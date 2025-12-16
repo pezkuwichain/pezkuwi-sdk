@@ -13,32 +13,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Asset Conversion Transaction Payment Pallet
+//! # Asset Conversion Transaction Payment Pezpallet
 //!
-//! This pallet allows runtimes that include it to pay for transactions in assets other than the
+//! This pezpallet allows runtimes that include it to pay for transactions in assets other than the
 //! chain's native asset.
 //!
 //! ## Overview
 //!
-//! This pallet provides a `TransactionExtension` with an optional `AssetId` that specifies the
+//! This pezpallet provides a `TransactionExtension` with an optional `AssetId` that specifies the
 //! asset to be used for payment (defaulting to the native token on `None`). It expects an
 //! [`OnChargeAssetTransaction`] implementation analogous to [`pezpallet-transaction-payment`]. The
 //! included [`SwapAssetAdapter`] (implementing [`OnChargeAssetTransaction`]) determines the
 //! fee amount by converting the fee calculated by [`pezpallet-transaction-payment`] in the native
 //! asset into the amount required of the specified asset.
 //!
-//! ## Pallet API
+//! ## Pezpallet API
 //!
-//! This pallet does not have any dispatchable calls or storage. It wraps FRAME's Transaction
-//! Payment pallet and functions as a replacement. This means you should include both pallets in
-//! your `construct_runtime` macro, but only include this pallet's [`TransactionExtension`]
+//! This pezpallet does not have any dispatchable calls or storage. It wraps FRAME's Transaction
+//! Payment pezpallet and functions as a replacement. This means you should include both pallets in
+//! your `construct_runtime` macro, but only include this pezpallet's [`TransactionExtension`]
 //! ([`ChargeAssetTxPayment`]).
 //!
 //! ## Terminology
 //!
 //! - Native Asset or Native Currency: The asset that a chain considers native, as in its default
 //!   for transaction fee payment, deposits, inflation, etc.
-//! - Other assets: Other assets that may exist on chain, for example under the Assets pallet.
+//! - Other assets: Other assets that may exist on chain, for example under the Assets pezpallet.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
@@ -102,13 +102,13 @@ pub enum InitialPayment<T: Config> {
 	Asset((T::AssetId, AssetLiquidityInfoOf<T>)),
 }
 
-pub use pallet::*;
+pub use pezpallet::*;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config + pezpallet_transaction_payment::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
@@ -122,7 +122,7 @@ pub mod pallet {
 			Balance = BalanceOf<Self>,
 			AssetId = Self::AssetId,
 		>;
-		/// The weight information of this pallet.
+		/// The weight information of this pezpallet.
 		type WeightInfo: WeightInfo;
 		#[cfg(feature = "runtime-benchmarks")]
 		/// Benchmark helper
@@ -133,8 +133,8 @@ pub mod pallet {
 		>;
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
 	#[cfg(feature = "runtime-benchmarks")]
 	/// Helper trait to benchmark the `ChargeAssetTxPayment` transaction extension.
@@ -146,8 +146,8 @@ pub mod pallet {
 		fn setup_balances_and_pool(asset_id: FunAssetIdParameter, account: AccountId);
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A transaction fee `actual_fee`, of which `tip` was added to the minimum inclusion fee,
 		/// has been paid by `who` in an asset `asset_id`.
@@ -316,7 +316,7 @@ where
 			return Ok((ValidTransaction::default(), Val::NoCharge, origin));
 		};
 		// Non-mutating call of `compute_fee` to calculate the fee used in the transaction priority.
-		let fee = pezpallet_transaction_payment::Pallet::<T>::compute_fee(len as u32, info, self.tip);
+		let fee = pezpallet_transaction_payment::Pezpallet::<T>::compute_fee(len as u32, info, self.tip);
 		self.can_withdraw_fee(&who, call, info, fee)?;
 		let priority = ChargeTransactionPayment::<T>::get_priority(info, len, self.tip, fee);
 		let validity = ValidTransaction { priority, ..Default::default() };
@@ -366,7 +366,7 @@ where
 				let unspent_weight = extension_weight.saturating_sub(actual_ext_weight);
 				let mut actual_post_info = *post_info;
 				actual_post_info.refund(unspent_weight);
-				let actual_fee = pezpallet_transaction_payment::Pallet::<T>::compute_actual_fee(
+				let actual_fee = pezpallet_transaction_payment::Pezpallet::<T>::compute_actual_fee(
 					len as u32,
 					info,
 					&actual_post_info,
@@ -380,7 +380,7 @@ where
 					tip,
 					already_withdrawn,
 				)?;
-				pezpallet_transaction_payment::Pallet::<T>::deposit_fee_paid_event(
+				pezpallet_transaction_payment::Pezpallet::<T>::deposit_fee_paid_event(
 					who, actual_fee, tip,
 				);
 				Ok(unspent_weight)
@@ -392,7 +392,7 @@ where
 				let unspent_weight = extension_weight.saturating_sub(actual_ext_weight);
 				let mut actual_post_info = *post_info;
 				actual_post_info.refund(unspent_weight);
-				let actual_fee = pezpallet_transaction_payment::Pallet::<T>::compute_actual_fee(
+				let actual_fee = pezpallet_transaction_payment::Pezpallet::<T>::compute_actual_fee(
 					len as u32,
 					info,
 					&actual_post_info,
@@ -408,7 +408,7 @@ where
 					already_withdrawn,
 				)?;
 
-				Pallet::<T>::deposit_event(Event::<T>::AssetTxFeePaid {
+				Pezpallet::<T>::deposit_event(Event::<T>::AssetTxFeePaid {
 					who,
 					actual_fee: converted_fee,
 					tip,

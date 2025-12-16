@@ -67,9 +67,9 @@ plugging all that together as a Runtime, there's some things we have to adapt no
 
 ##### `::Trait for Runtime` becomes `::Config for Runtime`
 
-The most visible and significant change is that the macros no longer generate the `$pallet::Trait` but now a much more
-aptly named `$pallet::Config`. Thus, we need to rename all `::Trait for Runtime` into`::Config for Runtime`, e.g. for
-the `sudo` pallet we must do:
+The most visible and significant change is that the macros no longer generate the `$pezpallet::Trait` but now a much more
+aptly named `$pezpallet::Config`. Thus, we need to rename all `::Trait for Runtime` into`::Config for Runtime`, e.g. for
+the `sudo` pezpallet we must do:
 
 ```diff
 -impl pallet_sudo::Trait for Runtime {
@@ -194,19 +194,19 @@ And update the overall definition for weights on frame and a few related types a
 
 ##### Assets
 
-The assets pallet has seen a variety of changes:
+The assets pezpallet has seen a variety of changes:
 - [Features needed for reserve-backed stablecoins #7152](https://github.com/pezkuwichain/kurdistan-sdk/issues/61)
 - [Freeze Assets and Asset Metadata #7346](https://github.com/pezkuwichain/kurdistan-sdk/issues/64)
 - [Introduces account existence providers reference counting #7363]((https://github.com/pezkuwichain/kurdistan-sdk/issues/65))
 
 have all altered the feature set and changed the concepts. However, it has some of the best documentation and explains
-the current state very well. If you are using the assets pallet and need to upgrade from an earlier version, we
+the current state very well. If you are using the assets pezpallet and need to upgrade from an earlier version, we
 recommend you use the current docs to guide your way!
 
 ##### Contracts
 
-As noted in the changelog, the `contracts`-pallet is still undergoing massive changes and is not yet part of this
-release. We are expecting for it to be released a few weeks after. If your chain is dependent on this pallet, we
+As noted in the changelog, the `contracts`-pezpallet is still undergoing massive changes and is not yet part of this
+release. We are expecting for it to be released a few weeks after. If your chain is dependent on this pezpallet, we
 recommend to wait until it has been released as the currently released version is not compatible with FRAME 2.0.
 
 #### (changes) Treasury
@@ -274,7 +274,7 @@ removed without worry.
 
 #### (changes) Elections Phragmen
 
-The pallet has been moved to a new system in which the exact amount of deposit for each voter, candidate, member, or
+The pezpallet has been moved to a new system in which the exact amount of deposit for each voter, candidate, member, or
 runner-up is now deposited on-chain. Moreover, the concept of a `defunct_voter` is removed, since votes now have
 adequate deposit associated with them. A number of configuration parameters has changed to reflect this, as shown below:
 

@@ -77,10 +77,10 @@ impl std::fmt::Display for BenchmarkParameter {
 #[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
 #[derive(Encode, Decode, Clone, PartialEq, Debug, TypeInfo)]
 pub struct BenchmarkBatch {
-	/// The pallet containing this benchmark.
+	/// The pezpallet containing this benchmark.
 	#[cfg_attr(feature = "std", serde(with = "serde_as_str"))]
-	pub pallet: Vec<u8>,
-	/// The instance of this pallet being benchmarked.
+	pub pezpallet: Vec<u8>,
+	/// The instance of this pezpallet being benchmarked.
 	#[cfg_attr(feature = "std", serde(with = "serde_as_str"))]
 	pub instance: Vec<u8>,
 	/// The extrinsic (or benchmark name) of this benchmark.
@@ -95,10 +95,10 @@ pub struct BenchmarkBatch {
 #[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
 #[derive(Encode, Decode, Clone, PartialEq, Debug)]
 pub struct BenchmarkBatchSplitResults {
-	/// The pallet containing this benchmark.
+	/// The pezpallet containing this benchmark.
 	#[cfg_attr(feature = "std", serde(with = "serde_as_str"))]
-	pub pallet: Vec<u8>,
-	/// The instance of this pallet being benchmarked.
+	pub pezpallet: Vec<u8>,
+	/// The instance of this pezpallet being benchmarked.
 	#[cfg_attr(feature = "std", serde(with = "serde_as_str"))]
 	pub instance: Vec<u8>,
 	/// The extrinsic (or benchmark name) of this benchmark.
@@ -110,7 +110,7 @@ pub struct BenchmarkBatchSplitResults {
 	pub db_results: Vec<BenchmarkResult>,
 }
 
-/// Result from running benchmarks on a FRAME pallet.
+/// Result from running benchmarks on a FRAME pezpallet.
 /// Contains duration of the function call in nanoseconds along with the benchmark parameters
 /// used for that benchmark result.
 #[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
@@ -210,9 +210,9 @@ impl From<TransactionValidityError> for BenchmarkError {
 /// Configuration used to setup and run runtime benchmarks.
 #[derive(Encode, Decode, Default, Clone, PartialEq, Debug, TypeInfo)]
 pub struct BenchmarkConfig {
-	/// The encoded name of the pallet to benchmark.
-	pub pallet: Vec<u8>,
-	/// The encoded name of the pallet instance to benchmark.
+	/// The encoded name of the pezpallet to benchmark.
+	pub pezpallet: Vec<u8>,
+	/// The encoded name of the pezpallet instance to benchmark.
 	pub instance: Vec<u8>,
 	/// The encoded name of the benchmark/extrinsic to run.
 	pub benchmark: Vec<u8>,
@@ -224,12 +224,12 @@ pub struct BenchmarkConfig {
 	pub internal_repeats: u32,
 }
 
-/// A list of benchmarks available for a particular pallet and instance.
+/// A list of benchmarks available for a particular pezpallet and instance.
 ///
 /// All `Vec<u8>` must be valid utf8 strings.
 #[derive(Encode, Decode, Default, Clone, PartialEq, Debug, TypeInfo)]
 pub struct BenchmarkList {
-	pub pallet: Vec<u8>,
+	pub pezpallet: Vec<u8>,
 	pub instance: Vec<u8>,
 	pub benchmarks: Vec<BenchmarkMetadata>,
 }
@@ -350,9 +350,9 @@ pub trait Benchmarking {
 	}
 }
 
-/// The pallet benchmarking trait.
+/// The pezpallet benchmarking trait.
 pub trait Benchmarking {
-	/// Get the benchmarks available for this pallet. Generally there is one benchmark per
+	/// Get the benchmarks available for this pezpallet. Generally there is one benchmark per
 	/// extrinsic, so these are sometimes just called "extrinsics".
 	///
 	/// Parameters
@@ -360,7 +360,7 @@ pub trait Benchmarking {
 	///   weight calculation.
 	fn benchmarks(extra: bool) -> Vec<BenchmarkMetadata>;
 
-	/// Run the benchmarks for this pallet.
+	/// Run the benchmarks for this pezpallet.
 	fn run_benchmark(
 		name: &[u8],
 		selected_components: &[(BenchmarkParameter, u32)],

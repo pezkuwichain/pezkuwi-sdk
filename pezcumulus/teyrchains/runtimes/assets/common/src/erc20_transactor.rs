@@ -122,7 +122,7 @@ where
 		let data =
 			IERC20::transferCall { to: checking_address, value: EU256::from(amount) }.abi_encode();
 		let ContractResult { result, gas_consumed, storage_deposit, .. } =
-			pezpallet_revive::Pallet::<T>::bare_call(
+			pezpallet_revive::Pezpallet::<T>::bare_call(
 				OriginFor::<T>::signed(who.clone()),
 				asset_id,
 				U256::zero(),
@@ -181,7 +181,7 @@ where
 		let data = IERC20::transferCall { to: address, value: EU256::from(amount) }.abi_encode();
 		let gas_limit = GasLimit::get();
 		let ContractResult { result, gas_consumed, storage_deposit, .. } =
-			pezpallet_revive::Pallet::<T>::bare_call(
+			pezpallet_revive::Pezpallet::<T>::bare_call(
 				OriginFor::<T>::signed(TransfersCheckingAccount::get()),
 				asset_id,
 				U256::zero(),

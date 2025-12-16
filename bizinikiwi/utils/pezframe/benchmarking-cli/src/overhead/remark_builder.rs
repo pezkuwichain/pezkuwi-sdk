@@ -23,9 +23,14 @@ use pezsp_runtime::{traits::Block as BlockT, OpaqueExtrinsic};
 use std::sync::Arc;
 use subxt::{
 	client::RuntimeVersion as SubxtRuntimeVersion,
-	config::{bizinikiwi::BizinikiwiExtrinsicParamsBuilder, HashFor},
-	Config, OfflineClient, BizinikiwiConfig,
+	config::{substrate::SubstrateExtrinsicParamsBuilder, HashFor},
+	Config, OfflineClient, SubstrateConfig,
 };
+
+/// Bizinikiwi configuration - based on SubstrateConfig
+pub type BizinikiwiConfig = SubstrateConfig;
+/// Bizinikiwi extrinsic params builder - based on SubstrateExtrinsicParamsBuilder
+pub type BizinikiwiExtrinsicParamsBuilder = SubstrateExtrinsicParamsBuilder<BizinikiwiConfig>;
 
 pub type BizinikiwiRemarkBuilder = DynamicRemarkBuilder<BizinikiwiConfig>;
 
@@ -98,7 +103,7 @@ impl<C: Config> DynamicRemarkBuilder<C> {
 }
 
 impl ExtrinsicBuilder for DynamicRemarkBuilder<BizinikiwiConfig> {
-	fn pallet(&self) -> &str {
+	fn pezpallet(&self) -> &str {
 		"system"
 	}
 

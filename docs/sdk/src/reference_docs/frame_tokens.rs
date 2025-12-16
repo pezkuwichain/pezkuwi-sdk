@@ -36,7 +36,7 @@
 //! You may then write custom pallets that interact with [`pezpallet_balances`]. The fastest way to
 //! get started with that is by
 //! [tightly coupling](crate::reference_docs::frame_pallet_coupling#tight-coupling-pallets) your
-//! custom pallet to [`pezpallet_balances`].
+//! custom pezpallet to [`pezpallet_balances`].
 //!
 //! However, to keep pallets flexible and modular, it is often preferred to
 //! [loosely couple](crate::reference_docs::frame_pallet_coupling#loosely--coupling-pallets).
@@ -70,18 +70,18 @@
 //! The distinction between traits and trait implementations is helpful because it allows pallets
 //! and other logic to be generic over their dependencies, avoiding tight coupling.
 //!
-//! To illustrate this with an example let's consider [`pezpallet_preimage`]. This pallet takes a
+//! To illustrate this with an example let's consider [`pezpallet_preimage`]. This pezpallet takes a
 //! deposit in exchange for storing a preimage for later use. A naive implementation of the
-//! pallet may use [`pezpallet_balances`] in a tightly coupled manner, directly calling methods
-//! on the pallet to reserve and unreserve deposits. This approach works well,
-//! until someone has a use case requiring that an asset from a different pallet such as
+//! pezpallet may use [`pezpallet_balances`] in a tightly coupled manner, directly calling methods
+//! on the pezpallet to reserve and unreserve deposits. This approach works well,
+//! until someone has a use case requiring that an asset from a different pezpallet such as
 //! [`pezpallet_assets`] is used for the deposit. Rather than tightly coupling [`pezpallet_preimage`] to
-//! [`pezpallet_balances`], [`pezpallet_assets`], and every other token-handling pallet, a user
-//! could possibly specify that [`pezpallet_preimage`] does not specify a concrete pallet as a
+//! [`pezpallet_balances`], [`pezpallet_assets`], and every other token-handling pezpallet, a user
+//! could possibly specify that [`pezpallet_preimage`] does not specify a concrete pezpallet as a
 //! dependency, but instead accepts any dependency which implements the
 //! [`currency::ReservableCurrency`](`pezframe_support::traits::tokens::currency::ReservableCurrency`)
-//! trait, namely via its [`Config::Currency`](`pezpallet_preimage::pallet::Config::Currency`)
-//! associated type. This allows [`pezpallet_preimage`] to support any arbitrary pallet implementing
+//! trait, namely via its [`Config::Currency`](`pezpallet_preimage::pezpallet::Config::Currency`)
+//! associated type. This allows [`pezpallet_preimage`] to support any arbitrary pezpallet implementing
 //! this trait, without needing any knowledge of what those pallets may be or requiring changes to
 //! support new pallets which may be written in the future.
 //!
@@ -115,7 +115,7 @@
 //! ## Non-Fungible Tokens in FRAME
 //!
 //! [`pezpallet_nfts`] is recommended to use for all NFT use cases in FRAME.
-//! See the crate documentation for more info about this pallet.
+//! See the crate documentation for more info about this pezpallet.
 //!
 //! [`pezpallet_uniques`] is deprecated and should not be used.
 //!

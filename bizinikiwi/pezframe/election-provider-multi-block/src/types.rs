@@ -15,11 +15,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Common types and traits of the EPMB pallet group.
+//! Common types and traits of the EPMB pezpallet group.
 //!
 //! ## [`SolutionOf`]
 //!
-//! This type is among the most cryptic used in the EPMB pallet. The origins of this type go back to
+//! This type is among the most cryptic used in the EPMB pezpallet. The origins of this type go back to
 //! the fact that sending a solution, with hundreds or thousands of account-ids in it would be too
 //! large for a chain to handle. This was particularly the case in a single page solution, as
 //! developed in `election-provider-multi-phase`. To combat this, a "compact" custom type is
@@ -32,7 +32,7 @@
 //!
 //! ## [`Phase`]
 //!
-//! This is the most important type of this pallet, demonstrating the state-machine used
+//! This is the most important type of this pezpallet, demonstrating the state-machine used
 //! to manage the election process and its various phases.
 
 use crate::{unsigned::miner::MinerConfig, verifier};
@@ -227,7 +227,7 @@ impl<T: MinerConfig> Get<u32> for MaxFlattenedVoters<T> {
 /// This is bounded by [`MaxFlattenedVoters`].
 pub type AllVoterPagesFlattenedOf<T> = BoundedVec<VoterOf<T>, MaxFlattenedVoters<T>>;
 
-/// Current phase of the pallet.
+/// Current phase of the pezpallet.
 #[derive(
 	PartialEqNoBound,
 	EqNoBound,
@@ -271,7 +271,7 @@ pub enum Phase<T: crate::Config> {
 	/// The inner value should be read as "`remaining` number of pages are left to be fetched".
 	/// Thus, if inner value is `0` if the snapshot is complete and we are ready to move on.
 	///
-	/// This value should be interpreted after `on_initialize` of this pallet has already been
+	/// This value should be interpreted after `on_initialize` of this pezpallet has already been
 	/// called.
 	Snapshot(PageIndex),
 	/// Snapshot is done, and we are waiting for `Export` to kick in.
@@ -280,7 +280,7 @@ pub enum Phase<T: crate::Config> {
 	///
 	/// Once this is active, no more signed or solutions will be accepted.
 	Export(PageIndex),
-	/// The emergency phase. This is could be enabled by one of the fallbacks, and locks the pallet
+	/// The emergency phase. This is could be enabled by one of the fallbacks, and locks the pezpallet
 	/// such that only governance can change the state.
 	Emergency,
 }

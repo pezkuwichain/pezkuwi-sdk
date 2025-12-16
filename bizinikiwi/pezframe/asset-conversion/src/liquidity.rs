@@ -20,7 +20,7 @@
 use pezframe_support::{traits::tokens::Balance, transactional};
 use pezsp_runtime::DispatchError;
 
-use crate::{Config, Pallet};
+use crate::{Config, Pezpallet};
 
 /// A struct to represent an asset and its desired and minimum amounts for adding liquidity.
 pub struct AddLiquidityAsset<AssetKind, Balance> {
@@ -82,7 +82,7 @@ pub trait MutateLiquidity<AccountId> {
 	) -> Result<(Self::Balance, Self::Balance), DispatchError>;
 }
 
-impl<T: Config> MutateLiquidity<T::AccountId> for Pallet<T> {
+impl<T: Config> MutateLiquidity<T::AccountId> for Pezpallet<T> {
 	type Balance = T::Balance;
 	type AssetKind = T::AssetKind;
 	type PoolId = T::PoolId;

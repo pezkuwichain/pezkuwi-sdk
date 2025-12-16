@@ -18,7 +18,7 @@
 
 pub mod v5;
 
-use crate::{Config, OverweightIndex, Pallet, QueueConfig, QueueConfigData, DEFAULT_POV_SIZE};
+use crate::{Config, OverweightIndex, Pezpallet, QueueConfig, QueueConfigData, DEFAULT_POV_SIZE};
 use alloc::vec::Vec;
 use pezcumulus_primitives_core::XcmpMessageFormat;
 use pezframe_support::{
@@ -37,7 +37,7 @@ mod v1 {
 	use codec::{Decode, Encode};
 
 	#[pezframe_support::storage_alias]
-	pub(crate) type QueueConfig<T: Config> = StorageValue<Pallet<T>, QueueConfigData, ValueQuery>;
+	pub(crate) type QueueConfig<T: Config> = StorageValue<Pezpallet<T>, QueueConfigData, ValueQuery>;
 
 	#[derive(Encode, Decode, Debug)]
 	pub struct QueueConfigData {
@@ -67,7 +67,7 @@ pub mod v2 {
 	use super::*;
 
 	#[pezframe_support::storage_alias]
-	pub(crate) type QueueConfig<T: Config> = StorageValue<Pallet<T>, QueueConfigData, ValueQuery>;
+	pub(crate) type QueueConfig<T: Config> = StorageValue<Pezpallet<T>, QueueConfigData, ValueQuery>;
 
 	#[derive(Copy, Clone, Eq, PartialEq, Encode, Decode, RuntimeDebug, TypeInfo)]
 	pub struct QueueConfigData {
@@ -136,7 +136,7 @@ pub mod v2 {
 		1,
 		2,
 		UncheckedMigrationToV2<T>,
-		Pallet<T>,
+		Pezpallet<T>,
 		<T as pezframe_system::Config>::DbWeight,
 	>;
 }
@@ -148,12 +148,12 @@ pub mod v3 {
 	/// Status of the inbound XCMP channels.
 	#[pezframe_support::storage_alias]
 	pub(crate) type InboundXcmpStatus<T: Config> =
-		StorageValue<Pallet<T>, Vec<InboundChannelDetails>, OptionQuery>;
+		StorageValue<Pezpallet<T>, Vec<InboundChannelDetails>, OptionQuery>;
 
 	/// Inbound aggregate XCMP messages. It can only be one per ParaId/block.
 	#[pezframe_support::storage_alias]
 	pub(crate) type InboundXcmpMessages<T: Config> = StorageDoubleMap<
-		Pallet<T>,
+		Pezpallet<T>,
 		Blake2_128Concat,
 		ParaId,
 		Twox64Concat,
@@ -164,7 +164,7 @@ pub mod v3 {
 
 	#[pezframe_support::storage_alias]
 	pub(crate) type QueueConfig<T: Config> =
-		StorageValue<Pallet<T>, v2::QueueConfigData, ValueQuery>;
+		StorageValue<Pezpallet<T>, v2::QueueConfigData, ValueQuery>;
 
 	#[derive(Clone, Eq, PartialEq, Ord, PartialOrd, Encode, Decode, TypeInfo)]
 	pub struct InboundChannelDetails {
@@ -187,14 +187,14 @@ pub mod v3 {
 		Suspended,
 	}
 
-	/// Migrates the pallet storage to v3.
+	/// Migrates the pezpallet storage to v3.
 	pub struct UncheckedMigrationToV3<T: Config>(PhantomData<T>);
 
 	impl<T: Config> UncheckedOnRuntimeUpgrade for UncheckedMigrationToV3<T> {
 		fn on_runtime_upgrade() -> Weight {
 			#[pezframe_support::storage_alias]
 			type Overweight<T: Config> =
-				CountedStorageMap<Pallet<T>, Twox64Concat, OverweightIndex, ParaId>;
+				CountedStorageMap<Pezpallet<T>, Twox64Concat, OverweightIndex, ParaId>;
 			let overweight_messages = Overweight::<T>::initialize_counter() as u64;
 
 			T::DbWeight::get().reads_writes(overweight_messages, 1)
@@ -208,7 +208,7 @@ pub mod v3 {
 		2,
 		3,
 		UncheckedMigrationToV3<T>,
-		Pallet<T>,
+		Pezpallet<T>,
 		<T as pezframe_system::Config>::DbWeight,
 	>;
 
@@ -311,7 +311,7 @@ pub mod v4 {
 		3,
 		4,
 		UncheckedMigrationToV4<T>,
-		Pallet<T>,
+		Pezpallet<T>,
 		<T as pezframe_system::Config>::DbWeight,
 	>;
 }
@@ -336,7 +336,7 @@ mod tests {
 
 		new_test_ext().execute_with(|| {
 			let storage_version = StorageVersion::new(1);
-			storage_version.put::<Pallet<Test>>();
+			storage_version.put::<Pezpallet<Test>>();
 
 			pezframe_support::storage::unhashed::put_raw(
 				&crate::QueueConfig::<Test>::hashed_key(),
@@ -364,7 +364,7 @@ mod tests {
 	fn test_migration_to_v4() {
 		new_test_ext().execute_with(|| {
 			let storage_version = StorageVersion::new(3);
-			storage_version.put::<Pallet<Test>>();
+			storage_version.put::<Pezpallet<Test>>();
 
 			let v2 = v2::QueueConfigData {
 				drop_threshold: 5,
@@ -393,7 +393,7 @@ mod tests {
 
 		new_test_ext().execute_with(|| {
 			let storage_version = StorageVersion::new(3);
-			storage_version.put::<Pallet<Test>>();
+			storage_version.put::<Pezpallet<Test>>();
 
 			let v2 = v2::QueueConfigData {
 				drop_threshold: 100,

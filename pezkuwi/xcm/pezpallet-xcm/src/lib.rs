@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Pallet to handle XCM messages.
+//! Pezpallet to handle XCM messages.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
@@ -47,7 +47,7 @@ use pezframe_support::{
 	PalletId,
 };
 use pezframe_system::pezpallet_prelude::{BlockNumberFor, *};
-pub use pallet::*;
+pub use pezpallet::*;
 use scale_info::TypeInfo;
 use pezsp_core::H256;
 use pezsp_runtime::{
@@ -218,8 +218,8 @@ pub fn aliasers_footprint(aliasers_count: usize) -> Footprint {
 	Footprint::from_parts(aliasers_count, OriginAliaser::max_encoded_len())
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::{
 		dispatch::{GetDispatchInfo, PostDispatchInfo},
@@ -241,16 +241,16 @@ pub mod pallet {
 
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(1);
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	#[pallet::without_storage_info]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	#[pezpallet::without_storage_info]
+	pub struct Pezpallet<T>(_);
 
 	pub type BalanceOf<T> =
 		<<T as Config>::Currency as Currency<<T as pezframe_system::Config>::AccountId>>::Balance;
 	pub type TicketOf<T> = <T as Config>::AuthorizedAliasConsideration;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	/// The module configuration trait.
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
@@ -296,7 +296,7 @@ pub mod pallet {
 		type Weigher: WeightBounds<<Self as Config>::RuntimeCall>;
 
 		/// This chain's Universal Location.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type UniversalLocation: Get<InteriorLocation>;
 
 		/// The runtime `Origin` type.
@@ -314,10 +314,10 @@ pub mod pallet {
 
 		/// The latest supported version that we advertise. Generally just set it to
 		/// `pezpallet_xcm::CurrentXcmVersion`.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type AdvertisedXcmVersion: Get<XcmVersion>;
 
-		/// The origin that is allowed to call privileged operations on the XCM pallet
+		/// The origin that is allowed to call privileged operations on the XCM pezpallet
 		type AdminOrigin: EnsureOrigin<<Self as SysConfig>::RuntimeOrigin>;
 
 		/// The assets which we consider a given origin is trusted if they claim to have placed a
@@ -328,27 +328,27 @@ pub mod pallet {
 		type SovereignAccountOf: ConvertLocation<Self::AccountId>;
 
 		/// The maximum number of local XCM locks that a single account may have.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxLockers: Get<u32>;
 
 		/// The maximum number of consumers a single remote lock may have.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxRemoteLockConsumers: Get<u32>;
 
 		/// The ID type for local consumers of remote locks.
 		type RemoteLockConsumerIdentifier: Parameter + Member + MaxEncodedLen + Ord + Copy;
 
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 	}
 
-	impl<T: Config> ExecuteControllerWeightInfo for Pallet<T> {
+	impl<T: Config> ExecuteControllerWeightInfo for Pezpallet<T> {
 		fn execute() -> Weight {
 			T::WeightInfo::execute()
 		}
 	}
 
-	impl<T: Config> ExecuteController<OriginFor<T>, <T as Config>::RuntimeCall> for Pallet<T> {
+	impl<T: Config> ExecuteController<OriginFor<T>, <T as Config>::RuntimeCall> for Pezpallet<T> {
 		type WeightInfo = Self;
 		fn execute(
 			origin: OriginFor<T>,
@@ -403,13 +403,13 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config> SendControllerWeightInfo for Pallet<T> {
+	impl<T: Config> SendControllerWeightInfo for Pezpallet<T> {
 		fn send() -> Weight {
 			T::WeightInfo::send()
 		}
 	}
 
-	impl<T: Config> SendController<OriginFor<T>> for Pallet<T> {
+	impl<T: Config> SendController<OriginFor<T>> for Pezpallet<T> {
 		type WeightInfo = Self;
 		fn send(
 			origin: OriginFor<T>,
@@ -450,7 +450,7 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config> QueryControllerWeightInfo for Pallet<T> {
+	impl<T: Config> QueryControllerWeightInfo for Pezpallet<T> {
 		fn query() -> Weight {
 			T::WeightInfo::new_query()
 		}
@@ -459,7 +459,7 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config> QueryController<OriginFor<T>, BlockNumberFor<T>> for Pallet<T> {
+	impl<T: Config> QueryController<OriginFor<T>, BlockNumberFor<T>> for Pezpallet<T> {
 		type WeightInfo = Self;
 
 		fn query(
@@ -484,7 +484,7 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config> EventEmitter for Pallet<T> {
+	impl<T: Config> EventEmitter for Pezpallet<T> {
 		fn emit_sent_event(
 			origin: Location,
 			destination: Location,
@@ -513,8 +513,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// Execution of an XCM message was attempted.
 		Attempted { outcome: xcm::latest::Outcome },
@@ -634,7 +634,7 @@ pub mod pallet {
 		AliasesAuthorizationsRemoved { target: Location },
 	}
 
-	#[pallet::origin]
+	#[pezpallet::origin]
 	#[derive(
 		PartialEq,
 		Eq,
@@ -658,14 +658,14 @@ pub mod pallet {
 		}
 	}
 
-	/// A reason for this pallet placing a hold on funds.
-	#[pallet::composite_enum]
+	/// A reason for this pezpallet placing a hold on funds.
+	#[pezpallet::composite_enum]
 	pub enum HoldReason {
 		/// The funds are held as storage deposit for an authorized alias.
 		AuthorizeAlias,
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// The desired destination was unreachable, generally because there is a no way of routing
 		/// to it.
@@ -803,11 +803,11 @@ pub mod pallet {
 	}
 
 	/// The latest available query index.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type QueryCounter<T: Config> = StorageValue<_, QueryId, ValueQuery>;
 
 	/// The ongoing queries.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type Queries<T: Config> =
 		StorageMap<_, Blake2_128Concat, QueryId, QueryStatus<BlockNumberFor<T>>, OptionQuery>;
 
@@ -815,17 +815,17 @@ pub mod pallet {
 	///
 	/// Key is the blake2 256 hash of (origin, versioned `Assets`) pair. Value is the number of
 	/// times this pair has been trapped (usually just 1 if it exists at all).
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type AssetTraps<T: Config> = StorageMap<_, Identity, H256, u32, ValueQuery>;
 
 	/// Default version to encode XCM when latest version of destination is unknown. If `None`,
 	/// then the destinations whose XCM version is unknown are considered unreachable.
-	#[pallet::storage]
-	#[pallet::whitelist_storage]
+	#[pezpallet::storage]
+	#[pezpallet::whitelist_storage]
 	pub(super) type SafeXcmVersion<T: Config> = StorageValue<_, XcmVersion, OptionQuery>;
 
 	/// The Latest versions that we know various locations support.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type SupportedVersion<T: Config> = StorageDoubleMap<
 		_,
 		Twox64Concat,
@@ -837,7 +837,7 @@ pub mod pallet {
 	>;
 
 	/// All locations that we have requested version notifications from.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type VersionNotifiers<T: Config> = StorageDoubleMap<
 		_,
 		Twox64Concat,
@@ -850,7 +850,7 @@ pub mod pallet {
 
 	/// The target locations that are subscribed to our version changes, as well as the most recent
 	/// of our versions we informed them of.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type VersionNotifyTargets<T: Config> = StorageDoubleMap<
 		_,
 		Twox64Concat,
@@ -871,8 +871,8 @@ pub mod pallet {
 	/// Destinations whose latest XCM version we would like to know. Duplicates not allowed, and
 	/// the `u32` counter is the number of times that a send to the destination has been attempted,
 	/// which is used as a prioritization.
-	#[pallet::storage]
-	#[pallet::whitelist_storage]
+	#[pezpallet::storage]
+	#[pezpallet::whitelist_storage]
 	pub(super) type VersionDiscoveryQueue<T: Config> = StorageValue<
 		_,
 		BoundedVec<(VersionedLocation, u32), VersionDiscoveryQueueSize<T>>,
@@ -880,7 +880,7 @@ pub mod pallet {
 	>;
 
 	/// The current migration's stage, if any.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type CurrentMigration<T: Config> =
 		StorageValue<_, VersionMigrationStage, OptionQuery>;
 
@@ -908,7 +908,7 @@ pub mod pallet {
 	}
 
 	/// Fungible assets which we know are locked on a remote chain.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type RemoteLockedFungibles<T: Config> = StorageNMap<
 		_,
 		(
@@ -921,7 +921,7 @@ pub mod pallet {
 	>;
 
 	/// Fungible assets which we know are locked on this chain.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type LockedFungibles<T: Config> = StorageMap<
 		_,
 		Blake2_128Concat,
@@ -931,7 +931,7 @@ pub mod pallet {
 	>;
 
 	/// Global suspension state of the XCM executor.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type XcmExecutionSuspended<T: Config> = StorageValue<_, bool, ValueQuery>;
 
 	/// Whether or not incoming XCMs (both executed locally and received) should be recorded.
@@ -939,24 +939,24 @@ pub mod pallet {
 	/// This is meant to be used in runtime APIs, and it's advised it stays false
 	/// for all other use cases, so as to not degrade regular performance.
 	///
-	/// Only relevant if this pallet is being used as the [`xcm_executor::traits::RecordXcm`]
+	/// Only relevant if this pezpallet is being used as the [`xcm_executor::traits::RecordXcm`]
 	/// implementation in the XCM executor configuration.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type ShouldRecordXcm<T: Config> = StorageValue<_, bool, ValueQuery>;
 
 	/// If [`ShouldRecordXcm`] is set to true, then the last XCM program executed locally
 	/// will be stored here.
 	/// Runtime APIs can fetch the XCM that was executed by accessing this value.
 	///
-	/// Only relevant if this pallet is being used as the [`xcm_executor::traits::RecordXcm`]
+	/// Only relevant if this pezpallet is being used as the [`xcm_executor::traits::RecordXcm`]
 	/// implementation in the XCM executor configuration.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type RecordedXcm<T: Config> = StorageValue<_, Xcm<()>>;
 
 	/// Map of authorized aliasers of local origins. Each local location can authorize a list of
 	/// other locations to alias into it. Each aliaser is only valid until its inner `expiry`
 	/// block number.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type AuthorizedAliases<T: Config> = StorageMap<
 		_,
 		Blake2_128Concat,
@@ -965,7 +965,7 @@ pub mod pallet {
 		OptionQuery,
 	>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	pub struct GenesisConfig<T: Config> {
 		#[serde(skip)]
 		pub _config: core::marker::PhantomData<T>,
@@ -985,7 +985,7 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			SafeXcmVersion::<T>::set(self.safe_xcm_version);
@@ -1000,8 +1000,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn on_initialize(_n: BlockNumberFor<T>) -> Weight {
 			let mut weight_used = Weight::zero();
 			if let Some(migration) = CurrentMigration::<T>::get() {
@@ -1115,9 +1115,9 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call(weight(<T as Config>::WeightInfo))]
-	impl<T: Config> Pallet<T> {
-		#[pallet::call_index(0)]
+	#[pezpallet::call(weight(<T as Config>::WeightInfo))]
+	impl<T: Config> Pezpallet<T> {
+		#[pezpallet::call_index(0)]
 		pub fn send(
 			origin: OriginFor<T>,
 			dest: Box<VersionedLocation>,
@@ -1144,7 +1144,7 @@ pub mod pallet {
 		/// - `assets`: The assets to be withdrawn. This should include the assets used to pay the
 		///   fee on the `dest` chain.
 		/// - `fee_asset_id`: Id of the asset from `assets` which should be used to pay fees.
-		#[pallet::call_index(1)]
+		#[pezpallet::call_index(1)]
 		#[allow(deprecated)]
 		#[deprecated(
 			note = "This extrinsic uses `WeightLimit::Unlimited`, please migrate to `limited_teleport_assets` or `transfer_assets`"
@@ -1188,7 +1188,7 @@ pub mod pallet {
 		/// - `assets`: The assets to be withdrawn. This should include the assets used to pay the
 		///   fee on the `dest` (and possibly reserve) chains.
 		/// - `fee_asset_id`: Id of the asset from `assets` which should be used to pay fees.
-		#[pallet::call_index(2)]
+		#[pezpallet::call_index(2)]
 		#[allow(deprecated)]
 		#[deprecated(
 			note = "This extrinsic uses `WeightLimit::Unlimited`, please migrate to `limited_reserve_transfer_assets` or `transfer_assets`"
@@ -1218,8 +1218,8 @@ pub mod pallet {
 		/// No more than `max_weight` will be used in its attempted execution. If this is less than
 		/// the maximum amount of weight that the message could take to be executed, then no
 		/// execution attempt will be made.
-		#[pallet::call_index(3)]
-		#[pallet::weight(max_weight.saturating_add(T::WeightInfo::execute()))]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(max_weight.saturating_add(T::WeightInfo::execute()))]
 		pub fn execute(
 			origin: OriginFor<T>,
 			message: Box<VersionedXcm<<T as Config>::RuntimeCall>>,
@@ -1236,7 +1236,7 @@ pub mod pallet {
 		/// - `origin`: Must be an origin specified by AdminOrigin.
 		/// - `location`: The destination that is being described.
 		/// - `xcm_version`: The latest version of XCM that `location` supports.
-		#[pallet::call_index(4)]
+		#[pezpallet::call_index(4)]
 		pub fn force_xcm_version(
 			origin: OriginFor<T>,
 			location: Box<Location>,
@@ -1254,7 +1254,7 @@ pub mod pallet {
 		///
 		/// - `origin`: Must be an origin specified by AdminOrigin.
 		/// - `maybe_xcm_version`: The default XCM encoding version, or `None` to disable.
-		#[pallet::call_index(5)]
+		#[pezpallet::call_index(5)]
 		pub fn force_default_xcm_version(
 			origin: OriginFor<T>,
 			maybe_xcm_version: Option<XcmVersion>,
@@ -1268,7 +1268,7 @@ pub mod pallet {
 		///
 		/// - `origin`: Must be an origin specified by AdminOrigin.
 		/// - `location`: The location to which we should subscribe for XCM version notifications.
-		#[pallet::call_index(6)]
+		#[pezpallet::call_index(6)]
 		pub fn force_subscribe_version_notify(
 			origin: OriginFor<T>,
 			location: Box<VersionedLocation>,
@@ -1300,7 +1300,7 @@ pub mod pallet {
 		/// - `origin`: Must be an origin specified by AdminOrigin.
 		/// - `location`: The location to which we are currently subscribed for XCM version
 		///   notifications which we no longer desire.
-		#[pallet::call_index(7)]
+		#[pezpallet::call_index(7)]
 		pub fn force_unsubscribe_version_notify(
 			origin: OriginFor<T>,
 			location: Box<VersionedLocation>,
@@ -1355,8 +1355,8 @@ pub mod pallet {
 		///   fee on the `dest` (and possibly reserve) chains.
 		/// - `fee_asset_id`: Id of the asset from `assets` which should be used to pay fees.
 		/// - `weight_limit`: The remote-side weight limit, if any, for the XCM fee purchase.
-		#[pallet::call_index(8)]
-		#[pallet::weight(T::WeightInfo::reserve_transfer_assets())]
+		#[pezpallet::call_index(8)]
+		#[pezpallet::weight(T::WeightInfo::reserve_transfer_assets())]
 		pub fn limited_reserve_transfer_assets(
 			origin: OriginFor<T>,
 			dest: Box<VersionedLocation>,
@@ -1392,8 +1392,8 @@ pub mod pallet {
 		///   fee on the `dest` chain.
 		/// - `fee_asset_id`: Id of the asset from `assets` which should be used to pay fees.
 		/// - `weight_limit`: The remote-side weight limit, if any, for the XCM fee purchase.
-		#[pallet::call_index(9)]
-		#[pallet::weight(T::WeightInfo::teleport_assets())]
+		#[pezpallet::call_index(9)]
+		#[pezpallet::weight(T::WeightInfo::teleport_assets())]
 		pub fn limited_teleport_assets(
 			origin: OriginFor<T>,
 			dest: Box<VersionedLocation>,
@@ -1409,7 +1409,7 @@ pub mod pallet {
 		///
 		/// - `origin`: Must be an origin specified by AdminOrigin.
 		/// - `suspended`: `true` to suspend, `false` to resume.
-		#[pallet::call_index(10)]
+		#[pezpallet::call_index(10)]
 		pub fn force_suspension(origin: OriginFor<T>, suspended: bool) -> DispatchResult {
 			T::AdminOrigin::ensure_origin(origin)?;
 			XcmExecutionSuspended::<T>::set(suspended);
@@ -1448,7 +1448,7 @@ pub mod pallet {
 		///   fee on the `dest` (and possibly reserve) chains.
 		/// - `fee_asset_id`: Id of the asset from `assets` which should be used to pay fees.
 		/// - `weight_limit`: The remote-side weight limit, if any, for the XCM fee purchase.
-		#[pallet::call_index(11)]
+		#[pezpallet::call_index(11)]
 		pub fn transfer_assets(
 			origin: OriginFor<T>,
 			dest: Box<VersionedLocation>,
@@ -1519,13 +1519,13 @@ pub mod pallet {
 			)
 		}
 
-		/// Claims assets trapped on this pallet because of leftover assets during XCM execution.
+		/// Claims assets trapped on this pezpallet because of leftover assets during XCM execution.
 		///
 		/// - `origin`: Anyone can call this extrinsic.
 		/// - `assets`: The exact assets that were trapped. Use the version to specify what version
 		/// was the latest when they were trapped.
 		/// - `beneficiary`: The location/account where the claimed assets will be deposited.
-		#[pallet::call_index(12)]
+		#[pezpallet::call_index(12)]
 		pub fn claim_assets(
 			origin: OriginFor<T>,
 			assets: Box<VersionedAssets>,
@@ -1622,8 +1622,8 @@ pub mod pallet {
 		/// - `custom_xcm_on_dest`: The XCM to be executed on `dest` chain as the last step of the
 		///   transfer, which also determines what happens to the assets on the destination chain.
 		/// - `weight_limit`: The remote-side weight limit, if any, for the XCM fee purchase.
-		#[pallet::call_index(13)]
-		#[pallet::weight(T::WeightInfo::transfer_assets())]
+		#[pezpallet::call_index(13)]
+		#[pezpallet::weight(T::WeightInfo::transfer_assets())]
 		pub fn transfer_assets_using_type_and_then(
 			origin: OriginFor<T>,
 			dest: Box<VersionedLocation>,
@@ -1695,7 +1695,7 @@ pub mod pallet {
 		/// WARNING: make sure the caller `origin` (you) trusts the `aliaser` location to act in
 		/// their/your name. Once authorized using this call, the `aliaser` can freely impersonate
 		/// `origin` in XCM programs executed on the local chain.
-		#[pallet::call_index(14)]
+		#[pezpallet::call_index(14)]
 		pub fn add_authorized_alias(
 			origin: OriginFor<T>,
 			aliaser: Box<VersionedLocation>,
@@ -1722,7 +1722,7 @@ pub mod pallet {
 			if let Some(expiry) = expires {
 				ensure!(
 					expiry >
-						pezframe_system::Pallet::<T>::current_block_number().saturated_into::<u64>(),
+						pezframe_system::Pezpallet::<T>::current_block_number().saturated_into::<u64>(),
 					Error::<T>::ExpiresInPast
 				);
 			}
@@ -1778,7 +1778,7 @@ pub mod pallet {
 
 		/// Remove a previously authorized `aliaser` from the list of locations that can alias into
 		/// the local `origin` making this call.
-		#[pallet::call_index(15)]
+		#[pezpallet::call_index(15)]
 		pub fn remove_authorized_alias(
 			origin: OriginFor<T>,
 			aliaser: Box<VersionedLocation>,
@@ -1838,8 +1838,8 @@ pub mod pallet {
 
 		/// Remove all previously authorized `aliaser`s that can alias into the local `origin`
 		/// making this call.
-		#[pallet::call_index(16)]
-		#[pallet::weight(T::WeightInfo::remove_authorized_alias())]
+		#[pezpallet::call_index(16)]
+		#[pezpallet::weight(T::WeightInfo::remove_authorized_alias())]
 		pub fn remove_all_authorized_aliases(origin: OriginFor<T>) -> DispatchResult {
 			let signed_origin = ensure_signed(origin.clone())?;
 			let origin_location: Location = T::ExecuteXcmOrigin::ensure_origin(origin)?;
@@ -1893,7 +1893,7 @@ impl<T: Config> core::fmt::Debug for FeesHandling<T> {
 	}
 }
 
-impl<T: Config> QueryHandler for Pallet<T> {
+impl<T: Config> QueryHandler for Pezpallet<T> {
 	type BlockNumber = BlockNumberFor<T>;
 	type Error = XcmError;
 	type UniversalLocation = T::UniversalLocation;
@@ -1970,12 +1970,12 @@ impl<T: Config> QueryHandler for Pallet<T> {
 		let response = response.into();
 		Queries::<T>::insert(
 			id,
-			QueryStatus::Ready { response, at: pezframe_system::Pallet::<T>::current_block_number() },
+			QueryStatus::Ready { response, at: pezframe_system::Pezpallet::<T>::current_block_number() },
 		);
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// The ongoing queries.
 	pub fn query(query_id: &QueryId) -> Option<QueryStatus<BlockNumberFor<T>>> {
 		Queries::<T>::get(query_id)
@@ -3075,14 +3075,14 @@ impl<T: Config> Pallet<T> {
 		RuntimeCall: Dispatchable<PostInfo = PostDispatchInfo>,
 		<RuntimeCall as Dispatchable>::RuntimeOrigin: From<OriginCaller>,
 	{
-		crate::Pallet::<Runtime>::set_record_xcm(true);
+		crate::Pezpallet::<Runtime>::set_record_xcm(true);
 		// Clear other messages in queues...
 		Router::clear_messages();
 		// ...and reset events to make sure we only record events from current call.
-		pezframe_system::Pallet::<Runtime>::reset_events();
+		pezframe_system::Pezpallet::<Runtime>::reset_events();
 		let result = call.dispatch(origin.into());
-		crate::Pallet::<Runtime>::set_record_xcm(false);
-		let local_xcm = crate::Pallet::<Runtime>::recorded_xcm()
+		crate::Pezpallet::<Runtime>::set_record_xcm(false);
+		let local_xcm = crate::Pezpallet::<Runtime>::recorded_xcm()
 			.map(|xcm| VersionedXcm::<()>::from(xcm).into_version(result_xcms_version))
 			.transpose()
 			.map_err(|()| {
@@ -3105,7 +3105,7 @@ impl<T: Config> Pallet<T> {
 				},
 			)?;
 		let events: Vec<<Runtime as pezframe_system::Config>::RuntimeEvent> =
-			pezframe_system::Pallet::<Runtime>::read_events_no_consensus()
+			pezframe_system::Pezpallet::<Runtime>::read_events_no_consensus()
 				.map(|record| record.event.clone())
 				.collect();
 		Ok(CallDryRunEffects {
@@ -3146,7 +3146,7 @@ impl<T: Config> Pallet<T> {
 
 		// To make sure we only record events from current call.
 		Router::clear_messages();
-		pezframe_system::Pallet::<T>::reset_events();
+		pezframe_system::Pezpallet::<T>::reset_events();
 
 		let result = <T as Config>::XcmExecutor::prepare_and_execute(
 			origin_location,
@@ -3163,7 +3163,7 @@ impl<T: Config> Pallet<T> {
 				);
 			})?;
 		let events: Vec<<T as pezframe_system::Config>::RuntimeEvent> =
-			pezframe_system::Pallet::<T>::read_events_no_consensus()
+			pezframe_system::Pezpallet::<T>::read_events_no_consensus()
 				.map(|record| record.event.clone())
 				.collect();
 		Ok(XcmDryRunEffects { forwarded_xcms, emitted_events: events, execution_result: result })
@@ -3250,7 +3250,7 @@ impl<T: Config> Pallet<T> {
 	) -> Result<u128, XcmPaymentApiError> {
 		let asset: AssetId = asset.clone().try_into()
 			.map_err(|e| {
-				tracing::debug!(target: "xcm::pallet::query_weight_to_asset_fee", ?e, ?asset, "Failed to convert versioned asset");
+				tracing::debug!(target: "xcm::pezpallet::query_weight_to_asset_fee", ?e, ?asset, "Failed to convert versioned asset");
 				XcmPaymentApiError::VersionedConversionFailed
 			})?;
 
@@ -3264,7 +3264,7 @@ impl<T: Config> Pallet<T> {
 			let mut trader = Trader::new();
 			let result = trader.buy_weight(weight, max_payment.into(), &context)
 				.map_err(|e| {
-					tracing::error!(target: "xcm::pallet::query_weight_to_asset_fee", ?e, ?asset, "Failed to buy weight");
+					tracing::error!(target: "xcm::pezpallet::query_weight_to_asset_fee", ?e, ?asset, "Failed to buy weight");
 
 					// Return something convertible to `DispatchError` as required by the `with_transaction` fn.
 					DispatchError::Other("Failed to buy weight")
@@ -3272,12 +3272,12 @@ impl<T: Config> Pallet<T> {
 
 			TransactionOutcome::Rollback(result)
 		}).map_err(|error| {
-			tracing::debug!(target: "xcm::pallet::query_weight_to_asset_fee", ?error, "Failed to execute transaction");
+			tracing::debug!(target: "xcm::pezpallet::query_weight_to_asset_fee", ?error, "Failed to execute transaction");
 			XcmPaymentApiError::AssetNotFound
 		})?;
 
 		let Some(unspent) = unspent.fungible.get(&asset) else {
-			tracing::error!(target: "xcm::pallet::query_weight_to_asset_fee", ?asset, "The trader didn't return the needed fungible asset");
+			tracing::error!(target: "xcm::pezpallet::query_weight_to_asset_fee", ?asset, "The trader didn't return the needed fungible asset");
 			return Err(XcmPaymentApiError::AssetNotFound);
 		};
 
@@ -3456,7 +3456,7 @@ impl<T: Config> Pallet<T> {
 				aliaser
 					.expiry
 					.map(|expiry| {
-						pezframe_system::Pallet::<T>::current_block_number().saturated_into::<u64>() <
+						pezframe_system::Pezpallet::<T>::current_block_number().saturated_into::<u64>() <
 							expiry
 					})
 					.unwrap_or(true)
@@ -3492,7 +3492,7 @@ impl<T: Config> Pallet<T> {
 	/// - `message`: The message whose outcome should be reported.
 	/// - `responder`: The origin from which a response should be expected.
 	/// - `notify`: A dispatchable function which will be called once the outcome of `message` is
-	///   known. It may be a dispatchable in any pallet of the local chain, but other than the usual
+	///   known. It may be a dispatchable in any pezpallet of the local chain, but other than the usual
 	///   origin, it must accept exactly two arguments: `query_id: QueryId` and `outcome: Response`,
 	///   and in that order. It should expect that the origin is `Origin::Response` and will contain
 	///   the responder's location.
@@ -3580,9 +3580,9 @@ impl<T: Config> Pallet<T> {
 		Ok(())
 	}
 
-	/// Ensure the correctness of the state of this pallet.
+	/// Ensure the correctness of the state of this pezpallet.
 	///
-	/// This should be valid before and after each state transition of this pallet.
+	/// This should be valid before and after each state transition of this pezpallet.
 	///
 	/// ## Invariants
 	///
@@ -3762,7 +3762,7 @@ impl<T: Config> xcm_executor::traits::Enact for ReduceTicket<T> {
 	}
 }
 
-impl<T: Config> xcm_executor::traits::AssetLock for Pallet<T> {
+impl<T: Config> xcm_executor::traits::AssetLock for Pezpallet<T> {
 	type LockTicket = LockTicket<T>;
 	type UnlockTicket = UnlockTicket<T>;
 	type ReduceTicket = ReduceTicket<T>;
@@ -3855,7 +3855,7 @@ impl<T: Config> xcm_executor::traits::AssetLock for Pallet<T> {
 	}
 }
 
-impl<T: Config> WrapVersion for Pallet<T> {
+impl<T: Config> WrapVersion for Pezpallet<T> {
 	fn wrap_version<RuntimeCall: Decode + GetDispatchInfo>(
 		dest: &Location,
 		xcm: impl Into<VersionedXcm<RuntimeCall>>,
@@ -3876,13 +3876,13 @@ impl<T: Config> WrapVersion for Pallet<T> {
 	}
 }
 
-impl<T: Config> GetVersion for Pallet<T> {
+impl<T: Config> GetVersion for Pezpallet<T> {
 	fn get_version_for(dest: &Location) -> Option<XcmVersion> {
 		SupportedVersion::<T>::get(XCM_VERSION, LatestVersionedLocation(dest))
 	}
 }
 
-impl<T: Config> VersionChangeNotifier for Pallet<T> {
+impl<T: Config> VersionChangeNotifier for Pezpallet<T> {
 	/// Start notifying `location` should the XCM version of this chain change.
 	///
 	/// When it does, this type should ensure a `QueryResponse` message is sent with the given
@@ -3930,7 +3930,7 @@ impl<T: Config> VersionChangeNotifier for Pallet<T> {
 	}
 }
 
-impl<T: Config> DropAssets for Pallet<T> {
+impl<T: Config> DropAssets for Pezpallet<T> {
 	fn drop_assets(origin: &Location, assets: AssetsInHolding, _context: &XcmContext) -> Weight {
 		if assets.is_empty() {
 			return Weight::zero();
@@ -3948,7 +3948,7 @@ impl<T: Config> DropAssets for Pallet<T> {
 	}
 }
 
-impl<T: Config> ClaimAssets for Pallet<T> {
+impl<T: Config> ClaimAssets for Pezpallet<T> {
 	fn claim_assets(
 		origin: &Location,
 		ticket: &Location,
@@ -3980,7 +3980,7 @@ impl<T: Config> ClaimAssets for Pallet<T> {
 	}
 }
 
-impl<T: Config> OnResponse for Pallet<T> {
+impl<T: Config> OnResponse for Pezpallet<T> {
 	fn expecting_response(
 		origin: &Location,
 		query_id: QueryId,
@@ -4147,7 +4147,7 @@ impl<T: Config> OnResponse for Pallet<T> {
 					None => {
 						let e = Event::ResponseReady { query_id, response: response.clone() };
 						Self::deposit_event(e);
-						let at = pezframe_system::Pallet::<T>::current_block_number();
+						let at = pezframe_system::Pezpallet::<T>::current_block_number();
 						let response = response.into();
 						Queries::<T>::insert(query_id, QueryStatus::Ready { response, at });
 						Weight::zero()
@@ -4163,7 +4163,7 @@ impl<T: Config> OnResponse for Pallet<T> {
 	}
 }
 
-impl<T: Config> CheckSuspension for Pallet<T> {
+impl<T: Config> CheckSuspension for Pezpallet<T> {
 	fn is_suspended<Call>(
 		_origin: &Location,
 		_instructions: &mut [Instruction<Call>],
@@ -4174,7 +4174,7 @@ impl<T: Config> CheckSuspension for Pallet<T> {
 	}
 }
 
-impl<T: Config> RecordXcm for Pallet<T> {
+impl<T: Config> RecordXcm for Pezpallet<T> {
 	fn should_record() -> bool {
 		ShouldRecordXcm::<T>::get()
 	}
@@ -4231,7 +4231,7 @@ impl<L: Into<VersionedLocation> + Clone, T: Config> ContainsPair<L, L> for Autho
 		tracing::trace!(target: "xcm::pezpallet_xcm::AuthorizedAliasers::contains", ?origin, ?target);
 		// return true if the `origin` has been explicitly authorized by `target` as aliaser, and
 		// the authorization has not expired
-		Pallet::<T>::is_authorized_alias(origin, target).unwrap_or(false)
+		Pezpallet::<T>::is_authorized_alias(origin, target).unwrap_or(false)
 	}
 }
 

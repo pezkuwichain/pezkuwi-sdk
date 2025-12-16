@@ -15,9 +15,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Origin restriction pallet and transaction extension
+//! # Origin restriction pezpallet and transaction extension
 //!
-//! This pallet tracks certain origin and limits how much total "fee usage" they can accumulate.
+//! This pezpallet tracks certain origin and limits how much total "fee usage" they can accumulate.
 //! Usage gradually recovers as blocks pass.
 //!
 //! First the entity is extracted from the restricted origin, the entity represents the granularity
@@ -95,9 +95,9 @@ pub trait RestrictedEntity<OriginCaller, Balance>: Sized {
 	fn benchmarked_restricted_origin() -> OriginCaller;
 }
 
-pub use pallet::*;
-#[pezframe_support::pallet]
-pub mod pallet {
+pub use pezpallet::*;
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::{pezpallet_prelude::*, traits::ContainsPair};
 	use pezframe_system::pezpallet_prelude::*;
@@ -118,11 +118,11 @@ pub mod pallet {
 			T,
 		>>::Balance;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
 	/// The current usage for each entity.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Usages<T: Config> = StorageMap<
 		_,
 		Blake2_128Concat,
@@ -130,7 +130,7 @@ pub mod pallet {
 		Usage<BalanceOf<T>, BlockNumberFor<T>>,
 	>;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config:
 		pezframe_system::Config<
 			RuntimeCall: Dispatchable<Info = DispatchInfo, PostInfo = PostDispatchInfo>,
@@ -139,7 +139,7 @@ pub mod pallet {
 		+ Send
 		+ Sync
 	{
-		/// The weight information for this pallet.
+		/// The weight information for this pezpallet.
 		type WeightInfo: WeightInfo;
 
 		/// The type that represent the entities tracked, its allowance and the conversion from
@@ -165,7 +165,7 @@ pub mod pallet {
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// The origin has no usage tracked.
 		NoUsage,
@@ -173,19 +173,19 @@ pub mod pallet {
 		NotZero,
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// Usage for an entity is cleaned.
 		UsageCleaned { entity: T::RestrictedEntity },
 	}
 
-	#[pallet::call(weight = <T as Config>::WeightInfo)]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call(weight = <T as Config>::WeightInfo)]
+	impl<T: Config> Pezpallet<T> {
 		/// Allow to clean usage associated with an entity when it is zero or when there is no
 		/// longer any allowance for the origin.
 		// This could be an unsigned call
-		#[pallet::call_index(1)]
+		#[pezpallet::call_index(1)]
 		pub fn clean_usage(
 			origin: OriginFor<T>,
 			entity: T::RestrictedEntity,
@@ -200,7 +200,7 @@ pub mod pallet {
 				return Err(Error::<T>::NoUsage.into());
 			};
 
-			let now = pezframe_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pezpallet::<T>::block_number();
 			let elapsed = now.saturating_sub(usage.at_block).saturated_into::<u32>();
 
 			let allowance = entity.allowance();
@@ -297,7 +297,7 @@ impl<T: Config> TransactionExtension<T::RuntimeCall> for RestrictOrigin<T> {
 			return Err(InvalidTransaction::Call.into());
 		}
 
-		let now = pezframe_system::Pallet::<T>::block_number();
+		let now = pezframe_system::Pezpallet::<T>::block_number();
 		let mut usage = match Usages::<T>::get(&entity) {
 			Some(mut usage) => {
 				let elapsed = now.saturating_sub(usage.at_block).saturated_into::<u32>();

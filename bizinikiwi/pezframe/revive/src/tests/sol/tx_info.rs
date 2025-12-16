@@ -20,7 +20,7 @@
 use crate::{
 	test_utils::{builder::Contract, ALICE, ALICE_ADDR},
 	tests::{builder, ExtBuilder, Test},
-	Code, Config, Pallet,
+	Code, Config, Pezpallet,
 };
 use alloy_core::sol_types::{SolCall, SolInterface};
 use pezframe_support::traits::fungible::Mutate;
@@ -46,7 +46,7 @@ fn gasprice_works(fixture_type: FixtureType) {
 			)
 			.build_and_unwrap_result();
 		let decoded = TransactionInfo::gaspriceCall::abi_decode_returns(&result.data).unwrap();
-		assert_eq!(<Pallet<Test>>::evm_base_fee().as_u64(), decoded);
+		assert_eq!(<Pezpallet<Test>>::evm_base_fee().as_u64(), decoded);
 	});
 }
 

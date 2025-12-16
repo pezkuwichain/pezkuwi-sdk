@@ -62,7 +62,7 @@
 //!
 //! ### Implementation Details
 //!
-//! The current implementation of the static tracker is tightly coupled with the staking pallet
+//! The current implementation of the static tracker is tightly coupled with the staking pezpallet
 //! implementation, namely the representation of a voter ([`VoterOf`]). The SCALE encoded byte size
 //! is calculated using [`Encode::size_hint`] of each type in the voter tuple. Each voter's byte
 //! size is the sum of:

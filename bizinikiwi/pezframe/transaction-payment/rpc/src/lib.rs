@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! RPC interface for the transaction payment pallet.
+//! RPC interface for the transaction payment pezpallet.
 
 use std::sync::Arc;
 

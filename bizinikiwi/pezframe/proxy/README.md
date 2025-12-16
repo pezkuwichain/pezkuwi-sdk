@@ -6,8 +6,8 @@ The accounts to which permission is delegated may be required to announce the ac
 wish to execute some duration prior to execution happens. In this case, the target account may
 reject the announcement and in doing so, veto the execution.
 
-- [`Config`](https://docs.rs/pezpallet-proxy/latest/pallet_proxy/pallet/trait.Config.html)
-- [`Call`](https://docs.rs/pezpallet-proxy/latest/pallet_proxy/pallet/enum.Call.html)
+- [`Config`](https://docs.rs/pezpallet-proxy/latest/pallet_proxy/pezpallet/trait.Config.html)
+- [`Call`](https://docs.rs/pezpallet-proxy/latest/pallet_proxy/pezpallet/enum.Call.html)
 
 ## Overview
 

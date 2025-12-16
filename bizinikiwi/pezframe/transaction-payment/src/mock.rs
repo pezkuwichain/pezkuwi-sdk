@@ -34,7 +34,7 @@ pezframe_support::construct_runtime!(
 	{
 		System: system,
 		Balances: pezpallet_balances,
-		TransactionPayment: pezpallet_transaction_payment::{Pallet, Storage, Event<T>},
+		TransactionPayment: pezpallet_transaction_payment::{Pezpallet, Storage, Event<T>},
 	}
 );
 

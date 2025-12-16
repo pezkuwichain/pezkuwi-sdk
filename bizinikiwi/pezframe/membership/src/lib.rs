@@ -44,15 +44,15 @@ pub mod benchmarking;
 #[cfg(test)]
 mod tests;
 
-pub use pallet::*;
+pub use pezpallet::*;
 pub use weights::WeightInfo;
 
 const LOG_TARGET: &str = "runtime::membership";
 
 type AccountIdLookupOf<T> = <<T as pezframe_system::Config>::Lookup as StaticLookup>::Source;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
@@ -60,11 +60,11 @@ pub mod pallet {
 	/// The in-code storage version.
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(4);
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T, I = ()>(PhantomData<(T, I)>);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T, I = ()>(PhantomData<(T, I)>);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
@@ -101,20 +101,20 @@ pub mod pallet {
 		/// This is enforced in the code; the membership size can not exceed this limit.
 		type MaxMembers: Get<u32>;
 
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 	}
 
 	/// The current membership, stored as an ordered Vec.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Members<T: Config<I>, I: 'static = ()> =
 		StorageValue<_, BoundedVec<T::AccountId, T::MaxMembers>, ValueQuery>;
 
 	/// The current prime member, if one exists.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Prime<T: Config<I>, I: 'static = ()> = StorageValue<_, T::AccountId, OptionQuery>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(pezframe_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config<I>, I: 'static = ()> {
 		pub members: BoundedVec<T::AccountId, T::MaxMembers>,
@@ -122,7 +122,7 @@ pub mod pallet {
 		pub phantom: PhantomData<I>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config<I>, I: 'static> BuildGenesisConfig for GenesisConfig<T, I> {
 		fn build(&self) {
 			use alloc::collections::btree_set::BTreeSet;
@@ -140,8 +140,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config<I>, I: 'static = ()> {
 		/// The given member was added; see the transaction for who.
 		MemberAdded,
@@ -157,7 +157,7 @@ pub mod pallet {
 		Dummy { _phantom_data: PhantomData<(T::AccountId, <T as Config<I>>::RuntimeEvent)> },
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T, I = ()> {
 		/// Already a member.
 		AlreadyMember,
@@ -167,13 +167,13 @@ pub mod pallet {
 		TooManyMembers,
 	}
 
-	#[pallet::call]
-	impl<T: Config<I>, I: 'static> Pallet<T, I> {
+	#[pezpallet::call]
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 		/// Add a member `who` to the set.
 		///
 		/// May only be called from `T::AddOrigin`.
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::add_member(T::MaxMembers::get()))]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::add_member(T::MaxMembers::get()))]
 		pub fn add_member(
 			origin: OriginFor<T>,
 			who: AccountIdLookupOf<T>,
@@ -200,8 +200,8 @@ pub mod pallet {
 		/// Remove a member `who` from the set.
 		///
 		/// May only be called from `T::RemoveOrigin`.
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::remove_member(T::MaxMembers::get()))]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::remove_member(T::MaxMembers::get()))]
 		pub fn remove_member(
 			origin: OriginFor<T>,
 			who: AccountIdLookupOf<T>,
@@ -228,8 +228,8 @@ pub mod pallet {
 		/// May only be called from `T::SwapOrigin`.
 		///
 		/// Prime membership is *not* passed from `remove` to `add`, if extant.
-		#[pallet::call_index(2)]
-		#[pallet::weight(T::WeightInfo::swap_member(T::MaxMembers::get()))]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(T::WeightInfo::swap_member(T::MaxMembers::get()))]
 		pub fn swap_member(
 			origin: OriginFor<T>,
 			remove: AccountIdLookupOf<T>,
@@ -262,8 +262,8 @@ pub mod pallet {
 		/// pass `members` pre-sorted.
 		///
 		/// May only be called from `T::ResetOrigin`.
-		#[pallet::call_index(3)]
-		#[pallet::weight(T::WeightInfo::reset_members(members.len().unique_saturated_into()))]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(T::WeightInfo::reset_members(members.len().unique_saturated_into()))]
 		pub fn reset_members(origin: OriginFor<T>, members: Vec<T::AccountId>) -> DispatchResult {
 			T::ResetOrigin::ensure_origin(origin)?;
 
@@ -285,8 +285,8 @@ pub mod pallet {
 		/// May only be called from `Signed` origin of a current member.
 		///
 		/// Prime membership is passed from the origin account to `new`, if extant.
-		#[pallet::call_index(4)]
-		#[pallet::weight(T::WeightInfo::change_key(T::MaxMembers::get()))]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(T::WeightInfo::change_key(T::MaxMembers::get()))]
 		pub fn change_key(
 			origin: OriginFor<T>,
 			new: AccountIdLookupOf<T>,
@@ -325,8 +325,8 @@ pub mod pallet {
 		/// Set the prime member. Must be a current member.
 		///
 		/// May only be called from `T::PrimeOrigin`.
-		#[pallet::call_index(5)]
-		#[pallet::weight(T::WeightInfo::set_prime(T::MaxMembers::get()))]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(T::WeightInfo::set_prime(T::MaxMembers::get()))]
 		pub fn set_prime(
 			origin: OriginFor<T>,
 			who: AccountIdLookupOf<T>,
@@ -343,8 +343,8 @@ pub mod pallet {
 		/// Remove the prime member if it exists.
 		///
 		/// May only be called from `T::PrimeOrigin`.
-		#[pallet::call_index(6)]
-		#[pallet::weight(T::WeightInfo::clear_prime())]
+		#[pezpallet::call_index(6)]
+		#[pezpallet::weight(T::WeightInfo::clear_prime())]
 		pub fn clear_prime(origin: OriginFor<T>) -> DispatchResult {
 			T::PrimeOrigin::ensure_origin(origin)?;
 			Prime::<T, I>::kill();
@@ -354,7 +354,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config<I>, I: 'static> Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 	/// The current membership, stored as an ordered `Vec`.
 	pub fn members() -> BoundedVec<T::AccountId, T::MaxMembers> {
 		Members::<T, I>::get()
@@ -375,13 +375,13 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 	}
 }
 
-impl<T: Config<I>, I: 'static> Contains<T::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Contains<T::AccountId> for Pezpallet<T, I> {
 	fn contains(t: &T::AccountId) -> bool {
 		Members::<T, I>::get().binary_search(t).is_ok()
 	}
 }
 
-impl<T: Config> ContainsLengthBound for Pallet<T> {
+impl<T: Config> ContainsLengthBound for Pezpallet<T> {
 	fn min_len() -> usize {
 		0
 	}
@@ -392,7 +392,7 @@ impl<T: Config> ContainsLengthBound for Pallet<T> {
 	}
 }
 
-impl<T: Config<I>, I: 'static> SortedMembers<T::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> SortedMembers<T::AccountId> for Pezpallet<T, I> {
 	fn sorted_members() -> Vec<T::AccountId> {
 		Members::<T, I>::get().to_vec()
 	}
@@ -407,7 +407,7 @@ impl<T: Config<I>, I: 'static> SortedMembers<T::AccountId> for Pallet<T, I> {
 		let new_member_lookup = T::Lookup::unlookup(new_member.clone());
 
 		if let Ok(origin) = T::AddOrigin::try_successful_origin() {
-			assert_ok!(Pallet::<T, I>::add_member(origin, new_member_lookup,));
+			assert_ok!(Pezpallet::<T, I>::add_member(origin, new_member_lookup,));
 		} else {
 			log::error!(target: LOG_TARGET, "Failed to add `{new_member:?}` in `SortedMembers::add`.")
 		}

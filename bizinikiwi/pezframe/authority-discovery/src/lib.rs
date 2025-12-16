@@ -15,9 +15,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Authority discovery pallet.
+//! # Authority discovery pezpallet.
 //!
-//! This pallet is used by the `client/authority-discovery` and by pezkuwi's teyrchain logic
+//! This pezpallet is used by the `client/authority-discovery` and by pezkuwi's teyrchain logic
 //! to retrieve the current and the next set of authorities.
 
 // Ensure we're `no_std` when compiling for Wasm.
@@ -32,50 +32,50 @@ use pezframe_support::{
 };
 use pezsp_authority_discovery::AuthorityId;
 
-pub use pallet::*;
+pub use pezpallet::*;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
-	/// The pallet's config trait.
+	#[pezpallet::config]
+	/// The pezpallet's config trait.
 	pub trait Config: pezframe_system::Config + pezpallet_session::Config {
 		/// The maximum number of authorities that can be added.
 		type MaxAuthorities: Get<u32>;
 	}
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	/// Keys of the current authority set.
 	pub type Keys<T: Config> =
 		StorageValue<_, WeakBoundedVec<AuthorityId, T::MaxAuthorities>, ValueQuery>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	/// Keys of the next authority set.
 	pub type NextKeys<T: Config> =
 		StorageValue<_, WeakBoundedVec<AuthorityId, T::MaxAuthorities>, ValueQuery>;
 
 	#[derive(pezframe_support::DefaultNoBound)]
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	pub struct GenesisConfig<T: Config> {
 		pub keys: Vec<AuthorityId>,
 		#[serde(skip)]
 		pub _config: core::marker::PhantomData<T>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
-			Pallet::<T>::initialize_keys(&self.keys)
+			Pezpallet::<T>::initialize_keys(&self.keys)
 		}
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Retrieve authority identifiers of the current and next authority set
 	/// sorted and deduplicated.
 	pub fn authorities() -> Vec<AuthorityId> {
@@ -113,11 +113,11 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-impl<T: Config> pezsp_runtime::BoundToRuntimeAppPublic for Pallet<T> {
+impl<T: Config> pezsp_runtime::BoundToRuntimeAppPublic for Pezpallet<T> {
 	type Public = AuthorityId;
 }
 
-impl<T: Config> OneSessionHandler<T::AccountId> for Pallet<T> {
+impl<T: Config> OneSessionHandler<T::AccountId> for Pezpallet<T> {
 	type Key = AuthorityId;
 
 	fn on_genesis_session<'a, I: 'a>(authorities: I)
@@ -255,7 +255,7 @@ mod tests {
 
 	#[test]
 	fn authorities_returns_current_and_next_authority_set() {
-		// The whole authority discovery pallet ignores account ids, but we still need them for
+		// The whole authority discovery pezpallet ignores account ids, but we still need them for
 		// `pezpallet_session::OneSessionHandler::on_new_session`, thus its safe to use the same value
 		// everywhere.
 		let account_id = AuthorityPair::from_seed_slice(vec![10; 32].as_ref()).unwrap().public();

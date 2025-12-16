@@ -17,19 +17,19 @@
 pub mod account {
 	use pezframe_support::PalletId;
 
-	/// Zagros treasury pallet id, used to convert into AccountId - in Zagros as a destination for
+	/// Zagros treasury pezpallet id, used to convert into AccountId - in Zagros as a destination for
 	/// slashed funds.
 	pub const ZAGROS_TREASURY_PALLET_ID: PalletId = PalletId(*b"py/trsry");
-	/// Alliance pallet ID - used as a temporary place to deposit a slashed imbalance before the
+	/// Alliance pezpallet ID - used as a temporary place to deposit a slashed imbalance before the
 	/// teleport to the Treasury.
 	pub const ALLIANCE_PALLET_ID: PalletId = PalletId(*b"py/allia");
-	/// Referenda pallet ID - used as a temporary place to deposit a slashed imbalance before the
+	/// Referenda pezpallet ID - used as a temporary place to deposit a slashed imbalance before the
 	/// teleport to the Treasury.
 	pub const REFERENDA_PALLET_ID: PalletId = PalletId(*b"py/refer");
-	/// Ambassador Referenda pallet ID - used as a temporary place to deposit a slashed imbalance
+	/// Ambassador Referenda pezpallet ID - used as a temporary place to deposit a slashed imbalance
 	/// before the teleport to the Treasury.
 	pub const AMBASSADOR_REFERENDA_PALLET_ID: PalletId = PalletId(*b"py/amref");
-	/// Fellowship treasury pallet ID.
+	/// Fellowship treasury pezpallet ID.
 	pub const FELLOWSHIP_TREASURY_PALLET_ID: PalletId = PalletId(*b"py/feltr");
 }
 
@@ -174,7 +174,7 @@ pub mod snowbridge {
 	use pezframe_support::parameter_types;
 	use xcm::prelude::{Location, NetworkId};
 
-	/// The pallet index of the Ethereum inbound queue pallet in the bridge hub runtime.
+	/// The pezpallet index of the Ethereum inbound queue pezpallet in the bridge hub runtime.
 	pub const INBOUND_QUEUE_PALLET_INDEX_V1: u8 = 80;
 	pub const INBOUND_QUEUE_PALLET_INDEX_V2: u8 = 91;
 

@@ -14,27 +14,27 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! This pallet allows to assign permanent (long-lived) or temporary
+//! This pezpallet allows to assign permanent (long-lived) or temporary
 //! (short-lived) teyrchain slots to paras, leveraging the existing
 //! teyrchain slot lease mechanism. Temporary slots are given turns
 //! in a fair (though best-effort) manner.
 //! The dispatchables must be called from the configured origin
 //! (typically `Sudo` or a governance origin).
-//! This pallet should not be used on a production relay chain,
+//! This pezpallet should not be used on a production relay chain,
 //! only on a test relay chain (e.g. Pezkuwichain).
 
 pub mod benchmarking;
 pub mod migration;
 
 use crate::{
-	slots::{self, Pallet as Slots, WeightInfo as SlotsWeightInfo},
+	slots::{self, Pezpallet as Slots, WeightInfo as SlotsWeightInfo},
 	traits::{LeaseError, Leaser, Registrar},
 };
 use alloc::vec::Vec;
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
 use pezframe_support::{pezpallet_prelude::*, traits::Currency};
 use pezframe_system::pezpallet_prelude::*;
-pub use pallet::*;
+pub use pezpallet::*;
 use pezkuwi_primitives::Id as ParaId;
 use pezkuwi_runtime_teyrchains::{
 	configuration,
@@ -105,19 +105,19 @@ type BalanceOf<T> = <<<T as Config>::Leaser as Leaser<BlockNumberFor<T>>>::Curre
 >>::Balance;
 type LeasePeriodOf<T> = <<T as Config>::Leaser as Leaser<BlockNumberFor<T>>>::LeasePeriod;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
 	/// The in-code storage version.
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(1);
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
-	#[pallet::disable_pezframe_system_supertrait_check]
+	#[pezpallet::config]
+	#[pezpallet::disable_pezframe_system_supertrait_check]
 	pub trait Config: configuration::Config + paras::Config + slots::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
@@ -134,32 +134,32 @@ pub mod pallet {
 		>;
 
 		/// The number of lease periods a permanent teyrchain slot lasts.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type PermanentSlotLeasePeriodLength: Get<u32>;
 
 		/// The number of lease periods a temporary teyrchain slot lasts.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type TemporarySlotLeasePeriodLength: Get<u32>;
 
 		/// The max number of temporary slots to be scheduled per lease periods.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxTemporarySlotPerLeasePeriod: Get<u32>;
 
-		/// Weight Information for the Extrinsics in the Pallet
+		/// Weight Information for the Extrinsics in the Pezpallet
 		type WeightInfo: WeightInfo;
 	}
 
 	/// Assigned permanent slots, with their start lease period, and duration.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type PermanentSlots<T: Config> =
 		StorageMap<_, Twox64Concat, ParaId, (LeasePeriodOf<T>, LeasePeriodOf<T>), OptionQuery>;
 
 	/// Number of assigned (and active) permanent slots.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type PermanentSlotCount<T: Config> = StorageValue<_, u32, ValueQuery>;
 
 	/// Assigned temporary slots.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type TemporarySlots<T: Config> = StorageMap<
 		_,
 		Twox64Concat,
@@ -169,22 +169,22 @@ pub mod pallet {
 	>;
 
 	/// Number of assigned temporary slots.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type TemporarySlotCount<T: Config> = StorageValue<_, u32, ValueQuery>;
 
 	/// Number of active temporary slots in current slot lease period.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ActiveTemporarySlotCount<T: Config> = StorageValue<_, u32, ValueQuery>;
 
 	///  The max number of temporary slots that can be assigned.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type MaxTemporarySlots<T: Config> = StorageValue<_, u32, ValueQuery>;
 
 	/// The max number of permanent slots that can be assigned.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type MaxPermanentSlots<T: Config> = StorageValue<_, u32, ValueQuery>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(pezframe_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		pub max_temporary_slots: u32,
@@ -193,7 +193,7 @@ pub mod pallet {
 		pub _config: PhantomData<T>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			MaxPermanentSlots::<T>::put(&self.max_permanent_slots);
@@ -201,8 +201,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A teyrchain was assigned a permanent teyrchain slot
 		PermanentSlotAssigned(ParaId),
@@ -214,7 +214,7 @@ pub mod pallet {
 		MaxTemporarySlotsChanged { slots: u32 },
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// The specified teyrchain is not registered.
 		ParaDoesntExist,
@@ -238,8 +238,8 @@ pub mod pallet {
 		MaxTemporarySlotsExceeded,
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn on_initialize(n: BlockNumberFor<T>) -> Weight {
 			if let Some((lease_period, first_block)) = Self::lease_period_index(n) {
 				// If we're beginning a new lease period then handle that.
@@ -253,11 +253,11 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Assign a permanent teyrchain slot and immediately create a lease for it.
-		#[pallet::call_index(0)]
-		#[pallet::weight((<T as Config>::WeightInfo::assign_perm_teyrchain_slot(), DispatchClass::Operational))]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight((<T as Config>::WeightInfo::assign_perm_teyrchain_slot(), DispatchClass::Operational))]
 		pub fn assign_perm_teyrchain_slot(origin: OriginFor<T>, id: ParaId) -> DispatchResult {
 			T::AssignSlotOrigin::ensure_origin(origin)?;
 
@@ -314,8 +314,8 @@ pub mod pallet {
 		/// Assign a temporary teyrchain slot. The function tries to create a lease for it
 		/// immediately if `SlotLeasePeriodStart::Current` is specified, and if the number
 		/// of currently active temporary slots is below `MaxTemporarySlotPerLeasePeriod`.
-		#[pallet::call_index(1)]
-		#[pallet::weight((<T as Config>::WeightInfo::assign_temp_teyrchain_slot(), DispatchClass::Operational))]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight((<T as Config>::WeightInfo::assign_temp_teyrchain_slot(), DispatchClass::Operational))]
 		pub fn assign_temp_teyrchain_slot(
 			origin: OriginFor<T>,
 			id: ParaId,
@@ -401,8 +401,8 @@ pub mod pallet {
 		}
 
 		/// Unassign a permanent or temporary teyrchain slot
-		#[pallet::call_index(2)]
-		#[pallet::weight((<T as Config>::WeightInfo::unassign_teyrchain_slot(), DispatchClass::Operational))]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight((<T as Config>::WeightInfo::unassign_teyrchain_slot(), DispatchClass::Operational))]
 		pub fn unassign_teyrchain_slot(origin: OriginFor<T>, id: ParaId) -> DispatchResult {
 			T::AssignSlotOrigin::ensure_origin(origin.clone())?;
 
@@ -435,7 +435,7 @@ pub mod pallet {
 				if let Err(err) = pezkuwi_runtime_teyrchains::schedule_teyrchain_downgrade::<T>(id)
 				{
 					// Treat failed downgrade as warning .. slot lease has been cleared,
-					// so the teyrchain will be downgraded anyway by the slots pallet
+					// so the teyrchain will be downgraded anyway by the slots pezpallet
 					// at the end of the lease period .
 					log::warn!(
 						target: LOG_TARGET,
@@ -451,8 +451,8 @@ pub mod pallet {
 		}
 
 		/// Sets the storage value [`MaxPermanentSlots`].
-		#[pallet::call_index(3)]
-		#[pallet::weight((<T as Config>::WeightInfo::set_max_permanent_slots(), DispatchClass::Operational))]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight((<T as Config>::WeightInfo::set_max_permanent_slots(), DispatchClass::Operational))]
 		pub fn set_max_permanent_slots(origin: OriginFor<T>, slots: u32) -> DispatchResult {
 			ensure_root(origin)?;
 
@@ -463,8 +463,8 @@ pub mod pallet {
 		}
 
 		/// Sets the storage value [`MaxTemporarySlots`].
-		#[pallet::call_index(4)]
-		#[pallet::weight((<T as Config>::WeightInfo::set_max_temporary_slots(), DispatchClass::Operational))]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight((<T as Config>::WeightInfo::set_max_temporary_slots(), DispatchClass::Operational))]
 		pub fn set_max_temporary_slots(origin: OriginFor<T>, slots: u32) -> DispatchResult {
 			ensure_root(origin)?;
 
@@ -476,7 +476,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Allocate temporary slot leases up to `MaxTemporarySlotPerLeasePeriod` per lease period.
 	/// Beyond the already active temporary slot leases, this function will activate more leases
 	/// in the following order of preference:
@@ -602,7 +602,7 @@ impl<T: Config> Pallet<T> {
 
 	/// Returns current lease period index.
 	fn current_lease_period_index() -> LeasePeriodOf<T> {
-		T::Leaser::lease_period_index(pezframe_system::Pallet::<T>::block_number())
+		T::Leaser::lease_period_index(pezframe_system::Pezpallet::<T>::block_number())
 			.and_then(|x| Some(x.0))
 			.unwrap()
 	}
@@ -615,7 +615,7 @@ impl<T: Config> Pallet<T> {
 	/// Handles start of a lease period.
 	fn manage_lease_period_start(lease_period_index: LeasePeriodOf<T>) -> Weight {
 		// Note: leases that have ended in previous lease period, should have been cleaned in slots
-		// pallet.
+		// pezpallet.
 		if let Err(err) = Self::allocate_temporary_slot_leases(lease_period_index) {
 			log::error!(
 				target: LOG_TARGET,
@@ -629,7 +629,7 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-/// tests for this pallet
+/// tests for this pezpallet
 #[cfg(test)]
 mod tests {
 	use super::*;

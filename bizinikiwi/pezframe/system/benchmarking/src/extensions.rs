@@ -28,7 +28,7 @@ use pezframe_support::{
 };
 use pezframe_system::{
 	pezpallet_prelude::*, CheckGenesis, CheckMortality, CheckNonZeroSender, CheckNonce,
-	CheckSpecVersion, CheckTxVersion, CheckWeight, Config, ExtensionsWeightInfo, Pallet as System,
+	CheckSpecVersion, CheckTxVersion, CheckWeight, Config, ExtensionsWeightInfo, Pezpallet as System,
 	RawOrigin, WeightReclaim,
 };
 use pezsp_runtime::{
@@ -38,7 +38,7 @@ use pezsp_runtime::{
 	},
 };
 
-pub struct Pallet<T: Config>(System<T>);
+pub struct Pezpallet<T: Config>(System<T>);
 
 #[benchmarks(where
 	T: Send + Sync,
@@ -298,5 +298,5 @@ mod benchmarks {
 		Ok(())
 	}
 
-	impl_benchmark_test_suite!(Pallet, crate::mock::new_test_ext(), crate::mock::Test,);
+	impl_benchmark_test_suite!(Pezpallet, crate::mock::new_test_ext(), crate::mock::Test,);
 }

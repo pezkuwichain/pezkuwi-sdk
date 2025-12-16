@@ -18,7 +18,7 @@
 //! Types and traits for dynamic parameters.
 //!
 //! Can be used by 3rd party macros to define dynamic parameters that are compatible with the the
-//! `parameters` pallet.
+//! `parameters` pezpallet.
 
 use codec::MaxEncodedLen;
 use pezframe_support::Parameter;
@@ -83,7 +83,7 @@ impl AggregatedKeyValue for () {
 
 /// Allows to create a `ParameterStore` from a `RuntimeParameterStore`.
 ///
-/// This concretization is useful when configuring pallets, since a pallet will require a parameter
+/// This concretization is useful when configuring pallets, since a pezpallet will require a parameter
 /// store for its own KV type and not the aggregated runtime-wide KV type.
 pub struct ParameterStoreAdapter<PS, KV>(core::marker::PhantomData<(PS, KV)>);
 

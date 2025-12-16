@@ -376,8 +376,8 @@ fn reward_to_stake_works() {
 
 			// Compute total payout now for whole duration as other parameter won't change
 			let validator_payout_0 = validator_payout_for(time_per_era());
-			Pallet::<T>::reward_by_ids(vec![(11, 1)]);
-			Pallet::<T>::reward_by_ids(vec![(21, 1)]);
+			Pezpallet::<T>::reward_by_ids(vec![(11, 1)]);
+			Pezpallet::<T>::reward_by_ids(vec![(21, 1)]);
 
 			// New era --> rewards are paid --> stakes are changed
 			Session::roll_until_active_era(2);
@@ -707,17 +707,17 @@ fn claim_reward_at_the_last_era_and_no_double_claim_and_invalid_claim() {
 		Payee::<T>::insert(101, RewardDestination::Account(101));
 
 		// reward for era 1
-		Pallet::<T>::reward_by_ids(vec![(11, 1)]);
+		Pezpallet::<T>::reward_by_ids(vec![(11, 1)]);
 
 		Session::roll_until_active_era(2);
 
 		// reward for era 2
-		Pallet::<T>::reward_by_ids(vec![(11, 1)]);
+		Pezpallet::<T>::reward_by_ids(vec![(11, 1)]);
 
 		Session::roll_until_active_era(3);
 
 		// reward for era 3
-		Pallet::<T>::reward_by_ids(vec![(11, 1)]);
+		Pezpallet::<T>::reward_by_ids(vec![(11, 1)]);
 
 		// go to the history depth era
 		Session::roll_until_active_era(HistoryDepth::get() + 1);
@@ -784,7 +784,7 @@ fn nominators_over_max_exposure_page_size_are_rewarded() {
 		Session::roll_until_active_era(2);
 
 		// reward for era 2
-		Pallet::<T>::reward_by_ids(vec![(11, 1)]);
+		Pezpallet::<T>::reward_by_ids(vec![(11, 1)]);
 
 		Session::roll_until_active_era(3);
 		mock::make_all_reward_payment(2);
@@ -826,7 +826,7 @@ fn test_nominators_are_rewarded_for_all_exposure_page() {
 		Session::roll_until_active_era(2);
 
 		// give rewards
-		Pallet::<T>::reward_by_ids(vec![(11, 1)]);
+		Pezpallet::<T>::reward_by_ids(vec![(11, 1)]);
 
 		Session::roll_until_active_era(3);
 		mock::make_all_reward_payment(2);

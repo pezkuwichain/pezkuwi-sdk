@@ -33,31 +33,31 @@ mod tests;
 mod benchmarking;
 pub mod weights;
 
-pub use pallet::*;
+pub use pezpallet::*;
 pub use weights::WeightInfo;
 
 type MemberOf<T> = <<T as Config>::People as AddOnlyPeopleTrait>::Member;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::{pezpallet_prelude::*, Twox64Concat};
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	/// The configuration of the pallet dummy DIM.
-	#[pallet::config]
+	/// The configuration of the pezpallet dummy DIM.
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 
 		/// The runtime event type.
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
-		/// The origin which may command personhood updates through this pallet. Root can always do
+		/// The origin which may command personhood updates through this pezpallet. Root can always do
 		/// this.
 		type UpdateOrigin: EnsureOrigin<Self::RuntimeOrigin>;
 
@@ -88,16 +88,16 @@ pub mod pallet {
 	}
 
 	/// The personal IDs that are reserved by unproven people.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ReservedIds<T: Config> = StorageMap<_, Blake2_128Concat, PersonalId, (), OptionQuery>;
 
 	/// The people we track along with their records.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type People<T: Config> =
 		StorageMap<_, Twox64Concat, PersonalId, Record<MemberOf<T>>, OptionQuery>;
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A number of IDs was reserved.
 		IdsReserved { count: u32 },
@@ -111,13 +111,13 @@ pub mod pallet {
 		PeopleSuspended { count: u32 },
 		/// Someone's personhood was resumed.
 		PersonhoodResumed { id: PersonalId },
-		/// The pallet enabled suspensions.
+		/// The pezpallet enabled suspensions.
 		SuspensionsStarted,
-		/// The pallet disabled suspensions.
+		/// The pezpallet disabled suspensions.
 		SuspensionsEnded,
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// The personal ID does not belong to a recognized person.
 		NotPerson,
@@ -129,11 +129,11 @@ pub mod pallet {
 		TooManyPeople,
 	}
 
-	#[pallet::call(weight = <T as Config>::WeightInfo)]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call(weight = <T as Config>::WeightInfo)]
+	impl<T: Config> Pezpallet<T> {
 		/// Reserve a number of personal IDs.
-		#[pallet::weight(T::WeightInfo::reserve_ids(T::MaxPersonBatchSize::get()))]
-		#[pallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::reserve_ids(T::MaxPersonBatchSize::get()))]
+		#[pezpallet::call_index(0)]
 		pub fn reserve_ids(origin: OriginFor<T>, count: u32) -> DispatchResultWithPostInfo {
 			T::UpdateOrigin::ensure_origin_or_root(origin)?;
 			ensure!(count <= T::MaxPersonBatchSize::get(), Error::<T>::TooManyPeople);
@@ -146,7 +146,7 @@ pub mod pallet {
 		}
 
 		/// Renew a personal ID. The ID must not be in use.
-		#[pallet::call_index(1)]
+		#[pezpallet::call_index(1)]
 		pub fn renew_id_reservation(
 			origin: OriginFor<T>,
 			id: PersonalId,
@@ -160,7 +160,7 @@ pub mod pallet {
 		}
 
 		/// Cancel a personal ID reservation.
-		#[pallet::call_index(2)]
+		#[pezpallet::call_index(2)]
 		pub fn cancel_id_reservation(
 			origin: OriginFor<T>,
 			id: PersonalId,
@@ -174,8 +174,8 @@ pub mod pallet {
 		}
 
 		/// Grant personhood for a list of candidates that have reserved personal IDs.
-		#[pallet::weight(T::WeightInfo::recognize_personhood(T::MaxPersonBatchSize::get()))]
-		#[pallet::call_index(3)]
+		#[pezpallet::weight(T::WeightInfo::recognize_personhood(T::MaxPersonBatchSize::get()))]
+		#[pezpallet::call_index(3)]
 		pub fn recognize_personhood(
 			origin: OriginFor<T>,
 			ids_and_keys: BoundedVec<(PersonalId, MemberOf<T>), T::MaxPersonBatchSize>,
@@ -194,8 +194,8 @@ pub mod pallet {
 
 		/// Suspend the personhood of a list of recognized people. The people must not currently be
 		/// suspended.
-		#[pallet::weight(T::WeightInfo::suspend_personhood(T::MaxPersonBatchSize::get()))]
-		#[pallet::call_index(4)]
+		#[pezpallet::weight(T::WeightInfo::suspend_personhood(T::MaxPersonBatchSize::get()))]
+		#[pezpallet::call_index(4)]
 		pub fn suspend_personhood(
 			origin: OriginFor<T>,
 			ids: BoundedVec<PersonalId, T::MaxPersonBatchSize>,
@@ -214,7 +214,7 @@ pub mod pallet {
 		}
 
 		/// Resume someone's personhood. The person must currently be suspended.
-		#[pallet::call_index(5)]
+		#[pezpallet::call_index(5)]
 		pub fn resume_personhood(
 			origin: OriginFor<T>,
 			id: PersonalId,
@@ -232,7 +232,7 @@ pub mod pallet {
 
 		/// Start a mutation session in the underlying `People` interface. This call does not check
 		/// whether a mutation session is already ongoing and can start new sessions.
-		#[pallet::call_index(6)]
+		#[pezpallet::call_index(6)]
 		pub fn start_mutation_session(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 			T::UpdateOrigin::ensure_origin_or_root(origin)?;
 			T::People::start_people_set_mutation_session()?;
@@ -241,10 +241,10 @@ pub mod pallet {
 		}
 
 		/// End a mutation session in the underlying `People` interface. This call can end multiple
-		/// mutation sessions, even ones not started by this pallet.
+		/// mutation sessions, even ones not started by this pezpallet.
 		///
 		/// This call will fail if no mutation session is ongoing.
-		#[pallet::call_index(7)]
+		#[pezpallet::call_index(7)]
 		pub fn end_mutation_session(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 			T::UpdateOrigin::ensure_origin_or_root(origin)?;
 			T::People::end_people_set_mutation_session()?;

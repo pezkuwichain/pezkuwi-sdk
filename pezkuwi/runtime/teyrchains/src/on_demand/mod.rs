@@ -55,7 +55,7 @@ use pezframe_support::{
 	},
 	PalletId,
 };
-use pezframe_system::{pezpallet_prelude::*, Pallet as System};
+use pezframe_system::{pezpallet_prelude::*, Pezpallet as System};
 use pezkuwi_primitives::{CoreIndex, Id as ParaId};
 use pezsp_runtime::{
 	traits::{AccountIdConversion, One, SaturatedConversion},
@@ -68,7 +68,7 @@ use types::{
 
 const LOG_TARGET: &str = "runtime::teyrchains::on-demand";
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 pub trait WeightInfo {
 	fn place_order_allow_death(s: u32) -> Weight;
@@ -102,19 +102,19 @@ enum PaymentType {
 	Balance,
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 
 	use super::*;
 
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(1);
 
-	#[pallet::pallet]
-	#[pallet::without_storage_info]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::without_storage_info]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config + configuration::Config + paras::Config {
 		/// The runtime's definition of an event.
 		#[allow(deprecated)]
@@ -123,30 +123,30 @@ pub mod pallet {
 		/// The runtime's definition of a Currency.
 		type Currency: Currency<Self::AccountId>;
 
-		/// Something that provides the weight of this pallet.
+		/// Something that provides the weight of this pezpallet.
 		type WeightInfo: WeightInfo;
 
 		/// The default value for the spot traffic multiplier.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type TrafficDefaultValue: Get<FixedU128>;
 
 		/// The maximum number of blocks some historical revenue
 		/// information stored for.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxHistoricalRevenue: Get<u32>;
 
 		/// Identifier for the internal revenue balance.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type PalletId: Get<PalletId>;
 	}
 
 	/// Creates an empty queue status for an empty queue with initial traffic value.
-	#[pallet::type_value]
+	#[pezpallet::type_value]
 	pub(super) fn QueueStatusOnEmpty<T: Config>() -> QueueStatusType {
 		QueueStatusType { traffic: T::TrafficDefaultValue::get(), ..Default::default() }
 	}
 
-	#[pallet::type_value]
+	#[pezpallet::type_value]
 	pub(super) fn EntriesOnEmpty<T: Config>() -> BinaryHeap<EnqueuedOrder> {
 		BinaryHeap::new()
 	}
@@ -154,22 +154,22 @@ pub mod pallet {
 	/// Maps a `ParaId` to `CoreIndex` and keeps track of how many assignments the scheduler has in
 	/// it's lookahead. Keeping track of this affinity prevents parallel execution of the same
 	/// `ParaId` on two or more `CoreIndex`es.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type ParaIdAffinity<T: Config> =
 		StorageMap<_, Twox64Concat, ParaId, CoreAffinityCount, OptionQuery>;
 
 	/// Overall status of queue (both free + affinity entries)
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type QueueStatus<T: Config> =
 		StorageValue<_, QueueStatusType, ValueQuery, QueueStatusOnEmpty<T>>;
 
 	/// Priority queue for all orders which don't yet (or not any more) have any core affinity.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type FreeEntries<T: Config> =
 		StorageValue<_, BinaryHeap<EnqueuedOrder>, ValueQuery, EntriesOnEmpty<T>>;
 
 	/// Queue entries that are currently bound to a particular core due to core affinity.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type AffinityEntries<T: Config> = StorageMap<
 		_,
 		Twox64Concat,
@@ -180,17 +180,17 @@ pub mod pallet {
 	>;
 
 	/// Keeps track of accumulated revenue from on demand order sales.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Revenue<T: Config> =
 		StorageValue<_, BoundedVec<BalanceOf<T>, T::MaxHistoricalRevenue>, ValueQuery>;
 
 	/// Keeps track of credits owned by each account.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Credits<T: Config> =
 		StorageMap<_, Blake2_128Concat, T::AccountId, BalanceOf<T>, ValueQuery>;
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// An order was placed at some spot price amount by orderer ordered_by
 		OnDemandOrderPlaced { para_id: ParaId, spot_price: BalanceOf<T>, ordered_by: T::AccountId },
@@ -200,7 +200,7 @@ pub mod pallet {
 		AccountCredited { who: T::AccountId, amount: BalanceOf<T> },
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// The order queue is full, `place_order` will not continue.
 		QueueFull,
@@ -211,8 +211,8 @@ pub mod pallet {
 		InsufficientCredits,
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn on_initialize(_now: BlockNumberFor<T>) -> Weight {
 			// Update revenue information storage.
 			Revenue::<T>::mutate(|revenue| {
@@ -240,8 +240,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Create a single on demand core order.
 		/// Will use the spot price for the current block and will reap the account if needed.
 		///
@@ -257,8 +257,8 @@ pub mod pallet {
 		///
 		/// Events:
 		/// - `OnDemandOrderPlaced`
-		#[pallet::call_index(0)]
-		#[pallet::weight(<T as Config>::WeightInfo::place_order_allow_death(QueueStatus::<T>::get().size()))]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::place_order_allow_death(QueueStatus::<T>::get().size()))]
 		#[allow(deprecated)]
 		#[deprecated(note = "This will be removed in favor of using `place_order_with_credits`")]
 		pub fn place_order_allow_death(
@@ -267,7 +267,7 @@ pub mod pallet {
 			para_id: ParaId,
 		) -> DispatchResult {
 			let sender = ensure_signed(origin)?;
-			Pallet::<T>::do_place_order(
+			Pezpallet::<T>::do_place_order(
 				sender,
 				max_amount,
 				para_id,
@@ -291,8 +291,8 @@ pub mod pallet {
 		///
 		/// Events:
 		/// - `OnDemandOrderPlaced`
-		#[pallet::call_index(1)]
-		#[pallet::weight(<T as Config>::WeightInfo::place_order_keep_alive(QueueStatus::<T>::get().size()))]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::place_order_keep_alive(QueueStatus::<T>::get().size()))]
 		#[allow(deprecated)]
 		#[deprecated(note = "This will be removed in favor of using `place_order_with_credits`")]
 		pub fn place_order_keep_alive(
@@ -301,7 +301,7 @@ pub mod pallet {
 			para_id: ParaId,
 		) -> DispatchResult {
 			let sender = ensure_signed(origin)?;
-			Pallet::<T>::do_place_order(
+			Pezpallet::<T>::do_place_order(
 				sender,
 				max_amount,
 				para_id,
@@ -327,15 +327,15 @@ pub mod pallet {
 		///
 		/// Events:
 		/// - `OnDemandOrderPlaced`
-		#[pallet::call_index(2)]
-		#[pallet::weight(<T as Config>::WeightInfo::place_order_with_credits(QueueStatus::<T>::get().size()))]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::place_order_with_credits(QueueStatus::<T>::get().size()))]
 		pub fn place_order_with_credits(
 			origin: OriginFor<T>,
 			max_amount: BalanceOf<T>,
 			para_id: ParaId,
 		) -> DispatchResult {
 			let sender = ensure_signed(origin)?;
-			Pallet::<T>::do_place_order(
+			Pezpallet::<T>::do_place_order(
 				sender,
 				max_amount,
 				para_id,
@@ -347,7 +347,7 @@ pub mod pallet {
 }
 
 // Internal functions and interface to scheduler/wrapping assignment provider.
-impl<T: Config> Pallet<T>
+impl<T: Config> Pezpallet<T>
 where
 	BalanceOf<T>: FixedPointOperand,
 {
@@ -387,13 +387,13 @@ where
 
 		let assignment = entry.map(|e| Assignment::Pool { para_id: e.para_id, core_index }).ok()?;
 
-		Pallet::<T>::increase_affinity(assignment.para_id(), core_index);
+		Pezpallet::<T>::increase_affinity(assignment.para_id(), core_index);
 		Some(assignment)
 	}
 
 	/// Report that an assignment was duplicated by the scheduler.
 	pub fn assignment_duplicated(para_id: ParaId, core_index: CoreIndex) {
-		Pallet::<T>::increase_affinity(para_id, core_index);
+		Pezpallet::<T>::increase_affinity(para_id, core_index);
 	}
 
 	/// Report that the `para_id` & `core_index` combination was processed.
@@ -403,7 +403,7 @@ where
 	/// In other words for each `pop_assignment_for_core` a call to this function or
 	/// `push_back_assignment` must follow, but only one.
 	pub fn report_processed(para_id: ParaId, core_index: CoreIndex) {
-		Pallet::<T>::decrease_affinity_update_queue(para_id, core_index);
+		Pezpallet::<T>::decrease_affinity_update_queue(para_id, core_index);
 	}
 
 	/// Push an assignment back to the front of the queue.
@@ -417,9 +417,9 @@ where
 	/// - `para_id`: The para that did not make it.
 	/// - `core_index`: The core the para was scheduled on.
 	pub fn push_back_assignment(para_id: ParaId, core_index: CoreIndex) {
-		Pallet::<T>::decrease_affinity_update_queue(para_id, core_index);
+		Pezpallet::<T>::decrease_affinity_update_queue(para_id, core_index);
 		QueueStatus::<T>::mutate(|queue_status| {
-			Pallet::<T>::add_on_demand_order(queue_status, para_id, QueuePushDirection::Front);
+			Pezpallet::<T>::add_on_demand_order(queue_status, para_id, QueuePushDirection::Front);
 		});
 	}
 
@@ -432,12 +432,12 @@ where
 		Credits::<T>::mutate(who.clone(), |credits| {
 			*credits = credits.saturating_add(amount);
 		});
-		Pallet::<T>::deposit_event(Event::<T>::AccountCredited { who, amount });
+		Pezpallet::<T>::deposit_event(Event::<T>::AccountCredited { who, amount });
 	}
 
 	/// Helper function for `place_order_*` calls. Used to differentiate between placing orders
 	/// with a keep alive check or to allow the account to be reaped. The amount charged is
-	/// stored to the pallet account to be later paid out as revenue.
+	/// stored to the pezpallet account to be later paid out as revenue.
 	///
 	/// Parameters:
 	/// - `sender`: The sender of the call, funds will be withdrawn from this account.
@@ -490,7 +490,7 @@ where
 						existence_requirement,
 					)?;
 
-					// Consume the negative imbalance and deposit it into the pallet account. Make
+					// Consume the negative imbalance and deposit it into the pezpallet account. Make
 					// sure the account preserves even without the existential deposit.
 					let pot = Self::account_id();
 					if !System::<T>::account_exists(&pot) {
@@ -525,8 +525,8 @@ where
 				}
 			});
 
-			Pallet::<T>::add_on_demand_order(queue_status, para_id, QueuePushDirection::Back);
-			Pallet::<T>::deposit_event(Event::<T>::OnDemandOrderPlaced {
+			Pezpallet::<T>::add_on_demand_order(queue_status, para_id, QueuePushDirection::Back);
+			Pezpallet::<T>::deposit_event(Event::<T>::OnDemandOrderPlaced {
 				para_id,
 				spot_price,
 				ordered_by: sender,
@@ -560,7 +560,7 @@ where
 					);
 
 					// emit the event for updated new price
-					Pallet::<T>::deposit_event(Event::<T>::SpotPriceSet { spot_price });
+					Pezpallet::<T>::deposit_event(Event::<T>::SpotPriceSet { spot_price });
 				}
 			},
 			Err(err) => {
@@ -675,7 +675,7 @@ where
 	///
 	/// if affinity dropped to 0, moving entries back to `FreeEntries`.
 	fn decrease_affinity_update_queue(para_id: ParaId, core_index: CoreIndex) {
-		let affinity = Pallet::<T>::decrease_affinity(para_id, core_index);
+		let affinity = Pezpallet::<T>::decrease_affinity(para_id, core_index);
 		#[cfg(not(test))]
 		debug_assert_ne!(
 			affinity, None,
@@ -743,7 +743,7 @@ where
 
 	/// Collect the revenue from the `when` blockheight
 	pub fn claim_revenue_until(when: BlockNumberFor<T>) -> BalanceOf<T> {
-		let now = <pezframe_system::Pallet<T>>::block_number();
+		let now = <pezframe_system::Pezpallet<T>>::block_number();
 		let mut amount: BalanceOf<T> = BalanceOf::<T>::zero();
 		Revenue::<T>::mutate(|revenue| {
 			while !revenue.is_empty() {
@@ -759,7 +759,7 @@ where
 		amount
 	}
 
-	/// Account of the pallet pot, where the funds from instantaneous coretime sale are accumulated.
+	/// Account of the pezpallet pot, where the funds from instantaneous coretime sale are accumulated.
 	pub fn account_id() -> T::AccountId {
 		T::PalletId::get().into_account_truncating()
 	}
@@ -786,7 +786,7 @@ where
 	pub fn populate_queue(para_id: ParaId, num: u32) {
 		QueueStatus::<T>::mutate(|queue_status| {
 			for _ in 0..num {
-				Pallet::<T>::add_on_demand_order(queue_status, para_id, QueuePushDirection::Back);
+				Pezpallet::<T>::add_on_demand_order(queue_status, para_id, QueuePushDirection::Back);
 			}
 		});
 	}

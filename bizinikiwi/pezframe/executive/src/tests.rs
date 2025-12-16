@@ -44,18 +44,18 @@ use pezsp_runtime::{
 const TEST_KEY: &[u8] = b":test:key:";
 const TEST_KEY_2: &[u8] = b":test:key_2:";
 
-#[pezframe_support::pallet(dev_mode)]
+#[pezframe_support::pezpallet(dev_mode)]
 mod custom {
 	use super::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		// module hooks.
 		// one with block number arg and one without
 		fn on_initialize(_: BlockNumberFor<T>) -> Weight {
@@ -80,15 +80,15 @@ mod custom {
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		pub fn some_function(origin: OriginFor<T>) -> DispatchResult {
 			// NOTE: does not make any difference.
 			pezframe_system::ensure_signed(origin)?;
 			Ok(())
 		}
 
-		#[pallet::weight((200, DispatchClass::Operational))]
+		#[pezpallet::weight((200, DispatchClass::Operational))]
 		pub fn some_root_operation(origin: OriginFor<T>) -> DispatchResult {
 			pezframe_system::ensure_root(origin)?;
 			Ok(())
@@ -109,7 +109,7 @@ mod custom {
 			Ok(())
 		}
 
-		#[pallet::weight((0, DispatchClass::Mandatory))]
+		#[pezpallet::weight((0, DispatchClass::Mandatory))]
 		pub fn inherent(origin: OriginFor<T>) -> DispatchResult {
 			pezframe_system::ensure_none(origin)?;
 			Ok(())
@@ -122,8 +122,8 @@ mod custom {
 		}
 	}
 
-	#[pallet::inherent]
-	impl<T: Config> ProvideInherent for Pallet<T> {
+	#[pezpallet::inherent]
+	impl<T: Config> ProvideInherent for Pezpallet<T> {
 		type Call = Call<T>;
 
 		type Error = pezsp_inherents::MakeFatalError<()>;
@@ -139,8 +139,8 @@ mod custom {
 		}
 	}
 
-	#[pallet::validate_unsigned]
-	impl<T: Config> ValidateUnsigned for Pallet<T> {
+	#[pezpallet::validate_unsigned]
+	impl<T: Config> ValidateUnsigned for Pezpallet<T> {
 		type Call = Call<T>;
 
 		// Inherent call is accepted for being dispatched
@@ -162,18 +162,18 @@ mod custom {
 	}
 }
 
-#[pezframe_support::pallet(dev_mode)]
+#[pezframe_support::pezpallet(dev_mode)]
 mod custom2 {
 	use super::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		// module hooks.
 		// one with block number arg and one without
 		fn on_initialize(_: BlockNumberFor<T>) -> Weight {
@@ -206,8 +206,8 @@ mod custom2 {
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		pub fn allowed_unsigned(origin: OriginFor<T>) -> DispatchResult {
 			pezframe_system::ensure_root(origin)?;
 			Ok(())
@@ -221,7 +221,7 @@ mod custom2 {
 			Ok(())
 		}
 
-		#[pallet::weight({0})]
+		#[pezpallet::weight({0})]
 		pub fn optional_inherent(origin: OriginFor<T>) -> DispatchResult {
 			pezframe_system::ensure_none(origin)?;
 
@@ -232,7 +232,7 @@ mod custom2 {
 			Ok(())
 		}
 
-		#[pallet::weight((0, DispatchClass::Mandatory))]
+		#[pezpallet::weight((0, DispatchClass::Mandatory))]
 		pub fn inherent(origin: OriginFor<T>) -> DispatchResult {
 			pezframe_system::ensure_none(origin)?;
 
@@ -244,8 +244,8 @@ mod custom2 {
 		}
 	}
 
-	#[pallet::inherent]
-	impl<T: Config> ProvideInherent for Pallet<T> {
+	#[pezpallet::inherent]
+	impl<T: Config> ProvideInherent for Pezpallet<T> {
 		type Call = Call<T>;
 
 		type Error = pezsp_inherents::MakeFatalError<()>;
@@ -261,8 +261,8 @@ mod custom2 {
 		}
 	}
 
-	#[pallet::validate_unsigned]
-	impl<T: Config> ValidateUnsigned for Pallet<T> {
+	#[pezpallet::validate_unsigned]
+	impl<T: Config> ValidateUnsigned for Pezpallet<T> {
 		type Call = Call<T>;
 
 		// Inherent call is accepted for being dispatched
@@ -288,11 +288,11 @@ mod custom2 {
 pezframe_support::construct_runtime!(
 	pub struct Runtime
 	{
-		System: pezframe_system::{Pallet, Call, Config<T>, Storage, Event<T>},
-		Balances: pezpallet_balances::{Pallet, Call, Storage, Config<T>, Event<T>},
-		TransactionPayment: pezpallet_transaction_payment::{Pallet, Storage, Event<T>},
-		Custom: custom::{Pallet, Call, ValidateUnsigned, Inherent},
-		Custom2: custom2::{Pallet, Call, ValidateUnsigned, Inherent},
+		System: pezframe_system::{Pezpallet, Call, Config<T>, Storage, Event<T>},
+		Balances: pezpallet_balances::{Pezpallet, Call, Storage, Config<T>, Event<T>},
+		TransactionPayment: pezpallet_transaction_payment::{Pezpallet, Storage, Event<T>},
+		Custom: custom::{Pezpallet, Call, ValidateUnsigned, Inherent},
+		Custom2: custom2::{Pezpallet, Call, ValidateUnsigned, Inherent},
 	}
 );
 
@@ -616,8 +616,8 @@ fn balance_transfer_dispatch_works() {
 		Executive::initialize_block(&Header::new_from_number(1));
 		let r = Executive::apply_extrinsic(xt);
 		assert!(r.is_ok());
-		assert_eq!(<pezpallet_balances::Pallet<Runtime>>::total_balance(&1), 142 - fee);
-		assert_eq!(<pezpallet_balances::Pallet<Runtime>>::total_balance(&2), 69);
+		assert_eq!(<pezpallet_balances::Pezpallet<Runtime>>::total_balance(&1), 142 - fee);
+		assert_eq!(<pezpallet_balances::Pezpallet<Runtime>>::total_balance(&2), 69);
 	});
 }
 
@@ -737,7 +737,7 @@ fn bad_extrinsic_not_inserted() {
 			Executive::apply_extrinsic(xt),
 			TransactionValidityError::Invalid(InvalidTransaction::Future)
 		);
-		assert_eq!(<pezframe_system::Pallet<Runtime>>::extrinsic_index(), Some(0));
+		assert_eq!(<pezframe_system::Pezpallet<Runtime>>::extrinsic_index(), Some(0));
 	});
 }
 
@@ -757,7 +757,7 @@ fn block_weight_limit_enforced() {
 	t.execute_with(|| {
 		Executive::initialize_block(&Header::new_from_number(1));
 		// Base block execution weight + `on_initialize` weight from the custom module.
-		assert_eq!(<pezframe_system::Pallet<Runtime>>::block_weight().total(), base_block_weight);
+		assert_eq!(<pezframe_system::Pezpallet<Runtime>>::block_weight().total(), base_block_weight);
 
 		for nonce in 0..=num_to_exhaust_block {
 			let xt = UncheckedXt::new_signed(
@@ -772,7 +772,7 @@ fn block_weight_limit_enforced() {
 			if nonce != num_to_exhaust_block {
 				assert!(res.is_ok());
 				assert_eq!(
-					<pezframe_system::Pallet<Runtime>>::block_weight().total(),
+					<pezframe_system::Pezpallet<Runtime>>::block_weight().total(),
 					//---------------------
 					// on_initialize
 					// + block_execution
@@ -787,7 +787,7 @@ fn block_weight_limit_enforced() {
 					) + base_block_weight,
 				);
 				assert_eq!(
-					<pezframe_system::Pallet<Runtime>>::extrinsic_index(),
+					<pezframe_system::Pezpallet<Runtime>>::extrinsic_index(),
 					Some(nonce as u32 + 1)
 				);
 			} else {
@@ -828,8 +828,8 @@ fn block_weight_and_size_is_stored_per_tx() {
 
 		Executive::initialize_block(&Header::new_from_number(1));
 
-		assert_eq!(<pezframe_system::Pallet<Runtime>>::block_weight().total(), base_block_weight);
-		assert_eq!(<pezframe_system::Pallet<Runtime>>::all_extrinsics_len(), 0);
+		assert_eq!(<pezframe_system::Pezpallet<Runtime>>::block_weight().total(), base_block_weight);
+		assert_eq!(<pezframe_system::Pezpallet<Runtime>>::all_extrinsics_len(), 0);
 
 		assert!(Executive::apply_extrinsic(xt.clone()).unwrap().is_ok());
 		assert!(Executive::apply_extrinsic(x1.clone()).unwrap().is_ok());
@@ -842,21 +842,21 @@ fn block_weight_and_size_is_stored_per_tx() {
 				.base_extrinsic;
 		// Check we account for all extrinsic weight and their len.
 		assert_eq!(
-			<pezframe_system::Pallet<Runtime>>::block_weight().total(),
+			<pezframe_system::Pezpallet<Runtime>>::block_weight().total(),
 			base_block_weight + 3u64 * extrinsic_weight + 3u64 * Weight::from_parts(0, len as u64),
 		);
-		assert_eq!(<pezframe_system::Pallet<Runtime>>::all_extrinsics_len(), 3 * len);
+		assert_eq!(<pezframe_system::Pezpallet<Runtime>>::all_extrinsics_len(), 3 * len);
 
-		let _ = <pezframe_system::Pallet<Runtime>>::finalize();
+		let _ = <pezframe_system::Pezpallet<Runtime>>::finalize();
 		// All extrinsics length cleaned on `System::finalize`
-		assert_eq!(<pezframe_system::Pallet<Runtime>>::all_extrinsics_len(), 0);
+		assert_eq!(<pezframe_system::Pezpallet<Runtime>>::all_extrinsics_len(), 0);
 
 		// Reset to a new block.
 		SystemCallbacksCalled::take();
 		Executive::initialize_block(&Header::new_from_number(2));
 
 		// Block weight cleaned up on `System::initialize`
-		assert_eq!(<pezframe_system::Pallet<Runtime>>::block_weight().total(), base_block_weight);
+		assert_eq!(<pezframe_system::Pezpallet<Runtime>>::block_weight().total(), base_block_weight);
 	});
 }
 
@@ -899,7 +899,7 @@ fn validate_unsigned() {
 fn can_not_pay_for_tx_fee_on_full_lock() {
 	let mut t = new_test_ext(1);
 	t.execute_with(|| {
-		<pezpallet_balances::Pallet<Runtime> as fungible::MutateFreeze<u64>>::set_freeze(
+		<pezpallet_balances::Pezpallet<Runtime> as fungible::MutateFreeze<u64>>::set_freeze(
 			&FreezeReasonId::Foo,
 			&1,
 			110,
@@ -914,7 +914,7 @@ fn can_not_pay_for_tx_fee_on_full_lock() {
 		Executive::initialize_block(&Header::new_from_number(1));
 
 		assert_eq!(Executive::apply_extrinsic(xt), Err(InvalidTransaction::Payment.into()),);
-		assert_eq!(<pezpallet_balances::Pallet<Runtime>>::total_balance(&1), 111);
+		assert_eq!(<pezpallet_balances::Pezpallet<Runtime>>::total_balance(&1), 111);
 	});
 }
 
@@ -927,7 +927,7 @@ fn block_hooks_weight_is_stored() {
 		// For now it only accounts for the base block execution weight and
 		// the `on_initialize` weight defined in the custom test module.
 		assert_eq!(
-			<pezframe_system::Pallet<Runtime>>::block_weight().total(),
+			<pezframe_system::Pezpallet<Runtime>>::block_weight().total(),
 			Weight::from_parts(175 + 175 + 10, 0)
 		);
 	})
@@ -1103,7 +1103,7 @@ fn all_weights_are_recorded_correctly() {
 
 		// Weights are recorded correctly
 		assert_eq!(
-			pezframe_system::Pallet::<Runtime>::block_weight().total(),
+			pezframe_system::Pezpallet::<Runtime>::block_weight().total(),
 			runtime_upgrade_weight + on_initialize_weight + base_block_weight,
 		);
 	});

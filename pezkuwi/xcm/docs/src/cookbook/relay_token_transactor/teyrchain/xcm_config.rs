@@ -54,7 +54,7 @@ mod asset_transactor {
 	/// AssetTransactor for handling the relay chain token
 	pub type FungibleTransactor = FungibleAdapter<
 		// Use this implementation of the `fungible::*` traits.
-		// `Balances` is the name given to the balances pallet in this particular recipe.
+		// `Balances` is the name given to the balances pezpallet in this particular recipe.
 		// Any implementation of the traits would suffice.
 		Balances,
 		// This transactor deals with the native token of the Relay Chain.
@@ -184,7 +184,7 @@ impl pezpallet_xcm::Config for Runtime {
 	// A currency to pay for things and its matcher, we are using the relay token
 	type Currency = Balances;
 	type CurrencyMatcher = IsConcrete<RelayLocation>;
-	// Pallet benchmarks, no need for this recipe
+	// Pezpallet benchmarks, no need for this recipe
 	type WeightInfo = pezpallet_xcm::TestWeightInfo;
 	// Runtime types
 	type RuntimeOrigin = RuntimeOrigin;

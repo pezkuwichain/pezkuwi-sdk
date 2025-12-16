@@ -26,7 +26,7 @@ use pezframe_support::{
 /// The old prefix.
 pub const OLD_PREFIX: &[u8] = b"PhragmenElection";
 
-/// Migrate the entire storage of this pallet to a new prefix.
+/// Migrate the entire storage of this pezpallet to a new prefix.
 ///
 /// This new prefix must be the same as the one set in construct_runtime. For safety, use
 /// `PalletInfo` to get it, as:
@@ -37,11 +37,11 @@ pub fn migrate<T: crate::Config, N: AsRef<str>>(new_pallet_name: N) -> Weight {
 	if new_pallet_name.as_ref().as_bytes() == OLD_PREFIX {
 		log::info!(
 			target: LOG_TARGET,
-			"New pallet name is equal to the old prefix. No migration needs to be done.",
+			"New pezpallet name is equal to the old prefix. No migration needs to be done.",
 		);
 		return Weight::zero();
 	}
-	let storage_version = StorageVersion::get::<crate::Pallet<T>>();
+	let storage_version = StorageVersion::get::<crate::Pezpallet<T>>();
 	log::info!(
 		target: LOG_TARGET,
 		"Running migration to v4 for elections-phragmen with storage version {:?}",
@@ -55,7 +55,7 @@ pub fn migrate<T: crate::Config, N: AsRef<str>>(new_pallet_name: N) -> Weight {
 			new_pallet_name.as_ref().as_bytes(),
 		);
 
-		StorageVersion::new(4).put::<crate::Pallet<T>>();
+		StorageVersion::new(4).put::<crate::Pezpallet<T>>();
 
 		<T as pezframe_system::Config>::BlockWeights::get().max_block
 	} else {
@@ -93,7 +93,7 @@ pub fn pre_migration<T: crate::Config, N: AsRef<str>>(new: N) {
 		pezsp_core::hexdisplay::HexDisplay::from(&pezsp_io::storage::next_key(new.as_bytes()).unwrap())
 	);
 	// ensure storage version is 3.
-	assert_eq!(StorageVersion::get::<crate::Pallet<T>>(), 3);
+	assert_eq!(StorageVersion::get::<crate::Pezpallet<T>>(), 3);
 }
 
 /// Some checks for after migration. This can be linked to
@@ -103,5 +103,5 @@ pub fn pre_migration<T: crate::Config, N: AsRef<str>>(new: N) {
 pub fn post_migration<T: crate::Config>() {
 	log::info!("post-migration elections-phragmen");
 	// ensure we've been updated to v4 by the automatic write of crate version -> storage version.
-	assert_eq!(StorageVersion::get::<crate::Pallet<T>>(), 4);
+	assert_eq!(StorageVersion::get::<crate::Pezpallet<T>>(), 4);
 }

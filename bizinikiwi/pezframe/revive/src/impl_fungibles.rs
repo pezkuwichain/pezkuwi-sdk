@@ -17,7 +17,7 @@
 
 //! Implementation of the `fungibles::*` family of traits for `pezpallet-revive`.
 //!
-//! This is meant to allow ERC20 tokens stored on this pallet to be used with
+//! This is meant to allow ERC20 tokens stored on this pezpallet to be used with
 //! the fungibles traits.
 //! This is only meant for tests since gas limits are not taken into account,
 //! the feature flags make sure of that.
@@ -42,12 +42,12 @@ use pezframe_support::{
 use pezsp_core::{H160, U256};
 use pezsp_runtime::{traits::AccountIdConversion, DispatchError};
 
-use super::{address::AddressMapper, pallet, Config, ContractResult, ExecConfig, Pallet, Weight};
+use super::{address::AddressMapper, pezpallet, Config, ContractResult, ExecConfig, Pezpallet, Weight};
 use pez_ethereum_standards::IERC20;
 
 const GAS_LIMIT: Weight = Weight::from_parts(500_000_000_000, 10 * 1024 * 1024);
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	// Test checking account for the `fungibles::*` implementation.
 	//
 	// Still needs to be mapped in tests for it to be usable.
@@ -56,7 +56,7 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-impl<T: Config> fungibles::Inspect<<T as pezframe_system::Config>::AccountId> for Pallet<T> {
+impl<T: Config> fungibles::Inspect<<T as pezframe_system::Config>::AccountId> for Pezpallet<T> {
 	// The asset id of an ERC20 is its origin contract's address.
 	type AssetId = H160;
 	// The balance is always u128.
@@ -70,7 +70,7 @@ impl<T: Config> fungibles::Inspect<<T as pezframe_system::Config>::AccountId> fo
 			asset_id,
 			U256::zero(),
 			GAS_LIMIT,
-			<<T as pallet::Config>::Currency as fungible::Inspect<_>>::total_issuance(),
+			<<T as pezpallet::Config>::Currency as fungible::Inspect<_>>::total_issuance(),
 			data,
 			ExecConfig::new_bizinikiwi_tx(),
 		);
@@ -105,7 +105,7 @@ impl<T: Config> fungibles::Inspect<<T as pezframe_system::Config>::AccountId> fo
 			asset_id,
 			U256::zero(),
 			GAS_LIMIT,
-			<<T as pallet::Config>::Currency as fungible::Inspect<_>>::total_issuance(),
+			<<T as pezpallet::Config>::Currency as fungible::Inspect<_>>::total_issuance(),
 			data,
 			ExecConfig::new_bizinikiwi_tx(),
 		);
@@ -156,7 +156,7 @@ impl<T: Config> fungibles::Inspect<<T as pezframe_system::Config>::AccountId> fo
 // We implement `fungibles::Mutate` to override `burn_from` and `mint_to`.
 //
 // These functions are used in [`xcm_builder::FungiblesAdapter`].
-impl<T: Config> fungibles::Mutate<<T as pezframe_system::Config>::AccountId> for Pallet<T> {
+impl<T: Config> fungibles::Mutate<<T as pezframe_system::Config>::AccountId> for Pezpallet<T> {
 	fn burn_from(
 		asset_id: Self::AssetId,
 		who: &T::AccountId,
@@ -174,7 +174,7 @@ impl<T: Config> fungibles::Mutate<<T as pezframe_system::Config>::AccountId> for
 			asset_id,
 			U256::zero(),
 			GAS_LIMIT,
-			<<T as pallet::Config>::Currency as fungible::Inspect<_>>::total_issuance(),
+			<<T as pezpallet::Config>::Currency as fungible::Inspect<_>>::total_issuance(),
 			data,
 			ExecConfig::new_bizinikiwi_tx(),
 		);
@@ -210,7 +210,7 @@ impl<T: Config> fungibles::Mutate<<T as pezframe_system::Config>::AccountId> for
 			asset_id,
 			U256::zero(),
 			GAS_LIMIT,
-			<<T as pallet::Config>::Currency as fungible::Inspect<_>>::total_issuance(),
+			<<T as pezpallet::Config>::Currency as fungible::Inspect<_>>::total_issuance(),
 			data,
 			ExecConfig::new_bizinikiwi_tx(),
 		);
@@ -237,7 +237,7 @@ impl<T: Config> fungibles::Mutate<<T as pezframe_system::Config>::AccountId> for
 // However, we don't have this type of access to smart contracts.
 // Withdraw and deposit happen via the custom `fungibles::Mutate` impl above.
 // Because of this, all functions here return an error, when possible.
-impl<T: Config> fungibles::Unbalanced<<T as pezframe_system::Config>::AccountId> for Pallet<T> {
+impl<T: Config> fungibles::Unbalanced<<T as pezframe_system::Config>::AccountId> for Pezpallet<T> {
 	fn handle_raw_dust(_: Self::AssetId, _: Self::Balance) {}
 	fn handle_dust(_: fungibles::Dust<T::AccountId, Self>) {}
 	fn write_balance(
@@ -380,7 +380,7 @@ mod tests {
 	#[test]
 	fn mint_into_impl_works() {
 		ExtBuilder::default().existential_deposit(1).build().execute_with(|| {
-			let checking_account = Pallet::<Test>::checking_account();
+			let checking_account = Pezpallet::<Test>::checking_account();
 			let _ =
 				<<Test as Config>::Currency as fungible::Mutate<_>>::set_balance(&ALICE, 1_000_000);
 			let _ = <<Test as Config>::Currency as fungible::Mutate<_>>::set_balance(

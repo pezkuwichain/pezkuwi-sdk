@@ -41,7 +41,7 @@ mod tests;
 #[cfg(feature = "runtime-benchmarks")]
 mod benchmarking;
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 /// Information about a session change that has just occurred.
 #[derive(Clone)]
@@ -103,17 +103,17 @@ impl WeightInfo for () {
 	}
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	#[pallet::without_storage_info]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::without_storage_info]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config:
 		pezframe_system::Config
 		+ configuration::Config
@@ -134,7 +134,7 @@ pub mod pallet {
 		/// to disable it on the ones that don't support it. Can be removed and replaced by a simple
 		/// bound to `coretime::Config` once all chains support it.
 		type CoretimeOnNewSession: OnNewSession<BlockNumberFor<Self>>;
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 	}
 
@@ -146,7 +146,7 @@ pub mod pallet {
 	/// As a `bool`, `set(false)` and `remove()` both lead to the next `get()` being false, but one
 	/// of them writes to the trie and one does not. This confusion makes `Option<()>` more suitable
 	/// for the semantics of this variable.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type HasInitialized<T: Config> = StorageValue<_, ()>;
 
 	/// Buffered session changes.
@@ -156,12 +156,12 @@ pub mod pallet {
 	///
 	/// However this is a `Vec` regardless to handle various edge cases that may occur at runtime
 	/// upgrade boundaries or if governance intervenes.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type BufferedSessionChanges<T: Config> =
 		StorageValue<_, Vec<BufferedSessionChange>, ValueQuery>;
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn on_initialize(now: BlockNumberFor<T>) -> Weight {
 			// The other modules are initialized in this order:
 			// - Configuration
@@ -173,16 +173,16 @@ pub mod pallet {
 			// - DMP
 			// - UMP
 			// - HRMP
-			let total_weight = configuration::Pallet::<T>::initializer_initialize(now) +
-				shared::Pallet::<T>::initializer_initialize(now) +
-				paras::Pallet::<T>::initializer_initialize(now) +
-				scheduler::Pallet::<T>::initializer_initialize(now) +
-				inclusion::Pallet::<T>::initializer_initialize(now) +
-				session_info::Pallet::<T>::initializer_initialize(now) +
+			let total_weight = configuration::Pezpallet::<T>::initializer_initialize(now) +
+				shared::Pezpallet::<T>::initializer_initialize(now) +
+				paras::Pezpallet::<T>::initializer_initialize(now) +
+				scheduler::Pezpallet::<T>::initializer_initialize(now) +
+				inclusion::Pezpallet::<T>::initializer_initialize(now) +
+				session_info::Pezpallet::<T>::initializer_initialize(now) +
 				T::DisputesHandler::initializer_initialize(now) +
 				T::SlashingHandler::initializer_initialize(now) +
-				dmp::Pallet::<T>::initializer_initialize(now) +
-				hrmp::Pallet::<T>::initializer_initialize(now);
+				dmp::Pezpallet::<T>::initializer_initialize(now) +
+				hrmp::Pezpallet::<T>::initializer_initialize(now);
 
 			HasInitialized::<T>::set(Some(()));
 
@@ -191,16 +191,16 @@ pub mod pallet {
 
 		fn on_finalize(now: BlockNumberFor<T>) {
 			// reverse initialization order.
-			hrmp::Pallet::<T>::initializer_finalize();
-			dmp::Pallet::<T>::initializer_finalize();
+			hrmp::Pezpallet::<T>::initializer_finalize();
+			dmp::Pezpallet::<T>::initializer_finalize();
 			T::SlashingHandler::initializer_finalize();
 			T::DisputesHandler::initializer_finalize();
-			session_info::Pallet::<T>::initializer_finalize();
-			inclusion::Pallet::<T>::initializer_finalize();
-			scheduler::Pallet::<T>::initializer_finalize();
-			paras::Pallet::<T>::initializer_finalize(now);
-			shared::Pallet::<T>::initializer_finalize();
-			configuration::Pallet::<T>::initializer_finalize();
+			session_info::Pezpallet::<T>::initializer_finalize();
+			inclusion::Pezpallet::<T>::initializer_finalize();
+			scheduler::Pezpallet::<T>::initializer_finalize();
+			paras::Pezpallet::<T>::initializer_finalize(now);
+			shared::Pezpallet::<T>::initializer_finalize();
+			configuration::Pezpallet::<T>::initializer_finalize();
 
 			// Apply buffered session changes as the last thing. This way the runtime APIs and the
 			// next block will observe the next session.
@@ -217,28 +217,28 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Issue a signal to the consensus engine to forcibly act as though all teyrchain
 		/// blocks in all relay chain blocks up to and including the given number in the current
 		/// chain are valid and should be finalized.
-		#[pallet::call_index(0)]
-		#[pallet::weight((
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight((
 			<T as Config>::WeightInfo::force_approve(
-				pezframe_system::Pallet::<T>::digest().logs.len() as u32,
+				pezframe_system::Pezpallet::<T>::digest().logs.len() as u32,
 			),
 			DispatchClass::Operational,
 		))]
 		pub fn force_approve(origin: OriginFor<T>, up_to: BlockNumber) -> DispatchResult {
 			T::ForceOrigin::ensure_origin(origin)?;
 
-			pezframe_system::Pallet::<T>::deposit_log(ConsensusLog::ForceApprove(up_to).into());
+			pezframe_system::Pezpallet::<T>::deposit_log(ConsensusLog::ForceApprove(up_to).into());
 			Ok(())
 		}
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	fn apply_new_session(
 		session_index: SessionIndex,
 		all_validators: Vec<ValidatorId>,
@@ -255,10 +255,10 @@ impl<T: Config> Pallet<T> {
 		};
 
 		let configuration::SessionChangeOutcome { prev_config, new_config } =
-			configuration::Pallet::<T>::initializer_on_new_session(&session_index);
+			configuration::Pezpallet::<T>::initializer_on_new_session(&session_index);
 		let new_config = new_config.unwrap_or_else(|| prev_config.clone());
 
-		let validators = shared::Pallet::<T>::initializer_on_new_session(
+		let validators = shared::Pezpallet::<T>::initializer_on_new_session(
 			session_index,
 			random_seed,
 			&new_config,
@@ -274,14 +274,14 @@ impl<T: Config> Pallet<T> {
 			session_index,
 		};
 
-		let outgoing_paras = paras::Pallet::<T>::initializer_on_new_session(&notification);
-		scheduler::Pallet::<T>::initializer_on_new_session(&notification);
-		inclusion::Pallet::<T>::initializer_on_new_session(&notification, &outgoing_paras);
-		session_info::Pallet::<T>::initializer_on_new_session(&notification);
+		let outgoing_paras = paras::Pezpallet::<T>::initializer_on_new_session(&notification);
+		scheduler::Pezpallet::<T>::initializer_on_new_session(&notification);
+		inclusion::Pezpallet::<T>::initializer_on_new_session(&notification, &outgoing_paras);
+		session_info::Pezpallet::<T>::initializer_on_new_session(&notification);
 		T::DisputesHandler::initializer_on_new_session(&notification);
 		T::SlashingHandler::initializer_on_new_session(session_index);
-		dmp::Pallet::<T>::initializer_on_new_session(&notification, &outgoing_paras);
-		hrmp::Pallet::<T>::initializer_on_new_session(&notification, &outgoing_paras);
+		dmp::Pezpallet::<T>::initializer_on_new_session(&notification, &outgoing_paras);
+		hrmp::Pezpallet::<T>::initializer_on_new_session(&notification, &outgoing_paras);
 		T::CoretimeOnNewSession::on_new_session(&notification);
 	}
 
@@ -332,26 +332,26 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-impl<T: Config> pezsp_runtime::BoundToRuntimeAppPublic for Pallet<T> {
+impl<T: Config> pezsp_runtime::BoundToRuntimeAppPublic for Pezpallet<T> {
 	type Public = ValidatorId;
 }
 
-impl<T: pezpallet_session::Config + Config> OneSessionHandler<T::AccountId> for Pallet<T> {
+impl<T: pezpallet_session::Config + Config> OneSessionHandler<T::AccountId> for Pezpallet<T> {
 	type Key = ValidatorId;
 
 	fn on_genesis_session<'a, I: 'a>(validators: I)
 	where
 		I: Iterator<Item = (&'a T::AccountId, Self::Key)>,
 	{
-		Pallet::<T>::on_new_session(false, 0, validators, None);
+		Pezpallet::<T>::on_new_session(false, 0, validators, None);
 	}
 
 	fn on_new_session<'a, I: 'a>(changed: bool, validators: I, queued: I)
 	where
 		I: Iterator<Item = (&'a T::AccountId, Self::Key)>,
 	{
-		let session_index = pezpallet_session::Pallet::<T>::current_index();
-		Pallet::<T>::on_new_session(changed, session_index, validators, Some(queued));
+		let session_index = pezpallet_session::Pezpallet::<T>::current_index();
+		Pezpallet::<T>::on_new_session(changed, session_index, validators, Some(queued));
 	}
 
 	fn on_disabled(_i: u32) {}

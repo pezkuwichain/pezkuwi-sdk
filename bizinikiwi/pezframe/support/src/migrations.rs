@@ -33,7 +33,7 @@ use pezsp_core::Get;
 use pezsp_io::{hashing::twox_128, storage::clear_prefix, KillStorageResult};
 use pezsp_runtime::traits::Zero;
 
-/// Handles storage migration pallet versioning.
+/// Handles storage migration pezpallet versioning.
 ///
 /// [`VersionedMigration`] allows developers to write migrations without worrying about checking and
 /// setting storage versions. Instead, the developer wraps their migration in this struct which
@@ -43,11 +43,11 @@ use pezsp_runtime::traits::Zero;
 /// - `From`: The version being upgraded from.
 /// - `To`: The version being upgraded to.
 /// - `Inner`: An implementation of `UncheckedOnRuntimeUpgrade`.
-/// - `Pallet`: The Pallet being upgraded.
+/// - `Pezpallet`: The Pezpallet being upgraded.
 /// - `Weight`: The runtime's RuntimeDbWeight implementation.
 ///
 /// When a [`VersionedMigration`] `on_runtime_upgrade`, `pre_upgrade`, or `post_upgrade` method is
-/// called, the on-chain version of the pallet is compared to `From`. If they match, the `Inner`
+/// called, the on-chain version of the pezpallet is compared to `From`. If they match, the `Inner`
 /// `UncheckedOnRuntimeUpgrade` is called and the pallets on-chain version is set to `To`
 /// after the migration. Otherwise, a warning is logged notifying the developer that the upgrade was
 /// a noop and should probably be removed.
@@ -83,19 +83,19 @@ use pezsp_runtime::traits::Zero;
 /// 		5,
 /// 		6,
 /// 		VersionUncheckedMigrateV5ToV6<T, I>,
-/// 		crate::pallet::Pallet<T, I>,
+/// 		crate::pezpallet::Pezpallet<T, I>,
 /// 		<T as pezframe_system::Config>::DbWeight
 /// 	>;
 ///
-/// // Migrations tuple to pass to the Executive pallet:
+/// // Migrations tuple to pass to the Executive pezpallet:
 /// pub type Migrations = (
 /// 	// other migrations...
 /// 	MigrateV5ToV6<T, ()>,
 /// 	// other migrations...
 /// );
 /// ```
-pub struct VersionedMigration<const FROM: u16, const TO: u16, Inner, Pallet, Weight> {
-	_marker: PhantomData<(Inner, Pallet, Weight)>,
+pub struct VersionedMigration<const FROM: u16, const TO: u16, Inner, Pezpallet, Weight> {
+	_marker: PhantomData<(Inner, Pezpallet, Weight)>,
 }
 
 /// A helper enum to wrap the pre_upgrade bytes like an Option before passing them to post_upgrade.
@@ -118,16 +118,16 @@ impl<
 		const FROM: u16,
 		const TO: u16,
 		Inner: crate::traits::UncheckedOnRuntimeUpgrade,
-		Pallet: GetStorageVersion<InCodeStorageVersion = StorageVersion> + PalletInfoAccess,
+		Pezpallet: GetStorageVersion<InCodeStorageVersion = StorageVersion> + PalletInfoAccess,
 		DbWeight: Get<RuntimeDbWeight>,
-	> crate::traits::OnRuntimeUpgrade for VersionedMigration<FROM, TO, Inner, Pallet, DbWeight>
+	> crate::traits::OnRuntimeUpgrade for VersionedMigration<FROM, TO, Inner, Pezpallet, DbWeight>
 {
 	/// Executes pre_upgrade if the migration will run, and wraps the pre_upgrade bytes in
 	/// [`VersionedPostUpgradeData`] before passing them to post_upgrade, so it knows whether the
 	/// migration ran or not.
 	#[cfg(feature = "try-runtime")]
 	fn pre_upgrade() -> Result<alloc::vec::Vec<u8>, pezsp_runtime::TryRuntimeError> {
-		let on_chain_version = Pallet::on_chain_storage_version();
+		let on_chain_version = Pezpallet::on_chain_storage_version();
 		if on_chain_version == FROM {
 			Ok(VersionedPostUpgradeData::MigrationExecuted(Inner::pre_upgrade()?).encode())
 		} else {
@@ -142,11 +142,11 @@ impl<
 	/// the weight. If it does not match, it writes a log notifying the developer that the migration
 	/// is a noop.
 	fn on_runtime_upgrade() -> Weight {
-		let on_chain_version = Pallet::on_chain_storage_version();
+		let on_chain_version = Pezpallet::on_chain_storage_version();
 		if on_chain_version == FROM {
 			log::info!(
-				"🚚 Pallet {:?} VersionedMigration migrating storage version from {:?} to {:?}.",
-				Pallet::name(),
+				"🚚 Pezpallet {:?} VersionedMigration migrating storage version from {:?} to {:?}.",
+				Pezpallet::name(),
 				FROM,
 				TO
 			);
@@ -155,13 +155,13 @@ impl<
 			let weight = Inner::on_runtime_upgrade();
 
 			// Update the on-chain version
-			StorageVersion::new(TO).put::<Pallet>();
+			StorageVersion::new(TO).put::<Pezpallet>();
 
 			weight.saturating_add(DbWeight::get().reads_writes(1, 1))
 		} else {
 			log::warn!(
-				"🚚 Pallet {:?} VersionedMigration migration {}->{} can be removed; on-chain is already at {:?}.",
-				Pallet::name(),
+				"🚚 Pezpallet {:?} VersionedMigration migration {}->{} can be removed; on-chain is already at {:?}.",
+				Pezpallet::name(),
 				FROM,
 				TO,
 				on_chain_version
@@ -189,7 +189,7 @@ impl<
 	}
 }
 
-/// Can store the in-code pallet version on-chain.
+/// Can store the in-code pezpallet version on-chain.
 pub trait StoreInCodeStorageVersion<T: GetStorageVersion + PalletInfoAccess> {
 	/// Write the in-code storage version on-chain.
 	fn store_in_code_storage_version();
@@ -261,16 +261,16 @@ pub fn migrate_from_pallet_version_to_storage_version<
 }
 
 /// `RemovePallet` is a utility struct used to remove all storage items associated with a specific
-/// pallet.
+/// pezpallet.
 ///
 /// This struct is generic over two parameters:
-/// - `P` is a type that implements the `Get` trait for a static string, representing the pallet's
+/// - `P` is a type that implements the `Get` trait for a static string, representing the pezpallet's
 ///   name.
 /// - `DbWeight` is a type that implements the `Get` trait for `RuntimeDbWeight`, providing the
 ///   weight for database operations.
 ///
 /// On runtime upgrade, the `on_runtime_upgrade` function will clear all storage items associated
-/// with the specified pallet, logging the number of keys removed. If the `try-runtime` feature is
+/// with the specified pezpallet, logging the number of keys removed. If the `try-runtime` feature is
 /// enabled, the `pre_upgrade` and `post_upgrade` functions can be used to verify the storage
 /// removal before and after the upgrade.
 ///
@@ -305,9 +305,9 @@ pub fn migrate_from_pallet_version_to_storage_version<
 /// ```
 ///
 /// WARNING: `RemovePallet` has no guard rails preventing it from bricking the chain if the
-/// operation of removing storage for the given pallet would exceed the block weight limit.
+/// operation of removing storage for the given pezpallet would exceed the block weight limit.
 ///
-/// If your pallet has too many keys to be removed in a single block, it is advised to wait for
+/// If your pezpallet has too many keys to be removed in a single block, it is advised to wait for
 /// a multi-block scheduler currently under development which will allow for removal of storage
 /// items (and performing other heavy migrations) over multiple blocks
 /// (see <https://github.com/pezkuwichain/kurdistan-sdk/issues/11>).
@@ -366,10 +366,10 @@ impl<P: Get<&'static str>, DbWeight: Get<RuntimeDbWeight>> pezframe_support::tra
 	}
 }
 
-/// `RemoveStorage` is a utility struct used to remove a storage item from a specific pallet.
+/// `RemoveStorage` is a utility struct used to remove a storage item from a specific pezpallet.
 ///
 /// This struct is generic over three parameters:
-/// - `P` is a type that implements the [`Get`] trait for a static string, representing the pallet's
+/// - `P` is a type that implements the [`Get`] trait for a static string, representing the pezpallet's
 ///   name.
 /// - `S` is a type that implements the [`Get`] trait for a static string, representing the storage
 ///   name.
@@ -412,7 +412,7 @@ impl<P: Get<&'static str>, DbWeight: Get<RuntimeDbWeight>> pezframe_support::tra
 /// ```
 ///
 /// WARNING: `RemoveStorage` has no guard rails preventing it from bricking the chain if the
-/// operation of removing storage for the given pallet would exceed the block weight limit.
+/// operation of removing storage for the given pezpallet would exceed the block weight limit.
 ///
 /// If your storage has too many keys to be removed in a single block, it is advised to wait for
 /// a multi-block scheduler currently under development which will allow for removal of storage
@@ -430,7 +430,7 @@ impl<P: Get<&'static str>, S: Get<&'static str>, DbWeight: Get<RuntimeDbWeight>>
 			KillStorageResult::AllRemoved(value) => value,
 			KillStorageResult::SomeRemaining(value) => {
 				log::error!(
-					"`clear_prefix` failed to remove all keys for storage `{}` from pallet `{}`. THIS SHOULD NEVER HAPPEN! 🚨",
+					"`clear_prefix` failed to remove all keys for storage `{}` from pezpallet `{}`. THIS SHOULD NEVER HAPPEN! 🚨",
 					S::get(), P::get()
 				);
 				value

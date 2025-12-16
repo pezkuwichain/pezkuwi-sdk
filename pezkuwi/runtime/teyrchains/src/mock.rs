@@ -287,7 +287,7 @@ impl crate::hrmp::Config for Test {
 	type RuntimeOrigin = RuntimeOrigin;
 	type RuntimeEvent = RuntimeEvent;
 	type ChannelManager = pezframe_system::EnsureRoot<u64>;
-	type Currency = pezpallet_balances::Pallet<Test>;
+	type Currency = pezpallet_balances::Pezpallet<Test>;
 	type DefaultChannelSizeAndCapacityWithSystem = DefaultChannelSizeAndCapacityWithSystem;
 	type VersionWrapper = TestUsesOnlyStoredVersionWrapper;
 	type WeightInfo = crate::hrmp::TestWeightInfo;
@@ -508,25 +508,25 @@ pub mod mock_assigner {
 	use crate::scheduler::common::Assignment;
 
 	use super::*;
-	pub use pallet::*;
+	pub use pezpallet::*;
 
-	#[pezframe_support::pallet]
-	pub mod pallet {
+	#[pezframe_support::pezpallet]
+	pub mod pezpallet {
 		use super::*;
 
-		#[pallet::pallet]
-		#[pallet::without_storage_info]
-		pub struct Pallet<T>(_);
+		#[pezpallet::pezpallet]
+		#[pezpallet::without_storage_info]
+		pub struct Pezpallet<T>(_);
 
-		#[pallet::config]
+		#[pezpallet::config]
 		pub trait Config: pezframe_system::Config + configuration::Config + paras::Config {}
 
-		#[pallet::storage]
+		#[pezpallet::storage]
 		pub(super) type MockAssignmentQueue<T: Config> =
 			StorageValue<_, VecDeque<Assignment>, ValueQuery>;
 	}
 
-	impl<T: Config> Pallet<T> {
+	impl<T: Config> Pezpallet<T> {
 		/// Adds a claim to the `MockAssignmentQueue` this claim can later be popped by the
 		/// scheduler when filling the claim queue for tests.
 		pub fn add_test_assignment(assignment: Assignment) {
@@ -534,7 +534,7 @@ pub mod mock_assigner {
 		}
 	}
 
-	impl<T: Config> AssignmentProvider<BlockNumber> for Pallet<T> {
+	impl<T: Config> AssignmentProvider<BlockNumber> for Pezpallet<T> {
 		// With regards to popping_assignments, the scheduler just needs to be tested under
 		// the following two conditions:
 		// 1. An assignment is provided
@@ -564,7 +564,7 @@ pub mod mock_assigner {
 	}
 }
 
-impl mock_assigner::pallet::Config for Test {}
+impl mock_assigner::pezpallet::Config for Test {}
 
 pub struct FoolIdentificationOf;
 impl pezsp_runtime::traits::Convert<AccountId, Option<()>> for FoolIdentificationOf {
@@ -710,7 +710,7 @@ pub struct MockGenesisConfig {
 }
 
 pub fn assert_last_event(generic_event: RuntimeEvent) {
-	let events = pezframe_system::Pallet::<Test>::events();
+	let events = pezframe_system::Pezpallet::<Test>::events();
 	let system_event: <Test as pezframe_system::Config>::RuntimeEvent = generic_event.into();
 	// compare to the last event record
 	let pezframe_system::EventRecord { event, .. } = &events[events.len() - 1];
@@ -721,7 +721,7 @@ pub fn assert_last_events<E>(generic_events: E)
 where
 	E: DoubleEndedIterator<Item = RuntimeEvent> + ExactSizeIterator,
 {
-	for (i, (got, want)) in pezframe_system::Pallet::<Test>::events()
+	for (i, (got, want)) in pezframe_system::Pezpallet::<Test>::events()
 		.into_iter()
 		.rev()
 		.map(|e| e.event)

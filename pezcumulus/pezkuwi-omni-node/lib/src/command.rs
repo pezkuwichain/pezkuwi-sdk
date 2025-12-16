@@ -226,7 +226,7 @@ where
 			// Switch on the concrete benchmark sub-command-
 			match cmd {
 				#[cfg(feature = "runtime-benchmarks")]
-				BenchmarkCmd::Pallet(cmd) => {
+				BenchmarkCmd::Pezpallet(cmd) => {
 					let chain = cmd
 						.shared_params
 						.chain

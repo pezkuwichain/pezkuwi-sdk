@@ -18,7 +18,7 @@
 //! Provides utils for building the `Extrinsic` instances used with `bizinikiwi-test-runtime`.
 
 use crate::{
-	bizinikiwi_test_pallet::pallet::Call as PalletCall, AccountId, Balance, BalancesCall,
+	bizinikiwi_test_pallet::pezpallet::Call as PalletCall, AccountId, Balance, BalancesCall,
 	CheckBizinikiwiCall, Extrinsic, Nonce, Pair, RuntimeCall, SignedPayload, TransferData,
 };
 use codec::Encode;
@@ -31,7 +31,7 @@ use pezsp_runtime::{
 	Perbill,
 };
 
-/// Transfer used in test bizinikiwi pallet. Extrinsic is created and signed using this data.
+/// Transfer used in test bizinikiwi pezpallet. Extrinsic is created and signed using this data.
 #[derive(Clone)]
 pub struct Transfer {
 	/// Transfer sender and signer of created extrinsic

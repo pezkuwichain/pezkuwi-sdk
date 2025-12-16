@@ -81,7 +81,7 @@ impl pezpallet_staking::Config for Runtime {
 	type OldCurrency = Balances;
 	type Currency = Balances;
 	type CurrencyBalance = Balance;
-	type UnixTime = pezpallet_timestamp::Pallet<Self>;
+	type UnixTime = pezpallet_timestamp::Pezpallet<Self>;
 	type AdminOrigin = pezframe_system::EnsureRoot<Self::AccountId>;
 	type EraPayout = pezpallet_staking::ConvertCurve<RewardCurve>;
 	type ElectionProvider =

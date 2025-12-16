@@ -135,7 +135,7 @@ pub fn signed_events_since_last_call() -> Vec<crate::signed::Event<Runtime>> {
 	events.into_iter().skip(already_seen as usize).collect()
 }
 
-/// get the events of the verifier pallet.
+/// get the events of the verifier pezpallet.
 pub fn signed_events() -> Vec<crate::signed::Event<Runtime>> {
 	System::events()
 		.into_iter()
@@ -144,7 +144,7 @@ pub fn signed_events() -> Vec<crate::signed::Event<Runtime>> {
 		.collect::<Vec<_>>()
 }
 
-/// Load a signed solution into its pallet.
+/// Load a signed solution into its pezpallet.
 pub fn load_signed_for_verification(who: AccountId, paged: PagedRawSolution<Runtime>) {
 	let initial_balance = Balances::free_balance(&who);
 	assert_eq!(balances(who), (initial_balance, 0));

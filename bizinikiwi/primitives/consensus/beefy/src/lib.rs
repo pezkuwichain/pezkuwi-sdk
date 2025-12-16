@@ -225,7 +225,7 @@ pub mod ecdsa_bls_crypto {
 /// The `ConsensusEngineId` of BEEFY.
 pub const BEEFY_ENGINE_ID: pezsp_runtime::ConsensusEngineId = *b"BEEF";
 
-/// Authority set id starts with zero at BEEFY pallet genesis.
+/// Authority set id starts with zero at BEEFY pezpallet genesis.
 pub const GENESIS_AUTHORITY_SET_ID: u64 = 0;
 
 /// A typedef for validator set id.
@@ -423,7 +423,7 @@ where
 
 /// New BEEFY validator set notification hook.
 pub trait OnNewValidatorSet<AuthorityId> {
-	/// Function called by the pallet when BEEFY validator set changes.
+	/// Function called by the pezpallet when BEEFY validator set changes.
 	fn on_new_validator_set(
 		validator_set: &ValidatorSet<AuthorityId>,
 		next_validator_set: &ValidatorSet<AuthorityId>,

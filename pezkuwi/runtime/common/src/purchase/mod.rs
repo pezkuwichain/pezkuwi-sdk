@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Pallet to process purchase of DOTs.
+//! Pezpallet to process purchase of DOTs.
 
 use alloc::vec::Vec;
 use codec::{Decode, Encode};
@@ -23,7 +23,7 @@ use pezframe_support::{
 	traits::{Currency, EnsureOrigin, ExistenceRequirement, Get, VestingSchedule},
 };
 use pezframe_system::pezpallet_prelude::*;
-pub use pallet::*;
+pub use pezpallet::*;
 use scale_info::TypeInfo;
 use pezsp_core::sr25519;
 use pezsp_runtime::{
@@ -89,24 +89,24 @@ pub struct AccountStatus<Balance> {
 	vat: Permill,
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::pallet]
-	#[pallet::without_storage_info]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::without_storage_info]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
-		/// Balances Pallet
+		/// Balances Pezpallet
 		type Currency: Currency<Self::AccountId>;
 
-		/// Vesting Pallet
+		/// Vesting Pezpallet
 		type VestingSchedule: VestingSchedule<
 			Self::AccountId,
 			Moment = BlockNumberFor<Self>,
@@ -116,24 +116,24 @@ pub mod pallet {
 		/// The origin allowed to set account status.
 		type ValidityOrigin: EnsureOrigin<Self::RuntimeOrigin>;
 
-		/// The origin allowed to make configurations to the pallet.
+		/// The origin allowed to make configurations to the pezpallet.
 		type ConfigurationOrigin: EnsureOrigin<Self::RuntimeOrigin>;
 
 		/// The maximum statement length for the statement users to sign when creating an account.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxStatementLength: Get<u32>;
 
 		/// The amount of purchased locked DOTs that we will unlock for basic actions on the chain.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type UnlockedProportion: Get<Permill>;
 
 		/// The maximum amount of locked DOTs that we will unlock.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxUnlocked: Get<BalanceOf<Self>>;
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A new account was created.
 		AccountCreated { who: T::AccountId },
@@ -151,7 +151,7 @@ pub mod pallet {
 		UnlockBlockUpdated { block_number: BlockNumberFor<T> },
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Account is not currently valid to use.
 		InvalidAccount,
@@ -172,41 +172,41 @@ pub mod pallet {
 	}
 
 	// A map of all participants in the HEZ purchase process.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type Accounts<T: Config> =
 		StorageMap<_, Blake2_128Concat, T::AccountId, AccountStatus<BalanceOf<T>>, ValueQuery>;
 
 	// The account that will be used to payout participants of the HEZ purchase process.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type PaymentAccount<T: Config> = StorageValue<_, T::AccountId, OptionQuery>;
 
 	// The statement purchasers will need to sign to participate.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type Statement<T> = StorageValue<_, Vec<u8>, ValueQuery>;
 
 	// The block where all locked dots will unlock.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type UnlockBlock<T: Config> = StorageValue<_, BlockNumberFor<T>, ValueQuery>;
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {}
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Create a new account. Proof of existence through a valid signed message.
 		///
 		/// We check that the account does not exist at this stage.
 		///
 		/// Origin must match the `ValidityOrigin`.
-		#[pallet::call_index(0)]
-		#[pallet::weight(Weight::from_parts(200_000_000, 0) + T::DbWeight::get().reads_writes(4, 1))]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(Weight::from_parts(200_000_000, 0) + T::DbWeight::get().reads_writes(4, 1))]
 		pub fn create_account(
 			origin: OriginFor<T>,
 			who: T::AccountId,
 			signature: Vec<u8>,
 		) -> DispatchResult {
 			T::ValidityOrigin::ensure_origin(origin)?;
-			// Account is already being tracked by the pallet.
+			// Account is already being tracked by the pezpallet.
 			ensure!(!Accounts::<T>::contains_key(&who), Error::<T>::ExistingAccount);
 			// Account should not have a vesting schedule.
 			ensure!(
@@ -236,8 +236,8 @@ pub mod pallet {
 		/// We check that the account exists at this stage, but has not completed the process.
 		///
 		/// Origin must match the `ValidityOrigin`.
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::DbWeight::get().reads_writes(1, 1))]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::DbWeight::get().reads_writes(1, 1))]
 		pub fn update_validity_status(
 			origin: OriginFor<T>,
 			who: T::AccountId,
@@ -265,8 +265,8 @@ pub mod pallet {
 		/// We check that the account is valid for a balance transfer at this point.
 		///
 		/// Origin must match the `ValidityOrigin`.
-		#[pallet::call_index(2)]
-		#[pallet::weight(T::DbWeight::get().reads_writes(2, 1))]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(T::DbWeight::get().reads_writes(2, 1))]
 		pub fn update_balance(
 			origin: OriginFor<T>,
 			who: T::AccountId,
@@ -303,8 +303,8 @@ pub mod pallet {
 		///
 		/// Origin must match the configured `PaymentAccount` (if it is not configured then this
 		/// will always fail with `BadOrigin`).
-		#[pallet::call_index(3)]
-		#[pallet::weight(T::DbWeight::get().reads_writes(4, 2))]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(T::DbWeight::get().reads_writes(4, 2))]
 		pub fn payout(origin: OriginFor<T>, who: T::AccountId) -> DispatchResult {
 			// Payments must be made directly by the `PaymentAccount`.
 			let payment_account = ensure_signed(origin)?;
@@ -376,8 +376,8 @@ pub mod pallet {
 		/// Set the account that will be used to payout users in the HEZ purchase process.
 		///
 		/// Origin must match the `ConfigurationOrigin`
-		#[pallet::call_index(4)]
-		#[pallet::weight(T::DbWeight::get().writes(1))]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(T::DbWeight::get().writes(1))]
 		pub fn set_payment_account(origin: OriginFor<T>, who: T::AccountId) -> DispatchResult {
 			T::ConfigurationOrigin::ensure_origin(origin)?;
 			// Possibly this is worse than having the caller account be the payment account?
@@ -389,8 +389,8 @@ pub mod pallet {
 		/// Set the statement that must be signed for a user to participate on the HEZ sale.
 		///
 		/// Origin must match the `ConfigurationOrigin`
-		#[pallet::call_index(5)]
-		#[pallet::weight(T::DbWeight::get().writes(1))]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(T::DbWeight::get().writes(1))]
 		pub fn set_statement(origin: OriginFor<T>, statement: Vec<u8>) -> DispatchResult {
 			T::ConfigurationOrigin::ensure_origin(origin)?;
 			ensure!(
@@ -406,15 +406,15 @@ pub mod pallet {
 		/// Set the block where locked DOTs will become unlocked.
 		///
 		/// Origin must match the `ConfigurationOrigin`
-		#[pallet::call_index(6)]
-		#[pallet::weight(T::DbWeight::get().writes(1))]
+		#[pezpallet::call_index(6)]
+		#[pezpallet::weight(T::DbWeight::get().writes(1))]
 		pub fn set_unlock_block(
 			origin: OriginFor<T>,
 			unlock_block: BlockNumberFor<T>,
 		) -> DispatchResult {
 			T::ConfigurationOrigin::ensure_origin(origin)?;
 			ensure!(
-				unlock_block > pezframe_system::Pallet::<T>::block_number(),
+				unlock_block > pezframe_system::Pezpallet::<T>::block_number(),
 				Error::<T>::InvalidUnlockBlock
 			);
 			// Possibly this is worse than having the caller account be the payment account?
@@ -425,7 +425,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	fn verify_signature(who: &T::AccountId, signature: &[u8]) -> Result<(), DispatchError> {
 		// sr25519 always expects a 64 byte signature.
 		let signature: AnySignature = sr25519::Signature::try_from(signature)
@@ -458,7 +458,7 @@ where
 	Ok(bytes)
 }
 
-/// WARNING: Executing this function will clear all storage used by this pallet.
+/// WARNING: Executing this function will clear all storage used by this pezpallet.
 /// Be sure this is what you want...
 pub fn remove_pallet<T>() -> pezframe_support::weights::Weight
 where

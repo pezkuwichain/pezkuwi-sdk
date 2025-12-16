@@ -64,6 +64,6 @@ pub type MigrateToV1<T, UnlockParaIds> = pezframe_support::migrations::Versioned
 	0,
 	1,
 	VersionUncheckedMigrateToV1<T, UnlockParaIds>,
-	super::Pallet<T>,
+	super::Pezpallet<T>,
 	<T as pezframe_system::Config>::DbWeight,
 >;

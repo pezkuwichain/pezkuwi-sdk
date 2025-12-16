@@ -234,7 +234,7 @@ impl<T: Config> Eras<T> {
 	) {
 		let page_size = T::MaxExposurePageSize::get().defensive_max(1);
 		if cfg!(debug_assertions) && cfg!(not(feature = "runtime-benchmarks")) {
-			// sanitize the exposure in case some test data from this pallet is wrong.
+			// sanitize the exposure in case some test data from this pezpallet is wrong.
 			// ignore benchmarks as other pallets might do weird things.
 			let expected_total = exposure
 				.others
@@ -445,7 +445,7 @@ impl<T: Config> Eras<T> {
 		}
 	}
 
-	/// Ensure the given era has indeed been already pruned. This is called by the main pallet in
+	/// Ensure the given era has indeed been already pruned. This is called by the main pezpallet in
 	/// do_prune_era_step.
 	pub(crate) fn era_absent(era: EraIndex) -> Result<(), pezsp_runtime::TryRuntimeError> {
 		// check double+ maps
@@ -499,7 +499,7 @@ impl<T: Config> Eras<T> {
 /// Manages session rotation logic.
 ///
 /// This controls the following storage items in FULL, meaning that they should not be accessed
-/// directly from anywhere else in this pallet:
+/// directly from anywhere else in this pezpallet:
 ///
 /// * `CurrentEra`: The current planning era
 /// * `ActiveEra`: The current active era
@@ -637,7 +637,7 @@ impl<T: Config> Rotator<T> {
 					id,
 					current_planned_era
 				);
-				Pallet::<T>::deposit_event(Event::Unexpected(
+				Pezpallet::<T>::deposit_event(Event::Unexpected(
 					UnexpectedKind::UnknownValidatorActivation,
 				));
 			},
@@ -681,7 +681,7 @@ impl<T: Config> Rotator<T> {
 			},
 		}
 
-		Pallet::<T>::deposit_event(Event::SessionRotated {
+		Pezpallet::<T>::deposit_event(Event::SessionRotated {
 			starting_session: starting,
 			active_era: Self::active_era(),
 			planned_era: Self::planned_era(),
@@ -774,7 +774,7 @@ impl<T: Config> Rotator<T> {
 			// if the cap is zero (not set), we don't cap the era duration.
 			uncapped_era_duration
 		} else if uncapped_era_duration > cap {
-			Pallet::<T>::deposit_event(Event::Unexpected(UnexpectedKind::EraDurationBoundExceeded));
+			Pezpallet::<T>::deposit_event(Event::Unexpected(UnexpectedKind::EraDurationBoundExceeded));
 
 			// if the cap is set, and era duration exceeds the cap, we cap the era duration to the
 			// maximum allowed.
@@ -813,7 +813,7 @@ impl<T: Config> Rotator<T> {
 		let validator_payout = validator_payout.min(max_staked_rewards * total_payout);
 		let remainder = total_payout.saturating_sub(validator_payout);
 
-		Pallet::<T>::deposit_event(Event::<T>::EraPaid {
+		Pezpallet::<T>::deposit_event(Event::<T>::EraPaid {
 			era_index: ending_era.index,
 			validator_payout,
 			remainder,
@@ -871,7 +871,7 @@ impl<T: Config> Rotator<T> {
 ///   `Some(_)` something is ongoing, otherwise not.
 /// * We fully trust [`Config::ElectionProvider`] to give us a full set of validators, with enough
 ///   backing after all calls to `maybe_fetch_election_results` are done. Note that older versions
-///   of this pallet had a `MinimumValidatorCount` to double-check this, but we don't check it
+///   of this pezpallet had a `MinimumValidatorCount` to double-check this, but we don't check it
 ///   anymore.
 /// * `maybe_fetch_election_results` returns no weight. Its weight should be taken account in the
 ///   e2e benchmarking of the [`Config::ElectionProvider`].
@@ -887,7 +887,7 @@ impl<T: Config> EraElectionPlanner<T> {
 		VoterSnapshotStatus::<T>::kill();
 		NextElectionPage::<T>::kill();
 		ElectableStashes::<T>::kill();
-		Pallet::<T>::register_weight(T::DbWeight::get().writes(3));
+		Pezpallet::<T>::register_weight(T::DbWeight::get().writes(3));
 	}
 
 	/// Fetches the number of pages configured by the election provider.
@@ -902,7 +902,7 @@ impl<T: Config> EraElectionPlanner<T> {
 			.inspect_err(|e| log!(warn, "Election provider failed to start: {:?}", e))
 	}
 
-	/// Hook to be used in the pallet's on-initialize.
+	/// Hook to be used in the pezpallet's on-initialize.
 	pub(crate) fn maybe_fetch_election_results() {
 		if let Ok(true) = T::ElectionProvider::status() {
 			crate::log!(
@@ -947,7 +947,7 @@ impl<T: Config> EraElectionPlanner<T> {
 	}
 
 	/// Get the right value of the first session that needs to be pruned on the RC's historical
-	/// session pallet.
+	/// session pezpallet.
 	fn get_prune_up_to() -> Option<SessionIndex> {
 		let bonded_eras = BondedEras::<T>::get();
 
@@ -983,14 +983,14 @@ impl<T: Config> EraElectionPlanner<T> {
 					);
 				};
 
-				Pallet::<T>::deposit_event(Event::PagedElectionProceeded {
+				Pezpallet::<T>::deposit_event(Event::PagedElectionProceeded {
 					page,
 					result: inner_processing_results.map(|x| x as u32).map_err(|x| x as u32),
 				});
 			},
 			Err(e) => {
 				log!(warn, "election provider page failed due to {:?} (page: {})", e, page);
-				Pallet::<T>::deposit_event(Event::PagedElectionProceeded { page, result: Err(0) });
+				Pezpallet::<T>::deposit_event(Event::PagedElectionProceeded { page, result: Err(0) });
 			},
 		}
 	}

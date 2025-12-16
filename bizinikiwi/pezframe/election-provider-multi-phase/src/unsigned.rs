@@ -19,7 +19,7 @@
 
 use crate::{
 	helpers, Call, Config, CurrentPhase, DesiredTargets, ElectionCompute, Error, FeasibilityError,
-	Pallet, QueuedSolution, RawSolution, ReadySolution, ReadySolutionOf, Round, RoundSnapshot,
+	Pezpallet, QueuedSolution, RawSolution, ReadySolution, ReadySolutionOf, Round, RoundSnapshot,
 	Snapshot, SolutionAccuracyOf, SolutionOf, SolutionOrSnapshotSize, Weight,
 };
 use alloc::{boxed::Box, vec::Vec};
@@ -71,7 +71,7 @@ pub type Assignment<T> =
 /// particular runtime `T`.
 pub type IndexAssignmentOf<T> = pezframe_election_provider_support::IndexAssignmentOf<SolutionOf<T>>;
 
-/// Error type of the pallet's [`crate::Config::Solver`].
+/// Error type of the pezpallet's [`crate::Config::Solver`].
 pub type SolverErrorOf<T> = <<T as Config>::Solver as NposSolver>::Error;
 /// Error type for operations related to the OCW npos solution miner.
 #[derive(pezframe_support::DebugNoBound, pezframe_support::PartialEqNoBound)]
@@ -192,7 +192,7 @@ fn ocw_solution_exists<T: Config>() -> bool {
 	matches!(StorageValueRef::persistent(OFFCHAIN_CACHED_CALL).get::<Call<T>>(), Ok(Some(_)))
 }
 
-impl<T: Config + CreateBare<Call<T>>> Pallet<T> {
+impl<T: Config + CreateBare<Call<T>>> Pezpallet<T> {
 	/// Mine a new npos solution.
 	///
 	/// The Npos Solver type, `S`, must have the same AccountId and Error type as the
@@ -322,9 +322,9 @@ impl<T: Config + CreateBare<Call<T>>> Pallet<T> {
 	/// Mine a new npos solution, with all the relevant checks to make sure that it will be accepted
 	/// to the chain.
 	///
-	/// If you want an unchecked solution, use [`Pallet::mine_solution`].
+	/// If you want an unchecked solution, use [`Pezpallet::mine_solution`].
 	/// If you want a checked solution and submit it at the same time, use
-	/// [`Pallet::mine_check_save_submit`].
+	/// [`Pezpallet::mine_check_save_submit`].
 	pub fn mine_and_check() -> Result<
 		(RawSolution<SolutionOf<T::MinerConfig>>, SolutionOrSnapshotSize, TrimmingStatus),
 		MinerError,
@@ -413,7 +413,7 @@ impl<T: Config + CreateBare<Call<T>>> Pallet<T> {
 	}
 }
 
-/// Configurations for a miner that comes with this pallet.
+/// Configurations for a miner that comes with this pezpallet.
 pub trait MinerConfig {
 	/// The account id type.
 	type AccountId: Ord + Clone + codec::Codec + core::fmt::Debug;
@@ -440,7 +440,7 @@ pub trait MinerConfig {
 	/// The weight is computed using `solution_weight`.
 	type MaxWeight: Get<Weight>;
 	/// The maximum number of winners that can be elected in the single page supported by this
-	/// pallet.
+	/// pezpallet.
 	type MaxWinners: Get<u32>;
 	/// The maximum number of backers per winner in the last solution.
 	type MaxBackersPerWinner: Get<u32>;
@@ -453,7 +453,7 @@ pub trait MinerConfig {
 /// A base miner, suitable to be used for both signed and unsigned submissions.
 pub struct Miner<T: MinerConfig>(core::marker::PhantomData<T>);
 impl<T: MinerConfig> Miner<T> {
-	/// Same as [`Pallet::mine_solution`], but the input snapshot data must be given.
+	/// Same as [`Pezpallet::mine_solution`], but the input snapshot data must be given.
 	pub fn mine_solution_with_snapshot<S>(
 		voters: Vec<(T::AccountId, VoteWeight, BoundedVec<T::AccountId, T::MaxVotesPerVoter>)>,
 		targets: Vec<T::AccountId>,

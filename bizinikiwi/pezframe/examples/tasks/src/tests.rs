@@ -45,7 +45,7 @@ pub fn new_test_ext() -> pezsp_io::TestExternalities {
 fn task_enumerate_works() {
 	new_test_ext().execute_with(|| {
 		Numbers::<Runtime>::insert(0, 1);
-		assert_eq!(crate::pallet::Task::<Runtime>::iter().collect::<Vec<_>>().len(), 1);
+		assert_eq!(crate::pezpallet::Task::<Runtime>::iter().collect::<Vec<_>>().len(), 1);
 	});
 }
 
@@ -66,7 +66,7 @@ fn runtime_task_enumerate_works_via_pallet_config() {
 	new_test_ext().execute_with(|| {
 		Numbers::<Runtime>::insert(1, 4);
 		assert_eq!(
-			<Runtime as crate::pallet::Config>::RuntimeTask::iter()
+			<Runtime as crate::pezpallet::Config>::RuntimeTask::iter()
 				.collect::<Vec<_>>()
 				.len(),
 			1
@@ -77,7 +77,7 @@ fn runtime_task_enumerate_works_via_pallet_config() {
 #[test]
 fn task_index_works_at_pallet_level() {
 	new_test_ext().execute_with(|| {
-		assert_eq!(crate::pallet::Task::<Runtime>::AddNumberIntoTotal { i: 2u32 }.task_index(), 0);
+		assert_eq!(crate::pezpallet::Task::<Runtime>::AddNumberIntoTotal { i: 2u32 }.task_index(), 0);
 	});
 }
 
@@ -85,7 +85,7 @@ fn task_index_works_at_pallet_level() {
 fn task_index_works_at_runtime_level() {
 	new_test_ext().execute_with(|| {
 		assert_eq!(
-			<Runtime as pezframe_system::Config>::RuntimeTask::TasksExample(crate::pallet::Task::<
+			<Runtime as pezframe_system::Config>::RuntimeTask::TasksExample(crate::pezpallet::Task::<
 				Runtime,
 			>::AddNumberIntoTotal {
 				i: 1u32
@@ -105,7 +105,7 @@ fn task_execution_works() {
 		Numbers::<Runtime>::insert(1, 4);
 
 		let task =
-			<Runtime as pezframe_system::Config>::RuntimeTask::TasksExample(crate::pallet::Task::<
+			<Runtime as pezframe_system::Config>::RuntimeTask::TasksExample(crate::pezpallet::Task::<
 				Runtime,
 			>::AddNumberIntoTotal {
 				i: 1u32,
@@ -127,7 +127,7 @@ fn task_execution_fails_for_invalid_task() {
 			System::do_task(
 				RuntimeOrigin::signed(1),
 				<Runtime as pezframe_system::Config>::RuntimeTask::TasksExample(
-					crate::pallet::Task::<Runtime>::AddNumberIntoTotal { i: 0u32 }
+					crate::pezpallet::Task::<Runtime>::AddNumberIntoTotal { i: 0u32 }
 				),
 			),
 			pezframe_system::Error::<Runtime>::InvalidTask

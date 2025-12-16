@@ -24,24 +24,24 @@ use pezsp_io;
 use pezsp_runtime::BuildStorage;
 
 // Logger module to track execution.
-#[pezframe_support::pallet]
+#[pezframe_support::pezpallet]
 pub mod logger {
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
-		#[pallet::call_index(0)]
-		#[pallet::weight(*weight)]
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(*weight)]
 		pub fn privileged_i32_log(
 			origin: OriginFor<T>,
 			i: i32,
@@ -54,8 +54,8 @@ pub mod logger {
 			Ok(().into())
 		}
 
-		#[pallet::call_index(1)]
-		#[pallet::weight(*weight)]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(*weight)]
 		pub fn non_privileged_log(
 			origin: OriginFor<T>,
 			i: i32,
@@ -70,20 +70,20 @@ pub mod logger {
 		}
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		AppendI32 { value: i32, weight: Weight },
 		AppendI32AndAccount { sender: T::AccountId, value: i32, weight: Weight },
 	}
 
-	#[pallet::storage]
-	#[pallet::getter(fn account_log)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn account_log)]
 	pub(super) type AccountLog<T: Config> =
 		StorageValue<_, BoundedVec<T::AccountId, ConstU32<1_000>>, ValueQuery>;
 
-	#[pallet::storage]
-	#[pallet::getter(fn i32_log)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn i32_log)]
 	pub(super) type I32Log<T> = StorageValue<_, BoundedVec<i32, ConstU32<1_000>>, ValueQuery>;
 }
 

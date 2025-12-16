@@ -283,7 +283,7 @@ where
 		finality_notifications: &mut Fuse<FinalityNotifications<B>>,
 		is_authority: bool,
 	) -> Result<Self, Error> {
-		// Wait for BEEFY pallet to be active before starting voter.
+		// Wait for BEEFY pezpallet to be active before starting voter.
 		let (beefy_genesis, best_grandpa) =
 			wait_for_runtime_pallet(&*runtime, finality_notifications).await?;
 
@@ -335,7 +335,7 @@ where
 
 	// If no persisted state present, walk back the chain from first GRANDPA notification to either:
 	//  - latest BEEFY finalized block, or if none found on the way,
-	//  - BEEFY pallet genesis;
+	//  - BEEFY pezpallet genesis;
 	// Enqueue any BEEFY mandatory blocks (session boundaries) found on the way, for voter to
 	// finalize.
 	async fn init_state(
@@ -353,9 +353,9 @@ where
 			.ok()
 			.flatten()
 			.filter(|genesis| *genesis == beefy_genesis)
-			.ok_or_else(|| Error::Backend("BEEFY pallet expected to be active.".into()))?;
+			.ok_or_else(|| Error::Backend("BEEFY pezpallet expected to be active.".into()))?;
 		// Walk back the imported blocks and initialize voter either, at the last block with
-		// a BEEFY justification, or at pallet genesis block; voter will resume from there.
+		// a BEEFY justification, or at pezpallet genesis block; voter will resume from there.
 		let mut sessions = VecDeque::new();
 		let mut header = best_grandpa.clone();
 		let state = loop {
@@ -444,7 +444,7 @@ where
 	) -> Result<PersistedState<B, AuthorityId>, Error> {
 		// Initialize voter state from AUX DB if compatible.
 		if let Some(mut state) = crate::aux_schema::load_persistent(backend.as_ref())?
-			// Verify state pallet genesis matches runtime.
+			// Verify state pezpallet genesis matches runtime.
 			.filter(|state| state.pezpallet_genesis() == beefy_genesis)
 		{
 			// Overwrite persisted state with current best GRANDPA block.
@@ -485,7 +485,7 @@ where
 			return Ok(state);
 		}
 
-		// No valid voter-state persisted, re-initialize from pallet genesis.
+		// No valid voter-state persisted, re-initialize from pezpallet genesis.
 		Self::init_state(beefy_genesis, best_grandpa, min_block_delta, backend, runtime).await
 	}
 }
@@ -557,8 +557,8 @@ pub async fn start_beefy_gadget<B, BE, C, N, P, R, S, AuthorityId>(
 
 	let mut block_import_justif = links.from_block_import_justif_stream.subscribe(100_000).fuse();
 
-	// Subscribe to finality notifications and justifications before waiting for runtime pallet and
-	// reuse the streams, so we don't miss notifications while waiting for pallet to be available.
+	// Subscribe to finality notifications and justifications before waiting for runtime pezpallet and
+	// reuse the streams, so we don't miss notifications while waiting for pezpallet to be available.
 	let finality_notifications = client.finality_notification_stream();
 	let (mut transformer, mut finality_notifications) =
 		finality_notification_transformer_future(finality_notifications);
@@ -718,7 +718,7 @@ where
 	}
 }
 
-/// Wait for BEEFY runtime pallet to be available, return active validator set.
+/// Wait for BEEFY runtime pezpallet to be available, return active validator set.
 /// Should be called only once during worker initialization.
 async fn wait_for_runtime_pallet<B, R, AuthorityId: AuthorityIdBound>(
 	runtime: &R,
@@ -729,7 +729,7 @@ where
 	R: ProvideRuntimeApi<B>,
 	R::Api: BeefyApi<B, AuthorityId>,
 {
-	info!(target: LOG_TARGET, "🥩 BEEFY gadget waiting for BEEFY pallet to become available...");
+	info!(target: LOG_TARGET, "🥩 BEEFY gadget waiting for BEEFY pezpallet to become available...");
 	loop {
 		let notif = finality.next().await.ok_or_else(|| {
 			let err_msg = "🥩 Finality stream has unexpectedly terminated.".into();
@@ -739,10 +739,10 @@ where
 		let at = notif.header.hash();
 		if let Some(start) = runtime.runtime_api().beefy_genesis(at).ok().flatten() {
 			if *notif.header.number() >= start {
-				// Beefy pallet available, return header for best grandpa at the time.
+				// Beefy pezpallet available, return header for best grandpa at the time.
 				info!(
 					target: LOG_TARGET,
-					"🥩 BEEFY pallet available: block {:?} beefy genesis {:?}",
+					"🥩 BEEFY pezpallet available: block {:?} beefy genesis {:?}",
 					notif.header.number(), start
 				);
 				return Ok((start, notif.header));

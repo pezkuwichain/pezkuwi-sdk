@@ -20,7 +20,7 @@
 use crate::{
 	mmr::{Node, NodeOf},
 	primitives::{mmr_lib, mmr_lib::helper, utils::NodesUtils, FullLeaf, NodeIndex},
-	BlockHashProvider, Config, Nodes, NumberOfLeaves, Pallet,
+	BlockHashProvider, Config, Nodes, NumberOfLeaves, Pezpallet,
 };
 use alloc::{vec, vec::Vec};
 use codec::Encode;
@@ -62,7 +62,7 @@ impl OffchainStorage {
 
 	#[cfg(feature = "runtime-benchmarks")]
 	fn set<T: Config<I>, I: 'static>(key: &[u8], value: &[u8]) {
-		if crate::pallet::UseLocalStorage::<T, I>::get() {
+		if crate::pezpallet::UseLocalStorage::<T, I>::get() {
 			offchain::local_storage_set(StorageKind::PERSISTENT, key, value);
 		} else {
 			offchain_index::set(key, value);
@@ -95,7 +95,7 @@ where
 		// We should only get here when trying to generate proofs. The client requests
 		// for proofs for finalized blocks, which should usually be already canonicalized,
 		// unless the MMR client gadget has a delay.
-		let key = Pallet::<T, I>::node_canon_offchain_key(pos);
+		let key = Pezpallet::<T, I>::node_canon_offchain_key(pos);
 		debug!(
 			target: "runtime::mmr::offchain", "offchain db get {}: leaf idx {:?}, canon key {:?}",
 			pos, ancestor_leaf_idx, key
@@ -107,9 +107,9 @@ where
 
 		// Fall through to searching node using fork-specific key.
 		let ancestor_parent_block_num =
-			Pallet::<T, I>::leaf_index_to_parent_block_num(ancestor_leaf_idx);
+			Pezpallet::<T, I>::leaf_index_to_parent_block_num(ancestor_leaf_idx);
 		let ancestor_parent_hash = T::BlockHashProvider::block_hash(ancestor_parent_block_num);
-		let temp_key = Pallet::<T, I>::node_temp_offchain_key(pos, ancestor_parent_hash);
+		let temp_key = Pezpallet::<T, I>::node_temp_offchain_key(pos, ancestor_parent_hash);
 		debug!(
 			target: "runtime::mmr::offchain",
 			"offchain db get {}: leaf idx {:?}, hash {:?}, temp key {:?}",
@@ -177,7 +177,7 @@ where
 
 		// Use parent hash of block adding new nodes (this block) as extra identifier
 		// in offchain DB to avoid DB collisions and overwrites in case of forks.
-		let parent_hash = <pezframe_system::Pallet<T>>::parent_hash();
+		let parent_hash = <pezframe_system::Pezpallet<T>>::parent_hash();
 		for elem in elems {
 			// On-chain we are going to only store new peaks.
 			if peaks_to_store.next_if_eq(&node_index).is_some() {
@@ -220,7 +220,7 @@ where
 		// We store this leaf offchain keyed by `(parent_hash, node_index)` to make it
 		// fork-resistant. The MMR client gadget task will "canonicalize" it on the first
 		// finality notification that follows, when we are not worried about forks anymore.
-		let temp_key = Pallet::<T, I>::node_temp_offchain_key(pos, parent_hash);
+		let temp_key = Pezpallet::<T, I>::node_temp_offchain_key(pos, parent_hash);
 		debug!(
 			target: "runtime::mmr::offchain", "offchain db set: pos {} parent_hash {:?} key {:?}",
 			pos, parent_hash, temp_key

@@ -15,15 +15,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Multisig pallet
-//! A pallet for doing multisig dispatch.
+//! # Multisig pezpallet
+//! A pezpallet for doing multisig dispatch.
 //!
 //! - [`Config`]
 //! - [`Call`]
 //!
 //! ## Overview
 //!
-//! This pallet contains functionality for multi-signature dispatch, a (potentially) stateful
+//! This pezpallet contains functionality for multi-signature dispatch, a (potentially) stateful
 //! operation, allowing multiple signed
 //! origins (accounts) to coordinate and dispatch a call from a well-known origin, derivable
 //! deterministically from the set of account IDs and the threshold number of accounts from the
@@ -57,10 +57,10 @@ use frame::{
 use pezframe_system::RawOrigin;
 pub use weights::WeightInfo;
 
-/// Re-export all pallet items.
-pub use pallet::*;
+/// Re-export all pezpallet items.
+pub use pezpallet::*;
 
-/// The log target of this pallet.
+/// The log target of this pezpallet.
 pub const LOG_TARGET: &'static str = "runtime::multisig";
 
 // syntactic sugar for logging.
@@ -69,7 +69,7 @@ macro_rules! log {
 	($level:tt, $patter:expr $(, $values:expr)* $(,)?) => {
 		log::$level!(
 			target: crate::LOG_TARGET,
-			concat!("[{:?}] ✍️ ", $patter), <pezframe_system::Pallet<T>>::block_number() $(, $values)*
+			concat!("[{:?}] ✍️ ", $patter), <pezframe_system::Pezpallet<T>>::block_number() $(, $values)*
 		)
 	};
 }
@@ -138,11 +138,11 @@ enum CallOrHash<T: Config> {
 	Hash([u8; 32]),
 }
 
-#[frame::pallet]
-pub mod pallet {
+#[frame::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
@@ -163,42 +163,42 @@ pub mod pallet {
 		/// This is held for an additional storage item whose value size is
 		/// `4 + sizeof((BlockNumber, Balance, AccountId))` bytes and whose key size is
 		/// `32 + sizeof(AccountId)` bytes.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type DepositBase: Get<BalanceOf<Self>>;
 
 		/// The amount of currency needed per unit threshold when creating a multisig execution.
 		///
 		/// This is held for adding 32 bytes more into a pre-existing storage value.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type DepositFactor: Get<BalanceOf<Self>>;
 
 		/// The maximum amount of signatories allowed in the multisig.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxSignatories: Get<u32>;
 
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: weights::WeightInfo;
 
 		/// Query the current block number.
 		///
 		/// Must return monotonically increasing values when called from consecutive blocks.
 		/// Can be configured to return either:
-		/// - the local block number of the runtime via `pezframe_system::Pallet`
+		/// - the local block number of the runtime via `pezframe_system::Pezpallet`
 		/// - a remote block number, eg from the relay chain through `RelaychainDataProvider`
 		/// - an arbitrary value through a custom implementation of the trait
 		///
 		/// There is currently no migration provided to "hot-swap" block number providers and it may
 		/// result in undefined behavior when doing so. Teyrchains are therefore best off setting
-		/// this to their local block number provider if they have the pallet already deployed.
+		/// this to their local block number provider if they have the pezpallet already deployed.
 		///
 		/// Suggested values:
-		/// - Solo- and Relay-chains: `pezframe_system::Pallet`
+		/// - Solo- and Relay-chains: `pezframe_system::Pezpallet`
 		/// - Teyrchains that may produce blocks sparingly or only when needed (on-demand):
-		///   - already have the pallet deployed: `pezframe_system::Pallet`
-		///   - are freshly deploying this pallet: `RelaychainDataProvider`
+		///   - already have the pezpallet deployed: `pezframe_system::Pezpallet`
+		///   - are freshly deploying this pezpallet: `RelaychainDataProvider`
 		/// - Teyrchains with a reliably block production rate (PLO or bulk-coretime):
-		///   - already have the pallet deployed: `pezframe_system::Pallet`
-		///   - are freshly deploying this pallet: no strong recommendation. Both local and remote
+		///   - already have the pezpallet deployed: `pezframe_system::Pezpallet`
+		///   - are freshly deploying this pezpallet: no strong recommendation. Both local and remote
 		///     providers can be used. Relay provider can be a bit better in cases where the
 		///     teyrchain is lagging its block production to avoid clock skew.
 		type BlockNumberProvider: BlockNumberProvider;
@@ -207,12 +207,12 @@ pub mod pallet {
 	/// The in-code storage version.
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(1);
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T>(_);
 
 	/// The set of open multisig operations.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Multisigs<T: Config> = StorageDoubleMap<
 		_,
 		Twox64Concat,
@@ -222,7 +222,7 @@ pub mod pallet {
 		Multisig<BlockNumberFor<T>, BalanceOf<T>, T::AccountId, T::MaxSignatories>,
 	>;
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Threshold must be 2 or greater.
 		MinimumThreshold,
@@ -255,8 +255,8 @@ pub mod pallet {
 		AlreadyStored,
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A new multisig operation has begun.
 		NewMultisig { approving: T::AccountId, multisig: T::AccountId, call_hash: CallHash },
@@ -291,11 +291,11 @@ pub mod pallet {
 		},
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<pezframe_system::pezpallet_prelude::BlockNumberFor<T>> for Pallet<T> {}
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<pezframe_system::pezpallet_prelude::BlockNumberFor<T>> for Pezpallet<T> {}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Immediately dispatch a multi-signature call using a single approval from the caller.
 		///
 		/// The dispatch origin for this call must be _Signed_.
@@ -308,8 +308,8 @@ pub mod pallet {
 		///
 		/// ## Complexity
 		/// O(Z + C) where Z is the length of the call and C its execution weight.
-		#[pallet::call_index(0)]
-		#[pallet::weight({
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight({
 			let dispatch_info = call.get_dispatch_info();
 			(
 				T::WeightInfo::as_multi_threshold_1(call.using_encoded(|c| c.len() as u32))
@@ -404,8 +404,8 @@ pub mod pallet {
 		/// - The weight of the `call`.
 		/// - Storage: inserts one item, value size bounded by `MaxSignatories`, with a deposit
 		///   taken for its lifetime of `DepositBase + threshold * DepositFactor`.
-		#[pallet::call_index(1)]
-		#[pallet::weight({
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight({
 			let s = other_signatories.len() as u32;
 			let z = call.using_encoded(|d| d.len()) as u32;
 
@@ -463,8 +463,8 @@ pub mod pallet {
 		/// - One event.
 		/// - Storage: inserts one item, value size bounded by `MaxSignatories`, with a deposit
 		///   taken for its lifetime of `DepositBase + threshold * DepositFactor`.
-		#[pallet::call_index(2)]
-		#[pallet::weight({
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight({
 			let s = other_signatories.len() as u32;
 
 			T::WeightInfo::approve_as_multi_create(s)
@@ -511,8 +511,8 @@ pub mod pallet {
 		/// - One event.
 		/// - I/O: 1 read `O(S)`, one remove.
 		/// - Storage: removes one item.
-		#[pallet::call_index(3)]
-		#[pallet::weight(T::WeightInfo::cancel_as_multi(other_signatories.len() as u32))]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(T::WeightInfo::cancel_as_multi(other_signatories.len() as u32))]
 		pub fn cancel_as_multi(
 			origin: OriginFor<T>,
 			threshold: u16,
@@ -559,8 +559,8 @@ pub mod pallet {
 		/// - `call_hash`: The hash of the call this deposit is reserved for.
 		///
 		/// Emits `DepositPoked` if successful.
-		#[pallet::call_index(4)]
-		#[pallet::weight(T::WeightInfo::poke_deposit(other_signatories.len() as u32))]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(T::WeightInfo::poke_deposit(other_signatories.len() as u32))]
 		pub fn poke_deposit(
 			origin: OriginFor<T>,
 			threshold: u16,
@@ -626,7 +626,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Derive a multi-account ID from the sorted list of accounts and the threshold that are
 	/// required.
 	///
@@ -770,7 +770,7 @@ impl<T: Config> Pallet<T> {
 	pub fn timepoint() -> Timepoint<BlockNumberFor<T>> {
 		Timepoint {
 			height: T::BlockNumberProvider::current_block_number(),
-			index: <pezframe_system::Pallet<T>>::extrinsic_index().unwrap_or_default(),
+			index: <pezframe_system::Pezpallet<T>>::extrinsic_index().unwrap_or_default(),
 		}
 	}
 

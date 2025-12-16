@@ -31,7 +31,7 @@ use pezsp_runtime::{
 };
 
 // test for instance
-#[pezframe_support::pallet]
+#[pezframe_support::pezpallet]
 pub mod pallet1 {
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
@@ -47,8 +47,8 @@ pub mod pallet1 {
 	pub const CALL_4_AUTH_WEIGHT: Weight = Weight::from_all(10);
 	pub const CALL_4_WEIGHT: Weight = Weight::from_all(11);
 
-	#[pallet::pallet]
-	pub struct Pallet<T, I = ()>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T, I = ()>(_);
 
 	pub trait WeightInfo {
 		fn call1() -> Weight;
@@ -76,24 +76,24 @@ pub mod pallet1 {
 		}
 	}
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config {
 		type SomeGeneric: Parameter;
 		type WeightInfo: WeightInfo;
 	}
 
-	#[pallet::call(weight = T::WeightInfo)]
-	impl<T: Config<I>, I: 'static> Pallet<T, I> {
-		#[pallet::authorize(|_source| Ok((ValidTransaction::default(), Weight::zero())))]
-		#[pallet::weight_of_authorize(CALL_1_AUTH_WEIGHT)]
-		#[pallet::call_index(0)]
+	#[pezpallet::call(weight = T::WeightInfo)]
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
+		#[pezpallet::authorize(|_source| Ok((ValidTransaction::default(), Weight::zero())))]
+		#[pezpallet::weight_of_authorize(CALL_1_AUTH_WEIGHT)]
+		#[pezpallet::call_index(0)]
 		pub fn call1(origin: OriginFor<T>) -> DispatchResult {
 			ensure_authorized(origin)?;
 
 			Ok(())
 		}
 
-		#[pallet::authorize(|_source, a, b, c, d, e, f, authorize_refund|
+		#[pezpallet::authorize(|_source, a, b, c, d, e, f, authorize_refund|
 			if *a {
 				let valid = ValidTransaction {
 					priority: *b,
@@ -107,7 +107,7 @@ pub mod pallet1 {
 				Err(TransactionValidityError::Invalid(InvalidTransaction::Call))
 			}
 		)]
-		#[pallet::call_index(1)]
+		#[pezpallet::call_index(1)]
 		pub fn call2(
 			origin: OriginFor<T>,
 			a: bool,
@@ -125,8 +125,8 @@ pub mod pallet1 {
 			Ok(Some(CALL_2_REFUND).into())
 		}
 
-		#[pallet::authorize(Self::authorize_call3)]
-		#[pallet::call_index(2)]
+		#[pezpallet::authorize(Self::authorize_call3)]
+		#[pezpallet::call_index(2)]
 		pub fn call3(
 			origin: OriginFor<T>,
 			valid: bool,
@@ -143,10 +143,10 @@ pub mod pallet1 {
 		}
 
 		#[cfg(feature = "frame-feature-testing")]
-		#[pallet::call_index(3)]
-		#[pallet::authorize(|_source| Ok((ValidTransaction::default(), Weight::zero())))]
-		#[pallet::weight_of_authorize(CALL_4_AUTH_WEIGHT)]
-		#[pallet::weight(CALL_4_WEIGHT)]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::authorize(|_source| Ok((ValidTransaction::default(), Weight::zero())))]
+		#[pezpallet::weight_of_authorize(CALL_4_AUTH_WEIGHT)]
+		#[pezpallet::weight(CALL_4_WEIGHT)]
 		pub fn call4(origin: OriginFor<T>) -> DispatchResult {
 			ensure_authorized(origin)?;
 
@@ -154,7 +154,7 @@ pub mod pallet1 {
 		}
 	}
 
-	impl<T: Config<I>, I: 'static> Pallet<T, I> {
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 		fn authorize_call3(
 			_source: TransactionSource,
 			valid: &bool,
@@ -170,22 +170,22 @@ pub mod pallet1 {
 }
 
 // test for dev mode.
-#[pezframe_support::pallet(dev_mode)]
+#[pezframe_support::pezpallet(dev_mode)]
 pub mod pallet2 {
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
 	pub trait SomeTrait {}
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
-		#[pallet::authorize(|_source| Ok(Default::default()))]
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
+		#[pezpallet::authorize(|_source| Ok(Default::default()))]
 		pub fn call1(origin: OriginFor<T>) -> DispatchResult {
 			ensure_authorized(origin)?;
 			Ok(())
@@ -193,8 +193,8 @@ pub mod pallet2 {
 	}
 }
 
-// test for no pallet info.
-#[pezframe_support::pallet]
+// test for no pezpallet info.
+#[pezframe_support::pezpallet]
 pub mod pallet3 {
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
@@ -202,18 +202,18 @@ pub mod pallet3 {
 	pub const CALL_1_AUTH_WEIGHT: Weight = Weight::from_all(1);
 	pub const CALL_1_WEIGHT: Weight = Weight::from_all(1);
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: crate::pallet1::Config + pezframe_system::Config {}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
-		#[pallet::authorize(|_source| Ok(Default::default()))]
-		#[pallet::weight_of_authorize(CALL_1_AUTH_WEIGHT)]
-		#[pallet::weight(CALL_1_WEIGHT)]
-		#[pallet::call_index(0)]
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
+		#[pezpallet::authorize(|_source| Ok(Default::default()))]
+		#[pezpallet::weight_of_authorize(CALL_1_AUTH_WEIGHT)]
+		#[pezpallet::weight(CALL_1_WEIGHT)]
+		#[pezpallet::call_index(0)]
 		pub fn call1(origin: OriginFor<T>) -> DispatchResult {
 			ensure_authorized(origin)?;
 			Ok(())
@@ -221,21 +221,21 @@ pub mod pallet3 {
 	}
 }
 
-// test for pallet with no authorized call
-#[pezframe_support::pallet(dev_mode)]
+// test for pezpallet with no authorized call
+#[pezframe_support::pezpallet(dev_mode)]
 pub mod pallet4 {
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
-		#[pallet::call_index(0)]
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
+		#[pezpallet::call_index(0)]
 		pub fn call1(origin: OriginFor<T>) -> DispatchResult {
 			ensure_authorized(origin)?;
 			Ok(())

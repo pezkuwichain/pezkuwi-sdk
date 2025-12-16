@@ -16,14 +16,14 @@
 // limitations under the License.
 
 //! This module contains helper methods to configure attributes for items and collections in the
-//! NFTs pallet.
+//! NFTs pezpallet.
 //! The bitflag [`PalletFeature::Attributes`] needs to be set in [`Config::Features`] for NFTs
 //! to have the functionality defined in this module.
 
 use crate::*;
 use pezframe_support::pezpallet_prelude::*;
 
-impl<T: Config<I>, I: 'static> Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 	/// Sets the attribute of an item or a collection.
 	///
 	/// This function is used to set an attribute for an item or a collection. It checks the
@@ -508,7 +508,7 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 	/// # Errors
 	///
 	/// This function returns an [`IncorrectData`](crate::Error::IncorrectData) error if the
-	/// provided pallet attribute is too long.
+	/// provided pezpallet attribute is too long.
 	pub fn has_system_attribute(
 		collection: &T::CollectionId,
 		item: &T::ItemId,
@@ -517,7 +517,7 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 		let attribute = (
 			&collection,
 			Some(item),
-			AttributeNamespace::Pallet,
+			AttributeNamespace::Pezpallet,
 			&Self::construct_attribute_key(attribute_key.encode())?,
 		);
 		Ok(Attribute::<T, I>::contains_key(attribute))

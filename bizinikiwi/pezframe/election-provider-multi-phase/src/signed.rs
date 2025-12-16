@@ -20,7 +20,7 @@
 use core::marker::PhantomData;
 
 use crate::{
-	unsigned::MinerConfig, Config, ElectionCompute, Pallet, QueuedSolution, RawSolution,
+	unsigned::MinerConfig, Config, ElectionCompute, Pezpallet, QueuedSolution, RawSolution,
 	ReadySolutionOf, SignedSubmissionIndices, SignedSubmissionNextIndex, SignedSubmissionsMap,
 	SnapshotMetadata, SolutionOf, SolutionOrSnapshotSize, Weight, WeightInfo,
 };
@@ -301,7 +301,7 @@ impl<T: Config> SignedSubmissions<T> {
 	pub fn insert(&mut self, submission: SignedSubmissionOf<T>) -> InsertResult<T> {
 		// verify the expectation that we never reuse an index
 		debug_assert!(!self.indices.iter().map(|(_, _, x)| x).any(|&idx| idx == self.next_idx));
-		let block_number = pezframe_system::Pallet::<T>::block_number();
+		let block_number = pezframe_system::Pezpallet::<T>::block_number();
 
 		let maybe_weakest = match self.indices.try_push((
 			submission.raw_solution.score,
@@ -376,7 +376,7 @@ where
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// `Self` accessor for `SignedSubmission<T>`.
 	pub fn signed_submissions() -> SignedSubmissions<T> {
 		SignedSubmissions::<T>::get()

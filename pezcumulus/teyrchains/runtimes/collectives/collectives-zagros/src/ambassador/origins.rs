@@ -15,17 +15,17 @@
 
 //! The Ambassador Program's origins.
 
-#[pezframe_support::pallet]
+#[pezframe_support::pezpallet]
 pub mod pezpallet_origins {
 	use crate::ambassador::ranks;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezpallet_ranked_collective::Rank;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(PhantomData<T>);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(PhantomData<T>);
 
-	/// The pallet configuration trait.
-	#[pallet::config]
+	/// The pezpallet configuration trait.
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
 	#[derive(
@@ -39,7 +39,7 @@ pub mod pezpallet_origins {
 		TypeInfo,
 		RuntimeDebug,
 	)]
-	#[pallet::origin]
+	#[pezpallet::origin]
 	pub enum Origin {
 		/// Plurality voice of the [ranks::AMBASSADOR_TIER_1] members or above given via
 		/// referendum.

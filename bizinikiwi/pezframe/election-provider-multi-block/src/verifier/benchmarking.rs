@@ -16,7 +16,7 @@
 // limitations under the License.
 
 use crate::{
-	verifier::{Config, Event, FeasibilityError, Pallet, Status, StatusStorage},
+	verifier::{Config, Event, FeasibilityError, Pezpallet, Status, StatusStorage},
 	CurrentPhase, Phase,
 };
 use pezframe_benchmarking::v2::*;
@@ -35,33 +35,33 @@ mod benchmarks {
 	where
 		<T as pezframe_system::Config>::RuntimeEvent: TryInto<Event<T>>,
 	{
-		pezframe_system::Pallet::<T>::read_events_for_pallet::<Event<T>>()
+		pezframe_system::Pezpallet::<T>::read_events_for_pallet::<Event<T>>()
 	}
 
 	#[benchmark(pov_mode = Measured)]
 	fn on_initialize_valid_non_terminal() -> Result<(), BenchmarkError> {
 		#[cfg(test)]
 		crate::mock::ElectionStart::set(pezsp_runtime::traits::Bounded::max_value());
-		crate::Pallet::<T>::start().unwrap();
+		crate::Pezpallet::<T>::start().unwrap();
 
-		// roll to signed validation, with a solution stored in the signed pallet
-		crate::Pallet::<T>::roll_to_signed_and_submit_full_solution()?;
+		// roll to signed validation, with a solution stored in the signed pezpallet
+		crate::Pezpallet::<T>::roll_to_signed_and_submit_full_solution()?;
 
 		// roll to verification
-		crate::Pallet::<T>::roll_until_matches(|| {
+		crate::Pezpallet::<T>::roll_until_matches(|| {
 			matches!(CurrentPhase::<T>::get(), Phase::SignedValidation(_))
 		});
 		// send start signal
-		crate::Pallet::<T>::roll_next(true, false);
+		crate::Pezpallet::<T>::roll_next(true, false);
 
 		// start signal must have been sent by now
-		assert_eq!(StatusStorage::<T>::get(), Status::Ongoing(crate::Pallet::<T>::msp()));
+		assert_eq!(StatusStorage::<T>::get(), Status::Ongoing(crate::Pezpallet::<T>::msp()));
 
 		#[block]
 		{
-			crate::Pallet::<T>::roll_next(true, false);
+			crate::Pezpallet::<T>::roll_next(true, false);
 		}
-		assert_eq!(StatusStorage::<T>::get(), Status::Ongoing(crate::Pallet::<T>::msp() - 1));
+		assert_eq!(StatusStorage::<T>::get(), Status::Ongoing(crate::Pezpallet::<T>::msp() - 1));
 
 		Ok(())
 	}
@@ -70,26 +70,26 @@ mod benchmarks {
 	fn on_initialize_valid_terminal() -> Result<(), BenchmarkError> {
 		#[cfg(test)]
 		crate::mock::ElectionStart::set(pezsp_runtime::traits::Bounded::max_value());
-		crate::Pallet::<T>::start().unwrap();
+		crate::Pezpallet::<T>::start().unwrap();
 
-		// roll to signed validation, with a solution stored in the signed pallet
+		// roll to signed validation, with a solution stored in the signed pezpallet
 		assert!(
 			T::SignedValidationPhase::get() >= T::Pages::get().into(),
 			"Signed validation phase must be larger than the number of pages"
 		);
 
-		crate::Pallet::<T>::roll_to_signed_and_submit_full_solution()?;
+		crate::Pezpallet::<T>::roll_to_signed_and_submit_full_solution()?;
 		// roll to before the last page of verification
-		crate::Pallet::<T>::roll_until_matches(|| {
+		crate::Pezpallet::<T>::roll_until_matches(|| {
 			matches!(CurrentPhase::<T>::get(), Phase::SignedValidation(_))
 		});
 		// send start signal
-		crate::Pallet::<T>::roll_next(true, false);
+		crate::Pezpallet::<T>::roll_next(true, false);
 
 		// start signal must have been sent by now
-		assert_eq!(StatusStorage::<T>::get(), Status::Ongoing(crate::Pallet::<T>::msp()));
+		assert_eq!(StatusStorage::<T>::get(), Status::Ongoing(crate::Pezpallet::<T>::msp()));
 		for _ in 0..(T::Pages::get() - 1) {
-			crate::Pallet::<T>::roll_next(true, false);
+			crate::Pezpallet::<T>::roll_next(true, false);
 		}
 
 		// we must have verified all pages by now, minus the last one.
@@ -101,7 +101,7 @@ mod benchmarks {
 		// verify the last page.
 		#[block]
 		{
-			crate::Pallet::<T>::roll_next(true, false);
+			crate::Pezpallet::<T>::roll_next(true, false);
 		}
 
 		// we are done
@@ -124,34 +124,34 @@ mod benchmarks {
 
 		#[cfg(test)]
 		crate::mock::ElectionStart::set(pezsp_runtime::traits::Bounded::max_value());
-		crate::Pallet::<T>::start().unwrap();
+		crate::Pezpallet::<T>::start().unwrap();
 
-		// roll to signed validation, with a solution stored in the signed pallet
+		// roll to signed validation, with a solution stored in the signed pezpallet
 
 		// but this solution is corrupt
-		let mut paged_solution = crate::Pallet::<T>::roll_to_signed_and_mine_full_solution();
+		let mut paged_solution = crate::Pezpallet::<T>::roll_to_signed_and_mine_full_solution();
 		paged_solution.score.minimal_stake -= 1;
-		crate::Pallet::<T>::submit_full_solution(paged_solution)?;
+		crate::Pezpallet::<T>::submit_full_solution(paged_solution)?;
 
 		// roll to verification
-		crate::Pallet::<T>::roll_until_matches(|| {
+		crate::Pezpallet::<T>::roll_until_matches(|| {
 			matches!(CurrentPhase::<T>::get(), Phase::SignedValidation(_))
 		});
 		// send start signal
-		crate::Pallet::<T>::roll_next(true, false);
+		crate::Pezpallet::<T>::roll_next(true, false);
 
-		assert_eq!(StatusStorage::<T>::get(), Status::Ongoing(crate::Pallet::<T>::msp()));
+		assert_eq!(StatusStorage::<T>::get(), Status::Ongoing(crate::Pezpallet::<T>::msp()));
 		// verify all pages, except for the last one.
 		for i in 0..T::Pages::get() - 1 {
-			crate::Pallet::<T>::roll_next(true, false);
+			crate::Pezpallet::<T>::roll_next(true, false);
 			assert_eq!(
 				StatusStorage::<T>::get(),
-				Status::Ongoing(crate::Pallet::<T>::msp() - 1 - i)
+				Status::Ongoing(crate::Pezpallet::<T>::msp() - 1 - i)
 			);
 		}
 
 		// next page to be verified is the last one
-		assert_eq!(StatusStorage::<T>::get(), Status::Ongoing(crate::Pallet::<T>::lsp()));
+		assert_eq!(StatusStorage::<T>::get(), Status::Ongoing(crate::Pezpallet::<T>::lsp()));
 		assert!(matches!(
 			&events_for::<T>()[..],
 			[Event::Verified(_, _), .., Event::Verified(1, _)]
@@ -159,7 +159,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			crate::Pallet::<T>::roll_next(true, false);
+			crate::Pezpallet::<T>::roll_next(true, false);
 		}
 
 		// we are now reset.
@@ -186,12 +186,12 @@ mod benchmarks {
 
 		#[cfg(test)]
 		crate::mock::ElectionStart::set(pezsp_runtime::traits::Bounded::max_value());
-		crate::Pallet::<T>::start().unwrap();
+		crate::Pezpallet::<T>::start().unwrap();
 
-		// roll to signed validation, with a solution stored in the signed pallet, but this solution
+		// roll to signed validation, with a solution stored in the signed pezpallet, but this solution
 		// is corrupt in its msp.
-		let mut paged_solution = crate::Pallet::<T>::roll_to_signed_and_mine_full_solution();
-		let page_to_corrupt = crate::Pallet::<T>::msp() - v;
+		let mut paged_solution = crate::Pezpallet::<T>::roll_to_signed_and_mine_full_solution();
+		let page_to_corrupt = crate::Pezpallet::<T>::msp() - v;
 		crate::log!(
 			info,
 			"pages of solution: {:?}, to corrupt {}, v {}",
@@ -200,30 +200,30 @@ mod benchmarks {
 			v
 		);
 		paged_solution.solution_pages[page_to_corrupt as usize].corrupt();
-		crate::Pallet::<T>::submit_full_solution(paged_solution)?;
+		crate::Pezpallet::<T>::submit_full_solution(paged_solution)?;
 
 		// roll to verification
-		crate::Pallet::<T>::roll_until_matches(|| {
+		crate::Pezpallet::<T>::roll_until_matches(|| {
 			matches!(CurrentPhase::<T>::get(), Phase::SignedValidation(_))
 		});
 		// send start signal
-		crate::Pallet::<T>::roll_next(true, false);
+		crate::Pezpallet::<T>::roll_next(true, false);
 
 		// we should be ready to go
-		assert_eq!(StatusStorage::<T>::get(), Status::Ongoing(crate::Pallet::<T>::msp()));
+		assert_eq!(StatusStorage::<T>::get(), Status::Ongoing(crate::Pezpallet::<T>::msp()));
 
 		// validate the the parameterized number of valid pages.
 		for _ in 0..v {
-			crate::Pallet::<T>::roll_next(true, false);
+			crate::Pezpallet::<T>::roll_next(true, false);
 		}
 
 		// we are still ready to continue
-		assert_eq!(StatusStorage::<T>::get(), Status::Ongoing(crate::Pallet::<T>::msp() - v));
+		assert_eq!(StatusStorage::<T>::get(), Status::Ongoing(crate::Pezpallet::<T>::msp() - v));
 
 		// verify one page, which will be invalid.
 		#[block]
 		{
-			crate::Pallet::<T>::roll_next(true, false);
+			crate::Pezpallet::<T>::roll_next(true, false);
 		}
 
 		// we are now reset, because this page was invalid.
@@ -238,7 +238,7 @@ mod benchmarks {
 	}
 
 	impl_benchmark_test_suite!(
-		Pallet,
+		Pezpallet,
 		crate::mock::ExtBuilder::full().build_unchecked(),
 		crate::mock::Runtime
 	);

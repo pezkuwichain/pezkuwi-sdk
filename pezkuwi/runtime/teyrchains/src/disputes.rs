@@ -102,10 +102,10 @@ pub trait SlashingHandler<BlockNumber> {
 		backers: impl IntoIterator<Item = ValidatorIndex>,
 	);
 
-	/// Called by the initializer to initialize the slashing pallet.
+	/// Called by the initializer to initialize the slashing pezpallet.
 	fn initializer_initialize(now: BlockNumber) -> Weight;
 
-	/// Called by the initializer to finalize the slashing pallet.
+	/// Called by the initializer to finalize the slashing pezpallet.
 	fn initializer_finalize();
 
 	/// Called by the initializer to note that a new session has started.
@@ -238,10 +238,10 @@ pub trait DisputesHandler<BlockNumber: Ord> {
 	/// Whether the given candidate concluded invalid in a dispute with supermajority.
 	fn concluded_invalid(session: SessionIndex, candidate_hash: CandidateHash) -> bool;
 
-	/// Called by the initializer to initialize the disputes pallet.
+	/// Called by the initializer to initialize the disputes pezpallet.
 	fn initializer_initialize(now: BlockNumber) -> Weight;
 
-	/// Called by the initializer to finalize the disputes pallet.
+	/// Called by the initializer to finalize the disputes pezpallet.
 	fn initializer_finalize();
 
 	/// Called by the initializer to note that a new session has started.
@@ -300,26 +300,26 @@ impl<BlockNumber: Ord> DisputesHandler<BlockNumber> for () {
 	fn initializer_on_new_session(_notification: &SessionChangeNotification<BlockNumber>) {}
 }
 
-impl<T: Config> DisputesHandler<BlockNumberFor<T>> for pallet::Pallet<T>
+impl<T: Config> DisputesHandler<BlockNumberFor<T>> for pezpallet::Pezpallet<T>
 where
 	BlockNumberFor<T>: Ord,
 {
 	fn is_frozen() -> bool {
-		pallet::Pallet::<T>::is_frozen()
+		pezpallet::Pezpallet::<T>::is_frozen()
 	}
 
 	fn filter_dispute_data(
 		set: DisputeStatementSet,
 		post_conclusion_acceptance_period: BlockNumberFor<T>,
 	) -> Option<CheckedDisputeStatementSet> {
-		pallet::Pallet::<T>::filter_dispute_data(&set, post_conclusion_acceptance_period)
+		pezpallet::Pezpallet::<T>::filter_dispute_data(&set, post_conclusion_acceptance_period)
 			.filter_statement_set(set)
 	}
 
 	fn process_checked_multi_dispute_data(
 		statement_sets: &CheckedMultiDisputeStatementSet,
 	) -> Result<Vec<(SessionIndex, CandidateHash)>, DispatchError> {
-		pallet::Pallet::<T>::process_checked_multi_dispute_data(statement_sets)
+		pezpallet::Pezpallet::<T>::process_checked_multi_dispute_data(statement_sets)
 	}
 
 	fn note_included(
@@ -327,30 +327,30 @@ where
 		candidate_hash: CandidateHash,
 		included_in: BlockNumberFor<T>,
 	) {
-		pallet::Pallet::<T>::note_included(session, candidate_hash, included_in)
+		pezpallet::Pezpallet::<T>::note_included(session, candidate_hash, included_in)
 	}
 
 	fn included_state(
 		session: SessionIndex,
 		candidate_hash: CandidateHash,
 	) -> Option<BlockNumberFor<T>> {
-		pallet::Pallet::<T>::included_state(session, candidate_hash)
+		pezpallet::Pezpallet::<T>::included_state(session, candidate_hash)
 	}
 
 	fn concluded_invalid(session: SessionIndex, candidate_hash: CandidateHash) -> bool {
-		pallet::Pallet::<T>::concluded_invalid(session, candidate_hash)
+		pezpallet::Pezpallet::<T>::concluded_invalid(session, candidate_hash)
 	}
 
 	fn initializer_initialize(now: BlockNumberFor<T>) -> Weight {
-		pallet::Pallet::<T>::initializer_initialize(now)
+		pezpallet::Pezpallet::<T>::initializer_initialize(now)
 	}
 
 	fn initializer_finalize() {
-		pallet::Pallet::<T>::initializer_finalize()
+		pezpallet::Pezpallet::<T>::initializer_finalize()
 	}
 
 	fn initializer_on_new_session(notification: &SessionChangeNotification<BlockNumberFor<T>>) {
-		pallet::Pallet::<T>::initializer_on_new_session(notification)
+		pezpallet::Pezpallet::<T>::initializer_on_new_session(notification)
 	}
 }
 
@@ -365,38 +365,38 @@ impl WeightInfo for TestWeightInfo {
 	}
 }
 
-pub use pallet::*;
-#[pezframe_support::pallet]
-pub mod pallet {
+pub use pezpallet::*;
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config + configuration::Config + session_info::Config {
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		type RewardValidators: RewardValidators;
 		type SlashingHandler: SlashingHandler<BlockNumberFor<Self>>;
 
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 	}
 
 	/// The in-code storage version.
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(1);
 
-	#[pallet::pallet]
-	#[pallet::without_storage_info]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::without_storage_info]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T>(_);
 
 	/// The last pruned session, if any. All data stored by this module
 	/// references sessions.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type LastPrunedSession<T> = StorageValue<_, SessionIndex>;
 
 	/// All ongoing or concluded disputes for the last several sessions.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type Disputes<T: Config> = StorageDoubleMap<
 		_,
 		Twox64Concat,
@@ -408,7 +408,7 @@ pub mod pallet {
 
 	/// Backing votes stored for each dispute.
 	/// This storage is used for slashing.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type BackersOnDisputes<T: Config> = StorageDoubleMap<
 		_,
 		Twox64Concat,
@@ -420,7 +420,7 @@ pub mod pallet {
 
 	/// All included blocks on the chain, as well as the block number in this chain that
 	/// should be reverted back to if the candidate is disputed and determined to be invalid.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type Included<T: Config> = StorageDoubleMap<
 		_,
 		Twox64Concat,
@@ -434,11 +434,11 @@ pub mod pallet {
 	/// the chain will not accept any new teyrchain blocks for backing or inclusion,
 	/// and its value indicates the last valid block number in the chain.
 	/// It can only be set back to `None` by governance intervention.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Frozen<T: Config> = StorageValue<_, Option<BlockNumberFor<T>>, ValueQuery>;
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A dispute has been initiated. \[candidate hash, dispute location\]
 		DisputeInitiated(CandidateHash, DisputeLocation),
@@ -452,7 +452,7 @@ pub mod pallet {
 		Revert(BlockNumberFor<T>),
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Duplicate dispute statement sets provided.
 		DuplicateDisputeStatementSets,
@@ -474,10 +474,10 @@ pub mod pallet {
 		UnconfirmedDispute,
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
-		#[pallet::call_index(0)]
-		#[pallet::weight(<T as Config>::WeightInfo::force_unfreeze())]
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::force_unfreeze())]
 		pub fn force_unfreeze(origin: OriginFor<T>) -> DispatchResult {
 			ensure_root(origin)?;
 			Frozen::<T>::set(None);
@@ -854,16 +854,16 @@ impl StatementSetFilter {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Called by the initializer to initialize the disputes module.
 	pub(crate) fn initializer_initialize(_now: BlockNumberFor<T>) -> Weight {
 		Weight::zero()
 	}
 
-	/// Called by the initializer to finalize the disputes pallet.
+	/// Called by the initializer to finalize the disputes pezpallet.
 	pub(crate) fn initializer_finalize() {}
 
-	/// Called by the initializer to note a new session in the disputes pallet.
+	/// Called by the initializer to note a new session in the disputes pezpallet.
 	pub(crate) fn initializer_on_new_session(
 		notification: &SessionChangeNotification<BlockNumberFor<T>>,
 	) {
@@ -889,7 +889,7 @@ impl<T: Config> Pallet<T> {
 				#[allow(deprecated)]
 				BackersOnDisputes::<T>::remove_prefix(to_prune, None);
 
-				// This is larger, and will be extracted to the `shared` pallet for more proper
+				// This is larger, and will be extracted to the `shared` pezpallet for more proper
 				// pruning. TODO: https://github.com/pezkuwichain/kurdistan-sdk/issues/145
 				#[allow(deprecated)]
 				Included::<T>::remove_prefix(to_prune, None);
@@ -945,7 +945,7 @@ impl<T: Config> Pallet<T> {
 
 		// Dispute statement sets on any dispute which concluded
 		// before this point are to be rejected.
-		let now = pezframe_system::Pallet::<T>::block_number();
+		let now = pezframe_system::Pezpallet::<T>::block_number();
 		let oldest_accepted = now.saturating_sub(post_conclusion_acceptance_period);
 
 		// Load session info to access validators
@@ -1063,7 +1063,7 @@ impl<T: Config> Pallet<T> {
 	) -> Result<bool, DispatchError> {
 		// Dispute statement sets on any dispute which concluded
 		// before this point are to be rejected.
-		let now = pezframe_system::Pallet::<T>::block_number();
+		let now = pezframe_system::Pezpallet::<T>::block_number();
 		let oldest_accepted = now.saturating_sub(dispute_post_conclusion_acceptance_period);
 
 		let set = set.as_ref();
@@ -1253,7 +1253,7 @@ impl<T: Config> Pallet<T> {
 			// block X+1.
 			let revert = revert_to + One::one();
 			Self::deposit_event(Event::Revert(revert));
-			pezframe_system::Pallet::<T>::deposit_log(
+			pezframe_system::Pezpallet::<T>::deposit_log(
 				ConsensusLog::Revert(revert.saturated_into()).into(),
 			);
 		}

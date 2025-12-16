@@ -261,8 +261,8 @@ impl_runtime_apis! {
 		) {
 			use pezframe_benchmarking::BenchmarkList;
 			use pezkuwi_sdk::pezframe_support::traits::StorageInfoTrait;
-			use pezframe_system_benchmarking::Pallet as SystemBench;
-			use pezcumulus_pezpallet_session_benchmarking::Pallet as SessionBench;
+			use pezframe_system_benchmarking::Pezpallet as SystemBench;
+			use pezcumulus_pezpallet_session_benchmarking::Pezpallet as SessionBench;
 			use super::*;
 
 			let mut list = Vec::<BenchmarkList>::new();
@@ -279,7 +279,7 @@ impl_runtime_apis! {
 			use pezframe_benchmarking::{BenchmarkError, BenchmarkBatch};
 			use super::*;
 
-			use pezframe_system_benchmarking::Pallet as SystemBench;
+			use pezframe_system_benchmarking::Pezpallet as SystemBench;
 			impl pezframe_system_benchmarking::Config for Runtime {
 				fn setup_set_code_requirements(code: &Vec<u8>) -> Result<(), BenchmarkError> {
 					TeyrchainSystem::initialize_for_set_code_benchmark(code.len() as u32);
@@ -291,7 +291,7 @@ impl_runtime_apis! {
 				}
 			}
 
-			use pezcumulus_pezpallet_session_benchmarking::Pallet as SessionBench;
+			use pezcumulus_pezpallet_session_benchmarking::Pezpallet as SessionBench;
 			impl pezcumulus_pezpallet_session_benchmarking::Config for Runtime {}
 
 			use pezkuwi_sdk::pezframe_support::traits::WhitelistedStorageKeys;
@@ -301,7 +301,7 @@ impl_runtime_apis! {
 			let params = (&config, &whitelist);
 			add_benchmarks!(params, batches);
 
-			if batches.is_empty() { return Err("Benchmark not found for this pallet.".into()) }
+			if batches.is_empty() { return Err("Benchmark not found for this pezpallet.".into()) }
 			Ok(batches)
 		}
 	}
@@ -322,7 +322,7 @@ impl_runtime_apis! {
 
 	impl pezcumulus_primitives_core::GetTeyrchainInfo<Block> for Runtime {
 		fn teyrchain_id() -> ParaId {
-			teyrchain_info::Pallet::<Runtime>::teyrchain_id()
+			teyrchain_info::Pezpallet::<Runtime>::teyrchain_id()
 		}
 	}
 }

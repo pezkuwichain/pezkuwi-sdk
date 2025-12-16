@@ -242,7 +242,7 @@ impl Default for IdentityInfo {
 // PezkuwiChain Custom People Pallets Configuration
 // =============================================================================
 // NOTE: These configurations are placeholders. Full implementation requires
-// additional pallet API alignment. See compile errors for specific issues.
+// additional pezpallet API alignment. See compile errors for specific issues.
 // =============================================================================
 
 parameter_types! {
@@ -258,7 +258,7 @@ parameter_types! {
 pub struct OnKycApprovedHook;
 impl pezpallet_identity_kyc::types::OnKycApproved<AccountId> for OnKycApprovedHook {
 	fn on_kyc_approved(_who: &AccountId, _referrer: &AccountId) {
-		// Hook implementation - referral pallet integration
+		// Hook implementation - referral pezpallet integration
 	}
 }
 
@@ -302,7 +302,7 @@ impl pezpallet_identity_kyc::Config for Runtime {
 }
 
 // =============================================================================
-// Perwerde (Education) Pallet Configuration
+// Perwerde (Education) Pezpallet Configuration
 // =============================================================================
 
 parameter_types! {
@@ -313,7 +313,7 @@ parameter_types! {
 	pub const MaxCoursesPerStudent: u32 = 50;
 }
 
-/// Admin origin for Perwerde pallet that supports progressive decentralization
+/// Admin origin for Perwerde pezpallet that supports progressive decentralization
 ///
 /// Yetki devri sırası:
 /// 1. Root (Sudo) - Başlangıç aşaması
@@ -369,7 +369,7 @@ impl pezpallet_perwerde::Config for Runtime {
 }
 
 // =============================================================================
-// Referral Pallet Configuration
+// Referral Pezpallet Configuration
 // =============================================================================
 
 parameter_types! {
@@ -387,7 +387,7 @@ impl pezpallet_referral::Config for Runtime {
 }
 
 // =============================================================================
-// NFTs Pallet Configuration (required by Tiki)
+// NFTs Pezpallet Configuration (required by Tiki)
 // =============================================================================
 
 parameter_types! {
@@ -429,11 +429,11 @@ impl pezpallet_nfts::Config for Runtime {
 	#[cfg(feature = "runtime-benchmarks")]
 	type Helper = ();
 	type WeightInfo = pezpallet_nfts::weights::BizinikiwiWeight<Runtime>;
-	type BlockNumberProvider = pezframe_system::Pallet<Runtime>;
+	type BlockNumberProvider = pezframe_system::Pezpallet<Runtime>;
 }
 
 // =============================================================================
-// Tiki (Role NFT) Pallet Configuration
+// Tiki (Role NFT) Pezpallet Configuration
 // =============================================================================
 
 parameter_types! {
@@ -455,7 +455,7 @@ impl pezpallet_tiki::Config for Runtime {
 }
 
 // =============================================================================
-// Staking Score Pallet Configuration
+// Staking Score Pezpallet Configuration
 // =============================================================================
 
 parameter_types! {
@@ -503,18 +503,18 @@ impl pezpallet_staking_score::Config for Runtime {
 }
 
 // =============================================================================
-// Collective Pallet Configuration (for governance)
+// Collective Pezpallet Configuration (for governance)
 // =============================================================================
 //
 // Pezkuwichain Komisyon Yapısı:
 // - Council (Instance1): Genel Konsey - Ana yönetişim organı
 //
 // Ek komisyonlar (EducationCommittee, TechnicalCommittee, TreasuryCommittee)
-// runtime upgrade ile eklenecek. Şu an Welati pallet'in EnsureSerok,
+// runtime upgrade ile eklenecek. Şu an Welati pezpallet'in EnsureSerok,
 // EnsureParlementer ve EnsureDiwan origin'leri kullanılıyor.
 //
 // Bu komisyonlar başlangıçta Root (Sudo) tarafından yönetilir.
-// Welati pallet'i aracılığıyla seçimler yapıldığında yetki devredilir.
+// Welati pezpallet'i aracılığıyla seçimler yapıldığında yetki devredilir.
 // =============================================================================
 
 parameter_types! {
@@ -545,7 +545,7 @@ impl pezpallet_collective::Config<CouncilCollective> for Runtime {
 }
 
 // =============================================================================
-// Trust Score Pallet Configuration
+// Trust Score Pezpallet Configuration
 // =============================================================================
 
 parameter_types! {
@@ -557,17 +557,17 @@ parameter_types! {
 	pub const TrustMaxBatchSize: u32 = 100;
 }
 
-/// Staking score source for Trust pallet
-/// Uses the StakingScore pallet to get composite staking scores
+/// Staking score source for Trust pezpallet
+/// Uses the StakingScore pezpallet to get composite staking scores
 pub struct StakingScoreSource;
 impl pezpallet_trust::StakingScoreProvider<AccountId, BlockNumber> for StakingScoreSource {
 	fn get_staking_score(who: &AccountId) -> (pezpallet_staking_score::RawScore, BlockNumber) {
-		// Delegate to StakingScore pallet
+		// Delegate to StakingScore pezpallet
 		<StakingScore as pezpallet_staking_score::StakingScoreProvider<AccountId, BlockNumber>>::get_staking_score(who)
 	}
 }
 
-/// Referral score source for Trust pallet
+/// Referral score source for Trust pezpallet
 pub struct ReferralScoreSource;
 impl pezpallet_trust::ReferralScoreProvider<AccountId> for ReferralScoreSource {
 	fn get_referral_score(who: &AccountId) -> u32 {
@@ -575,15 +575,15 @@ impl pezpallet_trust::ReferralScoreProvider<AccountId> for ReferralScoreSource {
 	}
 }
 
-/// Perwerde (education) score source for Trust pallet
+/// Perwerde (education) score source for Trust pezpallet
 pub struct PerwerdeScoreSource;
 impl pezpallet_trust::PerwerdeScoreProvider<AccountId> for PerwerdeScoreSource {
 	fn get_perwerde_score(_who: &AccountId) -> u32 {
-		0 // Placeholder - Perwerde pallet integration needed
+		0 // Placeholder - Perwerde pezpallet integration needed
 	}
 }
 
-/// Tiki score source for Trust pallet
+/// Tiki score source for Trust pezpallet
 pub struct TikiScoreSource;
 impl pezpallet_trust::TikiScoreProvider<AccountId> for TikiScoreSource {
 	fn get_tiki_score(who: &AccountId) -> u32 {
@@ -591,7 +591,7 @@ impl pezpallet_trust::TikiScoreProvider<AccountId> for TikiScoreSource {
 	}
 }
 
-/// Citizenship status source for Trust pallet - uses real IdentityKyc
+/// Citizenship status source for Trust pezpallet - uses real IdentityKyc
 #[cfg(not(feature = "runtime-benchmarks"))]
 pub struct CitizenshipSource;
 #[cfg(not(feature = "runtime-benchmarks"))]
@@ -627,7 +627,7 @@ impl pezpallet_trust::Config for Runtime {
 }
 
 // =============================================================================
-// Assets Pallet Configuration (required by PEZ Rewards)
+// Assets Pezpallet Configuration (required by PEZ Rewards)
 // =============================================================================
 
 parameter_types! {
@@ -666,7 +666,7 @@ impl pezpallet_assets::Config for Runtime {
 }
 
 // =============================================================================
-// Scheduler Pallet Configuration (required by Welati & Democracy)
+// Scheduler Pezpallet Configuration (required by Welati & Democracy)
 // =============================================================================
 
 parameter_types! {
@@ -684,11 +684,11 @@ impl pezpallet_scheduler::Config for Runtime {
 	type WeightInfo = pezpallet_scheduler::weights::BizinikiwiWeight<Runtime>;
 	type OriginPrivilegeCmp = pezframe_support::traits::EqualPrivilegeOnly;
 	type Preimages = ();
-	type BlockNumberProvider = pezframe_system::Pallet<Runtime>;
+	type BlockNumberProvider = pezframe_system::Pezpallet<Runtime>;
 }
 
 // =============================================================================
-// Democracy Pallet Configuration (required by Welati)
+// Democracy Pezpallet Configuration (required by Welati)
 // =============================================================================
 
 parameter_types! {
@@ -735,7 +735,7 @@ impl pezpallet_democracy::Config for Runtime {
 }
 
 // =============================================================================
-// Elections Phragmen Pallet Configuration (required by Welati)
+// Elections Phragmen Pezpallet Configuration (required by Welati)
 // =============================================================================
 
 parameter_types! {
@@ -770,7 +770,7 @@ impl pezpallet_elections_phragmen::Config for Runtime {
 }
 
 // =============================================================================
-// Welati (Governance) Pallet Configuration
+// Welati (Governance) Pezpallet Configuration
 // =============================================================================
 
 parameter_types! {
@@ -798,8 +798,8 @@ parameter_types! {
 pub struct TimestampRandomness;
 impl pezframe_support::traits::Randomness<Hash, BlockNumber> for TimestampRandomness {
 	fn random(subject: &[u8]) -> (Hash, BlockNumber) {
-		let block_number = pezframe_system::Pallet::<Runtime>::block_number();
-		let timestamp = pezpallet_timestamp::Pallet::<Runtime>::get();
+		let block_number = pezframe_system::Pezpallet::<Runtime>::block_number();
+		let timestamp = pezpallet_timestamp::Pezpallet::<Runtime>::get();
 		let mut data = subject.to_vec();
 		data.extend_from_slice(&timestamp.to_le_bytes());
 		data.extend_from_slice(&block_number.to_le_bytes());
@@ -853,13 +853,13 @@ impl pezpallet_welati::Config for Runtime {
 }
 
 // =============================================================================
-// PEZ Rewards Pallet Configuration
+// PEZ Rewards Pezpallet Configuration
 // =============================================================================
 
 parameter_types! {
 	/// PEZ Asset ID
 	pub const PezAssetId: u32 = 1;
-	/// Incentive Pot Pallet ID
+	/// Incentive Pot Pezpallet ID
 	pub const IncentivePotId: pezframe_support::PalletId = pezframe_support::PalletId(*b"pez/incv");
 	/// Clawback recipient (QaziMuhammed account - placeholder)
 	pub ClawbackRecipient: AccountId = pezsp_keyring::Sr25519Keyring::Bob.to_account_id();
@@ -888,7 +888,7 @@ impl pezpallet_pez_rewards::Config for Runtime {
 }
 
 // =============================================================================
-// Recovery Pallet Configuration
+// Recovery Pezpallet Configuration
 // =============================================================================
 
 parameter_types! {
@@ -911,7 +911,7 @@ impl pezpallet_recovery::Config for Runtime {
 }
 
 // =============================================================================
-// Society Pallet Configuration
+// Society Pezpallet Configuration
 // =============================================================================
 
 parameter_types! {
@@ -945,7 +945,7 @@ impl pezpallet_society::Config for Runtime {
 }
 
 // =============================================================================
-// Vesting Pallet Configuration
+// Vesting Pezpallet Configuration
 // =============================================================================
 
 parameter_types! {

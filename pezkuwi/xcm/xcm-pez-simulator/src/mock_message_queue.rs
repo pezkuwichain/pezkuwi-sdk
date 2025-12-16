@@ -26,35 +26,35 @@ use pezsp_runtime::traits::{Get, Hash};
 
 use xcm::{latest::prelude::*, VersionedXcm};
 
-pub use pallet::*;
+pub use pezpallet::*;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		type XcmExecutor: ExecuteXcm<Self::RuntimeCall>;
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {}
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {}
 
-	#[pallet::pallet]
-	#[pallet::without_storage_info]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::without_storage_info]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type TeyrchainId<T: Config> = StorageValue<_, ParaId, ValueQuery>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	/// A queue of received DMP messages
 	pub type ReceivedDmp<T: Config> = StorageValue<_, Vec<Xcm<T::RuntimeCall>>, ValueQuery>;
 
-	impl<T: Config> Get<ParaId> for Pallet<T> {
+	impl<T: Config> Get<ParaId> for Pezpallet<T> {
 		fn get() -> ParaId {
 			TeyrchainId::<T>::get()
 		}
@@ -62,8 +62,8 @@ pub mod pallet {
 
 	pub type MessageId = [u8; 32];
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		// XCMP
 		/// Some XCM was executed OK.
@@ -84,7 +84,7 @@ pub mod pallet {
 		ExecutedDownward { message_id: MessageId, outcome: Outcome },
 	}
 
-	impl<T: Config> Pallet<T> {
+	impl<T: Config> Pezpallet<T> {
 		pub fn set_para_id(para_id: ParaId) {
 			TeyrchainId::<T>::put(para_id);
 		}
@@ -128,7 +128,7 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config> XcmpMessageHandler for Pallet<T> {
+	impl<T: Config> XcmpMessageHandler for Pezpallet<T> {
 		fn handle_xcmp_messages<'a, I: Iterator<Item = (ParaId, RelayBlockNumber, &'a [u8])>>(
 			iter: I,
 			max_weight: xcm::latest::Weight,
@@ -153,7 +153,7 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config> DmpMessageHandler for Pallet<T> {
+	impl<T: Config> DmpMessageHandler for Pezpallet<T> {
 		fn handle_dmp_messages(
 			iter: impl Iterator<Item = (RelayBlockNumber, Vec<u8>)>,
 			limit: Weight,

@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! bounties pallet tests.
+//! bounties pezpallet tests.
 
 #![cfg(test)]
 
@@ -88,7 +88,7 @@ parameter_types! {
 
 impl pezpallet_treasury::Config for Test {
 	type PalletId = TreasuryPalletId;
-	type Currency = pezpallet_balances::Pallet<Test>;
+	type Currency = pezpallet_balances::Pezpallet<Test>;
 	type RejectOrigin = pezframe_system::EnsureRoot<u128>;
 	type RuntimeEvent = RuntimeEvent;
 	type SpendPeriod = ConstU64<2>;
@@ -111,7 +111,7 @@ impl pezpallet_treasury::Config for Test {
 
 impl pezpallet_treasury::Config<Instance1> for Test {
 	type PalletId = TreasuryPalletId2;
-	type Currency = pezpallet_balances::Pallet<Test>;
+	type Currency = pezpallet_balances::Pezpallet<Test>;
 	type RejectOrigin = pezframe_system::EnsureRoot<u128>;
 	type RuntimeEvent = RuntimeEvent;
 	type SpendPeriod = ConstU64<2>;
@@ -1494,7 +1494,7 @@ fn poke_deposit_fails_for_insufficient_balance() {
 
 		// BountyDepositBase (80) + DataDepositPerByte (1) * description.len() (5)
 		let deposit =
-			pezpallet_bounties::Pallet::<Test>::calculate_bounty_deposit(&bounded_description);
+			pezpallet_bounties::Pezpallet::<Test>::calculate_bounty_deposit(&bounded_description);
 
 		// Verify initial state
 		assert_eq!(Balances::reserved_balance(0), deposit);

@@ -127,7 +127,7 @@ impl<T: Config<I>, I: 'static> List<T, I> {
 	/// generated from scratch. Care needs to be taken to ensure
 	///
 	/// This may or may not need to be called at genesis as well, based on the configuration of the
-	/// pallet using this `List`.
+	/// pezpallet using this `List`.
 	///
 	/// Returns the number of ids migrated.
 	pub fn unsafe_regenerate(

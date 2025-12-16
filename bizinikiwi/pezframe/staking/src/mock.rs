@@ -285,7 +285,7 @@ impl Contains<AccountId> for MockedRestrictList {
 pub(crate) const DISABLING_LIMIT_FACTOR: usize = 3;
 
 #[derive_impl(crate::config_preludes::TestDefaultConfig)]
-impl crate::pallet::pallet::Config for Test {
+impl crate::pezpallet::pezpallet::Config for Test {
 	type OldCurrency = Balances;
 	type Currency = Balances;
 	type UnixTime = Timestamp;
@@ -470,7 +470,7 @@ impl ExtBuilder {
 				(40, self.balance_factor),
 				(50, self.balance_factor),
 				// stashes
-				// Note: Previously this pallet used locks and stakers could stake all their
+				// Note: Previously this pezpallet used locks and stakers could stake all their
 				// balance including ED. Now with holds, stakers are required to maintain
 				// (non-staked) ED in their accounts. Therefore, we drop an additional existential
 				// deposit to genesis stakers.
@@ -726,7 +726,7 @@ pub(crate) fn reward_time_per_era() -> u64 {
 pub(crate) fn reward_all_elected() {
 	let rewards = <Test as Config>::SessionInterface::validators().into_iter().map(|v| (v, 1));
 
-	<Pallet<Test>>::reward_by_ids(rewards)
+	<Pezpallet<Test>>::reward_by_ids(rewards)
 }
 
 pub(crate) fn validator_controllers() -> Vec<AccountId> {

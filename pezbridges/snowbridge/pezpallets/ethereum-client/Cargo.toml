@@ -1,0 +1,101 @@
+[package]
+name = "pezsnowbridge-pezpallet-ethereum-client"
+description = "Snowbridge Ethereum Client Pallet"
+version = "0.2.0"
+authors = ["Snowfork <contact@snowfork.com>"]
+edition.workspace = true
+repository.workspace = true
+license = "Apache-2.0"
+categories = ["cryptography::cryptocurrencies"]
+documentation = "https://docs.rs/pezsnowbridge-pezpallet-ethereum-client"
+homepage = { workspace = true }
+
+[lints]
+workspace = true
+
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+
+[package.metadata.pezkuwi-sdk]
+exclude-from-umbrella = true
+
+[dependencies]
+codec = { features = ["derive"], workspace = true }
+hex-literal = { optional = true, workspace = true, default-features = true }
+scale-info = { features = ["derive"], workspace = true }
+serde = { optional = true, workspace = true, default-features = true }
+serde_json = { optional = true, workspace = true, default-features = true }
+tracing = { workspace = true }
+
+pezframe-benchmarking = { optional = true, workspace = true }
+pezframe-support = { workspace = true }
+pezframe-system = { workspace = true }
+pezsp-core = { workspace = true }
+pezsp-io = { optional = true, workspace = true }
+pezsp-runtime = { workspace = true }
+pezsp-std = { workspace = true }
+
+pezpallet-timestamp = { optional = true, workspace = true }
+pezsnowbridge-beacon-primitives = { workspace = true }
+pezsnowbridge-core = { workspace = true }
+pezsnowbridge-ethereum = { workspace = true }
+pezsnowbridge-pezpallet-ethereum-client-fixtures = { optional = true, workspace = true }
+pezsnowbridge-verification-primitives = { workspace = true }
+static_assertions = { workspace = true }
+
+[dev-dependencies]
+hex-literal = { workspace = true, default-features = true }
+pezpallet-timestamp = { workspace = true, default-features = true }
+serde = { workspace = true, default-features = true }
+serde_json = { workspace = true, default-features = true }
+pezsnowbridge-pezpallet-ethereum-client-fixtures = { workspace = true, default-features = true }
+pezsp-io = { workspace = true, default-features = true }
+
+[features]
+default = ["std"]
+fuzzing = [
+  "hex-literal",
+  "pezpallet-timestamp",
+  "serde",
+  "serde_json",
+  "pezsp-io",
+]
+std = [
+  "codec/std",
+  "pezframe-benchmarking/std",
+  "pezframe-support/std",
+  "pezframe-system/std",
+  "pezpallet-timestamp/std",
+  "scale-info/std",
+  "serde",
+  "pezsnowbridge-beacon-primitives/std",
+  "pezsnowbridge-core/std",
+  "pezsnowbridge-ethereum/std",
+  "pezsnowbridge-pezpallet-ethereum-client-fixtures/std",
+  "pezsnowbridge-verification-primitives/std",
+  "pezsp-core/std",
+  "pezsp-io/std",
+  "pezsp-runtime/std",
+  "pezsp-std/std",
+  "tracing/std",
+]
+runtime-benchmarks = [
+  "pezframe-benchmarking/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezframe-system/runtime-benchmarks",
+  "hex-literal",
+  "pezpallet-timestamp?/runtime-benchmarks",
+  "pezsnowbridge-beacon-primitives/runtime-benchmarks",
+  "pezsnowbridge-core/runtime-benchmarks",
+  "pezsnowbridge-ethereum/runtime-benchmarks",
+  "pezsnowbridge-pezpallet-ethereum-client-fixtures/runtime-benchmarks",
+  "pezsnowbridge-verification-primitives/runtime-benchmarks",
+  "pezsp-io?/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
+]
+try-runtime = [
+  "pezframe-support/try-runtime",
+  "pezframe-system/try-runtime",
+  "pezpallet-timestamp?/try-runtime",
+  "pezsp-runtime/try-runtime",
+]

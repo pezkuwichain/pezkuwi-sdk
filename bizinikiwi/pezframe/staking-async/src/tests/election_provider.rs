@@ -941,7 +941,7 @@ mod paged_on_initialize_era_election_planner {
 					]
 				);
 
-				// era progressed and electable stashes have been served to session pallet.
+				// era progressed and electable stashes have been served to session pezpallet.
 				assert_eq_uvec!(Session::validators(), vec![11, 21, 31]);
 
 				// 4. in the next era, the validator set does not include 31 anymore which was
@@ -1135,9 +1135,9 @@ mod paged_on_initialize_era_election_planner {
 	//             assert_eq!(Session::validators(), vec![21, 31, 71]);
 
 	//             // distribute reward,
-	// 	        Pallet::<Test>::reward_by_ids(vec![(21, 50)]);
-	// 	        Pallet::<Test>::reward_by_ids(vec![(31, 50)]);
-	// 	        Pallet::<Test>::reward_by_ids(vec![(71, 50)]);
+	// 	        Pezpallet::<Test>::reward_by_ids(vec![(21, 50)]);
+	// 	        Pezpallet::<Test>::reward_by_ids(vec![(31, 50)]);
+	// 	        Pezpallet::<Test>::reward_by_ids(vec![(71, 50)]);
 
 	//     		let total_payout = validator_payout_for(time_per_era());
 

@@ -15,12 +15,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Benchmarking for the message queue pallet.
+//! Benchmarking for the message queue pezpallet.
 
 #![cfg(feature = "runtime-benchmarks")]
 #![allow(unused_assignments)] // Needed for `ready_ring_knit`.
 
-use super::{mock_helpers::*, Pallet as MessageQueue, *};
+use super::{mock_helpers::*, Pezpallet as MessageQueue, *};
 
 use pezframe_benchmarking::v2::*;
 use pezframe_support::traits::Get;

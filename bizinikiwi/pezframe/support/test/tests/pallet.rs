@@ -112,12 +112,12 @@ impl SomeAssociation2 for u64 {
 	type _2 = u64;
 }
 
-#[pezframe_support::pallet]
-/// Pallet documentation
-// Comments should not be included in the pallet documentation
+#[pezframe_support::pezpallet]
+/// Pezpallet documentation
+// Comments should not be included in the pezpallet documentation
 #[pezpallet_doc("../example-pezpallet-doc.md")]
 #[doc = include_str!("../example-readme.md")]
-pub mod pallet {
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
@@ -127,7 +127,7 @@ pub mod pallet {
 
 	pub(crate) const STORAGE_VERSION: StorageVersion = StorageVersion::new(10);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config
 	where
 		<Self as pezframe_system::Config>::AccountId: From<SomeType1> + SomeAssociation1,
@@ -135,15 +135,15 @@ pub mod pallet {
 		/// Some comment
 		/// Some comment
 		#[deprecated = "test 2"]
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MyGetParam: Get<u32>;
 
 		/// Some comment
 		/// Some comment
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MyGetParam2: Get<u32>;
 
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MyGetParam3: Get<<Self::AccountId as SomeAssociation1>::_1>;
 
 		type Balance: Parameter + Default + TypeInfo;
@@ -152,8 +152,8 @@ pub mod pallet {
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 	}
 
-	#[pallet::extra_constants]
-	impl<T: Config> Pallet<T>
+	#[pezpallet::extra_constants]
+	impl<T: Config> Pezpallet<T>
 	where
 		T::AccountId: From<SomeType1> + SomeAssociation1 + From<SomeType2>,
 	{
@@ -169,18 +169,18 @@ pub mod pallet {
 		}
 
 		/// Some doc
-		#[pallet::constant_name(SomeExtraRename)]
+		#[pezpallet::constant_name(SomeExtraRename)]
 		fn some_extra_rename() -> T::AccountId {
 			SomeType1.into()
 		}
 	}
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T>
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T>
 	where
 		T::AccountId: From<SomeType2> + From<SomeType1> + SomeAssociation1,
 	{
@@ -207,18 +207,18 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T>
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T>
 	where
 		T::AccountId: From<SomeType1> + From<SomeType3> + SomeAssociation1,
 	{
 		/// call foo doc comment put in metadata
-		#[pallet::call_index(0)]
-		#[pallet::weight(Weight::from_parts(*foo as u64, 0))]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(Weight::from_parts(*foo as u64, 0))]
 		#[deprecated = "test"]
 		pub fn foo(
 			origin: OriginFor<T>,
-			#[pallet::compact] foo: u32,
+			#[pezpallet::compact] foo: u32,
 			_bar: u32,
 		) -> DispatchResultWithPostInfo {
 			let _ = foo;
@@ -230,11 +230,11 @@ pub mod pallet {
 		}
 
 		/// call foo_storage_layer doc comment put in metadata
-		#[pallet::call_index(1)]
-		#[pallet::weight({1})]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight({1})]
 		pub fn foo_storage_layer(
 			_origin: OriginFor<T>,
-			#[pallet::compact] foo: u32,
+			#[pezpallet::compact] foo: u32,
 		) -> DispatchResultWithPostInfo {
 			Self::deposit_event(Event::Something(0));
 			if foo == 0 {
@@ -244,34 +244,34 @@ pub mod pallet {
 			Ok(().into())
 		}
 
-		#[pallet::call_index(4)]
-		#[pallet::weight({1})]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight({1})]
 		pub fn foo_index_out_of_order(_origin: OriginFor<T>) -> DispatchResult {
 			Ok(())
 		}
 
 		// Test for DispatchResult return type
-		#[pallet::call_index(2)]
-		#[pallet::weight({1})]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight({1})]
 		pub fn foo_no_post_info(_origin: OriginFor<T>) -> DispatchResult {
 			Ok(())
 		}
 
-		#[pallet::call_index(3)]
-		#[pallet::weight({1})]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight({1})]
 		pub fn check_for_dispatch_context(_origin: OriginFor<T>) -> DispatchResult {
 			with_context::<(), _>(|_| ()).ok_or_else(|| DispatchError::Unavailable)
 		}
 
 		#[cfg(feature = "frame-feature-testing")]
-		#[pallet::call_index(5)]
-		#[pallet::weight({1})]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight({1})]
 		pub fn foo_feature_test(_origin: OriginFor<T>) -> DispatchResult {
 			Ok(())
 		}
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	#[derive(PartialEq, Eq)]
 	pub enum Error<T> {
 		/// error doc comment put in metadata
@@ -286,8 +286,8 @@ pub mod pallet {
 		FeatureTest,
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(fn deposit_event)]
 
 	pub enum Event<T: Config>
 	where
@@ -301,21 +301,21 @@ pub mod pallet {
 		SomethingElse(<T::AccountId as SomeAssociation1>::_1),
 	}
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ValueWhereClause<T: Config>
 	where
 		T::AccountId: SomeAssociation2,
 	= StorageValue<_, <T::AccountId as SomeAssociation2>::_2>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Value<T> = StorageValue<Value = u32>;
 
-	#[pallet::storage]
-	#[pallet::storage_prefix = "Value2"]
+	#[pezpallet::storage]
+	#[pezpallet::storage_prefix = "Value2"]
 	pub type RenamedValue<T> = StorageValue<Value = u64>;
 
 	/// Test some doc
-	#[pallet::type_value]
+	#[pezpallet::type_value]
 	pub fn MyDefault<T: Config>() -> u16
 	where
 		T::AccountId: From<SomeType7> + From<SomeType1> + SomeAssociation1,
@@ -324,25 +324,25 @@ pub mod pallet {
 		4u16
 	}
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Map<T: Config>
 	where
 		T::AccountId: From<SomeType7>,
 	= StorageMap<_, Blake2_128Concat, u8, u16, ValueQuery, MyDefault<T>>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Map2<T> =
 		StorageMap<Hasher = Twox64Concat, Key = u16, Value = u32, MaxValues = ConstU32<3>>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	#[allow(deprecated)]
 	pub type Map3<T> =
 		StorageMap<_, Blake2_128Concat, u32, u64, ResultQuery<Error<T>::NonExistentStorageValue>>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type DoubleMap<T> = StorageDoubleMap<_, Blake2_128Concat, u8, Twox64Concat, u16, u32>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type DoubleMap2<T> = StorageDoubleMap<
 		Hasher1 = Twox64Concat,
 		Key1 = u16,
@@ -352,7 +352,7 @@ pub mod pallet {
 		MaxValues = ConstU32<5>,
 	>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	#[allow(deprecated)]
 	pub type DoubleMap3<T> = StorageDoubleMap<
 		_,
@@ -364,20 +364,20 @@ pub mod pallet {
 		ResultQuery<Error<T>::NonExistentStorageValue>,
 	>;
 
-	#[pallet::storage]
-	#[pallet::getter(fn nmap)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn nmap)]
 	pub type NMap<T> = StorageNMap<_, storage::Key<Blake2_128Concat, u8>, u32>;
 
-	#[pallet::storage]
-	#[pallet::getter(fn nmap2)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn nmap2)]
 	pub type NMap2<T> = StorageNMap<
 		Key = (NMapKey<Twox64Concat, u16>, NMapKey<Blake2_128Concat, u32>),
 		Value = u64,
 		MaxValues = ConstU32<11>,
 	>;
 
-	#[pallet::storage]
-	#[pallet::getter(fn nmap3)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn nmap3)]
 	#[allow(deprecated)]
 	pub type NMap3<T> = StorageNMap<
 		_,
@@ -386,20 +386,20 @@ pub mod pallet {
 		ResultQuery<Error<T>::NonExistentStorageValue>,
 	>;
 
-	#[pallet::storage]
-	#[pallet::getter(fn counted_nmap)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn counted_nmap)]
 	pub type CountedNMap<T> = CountedStorageNMap<_, storage::Key<Blake2_128Concat, u8>, u32>;
 
-	#[pallet::storage]
-	#[pallet::getter(fn counted_nmap2)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn counted_nmap2)]
 	pub type CountedNMap2<T> = CountedStorageNMap<
 		Key = (NMapKey<Twox64Concat, u16>, NMapKey<Blake2_128Concat, u32>),
 		Value = u64,
 		MaxValues = ConstU32<11>,
 	>;
 
-	#[pallet::storage]
-	#[pallet::getter(fn counted_nmap3)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn counted_nmap3)]
 	#[allow(deprecated)]
 	pub type CountedNMap3<T> = CountedStorageNMap<
 		_,
@@ -408,49 +408,49 @@ pub mod pallet {
 		ResultQuery<Error<T>::NonExistentStorageValue>,
 	>;
 
-	#[pallet::storage]
-	#[pallet::getter(fn conditional_value)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn conditional_value)]
 	#[cfg(feature = "frame-feature-testing")]
 	pub type ConditionalValue<T> = StorageValue<_, u32>;
 
 	#[cfg(feature = "frame-feature-testing")]
-	#[pallet::storage]
-	#[pallet::getter(fn conditional_map)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn conditional_map)]
 	pub type ConditionalMap<T> =
 		StorageMap<_, Twox64Concat, u16, u32, OptionQuery, GetDefault, ConstU32<12>>;
 
 	#[cfg(feature = "frame-feature-testing")]
-	#[pallet::storage]
-	#[pallet::getter(fn conditional_double_map)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn conditional_double_map)]
 	pub type ConditionalDoubleMap<T> =
 		StorageDoubleMap<_, Blake2_128Concat, u8, Twox64Concat, u16, u32>;
 
 	#[cfg(feature = "frame-feature-testing")]
-	#[pallet::storage]
-	#[pallet::getter(fn conditional_nmap)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn conditional_nmap)]
 	pub type ConditionalNMap<T> =
 		StorageNMap<_, (storage::Key<Blake2_128Concat, u8>, storage::Key<Twox64Concat, u16>), u32>;
 
 	#[cfg(feature = "frame-feature-testing")]
-	#[pallet::storage]
-	#[pallet::getter(fn conditional_counted_nmap)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn conditional_counted_nmap)]
 	pub type ConditionalCountedNMap<T> = CountedStorageNMap<
 		_,
 		(storage::Key<Blake2_128Concat, u8>, storage::Key<Twox64Concat, u16>),
 		u32,
 	>;
 
-	#[pallet::storage]
-	#[pallet::storage_prefix = "RenamedCountedMap"]
-	#[pallet::getter(fn counted_storage_map)]
+	#[pezpallet::storage]
+	#[pezpallet::storage_prefix = "RenamedCountedMap"]
+	#[pezpallet::getter(fn counted_storage_map)]
 	pub type SomeCountedStorageMap<T> =
 		CountedStorageMap<Hasher = Twox64Concat, Key = u8, Value = u32>;
 
-	#[pallet::storage]
-	#[pallet::unbounded]
+	#[pezpallet::storage]
+	#[pezpallet::unbounded]
 	pub type Unbounded<T> = StorageValue<Value = Vec<u8>>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(pezframe_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config>
 	where
@@ -461,8 +461,8 @@ pub mod pallet {
 		_myfield: u32,
 	}
 
-	#[pallet::view_functions]
-	impl<T: Config> Pallet<T>
+	#[pezpallet::view_functions]
+	impl<T: Config> Pezpallet<T>
 	where
 		T::AccountId: From<SomeType1> + SomeAssociation1,
 	{
@@ -477,7 +477,7 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T>
 	where
 		T::AccountId: From<SomeType1> + SomeAssociation1 + From<SomeType4>,
@@ -488,7 +488,7 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::origin]
+	#[pezpallet::origin]
 	#[derive(
 		EqNoBound,
 		RuntimeDebugNoBound,
@@ -504,8 +504,8 @@ pub mod pallet {
 	)]
 	pub struct Origin<T>(PhantomData<T>);
 
-	#[pallet::validate_unsigned]
-	impl<T: Config> ValidateUnsigned for Pallet<T>
+	#[pezpallet::validate_unsigned]
+	impl<T: Config> ValidateUnsigned for Pezpallet<T>
 	where
 		T::AccountId: From<SomeType1> + SomeAssociation1 + From<SomeType5> + From<SomeType3>,
 	{
@@ -520,8 +520,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::inherent]
-	impl<T: Config> ProvideInherent for Pallet<T>
+	#[pezpallet::inherent]
+	impl<T: Config> ProvideInherent for Pezpallet<T>
 	where
 		T::AccountId: From<SomeType1> + SomeAssociation1 + From<SomeType6> + From<SomeType3>,
 	{
@@ -558,7 +558,7 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::composite_enum]
+	#[pezpallet::composite_enum]
 	pub enum HoldReason {
 		Staking,
 	}
@@ -578,9 +578,9 @@ pub mod pallet {
 	pub const INHERENT_IDENTIFIER: InherentIdentifier = *b"testpall";
 }
 
-// Test that a pallet with non generic event and generic genesis_config is correctly handled
-// and that a pallet with the attribute without_storage_info is correctly handled.
-#[pezframe_support::pallet]
+// Test that a pezpallet with non generic event and generic genesis_config is correctly handled
+// and that a pezpallet with the attribute without_storage_info is correctly handled.
+#[pezframe_support::pezpallet]
 pub mod pallet2 {
 	use super::{SomeAssociation1, SomeType1, UpdateStorageVersion};
 	use pezframe_support::pezpallet_prelude::*;
@@ -588,7 +588,7 @@ pub mod pallet2 {
 
 	pub(crate) const STORAGE_VERSION: StorageVersion = StorageVersion::new(2);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config
 	where
 		<Self as pezframe_system::Config>::AccountId: From<SomeType1> + SomeAssociation1,
@@ -597,13 +597,13 @@ pub mod pallet2 {
 		type RuntimeEvent: From<Event> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 	}
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	#[pallet::without_storage_info]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	#[pezpallet::without_storage_info]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T>
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T>
 	where
 		T::AccountId: From<SomeType1> + SomeAssociation1,
 	{
@@ -625,24 +625,24 @@ pub mod pallet2 {
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> where T::AccountId: From<SomeType1> + SomeAssociation1 {}
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> where T::AccountId: From<SomeType1> + SomeAssociation1 {}
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type SomeValue<T: Config> = StorageValue<_, Vec<u32>>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type SomeCountedStorageMap<T> =
 		CountedStorageMap<Hasher = Twox64Concat, Key = u8, Value = u32>;
 
-	#[pallet::event]
-	#[pallet::generate_deposit(fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(fn deposit_event)]
 	pub enum Event {
 		/// Something
 		Something(u32),
 	}
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	pub struct GenesisConfig<T: Config>
 	where
 		T::AccountId: From<SomeType1> + SomeAssociation1,
@@ -659,7 +659,7 @@ pub mod pallet2 {
 		}
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T>
 	where
 		T::AccountId: From<SomeType1> + SomeAssociation1,
@@ -667,55 +667,55 @@ pub mod pallet2 {
 		fn build(&self) {}
 	}
 
-	#[pallet::composite_enum]
+	#[pezpallet::composite_enum]
 	pub enum HoldReason {
 		Governance,
 	}
 
-	#[pallet::composite_enum]
+	#[pezpallet::composite_enum]
 	pub enum SlashReason {
 		Equivocation,
 	}
 }
 
 /// Test that the supertrait check works when we pass some parameter to the `pezframe_system::Config`.
-#[pezframe_support::pallet]
+#[pezframe_support::pezpallet]
 pub mod pallet3 {
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config:
 		pezframe_system::Config<RuntimeOrigin = <Self as Config>::RuntimeOrigin>
 	{
 		type RuntimeOrigin;
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 }
 
-#[pezframe_support::pallet]
+#[pezframe_support::pezpallet]
 pub mod pallet4 {
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {}
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {}
 }
 
 /// Test that the supertrait check works when we pass some parameter to the `pezframe_system::Config`.
-#[pezframe_support::pallet]
+#[pezframe_support::pezpallet]
 pub mod pallet5 {
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config:
 		pezframe_system::Config<RuntimeOrigin = <Self as Config>::RuntimeOrigin>
 	{
 		type RuntimeOrigin;
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 }
 
 pezframe_support::parameter_types!(
@@ -747,7 +747,7 @@ impl pezframe_system::Config for Runtime {
 	type OnSetCode = ();
 	type MaxConsumers = ConstU32<16>;
 }
-impl pallet::Config for Runtime {
+impl pezpallet::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type MyGetParam = ConstU32<10>;
 	type MyGetParam2 = ConstU32<11>;
@@ -840,7 +840,7 @@ mod runtime {
 	pub type System = pezframe_system + Call + Event<T>;
 
 	#[runtime::pezpallet_index(1)]
-	pub type Example = pallet;
+	pub type Example = pezpallet;
 
 	#[runtime::pezpallet_index(2)]
 	#[runtime::disable_call]
@@ -877,30 +877,30 @@ fn maybe_docs(doc: Vec<&'static str>) -> Vec<&'static str> {
 #[allow(deprecated)]
 fn transactional_works() {
 	TestExternalities::default().execute_with(|| {
-		pezframe_system::Pallet::<Runtime>::set_block_number(1);
+		pezframe_system::Pezpallet::<Runtime>::set_block_number(1);
 
-		pallet::Call::<Runtime>::foo_storage_layer { foo: 0 }
+		pezpallet::Call::<Runtime>::foo_storage_layer { foo: 0 }
 			.dispatch_bypass_filter(None.into())
 			.err()
 			.unwrap();
-		assert!(pezframe_system::Pallet::<Runtime>::events().is_empty());
+		assert!(pezframe_system::Pezpallet::<Runtime>::events().is_empty());
 
-		pallet::Call::<Runtime>::foo_storage_layer { foo: 1 }
+		pezpallet::Call::<Runtime>::foo_storage_layer { foo: 1 }
 			.dispatch_bypass_filter(None.into())
 			.unwrap();
 		assert_eq!(
-			pezframe_system::Pallet::<Runtime>::events()
+			pezframe_system::Pezpallet::<Runtime>::events()
 				.iter()
 				.map(|e| &e.event)
 				.collect::<Vec<_>>(),
-			vec![&RuntimeEvent::Example(pallet::Event::Something(0))],
+			vec![&RuntimeEvent::Example(pezpallet::Event::Something(0))],
 		);
 	})
 }
 
 #[test]
 fn call_expand() {
-	let call_foo = pallet::Call::<Runtime>::foo { foo: 3, bar: 0 };
+	let call_foo = pezpallet::Call::<Runtime>::foo { foo: 3, bar: 0 };
 	assert_eq!(
 		call_foo.get_dispatch_info(),
 		DispatchInfo {
@@ -913,7 +913,7 @@ fn call_expand() {
 	assert_eq!(call_foo.get_call_name(), "foo");
 	#[cfg(not(feature = "frame-feature-testing"))]
 	assert_eq!(
-		pallet::Call::<Runtime>::get_call_names(),
+		pezpallet::Call::<Runtime>::get_call_names(),
 		&[
 			"foo",
 			"foo_storage_layer",
@@ -924,7 +924,7 @@ fn call_expand() {
 	);
 	#[cfg(feature = "frame-feature-testing")]
 	assert_eq!(
-		pallet::Call::<Runtime>::get_call_names(),
+		pezpallet::Call::<Runtime>::get_call_names(),
 		&[
 			"foo",
 			"foo_storage_layer",
@@ -937,49 +937,49 @@ fn call_expand() {
 
 	assert_eq!(call_foo.get_call_index(), 0u8);
 	#[cfg(not(feature = "frame-feature-testing"))]
-	assert_eq!(pallet::Call::<Runtime>::get_call_indices(), &[0u8, 1u8, 4u8, 2u8, 3u8]);
+	assert_eq!(pezpallet::Call::<Runtime>::get_call_indices(), &[0u8, 1u8, 4u8, 2u8, 3u8]);
 	#[cfg(feature = "frame-feature-testing")]
-	assert_eq!(pallet::Call::<Runtime>::get_call_indices(), &[0u8, 1u8, 4u8, 2u8, 3u8, 5u8]);
+	assert_eq!(pezpallet::Call::<Runtime>::get_call_indices(), &[0u8, 1u8, 4u8, 2u8, 3u8, 5u8]);
 }
 
 #[test]
 fn call_expand_index() {
-	let call_foo = pallet::Call::<Runtime>::foo_index_out_of_order {};
+	let call_foo = pezpallet::Call::<Runtime>::foo_index_out_of_order {};
 
 	assert_eq!(call_foo.get_call_index(), 4u8);
 	#[cfg(not(feature = "frame-feature-testing"))]
-	assert_eq!(pallet::Call::<Runtime>::get_call_indices(), &[0u8, 1u8, 4u8, 2u8, 3u8]);
+	assert_eq!(pezpallet::Call::<Runtime>::get_call_indices(), &[0u8, 1u8, 4u8, 2u8, 3u8]);
 	#[cfg(feature = "frame-feature-testing")]
-	assert_eq!(pallet::Call::<Runtime>::get_call_indices(), &[0u8, 1u8, 4u8, 2u8, 3u8, 5u8]);
+	assert_eq!(pezpallet::Call::<Runtime>::get_call_indices(), &[0u8, 1u8, 4u8, 2u8, 3u8, 5u8]);
 }
 
 #[test]
 fn error_expand() {
 	assert_eq!(
-		format!("{:?}", pallet::Error::<Runtime>::InsufficientProposersBalance),
+		format!("{:?}", pezpallet::Error::<Runtime>::InsufficientProposersBalance),
 		String::from("InsufficientProposersBalance"),
 	);
 	assert_eq!(
-		<&'static str>::from(pallet::Error::<Runtime>::InsufficientProposersBalance),
+		<&'static str>::from(pezpallet::Error::<Runtime>::InsufficientProposersBalance),
 		"InsufficientProposersBalance",
 	);
 	assert_eq!(
-		DispatchError::from(pallet::Error::<Runtime>::InsufficientProposersBalance),
+		DispatchError::from(pezpallet::Error::<Runtime>::InsufficientProposersBalance),
 		DispatchError::Module(ModuleError {
 			index: 1,
 			error: [0, 0, 0, 0],
 			message: Some("InsufficientProposersBalance")
 		}),
 	);
-	assert_eq!(<pallet::Error::<Runtime> as PalletError>::MAX_ENCODED_SIZE, 3);
+	assert_eq!(<pezpallet::Error::<Runtime> as PalletError>::MAX_ENCODED_SIZE, 3);
 	#[cfg(feature = "frame-feature-testing")]
-	assert_eq!(format!("{:?}", pallet::Error::<Runtime>::FeatureTest), String::from("FeatureTest"),);
+	assert_eq!(format!("{:?}", pezpallet::Error::<Runtime>::FeatureTest), String::from("FeatureTest"),);
 }
 
 #[test]
 fn instance_expand() {
 	// Assert same type.
-	let _: pallet::__InherentHiddenInstance = ();
+	let _: pezpallet::__InherentHiddenInstance = ();
 }
 
 #[test]
@@ -994,7 +994,7 @@ fn inherent_expand() {
 	let inherents = InherentData::new().create_extrinsics();
 
 	let expected =
-		vec![UncheckedExtrinsic::new_bare(RuntimeCall::Example(pallet::Call::foo_no_post_info {}))];
+		vec![UncheckedExtrinsic::new_bare(RuntimeCall::Example(pezpallet::Call::foo_no_post_info {}))];
 	assert_eq!(expected, inherents);
 
 	let block = Block::new(
@@ -1006,8 +1006,8 @@ fn inherent_expand() {
 			Digest::default(),
 		),
 		vec![
-			UncheckedExtrinsic::new_bare(RuntimeCall::Example(pallet::Call::foo_no_post_info {})),
-			UncheckedExtrinsic::new_bare(RuntimeCall::Example(pallet::Call::foo {
+			UncheckedExtrinsic::new_bare(RuntimeCall::Example(pezpallet::Call::foo_no_post_info {})),
+			UncheckedExtrinsic::new_bare(RuntimeCall::Example(pezpallet::Call::foo {
 				foo: 1,
 				bar: 0,
 			})),
@@ -1025,8 +1025,8 @@ fn inherent_expand() {
 			Digest::default(),
 		),
 		vec![
-			UncheckedExtrinsic::new_bare(RuntimeCall::Example(pallet::Call::foo_no_post_info {})),
-			UncheckedExtrinsic::new_bare(RuntimeCall::Example(pallet::Call::foo {
+			UncheckedExtrinsic::new_bare(RuntimeCall::Example(pezpallet::Call::foo_no_post_info {})),
+			UncheckedExtrinsic::new_bare(RuntimeCall::Example(pezpallet::Call::foo {
 				foo: 0,
 				bar: 0,
 			})),
@@ -1043,7 +1043,7 @@ fn inherent_expand() {
 			BlakeTwo256::hash(b"test"),
 			Digest::default(),
 		),
-		vec![UncheckedExtrinsic::new_bare(RuntimeCall::Example(pallet::Call::foo_storage_layer {
+		vec![UncheckedExtrinsic::new_bare(RuntimeCall::Example(pezpallet::Call::foo_storage_layer {
 			foo: 0,
 		}))],
 	);
@@ -1061,7 +1061,7 @@ fn inherent_expand() {
 			Digest::default(),
 		),
 		vec![UncheckedExtrinsic::new_signed(
-			RuntimeCall::Example(pallet::Call::foo_no_post_info {}),
+			RuntimeCall::Example(pezpallet::Call::foo_no_post_info {}),
 			1,
 			1.into(),
 			Default::default(),
@@ -1079,14 +1079,14 @@ fn validate_unsigned_expand() {
 		InvalidTransaction, TransactionSource, TransactionValidityError, ValidTransaction,
 		ValidateUnsigned,
 	};
-	let call = pallet::Call::<Runtime>::foo_no_post_info {};
+	let call = pezpallet::Call::<Runtime>::foo_no_post_info {};
 
-	let validity = pallet::Pallet::validate_unsigned(TransactionSource::Local, &call).unwrap_err();
+	let validity = pezpallet::Pezpallet::validate_unsigned(TransactionSource::Local, &call).unwrap_err();
 	assert_eq!(validity, TransactionValidityError::Invalid(InvalidTransaction::Call));
 
-	let call = pallet::Call::<Runtime>::foo_storage_layer { foo: 0 };
+	let call = pezpallet::Call::<Runtime>::foo_storage_layer { foo: 0 };
 
-	let validity = pallet::Pallet::validate_unsigned(TransactionSource::External, &call).unwrap();
+	let validity = pezpallet::Pezpallet::validate_unsigned(TransactionSource::External, &call).unwrap();
 	assert_eq!(validity, ValidTransaction::default());
 }
 
@@ -1094,11 +1094,11 @@ fn validate_unsigned_expand() {
 fn composite_expand() {
 	use codec::Encode;
 
-	let hold_reason: RuntimeHoldReason = pallet::HoldReason::Staking.into();
+	let hold_reason: RuntimeHoldReason = pezpallet::HoldReason::Staking.into();
 	let hold_reason2: RuntimeHoldReason = pallet2::HoldReason::Governance.into();
 	let slash_reason: RuntimeSlashReason = pallet2::SlashReason::Equivocation.into();
 
-	assert_eq!(hold_reason, RuntimeHoldReason::Example(pallet::HoldReason::Staking));
+	assert_eq!(hold_reason, RuntimeHoldReason::Example(pezpallet::HoldReason::Staking));
 	assert_eq!(hold_reason2, RuntimeHoldReason::Example2(pallet2::HoldReason::Governance));
 	assert_eq!(slash_reason, RuntimeSlashReason::Example2(pallet2::SlashReason::Equivocation));
 
@@ -1111,20 +1111,20 @@ fn composite_expand() {
 #[allow(deprecated)]
 fn pezpallet_expand_deposit_event() {
 	TestExternalities::default().execute_with(|| {
-		pezframe_system::Pallet::<Runtime>::set_block_number(1);
-		pallet::Call::<Runtime>::foo { foo: 3, bar: 0 }
+		pezframe_system::Pezpallet::<Runtime>::set_block_number(1);
+		pezpallet::Call::<Runtime>::foo { foo: 3, bar: 0 }
 			.dispatch_bypass_filter(None.into())
 			.unwrap();
 		assert_eq!(
-			pezframe_system::Pallet::<Runtime>::events()[0].event,
-			RuntimeEvent::Example(pallet::Event::Something(3)),
+			pezframe_system::Pezpallet::<Runtime>::events()[0].event,
+			RuntimeEvent::Example(pezpallet::Event::Something(3)),
 		);
 	})
 }
 
 #[test]
 fn pezpallet_new_call_variant() {
-	pallet::Call::<Runtime>::new_call_variant_foo(3, 4);
+	pezpallet::Call::<Runtime>::new_call_variant_foo(3, 4);
 }
 
 #[test]
@@ -1145,92 +1145,92 @@ fn storage_expand() {
 	}
 
 	TestExternalities::default().execute_with(|| {
-		pallet::Value::<Runtime>::put(1);
+		pezpallet::Value::<Runtime>::put(1);
 		let k = [twox_128(b"Example"), twox_128(b"Value")].concat();
 		assert_eq!(unhashed::get::<u32>(&k), Some(1u32));
 
-		pallet::RenamedValue::<Runtime>::put(2);
+		pezpallet::RenamedValue::<Runtime>::put(2);
 		let k = [twox_128(b"Example"), twox_128(b"Value2")].concat();
 		assert_eq!(unhashed::get::<u64>(&k), Some(2));
 
-		pallet::Map::<Runtime>::insert(1, 2);
+		pezpallet::Map::<Runtime>::insert(1, 2);
 		let mut k = [twox_128(b"Example"), twox_128(b"Map")].concat();
 		k.extend(1u8.using_encoded(blake2_128_concat));
 		assert_eq!(unhashed::get::<u16>(&k), Some(2u16));
-		assert_eq!(&k[..32], &<pallet::Map<Runtime>>::final_prefix());
+		assert_eq!(&k[..32], &<pezpallet::Map<Runtime>>::final_prefix());
 
-		pallet::Map2::<Runtime>::insert(1, 2);
+		pezpallet::Map2::<Runtime>::insert(1, 2);
 		let mut k = [twox_128(b"Example"), twox_128(b"Map2")].concat();
 		k.extend(1u16.using_encoded(twox_64_concat));
 		assert_eq!(unhashed::get::<u32>(&k), Some(2u32));
-		assert_eq!(&k[..32], &<pallet::Map2<Runtime>>::final_prefix());
+		assert_eq!(&k[..32], &<pezpallet::Map2<Runtime>>::final_prefix());
 
-		pallet::Map3::<Runtime>::insert(1, 2);
+		pezpallet::Map3::<Runtime>::insert(1, 2);
 		let mut k = [twox_128(b"Example"), twox_128(b"Map3")].concat();
 		k.extend(1u32.using_encoded(blake2_128_concat));
 		assert_eq!(unhashed::get::<u64>(&k), Some(2u64));
-		assert_eq!(&k[..32], &<pallet::Map3<Runtime>>::final_prefix());
+		assert_eq!(&k[..32], &<pezpallet::Map3<Runtime>>::final_prefix());
 		assert_eq!(
-			pallet::Map3::<Runtime>::get(2),
-			Err(pallet::Error::<Runtime>::NonExistentStorageValue),
+			pezpallet::Map3::<Runtime>::get(2),
+			Err(pezpallet::Error::<Runtime>::NonExistentStorageValue),
 		);
 
-		pallet::DoubleMap::<Runtime>::insert(&1, &2, &3);
+		pezpallet::DoubleMap::<Runtime>::insert(&1, &2, &3);
 		let mut k = [twox_128(b"Example"), twox_128(b"DoubleMap")].concat();
 		k.extend(1u8.using_encoded(blake2_128_concat));
 		k.extend(2u16.using_encoded(twox_64_concat));
 		assert_eq!(unhashed::get::<u32>(&k), Some(3u32));
-		assert_eq!(&k[..32], &<pallet::DoubleMap<Runtime>>::final_prefix());
+		assert_eq!(&k[..32], &<pezpallet::DoubleMap<Runtime>>::final_prefix());
 
-		pallet::DoubleMap2::<Runtime>::insert(&1, &2, &3);
+		pezpallet::DoubleMap2::<Runtime>::insert(&1, &2, &3);
 		let mut k = [twox_128(b"Example"), twox_128(b"DoubleMap2")].concat();
 		k.extend(1u16.using_encoded(twox_64_concat));
 		k.extend(2u32.using_encoded(blake2_128_concat));
 		assert_eq!(unhashed::get::<u64>(&k), Some(3u64));
-		assert_eq!(&k[..32], &<pallet::DoubleMap2<Runtime>>::final_prefix());
+		assert_eq!(&k[..32], &<pezpallet::DoubleMap2<Runtime>>::final_prefix());
 
-		pallet::DoubleMap3::<Runtime>::insert(&1, &2, &3);
+		pezpallet::DoubleMap3::<Runtime>::insert(&1, &2, &3);
 		let mut k = [twox_128(b"Example"), twox_128(b"DoubleMap3")].concat();
 		k.extend(1u32.using_encoded(blake2_128_concat));
 		k.extend(2u64.using_encoded(twox_64_concat));
 		assert_eq!(unhashed::get::<u128>(&k), Some(3u128));
-		assert_eq!(&k[..32], &<pallet::DoubleMap3<Runtime>>::final_prefix());
+		assert_eq!(&k[..32], &<pezpallet::DoubleMap3<Runtime>>::final_prefix());
 		assert_eq!(
-			pallet::DoubleMap3::<Runtime>::get(2, 3),
-			Err(pallet::Error::<Runtime>::NonExistentStorageValue),
+			pezpallet::DoubleMap3::<Runtime>::get(2, 3),
+			Err(pezpallet::Error::<Runtime>::NonExistentStorageValue),
 		);
 
-		pallet::NMap::<Runtime>::insert((&1,), &3);
+		pezpallet::NMap::<Runtime>::insert((&1,), &3);
 		let mut k = [twox_128(b"Example"), twox_128(b"NMap")].concat();
 		k.extend(1u8.using_encoded(blake2_128_concat));
 		assert_eq!(unhashed::get::<u32>(&k), Some(3u32));
-		assert_eq!(&k[..32], &<pallet::NMap<Runtime>>::final_prefix());
+		assert_eq!(&k[..32], &<pezpallet::NMap<Runtime>>::final_prefix());
 
-		pallet::NMap2::<Runtime>::insert((&1, &2), &3);
+		pezpallet::NMap2::<Runtime>::insert((&1, &2), &3);
 		let mut k = [twox_128(b"Example"), twox_128(b"NMap2")].concat();
 		k.extend(1u16.using_encoded(twox_64_concat));
 		k.extend(2u32.using_encoded(blake2_128_concat));
 		assert_eq!(unhashed::get::<u64>(&k), Some(3u64));
-		assert_eq!(&k[..32], &<pallet::NMap2<Runtime>>::final_prefix());
-		assert_eq!(pallet::Pallet::<Runtime>::nmap2((1, 2)), Some(3u64));
+		assert_eq!(&k[..32], &<pezpallet::NMap2<Runtime>>::final_prefix());
+		assert_eq!(pezpallet::Pezpallet::<Runtime>::nmap2((1, 2)), Some(3u64));
 
-		pallet::NMap3::<Runtime>::insert((&1, &2), &3);
+		pezpallet::NMap3::<Runtime>::insert((&1, &2), &3);
 		let mut k = [twox_128(b"Example"), twox_128(b"NMap3")].concat();
 		k.extend(1u8.using_encoded(blake2_128_concat));
 		k.extend(2u16.using_encoded(twox_64_concat));
 		assert_eq!(unhashed::get::<u128>(&k), Some(3u128));
-		assert_eq!(&k[..32], &<pallet::NMap3<Runtime>>::final_prefix());
-		assert_eq!(pallet::Pallet::<Runtime>::nmap3((1, 2)), Ok(3u128));
+		assert_eq!(&k[..32], &<pezpallet::NMap3<Runtime>>::final_prefix());
+		assert_eq!(pezpallet::Pezpallet::<Runtime>::nmap3((1, 2)), Ok(3u128));
 		assert_eq!(
-			pallet::NMap3::<Runtime>::get((2, 3)),
-			Err(pallet::Error::<Runtime>::NonExistentStorageValue),
+			pezpallet::NMap3::<Runtime>::get((2, 3)),
+			Err(pezpallet::Error::<Runtime>::NonExistentStorageValue),
 		);
 
-		pallet::CountedNMap::<Runtime>::insert((&1,), &3);
+		pezpallet::CountedNMap::<Runtime>::insert((&1,), &3);
 		let mut k = [twox_128(b"Example"), twox_128(b"CountedNMap")].concat();
 		k.extend(1u8.using_encoded(blake2_128_concat));
 		assert_eq!(unhashed::get::<u32>(&k), Some(3u32));
-		assert_eq!(pallet::CountedNMap::<Runtime>::count(), 1);
+		assert_eq!(pezpallet::CountedNMap::<Runtime>::count(), 1);
 		assert_eq!(
 			unhashed::get::<u32>(
 				&[twox_128(b"Example"), twox_128(b"CounterForCountedNMap")].concat()
@@ -1238,30 +1238,30 @@ fn storage_expand() {
 			Some(1u32)
 		);
 
-		pallet::CountedNMap2::<Runtime>::insert((&1, &2), &3);
+		pezpallet::CountedNMap2::<Runtime>::insert((&1, &2), &3);
 		let mut k = [twox_128(b"Example"), twox_128(b"CountedNMap2")].concat();
 		k.extend(1u16.using_encoded(twox_64_concat));
 		k.extend(2u32.using_encoded(blake2_128_concat));
 		assert_eq!(unhashed::get::<u64>(&k), Some(3u64));
-		assert_eq!(pallet::CountedNMap2::<Runtime>::count(), 1);
+		assert_eq!(pezpallet::CountedNMap2::<Runtime>::count(), 1);
 		assert_eq!(
 			unhashed::get::<u32>(
 				&[twox_128(b"Example"), twox_128(b"CounterForCountedNMap2")].concat()
 			),
 			Some(1u32)
 		);
-		assert_eq!(pallet::Pallet::<Runtime>::counted_nmap2((1, 2)), Some(3u64));
+		assert_eq!(pezpallet::Pezpallet::<Runtime>::counted_nmap2((1, 2)), Some(3u64));
 
-		pallet::CountedNMap3::<Runtime>::insert((&1, &2), &3);
+		pezpallet::CountedNMap3::<Runtime>::insert((&1, &2), &3);
 		let mut k = [twox_128(b"Example"), twox_128(b"CountedNMap3")].concat();
 		k.extend(1u8.using_encoded(blake2_128_concat));
 		k.extend(2u16.using_encoded(twox_64_concat));
-		assert_eq!(pallet::CountedNMap3::<Runtime>::count(), 1);
+		assert_eq!(pezpallet::CountedNMap3::<Runtime>::count(), 1);
 		assert_eq!(unhashed::get::<u128>(&k), Some(3u128));
-		assert_eq!(pallet::Pallet::<Runtime>::counted_nmap3((1, 2)), Ok(3u128));
+		assert_eq!(pezpallet::Pezpallet::<Runtime>::counted_nmap3((1, 2)), Ok(3u128));
 		assert_eq!(
-			pallet::CountedNMap3::<Runtime>::get((2, 3)),
-			Err(pallet::Error::<Runtime>::NonExistentStorageValue),
+			pezpallet::CountedNMap3::<Runtime>::get((2, 3)),
+			Err(pezpallet::Error::<Runtime>::NonExistentStorageValue),
 		);
 		assert_eq!(
 			unhashed::get::<u32>(
@@ -1272,20 +1272,20 @@ fn storage_expand() {
 
 		#[cfg(feature = "frame-feature-testing")]
 		{
-			pallet::ConditionalValue::<Runtime>::put(1);
-			pallet::ConditionalMap::<Runtime>::insert(1, 2);
-			pallet::ConditionalDoubleMap::<Runtime>::insert(1, 2, 3);
-			pallet::ConditionalNMap::<Runtime>::insert((1, 2), 3);
+			pezpallet::ConditionalValue::<Runtime>::put(1);
+			pezpallet::ConditionalMap::<Runtime>::insert(1, 2);
+			pezpallet::ConditionalDoubleMap::<Runtime>::insert(1, 2, 3);
+			pezpallet::ConditionalNMap::<Runtime>::insert((1, 2), 3);
 		}
 
-		pallet::SomeCountedStorageMap::<Runtime>::insert(1, 2);
+		pezpallet::SomeCountedStorageMap::<Runtime>::insert(1, 2);
 		let mut k = [twox_128(b"Example"), twox_128(b"RenamedCountedMap")].concat();
 		k.extend(1u8.using_encoded(twox_64_concat));
 		assert_eq!(unhashed::get::<u32>(&k), Some(2u32));
 		let k = [twox_128(b"Example"), twox_128(b"CounterForRenamedCountedMap")].concat();
 		assert_eq!(unhashed::get::<u32>(&k), Some(1u32));
 
-		pallet::Unbounded::<Runtime>::put(vec![1, 2]);
+		pezpallet::Unbounded::<Runtime>::put(vec![1, 2]);
 		let k = [twox_128(b"Example"), twox_128(b"Unbounded")].concat();
 		assert_eq!(unhashed::get::<Vec<u8>>(&k), Some(vec![1, 2]));
 	})
@@ -1295,7 +1295,7 @@ fn storage_expand() {
 #[allow(deprecated)]
 fn pezpallet_hooks_expand() {
 	TestExternalities::default().execute_with(|| {
-		pezframe_system::Pallet::<Runtime>::set_block_number(1);
+		pezframe_system::Pezpallet::<Runtime>::set_block_number(1);
 
 		assert_eq!(AllPalletsWithoutSystem::on_initialize(1), Weight::from_parts(10, 0));
 		AllPalletsWithoutSystem::on_finalize(1);
@@ -1303,27 +1303,27 @@ fn pezpallet_hooks_expand() {
 		assert_eq!(AllPalletsWithoutSystem::on_runtime_upgrade(), Weight::from_parts(30, 0));
 
 		assert_eq!(
-			pezframe_system::Pallet::<Runtime>::events()[0].event,
-			RuntimeEvent::Example(pallet::Event::Something(10)),
+			pezframe_system::Pezpallet::<Runtime>::events()[0].event,
+			RuntimeEvent::Example(pezpallet::Event::Something(10)),
 		);
 		assert_eq!(
-			pezframe_system::Pallet::<Runtime>::events()[1].event,
+			pezframe_system::Pezpallet::<Runtime>::events()[1].event,
 			RuntimeEvent::Example2(pallet2::Event::Something(11)),
 		);
 		assert_eq!(
-			pezframe_system::Pallet::<Runtime>::events()[2].event,
-			RuntimeEvent::Example(pallet::Event::Something(20)),
+			pezframe_system::Pezpallet::<Runtime>::events()[2].event,
+			RuntimeEvent::Example(pezpallet::Event::Something(20)),
 		);
 		assert_eq!(
-			pezframe_system::Pallet::<Runtime>::events()[3].event,
+			pezframe_system::Pezpallet::<Runtime>::events()[3].event,
 			RuntimeEvent::Example2(pallet2::Event::Something(21)),
 		);
 		assert_eq!(
-			pezframe_system::Pallet::<Runtime>::events()[4].event,
-			RuntimeEvent::Example(pallet::Event::Something(30)),
+			pezframe_system::Pezpallet::<Runtime>::events()[4].event,
+			RuntimeEvent::Example(pezpallet::Event::Something(30)),
 		);
 		assert_eq!(
-			pezframe_system::Pallet::<Runtime>::events()[5].event,
+			pezframe_system::Pezpallet::<Runtime>::events()[5].event,
 			RuntimeEvent::Example2(pallet2::Event::Something(31)),
 		);
 	})
@@ -1332,11 +1332,11 @@ fn pezpallet_hooks_expand() {
 #[test]
 fn pezpallet_on_genesis() {
 	TestExternalities::default().execute_with(|| {
-		assert_eq!(pallet::Pallet::<Runtime>::on_chain_storage_version(), StorageVersion::new(0));
-		pallet::Pallet::<Runtime>::on_genesis();
+		assert_eq!(pezpallet::Pezpallet::<Runtime>::on_chain_storage_version(), StorageVersion::new(0));
+		pezpallet::Pezpallet::<Runtime>::on_genesis();
 		assert_eq!(
-			pallet::Pallet::<Runtime>::in_code_storage_version(),
-			pallet::Pallet::<Runtime>::on_chain_storage_version(),
+			pezpallet::Pezpallet::<Runtime>::in_code_storage_version(),
+			pezpallet::Pezpallet::<Runtime>::on_chain_storage_version(),
 		);
 	})
 }
@@ -1350,7 +1350,7 @@ fn migrate_from_pallet_version_to_storage_version() {
 	}
 
 	TestExternalities::default().execute_with(|| {
-		// Insert some fake pallet versions
+		// Insert some fake pezpallet versions
 		pezsp_io::storage::set(&pezpallet_version_key(Example::name()), &[1, 2, 3]);
 		pezsp_io::storage::set(&pezpallet_version_key(Example2::name()), &[1, 2, 3]);
 		pezsp_io::storage::set(&pezpallet_version_key(System::name()), &[1, 2, 3]);
@@ -1376,12 +1376,12 @@ fn migrate_from_pallet_version_to_storage_version() {
 		// `pezpallet_num` pallets, 2 writes and every write costs 5 weight.
 		assert_eq!(Weight::from_parts(pezpallet_num * 2 * 5, 0), weight);
 
-		// All pallet versions should be removed
+		// All pezpallet versions should be removed
 		assert!(pezsp_io::storage::get(&pezpallet_version_key(Example::name())).is_none());
 		assert!(pezsp_io::storage::get(&pezpallet_version_key(Example2::name())).is_none());
 		assert!(pezsp_io::storage::get(&pezpallet_version_key(System::name())).is_none());
 
-		assert_eq!(Example::on_chain_storage_version(), pallet::STORAGE_VERSION);
+		assert_eq!(Example::on_chain_storage_version(), pezpallet::STORAGE_VERSION);
 		assert_eq!(Example2::on_chain_storage_version(), pallet2::STORAGE_VERSION);
 		assert_eq!(System::on_chain_storage_version(), StorageVersion::new(0));
 	});
@@ -1391,7 +1391,7 @@ fn migrate_from_pallet_version_to_storage_version() {
 #[allow(deprecated)]
 fn pezpallet_item_docs_in_metadata() {
 	// call
-	let call_variants = match meta_type::<pallet::Call<Runtime>>().type_info().type_def {
+	let call_variants = match meta_type::<pezpallet::Call<Runtime>>().type_info().type_def {
 		scale_info::TypeDef::Variant(variants) => variants.variants,
 		_ => unreachable!(),
 	};
@@ -1404,7 +1404,7 @@ fn pezpallet_item_docs_in_metadata() {
 	assert!(call_variants[2].docs.is_empty());
 
 	// event
-	let event_variants = match meta_type::<pallet::Event<Runtime>>().type_info().type_def {
+	let event_variants = match meta_type::<pezpallet::Event<Runtime>>().type_info().type_def {
 		scale_info::TypeDef::Variant(variants) => variants.variants,
 		_ => unreachable!(),
 	};
@@ -1413,7 +1413,7 @@ fn pezpallet_item_docs_in_metadata() {
 	assert!(event_variants[1].docs.is_empty());
 
 	// error
-	let error_variants = match meta_type::<pallet::Error<Runtime>>().type_info().type_def {
+	let error_variants = match meta_type::<pezpallet::Error<Runtime>>().type_info().type_def {
 		scale_info::TypeDef::Variant(variants) => variants.variants,
 		_ => unreachable!(),
 	};
@@ -1431,8 +1431,8 @@ fn metadata_v15() {
 	use frame_metadata::{v15::*, *};
 
 	let readme = "Very important information :D\n";
-	let pezpallet_doc = "This is the best pallet\n";
-	let expected_pallet_doc = vec![" Pallet documentation", readme, pezpallet_doc];
+	let pezpallet_doc = "This is the best pezpallet\n";
+	let expected_pallet_doc = vec![" Pezpallet documentation", readme, pezpallet_doc];
 
 	let pallets = vec![
 		PalletMetadata {
@@ -1736,8 +1736,8 @@ fn metadata_v15() {
 					},
 				],
 			}),
-			calls: Some(meta_type::<pallet::Call<Runtime>>().into()),
-			event: Some(meta_type::<pallet::Event<Runtime>>().into()),
+			calls: Some(meta_type::<pezpallet::Call<Runtime>>().into()),
+			event: Some(meta_type::<pezpallet::Event<Runtime>>().into()),
 			constants: vec![
 				PalletConstantMetadata {
 					name: "MyGetParam",
@@ -1776,7 +1776,7 @@ fn metadata_v15() {
 					docs: maybe_docs(vec![" Some doc"]),
 				},
 			],
-			error: Some(PalletErrorMetadata { ty: meta_type::<pallet::Error<Runtime>>() }),
+			error: Some(PalletErrorMetadata { ty: meta_type::<pezpallet::Error<Runtime>>() }),
 			docs: expected_pallet_doc,
 		},
 		PalletMetadata {
@@ -1941,16 +1941,16 @@ fn metadata_versions() {
 #[test]
 fn metadata_ir_pallet_runtime_docs() {
 	let ir = Runtime::metadata_ir();
-	let pallet = ir
+	let pezpallet = ir
 		.pallets
 		.iter()
-		.find(|pallet| pallet.name == "Example")
-		.expect("Pallet should be present");
+		.find(|pezpallet| pezpallet.name == "Example")
+		.expect("Pezpallet should be present");
 
 	let readme = "Very important information :D\n";
-	let pezpallet_doc = "This is the best pallet\n";
-	let expected = vec![" Pallet documentation", readme, pezpallet_doc];
-	assert_eq!(pallet.docs, expected);
+	let pezpallet_doc = "This is the best pezpallet\n";
+	let expected = vec![" Pezpallet documentation", readme, pezpallet_doc];
+	assert_eq!(pezpallet.docs, expected);
 }
 
 #[test]
@@ -1984,10 +1984,10 @@ fn extrinsic_metadata_ir_types() {
 
 #[test]
 fn test_pallet_runtime_docs() {
-	let docs = crate::pallet::Pallet::<Runtime>::pezpallet_documentation_metadata();
+	let docs = crate::pezpallet::Pezpallet::<Runtime>::pezpallet_documentation_metadata();
 	let readme = "Very important information :D\n";
-	let pezpallet_doc = "This is the best pallet\n";
-	let expected = vec![" Pallet documentation", readme, pezpallet_doc];
+	let pezpallet_doc = "This is the best pezpallet\n";
+	let expected = vec![" Pezpallet documentation", readme, pezpallet_doc];
 	assert_eq!(docs, expected);
 }
 
@@ -2300,19 +2300,19 @@ fn test_storage_alias() {
 	use pezframe_support::Twox64Concat;
 
 	#[pezframe_support::storage_alias]
-	type Value<T: pallet::Config>
+	type Value<T: pezpallet::Config>
 	where
 		<T as pezframe_system::Config>::AccountId: From<SomeType1> + SomeAssociation1,
-	= StorageValue<pallet::Pallet<T>, u32, ValueQuery>;
+	= StorageValue<pezpallet::Pezpallet<T>, u32, ValueQuery>;
 
 	#[pezframe_support::storage_alias]
 	type SomeCountedStorageMap<T: pallet2::Config>
 	where
 		<T as pezframe_system::Config>::AccountId: From<SomeType1> + SomeAssociation1,
-	= CountedStorageMap<pallet2::Pallet<T>, Twox64Concat, u8, u32>;
+	= CountedStorageMap<pallet2::Pezpallet<T>, Twox64Concat, u8, u32>;
 
 	TestExternalities::default().execute_with(|| {
-		pallet::Value::<Runtime>::put(10);
+		pezpallet::Value::<Runtime>::put(10);
 		assert_eq!(10, Value::<Runtime>::get());
 
 		pallet2::SomeCountedStorageMap::<Runtime>::insert(10, 100);
@@ -2335,12 +2335,12 @@ fn pezpallet_on_chain_storage_version_initializes_correctly() {
 		AllPalletsWithSystem,
 	>;
 
-	// Simple example of a pallet with in-code version 10 being added to the runtime for the first
+	// Simple example of a pezpallet with in-code version 10 being added to the runtime for the first
 	// time.
 	TestExternalities::default().execute_with(|| {
 		let in_code_version = Example::in_code_storage_version();
 
-		// Check the pallet has no storage items set.
+		// Check the pezpallet has no storage items set.
 		let pezpallet_hashed_prefix = twox_128(Example::name().as_bytes());
 		let exists = contains_prefixed_key(&pezpallet_hashed_prefix);
 		assert_eq!(exists, false);
@@ -2354,11 +2354,11 @@ fn pezpallet_on_chain_storage_version_initializes_correctly() {
 		assert_eq!(on_chain_version_after, in_code_version);
 	});
 
-	// Pallet with no in-code storage version should have the on-chain version initialized to 0.
+	// Pezpallet with no in-code storage version should have the on-chain version initialized to 0.
 	TestExternalities::default().execute_with(|| {
 		// Example4 in_code_storage_version is NoStorageVersionSet.
 
-		// Check the pallet has no storage items set.
+		// Check the pezpallet has no storage items set.
 		let pezpallet_hashed_prefix = twox_128(Example4::name().as_bytes());
 		let exists = contains_prefixed_key(&pezpallet_hashed_prefix);
 		assert_eq!(exists, false);
@@ -2452,7 +2452,7 @@ fn post_runtime_upgrade_detects_storage_version_issues() {
 	TestExternalities::default().execute_with(|| {
 		// Call `on_genesis` to put the storage version of `Example` into the storage.
 		Example::on_genesis();
-		// We set the new storage version in the pallet and that should be detected.
+		// We set the new storage version in the pezpallet and that should be detected.
 		UpdateStorageVersion::set(&true);
 		Executive::try_runtime_upgrade(UpgradeCheckSelect::PreAndPost).unwrap();
 	});
@@ -2475,8 +2475,8 @@ fn post_runtime_upgrade_detects_storage_version_issues() {
 		assert!(
 			ExecutiveWithUpgradePallet4::try_runtime_upgrade(UpgradeCheckSelect::PreAndPost)
 				.unwrap_err() ==
-				"On chain storage version set, while the pallet \
-				doesn't have the `#[pallet::storage_version(VERSION)]` attribute."
+				"On chain storage version set, while the pezpallet \
+				doesn't have the `#[pezpallet::storage_version(VERSION)]` attribute."
 					.into()
 		);
 	});
@@ -2495,39 +2495,39 @@ fn test_dispatch_context() {
 		);
 
 		// When using `dispatch`, there should be a dispatch context
-		assert_ok!(RuntimeCall::from(pallet::Call::<Runtime>::check_for_dispatch_context {})
+		assert_ok!(RuntimeCall::from(pezpallet::Call::<Runtime>::check_for_dispatch_context {})
 			.dispatch(RuntimeOrigin::root()));
 	});
 }
 
 #[test]
 fn test_call_feature_parsing() {
-	let call = pallet::Call::<Runtime>::check_for_dispatch_context {};
+	let call = pezpallet::Call::<Runtime>::check_for_dispatch_context {};
 	match call {
-		pallet::Call::<Runtime>::check_for_dispatch_context {} |
-		pallet::Call::<Runtime>::foo { .. } |
-		pallet::Call::foo_storage_layer { .. } |
-		pallet::Call::foo_index_out_of_order {} |
-		pallet::Call::foo_no_post_info {} => (),
+		pezpallet::Call::<Runtime>::check_for_dispatch_context {} |
+		pezpallet::Call::<Runtime>::foo { .. } |
+		pezpallet::Call::foo_storage_layer { .. } |
+		pezpallet::Call::foo_index_out_of_order {} |
+		pezpallet::Call::foo_no_post_info {} => (),
 		#[cfg(feature = "frame-feature-testing")]
-		pallet::Call::foo_feature_test {} => (),
-		pallet::Call::__Ignore(_, _) => (),
+		pezpallet::Call::foo_feature_test {} => (),
+		pezpallet::Call::__Ignore(_, _) => (),
 	}
 }
 
 #[test]
 #[allow(deprecated)]
 fn test_error_feature_parsing() {
-	let err = pallet::Error::<Runtime>::InsufficientProposersBalance;
+	let err = pezpallet::Error::<Runtime>::InsufficientProposersBalance;
 	match err {
-		pallet::Error::InsufficientProposersBalance |
-		pallet::Error::NonExistentStorageValue |
-		pallet::Error::Code(_) |
-		pallet::Error::Skipped(_) |
-		pallet::Error::CompactU8(_) => (),
+		pezpallet::Error::InsufficientProposersBalance |
+		pezpallet::Error::NonExistentStorageValue |
+		pezpallet::Error::Code(_) |
+		pezpallet::Error::Skipped(_) |
+		pezpallet::Error::CompactU8(_) => (),
 		#[cfg(feature = "frame-feature-testing")]
-		pallet::Error::FeatureTest => (),
-		pallet::Error::__Ignore(_, _) => (),
+		pezpallet::Error::FeatureTest => (),
+		pezpallet::Error::__Ignore(_, _) => (),
 	}
 }
 
@@ -2538,7 +2538,7 @@ fn pezpallet_metadata() {
 	let example = pallets[0].clone();
 	let example2 = pallets[1].clone();
 	{
-		// Example pallet calls is fully and partially deprecated
+		// Example pezpallet calls is fully and partially deprecated
 		let meta = &example.calls.unwrap();
 		assert_eq!(
 			EnumDeprecationInfoIR(BTreeMap::from([(
@@ -2549,7 +2549,7 @@ fn pezpallet_metadata() {
 		)
 	}
 	{
-		// Example pallet constant is deprecated
+		// Example pezpallet constant is deprecated
 		let meta = &example.constants[0];
 		assert_eq!(
 			ItemDeprecationInfoIR::Deprecated { note: "test 2", since: None },
@@ -2557,7 +2557,7 @@ fn pezpallet_metadata() {
 		)
 	}
 	{
-		// Example pallet errors are partially and fully deprecated
+		// Example pezpallet errors are partially and fully deprecated
 		let meta = &example.error.unwrap();
 		assert_eq!(
 			EnumDeprecationInfoIR(BTreeMap::from([(
@@ -2568,7 +2568,7 @@ fn pezpallet_metadata() {
 		)
 	}
 	{
-		// Example pallet events are partially and fully deprecated
+		// Example pezpallet events are partially and fully deprecated
 		let meta = example.event.unwrap();
 		assert_eq!(
 			EnumDeprecationInfoIR(BTreeMap::from([(
@@ -2579,7 +2579,7 @@ fn pezpallet_metadata() {
 		);
 	}
 	{
-		// Example2 pallet events are not deprecated
+		// Example2 pezpallet events are not deprecated
 		let meta = example2.event.unwrap();
 		assert!(!meta.deprecation_info.has_deprecated_variants());
 	}

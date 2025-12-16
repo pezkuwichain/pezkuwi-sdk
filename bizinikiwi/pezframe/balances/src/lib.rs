@@ -15,21 +15,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Balances Pallet
+//! # Balances Pezpallet
 //!
-//! The Balances pallet provides functionality for handling accounts and balances for a single
+//! The Balances pezpallet provides functionality for handling accounts and balances for a single
 //! token.
 //!
 //! It makes heavy use of concepts such as Holds and Freezes from the
 //! [`pezframe_support::traits::fungible`] traits, therefore you should read and understand those docs
-//! as a prerequisite to understanding this pallet.
+//! as a prerequisite to understanding this pezpallet.
 //!
 //! Also see the [`frame_tokens`] reference docs for higher level information regarding the
 //! place of this palet in FRAME.
 //!
 //! ## Overview
 //!
-//! The Balances pallet provides functions for:
+//! The Balances pezpallet provides functions for:
 //!
 //! - Getting and setting free balances.
 //! - Retrieving total, reserved and unreserved balances.
@@ -47,9 +47,9 @@
 //!
 //! ### Implementations
 //!
-//! The Balances pallet provides implementations for the following [`fungible`] traits. If these
+//! The Balances pezpallet provides implementations for the following [`fungible`] traits. If these
 //! traits provide the functionality that you need, then you should avoid tight coupling with the
-//! Balances pallet.
+//! Balances pezpallet.
 //!
 //! - [`fungible::Inspect`]
 //! - [`fungible::Mutate`]
@@ -77,11 +77,11 @@
 //!
 //! ## Usage
 //!
-//! The following examples show how to use the Balances pallet in your custom pallet.
+//! The following examples show how to use the Balances pezpallet in your custom pezpallet.
 //!
 //! ### Examples from the FRAME
 //!
-//! The Contract pallet uses the `Currency` trait to handle gas payment, and its types inherit from
+//! The Contract pezpallet uses the `Currency` trait to handle gas payment, and its types inherit from
 //! `Currency`:
 //!
 //! ```
@@ -96,7 +96,7 @@
 //! # fn main() {}
 //! ```
 //!
-//! The Staking pallet uses the `LockableCurrency` trait to lock a stash account's funds:
+//! The Staking pezpallet uses the `LockableCurrency` trait to lock a stash account's funds:
 //!
 //! ```
 //! use pezframe_support::traits::{WithdrawReasons, LockableCurrency};
@@ -128,14 +128,14 @@
 //!
 //! ## Genesis config
 //!
-//! The Balances pallet depends on the [`GenesisConfig`].
+//! The Balances pezpallet depends on the [`GenesisConfig`].
 //!
 //! ## Assumptions
 //!
 //! * Total issued balanced of all accounts should be less than `Config::Balance::max_value()`.
 //! * Existential Deposit is set to a value greater than zero.
 //!
-//! Note, you may find the Balances pallet still functions with an ED of zero when the
+//! Note, you may find the Balances pezpallet still functions with an ED of zero when the
 //! `insecure_zero_ed` cargo feature is enabled. However this is not a configuration which is
 //! generally supported, nor will it be.
 //!
@@ -191,7 +191,7 @@ pub use types::{
 };
 pub use weights::WeightInfo;
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 const LOG_TARGET: &str = "runtime::balances";
 
@@ -200,8 +200,8 @@ const DEFAULT_ADDRESS_URI: &str = "//Sender//{}";
 
 type AccountIdLookupOf<T> = <<T as pezframe_system::Config>::Lookup as StaticLookup>::Source;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use codec::HasCompact;
 	use pezframe_support::{
@@ -210,7 +210,7 @@ pub mod pallet {
 	};
 	use pezframe_system::pezpallet_prelude::*;
 
-	pub type CreditOf<T, I> = Credit<<T as pezframe_system::Config>::AccountId, Pallet<T, I>>;
+	pub type CreditOf<T, I> = Credit<<T as pezframe_system::Config>::AccountId, Pezpallet<T, I>>;
 
 	/// Default implementations of [`DefaultConfig`], which can be used to implement [`Config`].
 	pub mod config_preludes {
@@ -248,23 +248,23 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::config(with_default)]
+	#[pezpallet::config(with_default)]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config {
 		/// The overarching event type.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self, I>>
 			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// The overarching hold reason.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		type RuntimeHoldReason: Parameter + Member + MaxEncodedLen + Copy + VariantCount;
 
 		/// The overarching freeze reason.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		type RuntimeFreezeReason: VariantCount;
 
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 
 		/// The balance of an account.
@@ -282,23 +282,23 @@ pub mod pallet {
 			+ FixedPointOperand;
 
 		/// Handler for the unbalanced reduction when removing a dust account.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		type DustRemoval: OnUnbalanced<CreditOf<Self, I>>;
 
 		/// The minimum amount required to keep an account open. MUST BE GREATER THAN ZERO!
 		///
 		/// If you *really* need it to be zero, you can enable the feature `insecure_zero_ed` for
-		/// this pallet. However, you do so at your own risk: this will open up a major DoS vector.
+		/// this pezpallet. However, you do so at your own risk: this will open up a major DoS vector.
 		/// In case you have multiple sources of provider references, you may also get unexpected
 		/// behaviour if you set this to zero.
 		///
 		/// Bottom line: Do yourself a favour and make it at least one!
-		#[pallet::constant]
-		#[pallet::no_default_bounds]
+		#[pezpallet::constant]
+		#[pezpallet::no_default_bounds]
 		type ExistentialDeposit: Get<Self::Balance>;
 
 		/// The means of storing the balances of an account.
-		#[pallet::no_default]
+		#[pezpallet::no_default]
 		type AccountStore: StoredMap<Self::AccountId, AccountData<Self::Balance>>;
 
 		/// The ID type for reserves.
@@ -313,17 +313,17 @@ pub mod pallet {
 		/// Not strictly enforced, but used for weight estimation.
 		///
 		/// Use of locks is deprecated in favour of freezes. See `https://github.com/pezkuwichain/kurdistan-sdk/issues/40/`
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxLocks: Get<u32>;
 
 		/// The maximum number of named reserves that can exist on an account.
 		///
 		/// Use of reserves is deprecated in favour of holds. See `https://github.com/pezkuwichain/kurdistan-sdk/issues/40/`
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxReserves: Get<u32>;
 
 		/// The maximum number of individual freeze locks that can exist on an account at any time.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxFreezes: Get<u32>;
 
 		/// Allows callbacks to other pallets so they can update their bookkeeping when a slash
@@ -339,12 +339,12 @@ pub mod pallet {
 	const STORAGE_VERSION: pezframe_support::traits::StorageVersion =
 		pezframe_support::traits::StorageVersion::new(1);
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T, I = ()>(PhantomData<(T, I)>);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T, I = ()>(PhantomData<(T, I)>);
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config<I>, I: 'static = ()> {
 		/// An account was created with some free balance.
 		Endowed { account: T::AccountId, free_balance: T::Balance },
@@ -437,7 +437,7 @@ pub mod pallet {
 		FailedToMutateAccount,
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T, I = ()> {
 		/// Vesting balance too high to send value.
 		VestingBalance,
@@ -466,17 +466,17 @@ pub mod pallet {
 	}
 
 	/// The total units issued in the system.
-	#[pallet::storage]
-	#[pallet::whitelist_storage]
+	#[pezpallet::storage]
+	#[pezpallet::whitelist_storage]
 	pub type TotalIssuance<T: Config<I>, I: 'static = ()> = StorageValue<_, T::Balance, ValueQuery>;
 
 	/// The total units of outstanding deactivated balance in the system.
-	#[pallet::storage]
-	#[pallet::whitelist_storage]
+	#[pezpallet::storage]
+	#[pezpallet::whitelist_storage]
 	pub type InactiveIssuance<T: Config<I>, I: 'static = ()> =
 		StorageValue<_, T::Balance, ValueQuery>;
 
-	/// The Balances pallet example of storing the balance of an account.
+	/// The Balances pezpallet example of storing the balance of an account.
 	///
 	/// # Example
 	///
@@ -486,7 +486,7 @@ pub mod pallet {
 	///  }
 	/// ```
 	///
-	/// You can also store the balance of an account in the `System` pallet.
+	/// You can also store the balance of an account in the `System` pezpallet.
 	///
 	/// # Example
 	///
@@ -496,11 +496,11 @@ pub mod pallet {
 	///  }
 	/// ```
 	///
-	/// But this comes with tradeoffs, storing account balances in the system pallet stores
+	/// But this comes with tradeoffs, storing account balances in the system pezpallet stores
 	/// `pezframe_system` data alongside the account data contrary to storing account balances in the
-	/// `Balances` pallet, which uses a `StorageMap` to store balances data only.
-	/// NOTE: This is only used in the case that this pallet is used to store balances.
-	#[pallet::storage]
+	/// `Balances` pezpallet, which uses a `StorageMap` to store balances data only.
+	/// NOTE: This is only used in the case that this pezpallet is used to store balances.
+	#[pezpallet::storage]
 	pub type Account<T: Config<I>, I: 'static = ()> =
 		StorageMap<_, Blake2_128Concat, T::AccountId, AccountData<T::Balance>, ValueQuery>;
 
@@ -508,7 +508,7 @@ pub mod pallet {
 	/// NOTE: Should only be accessed when setting, changing and freeing a lock.
 	///
 	/// Use of locks is deprecated in favour of freezes. See `https://github.com/pezkuwichain/kurdistan-sdk/issues/40/`
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Locks<T: Config<I>, I: 'static = ()> = StorageMap<
 		_,
 		Blake2_128Concat,
@@ -520,7 +520,7 @@ pub mod pallet {
 	/// Named reserves on some account balances.
 	///
 	/// Use of reserves is deprecated in favour of holds. See `https://github.com/pezkuwichain/kurdistan-sdk/issues/40/`
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Reserves<T: Config<I>, I: 'static = ()> = StorageMap<
 		_,
 		Blake2_128Concat,
@@ -530,7 +530,7 @@ pub mod pallet {
 	>;
 
 	/// Holds on account balances.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Holds<T: Config<I>, I: 'static = ()> = StorageMap<
 		_,
 		Blake2_128Concat,
@@ -543,7 +543,7 @@ pub mod pallet {
 	>;
 
 	/// Freeze locks on account balances.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Freezes<T: Config<I>, I: 'static = ()> = StorageMap<
 		_,
 		Blake2_128Concat,
@@ -552,7 +552,7 @@ pub mod pallet {
 		ValueQuery,
 	>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	pub struct GenesisConfig<T: Config<I>, I: 'static = ()> {
 		pub balances: Vec<(T::AccountId, T::Balance)>,
 		/// Derived development accounts(Optional):
@@ -570,7 +570,7 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config<I>, I: 'static> BuildGenesisConfig for GenesisConfig<T, I> {
 		fn build(&self) {
 			let total = self.balances.iter().fold(Zero::zero(), |acc: T::Balance, &(_, n)| acc + n);
@@ -600,22 +600,22 @@ pub mod pallet {
 			// Generate additional dev accounts.
 			if let Some((num_accounts, balance, ref derivation)) = self.dev_accounts {
 				// Using the provided derivation string or default to `"//Sender//{}`".
-				Pallet::<T, I>::derive_dev_account(
+				Pezpallet::<T, I>::derive_dev_account(
 					num_accounts,
 					balance,
 					derivation.as_deref().unwrap_or(DEFAULT_ADDRESS_URI),
 				);
 			}
 			for &(ref who, free) in self.balances.iter() {
-				pezframe_system::Pallet::<T>::inc_providers(who);
+				pezframe_system::Pezpallet::<T>::inc_providers(who);
 				assert!(T::AccountStore::insert(who, AccountData { free, ..Default::default() })
 					.is_ok());
 			}
 		}
 	}
 
-	#[pallet::hooks]
-	impl<T: Config<I>, I: 'static> Hooks<BlockNumberFor<T>> for Pallet<T, I> {
+	#[pezpallet::hooks]
+	impl<T: Config<I>, I: 'static> Hooks<BlockNumberFor<T>> for Pezpallet<T, I> {
 		fn integrity_test() {
 			#[cfg(not(feature = "insecure_zero_ed"))]
 			assert!(
@@ -636,8 +636,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call(weight(<T as Config<I>>::WeightInfo))]
-	impl<T: Config<I>, I: 'static> Pallet<T, I> {
+	#[pezpallet::call(weight(<T as Config<I>>::WeightInfo))]
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 		/// Transfer some liquid free balance to another account.
 		///
 		/// `transfer_allow_death` will set the `FreeBalance` of the sender and receiver.
@@ -645,11 +645,11 @@ pub mod pallet {
 		/// of the transfer, the account will be reaped.
 		///
 		/// The dispatch origin for this call must be `Signed` by the transactor.
-		#[pallet::call_index(0)]
+		#[pezpallet::call_index(0)]
 		pub fn transfer_allow_death(
 			origin: OriginFor<T>,
 			dest: AccountIdLookupOf<T>,
-			#[pallet::compact] value: T::Balance,
+			#[pezpallet::compact] value: T::Balance,
 		) -> DispatchResult {
 			let source = ensure_signed(origin)?;
 			let dest = T::Lookup::lookup(dest)?;
@@ -659,12 +659,12 @@ pub mod pallet {
 
 		/// Exactly as `transfer_allow_death`, except the origin must be root and the source account
 		/// may be specified.
-		#[pallet::call_index(2)]
+		#[pezpallet::call_index(2)]
 		pub fn force_transfer(
 			origin: OriginFor<T>,
 			source: AccountIdLookupOf<T>,
 			dest: AccountIdLookupOf<T>,
-			#[pallet::compact] value: T::Balance,
+			#[pezpallet::compact] value: T::Balance,
 		) -> DispatchResult {
 			ensure_root(origin)?;
 			let source = T::Lookup::lookup(source)?;
@@ -678,12 +678,12 @@ pub mod pallet {
 		///
 		/// 99% of the time you want [`transfer_allow_death`] instead.
 		///
-		/// [`transfer_allow_death`]: struct.Pallet.html#method.transfer
-		#[pallet::call_index(3)]
+		/// [`transfer_allow_death`]: struct.Pezpallet.html#method.transfer
+		#[pezpallet::call_index(3)]
 		pub fn transfer_keep_alive(
 			origin: OriginFor<T>,
 			dest: AccountIdLookupOf<T>,
-			#[pallet::compact] value: T::Balance,
+			#[pezpallet::compact] value: T::Balance,
 		) -> DispatchResult {
 			let source = ensure_signed(origin)?;
 			let dest = T::Lookup::lookup(dest)?;
@@ -706,7 +706,7 @@ pub mod pallet {
 		///   of the funds the account has, causing the sender account to be killed (false), or
 		///   transfer everything except at least the existential deposit, which will guarantee to
 		///   keep the sender account alive (true).
-		#[pallet::call_index(4)]
+		#[pezpallet::call_index(4)]
 		pub fn transfer_all(
 			origin: OriginFor<T>,
 			dest: AccountIdLookupOf<T>,
@@ -732,7 +732,7 @@ pub mod pallet {
 		/// Unreserve some balance from a user by force.
 		///
 		/// Can only be called by ROOT.
-		#[pallet::call_index(5)]
+		#[pezpallet::call_index(5)]
 		pub fn force_unreserve(
 			origin: OriginFor<T>,
 			who: AccountIdLookupOf<T>,
@@ -752,8 +752,8 @@ pub mod pallet {
 		/// This will waive the transaction fee if at least all but 10% of the accounts needed to
 		/// be upgraded. (We let some not have to be upgraded just in order to allow for the
 		/// possibility of churn).
-		#[pallet::call_index(6)]
-		#[pallet::weight(T::WeightInfo::upgrade_accounts(who.len() as u32))]
+		#[pezpallet::call_index(6)]
+		#[pezpallet::weight(T::WeightInfo::upgrade_accounts(who.len() as u32))]
 		pub fn upgrade_accounts(
 			origin: OriginFor<T>,
 			who: Vec<T::AccountId>,
@@ -780,15 +780,15 @@ pub mod pallet {
 		/// Set the regular balance of a given account.
 		///
 		/// The dispatch origin for this call is `root`.
-		#[pallet::call_index(8)]
-		#[pallet::weight(
+		#[pezpallet::call_index(8)]
+		#[pezpallet::weight(
 			T::WeightInfo::force_set_balance_creating() // Creates a new account.
 				.max(T::WeightInfo::force_set_balance_killing()) // Kills an existing account.
 		)]
 		pub fn force_set_balance(
 			origin: OriginFor<T>,
 			who: AccountIdLookupOf<T>,
-			#[pallet::compact] new_free: T::Balance,
+			#[pezpallet::compact] new_free: T::Balance,
 		) -> DispatchResult {
 			ensure_root(origin)?;
 			let who = T::Lookup::lookup(who)?;
@@ -822,12 +822,12 @@ pub mod pallet {
 		///
 		/// # Example
 		#[doc = docify::embed!("./src/tests/dispatchable_tests.rs", force_adjust_total_issuance_example)]
-		#[pallet::call_index(9)]
-		#[pallet::weight(T::WeightInfo::force_adjust_total_issuance())]
+		#[pezpallet::call_index(9)]
+		#[pezpallet::weight(T::WeightInfo::force_adjust_total_issuance())]
 		pub fn force_adjust_total_issuance(
 			origin: OriginFor<T>,
 			direction: AdjustmentDirection,
-			#[pallet::compact] delta: T::Balance,
+			#[pezpallet::compact] delta: T::Balance,
 		) -> DispatchResult {
 			ensure_root(origin)?;
 
@@ -854,11 +854,11 @@ pub mod pallet {
 		///
 		/// Unlike sending funds to a _burn_ address, which merely makes the funds inaccessible,
 		/// this `burn` operation will reduce total issuance by the amount _burned_.
-		#[pallet::call_index(10)]
-		#[pallet::weight(if *keep_alive {T::WeightInfo::burn_allow_death() } else {T::WeightInfo::burn_keep_alive()})]
+		#[pezpallet::call_index(10)]
+		#[pezpallet::weight(if *keep_alive {T::WeightInfo::burn_allow_death() } else {T::WeightInfo::burn_keep_alive()})]
 		pub fn burn(
 			origin: OriginFor<T>,
-			#[pallet::compact] value: T::Balance,
+			#[pezpallet::compact] value: T::Balance,
 			keep_alive: bool,
 		) -> DispatchResult {
 			let source = ensure_signed(origin)?;
@@ -874,7 +874,7 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config<I>, I: 'static> Pallet<T, I> {
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 		/// Public function to get the total issuance.
 		pub fn total_issuance() -> T::Balance {
 			TotalIssuance::<T, I>::get()
@@ -910,7 +910,7 @@ pub mod pallet {
 			}
 			a.flags.set_new_logic();
 			if !a.reserved.is_zero() && a.frozen.is_zero() {
-				if system::Pallet::<T>::providers(who) == 0 {
+				if system::Pezpallet::<T>::providers(who) == 0 {
 					// Gah!! We have no provider refs :(
 					// This shouldn't practically happen, but we need a failsafe anyway: let's give
 					// them enough for an ED.
@@ -920,9 +920,9 @@ pub mod pallet {
 						who
 					);
 					a.free = a.free.max(Self::ed());
-					system::Pallet::<T>::inc_providers(who);
+					system::Pezpallet::<T>::inc_providers(who);
 				}
-				let _ = system::Pallet::<T>::inc_consumers_without_limit(who).defensive();
+				let _ = system::Pezpallet::<T>::inc_consumers_without_limit(who).defensive();
 			}
 			// Should never fail - we're only setting a bit.
 			let _ = T::AccountStore::try_mutate_exists(who, |account| -> DispatchResult {
@@ -1045,7 +1045,7 @@ pub mod pallet {
 		/// Returns `false` otherwise.
 		#[cfg(feature = "insecure_zero_ed")]
 		fn have_providers_or_no_zero_ed(who: &T::AccountId) -> bool {
-			pezframe_system::Pallet::<T>::providers(who) > 0
+			pezframe_system::Pezpallet::<T>::providers(who) > 0
 		}
 
 		/// Mutate an account to some new value, or delete it entirely with `None`. Will enforce
@@ -1081,35 +1081,35 @@ pub mod pallet {
 				let does_consume = !account.reserved.is_zero() || !account.frozen.is_zero();
 
 				if !did_provide && does_provide {
-					pezframe_system::Pallet::<T>::inc_providers(who);
+					pezframe_system::Pezpallet::<T>::inc_providers(who);
 				}
 				if did_consume && !does_consume {
-					pezframe_system::Pallet::<T>::dec_consumers(who);
+					pezframe_system::Pezpallet::<T>::dec_consumers(who);
 				}
 				if !did_consume && does_consume {
 					if force_consumer_bump {
 						// If we are forcing a consumer bump, we do it without limit.
-						pezframe_system::Pallet::<T>::inc_consumers_without_limit(who)?;
+						pezframe_system::Pezpallet::<T>::inc_consumers_without_limit(who)?;
 					} else {
-						pezframe_system::Pallet::<T>::inc_consumers(who)?;
+						pezframe_system::Pezpallet::<T>::inc_consumers(who)?;
 					}
 				}
-				if does_consume && pezframe_system::Pallet::<T>::consumers(who) == 0 {
+				if does_consume && pezframe_system::Pezpallet::<T>::consumers(who) == 0 {
 					// NOTE: This is a failsafe and should not happen for normal accounts. A normal
 					// account should have gotten a consumer ref in `!did_consume && does_consume`
 					// at some point.
 					log::error!(target: LOG_TARGET, "Defensively bumping a consumer ref.");
-					pezframe_system::Pallet::<T>::inc_consumers(who)?;
+					pezframe_system::Pezpallet::<T>::inc_consumers(who)?;
 				}
 				if did_provide && !does_provide {
 					// This could reap the account so must go last.
-					pezframe_system::Pallet::<T>::dec_providers(who).inspect_err(|_| {
+					pezframe_system::Pezpallet::<T>::dec_providers(who).inspect_err(|_| {
 						// best-effort revert consumer change.
 						if did_consume && !does_consume {
-							let _ = pezframe_system::Pallet::<T>::inc_consumers(who).defensive();
+							let _ = pezframe_system::Pezpallet::<T>::inc_consumers(who).defensive();
 						}
 						if !did_consume && does_consume {
-							let _ = pezframe_system::Pallet::<T>::dec_consumers(who);
+							let _ = pezframe_system::Pezpallet::<T>::dec_consumers(who);
 						}
 					})?;
 				}
@@ -1151,7 +1151,7 @@ pub mod pallet {
 					});
 				}
 				if let Some(amount) = maybe_dust {
-					Pallet::<T, I>::deposit_event(Event::DustLost { account: who.clone(), amount });
+					Pezpallet::<T, I>::deposit_event(Event::DustLost { account: who.clone(), amount });
 				}
 				(result, maybe_dust)
 			})
@@ -1362,7 +1362,7 @@ pub mod pallet {
 	}
 
 	#[cfg(any(test, feature = "try-runtime"))]
-	impl<T: Config<I>, I: 'static> Pallet<T, I> {
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 		pub(crate) fn do_try_state(
 			_n: BlockNumberFor<T>,
 		) -> Result<(), pezsp_runtime::TryRuntimeError> {

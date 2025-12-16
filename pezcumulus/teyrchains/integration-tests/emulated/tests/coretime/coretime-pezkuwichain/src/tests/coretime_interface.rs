@@ -128,7 +128,7 @@ fn transact_hardcoded_weights_are_sane() {
 
 	let config = CoretimePezkuwichain::ext_wrapper(|| {
 		Configuration::<<CoretimePezkuwichain as Chain>::Runtime>::get()
-			.expect("Pallet was configured earlier.")
+			.expect("Pezpallet was configured earlier.")
 	});
 
 	// Now run up to the block before the sale is rotated.

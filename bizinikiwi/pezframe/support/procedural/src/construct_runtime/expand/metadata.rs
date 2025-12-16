@@ -15,14 +15,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License
 
-use crate::construct_runtime::{parse::PalletPath, Pallet};
+use crate::construct_runtime::{parse::PalletPath, Pezpallet};
 use proc_macro2::TokenStream;
 use quote::quote;
 use syn::Ident;
 
 pub fn expand_runtime_metadata(
 	runtime: &Ident,
-	pezpallet_declarations: &[Pallet],
+	pezpallet_declarations: &[Pezpallet],
 	scrate: &TokenStream,
 	extrinsic: &TokenStream,
 	system_path: &PalletPath,
@@ -30,11 +30,11 @@ pub fn expand_runtime_metadata(
 	let pallets = pezpallet_declarations
 		.iter()
 		.filter_map(|pezpallet_declaration| {
-			pezpallet_declaration.find_part("Pallet").map(|_| {
+			pezpallet_declaration.find_part("Pezpallet").map(|_| {
 				let filtered_names: Vec<_> = pezpallet_declaration
 					.pezpallet_parts()
 					.iter()
-					.filter(|part| part.name() != "Pallet")
+					.filter(|part| part.name() != "Pezpallet")
 					.map(|part| part.name())
 					.collect();
 				(pezpallet_declaration, filtered_names)
@@ -170,14 +170,14 @@ pub fn expand_runtime_metadata(
 fn expand_pallet_metadata_storage(
 	filtered_names: &[&'static str],
 	runtime: &Ident,
-	decl: &Pallet,
+	decl: &Pezpallet,
 ) -> TokenStream {
 	if filtered_names.contains(&"Storage") {
 		let instance = decl.instance.as_ref().into_iter();
 		let path = &decl.path;
 
 		quote! {
-			Some(#path::Pallet::<#runtime #(, #path::#instance)*>::storage_metadata())
+			Some(#path::Pezpallet::<#runtime #(, #path::#instance)*>::storage_metadata())
 		}
 	} else {
 		quote!(None)
@@ -187,33 +187,33 @@ fn expand_pallet_metadata_storage(
 fn expand_pallet_metadata_calls(
 	filtered_names: &[&'static str],
 	runtime: &Ident,
-	decl: &Pallet,
+	decl: &Pezpallet,
 ) -> TokenStream {
 	if filtered_names.contains(&"Call") {
 		let instance = decl.instance.as_ref().into_iter();
 		let path = &decl.path;
 
 		quote! {
-			Some(#path::Pallet::<#runtime #(, #path::#instance)*>::call_functions())
+			Some(#path::Pezpallet::<#runtime #(, #path::#instance)*>::call_functions())
 		}
 	} else {
 		quote!(None)
 	}
 }
 
-fn expand_pallet_metadata_view_functions(runtime: &Ident, decl: &Pallet) -> TokenStream {
+fn expand_pallet_metadata_view_functions(runtime: &Ident, decl: &Pezpallet) -> TokenStream {
 	let path = &decl.path;
 	let instance = decl.instance.as_ref().into_iter();
 
 	quote! {
-		#path::Pallet::<#runtime #(, #path::#instance)*>::pezpallet_view_functions_metadata()
+		#path::Pezpallet::<#runtime #(, #path::#instance)*>::pezpallet_view_functions_metadata()
 	}
 }
 
 fn expand_pallet_metadata_events(
 	filtered_names: &[&'static str],
 	runtime: &Ident,
-	decl: &Pallet,
+	decl: &Pezpallet,
 ) -> TokenStream {
 	if filtered_names.contains(&"Event") {
 		let path = &decl.path;
@@ -240,45 +240,45 @@ fn expand_pallet_metadata_events(
 	}
 }
 
-fn expand_pallet_metadata_deprecation(runtime: &Ident, decl: &Pallet) -> TokenStream {
+fn expand_pallet_metadata_deprecation(runtime: &Ident, decl: &Pezpallet) -> TokenStream {
 	let path = &decl.path;
 	let instance = decl.instance.as_ref().into_iter();
 
-	quote! { #path::Pallet::<#runtime #(, #path::#instance)*>::deprecation_info() }
+	quote! { #path::Pezpallet::<#runtime #(, #path::#instance)*>::deprecation_info() }
 }
 
-fn expand_pallet_metadata_constants(runtime: &Ident, decl: &Pallet) -> TokenStream {
+fn expand_pallet_metadata_constants(runtime: &Ident, decl: &Pezpallet) -> TokenStream {
 	let path = &decl.path;
 	let instance = decl.instance.as_ref().into_iter();
 
 	quote! {
-		#path::Pallet::<#runtime #(, #path::#instance)*>::pezpallet_constants_metadata()
+		#path::Pezpallet::<#runtime #(, #path::#instance)*>::pezpallet_constants_metadata()
 	}
 }
 
-fn expand_pallet_metadata_errors(runtime: &Ident, decl: &Pallet) -> TokenStream {
+fn expand_pallet_metadata_errors(runtime: &Ident, decl: &Pezpallet) -> TokenStream {
 	let path = &decl.path;
 	let instance = decl.instance.as_ref().into_iter();
 
 	quote! {
-		#path::Pallet::<#runtime #(, #path::#instance)*>::error_metadata()
+		#path::Pezpallet::<#runtime #(, #path::#instance)*>::error_metadata()
 	}
 }
 
-fn expand_pallet_metadata_docs(runtime: &Ident, decl: &Pallet) -> TokenStream {
+fn expand_pallet_metadata_docs(runtime: &Ident, decl: &Pezpallet) -> TokenStream {
 	let path = &decl.path;
 	let instance = decl.instance.as_ref().into_iter();
 
 	quote! {
-		#path::Pallet::<#runtime #(, #path::#instance)*>::pezpallet_documentation_metadata()
+		#path::Pezpallet::<#runtime #(, #path::#instance)*>::pezpallet_documentation_metadata()
 	}
 }
 
-fn expand_pallet_metadata_associated_types(runtime: &Ident, decl: &Pallet) -> TokenStream {
+fn expand_pallet_metadata_associated_types(runtime: &Ident, decl: &Pezpallet) -> TokenStream {
 	let path = &decl.path;
 	let instance = decl.instance.as_ref().into_iter();
 
 	quote! {
-		#path::Pallet::<#runtime #(, #path::#instance)*>::pezpallet_associated_types_metadata()
+		#path::Pezpallet::<#runtime #(, #path::#instance)*>::pezpallet_associated_types_metadata()
 	}
 }

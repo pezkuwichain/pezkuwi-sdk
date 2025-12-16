@@ -40,16 +40,16 @@ type BalanceOf<T> =
 	<<T as Config>::Currency as Currency<<T as pezframe_system::Config>::AccountId>>::Balance;
 type AccountIdLookupOf<T> = <<T as pezframe_system::Config>::Lookup as StaticLookup>::Source;
 
-pub use pallet::*;
+pub use pezpallet::*;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
 	/// The module's config trait.
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// Type used for storing an account's index; implies the maximum number of accounts the
 		/// system can hold.
@@ -66,22 +66,22 @@ pub mod pallet {
 		type Currency: ReservableCurrency<Self::AccountId>;
 
 		/// The deposit needed for reserving an index.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type Deposit: Get<BalanceOf<Self>>;
 
 		/// The overarching event type.
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Assign an previously unassigned index.
 		///
 		/// Payment: `Deposit` is reserved from the sender account.
@@ -94,8 +94,8 @@ pub mod pallet {
 		///
 		/// ## Complexity
 		/// - `O(1)`.
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::claim())]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::claim())]
 		pub fn claim(origin: OriginFor<T>, index: T::AccountIndex) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 
@@ -120,8 +120,8 @@ pub mod pallet {
 		///
 		/// ## Complexity
 		/// - `O(1)`.
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::transfer())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::transfer())]
 		pub fn transfer(
 			origin: OriginFor<T>,
 			new: AccountIdLookupOf<T>,
@@ -155,8 +155,8 @@ pub mod pallet {
 		///
 		/// ## Complexity
 		/// - `O(1)`.
-		#[pallet::call_index(2)]
-		#[pallet::weight(T::WeightInfo::free())]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(T::WeightInfo::free())]
 		pub fn free(origin: OriginFor<T>, index: T::AccountIndex) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 
@@ -184,8 +184,8 @@ pub mod pallet {
 		///
 		/// ## Complexity
 		/// - `O(1)`.
-		#[pallet::call_index(3)]
-		#[pallet::weight(T::WeightInfo::force_transfer())]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(T::WeightInfo::force_transfer())]
 		pub fn force_transfer(
 			origin: OriginFor<T>,
 			new: AccountIdLookupOf<T>,
@@ -217,8 +217,8 @@ pub mod pallet {
 		///
 		/// ## Complexity
 		/// - `O(1)`.
-		#[pallet::call_index(4)]
-		#[pallet::weight(T::WeightInfo::freeze())]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(T::WeightInfo::freeze())]
 		pub fn freeze(origin: OriginFor<T>, index: T::AccountIndex) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 
@@ -244,8 +244,8 @@ pub mod pallet {
 		/// - `index`: the index whose deposit is to be poked/reconsidered.
 		///
 		/// Emits `DepositPoked` if successful.
-		#[pallet::call_index(5)]
-		#[pallet::weight(T::WeightInfo::poke_deposit())]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(T::WeightInfo::poke_deposit())]
 		pub fn poke_deposit(
 			origin: OriginFor<T>,
 			index: T::AccountIndex,
@@ -293,8 +293,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A account index was assigned.
 		IndexAssigned { who: T::AccountId, index: T::AccountIndex },
@@ -311,7 +311,7 @@ pub mod pallet {
 		},
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// The index was not already assigned.
 		NotAssigned,
@@ -326,17 +326,17 @@ pub mod pallet {
 	}
 
 	/// The lookup from index to account.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Accounts<T: Config> =
 		StorageMap<_, Blake2_128Concat, T::AccountIndex, (T::AccountId, BalanceOf<T>, bool)>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(pezframe_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		pub indices: Vec<(T::AccountIndex, T::AccountId)>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			for (a, b) in &self.indices {
@@ -346,7 +346,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	// PUBLIC IMMUTABLES
 
 	/// Lookup an T::AccountIndex to get an Id, if there's one there.
@@ -364,7 +364,7 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-impl<T: Config> StaticLookup for Pallet<T> {
+impl<T: Config> StaticLookup for Pezpallet<T> {
 	type Source = MultiAddress<T::AccountId, T::AccountIndex>;
 	type Target = T::AccountId;
 

@@ -15,9 +15,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Membership pallet benchmarking.
+//! Membership pezpallet benchmarking.
 
-use super::{Pallet as Membership, *};
+use super::{Pezpallet as Membership, *};
 use pezframe_benchmarking::v1::{account, benchmarks_instance_pallet, whitelist, BenchmarkError};
 use pezframe_support::{assert_ok, traits::EnsureOrigin};
 use pezframe_system::RawOrigin;

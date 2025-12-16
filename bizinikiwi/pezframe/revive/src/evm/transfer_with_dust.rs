@@ -186,7 +186,7 @@ mod tests {
 	use crate::{
 		test_utils::{ALICE_ADDR, BOB_ADDR},
 		tests::{builder, test_utils::set_balance_with_dust, ExtBuilder, Test},
-		Config, Error, Pallet, H160,
+		Config, Error, Pezpallet, H160,
 	};
 	use pezframe_support::{assert_err, traits::Get};
 	use pezsp_runtime::{traits::Zero, DispatchError};
@@ -349,11 +349,11 @@ mod tests {
 				set_balance_with_dust(&to, to_balance);
 
 				let total_issuance = <Test as Config>::Currency::total_issuance();
-				let evm_value = Pallet::<Test>::convert_native_to_evm(amount);
+				let evm_value = Pezpallet::<Test>::convert_native_to_evm(amount);
 
 				let (value, dust) = amount.deconstruct();
-				assert_eq!(Pallet::<Test>::has_dust(evm_value), !dust.is_zero());
-				assert_eq!(Pallet::<Test>::has_balance(evm_value), !value.is_zero());
+				assert_eq!(Pezpallet::<Test>::has_dust(evm_value), !dust.is_zero());
+				assert_eq!(Pezpallet::<Test>::has_balance(evm_value), !value.is_zero());
 
 				let result = builder::bare_call(to).evm_value(evm_value).build();
 
@@ -368,14 +368,14 @@ mod tests {
 				}
 
 				assert_eq!(
-					Pallet::<Test>::evm_balance(&from),
-					Pallet::<Test>::convert_native_to_evm(expected_from_balance),
+					Pezpallet::<Test>::evm_balance(&from),
+					Pezpallet::<Test>::convert_native_to_evm(expected_from_balance),
 					"{description}: invalid from balance"
 				);
 
 				assert_eq!(
-					Pallet::<Test>::evm_balance(&to),
-					Pallet::<Test>::convert_native_to_evm(expected_to_balance),
+					Pezpallet::<Test>::evm_balance(&to),
+					Pezpallet::<Test>::convert_native_to_evm(expected_to_balance),
 					"{description}: invalid to balance"
 				);
 

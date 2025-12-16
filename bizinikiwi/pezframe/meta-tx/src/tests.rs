@@ -36,7 +36,7 @@ fn create_tx_bare_ext(account: AccountId) -> TxBareExtension {
 		pezframe_system::CheckGenesis::<Runtime>::new(),
 		pezframe_system::CheckMortality::<Runtime>::from(Era::immortal()),
 		pezframe_system::CheckNonce::<Runtime>::from(
-			pezframe_system::Pallet::<Runtime>::account(&account).nonce,
+			pezframe_system::Pezpallet::<Runtime>::account(&account).nonce,
 		),
 		pezframe_system::CheckWeight::<Runtime>::new(),
 		pezpallet_transaction_payment::ChargeTransactionPayment::<Runtime>::from(0),
@@ -52,7 +52,7 @@ pub fn create_meta_tx_bare_ext(account: AccountId) -> MetaTxBareExtension {
 		pezframe_system::CheckGenesis::<Runtime>::new(),
 		pezframe_system::CheckMortality::<Runtime>::from(Era::immortal()),
 		pezframe_system::CheckNonce::<Runtime>::from(
-			pezframe_system::Pallet::<Runtime>::account(&account).nonce,
+			pezframe_system::Pezpallet::<Runtime>::account(&account).nonce,
 		),
 	)
 }
@@ -293,7 +293,7 @@ fn meta_tx_extension_work() {
 
 		// increment alice's nonce to invalidate the meta tx and verify that the
 		// meta tx extension works.
-		pezframe_system::Pallet::<Runtime>::inc_account_nonce(alice_account.clone());
+		pezframe_system::Pezpallet::<Runtime>::inc_account_nonce(alice_account.clone());
 
 		// Check Extrinsic validity and apply it.
 		let result = apply_extrinsic(uxt);

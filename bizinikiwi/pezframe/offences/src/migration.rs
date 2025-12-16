@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use super::{Config, Kind, OffenceDetails, Pallet, Perbill, SessionIndex, LOG_TARGET};
+use super::{Config, Kind, OffenceDetails, Pezpallet, Perbill, SessionIndex, LOG_TARGET};
 use alloc::vec::Vec;
 use pezframe_support::{
 	pezpallet_prelude::ValueQuery,
@@ -36,7 +36,7 @@ mod v0 {
 
 	#[storage_alias]
 	pub type ReportsByKindIndex<T: Config> = StorageMap<
-		Pallet<T>,
+		Pezpallet<T>,
 		Twox64Concat,
 		Kind,
 		Vec<u8>, // (O::TimeSlot, ReportIdOf<T>)
@@ -63,13 +63,13 @@ pub mod v1 {
 		}
 
 		fn on_runtime_upgrade() -> Weight {
-			if Pallet::<T>::on_chain_storage_version() > 0 {
+			if Pezpallet::<T>::on_chain_storage_version() > 0 {
 				log::info!(target: LOG_TARGET, "pezpallet_offences::MigrateToV1 should be removed");
 				return T::DbWeight::get().reads(1);
 			}
 
 			let keys_removed = v0::ReportsByKindIndex::<T>::clear(u32::MAX, None).unique as u64;
-			StorageVersion::new(1).put::<Pallet<T>>();
+			StorageVersion::new(1).put::<Pezpallet<T>>();
 
 			// + 1 for reading/writing the new storage version
 			T::DbWeight::get().reads_writes(keys_removed + 1, keys_removed + 1)
@@ -77,7 +77,7 @@ pub mod v1 {
 
 		#[cfg(feature = "try-runtime")]
 		fn post_upgrade(_state: Vec<u8>) -> Result<(), TryRuntimeError> {
-			let onchain = Pallet::<T>::on_chain_storage_version();
+			let onchain = Pezpallet::<T>::on_chain_storage_version();
 			ensure!(onchain == 1, "pezpallet_offences::MigrateToV1 needs to be run");
 			ensure!(
 				v0::ReportsByKindIndex::<T>::iter_keys().count() == 0,
@@ -99,7 +99,7 @@ type DeferredOffenceOf<T> = (
 // at a later time.
 #[storage_alias]
 type DeferredOffences<T: Config> =
-	StorageValue<crate::Pallet<T>, Vec<DeferredOffenceOf<T>>, ValueQuery>;
+	StorageValue<crate::Pezpallet<T>, Vec<DeferredOffenceOf<T>>, ValueQuery>;
 
 pub fn remove_deferred_storage<T: Config>() -> Weight {
 	let mut weight = T::DbWeight::get().reads_writes(1, 1);

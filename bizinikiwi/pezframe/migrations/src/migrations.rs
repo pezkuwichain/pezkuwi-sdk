@@ -13,7 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Generic multi block migrations not specific to any pallet.
+//! Generic multi block migrations not specific to any pezpallet.
 
 use crate::{weights::WeightInfo, Config};
 use codec::Encode;
@@ -27,7 +27,7 @@ use pezsp_core::{twox_128, Get};
 use pezsp_io::{storage::clear_prefix, KillStorageResult};
 use pezsp_runtime::SaturatedConversion;
 
-/// Remove all of a pallet's state and re-initializes it to the current in-code storage version.
+/// Remove all of a pezpallet's state and re-initializes it to the current in-code storage version.
 ///
 /// It uses the multi block migration frame. Hence it is safe to use even on
 /// pallets that contain a lot of storage.
@@ -35,11 +35,11 @@ use pezsp_runtime::SaturatedConversion;
 /// # Parameters
 ///
 /// - T: The runtime. Used to access the weight definition.
-/// - P: The pallet to resetted as defined in construct runtime
+/// - P: The pezpallet to resetted as defined in construct runtime
 ///
 /// # Note
 ///
-/// If your pallet does rely of some state in genesis you need to take care of that
+/// If your pezpallet does rely of some state in genesis you need to take care of that
 /// separately. This migration only sets the storage version after wiping.
 pub struct ResetPallet<T, P>(PhantomData<(T, P)>);
 

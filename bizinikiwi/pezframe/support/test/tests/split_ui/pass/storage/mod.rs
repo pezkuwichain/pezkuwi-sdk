@@ -19,9 +19,9 @@ use pezframe_support::pezpallet_macros::pezpallet_section;
 
 #[pezpallet_section]
 mod storage {
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Value<T> = StorageValue<_, u32, ValueQuery>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Map<T> = StorageMap<_, _, u32, u32, ValueQuery>;
 }

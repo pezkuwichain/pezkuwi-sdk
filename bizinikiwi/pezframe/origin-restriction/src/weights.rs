@@ -22,7 +22,7 @@
 
 use pezframe_support::weights::Weight;
 
-/// Weight functions needed for pallet origins restriction.
+/// Weight functions needed for pezpallet origins restriction.
 pub trait WeightInfo {
 	fn clean_usage() -> Weight;
 	fn restrict_origin_tx_ext() -> Weight;

@@ -1,4 +1,4 @@
-# Scheduler Pallet
+# Scheduler Pezpallet
 
 > TODO: this section is still heavily under construction. key questions about availability cores and validator
 > assignment are still open and the flow of the section may be contradictory or inconsistent

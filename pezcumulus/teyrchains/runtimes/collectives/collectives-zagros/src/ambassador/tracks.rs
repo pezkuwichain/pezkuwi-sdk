@@ -38,7 +38,7 @@ pub mod constants {
 	pub const MASTER_AMBASSADOR_TIER_9: TrackId = 9;
 }
 
-/// The type implementing the [`pezpallet_referenda::TracksInfo`] trait for referenda pallet.
+/// The type implementing the [`pezpallet_referenda::TracksInfo`] trait for referenda pezpallet.
 pub struct TracksInfo;
 
 /// Information on the voting tracks.

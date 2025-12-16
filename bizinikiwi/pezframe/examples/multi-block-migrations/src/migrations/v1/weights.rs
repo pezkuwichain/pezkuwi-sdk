@@ -27,10 +27,10 @@
 // pezkuwi-omni-bencher
 // v1
 // benchmark
-// pallet
+// pezpallet
 // --runtime
 // target/release/wbuild/pez-kitchensink-runtime/pez_kitchensink_runtime.compact.compressed.wasm
-// --pallet
+// --pezpallet
 // pezpallet_example_mbm
 // --extrinsic
 //

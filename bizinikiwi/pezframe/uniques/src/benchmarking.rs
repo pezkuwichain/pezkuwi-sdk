@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Uniques pallet benchmarking.
+//! Uniques pezpallet benchmarking.
 
 #![cfg(feature = "runtime-benchmarks")]
 
@@ -31,7 +31,7 @@ use pezframe_support::{
 use pezframe_system::RawOrigin as SystemOrigin;
 use pezsp_runtime::traits::Bounded;
 
-use crate::Pallet as Uniques;
+use crate::Pezpallet as Uniques;
 
 const SEED: u32 = 0;
 
@@ -126,7 +126,7 @@ fn add_item_attribute<T: Config<I>, I: 'static>(
 }
 
 fn assert_last_event<T: Config<I>, I: 'static>(generic_event: <T as Config<I>>::RuntimeEvent) {
-	let events = pezframe_system::Pallet::<T>::events();
+	let events = pezframe_system::Pezpallet::<T>::events();
 	let system_event: <T as pezframe_system::Config>::RuntimeEvent = generic_event.into();
 	// compare to the last event record
 	let pezframe_system::EventRecord { event, .. } = &events[events.len() - 1];

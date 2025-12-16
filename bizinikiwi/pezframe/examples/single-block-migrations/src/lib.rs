@@ -21,10 +21,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-//! # Single Block Migration Example Pallet
+//! # Single Block Migration Example Pezpallet
 //!
-//! An example pallet demonstrating best-practices for writing single-block migrations in the
-//! context of upgrading pallet storage.
+//! An example pezpallet demonstrating best-practices for writing single-block migrations in the
+//! context of upgrading pezpallet storage.
 //!
 //! ## Forewarning
 //!
@@ -37,26 +37,26 @@
 //!
 //! TODO: Link above to multi-block migration example.
 //!
-//! ## Pallet Overview
+//! ## Pezpallet Overview
 //!
-//! This example pallet contains a single storage item [`Value`](pallet::Value), which may be set by
+//! This example pezpallet contains a single storage item [`Value`](pezpallet::Value), which may be set by
 //! any signed origin by calling the [`set_value`](crate::Call::set_value) extrinsic.
 //!
-//! For the purposes of this exercise, we imagine that in [`StorageVersion`] V0 of this pallet
-//! [`Value`](pallet::Value) is a `u32`, and this what is currently stored on-chain.
+//! For the purposes of this exercise, we imagine that in [`StorageVersion`] V0 of this pezpallet
+//! [`Value`](pezpallet::Value) is a `u32`, and this what is currently stored on-chain.
 //!
 //! ```ignore
 //! // (Old) Storage Version V0 representation of `Value`
-//! #[pallet::storage]
+//! #[pezpallet::storage]
 //! pub type Value<T: Config> = StorageValue<_, u32>;
 //! ```
 //!
-//! In [`StorageVersion`] V1 of the pallet a new struct [`CurrentAndPreviousValue`] is introduced:
+//! In [`StorageVersion`] V1 of the pezpallet a new struct [`CurrentAndPreviousValue`] is introduced:
 #![doc = docify::embed!("src/lib.rs", CurrentAndPreviousValue)]
-//! and [`Value`](pallet::Value) is updated to store this new struct instead of a `u32`:
+//! and [`Value`](pezpallet::Value) is updated to store this new struct instead of a `u32`:
 #![doc = docify::embed!("src/lib.rs", Value)]
 //!
-//! In StorageVersion V1 of the pallet when [`set_value`](crate::Call::set_value) is called, the
+//! In StorageVersion V1 of the pezpallet when [`set_value`](crate::Call::set_value) is called, the
 //! new value is stored in the `current` field of [`CurrentAndPreviousValue`], and the previous
 //! value (if it exists) is stored in the `previous` field.
 #![doc = docify::embed!("src/lib.rs", pezpallet_calls)]
@@ -74,18 +74,18 @@
 //!
 //! Writing a pallets migrations in a separate module is strongly recommended.
 //!
-//! Here's how the migration module is defined for this pallet:
+//! Here's how the migration module is defined for this pezpallet:
 //!
 //! ```text
 //! bizinikiwi/pezframe/examples/single-block-migrations/src/
-//! ├── lib.rs       <-- pallet definition
-//! ├── Cargo.toml   <-- pallet manifest
+//! ├── lib.rs       <-- pezpallet definition
+//! ├── Cargo.toml   <-- pezpallet manifest
 //! └── migrations/
 //!    ├── mod.rs    <-- migrations module definition
 //!    └── v1.rs     <-- migration logic for the V0 to V1 transition
 //! ```
 //!
-//! This structure allows keeping migration logic separate from the pallet logic and
+//! This structure allows keeping migration logic separate from the pezpallet logic and
 //! easily adding new migrations in the future.
 //!
 //! ## Writing the Migration
@@ -114,12 +114,12 @@
 //! Otherwise, we would have two implementations of [`OnRuntimeUpgrade`] which could be confusing,
 //! and may lead to accidentally using the wrong one.
 //!
-//! #### Standalone Struct or Pallet Hook?
+//! #### Standalone Struct or Pezpallet Hook?
 //!
 //! Note that the storage migration logic is attached to a standalone struct implementing
 //! [`UncheckedOnRuntimeUpgrade`], rather than implementing the
 //! [`Hooks::on_runtime_upgrade`](pezframe_support::traits::Hooks::on_runtime_upgrade) hook directly on
-//! the pallet. The pallet hook is better suited for special types of logic that need to execute on
+//! the pezpallet. The pezpallet hook is better suited for special types of logic that need to execute on
 //! every runtime upgrade, but not so much for one-off storage migrations.
 //!
 //! ### `MigrateV0ToV1`
@@ -142,7 +142,7 @@
 //! When writing migration tests, don't forget to check:
 //! - `on_runtime_upgrade` returns the expected weight
 //! - `post_upgrade` succeeds when given the bytes returned by `pre_upgrade`
-//! - Pallet storage is in the expected state after the migration
+//! - Pezpallet storage is in the expected state after the migration
 //!
 //! [`VersionedMigration`]: pezframe_support::migrations::VersionedMigration
 //! [`GetStorageVersion`]: pezframe_support::traits::GetStorageVersion
@@ -150,13 +150,13 @@
 //! [`UncheckedOnRuntimeUpgrade`]: pezframe_support::traits::UncheckedOnRuntimeUpgrade
 //! [`MigrateV0ToV1`]: crate::migrations::v1::MigrateV0ToV1
 
-// We make sure this pallet uses `no_std` for compiling to Wasm.
+// We make sure this pezpallet uses `no_std` for compiling to Wasm.
 #![cfg_attr(not(feature = "std"), no_std)]
 // allow non-camel-case names for storage version V0 value
 #![allow(non_camel_case_types)]
 
-// Re-export pallet items so that they can be accessed from the crate namespace.
-pub use pallet::*;
+// Re-export pezpallet items so that they can be accessed from the crate namespace.
+pub use pezpallet::*;
 
 // Export migrations so they may be used in the runtime.
 pub mod migrations;
@@ -182,33 +182,33 @@ pub struct CurrentAndPreviousValue {
 	pub previous: Option<u32>,
 }
 
-// Pallet for demonstrating storage migrations.
-#[pezframe_support::pallet(dev_mode)]
-pub mod pallet {
+// Pezpallet for demonstrating storage migrations.
+#[pezframe_support::pezpallet(dev_mode)]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	/// Define the current [`StorageVersion`] of the pallet.
+	/// Define the current [`StorageVersion`] of the pezpallet.
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(1);
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
 	/// [`StorageVersion`] V1 of [`Value`].
 	///
 	/// Currently used.
 	#[docify::export]
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Value<T: Config> = StorageValue<_, CurrentAndPreviousValue>;
 
 	#[docify::export(pezpallet_calls)]
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		pub fn set_value(origin: OriginFor<T>, value: u32) -> DispatchResult {
 			ensure_signed(origin)?;
 

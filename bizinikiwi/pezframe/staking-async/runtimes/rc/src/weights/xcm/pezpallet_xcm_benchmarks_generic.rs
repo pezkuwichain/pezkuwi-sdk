@@ -27,10 +27,10 @@
 // frame-omni-bencher
 // v1
 // benchmark
-// pallet
+// pezpallet
 // --extrinsic=*
 // --runtime=target/production/wbuild/zagros-runtime/zagros_runtime.wasm
-// --pallet=pezpallet_xcm_benchmarks::generic
+// --pezpallet=pezpallet_xcm_benchmarks::generic
 // --header=/__w/pezkuwi-sdk/pezkuwi-sdk/pezkuwi/file_header.txt
 // --output=./pezkuwi/runtime/zagros/src/weights/xcm
 // --wasm-execution=compiled

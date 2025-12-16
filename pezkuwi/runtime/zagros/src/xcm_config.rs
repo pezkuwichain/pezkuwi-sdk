@@ -99,7 +99,7 @@ type LocalOriginConverter = (
 	// If the origin kind is `Native` and the XCM origin is the `AccountId32` location, then it can
 	// be expressed using the `Signed` origin variant.
 	SignedAccountId32AsNative<ThisNetwork, RuntimeOrigin>,
-	// Xcm origins can be represented natively under the Xcm pallet's Xcm origin.
+	// Xcm origins can be represented natively under the Xcm pezpallet's Xcm origin.
 	XcmPassthrough<RuntimeOrigin>,
 );
 
@@ -274,7 +274,7 @@ pub type FellowshipAdminToPlurality =
 /// Type to convert the `Treasurer` origin to a Plurality `Location` value.
 pub type TreasurerToPlurality = OriginToPluralityVoice<RuntimeOrigin, Treasurer, TreasurerBodyId>;
 
-/// Type to convert a pallet `Origin` type value into a `Location` value which represents an
+/// Type to convert a pezpallet `Origin` type value into a `Location` value which represents an
 /// interior location of this chain for a destination chain.
 pub type LocalPalletOriginToLocation = (
 	// GeneralAdmin origin to be used in XCM as a corresponding Plurality `Location` value.

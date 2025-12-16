@@ -22,7 +22,7 @@ use codec::Decode;
 use pezframe_benchmarking::v2::*;
 use pezframe_system::RawOrigin;
 use pezpallet_session::*;
-pub struct Pallet<T: Config>(pezpallet_session::Pallet<T>);
+pub struct Pezpallet<T: Config>(pezpallet_session::Pezpallet<T>);
 pub trait Config: pezpallet_session::Config {}
 
 #[benchmarks]
@@ -32,10 +32,10 @@ mod benchmarks {
 	#[benchmark]
 	fn set_keys() -> Result<(), BenchmarkError> {
 		let caller: T::AccountId = whitelisted_caller();
-		pezframe_system::Pallet::<T>::inc_providers(&caller);
+		pezframe_system::Pezpallet::<T>::inc_providers(&caller);
 		let keys = T::Keys::decode(&mut pezsp_runtime::traits::TrailingZeroInput::zeroes()).unwrap();
 		let proof: Vec<u8> = vec![0, 1, 2, 3];
-		<pezpallet_session::Pallet<T>>::ensure_can_pay_key_deposit(&caller).unwrap();
+		<pezpallet_session::Pezpallet<T>>::ensure_can_pay_key_deposit(&caller).unwrap();
 
 		#[extrinsic_call]
 		_(RawOrigin::Signed(caller), keys, proof);
@@ -46,11 +46,11 @@ mod benchmarks {
 	#[benchmark]
 	fn purge_keys() -> Result<(), BenchmarkError> {
 		let caller: T::AccountId = whitelisted_caller();
-		pezframe_system::Pallet::<T>::inc_providers(&caller);
+		pezframe_system::Pezpallet::<T>::inc_providers(&caller);
 		let keys = T::Keys::decode(&mut pezsp_runtime::traits::TrailingZeroInput::zeroes()).unwrap();
 		let proof: Vec<u8> = vec![0, 1, 2, 3];
-		<pezpallet_session::Pallet<T>>::ensure_can_pay_key_deposit(&caller).unwrap();
-		let _t = pezpallet_session::Pallet::<T>::set_keys(
+		<pezpallet_session::Pezpallet<T>>::ensure_can_pay_key_deposit(&caller).unwrap();
+		let _t = pezpallet_session::Pezpallet::<T>::set_keys(
 			RawOrigin::Signed(caller.clone()).into(),
 			keys,
 			proof,

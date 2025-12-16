@@ -15,16 +15,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use crate::{Config, Pallet, Weight, LOG_TARGET};
+use crate::{Config, Pezpallet, Weight, LOG_TARGET};
 use pezframe_support::{pezpallet_prelude::*, storage::migration, traits::OnRuntimeUpgrade};
 use log;
 
 /// The in-code storage version.
 pub const STORAGE_VERSION: StorageVersion = StorageVersion::new(2);
 
-/// Wrapper for all migrations of this pallet.
+/// Wrapper for all migrations of this pezpallet.
 pub fn migrate<T: Config<I>, I: 'static>() -> Weight {
-	let on_chain_version = Pallet::<T, I>::on_chain_storage_version();
+	let on_chain_version = Pezpallet::<T, I>::on_chain_storage_version();
 	let mut weight: Weight = Weight::zero();
 
 	if on_chain_version < 1 {
@@ -35,7 +35,7 @@ pub fn migrate<T: Config<I>, I: 'static>() -> Weight {
 		weight = weight.saturating_add(v1_to_v2::migrate::<T, I>());
 	}
 
-	STORAGE_VERSION.put::<Pallet<T, I>>();
+	STORAGE_VERSION.put::<Pezpallet<T, I>>();
 	weight = weight.saturating_add(T::DbWeight::get().writes(1));
 
 	weight
@@ -58,7 +58,7 @@ mod v0_to_v1 {
 		log::info!(target: LOG_TARGET, "Running migration v0_to_v1.");
 
 		let res = migration::clear_storage_prefix(
-			<Pallet<T, I>>::name().as_bytes(),
+			<Pezpallet<T, I>>::name().as_bytes(),
 			b"UpForKicking",
 			b"",
 			None,
@@ -154,7 +154,7 @@ pub(crate) mod v1_to_v2 {
 			MemberRoleV1,
 			BoundedVec<T::AccountId, T::MaxMembersCount>,
 			Twox64Concat,
-		>(<Pallet<T, I>>::name().as_bytes(), b"Members", role)
+		>(<Pezpallet<T, I>>::name().as_bytes(), b"Members", role)
 		.unwrap_or_default()
 	}
 }

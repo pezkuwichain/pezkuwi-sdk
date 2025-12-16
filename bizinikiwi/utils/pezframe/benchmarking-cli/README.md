@@ -4,7 +4,7 @@ This crate contains commands to benchmark various aspects of Bizinikiwi and the 
 The goal is to have a comprehensive suite of benchmarks that cover all aspects of Bizinikiwi and the hardware that its
 running on.  
 There exist fundamentally two ways to use this crate. A node-integrated CLI version, and a freestanding CLI. If you are
-only interested in pallet benchmarking, then skip ahead to the [Freestanding CLI](#freestanding-cli).
+only interested in pezpallet benchmarking, then skip ahead to the [Freestanding CLI](#freestanding-cli).
 
 # Node Integrated CLI
 
@@ -32,7 +32,7 @@ SUBCOMMANDS:
     block       Benchmark the execution time of historic blocks
     machine     Command to benchmark the hardware.
     overhead    Benchmark the execution overhead per-block and per-extrinsic
-    pallet      Benchmark the extrinsic weight of FRAME Pallets
+    pezpallet      Benchmark the extrinsic weight of FRAME Pallets
     storage     Benchmark the storage speed of a chain snapshot
 ```
 
@@ -45,7 +45,7 @@ comparable.
 
 The freestanding is a standalone CLI that does not rely on any node integration. It can be used to benchmark pallets of
 any FRAME runtime that does not utilize 3rd party host functions.  
-It currently only supports pallet benchmarking, since the other commands still rely on a node.
+It currently only supports pezpallet benchmarking, since the other commands still rely on a node.
 
 ## Installation
 
@@ -57,7 +57,7 @@ cargo install --locked --path bizinikiwi/utils/pezframe/omni-bencher --profile=p
 
 ## Usage
 
-The exposed pallet sub-command is identical as the node-integrated CLI. The only difference is that it needs to be prefixed
+The exposed pezpallet sub-command is identical as the node-integrated CLI. The only difference is that it needs to be prefixed
 with a `v1` to ensure drop-in compatibility.
 
 First we need to ensure that there is a runtime available. As example we will build the zagros runtime:
@@ -70,12 +70,12 @@ Now the benchmarking can be started with:
 
 ```sh
 frame-omni-bencher v1 \
-    benchmark pallet \
+    benchmark pezpallet \
     --runtime target/release/wbuild/zagros-runtime/zagros-runtime.compact.compressed.wasm \
-    --pallet "pallet_balances" --extrinsic ""
+    --pezpallet "pallet_balances" --extrinsic ""
 ```
 
-For the exact arguments of the `pallet` command, please refer to the [pallet] sub-module.
+For the exact arguments of the `pezpallet` command, please refer to the [pezpallet] sub-module.
 
 # Commands
 
@@ -84,14 +84,14 @@ The sub-commands of both CLIs have the same semantics and are documented in thei
 - [block] Compare the weight of a historic block to its actual resource usage
 - [machine] Gauges the speed of the hardware
 - [overhead] Creates weight files for the *Block*- and *Extrinsic*-base weights
-- [pallet] Creates weight files for a Pallet
+- [pezpallet] Creates weight files for a Pezpallet
 - [storage] Creates weight files for *Read* and *Write* storage operations
 
 License: Apache-2.0
 
 <!-- LINKS -->
 
-[pallet]: ../../../frame/benchmarking/README.md
+[pezpallet]: ../../../frame/benchmarking/README.md
 [machine]: src/machine/README.md
 [storage]: src/storage/README.md
 [overhead]: src/overhead/README.md

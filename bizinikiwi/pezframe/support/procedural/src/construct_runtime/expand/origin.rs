@@ -15,22 +15,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License
 
-use crate::construct_runtime::{Pallet, SYSTEM_PALLET_NAME};
+use crate::construct_runtime::{Pezpallet, SYSTEM_PALLET_NAME};
 use proc_macro2::TokenStream;
 use quote::quote;
 use syn::{Generics, Ident};
 
 pub fn expand_outer_origin(
 	runtime: &Ident,
-	system_pallet: &Pallet,
-	pallets: &[Pallet],
+	system_pallet: &Pezpallet,
+	pallets: &[Pezpallet],
 	scrate: &TokenStream,
 ) -> syn::Result<TokenStream> {
 	let mut caller_variants = TokenStream::new();
 	let mut pezpallet_conversions = TokenStream::new();
 	let mut query_origin_part_macros = Vec::new();
 
-	for pezpallet_decl in pallets.iter().filter(|pallet| pallet.name != SYSTEM_PALLET_NAME) {
+	for pezpallet_decl in pallets.iter().filter(|pezpallet| pezpallet.name != SYSTEM_PALLET_NAME) {
 		if let Some(pezpallet_entry) = pezpallet_decl.find_part("Origin") {
 			let instance = pezpallet_decl.instance.as_ref();
 			let index = pezpallet_decl.index;
@@ -40,8 +40,8 @@ pub fn expand_outer_origin(
 
 			if instance.is_some() && generics.params.is_empty() {
 				let msg = format!(
-					"Instantiable pallet with no generic `Origin` cannot \
-					 be constructed: pallet `{}` must have generic `Origin`",
+					"Instantiable pezpallet with no generic `Origin` cannot \
+					 be constructed: pezpallet `{}` must have generic `Origin`",
 					name
 				);
 				return Err(syn::Error::new(name.span(), msg));
@@ -283,7 +283,7 @@ pub fn expand_outer_origin(
 		}
 
 		impl From<RuntimeOrigin> for core::result::Result<#system_path::Origin<#runtime>, RuntimeOrigin> {
-			/// NOTE: converting to pallet origin loses the origin filter information.
+			/// NOTE: converting to pezpallet origin loses the origin filter information.
 			fn from(val: RuntimeOrigin) -> Self {
 				if let OriginCaller::system(l) = val.caller {
 					Ok(l)
@@ -321,15 +321,15 @@ pub fn expand_outer_origin(
 
 fn expand_origin_caller_variant(
 	runtime: &Ident,
-	pallet: &Pallet,
+	pezpallet: &Pezpallet,
 	index: u8,
 	instance: Option<&Ident>,
 	generics: &Generics,
 ) -> TokenStream {
 	let part_is_generic = !generics.params.is_empty();
-	let variant_name = &pallet.name;
-	let path = &pallet.path;
-	let attr = pallet.get_attributes();
+	let variant_name = &pezpallet.name;
+	let path = &pezpallet.path;
+	let attr = pezpallet.get_attributes();
 
 	match instance {
 		Some(inst) if part_is_generic => quote! {
@@ -358,12 +358,12 @@ fn expand_origin_caller_variant(
 fn expand_origin_pallet_conversions(
 	_scrate: &TokenStream,
 	runtime: &Ident,
-	pallet: &Pallet,
+	pezpallet: &Pezpallet,
 	instance: Option<&Ident>,
 	generics: &Generics,
 ) -> TokenStream {
-	let path = &pallet.path;
-	let variant_name = &pallet.name;
+	let path = &pezpallet.path;
+	let variant_name = &pezpallet.name;
 
 	let part_is_generic = !generics.params.is_empty();
 	let pezpallet_origin = match instance {
@@ -374,7 +374,7 @@ fn expand_origin_pallet_conversions(
 	};
 
 	let doc_string = get_intra_doc_string(" Convert to runtime origin using", &path.module_name());
-	let attr = pallet.get_attributes();
+	let attr = pezpallet.get_attributes();
 
 	quote! {
 		#attr
@@ -395,7 +395,7 @@ fn expand_origin_pallet_conversions(
 
 		#attr
 		impl From<RuntimeOrigin> for core::result::Result<#pezpallet_origin, RuntimeOrigin> {
-			/// NOTE: converting to pallet origin loses the origin filter information.
+			/// NOTE: converting to pezpallet origin loses the origin filter information.
 			fn from(val: RuntimeOrigin) -> Self {
 				if let OriginCaller::#variant_name(l) = val.caller {
 					Ok(l)

@@ -44,7 +44,7 @@ fn block_tests_run_on_drop() {
 	BlockTests::new().add(123, || panic!("if this test passes, block tests run properly"));
 }
 
-/// Test that ensures that the teyrchain-system pallet accepts both the legacy
+/// Test that ensures that the teyrchain-system pezpallet accepts both the legacy
 /// and versioned inherent format.
 #[test]
 fn test_inherent_compatibility() {
@@ -565,7 +565,7 @@ fn inherent_messages_are_compressed() {
 
 #[test]
 fn check_hrmp_message_metadata_works_with_known_channel() {
-	Pallet::<Test>::check_hrmp_message_metadata(
+	Pezpallet::<Test>::check_hrmp_message_metadata(
 		&[(1000.into(), Default::default())],
 		&mut None,
 		(1, 1000.into()),
@@ -578,7 +578,7 @@ fn check_hrmp_message_metadata_works_with_known_channel() {
 	doesn't have a channel opened to this teyrchain"
 )]
 fn check_hrmp_message_metadata_panics_on_unknown_channel() {
-	Pallet::<Test>::check_hrmp_message_metadata(
+	Pezpallet::<Test>::check_hrmp_message_metadata(
 		&[(1000.into(), Default::default())],
 		&mut None,
 		(1, 2000.into()),
@@ -587,13 +587,13 @@ fn check_hrmp_message_metadata_panics_on_unknown_channel() {
 
 #[test]
 fn check_hrmp_message_metadata_works_when_correctly_ordered() {
-	Pallet::<Test>::check_hrmp_message_metadata(
+	Pezpallet::<Test>::check_hrmp_message_metadata(
 		&[(1000.into(), Default::default())],
 		&mut None,
 		(1, 1000.into()),
 	);
 
-	Pallet::<Test>::check_hrmp_message_metadata(
+	Pezpallet::<Test>::check_hrmp_message_metadata(
 		&[(1000.into(), Default::default())],
 		&mut Some((0, 1000.into())),
 		(1, 1000.into()),
@@ -601,22 +601,22 @@ fn check_hrmp_message_metadata_works_when_correctly_ordered() {
 
 	// Test chained checks
 	let mut prev = None;
-	Pallet::<Test>::check_hrmp_message_metadata(
+	Pezpallet::<Test>::check_hrmp_message_metadata(
 		&[(1000.into(), Default::default())],
 		&mut prev,
 		(0, 1000.into()),
 	);
-	Pallet::<Test>::check_hrmp_message_metadata(
+	Pezpallet::<Test>::check_hrmp_message_metadata(
 		&[(1000.into(), Default::default())],
 		&mut prev,
 		(1, 1000.into()),
 	);
-	Pallet::<Test>::check_hrmp_message_metadata(
+	Pezpallet::<Test>::check_hrmp_message_metadata(
 		&[(1000.into(), Default::default())],
 		&mut prev,
 		(1, 1000.into()),
 	);
-	Pallet::<Test>::check_hrmp_message_metadata(
+	Pezpallet::<Test>::check_hrmp_message_metadata(
 		&[(1000.into(), Default::default())],
 		&mut prev,
 		(2, 1000.into()),
@@ -626,7 +626,7 @@ fn check_hrmp_message_metadata_works_when_correctly_ordered() {
 #[test]
 #[should_panic(expected = "[HRMP] Messages order violation")]
 fn check_hrmp_message_metadata_panics_on_unordered_sent_at() {
-	Pallet::<Test>::check_hrmp_message_metadata(
+	Pezpallet::<Test>::check_hrmp_message_metadata(
 		&[(1000.into(), Default::default())],
 		&mut Some((1, 1000.into())),
 		(0, 1000.into()),
@@ -638,12 +638,12 @@ fn check_hrmp_message_metadata_panics_on_unordered_sent_at() {
 fn chained_check_hrmp_message_metadata_panics_on_unordered_sent_at() {
 	// Test chained checks
 	let mut prev = None;
-	Pallet::<Test>::check_hrmp_message_metadata(
+	Pezpallet::<Test>::check_hrmp_message_metadata(
 		&[(1000.into(), Default::default())],
 		&mut prev,
 		(1, 1000.into()),
 	);
-	Pallet::<Test>::check_hrmp_message_metadata(
+	Pezpallet::<Test>::check_hrmp_message_metadata(
 		&[(1000.into(), Default::default())],
 		&mut prev,
 		(0, 1000.into()),
@@ -653,7 +653,7 @@ fn chained_check_hrmp_message_metadata_panics_on_unordered_sent_at() {
 #[test]
 #[should_panic(expected = "[HRMP] Messages order violation")]
 fn check_hrmp_message_metadata_panics_on_unordered_para_id() {
-	Pallet::<Test>::check_hrmp_message_metadata(
+	Pezpallet::<Test>::check_hrmp_message_metadata(
 		&[(1000.into(), Default::default())],
 		&mut Some((1, 2000.into())),
 		(1, 1000.into()),
@@ -665,12 +665,12 @@ fn check_hrmp_message_metadata_panics_on_unordered_para_id() {
 fn chained_check_hrmp_message_metadata_panics_on_unordered_para_id() {
 	// Test chained checks
 	let mut prev = None;
-	Pallet::<Test>::check_hrmp_message_metadata(
+	Pezpallet::<Test>::check_hrmp_message_metadata(
 		&[(1000.into(), Default::default()), (2000.into(), Default::default())],
 		&mut prev,
 		(1, 2000.into()),
 	);
-	Pallet::<Test>::check_hrmp_message_metadata(
+	Pezpallet::<Test>::check_hrmp_message_metadata(
 		&[(1000.into(), Default::default())],
 		&mut prev,
 		(1, 1000.into()),

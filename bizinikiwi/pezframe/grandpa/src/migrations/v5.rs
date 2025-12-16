@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use crate::{BoundedAuthorityList, Pallet};
+use crate::{BoundedAuthorityList, Pezpallet};
 use alloc::vec::Vec;
 use codec::Decode;
 use core::marker::PhantomData;
@@ -64,7 +64,7 @@ impl<T: crate::Config> UncheckedOnRuntimeUpgrade for UncheckedMigrateImpl<T> {
 		let len = u32::decode(&mut &state[..]).unwrap();
 
 		pezframe_support::ensure!(
-			len == crate::Pallet::<T>::grandpa_authorities().len() as u32,
+			len == crate::Pezpallet::<T>::grandpa_authorities().len() as u32,
 			"Grandpa: pre-migrated and post-migrated list should have the same length"
 		);
 
@@ -97,6 +97,6 @@ pub type MigrateV4ToV5<T> = VersionedMigration<
 	4,
 	5,
 	UncheckedMigrateImpl<T>,
-	Pallet<T>,
+	Pezpallet<T>,
 	<T as pezframe_system::Config>::DbWeight,
 >;

@@ -35,7 +35,7 @@ pub struct AssetFeeAsExistentialDepositMultiplier<
 impl<CurrencyBalance, Runtime, WeightToFee, BalanceConverter, AssetInstance>
 	pezcumulus_primitives_utility::ChargeWeightInFungibles<
 		AccountIdOf<Runtime>,
-		pezpallet_assets::Pallet<Runtime, AssetInstance>,
+		pezpallet_assets::Pezpallet<Runtime, AssetInstance>,
 	> for AssetFeeAsExistentialDepositMultiplier<Runtime, WeightToFee, BalanceConverter, AssetInstance>
 where
 	Runtime: pezpallet_assets::Config<AssetInstance>,
@@ -52,12 +52,12 @@ where
 	>>::Error: core::fmt::Debug,
 {
 	fn charge_weight_in_fungibles(
-		asset_id: <pezpallet_assets::Pallet<Runtime, AssetInstance> as Inspect<
+		asset_id: <pezpallet_assets::Pezpallet<Runtime, AssetInstance> as Inspect<
 			AccountIdOf<Runtime>,
 		>>::AssetId,
 		weight: Weight,
 	) -> Result<
-		<pezpallet_assets::Pallet<Runtime, AssetInstance> as Inspect<AccountIdOf<Runtime>>>::Balance,
+		<pezpallet_assets::Pezpallet<Runtime, AssetInstance> as Inspect<AccountIdOf<Runtime>>>::Balance,
 		XcmError,
 	> {
 		let amount = WeightToFee::weight_to_fee(&weight);
@@ -97,7 +97,7 @@ impl<SystemTeyrchainMatcher: Contains<Location>, Runtime: teyrchain_info::Config
 	for RelayOrOtherSystemTeyrchains<SystemTeyrchainMatcher, Runtime>
 {
 	fn contains(l: &Location) -> bool {
-		let self_para_id: u32 = teyrchain_info::Pallet::<Runtime>::get().into();
+		let self_para_id: u32 = teyrchain_info::Pezpallet::<Runtime>::get().into();
 		if let (0, [Teyrchain(para_id)]) = l.unpack() {
 			if *para_id == self_para_id {
 				return false;

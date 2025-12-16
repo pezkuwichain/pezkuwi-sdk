@@ -35,7 +35,7 @@ use xcm_executor::traits::ConvertLocation;
 pub type AccountIdOf<T> = <T as pezframe_system::Config>::AccountId;
 
 /// Type alias to conveniently refer to the `Currency::NegativeImbalance` associated type.
-pub type NegativeImbalance<T> = <pezpallet_balances::Pallet<T> as Currency<
+pub type NegativeImbalance<T> = <pezpallet_balances::Pezpallet<T> as Currency<
 	<T as pezframe_system::Config>::AccountId,
 >>::NegativeImbalance;
 
@@ -52,16 +52,16 @@ where
 	<R as pezframe_system::Config>::RuntimeEvent: From<pezpallet_balances::Event<R>>,
 {
 	fn on_nonzero_unbalanced(amount: NegativeImbalance<R>) {
-		let staking_pot = <pezpallet_collator_selection::Pallet<R>>::account_id();
+		let staking_pot = <pezpallet_collator_selection::Pezpallet<R>>::account_id();
 		// In case of error: Will drop the result triggering the `OnDrop` of the imbalance.
-		<pezpallet_balances::Pallet<R>>::resolve_creating(&staking_pot, amount);
+		<pezpallet_balances::Pezpallet<R>>::resolve_creating(&staking_pot, amount);
 	}
 }
 
 /// Fungible implementation of `OnUnbalanced` that deals with the fees by combining tip and fee and
 /// passing the result on to `ToStakingPot`.
 pub struct DealWithFees<R>(PhantomData<R>);
-impl<R> OnUnbalanced<fungible::Credit<R::AccountId, pezpallet_balances::Pallet<R>>> for DealWithFees<R>
+impl<R> OnUnbalanced<fungible::Credit<R::AccountId, pezpallet_balances::Pezpallet<R>>> for DealWithFees<R>
 where
 	R: pezpallet_balances::Config + pezpallet_collator_selection::Config,
 	AccountIdOf<R>: From<pezkuwi_primitives::AccountId> + Into<pezkuwi_primitives::AccountId>,
@@ -69,14 +69,14 @@ where
 {
 	fn on_unbalanceds(
 		mut fees_then_tips: impl Iterator<
-			Item = fungible::Credit<R::AccountId, pezpallet_balances::Pallet<R>>,
+			Item = fungible::Credit<R::AccountId, pezpallet_balances::Pezpallet<R>>,
 		>,
 	) {
 		if let Some(mut fees) = fees_then_tips.next() {
 			if let Some(tips) = fees_then_tips.next() {
 				tips.merge_into(&mut fees);
 			}
-			ResolveTo::<StakingPotAccountId<R>, pezpallet_balances::Pallet<R>>::on_unbalanced(fees)
+			ResolveTo::<StakingPotAccountId<R>, pezpallet_balances::Pezpallet<R>>::on_unbalanced(fees)
 		}
 	}
 }
@@ -84,17 +84,17 @@ where
 /// A `HandleCredit` implementation that naively transfers the fees to the block author.
 /// Will drop and burn the assets in case the transfer fails.
 pub struct AssetsToBlockAuthor<R, I>(PhantomData<(R, I)>);
-impl<R, I> HandleCredit<AccountIdOf<R>, pezpallet_assets::Pallet<R, I>> for AssetsToBlockAuthor<R, I>
+impl<R, I> HandleCredit<AccountIdOf<R>, pezpallet_assets::Pezpallet<R, I>> for AssetsToBlockAuthor<R, I>
 where
 	I: 'static,
 	R: pezpallet_authorship::Config + pezpallet_assets::Config<I>,
 	AccountIdOf<R>: From<pezkuwi_primitives::AccountId> + Into<pezkuwi_primitives::AccountId>,
 {
-	fn handle_credit(credit: fungibles::Credit<AccountIdOf<R>, pezpallet_assets::Pallet<R, I>>) {
+	fn handle_credit(credit: fungibles::Credit<AccountIdOf<R>, pezpallet_assets::Pezpallet<R, I>>) {
 		use pezframe_support::traits::fungibles::Balanced;
-		if let Some(author) = pezpallet_authorship::Pallet::<R>::author() {
+		if let Some(author) = pezpallet_authorship::Pezpallet::<R>::author() {
 			// In case of error: Will drop the result triggering the `OnDrop` of the imbalance.
-			let _ = pezpallet_assets::Pallet::<R, I>::resolve(&author, credit).defensive();
+			let _ = pezpallet_assets::Pezpallet::<R, I>::resolve(&author, credit).defensive();
 		}
 	}
 }
@@ -136,7 +136,7 @@ impl<T: Get<Location>> ContainsPair<Asset, Location> for AssetsFrom<T> {
 
 /// Type alias to conveniently refer to the `Currency::Balance` associated type.
 pub type BalanceOf<T> =
-	<pezpallet_balances::Pallet<T> as Currency<<T as pezframe_system::Config>::AccountId>>::Balance;
+	<pezpallet_balances::Pezpallet<T> as Currency<<T as pezframe_system::Config>::AccountId>>::Balance;
 
 /// Implements `OnUnbalanced::on_unbalanced` to teleport slashed assets to relay chain treasury
 /// account.
@@ -171,9 +171,9 @@ where
 			};
 		let treasury_account: AccountIdOf<T> = TreasuryAccount::get();
 
-		<pezpallet_balances::Pallet<T>>::resolve_creating(&root_account, amount);
+		<pezpallet_balances::Pezpallet<T>>::resolve_creating(&root_account, amount);
 
-		let result = <pezpallet_xcm::Pallet<T>>::limited_teleport_assets(
+		let result = <pezpallet_xcm::Pezpallet<T>>::limited_teleport_assets(
 			<<T as pezframe_system::Config>::RuntimeOrigin>::root(),
 			Box::new(Parent.into()),
 			Box::new(
@@ -216,9 +216,9 @@ mod tests {
 	pezframe_support::construct_runtime!(
 		pub enum Test
 		{
-			System: pezframe_system::{Pallet, Call, Config<T>, Storage, Event<T>},
-			Balances: pezpallet_balances::{Pallet, Call, Storage, Config<T>, Event<T>},
-			CollatorSelection: pezpallet_collator_selection::{Pallet, Call, Storage, Event<T>},
+			System: pezframe_system::{Pezpallet, Call, Config<T>, Storage, Event<T>},
+			Balances: pezpallet_balances::{Pezpallet, Call, Storage, Config<T>, Event<T>},
+			CollatorSelection: pezpallet_collator_selection::{Pezpallet, Call, Storage, Event<T>},
 		}
 	);
 
@@ -312,11 +312,11 @@ mod tests {
 	fn test_fees_and_tip_split() {
 		new_test_ext().execute_with(|| {
 			let fee =
-				<pezpallet_balances::Pallet<Test> as pezframe_support::traits::fungible::Balanced<
+				<pezpallet_balances::Pezpallet<Test> as pezframe_support::traits::fungible::Balanced<
 					AccountId,
 				>>::issue(10);
 			let tip =
-				<pezpallet_balances::Pallet<Test> as pezframe_support::traits::fungible::Balanced<
+				<pezpallet_balances::Pezpallet<Test> as pezframe_support::traits::fungible::Balanced<
 					AccountId,
 				>>::issue(20);
 

@@ -106,7 +106,7 @@ impl pezpallet_scheduler::Config for Test {
 	type WeightInfo = ();
 	type OriginPrivilegeCmp = EqualPrivilegeOnly;
 	type Preimages = ();
-	type BlockNumberProvider = pezframe_system::Pallet<Test>;
+	type BlockNumberProvider = pezframe_system::Pezpallet<Test>;
 }
 
 #[derive_impl(pezpallet_balances::config_preludes::TestDefaultConfig)]
@@ -136,7 +136,7 @@ impl SortedMembers<u64> for OneToFive {
 
 impl Config for Test {
 	type RuntimeEvent = RuntimeEvent;
-	type Currency = pezpallet_balances::Pallet<Self>;
+	type Currency = pezpallet_balances::Pezpallet<Self>;
 	type EnactmentPeriod = ConstU64<2>;
 	type LaunchPeriod = ConstU64<2>;
 	type VotingPeriod = ConstU64<2>;

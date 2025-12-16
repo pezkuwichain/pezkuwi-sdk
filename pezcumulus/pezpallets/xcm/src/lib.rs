@@ -14,7 +14,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Pallet for stuff specific to teyrchains' usage of XCM. Right now that's just the origin
+//! Pezpallet for stuff specific to teyrchains' usage of XCM. Right now that's just the origin
 //! used by teyrchains when receiving `Transact` messages from other teyrchains or the Relay chain
 //! which must be natively represented.
 
@@ -22,21 +22,21 @@
 
 use codec::{Decode, Encode};
 use pezcumulus_primitives_core::ParaId;
-pub use pallet::*;
+pub use pezpallet::*;
 use scale_info::TypeInfo;
 use pezsp_runtime::{traits::BadOrigin, RuntimeDebug};
 use xcm::latest::{ExecuteXcm, Outcome};
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
 	/// The module configuration trait.
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
@@ -45,7 +45,7 @@ pub mod pallet {
 		type XcmExecutor: ExecuteXcm<Self::RuntimeCall>;
 	}
 
-	#[pallet::event]
+	#[pezpallet::event]
 	pub enum Event<T: Config> {
 		/// Downward message is invalid XCM.
 		/// \[ id \]
@@ -70,7 +70,7 @@ pub mod pallet {
 		RuntimeDebug,
 		MaxEncodedLen,
 	)]
-	#[pallet::origin]
+	#[pezpallet::origin]
 	pub enum Origin {
 		/// It comes from the (parent) relay chain.
 		Relay,
@@ -78,8 +78,8 @@ pub mod pallet {
 		SiblingTeyrchain(ParaId),
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {}
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {}
 
 	impl From<ParaId> for Origin {
 		fn from(id: ParaId) -> Origin {

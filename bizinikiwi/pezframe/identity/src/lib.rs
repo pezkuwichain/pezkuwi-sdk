@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Identity Pallet
+//! # Identity Pezpallet
 //!
 //! - [`Config`]
 //! - [`Call`]
@@ -42,13 +42,13 @@
 //!
 //! ### Usernames
 //!
-//! The pallet provides functionality for username authorities to issue usernames, which are
+//! The pezpallet provides functionality for username authorities to issue usernames, which are
 //! independent of the identity information functionality; an account can set:
 //! - an identity without setting a username
 //! - a username without setting an identity
 //! - an identity and a username
 //!
-//! The username functionality implemented in this pallet is meant to be a user friendly lookup of
+//! The username functionality implemented in this pezpallet is meant to be a user friendly lookup of
 //! accounts. There are mappings in both directions, "account -> username" and "username ->
 //! account".
 //!
@@ -128,7 +128,7 @@ use pezframe_support::{
 	BoundedVec,
 };
 use pezframe_system::pezpallet_prelude::*;
-pub use pallet::*;
+pub use pezpallet::*;
 use pezsp_runtime::traits::{
 	AppendZerosInput, Hash, IdentifyAccount, Saturating, StaticLookup, Verify, Zero,
 };
@@ -145,8 +145,8 @@ type NegativeImbalanceOf<T> = <<T as Config>::Currency as Currency<
 type AccountIdLookupOf<T> = <<T as pezframe_system::Config>::Lookup as StaticLookup>::Source;
 type ProviderOf<T> = Provider<BalanceOf<T>>;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 
@@ -170,7 +170,7 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
@@ -180,26 +180,26 @@ pub mod pallet {
 		type Currency: ReservableCurrency<Self::AccountId>;
 
 		/// The amount held on deposit for a registered identity.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type BasicDeposit: Get<BalanceOf<Self>>;
 
 		/// The amount held on deposit per encoded byte for a registered identity.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type ByteDeposit: Get<BalanceOf<Self>>;
 
 		/// The amount held on deposit per registered username. This value should change only in
 		/// runtime upgrades with proper migration of existing deposits.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type UsernameDeposit: Get<BalanceOf<Self>>;
 
 		/// The amount held on deposit for a registered subaccount. This should account for the fact
 		/// that one storage item's value will increase by the size of an account ID, and there will
 		/// be another trie item whose value is the size of an account ID plus 32 bytes.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type SubAccountDeposit: Get<BalanceOf<Self>>;
 
 		/// The maximum number of sub-accounts allowed per identified account.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxSubAccounts: Get<u32>;
 
 		/// Structure holding information about an identity.
@@ -207,7 +207,7 @@ pub mod pallet {
 
 		/// Maximum number of registrars allowed in the system. Needed to bound the complexity
 		/// of, e.g., updating judgements.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxRegistrars: Get<u32>;
 
 		/// What to do with slashed funds.
@@ -231,20 +231,20 @@ pub mod pallet {
 		type UsernameAuthorityOrigin: EnsureOrigin<Self::RuntimeOrigin>;
 
 		/// The number of blocks within which a username grant must be accepted.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type PendingUsernameExpiration: Get<BlockNumberFor<Self>>;
 
 		/// The number of blocks that must pass to enable the permanent deletion of a username by
 		/// its respective authority.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type UsernameGracePeriod: Get<BlockNumberFor<Self>>;
 
 		/// The maximum length of a suffix.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxSuffixLength: Get<u32>;
 
 		/// The maximum length of a username, including its suffix and any system-added delimiters.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxUsernameLength: Get<u32>;
 
 		/// A set of helper functions for benchmarking.
@@ -252,21 +252,21 @@ pub mod pallet {
 		#[cfg(feature = "runtime-benchmarks")]
 		type BenchmarkHelper: BenchmarkHelper<Self::SigningPublicKey, Self::OffchainSignature>;
 
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 	}
 
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(2);
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T>(_);
 
 	/// Information that is pertinent to identify the entity behind an account. First item is the
 	/// registration, second is the account's primary username.
 	///
 	/// TWOX-NOTE: OK ― `AccountId` is a secure hash.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type IdentityOf<T: Config> = StorageMap<
 		_,
 		Twox64Concat,
@@ -276,13 +276,13 @@ pub mod pallet {
 	>;
 
 	/// Identifies the primary username of an account.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type UsernameOf<T: Config> =
 		StorageMap<_, Twox64Concat, T::AccountId, Username<T>, OptionQuery>;
 
 	/// The super-identity of an alternative "sub" identity together with its name, within that
 	/// context. If the account is not some other account's sub-identity, then just `None`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type SuperOf<T: Config> =
 		StorageMap<_, Blake2_128Concat, T::AccountId, (T::AccountId, Data), OptionQuery>;
 
@@ -291,7 +291,7 @@ pub mod pallet {
 	/// The first item is the deposit, the second is a vector of the accounts.
 	///
 	/// TWOX-NOTE: OK ― `AccountId` is a secure hash.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type SubsOf<T: Config> = StorageMap<
 		_,
 		Twox64Concat,
@@ -304,7 +304,7 @@ pub mod pallet {
 	/// special origin (likely a council motion).
 	///
 	/// The index into this can be cast to `RegistrarIndex` to get a valid value.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Registrars<T: Config> = StorageValue<
 		_,
 		BoundedVec<
@@ -321,7 +321,7 @@ pub mod pallet {
 	>;
 
 	/// A map of the accounts who are authorized to grant usernames.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type AuthorityOf<T: Config> =
 		StorageMap<_, Twox64Concat, Suffix<T>, AuthorityProperties<T::AccountId>, OptionQuery>;
 
@@ -331,7 +331,7 @@ pub mod pallet {
 	///
 	/// Multiple usernames may map to the same `AccountId`, but `UsernameOf` will only map to one
 	/// primary username.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type UsernameInfoOf<T: Config> = StorageMap<
 		_,
 		Blake2_128Concat,
@@ -346,7 +346,7 @@ pub mod pallet {
 	/// [accept_username](`Call::accept_username`).
 	///
 	/// First tuple item is the account and second is the acceptance deadline.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type PendingUsernames<T: Config> = StorageMap<
 		_,
 		Blake2_128Concat,
@@ -359,11 +359,11 @@ pub mod pallet {
 	/// unbinding them. Each unbinding username maps to its grace period expiry, which is the first
 	/// block in which the username could be deleted through a
 	/// [remove_username](`Call::remove_username`) call.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type UnbindingUsernames<T: Config> =
 		StorageMap<_, Blake2_128Concat, Username<T>, BlockNumberFor<T>, OptionQuery>;
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Too many subs-accounts.
 		TooManySubAccounts,
@@ -428,8 +428,8 @@ pub mod pallet {
 		InsufficientPrivileges,
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A name was set or reset (which will remove all judgements).
 		IdentitySet { who: T::AccountId },
@@ -479,9 +479,9 @@ pub mod pallet {
 		UsernameKilled { username: Username<T> },
 	}
 
-	#[pallet::call]
-	/// Identity pallet declaration.
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	/// Identity pezpallet declaration.
+	impl<T: Config> Pezpallet<T> {
 		/// Add a registrar to the system.
 		///
 		/// The dispatch origin for this call must be `T::RegistrarOrigin`.
@@ -489,8 +489,8 @@ pub mod pallet {
 		/// - `account`: the account of the registrar.
 		///
 		/// Emits `RegistrarAdded` if successful.
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::add_registrar(T::MaxRegistrars::get()))]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::add_registrar(T::MaxRegistrars::get()))]
 		pub fn add_registrar(
 			origin: OriginFor<T>,
 			account: AccountIdLookupOf<T>,
@@ -526,8 +526,8 @@ pub mod pallet {
 		/// - `info`: The identity information.
 		///
 		/// Emits `IdentitySet` if successful.
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::set_identity(T::MaxRegistrars::get()))]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::set_identity(T::MaxRegistrars::get()))]
 		pub fn set_identity(
 			origin: OriginFor<T>,
 			info: Box<T::IdentityInformation>,
@@ -575,8 +575,8 @@ pub mod pallet {
 		// N storage items for N sub accounts. Right now the weight on this function
 		// is a large overestimate due to the fact that it could potentially write
 		// to 2 x T::MaxSubAccounts::get().
-		#[pallet::call_index(2)]
-		#[pallet::weight(T::WeightInfo::set_subs_old(T::MaxSubAccounts::get())
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(T::WeightInfo::set_subs_old(T::MaxSubAccounts::get())
 			.saturating_add(T::WeightInfo::set_subs_new(subs.len() as u32))
 		)]
 		pub fn set_subs(
@@ -643,8 +643,8 @@ pub mod pallet {
 		/// identity.
 		///
 		/// Emits `IdentityCleared` if successful.
-		#[pallet::call_index(3)]
-		#[pallet::weight(T::WeightInfo::clear_identity(
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(T::WeightInfo::clear_identity(
 			T::MaxRegistrars::get(),
 			T::MaxSubAccounts::get(),
 		))]
@@ -687,12 +687,12 @@ pub mod pallet {
 		/// ```
 		///
 		/// Emits `JudgementRequested` if successful.
-		#[pallet::call_index(4)]
-		#[pallet::weight(T::WeightInfo::request_judgement(T::MaxRegistrars::get(),))]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(T::WeightInfo::request_judgement(T::MaxRegistrars::get(),))]
 		pub fn request_judgement(
 			origin: OriginFor<T>,
-			#[pallet::compact] reg_index: RegistrarIndex,
-			#[pallet::compact] max_fee: BalanceOf<T>,
+			#[pezpallet::compact] reg_index: RegistrarIndex,
+			#[pezpallet::compact] max_fee: BalanceOf<T>,
 		) -> DispatchResultWithPostInfo {
 			let sender = ensure_signed(origin)?;
 			let registrars = Registrars::<T>::get();
@@ -738,8 +738,8 @@ pub mod pallet {
 		/// - `reg_index`: The index of the registrar whose judgement is no longer requested.
 		///
 		/// Emits `JudgementUnrequested` if successful.
-		#[pallet::call_index(5)]
-		#[pallet::weight(T::WeightInfo::cancel_request(T::MaxRegistrars::get()))]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(T::WeightInfo::cancel_request(T::MaxRegistrars::get()))]
 		pub fn cancel_request(
 			origin: OriginFor<T>,
 			reg_index: RegistrarIndex,
@@ -777,12 +777,12 @@ pub mod pallet {
 		///
 		/// - `index`: the index of the registrar whose fee is to be set.
 		/// - `fee`: the new fee.
-		#[pallet::call_index(6)]
-		#[pallet::weight(T::WeightInfo::set_fee(T::MaxRegistrars::get()))]
+		#[pezpallet::call_index(6)]
+		#[pezpallet::weight(T::WeightInfo::set_fee(T::MaxRegistrars::get()))]
 		pub fn set_fee(
 			origin: OriginFor<T>,
-			#[pallet::compact] index: RegistrarIndex,
-			#[pallet::compact] fee: BalanceOf<T>,
+			#[pezpallet::compact] index: RegistrarIndex,
+			#[pezpallet::compact] fee: BalanceOf<T>,
 		) -> DispatchResultWithPostInfo {
 			let who = ensure_signed(origin)?;
 
@@ -810,11 +810,11 @@ pub mod pallet {
 		///
 		/// - `index`: the index of the registrar whose fee is to be set.
 		/// - `new`: the new account ID.
-		#[pallet::call_index(7)]
-		#[pallet::weight(T::WeightInfo::set_account_id(T::MaxRegistrars::get()))]
+		#[pezpallet::call_index(7)]
+		#[pezpallet::weight(T::WeightInfo::set_account_id(T::MaxRegistrars::get()))]
 		pub fn set_account_id(
 			origin: OriginFor<T>,
-			#[pallet::compact] index: RegistrarIndex,
+			#[pezpallet::compact] index: RegistrarIndex,
 			new: AccountIdLookupOf<T>,
 		) -> DispatchResultWithPostInfo {
 			let who = ensure_signed(origin)?;
@@ -844,11 +844,11 @@ pub mod pallet {
 		///
 		/// - `index`: the index of the registrar whose fee is to be set.
 		/// - `fields`: the fields that the registrar concerns themselves with.
-		#[pallet::call_index(8)]
-		#[pallet::weight(T::WeightInfo::set_fields(T::MaxRegistrars::get()))]
+		#[pezpallet::call_index(8)]
+		#[pezpallet::weight(T::WeightInfo::set_fields(T::MaxRegistrars::get()))]
 		pub fn set_fields(
 			origin: OriginFor<T>,
-			#[pallet::compact] index: RegistrarIndex,
+			#[pezpallet::compact] index: RegistrarIndex,
 			fields: <T::IdentityInformation as IdentityInformationProvider>::FieldsIdentifier,
 		) -> DispatchResultWithPostInfo {
 			let who = ensure_signed(origin)?;
@@ -882,11 +882,11 @@ pub mod pallet {
 		/// Note: Judgements do not apply to a username.
 		///
 		/// Emits `JudgementGiven` if successful.
-		#[pallet::call_index(9)]
-		#[pallet::weight(T::WeightInfo::provide_judgement(T::MaxRegistrars::get()))]
+		#[pezpallet::call_index(9)]
+		#[pezpallet::weight(T::WeightInfo::provide_judgement(T::MaxRegistrars::get()))]
 		pub fn provide_judgement(
 			origin: OriginFor<T>,
-			#[pallet::compact] reg_index: RegistrarIndex,
+			#[pezpallet::compact] reg_index: RegistrarIndex,
 			target: AccountIdLookupOf<T>,
 			judgement: Judgement<BalanceOf<T>>,
 			identity: T::Hash,
@@ -944,8 +944,8 @@ pub mod pallet {
 		///   with a registered identity.
 		///
 		/// Emits `IdentityKilled` if successful.
-		#[pallet::call_index(10)]
-		#[pallet::weight(T::WeightInfo::kill_identity(
+		#[pezpallet::call_index(10)]
+		#[pezpallet::weight(T::WeightInfo::kill_identity(
 			T::MaxRegistrars::get(),
 			T::MaxSubAccounts::get(),
 		))]
@@ -981,8 +981,8 @@ pub mod pallet {
 		///
 		/// The dispatch origin for this call must be _Signed_ and the sender must have a registered
 		/// sub identity of `sub`.
-		#[pallet::call_index(11)]
-		#[pallet::weight(T::WeightInfo::add_sub(T::MaxSubAccounts::get()))]
+		#[pezpallet::call_index(11)]
+		#[pezpallet::weight(T::WeightInfo::add_sub(T::MaxSubAccounts::get()))]
 		pub fn add_sub(
 			origin: OriginFor<T>,
 			sub: AccountIdLookupOf<T>,
@@ -1017,8 +1017,8 @@ pub mod pallet {
 		///
 		/// The dispatch origin for this call must be _Signed_ and the sender must have a registered
 		/// sub identity of `sub`.
-		#[pallet::call_index(12)]
-		#[pallet::weight(T::WeightInfo::rename_sub(T::MaxSubAccounts::get()))]
+		#[pezpallet::call_index(12)]
+		#[pezpallet::weight(T::WeightInfo::rename_sub(T::MaxSubAccounts::get()))]
 		pub fn rename_sub(
 			origin: OriginFor<T>,
 			sub: AccountIdLookupOf<T>,
@@ -1041,8 +1041,8 @@ pub mod pallet {
 		///
 		/// The dispatch origin for this call must be _Signed_ and the sender must have a registered
 		/// sub identity of `sub`.
-		#[pallet::call_index(13)]
-		#[pallet::weight(T::WeightInfo::remove_sub(T::MaxSubAccounts::get()))]
+		#[pezpallet::call_index(13)]
+		#[pezpallet::weight(T::WeightInfo::remove_sub(T::MaxSubAccounts::get()))]
 		pub fn remove_sub(origin: OriginFor<T>, sub: AccountIdLookupOf<T>) -> DispatchResult {
 			let sender = ensure_signed(origin)?;
 			ensure!(IdentityOf::<T>::contains_key(&sender), Error::<T>::NoIdentity);
@@ -1071,8 +1071,8 @@ pub mod pallet {
 		///
 		/// NOTE: This should not normally be used, but is provided in the case that the non-
 		/// controller of an account is maliciously registered as a sub-account.
-		#[pallet::call_index(14)]
-		#[pallet::weight(T::WeightInfo::quit_sub(T::MaxSubAccounts::get()))]
+		#[pezpallet::call_index(14)]
+		#[pezpallet::weight(T::WeightInfo::quit_sub(T::MaxSubAccounts::get()))]
 		pub fn quit_sub(origin: OriginFor<T>) -> DispatchResult {
 			let sender = ensure_signed(origin)?;
 			let (sup, _) = SuperOf::<T>::take(&sender).ok_or(Error::<T>::NotSub)?;
@@ -1096,8 +1096,8 @@ pub mod pallet {
 		/// The authority can grant up to `allocation` usernames. To top up the allocation or
 		/// change the account used to grant usernames, this call can be used with the updated
 		/// parameters to overwrite the existing configuration.
-		#[pallet::call_index(15)]
-		#[pallet::weight(T::WeightInfo::add_username_authority())]
+		#[pezpallet::call_index(15)]
+		#[pezpallet::weight(T::WeightInfo::add_username_authority())]
 		pub fn add_username_authority(
 			origin: OriginFor<T>,
 			authority: AccountIdLookupOf<T>,
@@ -1120,8 +1120,8 @@ pub mod pallet {
 		}
 
 		/// Remove `authority` from the username authorities.
-		#[pallet::call_index(16)]
-		#[pallet::weight(T::WeightInfo::remove_username_authority())]
+		#[pezpallet::call_index(16)]
+		#[pezpallet::weight(T::WeightInfo::remove_username_authority())]
 		pub fn remove_username_authority(
 			origin: OriginFor<T>,
 			suffix: Vec<u8>,
@@ -1150,8 +1150,8 @@ pub mod pallet {
 		///   - Only contain lowercase ASCII characters or digits.
 		///   - When combined with the suffix of the issuing authority be _less than_ the
 		///     `MaxUsernameLength`.
-		#[pallet::call_index(17)]
-		#[pallet::weight(T::WeightInfo::set_username_for(if *use_allocation { 1 } else { 0 }))]
+		#[pezpallet::call_index(17)]
+		#[pezpallet::weight(T::WeightInfo::set_username_for(if *use_allocation { 1 } else { 0 }))]
 		pub fn set_username_for(
 			origin: OriginFor<T>,
 			who: AccountIdLookupOf<T>,
@@ -1210,8 +1210,8 @@ pub mod pallet {
 
 		/// Accept a given username that an `authority` granted. The call must include the full
 		/// username, as in `username.suffix`.
-		#[pallet::call_index(18)]
-		#[pallet::weight(T::WeightInfo::accept_username())]
+		#[pezpallet::call_index(18)]
+		#[pezpallet::weight(T::WeightInfo::accept_username())]
 		pub fn accept_username(
 			origin: OriginFor<T>,
 			username: Username<T>,
@@ -1228,15 +1228,15 @@ pub mod pallet {
 		/// Remove an expired username approval. The username was approved by an authority but never
 		/// accepted by the user and must now be beyond its expiration. The call must include the
 		/// full username, as in `username.suffix`.
-		#[pallet::call_index(19)]
-		#[pallet::weight(T::WeightInfo::remove_expired_approval(0))]
+		#[pezpallet::call_index(19)]
+		#[pezpallet::weight(T::WeightInfo::remove_expired_approval(0))]
 		pub fn remove_expired_approval(
 			origin: OriginFor<T>,
 			username: Username<T>,
 		) -> DispatchResultWithPostInfo {
 			ensure_signed(origin)?;
 			if let Some((who, expiration, provider)) = PendingUsernames::<T>::take(&username) {
-				let now = pezframe_system::Pallet::<T>::block_number();
+				let now = pezframe_system::Pezpallet::<T>::block_number();
 				ensure!(now > expiration, Error::<T>::NotExpired);
 				let actual_weight = match provider {
 					Provider::AuthorityDeposit(deposit) => {
@@ -1266,8 +1266,8 @@ pub mod pallet {
 		}
 
 		/// Set a given username as the primary. The username should include the suffix.
-		#[pallet::call_index(20)]
-		#[pallet::weight(T::WeightInfo::set_primary_username())]
+		#[pezpallet::call_index(20)]
+		#[pezpallet::weight(T::WeightInfo::set_primary_username())]
 		pub fn set_primary_username(origin: OriginFor<T>, username: Username<T>) -> DispatchResult {
 			// ensure `username` maps to `origin` (i.e. has already been set by an authority).
 			let who = ensure_signed(origin)?;
@@ -1282,8 +1282,8 @@ pub mod pallet {
 		/// Start the process of removing a username by placing it in the unbinding usernames map.
 		/// Once the grace period has passed, the username can be deleted by calling
 		/// [remove_username](crate::Call::remove_username).
-		#[pallet::call_index(21)]
-		#[pallet::weight(T::WeightInfo::unbind_username())]
+		#[pezpallet::call_index(21)]
+		#[pezpallet::weight(T::WeightInfo::unbind_username())]
 		pub fn unbind_username(origin: OriginFor<T>, username: Username<T>) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 			let username_info =
@@ -1295,7 +1295,7 @@ pub mod pallet {
 			ensure!(who == authority_account, Error::<T>::NotUsernameAuthority);
 			match username_info.provider {
 				Provider::AuthorityDeposit(_) | Provider::Allocation => {
-					let now = pezframe_system::Pallet::<T>::block_number();
+					let now = pezframe_system::Pezpallet::<T>::block_number();
 					let grace_period_expiry = now.saturating_add(T::UsernameGracePeriod::get());
 					UnbindingUsernames::<T>::try_mutate(&username, |maybe_init| {
 						if maybe_init.is_some() {
@@ -1313,8 +1313,8 @@ pub mod pallet {
 
 		/// Permanently delete a username which has been unbinding for longer than the grace period.
 		/// Caller is refunded the fee if the username expired and the removal was successful.
-		#[pallet::call_index(22)]
-		#[pallet::weight(T::WeightInfo::remove_username())]
+		#[pezpallet::call_index(22)]
+		#[pezpallet::weight(T::WeightInfo::remove_username())]
 		pub fn remove_username(
 			origin: OriginFor<T>,
 			username: Username<T>,
@@ -1322,7 +1322,7 @@ pub mod pallet {
 			ensure_signed(origin)?;
 			let grace_period_expiry =
 				UnbindingUsernames::<T>::take(&username).ok_or(Error::<T>::NotUnbinding)?;
-			let now = pezframe_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pezpallet::<T>::block_number();
 			ensure!(now >= grace_period_expiry, Error::<T>::TooEarly);
 			let username_info = UsernameInfoOf::<T>::take(&username)
 				.defensive_proof("an unbinding username must exist")
@@ -1357,8 +1357,8 @@ pub mod pallet {
 
 		/// Call with [ForceOrigin](crate::Config::ForceOrigin) privileges which deletes a username
 		/// and slashes any deposit associated with it.
-		#[pallet::call_index(23)]
-		#[pallet::weight(T::WeightInfo::kill_username(0))]
+		#[pezpallet::call_index(23)]
+		#[pezpallet::weight(T::WeightInfo::kill_username(0))]
 		pub fn kill_username(
 			origin: OriginFor<T>,
 			username: Username<T>,
@@ -1404,7 +1404,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Get the subs of an account.
 	pub fn subs(who: &T::AccountId) -> Vec<(T::AccountId, Data)> {
 		SubsOf::<T>::get(who)
@@ -1555,7 +1555,7 @@ impl<T: Config> Pallet<T> {
 	/// A username was granted by an authority, but must be accepted by `who`. Put the username
 	/// into a queue for acceptance.
 	pub fn queue_acceptance(who: &T::AccountId, username: Username<T>, provider: ProviderOf<T>) {
-		let now = pezframe_system::Pallet::<T>::block_number();
+		let now = pezframe_system::Pezpallet::<T>::block_number();
 		let expiration = now.saturating_add(T::PendingUsernameExpiration::get());
 		PendingUsernames::<T>::insert(&username, (who.clone(), expiration, provider));
 		Self::deposit_event(Event::UsernameQueued { who: who.clone(), username, expiration });

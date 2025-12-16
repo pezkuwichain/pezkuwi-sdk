@@ -23,14 +23,14 @@
 //! [pezkuwi]: https://img.shields.io/badge/polkadot-E6007A?style=for-the-badge&logo=polkadot&logoColor=white
 //! [github]: https://img.shields.io/badge/github-8da0cb?style=for-the-badge&labelColor=555555&logo=github
 //!
-//! # Treasury Pallet
+//! # Treasury Pezpallet
 //!
-//! The Treasury pallet provides a "pot" of funds that can be managed by stakeholders in the system
+//! The Treasury pezpallet provides a "pot" of funds that can be managed by stakeholders in the system
 //! and a structure for making spending proposals from this pot.
 //!
 //! ## Overview
 //!
-//! The Treasury Pallet itself provides the pot to store funds, and a means for stakeholders to
+//! The Treasury Pezpallet itself provides the pot to store funds, and a means for stakeholders to
 //! propose and claim expenditures (aka spends). The chain will need to provide a method to approve
 //! spends (e.g. public referendum) and a method for collecting funds (e.g. inflation, fees).
 //!
@@ -42,7 +42,7 @@
 //! - **Proposal:** A suggestion to allocate funds from the pot to a beneficiary.
 //! - **Beneficiary:** An account who will receive the funds from a proposal iff the proposal is
 //!   approved.
-//! - **Pot:** Unspent funds accumulated by the treasury pallet.
+//! - **Pot:** Unspent funds accumulated by the treasury pezpallet.
 //! - **Spend** An approved proposal for transferring a specific amount of funds to a designated
 //!   beneficiary.
 //!
@@ -54,9 +54,9 @@
 //! 2. Approve a spend of some asset kind and claim it.
 #![doc = docify::embed!("src/tests.rs", spend_payout_works)]
 //!
-//! ## Pallet API
+//! ## Pezpallet API
 //!
-//! See the [`pallet`] module for more information about the interfaces this pallet exposes,
+//! See the [`pezpallet`] module for more information about the interfaces this pezpallet exposes,
 //! including its configuration trait, dispatchables, storage items, events and errors.
 //!
 //! ## Low Level / Implementation Details
@@ -64,11 +64,11 @@
 //! Spends can be initiated using either the `spend_local` or `spend` dispatchable. The
 //! `spend_local` dispatchable enables the creation of spends using the native currency of the
 //! chain, utilizing the funds stored in the pot. These spends are automatically paid out every
-//! [`pallet::Config::SpendPeriod`]. On the other hand, the `spend` dispatchable allows spending of
+//! [`pezpallet::Config::SpendPeriod`]. On the other hand, the `spend` dispatchable allows spending of
 //! any asset kind managed by the treasury, with payment facilitated by a designated
-//! [`pallet::Config::Paymaster`]. To claim these spends, the `payout` dispatchable should be called
+//! [`pezpallet::Config::Paymaster`]. To claim these spends, the `payout` dispatchable should be called
 //! within some temporal bounds, starting from the moment they become valid and within one
-//! [`pallet::Config::PayoutPeriod`].
+//! [`pezpallet::Config::PayoutPeriod`].
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
@@ -108,7 +108,7 @@ use pezframe_support::{
 };
 use pezframe_system::pezpallet_prelude::BlockNumberFor as SystemBlockNumberFor;
 
-pub use pallet::*;
+pub use pezpallet::*;
 pub use weights::WeightInfo;
 
 pub type BalanceOf<T, I = ()> =
@@ -125,7 +125,7 @@ type BeneficiaryLookupOf<T, I> = <<T as Config<I>>::BeneficiaryLookup as StaticL
 pub type BlockNumberFor<T, I = ()> =
 	<<T as Config<I>>::BlockNumberProvider as BlockNumberProvider>::BlockNumber;
 
-/// A trait to allow the Treasury Pallet to spend it's funds for other purposes.
+/// A trait to allow the Treasury Pezpallet to spend it's funds for other purposes.
 /// There is an expectation that the implementer of this trait will correctly manage
 /// the mutable variables passed to it:
 /// * `budget_remaining`: How much available funds that can be spent by the treasury. As funds are
@@ -226,8 +226,8 @@ pub struct SpendStatus<AssetKind, AssetBalance, Beneficiary, BlockNumber, Paymen
 /// Index of an approved treasury spend.
 pub type SpendIndex = u32;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::{
 		dispatch_context::with_context,
@@ -236,10 +236,10 @@ pub mod pallet {
 	};
 	use pezframe_system::pezpallet_prelude::{ensure_signed, OriginFor};
 
-	#[pallet::pallet]
-	pub struct Pallet<T, I = ()>(PhantomData<(T, I)>);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T, I = ()>(PhantomData<(T, I)>);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config {
 		/// The staking balance.
 		type Currency: Currency<Self::AccountId> + ReservableCurrency<Self::AccountId>;
@@ -253,24 +253,24 @@ pub mod pallet {
 			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// Period between successive spends.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type SpendPeriod: Get<BlockNumberFor<Self, I>>;
 
 		/// Percentage of spare funds (if any) that are burnt per spend period.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type Burn: Get<Permill>;
 
-		/// The treasury's pallet id, used for deriving its sovereign account ID.
-		#[pallet::constant]
+		/// The treasury's pezpallet id, used for deriving its sovereign account ID.
+		#[pezpallet::constant]
 		type PalletId: Get<PalletId>;
 
 		/// Handler for the unbalanced decrease when treasury funds are burned.
 		type BurnDestination: OnUnbalanced<NegativeImbalanceOf<Self, I>>;
 
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 
-		/// Runtime hooks to external pallet using treasury to compute spend funds.
+		/// Runtime hooks to external pezpallet using treasury to compute spend funds.
 		type SpendFunds: SpendFunds<Self, I>;
 
 		/// DEPRECATED: associated with `spend_local` call and will be removed in May 2025.
@@ -278,8 +278,8 @@ pub mod pallet {
 		///
 		/// The maximum number of approvals that can wait in the spending queue.
 		///
-		/// NOTE: This parameter is also used within the Bounties Pallet extension if enabled.
-		#[pallet::constant]
+		/// NOTE: This parameter is also used within the Bounties Pezpallet extension if enabled.
+		#[pezpallet::constant]
 		type MaxApprovals: Get<u32>;
 
 		/// The origin required for approving spends from the treasury outside of the proposal
@@ -309,20 +309,20 @@ pub mod pallet {
 		>;
 
 		/// The period during which an approved treasury spend has to be claimed.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type PayoutPeriod: Get<BlockNumberFor<Self, I>>;
 
 		/// Helper type for benchmarks.
 		#[cfg(feature = "runtime-benchmarks")]
 		type BenchmarkHelper: ArgumentsFactory<Self::AssetKind, Self::Beneficiary>;
 
-		/// Provider for the block number. Normally this is the `pezframe_system` pallet.
+		/// Provider for the block number. Normally this is the `pezframe_system` pezpallet.
 		type BlockNumberProvider: BlockNumberProvider;
 	}
 
-	#[pallet::extra_constants]
-	impl<T: Config<I>, I: 'static> Pallet<T, I> {
-		/// Gets this pallet's derived pot account.
+	#[pezpallet::extra_constants]
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
+		/// Gets this pezpallet's derived pot account.
 		fn pot_account() -> T::AccountId {
 			Self::account_id()
 		}
@@ -332,14 +332,14 @@ pub mod pallet {
 	/// Refer to <https://github.com/pezkuwichain/kurdistan-sdk/issues/122> for migration to `spend`.
 	///
 	/// Number of proposals that have been made.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ProposalCount<T, I = ()> = StorageValue<_, ProposalIndex, ValueQuery>;
 
 	/// DEPRECATED: associated with `spend_local` call and will be removed in May 2025.
 	/// Refer to <https://github.com/pezkuwichain/kurdistan-sdk/issues/122> for migration to `spend`.
 	///
 	/// Proposals that have been made.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Proposals<T: Config<I>, I: 'static = ()> = StorageMap<
 		_,
 		Twox64Concat,
@@ -349,7 +349,7 @@ pub mod pallet {
 	>;
 
 	/// The amount which has been reported as inactive to Currency.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Deactivated<T: Config<I>, I: 'static = ()> =
 		StorageValue<_, BalanceOf<T, I>, ValueQuery>;
 
@@ -357,17 +357,17 @@ pub mod pallet {
 	/// Refer to <https://github.com/pezkuwichain/kurdistan-sdk/issues/122> for migration to `spend`.
 	///
 	/// Proposal indices that have been approved but not yet awarded.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Approvals<T: Config<I>, I: 'static = ()> =
 		StorageValue<_, BoundedVec<ProposalIndex, T::MaxApprovals>, ValueQuery>;
 
 	/// The count of spends that have been made.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type SpendCount<T, I = ()> = StorageValue<_, SpendIndex, ValueQuery>;
 
 	/// Spends that have been approved and being processed.
 	// Hasher: Twox safe since `SpendIndex` is an internal count based index.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Spends<T: Config<I>, I: 'static = ()> = StorageMap<
 		_,
 		Twox64Concat,
@@ -383,21 +383,21 @@ pub mod pallet {
 	>;
 
 	/// The blocknumber for the last triggered spend period.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type LastSpendPeriod<T, I = ()> = StorageValue<_, BlockNumberFor<T, I>, OptionQuery>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(pezframe_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config<I>, I: 'static = ()> {
 		#[serde(skip)]
 		_config: core::marker::PhantomData<(T, I)>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config<I>, I: 'static> BuildGenesisConfig for GenesisConfig<T, I> {
 		fn build(&self) {
 			// Create Treasury account
-			let account_id = Pallet::<T, I>::account_id();
+			let account_id = Pezpallet::<T, I>::account_id();
 			let min = T::Currency::minimum_balance();
 			if T::Currency::free_balance(&account_id) < min {
 				let _ = T::Currency::make_free_balance_be(&account_id, min);
@@ -405,8 +405,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config<I>, I: 'static = ()> {
 		/// We have ended a spend period and will now allocate funds.
 		Spending { budget_remaining: BalanceOf<T, I> },
@@ -424,7 +424,7 @@ pub mod pallet {
 			amount: BalanceOf<T, I>,
 			beneficiary: T::AccountId,
 		},
-		/// The inactive funds of the pallet have been updated.
+		/// The inactive funds of the pezpallet have been updated.
 		UpdatedInactive { reactivated: BalanceOf<T, I>, deactivated: BalanceOf<T, I> },
 		/// A new asset spend proposal has been approved.
 		AssetSpendApproved {
@@ -446,8 +446,8 @@ pub mod pallet {
 		SpendProcessed { index: SpendIndex },
 	}
 
-	/// Error for the treasury pallet.
-	#[pallet::error]
+	/// Error for the treasury pezpallet.
+	#[pezpallet::error]
 	pub enum Error<T, I = ()> {
 		/// No proposal, bounty or spend at that index.
 		InvalidIndex,
@@ -474,8 +474,8 @@ pub mod pallet {
 		Inconclusive,
 	}
 
-	#[pallet::hooks]
-	impl<T: Config<I>, I: 'static> Hooks<SystemBlockNumberFor<T>> for Pallet<T, I> {
+	#[pezpallet::hooks]
+	impl<T: Config<I>, I: 'static> Hooks<SystemBlockNumberFor<T>> for Pezpallet<T, I> {
 		/// ## Complexity
 		/// - `O(A)` where `A` is the number of approvals
 		fn on_initialize(_do_not_use_local_block_number: SystemBlockNumberFor<T>) -> Weight {
@@ -526,8 +526,8 @@ pub mod pallet {
 		spend_in_context: BTreeMap<Balance, Balance>,
 	}
 
-	#[pallet::call]
-	impl<T: Config<I>, I: 'static> Pallet<T, I> {
+	#[pezpallet::call]
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 		/// Propose and approve a spend of treasury funds.
 		///
 		/// ## Dispatch Origin
@@ -545,15 +545,15 @@ pub mod pallet {
 		/// ## Events
 		///
 		/// Emits [`Event::SpendApproved`] if successful.
-		#[pallet::call_index(3)]
-		#[pallet::weight(T::WeightInfo::spend_local())]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(T::WeightInfo::spend_local())]
 		#[deprecated(
 			note = "The `spend_local` call will be removed by May 2025. Migrate to the new flow and use the `spend` call."
 		)]
 		#[allow(deprecated)]
 		pub fn spend_local(
 			origin: OriginFor<T>,
-			#[pallet::compact] amount: BalanceOf<T, I>,
+			#[pezpallet::compact] amount: BalanceOf<T, I>,
 			beneficiary: AccountIdLookupOf<T>,
 		) -> DispatchResult {
 			let max_amount = T::SpendOrigin::ensure_origin(origin)?;
@@ -621,15 +621,15 @@ pub mod pallet {
 		///   approval queue, i.e., the proposal has not been approved. This could also mean the
 		///   proposal does not exist altogether, thus there is no way it would have been approved
 		///   in the first place.
-		#[pallet::call_index(4)]
-		#[pallet::weight((T::WeightInfo::remove_approval(), DispatchClass::Operational))]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight((T::WeightInfo::remove_approval(), DispatchClass::Operational))]
 		#[deprecated(
 			note = "The `remove_approval` call will be removed by May 2025. It associated with the deprecated `spend_local` call."
 		)]
 		#[allow(deprecated)]
 		pub fn remove_approval(
 			origin: OriginFor<T>,
-			#[pallet::compact] proposal_id: ProposalIndex,
+			#[pezpallet::compact] proposal_id: ProposalIndex,
 		) -> DispatchResult {
 			T::RejectOrigin::ensure_origin(origin)?;
 
@@ -672,12 +672,12 @@ pub mod pallet {
 		/// ## Events
 		///
 		/// Emits [`Event::AssetSpendApproved`] if successful.
-		#[pallet::call_index(5)]
-		#[pallet::weight(T::WeightInfo::spend())]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(T::WeightInfo::spend())]
 		pub fn spend(
 			origin: OriginFor<T>,
 			asset_kind: Box<T::AssetKind>,
-			#[pallet::compact] amount: AssetBalanceOf<T, I>,
+			#[pezpallet::compact] amount: AssetBalanceOf<T, I>,
 			beneficiary: Box<BeneficiaryLookupOf<T, I>>,
 			valid_from: Option<BlockNumberFor<T, I>>,
 		) -> DispatchResult {
@@ -757,8 +757,8 @@ pub mod pallet {
 		/// ## Events
 		///
 		/// Emits [`Event::Paid`] if successful.
-		#[pallet::call_index(6)]
-		#[pallet::weight(T::WeightInfo::payout())]
+		#[pezpallet::call_index(6)]
+		#[pezpallet::weight(T::WeightInfo::payout())]
 		pub fn payout(origin: OriginFor<T>, index: SpendIndex) -> DispatchResult {
 			ensure_signed(origin)?;
 			let mut spend = Spends::<T, I>::get(index).ok_or(Error::<T, I>::InvalidIndex)?;
@@ -801,8 +801,8 @@ pub mod pallet {
 		///
 		/// Emits [`Event::PaymentFailed`] if the spend payout has failed.
 		/// Emits [`Event::SpendProcessed`] if the spend payout has succeed.
-		#[pallet::call_index(7)]
-		#[pallet::weight(T::WeightInfo::check_status())]
+		#[pezpallet::call_index(7)]
+		#[pezpallet::weight(T::WeightInfo::check_status())]
 		pub fn check_status(origin: OriginFor<T>, index: SpendIndex) -> DispatchResultWithPostInfo {
 			use PaymentState as State;
 			use PaymentStatus as Status;
@@ -855,8 +855,8 @@ pub mod pallet {
 		/// ## Events
 		///
 		/// Emits [`Event::AssetSpendVoided`] if successful.
-		#[pallet::call_index(8)]
-		#[pallet::weight(T::WeightInfo::void_spend())]
+		#[pezpallet::call_index(8)]
+		#[pezpallet::weight(T::WeightInfo::void_spend())]
 		pub fn void_spend(origin: OriginFor<T>, index: SpendIndex) -> DispatchResult {
 			T::RejectOrigin::ensure_origin(origin)?;
 			let spend = Spends::<T, I>::get(index).ok_or(Error::<T, I>::InvalidIndex)?;
@@ -872,7 +872,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config<I>, I: 'static> Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 	// Add public immutables and private mutables.
 
 	/// The account ID of the treasury pot.
@@ -904,7 +904,7 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 
 	/// Public function to proposal_count storage.
 	#[deprecated(
-		note = "This function will be removed by May 2025. Configure pallet to use PayFromAccount for Paymaster type instead"
+		note = "This function will be removed by May 2025. Configure pezpallet to use PayFromAccount for Paymaster type instead"
 	)]
 	pub fn proposal_count() -> ProposalIndex {
 		#[allow(deprecated)]
@@ -913,7 +913,7 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 
 	/// Public function to proposals storage.
 	#[deprecated(
-		note = "This function will be removed by May 2025. Configure pallet to use PayFromAccount for Paymaster type instead"
+		note = "This function will be removed by May 2025. Configure pezpallet to use PayFromAccount for Paymaster type instead"
 	)]
 	pub fn proposals(index: ProposalIndex) -> Option<Proposal<T::AccountId, BalanceOf<T, I>>> {
 		#[allow(deprecated)]
@@ -922,7 +922,7 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 
 	/// Public function to approvals storage.
 	#[deprecated(
-		note = "This function will be removed by May 2025. Configure pallet to use PayFromAccount for Paymaster type instead"
+		note = "This function will be removed by May 2025. Configure pezpallet to use PayFromAccount for Paymaster type instead"
 	)]
 	#[allow(deprecated)]
 	pub fn approvals() -> BoundedVec<ProposalIndex, T::MaxApprovals> {
@@ -979,7 +979,7 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 
 		total_weight += T::WeightInfo::on_initialize_proposals(proposals_len);
 
-		// Call Runtime hooks to external pallet using treasury to compute spend funds.
+		// Call Runtime hooks to external pezpallet using treasury to compute spend funds.
 		T::SpendFunds::spend_funds(
 			&mut budget_remaining,
 			&mut imbalance,
@@ -1028,7 +1028,7 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 			.saturating_sub(T::Currency::minimum_balance())
 	}
 
-	/// Ensure the correctness of the state of this pallet.
+	/// Ensure the correctness of the state of this pezpallet.
 	#[cfg(any(feature = "try-runtime", test))]
 	fn do_try_state() -> Result<(), pezsp_runtime::TryRuntimeError> {
 		Self::try_state_proposals()?;
@@ -1108,7 +1108,7 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 	}
 }
 
-impl<T: Config<I>, I: 'static> OnUnbalanced<NegativeImbalanceOf<T, I>> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> OnUnbalanced<NegativeImbalanceOf<T, I>> for Pezpallet<T, I> {
 	fn on_nonzero_unbalanced(amount: NegativeImbalanceOf<T, I>) {
 		let numeric_amount = amount.peek();
 
@@ -1127,6 +1127,6 @@ where
 {
 	type Type = <R as pezframe_system::Config>::AccountId;
 	fn get() -> Self::Type {
-		crate::Pallet::<R>::account_id()
+		crate::Pezpallet::<R>::account_id()
 	}
 }

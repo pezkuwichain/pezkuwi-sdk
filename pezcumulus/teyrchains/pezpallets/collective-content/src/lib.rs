@@ -13,22 +13,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Managed Collective Content Pallet
+//! Managed Collective Content Pezpallet
 //!
-//! The pallet provides the functionality to store different types of content. This would typically
+//! The pezpallet provides the functionality to store different types of content. This would typically
 //! be used by an on-chain collective, such as the Pezkuwi Alliance or Ambassador Program.
 //!
-//! The pallet stores content as an [OpaqueCid], which should correspond to some off-chain hosting
+//! The pezpallet stores content as an [OpaqueCid], which should correspond to some off-chain hosting
 //! service, such as IPFS, and contain any type of data. Each type of content has its own origin
 //! from which it can be managed. The origins are configurable in the runtime. Storing content does
 //! not require a deposit, as it is expected to be managed by a trusted collective.
 //!
 //! Content types:
 //!
-//! - Collective [charter](pallet::Charter): A single document (`OpaqueCid`) managed by
-//!   [CharterOrigin](pallet::Config::CharterOrigin).
-//! - Collective [announcements](pallet::Announcements): A list of announcements managed by
-//!   [AnnouncementOrigin](pallet::Config::AnnouncementOrigin).
+//! - Collective [charter](pezpallet::Charter): A single document (`OpaqueCid`) managed by
+//!   [CharterOrigin](pezpallet::Config::CharterOrigin).
+//! - Collective [announcements](pezpallet::Announcements): A list of announcements managed by
+//!   [AnnouncementOrigin](pezpallet::Config::AnnouncementOrigin).
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
@@ -41,7 +41,7 @@ mod tests;
 mod benchmarking;
 pub mod weights;
 
-pub use pallet::*;
+pub use pezpallet::*;
 pub use weights::WeightInfo;
 
 use pezframe_support::{traits::schedule::DispatchTime, BoundedVec};
@@ -51,8 +51,8 @@ use pezsp_core::ConstU32;
 // Worst case 2 bytes base and codec, 2 bytes hash type and size, 64 bytes hash digest.
 pub type OpaqueCid = BoundedVec<u8, ConstU32<68>>;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::{ensure, pezpallet_prelude::*};
 	use pezframe_system::pezpallet_prelude::*;
@@ -61,12 +61,12 @@ pub mod pallet {
 	/// The in-code storage version.
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(0);
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T, I = ()>(PhantomData<(T, I)>);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T, I = ()>(PhantomData<(T, I)>);
 
 	/// The module configuration trait.
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
@@ -80,17 +80,17 @@ pub mod pallet {
 		type AnnouncementOrigin: EnsureOrigin<Self::RuntimeOrigin>;
 
 		/// Maximum number of announcements in the storage.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxAnnouncements: Get<u32>;
 
 		/// The origin to control the collective charter.
 		type CharterOrigin: EnsureOrigin<Self::RuntimeOrigin>;
 
-		/// Weight information needed for the pallet.
+		/// Weight information needed for the pezpallet.
 		type WeightInfo: WeightInfo;
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T, I = ()> {
 		/// The announcement is not found.
 		MissingAnnouncement,
@@ -100,8 +100,8 @@ pub mod pallet {
 		InvalidExpiration,
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config<I>, I: 'static = ()> {
 		/// A new charter has been set.
 		NewCharterSet { cid: OpaqueCid },
@@ -112,23 +112,23 @@ pub mod pallet {
 	}
 
 	/// The collective charter.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Charter<T: Config<I>, I: 'static = ()> = StorageValue<_, OpaqueCid, OptionQuery>;
 
 	/// The collective announcements.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Announcements<T: Config<I>, I: 'static = ()> =
 		CountedStorageMap<_, Blake2_128Concat, OpaqueCid, BlockNumberFor<T>, OptionQuery>;
 
-	#[pallet::call]
-	impl<T: Config<I>, I: 'static> Pallet<T, I> {
+	#[pezpallet::call]
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 		/// Set the collective charter.
 		///
 		/// Parameters:
 		/// - `origin`: Must be the [Config::CharterOrigin].
 		/// - `cid`: [CID](super::OpaqueCid) of the IPFS document of the collective charter.
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::set_charter())]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::set_charter())]
 		pub fn set_charter(origin: OriginFor<T>, cid: OpaqueCid) -> DispatchResult {
 			T::CharterOrigin::ensure_origin(origin)?;
 
@@ -146,8 +146,8 @@ pub mod pallet {
 		/// - `maybe_expire`: Expiration block of the announcement. If `None`
 		///   [`Config::AnnouncementLifetime`]
 		/// used as a default.
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::announce())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::announce())]
 		pub fn announce(
 			origin: OriginFor<T>,
 			cid: OpaqueCid,
@@ -155,7 +155,7 @@ pub mod pallet {
 		) -> DispatchResult {
 			T::AnnouncementOrigin::ensure_origin(origin)?;
 
-			let now = pezframe_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pezpallet::<T>::block_number();
 			let expire_at = maybe_expire
 				.map_or(now.saturating_add(T::AnnouncementLifetime::get()), |e| e.evaluate(now));
 			ensure!(expire_at > now, Error::<T, I>::InvalidExpiration);
@@ -178,8 +178,8 @@ pub mod pallet {
 		/// - `origin`: Must be the [Config::AnnouncementOrigin] or signed for expired
 		///   announcements.
 		/// - `cid`: [CID](super::OpaqueCid) of the IPFS document to remove.
-		#[pallet::call_index(2)]
-		#[pallet::weight(T::WeightInfo::remove_announcement())]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(T::WeightInfo::remove_announcement())]
 		pub fn remove_announcement(
 			origin: OriginFor<T>,
 			cid: OpaqueCid,
@@ -190,7 +190,7 @@ pub mod pallet {
 			};
 			let expire_at = <Announcements<T, I>>::get(cid.clone())
 				.ok_or(Error::<T, I>::MissingAnnouncement)?;
-			let now = pezframe_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pezpallet::<T>::block_number();
 			ensure!(maybe_who.is_none() || now >= expire_at, BadOrigin);
 
 			<Announcements<T, I>>::remove(cid.clone());

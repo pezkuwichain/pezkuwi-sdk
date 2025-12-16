@@ -28,9 +28,9 @@
 // Executed Command:
 // ./target/release/pezkuwi-teyrchain
 // benchmark
-// pallet
+// pezpallet
 // --wasm-execution=compiled
-// --pallet=pezpallet_transaction_payment
+// --pezpallet=pezpallet_transaction_payment
 // --no-storage-info
 // --no-median-slopes
 // --no-min-squares

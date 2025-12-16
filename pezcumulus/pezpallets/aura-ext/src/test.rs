@@ -38,23 +38,23 @@ use pezsp_trie::{proof_size_extension::ProofSizeExt, recorder::Recorder};
 use pezsp_version::RuntimeVersion;
 use std::cell::RefCell;
 
-// Test pallet that reads storage and calls storage_proof_size
-#[pezframe_support::pallet]
+// Test pezpallet that reads storage and calls storage_proof_size
+#[pezframe_support::pezpallet]
 pub mod test_pallet {
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type TestStorage<T: Config> = StorageValue<_, u64, ValueQuery>;
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn on_initialize(_n: BlockNumberFor<T>) -> Weight {
 			let proof_size =
 				pezcumulus_primitives_proof_size_hostfunction::storage_proof_size::storage_proof_size(
@@ -188,7 +188,7 @@ fn relay_chain_state_proof(relay_slot: u64) -> RelayChainStateProof {
 }
 
 fn assert_slot_info(expected_slot: u64, expected_authored: u32) {
-	let (slot, authored) = pallet::RelaySlotInfo::<Test>::get().unwrap();
+	let (slot, authored) = pezpallet::RelaySlotInfo::<Test>::get().unwrap();
 	assert_eq!(slot, Slot::from(expected_slot), "Slot stored in RelaySlotInfo is incorrect.");
 	assert_eq!(
 		authored, expected_authored,
@@ -436,23 +436,23 @@ fn test_can_build_upon_unincluded_segment_size() {
 fn block_executor_does_not_influence_proof_size_recordings() {
 	fn build_block(header: <Block as BlockT>::Header) -> <Block as BlockT>::Header {
 		// Initialize the block
-		pezframe_system::Pallet::<Test>::initialize(
+		pezframe_system::Pezpallet::<Test>::initialize(
 			&header.number,
 			&header.parent_hash,
 			&header.digest(),
 		);
 
 		// We omit `teyrchain-system` as it is not important here.
-		<pezframe_system::Pallet<Test> as Hooks<_>>::on_initialize(header.number);
-		<crate::Pallet<Test> as Hooks<_>>::on_initialize(header.number);
-		<test_pallet::Pallet<Test> as Hooks<_>>::on_initialize(header.number);
+		<pezframe_system::Pezpallet<Test> as Hooks<_>>::on_initialize(header.number);
+		<crate::Pezpallet<Test> as Hooks<_>>::on_initialize(header.number);
+		<test_pallet::Pezpallet<Test> as Hooks<_>>::on_initialize(header.number);
 
-		<test_pallet::Pallet<Test> as Hooks<_>>::on_finalize(header.number);
-		<crate::Pallet<Test> as Hooks<_>>::on_finalize(header.number);
-		<pezframe_system::Pallet<Test> as Hooks<_>>::on_finalize(header.number);
+		<test_pallet::Pezpallet<Test> as Hooks<_>>::on_finalize(header.number);
+		<crate::Pezpallet<Test> as Hooks<_>>::on_finalize(header.number);
+		<pezframe_system::Pezpallet<Test> as Hooks<_>>::on_finalize(header.number);
 
 		// Finalize the block
-		pezframe_system::Pallet::<Test>::finalize()
+		pezframe_system::Pezpallet::<Test>::finalize()
 	}
 
 	// Create a simple executive that calls on_initialize and on_finalize

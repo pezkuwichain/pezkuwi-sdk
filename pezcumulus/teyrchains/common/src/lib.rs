@@ -117,7 +117,7 @@ mod constants {
 		pezkuwi_primitives::MAX_POV_SIZE as u64,
 	);
 
-	/// Treasury pallet id of the local chain, used to convert into AccountId
+	/// Treasury pezpallet id of the local chain, used to convert into AccountId
 	pub const TREASURY_PALLET_ID: PalletId = PalletId(*b"py/trsry");
 }
 

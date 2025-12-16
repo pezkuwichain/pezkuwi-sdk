@@ -16,7 +16,7 @@
 
 //! Contains the V6 storage definition of the host configuration.
 
-use crate::configuration::{Config, Pallet};
+use crate::configuration::{Config, Pezpallet};
 use alloc::vec::Vec;
 use pezframe_support::pezpallet_prelude::*;
 use pezframe_system::pezpallet_prelude::BlockNumberFor;
@@ -124,11 +124,11 @@ mod v6 {
 
 	#[pezframe_support::storage_alias]
 	pub(crate) type ActiveConfig<T: Config> =
-		StorageValue<Pallet<T>, V6HostConfiguration<BlockNumberFor<T>>, OptionQuery>;
+		StorageValue<Pezpallet<T>, V6HostConfiguration<BlockNumberFor<T>>, OptionQuery>;
 
 	#[pezframe_support::storage_alias]
 	pub(crate) type PendingConfigs<T: Config> = StorageValue<
-		Pallet<T>,
+		Pezpallet<T>,
 		Vec<(SessionIndex, V6HostConfiguration<BlockNumberFor<T>>)>,
 		OptionQuery,
 	>;

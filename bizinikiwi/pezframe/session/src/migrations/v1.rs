@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use crate::{Config, DisabledValidators as NewDisabledValidators, Pallet, Vec};
+use crate::{Config, DisabledValidators as NewDisabledValidators, Pezpallet, Vec};
 use pezframe_support::{
 	pezpallet_prelude::{Get, ValueQuery, Weight},
 	traits::UncheckedOnRuntimeUpgrade,
@@ -31,7 +31,7 @@ use pezframe_support::migrations::VersionedMigration;
 
 /// This is the storage getting migrated.
 #[pezframe_support::storage_alias]
-type DisabledValidators<T: Config> = StorageValue<Pallet<T>, Vec<u32>, ValueQuery>;
+type DisabledValidators<T: Config> = StorageValue<Pezpallet<T>, Vec<u32>, ValueQuery>;
 
 pub trait MigrateDisabledValidators {
 	/// Peek the list of disabled validators and their offence severity.
@@ -98,6 +98,6 @@ pub type MigrateV0ToV1<T, S> = VersionedMigration<
 	0,
 	1,
 	VersionUncheckedMigrateV0ToV1<T, S>,
-	Pallet<T>,
+	Pezpallet<T>,
 	<T as pezframe_system::Config>::DbWeight,
 >;

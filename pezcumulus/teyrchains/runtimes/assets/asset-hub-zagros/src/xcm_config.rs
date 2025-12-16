@@ -263,7 +263,7 @@ pub type XcmOriginToTransactDispatchOrigin = (
 	// Native signed account converter; this just converts an `AccountId32` origin into a normal
 	// `RuntimeOrigin::Signed` origin of the same 32-byte value.
 	SignedAccountId32AsNative<RelayNetwork, RuntimeOrigin>,
-	// Xcm origins can be represented natively under the Xcm pallet's Xcm origin.
+	// Xcm origins can be represented natively under the Xcm pezpallet's Xcm origin.
 	XcmPassthrough<RuntimeOrigin>,
 );
 
@@ -325,7 +325,7 @@ pub type Barrier = TrailingSetTopicAsId<
 					// If the message is one that immediately attempts to pay for execution, then
 					// allow it.
 					AllowTopLevelPaidExecutionFrom<Everything>,
-					// Parent, its pluralities (i.e. governance bodies), relay treasury pallet and
+					// Parent, its pluralities (i.e. governance bodies), relay treasury pezpallet and
 					// sibling teyrchains get free execution.
 					AllowExplicitUnpaidExecutionFrom<(
 						ParentOrParentsPlurality,
@@ -504,7 +504,7 @@ pub type FellowshipAdminToPlurality =
 /// Type to convert the `Treasurer` origin to a Plurality `Location` value.
 pub type TreasurerToPlurality = OriginToPluralityVoice<RuntimeOrigin, Treasurer, TreasurerBodyId>;
 
-/// Type to convert a pallet `Origin` type value into a `Location` value which represents an
+/// Type to convert a pezpallet `Origin` type value into a `Location` value which represents an
 /// interior location of this chain for a destination chain.
 pub type LocalPalletOriginToLocation = (
 	// GeneralAdmin origin to be used in XCM as a corresponding Plurality `Location` value.

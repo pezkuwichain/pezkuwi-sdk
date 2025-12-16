@@ -17,15 +17,15 @@
 //! }
 //! ```
 //!
-//! within the pallet, if you want to use the standard `println!`, it needs to be wrapped in
+//! within the pezpallet, if you want to use the standard `println!`, it needs to be wrapped in
 //! [`pezsp_std::if_std`]. Of course, this means that this print code is only available to you in the
 //! `std` compiler flag, and never present in a wasm build.
 //!
 //! ```
-//! // somewhere in your pallet. This is not a real pallet code.
-//! mod pallet {
-//! 	struct Pallet;
-//! 	impl Pallet {
+//! // somewhere in your pezpallet. This is not a real pezpallet code.
+//! mod pezpallet {
+//! 	struct Pezpallet;
+//! 	impl Pezpallet {
 //! 		fn print() {
 //! 			pezsp_std::if_std! {
 //! 				println!("Hello, world!");
@@ -42,9 +42,9 @@
 //! 1. `log-level`, signifying how important it is.
 //! 2. `log-target`, signifying to which component it belongs.
 //!
-//! Add log statements to your pallet as such:
+//! Add log statements to your pezpallet as such:
 //!
-//! You can add the log crate to the `Cargo.toml` of the pallet.
+//! You can add the log crate to the `Cargo.toml` of the pezpallet.
 //!
 //! ```text
 //! #[dependencies]
@@ -59,14 +59,14 @@
 //!
 //! More conveniently, the `frame` umbrella crate re-exports the log crate as [`frame::log`].
 //!
-//! Then, the pallet can use this crate to emit log statements. In this statement, we use the info
+//! Then, the pezpallet can use this crate to emit log statements. In this statement, we use the info
 //! level, and the target is `pezpallet-example`.
 //!
 //! ```
-//! mod pallet {
-//! 	struct Pallet;
+//! mod pezpallet {
+//! 	struct Pezpallet;
 //!
-//! 	impl Pallet {
+//! 	impl Pezpallet {
 //! 		fn logs() {
 //! 			frame::log::info!(target: "pezpallet-example", "Hello, world!");
 //! 		}
@@ -81,7 +81,7 @@
 //! // in your test
 //! fn it_also_prints() {
 //! 	pezsp_api::init_runtime_logger();
-//! 	// call into your pallet, and now it will print `log` statements.
+//! 	// call into your pezpallet, and now it will print `log` statements.
 //! }
 //! ```
 //!
@@ -107,7 +107,7 @@
 //! ## Log Target Prefixing
 //!
 //! Many [`crate::pezkuwi_sdk::frame_runtime`] pallets emit logs with log target `runtime::<name of
-//! pallet>`, for example `runtime::system`. This then allows one to run a node with a wasm blob
+//! pezpallet>`, for example `runtime::system`. This then allows one to run a node with a wasm blob
 //! compiled with `LOG_TARGET=runtime=debug`, which enables the log target of all pallets who's log
 //! target starts with `runtime`.
 //!

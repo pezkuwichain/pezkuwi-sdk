@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Storage migrations for the vesting pallet.
+//! Storage migrations for the vesting pezpallet.
 
 use super::*;
 use alloc::vec;

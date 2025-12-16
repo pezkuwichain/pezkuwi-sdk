@@ -1,6 +1,6 @@
-# Tipping Pallet ( pezpallet-tips )
+# Tipping Pezpallet ( pezpallet-tips )
 
-**Note :: This pallet is tightly coupled to pezpallet-treasury**
+**Note :: This pezpallet is tightly coupled to pezpallet-treasury**
 
 A subsystem to allow for an agile "tipping" process, whereby a reward may be given without first
 having a pre-determined stakeholder group come to consensus on how much should be paid.

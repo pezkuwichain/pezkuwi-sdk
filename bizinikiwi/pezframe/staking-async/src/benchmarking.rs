@@ -15,13 +15,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Staking pallet benchmarking.
+//! Staking pezpallet benchmarking.
 
 use super::*;
 use crate::{
 	asset,
 	session_rotation::{Eras, Rotator},
-	Pallet as Staking,
+	Pezpallet as Staking,
 };
 use alloc::collections::BTreeMap;
 pub use pezframe_benchmarking::{
@@ -753,7 +753,7 @@ mod benchmarks {
 		// clean up any existing state.
 		clear_validators_and_nominators::<T>();
 
-		let origin_weight = Pallet::<T>::min_nominator_bond()
+		let origin_weight = Pezpallet::<T>::min_nominator_bond()
 			// we use 100 to play friendly with the list threshold values in the mock
 			.max(100u32.into());
 
@@ -1062,7 +1062,7 @@ mod benchmarks {
 			reporters: Default::default(),
 			slash_fraction: Perbill::from_percent(50),
 		}];
-		<crate::Pallet<T> as rc_client::AHStakingInterface>::on_new_offences(
+		<crate::Pezpallet<T> as rc_client::AHStakingInterface>::on_new_offences(
 			slash_session,
 			offences,
 		);
@@ -1136,7 +1136,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			<crate::Pallet<T> as rc_client::AHStakingInterface>::on_new_offences(
+			<crate::Pezpallet<T> as rc_client::AHStakingInterface>::on_new_offences(
 				slash_session,
 				offences,
 			);
@@ -1183,7 +1183,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			<crate::Pallet<T> as rc_client::AHStakingInterface>::on_relay_session_report(report);
+			<crate::Pezpallet<T> as rc_client::AHStakingInterface>::on_relay_session_report(report);
 		}
 
 		ensure!(Rotator::<T>::active_era() == initial_active_era + 1, "active era not bumped");
@@ -1310,7 +1310,7 @@ mod benchmarks {
 		let result;
 		#[block]
 		{
-			result = Pallet::<T>::prune_era_step(RawOrigin::Signed(caller).into(), era);
+			result = Pezpallet::<T>::prune_era_step(RawOrigin::Signed(caller).into(), era);
 		}
 
 		validate_pruning_weight::<T>(&result, "ErasStakersPaged", v);
@@ -1331,7 +1331,7 @@ mod benchmarks {
 		let result;
 		#[block]
 		{
-			result = Pallet::<T>::prune_era_step(RawOrigin::Signed(caller).into(), era);
+			result = Pezpallet::<T>::prune_era_step(RawOrigin::Signed(caller).into(), era);
 		}
 
 		validate_pruning_weight::<T>(&result, "ErasStakersOverview", v);
@@ -1352,7 +1352,7 @@ mod benchmarks {
 		let result;
 		#[block]
 		{
-			result = Pallet::<T>::prune_era_step(RawOrigin::Signed(caller).into(), era);
+			result = Pezpallet::<T>::prune_era_step(RawOrigin::Signed(caller).into(), era);
 		}
 
 		validate_pruning_weight::<T>(&result, "ErasValidatorPrefs", v);
@@ -1373,7 +1373,7 @@ mod benchmarks {
 		let result;
 		#[block]
 		{
-			result = Pallet::<T>::prune_era_step(RawOrigin::Signed(caller).into(), era);
+			result = Pezpallet::<T>::prune_era_step(RawOrigin::Signed(caller).into(), era);
 		}
 
 		validate_pruning_weight::<T>(&result, "ClaimedRewards", v);
@@ -1392,7 +1392,7 @@ mod benchmarks {
 		let result;
 		#[block]
 		{
-			result = Pallet::<T>::prune_era_step(RawOrigin::Signed(caller).into(), era);
+			result = Pezpallet::<T>::prune_era_step(RawOrigin::Signed(caller).into(), era);
 		}
 
 		validate_pruning_weight::<T>(&result, "ErasValidatorReward", 1);
@@ -1411,7 +1411,7 @@ mod benchmarks {
 		let result;
 		#[block]
 		{
-			result = Pallet::<T>::prune_era_step(RawOrigin::Signed(caller).into(), era);
+			result = Pezpallet::<T>::prune_era_step(RawOrigin::Signed(caller).into(), era);
 		}
 
 		validate_pruning_weight::<T>(&result, "ErasRewardPoints", 1);
@@ -1430,7 +1430,7 @@ mod benchmarks {
 		let result;
 		#[block]
 		{
-			result = Pallet::<T>::prune_era_step(RawOrigin::Signed(caller).into(), era);
+			result = Pezpallet::<T>::prune_era_step(RawOrigin::Signed(caller).into(), era);
 		}
 
 		validate_pruning_weight::<T>(&result, "ErasTotalStake", 1);

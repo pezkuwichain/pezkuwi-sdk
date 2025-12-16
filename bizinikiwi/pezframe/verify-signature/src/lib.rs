@@ -37,29 +37,29 @@ pub use extension::VerifySignature;
 use pezframe_support::Parameter;
 pub use weights::WeightInfo;
 
-pub use pallet::*;
+pub use pezpallet::*;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezsp_runtime::traits::{IdentifyAccount, Verify};
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
 	/// Configuration trait.
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
-		/// Signature type that the extension of this pallet can verify.
+		/// Signature type that the extension of this pezpallet can verify.
 		type Signature: Verify<Signer = Self::AccountIdentifier>
 			+ Parameter
 			+ Encode
 			+ Decode
 			+ Send
 			+ Sync;
-		/// The account identifier used by this pallet's signature type.
+		/// The account identifier used by this pezpallet's signature type.
 		type AccountIdentifier: IdentifyAccount<AccountId = Self::AccountId>;
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 		/// Helper to create a signature to be benchmarked.
 		#[cfg(feature = "runtime-benchmarks")]

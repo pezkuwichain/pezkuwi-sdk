@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Minimal pallet without `pezframe_system::Config`-super trait.
+//! Minimal pezpallet without `pezframe_system::Config`-super trait.
 
 // Make sure we fail compilation on warnings
 #![warn(missing_docs)]
@@ -24,20 +24,20 @@
 pub use pezframe_support::dispatch::RawOrigin;
 use pezframe_system::pezpallet_prelude::BlockNumberFor;
 
-pub use self::pallet::*;
+pub use self::pezpallet::*;
 
-#[pezframe_support::pallet(dev_mode)]
-pub mod pallet {
+#[pezframe_support::pezpallet(dev_mode)]
+pub mod pezpallet {
 	use super::*;
 	use crate::{self as pezframe_system, pezpallet_prelude::*};
 	use pezframe_support::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
 	/// The configuration trait.
-	#[pallet::config(pezframe_system_config)]
-	#[pallet::disable_pezframe_system_supertrait_check]
+	#[pezpallet::config(pezframe_system_config)]
+	#[pezpallet::disable_pezframe_system_supertrait_check]
 	pub trait Config: 'static + Eq + Clone {
 		/// The block number type.
 		type BlockNumber: Parameter + Member + Default + MaybeSerializeDeserialize + MaxEncodedLen;
@@ -57,31 +57,31 @@ pub mod pallet {
 			+ Member
 			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>
 			+ From<Event<Self>>;
-		/// The information about the pallet setup in the runtime.
+		/// The information about the pezpallet setup in the runtime.
 		type PalletInfo: pezframe_support::traits::PalletInfo;
 		/// The db weights.
 		type DbWeight: Get<pezframe_support::weights::RuntimeDbWeight>;
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// A noop call.
 		pub fn noop(_origin: OriginFor<T>) -> DispatchResult {
 			Ok(())
 		}
 	}
 
-	impl<T: Config> Pallet<T> {
+	impl<T: Config> Pezpallet<T> {
 		/// A empty method.
 		pub fn deposit_event(_event: impl Into<T::RuntimeEvent>) {}
 	}
 
 	/// The origin type.
-	#[pallet::origin]
+	#[pezpallet::origin]
 	pub type Origin<T> = RawOrigin<<T as Config>::AccountId>;
 
 	/// The error type.
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Test error documentation
 		TestError,
@@ -93,7 +93,7 @@ pub mod pallet {
 	}
 
 	/// The event type.
-	#[pallet::event]
+	#[pezpallet::event]
 	pub enum Event<T: Config> {
 		/// The extrinsic is successful
 		ExtrinsicSuccess,
@@ -113,7 +113,7 @@ where
 }
 
 /// Same semantic as [`pezframe_system`].
-// Note: we cannot use [`pezframe_system`] here since the pallet does not depend on
+// Note: we cannot use [`pezframe_system`] here since the pezpallet does not depend on
 // [`pezframe_system::Config`].
 pub mod pezpallet_prelude {
 	pub use crate::ensure_root;
@@ -139,7 +139,7 @@ where
 
 		(
 			Output::decode(&mut TrailingZeroInput::new(subject)).unwrap_or_default(),
-			pezframe_system::Pallet::<T>::block_number(),
+			pezframe_system::Pezpallet::<T>::block_number(),
 		)
 	}
 }

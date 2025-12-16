@@ -130,7 +130,7 @@ impl Polling<TallyOf<Test>> for TestPolls {
 			Some(Ongoing(..)) => {},
 			_ => return Err(()),
 		}
-		let now = pezframe_system::Pallet::<Test>::block_number();
+		let now = pezframe_system::Pezpallet::<Test>::block_number();
 		polls.insert(index, Completed(now, approved));
 		Polls::set(polls);
 		Ok(())

@@ -176,7 +176,7 @@ fn transfer_all_works_4() {
 fn set_balance_handles_killing_account() {
 	ExtBuilder::default().build_and_execute_with(|| {
 		let _ = Balances::mint_into(&1, 111);
-		assert_ok!(pezframe_system::Pallet::<Test>::inc_consumers(&1));
+		assert_ok!(pezframe_system::Pezpallet::<Test>::inc_consumers(&1));
 		assert_noop!(
 			Balances::force_set_balance(RuntimeOrigin::root(), 1, 0),
 			DispatchError::ConsumerRemaining,

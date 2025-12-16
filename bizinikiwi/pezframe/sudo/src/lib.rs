@@ -23,14 +23,14 @@
 //! [github]: https://img.shields.io/badge/github-8da0cb?style=for-the-badge&labelColor=555555&logo=github
 //! [pezkuwi]: https://img.shields.io/badge/polkadot-E6007A?style=for-the-badge&logo=polkadot&logoColor=white
 //!
-//! # Sudo Pallet
+//! # Sudo Pezpallet
 //!
-//! A pallet to provide a way to execute privileged runtime calls using a specified sudo ("superuser
+//! A pezpallet to provide a way to execute privileged runtime calls using a specified sudo ("superuser
 //! do") account.
 //!
-//! ## Pallet API
+//! ## Pezpallet API
 //!
-//! See the [`pallet`] module for more information about the interfaces this pallet exposes,
+//! See the [`pezpallet`] module for more information about the interfaces this pezpallet exposes,
 //! including its configuration trait, dispatchables, storage items, events and errors.
 //!
 //! ## Overview
@@ -40,24 +40,24 @@
 //! Setting a privileged account, called the _sudo key_, allows you to make such calls as an
 //! extrinsic.
 //!
-//! Here's an example of a privileged function in another pallet:
+//! Here's an example of a privileged function in another pezpallet:
 //!
 //! ```
-//! #[pezframe_support::pallet]
-//! pub mod pallet {
+//! #[pezframe_support::pezpallet]
+//! pub mod pezpallet {
 //! 	use super::*;
 //! 	use pezframe_support::pezpallet_prelude::*;
 //! 	use pezframe_system::pezpallet_prelude::*;
 //!
-//! 	#[pallet::pallet]
-//! 	pub struct Pallet<T>(_);
+//! 	#[pezpallet::pezpallet]
+//! 	pub struct Pezpallet<T>(_);
 //!
-//! 	#[pallet::config]
+//! 	#[pezpallet::config]
 //! 	pub trait Config: pezframe_system::Config {}
 //!
-//! 	#[pallet::call]
-//! 	impl<T: Config> Pallet<T> {
-//! 		#[pallet::weight(0)]
+//! 	#[pezpallet::call]
+//! 	impl<T: Config> Pezpallet<T> {
+//! 		#[pezpallet::weight(0)]
 //!         pub fn privileged_function(origin: OriginFor<T>) -> DispatchResult {
 //!             ensure_root(origin)?;
 //!
@@ -69,23 +69,23 @@
 //! }
 //! ```
 //!
-//! With the Sudo pallet configured in your chain's runtime you can execute this privileged
-//! function by constructing a call using the [`sudo`](Pallet::sudo) dispatchable.
+//! With the Sudo pezpallet configured in your chain's runtime you can execute this privileged
+//! function by constructing a call using the [`sudo`](Pezpallet::sudo) dispatchable.
 //!
-//! To use this pallet in your runtime, a sudo key must be specified in the [`GenesisConfig`] of
-//! the pallet. You can change this key at anytime once your chain is live using the
-//! [`set_key`](Pallet::set_key) dispatchable, however <strong>only one sudo key can be set at a
-//! time</strong>. The pallet also allows you to make a call using
-//! [`sudo_unchecked_weight`](Pallet::sudo_unchecked_weight), which allows the sudo account to
+//! To use this pezpallet in your runtime, a sudo key must be specified in the [`GenesisConfig`] of
+//! the pezpallet. You can change this key at anytime once your chain is live using the
+//! [`set_key`](Pezpallet::set_key) dispatchable, however <strong>only one sudo key can be set at a
+//! time</strong>. The pezpallet also allows you to make a call using
+//! [`sudo_unchecked_weight`](Pezpallet::sudo_unchecked_weight), which allows the sudo account to
 //! execute a call with a custom weight.
 //!
 //! <div class="example-wrap" style="display:inline-block"><pre class="compile_fail"
 //! style="white-space:normal;font:inherit;">
-//! <strong>Note:</strong> this pallet is not meant to be used inside other pallets. It is only
+//! <strong>Note:</strong> this pezpallet is not meant to be used inside other pallets. It is only
 //! meant to be used by constructing runtime calls from outside the runtime.
 //! </pre></div>
 //!
-//! This pallet also defines a [`TransactionExtension`](pezsp_runtime::traits::TransactionExtension)
+//! This pezpallet also defines a [`TransactionExtension`](pezsp_runtime::traits::TransactionExtension)
 //! called [`CheckOnlySudoAccount`] to ensure that only signed transactions by the sudo account are
 //! accepted by the transaction pool. The intended use of this signed extension is to prevent other
 //! accounts from spamming the transaction pool for the initial phase of a chain, during which
@@ -108,10 +108,10 @@
 //!
 //! ## Low Level / Implementation Details
 //!
-//! This pallet checks that the caller of its dispatchables is a signed account and ensures that the
+//! This pezpallet checks that the caller of its dispatchables is a signed account and ensures that the
 //! caller matches the sudo key in storage.
-//! A caller of this pallet's dispatchables does not pay any fees to dispatch a call. If the account
-//! making one of these calls is not the sudo key, the pallet returns a [`Error::RequireSudo`]
+//! A caller of this pezpallet's dispatchables does not pay any fees to dispatch a call. If the account
+//! making one of these calls is not the sudo key, the pezpallet returns a [`Error::RequireSudo`]
 //! error.
 //!
 //! Once an origin is verified, sudo calls use `dispatch_bypass_filter` from the
@@ -141,12 +141,12 @@ pub mod weights;
 pub use weights::WeightInfo;
 
 pub use extension::CheckOnlySudoAccount;
-pub use pallet::*;
+pub use pezpallet::*;
 
 type AccountIdLookupOf<T> = <<T as pezframe_system::Config>::Lookup as StaticLookup>::Source;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::{DispatchResult, *};
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::{pezpallet_prelude::*, RawOrigin};
@@ -171,31 +171,31 @@ pub mod pallet {
 			type RuntimeCall = ();
 		}
 	}
-	#[pallet::config(with_default)]
+	#[pezpallet::config(with_default)]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// A sudo-able call.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		type RuntimeCall: Parameter
 			+ UnfilteredDispatchable<RuntimeOrigin = Self::RuntimeOrigin>
 			+ GetDispatchInfo;
 
-		/// Type representing the weight of this pallet
+		/// Type representing the weight of this pezpallet
 		type WeightInfo: WeightInfo;
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Authenticates the sudo key and dispatches a function call with `Root` origin.
-		#[pallet::call_index(0)]
-		#[pallet::weight({
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight({
 			let dispatch_info = call.get_dispatch_info();
 			(
 				T::WeightInfo::sudo().saturating_add(dispatch_info.call_weight),
@@ -220,8 +220,8 @@ pub mod pallet {
 		/// Sudo user to specify the weight of the call.
 		///
 		/// The dispatch origin for this call must be _Signed_.
-		#[pallet::call_index(1)]
-		#[pallet::weight((*weight, call.get_dispatch_info().class))]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight((*weight, call.get_dispatch_info().class))]
 		pub fn sudo_unchecked_weight(
 			origin: OriginFor<T>,
 			call: Box<<T as Config>::RuntimeCall>,
@@ -239,8 +239,8 @@ pub mod pallet {
 
 		/// Authenticates the current sudo key and sets the given AccountId (`new`) as the new sudo
 		/// key.
-		#[pallet::call_index(2)]
-		#[pallet::weight(T::WeightInfo::set_key())]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(T::WeightInfo::set_key())]
 		pub fn set_key(
 			origin: OriginFor<T>,
 			new: AccountIdLookupOf<T>,
@@ -259,8 +259,8 @@ pub mod pallet {
 		/// a given account.
 		///
 		/// The dispatch origin for this call must be _Signed_.
-		#[pallet::call_index(3)]
-		#[pallet::weight({
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight({
 			let dispatch_info = call.get_dispatch_info();
 			(
 				T::WeightInfo::sudo_as().saturating_add(dispatch_info.call_weight),
@@ -287,8 +287,8 @@ pub mod pallet {
 		/// Permanently removes the sudo key.
 		///
 		/// **This cannot be un-done.**
-		#[pallet::call_index(4)]
-		#[pallet::weight(T::WeightInfo::remove_key())]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(T::WeightInfo::remove_key())]
 		pub fn remove_key(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 			Self::ensure_sudo(origin)?;
 
@@ -300,8 +300,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A sudo call just took place.
 		Sudid {
@@ -317,39 +317,39 @@ pub mod pallet {
 		},
 		/// The key was permanently removed.
 		KeyRemoved,
-		/// A [sudo_as](Pallet::sudo_as) call just took place.
+		/// A [sudo_as](Pezpallet::sudo_as) call just took place.
 		SudoAsDone {
 			/// The result of the call made by the sudo user.
 			sudo_result: DispatchResult,
 		},
 	}
 
-	#[pallet::error]
-	/// Error for the Sudo pallet.
+	#[pezpallet::error]
+	/// Error for the Sudo pezpallet.
 	pub enum Error<T> {
 		/// Sender must be the Sudo account.
 		RequireSudo,
 	}
 
 	/// The `AccountId` of the sudo key.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Key<T: Config> = StorageValue<_, T::AccountId, OptionQuery>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(pezframe_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		/// The `AccountId` of the sudo key.
 		pub key: Option<T::AccountId>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			Key::<T>::set(self.key.clone());
 		}
 	}
 
-	impl<T: Config> Pallet<T> {
+	impl<T: Config> Pezpallet<T> {
 		/// Ensure that the caller is the sudo key.
 		pub(crate) fn ensure_sudo(origin: OriginFor<T>) -> DispatchResult {
 			let sender = ensure_signed_or_root(origin)?;

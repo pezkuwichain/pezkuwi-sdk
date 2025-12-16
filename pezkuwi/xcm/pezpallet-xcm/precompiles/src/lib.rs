@@ -102,7 +102,7 @@ where
 
 				ensure_xcm_version(&final_message)?;
 
-				pezpallet_xcm::Pallet::<Runtime>::send(
+				pezpallet_xcm::Pezpallet::<Runtime>::send(
 					frame_origin,
 					final_destination.into(),
 					final_message.into(),
@@ -129,7 +129,7 @@ where
 
 				ensure_xcm_version(&final_message)?;
 
-				let result = pezpallet_xcm::Pallet::<Runtime>::execute(
+				let result = pezpallet_xcm::Pezpallet::<Runtime>::execute(
 					frame_origin,
 					final_message.into(),
 					max_weight,

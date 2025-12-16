@@ -15,9 +15,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Delegated Staking Pallet
+//! # Delegated Staking Pezpallet
 //!
-//! This pallet implements [`pezsp_staking::DelegationInterface`] that provides delegation
+//! This pezpallet implements [`pezsp_staking::DelegationInterface`] that provides delegation
 //! functionality to `delegators` and `agents`. It is designed to be used in conjunction with
 //! [`StakingInterface`] and relies on [`Config::CoreStaking`] to provide primitive staking
 //! functions.
@@ -38,24 +38,24 @@
 //!
 //! ## Goals
 //!
-//! Direct nomination on the Staking pallet does not scale well. Nominations pools were created to
+//! Direct nomination on the Staking pezpallet does not scale well. Nominations pools were created to
 //! address this by pooling delegator funds into one account and then staking it. This though had
 //! a very critical limitation that the funds were moved from delegator account to pool account
 //! and hence the delegator lost control over their funds for using it for other purposes such as
-//! governance. This pallet aims to solve this by extending the staking pallet to support a new
+//! governance. This pezpallet aims to solve this by extending the staking pezpallet to support a new
 //! primitive function: delegation of funds to an `agent` with the intent of staking. The agent can
 //! then stake the delegated funds to [`Config::CoreStaking`] on behalf of the delegators.
 //!
 //! ### Withdrawal Management
 //! Agent unbonding does not regulate ordering of consequent withdrawal for delegators. This is upto
-//! the consumer of this pallet to implement in what order unbondable funds from
+//! the consumer of this pezpallet to implement in what order unbondable funds from
 //! [`Config::CoreStaking`] can be withdrawn by the delegators.
 //!
 //! ### Reward and Slashing
-//! This pallet does not enforce any specific strategy for how rewards or slashes are applied. It
+//! This pezpallet does not enforce any specific strategy for how rewards or slashes are applied. It
 //! is upto the `agent` account to decide how to apply the rewards and slashes.
 //!
-//! This importantly allows clients of this pallet to build their own strategies for reward/slashes.
+//! This importantly allows clients of this pezpallet to build their own strategies for reward/slashes.
 //! For example, an `agent` account can choose to first slash the reward pot before slashing the
 //! delegators. Or part of the reward can go to an insurance fund that can be used to cover any
 //! potential future slashes. The goal is to eventually allow foreign MultiLocations
@@ -64,42 +64,42 @@
 
 //! ## Core functions
 //!
-//! - Allow an account to receive delegations. See [`Pallet::register_agent`].
-//! - Delegate funds to an `agent` account. See [`Pallet::delegate_to_agent`].
+//! - Allow an account to receive delegations. See [`Pezpallet::register_agent`].
+//! - Delegate funds to an `agent` account. See [`Pezpallet::delegate_to_agent`].
 //! - Release delegated funds from an `agent` account to the `delegator`. See
-//!   [`Pallet::release_delegation`].
-//! - Migrate a `Nominator` account to an `agent` account. See [`Pallet::migrate_to_agent`].
+//!   [`Pezpallet::release_delegation`].
+//! - Migrate a `Nominator` account to an `agent` account. See [`Pezpallet::migrate_to_agent`].
 //!   Explained in more detail in the `Migration` section.
 //! - Migrate unclaimed delegated funds from `agent` to delegator. When a nominator migrates to an
 //!   agent, the funds are held in a proxy account. This function allows the delegator to claim
-//!   their share of the funds from the proxy account. See [`Pallet::migrate_delegation`].
+//!   their share of the funds from the proxy account. See [`Pezpallet::migrate_delegation`].
 //!
 //! ## Lazy Slashing
-//! One of the reasons why direct nominators on staking pallet cannot scale well is because all
+//! One of the reasons why direct nominators on staking pezpallet cannot scale well is because all
 //! nominators are slashed at the same time. This is expensive and needs to be bounded operation.
 //!
-//! This pallet implements a lazy slashing mechanism. Any slashes to the `agent` are posted in its
+//! This pezpallet implements a lazy slashing mechanism. Any slashes to the `agent` are posted in its
 //! `AgentLedger` as a pending slash. Since the actual amount is held in the multiple
-//! `delegator` accounts, this pallet has no way to know how to apply slash. It is the `agent`'s
-//! responsibility to apply slashes for each delegator, one at a time. Staking pallet ensures the
+//! `delegator` accounts, this pezpallet has no way to know how to apply slash. It is the `agent`'s
+//! responsibility to apply slashes for each delegator, one at a time. Staking pezpallet ensures the
 //! pending slash never exceeds staked amount and would freeze further withdraws until all pending
 //! slashes are cleared.
 //!
-//! The user of this pallet can apply slash using
+//! The user of this pezpallet can apply slash using
 //! [DelegationInterface::delegator_slash](pezsp_staking::DelegationInterface::delegator_slash).
 //!
 //! ## Migration from Nominator to Agent
 //! More details [here](https://hackmd.io/@ak0n/454-np-governance).
 //!
 //! ## Nomination Pool vs Delegation Staking
-//! This pallet is not a replacement for Nomination Pool but adds a new primitive in addition to
-//! staking pallet that can be used by Nomination Pool to support delegation based staking. It can
-//! be thought of as an extension to the Staking Pallet in relation to Nomination Pools.
+//! This pezpallet is not a replacement for Nomination Pool but adds a new primitive in addition to
+//! staking pezpallet that can be used by Nomination Pool to support delegation based staking. It can
+//! be thought of as an extension to the Staking Pezpallet in relation to Nomination Pools.
 //! Technically, these changes could be made in one of those pallets as well but that would have
 //! meant significant refactoring and high chances of introducing a regression. With this approach,
-//! we can keep the existing pallets with minimal changes and introduce a new pallet that can be
+//! we can keep the existing pallets with minimal changes and introduce a new pezpallet that can be
 //! optionally used by Nomination Pool. The vision is to build this in a configurable way such that
-//! runtime can choose whether to use this pallet or not.
+//! runtime can choose whether to use this pezpallet or not.
 //!
 //! With that said, following is the main difference between
 //! #### Nomination Pool without delegation support
@@ -108,14 +108,14 @@
 //!
 //! #### Nomination Pool with delegation support
 //!  1) delegate fund from delegator to pool account, and
-//!  2) stake from pool account as an `Agent` account on the staking pallet.
+//!  2) stake from pool account as an `Agent` account on the staking pezpallet.
 //!
 //! The difference being, in the second approach, the delegated funds will be locked in-place in
 //! user's account enabling them to participate in use cases that allows use of `held` funds such
 //! as participation in governance voting.
 //!
 //! Nomination pool still does all the heavy lifting around pool administration, reward
-//! distribution, lazy slashing and as such, is not meant to be replaced with this pallet.
+//! distribution, lazy slashing and as such, is not meant to be replaced with this pezpallet.
 //!
 //! ## Limitations
 //! - Rewards can not be auto-compounded.
@@ -135,7 +135,7 @@ pub mod types;
 
 extern crate alloc;
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 use types::*;
 
@@ -160,7 +160,7 @@ use pezsp_runtime::{
 };
 use pezsp_staking::{Agent, Delegator, EraIndex, StakingInterface, StakingUnchecked};
 
-/// The log target of this pallet.
+/// The log target of this pezpallet.
 pub const LOG_TARGET: &str = "runtime::delegated-staking";
 // syntactic sugar for logging.
 #[macro_export]
@@ -168,7 +168,7 @@ macro_rules! log {
 	($level:tt, $patter:expr $(, $values:expr)* $(,)?) => {
 		log::$level!(
 			target: $crate::LOG_TARGET,
-			concat!("[{:?}] 🏊‍♂️ ", $patter), <pezframe_system::Pallet<T>>::block_number() $(, $values)*
+			concat!("[{:?}] 🏊‍♂️ ", $patter), <pezframe_system::Pezpallet<T>>::block_number() $(, $values)*
 		)
 	};
 }
@@ -177,24 +177,24 @@ pub type BalanceOf<T> =
 
 use pezframe_system::{ensure_signed, pezpallet_prelude::*, RawOrigin};
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
 	/// The in-code storage version.
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(0);
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T>(PhantomData<T>);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T>(PhantomData<T>);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
-		/// Injected identifier for the pallet.
-		#[pallet::constant]
+		/// Injected identifier for the pezpallet.
+		#[pezpallet::constant]
 		type PalletId: Get<pezframe_support::PalletId>;
 
 		/// Currency type.
@@ -206,7 +206,7 @@ pub mod pallet {
 		type OnSlash: OnUnbalanced<Credit<Self::AccountId, Self::Currency>>;
 
 		/// Fraction of the slash that is rewarded to the caller of pending slash to the agent.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type SlashRewardFraction: Get<Perbill>;
 
 		/// Overarching hold reason.
@@ -216,7 +216,7 @@ pub mod pallet {
 		type CoreStaking: StakingUnchecked<Balance = BalanceOf<Self>, AccountId = Self::AccountId>;
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// The account cannot perform this operation.
 		NotAllowed,
@@ -244,20 +244,20 @@ pub mod pallet {
 		NothingToSlash,
 		/// Failed to withdraw amount from Core Staking.
 		WithdrawFailed,
-		/// Operation not supported by this pallet.
+		/// Operation not supported by this pezpallet.
 		NotSupported,
 	}
 
 	/// A reason for placing a hold on funds.
-	#[pallet::composite_enum]
+	#[pezpallet::composite_enum]
 	pub enum HoldReason {
 		/// Funds held for stake delegation to another account.
 		#[codec(index = 0)]
 		StakingDelegation,
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub (super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub (super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// Funds delegated by a delegator.
 		Delegated { agent: T::AccountId, delegator: T::AccountId, amount: BalanceOf<T> },
@@ -273,19 +273,19 @@ pub mod pallet {
 	///
 	/// Implementation note: We are not using a double map with `delegator` and `agent` account
 	/// as keys since we want to restrict delegators to delegate only to one account at a time.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Delegators<T: Config> =
 		CountedStorageMap<_, Twox64Concat, T::AccountId, Delegation<T>, OptionQuery>;
 
 	/// Map of `Agent` to their `Ledger`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Agents<T: Config> =
 		CountedStorageMap<_, Twox64Concat, T::AccountId, AgentLedger<T>, OptionQuery>;
 
-	// This pallet is not currently written with the intention of exposing any calls. But the
+	// This pezpallet is not currently written with the intention of exposing any calls. But the
 	// functions defined in the following impl block should act as a good reference for how the
 	// exposed calls would look like when exposed.
-	impl<T: Config> Pallet<T> {
+	impl<T: Config> Pezpallet<T> {
 		/// Register an account to become a stake `Agent`. Sometimes also called a `Delegatee`.
 		///
 		/// Delegators can authorize `Agent`s to stake on their behalf by delegating their funds to
@@ -450,8 +450,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		#[cfg(feature = "try-runtime")]
 		fn try_state(_n: BlockNumberFor<T>) -> Result<(), pezsp_runtime::TryRuntimeError> {
 			Self::do_try_state()
@@ -459,7 +459,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Derive an account from the migrating agent account where the unclaimed delegation funds
 	/// are held.
 	pub fn generate_proxy_delegator(agent: Agent<T::AccountId>) -> Delegator<T::AccountId> {
@@ -765,7 +765,7 @@ impl<T: Config> Pallet<T> {
 use alloc::collections::btree_map::BTreeMap;
 
 #[cfg(any(test, feature = "try-runtime"))]
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	pub(crate) fn do_try_state() -> Result<(), pezsp_runtime::TryRuntimeError> {
 		// build map to avoid reading storage multiple times.
 		let delegation_map = Delegators::<T>::iter().collect::<BTreeMap<_, _>>();

@@ -16,17 +16,17 @@
 
 // Benchmarking for the `AssetTransactor` trait via `Fungible`.
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 #[cfg(feature = "runtime-benchmarks")]
 pub mod benchmarking;
 #[cfg(test)]
 mod mock;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use pezframe_support::pezpallet_prelude::Get;
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config + crate::Config {
 		/// The type of `fungible` that is being used under the hood.
 		///
@@ -47,6 +47,6 @@ pub mod pallet {
 		fn get_asset() -> xcm::latest::Asset;
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T, I = ()>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T, I = ()>(_);
 }

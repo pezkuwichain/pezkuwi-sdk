@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! A minimal runtime that includes the template [`pallet`](`pezpallet_minimal_template`).
+//! A minimal runtime that includes the template [`pezpallet`](`pezpallet_minimal_template`).
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
@@ -145,59 +145,59 @@ mod runtime {
 	)]
 	pub struct Runtime;
 
-	/// Mandatory system pallet that should always be included in a FRAME runtime.
+	/// Mandatory system pezpallet that should always be included in a FRAME runtime.
 	#[runtime::pezpallet_index(0)]
-	pub type System = pezframe_system::Pallet<Runtime>;
+	pub type System = pezframe_system::Pezpallet<Runtime>;
 
 	/// Provides a way for consensus systems to set and check the onchain time.
 	#[runtime::pezpallet_index(1)]
-	pub type Timestamp = pezpallet_timestamp::Pallet<Runtime>;
+	pub type Timestamp = pezpallet_timestamp::Pezpallet<Runtime>;
 
 	/// Provides the ability to keep track of balances.
 	#[runtime::pezpallet_index(2)]
-	pub type Balances = pezpallet_balances::Pallet<Runtime>;
+	pub type Balances = pezpallet_balances::Pezpallet<Runtime>;
 
 	/// Provides a way to execute privileged functions.
 	#[runtime::pezpallet_index(3)]
-	pub type Sudo = pezpallet_sudo::Pallet<Runtime>;
+	pub type Sudo = pezpallet_sudo::Pezpallet<Runtime>;
 
 	/// Provides the ability to charge for extrinsic execution.
 	#[runtime::pezpallet_index(4)]
-	pub type TransactionPayment = pezpallet_transaction_payment::Pallet<Runtime>;
+	pub type TransactionPayment = pezpallet_transaction_payment::Pezpallet<Runtime>;
 
-	/// A minimal pallet template.
+	/// A minimal pezpallet template.
 	#[runtime::pezpallet_index(5)]
-	pub type Template = pezpallet_minimal_template::Pallet<Runtime>;
+	pub type Template = pezpallet_minimal_template::Pezpallet<Runtime>;
 }
 
 parameter_types! {
 	pub const Version: RuntimeVersion = VERSION;
 }
 
-/// Implements the types required for the system pallet.
+/// Implements the types required for the system pezpallet.
 #[derive_impl(pezframe_system::config_preludes::SolochainDefaultConfig)]
 impl pezframe_system::Config for Runtime {
 	type Block = Block;
 	type Version = Version;
-	// Use the account data from the balances pallet
+	// Use the account data from the balances pezpallet
 	type AccountData = pezpallet_balances::AccountData<<Runtime as pezpallet_balances::Config>::Balance>;
 }
 
-// Implements the types required for the balances pallet.
+// Implements the types required for the balances pezpallet.
 #[derive_impl(pezpallet_balances::config_preludes::TestDefaultConfig)]
 impl pezpallet_balances::Config for Runtime {
 	type AccountStore = System;
 }
 
-// Implements the types required for the sudo pallet.
+// Implements the types required for the sudo pezpallet.
 #[derive_impl(pezpallet_sudo::config_preludes::TestDefaultConfig)]
 impl pezpallet_sudo::Config for Runtime {}
 
-// Implements the types required for the sudo pallet.
+// Implements the types required for the sudo pezpallet.
 #[derive_impl(pezpallet_timestamp::config_preludes::TestDefaultConfig)]
 impl pezpallet_timestamp::Config for Runtime {}
 
-// Implements the types required for the transaction payment pallet.
+// Implements the types required for the transaction payment pezpallet.
 #[derive_impl(pezpallet_transaction_payment::config_preludes::TestDefaultConfig)]
 impl pezpallet_transaction_payment::Config for Runtime {
 	type OnChargeTransaction = pezpallet_transaction_payment::FungibleAdapter<Balances, ()>;
@@ -207,7 +207,7 @@ impl pezpallet_transaction_payment::Config for Runtime {
 	type LengthToFee = FixedFee<1, <Self as pezpallet_balances::Config>::Balance>;
 }
 
-// Implements the types required for the template pallet.
+// Implements the types required for the template pezpallet.
 impl pezpallet_minimal_template::Config for Runtime {}
 
 type Block = frame::runtime::types_common::BlockOf<Runtime, TxExtension>;

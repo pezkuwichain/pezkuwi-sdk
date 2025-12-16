@@ -24,8 +24,8 @@
 // Executed Command:
 // ./target/release/pezkuwi-teyrchain
 // benchmark
-// pallet
-// --pallet
+// pezpallet
+// --pezpallet
 // pezcumulus-pezpallet-dmp-queue
 // --chain
 // asset-hub-kusama-dev

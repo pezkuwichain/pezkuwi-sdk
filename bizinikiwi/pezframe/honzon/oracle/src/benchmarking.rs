@@ -16,12 +16,12 @@
 // limitations under the License.
 
 use super::*;
-use crate::Pallet as Oracle;
+use crate::Pezpallet as Oracle;
 
 use pezframe_benchmarking::v2::*;
 
 use pezframe_support::assert_ok;
-use pezframe_system::{Pallet as System, RawOrigin};
+use pezframe_system::{Pezpallet as System, RawOrigin};
 
 #[instance_benchmarks]
 mod benchmarks {

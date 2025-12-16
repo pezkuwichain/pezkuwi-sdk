@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Functions for the Assets pallet.
+//! Functions for the Assets pezpallet.
 
 use super::*;
 use alloc::vec;
@@ -30,7 +30,7 @@ pub(super) enum DeadConsequence {
 use DeadConsequence::*;
 
 // The main implementation block for the module.
-impl<T: Config<I>, I: 'static> Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 	// Public immutables
 
 	/// Return the extra "sid-car" data for `id`/`who`, or `None` if the account doesn't exist.
@@ -77,16 +77,16 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 				ExistenceReason::DepositFrom(depositor.clone(), deposit)
 			}
 		} else if d.is_sufficient {
-			pezframe_system::Pallet::<T>::inc_sufficients(who);
+			pezframe_system::Pezpallet::<T>::inc_sufficients(who);
 			d.sufficients.saturating_inc();
 			ExistenceReason::Sufficient
 		} else {
-			pezframe_system::Pallet::<T>::inc_consumers(who)
+			pezframe_system::Pezpallet::<T>::inc_consumers(who)
 				.map_err(|_| Error::<T, I>::UnavailableConsumer)?;
 			// We ensure that we can still increment consumers once more because we could otherwise
 			// allow accidental usage of all consumer references which could cause grief.
-			if !pezframe_system::Pallet::<T>::can_inc_consumer(who) {
-				pezframe_system::Pallet::<T>::dec_consumers(who);
+			if !pezframe_system::Pezpallet::<T>::can_inc_consumer(who) {
+				pezframe_system::Pezpallet::<T>::dec_consumers(who);
 				return Err(Error::<T, I>::UnavailableConsumer.into());
 			}
 			ExistenceReason::Consumer
@@ -113,10 +113,10 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 		use ExistenceReason::*;
 
 		match *reason {
-			Consumer => pezframe_system::Pallet::<T>::dec_consumers(who),
+			Consumer => pezframe_system::Pezpallet::<T>::dec_consumers(who),
 			Sufficient => {
 				d.sufficients = d.sufficients.saturating_sub(1);
-				pezframe_system::Pallet::<T>::dec_sufficients(who);
+				pezframe_system::Pezpallet::<T>::dec_sufficients(who);
 			},
 			DepositRefunded => {},
 			DepositHeld(_) | DepositFrom(..) if !force => return Keep,
@@ -160,7 +160,7 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 			if amount < details.min_balance {
 				return DepositConsequence::BelowMinimum;
 			}
-			if !details.is_sufficient && !pezframe_system::Pallet::<T>::can_accrue_consumers(who, 2) {
+			if !details.is_sufficient && !pezframe_system::Pezpallet::<T>::can_accrue_consumers(who, 2) {
 				return DepositConsequence::CannotCreate;
 			}
 			if details.is_sufficient && details.sufficients.checked_add(1).is_none() {

@@ -7,7 +7,7 @@ license = "Apache-2.0"
 publish = false
 homepage.workspace = true
 repository.workspace = true
-description = "Pezkuwi SDK FRAME support: support test pallet"
+description = "Pezkuwi SDK FRAME support: support test pezpallet"
 documentation = "https://docs.rs/pezframe-support-test-pezpallet"
 
 [lints]

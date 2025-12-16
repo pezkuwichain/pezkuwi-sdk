@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Nfts pallet benchmarking.
+//! Nfts pezpallet benchmarking.
 
 #![cfg(feature = "runtime-benchmarks")]
 
@@ -32,7 +32,7 @@ use pezframe_support::{
 use pezframe_system::RawOrigin as SystemOrigin;
 use pezsp_runtime::traits::{Bounded, One};
 
-use crate::Pallet as Nfts;
+use crate::Pezpallet as Nfts;
 
 const SEED: u32 = 0;
 
@@ -190,7 +190,7 @@ fn add_collection_attribute<T: Config<I>, I: 'static>(
 }
 
 fn assert_last_event<T: Config<I>, I: 'static>(generic_event: <T as Config<I>>::RuntimeEvent) {
-	let events = pezframe_system::Pallet::<T>::events();
+	let events = pezframe_system::Pezpallet::<T>::events();
 	let system_event: <T as pezframe_system::Config>::RuntimeEvent = generic_event.into();
 	// compare to the last event record
 	let pezframe_system::EventRecord { event, .. } = &events[events.len() - 1];

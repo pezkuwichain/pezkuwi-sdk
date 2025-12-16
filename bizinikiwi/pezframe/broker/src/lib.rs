@@ -18,7 +18,7 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 #![doc = include_str!("../README.md")]
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 mod adapt_price;
 mod benchmarking;
@@ -49,11 +49,11 @@ pub use types::*;
 
 extern crate alloc;
 
-/// The log target for this pallet.
+/// The log target for this pezpallet.
 const LOG_TARGET: &str = "runtime::broker";
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use alloc::vec::Vec;
 	use pezframe_support::{
@@ -69,22 +69,22 @@ pub mod pallet {
 
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(4);
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
-		/// Weight information for all calls of this pallet.
+		/// Weight information for all calls of this pezpallet.
 		type WeightInfo: WeightInfo;
 
 		/// Currency used to pay for Coretime.
 		type Currency: Mutate<Self::AccountId> + Balanced<Self::AccountId>;
 
-		/// The origin test needed for administrating this pallet.
+		/// The origin test needed for administrating this pezpallet.
 		type AdminOrigin: EnsureOrigin<Self::RuntimeOrigin>;
 
 		/// What to do with any revenues collected from the sale of Coretime.
@@ -107,103 +107,103 @@ pub mod pallet {
 		type SovereignAccountOf: MaybeConvert<TaskId, Self::AccountId>;
 
 		/// Identifier from which the internal Pot is generated.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type PalletId: Get<PalletId>;
 
 		/// Number of Relay-chain blocks per timeslice.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type TimeslicePeriod: Get<RelayBlockNumberOf<Self>>;
 
 		/// Maximum number of legacy leases.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxLeasedCores: Get<u32>;
 
 		/// Maximum number of system cores.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxReservedCores: Get<u32>;
 
 		/// Given that we are performing all auto-renewals in a single block, it has to be limited.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxAutoRenewals: Get<u32>;
 
 		/// The smallest amount of credits a user can purchase.
 		///
 		/// Needed to prevent spam attacks.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MinimumCreditPurchase: Get<BalanceOf<Self>>;
 	}
 
-	/// The current configuration of this pallet.
-	#[pallet::storage]
+	/// The current configuration of this pezpallet.
+	#[pezpallet::storage]
 	pub type Configuration<T> = StorageValue<_, ConfigRecordOf<T>, OptionQuery>;
 
 	/// The Pezkuwi Core reservations (generally tasked with the maintenance of System Chains).
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Reservations<T> = StorageValue<_, ReservationsRecordOf<T>, ValueQuery>;
 
 	/// The Pezkuwi Core legacy leases.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Leases<T> = StorageValue<_, LeasesRecordOf<T>, ValueQuery>;
 
-	/// The current status of miscellaneous subsystems of this pallet.
-	#[pallet::storage]
+	/// The current status of miscellaneous subsystems of this pezpallet.
+	#[pezpallet::storage]
 	pub type Status<T> = StorageValue<_, StatusRecord, OptionQuery>;
 
 	/// The details of the current sale, including its properties and status.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type SaleInfo<T> = StorageValue<_, SaleInfoRecordOf<T>, OptionQuery>;
 
 	/// Records of potential renewals.
 	///
 	/// Renewals will only actually be allowed if `CompletionStatus` is actually `Complete`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type PotentialRenewals<T> =
 		StorageMap<_, Twox64Concat, PotentialRenewalId, PotentialRenewalRecordOf<T>, OptionQuery>;
 
 	/// The current (unassigned or provisionally assigend) Regions.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Regions<T> = StorageMap<_, Blake2_128Concat, RegionId, RegionRecordOf<T>, OptionQuery>;
 
 	/// The work we plan on having each core do at a particular time in the future.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Workplan<T> =
 		StorageMap<_, Twox64Concat, (Timeslice, CoreIndex), Schedule, OptionQuery>;
 
 	/// The current workload of each core. This gets updated with workplan as timeslices pass.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Workload<T> = StorageMap<_, Twox64Concat, CoreIndex, Schedule, ValueQuery>;
 
 	/// Record of a single contribution to the Instantaneous Coretime Pool.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type InstaPoolContribution<T> =
 		StorageMap<_, Blake2_128Concat, RegionId, ContributionRecordOf<T>, OptionQuery>;
 
 	/// Record of Coretime entering or leaving the Instantaneous Coretime Pool.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type InstaPoolIo<T> = StorageMap<_, Blake2_128Concat, Timeslice, PoolIoRecord, ValueQuery>;
 
 	/// Total InstaPool rewards for each Timeslice and the number of core parts which contributed.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type InstaPoolHistory<T> =
 		StorageMap<_, Blake2_128Concat, Timeslice, InstaPoolHistoryRecordOf<T>>;
 
 	/// Received core count change from the relay chain.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type CoreCountInbox<T> = StorageValue<_, CoreIndex, OptionQuery>;
 
 	/// Keeping track of cores which have auto-renewal enabled.
 	///
 	/// Sorted by `CoreIndex` to make the removal of cores from auto-renewal more efficient.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type AutoRenewals<T: Config> =
 		StorageValue<_, BoundedVec<AutoRenewalRecord, T::MaxAutoRenewals>, ValueQuery>;
 
 	/// Received revenue info from the relay chain.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type RevenueInbox<T> = StorageValue<_, OnDemandRevenueRecordOf<T>, OptionQuery>;
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A Region of Bulk Coretime has been purchased.
 		Purchased {
@@ -362,7 +362,7 @@ pub mod pallet {
 		SalesStarted {
 			/// The nominal price of an Region of Bulk Coretime.
 			price: BalanceOf<T>,
-			/// The maximum number of cores which this pallet will attempt to assign.
+			/// The maximum number of cores which this pezpallet will attempt to assign.
 			core_count: CoreIndex,
 		},
 		/// The act of claiming revenue has begun.
@@ -496,7 +496,7 @@ pub mod pallet {
 		AutoRenewalLimitReached,
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	#[derive(PartialEq)]
 	pub enum Error<T> {
 		/// The given region identity is not known.
@@ -513,7 +513,7 @@ pub mod pallet {
 		VoidPivot,
 		/// The pivot mask for the interlacing is complete (and therefore not a strict subset).
 		CompletePivot,
-		/// The workplan of the pallet's state is invalid. This indicates a state corruption.
+		/// The workplan of the pezpallet's state is invalid. This indicates a state corruption.
 		CorruptWorkplan,
 		/// There is no sale happening currently.
 		NoSales,
@@ -528,7 +528,7 @@ pub mod pallet {
 		WrongTime,
 		/// Invalid attempt to renew.
 		NotAllowed,
-		/// This pallet has not yet been initialized.
+		/// This pezpallet has not yet been initialized.
 		Uninitialized,
 		/// The purchase cannot happen yet as the sale period is yet to begin.
 		TooEarly,
@@ -580,33 +580,33 @@ pub mod pallet {
 	}
 
 	#[derive(pezframe_support::DefaultNoBound)]
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	pub struct GenesisConfig<T: Config> {
 		#[serde(skip)]
 		pub _config: core::marker::PhantomData<T>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
-			pezframe_system::Pallet::<T>::inc_providers(&Pallet::<T>::account_id());
+			pezframe_system::Pezpallet::<T>::inc_providers(&Pezpallet::<T>::account_id());
 		}
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn on_initialize(_now: BlockNumberFor<T>) -> Weight {
 			Self::do_tick()
 		}
 	}
 
-	#[pallet::call(weight(<T as Config>::WeightInfo))]
-	impl<T: Config> Pallet<T> {
-		/// Configure the pallet.
+	#[pezpallet::call(weight(<T as Config>::WeightInfo))]
+	impl<T: Config> Pezpallet<T> {
+		/// Configure the pezpallet.
 		///
 		/// - `origin`: Must be Root or pass `AdminOrigin`.
-		/// - `config`: The configuration for this pallet.
-		#[pallet::call_index(0)]
+		/// - `config`: The configuration for this pezpallet.
+		#[pezpallet::call_index(0)]
 		pub fn configure(
 			origin: OriginFor<T>,
 			config: ConfigRecordOf<T>,
@@ -623,7 +623,7 @@ pub mod pallet {
 		///
 		/// - `origin`: Must be Root or pass `AdminOrigin`.
 		/// - `workload`: The workload which should be permanently placed on a core.
-		#[pallet::call_index(1)]
+		#[pezpallet::call_index(1)]
 		pub fn reserve(origin: OriginFor<T>, workload: Schedule) -> DispatchResultWithPostInfo {
 			T::AdminOrigin::ensure_origin_or_root(origin)?;
 			Self::do_reserve(workload)?;
@@ -637,7 +637,7 @@ pub mod pallet {
 		///   core on which the reservation has been scheduled. However, it is possible that if
 		///   other cores are reserved or unreserved in the same sale rotation that they won't
 		///   correspond, so it's better to look up the core properly in the `Reservations` storage.
-		#[pallet::call_index(2)]
+		#[pezpallet::call_index(2)]
 		pub fn unreserve(origin: OriginFor<T>, item_index: u32) -> DispatchResultWithPostInfo {
 			T::AdminOrigin::ensure_origin_or_root(origin)?;
 			Self::do_unreserve(item_index)?;
@@ -653,7 +653,7 @@ pub mod pallet {
 		/// - `task`: The workload which should be placed on a core.
 		/// - `until`: The timeslice now earlier than which `task` should be placed as a workload on
 		///   a core.
-		#[pallet::call_index(3)]
+		#[pezpallet::call_index(3)]
 		pub fn set_lease(
 			origin: OriginFor<T>,
 			task: TaskId,
@@ -673,8 +673,8 @@ pub mod pallet {
 		///
 		/// This will call [`Self::request_core_count`] internally to set the correct core count on
 		/// the relay chain.
-		#[pallet::call_index(4)]
-		#[pallet::weight(T::WeightInfo::start_sales(
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(T::WeightInfo::start_sales(
 			T::MaxLeasedCores::get() + T::MaxReservedCores::get() + *extra_cores as u32
 		))]
 		pub fn start_sales(
@@ -692,7 +692,7 @@ pub mod pallet {
 		/// - `origin`: Must be a Signed origin with at least enough funds to pay the current price
 		///   of Bulk Coretime.
 		/// - `price_limit`: An amount no more than which should be paid.
-		#[pallet::call_index(5)]
+		#[pezpallet::call_index(5)]
 		pub fn purchase(
 			origin: OriginFor<T>,
 			price_limit: BalanceOf<T>,
@@ -707,7 +707,7 @@ pub mod pallet {
 		/// - `origin`: Must be a Signed origin with at least enough funds to pay the renewal price
 		///   of the core.
 		/// - `core`: The core which should be renewed.
-		#[pallet::call_index(6)]
+		#[pezpallet::call_index(6)]
 		pub fn renew(origin: OriginFor<T>, core: CoreIndex) -> DispatchResultWithPostInfo {
 			let who = ensure_signed(origin)?;
 			Self::do_renew(who, core)?;
@@ -719,7 +719,7 @@ pub mod pallet {
 		/// - `origin`: Must be a Signed origin of the account which owns the Region `region_id`.
 		/// - `region_id`: The Region whose ownership should change.
 		/// - `new_owner`: The new owner for the Region.
-		#[pallet::call_index(7)]
+		#[pezpallet::call_index(7)]
 		pub fn transfer(
 			origin: OriginFor<T>,
 			region_id: RegionId,
@@ -736,7 +736,7 @@ pub mod pallet {
 		/// - `origin`: Must be a Signed origin of the account which owns the Region `region_id`.
 		/// - `region_id`: The Region which should be partitioned into two non-overlapping Regions.
 		/// - `pivot`: The offset in time into the Region at which to make the split.
-		#[pallet::call_index(8)]
+		#[pezpallet::call_index(8)]
 		pub fn partition(
 			origin: OriginFor<T>,
 			region_id: RegionId,
@@ -755,7 +755,7 @@ pub mod pallet {
 		///   regularity.
 		/// - `pivot`: The interlace mask of one of the two new regions (the other is its partial
 		///   complement).
-		#[pallet::call_index(9)]
+		#[pezpallet::call_index(9)]
 		pub fn interlace(
 			origin: OriginFor<T>,
 			region_id: RegionId,
@@ -774,7 +774,7 @@ pub mod pallet {
 		/// - `finality`: Indication of whether this assignment is final (in which case it may be
 		///   eligible for renewal) or provisional (in which case it may be manipulated and/or
 		/// reassigned at a later stage).
-		#[pallet::call_index(10)]
+		#[pezpallet::call_index(10)]
 		pub fn assign(
 			origin: OriginFor<T>,
 			region_id: RegionId,
@@ -792,7 +792,7 @@ pub mod pallet {
 		/// - `region_id`: The Region which should be assigned to the Pool.
 		/// - `payee`: The account which is able to collect any revenue due for the usage of this
 		///   Coretime.
-		#[pallet::call_index(11)]
+		#[pezpallet::call_index(11)]
 		pub fn pool(
 			origin: OriginFor<T>,
 			region_id: RegionId,
@@ -812,8 +812,8 @@ pub mod pallet {
 		///   must be greater than 0. This may affect the weight of the call but should be ideally
 		///   made equivalent to the length of the Region `region_id`. If less, further dispatches
 		///   will be required with the same `region_id` to claim revenue for the remainder.
-		#[pallet::call_index(12)]
-		#[pallet::weight(T::WeightInfo::claim_revenue(*max_timeslices))]
+		#[pezpallet::call_index(12)]
+		#[pezpallet::weight(T::WeightInfo::claim_revenue(*max_timeslices))]
 		pub fn claim_revenue(
 			origin: OriginFor<T>,
 			region_id: RegionId,
@@ -830,7 +830,7 @@ pub mod pallet {
 		/// - `amount`: The amount of credit to purchase.
 		/// - `beneficiary`: The account on the Relay-chain which controls the credit (generally
 		///   this will be the collator's hot wallet).
-		#[pallet::call_index(13)]
+		#[pezpallet::call_index(13)]
 		pub fn purchase_credit(
 			origin: OriginFor<T>,
 			amount: BalanceOf<T>,
@@ -845,7 +845,7 @@ pub mod pallet {
 		///
 		/// - `origin`: Can be any kind of origin.
 		/// - `region_id`: The Region which has expired.
-		#[pallet::call_index(14)]
+		#[pezpallet::call_index(14)]
 		pub fn drop_region(
 			_origin: OriginFor<T>,
 			region_id: RegionId,
@@ -858,7 +858,7 @@ pub mod pallet {
 		///
 		/// - `origin`: Can be any kind of origin.
 		/// - `region_id`: The Region identifying the Pool Contribution which has expired.
-		#[pallet::call_index(15)]
+		#[pezpallet::call_index(15)]
 		pub fn drop_contribution(
 			_origin: OriginFor<T>,
 			region_id: RegionId,
@@ -871,7 +871,7 @@ pub mod pallet {
 		///
 		/// - `origin`: Can be any kind of origin.
 		/// - `region_id`: The time of the Pool History record which has expired.
-		#[pallet::call_index(16)]
+		#[pezpallet::call_index(16)]
 		pub fn drop_history(_origin: OriginFor<T>, when: Timeslice) -> DispatchResultWithPostInfo {
 			Self::do_drop_history(when)?;
 			Ok(Pays::No.into())
@@ -882,7 +882,7 @@ pub mod pallet {
 		/// - `origin`: Can be any kind of origin.
 		/// - `core`: The core to which the expired renewal refers.
 		/// - `when`: The timeslice to which the expired renewal refers. This must have passed.
-		#[pallet::call_index(17)]
+		#[pezpallet::call_index(17)]
 		pub fn drop_renewal(
 			_origin: OriginFor<T>,
 			core: CoreIndex,
@@ -896,24 +896,24 @@ pub mod pallet {
 		///
 		/// - `origin`: Must be Root or pass `AdminOrigin`.
 		/// - `core_count`: The desired number of cores to be made available.
-		#[pallet::call_index(18)]
-		#[pallet::weight(T::WeightInfo::request_core_count((*core_count).into()))]
+		#[pezpallet::call_index(18)]
+		#[pezpallet::weight(T::WeightInfo::request_core_count((*core_count).into()))]
 		pub fn request_core_count(origin: OriginFor<T>, core_count: CoreIndex) -> DispatchResult {
 			T::AdminOrigin::ensure_origin_or_root(origin)?;
 			Self::do_request_core_count(core_count)?;
 			Ok(())
 		}
 
-		#[pallet::call_index(19)]
-		#[pallet::weight(T::WeightInfo::notify_core_count())]
+		#[pezpallet::call_index(19)]
+		#[pezpallet::weight(T::WeightInfo::notify_core_count())]
 		pub fn notify_core_count(origin: OriginFor<T>, core_count: CoreIndex) -> DispatchResult {
 			T::AdminOrigin::ensure_origin_or_root(origin)?;
 			Self::do_notify_core_count(core_count)?;
 			Ok(())
 		}
 
-		#[pallet::call_index(20)]
-		#[pallet::weight(T::WeightInfo::notify_revenue())]
+		#[pezpallet::call_index(20)]
+		#[pezpallet::weight(T::WeightInfo::notify_revenue())]
 		pub fn notify_revenue(
 			origin: OriginFor<T>,
 			revenue: OnDemandRevenueRecordOf<T>,
@@ -934,8 +934,8 @@ pub mod pallet {
 		/// - `workload_end_hint`: should be used when enabling auto-renewal for a core that is not
 		///   expiring in the upcoming bulk period (e.g., due to holding a lease) since it would be
 		///   inefficient to look up when the core expires to schedule the next renewal.
-		#[pallet::call_index(21)]
-		#[pallet::weight(T::WeightInfo::enable_auto_renew())]
+		#[pezpallet::call_index(21)]
+		#[pezpallet::weight(T::WeightInfo::enable_auto_renew())]
 		pub fn enable_auto_renew(
 			origin: OriginFor<T>,
 			core: CoreIndex,
@@ -960,8 +960,8 @@ pub mod pallet {
 		/// - `origin`: Must be the sovereign account of the task.
 		/// - `core`: The core for which we want to disable auto renewal.
 		/// - `task`: The task for which we want to disable auto renewal.
-		#[pallet::call_index(22)]
-		#[pallet::weight(T::WeightInfo::disable_auto_renew())]
+		#[pezpallet::call_index(22)]
+		#[pezpallet::weight(T::WeightInfo::disable_auto_renew())]
 		pub fn disable_auto_renew(
 			origin: OriginFor<T>,
 			core: CoreIndex,
@@ -991,7 +991,7 @@ pub mod pallet {
 		/// This reserves the workload and then injects the workload into the Workplan for the next
 		/// two sale periods. This overwrites any existing assignments for this core at the start of
 		/// the next sale period.
-		#[pallet::call_index(23)]
+		#[pezpallet::call_index(23)]
 		pub fn force_reserve(
 			origin: OriginFor<T>,
 			workload: Schedule,
@@ -1006,7 +1006,7 @@ pub mod pallet {
 		///
 		/// - `origin`: Must be Root or pass `AdminOrigin`.
 		/// - `task`: The task id of the lease which should be removed.
-		#[pallet::call_index(24)]
+		#[pezpallet::call_index(24)]
 		pub fn remove_lease(origin: OriginFor<T>, task: TaskId) -> DispatchResult {
 			T::AdminOrigin::ensure_origin_or_root(origin)?;
 			Self::do_remove_lease(task)
@@ -1016,14 +1016,14 @@ pub mod pallet {
 		///
 		/// - `origin`: Must be Root or pass `AdminOrigin`.
 		/// - `region_id`: The Region to be removed from the workplan.
-		#[pallet::call_index(26)]
+		#[pezpallet::call_index(26)]
 		pub fn remove_assignment(origin: OriginFor<T>, region_id: RegionId) -> DispatchResult {
 			T::AdminOrigin::ensure_origin_or_root(origin)?;
 			Self::do_remove_assignment(region_id)
 		}
 
-		#[pallet::call_index(99)]
-		#[pallet::weight(T::WeightInfo::swap_leases())]
+		#[pezpallet::call_index(99)]
+		#[pezpallet::weight(T::WeightInfo::swap_leases())]
 		pub fn swap_leases(origin: OriginFor<T>, id: TaskId, other: TaskId) -> DispatchResult {
 			T::AdminOrigin::ensure_origin_or_root(origin)?;
 			Self::do_swap_leases(id, other)?;

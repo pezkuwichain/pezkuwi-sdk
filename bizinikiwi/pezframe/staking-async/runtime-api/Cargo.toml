@@ -6,7 +6,7 @@ edition.workspace = true
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
-description = "RPC runtime API for transaction payment FRAME pallet"
+description = "RPC runtime API for transaction payment FRAME pezpallet"
 readme = "README.md"
 documentation = "https://docs.rs/pezpallet-staking-async-runtime-api"
 

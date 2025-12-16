@@ -79,23 +79,23 @@ impl TransactionExtension<RuntimeCall> for DummyExtension {
 	}
 }
 
-#[pezframe_support::pallet(dev_mode)]
+#[pezframe_support::pezpallet(dev_mode)]
 pub mod pezpallet_dummy {
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
-		#[pallet::feeless_if(|_origin: &OriginFor<T>, data: &u32| -> bool {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
+		#[pezpallet::feeless_if(|_origin: &OriginFor<T>, data: &u32| -> bool {
 			*data == 0
 		})]
-		pub fn aux(_origin: OriginFor<T>, #[pallet::compact] _data: u32) -> DispatchResult {
+		pub fn aux(_origin: OriginFor<T>, #[pezpallet::compact] _data: u32) -> DispatchResult {
 			unreachable!()
 		}
 	}

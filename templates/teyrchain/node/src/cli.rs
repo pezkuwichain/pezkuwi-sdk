@@ -44,7 +44,7 @@ pub enum Subcommand {
 	ExportGenesisWasm(pezcumulus_client_cli::ExportGenesisWasmCommand),
 
 	/// Sub-commands concerned with benchmarking.
-	/// The pallet benchmarking moved to the `pallet` sub-command.
+	/// The pezpallet benchmarking moved to the `pezpallet` sub-command.
 	#[command(subcommand)]
 	Benchmark(pezframe_benchmarking_cli::BenchmarkCmd),
 }

@@ -53,7 +53,7 @@ pub trait StorageDoubleMap<K1: FullEncode, K2: FullEncode, V: FullCodec> {
 	/// Hasher for the second key.
 	type Hasher2: StorageHasher;
 
-	/// Pallet prefix. Used for generating final key.
+	/// Pezpallet prefix. Used for generating final key.
 	fn pezpallet_prefix() -> &'static [u8];
 
 	/// Storage prefix. Used for generating final key.

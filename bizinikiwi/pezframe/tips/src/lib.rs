@@ -15,9 +15,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Tipping Pallet ( pezpallet-tips )
+//! # Tipping Pezpallet ( pezpallet-tips )
 //!
-//! > NOTE: This pallet is tightly coupled with pezpallet-treasury.
+//! > NOTE: This pezpallet is tightly coupled with pezpallet-treasury.
 //!
 //! A subsystem to allow for an agile "tipping" process, whereby a reward may be given without first
 //! having a pre-determined stakeholder group come to consensus on how much should be paid.
@@ -82,7 +82,7 @@ use pezframe_system::pezpallet_prelude::BlockNumberFor;
 #[cfg(any(feature = "try-runtime", test))]
 use pezsp_runtime::TryRuntimeError;
 
-pub use pallet::*;
+pub use pezpallet::*;
 pub use weights::WeightInfo;
 
 const LOG_TARGET: &str = "runtime::tips";
@@ -118,8 +118,8 @@ pub struct OpenTip<
 	finders_fee: bool,
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
@@ -127,12 +127,12 @@ pub mod pallet {
 	/// The in-code storage version.
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(4);
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	#[pallet::without_storage_info]
-	pub struct Pallet<T, I = ()>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	#[pezpallet::without_storage_info]
+	pub struct Pezpallet<T, I = ()>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config + pezpallet_treasury::Config<I> {
 		/// The overarching event type.
 		#[allow(deprecated)]
@@ -142,27 +142,27 @@ pub mod pallet {
 		/// Maximum acceptable reason length.
 		///
 		/// Benchmarks depend on this value, be sure to update weights file when changing this value
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaximumReasonLength: Get<u32>;
 
 		/// The amount held on deposit per byte within the tip report reason or bounty description.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type DataDepositPerByte: Get<BalanceOf<Self, I>>;
 
 		/// The period for which a tip remains open after is has achieved threshold tippers.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type TipCountdown: Get<BlockNumberFor<Self>>;
 
 		/// The percent of the final tip which goes to the original reporter of the tip.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type TipFindersFee: Get<Percent>;
 
 		/// The non-zero amount held on deposit for placing a tip report.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type TipReportDepositBase: Get<BalanceOf<Self, I>>;
 
 		/// The maximum amount for a single tip.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxTipAmount: Get<BalanceOf<Self, I>>;
 
 		/// Origin from which tippers must come.
@@ -175,14 +175,14 @@ pub mod pallet {
 		/// Handler for the unbalanced decrease when slashing for a removed tip.
 		type OnSlash: OnUnbalanced<NegativeImbalanceOf<Self, I>>;
 
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 	}
 
 	/// TipsMap that are not yet completed. Keyed by the hash of `(reason, who)` from the value.
 	/// This has the insecure enumerable hash function since the key itself is already
 	/// guaranteed to be a secure hash.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Tips<T: Config<I>, I: 'static = ()> = StorageMap<
 		_,
 		Twox64Concat,
@@ -193,12 +193,12 @@ pub mod pallet {
 
 	/// Simple preimage lookup from the reason's hash to the original data. Again, has an
 	/// insecure enumerable hash since the key is guaranteed to be the result of a secure hash.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Reasons<T: Config<I>, I: 'static = ()> =
 		StorageMap<_, Identity, T::Hash, Vec<u8>, OptionQuery>;
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config<I>, I: 'static = ()> {
 		/// A new tip suggestion has been opened.
 		NewTip { tip_hash: T::Hash },
@@ -212,7 +212,7 @@ pub mod pallet {
 		TipSlashed { tip_hash: T::Hash, finder: T::AccountId, deposit: BalanceOf<T, I> },
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T, I = ()> {
 		/// The reason given is just too big.
 		ReasonTooBig,
@@ -230,8 +230,8 @@ pub mod pallet {
 		Premature,
 	}
 
-	#[pallet::call]
-	impl<T: Config<I>, I: 'static> Pallet<T, I> {
+	#[pezpallet::call]
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 		/// Report something `reason` that deserves a tip and claim any eventual the finder's fee.
 		///
 		/// The dispatch origin for this call must be _Signed_.
@@ -248,8 +248,8 @@ pub mod pallet {
 		/// ## Complexity
 		/// - `O(R)` where `R` length of `reason`.
 		///   - encoding and hashing of 'reason'
-		#[pallet::call_index(0)]
-		#[pallet::weight(<T as Config<I>>::WeightInfo::report_awesome(reason.len() as u32))]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(<T as Config<I>>::WeightInfo::report_awesome(reason.len() as u32))]
 		pub fn report_awesome(
 			origin: OriginFor<T>,
 			reason: Vec<u8>,
@@ -303,8 +303,8 @@ pub mod pallet {
 		/// ## Complexity
 		/// - `O(1)`
 		///   - Depends on the length of `T::Hash` which is fixed.
-		#[pallet::call_index(1)]
-		#[pallet::weight(<T as Config<I>>::WeightInfo::retract_tip())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(<T as Config<I>>::WeightInfo::retract_tip())]
 		pub fn retract_tip(origin: OriginFor<T>, hash: T::Hash) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 			let tip = Tips::<T, I>::get(&hash).ok_or(Error::<T, I>::UnknownTip)?;
@@ -339,13 +339,13 @@ pub mod pallet {
 		///     `ContainsLengthBound`. The actual cost depends on the implementation of
 		///     `T::Tippers`.
 		///   - `O(R)`: hashing and encoding of reason of length `R`
-		#[pallet::call_index(2)]
-		#[pallet::weight(<T as Config<I>>::WeightInfo::tip_new(reason.len() as u32, T::Tippers::max_len() as u32))]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(<T as Config<I>>::WeightInfo::tip_new(reason.len() as u32, T::Tippers::max_len() as u32))]
 		pub fn tip_new(
 			origin: OriginFor<T>,
 			reason: Vec<u8>,
 			who: AccountIdLookupOf<T>,
-			#[pallet::compact] tip_value: BalanceOf<T, I>,
+			#[pezpallet::compact] tip_value: BalanceOf<T, I>,
 		) -> DispatchResult {
 			let tipper = ensure_signed(origin)?;
 			let who = T::Lookup::lookup(who)?;
@@ -394,12 +394,12 @@ pub mod pallet {
 		///
 		///   Actually weight could be lower as it depends on how many tips are in `OpenTip` but it
 		///   is weighted as if almost full i.e of length `T-1`.
-		#[pallet::call_index(3)]
-		#[pallet::weight(<T as Config<I>>::WeightInfo::tip(T::Tippers::max_len() as u32))]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(<T as Config<I>>::WeightInfo::tip(T::Tippers::max_len() as u32))]
 		pub fn tip(
 			origin: OriginFor<T>,
 			hash: T::Hash,
-			#[pallet::compact] tip_value: BalanceOf<T, I>,
+			#[pezpallet::compact] tip_value: BalanceOf<T, I>,
 		) -> DispatchResult {
 			let tipper = ensure_signed(origin)?;
 			ensure!(T::Tippers::contains(&tipper), BadOrigin);
@@ -428,14 +428,14 @@ pub mod pallet {
 		/// - : `O(T)` where `T` is the number of tippers. decoding `Tipper` vec of length `T`. `T`
 		///   is charged as upper bound given by `ContainsLengthBound`. The actual cost depends on
 		///   the implementation of `T::Tippers`.
-		#[pallet::call_index(4)]
-		#[pallet::weight(<T as Config<I>>::WeightInfo::close_tip(T::Tippers::max_len() as u32))]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(<T as Config<I>>::WeightInfo::close_tip(T::Tippers::max_len() as u32))]
 		pub fn close_tip(origin: OriginFor<T>, hash: T::Hash) -> DispatchResult {
 			ensure_signed(origin)?;
 
 			let tip = Tips::<T, I>::get(hash).ok_or(Error::<T, I>::UnknownTip)?;
 			let n = tip.closes.as_ref().ok_or(Error::<T, I>::StillOpen)?;
-			ensure!(pezframe_system::Pallet::<T>::block_number() >= *n, Error::<T, I>::Premature);
+			ensure!(pezframe_system::Pezpallet::<T>::block_number() >= *n, Error::<T, I>::Premature);
 			// closed.
 			Reasons::<T, I>::remove(&tip.reason);
 			Tips::<T, I>::remove(hash);
@@ -453,8 +453,8 @@ pub mod pallet {
 		///
 		/// ## Complexity
 		/// - O(1).
-		#[pallet::call_index(5)]
-		#[pallet::weight(<T as Config<I>>::WeightInfo::slash_tip(T::Tippers::max_len() as u32))]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(<T as Config<I>>::WeightInfo::slash_tip(T::Tippers::max_len() as u32))]
 		pub fn slash_tip(origin: OriginFor<T>, hash: T::Hash) -> DispatchResult {
 			T::RejectOrigin::ensure_origin(origin)?;
 
@@ -474,8 +474,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::hooks]
-	impl<T: Config<I>, I: 'static> Hooks<BlockNumberFor<T>> for Pallet<T, I> {
+	#[pezpallet::hooks]
+	impl<T: Config<I>, I: 'static> Hooks<BlockNumberFor<T>> for Pezpallet<T, I> {
 		fn integrity_test() {
 			assert!(
 				!T::TipReportDepositBase::get().is_zero(),
@@ -490,7 +490,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config<I>, I: 'static> Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 	// Add public immutables and private mutables.
 
 	/// Access tips storage from outside
@@ -529,7 +529,7 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 		Self::retain_active_tips(&mut tip.tips);
 		let threshold = T::Tippers::count().div_ceil(2);
 		if tip.tips.len() >= threshold && tip.closes.is_none() {
-			tip.closes = Some(pezframe_system::Pallet::<T>::block_number() + T::TipCountdown::get());
+			tip.closes = Some(pezframe_system::Pezpallet::<T>::block_number() + T::TipCountdown::get());
 			true
 		} else {
 			false
@@ -570,7 +570,7 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 		tips.sort_by_key(|i| i.1);
 
 		let treasury = Self::account_id();
-		let max_payout = pezpallet_treasury::Pallet::<T, I>::pot();
+		let max_payout = pezpallet_treasury::Pezpallet::<T, I>::pot();
 
 		let mut payout = tips[tips.len() / 2].1.min(max_payout);
 		if !tip.deposit.is_zero() {
@@ -647,9 +647,9 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 		}
 	}
 
-	/// Ensure the correctness of the state of this pallet.
+	/// Ensure the correctness of the state of this pezpallet.
 	///
-	/// This should be valid before and after each state transition of this pallet.
+	/// This should be valid before and after each state transition of this pezpallet.
 	///
 	/// ## Invariants:
 	/// 1. The number of entries in `Tips` should be equal to `Reasons`.

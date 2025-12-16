@@ -30,7 +30,7 @@ use crate::{
 		test_utils::{get_balance, place_contract, set_balance},
 		ExtBuilder, RuntimeEvent as MetaEvent, Test,
 	},
-	AddressMapper, Error, Pallet,
+	AddressMapper, Error, Pezpallet,
 };
 use assert_matches::assert_matches;
 use pezframe_support::{assert_err, assert_ok, parameter_types};
@@ -41,7 +41,7 @@ use pezsp_io::hashing::keccak_256;
 use pezsp_runtime::DispatchError;
 use std::{cell::RefCell, collections::hash_map::HashMap, rc::Rc};
 
-type System = pezframe_system::Pallet<Test>;
+type System = pezframe_system::Pezpallet<Test>;
 
 type MockStack<'a> = Stack<'a, Test, MockExecutable>;
 
@@ -250,7 +250,7 @@ fn transfer_works() {
 			&origin,
 			&ALICE,
 			&BOB,
-			Pallet::<Test>::convert_native_to_evm(value),
+			Pezpallet::<Test>::convert_native_to_evm(value),
 			Preservation::Preserve,
 			&mut storage_meter,
 			&ExecConfig::new_bizinikiwi_tx(),
@@ -278,7 +278,7 @@ fn transfer_to_nonexistent_account_works() {
 	ExtBuilder::default().build().execute_with(|| {
 		let ed = <Test as Config>::Currency::minimum_balance();
 		let value = 1024;
-		let evm_value = Pallet::<Test>::convert_native_to_evm(value);
+		let evm_value = Pezpallet::<Test>::convert_native_to_evm(value);
 		let mut storage_meter = storage::meter::Meter::new(u64::MAX);
 
 		// Transfers to nonexistent accounts should work
@@ -337,7 +337,7 @@ fn transfer_to_nonexistent_account_works() {
 #[test]
 fn correct_transfer_on_call() {
 	let value = 55;
-	let evm_value = Pallet::<Test>::convert_native_to_evm(value);
+	let evm_value = Pezpallet::<Test>::convert_native_to_evm(value);
 
 	let success_ch = MockLoader::insert(Call, move |ctx, _| {
 		assert_eq!(ctx.ext.value_transferred(), evm_value);
@@ -370,7 +370,7 @@ fn correct_transfer_on_call() {
 #[test]
 fn correct_transfer_on_delegate_call() {
 	let value = 35;
-	let evm_value = Pallet::<Test>::convert_native_to_evm(value);
+	let evm_value = Pezpallet::<Test>::convert_native_to_evm(value);
 
 	let success_ch = MockLoader::insert(Call, move |ctx, _| {
 		assert_eq!(ctx.ext.value_transferred(), evm_value);
@@ -499,7 +499,7 @@ fn balance_too_low() {
 			&Origin::from_account_id(ALICE),
 			&from,
 			&dest,
-			Pallet::<Test>::convert_native_to_evm(100u64).as_u64().into(),
+			Pezpallet::<Test>::convert_native_to_evm(100u64).as_u64().into(),
 			Preservation::Preserve,
 			&mut storage_meter,
 			&ExecConfig::new_bizinikiwi_tx(),
@@ -1126,7 +1126,7 @@ fn instantiation_work_with_success_output() {
 					executable,
 					&mut gas_meter,
 					&mut storage_meter,
-					Pallet::<Test>::convert_native_to_evm(min_balance),
+					Pezpallet::<Test>::convert_native_to_evm(min_balance),
 					vec![],
 					Some(&[0 ;32]),
 					&ExecConfig::new_bizinikiwi_tx(),
@@ -1177,7 +1177,7 @@ fn instantiation_fails_with_failing_output() {
 					executable,
 					&mut gas_meter,
 					&mut storage_meter,
-					Pallet::<Test>::convert_native_to_evm(min_balance),
+					Pezpallet::<Test>::convert_native_to_evm(min_balance),
 					vec![],
 					Some(&[0; 32]),
 					&ExecConfig::new_bizinikiwi_tx(),
@@ -1211,7 +1211,7 @@ fn instantiation_from_contract() {
 					Weight::MAX,
 					U256::MAX,
 					Code::Existing(dummy_ch),
-					Pallet::<Test>::convert_native_to_evm(min_balance),
+					Pezpallet::<Test>::convert_native_to_evm(min_balance),
 					vec![],
 					Some(&[48; 32]),
 				)
@@ -1240,7 +1240,7 @@ fn instantiation_from_contract() {
 					BOB_ADDR,
 					&mut GasMeter::<Test>::new(GAS_LIMIT),
 					&mut storage_meter,
-					Pallet::<Test>::convert_native_to_evm(min_balance * 10),
+					Pezpallet::<Test>::convert_native_to_evm(min_balance * 10),
 					vec![],
 					&ExecConfig::new_bizinikiwi_tx(),
 				),
@@ -1271,7 +1271,7 @@ fn instantiation_traps() {
 		move |ctx, _| {
 			// Instantiate a contract and save it's address in `instantiated_contract_address`.
 			let min_balance = <Test as Config>::Currency::minimum_balance();
-			let value = Pallet::<Test>::convert_native_to_evm(min_balance);
+			let value = Pezpallet::<Test>::convert_native_to_evm(min_balance);
 
 			assert_matches!(
 				ctx.ext.instantiate(
@@ -1340,7 +1340,7 @@ fn termination_from_instantiate_succeeds() {
 				executable,
 				&mut gas_meter,
 				&mut storage_meter,
-				Pallet::<Test>::convert_native_to_evm(100u64),
+				Pezpallet::<Test>::convert_native_to_evm(100u64),
 				vec![],
 				Some(&[0; 32]),
 				&ExecConfig::new_bizinikiwi_tx(),
@@ -1619,7 +1619,7 @@ fn call_deny_reentry() {
 #[test]
 fn minimum_balance_must_return_converted_balance() {
 	let min_balance: BalanceOf<Test> = <Test as Config>::Currency::minimum_balance();
-	let min_balance_evm_value: U256 = Pallet::<Test>::convert_native_to_evm(min_balance);
+	let min_balance_evm_value: U256 = Pezpallet::<Test>::convert_native_to_evm(min_balance);
 
 	let succ_fail_code = MockLoader::insert(Constructor, move |ctx, _| {
 		// The value returned by `Ext::minimum_balance` is `U256`, it must
@@ -1708,7 +1708,7 @@ fn nonce() {
 		.build()
 		.execute_with(|| {
 			let min_balance = <Test as Config>::Currency::minimum_balance();
-			let min_balance_evm_value: U256 = Pallet::<Test>::convert_native_to_evm(min_balance);
+			let min_balance_evm_value: U256 = Pezpallet::<Test>::convert_native_to_evm(min_balance);
 
 			let mut gas_meter = GasMeter::<Test>::new(GAS_LIMIT);
 			let fail_executable = MockExecutable::from_storage(fail_code, &mut gas_meter).unwrap();
@@ -2400,7 +2400,7 @@ fn last_frame_output_works_on_instantiate() {
 	let instantiator_ch = MockLoader::insert(Call, {
 		move |ctx, _| {
 			let min_balance = <Test as Config>::Currency::minimum_balance();
-			let value = Pallet::<Test>::convert_native_to_evm(min_balance);
+			let value = Pezpallet::<Test>::convert_native_to_evm(min_balance);
 
 			// Successful instantiation should set the output
 			let address = ctx
@@ -2418,7 +2418,7 @@ fn last_frame_output_works_on_instantiate() {
 					Weight::MAX,
 					U256::MAX,
 					&address,
-					Pallet::<Test>::convert_native_to_evm(1),
+					Pezpallet::<Test>::convert_native_to_evm(1),
 					vec![],
 					true,
 					false,
@@ -2632,7 +2632,7 @@ fn immutable_data_access_checks_work() {
 	let instantiator_ch = MockLoader::insert(Call, {
 		move |ctx, _| {
 			let min_balance = <Test as Config>::Currency::minimum_balance();
-			let value = Pallet::<Test>::convert_native_to_evm(min_balance);
+			let value = Pezpallet::<Test>::convert_native_to_evm(min_balance);
 
 			assert_eq!(
 				ctx.ext.set_immutable_data(vec![0, 1, 2, 3].try_into().unwrap()),
@@ -2804,7 +2804,7 @@ fn immutable_data_set_errors_with_empty_data() {
 	let instantiator_ch = MockLoader::insert(Call, {
 		move |ctx, _| {
 			let min_balance = <Test as Config>::Currency::minimum_balance();
-			let value = Pallet::<Test>::convert_native_to_evm(min_balance);
+			let value = Pezpallet::<Test>::convert_native_to_evm(min_balance);
 
 			ctx.ext
 				.instantiate(Weight::MAX, U256::MAX, Code::Existing(dummy_ch), value, vec![], None)

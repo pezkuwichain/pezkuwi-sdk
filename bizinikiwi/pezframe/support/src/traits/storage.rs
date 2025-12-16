@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Traits for encoding data related to pallet's storage items.
+//! Traits for encoding data related to pezpallet's storage items.
 
 use alloc::{collections::btree_set::BTreeSet, vec, vec::Vec};
 use codec::{Decode, DecodeWithMemTracking, Encode, FullCodec, MaxEncodedLen};
@@ -30,9 +30,9 @@ use pezsp_runtime::{
 	DispatchError, RuntimeDebug,
 };
 
-/// An instance of a pallet in the storage.
+/// An instance of a pezpallet in the storage.
 ///
-/// It is required that these instances are unique, to support multiple instances per pallet in the
+/// It is required that these instances are unique, to support multiple instances per pezpallet in the
 /// same runtime!
 ///
 /// E.g. for module MyModule default instance will have prefix "MyModule" and other instances
@@ -50,19 +50,19 @@ impl Instance for () {
 	const INDEX: u8 = 0;
 }
 
-/// An instance of a storage in a pallet.
+/// An instance of a storage in a pezpallet.
 ///
-/// Define an instance for an individual storage inside a pallet.
-/// The pallet prefix is used to isolate the storage between pallets, and the storage prefix is
-/// used to isolate storages inside a pallet.
+/// Define an instance for an individual storage inside a pezpallet.
+/// The pezpallet prefix is used to isolate the storage between pallets, and the storage prefix is
+/// used to isolate storages inside a pezpallet.
 ///
-/// NOTE: These information can be used to define storages in pallet such as a `StorageMap` which
+/// NOTE: These information can be used to define storages in pezpallet such as a `StorageMap` which
 /// can use keys after `twox_128(pezpallet_prefix())++twox_128(STORAGE_PREFIX)`
 pub trait StorageInstance {
-	/// Prefix of a pallet to isolate it from other pallets.
+	/// Prefix of a pezpallet to isolate it from other pallets.
 	fn pezpallet_prefix() -> &'static str;
 
-	/// Return the prefix hash of pallet instance.
+	/// Return the prefix hash of pezpallet instance.
 	///
 	/// NOTE: This hash must be `twox_128(pezpallet_prefix())`.
 	/// Should not impl this function by hand. Only use the default or macro generated impls.
@@ -70,7 +70,7 @@ pub trait StorageInstance {
 		pezsp_io::hashing::twox_128(Self::pezpallet_prefix().as_bytes())
 	}
 
-	/// Prefix given to a storage to isolate from other storages in the pallet.
+	/// Prefix given to a storage to isolate from other storages in the pezpallet.
 	const STORAGE_PREFIX: &'static str;
 
 	/// Return the prefix hash of storage instance.
@@ -96,7 +96,7 @@ pub trait StorageInstance {
 /// Metadata about storage from the runtime.
 #[derive(Debug, codec::Encode, codec::Decode, Eq, PartialEq, Clone, scale_info::TypeInfo)]
 pub struct StorageInfo {
-	/// Encoded string of pallet name.
+	/// Encoded string of pezpallet name.
 	pub pezpallet_name: Vec<u8>,
 	/// Encoded string of storage name.
 	pub storage_name: Vec<u8>,
@@ -134,7 +134,7 @@ pub trait PartialStorageInfoTrait {
 	fn partial_storage_info() -> Vec<StorageInfo>;
 }
 
-/// Allows a pallet to specify storage keys to whitelist during benchmarking.
+/// Allows a pezpallet to specify storage keys to whitelist during benchmarking.
 /// This means those keys will be excluded from the benchmarking performance
 /// calculation.
 pub trait WhitelistedStorageKeys {

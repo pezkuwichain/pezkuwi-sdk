@@ -51,7 +51,7 @@ use pezsp_runtime::traits::Saturating;
 /// The total number of items currently stored in the map can be retrieved with the
 /// [`CountedStorageMap::count`] method.
 ///
-/// For general information regarding the `#[pallet::storage]` attribute, refer to
+/// For general information regarding the `#[pezpallet::storage]` attribute, refer to
 /// [`crate::pezpallet_macros::storage`].
 ///
 /// # Examples
@@ -59,18 +59,18 @@ use pezsp_runtime::traits::Saturating;
 /// Declaring a counted map:
 ///
 /// ```
-/// #[pezframe_support::pallet]
-/// mod pallet {
+/// #[pezframe_support::pezpallet]
+/// mod pezpallet {
 /// # 	use pezframe_support::pezpallet_prelude::*;
-/// # 	#[pallet::config]
+/// # 	#[pezpallet::config]
 /// # 	pub trait Config: pezframe_system::Config {}
-/// # 	#[pallet::pallet]
-/// # 	pub struct Pallet<T>(_);
+/// # 	#[pezpallet::pezpallet]
+/// # 	pub struct Pezpallet<T>(_);
 /// 	/// A kitchen-sink CountedStorageMap, with all possible additional attributes.
-///     #[pallet::storage]
-/// 	#[pallet::getter(fn foo)]
-/// 	#[pallet::storage_prefix = "OtherFoo"]
-/// 	#[pallet::unbounded]
+///     #[pezpallet::storage]
+/// 	#[pezpallet::getter(fn foo)]
+/// 	#[pezpallet::storage_prefix = "OtherFoo"]
+/// 	#[pezpallet::unbounded]
 ///     pub type Foo<T> = CountedStorageMap<
 /// 		_,
 /// 		Blake2_128Concat,
@@ -80,7 +80,7 @@ use pezsp_runtime::traits::Saturating;
 /// 	>;
 ///
 /// 	/// Alternative named syntax.
-/// 	#[pallet::storage]
+/// 	#[pezpallet::storage]
 ///     pub type Bar<T> = CountedStorageMap<
 /// 		Hasher = Blake2_128Concat,
 /// 		Key = u32,

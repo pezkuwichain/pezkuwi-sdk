@@ -134,7 +134,7 @@ pub use pezsp_weights::Weight;
 pub use either::Either;
 
 /// The number of bytes of the module-specific `error` field defined in [`ModuleError`].
-/// In FRAME, this is the maximum encoded size of a pallet error type.
+/// In FRAME, this is the maximum encoded size of a pezpallet error type.
 pub const MAX_MODULE_ERROR_ENCODED_SIZE: usize = 4;
 
 /// An abstraction over justification for a block's validity under a consensus algorithm.
@@ -566,7 +566,7 @@ pub type DispatchResult = core::result::Result<(), DispatchError>;
 /// about the `Dispatchable` that is only known post dispatch.
 pub type DispatchResultWithInfo<T> = core::result::Result<T, DispatchErrorWithPostInfo<T>>;
 
-/// Reason why a pallet call failed.
+/// Reason why a pezpallet call failed.
 #[derive(
 	Eq, Clone, Copy, Encode, Decode, DecodeWithMemTracking, Debug, TypeInfo, MaxEncodedLen,
 )]

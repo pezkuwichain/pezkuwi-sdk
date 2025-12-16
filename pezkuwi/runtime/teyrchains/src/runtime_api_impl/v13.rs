@@ -52,20 +52,20 @@ pub fn validator_groups<T: initializer::Config>(
 ) -> (Vec<Vec<ValidatorIndex>>, GroupRotationInfo<BlockNumberFor<T>>) {
 	// This formula needs to be the same as the one we use
 	// when populating group_responsible in `availability_cores`
-	let now = pezframe_system::Pallet::<T>::block_number() + One::one();
+	let now = pezframe_system::Pezpallet::<T>::block_number() + One::one();
 
 	let groups = scheduler::ValidatorGroups::<T>::get();
-	let rotation_info = scheduler::Pallet::<T>::group_rotation_info(now);
+	let rotation_info = scheduler::Pezpallet::<T>::group_rotation_info(now);
 
 	(groups, rotation_info)
 }
 
 /// Implementation for the `availability_cores` function of the runtime API.
 pub fn availability_cores<T: initializer::Config>() -> Vec<CoreState<T::Hash, BlockNumberFor<T>>> {
-	let time_out_for = scheduler::Pallet::<T>::availability_timeout_predicate();
+	let time_out_for = scheduler::Pezpallet::<T>::availability_timeout_predicate();
 
 	let group_responsible_for =
-		|backed_in_number, core_index| match scheduler::Pallet::<T>::group_assigned_to_core(
+		|backed_in_number, core_index| match scheduler::Pezpallet::<T>::group_assigned_to_core(
 			core_index,
 			backed_in_number,
 		) {
@@ -81,10 +81,10 @@ pub fn availability_cores<T: initializer::Config>() -> Vec<CoreState<T::Hash, Bl
 			},
 		};
 
-	let claim_queue = scheduler::Pallet::<T>::get_claim_queue();
+	let claim_queue = scheduler::Pezpallet::<T>::get_claim_queue();
 	let occupied_cores: BTreeMap<CoreIndex, inclusion::CandidatePendingAvailability<_, _>> =
-		inclusion::Pallet::<T>::get_occupied_cores().collect();
-	let n_cores = scheduler::Pallet::<T>::num_availability_cores();
+		inclusion::Pezpallet::<T>::get_occupied_cores().collect();
+	let n_cores = scheduler::Pezpallet::<T>::num_availability_cores();
 
 	(0..n_cores)
 		.map(|core_idx| {
@@ -95,10 +95,10 @@ pub fn availability_cores<T: initializer::Config>() -> Vec<CoreState<T::Hash, Bl
 				let backing_group_allocation_time =
 					pending_availability.relay_parent_number() + One::one();
 				CoreState::Occupied(OccupiedCore {
-					next_up_on_available: scheduler::Pallet::<T>::next_up_on_available(core_idx),
+					next_up_on_available: scheduler::Pezpallet::<T>::next_up_on_available(core_idx),
 					occupied_since: pending_availability.backed_in_number(),
 					time_out_at: time_out_for(pending_availability.backed_in_number()).live_until,
-					next_up_on_time_out: scheduler::Pallet::<T>::next_up_on_available(core_idx),
+					next_up_on_time_out: scheduler::Pezpallet::<T>::next_up_on_available(core_idx),
 					availability: pending_availability.availability_votes().clone(),
 					group_responsible: group_responsible_for(
 						backing_group_allocation_time,
@@ -125,8 +125,8 @@ pub fn availability_cores<T: initializer::Config>() -> Vec<CoreState<T::Hash, Bl
 fn current_relay_parent<T: pezframe_system::Config>(
 ) -> (BlockNumberFor<T>, <T as pezframe_system::Config>::Hash) {
 	use codec::Decode as _;
-	let state_version = pezframe_system::Pallet::<T>::runtime_version().state_version();
-	let relay_parent_number = pezframe_system::Pallet::<T>::block_number();
+	let state_version = pezframe_system::Pezpallet::<T>::runtime_version().state_version();
+	let relay_parent_number = pezframe_system::Pezpallet::<T>::block_number();
 	let relay_parent_storage_root = T::Hash::decode(&mut &pezsp_io::storage::root(state_version)[..])
 		.expect("storage root must decode to the Hash type; qed");
 	(relay_parent_number, relay_parent_storage_root)
@@ -143,12 +143,12 @@ where
 {
 	match assumption {
 		OccupiedCoreAssumption::Included => {
-			<inclusion::Pallet<Config>>::force_enact(para_id);
+			<inclusion::Pezpallet<Config>>::force_enact(para_id);
 			build()
 		},
 		OccupiedCoreAssumption::TimedOut => build(),
 		OccupiedCoreAssumption::Free =>
-			if !<inclusion::Pallet<Config>>::candidates_pending_availability(para_id).is_empty() {
+			if !<inclusion::Pezpallet<Config>>::candidates_pending_availability(para_id).is_empty() {
 				None
 			} else {
 				build()
@@ -191,10 +191,10 @@ pub fn assumed_validation_data<T: initializer::Config>(
 	let persisted_validation_data = make_validation_data().or_else(|| {
 		// Try again with force enacting the pending candidates. This check only makes sense if
 		// there are any pending candidates.
-		(!inclusion::Pallet::<T>::candidates_pending_availability(para_id).is_empty())
+		(!inclusion::Pezpallet::<T>::candidates_pending_availability(para_id).is_empty())
 			.then_some(())
 			.and_then(|_| {
-				inclusion::Pallet::<T>::force_enact(para_id);
+				inclusion::Pezpallet::<T>::force_enact(para_id);
 				make_validation_data()
 			})
 	});
@@ -207,8 +207,8 @@ pub fn check_validation_outputs<T: initializer::Config>(
 	para_id: ParaId,
 	outputs: pezkuwi_primitives::CandidateCommitments,
 ) -> bool {
-	let relay_parent_number = pezframe_system::Pallet::<T>::block_number();
-	inclusion::Pallet::<T>::check_validation_outputs_for_runtime_api(
+	let relay_parent_number = pezframe_system::Pezpallet::<T>::block_number();
+	inclusion::Pezpallet::<T>::check_validation_outputs_for_runtime_api(
 		para_id,
 		relay_parent_number,
 		outputs,
@@ -238,8 +238,8 @@ pub fn relevant_authority_ids<T: initializer::Config + pezpallet_authority_disco
 	// Due to `max_validators`, the `SessionInfo` stores only the validators who are actively
 	// selected to participate in teyrchain consensus. We'd like all authorities for the current
 	// and next sessions to be used in authority-discovery. The two sets likely have large overlap.
-	let mut authority_ids = pezpallet_authority_discovery::Pallet::<T>::current_authorities().to_vec();
-	authority_ids.extend(pezpallet_authority_discovery::Pallet::<T>::next_authorities().to_vec());
+	let mut authority_ids = pezpallet_authority_discovery::Pezpallet::<T>::current_authorities().to_vec();
+	authority_ids.extend(pezpallet_authority_discovery::Pezpallet::<T>::next_authorities().to_vec());
 
 	// Due to disputes, we'd like to remain connected to authorities of the previous few sessions.
 	// For this, we don't need anyone other than the validators actively participating in consensus.
@@ -261,7 +261,7 @@ pub fn validation_code<T: initializer::Config>(
 	para_id: ParaId,
 	assumption: OccupiedCoreAssumption,
 ) -> Option<ValidationCode> {
-	with_assumption::<T, _, _>(para_id, assumption, || paras::Pallet::<T>::current_code(&para_id))
+	with_assumption::<T, _, _>(para_id, assumption, || paras::Pezpallet::<T>::current_code(&para_id))
 }
 
 /// Implementation for the `candidate_pending_availability` function of the runtime API.
@@ -272,7 +272,7 @@ pub fn validation_code<T: initializer::Config>(
 pub fn candidate_pending_availability<T: initializer::Config>(
 	para_id: ParaId,
 ) -> Option<CommittedCandidateReceipt<T::Hash>> {
-	inclusion::Pallet::<T>::first_candidate_pending_availability(para_id)
+	inclusion::Pezpallet::<T>::first_candidate_pending_availability(para_id)
 }
 
 /// Implementation for the `candidate_events` function of the runtime API.
@@ -285,7 +285,7 @@ where
 {
 	use inclusion::Event as RawEvent;
 
-	pezframe_system::Pallet::<T>::read_events_no_consensus()
+	pezframe_system::Pezpallet::<T>::read_events_no_consensus()
 		.into_iter()
 		.filter_map(|record| extract_event(record.event))
 		.filter_map(|event| {
@@ -313,14 +313,14 @@ pub fn session_info<T: session_info::Config>(index: SessionIndex) -> Option<Sess
 pub fn dmq_contents<T: dmp::Config>(
 	recipient: ParaId,
 ) -> Vec<InboundDownwardMessage<BlockNumberFor<T>>> {
-	dmp::Pallet::<T>::dmq_contents(recipient)
+	dmp::Pezpallet::<T>::dmq_contents(recipient)
 }
 
 /// Implementation for the `inbound_hrmp_channels_contents` function of the runtime API.
 pub fn inbound_hrmp_channels_contents<T: hrmp::Config>(
 	recipient: ParaId,
 ) -> BTreeMap<ParaId, Vec<InboundHrmpMessage<BlockNumberFor<T>>>> {
-	hrmp::Pallet::<T>::inbound_hrmp_channels_contents(recipient)
+	hrmp::Pezpallet::<T>::inbound_hrmp_channels_contents(recipient)
 }
 
 /// Implementation for the `validation_code_by_hash` function of the runtime API.
@@ -340,12 +340,12 @@ pub fn submit_pvf_check_statement<T: paras::Config>(
 	stmt: PvfCheckStatement,
 	signature: ValidatorSignature,
 ) {
-	paras::Pallet::<T>::submit_pvf_check_statement(stmt, signature)
+	paras::Pezpallet::<T>::submit_pvf_check_statement(stmt, signature)
 }
 
 /// Returns the list of all PVF code hashes that require pre-checking.
 pub fn pvfs_require_precheck<T: paras::Config>() -> Vec<ValidationCodeHash> {
-	paras::Pallet::<T>::pvfs_require_precheck()
+	paras::Pezpallet::<T>::pvfs_require_precheck()
 }
 
 /// Returns the validation code hash for the given teyrchain making the given
@@ -363,7 +363,7 @@ where
 /// Implementation for `get_session_disputes` function from the runtime API
 pub fn get_session_disputes<T: disputes::Config>(
 ) -> Vec<(SessionIndex, CandidateHash, DisputeState<BlockNumberFor<T>>)> {
-	disputes::Pallet::<T>::disputes()
+	disputes::Pezpallet::<T>::disputes()
 }
 
 /// Get session executor parameter set
@@ -376,7 +376,7 @@ pub fn session_executor_params<T: session_info::Config>(
 /// Implementation of `unapplied_slashes` runtime API
 pub fn unapplied_slashes<T: disputes::slashing::Config>(
 ) -> Vec<(SessionIndex, CandidateHash, slashing::LegacyPendingSlashes)> {
-	disputes::slashing::Pallet::<T>::unapplied_slashes()
+	disputes::slashing::Pezpallet::<T>::unapplied_slashes()
 		.into_iter()
 		.filter_map(|(session, candidate_hash, pending_slash)| {
 			let legacy_pending_slash = slashing::LegacyPendingSlashes {
@@ -391,7 +391,7 @@ pub fn unapplied_slashes<T: disputes::slashing::Config>(
 /// Implementation of `unapplied_slashes_v2` runtime API
 pub fn unapplied_slashes_v2<T: disputes::slashing::Config>(
 ) -> Vec<(SessionIndex, CandidateHash, slashing::PendingSlashes)> {
-	disputes::slashing::Pallet::<T>::unapplied_slashes()
+	disputes::slashing::Pezpallet::<T>::unapplied_slashes()
 }
 
 /// Implementation of `submit_report_dispute_lost` runtime API
@@ -401,7 +401,7 @@ pub fn submit_unsigned_slashing_report<T: disputes::slashing::Config>(
 ) -> Option<()> {
 	let key_ownership_proof = key_ownership_proof.decode()?;
 
-	disputes::slashing::Pallet::<T>::submit_unsigned_slashing_report(
+	disputes::slashing::Pezpallet::<T>::submit_unsigned_slashing_report(
 		dispute_proof,
 		key_ownership_proof,
 	)
@@ -422,11 +422,11 @@ pub fn backing_constraints<T: initializer::Config>(
 	// clears the buffer.
 	//
 	// Thus, minimum relay parent is ensured to have asynchronous backing enabled.
-	let now = pezframe_system::Pallet::<T>::block_number();
+	let now = pezframe_system::Pezpallet::<T>::block_number();
 
 	// Use the right storage depending on version to ensure #64 doesn't cause issues with this
 	// migration.
-	let min_relay_parent_number = if shared::Pallet::<T>::on_chain_storage_version() ==
+	let min_relay_parent_number = if shared::Pezpallet::<T>::on_chain_storage_version() ==
 		StorageVersion::new(0)
 	{
 		shared::migration::v0::AllowedRelayParents::<T>::get().hypothetical_earliest_block_number(
@@ -451,18 +451,18 @@ pub fn backing_constraints<T: initializer::Config>(
 		});
 
 	let (ump_msg_count, ump_total_bytes) =
-		inclusion::Pallet::<T>::relay_dispatch_queue_size(para_id);
+		inclusion::Pezpallet::<T>::relay_dispatch_queue_size(para_id);
 	let ump_remaining = config.max_upward_queue_count - ump_msg_count;
 	let ump_remaining_bytes = config.max_upward_queue_size - ump_total_bytes;
 
-	let dmp_remaining_messages = dmp::Pallet::<T>::dmq_contents(para_id)
+	let dmp_remaining_messages = dmp::Pezpallet::<T>::dmq_contents(para_id)
 		.into_iter()
 		.map(|msg| msg.sent_at)
 		.collect();
 
-	let valid_watermarks = hrmp::Pallet::<T>::valid_watermarks(para_id);
+	let valid_watermarks = hrmp::Pezpallet::<T>::valid_watermarks(para_id);
 	let hrmp_inbound = InboundHrmpLimitations { valid_watermarks };
-	let hrmp_channels_out = hrmp::Pallet::<T>::outbound_remaining_capacity(para_id)
+	let hrmp_channels_out = hrmp::Pezpallet::<T>::outbound_remaining_capacity(para_id)
 		.into_iter()
 		.map(|(para, (messages_remaining, bytes_remaining))| {
 			(para, OutboundHrmpChannelLimitations { messages_remaining, bytes_remaining })
@@ -532,7 +532,7 @@ pub fn disabled_validators<T>() -> Vec<ValidatorIndex>
 where
 	T: shared::Config,
 {
-	<shared::Pallet<T>>::disabled_validators()
+	<shared::Pezpallet<T>>::disabled_validators()
 }
 
 /// Returns the current state of the node features.
@@ -550,7 +550,7 @@ pub fn claim_queue<T: scheduler::Config>() -> BTreeMap<CoreIndex, VecDeque<ParaI
 	let config = configuration::ActiveConfig::<T>::get();
 	// Extra sanity, config should already never be smaller than 1:
 	let n_lookahead = config.scheduler_params.lookahead.max(1);
-	scheduler::Pallet::<T>::get_claim_queue()
+	scheduler::Pezpallet::<T>::get_claim_queue()
 		.into_iter()
 		.map(|(core_index, entries)| {
 			(
@@ -566,7 +566,7 @@ pub fn claim_queue<T: scheduler::Config>() -> BTreeMap<CoreIndex, VecDeque<ParaI
 pub fn candidates_pending_availability<T: initializer::Config>(
 	para_id: ParaId,
 ) -> Vec<CommittedCandidateReceipt<T::Hash>> {
-	<inclusion::Pallet<T>>::candidates_pending_availability(para_id)
+	<inclusion::Pezpallet<T>>::candidates_pending_availability(para_id)
 }
 
 /// Implementation for `validation_code_bomb_limit` function from the runtime API

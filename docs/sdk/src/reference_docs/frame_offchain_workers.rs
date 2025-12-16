@@ -58,18 +58,18 @@
 //! [`frame::pezpallet_macros::hooks`].
 //!
 //! ```
-//! #[frame::pallet]
-//! pub mod pallet {
+//! #[frame::pezpallet]
+//! pub mod pezpallet {
 //! 	use frame::prelude::*;
 //!
-//! 	#[pallet::config]
+//! 	#[pezpallet::config]
 //! 	pub trait Config: pezframe_system::Config {}
 //!
-//! 	#[pallet::pallet]
-//! 	pub struct Pallet<T>(_);
+//! 	#[pezpallet::pezpallet]
+//! 	pub struct Pezpallet<T>(_);
 //!
-//! 	#[pallet::hooks]
-//! 	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+//! 	#[pezpallet::hooks]
+//! 	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 //! 		fn offchain_worker(block_number: BlockNumberFor<T>) {
 //! 			// ...
 //! 		}

@@ -27,7 +27,7 @@ use crate::{
 		AllowEvmBytecode, DebugFlag, ExtBuilder, RuntimeOrigin, Test,
 	},
 	tracing::trace,
-	Code, Config, Error, EthBlockBuilderFirstValues, GenesisConfig, Origin, Pallet, PristineCode,
+	Code, Config, Error, EthBlockBuilderFirstValues, GenesisConfig, Origin, Pezpallet, PristineCode,
 };
 use alloy_core::sol_types::{SolCall, SolInterface};
 use pezframe_support::{
@@ -220,9 +220,9 @@ fn upload_evm_runtime_code_works() {
 	ExtBuilder::default().build().execute_with(|| {
 		let deployer = ALICE;
 		let deployer_addr = ALICE_ADDR;
-		let _ = Pallet::<Test>::set_evm_balance(&deployer_addr, 1_000_000_000.into());
+		let _ = Pezpallet::<Test>::set_evm_balance(&deployer_addr, 1_000_000_000.into());
 
-		let (uploaded_blob, _) = Pallet::<Test>::try_upload_code(
+		let (uploaded_blob, _) = Pezpallet::<Test>::try_upload_code(
 			deployer,
 			runtime_code.clone(),
 			crate::vm::BytecodeType::Evm,
@@ -252,19 +252,19 @@ fn upload_and_remove_code_works_for_evm() {
 	let (code, code_hash) = compile_module_with_type("Dummy", FixtureType::SolcRuntime).unwrap();
 
 	ExtBuilder::default().build().execute_with(|| {
-		let _ = Pallet::<Test>::set_evm_balance(&ALICE_ADDR, 5_000_000_000u64.into());
+		let _ = Pezpallet::<Test>::set_evm_balance(&ALICE_ADDR, 5_000_000_000u64.into());
 
 		// Ensure the code is not already stored.
 		assert!(!PristineCode::<Test>::contains_key(&code_hash));
 
 		// Upload the code.
-		assert_ok!(Pallet::<Test>::upload_code(RuntimeOrigin::signed(ALICE), code, 1000u64));
+		assert_ok!(Pezpallet::<Test>::upload_code(RuntimeOrigin::signed(ALICE), code, 1000u64));
 
 		// Ensure the contract was stored.
 		ensure_stored(code_hash);
 
 		// Remove the code.
-		assert_ok!(Pallet::<Test>::remove_code(RuntimeOrigin::signed(ALICE), code_hash));
+		assert_ok!(Pezpallet::<Test>::remove_code(RuntimeOrigin::signed(ALICE), code_hash));
 
 		// Ensure the code is no longer stored.
 		assert!(!PristineCode::<Test>::contains_key(&code_hash));
@@ -279,7 +279,7 @@ fn upload_fails_if_evm_bytecode_disabled() {
 	ExtBuilder::default().build().execute_with(|| {
 		// Upload should fail since support for EVM bytecode is disabled.
 		assert_err!(
-			Pallet::<Test>::upload_code(RuntimeOrigin::signed(ALICE), code, 1000u64),
+			Pezpallet::<Test>::upload_code(RuntimeOrigin::signed(ALICE), code, 1000u64),
 			<Error<Test>>::CodeRejected
 		);
 	});
@@ -305,7 +305,7 @@ fn dust_work_with_child_calls(fixture_type: FixtureType) {
 			.evm_value(value)
 			.build_and_unwrap_result();
 
-		assert_eq!(crate::Pallet::<Test>::evm_balance(&addr), value);
+		assert_eq!(crate::Pezpallet::<Test>::evm_balance(&addr), value);
 	});
 }
 
@@ -440,12 +440,12 @@ fn prestate_diff_mode_tracing_works() {
 			let child_addr = crate::address::create1(&contract_addr, 1u64);
 
 			// Compute balances
-			let alice_balance_pre = Pallet::<Test>::convert_native_to_evm(
-				1_000_000_000_000 - Pallet::<Test>::min_balance(),
+			let alice_balance_pre = Pezpallet::<Test>::convert_native_to_evm(
+				1_000_000_000_000 - Pezpallet::<Test>::min_balance(),
 			);
 
 			let replace_placeholders = |json: &str| -> String {
-				let alice_balance_post = Pallet::<Test>::evm_balance(&ALICE_ADDR);
+				let alice_balance_post = Pezpallet::<Test>::evm_balance(&ALICE_ADDR);
 
 				let mut child_addr_bytes = [0u8; 32];
 				child_addr_bytes[12..32].copy_from_slice(child_addr.as_bytes());
@@ -523,7 +523,7 @@ fn eth_bizinikiwi_call_dispatches_successfully() {
 
 		assert!(EthBlockBuilderFirstValues::<Test>::get().is_none());
 
-		assert_ok!(Pallet::<Test>::eth_bizinikiwi_call(
+		assert_ok!(Pezpallet::<Test>::eth_bizinikiwi_call(
 			Origin::EthTransaction(ALICE).into(),
 			Box::new(transfer_call),
 			vec![]
@@ -544,7 +544,7 @@ fn eth_bizinikiwi_call_requires_eth_origin() {
 
 		// Should fail with non-EthTransaction origin
 		assert_noop!(
-			Pallet::<Test>::eth_bizinikiwi_call(
+			Pezpallet::<Test>::eth_bizinikiwi_call(
 				RuntimeOrigin::signed(ALICE),
 				Box::new(inner_call.into()),
 				vec![]
@@ -564,7 +564,7 @@ fn eth_bizinikiwi_call_tracks_weight_correctly() {
 		let transaction_encoded = vec![];
 		let transaction_encoded_len = transaction_encoded.len() as u32;
 
-		let result = Pallet::<Test>::eth_bizinikiwi_call(
+		let result = Pezpallet::<Test>::eth_bizinikiwi_call(
 			Origin::EthTransaction(ALICE).into(),
 			Box::new(inner_call.clone().into()),
 			transaction_encoded,

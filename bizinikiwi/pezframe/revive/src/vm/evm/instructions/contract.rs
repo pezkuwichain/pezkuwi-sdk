@@ -23,7 +23,7 @@ use crate::{
 		evm::{interpreter::Halt, util::as_usize_or_halt, Interpreter},
 		Ext, RuntimeCosts,
 	},
-	Code, DebugSettings, Error, Pallet, Weight, H160, LOG_TARGET, U256,
+	Code, DebugSettings, Error, Pezpallet, Weight, H160, LOG_TARGET, U256,
 };
 use alloc::{vec, vec::Vec};
 pub use call_helpers::{calc_call_gas, get_memory_in_and_out_ranges};
@@ -48,8 +48,8 @@ pub fn create<const IS_CREATE2: bool, E: Ext>(
 
 	interpreter.ext.charge_or_halt(RuntimeCosts::Create {
 		init_code_len: len as u32,
-		balance_transfer: Pallet::<E::T>::has_balance(value),
-		dust_transfer: Pallet::<E::T>::has_dust(value),
+		balance_transfer: Pezpallet::<E::T>::has_balance(value),
+		dust_transfer: Pezpallet::<E::T>::has_dust(value),
 	})?;
 
 	let mut code = Vec::new();

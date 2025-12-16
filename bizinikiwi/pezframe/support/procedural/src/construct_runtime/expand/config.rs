@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License
 
-use crate::construct_runtime::Pallet;
+use crate::construct_runtime::Pezpallet;
 use inflector::Inflector;
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote, ToTokens};
@@ -23,7 +23,7 @@ use syn::Ident;
 
 pub fn expand_outer_config(
 	runtime: &Ident,
-	pezpallet_decls: &[Pallet],
+	pezpallet_decls: &[Pezpallet],
 	scrate: &TokenStream,
 ) -> TokenStream {
 	let mut types = TokenStream::new();
@@ -104,7 +104,7 @@ pub fn expand_outer_config(
 fn expand_config_types(
 	attr: &TokenStream,
 	runtime: &Ident,
-	decl: &Pallet,
+	decl: &Pezpallet,
 	config: &Ident,
 	part_is_generic: bool,
 ) -> TokenStream {

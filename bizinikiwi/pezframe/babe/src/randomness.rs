@@ -160,7 +160,7 @@ impl<T: Config> RandomnessT<Option<T::Hash>, BlockNumberFor<T>> for ParentBlockR
 			T::Hashing::hash(&subject[..])
 		});
 
-		(random, <pezframe_system::Pallet<T>>::block_number().saturating_sub(One::one()))
+		(random, <pezframe_system::Pezpallet<T>>::block_number().saturating_sub(One::one()))
 	}
 }
 
@@ -168,6 +168,6 @@ impl<T: Config> RandomnessT<Option<T::Hash>, BlockNumberFor<T>> for ParentBlockR
 impl<T: Config> RandomnessT<Option<T::Hash>, BlockNumberFor<T>> for CurrentBlockRandomness<T> {
 	fn random(subject: &[u8]) -> (Option<T::Hash>, BlockNumberFor<T>) {
 		let (random, _) = ParentBlockRandomness::<T>::random(subject);
-		(random, <pezframe_system::Pallet<T>>::block_number())
+		(random, <pezframe_system::Pezpallet<T>>::block_number())
 	}
 }

@@ -20,7 +20,7 @@
 use crate::{
 	migration::{IsFinished, MigrationStep},
 	weights::WeightInfo,
-	CodeHash, Config, Determinism, Pallet, Weight, LOG_TARGET,
+	CodeHash, Config, Determinism, Pezpallet, Weight, LOG_TARGET,
 };
 use alloc::vec::Vec;
 use codec::{Decode, Encode};
@@ -46,7 +46,7 @@ mod v8 {
 
 	#[storage_alias]
 	pub type CodeStorage<T: Config> =
-		StorageMap<Pallet<T>, Identity, CodeHash<T>, PrefabWasmModule>;
+		StorageMap<Pezpallet<T>, Identity, CodeHash<T>, PrefabWasmModule>;
 }
 
 #[cfg(feature = "runtime-benchmarks")]
@@ -75,7 +75,7 @@ struct PrefabWasmModule {
 }
 
 #[storage_alias]
-type CodeStorage<T: Config> = StorageMap<Pallet<T>, Identity, CodeHash<T>, PrefabWasmModule>;
+type CodeStorage<T: Config> = StorageMap<Pezpallet<T>, Identity, CodeHash<T>, PrefabWasmModule>;
 
 #[derive(Encode, Decode, MaxEncodedLen, DefaultNoBound)]
 pub struct Migration<T: Config> {

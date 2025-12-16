@@ -4,7 +4,7 @@ All notable changes and migrations to pezpallet-staking will be documented in th
 
 The format is loosely based
 on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). We maintain a
-single integer version number for staking pallet to keep track of all storage
+single integer version number for staking pezpallet to keep track of all storage
 migrations.
 
 ## [v16]

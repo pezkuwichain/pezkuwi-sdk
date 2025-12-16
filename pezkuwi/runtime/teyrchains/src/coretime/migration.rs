@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Migrations for the Coretime pallet.
+//! Migrations for the Coretime pezpallet.
 
 pub use v_coretime::{GetLegacyLease, MigrateToCoretime};
 
@@ -70,11 +70,11 @@ mod v_coretime {
 		> MigrateToCoretime<T, XcmSender, LegacyLease, TIMESLICE_PERIOD>
 	{
 		fn already_migrated() -> bool {
-			// We are using the assigner coretime because the coretime pallet doesn't has any
+			// We are using the assigner coretime because the coretime pezpallet doesn't has any
 			// storage data. But both pallets are introduced at the same time, so this is fine.
-			let name_hash = assigner_coretime::Pallet::<T>::name_hash();
+			let name_hash = assigner_coretime::Pezpallet::<T>::name_hash();
 			let mut next_key = name_hash.to_vec();
-			let storage_version_key = StorageVersion::storage_key::<assigner_coretime::Pallet<T>>();
+			let storage_version_key = StorageVersion::storage_key::<assigner_coretime::Pezpallet<T>>();
 
 			loop {
 				match pezsp_io::storage::next_key(&next_key) {
@@ -82,7 +82,7 @@ mod v_coretime {
 					Some(key) if &key == &storage_version_key => {
 						next_key = key;
 					},
-					// If there is any other key with the prefix of the pallet,
+					// If there is any other key with the prefix of the pezpallet,
 					// we already have executed the migration.
 					Some(key) if key.starts_with(&name_hash) => {
 						log::info!("`MigrateToCoretime` already executed!");
@@ -122,7 +122,7 @@ mod v_coretime {
 			let total_core_count = config.scheduler_params.num_cores + legacy_paras.len() as u32;
 
 			let dmp_queue_size =
-				crate::dmp::Pallet::<T>::dmq_contents(T::BrokerId::get().into()).len() as u32;
+				crate::dmp::Pezpallet::<T>::dmq_contents(T::BrokerId::get().into()).len() as u32;
 
 			let total_core_count = total_core_count as u32;
 
@@ -141,7 +141,7 @@ mod v_coretime {
 				<(u32, u32)>::decode(&mut &state[..]).unwrap();
 
 			let dmp_queue_size =
-				crate::dmp::Pallet::<T>::dmq_contents(T::BrokerId::get().into()).len() as u32;
+				crate::dmp::Pezpallet::<T>::dmq_contents(T::BrokerId::get().into()).len() as u32;
 			let config = configuration::ActiveConfig::<T>::get();
 			let new_core_count = config.scheduler_params.num_cores;
 			ensure!(new_core_count == prev_core_count, "Total number of cores need to not change.");
@@ -165,9 +165,9 @@ mod v_coretime {
 	>() -> Weight {
 		let legacy_paras = LegacyLease::get_all_teyrchains_with_leases();
 		let legacy_count = legacy_paras.len() as u32;
-		let now = pezframe_system::Pallet::<T>::block_number();
+		let now = pezframe_system::Pezpallet::<T>::block_number();
 		for (core, para_id) in legacy_paras.into_iter().enumerate() {
-			let r = assigner_coretime::Pallet::<T>::assign_core(
+			let r = assigner_coretime::Pezpallet::<T>::assign_core(
 				CoreIndex(core as u32),
 				now,
 				vec![(CoreAssignment::Task(para_id.into()), PartsOf57600::FULL)],
@@ -185,7 +185,7 @@ mod v_coretime {
 		let config = configuration::ActiveConfig::<T>::get();
 		for on_demand in 0..config.scheduler_params.num_cores {
 			let core = CoreIndex(legacy_count.saturating_add(on_demand as _));
-			let r = assigner_coretime::Pallet::<T>::assign_core(
+			let r = assigner_coretime::Pezpallet::<T>::assign_core(
 				core,
 				now,
 				vec![(CoreAssignment::Pool, PartsOf57600::FULL)],

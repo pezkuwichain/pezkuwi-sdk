@@ -16,12 +16,12 @@
 // limitations under the License.
 
 //! This module contains helper methods to configure locks on collections and items for the NFTs
-//! pallet.
+//! pezpallet.
 
 use crate::*;
 use pezframe_support::pezpallet_prelude::*;
 
-impl<T: Config<I>, I: 'static> Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 	/// Locks a collection with specified settings.
 	///
 	/// The origin must be the owner of the collection to lock it. This function disables certain

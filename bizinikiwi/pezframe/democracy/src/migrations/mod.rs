@@ -13,10 +13,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! All migrations of this pallet.
+//! All migrations of this pezpallet.
 
-/// Migration to unlock and unreserve all pallet funds.
+/// Migration to unlock and unreserve all pezpallet funds.
 pub mod unlock_and_unreserve_all_funds;
 
-/// V1 storage migrations for the preimage pallet.
+/// V1 storage migrations for the preimage pezpallet.
 pub mod v1;

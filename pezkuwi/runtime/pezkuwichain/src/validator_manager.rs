@@ -14,27 +14,27 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! A pallet for managing validators on Pezkuwichain.
+//! A pezpallet for managing validators on Pezkuwichain.
 
 use alloc::vec::Vec;
 use pezsp_staking::SessionIndex;
 
-pub use pallet::*;
+pub use pezpallet::*;
 
-type Session<T> = pezpallet_session::Pallet<T>;
+type Session<T> = pezpallet_session::Pezpallet<T>;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::{dispatch::DispatchResult, pezpallet_prelude::*, traits::EnsureOrigin};
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	#[pallet::without_storage_info]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::without_storage_info]
+	pub struct Pezpallet<T>(_);
 
 	/// Configuration for the teyrchain proposer.
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config + pezpallet_session::Config {
 		/// The overreaching event type.
 		#[allow(deprecated)]
@@ -44,8 +44,8 @@ pub mod pallet {
 		type PrivilegedOrigin: EnsureOrigin<<Self as pezframe_system::Config>::RuntimeOrigin>;
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// New validators were added to the set.
 		ValidatorsRegistered(Vec<T::ValidatorId>),
@@ -54,21 +54,21 @@ pub mod pallet {
 	}
 
 	/// Validators that should be retired, because their Teyrchain was deregistered.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type ValidatorsToRetire<T: Config> =
 		StorageValue<_, Vec<T::ValidatorId>, ValueQuery>;
 
 	/// Validators that should be added.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type ValidatorsToAdd<T: Config> = StorageValue<_, Vec<T::ValidatorId>, ValueQuery>;
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Add new validators to the set.
 		///
 		/// The new validators will be active from current session + 2.
-		#[pallet::call_index(0)]
-		#[pallet::weight({100_000})]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight({100_000})]
 		pub fn register_validators(
 			origin: OriginFor<T>,
 			validators: Vec<T::ValidatorId>,
@@ -84,8 +84,8 @@ pub mod pallet {
 		/// Remove validators from the set.
 		///
 		/// The removed validators will be deactivated from current session + 2.
-		#[pallet::call_index(1)]
-		#[pallet::weight({100_000})]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight({100_000})]
 		pub fn deregister_validators(
 			origin: OriginFor<T>,
 			validators: Vec<T::ValidatorId>,
@@ -100,7 +100,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> pezpallet_session::SessionManager<T::ValidatorId> for Pallet<T> {
+impl<T: Config> pezpallet_session::SessionManager<T::ValidatorId> for Pezpallet<T> {
 	fn new_session(new_index: SessionIndex) -> Option<Vec<T::ValidatorId>> {
 		if new_index <= 1 {
 			return None;
@@ -128,7 +128,7 @@ impl<T: Config> pezpallet_session::SessionManager<T::ValidatorId> for Pallet<T> 
 	fn start_session(_start_index: SessionIndex) {}
 }
 
-impl<T: Config> pezpallet_session::historical::SessionManager<T::ValidatorId, ()> for Pallet<T> {
+impl<T: Config> pezpallet_session::historical::SessionManager<T::ValidatorId, ()> for Pezpallet<T> {
 	fn new_session(new_index: SessionIndex) -> Option<Vec<(T::ValidatorId, ())>> {
 		<Self as pezpallet_session::SessionManager<_>>::new_session(new_index)
 			.map(|r| r.into_iter().map(|v| (v, Default::default())).collect())

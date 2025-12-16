@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Benchmarks for transaction-storage Pallet
+//! Benchmarks for transaction-storage Pezpallet
 
 #![cfg(feature = "runtime-benchmarks")]
 
@@ -23,7 +23,7 @@ use crate::*;
 use alloc::{vec, vec::Vec};
 use pezframe_benchmarking::v2::*;
 use pezframe_support::traits::{Get, OnFinalize, OnInitialize};
-use pezframe_system::{pezpallet_prelude::BlockNumberFor, EventRecord, Pallet as System, RawOrigin};
+use pezframe_system::{pezpallet_prelude::BlockNumberFor, EventRecord, Pezpallet as System, RawOrigin};
 use pezsp_runtime::traits::{Bounded, CheckedDiv, One, Zero};
 use pezsp_transaction_storage_proof::TransactionStorageProof;
 
@@ -109,14 +109,14 @@ fn assert_last_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
 }
 
 pub fn run_to_block<T: Config>(n: pezframe_system::pezpallet_prelude::BlockNumberFor<T>) {
-	while pezframe_system::Pallet::<T>::block_number() < n {
-		crate::Pallet::<T>::on_finalize(pezframe_system::Pallet::<T>::block_number());
-		pezframe_system::Pallet::<T>::on_finalize(pezframe_system::Pallet::<T>::block_number());
-		pezframe_system::Pallet::<T>::set_block_number(
-			pezframe_system::Pallet::<T>::block_number() + One::one(),
+	while pezframe_system::Pezpallet::<T>::block_number() < n {
+		crate::Pezpallet::<T>::on_finalize(pezframe_system::Pezpallet::<T>::block_number());
+		pezframe_system::Pezpallet::<T>::on_finalize(pezframe_system::Pezpallet::<T>::block_number());
+		pezframe_system::Pezpallet::<T>::set_block_number(
+			pezframe_system::Pezpallet::<T>::block_number() + One::one(),
 		);
-		pezframe_system::Pallet::<T>::on_initialize(pezframe_system::Pallet::<T>::block_number());
-		crate::Pallet::<T>::on_initialize(pezframe_system::Pallet::<T>::block_number());
+		pezframe_system::Pezpallet::<T>::on_initialize(pezframe_system::Pezpallet::<T>::block_number());
+		crate::Pezpallet::<T>::on_initialize(pezframe_system::Pezpallet::<T>::block_number());
 	}
 }
 
@@ -142,7 +142,7 @@ mod benchmarks {
 		let caller: T::AccountId = whitelisted_caller();
 		let initial_balance = BalanceOf::<T>::max_value().checked_div(&2u32.into()).unwrap();
 		T::Currency::set_balance(&caller, initial_balance);
-		Pallet::<T>::store(
+		Pezpallet::<T>::store(
 			RawOrigin::Signed(caller.clone()).into(),
 			vec![0u8; T::MaxTransactionSize::get() as usize],
 		)?;
@@ -163,7 +163,7 @@ mod benchmarks {
 		let initial_balance = BalanceOf::<T>::max_value().checked_div(&2u32.into()).unwrap();
 		T::Currency::set_balance(&caller, initial_balance);
 		for _ in 0..T::MaxBlockTransactions::get() {
-			Pallet::<T>::store(
+			Pezpallet::<T>::store(
 				RawOrigin::Signed(caller.clone()).into(),
 				vec![0u8; T::MaxTransactionSize::get() as usize],
 			)?;
@@ -180,5 +180,5 @@ mod benchmarks {
 		Ok(())
 	}
 
-	impl_benchmark_test_suite!(Pallet, mock::new_test_ext(), mock::Test);
+	impl_benchmark_test_suite!(Pezpallet, mock::new_test_ext(), mock::Test);
 }

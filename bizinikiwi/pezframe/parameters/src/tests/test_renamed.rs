@@ -88,7 +88,7 @@ impl Config for Runtime {
 }
 
 impl pezpallet_example_basic::Config for Runtime {
-	// Use the dynamic key in the pallet config:
+	// Use the dynamic key in the pezpallet config:
 	type MagicNumber = dynamic_params::pallet1::Key1;
 	type WeightInfo = ();
 }
@@ -109,7 +109,7 @@ pub fn new_test_ext() -> pezsp_io::TestExternalities {
 }
 
 pub(crate) fn assert_last_event(generic_event: RuntimeEvent) {
-	let events = pezframe_system::Pallet::<Runtime>::events();
+	let events = pezframe_system::Pezpallet::<Runtime>::events();
 	// compare to the last event record
 	let pezframe_system::EventRecord { event, .. } = &events.last().expect("Event expected");
 	assert_eq!(event, &generic_event);

@@ -962,7 +962,7 @@ mod benchmarks {
 	}
 
 	impl_benchmark_test_suite!(
-		Pallet,
+		Pezpallet,
 		crate::generic::mock::new_test_ext(),
 		crate::generic::mock::Test
 	);

@@ -193,7 +193,7 @@ fn upon_receiving_election_queue_and_activate_next_session() {
 				new_validator_set: vec![1, 2, 3, 4],
 			};
 
-			assert_ok!(ah_client::Pallet::<Runtime>::validator_set(RuntimeOrigin::root(), report));
+			assert_ok!(ah_client::Pezpallet::<Runtime>::validator_set(RuntimeOrigin::root(), report));
 
 			// session validators are not set yet.
 			assert!(pezpallet_session::Validators::<Runtime>::get().is_empty());
@@ -275,7 +275,7 @@ fn upon_receiving_election_queue_and_activate_next_session() {
 				leftover: false,
 				new_validator_set: vec![1, 2, 3, 5],
 			};
-			assert_ok!(ah_client::Pallet::<Runtime>::validator_set(RuntimeOrigin::root(), report));
+			assert_ok!(ah_client::Pezpallet::<Runtime>::validator_set(RuntimeOrigin::root(), report));
 
 			// rotate one more session
 			roll_until_matches(|| pezpallet_session::CurrentIndex::<Runtime>::get() == 6, false);
@@ -490,7 +490,7 @@ fn reports_unexpected_event_if_too_many_validator_points() {
 					validator_points, ..
 				})
 			)] if validator_points.len() as u32 == 1 + 1
-			// 1 more validator point added by the authorship pallet in our test setup
+			// 1 more validator point added by the authorship pezpallet in our test setup
 		));
 	})
 }
@@ -507,7 +507,7 @@ fn drops_too_small_validator_set() {
 		};
 
 		// This will raise okay, but nothing is queued, and event is emitted
-		assert_ok!(ah_client::Pallet::<Runtime>::validator_set(RuntimeOrigin::root(), report),);
+		assert_ok!(ah_client::Pezpallet::<Runtime>::validator_set(RuntimeOrigin::root(), report),);
 		assert_eq!(
 			ah_client_events_since_last_call(),
 			vec![ah_client::Event::SetTooSmallAndDropped]
@@ -530,7 +530,7 @@ fn splitted_drops_too_small_validator_set() {
 		.split(1);
 		assert_eq!(parts.len(), 2);
 
-		assert_ok!(ah_client::Pallet::<Runtime>::validator_set(
+		assert_ok!(ah_client::Pezpallet::<Runtime>::validator_set(
 			RuntimeOrigin::root(),
 			parts[0].clone()
 		));
@@ -547,7 +547,7 @@ fn splitted_drops_too_small_validator_set() {
 		assert_eq!(ah_client::ValidatorSet::<Runtime>::get(), None);
 		assert!(ah_client::IncompleteValidatorSetReport::<Runtime>::get().is_some());
 
-		assert_ok!(ah_client::Pallet::<Runtime>::validator_set(
+		assert_ok!(ah_client::Pezpallet::<Runtime>::validator_set(
 			RuntimeOrigin::root(),
 			parts[1].clone()
 		));
@@ -578,7 +578,7 @@ fn on_offence_non_validator() {
 			// submit an offence for validator 5 in current session, which is not a validator
 			// really. Note that we have to provide a manual identification, as the default one
 			// won't work here.
-			assert_ok!(pezpallet_root_offences::Pallet::<Runtime>::create_offence(
+			assert_ok!(pezpallet_root_offences::Pezpallet::<Runtime>::create_offence(
 				RuntimeOrigin::root(),
 				vec![(5, Perbill::from_percent(50))],
 				Some(vec![Default::default()]),
@@ -617,7 +617,7 @@ fn offences_first_queued_and_then_sent() {
 		let _ = session_events_since_last_call();
 
 		// submit an offence for two accounts
-		assert_ok!(pezpallet_root_offences::Pallet::<Runtime>::create_offence(
+		assert_ok!(pezpallet_root_offences::Pezpallet::<Runtime>::create_offence(
 			RuntimeOrigin::root(),
 			vec![(4, Perbill::from_percent(50)), (5, Perbill::from_percent(50))],
 			Some(vec![Default::default(), Default::default()]),
@@ -687,12 +687,12 @@ fn offences_spam_sent_page_by_page() {
 				)
 			})
 			.collect::<Vec<_>>();
-		assert_ok!(pezpallet_root_offences::Pallet::<Runtime>::report_offence(RuntimeOrigin::root(), offences));
+		assert_ok!(pezpallet_root_offences::Pezpallet::<Runtime>::report_offence(RuntimeOrigin::root(), offences));
 
-		// all offences reported to the offence pallet.
+		// all offences reported to the offence pezpallet.
 		assert_eq!(offence_events_since_last_call().len() as u32, offence_count);
 
-		// offence pallet will try and deduplicate them, but they all have the same time-slot,
+		// offence pezpallet will try and deduplicate them, but they all have the same time-slot,
 		// therefore are all reported to ah-client.
 		assert_eq!(ah_client::OffenceSendQueue::<Runtime>::count(), offence_count);
 		// 2.5 pages worth of offences
@@ -764,7 +764,7 @@ fn on_offence_non_validator_and_active() {
 			let _ = session_events_since_last_call();
 
 			// submit an offence for 5 and 4, first a non-validator and second an active one.
-			assert_ok!(pezpallet_root_offences::Pallet::<Runtime>::create_offence(
+			assert_ok!(pezpallet_root_offences::Pezpallet::<Runtime>::create_offence(
 				RuntimeOrigin::root(),
 				vec![(4, Perbill::from_percent(50)), (5, Perbill::from_percent(50))],
 				Some(vec![Default::default(), Default::default()]),
@@ -829,7 +829,7 @@ fn wont_disable_past_session_offence() {
 			let _ = session_events_since_last_call();
 
 			// submit an offence for 1, who is a past validator, in a past session.
-			assert_ok!(pezpallet_root_offences::Pallet::<Runtime>::create_offence(
+			assert_ok!(pezpallet_root_offences::Pezpallet::<Runtime>::create_offence(
 				RuntimeOrigin::root(),
 				vec![(1, Perbill::from_percent(50))],
 				Some(vec![Default::default()]),
@@ -875,7 +875,7 @@ fn on_offence_disable_and_re_enabled_next_set() {
 			let _ = session_events_since_last_call();
 
 			// submit an offence for 4 in the current session
-			assert_ok!(pezpallet_root_offences::Pallet::<Runtime>::create_offence(
+			assert_ok!(pezpallet_root_offences::Pezpallet::<Runtime>::create_offence(
 				RuntimeOrigin::root(),
 				vec![(4, Perbill::from_percent(50))],
 				Some(vec![Default::default()]),
@@ -951,7 +951,7 @@ mod session_pruning {
 				for i in 1..=10 {
 					let session_validators =
 						(i * 10..(i + 1) * 10).map(|x| x as AccountId).collect::<Vec<_>>();
-					assert_ok!(ah_client::Pallet::<T>::validator_set(
+					assert_ok!(ah_client::Pezpallet::<T>::validator_set(
 						RuntimeOrigin::root(),
 						ValidatorSetReport {
 							id: i,
@@ -975,11 +975,11 @@ mod session_pruning {
 					)
 				}
 
-				// ensure that we have the root for these recorded in the historical session pallet
+				// ensure that we have the root for these recorded in the historical session pezpallet
 				assert_eq!(pezpallet_session::historical::StoredRange::<T>::get(), Some((2, 12)));
 
 				// send back a new validator set, but with some pruning info.
-				assert_ok!(ah_client::Pallet::<T>::validator_set(
+				assert_ok!(ah_client::Pezpallet::<T>::validator_set(
 					RuntimeOrigin::root(),
 					ValidatorSetReport {
 						id: 999,
@@ -1014,7 +1014,7 @@ mod blocking {
 
 			// when
 			assert_noop!(
-				ah_client::Pallet::<Runtime>::validator_set(RuntimeOrigin::root(), report),
+				ah_client::Pezpallet::<Runtime>::validator_set(RuntimeOrigin::root(), report),
 				ah_client::Error::<Runtime>::Blocked,
 			);
 
@@ -1032,7 +1032,7 @@ mod blocking {
 			// nothing is queued; No outgoing messages expected in passive mode.
 			assert_eq!(LocalQueue::get().unwrap(), vec![]);
 
-			// make pallet active
+			// make pezpallet active
 			Mode::<T>::put(OperatingMode::Active);
 
 			// roll another session
@@ -1374,7 +1374,7 @@ mod splitting {
 			assert!(ah_client::ValidatorSet::<Runtime>::get().is_none());
 
 			assert_eq!(
-				pezframe_system::Pallet::<Runtime>::read_events_for_pallet::<ah_client::Event<Runtime>>(
+				pezframe_system::Pezpallet::<Runtime>::read_events_for_pallet::<ah_client::Event<Runtime>>(
 				),
 				vec![
 					ah_client::Event::<T>::ValidatorSetReceived {
@@ -1411,7 +1411,7 @@ mod key_proofs {
 
 				// receive a validator set, and trigger a 3 new sessions, such that we store some
 				// roots.
-				assert_ok!(ah_client::Pallet::<T>::validator_set(
+				assert_ok!(ah_client::Pezpallet::<T>::validator_set(
 					RuntimeOrigin::root(),
 					ValidatorSetReport {
 						id: 0,
@@ -1440,12 +1440,12 @@ mod key_proofs {
 				let key_ids = <SessionKeys as OpaqueKeys>::key_ids();
 				assert_eq!(key_ids.len(), 1, "we have inserted only one key type in mock");
 
-				let keys = pezpallet_session::Pallet::<T>::load_keys(&1).unwrap();
+				let keys = pezpallet_session::Pezpallet::<T>::load_keys(&1).unwrap();
 				let our_key = keys.get::<UintAuthorityId>(key_ids[0]);
 				assert_eq!(key_ids[0], DUMMY);
 
 				let proof =
-					pezpallet_session::historical::Pallet::<T>::prove((DUMMY, &our_key.encode()[..]))
+					pezpallet_session::historical::Pezpallet::<T>::prove((DUMMY, &our_key.encode()[..]))
 						.unwrap();
 
 				assert_eq!(proof.session, 3);
@@ -1453,7 +1453,7 @@ mod key_proofs {
 
 				// proof is valid, and it results into a default exposure.
 				assert_eq!(
-					pezpallet_session::historical::Pallet::<T>::check_proof(
+					pezpallet_session::historical::Pezpallet::<T>::check_proof(
 						(DUMMY, &our_key.encode()[..]),
 						proof
 					)

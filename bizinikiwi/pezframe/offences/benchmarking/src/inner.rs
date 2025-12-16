@@ -15,25 +15,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Offences pallet benchmarking.
+//! Offences pezpallet benchmarking.
 
 use alloc::{vec, vec::Vec};
 use codec::Decode;
 use pezframe_benchmarking::v2::*;
 use pezframe_support::traits::Get;
-use pezframe_system::{Config as SystemConfig, Pallet as System, RawOrigin};
+use pezframe_system::{Config as SystemConfig, Pezpallet as System, RawOrigin};
 use pezpallet_babe::EquivocationOffence as BabeEquivocationOffence;
 use pezpallet_balances::Config as BalancesConfig;
 use pezpallet_grandpa::{
 	EquivocationOffence as GrandpaEquivocationOffence, TimeSlot as GrandpaTimeSlot,
 };
-use pezpallet_offences::{Config as OffencesConfig, Pallet as Offences};
+use pezpallet_offences::{Config as OffencesConfig, Pezpallet as Offences};
 use pezpallet_session::{
 	historical::{Config as HistoricalConfig, IdentificationTuple},
-	Config as SessionConfig, Pallet as Session,
+	Config as SessionConfig, Pezpallet as Session,
 };
 use pezpallet_staking::{
-	Config as StakingConfig, Exposure, IndividualExposure, MaxNominationsOf, Pallet as Staking,
+	Config as StakingConfig, Exposure, IndividualExposure, MaxNominationsOf, Pezpallet as Staking,
 	RewardDestination, ValidatorPrefs,
 };
 use pezsp_runtime::{
@@ -46,7 +46,7 @@ const SEED: u32 = 0;
 
 const MAX_NOMINATORS: u32 = 100;
 
-pub struct Pallet<T: Config>(Offences<T>);
+pub struct Pezpallet<T: Config>(Offences<T>);
 
 pub trait Config:
 	SessionConfig<ValidatorId = <Self as pezframe_system::Config>::AccountId>
@@ -285,5 +285,5 @@ mod benchmarks {
 		Ok(())
 	}
 
-	impl_benchmark_test_suite!(Pallet, crate::mock::new_test_ext(), crate::mock::Test);
+	impl_benchmark_test_suite!(Pezpallet, crate::mock::new_test_ext(), crate::mock::Test);
 }

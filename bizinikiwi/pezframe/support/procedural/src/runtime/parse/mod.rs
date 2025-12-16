@@ -16,12 +16,12 @@
 // limitations under the License.
 
 pub mod helper;
-pub mod pallet;
+pub mod pezpallet;
 pub mod pezpallet_decl;
 pub mod runtime_struct;
 pub mod runtime_types;
 
-use crate::construct_runtime::parse::Pallet;
+use crate::construct_runtime::parse::Pezpallet;
 use pezpallet_decl::PalletDeclaration;
 use proc_macro2::TokenStream as TokenStream2;
 use quote::ToTokens;
@@ -106,18 +106,18 @@ pub enum AllPalletsDeclaration {
 	Explicit(ExplicitAllPalletsDeclaration),
 }
 
-/// Declaration of a runtime with some pallet with implicit declaration of parts.
+/// Declaration of a runtime with some pezpallet with implicit declaration of parts.
 #[derive(Debug, Clone)]
 pub struct ImplicitAllPalletsDeclaration {
 	pub pezpallet_decls: Vec<PalletDeclaration>,
 	pub pezpallet_count: usize,
 }
 
-/// Declaration of a runtime with all pallet having explicit declaration of parts.
+/// Declaration of a runtime with all pezpallet having explicit declaration of parts.
 #[derive(Debug, Clone)]
 pub struct ExplicitAllPalletsDeclaration {
 	pub name: Ident,
-	pub pallets: Vec<Pallet>,
+	pub pallets: Vec<Pezpallet>,
 }
 
 pub struct Def {
@@ -202,7 +202,7 @@ impl Def {
 						pezpallet_decls.push(pezpallet_decl);
 					},
 					syn::Type::TraitObject(syn::TypeTraitObject { bounds, .. }) => {
-						let pallet = Pallet::try_from(
+						let pezpallet = Pezpallet::try_from(
 							item.span(),
 							&pezpallet_item,
 							pezpallet_index,
@@ -211,24 +211,24 @@ impl Def {
 							&bounds,
 						)?;
 
-						if let Some(used_pallet) = indices.insert(pallet.index, pallet.name.clone())
+						if let Some(used_pallet) = indices.insert(pezpallet.index, pezpallet.name.clone())
 						{
 							let msg = format!(
-								"Pallet indices are conflicting: Both pallets {} and {} are at index {}",
-								used_pallet, pallet.name, pallet.index,
+								"Pezpallet indices are conflicting: Both pallets {} and {} are at index {}",
+								used_pallet, pezpallet.name, pezpallet.index,
 							);
 							let mut err = syn::Error::new(used_pallet.span(), &msg);
-							err.combine(syn::Error::new(pallet.name.span(), msg));
+							err.combine(syn::Error::new(pezpallet.name.span(), msg));
 							return Err(err);
 						}
 
-						pallets.push(pallet);
+						pallets.push(pezpallet);
 					},
 					_ => continue,
 				}
 			} else {
 				if let syn::Item::Type(item) = item {
-					let msg = "Missing pallet index for pallet declaration. Please add `#[runtime::pezpallet_index(...)]`";
+					let msg = "Missing pezpallet index for pezpallet declaration. Please add `#[runtime::pezpallet_index(...)]`";
 					return Err(syn::Error::new(item.span(), &msg));
 				}
 			}
@@ -274,7 +274,7 @@ fn runtime_parsing_works() {
 			pub struct Runtime;
 
 			#[runtime::pezpallet_index(0)]
-			pub type System = pezframe_system::Pallet<Runtime>;
+			pub type System = pezframe_system::Pezpallet<Runtime>;
 
 			#[runtime::pezpallet_index(1)]
 			pub type Pallet1 = pallet1<Instance1>;

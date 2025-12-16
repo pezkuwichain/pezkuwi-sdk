@@ -26,11 +26,11 @@
 // Executed Command:
 // ./target/production/bizinikiwi-node
 // benchmark
-// pallet
+// pezpallet
 // --chain=dev
 // --steps=50
 // --repeat=20
-// --pallet=pezpallet_asset_tx_payment
+// --pezpallet=pezpallet_asset_tx_payment
 // --no-storage-info
 // --no-median-slopes
 // --no-min-squares

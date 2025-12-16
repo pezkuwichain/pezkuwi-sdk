@@ -50,7 +50,7 @@ impl pezframe_system::Config for Test {
 	type AccountData = pezpallet_balances::AccountData<u64>;
 }
 
-/// The benchmarks in this pallet should never need an asset transactor to begin with.
+/// The benchmarks in this pezpallet should never need an asset transactor to begin with.
 pub struct NoAssetTransactor;
 impl xcm_executor::traits::TransactAsset for NoAssetTransactor {
 	fn deposit_asset(_: &Asset, _: &Location, _: Option<&XcmContext>) -> Result<(), XcmError> {

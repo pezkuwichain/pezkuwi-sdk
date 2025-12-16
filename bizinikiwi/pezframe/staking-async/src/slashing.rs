@@ -42,7 +42,7 @@
 
 use crate::{
 	asset, log, session_rotation::Eras, BalanceOf, Config, NegativeImbalanceOf, OffenceQueue,
-	OffenceQueueEras, PagedExposure, Pallet, Perbill, ProcessingOffence, SlashRewardFraction,
+	OffenceQueueEras, PagedExposure, Pezpallet, Perbill, ProcessingOffence, SlashRewardFraction,
 	UnappliedSlash, UnappliedSlashes, ValidatorSlashInEra, WeightInfo,
 };
 use alloc::vec::Vec;
@@ -233,7 +233,7 @@ pub(crate) fn process_offence<T: Config>() -> Weight {
 		return incomplete_consumed_weight;
 	};
 
-	<Pallet<T>>::deposit_event(super::Event::<T>::SlashComputed {
+	<Pezpallet<T>>::deposit_event(super::Event::<T>::SlashComputed {
 		offence_era,
 		slash_era,
 		offender: offender.clone(),
@@ -354,7 +354,7 @@ fn slash_nominators<T: Config>(
 		let prior_slashed = params.prior_slash * nominator.value;
 		let new_slash = params.slash * nominator.value;
 		// this should always be positive since prior slash is always less than the new slash or
-		// filtered out when offence is reported (`Pallet::on_new_offences`).
+		// filtered out when offence is reported (`Pezpallet::on_new_offences`).
 		let slash_diff = new_slash.defensive_saturating_sub(prior_slashed);
 
 		if slash_diff == Zero::zero() {
@@ -398,7 +398,7 @@ pub fn do_slash<T: Config>(
 	slash_era: EraIndex,
 ) {
 	let mut ledger =
-		match Pallet::<T>::ledger(pezsp_staking::StakingAccount::Stash(stash.clone())).defensive() {
+		match Pezpallet::<T>::ledger(pezsp_staking::StakingAccount::Stash(stash.clone())).defensive() {
 			Ok(ledger) => ledger,
 			Err(_) => return, // nothing to do.
 		};
@@ -410,7 +410,7 @@ pub fn do_slash<T: Config>(
 	}
 
 	// Skip slashing for virtual stakers. The pallets managing them should handle the slashing.
-	if !Pallet::<T>::is_virtual_staker(stash) {
+	if !Pezpallet::<T>::is_virtual_staker(stash) {
 		let (imbalance, missing) = asset::slash::<T>(stash, value);
 		slashed_imbalance.subsume(imbalance);
 
@@ -425,7 +425,7 @@ pub fn do_slash<T: Config>(
 		.defensive_proof("ledger fetched from storage so it exists in storage; qed.");
 
 	// trigger the event
-	<Pallet<T>>::deposit_event(super::Event::<T>::Slashed { staker: stash.clone(), amount: value });
+	<Pezpallet<T>>::deposit_event(super::Event::<T>::Slashed { staker: stash.clone(), amount: value });
 }
 
 /// Apply a previously-unapplied slash.

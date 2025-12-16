@@ -38,6 +38,6 @@ the default branch.
 
 The regex in cmd.yml is: `^(\/cmd )([-\/\s\w.=:]+)$` accepts only alphanumeric, space, "-", "/", "=", ":", "." chars.
 
-`/cmd bench --runtime bridge-hub-zagros --pallet=pallet_name`
+`/cmd bench --runtime bridge-hub-zagros --pezpallet=pallet_name`
 `/cmd prdoc --audience runtime_dev runtime_user --bump patch --force`
 `/cmd update-ui --image=docker.io/paritytech/ci-unified:bullseye-1.77.0-2024-04-10-v202407161507 --clean`

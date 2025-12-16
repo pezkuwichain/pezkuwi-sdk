@@ -340,7 +340,7 @@ mod tests {
 	use std::{collections::HashSet, sync::Arc};
 	use bizinikiwi_test_runtime_client::{
 		runtime::{
-			bizinikiwi_test_pallet::pallet::Call as PalletCall, ExtrinsicBuilder, RuntimeCall,
+			bizinikiwi_test_pallet::pezpallet::Call as PalletCall, ExtrinsicBuilder, RuntimeCall,
 		},
 		ClientBlockImportExt, DefaultTestClientBuilderExt, TestClientBuilderExt,
 	};

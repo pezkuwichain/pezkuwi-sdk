@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Whitelist Pallet
+//! # Whitelist Pezpallet
 //!
 //! - [`Config`]
 //! - [`Call`]
@@ -27,7 +27,7 @@
 //! with the root origin.
 //!
 //! In the meantime the call corresponding to the hash must have been submitted to the pre-image
-//! handler [`pallet::Config::Preimages`].
+//! handler [`pezpallet::Config::Preimages`].
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
@@ -50,13 +50,13 @@ use frame::{
 };
 use scale_info::TypeInfo;
 
-pub use pallet::*;
+pub use pezpallet::*;
 
-#[frame::pallet]
-pub mod pallet {
+#[frame::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
@@ -80,22 +80,22 @@ pub mod pallet {
 		/// The handler of pre-images.
 		type Preimages: QueryPreimage<H = Self::Hashing> + StorePreimage;
 
-		/// The weight information for this pallet.
+		/// The weight information for this pezpallet.
 		type WeightInfo: WeightInfo;
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		CallWhitelisted { call_hash: T::Hash },
 		WhitelistedCallRemoved { call_hash: T::Hash },
 		WhitelistedCallDispatched { call_hash: T::Hash, result: DispatchResultWithPostInfo },
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// The preimage of the call hash could not be loaded.
 		UnavailablePreImage,
@@ -109,13 +109,13 @@ pub mod pallet {
 		CallAlreadyWhitelisted,
 	}
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type WhitelistedCall<T: Config> = StorageMap<_, Twox64Concat, T::Hash, (), OptionQuery>;
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::whitelist_call())]
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::whitelist_call())]
 		pub fn whitelist_call(origin: OriginFor<T>, call_hash: T::Hash) -> DispatchResult {
 			T::WhitelistOrigin::ensure_origin(origin)?;
 
@@ -132,8 +132,8 @@ pub mod pallet {
 			Ok(())
 		}
 
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::remove_whitelisted_call())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::remove_whitelisted_call())]
 		pub fn remove_whitelisted_call(origin: OriginFor<T>, call_hash: T::Hash) -> DispatchResult {
 			T::WhitelistOrigin::ensure_origin(origin)?;
 
@@ -146,8 +146,8 @@ pub mod pallet {
 			Ok(())
 		}
 
-		#[pallet::call_index(2)]
-		#[pallet::weight(
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(
 			T::WeightInfo::dispatch_whitelisted_call(*call_encoded_len)
 				.saturating_add(*call_weight_witness)
 		)]
@@ -185,8 +185,8 @@ pub mod pallet {
 			Ok(actual_weight.into())
 		}
 
-		#[pallet::call_index(3)]
-		#[pallet::weight({
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight({
 			let call_weight = call.get_dispatch_info().call_weight;
 			let call_len = call.encoded_size() as u32;
 
@@ -216,7 +216,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Clean whitelisting/preimage and dispatch call.
 	///
 	/// Return the call actual weight of the dispatched call if there is some.

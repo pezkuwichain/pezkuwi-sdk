@@ -15,7 +15,7 @@
 // See the License fsor the specific language governing permissions and
 // limitations under the License.
 
-//! Traits for querying pallet view functions.
+//! Traits for querying pezpallet view functions.
 
 use alloc::vec::Vec;
 use codec::{Decode, DecodeAll, Encode, Output};
@@ -28,7 +28,7 @@ pub struct ViewFunctionId {
 	/// The part of the id for dispatching view functions from the top level of the runtime.
 	///
 	/// Specifies which view function grouping this view function belongs to. This could be a group
-	/// of view functions associated with a pallet, or a pallet agnostic group of view functions.
+	/// of view functions associated with a pezpallet, or a pezpallet agnostic group of view functions.
 	pub prefix: [u8; 16],
 	/// The part of the id for dispatching to a view function within a group.
 	pub suffix: [u8; 16],
@@ -61,14 +61,14 @@ impl From<codec::Error> for ViewFunctionDispatchError {
 }
 
 /// Implemented by both pallets and the runtime. The runtime is dispatching by prefix using the
-/// pallet implementation of `ViewFunctionIdPrefix` then the pallet is dispatching by suffix using
+/// pezpallet implementation of `ViewFunctionIdPrefix` then the pezpallet is dispatching by suffix using
 /// the methods implementation of `ViewFunctionIdSuffix`.
 ///
 /// In more details, `ViewFunctionId` = `ViewFunctionIdPrefix` ++ `ViewFunctionIdSuffix`, where
 /// `ViewFunctionIdPrefix=twox_128(pezpallet_name)` and
 /// `ViewFunctionIdSuffix=twox_128("fn_name(fnarg_types) -> return_ty")`. The prefix is the same as
 /// the storage prefix for pallets. The suffix is generated from the view function method type
-/// signature, so is guaranteed to be unique for that pallet implementation.
+/// signature, so is guaranteed to be unique for that pezpallet implementation.
 pub trait DispatchViewFunction {
 	fn dispatch_view_function<O: Output>(
 		id: &ViewFunctionId,
@@ -87,19 +87,19 @@ impl DispatchViewFunction for () {
 	}
 }
 
-/// Automatically implemented for each pallet by the macro [`pallet`](crate::pallet).
+/// Automatically implemented for each pezpallet by the macro [`pezpallet`](crate::pezpallet).
 pub trait ViewFunctionIdPrefix {
 	fn prefix() -> [u8; 16];
 }
 
-/// Automatically implemented for each pallet view function method by the macro
-/// [`pallet`](crate::pallet).
+/// Automatically implemented for each pezpallet view function method by the macro
+/// [`pezpallet`](crate::pezpallet).
 pub trait ViewFunctionIdSuffix {
 	const SUFFIX: [u8; 16];
 }
 
-/// Automatically implemented for each pallet view function method by the macro
-/// [`pallet`](crate::pallet).
+/// Automatically implemented for each pezpallet view function method by the macro
+/// [`pezpallet`](crate::pezpallet).
 pub trait ViewFunction: DecodeAll {
 	fn id() -> ViewFunctionId;
 	type ReturnType: Encode;

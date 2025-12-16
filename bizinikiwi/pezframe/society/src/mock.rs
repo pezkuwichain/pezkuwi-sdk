@@ -72,7 +72,7 @@ impl pezpallet_balances::Config for Test {
 impl Config for Test {
 	type RuntimeEvent = RuntimeEvent;
 	type PalletId = SocietyPalletId;
-	type Currency = pezpallet_balances::Pallet<Self>;
+	type Currency = pezpallet_balances::Pezpallet<Self>;
 	type Randomness = TestRandomness<Self>;
 	type GraceStrikes = ConstU32<1>;
 	type PeriodSpend = ConstU64<1000>;

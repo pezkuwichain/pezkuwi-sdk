@@ -37,7 +37,7 @@ use crate::{
 	weights::WeightInfo,
 	Array, BalanceOf, Code, CodeHash, CodeInfoOf, CollectEvents, Config, ContractInfo,
 	ContractInfoOf, DebugInfo, DefaultAddressGenerator, DeletionQueueCounter, Error, HoldReason,
-	MigrationInProgress, Origin, Pallet, PristineCode, Schedule,
+	MigrationInProgress, Origin, Pezpallet, PristineCode, Schedule,
 };
 use assert_matches::assert_matches;
 use codec::{Decode, Encode};
@@ -399,7 +399,7 @@ impl pezpallet_proxy::Config for Test {
 	type CallHasher = BlakeTwo256;
 	type AnnouncementDepositBase = ConstU64<1>;
 	type AnnouncementDepositFactor = ConstU64<1>;
-	type BlockNumberProvider = pezframe_system::Pallet<Test>;
+	type BlockNumberProvider = pezframe_system::Pezpallet<Test>;
 }
 
 impl pezpallet_dummy::Config for Test {}
@@ -561,9 +561,9 @@ impl ExtBuilder {
 		ext.execute_with(|| {
 			use pezframe_support::traits::OnGenesis;
 
-			Pallet::<Test>::on_genesis();
+			Pezpallet::<Test>::on_genesis();
 			if let Some(storage_version) = self.storage_version {
-				storage_version.put::<Pallet<Test>>();
+				storage_version.put::<Pezpallet<Test>>();
 			}
 			System::set_block_number(1)
 		});
@@ -647,7 +647,7 @@ fn migration_on_idle_hooks_works() {
 			.execute_with(|| {
 				MigrationInProgress::<Test>::set(Some(Default::default()));
 				Contracts::on_idle(System::block_number(), weight);
-				assert_eq!(StorageVersion::get::<Pallet<Test>>(), expected_version);
+				assert_eq!(StorageVersion::get::<Pezpallet<Test>>(), expected_version);
 			});
 	}
 }
@@ -2545,7 +2545,7 @@ fn failed_deposit_charge_should_roll_back_call() {
 			let transfer_call =
 				Box::new(RuntimeCall::Balances(pezpallet_balances::Call::transfer_allow_death {
 					dest: CHARLIE,
-					value: pezpallet_balances::Pallet::<Test>::free_balance(&ALICE) - 2 * ED,
+					value: pezpallet_balances::Pezpallet::<Test>::free_balance(&ALICE) - 2 * ED,
 				}));
 
 			// Wrap the transfer call in a proxy call.

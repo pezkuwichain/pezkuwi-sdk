@@ -36,7 +36,7 @@ use pezframe_support::{
 use pezframe_system::Config as SysConfig;
 use num_traits::Zero;
 use pezpallet_transaction_payment::{
-	Config as TxConfig, MultiplierUpdate, NextFeeMultiplier, Pallet as TxPallet, TxCreditHold,
+	Config as TxConfig, MultiplierUpdate, NextFeeMultiplier, Pezpallet as TxPallet, TxCreditHold,
 };
 use pezsp_runtime::{
 	generic::UncheckedExtrinsic,
@@ -48,7 +48,7 @@ use pezsp_runtime::{
 
 type CreditOf<T> = Credit<<T as pezframe_system::Config>::AccountId, <T as Config>::Currency>;
 
-/// The only [`WeightToFee`] implementation that is supported by this pallet.
+/// The only [`WeightToFee`] implementation that is supported by this pezpallet.
 ///
 /// `P,Q`: Rational number that defines the ref_time to fee mapping.
 ///

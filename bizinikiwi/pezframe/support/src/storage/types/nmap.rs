@@ -40,24 +40,24 @@ use pezsp_runtime::SaturatedConversion;
 /// For example, [`StorageDoubleMap`](pezframe_support::storage::types::StorageDoubleMap) is a special
 /// case of an *NMap* with N = 2.
 ///
-/// For general information regarding the `#[pallet::storage]` attribute, refer to
+/// For general information regarding the `#[pezpallet::storage]` attribute, refer to
 /// [`crate::pezpallet_macros::storage`].
 ///
 /// # Example
 ///
 /// ```
-/// #[pezframe_support::pallet]
-/// mod pallet {
+/// #[pezframe_support::pezpallet]
+/// mod pezpallet {
 ///     # use pezframe_support::pezpallet_prelude::*;
-///     # #[pallet::config]
+///     # #[pezpallet::config]
 ///     # pub trait Config: pezframe_system::Config {}
-///     # #[pallet::pallet]
-///     # pub struct Pallet<T>(_);
+///     # #[pezpallet::pezpallet]
+///     # pub struct Pezpallet<T>(_);
 /// 	/// A kitchen-sink StorageNMap, with all possible additional attributes.
-///     #[pallet::storage]
-/// 	#[pallet::getter(fn foo)]
-/// 	#[pallet::storage_prefix = "OtherFoo"]
-/// 	#[pallet::unbounded]
+///     #[pezpallet::storage]
+/// 	#[pezpallet::getter(fn foo)]
+/// 	#[pezpallet::storage_prefix = "OtherFoo"]
+/// 	#[pezpallet::unbounded]
 ///     pub type Foo<T> = StorageNMap<
 /// 		_,
 /// 		(
@@ -70,7 +70,7 @@ use pezsp_runtime::SaturatedConversion;
 /// 	>;
 ///
 /// 	/// Named alternative syntax.
-///     #[pallet::storage]
+///     #[pezpallet::storage]
 ///     pub type Bar<T> = StorageNMap<
 /// 		Key = (
 /// 			NMapKey<Blake2_128Concat, u8>,

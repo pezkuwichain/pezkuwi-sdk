@@ -15,9 +15,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Assets Holder Pallet
+//! # Assets Holder Pezpallet
 //!
-//! A pallet capable of holding fungibles from `pezpallet-assets`. This is an extension of
+//! A pezpallet capable of holding fungibles from `pezpallet-assets`. This is an extension of
 //! `pezpallet-assets`, wrapping [`fungibles::Inspect`](`pezframe_support::traits::fungibles::Inspect`).
 //! It implements both
 //! [`fungibles::hold::Inspect`](pezframe_support::traits::fungibles::hold::Inspect),
@@ -25,16 +25,16 @@
 //! [`fungibles::hold::Unbalanced`](pezframe_support::traits::fungibles::hold::Unbalanced). The
 //! complexity of the operations is `O(1)`.
 //!
-//! ## Pallet API
+//! ## Pezpallet API
 //!
-//! See the [`pallet`] module for more information about the interfaces this pallet exposes,
+//! See the [`pezpallet`] module for more information about the interfaces this pezpallet exposes,
 //! including its configuration trait, dispatchables, storage items, events and errors.
 //!
 //! ## Overview
 //!
-//! This pallet provides the following functionality:
+//! This pezpallet provides the following functionality:
 //!
-//! - Pallet hooks allowing [`pezpallet-assets`] to know the balance on hold for an account on a given
+//! - Pezpallet hooks allowing [`pezpallet-assets`] to know the balance on hold for an account on a given
 //!   asset (see [`pezpallet_assets::BalanceOnHold`]).
 //! - An implementation of
 //!   [`fungibles::hold::Inspect`](pezframe_support::traits::fungibles::hold::Inspect),
@@ -51,7 +51,7 @@ use pezframe_support::{
 };
 use pezframe_system::pezpallet_prelude::BlockNumberFor;
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 #[cfg(test)]
 mod mock;
@@ -60,36 +60,36 @@ mod tests;
 
 mod impl_fungibles;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::config(with_default)]
+	#[pezpallet::config(with_default)]
 	pub trait Config<I: 'static = ()>:
-		pezframe_system::Config + pezpallet_assets::Config<I, Holder = Pallet<Self, I>>
+		pezframe_system::Config + pezpallet_assets::Config<I, Holder = Pezpallet<Self, I>>
 	{
 		/// The overarching freeze reason.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		type RuntimeHoldReason: Parameter + Member + MaxEncodedLen + Copy + VariantCount;
 
 		/// The overarching event type.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self, I>>
 			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T, I = ()> {
 		/// Number of holds on an account would exceed the count of `RuntimeHoldReason`.
 		TooManyHolds,
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T, I = ()>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T, I = ()>(_);
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config<I>, I: 'static = ()> {
 		/// `who`s balance on hold was increased by `amount`.
 		Held {
@@ -115,7 +115,7 @@ pub mod pallet {
 	}
 
 	/// A map that stores holds applied on an account for a given AssetId.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type Holds<T: Config<I>, I: 'static = ()> = StorageDoubleMap<
 		_,
 		Blake2_128Concat,
@@ -130,7 +130,7 @@ pub mod pallet {
 	>;
 
 	/// A map that stores the current total balance on hold for every account on a given AssetId.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type BalancesOnHold<T: Config<I>, I: 'static = ()> = StorageDoubleMap<
 		_,
 		Blake2_128Concat,
@@ -140,8 +140,8 @@ pub mod pallet {
 		T::Balance,
 	>;
 
-	#[pallet::hooks]
-	impl<T: Config<I>, I: 'static> Hooks<BlockNumberFor<T>> for Pallet<T, I> {
+	#[pezpallet::hooks]
+	impl<T: Config<I>, I: 'static> Hooks<BlockNumberFor<T>> for Pezpallet<T, I> {
 		#[cfg(feature = "try-runtime")]
 		fn try_state(_: BlockNumberFor<T>) -> Result<(), pezsp_runtime::TryRuntimeError> {
 			Self::do_try_state()
@@ -149,7 +149,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config<I>, I: 'static> Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 	#[cfg(any(test, feature = "try-runtime"))]
 	fn do_try_state() -> Result<(), pezsp_runtime::TryRuntimeError> {
 		use pezsp_runtime::{

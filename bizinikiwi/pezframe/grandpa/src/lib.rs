@@ -67,10 +67,10 @@ mod tests;
 
 pub use equivocation::{EquivocationOffence, EquivocationReportSystem, TimeSlot};
 
-pub use pallet::*;
+pub use pezpallet::*;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::{dispatch::DispatchResult, pezpallet_prelude::*};
 	use pezframe_system::pezpallet_prelude::*;
@@ -78,11 +78,11 @@ pub mod pallet {
 	/// The in-code storage version.
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(5);
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// The event type of this module.
 		#[allow(deprecated)]
@@ -90,15 +90,15 @@ pub mod pallet {
 			+ Into<<Self as pezframe_system::Config>::RuntimeEvent>
 			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
-		/// Weights for this pallet.
+		/// Weights for this pezpallet.
 		type WeightInfo: WeightInfo;
 
 		/// Max Authorities in use
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxAuthorities: Get<u32>;
 
 		/// The maximum number of nominators for each validator.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxNominators: Get<u32>;
 
 		/// The maximum number of entries to keep in the set id to session index mapping.
@@ -107,7 +107,7 @@ pub mod pallet {
 		/// value should relate to the bonding duration of whatever staking system is
 		/// being used (if any). If equivocation handling is not enabled then this value
 		/// can be zero.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxSetIdSessionEntries: Get<u64>;
 
 		/// The proof of key ownership, used for validating equivocation reports
@@ -124,8 +124,8 @@ pub mod pallet {
 		>;
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn on_finalize(block_number: BlockNumberFor<T>) {
 			// check for scheduled pending authority set changes
 			if let Some(pending_change) = PendingChange::<T>::get() {
@@ -186,14 +186,14 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Report voter equivocation/misbehavior. This method will verify the
 		/// equivocation proof and validate the given key ownership proof
 		/// against the extracted offender. If both are valid, the offence
 		/// will be reported.
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::report_equivocation(
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::report_equivocation(
 			key_owner_proof.validator_count(),
 			T::MaxNominators::get(),
 		))]
@@ -221,8 +221,8 @@ pub mod pallet {
 		/// block authors will call it (validated in `ValidateUnsigned`), as such
 		/// if the block author is defined it will be defined as the equivocation
 		/// reporter.
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::report_equivocation(
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::report_equivocation(
 			key_owner_proof.validator_count(),
 			T::MaxNominators::get(),
 		))]
@@ -252,8 +252,8 @@ pub mod pallet {
 		/// block of all validators of the new authority set.
 		///
 		/// Only callable by root.
-		#[pallet::call_index(2)]
-		#[pallet::weight(T::WeightInfo::note_stalled())]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(T::WeightInfo::note_stalled())]
 		pub fn note_stalled(
 			origin: OriginFor<T>,
 			delay: BlockNumberFor<T>,
@@ -266,8 +266,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(fn deposit_event)]
 	pub enum Event {
 		/// New authority set has been applied.
 		NewAuthorities { authority_set: AuthorityList },
@@ -277,7 +277,7 @@ pub mod pallet {
 		Resumed,
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Attempt to signal GRANDPA pause when the authority set isn't live
 		/// (either paused or already pending pause).
@@ -297,32 +297,32 @@ pub mod pallet {
 		DuplicateOffenceReport,
 	}
 
-	#[pallet::type_value]
+	#[pezpallet::type_value]
 	pub fn DefaultForState<T: Config>() -> StoredState<BlockNumberFor<T>> {
 		StoredState::Live
 	}
 
 	/// State of the current authority set.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type State<T: Config> =
 		StorageValue<_, StoredState<BlockNumberFor<T>>, ValueQuery, DefaultForState<T>>;
 
 	/// Pending change: (signaled at, scheduled change).
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type PendingChange<T: Config> =
 		StorageValue<_, StoredPendingChange<BlockNumberFor<T>, T::MaxAuthorities>>;
 
 	/// next block number where we can force a change.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type NextForced<T: Config> = StorageValue<_, BlockNumberFor<T>>;
 
 	/// `true` if we are currently stalled.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Stalled<T: Config> = StorageValue<_, (BlockNumberFor<T>, BlockNumberFor<T>)>;
 
 	/// The number of changes (both in terms of keys and underlying economic responsibilities)
 	/// in the "set" of Grandpa validators from genesis.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type CurrentSetId<T: Config> = StorageValue<_, SetId, ValueQuery>;
 
 	/// A mapping from grandpa set ID to the index of the *most recent* session for which its
@@ -335,32 +335,32 @@ pub mod pallet {
 	/// during that session.
 	///
 	/// TWOX-NOTE: `SetId` is not under user control.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type SetIdSession<T: Config> = StorageMap<_, Twox64Concat, SetId, SessionIndex>;
 
 	/// The current list of authorities.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Authorities<T: Config> =
 		StorageValue<_, BoundedAuthorityList<T::MaxAuthorities>, ValueQuery>;
 
 	#[derive(pezframe_support::DefaultNoBound)]
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	pub struct GenesisConfig<T: Config> {
 		pub authorities: AuthorityList,
 		#[serde(skip)]
 		pub _config: core::marker::PhantomData<T>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			CurrentSetId::<T>::put(SetId::default());
-			Pallet::<T>::initialize(self.authorities.clone())
+			Pezpallet::<T>::initialize(self.authorities.clone())
 		}
 	}
 
-	#[pallet::validate_unsigned]
-	impl<T: Config> ValidateUnsigned for Pallet<T> {
+	#[pezpallet::validate_unsigned]
+	impl<T: Config> ValidateUnsigned for Pezpallet<T> {
 		type Call = Call<T>;
 
 		fn validate_unsigned(source: TransactionSource, call: &Self::Call) -> TransactionValidity {
@@ -426,7 +426,7 @@ pub enum StoredState<N> {
 	},
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// State of the current authority set.
 	pub fn state() -> StoredState<BlockNumberFor<T>> {
 		State::<T>::get()
@@ -474,7 +474,7 @@ impl<T: Config> Pallet<T> {
 	/// Cannot be done when already paused.
 	pub fn schedule_pause(in_blocks: BlockNumberFor<T>) -> DispatchResult {
 		if let StoredState::Live = State::<T>::get() {
-			let scheduled_at = pezframe_system::Pallet::<T>::block_number();
+			let scheduled_at = pezframe_system::Pezpallet::<T>::block_number();
 			State::<T>::put(StoredState::PendingPause { delay: in_blocks, scheduled_at });
 
 			Ok(())
@@ -486,7 +486,7 @@ impl<T: Config> Pallet<T> {
 	/// Schedule a resume of GRANDPA after pausing.
 	pub fn schedule_resume(in_blocks: BlockNumberFor<T>) -> DispatchResult {
 		if let StoredState::Paused = State::<T>::get() {
-			let scheduled_at = pezframe_system::Pallet::<T>::block_number();
+			let scheduled_at = pezframe_system::Pezpallet::<T>::block_number();
 			State::<T>::put(StoredState::PendingResume { delay: in_blocks, scheduled_at });
 
 			Ok(())
@@ -515,7 +515,7 @@ impl<T: Config> Pallet<T> {
 		forced: Option<BlockNumberFor<T>>,
 	) -> DispatchResult {
 		if !PendingChange::<T>::exists() {
-			let scheduled_at = pezframe_system::Pallet::<T>::block_number();
+			let scheduled_at = pezframe_system::Pezpallet::<T>::block_number();
 
 			if forced.is_some() {
 				if NextForced::<T>::get().map_or(false, |next| next > scheduled_at) {
@@ -551,7 +551,7 @@ impl<T: Config> Pallet<T> {
 	/// Deposit one of this module's logs.
 	fn deposit_log(log: ConsensusLog<BlockNumberFor<T>>) {
 		let log = DigestItem::Consensus(GRANDPA_ENGINE_ID, log.encode());
-		pezframe_system::Pallet::<T>::deposit_log(log);
+		pezframe_system::Pezpallet::<T>::deposit_log(log);
 	}
 
 	// Perform module initialization, abstracted so that it can be called either through genesis
@@ -591,11 +591,11 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-impl<T: Config> pezsp_runtime::BoundToRuntimeAppPublic for Pallet<T> {
+impl<T: Config> pezsp_runtime::BoundToRuntimeAppPublic for Pezpallet<T> {
 	type Public = AuthorityId;
 }
 
-impl<T: Config> OneSessionHandler<T::AccountId> for Pallet<T>
+impl<T: Config> OneSessionHandler<T::AccountId> for Pezpallet<T>
 where
 	T: pezpallet_session::Config,
 {
@@ -651,7 +651,7 @@ where
 
 		// update the mapping to note that the current set corresponds to the
 		// latest equivalent session (i.e. now).
-		let session_index = pezpallet_session::Pallet::<T>::current_index();
+		let session_index = pezpallet_session::Pezpallet::<T>::current_index();
 		SetIdSession::<T>::insert(current_set_id, &session_index);
 	}
 

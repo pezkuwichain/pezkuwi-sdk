@@ -373,7 +373,7 @@ mod list {
 			// not exposed as mutable in any sense.
 			#[pezframe_support::storage_alias]
 			type CounterForListNodes<T: Config> =
-				StorageValue<crate::Pallet<T>, u32, pezframe_support::pezpallet_prelude::ValueQuery>;
+				StorageValue<crate::Pezpallet<T>, u32, pezframe_support::pezpallet_prelude::ValueQuery>;
 			CounterForListNodes::<Runtime>::mutate(|counter| *counter += 1);
 			assert_eq!(crate::ListNodes::<Runtime>::count(), 5);
 

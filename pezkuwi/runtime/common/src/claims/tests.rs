@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Tests for the claims pallet.
+//! Tests for the claims pezpallet.
 
 #[cfg(test)]
 use super::*;
@@ -570,7 +570,7 @@ fn validate_unsigned_works() {
 
 	new_test_ext().execute_with(|| {
 		assert_eq!(
-			Pallet::<Test>::validate_unsigned(
+			Pezpallet::<Test>::validate_unsigned(
 				source,
 				&ClaimsCall::claim {
 					dest: 1,
@@ -586,14 +586,14 @@ fn validate_unsigned_works() {
 			})
 		);
 		assert_eq!(
-			Pallet::<Test>::validate_unsigned(
+			Pezpallet::<Test>::validate_unsigned(
 				source,
 				&ClaimsCall::claim { dest: 0, ethereum_signature: EcdsaSignature([0; 65]) }
 			),
 			InvalidTransaction::Custom(ValidityError::InvalidEthereumSignature.into()).into(),
 		);
 		assert_eq!(
-			Pallet::<Test>::validate_unsigned(
+			Pezpallet::<Test>::validate_unsigned(
 				source,
 				&ClaimsCall::claim {
 					dest: 1,
@@ -609,7 +609,7 @@ fn validate_unsigned_works() {
 			statement: StatementKind::Regular.to_text().to_vec(),
 		};
 		assert_eq!(
-			Pallet::<Test>::validate_unsigned(source, &call),
+			Pezpallet::<Test>::validate_unsigned(source, &call),
 			Ok(ValidTransaction {
 				priority: 100,
 				requires: vec![],
@@ -619,7 +619,7 @@ fn validate_unsigned_works() {
 			})
 		);
 		assert_eq!(
-			Pallet::<Test>::validate_unsigned(
+			Pezpallet::<Test>::validate_unsigned(
 				source,
 				&ClaimsCall::claim_attest {
 					dest: 1,
@@ -637,7 +637,7 @@ fn validate_unsigned_works() {
 			statement: StatementKind::Regular.to_text().to_vec(),
 		};
 		assert_eq!(
-			Pallet::<Test>::validate_unsigned(source, &call),
+			Pezpallet::<Test>::validate_unsigned(source, &call),
 			InvalidTransaction::Custom(ValidityError::SignerHasNoClaim.into()).into(),
 		);
 
@@ -648,7 +648,7 @@ fn validate_unsigned_works() {
 			statement: StatementKind::Regular.to_text().to_vec(),
 		};
 		assert_eq!(
-			Pallet::<Test>::validate_unsigned(source, &call),
+			Pezpallet::<Test>::validate_unsigned(source, &call),
 			InvalidTransaction::Custom(ValidityError::SignerHasNoClaim.into()).into(),
 		);
 
@@ -659,7 +659,7 @@ fn validate_unsigned_works() {
 			statement: StatementKind::Saft.to_text().to_vec(),
 		};
 		assert_eq!(
-			Pallet::<Test>::validate_unsigned(source, &call),
+			Pezpallet::<Test>::validate_unsigned(source, &call),
 			InvalidTransaction::Custom(ValidityError::InvalidStatement.into()).into(),
 		);
 	});

@@ -17,25 +17,25 @@
 
 #![cfg(feature = "experimental")]
 
-#[pezframe_support::pallet(dev_mode)]
+#[pezframe_support::pezpallet(dev_mode)]
 mod my_pallet {
 	use pezframe_support::pezpallet_prelude::{StorageValue, ValueQuery};
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config {}
 
-	#[pallet::pallet]
-	pub struct Pallet<T, I = ()>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T, I = ()>(_);
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type SomeStorage<T, I = ()> = StorageValue<_, (u32, u64), ValueQuery>;
 
-	#[pallet::tasks_experimental]
-	impl<T: Config<I>, I> Pallet<T, I> {
-		#[pallet::task_index(0)]
-		#[pallet::task_condition(|i, j| i == 0u32 && j == 2u64)]
-		#[pallet::task_list(vec![(0u32, 2u64), (2u32, 4u64)].iter())]
-		#[pallet::task_weight(0.into())]
+	#[pezpallet::tasks_experimental]
+	impl<T: Config<I>, I> Pezpallet<T, I> {
+		#[pezpallet::task_index(0)]
+		#[pezpallet::task_condition(|i, j| i == 0u32 && j == 2u64)]
+		#[pezpallet::task_list(vec![(0u32, 2u64), (2u32, 4u64)].iter())]
+		#[pezpallet::task_weight(0.into())]
 		fn foo(i: u32, j: u64) -> pezframe_support::pezpallet_prelude::DispatchResult {
 			<SomeStorage<T, I>>::put((i, j));
 			Ok(())
@@ -43,26 +43,26 @@ mod my_pallet {
 	}
 }
 
-// Another pallet for which we won't implement the default instance.
-#[pezframe_support::pallet(dev_mode)]
+// Another pezpallet for which we won't implement the default instance.
+#[pezframe_support::pezpallet(dev_mode)]
 mod my_pallet_2 {
 	use pezframe_support::pezpallet_prelude::{StorageValue, ValueQuery};
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config {}
 
-	#[pallet::pallet]
-	pub struct Pallet<T, I = ()>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T, I = ()>(_);
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type SomeStorage<T, I = ()> = StorageValue<_, (u32, u64), ValueQuery>;
 
-	#[pallet::tasks_experimental]
-	impl<T: Config<I>, I> Pallet<T, I> {
-		#[pallet::task_index(0)]
-		#[pallet::task_condition(|i, j| i == 0u32 && j == 2u64)]
-		#[pallet::task_list(vec![(0u32, 2u64), (2u32, 4u64)].iter())]
-		#[pallet::task_weight(0.into())]
+	#[pezpallet::tasks_experimental]
+	impl<T: Config<I>, I> Pezpallet<T, I> {
+		#[pezpallet::task_index(0)]
+		#[pezpallet::task_condition(|i, j| i == 0u32 && j == 2u64)]
+		#[pezpallet::task_list(vec![(0u32, 2u64), (2u32, 4u64)].iter())]
+		#[pezpallet::task_weight(0.into())]
 		fn foo(i: u32, j: u64) -> pezframe_support::pezpallet_prelude::DispatchResult {
 			<SomeStorage<T, I>>::put((i, j));
 			Ok(())

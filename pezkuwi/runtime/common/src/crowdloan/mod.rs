@@ -14,9 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! # Teyrchain `Crowdloaning` pallet
+//! # Teyrchain `Crowdloaning` pezpallet
 //!
-//! The point of this pallet is to allow teyrchain projects to offer the ability to help fund a
+//! The point of this pezpallet is to allow teyrchain projects to offer the ability to help fund a
 //! deposit for the teyrchain. When the crowdloan has ended, the funds are returned.
 //!
 //! Each fund has a child-trie which stores all contributors account IDs together with the amount
@@ -69,7 +69,7 @@ use pezframe_support::{
 	Identity, PalletId,
 };
 use pezframe_system::pezpallet_prelude::BlockNumberFor;
-pub use pallet::*;
+pub use pezpallet::*;
 use pezkuwi_primitives::Id as ParaId;
 use scale_info::TypeInfo;
 use pezsp_runtime::{
@@ -170,8 +170,8 @@ pub struct FundInfo<AccountId, Balance, BlockNumber, LeasePeriod> {
 	pub fund_index: FundIndex,
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::{ensure_root, ensure_signed, pezpallet_prelude::*};
@@ -179,19 +179,19 @@ pub mod pallet {
 	/// The in-code storage version.
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(2);
 
-	#[pallet::pallet]
-	#[pallet::without_storage_info]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::without_storage_info]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
-		/// `PalletId` for the crowdloan pallet. An appropriate value could be
+		/// `PalletId` for the crowdloan pezpallet. An appropriate value could be
 		/// `PalletId(*b"py/cfund")`
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type PalletId: Get<PalletId>;
 
 		/// The amount to be held on deposit by the depositor of a crowdloan.
@@ -199,11 +199,11 @@ pub mod pallet {
 
 		/// The minimum amount that may be contributed into a crowdloan. Should almost certainly be
 		/// at least `ExistentialDeposit`.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MinContribution: Get<BalanceOf<Self>>;
 
 		/// Max number of storage keys to remove per extrinsic call.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type RemoveKeysLimit: Get<u32>;
 
 		/// The teyrchain registrar type. We just use this to ensure that only the manager of a para
@@ -220,12 +220,12 @@ pub mod pallet {
 		/// The maximum length for the memo attached to a crowdloan contribution.
 		type MaxMemoLength: Get<u8>;
 
-		/// Weight Information for the Extrinsics in the Pallet
+		/// Weight Information for the Extrinsics in the Pezpallet
 		type WeightInfo: WeightInfo;
 	}
 
 	/// Info on all of the funds.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Funds<T: Config> = StorageMap<
 		_,
 		Twox64Concat,
@@ -235,19 +235,19 @@ pub mod pallet {
 
 	/// The funds that have had additional contributions during the last block. This is used
 	/// in order to determine which funds should submit new or updated bids.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type NewRaise<T> = StorageValue<_, Vec<ParaId>, ValueQuery>;
 
 	/// The number of auctions that have entered into their ending period so far.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type EndingsCount<T> = StorageValue<_, u32, ValueQuery>;
 
 	/// Tracker for the next available fund index
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type NextFundIndex<T> = StorageValue<_, u32, ValueQuery>;
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// Create a new crowdloaning campaign.
 		Created { para_id: ParaId },
@@ -262,7 +262,7 @@ pub mod pallet {
 		AllRefunded { para_id: ParaId },
 		/// Fund is dissolved.
 		Dissolved { para_id: ParaId },
-		/// The result of trying to submit a new bid to the Slots pallet.
+		/// The result of trying to submit a new bid to the Slots pezpallet.
 		HandleBidResult { para_id: ParaId, result: DispatchResult },
 		/// The configuration to a crowdloan has been edited.
 		Edited { para_id: ParaId },
@@ -272,7 +272,7 @@ pub mod pallet {
 		AddedToNewRaise { para_id: ParaId },
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// The current lease period is more than the first lease period.
 		FirstPeriodInPast,
@@ -323,8 +323,8 @@ pub mod pallet {
 		NoLeasePeriod,
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn on_initialize(num: BlockNumberFor<T>) -> pezframe_support::weights::Weight {
 			if let Some((sample, sub_sample)) = T::Auctioneer::auction_status(num).is_ending() {
 				// This is the very first block in the ending period
@@ -357,26 +357,26 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Create a new crowdloaning campaign for a teyrchain slot with the given lease period
 		/// range.
 		///
 		/// This applies a lock to your teyrchain configuration, ensuring that it cannot be changed
 		/// by the teyrchain manager.
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::create())]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::create())]
 		pub fn create(
 			origin: OriginFor<T>,
-			#[pallet::compact] index: ParaId,
-			#[pallet::compact] cap: BalanceOf<T>,
-			#[pallet::compact] first_period: LeasePeriodOf<T>,
-			#[pallet::compact] last_period: LeasePeriodOf<T>,
-			#[pallet::compact] end: BlockNumberFor<T>,
+			#[pezpallet::compact] index: ParaId,
+			#[pezpallet::compact] cap: BalanceOf<T>,
+			#[pezpallet::compact] first_period: LeasePeriodOf<T>,
+			#[pezpallet::compact] last_period: LeasePeriodOf<T>,
+			#[pezpallet::compact] end: BlockNumberFor<T>,
 			verifier: Option<MultiSigner>,
 		) -> DispatchResult {
 			let depositor = ensure_signed(origin)?;
-			let now = pezframe_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pezpallet::<T>::block_number();
 
 			ensure!(first_period <= last_period, Error::<T>::LastPeriodBeforeFirstPeriod);
 			let last_period_limit = first_period
@@ -414,7 +414,7 @@ pub mod pallet {
 
 			let deposit = T::SubmissionDeposit::get();
 
-			pezframe_system::Pallet::<T>::inc_providers(&Self::fund_account_id(fund_index));
+			pezframe_system::Pezpallet::<T>::inc_providers(&Self::fund_account_id(fund_index));
 			CurrencyOf::<T>::reserve(&depositor, deposit)?;
 
 			Funds::<T>::insert(
@@ -441,12 +441,12 @@ pub mod pallet {
 
 		/// Contribute to a crowd sale. This will transfer some balance over to fund a teyrchain
 		/// slot. It will be withdrawable when the crowdloan has ended and the funds are unused.
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::contribute())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::contribute())]
 		pub fn contribute(
 			origin: OriginFor<T>,
-			#[pallet::compact] index: ParaId,
-			#[pallet::compact] value: BalanceOf<T>,
+			#[pezpallet::compact] index: ParaId,
+			#[pezpallet::compact] value: BalanceOf<T>,
 			signature: Option<MultiSignature>,
 		) -> DispatchResult {
 			let who = ensure_signed(origin)?;
@@ -470,17 +470,17 @@ pub mod pallet {
 		///
 		/// - `who`: The account whose contribution should be withdrawn.
 		/// - `index`: The teyrchain to whose crowdloan the contribution was made.
-		#[pallet::call_index(2)]
-		#[pallet::weight(T::WeightInfo::withdraw())]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(T::WeightInfo::withdraw())]
 		pub fn withdraw(
 			origin: OriginFor<T>,
 			who: T::AccountId,
-			#[pallet::compact] index: ParaId,
+			#[pezpallet::compact] index: ParaId,
 		) -> DispatchResult {
 			ensure_signed(origin)?;
 
 			let mut fund = Funds::<T>::get(index).ok_or(Error::<T>::InvalidParaId)?;
-			let now = pezframe_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pezpallet::<T>::block_number();
 			let fund_account = Self::fund_account_id(fund.fund_index);
 			Self::ensure_crowdloan_ended(now, &fund_account, &fund)?;
 
@@ -504,16 +504,16 @@ pub mod pallet {
 		/// times to fully refund all users. We will refund `RemoveKeysLimit` users at a time.
 		///
 		/// Origin must be signed, but can come from anyone.
-		#[pallet::call_index(3)]
-		#[pallet::weight(T::WeightInfo::refund(T::RemoveKeysLimit::get()))]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(T::WeightInfo::refund(T::RemoveKeysLimit::get()))]
 		pub fn refund(
 			origin: OriginFor<T>,
-			#[pallet::compact] index: ParaId,
+			#[pezpallet::compact] index: ParaId,
 		) -> DispatchResultWithPostInfo {
 			ensure_signed(origin)?;
 
 			let mut fund = Funds::<T>::get(index).ok_or(Error::<T>::InvalidParaId)?;
-			let now = pezframe_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pezpallet::<T>::block_number();
 			let fund_account = Self::fund_account_id(fund.fund_index);
 			Self::ensure_crowdloan_ended(now, &fund_account, &fund)?;
 
@@ -550,14 +550,14 @@ pub mod pallet {
 		}
 
 		/// Remove a fund after the retirement period has ended and all funds have been returned.
-		#[pallet::call_index(4)]
-		#[pallet::weight(T::WeightInfo::dissolve())]
-		pub fn dissolve(origin: OriginFor<T>, #[pallet::compact] index: ParaId) -> DispatchResult {
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(T::WeightInfo::dissolve())]
+		pub fn dissolve(origin: OriginFor<T>, #[pezpallet::compact] index: ParaId) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 
 			let fund = Funds::<T>::get(index).ok_or(Error::<T>::InvalidParaId)?;
 			let pot = Self::fund_account_id(fund.fund_index);
-			let now = pezframe_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pezpallet::<T>::block_number();
 
 			// Only allow dissolution when the raised funds goes to zero,
 			// and the caller is the fund creator or we are past the end date.
@@ -572,7 +572,7 @@ pub mod pallet {
 
 			// Crowdloan over, burn all funds.
 			let _imba = CurrencyOf::<T>::make_free_balance_be(&pot, Zero::zero());
-			let _ = pezframe_system::Pallet::<T>::dec_providers(&pot).defensive();
+			let _ = pezframe_system::Pezpallet::<T>::dec_providers(&pot).defensive();
 
 			CurrencyOf::<T>::unreserve(&fund.depositor, fund.deposit);
 			Funds::<T>::remove(index);
@@ -583,15 +583,15 @@ pub mod pallet {
 		/// Edit the configuration for an in-progress crowdloan.
 		///
 		/// Can only be called by Root origin.
-		#[pallet::call_index(5)]
-		#[pallet::weight(T::WeightInfo::edit())]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(T::WeightInfo::edit())]
 		pub fn edit(
 			origin: OriginFor<T>,
-			#[pallet::compact] index: ParaId,
-			#[pallet::compact] cap: BalanceOf<T>,
-			#[pallet::compact] first_period: LeasePeriodOf<T>,
-			#[pallet::compact] last_period: LeasePeriodOf<T>,
-			#[pallet::compact] end: BlockNumberFor<T>,
+			#[pezpallet::compact] index: ParaId,
+			#[pezpallet::compact] cap: BalanceOf<T>,
+			#[pezpallet::compact] first_period: LeasePeriodOf<T>,
+			#[pezpallet::compact] last_period: LeasePeriodOf<T>,
+			#[pezpallet::compact] end: BlockNumberFor<T>,
 			verifier: Option<MultiSigner>,
 		) -> DispatchResult {
 			ensure_root(origin)?;
@@ -621,8 +621,8 @@ pub mod pallet {
 		/// Add an optional memo to an existing crowdloan contribution.
 		///
 		/// Origin must be Signed, and the user must have contributed to the crowdloan.
-		#[pallet::call_index(6)]
-		#[pallet::weight(T::WeightInfo::add_memo())]
+		#[pezpallet::call_index(6)]
+		#[pezpallet::weight(T::WeightInfo::add_memo())]
 		pub fn add_memo(origin: OriginFor<T>, index: ParaId, memo: Vec<u8>) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 
@@ -640,8 +640,8 @@ pub mod pallet {
 		/// Poke the fund into `NewRaise`
 		///
 		/// Origin must be Signed, and the fund has non-zero raise.
-		#[pallet::call_index(7)]
-		#[pallet::weight(T::WeightInfo::poke())]
+		#[pezpallet::call_index(7)]
+		#[pezpallet::weight(T::WeightInfo::poke())]
 		pub fn poke(origin: OriginFor<T>, index: ParaId) -> DispatchResult {
 			ensure_signed(origin)?;
 			let fund = Funds::<T>::get(index).ok_or(Error::<T>::InvalidParaId)?;
@@ -655,11 +655,11 @@ pub mod pallet {
 		/// Contribute your entire balance to a crowd sale. This will transfer the entire balance of
 		/// a user over to fund a teyrchain slot. It will be withdrawable when the crowdloan has
 		/// ended and the funds are unused.
-		#[pallet::call_index(8)]
-		#[pallet::weight(T::WeightInfo::contribute())]
+		#[pezpallet::call_index(8)]
+		#[pezpallet::weight(T::WeightInfo::contribute())]
 		pub fn contribute_all(
 			origin: OriginFor<T>,
-			#[pallet::compact] index: ParaId,
+			#[pezpallet::compact] index: ParaId,
 			signature: Option<MultiSignature>,
 		) -> DispatchResult {
 			let who = ensure_signed(origin)?;
@@ -669,7 +669,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// The account ID of the fund pot.
 	///
 	/// This actually does computation. If you need to keep using it, then make sure you cache the
@@ -759,11 +759,11 @@ impl<T: Config> Pallet<T> {
 		ensure!(fund.raised <= fund.cap, Error::<T>::CapExceeded);
 
 		// Make sure crowdloan has not ended
-		let now = pezframe_system::Pallet::<T>::block_number();
+		let now = pezframe_system::Pezpallet::<T>::block_number();
 		ensure!(now < fund.end, Error::<T>::ContributionPeriodOver);
 
 		// Make sure crowdloan is in a valid lease period
-		let now = pezframe_system::Pallet::<T>::block_number();
+		let now = pezframe_system::Pezpallet::<T>::block_number();
 		let (current_lease_period, _) =
 			T::Auctioneer::lease_period_index(now).ok_or(Error::<T>::NoLeasePeriod)?;
 		ensure!(current_lease_period <= fund.first_period, Error::<T>::ContributionPeriodOver);
@@ -831,7 +831,7 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-impl<T: Config> crate::traits::OnSwap for Pallet<T> {
+impl<T: Config> crate::traits::OnSwap for Pezpallet<T> {
 	fn on_swap(one: ParaId, other: ParaId) {
 		Funds::<T>::mutate(one, |x| Funds::<T>::mutate(other, |y| core::mem::swap(x, y)))
 	}
@@ -1425,7 +1425,7 @@ mod tests {
 			let para_2 = new_para();
 			let index = NextFundIndex::<Test>::get();
 			assert_ok!(Crowdloan::create(RuntimeOrigin::signed(1), para_2, 1000, 1, 4, 40, None));
-			// Emulate a win by leasing out and putting a deposit. Slots pallet would normally do
+			// Emulate a win by leasing out and putting a deposit. Slots pezpallet would normally do
 			// this.
 			let crowdloan_account = Crowdloan::fund_account_id(index);
 			set_winner(para_2, crowdloan_account, true);
@@ -1799,7 +1799,7 @@ mod tests {
 			// Fund crowdloans.
 			assert_ok!(Crowdloan::contribute(RuntimeOrigin::signed(2), para, 100, None));
 			assert_ok!(Crowdloan::contribute(RuntimeOrigin::signed(3), para, 50, None));
-			// simulate the reserving of para's funds. this actually happens in the Slots pallet.
+			// simulate the reserving of para's funds. this actually happens in the Slots pezpallet.
 			assert_ok!(Balances::reserve(&account_id, 149));
 
 			System::run_to_block::<AllPalletsWithSystem>(19);
@@ -1810,7 +1810,7 @@ mod tests {
 
 			System::run_to_block::<AllPalletsWithSystem>(20);
 			// simulate the unreserving of para's funds, now that the lease expired. this actually
-			// happens in the Slots pallet.
+			// happens in the Slots pezpallet.
 			Balances::unreserve(&account_id, 150);
 
 			// para has no reserved funds, indicating it did ot win the auction.
@@ -1949,7 +1949,7 @@ mod tests {
 
 #[cfg(feature = "runtime-benchmarks")]
 mod benchmarking {
-	use super::{Pallet as Crowdloan, *};
+	use super::{Pezpallet as Crowdloan, *};
 	use pezframe_support::{assert_ok, traits::OnInitialize};
 	use pezframe_system::RawOrigin;
 	use pezkuwi_runtime_teyrchains::paras;
@@ -1959,7 +1959,7 @@ mod benchmarking {
 	use pezframe_benchmarking::v2::*;
 
 	fn assert_last_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
-		let events = pezframe_system::Pallet::<T>::events();
+		let events = pezframe_system::Pezpallet::<T>::events();
 		let system_event: <T as pezframe_system::Config>::RuntimeEvent = generic_event.into();
 		// compare to the last event record
 		let pezframe_system::EventRecord { event, .. } = &events[events.len() - 1];
@@ -1970,8 +1970,8 @@ mod benchmarking {
 		let cap = BalanceOf::<T>::max_value();
 		let (_, offset) = T::Auctioneer::lease_period_length();
 		// Set to the very beginning of lease period index 0.
-		pezframe_system::Pallet::<T>::set_block_number(offset);
-		let now = pezframe_system::Pallet::<T>::block_number();
+		pezframe_system::Pezpallet::<T>::set_block_number(offset);
+		let now = pezframe_system::Pezpallet::<T>::block_number();
 		let (lease_period_index, _) = T::Auctioneer::lease_period_index(now).unwrap_or_default();
 		let first_period = lease_period_index;
 		let last_period =
@@ -1992,7 +1992,7 @@ mod benchmarking {
 			head_data,
 			validation_code.clone()
 		));
-		assert_ok!(paras::Pallet::<T>::add_trusted_validation_code(
+		assert_ok!(paras::Pezpallet::<T>::add_trusted_validation_code(
 			pezframe_system::Origin::<T>::Root.into(),
 			validation_code,
 		));
@@ -2050,7 +2050,7 @@ mod benchmarking {
 
 			CurrencyOf::<T>::make_free_balance_be(&caller, BalanceOf::<T>::max_value());
 			T::Registrar::register(caller.clone(), para_id, head_data, validation_code.clone())?;
-			assert_ok!(paras::Pallet::<T>::add_trusted_validation_code(
+			assert_ok!(paras::Pezpallet::<T>::add_trusted_validation_code(
 				pezframe_system::Origin::<T>::Root.into(),
 				validation_code,
 			));
@@ -2107,7 +2107,7 @@ mod benchmarking {
 			let caller: T::AccountId = whitelisted_caller();
 			let contributor = account("contributor", 0, 0);
 			contribute_fund::<T>(&contributor, fund_index);
-			pezframe_system::Pallet::<T>::set_block_number(BlockNumberFor::<T>::max_value());
+			pezframe_system::Pezpallet::<T>::set_block_number(BlockNumberFor::<T>::max_value());
 			#[extrinsic_call]
 			_(RawOrigin::Signed(caller), contributor.clone(), fund_index);
 
@@ -2136,7 +2136,7 @@ mod benchmarking {
 			}
 
 			let caller: T::AccountId = whitelisted_caller();
-			pezframe_system::Pallet::<T>::set_block_number(BlockNumberFor::<T>::max_value());
+			pezframe_system::Pezpallet::<T>::set_block_number(BlockNumberFor::<T>::max_value());
 			#[extrinsic_call]
 			_(RawOrigin::Signed(caller), fund_index);
 
@@ -2150,7 +2150,7 @@ mod benchmarking {
 			let end = lpl + offset;
 			let fund_index = create_fund::<T>(1337, end);
 			let caller: T::AccountId = whitelisted_caller();
-			pezframe_system::Pallet::<T>::set_block_number(BlockNumberFor::<T>::max_value());
+			pezframe_system::Pezpallet::<T>::set_block_number(BlockNumberFor::<T>::max_value());
 			#[extrinsic_call]
 			_(RawOrigin::Signed(caller.clone()), fund_index);
 
@@ -2175,7 +2175,7 @@ mod benchmarking {
 
 			CurrencyOf::<T>::make_free_balance_be(&caller, BalanceOf::<T>::max_value());
 			T::Registrar::register(caller.clone(), para_id, head_data, validation_code.clone())?;
-			assert_ok!(paras::Pallet::<T>::add_trusted_validation_code(
+			assert_ok!(paras::Pezpallet::<T>::add_trusted_validation_code(
 				pezframe_system::Origin::<T>::Root.into(),
 				validation_code,
 			));
@@ -2262,11 +2262,11 @@ mod benchmarking {
 				)?;
 			}
 
-			let now = pezframe_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pezpallet::<T>::block_number();
 			let (lease_period_index, _) =
 				T::Auctioneer::lease_period_index(now).unwrap_or_default();
 			let duration = end_block
-				.checked_sub(&pezframe_system::Pallet::<T>::block_number())
+				.checked_sub(&pezframe_system::Pezpallet::<T>::block_number())
 				.ok_or("duration of auction less than zero")?;
 			T::Auctioneer::new_auction(duration, lease_period_index)?;
 

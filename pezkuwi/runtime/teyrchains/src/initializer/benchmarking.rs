@@ -30,14 +30,14 @@ mod benchmarks {
 	#[benchmark]
 	fn force_approve(d: Linear<0, DIGEST_MAX_LEN>) -> Result<(), BenchmarkError> {
 		for _ in 0..d {
-			pezframe_system::Pallet::<T>::deposit_log(ConsensusLog::ForceApprove(d).into());
+			pezframe_system::Pezpallet::<T>::deposit_log(ConsensusLog::ForceApprove(d).into());
 		}
 
 		#[extrinsic_call]
 		_(RawOrigin::Root, d + 1);
 
 		assert_eq!(
-			pezframe_system::Pallet::<T>::digest().logs.last().unwrap(),
+			pezframe_system::Pezpallet::<T>::digest().logs.last().unwrap(),
 			&DigestItem::from(ConsensusLog::ForceApprove(d + 1)),
 		);
 
@@ -45,7 +45,7 @@ mod benchmarks {
 	}
 
 	impl_benchmark_test_suite!(
-		Pallet,
+		Pezpallet,
 		crate::mock::new_test_ext(Default::default()),
 		crate::mock::Test
 	);

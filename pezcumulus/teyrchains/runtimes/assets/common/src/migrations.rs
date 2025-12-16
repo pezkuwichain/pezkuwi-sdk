@@ -87,7 +87,7 @@ pub mod foreign_assets_reserves {
 		type Identifier = MigrationId<23>;
 
 		fn id() -> Self::Identifier {
-			// this migration doesn't change pallet storage version, from and to are both `1`
+			// this migration doesn't change pezpallet storage version, from and to are both `1`
 			MigrationId { pezpallet_id: *MIGRATIONS_ID, version_from: 1, version_to: 1 }
 		}
 
@@ -142,7 +142,7 @@ pub mod foreign_assets_reserves {
 			let prev_state = TryRuntimeState::<T, I>::decode(&mut &state[..])
 				.expect("Failed to decode the previous storage state");
 			for id in prev_state.assets {
-				let reserves = pezpallet_assets::Pallet::<T, I>::get_reserves_data(id.clone());
+				let reserves = pezpallet_assets::Pezpallet::<T, I>::get_reserves_data(id.clone());
 				tracing::info!(target: "runtime::ForeignAssetsReservesMigration::post_upgrade", ?id, ?reserves, "verify asset");
 				assert!(ReservesProvider::check_reserves_for(&id, reserves));
 			}
@@ -175,7 +175,7 @@ pub mod foreign_assets_reserves {
 					target: "runtime::ForeignAssetsReservesMigration::asset_step",
 					?asset_id, ?reserves, "updating reserves for"
 				);
-				if let Err(e) = pezpallet_assets::Pallet::<T, I>::unchecked_update_reserves(
+				if let Err(e) = pezpallet_assets::Pezpallet::<T, I>::unchecked_update_reserves(
 					asset_id.clone(),
 					reserves,
 				) {

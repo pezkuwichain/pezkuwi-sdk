@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Dispute slashing pallet.
+//! Dispute slashing pezpallet.
 //!
 //! Once a dispute is concluded, we want to slash validators who were on the
 //! wrong side of the dispute.
@@ -30,7 +30,7 @@
 //!
 //! Past session slashing edgecase:
 //!
-//! The `offences` pallet from Bizinikiwi provides us with a way to do both.
+//! The `offences` pezpallet from Bizinikiwi provides us with a way to do both.
 //! Currently, the interface expects us to provide staking information including
 //! nominator exposure in order to submit an offence.
 //!
@@ -178,7 +178,7 @@ impl<C> Default for SlashValidatorsForDisputes<C> {
 	}
 }
 
-impl<T> SlashValidatorsForDisputes<Pallet<T>>
+impl<T> SlashValidatorsForDisputes<Pezpallet<T>>
 where
 	T: Config<KeyOwnerIdentification = IdentificationTuple<T>>,
 {
@@ -191,7 +191,7 @@ where
 		// We use `ValidatorSet::session_index` and not
 		// `shared::CurrentSessionIndex::<T>::get()` because at the first block of a new era,
 		// the `IdentificationOf` of a validator in the previous session might be
-		// missing, while `shared` pallet would return the same session index as being
+		// missing, while `shared` pezpallet would return the same session index as being
 		// updated at the end of the block.
 		let current_session = T::ValidatorSet::session_index();
 		if session_index == current_session {
@@ -262,7 +262,7 @@ where
 	}
 }
 
-impl<T> disputes::SlashingHandler<BlockNumberFor<T>> for SlashValidatorsForDisputes<Pallet<T>>
+impl<T> disputes::SlashingHandler<BlockNumberFor<T>> for SlashValidatorsForDisputes<Pezpallet<T>>
 where
 	T: Config<KeyOwnerIdentification = IdentificationTuple<T>>,
 {
@@ -311,15 +311,15 @@ where
 	}
 
 	fn initializer_initialize(now: BlockNumberFor<T>) -> Weight {
-		Pallet::<T>::initializer_initialize(now)
+		Pezpallet::<T>::initializer_initialize(now)
 	}
 
 	fn initializer_finalize() {
-		Pallet::<T>::initializer_finalize()
+		Pezpallet::<T>::initializer_finalize()
 	}
 
 	fn initializer_on_new_session(session_index: SessionIndex) {
-		Pallet::<T>::initializer_on_new_session(session_index)
+		Pezpallet::<T>::initializer_on_new_session(session_index)
 	}
 }
 
@@ -328,7 +328,7 @@ where
 /// an offchain context).
 pub trait HandleReports<T: Config> {
 	/// The longevity, in blocks, that the offence report is valid for. When
-	/// using the staking pallet this should be equal to the bonding duration
+	/// using the staking pezpallet this should be equal to the bonding duration
 	/// (in blocks, not eras).
 	type ReportLongevity: Get<u64>;
 
@@ -387,14 +387,14 @@ impl WeightInfo for TestWeightInfo {
 	}
 }
 
-pub use pallet::*;
-#[pezframe_support::pallet]
-pub mod pallet {
+pub use pezpallet::*;
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config + crate::disputes::Config {
 		/// The proof of key ownership, used for validating slashing reports.
 		/// The proof must include the session index and validator count of the
@@ -416,23 +416,23 @@ pub mod pallet {
 		/// offence (after the slashing report has been validated) and for
 		/// submitting a transaction to report a slash (from an offchain
 		/// context). NOTE: when enabling slashing report handling (i.e. this
-		/// type isn't set to `()`) you must use this pallet's
+		/// type isn't set to `()`) you must use this pezpallet's
 		/// `ValidateUnsigned` in the runtime definition.
 		type HandleReports: HandleReports<Self>;
 
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 
 		/// Benchmarking configuration.
 		type BenchmarkingConfig: BenchmarkingConfiguration;
 	}
 
-	#[pallet::pallet]
-	#[pallet::without_storage_info]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::without_storage_info]
+	pub struct Pezpallet<T>(_);
 
 	/// Validators pending dispute slashes.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type UnappliedSlashes<T> = StorageDoubleMap<
 		_,
 		Twox64Concat,
@@ -443,11 +443,11 @@ pub mod pallet {
 	>;
 
 	/// `ValidatorSetCount` per session.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type ValidatorSetCounts<T> =
 		StorageMap<_, Twox64Concat, SessionIndex, ValidatorSetCount>;
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// The key ownership proof is invalid.
 		InvalidKeyOwnershipProof,
@@ -464,10 +464,10 @@ pub mod pallet {
 		DuplicateSlashingReport,
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
-		#[pallet::call_index(0)]
-		#[pallet::weight(<T as Config>::WeightInfo::report_dispute_lost_unsigned(
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::report_dispute_lost_unsigned(
 			key_owner_proof.validator_count()
 		))]
 		pub fn report_dispute_lost_unsigned(
@@ -530,8 +530,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::validate_unsigned]
-	impl<T: Config> ValidateUnsigned for Pallet<T> {
+	#[pezpallet::validate_unsigned]
+	impl<T: Config> ValidateUnsigned for Pezpallet<T> {
 		type Call = Call<T>;
 		fn validate_unsigned(source: TransactionSource, call: &Self::Call) -> TransactionValidity {
 			Self::validate_unsigned(source, call)
@@ -543,17 +543,17 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Called by the initializer to initialize the disputes slashing module.
 	fn initializer_initialize(_now: BlockNumberFor<T>) -> Weight {
 		Weight::zero()
 	}
 
-	/// Called by the initializer to finalize the disputes slashing pallet.
+	/// Called by the initializer to finalize the disputes slashing pezpallet.
 	fn initializer_finalize() {}
 
 	/// Called by the initializer to note a new session in the disputes slashing
-	/// pallet.
+	/// pezpallet.
 	fn initializer_on_new_session(session_index: SessionIndex) {
 		// This should be small, as disputes are limited by spam slots, so no limit is
 		// fine.
@@ -585,7 +585,7 @@ impl<T: Config> Pallet<T> {
 /// It restricts calls to `report_dispute_lost_unsigned` to local calls (i.e.
 /// extrinsics generated on this node) or that already in a block. This
 /// guarantees that only block authors can include unsigned slashing reports.
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	pub fn validate_unsigned(source: TransactionSource, call: &Call<T>) -> TransactionValidity {
 		if let Call::report_dispute_lost_unsigned { dispute_proof, key_owner_proof } = call {
 			// discard slashing report not coming from the local node

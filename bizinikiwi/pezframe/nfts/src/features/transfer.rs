@@ -16,12 +16,12 @@
 // limitations under the License.
 
 //! This module contains helper methods to perform the transfer functionalities
-//! of the NFTs pallet.
+//! of the NFTs pezpallet.
 
 use crate::*;
 use pezframe_support::pezpallet_prelude::*;
 
-impl<T: Config<I>, I: 'static> Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 	/// Transfer an NFT to the specified destination account.
 	///
 	/// - `collection`: The ID of the collection to which the NFT belongs.
@@ -153,7 +153,7 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 
 			details.owner = new_owner.clone();
 			OwnershipAcceptance::<T, I>::remove(&new_owner);
-			pezframe_system::Pallet::<T>::dec_consumers(&new_owner);
+			pezframe_system::Pezpallet::<T>::dec_consumers(&new_owner);
 
 			// Emit `OwnerChanged` event.
 			Self::deposit_event(Event::OwnerChanged { collection, new_owner });
@@ -176,10 +176,10 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 		let exists = OwnershipAcceptance::<T, I>::contains_key(&who);
 		match (exists, maybe_collection.is_some()) {
 			(false, true) => {
-				pezframe_system::Pallet::<T>::inc_consumers(&who)?;
+				pezframe_system::Pezpallet::<T>::inc_consumers(&who)?;
 			},
 			(true, false) => {
-				pezframe_system::Pallet::<T>::dec_consumers(&who);
+				pezframe_system::Pezpallet::<T>::dec_consumers(&who);
 			},
 			_ => {},
 		}

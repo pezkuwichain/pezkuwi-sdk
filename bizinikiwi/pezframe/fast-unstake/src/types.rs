@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Types used in the Fast Unstake pallet.
+//! Types used in the Fast Unstake pezpallet.
 
 use crate::Config;
 use codec::{Decode, Encode, MaxEncodedLen};

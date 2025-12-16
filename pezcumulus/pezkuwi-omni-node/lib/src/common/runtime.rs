@@ -25,9 +25,9 @@ use scale_info::{form::PortableForm, TypeDef, TypeDefPrimitive};
 use std::fmt::Display;
 use subxt_metadata::{Metadata, StorageEntryType};
 
-/// Expected teyrchain system pallet runtime type name.
+/// Expected teyrchain system pezpallet runtime type name.
 pub const DEFAULT_TEYRCHAIN_SYSTEM_PALLET_NAME: &str = "TeyrchainSystem";
-/// Expected frame system pallet runtime type name.
+/// Expected frame system pezpallet runtime type name.
 pub const DEFAULT_FRAME_SYSTEM_PALLET_NAME: &str = "System";
 
 /// The Aura ID used by the Aura consensus
@@ -113,7 +113,7 @@ impl RuntimeResolver for DefaultRuntimeResolver {
 			None => {
 				log::warn!(
 					r#"⚠️  There isn't a runtime type named `System`, corresponding to the `pezframe-system`
-                pallet (https://docs.rs/pezframe-system/latest/pezframe_system/). Please check Omni Node docs for runtime conventions:
+                pezpallet (https://docs.rs/pezframe-system/latest/pezframe_system/). Please check Omni Node docs for runtime conventions:
                 https://docs.pezkuwichain.io/sdk/master/polkadot_sdk_docs/reference_docs/omni_node/index.html#runtime-conventions.
                 Note: We'll assume a block number size of `u32`."#
 				);
@@ -121,9 +121,9 @@ impl RuntimeResolver for DefaultRuntimeResolver {
 			},
 		};
 
-		if !metadata_inspector.pallet_exists(DEFAULT_TEYRCHAIN_SYSTEM_PALLET_NAME) {
+		if !metadata_inspector.pezpallet_exists(DEFAULT_TEYRCHAIN_SYSTEM_PALLET_NAME) {
 			log::warn!(
-				r#"⚠️  The teyrchain system pallet (https://docs.rs/crate/pezcumulus-pezpallet-parachain-system/latest) is
+				r#"⚠️  The teyrchain system pezpallet (https://docs.rs/crate/pezcumulus-pezpallet-parachain-system/latest) is
 			   missing from the runtime’s metadata. Please check Omni Node docs for runtime conventions:
 			   https://docs.pezkuwichain.io/sdk/master/polkadot_sdk_docs/reference_docs/omni_node/index.html#runtime-conventions."#
 			);
@@ -201,8 +201,8 @@ mod tests {
 	#[test]
 	fn test_pallet_exists() {
 		let metadata_inspector = MetadataInspector(pezcumulus_test_runtime_metadata());
-		assert!(metadata_inspector.pallet_exists(DEFAULT_TEYRCHAIN_SYSTEM_PALLET_NAME));
-		assert!(metadata_inspector.pallet_exists(DEFAULT_FRAME_SYSTEM_PALLET_NAME));
+		assert!(metadata_inspector.pezpallet_exists(DEFAULT_TEYRCHAIN_SYSTEM_PALLET_NAME));
+		assert!(metadata_inspector.pezpallet_exists(DEFAULT_FRAME_SYSTEM_PALLET_NAME));
 	}
 
 	#[test]

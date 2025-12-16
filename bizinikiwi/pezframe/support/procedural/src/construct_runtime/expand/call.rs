@@ -15,15 +15,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License
 
-use crate::construct_runtime::Pallet;
+use crate::construct_runtime::Pezpallet;
 use proc_macro2::TokenStream;
 use quote::quote;
 use syn::Ident;
 
 pub fn expand_outer_dispatch(
 	runtime: &Ident,
-	system_pallet: &Pallet,
-	pezpallet_decls: &[Pallet],
+	system_pallet: &Pezpallet,
+	pezpallet_decls: &[Pezpallet],
 	scrate: &TokenStream,
 ) -> TokenStream {
 	let mut variant_defs = TokenStream::new();

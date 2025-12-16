@@ -140,12 +140,12 @@ pub fn limited_reserve_transfer_assets_for_native_asset_works<
 			// drip ED + transfer_amount + delivery_fees_buffer to Alice account
 			let alice_account_init_balance =
 				existential_deposit + balance_to_transfer.into() + delivery_fees_buffer.into();
-			let _ = <pezpallet_balances::Pallet<Runtime>>::deposit_creating(
+			let _ = <pezpallet_balances::Pezpallet<Runtime>>::deposit_creating(
 				&alice_account,
 				alice_account_init_balance,
 			);
 			// SA of target location needs to have at least ED, otherwise making reserve fails
-			let _ = <pezpallet_balances::Pallet<Runtime>>::deposit_creating(
+			let _ = <pezpallet_balances::Pezpallet<Runtime>>::deposit_creating(
 				&reserve_account,
 				existential_deposit,
 			);
@@ -153,19 +153,19 @@ pub fn limited_reserve_transfer_assets_for_native_asset_works<
 			// we just check here, that user retains enough balance after withdrawal
 			// and also we check if `balance_to_transfer` is more than `existential_deposit`,
 			assert!(
-				(<pezpallet_balances::Pallet<Runtime>>::free_balance(&alice_account) -
+				(<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&alice_account) -
 					balance_to_transfer.into()) >=
 					existential_deposit
 			);
 			// SA has just ED
 			assert_eq!(
-				<pezpallet_balances::Pallet<Runtime>>::free_balance(&reserve_account),
+				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&reserve_account),
 				existential_deposit
 			);
 
 			let delivery_fees_account_balance_before = delivery_fees_account
 				.as_ref()
-				.map(|dfa| <pezpallet_balances::Pallet<Runtime>>::free_balance(dfa))
+				.map(|dfa| <pezpallet_balances::Pezpallet<Runtime>>::free_balance(dfa))
 				.unwrap_or(0.into());
 
 			// local native asset (pezpallet_balances)
@@ -191,7 +191,7 @@ pub fn limited_reserve_transfer_assets_for_native_asset_works<
 			let expected_beneficiary = target_destination_account.clone();
 
 			// do cross-chain transfer
-			assert_ok!(<pezpallet_xcm::Pallet<Runtime>>::transfer_assets_using_type_and_then(
+			assert_ok!(<pezpallet_xcm::Pezpallet<Runtime>>::transfer_assets_using_type_and_then(
 				RuntimeHelper::<Runtime, AllPalletsWithoutSystem>::origin_of(alice_account.clone()),
 				Box::new(target_location_from_different_consensus.clone().into_versioned()),
 				Box::new(VersionedAssets::from(assets_to_transfer)),
@@ -216,7 +216,7 @@ pub fn limited_reserve_transfer_assets_for_native_asset_works<
 			);
 
 			// check that xcm was sent
-			let xcm_sent_message_hash = <pezframe_system::Pallet<Runtime>>::events()
+			let xcm_sent_message_hash = <pezframe_system::Pezpallet<Runtime>>::events()
 				.into_iter()
 				.filter_map(|e| unwrap_xcmp_queue_event(e.event.encode()))
 				.find_map(|e| match e {
@@ -305,7 +305,7 @@ pub fn limited_reserve_transfer_assets_for_native_asset_works<
 
 			// check alice account decreased by balance_to_transfer
 			assert_eq!(
-				<pezpallet_balances::Pallet<Runtime>>::free_balance(&alice_account),
+				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&alice_account),
 				alice_account_init_balance
 					.saturating_sub(balance_to_transfer.into())
 					.saturating_sub(delivery_fees.into())
@@ -313,14 +313,14 @@ pub fn limited_reserve_transfer_assets_for_native_asset_works<
 
 			// check reserve account increased by balance_to_transfer
 			assert_eq!(
-				<pezpallet_balances::Pallet<Runtime>>::free_balance(&reserve_account),
+				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&reserve_account),
 				existential_deposit + balance_to_transfer.into()
 			);
 
 			// check dedicated account increased by delivery fees (if configured)
 			if let Some(delivery_fees_account) = delivery_fees_account {
 				let delivery_fees_account_balance_after =
-					<pezpallet_balances::Pallet<Runtime>>::free_balance(&delivery_fees_account);
+					<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&delivery_fees_account);
 				assert!(
 					delivery_fees_account_balance_after - delivery_fees.into() >=
 						delivery_fees_account_balance_before
@@ -392,14 +392,14 @@ pub fn receive_reserve_asset_deposited_from_different_consensus_works<
 			);
 
 			// drip 'ED' user target account
-			let _ = <pezpallet_balances::Pallet<Runtime>>::deposit_creating(
+			let _ = <pezpallet_balances::Pezpallet<Runtime>>::deposit_creating(
 				&target_account,
 				existential_deposit,
 			);
 
 			// create foreign asset for wrapped/derived representation
 			assert_ok!(
-				<pezpallet_assets::Pallet<Runtime, ForeignAssetsPalletInstance>>::force_create(
+				<pezpallet_assets::Pezpallet<Runtime, ForeignAssetsPalletInstance>>::force_create(
 					RuntimeHelper::<Runtime, AllPalletsWithoutSystem>::root_origin(),
 					foreign_asset_id_location.clone().into(),
 					foreign_asset_owner.clone().into(),
@@ -409,7 +409,7 @@ pub fn receive_reserve_asset_deposited_from_different_consensus_works<
 			);
 			// set the right reserve for the foreign asset
 			assert_ok!(
-				<pezpallet_assets::Pallet<Runtime, ForeignAssetsPalletInstance>>::set_reserves(
+				<pezpallet_assets::Pezpallet<Runtime, ForeignAssetsPalletInstance>>::set_reserves(
 					RuntimeHelper::<Runtime, AllPalletsWithoutSystem>::origin_of(
 						foreign_asset_owner
 					),
@@ -423,13 +423,13 @@ pub fn receive_reserve_asset_deposited_from_different_consensus_works<
 
 			// Balances before
 			assert_eq!(
-				<pezpallet_balances::Pallet<Runtime>>::free_balance(&target_account),
+				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&target_account),
 				existential_deposit.clone()
 			);
 
 			// ForeignAssets balances before
 			assert_eq!(
-				<pezpallet_assets::Pallet<Runtime, ForeignAssetsPalletInstance>>::balance(
+				<pezpallet_assets::Pezpallet<Runtime, ForeignAssetsPalletInstance>>::balance(
 					foreign_asset_id_location.clone().into(),
 					&target_account
 				),
@@ -493,13 +493,13 @@ pub fn receive_reserve_asset_deposited_from_different_consensus_works<
 
 			// Balances after
 			assert_eq!(
-				<pezpallet_balances::Pallet<Runtime>>::free_balance(&target_account),
+				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&target_account),
 				existential_deposit.clone()
 			);
 
 			// ForeignAssets balances after
 			assert!(
-				<pezpallet_assets::Pallet<Runtime, ForeignAssetsPalletInstance>>::balance(
+				<pezpallet_assets::Pezpallet<Runtime, ForeignAssetsPalletInstance>>::balance(
 					foreign_asset_id_location.into(),
 					&target_account
 				) > 0.into()
@@ -572,7 +572,7 @@ pub fn report_bridge_status_from_xcm_bridge_router_works<
 					Weight::zero(),
 				);
 				assert_ok!(outcome.ensure_complete());
-				assert_eq!(is_congested, pezpallet_xcm_bridge_hub_router::Pallet::<Runtime, XcmBridgeHubRouterInstance>::bridge().is_congested);
+				assert_eq!(is_congested, pezpallet_xcm_bridge_hub_router::Pezpallet::<Runtime, XcmBridgeHubRouterInstance>::bridge().is_congested);
 			};
 
 			report_bridge_status(true);

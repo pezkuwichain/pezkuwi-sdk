@@ -242,7 +242,7 @@ pub type XcmOriginToTransactDispatchOrigin = (
 	// Native signed account converter; this just converts an `AccountId32` origin into a normal
 	// `RuntimeOrigin::Signed` origin of the same 32-byte value.
 	SignedAccountId32AsNative<RelayNetwork, RuntimeOrigin>,
-	// Xcm origins can be represented natively under the Xcm pallet's Xcm origin.
+	// Xcm origins can be represented natively under the Xcm pezpallet's Xcm origin.
 	XcmPassthrough<RuntimeOrigin>,
 );
 
@@ -271,7 +271,7 @@ pub type Barrier = TrailingSetTopicAsId<
 					// If the message is one that immediately attempts to pay for execution, then
 					// allow it.
 					AllowTopLevelPaidExecutionFrom<Everything>,
-					// Parent, its pluralities (i.e. governance bodies), relay treasury pallet and
+					// Parent, its pluralities (i.e. governance bodies), relay treasury pezpallet and
 					// BridgeHub get free execution.
 					AllowExplicitUnpaidExecutionFrom<(
 						ParentOrParentsPlurality,

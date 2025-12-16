@@ -71,7 +71,7 @@ fn benchmark_block_validation(c: &mut Criterion) {
 	group.sample_size(20);
 	group.measurement_time(Duration::from_secs(120));
 
-	// In the first iteration we want to initialize the glutton pallet.
+	// In the first iteration we want to initialize the glutton pezpallet.
 	let mut is_first = true;
 	for (compute_ratio, storage_ratio) in &[(One::one(), Zero::zero()), (One::one(), One::one())] {
 		let teyrchain_block =

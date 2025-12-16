@@ -23,14 +23,14 @@
 //! [pezkuwi]: https://img.shields.io/badge/polkadot-E6007A?style=for-the-badge&logo=polkadot&logoColor=white
 //! [github]: https://img.shields.io/badge/github-8da0cb?style=for-the-badge&labelColor=555555&logo=github
 //!
-//! # Paged List Pallet
+//! # Paged List Pezpallet
 //!
-//! A thin wrapper pallet around a [`paged_list::StoragePagedList`]. It provides an API for a single
+//! A thin wrapper pezpallet around a [`paged_list::StoragePagedList`]. It provides an API for a single
 //! paginated list. It can be instantiated multiple times to provide multiple lists.
 //!
 //! ## Overview
 //!
-//! The pallet is quite unique since it does not expose any `Call`s, `Error`s or `Event`s. All
+//! The pezpallet is quite unique since it does not expose any `Call`s, `Error`s or `Event`s. All
 //! interaction goes through the implemented
 //! [`StorageList`][frame::deps::pezframe_support::storage::StorageList] trait.
 //!
@@ -38,21 +38,21 @@
 //!
 //! ## Examples
 //!
-//! 1. **Appending** some data to the list can happen either by [`Pallet::append_one`]:
+//! 1. **Appending** some data to the list can happen either by [`Pezpallet::append_one`]:
 #![doc = docify::embed!("src/tests.rs", append_one_works)]
-//! 2. or by [`Pallet::append_many`]. This should always be preferred to repeated calls to
-//! [`Pallet::append_one`]:
+//! 2. or by [`Pezpallet::append_many`]. This should always be preferred to repeated calls to
+//! [`Pezpallet::append_one`]:
 #![doc = docify::embed!("src/tests.rs", append_many_works)]
-//! 3. If you want to append many values (ie. in a loop), then best use the [`Pallet::appender`]:
+//! 3. If you want to append many values (ie. in a loop), then best use the [`Pezpallet::appender`]:
 #![doc = docify::embed!("src/tests.rs", appender_works)]
-//! 4. **Iterating** over the list can be done with [`Pallet::iter`]. It uses the standard
+//! 4. **Iterating** over the list can be done with [`Pezpallet::iter`]. It uses the standard
 //! `Iterator` trait:
 #![doc = docify::embed!("src/tests.rs", iter_works)]
-//! 5. **Draining** elements happens through the [`Pallet::drain`] iterator. Note that even
+//! 5. **Draining** elements happens through the [`Pezpallet::drain`] iterator. Note that even
 //! *peeking* a value will already remove it.
 #![doc = docify::embed!("src/tests.rs", drain_works)]
 //!
-//! ## Pallet API
+//! ## Pezpallet API
 //!
 //! None. Only things to consider is the [`Config`] traits.
 //!
@@ -63,7 +63,7 @@
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 pub mod mock;
 mod paged_list;
@@ -75,14 +75,14 @@ use codec::FullCodec;
 use frame::{prelude::*, traits::StorageInstance};
 pub use paged_list::StoragePagedList;
 
-#[frame::pallet]
-pub mod pallet {
+#[frame::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T, I = ()>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T, I = ()>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config {
 		/// The value type that can be stored in the list.
 		type Value: FullCodec;
@@ -91,7 +91,7 @@ pub mod pallet {
 		///
 		/// Note that this does not retroactively affect already created pages. This value can be
 		/// changed at any time without requiring a runtime migration.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type ValuesPerNewPage: Get<u32>;
 	}
 
@@ -105,7 +105,7 @@ pub mod pallet {
 }
 
 // This exposes the list functionality to other pallets.
-impl<T: Config<I>, I: 'static> StorageList<T::Value> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> StorageList<T::Value> for Pezpallet<T, I> {
 	type Iterator = <List<T, I> as StorageList<T::Value>>::Iterator;
 	type Appender = <List<T, I> as StorageList<T::Value>>::Appender;
 
@@ -122,12 +122,12 @@ impl<T: Config<I>, I: 'static> StorageList<T::Value> for Pallet<T, I> {
 	}
 }
 
-/// Generates a unique storage prefix for each instance of the pallet.
+/// Generates a unique storage prefix for each instance of the pezpallet.
 pub struct ListPrefix<T, I>(core::marker::PhantomData<(T, I)>);
 
 impl<T: Config<I>, I: 'static> StorageInstance for ListPrefix<T, I> {
 	fn pezpallet_prefix() -> &'static str {
-		crate::Pallet::<T, I>::name()
+		crate::Pezpallet::<T, I>::name()
 	}
 
 	const STORAGE_PREFIX: &'static str = "paged_list";

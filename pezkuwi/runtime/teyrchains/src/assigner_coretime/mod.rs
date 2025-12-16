@@ -41,7 +41,7 @@ use pezpallet_broker::CoreAssignment;
 use pezkuwi_primitives::CoreIndex;
 use pezsp_runtime::traits::{One, Saturating};
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 /// Fraction expressed as a nominator with an assumed denominator of 57,600.
 #[derive(
@@ -204,22 +204,22 @@ impl<N> From<Schedule<N>> for WorkState<N> {
 	}
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::pallet]
-	#[pallet::without_storage_info]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::without_storage_info]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config + configuration::Config + on_demand::Config {}
 
 	/// Scheduled assignment sets.
 	///
 	/// Assignments as of the given block number. They will go into state once the block number is
 	/// reached (and replace whatever was in there before).
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type CoreSchedules<T: Config> = StorageMap<
 		_,
 		Twox256,
@@ -232,7 +232,7 @@ pub mod pallet {
 	///
 	/// They will be picked from `PendingAssignments` once we reach the scheduled block number in
 	/// `PendingAssignments`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type CoreDescriptors<T: Config> = StorageMap<
 		_,
 		Twox256,
@@ -242,10 +242,10 @@ pub mod pallet {
 		GetDefault,
 	>;
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {}
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		AssignmentsEmpty,
 		/// assign_core is only allowed to append new assignments at the end of already existing
@@ -254,9 +254,9 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> AssignmentProvider<BlockNumberFor<T>> for Pallet<T> {
+impl<T: Config> AssignmentProvider<BlockNumberFor<T>> for Pezpallet<T> {
 	fn pop_assignment_for_core(core_idx: CoreIndex) -> Option<Assignment> {
-		let now = pezframe_system::Pallet::<T>::block_number();
+		let now = pezframe_system::Pezpallet::<T>::block_number();
 
 		CoreDescriptors::<T>::mutate(core_idx, |core_state| {
 			Self::ensure_workload(now, core_idx, core_state);
@@ -282,7 +282,7 @@ impl<T: Config> AssignmentProvider<BlockNumberFor<T>> for Pallet<T> {
 
 			match a_type {
 				CoreAssignment::Idle => None,
-				CoreAssignment::Pool => on_demand::Pallet::<T>::pop_assignment_for_core(core_idx),
+				CoreAssignment::Pool => on_demand::Pezpallet::<T>::pop_assignment_for_core(core_idx),
 				CoreAssignment::Task(para_id) => Some(Assignment::Bulk((*para_id).into())),
 			}
 		})
@@ -291,7 +291,7 @@ impl<T: Config> AssignmentProvider<BlockNumberFor<T>> for Pallet<T> {
 	fn report_processed(assignment: Assignment) {
 		match assignment {
 			Assignment::Pool { para_id, core_index } =>
-				on_demand::Pallet::<T>::report_processed(para_id, core_index),
+				on_demand::Pezpallet::<T>::report_processed(para_id, core_index),
 			Assignment::Bulk(_) => {},
 		}
 	}
@@ -304,7 +304,7 @@ impl<T: Config> AssignmentProvider<BlockNumberFor<T>> for Pallet<T> {
 	fn push_back_assignment(assignment: Assignment) {
 		match assignment {
 			Assignment::Pool { para_id, core_index } =>
-				on_demand::Pallet::<T>::push_back_assignment(para_id, core_index),
+				on_demand::Pezpallet::<T>::push_back_assignment(para_id, core_index),
 			Assignment::Bulk(_) => {
 				// Session changes are rough. We just drop assignments that did not make it on a
 				// session boundary. This seems sensible as bulk is region based. Meaning, even if
@@ -325,13 +325,13 @@ impl<T: Config> AssignmentProvider<BlockNumberFor<T>> for Pallet<T> {
 	fn assignment_duplicated(assignment: &Assignment) {
 		match assignment {
 			Assignment::Pool { para_id, core_index } =>
-				on_demand::Pallet::<T>::assignment_duplicated(*para_id, *core_index),
+				on_demand::Pezpallet::<T>::assignment_duplicated(*para_id, *core_index),
 			Assignment::Bulk(_) => {},
 		}
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Ensure given workload for core is up to date.
 	fn ensure_workload(
 		now: BlockNumberFor<T>,
@@ -459,9 +459,9 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-impl<T: Config> AssignCoretime for Pallet<T> {
+impl<T: Config> AssignCoretime for Pezpallet<T> {
 	fn assign_coretime(id: ParaId) -> DispatchResult {
-		let current_block = pezframe_system::Pallet::<T>::block_number();
+		let current_block = pezframe_system::Pezpallet::<T>::block_number();
 
 		// Add a new core and assign the para to it.
 		let mut config = configuration::ActiveConfig::<T>::get();
@@ -470,10 +470,10 @@ impl<T: Config> AssignCoretime for Pallet<T> {
 
 		// `assign_coretime` is only called at genesis or by root, so setting the active
 		// config here is fine.
-		configuration::Pallet::<T>::force_set_active_config(config);
+		configuration::Pezpallet::<T>::force_set_active_config(config);
 
 		let begin = current_block + One::one();
 		let assignment = vec![(pezpallet_broker::CoreAssignment::Task(id.into()), PartsOf57600::FULL)];
-		Pallet::<T>::assign_core(CoreIndex(core), begin, assignment, None)
+		Pezpallet::<T>::assign_core(CoreIndex(core), begin, assignment, None)
 	}
 }

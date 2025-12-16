@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Test utilities for Sassafras pallet.
+//! Test utilities for Sassafras pezpallet.
 
 use crate::{self as pezpallet_sassafras, EpochChangeInternalTrigger, *};
 
@@ -324,7 +324,7 @@ pub fn finalize_block(number: u64) -> Header {
 	System::finalize()
 }
 
-/// Progress the pallet state up to the given block `number` and `slot`.
+/// Progress the pezpallet state up to the given block `number` and `slot`.
 pub fn go_to_block(number: u64, slot: Slot, pair: &AuthorityPair) -> Digest {
 	Sassafras::on_finalize(System::block_number());
 	let parent_hash = System::finalize().hash();
@@ -338,7 +338,7 @@ pub fn go_to_block(number: u64, slot: Slot, pair: &AuthorityPair) -> Digest {
 	digest
 }
 
-/// Progress the pallet state up to the given block `number`.
+/// Progress the pezpallet state up to the given block `number`.
 /// Slots will grow linearly accordingly to blocks.
 pub fn progress_to_block(number: u64, pair: &AuthorityPair) -> Option<Digest> {
 	let mut slot = Sassafras::current_slot() + 1;

@@ -361,7 +361,7 @@ impl<T: Config, Staking: StakingInterface<Balance = BalanceOf<T>, AccountId = T:
 ///
 /// This is the newer staking strategy used by pools. Once switched to this and migrated, ideally
 /// the `TransferStake` strategy should not be used. Or a separate migration would be required for
-/// it which is not provided by this pallet.
+/// it which is not provided by this pezpallet.
 ///
 /// Use [`migration::unversioned::DelegationStakeMigration`] to migrate to this strategy.
 pub struct DelegateStake<T: Config, Staking: StakingInterface, Delegation: DelegationInterface>(

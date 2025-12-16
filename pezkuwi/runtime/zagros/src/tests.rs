@@ -189,10 +189,10 @@ mod remote_tests {
 
 			// iterate over all pools
 			pezpallet_nomination_pools::BondedPools::<Runtime>::iter_keys().for_each(|k| {
-				if pezpallet_nomination_pools::Pallet::<Runtime>::api_pool_needs_delegate_migration(k)
+				if pezpallet_nomination_pools::Pezpallet::<Runtime>::api_pool_needs_delegate_migration(k)
 				{
 					assert_ok!(
-						pezpallet_nomination_pools::Pallet::<Runtime>::migrate_pool_to_delegate_stake(
+						pezpallet_nomination_pools::Pezpallet::<Runtime>::migrate_pool_to_delegate_stake(
 							RuntimeOrigin::signed(alice.clone()).into(),
 							k,
 						)
@@ -207,13 +207,13 @@ mod remote_tests {
 
 			// iterate over all pool members
 			pezpallet_nomination_pools::PoolMembers::<Runtime>::iter_keys().for_each(|k| {
-				if pezpallet_nomination_pools::Pallet::<Runtime>::api_member_needs_delegate_migration(
+				if pezpallet_nomination_pools::Pezpallet::<Runtime>::api_member_needs_delegate_migration(
 					k.clone(),
 				) {
 					// reasons migrations can fail:
 					let is_direct_staker = pezpallet_staking::Bonded::<Runtime>::contains_key(&k);
 
-					let migration = pezpallet_nomination_pools::Pallet::<Runtime>::migrate_delegation(
+					let migration = pezpallet_nomination_pools::Pezpallet::<Runtime>::migrate_delegation(
 						RuntimeOrigin::signed(alice.clone()).into(),
 						pezsp_runtime::MultiAddress::Id(k.clone()),
 					);
@@ -299,7 +299,7 @@ mod remote_tests {
 			let mut max_force_withdraw = 0;
 			// iterate over all stakers
 			pezpallet_staking::Ledger::<Runtime>::iter().for_each(|(ctrl, ledger)| {
-				match pezpallet_staking::Pallet::<Runtime>::migrate_currency(
+				match pezpallet_staking::Pezpallet::<Runtime>::migrate_currency(
 					RuntimeOrigin::signed(alice.clone()).into(),
 					ledger.stash.clone(),
 				) {

@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Storage migrations for the core-fellowship pallet.
+//! Storage migrations for the core-fellowship pezpallet.
 use super::*;
 use pezframe_support::{
 	pezpallet_prelude::*,
@@ -65,7 +65,7 @@ mod v0 {
 	/// V0 type for [`crate::Params`].
 	#[storage_alias]
 	pub type Params<T: Config<I>, I: 'static> =
-		StorageValue<Pallet<T, I>, ParamsOf<T, I>, ValueQuery>;
+		StorageValue<Pezpallet<T, I>, ParamsOf<T, I>, ValueQuery>;
 }
 
 pub struct MigrateToV1<T, I = ()>(PhantomData<(T, I)>);
@@ -108,6 +108,6 @@ pub type MigrateV0ToV1<T, I> = pezframe_support::migrations::VersionedMigration<
 	0, // The migration will only execute when the on-chain storage version is 0
 	1, // The on-chain storage version will be set to 1 after the migration is complete
 	MigrateToV1<T, I>,
-	crate::pallet::Pallet<T, I>,
+	crate::pezpallet::Pezpallet<T, I>,
 	<T as pezframe_system::Config>::DbWeight,
 >;

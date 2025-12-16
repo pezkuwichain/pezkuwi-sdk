@@ -20,22 +20,22 @@ use pezframe_support::pezpallet_macros::import_section;
 mod storage;
 
 #[import_section(storage::storage)]
-#[pezframe_support::pallet(dev_mode)]
-pub mod pallet {
+#[pezframe_support::pezpallet(dev_mode)]
+pub mod pezpallet {
     use pezframe_support::pezpallet_prelude::*;
     use pezframe_system::pezpallet_prelude::*;
 
     const STORAGE_VERSION: StorageVersion = StorageVersion::new(8);
 
-    #[pallet::pallet]
-    #[pallet::storage_version(STORAGE_VERSION)]
-    pub struct Pallet<T>(_);
+    #[pezpallet::pezpallet]
+    #[pezpallet::storage_version(STORAGE_VERSION)]
+    pub struct Pezpallet<T>(_);
 
-    #[pallet::config]
+    #[pezpallet::config]
     pub trait Config: pezframe_system::Config {}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		pub fn increment_value(_origin: OriginFor<T>) -> DispatchResult {
 			Value::<T>::mutate(|v| {
 				v.saturating_add(1)

@@ -17,7 +17,7 @@
 
 use pezsp_core::Get;
 
-use super::{new_test_ext, BlockNumberFor, Config, Pallet, Runtime};
+use super::{new_test_ext, BlockNumberFor, Config, Pezpallet, Runtime};
 use crate::{
 	assert_noop, assert_ok, parameter_types, storage::generator::StorageValue, Blake2_128Concat,
 };
@@ -29,9 +29,9 @@ fn storage_alias_works() {
 		type GenericData2<T> =
 			StorageMap<System, Blake2_128Concat, BlockNumberFor<T>, BlockNumberFor<T>>;
 
-		assert_eq!(Pallet::<Runtime>::generic_data2(5), None);
+		assert_eq!(Pezpallet::<Runtime>::generic_data2(5), None);
 		GenericData2::<Runtime>::insert(5, 5);
-		assert_eq!(Pallet::<Runtime>::generic_data2(5), Some(5));
+		assert_eq!(Pezpallet::<Runtime>::generic_data2(5), Some(5));
 
 		/// Some random docs that ensure that docs are accepted
 		#[crate::storage_alias]
@@ -40,7 +40,7 @@ fn storage_alias_works() {
 
 		#[crate::storage_alias]
 		pub type GenericDataPallet<T: Config> =
-			StorageMap<Pallet<T>, Blake2_128Concat, BlockNumberFor<T>, BlockNumberFor<T>>;
+			StorageMap<Pezpallet<T>, Blake2_128Concat, BlockNumberFor<T>, BlockNumberFor<T>>;
 	});
 }
 
@@ -120,15 +120,15 @@ fn verbatim_attribute() {
 #[test]
 fn pezpallet_name_attribute() {
 	new_test_ext().execute_with(|| {
-		// Declare the alias that will use the pallet name as prefix.
+		// Declare the alias that will use the pezpallet name as prefix.
 		#[crate::storage_alias(pezpallet_name)]
-		pub type Value<T: Config> = StorageValue<Pallet<T>, u32>;
+		pub type Value<T: Config> = StorageValue<Pezpallet<T>, u32>;
 
 		// Check that it works as expected.
 		Value::<Runtime>::put(1);
 		assert_eq!(1, Value::<Runtime>::get().unwrap());
 
-		// The prefix is the pallet name. In this case the pallet name is `System` as declared in
+		// The prefix is the pezpallet name. In this case the pezpallet name is `System` as declared in
 		// `construct_runtime!`.
 		assert_eq!(&b"System"[..], Value::<Runtime>::pezpallet_prefix());
 	});
@@ -168,9 +168,9 @@ fn storage_alias_guess() {
 
 		assert_eq!(&b"Test"[..], Value::pezpallet_prefix());
 
-		// The macro will use the pallet name as prefix.
+		// The macro will use the pezpallet name as prefix.
 		#[crate::storage_alias]
-		pub type PalletValue<T: Config> = StorageValue<Pallet<T>, u32>;
+		pub type PalletValue<T: Config> = StorageValue<Pezpallet<T>, u32>;
 
 		assert_eq!(&b"System"[..], PalletValue::<Runtime>::pezpallet_prefix());
 	});

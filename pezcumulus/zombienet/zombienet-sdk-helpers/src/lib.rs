@@ -64,13 +64,13 @@ pub fn create_assign_core_call(core_and_para: &[(u32, u32)]) -> DynamicPayload {
 /// Find an event in subxt `Events` and attempt to decode the fields fo the event.
 fn find_event_and_decode_fields<T: Decode>(
 	events: &Events<PolkadotConfig>,
-	pallet: &str,
+	pezpallet: &str,
 	variant: &str,
 ) -> Result<Vec<T>, anyhow::Error> {
 	let mut result = vec![];
 	for event in events.iter() {
 		let event = event?;
-		if event.pallet_name() == pallet && event.variant_name() == variant {
+		if event.pezpallet_name() == pezpallet && event.variant_name() == variant {
 			let field_bytes = event.field_bytes().to_vec();
 			result.push(T::decode(&mut &field_bytes[..])?);
 		}
@@ -84,7 +84,7 @@ async fn is_session_change(
 	let events = block.events().await?;
 	Ok(events.iter().any(|event| {
 		event.as_ref().is_ok_and(|event| {
-			event.pallet_name() == "Session" && event.variant_name() == "NewSession"
+			event.pezpallet_name() == "Session" && event.variant_name() == "NewSession"
 		})
 	}))
 }

@@ -22,10 +22,10 @@ use crate::{
 	aliasers_footprint,
 	migration::data::NeedsMigration,
 	mock::*,
-	pallet::{LockedFungibles, RemoteLockedFungibles, SupportedVersion},
+	pezpallet::{LockedFungibles, RemoteLockedFungibles, SupportedVersion},
 	xcm_helpers::find_xcm_sent_message_id,
 	AssetTraps, AuthorizedAliasers, Config, CurrentMigration, Error, ExecuteControllerWeightInfo,
-	LatestVersionedLocation, MaxAuthorizedAliases, Pallet, Queries, QueryStatus, RecordedXcm,
+	LatestVersionedLocation, MaxAuthorizedAliases, Pezpallet, Queries, QueryStatus, RecordedXcm,
 	RemoteLockedFungibleRecord, ShouldRecordXcm, VersionDiscoveryQueue, VersionMigrationStage,
 	VersionNotifiers, VersionNotifyTargets, WeightInfo,
 };
@@ -753,7 +753,7 @@ fn incomplete_execute_reverts_side_effects() {
 			Err(pezsp_runtime::DispatchErrorWithPostInfo {
 				post_info: pezframe_support::dispatch::PostDispatchInfo {
 					actual_weight: Some(
-						<Pallet<Test> as ExecuteControllerWeightInfo>::execute() + weight
+						<Pezpallet<Test> as ExecuteControllerWeightInfo>::execute() + weight
 					),
 					pays_fee: pezframe_support::dispatch::Pays::Yes,
 				},
@@ -1417,7 +1417,7 @@ fn multistage_migration_works() {
 		AdvertisedXcmVersion::set(4);
 
 		// check `try-state`
-		assert!(Pallet::<Test>::do_try_state().is_err());
+		assert!(Pezpallet::<Test>::do_try_state().is_err());
 
 		// closure simulates a multistage migration process
 		let migrate = |expected_cycle_count| {
@@ -1476,7 +1476,7 @@ fn multistage_migration_works() {
 		assert_eq!(take_sent_xcm(), vec![]);
 
 		// check `try-state`
-		assert!(Pallet::<Test>::do_try_state().is_ok());
+		assert!(Pezpallet::<Test>::do_try_state().is_ok());
 	})
 }
 
@@ -1484,7 +1484,7 @@ fn multistage_migration_works() {
 fn migrate_data_to_xcm_version_works() {
 	new_test_ext_with_balances(vec![]).execute_with(|| {
 		// check `try-state`
-		assert!(Pallet::<Test>::do_try_state().is_ok());
+		assert!(Pezpallet::<Test>::do_try_state().is_ok());
 
 		let latest_version = XCM_VERSION;
 		let previous_version = XCM_VERSION - 1;
@@ -1509,16 +1509,16 @@ fn migrate_data_to_xcm_version_works() {
 			// store two queries: migrated and not migrated
 			Queries::<Test>::insert(query_id1, query_as_latest.clone());
 			Queries::<Test>::insert(query_id2, query_as_previous);
-			assert!(Pallet::<Test>::do_try_state().is_ok());
+			assert!(Pezpallet::<Test>::do_try_state().is_ok());
 
 			// trigger migration
-			Pallet::<Test>::migrate_data_to_xcm_version(&mut Weight::zero(), latest_version);
+			Pezpallet::<Test>::migrate_data_to_xcm_version(&mut Weight::zero(), latest_version);
 
 			// no change for query_id1
 			assert_eq!(Queries::<Test>::get(query_id1), Some(query_as_latest.clone()));
 			// change for query_id2
 			assert_eq!(Queries::<Test>::get(query_id2), Some(query_as_latest));
-			assert!(Pallet::<Test>::do_try_state().is_ok());
+			assert!(Pezpallet::<Test>::do_try_state().is_ok());
 		}
 
 		// `LockedFungibles` migration
@@ -1540,16 +1540,16 @@ fn migrate_data_to_xcm_version_works() {
 			// store two lockeds: migrated and not migrated
 			LockedFungibles::<Test>::insert(&account1, lockeds_as_latest.clone());
 			LockedFungibles::<Test>::insert(&account2, lockeds_as_previous);
-			assert!(Pallet::<Test>::do_try_state().is_ok());
+			assert!(Pezpallet::<Test>::do_try_state().is_ok());
 
 			// trigger migration
-			Pallet::<Test>::migrate_data_to_xcm_version(&mut Weight::zero(), latest_version);
+			Pezpallet::<Test>::migrate_data_to_xcm_version(&mut Weight::zero(), latest_version);
 
 			// no change for account1
 			assert_eq!(LockedFungibles::<Test>::get(&account1), Some(lockeds_as_latest.clone()));
 			// change for account2
 			assert_eq!(LockedFungibles::<Test>::get(&account2), Some(lockeds_as_latest));
-			assert!(Pallet::<Test>::do_try_state().is_ok());
+			assert!(Pezpallet::<Test>::do_try_state().is_ok());
 		}
 
 		// `RemoteLockedFungibles` migration
@@ -1602,10 +1602,10 @@ fn migrate_data_to_xcm_version_works() {
 			RemoteLockedFungibles::<Test>::insert(&key2_as_latest, data_as_previous.clone());
 			// neither key nor data migrated
 			RemoteLockedFungibles::<Test>::insert(&key3_as_previous, data_as_previous);
-			assert!(Pallet::<Test>::do_try_state().is_ok());
+			assert!(Pezpallet::<Test>::do_try_state().is_ok());
 
 			// trigger migration
-			Pallet::<Test>::migrate_data_to_xcm_version(&mut Weight::zero(), latest_version);
+			Pezpallet::<Test>::migrate_data_to_xcm_version(&mut Weight::zero(), latest_version);
 
 			let assert_locked_eq =
 				|left: Option<RemoteLockedFungibleRecord<_, _>>,
@@ -1638,7 +1638,7 @@ fn migrate_data_to_xcm_version_works() {
 				RemoteLockedFungibles::<Test>::get(&expected_key3_as_latest),
 				Some(data_as_latest.clone()),
 			);
-			assert!(Pallet::<Test>::do_try_state().is_ok());
+			assert!(Pezpallet::<Test>::do_try_state().is_ok());
 		}
 	})
 }

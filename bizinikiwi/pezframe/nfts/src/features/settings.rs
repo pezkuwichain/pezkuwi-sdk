@@ -15,12 +15,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! This module provides helper methods to configure collection settings for the NFTs pallet.
+//! This module provides helper methods to configure collection settings for the NFTs pezpallet.
 
 use crate::*;
 use pezframe_support::pezpallet_prelude::*;
 
-impl<T: Config<I>, I: 'static> Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 	/// Forcefully change the configuration of a collection.
 	///
 	/// - `collection`: The ID of the collection for which to update the configuration.
@@ -160,12 +160,12 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 		Ok(collection_config.mint_settings.default_item_settings)
 	}
 
-	/// Check if a specified pallet feature is enabled.
+	/// Check if a specified pezpallet feature is enabled.
 	///
 	/// - `feature`: The feature to check.
 	///
 	/// This function checks if the given `feature` is enabled in the runtime using the
-	/// pallet's `T::Features::get()` function. It returns `true` if the feature is enabled,
+	/// pezpallet's `T::Features::get()` function. It returns `true` if the feature is enabled,
 	/// otherwise it returns `false`.
 	pub(crate) fn is_pallet_feature_enabled(feature: PalletFeature) -> bool {
 		let features = T::Features::get();

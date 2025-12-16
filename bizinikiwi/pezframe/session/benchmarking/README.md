@@ -1,3 +1,3 @@
-Benchmarks for the Session Pallet.
+Benchmarks for the Session Pezpallet.
 
 License: Apache-2.0

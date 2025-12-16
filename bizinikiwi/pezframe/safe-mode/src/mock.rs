@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Tests and test utilities for safe mode pallet.
+//! Tests and test utilities for safe mode pezpallet.
 
 #![cfg(test)]
 
@@ -58,7 +58,7 @@ impl pezframe_system::Config for Test {
 	Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Encode, Decode, MaxEncodedLen, Debug, TypeInfo,
 )]
 pub enum HoldReason {
-	/// The safe-mode pallet holds funds since an account either entered or extended the safe-mode.
+	/// The safe-mode pezpallet holds funds since an account either entered or extended the safe-mode.
 	SafeMode,
 }
 
@@ -75,7 +75,7 @@ impl pezpallet_utility::Config for Test {
 	type WeightInfo = ();
 }
 
-/// Mocked proxies to check that the safe-mode also works with the proxy pallet.
+/// Mocked proxies to check that the safe-mode also works with the proxy pezpallet.
 #[derive(
 	Copy,
 	Clone,
@@ -133,7 +133,7 @@ impl pezpallet_proxy::Config for Test {
 	type MaxPending = ConstU32<2>;
 	type AnnouncementDepositBase = ConstU64<1>;
 	type AnnouncementDepositFactor = ConstU64<1>;
-	type BlockNumberProvider = pezframe_system::Pallet<Test>;
+	type BlockNumberProvider = pezframe_system::Pezpallet<Test>;
 }
 
 /// The calls that can always bypass safe-mode.
@@ -172,13 +172,13 @@ pub struct MockedNotify;
 impl SafeModeNotify for MockedNotify {
 	fn entered() {
 		let mut ns = Notifications::get();
-		ns.push((<pezframe_system::Pallet<Test>>::block_number(), true));
+		ns.push((<pezframe_system::Pezpallet<Test>>::block_number(), true));
 		Notifications::set(&ns);
 	}
 
 	fn exited() {
 		let mut ns = Notifications::get();
-		ns.push((<pezframe_system::Pallet<Test>>::block_number(), false));
+		ns.push((<pezframe_system::Pezpallet<Test>>::block_number(), false));
 		Notifications::set(&ns);
 	}
 }

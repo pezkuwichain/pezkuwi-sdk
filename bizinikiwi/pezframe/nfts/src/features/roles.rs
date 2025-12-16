@@ -21,7 +21,7 @@ use crate::*;
 use alloc::{collections::btree_map::BTreeMap, vec::Vec};
 use pezframe_support::pezpallet_prelude::*;
 
-impl<T: Config<I>, I: 'static> Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 	/// Set the team roles for a specific collection.
 	///
 	/// - `maybe_check_owner`: An optional account ID used to check ownership permission. If `None`,

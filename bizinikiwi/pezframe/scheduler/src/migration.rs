@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Migrations for the scheduler pallet.
+//! Migrations for the scheduler pezpallet.
 
 use super::*;
 use pezframe_support::traits::OnRuntimeUpgrade;
@@ -32,7 +32,7 @@ pub mod v1 {
 
 	#[pezframe_support::storage_alias]
 	pub(crate) type Agenda<T: Config> = StorageMap<
-		Pallet<T>,
+		Pezpallet<T>,
 		Twox64Concat,
 		BlockNumberFor<T>,
 		Vec<Option<ScheduledV1<<T as Config>::RuntimeCall, BlockNumberFor<T>>>>,
@@ -41,7 +41,7 @@ pub mod v1 {
 
 	#[pezframe_support::storage_alias]
 	pub(crate) type Lookup<T: Config> =
-		StorageMap<Pallet<T>, Twox64Concat, Vec<u8>, TaskAddress<BlockNumberFor<T>>>;
+		StorageMap<Pezpallet<T>, Twox64Concat, Vec<u8>, TaskAddress<BlockNumberFor<T>>>;
 }
 
 pub mod v2 {
@@ -50,7 +50,7 @@ pub mod v2 {
 
 	#[pezframe_support::storage_alias]
 	pub(crate) type Agenda<T: Config> = StorageMap<
-		Pallet<T>,
+		Pezpallet<T>,
 		Twox64Concat,
 		BlockNumberFor<T>,
 		Vec<Option<ScheduledV2Of<T>>>,
@@ -59,7 +59,7 @@ pub mod v2 {
 
 	#[pezframe_support::storage_alias]
 	pub(crate) type Lookup<T: Config> =
-		StorageMap<Pallet<T>, Twox64Concat, Vec<u8>, TaskAddress<BlockNumberFor<T>>>;
+		StorageMap<Pezpallet<T>, Twox64Concat, Vec<u8>, TaskAddress<BlockNumberFor<T>>>;
 }
 
 pub mod v3 {
@@ -68,7 +68,7 @@ pub mod v3 {
 
 	#[pezframe_support::storage_alias]
 	pub(crate) type Agenda<T: Config> = StorageMap<
-		Pallet<T>,
+		Pezpallet<T>,
 		Twox64Concat,
 		BlockNumberFor<T>,
 		Vec<Option<ScheduledV3Of<T>>>,
@@ -77,15 +77,15 @@ pub mod v3 {
 
 	#[pezframe_support::storage_alias]
 	pub(crate) type Lookup<T: Config> =
-		StorageMap<Pallet<T>, Twox64Concat, Vec<u8>, TaskAddress<BlockNumberFor<T>>>;
+		StorageMap<Pezpallet<T>, Twox64Concat, Vec<u8>, TaskAddress<BlockNumberFor<T>>>;
 
-	/// Migrate the scheduler pallet from V3 to V4.
+	/// Migrate the scheduler pezpallet from V3 to V4.
 	pub struct MigrateToV4<T>(core::marker::PhantomData<T>);
 
 	impl<T: Config> OnRuntimeUpgrade for MigrateToV4<T> {
 		#[cfg(feature = "try-runtime")]
 		fn pre_upgrade() -> Result<Vec<u8>, TryRuntimeError> {
-			ensure!(StorageVersion::get::<Pallet<T>>() == 3, "Can only upgrade from version 3");
+			ensure!(StorageVersion::get::<Pezpallet<T>>() == 3, "Can only upgrade from version 3");
 
 			let agendas = Agenda::<T>::iter_keys().count() as u32;
 			let decodable_agendas = Agenda::<T>::iter_values().count() as u32;
@@ -141,7 +141,7 @@ pub mod v3 {
 		}
 
 		fn on_runtime_upgrade() -> Weight {
-			let version = StorageVersion::get::<Pallet<T>>();
+			let version = StorageVersion::get::<Pezpallet<T>>();
 			if version != 3 {
 				log::warn!(
 					target: TARGET,
@@ -152,12 +152,12 @@ pub mod v3 {
 				return T::DbWeight::get().reads(1);
 			}
 
-			crate::Pallet::<T>::migrate_v3_to_v4()
+			crate::Pezpallet::<T>::migrate_v3_to_v4()
 		}
 
 		#[cfg(feature = "try-runtime")]
 		fn post_upgrade(state: Vec<u8>) -> Result<(), TryRuntimeError> {
-			ensure!(StorageVersion::get::<Pallet<T>>() == 4, "Must upgrade");
+			ensure!(StorageVersion::get::<Pezpallet<T>>() == 4, "Must upgrade");
 
 			// Check that everything decoded fine.
 			for k in crate::Agenda::<T>::iter_keys() {
@@ -192,14 +192,14 @@ pub mod v4 {
 	/// This migration cleans up empty agendas of the V4 scheduler.
 	///
 	/// This should be run on a scheduler that does not have
-	/// <https://github.com/pezkuwichain/kurdistan-sdk/issues/41> since it piles up `None`-only agendas. This does not modify the pallet version.
+	/// <https://github.com/pezkuwichain/kurdistan-sdk/issues/41> since it piles up `None`-only agendas. This does not modify the pezpallet version.
 	pub struct CleanupAgendas<T>(core::marker::PhantomData<T>);
 
 	impl<T: Config> OnRuntimeUpgrade for CleanupAgendas<T> {
 		#[cfg(feature = "try-runtime")]
 		fn pre_upgrade() -> Result<Vec<u8>, TryRuntimeError> {
 			assert_eq!(
-				StorageVersion::get::<Pallet<T>>(),
+				StorageVersion::get::<Pezpallet<T>>(),
 				4,
 				"Can only cleanup agendas of the V4 scheduler"
 			);
@@ -218,7 +218,7 @@ pub mod v4 {
 		}
 
 		fn on_runtime_upgrade() -> Weight {
-			let version = StorageVersion::get::<Pallet<T>>();
+			let version = StorageVersion::get::<Pezpallet<T>>();
 			if version != 4 {
 				log::warn!(target: TARGET, "Skipping CleanupAgendas migration since it was run on the wrong version: {:?} != 4", version);
 				return T::DbWeight::get().reads(1);
@@ -266,14 +266,14 @@ pub mod v4 {
 				}
 			}
 
-			// We don't modify the pallet version.
+			// We don't modify the pezpallet version.
 
 			T::DbWeight::get().reads_writes(1 + keys.len().saturating_mul(2) as u64, writes)
 		}
 
 		#[cfg(feature = "try-runtime")]
 		fn post_upgrade(state: Vec<u8>) -> Result<(), TryRuntimeError> {
-			ensure!(StorageVersion::get::<Pallet<T>>() == 4, "Version must not change");
+			ensure!(StorageVersion::get::<Pezpallet<T>>() == 4, "Version must not change");
 
 			let (old_agendas, non_empty_agendas): (u32, u32) =
 				Decode::decode(&mut state.as_ref()).expect("Must decode pre_upgrade state");

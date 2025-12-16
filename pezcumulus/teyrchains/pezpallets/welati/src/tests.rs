@@ -1311,7 +1311,7 @@ fn proposal_id_increments_correctly() {
 #[test]
 fn multiple_elections_different_types() {
 	ExtBuilder::default().build().execute_with(|| {
-		pezframe_system::Pallet::<Test>::set_block_number(1);
+		pezframe_system::Pezpallet::<Test>::set_block_number(1);
 
 		// Start presidential election
 		assert_ok!(Welati::initiate_election(
@@ -1348,7 +1348,7 @@ fn multiple_elections_different_types() {
 #[test]
 fn sequential_elections_id_increment() {
 	ExtBuilder::default().build().execute_with(|| {
-		pezframe_system::Pallet::<Test>::set_block_number(1);
+		pezframe_system::Pezpallet::<Test>::set_block_number(1);
 
 		// Initial ID should be 0
 		assert_eq!(Welati::next_election_id(), 0);
@@ -1382,7 +1382,7 @@ fn sequential_elections_id_increment() {
 #[test]
 fn proposal_and_election_storage_independent() {
 	ExtBuilder::default().build().execute_with(|| {
-		pezframe_system::Pallet::<Test>::set_block_number(1);
+		pezframe_system::Pezpallet::<Test>::set_block_number(1);
 		add_parliament_member(1);
 
 		// Create a proposal

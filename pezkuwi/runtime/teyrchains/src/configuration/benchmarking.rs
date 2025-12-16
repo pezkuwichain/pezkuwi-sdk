@@ -100,7 +100,7 @@ mod benchmarks {
 	}
 
 	impl_benchmark_test_suite!(
-		Pallet,
+		Pezpallet,
 		crate::mock::new_test_ext(Default::default()),
 		crate::mock::Test
 	);

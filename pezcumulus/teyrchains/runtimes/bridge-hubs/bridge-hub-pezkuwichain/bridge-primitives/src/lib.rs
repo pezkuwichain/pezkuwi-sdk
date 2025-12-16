@@ -85,17 +85,17 @@ pub type Address = MultiAddress<AccountId, ()>;
 /// Identifier of BridgeHubPezkuwichain in the Pezkuwichain relay chain.
 pub const BRIDGE_HUB_PEZKUWICHAIN_TEYRCHAIN_ID: u32 = 1002;
 
-/// Name of the With-BridgeHubPezkuwichain messages pallet instance that is deployed at bridged
+/// Name of the With-BridgeHubPezkuwichain messages pezpallet instance that is deployed at bridged
 /// chains.
 pub const WITH_BRIDGE_HUB_PEZKUWICHAIN_MESSAGES_PALLET_NAME: &str = "BridgePezkuwichainMessages";
 
-/// Name of the With-BridgeHubPezkuwichain bridge-relayers pallet instance that is deployed at
+/// Name of the With-BridgeHubPezkuwichain bridge-relayers pezpallet instance that is deployed at
 /// bridged chains.
 pub const WITH_BRIDGE_HUB_PEZKUWICHAIN_RELAYERS_PALLET_NAME: &str = "BridgeRelayers";
 
-/// Pallet index of `BridgeZagrosMessages: pezpallet_bridge_messages::<Instance3>`.
+/// Pezpallet index of `BridgeZagrosMessages: pezpallet_bridge_messages::<Instance3>`.
 pub const WITH_BRIDGE_PEZKUWICHAIN_TO_ZAGROS_MESSAGES_PALLET_INDEX: u8 = 51;
-/// Pallet index of `BridgePezkuwiBulletinMessages: pezpallet_bridge_messages::<Instance4>`.
+/// Pezpallet index of `BridgePezkuwiBulletinMessages: pezpallet_bridge_messages::<Instance4>`.
 pub const WITH_BRIDGE_PEZKUWICHAIN_TO_BULLETIN_MESSAGES_PALLET_INDEX: u8 = 61;
 
 decl_bridge_finality_runtime_apis!(bridge_hub_pezkuwichain);
@@ -119,7 +119,7 @@ pezframe_support::parameter_types! {
 /// Wrapper over `BridgeHubPezkuwichain`'s `RuntimeCall` that can be used without a runtime.
 #[derive(Decode, Encode)]
 pub enum RuntimeCall {
-	/// Points to the `pezpallet_xcm_bridge_hub` pallet instance for `BridgeHubZagros`.
+	/// Points to the `pezpallet_xcm_bridge_hub` pezpallet instance for `BridgeHubZagros`.
 	#[codec(index = 52)]
 	XcmOverBridgeHubZagros(bp_xcm_bridge_hub::XcmBridgeHubCall),
 }

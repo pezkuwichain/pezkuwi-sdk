@@ -86,7 +86,7 @@ fn create_and_claim_treasury_spend() {
 
 		// assert events triggered by xcm pay program
 		// 1. treasury asset transferred to spend beneficiary
-		// 2. response to Relay Chain treasury pallet instance sent back
+		// 2. response to Relay Chain treasury pezpallet instance sent back
 		// 3. XCM program completed
 		assert_expected_events!(
 			AssetHubZagros,

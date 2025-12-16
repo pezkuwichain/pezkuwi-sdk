@@ -24,9 +24,12 @@ use std::time::SystemTime;
 use tracing_subscriber::EnvFilter;
 use txtesttool::scenario::{ChainType, ScenarioBuilder};
 use zombienet_sdk::{
-	subxt::BizinikiwiConfig, GlobalSettingsBuilder, LocalFileSystem, Network, NetworkConfig,
+	subxt::SubstrateConfig, GlobalSettingsBuilder, LocalFileSystem, Network, NetworkConfig,
 	NetworkConfigBuilder, NetworkConfigExt, WithRelaychain,
 };
+
+/// Bizinikiwi configuration for zombienet tests - based on SubstrateConfig
+pub type BizinikiwiConfig = SubstrateConfig;
 
 /// Gathers TOML files paths for relaychains and for teyrchains' (that use pezkuwichain-local based
 /// relaychains) zombienet network specs for testing in relation to fork aware transaction pool.

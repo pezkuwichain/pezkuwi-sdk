@@ -23,13 +23,13 @@
 //! [pezkuwi]: https://img.shields.io/badge/polkadot-E6007A?style=for-the-badge&logo=polkadot&logoColor=white
 //! [github]: https://img.shields.io/badge/github-8da0cb?style=for-the-badge&labelColor=555555&logo=github
 //!
-//! # Scheduler Pallet
+//! # Scheduler Pezpallet
 //!
-//! A Pallet for scheduling runtime calls.
+//! A Pezpallet for scheduling runtime calls.
 //!
 //! ## Overview
 //!
-//! This Pallet exposes capabilities for scheduling runtime calls to occur at a specified block
+//! This Pezpallet exposes capabilities for scheduling runtime calls to occur at a specified block
 //! number or at a specified period. These scheduled runtime calls may be named or anonymous and may
 //! be canceled.
 //!
@@ -50,14 +50,14 @@
 #![doc = docify::embed!("src/tests.rs", scheduling_with_preimages_works)]
 
 //!
-//! ## Pallet API
+//! ## Pezpallet API
 //!
-//! See the [`pallet`] module for more information about the interfaces this pallet exposes,
+//! See the [`pezpallet`] module for more information about the interfaces this pezpallet exposes,
 //! including its configuration trait, dispatchables, storage items, events and errors.
 //!
 //! ## Warning
 //!
-//! This Pallet executes all scheduled runtime calls in the [`on_initialize`] hook. Do not execute
+//! This Pezpallet executes all scheduled runtime calls in the [`on_initialize`] hook. Do not execute
 //! any runtime calls which should not be considered mandatory.
 //!
 //! Please be aware that any scheduled runtime calls executed in a future block may __fail__ or may
@@ -108,7 +108,7 @@ use pezsp_runtime::{
 	BoundedVec, DispatchError, RuntimeDebug,
 };
 
-pub use pallet::*;
+pub use pezpallet::*;
 pub use weights::WeightInfo;
 
 /// Just a simple index for naming period tasks.
@@ -247,8 +247,8 @@ pub(crate) trait MarginalWeightInfo: WeightInfo {
 }
 impl<T: WeightInfo> MarginalWeightInfo for T {}
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::{dispatch::PostDispatchInfo, pezpallet_prelude::*};
 	use pezframe_system::pezpallet_prelude::{BlockNumberFor as SystemBlockNumberFor, OriginFor};
@@ -256,12 +256,12 @@ pub mod pallet {
 	/// The in-code storage version.
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(4);
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T>(_);
 
 	/// `system::Config` should always be included in our implied traits.
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
@@ -286,7 +286,7 @@ pub mod pallet {
 			+ From<system::Call<Self>>;
 
 		/// The maximum weight that may be scheduled per block for any dispatchables.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaximumWeight: Get<Weight>;
 
 		/// Required origin to schedule or cancel calls.
@@ -306,10 +306,10 @@ pub mod pallet {
 		/// NOTE:
 		/// + Dependent pallets' benchmarks might require a higher limit for the setting. Set a
 		/// higher limit under `runtime-benchmarks` feature.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxScheduledPerBlock: Get<u32>;
 
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 
 		/// The preimage provider with which we look up call hashes to get the call.
@@ -319,21 +319,21 @@ pub mod pallet {
 		///
 		/// Must return monotonically increasing values when called from consecutive blocks. It is
 		/// generally expected that the values also do not differ "too much" between consecutive
-		/// blocks. A future addition to this pallet will allow bigger difference between
+		/// blocks. A future addition to this pezpallet will allow bigger difference between
 		/// consecutive blocks to make it possible to be utilized by teyrchains with *Agile
 		/// Coretime*. *Agile Coretime* teyrchains are currently not supported and must continue to
 		/// use their local block number provider.
 		///
 		/// Can be configured to return either:
-		/// - the local block number of the runtime via `pezframe_system::Pallet`
+		/// - the local block number of the runtime via `pezframe_system::Pezpallet`
 		/// - a remote block number, eg from the relay chain through `RelaychainDataProvider`
 		/// - an arbitrary value through a custom implementation of the trait
 		///
 		/// Suggested values:
-		/// - Solo- and Relay-chains should use `pezframe_system::Pallet`. There are no concerns with
+		/// - Solo- and Relay-chains should use `pezframe_system::Pezpallet`. There are no concerns with
 		///   this configuration.
-		/// - Teyrchains should also use `pezframe_system::Pallet` for the time being. The scheduler
-		///   pallet is not yet ready for the case that big numbers of blocks are skipped. In an
+		/// - Teyrchains should also use `pezframe_system::Pezpallet` for the time being. The scheduler
+		///   pezpallet is not yet ready for the case that big numbers of blocks are skipped. In an
 		///   *Agile Coretime* chain with relay chain number provider configured, it could otherwise
 		///   happen that the scheduler will not be able to catch up to its agendas, since too many
 		///   relay blocks are missing if the teyrchain only produces blocks rarely.
@@ -341,16 +341,16 @@ pub mod pallet {
 		/// There is currently no migration provided to "hot-swap" block number providers and it is
 		/// therefore highly advised to stay with the default (local) values. If you still want to
 		/// swap block number providers on the fly, then please at least ensure that you do not run
-		/// any pallet migration in the same runtime upgrade.
+		/// any pezpallet migration in the same runtime upgrade.
 		type BlockNumberProvider: BlockNumberProvider;
 	}
 
 	/// Block number at which the agenda began incomplete execution.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type IncompleteSince<T: Config> = StorageValue<_, BlockNumberFor<T>>;
 
 	/// Items to be executed, indexed by the block number that they should be executed on.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Agenda<T: Config> = StorageMap<
 		_,
 		Twox64Concat,
@@ -360,7 +360,7 @@ pub mod pallet {
 	>;
 
 	/// Retry configurations for items to be executed, indexed by task address.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Retries<T: Config> = StorageMap<
 		_,
 		Blake2_128Concat,
@@ -373,13 +373,13 @@ pub mod pallet {
 	///
 	/// For v3 -> v4 the previously unbounded identities are Blake2-256 hashed to form the v4
 	/// identities.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Lookup<T: Config> =
 		StorageMap<_, Twox64Concat, TaskName, TaskAddress<BlockNumberFor<T>>>;
 
 	/// Events type.
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// Scheduled some task.
 		Scheduled { when: BlockNumberFor<T>, index: u32 },
@@ -413,7 +413,7 @@ pub mod pallet {
 		AgendaIncomplete { when: BlockNumberFor<T> },
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Failed to schedule a call
 		FailedToSchedule,
@@ -427,12 +427,12 @@ pub mod pallet {
 		Named,
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<SystemBlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<SystemBlockNumberFor<T>> for Pezpallet<T> {
 		/// Execute the scheduled calls
 		fn on_initialize(_now: SystemBlockNumberFor<T>) -> Weight {
 			let now = T::BlockNumberProvider::current_block_number();
-			let mut weight_counter = pezframe_system::Pallet::<T>::remaining_block_weight()
+			let mut weight_counter = pezframe_system::Pezpallet::<T>::remaining_block_weight()
 				.limit_to(T::MaximumWeight::get());
 			Self::service_agendas(&mut weight_counter, now, u32::MAX);
 			weight_counter.consumed()
@@ -460,11 +460,11 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Anonymously schedule a task.
-		#[pallet::call_index(0)]
-		#[pallet::weight(<T as Config>::WeightInfo::schedule(T::MaxScheduledPerBlock::get()))]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::schedule(T::MaxScheduledPerBlock::get()))]
 		pub fn schedule(
 			origin: OriginFor<T>,
 			when: BlockNumberFor<T>,
@@ -485,8 +485,8 @@ pub mod pallet {
 		}
 
 		/// Cancel an anonymously scheduled task.
-		#[pallet::call_index(1)]
-		#[pallet::weight(<T as Config>::WeightInfo::cancel(T::MaxScheduledPerBlock::get()))]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::cancel(T::MaxScheduledPerBlock::get()))]
 		pub fn cancel(origin: OriginFor<T>, when: BlockNumberFor<T>, index: u32) -> DispatchResult {
 			T::ScheduleOrigin::ensure_origin(origin.clone())?;
 			let origin = <T as Config>::RuntimeOrigin::from(origin);
@@ -495,8 +495,8 @@ pub mod pallet {
 		}
 
 		/// Schedule a named task.
-		#[pallet::call_index(2)]
-		#[pallet::weight(<T as Config>::WeightInfo::schedule_named(T::MaxScheduledPerBlock::get()))]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::schedule_named(T::MaxScheduledPerBlock::get()))]
 		pub fn schedule_named(
 			origin: OriginFor<T>,
 			id: TaskName,
@@ -519,8 +519,8 @@ pub mod pallet {
 		}
 
 		/// Cancel a named scheduled task.
-		#[pallet::call_index(3)]
-		#[pallet::weight(<T as Config>::WeightInfo::cancel_named(T::MaxScheduledPerBlock::get()))]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::cancel_named(T::MaxScheduledPerBlock::get()))]
 		pub fn cancel_named(origin: OriginFor<T>, id: TaskName) -> DispatchResult {
 			T::ScheduleOrigin::ensure_origin(origin.clone())?;
 			let origin = <T as Config>::RuntimeOrigin::from(origin);
@@ -529,8 +529,8 @@ pub mod pallet {
 		}
 
 		/// Anonymously schedule a task after a delay.
-		#[pallet::call_index(4)]
-		#[pallet::weight(<T as Config>::WeightInfo::schedule(T::MaxScheduledPerBlock::get()))]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::schedule(T::MaxScheduledPerBlock::get()))]
 		pub fn schedule_after(
 			origin: OriginFor<T>,
 			after: BlockNumberFor<T>,
@@ -551,8 +551,8 @@ pub mod pallet {
 		}
 
 		/// Schedule a named task after a delay.
-		#[pallet::call_index(5)]
-		#[pallet::weight(<T as Config>::WeightInfo::schedule_named(T::MaxScheduledPerBlock::get()))]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::schedule_named(T::MaxScheduledPerBlock::get()))]
 		pub fn schedule_named_after(
 			origin: OriginFor<T>,
 			id: TaskName,
@@ -586,8 +586,8 @@ pub mod pallet {
 		/// clones of the original task. Their retry configuration will be derived from the
 		/// original task's configuration, but will have a lower value for `remaining` than the
 		/// original `total_retries`.
-		#[pallet::call_index(6)]
-		#[pallet::weight(<T as Config>::WeightInfo::set_retry())]
+		#[pezpallet::call_index(6)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::set_retry())]
 		pub fn set_retry(
 			origin: OriginFor<T>,
 			task: TaskAddress<BlockNumberFor<T>>,
@@ -623,8 +623,8 @@ pub mod pallet {
 		/// clones of the original task. Their retry configuration will be derived from the
 		/// original task's configuration, but will have a lower value for `remaining` than the
 		/// original `total_retries`.
-		#[pallet::call_index(7)]
-		#[pallet::weight(<T as Config>::WeightInfo::set_retry_named())]
+		#[pezpallet::call_index(7)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::set_retry_named())]
 		pub fn set_retry_named(
 			origin: OriginFor<T>,
 			id: TaskName,
@@ -654,8 +654,8 @@ pub mod pallet {
 		}
 
 		/// Removes the retry configuration of a task.
-		#[pallet::call_index(8)]
-		#[pallet::weight(<T as Config>::WeightInfo::cancel_retry())]
+		#[pezpallet::call_index(8)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::cancel_retry())]
 		pub fn cancel_retry(
 			origin: OriginFor<T>,
 			task: TaskAddress<BlockNumberFor<T>>,
@@ -668,8 +668,8 @@ pub mod pallet {
 		}
 
 		/// Cancel the retry configuration of a named task.
-		#[pallet::call_index(9)]
-		#[pallet::weight(<T as Config>::WeightInfo::cancel_retry_named())]
+		#[pezpallet::call_index(9)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::cancel_retry_named())]
 		pub fn cancel_retry_named(origin: OriginFor<T>, id: TaskName) -> DispatchResult {
 			T::ScheduleOrigin::ensure_origin(origin.clone())?;
 			let origin = <T as Config>::RuntimeOrigin::from(origin);
@@ -681,7 +681,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Migrate storage format from V1 to V4.
 	///
 	/// Returns the weight consumed by this migration.
@@ -928,8 +928,8 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-impl<T: Config> Pallet<T> {
-	/// Helper to migrate scheduler when the pallet origin type has changed.
+impl<T: Config> Pezpallet<T> {
+	/// Helper to migrate scheduler when the pezpallet origin type has changed.
 	pub fn migrate_origin<OldOrigin: Into<T::PalletsOrigin> + codec::Decode>() {
 		Agenda::<T>::translate::<
 			Vec<
@@ -1226,7 +1226,7 @@ enum ServiceTaskError {
 }
 use ServiceTaskError::*;
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Service up to `max` agendas queue starting from earliest incompletely executed agenda.
 	fn service_agendas(weight: &mut WeightMeter, now: BlockNumberFor<T>, max: u32) {
 		if weight.try_consume(T::WeightInfo::service_agendas_base()).is_err() {
@@ -1533,7 +1533,7 @@ impl<T: Config> Pallet<T> {
 
 #[allow(deprecated)]
 impl<T: Config> schedule::v2::Anon<BlockNumberFor<T>, <T as Config>::RuntimeCall, T::PalletsOrigin>
-	for Pallet<T>
+	for Pezpallet<T>
 {
 	type Address = TaskAddress<BlockNumberFor<T>>;
 	type Hash = T::Hash;
@@ -1569,7 +1569,7 @@ impl<T: Config> schedule::v2::Anon<BlockNumberFor<T>, <T as Config>::RuntimeCall
 // TODO: migrate `schedule::v2::Anon` to `v3`
 #[allow(deprecated)]
 impl<T: Config> schedule::v2::Named<BlockNumberFor<T>, <T as Config>::RuntimeCall, T::PalletsOrigin>
-	for Pallet<T>
+	for Pezpallet<T>
 {
 	type Address = TaskAddress<BlockNumberFor<T>>;
 	type Hash = T::Hash;
@@ -1610,7 +1610,7 @@ impl<T: Config> schedule::v2::Named<BlockNumberFor<T>, <T as Config>::RuntimeCal
 }
 
 impl<T: Config> schedule::v3::Anon<BlockNumberFor<T>, <T as Config>::RuntimeCall, T::PalletsOrigin>
-	for Pallet<T>
+	for Pezpallet<T>
 {
 	type Address = TaskAddress<BlockNumberFor<T>>;
 	type Hasher = T::Hashing;
@@ -1649,7 +1649,7 @@ impl<T: Config> schedule::v3::Anon<BlockNumberFor<T>, <T as Config>::RuntimeCall
 use schedule::v3::TaskName;
 
 impl<T: Config> schedule::v3::Named<BlockNumberFor<T>, <T as Config>::RuntimeCall, T::PalletsOrigin>
-	for Pallet<T>
+	for Pezpallet<T>
 {
 	type Address = TaskAddress<BlockNumberFor<T>>;
 	type Hasher = T::Hashing;
@@ -1683,7 +1683,7 @@ impl<T: Config> schedule::v3::Named<BlockNumberFor<T>, <T as Config>::RuntimeCal
 	}
 }
 
-/// Maps a pallet error to an `schedule::v3` error.
+/// Maps a pezpallet error to an `schedule::v3` error.
 fn map_err_to_v3_err<T: Config>(err: DispatchError) -> DispatchError {
 	if err == DispatchError::from(Error::<T>::NotFound) {
 		DispatchError::Unavailable

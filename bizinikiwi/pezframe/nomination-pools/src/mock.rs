@@ -32,7 +32,7 @@ pub type BlockNumber = u64;
 pub type AccountId = u128;
 pub type Balance = u128;
 pub type RewardCounter = FixedU128;
-// This sneaky little hack allows us to write code exactly as we would do in the pallet in the tests
+// This sneaky little hack allows us to write code exactly as we would do in the pezpallet in the tests
 // as well, e.g. `StorageItem::<T>::get()`.
 pub type T = Runtime;
 pub type Currency = <T as Config>::Currency;
@@ -70,7 +70,7 @@ impl StakingMock {
 	}
 	/// Mimics a slash towards a pool specified by `pool_id`.
 	/// This reduces the bonded balance of a pool by `amount` and calls [`Pools::on_slash`] to
-	/// enact changes in the nomination-pool pallet.
+	/// enact changes in the nomination-pool pezpallet.
 	///
 	/// Does not modify any [`SubPools`] of the pool as [`Default::default`] is passed for
 	/// `slashed_unlocking`.
@@ -165,7 +165,7 @@ impl pezsp_staking::StakingInterface for StakingMock {
 
 		staker_map.retain(|(unlocking_at, _amount)| *unlocking_at > current_era);
 
-		// if there was a withdrawal, notify the pallet.
+		// if there was a withdrawal, notify the pezpallet.
 		let withdraw_amount = unlocking_before.saturating_sub(unlocking(&staker_map));
 		Pools::on_withdraw(&who, withdraw_amount);
 		DelegateMock::on_withdraw(who, withdraw_amount);
@@ -578,7 +578,7 @@ impl ExtBuilder {
 
 		ext.execute_with(|| {
 			// for events to be deposited.
-			pezframe_system::Pallet::<Runtime>::set_block_number(1);
+			pezframe_system::Pezpallet::<Runtime>::set_block_number(1);
 
 			// make a pool
 			let amount_to_bond = Pools::depositor_min_bond();
@@ -623,7 +623,7 @@ pub fn run_blocks(n: u64) {
 	System::run_to_block::<AllPalletsWithSystem>(n + current_block);
 }
 
-/// All events of this pallet.
+/// All events of this pezpallet.
 pub fn pool_events_since_last_call() -> Vec<super::Event<Runtime>> {
 	let events = System::events()
 		.into_iter()
@@ -635,7 +635,7 @@ pub fn pool_events_since_last_call() -> Vec<super::Event<Runtime>> {
 	events.into_iter().skip(already_seen as usize).collect()
 }
 
-/// All events of the `Balances` pallet.
+/// All events of the `Balances` pezpallet.
 pub fn balances_events_since_last_call() -> Vec<pezpallet_balances::Event<Runtime>> {
 	let events = System::events()
 		.into_iter()

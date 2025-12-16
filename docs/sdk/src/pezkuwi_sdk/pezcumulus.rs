@@ -81,7 +81,7 @@ mod tests {
 			impl pezcumulus_pezpallet_teyrchain_system::Config for Runtime {
 				type RuntimeEvent = RuntimeEvent;
 				type OnSystemEvent = ();
-				type SelfParaId = teyrchain_info::Pallet<Runtime>;
+				type SelfParaId = teyrchain_info::Pezpallet<Runtime>;
 				type OutboundXcmpMessageSource = ();
 				type XcmpMessageHandler = ();
 				type ReservedDmpWeight = ();

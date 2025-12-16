@@ -20,7 +20,7 @@ use pezframe_support::construct_runtime;
 construct_runtime! {
 	pub struct Runtime
 	{
-		System: system expanded::{}::{Pallet},
+		System: system expanded::{}::{Pezpallet},
 		Balance: balances::<Instance1> expanded::{}::{Origin},
 	}
 }

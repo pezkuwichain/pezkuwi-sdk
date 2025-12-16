@@ -30,7 +30,7 @@ use pezframe_support::{
 
 use super::*;
 
-impl<T: Config<I>, I: 'static> fungibles::Inspect<<T as SystemConfig>::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> fungibles::Inspect<<T as SystemConfig>::AccountId> for Pezpallet<T, I> {
 	type AssetId = T::AssetId;
 	type Balance = T::Balance;
 
@@ -43,11 +43,11 @@ impl<T: Config<I>, I: 'static> fungibles::Inspect<<T as SystemConfig>::AccountId
 	}
 
 	fn balance(asset: Self::AssetId, who: &<T as SystemConfig>::AccountId) -> Self::Balance {
-		Pallet::<T, I>::balance(asset, who)
+		Pezpallet::<T, I>::balance(asset, who)
 	}
 
 	fn total_balance(asset: Self::AssetId, who: &<T as SystemConfig>::AccountId) -> Self::Balance {
-		Pallet::<T, I>::balance(asset.clone(), who)
+		Pezpallet::<T, I>::balance(asset.clone(), who)
 			.saturating_add(T::Holder::balance_on_hold(asset, who).unwrap_or_default())
 	}
 
@@ -57,7 +57,7 @@ impl<T: Config<I>, I: 'static> fungibles::Inspect<<T as SystemConfig>::AccountId
 		preservation: Preservation,
 		_: Fortitude,
 	) -> Self::Balance {
-		Pallet::<T, I>::reducible_balance(asset, who, !matches!(preservation, Expendable))
+		Pezpallet::<T, I>::reducible_balance(asset, who, !matches!(preservation, Expendable))
 			.unwrap_or(Zero::zero())
 	}
 
@@ -67,7 +67,7 @@ impl<T: Config<I>, I: 'static> fungibles::Inspect<<T as SystemConfig>::AccountId
 		amount: Self::Balance,
 		provenance: Provenance,
 	) -> DepositConsequence {
-		Pallet::<T, I>::can_increase(asset, who, amount, provenance == Minted)
+		Pezpallet::<T, I>::can_increase(asset, who, amount, provenance == Minted)
 	}
 
 	fn can_withdraw(
@@ -75,7 +75,7 @@ impl<T: Config<I>, I: 'static> fungibles::Inspect<<T as SystemConfig>::AccountId
 		who: &<T as SystemConfig>::AccountId,
 		amount: Self::Balance,
 	) -> WithdrawConsequence<Self::Balance> {
-		Pallet::<T, I>::can_decrease(asset, who, amount, false)
+		Pezpallet::<T, I>::can_decrease(asset, who, amount, false)
 	}
 
 	fn asset_exists(asset: Self::AssetId) -> bool {
@@ -83,7 +83,7 @@ impl<T: Config<I>, I: 'static> fungibles::Inspect<<T as SystemConfig>::AccountId
 	}
 }
 
-impl<T: Config<I>, I: 'static> fungibles::Mutate<<T as SystemConfig>::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> fungibles::Mutate<<T as SystemConfig>::AccountId> for Pezpallet<T, I> {
 	fn done_mint_into(
 		asset_id: Self::AssetId,
 		beneficiary: &<T as SystemConfig>::AccountId,
@@ -116,7 +116,7 @@ impl<T: Config<I>, I: 'static> fungibles::Mutate<<T as SystemConfig>::AccountId>
 }
 
 impl<T: Config<I>, I: 'static> fungibles::Balanced<<T as SystemConfig>::AccountId>
-	for Pallet<T, I>
+	for Pezpallet<T, I>
 {
 	type OnDropCredit = fungibles::DecreaseIssuance<T::AccountId, Self>;
 	type OnDropDebt = fungibles::IncreaseIssuance<T::AccountId, Self>;
@@ -138,7 +138,7 @@ impl<T: Config<I>, I: 'static> fungibles::Balanced<<T as SystemConfig>::AccountI
 	}
 }
 
-impl<T: Config<I>, I: 'static> fungibles::Unbalanced<T::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> fungibles::Unbalanced<T::AccountId> for Pezpallet<T, I> {
 	fn handle_raw_dust(_: Self::AssetId, _: Self::Balance) {}
 	fn handle_dust(_: fungibles::Dust<T::AccountId, Self>) {
 		defensive!("`decrease_balance` and `increase_balance` have non-default impls; nothing else calls this; qed");
@@ -185,7 +185,7 @@ impl<T: Config<I>, I: 'static> fungibles::Unbalanced<T::AccountId> for Pallet<T,
 	// TODO: #13196 implement deactivate/reactivate once we have inactive balance tracking.
 }
 
-impl<T: Config<I>, I: 'static> fungibles::Create<T::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> fungibles::Create<T::AccountId> for Pezpallet<T, I> {
 	fn create(
 		id: T::AssetId,
 		admin: T::AccountId,
@@ -196,7 +196,7 @@ impl<T: Config<I>, I: 'static> fungibles::Create<T::AccountId> for Pallet<T, I> 
 	}
 }
 
-impl<T: Config<I>, I: 'static> fungibles::Destroy<T::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> fungibles::Destroy<T::AccountId> for Pezpallet<T, I> {
 	fn start_destroy(id: T::AssetId, maybe_check_owner: Option<T::AccountId>) -> DispatchResult {
 		Self::do_start_destroy(id, maybe_check_owner)
 	}
@@ -215,7 +215,7 @@ impl<T: Config<I>, I: 'static> fungibles::Destroy<T::AccountId> for Pallet<T, I>
 }
 
 impl<T: Config<I>, I: 'static> fungibles::metadata::Inspect<<T as SystemConfig>::AccountId>
-	for Pallet<T, I>
+	for Pezpallet<T, I>
 {
 	fn name(asset: T::AssetId) -> Vec<u8> {
 		Metadata::<T, I>::get(asset).name.to_vec()
@@ -231,7 +231,7 @@ impl<T: Config<I>, I: 'static> fungibles::metadata::Inspect<<T as SystemConfig>:
 }
 
 impl<T: Config<I>, I: 'static> fungibles::metadata::Mutate<<T as SystemConfig>::AccountId>
-	for Pallet<T, I>
+	for Pezpallet<T, I>
 {
 	fn set(
 		asset: T::AssetId,
@@ -247,7 +247,7 @@ impl<T: Config<I>, I: 'static> fungibles::metadata::Mutate<<T as SystemConfig>::
 impl<T: Config<I>, I: 'static>
 	fungibles::metadata::MetadataDeposit<
 		<T::Currency as Currency<<T as SystemConfig>::AccountId>>::Balance,
-	> for Pallet<T, I>
+	> for Pezpallet<T, I>
 {
 	fn calc_metadata_deposit(
 		name: &[u8],
@@ -258,7 +258,7 @@ impl<T: Config<I>, I: 'static>
 }
 
 impl<T: Config<I>, I: 'static> fungibles::approvals::Inspect<<T as SystemConfig>::AccountId>
-	for Pallet<T, I>
+	for Pezpallet<T, I>
 {
 	// Check the amount approved to be spent by an owner to a delegate
 	fn allowance(
@@ -273,7 +273,7 @@ impl<T: Config<I>, I: 'static> fungibles::approvals::Inspect<<T as SystemConfig>
 }
 
 impl<T: Config<I>, I: 'static> fungibles::approvals::Mutate<<T as SystemConfig>::AccountId>
-	for Pallet<T, I>
+	for Pezpallet<T, I>
 {
 	// Approve spending tokens from a given account
 	fn approve(
@@ -297,7 +297,7 @@ impl<T: Config<I>, I: 'static> fungibles::approvals::Mutate<<T as SystemConfig>:
 }
 
 impl<T: Config<I>, I: 'static> fungibles::roles::Inspect<<T as SystemConfig>::AccountId>
-	for Pallet<T, I>
+	for Pezpallet<T, I>
 {
 	fn owner(asset: T::AssetId) -> Option<<T as SystemConfig>::AccountId> {
 		Asset::<T, I>::get(asset).map(|x| x.owner)
@@ -316,7 +316,7 @@ impl<T: Config<I>, I: 'static> fungibles::roles::Inspect<<T as SystemConfig>::Ac
 	}
 }
 
-impl<T: Config<I>, I: 'static> fungibles::InspectEnumerable<T::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> fungibles::InspectEnumerable<T::AccountId> for Pezpallet<T, I> {
 	type AssetsIterator = KeyPrefixIterator<<T as Config<I>>::AssetId>;
 
 	/// Returns an iterator of the assets in existence.
@@ -327,7 +327,7 @@ impl<T: Config<I>, I: 'static> fungibles::InspectEnumerable<T::AccountId> for Pa
 	}
 }
 
-impl<T: Config<I>, I: 'static> fungibles::roles::ResetTeam<T::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> fungibles::roles::ResetTeam<T::AccountId> for Pezpallet<T, I> {
 	fn reset_team(
 		id: T::AssetId,
 		owner: T::AccountId,
@@ -339,7 +339,7 @@ impl<T: Config<I>, I: 'static> fungibles::roles::ResetTeam<T::AccountId> for Pal
 	}
 }
 
-impl<T: Config<I>, I: 'static> fungibles::Refund<T::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> fungibles::Refund<T::AccountId> for Pezpallet<T, I> {
 	type AssetId = T::AssetId;
 	type Balance = DepositBalanceOf<T, I>;
 	fn deposit_held(id: Self::AssetId, who: T::AccountId) -> Option<(T::AccountId, Self::Balance)> {

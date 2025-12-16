@@ -17,7 +17,7 @@
 
 //! The client for AssetHub, intended to be used in the relay chain.
 //!
-//! The counter-part for this pallet is `pezpallet-staking-async-rc-client` on AssetHub.
+//! The counter-part for this pezpallet is `pezpallet-staking-async-rc-client` on AssetHub.
 //!
 //! This documentation is divided into the following sections:
 //!
@@ -36,15 +36,15 @@
 //!
 //! All outgoing messages are handled by a single trait
 //! [`pezpallet_staking_async_rc_client::SendToAssetHub`]. They match the incoming messages of the
-//! `rc-client` pallet.
+//! `rc-client` pezpallet.
 //!
 //! ## Local Interfaces:
 //!
-//! Living on the relay chain, this pallet must:
+//! Living on the relay chain, this pezpallet must:
 //!
 //! * Implement [`pezpallet_session::SessionManager`] (and historical variant thereof) to _give_
-//!   information to the session pallet.
-//! * Implements [`SessionInterface`] to _receive_ information from the session pallet
+//!   information to the session pezpallet.
+//! * Implements [`SessionInterface`] to _receive_ information from the session pezpallet
 //! * Implement [`pezsp_staking::offence::OnOffenceHandler`].
 //! * Implement reward related APIs ([`pezframe_support::traits::RewardsReporter`]).
 //!
@@ -54,7 +54,7 @@
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 #[cfg(test)]
 pub mod mock;
@@ -73,7 +73,7 @@ use pezsp_staking::{
 	SessionIndex,
 };
 
-/// The balance type seen from this pallet's PoV.
+/// The balance type seen from this pezpallet's PoV.
 pub type BalanceOf<T> = <T as Config>::CurrencyBalance;
 
 /// Type alias for offence details
@@ -93,14 +93,14 @@ macro_rules! log {
 	($level:tt, $patter:expr $(, $values:expr)* $(,)?) => {
 		log::$level!(
 			target: $crate::LOG_TARGET,
-			concat!("[{:?}] ⬇️ ", $patter), <pezframe_system::Pallet<T>>::block_number() $(, $values)*
+			concat!("[{:?}] ⬇️ ", $patter), <pezframe_system::Pezpallet<T>>::block_number() $(, $values)*
 		)
 	};
 }
 
-/// Interface to talk to the local session pallet.
+/// Interface to talk to the local session pezpallet.
 pub trait SessionInterface {
-	/// The validator id type of the session pallet
+	/// The validator id type of the session pezpallet
 	type ValidatorId: Clone;
 
 	fn validators() -> Vec<Self::ValidatorId>;
@@ -120,18 +120,18 @@ impl<T: Config + pezpallet_session::Config + pezpallet_session::historical::Conf
 	type ValidatorId = <T as pezpallet_session::Config>::ValidatorId;
 
 	fn validators() -> Vec<Self::ValidatorId> {
-		pezpallet_session::Pallet::<T>::validators()
+		pezpallet_session::Pezpallet::<T>::validators()
 	}
 
 	fn prune_up_to(index: SessionIndex) {
-		pezpallet_session::historical::Pallet::<T>::prune_up_to(index)
+		pezpallet_session::historical::Pezpallet::<T>::prune_up_to(index)
 	}
 	fn report_offence(offender: Self::ValidatorId, severity: OffenceSeverity) {
-		pezpallet_session::Pallet::<T>::report_offence(offender, severity)
+		pezpallet_session::Pezpallet::<T>::report_offence(offender, severity)
 	}
 }
 
-/// Represents the operating mode of the pallet.
+/// Represents the operating mode of the pezpallet.
 #[derive(
 	Default,
 	DecodeWithMemTracking,
@@ -149,8 +149,8 @@ impl<T: Config + pezpallet_session::Config + pezpallet_session::historical::Conf
 pub enum OperatingMode {
 	/// Fully delegated mode.
 	///
-	/// In this mode, the pallet performs no core logic and forwards all relevant operations
-	/// to the fallback implementation defined in the pallet's `Config::Fallback`.
+	/// In this mode, the pezpallet performs no core logic and forwards all relevant operations
+	/// to the fallback implementation defined in the pezpallet's `Config::Fallback`.
 	///
 	/// This mode is useful when staking is in synchronous mode and waiting for the signal to
 	/// transition to asynchronous mode.
@@ -162,16 +162,16 @@ pub enum OperatingMode {
 	/// In this mode, offences are accepted and buffered for later transmission to AssetHub.
 	/// However, session change reports are dropped.
 	///
-	/// This mode is useful when the counterpart pallet `pezpallet-staking-async-rc-client` on
+	/// This mode is useful when the counterpart pezpallet `pezpallet-staking-async-rc-client` on
 	/// AssetHub is not yet ready to process incoming messages.
 	Buffered,
 
 	/// Fully active mode.
 	///
-	/// The pallet performs all core logic directly and handles messages immediately.
+	/// The pezpallet performs all core logic directly and handles messages immediately.
 	///
 	/// This mode is useful when staking is ready to execute in asynchronous mode and the
-	/// counterpart pallet `pezpallet-staking-async-rc-client` is ready to accept messages.
+	/// counterpart pezpallet `pezpallet-staking-async-rc-client` is ready to accept messages.
 	Active,
 }
 
@@ -200,8 +200,8 @@ impl<T: Config>
 	}
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use crate::*;
 	use alloc::vec;
 	use pezframe_support::traits::{Hooks, UnixTime};
@@ -216,7 +216,7 @@ pub mod pallet {
 
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(1);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// The balance type of the runtime's currency interface.
 		type CurrencyBalance: pezsp_runtime::traits::AtLeast32BitUnsigned
@@ -236,7 +236,7 @@ pub mod pallet {
 		/// An origin type that ensures an incoming message is from asset hub.
 		type AssetHubOrigin: EnsureOrigin<Self::RuntimeOrigin>;
 
-		/// The origin that can control this pallet's operations.
+		/// The origin that can control this pezpallet's operations.
 		type AdminOrigin: EnsureOrigin<Self::RuntimeOrigin>;
 
 		/// Our communication interface to AssetHub.
@@ -274,14 +274,14 @@ pub mod pallet {
 		/// (74 bytes).
 		type MaxOffenceBatchSize: Get<u32>;
 
-		/// Interface to talk to the local Session pallet.
+		/// Interface to talk to the local Session pezpallet.
 		type SessionInterface: SessionInterface<ValidatorId = Self::AccountId>;
 
-		/// A fallback implementation to delegate logic to when the pallet is in
+		/// A fallback implementation to delegate logic to when the pezpallet is in
 		/// [`OperatingMode::Passive`].
 		///
 		/// This type must implement the `historical::SessionManager` and `OnOffenceHandler`
-		/// interface and is expected to behave as a stand-in for this pallet’s core logic when
+		/// interface and is expected to behave as a stand-in for this pezpallet’s core logic when
 		/// delegation is active.
 		type Fallback: pezpallet_session::SessionManager<Self::AccountId>
 			+ OnOffenceHandler<
@@ -296,20 +296,20 @@ pub mod pallet {
 		type MaxSessionReportRetries: Get<u32>;
 	}
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T>(_);
 
 	/// The queued validator sets for a given planning session index.
 	///
 	/// This is received via a call from AssetHub.
-	#[pallet::storage]
-	#[pallet::unbounded]
+	#[pezpallet::storage]
+	#[pezpallet::unbounded]
 	pub type ValidatorSet<T: Config> = StorageValue<_, (u32, Vec<T::AccountId>), OptionQuery>;
 
 	/// An incomplete validator set report.
-	#[pallet::storage]
-	#[pallet::unbounded]
+	#[pezpallet::storage]
+	#[pezpallet::unbounded]
 	pub type IncompleteValidatorSetReport<T: Config> =
 		StorageValue<_, rc_client::ValidatorSetReport<T::AccountId>, OptionQuery>;
 
@@ -317,41 +317,41 @@ pub mod pallet {
 	///
 	/// This is populated during a session, and is flushed and sent over via [`SendToAssetHub`]
 	/// at each session end.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ValidatorPoints<T: Config> =
 		StorageMap<_, Twox64Concat, T::AccountId, u32, ValueQuery>;
 
-	/// Indicates the current operating mode of the pallet.
+	/// Indicates the current operating mode of the pezpallet.
 	///
-	/// This value determines how the pallet behaves in response to incoming and outgoing messages,
+	/// This value determines how the pezpallet behaves in response to incoming and outgoing messages,
 	/// particularly whether it should execute logic directly, defer it, or delegate it entirely.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Mode<T: Config> = StorageValue<_, OperatingMode, ValueQuery>;
 
 	/// A storage value that is set when a `new_session` gives a new validator set to the session
-	/// pallet, and is cleared on the next call.
+	/// pezpallet, and is cleared on the next call.
 	///
 	/// The inner u32 is the id of the said activated validator set. While not relevant here, good
 	/// to know this is the planning era index of staking-async on AH.
 	///
 	/// Once cleared, we know a validator set has been activated, and therefore we can send a
 	/// timestamp to AH.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type NextSessionChangesValidators<T: Config> = StorageValue<_, u32, OptionQuery>;
 
 	/// The session index at which the latest elected validator set was applied.
 	///
 	/// This is used to determine if an offence, given a session index, is in the current active era
 	/// or not.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ValidatorSetAppliedAt<T: Config> = StorageValue<_, SessionIndex, OptionQuery>;
 
 	/// A session report that is outgoing, and should be sent.
 	///
 	/// This will be attempted to be sent, possibly on every `on_initialize` call, until it is sent,
 	/// or the second value reaches zero, at which point we drop it.
-	#[pallet::storage]
-	#[pallet::unbounded]
+	#[pezpallet::storage]
+	#[pezpallet::unbounded]
 	pub type OutgoingSessionReport<T: Config> =
 		StorageValue<_, (SessionReport<T::AccountId>, u32), OptionQuery>;
 
@@ -435,38 +435,38 @@ pub mod pallet {
 	}
 
 	/// Internal storage item of [`OffenceSendQueue`]. Should not be used manually.
-	#[pallet::storage]
-	#[pallet::unbounded]
+	#[pezpallet::storage]
+	#[pezpallet::unbounded]
 	pub(crate) type OffenceSendQueueOffences<T: Config> =
 		StorageMap<_, Twox64Concat, u32, QueuedOffencePageOf<T>, ValueQuery>;
 	/// Internal storage item of [`OffenceSendQueue`]. Should not be used manually.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type OffenceSendQueueCursor<T: Config> = StorageValue<_, u32, ValueQuery>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(pezframe_support::DefaultNoBound, pezframe_support::DebugNoBound)]
 	pub struct GenesisConfig<T: Config> {
-		/// The initial operating mode of the pallet.
+		/// The initial operating mode of the pezpallet.
 		pub operating_mode: OperatingMode,
 		pub _marker: core::marker::PhantomData<T>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
-			// Set the initial operating mode of the pallet.
+			// Set the initial operating mode of the pezpallet.
 			Mode::<T>::put(self.operating_mode.clone());
 		}
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Could not process incoming message because incoming messages are blocked.
 		Blocked,
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A new validator set has been received.
 		ValidatorSetReceived {
@@ -478,7 +478,7 @@ pub mod pallet {
 		/// We could not merge, and therefore dropped a buffered message.
 		///
 		/// Note that this event is more resembling an error, but we use an event because in this
-		/// pallet we need to mutate storage upon some failures.
+		/// pezpallet we need to mutate storage upon some failures.
 		CouldNotMergeAndDropped,
 		/// The validator set received is way too small, as per
 		/// [`Config::MinimumValidatorSetSize`].
@@ -495,7 +495,7 @@ pub mod pallet {
 	/// diagnosing issues in production or test environments.
 	#[derive(Clone, Encode, Decode, DecodeWithMemTracking, PartialEq, TypeInfo, RuntimeDebug)]
 	pub enum UnexpectedKind {
-		/// A validator set was received while the pallet is in [`OperatingMode::Passive`].
+		/// A validator set was received while the pezpallet is in [`OperatingMode::Passive`].
 		ReceivedValidatorSetWhilePassive,
 
 		/// An unexpected transition was applied between operating modes.
@@ -528,10 +528,10 @@ pub mod pallet {
 		ValidatorPointDropped,
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
-		#[pallet::call_index(0)]
-		#[pallet::weight(
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(
 			// Reads:
 			// - OperatingMode
 			// - IncompleteValidatorSetReport
@@ -616,18 +616,18 @@ pub mod pallet {
 			Ok(())
 		}
 
-		/// Allows governance to force set the operating mode of the pallet.
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::DbWeight::get().writes(1))]
+		/// Allows governance to force set the operating mode of the pezpallet.
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::DbWeight::get().writes(1))]
 		pub fn set_mode(origin: OriginFor<T>, mode: OperatingMode) -> DispatchResult {
 			T::AdminOrigin::ensure_origin(origin)?;
 			Self::do_set_mode(mode);
 			Ok(())
 		}
 
-		/// manually do what this pallet was meant to do at the end of the migration.
-		#[pallet::call_index(2)]
-		#[pallet::weight(T::DbWeight::get().writes(1))]
+		/// manually do what this pezpallet was meant to do at the end of the migration.
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(T::DbWeight::get().writes(1))]
 		pub fn force_on_migration_end(origin: OriginFor<T>) -> DispatchResult {
 			T::AdminOrigin::ensure_origin(origin)?;
 			Self::on_migration_end();
@@ -635,8 +635,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn on_initialize(_n: BlockNumberFor<T>) -> Weight {
 			let mut weight = Weight::zero();
 
@@ -699,7 +699,7 @@ pub mod pallet {
 
 	impl<T: Config>
 		historical::SessionManager<T::AccountId, pezsp_staking::Exposure<T::AccountId, BalanceOf<T>>>
-		for Pallet<T>
+		for Pezpallet<T>
 	{
 		fn new_session(
 			new_index: pezsp_staking::SessionIndex,
@@ -734,7 +734,7 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config> pezpallet_session::SessionManager<T::AccountId> for Pallet<T> {
+	impl<T: Config> pezpallet_session::SessionManager<T::AccountId> for Pezpallet<T> {
 		fn new_session(session_index: u32) -> Option<Vec<T::AccountId>> {
 			match Mode::<T>::get() {
 				OperatingMode::Passive => T::Fallback::new_session(session_index),
@@ -773,7 +773,7 @@ pub mod pallet {
 			T::AccountId,
 			(T::AccountId, pezsp_staking::Exposure<T::AccountId, BalanceOf<T>>),
 			Weight,
-		> for Pallet<T>
+		> for Pezpallet<T>
 	{
 		fn on_offence(
 			offenders: &[OffenceDetails<
@@ -796,7 +796,7 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config> RewardsReporter<T::AccountId> for Pallet<T> {
+	impl<T: Config> RewardsReporter<T::AccountId> for Pezpallet<T> {
 		fn reward_by_ids(rewards: impl IntoIterator<Item = (T::AccountId, u32)>) {
 			match Mode::<T>::get() {
 				OperatingMode::Passive => T::Fallback::reward_by_ids(rewards),
@@ -805,7 +805,7 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config> pezpallet_authorship::EventHandler<T::AccountId, BlockNumberFor<T>> for Pallet<T> {
+	impl<T: Config> pezpallet_authorship::EventHandler<T::AccountId, BlockNumberFor<T>> for Pezpallet<T> {
 		fn note_author(author: T::AccountId) {
 			match Mode::<T>::get() {
 				OperatingMode::Passive => T::Fallback::note_author(author),
@@ -814,14 +814,14 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config> Pallet<T> {
+	impl<T: Config> Pezpallet<T> {
 		/// Hook to be called when the AssetHub migration begins.
 		///
-		/// This transitions the pallet into [`OperatingMode::Buffered`], meaning it will act as the
+		/// This transitions the pezpallet into [`OperatingMode::Buffered`], meaning it will act as the
 		/// primary staking module on the relay chain but will buffer outgoing messages instead of
 		/// sending them to AssetHub.
 		///
-		/// While in this mode, the pallet stops delegating to the fallback implementation and
+		/// While in this mode, the pezpallet stops delegating to the fallback implementation and
 		/// temporarily accumulates events for later processing.
 		pub fn on_migration_start() {
 			debug_assert!(
@@ -833,11 +833,11 @@ pub mod pallet {
 
 		/// Hook to be called when the AssetHub migration is complete.
 		///
-		/// This transitions the pallet into [`OperatingMode::Active`], meaning the counterpart
-		/// pallet on AssetHub is ready to accept incoming messages, and this pallet can resume
+		/// This transitions the pezpallet into [`OperatingMode::Active`], meaning the counterpart
+		/// pezpallet on AssetHub is ready to accept incoming messages, and this pezpallet can resume
 		/// sending them.
 		///
-		/// In this mode, the pallet becomes fully active and processes all staking-related events
+		/// In this mode, the pezpallet becomes fully active and processes all staking-related events
 		/// directly.
 		pub fn on_migration_end() {
 			debug_assert!(
@@ -939,7 +939,7 @@ pub mod pallet {
 
 			offenders.iter().cloned().zip(slash_fraction).for_each(|(offence, fraction)| {
 				if ongoing_offence {
-					// report the offence to the session pallet.
+					// report the offence to the session pezpallet.
 					T::SessionInterface::report_offence(
 						offence.offender.0.clone(),
 						OffenceSeverity(*fraction),
@@ -973,7 +973,7 @@ pub mod pallet {
 
 			offenders.iter().cloned().zip(slash_fraction).for_each(|(offence, fraction)| {
 				if ongoing_offence {
-					// report the offence to the session pallet.
+					// report the offence to the session pezpallet.
 					T::SessionInterface::report_offence(
 						offence.offender.0.clone(),
 						OffenceSeverity(*fraction),

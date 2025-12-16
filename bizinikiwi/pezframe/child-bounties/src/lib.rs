@@ -15,11 +15,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Child Bounties Pallet ( `pezpallet-child-bounties` )
+//! # Child Bounties Pezpallet ( `pezpallet-child-bounties` )
 //!
 //! ## Child Bounty
 //!
-//! > NOTE: This pallet is tightly coupled with `pezpallet-treasury` and `pezpallet-bounties`.
+//! > NOTE: This pezpallet is tightly coupled with `pezpallet-treasury` and `pezpallet-bounties`.
 //!
 //! With child bounties, a large bounty proposal can be divided into smaller chunks,
 //! for parallel execution, and for efficient governance and tracking of spent funds.
@@ -44,11 +44,11 @@
 //! - `close_child_bounty` - Cancel the child bounty for a specific treasury amount and close the
 //!   bounty.
 
-// Most of the business logic in this pallet has been
+// Most of the business logic in this pezpallet has been
 // originally contributed by "https://github.com/shamb0",
 // as part of the PR - https://github.com/pezkuwichain/kurdistan-sdk/issues/74.
 // The code has been moved here and then refactored in order to
-// extract child bounties as a separate pallet.
+// extract child bounties as a separate pezpallet.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
@@ -59,7 +59,7 @@ pub mod weights;
 
 extern crate alloc;
 
-/// The log target for this pallet.
+/// The log target for this pezpallet.
 const LOG_TARGET: &str = "runtime::child-bounties";
 
 use alloc::vec::Vec;
@@ -86,7 +86,7 @@ use pezpallet_bounties::BountyStatus;
 use scale_info::TypeInfo;
 pub use weights::WeightInfo;
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 pub type BalanceOf<T> = pezpallet_treasury::BalanceOf<T>;
 pub type BountiesError<T> = pezpallet_bounties::Error<T>;
@@ -137,39 +137,39 @@ pub enum ChildBountyStatus<AccountId, BlockNumber> {
 	},
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 
 	use super::*;
 
 	/// The in-code storage version.
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(1);
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config:
 		pezframe_system::Config + pezpallet_treasury::Config + pezpallet_bounties::Config
 	{
 		/// Maximum number of child bounties that can be added to a parent bounty.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxActiveChildBountyCount: Get<u32>;
 
 		/// Minimum value for a child-bounty.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type ChildBountyValueMinimum: Get<BalanceOf<Self>>;
 
 		/// The overarching event type.
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// The parent bounty is not in active state.
 		ParentBountyNotActive,
@@ -179,8 +179,8 @@ pub mod pallet {
 		TooManyChildBounties,
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A child-bounty is added.
 		Added { index: BountyIndex, child_index: BountyIndex },
@@ -199,22 +199,22 @@ pub mod pallet {
 
 	/// DEPRECATED: Replaced with `ParentTotalChildBounties` storage item keeping dedicated counts
 	/// for each parent bounty. Number of total child bounties. Will be removed in May 2025.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ChildBountyCount<T: Config> = StorageValue<_, BountyIndex, ValueQuery>;
 
 	/// Number of active child bounties per parent bounty.
 	/// Map of parent bounty index to number of child bounties.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ParentChildBounties<T: Config> =
 		StorageMap<_, Twox64Concat, BountyIndex, u32, ValueQuery>;
 
 	/// Number of total child bounties per parent bounty, including completed bounties.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ParentTotalChildBounties<T: Config> =
 		StorageMap<_, Twox64Concat, BountyIndex, u32, ValueQuery>;
 
 	/// Child bounties that have been added.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ChildBounties<T: Config> = StorageDoubleMap<
 		_,
 		Twox64Concat,
@@ -227,7 +227,7 @@ pub mod pallet {
 	/// The description of each child-bounty. Indexed by `(parent_id, child_id)`.
 	///
 	/// This item replaces the `ChildBountyDescriptions` storage item from the V0 storage version.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ChildBountyDescriptionsV1<T: Config> = StorageDoubleMap<
 		_,
 		Twox64Concat,
@@ -241,18 +241,18 @@ pub mod pallet {
 	///
 	/// The `V0` ids based on total child bounty count [`ChildBountyCount`]`. The `V1` version ids
 	/// based on the child bounty count per parent bounty [`ParentTotalChildBounties`].
-	/// The item intended solely for client convenience and not used in the pallet's core logic.
-	#[pallet::storage]
+	/// The item intended solely for client convenience and not used in the pezpallet's core logic.
+	#[pezpallet::storage]
 	pub type V0ToV1ChildBountyIds<T: Config> =
 		StorageMap<_, Twox64Concat, BountyIndex, (BountyIndex, BountyIndex)>;
 
 	/// The cumulative child-bounty curator fee for each parent bounty.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ChildrenCuratorFees<T: Config> =
 		StorageMap<_, Twox64Concat, BountyIndex, BalanceOf<T>, ValueQuery>;
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Add a new child-bounty.
 		///
 		/// The dispatch origin for this call must be the curator of parent
@@ -272,12 +272,12 @@ pub mod pallet {
 		/// - `parent_bounty_id`: Index of parent bounty for which child-bounty is being added.
 		/// - `value`: Value for executing the proposal.
 		/// - `description`: Text description for the child-bounty.
-		#[pallet::call_index(0)]
-		#[pallet::weight(<T as Config>::WeightInfo::add_child_bounty(description.len() as u32))]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::add_child_bounty(description.len() as u32))]
 		pub fn add_child_bounty(
 			origin: OriginFor<T>,
-			#[pallet::compact] parent_bounty_id: BountyIndex,
-			#[pallet::compact] value: BalanceOf<T>,
+			#[pezpallet::compact] parent_bounty_id: BountyIndex,
+			#[pezpallet::compact] value: BalanceOf<T>,
 			description: Vec<u8>,
 		) -> DispatchResult {
 			let signer = ensure_signed(origin)?;
@@ -297,7 +297,7 @@ pub mod pallet {
 
 			// Read parent bounty account info.
 			let parent_bounty_account =
-				pezpallet_bounties::Pallet::<T>::bounty_account_id(parent_bounty_id);
+				pezpallet_bounties::Pezpallet::<T>::bounty_account_id(parent_bounty_id);
 
 			// Ensure parent bounty has enough balance after adding child-bounty.
 			let bounty_balance = T::Currency::free_balance(&parent_bounty_account);
@@ -351,14 +351,14 @@ pub mod pallet {
 		/// - `child_bounty_id`: Index of child bounty.
 		/// - `curator`: Address of child-bounty curator.
 		/// - `fee`: payment fee to child-bounty curator for execution.
-		#[pallet::call_index(1)]
-		#[pallet::weight(<T as Config>::WeightInfo::propose_curator())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::propose_curator())]
 		pub fn propose_curator(
 			origin: OriginFor<T>,
-			#[pallet::compact] parent_bounty_id: BountyIndex,
-			#[pallet::compact] child_bounty_id: BountyIndex,
+			#[pezpallet::compact] parent_bounty_id: BountyIndex,
+			#[pezpallet::compact] child_bounty_id: BountyIndex,
 			curator: AccountIdLookupOf<T>,
-			#[pallet::compact] fee: BalanceOf<T>,
+			#[pezpallet::compact] fee: BalanceOf<T>,
 		) -> DispatchResult {
 			let signer = ensure_signed(origin)?;
 			let child_bounty_curator = T::Lookup::lookup(curator)?;
@@ -421,12 +421,12 @@ pub mod pallet {
 		///
 		/// - `parent_bounty_id`: Index of parent bounty.
 		/// - `child_bounty_id`: Index of child bounty.
-		#[pallet::call_index(2)]
-		#[pallet::weight(<T as Config>::WeightInfo::accept_curator())]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::accept_curator())]
 		pub fn accept_curator(
 			origin: OriginFor<T>,
-			#[pallet::compact] parent_bounty_id: BountyIndex,
-			#[pallet::compact] child_bounty_id: BountyIndex,
+			#[pezpallet::compact] parent_bounty_id: BountyIndex,
+			#[pezpallet::compact] child_bounty_id: BountyIndex,
 		) -> DispatchResult {
 			let signer = ensure_signed(origin)?;
 
@@ -498,12 +498,12 @@ pub mod pallet {
 		///
 		/// - `parent_bounty_id`: Index of parent bounty.
 		/// - `child_bounty_id`: Index of child bounty.
-		#[pallet::call_index(3)]
-		#[pallet::weight(<T as Config>::WeightInfo::unassign_curator())]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::unassign_curator())]
 		pub fn unassign_curator(
 			origin: OriginFor<T>,
-			#[pallet::compact] parent_bounty_id: BountyIndex,
-			#[pallet::compact] child_bounty_id: BountyIndex,
+			#[pezpallet::compact] parent_bounty_id: BountyIndex,
+			#[pezpallet::compact] child_bounty_id: BountyIndex,
 		) -> DispatchResult {
 			let maybe_sender = ensure_signed(origin.clone())
 				.map(Some)
@@ -614,12 +614,12 @@ pub mod pallet {
 		/// - `parent_bounty_id`: Index of parent bounty.
 		/// - `child_bounty_id`: Index of child bounty.
 		/// - `beneficiary`: Beneficiary account.
-		#[pallet::call_index(4)]
-		#[pallet::weight(<T as Config>::WeightInfo::award_child_bounty())]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::award_child_bounty())]
 		pub fn award_child_bounty(
 			origin: OriginFor<T>,
-			#[pallet::compact] parent_bounty_id: BountyIndex,
-			#[pallet::compact] child_bounty_id: BountyIndex,
+			#[pezpallet::compact] parent_bounty_id: BountyIndex,
+			#[pezpallet::compact] child_bounty_id: BountyIndex,
 			beneficiary: AccountIdLookupOf<T>,
 		) -> DispatchResult {
 			let signer = ensure_signed(origin)?;
@@ -681,12 +681,12 @@ pub mod pallet {
 		///
 		/// - `parent_bounty_id`: Index of parent bounty.
 		/// - `child_bounty_id`: Index of child bounty.
-		#[pallet::call_index(5)]
-		#[pallet::weight(<T as Config>::WeightInfo::claim_child_bounty())]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::claim_child_bounty())]
 		pub fn claim_child_bounty(
 			origin: OriginFor<T>,
-			#[pallet::compact] parent_bounty_id: BountyIndex,
-			#[pallet::compact] child_bounty_id: BountyIndex,
+			#[pezpallet::compact] parent_bounty_id: BountyIndex,
+			#[pezpallet::compact] child_bounty_id: BountyIndex,
 		) -> DispatchResult {
 			ensure_signed(origin)?;
 
@@ -792,13 +792,13 @@ pub mod pallet {
 		///
 		/// - `parent_bounty_id`: Index of parent bounty.
 		/// - `child_bounty_id`: Index of child bounty.
-		#[pallet::call_index(6)]
-		#[pallet::weight(<T as Config>::WeightInfo::close_child_bounty_added()
+		#[pezpallet::call_index(6)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::close_child_bounty_added()
 			.max(<T as Config>::WeightInfo::close_child_bounty_active()))]
 		pub fn close_child_bounty(
 			origin: OriginFor<T>,
-			#[pallet::compact] parent_bounty_id: BountyIndex,
-			#[pallet::compact] child_bounty_id: BountyIndex,
+			#[pezpallet::compact] parent_bounty_id: BountyIndex,
+			#[pezpallet::compact] child_bounty_id: BountyIndex,
 		) -> DispatchResult {
 			let maybe_sender = ensure_signed(origin.clone())
 				.map(Some)
@@ -814,8 +814,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<SystemBlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<SystemBlockNumberFor<T>> for Pezpallet<T> {
 		fn integrity_test() {
 			let parent_bounty_id: BountyIndex = 1;
 			let child_bounty_id: BountyIndex = 2;
@@ -828,8 +828,8 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> Pallet<T> {
-	/// Get the block number used in the treasury pallet.
+impl<T: Config> Pezpallet<T> {
+	/// Get the block number used in the treasury pezpallet.
 	///
 	/// It may be configured to use the relay chain block number on a teyrchain.
 	pub fn treasury_block_number() -> BlockNumberFor<T> {
@@ -846,8 +846,8 @@ impl<T: Config> Pallet<T> {
 			return Zero::zero();
 		}
 
-		// We just use the same logic from the parent bounties pallet.
-		pezpallet_bounties::Pallet::<T>::calculate_curator_deposit(bounty_fee)
+		// We just use the same logic from the parent bounties pezpallet.
+		pezpallet_bounties::Pezpallet::<T>::calculate_curator_deposit(bounty_fee)
 	}
 
 	/// The account ID of a child-bounty account.
@@ -855,7 +855,7 @@ impl<T: Config> Pallet<T> {
 		parent_bounty_id: BountyIndex,
 		child_bounty_id: BountyIndex,
 	) -> T::AccountId {
-		// This function is taken from the parent (bounties) pallet, but the
+		// This function is taken from the parent (bounties) pezpallet, but the
 		// prefix is changed to have different AccountId when the index of
 		// parent and child is same.
 		T::PalletId::get().into_sub_account_truncating(("cb", parent_bounty_id, child_bounty_id))
@@ -933,7 +933,7 @@ impl<T: Config> Pallet<T> {
 
 				// Transfer fund from child-bounty to parent bounty.
 				let parent_bounty_account =
-					pezpallet_bounties::Pallet::<T>::bounty_account_id(parent_bounty_id);
+					pezpallet_bounties::Pezpallet::<T>::bounty_account_id(parent_bounty_id);
 				let child_bounty_account =
 					Self::child_bounty_account_id(parent_bounty_id, child_bounty_id);
 				let balance = T::Currency::free_balance(&child_bounty_account);
@@ -960,13 +960,13 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-/// Implement ChildBountyManager to connect with the bounties pallet. This is
+/// Implement ChildBountyManager to connect with the bounties pezpallet. This is
 /// where we pass the active child bounties and child curator fees to the parent
 /// bounty.
 ///
 /// Function `children_curator_fees` not only returns the fee but also removes cumulative curator
 /// fees during call.
-impl<T: Config> pezpallet_bounties::ChildBountyManager<BalanceOf<T>> for Pallet<T> {
+impl<T: Config> pezpallet_bounties::ChildBountyManager<BalanceOf<T>> for Pezpallet<T> {
 	/// Returns number of active child bounties for `bounty_id`
 	fn child_bounties_count(
 		bounty_id: pezpallet_bounties::BountyIndex,

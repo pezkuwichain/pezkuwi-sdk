@@ -31,7 +31,7 @@ pezpallet-transaction-payment-rpc-runtime-api = { workspace = true }
 # other pezkuwi-sdk-deps
 pezsp-keyring = { workspace = true }
 
-# local pallet templates
+# local pezpallet templates
 first-pezpallet = { workspace = true }
 
 docify = { workspace = true }

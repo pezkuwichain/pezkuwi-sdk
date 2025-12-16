@@ -19,7 +19,7 @@
 
 use super::*;
 
-use crate::{CoreAssignment::Task, Pallet as Broker};
+use crate::{CoreAssignment::Task, Pezpallet as Broker};
 use alloc::{vec, vec::Vec};
 use pezframe_benchmarking::v2::*;
 use pezframe_support::{
@@ -29,7 +29,7 @@ use pezframe_support::{
 		EnsureOrigin, Hooks,
 	},
 };
-use pezframe_system::{Pallet as System, RawOrigin};
+use pezframe_system::{Pezpallet as System, RawOrigin};
 use pezsp_arithmetic::{FixedU64, Perbill};
 use pezsp_core::Get;
 use pezsp_runtime::{
@@ -41,11 +41,11 @@ const SEED: u32 = 0;
 const MAX_CORE_COUNT: u16 = 1_000;
 
 fn assert_last_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
-	pezframe_system::Pallet::<T>::assert_last_event(generic_event.into());
+	pezframe_system::Pezpallet::<T>::assert_last_event(generic_event.into());
 }
 
 fn assert_has_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
-	pezframe_system::Pallet::<T>::assert_has_event(generic_event.into());
+	pezframe_system::Pezpallet::<T>::assert_has_event(generic_event.into());
 }
 
 fn new_config_record<T: Config>() -> ConfigRecordOf<T> {
@@ -1321,5 +1321,5 @@ mod benches {
 
 	// Implements a test for each benchmark. Execute with:
 	// `cargo test -p pezpallet-broker --features runtime-benchmarks`.
-	impl_benchmark_test_suite!(Pallet, crate::mock::new_test_ext(), crate::mock::Test);
+	impl_benchmark_test_suite!(Pezpallet, crate::mock::new_test_ext(), crate::mock::Test);
 }

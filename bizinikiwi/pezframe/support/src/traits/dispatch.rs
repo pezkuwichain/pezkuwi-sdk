@@ -441,7 +441,7 @@ impl<
 
 /// Type that can be dispatched with an origin but without checking the origin filter.
 ///
-/// Implemented for pallet dispatchable type by `decl_module` and for runtime dispatchable by
+/// Implemented for pezpallet dispatchable type by `decl_module` and for runtime dispatchable by
 /// `construct_runtime`.
 pub trait UnfilteredDispatchable {
 	/// The origin type of the runtime, (i.e. `pezframe_system::Config::RuntimeOrigin`).
@@ -569,10 +569,10 @@ pub trait OriginTrait: Sized {
 
 /// A trait to allow calls to authorize themselves from the origin `None`.
 ///
-/// It is implemented by the [`crate::pallet`] macro and used by the
+/// It is implemented by the [`crate::pezpallet`] macro and used by the
 /// `pezframe_system::AuthorizeCall` transaction extension.
 ///
-/// Pallet writers can declare the authorization logic for a call using the call attribute:
+/// Pezpallet writers can declare the authorization logic for a call using the call attribute:
 /// [`crate::pezpallet_macros::authorize`].
 pub trait Authorize {
 	/// The authorize function.

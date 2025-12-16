@@ -7,7 +7,7 @@ use frame::{deps::pezframe_benchmarking::v2::*, prelude::*};
 mod benchmarks {
 	use super::*;
 	#[cfg(test)]
-	use crate::pallet::Pallet as Template;
+	use crate::pezpallet::Pezpallet as Template;
 	use pezframe_system::RawOrigin;
 
 	#[benchmark]

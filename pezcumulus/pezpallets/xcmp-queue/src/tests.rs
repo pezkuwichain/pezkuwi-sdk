@@ -545,7 +545,7 @@ fn xcm_enqueueing_backpressure_works() {
 		});
 		assert_eq!(EnqueuedMessages::get().len(), 5);
 
-		mock::EnqueueToLocalStorage::<Pallet<Test>>::sweep_queue(para);
+		mock::EnqueueToLocalStorage::<Pezpallet<Test>>::sweep_queue(para);
 		XcmpQueue::handle_xcmp_messages(once((para, 1, page.as_slice())), Weight::MAX);
 		// Got resumed:
 		assert!(InboundXcmpSuspended::<Test>::get().is_empty());
@@ -747,7 +747,7 @@ fn hrmp_signals_are_prioritized() {
 	let mut msg_wrapper = Some(message.clone());
 
 	new_test_ext().execute_with(|| {
-		pezframe_system::Pallet::<Test>::set_block_number(1);
+		pezframe_system::Pezpallet::<Test>::set_block_number(1);
 		<XcmpQueue as SendXcm>::validate(&mut dest_wrapper, &mut msg_wrapper).unwrap();
 
 		// check wrapper were consumed
@@ -770,11 +770,11 @@ fn hrmp_signals_are_prioritized() {
 		assert_eq!(taken, vec![]);
 
 		// Enqueue some messages
-		let num_events = pezframe_system::Pallet::<Test>::events().len();
+		let num_events = pezframe_system::Pezpallet::<Test>::events().len();
 		for _ in 0..256 {
 			assert_ok!(send_xcm::<XcmpQueue>(dest.into(), message.clone()));
 		}
-		assert_eq!(num_events + 256, pezframe_system::Pallet::<Test>::events().len());
+		assert_eq!(num_events + 256, pezframe_system::Pezpallet::<Test>::events().len());
 
 		// Without a signal we get the messages in order:
 		let mut expected_msg = XcmpMessageFormat::ConcatenatedVersionedXcm.encode();
@@ -1099,8 +1099,8 @@ fn verify_fee_factor_increase_and_decrease() {
 	xcmp_message.extend(versioned_xcm.encode());
 
 	new_test_ext().execute_with(|| {
-		let initial = Pallet::<Test>::MIN_FEE_FACTOR;
-		assert_eq!(Pallet::<Test>::get_fee_factor(sibling_para_id), initial);
+		let initial = Pezpallet::<Test>::MIN_FEE_FACTOR;
+		assert_eq!(Pezpallet::<Test>::get_fee_factor(sibling_para_id), initial);
 
 		// Open channel so messages can actually be sent
 		TeyrchainSystem::open_custom_outbound_hrmp_channel_for_benchmarks_or_tests(

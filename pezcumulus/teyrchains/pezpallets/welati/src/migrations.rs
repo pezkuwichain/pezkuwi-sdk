@@ -19,7 +19,7 @@ pub mod v1 {
 
 	impl<T: Config> OnRuntimeUpgrade for MigrateToV1<T> {
 		fn on_runtime_upgrade() -> Weight {
-			let current = Pallet::<T>::on_chain_storage_version();
+			let current = Pezpallet::<T>::on_chain_storage_version();
 
 			log::info!(
 				"🔄 Running migration for pezpallet-welati from {:?} to {:?}",
@@ -43,7 +43,7 @@ pub mod v1 {
 				migrated = officials_count + ministers_count + elections_count + proposals_count;
 
 				// Update storage version
-				STORAGE_VERSION.put::<Pallet<T>>();
+				STORAGE_VERSION.put::<Pezpallet<T>>();
 
 				log::info!("✅ Migrated {} entries in pezpallet-welati", migrated);
 				log::info!(
@@ -71,7 +71,7 @@ pub mod v1 {
 
 		#[cfg(feature = "try-runtime")]
 		fn pre_upgrade() -> Result<pezsp_std::vec::Vec<u8>, pezsp_runtime::TryRuntimeError> {
-			let current = Pallet::<T>::on_chain_storage_version();
+			let current = Pezpallet::<T>::on_chain_storage_version();
 
 			log::info!("🔍 Pre-upgrade check for pezpallet-welati");
 			log::info!("   Current version: {:?}", current);
@@ -152,7 +152,7 @@ pub mod v1 {
 			log::info!("🔍 Post-upgrade check for pezpallet-welati");
 
 			// Verify storage version was updated
-			let current_version = Pallet::<T>::on_chain_storage_version();
+			let current_version = Pezpallet::<T>::on_chain_storage_version();
 			assert_eq!(current_version, STORAGE_VERSION, "Storage version not updated correctly");
 			log::info!("✅ Storage version updated to {:?}", current_version);
 
@@ -309,7 +309,7 @@ pub mod v2 {
 
 	impl<T: Config> OnRuntimeUpgrade for MigrateToV2<T> {
 		fn on_runtime_upgrade() -> Weight {
-			let current = Pallet::<T>::on_chain_storage_version();
+			let current = Pezpallet::<T>::on_chain_storage_version();
 
 			if current < StorageVersion::new(2) {
 				log::info!("🔄 Running migration for pezpallet-welati to v2");
@@ -321,7 +321,7 @@ pub mod v2 {
 				// 4. Update version
 
 				// For now, this is just a template
-				StorageVersion::new(2).put::<Pallet<T>>();
+				StorageVersion::new(2).put::<Pezpallet<T>>();
 
 				log::info!("✅ Completed migration to pezpallet-welati v2");
 
@@ -356,13 +356,13 @@ mod tests {
 	fn test_migration_v1() {
 		ExtBuilder::default().build().execute_with(|| {
 			// Set initial storage version to 0
-			StorageVersion::new(0).put::<Pallet<Test>>();
+			StorageVersion::new(0).put::<Pezpallet<Test>>();
 
 			// Run migration
 			let weight = v1::MigrateToV1::<Test>::on_runtime_upgrade();
 
 			// Verify version was updated
-			assert_eq!(Pallet::<Test>::on_chain_storage_version(), STORAGE_VERSION);
+			assert_eq!(Pezpallet::<Test>::on_chain_storage_version(), STORAGE_VERSION);
 
 			// Verify weight is non-zero
 			assert!(weight != Weight::zero());
@@ -373,7 +373,7 @@ mod tests {
 	fn test_migration_idempotent() {
 		ExtBuilder::default().build().execute_with(|| {
 			// Set current version
-			STORAGE_VERSION.put::<Pallet<Test>>();
+			STORAGE_VERSION.put::<Pezpallet<Test>>();
 
 			// Run migration again
 			let weight = v1::MigrateToV1::<Test>::on_runtime_upgrade();

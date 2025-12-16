@@ -15,7 +15,7 @@ pub type AccountId = u64;
 pub type Balance = u128;
 pub type BlockNumber = u64;
 
-// Configure a mock runtime to test the pallet.
+// Configure a mock runtime to test the pezpallet.
 // Note: We don't include pezpallet_session here because it requires complex Currency setup.
 // We can test SessionManager trait implementation directly.
 construct_runtime!(

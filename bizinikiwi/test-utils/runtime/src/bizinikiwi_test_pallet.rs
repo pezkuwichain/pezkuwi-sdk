@@ -15,11 +15,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # bizinikiwi-test pallet
+//! # bizinikiwi-test pezpallet
 //!
 //! Provides functionality used in unit-tests of numerous modules across bizinikiwi that require
 //! functioning runtime. Some calls are allowed to be submitted as unsigned extrinsics, however most
-//! of them requires signing. Refer to `pallet::Call` for further details.
+//! of them requires signing. Refer to `pezpallet::Call` for further details.
 
 use alloc::{vec, vec::Vec};
 use pezframe_support::{pezpallet_prelude::*, storage};
@@ -31,30 +31,30 @@ use pezsp_runtime::{
 	},
 };
 
-pub use self::pallet::*;
+pub use self::pezpallet::*;
 
 const LOG_TARGET: &str = "bizinikiwi_test_pallet";
 
-#[pezframe_support::pallet(dev_mode)]
-pub mod pallet {
+#[pezframe_support::pezpallet(dev_mode)]
+pub mod pezpallet {
 	use super::*;
 	use crate::TransferData;
 	use pezframe_system::pezpallet_prelude::*;
 	use pezsp_core::storage::well_known_keys;
 	use pezsp_runtime::{traits::BlakeTwo256, transaction_validity::TransactionPriority, Perbill};
 
-	#[pallet::pallet]
-	#[pallet::without_storage_info]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::without_storage_info]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
-	#[pallet::storage]
-	#[pallet::getter(fn authorities)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn authorities)]
 	pub type Authorities<T> = StorageValue<_, Vec<Public>, ValueQuery>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(pezframe_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		pub authorities: Vec<Public>,
@@ -62,33 +62,33 @@ pub mod pallet {
 		pub _config: core::marker::PhantomData<T>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			<Authorities<T>>::put(self.authorities.clone());
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Legacy call used in transaction pool benchmarks.
-		#[pallet::call_index(0)]
-		#[pallet::weight(100)]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(100)]
 		pub fn bench_call(_origin: OriginFor<T>, _transfer: TransferData) -> DispatchResult {
 			Ok(())
 		}
 
 		/// Implicitly fill a block body with some data.
-		#[pallet::call_index(1)]
-		#[pallet::weight(100)]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(100)]
 		pub fn include_data(origin: OriginFor<T>, _data: Vec<u8>) -> DispatchResult {
 			pezframe_system::ensure_signed(origin)?;
 			Ok(())
 		}
 
 		/// Put/delete some data from storage. Intended to use as an unsigned extrinsic.
-		#[pallet::call_index(2)]
-		#[pallet::weight(100)]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(100)]
 		pub fn storage_change(
 			_origin: OriginFor<T>,
 			key: Vec<u8>,
@@ -102,8 +102,8 @@ pub mod pallet {
 		}
 
 		/// Write a key value pair to the offchain database.
-		#[pallet::call_index(3)]
-		#[pallet::weight(100)]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(100)]
 		pub fn offchain_index_set(
 			origin: OriginFor<T>,
 			key: Vec<u8>,
@@ -115,8 +115,8 @@ pub mod pallet {
 		}
 
 		/// Remove a key and an associated value from the offchain database.
-		#[pallet::call_index(4)]
-		#[pallet::weight(100)]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(100)]
 		pub fn offchain_index_clear(origin: OriginFor<T>, key: Vec<u8>) -> DispatchResult {
 			pezframe_system::ensure_signed(origin)?;
 			pezsp_io::offchain_index::clear(&key);
@@ -124,8 +124,8 @@ pub mod pallet {
 		}
 
 		/// Create an index for this call.
-		#[pallet::call_index(5)]
-		#[pallet::weight(100)]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(100)]
 		pub fn indexed_call(origin: OriginFor<T>, data: Vec<u8>) -> DispatchResult {
 			pezframe_system::ensure_signed(origin)?;
 			let content_hash = pezsp_io::hashing::blake2_256(&data);
@@ -137,19 +137,19 @@ pub mod pallet {
 
 		/// Deposit given digest items into the system storage. They will be included in a header
 		/// during finalization.
-		#[pallet::call_index(6)]
-		#[pallet::weight(100)]
+		#[pezpallet::call_index(6)]
+		#[pezpallet::weight(100)]
 		pub fn deposit_log_digest_item(
 			_origin: OriginFor<T>,
 			log: pezsp_runtime::generic::DigestItem,
 		) -> DispatchResult {
-			<pezframe_system::Pallet<T>>::deposit_log(log);
+			<pezframe_system::Pezpallet<T>>::deposit_log(log);
 			Ok(())
 		}
 
 		/// This call is validated as `ValidTransaction` with given priority.
-		#[pallet::call_index(7)]
-		#[pallet::weight(100)]
+		#[pezpallet::call_index(7)]
+		#[pezpallet::weight(100)]
 		pub fn call_with_priority(
 			_origin: OriginFor<T>,
 			_priority: TransactionPriority,
@@ -158,15 +158,15 @@ pub mod pallet {
 		}
 
 		/// This call is validated as non-propagable `ValidTransaction`.
-		#[pallet::call_index(8)]
-		#[pallet::weight(100)]
+		#[pezpallet::call_index(8)]
+		#[pezpallet::weight(100)]
 		pub fn call_do_not_propagate(_origin: OriginFor<T>) -> DispatchResult {
 			Ok(())
 		}
 
 		/// Fill the block weight up to the given ratio.
-		#[pallet::call_index(9)]
-		#[pallet::weight(*_ratio * T::BlockWeights::get().max_block)]
+		#[pezpallet::call_index(9)]
+		#[pezpallet::weight(*_ratio * T::BlockWeights::get().max_block)]
 		pub fn fill_block(origin: OriginFor<T>, _ratio: Perbill) -> DispatchResult {
 			ensure_signed(origin)?;
 			Ok(())
@@ -175,8 +175,8 @@ pub mod pallet {
 		/// Read X times from the state some data.
 		///
 		/// Panics if it can not read `X` times.
-		#[pallet::call_index(10)]
-		#[pallet::weight(100)]
+		#[pezpallet::call_index(10)]
+		#[pezpallet::weight(100)]
 		pub fn read(_origin: OriginFor<T>, count: u32) -> DispatchResult {
 			Self::execute_read(count, false)
 		}
@@ -184,14 +184,14 @@ pub mod pallet {
 		/// Read X times from the state some data and then panic!
 		///
 		/// Returns `Ok` if it didn't read anything.
-		#[pallet::call_index(11)]
-		#[pallet::weight(100)]
+		#[pezpallet::call_index(11)]
+		#[pezpallet::weight(100)]
 		pub fn read_and_panic(_origin: OriginFor<T>, count: u32) -> DispatchResult {
 			Self::execute_read(count, true)
 		}
 	}
 
-	impl<T: Config> Pallet<T> {
+	impl<T: Config> Pezpallet<T> {
 		fn execute_read(read: u32, panic_at_end: bool) -> DispatchResult {
 			let mut next_key = vec![];
 			for _ in 0..(read as usize) {
@@ -217,8 +217,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::validate_unsigned]
-	impl<T: Config> ValidateUnsigned for Pallet<T> {
+	#[pezpallet::validate_unsigned]
+	impl<T: Config> ValidateUnsigned for Pezpallet<T> {
 		type Call = Call<T>;
 
 		fn validate_unsigned(_source: TransactionSource, call: &Self::Call) -> TransactionValidity {
@@ -240,7 +240,7 @@ pub mod pallet {
 	}
 }
 
-pub fn validate_runtime_call<T: pallet::Config>(call: &pallet::Call<T>) -> TransactionValidity {
+pub fn validate_runtime_call<T: pezpallet::Config>(call: &pezpallet::Call<T>) -> TransactionValidity {
 	log::trace!(target: LOG_TARGET, "validate_runtime_call {call:?}");
 	match call {
 		Call::call_do_not_propagate {} =>

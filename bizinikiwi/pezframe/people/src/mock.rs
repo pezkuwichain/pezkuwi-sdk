@@ -48,7 +48,7 @@ pub type UncheckedExtrinsic = pezsp_runtime::generic::UncheckedExtrinsic<
 	TransactionExtension,
 >;
 
-// Configure a mock runtime to test the pallet.
+// Configure a mock runtime to test the pezpallet.
 pezframe_support::construct_runtime!(
 	pub enum Test
 	{
@@ -373,7 +373,7 @@ pub fn setup_alias_account(
 	};
 	let call = RuntimeCall::PeoplePallet(crate::Call::set_alias_account {
 		account,
-		call_valid_at: pezframe_system::Pallet::<Test>::block_number(),
+		call_valid_at: pezframe_system::Pezpallet::<Test>::block_number(),
 	});
 	let other_tx_ext = (pezframe_system::CheckNonce::<Test>::from(0),);
 	// Here we simply ignore implicit as they are null.

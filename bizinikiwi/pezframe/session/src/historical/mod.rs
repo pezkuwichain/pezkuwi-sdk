@@ -52,25 +52,25 @@ use pezframe_support::{
 
 const LOG_TARGET: &'static str = "runtime::historical";
 
-use crate::{self as pezpallet_session, Pallet as Session};
+use crate::{self as pezpallet_session, Pezpallet as Session};
 
-pub use pallet::*;
+pub use pezpallet::*;
 use pezsp_trie::{accessed_nodes_tracker::AccessedNodesTracker, recorder_ext::RecorderExt};
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 
 	/// The in-code storage version.
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(1);
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T>(_);
 
-	/// Config necessary for the historical pallet.
-	#[pallet::config]
+	/// Config necessary for the historical pezpallet.
+	#[pezpallet::config]
 	pub trait Config: pezpallet_session::Config + pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
@@ -90,17 +90,17 @@ pub mod pallet {
 	}
 
 	/// Mapping from historical session indices to session-data root hash and validator count.
-	#[pallet::storage]
-	#[pallet::getter(fn historical_root)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn historical_root)]
 	pub type HistoricalSessions<T: Config> =
 		StorageMap<_, Twox64Concat, SessionIndex, (T::Hash, ValidatorCount), OptionQuery>;
 
 	/// The range of historical sessions we store. [first, last)
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type StoredRange<T> = StorageValue<_, (SessionIndex, SessionIndex), OptionQuery>;
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T> {
 		/// The merkle root of the validators of the said session were stored
 		RootStored { index: SessionIndex },
@@ -109,7 +109,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Prune historical stored session roots up to (but not including)
 	/// `up_to`.
 	pub fn prune_up_to(up_to: SessionIndex) {
@@ -149,20 +149,20 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-impl<T: Config> ValidatorSet<T::AccountId> for Pallet<T> {
+impl<T: Config> ValidatorSet<T::AccountId> for Pezpallet<T> {
 	type ValidatorId = T::ValidatorId;
 	type ValidatorIdOf = T::ValidatorIdOf;
 
 	fn session_index() -> pezsp_staking::SessionIndex {
-		super::Pallet::<T>::current_index()
+		super::Pezpallet::<T>::current_index()
 	}
 
 	fn validators() -> Vec<Self::ValidatorId> {
-		super::Pallet::<T>::validators()
+		super::Pezpallet::<T>::validators()
 	}
 }
 
-impl<T: Config> ValidatorSetWithIdentification<T::AccountId> for Pallet<T> {
+impl<T: Config> ValidatorSetWithIdentification<T::AccountId> for Pezpallet<T> {
 	type Identification = T::FullIdentification;
 	type IdentificationOf = T::FullIdentificationOf;
 }
@@ -208,7 +208,7 @@ impl<T: Config, I: SessionManager<T::ValidatorId, T::FullIdentification>> NoteHi
 			match ProvingTrie::<T>::generate_for(new_validators) {
 				Ok(trie) => {
 					<HistoricalSessions<T>>::insert(new_index, &(trie.root, count));
-					Pallet::<T>::deposit_event(Event::RootStored { index: new_index });
+					Pezpallet::<T>::deposit_event(Event::RootStored { index: new_index });
 				},
 				Err(reason) => {
 					print("Failed to generate historical ancestry-inclusion proof.");
@@ -219,7 +219,7 @@ impl<T: Config, I: SessionManager<T::ValidatorId, T::FullIdentification>> NoteHi
 			let previous_index = new_index.saturating_sub(1);
 			if let Some(previous_session) = <HistoricalSessions<T>>::get(previous_index) {
 				<HistoricalSessions<T>>::insert(new_index, previous_session);
-				Pallet::<T>::deposit_event(Event::RootStored { index: new_index });
+				Pezpallet::<T>::deposit_event(Event::RootStored { index: new_index });
 			}
 		}
 
@@ -336,7 +336,7 @@ impl<T: Config> ProvingTrie<T> {
 	}
 }
 
-impl<T: Config, D: AsRef<[u8]>> KeyOwnerProofSystem<(KeyTypeId, D)> for Pallet<T> {
+impl<T: Config, D: AsRef<[u8]>> KeyOwnerProofSystem<(KeyTypeId, D)> for Pezpallet<T> {
 	type Proof = MembershipProof;
 	type IdentificationTuple = IdentificationTuple<T>;
 
@@ -403,7 +403,7 @@ pub(crate) mod tests {
 
 	use pezframe_support::traits::{KeyOwnerProofSystem, OnInitialize};
 
-	type Historical = Pallet<Test>;
+	type Historical = Pezpallet<Test>;
 
 	pub(crate) fn new_test_ext() -> pezsp_io::TestExternalities {
 		let mut t = pezframe_system::GenesisConfig::<Test>::default().build_storage().unwrap();
@@ -414,7 +414,7 @@ pub(crate) mod tests {
 			.collect();
 		BasicExternalities::execute_with_storage(&mut t, || {
 			for (ref k, ..) in &keys {
-				pezframe_system::Pallet::<Test>::inc_providers(k);
+				pezframe_system::Pezpallet::<Test>::inc_providers(k);
 			}
 		});
 		pezpallet_session::GenesisConfig::<Test> { keys, ..Default::default() }

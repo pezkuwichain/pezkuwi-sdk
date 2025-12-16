@@ -193,8 +193,8 @@ pub fn native_version() -> NativeVersion {
 	NativeVersion { runtime_version: VERSION, can_author_with: Default::default() }
 }
 
-/// A type to identify calls to the Identity pallet. These will be filtered to prevent invocation,
-/// locking the state of the pallet and preventing further updates to identities and sub-identities.
+/// A type to identify calls to the Identity pezpallet. These will be filtered to prevent invocation,
+/// locking the state of the pezpallet and preventing further updates to identities and sub-identities.
 /// The locked state will be the genesis state of a new system chain and then removed from the Relay
 /// Chain.
 pub struct IsIdentityCall;
@@ -431,7 +431,7 @@ impl pezpallet_mmr::Config for Runtime {
 	const INDEXING_PREFIX: &'static [u8] = mmr::INDEXING_PREFIX;
 	type Hashing = Keccak256;
 	type OnNewRoot = pezpallet_beefy_mmr::DepositBeefyDigest<Runtime>;
-	type LeafData = pezpallet_beefy_mmr::Pallet<Runtime>;
+	type LeafData = pezpallet_beefy_mmr::Pezpallet<Runtime>;
 	type BlockHashProvider = pezpallet_mmr::DefaultBlockHashProvider<Runtime>;
 	type WeightInfo = weights::pezpallet_mmr::WeightInfo<Runtime>;
 	#[cfg(feature = "runtime-benchmarks")]
@@ -458,7 +458,7 @@ pub struct ParaHeadsRootProvider;
 impl BeefyDataProvider<H256> for ParaHeadsRootProvider {
 	fn extra_data() -> H256 {
 		let para_heads: Vec<(u32, Vec<u8>)> =
-			teyrchains_paras::Pallet::<Runtime>::sorted_para_heads();
+			teyrchains_paras::Pezpallet::<Runtime>::sorted_para_heads();
 		binary_merkle_tree::merkle_root::<mmr::Hashing, _>(
 			para_heads.into_iter().map(|pair| pair.encode()),
 		)
@@ -776,7 +776,7 @@ impl pezpallet_staking::Config for Runtime {
 	type BenchmarkingConfig = pezkuwi_runtime_common::StakingBenchmarkingConfig;
 	type EventListeners = (NominationPools, DelegatedStaking);
 	type WeightInfo = weights::pezpallet_staking::WeightInfo<Runtime>;
-	// Genesis benchmarking setup needs this until we remove the pallet completely.
+	// Genesis benchmarking setup needs this until we remove the pezpallet completely.
 	#[cfg(not(feature = "on-chain-release-build"))]
 	type Filter = Nothing;
 	#[cfg(feature = "on-chain-release-build")]
@@ -927,7 +927,7 @@ parameter_types! {
 	pub const TreasuryPalletId: PalletId = PalletId(*b"py/trsry");
 	pub const PayoutSpendPeriod: BlockNumber = 30 * DAYS;
 	// The asset's interior location for the paying account. This is the Treasury
-	// pallet instance (which sits at index 37).
+	// pezpallet instance (which sits at index 37).
 	pub TreasuryInteriorLocation: InteriorLocation = PalletInstance(37).into();
 
 	pub const TipCountdown: BlockNumber = 1 * DAYS;
@@ -1181,7 +1181,7 @@ impl pezpallet_multisig::Config for Runtime {
 	type DepositFactor = DepositFactor;
 	type MaxSignatories = MaxSignatories;
 	type WeightInfo = weights::pezpallet_multisig::WeightInfo<Runtime>;
-	type BlockNumberProvider = pezframe_system::Pallet<Runtime>;
+	type BlockNumberProvider = pezframe_system::Pezpallet<Runtime>;
 }
 
 parameter_types! {
@@ -1282,7 +1282,7 @@ impl InstanceFilter<RuntimeCall> for ProxyType {
 				RuntimeCall::Indices(pezpallet_indices::Call::free{..}) |
 				RuntimeCall::Indices(pezpallet_indices::Call::freeze{..}) |
 				// Specifically omitting Indices `transfer`, `force_transfer`
-				// Specifically omitting the entire Balances pallet
+				// Specifically omitting the entire Balances pezpallet
 				RuntimeCall::Staking(..) |
 				RuntimeCall::Session(..) |
 				RuntimeCall::Grandpa(..) |
@@ -1302,7 +1302,7 @@ impl InstanceFilter<RuntimeCall> for ProxyType {
 				RuntimeCall::Vesting(pezpallet_vesting::Call::vest_other{..}) |
 				// Specifically omitting Vesting `vested_transfer`, and `force_vested_transfer`
 				RuntimeCall::Scheduler(..) |
-				// Specifically omitting Sudo pallet
+				// Specifically omitting Sudo pezpallet
 				RuntimeCall::Proxy(..) |
 				RuntimeCall::Multisig(..) |
 				RuntimeCall::Registrar(paras_registrar::Call::register{..}) |
@@ -1311,7 +1311,7 @@ impl InstanceFilter<RuntimeCall> for ProxyType {
 				RuntimeCall::Registrar(paras_registrar::Call::reserve{..}) |
 				RuntimeCall::Crowdloan(..) |
 				RuntimeCall::Slots(..) |
-				RuntimeCall::Auctions(..) | // Specifically omitting the entire XCM Pallet
+				RuntimeCall::Auctions(..) | // Specifically omitting the entire XCM Pezpallet
 				RuntimeCall::VoterList(..) |
 				RuntimeCall::NominationPools(..) |
 				RuntimeCall::FastUnstake(..)
@@ -1394,7 +1394,7 @@ impl pezpallet_proxy::Config for Runtime {
 	type CallHasher = BlakeTwo256;
 	type AnnouncementDepositBase = AnnouncementDepositBase;
 	type AnnouncementDepositFactor = AnnouncementDepositFactor;
-	type BlockNumberProvider = pezframe_system::Pallet<Runtime>;
+	type BlockNumberProvider = pezframe_system::Pezpallet<Runtime>;
 }
 
 impl teyrchains_origin::Config for Runtime {}
@@ -1455,7 +1455,7 @@ parameter_types! {
 	pub const MessageQueueMaxStale: u32 = 48;
 }
 
-/// Message processor to handle any messages that were enqueued into the `MessageQueue` pallet.
+/// Message processor to handle any messages that were enqueued into the `MessageQueue` pezpallet.
 pub struct MessageProcessor;
 impl ProcessMessage for MessageProcessor {
 	type Origin = AggregateMessageOrigin;
@@ -1785,11 +1785,11 @@ impl pezpallet_asset_rate::Config for Runtime {
 	type BenchmarkHelper = pezkuwi_runtime_common::impls::benchmarks::AssetRateArguments;
 }
 
-// Notify `coretime` pallet when a lease swap occurs
+// Notify `coretime` pezpallet when a lease swap occurs
 pub struct SwapLeases;
 impl OnSwap for SwapLeases {
 	fn on_swap(one: ParaId, other: ParaId) {
-		coretime::Pallet::<Runtime>::on_legacy_lease_swap(one, other);
+		coretime::Pezpallet::<Runtime>::on_legacy_lease_swap(one, other);
 	}
 }
 
@@ -1912,7 +1912,7 @@ mod runtime {
 	#[runtime::pezpallet_index(23)]
 	pub type Multisig = pezpallet_multisig;
 
-	// Election pallet. Only works with staking, but placed here to maintain indices.
+	// Election pezpallet. Only works with staking, but placed here to maintain indices.
 	#[runtime::pezpallet_index(24)]
 	pub type ElectionProviderMultiPhase = pezpallet_election_provider_multi_phase;
 
@@ -1924,7 +1924,7 @@ mod runtime {
 	#[runtime::pezpallet_index(29)]
 	pub type NominationPools = pezpallet_nomination_pools;
 
-	// Fast unstake pallet = extension to staking.
+	// Fast unstake pezpallet = extension to staking.
 	#[runtime::pezpallet_index(30)]
 	pub type FastUnstake = pezpallet_fast_unstake;
 
@@ -1997,11 +1997,11 @@ mod runtime {
 	#[runtime::pezpallet_index(67)]
 	pub type StakingAhClient = pezpallet_staking_async_ah_client;
 
-	// Migrations pallet
+	// Migrations pezpallet
 	#[runtime::pezpallet_index(98)]
 	pub type MultiBlockMigrations = pezpallet_migrations;
 
-	// Pallet for sending XCM.
+	// Pezpallet for sending XCM.
 	#[runtime::pezpallet_index(99)]
 	pub type XcmPallet = pezpallet_xcm;
 
@@ -2013,17 +2013,17 @@ mod runtime {
 	#[runtime::pezpallet_index(101)]
 	pub type AssetRate = pezpallet_asset_rate;
 
-	// Root testing pallet.
+	// Root testing pezpallet.
 	#[runtime::pezpallet_index(102)]
 	pub type RootTesting = pezpallet_root_testing;
 
 	#[runtime::pezpallet_index(103)]
-	pub type MetaTx = pezpallet_meta_tx::Pallet<Runtime>;
+	pub type MetaTx = pezpallet_meta_tx::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(104)]
-	pub type VerifySignature = pezpallet_verify_signature::Pallet<Runtime>;
+	pub type VerifySignature = pezpallet_verify_signature::Pezpallet<Runtime>;
 
-	// Root offences pallet
+	// Root offences pezpallet
 	#[runtime::pezpallet_index(105)]
 	pub type RootOffences = pezpallet_root_offences;
 
@@ -2037,7 +2037,7 @@ mod runtime {
 	#[runtime::pezpallet_index(202)]
 	pub type BeefyMmrLeaf = pezpallet_beefy_mmr;
 
-	// Pallet for migrating Identity to a teyrchain. To be removed post-migration.
+	// Pezpallet for migrating Identity to a teyrchain. To be removed post-migration.
 	#[runtime::pezpallet_index(248)]
 	pub type IdentityMigrator = identity_migrator;
 }
@@ -2861,16 +2861,16 @@ pezsp_api::impl_runtime_apis! {
 			use pezframe_benchmarking::BenchmarkList;
 			use pezframe_support::traits::StorageInfoTrait;
 
-			use pezpallet_session_benchmarking::Pallet as SessionBench;
-			use pezpallet_offences_benchmarking::Pallet as OffencesBench;
-			use pezpallet_election_provider_support_benchmarking::Pallet as ElectionProviderBench;
-			use pezpallet_xcm::benchmarking::Pallet as PalletXcmExtrinsicsBenchmark;
-			use pezframe_system_benchmarking::Pallet as SystemBench;
-			use pezframe_system_benchmarking::extensions::Pallet as SystemExtensionsBench;
-			use pezpallet_nomination_pools_benchmarking::Pallet as NominationPoolsBench;
+			use pezpallet_session_benchmarking::Pezpallet as SessionBench;
+			use pezpallet_offences_benchmarking::Pezpallet as OffencesBench;
+			use pezpallet_election_provider_support_benchmarking::Pezpallet as ElectionProviderBench;
+			use pezpallet_xcm::benchmarking::Pezpallet as PalletXcmExtrinsicsBenchmark;
+			use pezframe_system_benchmarking::Pezpallet as SystemBench;
+			use pezframe_system_benchmarking::extensions::Pezpallet as SystemExtensionsBench;
+			use pezpallet_nomination_pools_benchmarking::Pezpallet as NominationPoolsBench;
 
-			type XcmBalances = pezpallet_xcm_benchmarks::fungible::Pallet::<Runtime>;
-			type XcmGeneric = pezpallet_xcm_benchmarks::generic::Pallet::<Runtime>;
+			type XcmBalances = pezpallet_xcm_benchmarks::fungible::Pezpallet::<Runtime>;
+			type XcmGeneric = pezpallet_xcm_benchmarks::generic::Pezpallet::<Runtime>;
 
 			let mut list = Vec::<BenchmarkList>::new();
 			list_benchmarks!(list, extra);
@@ -2891,13 +2891,13 @@ pezsp_api::impl_runtime_apis! {
 			use pezsp_storage::TrackedStorageKey;
 			// Trying to add benchmarks directly to some pallets caused cyclic dependency issues.
 			// To get around that, we separated the benchmarks into its own crate.
-			use pezpallet_session_benchmarking::Pallet as SessionBench;
-			use pezpallet_offences_benchmarking::Pallet as OffencesBench;
-			use pezpallet_election_provider_support_benchmarking::Pallet as ElectionProviderBench;
-			use pezpallet_xcm::benchmarking::Pallet as PalletXcmExtrinsicsBenchmark;
-			use pezframe_system_benchmarking::Pallet as SystemBench;
-			use pezframe_system_benchmarking::extensions::Pallet as SystemExtensionsBench;
-			use pezpallet_nomination_pools_benchmarking::Pallet as NominationPoolsBench;
+			use pezpallet_session_benchmarking::Pezpallet as SessionBench;
+			use pezpallet_offences_benchmarking::Pezpallet as OffencesBench;
+			use pezpallet_election_provider_support_benchmarking::Pezpallet as ElectionProviderBench;
+			use pezpallet_xcm::benchmarking::Pezpallet as PalletXcmExtrinsicsBenchmark;
+			use pezframe_system_benchmarking::Pezpallet as SystemBench;
+			use pezframe_system_benchmarking::extensions::Pezpallet as SystemExtensionsBench;
+			use pezpallet_nomination_pools_benchmarking::Pezpallet as NominationPoolsBench;
 
 			impl pezpallet_session_benchmarking::Config for Runtime {}
 			impl pezpallet_offences_benchmarking::Config for Runtime {}
@@ -3085,8 +3085,8 @@ pezsp_api::impl_runtime_apis! {
 				}
 			}
 
-			type XcmBalances = pezpallet_xcm_benchmarks::fungible::Pallet::<Runtime>;
-			type XcmGeneric = pezpallet_xcm_benchmarks::generic::Pallet::<Runtime>;
+			type XcmBalances = pezpallet_xcm_benchmarks::fungible::Pezpallet::<Runtime>;
+			type XcmGeneric = pezpallet_xcm_benchmarks::generic::Pezpallet::<Runtime>;
 
 			let whitelist: Vec<TrackedStorageKey> = AllPalletsWithSystem::whitelisted_storage_keys();
 

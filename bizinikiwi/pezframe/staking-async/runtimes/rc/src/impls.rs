@@ -35,7 +35,7 @@ enum PeopleRuntimePallets<AccountId: Encode> {
 	IdentityMigrator(IdentityMigratorCalls<AccountId>),
 }
 
-/// Call encoding for the calls needed from the Identity Migrator pallet.
+/// Call encoding for the calls needed from the Identity Migrator pezpallet.
 #[derive(Encode, Decode)]
 enum IdentityMigratorCalls<AccountId: Encode> {
 	#[codec(index = 1)]
@@ -69,7 +69,7 @@ impl<Runtime, AccountId> ToTeyrchainIdentityReaper<Runtime, AccountId> {
 		let para_sub_account_deposit = deposit(1, 53) / 100;
 		let para_existential_deposit = EXISTENTIAL_DEPOSIT / 10;
 
-		// pallet deposits
+		// pezpallet deposits
 		let id_deposit =
 			para_basic_deposit.saturating_add(para_byte_deposit.saturating_mul(bytes as Balance));
 		let subs_deposit = para_sub_account_deposit.saturating_mul(subs as Balance);
@@ -169,7 +169,7 @@ where
 		]);
 
 		// send
-		let _ = <pezpallet_xcm::Pallet<Runtime>>::send(
+		let _ = <pezpallet_xcm::Pezpallet<Runtime>>::send(
 			RawOrigin::Root.into(),
 			Box::new(VersionedLocation::from(destination)),
 			Box::new(VersionedXcm::from(program)),

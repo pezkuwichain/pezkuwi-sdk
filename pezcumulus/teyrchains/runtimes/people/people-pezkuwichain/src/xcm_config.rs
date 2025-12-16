@@ -135,7 +135,7 @@ pub type XcmOriginToTransactDispatchOrigin = (
 	// Native signed account converter; this just converts an `AccountId32` origin into a normal
 	// `RuntimeOrigin::Signed` origin of the same 32-byte value.
 	SignedAccountId32AsNative<RelayNetwork, RuntimeOrigin>,
-	// XCM origins can be represented natively under the XCM pallet's `Xcm` origin.
+	// XCM origins can be represented natively under the XCM pezpallet's `Xcm` origin.
 	XcmPassthrough<RuntimeOrigin>,
 );
 

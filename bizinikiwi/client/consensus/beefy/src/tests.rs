@@ -828,7 +828,7 @@ async fn beefy_importing_justifications() {
 		ImportResult::AlreadyInChain,
 	);
 
-	// Import block 2 with "valid" justification (beefy pallet genesis block not yet reached).
+	// Import block 2 with "valid" justification (beefy pezpallet genesis block not yet reached).
 	let block_num = 2;
 	let builder = BlockBuilderBuilder::new(&*full_client)
 		.on_parent_block(hashof1)
@@ -1072,7 +1072,7 @@ async fn should_initialize_voter_at_custom_genesis() {
 	let validator_set = ValidatorSet::new(make_beefy_ids(keys), 0).unwrap();
 	let mut net = BeefyTestNet::new(1);
 	let backend = net.peer(0).client().as_backend();
-	// custom pallet genesis is block number 7
+	// custom pezpallet genesis is block number 7
 	let custom_pallet_genesis = 7;
 	let api = TestApi::new(custom_pallet_genesis, &validator_set, GOOD_MMR_ROOT);
 
@@ -1118,7 +1118,7 @@ async fn should_initialize_voter_at_custom_genesis() {
 	let api = TestApi::new(new_pallet_genesis, &new_validator_set, GOOD_MMR_ROOT);
 
 	net.peer(0).client().as_client().finalize_block(hashes[10], None).unwrap();
-	// load persistent state - state preset in DB, but with different pallet genesis
+	// load persistent state - state preset in DB, but with different pezpallet genesis
 	let new_persisted_state =
 		voter_init_setup(&mut net, &mut finality_notifications, &api).await.unwrap();
 
@@ -1259,7 +1259,7 @@ async fn should_initialize_voter_at_custom_genesis_when_state_unavailable() {
 	let validator_set = ValidatorSet::new(make_beefy_ids(keys), 0).unwrap();
 	let mut net = BeefyTestNet::new(1);
 	let backend = net.peer(0).client().as_backend();
-	// custom pallet genesis is block number 7
+	// custom pezpallet genesis is block number 7
 	let custom_pallet_genesis = 7;
 	let mut api = TestApi::new(custom_pallet_genesis, &validator_set, GOOD_MMR_ROOT);
 	// remove validator set from `TestApi`, practically simulating unavailable/pruned runtime state
@@ -1395,7 +1395,7 @@ async fn beefy_finalizing_after_pallet_genesis() {
 
 	// Minimum BEEFY block delta is 1.
 
-	// GRANDPA finalize blocks leading up to BEEFY pallet genesis -> BEEFY should finalize nothing.
+	// GRANDPA finalize blocks leading up to BEEFY pezpallet genesis -> BEEFY should finalize nothing.
 	finalize_block_and_wait_for_beefy(&net, peers.clone(), &hashes[14], &[]).await;
 
 	// GRANDPA finalize block #16 -> BEEFY should finalize #15 (genesis mandatory) and #16.

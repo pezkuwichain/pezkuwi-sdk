@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Runtime API definition for nomination-pools pallet.
+//! Runtime API definition for nomination-pools pezpallet.
 //! Currently supports only one rpc endpoint.
 
 #![cfg_attr(not(feature = "std"), no_std)]

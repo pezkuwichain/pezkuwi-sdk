@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Transaction storage pallet. Indexes transactions and manages storage proofs.
+//! Transaction storage pezpallet. Indexes transactions and manages storage proofs.
 
 // Ensure we're `no_std` when compiling for Wasm.
 #![cfg_attr(not(feature = "std"), no_std)]
@@ -47,13 +47,13 @@ use pezsp_transaction_storage_proof::{
 	CHUNK_SIZE, INHERENT_IDENTIFIER,
 };
 
-/// A type alias for the balance type from this pallet's point of view.
+/// A type alias for the balance type from this pezpallet's point of view.
 type BalanceOf<T> =
 	<<T as Config>::Currency as Inspect<<T as pezframe_system::Config>::AccountId>>::Balance;
 pub type CreditOf<T> = Credit<<T as pezframe_system::Config>::AccountId, <T as Config>::Currency>;
 
-// Re-export pallet items so that they can be accessed from the crate namespace.
-pub use pallet::*;
+// Re-export pezpallet items so that they can be accessed from the crate namespace.
+pub use pezpallet::*;
 pub use weights::WeightInfo;
 
 /// Maximum bytes that can be stored in one transaction.
@@ -96,20 +96,20 @@ impl TransactionInfo {
 	}
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	/// A reason for this pallet placing a hold on funds.
-	#[pallet::composite_enum]
+	/// A reason for this pezpallet placing a hold on funds.
+	#[pezpallet::composite_enum]
 	pub enum HoldReason {
 		/// The funds are held as deposit for the used storage.
 		StorageFeeHold,
 	}
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
@@ -119,7 +119,7 @@ pub mod pallet {
 			+ Dispatchable<RuntimeOrigin = Self::RuntimeOrigin>
 			+ GetDispatchInfo
 			+ From<pezframe_system::Call<Self>>;
-		/// The fungible type for this pallet.
+		/// The fungible type for this pezpallet.
 		type Currency: Mutate<Self::AccountId>
 			+ MutateHold<Self::AccountId, Reason = Self::RuntimeHoldReason>
 			+ Balanced<Self::AccountId>;
@@ -127,7 +127,7 @@ pub mod pallet {
 		type RuntimeHoldReason: From<HoldReason>;
 		/// Handler for the unbalanced decrease when fees are burned.
 		type FeeDestination: OnUnbalanced<CreditOf<Self>>;
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 		/// Maximum number of indexed transactions in the block.
 		type MaxBlockTransactions: Get<u32>;
@@ -135,7 +135,7 @@ pub mod pallet {
 		type MaxTransactionSize: Get<u32>;
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Invalid configuration.
 		NotConfigured,
@@ -163,11 +163,11 @@ pub mod pallet {
 		BadContext,
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn on_initialize(n: BlockNumberFor<T>) -> Weight {
 			// TODO: https://github.com/pezkuwichain/pezkuwi-sdk/issues/160 - Replace this with benchmarked weights.
 			let mut weight = Weight::zero();
@@ -192,7 +192,7 @@ pub mod pallet {
 			assert!(
 				ProofChecked::<T>::take() || {
 					// Proof is not required for early or empty blocks.
-					let number = pezframe_system::Pallet::<T>::block_number();
+					let number = pezframe_system::Pezpallet::<T>::block_number();
 					let period = StoragePeriod::<T>::get();
 					let target_number = number.saturating_sub(period);
 
@@ -213,15 +213,15 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Index and store data off chain. Minimum data size is 1 bytes, maximum is
 		/// `MaxTransactionSize`. Data will be removed after `STORAGE_PERIOD` blocks, unless `renew`
 		/// is called.
 		/// ## Complexity
 		/// - O(n*log(n)) of data size, as all data is pushed to an in-memory trie.
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::store(data.len() as u32))]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::store(data.len() as u32))]
 		pub fn store(origin: OriginFor<T>, data: Vec<u8>) -> DispatchResult {
 			ensure!(data.len() > 0, Error::<T>::EmptyTransaction);
 			ensure!(
@@ -238,7 +238,7 @@ pub mod pallet {
 
 			let content_hash = pezsp_io::hashing::blake2_256(&data);
 			let extrinsic_index =
-				pezframe_system::Pallet::<T>::extrinsic_index().ok_or(Error::<T>::BadContext)?;
+				pezframe_system::Pezpallet::<T>::extrinsic_index().ok_or(Error::<T>::BadContext)?;
 			pezsp_io::transaction_index::index(extrinsic_index, data.len() as u32, content_hash);
 
 			let mut index = 0;
@@ -268,8 +268,8 @@ pub mod pallet {
 		/// Applies same fees as `store`.
 		/// ## Complexity
 		/// - O(1).
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::renew())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::renew())]
 		pub fn renew(
 			origin: OriginFor<T>,
 			block: BlockNumberFor<T>,
@@ -279,7 +279,7 @@ pub mod pallet {
 			let transactions = Transactions::<T>::get(block).ok_or(Error::<T>::RenewedNotFound)?;
 			let info = transactions.get(index as usize).ok_or(Error::<T>::RenewedNotFound)?;
 			let extrinsic_index =
-				pezframe_system::Pallet::<T>::extrinsic_index().ok_or(Error::<T>::BadContext)?;
+				pezframe_system::Pezpallet::<T>::extrinsic_index().ok_or(Error::<T>::BadContext)?;
 
 			Self::apply_fee(sender, info.size)?;
 
@@ -313,8 +313,8 @@ pub mod pallet {
 		/// - Linear w.r.t the number of indexed transactions in the proved block for random
 		///   probing.
 		/// There's a DB read for each transaction.
-		#[pallet::call_index(2)]
-		#[pallet::weight((T::WeightInfo::check_proof_max(), DispatchClass::Mandatory))]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight((T::WeightInfo::check_proof_max(), DispatchClass::Mandatory))]
 		pub fn check_proof(
 			origin: OriginFor<T>,
 			proof: TransactionStorageProof,
@@ -323,7 +323,7 @@ pub mod pallet {
 			ensure!(!ProofChecked::<T>::get(), Error::<T>::DoubleCheck);
 
 			// Get the target block metadata.
-			let number = pezframe_system::Pallet::<T>::block_number();
+			let number = pezframe_system::Pezpallet::<T>::block_number();
 			let period = StoragePeriod::<T>::get();
 			let target_number = number.saturating_sub(period);
 			ensure!(!target_number.is_zero(), Error::<T>::UnexpectedProof);
@@ -331,7 +331,7 @@ pub mod pallet {
 				Transactions::<T>::get(target_number).ok_or(Error::<T>::MissingStateData)?;
 
 			// Verify the proof with a "random" chunk (randomness is based on the parent hash).
-			let parent_hash = pezframe_system::Pallet::<T>::parent_hash();
+			let parent_hash = pezframe_system::Pezpallet::<T>::parent_hash();
 			Self::verify_chunk_proof(proof, parent_hash.as_ref(), transactions.to_vec())?;
 			ProofChecked::<T>::put(true);
 			Self::deposit_event(Event::ProofChecked);
@@ -339,8 +339,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// Stored data under specified index.
 		Stored { index: u32 },
@@ -351,7 +351,7 @@ pub mod pallet {
 	}
 
 	/// Collection of transaction metadata by block number.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Transactions<T: Config> = StorageMap<
 		_,
 		Blake2_128Concat,
@@ -360,29 +360,29 @@ pub mod pallet {
 		OptionQuery,
 	>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	/// Storage fee per byte.
 	pub type ByteFee<T: Config> = StorageValue<_, BalanceOf<T>>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	/// Storage fee per transaction.
 	pub type EntryFee<T: Config> = StorageValue<_, BalanceOf<T>>;
 
 	/// Storage period for data in blocks. Should match `pezsp_storage_proof::DEFAULT_STORAGE_PERIOD`
 	/// for block authoring.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type StoragePeriod<T: Config> = StorageValue<_, BlockNumberFor<T>, ValueQuery>;
 
 	// Intermediates
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type BlockTransactions<T: Config> =
 		StorageValue<_, BoundedVec<TransactionInfo, T::MaxBlockTransactions>, ValueQuery>;
 
 	/// Was the proof checked in this block?
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ProofChecked<T: Config> = StorageValue<_, bool, ValueQuery>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	pub struct GenesisConfig<T: Config> {
 		pub byte_fee: BalanceOf<T>,
 		pub entry_fee: BalanceOf<T>,
@@ -399,7 +399,7 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			ByteFee::<T>::put(&self.byte_fee);
@@ -408,8 +408,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::inherent]
-	impl<T: Config> ProvideInherent for Pallet<T> {
+	#[pezpallet::inherent]
+	impl<T: Config> ProvideInherent for Pezpallet<T> {
 		type Call = Call<T>;
 		type Error = InherentError;
 		const INHERENT_IDENTIFIER: InherentIdentifier = INHERENT_IDENTIFIER;
@@ -433,18 +433,18 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config> Pallet<T> {
-		/// Get transaction storage information from outside of this pallet.
+	impl<T: Config> Pezpallet<T> {
+		/// Get transaction storage information from outside of this pezpallet.
 		pub fn transaction_roots(
 			block: BlockNumberFor<T>,
 		) -> Option<BoundedVec<TransactionInfo, T::MaxBlockTransactions>> {
 			Transactions::<T>::get(block)
 		}
-		/// Get ByteFee storage information from outside of this pallet.
+		/// Get ByteFee storage information from outside of this pezpallet.
 		pub fn byte_fee() -> Option<BalanceOf<T>> {
 			ByteFee::<T>::get()
 		}
-		/// Get EntryFee storage information from outside of this pallet.
+		/// Get EntryFee storage information from outside of this pezpallet.
 		pub fn entry_fee() -> Option<BalanceOf<T>> {
 			EntryFee::<T>::get()
 		}

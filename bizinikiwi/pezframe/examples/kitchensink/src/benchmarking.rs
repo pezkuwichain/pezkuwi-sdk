@@ -28,18 +28,18 @@
 use super::*;
 
 #[allow(unused)]
-use crate::Pallet as Kitchensink;
+use crate::Pezpallet as Kitchensink;
 
 use pezframe_benchmarking::v2::*;
 use pezframe_support::pezpallet_prelude::TransactionSource;
 use pezframe_system::RawOrigin;
 
-// To actually run this benchmark on pezpallet-example-kitchensink, we need to put this pallet into the
+// To actually run this benchmark on pezpallet-example-kitchensink, we need to put this pezpallet into the
 //   runtime and compile it with `runtime-benchmarks` feature. The detail procedures are
 //   documented at:
 //   https://docs.pezkuwichain.io/reference/how-to-guides/weights/add-benchmarks/
 //
-// The auto-generated weight estimate of this pallet is copied over to the `weights.rs` file.
+// The auto-generated weight estimate of this pezpallet is copied over to the `weights.rs` file.
 // The exact command of how the estimate generated is printed at the top of the file.
 
 // Details on using the benchmarks macro can be seen at:
@@ -78,7 +78,7 @@ mod benchmarks {
 		assert_eq!(Foo::<T>::get(), Some(42))
 	}
 
-	// This will measure the weight for the closure in `[pallet::authorize(...)]`.
+	// This will measure the weight for the closure in `[pezpallet::authorize(...)]`.
 	#[benchmark]
 	fn authorize_set_foo_using_authorize() {
 		// This is the benchmark setup phase.

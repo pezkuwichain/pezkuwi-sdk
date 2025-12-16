@@ -62,7 +62,7 @@ pezpallet-transaction-payment-rpc-runtime-api = { workspace = true }
 pezframe-benchmarking = { optional = true, workspace = true }
 pezframe-system-benchmarking = { optional = true, workspace = true }
 
-# The pallet in this template.
+# The pezpallet in this template.
 pezpallet-template = { workspace = true }
 
 [build-dependencies]

@@ -37,6 +37,72 @@ gh run list --limit 100 --json databaseId -q '.[].databaseId' | xargs -I{} gh ru
 | `-lparachain=debug` | **`-lteyrchain=debug`** |
 | `parachain=debug` | **`teyrchain=debug`** |
 
+### 🔄 CRATE REBRAND KURALLARI (76 Crate)
+
+**Prefix Dönüşümleri:**
+
+| Polkadot SDK Prefix | Pezkuwi SDK Prefix | Örnek |
+|---------------------|-------------------|-------|
+| `sp-` | `pezsp-` | sp-core → pezsp-core |
+| `sc-` | `pezsc-` | sc-client → pezsc-client |
+| `frame-` | `pezframe-` | frame-support → pezframe-support |
+| `pezpallet-` | `pezpallet-` | pezpallet-balances → pezpallet-balances |
+| `cumulus-` | `pezcumulus-` | cumulus-client → pezcumulus-client |
+| `bridge-hub-` | `pezbridge-hub-` | bridge-hub-runtime → pezbridge-hub-runtime |
+| `bridge-runtime-` | `pezbridge-runtime-` | bridge-runtime-common → pezbridge-runtime-common |
+| `mmr-` | `pezmmr-` | mmr-gadget → pezmmr-gadget |
+| `snowbridge-` | `pezsnowbridge-` | snowbridge-core → pezsnowbridge-core |
+
+**snowbridge-pezpallet-* Dönüşümü:**
+```
+snowbridge-pezpallet-* → pezsnowbridge-pezpallet-*
+```
+Örnek: `snowbridge-pezpallet-ethereum-client` → `pezsnowbridge-pezpallet-ethereum-client`
+
+**Özel Dönüşümler:**
+
+| Polkadot SDK | Pezkuwi SDK |
+|--------------|-------------|
+| `bp-runtime` | `pezbp-runtime` |
+| `bp-header-chain` | `bp-header-pez-chain` |
+| `asset-test-utils` | `asset-test-pezutils` |
+| `test-runtime-constants` | `peztest-runtime-constants` |
+| `xcm-docs` | `xcm-pez-docs` |
+| `xcm-emulator` | `xcm-pez-emulator` |
+| `xcm-procedural` | `xcm-pez-procedural` |
+| `xcm-runtime-apis` | `xcm-runtime-pezapis` |
+| `xcm-simulator` | `xcm-pez-simulator` |
+
+**Genel pez- Prefix Eklenen Crate'ler:**
+
+| Polkadot SDK | Pezkuwi SDK |
+|--------------|-------------|
+| fork-tree | pez-fork-tree |
+| subkey | pez-subkey |
+| generate-bags | pez-generate-bags |
+| kitchensink-runtime | pez-kitchensink-runtime |
+| minimal-template-node | pez-minimal-template-node |
+| minimal-template-runtime | pez-minimal-template-runtime |
+| node-bench | pez-node-bench |
+| node-primitives | pez-node-primitives |
+| node-rpc | pez-node-rpc |
+| node-testing | pez-node-testing |
+| solochain-template-node | pez-solochain-template-node |
+| solochain-template-runtime | pez-solochain-template-runtime |
+| tracing-gum | pez-tracing-gum |
+| tracing-gum-proc-macro | pez-tracing-gum-proc-macro |
+| equivocation-detector | pez-equivocation-detector |
+| finality-relay | pez-finality-relay |
+| messages-relay | pez-messages-relay |
+| slot-range-helper | pez-slot-range-helper |
+| penpal-emulated-chain | pez-penpal-emulated-chain |
+| penpal-runtime | pez-penpal-runtime |
+
+**Dosya İsimlendirme Kuralı:**
+- Cargo.toml `name` alanı rebrand edilmeli
+- Rust dosya isimleri mod bildirimleriyle eşleşmeli
+- Örnek: `mod pezsnowbridge_pezpallet_system;` → dosya `pezsnowbridge_pezpallet_system.rs` olmalı
+
 ### Token'lar:
 - **HEZ**: Relay chain native token (200M genesis, inflationary)
 - **PEZ**: Asset Hub governance token (5B sabit supply)
@@ -238,7 +304,7 @@ Periodically check upstream and update checkboxes above based on status changes.
 ### Değiştirilen Dosyalar (438 dosya)
 - Config dosyaları: `.config/taplo.toml`, `.config/zepter.yaml`, `.github/.markdownlint.yaml`
 - Script: `.github/scripts/check-workspace.py`
-- Pallet Cargo.toml: `pezpallet-identity-kyc`, `pezpallet-tiki` + 12 özel pallet feature propagation
+- Pezpallet Cargo.toml: `pezpallet-identity-kyc`, `pezpallet-tiki` + 12 özel pezpallet feature propagation
 - Tüm Cargo.toml dosyaları (taplo format)
 - Umbrella crate dosyaları
 

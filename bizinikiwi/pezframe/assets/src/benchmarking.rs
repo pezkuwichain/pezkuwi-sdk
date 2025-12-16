@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Assets pallet benchmarking.
+//! Assets pezpallet benchmarking.
 
 #![cfg(feature = "runtime-benchmarks")]
 
@@ -31,7 +31,7 @@ use pezframe_support::traits::{EnsureOrigin, Get, UnfilteredDispatchable};
 use pezframe_system::RawOrigin as SystemOrigin;
 use pezsp_runtime::{traits::Bounded, Weight};
 
-use crate::Pallet as Assets;
+use crate::Pezpallet as Assets;
 
 const SEED: u32 = 0;
 const MIN_BALANCE: u32 = 1;
@@ -147,11 +147,11 @@ fn add_approvals<T: Config<I>, I: 'static>(minter: T::AccountId, n: u32) {
 }
 
 fn assert_last_event<T: Config<I>, I: 'static>(generic_event: <T as Config<I>>::RuntimeEvent) {
-	pezframe_system::Pallet::<T>::assert_last_event(generic_event.into());
+	pezframe_system::Pezpallet::<T>::assert_last_event(generic_event.into());
 }
 
 fn assert_event<T: Config<I>, I: 'static>(generic_event: <T as Config<I>>::RuntimeEvent) {
-	pezframe_system::Pallet::<T>::assert_has_event(generic_event.into());
+	pezframe_system::Pezpallet::<T>::assert_has_event(generic_event.into());
 }
 
 benchmarks_instance_pallet! {
@@ -272,7 +272,7 @@ benchmarks_instance_pallet! {
 		let target_lookup = T::Lookup::unlookup(target.clone());
 	}: _(SystemOrigin::Signed(caller.clone()), asset_id.clone(), target_lookup, amount)
 	verify {
-		assert!(pezframe_system::Pallet::<T>::account_exists(&caller));
+		assert!(pezframe_system::Pezpallet::<T>::account_exists(&caller));
 		assert_last_event::<T, I>(Event::Transferred { asset_id: asset_id.into(), from: caller, to: target, amount }.into());
 	}
 
@@ -592,7 +592,7 @@ benchmarks_instance_pallet! {
 		let (asset_id, _, _) = create_default_minted_asset::<T, I>(true, 100u32.into());
 		let amount;
 	}: {
-		amount = Pallet::<T, I>::total_issuance(asset_id.into());
+		amount = Pezpallet::<T, I>::total_issuance(asset_id.into());
 	} verify {
 		assert_eq!(amount, 100u32.into());
 	}
@@ -601,7 +601,7 @@ benchmarks_instance_pallet! {
 		let (asset_id, caller, _) = create_default_minted_asset::<T, I>(true, 100u32.into());
 		let amount;
 	}: {
-		amount = Pallet::<T, I>::balance(asset_id.into(), caller);
+		amount = Pezpallet::<T, I>::balance(asset_id.into(), caller);
 	} verify {
 		assert_eq!(amount, 100u32.into());
 	}
@@ -613,20 +613,20 @@ benchmarks_instance_pallet! {
 		let delegate: T::AccountId = account("approval", 0, SEED);
 		let amount;
 	}: {
-		amount = Pallet::<T, I>::allowance(asset_id.into(), &caller, &delegate);
+		amount = Pezpallet::<T, I>::allowance(asset_id.into(), &caller, &delegate);
 	} verify {
 		assert_eq!(amount, 100u32.into());
 	}
 
 	migration_v2_foreign_asset_set_reserve_weight {
 		let (id, _, _) = create_default_asset::<T, I>(true);
-		let id: <T as pallet::Config<I>>::AssetId = id.into();
+		let id: <T as pezpallet::Config<I>>::AssetId = id.into();
 		let reserve = T::BenchmarkHelper::create_reserve_id_parameter(42);
 	}: {
 		let asset_id = Asset::<T, I>::iter_keys().next()
 			.ok_or_else(|| BenchmarkError::Override(BenchmarkResult::from_weight(Weight::MAX)))?;
 		assert_eq!(id, asset_id);
-		Pallet::<T, I>::unchecked_update_reserves(asset_id, vec![reserve.clone()]).unwrap();
+		Pezpallet::<T, I>::unchecked_update_reserves(asset_id, vec![reserve.clone()]).unwrap();
 	}
 	verify {
 		assert_eq!(Reserves::<T, I>::get(id)[0], reserve);

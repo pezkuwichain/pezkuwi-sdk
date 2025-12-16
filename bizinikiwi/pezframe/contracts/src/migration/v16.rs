@@ -21,7 +21,7 @@
 use crate::{
 	migration::{IsFinished, MigrationStep},
 	weights::WeightInfo,
-	BalanceOf, CodeHash, Config, Pallet, TrieId, Weight, WeightMeter, LOG_TARGET,
+	BalanceOf, CodeHash, Config, Pezpallet, TrieId, Weight, WeightMeter, LOG_TARGET,
 };
 use codec::{Decode, Encode};
 use pezframe_support::{pezpallet_prelude::*, storage_alias, DefaultNoBound};
@@ -32,7 +32,7 @@ pub fn store_old_contract_info<T: Config>(
 	account: T::AccountId,
 	info: &crate::ContractInfo<T>,
 ) -> BalanceOf<T> {
-	let storage_base_deposit = Pallet::<T>::min_balance() + 1u32.into();
+	let storage_base_deposit = Pezpallet::<T>::min_balance() + 1u32.into();
 	ContractInfoOf::<T>::insert(
 		account,
 		ContractInfo {
@@ -52,7 +52,7 @@ pub fn store_old_contract_info<T: Config>(
 
 #[storage_alias]
 pub type ContractInfoOf<T: Config> =
-	StorageMap<Pallet<T>, Twox64Concat, <T as pezframe_system::Config>::AccountId, ContractInfo<T>>;
+	StorageMap<Pezpallet<T>, Twox64Concat, <T as pezframe_system::Config>::AccountId, ContractInfo<T>>;
 
 #[derive(Encode, Decode, CloneNoBound, PartialEq, Eq, RuntimeDebug, TypeInfo, MaxEncodedLen)]
 #[scale_info(skip_type_params(T))]
@@ -89,7 +89,7 @@ impl<T: Config> MigrationStep for Migration<T> {
 		if let Some(key) = iter.next() {
 			log::debug!(target: LOG_TARGET, "Migrating contract {:?}", key);
 			ContractInfoOf::<T>::mutate(key.clone(), |info| {
-				let ed = Pallet::<T>::min_balance();
+				let ed = Pezpallet::<T>::min_balance();
 				let mut updated_info = info.take().expect("Item exists; qed");
 				updated_info.storage_base_deposit.saturating_reduce(ed);
 				*info = Some(updated_info);

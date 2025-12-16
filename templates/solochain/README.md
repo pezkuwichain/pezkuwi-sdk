@@ -181,12 +181,12 @@ address [a variety of needs](https://bizinikiwi.pezkuwichain.app/ecosystem/proje
 Review the [FRAME runtime implementation](./runtime/src/lib.rs) included in this
 template and note the following:
 
-- This file configures several pallets to include in the runtime. Each pallet
+- This file configures several pallets to include in the runtime. Each pezpallet
   configuration is defined by a code block that begins with `impl
   $PALLET_NAME::Config for Runtime`.
 - The pallets are composed into a single runtime by way of the
   [#[runtime]](https://docs.pezkuwichain.io/sdk/master/frame_support/attr.runtime.html)
-  macro, which is part of the [core FRAME pallet
+  macro, which is part of the [core FRAME pezpallet
   library](https://docs.pezkuwichain.io/reference/frame-pallets/#system-pallets).
 
 ### Pallets
@@ -194,10 +194,10 @@ template and note the following:
 The runtime in this project is constructed using many FRAME pallets that ship
 with [the Bizinikiwi
 repository](https://github.com/pezkuwichain/pezkuwi-sdk/tree/master/bizinikiwi/frame) and a
-template pallet that is [defined in the
+template pezpallet that is [defined in the
 `pallets`](./pallets/template/src/lib.rs) directory.
 
-A FRAME pallet is comprised of a number of blockchain primitives, including:
+A FRAME pezpallet is comprised of a number of blockchain primitives, including:
 
 - Storage: FRAME defines a rich set of powerful [storage
   abstractions](https://docs.pezkuwichain.io/build/runtime-storage/) that makes it
@@ -210,7 +210,7 @@ A FRAME pallet is comprised of a number of blockchain primitives, including:
   of significant state changes.
 - Errors: When a dispatchable fails, it returns an error.
 
-Each pallet has its own `Config` trait which serves as a configuration interface
+Each pezpallet has its own `Config` trait which serves as a configuration interface
 to generically define the types and parameters it depends on.
 
 ## Alternatives Installations

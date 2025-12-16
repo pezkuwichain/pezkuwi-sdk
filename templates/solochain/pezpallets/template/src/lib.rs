@@ -1,12 +1,12 @@
-//! # Template Pallet
+//! # Template Pezpallet
 //!
-//! A pallet with minimal functionality to help developers understand the essential components of
-//! writing a FRAME pallet. It is typically used in beginner tutorials or in Bizinikiwi template
-//! nodes as a starting point for creating a new pallet and **not meant to be used in production**.
+//! A pezpallet with minimal functionality to help developers understand the essential components of
+//! writing a FRAME pezpallet. It is typically used in beginner tutorials or in Bizinikiwi template
+//! nodes as a starting point for creating a new pezpallet and **not meant to be used in production**.
 //!
 //! ## Overview
 //!
-//! This template pallet contains basic examples of:
+//! This template pezpallet contains basic examples of:
 //! - declaring a storage item that stores a single `u32` value
 //! - declaring and using events
 //! - declaring and using errors
@@ -14,98 +14,98 @@
 //!   upon success
 //! - another dispatchable function that causes a custom error to be thrown
 //!
-//! Each pallet section is annotated with an attribute using the `#[pallet::...]` procedural macro.
-//! This macro generates the necessary code for a pallet to be aggregated into a FRAME runtime.
+//! Each pezpallet section is annotated with an attribute using the `#[pezpallet::...]` procedural macro.
+//! This macro generates the necessary code for a pezpallet to be aggregated into a FRAME runtime.
 //!
 //! Learn more about FRAME macros [here](https://docs.pezkuwichain.io/reference/frame-macros/).
 //!
-//! ### Pallet Sections
+//! ### Pezpallet Sections
 //!
-//! The pallet sections in this template are:
+//! The pezpallet sections in this template are:
 //!
-//! - A **configuration trait** that defines the types and parameters which the pallet depends on
-//!   (denoted by the `#[pallet::config]` attribute). See: [`Config`].
-//! - A **means to store pezpallet-specific data** (denoted by the `#[pallet::storage]` attribute).
+//! - A **configuration trait** that defines the types and parameters which the pezpallet depends on
+//!   (denoted by the `#[pezpallet::config]` attribute). See: [`Config`].
+//! - A **means to store pezpallet-specific data** (denoted by the `#[pezpallet::storage]` attribute).
 //!   See: [`storage_types`].
-//! - A **declaration of the events** this pallet emits (denoted by the `#[pallet::event]`
+//! - A **declaration of the events** this pezpallet emits (denoted by the `#[pezpallet::event]`
 //!   attribute). See: [`Event`].
-//! - A **declaration of the errors** that this pallet can throw (denoted by the `#[pallet::error]`
+//! - A **declaration of the errors** that this pezpallet can throw (denoted by the `#[pezpallet::error]`
 //!   attribute). See: [`Error`].
-//! - A **set of dispatchable functions** that define the pallet's functionality (denoted by the
-//!   `#[pallet::call]` attribute). See: [`dispatchables`].
+//! - A **set of dispatchable functions** that define the pezpallet's functionality (denoted by the
+//!   `#[pezpallet::call]` attribute). See: [`dispatchables`].
 //!
-//! Run `cargo doc --package pezpallet-template --open` to view this pallet's documentation.
+//! Run `cargo doc --package pezpallet-template --open` to view this pezpallet's documentation.
 
-// We make sure this pallet uses `no_std` for compiling to Wasm.
+// We make sure this pezpallet uses `no_std` for compiling to Wasm.
 #![cfg_attr(not(feature = "std"), no_std)]
 
-// Re-export pallet items so that they can be accessed from the crate namespace.
-pub use pallet::*;
+// Re-export pezpallet items so that they can be accessed from the crate namespace.
+pub use pezpallet::*;
 
 // FRAME pallets require their own "mock runtimes" to be able to run unit tests. This module
-// contains a mock runtime specific for testing this pallet's functionality.
+// contains a mock runtime specific for testing this pezpallet's functionality.
 #[cfg(test)]
 mod mock;
 
-// This module contains the unit tests for this pallet.
-// Learn about pallet unit testing here: https://docs.pezkuwichain.io/test/unit-testing/
+// This module contains the unit tests for this pezpallet.
+// Learn about pezpallet unit testing here: https://docs.pezkuwichain.io/test/unit-testing/
 #[cfg(test)]
 mod tests;
 
-// Every callable function or "dispatchable" a pallet exposes must have weight values that correctly
+// Every callable function or "dispatchable" a pezpallet exposes must have weight values that correctly
 // estimate a dispatchable's execution time. The benchmarking module is used to calculate weights
-// for each dispatchable and generates this pallet's weight.rs file. Learn more about benchmarking here: https://docs.pezkuwichain.io/test/benchmark/
+// for each dispatchable and generates this pezpallet's weight.rs file. Learn more about benchmarking here: https://docs.pezkuwichain.io/test/benchmark/
 #[cfg(feature = "runtime-benchmarks")]
 mod benchmarking;
 pub mod weights;
 pub use weights::*;
 
-// All pallet logic is defined in its own module and must be annotated by the `pallet` attribute.
-#[pezframe_support::pallet]
-pub mod pallet {
+// All pezpallet logic is defined in its own module and must be annotated by the `pezpallet` attribute.
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	// Import various useful types required by all FRAME pallets.
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	// The `Pallet` struct serves as a placeholder to implement traits, methods and dispatchables
-	// (`Call`s) in this pallet.
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	// The `Pezpallet` struct serves as a placeholder to implement traits, methods and dispatchables
+	// (`Call`s) in this pezpallet.
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	/// The pallet's configuration trait.
+	/// The pezpallet's configuration trait.
 	///
-	/// All our types and constants a pallet depends on must be declared here.
-	/// These types are defined generically and made concrete when the pallet is declared in the
+	/// All our types and constants a pezpallet depends on must be declared here.
+	/// These types are defined generically and made concrete when the pezpallet is declared in the
 	/// `runtime/src/lib.rs` file of your chain.
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching runtime event type.
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
-		/// A type representing the weights required by the dispatchables of this pallet.
+		/// A type representing the weights required by the dispatchables of this pezpallet.
 		type WeightInfo: WeightInfo;
 	}
 
-	/// A storage item for this pallet.
+	/// A storage item for this pezpallet.
 	///
 	/// In this template, we are declaring a storage item called `Something` that stores a single
 	/// `u32` value. Learn more about runtime storage here: <https://docs.pezkuwichain.io/build/runtime-storage/>
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Something<T> = StorageValue<_, u32>;
 
-	/// Events that functions in this pallet can emit.
+	/// Events that functions in this pezpallet can emit.
 	///
 	/// Events are a simple means of indicating to the outside world (such as dApps, chain explorers
-	/// or other users) that some notable update in the runtime has occurred. In a FRAME pallet, the
+	/// or other users) that some notable update in the runtime has occurred. In a FRAME pezpallet, the
 	/// documentation for each event field and its parameters is added to a node's metadata so it
 	/// can be used by external interfaces or tools.
 	///
-	///	The `generate_deposit` macro generates a function on `Pallet` called `deposit_event` which
-	/// will convert the event type of your pallet into `RuntimeEvent` (declared in the pallet's
-	/// [`Config`] trait) and deposit it using [`pezframe_system::Pallet::deposit_event`].
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	///	The `generate_deposit` macro generates a function on `Pezpallet` called `deposit_event` which
+	/// will convert the event type of your pezpallet into `RuntimeEvent` (declared in the pezpallet's
+	/// [`Config`] trait) and deposit it using [`pezframe_system::Pezpallet::deposit_event`].
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A user has successfully set a new value.
 		SomethingStored {
@@ -116,7 +116,7 @@ pub mod pallet {
 		},
 	}
 
-	/// Errors that can be returned by this pallet.
+	/// Errors that can be returned by this pezpallet.
 	///
 	/// Errors tell users that something went wrong so it's important that their naming is
 	/// informative. Similar to events, error documentation is added to a node's metadata so it's
@@ -124,7 +124,7 @@ pub mod pallet {
 	///
 	/// This type of runtime error can be up to 4 bytes in size should you want to return additional
 	/// information.
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// The value retrieved was `None` as no value was previously set.
 		NoneValue,
@@ -132,9 +132,9 @@ pub mod pallet {
 		StorageOverflow,
 	}
 
-	/// The pallet's dispatchable functions ([`Call`]s).
+	/// The pezpallet's dispatchable functions ([`Call`]s).
 	///
-	/// Dispatchable functions allows users to interact with the pallet and invoke state changes.
+	/// Dispatchable functions allows users to interact with the pezpallet and invoke state changes.
 	/// These functions materialize as "extrinsics", which are often compared to transactions.
 	/// They must always return a `DispatchResult` and be annotated with a weight and call index.
 	///
@@ -144,15 +144,15 @@ pub mod pallet {
 	/// will also change which will break backwards compatibility.
 	///
 	/// The [`weight`] macro is used to assign a weight to each call.
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// An example dispatchable that takes a single u32 value as a parameter, writes the value
 		/// to storage and emits an event.
 		///
 		/// It checks that the _origin_ for this call is _Signed_ and returns a dispatch
 		/// error if it isn't. Learn more about origins here: <https://docs.pezkuwichain.io/build/origins/>
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::do_something())]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::do_something())]
 		pub fn do_something(origin: OriginFor<T>, something: u32) -> DispatchResult {
 			// Check that the extrinsic was signed and get the signer.
 			let who = ensure_signed(origin)?;
@@ -180,8 +180,8 @@ pub mod pallet {
 		/// - If no value has been set ([`Error::NoneValue`])
 		/// - If incrementing the value in storage causes an arithmetic overflow
 		///   ([`Error::StorageOverflow`])
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::cause_error())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::cause_error())]
 		pub fn cause_error(origin: OriginFor<T>) -> DispatchResult {
 			let _who = ensure_signed(origin)?;
 

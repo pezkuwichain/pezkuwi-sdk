@@ -1,13 +1,13 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-//! # Tiki (Role) Pallet
+//! # Tiki (Role) Pezpallet
 //!
-//! A pallet for managing citizenship and role-based NFTs with automated and governance-driven
+//! A pezpallet for managing citizenship and role-based NFTs with automated and governance-driven
 //! assignment.
 //!
 //! ## Overview
 //!
-//! The Tiki pallet implements a comprehensive role management system using non-transferable NFTs
+//! The Tiki pezpallet implements a comprehensive role management system using non-transferable NFTs
 //! to represent citizenship status and various roles within the ecosystem. Each role grants
 //! specific permissions, rights, and social standing.
 //!
@@ -81,7 +81,7 @@
 //!
 //! ## Dependencies
 //!
-//! This pallet requires integration with:
+//! This pezpallet requires integration with:
 //! - `pezpallet-identity-kyc` - KYC status and approval notifications
 //! - `pezpallet-nfts` - Underlying NFT infrastructure
 //! - `pezpallet-trust` - Trust score verification for role eligibility
@@ -101,7 +101,7 @@
 
 extern crate alloc;
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 use alloc::{format, vec::Vec};
 use pezframe_support::pezpallet_prelude::{MaybeSerializeDeserialize, Parameter, RuntimeDebug};
@@ -120,18 +120,18 @@ pub use weights::*;
 pub mod ensure;
 pub mod migrations; // Storage migrations // For origin validation
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 	use pezsp_runtime::traits::StaticLookup;
 
-	#[pallet::pallet]
-	#[pallet::storage_version(migrations::STORAGE_VERSION)]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(migrations::STORAGE_VERSION)]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config:
 		pezframe_system::Config + pezpallet_nfts::Config<ItemId = u32> + pezpallet_identity_kyc::Config
 	{
@@ -140,14 +140,14 @@ pub mod pallet {
 		type WeightInfo: weights::WeightInfo;
 
 		/// Collection ID holding Tiki (Role) NFTs.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type TikiCollectionId: Get<Self::CollectionId>;
 
 		/// Technical upper limit for maximum number of Tikis (roles) a user can hold.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxTikisPerUser: Get<u32>;
 
-		/// Tiki enum type to be used within the pallet.
+		/// Tiki enum type to be used within the pezpallet.
 		type Tiki: Parameter
 			+ From<Tiki>
 			+ Into<u32>
@@ -254,14 +254,14 @@ pub mod pallet {
 	}
 
 	/// Holds citizenship NFT ID for each user
-	#[pallet::storage]
-	#[pallet::getter(fn citizen_nft)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn citizen_nft)]
 	pub type CitizenNft<T: Config> =
 		StorageMap<_, Blake2_128Concat, T::AccountId, u32, OptionQuery>;
 
 	/// List of Tikis (roles) owned by each user
-	#[pallet::storage]
-	#[pallet::getter(fn user_tikis)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn user_tikis)]
 	pub type UserTikis<T: Config> = StorageMap<
 		_,
 		Blake2_128Concat,
@@ -271,17 +271,17 @@ pub mod pallet {
 	>;
 
 	/// Shows which user a specific Tiki belongs to (for unique roles)
-	#[pallet::storage]
-	#[pallet::getter(fn tiki_holder)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn tiki_holder)]
 	pub type TikiHolder<T: Config> =
 		StorageMap<_, Blake2_128Concat, Tiki, T::AccountId, OptionQuery>;
 
 	/// Item ID to be used for next NFT
-	#[pallet::storage]
-	#[pallet::getter(fn next_item_id)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn next_item_id)]
 	pub type NextItemId<T: Config> = StorageValue<_, u32, ValueQuery>;
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Role already belongs to someone else
 		RoleAlreadyTaken,
@@ -305,8 +305,8 @@ pub mod pallet {
 		InvalidRoleAssignmentMethod,
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// New citizenship NFT minted
 		CitizenNftMinted { who: T::AccountId, nft_id: u32 },
@@ -323,8 +323,8 @@ pub mod pallet {
 		},
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn on_initialize(_block_number: BlockNumberFor<T>) -> Weight {
 			// Check newly KYC-approved users and mint citizenship NFT
 			Self::check_and_mint_citizen_nfts();
@@ -333,11 +333,11 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Admin tarafından belirli bir kullanıcıya Tiki (rol) verme
-		#[pallet::call_index(0)]
-		#[pallet::weight(<T as crate::pallet::Config>::WeightInfo::grant_tiki())]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(<T as crate::pezpallet::Config>::WeightInfo::grant_tiki())]
 		pub fn grant_tiki(
 			origin: OriginFor<T>,
 			dest: <T::Lookup as StaticLookup>::Source,
@@ -357,8 +357,8 @@ pub mod pallet {
 		}
 
 		/// Admin tarafından belirli bir kullanıcıdan Tiki (rol) alma
-		#[pallet::call_index(1)]
-		#[pallet::weight(<T as crate::pallet::Config>::WeightInfo::revoke_tiki())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(<T as crate::pezpallet::Config>::WeightInfo::revoke_tiki())]
 		pub fn revoke_tiki(
 			origin: OriginFor<T>,
 			target: <T::Lookup as StaticLookup>::Source,
@@ -372,8 +372,8 @@ pub mod pallet {
 		}
 
 		/// Manually mint citizenship NFT (for testing/emergency)
-		#[pallet::call_index(2)]
-		#[pallet::weight(<T as crate::pallet::Config>::WeightInfo::grant_tiki())]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(<T as crate::pezpallet::Config>::WeightInfo::grant_tiki())]
 		pub fn force_mint_citizen_nft(
 			origin: OriginFor<T>,
 			dest: <T::Lookup as StaticLookup>::Source,
@@ -386,8 +386,8 @@ pub mod pallet {
 		}
 
 		/// Grant role through election system (called from pezpallet-voting)
-		#[pallet::call_index(3)]
-		#[pallet::weight(<T as crate::pallet::Config>::WeightInfo::grant_tiki())]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(<T as crate::pezpallet::Config>::WeightInfo::grant_tiki())]
 		pub fn grant_elected_role(
 			origin: OriginFor<T>,
 			dest: <T::Lookup as StaticLookup>::Source,
@@ -407,14 +407,14 @@ pub mod pallet {
 		}
 
 		/// Grant role through exam/test system
-		#[pallet::call_index(4)]
-		#[pallet::weight(<T as crate::pallet::Config>::WeightInfo::grant_tiki())]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(<T as crate::pezpallet::Config>::WeightInfo::grant_tiki())]
 		pub fn grant_earned_role(
 			origin: OriginFor<T>,
 			dest: <T::Lookup as StaticLookup>::Source,
 			tiki: Tiki,
 		) -> DispatchResult {
-			T::AdminOrigin::ensure_origin(origin)?; // For now admin, later exam pallet
+			T::AdminOrigin::ensure_origin(origin)?; // For now admin, later exam pezpallet
 			let dest_account = T::Lookup::lookup(dest)?;
 
 			// Check if the role can be earned
@@ -428,13 +428,13 @@ pub mod pallet {
 		}
 
 		/// Apply for citizenship after KYC completion
-		#[pallet::call_index(5)]
-		#[pallet::weight(<T as crate::pallet::Config>::WeightInfo::grant_tiki())]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(<T as crate::pezpallet::Config>::WeightInfo::grant_tiki())]
 		pub fn apply_for_citizenship(origin: OriginFor<T>) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 
 			// Check if user's KYC is approved
-			let kyc_status = pezpallet_identity_kyc::Pallet::<T>::kyc_status_of(&who);
+			let kyc_status = pezpallet_identity_kyc::Pezpallet::<T>::kyc_status_of(&who);
 			ensure!(
 				kyc_status == pezpallet_identity_kyc::types::KycLevel::Approved,
 				Error::<T>::KycNotCompleted
@@ -447,8 +447,8 @@ pub mod pallet {
 		}
 
 		/// Check NFT transfer for transfer blocking system
-		#[pallet::call_index(6)]
-		#[pallet::weight(<T as crate::pallet::Config>::WeightInfo::grant_tiki())]
+		#[pezpallet::call_index(6)]
+		#[pezpallet::weight(<T as crate::pezpallet::Config>::WeightInfo::grant_tiki())]
 		pub fn check_transfer_permission(
 			_origin: OriginFor<T>,
 			collection_id: T::CollectionId,
@@ -465,11 +465,11 @@ pub mod pallet {
 		}
 	}
 
-	// Pallet's helper functions
-	impl<T: Config> Pallet<T> {
+	// Pezpallet's helper functions
+	impl<T: Config> Pezpallet<T> {
 		/// Checks newly KYC-completed users and mints citizenship NFT
 		fn check_and_mint_citizen_nfts() {
-			// Check all approved users in KYC pallet
+			// Check all approved users in KYC pezpallet
 			for (account, kyc_status) in pezpallet_identity_kyc::KycStatuses::<T>::iter() {
 				// Check if KYC is approved
 				if kyc_status == pezpallet_identity_kyc::types::KycLevel::Approved {
@@ -494,7 +494,7 @@ pub mod pallet {
 
 			// Mint the NFT - use force_mint in benchmarks to bypass balance/origin requirements
 			#[cfg(feature = "runtime-benchmarks")]
-			pezpallet_nfts::Pallet::<T>::force_mint(
+			pezpallet_nfts::Pezpallet::<T>::force_mint(
 				T::RuntimeOrigin::from(pezframe_system::RawOrigin::Root),
 				collection_id,
 				next_id_u32,
@@ -503,7 +503,7 @@ pub mod pallet {
 			)?;
 
 			#[cfg(not(feature = "runtime-benchmarks"))]
-			pezpallet_nfts::Pallet::<T>::force_mint(
+			pezpallet_nfts::Pezpallet::<T>::force_mint(
 				T::RuntimeOrigin::from(pezframe_system::RawOrigin::Root),
 				collection_id,
 				next_id_u32,
@@ -595,12 +595,12 @@ pub mod pallet {
 			// Mark NFT with lock attribute - use force_set_attribute in benchmarks to bypass
 			// deposits
 			#[cfg(feature = "runtime-benchmarks")]
-			let _ = pezpallet_nfts::Pallet::<T>::force_set_attribute(
+			let _ = pezpallet_nfts::Pezpallet::<T>::force_set_attribute(
 				T::RuntimeOrigin::from(pezframe_system::RawOrigin::Root),
 				None,
 				*collection_id,
 				Some(*item_id),
-				pezpallet_nfts::AttributeNamespace::Pallet,
+				pezpallet_nfts::AttributeNamespace::Pezpallet,
 				b"locked"
 					.to_vec()
 					.try_into()
@@ -612,11 +612,11 @@ pub mod pallet {
 			);
 
 			#[cfg(not(feature = "runtime-benchmarks"))]
-			let _ = pezpallet_nfts::Pallet::<T>::set_attribute(
+			let _ = pezpallet_nfts::Pezpallet::<T>::set_attribute(
 				T::RuntimeOrigin::from(pezframe_system::RawOrigin::Root),
 				*collection_id,
 				Some(*item_id),
-				pezpallet_nfts::AttributeNamespace::Pallet,
+				pezpallet_nfts::AttributeNamespace::Pezpallet,
 				b"locked"
 					.to_vec()
 					.try_into()
@@ -646,7 +646,7 @@ pub mod pallet {
 			);
 
 			// Set metadata - log error but don't crash
-			if pezpallet_nfts::Pallet::<T>::set_metadata(
+			if pezpallet_nfts::Pezpallet::<T>::set_metadata(
 				T::RuntimeOrigin::from(pezframe_system::RawOrigin::Root),
 				collection_id,
 				nft_id_u32,
@@ -710,7 +710,7 @@ pub mod pallet {
 		/// KYC sonrası otomatik Welati rolü verme
 		pub fn auto_grant_citizenship(account: &T::AccountId) -> DispatchResult {
 			// KYC kontrolü
-			let kyc_status = pezpallet_identity_kyc::Pallet::<T>::kyc_status_of(account);
+			let kyc_status = pezpallet_identity_kyc::Pezpallet::<T>::kyc_status_of(account);
 			if kyc_status == pezpallet_identity_kyc::types::KycLevel::Approved {
 				// Vatandaşlık NFT'si yoksa bas
 				if Self::citizen_nft(account).is_none() {
@@ -745,14 +745,14 @@ pub trait TikiProvider<AccountId> {
 }
 
 /// Trait implementasyonları
-impl<T: Config> TikiScoreProvider<T::AccountId> for Pallet<T> {
+impl<T: Config> TikiScoreProvider<T::AccountId> for Pezpallet<T> {
 	fn get_tiki_score(who: &T::AccountId) -> u32 {
 		let tikis = Self::user_tikis(who);
 		tikis.iter().map(Self::get_bonus_for_tiki).sum()
 	}
 }
 
-impl<T: Config> TikiProvider<T::AccountId> for Pallet<T> {
+impl<T: Config> TikiProvider<T::AccountId> for Pezpallet<T> {
 	fn has_tiki(who: &T::AccountId, tiki: &Tiki) -> bool {
 		Self::has_tiki(who, tiki)
 	}
@@ -767,7 +767,7 @@ impl<T: Config> TikiProvider<T::AccountId> for Pallet<T> {
 }
 
 // Puanlama mantığını ayrı bir impl bloğunda tutarak kodu daha düzenli hale getiriyoruz.
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Belirli bir Tiki'nin Trust Puanı'na olan katkısını döndürür.
 	pub fn get_bonus_for_tiki(tiki: &Tiki) -> u32 {
 		match tiki {
@@ -833,7 +833,7 @@ impl<T: Config> Pallet<T> {
 	}
 }
 // CitizenNftProvider trait implementation for pezpallet-identity-kyc integration
-impl<T: Config> pezpallet_identity_kyc::types::CitizenNftProvider<T::AccountId> for Pallet<T> {
+impl<T: Config> pezpallet_identity_kyc::types::CitizenNftProvider<T::AccountId> for Pezpallet<T> {
 	fn mint_citizen_nft(who: &T::AccountId) -> pezsp_runtime::DispatchResult {
 		Self::mint_citizen_nft_for_user(who)
 	}
@@ -850,7 +850,7 @@ impl<T: Config> pezpallet_identity_kyc::types::CitizenNftProvider<T::AccountId> 
 		let collection_id = T::TikiCollectionId::get();
 
 		// Burn the NFT using pezpallet_nfts burn function
-		pezpallet_nfts::Pallet::<T>::burn(
+		pezpallet_nfts::Pezpallet::<T>::burn(
 			T::RuntimeOrigin::from(pezframe_system::RawOrigin::Signed(who.clone())),
 			collection_id,
 			item_id,

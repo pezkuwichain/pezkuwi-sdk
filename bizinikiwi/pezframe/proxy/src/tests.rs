@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Tests for Proxy Pallet
+// Tests for Proxy Pezpallet
 
 #![cfg(test)]
 
@@ -128,7 +128,7 @@ impl Config for Test {
 	type MaxPending = ConstU32<2>;
 	type AnnouncementDepositBase = AnnouncementDepositBase;
 	type AnnouncementDepositFactor = AnnouncementDepositFactor;
-	type BlockNumberProvider = pezframe_system::Pallet<Test>;
+	type BlockNumberProvider = pezframe_system::Pezpallet<Test>;
 }
 
 use super::{Call as ProxyCall, Event as ProxyEvent};
@@ -152,7 +152,7 @@ pub fn new_test_ext() -> TestState {
 }
 
 fn last_events(n: usize) -> Vec<RuntimeEvent> {
-	pezframe_system::Pallet::<Test>::events()
+	pezframe_system::Pezpallet::<Test>::events()
 		.into_iter()
 		.rev()
 		.take(n)
@@ -289,7 +289,7 @@ fn delayed_requires_pre_announcement() {
 		assert_noop!(Proxy::proxy_announced(RuntimeOrigin::signed(0), 2, 1, None, call.clone()), e);
 		let call_hash = BlakeTwo256::hash_of(&call);
 		assert_ok!(Proxy::announce(RuntimeOrigin::signed(2), 1, call_hash));
-		pezframe_system::Pallet::<Test>::set_block_number(2);
+		pezframe_system::Pezpallet::<Test>::set_block_number(2);
 		assert_ok!(Proxy::proxy_announced(RuntimeOrigin::signed(0), 2, 1, None, call.clone()));
 	});
 }
@@ -307,7 +307,7 @@ fn proxy_announced_removes_announcement_and_returns_deposit() {
 		let e = Error::<Test>::Unannounced;
 		assert_noop!(Proxy::proxy_announced(RuntimeOrigin::signed(0), 3, 1, None, call.clone()), e);
 
-		pezframe_system::Pallet::<Test>::set_block_number(2);
+		pezframe_system::Pezpallet::<Test>::set_block_number(2);
 		assert_ok!(Proxy::proxy_announced(RuntimeOrigin::signed(0), 3, 1, None, call.clone()));
 		let announcements = Announcements::<Test>::get(3);
 		assert_eq!(announcements.0, vec![Announcement { real: 2, call_hash, height: 1 }]);

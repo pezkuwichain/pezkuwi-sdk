@@ -21,7 +21,7 @@
 use assert_cmd::cargo::cargo_bin;
 use std::process::Command;
 
-/// `benchmark pallet` works for the different combinations of `steps` and `repeat`.
+/// `benchmark pezpallet` works for the different combinations of `steps` and `repeat`.
 #[test]
 fn benchmark_pallet_works() {
 	// Some invalid combinations:
@@ -35,32 +35,32 @@ fn benchmark_pallet_works() {
 
 #[test]
 fn benchmark_pallet_args_work() {
-	benchmark_pallet_args(&["--list", "--pallet=pezpallet_balances"], true);
-	benchmark_pallet_args(&["--list", "--pallet=pezpallet_balances"], true);
+	benchmark_pallet_args(&["--list", "--pezpallet=pezpallet_balances"], true);
+	benchmark_pallet_args(&["--list", "--pezpallet=pezpallet_balances"], true);
 	benchmark_pallet_args(
-		&["--list", "--pallet=pezpallet_balances", "--genesis-builder=spec-genesis"],
+		&["--list", "--pezpallet=pezpallet_balances", "--genesis-builder=spec-genesis"],
 		true,
 	);
 	benchmark_pallet_args(
-		&["--list", "--pallet=pezpallet_balances", "--chain=dev", "--genesis-builder=spec-genesis"],
+		&["--list", "--pezpallet=pezpallet_balances", "--chain=dev", "--genesis-builder=spec-genesis"],
 		true,
 	);
 	benchmark_pallet_args(
-		&["--list", "--pallet=pezpallet_balances", "--chain=dev", "--genesis-builder=spec-runtime"],
+		&["--list", "--pezpallet=pezpallet_balances", "--chain=dev", "--genesis-builder=spec-runtime"],
 		true,
 	);
 	// Error because no runtime is provided:
 	benchmark_pallet_args(
-		&["--list", "--pallet=pezpallet_balances", "--chain=dev", "--genesis-builder=runtime"],
+		&["--list", "--pezpallet=pezpallet_balances", "--chain=dev", "--genesis-builder=runtime"],
 		false,
 	);
 }
 
 fn benchmark_pallet(steps: u32, repeat: u32, should_work: bool) {
 	let status = Command::new(cargo_bin("bizinikiwi-node"))
-		.args(["benchmark", "pallet", "--dev"])
+		.args(["benchmark", "pezpallet", "--dev"])
 		// Use the `addition` benchmark since is the fastest.
-		.args(["--pallet", "pezframe-benchmarking", "--extrinsic", "addition"])
+		.args(["--pezpallet", "pezframe-benchmarking", "--extrinsic", "addition"])
 		.args(["--steps", &format!("{}", steps), "--repeat", &format!("{}", repeat)])
 		.args([
 			"--wasm-execution=compiled",
@@ -77,7 +77,7 @@ fn benchmark_pallet(steps: u32, repeat: u32, should_work: bool) {
 
 fn benchmark_pallet_args(args: &[&str], should_work: bool) {
 	let status = Command::new(cargo_bin("bizinikiwi-node"))
-		.args(["benchmark", "pallet"])
+		.args(["benchmark", "pezpallet"])
 		.args(args)
 		.status()
 		.unwrap();

@@ -1,7 +1,7 @@
 //! Benchmarking setup for pezpallet-perwerde
 #![cfg(feature = "runtime-benchmarks")]
 
-use super::{Pallet as Perwerde, *};
+use super::{Pezpallet as Perwerde, *};
 use pezframe_benchmarking::v2::*;
 use pezframe_support::{pezpallet_prelude::Get, BoundedVec};
 use pezframe_system::RawOrigin;

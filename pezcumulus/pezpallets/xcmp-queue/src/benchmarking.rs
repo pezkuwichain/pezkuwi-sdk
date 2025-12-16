@@ -37,7 +37,7 @@ mod benchmarks {
 	#[benchmark]
 	fn set_config_with_u32() {
 		#[extrinsic_call]
-		Pallet::<T>::update_resume_threshold(RawOrigin::Root, 1);
+		Pezpallet::<T>::update_resume_threshold(RawOrigin::Root, 1);
 	}
 
 	/// Add a XCMP message of `n` bytes to the message queue.
@@ -57,7 +57,7 @@ mod benchmarks {
 		let fp_before = T::XcmpQueue::footprint(0.into());
 		#[block]
 		{
-			assert_ok!(Pallet::<T>::enqueue_xcmp_messages(
+			assert_ok!(Pezpallet::<T>::enqueue_xcmp_messages(
 				0.into(),
 				&[msg.as_bounded_slice()],
 				true,
@@ -94,7 +94,7 @@ mod benchmarks {
 		let fp_before = T::XcmpQueue::footprint(0.into());
 		#[block]
 		{
-			assert_ok!(Pallet::<T>::enqueue_xcmp_messages(
+			assert_ok!(Pezpallet::<T>::enqueue_xcmp_messages(
 				0.into(),
 				&msgs,
 				true,
@@ -121,7 +121,7 @@ mod benchmarks {
 			mock::EnqueuedMessages::set(vec![]);
 		}
 
-		assert_ok!(Pallet::<T>::enqueue_xcmp_messages(
+		assert_ok!(Pezpallet::<T>::enqueue_xcmp_messages(
 			0.into(),
 			&[BoundedVec::try_from(vec![0; n as usize]).unwrap().as_bounded_slice()],
 			true,
@@ -132,7 +132,7 @@ mod benchmarks {
 		let fp_before = T::XcmpQueue::footprint(0.into());
 		#[block]
 		{
-			assert_ok!(Pallet::<T>::enqueue_xcmp_messages(
+			assert_ok!(Pezpallet::<T>::enqueue_xcmp_messages(
 				0.into(),
 				&[BoundedVec::new().as_bounded_slice()],
 				true,
@@ -172,7 +172,7 @@ mod benchmarks {
 		let fp_before = T::XcmpQueue::footprint(0.into());
 		#[block]
 		{
-			assert_ok!(Pallet::<T>::enqueue_xcmp_messages(
+			assert_ok!(Pezpallet::<T>::enqueue_xcmp_messages(
 				0.into(),
 				&msgs.iter().map(|msg| msg.as_bounded_slice()).collect::<Vec<_>>(),
 				true,
@@ -197,7 +197,7 @@ mod benchmarks {
 			});
 		}
 
-		assert_ok!(Pallet::<T>::enqueue_xcmp_messages(
+		assert_ok!(Pezpallet::<T>::enqueue_xcmp_messages(
 			0.into(),
 			&[BoundedVec::try_from(vec![
 				0;
@@ -219,7 +219,7 @@ mod benchmarks {
 		let fp_before = T::XcmpQueue::footprint(0.into());
 		#[block]
 		{
-			assert_ok!(Pallet::<T>::enqueue_xcmp_messages(
+			assert_ok!(Pezpallet::<T>::enqueue_xcmp_messages(
 				0.into(),
 				&msgs.iter().map(|msg| msg.as_bounded_slice()).collect::<Vec<_>>(),
 				true,
@@ -241,7 +241,7 @@ mod benchmarks {
 		#[block]
 		{
 			ChannelSignal::decode_all(&mut &data[..]).unwrap();
-			Pallet::<T>::suspend_channel(para);
+			Pezpallet::<T>::suspend_channel(para);
 		}
 
 		assert_eq!(
@@ -259,12 +259,12 @@ mod benchmarks {
 		let para = 123.into();
 		let data = ChannelSignal::Resume.encode();
 
-		Pallet::<T>::suspend_channel(para);
+		Pezpallet::<T>::suspend_channel(para);
 
 		#[block]
 		{
 			ChannelSignal::decode_all(&mut &data[..]).unwrap();
-			Pallet::<T>::resume_channel(para);
+			Pezpallet::<T>::resume_channel(para);
 		}
 
 		assert!(
@@ -286,7 +286,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			Pallet::<T>::take_first_concatenated_xcm(&mut &data[..], &mut WeightMeter::new())
+			Pezpallet::<T>::take_first_concatenated_xcm(&mut &data[..], &mut WeightMeter::new())
 				.unwrap();
 		}
 	}
@@ -310,7 +310,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			Pallet::<T>::on_idle(0u32.into(), Weight::MAX);
+			Pezpallet::<T>::on_idle(0u32.into(), Weight::MAX);
 		}
 	}
 
@@ -333,9 +333,9 @@ mod benchmarks {
 
 		#[block]
 		{
-			Pallet::<T>::on_idle(0u32.into(), Weight::MAX);
+			Pezpallet::<T>::on_idle(0u32.into(), Weight::MAX);
 		}
 	}
 
-	impl_benchmark_test_suite!(Pallet, crate::mock::new_test_ext(), crate::mock::Test);
+	impl_benchmark_test_suite!(Pezpallet, crate::mock::new_test_ext(), crate::mock::Test);
 }

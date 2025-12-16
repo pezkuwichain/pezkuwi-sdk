@@ -7,7 +7,7 @@ These crates are used by external developers and need thorough documentation. Th
 development.
 
 - [Documentation Guidelines](#documentation-guidelines)
-  - [General/Non-Pallet Crates](#generalnon-pezpallet-crates)
+  - [General/Non-Pezpallet Crates](#generalnon-pezpallet-crates)
     - [What to Document?](#what-to-document)
       - [Rust Docs vs. Code Comments](#rust-docs-vs-code-comments)
     - [How to Document?](#how-to-document)
@@ -16,8 +16,8 @@ development.
     - [Other Guidelines](#other-guidelines)
       - [Document Through Code](#document-through-code)
       - [Formatting Matters](#formatting-matters)
-  - [Pallet Crates](#pezpallet-crates)
-    - [Top Level Pallet Docs (`lib.rs`)](#top-level-pezpallet-docs-librs)
+  - [Pezpallet Crates](#pezpallet-crates)
+    - [Top Level Pezpallet Docs (`lib.rs`)](#top-level-pezpallet-docs-librs)
       - [Pezkuwi and Bizinikiwi](#pezkuwi-and-bizinikiwi)
     - [Dispatchables](#dispatchables)
     - [Storage Items](#storage-items)
@@ -25,7 +25,7 @@ development.
 
 ---
 
-## General/Non-Pallet Crates
+## General/Non-Pezpallet Crates
 
 First, consider the case for all such crates, except for those that are pallets.
 
@@ -203,49 +203,49 @@ properly do this.
 
 ---
 
-## Pallet Crates
+## Pezpallet Crates
 
 The guidelines so far have been general in nature, and are applicable to crates that are pallets and crates that are not
 pallets.
 
-The following is relevant to how to document parts of a crate that is a pallet. See
+The following is relevant to how to document parts of a crate that is a pezpallet. See
 [`pezpallet-fast-unstake`](../../bizinikiwi/pezframe/fast-unstake/src/lib.rs) as one example of adhering these guidelines.
 
 ---
 
-### Top Level Pallet Docs (`lib.rs`)
+### Top Level Pezpallet Docs (`lib.rs`)
 
-For the top-level pallet docs, consider the following template:
+For the top-level pezpallet docs, consider the following template:
 
 ```
-//! # <Pallet Name>
+//! # <Pezpallet Name>
 //!
-//! <single-liner about the pallet>.
+//! <single-liner about the pezpallet>.
 //!
-//! ## Pallet API
+//! ## Pezpallet API
 //!
-//! <Reminder: inside the [`pallet`] module, a template that leads the reader to the relevant items is auto-generated. There is no need to repeat
-//! things like "See Config trait for ...", which are generated inside [`pallet`] here anyways. You can use the line below as-is:>
+//! <Reminder: inside the [`pezpallet`] module, a template that leads the reader to the relevant items is auto-generated. There is no need to repeat
+//! things like "See Config trait for ...", which are generated inside [`pezpallet`] here anyways. You can use the line below as-is:>
 //!
-//! See the [`pallet`] module for more information about the interfaces this pallet exposes, including its
+//! See the [`pezpallet`] module for more information about the interfaces this pezpallet exposes, including its
 //! configuration trait, dispatchables, storage items, events and errors.
 //!
 //! ## Overview
 //!
 //! <should be high-level details that are relevant to the most broad audience>
 //!
-//! <The audience here is potentially non-coders who just want to know what this pallet does, not how it does it>
+//! <The audience here is potentially non-coders who just want to know what this pezpallet does, not how it does it>
 //!
-//! <potentially a few paragraphs, focus on what external folks should know about the pallet>
+//! <potentially a few paragraphs, focus on what external folks should know about the pezpallet>
 //!
 //! ### Example
 //!
-//! <Your pallet must have a few tests that cover important user journeys. Use https://crates.io/crates/docify to
+//! <Your pezpallet must have a few tests that cover important user journeys. Use https://crates.io/crates/docify to
 //! reuse these as examples.>
 //!
-//! <The audience of this is those who want to know how this pallet works, to the extent of being able to build
-//! something on top of it, like a DApp or another pallet. In some cases, you might want to add an example of how to
-//! use this pallet in other pallets.>
+//! <The audience of this is those who want to know how this pezpallet works, to the extent of being able to build
+//! something on top of it, like a DApp or another pezpallet. In some cases, you might want to add an example of how to
+//! use this pezpallet in other pallets.>
 //!
 //! This section can most often be left as-is.
 //!
@@ -253,16 +253,16 @@ For the top-level pallet docs, consider the following template:
 //!
 //! <The format of this section is up to you, but we suggest the Design-oriented approach that follows>
 //!
-//! <The audience of this would be your future self, or anyone who wants to gain a deep understanding of how the pallet
+//! <The audience of this would be your future self, or anyone who wants to gain a deep understanding of how the pezpallet
 //! works so that they can eventually propose optimizations to it>
 //!
 //! ### Design Goals (optional)
 //!
-//! <Describe your goals with the pallet design.>
+//! <Describe your goals with the pezpallet design.>
 //!
 //! ### Design (optional)
 //!
-//! <Describe how you've reached those goals. This should describe the storage layout of your pallet and what was your
+//! <Describe how you've reached those goals. This should describe the storage layout of your pezpallet and what was your
 //! approach in designing it that way.>
 //!
 //! ### Terminology (optional)
@@ -285,7 +285,7 @@ and beyond are flexible.
 
 #### Pezkuwi and Bizinikiwi
 
-Optionally, in order to demonstrate the relation between the two, you can start the pallet documentation with:
+Optionally, in order to demonstrate the relation between the two, you can start the pezpallet documentation with:
 
 ```
 //! > Made with *Bizinikiwi*, for *Pezkuwi*.
@@ -301,7 +301,7 @@ Optionally, in order to demonstrate the relation between the two, you can start 
 
 ### Dispatchables
 
-For each dispatchable (`fn` item inside `#[pallet::call]`), consider the following template:
+For each dispatchable (`fn` item inside `#[pezpallet::call]`), consider the following template:
 
 ```
 /// <One-liner explaining what the dispatchable does>
@@ -337,8 +337,8 @@ because ...`). Recall that this is not relevant information to external people, 
 
 2. Consider explaining the crypto-economics of how a deposit is being taken in return of the storage being used.
 
-3. Consider explaining why it is safe for the storage item to be unbounded, if `#[pallet::unbounded]` or
-`#[pallet::without_storage_info]` is being used.
+3. Consider explaining why it is safe for the storage item to be unbounded, if `#[pezpallet::unbounded]` or
+`#[pezpallet::without_storage_info]` is being used.
 
 ---
 

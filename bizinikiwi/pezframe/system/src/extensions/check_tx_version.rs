@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use crate::{Config, Pallet};
+use crate::{Config, Pezpallet};
 use codec::{Decode, DecodeWithMemTracking, Encode};
 use scale_info::TypeInfo;
 use pezsp_runtime::{
@@ -58,7 +58,7 @@ impl<T: Config + Send + Sync> TransactionExtension<<T as Config>::RuntimeCall>
 	const IDENTIFIER: &'static str = "CheckTxVersion";
 	type Implicit = u32;
 	fn implicit(&self) -> Result<Self::Implicit, TransactionValidityError> {
-		Ok(<Pallet<T>>::runtime_version().transaction_version)
+		Ok(<Pezpallet<T>>::runtime_version().transaction_version)
 	}
 	type Val = ();
 	type Pre = ();

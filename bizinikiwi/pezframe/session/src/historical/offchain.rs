@@ -31,7 +31,7 @@ use pezsp_runtime::{
 use pezsp_session::MembershipProof;
 
 use super::{shared, Config, IdentificationTuple, ProvingTrie};
-use crate::{Pallet as SessionModule, SessionIndex};
+use crate::{Pezpallet as SessionModule, SessionIndex};
 
 /// A set of validators, which was used for a fixed session index.
 struct ValidatorSet<T: Config> {
@@ -138,7 +138,7 @@ pub fn keep_newest<T: Config>(n_to_keep: usize) {
 mod tests {
 	use super::*;
 	use crate::{
-		historical::{onchain, Pallet},
+		historical::{onchain, Pezpallet},
 		mock::{force_new_session, set_next_validators, NextValidators, Session, System, Test},
 	};
 
@@ -152,7 +152,7 @@ mod tests {
 
 	use pezframe_support::traits::{KeyOwnerProofSystem, OnInitialize};
 
-	type Historical = Pallet<Test>;
+	type Historical = Pezpallet<Test>;
 
 	pub fn new_test_ext() -> pezsp_io::TestExternalities {
 		let mut t = pezframe_system::GenesisConfig::<Test>::default()
@@ -167,7 +167,7 @@ mod tests {
 
 		BasicExternalities::execute_with_storage(&mut t, || {
 			for (ref k, ..) in &keys {
-				pezframe_system::Pallet::<Test>::inc_providers(k);
+				pezframe_system::Pezpallet::<Test>::inc_providers(k);
 			}
 		});
 

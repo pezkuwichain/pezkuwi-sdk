@@ -157,7 +157,7 @@ impl XcmpMessageSource for FromThreadLocal {
 		let mut result = Vec::new();
 		SENT_MESSAGES.with(|ms| {
 			ms.borrow_mut().retain(|m| {
-				let status = <Pallet<Test> as GetChannelInfo>::get_channel_status(m.0);
+				let status = <Pezpallet<Test> as GetChannelInfo>::get_channel_status(m.0);
 				let (max_size_now, max_size_ever) = match status {
 					ChannelStatus::Ready(now, ever) => (now, ever),
 					ChannelStatus::Closed => return false, // drop message

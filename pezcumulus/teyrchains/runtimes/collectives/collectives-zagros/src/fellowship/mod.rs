@@ -115,7 +115,7 @@ impl pezpallet_ranked_collective::Config<FellowshipCollectiveInstance> for Runti
 	type WeightInfo = weights::pezpallet_ranked_collective_fellowship_collective::WeightInfo<Runtime>;
 	type RuntimeEvent = RuntimeEvent;
 
-	// Promotions and the induction of new members are serviced by `FellowshipCore` pallet instance.
+	// Promotions and the induction of new members are serviced by `FellowshipCore` pezpallet instance.
 	#[cfg(not(feature = "runtime-benchmarks"))]
 	type AddOrigin = pezframe_system::EnsureNever<()>;
 	#[cfg(feature = "runtime-benchmarks")]
@@ -161,7 +161,7 @@ pub type FellowshipCoreInstance = pezpallet_core_fellowship::Instance1;
 impl pezpallet_core_fellowship::Config<FellowshipCoreInstance> for Runtime {
 	type WeightInfo = weights::pezpallet_core_fellowship_fellowship_core::WeightInfo<Runtime>;
 	type RuntimeEvent = RuntimeEvent;
-	type Members = pezpallet_ranked_collective::Pallet<Runtime, FellowshipCollectiveInstance>;
+	type Members = pezpallet_ranked_collective::Pezpallet<Runtime, FellowshipCollectiveInstance>;
 	type Balance = Balance;
 	// Parameters are set by any of:
 	// - Root;
@@ -218,7 +218,7 @@ pub type FellowshipSalaryInstance = pezpallet_salary::Instance1;
 
 parameter_types! {
 	// The interior location on AssetHub for the paying account. This is the Fellowship Salary
-	// pallet instance (which sits at index 64). This sovereign account will need funding.
+	// pezpallet instance (which sits at index 64). This sovereign account will need funding.
 	pub Interior: InteriorLocation = PalletInstance(64).into();
 }
 
@@ -244,10 +244,10 @@ impl pezpallet_salary::Config<FellowshipSalaryInstance> for Runtime {
 	type Paymaster = FellowshipSalaryPaymaster;
 	#[cfg(feature = "runtime-benchmarks")]
 	type Paymaster = PayWithEnsure<FellowshipSalaryPaymaster, OpenHrmpChannel<ConstU32<1000>>>;
-	type Members = pezpallet_ranked_collective::Pallet<Runtime, FellowshipCollectiveInstance>;
+	type Members = pezpallet_ranked_collective::Pezpallet<Runtime, FellowshipCollectiveInstance>;
 
 	#[cfg(not(feature = "runtime-benchmarks"))]
-	type Salary = pezpallet_core_fellowship::Pallet<Runtime, FellowshipCoreInstance>;
+	type Salary = pezpallet_core_fellowship::Pezpallet<Runtime, FellowshipCoreInstance>;
 	#[cfg(feature = "runtime-benchmarks")]
 	type Salary = pezframe_support::traits::tokens::ConvertRank<
 		crate::impls::benchmarks::RankToSalary<Balances>,
@@ -266,7 +266,7 @@ parameter_types! {
 	pub const Burn: Permill = Permill::from_percent(0);
 	pub const MaxBalance: Balance = Balance::max_value();
 	// The asset's interior location for the paying account. This is the Fellowship Treasury
-	// pallet instance (which sits at index 65).
+	// pezpallet instance (which sits at index 65).
 	pub FellowshipTreasuryInteriorLocation: InteriorLocation = PalletInstance(65).into();
 	pub SelfParaId: ParaId = TeyrchainInfo::teyrchain_id();
 }

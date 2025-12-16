@@ -240,7 +240,7 @@ impl Contains<AccountId> for MockedRestrictList {
 	}
 }
 
-/// A representation of the session pallet that lives on the relay chain.
+/// A representation of the session pezpallet that lives on the relay chain.
 pub mod session_mock {
 	use super::*;
 	use pezpallet_staking_async_rc_client::ValidatorSetReport;
@@ -417,7 +417,7 @@ impl EraPayout<Balance> for OneTokenPerMillisecond {
 	}
 }
 
-impl crate::pallet::pallet::Config for Test {
+impl crate::pezpallet::pezpallet::Config for Test {
 	type RuntimeHoldReason = RuntimeHoldReason;
 	type OldCurrency = Balances;
 	type Currency = Balances;
@@ -788,7 +788,7 @@ pub(crate) fn time_per_era() -> u64 {
 
 pub(crate) fn reward_all_elected() {
 	let rewards = session_mock::Session::validators().into_iter().map(|v| (v, 1));
-	<Pallet<Test>>::reward_by_ids(rewards)
+	<Pezpallet<Test>>::reward_by_ids(rewards)
 }
 
 pub(crate) fn era_exposures(era: u32) -> Vec<(AccountId, Exposure<AccountId, Balance>)> {

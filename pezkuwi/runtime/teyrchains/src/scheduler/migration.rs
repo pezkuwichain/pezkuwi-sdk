@@ -38,7 +38,7 @@ mod v0 {
 	use pezkuwi_primitives::{CollatorId, Id};
 
 	#[storage_alias]
-	pub(super) type Scheduled<T: Config> = StorageValue<Pallet<T>, Vec<CoreAssignment>, ValueQuery>;
+	pub(super) type Scheduled<T: Config> = StorageValue<Pezpallet<T>, Vec<CoreAssignment>, ValueQuery>;
 
 	#[derive(Clone, Encode, Decode)]
 	#[cfg_attr(feature = "std", derive(PartialEq))]
@@ -66,14 +66,14 @@ mod v0 {
 	/// The actual type isn't important, as we only delete the key in the state.
 	#[storage_alias]
 	pub(crate) type AvailabilityCores<T: Config> =
-		StorageValue<Pallet<T>, Vec<Option<CoreOccupied>>, ValueQuery>;
+		StorageValue<Pezpallet<T>, Vec<Option<CoreOccupied>>, ValueQuery>;
 
 	/// The actual type isn't important, as we only delete the key in the state.
 	#[storage_alias]
-	pub(super) type ParathreadQueue<T: Config> = StorageValue<Pallet<T>, (), ValueQuery>;
+	pub(super) type ParathreadQueue<T: Config> = StorageValue<Pezpallet<T>, (), ValueQuery>;
 
 	#[storage_alias]
-	pub(super) type ParathreadClaimIndex<T: Config> = StorageValue<Pallet<T>, (), ValueQuery>;
+	pub(super) type ParathreadClaimIndex<T: Config> = StorageValue<Pezpallet<T>, (), ValueQuery>;
 
 	/// The assignment type.
 	#[derive(Clone, Encode, Decode, TypeInfo, RuntimeDebug)]
@@ -116,14 +116,14 @@ mod v1 {
 
 	#[storage_alias]
 	pub(super) type ClaimQueue<T: Config> = StorageValue<
-		Pallet<T>,
+		Pezpallet<T>,
 		BTreeMap<CoreIndex, VecDeque<Option<ParasEntry<BlockNumberFor<T>>>>>,
 		ValueQuery,
 	>;
 
 	#[storage_alias]
 	pub(super) type AvailabilityCores<T: Config> =
-		StorageValue<Pallet<T>, Vec<CoreOccupied<BlockNumberFor<T>>>, ValueQuery>;
+		StorageValue<Pezpallet<T>, Vec<CoreOccupied<BlockNumberFor<T>>>, ValueQuery>;
 
 	#[derive(Encode, Decode, TypeInfo, RuntimeDebug, PartialEq)]
 	pub(super) enum CoreOccupied<N> {
@@ -173,7 +173,7 @@ mod v1 {
 			v0::ParathreadQueue::<T>::kill();
 			v0::ParathreadClaimIndex::<T>::kill();
 
-			let now = pezframe_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pezpallet::<T>::block_number();
 			let scheduled = v0::Scheduled::<T>::take();
 			let sched_len = scheduled.len() as u64;
 			for core_assignment in scheduled {
@@ -249,7 +249,7 @@ mod v1 {
 				.count();
 
 			ensure!(
-				Pallet::<T>::claim_queue_len() as u32 + availability_cores_waiting as u32 ==
+				Pezpallet::<T>::claim_queue_len() as u32 + availability_cores_waiting as u32 ==
 					expected_len,
 				"ClaimQueue and AvailabilityCores should have the correct length",
 			);
@@ -264,7 +264,7 @@ pub type MigrateV0ToV1<T> = VersionedMigration<
 	0,
 	1,
 	v1::UncheckedMigrateToV1<T>,
-	Pallet<T>,
+	Pezpallet<T>,
 	<T as pezframe_system::Config>::DbWeight,
 >;
 
@@ -288,14 +288,14 @@ pub(crate) mod v2 {
 	// V2 (no Option wrapper) and new [`Assignment`].
 	#[storage_alias]
 	pub(crate) type ClaimQueue<T: Config> = StorageValue<
-		Pallet<T>,
+		Pezpallet<T>,
 		BTreeMap<CoreIndex, VecDeque<ParasEntry<BlockNumberFor<T>>>>,
 		ValueQuery,
 	>;
 
 	#[storage_alias]
 	pub(crate) type AvailabilityCores<T: Config> =
-		StorageValue<Pallet<T>, Vec<CoreOccupied<BlockNumberFor<T>>>, ValueQuery>;
+		StorageValue<Pezpallet<T>, Vec<CoreOccupied<BlockNumberFor<T>>>, ValueQuery>;
 
 	fn is_bulk<T: Config>(core_index: CoreIndex) -> bool {
 		core_index.0 < paras::Teyrchains::<T>::decode_len().unwrap_or(0) as u32
@@ -403,7 +403,7 @@ pub type MigrateV1ToV2<T> = VersionedMigration<
 	1,
 	2,
 	v2::UncheckedMigrateToV2<T>,
-	Pallet<T>,
+	Pezpallet<T>,
 	<T as pezframe_system::Config>::DbWeight,
 >;
 
@@ -416,7 +416,7 @@ mod v3 {
 
 	#[storage_alias]
 	pub(crate) type ClaimQueue<T: Config> =
-		StorageValue<Pallet<T>, BTreeMap<CoreIndex, VecDeque<Assignment>>, ValueQuery>;
+		StorageValue<Pezpallet<T>, BTreeMap<CoreIndex, VecDeque<Assignment>>, ValueQuery>;
 	/// Migration to V3
 	pub struct UncheckedMigrateToV3<T>(core::marker::PhantomData<T>);
 
@@ -489,6 +489,6 @@ pub type MigrateV2ToV3<T> = VersionedMigration<
 	2,
 	3,
 	v3::UncheckedMigrateToV3<T>,
-	Pallet<T>,
+	Pezpallet<T>,
 	<T as pezframe_system::Config>::DbWeight,
 >;

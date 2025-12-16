@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Tests for Message Queue Pallet.
+//! Tests for Message Queue Pezpallet.
 
 #![cfg(test)]
 
@@ -473,7 +473,7 @@ fn service_page_works() {
 			let mut meter = WeightMeter::with_limit(((2 + (3 + 1) * process) as u64).into_weight());
 			System::reset_events();
 			let (processed, status) =
-				crate::Pallet::<Test>::service_page(&Here, &mut book, &mut meter, Weight::MAX);
+				crate::Pezpallet::<Test>::service_page(&Here, &mut book, &mut meter, Weight::MAX);
 			assert_eq!(processed as usize, process);
 			assert_eq!(NumMessagesProcessed::take(), process);
 			assert_eq!(System::events().len(), process);
@@ -564,7 +564,7 @@ fn service_page_suspension_works() {
 		// First we process 5 messages from this page.
 		let mut meter = WeightMeter::with_limit(5.into_weight());
 		let (_, status) =
-			crate::Pallet::<Test>::service_page(&Here, &mut book, &mut meter, Weight::MAX);
+			crate::Pezpallet::<Test>::service_page(&Here, &mut book, &mut meter, Weight::MAX);
 
 		assert_eq!(NumMessagesProcessed::take(), 5);
 		assert!(meter.remaining().is_zero());
@@ -575,7 +575,7 @@ fn service_page_suspension_works() {
 		YieldingQueues::set(vec![Here]);
 		// Noting happens...
 		for _ in 0..5 {
-			let (_, status) = crate::Pallet::<Test>::service_page(
+			let (_, status) = crate::Pezpallet::<Test>::service_page(
 				&Here,
 				&mut book,
 				&mut WeightMeter::new(),
@@ -587,7 +587,7 @@ fn service_page_suspension_works() {
 
 		// Resume and process all remaining.
 		YieldingQueues::take();
-		let (_, status) = crate::Pallet::<Test>::service_page(
+		let (_, status) = crate::Pezpallet::<Test>::service_page(
 			&Here,
 			&mut book,
 			&mut WeightMeter::new(),
@@ -697,7 +697,7 @@ fn service_page_item_skips_perm_overweight_message() {
 		set_weight("service_page_item", 2.into_weight());
 
 		assert_eq!(
-			crate::Pallet::<Test>::service_page_item(
+			crate::Pezpallet::<Test>::service_page_item(
 				&MessageOrigin::Here,
 				0,
 				&mut book_for::<Test>(&page),
@@ -1251,7 +1251,7 @@ fn permanently_overweight_limit_is_valid_basic() {
 			MessageQueue::service_queues(w.into());
 
 			let last_event =
-				pezframe_system::Pallet::<Test>::events().into_iter().last().expect("No event");
+				pezframe_system::Pezpallet::<Test>::events().into_iter().last().expect("No event");
 
 			// The weight overhead for a single message is set to 50. The message itself needs 200.
 			// Every weight in range `[50, 249]` should result in a permanently overweight message:
@@ -1311,7 +1311,7 @@ fn permanently_overweight_limit_is_valid_fuzzy() {
 				MessageQueue::service_queues(w.into());
 
 				let last_event =
-					pezframe_system::Pallet::<Test>::events().into_iter().last().expect("No event");
+					pezframe_system::Pezpallet::<Test>::events().into_iter().last().expect("No event");
 
 				if w < o + 200 {
 					assert_eq!(
@@ -1858,7 +1858,7 @@ fn process_enqueued_on_idle() {
 		assert_eq!(BookStateFor::<Test>::iter().count(), 1);
 
 		// Process enqueued messages from previous block.
-		Pallet::<Test>::on_initialize(1);
+		Pezpallet::<Test>::on_initialize(1);
 		assert_eq!(
 			MessagesProcessed::take(),
 			vec![(b"a".to_vec(), Here), (b"ab".to_vec(), Here), (b"abc".to_vec(), Here),]
@@ -1868,7 +1868,7 @@ fn process_enqueued_on_idle() {
 		assert_eq!(BookStateFor::<Test>::iter().count(), 2);
 
 		// Enough weight to process on idle.
-		Pallet::<Test>::on_idle(1, Weight::from_parts(100, 100));
+		Pezpallet::<Test>::on_idle(1, Weight::from_parts(100, 100));
 		assert_eq!(
 			MessagesProcessed::take(),
 			vec![(b"x".to_vec(), There), (b"xy".to_vec(), There), (b"xyz".to_vec(), There)]
@@ -1880,13 +1880,13 @@ fn process_enqueued_on_idle() {
 fn process_enqueued_on_idle_requires_enough_weight() {
 	use MessageOrigin::*;
 	build_and_execute::<Test>(|| {
-		Pallet::<Test>::on_initialize(1);
+		Pezpallet::<Test>::on_initialize(1);
 
 		MessageQueue::enqueue_messages(vec![msg("x"), msg("xy"), msg("xyz")].into_iter(), There);
 		assert_eq!(BookStateFor::<Test>::iter().count(), 1);
 
 		// Not enough weight to process on idle.
-		Pallet::<Test>::on_idle(1, Weight::from_parts(0, 0));
+		Pezpallet::<Test>::on_idle(1, Weight::from_parts(0, 0));
 		assert_eq!(MessagesProcessed::take(), vec![]);
 
 		assert!(!System::events().into_iter().any(|e| matches!(
@@ -2075,7 +2075,7 @@ fn force_set_head_can_starve_other_queues() {
 		}};
 
 		// But we won't let that happen and instead prioritize it:
-		assert!(Pallet::<Test>::force_set_head(&mut WeightMeter::new(), &Here).unwrap());
+		assert!(Pezpallet::<Test>::force_set_head(&mut WeightMeter::new(), &Here).unwrap());
 
 		MessageQueue::service_queues(1.into_weight());
 		assert_eq!(MessagesProcessed::take(), vec![(b"A".to_vec(), Here)]);
@@ -2092,7 +2092,7 @@ fn force_set_head_noop_on_unready_queue() {
 		assert_ring(&[]);
 
 		let _guard = StorageNoopGuard::new();
-		let was_set = Pallet::<Test>::force_set_head(&mut WeightMeter::new(), &There).unwrap();
+		let was_set = Pezpallet::<Test>::force_set_head(&mut WeightMeter::new(), &There).unwrap();
 		assert!(!was_set);
 	});
 }
@@ -2107,7 +2107,7 @@ fn force_set_head_noop_on_current_head() {
 		assert_ring(&[Here]);
 
 		let _guard = StorageNoopGuard::new();
-		let was_set = Pallet::<Test>::force_set_head(&mut WeightMeter::new(), &Here).unwrap();
+		let was_set = Pezpallet::<Test>::force_set_head(&mut WeightMeter::new(), &Here).unwrap();
 		assert!(was_set);
 	});
 }
@@ -2120,7 +2120,7 @@ fn force_set_head_noop_unprocessed_queue() {
 		assert_ring(&[Here]);
 
 		let _guard = StorageNoopGuard::new();
-		let was_set = Pallet::<Test>::force_set_head(&mut WeightMeter::new(), &Here).unwrap();
+		let was_set = Pezpallet::<Test>::force_set_head(&mut WeightMeter::new(), &Here).unwrap();
 		assert!(was_set);
 	});
 }
@@ -2134,7 +2134,7 @@ fn force_set_head_works() {
 		assert_eq!(ServiceHead::<Test>::get(), Some(Here));
 		assert_ring(&[Here, There]);
 
-		let was_set = Pallet::<Test>::force_set_head(&mut WeightMeter::new(), &There).unwrap();
+		let was_set = Pezpallet::<Test>::force_set_head(&mut WeightMeter::new(), &There).unwrap();
 		assert!(was_set);
 
 		assert_eq!(ServiceHead::<Test>::get(), Some(There));

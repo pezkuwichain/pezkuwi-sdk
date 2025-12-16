@@ -10,7 +10,7 @@
 
 use super::*;
 #[allow(unused)]
-use crate::Pallet as Presale;
+use crate::Pezpallet as Presale;
 use pezframe_benchmarking::v2::*;
 use pezframe_support::traits::fungibles::{Create, Mutate};
 use pezframe_system::RawOrigin;
@@ -281,13 +281,13 @@ mod benchmarks {
 			Presale::<T>::contribute(RawOrigin::Signed(caller.clone()).into(), presale_id, amount);
 
 		// Advance blocks past presale end
-		pezframe_system::Pallet::<T>::set_block_number(2000u32.into());
+		pezframe_system::Pezpallet::<T>::set_block_number(2000u32.into());
 
 		// Finalize presale (requires root)
 		let _ = Presale::<T>::finalize_presale(RawOrigin::Root.into(), presale_id);
 
 		// Advance past cliff period
-		pezframe_system::Pallet::<T>::set_block_number(3000u32.into());
+		pezframe_system::Pezpallet::<T>::set_block_number(3000u32.into());
 
 		#[extrinsic_call]
 		claim_vested(RawOrigin::Signed(caller.clone()), presale_id);
@@ -369,7 +369,7 @@ mod benchmarks {
 		}
 
 		// Advance blocks past presale end
-		pezframe_system::Pallet::<T>::set_block_number(2000u32.into());
+		pezframe_system::Pezpallet::<T>::set_block_number(2000u32.into());
 
 		#[extrinsic_call]
 		finalize_presale(RawOrigin::Root, presale_id);
@@ -435,7 +435,7 @@ mod benchmarks {
 		let _ = T::Assets::mint_into(payment_asset.clone(), &presale_treasury, refund_pool);
 
 		// Advance blocks past presale end
-		pezframe_system::Pallet::<T>::set_block_number(2000u32.into());
+		pezframe_system::Pezpallet::<T>::set_block_number(2000u32.into());
 
 		// Finalize presale (will mark as Failed due to soft cap not reached)
 		let _ = Presale::<T>::finalize_presale(RawOrigin::Root.into(), presale_id);

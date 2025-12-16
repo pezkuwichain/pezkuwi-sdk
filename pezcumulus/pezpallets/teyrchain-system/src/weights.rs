@@ -25,10 +25,10 @@
 // Executed Command:
 // ./target/release/pezkuwi-teyrchain
 // benchmark
-// pallet
+// pezpallet
 // --chain
 // westmint-dev
-// --pallet
+// --pezpallet
 // pezcumulus_pezpallet_teyrchain_system
 // --extrinsic
 // *

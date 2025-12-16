@@ -17,7 +17,7 @@
 
 //! Adapter to use `fungibles::*` implementations as `fungible::*`.
 //!
-//! This allows for a `fungibles` asset, e.g. from the `pezpallet_assets` pallet, to be used when a
+//! This allows for a `fungibles` asset, e.g. from the `pezpallet_assets` pezpallet, to be used when a
 //! `fungible` asset is expected.
 //!
 //! See the [`crate::traits::fungible`] doc for more information about fungible traits.

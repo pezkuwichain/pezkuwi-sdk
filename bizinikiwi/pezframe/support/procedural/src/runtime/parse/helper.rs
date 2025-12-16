@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use crate::pallet::parse::helper::MutItemAttrs;
+use crate::pezpallet::parse::helper::MutItemAttrs;
 use quote::ToTokens;
 
 pub(crate) fn take_first_item_runtime_attr<Attr>(

@@ -150,33 +150,33 @@ impl Config for XcmConfig {
 	type XcmRecorder = ();
 }
 
-#[pezframe_support::pallet]
+#[pezframe_support::pezpallet]
 pub mod mock_msg_queue {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		type XcmExecutor: ExecuteXcm<Self::RuntimeCall>;
 	}
 
-	#[pallet::pallet]
-	#[pallet::without_storage_info]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::without_storage_info]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {}
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {}
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type TeyrchainId<T: Config> = StorageValue<_, ParaId, ValueQuery>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	/// A queue of received DMP messages
 	pub(super) type ReceivedDmp<T: Config> = StorageValue<_, Vec<Xcm<T::RuntimeCall>>, ValueQuery>;
 
-	impl<T: Config> Get<ParaId> for Pallet<T> {
+	impl<T: Config> Get<ParaId> for Pezpallet<T> {
 		fn get() -> ParaId {
 			Self::teyrchain_id()
 		}
@@ -184,8 +184,8 @@ pub mod mock_msg_queue {
 
 	pub type MessageId = [u8; 32];
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		// XCMP
 		/// Some XCM was executed OK.
@@ -206,7 +206,7 @@ pub mod mock_msg_queue {
 		ExecutedDownward(MessageId, Outcome),
 	}
 
-	impl<T: Config> Pallet<T> {
+	impl<T: Config> Pezpallet<T> {
 		pub fn teyrchain_id() -> ParaId {
 			TeyrchainId::<T>::get()
 		}
@@ -254,7 +254,7 @@ pub mod mock_msg_queue {
 		}
 	}
 
-	impl<T: Config> XcmpMessageHandler for Pallet<T> {
+	impl<T: Config> XcmpMessageHandler for Pezpallet<T> {
 		fn handle_xcmp_messages<'a, I: Iterator<Item = (ParaId, RelayBlockNumber, &'a [u8])>>(
 			iter: I,
 			max_weight: Weight,
@@ -279,7 +279,7 @@ pub mod mock_msg_queue {
 		}
 	}
 
-	impl<T: Config> DmpMessageHandler for Pallet<T> {
+	impl<T: Config> DmpMessageHandler for Pezpallet<T> {
 		fn handle_dmp_messages(
 			iter: impl Iterator<Item = (RelayBlockNumber, Vec<u8>)>,
 			limit: Weight,

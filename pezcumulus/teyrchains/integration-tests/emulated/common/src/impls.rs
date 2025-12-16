@@ -65,7 +65,7 @@ use bp_messages::{
 	MessageKey, OutboundLaneData,
 };
 pub use bp_xcm_bridge_hub::XcmBridgeHubCall;
-use pezpallet_bridge_messages::{Config as BridgeMessagesConfig, LaneIdOf, OutboundLanes, Pallet};
+use pezpallet_bridge_messages::{Config as BridgeMessagesConfig, LaneIdOf, OutboundLanes, Pezpallet};
 pub use pezpallet_bridge_messages::{
 	Instance1 as BridgeMessagesInstance1, Instance2 as BridgeMessagesInstance2,
 	Instance3 as BridgeMessagesInstance3,
@@ -112,7 +112,7 @@ where
 				OutboundLanes::<S, SI>::get(lane).unwrap().latest_received_nonce;
 
 			(latest_received_nonce + 1..=latest_generated_nonce).for_each(|nonce| {
-				let encoded_payload: Vec<u8> = Pallet::<S, SI>::outbound_message_data(lane, nonce)
+				let encoded_payload: Vec<u8> = Pezpallet::<S, SI>::outbound_message_data(lane, nonce)
 					.expect("Bridge message does not exist")
 					.into();
 				let payload = Vec::<u8>::decode(&mut &encoded_payload[..])
@@ -371,7 +371,7 @@ macro_rules! impl_send_transact_helpers_for_relay_chain {
 						let destination:  $crate::impls::Location = <Self as RelayChain>::child_location_of(recipient);
 						let xcm = $crate::impls::xcm_transact_unpaid_execution(call, $crate::impls::OriginKind::Superuser);
 
-						$crate::impls::dmp::Pallet::<<Self as $crate::impls::Chain>::Runtime>::make_teyrchain_reachable(recipient);
+						$crate::impls::dmp::Pezpallet::<<Self as $crate::impls::Chain>::Runtime>::make_teyrchain_reachable(recipient);
 
 						// Send XCM `Transact`
 						$crate::impls::assert_ok!(<Self as [<$chain RelayPallet>]>::XcmPallet::send(
@@ -600,7 +600,7 @@ macro_rules! impl_assets_helpers_for_system_teyrchain {
 	( $chain:ident, $relay_chain:ident ) => {
 		$crate::impls::paste::paste! {
 			impl<N: $crate::impls::Network> $chain<N> {
-				/// Returns the encoded call for `force_create` from the assets pallet
+				/// Returns the encoded call for `force_create` from the assets pezpallet
 				pub fn force_create_asset_call(
 					asset_id: u32,
 					owner: $crate::impls::AccountId,
@@ -622,7 +622,7 @@ macro_rules! impl_assets_helpers_for_system_teyrchain {
 					.into()
 				}
 
-				/// Returns a `VersionedXcm` for `force_create` from the assets pallet
+				/// Returns a `VersionedXcm` for `force_create` from the assets pezpallet
 				pub fn force_create_asset_xcm(
 					origin_kind: $crate::impls::OriginKind,
 					asset_id: u32,
@@ -634,7 +634,7 @@ macro_rules! impl_assets_helpers_for_system_teyrchain {
 					$crate::impls::xcm_transact_unpaid_execution(call, origin_kind)
 				}
 
-				/// Force create and mint assets making use of the assets pallet
+				/// Force create and mint assets making use of the assets pezpallet
 				pub fn force_create_and_mint_asset(
 					id: u32,
 					min_balance: u128,
@@ -744,7 +744,7 @@ macro_rules! impl_assets_helpers_for_teyrchain {
 					}
 				}
 
-				/// Mint assets making use of the assets pallet
+				/// Mint assets making use of the assets pezpallet
 				pub fn mint_asset(
 					signed_origin: <Self as $crate::impls::Chain>::RuntimeOrigin,
 					id: u32,
@@ -776,7 +776,7 @@ macro_rules! impl_assets_helpers_for_teyrchain {
 					});
 				}
 
-				/// Returns the encoded call for `create` from the assets pallet
+				/// Returns the encoded call for `create` from the assets pezpallet
 				pub fn create_asset_call(
 					asset_id: u32,
 					min_balance: $crate::impls::Balance,
@@ -898,7 +898,7 @@ macro_rules! impl_foreign_assets_helpers_for_teyrchain {
 					});
 				}
 
-				/// Returns the encoded call for `create` from the foreign assets pallet
+				/// Returns the encoded call for `create` from the foreign assets pezpallet
 				pub fn create_foreign_asset_call(
 					asset_id: $asset_id_type,
 					min_balance: $crate::impls::Balance,
@@ -954,7 +954,7 @@ macro_rules! impl_xcm_helpers_for_teyrchain {
 
 #[macro_export]
 macro_rules! impl_bridge_helpers_for_chain {
-	( $chain:ident, $pallet:ident, $pezpallet_xcm:ident, $runtime_call_wrapper:path ) => {
+	( $chain:ident, $pezpallet:ident, $pezpallet_xcm:ident, $runtime_call_wrapper:path ) => {
 		$crate::impls::paste::paste! {
 			impl<N: $crate::impls::Network> $chain<N> {
 				/// Open bridge with `dest`.
@@ -985,7 +985,7 @@ macro_rules! impl_bridge_helpers_for_chain {
 						};
 
 						// Send XCM `Transact` with `open_bridge` call
-						$crate::impls::assert_ok!(<Self as [<$chain $pallet>]>::$pezpallet_xcm::send(
+						$crate::impls::assert_ok!(<Self as [<$chain $pezpallet>]>::$pezpallet_xcm::send(
 							root_origin,
 							bx!(bridge_location.into()),
 							bx!(xcm),

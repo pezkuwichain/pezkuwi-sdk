@@ -357,7 +357,7 @@ impl pezcumulus_pezpallet_teyrchain_system::Config for Runtime {
 	type WeightInfo = pezcumulus_pezpallet_teyrchain_system::weights::BizinikiwiWeight<Self>;
 	type RuntimeEvent = RuntimeEvent;
 	type OnSystemEvent = ();
-	type SelfParaId = teyrchain_info::Pallet<Runtime>;
+	type SelfParaId = teyrchain_info::Pezpallet<Runtime>;
 	type OutboundXcmpMessageSource = XcmpQueue;
 	type DmpQueue = pezframe_support::traits::EnqueueWithOrigin<MessageQueue, RelayOrigin>;
 	type ReservedDmpWeight = ReservedDmpWeight;
@@ -377,7 +377,7 @@ impl pezpallet_message_queue::Config for Runtime {
 		RuntimeCall,
 	>;
 	type Size = u32;
-	// The XCMP queue pallet is only ever able to handle the `Sibling(ParaId)` origin:
+	// The XCMP queue pezpallet is only ever able to handle the `Sibling(ParaId)` origin:
 	type QueueChangeHandler = NarrowOriginToSibling<XcmpQueue>;
 	type QueuePausedQuery = NarrowOriginToSibling<XcmpQueue>;
 	type HeapSize = pezsp_core::ConstU32<{ 103 * 1024 }>;
@@ -586,7 +586,7 @@ pub struct RemoveCollectiveFlip;
 impl pezframe_support::traits::OnRuntimeUpgrade for RemoveCollectiveFlip {
 	fn on_runtime_upgrade() -> Weight {
 		use pezframe_support::storage::migration;
-		// Remove the storage value `RandomMaterial` from removed pallet `RandomnessCollectiveFlip`
+		// Remove the storage value `RandomMaterial` from removed pezpallet `RandomnessCollectiveFlip`
 		#[allow(deprecated)]
 		migration::remove_storage_prefix(b"RandomnessCollectiveFlip", b"RandomMaterial", b"");
 		<Runtime as pezframe_system::Config>::DbWeight::get().writes(1)

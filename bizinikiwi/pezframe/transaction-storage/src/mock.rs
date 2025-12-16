@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Test environment for transaction-storage pallet.
+//! Test environment for transaction-storage pezpallet.
 
 use crate::{
 	self as pezpallet_transaction_storage, TransactionStorageProof, DEFAULT_MAX_BLOCK_TRANSACTIONS,
@@ -26,7 +26,7 @@ use pezsp_runtime::{traits::IdentityLookup, BuildStorage};
 
 pub type Block = pezframe_system::mocking::MockBlock<Test>;
 
-// Configure a mock runtime to test the pallet.
+// Configure a mock runtime to test the pezpallet.
 pezframe_support::construct_runtime!(
 	pub enum Test
 	{

@@ -17,28 +17,28 @@
 
 use pezframe_benchmarking::v2::*;
 
-#[pezframe_support::pallet]
-mod pallet {
+#[pezframe_support::pezpallet]
+mod pezpallet {
 	use pezframe_system::pezpallet_prelude::*;
 	use pezframe_support::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
-		#[pallet::call_index(1)]
-		#[pallet::weight(Weight::default())]
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(Weight::default())]
 		pub fn call_1(_origin: OriginFor<T>) -> DispatchResult {
 			Ok(())
 		}
 	}
 }
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 #[benchmarks]
 mod benches {

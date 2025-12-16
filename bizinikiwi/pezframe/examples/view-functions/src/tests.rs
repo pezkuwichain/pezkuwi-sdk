@@ -19,7 +19,7 @@
 #![cfg(test)]
 
 use crate::{
-	pallet::{self, Pallet},
+	pezpallet::{self, Pezpallet},
 	pallet2,
 };
 use codec::{Decode, Encode};
@@ -39,7 +39,7 @@ type Block = pezframe_system::mocking::MockBlock<Runtime>;
 pezframe_support::construct_runtime!(
 	pub enum Runtime {
 		System: pezframe_system,
-		ViewFunctionsExample: pallet,
+		ViewFunctionsExample: pezpallet,
 		ViewFunctionsInstance: pallet2,
 		ViewFunctionsInstance1: pallet2::<Instance1>,
 	}
@@ -52,7 +52,7 @@ impl pezframe_system::Config for Runtime {
 	type Block = Block;
 }
 
-impl pallet::Config for Runtime {}
+impl pezpallet::Config for Runtime {}
 impl pallet2::Config<pallet2::Instance1> for Runtime {}
 
 impl pallet2::Config for Runtime {}
@@ -68,10 +68,10 @@ pub fn new_test_ext() -> pezsp_io::TestExternalities {
 fn pezpallet_get_value_query() {
 	new_test_ext().execute_with(|| {
 		let some_value = Some(99);
-		pallet::SomeValue::<Runtime>::set(some_value);
-		assert_eq!(some_value, Pallet::<Runtime>::get_value());
+		pezpallet::SomeValue::<Runtime>::set(some_value);
+		assert_eq!(some_value, Pezpallet::<Runtime>::get_value());
 
-		let query = pallet::GetValueViewFunction::<Runtime>::new();
+		let query = pezpallet::GetValueViewFunction::<Runtime>::new();
 		test_dispatch_view_function(&query, some_value);
 	});
 }
@@ -81,10 +81,10 @@ fn pezpallet_get_value_with_arg_query() {
 	new_test_ext().execute_with(|| {
 		let some_key = 1u32;
 		let some_value = Some(123);
-		pallet::SomeMap::<Runtime>::set(some_key, some_value);
-		assert_eq!(some_value, Pallet::<Runtime>::get_value_with_arg(some_key));
+		pezpallet::SomeMap::<Runtime>::set(some_key, some_value);
+		assert_eq!(some_value, Pezpallet::<Runtime>::get_value_with_arg(some_key));
 
-		let query = pallet::GetValueWithArgViewFunction::<Runtime>::new(some_key);
+		let query = pezpallet::GetValueWithArgViewFunction::<Runtime>::new(some_key);
 		test_dispatch_view_function(&query, some_value);
 	});
 }
@@ -115,7 +115,7 @@ fn metadata_ir_definitions() {
 		let pallet1 = metadata_ir
 			.pallets
 			.iter()
-			.find(|pallet| pallet.name == "ViewFunctionsExample")
+			.find(|pezpallet| pezpallet.name == "ViewFunctionsExample")
 			.unwrap();
 
 		fn view_fn_id(preifx_hash: [u8; 16], view_fn_signature: &str) -> [u8; 32] {

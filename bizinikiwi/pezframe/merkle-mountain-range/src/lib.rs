@@ -22,7 +22,7 @@
 //! Details on Merkle Mountain Ranges (MMRs) can be found here:
 //! <https://github.com/mimblewimble/grin/blob/master/doc/mmr.md>
 //!
-//! The MMR pallet constructs an MMR from leaf data obtained on every block from
+//! The MMR pezpallet constructs an MMR from leaf data obtained on every block from
 //! `LeafDataProvider`. MMR nodes are stored both in:
 //! - on-chain storage - hashes only; not full leaf content;
 //! - off-chain storage - via Indexing API we push full leaf content (and all internal nodes as
@@ -31,7 +31,7 @@
 //! `pezframe_system::Hashing`) so something compatible with external chains can be used (like
 //! Keccak256 for Ethereum compatibility).
 //!
-//! Depending on the usage context (off-chain vs on-chain) the pallet is able to:
+//! Depending on the usage context (off-chain vs on-chain) the pezpallet is able to:
 //! - verify MMR leaf proofs (on-chain)
 //! - generate leaf proofs (off-chain)
 //!
@@ -40,12 +40,12 @@
 //!
 //! ## What for?
 //!
-//! Primary use case for this pallet is to generate MMR root hashes, that can latter on be used by
+//! Primary use case for this pezpallet is to generate MMR root hashes, that can latter on be used by
 //! BEEFY protocol (see <https://github.com/paritytech/grandpa-bridge-gadget>).
 //! MMR root hashes along with BEEFY will make it possible to build Super Light Clients (SLC) of
 //! Bizinikiwi-based chains. The SLC will be able to follow finality and can be shown proofs of more
 //! details that happened on the source chain.
-//! In that case the chain which contains the pallet generates the Root Hashes and Proofs, which
+//! In that case the chain which contains the pezpallet generates the Root Hashes and Proofs, which
 //! are then presented to another chain acting as a light client which can verify them.
 //!
 //! Secondary use case is to archive historical data, but still be able to retrieve them on-demand
@@ -53,7 +53,7 @@
 //! in time to provide an MMR proof about some past block hash, while this data can be safely pruned
 //! from on-chain storage.
 //!
-//! NOTE This pallet is experimental and not proven to work in production.
+//! NOTE This pezpallet is experimental and not proven to work in production.
 #![cfg_attr(not(feature = "std"), no_std)]
 
 extern crate alloc;
@@ -68,7 +68,7 @@ pub use pezsp_mmr_primitives::{
 	LeafIndex, LeafProof, NodeIndex, OnNewRoot,
 };
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 #[cfg(feature = "runtime-benchmarks")]
 mod benchmarking;
@@ -84,7 +84,7 @@ mod tests;
 /// blocks without using excessive on-chain storage.
 ///
 /// Hence we implement the [LeafDataProvider] for [ParentNumberAndHash] which is a
-/// crate-local wrapper over [pezframe_system::Pallet]. Since the current block hash
+/// crate-local wrapper over [pezframe_system::Pezpallet]. Since the current block hash
 /// is not available (since the block is not finished yet),
 /// we use the `parent_hash` here along with parent block number.
 pub struct ParentNumberAndHash<T: Config> {
@@ -96,8 +96,8 @@ impl<T: Config> LeafDataProvider for ParentNumberAndHash<T> {
 
 	fn leaf_data() -> Self::LeafData {
 		(
-			pezframe_system::Pallet::<T>::block_number().saturating_sub(One::one()),
-			pezframe_system::Pallet::<T>::parent_hash(),
+			pezframe_system::Pezpallet::<T>::block_number().saturating_sub(One::one()),
+			pezframe_system::Pezpallet::<T>::parent_hash(),
 		)
 	}
 }
@@ -114,7 +114,7 @@ pub struct DefaultBlockHashProvider<T: Config> {
 
 impl<T: Config> BlockHashProvider<BlockNumberFor<T>, T::Hash> for DefaultBlockHashProvider<T> {
 	fn block_hash(block_number: BlockNumberFor<T>) -> T::Hash {
-		pezframe_system::Pallet::<T>::block_hash(block_number)
+		pezframe_system::Pezpallet::<T>::block_hash(block_number)
 	}
 }
 
@@ -133,26 +133,26 @@ impl BenchmarkHelper for () {
 	fn setup() {}
 }
 
-/// An MMR specific to the pallet.
+/// An MMR specific to the pezpallet.
 type ModuleMmr<StorageType, T, I> = mmr::Mmr<StorageType, T, I, LeafOf<T, I>>;
 
 /// Leaf data.
 type LeafOf<T, I> = <<T as Config<I>>::LeafData as LeafDataProvider>::LeafData;
 
-/// Hashing used for the pallet.
+/// Hashing used for the pezpallet.
 pub(crate) type HashingOf<T, I> = <T as Config<I>>::Hashing;
-/// Hash type used for the pallet.
+/// Hash type used for the pezpallet.
 pub(crate) type HashOf<T, I> = <<T as Config<I>>::Hashing as Hash>::Output;
 
-#[frame::pallet]
-pub mod pallet {
+#[frame::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T, I = ()>(PhantomData<(T, I)>);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T, I = ()>(PhantomData<(T, I)>);
 
-	/// This pallet's configuration trait
-	#[pallet::config]
+	/// This pezpallet's configuration trait
+	#[pezpallet::config]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config {
 		/// Prefix for elements stored in the Off-chain DB via Indexing API.
 		///
@@ -198,7 +198,7 @@ pub mod pallet {
 		///
 		/// For some applications it might be beneficial to make the MMR root available externally
 		/// apart from having it in the storage. For instance you might output it in the header
-		/// digest (see [`pezframe_system::Pallet::deposit_log`]) to make it available for Light
+		/// digest (see [`pezframe_system::Pezpallet::deposit_log`]) to make it available for Light
 		/// Clients. Hook complexity should be `O(1)`.
 		type OnNewRoot: OnNewRoot<HashOf<Self, I>>;
 
@@ -208,7 +208,7 @@ pub mod pallet {
 			<Self as pezframe_system::Config>::Hash,
 		>;
 
-		/// Weights for this pallet.
+		/// Weights for this pezpallet.
 		type WeightInfo: WeightInfo;
 
 		/// Benchmarking setup helper trait.
@@ -217,30 +217,30 @@ pub mod pallet {
 	}
 
 	/// Latest MMR Root hash.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type RootHash<T: Config<I>, I: 'static = ()> = StorageValue<_, HashOf<T, I>, ValueQuery>;
 
 	/// Current size of the MMR (number of leaves).
-	#[pallet::storage]
-	#[pallet::getter(fn mmr_leaves)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn mmr_leaves)]
 	pub type NumberOfLeaves<T, I = ()> = StorageValue<_, LeafIndex, ValueQuery>;
 
 	/// Hashes of the nodes in the MMR.
 	///
 	/// Note this collection only contains MMR peaks, the inner nodes (and leaves)
 	/// are pruned and only stored in the Offchain DB.
-	#[pallet::storage]
-	#[pallet::getter(fn mmr_peak)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn mmr_peak)]
 	pub type Nodes<T: Config<I>, I: 'static = ()> =
 		StorageMap<_, Identity, NodeIndex, HashOf<T, I>, OptionQuery>;
 
 	/// Helper flag used in the runtime benchmarks for the initial setup.
 	#[cfg(feature = "runtime-benchmarks")]
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type UseLocalStorage<T, I = ()> = StorageValue<_, bool, ValueQuery>;
 
-	#[pallet::hooks]
-	impl<T: Config<I>, I: 'static> Hooks<BlockNumberFor<T>> for Pallet<T, I> {
+	#[pezpallet::hooks]
+	impl<T: Config<I>, I: 'static> Hooks<BlockNumberFor<T>> for Pezpallet<T, I> {
 		fn on_initialize(_n: BlockNumberFor<T>) -> Weight {
 			let leaves = NumberOfLeaves::<T, I>::get();
 			let peaks_before = NodesUtils::new(leaves).number_of_peaks();
@@ -310,7 +310,7 @@ where
 		.map_err(|_| Error::Verify.log_debug(("The ancestry proof is incorrect.", root)))
 }
 
-impl<T: Config<I>, I: 'static> Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 	/// Build offchain key from `parent_hash` of block that originally added node `pos` to MMR.
 	///
 	/// This combination makes the offchain (key,value) entry resilient to chain forks.
@@ -332,12 +332,12 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 
 	/// Provide the parent number for the block that added `leaf_index` to the MMR.
 	fn leaf_index_to_parent_block_num(leaf_index: LeafIndex) -> BlockNumberFor<T> {
-		// leaves are zero-indexed and were added one per block since pallet activation,
+		// leaves are zero-indexed and were added one per block since pezpallet activation,
 		// while block numbers are one-indexed, so block number that added `leaf_idx` is:
 		// `block_num = block_num_when_pallet_activated + leaf_idx + 1`
 		// `block_num = (current_block_num - leaves_count) + leaf_idx + 1`
 		// `parent_block_num = current_block_num - leaves_count + leaf_idx`.
-		<pezframe_system::Pallet<T>>::block_number()
+		<pezframe_system::Pezpallet<T>>::block_number()
 			.saturating_sub(Self::mmr_leaves().saturated_into())
 			.saturating_add(leaf_index.saturated_into())
 	}
@@ -348,7 +348,7 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 		T: pezframe_system::Config,
 	{
 		let first_mmr_block = utils::first_mmr_block_num::<HeaderFor<T>>(
-			<pezframe_system::Pallet<T>>::block_number(),
+			<pezframe_system::Pezpallet<T>>::block_number(),
 			NumberOfLeaves::<T, I>::get(),
 		)?;
 
@@ -379,7 +379,7 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 	) -> Result<(Vec<LeafOf<T, I>>, LeafProof<HashOf<T, I>>), Error> {
 		// check whether best_known_block_number provided, else use current best block
 		let best_known_block_number =
-			best_known_block_number.unwrap_or_else(|| <pezframe_system::Pallet<T>>::block_number());
+			best_known_block_number.unwrap_or_else(|| <pezframe_system::Pezpallet<T>>::block_number());
 
 		let leaf_count = Self::block_num_to_leaf_count(best_known_block_number)?;
 
@@ -429,7 +429,7 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 	) -> Result<AncestryProof<HashOf<T, I>>, Error> {
 		// check whether best_known_block_number provided, else use current best block
 		let best_known_block_number =
-			best_known_block_number.unwrap_or_else(|| <pezframe_system::Pallet<T>>::block_number());
+			best_known_block_number.unwrap_or_else(|| <pezframe_system::Pezpallet<T>>::block_number());
 
 		let leaf_count = Self::block_num_to_leaf_count(best_known_block_number)?;
 		let prev_leaf_count = Self::block_num_to_leaf_count(prev_block_number)?;
@@ -440,7 +440,7 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 
 	#[cfg(feature = "runtime-benchmarks")]
 	pub fn generate_mock_ancestry_proof() -> Result<AncestryProof<HashOf<T, I>>, Error> {
-		let leaf_count = Self::block_num_to_leaf_count(<pezframe_system::Pallet<T>>::block_number())?;
+		let leaf_count = Self::block_num_to_leaf_count(<pezframe_system::Pezpallet<T>>::block_number())?;
 		let mmr: ModuleMmr<mmr::storage::OffchainStorage, T, I> = mmr::Mmr::new(leaf_count);
 		mmr.generate_mock_ancestry_proof()
 	}

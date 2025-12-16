@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! A set of traits that define how a pallet interface with XCM.
+//! A set of traits that define how a pezpallet interface with XCM.
 //! Controller traits defined in this module are high-level traits that will rely on other traits
 //! from `xcm-executor` to perform their tasks.
 

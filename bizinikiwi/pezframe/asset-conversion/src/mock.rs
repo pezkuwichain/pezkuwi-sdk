@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Test environment for Asset Conversion pallet.
+//! Test environment for Asset Conversion pezpallet.
 
 use super::*;
 use crate as pezpallet_asset_conversion;

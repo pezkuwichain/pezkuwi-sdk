@@ -25,11 +25,11 @@
 // Executed Command:
 // ./target/debug/pezkuwi
 // benchmark
-// pallet
+// pezpallet
 // --chain=zagros-dev
 // --steps=50
 // --repeat=2
-// --pallet=pezpallet-meta-tx
+// --pezpallet=pezpallet-meta-tx
 // --extrinsic=*
 // --wasm-execution=compiled
 // --heap-pages=4096

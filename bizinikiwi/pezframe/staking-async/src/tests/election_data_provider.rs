@@ -881,7 +881,7 @@ mod score_provider {
 	#[test]
 	fn no_score_for_non_stakers() {
 		ExtBuilder::default().build_and_execute(|| {
-			// given 777 being neither a nominator nor a validator in this pallet.
+			// given 777 being neither a nominator nor a validator in this pezpallet.
 			assert!(
 				!Ledger::<Test>::get(777).is_some() &&
 					!Validators::<Test>::contains_key(777) &&

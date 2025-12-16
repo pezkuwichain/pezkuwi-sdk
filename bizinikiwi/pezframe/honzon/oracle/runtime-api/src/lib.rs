@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Runtime API definition for the oracle pallet.
+//! Runtime API definition for the oracle pezpallet.
 //!
 //! This crate provides runtime APIs that allow external clients to query oracle data
 //! from the blockchain. The APIs are designed to be efficient and provide access to

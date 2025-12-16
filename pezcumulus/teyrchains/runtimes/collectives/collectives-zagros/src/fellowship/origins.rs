@@ -19,17 +19,17 @@
 use super::ranks;
 pub use pezpallet_origins::*;
 
-#[pezframe_support::pallet]
+#[pezframe_support::pezpallet]
 pub mod pezpallet_origins {
 	use super::ranks;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezpallet_ranked_collective::Rank;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
 	#[derive(
 		PartialEq,
@@ -42,7 +42,7 @@ pub mod pezpallet_origins {
 		TypeInfo,
 		RuntimeDebug,
 	)]
-	#[pallet::origin]
+	#[pezpallet::origin]
 	pub enum Origin {
 		/// Origin aggregated through weighted votes of those with rank 1 or above; `Success` is 1.
 		/// Aka the "voice" of all Members.
@@ -133,7 +133,7 @@ pub mod pezpallet_origins {
 	}
 
 	/// A `TryMorph` implementation which is designed to convert an aggregate `RuntimeOrigin`
-	/// value into the Fellowship voice it represents if it is a Fellowship pallet origin an
+	/// value into the Fellowship voice it represents if it is a Fellowship pezpallet origin an
 	/// appropriate variant. See also [Origin::as_voice].
 	pub struct ToVoice;
 	impl<'a, O: 'a + TryInto<&'a Origin>> pezsp_runtime::traits::TryMorph<O> for ToVoice {

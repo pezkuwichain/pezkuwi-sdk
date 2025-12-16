@@ -49,7 +49,7 @@ mod tests {
 
 		// initial state of ah
 		shared::in_ah(|| {
-			assert_eq!(pezframe_system::Pallet::<ah::Runtime>::block_number(), 1);
+			assert_eq!(pezframe_system::Pezpallet::<ah::Runtime>::block_number(), 1);
 			assert_eq!(pezpallet_staking_async::CurrentEra::<ah::Runtime>::get(), Some(0));
 			assert_eq!(
 				ActiveEra::<ah::Runtime>::get(),
@@ -62,7 +62,7 @@ mod tests {
 			assert_eq!(ah_client::Mode::<rc::Runtime>::get(), OperatingMode::Active);
 			// go to session 1 in RC and test.
 			// when
-			assert!(pezframe_system::Pallet::<rc::Runtime>::block_number() == 1);
+			assert!(pezframe_system::Pezpallet::<rc::Runtime>::block_number() == 1);
 
 			// given end session 0, start session 1, plan 2
 			rc::roll_until_matches(
@@ -71,7 +71,7 @@ mod tests {
 			);
 
 			// then
-			assert_eq!(pezframe_system::Pallet::<rc::Runtime>::block_number(), rc::Period::get());
+			assert_eq!(pezframe_system::Pezpallet::<rc::Runtime>::block_number(), rc::Period::get());
 		});
 
 		shared::in_rc(|| {
@@ -84,7 +84,7 @@ mod tests {
 
 		shared::in_ah(|| {
 			// ah's rc-client has also progressed some blocks, equal to 4 sessions
-			assert_eq!(pezframe_system::Pallet::<ah::Runtime>::block_number(), 120);
+			assert_eq!(pezframe_system::Pezpallet::<ah::Runtime>::block_number(), 120);
 			// election is ongoing, and has just started
 			assert!(matches!(
 				multi_block::CurrentPhase::<ah::Runtime>::get(),
@@ -177,12 +177,12 @@ mod tests {
 			let pre_migration_era_points =
 				staking_classic::ErasRewardPoints::<rc::Runtime>::get(1).total;
 
-			ah_client::Pallet::<rc::Runtime>::on_migration_start();
+			ah_client::Pezpallet::<rc::Runtime>::on_migration_start();
 			assert_eq!(ah_client::Mode::<rc::Runtime>::get(), OperatingMode::Buffered);
 
 			// get current session
 			let current_session = pezpallet_session::CurrentIndex::<rc::Runtime>::get();
-			pre_migration_block_number = pezframe_system::Pallet::<rc::Runtime>::block_number();
+			pre_migration_block_number = pezframe_system::Pezpallet::<rc::Runtime>::block_number();
 
 			// assume migration takes at least one era
 			// go forward by more than `SessionsPerEra` sessions -- staking will not rotate a new
@@ -194,7 +194,7 @@ mod tests {
 				},
 				true,
 			);
-			let migration_start_block_number = pezframe_system::Pallet::<rc::Runtime>::block_number();
+			let migration_start_block_number = pezframe_system::Pezpallet::<rc::Runtime>::block_number();
 
 			// ensure era is still 1 on RC.
 			// (Session events are received by AHClient and never passed on to staking-classic once
@@ -365,7 +365,7 @@ mod tests {
 			// Before migration ends, verify we have 9 buffered offences across multiple sessions
 			assert_eq!(OffenceSendQueue::<rc::Runtime>::count(), 13);
 
-			ah_client::Pallet::<rc::Runtime>::on_migration_end();
+			ah_client::Pezpallet::<rc::Runtime>::on_migration_end();
 			assert_eq!(ah_client::Mode::<rc::Runtime>::get(), OperatingMode::Active);
 
 			// `MaxOffenceBatchSize` is set to 2 in this test, so we will send over the 13 offences
@@ -478,7 +478,7 @@ mod tests {
 			// - But only the highest slash fraction per validator per era gets queued for
 			//   processing
 			// - So we see 13 OffenceReported events but only 3 offences in the processing queue
-			// - The queue processing happens one offence per block in staking-async pallet.
+			// - The queue processing happens one offence per block in staking-async pezpallet.
 
 			// Process all queued offences (one offence per block)
 			// We have 3 offences queued (one per validator), so we need to roll 3 times
@@ -676,7 +676,7 @@ mod tests {
 		shared::in_rc(|| {
 			rc::roll_to_next_session(true);
 			post_migration_session_block_number =
-				pezframe_system::Pallet::<rc::Runtime>::block_number();
+				pezframe_system::Pezpallet::<rc::Runtime>::block_number();
 
 			// all the buffered validators points are flushed
 			assert_eq!(ah_client::ValidatorPoints::<rc::Runtime>::iter().count(), 0,);

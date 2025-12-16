@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! The migrations of this pallet.
+//! The migrations of this pezpallet.
 
 use codec::{Decode, Encode};
 use core::marker::PhantomData;
@@ -42,7 +42,7 @@ impl<T: crate::Config<I>, I: 'static> OnRuntimeUpgrade for CheckCounterPrefix<T,
 		// The old explicit storage item.
 		#[pezframe_support::storage_alias]
 		type CounterForListNodes<T: crate::Config<I>, I: 'static> =
-			StorageValue<crate::Pallet<T, I>, u32>;
+			StorageValue<crate::Pezpallet<T, I>, u32>;
 
 		// ensure that a value exists in the counter struct.
 		ensure!(
@@ -76,7 +76,7 @@ mod old {
 
 	#[pezframe_support::storage_alias]
 	pub type ListNodes<T: crate::Config<I>, I: 'static> = StorageMap<
-		crate::Pallet<T, I>,
+		crate::Pezpallet<T, I>,
 		Twox64Concat,
 		<T as pezframe_system::Config>::AccountId,
 		PreScoreNode<T, I>,
@@ -84,7 +84,7 @@ mod old {
 
 	#[pezframe_support::storage_alias]
 	pub type CounterForListNodes<T: crate::Config<I>, I: 'static> =
-		StorageValue<crate::Pallet<T, I>, u32, ValueQuery>;
+		StorageValue<crate::Pezpallet<T, I>, u32, ValueQuery>;
 }
 
 /// A struct that migrates all bags lists to contain a score value.

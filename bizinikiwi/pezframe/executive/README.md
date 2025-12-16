@@ -5,7 +5,7 @@ respective modules in the runtime.
 
 ## Overview
 
-The executive module is not a typical pallet providing functionality around a specific feature. It is a cross-cutting
+The executive module is not a typical pezpallet providing functionality around a specific feature. It is a cross-cutting
 framework component for the FRAME. It works in conjunction with the [FRAME System
 module](https://docs.rs/pezframe-system/latest/frame_system/) to perform these cross-cutting functions.
 

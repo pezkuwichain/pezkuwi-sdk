@@ -1,12 +1,12 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-//! # Referral Pallet
+//! # Referral Pezpallet
 //!
-//! A pallet for managing user referrals and tracking network growth through invitation mechanics.
+//! A pezpallet for managing user referrals and tracking network growth through invitation mechanics.
 //!
 //! ## Overview
 //!
-//! The Referral pallet implements a referral system that incentivizes user growth by tracking
+//! The Referral pezpallet implements a referral system that incentivizes user growth by tracking
 //! and rewarding users who successfully invite others to complete KYC verification. Referral
 //! counts contribute to trust scores and validator eligibility.
 //!
@@ -86,14 +86,14 @@
 //!     type WeightInfo = pezpallet_referral::weights::BizinikiwiWeight<Runtime>;
 //! }
 //!
-//! // Configure pezpallet-identity-kyc to notify referral pallet
+//! // Configure pezpallet-identity-kyc to notify referral pezpallet
 //! impl pezpallet_identity_kyc::Config for Runtime {
 //!     // ...
 //!     type OnKycApproved = Referral; // Hook referral confirmation
 //! }
 //! ```
 
-pub use pallet::*;
+pub use pezpallet::*;
 #[cfg(test)]
 mod mock;
 pub mod types; // Adding our new types module
@@ -107,18 +107,18 @@ mod benchmarking;
 extern crate alloc;
 use crate::weights::WeightInfo;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use crate::types::{InviterProvider, RawScore, ReferralScoreProvider, ReferrerStats};
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 	use pezpallet_identity_kyc::types::{KycStatus, OnCitizenshipRevoked, OnKycApproved};
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config + pezpallet_identity_kyc::Config + TypeInfo {
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		type WeightInfo: weights::WeightInfo;
@@ -130,7 +130,7 @@ pub mod pallet {
 		/// Penalty score per revoked referral
 		/// DIRECT RESPONSIBILITY: Bad referrals reduce referrer's score
 		/// Default: 3 (each bad referral costs 3x a good referral)
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type PenaltyPerRevocation: Get<u32>;
 	}
 
@@ -138,29 +138,29 @@ pub mod pallet {
 
 	/// Holds users awaiting to join system via referral.
 	/// (Referred AccountId -> Referrer AccountId)
-	#[pallet::storage]
-	#[pallet::getter(fn pending_referrals)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn pending_referrals)]
 	pub type PendingReferrals<T: Config> =
 		StorageMap<_, Blake2_128Concat, T::AccountId, T::AccountId, OptionQuery>;
 
 	/// Holds successfully completed referral count per user.
 	/// (Referrer AccountId -> Count)
-	#[pallet::storage]
-	#[pallet::getter(fn referral_count)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn referral_count)]
 	pub type ReferralCount<T: Config> =
 		StorageMap<_, Blake2_128Concat, T::AccountId, u32, ValueQuery>;
 
 	/// Holds who a user invited and transaction details.
 	/// (Referred AccountId -> ReferralInfo)
-	#[pallet::storage]
-	#[pallet::getter(fn referrals)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn referrals)]
 	pub type Referrals<T: Config> =
 		StorageMap<_, Blake2_128Concat, T::AccountId, ReferralInfo<T>, OptionQuery>;
 
 	/// Referrer statistics for direct responsibility tracking
 	/// ACCOUNTABILITY: Tracks good and bad referrals for penalty calculation
-	#[pallet::storage]
-	#[pallet::getter(fn referrer_stats)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn referrer_stats)]
 	pub type ReferrerStatsStorage<T: Config> =
 		StorageMap<_, Blake2_128Concat, T::AccountId, ReferrerStats, ValueQuery>;
 
@@ -171,8 +171,8 @@ pub mod pallet {
 	}
 
 	// --- Events ---
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// When a user invites another user.
 		ReferralInitiated { referrer: T::AccountId, referred: T::AccountId },
@@ -193,7 +193,7 @@ pub mod pallet {
 	}
 
 	// --- Errors ---
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// A user cannot invite themselves.
 		SelfReferral,
@@ -202,11 +202,11 @@ pub mod pallet {
 	}
 
 	// --- Extrinsics ---
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Initiates a referral record to invite another user to the system.
-		#[pallet::call_index(0)]
-		#[pallet::weight(<T as Config>::WeightInfo::initiate_referral())]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::initiate_referral())]
 		pub fn initiate_referral(origin: OriginFor<T>, referred: T::AccountId) -> DispatchResult {
 			let referrer = ensure_signed(origin)?;
 			ensure!(referrer != referred, Error::<T>::SelfReferral);
@@ -220,8 +220,8 @@ pub mod pallet {
 
 		/// Sudo-only extrinsic to manually confirm a referral (for fixing historical data).
 		/// This bypasses the normal KYC approval flow and directly confirms the referral.
-		#[pallet::call_index(1)]
-		#[pallet::weight(<T as Config>::WeightInfo::force_confirm_referral())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::force_confirm_referral())]
 		pub fn force_confirm_referral(
 			origin: OriginFor<T>,
 			referrer: T::AccountId,
@@ -238,7 +238,7 @@ pub mod pallet {
 			// Create and store referral info
 			let referral_info = ReferralInfo {
 				referrer: referrer.clone(),
-				created_at: pezframe_system::Pallet::<T>::block_number(),
+				created_at: pezframe_system::Pezpallet::<T>::block_number(),
 			};
 			Referrals::<T>::insert(referred.clone(), referral_info);
 
@@ -258,11 +258,11 @@ pub mod pallet {
 
 	// --- Trait Implementations ---
 
-	impl<T: Config> OnKycApproved<T::AccountId> for Pallet<T> {
+	impl<T: Config> OnKycApproved<T::AccountId> for Pezpallet<T> {
 		fn on_kyc_approved(who: &T::AccountId, referrer: &T::AccountId) {
 			// Security check: Verify on-chain that the user's KYC status is actually
 			// "Approved" before confirming the referral.
-			if pezpallet_identity_kyc::Pallet::<T>::get_kyc_status(who) ==
+			if pezpallet_identity_kyc::Pezpallet::<T>::get_kyc_status(who) ==
 				pezpallet_identity_kyc::types::KycLevel::Approved
 			{
 				// Check if this referral already exists (prevent double-counting)
@@ -289,7 +289,7 @@ pub mod pallet {
 				// Create and store referral info
 				let referral_info = ReferralInfo {
 					referrer: referrer.clone(),
-					created_at: pezframe_system::Pallet::<T>::block_number(),
+					created_at: pezframe_system::Pezpallet::<T>::block_number(),
 				};
 				Referrals::<T>::insert(who.clone(), referral_info);
 
@@ -305,7 +305,7 @@ pub mod pallet {
 
 	/// Implementation for direct responsibility penalty system
 	/// Called when a citizen's status is revoked (malicious actor identified)
-	impl<T: Config> OnCitizenshipRevoked<T::AccountId> for Pallet<T> {
+	impl<T: Config> OnCitizenshipRevoked<T::AccountId> for Pezpallet<T> {
 		fn on_citizenship_revoked(who: &T::AccountId) {
 			// Find the referrer of the revoked citizen
 			if let Some(referral_info) = Referrals::<T>::get(who) {
@@ -333,7 +333,7 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config> ReferralScoreProvider<T::AccountId> for Pallet<T> {
+	impl<T: Config> ReferralScoreProvider<T::AccountId> for Pezpallet<T> {
 		type Score = RawScore;
 
 		fn get_referral_score(who: &T::AccountId) -> RawScore {
@@ -372,7 +372,7 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config> InviterProvider<T::AccountId> for Pallet<T> {
+	impl<T: Config> InviterProvider<T::AccountId> for Pezpallet<T> {
 		fn get_inviter(who: &T::AccountId) -> Option<T::AccountId> {
 			Referrals::<T>::get(who).map(|info| info.referrer)
 		}

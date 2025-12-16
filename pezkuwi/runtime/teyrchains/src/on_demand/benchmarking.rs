@@ -14,15 +14,15 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! On demand assigner pallet benchmarking.
+//! On demand assigner pezpallet benchmarking.
 
 #![cfg(feature = "runtime-benchmarks")]
 
-use super::{Pallet, *};
+use super::{Pezpallet, *};
 use crate::{
-	configuration::{HostConfiguration, Pallet as ConfigurationPallet},
-	paras::{Pallet as ParasPallet, ParaGenesisArgs, ParaKind, TeyrchainsCache},
-	shared::Pallet as ParasShared,
+	configuration::{HostConfiguration, Pezpallet as ConfigurationPallet},
+	paras::{Pezpallet as ParasPallet, ParaGenesisArgs, ParaKind, TeyrchainsCache},
+	shared::Pezpallet as ParasShared,
 };
 
 use alloc::vec;
@@ -71,7 +71,7 @@ mod benchmarks {
 		let para_id = ParaId::from(111u32);
 		init_parathread::<T>(para_id);
 		T::Currency::make_free_balance_be(&caller, BalanceOf::<T>::max_value());
-		Pallet::<T>::populate_queue(para_id, s);
+		Pezpallet::<T>::populate_queue(para_id, s);
 
 		#[extrinsic_call]
 		_(RawOrigin::Signed(caller.into()), BalanceOf::<T>::max_value(), para_id)
@@ -85,7 +85,7 @@ mod benchmarks {
 		init_parathread::<T>(para_id);
 		T::Currency::make_free_balance_be(&caller, BalanceOf::<T>::max_value());
 
-		Pallet::<T>::populate_queue(para_id, s);
+		Pezpallet::<T>::populate_queue(para_id, s);
 
 		#[extrinsic_call]
 		_(RawOrigin::Signed(caller.into()), BalanceOf::<T>::max_value(), para_id)
@@ -99,14 +99,14 @@ mod benchmarks {
 		init_parathread::<T>(para_id);
 		Credits::<T>::insert(&caller, BalanceOf::<T>::max_value());
 
-		Pallet::<T>::populate_queue(para_id, s);
+		Pezpallet::<T>::populate_queue(para_id, s);
 
 		#[extrinsic_call]
 		_(RawOrigin::Signed(caller.into()), BalanceOf::<T>::max_value(), para_id)
 	}
 
 	impl_benchmark_test_suite!(
-		Pallet,
+		Pezpallet,
 		crate::mock::new_test_ext(
 			crate::on_demand::mock_helpers::GenesisConfigBuilder::default().build()
 		),

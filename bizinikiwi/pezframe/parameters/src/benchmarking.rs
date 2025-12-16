@@ -15,13 +15,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Parameters pallet benchmarking.
+//! Parameters pezpallet benchmarking.
 
 #![cfg(feature = "runtime-benchmarks")]
 
 use super::*;
 #[cfg(test)]
-use crate::Pallet as Parameters;
+use crate::Pezpallet as Parameters;
 
 use pezframe_benchmarking::v2::*;
 

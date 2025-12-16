@@ -4,7 +4,7 @@ version = "0.7.0"
 authors.workspace = true
 edition.workspace = true
 repository.workspace = true
-description = "Migrates messages from the old DMP queue pallet."
+description = "Migrates messages from the old DMP queue pezpallet."
 license = "Apache-2.0"
 documentation = "https://docs.rs/pezcumulus-pezpallet-dmp-queue"
 homepage = { workspace = true }

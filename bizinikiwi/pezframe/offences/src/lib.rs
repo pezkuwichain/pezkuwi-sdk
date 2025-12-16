@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Offences Pallet
+//! # Offences Pezpallet
 //!
 //! Tracks reported offences
 
@@ -38,7 +38,7 @@ use pezsp_staking::{
 	SessionIndex,
 };
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 /// A binary blob which represents a SCALE codec-encoded `O::TimeSlot`.
 type OpaqueTimeSlot = Vec<u8>;
@@ -48,20 +48,20 @@ type ReportIdOf<T> = <T as pezframe_system::Config>::Hash;
 
 const LOG_TARGET: &str = "runtime::offences";
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(1);
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	#[pallet::without_storage_info]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	#[pezpallet::without_storage_info]
+	pub struct Pezpallet<T>(_);
 
-	/// The pallet's config trait.
-	#[pallet::config]
+	/// The pezpallet's config trait.
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
@@ -73,7 +73,7 @@ pub mod pallet {
 	}
 
 	/// The primary structure that holds all offence records keyed by report identifiers.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Reports<T: Config> = StorageMap<
 		_,
 		Twox64Concat,
@@ -82,7 +82,7 @@ pub mod pallet {
 	>;
 
 	/// A vector of reports of the same kind that happened at the same time slot.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ConcurrentReportsIndex<T: Config> = StorageDoubleMap<
 		_,
 		Twox64Concat,
@@ -94,8 +94,8 @@ pub mod pallet {
 	>;
 
 	/// Events type.
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event {
 		/// There is an offence reported of the given `kind` happened at the `session_index` and
 		/// (kind-specific) time slot. This event is not deposited for duplicate slashes.
@@ -104,7 +104,7 @@ pub mod pallet {
 	}
 }
 
-impl<T, O> ReportOffence<T::AccountId, T::IdentificationTuple, O> for Pallet<T>
+impl<T, O> ReportOffence<T::AccountId, T::IdentificationTuple, O> for Pezpallet<T>
 where
 	T: Config,
 	O: Offence<T::IdentificationTuple>,
@@ -151,7 +151,7 @@ where
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Get the offence details from reports of given ID.
 	pub fn reports(
 		report_id: ReportIdOf<T>,

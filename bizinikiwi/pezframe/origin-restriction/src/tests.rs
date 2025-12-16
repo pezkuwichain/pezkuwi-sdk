@@ -236,7 +236,7 @@ fn restrict_origin_extension_disabled_behavior() {
 		advance_by(1);
 
 		// 1) Attempt from restricted origin => Expect InvalidTransaction::Call
-		// because the pallet explicitly forbids restricted origins if the extension is off.
+		// because the pezpallet explicitly forbids restricted origins if the extension is off.
 		assert_noop!(
 			exec_signed_tx_disabled(RESTRICTED_ORIGIN_1, MockPalletCall::do_something {}),
 			pezsp_runtime::transaction_validity::InvalidTransaction::Call

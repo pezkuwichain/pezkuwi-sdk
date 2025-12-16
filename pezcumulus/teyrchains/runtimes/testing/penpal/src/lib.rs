@@ -385,7 +385,7 @@ impl pezframe_system::Config for Runtime {
 	type DbWeight = RocksDbWeight;
 	/// The basic call filter to use in dispatchable.
 	type BaseCallFilter = Everything;
-	/// Weight information for the extrinsics of this pallet.
+	/// Weight information for the extrinsics of this pezpallet.
 	type SystemWeightInfo = ();
 	/// Block & extrinsics weights: base values and limits.
 	type BlockWeights = RuntimeBlockWeights;
@@ -500,7 +500,7 @@ parameter_types! {
 	pub const ForeignAssetsMetadataDepositPerByte: Balance = MetadataDepositPerByte::get();
 }
 
-/// Another pallet assets instance to store foreign assets from bridgehub.
+/// Another pezpallet assets instance to store foreign assets from bridgehub.
 pub type ForeignAssetsInstance = pezpallet_assets::Instance2;
 impl pezpallet_assets::Config<ForeignAssetsInstance> for Runtime {
 	type RuntimeEvent = RuntimeEvent;
@@ -626,7 +626,7 @@ impl pezpallet_asset_conversion::Config for Runtime {
 	#[cfg(feature = "runtime-benchmarks")]
 	type BenchmarkHelper = assets_common::benchmarks::AssetPairFactory<
 		xcm_config::RelayLocation,
-		teyrchain_info::Pallet<Runtime>,
+		teyrchain_info::Pezpallet<Runtime>,
 		xcm_config::TrustBackedAssetsPalletIndex,
 		xcm::latest::Location,
 	>;
@@ -649,7 +649,7 @@ impl pezcumulus_pezpallet_teyrchain_system::Config for Runtime {
 	type WeightInfo = ();
 	type RuntimeEvent = RuntimeEvent;
 	type OnSystemEvent = ();
-	type SelfParaId = teyrchain_info::Pallet<Runtime>;
+	type SelfParaId = teyrchain_info::Pezpallet<Runtime>;
 	type DmpQueue = pezframe_support::traits::EnqueueWithOrigin<MessageQueue, RelayOrigin>;
 	type ReservedDmpWeight = ReservedDmpWeight;
 	type OutboundXcmpMessageSource = XcmpQueue;
@@ -681,7 +681,7 @@ impl pezpallet_message_queue::Config for Runtime {
 		RuntimeCall,
 	>;
 	type Size = u32;
-	// The XCMP queue pallet is only ever able to handle the `Sibling(ParaId)` origin:
+	// The XCMP queue pezpallet is only ever able to handle the `Sibling(ParaId)` origin:
 	type QueueChangeHandler = NarrowOriginToSibling<XcmpQueue>;
 	type QueuePausedQuery = NarrowOriginToSibling<XcmpQueue>;
 	type HeapSize = pezsp_core::ConstU32<{ 103 * 1024 }>;
@@ -1160,9 +1160,9 @@ pezpallet_revive::impl_runtime_apis_plus_revive_traits!(
 		) {
 			use pezframe_benchmarking::BenchmarkList;
 			use pezframe_support::traits::StorageInfoTrait;
-			use pezframe_system_benchmarking::Pallet as SystemBench;
-			use pezframe_system_benchmarking::extensions::Pallet as SystemExtensionsBench;
-			use pezcumulus_pezpallet_session_benchmarking::Pallet as SessionBench;
+			use pezframe_system_benchmarking::Pezpallet as SystemBench;
+			use pezframe_system_benchmarking::extensions::Pezpallet as SystemExtensionsBench;
+			use pezcumulus_pezpallet_session_benchmarking::Pezpallet as SessionBench;
 
 			let mut list = Vec::<BenchmarkList>::new();
 			list_benchmarks!(list, extra);
@@ -1178,11 +1178,11 @@ pezpallet_revive::impl_runtime_apis_plus_revive_traits!(
 			use pezframe_benchmarking::BenchmarkBatch;
 			use pezsp_storage::TrackedStorageKey;
 
-			use pezframe_system_benchmarking::Pallet as SystemBench;
-			use pezframe_system_benchmarking::extensions::Pallet as SystemExtensionsBench;
+			use pezframe_system_benchmarking::Pezpallet as SystemBench;
+			use pezframe_system_benchmarking::extensions::Pezpallet as SystemExtensionsBench;
 			impl pezframe_system_benchmarking::Config for Runtime {}
 
-			use pezcumulus_pezpallet_session_benchmarking::Pallet as SessionBench;
+			use pezcumulus_pezpallet_session_benchmarking::Pezpallet as SessionBench;
 			impl pezcumulus_pezpallet_session_benchmarking::Config for Runtime {}
 
 			use pezframe_support::traits::WhitelistedStorageKeys;
@@ -1192,7 +1192,7 @@ pezpallet_revive::impl_runtime_apis_plus_revive_traits!(
 			let params = (&config, &whitelist);
 			add_benchmarks!(params, batches);
 
-			if batches.is_empty() { return Err("Benchmark not found for this pallet.".into()) }
+			if batches.is_empty() { return Err("Benchmark not found for this pezpallet.".into()) }
 			Ok(batches)
 		}
 	}

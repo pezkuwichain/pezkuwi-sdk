@@ -422,13 +422,13 @@ impl<T: paras_inherent::Config> BenchBuilder<T> {
 	/// way.
 	fn run_to_block(to: u32) {
 		let to = to.into();
-		while pezframe_system::Pallet::<T>::block_number() < to {
-			let b = pezframe_system::Pallet::<T>::block_number();
-			initializer::Pallet::<T>::on_finalize(b);
+		while pezframe_system::Pezpallet::<T>::block_number() < to {
+			let b = pezframe_system::Pezpallet::<T>::block_number();
+			initializer::Pezpallet::<T>::on_finalize(b);
 
 			let b = b + One::one();
-			pezframe_system::Pallet::<T>::set_block_number(b);
-			initializer::Pallet::<T>::on_initialize(b);
+			pezframe_system::Pezpallet::<T>::set_block_number(b);
+			initializer::Pezpallet::<T>::on_initialize(b);
 		}
 	}
 
@@ -442,7 +442,7 @@ impl<T: paras_inherent::Config> BenchBuilder<T> {
 			let para_id = ParaId::from(i as u32);
 			let validation_code = mock_validation_code();
 
-			paras::Pallet::<T>::schedule_para_initialize(
+			paras::Pezpallet::<T>::schedule_para_initialize(
 				para_id,
 				paras::ParaGenesisArgs {
 					genesis_head: Self::mock_head_data(),
@@ -451,7 +451,7 @@ impl<T: paras_inherent::Config> BenchBuilder<T> {
 				},
 			)
 			.unwrap();
-			paras::Pallet::<T>::add_trusted_validation_code(
+			paras::Pezpallet::<T>::add_trusted_validation_code(
 				pezframe_system::Origin::<T>::Root.into(),
 				validation_code,
 			)
@@ -484,7 +484,7 @@ impl<T: paras_inherent::Config> BenchBuilder<T> {
 	) -> Self {
 		let mut block = 1;
 		for session in 0..target_session {
-			initializer::Pallet::<T>::test_trigger_on_new_session(
+			initializer::Pezpallet::<T>::test_trigger_on_new_session(
 				false,
 				session,
 				validators.iter().map(|(a, v)| (a, v.clone())),
@@ -494,19 +494,19 @@ impl<T: paras_inherent::Config> BenchBuilder<T> {
 			Self::run_to_block(block);
 		}
 
-		initializer::Pallet::<T>::test_trigger_on_new_session(
+		initializer::Pezpallet::<T>::test_trigger_on_new_session(
 			false,
 			block - 1,
 			validators.iter().map(|(a, v)| (a, v.clone())),
 			None,
 		);
-		initializer::Pallet::<T>::on_finalize(block.into());
+		initializer::Pezpallet::<T>::on_finalize(block.into());
 		let block_number = BlockNumberFor::<T>::from(block + 1);
 		let header = Self::header(block_number);
 
-		pezframe_system::Pallet::<T>::reset_events();
-		pezframe_system::Pallet::<T>::initialize(&header.number(), &header.hash(), header.digest());
-		initializer::Pallet::<T>::on_initialize(*header.number());
+		pezframe_system::Pezpallet::<T>::reset_events();
+		pezframe_system::Pezpallet::<T>::initialize(&header.number(), &header.hash(), header.digest());
+		initializer::Pezpallet::<T>::on_initialize(*header.number());
 
 		assert_eq!(shared::CurrentSessionIndex::<T>::get(), target_session);
 
@@ -545,7 +545,7 @@ impl<T: paras_inherent::Config> BenchBuilder<T> {
 			for _chain_idx in 0..elastic_paras.get(&seed).cloned().unwrap_or(1) {
 				let core_idx = CoreIndex::from(current_core_idx);
 				let group_idx =
-					scheduler::Pallet::<T>::group_assigned_to_core(core_idx, self.block_number)
+					scheduler::Pezpallet::<T>::group_assigned_to_core(core_idx, self.block_number)
 						.unwrap();
 
 				Self::add_availability(
@@ -612,7 +612,7 @@ impl<T: paras_inherent::Config> BenchBuilder<T> {
 						let core_idx = CoreIndex::from(current_core_idx);
 						// Advance core index.
 						current_core_idx += 1;
-						let group_idx = scheduler::Pallet::<T>::group_assigned_to_core(
+						let group_idx = scheduler::Pezpallet::<T>::group_assigned_to_core(
 							core_idx,
 							self.block_number,
 						)
@@ -629,7 +629,7 @@ impl<T: paras_inherent::Config> BenchBuilder<T> {
 
 						if chain_idx == 0 {
 							// Only first parahead of the chain needs to be set in storage.
-							paras::Pallet::<T>::heads_insert(&para_id, head_data.clone());
+							paras::Pezpallet::<T>::heads_insert(&para_id, head_data.clone());
 						} else {
 							// Make each candidate head data unique to avoid cycles.
 							head_data.0[0] = chain_idx;
@@ -655,7 +655,7 @@ impl<T: paras_inherent::Config> BenchBuilder<T> {
 						past_code_meta.note_replacement(0u32.into(), 0u32.into());
 
 						let group_validators =
-							scheduler::Pallet::<T>::group_validators(group_idx).unwrap();
+							scheduler::Pezpallet::<T>::group_validators(group_idx).unwrap();
 
 						let descriptor = CandidateDescriptorV2::new(
 							para_id,
@@ -767,7 +767,7 @@ impl<T: paras_inherent::Config> BenchBuilder<T> {
 				current_core_idx +=1;
 
 				let group_idx =
-					scheduler::Pallet::<T>::group_assigned_to_core(core_idx, self.block_number)
+					scheduler::Pezpallet::<T>::group_assigned_to_core(core_idx, self.block_number)
 						.unwrap();
 
 				let candidate_hash = CandidateHash(H256::from(byte32_slice_from(seed)));
@@ -843,7 +843,7 @@ impl<T: paras_inherent::Config> BenchBuilder<T> {
 		// NOTE: there is an n+2 session delay for these actions to take effect.
 		// We are currently in Session 0, so these changes will take effect in Session 2.
 		Self::setup_para_ids(used_cores - extra_cores);
-		configuration::Pallet::<T>::set_coretime_cores_unchecked(used_cores as u32).unwrap();
+		configuration::Pezpallet::<T>::set_coretime_cores_unchecked(used_cores as u32).unwrap();
 
 		let validator_ids = generate_validator_pairs::<T>(self.max_validators());
 		let target_session = SessionIndex::from(self.target_session);
@@ -852,7 +852,7 @@ impl<T: paras_inherent::Config> BenchBuilder<T> {
 		let bitfields = builder.create_availability_bitfields(
 			&builder.backed_and_concluding_paras,
 			&builder.elastic_paras,
-			scheduler::Pallet::<T>::num_availability_cores(),
+			scheduler::Pezpallet::<T>::num_availability_cores(),
 		);
 
 		let mut backed_in_inherent = BTreeMap::new();
@@ -885,7 +885,7 @@ impl<T: paras_inherent::Config> BenchBuilder<T> {
 		let mut core_idx = 0u32;
 		let elastic_paras = &builder.elastic_paras;
 
-		let mut occupied_cores = inclusion::Pallet::<T>::get_occupied_cores()
+		let mut occupied_cores = inclusion::Pezpallet::<T>::get_occupied_cores()
 			.map(|(core, candidate)| (core, candidate.candidate_descriptor().para_id()))
 			.collect::<Vec<_>>();
 		occupied_cores.sort_by(|(core_a, _), (core_b, _)| core_a.0.cmp(&core_b.0));

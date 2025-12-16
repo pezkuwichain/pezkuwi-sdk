@@ -87,7 +87,7 @@ where
 
 impl_opaque_keys! {
 	pub struct MockSessionKeys {
-		pub babe_authority: super::Pallet<Test>,
+		pub babe_authority: super::Pezpallet<Test>,
 	}
 }
 
@@ -170,7 +170,7 @@ impl pezpallet_staking::Config for Test {
 	type BondingDuration = BondingDuration;
 	type AdminOrigin = pezframe_system::EnsureRoot<Self::AccountId>;
 	type SessionInterface = Self;
-	type UnixTime = pezpallet_timestamp::Pallet<Test>;
+	type UnixTime = pezpallet_timestamp::Pezpallet<Test>;
 	type EraPayout = pezpallet_staking::ConvertCurve<RewardCurve>;
 	type NextNewSession = Session;
 	type ElectionProvider = onchain::OnChainExecution<OnChainSeqPhragmen>;

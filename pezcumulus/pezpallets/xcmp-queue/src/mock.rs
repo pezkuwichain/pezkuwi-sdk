@@ -35,16 +35,16 @@ use xcm_executor::traits::ConvertOrigin;
 
 type Block = pezframe_system::mocking::MockBlock<Test>;
 
-// Configure a mock runtime to test the pallet.
+// Configure a mock runtime to test the pezpallet.
 pezframe_support::construct_runtime!(
 	pub enum Test
 	{
-		System: pezframe_system::{Pallet, Call, Config<T>, Storage, Event<T>},
-		Balances: pezpallet_balances::{Pallet, Call, Storage, Config<T>, Event<T>},
+		System: pezframe_system::{Pezpallet, Call, Config<T>, Storage, Event<T>},
+		Balances: pezpallet_balances::{Pezpallet, Call, Storage, Config<T>, Event<T>},
 		TeyrchainSystem: pezcumulus_pezpallet_teyrchain_system::{
-			Pallet, Call, Config<T>, Storage, Inherent, Event<T>,
+			Pezpallet, Call, Config<T>, Storage, Inherent, Event<T>,
 		},
-		XcmpQueue: xcmp_queue::{Pallet, Call, Storage, Event<T>},
+		XcmpQueue: xcmp_queue::{Pezpallet, Call, Storage, Event<T>},
 	}
 );
 
@@ -233,7 +233,7 @@ impl Config for Test {
 	type RuntimeEvent = RuntimeEvent;
 	type ChannelInfo = MockedChannelInfo;
 	type VersionWrapper = ();
-	type XcmpQueue = EnqueueToLocalStorage<Pallet<Test>>;
+	type XcmpQueue = EnqueueToLocalStorage<Pezpallet<Test>>;
 	type MaxInboundSuspended = ConstU32<1_000>;
 	type MaxActiveOutboundChannels = ConstU32<128>;
 	// Most on-chain HRMP channels are configured to use 102400 bytes of max message size, so we

@@ -37,7 +37,7 @@ use quote::quote;
 use std::collections::HashSet;
 use syn::{Ident, Result};
 
-/// The fixed name of the system pallet.
+/// The fixed name of the system pezpallet.
 const SYSTEM_PALLET_NAME: &str = "System";
 
 pub fn expand(def: Def, legacy_ordering: bool) -> TokenStream2 {
@@ -96,11 +96,11 @@ fn construct_runtime_implicit_to_explicit(
 		#[#pezframe_support::runtime #attr]
 		#input
 	);
-	for pallet in definition.pezpallet_decls.iter() {
-		let pezpallet_path = &pallet.path;
-		let pezpallet_name = &pallet.name;
-		let runtime_param = &pallet.runtime_param;
-		let pezpallet_segment_and_instance = match (&pallet.pezpallet_segment, &pallet.instance) {
+	for pezpallet in definition.pezpallet_decls.iter() {
+		let pezpallet_path = &pezpallet.path;
+		let pezpallet_name = &pezpallet.name;
+		let runtime_param = &pezpallet.runtime_param;
+		let pezpallet_segment_and_instance = match (&pezpallet.pezpallet_segment, &pezpallet.instance) {
 			(Some(segment), Some(instance)) => quote::quote!(::#segment<#runtime_param, #instance>),
 			(Some(segment), None) => quote::quote!(::#segment<#runtime_param>),
 			(None, Some(instance)) => quote::quote!(<#instance>),
@@ -130,7 +130,7 @@ fn construct_runtime_final_expansion(
 	let ExplicitAllPalletsDeclaration { mut pallets, name: pallets_name } = definition;
 
 	if !legacy_ordering {
-		// Ensure that order of hooks is based on the pallet index
+		// Ensure that order of hooks is based on the pezpallet index
 		pallets.sort_by_key(|p| p.index);
 	}
 
@@ -138,14 +138,14 @@ fn construct_runtime_final_expansion(
 		pallets.iter().find(|decl| decl.name == SYSTEM_PALLET_NAME).ok_or_else(|| {
 			syn::Error::new(
 				pallets_name.span(),
-				"`System` pallet declaration is missing. \
+				"`System` pezpallet declaration is missing. \
 			 Please add this line: `pub type System = pezframe_system;`",
 			)
 		})?;
 	if !system_pallet.cfg_pattern.is_empty() {
 		return Err(syn::Error::new(
 			system_pallet.name.span(),
-			"`System` pallet declaration is feature gated, please remove any `#[cfg]` attributes",
+			"`System` pezpallet declaration is feature gated, please remove any `#[cfg]` attributes",
 		));
 	}
 

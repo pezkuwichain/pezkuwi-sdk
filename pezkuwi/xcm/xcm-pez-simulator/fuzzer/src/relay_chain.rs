@@ -192,7 +192,7 @@ parameter_types! {
 	pub const MessageQueueMaxStale: u32 = 16;
 }
 
-/// Message processor to handle any messages that were enqueued into the `MessageQueue` pallet.
+/// Message processor to handle any messages that were enqueued into the `MessageQueue` pezpallet.
 pub struct MessageProcessor;
 impl ProcessMessage for MessageProcessor {
 	type Origin = AggregateMessageOrigin;

@@ -31,10 +31,10 @@ use pezsp_runtime::{
 use storage::StorageDoubleMap;
 
 // Implements [`BalanceOnHold`] from [`pezpallet-assets`], so it can understand whether there's some
-// balance on hold for an asset account, and is able to signal to this pallet when to clear the
+// balance on hold for an asset account, and is able to signal to this pezpallet when to clear the
 // state of an account.
 impl<T: Config<I>, I: 'static> BalanceOnHold<T::AssetId, T::AccountId, T::Balance>
-	for Pallet<T, I>
+	for Pezpallet<T, I>
 {
 	fn balance_on_hold(asset: T::AssetId, who: &T::AccountId) -> Option<T::Balance> {
 		BalancesOnHold::<T, I>::get(asset, who)
@@ -63,24 +63,24 @@ impl<T: Config<I>, I: 'static> BalanceOnHold<T::AssetId, T::AccountId, T::Balanc
 // [`fungibles::InspectHold`](pezframe_support::traits::fungibles::InspectHold) and
 // [`fungibles::MutateHold`](pezframe_support::traits::fungibles::MutateHold). To do so, we'll
 // re-export all of `pezpallet-assets` implementation of the same trait.
-impl<T: Config<I>, I: 'static> Inspect<T::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Inspect<T::AccountId> for Pezpallet<T, I> {
 	type AssetId = T::AssetId;
 	type Balance = T::Balance;
 
 	fn total_issuance(asset: Self::AssetId) -> Self::Balance {
-		pezpallet_assets::Pallet::<T, I>::total_issuance(asset)
+		pezpallet_assets::Pezpallet::<T, I>::total_issuance(asset)
 	}
 
 	fn minimum_balance(asset: Self::AssetId) -> Self::Balance {
-		pezpallet_assets::Pallet::<T, I>::minimum_balance(asset)
+		pezpallet_assets::Pezpallet::<T, I>::minimum_balance(asset)
 	}
 
 	fn total_balance(asset: Self::AssetId, who: &T::AccountId) -> Self::Balance {
-		pezpallet_assets::Pallet::<T, I>::total_balance(asset, who)
+		pezpallet_assets::Pezpallet::<T, I>::total_balance(asset, who)
 	}
 
 	fn balance(asset: Self::AssetId, who: &T::AccountId) -> Self::Balance {
-		pezpallet_assets::Pallet::<T, I>::balance(asset, who)
+		pezpallet_assets::Pezpallet::<T, I>::balance(asset, who)
 	}
 
 	fn reducible_balance(
@@ -89,7 +89,7 @@ impl<T: Config<I>, I: 'static> Inspect<T::AccountId> for Pallet<T, I> {
 		preservation: Preservation,
 		force: Fortitude,
 	) -> Self::Balance {
-		pezpallet_assets::Pallet::<T, I>::reducible_balance(asset, who, preservation, force)
+		pezpallet_assets::Pezpallet::<T, I>::reducible_balance(asset, who, preservation, force)
 	}
 
 	fn can_deposit(
@@ -98,7 +98,7 @@ impl<T: Config<I>, I: 'static> Inspect<T::AccountId> for Pallet<T, I> {
 		amount: Self::Balance,
 		provenance: Provenance,
 	) -> DepositConsequence {
-		pezpallet_assets::Pallet::<T, I>::can_deposit(asset, who, amount, provenance)
+		pezpallet_assets::Pezpallet::<T, I>::can_deposit(asset, who, amount, provenance)
 	}
 
 	fn can_withdraw(
@@ -106,15 +106,15 @@ impl<T: Config<I>, I: 'static> Inspect<T::AccountId> for Pallet<T, I> {
 		who: &T::AccountId,
 		amount: Self::Balance,
 	) -> WithdrawConsequence<Self::Balance> {
-		pezpallet_assets::Pallet::<T, I>::can_withdraw(asset, who, amount)
+		pezpallet_assets::Pezpallet::<T, I>::can_withdraw(asset, who, amount)
 	}
 
 	fn asset_exists(asset: Self::AssetId) -> bool {
-		pezpallet_assets::Pallet::<T, I>::asset_exists(asset)
+		pezpallet_assets::Pezpallet::<T, I>::asset_exists(asset)
 	}
 }
 
-impl<T: Config<I>, I: 'static> InspectHold<T::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> InspectHold<T::AccountId> for Pezpallet<T, I> {
 	type Reason = T::RuntimeHoldReason;
 
 	fn total_balance_on_hold(asset: Self::AssetId, who: &T::AccountId) -> Self::Balance {
@@ -134,10 +134,10 @@ impl<T: Config<I>, I: 'static> InspectHold<T::AccountId> for Pallet<T, I> {
 	}
 }
 
-impl<T: Config<I>, I: 'static> Unbalanced<T::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Unbalanced<T::AccountId> for Pezpallet<T, I> {
 	fn handle_dust(dust: Dust<T::AccountId, Self>) {
 		let Dust(id, balance) = dust;
-		pezpallet_assets::Pallet::<T, I>::handle_dust(Dust(id, balance));
+		pezpallet_assets::Pezpallet::<T, I>::handle_dust(Dust(id, balance));
 	}
 
 	fn write_balance(
@@ -145,11 +145,11 @@ impl<T: Config<I>, I: 'static> Unbalanced<T::AccountId> for Pallet<T, I> {
 		who: &T::AccountId,
 		amount: Self::Balance,
 	) -> Result<Option<Self::Balance>, DispatchError> {
-		pezpallet_assets::Pallet::<T, I>::write_balance(asset, who, amount)
+		pezpallet_assets::Pezpallet::<T, I>::write_balance(asset, who, amount)
 	}
 
 	fn set_total_issuance(asset: Self::AssetId, amount: Self::Balance) {
-		pezpallet_assets::Pallet::<T, I>::set_total_issuance(asset, amount)
+		pezpallet_assets::Pezpallet::<T, I>::set_total_issuance(asset, amount)
 	}
 
 	fn decrease_balance(
@@ -160,7 +160,7 @@ impl<T: Config<I>, I: 'static> Unbalanced<T::AccountId> for Pallet<T, I> {
 		preservation: Preservation,
 		force: Fortitude,
 	) -> Result<Self::Balance, DispatchError> {
-		pezpallet_assets::Pallet::<T, I>::decrease_balance(
+		pezpallet_assets::Pezpallet::<T, I>::decrease_balance(
 			asset,
 			who,
 			amount,
@@ -176,11 +176,11 @@ impl<T: Config<I>, I: 'static> Unbalanced<T::AccountId> for Pallet<T, I> {
 		amount: Self::Balance,
 		precision: Precision,
 	) -> Result<Self::Balance, DispatchError> {
-		pezpallet_assets::Pallet::<T, I>::increase_balance(asset, who, amount, precision)
+		pezpallet_assets::Pezpallet::<T, I>::increase_balance(asset, who, amount, precision)
 	}
 }
 
-impl<T: Config<I>, I: 'static> UnbalancedHold<T::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> UnbalancedHold<T::AccountId> for Pezpallet<T, I> {
 	fn set_balance_on_hold(
 		asset: Self::AssetId,
 		reason: &Self::Reason,
@@ -245,7 +245,7 @@ impl<T: Config<I>, I: 'static> UnbalancedHold<T::AccountId> for Pallet<T, I> {
 	}
 }
 
-impl<T: Config<I>, I: 'static> MutateHold<T::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> MutateHold<T::AccountId> for Pezpallet<T, I> {
 	fn done_hold(
 		asset_id: Self::AssetId,
 		reason: &Self::Reason,

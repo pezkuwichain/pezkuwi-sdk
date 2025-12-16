@@ -66,7 +66,7 @@
 //!
 //! ### UMP signals
 //!
-//! UMP signals are now enabled by default in the `teyrchain-system` pallet and are used for
+//! UMP signals are now enabled by default in the `teyrchain-system` pezpallet and are used for
 //! elastic scaling. You can find more technical details about UMP signals and their usage for
 //! elastic scaling
 //! [here](https://github.com/polkadot-fellows/RFCs/blob/main/text/0103-introduce-core-index-commitment.md).

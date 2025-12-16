@@ -24,7 +24,7 @@
 //!
 //! - Begin with a call to `induct`, where some privileged origin (perhaps a pre-existing member of
 //!   `rank > 1`) is able to make a candidate from an account and introduce it to be tracked in this
-//!   pallet in order to allow evidence to be submitted and promotion voted on.
+//!   pezpallet in order to allow evidence to be submitted and promotion voted on.
 //! - The candidate then calls `submit_evidence` to apply for their promotion to rank 1.
 //! - A `PromoteOrigin` of at least rank 1 calls `promote` on the candidate to elevate it to rank 1.
 //! - Some time later but before rank 1's `demotion_period` elapses, candidate calls
@@ -38,15 +38,15 @@
 //! - If a candidate fails to be promoted to a member within the `offboard_timeout` period, then
 //!   anyone may call `bump` to remove the account's candidacy.
 //! - Pre-existing members may call `import_member` on themselves (formerly `import`) to have their
-//!   rank recognised and be inducted into this pallet (to gain a salary and allow for eventual
+//!   rank recognised and be inducted into this pezpallet (to gain a salary and allow for eventual
 //!   promotion).
-//! - If, externally to this pallet, a member or candidate has their rank removed completely, then
-//!   `offboard` may be called to remove them entirely from this pallet.
+//! - If, externally to this pezpallet, a member or candidate has their rank removed completely, then
+//!   `offboard` may be called to remove them entirely from this pezpallet.
 //!
 //! Note there is a difference between having a rank of 0 (whereby the account is a *candidate*) and
 //! having no rank at all (whereby we consider it *unranked*). An account can be demoted from rank
 //! 0 to become unranked. This process is called being offboarded and there is an extrinsic to do
-//! this explicitly when external factors to this pallet have caused the tracked account to become
+//! this explicitly when external factors to this pezpallet have caused the tracked account to become
 //! unranked. At rank 0, there is not a "demotion" period after which the account may be bumped to
 //! become offboarded but rather an "offboard timeout".
 //!
@@ -87,7 +87,7 @@ mod benchmarking;
 pub mod migration;
 pub mod weights;
 
-pub use pallet::*;
+pub use pezpallet::*;
 pub use weights::*;
 
 /// The desired outcome for which evidence is presented.
@@ -112,11 +112,11 @@ pub enum Wish {
 
 /// A piece of evidence to underpin a [Wish].
 ///
-/// From the pallet's perspective, this is just a blob of data without meaning. The fellows can
+/// From the pezpallet's perspective, this is just a blob of data without meaning. The fellows can
 /// decide how to concretely utilise it. This could be an IPFS hash, a URL or structured data.
 pub type Evidence<T, I> = BoundedVec<u8, <T as Config<I>>::EvidenceSize>;
 
-/// The status of the pallet instance.
+/// The status of the pezpallet instance.
 #[derive(
 	Encode,
 	Decode,
@@ -181,8 +181,8 @@ pub struct MemberStatus<BlockNumber> {
 	last_proof: BlockNumber,
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::{
 		dispatch::Pays,
@@ -193,13 +193,13 @@ pub mod pallet {
 	/// The in-code storage version.
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(1);
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T, I = ()>(PhantomData<(T, I)>);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T, I = ()>(PhantomData<(T, I)>);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config {
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 
 		/// The runtime event type.
@@ -219,7 +219,7 @@ pub mod pallet {
 		/// The origin which has permission update the parameters.
 		type ParamsOrigin: EnsureOrigin<Self::RuntimeOrigin>;
 
-		/// The origin which has permission to move a candidate into being tracked in this pallet.
+		/// The origin which has permission to move a candidate into being tracked in this pezpallet.
 		/// Generally a very low-permission, such as a pre-existing member of rank 1 or above.
 		///
 		/// This allows the candidate to deposit evidence for their request to be promoted to a
@@ -239,13 +239,13 @@ pub mod pallet {
 		type FastPromoteOrigin: EnsureOrigin<Self::RuntimeOrigin, Success = RankOf<Self, I>>;
 
 		/// The maximum size in bytes submitted evidence is allowed to be.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type EvidenceSize: Get<u32>;
 
-		/// Represents the highest possible rank in this pallet.
+		/// Represents the highest possible rank in this pezpallet.
 		///
 		/// Increasing this value is supported, but decreasing it may lead to a broken state.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxRank: Get<u16>;
 	}
 
@@ -263,29 +263,29 @@ pub mod pallet {
 	pub type RankOf<T, I> = <<T as Config<I>>::Members as RankedMembers>::Rank;
 
 	/// The overall status of the system.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Params<T: Config<I>, I: 'static = ()> = StorageValue<_, ParamsOf<T, I>, ValueQuery>;
 
 	/// The status of a claimant.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Member<T: Config<I>, I: 'static = ()> =
 		StorageMap<_, Twox64Concat, T::AccountId, MemberStatusOf<T>, OptionQuery>;
 
 	/// Some evidence together with the desired outcome for which it was presented.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type MemberEvidence<T: Config<I>, I: 'static = ()> =
 		StorageMap<_, Twox64Concat, T::AccountId, (Wish, Evidence<T, I>), OptionQuery>;
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config<I>, I: 'static = ()> {
-		/// Parameters for the pallet have changed.
+		/// Parameters for the pezpallet have changed.
 		ParamsChanged { params: ParamsOf<T, I> },
 		/// Member activity flag has been set.
 		ActiveChanged { who: T::AccountId, is_active: bool },
-		/// Member has begun being tracked in this pallet.
+		/// Member has begun being tracked in this pezpallet.
 		Inducted { who: T::AccountId },
-		/// Member has been removed from being tracked in this pallet (i.e. because rank is now
+		/// Member has been removed from being tracked in this pezpallet (i.e. because rank is now
 		/// zero).
 		Offboarded { who: T::AccountId },
 		/// Member has been promoted to the given rank.
@@ -316,7 +316,7 @@ pub mod pallet {
 		Swapped { who: T::AccountId, new_who: T::AccountId },
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T, I = ()> {
 		/// Member's rank is too low.
 		Unranked,
@@ -332,16 +332,16 @@ pub mod pallet {
 		/// No work needs to be done at present for this member.
 		NothingDoing,
 		/// The candidate has already been inducted. This should never happen since it would
-		/// require a candidate (rank 0) to already be tracked in the pallet.
+		/// require a candidate (rank 0) to already be tracked in the pezpallet.
 		AlreadyInducted,
-		/// The candidate has not been inducted, so cannot be offboarded from this pallet.
+		/// The candidate has not been inducted, so cannot be offboarded from this pezpallet.
 		NotTracked,
 		/// Operation cannot be done yet since not enough time has passed.
 		TooSoon,
 	}
 
-	#[pallet::call]
-	impl<T: Config<I>, I: 'static> Pallet<T, I> {
+	#[pezpallet::call]
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 		/// Bump the state of a member.
 		///
 		/// This will demote a member whose `last_proof` is now beyond their rank's
@@ -349,8 +349,8 @@ pub mod pallet {
 		///
 		/// - `origin`: A `Signed` origin of an account.
 		/// - `who`: A member account whose state is to be updated.
-		#[pallet::weight(T::WeightInfo::bump_offboard().max(T::WeightInfo::bump_demote()))]
-		#[pallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::bump_offboard().max(T::WeightInfo::bump_demote()))]
+		#[pezpallet::call_index(0)]
 		pub fn bump(origin: OriginFor<T>, who: T::AccountId) -> DispatchResultWithPostInfo {
 			ensure_signed(origin)?;
 			let mut member = Member::<T, I>::get(&who).ok_or(Error::<T, I>::NotTracked)?;
@@ -371,7 +371,7 @@ pub mod pallet {
 			let demotion_block = member.last_proof.saturating_add(demotion_period);
 
 			// Ensure enough time has passed.
-			let now = pezframe_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pezpallet::<T>::block_number();
 			if now >= demotion_block {
 				T::Members::demote(&who)?;
 				let maybe_to_rank = T::Members::rank_of(&who);
@@ -394,9 +394,9 @@ pub mod pallet {
 		/// Set the parameters.
 		///
 		/// - `origin`: An origin complying with `ParamsOrigin` or root.
-		/// - `params`: The new parameters for the pallet.
-		#[pallet::weight(T::WeightInfo::set_params())]
-		#[pallet::call_index(1)]
+		/// - `params`: The new parameters for the pezpallet.
+		#[pezpallet::weight(T::WeightInfo::set_params())]
+		#[pezpallet::call_index(1)]
 		pub fn set_params(origin: OriginFor<T>, params: Box<ParamsOf<T, I>>) -> DispatchResult {
 			T::ParamsOrigin::ensure_origin_or_root(origin)?;
 
@@ -410,8 +410,8 @@ pub mod pallet {
 		///
 		/// - `origin`: A `Signed` origin of a member's account.
 		/// - `is_active`: `true` iff the member is active.
-		#[pallet::weight(T::WeightInfo::set_active())]
-		#[pallet::call_index(2)]
+		#[pezpallet::weight(T::WeightInfo::set_active())]
+		#[pezpallet::call_index(2)]
 		pub fn set_active(origin: OriginFor<T>, is_active: bool) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 			ensure!(
@@ -429,13 +429,13 @@ pub mod pallet {
 		///
 		/// This resets `last_proof` to the current block, thereby delaying any automatic demotion.
 		///
-		/// `who` must already be tracked by this pallet for this to have an effect.
+		/// `who` must already be tracked by this pezpallet for this to have an effect.
 		///
 		/// - `origin`: An origin which satisfies `ApproveOrigin` or root.
 		/// - `who`: A member (i.e. of non-zero rank).
 		/// - `at_rank`: The rank of member.
-		#[pallet::weight(T::WeightInfo::approve())]
-		#[pallet::call_index(3)]
+		#[pezpallet::weight(T::WeightInfo::approve())]
+		#[pezpallet::call_index(3)]
 		pub fn approve(
 			origin: OriginFor<T>,
 			who: T::AccountId,
@@ -450,7 +450,7 @@ pub mod pallet {
 			ensure!(rank == at_rank, Error::<T, I>::UnexpectedRank);
 			let mut member = Member::<T, I>::get(&who).ok_or(Error::<T, I>::NotTracked)?;
 
-			member.last_proof = pezframe_system::Pallet::<T>::block_number();
+			member.last_proof = pezframe_system::Pezpallet::<T>::block_number();
 			Member::<T, I>::insert(&who, &member);
 
 			Self::dispose_evidence(who.clone(), at_rank, Some(at_rank));
@@ -463,8 +463,8 @@ pub mod pallet {
 		///
 		/// - `origin`: An origin which satisfies `InductOrigin` or root.
 		/// - `who`: The account ID of the candidate to be inducted and become a member.
-		#[pallet::weight(T::WeightInfo::induct())]
-		#[pallet::call_index(4)]
+		#[pezpallet::weight(T::WeightInfo::induct())]
+		#[pezpallet::call_index(4)]
 		pub fn induct(origin: OriginFor<T>, who: T::AccountId) -> DispatchResult {
 			match T::InductOrigin::try_origin(origin) {
 				Ok(_) => {},
@@ -474,7 +474,7 @@ pub mod pallet {
 			ensure!(T::Members::rank_of(&who).is_none(), Error::<T, I>::Ranked);
 
 			T::Members::induct(&who)?;
-			let now = pezframe_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pezpallet::<T>::block_number();
 			Member::<T, I>::insert(
 				&who,
 				MemberStatus { is_active: true, last_promotion: now, last_proof: now },
@@ -489,8 +489,8 @@ pub mod pallet {
 		///   `to_rank` or more or root.
 		/// - `who`: The account ID of the member to be promoted to `to_rank`.
 		/// - `to_rank`: One more than the current rank of `who`.
-		#[pallet::weight(T::WeightInfo::promote())]
-		#[pallet::call_index(5)]
+		#[pezpallet::weight(T::WeightInfo::promote())]
+		#[pezpallet::call_index(5)]
 		pub fn promote(
 			origin: OriginFor<T>,
 			who: T::AccountId,
@@ -507,7 +507,7 @@ pub mod pallet {
 			);
 
 			let mut member = Member::<T, I>::get(&who).ok_or(Error::<T, I>::NotTracked)?;
-			let now = pezframe_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pezpallet::<T>::block_number();
 
 			let params = Params::<T, I>::get();
 			let rank_index = Self::rank_to_index(to_rank).ok_or(Error::<T, I>::InvalidRank)?;
@@ -534,8 +534,8 @@ pub mod pallet {
 		/// This is useful for out-of-band promotions, hence it has its own `FastPromoteOrigin` to
 		/// be (possibly) more restrictive than `PromoteOrigin`. Note that the member must already
 		/// be inducted.
-		#[pallet::weight(T::WeightInfo::promote_fast(*to_rank as u32))]
-		#[pallet::call_index(10)]
+		#[pezpallet::weight(T::WeightInfo::promote_fast(*to_rank as u32))]
+		#[pezpallet::call_index(10)]
 		pub fn promote_fast(
 			origin: OriginFor<T>,
 			who: T::AccountId,
@@ -550,7 +550,7 @@ pub mod pallet {
 			ensure!(to_rank > curr_rank, Error::<T, I>::UnexpectedRank);
 
 			let mut member = Member::<T, I>::get(&who).ok_or(Error::<T, I>::NotTracked)?;
-			let now = pezframe_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pezpallet::<T>::block_number();
 			member.last_promotion = now;
 			member.last_proof = now;
 
@@ -570,10 +570,10 @@ pub mod pallet {
 		/// Stop tracking a prior member who is now not a ranked member of the collective.
 		///
 		/// - `origin`: A `Signed` origin of an account.
-		/// - `who`: The ID of an account which was tracked in this pallet but which is now not a
+		/// - `who`: The ID of an account which was tracked in this pezpallet but which is now not a
 		///   ranked member of the collective.
-		#[pallet::weight(T::WeightInfo::offboard())]
-		#[pallet::call_index(6)]
+		#[pezpallet::weight(T::WeightInfo::offboard())]
+		#[pezpallet::call_index(6)]
 		pub fn offboard(origin: OriginFor<T>, who: T::AccountId) -> DispatchResultWithPostInfo {
 			ensure_signed(origin)?;
 			ensure!(T::Members::rank_of(&who).is_none(), Error::<T, I>::Ranked);
@@ -594,8 +594,8 @@ pub mod pallet {
 		/// - `evidence`: A dump of evidence to be considered. This should generally be either a
 		///   Markdown-encoded document or a series of 32-byte hashes which can be found on a
 		///   decentralised content-based-indexing system such as IPFS.
-		#[pallet::weight(T::WeightInfo::submit_evidence())]
-		#[pallet::call_index(7)]
+		#[pezpallet::weight(T::WeightInfo::submit_evidence())]
+		#[pezpallet::call_index(7)]
 		pub fn submit_evidence(
 			origin: OriginFor<T>,
 			wish: Wish,
@@ -609,15 +609,15 @@ pub mod pallet {
 			Ok(if replaced { Pays::Yes } else { Pays::No }.into())
 		}
 
-		/// Introduce an already-ranked individual of the collective into this pallet.
+		/// Introduce an already-ranked individual of the collective into this pezpallet.
 		///
 		/// The rank may still be zero. This resets `last_proof` to the current block and
 		/// `last_promotion` will be set to zero, thereby delaying any automatic demotion but
 		/// allowing immediate promotion.
 		///
 		/// - `origin`: A signed origin of a ranked, but not tracked, account.
-		#[pallet::weight(T::WeightInfo::import())]
-		#[pallet::call_index(8)]
+		#[pezpallet::weight(T::WeightInfo::import())]
+		#[pezpallet::call_index(8)]
 		#[deprecated = "Use `import_member` instead"]
 		#[allow(deprecated)] // Otherwise FRAME will complain about using something deprecated.
 		pub fn import(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
@@ -627,7 +627,7 @@ pub mod pallet {
 			Ok(Pays::No.into()) // Successful imports are free
 		}
 
-		/// Introduce an already-ranked individual of the collective into this pallet.
+		/// Introduce an already-ranked individual of the collective into this pezpallet.
 		///
 		/// The rank may still be zero. Can be called by anyone on any collective member - including
 		/// the sender.
@@ -637,8 +637,8 @@ pub mod pallet {
 		///
 		/// - `origin`: A signed origin of a ranked, but not tracked, account.
 		/// - `who`: The account ID of the collective member to be inducted.
-		#[pallet::weight(T::WeightInfo::set_partial_params())]
-		#[pallet::call_index(11)]
+		#[pezpallet::weight(T::WeightInfo::set_partial_params())]
+		#[pezpallet::call_index(11)]
 		pub fn import_member(
 			origin: OriginFor<T>,
 			who: T::AccountId,
@@ -652,12 +652,12 @@ pub mod pallet {
 		/// Set the parameters partially.
 		///
 		/// - `origin`: An origin complying with `ParamsOrigin` or root.
-		/// - `partial_params`: The new parameters for the pallet.
+		/// - `partial_params`: The new parameters for the pezpallet.
 		///
 		/// This update config with multiple arguments without duplicating
 		/// the fields that does not need to update (set to None).
-		#[pallet::weight(T::WeightInfo::set_partial_params())]
-		#[pallet::call_index(9)]
+		#[pezpallet::weight(T::WeightInfo::set_partial_params())]
+		#[pezpallet::call_index(9)]
 		pub fn set_partial_params(
 			origin: OriginFor<T>,
 			partial_params: Box<PartialParamsOf<T, I>>,
@@ -687,7 +687,7 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config<I>, I: 'static> Pallet<T, I> {
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 		/// Partially update the base slice with a new slice
 		///
 		/// Only elements in the base slice which has a new value in the new slice will be updated.
@@ -702,14 +702,14 @@ pub mod pallet {
 			}
 		}
 
-		/// Import `who` into the core-fellowship pallet.
+		/// Import `who` into the core-fellowship pezpallet.
 		///
 		/// `who` must be a member of the collective but *not* already imported.
 		pub(crate) fn do_import(who: T::AccountId) -> DispatchResult {
 			ensure!(!Member::<T, I>::contains_key(&who), Error::<T, I>::AlreadyInducted);
 			let rank = T::Members::rank_of(&who).ok_or(Error::<T, I>::Unranked)?;
 
-			let now = pezframe_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pezpallet::<T>::block_number();
 			Member::<T, I>::insert(
 				&who,
 				MemberStatus { is_active: true, last_promotion: 0u32.into(), last_proof: now },
@@ -739,7 +739,7 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config<I>, I: 'static> GetSalary<RankOf<T, I>, T::AccountId, T::Balance> for Pallet<T, I> {
+	impl<T: Config<I>, I: 'static> GetSalary<RankOf<T, I>, T::AccountId, T::Balance> for Pezpallet<T, I> {
 		fn get_salary(rank: RankOf<T, I>, who: &T::AccountId) -> T::Balance {
 			let index = match Self::rank_to_index(rank) {
 				Some(i) => i,
@@ -757,7 +757,7 @@ pub mod pallet {
 	}
 }
 
-/// Guard to ensure that the given origin is inducted into this pallet with a given minimum rank.
+/// Guard to ensure that the given origin is inducted into this pezpallet with a given minimum rank.
 /// The account ID of the member is the `Success` value.
 pub struct EnsureInducted<T, I, const MIN_RANK: u16>(PhantomData<(T, I)>);
 impl<T: Config<I>, I: 'static, const MIN_RANK: u16> EnsureOrigin<T::RuntimeOrigin>
@@ -794,7 +794,7 @@ impl_ensure_origin_with_arg_ignoring_arg! {
 	{}
 }
 
-impl<T: Config<I>, I: 'static> RankedMembersSwapHandler<T::AccountId, u16> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> RankedMembersSwapHandler<T::AccountId, u16> for Pezpallet<T, I> {
 	fn swapped(old: &T::AccountId, new: &T::AccountId, _rank: u16) {
 		if old == new {
 			defensive!("Should not try to swap with self");
@@ -822,7 +822,7 @@ impl<T: Config<I>, I: 'static> RankedMembersSwapHandler<T::AccountId, u16> for P
 
 #[cfg(feature = "runtime-benchmarks")]
 impl<T: Config<I>, I: 'static>
-	pezpallet_ranked_collective::BenchmarkSetup<<T as pezframe_system::Config>::AccountId> for Pallet<T, I>
+	pezpallet_ranked_collective::BenchmarkSetup<<T as pezframe_system::Config>::AccountId> for Pezpallet<T, I>
 {
 	fn ensure_member(who: &<T as pezframe_system::Config>::AccountId) {
 		#[allow(deprecated)]

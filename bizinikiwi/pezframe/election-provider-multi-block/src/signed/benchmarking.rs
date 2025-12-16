@@ -16,7 +16,7 @@
 // limitations under the License.
 
 use crate::{
-	signed::{Config, Pallet, Submissions},
+	signed::{Config, Pezpallet, Submissions},
 	types::PagedRawSolution,
 	unsigned::miner::OffchainWorkerMiner,
 	CurrentPhase, Phase, Round,
@@ -37,13 +37,13 @@ mod benchmarks {
 	fn register_not_full() -> Result<(), BenchmarkError> {
 		CurrentPhase::<T>::put(Phase::Signed(T::SignedPhase::get() - One::one()));
 		let round = Round::<T>::get();
-		let alice = crate::Pallet::<T>::funded_account("alice", 0);
+		let alice = crate::Pezpallet::<T>::funded_account("alice", 0);
 		let score = ElectionScore::default();
 
 		assert_eq!(Submissions::<T>::sorted_submitters(round).len(), 0);
 		#[block]
 		{
-			Pallet::<T>::register(RawOrigin::Signed(alice).into(), score)?;
+			Pezpallet::<T>::register(RawOrigin::Signed(alice).into(), score)?;
 		}
 
 		assert_eq!(Submissions::<T>::sorted_submitters(round).len(), 1);
@@ -56,20 +56,20 @@ mod benchmarks {
 		let round = Round::<T>::get();
 
 		for i in 0..T::MaxSubmissions::get() {
-			let submitter = crate::Pallet::<T>::funded_account("submitter", i);
+			let submitter = crate::Pezpallet::<T>::funded_account("submitter", i);
 			let score = ElectionScore { minimal_stake: i.into(), ..Default::default() };
-			Pallet::<T>::register(RawOrigin::Signed(submitter.clone()).into(), score)?;
+			Pezpallet::<T>::register(RawOrigin::Signed(submitter.clone()).into(), score)?;
 
 			// The first one, which will be ejected, has also submitted all pages
 			if i == 0 {
 				for p in 0..T::Pages::get() {
 					let page = Some(Default::default());
-					Pallet::<T>::submit_page(RawOrigin::Signed(submitter.clone()).into(), p, page)?;
+					Pezpallet::<T>::submit_page(RawOrigin::Signed(submitter.clone()).into(), p, page)?;
 				}
 			}
 		}
 
-		let who = crate::Pallet::<T>::funded_account("who", 0);
+		let who = crate::Pezpallet::<T>::funded_account("who", 0);
 		let score =
 			ElectionScore { minimal_stake: T::MaxSubmissions::get().into(), ..Default::default() };
 
@@ -80,7 +80,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			Pallet::<T>::register(RawOrigin::Signed(who).into(), score)?;
+			Pezpallet::<T>::register(RawOrigin::Signed(who).into(), score)?;
 		}
 
 		assert_eq!(
@@ -94,9 +94,9 @@ mod benchmarks {
 	fn submit_page() -> Result<(), BenchmarkError> {
 		#[cfg(test)]
 		crate::mock::ElectionStart::set(pezsp_runtime::traits::Bounded::max_value());
-		crate::Pallet::<T>::start().unwrap();
+		crate::Pezpallet::<T>::start().unwrap();
 
-		crate::Pallet::<T>::roll_until_matches(|| {
+		crate::Pezpallet::<T>::roll_until_matches(|| {
 			matches!(CurrentPhase::<T>::get(), Phase::Signed(_))
 		});
 
@@ -106,12 +106,12 @@ mod benchmarks {
 		let page = Some(Box::new(solution_pages[0].clone()));
 
 		// register alice
-		let alice = crate::Pallet::<T>::funded_account("alice", 0);
-		Pallet::<T>::register(RawOrigin::Signed(alice.clone()).into(), score)?;
+		let alice = crate::Pezpallet::<T>::funded_account("alice", 0);
+		Pezpallet::<T>::register(RawOrigin::Signed(alice.clone()).into(), score)?;
 
 		#[block]
 		{
-			Pallet::<T>::submit_page(RawOrigin::Signed(alice).into(), 0, page)?;
+			Pezpallet::<T>::submit_page(RawOrigin::Signed(alice).into(), 0, page)?;
 		}
 
 		Ok(())
@@ -121,9 +121,9 @@ mod benchmarks {
 	fn unset_page() -> Result<(), BenchmarkError> {
 		#[cfg(test)]
 		crate::mock::ElectionStart::set(pezsp_runtime::traits::Bounded::max_value());
-		crate::Pallet::<T>::start().unwrap();
+		crate::Pezpallet::<T>::start().unwrap();
 
-		crate::Pallet::<T>::roll_until_matches(|| {
+		crate::Pezpallet::<T>::roll_until_matches(|| {
 			matches!(CurrentPhase::<T>::get(), Phase::Signed(_))
 		});
 
@@ -133,15 +133,15 @@ mod benchmarks {
 		let page = Some(Box::new(solution_pages[0].clone()));
 
 		// register alice
-		let alice = crate::Pallet::<T>::funded_account("alice", 0);
-		Pallet::<T>::register(RawOrigin::Signed(alice.clone()).into(), score)?;
+		let alice = crate::Pezpallet::<T>::funded_account("alice", 0);
+		Pezpallet::<T>::register(RawOrigin::Signed(alice.clone()).into(), score)?;
 
 		// submit page
-		Pallet::<T>::submit_page(RawOrigin::Signed(alice.clone()).into(), 0, page)?;
+		Pezpallet::<T>::submit_page(RawOrigin::Signed(alice.clone()).into(), 0, page)?;
 
 		#[block]
 		{
-			Pallet::<T>::submit_page(RawOrigin::Signed(alice).into(), 0, None)?;
+			Pezpallet::<T>::submit_page(RawOrigin::Signed(alice).into(), 0, None)?;
 		}
 
 		Ok(())
@@ -150,21 +150,21 @@ mod benchmarks {
 	#[benchmark(pov_mode = Measured)]
 	fn bail() -> Result<(), BenchmarkError> {
 		CurrentPhase::<T>::put(Phase::Signed(T::SignedPhase::get() - One::one()));
-		let alice = crate::Pallet::<T>::funded_account("alice", 0);
+		let alice = crate::Pezpallet::<T>::funded_account("alice", 0);
 
 		// register alice
 		let score = ElectionScore::default();
-		Pallet::<T>::register(RawOrigin::Signed(alice.clone()).into(), score)?;
+		Pezpallet::<T>::register(RawOrigin::Signed(alice.clone()).into(), score)?;
 
 		// submit all pages
 		for p in 0..T::Pages::get() {
 			let page = Some(Default::default());
-			Pallet::<T>::submit_page(RawOrigin::Signed(alice.clone()).into(), p, page)?;
+			Pezpallet::<T>::submit_page(RawOrigin::Signed(alice.clone()).into(), p, page)?;
 		}
 
 		#[block]
 		{
-			Pallet::<T>::bail(RawOrigin::Signed(alice).into())?;
+			Pezpallet::<T>::bail(RawOrigin::Signed(alice).into())?;
 		}
 
 		Ok(())
@@ -174,32 +174,32 @@ mod benchmarks {
 	fn clear_old_round_data(p: Linear<1, { T::Pages::get() }>) -> Result<(), BenchmarkError> {
 		// set signed phase and alice ready to submit
 		CurrentPhase::<T>::put(Phase::Signed(T::SignedPhase::get() - One::one()));
-		let alice = crate::Pallet::<T>::funded_account("alice", 0);
+		let alice = crate::Pezpallet::<T>::funded_account("alice", 0);
 
 		// register alice
 		let score = ElectionScore::default();
-		Pallet::<T>::register(RawOrigin::Signed(alice.clone()).into(), score)?;
+		Pezpallet::<T>::register(RawOrigin::Signed(alice.clone()).into(), score)?;
 
 		// submit a solution with p pages.
 		for pp in 0..p {
 			let page = Some(Default::default());
-			Pallet::<T>::submit_page(RawOrigin::Signed(alice.clone()).into(), pp, page)?;
+			Pezpallet::<T>::submit_page(RawOrigin::Signed(alice.clone()).into(), pp, page)?;
 		}
 
 		// force rotate to the next round.
 		let prev_round = Round::<T>::get();
-		crate::Pallet::<T>::rotate_round();
+		crate::Pezpallet::<T>::rotate_round();
 
 		#[block]
 		{
-			Pallet::<T>::clear_old_round_data(RawOrigin::Signed(alice).into(), prev_round, p)?;
+			Pezpallet::<T>::clear_old_round_data(RawOrigin::Signed(alice).into(), prev_round, p)?;
 		}
 
 		Ok(())
 	}
 
 	impl_benchmark_test_suite!(
-		Pallet,
+		Pezpallet,
 		crate::mock::ExtBuilder::signed().build_unchecked(),
 		crate::mock::Runtime
 	);

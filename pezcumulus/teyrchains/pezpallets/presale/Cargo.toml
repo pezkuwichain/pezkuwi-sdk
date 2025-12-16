@@ -1,7 +1,7 @@
 [package]
 name = "pezpallet-presale"
 version = "1.0.0"
-description = "PEZ token presale pallet - accepts wUSDT, distributes PEZ"
+description = "PEZ token presale pezpallet - accepts wUSDT, distributes PEZ"
 authors.workspace = true
 homepage.workspace = true
 edition.workspace = true

@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Treasury pallet tests.
+//! Treasury pezpallet tests.
 
 #![cfg(test)]
 
@@ -103,7 +103,7 @@ parameter_types! {
 
 impl pezpallet_treasury::Config for Test {
 	type PalletId = TreasuryPalletId;
-	type Currency = pezpallet_balances::Pallet<Test>;
+	type Currency = pezpallet_balances::Pezpallet<Test>;
 	type RejectOrigin = pezframe_system::EnsureRoot<u128>;
 	type RuntimeEvent = RuntimeEvent;
 	type SpendPeriod = ConstU64<2>;
@@ -126,7 +126,7 @@ impl pezpallet_treasury::Config for Test {
 
 impl pezpallet_treasury::Config<Instance1> for Test {
 	type PalletId = TreasuryPalletId2;
-	type Currency = pezpallet_balances::Pallet<Test>;
+	type Currency = pezpallet_balances::Pezpallet<Test>;
 	type RejectOrigin = pezframe_system::EnsureRoot<u128>;
 	type RuntimeEvent = RuntimeEvent;
 	type SpendPeriod = ConstU64<2>;

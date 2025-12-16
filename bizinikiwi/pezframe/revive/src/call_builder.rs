@@ -33,7 +33,7 @@ use crate::{
 	transient_storage::MeterEntry,
 	vm::pvm::{PreparedCall, Runtime},
 	AccountInfo, BalanceOf, BalanceWithDust, Code, CodeInfoOf, Config, ContractBlob, ContractInfo,
-	Error, ExecConfig, ExecOrigin as Origin, GasMeter, OriginFor, Pallet as Contracts,
+	Error, ExecConfig, ExecOrigin as Origin, GasMeter, OriginFor, Pezpallet as Contracts,
 	PristineCode, Weight,
 };
 use alloc::{vec, vec::Vec};

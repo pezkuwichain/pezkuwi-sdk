@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License
 
-use crate::construct_runtime::Pallet;
+use crate::construct_runtime::Pezpallet;
 use proc_macro2::{Span, TokenStream};
 use quote::{quote, ToTokens};
 use syn::{Generics, Ident};
@@ -58,9 +58,9 @@ impl ToTokens for OuterEnumType {
 
 /// Create an outer enum that encapsulates all pallets as variants.
 ///
-/// Each variant represents a pallet and contains the corresponding type declared with either:
-/// - #[pallet::event] for the [`OuterEnumType::Event`] variant
-/// - #[pallet::error] for the [`OuterEnumType::Error`] variant
+/// Each variant represents a pezpallet and contains the corresponding type declared with either:
+/// - #[pezpallet::event] for the [`OuterEnumType::Event`] variant
+/// - #[pezpallet::error] for the [`OuterEnumType::Error`] variant
 ///
 /// The name of the outer enum is prefixed with Runtime, resulting in names like RuntimeEvent
 /// or RuntimeError.
@@ -81,16 +81,16 @@ impl ToTokens for OuterEnumType {
 /// }
 /// ```
 ///
-/// Notice that the pallet index is preserved using the `#[codec(index = ..)]` attribute.
+/// Notice that the pezpallet index is preserved using the `#[codec(index = ..)]` attribute.
 pub fn expand_outer_enum(
 	runtime: &Ident,
-	pezpallet_decls: &[Pallet],
+	pezpallet_decls: &[Pezpallet],
 	scrate: &TokenStream,
 	enum_ty: OuterEnumType,
 ) -> syn::Result<TokenStream> {
-	// Stores all pallet variants.
+	// Stores all pezpallet variants.
 	let mut enum_variants = TokenStream::new();
-	// Generates the enum conversion between the `Runtime` outer enum and the pallet's enum.
+	// Generates the enum conversion between the `Runtime` outer enum and the pezpallet's enum.
 	let mut enum_conversions = TokenStream::new();
 	// Specific for events to query via `is_event_part_defined!`.
 	let mut query_enum_part_macros = Vec::new();
@@ -109,8 +109,8 @@ pub fn expand_outer_enum(
 
 		if instance.is_some() && generics.params.is_empty() {
 			let msg = format!(
-				"Instantiable pallet with no generic `{}` cannot \
-					be constructed: pallet `{}` must have generic `{}`",
+				"Instantiable pezpallet with no generic `{}` cannot \
+					be constructed: pezpallet `{}` must have generic `{}`",
 				enum_name_str, pezpallet_name, enum_name_str,
 			);
 			return Err(syn::Error::new(pezpallet_name.span(), msg));
@@ -176,16 +176,16 @@ pub fn expand_outer_enum(
 
 fn expand_enum_variant(
 	runtime: &Ident,
-	pallet: &Pallet,
+	pezpallet: &Pezpallet,
 	index: u8,
 	instance: Option<&Ident>,
 	generics: &Generics,
 	enum_ty: OuterEnumType,
 ) -> TokenStream {
-	let path = &pallet.path;
-	let variant_name = &pallet.name;
+	let path = &pezpallet.path;
+	let variant_name = &pezpallet.name;
 	let part_is_generic = !generics.params.is_empty();
-	let attr = pallet.get_attributes();
+	let attr = pezpallet.get_attributes();
 
 	match instance {
 		Some(inst) if part_is_generic => quote! {
@@ -212,12 +212,12 @@ fn expand_enum_variant(
 }
 
 fn expand_enum_conversion(
-	pallet: &Pallet,
+	pezpallet: &Pezpallet,
 	pezpallet_enum: &TokenStream,
 	enum_name_ident: &Ident,
 ) -> TokenStream {
-	let variant_name = &pallet.name;
-	let attr = pallet.get_attributes();
+	let variant_name = &pezpallet.name;
+	let attr = pezpallet.get_attributes();
 
 	quote! {
 		#attr

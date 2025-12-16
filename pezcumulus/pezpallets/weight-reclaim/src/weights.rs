@@ -25,8 +25,8 @@
 // Executed Command:
 // ./target/release/teyrchain-template-node
 // benchmark
-// pallet
-// --pallet
+// pezpallet
+// --pezpallet
 // pezcumulus-pezpallet-weight-reclaim
 // --chain
 // dev

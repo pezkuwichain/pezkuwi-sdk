@@ -1,12 +1,12 @@
 use crate::{
-	mock::*, pallet::ReferralInfo, Error, Event, PendingReferrals, ReferralCount, Referrals,
+	mock::*, pezpallet::ReferralInfo, Error, Event, PendingReferrals, ReferralCount, Referrals,
 	ReferrerStatsStorage,
 };
 use pezframe_support::{assert_noop, assert_ok};
 use pezpallet_identity_kyc::types::{OnCitizenshipRevoked, OnKycApproved};
 use pezsp_runtime::DispatchError;
 
-type ReferralPallet = crate::Pallet<Test>;
+type ReferralPallet = crate::Pezpallet<Test>;
 
 // ============================================================================
 // initiate_referral Tests

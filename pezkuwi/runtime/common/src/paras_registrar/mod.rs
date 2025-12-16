@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Pallet to handle teyrchain registration and related fund management.
+//! Pezpallet to handle teyrchain registration and related fund management.
 //! In essence this is a simple wrapper around `paras`.
 
 pub mod migration;
@@ -37,7 +37,7 @@ use pezkuwi_runtime_teyrchains::{
 
 use crate::traits::{OnSwap, Registrar};
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
-pub use pallet::*;
+pub use pezpallet::*;
 use pezkuwi_runtime_teyrchains::paras::{OnNewHead, ParaKind};
 use scale_info::TypeInfo;
 use pezsp_runtime::{
@@ -112,8 +112,8 @@ impl WeightInfo for TestWeightInfo {
 	}
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
@@ -121,13 +121,13 @@ pub mod pallet {
 	/// The in-code storage version.
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(1);
 
-	#[pallet::pallet]
-	#[pallet::without_storage_info]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::without_storage_info]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
-	#[pallet::disable_pezframe_system_supertrait_check]
+	#[pezpallet::config]
+	#[pezpallet::disable_pezframe_system_supertrait_check]
 	pub trait Config: configuration::Config + paras::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
@@ -148,19 +148,19 @@ pub mod pallet {
 
 		/// The deposit to be paid to run a on-demand teyrchain.
 		/// This should include the cost for storing the genesis head and validation code.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type ParaDeposit: Get<BalanceOf<Self>>;
 
 		/// The deposit to be paid per byte stored on chain.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type DataDepositPerByte: Get<BalanceOf<Self>>;
 
-		/// Weight Information for the Extrinsics in the Pallet
+		/// Weight Information for the Extrinsics in the Pezpallet
 		type WeightInfo: WeightInfo;
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		Registered { para_id: ParaId, manager: T::AccountId },
 		Deregistered { para_id: ParaId },
@@ -168,7 +168,7 @@ pub mod pallet {
 		Swapped { para_id: ParaId, other_id: ParaId },
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// The ID is not registered.
 		NotRegistered,
@@ -203,22 +203,22 @@ pub mod pallet {
 	}
 
 	/// Pending swap operations.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type PendingSwap<T> = StorageMap<_, Twox64Concat, ParaId, ParaId>;
 
 	/// Amount held on deposit for each para and the original depositor.
 	///
 	/// The given account ID is responsible for registering the code and initial head data, but may
 	/// only do so if it isn't yet registered. (After that, it's up to governance to do so.)
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Paras<T: Config> =
 		StorageMap<_, Twox64Concat, ParaId, ParaInfo<T::AccountId, BalanceOf<T>>>;
 
 	/// The next free `ParaId`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type NextFreeParaId<T> = StorageValue<_, ParaId, ValueQuery>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	pub struct GenesisConfig<T: Config> {
 		#[serde(skip)]
 		pub _config: core::marker::PhantomData<T>,
@@ -231,18 +231,18 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			NextFreeParaId::<T>::put(self.next_free_para_id);
 		}
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {}
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Register head data and validation code for a reserved Para Id.
 		///
 		/// ## Arguments
@@ -257,14 +257,14 @@ pub mod pallet {
 		/// The deposit is required to cover the costs associated with storing the genesis head
 		/// data and the validation code.
 		/// This accounts for the potential to store validation code of a size up to the
-		/// `max_code_size`, as defined in the configuration pallet
+		/// `max_code_size`, as defined in the configuration pezpallet
 		///
 		/// Anything already reserved previously for this para ID is accounted for.
 		///
 		/// ## Events
 		/// The `Registered` event is emitted in case of success.
-		#[pallet::call_index(0)]
-		#[pallet::weight(<T as Config>::WeightInfo::register())]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::register())]
 		pub fn register(
 			origin: OriginFor<T>,
 			id: ParaId,
@@ -282,8 +282,8 @@ pub mod pallet {
 		///
 		/// The deposit taken can be specified for this registration. Any `ParaId`
 		/// can be registered, including sub-1000 IDs which are System Teyrchains.
-		#[pallet::call_index(1)]
-		#[pallet::weight(<T as Config>::WeightInfo::force_register())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::force_register())]
 		pub fn force_register(
 			origin: OriginFor<T>,
 			who: T::AccountId,
@@ -300,8 +300,8 @@ pub mod pallet {
 		///
 		/// The caller must be Root, the `para` owner, or the `para` itself. The para must be an
 		/// on-demand teyrchain.
-		#[pallet::call_index(2)]
-		#[pallet::weight(<T as Config>::WeightInfo::deregister())]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::deregister())]
 		pub fn deregister(origin: OriginFor<T>, id: ParaId) -> DispatchResult {
 			Self::ensure_root_para_or_owner(origin, id)?;
 			Self::do_deregister(id)
@@ -319,8 +319,8 @@ pub mod pallet {
 		/// `ParaId` to be a long-term identifier of a notional "teyrchain". However, their
 		/// scheduling info (i.e. whether they're an on-demand teyrchain or lease holding
 		/// teyrchain), auction information and the auction deposit are switched.
-		#[pallet::call_index(3)]
-		#[pallet::weight(<T as Config>::WeightInfo::swap())]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::swap())]
 		pub fn swap(origin: OriginFor<T>, id: ParaId, other: ParaId) -> DispatchResult {
 			Self::ensure_root_para_or_owner(origin, id)?;
 
@@ -333,11 +333,11 @@ pub mod pallet {
 
 			// Sanity check that `id` is even a para.
 			let id_lifecycle =
-				paras::Pallet::<T>::lifecycle(id).ok_or(Error::<T>::NotRegistered)?;
+				paras::Pezpallet::<T>::lifecycle(id).ok_or(Error::<T>::NotRegistered)?;
 
 			if PendingSwap::<T>::get(other) == Some(id) {
 				let other_lifecycle =
-					paras::Pallet::<T>::lifecycle(other).ok_or(Error::<T>::NotRegistered)?;
+					paras::Pezpallet::<T>::lifecycle(other).ok_or(Error::<T>::NotRegistered)?;
 				// identify which is a lease holding teyrchain and which is a parathread (on-demand
 				// teyrchain)
 				if id_lifecycle == ParaLifecycle::Teyrchain &&
@@ -371,8 +371,8 @@ pub mod pallet {
 		/// previously locked para to deregister or swap a para without using governance.
 		///
 		/// Can only be called by the Root origin or the teyrchain.
-		#[pallet::call_index(4)]
-		#[pallet::weight(T::DbWeight::get().reads_writes(1, 1))]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(T::DbWeight::get().reads_writes(1, 1))]
 		pub fn remove_lock(origin: OriginFor<T>, para: ParaId) -> DispatchResult {
 			Self::ensure_root_or_para(origin, para)?;
 			<Self as Registrar>::remove_lock(para);
@@ -383,7 +383,7 @@ pub mod pallet {
 		///
 		/// This function will reserve a new Para Id to be owned/managed by the origin account.
 		/// The origin account is able to register head data and validation code using `register` to
-		/// create an on-demand teyrchain. Using the Slots pallet, an on-demand teyrchain can then
+		/// create an on-demand teyrchain. Using the Slots pezpallet, an on-demand teyrchain can then
 		/// be upgraded to a lease holding teyrchain.
 		///
 		/// ## Arguments
@@ -396,8 +396,8 @@ pub mod pallet {
 		/// ## Events
 		/// The `Reserved` event is emitted in case of success, which provides the ID reserved for
 		/// use.
-		#[pallet::call_index(5)]
-		#[pallet::weight(<T as Config>::WeightInfo::reserve())]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::reserve())]
 		pub fn reserve(origin: OriginFor<T>) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 			let id = NextFreeParaId::<T>::get().max(LOWEST_PUBLIC_ID);
@@ -411,8 +411,8 @@ pub mod pallet {
 		///
 		/// Can be called by Root, the teyrchain, or the teyrchain manager if the teyrchain is
 		/// unlocked.
-		#[pallet::call_index(6)]
-		#[pallet::weight(T::DbWeight::get().reads_writes(1, 1))]
+		#[pezpallet::call_index(6)]
+		#[pezpallet::weight(T::DbWeight::get().reads_writes(1, 1))]
 		pub fn add_lock(origin: OriginFor<T>, para: ParaId) -> DispatchResult {
 			Self::ensure_root_para_or_owner(origin, para)?;
 			<Self as Registrar>::apply_lock(para);
@@ -430,8 +430,8 @@ pub mod pallet {
 		///
 		/// Can be called by Root, the teyrchain, or the teyrchain manager if the teyrchain is
 		/// unlocked.
-		#[pallet::call_index(7)]
-		#[pallet::weight(<T as Config>::WeightInfo::schedule_code_upgrade(new_code.0.len() as u32))]
+		#[pezpallet::call_index(7)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::schedule_code_upgrade(new_code.0.len() as u32))]
 		pub fn schedule_code_upgrade(
 			origin: OriginFor<T>,
 			para: ParaId,
@@ -450,8 +450,8 @@ pub mod pallet {
 		///
 		/// Can be called by Root, the teyrchain, or the teyrchain manager if the teyrchain is
 		/// unlocked.
-		#[pallet::call_index(8)]
-		#[pallet::weight(<T as Config>::WeightInfo::set_current_head(new_head.0.len() as u32))]
+		#[pezpallet::call_index(8)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::set_current_head(new_head.0.len() as u32))]
 		pub fn set_current_head(
 			origin: OriginFor<T>,
 			para: ParaId,
@@ -464,7 +464,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> Registrar for Pallet<T> {
+impl<T: Config> Registrar for Pezpallet<T> {
 	type AccountId = T::AccountId;
 
 	/// Return the manager `AccountId` of a para if one exists.
@@ -480,12 +480,12 @@ impl<T: Config> Registrar for Pallet<T> {
 
 	// Return if a para is a parathread (on-demand teyrchain)
 	fn is_parathread(id: ParaId) -> bool {
-		paras::Pallet::<T>::is_parathread(id)
+		paras::Pezpallet::<T>::is_parathread(id)
 	}
 
 	// Return if a para is a lease holding teyrchain
 	fn is_teyrchain(id: ParaId) -> bool {
-		paras::Pallet::<T>::is_teyrchain(id)
+		paras::Pezpallet::<T>::is_teyrchain(id)
 	}
 
 	// Apply a lock to the teyrchain.
@@ -520,7 +520,7 @@ impl<T: Config> Registrar for Pallet<T> {
 	fn make_teyrchain(id: ParaId) -> DispatchResult {
 		// Para backend should think this is an on-demand teyrchain...
 		ensure!(
-			paras::Pallet::<T>::lifecycle(id) == Some(ParaLifecycle::Parathread),
+			paras::Pezpallet::<T>::lifecycle(id) == Some(ParaLifecycle::Parathread),
 			Error::<T>::NotParathread
 		);
 		pezkuwi_runtime_teyrchains::schedule_parathread_upgrade::<T>(id)
@@ -533,7 +533,7 @@ impl<T: Config> Registrar for Pallet<T> {
 	fn make_parathread(id: ParaId) -> DispatchResult {
 		// Para backend should think this is a teyrchain...
 		ensure!(
-			paras::Pallet::<T>::lifecycle(id) == Some(ParaLifecycle::Teyrchain),
+			paras::Pezpallet::<T>::lifecycle(id) == Some(ParaLifecycle::Teyrchain),
 			Error::<T>::NotTeyrchain
 		);
 		pezkuwi_runtime_teyrchains::schedule_teyrchain_downgrade::<T>(id)
@@ -559,12 +559,12 @@ impl<T: Config> Registrar for Pallet<T> {
 	#[cfg(any(feature = "runtime-benchmarks", test))]
 	fn execute_pending_transitions() {
 		use pezkuwi_runtime_teyrchains::shared;
-		shared::Pallet::<T>::set_session_index(shared::Pallet::<T>::scheduled_session());
-		paras::Pallet::<T>::test_on_new_session();
+		shared::Pezpallet::<T>::set_session_index(shared::Pezpallet::<T>::scheduled_session());
+		paras::Pezpallet::<T>::test_on_new_session();
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Ensure the origin is one of Root, the `para` owner, or the `para` itself.
 	/// If the origin is the `para` owner, the `para` must be unlocked.
 	fn ensure_root_para_or_owner(
@@ -605,7 +605,7 @@ impl<T: Config> Pallet<T> {
 		id: ParaId,
 	) -> DispatchResult {
 		ensure!(!Paras::<T>::contains_key(id), Error::<T>::AlreadyRegistered);
-		ensure!(paras::Pallet::<T>::lifecycle(id).is_none(), Error::<T>::AlreadyRegistered);
+		ensure!(paras::Pezpallet::<T>::lifecycle(id).is_none(), Error::<T>::AlreadyRegistered);
 
 		let deposit = deposit_override.unwrap_or_else(T::ParaDeposit::get);
 		<T as Config>::Currency::reserve(&who, deposit)?;
@@ -634,7 +634,7 @@ impl<T: Config> Pallet<T> {
 			ensure!(!ensure_reserved, Error::<T>::NotReserved);
 			Default::default()
 		};
-		ensure!(paras::Pallet::<T>::lifecycle(id).is_none(), Error::<T>::AlreadyRegistered);
+		ensure!(paras::Pezpallet::<T>::lifecycle(id).is_none(), Error::<T>::AlreadyRegistered);
 		let (genesis, deposit) =
 			Self::validate_onboarding_data(genesis_head, validation_code, ParaKind::Parathread)?;
 		let deposit = deposit_override.unwrap_or(deposit);
@@ -656,7 +656,7 @@ impl<T: Config> Pallet<T> {
 
 	/// Deregister a Para Id, freeing all data returning any deposit.
 	fn do_deregister(id: ParaId) -> DispatchResult {
-		match paras::Pallet::<T>::lifecycle(id) {
+		match paras::Pezpallet::<T>::lifecycle(id) {
 			// Para must be a parathread (on-demand teyrchain), or not exist at all.
 			Some(ParaLifecycle::Parathread) | None => {},
 			_ => return Err(Error::<T>::NotParathread.into()),
@@ -708,7 +708,7 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-impl<T: Config> OnNewHead for Pallet<T> {
+impl<T: Config> OnNewHead for Pezpallet<T> {
 	fn on_new_head(id: ParaId, _head: &HeadData) -> Weight {
 		// mark the teyrchain locked if the locked value is not already set
 		let mut writes = 0;

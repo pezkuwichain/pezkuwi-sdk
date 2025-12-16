@@ -22,7 +22,7 @@ use pezframe_support::{
 	traits::nonfungible::{Inspect, Mutate, Transfer},
 };
 
-impl<T: Config> Inspect<T::AccountId> for Pallet<T> {
+impl<T: Config> Inspect<T::AccountId> for Pezpallet<T> {
 	type ItemId = u128;
 
 	fn owner(item: &Self::ItemId) -> Option<T::AccountId> {
@@ -46,7 +46,7 @@ impl<T: Config> Inspect<T::AccountId> for Pallet<T> {
 	}
 }
 
-impl<T: Config> Transfer<T::AccountId> for Pallet<T> {
+impl<T: Config> Transfer<T::AccountId> for Pezpallet<T> {
 	fn transfer(item: &Self::ItemId, dest: &T::AccountId) -> DispatchResult {
 		Self::do_transfer((*item).into(), None, dest.clone()).map_err(Into::into)
 	}
@@ -65,7 +65,7 @@ impl<T: Config> Transfer<T::AccountId> for Pallet<T> {
 /// of burning, we set the asset's owner to `None`. In essence, 'burning' a region involves setting
 /// its owner to `None`, whereas 'minting' the region assigns its owner to an actual account. This
 /// way we never lose track of the associated record data.
-impl<T: Config> Mutate<T::AccountId> for Pallet<T> {
+impl<T: Config> Mutate<T::AccountId> for Pezpallet<T> {
 	/// Deposit a region into an account.
 	fn mint_into(item: &Self::ItemId, who: &T::AccountId) -> DispatchResult {
 		let region_id: RegionId = (*item).into();

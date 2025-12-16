@@ -37,7 +37,7 @@ use self::pvf_check::{VoteCause, VoteOutcome};
 const SAMPLE_SIZE: u32 = 1024;
 
 fn assert_last_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
-	let events = pezframe_system::Pallet::<T>::events();
+	let events = pezframe_system::Pezpallet::<T>::events();
 	let system_event: <T as pezframe_system::Config>::RuntimeEvent = generic_event.into();
 	// compare to the last event record
 	let pezframe_system::EventRecord { event, .. } = &events[events.len() - 1];
@@ -141,13 +141,13 @@ mod benchmarks {
 		let new_head = HeadData(vec![0; s as usize]);
 		let old_code_hash = ValidationCode(vec![0]).hash();
 		CurrentCodeHash::<T>::insert(&para_id, old_code_hash);
-		pezframe_system::Pallet::<T>::set_block_number(10u32.into());
+		pezframe_system::Pezpallet::<T>::set_block_number(10u32.into());
 		// schedule an expired code upgrade for this `para_id` so that force_note_new_head would use
 		// the worst possible code path
-		let expired = pezframe_system::Pallet::<T>::block_number().saturating_sub(One::one());
+		let expired = pezframe_system::Pezpallet::<T>::block_number().saturating_sub(One::one());
 		let config = HostConfiguration::<BlockNumberFor<T>>::default();
 		generate_disordered_pruning::<T>();
-		Pallet::<T>::schedule_code_upgrade(
+		Pezpallet::<T>::schedule_code_upgrade(
 			para_id,
 			ValidationCode(vec![0u8; MIN_CODE_SIZE as usize]),
 			expired,
@@ -199,7 +199,7 @@ mod benchmarks {
 		#[block]
 		{
 			let _ =
-				Pallet::<T>::include_pvf_check_statement(RawOrigin::None.into(), stmt, signature);
+				Pezpallet::<T>::include_pvf_check_statement(RawOrigin::None.into(), stmt, signature);
 		}
 	}
 
@@ -211,7 +211,7 @@ mod benchmarks {
 		#[block]
 		{
 			let _ =
-				Pallet::<T>::include_pvf_check_statement(RawOrigin::None.into(), stmt, signature);
+				Pezpallet::<T>::include_pvf_check_statement(RawOrigin::None.into(), stmt, signature);
 		}
 	}
 
@@ -223,7 +223,7 @@ mod benchmarks {
 		#[block]
 		{
 			let _ =
-				Pallet::<T>::include_pvf_check_statement(RawOrigin::None.into(), stmt, signature);
+				Pezpallet::<T>::include_pvf_check_statement(RawOrigin::None.into(), stmt, signature);
 		}
 	}
 
@@ -235,7 +235,7 @@ mod benchmarks {
 		#[block]
 		{
 			let _ =
-				Pallet::<T>::include_pvf_check_statement(RawOrigin::None.into(), stmt, signature);
+				Pezpallet::<T>::include_pvf_check_statement(RawOrigin::None.into(), stmt, signature);
 		}
 	}
 
@@ -247,7 +247,7 @@ mod benchmarks {
 		#[block]
 		{
 			let _ =
-				Pallet::<T>::include_pvf_check_statement(RawOrigin::None.into(), stmt, signature);
+				Pezpallet::<T>::include_pvf_check_statement(RawOrigin::None.into(), stmt, signature);
 		}
 	}
 
@@ -256,10 +256,10 @@ mod benchmarks {
 		let para_id = ParaId::from(1000);
 		let old_code_hash = ValidationCode(vec![0]).hash();
 		CurrentCodeHash::<T>::insert(&para_id, old_code_hash);
-		pezframe_system::Pallet::<T>::set_block_number(10u32.into());
-		let inclusion = pezframe_system::Pallet::<T>::block_number().saturating_add(10u32.into());
+		pezframe_system::Pezpallet::<T>::set_block_number(10u32.into());
+		let inclusion = pezframe_system::Pezpallet::<T>::block_number().saturating_add(10u32.into());
 		let config = HostConfiguration::<BlockNumberFor<T>>::default();
-		Pallet::<T>::schedule_code_upgrade(
+		Pezpallet::<T>::schedule_code_upgrade(
 			para_id,
 			ValidationCode(vec![0u8; MIN_CODE_SIZE as usize]),
 			inclusion,
@@ -297,7 +297,7 @@ mod benchmarks {
 			Event::CodeAuthorized {
 				para_id,
 				code_hash: new_code_hash,
-				expire_at: pezframe_system::Pallet::<T>::block_number().saturating_add(valid_period),
+				expire_at: pezframe_system::Pezpallet::<T>::block_number().saturating_add(valid_period),
 			}
 			.into(),
 		);
@@ -308,7 +308,7 @@ mod benchmarks {
 		let code = ValidationCode(vec![0; c as usize]);
 		let para_id = ParaId::from(1000);
 		let expire_at =
-			pezframe_system::Pallet::<T>::block_number().saturating_add(BlockNumberFor::<T>::from(c));
+			pezframe_system::Pezpallet::<T>::block_number().saturating_add(BlockNumberFor::<T>::from(c));
 		AuthorizedCodeHash::<T>::insert(
 			&para_id,
 			AuthorizedCodeHashAndExpiry::from((code.hash(), expire_at)),
@@ -322,7 +322,7 @@ mod benchmarks {
 	}
 
 	impl_benchmark_test_suite!(
-		Pallet,
+		Pezpallet,
 		crate::mock::new_test_ext(Default::default()),
 		crate::mock::Test
 	);

@@ -17,7 +17,7 @@
 use crate::{
 	evm::{Bytes, PrestateTrace, PrestateTraceInfo, PrestateTracerConfig},
 	tracing::Tracing,
-	AccountInfo, Code, Config, ExecReturnValue, Key, Pallet, PristineCode, Weight,
+	AccountInfo, Code, Config, ExecReturnValue, Key, Pezpallet, PristineCode, Weight,
 };
 use alloc::{
 	collections::{BTreeMap, BTreeSet},
@@ -122,7 +122,7 @@ where
 				let post_info = post.entry(*addr).or_insert_with_key(|addr| {
 					Self::prestate_info(
 						addr,
-						Pallet::<T>::evm_balance(addr),
+						Pezpallet::<T>::evm_balance(addr),
 						include_code.then(|| Self::bytecode(addr)).flatten(),
 					)
 				});
@@ -189,7 +189,7 @@ where
 
 	/// Update the prestate info for the given address.
 	fn update_prestate_info(entry: &mut PrestateTraceInfo, addr: &H160, code: Option<Bytes>) {
-		let info = Self::prestate_info(addr, Pallet::<T>::evm_balance(addr), code);
+		let info = Self::prestate_info(addr, Pezpallet::<T>::evm_balance(addr), code);
 		entry.balance = info.balance;
 		entry.nonce = info.nonce;
 		entry.code = info.code;
@@ -200,7 +200,7 @@ where
 		let mut info = PrestateTraceInfo::default();
 		info.balance = Some(balance);
 		info.code = code;
-		let nonce = Pallet::<T>::evm_nonce(addr);
+		let nonce = Pezpallet::<T>::evm_nonce(addr);
 		info.nonce = if nonce > 0 { Some(nonce) } else { None };
 		info
 	}
@@ -211,7 +211,7 @@ where
 		get_entry!(self, addr).or_insert_with_key(|addr| {
 			Self::prestate_info(
 				addr,
-				Pallet::<T>::evm_balance(addr),
+				Pezpallet::<T>::evm_balance(addr),
 				include_code.then(|| Self::bytecode(addr)).flatten(),
 			)
 		});
@@ -227,7 +227,7 @@ where
 		self.trace.0.entry(*addr).or_insert_with_key(|addr| {
 			Self::prestate_info(
 				addr,
-				Pallet::<T>::evm_balance(addr),
+				Pezpallet::<T>::evm_balance(addr),
 				include_code.then(|| Self::bytecode(addr)).flatten(),
 			)
 		});
@@ -246,7 +246,7 @@ where
 	) {
 		self.destructed_addrs.insert(contract_address);
 		self.trace.0.entry(beneficiary_address).or_insert_with_key(|addr| {
-			Self::prestate_info(addr, Pallet::<T>::evm_balance(addr), None)
+			Self::prestate_info(addr, Pezpallet::<T>::evm_balance(addr), None)
 		});
 	}
 

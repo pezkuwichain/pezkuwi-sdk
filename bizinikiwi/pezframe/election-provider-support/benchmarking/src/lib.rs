@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Election provider support pallet benchmarking.
+//! Election provider support pezpallet benchmarking.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 

@@ -103,7 +103,7 @@ impl TransferKeepAliveBuilder {
 }
 
 impl pezframe_benchmarking_cli::ExtrinsicBuilder for TransferKeepAliveBuilder {
-	fn pallet(&self) -> &str {
+	fn pezpallet(&self) -> &str {
 		"balances"
 	}
 
@@ -263,7 +263,7 @@ pub fn benchmark_inherent_data(
 	use pezsp_inherents::InherentDataProvider;
 	let mut inherent_data = pezsp_inherents::InherentData::new();
 
-	// Assume that all runtimes have the `timestamp` pallet.
+	// Assume that all runtimes have the `timestamp` pezpallet.
 	let d = std::time::Duration::from_millis(0);
 	let timestamp = pezsp_timestamp::InherentDataProvider::new(d.into());
 	futures::executor::block_on(timestamp.provide_inherent_data(&mut inherent_data))?;

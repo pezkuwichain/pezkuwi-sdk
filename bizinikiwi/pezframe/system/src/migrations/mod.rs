@@ -18,7 +18,7 @@
 //! Migrate the reference counting state.
 
 use super::LOG_TARGET;
-use crate::{Config, Pallet};
+use crate::{Config, Pezpallet};
 use codec::{Decode, Encode, FullCodec};
 use pezframe_support::{
 	pezpallet_prelude::ValueQuery, traits::PalletInfoAccess, weights::Weight, Blake2_128Concat,
@@ -40,8 +40,8 @@ struct AccountInfo<Nonce, AccountData> {
 
 /// Trait to implement to give information about types used for migration
 pub trait V2ToV3 {
-	/// The system pallet.
-	type Pallet: 'static + PalletInfoAccess;
+	/// The system pezpallet.
+	type Pezpallet: 'static + PalletInfoAccess;
 
 	/// System config account id
 	type AccountId: 'static + FullCodec;
@@ -54,14 +54,14 @@ pub trait V2ToV3 {
 }
 
 #[pezframe_support::storage_alias]
-type UpgradedToU32RefCount<T: Config> = StorageValue<Pallet<T>, bool, ValueQuery>;
+type UpgradedToU32RefCount<T: Config> = StorageValue<Pezpallet<T>, bool, ValueQuery>;
 
 #[pezframe_support::storage_alias]
-type UpgradedToTripleRefCount<T: Config> = StorageValue<Pallet<T>, bool, ValueQuery>;
+type UpgradedToTripleRefCount<T: Config> = StorageValue<Pezpallet<T>, bool, ValueQuery>;
 
 #[pezframe_support::storage_alias]
 type Account<V, T: Config> = StorageMap<
-	Pallet<T>,
+	Pezpallet<T>,
 	Blake2_128Concat,
 	<V as V2ToV3>::AccountId,
 	AccountInfo<<V as V2ToV3>::Nonce, <V as V2ToV3>::AccountData>,

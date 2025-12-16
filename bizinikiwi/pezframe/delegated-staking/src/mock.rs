@@ -106,7 +106,7 @@ impl onchain::Config for OnChainSeqPhragmen {
 impl pezpallet_staking::Config for Runtime {
 	type OldCurrency = Balances;
 	type Currency = Balances;
-	type UnixTime = pezpallet_timestamp::Pallet<Self>;
+	type UnixTime = pezpallet_timestamp::Pezpallet<Self>;
 	type AdminOrigin = pezframe_system::EnsureRoot<Self::AccountId>;
 	type EraPayout = pezpallet_staking::ConvertCurve<RewardCurve>;
 	type ElectionProvider = onchain::OnChainExecution<OnChainSeqPhragmen>;
@@ -236,7 +236,7 @@ impl ExtBuilder {
 
 		ext.execute_with(|| {
 			// for events to be deposited.
-			pezframe_system::Pallet::<Runtime>::set_block_number(1);
+			pezframe_system::Pezpallet::<Runtime>::set_block_number(1);
 			// set era for staking.
 			start_era(0);
 		});
@@ -250,7 +250,7 @@ impl ExtBuilder {
 		ext.execute_with(|| {
 			#[cfg(feature = "try-runtime")]
 			<AllPalletsWithSystem as pezframe_support::traits::TryState<u64>>::try_state(
-				pezframe_system::Pallet::<Runtime>::block_number(),
+				pezframe_system::Pezpallet::<Runtime>::block_number(),
 				pezframe_support::traits::TryStateSelect::All,
 			)
 			.unwrap();

@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Benchmarks for Verify Signature Pallet
+//! Benchmarks for Verify Signature Pezpallet
 
 #![cfg(feature = "runtime-benchmarks")]
 
@@ -24,7 +24,7 @@ extern crate alloc;
 use super::*;
 
 #[allow(unused)]
-use crate::{extension::VerifySignature, Config, Pallet as VerifySignaturePallet};
+use crate::{extension::VerifySignature, Config, Pezpallet as VerifySignaturePallet};
 use alloc::vec;
 use pezframe_benchmarking::{v2::*, BenchmarkError};
 use pezframe_support::{
@@ -90,5 +90,5 @@ mod benchmarks {
 		Ok(())
 	}
 
-	impl_benchmark_test_suite!(Pallet, crate::tests::new_test_ext(), crate::tests::Test);
+	impl_benchmark_test_suite!(Pezpallet, crate::tests::new_test_ext(), crate::tests::Test);
 }

@@ -18,7 +18,7 @@
 //! The crate's benchmarks.
 
 use super::*;
-use crate::{pallet as pezpallet_asset_rate, Pallet as AssetRate};
+use crate::{pezpallet as pezpallet_asset_rate, Pezpallet as AssetRate};
 
 use codec::Encode;
 use pezframe_benchmarking::v2::*;

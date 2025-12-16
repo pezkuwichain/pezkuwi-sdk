@@ -36,7 +36,7 @@ pub async fn execute<Runtime, Block>(
 	let mut ext = Builder::<Block>::new()
 		.mode(Mode::Online(OnlineConfig {
 			transport: ws_url.to_string().into(),
-			pallets: vec![pezpallet_bags_list::Pallet::<Runtime, pezpallet_bags_list::Instance1>::name()
+			pallets: vec![pezpallet_bags_list::Pezpallet::<Runtime, pezpallet_bags_list::Instance1>::name()
 				.to_string()],
 			hashed_prefixes: vec![
 				<pezpallet_staking::Bonded<Runtime>>::prefix_hash().to_vec(),
@@ -51,7 +51,7 @@ pub async fn execute<Runtime, Block>(
 	ext.execute_with(|| {
 		pezsp_core::crypto::set_default_ss58_version(Runtime::SS58Prefix::get().try_into().unwrap());
 
-		pezpallet_bags_list::Pallet::<Runtime, pezpallet_bags_list::Instance1>::do_try_state().unwrap();
+		pezpallet_bags_list::Pezpallet::<Runtime, pezpallet_bags_list::Instance1>::do_try_state().unwrap();
 
 		log::info!(target: crate::LOG_TARGET, "executed bags-list sanity check with no errors.");
 

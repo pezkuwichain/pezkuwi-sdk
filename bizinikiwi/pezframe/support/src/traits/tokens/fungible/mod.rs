@@ -52,7 +52,7 @@
 //!   transfer.
 //!
 //! - **Held Balance**: Held balance still belongs to the account holder, but is suspended — it
-//!   cannot be transferred or used for most operations. It may be slashed by the pallet that placed
+//!   cannot be transferred or used for most operations. It may be slashed by the pezpallet that placed
 //!   the hold.
 //!
 //!   Multiple holds stack rather than overlay. This means that if an account has
@@ -130,7 +130,7 @@
 //! slashed.
 //!
 //! Every Hold and Freeze is accompanied by a unique `Reason`, making it clear for each instance
-//! what the originating pallet and purpose is. These reasons are amalgomated into a single enum
+//! what the originating pezpallet and purpose is. These reasons are amalgomated into a single enum
 //! `RuntimeHoldReason` and `RuntimeFreezeReason` respectively, when the runtime is compiled.
 //!
 //! Note that `Hold` and `Freeze` reasons should remain in your runtime for as long as storage

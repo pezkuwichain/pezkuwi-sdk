@@ -355,7 +355,7 @@ fn queue_enact_too_long_ignored() {
 	});
 }
 
-/// Check that the Inclusion pallet correctly updates the well known keys in the MQ handler.
+/// Check that the Inclusion pezpallet correctly updates the well known keys in the MQ handler.
 ///
 /// Also checks that it works in the presence of overweight messages.
 #[test]
@@ -365,7 +365,7 @@ fn relay_dispatch_queue_size_is_updated() {
 
 		for p in 0..100 {
 			let para = p.into();
-			// Do some tricks with the weight such that the MQ pallet will process in order:
+			// Do some tricks with the weight such that the MQ pezpallet will process in order:
 			// Q0:0, Q1:0 … Q0:1, Q1:1 …
 			let m1 = (300u32 * (100 - p), "m1").encode();
 			let m2 = (300u32 * (100 - p), "m11").encode();

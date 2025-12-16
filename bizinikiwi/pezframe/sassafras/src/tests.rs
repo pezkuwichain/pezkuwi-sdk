@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Tests for Sassafras pallet.
+//! Tests for Sassafras pezpallet.
 
 use crate::*;
 use mock::*;
@@ -148,9 +148,9 @@ fn slot_ticket_id_outside_in_fetch() {
 			unsorted_tickets_count: 0,
 		});
 
-		// Before importing the first block the pallet always return `None`
+		// Before importing the first block the pezpallet always return `None`
 		// This is a kind of special hardcoded case that should never happen in practice
-		// as the first thing the pallet does is to initialize the genesis slot.
+		// as the first thing the pezpallet does is to initialize the genesis slot.
 
 		assert_eq!(Sassafras::slot_ticket_id(0.into()), None);
 		assert_eq!(Sassafras::slot_ticket_id(genesis_slot + 0), None);
@@ -159,7 +159,7 @@ fn slot_ticket_id_outside_in_fetch() {
 
 		// Initialize genesis slot..
 		GenesisSlot::<Test>::set(genesis_slot);
-		pezframe_system::Pallet::<Test>::set_block_number(One::one());
+		pezframe_system::Pezpallet::<Test>::set_block_number(One::one());
 
 		// Try to fetch a ticket for a slot before current epoch.
 		assert_eq!(Sassafras::slot_ticket_id(0.into()), None);
@@ -198,7 +198,7 @@ fn slot_ticket_id_outside_in_fetch() {
 #[test]
 fn slot_ticket_id_outside_in_fetch_corner_cases() {
 	new_test_ext(0).execute_with(|| {
-		pezframe_system::Pallet::<Test>::set_block_number(One::one());
+		pezframe_system::Pezpallet::<Test>::set_block_number(One::one());
 
 		let mut meta = TicketsMetadata { tickets_count: [0, 0], unsorted_tickets_count: 0 };
 		let curr_epoch_idx = EpochIndex::<Test>::get();
@@ -460,7 +460,7 @@ fn produce_epoch_change_digest_with_config() {
 		let header = finalize_block(end_block);
 
 		// Header data check.
-		// Skip pallet status checks that were already performed by other tests.
+		// Skip pezpallet status checks that were already performed by other tests.
 
 		assert_eq!(header.digest.logs.len(), 2);
 		assert_eq!(header.digest.logs[0], digest.logs[0]);

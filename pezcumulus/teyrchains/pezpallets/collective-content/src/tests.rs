@@ -54,7 +54,7 @@ fn set_charter_works() {
 #[test]
 fn announce_works() {
 	new_test_ext().execute_with(|| {
-		let now = pezframe_system::Pallet::<Test>::block_number();
+		let now = pezframe_system::Pezpallet::<Test>::block_number();
 		// wrong origin.
 		let origin = RuntimeOrigin::signed(SomeAccount::get());
 		let cid = create_cid(1);

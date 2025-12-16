@@ -16,7 +16,7 @@
 // limitations under the License.
 
 //! A migration that unreserves all deposit and unlocks all stake held in the context of this
-//! pallet.
+//! pezpallet.
 
 use alloc::{collections::btree_map::BTreeMap, vec::Vec};
 use core::iter::Sum;
@@ -41,14 +41,14 @@ pub trait UnlockConfig: 'static {
 	type AccountId: Parameter + Ord;
 	/// The currency type used in the runtime.
 	///
-	/// Should match the currency type previously used for the pallet, if applicable.
+	/// Should match the currency type previously used for the pezpallet, if applicable.
 	type Currency: LockableCurrency<Self::AccountId> + ReservableCurrency<Self::AccountId>;
-	/// The name of the pallet as previously configured in
+	/// The name of the pezpallet as previously configured in
 	/// [`construct_runtime!`](pezframe_support::construct_runtime).
 	type PalletName: Get<&'static str>;
 	/// The maximum number of votes per voter as configured previously in the previous runtime.
 	type MaxVotesPerVoter: Get<u32>;
-	/// Identifier for the elections-phragmen pallet's lock, as previously configured in the
+	/// Identifier for the elections-phragmen pezpallet's lock, as previously configured in the
 	/// runtime.
 	type PalletId: Get<LockIdentifier>;
 	/// The DB weight as configured in the runtime to calculate the correct weight.
@@ -86,18 +86,18 @@ type Voting<T: UnlockConfig> = StorageMap<
 >;
 
 /// A migration that unreserves all deposit and unlocks all stake held in the context of this
-/// pallet.
+/// pezpallet.
 ///
-/// Useful to prevent funds from being locked up when the pallet is being deprecated.
+/// Useful to prevent funds from being locked up when the pezpallet is being deprecated.
 ///
-/// The pallet should be made inoperable before this migration is run.
+/// The pezpallet should be made inoperable before this migration is run.
 ///
 /// (See also [`RemovePallet`][pezframe_support::migrations::RemovePallet])
 pub struct UnlockAndUnreserveAllFunds<T: UnlockConfig>(core::marker::PhantomData<T>);
 
 impl<T: UnlockConfig> UnlockAndUnreserveAllFunds<T> {
 	/// Calculates and returns the total amounts deposited and staked by each account in the context
-	/// of this pallet.
+	/// of this pezpallet.
 	///
 	/// The deposited and staked amounts are returned in two separate `BTreeMap` collections.
 	///
@@ -177,20 +177,20 @@ where
 	/// checks the integrity of deposited and reserved balances.
 	///
 	/// Steps:
-	/// 1. Gets the deposited and staked balances for each account stored in this pallet.
+	/// 1. Gets the deposited and staked balances for each account stored in this pezpallet.
 	/// 2. Collects actual pre-migration locked and reserved balances for each account.
 	/// 3. Checks the integrity of the deposited and reserved balances.
 	/// 4. Prints summary statistics about the state to be migrated.
 	/// 5. Encodes and returns pre-migration data to be used in post_upgrade.
 	///
 	/// Fails with a `TryRuntimeError` if there's a discrepancy between the amount
-	/// reported as staked by the pallet and the amount actually locked in `Balances`.
+	/// reported as staked by the pezpallet and the amount actually locked in `Balances`.
 	#[cfg(feature = "try-runtime")]
 	fn pre_upgrade() -> Result<Vec<u8>, pezsp_runtime::TryRuntimeError> {
 		use alloc::collections::btree_set::BTreeSet;
 		use codec::Encode;
 
-		// Get staked and deposited balances as reported by this pallet.
+		// Get staked and deposited balances as reported by this pezpallet.
 		let (account_deposited_sums, account_staked_sums, _) =
 			Self::get_account_deposited_and_staked_sums();
 
@@ -206,7 +206,7 @@ where
 			.collect();
 
 		// Total deposited for each account *should* be less than or equal to the total reserved,
-		// however this does not hold for all cases due to bugs in the reserve logic of this pallet.
+		// however this does not hold for all cases due to bugs in the reserve logic of this pezpallet.
 		let bugged_deposits = all_accounts
 			.iter()
 			.filter(|account| {
@@ -241,11 +241,11 @@ where
 	/// Executes the migration.
 	///
 	/// Steps:
-	/// 1. Retrieves the deposit and stake amounts from the pallet.
+	/// 1. Retrieves the deposit and stake amounts from the pezpallet.
 	/// 2. Unreserves the deposited funds for each account.
 	/// 3. Unlocks the staked funds for each account.
 	fn on_runtime_upgrade() -> pezframe_support::weights::Weight {
-		// Get staked and deposited balances as reported by this pallet.
+		// Get staked and deposited balances as reported by this pezpallet.
 		let (account_deposited_sums, account_staked_sums, initial_reads) =
 			Self::get_account_deposited_and_staked_sums();
 
@@ -290,7 +290,7 @@ where
 			BTreeMap::<T::AccountId, BalanceOf<T>>::decode(&mut &account_reserved_before_bytes[..])
 				.map_err(|_| "Failed to decode account_reserved_before_bytes")?;
 
-		// Get deposited balances as reported by this pallet.
+		// Get deposited balances as reported by this pezpallet.
 		let (account_deposited_sums, _, _) = Self::get_account_deposited_and_staked_sums();
 
 		// Check that the reserved balance is reduced by the expected deposited amount.
@@ -300,7 +300,7 @@ where
 				.get(&account)
 				.unwrap_or(&Zero::zero())
 				// .min here to handle bugged deposits where actual_reserved_before is less than the
-				// amount the pallet reports is reserved
+				// amount the pezpallet reports is reserved
 				.min(&actual_reserved_before);
 			let expected_reserved_after =
 				actual_reserved_before.saturating_sub(expected_amount_deducted);

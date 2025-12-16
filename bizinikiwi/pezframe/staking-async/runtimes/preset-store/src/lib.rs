@@ -15,39 +15,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Simple pallet that stores the preset that was used to generate the genesis state in the state.
+//! Simple pezpallet that stores the preset that was used to generate the genesis state in the state.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
-pub use pallet::*;
+pub use pezpallet::*;
 
-#[frame::pallet]
-pub mod pallet {
+#[frame::pezpallet]
+pub mod pezpallet {
 	extern crate alloc;
 	use frame::prelude::*;
 
-	#[pallet::storage]
-	#[pallet::getter(fn preset)]
-	#[pallet::unbounded]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn preset)]
+	#[pezpallet::unbounded]
 	pub type Preset<T: Config> = StorageValue<_, alloc::string::String, OptionQuery>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(DefaultNoBound, DebugNoBound, CloneNoBound, PartialEqNoBound, EqNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		pub preset: alloc::string::String,
 		pub _marker: core::marker::PhantomData<T>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			Preset::<T>::put(self.preset.clone());
 		}
 	}
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 }

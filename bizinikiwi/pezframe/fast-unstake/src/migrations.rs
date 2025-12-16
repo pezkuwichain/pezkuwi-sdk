@@ -33,8 +33,8 @@ pub mod v1 {
 	pub struct MigrateToV1<T>(core::marker::PhantomData<T>);
 	impl<T: Config> OnRuntimeUpgrade for MigrateToV1<T> {
 		fn on_runtime_upgrade() -> Weight {
-			let current = Pallet::<T>::in_code_storage_version();
-			let onchain = Pallet::<T>::on_chain_storage_version();
+			let current = Pezpallet::<T>::in_code_storage_version();
+			let onchain = Pezpallet::<T>::on_chain_storage_version();
 
 			log!(
 				info,
@@ -45,7 +45,7 @@ pub mod v1 {
 
 			if current == 1 && onchain == 0 {
 				// update the version nonetheless.
-				current.put::<Pallet<T>>();
+				current.put::<Pezpallet<T>>();
 
 				// if a head exists, then we put them back into the queue.
 				if Head::<T>::exists() {
@@ -72,7 +72,7 @@ pub mod v1 {
 		#[cfg(feature = "try-runtime")]
 		fn pre_upgrade() -> Result<Vec<u8>, TryRuntimeError> {
 			ensure!(
-				Pallet::<T>::on_chain_storage_version() == 0,
+				Pezpallet::<T>::on_chain_storage_version() == 0,
 				"The onchain storage version must be zero for the migration to execute."
 			);
 			Ok(Default::default())
@@ -81,7 +81,7 @@ pub mod v1 {
 		#[cfg(feature = "try-runtime")]
 		fn post_upgrade(_: Vec<u8>) -> Result<(), TryRuntimeError> {
 			ensure!(
-				Pallet::<T>::on_chain_storage_version() == 1,
+				Pezpallet::<T>::on_chain_storage_version() == 1,
 				"The onchain version must be updated after the migration."
 			);
 			Ok(())

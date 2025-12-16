@@ -144,10 +144,10 @@ pub fn book_for<T: Config>(page: &PageOf<T>) -> BookStateOf<T> {
 #[cfg(any(feature = "std", feature = "runtime-benchmarks", test))]
 pub fn assert_last_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
 	assert!(
-		!pezframe_system::Pallet::<T>::block_number().is_zero(),
+		!pezframe_system::Pezpallet::<T>::block_number().is_zero(),
 		"The genesis block has n o events"
 	);
-	pezframe_system::Pallet::<T>::assert_last_event(generic_event.into());
+	pezframe_system::Pezpallet::<T>::assert_last_event(generic_event.into());
 }
 
 /// Provide a setup for `bump_service_head`.
@@ -155,21 +155,21 @@ pub fn setup_bump_service_head<T: Config>(
 	current: <<T as Config>::MessageProcessor as ProcessMessage>::Origin,
 	next: <<T as Config>::MessageProcessor as ProcessMessage>::Origin,
 ) {
-	crate::Pallet::<T>::enqueue_message(msg("1"), current);
-	crate::Pallet::<T>::enqueue_message(msg("1"), next);
+	crate::Pezpallet::<T>::enqueue_message(msg("1"), current);
+	crate::Pezpallet::<T>::enqueue_message(msg("1"), next);
 }
 
 /// Knit a queue into the ready-ring and write it back to storage.
 pub fn knit<T: Config>(o: &<<T as Config>::MessageProcessor as ProcessMessage>::Origin) {
 	let mut b = BookStateFor::<T>::get(o);
-	b.ready_neighbours = crate::Pallet::<T>::ready_ring_knit(o).ok().defensive();
+	b.ready_neighbours = crate::Pezpallet::<T>::ready_ring_knit(o).ok().defensive();
 	BookStateFor::<T>::insert(o, b);
 }
 
 /// Unknit a queue into the ready-ring and write it back to storage.
 pub fn unknit<T: Config>(o: &<<T as Config>::MessageProcessor as ProcessMessage>::Origin) {
 	let mut b = BookStateFor::<T>::get(o);
-	crate::Pallet::<T>::ready_ring_unknit(o, b.ready_neighbours.unwrap());
+	crate::Pezpallet::<T>::ready_ring_unknit(o, b.ready_neighbours.unwrap());
 	b.ready_neighbours = None;
 	BookStateFor::<T>::insert(o, b);
 }
@@ -179,7 +179,7 @@ pub fn build_ring<T: Config>(
 	queues: &[<<T as Config>::MessageProcessor as ProcessMessage>::Origin],
 ) {
 	for queue in queues.iter() {
-		crate::Pallet::<T>::enqueue_message(msg("1"), queue.clone());
+		crate::Pezpallet::<T>::enqueue_message(msg("1"), queue.clone());
 	}
 	assert_ring::<T>(queues);
 }

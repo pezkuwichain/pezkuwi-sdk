@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! This pallet demonstrates the use of the `pallet::view_functions` api for service
+//! This pezpallet demonstrates the use of the `pezpallet::view_functions` api for service
 //! work.
 #![cfg_attr(not(feature = "std"), no_std)]
 
@@ -38,28 +38,28 @@ impl SomeAssociation1 for u64 {
 	type _1 = u64;
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {}
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type SomeValue<T: Config> = StorageValue<_, u32>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type SomeMap<T: Config> = StorageMap<_, Twox64Concat, u32, u32, OptionQuery>;
 
-	#[pallet::view_functions]
-	impl<T: Config> Pallet<T>
+	#[pezpallet::view_functions]
+	impl<T: Config> Pezpallet<T>
 	where
 		T::AccountId: From<SomeType1> + SomeAssociation1,
 	{
@@ -75,29 +75,29 @@ pub mod pallet {
 	}
 }
 
-#[pezframe_support::pallet]
+#[pezframe_support::pezpallet]
 pub mod pallet2 {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T, I = ()> {}
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config {}
 
-	#[pallet::pallet]
-	pub struct Pallet<T, I = ()>(PhantomData<(T, I)>);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T, I = ()>(PhantomData<(T, I)>);
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type SomeValue<T: Config<I>, I: 'static = ()> = StorageValue<_, u32>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type SomeMap<T: Config<I>, I: 'static = ()> =
 		StorageMap<_, Twox64Concat, u32, u32, OptionQuery>;
 
-	#[pallet::view_functions]
-	impl<T: Config<I>, I: 'static> Pallet<T, I>
+	#[pezpallet::view_functions]
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I>
 	where
 		T::AccountId: From<SomeType1> + SomeAssociation1,
 	{

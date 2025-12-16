@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Various basic types for use in the assets pallet.
+//! Various basic types for use in the assets pezpallet.
 
 use super::*;
 use pezframe_support::{
@@ -183,7 +183,7 @@ pub struct AssetAccount<Balance, DepositBalance, Extra, AccountId> {
 	pub status: AccountStatus,
 	/// The reason for the existence of the account.
 	pub reason: ExistenceReason<DepositBalance, AccountId>,
-	/// Additional "sidecar" data, in case some other pallet wants to use this storage item.
+	/// Additional "sidecar" data, in case some other pezpallet wants to use this storage item.
 	pub extra: Extra,
 }
 
@@ -319,7 +319,7 @@ pub enum ConversionError {
 
 // Type alias for `pezframe_system`'s account id.
 type AccountIdOf<T> = <T as pezframe_system::Config>::AccountId;
-// This pallet's asset id and balance type.
+// This pezpallet's asset id and balance type.
 type AssetIdOf<T, I> = <T as Config<I>>::AssetId;
 type AssetBalanceOf<T, I> = <T as Config<I>>::Balance;
 // Generic fungible balance type.

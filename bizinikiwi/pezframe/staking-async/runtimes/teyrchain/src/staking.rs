@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-///! Staking, and election related pallet configurations.
+///! Staking, and election related pezpallet configurations.
 use super::*;
 use pezcumulus_primitives_core::relay_chain::SessionIndex;
 use pezframe_election_provider_support::{ElectionDataProvider, SequentialPhragmen};
@@ -703,7 +703,7 @@ mod tests {
 		pezsp_tracing::try_init_simple();
 		pezsp_io::TestExternalities::default().execute_with(|| {
 			super::enable_hez_preset(false);
-			let duration = mb::Pallet::<Runtime>::average_election_duration();
+			let duration = mb::Pezpallet::<Runtime>::average_election_duration();
 			let pezkuwi_session = 6 * HOURS;
 			log::info!(
 				target: "runtime",
@@ -716,7 +716,7 @@ mod tests {
 
 		pezsp_io::TestExternalities::default().execute_with(|| {
 			super::enable_ksm_preset(false);
-			let duration = mb::Pallet::<Runtime>::average_election_duration();
+			let duration = mb::Pezpallet::<Runtime>::average_election_duration();
 			let kusama_session = 1 * HOURS;
 			log::info!(
 				target: "runtime",
@@ -799,8 +799,8 @@ mod tests {
 			pezsp_core::crypto::set_default_ss58_version(1u8.into());
 			super::enable_hez_preset(true);
 
-			// prepare all snapshot in EPMB pallet.
-			mb::Pallet::<Runtime>::asap();
+			// prepare all snapshot in EPMB pezpallet.
+			mb::Pezpallet::<Runtime>::asap();
 			for page in 1..=32 {
 				mb::unsigned::miner::OffchainWorkerMiner::<Runtime>::mine_solution(page, true)
 					.inspect(|p| log::info!(target: "runtime", "{:?}", p.score.pretty("HEZ", 10)))

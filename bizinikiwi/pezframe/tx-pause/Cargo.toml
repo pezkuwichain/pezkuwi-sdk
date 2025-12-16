@@ -6,7 +6,7 @@ edition.workspace = true
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
-description = "FRAME transaction pause pallet"
+description = "FRAME transaction pause pezpallet"
 documentation = "https://docs.rs/pezpallet-tx-pause"
 
 [lints]

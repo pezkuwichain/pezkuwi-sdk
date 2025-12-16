@@ -27,7 +27,7 @@ fn pezpallet_ui() {
 	// As trybuild is using `cargo check`, we don't need the real WASM binaries.
 	std::env::set_var("SKIP_WASM_BUILD", "1");
 
-	// Deny all warnings since we emit warnings as part of a Pallet's UI.
+	// Deny all warnings since we emit warnings as part of a Pezpallet's UI.
 	std::env::set_var("CARGO_ENCODED_RUSTFLAGS", "--deny=warnings");
 
 	let t = trybuild::TestCases::new();

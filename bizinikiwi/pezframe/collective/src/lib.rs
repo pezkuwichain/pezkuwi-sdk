@@ -20,7 +20,7 @@
 //!
 //! The membership can be provided in one of two ways: either directly, using the Root-dispatchable
 //! function `set_members`, or indirectly, through implementing the `ChangeMembers`.
-//! The pallet assumes that the amount of members stays at or below `MaxMembers` for its weight
+//! The pezpallet assumes that the amount of members stays at or below `MaxMembers` for its weight
 //! calculations, but enforces this neither in `set_members` nor in `change_members_sorted`.
 //!
 //! A "prime" member may be set to help determine the default vote behavior based on chain
@@ -76,7 +76,7 @@ mod benchmarking;
 pub mod migrations;
 pub mod weights;
 
-pub use pallet::*;
+pub use pezpallet::*;
 pub use weights::WeightInfo;
 
 const LOG_TARGET: &str = "runtime::collective";
@@ -320,8 +320,8 @@ pub mod deposit {
 	}
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
@@ -329,12 +329,12 @@ pub mod pallet {
 	/// The in-code storage version.
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(4);
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	#[pallet::without_storage_info]
-	pub struct Pallet<T, I = ()>(PhantomData<(T, I)>);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	#[pezpallet::without_storage_info]
+	pub struct Pezpallet<T, I = ()>(PhantomData<(T, I)>);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config {
 		/// The runtime origin type.
 		type RuntimeOrigin: From<RawOrigin<Self::AccountId, I>>;
@@ -358,24 +358,24 @@ pub mod pallet {
 		/// Maximum number of proposals allowed to be active in parallel.
 		type MaxProposals: Get<ProposalIndex>;
 
-		/// The maximum number of members supported by the pallet. Used for weight estimation.
+		/// The maximum number of members supported by the pezpallet. Used for weight estimation.
 		///
 		/// NOTE:
 		/// + Benchmarks will need to be re-run and weights adjusted if this changes.
-		/// + This pallet assumes that dependents keep to the limit without enforcing it.
+		/// + This pezpallet assumes that dependents keep to the limit without enforcing it.
 		type MaxMembers: Get<MemberCount>;
 
 		/// Default vote strategy of this collective.
 		type DefaultVote: DefaultVote;
 
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 
 		/// Origin allowed to set collective members
 		type SetMembersOrigin: EnsureOrigin<<Self as pezframe_system::Config>::RuntimeOrigin>;
 
 		/// The maximum weight of a dispatch call that can be proposed and executed.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxProposalWeight: Get<Weight>;
 
 		/// Origin from which a proposal in any status may be disapproved without associated cost
@@ -400,7 +400,7 @@ pub mod pallet {
 		type Consideration: MaybeConsideration<Self::AccountId, u32>;
 	}
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(pezframe_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config<I>, I: 'static = ()> {
 		#[serde(skip)]
@@ -408,7 +408,7 @@ pub mod pallet {
 		pub members: Vec<T::AccountId>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config<I>, I: 'static> BuildGenesisConfig for GenesisConfig<T, I> {
 		fn build(&self) {
 			use alloc::collections::btree_set::BTreeSet;
@@ -423,21 +423,21 @@ pub mod pallet {
 				"Members length cannot exceed MaxMembers.",
 			);
 
-			Pallet::<T, I>::initialize_members(&self.members)
+			Pezpallet::<T, I>::initialize_members(&self.members)
 		}
 	}
 
-	/// Origin for the collective pallet.
-	#[pallet::origin]
+	/// Origin for the collective pezpallet.
+	#[pezpallet::origin]
 	pub type Origin<T, I = ()> = RawOrigin<<T as pezframe_system::Config>::AccountId, I>;
 
 	/// The hashes of the active proposals.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Proposals<T: Config<I>, I: 'static = ()> =
 		StorageValue<_, BoundedVec<T::Hash, T::MaxProposals>, ValueQuery>;
 
 	/// Actual proposal for a given hash, if it's current.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ProposalOf<T: Config<I>, I: 'static = ()> =
 		StorageMap<_, Identity, T::Hash, <T as Config<I>>::Proposal, OptionQuery>;
 
@@ -445,30 +445,30 @@ pub mod pallet {
 	///
 	/// Determined by [Config::Consideration] and may be not present for certain proposals (e.g. if
 	/// the proposal count at the time of creation was below threshold N).
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type CostOf<T: Config<I>, I: 'static = ()> =
 		StorageMap<_, Identity, T::Hash, (T::AccountId, T::Consideration), OptionQuery>;
 
 	/// Votes on a given proposal, if it is ongoing.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Voting<T: Config<I>, I: 'static = ()> =
 		StorageMap<_, Identity, T::Hash, Votes<T::AccountId, BlockNumberFor<T>>, OptionQuery>;
 
 	/// Proposals so far.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ProposalCount<T: Config<I>, I: 'static = ()> = StorageValue<_, u32, ValueQuery>;
 
 	/// The current members of the collective. This is stored sorted (just by value).
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Members<T: Config<I>, I: 'static = ()> =
 		StorageValue<_, Vec<T::AccountId>, ValueQuery>;
 
 	/// The prime member that helps determine the default vote behavior in case of abstentions.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Prime<T: Config<I>, I: 'static = ()> = StorageValue<_, T::AccountId, OptionQuery>;
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config<I>, I: 'static = ()> {
 		/// A motion (given hash) has been proposed (by given account) with a threshold (given
 		/// `MemberCount`).
@@ -505,7 +505,7 @@ pub mod pallet {
 		ProposalCostReleased { proposal_hash: T::Hash, who: T::AccountId },
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T, I = ()> {
 		/// Account is not a member
 		NotMember,
@@ -533,16 +533,16 @@ pub mod pallet {
 		ProposalActive,
 	}
 
-	#[pallet::hooks]
-	impl<T: Config<I>, I: 'static> Hooks<BlockNumberFor<T>> for Pallet<T, I> {
+	#[pezpallet::hooks]
+	impl<T: Config<I>, I: 'static> Hooks<BlockNumberFor<T>> for Pezpallet<T, I> {
 		#[cfg(feature = "try-runtime")]
 		fn try_state(_n: BlockNumberFor<T>) -> Result<(), TryRuntimeError> {
 			Self::do_try_state()
 		}
 	}
 
-	/// A reason for the pallet placing a hold on funds.
-	#[pallet::composite_enum]
+	/// A reason for the pezpallet placing a hold on funds.
+	#[pezpallet::composite_enum]
 	pub enum HoldReason<I: 'static = ()> {
 		/// Funds are held for submitting and storing a proposal.
 		#[codec(index = 0)]
@@ -550,8 +550,8 @@ pub mod pallet {
 	}
 
 	// Note that councillor operations are assigned to the operational class.
-	#[pallet::call]
-	impl<T: Config<I>, I: 'static> Pallet<T, I> {
+	#[pezpallet::call]
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 		/// Set the collective's membership.
 		///
 		/// - `new_members`: The new member list. Be nice to the chain and provide it sorted.
@@ -566,7 +566,7 @@ pub mod pallet {
 		///
 		/// # WARNING:
 		///
-		/// The `pezpallet-collective` can also be managed by logic outside of the pallet through the
+		/// The `pezpallet-collective` can also be managed by logic outside of the pezpallet through the
 		/// implementation of the trait [`ChangeMembers`].
 		/// Any call to `set_members` must be careful that the member set doesn't get out of sync
 		/// with other logic managing the member set.
@@ -576,8 +576,8 @@ pub mod pallet {
 		///   - `M` old-members-count (code- and governance-bounded)
 		///   - `N` new-members-count (code- and governance-bounded)
 		///   - `P` proposals-count (code-bounded)
-		#[pallet::call_index(0)]
-		#[pallet::weight((
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_members(
 				*old_count, // M
 				new_members.len() as u32, // N
@@ -635,8 +635,8 @@ pub mod pallet {
 		/// - `B` is `proposal` size in bytes (length-fee-bounded)
 		/// - `M` members-count (code-bounded)
 		/// - `P` complexity of dispatching `proposal`
-		#[pallet::call_index(1)]
-		#[pallet::weight((
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight((
 			T::WeightInfo::execute(
 				*length_bound, // B
 				T::MaxMembers::get(), // M
@@ -646,7 +646,7 @@ pub mod pallet {
 		pub fn execute(
 			origin: OriginFor<T>,
 			proposal: Box<<T as Config<I>>::Proposal>,
-			#[pallet::compact] length_bound: u32,
+			#[pezpallet::compact] length_bound: u32,
 		) -> DispatchResultWithPostInfo {
 			let who = ensure_signed(origin)?;
 			let members = Members::<T, I>::get();
@@ -686,8 +686,8 @@ pub mod pallet {
 		///   - branching is influenced by `threshold` where:
 		///     - `P1` is proposal execution complexity (`threshold < 2`)
 		///     - `P2` is proposals-count (code-bounded) (`threshold >= 2`)
-		#[pallet::call_index(2)]
-		#[pallet::weight((
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight((
 			if *threshold < 2 {
 				T::WeightInfo::propose_execute(
 					*length_bound, // B
@@ -704,9 +704,9 @@ pub mod pallet {
 		))]
 		pub fn propose(
 			origin: OriginFor<T>,
-			#[pallet::compact] threshold: MemberCount,
+			#[pezpallet::compact] threshold: MemberCount,
 			proposal: Box<<T as Config<I>>::Proposal>,
-			#[pallet::compact] length_bound: u32,
+			#[pezpallet::compact] length_bound: u32,
 		) -> DispatchResultWithPostInfo {
 			let who = ensure_signed(origin)?;
 			let members = Members::<T, I>::get();
@@ -746,12 +746,12 @@ pub mod pallet {
 		/// fee.
 		/// ## Complexity
 		/// - `O(M)` where `M` is members-count (code- and governance-bounded)
-		#[pallet::call_index(3)]
-		#[pallet::weight((T::WeightInfo::vote(T::MaxMembers::get()), DispatchClass::Operational))]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight((T::WeightInfo::vote(T::MaxMembers::get()), DispatchClass::Operational))]
 		pub fn vote(
 			origin: OriginFor<T>,
 			proposal: T::Hash,
-			#[pallet::compact] index: ProposalIndex,
+			#[pezpallet::compact] index: ProposalIndex,
 			approve: bool,
 		) -> DispatchResultWithPostInfo {
 			let who = ensure_signed(origin)?;
@@ -780,8 +780,8 @@ pub mod pallet {
 		///
 		/// ## Complexity
 		/// O(P) where P is the number of max proposals
-		#[pallet::call_index(5)]
-		#[pallet::weight(T::WeightInfo::disapprove_proposal(T::MaxProposals::get()))]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(T::WeightInfo::disapprove_proposal(T::MaxProposals::get()))]
 		pub fn disapprove_proposal(
 			origin: OriginFor<T>,
 			proposal_hash: T::Hash,
@@ -815,8 +815,8 @@ pub mod pallet {
 		///   - `M` is members-count (code- and governance-bounded)
 		///   - `P1` is the complexity of `proposal` preimage.
 		///   - `P2` is proposal-count (code-bounded)
-		#[pallet::call_index(6)]
-		#[pallet::weight((
+		#[pezpallet::call_index(6)]
+		#[pezpallet::weight((
 			{
 				let b = *length_bound;
 				let m = T::MaxMembers::get();
@@ -833,9 +833,9 @@ pub mod pallet {
 		pub fn close(
 			origin: OriginFor<T>,
 			proposal_hash: T::Hash,
-			#[pallet::compact] index: ProposalIndex,
+			#[pezpallet::compact] index: ProposalIndex,
 			proposal_weight_bound: Weight,
-			#[pallet::compact] length_bound: u32,
+			#[pezpallet::compact] length_bound: u32,
 		) -> DispatchResultWithPostInfo {
 			ensure_signed(origin)?;
 
@@ -849,8 +849,8 @@ pub mod pallet {
 		/// - `proposal_hash`: The hash of the proposal that should be killed.
 		///
 		/// Emits `Killed` and `ProposalCostBurned` if any cost was held for a given proposal.
-		#[pallet::call_index(7)]
-		#[pallet::weight(T::WeightInfo::kill(1, T::MaxProposals::get()))]
+		#[pezpallet::call_index(7)]
+		#[pezpallet::weight(T::WeightInfo::kill(1, T::MaxProposals::get()))]
 		pub fn kill(origin: OriginFor<T>, proposal_hash: T::Hash) -> DispatchResultWithPostInfo {
 			T::KillOrigin::ensure_origin(origin)?;
 			ensure!(
@@ -880,8 +880,8 @@ pub mod pallet {
 		/// - `proposal_hash`: The hash of the proposal.
 		///
 		/// Emits `ProposalCostReleased` if any cost held for a given proposal.
-		#[pallet::call_index(8)]
-		#[pallet::weight(T::WeightInfo::release_proposal_cost())]
+		#[pezpallet::call_index(8)]
+		#[pezpallet::weight(T::WeightInfo::release_proposal_cost())]
 		pub fn release_proposal_cost(
 			origin: OriginFor<T>,
 			proposal_hash: T::Hash,
@@ -911,7 +911,7 @@ fn get_result_weight(result: DispatchResultWithPostInfo) -> Option<Weight> {
 	}
 }
 
-impl<T: Config<I>, I: 'static> Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 	/// Check whether `who` is a member of the collective.
 	pub fn is_member(who: &T::AccountId) -> bool {
 		// Note: The dispatchables *do not* use this to check membership so make sure
@@ -978,7 +978,7 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 		<ProposalCount<T, I>>::mutate(|i| *i += 1);
 		<ProposalOf<T, I>>::insert(proposal_hash, proposal);
 		let votes = {
-			let end = pezframe_system::Pallet::<T>::block_number() + T::MotionDuration::get();
+			let end = pezframe_system::Pezpallet::<T>::block_number() + T::MotionDuration::get();
 			Votes { index, threshold, ayes: vec![], nays: vec![], end }
 		};
 		<Voting<T, I>>::insert(proposal_hash, votes);
@@ -1088,7 +1088,7 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 		}
 
 		// Only allow actual closing of the proposal after the voting period has ended.
-		ensure!(pezframe_system::Pallet::<T>::block_number() >= voting.end, Error::<T, I>::TooEarly);
+		ensure!(pezframe_system::Pezpallet::<T>::block_number() >= voting.end, Error::<T, I>::TooEarly);
 
 		let prime_vote = Prime::<T, I>::get().map(|who| voting.ayes.iter().any(|a| a == &who));
 
@@ -1182,14 +1182,14 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 		(proposal_weight, proposal_count)
 	}
 
-	/// Removes a proposal from the pallet, and deposit the `Disapproved` event.
+	/// Removes a proposal from the pezpallet, and deposit the `Disapproved` event.
 	pub fn do_disapprove_proposal(proposal_hash: T::Hash) -> u32 {
 		// disapproved
 		Self::deposit_event(Event::Disapproved { proposal_hash });
 		Self::remove_proposal(proposal_hash)
 	}
 
-	// Removes a proposal from the pallet, cleaning up votes and the vector of proposals.
+	// Removes a proposal from the pezpallet, cleaning up votes and the vector of proposals.
 	fn remove_proposal(proposal_hash: T::Hash) -> u32 {
 		// remove proposal and vote
 		ProposalOf::<T, I>::remove(&proposal_hash);
@@ -1201,7 +1201,7 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 		num_proposals as u32
 	}
 
-	/// Ensure the correctness of the state of this pallet.
+	/// Ensure the correctness of the state of this pezpallet.
 	///
 	/// The following expectation must always apply.
 	///
@@ -1308,7 +1308,7 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 	}
 }
 
-impl<T: Config<I>, I: 'static> ChangeMembers<T::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> ChangeMembers<T::AccountId> for Pezpallet<T, I> {
 	/// Update the members of the collective. Votes are updated and the prime is reset.
 	///
 	/// NOTE: Does not enforce the expected `MaxMembers` limit on the amount of members, but
@@ -1365,7 +1365,7 @@ impl<T: Config<I>, I: 'static> ChangeMembers<T::AccountId> for Pallet<T, I> {
 	}
 }
 
-impl<T: Config<I>, I: 'static> InitializeMembers<T::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> InitializeMembers<T::AccountId> for Pezpallet<T, I> {
 	fn initialize_members(members: &[T::AccountId]) {
 		if !members.is_empty() {
 			assert!(<Members<T, I>>::get().is_empty(), "Members are already initialized!");

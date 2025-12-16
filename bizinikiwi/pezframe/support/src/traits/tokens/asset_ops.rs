@@ -37,7 +37,7 @@
 //!
 //! ### Usage Example
 //!
-//! This example shows how to interact with pezpallet-uniques (assuming the pallet called Uniques in
+//! This example shows how to interact with pezpallet-uniques (assuming the pezpallet called Uniques in
 //! the chain’s Runtime) via the asset ops.
 //!
 //! If you are interested in the implementation example, you can look at the pezpallet-uniques

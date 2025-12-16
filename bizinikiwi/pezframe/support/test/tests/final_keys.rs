@@ -29,40 +29,40 @@ use pezsp_runtime::{
 	traits::{BlakeTwo256, Verify},
 };
 
-#[pezframe_support::pallet]
+#[pezframe_support::pezpallet]
 mod no_instance {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {}
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {}
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Value<T> = StorageValue<_, u32, ValueQuery>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Map<T> = StorageMap<_, Blake2_128Concat, u32, u32, ValueQuery>;
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Map2<T> = StorageMap<_, Twox64Concat, u32, u32, ValueQuery>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type DoubleMap<T> =
 		StorageDoubleMap<_, Blake2_128Concat, u32, Blake2_128Concat, u32, u32, ValueQuery>;
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type DoubleMap2<T> =
 		StorageDoubleMap<_, Twox64Concat, u32, Twox64Concat, u32, u32, ValueQuery>;
 
-	#[pallet::storage]
-	#[pallet::getter(fn test_generic_value)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn test_generic_value)]
 	pub type TestGenericValue<T: Config> = StorageValue<_, BlockNumberFor<T>, OptionQuery>;
-	#[pallet::storage]
-	#[pallet::getter(fn foo2)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn foo2)]
 	pub type TestGenericDoubleMap<T: Config> = StorageDoubleMap<
 		_,
 		Blake2_128Concat,
@@ -73,7 +73,7 @@ mod no_instance {
 		ValueQuery,
 	>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	pub struct GenesisConfig<T: Config> {
 		pub value: u32,
 		pub test_generic_value: BlockNumberFor<T>,
@@ -90,7 +90,7 @@ mod no_instance {
 		}
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			<Value<T>>::put(self.value);
@@ -102,43 +102,43 @@ mod no_instance {
 	}
 }
 
-#[pezframe_support::pallet]
+#[pezframe_support::pezpallet]
 mod instance {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T, I = ()>(PhantomData<(T, I)>);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T, I = ()>(PhantomData<(T, I)>);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config {}
 
-	#[pallet::call]
-	impl<T: Config<I>, I: 'static> Pallet<T, I> {}
+	#[pezpallet::call]
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I> {}
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Value<T: Config<I>, I: 'static = ()> = StorageValue<_, u32, ValueQuery>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Map<T: Config<I>, I: 'static = ()> =
 		StorageMap<_, Blake2_128Concat, u32, u32, ValueQuery>;
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Map2<T: Config<I>, I: 'static = ()> =
 		StorageMap<_, Twox64Concat, u32, u32, ValueQuery>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type DoubleMap<T: Config<I>, I: 'static = ()> =
 		StorageDoubleMap<_, Blake2_128Concat, u32, Blake2_128Concat, u32, u32, ValueQuery>;
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type DoubleMap2<T: Config<I>, I: 'static = ()> =
 		StorageDoubleMap<_, Twox64Concat, u32, Twox64Concat, u32, u32, ValueQuery>;
 
-	#[pallet::storage]
-	#[pallet::getter(fn test_generic_value)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn test_generic_value)]
 	pub type TestGenericValue<T: Config<I>, I: 'static = ()> =
 		StorageValue<_, BlockNumberFor<T>, OptionQuery>;
-	#[pallet::storage]
-	#[pallet::getter(fn foo2)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn foo2)]
 	pub type TestGenericDoubleMap<T: Config<I>, I: 'static = ()> = StorageDoubleMap<
 		_,
 		Blake2_128Concat,
@@ -149,7 +149,7 @@ mod instance {
 		ValueQuery,
 	>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	pub struct GenesisConfig<T: Config<I>, I: 'static = ()> {
 		pub value: u32,
 		pub test_generic_value: BlockNumberFor<T>,
@@ -168,7 +168,7 @@ mod instance {
 		}
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config<I>, I: 'static> BuildGenesisConfig for GenesisConfig<T, I> {
 		fn build(&self) {
 			<Value<T, I>>::put(self.value);

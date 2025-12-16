@@ -104,7 +104,7 @@ pub struct IncrementalHashBuilder {
 impl Default for IncrementalHashBuilder {
 	fn default() -> Self {
 		Self {
-			// First deserialization time from the pallet storage, is expected
+			// First deserialization time from the pezpallet storage, is expected
 			// to contain index 1.
 			index: 1,
 			hash_builder: HashBuilder::default(),
@@ -429,7 +429,7 @@ impl IncrementalHashBuilderIR {
 impl Default for IncrementalHashBuilderIR {
 	fn default() -> Self {
 		Self {
-			// First deserialization time from the pallet storage, is expected
+			// First deserialization time from the pezpallet storage, is expected
 			// to contain index 1.
 			index: 1,
 			key: Vec::new(),

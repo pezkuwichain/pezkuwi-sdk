@@ -23,50 +23,50 @@ use core::ops::Add;
 use impl_trait_for_tuples::impl_for_tuples;
 use pezsp_runtime::RuntimeDebug;
 
-/// Provides information about the pallet itself and its setup in the runtime.
+/// Provides information about the pezpallet itself and its setup in the runtime.
 ///
-/// An implementor should be able to provide information about each pallet that
+/// An implementor should be able to provide information about each pezpallet that
 /// is configured in `construct_runtime!`.
 pub trait PalletInfo {
-	/// Convert the given pallet `P` into its index as configured in the runtime.
+	/// Convert the given pezpallet `P` into its index as configured in the runtime.
 	fn index<P: 'static>() -> Option<usize>;
-	/// Convert the given pallet `P` into its name as configured in the runtime.
+	/// Convert the given pezpallet `P` into its name as configured in the runtime.
 	fn name<P: 'static>() -> Option<&'static str>;
 	/// The two128 hash of name.
 	fn name_hash<P: 'static>() -> Option<[u8; 16]>;
-	/// Convert the given pallet `P` into its Rust module name as used in `construct_runtime!`.
+	/// Convert the given pezpallet `P` into its Rust module name as used in `construct_runtime!`.
 	fn module_name<P: 'static>() -> Option<&'static str>;
-	/// Convert the given pallet `P` into its containing crate version.
+	/// Convert the given pezpallet `P` into its containing crate version.
 	fn crate_version<P: 'static>() -> Option<CrateVersion>;
 }
 
-/// Information regarding an instance of a pallet.
+/// Information regarding an instance of a pezpallet.
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, RuntimeDebug)]
 pub struct PalletInfoData {
-	/// Index of the pallet as configured in the runtime.
+	/// Index of the pezpallet as configured in the runtime.
 	pub index: usize,
-	/// Name of the pallet as configured in the runtime.
+	/// Name of the pezpallet as configured in the runtime.
 	pub name: &'static str,
-	/// Name of the Rust module containing the pallet.
+	/// Name of the Rust module containing the pezpallet.
 	pub module_name: &'static str,
-	/// Version of the crate containing the pallet.
+	/// Version of the crate containing the pezpallet.
 	pub crate_version: CrateVersion,
 }
 
-/// Provides information about the pallet itself and its setup in the runtime.
+/// Provides information about the pezpallet itself and its setup in the runtime.
 ///
 /// Declare some information and access the information provided by [`PalletInfo`] for a specific
-/// pallet.
+/// pezpallet.
 pub trait PalletInfoAccess {
-	/// Index of the pallet as configured in the runtime.
+	/// Index of the pezpallet as configured in the runtime.
 	fn index() -> usize;
-	/// Name of the pallet as configured in the runtime.
+	/// Name of the pezpallet as configured in the runtime.
 	fn name() -> &'static str;
 	/// Two128 hash of name.
 	fn name_hash() -> [u8; 16];
-	/// Name of the Rust module containing the pallet.
+	/// Name of the Rust module containing the pezpallet.
 	fn module_name() -> &'static str;
-	/// Version of the crate containing the pallet.
+	/// Version of the crate containing the pezpallet.
 	fn crate_version() -> CrateVersion;
 }
 
@@ -95,12 +95,12 @@ impl PalletsInfoAccess for Tuple {
 	}
 }
 
-/// The function and pallet name of the Call.
+/// The function and pezpallet name of the Call.
 #[derive(Clone, Eq, PartialEq, Default, RuntimeDebug)]
 pub struct CallMetadata {
 	/// Name of the function.
 	pub function_name: &'static str,
-	/// Name of the pallet to which the function belongs.
+	/// Name of the pezpallet to which the function belongs.
 	pub pezpallet_name: &'static str,
 }
 
@@ -120,13 +120,13 @@ pub trait GetCallIndex {
 	fn get_call_index(&self) -> u8;
 }
 
-/// Gets the metadata for the Call - function name and pallet name.
+/// Gets the metadata for the Call - function name and pezpallet name.
 pub trait GetCallMetadata {
 	/// Return all module names.
 	fn get_module_names() -> &'static [&'static str];
 	/// Return all function names for the given `module`.
 	fn get_call_names(module: &str) -> &'static [&'static str];
-	/// Return a [`CallMetadata`], containing function and pallet name of the Call.
+	/// Return a [`CallMetadata`], containing function and pezpallet name of the Call.
 	fn get_call_metadata(&self) -> CallMetadata;
 }
 
@@ -161,15 +161,15 @@ impl PartialOrd for CrateVersion {
 	}
 }
 
-/// The storage key postfix that is used to store the [`StorageVersion`] per pallet.
+/// The storage key postfix that is used to store the [`StorageVersion`] per pezpallet.
 ///
 /// The full storage key is built by using:
 /// Twox128([`PalletInfo::name`]) ++ Twox128([`STORAGE_VERSION_STORAGE_KEY_POSTFIX`])
 pub const STORAGE_VERSION_STORAGE_KEY_POSTFIX: &[u8] = b":__STORAGE_VERSION__:";
 
-/// The storage version of a pallet.
+/// The storage version of a pezpallet.
 ///
-/// Each storage version of a pallet is stored in the state under a fixed key. See
+/// Each storage version of a pezpallet is stored in the state under a fixed key. See
 /// [`STORAGE_VERSION_STORAGE_KEY_POSTFIX`] for how this key is built.
 #[derive(Debug, Eq, PartialEq, Encode, Decode, Ord, Clone, Copy, PartialOrd, Default)]
 pub struct StorageVersion(u16);
@@ -188,13 +188,13 @@ impl StorageVersion {
 		crate::storage::storage_prefix(pezpallet_name.as_bytes(), STORAGE_VERSION_STORAGE_KEY_POSTFIX)
 	}
 
-	/// Put this storage version for the given pallet into the storage.
+	/// Put this storage version for the given pezpallet into the storage.
 	///
-	/// It will use the storage key that is associated with the given `Pallet`.
+	/// It will use the storage key that is associated with the given `Pezpallet`.
 	///
 	/// # Panics
 	///
-	/// This function will panic iff `Pallet` can not be found by `PalletInfo`.
+	/// This function will panic iff `Pezpallet` can not be found by `PalletInfo`.
 	/// In a runtime that is put together using
 	/// [`construct_runtime!`](crate::construct_runtime) this should never happen.
 	///
@@ -206,13 +206,13 @@ impl StorageVersion {
 		crate::storage::unhashed::put(&key, self);
 	}
 
-	/// Get the storage version of the given pallet from the storage.
+	/// Get the storage version of the given pezpallet from the storage.
 	///
-	/// It will use the storage key that is associated with the given `Pallet`.
+	/// It will use the storage key that is associated with the given `Pezpallet`.
 	///
 	/// # Panics
 	///
-	/// This function will panic iff `Pallet` can not be found by `PalletInfo`.
+	/// This function will panic iff `Pezpallet` can not be found by `PalletInfo`.
 	/// In a runtime that is put together using
 	/// [`construct_runtime!`](crate::construct_runtime) this should never happen.
 	///
@@ -224,13 +224,13 @@ impl StorageVersion {
 		crate::storage::unhashed::get_or_default(&key)
 	}
 
-	/// Returns if the storage version key for the given pallet exists in storage.
+	/// Returns if the storage version key for the given pezpallet exists in storage.
 	///
 	/// See [`STORAGE_VERSION_STORAGE_KEY_POSTFIX`] on how this key is built.
 	///
 	/// # Panics
 	///
-	/// This function will panic iff `Pallet` can not be found by `PalletInfo`.
+	/// This function will panic iff `Pezpallet` can not be found by `PalletInfo`.
 	/// In a runtime that is put together using
 	/// [`construct_runtime!`](crate::construct_runtime) this should never happen.
 	///
@@ -263,33 +263,33 @@ impl Add<u16> for StorageVersion {
 }
 
 /// Special marker struct used when [`storage_version`](crate::pezpallet_macros::storage_version) is
-/// not defined for a pallet.
+/// not defined for a pezpallet.
 ///
 /// If you (the reader) end up here, it probably means that you tried to compare
 /// [`GetStorageVersion::on_chain_storage_version`] against
 /// [`GetStorageVersion::in_code_storage_version`]. This basically means that the
-/// [`storage_version`](crate::pezpallet_macros::storage_version) is missing from the pallet where the
+/// [`storage_version`](crate::pezpallet_macros::storage_version) is missing from the pezpallet where the
 /// mentioned functions are being called, and needs to be defined.
 #[derive(Debug, Default)]
 pub struct NoStorageVersionSet;
 
-/// Provides information about a pallet's storage versions.
+/// Provides information about a pezpallet's storage versions.
 ///
-/// Every pallet has two storage versions:
+/// Every pezpallet has two storage versions:
 /// 1. An in-code storage version
 /// 2. An on-chain storage version
 ///
-/// The in-code storage version is the version of the pallet as defined in the runtime blob, and the
-/// on-chain storage version is the version of the pallet stored on-chain.
+/// The in-code storage version is the version of the pezpallet as defined in the runtime blob, and the
+/// on-chain storage version is the version of the pezpallet stored on-chain.
 ///
-/// Storage versions should be only ever be out of sync when a pallet has been updated to a new
+/// Storage versions should be only ever be out of sync when a pezpallet has been updated to a new
 /// version and the in-code version is incremented, but the migration has not yet been executed
 /// on-chain as part of a runtime upgrade.
 ///
 /// It is the responsibility of the developer to ensure that the on-chain storage version is set
 /// correctly during a migration so that it matches the in-code storage version.
 pub trait GetStorageVersion {
-	/// This type is generated by the [`pallet`](crate::pallet) macro.
+	/// This type is generated by the [`pezpallet`](crate::pezpallet) macro.
 	///
 	/// If the [`storage_version`](crate::pezpallet_macros::storage_version) attribute isn't specified,
 	/// this is set to [`NoStorageVersionSet`] to signify that it is missing.
@@ -319,7 +319,7 @@ pub trait GetStorageVersion {
 	/// [`storage_version`](crate::pezpallet_macros::storage_version) attribute, or
 	/// [`NoStorageVersionSet`] if the attribute is missing.
 	fn in_code_storage_version() -> Self::InCodeStorageVersion;
-	/// Returns the storage version of the pallet as last set in the actual on-chain storage.
+	/// Returns the storage version of the pezpallet as last set in the actual on-chain storage.
 	fn on_chain_storage_version() -> StorageVersion;
 }
 

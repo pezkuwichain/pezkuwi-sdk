@@ -1,10 +1,10 @@
 <!-- markdown-link-check-disable -->
-# Dev Mode Example Pallet
+# Dev Mode Example Pezpallet
 
-A simple example of a FRAME pallet demonstrating
-the ease of requirements for a pallet in dev mode.
+A simple example of a FRAME pezpallet demonstrating
+the ease of requirements for a pezpallet in dev mode.
 
-Run `cargo doc --package pezpallet-dev-mode --open` to view this pallet's documentation.
+Run `cargo doc --package pezpallet-dev-mode --open` to view this pezpallet's documentation.
 
 **Dev mode is not meant to be used in production.**
 

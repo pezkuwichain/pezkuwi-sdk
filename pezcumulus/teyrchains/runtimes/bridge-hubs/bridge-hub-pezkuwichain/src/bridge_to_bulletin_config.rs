@@ -50,7 +50,7 @@ use xcm::{
 use xcm_builder::{BridgeBlobDispatcher, ParentIsPreset, SiblingTeyrchainConvertsVia};
 
 parameter_types! {
-	/// Interior location (relative to this runtime) of the with-PezkuwichainBulletin messages pallet.
+	/// Interior location (relative to this runtime) of the with-PezkuwichainBulletin messages pezpallet.
 	pub BridgePezkuwichainToPezkuwichainBulletinMessagesPalletInstance: InteriorLocation = [
 		PalletInstance(<BridgePezkuwichainBulletinMessages as PalletInfoAccess>::index() as u8)
 	].into();

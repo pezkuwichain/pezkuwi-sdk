@@ -19,11 +19,11 @@
 //!
 //! - migrate the old `CodeInfoOf` storage to the new `CodeInfoOf` which add the new `code_type`
 //! field.
-//! - Unhold the deposit on the owner and transfer it to the pallet account.
+//! - Unhold the deposit on the owner and transfer it to the pezpallet account.
 
 extern crate alloc;
 use super::PALLET_MIGRATIONS_ID;
-use crate::{vm::BytecodeType, weights::WeightInfo, Config, Pallet, H256, LOG_TARGET};
+use crate::{vm::BytecodeType, weights::WeightInfo, Config, Pezpallet, H256, LOG_TARGET};
 use pezframe_support::{
 	migrations::{MigrationId, SteppedMigration, SteppedMigrationError},
 	pezpallet_prelude::PhantomData,
@@ -43,7 +43,7 @@ use pezframe_support::{pezsp_runtime::TryRuntimeError, traits::fungible::Inspect
 /// Module containing the old storage items.
 mod old {
 	use super::Config;
-	use crate::{pallet::Pallet, AccountIdOf, BalanceOf, H256};
+	use crate::{pezpallet::Pezpallet, AccountIdOf, BalanceOf, H256};
 	use codec::{Decode, Encode};
 	use pezframe_support::{storage_alias, Identity};
 
@@ -60,12 +60,12 @@ mod old {
 
 	#[storage_alias]
 	/// The storage item that is being migrated from.
-	pub type CodeInfoOf<T: Config> = StorageMap<Pallet<T>, Identity, H256, CodeInfo<T>>;
+	pub type CodeInfoOf<T: Config> = StorageMap<Pezpallet<T>, Identity, H256, CodeInfo<T>>;
 }
 
 mod new {
 	use super::{BytecodeType, Config};
-	use crate::{pallet::Pallet, AccountIdOf, BalanceOf, H256};
+	use crate::{pezpallet::Pezpallet, AccountIdOf, BalanceOf, H256};
 	use codec::{Decode, Encode};
 	use pezframe_support::{storage_alias, DebugNoBound, Identity};
 
@@ -83,7 +83,7 @@ mod new {
 
 	#[storage_alias]
 	/// The storage item that is being migrated to.
-	pub type CodeInfoOf<T: Config> = StorageMap<Pallet<T>, Identity, H256, CodeInfo<T>>;
+	pub type CodeInfoOf<T: Config> = StorageMap<Pezpallet<T>, Identity, H256, CodeInfo<T>>;
 }
 
 /// Migrates the items of the [`old::CodeInfoOf`] map into [`crate::CodeInfoOf`] by adding the
@@ -107,9 +107,9 @@ impl<T: Config> SteppedMigration for Migration<T> {
 			return Err(SteppedMigrationError::InsufficientWeight { required });
 		}
 
-		if !pezframe_system::Pallet::<T>::account_exists(&Pallet::<T>::account_id()) {
+		if !pezframe_system::Pezpallet::<T>::account_exists(&Pezpallet::<T>::account_id()) {
 			let _ =
-				T::Currency::mint_into(&Pallet::<T>::account_id(), T::Currency::minimum_balance());
+				T::Currency::mint_into(&Pezpallet::<T>::account_id(), T::Currency::minimum_balance());
 		}
 
 		loop {
@@ -127,7 +127,7 @@ impl<T: Config> SteppedMigration for Migration<T> {
 				if let Err(err) = T::Currency::transfer_on_hold(
 					&crate::HoldReason::CodeUploadDepositReserve.into(),
 					&value.owner,
-					&Pallet::<T>::account_id(),
+					&Pezpallet::<T>::account_id(),
 					value.deposit,
 					Precision::Exact,
 					Restriction::OnHold,
@@ -194,7 +194,7 @@ impl<T: Config> SteppedMigration for Migration<T> {
 		assert_eq!(
 			<T as Config>::Currency::balance_on_hold(
 				&crate::HoldReason::CodeUploadDepositReserve.into(),
-				&Pallet::<T>::account_id(),
+				&Pezpallet::<T>::account_id(),
 			),
 			deposit_sum,
 		);
@@ -219,7 +219,7 @@ impl<T: Config> Migration<T> {
 		behaviour_version: u32,
 	) -> old::CodeInfo<T> {
 		use pezframe_support::traits::fungible::Mutate;
-		T::Currency::mint_into(&owner, Pallet::<T>::min_balance() + deposit)
+		T::Currency::mint_into(&owner, Pezpallet::<T>::min_balance() + deposit)
 			.expect("Failed to mint into owner account");
 		T::Currency::hold(&crate::HoldReason::CodeUploadDepositReserve.into(), &owner, deposit)
 			.expect("Failed to hold the deposit on the owner account");

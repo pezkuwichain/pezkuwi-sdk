@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Tests for Nfts pallet.
+//! Tests for Nfts pezpallet.
 
 use crate::{mock::*, Event, SystemConfig, *};
 use enumflags2::BitFlags;
@@ -1014,7 +1014,7 @@ fn set_collection_system_attributes_should_work() {
 			&attribute_value
 		));
 
-		assert_eq!(attributes(0), vec![(None, AttributeNamespace::Pallet, bvec![0], bvec![0])]);
+		assert_eq!(attributes(0), vec![(None, AttributeNamespace::Pezpallet, bvec![0], bvec![0])]);
 
 		assert_eq!(
 			<Nfts as Inspect<AccountIdOf<Test>>>::system_attribute(
@@ -1052,10 +1052,10 @@ fn set_collection_system_attributes_should_work() {
 		assert_eq!(
 			attributes(collection_id),
 			[
-				(None, AttributeNamespace::Pallet, bvec![0], bvec![0]),
+				(None, AttributeNamespace::Pezpallet, bvec![0], bvec![0]),
 				(
 					None,
-					AttributeNamespace::Pallet,
+					AttributeNamespace::Pezpallet,
 					bvec![
 						0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						0, 0, 0, 0, 0, 0, 0
@@ -1406,7 +1406,7 @@ fn validate_deposit_required_setting() {
 				(Some(0), AttributeNamespace::CollectionOwner, bvec![0], bvec![0]),
 				(Some(0), AttributeNamespace::ItemOwner, bvec![1], bvec![0]),
 				(Some(0), AttributeNamespace::Account(account(3)), bvec![2], bvec![0]),
-				(Some(0), AttributeNamespace::Pallet, bvec![3], bvec![0]),
+				(Some(0), AttributeNamespace::Pezpallet, bvec![3], bvec![0]),
 			]
 		);
 		assert_eq!(Balances::reserved_balance(account(1)), 0);

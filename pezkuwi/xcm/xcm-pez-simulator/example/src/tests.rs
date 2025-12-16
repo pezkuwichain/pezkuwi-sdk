@@ -151,7 +151,7 @@ fn reserve_transfer() {
 	ParaA::execute_with(|| {
 		// free execution, full amount received
 		assert_eq!(
-			pezpallet_balances::Pallet::<teyrchain::Runtime>::free_balance(&ALICE),
+			pezpallet_balances::Pezpallet::<teyrchain::Runtime>::free_balance(&ALICE),
 			INITIAL_BALANCE + withdraw_amount
 		);
 	});
@@ -201,7 +201,7 @@ fn reserve_transfer_with_error() {
 		// Ensure no balance change due to the error
 		ParaA::execute_with(|| {
 			assert_eq!(
-				pezpallet_balances::Pallet::<teyrchain::Runtime>::free_balance(&ALICE),
+				pezpallet_balances::Pezpallet::<teyrchain::Runtime>::free_balance(&ALICE),
 				INITIAL_BALANCE
 			);
 		});

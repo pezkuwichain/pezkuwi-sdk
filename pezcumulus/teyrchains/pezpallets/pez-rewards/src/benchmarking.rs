@@ -3,13 +3,13 @@
 #![cfg(feature = "runtime-benchmarks")]
 
 use super::{BalanceOf, Call, Config};
-use crate::{Pallet as PezRewards, Pallet};
+use crate::{Pezpallet as PezRewards, Pezpallet};
 use pezframe_benchmarking::v2::*;
 use pezframe_support::traits::{
 	fungibles::{Create, Mutate},
 	Currency, Get,
 };
-use pezframe_system::{Pallet as System, RawOrigin};
+use pezframe_system::{Pezpallet as System, RawOrigin};
 use pezsp_runtime::traits::{Bounded, Saturating, StaticLookup, Zero}; // AccountIdConversion removed
 
 const SEED: u32 = 0;
@@ -53,7 +53,7 @@ where
 #[benchmarks(where T: pezpallet_balances::Config, T::Assets: Create<T::AccountId>)]
 mod benchmarks {
 	use super::*;
-	use pezpallet_balances::Pallet as Balances;
+	use pezpallet_balances::Pezpallet as Balances;
 
 	#[benchmark]
 	fn initialize_rewards_system() {
@@ -110,7 +110,7 @@ mod benchmarks {
 			.unwrap_or_else(|_| BalanceOf::<T>::max_value() / 2u32.into());
 		let _ = T::Assets::mint_into(T::PezAssetId::get(), &incentive_pot, large_amount);
 
-		let target_block = System::<T>::block_number() + crate::pallet::BLOCKS_PER_EPOCH.into();
+		let target_block = System::<T>::block_number() + crate::pezpallet::BLOCKS_PER_EPOCH.into();
 		System::<T>::set_block_number(target_block);
 
 		#[extrinsic_call]

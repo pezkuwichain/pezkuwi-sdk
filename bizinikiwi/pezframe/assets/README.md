@@ -11,10 +11,10 @@ The Assets module provides functionality for asset management of fungible asset 
 * Asset Destruction
 
 To use it in your runtime, you need to implement the assets
-[`assets::Config`](https://docs.rs/pezpallet-assets/latest/pallet_assets/pallet/trait.Config.html).
+[`assets::Config`](https://docs.rs/pezpallet-assets/latest/pallet_assets/pezpallet/trait.Config.html).
 
 The supported dispatchable functions are documented in the
-[`assets::Call`](https://docs.rs/pezpallet-assets/latest/pallet_assets/pallet/enum.Call.html) enum.
+[`assets::Call`](https://docs.rs/pezpallet-assets/latest/pallet_assets/pezpallet/enum.Call.html) enum.
 
 ### Terminology
 
@@ -50,7 +50,7 @@ variants for documentation on each function.
 * `balance` - Get the asset `id` balance of `who`.
 * `total_supply` - Get the total supply of an asset `id`.
 
-Please refer to the [`Pallet`](https://docs.rs/pezpallet-assets/latest/pallet_assets/pallet/struct.Pallet.html) struct for
+Please refer to the [`Pezpallet`](https://docs.rs/pezpallet-assets/latest/pallet_assets/pezpallet/struct.Pezpallet.html) struct for
 details on publicly available functions.
 
 ## Usage
@@ -71,20 +71,20 @@ Import the Assets module and types and derive your runtime's configuration trait
 use pallet_assets as assets;
 use sp_runtime::ArithmeticError;
 
-#[frame_support::pallet]
-pub mod pallet {
+#[frame_support::pezpallet]
+pub mod pezpallet {
     use super::*;
     use frame_support::pallet_prelude::*;
     use frame_system::pallet_prelude::*;
 
-    #[pallet::pallet]
-    pub struct Pallet<T>(_);
+    #[pezpallet::pezpallet]
+    pub struct Pezpallet<T>(_);
 
-    #[pallet::config]
+    #[pezpallet::config]
     pub trait Config: frame_system::Config + assets::Config {}
 
-    #[pallet::call]
-    impl<T: Config> Pallet<T> {
+    #[pezpallet::call]
+    impl<T: Config> Pezpallet<T> {
         pub fn issue_token_airdrop(origin: OriginFor<T>) -> DispatchResult {
             let sender = ensure_signed(origin)?;
 

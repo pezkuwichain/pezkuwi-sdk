@@ -24,11 +24,11 @@
 // Executed Command:
 // target/release/bizinikiwi
 // benchmark
-// pallet
+// pezpallet
 // --chain=dev
 // --steps=1
 // --repeat=1
-// --pallet=pezpallet_election_provider_support_benchmarking
+// --pezpallet=pezpallet_election_provider_support_benchmarking
 // --extrinsic=*
 // --execution=wasm
 // --wasm-execution=compiled

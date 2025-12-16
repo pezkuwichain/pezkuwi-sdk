@@ -15,11 +15,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Treasury pallet benchmarking.
+//! Treasury pezpallet benchmarking.
 
 #![cfg(feature = "runtime-benchmarks")]
 
-use super::{Pallet as Treasury, *};
+use super::{Pezpallet as Treasury, *};
 
 use pezframe_benchmarking::{
 	v1::{account, BenchmarkError},
@@ -97,7 +97,7 @@ fn setup_pot_account<T: Config<I>, I: 'static>() {
 }
 
 fn assert_last_event<T: Config<I>, I: 'static>(generic_event: <T as Config<I>>::RuntimeEvent) {
-	pezframe_system::Pallet::<T>::assert_last_event(generic_event.into());
+	pezframe_system::Pezpallet::<T>::assert_last_event(generic_event.into());
 }
 
 // Create the arguments for the `spend` dispatchable.

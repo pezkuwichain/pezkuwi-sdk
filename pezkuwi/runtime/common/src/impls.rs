@@ -29,30 +29,30 @@ use xcm::VersionedLocation;
 
 /// Logic for the author to get a portion of fees.
 pub struct ToAuthor<R>(core::marker::PhantomData<R>);
-impl<R> OnUnbalanced<Credit<R::AccountId, pezpallet_balances::Pallet<R>>> for ToAuthor<R>
+impl<R> OnUnbalanced<Credit<R::AccountId, pezpallet_balances::Pezpallet<R>>> for ToAuthor<R>
 where
 	R: pezpallet_balances::Config + pezpallet_authorship::Config,
 	<R as pezframe_system::Config>::AccountId: From<pezkuwi_primitives::AccountId>,
 	<R as pezframe_system::Config>::AccountId: Into<pezkuwi_primitives::AccountId>,
 {
 	fn on_nonzero_unbalanced(
-		amount: Credit<<R as pezframe_system::Config>::AccountId, pezpallet_balances::Pallet<R>>,
+		amount: Credit<<R as pezframe_system::Config>::AccountId, pezpallet_balances::Pezpallet<R>>,
 	) {
-		if let Some(author) = <pezpallet_authorship::Pallet<R>>::author() {
-			let _ = <pezpallet_balances::Pallet<R>>::resolve(&author, amount);
+		if let Some(author) = <pezpallet_authorship::Pezpallet<R>>::author() {
+			let _ = <pezpallet_balances::Pezpallet<R>>::resolve(&author, amount);
 		}
 	}
 }
 
 pub struct DealWithFees<R>(core::marker::PhantomData<R>);
-impl<R> OnUnbalanced<Credit<R::AccountId, pezpallet_balances::Pallet<R>>> for DealWithFees<R>
+impl<R> OnUnbalanced<Credit<R::AccountId, pezpallet_balances::Pezpallet<R>>> for DealWithFees<R>
 where
 	R: pezpallet_balances::Config + pezpallet_authorship::Config + pezpallet_treasury::Config,
 	<R as pezframe_system::Config>::AccountId: From<pezkuwi_primitives::AccountId>,
 	<R as pezframe_system::Config>::AccountId: Into<pezkuwi_primitives::AccountId>,
 {
 	fn on_unbalanceds(
-		mut fees_then_tips: impl Iterator<Item = Credit<R::AccountId, pezpallet_balances::Pallet<R>>>,
+		mut fees_then_tips: impl Iterator<Item = Credit<R::AccountId, pezpallet_balances::Pezpallet<R>>>,
 	) {
 		if let Some(fees) = fees_then_tips.next() {
 			// for fees, 80% to treasury, 20% to author
@@ -61,7 +61,7 @@ where
 				// for tips, if any, 100% to author
 				tips.merge_into(&mut split.1);
 			}
-			ResolveTo::<TreasuryAccountId<R>, pezpallet_balances::Pallet<R>>::on_unbalanced(split.0);
+			ResolveTo::<TreasuryAccountId<R>, pezpallet_balances::Pezpallet<R>>::on_unbalanced(split.0);
 			<ToAuthor<R> as OnUnbalanced<_>>::on_unbalanced(split.1);
 		}
 	}
@@ -378,7 +378,7 @@ mod tests {
 	}
 
 	impl pezpallet_treasury::Config for Test {
-		type Currency = pezpallet_balances::Pallet<Test>;
+		type Currency = pezpallet_balances::Pezpallet<Test>;
 		type RejectOrigin = pezframe_system::EnsureRoot<AccountId>;
 		type RuntimeEvent = RuntimeEvent;
 		type SpendPeriod = ();
@@ -467,11 +467,11 @@ mod tests {
 	fn test_fees_and_tip_split() {
 		new_test_ext().execute_with(|| {
 			let fee =
-				<pezpallet_balances::Pallet<Test> as pezframe_support::traits::fungible::Balanced<
+				<pezpallet_balances::Pezpallet<Test> as pezframe_support::traits::fungible::Balanced<
 					AccountId,
 				>>::issue(10);
 			let tip =
-				<pezpallet_balances::Pallet<Test> as pezframe_support::traits::fungible::Balanced<
+				<pezpallet_balances::Pezpallet<Test> as pezframe_support::traits::fungible::Balanced<
 					AccountId,
 				>>::issue(20);
 

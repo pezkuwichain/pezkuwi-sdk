@@ -14,7 +14,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! A pallet which uses the XCMP transport layer to handle both incoming and outgoing XCM message
+//! A pezpallet which uses the XCMP transport layer to handle both incoming and outgoing XCM message
 //! sending and dispatch, queuing, signalling and backpressure. To do so, it implements:
 //! * `XcmpMessageHandler`
 //! * `XcmpMessageSource`
@@ -81,7 +81,7 @@ use xcm::{latest::prelude::*, VersionedLocation, VersionedXcm, WrapVersion, MAX_
 use xcm_builder::InspectMessageQueues;
 use xcm_executor::traits::ConvertOrigin;
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 /// Index used to identify overweight XCMs.
 pub type OverweightIndex = u64;
@@ -102,17 +102,17 @@ pub mod delivery_fee_constants {
 	pub const THRESHOLD_FACTOR: u32 = 2;
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::{pezpallet_prelude::*, Twox64Concat};
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	#[pallet::storage_version(migration::STORAGE_VERSION)]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(migration::STORAGE_VERSION)]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
@@ -125,7 +125,7 @@ pub mod pallet {
 
 		/// Enqueue an inbound horizontal message for later processing.
 		///
-		/// This defines the maximal message length via [`crate::MaxXcmpMessageLenOf`]. The pallet
+		/// This defines the maximal message length via [`crate::MaxXcmpMessageLenOf`]. The pezpallet
 		/// assumes that this hook will eventually process all the pushed messages.
 		type XcmpQueue: EnqueueMessage<ParaId>
 			+ QueueFootprintQuery<ParaId, MaxMessageLen = MaxXcmpMessageLenOf<Self>>;
@@ -135,7 +135,7 @@ pub mod pallet {
 		/// Any further channel suspensions will fail and messages may get dropped without further
 		/// notice. Choosing a high value (1000) is okay; the trade-off that is described in
 		/// [`InboundXcmpSuspended`] still applies at that scale.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxInboundSuspended: Get<u32>;
 
 		/// Maximal number of outbound XCMP channels that can have messages queued at the same time.
@@ -146,7 +146,7 @@ pub mod pallet {
 		/// since otherwise the congestion control protocol will not work as intended and messages
 		/// may be dropped. This value increases the PoV and should therefore not be picked too
 		/// high. Governance needs to pay attention to not open more channels than this value.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxActiveOutboundChannels: Get<u32>;
 
 		/// The maximal page size for HRMP message pages.
@@ -154,7 +154,7 @@ pub mod pallet {
 		/// A lower limit can be set dynamically, but this is the hard-limit for the PoV worst case
 		/// benchmarking. The limit for the size of a message is slightly below this, since some
 		/// overhead is incurred for encoding the format.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxPageSize: Get<u32>;
 
 		/// The origin that is allowed to resume or suspend the XCMP queue.
@@ -167,17 +167,17 @@ pub mod pallet {
 		/// The price for delivering an XCM to a sibling teyrchain destination.
 		type PriceForSiblingDelivery: PriceForMessageDelivery<Id = ParaId>;
 
-		/// The weight information of this pallet.
+		/// The weight information of this pezpallet.
 		type WeightInfo: WeightInfoExt;
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Suspends all XCM executions for the XCMP queue, regardless of the sender's origin.
 		///
 		/// - `origin`: Must pass `ControllerOrigin`.
-		#[pallet::call_index(1)]
-		#[pallet::weight((T::DbWeight::get().writes(1), DispatchClass::Operational,))]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight((T::DbWeight::get().writes(1), DispatchClass::Operational,))]
 		pub fn suspend_xcm_execution(origin: OriginFor<T>) -> DispatchResult {
 			T::ControllerOrigin::ensure_origin(origin)?;
 
@@ -196,8 +196,8 @@ pub mod pallet {
 		/// Note that this function doesn't change the status of the in/out bound channels.
 		///
 		/// - `origin`: Must pass `ControllerOrigin`.
-		#[pallet::call_index(2)]
-		#[pallet::weight((T::DbWeight::get().writes(1), DispatchClass::Operational,))]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight((T::DbWeight::get().writes(1), DispatchClass::Operational,))]
 		pub fn resume_xcm_execution(origin: OriginFor<T>) -> DispatchResult {
 			T::ControllerOrigin::ensure_origin(origin)?;
 
@@ -216,8 +216,8 @@ pub mod pallet {
 		///
 		/// - `origin`: Must pass `Root`.
 		/// - `new`: Desired value for `QueueConfigData.suspend_value`
-		#[pallet::call_index(3)]
-		#[pallet::weight((T::WeightInfo::set_config_with_u32(), DispatchClass::Operational,))]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight((T::WeightInfo::set_config_with_u32(), DispatchClass::Operational,))]
 		pub fn update_suspend_threshold(origin: OriginFor<T>, new: u32) -> DispatchResult {
 			ensure_root(origin)?;
 
@@ -232,8 +232,8 @@ pub mod pallet {
 		///
 		/// - `origin`: Must pass `Root`.
 		/// - `new`: Desired value for `QueueConfigData.drop_threshold`
-		#[pallet::call_index(4)]
-		#[pallet::weight((T::WeightInfo::set_config_with_u32(),DispatchClass::Operational,))]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight((T::WeightInfo::set_config_with_u32(),DispatchClass::Operational,))]
 		pub fn update_drop_threshold(origin: OriginFor<T>, new: u32) -> DispatchResult {
 			ensure_root(origin)?;
 
@@ -248,8 +248,8 @@ pub mod pallet {
 		///
 		/// - `origin`: Must pass `Root`.
 		/// - `new`: Desired value for `QueueConfigData.resume_threshold`
-		#[pallet::call_index(5)]
-		#[pallet::weight((T::WeightInfo::set_config_with_u32(), DispatchClass::Operational,))]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight((T::WeightInfo::set_config_with_u32(), DispatchClass::Operational,))]
 		pub fn update_resume_threshold(origin: OriginFor<T>, new: u32) -> DispatchResult {
 			ensure_root(origin)?;
 
@@ -260,8 +260,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn integrity_test() {
 			assert!(!T::MaxPageSize::get().is_zero(), "MaxPageSize too low");
 
@@ -290,14 +290,14 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// An HRMP message was sent to a sibling teyrchain.
 		XcmpMessageSent { message_hash: XcmHash },
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Setting the queue config failed since one of its values was invalid.
 		BadQueueConfig,
@@ -319,7 +319,7 @@ pub mod pallet {
 	///
 	/// NOTE: The PoV benchmarking cannot know this and will over-estimate, but the actual proof
 	/// will be smaller.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type InboundXcmpSuspended<T: Config> =
 		StorageValue<_, BoundedBTreeSet<ParaId, T::MaxInboundSuspended>, ValueQuery>;
 
@@ -329,7 +329,7 @@ pub mod pallet {
 	/// than 65535 items. Queue indices for normal messages begin at one; zero is reserved in
 	/// case of the need to send a high-priority signal message this block.
 	/// The bool is true if there is a signal message waiting to be sent.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type OutboundXcmpStatus<T: Config> = StorageValue<
 		_,
 		BoundedVec<OutboundChannelDetails, T::MaxActiveOutboundChannels>,
@@ -337,7 +337,7 @@ pub mod pallet {
 	>;
 
 	/// The messages outbound in a given XCMP channel.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type OutboundXcmpMessages<T: Config> = StorageDoubleMap<
 		_,
 		Blake2_128Concat,
@@ -349,22 +349,22 @@ pub mod pallet {
 	>;
 
 	/// Any signal messages waiting to be sent.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type SignalMessages<T: Config> =
 		StorageMap<_, Blake2_128Concat, ParaId, WeakBoundedVec<u8, T::MaxPageSize>, ValueQuery>;
 
 	/// The configuration which controls the dynamics of the outbound queue.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type QueueConfig<T: Config> = StorageValue<_, QueueConfigData, ValueQuery>;
 
 	/// Whether or not the XCMP queue is suspended from executing incoming XCMs or not.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type QueueSuspended<T: Config> = StorageValue<_, bool, ValueQuery>;
 
 	/// The factor to multiply the base delivery fee by.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type DeliveryFeeFactor<T: Config> =
-		StorageMap<_, Twox64Concat, ParaId, FixedU128, ValueQuery, GetMinFeeFactor<Pallet<T>>>;
+		StorageMap<_, Twox64Concat, ParaId, FixedU128, ValueQuery, GetMinFeeFactor<Pezpallet<T>>>;
 }
 
 #[derive(Copy, Clone, Eq, PartialEq, Encode, Decode, RuntimeDebug, TypeInfo, MaxEncodedLen)]
@@ -458,7 +458,7 @@ pub enum ChannelSignal {
 	Resume,
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Place a message `fragment` on the outgoing XCMP queue for `recipient`.
 	///
 	/// Format is the type of aggregate message that the `fragment` may be safely encoded and
@@ -818,7 +818,7 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-impl<T: Config> OnQueueChanged<ParaId> for Pallet<T> {
+impl<T: Config> OnQueueChanged<ParaId> for Pezpallet<T> {
 	// Suspends/Resumes the queue when certain thresholds are reached.
 	fn on_queue_changed(para: ParaId, fp: QueueFootprint) {
 		let QueueConfigData { resume_threshold, suspend_threshold, .. } = <QueueConfig<T>>::get();
@@ -861,7 +861,7 @@ impl<T: Config> OnQueueChanged<ParaId> for Pallet<T> {
 	}
 }
 
-impl<T: Config> QueuePausedQuery<ParaId> for Pallet<T> {
+impl<T: Config> QueuePausedQuery<ParaId> for Pezpallet<T> {
 	fn is_paused(para: &ParaId) -> bool {
 		if !QueueSuspended::<T>::get() {
 			return false;
@@ -897,7 +897,7 @@ enum XcmEncoding {
 	Double,
 }
 
-impl<T: Config> XcmpMessageHandler for Pallet<T> {
+impl<T: Config> XcmpMessageHandler for Pezpallet<T> {
 	fn handle_xcmp_messages<'a, I: Iterator<Item = (ParaId, RelayBlockNumber, &'a [u8])>>(
 		iter: I,
 		max_weight: Weight,
@@ -1014,7 +1014,7 @@ impl<T: Config> XcmpMessageHandler for Pallet<T> {
 	}
 }
 
-impl<T: Config> XcmpMessageSource for Pallet<T> {
+impl<T: Config> XcmpMessageSource for Pezpallet<T> {
 	fn take_outbound_messages(maximum_channels: usize) -> Vec<(ParaId, Vec<u8>)> {
 		let mut statuses = <OutboundXcmpStatus<T>>::get();
 		let old_statuses_len = statuses.len();
@@ -1151,7 +1151,7 @@ impl<T: Config> XcmpMessageSource for Pallet<T> {
 }
 
 /// Xcm sender for sending to a sibling teyrchain.
-impl<T: Config> SendXcm for Pallet<T> {
+impl<T: Config> SendXcm for Pezpallet<T> {
 	type Ticket = (ParaId, VersionedXcm<()>);
 
 	fn validate(
@@ -1199,7 +1199,7 @@ impl<T: Config> SendXcm for Pallet<T> {
 	}
 }
 
-impl<T: Config> InspectMessageQueues for Pallet<T> {
+impl<T: Config> InspectMessageQueues for Pezpallet<T> {
 	fn clear_messages() {
 		// Best effort.
 		let _ = OutboundXcmpMessages::<T>::clear(u32::MAX, None);
@@ -1248,7 +1248,7 @@ impl<T: Config> InspectMessageQueues for Pallet<T> {
 	}
 }
 
-impl<T: Config> FeeTracker for Pallet<T> {
+impl<T: Config> FeeTracker for Pezpallet<T> {
 	type Id = ParaId;
 
 	fn get_fee_factor(id: Self::Id) -> FixedU128 {

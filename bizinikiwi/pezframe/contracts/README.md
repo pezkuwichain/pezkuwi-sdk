@@ -2,10 +2,10 @@
 
 The Contracts module provides functionality for the runtime to deploy and execute WebAssembly smart-contracts.
 
-- [`Call`](https://docs.pezkuwichain.io/bizinikiwi/master/pallet_contracts/pallet/enum.Call.html)
-- [`Config`](https://docs.pezkuwichain.io/bizinikiwi/master/pallet_contracts/pallet/trait.Config.html)
-- [`Error`](https://docs.pezkuwichain.io/bizinikiwi/master/pallet_contracts/pallet/enum.Error.html)
-- [`Event`](https://docs.pezkuwichain.io/bizinikiwi/master/pallet_contracts/pallet/enum.Event.html)
+- [`Call`](https://docs.pezkuwichain.io/bizinikiwi/master/pallet_contracts/pezpallet/enum.Call.html)
+- [`Config`](https://docs.pezkuwichain.io/bizinikiwi/master/pallet_contracts/pezpallet/trait.Config.html)
+- [`Error`](https://docs.pezkuwichain.io/bizinikiwi/master/pallet_contracts/pezpallet/enum.Error.html)
+- [`Event`](https://docs.pezkuwichain.io/bizinikiwi/master/pallet_contracts/pezpallet/enum.Event.html)
 
 ## Overview
 
@@ -52,15 +52,15 @@ constraints:
 1. No contract can ever be instantiated from an indeterministic code. The only way to execute the code is to use a
 delegate call from a deterministic contract.
 2. The code that wants to use this feature needs to depend on `pezpallet-contracts` and use
-[`bare_call()`](https://docs.pezkuwichain.io/bizinikiwi/master/pallet_contracts/pallet/struct.Pallet.html#method.bare_call)
+[`bare_call()`](https://docs.pezkuwichain.io/bizinikiwi/master/pallet_contracts/pezpallet/struct.Pezpallet.html#method.bare_call)
 directly. This makes sure that by default `pezpallet-contracts` does not expose any indeterminism.
 
 #### How to use
 
 An indeterministic code can be deployed on-chain by passing `Determinism::Relaxed` to
-[`upload_code()`](https://docs.pezkuwichain.io/bizinikiwi/master/pallet_contracts/pallet/struct.Pallet.html#method.upload_code).
+[`upload_code()`](https://docs.pezkuwichain.io/bizinikiwi/master/pallet_contracts/pezpallet/struct.Pezpallet.html#method.upload_code).
 A deterministic contract can then delegate call into it if and only if it is ran by using
-[`bare_call()`](https://docs.pezkuwichain.io/bizinikiwi/master/pallet_contracts/pallet/struct.Pallet.html#method.bare_call)
+[`bare_call()`](https://docs.pezkuwichain.io/bizinikiwi/master/pallet_contracts/pezpallet/struct.Pezpallet.html#method.bare_call)
 and passing
 [`Determinism::Relaxed`](https://docs.pezkuwichain.io/bizinikiwi/master/pallet_contracts/enum.Determinism.html#variant.Relaxed)
 to it. **Never use this argument when the contract is called from an on-chain transaction.**
@@ -145,7 +145,7 @@ cargo run --release -- --dev -lerror,runtime::contracts::strace=trace,runtime::c
 
 ## Unstable Interfaces
 
-Driven by the desire to have an iterative approach in developing new contract interfaces this pallet contains the
+Driven by the desire to have an iterative approach in developing new contract interfaces this pezpallet contains the
 concept of an unstable interface. Akin to the rust nightly compiler it allows us to add new interfaces but mark them as
 unstable so that contract languages can experiment with them and give feedback before we stabilize those.
 

@@ -21,7 +21,7 @@ use crate::{
 		create_call,
 		fees::InfoT,
 	},
-	AccountIdOf, AddressMapper, BalanceOf, CallOf, Config, Pallet, Zero, LOG_TARGET,
+	AccountIdOf, AddressMapper, BalanceOf, CallOf, Config, Pezpallet, Zero, LOG_TARGET,
 };
 use codec::{Decode, DecodeWithMemTracking, Encode};
 use pezframe_support::{
@@ -306,7 +306,7 @@ pub trait EthExtra {
 		})?;
 
 		let signer = <Self::Config as Config>::AddressMapper::to_fallback_account_id(&signer_addr);
-		let base_fee = <Pallet<Self::Config>>::evm_base_fee();
+		let base_fee = <Pezpallet<Self::Config>>::evm_base_fee();
 		let tx = GenericTransaction::from_signed(tx, base_fee, None);
 		let nonce = tx.nonce.unwrap_or_default().try_into().map_err(|_| {
 			log::debug!(target: LOG_TARGET, "Failed to convert nonce");
@@ -329,7 +329,7 @@ pub trait EthExtra {
 		<Self::Config as Config>::FeeInfo::deposit_txfee(storage_credit);
 
 		crate::tracing::if_tracing(|tracer| {
-			tracer.watch_address(&Pallet::<Self::Config>::block_author());
+			tracer.watch_address(&Pezpallet::<Self::Config>::block_author());
 			tracer.watch_address(&signer_addr);
 		});
 
@@ -430,8 +430,8 @@ mod test {
 			Self::fund_account(&account);
 
 			let dry_run =
-				crate::Pallet::<Test>::dry_run_eth_transact(self.tx.clone(), Default::default());
-			self.tx.gas_price = Some(<Pallet<Test>>::evm_base_fee());
+				crate::Pezpallet::<Test>::dry_run_eth_transact(self.tx.clone(), Default::default());
+			self.tx.gas_price = Some(<Pezpallet<Test>>::evm_base_fee());
 
 			match dry_run {
 				Ok(dry_run) => {
@@ -531,7 +531,7 @@ mod test {
 		let (expected_encoded_len, call, _, tx, gas_required, signed_transaction) =
 			builder.check().unwrap();
 		let expected_effective_gas_price =
-			ExtBuilder::default().build().execute_with(|| Pallet::<Test>::evm_base_fee());
+			ExtBuilder::default().build().execute_with(|| Pezpallet::<Test>::evm_base_fee());
 
 		match call {
 			RuntimeCall::Contracts(crate::Call::eth_call::<Test> {
@@ -569,7 +569,7 @@ mod test {
 		let (expected_encoded_len, call, _, tx, gas_required, signed_transaction) =
 			builder.check().unwrap();
 		let expected_effective_gas_price =
-			ExtBuilder::default().build().execute_with(|| Pallet::<Test>::evm_base_fee());
+			ExtBuilder::default().build().execute_with(|| Pezpallet::<Test>::evm_base_fee());
 		let expected_value = tx.value.unwrap_or_default().as_u64().into();
 
 		match call {

@@ -710,7 +710,7 @@ impl Client {
 		// This could potentially fail under below circumstances:
 		//  - state has been pruned
 		//  - the block author cannot be obtained from the digest logs (highly unlikely)
-		//  - the node we are targeting has an outdated revive pallet (or ETH block functionality is
+		//  - the node we are targeting has an outdated revive pezpallet (or ETH block functionality is
 		//    disabled)
 		match self.runtime_api(block.hash()).eth_block().await {
 			Ok(mut eth_block) => {

@@ -97,10 +97,10 @@ mod runtime {
 	pub struct Test;
 
 	#[runtime::pezpallet_index(0)]
-	pub type System = pezframe_system::Pallet<Test>;
+	pub type System = pezframe_system::Pezpallet<Test>;
 
 	#[runtime::pezpallet_index(1)]
-	pub type WeightReclaim = crate::Pallet<Test>;
+	pub type WeightReclaim = crate::Pezpallet<Test>;
 }
 
 pub struct MockWeightInfo;

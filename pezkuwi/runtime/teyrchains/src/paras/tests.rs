@@ -180,7 +180,7 @@ impl EventValidator {
 	}
 
 	fn check(&self) {
-		assert_eq!(&pezframe_system::Pallet::<Test>::events(), &self.events);
+		assert_eq!(&pezframe_system::Pezpallet::<Test>::events(), &self.events);
 	}
 }
 
@@ -943,7 +943,7 @@ fn full_teyrchain_cleanup_storage() {
 		// For that run to block #7 and submit a new head.
 		assert_eq!(expected_at, 7);
 		run_to_block(7, None);
-		assert_eq!(pezframe_system::Pallet::<Test>::block_number(), 7);
+		assert_eq!(pezframe_system::Pezpallet::<Test>::block_number(), 7);
 		Paras::note_new_head(para_id, Default::default(), expected_at);
 		AuthorizedCodeHash::<Test>::insert(
 			&para_id,
@@ -2118,7 +2118,7 @@ fn remove_upgrade_cooldown_works() {
 			.dispatch_bypass_filter(RuntimeOrigin::signed(1)));
 
 		let expected_issuance = issuance -
-			Pallet::<Test>::calculate_remove_upgrade_cooldown_cost(next_possible_upgrade_at);
+			Pezpallet::<Test>::calculate_remove_upgrade_cooldown_cost(next_possible_upgrade_at);
 		// Check that we burned the funds
 		assert_eq!(expected_issuance, Balances::total_issuance());
 
@@ -2308,7 +2308,7 @@ fn apply_authorized_force_set_current_code_works() {
 		);
 
 		// cannot apply obsolete authorization
-		pezframe_system::Pallet::<Test>::set_block_number(valid_period + 5 + 10);
+		pezframe_system::Pezpallet::<Test>::set_block_number(valid_period + 5 + 10);
 		assert_eq!(
 			apply_code(RuntimeOrigin::signed(1), para_a, code_1.clone(),),
 			(
@@ -2316,7 +2316,7 @@ fn apply_authorized_force_set_current_code_works() {
 				Err(Error::<Test>::InvalidBlockNumber.into())
 			),
 		);
-		pezframe_system::Pallet::<Test>::set_block_number(5);
+		pezframe_system::Pezpallet::<Test>::set_block_number(5);
 
 		// ok - can apply authorized code
 		let (validate_unsigned, dispatch_result) =

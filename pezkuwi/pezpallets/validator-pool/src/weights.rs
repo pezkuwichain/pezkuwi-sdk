@@ -27,9 +27,9 @@
 // Executed Command:
 // /home/mamostehp/Pezkuwi-SDK/target/release/pezkuwi
 // benchmark
-// pallet
+// pezpallet
 // --chain=dev
-// --pallet=pezpallet_validator_pool
+// --pezpallet=pezpallet_validator_pool
 // --extrinsic=*
 // --steps=50
 // --repeat=20

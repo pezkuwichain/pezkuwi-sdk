@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Mocking utilities for testing in purchase pallet.
+//! Mocking utilities for testing in purchase pezpallet.
 
 #[cfg(test)]
 use super::*;
@@ -119,7 +119,7 @@ impl Config for Test {
 }
 
 // This function basically just builds a genesis storage key/value store according to
-// our desired mockup. It also executes our `setup` function which sets up this pallet for use.
+// our desired mockup. It also executes our `setup` function which sets up this pezpallet for use.
 pub fn new_test_ext() -> pezsp_io::TestExternalities {
 	let t = pezframe_system::GenesisConfig::<Test>::default().build_storage().unwrap();
 	let mut ext = pezsp_io::TestExternalities::new(t);

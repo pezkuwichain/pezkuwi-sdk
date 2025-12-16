@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Mocking utilities for testing in auctions pallet.
+//! Mocking utilities for testing in auctions pezpallet.
 
 #[cfg(test)]
 use super::*;
@@ -182,7 +182,7 @@ impl Randomness<H256, BlockNumber> for TestPastRandomness {
 			if let Some((output, known_since)) = &*p.borrow() {
 				(*output, *known_since)
 			} else {
-				(H256::zero(), pezframe_system::Pallet::<Test>::block_number())
+				(H256::zero(), pezframe_system::Pezpallet::<Test>::block_number())
 			}
 		})
 	}

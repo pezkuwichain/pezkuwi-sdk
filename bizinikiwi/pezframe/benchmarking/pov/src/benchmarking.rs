@@ -23,7 +23,7 @@ use super::*;
 
 use pezframe_benchmarking::v2::*;
 use pezframe_support::traits::UnfilteredDispatchable;
-use pezframe_system::{Pallet as System, RawOrigin};
+use pezframe_system::{Pezpallet as System, RawOrigin};
 use pezsp_runtime::traits::Hash;
 
 #[benchmarks]
@@ -392,7 +392,7 @@ mod benchmarks {
 		}
 	}
 
-	impl_benchmark_test_suite!(Pallet, super::mock::new_test_ext(), super::mock::Test,);
+	impl_benchmark_test_suite!(Pezpallet, super::mock::new_test_ext(), super::mock::Test,);
 }
 
 #[cfg(test)]

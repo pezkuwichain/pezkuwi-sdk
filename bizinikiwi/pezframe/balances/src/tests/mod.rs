@@ -20,7 +20,7 @@
 #![cfg(test)]
 
 use crate::{
-	self as pezpallet_balances, AccountData, Config, CreditOf, Error, Pallet, TotalIssuance,
+	self as pezpallet_balances, AccountData, Config, CreditOf, Error, Pezpallet, TotalIssuance,
 	DEFAULT_ADDRESS_URI,
 };
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
@@ -109,7 +109,7 @@ impl pezframe_system::Config for Test {
 #[derive_impl(pezpallet_transaction_payment::config_preludes::TestDefaultConfig)]
 impl pezpallet_transaction_payment::Config for Test {
 	type RuntimeEvent = RuntimeEvent;
-	type OnChargeTransaction = FungibleAdapter<Pallet<Test>, ()>;
+	type OnChargeTransaction = FungibleAdapter<Pezpallet<Test>, ()>;
 	type OperationalFeeMultiplier = ConstU8<5>;
 	type WeightToFee = IdentityFee<u64>;
 	type LengthToFee = IdentityFee<u64>;
@@ -239,7 +239,7 @@ parameter_types! {
 }
 
 type BalancesAccountStore = StorageMapShim<super::Account<Test>, u64, super::AccountData<u64>>;
-type SystemAccountStore = pezframe_system::Pallet<Test>;
+type SystemAccountStore = pezframe_system::Pezpallet<Test>;
 
 pub struct TestAccountStore;
 impl StoredMap<u64, super::AccountData<u64>> for TestAccountStore {
@@ -336,9 +336,9 @@ pub fn ensure_ti_valid() {
 			continue;
 		}
 
-		// Check if we are using the system pallet or some other custom storage for accounts.
+		// Check if we are using the system pezpallet or some other custom storage for accounts.
 		if UseSystem::get() {
-			let data = pezframe_system::Pallet::<Test>::account(acc);
+			let data = pezframe_system::Pezpallet::<Test>::account(acc);
 			sum += data.data.total();
 		} else {
 			let data = crate::Account::<Test>::get(acc);
@@ -371,7 +371,7 @@ fn check_whitelist() {
 	assert!(whitelist.contains("c2261276cc9d1f8598ea4b6a74b15c2f57c875e4cff74148e4628f264b974c80"));
 }
 
-/// This pallet runs tests twice, once with system as `type AccountStore` and once this pallet. This
+/// This pezpallet runs tests twice, once with system as `type AccountStore` and once this pezpallet. This
 /// function will return the right value based on the `UseSystem` flag.
 pub(crate) fn get_test_account_data(who: AccountId) -> AccountData<Balance> {
 	if UseSystem::get() {

@@ -2,9 +2,9 @@
 
 The Timestamp module provides functionality to get and set the on-chain time.
 
-- [`timestamp::Config`](https://docs.rs/pezpallet-timestamp/latest/pallet_timestamp/pallet/trait.Config.html)
-- [`Call`](https://docs.rs/pezpallet-timestamp/latest/pallet_timestamp/pallet/enum.Call.html)
-- [`Pallet`](https://docs.rs/pezpallet-timestamp/latest/pallet_timestamp/pallet/struct.Pallet.html)
+- [`timestamp::Config`](https://docs.rs/pezpallet-timestamp/latest/pallet_timestamp/pezpallet/trait.Config.html)
+- [`Call`](https://docs.rs/pezpallet-timestamp/latest/pallet_timestamp/pezpallet/enum.Call.html)
+- [`Pezpallet`](https://docs.rs/pezpallet-timestamp/latest/pallet_timestamp/pezpallet/struct.Pezpallet.html)
 
 ## Overview
 
@@ -47,24 +47,24 @@ trait from the timestamp trait.
 ```rust
 use pallet_timestamp::{self as timestamp};
 
-#[frame_support::pallet]
-pub mod pallet {
+#[frame_support::pezpallet]
+pub mod pezpallet {
     use super::*;
     use frame_support::pallet_prelude::*;
     use frame_system::pallet_prelude::*;
 
-    #[pallet::pallet]
-    pub struct Pallet<T>(_);
+    #[pezpallet::pezpallet]
+    pub struct Pezpallet<T>(_);
 
-    #[pallet::config]
+    #[pezpallet::config]
     pub trait Config: frame_system::Config + timestamp::Config {}
 
-    #[pallet::call]
-    impl<T: Config> Pallet<T> {
-        #[pallet::weight(0)]
+    #[pezpallet::call]
+    impl<T: Config> Pezpallet<T> {
+        #[pezpallet::weight(0)]
         pub fn get_time(origin: OriginFor<T>) -> DispatchResult {
             let _sender = ensure_signed(origin)?;
-            let _now = <timestamp::Pallet<T>>::get();
+            let _now = <timestamp::Pezpallet<T>>::get();
             Ok(())
         }
     }

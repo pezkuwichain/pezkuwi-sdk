@@ -1,4 +1,4 @@
-# HRMP Pallet
+# HRMP Pezpallet
 
 A module responsible for Horizontally Relay-routed Message Passing (HRMP). See [Messaging Overview](../messaging.md) for
 more details.

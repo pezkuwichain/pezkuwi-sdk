@@ -20,43 +20,43 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 #[docify::export]
-#[frame::pallet(dev_mode)]
+#[frame::pezpallet(dev_mode)]
 pub mod shell_pallet {
 	use frame::prelude::*;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 }
 
-#[frame::pallet(dev_mode)]
-pub mod pallet {
+#[frame::pezpallet(dev_mode)]
+pub mod pezpallet {
 	use frame::prelude::*;
 
 	#[docify::export]
 	pub type Balance = u128;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
 	#[docify::export]
 	/// Single storage item, of type `Balance`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type TotalIssuance<T: Config> = StorageValue<_, Balance>;
 
 	#[docify::export]
 	/// A mapping from `T::AccountId` to `Balance`
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Balances<T: Config> = StorageMap<_, _, T::AccountId, Balance>;
 
 	#[docify::export(impl_pallet)]
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// An unsafe mint that can be called by anyone. Not a great idea.
 		pub fn mint_unsafe(
 			origin: T::RuntimeOrigin,
@@ -98,7 +98,7 @@ pub mod pallet {
 	}
 
 	#[allow(unused)]
-	impl<T: Config> Pallet<T> {
+	impl<T: Config> Pezpallet<T> {
 		#[docify::export]
 		pub fn transfer_better(
 			origin: T::RuntimeOrigin,
@@ -134,7 +134,7 @@ pub mod pallet {
 
 	#[cfg(any(test, doc))]
 	pub(crate) mod tests {
-		use crate::pallet::*;
+		use crate::pezpallet::*;
 
 		#[docify::export(testing_prelude)]
 		use frame::testing_prelude::*;
@@ -148,10 +148,10 @@ pub mod pallet {
 		// tests { .. }`
 		mod runtime {
 			use super::*;
-			// we need to reference our `mod pallet` as an identifier to pass to
+			// we need to reference our `mod pezpallet` as an identifier to pass to
 			// `construct_runtime`.
 			// YOU HAVE TO CHANGE THIS LINE BASED ON YOUR TEMPLATE
-			use crate::pallet as pezpallet_currency;
+			use crate::pezpallet as pezpallet_currency;
 
 			construct_runtime!(
 				pub enum Runtime {
@@ -164,12 +164,12 @@ pub mod pallet {
 			#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
 			impl pezframe_system::Config for Runtime {
 				type Block = MockBlock<Runtime>;
-				// within pallet we just said `<T as pezframe_system::Config>::AccountId`, now we
+				// within pezpallet we just said `<T as pezframe_system::Config>::AccountId`, now we
 				// finally specified it.
 				type AccountId = u64;
 			}
 
-			// our simple pallet has nothing to be configured.
+			// our simple pezpallet has nothing to be configured.
 			impl pezpallet_currency::Config for Runtime {}
 		}
 
@@ -246,7 +246,7 @@ pub mod pallet {
 				assert_eq!(TotalIssuance::<Runtime>::get(), None);
 
 				// mint some funds into Alice's account.
-				assert_ok!(Pallet::<Runtime>::mint_unsafe(
+				assert_ok!(Pezpallet::<Runtime>::mint_unsafe(
 					RuntimeOrigin::signed(ALICE),
 					ALICE,
 					100
@@ -295,14 +295,14 @@ pub mod pallet {
 		fn mint_works() {
 			StateBuilder::default().build_and_execute(|| {
 				// given the initial state, when:
-				assert_ok!(Pallet::<Runtime>::mint_unsafe(RuntimeOrigin::signed(ALICE), BOB, 100));
+				assert_ok!(Pezpallet::<Runtime>::mint_unsafe(RuntimeOrigin::signed(ALICE), BOB, 100));
 
 				// then:
 				assert_eq!(Balances::<Runtime>::get(&BOB), Some(200));
 				assert_eq!(TotalIssuance::<Runtime>::get(), Some(300));
 
 				// given:
-				assert_ok!(Pallet::<Runtime>::mint_unsafe(
+				assert_ok!(Pezpallet::<Runtime>::mint_unsafe(
 					RuntimeOrigin::signed(ALICE),
 					CHARLIE,
 					100
@@ -319,7 +319,7 @@ pub mod pallet {
 		fn transfer_works() {
 			StateBuilder::default().build_and_execute(|| {
 				// given the initial state, when:
-				assert_ok!(Pallet::<Runtime>::transfer(RuntimeOrigin::signed(ALICE), BOB, 50));
+				assert_ok!(Pezpallet::<Runtime>::transfer(RuntimeOrigin::signed(ALICE), BOB, 50));
 
 				// then:
 				assert_eq!(Balances::<Runtime>::get(&ALICE), Some(50));
@@ -327,7 +327,7 @@ pub mod pallet {
 				assert_eq!(TotalIssuance::<Runtime>::get(), Some(200));
 
 				// when:
-				assert_ok!(Pallet::<Runtime>::transfer(RuntimeOrigin::signed(BOB), ALICE, 50));
+				assert_ok!(Pezpallet::<Runtime>::transfer(RuntimeOrigin::signed(BOB), ALICE, 50));
 
 				// then:
 				assert_eq!(Balances::<Runtime>::get(&ALICE), Some(100));
@@ -342,7 +342,7 @@ pub mod pallet {
 			StateBuilder::default().build_and_execute(|| {
 				// given the initial state, when:
 				assert_err!(
-					Pallet::<Runtime>::transfer(RuntimeOrigin::signed(CHARLIE), ALICE, 10),
+					Pezpallet::<Runtime>::transfer(RuntimeOrigin::signed(CHARLIE), ALICE, 10),
 					"NonExistentAccount"
 				);
 
@@ -356,13 +356,13 @@ pub mod pallet {
 	}
 }
 
-#[frame::pallet(dev_mode)]
+#[frame::pezpallet(dev_mode)]
 pub mod pezpallet_v2 {
-	use super::pallet::Balance;
+	use super::pezpallet::Balance;
 	use frame::prelude::*;
 
 	#[docify::export(config_v2)]
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type of the runtime.
 		#[allow(deprecated)]
@@ -371,17 +371,17 @@ pub mod pezpallet_v2 {
 			+ TryInto<Event<Self>>;
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Balances<T: Config> = StorageMap<_, _, T::AccountId, Balance>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type TotalIssuance<T: Config> = StorageValue<_, Balance>;
 
 	#[docify::export]
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Account does not exist.
 		NonExistentAccount,
@@ -390,15 +390,15 @@ pub mod pezpallet_v2 {
 	}
 
 	#[docify::export]
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A transfer succeeded.
 		Transferred { from: T::AccountId, to: T::AccountId, amount: Balance },
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		#[docify::export(transfer_v2)]
 		pub fn transfer(
 			origin: T::RuntimeOrigin,
@@ -424,7 +424,7 @@ pub mod pezpallet_v2 {
 
 	#[cfg(any(test, doc))]
 	pub mod tests {
-		use super::{super::pallet::tests::StateBuilder, *};
+		use super::{super::pezpallet::tests::StateBuilder, *};
 		use frame::testing_prelude::*;
 		const ALICE: u64 = 1;
 		const BOB: u64 = 2;
@@ -463,7 +463,7 @@ pub mod pezpallet_v2 {
 				System::set_block_number(ALICE);
 
 				// given the initial state, when:
-				assert_ok!(Pallet::<Runtime>::transfer(RuntimeOrigin::signed(ALICE), BOB, 50));
+				assert_ok!(Pezpallet::<Runtime>::transfer(RuntimeOrigin::signed(ALICE), BOB, 50));
 
 				// then:
 				assert_eq!(Balances::<Runtime>::get(&ALICE), Some(50));

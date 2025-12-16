@@ -27,10 +27,10 @@
 // frame-omni-bencher
 // v1
 // benchmark
-// pallet
+// pezpallet
 // --extrinsic=all
 // --runtime=target/production/wbuild/pez-kitchensink-runtime/pez_kitchensink_runtime.wasm
-// --pallet=pezpallet_oracle
+// --pezpallet=pezpallet_oracle
 // --header=bizinikiwi/HEADER-APACHE2
 // --output=bizinikiwi/pezframe/honzon/oracle/src/weights.rs
 // --wasm-execution=compiled

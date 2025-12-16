@@ -1229,47 +1229,47 @@ path = "../bizinikiwi/utils/binary-merkle-tree"
 [dependencies.bp-header-pez-chain]
 default-features = false
 optional = true
-path = "../bridges/primitives/header-chain"
+path = "../pezbridges/primitives/header-chain"
 
 [dependencies.bp-messages]
 default-features = false
 optional = true
-path = "../bridges/primitives/messages"
+path = "../pezbridges/primitives/messages"
 
 [dependencies.bp-pezkuwi-core]
 default-features = false
 optional = true
-path = "../bridges/primitives/pezkuwi-core"
+path = "../pezbridges/primitives/pezkuwi-core"
 
 [dependencies.bp-relayers]
 default-features = false
 optional = true
-path = "../bridges/primitives/relayers"
+path = "../pezbridges/primitives/relayers"
 
 [dependencies.pezbp-runtime]
 default-features = false
 optional = true
-path = "../bridges/primitives/runtime"
+path = "../pezbridges/primitives/runtime"
 
 [dependencies.bp-test-utils]
 default-features = false
 optional = true
-path = "../bridges/primitives/test-utils"
+path = "../pezbridges/primitives/test-utils"
 
 [dependencies.bp-teyrchains]
 default-features = false
 optional = true
-path = "../bridges/primitives/teyrchains"
+path = "../pezbridges/primitives/teyrchains"
 
 [dependencies.bp-xcm-bridge-hub]
 default-features = false
 optional = true
-path = "../bridges/primitives/xcm-bridge-hub"
+path = "../pezbridges/primitives/xcm-bridge-hub"
 
 [dependencies.bp-xcm-bridge-hub-router]
 default-features = false
 optional = true
-path = "../bridges/primitives/xcm-bridge-hub-router"
+path = "../pezbridges/primitives/xcm-bridge-hub-router"
 
 [dependencies.bridge-hub-common]
 default-features = false
@@ -1279,7 +1279,7 @@ path = "../pezcumulus/teyrchains/runtimes/bridge-hubs/common"
 [dependencies.pezbridge-runtime-common]
 default-features = false
 optional = true
-path = "../bridges/bin/runtime-common"
+path = "../pezbridges/bin/runtime-common"
 
 [dependencies.pezcumulus-pezpallet-aura-ext]
 default-features = false
@@ -1544,22 +1544,22 @@ path = "../bizinikiwi/pezframe/bounties"
 [dependencies.pezpallet-bridge-grandpa]
 default-features = false
 optional = true
-path = "../bridges/modules/grandpa"
+path = "../pezbridges/modules/grandpa"
 
 [dependencies.pezpallet-bridge-messages]
 default-features = false
 optional = true
-path = "../bridges/modules/messages"
+path = "../pezbridges/modules/messages"
 
 [dependencies.pezpallet-bridge-relayers]
 default-features = false
 optional = true
-path = "../bridges/modules/relayers"
+path = "../pezbridges/modules/relayers"
 
 [dependencies.pezpallet-bridge-teyrchains]
 default-features = false
 optional = true
-path = "../bridges/modules/teyrchains"
+path = "../pezbridges/modules/teyrchains"
 
 [dependencies.pezpallet-broker]
 default-features = false
@@ -2044,12 +2044,12 @@ path = "../pezkuwi/xcm/pezpallet-xcm-benchmarks"
 [dependencies.pezpallet-xcm-bridge-hub]
 default-features = false
 optional = true
-path = "../bridges/modules/xcm-bridge-hub"
+path = "../pezbridges/modules/xcm-bridge-hub"
 
 [dependencies.pezpallet-xcm-bridge-hub-router]
 default-features = false
 optional = true
-path = "../bridges/modules/xcm-bridge-hub-router"
+path = "../pezbridges/modules/xcm-bridge-hub-router"
 
 [dependencies.pezpallet-xcm-precompiles]
 default-features = false

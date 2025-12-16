@@ -56,16 +56,16 @@ use pezsp_staking::{offence::OffenceReportSystem, SessionIndex};
 
 use crate::equivocation::EquivocationEvidenceFor;
 pub use crate::equivocation::{EquivocationOffence, EquivocationReportSystem, TimeSlot};
-pub use pallet::*;
+pub use pezpallet::*;
 
 const LOG_TARGET: &str = "runtime::beefy";
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_system::{ensure_root, pezpallet_prelude::BlockNumberFor};
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// Authority identifier type
 		type BeefyId: Member
@@ -76,11 +76,11 @@ pub mod pallet {
 			+ MaxEncodedLen;
 
 		/// The maximum number of authorities that can be added.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxAuthorities: Get<u32>;
 
 		/// The maximum number of nominators for each validator.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxNominators: Get<u32>;
 
 		/// The maximum number of entries to keep in the set id to session index mapping.
@@ -89,7 +89,7 @@ pub mod pallet {
 		/// value should relate to the bonding duration of whatever staking system is
 		/// being used (if any). If equivocation handling is not enabled then this value
 		/// can be zero.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxSetIdSessionEntries: Get<u64>;
 
 		/// A hook to act on the new BEEFY validator set.
@@ -103,7 +103,7 @@ pub mod pallet {
 		type AncestryHelper: AncestryHelper<HeaderFor<Self>>
 			+ AncestryHelperWeightInfo<HeaderFor<Self>>;
 
-		/// Weights for this pallet.
+		/// Weights for this pezpallet.
 		type WeightInfo: WeightInfo;
 
 		/// The proof of key ownership, used for validating equivocation reports
@@ -120,21 +120,21 @@ pub mod pallet {
 		>;
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
 	/// The current authorities set
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Authorities<T: Config> =
 		StorageValue<_, BoundedVec<T::BeefyId, T::MaxAuthorities>, ValueQuery>;
 
 	/// The current validator set id
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ValidatorSetId<T: Config> =
 		StorageValue<_, pezsp_consensus_beefy::ValidatorSetId, ValueQuery>;
 
 	/// Authorities set scheduled to be used with the next session
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type NextAuthorities<T: Config> =
 		StorageValue<_, BoundedVec<T::BeefyId, T::MaxAuthorities>, ValueQuery>;
 
@@ -148,17 +148,17 @@ pub mod pallet {
 	/// during that session.
 	///
 	/// TWOX-NOTE: `ValidatorSetId` is not under user control.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type SetIdSession<T: Config> =
 		StorageMap<_, Twox64Concat, pezsp_consensus_beefy::ValidatorSetId, SessionIndex>;
 
 	/// Block number where BEEFY consensus is enabled/started.
 	/// By changing this (through privileged `set_new_genesis()`), BEEFY consensus is effectively
 	/// restarted from the newly set block number.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type GenesisBlock<T: Config> = StorageValue<_, Option<BlockNumberFor<T>>, ValueQuery>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	pub struct GenesisConfig<T: Config> {
 		/// Initial set of BEEFY authorities.
 		pub authorities: Vec<T::BeefyId>,
@@ -178,10 +178,10 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
-			Pallet::<T>::initialize(&self.authorities)
+			Pezpallet::<T>::initialize(&self.authorities)
 				// we panic here as runtime maintainers can simply reconfigure genesis and restart
 				// the chain easily
 				.expect("Authorities vec too big");
@@ -189,7 +189,7 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// A key ownership proof provided as part of an equivocation report is invalid.
 		InvalidKeyOwnershipProof,
@@ -209,14 +209,14 @@ pub mod pallet {
 		InvalidConfiguration,
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Report voter equivocation/misbehavior. This method will verify the
 		/// equivocation proof and validate the given key ownership proof
 		/// against the extracted offender. If both are valid, the offence
 		/// will be reported.
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::report_double_voting(
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::report_double_voting(
 			key_owner_proof.validator_count(),
 			T::MaxNominators::get(),
 		))]
@@ -250,8 +250,8 @@ pub mod pallet {
 		/// block authors will call it (validated in `ValidateUnsigned`), as such
 		/// if the block author is defined it will be defined as the equivocation
 		/// reporter.
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::report_double_voting(
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::report_double_voting(
 			key_owner_proof.validator_count(),
 			T::MaxNominators::get(),
 		))]
@@ -279,15 +279,15 @@ pub mod pallet {
 		/// future.
 		///
 		/// Note: `delay_in_blocks` has to be at least 1.
-		#[pallet::call_index(2)]
-		#[pallet::weight(<T as Config>::WeightInfo::set_new_genesis())]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::set_new_genesis())]
 		pub fn set_new_genesis(
 			origin: OriginFor<T>,
 			delay_in_blocks: BlockNumberFor<T>,
 		) -> DispatchResult {
 			ensure_root(origin)?;
 			ensure!(delay_in_blocks >= One::one(), Error::<T>::InvalidConfiguration);
-			let genesis_block = pezframe_system::Pallet::<T>::block_number() + delay_in_blocks;
+			let genesis_block = pezframe_system::Pezpallet::<T>::block_number() + delay_in_blocks;
 			GenesisBlock::<T>::put(Some(genesis_block));
 			Ok(())
 		}
@@ -295,8 +295,8 @@ pub mod pallet {
 		/// Report fork voting equivocation. This method will verify the equivocation proof
 		/// and validate the given key ownership proof against the extracted offender.
 		/// If both are valid, the offence will be reported.
-		#[pallet::call_index(3)]
-		#[pallet::weight(T::WeightInfo::report_fork_voting::<T>(
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(T::WeightInfo::report_fork_voting::<T>(
 			key_owner_proof.validator_count(),
 			T::MaxNominators::get(),
 			&equivocation_proof.ancestry_proof
@@ -330,8 +330,8 @@ pub mod pallet {
 		/// block authors will call it (validated in `ValidateUnsigned`), as such
 		/// if the block author is defined it will be defined as the equivocation
 		/// reporter.
-		#[pallet::call_index(4)]
-		#[pallet::weight(T::WeightInfo::report_fork_voting::<T>(
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(T::WeightInfo::report_fork_voting::<T>(
 			key_owner_proof.validator_count(),
 			T::MaxNominators::get(),
 			&equivocation_proof.ancestry_proof
@@ -360,8 +360,8 @@ pub mod pallet {
 		/// Report future block voting equivocation. This method will verify the equivocation proof
 		/// and validate the given key ownership proof against the extracted offender.
 		/// If both are valid, the offence will be reported.
-		#[pallet::call_index(5)]
-		#[pallet::weight(T::WeightInfo::report_future_block_voting(
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(T::WeightInfo::report_future_block_voting(
 			key_owner_proof.validator_count(),
 			T::MaxNominators::get(),
 		))]
@@ -391,8 +391,8 @@ pub mod pallet {
 		/// block authors will call it (validated in `ValidateUnsigned`), as such
 		/// if the block author is defined it will be defined as the equivocation
 		/// reporter.
-		#[pallet::call_index(6)]
-		#[pallet::weight(T::WeightInfo::report_future_block_voting(
+		#[pezpallet::call_index(6)]
+		#[pezpallet::weight(T::WeightInfo::report_future_block_voting(
 			key_owner_proof.validator_count(),
 			T::MaxNominators::get(),
 		))]
@@ -415,16 +415,16 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		#[cfg(feature = "try-runtime")]
 		fn try_state(_n: BlockNumberFor<T>) -> Result<(), pezsp_runtime::TryRuntimeError> {
 			Self::do_try_state()
 		}
 	}
 
-	#[pallet::validate_unsigned]
-	impl<T: Config> ValidateUnsigned for Pallet<T> {
+	#[pezpallet::validate_unsigned]
+	impl<T: Config> ValidateUnsigned for Pezpallet<T> {
 		type Call = Call<T>;
 
 		fn pre_dispatch(call: &Self::Call) -> Result<(), TransactionValidityError> {
@@ -480,10 +480,10 @@ pub mod pallet {
 }
 
 #[cfg(any(feature = "try-runtime", test))]
-impl<T: Config> Pallet<T> {
-	/// Ensure the correctness of the state of this pallet.
+impl<T: Config> Pezpallet<T> {
+	/// Ensure the correctness of the state of this pezpallet.
 	///
-	/// This should be valid before or after each state transition of this pallet.
+	/// This should be valid before or after each state transition of this pezpallet.
 	pub fn do_try_state() -> Result<(), pezsp_runtime::TryRuntimeError> {
 		Self::try_state_authorities()?;
 		Self::try_state_validators()?;
@@ -499,7 +499,7 @@ impl<T: Config> Pallet<T> {
 		if let Some(authorities_len) = <Authorities<T>>::decode_len() {
 			ensure!(
 				authorities_len as u32 <= T::MaxAuthorities::get(),
-				"Authorities number exceeds what the pallet config allows."
+				"Authorities number exceeds what the pezpallet config allows."
 			);
 		} else {
 			return Err(pezsp_runtime::TryRuntimeError::Other(
@@ -510,7 +510,7 @@ impl<T: Config> Pallet<T> {
 		if let Some(next_authorities_len) = <NextAuthorities<T>>::decode_len() {
 			ensure!(
 				next_authorities_len as u32 <= T::MaxAuthorities::get(),
-				"Next authorities number exceeds what the pallet config allows."
+				"Next authorities number exceeds what the pezpallet config allows."
 			);
 		} else {
 			return Err(pezsp_runtime::TryRuntimeError::Other(
@@ -533,7 +533,7 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Return the current active BEEFY validator set.
 	pub fn validator_set() -> Option<ValidatorSet<T::BeefyId>> {
 		let validators: BoundedVec<T::BeefyId, T::MaxAuthorities> = Authorities::<T>::get();
@@ -606,7 +606,7 @@ impl<T: Config> Pallet<T> {
 				BEEFY_ENGINE_ID,
 				ConsensusLog::AuthoritiesChange(validator_set.clone()).encode(),
 			);
-			pezframe_system::Pallet::<T>::deposit_log(log);
+			pezframe_system::Pezpallet::<T>::deposit_log(log);
 
 			let next_id = new_id + 1;
 			if let Some(next_validator_set) = ValidatorSet::<T::BeefyId>::new(queued, next_id) {
@@ -658,11 +658,11 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-impl<T: Config> pezsp_runtime::BoundToRuntimeAppPublic for Pallet<T> {
+impl<T: Config> pezsp_runtime::BoundToRuntimeAppPublic for Pezpallet<T> {
 	type Public = T::BeefyId;
 }
 
-impl<T: Config> OneSessionHandler<T::AccountId> for Pallet<T>
+impl<T: Config> OneSessionHandler<T::AccountId> for Pezpallet<T>
 where
 	T: pezpallet_session::Config,
 {
@@ -712,7 +712,7 @@ where
 
 		let validator_set_id = ValidatorSetId::<T>::get();
 		// Update the mapping for the new set id that corresponds to the latest session (i.e. now).
-		let session_index = pezpallet_session::Pallet::<T>::current_index();
+		let session_index = pezpallet_session::Pezpallet::<T>::current_index();
 		SetIdSession::<T>::insert(validator_set_id, &session_index);
 		// Prune old entry if limit reached.
 		let max_set_id_session_entries = T::MaxSetIdSessionEntries::get().max(1);
@@ -727,11 +727,11 @@ where
 			ConsensusLog::<T::BeefyId>::OnDisabled(i as AuthorityIndex).encode(),
 		);
 
-		pezframe_system::Pallet::<T>::deposit_log(log);
+		pezframe_system::Pezpallet::<T>::deposit_log(log);
 	}
 }
 
-impl<T: Config> IsMember<T::BeefyId> for Pallet<T> {
+impl<T: Config> IsMember<T::BeefyId> for Pezpallet<T> {
 	fn is_member(authority_id: &T::BeefyId) -> bool {
 		Authorities::<T>::get().iter().any(|id| id == authority_id)
 	}

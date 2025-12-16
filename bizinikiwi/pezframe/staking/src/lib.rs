@@ -15,17 +15,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Staking Pallet
+//! # Staking Pezpallet
 //!
-//! The Staking pallet is used to manage funds at stake by network maintainers.
+//! The Staking pezpallet is used to manage funds at stake by network maintainers.
 //!
 //! - [`Config`]
 //! - [`Call`]
-//! - [`Pallet`]
+//! - [`Pezpallet`]
 //!
 //! ## Overview
 //!
-//! The Staking pallet is the means by which a set of network maintainers (known as _authorities_ in
+//! The Staking pezpallet is the means by which a set of network maintainers (known as _authorities_ in
 //! some contexts and _validators_ in others) are chosen based upon those who voluntarily place
 //! funds under deposit. Under deposit, those funds are rewarded under normal operation but are held
 //! at pain of _slash_ (expropriation) should the staked maintainer be found not to be discharging
@@ -59,10 +59,10 @@
 //!
 //! #### Staking
 //!
-//! Almost any interaction with the Staking pallet requires a process of _**bonding**_ (also known
+//! Almost any interaction with the Staking pezpallet requires a process of _**bonding**_ (also known
 //! as being a _staker_). To become *bonded*, a fund-holding register known as the _stash account_,
 //! which holds some or all of the funds that become frozen in place as part of the staking process.
-//! The controller account, which this pallet now assigns the stash account to, issues instructions
+//! The controller account, which this pezpallet now assigns the stash account to, issues instructions
 //! on how funds shall be used.
 //!
 //! An account can become a bonded stash account using the [`bond`](Call::bond) call.
@@ -108,7 +108,7 @@
 //!
 //! #### Rewards and Slash
 //!
-//! The **reward and slashing** procedure is the core of the Staking pallet, attempting to _embrace
+//! The **reward and slashing** procedure is the core of the Staking pezpallet, attempting to _embrace
 //! valid behavior_ while _punishing any misbehavior or lack of availability_.
 //!
 //! Rewards must be claimed for each era before it gets too old by
@@ -124,7 +124,7 @@
 //! determined, a value is deducted from the balance of the validator and all the nominators who
 //! voted for this validator (values are deducted from the _stash_ account of the slashed entity).
 //!
-//! Slashing logic is further described in the documentation of the `slashing` pallet.
+//! Slashing logic is further described in the documentation of the `slashing` pezpallet.
 //!
 //! Similar to slashing, rewards are also shared among a validator and its associated nominators.
 //! Yet, the reward funds are not always transferred to the stash account and can be configured. See
@@ -140,19 +140,19 @@
 //!
 //! ### Session managing
 //!
-//! The pallet implement the trait `SessionManager`. Which is the only API to query new validator
+//! The pezpallet implement the trait `SessionManager`. Which is the only API to query new validator
 //! set and allowing these validator set to be rewarded once their era is ended.
 //!
 //! ## Interface
 //!
 //! ### Dispatchable Functions
 //!
-//! The dispatchable functions of the Staking pallet enable the steps needed for entities to accept
-//! and change their role, alongside some helper functions to get/set the metadata of the pallet.
+//! The dispatchable functions of the Staking pezpallet enable the steps needed for entities to accept
+//! and change their role, alongside some helper functions to get/set the metadata of the pezpallet.
 //!
 //! ### Public Functions
 //!
-//! The Staking pallet contains many public storage items and (im)mutable functions.
+//! The Staking pezpallet contains many public storage items and (im)mutable functions.
 //!
 //! ## Usage
 //!
@@ -162,26 +162,26 @@
 //! use pezpallet_staking::{self as staking};
 //! use pezframe_support::traits::RewardsReporter;
 //!
-//! #[pezframe_support::pallet(dev_mode)]
-//! pub mod pallet {
+//! #[pezframe_support::pezpallet(dev_mode)]
+//! pub mod pezpallet {
 //!   use super::*;
 //!   use pezframe_support::pezpallet_prelude::*;
 //!   use pezframe_system::pezpallet_prelude::*;
 //!   # use pezframe_support::traits::RewardsReporter;
 //!
-//!   #[pallet::pallet]
-//!   pub struct Pallet<T>(_);
+//!   #[pezpallet::pezpallet]
+//!   pub struct Pezpallet<T>(_);
 //!
-//!   #[pallet::config]
+//!   #[pezpallet::config]
 //!   pub trait Config: pezframe_system::Config + staking::Config {}
 //!
-//!   #[pallet::call]
-//!   impl<T: Config> Pallet<T> {
+//!   #[pezpallet::call]
+//!   impl<T: Config> Pezpallet<T> {
 //!         /// Reward a validator.
-//!         #[pallet::weight(0)]
+//!         #[pezpallet::weight(0)]
 //!         pub fn reward_myself(origin: OriginFor<T>) -> DispatchResult {
 //!             let reported = ensure_signed(origin)?;
-//!             <staking::Pallet<T>>::reward_by_ids(vec![(reported, 10)]);
+//!             <staking::Pezpallet<T>>::reward_by_ids(vec![(reported, 10)]);
 //!             Ok(())
 //!         }
 //!     }
@@ -222,9 +222,9 @@
 //!
 //! Total reward is split among validators and their nominators depending on the number of points
 //! they received during the era. Points are added to a validator using the method
-//! [`pezframe_support::traits::RewardsReporter::reward_by_ids`] implemented by the [`Pallet`].
+//! [`pezframe_support::traits::RewardsReporter::reward_by_ids`] implemented by the [`Pezpallet`].
 //!
-//! [`Pallet`] implements [`pezpallet_authorship::EventHandler`] to add reward points to block producer
+//! [`Pezpallet`] implements [`pezpallet_authorship::EventHandler`] to add reward points to block producer
 //! and block producer of referenced uncles.
 //!
 //! The validator and its nominator split their reward as following:
@@ -275,14 +275,14 @@
 //!
 //! ## GenesisConfig
 //!
-//! The Staking pallet depends on the [`GenesisConfig`]. The `GenesisConfig` is optional and allow
+//! The Staking pezpallet depends on the [`GenesisConfig`]. The `GenesisConfig` is optional and allow
 //! to set some initial stakers.
 //!
 //! ## Related Modules
 //!
 //! - [Balances](../pezpallet_balances/index.html): Used to manage values at stake.
 //! - [Session](../pezpallet_session/index.html): Used to manage sessions. Also, a list of new
-//!   validators is stored in the Session pallet's `Validators` at the end of each era.
+//!   validators is stored in the Session pezpallet's `Validators` at the end of each era.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 #![recursion_limit = "256"]
@@ -305,7 +305,7 @@ pub mod migrations;
 pub mod slashing;
 pub mod weights;
 
-mod pallet;
+mod pezpallet;
 
 extern crate alloc;
 
@@ -334,7 +334,7 @@ use pezsp_staking::{
 pub use pezsp_staking::{Exposure, IndividualExposure, StakerStatus};
 pub use weights::WeightInfo;
 
-pub use pallet::{pallet::*, UseNominatorsAndValidatorsMap, UseValidatorsMap};
+pub use pezpallet::{pezpallet::*, UseNominatorsAndValidatorsMap, UseValidatorsMap};
 
 pub(crate) const STAKING_ID: LockIdentifier = *b"staking ";
 pub(crate) const LOG_TARGET: &str = "runtime::staking";
@@ -345,12 +345,12 @@ macro_rules! log {
 	($level:tt, $patter:expr $(, $values:expr)* $(,)?) => {
 		log::$level!(
 			target: crate::LOG_TARGET,
-			concat!("[{:?}] 💸 ", $patter), <pezframe_system::Pallet<T>>::block_number() $(, $values)*
+			concat!("[{:?}] 💸 ", $patter), <pezframe_system::Pezpallet<T>>::block_number() $(, $values)*
 		)
 	};
 }
 
-/// Alias for the maximum number of winners (aka. active validators), as defined in by this pallet's
+/// Alias for the maximum number of winners (aka. active validators), as defined in by this pezpallet's
 /// config.
 pub type MaxWinnersOf<T> = <T as Config>::MaxValidatorSet;
 
@@ -364,7 +364,7 @@ pub type MaxNominationsOf<T> =
 /// Counter for the number of "reward" points earned by a given validator.
 pub type RewardPoint = u32;
 
-/// The balance type of this pallet.
+/// The balance type of this pezpallet.
 pub type BalanceOf<T> = <T as Config>::CurrencyBalance;
 
 type PositiveImbalanceOf<T> = Debt<<T as pezframe_system::Config>::AccountId, <T as Config>::Currency>;
@@ -969,15 +969,15 @@ where
 		validator: <T as pezframe_system::Config>::AccountId,
 		severity: OffenceSeverity,
 	) {
-		<pezpallet_session::Pallet<T>>::report_offence(validator, severity)
+		<pezpallet_session::Pezpallet<T>>::report_offence(validator, severity)
 	}
 
 	fn validators() -> Vec<<T as pezframe_system::Config>::AccountId> {
-		<pezpallet_session::Pallet<T>>::validators()
+		<pezpallet_session::Pezpallet<T>>::validators()
 	}
 
 	fn prune_historical_up_to(up_to: SessionIndex) {
-		<pezpallet_session::historical::Pallet<T>>::prune_up_to(up_to);
+		<pezpallet_session::historical::Pezpallet<T>>::prune_up_to(up_to);
 	}
 }
 
@@ -1089,7 +1089,7 @@ impl<T: Config> Convert<T::AccountId, Option<Exposure<T::AccountId, BalanceOf<T>
 {
 	fn convert(validator: T::AccountId) -> Option<Exposure<T::AccountId, BalanceOf<T>>> {
 		ActiveEra::<T>::get()
-			.map(|active_era| <Pallet<T>>::eras_stakers(active_era.index, &validator))
+			.map(|active_era| <Pezpallet<T>>::eras_stakers(active_era.index, &validator))
 	}
 }
 
@@ -1104,7 +1104,7 @@ impl<T: Config> Convert<T::AccountId, Option<Exposure<T::AccountId, BalanceOf<T>
 /// In the new model, we don't need to identify a validator with their full exposure anymore, and
 /// therefore [`UnitIdentificationOf`] is perfectly fine. Yet, for runtimes that used to work with
 /// [`ExposureOf`], we need to be able to decode old identification data, possibly stored in the
-/// historical session pallet in older blocks. Therefore, this type is a good compromise, allowing
+/// historical session pezpallet in older blocks. Therefore, this type is a good compromise, allowing
 /// old exposure identifications to be decoded, and returning a few zero bytes
 /// (`Exposure::default`) for any new identification request.
 ///
@@ -1150,7 +1150,7 @@ pub struct FilterHistoricalOffences<T, R> {
 }
 
 impl<T, Reporter, Offender, R, O> ReportOffence<Reporter, Offender, O>
-	for FilterHistoricalOffences<Pallet<T>, R>
+	for FilterHistoricalOffences<Pezpallet<T>, R>
 where
 	T: Config,
 	R: ReportOffence<Reporter, Offender, O>,
@@ -1164,7 +1164,7 @@ where
 		if bonded_eras.first().filter(|(_, start)| offence_session >= *start).is_some() {
 			R::report_offence(reporters, offence)
 		} else {
-			<Pallet<T>>::deposit_event(Event::<T>::OldSlashingReportDiscarded {
+			<Pezpallet<T>>::deposit_event(Event::<T>::OldSlashingReportDiscarded {
 				session_index: offence_session,
 			});
 			Ok(())
@@ -1410,7 +1410,7 @@ impl<T: Config> Contains<T::AccountId> for AllStakers<T> {
 	}
 }
 
-/// Configurations of the benchmarking of the pallet.
+/// Configurations of the benchmarking of the pezpallet.
 pub trait BenchmarkingConfig {
 	/// The maximum number of validators to use.
 	type MaxValidators: Get<u32>;

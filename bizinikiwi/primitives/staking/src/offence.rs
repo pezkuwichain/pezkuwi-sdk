@@ -201,7 +201,7 @@ pub struct OffenceDetails<Reporter, Offender> {
 pub trait OffenceReportSystem<Reporter, Evidence> {
 	/// Longevity, in blocks, for the evidence report validity.
 	///
-	/// For example, when using the staking pallet this should be set equal
+	/// For example, when using the staking pezpallet this should be set equal
 	/// to the bonding duration in blocks, not eras.
 	type Longevity: Get<u64>;
 

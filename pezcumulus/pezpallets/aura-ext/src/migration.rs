@@ -15,7 +15,7 @@
 // limitations under the License.
 extern crate alloc;
 
-use crate::{Config, Pallet};
+use crate::{Config, Pezpallet};
 #[cfg(feature = "try-runtime")]
 use alloc::vec::Vec;
 use pezframe_support::{migrations::VersionedMigration, pezpallet_prelude::StorageVersion};
@@ -32,7 +32,7 @@ mod v0 {
 	///
 	/// Updated on each block initialization.
 	#[storage_alias]
-	pub(super) type SlotInfo<T: Config> = StorageValue<Pallet<T>, (Slot, u32), OptionQuery>;
+	pub(super) type SlotInfo<T: Config> = StorageValue<Pezpallet<T>, (Slot, u32), OptionQuery>;
 }
 mod v1 {
 	use super::*;
@@ -69,6 +69,6 @@ pub type MigrateV0ToV1<T> = VersionedMigration<
 	0,
 	1,
 	v1::UncheckedMigrationToV1<T>,
-	Pallet<T>,
+	Pezpallet<T>,
 	<T as pezframe_system::Config>::DbWeight,
 >;

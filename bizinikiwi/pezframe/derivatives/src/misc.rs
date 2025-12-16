@@ -233,7 +233,7 @@ impl<Registry: DerivativesRegistry<NonFungibleAsset, DerivativeId>, DerivativeId
 /// NonFungible(Index(<InClassInstanceId>))`. So, this chain is the reserve location for all
 /// instances matching the above identification.
 ///
-/// However, if some of the instances within Pallet #111 could be derivatives as well,
+/// However, if some of the instances within Pezpallet #111 could be derivatives as well,
 /// we need to ensure that this chain won't act as the reserve location for these instances.
 /// If we allow this, this chain could send a derivative as if it were the original NFT on this
 /// chain. The other chain can't know that this instance isn't the original.

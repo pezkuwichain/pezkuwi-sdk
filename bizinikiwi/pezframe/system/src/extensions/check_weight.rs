@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use crate::{limits::BlockWeights, Config, Pallet, LOG_TARGET};
+use crate::{limits::BlockWeights, Config, Pezpallet, LOG_TARGET};
 use codec::{Decode, DecodeWithMemTracking, Encode};
 use pezframe_support::{
 	dispatch::{DispatchInfo, PostDispatchInfo},
@@ -78,7 +78,7 @@ where
 		len: usize,
 	) -> Result<u32, TransactionValidityError> {
 		let length_limit = T::BlockLength::get();
-		let current_len = Pallet::<T>::all_extrinsics_len();
+		let current_len = Pezpallet::<T>::all_extrinsics_len();
 		let added_len = len as u32;
 		let next_len = current_len.saturating_add(added_len);
 		if next_len > *length_limit.max.get(info.class) {
@@ -127,7 +127,7 @@ where
 		len: usize,
 		next_len: u32,
 	) -> Result<(), TransactionValidityError> {
-		let all_weight = Pallet::<T>::block_weight();
+		let all_weight = Pezpallet::<T>::block_weight();
 		let maximum_weight = T::BlockWeights::get();
 		let next_weight =
 			calculate_consumed_weight::<T::RuntimeCall>(&maximum_weight, all_weight, info, len)?;
@@ -138,12 +138,12 @@ where
 		Ok(())
 	}
 
-	#[deprecated(note = "Use `pezframe_system::Pallet::reclaim_weight` instead.")]
+	#[deprecated(note = "Use `pezframe_system::Pezpallet::reclaim_weight` instead.")]
 	pub fn do_post_dispatch(
 		info: &DispatchInfoOf<T::RuntimeCall>,
 		post_info: &PostDispatchInfoOf<T::RuntimeCall>,
 	) -> Result<(), TransactionValidityError> {
-		crate::Pallet::<T>::reclaim_weight(info, post_info)
+		crate::Pezpallet::<T>::reclaim_weight(info, post_info)
 	}
 }
 
@@ -264,7 +264,7 @@ where
 		_len: usize,
 		_result: &DispatchResult,
 	) -> Result<Weight, TransactionValidityError> {
-		crate::Pallet::<T>::reclaim_weight(info, post_info).map(|()| Weight::zero())
+		crate::Pezpallet::<T>::reclaim_weight(info, post_info).map(|()| Weight::zero())
 	}
 
 	fn bare_validate(
@@ -290,7 +290,7 @@ where
 		_len: usize,
 		_result: &DispatchResult,
 	) -> Result<(), TransactionValidityError> {
-		crate::Pallet::<T>::reclaim_weight(info, post_info)
+		crate::Pezpallet::<T>::reclaim_weight(info, post_info)
 	}
 }
 

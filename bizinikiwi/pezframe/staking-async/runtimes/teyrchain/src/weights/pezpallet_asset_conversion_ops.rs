@@ -26,11 +26,11 @@
 // Executed Command:
 // ./target/debug/pezkuwi-teyrchain
 // benchmark
-// pallet
+// pezpallet
 // --chain=asset-hub-next-zagros-dev
 // --steps=10
 // --repeat=2
-// --pallet=pezpallet-asset-conversion-ops
+// --pezpallet=pezpallet-asset-conversion-ops
 // --extrinsic=*
 // --wasm-execution=compiled
 // --heap-pages=4096

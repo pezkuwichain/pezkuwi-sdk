@@ -1,7 +1,7 @@
 # Ranked collective system
 
-This is a membership pallet providing a `Tally` implementation ready for use with polling
-systems such as the Referenda pallet. Members each have a rank, with zero being the lowest.
+This is a membership pezpallet providing a `Tally` implementation ready for use with polling
+systems such as the Referenda pezpallet. Members each have a rank, with zero being the lowest.
 There is no complexity limitation on either the number of members at a rank or the number of
 ranks in the system thus allowing potentially public membership. A member of at least a given
 rank can be selected at random in O(1) time, allowing for various games to constructed using

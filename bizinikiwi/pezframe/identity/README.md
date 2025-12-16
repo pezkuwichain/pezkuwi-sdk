@@ -1,6 +1,6 @@
 # pezpallet-identity
 
-## Identity Pallet
+## Identity Pezpallet
 
 - [`Config`]
 - [`Call`]
@@ -27,13 +27,13 @@ no state-bloat attack is viable.
 
 #### Usernames
 
-The pallet provides functionality for username authorities to issue usernames, which are independent
+The pezpallet provides functionality for username authorities to issue usernames, which are independent
 of the identity information functionality; an account can set:
 - an identity without setting a username
 - a username without setting an identity
 - an identity and a username
 
-The username functionality implemented in this pallet is meant to be a user friendly lookup of
+The username functionality implemented in this pezpallet is meant to be a user friendly lookup of
 accounts. There are mappings in both directions, "account -> username" and "username -> account".
 
 To grant a username, a username authority can either:

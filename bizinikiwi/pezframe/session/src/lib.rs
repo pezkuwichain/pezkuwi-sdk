@@ -15,14 +15,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Session Pallet
+//! # Session Pezpallet
 //!
-//! The Session pallet allows validators to manage their session keys, provides a function for
+//! The Session pezpallet allows validators to manage their session keys, provides a function for
 //! changing the session length, and handles session rotation.
 //!
 //! - [`Config`]
 //! - [`Call`]
-//! - [`Pallet`]
+//! - [`Pezpallet`]
 //!
 //! ## Overview
 //!
@@ -48,9 +48,9 @@
 //!   the origin stored in `NextKeys` may not necessarily be associated with a block author or a
 //!   validator. The session keys of accounts are removed once their account balance is zero.
 //!
-//! - **Session length:** This pallet does not assume anything about the length of each session.
+//! - **Session length:** This pezpallet does not assume anything about the length of each session.
 //!   Rather, it relies on an implementation of `ShouldEndSession` to dictate a new session's start.
-//!   This pallet provides the `PeriodicSessions` struct for simple periodic sessions.
+//!   This pezpallet provides the `PeriodicSessions` struct for simple periodic sessions.
 //!
 //! - **Session rotation configuration:** Configure as either a 'normal' (rewardable session where
 //!   rewards are applied) or 'exceptional' (slashable) session rotation.
@@ -65,7 +65,7 @@
 //!
 //! ### Goals
 //!
-//! The Session pallet is designed to make the following possible:
+//! The Session pezpallet is designed to make the following possible:
 //!
 //! - Set session keys of the validator set for upcoming sessions.
 //! - Control the length of sessions.
@@ -88,7 +88,7 @@
 //!
 //! ### Example from the FRAME
 //!
-//! The [Staking pallet](../pezpallet_staking/index.html) uses the Session pallet to get the validator
+//! The [Staking pezpallet](../pezpallet_staking/index.html) uses the Session pezpallet to get the validator
 //! set.
 //!
 //! ```
@@ -143,7 +143,7 @@ use pezsp_runtime::{
 };
 use pezsp_staking::{offence::OffenceSeverity, SessionIndex};
 
-pub use pallet::*;
+pub use pezpallet::*;
 pub use weights::WeightInfo;
 
 #[cfg(any(feature = "try-runtime"))]
@@ -157,7 +157,7 @@ macro_rules! log {
 	($level:tt, $patter:expr $(, $values:expr)* $(,)?) => {
 		log::$level!(
 			target: crate::LOG_TARGET,
-			concat!("[{:?}] 💸 ", $patter), <pezframe_system::Pallet<T>>::block_number() $(, $values)*
+			concat!("[{:?}] 💸 ", $patter), <pezframe_system::Pezpallet<T>>::block_number() $(, $values)*
 		)
 	};
 }
@@ -251,7 +251,7 @@ pub trait SessionManager<ValidatorId> {
 	///
 	/// Even if the validator-set is the same as before, if any underlying economic conditions have
 	/// changed (i.e. stake-weights), the new validator set must be returned. This is necessary for
-	/// consensus engines making use of the session pallet to issue a validator-set change so
+	/// consensus engines making use of the session pezpallet to issue a validator-set change so
 	/// misbehavior can be provably associated with the new economic conditions as opposed to the
 	/// old. The returned validator set, if any, will not be applied until `new_index`. `new_index`
 	/// is strictly greater than from previous call.
@@ -270,7 +270,7 @@ pub trait SessionManager<ValidatorId> {
 	}
 	/// End the session.
 	///
-	/// Because the session pallet can queue validator set the ending session can be lower than the
+	/// Because the session pezpallet can queue validator set the ending session can be lower than the
 	/// last new session index.
 	fn end_session(end_index: SessionIndex);
 	/// Start an already planned session.
@@ -303,7 +303,7 @@ pub trait SessionHandler<ValidatorId> {
 	fn on_genesis_session<Ks: OpaqueKeys>(validators: &[(ValidatorId, Ks)]);
 
 	/// Session set has changed; act appropriately. Note that this can be called
-	/// before initialization of your pallet.
+	/// before initialization of your pezpallet.
 	///
 	/// `changed` is true whenever any of the session keys or underlying economic
 	/// identities or weightings behind `validators` keys has changed. `queued_validators`
@@ -387,8 +387,8 @@ impl<AId> SessionHandler<AId> for TestSessionHandler {
 	fn on_disabled(_: u32) {}
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
@@ -396,12 +396,12 @@ pub mod pallet {
 	/// The in-code storage version.
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(1);
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	#[pallet::without_storage_info]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	#[pezpallet::without_storage_info]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
@@ -443,7 +443,7 @@ pub mod pallet {
 		/// `DisablingStragegy` controls how validators are disabled
 		type DisablingStrategy: DisablingStrategy<Self>;
 
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 
 		/// The currency type for placing holds when setting keys.
@@ -451,13 +451,13 @@ pub mod pallet {
 			+ HoldMutate<Self::AccountId, Reason: From<HoldReason>>;
 
 		/// The amount to be held when setting keys.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type KeyDeposit: Get<
 			<<Self as Config>::Currency as Inspect<<Self as pezframe_system::Config>::AccountId>>::Balance,
 		>;
 	}
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(pezframe_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		/// Initial list of validator at genesis representing by their `(AccountId, ValidatorId,
@@ -470,7 +470,7 @@ pub mod pallet {
 		pub non_authority_keys: Vec<(T::AccountId, T::ValidatorId, T::Keys)>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			if T::SessionHandler::KEY_TYPE_IDS.len() != T::Keys::key_ids().len() {
@@ -493,14 +493,14 @@ pub mod pallet {
 			for (account, val, keys) in
 				self.keys.iter().chain(self.non_authority_keys.iter()).cloned()
 			{
-				Pallet::<T>::inner_set_keys(&val, keys)
+				Pezpallet::<T>::inner_set_keys(&val, keys)
 					.expect("genesis config must not contain duplicates; qed");
-				if pezframe_system::Pallet::<T>::inc_consumers_without_limit(&account).is_err() {
+				if pezframe_system::Pezpallet::<T>::inc_consumers_without_limit(&account).is_err() {
 					// This will leak a provider reference, however it only happens once (at
 					// genesis) so it's really not a big deal and we assume that the user wants to
 					// do this since it's the only way a non-endowed account can contain a session
 					// key.
-					pezframe_system::Pallet::<T>::inc_providers(&account);
+					pezframe_system::Pezpallet::<T>::inc_providers(&account);
 				}
 			}
 
@@ -518,7 +518,7 @@ pub mod pallet {
 
 			let queued_keys: Vec<_> = initial_validators_1
 				.into_iter()
-				.filter_map(|v| Pallet::<T>::load_keys(&v).map(|k| (v, k)))
+				.filter_map(|v| Pezpallet::<T>::load_keys(&v).map(|k| (v, k)))
 				.collect();
 
 			// Tell everyone about the genesis session keys
@@ -531,8 +531,8 @@ pub mod pallet {
 		}
 	}
 
-	/// A reason for the pallet placing a hold on funds.
-	#[pallet::composite_enum]
+	/// A reason for the pezpallet placing a hold on funds.
+	#[pezpallet::composite_enum]
 	pub enum HoldReason {
 		// Funds are held when settings keys
 		#[codec(index = 0)]
@@ -540,21 +540,21 @@ pub mod pallet {
 	}
 
 	/// The current set of validators.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Validators<T: Config> = StorageValue<_, Vec<T::ValidatorId>, ValueQuery>;
 
 	/// Current index of the session.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type CurrentIndex<T> = StorageValue<_, SessionIndex, ValueQuery>;
 
 	/// True if the underlying economic identities or weighting behind the validators
 	/// has changed in the queued validator set.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type QueuedChanged<T> = StorageValue<_, bool, ValueQuery>;
 
 	/// The queued keys for the next session. When the next session begins, these keys
 	/// will be used to determine the validator's session keys.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type QueuedKeys<T: Config> = StorageValue<_, Vec<(T::ValidatorId, T::Keys)>, ValueQuery>;
 
 	/// Indices of disabled validators.
@@ -562,21 +562,21 @@ pub mod pallet {
 	/// The vec is always kept sorted so that we can find whether a given validator is
 	/// disabled using binary search. It gets cleared when `on_session_ending` returns
 	/// a new set of identities.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type DisabledValidators<T> = StorageValue<_, Vec<(u32, OffenceSeverity)>, ValueQuery>;
 
 	/// The next session keys for a validator.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type NextKeys<T: Config> =
 		StorageMap<_, Twox64Concat, T::ValidatorId, T::Keys, OptionQuery>;
 
 	/// The owner of a key. The key is the `KeyTypeId` + the encoded key.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type KeyOwner<T: Config> =
 		StorageMap<_, Twox64Concat, (KeyTypeId, Vec<u8>), T::ValidatorId, OptionQuery>;
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// New session has happened. Note that the argument is the session index, not the
 		/// block number as the type might suggest.
@@ -590,8 +590,8 @@ pub mod pallet {
 		ValidatorReenabled { validator: T::ValidatorId },
 	}
 
-	/// Error for the session pallet.
-	#[pallet::error]
+	/// Error for the session pezpallet.
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Invalid ownership proof.
 		InvalidProof,
@@ -605,8 +605,8 @@ pub mod pallet {
 		NoAccount,
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		/// Called when a block is initialized. Will rotate session if it is the last
 		/// block of the current session.
 		fn on_initialize(n: BlockNumberFor<T>) -> Weight {
@@ -627,8 +627,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Sets the session key(s) of the function caller to `keys`.
 		/// Allows an account to set its session key prior to becoming a validator.
 		/// This doesn't take effect until the next session.
@@ -638,8 +638,8 @@ pub mod pallet {
 		/// ## Complexity
 		/// - `O(1)`. Actual cost depends on the number of length of `T::Keys::key_ids()` which is
 		///   fixed.
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::set_keys())]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::set_keys())]
 		pub fn set_keys(origin: OriginFor<T>, keys: T::Keys, proof: Vec<u8>) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 			ensure!(keys.ownership_proof_is_valid(&proof), Error::<T>::InvalidProof);
@@ -660,8 +660,8 @@ pub mod pallet {
 		/// ## Complexity
 		/// - `O(1)` in number of key types. Actual cost depends on the number of length of
 		///   `T::Keys::key_ids()` which is fixed.
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::purge_keys())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::purge_keys())]
 		pub fn purge_keys(origin: OriginFor<T>) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 			Self::do_purge_keys(&who)?;
@@ -670,10 +670,10 @@ pub mod pallet {
 	}
 
 	#[cfg(feature = "runtime-benchmarks")]
-	impl<T: Config> Pallet<T> {
+	impl<T: Config> Pezpallet<T> {
 		/// Mint enough funds into `who`, such that they can pay the session key setting deposit.
 		///
-		/// Meant to be used if any pallet's benchmarking code wishes to set session keys, and wants
+		/// Meant to be used if any pezpallet's benchmarking code wishes to set session keys, and wants
 		/// to make sure it will succeed.
 		pub fn ensure_can_pay_key_deposit(who: &T::AccountId) -> Result<(), DispatchError> {
 			use pezframe_support::traits::tokens::{Fortitude, Preservation};
@@ -689,7 +689,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Public function to access the current set of validators.
 	pub fn validators() -> Vec<T::ValidatorId> {
 		Validators::<T>::get()
@@ -815,7 +815,7 @@ impl<T: Config> Pallet<T> {
 	///
 	/// Care should be taken that the raw versions of the
 	/// added keys are unique for every `ValidatorId, KeyTypeId` combination.
-	/// This is an invariant that the session pallet typically maintains internally.
+	/// This is an invariant that the session pezpallet typically maintains internally.
 	///
 	/// As the actual values of the keys are typically not known at runtime upgrade,
 	/// it's recommended to initialize the keys to a (unique) dummy value with the expectation
@@ -864,7 +864,7 @@ impl<T: Config> Pallet<T> {
 		let who = T::ValidatorIdOf::convert(account.clone())
 			.ok_or(Error::<T>::NoAssociatedValidatorId)?;
 
-		ensure!(pezframe_system::Pallet::<T>::can_inc_consumer(account), Error::<T>::NoAccount);
+		ensure!(pezframe_system::Pezpallet::<T>::can_inc_consumer(account), Error::<T>::NoAccount);
 
 		let old_keys = Self::inner_set_keys(&who, keys)?;
 
@@ -876,7 +876,7 @@ impl<T: Config> Pallet<T> {
 				T::Currency::hold(&HoldReason::Keys.into(), account, deposit)?;
 			}
 
-			let assertion = pezframe_system::Pallet::<T>::inc_consumers(account).is_ok();
+			let assertion = pezframe_system::Pezpallet::<T>::inc_consumers(account).is_ok();
 			debug_assert!(assertion, "can_inc_consumer() returned true; no change since; qed");
 		}
 
@@ -944,7 +944,7 @@ impl<T: Config> Pallet<T> {
 			pezframe_support::traits::tokens::Precision::BestEffort,
 		);
 
-		pezframe_system::Pallet::<T>::dec_consumers(account);
+		pezframe_system::Pezpallet::<T>::dec_consumers(account);
 
 		Ok(())
 	}
@@ -1042,7 +1042,7 @@ impl<T: Config> Pallet<T> {
 	}
 
 	/// Convert a validator ID to an index.
-	/// (If using with the staking pallet, this would be their *stash* account.)
+	/// (If using with the staking pezpallet, this would be their *stash* account.)
 	pub fn validator_id_to_index(id: &T::ValidatorId) -> Option<u32> {
 		Validators::<T>::get().iter().position(|i| i == id).map(|i| i as u32)
 	}
@@ -1082,13 +1082,13 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-impl<T: Config> ValidatorRegistration<T::ValidatorId> for Pallet<T> {
+impl<T: Config> ValidatorRegistration<T::ValidatorId> for Pezpallet<T> {
 	fn is_registered(id: &T::ValidatorId) -> bool {
 		Self::load_keys(id).is_some()
 	}
 }
 
-impl<T: Config> ValidatorSet<T::AccountId> for Pallet<T> {
+impl<T: Config> ValidatorSet<T::AccountId> for Pezpallet<T> {
 	type ValidatorId = T::ValidatorId;
 	type ValidatorIdOf = T::ValidatorIdOf;
 
@@ -1101,19 +1101,19 @@ impl<T: Config> ValidatorSet<T::AccountId> for Pallet<T> {
 	}
 }
 
-impl<T: Config> EstimateNextNewSession<BlockNumberFor<T>> for Pallet<T> {
+impl<T: Config> EstimateNextNewSession<BlockNumberFor<T>> for Pezpallet<T> {
 	fn average_session_length() -> BlockNumberFor<T> {
 		T::NextSessionRotation::average_session_length()
 	}
 
-	/// This session pallet always calls new_session and next_session at the same time, hence we
+	/// This session pezpallet always calls new_session and next_session at the same time, hence we
 	/// do a simple proxy and pass the function to next rotation.
 	fn estimate_next_new_session(now: BlockNumberFor<T>) -> (Option<BlockNumberFor<T>>, Weight) {
 		T::NextSessionRotation::estimate_next_session_rotation(now)
 	}
 }
 
-impl<T: Config> pezframe_support::traits::DisabledValidators for Pallet<T> {
+impl<T: Config> pezframe_support::traits::DisabledValidators for Pezpallet<T> {
 	fn is_disabled(index: u32) -> bool {
 		DisabledValidators::<T>::get().binary_search_by_key(&index, |(i, _)| *i).is_ok()
 	}

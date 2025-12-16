@@ -107,7 +107,7 @@ pub type OnBridgeHubZagrosRefundBridgeHubPezkuwichainMessages = BridgeRelayersTr
 >;
 pezbp_runtime::generate_static_str_provider!(OnBridgeHubZagrosRefundBridgeHubPezkuwichainMessages);
 
-/// Add GRANDPA bridge pallet to track Pezkuwichain relay chain.
+/// Add GRANDPA bridge pezpallet to track Pezkuwichain relay chain.
 pub type BridgeGrandpaPezkuwichainInstance = pezpallet_bridge_grandpa::Instance1;
 impl pezpallet_bridge_grandpa::Config<BridgeGrandpaPezkuwichainInstance> for Runtime {
 	type RuntimeEvent = RuntimeEvent;
@@ -118,7 +118,7 @@ impl pezpallet_bridge_grandpa::Config<BridgeGrandpaPezkuwichainInstance> for Run
 	type WeightInfo = weights::pezpallet_bridge_grandpa::WeightInfo<Runtime>;
 }
 
-/// Add teyrchain bridge pallet to track Pezkuwichain BridgeHub teyrchain
+/// Add teyrchain bridge pezpallet to track Pezkuwichain BridgeHub teyrchain
 pub type BridgeTeyrchainPezkuwichainInstance = pezpallet_bridge_teyrchains::Instance1;
 impl pezpallet_bridge_teyrchains::Config<BridgeTeyrchainPezkuwichainInstance> for Runtime {
 	type RuntimeEvent = RuntimeEvent;

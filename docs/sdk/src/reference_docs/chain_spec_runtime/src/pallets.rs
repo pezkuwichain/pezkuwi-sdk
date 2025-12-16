@@ -21,28 +21,28 @@ use alloc::vec::Vec;
 use frame::prelude::*;
 
 #[docify::export]
-#[frame::pallet(dev_mode)]
+#[frame::pezpallet(dev_mode)]
 pub mod pezpallet_bar {
 	use super::*;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type InitialAccount<T: Config> = StorageValue<Value = T::AccountId>;
 
 	/// Simple `GenesisConfig`.
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(DefaultNoBound)]
 	#[docify::export(pezpallet_bar_GenesisConfig)]
 	pub struct GenesisConfig<T: Config> {
 		pub initial_account: Option<T::AccountId>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	#[docify::export(pezpallet_bar_build)]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		/// The storage building function that presents a direct mapping of the initial config
@@ -94,24 +94,24 @@ pub enum FooEnum {
 }
 
 #[docify::export]
-#[frame::pallet(dev_mode)]
+#[frame::pezpallet(dev_mode)]
 pub mod pezpallet_foo {
 	use super::*;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ProcessedEnumValue<T> = StorageValue<Value = u64>;
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type SomeInteger<T> = StorageValue<Value = u32>;
 
 	/// The more sophisticated structure for conveying initial state.
 	#[docify::export(pezpallet_foo_GenesisConfig)]
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		pub some_integer: u32,
@@ -121,7 +121,7 @@ pub mod pezpallet_foo {
 		pub _phantom: PhantomData<T>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	#[docify::export(pezpallet_foo_build)]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		/// The build method that indirectly maps an initial config values into the storage items.

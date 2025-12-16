@@ -41,7 +41,7 @@ mod benchmarking;
 
 pub mod migration;
 
-pub use pallet::*;
+pub use pezpallet::*;
 use pezkuwi_primitives::SchedulerParams;
 
 const LOG_TARGET: &str = "runtime::configuration";
@@ -507,8 +507,8 @@ impl WeightInfo for TestWeightInfo {
 	}
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
 	/// The in-code storage version.
@@ -529,26 +529,26 @@ pub mod pallet {
 	/// v11-12: <https://github.com/pezkuwichain/kurdistan-sdk/issues/112>
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(12);
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	#[pallet::without_storage_info]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	#[pezpallet::without_storage_info]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config + shared::Config {
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// The new value for a configuration parameter is invalid.
 		InvalidNewValue,
 	}
 
 	/// The active configuration for the current session.
-	#[pallet::storage]
-	#[pallet::whitelist_storage]
+	#[pezpallet::storage]
+	#[pezpallet::whitelist_storage]
 	pub type ActiveConfig<T: Config> =
 		StorageValue<_, HostConfiguration<BlockNumberFor<T>>, ValueQuery>;
 
@@ -559,22 +559,22 @@ pub mod pallet {
 	///
 	/// The list is sorted ascending by session index. Also, this list can only contain at most
 	/// 2 items: for the next session and for the `scheduled_session`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type PendingConfigs<T: Config> =
 		StorageValue<_, Vec<(SessionIndex, HostConfiguration<BlockNumberFor<T>>)>, ValueQuery>;
 
 	/// If this is set, then the configuration setters will bypass the consistency checks. This
 	/// is meant to be used only as the last resort.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type BypassConsistencyCheck<T: Config> = StorageValue<_, bool, ValueQuery>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		pub config: HostConfiguration<BlockNumberFor<T>>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			self.config.panic_if_not_consistent();
@@ -582,11 +582,11 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Set the validation upgrade cooldown.
-		#[pallet::call_index(0)]
-		#[pallet::weight((
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_block_number(),
 			DispatchClass::Operational,
 		))]
@@ -601,8 +601,8 @@ pub mod pallet {
 		}
 
 		/// Set the validation upgrade delay.
-		#[pallet::call_index(1)]
-		#[pallet::weight((
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_block_number(),
 			DispatchClass::Operational,
 		))]
@@ -617,8 +617,8 @@ pub mod pallet {
 		}
 
 		/// Set the acceptance period for an included candidate.
-		#[pallet::call_index(2)]
-		#[pallet::weight((
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_block_number(),
 			DispatchClass::Operational,
 		))]
@@ -633,8 +633,8 @@ pub mod pallet {
 		}
 
 		/// Set the max validation code size for incoming upgrades.
-		#[pallet::call_index(3)]
-		#[pallet::weight((
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_u32(),
 			DispatchClass::Operational,
 		))]
@@ -646,8 +646,8 @@ pub mod pallet {
 		}
 
 		/// Set the max POV block size for incoming upgrades.
-		#[pallet::call_index(4)]
-		#[pallet::weight((
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_u32(),
 			DispatchClass::Operational,
 		))]
@@ -659,8 +659,8 @@ pub mod pallet {
 		}
 
 		/// Set the max head data size for paras.
-		#[pallet::call_index(5)]
-		#[pallet::weight((
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_u32(),
 			DispatchClass::Operational,
 		))]
@@ -675,8 +675,8 @@ pub mod pallet {
 		///
 		/// NOTE: that this configuration is managed by the coretime chain. Only manually change
 		/// this, if you really know what you are doing!
-		#[pallet::call_index(6)]
-		#[pallet::weight((
+		#[pezpallet::call_index(6)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_u32(),
 			DispatchClass::Operational,
 		))]
@@ -688,8 +688,8 @@ pub mod pallet {
 		// Call index 7 used to be `set_max_availability_timeouts`, which was removed.
 
 		/// Set the teyrchain validator-group rotation frequency
-		#[pallet::call_index(8)]
-		#[pallet::weight((
+		#[pezpallet::call_index(8)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_block_number(),
 			DispatchClass::Operational,
 		))]
@@ -704,8 +704,8 @@ pub mod pallet {
 		}
 
 		/// Set the availability period for paras.
-		#[pallet::call_index(9)]
-		#[pallet::weight((
+		#[pezpallet::call_index(9)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_block_number(),
 			DispatchClass::Operational,
 		))]
@@ -720,8 +720,8 @@ pub mod pallet {
 		}
 
 		/// Set the scheduling lookahead, in expected number of blocks at peak throughput.
-		#[pallet::call_index(11)]
-		#[pallet::weight((
+		#[pezpallet::call_index(11)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_u32(),
 			DispatchClass::Operational,
 		))]
@@ -733,8 +733,8 @@ pub mod pallet {
 		}
 
 		/// Set the maximum number of validators to assign to any core.
-		#[pallet::call_index(12)]
-		#[pallet::weight((
+		#[pezpallet::call_index(12)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_option_u32(),
 			DispatchClass::Operational,
 		))]
@@ -749,8 +749,8 @@ pub mod pallet {
 		}
 
 		/// Set the maximum number of validators to use in teyrchain consensus.
-		#[pallet::call_index(13)]
-		#[pallet::weight((
+		#[pezpallet::call_index(13)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_option_u32(),
 			DispatchClass::Operational,
 		))]
@@ -762,8 +762,8 @@ pub mod pallet {
 		}
 
 		/// Set the dispute period, in number of sessions to keep for disputes.
-		#[pallet::call_index(14)]
-		#[pallet::weight((
+		#[pezpallet::call_index(14)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_u32(),
 			DispatchClass::Operational,
 		))]
@@ -775,8 +775,8 @@ pub mod pallet {
 		}
 
 		/// Set the dispute post conclusion acceptance period.
-		#[pallet::call_index(15)]
-		#[pallet::weight((
+		#[pezpallet::call_index(15)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_block_number(),
 			DispatchClass::Operational,
 		))]
@@ -792,8 +792,8 @@ pub mod pallet {
 
 		/// Set the no show slots, in number of number of consensus slots.
 		/// Must be at least 1.
-		#[pallet::call_index(18)]
-		#[pallet::weight((
+		#[pezpallet::call_index(18)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_u32(),
 			DispatchClass::Operational,
 		))]
@@ -805,8 +805,8 @@ pub mod pallet {
 		}
 
 		/// Set the total number of delay tranches.
-		#[pallet::call_index(19)]
-		#[pallet::weight((
+		#[pezpallet::call_index(19)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_u32(),
 			DispatchClass::Operational,
 		))]
@@ -818,8 +818,8 @@ pub mod pallet {
 		}
 
 		/// Set the zeroth delay tranche width.
-		#[pallet::call_index(20)]
-		#[pallet::weight((
+		#[pezpallet::call_index(20)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_u32(),
 			DispatchClass::Operational,
 		))]
@@ -831,8 +831,8 @@ pub mod pallet {
 		}
 
 		/// Set the number of validators needed to approve a block.
-		#[pallet::call_index(21)]
-		#[pallet::weight((
+		#[pezpallet::call_index(21)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_u32(),
 			DispatchClass::Operational,
 		))]
@@ -844,8 +844,8 @@ pub mod pallet {
 		}
 
 		/// Set the number of samples to do of the `RelayVRFModulo` approval assignment criterion.
-		#[pallet::call_index(22)]
-		#[pallet::weight((
+		#[pezpallet::call_index(22)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_u32(),
 			DispatchClass::Operational,
 		))]
@@ -857,8 +857,8 @@ pub mod pallet {
 		}
 
 		/// Sets the maximum items that can present in a upward dispatch queue at once.
-		#[pallet::call_index(23)]
-		#[pallet::weight((
+		#[pezpallet::call_index(23)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_u32(),
 			DispatchClass::Operational,
 		))]
@@ -871,8 +871,8 @@ pub mod pallet {
 
 		/// Sets the maximum total size of items that can present in a upward dispatch queue at
 		/// once.
-		#[pallet::call_index(24)]
-		#[pallet::weight((
+		#[pezpallet::call_index(24)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_u32(),
 			DispatchClass::Operational,
 		))]
@@ -885,8 +885,8 @@ pub mod pallet {
 		}
 
 		/// Set the critical downward message size.
-		#[pallet::call_index(25)]
-		#[pallet::weight((
+		#[pezpallet::call_index(25)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_u32(),
 			DispatchClass::Operational,
 		))]
@@ -898,8 +898,8 @@ pub mod pallet {
 		}
 
 		/// Sets the maximum size of an upward message that can be sent by a candidate.
-		#[pallet::call_index(27)]
-		#[pallet::weight((
+		#[pezpallet::call_index(27)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_u32(),
 			DispatchClass::Operational,
 		))]
@@ -911,8 +911,8 @@ pub mod pallet {
 		}
 
 		/// Sets the maximum number of messages that a candidate can contain.
-		#[pallet::call_index(28)]
-		#[pallet::weight((
+		#[pezpallet::call_index(28)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_u32(),
 			DispatchClass::Operational,
 		))]
@@ -927,8 +927,8 @@ pub mod pallet {
 		}
 
 		/// Sets the number of sessions after which an HRMP open channel request expires.
-		#[pallet::call_index(29)]
-		#[pallet::weight((
+		#[pezpallet::call_index(29)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_hrmp_open_request_ttl(),
 			DispatchClass::Operational,
 		))]
@@ -939,8 +939,8 @@ pub mod pallet {
 		}
 
 		/// Sets the amount of funds that the sender should provide for opening an HRMP channel.
-		#[pallet::call_index(30)]
-		#[pallet::weight((
+		#[pezpallet::call_index(30)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_balance(),
 			DispatchClass::Operational,
 		))]
@@ -953,8 +953,8 @@ pub mod pallet {
 
 		/// Sets the amount of funds that the recipient should provide for accepting opening an HRMP
 		/// channel.
-		#[pallet::call_index(31)]
-		#[pallet::weight((
+		#[pezpallet::call_index(31)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_balance(),
 			DispatchClass::Operational,
 		))]
@@ -966,8 +966,8 @@ pub mod pallet {
 		}
 
 		/// Sets the maximum number of messages allowed in an HRMP channel at once.
-		#[pallet::call_index(32)]
-		#[pallet::weight((
+		#[pezpallet::call_index(32)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_u32(),
 			DispatchClass::Operational,
 		))]
@@ -979,8 +979,8 @@ pub mod pallet {
 		}
 
 		/// Sets the maximum total size of messages in bytes allowed in an HRMP channel at once.
-		#[pallet::call_index(33)]
-		#[pallet::weight((
+		#[pezpallet::call_index(33)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_u32(),
 			DispatchClass::Operational,
 		))]
@@ -992,8 +992,8 @@ pub mod pallet {
 		}
 
 		/// Sets the maximum number of inbound HRMP channels a teyrchain is allowed to accept.
-		#[pallet::call_index(34)]
-		#[pallet::weight((
+		#[pezpallet::call_index(34)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_u32(),
 			DispatchClass::Operational,
 		))]
@@ -1008,8 +1008,8 @@ pub mod pallet {
 		}
 
 		/// Sets the maximum size of a message that could ever be put into an HRMP channel.
-		#[pallet::call_index(36)]
-		#[pallet::weight((
+		#[pezpallet::call_index(36)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_u32(),
 			DispatchClass::Operational,
 		))]
@@ -1021,8 +1021,8 @@ pub mod pallet {
 		}
 
 		/// Sets the maximum number of outbound HRMP channels a teyrchain is allowed to open.
-		#[pallet::call_index(37)]
-		#[pallet::weight((
+		#[pezpallet::call_index(37)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_u32(),
 			DispatchClass::Operational,
 		))]
@@ -1037,8 +1037,8 @@ pub mod pallet {
 		}
 
 		/// Sets the maximum number of outbound HRMP messages can be sent by a candidate.
-		#[pallet::call_index(39)]
-		#[pallet::weight((
+		#[pezpallet::call_index(39)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_u32(),
 			DispatchClass::Operational,
 		))]
@@ -1053,8 +1053,8 @@ pub mod pallet {
 		}
 
 		/// Set the number of session changes after which a PVF pre-checking voting is rejected.
-		#[pallet::call_index(42)]
-		#[pallet::weight((
+		#[pezpallet::call_index(42)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_u32(),
 			DispatchClass::Operational,
 		))]
@@ -1069,8 +1069,8 @@ pub mod pallet {
 		/// upgrade taking place.
 		///
 		/// See the field documentation for information and constraints for the new value.
-		#[pallet::call_index(43)]
-		#[pallet::weight((
+		#[pezpallet::call_index(43)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_block_number(),
 			DispatchClass::Operational,
 		))]
@@ -1086,8 +1086,8 @@ pub mod pallet {
 
 		/// Setting this to true will disable consistency checks for the configuration setters.
 		/// Use with caution.
-		#[pallet::call_index(44)]
-		#[pallet::weight((
+		#[pezpallet::call_index(44)]
+		#[pezpallet::weight((
 			T::DbWeight::get().writes(1),
 			DispatchClass::Operational,
 		))]
@@ -1098,8 +1098,8 @@ pub mod pallet {
 		}
 
 		/// Set the asynchronous backing parameters.
-		#[pallet::call_index(45)]
-		#[pallet::weight((
+		#[pezpallet::call_index(45)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_option_u32(), // The same size in bytes.
 			DispatchClass::Operational,
 		))]
@@ -1114,8 +1114,8 @@ pub mod pallet {
 		}
 
 		/// Set PVF executor parameters.
-		#[pallet::call_index(46)]
-		#[pallet::weight((
+		#[pezpallet::call_index(46)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_executor_params(),
 			DispatchClass::Operational,
 		))]
@@ -1127,8 +1127,8 @@ pub mod pallet {
 		}
 
 		/// Set the on demand (parathreads) base fee.
-		#[pallet::call_index(47)]
-		#[pallet::weight((
+		#[pezpallet::call_index(47)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_balance(),
 			DispatchClass::Operational,
 		))]
@@ -1140,8 +1140,8 @@ pub mod pallet {
 		}
 
 		/// Set the on demand (parathreads) fee variability.
-		#[pallet::call_index(48)]
-		#[pallet::weight((
+		#[pezpallet::call_index(48)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_perbill(),
 			DispatchClass::Operational,
 		))]
@@ -1153,8 +1153,8 @@ pub mod pallet {
 		}
 
 		/// Set the on demand (parathreads) queue max size.
-		#[pallet::call_index(49)]
-		#[pallet::weight((
+		#[pezpallet::call_index(49)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_option_u32(),
 			DispatchClass::Operational,
 		))]
@@ -1166,8 +1166,8 @@ pub mod pallet {
 		}
 
 		/// Set the on demand (parathreads) fee variability.
-		#[pallet::call_index(50)]
-		#[pallet::weight((
+		#[pezpallet::call_index(50)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_perbill(),
 			DispatchClass::Operational,
 		))]
@@ -1184,8 +1184,8 @@ pub mod pallet {
 		// Call index 51 used to be `set_on_demand_ttl`, which was removed.
 
 		/// Set the minimum backing votes threshold.
-		#[pallet::call_index(52)]
-		#[pallet::weight((
+		#[pezpallet::call_index(52)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_u32(),
 			DispatchClass::Operational
 		))]
@@ -1197,8 +1197,8 @@ pub mod pallet {
 		}
 
 		/// Set/Unset a node feature.
-		#[pallet::call_index(53)]
-		#[pallet::weight((
+		#[pezpallet::call_index(53)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_node_feature(),
 			DispatchClass::Operational
 		))]
@@ -1215,8 +1215,8 @@ pub mod pallet {
 		}
 
 		/// Set approval-voting-params.
-		#[pallet::call_index(54)]
-		#[pallet::weight((
+		#[pezpallet::call_index(54)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_executor_params(),
 			DispatchClass::Operational,
 		))]
@@ -1231,8 +1231,8 @@ pub mod pallet {
 		}
 
 		/// Set scheduler-params.
-		#[pallet::call_index(55)]
-		#[pallet::weight((
+		#[pezpallet::call_index(55)]
+		#[pezpallet::weight((
 			T::WeightInfo::set_config_with_scheduler_params(),
 			DispatchClass::Operational,
 		))]
@@ -1247,7 +1247,7 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config> Pallet<T> {
+	impl<T: Config> Pezpallet<T> {
 		/// Set coretime cores.
 		///
 		/// To be used if authorization is checked otherwise.
@@ -1258,14 +1258,14 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn integrity_test() {
 			assert_eq!(
 				&ActiveConfig::<T>::hashed_key(),
 				pezkuwi_primitives::well_known_keys::ACTIVE_CONFIG,
 				"`well_known_keys::ACTIVE_CONFIG` doesn't match key of `ActiveConfig`! Make sure that the name of the\
-				 configuration pallet is `Configuration` in the runtime!",
+				 configuration pezpallet is `Configuration` in the runtime!",
 			);
 		}
 	}
@@ -1280,13 +1280,13 @@ pub struct SessionChangeOutcome<BlockNumber> {
 	pub new_config: Option<HostConfiguration<BlockNumber>>,
 }
 
-impl<T: Config> Pallet<T> {
-	/// Called by the initializer to initialize the configuration pallet.
+impl<T: Config> Pezpallet<T> {
+	/// Called by the initializer to initialize the configuration pezpallet.
 	pub(crate) fn initializer_initialize(_now: BlockNumberFor<T>) -> Weight {
 		Weight::zero()
 	}
 
-	/// Called by the initializer to finalize the configuration pallet.
+	/// Called by the initializer to finalize the configuration pezpallet.
 	pub(crate) fn initializer_finalize() {}
 
 	/// Called by the initializer to note that a new session has started.
@@ -1331,7 +1331,7 @@ impl<T: Config> Pallet<T> {
 
 	/// Return the session index that should be used for any future scheduled changes.
 	fn scheduled_session() -> SessionIndex {
-		shared::Pallet::<T>::scheduled_session()
+		shared::Pezpallet::<T>::scheduled_session()
 	}
 
 	/// Forcibly set the active config. This should be used with extreme care, and typically
@@ -1454,7 +1454,7 @@ impl<T: Config> Pallet<T> {
 /// The implementation of `Get<(u32, u32)>` which reads `ActiveConfig` and returns `P` percent of
 /// `hrmp_channel_max_message_size` / `hrmp_channel_max_capacity`.
 pub struct ActiveConfigHrmpChannelSizeAndCapacityRatio<T, P>(core::marker::PhantomData<(T, P)>);
-impl<T: crate::hrmp::pallet::Config, P: Get<Percent>> Get<(u32, u32)>
+impl<T: crate::hrmp::pezpallet::Config, P: Get<Percent>> Get<(u32, u32)>
 	for ActiveConfigHrmpChannelSizeAndCapacityRatio<T, P>
 {
 	fn get() -> (u32, u32) {

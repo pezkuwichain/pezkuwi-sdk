@@ -23,26 +23,26 @@ use pezsp_runtime::{
 	traits::{BlakeTwo256, Verify},
 };
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {}
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {}
 
-	#[pallet::storage]
-	#[pallet::unbounded]
+	#[pezpallet::storage]
+	#[pezpallet::unbounded]
 	pub type AppendableDM<T: Config> =
 		StorageDoubleMap<_, Identity, u32, Identity, BlockNumberFor<T>, Vec<u32>>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	pub struct GenesisConfig<T: Config> {
 		pub t: Vec<(u32, BlockNumberFor<T>, Vec<u32>)>,
 	}
@@ -53,7 +53,7 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			for (k1, k2, v) in &self.t {
@@ -75,7 +75,7 @@ pezframe_support::construct_runtime!(
 
 	{
 		System: pezframe_system,
-		MyPallet: pallet,
+		MyPallet: pezpallet,
 	}
 );
 
@@ -90,9 +90,9 @@ impl pezframe_system::Config for Test {
 	type OnSetCode = ();
 }
 
-impl pallet::Config for Test {}
+impl pezpallet::Config for Test {}
 
 #[test]
 fn init_genesis_config() {
-	pallet::GenesisConfig::<Test>::default();
+	pezpallet::GenesisConfig::<Test>::default();
 }

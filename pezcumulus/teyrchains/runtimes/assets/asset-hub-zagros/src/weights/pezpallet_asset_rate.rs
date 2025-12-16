@@ -25,11 +25,11 @@
 // Executed Command:
 // ./target/debug/pezkuwi
 // benchmark
-// pallet
+// pezpallet
 // --chain=pezkuwi-dev
 // --steps=50
 // --repeat=2
-// --pallet=pezpallet_asset_rate
+// --pezpallet=pezpallet_asset_rate
 // --extrinsic=*
 // --wasm-execution=compiled
 // --heap-pages=4096

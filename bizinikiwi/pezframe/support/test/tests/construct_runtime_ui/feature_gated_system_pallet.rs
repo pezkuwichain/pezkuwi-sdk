@@ -21,7 +21,7 @@ construct_runtime! {
 	pub struct Runtime
 	{
 		#[cfg(test)]
-		System: pezframe_system::{Pallet, Call, Storage, Config<T>, Event<T>},
+		System: pezframe_system::{Pezpallet, Call, Storage, Config<T>, Event<T>},
 	}
 }
 

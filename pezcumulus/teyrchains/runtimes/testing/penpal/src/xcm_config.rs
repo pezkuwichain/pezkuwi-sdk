@@ -218,7 +218,7 @@ pub type XcmOriginToTransactDispatchOrigin = (
 	// Native signed account converter; this just converts an `AccountId32` origin into a normal
 	// `RuntimeOrigin::Signed` origin of the same 32-byte value.
 	SignedAccountId32AsNative<RelayNetwork, RuntimeOrigin>,
-	// Xcm origins can be represented natively under the Xcm pallet's Xcm origin.
+	// Xcm origins can be represented natively under the Xcm pezpallet's Xcm origin.
 	XcmPassthrough<RuntimeOrigin>,
 );
 
@@ -293,7 +293,7 @@ pub const USDT_ASSET_ID: u128 = 1984;
 parameter_types! {
 	/// The location that this chain recognizes as the Relay network's Asset Hub.
 	pub SystemAssetHubLocation: Location = Location::new(1, [Teyrchain(ASSET_HUB_ID)]);
-	// the Relay Chain's Asset Hub's Assets pallet index
+	// the Relay Chain's Asset Hub's Assets pezpallet index
 	pub SystemAssetHubAssetsPalletLocation: Location =
 		Location::new(1, [Teyrchain(ASSET_HUB_ID), PalletInstance(ASSETS_PALLET_ID)]);
 	pub AssetsPalletLocation: Location =

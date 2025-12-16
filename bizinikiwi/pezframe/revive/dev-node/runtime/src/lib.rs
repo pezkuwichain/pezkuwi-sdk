@@ -237,29 +237,29 @@ mod runtime {
 	)]
 	pub struct Runtime;
 
-	/// Mandatory system pallet that should always be included in a FRAME runtime.
+	/// Mandatory system pezpallet that should always be included in a FRAME runtime.
 	#[runtime::pezpallet_index(0)]
-	pub type System = pezframe_system::Pallet<Runtime>;
+	pub type System = pezframe_system::Pezpallet<Runtime>;
 
 	/// Provides a way for consensus systems to set and check the onchain time.
 	#[runtime::pezpallet_index(1)]
-	pub type Timestamp = pezpallet_timestamp::Pallet<Runtime>;
+	pub type Timestamp = pezpallet_timestamp::Pezpallet<Runtime>;
 
 	/// Provides the ability to keep track of balances.
 	#[runtime::pezpallet_index(2)]
-	pub type Balances = pezpallet_balances::Pallet<Runtime>;
+	pub type Balances = pezpallet_balances::Pezpallet<Runtime>;
 
 	/// Provides a way to execute privileged functions.
 	#[runtime::pezpallet_index(3)]
-	pub type Sudo = pezpallet_sudo::Pallet<Runtime>;
+	pub type Sudo = pezpallet_sudo::Pezpallet<Runtime>;
 
 	/// Provides the ability to charge for extrinsic execution.
 	#[runtime::pezpallet_index(4)]
-	pub type TransactionPayment = pezpallet_transaction_payment::Pallet<Runtime>;
+	pub type TransactionPayment = pezpallet_transaction_payment::Pezpallet<Runtime>;
 
 	/// Provides the ability to execute Smart Contracts.
 	#[runtime::pezpallet_index(5)]
-	pub type Revive = pezpallet_revive::Pallet<Runtime>;
+	pub type Revive = pezpallet_revive::Pezpallet<Runtime>;
 }
 
 /// We assume that ~10% of the block weight is consumed by `on_initialize` handlers.
@@ -294,7 +294,7 @@ parameter_types! {
 		.build_or_panic();
 }
 
-/// Implements the types required for the system pallet.
+/// Implements the types required for the system pezpallet.
 #[derive_impl(pezframe_system::config_preludes::SolochainDefaultConfig)]
 impl pezframe_system::Config for Runtime {
 	type Block = Block;
@@ -309,7 +309,7 @@ parameter_types! {
 	pub const ExistentialDeposit: Balance = CENTS;
 }
 
-// Implements the types required for the balances pallet.
+// Implements the types required for the balances pezpallet.
 #[derive_impl(pezpallet_balances::config_preludes::TestDefaultConfig)]
 impl pezpallet_balances::Config for Runtime {
 	type AccountStore = System;
@@ -317,11 +317,11 @@ impl pezpallet_balances::Config for Runtime {
 	type ExistentialDeposit = ExistentialDeposit;
 }
 
-// Implements the types required for the sudo pallet.
+// Implements the types required for the sudo pezpallet.
 #[derive_impl(pezpallet_sudo::config_preludes::TestDefaultConfig)]
 impl pezpallet_sudo::Config for Runtime {}
 
-// Implements the types required for the sudo pallet.
+// Implements the types required for the sudo pezpallet.
 #[derive_impl(pezpallet_timestamp::config_preludes::TestDefaultConfig)]
 impl pezpallet_timestamp::Config for Runtime {}
 
@@ -330,7 +330,7 @@ parameter_types! {
 	pub FeeMultiplier: Multiplier = Multiplier::one();
 }
 
-// Implements the types required for the transaction payment pallet.
+// Implements the types required for the transaction payment pezpallet.
 #[derive_impl(pezpallet_transaction_payment::config_preludes::TestDefaultConfig)]
 impl pezpallet_transaction_payment::Config for Runtime {
 	type OnChargeTransaction = pezpallet_transaction_payment::FungibleAdapter<Balances, ()>;

@@ -24,17 +24,17 @@ pub trait Config {
 
 type RuntimeInfo = u32;
 
-struct Pallet;
+struct Pezpallet;
 
-#[register_default_impl(Pallet)]
-impl Config for Pallet {
+#[register_default_impl(Pezpallet)]
+impl Config for Pezpallet {
     #[inject_runtime_type]
     type RuntimeInfo = ();
 }
 
 struct SomePallet;
 
-#[derive_impl(Pallet)] // Injects type RuntimeInfo = RuntimeInfo;
+#[derive_impl(Pezpallet)] // Injects type RuntimeInfo = RuntimeInfo;
 impl Config for SomePallet {}
 
 assert_type_eq_all!(<SomePallet as Config>::RuntimeInfo, u32);

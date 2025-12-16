@@ -39,13 +39,13 @@ pub mod v2 {
 		1,
 		2,
 		UncheckedMigrationToV2<T>,
-		Pallet<T>,
+		Pezpallet<T>,
 		<T as pezframe_system::Config>::DbWeight,
 	>;
 
 	#[storage_alias]
 	pub type Candidates<T: Config> = StorageValue<
-		Pallet<T>,
+		Pezpallet<T>,
 		BoundedVec<CandidateInfo<<T as pezframe_system::Config>::AccountId, <<T as Config>::Currency as Currency<<T as pezframe_system::Config>::AccountId>>::Balance>, <T as Config>::MaxCandidates>,
 		ValueQuery,
 	>;
@@ -127,14 +127,14 @@ pub mod v1 {
 	pub struct MigrateToV1<T>(PhantomData<T>);
 	impl<T: Config> OnRuntimeUpgrade for MigrateToV1<T> {
 		fn on_runtime_upgrade() -> Weight {
-			let on_chain_version = Pallet::<T>::on_chain_storage_version();
+			let on_chain_version = Pezpallet::<T>::on_chain_storage_version();
 			if on_chain_version == 0 {
 				let invulnerables_len = Invulnerables::<T>::get().to_vec().len();
 				Invulnerables::<T>::mutate(|invulnerables| {
 					invulnerables.sort();
 				});
 
-				StorageVersion::new(1).put::<Pallet<T>>();
+				StorageVersion::new(1).put::<Pezpallet<T>>();
 				log::info!(
 					target: LOG_TARGET,
 					"Sorted {} Invulnerables, upgraded storage to version 1",
@@ -179,7 +179,7 @@ pub mod v1 {
 				"after migration, there should be the same number of invulnerables"
 			);
 
-			let on_chain_version = Pallet::<T>::on_chain_storage_version();
+			let on_chain_version = Pezpallet::<T>::on_chain_storage_version();
 			pezframe_support::ensure!(on_chain_version >= 1, "must_upgrade");
 
 			Ok(())
@@ -204,7 +204,7 @@ mod tests {
 	fn migrate_to_v2_with_new_candidates() {
 		new_test_ext().execute_with(|| {
 			let storage_version = StorageVersion::new(1);
-			storage_version.put::<Pallet<Test>>();
+			storage_version.put::<Pezpallet<Test>>();
 
 			let one = 1u64;
 			let two = 2u64;
@@ -252,7 +252,7 @@ mod tests {
 			// Run migration
 			v2::MigrationToV2::<Test>::on_runtime_upgrade();
 
-			let new_storage_version = StorageVersion::get::<Pallet<Test>>();
+			let new_storage_version = StorageVersion::get::<Pezpallet<Test>>();
 			assert_eq!(new_storage_version, 2);
 
 			// 10 should have been unreserved from the old candidacy
@@ -270,7 +270,7 @@ mod tests {
 	fn migrate_to_v2_without_new_candidates() {
 		new_test_ext().execute_with(|| {
 			let storage_version = StorageVersion::new(1);
-			storage_version.put::<Pallet<Test>>();
+			storage_version.put::<Pezpallet<Test>>();
 
 			let one = 1u64;
 			let two = 2u64;
@@ -306,7 +306,7 @@ mod tests {
 			// Run migration
 			v2::MigrationToV2::<Test>::on_runtime_upgrade();
 
-			let new_storage_version = StorageVersion::get::<Pallet<Test>>();
+			let new_storage_version = StorageVersion::get::<Pezpallet<Test>>();
 			assert_eq!(new_storage_version, 2);
 
 			// Nothing changes deposit-wise

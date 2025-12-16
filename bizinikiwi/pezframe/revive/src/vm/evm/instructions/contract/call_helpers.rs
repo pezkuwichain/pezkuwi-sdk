@@ -21,7 +21,7 @@ use crate::{
 		evm::{interpreter::Halt, util::as_usize_or_halt, Interpreter},
 		Ext,
 	},
-	Pallet, RuntimeCosts,
+	Pezpallet, RuntimeCosts,
 };
 use core::ops::{ControlFlow, Range};
 use revm::interpreter::interpreter_action::CallScheme;
@@ -102,7 +102,7 @@ pub fn calc_call_gas<'a, E: Ext>(
 			.ext
 			.gas_meter_mut()
 			.charge_or_halt(RuntimeCosts::CallTransferSurcharge {
-				dust_transfer: Pallet::<E::T>::has_dust(value),
+				dust_transfer: Pezpallet::<E::T>::has_dust(value),
 			})?;
 	}
 

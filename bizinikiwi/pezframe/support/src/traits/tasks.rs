@@ -44,7 +44,7 @@ pub trait Task: Sized + FullCodec + TypeInfo + Clone + Debug + PartialEq + Eq {
 	/// An [`Iterator`] over tasks of this type used as the return type for `enumerate`.
 	type Enumeration: Iterator;
 
-	/// Inspects the pallet's state and enumerates tasks of this type.
+	/// Inspects the pezpallet's state and enumerates tasks of this type.
 	fn iter() -> Self::Enumeration;
 
 	/// Checks if a particular instance of this `Task` variant is a valid piece of work.
@@ -60,10 +60,10 @@ pub trait Task: Sized + FullCodec + TypeInfo + Clone + Debug + PartialEq + Eq {
 	/// Returns the weight of executing this `Task`.
 	fn weight(&self) -> Weight;
 
-	/// A unique value representing this `Task` within the current pallet. Analogous to
+	/// A unique value representing this `Task` within the current pezpallet. Analogous to
 	/// `call_index`, but for tasks.'
 	///
-	/// This value should be unique within the current pallet and can overlap with task indices
+	/// This value should be unique within the current pezpallet and can overlap with task indices
 	/// in other pallets.
 	fn task_index(&self) -> u32;
 }

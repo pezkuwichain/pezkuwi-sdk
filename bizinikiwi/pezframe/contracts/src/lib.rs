@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Contracts Pallet
+//! # Contracts Pezpallet
 //!
 //! The Contracts module provides functionality for the runtime to deploy and execute WebAssembly
 //! smart-contracts.
@@ -63,19 +63,19 @@
 //!
 //! ### Dispatchable functions
 //!
-//! * [`Pallet::instantiate_with_code`] - Deploys a new contract from the supplied Wasm binary,
+//! * [`Pezpallet::instantiate_with_code`] - Deploys a new contract from the supplied Wasm binary,
 //! optionally transferring
 //! some balance. This instantiates a new smart contract account with the supplied code and
 //! calls its constructor to initialize the contract.
-//! * [`Pallet::instantiate`] - The same as `instantiate_with_code` but instead of uploading new
+//! * [`Pezpallet::instantiate`] - The same as `instantiate_with_code` but instead of uploading new
 //! code an existing `code_hash` is supplied.
-//! * [`Pallet::call`] - Makes a call to an account, optionally transferring some balance.
-//! * [`Pallet::upload_code`] - Uploads new code without instantiating a contract from it.
-//! * [`Pallet::remove_code`] - Removes the stored code and refunds the deposit to its owner. Only
+//! * [`Pezpallet::call`] - Makes a call to an account, optionally transferring some balance.
+//! * [`Pezpallet::upload_code`] - Uploads new code without instantiating a contract from it.
+//! * [`Pezpallet::remove_code`] - Removes the stored code and refunds the deposit to its owner. Only
 //!   allowed to code owner.
-//! * [`Pallet::set_code`] - Changes the code of an existing contract. Only allowed to `Root`
+//! * [`Pezpallet::set_code`] - Changes the code of an existing contract. Only allowed to `Root`
 //!   origin.
-//! * [`Pallet::migrate`] - Runs migration steps of current multi-block migration in priority,
+//! * [`Pezpallet::migrate`] - Runs migration steps of current multi-block migration in priority,
 //!   before [`Hooks::on_idle`][pezframe_support::traits::Hooks::on_idle] activates.
 //!
 //! ## Usage
@@ -132,7 +132,7 @@ use pezframe_support::{
 use pezframe_system::{
 	ensure_signed,
 	pezpallet_prelude::{BlockNumberFor, OriginFor},
-	EventRecord, Pallet as System,
+	EventRecord, Pezpallet as System,
 };
 use scale_info::TypeInfo;
 use smallvec::Array;
@@ -146,7 +146,7 @@ pub use crate::{
 	debug::Tracing,
 	exec::Frame,
 	migration::{MigrateSequence, Migration, NoopMigration},
-	pallet::*,
+	pezpallet::*,
 	schedule::{InstructionWeights, Limits, Schedule},
 	wasm::Determinism,
 };
@@ -167,7 +167,7 @@ type EventRecordOf<T> =
 
 /// The old weight type.
 ///
-/// This is a copy of the [`pezframe_support::weights::OldWeight`] type since the contracts pallet
+/// This is a copy of the [`pezframe_support::weights::OldWeight`] type since the contracts pezpallet
 /// needs to support it indefinitely.
 type OldWeight = u64;
 
@@ -237,8 +237,8 @@ fn api_version_is_up_to_date() {
 	);
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use crate::debug::Debugger;
 	use pezframe_support::pezpallet_prelude::*;
@@ -248,11 +248,11 @@ pub mod pallet {
 	/// The in-code storage version.
 	pub(crate) const STORAGE_VERSION: StorageVersion = StorageVersion::new(16);
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config(with_default)]
+	#[pezpallet::config(with_default)]
 	pub trait Config: pezframe_system::Config {
 		/// The time implementation used to supply timestamps to contracts through `seal_now`.
 		type Time: Time;
@@ -265,29 +265,29 @@ pub mod pallet {
 		/// be instantiated from existing codes that use this deprecated functionality. It will
 		/// be removed eventually. Hence for new `pezpallet-contracts` deployments it is okay
 		/// to supply a dummy implementation for this type (because it is never used).
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		type Randomness: Randomness<Self::Hash, BlockNumberFor<Self>>;
 
 		/// The fungible in which fees are paid and contract balances are held.
-		#[pallet::no_default]
+		#[pezpallet::no_default]
 		type Currency: Inspect<Self::AccountId>
 			+ Mutate<Self::AccountId>
 			+ MutateHold<Self::AccountId, Reason = Self::RuntimeHoldReason>;
 
 		/// The overarching event type.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// The overarching call type.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		type RuntimeCall: Dispatchable<RuntimeOrigin = Self::RuntimeOrigin, PostInfo = PostDispatchInfo>
 			+ GetDispatchInfo
 			+ codec::Decode
 			+ IsType<<Self as pezframe_system::Config>::RuntimeCall>;
 
 		/// Overarching hold reason.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		type RuntimeHoldReason: From<HoldReason>;
 
 		/// Filter that is applied to calls dispatched by contracts.
@@ -311,13 +311,13 @@ pub mod pallet {
 		/// be exploited to drive the runtime into a panic.
 		///
 		/// This filter does not apply to XCM transact calls. To impose restrictions on XCM transact
-		/// calls, you must configure them separately within the XCM pallet itself.
-		#[pallet::no_default_bounds]
+		/// calls, you must configure them separately within the XCM pezpallet itself.
+		#[pezpallet::no_default_bounds]
 		type CallFilter: Contains<<Self as pezframe_system::Config>::RuntimeCall>;
 
 		/// Used to answer contracts' queries regarding the current weight price. This is **not**
 		/// used to calculate the actual fee and is only for informational purposes.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		type WeightPrice: Convert<Weight, BalanceOf<Self>>;
 
 		/// Describes the weights of the dispatchables of this module and is also used to
@@ -325,12 +325,12 @@ pub mod pallet {
 		type WeightInfo: WeightInfo;
 
 		/// Type that allows the runtime authors to add new host functions for a contract to call.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		type ChainExtension: chain_extension::ChainExtension<Self> + Default;
 
 		/// Cost schedule and limits.
-		#[pallet::constant]
-		#[pallet::no_default]
+		#[pezpallet::constant]
+		#[pezpallet::no_default]
 		type Schedule: Get<Schedule<Self>>;
 
 		/// The type of the call stack determines the maximum nesting depth of contract calls.
@@ -341,7 +341,7 @@ pub mod pallet {
 		///
 		/// This setting along with [`MaxCodeLen`](#associatedtype.MaxCodeLen) directly affects
 		/// memory usage of your runtime.
-		#[pallet::no_default]
+		#[pezpallet::no_default]
 		type CallStack: Array<Item = Frame<Self>>;
 
 		/// The amount of balance a caller has to pay for each byte of storage.
@@ -349,13 +349,13 @@ pub mod pallet {
 		/// # Note
 		///
 		/// Changing this value for an existing chain might need a storage migration.
-		#[pallet::constant]
-		#[pallet::no_default_bounds]
+		#[pezpallet::constant]
+		#[pezpallet::no_default_bounds]
 		type DepositPerByte: Get<BalanceOf<Self>>;
 
 		/// Fallback value to limit the storage deposit if it's not being set by the caller.
-		#[pallet::constant]
-		#[pallet::no_default_bounds]
+		#[pezpallet::constant]
+		#[pezpallet::no_default_bounds]
 		type DefaultDepositLimit: Get<BalanceOf<Self>>;
 
 		/// The amount of balance a caller has to pay for each storage item.
@@ -363,19 +363,19 @@ pub mod pallet {
 		/// # Note
 		///
 		/// Changing this value for an existing chain might need a storage migration.
-		#[pallet::constant]
-		#[pallet::no_default_bounds]
+		#[pezpallet::constant]
+		#[pezpallet::no_default_bounds]
 		type DepositPerItem: Get<BalanceOf<Self>>;
 
 		/// The percentage of the storage deposit that should be held for using a code hash.
 		/// Instantiating a contract, or calling [`chain_extension::Ext::lock_delegate_dependency`]
 		/// protects the code from being removed. In order to prevent abuse these actions are
 		/// protected with a percentage of the code deposit.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type CodeHashLockupDepositPercent: Get<Perbill>;
 
 		/// The address generator used to generate the addresses of contracts.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		type AddressGenerator: AddressGenerator<Self>;
 
 		/// The maximum length of a contract code in bytes.
@@ -383,21 +383,21 @@ pub mod pallet {
 		/// The value should be chosen carefully taking into the account the overall memory limit
 		/// your runtime has, as well as the [maximum allowed callstack
 		/// depth](#associatedtype.CallStack). Look into the `integrity_test()` for some insights.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxCodeLen: Get<u32>;
 
 		/// The maximum allowable length in bytes for storage keys.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxStorageKeyLen: Get<u32>;
 
 		/// The maximum size of the transient storage in bytes.
 		/// This includes keys, values, and previous entries used for storage rollback.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxTransientStorageSize: Get<u32>;
 
 		/// The maximum number of delegate_dependencies that a contract can lock with
 		/// [`chain_extension::Ext::lock_delegate_dependency`].
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxDelegateDependencies: Get<u32>;
 
 		/// Make contract callable functions marked as `#[unstable]` available.
@@ -409,18 +409,18 @@ pub mod pallet {
 		/// # Warning
 		///
 		/// Do **not** set to `true` on productions chains.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type UnsafeUnstableInterface: Get<bool>;
 
 		/// The maximum length of the debug buffer in bytes.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxDebugBufferLen: Get<u32>;
 
 		/// Origin allowed to upload code.
 		///
 		/// By default, it is safe to set this to `EnsureSigned`, allowing anyone to upload contract
 		/// code.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		type UploadOrigin: EnsureOrigin<Self::RuntimeOrigin, Success = Self::AccountId>;
 
 		/// Origin allowed to instantiate code.
@@ -433,7 +433,7 @@ pub mod pallet {
 		///
 		/// By default, it is safe to set this to `EnsureSigned`, allowing anyone to instantiate
 		/// contract code.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		type InstantiateOrigin: EnsureOrigin<Self::RuntimeOrigin, Success = Self::AccountId>;
 
 		/// The sequence of migration steps that will be applied during a migration.
@@ -459,27 +459,27 @@ pub mod pallet {
 		/// For most production chains, it's recommended to use the `()` implementation of this
 		/// trait. This implementation offers additional logging when the log target
 		/// "runtime::contracts" is set to trace.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		type Debug: Debugger<Self>;
 
 		/// Type that bundles together all the runtime configurable interface types.
 		///
 		/// This is not a real config. We just mention the type here as constant so that
 		/// its type appears in the metadata. Only valid value is `()`.
-		#[pallet::constant]
-		#[pallet::no_default_bounds]
+		#[pezpallet::constant]
+		#[pezpallet::no_default_bounds]
 		type Environment: Get<Environment<Self>>;
 
 		/// The version of the HostFn APIs that are available in the runtime.
 		///
 		/// Only valid value is `()`.
-		#[pallet::constant]
-		#[pallet::no_default_bounds]
+		#[pezpallet::constant]
+		#[pezpallet::no_default_bounds]
 		type ApiVersion: Get<ApiVersion>;
 
 		/// A type that exposes XCM APIs, allowing contracts to interact with other teyrchains, and
 		/// execute XCM programs.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		type Xcm: xcm_builder::Controller<
 			OriginFor<Self>,
 			<Self as pezframe_system::Config>::RuntimeCall,
@@ -487,7 +487,7 @@ pub mod pallet {
 		>;
 	}
 
-	/// Container for different types that implement [`DefaultConfig`]` of this pallet.
+	/// Container for different types that implement [`DefaultConfig`]` of this pezpallet.
 	pub mod config_preludes {
 		use super::*;
 		use pezframe_support::{
@@ -514,7 +514,7 @@ pub mod pallet {
 			pub const MaxDelegateDependencies: u32 = 32;
 		}
 
-		/// A type providing default configurations for this pallet in testing environment.
+		/// A type providing default configurations for this pezpallet in testing environment.
 		pub struct TestDefaultConfig;
 
 		impl<Output, BlockNumber> Randomness<Output, BlockNumber> for TestDefaultConfig {
@@ -577,8 +577,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn on_idle(_block: BlockNumberFor<T>, limit: Weight) -> Weight {
 			use migration::MigrateResult::*;
 			let mut meter = WeightMeter::with_limit(limit);
@@ -624,7 +624,7 @@ pub mod pallet {
 			// encoded one. This is because even a single-byte wasm instruction has 16-byte size in
 			// wasmi. This gives us `MaxCodeLen*16` safety margin.
 			//
-			// Next, the pallet keeps the Wasm blob for each
+			// Next, the pezpallet keeps the Wasm blob for each
 			// contract, hence we add up `MaxCodeLen` to the safety margin.
 			//
 			// The inefficiencies of the freeing-bump allocator
@@ -636,7 +636,7 @@ pub mod pallet {
 			// memory should be available. Note that maximum allowed heap memory and stack size per
 			// each contract (stack frame) should also be counted.
 			//
-			// The pallet holds transient storage with a size up to `max_transient_storage_size`.
+			// The pezpallet holds transient storage with a size up to `max_transient_storage_size`.
 			//
 			// Finally, we allow 50% of the runtime memory to be utilized by the contracts call
 			// stack, keeping the rest for other facilities, such as PoV, etc.
@@ -734,21 +734,21 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T>
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T>
 	where
 		<BalanceOf<T> as HasCompact>::Type: Clone + Eq + PartialEq + Debug + TypeInfo + Encode,
 	{
 		/// Deprecated version if [`Self::call`] for use in an in-storage `Call`.
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::call().saturating_add(<Pallet<T>>::compat_weight_limit(*gas_limit)))]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::call().saturating_add(<Pezpallet<T>>::compat_weight_limit(*gas_limit)))]
 		#[allow(deprecated)]
 		#[deprecated(note = "1D weight is used in this extrinsic, please migrate to `call`")]
 		pub fn call_old_weight(
 			origin: OriginFor<T>,
 			dest: AccountIdLookupOf<T>,
-			#[pallet::compact] value: BalanceOf<T>,
-			#[pallet::compact] gas_limit: OldWeight,
+			#[pezpallet::compact] value: BalanceOf<T>,
+			#[pezpallet::compact] gas_limit: OldWeight,
 			storage_deposit_limit: Option<<BalanceOf<T> as codec::HasCompact>::Type>,
 			data: Vec<u8>,
 		) -> DispatchResultWithPostInfo {
@@ -756,17 +756,17 @@ pub mod pallet {
 				origin,
 				dest,
 				value,
-				<Pallet<T>>::compat_weight_limit(gas_limit),
+				<Pezpallet<T>>::compat_weight_limit(gas_limit),
 				storage_deposit_limit,
 				data,
 			)
 		}
 
 		/// Deprecated version if [`Self::instantiate_with_code`] for use in an in-storage `Call`.
-		#[pallet::call_index(1)]
-		#[pallet::weight(
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(
 			T::WeightInfo::instantiate_with_code(code.len() as u32, data.len() as u32, salt.len() as u32)
-			.saturating_add(<Pallet<T>>::compat_weight_limit(*gas_limit))
+			.saturating_add(<Pezpallet<T>>::compat_weight_limit(*gas_limit))
 		)]
 		#[allow(deprecated)]
 		#[deprecated(
@@ -774,8 +774,8 @@ pub mod pallet {
 		)]
 		pub fn instantiate_with_code_old_weight(
 			origin: OriginFor<T>,
-			#[pallet::compact] value: BalanceOf<T>,
-			#[pallet::compact] gas_limit: OldWeight,
+			#[pezpallet::compact] value: BalanceOf<T>,
+			#[pezpallet::compact] gas_limit: OldWeight,
 			storage_deposit_limit: Option<<BalanceOf<T> as codec::HasCompact>::Type>,
 			code: Vec<u8>,
 			data: Vec<u8>,
@@ -784,7 +784,7 @@ pub mod pallet {
 			Self::instantiate_with_code(
 				origin,
 				value,
-				<Pallet<T>>::compat_weight_limit(gas_limit),
+				<Pezpallet<T>>::compat_weight_limit(gas_limit),
 				storage_deposit_limit,
 				code,
 				data,
@@ -793,16 +793,16 @@ pub mod pallet {
 		}
 
 		/// Deprecated version if [`Self::instantiate`] for use in an in-storage `Call`.
-		#[pallet::call_index(2)]
-		#[pallet::weight(
-			T::WeightInfo::instantiate(data.len() as u32, salt.len() as u32).saturating_add(<Pallet<T>>::compat_weight_limit(*gas_limit))
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(
+			T::WeightInfo::instantiate(data.len() as u32, salt.len() as u32).saturating_add(<Pezpallet<T>>::compat_weight_limit(*gas_limit))
 		)]
 		#[allow(deprecated)]
 		#[deprecated(note = "1D weight is used in this extrinsic, please migrate to `instantiate`")]
 		pub fn instantiate_old_weight(
 			origin: OriginFor<T>,
-			#[pallet::compact] value: BalanceOf<T>,
-			#[pallet::compact] gas_limit: OldWeight,
+			#[pezpallet::compact] value: BalanceOf<T>,
+			#[pezpallet::compact] gas_limit: OldWeight,
 			storage_deposit_limit: Option<<BalanceOf<T> as codec::HasCompact>::Type>,
 			code_hash: CodeHash<T>,
 			data: Vec<u8>,
@@ -811,7 +811,7 @@ pub mod pallet {
 			Self::instantiate(
 				origin,
 				value,
-				<Pallet<T>>::compat_weight_limit(gas_limit),
+				<Pezpallet<T>>::compat_weight_limit(gas_limit),
 				storage_deposit_limit,
 				code_hash,
 				data,
@@ -843,8 +843,8 @@ pub mod pallet {
 		/// Use [`Determinism::Relaxed`] exclusively for non-deterministic code. If the uploaded
 		/// code is deterministic, specifying [`Determinism::Relaxed`] will be disregarded and
 		/// result in higher gas costs.
-		#[pallet::call_index(3)]
-		#[pallet::weight(
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(
 			match determinism {
 				Determinism::Enforced => T::WeightInfo::upload_code_determinism_enforced(code.len() as u32),
 				Determinism::Relaxed => T::WeightInfo::upload_code_determinism_relaxed(code.len() as u32),
@@ -866,8 +866,8 @@ pub mod pallet {
 		///
 		/// A code can only be removed by its original uploader (its owner) and only if it is
 		/// not used by any contract.
-		#[pallet::call_index(4)]
-		#[pallet::weight(T::WeightInfo::remove_code())]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(T::WeightInfo::remove_code())]
 		pub fn remove_code(
 			origin: OriginFor<T>,
 			code_hash: CodeHash<T>,
@@ -889,8 +889,8 @@ pub mod pallet {
 		/// This does **not** change the address of the contract in question. This means
 		/// that the contract address is no longer derived from its code hash after calling
 		/// this dispatchable.
-		#[pallet::call_index(5)]
-		#[pallet::weight(T::WeightInfo::set_code())]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(T::WeightInfo::set_code())]
 		pub fn set_code(
 			origin: OriginFor<T>,
 			dest: AccountIdLookupOf<T>,
@@ -933,12 +933,12 @@ pub mod pallet {
 		/// * If the account is a regular account, any value will be transferred.
 		/// * If no account exists and the call value is not less than `existential_deposit`,
 		/// a regular account will be created and any value will be transferred.
-		#[pallet::call_index(6)]
-		#[pallet::weight(T::WeightInfo::call().saturating_add(*gas_limit))]
+		#[pezpallet::call_index(6)]
+		#[pezpallet::weight(T::WeightInfo::call().saturating_add(*gas_limit))]
 		pub fn call(
 			origin: OriginFor<T>,
 			dest: AccountIdLookupOf<T>,
-			#[pallet::compact] value: BalanceOf<T>,
+			#[pezpallet::compact] value: BalanceOf<T>,
 			gas_limit: Weight,
 			storage_deposit_limit: Option<<BalanceOf<T> as codec::HasCompact>::Type>,
 			data: Vec<u8>,
@@ -978,7 +978,7 @@ pub mod pallet {
 		///   from the caller to pay for the storage consumed.
 		/// * `code`: The contract code to deploy in raw bytes.
 		/// * `data`: The input data to pass to the contract constructor.
-		/// * `salt`: Used for the address derivation. See [`Pallet::contract_address`].
+		/// * `salt`: Used for the address derivation. See [`Pezpallet::contract_address`].
 		///
 		/// Instantiation is executed as follows:
 		///
@@ -988,14 +988,14 @@ pub mod pallet {
 		/// - The smart-contract account is created at the computed address.
 		/// - The `value` is transferred to the new account.
 		/// - The `deploy` function is executed in the context of the newly-created account.
-		#[pallet::call_index(7)]
-		#[pallet::weight(
+		#[pezpallet::call_index(7)]
+		#[pezpallet::weight(
 			T::WeightInfo::instantiate_with_code(code.len() as u32, data.len() as u32, salt.len() as u32)
 			.saturating_add(*gas_limit)
 		)]
 		pub fn instantiate_with_code(
 			origin: OriginFor<T>,
-			#[pallet::compact] value: BalanceOf<T>,
+			#[pezpallet::compact] value: BalanceOf<T>,
 			gas_limit: Weight,
 			storage_deposit_limit: Option<<BalanceOf<T> as codec::HasCompact>::Type>,
 			code: Vec<u8>,
@@ -1054,13 +1054,13 @@ pub mod pallet {
 		/// This function is identical to [`Self::instantiate_with_code`] but without the
 		/// code deployment step. Instead, the `code_hash` of an on-chain deployed wasm binary
 		/// must be supplied.
-		#[pallet::call_index(8)]
-		#[pallet::weight(
+		#[pezpallet::call_index(8)]
+		#[pezpallet::weight(
 			T::WeightInfo::instantiate(data.len() as u32, salt.len() as u32).saturating_add(*gas_limit)
 		)]
 		pub fn instantiate(
 			origin: OriginFor<T>,
-			#[pallet::compact] value: BalanceOf<T>,
+			#[pezpallet::compact] value: BalanceOf<T>,
 			gas_limit: Weight,
 			storage_deposit_limit: Option<<BalanceOf<T> as codec::HasCompact>::Type>,
 			code_hash: CodeHash<T>,
@@ -1094,10 +1094,10 @@ pub mod pallet {
 
 		/// When a migration is in progress, this dispatchable can be used to run migration steps.
 		/// Calls that contribute to advancing the migration have their fees waived, as it's helpful
-		/// for the chain. Note that while the migration is in progress, the pallet will also
+		/// for the chain. Note that while the migration is in progress, the pezpallet will also
 		/// leverage the `on_idle` hooks to run migration steps.
-		#[pallet::call_index(9)]
-		#[pallet::weight(T::WeightInfo::migrate().saturating_add(*weight_limit))]
+		#[pezpallet::call_index(9)]
+		#[pezpallet::weight(T::WeightInfo::migrate().saturating_add(*weight_limit))]
 		pub fn migrate(origin: OriginFor<T>, weight_limit: Weight) -> DispatchResultWithPostInfo {
 			use migration::MigrateResult::*;
 			ensure_signed(origin)?;
@@ -1127,7 +1127,7 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::event]
+	#[pezpallet::event]
 	pub enum Event<T: Config> {
 		/// Contract deployed by address at the specified address.
 		Instantiated { deployer: T::AccountId, contract: T::AccountId },
@@ -1214,7 +1214,7 @@ pub mod pallet {
 		},
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Invalid schedule supplied, e.g. with zero weight of a basic operation.
 		InvalidSchedule,
@@ -1270,7 +1270,7 @@ pub mod pallet {
 		TerminatedInConstructor,
 		/// A call tried to invoke a contract that is flagged as non-reentrant.
 		/// The only other cause is that a call from a contract into the runtime tried to call back
-		/// into `pezpallet-contracts`. This would make the whole pallet reentrant with regard to
+		/// into `pezpallet-contracts`. This would make the whole pezpallet reentrant with regard to
 		/// contract code execution which is not supported.
 		ReentranceDenied,
 		/// A contract attempted to invoke a state modifying API while being in read-only mode.
@@ -1313,21 +1313,21 @@ pub mod pallet {
 		OutOfTransientStorage,
 	}
 
-	/// A reason for the pallet contracts placing a hold on funds.
-	#[pallet::composite_enum]
+	/// A reason for the pezpallet contracts placing a hold on funds.
+	#[pezpallet::composite_enum]
 	pub enum HoldReason {
-		/// The Pallet has reserved it for storing code on-chain.
+		/// The Pezpallet has reserved it for storing code on-chain.
 		CodeUploadDepositReserve,
-		/// The Pallet has reserved it for storage deposit.
+		/// The Pezpallet has reserved it for storage deposit.
 		StorageDepositReserve,
 	}
 
 	/// A mapping from a contract's code hash to its code.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type PristineCode<T: Config> = StorageMap<_, Identity, CodeHash<T>, CodeVec<T>>;
 
 	/// A mapping from a contract's code hash to its code info.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type CodeInfoOf<T: Config> = StorageMap<_, Identity, CodeHash<T>, CodeInfo<T>>;
 
 	/// This is a **monotonic** counter incremented on contract instantiation.
@@ -1352,13 +1352,13 @@ pub mod pallet {
 	///
 	/// Do not use it to determine the number of contracts. It won't be decremented if
 	/// a contract is destroyed.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type Nonce<T: Config> = StorageValue<_, u64, ValueQuery>;
 
 	/// The code associated with a given account.
 	///
 	/// TWOX-NOTE: SAFE since `AccountId` is a secure hash.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type ContractInfoOf<T: Config> =
 		StorageMap<_, Twox64Concat, T::AccountId, ContractInfo<T>>;
 
@@ -1366,23 +1366,23 @@ pub mod pallet {
 	///
 	/// Child trie deletion is a heavy operation depending on the amount of storage items
 	/// stored in said trie. Therefore this operation is performed lazily in `on_idle`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type DeletionQueue<T: Config> = StorageMap<_, Twox64Concat, u32, TrieId>;
 
 	/// A pair of monotonic counters used to track the latest contract marked for deletion
 	/// and the latest deleted contract in queue.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type DeletionQueueCounter<T: Config> =
 		StorageValue<_, DeletionQueueManager<T>, ValueQuery>;
 
 	/// A migration can span across multiple blocks. This storage defines a cursor to track the
 	/// progress of the migration, enabling us to resume from the last completed position.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type MigrationInProgress<T: Config> =
 		StorageValue<_, migration::Cursor, OptionQuery>;
 }
 
-/// The type of origins supported by the contracts pallet.
+/// The type of origins supported by the contracts pezpallet.
 #[derive(
 	Clone, Encode, Decode, DecodeWithMemTracking, PartialEq, TypeInfo, RuntimeDebugNoBound,
 )]
@@ -1668,7 +1668,7 @@ macro_rules! ensure_no_migration_in_progress {
 	};
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Perform a call to a specified contract.
 	///
 	/// This function is similar to [`Self::call`], but doesn't perform any address lookups
@@ -1904,14 +1904,14 @@ impl<T: Config> Pallet<T> {
 		Ok(())
 	}
 
-	/// Deposit a pallet contracts event.
+	/// Deposit a pezpallet contracts event.
 	fn deposit_event(event: Event<T>) {
-		<pezframe_system::Pallet<T>>::deposit_event(<T as Config>::RuntimeEvent::from(event))
+		<pezframe_system::Pezpallet<T>>::deposit_event(<T as Config>::RuntimeEvent::from(event))
 	}
 
-	/// Deposit a pallet contracts indexed event.
+	/// Deposit a pezpallet contracts indexed event.
 	fn deposit_indexed_event(topics: Vec<T::Hash>, event: Event<T>) {
-		<pezframe_system::Pallet<T>>::deposit_event_indexed(
+		<pezframe_system::Pezpallet<T>>::deposit_event_indexed(
 			&topics,
 			<T as Config>::RuntimeEvent::from(event).into(),
 		)
@@ -1943,7 +1943,7 @@ pezsp_api::decl_runtime_apis! {
 	{
 		/// Perform a call from a specified account to a given contract.
 		///
-		/// See [`crate::Pallet::bare_call`].
+		/// See [`crate::Pezpallet::bare_call`].
 		fn call(
 			origin: AccountId,
 			dest: AccountId,
@@ -1955,7 +1955,7 @@ pezsp_api::decl_runtime_apis! {
 
 		/// Instantiate a new contract.
 		///
-		/// See `[crate::Pallet::bare_instantiate]`.
+		/// See `[crate::Pezpallet::bare_instantiate]`.
 		fn instantiate(
 			origin: AccountId,
 			value: Balance,
@@ -1968,7 +1968,7 @@ pezsp_api::decl_runtime_apis! {
 
 		/// Upload new code without instantiating a contract from it.
 		///
-		/// See [`crate::Pallet::bare_upload_code`].
+		/// See [`crate::Pezpallet::bare_upload_code`].
 		fn upload_code(
 			origin: AccountId,
 			code: Vec<u8>,

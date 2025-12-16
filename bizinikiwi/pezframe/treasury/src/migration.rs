@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Treasury pallet migrations.
+//! Treasury pezpallet migrations.
 
 use super::*;
 use alloc::collections::BTreeSet;
@@ -24,7 +24,7 @@ use alloc::vec::Vec;
 use core::marker::PhantomData;
 use pezframe_support::{defensive, traits::OnRuntimeUpgrade};
 
-/// The log target for this pallet.
+/// The log target for this pezpallet.
 const LOG_TARGET: &str = "runtime::treasury";
 
 pub mod cleanup_proposals {

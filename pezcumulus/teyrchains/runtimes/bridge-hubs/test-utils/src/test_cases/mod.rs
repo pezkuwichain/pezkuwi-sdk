@@ -140,7 +140,7 @@ pub fn initialize_bridge_by_governance_works<Runtime, GrandpaPalletInstance>(
 	})
 }
 
-/// Test-case makes sure that `Runtime` can change bridge GRANDPA pallet operating mode via
+/// Test-case makes sure that `Runtime` can change bridge GRANDPA pezpallet operating mode via
 /// governance-like call.
 pub fn change_bridge_grandpa_pallet_mode_by_governance_works<Runtime, GrandpaPalletInstance>(
 	collator_session_key: CollatorSessionKeys<Runtime>,
@@ -191,7 +191,7 @@ pub fn change_bridge_grandpa_pallet_mode_by_governance_works<Runtime, GrandpaPal
 	});
 }
 
-/// Test-case makes sure that `Runtime` can change bridge teyrchains pallet operating mode via
+/// Test-case makes sure that `Runtime` can change bridge teyrchains pezpallet operating mode via
 /// governance-like call.
 pub fn change_bridge_teyrchains_pallet_mode_by_governance_works<Runtime, TeyrchainsPalletInstance>(
 	collator_session_key: CollatorSessionKeys<Runtime>,
@@ -244,7 +244,7 @@ pub fn change_bridge_teyrchains_pallet_mode_by_governance_works<Runtime, Teyrcha
 	});
 }
 
-/// Test-case makes sure that `Runtime` can change bridge messaging pallet operating mode via
+/// Test-case makes sure that `Runtime` can change bridge messaging pezpallet operating mode via
 /// governance-like call.
 pub fn change_bridge_messages_pallet_mode_by_governance_works<Runtime, MessagesPalletInstance>(
 	collator_session_key: CollatorSessionKeys<Runtime>,
@@ -406,7 +406,7 @@ pub fn handle_export_message_from_system_teyrchain_to_outbound_queue_works<
 		);
 
 		// check events
-		let mut events = <pezframe_system::Pallet<Runtime>>::events()
+		let mut events = <pezframe_system::Pezpallet<Runtime>>::events()
 			.into_iter()
 			.filter_map(|e| unwrap_pallet_bridge_messages_event(e.event.encode()));
 		assert!(events.any(|e| matches!(e, pezpallet_bridge_messages::Event::MessageAccepted { .. })));
@@ -499,7 +499,7 @@ pub fn message_dispatch_routing_works<
 		);
 
 		// check events - UpwardMessageSent
-		let mut events = <pezframe_system::Pallet<Runtime>>::events()
+		let mut events = <pezframe_system::Pezpallet<Runtime>>::events()
 			.into_iter()
 			.filter_map(|e| unwrap_pezcumulus_pezpallet_teyrchain_system_event(e.event.encode()));
 		assert!(events.any(|e| matches!(
@@ -534,7 +534,7 @@ pub fn message_dispatch_routing_works<
 
 		// check events - no XcmpMessageSent
 		assert_eq!(
-			<pezframe_system::Pallet<Runtime>>::events()
+			<pezframe_system::Pezpallet<Runtime>>::events()
 				.into_iter()
 				.filter_map(|e| unwrap_pezcumulus_pezpallet_xcmp_queue_event(e.event.encode()))
 				.count(),
@@ -562,7 +562,7 @@ pub fn message_dispatch_routing_works<
 		);
 
 		// check events - XcmpMessageSent
-		let mut events = <pezframe_system::Pallet<Runtime>>::events()
+		let mut events = <pezframe_system::Pezpallet<Runtime>>::events()
 			.into_iter()
 			.filter_map(|e| unwrap_pezcumulus_pezpallet_xcmp_queue_event(e.event.encode()));
 		assert!(
@@ -689,7 +689,7 @@ pub(crate) mod for_pallet_xcm_bridge_hub {
 	{
 		run_test::<Runtime, _>(collator_session_key, runtime_para_id, vec![], || {
 			// construct expected bridge configuration
-			let locations = pezpallet_xcm_bridge_hub::Pallet::<Runtime, XcmOverBridgePalletInstance>::bridge_locations(
+			let locations = pezpallet_xcm_bridge_hub::Pezpallet::<Runtime, XcmOverBridgePalletInstance>::bridge_locations(
 				expected_source.clone().into(),
 				destination.clone().into(),
 			).expect("valid bridge locations");

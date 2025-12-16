@@ -16,7 +16,7 @@
 // limitations under the License.
 
 //! This module contains helper functions to perform the buy and sell functionalities of the NFTs
-//! pallet.
+//! pezpallet.
 //! The bitflag [`PalletFeature::Trading`] needs to be set in the [`Config::Features`] for NFTs
 //! to have the functionality defined in this module.
 
@@ -26,7 +26,7 @@ use pezframe_support::{
 	traits::{Currency, ExistenceRequirement, ExistenceRequirement::KeepAlive},
 };
 
-impl<T: Config<I>, I: 'static> Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 	/// Pays the specified tips to the corresponding receivers.
 	///
 	/// This function is used to pay tips from the `sender` account to multiple receivers. The tips

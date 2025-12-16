@@ -24,7 +24,7 @@ use frame::testing_prelude::*;
 
 type Block = pezframe_system::mocking::MockBlock<Test>;
 
-// Configure a mock runtime to test the pallet.
+// Configure a mock runtime to test the pezpallet.
 construct_runtime!(
 	pub enum Test {
 		System: pezframe_system,

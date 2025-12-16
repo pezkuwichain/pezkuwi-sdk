@@ -301,7 +301,7 @@ impl Config for Test {
 	type DisablingStrategy =
 		disabling::UpToLimitWithReEnablingDisablingStrategy<DISABLING_LIMIT_FACTOR>;
 	type WeightInfo = ();
-	type Currency = pezpallet_balances::Pallet<Test>;
+	type Currency = pezpallet_balances::Pezpallet<Test>;
 	type KeyDeposit = KeyDeposit;
 }
 

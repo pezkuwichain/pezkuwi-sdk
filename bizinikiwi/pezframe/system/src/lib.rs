@@ -15,17 +15,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # System Pallet
+//! # System Pezpallet
 //!
-//! The System pallet provides low-level access to core types and cross-cutting utilities. It acts
+//! The System pezpallet provides low-level access to core types and cross-cutting utilities. It acts
 //! as the base layer for other pallets to interact with the Bizinikiwi framework components.
 //!
 //! - [`Config`]
 //!
 //! ## Overview
 //!
-//! The System pallet defines the core data types used in a Bizinikiwi runtime. It also provides
-//! several utility functions (see [`Pallet`]) for other FRAME pallets.
+//! The System pezpallet defines the core data types used in a Bizinikiwi runtime. It also provides
+//! several utility functions (see [`Pezpallet`]) for other FRAME pallets.
 //!
 //! In addition, it manages the storage items for extrinsic data, indices, event records, and digest
 //! items, among other things that support the execution of the current block.
@@ -37,7 +37,7 @@
 //!
 //! ### Dispatchable Functions
 //!
-//! The System pallet provides dispatchable functions that, with the exception of `remark`, manage
+//! The System pezpallet provides dispatchable functions that, with the exception of `remark`, manage
 //! low-level or privileged functionality of a Bizinikiwi-based runtime.
 //!
 //! - `remark`: Make some on-chain remark.
@@ -56,7 +56,7 @@
 //!
 //! #### A Note on Upgrades
 //!
-//! The pallet provides two primary means of upgrading the runtime, a single-phase means using
+//! The pezpallet provides two primary means of upgrading the runtime, a single-phase means using
 //! `set_code` and a two-phase means using `authorize_upgrade` followed by
 //! `apply_authorized_upgrade`. The first will directly attempt to apply the provided `code`
 //! (application may have to be scheduled, depending on the context and implementation of the
@@ -74,11 +74,11 @@
 //!
 //! ### Public Functions
 //!
-//! See the [`Pallet`] struct for details of publicly available functions.
+//! See the [`Pezpallet`] struct for details of publicly available functions.
 //!
 //! ### Signed Extensions
 //!
-//! The System pallet defines the following extensions:
+//! The System pezpallet defines the following extensions:
 //!
 //!   - [`CheckWeight`]: Checks the weight and length of the block and ensure that it does not
 //!     exceed the limits.
@@ -212,7 +212,7 @@ pub fn extrinsics_data_root<H: Hash>(xts: Vec<Vec<u8>>, state_version: StateVers
 /// An object to track the currently used extrinsic weight in a block.
 pub type ConsumedWeight = PerDispatchClass<Weight>;
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 /// Do something when we should be setting the code.
 pub trait SetCode<T: Config> {
@@ -222,7 +222,7 @@ pub trait SetCode<T: Config> {
 
 impl<T: Config> SetCode<T> for () {
 	fn set_code(code: Vec<u8>) -> DispatchResult {
-		<Pallet<T>>::update_code_in_storage(&code);
+		<Pezpallet<T>>::update_code_in_storage(&code);
 		Ok(())
 	}
 }
@@ -305,8 +305,8 @@ pub struct DispatchEventInfo {
 	pub pays_fee: Pays,
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use crate::{self as pezframe_system, pezpallet_prelude::*, *};
 	use codec::HasCompact;
 	use pezframe_support::pezpallet_prelude::*;
@@ -329,10 +329,10 @@ pub mod pallet {
 		}
 
 		/// Provides a viable default config that can be used with
-		/// [`derive_impl`](`pezframe_support::derive_impl`) to derive a testing pallet config
+		/// [`derive_impl`](`pezframe_support::derive_impl`) to derive a testing pezpallet config
 		/// based on this one.
 		///
-		/// See `Test` in the `default-config` example pallet's `test.rs` for an example of
+		/// See `Test` in the `default-config` example pezpallet's `test.rs` for an example of
 		/// a downstream user of this particular `TestDefaultConfig`
 		pub struct TestDefaultConfig;
 
@@ -374,14 +374,14 @@ pub mod pallet {
 			type PostTransactions = ();
 		}
 
-		/// Default configurations of this pallet in a solochain environment.
+		/// Default configurations of this pezpallet in a solochain environment.
 		///
 		/// ## Considerations:
 		///
 		/// By default, this type makes the following choices:
 		///
 		/// * Use a normal 32 byte account id, with a [`DefaultConfig::Lookup`] that implies no
-		///   'account-indexing' pallet is being used.
+		///   'account-indexing' pezpallet is being used.
 		/// * Given that we don't know anything about the existence of a currency system in scope,
 		///   an [`DefaultConfig::AccountData`] is chosen that has no addition data. Overwrite this
 		///   if you use `pezpallet-balances` or similar.
@@ -418,10 +418,10 @@ pub mod pallet {
 			/// What to do if an account is fully reaped from the system.
 			type OnKilledAccount = ();
 
-			/// Weight information for the extrinsics of this pallet.
+			/// Weight information for the extrinsics of this pezpallet.
 			type SystemWeightInfo = ();
 
-			/// Weight information for the extensions of this pallet.
+			/// Weight information for the extensions of this pezpallet.
 			type ExtensionsWeightInfo = ();
 
 			/// This is used as an identifier of the chain.
@@ -476,7 +476,7 @@ pub mod pallet {
 			type PostTransactions = ();
 		}
 
-		/// Default configurations of this pallet in a relay-chain environment.
+		/// Default configurations of this pezpallet in a relay-chain environment.
 		pub struct RelayChainDefaultConfig;
 
 		/// It currently uses the same configuration as `SolochainDefaultConfig`.
@@ -484,7 +484,7 @@ pub mod pallet {
 		#[pezframe_support::register_default_impl(RelayChainDefaultConfig)]
 		impl DefaultConfig for RelayChainDefaultConfig {}
 
-		/// Default configurations of this pallet in a teyrchain environment.
+		/// Default configurations of this pezpallet in a teyrchain environment.
 		pub struct TeyrchainDefaultConfig;
 
 		/// It currently uses the same configuration as `SolochainDefaultConfig`.
@@ -494,11 +494,11 @@ pub mod pallet {
 	}
 
 	/// System configuration trait. Implemented by runtime.
-	#[pallet::config(with_default, pezframe_system_config)]
-	#[pallet::disable_pezframe_system_supertrait_check]
+	#[pezpallet::config(with_default, pezframe_system_config)]
+	#[pezpallet::disable_pezframe_system_supertrait_check]
 	pub trait Config: 'static + Eq + Clone {
 		/// The aggregated event type of the runtime.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		type RuntimeEvent: Parameter
 			+ Member
 			+ From<Event<Self>>
@@ -515,19 +515,19 @@ pub mod pallet {
 		/// [`pezframe_support::traits::InsideBoth`], [`pezframe_support::traits::TheseExcept`] or
 		/// [`pezframe_support::traits::EverythingBut`] et al. The default would be
 		/// [`pezframe_support::traits::Everything`].
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		type BaseCallFilter: Contains<Self::RuntimeCall>;
 
 		/// Block & extrinsics weights: base values and limits.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type BlockWeights: Get<limits::BlockWeights>;
 
 		/// The maximum length of a block (in bytes).
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type BlockLength: Get<limits::BlockLength>;
 
 		/// The `RuntimeOrigin` type used by dispatchable calls.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		type RuntimeOrigin: Into<Result<RawOrigin<Self::AccountId>, Self::RuntimeOrigin>>
 			+ From<RawOrigin<Self::AccountId>>
 			+ Clone
@@ -536,7 +536,7 @@ pub mod pallet {
 
 		#[docify::export(system_runtime_call)]
 		/// The aggregated `RuntimeCall` type.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		type RuntimeCall: Parameter
 			+ Dispatchable<RuntimeOrigin = Self::RuntimeOrigin>
 			+ Debug
@@ -545,7 +545,7 @@ pub mod pallet {
 			+ Authorize;
 
 		/// The aggregated `RuntimeTask` type.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		type RuntimeTask: Task;
 
 		/// This stores the number of previous transactions associated with a sender account.
@@ -592,39 +592,39 @@ pub mod pallet {
 		///
 		/// Used to define the type and conversion mechanism for referencing accounts in
 		/// transactions. It's perfectly reasonable for this to be an identity conversion (with the
-		/// source type being `AccountId`), but other pallets (e.g. Indices pallet) may provide more
+		/// source type being `AccountId`), but other pallets (e.g. Indices pezpallet) may provide more
 		/// functional/efficient alternatives.
 		type Lookup: StaticLookup<Target = Self::AccountId>;
 
 		/// The Block type used by the runtime. This is used by `construct_runtime` to retrieve the
 		/// extrinsics or other block specific data as needed.
-		#[pallet::no_default]
+		#[pezpallet::no_default]
 		type Block: Parameter + Member + traits::Block<Hash = Self::Hash>;
 
 		/// Maximum number of block number to block hash mappings to keep (oldest pruned first).
-		#[pallet::constant]
-		#[pallet::no_default_bounds]
+		#[pezpallet::constant]
+		#[pezpallet::no_default_bounds]
 		type BlockHashCount: Get<BlockNumberFor<Self>>;
 
 		/// The weight of runtime database operations the runtime can invoke.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type DbWeight: Get<RuntimeDbWeight>;
 
 		/// Get the chain's in-code version.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type Version: Get<RuntimeVersion>;
 
-		/// Provides information about the pallet setup in the runtime.
+		/// Provides information about the pezpallet setup in the runtime.
 		///
 		/// Expects the `PalletInfo` type that is being generated by `construct_runtime!` in the
 		/// runtime.
 		///
 		/// For tests it is okay to use `()` as type, however it will provide "useless" data.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		type PalletInfo: PalletInfo;
 
 		/// Data to be associated with an account (other than nonce/transaction counter, which this
-		/// pallet does regardless).
+		/// pezpallet does regardless).
 		type AccountData: Member + FullCodec + Clone + Default + TypeInfo + MaxEncodedLen;
 
 		/// Handler for when a new account has just been created.
@@ -635,10 +635,10 @@ pub mod pallet {
 		/// All resources should be cleaned up associated with the given account.
 		type OnKilledAccount: OnKilledAccount<Self::AccountId>;
 
-		/// Weight information for the extrinsics of this pallet.
+		/// Weight information for the extrinsics of this pezpallet.
 		type SystemWeightInfo: WeightInfo;
 
-		/// Weight information for the transaction extensions of this pallet.
+		/// Weight information for the transaction extensions of this pezpallet.
 		type ExtensionsWeightInfo: extensions::WeightInfo;
 
 		/// The designated SS58 prefix of this chain.
@@ -646,17 +646,17 @@ pub mod pallet {
 		/// This replaces the "ss58Format" property declared in the chain spec. Reason is
 		/// that the runtime should know about the prefix in order to make use of it as
 		/// an identifier of the chain.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type SS58Prefix: Get<u16>;
 
 		/// What to do if the runtime wants to change the code to something new.
 		///
 		/// The default (`()`) implementation is responsible for setting the correct storage
 		/// entry and emitting corresponding event and log item. (see
-		/// [`Pallet::update_code_in_storage`]).
+		/// [`Pezpallet::update_code_in_storage`]).
 		/// It's unlikely that this needs to be customized, unless you are writing a teyrchain using
 		/// `Pezcumulus`, where the actual code change is deferred.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		type OnSetCode: SetCode<Self>;
 
 		/// The maximum number of consumers allowed on a single account.
@@ -666,7 +666,7 @@ pub mod pallet {
 		///
 		/// These used to be formerly configured in `Executive`. Teyrchains need to ensure that
 		/// running all these migrations in one block will not overflow the weight limit of a block.
-		/// The migrations are run *before* the pallet `on_runtime_upgrade` hooks, just like the
+		/// The migrations are run *before* the pezpallet `on_runtime_upgrade` hooks, just like the
 		/// `OnRuntimeUpgrade` migrations.
 		type SingleBlockMigrations: OnRuntimeUpgrade;
 
@@ -692,32 +692,32 @@ pub mod pallet {
 		type PostTransactions: PostTransactions;
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		#[cfg(feature = "std")]
 		fn integrity_test() {
 			T::BlockWeights::get().validate().expect("The weights are invalid.");
 		}
 	}
 
-	#[pallet::call(weight = <T as Config>::SystemWeightInfo)]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call(weight = <T as Config>::SystemWeightInfo)]
+	impl<T: Config> Pezpallet<T> {
 		/// Make some on-chain remark.
 		///
 		/// Can be executed by every `origin`.
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::SystemWeightInfo::remark(remark.len() as u32))]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::SystemWeightInfo::remark(remark.len() as u32))]
 		pub fn remark(_origin: OriginFor<T>, remark: Vec<u8>) -> DispatchResultWithPostInfo {
 			let _ = remark; // No need to check the weight witness.
 			Ok(().into())
 		}
 
 		/// Set the number of pages in the WebAssembly environment's heap.
-		#[pallet::call_index(1)]
-		#[pallet::weight((T::SystemWeightInfo::set_heap_pages(), DispatchClass::Operational))]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight((T::SystemWeightInfo::set_heap_pages(), DispatchClass::Operational))]
 		pub fn set_heap_pages(origin: OriginFor<T>, pages: u64) -> DispatchResultWithPostInfo {
 			ensure_root(origin)?;
 			storage::unhashed::put_raw(well_known_keys::HEAP_PAGES, &pages.encode());
@@ -726,8 +726,8 @@ pub mod pallet {
 		}
 
 		/// Set the new runtime code.
-		#[pallet::call_index(2)]
-		#[pallet::weight((T::SystemWeightInfo::set_code(), DispatchClass::Operational))]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight((T::SystemWeightInfo::set_code(), DispatchClass::Operational))]
 		pub fn set_code(origin: OriginFor<T>, code: Vec<u8>) -> DispatchResultWithPostInfo {
 			ensure_root(origin)?;
 			Self::can_set_code(&code, true).into_result()?;
@@ -740,8 +740,8 @@ pub mod pallet {
 		///
 		/// Note that runtime upgrades will not run if this is called with a not-increasing spec
 		/// version!
-		#[pallet::call_index(3)]
-		#[pallet::weight((T::SystemWeightInfo::set_code(), DispatchClass::Operational))]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight((T::SystemWeightInfo::set_code(), DispatchClass::Operational))]
 		pub fn set_code_without_checks(
 			origin: OriginFor<T>,
 			code: Vec<u8>,
@@ -753,8 +753,8 @@ pub mod pallet {
 		}
 
 		/// Set some items of storage.
-		#[pallet::call_index(4)]
-		#[pallet::weight((
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight((
 			T::SystemWeightInfo::set_storage(items.len() as u32),
 			DispatchClass::Operational,
 		))]
@@ -770,8 +770,8 @@ pub mod pallet {
 		}
 
 		/// Kill some items from storage.
-		#[pallet::call_index(5)]
-		#[pallet::weight((
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight((
 			T::SystemWeightInfo::kill_storage(keys.len() as u32),
 			DispatchClass::Operational,
 		))]
@@ -787,8 +787,8 @@ pub mod pallet {
 		///
 		/// **NOTE:** We rely on the Root origin to provide us the number of pez_subkeys under
 		/// the prefix we are removing to accurately calculate the weight of this function.
-		#[pallet::call_index(6)]
-		#[pallet::weight((
+		#[pezpallet::call_index(6)]
+		#[pezpallet::weight((
 			T::SystemWeightInfo::kill_prefix(pez_subkeys.saturating_add(1)),
 			DispatchClass::Operational,
 		))]
@@ -803,8 +803,8 @@ pub mod pallet {
 		}
 
 		/// Make some on-chain remark and emit event.
-		#[pallet::call_index(7)]
-		#[pallet::weight(T::SystemWeightInfo::remark_with_event(remark.len() as u32))]
+		#[pezpallet::call_index(7)]
+		#[pezpallet::weight(T::SystemWeightInfo::remark_with_event(remark.len() as u32))]
 		pub fn remark_with_event(
 			origin: OriginFor<T>,
 			remark: Vec<u8>,
@@ -816,8 +816,8 @@ pub mod pallet {
 		}
 
 		#[cfg(feature = "experimental")]
-		#[pallet::call_index(8)]
-		#[pallet::weight(task.weight())]
+		#[pezpallet::call_index(8)]
+		#[pezpallet::weight(task.weight())]
 		pub fn do_task(_origin: OriginFor<T>, task: T::RuntimeTask) -> DispatchResultWithPostInfo {
 			if !task.is_valid() {
 				return Err(Error::<T>::InvalidTask.into());
@@ -829,7 +829,7 @@ pub mod pallet {
 				return Err(Error::<T>::FailedTask.into());
 			}
 
-			// Emit a success event, if your design includes events for this pallet.
+			// Emit a success event, if your design includes events for this pezpallet.
 			Self::deposit_event(Event::TaskCompleted { task });
 
 			// Return success.
@@ -840,8 +840,8 @@ pub mod pallet {
 		/// later.
 		///
 		/// This call requires Root origin.
-		#[pallet::call_index(9)]
-		#[pallet::weight((T::SystemWeightInfo::authorize_upgrade(), DispatchClass::Operational))]
+		#[pezpallet::call_index(9)]
+		#[pezpallet::weight((T::SystemWeightInfo::authorize_upgrade(), DispatchClass::Operational))]
 		pub fn authorize_upgrade(origin: OriginFor<T>, code_hash: T::Hash) -> DispatchResult {
 			ensure_root(origin)?;
 			Self::do_authorize_upgrade(code_hash, true);
@@ -856,8 +856,8 @@ pub mod pallet {
 		/// recommended for normal use. Use `authorize_upgrade` instead.
 		///
 		/// This call requires Root origin.
-		#[pallet::call_index(10)]
-		#[pallet::weight((T::SystemWeightInfo::authorize_upgrade(), DispatchClass::Operational))]
+		#[pezpallet::call_index(10)]
+		#[pezpallet::weight((T::SystemWeightInfo::authorize_upgrade(), DispatchClass::Operational))]
 		pub fn authorize_upgrade_without_checks(
 			origin: OriginFor<T>,
 			code_hash: T::Hash,
@@ -876,8 +876,8 @@ pub mod pallet {
 		/// the new `code` in the same block or attempt to schedule the upgrade.
 		///
 		/// All origins are allowed.
-		#[pallet::call_index(11)]
-		#[pallet::weight((T::SystemWeightInfo::apply_authorized_upgrade(), DispatchClass::Operational))]
+		#[pezpallet::call_index(11)]
+		#[pezpallet::weight((T::SystemWeightInfo::apply_authorized_upgrade(), DispatchClass::Operational))]
 		pub fn apply_authorized_upgrade(
 			_: OriginFor<T>,
 			code: Vec<u8>,
@@ -911,8 +911,8 @@ pub mod pallet {
 		}
 	}
 
-	/// Event for the System pallet.
-	#[pallet::event]
+	/// Event for the System pezpallet.
+	#[pezpallet::event]
 	pub enum Event<T: Config> {
 		/// An extrinsic completed successfully.
 		ExtrinsicSuccess { dispatch_info: DispatchEventInfo },
@@ -941,8 +941,8 @@ pub mod pallet {
 		RejectedInvalidAuthorizedUpgrade { code_hash: T::Hash, error: DispatchError },
 	}
 
-	/// Error for the System pallet
-	#[pallet::error]
+	/// Error for the System pezpallet
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// The name of specification does not match between the current runtime
 		/// and the new runtime.
@@ -975,12 +975,12 @@ pub mod pallet {
 	}
 
 	/// Exposed trait-generic origin type.
-	#[pallet::origin]
+	#[pezpallet::origin]
 	pub type Origin<T> = RawOrigin<<T as Config>::AccountId>;
 
 	/// The full account information for a particular account ID.
-	#[pallet::storage]
-	#[pallet::getter(fn account)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn account)]
 	pub type Account<T: Config> = StorageMap<
 		_,
 		Blake2_128Concat,
@@ -990,55 +990,55 @@ pub mod pallet {
 	>;
 
 	/// Total extrinsics count for the current block.
-	#[pallet::storage]
-	#[pallet::whitelist_storage]
+	#[pezpallet::storage]
+	#[pezpallet::whitelist_storage]
 	pub(super) type ExtrinsicCount<T: Config> = StorageValue<_, u32>;
 
 	/// Whether all inherents have been applied.
-	#[pallet::storage]
-	#[pallet::whitelist_storage]
+	#[pezpallet::storage]
+	#[pezpallet::whitelist_storage]
 	pub type InherentsApplied<T: Config> = StorageValue<_, bool, ValueQuery>;
 
 	/// The current weight for the block.
-	#[pallet::storage]
-	#[pallet::whitelist_storage]
-	#[pallet::getter(fn block_weight)]
+	#[pezpallet::storage]
+	#[pezpallet::whitelist_storage]
+	#[pezpallet::getter(fn block_weight)]
 	pub type BlockWeight<T: Config> = StorageValue<_, ConsumedWeight, ValueQuery>;
 
 	/// Total length (in bytes) for all extrinsics put together, for the current block.
-	#[pallet::storage]
-	#[pallet::whitelist_storage]
+	#[pezpallet::storage]
+	#[pezpallet::whitelist_storage]
 	pub type AllExtrinsicsLen<T: Config> = StorageValue<_, u32>;
 
 	/// Map of block numbers to block hashes.
-	#[pallet::storage]
-	#[pallet::getter(fn block_hash)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn block_hash)]
 	pub type BlockHash<T: Config> =
 		StorageMap<_, Twox64Concat, BlockNumberFor<T>, T::Hash, ValueQuery>;
 
 	/// Extrinsics data for the current block (maps an extrinsic's index to its data).
-	#[pallet::storage]
-	#[pallet::getter(fn extrinsic_data)]
-	#[pallet::unbounded]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn extrinsic_data)]
+	#[pezpallet::unbounded]
 	pub(super) type ExtrinsicData<T: Config> =
 		StorageMap<_, Twox64Concat, u32, Vec<u8>, ValueQuery>;
 
 	/// The current block number being processed. Set by `execute_block`.
-	#[pallet::storage]
-	#[pallet::whitelist_storage]
-	#[pallet::getter(fn block_number)]
+	#[pezpallet::storage]
+	#[pezpallet::whitelist_storage]
+	#[pezpallet::getter(fn block_number)]
 	pub(super) type Number<T: Config> = StorageValue<_, BlockNumberFor<T>, ValueQuery>;
 
 	/// Hash of the previous block.
-	#[pallet::storage]
-	#[pallet::getter(fn parent_hash)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn parent_hash)]
 	pub(super) type ParentHash<T: Config> = StorageValue<_, T::Hash, ValueQuery>;
 
 	/// Digest of the current block, also part of the block header.
-	#[pallet::storage]
-	#[pallet::whitelist_storage]
-	#[pallet::unbounded]
-	#[pallet::getter(fn digest)]
+	#[pezpallet::storage]
+	#[pezpallet::whitelist_storage]
+	#[pezpallet::unbounded]
+	#[pezpallet::getter(fn digest)]
 	pub(super) type Digest<T: Config> = StorageValue<_, generic::Digest, ValueQuery>;
 
 	/// Events deposited for the current block.
@@ -1048,17 +1048,17 @@ pub mod pallet {
 	///
 	/// Events have a large in-memory size. Box the events to not go out-of-memory
 	/// just in case someone still reads them from within the runtime.
-	#[pallet::storage]
-	#[pallet::whitelist_storage]
-	#[pallet::disable_try_decode_storage]
-	#[pallet::unbounded]
+	#[pezpallet::storage]
+	#[pezpallet::whitelist_storage]
+	#[pezpallet::disable_try_decode_storage]
+	#[pezpallet::unbounded]
 	pub(super) type Events<T: Config> =
 		StorageValue<_, Vec<Box<EventRecord<T::RuntimeEvent, T::Hash>>>, ValueQuery>;
 
 	/// The number of events in the `Events<T>` list.
-	#[pallet::storage]
-	#[pallet::whitelist_storage]
-	#[pallet::getter(fn event_count)]
+	#[pezpallet::storage]
+	#[pezpallet::whitelist_storage]
+	#[pezpallet::getter(fn event_count)]
 	pub(super) type EventCount<T: Config> = StorageValue<_, EventIndex, ValueQuery>;
 
 	/// Mapping between a topic (represented by T::Hash) and a vector of indexes
@@ -1071,34 +1071,34 @@ pub mod pallet {
 	/// The value has the type `(BlockNumberFor<T>, EventIndex)` because if we used only just
 	/// the `EventIndex` then in case if the topic has the same contents on the next block
 	/// no notification will be triggered thus the event might be lost.
-	#[pallet::storage]
-	#[pallet::unbounded]
-	#[pallet::getter(fn event_topics)]
+	#[pezpallet::storage]
+	#[pezpallet::unbounded]
+	#[pezpallet::getter(fn event_topics)]
 	pub(super) type EventTopics<T: Config> =
 		StorageMap<_, Blake2_128Concat, T::Hash, Vec<(BlockNumberFor<T>, EventIndex)>, ValueQuery>;
 
 	/// Stores the `spec_version` and `spec_name` of when the last runtime upgrade happened.
-	#[pallet::storage]
-	#[pallet::unbounded]
+	#[pezpallet::storage]
+	#[pezpallet::unbounded]
 	pub type LastRuntimeUpgrade<T: Config> = StorageValue<_, LastRuntimeUpgradeInfo>;
 
 	/// True if we have upgraded so that `type RefCount` is `u32`. False (default) if not.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type UpgradedToU32RefCount<T: Config> = StorageValue<_, bool, ValueQuery>;
 
 	/// True if we have upgraded so that AccountInfo contains three types of `RefCount`. False
 	/// (default) if not.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type UpgradedToTripleRefCount<T: Config> = StorageValue<_, bool, ValueQuery>;
 
 	/// The execution phase of the block.
-	#[pallet::storage]
-	#[pallet::whitelist_storage]
+	#[pezpallet::storage]
+	#[pezpallet::whitelist_storage]
 	pub(super) type ExecutionPhase<T: Config> = StorageValue<_, Phase>;
 
 	/// `Some` if a code upgrade has been authorized.
-	#[pallet::storage]
-	#[pallet::getter(fn authorized_upgrade)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn authorized_upgrade)]
 	pub(super) type AuthorizedUpgrade<T: Config> =
 		StorageValue<_, CodeUpgradeAuthorization<T>, OptionQuery>;
 
@@ -1109,18 +1109,18 @@ pub mod pallet {
 	///
 	/// Logic doing some post dispatch weight reduction must update this storage to avoid duplicate
 	/// reduction.
-	#[pallet::storage]
-	#[pallet::whitelist_storage]
+	#[pezpallet::storage]
+	#[pezpallet::whitelist_storage]
 	pub type ExtrinsicWeightReclaimed<T: Config> = StorageValue<_, Weight, ValueQuery>;
 
 	#[derive(pezframe_support::DefaultNoBound)]
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	pub struct GenesisConfig<T: Config> {
 		#[serde(skip)]
 		pub _config: core::marker::PhantomData<T>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			<BlockHash<T>>::insert::<_, T::Hash>(BlockNumberFor::<T>::zero(), hash69());
@@ -1133,8 +1133,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::validate_unsigned]
-	impl<T: Config> pezsp_runtime::traits::ValidateUnsigned for Pallet<T> {
+	#[pezpallet::validate_unsigned]
+	impl<T: Config> pezsp_runtime::traits::ValidateUnsigned for Pezpallet<T> {
 		type Call = Call<T>;
 		fn validate_unsigned(source: TransactionSource, call: &Self::Call) -> TransactionValidity {
 			if let Call::apply_authorized_upgrade { ref code } = call {
@@ -1534,7 +1534,7 @@ pub enum DecRefStatus {
 	Exists,
 }
 
-/// Result of [`Pallet::can_set_code`].
+/// Result of [`Pezpallet::can_set_code`].
 pub enum CanSetCodeResult<T: Config> {
 	/// Everything is fine.
 	Ok,
@@ -1561,7 +1561,7 @@ impl<T: Config> CanSetCodeResult<T> {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Returns the `spec_version` of the last runtime upgrade.
 	///
 	/// This function is useful for writing guarded runtime migrations in the runtime. A runtime
@@ -1667,7 +1667,7 @@ impl<T: Config> Pallet<T> {
 					(1, 0, 0) => {
 						// No providers left (and no consumers) and no sufficients. Account dead.
 
-						Pallet::<T>::on_killed_account(who.clone());
+						Pezpallet::<T>::on_killed_account(who.clone());
 						Ok(DecRefStatus::Reaped)
 					},
 					(1, c, _) if c > 0 => {
@@ -1722,7 +1722,7 @@ impl<T: Config> Pallet<T> {
 				}
 				match (account.sufficients, account.providers) {
 					(0, 0) | (1, 0) => {
-						Pallet::<T>::on_killed_account(who.clone());
+						Pezpallet::<T>::on_killed_account(who.clone());
 						DecRefStatus::Reaped
 					},
 					(x, _) => {
@@ -1896,7 +1896,7 @@ impl<T: Config> Pallet<T> {
 		AllExtrinsicsLen::<T>::get().unwrap_or_default()
 	}
 
-	/// Inform the system pallet of some additional weight that should be accounted for, in the
+	/// Inform the system pezpallet of some additional weight that should be accounted for, in the
 	/// current block.
 	///
 	/// NOTE: use with extra care; this function is made public only be used for certain pallets
@@ -2053,7 +2053,7 @@ impl<T: Config> Pallet<T> {
 		<Digest<T>>::append(item);
 	}
 
-	/// Get the basic externalities for this pallet, useful for tests.
+	/// Get the basic externalities for this pezpallet, useful for tests.
 	#[cfg(any(feature = "std", test))]
 	pub fn externalities() -> TestExternalities {
 		TestExternalities::new(pezsp_core::storage::Storage {
@@ -2098,9 +2098,9 @@ impl<T: Config> Pallet<T> {
 		Events::<T>::stream_iter()
 	}
 
-	/// Read and return the events of a specific pallet, as denoted by `E`.
+	/// Read and return the events of a specific pezpallet, as denoted by `E`.
 	///
-	/// This is useful for a pallet that wishes to read only the events it has deposited into
+	/// This is useful for a pezpallet that wishes to read only the events it has deposited into
 	/// `pezframe_system` using the standard `fn deposit_event`.
 	pub fn read_events_for_pallet<E>() -> Vec<E>
 	where
@@ -2299,7 +2299,7 @@ impl<T: Config> Pallet<T> {
 		log::trace!(
 			target: LOG_TARGET,
 			"Used block length: {:?}",
-			Pallet::<T>::all_extrinsics_len(),
+			Pezpallet::<T>::all_extrinsics_len(),
 		);
 
 		let next_extrinsic_index = Self::extrinsic_index().unwrap_or_default() + 1u32;
@@ -2438,11 +2438,11 @@ pub fn unique(entropy: impl Encode) -> [u8; 32] {
 pub struct Provider<T>(PhantomData<T>);
 impl<T: Config> HandleLifetime<T::AccountId> for Provider<T> {
 	fn created(t: &T::AccountId) -> Result<(), DispatchError> {
-		Pallet::<T>::inc_providers(t);
+		Pezpallet::<T>::inc_providers(t);
 		Ok(())
 	}
 	fn killed(t: &T::AccountId) -> Result<(), DispatchError> {
-		Pallet::<T>::dec_providers(t).map(|_| ())
+		Pezpallet::<T>::dec_providers(t).map(|_| ())
 	}
 }
 
@@ -2450,11 +2450,11 @@ impl<T: Config> HandleLifetime<T::AccountId> for Provider<T> {
 pub struct SelfSufficient<T>(PhantomData<T>);
 impl<T: Config> HandleLifetime<T::AccountId> for SelfSufficient<T> {
 	fn created(t: &T::AccountId) -> Result<(), DispatchError> {
-		Pallet::<T>::inc_sufficients(t);
+		Pezpallet::<T>::inc_sufficients(t);
 		Ok(())
 	}
 	fn killed(t: &T::AccountId) -> Result<(), DispatchError> {
-		Pallet::<T>::dec_sufficients(t);
+		Pezpallet::<T>::dec_sufficients(t);
 		Ok(())
 	}
 }
@@ -2463,19 +2463,19 @@ impl<T: Config> HandleLifetime<T::AccountId> for SelfSufficient<T> {
 pub struct Consumer<T>(PhantomData<T>);
 impl<T: Config> HandleLifetime<T::AccountId> for Consumer<T> {
 	fn created(t: &T::AccountId) -> Result<(), DispatchError> {
-		Pallet::<T>::inc_consumers(t)
+		Pezpallet::<T>::inc_consumers(t)
 	}
 	fn killed(t: &T::AccountId) -> Result<(), DispatchError> {
-		Pallet::<T>::dec_consumers(t);
+		Pezpallet::<T>::dec_consumers(t);
 		Ok(())
 	}
 }
 
-impl<T: Config> BlockNumberProvider for Pallet<T> {
+impl<T: Config> BlockNumberProvider for Pezpallet<T> {
 	type BlockNumber = BlockNumberFor<T>;
 
 	fn current_block_number() -> Self::BlockNumber {
-		Pallet::<T>::block_number()
+		Pezpallet::<T>::block_number()
 	}
 
 	#[cfg(feature = "runtime-benchmarks")]
@@ -2489,7 +2489,7 @@ impl<T: Config> BlockNumberProvider for Pallet<T> {
 /// empty/default.
 ///
 /// Anything more complex will need more sophisticated logic.
-impl<T: Config> StoredMap<T::AccountId, T::AccountData> for Pallet<T> {
+impl<T: Config> StoredMap<T::AccountId, T::AccountData> for Pezpallet<T> {
 	fn get(k: &T::AccountId) -> T::AccountData {
 		Account::<T>::get(k).data
 	}
@@ -2541,7 +2541,7 @@ impl<T: Config> Lookup for ChainContext<T> {
 	}
 }
 
-/// Hooks for the [`Pallet::run_to_block_with`] function.
+/// Hooks for the [`Pezpallet::run_to_block_with`] function.
 #[cfg(any(feature = "std", feature = "runtime-benchmarks", test))]
 pub struct RunToBlockHooks<'a, T>
 where
@@ -2607,7 +2607,7 @@ where
 	}
 }
 
-/// Prelude to be used alongside pallet macro, for ease of use.
+/// Prelude to be used alongside pezpallet macro, for ease of use.
 pub mod pezpallet_prelude {
 	pub use crate::{
 		ensure_authorized, ensure_none, ensure_root, ensure_signed, ensure_signed_or_root,

@@ -216,7 +216,7 @@ pub fn get_wasm_module() -> Box<dyn pezsc_executor_common::wasm_runtime::WasmMod
 	)
 }
 
-/// Create a block containing setup extrinsics for the glutton pallet.
+/// Create a block containing setup extrinsics for the glutton pezpallet.
 pub fn set_glutton_parameters(
 	client: &TestClient,
 	initialize: bool,
@@ -233,7 +233,7 @@ pub fn set_glutton_parameters(
 
 	let mut extrinsics = vec![];
 	if initialize {
-		// Initialize the pallet
+		// Initialize the pezpallet
 		extrinsics.push(construct_extrinsic(
 			client,
 			SudoCall::sudo {

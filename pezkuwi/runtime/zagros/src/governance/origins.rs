@@ -18,16 +18,16 @@
 
 pub use pezpallet_custom_origins::*;
 
-#[pezframe_support::pallet]
+#[pezframe_support::pezpallet]
 pub mod pezpallet_custom_origins {
 	use crate::{Balance, CENTS, GRAND};
 	use pezframe_support::pezpallet_prelude::*;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
 	#[derive(
 		PartialEq,
@@ -40,7 +40,7 @@ pub mod pezpallet_custom_origins {
 		TypeInfo,
 		RuntimeDebug,
 	)]
-	#[pallet::origin]
+	#[pezpallet::origin]
 	pub enum Origin {
 		/// Origin for cancelling slashes.
 		StakingAdmin,

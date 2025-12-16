@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Election provider support pallet benchmarking.
+//! Election provider support pezpallet benchmarking.
 //! This is separated into its own crate to avoid bloating the size of the runtime.
 
 use alloc::vec::Vec;
@@ -31,7 +31,7 @@ const SEED: u32 = 999;
 
 pub trait Config: pezframe_system::Config {}
 
-pub struct Pallet<T: Config>(pezframe_system::Pallet<T>);
+pub struct Pezpallet<T: Config>(pezframe_system::Pezpallet<T>);
 
 fn set_up_voters_targets<AccountId: Decode + Clone>(
 	voters_len: u32,

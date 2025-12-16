@@ -5,7 +5,7 @@
 //!
 //! # Feature Unification Note
 //!
-//! Due to Cargo's feature unification behavior, this pallet must be excluded
+//! Due to Cargo's feature unification behavior, this pezpallet must be excluded
 //! from `cargo check --benches` operations when its `runtime-benchmarks` feature
 //! is not explicitly enabled. The CI workflow (tests-misc.yml) handles this
 //! by excluding pezpallet-tiki and all its dependents.
@@ -15,10 +15,10 @@
 //! a required trait method. However, if `pezpallet-tiki/runtime-benchmarks` is not enabled,
 //! our cfg-gated method won't be compiled, causing E0046 errors.
 //!
-//! CI exclusion: .github/workflows/tests-misc.yml excludes this pallet with:
+//! CI exclusion: .github/workflows/tests-misc.yml excludes this pezpallet with:
 //! `--exclude pezpallet-tiki` in the `cargo check --benches` command.
 
-use crate::{Config, Pallet as TikiPallet};
+use crate::{Config, Pezpallet as TikiPallet};
 use pezframe_support::traits::EnsureOrigin;
 use pezframe_system::ensure_signed;
 use pezsp_std::marker::PhantomData;
@@ -96,9 +96,9 @@ impl GetTiki for ParlementerRole {
 /// // Require the caller to hold the Serok Tiki
 /// type SerokOrigin = EnsureTiki<Runtime, SerokRole>;
 ///
-/// // Use in a pallet's dispatchable
-/// #[pallet::call]
-/// impl<T: Config> Pallet<T> {
+/// // Use in a pezpallet's dispatchable
+/// #[pezpallet::call]
+/// impl<T: Config> Pezpallet<T> {
 ///     pub fn privileged_action(origin: OriginFor<T>) -> DispatchResult {
 ///         let who = T::SerokOrigin::ensure_origin(origin)?;
 ///         // ... action requiring Serok authority

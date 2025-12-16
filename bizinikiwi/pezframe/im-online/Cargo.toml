@@ -6,7 +6,7 @@ edition.workspace = true
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
-description = "FRAME's I'm online pallet"
+description = "FRAME's I'm online pezpallet"
 readme = "README.md"
 documentation = "https://docs.rs/pezpallet-im-online"
 

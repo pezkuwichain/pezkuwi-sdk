@@ -61,13 +61,13 @@ pub struct ExtrinsicParams {
 
 	/// List all available pallets and extrinsics.
 	///
-	/// The format is CSV with header `pallet, extrinsic`.
+	/// The format is CSV with header `pezpallet, extrinsic`.
 	#[arg(long)]
 	pub list: bool,
 
-	/// Pallet name of the extrinsic to benchmark.
-	#[arg(long, value_name = "PALLET", required_unless_present = "list")]
-	pub pallet: Option<String>,
+	/// Pezpallet name of the extrinsic to benchmark.
+	#[arg(long, value_name = "PEZPALLET", required_unless_present = "list")]
+	pub pezpallet: Option<String>,
 
 	/// Extrinsic to benchmark.
 	#[arg(long, value_name = "EXTRINSIC", required_unless_present = "list")]
@@ -110,12 +110,12 @@ impl ExtrinsicCmd {
 			return Ok(());
 		}
 
-		let pallet = self.params.pallet.clone().unwrap_or_default();
+		let pezpallet = self.params.pezpallet.clone().unwrap_or_default();
 		let extrinsic = self.params.extrinsic.clone().unwrap_or_default();
-		let ext_builder = match ext_factory.try_get(&pallet, &extrinsic) {
+		let ext_builder = match ext_factory.try_get(&pezpallet, &extrinsic) {
 			Some(ext_builder) => ext_builder,
 			None =>
-				return Err("Unknown pallet or extrinsic. Use --list for a complete list.".into()),
+				return Err("Unknown pezpallet or extrinsic. Use --list for a complete list.".into()),
 		};
 
 		let bench =
@@ -123,7 +123,7 @@ impl ExtrinsicCmd {
 		let stats = bench.bench_extrinsic(ext_builder)?;
 		info!(
 			"Executing a {}::{} extrinsic takes[ns]:\n{:?}",
-			ext_builder.pallet(),
+			ext_builder.pezpallet(),
 			ext_builder.extrinsic(),
 			stats
 		);

@@ -1,6 +1,6 @@
-//! A shell pallet built with [`frame`].
+//! A shell pezpallet built with [`frame`].
 //!
-//! To get started with this pallet, try implementing the guide in
+//! To get started with this pezpallet, try implementing the guide in
 //! <https://docs.pezkuwichain.io/sdk/master/polkadot_sdk_docs/guides/your_first_pallet/index.html>
 
 #![cfg_attr(not(feature = "std"), no_std)]
@@ -8,19 +8,19 @@
 use frame::prelude::*;
 use pezkuwi_sdk::pezkuwi_sdk_frame as frame;
 
-// Re-export all pallet parts, this is needed to properly import the pallet into the runtime.
-pub use pallet::*;
+// Re-export all pezpallet parts, this is needed to properly import the pezpallet into the runtime.
+pub use pezpallet::*;
 
-#[frame::pallet]
-pub mod pallet {
+#[frame::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezkuwi_sdk::pezframe_system::Config {}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Value<T> = StorageValue<Value = u32>;
 }

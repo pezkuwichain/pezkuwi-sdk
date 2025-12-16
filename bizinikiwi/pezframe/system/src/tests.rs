@@ -634,7 +634,7 @@ fn set_code_checks_works() {
 			"test",
 			2,
 			1,
-			Ok(Some(<mock::Test as pallet::Config>::BlockWeights::get().max_block).into()),
+			Ok(Some(<mock::Test as pezpallet::Config>::BlockWeights::get().max_block).into()),
 		),
 		("test", 0, 1, Err(Error::<Test>::SpecVersionNeedsToIncrease)),
 		("test", 1, 0, Err(Error::<Test>::SpecVersionNeedsToIncrease)),
@@ -728,7 +728,7 @@ fn set_code_via_authorization_works() {
 		assert!(System::authorized_upgrade().is_none());
 
 		let runtime = bizinikiwi_test_runtime_client::runtime::wasm_binary_unwrap().to_vec();
-		let hash = <mock::Test as pallet::Config>::Hashing::hash(&runtime);
+		let hash = <mock::Test as pezpallet::Config>::Hashing::hash(&runtime);
 
 		// Can't apply before authorization
 		assert_noop!(
@@ -920,7 +920,7 @@ fn extrinsic_weight_refunded_is_cleaned() {
 fn reclaim_works() {
 	new_test_ext().execute_with(|| {
 		let info = DispatchInfo { call_weight: Weight::from_parts(100, 200), ..Default::default() };
-		crate::Pallet::<Test>::reclaim_weight(
+		crate::Pezpallet::<Test>::reclaim_weight(
 			&info,
 			&PostDispatchInfo {
 				actual_weight: Some(Weight::from_parts(50, 100)),
@@ -930,7 +930,7 @@ fn reclaim_works() {
 		.unwrap();
 		assert_eq!(crate::ExtrinsicWeightReclaimed::<Test>::get(), Weight::from_parts(50, 100));
 
-		crate::Pallet::<Test>::reclaim_weight(
+		crate::Pezpallet::<Test>::reclaim_weight(
 			&info,
 			&PostDispatchInfo {
 				actual_weight: Some(Weight::from_parts(25, 200)),
@@ -940,7 +940,7 @@ fn reclaim_works() {
 		.unwrap();
 		assert_eq!(crate::ExtrinsicWeightReclaimed::<Test>::get(), Weight::from_parts(75, 100));
 
-		crate::Pallet::<Test>::reclaim_weight(
+		crate::Pezpallet::<Test>::reclaim_weight(
 			&info,
 			&PostDispatchInfo {
 				actual_weight: Some(Weight::from_parts(300, 50)),
@@ -950,7 +950,7 @@ fn reclaim_works() {
 		.unwrap();
 		assert_eq!(crate::ExtrinsicWeightReclaimed::<Test>::get(), Weight::from_parts(75, 150));
 
-		crate::Pallet::<Test>::reclaim_weight(
+		crate::Pezpallet::<Test>::reclaim_weight(
 			&info,
 			&PostDispatchInfo {
 				actual_weight: Some(Weight::from_parts(300, 300)),

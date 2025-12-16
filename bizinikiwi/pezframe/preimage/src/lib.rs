@@ -15,14 +15,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Preimage Pallet
+//! # Preimage Pezpallet
 //!
 //! - [`Config`]
 //! - [`Call`]
 //!
 //! ## Overview
 //!
-//! The Preimage pallet allows for the users and the runtime to store the preimage
+//! The Preimage pezpallet allows for the users and the runtime to store the preimage
 //! of a hash on chain. This can be used by other pallets for storing and managing
 //! large byte-blobs.
 
@@ -62,7 +62,7 @@ pub use weights::WeightInfo;
 use pezframe_support::pezpallet_prelude::*;
 use pezframe_system::pezpallet_prelude::*;
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 /// A type to note whether a preimage is owned by a user or the system.
 #[derive(
@@ -119,24 +119,24 @@ pub const MAX_SIZE: u32 = 4 * 1024 * 1024;
 /// Exists only for benchmarking purposes.
 pub const MAX_HASH_UPGRADE_BULK_COUNT: u32 = 1024;
 
-#[pezframe_support::pallet]
+#[pezframe_support::pezpallet]
 #[allow(deprecated)]
-pub mod pallet {
+pub mod pezpallet {
 	use super::*;
 
 	/// The in-code storage version.
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(1);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
-		/// The Weight information for this pallet.
+		/// The Weight information for this pezpallet.
 		type WeightInfo: weights::WeightInfo;
 
-		/// Currency type for this pallet.
+		/// Currency type for this pezpallet.
 		// TODO#1569: Remove.
 		type Currency: ReservableCurrency<Self::AccountId>;
 
@@ -148,12 +148,12 @@ pub mod pallet {
 		type Consideration: Consideration<Self::AccountId, Footprint>;
 	}
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A preimage has been noted.
 		Noted { hash: T::Hash },
@@ -163,7 +163,7 @@ pub mod pallet {
 		Cleared { hash: T::Hash },
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Preimage is too large to store on-chain.
 		TooBig,
@@ -183,8 +183,8 @@ pub mod pallet {
 		TooFew,
 	}
 
-	/// A reason for this pallet placing a hold on funds.
-	#[pallet::composite_enum]
+	/// A reason for this pezpallet placing a hold on funds.
+	#[pezpallet::composite_enum]
 	pub enum HoldReason {
 		/// The funds are held as storage deposit for a preimage.
 		Preimage,
@@ -192,27 +192,27 @@ pub mod pallet {
 
 	/// The request status of a given hash.
 	#[deprecated = "RequestStatusFor"]
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type StatusFor<T: Config> =
 		StorageMap<_, Identity, T::Hash, OldRequestStatus<T::AccountId, BalanceOf<T>>>;
 
 	/// The request status of a given hash.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type RequestStatusFor<T: Config> =
 		StorageMap<_, Identity, T::Hash, RequestStatus<T::AccountId, TicketOf<T>>>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type PreimageFor<T: Config> =
 		StorageMap<_, Identity, (T::Hash, u32), BoundedVec<u8, ConstU32<MAX_SIZE>>>;
 
-	#[pallet::call(weight = T::WeightInfo)]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call(weight = T::WeightInfo)]
+	impl<T: Config> Pezpallet<T> {
 		/// Register a preimage on-chain.
 		///
 		/// If the preimage was previously requested, no fees or deposits are taken for providing
 		/// the preimage. Otherwise, a deposit is taken proportional to the size of the preimage.
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::note_preimage(bytes.len() as u32))]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::note_preimage(bytes.len() as u32))]
 		pub fn note_preimage(origin: OriginFor<T>, bytes: Vec<u8>) -> DispatchResultWithPostInfo {
 			// We accept a signed origin which will pay a deposit, or a root origin where a deposit
 			// is not taken.
@@ -231,7 +231,7 @@ pub mod pallet {
 		///
 		/// - `hash`: The hash of the preimage to be removed from the store.
 		/// - `len`: The length of the preimage of `hash`.
-		#[pallet::call_index(1)]
+		#[pezpallet::call_index(1)]
 		pub fn unnote_preimage(origin: OriginFor<T>, hash: T::Hash) -> DispatchResult {
 			let maybe_sender = Self::ensure_signed_or_manager(origin)?;
 			Self::do_unnote_preimage(&hash, maybe_sender)
@@ -241,7 +241,7 @@ pub mod pallet {
 		///
 		/// If the preimage requests has already been provided on-chain, we unreserve any deposit
 		/// a user may have paid, and take the control of the preimage out of their hands.
-		#[pallet::call_index(2)]
+		#[pezpallet::call_index(2)]
 		pub fn request_preimage(origin: OriginFor<T>, hash: T::Hash) -> DispatchResult {
 			T::ManagerOrigin::ensure_origin(origin)?;
 			Self::do_request_preimage(&hash);
@@ -251,7 +251,7 @@ pub mod pallet {
 		/// Clear a previously made request for a preimage.
 		///
 		/// NOTE: THIS MUST NOT BE CALLED ON `hash` MORE TIMES THAN `request_preimage`.
-		#[pallet::call_index(3)]
+		#[pezpallet::call_index(3)]
 		pub fn unrequest_preimage(origin: OriginFor<T>, hash: T::Hash) -> DispatchResult {
 			T::ManagerOrigin::ensure_origin(origin)?;
 			Self::do_unrequest_preimage(&hash)
@@ -260,8 +260,8 @@ pub mod pallet {
 		/// Ensure that the bulk of pre-images is upgraded.
 		///
 		/// The caller pays no fee if at least 90% of pre-images were successfully updated.
-		#[pallet::call_index(4)]
-		#[pallet::weight(T::WeightInfo::ensure_updated(hashes.len() as u32))]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(T::WeightInfo::ensure_updated(hashes.len() as u32))]
 		pub fn ensure_updated(
 			origin: OriginFor<T>,
 			hashes: Vec<T::Hash>,
@@ -279,7 +279,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	fn do_ensure_updated(h: &T::Hash) -> bool {
 		#[allow(deprecated)]
 		let r = match StatusFor::<T>::take(h) {
@@ -342,7 +342,7 @@ impl<T: Config> Pallet<T> {
 	///
 	/// If `maybe_depositor` is `None` then it is also requested. If `Some`, then it is not.
 	///
-	/// We verify that the preimage is within the bounds of what the pallet supports.
+	/// We verify that the preimage is within the bounds of what the pezpallet supports.
 	///
 	/// If the preimage was requested to be uploaded, then the user pays no deposits or tx fees.
 	fn note_bytes(
@@ -514,7 +514,7 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-impl<T: Config> PreimageProvider<T::Hash> for Pallet<T> {
+impl<T: Config> PreimageProvider<T::Hash> for Pezpallet<T> {
 	fn have_preimage(hash: &T::Hash) -> bool {
 		Self::have(hash)
 	}
@@ -538,7 +538,7 @@ impl<T: Config> PreimageProvider<T::Hash> for Pallet<T> {
 	}
 }
 
-impl<T: Config> PreimageRecipient<T::Hash> for Pallet<T> {
+impl<T: Config> PreimageRecipient<T::Hash> for Pezpallet<T> {
 	type MaxSize = ConstU32<MAX_SIZE>; // 2**22
 
 	fn note_preimage(bytes: BoundedVec<u8, Self::MaxSize>) {
@@ -554,15 +554,15 @@ impl<T: Config> PreimageRecipient<T::Hash> for Pallet<T> {
 	}
 }
 
-impl<T: Config> QueryPreimage for Pallet<T> {
+impl<T: Config> QueryPreimage for Pezpallet<T> {
 	type H = T::Hashing;
 
 	fn len(hash: &T::Hash) -> Option<u32> {
-		Pallet::<T>::len(hash)
+		Pezpallet::<T>::len(hash)
 	}
 
 	fn fetch(hash: &T::Hash, len: Option<u32>) -> FetchResult {
-		Pallet::<T>::fetch(hash, len)
+		Pezpallet::<T>::fetch(hash, len)
 	}
 
 	fn is_requested(hash: &T::Hash) -> bool {
@@ -580,7 +580,7 @@ impl<T: Config> QueryPreimage for Pallet<T> {
 	}
 }
 
-impl<T: Config> StorePreimage for Pallet<T> {
+impl<T: Config> StorePreimage for Pezpallet<T> {
 	const MAX_LENGTH: usize = MAX_SIZE as usize;
 
 	fn note(bytes: Cow<[u8]>) -> Result<T::Hash, DispatchError> {

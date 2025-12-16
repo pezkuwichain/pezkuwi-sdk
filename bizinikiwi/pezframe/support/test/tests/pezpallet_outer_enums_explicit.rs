@@ -34,22 +34,22 @@ impl pezframe_system::Config for Runtime {
 	type OnSetCode = ();
 }
 
-impl common::outer_enums::pallet::Config for Runtime {
+impl common::outer_enums::pezpallet::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 }
-impl common::outer_enums::pallet::Config<common::outer_enums::pallet::Instance1> for Runtime {
+impl common::outer_enums::pezpallet::Config<common::outer_enums::pezpallet::Instance1> for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 }
 impl common::outer_enums::pallet2::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 }
-impl common::outer_enums::pallet2::Config<common::outer_enums::pallet::Instance1> for Runtime {
+impl common::outer_enums::pallet2::Config<common::outer_enums::pezpallet::Instance1> for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 }
 impl common::outer_enums::pallet3::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 }
-impl common::outer_enums::pallet3::Config<common::outer_enums::pallet::Instance1> for Runtime {
+impl common::outer_enums::pallet3::Config<common::outer_enums::pezpallet::Instance1> for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 }
 
@@ -57,31 +57,31 @@ pezframe_support::construct_runtime!(
 	pub struct Runtime
 	{
 		// Exclude part `Storage` in order not to check its metadata in tests.
-		System: pezframe_system::{Pallet, Config<T>, Call, Event<T> },
+		System: pezframe_system::{Pezpallet, Config<T>, Call, Event<T> },
 
-		// This pallet exposes the Error type explicitly.
-		Example: common::outer_enums::pallet::{Pallet, Config<T>, Event<T>, Error<T>},
-		Instance1Example: common::outer_enums::pallet::<Instance1>::{ Pallet, Config<T>, Event<T> },
+		// This pezpallet exposes the Error type explicitly.
+		Example: common::outer_enums::pezpallet::{Pezpallet, Config<T>, Event<T>, Error<T>},
+		Instance1Example: common::outer_enums::pezpallet::<Instance1>::{ Pezpallet, Config<T>, Event<T> },
 
-		// This pallet does not mention the Error type, but it must be propagated (similarly to the pezkuwi/kusama).
-		Example2: common::outer_enums::pallet2::{Pallet, Config<T>, Event<T> },
-		Instance1Example2: common::outer_enums::pallet2::<Instance1>::{Pallet, Config<T>, Event<T>},
+		// This pezpallet does not mention the Error type, but it must be propagated (similarly to the pezkuwi/kusama).
+		Example2: common::outer_enums::pallet2::{Pezpallet, Config<T>, Event<T> },
+		Instance1Example2: common::outer_enums::pallet2::<Instance1>::{Pezpallet, Config<T>, Event<T>},
 
-		// This pallet does not declare any errors.
-		Example3: common::outer_enums::pallet3::{Pallet, Config<T>, Event<T>},
-		Instance1Example3: common::outer_enums::pallet3::<Instance1>::{Pallet, Config<T>, Event<T>},
+		// This pezpallet does not declare any errors.
+		Example3: common::outer_enums::pallet3::{Pezpallet, Config<T>, Event<T>},
+		Instance1Example3: common::outer_enums::pallet3::<Instance1>::{Pezpallet, Config<T>, Event<T>},
 	}
 );
 
 #[cfg(feature = "experimental")]
 #[test]
 fn module_error_outer_enum_expand_explicit() {
-	use common::outer_enums::{pallet, pallet2};
+	use common::outer_enums::{pezpallet, pallet2};
 	// The Runtime has *all* parts explicitly defined.
 
 	// Check that all error types are propagated
-	match RuntimeError::Example(pallet::Error::InsufficientProposersBalance) {
-		// Error passed implicitly to the pallet system.
+	match RuntimeError::Example(pezpallet::Error::InsufficientProposersBalance) {
+		// Error passed implicitly to the pezpallet system.
 		RuntimeError::System(system) => match system {
 			pezframe_system::Error::InvalidSpecName => (),
 			pezframe_system::Error::SpecVersionNeedsToIncrease => (),
@@ -99,24 +99,24 @@ fn module_error_outer_enum_expand_explicit() {
 
 		// Error declared explicitly.
 		RuntimeError::Example(example) => match example {
-			pallet::Error::InsufficientProposersBalance => (),
-			pallet::Error::NonExistentStorageValue => (),
-			pallet::Error::__Ignore(_, _) => (),
+			pezpallet::Error::InsufficientProposersBalance => (),
+			pezpallet::Error::NonExistentStorageValue => (),
+			pezpallet::Error::__Ignore(_, _) => (),
 		},
 		// Error declared explicitly.
 		RuntimeError::Instance1Example(example) => match example {
-			pallet::Error::InsufficientProposersBalance => (),
-			pallet::Error::NonExistentStorageValue => (),
-			pallet::Error::__Ignore(_, _) => (),
+			pezpallet::Error::InsufficientProposersBalance => (),
+			pezpallet::Error::NonExistentStorageValue => (),
+			pezpallet::Error::__Ignore(_, _) => (),
 		},
 
-		// Error must propagate even if not defined explicitly as pallet part.
+		// Error must propagate even if not defined explicitly as pezpallet part.
 		RuntimeError::Example2(example) => match example {
 			pallet2::Error::OtherInsufficientProposersBalance => (),
 			pallet2::Error::OtherNonExistentStorageValue => (),
 			pallet2::Error::__Ignore(_, _) => (),
 		},
-		// Error must propagate even if not defined explicitly as pallet part.
+		// Error must propagate even if not defined explicitly as pezpallet part.
 		RuntimeError::Instance1Example2(example) => match example {
 			pallet2::Error::OtherInsufficientProposersBalance => (),
 			pallet2::Error::OtherNonExistentStorageValue => (),

@@ -15,9 +15,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # NFT Fractionalization Pallet
+//! # NFT Fractionalization Pezpallet
 //!
-//! This pallet provides the basic functionality that should allow users
+//! This pezpallet provides the basic functionality that should allow users
 //! to leverage partial ownership, transfers, and sales, of illiquid assets,
 //! whether real-world assets represented by their digital twins, or NFTs,
 //! or original NFTs.
@@ -49,12 +49,12 @@ pub mod weights;
 
 use frame::prelude::*;
 use pezframe_system::Config as SystemConfig;
-pub use pallet::*;
+pub use pezpallet::*;
 pub use types::*;
 pub use weights::WeightInfo;
 
-#[frame::pallet]
-pub mod pallet {
+#[frame::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use core::fmt::Display;
 	use fungible::{
@@ -73,10 +73,10 @@ pub mod pallet {
 		Precision::{BestEffort, Exact},
 		Preservation::{Expendable, Preserve},
 	};
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
@@ -92,7 +92,7 @@ pub mod pallet {
 
 		/// The deposit paid by the user locking an NFT. The deposit is returned to the original NFT
 		/// owner when the asset is unified and the NFT is unlocked.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type Deposit: Get<DepositOf<Self>>;
 
 		/// Identifier for the collection of NFT.
@@ -122,32 +122,32 @@ pub mod pallet {
 				CollectionId = Self::NftCollectionId,
 			> + Transfer<Self::AccountId>;
 
-		/// The pallet's id, used for deriving its sovereign account ID.
-		#[pallet::constant]
+		/// The pezpallet's id, used for deriving its sovereign account ID.
+		#[pezpallet::constant]
 		type PalletId: Get<PalletId>;
 
 		/// The newly created asset's symbol.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type NewAssetSymbol: Get<BoundedVec<u8, Self::StringLimit>>;
 
 		/// The newly created asset's name.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type NewAssetName: Get<BoundedVec<u8, Self::StringLimit>>;
 
 		/// The maximum length of a name or symbol stored on-chain.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type StringLimit: Get<u32>;
 
 		/// A set of helper functions for benchmarking.
 		#[cfg(feature = "runtime-benchmarks")]
 		type BenchmarkHelper: BenchmarkHelper<Self::AssetId, Self::NftCollectionId, Self::NftId>;
 
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 	}
 
 	/// Keeps track of the corresponding NFT ID, asset ID and amount minted.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type NftToAsset<T: Config> = StorageMap<
 		_,
 		Blake2_128Concat,
@@ -156,8 +156,8 @@ pub mod pallet {
 		OptionQuery,
 	>;
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// An NFT was successfully fractionalized.
 		NftFractionalized {
@@ -176,7 +176,7 @@ pub mod pallet {
 		},
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Asset ID does not correspond to locked NFT.
 		IncorrectAssetId,
@@ -188,16 +188,16 @@ pub mod pallet {
 		NftNotFractionalized,
 	}
 
-	/// A reason for the pallet placing a hold on funds.
-	#[pallet::composite_enum]
+	/// A reason for the pezpallet placing a hold on funds.
+	#[pezpallet::composite_enum]
 	pub enum HoldReason {
 		/// Reserved for a fractionalized NFT.
 		#[codec(index = 0)]
 		Fractionalized,
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Lock the NFT and mint a new fungible asset.
 		///
 		/// The dispatch origin for this call must be Signed.
@@ -215,8 +215,8 @@ pub mod pallet {
 		/// - `fractions`: The total issuance of the newly created asset class.
 		///
 		/// Emits `NftFractionalized` event when successful.
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::fractionalize())]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::fractionalize())]
 		pub fn fractionalize(
 			origin: OriginFor<T>,
 			nft_collection_id: T::NftCollectionId,
@@ -278,8 +278,8 @@ pub mod pallet {
 		/// - `beneficiary`: The account that will receive the unified NFT.
 		///
 		/// Emits `NftUnified` event when successful.
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::unify())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::unify())]
 		pub fn unify(
 			origin: OriginFor<T>,
 			nft_collection_id: T::NftCollectionId,
@@ -317,8 +317,8 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config> Pallet<T> {
-		/// The account ID of the pallet.
+	impl<T: Config> Pezpallet<T> {
+		/// The account ID of the pezpallet.
 		///
 		/// This actually does computation. If you need to keep using it, then make sure you cache
 		/// the value and only call this once.

@@ -19,7 +19,7 @@
 
 use crate::{
 	storage::ContractInfo, BalanceOf, Config, Error, ExecConfig, ExecOrigin as Origin, HoldReason,
-	Pallet, StorageDeposit as Deposit, LOG_TARGET,
+	Pezpallet, StorageDeposit as Deposit, LOG_TARGET,
 };
 use alloc::vec::Vec;
 use core::{fmt::Debug, marker::PhantomData};
@@ -468,7 +468,7 @@ impl<T: Config> Ext<T> for ReservingExt {
 		match amount {
 			Deposit::Charge(amount) | Deposit::Refund(amount) if amount.is_zero() => (),
 			Deposit::Charge(amount) => {
-				<Pallet<T>>::charge_deposit(
+				<Pezpallet<T>>::charge_deposit(
 					Some(HoldReason::StorageDepositReserve),
 					origin,
 					contract,
@@ -477,7 +477,7 @@ impl<T: Config> Ext<T> for ReservingExt {
 				)?;
 			},
 			Deposit::Refund(amount) => {
-				<Pallet<T>>::refund_deposit(
+				<Pezpallet<T>>::refund_deposit(
 					HoldReason::StorageDepositReserve,
 					contract,
 					origin,

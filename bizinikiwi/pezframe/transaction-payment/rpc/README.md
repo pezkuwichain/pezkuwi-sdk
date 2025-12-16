@@ -1,3 +1,3 @@
-RPC interface for the transaction payment pallet.
+RPC interface for the transaction payment pezpallet.
 
 License: Apache-2.0

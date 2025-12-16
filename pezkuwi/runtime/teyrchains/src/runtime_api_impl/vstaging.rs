@@ -29,5 +29,5 @@ pub fn para_ids<T: initializer::Config>() -> Vec<ParaId> {
 /// Implementation of `unapplied_slashes_v2` runtime API
 pub fn unapplied_slashes_v2<T: disputes::slashing::Config>(
 ) -> Vec<(SessionIndex, CandidateHash, slashing::PendingSlashes)> {
-	disputes::slashing::Pallet::<T>::unapplied_slashes()
+	disputes::slashing::Pezpallet::<T>::unapplied_slashes()
 }

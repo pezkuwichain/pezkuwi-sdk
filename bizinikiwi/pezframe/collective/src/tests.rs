@@ -51,16 +51,16 @@ pezframe_support::construct_runtime!(
 );
 
 mod mock_democracy {
-	pub use pallet::*;
-	#[pezframe_support::pallet(dev_mode)]
-	pub mod pallet {
+	pub use pezpallet::*;
+	#[pezframe_support::pezpallet(dev_mode)]
+	pub mod pezpallet {
 		use pezframe_support::pezpallet_prelude::*;
 		use pezframe_system::pezpallet_prelude::*;
 
-		#[pallet::pallet]
-		pub struct Pallet<T>(_);
+		#[pezpallet::pezpallet]
+		pub struct Pezpallet<T>(_);
 
-		#[pallet::config]
+		#[pezpallet::config]
 		pub trait Config: pezframe_system::Config + Sized {
 			#[allow(deprecated)]
 			type RuntimeEvent: From<Event<Self>>
@@ -68,8 +68,8 @@ mod mock_democracy {
 			type ExternalMajorityOrigin: EnsureOrigin<Self::RuntimeOrigin>;
 		}
 
-		#[pallet::call]
-		impl<T: Config> Pallet<T> {
+		#[pezpallet::call]
+		impl<T: Config> Pezpallet<T> {
 			pub fn external_propose_majority(origin: OriginFor<T>) -> DispatchResult {
 				T::ExternalMajorityOrigin::ensure_origin(origin)?;
 				Self::deposit_event(Event::<T>::ExternalProposed);
@@ -77,8 +77,8 @@ mod mock_democracy {
 			}
 		}
 
-		#[pallet::event]
-		#[pallet::generate_deposit(pub(super) fn deposit_event)]
+		#[pezpallet::event]
+		#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 		pub enum Event<T: Config> {
 			ExternalProposed,
 		}
@@ -1306,7 +1306,7 @@ fn motions_approval_with_enough_votes_and_lower_voting_threshold_works() {
 				})),
 				record(RuntimeEvent::Collective(CollectiveEvent::Approved { proposal_hash: hash })),
 				record(RuntimeEvent::Democracy(
-					mock_democracy::pallet::Event::<Test>::ExternalProposed
+					mock_democracy::pezpallet::Event::<Test>::ExternalProposed
 				)),
 				record(RuntimeEvent::Collective(CollectiveEvent::Executed {
 					proposal_hash: hash,

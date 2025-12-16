@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Pallet to process claims from Ethereum addresses.
+//! Pezpallet to process claims from Ethereum addresses.
 
 #[cfg(not(feature = "std"))]
 use alloc::{format, string::String};
@@ -27,7 +27,7 @@ use pezframe_support::{
 	weights::Weight,
 	DefaultNoBound,
 };
-pub use pallet::*;
+pub use pezpallet::*;
 use pezkuwi_primitives::ValidityError;
 use scale_info::TypeInfo;
 use serde::{self, Deserialize, Deserializer, Serialize, Serializer};
@@ -195,36 +195,36 @@ impl core::fmt::Debug for EcdsaSignature {
 	}
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
 	/// Configuration trait.
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		type VestingSchedule: VestingSchedule<Self::AccountId, Moment = BlockNumberFor<Self>>;
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type Prefix: Get<&'static [u8]>;
 		type MoveClaimOrigin: EnsureOrigin<Self::RuntimeOrigin>;
 		type WeightInfo: WeightInfo;
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// Someone claimed some DOTs.
 		Claimed { who: T::AccountId, ethereum_address: EthereumAddress, amount: BalanceOf<T> },
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Invalid Ethereum signature.
 		InvalidEthereumSignature,
@@ -241,29 +241,29 @@ pub mod pallet {
 		VestedBalanceExists,
 	}
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Claims<T: Config> = StorageMap<_, Identity, EthereumAddress, BalanceOf<T>>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Total<T: Config> = StorageValue<_, BalanceOf<T>, ValueQuery>;
 
 	/// Vesting schedule for a claim.
 	/// First balance is the total amount that should be held for vesting.
 	/// Second balance is how much should be unlocked per block.
 	/// The block number is when the vesting should start.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Vesting<T: Config> =
 		StorageMap<_, Identity, EthereumAddress, (BalanceOf<T>, BalanceOf<T>, BlockNumberFor<T>)>;
 
 	/// The statement kind that must be signed, if any.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Signing<T> = StorageMap<_, Identity, EthereumAddress, StatementKind>;
 
 	/// Pre-claimed Ethereum accounts, by the Account ID that they are claimed to.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Preclaims<T: Config> = StorageMap<_, Identity, T::AccountId, EthereumAddress>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		pub claims:
@@ -271,7 +271,7 @@ pub mod pallet {
 		pub vesting: Vec<(EthereumAddress, (BalanceOf<T>, BalanceOf<T>, BlockNumberFor<T>))>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			// build `Claims`
@@ -304,11 +304,11 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {}
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Make a claim to collect your DOTs.
 		///
 		/// The dispatch origin for this call must be _None_.
@@ -333,8 +333,8 @@ pub mod pallet {
 		///
 		/// Total Complexity: O(1)
 		/// </weight>
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::claim())]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::claim())]
 		pub fn claim(
 			origin: OriginFor<T>,
 			dest: T::AccountId,
@@ -366,8 +366,8 @@ pub mod pallet {
 		///
 		/// Total Complexity: O(1)
 		/// </weight>
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::mint_claim())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::mint_claim())]
 		pub fn mint_claim(
 			origin: OriginFor<T>,
 			who: EthereumAddress,
@@ -415,8 +415,8 @@ pub mod pallet {
 		///
 		/// Total Complexity: O(1)
 		/// </weight>
-		#[pallet::call_index(2)]
-		#[pallet::weight(T::WeightInfo::claim_attest())]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(T::WeightInfo::claim_attest())]
 		pub fn claim_attest(
 			origin: OriginFor<T>,
 			dest: T::AccountId,
@@ -454,8 +454,8 @@ pub mod pallet {
 		///
 		/// Total Complexity: O(1)
 		/// </weight>
-		#[pallet::call_index(3)]
-		#[pallet::weight((
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight((
 			T::WeightInfo::attest(),
 			DispatchClass::Normal,
 			Pays::No
@@ -471,8 +471,8 @@ pub mod pallet {
 			Ok(())
 		}
 
-		#[pallet::call_index(4)]
-		#[pallet::weight(T::WeightInfo::move_claim())]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(T::WeightInfo::move_claim())]
 		pub fn move_claim(
 			origin: OriginFor<T>,
 			old: EthereumAddress,
@@ -495,8 +495,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::validate_unsigned]
-	impl<T: Config> ValidateUnsigned for Pallet<T> {
+	#[pezpallet::validate_unsigned]
+	impl<T: Config> ValidateUnsigned for Pezpallet<T> {
 		type Call = Call<T>;
 
 		fn validate_unsigned(_source: TransactionSource, call: &Self::Call) -> TransactionValidity {
@@ -558,7 +558,7 @@ fn to_ascii_hex(data: &[u8]) -> Vec<u8> {
 	r
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	// Constructs the message that Ethereum RPC's `personal_sign` and `eth_sign` would sign.
 	fn ethereum_signable_message(what: &[u8], extra: &[u8]) -> Vec<u8> {
 		let prefix = T::Prefix::get();
@@ -719,7 +719,7 @@ mod secp_utils {
 		what: &[u8],
 		extra: &[u8],
 	) -> EcdsaSignature {
-		let msg = keccak_256(&super::Pallet::<T>::ethereum_signable_message(
+		let msg = keccak_256(&super::Pezpallet::<T>::ethereum_signable_message(
 			&to_ascii_hex(what)[..],
 			extra,
 		));

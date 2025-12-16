@@ -505,7 +505,7 @@ fn all_pallets_sanity_checks() {
 
 /// Fully verify a solution.
 ///
-/// This will progress the blocks until the verifier pallet is done verifying it.
+/// This will progress the blocks until the verifier pezpallet is done verifying it.
 ///
 /// The solution must have already been loaded via `load_and_start_verification`.
 ///
@@ -608,7 +608,7 @@ pub fn ensure_targets(pages: PageIndex, count: usize) {
 	assert_eq!(crate::Snapshot::<Runtime>::targets().unwrap().len(), count);
 }
 
-/// get the events of the multi-block pallet.
+/// get the events of the multi-block pezpallet.
 pub fn multi_block_events() -> Vec<crate::Event<Runtime>> {
 	System::events()
 		.into_iter()
@@ -629,7 +629,7 @@ pub fn multi_block_events_since_last_call() -> Vec<crate::Event<Runtime>> {
 	events.into_iter().skip(already_seen as usize).collect()
 }
 
-/// get the events of the verifier pallet.
+/// get the events of the verifier pezpallet.
 pub fn verifier_events() -> Vec<crate::verifier::Event<Runtime>> {
 	System::events()
 		.into_iter()
@@ -640,7 +640,7 @@ pub fn verifier_events() -> Vec<crate::verifier::Event<Runtime>> {
 		.collect::<Vec<_>>()
 }
 
-/// get the events of the verifier pallet since last call.
+/// get the events of the verifier pezpallet since last call.
 pub fn verifier_events_since_last_call() -> Vec<crate::verifier::Event<Runtime>> {
 	let events = verifier_events();
 	let already_seen = VerifierEvents::get();
@@ -650,7 +650,7 @@ pub fn verifier_events_since_last_call() -> Vec<crate::verifier::Event<Runtime>>
 
 /// proceed block number to `n`.
 pub fn roll_to(n: BlockNumber) {
-	crate::Pallet::<Runtime>::roll_to(
+	crate::Pezpallet::<Runtime>::roll_to(
 		n,
 		matches!(SignedPhaseSwitch::get(), SignedSwitch::Real),
 		true,

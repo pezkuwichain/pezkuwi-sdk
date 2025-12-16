@@ -15,54 +15,54 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Root Testing Pallet
+//! # Root Testing Pezpallet
 //!
-//! Pallet that contains extrinsics that can be useful in testing.
+//! Pezpallet that contains extrinsics that can be useful in testing.
 //!
-//! NOTE: This pallet should only be used for testing purposes and should not be used in production
+//! NOTE: This pezpallet should only be used for testing purposes and should not be used in production
 //! runtimes!
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
 use pezframe_support::{dispatch::DispatchResult, pezsp_runtime::Perbill};
 
-pub use pallet::*;
+pub use pezpallet::*;
 
-#[pezframe_support::pallet(dev_mode)]
-pub mod pallet {
+#[pezframe_support::pezpallet(dev_mode)]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// Event dispatched when the trigger_defensive extrinsic is called.
 		DefensiveTestCall,
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// A dispatch that will fill the block weight up to the given ratio.
-		#[pallet::call_index(0)]
-		#[pallet::weight(*_ratio * T::BlockWeights::get().max_block)]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(*_ratio * T::BlockWeights::get().max_block)]
 		pub fn fill_block(origin: OriginFor<T>, _ratio: Perbill) -> DispatchResult {
 			ensure_root(origin)?;
 			Ok(())
 		}
 
-		#[pallet::call_index(1)]
-		#[pallet::weight(0)]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(0)]
 		pub fn trigger_defensive(origin: OriginFor<T>) -> DispatchResult {
 			ensure_root(origin)?;
 			pezframe_support::defensive!("root_testing::trigger_defensive was called.");

@@ -46,8 +46,8 @@ use pezsp_runtime::{
 };
 use pezsp_tracing::{WASM_NAME_KEY, WASM_TARGET_KEY, WASM_TRACE_IDENTIFIER};
 
-// Default to only pallet, frame support and state related traces
-const DEFAULT_TARGETS: &str = "pallet,frame,state";
+// Default to only pezpallet, frame support and state related traces
+const DEFAULT_TARGETS: &str = "pezpallet,frame,state";
 const TRACE_TARGET: &str = "block_trace";
 // The name of a field required for all events.
 const REQUIRED_EVENT_FIELD: &str = "method";
@@ -200,7 +200,7 @@ impl Subscriber for BlockSubscriber {
 }
 
 /// Holds a reference to the client in order to execute the given block.
-/// Records spans & events for the supplied targets (eg. "pallet,frame,state") and
+/// Records spans & events for the supplied targets (eg. "pezpallet,frame,state") and
 /// only records events with the specified hex encoded storage key prefixes.
 /// Note: if `targets` or `storage_keys` is an empty string then nothing is
 /// filtered out.

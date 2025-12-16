@@ -1,4 +1,4 @@
-# Transaction Storage Pallet
+# Transaction Storage Pezpallet
 
 Indexes transactions and manages storage proofs.
 

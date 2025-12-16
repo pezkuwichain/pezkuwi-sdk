@@ -50,12 +50,12 @@ pub mod v1 {
 		}
 	}
 
-	/// A migration utility to update the storage version from v0 to v1 for the pallet.
+	/// A migration utility to update the storage version from v0 to v1 for the pezpallet.
 	pub struct MigrateToV1<T>(core::marker::PhantomData<T>);
 	impl<T: Config> OnRuntimeUpgrade for MigrateToV1<T> {
 		fn on_runtime_upgrade() -> Weight {
-			let in_code_version = Pallet::<T>::in_code_storage_version();
-			let on_chain_version = Pallet::<T>::on_chain_storage_version();
+			let in_code_version = Pezpallet::<T>::in_code_storage_version();
+			let on_chain_version = Pezpallet::<T>::on_chain_storage_version();
 
 			log::info!(
 				target: LOG_TARGET,
@@ -77,7 +77,7 @@ pub mod v1 {
 					Some(old_value.migrate_to_v1(item_configs))
 				});
 
-				in_code_version.put::<Pallet<T>>();
+				in_code_version.put::<Pezpallet<T>>();
 
 				log::info!(
 					target: LOG_TARGET,
@@ -112,7 +112,7 @@ pub mod v1 {
 				"the records count before and after the migration should be the same"
 			);
 
-			ensure!(Pallet::<T>::on_chain_storage_version() >= 1, "wrong storage version");
+			ensure!(Pezpallet::<T>::on_chain_storage_version() >= 1, "wrong storage version");
 
 			Ok(())
 		}

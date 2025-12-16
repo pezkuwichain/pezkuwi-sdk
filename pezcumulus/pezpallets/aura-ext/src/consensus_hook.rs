@@ -16,7 +16,7 @@
 
 //! The definition of a [`FixedVelocityConsensusHook`] for consensus logic to manage
 //! block velocity.
-use super::{pallet, Aura};
+use super::{pezpallet, Aura};
 use core::{marker::PhantomData, num::NonZeroU32};
 use pezcumulus_pezpallet_teyrchain_system::{
 	self as teyrchain_system,
@@ -53,7 +53,7 @@ pub struct FixedVelocityConsensusHook<
 >(PhantomData<T>);
 
 impl<
-		T: pallet::Config,
+		T: pezpallet::Config,
 		const RELAY_CHAIN_SLOT_DURATION_MILLIS: u32,
 		const V: u32,
 		const C: u32,
@@ -75,7 +75,7 @@ where
 		let velocity = V.max(1);
 		let relay_chain_slot = state_proof.read_slot().expect("failed to read relay chain slot");
 
-		let (relay_chain_slot, authored_in_relay) = match pallet::RelaySlotInfo::<T>::get() {
+		let (relay_chain_slot, authored_in_relay) = match pezpallet::RelaySlotInfo::<T>::get() {
 			Some((slot, authored)) if slot == relay_chain_slot => (slot, authored),
 			Some((slot, _)) if slot < relay_chain_slot => (relay_chain_slot, 0),
 			Some((slot, _)) => {
@@ -89,7 +89,7 @@ where
 			panic!("authored blocks limit is reached for the slot: relay_chain_slot={relay_chain_slot:?}, authored={authored_in_relay:?}, velocity={velocity:?}");
 		}
 
-		pallet::RelaySlotInfo::<T>::put((relay_chain_slot, authored_in_relay + 1));
+		pezpallet::RelaySlotInfo::<T>::put((relay_chain_slot, authored_in_relay + 1));
 
 		let para_slot = pezpallet_aura::CurrentSlot::<T>::get();
 
@@ -123,7 +123,7 @@ where
 }
 
 impl<
-		T: pallet::Config + teyrchain_system::Config,
+		T: pezpallet::Config + teyrchain_system::Config,
 		const RELAY_CHAIN_SLOT_DURATION_MILLIS: u32,
 		const V: u32,
 		const C: u32,
@@ -141,13 +141,13 @@ impl<
 	/// is more recent than the included block itself.
 	pub fn can_build_upon(included_hash: T::Hash, new_slot: Slot) -> bool {
 		let velocity = V.max(1);
-		let (last_slot, authored_so_far) = match pallet::RelaySlotInfo::<T>::get() {
+		let (last_slot, authored_so_far) = match pezpallet::RelaySlotInfo::<T>::get() {
 			None => return true,
 			Some(x) => x,
 		};
 
 		let size_after_included =
-			teyrchain_system::Pallet::<T>::unincluded_segment_size_after(included_hash);
+			teyrchain_system::Pezpallet::<T>::unincluded_segment_size_after(included_hash);
 
 		// can never author when the unincluded segment is full.
 		if size_after_included >= C {

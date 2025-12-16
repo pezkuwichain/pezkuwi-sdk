@@ -19,16 +19,16 @@
 pub use pezpallet_custom_origins::*;
 
 // From https://github.com/polkadot-fellows/runtimes/blob/7bbf00566d86d51fcd5582779e7e9c37a814405e/relay/polkadot/src/governance/origins.rs#L21-L154
-#[pezframe_support::pallet]
+#[pezframe_support::pezpallet]
 pub mod pezpallet_custom_origins {
 	use crate::{Balance, CENTS, GRAND};
 	use pezframe_support::pezpallet_prelude::*;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
 	#[derive(
 		PartialEq,
@@ -41,7 +41,7 @@ pub mod pezpallet_custom_origins {
 		TypeInfo,
 		RuntimeDebug,
 	)]
-	#[pallet::origin]
+	#[pezpallet::origin]
 	pub enum Origin {
 		/// Origin able to cancel slashes and manage minimum commission.
 		StakingAdmin,

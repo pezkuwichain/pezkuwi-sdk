@@ -107,7 +107,7 @@ pub type FungibleTransactor = FungibleAdapter<
 pub type RegionTransactor = NonFungibleAdapter<
 	// Use this non-fungible implementation:
 	Broker,
-	// This adapter will handle coretime regions from the broker pallet.
+	// This adapter will handle coretime regions from the broker pezpallet.
 	IsConcrete<BrokerPalletLocation>,
 	// Convert an XCM Location into a local account id:
 	LocationToAccountId,
@@ -142,7 +142,7 @@ pub type XcmOriginToTransactDispatchOrigin = (
 	// Native signed account converter; this just converts an `AccountId32` origin into a normal
 	// `RuntimeOrigin::Signed` origin of the same 32-byte value.
 	SignedAccountId32AsNative<RelayNetwork, RuntimeOrigin>,
-	// XCM origins can be represented natively under the XCM pallet's `Xcm` origin.
+	// XCM origins can be represented natively under the XCM pezpallet's `Xcm` origin.
 	XcmPassthrough<RuntimeOrigin>,
 );
 

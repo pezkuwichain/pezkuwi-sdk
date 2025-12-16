@@ -17,10 +17,10 @@
 #![cfg(feature = "runtime-benchmarks")]
 
 use crate::{
-	configuration::Pallet as Configuration,
-	hrmp::{Pallet as Hrmp, *},
-	paras::{Pallet as Paras, ParaKind, TeyrchainsCache},
-	shared::Pallet as Shared,
+	configuration::Pezpallet as Configuration,
+	hrmp::{Pezpallet as Hrmp, *},
+	paras::{Pezpallet as Paras, ParaKind, TeyrchainsCache},
+	shared::Pezpallet as Shared,
 };
 use pezframe_benchmarking::{v2::*, whitelisted_caller};
 use pezframe_support::{assert_ok, traits::Currency};
@@ -43,7 +43,7 @@ fn register_teyrchain_with_balance<T: Config>(id: ParaId, balance: BalanceOf<T>)
 }
 
 fn assert_last_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
-	let events = pezframe_system::Pallet::<T>::events();
+	let events = pezframe_system::Pezpallet::<T>::events();
 	let system_event: <T as pezframe_system::Config>::RuntimeEvent = generic_event.into();
 	// compare to the last event record
 	let pezframe_system::EventRecord { event, .. } = &events[events.len() - 1];
@@ -51,7 +51,7 @@ fn assert_last_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
 }
 
 fn assert_has_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
-	let events = pezframe_system::Pallet::<T>::events();
+	let events = pezframe_system::Pezpallet::<T>::events();
 	let system_event: <T as pezframe_system::Config>::RuntimeEvent = generic_event.into();
 
 	assert!(events.iter().any(|record| record.event == system_event));

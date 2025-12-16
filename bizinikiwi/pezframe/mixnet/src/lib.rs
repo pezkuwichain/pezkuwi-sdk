@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! This pallet is responsible for determining the current mixnet session and phase, and the
+//! This pezpallet is responsible for determining the current mixnet session and phase, and the
 //! mixnode set for each session.
 
 #![warn(missing_docs)]
@@ -23,7 +23,7 @@
 
 extern crate alloc;
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 use alloc::vec::Vec;
 use core::cmp::Ordering;
@@ -169,27 +169,27 @@ fn twox<BlockNumber: UniqueSaturatedInto<u64>>(
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// The pallet
+// The pezpallet
 ////////////////////////////////////////////////////////////////////////////////
 
-#[frame::pallet(dev_mode)]
-pub mod pallet {
+#[frame::pezpallet(dev_mode)]
+pub mod pezpallet {
 	use super::*;
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config + CreateBare<Call<Self>> {
 		/// The maximum number of authorities per session.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxAuthorities: Get<AuthorityIndex>;
 
 		/// The maximum size of one of a mixnode's external addresses.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxExternalAddressSize: Get<u32>;
 
 		/// The maximum number of external addresses for a mixnode.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxExternalAddressesPerMixnode: Get<u32>;
 
 		/// Session progress/length estimation. Used to determine when to send registration
@@ -197,51 +197,51 @@ pub mod pallet {
 		type NextSessionRotation: EstimateNextSessionRotation<BlockNumberFor<Self>>;
 
 		/// Length of the first phase of each session (`CoverToCurrent`), in blocks.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type NumCoverToCurrentBlocks: Get<BlockNumberFor<Self>>;
 
 		/// Length of the second phase of each session (`RequestsToCurrent`), in blocks.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type NumRequestsToCurrentBlocks: Get<BlockNumberFor<Self>>;
 
 		/// Length of the third phase of each session (`CoverToPrev`), in blocks.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type NumCoverToPrevBlocks: Get<BlockNumberFor<Self>>;
 
 		/// The number of "slack" blocks at the start of each session, during which
-		/// [`maybe_register`](Pallet::maybe_register) will not attempt to post registration
+		/// [`maybe_register`](Pezpallet::maybe_register) will not attempt to post registration
 		/// transactions.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type NumRegisterStartSlackBlocks: Get<BlockNumberFor<Self>>;
 
 		/// The number of "slack" blocks at the end of each session.
-		/// [`maybe_register`](Pallet::maybe_register) will try to register before this slack
+		/// [`maybe_register`](Pezpallet::maybe_register) will try to register before this slack
 		/// period, but may post registration transactions during the slack period as a last
 		/// resort.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type NumRegisterEndSlackBlocks: Get<BlockNumberFor<Self>>;
 
 		/// Priority of unsigned transactions used to register mixnodes.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type RegistrationPriority: Get<TransactionPriority>;
 
 		/// Minimum number of mixnodes. If there are fewer than this many mixnodes registered for a
 		/// session, the mixnet will not be active during the session.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MinMixnodes: Get<u32>;
 	}
 
 	/// Index of the current session. This may be offset relative to the session index tracked by
 	/// eg `pezpallet_session`; mixnet session indices are independent.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type CurrentSessionIndex<T> = StorageValue<_, SessionIndex, ValueQuery>;
 
 	/// Block in which the current session started.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type CurrentSessionStartBlock<T> = StorageValue<_, BlockNumberFor<T>, ValueQuery>;
 
 	/// Authority list for the next session.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type NextAuthorityIds<T> = StorageMap<_, Identity, AuthorityIndex, AuthorityId>;
 
 	/// Mixnode sets by session index. Only the mixnode sets for the previous, current, and next
@@ -250,18 +250,18 @@ pub mod pallet {
 	/// The mixnodes in each set are keyed by authority index so we can easily check if an
 	/// authority has registered a mixnode. The authority indices should only be used during
 	/// registration; the authority indices for the very first session are made up.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type Mixnodes<T> =
 		StorageDoubleMap<_, Identity, SessionIndex, Identity, AuthorityIndex, BoundedMixnodeFor<T>>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		/// The mixnode set for the very first session.
 		pub mixnodes: BoundedVec<BoundedMixnodeFor<T>, T::MaxAuthorities>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			assert!(
@@ -276,11 +276,11 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Register a mixnode for the following session.
-		#[pallet::call_index(0)]
-		#[pallet::weight(1)] // TODO
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(1)] // TODO
 		pub fn register(
 			origin: OriginFor<T>,
 			registration: RegistrationFor<T>,
@@ -303,8 +303,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::validate_unsigned]
-	impl<T: Config> ValidateUnsigned for Pallet<T> {
+	#[pezpallet::validate_unsigned]
+	impl<T: Config> ValidateUnsigned for Pezpallet<T> {
 		type Call = Call<T>;
 
 		fn validate_unsigned(_source: TransactionSource, call: &Self::Call) -> TransactionValidity {
@@ -362,10 +362,10 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Returns the phase of the current session.
 	fn session_phase() -> SessionPhase {
-		let block_in_phase = pezframe_system::Pallet::<T>::block_number()
+		let block_in_phase = pezframe_system::Pezpallet::<T>::block_number()
 			.saturating_sub(CurrentSessionStartBlock::<T>::get());
 		let Some(block_in_phase) = block_in_phase.checked_sub(&T::NumCoverToCurrentBlocks::get())
 		else {
@@ -500,7 +500,7 @@ impl<T: Config> Pallet<T> {
 			return false;
 		}
 
-		let block_number = pezframe_system::Pallet::<T>::block_number();
+		let block_number = pezframe_system::Pezpallet::<T>::block_number();
 		if !Self::should_register_by_session_progress(block_number, &mixnode) {
 			log::trace!(
 				target: LOG_TARGET,
@@ -546,11 +546,11 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-impl<T: Config> pezsp_runtime::BoundToRuntimeAppPublic for Pallet<T> {
+impl<T: Config> pezsp_runtime::BoundToRuntimeAppPublic for Pezpallet<T> {
 	type Public = AuthorityId;
 }
 
-impl<T: Config> OneSessionHandler<T::AccountId> for Pallet<T> {
+impl<T: Config> OneSessionHandler<T::AccountId> for Pezpallet<T> {
 	type Key = AuthorityId;
 
 	fn on_genesis_session<'a, I: 'a>(validators: I)
@@ -574,7 +574,7 @@ impl<T: Config> OneSessionHandler<T::AccountId> for Pallet<T> {
 			*index += 1;
 			*index
 		});
-		CurrentSessionStartBlock::<T>::put(pezframe_system::Pallet::<T>::block_number());
+		CurrentSessionStartBlock::<T>::put(pezframe_system::Pezpallet::<T>::block_number());
 
 		// Discard the previous previous mixnode set, which we don't need any more
 		if let Some(prev_prev_session_index) = session_index.checked_sub(2) {

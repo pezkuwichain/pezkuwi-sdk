@@ -15,20 +15,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License
 
-use crate::construct_runtime::Pallet;
+use crate::construct_runtime::Pezpallet;
 use proc_macro2::{Ident, Span, TokenStream as TokenStream2};
 
 /// Expands implementation of runtime level `DispatchViewFunction`.
 pub fn expand_outer_query(
 	runtime_name: &Ident,
-	pezpallet_decls: &[Pallet],
+	pezpallet_decls: &[Pezpallet],
 	scrate: &TokenStream2,
 ) -> TokenStream2 {
 	let runtime_view_function = syn::Ident::new("RuntimeViewFunction", Span::call_site());
 
-	let prefix_conditionals = pezpallet_decls.iter().map(|pallet| {
-		let pezpallet_name = &pallet.name;
-		let attr = pallet.get_attributes();
+	let prefix_conditionals = pezpallet_decls.iter().map(|pezpallet| {
+		let pezpallet_name = &pezpallet.name;
+		let attr = pezpallet.get_attributes();
 		quote::quote! {
 			#attr
 			if id.prefix == <#pezpallet_name as #scrate::view_functions::ViewFunctionIdPrefix>::prefix() {

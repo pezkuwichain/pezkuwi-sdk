@@ -1392,7 +1392,7 @@ fn try_schedule_retry_respects_weight_limits() {
 		assert_eq!(Retries::<Test>::iter().count(), 0);
 		assert_eq!(logger::log(), vec![]);
 		// check the `RetryFailed` event happened
-		let events = pezframe_system::Pallet::<Test>::events();
+		let events = pezframe_system::Pezpallet::<Test>::events();
 		let system_event: <Test as pezframe_system::Config>::RuntimeEvent =
 			Event::RetryFailed { task: (4, 0), id: None }.into();
 		// compare to the last event record
@@ -1693,7 +1693,7 @@ fn on_initialize_weight_is_correct() {
 		);
 		assert_eq!(IncompleteSince::<Test>::get(), Some(now + 1));
 
-		pezframe_system::Pallet::<Test>::register_extra_weight_unchecked(
+		pezframe_system::Pezpallet::<Test>::register_extra_weight_unchecked(
 			BlockWeights::get().max_block,
 			pezframe_support::dispatch::DispatchClass::Mandatory,
 		);

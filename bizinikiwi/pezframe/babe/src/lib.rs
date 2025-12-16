@@ -70,7 +70,7 @@ pub use randomness::{
 	ParentBlockRandomness, RandomnessFromOneEpochAgo, RandomnessFromTwoEpochsAgo,
 };
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 pub trait WeightInfo {
 	fn plan_config_change() -> Weight;
@@ -98,34 +98,34 @@ pub struct SameAuthoritiesForever;
 
 impl EpochChangeTrigger for SameAuthoritiesForever {
 	fn trigger<T: Config>(now: BlockNumberFor<T>) {
-		if Pallet::<T>::should_epoch_change(now) {
+		if Pezpallet::<T>::should_epoch_change(now) {
 			let authorities = Authorities::<T>::get();
 			let next_authorities = authorities.clone();
 
-			Pallet::<T>::enact_epoch_change(authorities, next_authorities, None);
+			Pezpallet::<T>::enact_epoch_change(authorities, next_authorities, None);
 		}
 	}
 }
 
 const UNDER_CONSTRUCTION_SEGMENT_LENGTH: u32 = 256;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	/// The BABE Pallet
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	/// The BABE Pezpallet
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
-	#[pallet::disable_pezframe_system_supertrait_check]
+	#[pezpallet::config]
+	#[pezpallet::disable_pezframe_system_supertrait_check]
 	pub trait Config: pezpallet_timestamp::Config {
 		/// The amount of time, in slots, that each epoch should last.
 		/// NOTE: Currently it is not possible to change the epoch duration after
 		/// the chain has started. Attempting to do so will brick block production.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type EpochDuration: Get<u64>;
 
 		/// The expected average block time at which BABE should be creating
@@ -133,7 +133,7 @@ pub mod pallet {
 		/// what the expected average block time should be based on the slot
 		/// duration and the security parameter `c` (where `1 - c` represents
 		/// the probability of a slot being empty).
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type ExpectedBlockTime: Get<Self::Moment>;
 
 		/// BABE requires some logic to be triggered on every block to query for whether an epoch
@@ -152,11 +152,11 @@ pub mod pallet {
 		type WeightInfo: WeightInfo;
 
 		/// Max number of authorities allowed
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxAuthorities: Get<u32>;
 
 		/// The maximum number of nominators for each validator.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxNominators: Get<u32>;
 
 		/// The proof of key ownership, used for validating equivocation reports.
@@ -173,7 +173,7 @@ pub mod pallet {
 		>;
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// An equivocation proof provided as part of an equivocation report is invalid.
 		InvalidEquivocationProof,
@@ -186,11 +186,11 @@ pub mod pallet {
 	}
 
 	/// Current epoch index.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type EpochIndex<T> = StorageValue<_, u64, ValueQuery>;
 
 	/// Current epoch authorities.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Authorities<T: Config> = StorageValue<
 		_,
 		WeakBoundedVec<(AuthorityId, BabeAuthorityWeight), T::MaxAuthorities>,
@@ -199,11 +199,11 @@ pub mod pallet {
 
 	/// The slot at which the first epoch actually started. This is 0
 	/// until the first block of the chain.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type GenesisSlot<T> = StorageValue<_, Slot, ValueQuery>;
 
 	/// Current slot number.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type CurrentSlot<T> = StorageValue<_, Slot, ValueQuery>;
 
 	/// The epoch randomness for the *current* epoch.
@@ -219,19 +219,19 @@ pub mod pallet {
 	// NOTE: the following fields don't use the constants to define the
 	// array size because the metadata API currently doesn't resolve the
 	// variable to its underlying value.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Randomness<T> = StorageValue<_, BabeRandomness, ValueQuery>;
 
 	/// Pending epoch configuration change that will be applied when the next epoch is enacted.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type PendingEpochConfigChange<T> = StorageValue<_, NextConfigDescriptor>;
 
 	/// Next epoch randomness.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type NextRandomness<T> = StorageValue<_, BabeRandomness, ValueQuery>;
 
 	/// Next epoch authorities.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type NextAuthorities<T: Config> = StorageValue<
 		_,
 		WeakBoundedVec<(AuthorityId, BabeAuthorityWeight), T::MaxAuthorities>,
@@ -247,11 +247,11 @@ pub mod pallet {
 	/// Once a segment reaches this length, we begin the next one.
 	/// We reset all segments and return to `0` at the beginning of every
 	/// epoch.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type SegmentIndex<T> = StorageValue<_, u32, ValueQuery>;
 
 	/// TWOX-NOTE: `SegmentIndex` is an increasing integer, so this is okay.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type UnderConstruction<T: Config> = StorageMap<
 		_,
 		Twox64Concat,
@@ -262,14 +262,14 @@ pub mod pallet {
 
 	/// Temporary value (cleared at block finalization) which is `Some`
 	/// if per-block initialization has already been called for current block.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Initialized<T> = StorageValue<_, Option<PreDigest>>;
 
 	/// This field should always be populated during block processing unless
 	/// secondary plain slots are enabled (which don't contain a VRF output).
 	///
 	/// It is set in `on_finalize`, before it will contain the value from the last block.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type AuthorVrfRandomness<T> = StorageValue<_, Option<BabeRandomness>, ValueQuery>;
 
 	/// The block numbers when the last and current epoch have started, respectively `N-1` and
@@ -277,7 +277,7 @@ pub mod pallet {
 	/// NOTE: We track this is in order to annotate the block number when a given pool of
 	/// entropy was fixed (i.e. it was known to chain observers). Since epochs are defined in
 	/// slots, which may be skipped, the block numbers may not line up with the slot numbers.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type EpochStart<T: Config> =
 		StorageValue<_, (BlockNumberFor<T>, BlockNumberFor<T>), ValueQuery>;
 
@@ -286,17 +286,17 @@ pub mod pallet {
 	/// This entry is populated as part of block execution and is cleaned up
 	/// on block finalization. Querying this storage entry outside of block
 	/// execution context should always yield zero.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Lateness<T: Config> = StorageValue<_, BlockNumberFor<T>, ValueQuery>;
 
 	/// The configuration for the current epoch. Should never be `None` as it is initialized in
 	/// genesis.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type EpochConfig<T> = StorageValue<_, BabeEpochConfiguration>;
 
 	/// The configuration for the next epoch, `None` if the config will not change
 	/// (you can fallback to `EpochConfig` instead in that case).
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type NextEpochConfig<T> = StorageValue<_, BabeEpochConfiguration>;
 
 	/// A list of the last 100 skipped epochs and the corresponding session index
@@ -307,12 +307,12 @@ pub mod pallet {
 	/// way to tie together sessions and epoch indices, i.e. we need to validate that
 	/// a validator was the owner of a given key on a given session, and what the
 	/// active epoch index was during that session.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type SkippedEpochs<T> =
 		StorageValue<_, BoundedVec<(u64, SessionIndex), ConstU32<100>>, ValueQuery>;
 
 	#[derive(pezframe_support::DefaultNoBound)]
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	pub struct GenesisConfig<T: Config> {
 		pub authorities: Vec<(AuthorityId, BabeAuthorityWeight)>,
 		pub epoch_config: BabeEpochConfiguration,
@@ -320,17 +320,17 @@ pub mod pallet {
 		pub _config: core::marker::PhantomData<T>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			SegmentIndex::<T>::put(0);
-			Pallet::<T>::initialize_genesis_authorities(&self.authorities);
+			Pezpallet::<T>::initialize_genesis_authorities(&self.authorities);
 			EpochConfig::<T>::put(&self.epoch_config);
 		}
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		/// Initialization
 		fn on_initialize(now: BlockNumberFor<T>) -> Weight {
 			Self::initialize(now);
@@ -396,14 +396,14 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Report authority equivocation/misbehavior. This method will verify
 		/// the equivocation proof and validate the given key ownership proof
 		/// against the extracted offender. If both are valid, the offence will
 		/// be reported.
-		#[pallet::call_index(0)]
-		#[pallet::weight(<T as Config>::WeightInfo::report_equivocation(
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::report_equivocation(
 			key_owner_proof.validator_count(),
 			T::MaxNominators::get(),
 		))]
@@ -429,8 +429,8 @@ pub mod pallet {
 		/// block authors will call it (validated in `ValidateUnsigned`), as such
 		/// if the block author is defined it will be defined as the equivocation
 		/// reporter.
-		#[pallet::call_index(1)]
-		#[pallet::weight(<T as Config>::WeightInfo::report_equivocation(
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::report_equivocation(
 			key_owner_proof.validator_count(),
 			T::MaxNominators::get(),
 		))]
@@ -451,8 +451,8 @@ pub mod pallet {
 		/// the next call to `enact_epoch_change`. The config will be activated one epoch after.
 		/// Multiple calls to this method will replace any existing planned config change that had
 		/// not been enacted yet.
-		#[pallet::call_index(2)]
-		#[pallet::weight(<T as Config>::WeightInfo::plan_config_change())]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::plan_config_change())]
 		pub fn plan_config_change(
 			origin: OriginFor<T>,
 			config: NextConfigDescriptor,
@@ -471,8 +471,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::validate_unsigned]
-	impl<T: Config> ValidateUnsigned for Pallet<T> {
+	#[pezpallet::validate_unsigned]
+	impl<T: Config> ValidateUnsigned for Pezpallet<T> {
 		type Call = Call<T>;
 		fn validate_unsigned(source: TransactionSource, call: &Self::Call) -> TransactionValidity {
 			Self::validate_unsigned(source, call)
@@ -484,7 +484,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> FindAuthor<u32> for Pallet<T> {
+impl<T: Config> FindAuthor<u32> for Pezpallet<T> {
 	fn find_author<'a, I>(digests: I) -> Option<u32>
 	where
 		I: 'a + IntoIterator<Item = (ConsensusEngineId, &'a [u8])>,
@@ -500,24 +500,24 @@ impl<T: Config> FindAuthor<u32> for Pallet<T> {
 	}
 }
 
-impl<T: Config> IsMember<AuthorityId> for Pallet<T> {
+impl<T: Config> IsMember<AuthorityId> for Pezpallet<T> {
 	fn is_member(authority_id: &AuthorityId) -> bool {
 		Authorities::<T>::get().iter().any(|id| &id.0 == authority_id)
 	}
 }
 
-impl<T: Config> pezpallet_session::ShouldEndSession<BlockNumberFor<T>> for Pallet<T> {
+impl<T: Config> pezpallet_session::ShouldEndSession<BlockNumberFor<T>> for Pezpallet<T> {
 	fn should_end_session(now: BlockNumberFor<T>) -> bool {
 		// it might be (and it is in current implementation) that session module is calling
 		// `should_end_session` from it's own `on_initialize` handler, in which case it's
 		// possible that babe's own `on_initialize` has not run yet, so let's ensure that we
-		// have initialized the pallet and updated the current slot.
+		// have initialized the pezpallet and updated the current slot.
 		Self::initialize(now);
 		Self::should_epoch_change(now)
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Public function to access epoch_index storage.
 	pub fn epoch_index() -> u64 {
 		EpochIndex::<T>::get()
@@ -690,7 +690,7 @@ impl<T: Config> Pallet<T> {
 		// Update the start blocks of the previous and new current epoch.
 		EpochStart::<T>::mutate(|(previous_epoch_start_block, current_epoch_start_block)| {
 			*previous_epoch_start_block = core::mem::take(current_epoch_start_block);
-			*current_epoch_start_block = <pezframe_system::Pallet<T>>::block_number();
+			*current_epoch_start_block = <pezframe_system::Pezpallet<T>>::block_number();
 		});
 
 		// After we update the current epoch, we signal the *next* epoch change
@@ -771,7 +771,7 @@ impl<T: Config> Pallet<T> {
 
 	fn deposit_consensus<U: Encode>(new: U) {
 		let log = DigestItem::Consensus(BABE_ENGINE_ID, new.encode());
-		<pezframe_system::Pallet<T>>::deposit_log(log)
+		<pezframe_system::Pezpallet<T>>::deposit_log(log)
 	}
 
 	fn deposit_randomness(randomness: &BabeRandomness) {
@@ -828,7 +828,7 @@ impl<T: Config> Pallet<T> {
 		}
 
 		let pre_digest =
-			<pezframe_system::Pallet<T>>::digest()
+			<pezframe_system::Pezpallet<T>>::digest()
 				.logs
 				.iter()
 				.filter_map(|s| s.as_pre_runtime())
@@ -927,7 +927,7 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-impl<T: Config> OnTimestampSet<T::Moment> for Pallet<T> {
+impl<T: Config> OnTimestampSet<T::Moment> for Pezpallet<T> {
 	fn on_timestamp_set(moment: T::Moment) {
 		let slot_duration = Self::slot_duration();
 		assert!(!slot_duration.is_zero(), "Babe slot duration cannot be zero.");
@@ -944,7 +944,7 @@ impl<T: Config> OnTimestampSet<T::Moment> for Pallet<T> {
 }
 
 impl<T: Config> pezframe_support::traits::EstimateNextSessionRotation<BlockNumberFor<T>>
-	for Pallet<T>
+	for Pezpallet<T>
 {
 	fn average_session_length() -> BlockNumberFor<T> {
 		T::EpochDuration::get().saturated_into()
@@ -971,17 +971,17 @@ impl<T: Config> pezframe_support::traits::EstimateNextSessionRotation<BlockNumbe
 	}
 }
 
-impl<T: Config> pezframe_support::traits::Lateness<BlockNumberFor<T>> for Pallet<T> {
+impl<T: Config> pezframe_support::traits::Lateness<BlockNumberFor<T>> for Pezpallet<T> {
 	fn lateness(&self) -> BlockNumberFor<T> {
 		Lateness::<T>::get()
 	}
 }
 
-impl<T: Config> pezsp_runtime::BoundToRuntimeAppPublic for Pallet<T> {
+impl<T: Config> pezsp_runtime::BoundToRuntimeAppPublic for Pezpallet<T> {
 	type Public = AuthorityId;
 }
 
-impl<T: Config> OneSessionHandler<T::AccountId> for Pallet<T>
+impl<T: Config> OneSessionHandler<T::AccountId> for Pezpallet<T>
 where
 	T: pezpallet_session::Config,
 {
@@ -1017,7 +1017,7 @@ where
 			),
 		);
 
-		let session_index = <pezpallet_session::Pallet<T>>::current_index();
+		let session_index = <pezpallet_session::Pezpallet<T>>::current_index();
 
 		Self::enact_epoch_change(bounded_authorities, next_bounded_authorities, Some(session_index))
 	}
@@ -1052,7 +1052,7 @@ pub mod migrations {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::{StorageValue, ValueQuery};
 
-	/// Something that can return the storage prefix of the `Babe` pallet.
+	/// Something that can return the storage prefix of the `Babe` pezpallet.
 	pub trait BabePalletPrefix: Config {
 		fn pezpallet_prefix() -> &'static str;
 	}

@@ -28,7 +28,7 @@ use crate::{
 	limits,
 	precompiles::{All as AllPrecompiles, Precompiles},
 	primitives::ExecReturnValue,
-	Code, Config, Error, Pallet, RuntimeCosts, LOG_TARGET, SENTINEL,
+	Code, Config, Error, Pezpallet, RuntimeCosts, LOG_TARGET, SENTINEL,
 };
 use alloc::{vec, vec::Vec};
 use codec::Encode;
@@ -683,7 +683,7 @@ impl<'a, E: Ext, M: ?Sized + Memory<E::T>> Runtime<'a, E, M> {
 					}
 
 					self.charge_gas(RuntimeCosts::CallTransferSurcharge {
-						dust_transfer: Pallet::<E::T>::has_dust(value),
+						dust_transfer: Pezpallet::<E::T>::has_dust(value),
 					})?;
 				}
 				self.ext.call(
@@ -754,8 +754,8 @@ impl<'a, E: Ext, M: ?Sized + Memory<E::T>> Runtime<'a, E, M> {
 			Ok(value) => {
 				self.charge_gas(RuntimeCosts::Instantiate {
 					input_data_len,
-					balance_transfer: Pallet::<E::T>::has_balance(value),
-					dust_transfer: Pallet::<E::T>::has_dust(value),
+					balance_transfer: Pezpallet::<E::T>::has_balance(value),
+					dust_transfer: Pezpallet::<E::T>::has_dust(value),
 				})?;
 				value
 			},

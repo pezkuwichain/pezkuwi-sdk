@@ -1,4 +1,4 @@
-# Paras Pallet
+# Paras Pezpallet
 
 The Paras module is responsible for storing information on teyrchains. Registered teyrchains cannot change except at
 session boundaries and after at least a full session has passed. This is primarily to ensure that the number and meaning

@@ -17,7 +17,7 @@
 use super::*;
 
 use crate::{
-	assigner_coretime::{mock_helpers::GenesisConfigBuilder, pallet::Error, Schedule},
+	assigner_coretime::{mock_helpers::GenesisConfigBuilder, pezpallet::Error, Schedule},
 	initializer::SessionChangeNotification,
 	mock::{
 		new_test_ext, CoretimeAssigner, OnDemand, Paras, ParasShared, RuntimeOrigin, Scheduler,
@@ -76,7 +76,7 @@ fn run_to_block(
 		// Update the spot traffic and revenue on every block.
 		OnDemand::on_initialize(b + 1);
 
-		// In the real runtime this is expected to be called by the `InclusionInherent` pallet.
+		// In the real runtime this is expected to be called by the `InclusionInherent` pezpallet.
 		Scheduler::advance_claim_queue(&Default::default());
 	}
 }

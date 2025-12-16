@@ -13,11 +13,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-//! # Skip Feeless Payment Pallet
+//! # Skip Feeless Payment Pezpallet
 //!
-//! This pallet allows runtimes that include it to skip payment of transaction fees for
+//! This pezpallet allows runtimes that include it to skip payment of transaction fees for
 //! dispatchables marked by
-//! [`#[pallet::feeless_if]`](pezframe_support::pezpallet_prelude::feeless_if).
+//! [`#[pezpallet::feeless_if]`](pezframe_support::pezpallet_prelude::feeless_if).
 //!
 //! ## Overview
 //!
@@ -29,9 +29,9 @@
 //!
 //! ## Integration
 //!
-//! This pallet wraps an existing transaction payment pallet. This means you should both pallets
+//! This pezpallet wraps an existing transaction payment pezpallet. This means you should both pallets
 //! in your [`construct_runtime`](pezframe_support::construct_runtime) macro and
-//! include this pallet's [`TransactionExtension`] ([`SkipCheckIfFeeless`]) that would accept the
+//! include this pezpallet's [`TransactionExtension`] ([`SkipCheckIfFeeless`]) that would accept the
 //! existing one as an argument.
 
 #![cfg_attr(not(feature = "std"), no_std)]
@@ -59,24 +59,24 @@ mod mock;
 #[cfg(test)]
 mod tests;
 
-pub use pallet::*;
+pub use pezpallet::*;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A transaction fee was skipped.
 		FeeSkipped { origin: <T::RuntimeOrigin as OriginTrait>::PalletsOrigin },
@@ -198,7 +198,7 @@ where
 		match pre {
 			Apply(pre) => S::post_dispatch_details(pre, info, post_info, len, result),
 			Skip(origin) => {
-				Pallet::<T>::deposit_event(Event::<T>::FeeSkipped { origin });
+				Pezpallet::<T>::deposit_event(Event::<T>::FeeSkipped { origin });
 				Ok(Weight::zero())
 			},
 		}

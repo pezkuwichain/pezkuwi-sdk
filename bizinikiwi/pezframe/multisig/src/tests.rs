@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Tests for Multisig Pallet
+// Tests for Multisig Pezpallet
 
 #![cfg(test)]
 
@@ -37,7 +37,7 @@ construct_runtime!(
 impl pezframe_system::Config for Test {
 	type Block = Block;
 	type AccountData = pezpallet_balances::AccountData<u64>;
-	// This pallet wishes to overwrite this.
+	// This pezpallet wishes to overwrite this.
 	type BaseCallFilter = TestBaseCallFilter;
 }
 
@@ -72,7 +72,7 @@ impl Config for Test {
 	type DepositFactor = MultisigDepositFactor;
 	type MaxSignatories = ConstU32<3>;
 	type WeightInfo = ();
-	type BlockNumberProvider = pezframe_system::Pallet<Test>;
+	type BlockNumberProvider = pezframe_system::Pezpallet<Test>;
 }
 
 use pezpallet_balances::{Call as BalancesCall, Error as BalancesError};

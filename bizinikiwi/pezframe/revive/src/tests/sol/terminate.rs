@@ -23,7 +23,7 @@ use crate::{
 		test_utils::{get_balance, get_contract_checked},
 		Contracts, ExtBuilder, RuntimeOrigin, Test,
 	},
-	BalanceOf, Code, Config, Pallet, H160,
+	BalanceOf, Code, Config, Pezpallet, H160,
 };
 use alloy_core::sol_types::{SolCall, SolConstructor};
 use pezframe_support::traits::fungible::Mutate;
@@ -202,12 +202,12 @@ fn syscall_passes_for_direct_delegate_same_tx(fixture_type: FixtureType) {
 
 		if fixture_type == FixtureType::Resolc {
 			// Need to pre-upload code for PVM
-			let _ = <Pallet<Test>>::upload_code(
+			let _ = <Pezpallet<Test>>::upload_code(
 				RuntimeOrigin::signed(ALICE.clone()),
 				code.clone(),
 				<BalanceOf<Test>>::MAX,
 			);
-			let _ = <Pallet<Test>>::upload_code(
+			let _ = <Pezpallet<Test>>::upload_code(
 				RuntimeOrigin::signed(ALICE.clone()),
 				delegator_code.clone(),
 				<BalanceOf<Test>>::MAX,
@@ -402,7 +402,7 @@ fn sent_funds_after_terminate_shall_be_credited_to_beneficiary_base_case(
 
 		if fixture_type == FixtureType::Resolc {
 			// Need to pre-upload code for PVM
-			let _ = <Pallet<Test>>::upload_code(
+			let _ = <Pezpallet<Test>>::upload_code(
 				RuntimeOrigin::signed(ALICE.clone()),
 				code.clone(),
 				<BalanceOf<Test>>::MAX,
@@ -615,7 +615,7 @@ fn terminate_twice(fixture_type: FixtureType, method1: u8, method2: u8) {
 
 		if fixture_type == FixtureType::Resolc {
 			// Need to pre-upload code for PVM
-			let _ = <Pallet<Test>>::upload_code(
+			let _ = <Pezpallet<Test>>::upload_code(
 				RuntimeOrigin::signed(ALICE.clone()),
 				code.clone(),
 				<BalanceOf<Test>>::MAX,
@@ -669,7 +669,7 @@ fn call_after_terminate_works(fixture_type: FixtureType, method: u8) {
 
 		if fixture_type == FixtureType::Resolc {
 			// Need to pre-upload code for PVM
-			let _ = <Pallet<Test>>::upload_code(
+			let _ = <Pezpallet<Test>>::upload_code(
 				RuntimeOrigin::signed(ALICE.clone()),
 				code.clone(),
 				<BalanceOf<Test>>::MAX,

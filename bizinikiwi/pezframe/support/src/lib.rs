@@ -138,7 +138,7 @@ pub const LOG_TARGET: &str = "runtime::pezframe-support";
 #[derive(Encode, Decode, Debug, PartialEq, Eq, Clone, TypeInfo)]
 pub enum Never {}
 
-/// A pallet identifier. These are per pallet and should be stored in a registry somewhere.
+/// A pezpallet identifier. These are per pezpallet and should be stored in a registry somewhere.
 #[derive(Clone, Copy, Eq, PartialEq, Encode, Decode, TypeInfo)]
 pub struct PalletId(pub [u8; 8]);
 
@@ -146,16 +146,16 @@ impl TypeId for PalletId {
 	const TYPE_ID: [u8; 4] = *b"modl";
 }
 
-/// Generate a [`#[pallet::storage]`](pezpallet_macros::storage) alias outside of a pallet.
+/// Generate a [`#[pezpallet::storage]`](pezpallet_macros::storage) alias outside of a pezpallet.
 ///
-/// This storage alias works similarly to the [`#[pallet::storage]`](pezpallet_macros::storage)
+/// This storage alias works similarly to the [`#[pezpallet::storage]`](pezpallet_macros::storage)
 /// attribute macro. It supports [`StorageValue`](storage::types::StorageValue),
 /// [`StorageMap`](storage::types::StorageMap),
 /// [`StorageDoubleMap`](storage::types::StorageDoubleMap) and
 /// [`StorageNMap`](storage::types::StorageNMap). The main difference to the normal
-/// [`#[pallet::storage]`](pezpallet_macros::storage) is the flexibility around declaring the
+/// [`#[pezpallet::storage]`](pezpallet_macros::storage) is the flexibility around declaring the
 /// storage prefix to use. The storage prefix determines where to find the value in the
-/// storage. [`#[pallet::storage]`](pezpallet_macros::storage) uses the name of the pallet as
+/// storage. [`#[pezpallet::storage]`](pezpallet_macros::storage) uses the name of the pezpallet as
 /// declared in [`construct_runtime!`].
 ///
 /// The flexibility around declaring the storage prefix makes this macro very useful for
@@ -166,20 +166,20 @@ impl TypeId for PalletId {
 /// There are different ways to declare the `prefix` to use. The `prefix` type can either be
 /// declared explicitly by passing it to the macro as an attribute or by letting the macro
 /// guess on what the `prefix` type is. The `prefix` is always passed as the first generic
-/// argument to the type declaration. When using [`#[pallet::storage]`](pezpallet_macros::storage)
+/// argument to the type declaration. When using [`#[pezpallet::storage]`](pezpallet_macros::storage)
 /// this first generic argument is always `_`. Besides declaring the `prefix`, the rest of the
-/// type declaration works as with [`#[pallet::storage]`](pezpallet_macros::storage).
+/// type declaration works as with [`#[pezpallet::storage]`](pezpallet_macros::storage).
 ///
 /// 1. Use the `verbatim` prefix type. This prefix type uses the given identifier as the
 /// `prefix`:
 #[doc = docify::embed!("src/tests/storage_alias.rs", verbatim_attribute)]
 ///
-/// 2. Use the `pezpallet_name` prefix type. This prefix type uses the name of the pallet as
+/// 2. Use the `pezpallet_name` prefix type. This prefix type uses the name of the pezpallet as
 /// configured in    [`construct_runtime!`] as the `prefix`:
 #[doc = docify::embed!("src/tests/storage_alias.rs", pezpallet_name_attribute)]
 /// It requires that the given prefix type implements
-/// [`PalletInfoAccess`](traits::PalletInfoAccess) (which is always the case for FRAME pallet
-/// structs). In the example above, `Pallet<T>` is the prefix type.
+/// [`PalletInfoAccess`](traits::PalletInfoAccess) (which is always the case for FRAME pezpallet
+/// structs). In the example above, `Pezpallet<T>` is the prefix type.
 ///
 /// 3. Use the `dynamic` prefix type. This prefix type calls [`Get::get()`](traits::Get::get)
 ///    to get the `prefix`:
@@ -187,14 +187,14 @@ impl TypeId for PalletId {
 /// It requires that the given prefix type implements [`Get<'static str>`](traits::Get).
 ///
 /// 4. Let the macro "guess" what kind of prefix type to use. This only supports verbatim or
-///    pallet name. The macro uses the presence of generic arguments to the prefix type as an
-///    indication that it should use the pallet name as the `prefix`:
+///    pezpallet name. The macro uses the presence of generic arguments to the prefix type as an
+///    indication that it should use the pezpallet name as the `prefix`:
 #[doc = docify::embed!("src/tests/storage_alias.rs", storage_alias_guess)]
 pub use pezframe_support_procedural::storage_alias;
 
 pub use pezframe_support_procedural::derive_impl;
 
-/// Experimental macros for defining dynamic params that can be used in pallet configs.
+/// Experimental macros for defining dynamic params that can be used in pezpallet configs.
 #[cfg(feature = "experimental")]
 pub mod dynamic_params {
 	pub use pezframe_support_procedural::{
@@ -401,7 +401,7 @@ pub use serde::{Deserialize, Serialize};
 #[doc(hidden)]
 pub use macro_magic;
 
-/// Prelude to be used for pallet testing, for ease of use.
+/// Prelude to be used for pezpallet testing, for ease of use.
 #[cfg(feature = "std")]
 pub mod testing_prelude {
 	pub use super::traits::Get;
@@ -413,7 +413,7 @@ pub mod testing_prelude {
 	pub use pezsp_runtime::{bounded_btree_map, bounded_vec};
 }
 
-/// Prelude to be used alongside pallet macro, for ease of use.
+/// Prelude to be used alongside pezpallet macro, for ease of use.
 pub mod pezpallet_prelude {
 	pub use crate::{
 		defensive, defensive_assert,
@@ -462,26 +462,26 @@ pub mod pezpallet_prelude {
 	pub use pezsp_weights::Weight;
 }
 
-/// The pallet macro has 2 purposes:
+/// The pezpallet macro has 2 purposes:
 ///
-/// * [For declaring a pallet as a rust module](#1---pezpallet-module-declaration)
+/// * [For declaring a pezpallet as a rust module](#1---pezpallet-module-declaration)
 /// * [For declaring the `struct` placeholder of a
-///   pallet](#2---pezpallet-struct-placeholder-declaration)
+///   pezpallet](#2---pezpallet-struct-placeholder-declaration)
 ///
-/// # 1 - Pallet module declaration
+/// # 1 - Pezpallet module declaration
 ///
-/// The module to declare a pallet is organized as follows:
+/// The module to declare a pezpallet is organized as follows:
 /// ```
-/// #[pezframe_support::pallet]    // <- the macro
-/// mod pallet {
-/// 	#[pallet::pallet]
-/// 	pub struct Pallet<T>(_);
+/// #[pezframe_support::pezpallet]    // <- the macro
+/// mod pezpallet {
+/// 	#[pezpallet::pezpallet]
+/// 	pub struct Pezpallet<T>(_);
 ///
-/// 	#[pallet::config]
+/// 	#[pezpallet::config]
 /// 	pub trait Config: pezframe_system::Config {}
 ///
-/// 	#[pallet::call]
-/// 	impl<T: Config> Pallet<T> {
+/// 	#[pezpallet::call]
+/// 	impl<T: Config> Pezpallet<T> {
 /// 	}
 ///
 /// 	/* ... */
@@ -490,75 +490,75 @@ pub mod pezpallet_prelude {
 ///
 /// The documentation for each individual part can be found at [pezframe_support::pezpallet_macros]
 ///
-/// ## Dev Mode (`#[pallet(dev_mode)]`)
+/// ## Dev Mode (`#[pezpallet(dev_mode)]`)
 ///
 /// Syntax:
 ///
 /// ```
-/// #[pezframe_support::pallet(dev_mode)]
-/// mod pallet {
-/// # 	 #[pallet::pallet]
-/// # 	 pub struct Pallet<T>(_);
-/// # 	 #[pallet::config]
+/// #[pezframe_support::pezpallet(dev_mode)]
+/// mod pezpallet {
+/// # 	 #[pezpallet::pezpallet]
+/// # 	 pub struct Pezpallet<T>(_);
+/// # 	 #[pezpallet::config]
 /// # 	 pub trait Config: pezframe_system::Config {}
 /// 	/* ... */
 /// }
 /// ```
 ///
-/// Specifying the argument `dev_mode` will allow you to enable dev mode for a pallet. The
+/// Specifying the argument `dev_mode` will allow you to enable dev mode for a pezpallet. The
 /// aim of dev mode is to loosen some of the restrictions and requirements placed on
 /// production pallets for easy tinkering and development. Dev mode pallets should not be
 /// used in production. Enabling dev mode has the following effects:
 ///
-/// * Weights no longer need to be specified on every `#[pallet::call]` declaration. By
+/// * Weights no longer need to be specified on every `#[pezpallet::call]` declaration. By
 ///   default, dev mode pallets will assume a weight of zero (`0`) if a weight is not
 ///   specified. This is equivalent to specifying `#[weight(0)]` on all calls that do not
 ///   specify a weight.
-/// * Call indices no longer need to be specified on every `#[pallet::call]` declaration. By
+/// * Call indices no longer need to be specified on every `#[pezpallet::call]` declaration. By
 ///   default, dev mode pallets will assume a call index based on the order of the call.
 /// * All storages are marked as unbounded, meaning you do not need to implement
 ///   [`MaxEncodedLen`](pezframe_support::pezpallet_prelude::MaxEncodedLen) on storage types. This is
-///   equivalent to specifying `#[pallet::unbounded]` on all storage type definitions.
+///   equivalent to specifying `#[pezpallet::unbounded]` on all storage type definitions.
 /// * Storage hashers no longer need to be specified and can be replaced by `_`. In dev mode,
 ///   these will be replaced by `Blake2_128Concat`. In case of explicit key-binding, `Hasher`
 ///   can simply be ignored when in `dev_mode`.
 ///
-/// Note that the `dev_mode` argument can only be supplied to the `#[pallet]` or
-/// `#[pezframe_support::pallet]` attribute macro that encloses your pallet module. This
+/// Note that the `dev_mode` argument can only be supplied to the `#[pezpallet]` or
+/// `#[pezframe_support::pezpallet]` attribute macro that encloses your pezpallet module. This
 /// argument cannot be specified anywhere else, including but not limited to the
-/// `#[pallet::pallet]` attribute macro.
+/// `#[pezpallet::pezpallet]` attribute macro.
 ///
 /// <div class="example-wrap" style="display:inline-block"><pre class="compile_fail"
 /// style="white-space:normal;font:inherit;">
 /// <strong>WARNING</strong>:
 /// You should never deploy or use dev mode pallets in production. Doing so can break your
 /// chain. Once you are done tinkering, you should
-/// remove the 'dev_mode' argument from your #[pallet] declaration and fix any compile
-/// errors before attempting to use your pallet in a production scenario.
+/// remove the 'dev_mode' argument from your #[pezpallet] declaration and fix any compile
+/// errors before attempting to use your pezpallet in a production scenario.
 /// </pre></div>
 ///
-/// # 2 - Pallet struct placeholder declaration
+/// # 2 - Pezpallet struct placeholder declaration
 ///
-/// The pallet struct placeholder `#[pallet::pallet]` is mandatory and allows you to
-/// specify pallet information.
+/// The pezpallet struct placeholder `#[pezpallet::pezpallet]` is mandatory and allows you to
+/// specify pezpallet information.
 ///
 /// The struct must be defined as follows:
 /// ```
-/// #[pezframe_support::pallet]
-/// mod pallet {
-/// 	#[pallet::pallet]         // <- the macro
-/// 	pub struct Pallet<T>(_);  // <- the struct definition
+/// #[pezframe_support::pezpallet]
+/// mod pezpallet {
+/// 	#[pezpallet::pezpallet]         // <- the macro
+/// 	pub struct Pezpallet<T>(_);  // <- the struct definition
 ///
-/// 	#[pallet::config]
+/// 	#[pezpallet::config]
 /// 	pub trait Config: pezframe_system::Config {}
 /// }
 /// ```
 //
-/// I.e. a regular struct definition named `Pallet`, with generic T and no where clause.
+/// I.e. a regular struct definition named `Pezpallet`, with generic T and no where clause.
 ///
 /// ## Macro expansion:
 ///
-/// The macro adds this attribute to the Pallet struct definition:
+/// The macro adds this attribute to the Pezpallet struct definition:
 /// ```ignore
 /// #[derive(
 /// 	pezframe_support::CloneNoBound,
@@ -569,12 +569,12 @@ pub mod pezpallet_prelude {
 /// ```
 /// and replaces the type `_` with `PhantomData<T>`.
 ///
-/// It also implements on the pallet:
+/// It also implements on the pezpallet:
 ///
 /// * [`GetStorageVersion`](pezframe_support::traits::GetStorageVersion)
-/// * [`OnGenesis`](pezframe_support::traits::OnGenesis): contains some logic to write the pallet
+/// * [`OnGenesis`](pezframe_support::traits::OnGenesis): contains some logic to write the pezpallet
 ///   version into storage.
-/// * [`PalletInfoAccess`](pezframe_support::traits::PalletInfoAccess) to ease access to pallet
+/// * [`PalletInfoAccess`](pezframe_support::traits::PalletInfoAccess) to ease access to pezpallet
 ///   information given by [`pezframe_support::traits::PalletInfo`]. (The implementation uses the
 ///   associated type [`pezframe_support::traits::PalletInfo`]).
 /// * [`StorageInfoTrait`](pezframe_support::traits::StorageInfoTrait) to give information about
@@ -583,23 +583,23 @@ pub mod pezpallet_prelude {
 /// If the attribute `set_storage_max_encoded_len` is set then the macro calls
 /// [`StorageInfoTrait`](pezframe_support::traits::StorageInfoTrait) for each storage in the
 /// implementation of [`StorageInfoTrait`](pezframe_support::traits::StorageInfoTrait) for the
-/// pallet. Otherwise, it implements
-/// [`StorageInfoTrait`](pezframe_support::traits::StorageInfoTrait) for the pallet using the
+/// pezpallet. Otherwise, it implements
+/// [`StorageInfoTrait`](pezframe_support::traits::StorageInfoTrait) for the pezpallet using the
 /// [`PartialStorageInfoTrait`](pezframe_support::traits::PartialStorageInfoTrait)
 /// implementation of storages.
 ///
 /// ## Note on deprecation.
 ///
-/// - Usage of `deprecated` attribute will propagate deprecation information to the pallet
+/// - Usage of `deprecated` attribute will propagate deprecation information to the pezpallet
 ///   metadata.
 /// - For general usage examples of `deprecated` attribute please refer to <https://doc.rust-lang.org/nightly/reference/attributes/diagnostics.html#the-deprecated-attribute>
 /// - Usage of `allow(deprecated)` on the item will propagate this attribute to the generated
 ///   code.
 /// - If the item is annotated with `deprecated` attribute then the generated code will be
 ///   automatically annotated with `allow(deprecated)`
-pub use pezframe_support_procedural::pallet;
+pub use pezframe_support_procedural::pezpallet;
 
-/// Contains macro stubs for all of the `pallet::` macros
+/// Contains macro stubs for all of the `pezpallet::` macros
 pub mod pezpallet_macros {
 	/// Declare the storage as whitelisted from benchmarking.
 	///
@@ -611,18 +611,18 @@ pub mod pezpallet_macros {
 	///
 	/// ### Example
 	/// ```
-	/// #[pezframe_support::pallet]
-	/// mod pallet {
+	/// #[pezframe_support::pezpallet]
+	/// mod pezpallet {
 	/// # 	use pezframe_support::pezpallet_prelude::*;
 	/// #
-	/// 	#[pallet::pallet]
-	/// 	pub struct Pallet<T>(_);
+	/// 	#[pezpallet::pezpallet]
+	/// 	pub struct Pezpallet<T>(_);
 	///
-	/// 	#[pallet::storage]
-	/// 	#[pallet::whitelist_storage]
+	/// 	#[pezpallet::storage]
+	/// 	#[pezpallet::whitelist_storage]
 	/// 	pub type MyStorage<T> = StorageValue<_, u32>;
 	/// #
-	/// # 	#[pallet::config]
+	/// # 	#[pezpallet::config]
 	/// # 	pub trait Config: pezframe_system::Config {}
 	/// }
 	/// ```
@@ -632,35 +632,35 @@ pub mod pezpallet_macros {
 	///
 	/// Each dispatchable needs to define a weight.
 	/// This attribute allows to define a weight using the expression:
-	/// `#[pallet::weight($expr)]` Note that argument of the call are available inside the
+	/// `#[pezpallet::weight($expr)]` Note that argument of the call are available inside the
 	/// expression.
 	///
 	/// If not defined explicitly, the weight can be implicitly inferred from the weight info
-	/// defined in the attribute `pallet::call`: `#[pallet::call(weight = $WeightInfo)]`.
-	/// Or it can be simply ignored when the pallet is in `dev_mode`.
+	/// defined in the attribute `pezpallet::call`: `#[pezpallet::call(weight = $WeightInfo)]`.
+	/// Or it can be simply ignored when the pezpallet is in `dev_mode`.
 	///
 	/// ## Example
 	///
 	/// ```
-	/// #[pezframe_support::pallet]
-	/// mod pallet {
+	/// #[pezframe_support::pezpallet]
+	/// mod pezpallet {
 	///  	use pezframe_support::pezpallet_prelude::*;
 	///  	use pezframe_system::pezpallet_prelude::*;
 	///
-	/// 	#[pallet::pallet]
-	/// 	pub struct Pallet<T>(_);
+	/// 	#[pezpallet::pezpallet]
+	/// 	pub struct Pezpallet<T>(_);
 	///
-	///  	#[pallet::config]
+	///  	#[pezpallet::config]
 	///  	pub trait Config: pezframe_system::Config {
 	///         /// Type for specifying dispatchable weights.
 	///         type WeightInfo: WeightInfo;
 	///     }
 	///
-	/// 	#[pallet::call(weight = <T as Config>::WeightInfo)]
-	/// 	impl<T: Config> Pallet<T> {
+	/// 	#[pezpallet::call(weight = <T as Config>::WeightInfo)]
+	/// 	impl<T: Config> Pezpallet<T> {
 	/// 		// Explicit weight definition
-	/// 		#[pallet::weight(<T as Config>::WeightInfo::do_something())]
-	/// 		#[pallet::call_index(0)]
+	/// 		#[pezpallet::weight(<T as Config>::WeightInfo::do_something())]
+	/// 		#[pezpallet::call_index(0)]
 	/// 		pub fn do_something(
 	/// 			origin: OriginFor<T>,
 	/// 			foo: u32,
@@ -669,9 +669,9 @@ pub mod pezpallet_macros {
 	/// 		}
 	///
 	///             // Implicit weight definition, the macro looks up to the weight info defined in
-	///             // `#[pallet::call(weight = $WeightInfo)]` attribute. Then use
+	///             // `#[pezpallet::call(weight = $WeightInfo)]` attribute. Then use
 	///             // `$WeightInfo::do_something_else` as the weight function.
-	///             #[pallet::call_index(1)]
+	///             #[pezpallet::call_index(1)]
 	///             pub fn do_something_else(
 	///                 origin: OriginFor<T>,
 	///                 bar: u64,
@@ -691,24 +691,24 @@ pub mod pezpallet_macros {
 
 	/// Allows whitelisting a storage item from decoding during try-runtime checks.
 	///
-	/// The optional attribute `#[pallet::disable_try_decode_storage]` will declare the
+	/// The optional attribute `#[pezpallet::disable_try_decode_storage]` will declare the
 	/// storage as whitelisted from decoding during try-runtime checks. This should only be
 	/// attached to transient storage which cannot be migrated during runtime upgrades.
 	///
 	/// ### Example
 	/// ```
-	/// #[pezframe_support::pallet]
-	/// mod pallet {
+	/// #[pezframe_support::pezpallet]
+	/// mod pezpallet {
 	/// # 	use pezframe_support::pezpallet_prelude::*;
 	/// #
-	/// 	#[pallet::pallet]
-	/// 	pub struct Pallet<T>(_);
+	/// 	#[pezpallet::pezpallet]
+	/// 	pub struct Pezpallet<T>(_);
 	///
-	/// 	#[pallet::storage]
-	/// 	#[pallet::disable_try_decode_storage]
+	/// 	#[pezpallet::storage]
+	/// 	#[pezpallet::disable_try_decode_storage]
 	/// 	pub type MyStorage<T> = StorageValue<_, u32>;
 	/// #
-	/// # 	#[pallet::config]
+	/// # 	#[pezpallet::config]
 	/// # 	pub trait Config: pezframe_system::Config {}
 	/// }
 	/// ```
@@ -716,26 +716,26 @@ pub mod pezpallet_macros {
 
 	/// Declares a storage as unbounded in potential size.
 	///
-	/// When implementing the storage info (when `#[pallet::generate_storage_info]` is
-	/// specified on the pallet struct placeholder), the size of the storage will be declared
+	/// When implementing the storage info (when `#[pezpallet::generate_storage_info]` is
+	/// specified on the pezpallet struct placeholder), the size of the storage will be declared
 	/// as unbounded. This can be useful for storage which can never go into PoV (Proof of
 	/// Validity).
 	///
 	/// ## Example
 	///
 	/// ```
-	/// #[pezframe_support::pallet]
-	/// mod pallet {
+	/// #[pezframe_support::pezpallet]
+	/// mod pezpallet {
 	/// # 	use pezframe_support::pezpallet_prelude::*;
 	/// #
-	/// 	#[pallet::pallet]
-	/// 	pub struct Pallet<T>(_);
+	/// 	#[pezpallet::pezpallet]
+	/// 	pub struct Pezpallet<T>(_);
 	///
-	/// 	#[pallet::storage]
-	/// 	#[pallet::unbounded]
+	/// 	#[pezpallet::storage]
+	/// 	#[pezpallet::unbounded]
 	/// 	pub type MyStorage<T> = StorageValue<_, u32>;
 	/// #
-	/// # 	#[pallet::config]
+	/// # 	#[pezpallet::config]
 	/// # 	pub trait Config: pezframe_system::Config {}
 	/// }
 	/// ```
@@ -749,18 +749,18 @@ pub mod pezpallet_macros {
 	/// ## Example
 	///
 	/// ```
-	/// #[pezframe_support::pallet]
-	/// mod pallet {
+	/// #[pezframe_support::pezpallet]
+	/// mod pezpallet {
 	/// # 	use pezframe_support::pezpallet_prelude::*;
 	/// #
-	/// 	#[pallet::pallet]
-	/// 	pub struct Pallet<T>(_);
+	/// 	#[pezpallet::pezpallet]
+	/// 	pub struct Pezpallet<T>(_);
 	///
-	/// 	#[pallet::storage]
-	/// 	#[pallet::storage_prefix = "foo"]
+	/// 	#[pezpallet::storage]
+	/// 	#[pezpallet::storage_prefix = "foo"]
 	/// 	pub type MyStorage<T> = StorageValue<_, u32>;
 	/// #
-	/// # 	#[pallet::config]
+	/// # 	#[pezpallet::config]
 	/// # 	pub trait Config: pezframe_system::Config {}
 	/// }
 	/// ```
@@ -780,34 +780,34 @@ pub mod pezpallet_macros {
 	/// Ensures the trait item will not be used as a default with the
 	/// `#[derive_impl(..)]` attribute macro.
 	///
-	/// The optional attribute `#[pallet::no_default]` can be attached to trait items within a
-	/// `Config` trait impl that has [`#[pallet::config(with_default)]`](`config`)
+	/// The optional attribute `#[pezpallet::no_default]` can be attached to trait items within a
+	/// `Config` trait impl that has [`#[pezpallet::config(with_default)]`](`config`)
 	/// attached.
 	pub use pezframe_support_procedural::no_default;
 
-	/// Declares a module as importable into a pallet via
+	/// Declares a module as importable into a pezpallet via
 	/// [`#[import_section]`](`import_section`).
 	///
 	/// Note that sections are imported by their module name/ident, and should be referred to
-	/// by their _full path_ from the perspective of the target pallet. Do not attempt to make
-	/// use of `use` statements to bring pallet sections into scope, as this will not work
+	/// by their _full path_ from the perspective of the target pezpallet. Do not attempt to make
+	/// use of `use` statements to bring pezpallet sections into scope, as this will not work
 	/// (unless you do so as part of a wildcard import, in which case it will work).
 	///
 	/// ## Naming Logistics
 	///
-	/// Also note that because of how `#[pezpallet_section]` works, pallet section names must be
+	/// Also note that because of how `#[pezpallet_section]` works, pezpallet section names must be
 	/// globally unique _within the crate in which they are defined_. For more information on
 	/// why this must be the case, see macro_magic's
 	/// [`#[export_tokens]`](https://docs.rs/macro_magic/latest/macro_magic/attr.export_tokens.html) macro.
 	///
 	/// Optionally, you may provide an argument to `#[pezpallet_section]` such as
-	/// `#[pezpallet_section(some_ident)]`, in the event that there is another pallet section in
+	/// `#[pezpallet_section(some_ident)]`, in the event that there is another pezpallet section in
 	/// same crate with the same ident/name. The ident you specify can then be used instead of
 	/// the module's ident name when you go to import it via
 	/// [`#[import_section]`](`import_section`).
 	pub use pezframe_support_procedural::pezpallet_section;
 
-	/// The `#[pallet::inherent]` attribute allows the pallet to provide
+	/// The `#[pezpallet::inherent]` attribute allows the pezpallet to provide
 	/// [inherents](https://docs.pezkuwichain.io/fundamentals/transaction-types/#inherent-transactions).
 	///
 	/// An inherent is some piece of data that is inserted by a block authoring node at block
@@ -821,8 +821,8 @@ pub mod pezpallet_macros {
 	/// Example usage:
 	///
 	/// ```
-	/// #[pezframe_support::pallet]
-	/// mod pallet {
+	/// #[pezframe_support::pezpallet]
+	/// mod pezpallet {
 	/// # 	use pezframe_support::pezpallet_prelude::*;
 	/// # 	use pezframe_support::inherent::IsFatalError;
 	/// # 	use pezsp_timestamp::InherentError;
@@ -831,11 +831,11 @@ pub mod pezpallet_macros {
 	/// 	// Example inherent identifier
 	/// 	pub const INHERENT_IDENTIFIER: InherentIdentifier = *b"timstap0";
 	///
-	/// 	#[pallet::pallet]
-	/// 	pub struct Pallet<T>(_);
+	/// 	#[pezpallet::pezpallet]
+	/// 	pub struct Pezpallet<T>(_);
 	///
-	/// 	#[pallet::inherent]
-	/// 	impl<T: Config> ProvideInherent for Pallet<T> {
+	/// 	#[pezpallet::inherent]
+	/// 	impl<T: Config> ProvideInherent for Pezpallet<T> {
 	/// 		type Call = Call<T>;
 	/// 		type Error = InherentError;
 	/// 		const INHERENT_IDENTIFIER: InherentIdentifier = INHERENT_IDENTIFIER;
@@ -856,13 +856,13 @@ pub mod pezpallet_macros {
 	/// 		}
 	/// 	}
 	/// #
-	/// # 	#[pallet::config]
+	/// # 	#[pezpallet::config]
 	/// # 	pub trait Config: pezframe_system::Config {}
 	/// }
 	/// ```
 	///
 	/// I.e. a trait implementation with bound `T: Config`, of trait `ProvideInherent` for type
-	/// `Pallet<T>`, and some optional where clause.
+	/// `Pezpallet<T>`, and some optional where clause.
 	///
 	/// ## Macro expansion
 	///
@@ -870,10 +870,10 @@ pub mod pezpallet_macros {
 	/// in the future to give information directly to `construct_runtime`.
 	pub use pezframe_support_procedural::inherent;
 
-	/// Splits a pallet declaration into multiple parts.
+	/// Splits a pezpallet declaration into multiple parts.
 	///
 	/// An attribute macro that can be attached to a module declaration. Doing so will
-	/// import the contents of the specified external pallet section that is defined
+	/// import the contents of the specified external pezpallet section that is defined
 	/// elsewhere using [`#[pezpallet_section]`](`pezpallet_section`).
 	///
 	/// ## Example
@@ -881,12 +881,12 @@ pub mod pezpallet_macros {
 	/// # use pezframe_support::pezpallet_macros::pezpallet_section;
 	/// # use pezframe_support::pezpallet_macros::import_section;
 	/// #
-	/// /// A [`pezpallet_section`] that defines the events for a pallet.
-	/// /// This can later be imported into the pallet using [`import_section`].
+	/// /// A [`pezpallet_section`] that defines the events for a pezpallet.
+	/// /// This can later be imported into the pezpallet using [`import_section`].
 	/// #[pezpallet_section]
 	/// mod events {
-	/// 	#[pallet::event]
-	/// 	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	/// 	#[pezpallet::event]
+	/// 	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	/// 	pub enum Event<T: Config> {
 	/// 		/// Event documentation should end with an array that provides descriptive names for event
 	/// 		/// parameters. [something, who]
@@ -895,78 +895,78 @@ pub mod pezpallet_macros {
 	/// }
 	///
 	/// #[import_section(events)]
-	/// #[pezframe_support::pallet]
-	/// mod pallet {
+	/// #[pezframe_support::pezpallet]
+	/// mod pezpallet {
 	/// # 	use pezframe_support::pezpallet_prelude::*;
 	/// #
-	/// 	#[pallet::pallet]
-	/// 	pub struct Pallet<T>(_);
+	/// 	#[pezpallet::pezpallet]
+	/// 	pub struct Pezpallet<T>(_);
 	/// #
-	/// # 	#[pallet::config]
+	/// # 	#[pezpallet::config]
 	/// # 	pub trait Config: pezframe_system::Config<RuntimeEvent: From<Event<Self>>> {
 	/// # 	}
 	/// }
 	/// ```
 	///
 	/// This will result in the contents of `some_section` being _verbatim_ imported into
-	/// the pallet above. Note that since the tokens for `some_section` are essentially
-	/// copy-pasted into the target pallet, you cannot refer to imports that don't also
-	/// exist in the target pallet, but this is easily resolved by including all relevant
-	/// `use` statements within your pallet section, so they are imported as well, or by
-	/// otherwise ensuring that you have the same imports on the target pallet.
+	/// the pezpallet above. Note that since the tokens for `some_section` are essentially
+	/// copy-pasted into the target pezpallet, you cannot refer to imports that don't also
+	/// exist in the target pezpallet, but this is easily resolved by including all relevant
+	/// `use` statements within your pezpallet section, so they are imported as well, or by
+	/// otherwise ensuring that you have the same imports on the target pezpallet.
 	///
-	/// It is perfectly permissible to import multiple pallet sections into the same pallet,
+	/// It is perfectly permissible to import multiple pezpallet sections into the same pezpallet,
 	/// which can be done by having multiple `#[import_section(something)]` attributes
-	/// attached to the pallet.
+	/// attached to the pezpallet.
 	///
 	/// Note that sections are imported by their module name/ident, and should be referred to
-	/// by their _full path_ from the perspective of the target pallet.
+	/// by their _full path_ from the perspective of the target pezpallet.
 	pub use pezframe_support_procedural::import_section;
 
-	/// Allows defining getter functions on `Pallet` storage.
+	/// Allows defining getter functions on `Pezpallet` storage.
 	///
 	/// ## Example
 	///
 	/// ```
-	/// #[pezframe_support::pallet]
-	/// mod pallet {
+	/// #[pezframe_support::pezpallet]
+	/// mod pezpallet {
 	/// # 	use pezframe_support::pezpallet_prelude::*;
 	/// #
-	/// 	#[pallet::pallet]
-	/// 	pub struct Pallet<T>(_);
+	/// 	#[pezpallet::pezpallet]
+	/// 	pub struct Pezpallet<T>(_);
 	///
-	/// 	#[pallet::storage]
-	/// 	#[pallet::getter(fn my_getter_fn_name)]
+	/// 	#[pezpallet::storage]
+	/// 	#[pezpallet::getter(fn my_getter_fn_name)]
 	/// 	pub type MyStorage<T> = StorageValue<_, u32>;
 	/// #
-	/// # 	#[pallet::config]
+	/// # 	#[pezpallet::config]
 	/// # 	pub trait Config: pezframe_system::Config {}
 	/// }
 	/// ```
 	///
-	/// See [`pallet::storage`](`pezframe_support::pezpallet_macros::storage`) for more info.
+	/// See [`pezpallet::storage`](`pezframe_support::pezpallet_macros::storage`) for more info.
 	pub use pezframe_support_procedural::getter;
 
 	/// Defines constants that are added to the constant field of
-	/// [`PalletMetadata`](frame_metadata::v15::PalletMetadata) struct for this pallet.
+	/// [`PalletMetadata`](frame_metadata::v15::PalletMetadata) struct for this pezpallet.
 	///
 	/// Must be defined like:
 	///
 	/// ```
-	/// #[pezframe_support::pallet]
-	/// mod pallet {
+	/// #[pezframe_support::pezpallet]
+	/// mod pezpallet {
 	/// # 	use pezframe_support::pezpallet_prelude::*;
 	/// #
-	/// 	#[pallet::pallet]
-	/// 	pub struct Pallet<T>(_);
+	/// 	#[pezpallet::pezpallet]
+	/// 	pub struct Pezpallet<T>(_);
 	///
-	/// # 	#[pallet::config]
+	/// # 	#[pezpallet::config]
 	/// # 	pub trait Config: pezframe_system::Config {}
 	/// #
-	/// 	#[pallet::extra_constants]
-	/// 	impl<T: Config> Pallet<T> // $optional_where_clause
+	/// 	#[pezpallet::extra_constants]
+	/// 	impl<T: Config> Pezpallet<T> // $optional_where_clause
 	/// 	{
-	/// 	#[pallet::constant_name(SomeU32ConstantName)]
+	/// 	#[pezpallet::constant_name(SomeU32ConstantName)]
 	/// 		/// Some doc
 	/// 		fn some_u32_constant() -> u32 {
 	/// 			100u32
@@ -983,28 +983,28 @@ pub mod pezpallet_macros {
 	/// Allows bypassing the `pezframe_system::Config` supertrait check.
 	///
 	/// To bypass the syntactic `pezframe_system::Config` supertrait check, use the attribute
-	/// `pallet::disable_pezframe_system_supertrait_check`.
+	/// `pezpallet::disable_pezframe_system_supertrait_check`.
 	///
 	/// Note this bypass is purely syntactic, and does not actually remove the requirement that your
-	/// pallet implements `pezframe_system::Config`. When using this check, your config is still required to implement
+	/// pezpallet implements `pezframe_system::Config`. When using this check, your config is still required to implement
 	/// `pezframe_system::Config` either via
 	/// - Implementing a trait that itself implements `pezframe_system::Config`
-	/// - Tightly coupling it with another pallet which itself implements `pezframe_system::Config`
+	/// - Tightly coupling it with another pezpallet which itself implements `pezframe_system::Config`
 	///
 	/// e.g.
 	///
 	/// ```
-	/// #[pezframe_support::pallet]
-	/// mod pallet {
+	/// #[pezframe_support::pezpallet]
+	/// mod pezpallet {
 	/// # 	use pezframe_support::pezpallet_prelude::*;
 	/// # 	use pezframe_system::pezpallet_prelude::*;
 	/// 	trait OtherTrait: pezframe_system::Config {}
 	///
-	/// 	#[pallet::pallet]
-	/// 	pub struct Pallet<T>(_);
+	/// 	#[pezpallet::pezpallet]
+	/// 	pub struct Pezpallet<T>(_);
 	///
-	/// 	#[pallet::config]
-	/// 	#[pallet::disable_pezframe_system_supertrait_check]
+	/// 	#[pezpallet::config]
+	/// 	#[pezpallet::disable_pezframe_system_supertrait_check]
 	/// 	pub trait Config: OtherTrait {}
 	/// }
 	/// ```
@@ -1014,19 +1014,19 @@ pub mod pezpallet_macros {
 	/// reference doc.
 	pub use pezframe_support_procedural::disable_pezframe_system_supertrait_check;
 
-	/// The mandatory attribute allowing definition of configurable types for the pallet.
+	/// The mandatory attribute allowing definition of configurable types for the pezpallet.
 	///
 	/// Item must be defined as:
 	///
 	/// ```
-	/// #[pezframe_support::pallet]
-	/// mod pallet {
+	/// #[pezframe_support::pezpallet]
+	/// mod pezpallet {
 	/// # 	use pezframe_support::pezpallet_prelude::*;
 	/// #
-	/// 	#[pallet::pallet]
-	/// 	pub struct Pallet<T>(_);
+	/// 	#[pezpallet::pezpallet]
+	/// 	pub struct Pezpallet<T>(_);
 	///
-	/// 	#[pallet::config]
+	/// 	#[pezpallet::config]
 	/// 	pub trait Config: pezframe_system::Config // + $optionally_some_other_supertraits
 	/// 	// $optional_where_clause
 	/// 	{
@@ -1036,20 +1036,20 @@ pub mod pezpallet_macros {
 	/// ```
 	///
 	/// I.e. a regular trait definition named `Config`, with the supertrait
-	/// [`pezframe_system::pallet::Config`](../../pezframe_system/pallet/trait.Config.html), and
+	/// [`pezframe_system::pezpallet::Config`](../../pezframe_system/pezpallet/trait.Config.html), and
 	/// optionally other supertraits and a where clause. (Specifying other supertraits here is
 	/// known as [tight coupling](https://docs.pezkuwichain.io/reference/how-to-guides/pezpallet-design/use-tight-coupling/))
 	///
 	/// ## Optional: `with_default`
 	///
 	/// An optional `with_default` argument may also be specified. Doing so will automatically
-	/// generate a `DefaultConfig` trait inside your pallet which is suitable for use with
+	/// generate a `DefaultConfig` trait inside your pezpallet which is suitable for use with
 	/// [`#[derive_impl(..)`](`pezframe_support::derive_impl`) to derive a default testing
 	/// config:
 	///
 	/// ```
-	/// #[pezframe_support::pallet]
-	/// mod pallet {
+	/// #[pezframe_support::pezpallet]
+	/// mod pezpallet {
 	/// # 	use pezframe_support::pezpallet_prelude::*;
 	/// # 	use pezframe_system::pezpallet_prelude::*;
 	/// # 	use core::fmt::Debug;
@@ -1057,13 +1057,13 @@ pub mod pezpallet_macros {
 	/// #
 	/// # 	pub trait SomeMoreComplexBound {}
 	/// #
-	/// 	#[pallet::pallet]
-	/// 	pub struct Pallet<T>(_);
+	/// 	#[pezpallet::pezpallet]
+	/// 	pub struct Pezpallet<T>(_);
 	///
-	/// 	#[pallet::config(with_default)] // <- with_default is optional
+	/// 	#[pezpallet::config(with_default)] // <- with_default is optional
 	/// 	pub trait Config: pezframe_system::Config {
 	/// 		/// A more complex type.
-	/// 		#[pallet::no_default] // Example of type where no default should be provided
+	/// 		#[pezpallet::no_default] // Example of type where no default should be provided
 	/// 		type MoreComplexType: SomeMoreComplexBound;
 	///
 	/// 		/// A simple type.
@@ -1071,7 +1071,7 @@ pub mod pezpallet_macros {
 	/// 		type SimpleType: From<u32>;
 	/// 	}
 	///
-	/// 	#[pallet::event]
+	/// 	#[pezpallet::event]
 	/// 	pub enum Event<T: Config> {
 	/// 		SomeEvent(u16, u32),
 	/// 	}
@@ -1079,13 +1079,13 @@ pub mod pezpallet_macros {
 	/// ```
 	///
 	/// As shown above:
-	/// * you may attach the [`#[pallet::no_default]`](`no_default`)
+	/// * you may attach the [`#[pezpallet::no_default]`](`no_default`)
 	/// attribute to specify that a particular trait item _cannot_ be used as a default when a
 	/// test `Config` is derived using the [`#[derive_impl(..)]`](`pezframe_support::derive_impl`)
 	/// attribute macro. This will cause that particular trait item to simply not appear in
 	/// default testing configs based on this config (the trait item will not be included in
 	/// `DefaultConfig`).
-	/// * you may attach the [`#[pallet::no_default_bounds]`](`no_default_bounds`)
+	/// * you may attach the [`#[pezpallet::no_default_bounds]`](`no_default_bounds`)
 	/// attribute to specify that a particular trait item can be used as a default when a
 	/// test `Config` is derived using the [`#[derive_impl(..)]`](`pezframe_support::derive_impl`)
 	/// attribute macro. But its bounds cannot be enforced at this point and should be
@@ -1094,45 +1094,45 @@ pub mod pezpallet_macros {
 	///   trait.
 	///
 	/// In case origin of error is not clear it is recommended to disable all default with
-	/// [`#[pallet::no_default]`](`no_default`) and enable them one by one.
+	/// [`#[pezpallet::no_default]`](`no_default`) and enable them one by one.
 	///
 	/// ### `DefaultConfig` Caveats
 	///
 	/// The auto-generated `DefaultConfig` trait:
-	/// - is always a _subset_ of your pallet's `Config` trait.
+	/// - is always a _subset_ of your pezpallet's `Config` trait.
 	/// - can only contain items that don't rely on externalities, such as
 	///   `pezframe_system::Config`.
 	///
 	/// Trait items that _do_ rely on externalities should be marked with
-	/// [`#[pallet::no_default]`](`no_default`)
+	/// [`#[pezpallet::no_default]`](`no_default`)
 	///
 	/// Consequently:
 	/// - Any items that rely on externalities _must_ be marked with
-	///   [`#[pallet::no_default]`](`no_default`) or your trait will fail to compile when used
+	///   [`#[pezpallet::no_default]`](`no_default`) or your trait will fail to compile when used
 	///   with [`derive_impl`](`pezframe_support::derive_impl`).
-	/// - Items marked with [`#[pallet::no_default]`](`no_default`) are entirely excluded from
+	/// - Items marked with [`#[pezpallet::no_default]`](`no_default`) are entirely excluded from
 	///   the `DefaultConfig` trait, and therefore any impl of `DefaultConfig` doesn't need to
 	///   implement such items.
 	///
 	/// For more information, see:
 	/// * [`pezframe_support::derive_impl`].
-	/// * [`#[pallet::no_default]`](`no_default`)
-	/// * [`#[pallet::no_default_bounds]`](`no_default_bounds`)
+	/// * [`#[pezpallet::no_default]`](`no_default`)
+	/// * [`#[pezpallet::no_default_bounds]`](`no_default_bounds`)
 	///
 	/// ## Optional: `without_automatic_metadata`
 	///
 	/// By default, the associated types of the `Config` trait that require the `TypeInfo` or
-	/// `Parameter` bounds are included in the metadata of the pallet.
+	/// `Parameter` bounds are included in the metadata of the pezpallet.
 	///
 	/// The optional `without_automatic_metadata` argument can be used to exclude these
 	/// associated types from the metadata collection.
 	///
 	/// Furthermore, the `without_automatic_metadata` argument can be used in combination with
-	/// the [`#[pallet::include_metadata]`](`include_metadata`) attribute to selectively
+	/// the [`#[pezpallet::include_metadata]`](`include_metadata`) attribute to selectively
 	/// include only certain associated types in the metadata collection.
 	/// ```
-	/// #[pezframe_support::pallet]
-	/// mod pallet {
+	/// #[pezframe_support::pezpallet]
+	/// mod pezpallet {
 	/// # 	use pezframe_support::pezpallet_prelude::*;
 	/// # 	use pezframe_system::pezpallet_prelude::*;
 	/// # 	use core::fmt::Debug;
@@ -1140,24 +1140,24 @@ pub mod pezpallet_macros {
 	/// #
 	/// # 	pub trait SomeMoreComplexBound {}
 	/// #
-	/// 	#[pallet::pallet]
-	/// 	pub struct Pallet<T>(_);
+	/// 	#[pezpallet::pezpallet]
+	/// 	pub struct Pezpallet<T>(_);
 	///
-	/// 	#[pallet::config(with_default, without_automatic_metadata)] // <- with_default and without_automatic_metadata are optional
+	/// 	#[pezpallet::config(with_default, without_automatic_metadata)] // <- with_default and without_automatic_metadata are optional
 	/// 	pub trait Config: pezframe_system::Config {
 	/// 		/// The overarching freeze reason.
-	/// 		#[pallet::no_default_bounds] // Default with bounds is not supported for RuntimeFreezeReason
+	/// 		#[pezpallet::no_default_bounds] // Default with bounds is not supported for RuntimeFreezeReason
 	/// 		type RuntimeFreezeReason: Parameter + Member + MaxEncodedLen + Copy + VariantCount;
 	/// 		/// A simple type.
 	/// 		// Type that would have been included in metadata, but is now excluded.
 	/// 		type SimpleType: From<u32> + TypeInfo;
 	///
-	/// 		// The `pallet::include_metadata` is used to selectively include this type in metadata.
-	/// 		#[pallet::include_metadata]
+	/// 		// The `pezpallet::include_metadata` is used to selectively include this type in metadata.
+	/// 		#[pezpallet::include_metadata]
 	/// 		type SelectivelyInclude: From<u32> + TypeInfo;
 	/// 	}
 	///
-	/// 	#[pallet::event]
+	/// 	#[pezpallet::event]
 	/// 	pub enum Event<T: Config> {
 	/// 		SomeEvent(u16, u32),
 	/// 	}
@@ -1167,7 +1167,7 @@ pub mod pezpallet_macros {
 
 	/// Allows defining an enum that gets composed as an aggregate enum by `construct_runtime`.
 	///
-	/// The `#[pallet::composite_enum]` attribute allows you to define an enum that gets
+	/// The `#[pezpallet::composite_enum]` attribute allows you to define an enum that gets
 	/// composed as an aggregate enum by `construct_runtime`. This is similar in principle with
 	/// [pezframe_support_procedural::event] and [pezframe_support_procedural::error].
 	///
@@ -1178,7 +1178,7 @@ pub mod pezpallet_macros {
 	/// `RuntimeHoldReason`, `RuntimeLockId` and `RuntimeSlashReason` respectively.
 	///
 	/// NOTE: The aggregate enum generated by `construct_runtime` generates a conversion
-	/// function from the pallet enum to the aggregate enum, and automatically derives the
+	/// function from the pezpallet enum to the aggregate enum, and automatically derives the
 	/// following traits:
 	///
 	/// ```ignore
@@ -1187,48 +1187,48 @@ pub mod pezpallet_macros {
 	/// ```
 	///
 	/// For ease of usage, when no `#[derive]` attributes are found for the enum under
-	/// [`#[pallet::composite_enum]`](composite_enum), the aforementioned traits are
+	/// [`#[pezpallet::composite_enum]`](composite_enum), the aforementioned traits are
 	/// automatically derived for it. The inverse is also true: if there are any `#[derive]`
 	/// attributes found for the enum, then no traits will automatically be derived for it.
 	///
-	/// e.g, defining `HoldReason` in a pallet
+	/// e.g, defining `HoldReason` in a pezpallet
 	///
 	/// ```
-	/// #[pezframe_support::pallet]
-	/// mod pallet {
+	/// #[pezframe_support::pezpallet]
+	/// mod pezpallet {
 	/// # 	use pezframe_support::pezpallet_prelude::*;
 	/// #
-	/// 	#[pallet::pallet]
-	/// 	pub struct Pallet<T>(_);
+	/// 	#[pezpallet::pezpallet]
+	/// 	pub struct Pezpallet<T>(_);
 	///
-	/// 	#[pallet::composite_enum]
+	/// 	#[pezpallet::composite_enum]
 	/// 	pub enum HoldReason {
-	/// 		/// The NIS Pallet has reserved it for a non-fungible receipt.
+	/// 		/// The NIS Pezpallet has reserved it for a non-fungible receipt.
 	/// 		#[codec(index = 0)]
 	/// 		SomeHoldReason,
 	/// 		#[codec(index = 1)]
 	/// 		SomeOtherHoldReason,
 	/// 	}
 	/// #
-	/// # 	#[pallet::config]
+	/// # 	#[pezpallet::config]
 	/// # 	pub trait Config: pezframe_system::Config {}
 	/// }
 	pub use pezframe_support_procedural::composite_enum;
 
-	/// Allows the pallet to validate unsigned transactions.
+	/// Allows the pezpallet to validate unsigned transactions.
 	///
 	/// Item must be defined as:
 	///
 	/// ```
-	/// #[pezframe_support::pallet]
-	/// mod pallet {
+	/// #[pezframe_support::pezpallet]
+	/// mod pezpallet {
 	/// # 	use pezframe_support::pezpallet_prelude::*;
 	/// #
-	/// 	#[pallet::pallet]
-	/// 	pub struct Pallet<T>(_);
+	/// 	#[pezpallet::pezpallet]
+	/// 	pub struct Pezpallet<T>(_);
 	///
-	/// 	#[pallet::validate_unsigned]
-	/// 	impl<T: Config> pezsp_runtime::traits::ValidateUnsigned for Pallet<T> {
+	/// 	#[pezpallet::validate_unsigned]
+	/// 	impl<T: Config> pezsp_runtime::traits::ValidateUnsigned for Pezpallet<T> {
 	/// 		type Call = Call<T>;
 	///
 	/// 		fn validate_unsigned(_source: TransactionSource, _call: &Self::Call) -> TransactionValidity {
@@ -1237,14 +1237,14 @@ pub mod pezpallet_macros {
 	/// 		}
 	/// 	}
 	/// #
-	/// # 	#[pallet::config]
+	/// # 	#[pezpallet::config]
 	/// # 	pub trait Config: pezframe_system::Config {}
 	/// }
 	/// ```
 	///
 	/// I.e. a trait implementation with bound `T: Config`, of trait
 	/// [`ValidateUnsigned`](pezframe_support::pezpallet_prelude::ValidateUnsigned) for
-	/// type `Pallet<T>`, and some optional where clause.
+	/// type `Pezpallet<T>`, and some optional where clause.
 	///
 	/// NOTE: There is also the [`pezsp_runtime::traits::TransactionExtension`] trait that can be
 	/// used to add some specific logic for transaction validation.
@@ -1255,11 +1255,11 @@ pub mod pezpallet_macros {
 	/// in the future to give information directly to [`pezframe_support::construct_runtime`].
 	pub use pezframe_support_procedural::validate_unsigned;
 
-	/// Allows defining	view functions on a pallet.
+	/// Allows defining	view functions on a pezpallet.
 	///
-	/// A pallet view function is a read-only function providing access to the state of the
-	/// pallet from both outside and inside the runtime. It should provide a _stable_ interface
-	/// for querying the state of the pallet, avoiding direct storage access and upgrading
+	/// A pezpallet view function is a read-only function providing access to the state of the
+	/// pezpallet from both outside and inside the runtime. It should provide a _stable_ interface
+	/// for querying the state of the pezpallet, avoiding direct storage access and upgrading
 	/// along with the runtime.
 	///
 	/// ## Syntax
@@ -1269,21 +1269,21 @@ pub mod pezpallet_macros {
 	///
 	/// ## Example
 	/// ```
-	/// #[pezframe_support::pallet]
-	/// pub mod pallet {
+	/// #[pezframe_support::pezpallet]
+	/// pub mod pezpallet {
 	/// 	use pezframe_support::pezpallet_prelude::*;
 	///
-	///  	#[pallet::config]
+	///  	#[pezpallet::config]
 	///  	pub trait Config: pezframe_system::Config {}
 	///
-	///  	#[pallet::pallet]
-	///  	pub struct Pallet<T>(_);
+	///  	#[pezpallet::pezpallet]
+	///  	pub struct Pezpallet<T>(_);
 	///
-	///     #[pallet::storage]
+	///     #[pezpallet::storage]
 	/// 	pub type SomeMap<T: Config> = StorageMap<_, Twox64Concat, u32, u32, OptionQuery>;
 	///
-	///     #[pallet::view_functions]
-	///     impl<T: Config> Pallet<T> {
+	///     #[pezpallet::view_functions]
+	///     impl<T: Config> Pezpallet<T> {
 	/// 		/// Retrieve a map storage value by key.
 	///         pub fn get_value_with_arg(key: u32) -> Option<u32> {
 	/// 			SomeMap::<T>::get(key)
@@ -1294,17 +1294,17 @@ pub mod pezpallet_macros {
 	///
 	///
 	/// ## Usage and implementation details
-	/// To allow outside access to pallet view functions, you need to add a runtime API that
-	/// accepts view function queries and dispatches them to the right pallet. You can do that
+	/// To allow outside access to pezpallet view functions, you need to add a runtime API that
+	/// accepts view function queries and dispatches them to the right pezpallet. You can do that
 	/// by implementing the
 	/// [`RuntimeViewFunction`](pezframe_support::view_functions::runtime_api::RuntimeViewFunction)
 	/// trait for the runtime inside an [`impl_runtime_apis!`](pezsp_api::impl_runtime_apis)
 	/// block.
 	///
 	/// The `RuntimeViewFunction` trait implements a hashing-based dispatching mechanism to
-	/// dispatch view functions to the right method in the right pallet based on their IDs. A
-	/// view function ID depends both on its pallet and on its method signature, so it remains
-	/// stable as long as those two elements are not modified. In general, pallet view
+	/// dispatch view functions to the right method in the right pezpallet based on their IDs. A
+	/// view function ID depends both on its pezpallet and on its method signature, so it remains
+	/// stable as long as those two elements are not modified. In general, pezpallet view
 	/// functions should expose a _stable_ interface and changes to the method signature are
 	/// strongly discouraged. For more details on the dispatching mechanism, see the
 	/// [`DispatchViewFunction`](pezframe_support::view_functions::DispatchViewFunction) trait.
@@ -1313,31 +1313,31 @@ pub mod pezpallet_macros {
 	/// Allows defining a struct implementing the [`Get`](pezframe_support::traits::Get) trait to
 	/// ease the use of storage types.
 	///
-	/// This attribute is meant to be used alongside [`#[pallet::storage]`](`storage`) to
+	/// This attribute is meant to be used alongside [`#[pezpallet::storage]`](`storage`) to
 	/// define a storage's default value. This attribute can be used multiple times.
 	///
 	/// Item must be defined as:
 	///
 	/// ```
-	/// #[pezframe_support::pallet]
-	/// mod pallet {
+	/// #[pezframe_support::pezpallet]
+	/// mod pezpallet {
 	/// # 	use pezsp_runtime::FixedU128;
 	/// # 	use pezframe_support::pezpallet_prelude::*;
 	/// #
-	/// 	#[pallet::pallet]
-	/// 	pub struct Pallet<T>(_);
+	/// 	#[pezpallet::pezpallet]
+	/// 	pub struct Pezpallet<T>(_);
 	///
-	/// 	#[pallet::storage]
+	/// 	#[pezpallet::storage]
 	/// 	pub(super) type SomeStorage<T: Config> =
 	/// 		StorageValue<_, FixedU128, ValueQuery, DefaultForSomeValue>;
 	///
 	/// 	// Define default for TeyrchainId
-	/// 	#[pallet::type_value]
+	/// 	#[pezpallet::type_value]
 	/// 	pub fn DefaultForSomeValue() -> FixedU128 {
 	/// 		FixedU128::from_u32(1)
 	/// 	}
 	/// #
-	/// # 	#[pallet::config]
+	/// # 	#[pezpallet::config]
 	/// # 	pub trait Config: pezframe_system::Config {}
 	/// }
 	/// ```
@@ -1349,26 +1349,26 @@ pub mod pezpallet_macros {
 	/// calling the user defined function.
 	pub use pezframe_support_procedural::type_value;
 
-	/// Allows defining a storage version for the pallet.
+	/// Allows defining a storage version for the pezpallet.
 	///
-	/// Because the `pallet::pallet` macro implements
+	/// Because the `pezpallet::pezpallet` macro implements
 	/// [`GetStorageVersion`](pezframe_support::traits::GetStorageVersion), the current storage
 	/// version needs to be communicated to the macro. This can be done by using the
-	/// `pallet::storage_version` attribute:
+	/// `pezpallet::storage_version` attribute:
 	///
 	/// ```
-	/// #[pezframe_support::pallet]
-	/// mod pallet {
+	/// #[pezframe_support::pezpallet]
+	/// mod pezpallet {
 	/// # 	use pezframe_support::pezpallet_prelude::StorageVersion;
 	/// # 	use pezframe_support::traits::GetStorageVersion;
 	/// #
 	/// 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(5);
 	///
-	/// 	#[pallet::pallet]
-	/// 	#[pallet::storage_version(STORAGE_VERSION)]
-	/// 	pub struct Pallet<T>(_);
+	/// 	#[pezpallet::pezpallet]
+	/// 	#[pezpallet::storage_version(STORAGE_VERSION)]
+	/// 	pub struct Pezpallet<T>(_);
 	/// #
-	/// # 	#[pallet::config]
+	/// # 	#[pezpallet::config]
 	/// # 	pub trait Config: pezframe_system::Config {}
 	/// }
 	/// ```
@@ -1376,32 +1376,32 @@ pub mod pezpallet_macros {
 	/// If not present, the current storage version is set to the default value.
 	pub use pezframe_support_procedural::storage_version;
 
-	/// The `#[pallet::hooks]` attribute allows you to specify a
-	/// [`pezframe_support::traits::Hooks`] implementation for `Pallet` that specifies
+	/// The `#[pezpallet::hooks]` attribute allows you to specify a
+	/// [`pezframe_support::traits::Hooks`] implementation for `Pezpallet` that specifies
 	/// pezpallet-specific logic.
 	///
 	/// The item the attribute attaches to must be defined as follows:
 	///
 	/// ```
-	/// #[pezframe_support::pallet]
-	/// mod pallet {
+	/// #[pezframe_support::pezpallet]
+	/// mod pezpallet {
 	/// # 	use pezframe_support::pezpallet_prelude::*;
 	/// # 	use pezframe_system::pezpallet_prelude::*;
 	/// #
-	/// 	#[pallet::pallet]
-	/// 	pub struct Pallet<T>(_);
+	/// 	#[pezpallet::pezpallet]
+	/// 	pub struct Pezpallet<T>(_);
 	///
-	/// 	#[pallet::hooks]
-	/// 	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	/// 	#[pezpallet::hooks]
+	/// 	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 	/// 		// Implement hooks here
 	/// 	}
 	/// #
-	/// # 	#[pallet::config]
+	/// # 	#[pezpallet::config]
 	/// # 	pub trait Config: pezframe_system::Config {}
 	/// }
 	/// ```
 	/// I.e. a regular trait implementation with generic bound: `T: Config`, for the trait
-	/// `Hooks<BlockNumberFor<T>>` (they are defined in preludes), for the type `Pallet<T>`.
+	/// `Hooks<BlockNumberFor<T>>` (they are defined in preludes), for the type `Pezpallet<T>`.
 	///
 	/// Optionally, you could add a where clause.
 	///
@@ -1417,13 +1417,13 @@ pub mod pezpallet_macros {
 	/// the provided [`Hooks`](pezframe_support::traits::Hooks) implementation.
 	///
 	/// NOTE: `OnRuntimeUpgrade` is implemented with `Hooks::on_runtime_upgrade` and some
-	/// additional logic. E.g. logic to write the pallet version into storage.
+	/// additional logic. E.g. logic to write the pezpallet version into storage.
 	///
 	/// NOTE: The macro also adds some tracing logic when implementing the above traits. The
 	/// following hooks emit traces: `on_initialize`, `on_finalize` and `on_runtime_upgrade`.
 	pub use pezframe_support_procedural::hooks;
 
-	/// Generates a helper function on `Pallet` that handles deposit events.
+	/// Generates a helper function on `Pezpallet` that handles deposit events.
 	///
 	/// NOTE: For instantiable pallets, the event must be generic over `T` and `I`.
 	///
@@ -1441,13 +1441,13 @@ pub mod pezpallet_macros {
 	///
 	/// The macro implements a metadata function on `Event` returning the `EventMetadata`.
 	///
-	/// If `#[pallet::generate_deposit]` is present then the macro implements `fn
-	/// deposit_event` on `Pallet`.
+	/// If `#[pezpallet::generate_deposit]` is present then the macro implements `fn
+	/// deposit_event` on `Pezpallet`.
 	pub use pezframe_support_procedural::generate_deposit;
 
 	/// Allows defining logic to make an extrinsic call feeless.
 	///
-	/// Each dispatchable may be annotated with the `#[pallet::feeless_if($closure)]`
+	/// Each dispatchable may be annotated with the `#[pezpallet::feeless_if($closure)]`
 	/// attribute, which explicitly defines the condition for the dispatchable to be feeless.
 	///
 	/// The arguments for the closure must be the referenced arguments of the dispatchable
@@ -1458,19 +1458,19 @@ pub mod pezpallet_macros {
 	/// ### Example
 	///
 	/// ```
-	/// #[pezframe_support::pallet(dev_mode)]
-	/// mod pallet {
+	/// #[pezframe_support::pezpallet(dev_mode)]
+	/// mod pezpallet {
 	/// # 	use pezframe_support::pezpallet_prelude::*;
 	/// # 	use pezframe_system::pezpallet_prelude::*;
 	/// #
-	/// 	#[pallet::pallet]
-	/// 	pub struct Pallet<T>(_);
+	/// 	#[pezpallet::pezpallet]
+	/// 	pub struct Pezpallet<T>(_);
 	///
-	/// 	#[pallet::call]
-	/// 	impl<T: Config> Pallet<T> {
-	/// 		#[pallet::call_index(0)]
+	/// 	#[pezpallet::call]
+	/// 	impl<T: Config> Pezpallet<T> {
+	/// 		#[pezpallet::call_index(0)]
 	/// 		/// Marks this call as feeless if `foo` is zero.
-	/// 		#[pallet::feeless_if(|_origin: &OriginFor<T>, foo: &u32| -> bool {
+	/// 		#[pezpallet::feeless_if(|_origin: &OriginFor<T>, foo: &u32| -> bool {
 	/// 			*foo == 0
 	/// 		})]
 	/// 		pub fn something(
@@ -1481,7 +1481,7 @@ pub mod pezpallet_macros {
 	/// 		}
 	/// 	}
 	/// #
-	/// # 	#[pallet::config]
+	/// # 	#[pezpallet::config]
 	/// # 	pub trait Config: pezframe_system::Config {}
 	/// }
 	/// ```
@@ -1513,12 +1513,12 @@ pub mod pezpallet_macros {
 	/// Item must be defined as so:
 	///
 	/// ```
-	/// #[pezframe_support::pallet(dev_mode)]
-	/// mod pallet {
-	/// 	#[pallet::pallet]
-	/// 	pub struct Pallet<T>(_);
+	/// #[pezframe_support::pezpallet(dev_mode)]
+	/// mod pezpallet {
+	/// 	#[pezpallet::pezpallet]
+	/// 	pub struct Pezpallet<T>(_);
 	///
-	/// 	#[pallet::error]
+	/// 	#[pezpallet::error]
 	/// 	pub enum Error<T> {
 	/// 		/// SomeFieldLessVariant doc
 	/// 		SomeFieldLessVariant,
@@ -1526,7 +1526,7 @@ pub mod pezpallet_macros {
 	/// 		SomeVariantWithOneField(u32),
 	/// 	}
 	/// #
-	/// # 	#[pallet::config]
+	/// # 	#[pezpallet::config]
 	/// # 	pub trait Config: pezframe_system::Config {}
 	/// }
 	/// ```
@@ -1544,7 +1544,7 @@ pub mod pezpallet_macros {
 	/// lots of individual error conditions.)
 	///
 	/// Field types in enum variants must also implement [`pezframe_support::PalletError`],
-	/// otherwise the pallet will fail to compile. Rust primitive types have already
+	/// otherwise the pezpallet will fail to compile. Rust primitive types have already
 	/// implemented the [`pezframe_support::PalletError`] trait along with some commonly used
 	/// stdlib types such as [`Option`] and [`core::marker::PhantomData`], and hence
 	/// in most use cases, a manual implementation is not necessary and is discouraged.
@@ -1562,7 +1562,7 @@ pub mod pezpallet_macros {
 	///
 	/// ## Note on deprecation of Errors
 	///
-	/// - Usage of `deprecated` attribute will propagate deprecation information to the pallet
+	/// - Usage of `deprecated` attribute will propagate deprecation information to the pezpallet
 	///   metadata where the item was declared.
 	/// - For general usage examples of `deprecated` attribute please refer to <https://doc.rust-lang.org/nightly/reference/attributes/diagnostics.html#the-deprecated-attribute>
 	/// - It's possible to deprecated either certain variants inside the `Error` or the whole
@@ -1574,26 +1574,26 @@ pub mod pezpallet_macros {
 	///   automatically annotated with `allow(deprecated)`
 	pub use pezframe_support_procedural::error;
 
-	/// Allows defining pallet events.
+	/// Allows defining pezpallet events.
 	///
-	/// Pallet events are stored under the `system` / `events` key when the block is applied
+	/// Pezpallet events are stored under the `system` / `events` key when the block is applied
 	/// (and then replaced when the next block writes it's events).
 	///
 	/// The Event enum can be defined as follows:
 	///
 	/// ```
-	/// #[pezframe_support::pallet(dev_mode)]
-	/// mod pallet {
+	/// #[pezframe_support::pezpallet(dev_mode)]
+	/// mod pezpallet {
 	/// #     use pezframe_support::pezpallet_prelude::IsType;
 	/// #
-	/// 	#[pallet::pallet]
-	/// 	pub struct Pallet<T>(_);
+	/// 	#[pezpallet::pezpallet]
+	/// 	pub struct Pezpallet<T>(_);
 	///
-	/// 	#[pallet::config]
+	/// 	#[pezpallet::config]
 	/// 	pub trait Config: pezframe_system::Config {}
 	///
-	/// 	#[pallet::event]
-	/// 	#[pallet::generate_deposit(fn deposit_event)] // Optional
+	/// 	#[pezpallet::event]
+	/// 	#[pezpallet::generate_deposit(fn deposit_event)] // Optional
 	/// 	pub enum Event<T> {
 	/// 		/// SomeEvent doc
 	/// 		SomeEvent(u16, u32), // SomeEvent with two fields
@@ -1608,7 +1608,7 @@ pub mod pezpallet_macros {
 	/// system supertrait's `RuntimeEvent `associated type, i.e:
 	///
 	/// ```rs
-	/// 	#[pallet::config]
+	/// 	#[pezpallet::config]
 	/// 	pub trait Config: pezframe_system::Config<RuntimeEvent: From<Event<Self>>> {}
 	/// ```
 	///
@@ -1618,7 +1618,7 @@ pub mod pezpallet_macros {
 	///
 	/// ## Note on deprecation of Events
 	///
-	/// - Usage of `deprecated` attribute will propagate deprecation information to the pallet
+	/// - Usage of `deprecated` attribute will propagate deprecation information to the pezpallet
 	///   metadata where the item was declared.
 	/// - For general usage examples of `deprecated` attribute please refer to <https://doc.rust-lang.org/nightly/reference/attributes/diagnostics.html#the-deprecated-attribute>
 	/// - It's possible to deprecated either certain variants inside the `Event` or the whole
@@ -1638,13 +1638,13 @@ pub mod pezpallet_macros {
 	/// By default all collectable associated types are included in the metadata.
 	///
 	/// This attribute can be used in combination with the
-	/// [`#[pallet::config(without_automatic_metadata)]`](`config`).
+	/// [`#[pezpallet::config(without_automatic_metadata)]`](`config`).
 	pub use pezframe_support_procedural::include_metadata;
 
-	/// Allows a pallet to declare a set of functions as a *dispatchable extrinsic*.
+	/// Allows a pezpallet to declare a set of functions as a *dispatchable extrinsic*.
 	///
 	/// In slightly simplified terms, this macro declares the set of "transactions" of a
-	/// pallet.
+	/// pezpallet.
 	///
 	/// > The exact definition of **extrinsic** can be found in
 	/// > [`pezsp_runtime::generic::UncheckedExtrinsic`].
@@ -1656,7 +1656,7 @@ pub mod pezpallet_macros {
 	///
 	/// ## Call Enum
 	///
-	/// The macro is called `call` (rather than `#[pallet::extrinsics]`) because of the
+	/// The macro is called `call` (rather than `#[pezpallet::extrinsics]`) because of the
 	/// generation of a `enum Call`. This enum contains only the encoding of the function
 	/// arguments of the dispatchable, alongside the information needed to route it to the
 	/// correct function.
@@ -1667,17 +1667,17 @@ pub mod pezpallet_macros {
 	/// rolled back.
 	///
 	/// ```
-	/// #[pezframe_support::pallet(dev_mode)]
+	/// #[pezframe_support::pezpallet(dev_mode)]
 	/// pub mod custom_pallet {
 	/// #   use pezframe_support::pezpallet_prelude::*;
 	/// #   use pezframe_system::pezpallet_prelude::*;
-	/// #   #[pallet::config]
+	/// #   #[pezpallet::config]
 	/// #   pub trait Config: pezframe_system::Config {}
-	/// #   #[pallet::pallet]
-	/// #   pub struct Pallet<T>(_);
+	/// #   #[pezpallet::pezpallet]
+	/// #   pub struct Pezpallet<T>(_);
 	/// #   use pezframe_support::traits::BuildGenesisConfig;
-	///     #[pallet::call]
-	///     impl<T: Config> Pallet<T> {
+	///     #[pezpallet::call]
+	///     impl<T: Config> Pezpallet<T> {
 	///         pub fn some_dispatchable(_origin: OriginFor<T>, _input: u32) -> DispatchResult {
 	///             Ok(())
 	///         }
@@ -1713,7 +1713,7 @@ pub mod pezpallet_macros {
 	/// #    TestExternalities::new_empty().execute_with(|| {
 	///     let origin: RuntimeOrigin = pezframe_system::RawOrigin::Signed(10).into();
 	///     // calling into a dispatchable from within the runtime is simply a function call.
-	///         let _ = custom_pallet::Pallet::<Runtime>::some_dispatchable(origin.clone(), 10);
+	///         let _ = custom_pallet::Pezpallet::<Runtime>::some_dispatchable(origin.clone(), 10);
 	///
 	///     // calling into a dispatchable from the outer world involves constructing the bytes of
 	///     let call = custom_pallet::Call::<Runtime>::some_dispatchable { input: 10 };
@@ -1749,24 +1749,24 @@ pub mod pezpallet_macros {
 	/// ## Weight info
 	///
 	/// Each call needs to define a weight.
-	/// * The weight can be defined explicitly using the attribute `#[pallet::weight($expr)]`
+	/// * The weight can be defined explicitly using the attribute `#[pezpallet::weight($expr)]`
 	///   (Note that argument of the call are available inside the expression).
 	/// * Or it can be defined implicitly, the weight info for the calls needs to be specified
-	///   in the call attribute: `#[pallet::call(weight = $WeightInfo)]`, then each call that
+	///   in the call attribute: `#[pezpallet::call(weight = $WeightInfo)]`, then each call that
 	///   doesn't have explicit weight will use `$WeightInfo::$call_name` as the weight.
 	///
-	/// * Or it can be simply ignored when the pallet is in `dev_mode`.
+	/// * Or it can be simply ignored when the pezpallet is in `dev_mode`.
 	///
 	/// ```
-	/// #[pezframe_support::pallet]
-	/// mod pallet {
+	/// #[pezframe_support::pezpallet]
+	/// mod pezpallet {
 	///     use pezframe_support::pezpallet_prelude::*;
 	///     use pezframe_system::pezpallet_prelude::*;
 	///
-	///     #[pallet::pallet]
-	///     pub struct Pallet<T>(_);
+	///     #[pezpallet::pezpallet]
+	///     pub struct Pezpallet<T>(_);
 	///
-	///     #[pallet::config]
+	///     #[pezpallet::config]
 	///     pub trait Config: pezframe_system::Config {
 	///         /// Type for specifying dispatchable weights.
 	///         type WeightInfo: WeightInfo;
@@ -1778,11 +1778,11 @@ pub mod pezpallet_macros {
 	///         fn do_something_else() -> Weight;
 	///     }
 	///
-	///     #[pallet::call(weight = <T as Config>::WeightInfo)]
-	///     impl<T: Config> Pallet<T> {
-	///         // Explicit weight definition using `#[pallet::weight(...)]`
-	///         #[pallet::weight(<T as Config>::WeightInfo::do_something())]
-	///         #[pallet::call_index(0)]
+	///     #[pezpallet::call(weight = <T as Config>::WeightInfo)]
+	///     impl<T: Config> Pezpallet<T> {
+	///         // Explicit weight definition using `#[pezpallet::weight(...)]`
+	///         #[pezpallet::weight(<T as Config>::WeightInfo::do_something())]
+	///         #[pezpallet::call_index(0)]
 	///         pub fn do_something(
 	///             origin: OriginFor<T>,
 	///             foo: u32,
@@ -1792,9 +1792,9 @@ pub mod pezpallet_macros {
 	///         }
 	///
 	///         // Implicit weight definition, the macro looks up to the weight info defined in
-	///         // `#[pallet::call(weight = $WeightInfo)]` attribute. Then use
+	///         // `#[pezpallet::call(weight = $WeightInfo)]` attribute. Then use
 	///         // `$WeightInfo::do_something_else` as the weight function.
-	///         #[pallet::call_index(1)]
+	///         #[pezpallet::call_index(1)]
 	///         pub fn do_something_else(
 	///             origin: OriginFor<T>,
 	///             bar: u64,
@@ -1808,26 +1808,26 @@ pub mod pezpallet_macros {
 	///
 	/// ## Default Behavior
 	///
-	/// If no `#[pallet::call]` exists, then a default implementation corresponding to the
+	/// If no `#[pezpallet::call]` exists, then a default implementation corresponding to the
 	/// following code is automatically generated:
 	///
 	/// ```
-	/// #[pezframe_support::pallet(dev_mode)]
-	/// mod pallet {
-	/// 	#[pallet::pallet]
-	/// 	pub struct Pallet<T>(_);
+	/// #[pezframe_support::pezpallet(dev_mode)]
+	/// mod pezpallet {
+	/// 	#[pezpallet::pezpallet]
+	/// 	pub struct Pezpallet<T>(_);
 	///
-	/// 	#[pallet::call] // <- automatically generated
-	/// 	impl<T: Config> Pallet<T> {} // <- automatically generated
+	/// 	#[pezpallet::call] // <- automatically generated
+	/// 	impl<T: Config> Pezpallet<T> {} // <- automatically generated
 	///
-	/// 	#[pallet::config]
+	/// 	#[pezpallet::config]
 	/// 	pub trait Config: pezframe_system::Config {}
 	/// }
 	/// ```
 	///
 	/// ## Note on deprecation of Calls
 	///
-	/// - Usage of `deprecated` attribute will propagate deprecation information to the pallet
+	/// - Usage of `deprecated` attribute will propagate deprecation information to the pezpallet
 	///   metadata where the item was declared.
 	/// - For general usage examples of `deprecated` attribute please refer to <https://doc.rust-lang.org/nightly/reference/attributes/diagnostics.html#the-deprecated-attribute>
 	/// - Usage of `allow(deprecated)` on the item will propagate this attribute to the
@@ -1858,25 +1858,25 @@ pub mod pezpallet_macros {
 	/// allows. In all such cases, using `compact` is sensible.
 	///
 	/// ```
-	/// #[pezframe_support::pallet(dev_mode)]
+	/// #[pezframe_support::pezpallet(dev_mode)]
 	/// pub mod custom_pallet {
 	/// #   use pezframe_support::pezpallet_prelude::*;
 	/// #   use pezframe_system::pezpallet_prelude::*;
-	/// #   #[pallet::config]
+	/// #   #[pezpallet::config]
 	/// #   pub trait Config: pezframe_system::Config {}
-	/// #   #[pallet::pallet]
-	/// #   pub struct Pallet<T>(_);
+	/// #   #[pezpallet::pezpallet]
+	/// #   pub struct Pezpallet<T>(_);
 	/// #   use pezframe_support::traits::BuildGenesisConfig;
-	///     #[pallet::call]
-	///     impl<T: Config> Pallet<T> {
-	///         pub fn some_dispatchable(_origin: OriginFor<T>, #[pallet::compact] _input: u32) -> DispatchResult {
+	///     #[pezpallet::call]
+	///     impl<T: Config> Pezpallet<T> {
+	///         pub fn some_dispatchable(_origin: OriginFor<T>, #[pezpallet::compact] _input: u32) -> DispatchResult {
 	///             Ok(())
 	///         }
 	///     }
 	/// }
 	pub use pezframe_support_procedural::compact;
 
-	/// Allows you to define the genesis configuration for the pallet.
+	/// Allows you to define the genesis configuration for the pezpallet.
 	///
 	/// Item is defined as either an enum or a struct. It needs to be public and implement the
 	/// trait [`pezframe_support::traits::BuildGenesisConfig`].
@@ -1884,8 +1884,8 @@ pub mod pezpallet_macros {
 	/// See [`genesis_build`] for an example.
 	pub use pezframe_support_procedural::genesis_config;
 
-	/// Allows you to define how the state of your pallet at genesis is built. This
-	/// takes as input the `GenesisConfig` type (as `self`) and constructs the pallet's initial
+	/// Allows you to define how the state of your pezpallet at genesis is built. This
+	/// takes as input the `GenesisConfig` type (as `self`) and constructs the pezpallet's initial
 	/// state.
 	///
 	/// The fields of the `GenesisConfig` can in turn be populated by the chain-spec.
@@ -1893,20 +1893,20 @@ pub mod pezpallet_macros {
 	/// ## Example
 	///
 	/// ```
-	/// #[pezframe_support::pallet]
-	/// pub mod pallet {
-	/// # 	#[pallet::config]
+	/// #[pezframe_support::pezpallet]
+	/// pub mod pezpallet {
+	/// # 	#[pezpallet::config]
 	/// # 	pub trait Config: pezframe_system::Config {}
-	/// # 	#[pallet::pallet]
-	/// # 	pub struct Pallet<T>(_);
+	/// # 	#[pezpallet::pezpallet]
+	/// # 	pub struct Pezpallet<T>(_);
 	/// # 	use pezframe_support::traits::BuildGenesisConfig;
-	///     #[pallet::genesis_config]
+	///     #[pezpallet::genesis_config]
 	///     #[derive(pezframe_support::DefaultNoBound)]
 	///     pub struct GenesisConfig<T: Config> {
 	///         foo: Vec<T::AccountId>
 	///     }
 	///
-	///     #[pallet::genesis_build]
+	///     #[pezpallet::genesis_build]
 	///     impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 	///         fn build(&self) {
 	///             // use &self to access fields.
@@ -1923,20 +1923,20 @@ pub mod pezpallet_macros {
 	/// This is deprecated and will soon be removed.
 	///
 	/// ```
-	/// #[pezframe_support::pallet]
-	/// pub mod pallet {
-	/// #     #[pallet::config]
+	/// #[pezframe_support::pezpallet]
+	/// pub mod pezpallet {
+	/// #     #[pezpallet::config]
 	/// #     pub trait Config: pezframe_system::Config {}
-	/// #     #[pallet::pallet]
-	/// #     pub struct Pallet<T>(_);
+	/// #     #[pezpallet::pezpallet]
+	/// #     pub struct Pezpallet<T>(_);
 	/// #     use pezframe_support::traits::GenesisBuild;
-	///     #[pallet::genesis_config]
+	///     #[pezpallet::genesis_config]
 	///     #[derive(pezframe_support::DefaultNoBound)]
 	///     pub struct GenesisConfig<T: Config> {
 	/// 		foo: Vec<T::AccountId>
 	/// 	}
 	///
-	///     #[pallet::genesis_build]
+	///     #[pezpallet::genesis_build]
 	///     impl<T: Config> GenesisBuild<T> for GenesisConfig<T> {
 	///         fn build(&self) {
 	///             todo!()
@@ -1947,21 +1947,21 @@ pub mod pezpallet_macros {
 	pub use pezframe_support_procedural::genesis_build;
 
 	/// Allows adding an associated type trait bounded by
-	/// [`Get`](pezframe_support::pezpallet_prelude::Get) from [`pallet::config`](`macro@config`)
+	/// [`Get`](pezframe_support::pezpallet_prelude::Get) from [`pezpallet::config`](`macro@config`)
 	/// into metadata.
 	///
 	/// ## Example
 	///
 	/// ```
-	/// #[pezframe_support::pallet]
-	/// mod pallet {
+	/// #[pezframe_support::pezpallet]
+	/// mod pezpallet {
 	///     use pezframe_support::pezpallet_prelude::*;
-	///     # #[pallet::pallet]
-	///     # pub struct Pallet<T>(_);
-	///     #[pallet::config]
+	///     # #[pezpallet::pezpallet]
+	///     # pub struct Pezpallet<T>(_);
+	///     #[pezpallet::config]
 	///     pub trait Config: pezframe_system::Config {
 	/// 		/// This is like a normal `Get` trait, but it will be added into metadata.
-	/// 		#[pallet::constant]
+	/// 		#[pezpallet::constant]
 	/// 		type Foo: Get<u32>;
 	/// 	}
 	/// }
@@ -1969,7 +1969,7 @@ pub mod pezpallet_macros {
 	///
 	/// ## Note on deprecation of constants
 	///
-	/// - Usage of `deprecated` attribute will propagate deprecation information to the pallet
+	/// - Usage of `deprecated` attribute will propagate deprecation information to the pezpallet
 	///   metadata where the item was declared.
 	/// - For general usage examples of `deprecated` attribute please refer to <https://doc.rust-lang.org/nightly/reference/attributes/diagnostics.html#the-deprecated-attribute>
 	/// - Usage of `allow(deprecated)` on the item will propagate this attribute to the
@@ -1983,7 +1983,7 @@ pub mod pezpallet_macros {
 	/// Storage items are pointers to data stored on-chain (the *blockchain state*), under a
 	/// specific key. The exact key is dependent on the type of the storage.
 	///
-	/// > From the perspective of this pallet, the entire blockchain state is abstracted behind
+	/// > From the perspective of this pezpallet, the entire blockchain state is abstracted behind
 	/// > a key-value api, namely [`pezsp_io::storage`].
 	///
 	/// ## Storage Types
@@ -2035,23 +2035,23 @@ pub mod pezpallet_macros {
 	/// #### Example
 	///
 	/// ```
-	/// #[pezframe_support::pallet]
-	/// mod pallet {
+	/// #[pezframe_support::pezpallet]
+	/// mod pezpallet {
 	///     # use pezframe_support::pezpallet_prelude::*;
-	///     # #[pallet::config]
+	///     # #[pezpallet::config]
 	///     # pub trait Config: pezframe_system::Config {}
-	///     # #[pallet::pallet]
-	///     # pub struct Pallet<T>(_);
+	///     # #[pezpallet::pezpallet]
+	///     # pub struct Pezpallet<T>(_);
 	///     /// Positional syntax, without bounding `T`.
-	///     #[pallet::storage]
+	///     #[pezpallet::storage]
 	///     pub type Foo<T> = StorageValue<_, u32>;
 	///
 	///     /// Positional syntax, with bounding `T`.
-	///     #[pallet::storage]
+	///     #[pezpallet::storage]
 	///     pub type Bar<T: Config> = StorageValue<_, u32>;
 	///
 	///     /// Named syntax.
-	///     #[pallet::storage]
+	///     #[pezpallet::storage]
 	///     pub type Baz<T> = StorageMap<Hasher = Blake2_128Concat, Key = u32, Value = u32>;
 	/// }
 	/// ```
@@ -2154,7 +2154,7 @@ pub mod pezpallet_macros {
 	///
 	/// > The storage prefix begins with `twox128(pezpallet_prefix) ++ twox128(STORAGE_PREFIX)`,
 	/// > where
-	/// > `pezpallet_prefix` is the name assigned to the pallet instance in
+	/// > `pezpallet_prefix` is the name assigned to the pezpallet instance in
 	/// > [`pezframe_support::construct_runtime`](pezframe_support::construct_runtime), and
 	/// > `STORAGE_PREFIX` is the name of the `type` aliased to a particular storage type, such
 	/// > as
@@ -2178,26 +2178,26 @@ pub mod pezpallet_macros {
 	///
 	/// #### Example
 	/// ```
-	/// #[pezframe_support::pallet]
-	/// mod pallet {
+	/// #[pezframe_support::pezpallet]
+	/// mod pezpallet {
 	///     # use pezframe_support::pezpallet_prelude::*;
-	///     # #[pallet::config]
+	///     # #[pezpallet::config]
 	///     # pub trait Config: pezframe_system::Config {}
-	///     # #[pallet::pallet]
-	///     # pub struct Pallet<T>(_);
+	///     # #[pezpallet::pezpallet]
+	///     # pub struct Pezpallet<T>(_);
 	/// 	/// A kitchen-sink StorageValue, with all possible additional attributes.
-	///     #[pallet::storage]
-	/// 	#[pallet::getter(fn foo)]
-	/// 	#[pallet::storage_prefix = "OtherFoo"]
-	/// 	#[pallet::unbounded]
-	/// 	#[pallet::disable_try_decode_storage]
+	///     #[pezpallet::storage]
+	/// 	#[pezpallet::getter(fn foo)]
+	/// 	#[pezpallet::storage_prefix = "OtherFoo"]
+	/// 	#[pezpallet::unbounded]
+	/// 	#[pezpallet::disable_try_decode_storage]
 	///     pub type Foo<T> = StorageValue<_, u32, ValueQuery>;
 	/// }
 	/// ```
 	///
 	/// ## Note on deprecation of storage items
 	///
-	/// - Usage of `deprecated` attribute will propagate deprecation information to the pallet
+	/// - Usage of `deprecated` attribute will propagate deprecation information to the pezpallet
 	///   metadata where the storage item was declared.
 	/// - For general usage examples of `deprecated` attribute please refer to <https://doc.rust-lang.org/nightly/reference/attributes/diagnostics.html#the-deprecated-attribute>
 	/// - Usage of `allow(deprecated)` on the item will propagate this attribute to the
@@ -2211,7 +2211,7 @@ pub mod pezpallet_macros {
 		weight_of_authorize,
 	};
 
-	/// Allows a pallet to declare a type as an origin.
+	/// Allows a pezpallet to declare a type as an origin.
 	///
 	/// If defined as such, this type will be amalgamated at the runtime level into
 	/// `RuntimeOrigin`, very similar to [`call`], [`error`] and [`event`]. See
@@ -2222,15 +2222,15 @@ pub mod pezpallet_macros {
 	/// ## Syntax Variants
 	///
 	/// ```
-	/// #[pezframe_support::pallet]
-	/// mod pallet {
+	/// #[pezframe_support::pezpallet]
+	/// mod pezpallet {
 	///     # use pezframe_support::pezpallet_prelude::*;
-	///     # #[pallet::config]
+	///     # #[pezpallet::config]
 	///     # pub trait Config: pezframe_system::Config {}
-	///     # #[pallet::pallet]
-	///     # pub struct Pallet<T>(_);
+	///     # #[pezpallet::pezpallet]
+	///     # pub struct Pezpallet<T>(_);
 	/// 	/// On the spot declaration.
-	///     #[pallet::origin]
+	///     #[pezpallet::origin]
 	/// 	#[derive(PartialEq, Eq, Clone, RuntimeDebug, Encode, Decode, TypeInfo, MaxEncodedLen)]
 	/// 	pub enum Origin {
 	/// 		Foo,
@@ -2242,27 +2242,27 @@ pub mod pezpallet_macros {
 	/// Or, more commonly used:
 	///
 	/// ```
-	/// #[pezframe_support::pallet]
-	/// mod pallet {
+	/// #[pezframe_support::pezpallet]
+	/// mod pezpallet {
 	///     # use pezframe_support::pezpallet_prelude::*;
-	///     # #[pallet::config]
+	///     # #[pezpallet::config]
 	///     # pub trait Config: pezframe_system::Config {}
-	///     # #[pallet::pallet]
-	///     # pub struct Pallet<T>(_);
+	///     # #[pezpallet::pezpallet]
+	///     # pub struct Pezpallet<T>(_);
 	/// 	#[derive(PartialEq, Eq, Clone, RuntimeDebug, Encode, Decode, TypeInfo, MaxEncodedLen)]
 	/// 	pub enum RawOrigin {
 	/// 		Foo,
 	/// 		Bar,
 	/// 	}
 	///
-	/// 	#[pallet::origin]
+	/// 	#[pezpallet::origin]
 	/// 	pub type Origin = RawOrigin;
 	/// }
 	/// ```
 	///
 	/// ## Warning
 	///
-	/// Modifying any pallet's origin type will cause the runtime level origin type to also
+	/// Modifying any pezpallet's origin type will cause the runtime level origin type to also
 	/// change in encoding. If stored anywhere on-chain, this will require a data migration.
 	///
 	/// Read more about origins at the [Origin Reference

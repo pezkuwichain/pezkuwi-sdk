@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Test environment for Nfts pallet.
+//! Test environment for Nfts pezpallet.
 
 use super::*;
 use crate as pezpallet_nfts;
@@ -92,7 +92,7 @@ impl Config for Test {
 	type WeightInfo = ();
 	#[cfg(feature = "runtime-benchmarks")]
 	type Helper = ();
-	type BlockNumberProvider = pezframe_system::Pallet<Test>;
+	type BlockNumberProvider = pezframe_system::Pezpallet<Test>;
 }
 
 pub(crate) fn new_test_ext() -> pezsp_io::TestExternalities {

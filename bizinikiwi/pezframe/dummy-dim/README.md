@@ -1,4 +1,4 @@
-# Dummy DIM Pallet
+# Dummy DIM Pezpallet
 
 Allows control of a `PeopleTrait` interface through a privileged origin by simulating a DIM.
 

@@ -35,8 +35,8 @@ mod benches {
 	}
 
 	#[benchmark(extra, pov_mode = Measured {
-		Pallet: Measured,
-		Pallet::Storage: MaxEncodedLen,
+		Pezpallet: Measured,
+		Pezpallet::Storage: MaxEncodedLen,
 	}, skip_meta)]
 	fn bench3() {
 		#[block]
@@ -44,8 +44,8 @@ mod benches {
 	}
 
 	#[benchmark(skip_meta, extra, pov_mode = Measured {
-		Pallet::Storage: MaxEncodedLen,
-		Pallet::StorageSubKey: Measured,
+		Pezpallet::Storage: MaxEncodedLen,
+		Pezpallet::StorageSubKey: Measured,
 	})]
 	fn bench4() {
 		#[block]
@@ -53,8 +53,8 @@ mod benches {
 	}
 
 	#[benchmark(pov_mode = MaxEncodedLen {
-		Pallet::Storage: Measured,
-		Pallet::StorageSubKey: Measured
+		Pezpallet::Storage: Measured,
+		Pezpallet::StorageSubKey: Measured
 	}, extra, skip_meta)]
 	fn bench5() {
 		#[block]
@@ -62,8 +62,8 @@ mod benches {
 	}
 
 	#[benchmark(pov_mode = MaxEncodedLen {
-		Pallet::Storage: Measured,
-		Pallet::Storage::Nested: Ignored
+		Pezpallet::Storage: Measured,
+		Pezpallet::Storage::Nested: Ignored
 	}, extra, skip_meta)]
 	fn bench6() {
 		#[block]

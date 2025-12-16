@@ -56,7 +56,7 @@ pub trait LeafDataProvider {
 	/// in the leaf node appended MMR at this block.
 	///
 	/// This is being called by the `on_initialize` method of
-	/// this pallet at the very beginning of each block.
+	/// this pezpallet at the very beginning of each block.
 	fn leaf_data() -> Self::LeafData;
 }
 
@@ -70,7 +70,7 @@ impl LeafDataProvider for () {
 
 /// New MMR root notification hook.
 pub trait OnNewRoot<Hash> {
-	/// Function called by the pallet in case new MMR root has been computed.
+	/// Function called by the pezpallet in case new MMR root has been computed.
 	fn on_new_root(root: &Hash);
 }
 
@@ -402,8 +402,8 @@ pub enum Error {
 	/// Leaf not found in the storage.
 	#[cfg_attr(feature = "std", error("Leaf was not found"))]
 	LeafNotFound,
-	/// Mmr Pallet not included in runtime
-	#[cfg_attr(feature = "std", error("MMR pallet not included in runtime"))]
+	/// Mmr Pezpallet not included in runtime
+	#[cfg_attr(feature = "std", error("MMR pezpallet not included in runtime"))]
 	PalletNotIncluded,
 	/// Cannot find the requested leaf index
 	#[cfg_attr(feature = "std", error("Requested leaf index invalid"))]
@@ -439,7 +439,7 @@ impl Error {
 }
 
 pezsp_api::decl_runtime_apis! {
-	/// API to interact with MMR pallet.
+	/// API to interact with MMR pezpallet.
 	#[api_version(3)]
 	pub trait MmrApi<Hash: codec::Codec, BlockNumber: codec::Codec> {
 		/// Return the on-chain MMR root hash.

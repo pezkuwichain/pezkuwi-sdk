@@ -10,7 +10,7 @@ edition.workspace = true
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
-description = "Runtime API for the oracle pallet."
+description = "Runtime API for the oracle pezpallet."
 documentation = "https://docs.rs/pezpallet-oracle-runtime-api"
 
 [dependencies]

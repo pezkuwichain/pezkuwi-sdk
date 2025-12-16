@@ -31,7 +31,7 @@ fn it_works_for_default_value() {
 		System::set_block_number(1);
 		// Dispatch a signed extrinsic.
 		assert_ok!(TemplatePallet::do_something(RuntimeOrigin::signed(1), 42));
-		// Read pallet storage and assert an expected result.
+		// Read pezpallet storage and assert an expected result.
 		assert_eq!(Something::<Test>::get(), Some(42));
 		// Assert that the correct event was deposited
 		System::assert_last_event(Event::SomethingStored { something: 42, who: 1 }.into());

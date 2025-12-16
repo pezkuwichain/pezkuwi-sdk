@@ -56,11 +56,11 @@ blockchain is the fixed block production time for the network.
 
 Within FRAME, each dispatchable function must have a `#[weight]` annotation with a function that can return the expected
 weight for the worst case scenario execution of that function given its inputs. This benchmarking framework will result
-in a file that automatically generates those formulas for you, which you can then use in your pallet.
+in a file that automatically generates those formulas for you, which you can then use in your pezpallet.
 
 ## Writing Benchmarks
 
-Writing a runtime benchmark is much like writing a unit test for your pallet. It needs to be carefully crafted to
+Writing a runtime benchmark is much like writing a unit test for your pezpallet. It needs to be carefully crafted to
 execute a certain logical path in your code. In tests you want to check for various success and failure conditions, but
 with benchmarks you specifically look for the **most computationally heavy** path, a.k.a the "worst case scenario".
 
@@ -71,7 +71,7 @@ this.
 It may be that there are multiple paths your function can go down, and it is not clear which one is the heaviest. In
 this case, you should just create a benchmark for each scenario! You may find that there are paths in your code where
 complexity may become unbounded depending on user input. This may be a hint that you should enforce sane boundaries for
-how a user can use your pallet. For example: limiting the number of elements in a vector, limiting the number of
+how a user can use your pezpallet. For example: limiting the number of elements in a vector, limiting the number of
 iterations in a `for` loop, etc...
 
 Examples of end-to-end benchmarks can be found in the [pallets provided by Bizinikiwi](../), and the specific details on
@@ -79,7 +79,7 @@ how to use the `benchmarks!` macro can be found in [its documentation](./src/lib
 
 ## Testing Benchmarks
 
-You can test your benchmarks using the same test runtime that you created for your pallet's unit tests. By creating your
+You can test your benchmarks using the same test runtime that you created for your pezpallet's unit tests. By creating your
 benchmarks in the `benchmarks!` macro, it automatically generates test functions for you:
 
 ```rust
@@ -98,7 +98,7 @@ verify any final conditions, such as the final state of your runtime.
 These additional `verify` blocks will not affect the results of your final benchmarking process.
 
 To run the tests, you need to enable the `runtime-benchmarks` feature flag. This may also mean you need to move into
-your node's binary folder. For example, with the Bizinikiwi repository, this is how you would test the Balances pallet's
+your node's binary folder. For example, with the Bizinikiwi repository, this is how you would test the Balances pezpallet's
 benchmarks:
 
 ```bash
@@ -109,7 +109,7 @@ cargo test -p pezpallet-balances --features runtime-benchmarks
 > ```
 > error: --features is not allowed in the root of a virtual workspace`
 > ```
-> To solve this, navigate to the folder of the node (`cd bin/node/cli`) or pallet (`cd frame/pallet`) and run the
+> To solve this, navigate to the folder of the node (`cd bin/node/cli`) or pezpallet (`cd frame/pezpallet`) and run the
 > command there.
 
 This will instance each linear component with different values. The number of values per component is set to six and can
@@ -117,7 +117,7 @@ be changed with the `VALUES_PER_COMPONENT` environment variable.
 
 ## Adding Benchmarks
 
-The benchmarks included with each pallet are not automatically added to your node. To actually execute these benchmarks,
+The benchmarks included with each pezpallet are not automatically added to your node. To actually execute these benchmarks,
 you need to implement the `frame_benchmarking::Benchmark` trait. You can see an example of how to do this in the
 [included Bizinikiwi node](../../bin/node/runtime/src/lib.rs).
 
@@ -126,12 +126,12 @@ Assuming there are already some benchmarks set up on your node, you just need to
 
 ```rust
 ///  configuration for running benchmarks
-///               |    name of your pallet's crate (as imported)
+///               |    name of your pezpallet's crate (as imported)
 ///               v                   v
 add_benchmark!(params, batches, pallet_balances, Balances);
 ///                       ^                          ^
 ///    where all benchmark results are saved         |
-///            the `struct` created for your pallet by `construct_runtime!`
+///            the `struct` created for your pezpallet by `construct_runtime!`
 ```
 
 Once you have done this, you will need to compile your node binary with the `runtime-benchmarks` feature flag:
@@ -152,23 +152,23 @@ Finally, once you have a node binary with benchmarks enabled, you need to execut
 You can get a list of the available benchmarks by running:
 
 ```bash
-./target/production/bizinikiwi benchmark pallet --chain dev --pallet "*" --extrinsic "*" --repeat 0
+./target/production/bizinikiwi benchmark pezpallet --chain dev --pezpallet "*" --extrinsic "*" --repeat 0
 ```
 
 Then you can run a benchmark like so:
 
 ```bash
-./target/production/bizinikiwi benchmark pallet \
+./target/production/bizinikiwi benchmark pezpallet \
     --chain dev \                  # Configurable Chain Spec
     --wasm-execution=compiled \    # Always used `wasm-time`
-    --pallet pallet_balances \     # Select the pallet
+    --pezpallet pallet_balances \     # Select the pezpallet
     --extrinsic transfer \         # Select the extrinsic
     --steps 50 \                   # Number of samples across component ranges
     --repeat 20 \                  # Number of times we repeat a benchmark
     --output <path> \              # Output benchmark results into a folder or file
 ```
 
-This will output a file `pallet_name.rs` which implements the `WeightInfo` trait you should include in your pallet.
+This will output a file `pallet_name.rs` which implements the `WeightInfo` trait you should include in your pezpallet.
 Double colons `::` will be replaced with a `_` in the output name if you specify a directory. Each blockchain should
 generate their own benchmark file with their custom implementation of the `WeightInfo` trait. This means that you will
 be able to use these modular Bizinikiwi pallets while still keeping your network safe for your specific configuration and
@@ -177,8 +177,8 @@ requirements.
 The benchmarking CLI uses a Handlebars template to format the final output file. You can optionally pass the flag
 `--template` pointing to a custom template that can be used instead. Within the template, you have access to all the
 data provided by the `TemplateData` struct in the [benchmarking CLI
-writer](../../utils/pezframe/benchmarking-cli/src/pallet/writer.rs). You can find the default template used
-[here](../../utils/pezframe/benchmarking-cli/src/pallet/template.hbs).
+writer](../../utils/pezframe/benchmarking-cli/src/pezpallet/writer.rs). You can find the default template used
+[here](../../utils/pezframe/benchmarking-cli/src/pezpallet/template.hbs).
 
 There are some custom Handlebars helpers included with our output generation:
 

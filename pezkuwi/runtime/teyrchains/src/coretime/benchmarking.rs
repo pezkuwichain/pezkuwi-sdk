@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Coretime pallet benchmarking.
+//! Coretime pezpallet benchmarking.
 
 #![cfg(feature = "runtime-benchmarks")]
 
@@ -32,7 +32,7 @@ mod benchmarks {
 	fn request_revenue_at() {
 		let root_origin = <T as pezframe_system::Config>::RuntimeOrigin::root();
 		let mhr = <T as on_demand::Config>::MaxHistoricalRevenue::get();
-		pezframe_system::Pallet::<T>::set_block_number((mhr + 2).into());
+		pezframe_system::Pezpallet::<T>::set_block_number((mhr + 2).into());
 		let minimum_balance = <T as on_demand::Config>::Currency::minimum_balance();
 		let rev: BoundedVec<
 			<<T as on_demand::Config>::Currency as pezframe_support::traits::Currency<
@@ -46,7 +46,7 @@ mod benchmarks {
 		crate::paras::Heads::<T>::insert(ParaId::from(T::BrokerId::get()), vec![1, 2, 3]);
 
 		<T as on_demand::Config>::Currency::make_free_balance_be(
-			&<on_demand::Pallet<T>>::account_id(),
+			&<on_demand::Pezpallet<T>>::account_id(),
 			minimum_balance * (mhr * (mhr + 1)).into(),
 		);
 

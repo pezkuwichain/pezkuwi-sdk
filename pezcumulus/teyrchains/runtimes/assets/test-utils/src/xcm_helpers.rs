@@ -18,7 +18,7 @@
 
 use xcm::latest::prelude::*;
 
-/// Returns the delivery fees amount for pallet xcm's `teleport_assets` extrinsics.
+/// Returns the delivery fees amount for pezpallet xcm's `teleport_assets` extrinsics.
 /// Because it returns only a `u128`, it assumes delivery fees are only paid
 /// in one asset and that asset is known.
 pub fn teleport_assets_delivery_fees<S: SendXcm>(

@@ -10,7 +10,7 @@ edition.workspace = true
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
-description = "FRAME oracle pallet for off-chain data"
+description = "FRAME oracle pezpallet for off-chain data"
 readme = "README.md"
 documentation = "https://docs.rs/pezpallet-oracle"
 

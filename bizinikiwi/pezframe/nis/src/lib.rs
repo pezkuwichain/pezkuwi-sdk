@@ -15,8 +15,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Non-Interactive Staking (NIS) Pallet
-//! A pallet allowing accounts to auction for being frozen and receive open-ended
+//! # Non-Interactive Staking (NIS) Pezpallet
+//! A pezpallet allowing accounts to auction for being frozen and receive open-ended
 //! inflation-protection in return.
 //!
 //! ## Overview
@@ -44,7 +44,7 @@
 //! funds are unreserved.
 //!
 //! There's a target proportion of effective total issuance (i.e. accounting for existing receipts)
-//! which the pallet attempts to have frozen at any one time. It will likely be gradually increased
+//! which the pezpallet attempts to have frozen at any one time. It will likely be gradually increased
 //! over time by governance.
 //!
 //! As the proportion of effective total issuance represented by outstanding receipts drops below
@@ -58,7 +58,7 @@
 //! of consolidation. The receipt has two independent elements: a "main" non-fungible receipt and
 //! a second set of fungible "counterpart" tokens. The accounting functionality of the latter must
 //! be provided through the `Counterpart` trait item. The main non-fungible receipt may have its
-//! owner transferred through the pallet's implementation of `nonfungible::Transfer`.
+//! owner transferred through the pezpallet's implementation of `nonfungible::Transfer`.
 //!
 //! A later `thaw` function may be called in order to reduce the recorded proportion or entirely
 //! remove the receipt in return for the appropriate proportion of the effective total issuance.
@@ -86,7 +86,7 @@ mod mock;
 #[cfg(test)]
 mod tests;
 
-pub use pallet::*;
+pub use pezpallet::*;
 pub use weights::WeightInfo;
 
 use alloc::{vec, vec::Vec};
@@ -173,8 +173,8 @@ impl BenchmarkSetup for () {
 	fn create_counterpart_asset() {}
 }
 
-#[frame::pallet]
-pub mod pallet {
+#[frame::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
 	type BalanceOf<T> =
@@ -188,7 +188,7 @@ pub mod pallet {
 	type BidOf<T> = Bid<BalanceOf<T>, <T as pezframe_system::Config>::AccountId>;
 	type QueueTotalsTypeOf<T> = BoundedVec<(u32, BalanceOf<T>), <T as Config>::QueueCount>;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// Information on runtime weights.
 		type WeightInfo: WeightInfo;
@@ -197,8 +197,8 @@ pub mod pallet {
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
-		/// The treasury's pallet id, used for deriving its sovereign account ID.
-		#[pallet::constant]
+		/// The treasury's pezpallet id, used for deriving its sovereign account ID.
+		#[pezpallet::constant]
 		type PalletId: Get<PalletId>;
 
 		/// Currency type that this works on.
@@ -242,24 +242,24 @@ pub mod pallet {
 
 		/// Number of duration queues in total. This sets the maximum duration supported, which is
 		/// this value multiplied by `Period`.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type QueueCount: Get<u32>;
 
 		/// Maximum number of items that may be in each duration queue.
 		///
 		/// Must be larger than zero.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxQueueLen: Get<u32>;
 
 		/// Portion of the queue which is free from ordering and just a FIFO.
 		///
 		/// Must be no greater than `MaxQueueLen`.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type FifoQueueLen: Get<u32>;
 
 		/// The base period for the duration queues. This is the common multiple across all
 		/// supported freezing durations that can be bid upon.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type BasePeriod: Get<BlockNumberFor<Self>>;
 
 		/// The minimum amount of funds that may be placed in a bid. Note that this
@@ -268,29 +268,29 @@ pub mod pallet {
 		///
 		/// It should be at least big enough to ensure that there is no possible storage spam attack
 		/// or queue-filling attack.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MinBid: Get<BalanceOf<Self>>;
 
 		/// The minimum amount of funds which may intentionally be left remaining under a single
 		/// receipt.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MinReceipt: Get<Perquintill>;
 
 		/// The number of blocks between consecutive attempts to dequeue bids and create receipts.
 		///
 		/// A larger value results in fewer storage hits each block, but a slower period to get to
 		/// the target.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type IntakePeriod: Get<BlockNumberFor<Self>>;
 
 		/// The maximum amount of bids that can consolidated into receipts in a single intake. A
 		/// larger value here means less of the block available for transactions should there be a
 		/// glut of bids.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxIntakeWeight: Get<Weight>;
 
 		/// The maximum proportion which may be thawed and the period over which it is reset.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type ThawThrottle: Get<(Perquintill, BlockNumberFor<Self>)>;
 
 		/// Setup the state for benchmarking.
@@ -298,8 +298,8 @@ pub mod pallet {
 		type BenchmarkSetup: crate::BenchmarkSetup;
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
 	/// A single bid, an item of a *queue* in `Queues`.
 	#[derive(
@@ -370,26 +370,26 @@ pub mod pallet {
 	///
 	/// The vector is indexed by duration in `Period`s, offset by one, so information on the queue
 	/// whose duration is one `Period` would be storage `0`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type QueueTotals<T: Config> =
 		StorageValue<_, QueueTotalsTypeOf<T>, ValueQuery, OnEmptyQueueTotals<T>>;
 
 	/// The queues of bids. Indexed by duration (in `Period`s).
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Queues<T: Config> =
 		StorageMap<_, Blake2_128Concat, u32, BoundedVec<BidOf<T>, T::MaxQueueLen>, ValueQuery>;
 
 	/// Summary information over the general state.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Summary<T> = StorageValue<_, SummaryRecordOf<T>, ValueQuery>;
 
 	/// The currently outstanding receipts, indexed according to the order of creation.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Receipts<T> =
 		StorageMap<_, Blake2_128Concat, ReceiptIndex, ReceiptRecordOf<T>, OptionQuery>;
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A bid was successfully placed.
 		BidPlaced { who: T::AccountId, amount: BalanceOf<T>, duration: u32 },
@@ -429,7 +429,7 @@ pub mod pallet {
 		Transferred { from: T::AccountId, to: T::AccountId, index: ReceiptIndex },
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// The duration of the bid is less than one.
 		DurationTooSmall,
@@ -464,10 +464,10 @@ pub mod pallet {
 		AlreadyPrivate,
 	}
 
-	/// A reason for the NIS pallet placing a hold on funds.
-	#[pallet::composite_enum]
+	/// A reason for the NIS pezpallet placing a hold on funds.
+	#[pezpallet::composite_enum]
 	pub enum HoldReason {
-		/// The NIS Pallet has reserved it for a non-fungible receipt.
+		/// The NIS Pezpallet has reserved it for a non-fungible receipt.
 		#[codec(index = 0)]
 		NftReceipt,
 	}
@@ -495,8 +495,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn on_initialize(n: BlockNumberFor<T>) -> Weight {
 			let mut weight_counter =
 				WeightCounter { used: Weight::zero(), limit: T::MaxIntakeWeight::get() };
@@ -519,8 +519,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Place a bid.
 		///
 		/// Origin must be Signed, and account must have at least `amount` in free balance.
@@ -532,11 +532,11 @@ pub mod pallet {
 		///
 		/// Complexities:
 		/// - `Queues[duration].len()` (just take max).
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::place_bid_max())]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::place_bid_max())]
 		pub fn place_bid(
 			origin: OriginFor<T>,
-			#[pallet::compact] amount: BalanceOf<T>,
+			#[pezpallet::compact] amount: BalanceOf<T>,
 			duration: u32,
 		) -> DispatchResult {
 			let who = ensure_signed(origin)?;
@@ -599,11 +599,11 @@ pub mod pallet {
 		///
 		/// - `amount`: The amount of the previous bid.
 		/// - `duration`: The duration of the previous bid.
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::retract_bid(T::MaxQueueLen::get()))]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::retract_bid(T::MaxQueueLen::get()))]
 		pub fn retract_bid(
 			origin: OriginFor<T>,
-			#[pallet::compact] amount: BalanceOf<T>,
+			#[pezpallet::compact] amount: BalanceOf<T>,
 			duration: u32,
 		) -> DispatchResult {
 			let who = ensure_signed(origin)?;
@@ -636,8 +636,8 @@ pub mod pallet {
 		/// Ensure we have sufficient funding for all potential payouts.
 		///
 		/// - `origin`: Must be accepted by `FundOrigin`.
-		#[pallet::call_index(2)]
-		#[pallet::weight(T::WeightInfo::fund_deficit())]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(T::WeightInfo::fund_deficit())]
 		pub fn fund_deficit(origin: OriginFor<T>) -> DispatchResult {
 			T::FundOrigin::ensure_origin(origin)?;
 			let summary: SummaryRecordOf<T> = Summary::<T>::get();
@@ -658,11 +658,11 @@ pub mod pallet {
 		/// - `index`: The index of the receipt.
 		/// - `portion`: If `Some`, then only the given portion of the receipt should be thawed. If
 		///   `None`, then all of it should be.
-		#[pallet::call_index(3)]
-		#[pallet::weight(T::WeightInfo::thaw_private())]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(T::WeightInfo::thaw_private())]
 		pub fn thaw_private(
 			origin: OriginFor<T>,
-			#[pallet::compact] index: ReceiptIndex,
+			#[pezpallet::compact] index: ReceiptIndex,
 			maybe_proportion: Option<Perquintill>,
 		) -> DispatchResult {
 			let who = ensure_signed(origin)?;
@@ -674,7 +674,7 @@ pub mod pallet {
 			let (owner, mut on_hold) = receipt.owner.ok_or(Error::<T>::AlreadyCommunal)?;
 			ensure!(owner == who, Error::<T>::NotOwner);
 
-			let now = pezframe_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pezpallet::<T>::block_number();
 			ensure!(now >= receipt.expiry, Error::<T>::NotExpired);
 
 			let mut summary: SummaryRecordOf<T> = Summary::<T>::get();
@@ -768,11 +768,11 @@ pub mod pallet {
 		/// - `origin`: Must be Signed and the account must be the owner of the fungible counterpart
 		///   for receipt `index`.
 		/// - `index`: The index of the receipt.
-		#[pallet::call_index(4)]
-		#[pallet::weight(T::WeightInfo::thaw_communal())]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(T::WeightInfo::thaw_communal())]
 		pub fn thaw_communal(
 			origin: OriginFor<T>,
-			#[pallet::compact] index: ReceiptIndex,
+			#[pezpallet::compact] index: ReceiptIndex,
 		) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 
@@ -781,7 +781,7 @@ pub mod pallet {
 				Receipts::<T>::get(index).ok_or(Error::<T>::UnknownReceipt)?;
 			// If found, check it is actually communal.
 			ensure!(receipt.owner.is_none(), Error::<T>::NotOwner);
-			let now = pezframe_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pezpallet::<T>::block_number();
 			ensure!(now >= receipt.expiry, Error::<T>::NotExpired);
 
 			let mut summary: SummaryRecordOf<T> = Summary::<T>::get();
@@ -819,11 +819,11 @@ pub mod pallet {
 		}
 
 		/// Make a private receipt communal and create fungible counterparts for its owner.
-		#[pallet::call_index(5)]
-		#[pallet::weight(T::WeightInfo::communify())]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(T::WeightInfo::communify())]
 		pub fn communify(
 			origin: OriginFor<T>,
-			#[pallet::compact] index: ReceiptIndex,
+			#[pezpallet::compact] index: ReceiptIndex,
 		) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 
@@ -857,11 +857,11 @@ pub mod pallet {
 		}
 
 		/// Make a communal receipt private and burn fungible counterparts from its owner.
-		#[pallet::call_index(6)]
-		#[pallet::weight(T::WeightInfo::privatize())]
+		#[pezpallet::call_index(6)]
+		#[pezpallet::weight(T::WeightInfo::privatize())]
 		pub fn privatize(
 			origin: OriginFor<T>,
-			#[pallet::compact] index: ReceiptIndex,
+			#[pezpallet::compact] index: ReceiptIndex,
 		) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 
@@ -909,20 +909,20 @@ pub mod pallet {
 	/// Issuance information returned by `issuance()`.
 	#[derive(Debug)]
 	pub struct IssuanceInfo<Balance> {
-		/// The balance held by this pallet instance together with the balances on hold across
+		/// The balance held by this pezpallet instance together with the balances on hold across
 		/// all receipt-owning accounts.
 		pub holdings: Balance,
-		/// The (non-ignored) issuance in the system, not including this pallet's account.
+		/// The (non-ignored) issuance in the system, not including this pezpallet's account.
 		pub other: Balance,
 		/// The effective total issuance, hypothetically if all outstanding receipts were thawed at
 		/// present.
 		pub effective: Balance,
-		/// The amount needed to be accessible to this pallet in case all outstanding receipts were
-		/// thawed at present. If it is more than `holdings`, then the pallet will need funding.
+		/// The amount needed to be accessible to this pezpallet in case all outstanding receipts were
+		/// thawed at present. If it is more than `holdings`, then the pezpallet will need funding.
 		pub required: Balance,
 	}
 
-	impl<T: Config> NftInspect<T::AccountId> for Pallet<T> {
+	impl<T: Config> NftInspect<T::AccountId> for Pezpallet<T> {
 		type ItemId = ReceiptIndex;
 
 		fn owner(item: &ReceiptIndex) -> Option<T::AccountId> {
@@ -941,7 +941,7 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config> NftTransfer<T::AccountId> for Pallet<T> {
+	impl<T: Config> NftTransfer<T::AccountId> for Pezpallet<T> {
 		fn transfer(index: &ReceiptIndex, dest: &T::AccountId) -> DispatchResult {
 			let mut item = Receipts::<T>::get(index).ok_or(TokenError::UnknownAsset)?;
 			let (owner, on_hold) = item.owner.take().ok_or(Error::<T>::AlreadyCommunal)?;
@@ -951,7 +951,7 @@ pub mod pallet {
 
 			item.owner = Some((dest.clone(), on_hold));
 			Receipts::<T>::insert(&index, &item);
-			Pallet::<T>::deposit_event(Event::<T>::Transferred {
+			Pezpallet::<T>::deposit_event(Event::<T>::Transferred {
 				from: owner,
 				to: dest.clone(),
 				index: *index,
@@ -960,7 +960,7 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config> Pallet<T> {
+	impl<T: Config> Pezpallet<T> {
 		/// The account ID of the reserves.
 		///
 		/// This actually does computation. If you need to keep using it, then make sure you cache
@@ -1013,7 +1013,7 @@ pub mod pallet {
 				return;
 			}
 
-			let now = pezframe_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pezpallet::<T>::block_number();
 			let our_account = Self::account_id();
 			let issuance: IssuanceInfoOf<T> = Self::issuance_with(&our_account, &summary);
 			let mut remaining = target.saturating_sub(summary.proportion_owed) * issuance.effective;

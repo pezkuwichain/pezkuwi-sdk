@@ -34,7 +34,7 @@ All branches must follow these naming patterns:
 | --- | --- | --- |
 | `feature/<name>` | New features | `feature/parliamentary-nft-voting` |
 | `fix/<name>` | Bug fixes | `fix/presale-overflow-check` |
-| `pallet/<name>` | Pallet-specific changes | `pallet/welati-liquid-democracy` |
+| `pezpallet/<name>` | Pezpallet-specific changes | `pezpallet/welati-liquid-democracy` |
 | `runtime/<name>` | Runtime configuration changes | `runtime/xcm-v5-upgrade` |
 | `docs/<name>` | Documentation updates | `docs/token-economics` |
 | `ci/<name>` | CI/CD changes | `ci/benchmark-workflow` |

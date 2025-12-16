@@ -18,16 +18,16 @@
 use codec::{Decode, DecodeWithMemTracking, Encode};
 use pezframe_support::PalletError;
 
-#[pezframe_support::pallet]
+#[pezframe_support::pezpallet]
 #[allow(unused_imports)]
-pub mod pallet {
-	#[pallet::config]
+pub mod pezpallet {
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(core::marker::PhantomData<T>);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(core::marker::PhantomData<T>);
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		CustomError(crate::MyError),
 	}

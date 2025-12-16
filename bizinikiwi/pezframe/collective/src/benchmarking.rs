@@ -15,10 +15,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Staking pallet benchmarking.
+//! Staking pezpallet benchmarking.
 
 use super::*;
-use crate::Pallet as Collective;
+use crate::Pezpallet as Collective;
 
 use core::mem::size_of;
 use pezsp_runtime::traits::Bounded;
@@ -28,7 +28,7 @@ use pezframe_benchmarking::{
 	v2::*,
 };
 use pezframe_system::{
-	pezpallet_prelude::BlockNumberFor, Call as SystemCall, Pallet as System, RawOrigin as SystemOrigin,
+	pezpallet_prelude::BlockNumberFor, Call as SystemCall, Pezpallet as System, RawOrigin as SystemOrigin,
 };
 
 const SEED: u32 = 0;
@@ -36,11 +36,11 @@ const SEED: u32 = 0;
 const MAX_BYTES: u32 = 1_024;
 
 fn assert_last_event<T: Config<I>, I: 'static>(generic_event: <T as Config<I>>::RuntimeEvent) {
-	pezframe_system::Pallet::<T>::assert_last_event(generic_event.into());
+	pezframe_system::Pezpallet::<T>::assert_last_event(generic_event.into());
 }
 
 fn assert_has_event<T: Config<I>, I: 'static>(generic_event: <T as Config<I>>::RuntimeEvent) {
-	pezframe_system::Pallet::<T>::assert_has_event(generic_event.into());
+	pezframe_system::Pezpallet::<T>::assert_has_event(generic_event.into());
 }
 
 fn id_to_remark_data(id: u32, length: usize) -> Vec<u8> {

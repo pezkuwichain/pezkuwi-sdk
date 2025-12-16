@@ -46,14 +46,14 @@ impl SomeAssociation1 for u64 {
 	type _1 = u64;
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 
 	pub(crate) const STORAGE_VERSION: StorageVersion = StorageVersion::new(10);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config
 	where
 		<Self as pezframe_system::Config>::AccountId: From<SomeType1> + SomeAssociation1,
@@ -64,11 +64,11 @@ pub mod pallet {
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 	}
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::error]
+	#[pezpallet::error]
 	#[derive(PartialEq, Eq)]
 	pub enum Error<T> {
 		/// error doc comment put in metadata
@@ -80,7 +80,7 @@ pub mod pallet {
 		CompactU8(#[codec(compact)] u8),
 	}
 
-	#[pallet::event]
+	#[pezpallet::event]
 	pub enum Event<T: Config>
 	where
 		T::AccountId: SomeAssociation1 + From<SomeType1>,
@@ -93,7 +93,7 @@ pub mod pallet {
 		B,
 	}
 
-	#[pallet::origin]
+	#[pezpallet::origin]
 	#[derive(
 		EqNoBound,
 		RuntimeDebugNoBound,
@@ -128,7 +128,7 @@ impl pezframe_system::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type MaxConsumers = ConstU32<16>;
 }
-impl pallet::Config for Runtime {
+impl pezpallet::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type Balance = u64;
 }
@@ -145,8 +145,8 @@ pub type UncheckedExtrinsic = pezsp_runtime::generic::UncheckedExtrinsic<
 pezframe_support::construct_runtime!(
 	pub struct Runtime {
 		// Exclude part `Storage` in order not to check its metadata in tests.
-		System: pezframe_system exclude_parts { Pallet, Storage },
-		Example: pallet,
+		System: pezframe_system exclude_parts { Pezpallet, Storage },
+		Example: pezpallet,
 
 	}
 );
@@ -157,7 +157,7 @@ fn pezpallet_metadata() {
 	let pallets = Runtime::metadata_ir().pallets;
 	let example = pallets[0].clone();
 	{
-		// Example pallet events are partially and fully deprecated
+		// Example pezpallet events are partially and fully deprecated
 		let meta = example.event.unwrap();
 		assert_eq!(
 			EnumDeprecationInfoIR(BTreeMap::from([

@@ -15,19 +15,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Benchmarks for Transaction Payment Pallet's transaction extension
+//! Benchmarks for Transaction Payment Pezpallet's transaction extension
 
 extern crate alloc;
 
 use super::*;
-use crate::Pallet;
+use crate::Pezpallet;
 use pezframe_benchmarking::v2::*;
 use pezframe_support::dispatch::{DispatchInfo, PostDispatchInfo};
 use pezframe_system::{EventRecord, RawOrigin};
 use pezsp_runtime::traits::{AsTransactionAuthorizedOrigin, DispatchTransaction, Dispatchable};
 
 fn assert_last_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
-	let events = pezframe_system::Pallet::<T>::events();
+	let events = pezframe_system::Pezpallet::<T>::events();
 	let system_event: <T as pezframe_system::Config>::RuntimeEvent = generic_event.into();
 	// compare to the last event record
 	let EventRecord { event, .. } = &events[events.len() - 1];
@@ -49,7 +49,7 @@ mod benchmarks {
 			<T::OnChargeTransaction as OnChargeTransaction<T>>::minimum_balance();
 
 		let (amount_to_endow, tip) = if existential_deposit.is_zero() {
-			let min_tip: <<T as pallet::Config>::OnChargeTransaction as payment::OnChargeTransaction<T>>::Balance = 1_000_000_000u32.into();
+			let min_tip: <<T as pezpallet::Config>::OnChargeTransaction as payment::OnChargeTransaction<T>>::Balance = 1_000_000_000u32.into();
 			(min_tip * 1000u32.into(), min_tip)
 		} else {
 			(existential_deposit * 1000u32.into(), existential_deposit)
@@ -83,11 +83,11 @@ mod benchmarks {
 		}
 
 		post_info.actual_weight.as_mut().map(|w| w.saturating_accrue(extension_weight));
-		let actual_fee = Pallet::<T>::compute_actual_fee(10, &info, &post_info, tip);
+		let actual_fee = Pezpallet::<T>::compute_actual_fee(10, &info, &post_info, tip);
 		assert_last_event::<T>(
 			Event::<T>::TransactionFeePaid { who: caller, actual_fee, tip }.into(),
 		);
 	}
 
-	impl_benchmark_test_suite!(Pallet, crate::mock::new_test_ext(), crate::mock::Runtime);
+	impl_benchmark_test_suite!(Pezpallet, crate::mock::new_test_ext(), crate::mock::Runtime);
 }

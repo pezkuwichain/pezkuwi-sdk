@@ -25,7 +25,7 @@ use crate::{
 	pezsp_runtime::traits::{One, Zero},
 	weights::WeightInfo,
 	AccountIdOf, BalanceOf, BalanceWithDust, BlockHash, BlockNumberFor, Config, ContractResult,
-	Error, EthBlockBuilderIR, EthereumBlock, Event, ExecReturnValue, Pallet, ReceiptGasInfo,
+	Error, EthBlockBuilderIR, EthereumBlock, Event, ExecReturnValue, Pezpallet, ReceiptGasInfo,
 	ReceiptInfoData, StorageDeposit, Weight, H160, H256, LOG_TARGET,
 };
 use alloc::vec::Vec;
@@ -75,7 +75,7 @@ impl EthereumCallResult {
 		info: &DispatchInfo,
 		effective_gas_price: U256,
 	) -> Self {
-		let effective_gas_price = effective_gas_price.max(Pallet::<T>::evm_base_fee());
+		let effective_gas_price = effective_gas_price.max(Pezpallet::<T>::evm_base_fee());
 
 		if let Ok(retval) = &output.result {
 			if retval.did_revert() {
@@ -94,7 +94,7 @@ impl EthereumCallResult {
 		let native_fee = T::FeeInfo::compute_actual_fee(encoded_len, &info, &result);
 		let result = T::FeeInfo::ensure_not_overdrawn(native_fee, result);
 
-		let fee = Pallet::<T>::convert_native_to_evm(match output.storage_deposit {
+		let fee = Pezpallet::<T>::convert_native_to_evm(match output.storage_deposit {
 			StorageDeposit::Refund(refund) => native_fee.saturating_sub(refund),
 			StorageDeposit::Charge(amount) => native_fee.saturating_add(amount),
 		});
@@ -192,7 +192,7 @@ pub fn with_ethereum_context<T: Config>(
 }
 
 fn deposit_eth_extrinsic_revert_event<T: Config>(dispatch_error: DispatchError) {
-	Pallet::<T>::deposit_event(Event::<T>::EthExtrinsicRevert { dispatch_error });
+	Pezpallet::<T>::deposit_event(Event::<T>::EthExtrinsicRevert { dispatch_error });
 }
 
 /// Clear the storage used to capture the block hash related data.
@@ -201,7 +201,7 @@ pub fn on_initialize<T: Config>() {
 	EthereumBlock::<T>::kill();
 }
 
-/// Build the ethereum block and store it into the pallet storage.
+/// Build the ethereum block and store it into the pezpallet storage.
 pub fn on_finalize_build_eth_block<T: Config>(block_number: BlockNumberFor<T>) {
 	let block_builder_ir = EthBlockBuilderIR::<T>::get();
 	EthBlockBuilderIR::<T>::kill();
@@ -265,7 +265,7 @@ pub fn process_transaction<T: Config>(
 // WASM instance).
 //
 // For this reason, we need to account for the memory used by the `EthereumBlockBuilder`
-// and for the pallet storage consumed by the `EthereumBlockBuilderIR`.
+// and for the pezpallet storage consumed by the `EthereumBlockBuilderIR`.
 //
 // ## Memory Usage Analysis
 //
@@ -295,7 +295,7 @@ pub fn process_transaction<T: Config>(
 // `limits::MAX_TRANSACTION_PAYLOAD_SIZE`, while the maximum size of a receipt is
 // limited by `limits::EVENT_BYTES`.
 //
-// Similarly, this is the amount of pallet storage consumed by the
+// Similarly, this is the amount of pezpallet storage consumed by the
 // `EthereumBlockBuilderIR` object, plus a marginal book-keeping overhead.
 pub fn block_builder_bytes_usage(max_events_size: u32) -> u32 {
 	// A block builder requires 3 times the maximum size of the entry.

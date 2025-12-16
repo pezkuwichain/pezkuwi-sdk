@@ -16,7 +16,7 @@
 // limitations under the License.
 
 /// ! Traits and default implementation for paying transaction fees.
-use crate::{Config, Pallet, TxPaymentCredit, LOG_TARGET};
+use crate::{Config, Pezpallet, TxPaymentCredit, LOG_TARGET};
 
 use codec::{DecodeWithMemTracking, FullCodec, MaxEncodedLen};
 use core::marker::PhantomData;
@@ -94,7 +94,7 @@ pub trait OnChargeTransaction<T: Config>: TxCreditHold<T> {
 pub trait TxCreditHold<T: Config> {
 	/// The credit that is used to represent the withdrawn transaction fees.
 	///
-	/// The pallet will put this into a temporary storage item in order to
+	/// The pezpallet will put this into a temporary storage item in order to
 	/// make it available to other pallets during tx application.
 	///
 	/// Is only used within a transaction. Hence changes to the encoding of this
@@ -104,7 +104,7 @@ pub trait TxCreditHold<T: Config> {
 	type Credit: FullCodec + DecodeWithMemTracking + MaxEncodedLen + TypeInfo + SuppressedDrop;
 }
 
-/// Implements transaction payment for a pallet implementing the [`pezframe_support::traits::fungible`]
+/// Implements transaction payment for a pezpallet implementing the [`pezframe_support::traits::fungible`]
 /// trait (eg. pezpallet_balances) using an unbalance handler (implementing
 /// [`OnUnbalanced`]).
 ///
@@ -144,7 +144,7 @@ where
 
 		let (tip_credit, inclusion_fee) = credit.split(tip);
 
-		<Pallet<T>>::deposit_txfee(inclusion_fee);
+		<Pezpallet<T>>::deposit_txfee(inclusion_fee);
 
 		Ok(Some(tip_credit))
 	}
@@ -188,7 +188,7 @@ where
 		}
 
 		// skip refund if account was killed by the tx
-		let fee_credit = if pezframe_system::Pallet::<T>::account_exists(who) {
+		let fee_credit = if pezframe_system::Pezpallet::<T>::account_exists(who) {
 			let (mut fee_credit, refund_credit) = remaining_credit.split(corrected_fee);
 			// resolve might fail if refund is below the ed and account
 			// is kept alive by other providers
@@ -226,7 +226,7 @@ where
 	type Credit = NoDrop<Credit<<T as pezframe_system::Config>::AccountId, F>>;
 }
 
-/// Implements the transaction payment for a pallet implementing the [`Currency`]
+/// Implements the transaction payment for a pezpallet implementing the [`Currency`]
 /// trait (eg. the pezpallet_balances) using an unbalance handler (implementing
 /// [`OnUnbalanced`]).
 ///

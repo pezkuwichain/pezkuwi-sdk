@@ -26,7 +26,7 @@ use pezsp_arithmetic::traits::{CheckedDiv, Saturating, Zero};
 use pezsp_runtime::traits::{BlockNumberProvider, Convert};
 use CompletionStatus::{Complete, Partial};
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	pub(crate) fn do_configure(config: ConfigRecordOf<T>) -> DispatchResult {
 		config.validate().map_err(|()| Error::<T>::InvalidConfig)?;
 		Configuration::<T>::put(config);

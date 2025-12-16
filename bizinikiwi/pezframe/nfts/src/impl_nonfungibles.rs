@@ -26,7 +26,7 @@ use pezframe_support::{
 };
 use pezsp_runtime::{DispatchError, DispatchResult};
 
-impl<T: Config<I>, I: 'static> Inspect<<T as SystemConfig>::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Inspect<<T as SystemConfig>::AccountId> for Pezpallet<T, I> {
 	type ItemId = T::ItemId;
 	type CollectionId = T::CollectionId;
 
@@ -88,7 +88,7 @@ impl<T: Config<I>, I: 'static> Inspect<<T as SystemConfig>::AccountId> for Palle
 		item: Option<&Self::ItemId>,
 		key: &[u8],
 	) -> Option<Vec<u8>> {
-		let namespace = AttributeNamespace::Pallet;
+		let namespace = AttributeNamespace::Pezpallet;
 		let key = BoundedSlice::<_, _>::try_from(key).ok()?;
 		Attribute::<T, I>::get((collection, item, namespace, key)).map(|a| a.0.into())
 	}
@@ -136,7 +136,7 @@ impl<T: Config<I>, I: 'static> Inspect<<T as SystemConfig>::AccountId> for Palle
 	}
 }
 
-impl<T: Config<I>, I: 'static> InspectRole<<T as SystemConfig>::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> InspectRole<<T as SystemConfig>::AccountId> for Pezpallet<T, I> {
 	fn is_issuer(collection: &Self::CollectionId, who: &<T as SystemConfig>::AccountId) -> bool {
 		Self::has_role(collection, who, CollectionRole::Issuer)
 	}
@@ -149,7 +149,7 @@ impl<T: Config<I>, I: 'static> InspectRole<<T as SystemConfig>::AccountId> for P
 }
 
 impl<T: Config<I>, I: 'static> Create<<T as SystemConfig>::AccountId, CollectionConfigFor<T, I>>
-	for Pallet<T, I>
+	for Pezpallet<T, I>
 {
 	/// Create a `collection` of nonfungible items to be owned by `who` and managed by `admin`.
 	fn create_collection(
@@ -186,7 +186,7 @@ impl<T: Config<I>, I: 'static> Create<<T as SystemConfig>::AccountId, Collection
 	/// incremental order for the collection IDs and is a replacement for the auto id creation.
 	///
 	///
-	/// SAFETY: This function can break the pallet if it is used in combination with the auto
+	/// SAFETY: This function can break the pezpallet if it is used in combination with the auto
 	/// increment functionality, as it can claim a value in the ID sequence.
 	fn create_collection_with_id(
 		collection: T::CollectionId,
@@ -211,7 +211,7 @@ impl<T: Config<I>, I: 'static> Create<<T as SystemConfig>::AccountId, Collection
 	}
 }
 
-impl<T: Config<I>, I: 'static> Destroy<<T as SystemConfig>::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Destroy<<T as SystemConfig>::AccountId> for Pezpallet<T, I> {
 	type DestroyWitness = DestroyWitness;
 
 	fn get_destroy_witness(collection: &Self::CollectionId) -> Option<DestroyWitness> {
@@ -227,7 +227,7 @@ impl<T: Config<I>, I: 'static> Destroy<<T as SystemConfig>::AccountId> for Palle
 	}
 }
 
-impl<T: Config<I>, I: 'static> Mutate<<T as SystemConfig>::AccountId, ItemConfig> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Mutate<<T as SystemConfig>::AccountId, ItemConfig> for Pezpallet<T, I> {
 	fn mint_into(
 		collection: &Self::CollectionId,
 		item: &Self::ItemId,
@@ -273,7 +273,7 @@ impl<T: Config<I>, I: 'static> Mutate<<T as SystemConfig>::AccountId, ItemConfig
 			None,
 			*collection,
 			Some(*item),
-			AttributeNamespace::Pallet,
+			AttributeNamespace::Pezpallet,
 			Self::construct_attribute_key(key.to_vec())?,
 			Self::construct_attribute_value(value.to_vec())?,
 		)
@@ -301,7 +301,7 @@ impl<T: Config<I>, I: 'static> Mutate<<T as SystemConfig>::AccountId, ItemConfig
 			None,
 			*collection,
 			None,
-			AttributeNamespace::Pallet,
+			AttributeNamespace::Pezpallet,
 			Self::construct_attribute_key(key.to_vec())?,
 			Self::construct_attribute_value(value.to_vec())?,
 		)
@@ -357,7 +357,7 @@ impl<T: Config<I>, I: 'static> Mutate<<T as SystemConfig>::AccountId, ItemConfig
 			None,
 			*collection,
 			Some(*item),
-			AttributeNamespace::Pallet,
+			AttributeNamespace::Pezpallet,
 			Self::construct_attribute_key(key.to_vec())?,
 		)
 	}
@@ -377,7 +377,7 @@ impl<T: Config<I>, I: 'static> Mutate<<T as SystemConfig>::AccountId, ItemConfig
 			None,
 			*collection,
 			None,
-			AttributeNamespace::Pallet,
+			AttributeNamespace::Pezpallet,
 			Self::construct_attribute_key(key.to_vec())?,
 		)
 	}
@@ -407,7 +407,7 @@ impl<T: Config<I>, I: 'static> Mutate<<T as SystemConfig>::AccountId, ItemConfig
 	}
 }
 
-impl<T: Config<I>, I: 'static> Transfer<T::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Transfer<T::AccountId> for Pezpallet<T, I> {
 	fn transfer(
 		collection: &Self::CollectionId,
 		item: &Self::ItemId,
@@ -441,7 +441,7 @@ impl<T: Config<I>, I: 'static> Transfer<T::AccountId> for Pallet<T, I> {
 	}
 }
 
-impl<T: Config<I>, I: 'static> Trading<T::AccountId, ItemPrice<T, I>> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Trading<T::AccountId, ItemPrice<T, I>> for Pezpallet<T, I> {
 	fn buy_item(
 		collection: &Self::CollectionId,
 		item: &Self::ItemId,
@@ -466,7 +466,7 @@ impl<T: Config<I>, I: 'static> Trading<T::AccountId, ItemPrice<T, I>> for Pallet
 	}
 }
 
-impl<T: Config<I>, I: 'static> InspectEnumerable<T::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> InspectEnumerable<T::AccountId> for Pezpallet<T, I> {
 	type CollectionsIterator = KeyPrefixIterator<<T as Config<I>>::CollectionId>;
 	type ItemsIterator = KeyPrefixIterator<<T as Config<I>>::ItemId>;
 	type OwnedIterator =

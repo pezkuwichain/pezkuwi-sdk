@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! WeightInfo for the election provider multi-block pallet group.
+//! WeightInfo for the election provider multi-block pezpallet group.
 
 mod pezpallet_election_provider_multi_block_hez_size;
 mod pezpallet_election_provider_multi_block_signed_hez_size;

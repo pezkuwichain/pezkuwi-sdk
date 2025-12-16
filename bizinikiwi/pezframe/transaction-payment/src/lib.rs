@@ -15,9 +15,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Transaction Payment Pallet
+//! # Transaction Payment Pezpallet
 //!
-//! This pallet provides the basic logic needed to pay the absolute minimum amount needed for a
+//! This pezpallet provides the basic logic needed to pay the absolute minimum amount needed for a
 //! transaction to be included. This includes:
 //!   - _base fee_: This is the minimum amount a user pays for a transaction. It is declared
 //! 	as a base _weight_ in the runtime and converted to a fee using `WeightToFee`.
@@ -38,7 +38,7 @@
 //!   - `targeted_fee_adjustment`: This is a multiplier that can tune the final fee based on
 //! 	the congestion of the network.
 //!
-//! Additionally, this pallet allows one to configure:
+//! Additionally, this pezpallet allows one to configure:
 //!   - The mapping between one unit of weight to one unit of fee via [`Config::WeightToFee`].
 //!   - A means of updating the fee for the next block, via defining a multiplier, based on the
 //!     final state of the chain at the end of the previous block. This can be configured via
@@ -59,7 +59,7 @@ use pezframe_support::{
 	weights::{Weight, WeightToFee},
 	RuntimeDebugNoBound,
 };
-pub use pallet::*;
+pub use pezpallet::*;
 pub use payment::*;
 use pezsp_runtime::{
 	traits::{
@@ -96,7 +96,7 @@ const LOG_TARGET: &str = "runtime::txpayment";
 /// A struct to update the weight multiplier per block. It implements `Convert<Multiplier,
 /// Multiplier>`, meaning that it can convert the previous multiplier to the next one. This should
 /// be called on `on_finalize` of a block, prior to potentially cleaning the weight data from the
-/// system pallet.
+/// system pezpallet.
 ///
 /// given:
 /// 	s = previous block weight
@@ -216,7 +216,7 @@ where
 		// the computed ratio is only among the normal class.
 		let normal_max_weight =
 			weights.get(DispatchClass::Normal).max_total.unwrap_or(weights.max_block);
-		let current_block_weight = pezframe_system::Pallet::<T>::block_weight();
+		let current_block_weight = pezframe_system::Pezpallet::<T>::block_weight();
 		let normal_block_weight =
 			current_block_weight.get(DispatchClass::Normal).min(normal_max_weight);
 
@@ -298,10 +298,10 @@ where
 	}
 }
 
-/// Storage releases of the pallet.
+/// Storage releases of the pezpallet.
 #[derive(Encode, Decode, Clone, Copy, PartialEq, Eq, RuntimeDebug, TypeInfo, MaxEncodedLen)]
 pub enum Releases {
-	/// Original version of the pallet.
+	/// Original version of the pezpallet.
 	V1Ancient,
 	/// One that bumps the usage to FixedU128 from FixedI128.
 	V2,
@@ -317,15 +317,15 @@ impl Default for Releases {
 /// NextFeeMultiplierOnEmpty() to provide a value when none exists in storage.
 const MULTIPLIER_DEFAULT_VALUE: Multiplier = Multiplier::from_u32(1);
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
 	use super::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
 	pub mod config_preludes {
 		use super::*;
@@ -347,10 +347,10 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::config(with_default)]
+	#[pezpallet::config(with_default)]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
@@ -360,15 +360,15 @@ pub mod pallet {
 		/// adjusted, depending on the used resources by the transaction. If the
 		/// transaction weight is lower than expected, parts of the transaction fee
 		/// might be refunded. In the end the fees can be deposited.
-		#[pallet::no_default]
+		#[pezpallet::no_default]
 		type OnChargeTransaction: OnChargeTransaction<Self>;
 
 		/// Convert a weight value into a deductible fee based on the currency type.
-		#[pallet::no_default]
+		#[pezpallet::no_default]
 		type WeightToFee: WeightToFee<Balance = BalanceOf<Self>>;
 
 		/// Convert a length value into a deductible fee based on the currency type.
-		#[pallet::no_default]
+		#[pezpallet::no_default]
 		type LengthToFee: WeightToFee<Balance = BalanceOf<Self>>;
 
 		/// Update the multiplier of the next block, based on the previous block's weight.
@@ -395,34 +395,34 @@ pub mod pallet {
 		/// sent with the transaction. So, not only does the transaction get a priority bump based
 		/// on the `inclusion_fee`, but we also amplify the impact of tips applied to `Operational`
 		/// transactions.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type OperationalFeeMultiplier: Get<u8>;
 
-		/// The weight information of this pallet.
+		/// The weight information of this pezpallet.
 		type WeightInfo: WeightInfo;
 	}
 
-	#[pallet::type_value]
+	#[pezpallet::type_value]
 	pub fn NextFeeMultiplierOnEmpty() -> Multiplier {
 		MULTIPLIER_DEFAULT_VALUE
 	}
 
-	#[pallet::storage]
-	#[pallet::whitelist_storage]
+	#[pezpallet::storage]
+	#[pezpallet::whitelist_storage]
 	pub type NextFeeMultiplier<T: Config> =
 		StorageValue<_, Multiplier, ValueQuery, NextFeeMultiplierOnEmpty>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type StorageVersion<T: Config> = StorageValue<_, Releases, ValueQuery>;
 
 	/// The `OnChargeTransaction` stores the withdrawn tx fee here.
 	///
 	/// Use `withdraw_txfee` and `remaining_txfee` to access from outside the crate.
-	#[pallet::storage]
-	#[pallet::whitelist_storage]
+	#[pezpallet::storage]
+	#[pezpallet::whitelist_storage]
 	pub(crate) type TxPaymentCredit<T: Config> = StorageValue<_, StoredCreditOf<T>>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	pub struct GenesisConfig<T: Config> {
 		pub multiplier: Multiplier,
 		#[serde(skip)]
@@ -435,7 +435,7 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			StorageVersion::<T>::put(Releases::V2);
@@ -443,16 +443,16 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A transaction fee `actual_fee`, of which `tip` was added to the minimum inclusion fee,
 		/// has been paid by `who`.
 		TransactionFeePaid { who: T::AccountId, actual_fee: BalanceOf<T>, tip: BalanceOf<T> },
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn on_finalize(_: pezframe_system::pezpallet_prelude::BlockNumberFor<T>) {
 			NextFeeMultiplier::<T>::mutate(|fm| {
 				*fm = T::FeeMultiplierUpdate::convert(*fm);
@@ -484,7 +484,7 @@ pub mod pallet {
 			let target = T::FeeMultiplierUpdate::target() *
 				T::BlockWeights::get().get(DispatchClass::Normal).max_total.expect(
 					"Setting `max_total` for `Normal` dispatch class is not compatible with \
-					`transaction-payment` pallet.",
+					`transaction-payment` pezpallet.",
 				);
 			// add 1 percent;
 			let addition = target / 100;
@@ -501,7 +501,7 @@ pub mod pallet {
 			let min_value = T::FeeMultiplierUpdate::min();
 			let target = target + addition;
 
-			pezframe_system::Pallet::<T>::set_block_consumed_resources(target, 0);
+			pezframe_system::Pezpallet::<T>::set_block_consumed_resources(target, 0);
 			let next = T::FeeMultiplierUpdate::convert(min_value);
 			assert!(
 				next > min_value,
@@ -513,7 +513,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Public function to access the next fee multiplier.
 	pub fn next_fee_multiplier() -> Multiplier {
 		NextFeeMultiplier::<T>::get()
@@ -521,7 +521,7 @@ impl<T: Config> Pallet<T> {
 
 	/// Query the data that we know about the fee of a given `call`.
 	///
-	/// This pallet is not and cannot be aware of the internals of a signed extension, for example
+	/// This pezpallet is not and cannot be aware of the internals of a signed extension, for example
 	/// a tip. It only interprets the extrinsic as some encoded value and accounts for its weight
 	/// and length, the runtime's extrinsic base weight, and the current fee multiplier.
 	///
@@ -715,12 +715,12 @@ impl<T: Config> Pallet<T> {
 	///
 	/// # Note
 	///
-	/// This is only useful if a pallet knows that the pre-dispatch weight was vastly
+	/// This is only useful if a pezpallet knows that the pre-dispatch weight was vastly
 	/// overestimated. Pallets need to make sure to leave enough balance to pay for the
 	/// transaction fees. They can do that by first drawing as much as they need and then
 	/// at the end of the transaction (when they know the post dispatch fee) return an error
 	/// in case not enough is left. The error will automatically roll back all the storage
-	/// changes done by the pallet including the balance drawn by calling this function.
+	/// changes done by the pezpallet including the balance drawn by calling this function.
 	pub fn withdraw_txfee<Balance>(amount: Balance) -> Option<CreditOf<T>>
 	where
 		CreditOf<T>: Imbalance<Balance>,
@@ -765,7 +765,7 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-impl<T> Convert<Weight, BalanceOf<T>> for Pallet<T>
+impl<T> Convert<Weight, BalanceOf<T>> for Pezpallet<T>
 where
 	T: Config,
 {
@@ -841,7 +841,7 @@ where
 		len: usize,
 	) -> Result<BalanceOf<T>, TransactionValidityError> {
 		let tip = self.0;
-		let fee_with_tip = Pallet::<T>::compute_fee(len as u32, info, tip);
+		let fee_with_tip = Pezpallet::<T>::compute_fee(len as u32, info, tip);
 
 		<<T as Config>::OnChargeTransaction as OnChargeTransaction<T>>::can_withdraw_fee(
 			who,
@@ -1062,7 +1062,7 @@ where
 			},
 		};
 		let actual_fee_with_tip =
-			Pallet::<T>::compute_actual_fee(len as u32, info, &post_info, tip);
+			Pezpallet::<T>::compute_actual_fee(len as u32, info, &post_info, tip);
 		T::OnChargeTransaction::correct_and_deposit_fee(
 			&who,
 			info,
@@ -1071,7 +1071,7 @@ where
 			tip,
 			liquidity_info,
 		)?;
-		Pallet::<T>::deposit_event(Event::<T>::TransactionFeePaid {
+		Pezpallet::<T>::deposit_event(Event::<T>::TransactionFeePaid {
 			who,
 			actual_fee: actual_fee_with_tip,
 			tip,
@@ -1081,7 +1081,7 @@ where
 }
 
 impl<T: Config, AnyCall: GetDispatchInfo + Encode> EstimateCallFee<AnyCall, BalanceOf<T>>
-	for Pallet<T>
+	for Pezpallet<T>
 where
 	T::RuntimeCall: Dispatchable<Info = DispatchInfo, PostInfo = PostDispatchInfo>,
 {

@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Nft fractionalization pallet benchmarking.
+//! Nft fractionalization pezpallet benchmarking.
 
 #![cfg(feature = "runtime-benchmarks")]
 
@@ -29,7 +29,7 @@ use nonfungibles_v2::{Create, Mutate};
 use pezframe_system::RawOrigin as SystemOrigin;
 use pezpallet_nfts::{CollectionConfig, CollectionSettings, ItemConfig, MintSettings};
 
-use crate::Pallet as NftFractionalization;
+use crate::Pezpallet as NftFractionalization;
 
 type BalanceOf<T> =
 	<<T as Config>::Currency as InspectFungible<<T as SystemConfig>::AccountId>>::Balance;
@@ -66,7 +66,7 @@ where
 }
 
 fn assert_last_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
-	let events = pezframe_system::Pallet::<T>::events();
+	let events = pezframe_system::Pezpallet::<T>::events();
 	let system_event: <T as pezframe_system::Config>::RuntimeEvent = generic_event.into();
 	// compare to the last event record
 	let pezframe_system::EventRecord { event, .. } = &events[events.len() - 1];

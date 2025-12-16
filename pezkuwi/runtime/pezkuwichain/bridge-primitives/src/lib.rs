@@ -63,12 +63,12 @@ impl ChainWithGrandpa for Pezkuwichain {
 // The TransactionExtension used by Pezkuwichain.
 pub use bp_pezkuwi_core::CommonTransactionExtension as TransactionExtension;
 
-/// Name of the teyrchains pallet in the Pezkuwichain runtime.
+/// Name of the teyrchains pezpallet in the Pezkuwichain runtime.
 pub const PARAS_PALLET_NAME: &str = "Paras";
 
-/// Name of the With-Pezkuwichain GRANDPA pallet instance that is deployed at bridged chains.
+/// Name of the With-Pezkuwichain GRANDPA pezpallet instance that is deployed at bridged chains.
 pub const WITH_PEZKUWICHAIN_GRANDPA_PALLET_NAME: &str = "BridgePezkuwichainGrandpa";
-/// Name of the With-Pezkuwichain teyrchains pallet instance that is deployed at bridged chains.
+/// Name of the With-Pezkuwichain teyrchains pezpallet instance that is deployed at bridged chains.
 pub const WITH_PEZKUWICHAIN_BRIDGE_TEYRCHAINS_PALLET_NAME: &str = "BridgePezkuwichainTeyrchains";
 
 /// Maximal size of encoded `bp_teyrchains::ParaStoredHeaderData` structure among all Pezkuwichain

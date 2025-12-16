@@ -16,12 +16,12 @@
 // limitations under the License.
 
 //! This module contains helper methods to perform functionality associated with creating and
-//! destroying collections for the NFTs pallet.
+//! destroying collections for the NFTs pezpallet.
 
 use crate::*;
 use pezframe_support::pezpallet_prelude::*;
 
-impl<T: Config<I>, I: 'static> Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 	/// Create a new collection with the given `collection`, `owner`, `admin`, `config`, `deposit`,
 	/// and `event`.
 	///

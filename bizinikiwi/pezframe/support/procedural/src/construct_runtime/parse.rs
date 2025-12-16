@@ -32,7 +32,7 @@ mod keyword {
 	syn::custom_keyword!(Block);
 	syn::custom_keyword!(NodeBlock);
 	syn::custom_keyword!(UncheckedExtrinsic);
-	syn::custom_keyword!(Pallet);
+	syn::custom_keyword!(Pezpallet);
 	syn::custom_keyword!(Call);
 	syn::custom_keyword!(Storage);
 	syn::custom_keyword!(Event);
@@ -53,8 +53,8 @@ mod keyword {
 
 /// Declaration of a runtime.
 ///
-/// Pallet declare their part either explicitly or implicitly (using no part declaration)
-/// If all pallet have explicit parts then the runtime declaration is explicit, otherwise it is
+/// Pezpallet declare their part either explicitly or implicitly (using no part declaration)
+/// If all pezpallet have explicit parts then the runtime declaration is explicit, otherwise it is
 /// implicit.
 #[derive(Debug)]
 pub enum RuntimeDeclaration {
@@ -63,18 +63,18 @@ pub enum RuntimeDeclaration {
 	ExplicitExpanded(ExplicitRuntimeDeclaration),
 }
 
-/// Declaration of a runtime with some pallet with implicit declaration of parts.
+/// Declaration of a runtime with some pezpallet with implicit declaration of parts.
 #[derive(Debug)]
 pub struct ImplicitRuntimeDeclaration {
 	pub pallets: Vec<PalletDeclaration>,
 }
 
-/// Declaration of a runtime with all pallet having explicit declaration of parts.
+/// Declaration of a runtime with all pezpallet having explicit declaration of parts.
 #[derive(Debug)]
 pub struct ExplicitRuntimeDeclaration {
 	pub name: Ident,
 	pub where_section: Option<WhereSection>,
-	pub pallets: Vec<Pallet>,
+	pub pallets: Vec<Pezpallet>,
 	pub pallets_token: token::Brace,
 }
 
@@ -184,37 +184,37 @@ impl Parse for WhereDefinition {
 	}
 }
 
-/// The declaration of a pallet.
+/// The declaration of a pezpallet.
 #[derive(Debug, Clone)]
 pub struct PalletDeclaration {
-	/// Is this pallet fully expanded?
+	/// Is this pezpallet fully expanded?
 	pub is_expanded: bool,
-	/// The name of the pallet, e.g.`System` in `System: pezframe_system`.
+	/// The name of the pezpallet, e.g.`System` in `System: pezframe_system`.
 	pub name: Ident,
-	/// Optional attributes tagged right above a pallet declaration.
+	/// Optional attributes tagged right above a pezpallet declaration.
 	pub attrs: Vec<Attribute>,
 	/// Optional fixed index, e.g. `MyPallet ...  = 3,`.
 	pub index: Option<u8>,
-	/// The path of the pallet, e.g. `pezframe_system` in `System: pezframe_system`.
+	/// The path of the pezpallet, e.g. `pezframe_system` in `System: pezframe_system`.
 	pub path: PalletPath,
-	/// The instance of the pallet, e.g. `Instance1` in `Council: pezpallet_collective::<Instance1>`.
+	/// The instance of the pezpallet, e.g. `Instance1` in `Council: pezpallet_collective::<Instance1>`.
 	pub instance: Option<Ident>,
-	/// The declared pallet parts,
-	/// e.g. `Some([Pallet, Call])` for `System: system::{Pallet, Call}`
+	/// The declared pezpallet parts,
+	/// e.g. `Some([Pezpallet, Call])` for `System: system::{Pezpallet, Call}`
 	/// or `None` for `System: system`.
 	pub pezpallet_parts: Option<Vec<PalletPart>>,
 	/// The specified parts, either use_parts or exclude_parts.
 	pub specified_parts: SpecifiedParts,
 }
 
-/// The possible declaration of pallet parts to use.
+/// The possible declaration of pezpallet parts to use.
 #[derive(Debug, Clone)]
 pub enum SpecifiedParts {
-	/// Use all the pallet parts except those specified.
+	/// Use all the pezpallet parts except those specified.
 	Exclude(Vec<PalletPartNoGeneric>),
-	/// Use only the specified pallet parts.
+	/// Use only the specified pezpallet parts.
 	Use(Vec<PalletPartNoGeneric>),
-	/// Use the all the pallet parts.
+	/// Use the all the pezpallet parts.
 	All,
 }
 
@@ -248,7 +248,7 @@ impl Parse for PalletDeclaration {
 			None
 		};
 
-		// Check if the pallet is fully expanded.
+		// Check if the pezpallet is fully expanded.
 		let (is_expanded, extra_parts) = if input.peek(keyword::expanded) {
 			let _: keyword::expanded = input.parse()?;
 			let _: Token![::] = input.parse()?;
@@ -289,7 +289,7 @@ impl Parse for PalletDeclaration {
 			SpecifiedParts::All
 		};
 
-		// Parse for pallet index
+		// Parse for pezpallet index
 		let index = if input.peek(Token![=]) {
 			input.parse::<Token![=]>()?;
 			let index = input.parse::<syn::LitInt>()?;
@@ -305,7 +305,7 @@ impl Parse for PalletDeclaration {
 	}
 }
 
-/// A struct representing a path to a pallet. `PalletPath` is almost identical to the standard
+/// A struct representing a path to a pezpallet. `PalletPath` is almost identical to the standard
 /// Rust path with a few restrictions:
 /// - No leading colons allowed
 /// - Path segments can only consist of identifiers separated by colons
@@ -380,7 +380,7 @@ fn parse_pallet_parts(input: ParseStream) -> Result<Vec<PalletPart>> {
 
 #[derive(Debug, Clone)]
 pub enum PalletPartKeyword {
-	Pallet(keyword::Pallet),
+	Pezpallet(keyword::Pezpallet),
 	Call(keyword::Call),
 	Storage(keyword::Storage),
 	Event(keyword::Event),
@@ -400,8 +400,8 @@ impl Parse for PalletPartKeyword {
 	fn parse(input: ParseStream) -> Result<Self> {
 		let lookahead = input.lookahead1();
 
-		if lookahead.peek(keyword::Pallet) {
-			Ok(Self::Pallet(input.parse()?))
+		if lookahead.peek(keyword::Pezpallet) {
+			Ok(Self::Pezpallet(input.parse()?))
 		} else if lookahead.peek(keyword::Call) {
 			Ok(Self::Call(input.parse()?))
 		} else if lookahead.peek(keyword::Storage) {
@@ -438,7 +438,7 @@ impl PalletPartKeyword {
 	/// Returns the name of `Self`.
 	fn name(&self) -> &'static str {
 		match self {
-			Self::Pallet(_) => "Pallet",
+			Self::Pezpallet(_) => "Pezpallet",
 			Self::Call(_) => "Call",
 			Self::Storage(_) => "Storage",
 			Self::Event(_) => "Event",
@@ -455,12 +455,12 @@ impl PalletPartKeyword {
 		}
 	}
 
-	/// Returns `true` if this pallet part is allowed to have generic arguments.
+	/// Returns `true` if this pezpallet part is allowed to have generic arguments.
 	fn allows_generic(&self) -> bool {
 		Self::all_generic_arg().iter().any(|n| *n == self.name())
 	}
 
-	/// Returns the names of all pallet parts that allow to have a generic argument.
+	/// Returns the names of all pezpallet parts that allow to have a generic argument.
 	fn all_generic_arg() -> &'static [&'static str] {
 		&["Event", "Error", "Origin", "Config", "Task"]
 	}
@@ -469,7 +469,7 @@ impl PalletPartKeyword {
 impl ToTokens for PalletPartKeyword {
 	fn to_tokens(&self, tokens: &mut TokenStream) {
 		match self {
-			Self::Pallet(inner) => inner.to_tokens(tokens),
+			Self::Pezpallet(inner) => inner.to_tokens(tokens),
 			Self::Call(inner) => inner.to_tokens(tokens),
 			Self::Storage(inner) => inner.to_tokens(tokens),
 			Self::Event(inner) => inner.to_tokens(tokens),
@@ -519,7 +519,7 @@ impl PalletPart {
 		res.join(", ")
 	}
 
-	/// The name of this pallet part.
+	/// The name of this pezpallet part.
 	pub fn name(&self) -> &'static str {
 		self.keyword.name()
 	}
@@ -574,20 +574,20 @@ fn parse_pallet_parts_no_generic(input: ParseStream) -> Result<Vec<PalletPartNoG
 	Ok(pezpallet_parts.content.inner.into_iter().collect())
 }
 
-/// The final definition of a pallet with the resulting fixed index and explicit parts.
+/// The final definition of a pezpallet with the resulting fixed index and explicit parts.
 #[derive(Debug, Clone)]
-pub struct Pallet {
-	/// Is this pallet fully expanded?
+pub struct Pezpallet {
+	/// Is this pezpallet fully expanded?
 	pub is_expanded: bool,
-	/// The name of the pallet, e.g.`System` in `System: pezframe_system`.
+	/// The name of the pezpallet, e.g.`System` in `System: pezframe_system`.
 	pub name: Ident,
 	/// Either automatically inferred, or defined (e.g. `MyPallet ...  = 3,`).
 	pub index: u8,
-	/// The path of the pallet, e.g. `pezframe_system` in `System: pezframe_system`.
+	/// The path of the pezpallet, e.g. `pezframe_system` in `System: pezframe_system`.
 	pub path: PalletPath,
-	/// The instance of the pallet, e.g. `Instance1` in `Council: pezpallet_collective::<Instance1>`.
+	/// The instance of the pezpallet, e.g. `Instance1` in `Council: pezpallet_collective::<Instance1>`.
 	pub instance: Option<Ident>,
-	/// The pallet parts to use for the pallet.
+	/// The pezpallet parts to use for the pezpallet.
 	pub pezpallet_parts: Vec<PalletPart>,
 	/// Expressions specified inside of a #[cfg] attribute.
 	pub cfg_pattern: Vec<cfg_expr::Expression>,
@@ -595,8 +595,8 @@ pub struct Pallet {
 	pub docs: Vec<syn::Expr>,
 }
 
-impl Pallet {
-	/// Get resolved pallet parts
+impl Pezpallet {
+	/// Get resolved pezpallet parts
 	pub fn pezpallet_parts(&self) -> &[PalletPart] {
 		&self.pezpallet_parts
 	}
@@ -606,12 +606,12 @@ impl Pallet {
 		self.pezpallet_parts.iter().find(|part| part.name() == name)
 	}
 
-	/// Return whether pallet contains part
+	/// Return whether pezpallet contains part
 	pub fn exists_part(&self, name: &str) -> bool {
 		self.find_part(name).is_some()
 	}
 
-	// Get runtime attributes for the pallet, mostly used for macros
+	// Get runtime attributes for the pezpallet, mostly used for macros
 	pub fn get_attributes(&self) -> TokenStream {
 		self.cfg_pattern.iter().fold(TokenStream::new(), |acc, pattern| {
 			let attr = TokenStream::from_str(&format!("#[cfg({})]", pattern.original()))
@@ -640,29 +640,29 @@ enum PalletsConversion {
 	Implicit(Vec<PalletDeclaration>),
 	/// Pallets explicitly declare parts.
 	///
-	/// `System: pezframe_system::{Pallet, Call}`
+	/// `System: pezframe_system::{Pezpallet, Call}`
 	///
 	/// However, for backwards compatibility with Pezkuwi/Kusama
-	/// we must propagate some other parts to the pallet by default.
-	Explicit(Vec<Pallet>),
+	/// we must propagate some other parts to the pezpallet by default.
+	Explicit(Vec<Pezpallet>),
 	/// Pallets explicitly declare parts that are fully expanded.
 	///
 	/// This is the end state that contains extra parts included by
 	/// default by Bizinikiwi.
 	///
-	/// `System: pezframe_system expanded::{Error} ::{Pallet, Call}`
+	/// `System: pezframe_system expanded::{Error} ::{Pezpallet, Call}`
 	///
-	/// For this example, the `Pallet`, `Call` and `Error` parts are collected.
-	ExplicitExpanded(Vec<Pallet>),
+	/// For this example, the `Pezpallet`, `Call` and `Error` parts are collected.
+	ExplicitExpanded(Vec<Pezpallet>),
 }
 
-/// Convert from the parsed pallet declaration to their final information.
+/// Convert from the parsed pezpallet declaration to their final information.
 ///
-/// Check if all pallet have explicit declaration of their parts, if so then assign index to each
-/// pallet using same rules as rust for fieldless enum. I.e. implicit are assigned number
+/// Check if all pezpallet have explicit declaration of their parts, if so then assign index to each
+/// pezpallet using same rules as rust for fieldless enum. I.e. implicit are assigned number
 /// incrementally from last explicit or 0.
 fn convert_pallets(pallets: Vec<PalletDeclaration>) -> syn::Result<PalletsConversion> {
-	if pallets.iter().any(|pallet| pallet.pezpallet_parts.is_none()) {
+	if pallets.iter().any(|pezpallet| pezpallet.pezpallet_parts.is_none()) {
 		return Ok(PalletsConversion::Implicit(pallets));
 	}
 
@@ -673,49 +673,49 @@ fn convert_pallets(pallets: Vec<PalletDeclaration>) -> syn::Result<PalletsConver
 
 	let pallets = pallets
 		.into_iter()
-		.map(|pallet| {
-			let final_index = match pallet.index {
+		.map(|pezpallet| {
+			let final_index = match pezpallet.index {
 				Some(i) => i,
 				None => last_index.map_or(Some(0), |i| i.checked_add(1)).ok_or_else(|| {
-					let msg = "Pallet index doesn't fit into u8, index is 256";
-					syn::Error::new(pallet.name.span(), msg)
+					let msg = "Pezpallet index doesn't fit into u8, index is 256";
+					syn::Error::new(pezpallet.name.span(), msg)
 				})?,
 			};
 
 			last_index = Some(final_index);
 
-			if let Some(used_pallet) = indices.insert(final_index, pallet.name.clone()) {
+			if let Some(used_pallet) = indices.insert(final_index, pezpallet.name.clone()) {
 				let msg = format!(
-					"Pallet indices are conflicting: Both pallets {} and {} are at index {}",
-					used_pallet, pallet.name, final_index,
+					"Pezpallet indices are conflicting: Both pallets {} and {} are at index {}",
+					used_pallet, pezpallet.name, final_index,
 				);
 				let mut err = syn::Error::new(used_pallet.span(), &msg);
-				err.combine(syn::Error::new(pallet.name.span(), msg));
+				err.combine(syn::Error::new(pezpallet.name.span(), msg));
 				return Err(err);
 			}
 
-			if let Some(used_pallet) = names.insert(pallet.name.clone(), pallet.name.span()) {
+			if let Some(used_pallet) = names.insert(pezpallet.name.clone(), pezpallet.name.span()) {
 				let msg = "Two pallets with the same name!";
 
 				let mut err = syn::Error::new(used_pallet, &msg);
-				err.combine(syn::Error::new(pallet.name.span(), &msg));
+				err.combine(syn::Error::new(pezpallet.name.span(), &msg));
 				return Err(err);
 			}
 
-			let mut pezpallet_parts = pallet.pezpallet_parts.expect("Checked above");
+			let mut pezpallet_parts = pezpallet.pezpallet_parts.expect("Checked above");
 
 			let available_parts =
 				pezpallet_parts.iter().map(|part| part.keyword.name()).collect::<HashSet<_>>();
 
 			// Check parts are correctly specified
-			match &pallet.specified_parts {
+			match &pezpallet.specified_parts {
 				SpecifiedParts::Exclude(parts) | SpecifiedParts::Use(parts) =>
 					for part in parts {
 						if !available_parts.contains(part.keyword.name()) {
 							let msg = format!(
-								"Invalid pallet part specified, the pallet `{}` doesn't have the \
+								"Invalid pezpallet part specified, the pezpallet `{}` doesn't have the \
 								`{}` part. Available parts are: {}.",
-								pallet.name,
+								pezpallet.name,
 								part.keyword.name(),
 								pezpallet_parts.iter().fold(String::new(), |fold, part| {
 									if fold.is_empty() {
@@ -732,7 +732,7 @@ fn convert_pallets(pallets: Vec<PalletDeclaration>) -> syn::Result<PalletsConver
 			}
 
 			// Set only specified parts.
-			match pallet.specified_parts {
+			match pezpallet.specified_parts {
 				SpecifiedParts::Exclude(excluded_parts) => pezpallet_parts.retain(|part| {
 					!excluded_parts
 						.iter()
@@ -744,12 +744,12 @@ fn convert_pallets(pallets: Vec<PalletDeclaration>) -> syn::Result<PalletsConver
 				SpecifiedParts::All => (),
 			}
 
-			let cfg_pattern = pallet
+			let cfg_pattern = pezpallet
 				.attrs
 				.iter()
 				.map(|attr| {
 					if attr.path().segments.first().map_or(false, |s| s.ident != "cfg") {
-						let msg = "Unsupported attribute, only #[cfg] is supported on pallet \
+						let msg = "Unsupported attribute, only #[cfg] is supported on pezpallet \
 						declarations in `construct_runtime`";
 						return Err(syn::Error::new(attr.span(), msg));
 					}
@@ -764,14 +764,14 @@ fn convert_pallets(pallets: Vec<PalletDeclaration>) -> syn::Result<PalletsConver
 				})
 				.collect::<Result<Vec<_>>>()?;
 
-			is_expanded &= pallet.is_expanded;
+			is_expanded &= pezpallet.is_expanded;
 
-			Ok(Pallet {
-				is_expanded: pallet.is_expanded,
-				name: pallet.name,
+			Ok(Pezpallet {
+				is_expanded: pezpallet.is_expanded,
+				name: pezpallet.name,
 				index: final_index,
-				path: pallet.path,
-				instance: pallet.instance,
+				path: pezpallet.path,
+				instance: pezpallet.instance,
 				cfg_pattern,
 				pezpallet_parts,
 				docs: vec![],

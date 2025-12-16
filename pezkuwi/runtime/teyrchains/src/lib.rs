@@ -132,22 +132,22 @@ pub fn schedule_para_initialize<T: paras::Config>(
 	id: ParaId,
 	genesis: paras::ParaGenesisArgs,
 ) -> Result<(), ()> {
-	paras::Pallet::<T>::schedule_para_initialize(id, genesis).map_err(|_| ())
+	paras::Pezpallet::<T>::schedule_para_initialize(id, genesis).map_err(|_| ())
 }
 
 /// Schedule a para to be cleaned up at the start of the next session.
 pub fn schedule_para_cleanup<T: paras::Config>(id: pezkuwi_primitives::Id) -> Result<(), ()> {
-	paras::Pallet::<T>::schedule_para_cleanup(id).map_err(|_| ())
+	paras::Pezpallet::<T>::schedule_para_cleanup(id).map_err(|_| ())
 }
 
 /// Schedule a parathread (on-demand teyrchain) to be upgraded to a lease holding teyrchain.
 pub fn schedule_parathread_upgrade<T: paras::Config>(id: ParaId) -> Result<(), ()> {
-	paras::Pallet::<T>::schedule_parathread_upgrade(id).map_err(|_| ())
+	paras::Pezpallet::<T>::schedule_parathread_upgrade(id).map_err(|_| ())
 }
 
 /// Schedule a lease holding teyrchain to be downgraded to an on-demand teyrchain.
 pub fn schedule_teyrchain_downgrade<T: paras::Config>(id: ParaId) -> Result<(), ()> {
-	paras::Pallet::<T>::schedule_teyrchain_downgrade(id).map_err(|_| ())
+	paras::Pezpallet::<T>::schedule_teyrchain_downgrade(id).map_err(|_| ())
 }
 
 /// Schedules a validation code upgrade to a teyrchain with the given id.
@@ -156,12 +156,12 @@ pub fn schedule_code_upgrade<T: paras::Config>(
 	new_code: ValidationCode,
 	set_go_ahead: UpgradeStrategy,
 ) -> DispatchResult {
-	paras::Pallet::<T>::schedule_code_upgrade_external(id, new_code, set_go_ahead)
+	paras::Pezpallet::<T>::schedule_code_upgrade_external(id, new_code, set_go_ahead)
 }
 
 /// Sets the current teyrchain head with the given id.
 pub fn set_current_head<T: paras::Config>(id: ParaId, new_head: HeadData) {
-	paras::Pallet::<T>::set_current_head(id, new_head)
+	paras::Pezpallet::<T>::set_current_head(id, new_head)
 }
 
 /// Ensure more initialization for `ParaId` when benchmarking. (e.g. open HRMP channels, ...)

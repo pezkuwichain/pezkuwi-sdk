@@ -31,30 +31,30 @@ use pezsp_runtime::BuildStorage;
 
 type Block = pezframe_system::mocking::MockBlock<Test>;
 
-#[pezframe_support::pallet]
+#[pezframe_support::pezpallet]
 mod dummy_pallet {
 	use pezframe_support::pezpallet_prelude::*;
 
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(4);
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type SomeStorage<T: Config> = StorageValue<_, u32, ValueQuery>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(pezframe_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		#[serde(skip)]
 		_config: core::marker::PhantomData<T>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {}
 	}

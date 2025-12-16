@@ -16,11 +16,11 @@
 // limitations under the License
 
 use super::composite_helper;
-use crate::construct_runtime::Pallet;
+use crate::construct_runtime::Pezpallet;
 use proc_macro2::TokenStream;
 use quote::quote;
 
-pub fn expand_outer_freeze_reason(pezpallet_decls: &[Pallet], scrate: &TokenStream) -> TokenStream {
+pub fn expand_outer_freeze_reason(pezpallet_decls: &[Pezpallet], scrate: &TokenStream) -> TokenStream {
 	let mut conversion_fns = Vec::new();
 	let mut freeze_reason_variants = Vec::new();
 	let mut freeze_reason_variants_count = Vec::new();

@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! I'm Online pallet benchmarking.
+//! I'm Online pezpallet benchmarking.
 
 #![cfg(feature = "runtime-benchmarks")]
 
@@ -83,7 +83,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			Pallet::<T>::validate_unsigned(TransactionSource::InBlock, &call)
+			Pezpallet::<T>::validate_unsigned(TransactionSource::InBlock, &call)
 				.map_err(<&str>::from)?;
 		}
 
@@ -100,7 +100,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			Pallet::<T>::validate_unsigned(TransactionSource::InBlock, &call)
+			Pezpallet::<T>::validate_unsigned(TransactionSource::InBlock, &call)
 				.map_err(<&str>::from)?;
 			<Call<T> as Decode>::decode(&mut &*call_enc)
 				.expect("call is encoded above, encoding must be correct")
@@ -111,7 +111,7 @@ mod benchmarks {
 	}
 
 	impl_benchmark_test_suite! {
-		Pallet,
+		Pezpallet,
 		mock::new_test_ext(),
 		mock::Runtime
 	}

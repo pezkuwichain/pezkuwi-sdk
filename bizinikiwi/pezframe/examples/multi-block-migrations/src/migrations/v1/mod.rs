@@ -19,12 +19,12 @@
 //!
 //! This module showcases a simple migration that iterates over the values in the
 //! [`v0::MyMap`](`crate::migrations::v1::v0::MyMap`) storage map, transforms them,
-//! and inserts them into the [`MyMap`](`crate::pallet::MyMap`) storage map.
+//! and inserts them into the [`MyMap`](`crate::pezpallet::MyMap`) storage map.
 
 extern crate alloc;
 
 use super::PALLET_MIGRATIONS_ID;
-use crate::pallet::{Config, MyMap};
+use crate::pezpallet::{Config, MyMap};
 use pezframe_support::{
 	migrations::{MigrationId, SteppedMigration, SteppedMigrationError},
 	pezpallet_prelude::PhantomData,
@@ -49,12 +49,12 @@ pub mod weights;
 // intended to be used by any other code.
 pub mod v0 {
 	use super::Config;
-	use crate::pallet::Pallet;
+	use crate::pezpallet::Pezpallet;
 	use pezframe_support::{storage_alias, Blake2_128Concat};
 
 	#[storage_alias]
 	/// The storage item that is being migrated from.
-	pub type MyMap<T: Config> = StorageMap<Pallet<T>, Blake2_128Concat, u32, u32>;
+	pub type MyMap<T: Config> = StorageMap<Pezpallet<T>, Blake2_128Concat, u32, u32>;
 }
 
 /// Migrates the items of the [`crate::MyMap`] map from `u32` to `u64`.

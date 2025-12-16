@@ -84,7 +84,7 @@ pub struct AhmPrioritizer {
 	favorite_queue_num_messages: Option<u64>,
 }
 
-// The whole `AhmPrioritizer` could be part of the AHM controller pallet.
+// The whole `AhmPrioritizer` could be part of the AHM controller pezpallet.
 parameter_types! {
 	pub storage AhmPrioritizerStorage: AhmPrioritizer = AhmPrioritizer::default();
 }
@@ -131,7 +131,7 @@ impl AhmPrioritizer {
 		}
 
 		// Our queue did not get a streak since 10 blocks. It must either be empty or starved:
-		if Pallet::<Test>::footprint(q).pages == 0 {
+		if Pezpallet::<Test>::footprint(q).pages == 0 {
 			return meter.consumed();
 		}
 		if this.streak_until.map_or(false, |until| until < now.saturating_sub(10)) {
@@ -140,7 +140,7 @@ impl AhmPrioritizer {
 		}
 
 		if this.streak_until.map_or(false, |until| until > now) {
-			let _ = Pallet::<Test>::force_set_head(&mut meter, &q).defensive();
+			let _ = Pezpallet::<Test>::force_set_head(&mut meter, &q).defensive();
 		}
 
 		meter.consumed()
@@ -569,7 +569,7 @@ fn next_block() -> Weight {
 	MessageQueue::on_initialize(System::block_number())
 }
 
-/// Assert that the pallet is in the expected post state.
+/// Assert that the pezpallet is in the expected post state.
 fn post_conditions() {
 	// All queues are empty.
 	for (_, book) in BookStateFor::<Test>::iter() {

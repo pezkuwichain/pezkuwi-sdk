@@ -15,14 +15,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Voting Pallet
+//! # Voting Pezpallet
 //!
 //! - [`Config`]
 //! - [`Call`]
 //!
 //! ## Overview
 //!
-//! Pallet for managing actual voting in polls.
+//! Pezpallet for managing actual voting in polls.
 
 #![recursion_limit = "256"]
 #![cfg_attr(not(feature = "std"), no_std)]
@@ -50,7 +50,7 @@ pub mod weights;
 
 pub use self::{
 	conviction::Conviction,
-	pallet::*,
+	pezpallet::*,
 	traits::{Status, VotingHooks},
 	types::{Delegations, Tally, UnvoteScope},
 	vote::{AccountVote, Casting, Delegating, Vote, Voting},
@@ -89,8 +89,8 @@ pub type PollIndexOf<T, I = ()> = <<T as Config<I>>::Polls as Polling<TallyOf<T,
 pub type IndexOf<T, I = ()> = <<T as Config<I>>::Polls as Polling<TallyOf<T, I>>>::Index;
 pub type ClassOf<T, I = ()> = <<T as Config<I>>::Polls as Polling<TallyOf<T, I>>>::Class;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::{
 		pezpallet_prelude::{
@@ -102,16 +102,16 @@ pub mod pallet {
 	use pezframe_system::pezpallet_prelude::{ensure_signed, OriginFor};
 	use pezsp_runtime::BoundedVec;
 
-	#[pallet::pallet]
-	pub struct Pallet<T, I = ()>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T, I = ()>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config + Sized {
 		// System level stuff.
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self, I>>
 			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 		/// Currency type with which voting happens.
 		type Currency: ReservableCurrency<Self::AccountId>
@@ -134,16 +134,16 @@ pub mod pallet {
 		///
 		/// Also used to compute weight, an overly large value can lead to extrinsics with large
 		/// weight estimation: see `delegate` for instance.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxVotes: Get<u32>;
 
 		/// The minimum period of vote locking.
 		///
 		/// It should be no shorter than enactment period to ensure that in the case of an approval,
 		/// those successful voters are locked into the consequences that their votes entail.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type VoteLockingPeriod: Get<BlockNumberFor<Self, I>>;
-		/// Provider for the block number. Normally this is the `pezframe_system` pallet.
+		/// Provider for the block number. Normally this is the `pezframe_system` pezpallet.
 		type BlockNumberProvider: BlockNumberProvider;
 		/// Hooks are called when a new vote is registered or an existing vote is removed.
 		///
@@ -161,7 +161,7 @@ pub mod pallet {
 
 	/// All voting for a particular voter in a particular voting class. We store the balance for the
 	/// number of votes that we have recorded.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type VotingFor<T: Config<I>, I: 'static = ()> = StorageDoubleMap<
 		_,
 		Twox64Concat,
@@ -173,9 +173,9 @@ pub mod pallet {
 	>;
 
 	/// The voting classes which have a non-zero lock requirement and the lock amounts which they
-	/// require. The actual amount locked on behalf of this pallet should always be the maximum of
+	/// require. The actual amount locked on behalf of this pezpallet should always be the maximum of
 	/// this list.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ClassLocksFor<T: Config<I>, I: 'static = ()> = StorageMap<
 		_,
 		Twox64Concat,
@@ -184,8 +184,8 @@ pub mod pallet {
 		ValueQuery,
 	>;
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config<I>, I: 'static = ()> {
 		/// An account has delegated their vote to another account. \[who, target\]
 		Delegated(T::AccountId, T::AccountId, ClassOf<T, I>),
@@ -207,7 +207,7 @@ pub mod pallet {
 		VoteUnlocked { who: T::AccountId, class: ClassOf<T, I> },
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T, I = ()> {
 		/// Poll is not ongoing.
 		NotOngoing,
@@ -236,8 +236,8 @@ pub mod pallet {
 		BadClass,
 	}
 
-	#[pallet::call]
-	impl<T: Config<I>, I: 'static> Pallet<T, I> {
+	#[pezpallet::call]
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 		/// Vote in a poll. If `vote.is_aye()`, the vote is to enact the proposal;
 		/// otherwise it is a vote to keep the status quo.
 		///
@@ -247,11 +247,11 @@ pub mod pallet {
 		/// - `vote`: The vote configuration.
 		///
 		/// Weight: `O(R)` where R is the number of polls the voter has voted on.
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::vote_new().max(T::WeightInfo::vote_existing()))]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::vote_new().max(T::WeightInfo::vote_existing()))]
 		pub fn vote(
 			origin: OriginFor<T>,
-			#[pallet::compact] poll_index: PollIndexOf<T, I>,
+			#[pezpallet::compact] poll_index: PollIndexOf<T, I>,
 			vote: AccountVote<BalanceOf<T, I>>,
 		) -> DispatchResult {
 			let who = ensure_signed(origin)?;
@@ -283,8 +283,8 @@ pub mod pallet {
 		///   voted on. Weight is initially charged as if maximum votes, but is refunded later.
 		// NOTE: weight must cover an incorrect voting of origin with max votes, this is ensure
 		// because a valid delegation cover decoding a direct voting with max votes.
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::delegate(T::MaxVotes::get()))]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::delegate(T::MaxVotes::get()))]
 		pub fn delegate(
 			origin: OriginFor<T>,
 			class: ClassOf<T, I>,
@@ -315,8 +315,8 @@ pub mod pallet {
 		///   voted on. Weight is initially charged as if maximum votes, but is refunded later.
 		// NOTE: weight must cover an incorrect voting of origin with max votes, this is ensure
 		// because a valid delegation cover decoding a direct voting with max votes.
-		#[pallet::call_index(2)]
-		#[pallet::weight(T::WeightInfo::undelegate(T::MaxVotes::get().into()))]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(T::WeightInfo::undelegate(T::MaxVotes::get().into()))]
 		pub fn undelegate(
 			origin: OriginFor<T>,
 			class: ClassOf<T, I>,
@@ -335,8 +335,8 @@ pub mod pallet {
 		/// - `target`: The account to remove the lock on.
 		///
 		/// Weight: `O(R)` with R number of vote of target.
-		#[pallet::call_index(3)]
-		#[pallet::weight(T::WeightInfo::unlock())]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(T::WeightInfo::unlock())]
 		pub fn unlock(
 			origin: OriginFor<T>,
 			class: ClassOf<T, I>,
@@ -378,8 +378,8 @@ pub mod pallet {
 		///
 		/// Weight: `O(R + log R)` where R is the number of polls that `target` has voted on.
 		///   Weight is calculated for the maximum number of vote.
-		#[pallet::call_index(4)]
-		#[pallet::weight(T::WeightInfo::remove_vote())]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(T::WeightInfo::remove_vote())]
 		pub fn remove_vote(
 			origin: OriginFor<T>,
 			class: Option<ClassOf<T, I>>,
@@ -405,8 +405,8 @@ pub mod pallet {
 		///
 		/// Weight: `O(R + log R)` where R is the number of polls that `target` has voted on.
 		///   Weight is calculated for the maximum number of vote.
-		#[pallet::call_index(5)]
-		#[pallet::weight(T::WeightInfo::remove_other_vote())]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(T::WeightInfo::remove_other_vote())]
 		pub fn remove_other_vote(
 			origin: OriginFor<T>,
 			target: AccountIdLookupOf<T>,
@@ -422,7 +422,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config<I>, I: 'static> Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 	/// Actually enact a vote, if legit.
 	fn try_vote(
 		who: &T::AccountId,

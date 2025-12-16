@@ -2,9 +2,9 @@
 
 The Balances module provides functionality for handling accounts and balances.
 
-- [`Config`](https://docs.rs/pezpallet-balances/latest/pallet_balances/pallet/trait.Config.html)
-- [`Call`](https://docs.rs/pezpallet-balances/latest/pallet_balances/pallet/enum.Call.html)
-- [`Pallet`](https://docs.rs/pezpallet-balances/latest/pallet_balances/pallet/struct.Pallet.html)
+- [`Config`](https://docs.rs/pezpallet-balances/latest/pallet_balances/pezpallet/trait.Config.html)
+- [`Call`](https://docs.rs/pezpallet-balances/latest/pallet_balances/pezpallet/enum.Call.html)
+- [`Pezpallet`](https://docs.rs/pezpallet-balances/latest/pallet_balances/pezpallet/struct.Pezpallet.html)
 
 ## Overview
 
@@ -113,7 +113,7 @@ fn update_ledger<T: Config>(
 ## Genesis config
 
 The Balances module depends on the
-[`GenesisConfig`](https://docs.rs/pezpallet-balances/latest/pallet_balances/pallet/struct.GenesisConfig.html).
+[`GenesisConfig`](https://docs.rs/pezpallet-balances/latest/pallet_balances/pezpallet/struct.GenesisConfig.html).
 
 ## Assumptions
 

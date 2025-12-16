@@ -579,8 +579,8 @@ fn sufficients_work_properly_with_reference_counting() {
 		.existential_deposit(1)
 		.monied(true)
 		.build_and_execute_with(|| {
-			// Only run PoC when the system pallet is enabled, since the underlying bug is in the
-			// system pallet it won't work with BalancesAccountStore
+			// Only run PoC when the system pezpallet is enabled, since the underlying bug is in the
+			// system pezpallet it won't work with BalancesAccountStore
 			if UseSystem::get() {
 				// Start with a balance of 100
 				<Balances as fungible::Mutate<_>>::set_balance(&1, 100);

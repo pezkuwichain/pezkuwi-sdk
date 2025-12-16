@@ -193,7 +193,7 @@ impl ContainsPair<Asset, Location> for NativeTokenToAssetHub {
 
 /// Teyrchain id of Asset Hub.
 pub const ASSET_HUB_PARA_ID: u32 = 1000;
-/// The instance index of the trust-backed assets pallet in Asset Hub.
+/// The instance index of the trust-backed assets pezpallet in Asset Hub.
 pub const ASSET_HUB_ASSETS_PALLET_INSTANCE: u8 = 50;
 /// Id of USDT in Asset Hub.
 pub const USDT_ID: u32 = 1984;
@@ -598,18 +598,18 @@ pezsp_api::mock_impl_runtime_apis! {
 			call: RuntimeCall,
 			result_xcms_version: XcmVersion,
 		) -> Result<CallDryRunEffects<RuntimeEvent>, XcmDryRunApiError> {
-			pezpallet_xcm::Pallet::<TestRuntime>::dry_run_call::<TestRuntime, XcmRouter, OriginCaller, RuntimeCall>(origin, call, result_xcms_version)
+			pezpallet_xcm::Pezpallet::<TestRuntime>::dry_run_call::<TestRuntime, XcmRouter, OriginCaller, RuntimeCall>(origin, call, result_xcms_version)
 		}
 
 		fn dry_run_call_before_version_2(
 			origin: OriginCaller,
 			call: RuntimeCall,
 		) -> Result<CallDryRunEffects<RuntimeEvent>, XcmDryRunApiError> {
-			pezpallet_xcm::Pallet::<TestRuntime>::dry_run_call::<TestRuntime, XcmRouter, OriginCaller, RuntimeCall>(origin, call, xcm::latest::VERSION)
+			pezpallet_xcm::Pezpallet::<TestRuntime>::dry_run_call::<TestRuntime, XcmRouter, OriginCaller, RuntimeCall>(origin, call, xcm::latest::VERSION)
 		}
 
 		fn dry_run_xcm(origin_location: VersionedLocation, xcm: VersionedXcm<RuntimeCall>) -> Result<XcmDryRunEffects<RuntimeEvent>, XcmDryRunApiError> {
-			pezpallet_xcm::Pallet::<TestRuntime>::dry_run_xcm::<XcmRouter>(origin_location, xcm)
+			pezpallet_xcm::Pezpallet::<TestRuntime>::dry_run_xcm::<XcmRouter>(origin_location, xcm)
 		}
 	}
 }

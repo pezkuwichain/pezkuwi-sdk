@@ -25,16 +25,16 @@ use pezsp_runtime::OpaqueExtrinsic;
 pub struct ExtrinsicFactory(pub Vec<Box<dyn ExtrinsicBuilder>>);
 
 impl ExtrinsicFactory {
-	/// Returns a builder for a pallet and extrinsic name.
+	/// Returns a builder for a pezpallet and extrinsic name.
 	///
 	/// Is case in-sensitive.
-	pub fn try_get(&self, pallet: &str, extrinsic: &str) -> Option<&dyn ExtrinsicBuilder> {
-		let pallet = pallet.to_lowercase();
+	pub fn try_get(&self, pezpallet: &str, extrinsic: &str) -> Option<&dyn ExtrinsicBuilder> {
+		let pezpallet = pezpallet.to_lowercase();
 		let extrinsic = extrinsic.to_lowercase();
 
 		self.0
 			.iter()
-			.find(|b| b.pallet() == pallet && b.extrinsic() == extrinsic)
+			.find(|b| b.pezpallet() == pezpallet && b.extrinsic() == extrinsic)
 			.map(|b| b.as_ref())
 	}
 }
@@ -46,10 +46,10 @@ impl ExtrinsicFactory {
 /// This assumption simplifies the generation of the extrinsics.
 /// The signer should be one of the pre-funded dev accounts.
 pub trait ExtrinsicBuilder {
-	/// Name of the pallet this builder is for.
+	/// Name of the pezpallet this builder is for.
 	///
 	/// Should be all lowercase.
-	fn pallet(&self) -> &str;
+	fn pezpallet(&self) -> &str;
 
 	/// Name of the extrinsic this builder is for.
 	///
@@ -63,8 +63,8 @@ pub trait ExtrinsicBuilder {
 }
 
 impl dyn ExtrinsicBuilder + '_ {
-	/// Name of this builder in CSV format: `pallet, extrinsic`.
+	/// Name of this builder in CSV format: `pezpallet, extrinsic`.
 	pub fn name(&self) -> String {
-		format!("{}, {}", self.pallet(), self.extrinsic())
+		format!("{}, {}", self.pezpallet(), self.extrinsic())
 	}
 }

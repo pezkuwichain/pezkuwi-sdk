@@ -1,13 +1,13 @@
 # asset-conversion
 
-## A swap pallet
+## A swap pezpallet
 
-This pallet allows assets to be converted from one type to another by means of a constant product formula.
-The pallet based is based on [Uniswap V2](https://github.com/Uniswap/v2-core) logic.
+This pezpallet allows assets to be converted from one type to another by means of a constant product formula.
+The pezpallet based is based on [Uniswap V2](https://github.com/Uniswap/v2-core) logic.
 
 ### Overview
 
-This pallet allows you to:
+This pezpallet allows you to:
 
   - create a liquidity pool for 2 assets
   - provide the liquidity and receive back an LP token

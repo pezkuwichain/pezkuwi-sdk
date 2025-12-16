@@ -2,12 +2,12 @@
 use super::*;
 
 #[allow(unused)]
-use crate::Pallet as Tiki;
+use crate::Pezpallet as Tiki;
 use pezframe_benchmarking::v2::*;
 use pezframe_system::RawOrigin;
 // Gerekli trait'leri import ediyoruz
 use pezframe_support::traits::{Currency, Get};
-use pezpallet_balances::Pallet as Balances;
+use pezpallet_balances::Pezpallet as Balances;
 use pezsp_runtime::traits::StaticLookup;
 extern crate alloc;
 use alloc::vec;
@@ -38,7 +38,7 @@ mod benchmarks {
 
 		// `while` döngüsü, 'Step' trait'ine olan ihtiyacı ortadan kaldırır.
 		while pezpallet_nfts::NextCollectionId::<T>::get().unwrap_or_default() <= collection_id {
-			let _ = pezpallet_nfts::Pallet::<T>::force_create(
+			let _ = pezpallet_nfts::Pezpallet::<T>::force_create(
 				RawOrigin::Root.into(),
 				T::Lookup::unlookup(caller.clone()),
 				pezpallet_nfts::CollectionConfig {

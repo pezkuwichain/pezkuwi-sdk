@@ -82,14 +82,14 @@ where
 	B: Block,
 	BE: AuxStore,
 {
-	// Initialize gadget best_canon from AUX DB or from pallet genesis.
+	// Initialize gadget best_canon from AUX DB or from pezpallet genesis.
 	if let Some(best) = load_state::<B, BE>(backend)? {
 		info!(target: LOG_TARGET, "Loading MMR best canonicalized state from db: {:?}.", best);
 		Ok(best)
 	} else {
 		info!(
 			target: LOG_TARGET,
-			"Loading MMR from pallet genesis on what appears to be the first startup: {:?}.",
+			"Loading MMR from pezpallet genesis on what appears to be the first startup: {:?}.",
 			default
 		);
 		write_current_version(backend)?;

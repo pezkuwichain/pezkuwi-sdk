@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Tests for NIS pallet.
+//! Tests for NIS pezpallet.
 
 use frame::testing_prelude::*;
 

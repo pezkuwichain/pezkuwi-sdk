@@ -15,9 +15,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Node authorization pallet
+//! # Node authorization pezpallet
 //!
-//! This pallet manages a configurable set of nodes for a permissioned network.
+//! This pezpallet manages a configurable set of nodes for a permissioned network.
 //! Each node is identified by a PeerId (i.e. `Vec<u8>`). It provides two ways to
 //! authorize a node,
 //!
@@ -29,7 +29,7 @@
 //! A node must have an owner. The owner can additionally change the connections
 //! for the node. Only one user is allowed to claim a specific node. To eliminate
 //! false claim, the maintainer of the node should claim it before even starting the
-//! node. This pallet uses offchain worker to set reserved nodes, if the node is not
+//! node. This pezpallet uses offchain worker to set reserved nodes, if the node is not
 //! an authority, make sure to enable offchain worker with the right CLI flag. The
 //! node can be lagged with the latest block, in this case you need to disable offchain
 //! worker and manually set reserved nodes when starting it.
@@ -53,32 +53,32 @@ use frame::{
 	deps::{pezsp_core::OpaquePeerId as PeerId, pezsp_io},
 	prelude::*,
 };
-pub use pallet::*;
+pub use pezpallet::*;
 pub use weights::WeightInfo;
 
 type AccountIdLookupOf<T> = <<T as pezframe_system::Config>::Lookup as StaticLookup>::Source;
 
-#[frame::pallet]
-pub mod pallet {
+#[frame::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::pallet]
-	#[pallet::without_storage_info]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::without_storage_info]
+	pub struct Pezpallet<T>(_);
 
 	/// The module configuration trait
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// The maximum number of well known nodes that are allowed to set
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxWellKnownNodes: Get<u32>;
 
 		/// The maximum length in bytes of PeerId
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxPeerIdLength: Get<u32>;
 
 		/// The origin which can add a well known node.
@@ -93,41 +93,41 @@ pub mod pallet {
 		/// The origin which can reset the well known nodes.
 		type ResetOrigin: EnsureOrigin<Self::RuntimeOrigin>;
 
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 	}
 
 	/// The set of well known nodes. This is stored sorted (just by value).
-	#[pallet::storage]
-	#[pallet::getter(fn well_known_nodes)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn well_known_nodes)]
 	pub type WellKnownNodes<T> = StorageValue<_, BTreeSet<PeerId>, ValueQuery>;
 
 	/// A map that maintains the ownership of each node.
-	#[pallet::storage]
-	#[pallet::getter(fn owners)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn owners)]
 	pub type Owners<T: Config> = StorageMap<_, Blake2_128Concat, PeerId, T::AccountId>;
 
 	/// The additional adaptive connections of each node.
-	#[pallet::storage]
-	#[pallet::getter(fn additional_connection)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn additional_connection)]
 	pub type AdditionalConnections<T> =
 		StorageMap<_, Blake2_128Concat, PeerId, BTreeSet<PeerId>, ValueQuery>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		pub nodes: Vec<(PeerId, T::AccountId)>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
-			Pallet::<T>::initialize_nodes(&self.nodes);
+			Pezpallet::<T>::initialize_nodes(&self.nodes);
 		}
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// The given well known node was added.
 		NodeAdded { peer_id: PeerId, who: T::AccountId },
@@ -150,7 +150,7 @@ pub mod pallet {
 		ConnectionsRemoved { peer_id: PeerId, allowed_connections: Vec<PeerId> },
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// The PeerId is too long.
 		PeerIdTooLong,
@@ -170,8 +170,8 @@ pub mod pallet {
 		PermissionDenied,
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		/// Set reserved node every block. It may not be enabled depends on the offchain
 		/// worker settings when starting the node.
 		fn offchain_worker(now: BlockNumberFor<T>) {
@@ -200,16 +200,16 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Add a node to the set of well known nodes. If the node is already claimed, the owner
 		/// will be updated and keep the existing additional connection unchanged.
 		///
 		/// May only be called from `T::AddOrigin`.
 		///
 		/// - `node`: identifier of the node.
-		#[pallet::call_index(0)]
-		#[pallet::weight((T::WeightInfo::add_well_known_node(), DispatchClass::Operational))]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight((T::WeightInfo::add_well_known_node(), DispatchClass::Operational))]
 		pub fn add_well_known_node(
 			origin: OriginFor<T>,
 			node: PeerId,
@@ -238,8 +238,8 @@ pub mod pallet {
 		/// May only be called from `T::RemoveOrigin`.
 		///
 		/// - `node`: identifier of the node.
-		#[pallet::call_index(1)]
-		#[pallet::weight((T::WeightInfo::remove_well_known_node(), DispatchClass::Operational))]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight((T::WeightInfo::remove_well_known_node(), DispatchClass::Operational))]
 		pub fn remove_well_known_node(origin: OriginFor<T>, node: PeerId) -> DispatchResult {
 			T::RemoveOrigin::ensure_origin(origin)?;
 			ensure!(node.0.len() < T::MaxPeerIdLength::get() as usize, Error::<T>::PeerIdTooLong);
@@ -264,8 +264,8 @@ pub mod pallet {
 		///
 		/// - `remove`: the node which will be moved out from the list.
 		/// - `add`: the node which will be put in the list.
-		#[pallet::call_index(2)]
-		#[pallet::weight((T::WeightInfo::swap_well_known_node(), DispatchClass::Operational))]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight((T::WeightInfo::swap_well_known_node(), DispatchClass::Operational))]
 		pub fn swap_well_known_node(
 			origin: OriginFor<T>,
 			remove: PeerId,
@@ -301,8 +301,8 @@ pub mod pallet {
 		/// May only be called from `T::ResetOrigin`.
 		///
 		/// - `nodes`: the new nodes for the allow list.
-		#[pallet::call_index(3)]
-		#[pallet::weight((T::WeightInfo::reset_well_known_nodes(), DispatchClass::Operational))]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight((T::WeightInfo::reset_well_known_nodes(), DispatchClass::Operational))]
 		pub fn reset_well_known_nodes(
 			origin: OriginFor<T>,
 			nodes: Vec<(PeerId, T::AccountId)>,
@@ -320,8 +320,8 @@ pub mod pallet {
 		/// PeerId, so claim it right away!
 		///
 		/// - `node`: identifier of the node.
-		#[pallet::call_index(4)]
-		#[pallet::weight(T::WeightInfo::claim_node())]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(T::WeightInfo::claim_node())]
 		pub fn claim_node(origin: OriginFor<T>, node: PeerId) -> DispatchResult {
 			let sender = ensure_signed(origin)?;
 
@@ -338,8 +338,8 @@ pub mod pallet {
 		/// needs to reach consensus among the network participants.
 		///
 		/// - `node`: identifier of the node.
-		#[pallet::call_index(5)]
-		#[pallet::weight(T::WeightInfo::remove_claim())]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(T::WeightInfo::remove_claim())]
 		pub fn remove_claim(origin: OriginFor<T>, node: PeerId) -> DispatchResult {
 			let sender = ensure_signed(origin)?;
 
@@ -359,8 +359,8 @@ pub mod pallet {
 		///
 		/// - `node`: identifier of the node.
 		/// - `owner`: new owner of the node.
-		#[pallet::call_index(6)]
-		#[pallet::weight(T::WeightInfo::transfer_node())]
+		#[pezpallet::call_index(6)]
+		#[pezpallet::weight(T::WeightInfo::transfer_node())]
 		pub fn transfer_node(
 			origin: OriginFor<T>,
 			node: PeerId,
@@ -383,8 +383,8 @@ pub mod pallet {
 		///
 		/// - `node`: identifier of the node.
 		/// - `connections`: additional nodes from which the connections are allowed.
-		#[pallet::call_index(7)]
-		#[pallet::weight(T::WeightInfo::add_connections())]
+		#[pezpallet::call_index(7)]
+		#[pezpallet::weight(T::WeightInfo::add_connections())]
 		pub fn add_connections(
 			origin: OriginFor<T>,
 			node: PeerId,
@@ -418,8 +418,8 @@ pub mod pallet {
 		///
 		/// - `node`: identifier of the node.
 		/// - `connections`: additional nodes from which the connections are not allowed anymore.
-		#[pallet::call_index(8)]
-		#[pallet::weight(T::WeightInfo::remove_connections())]
+		#[pezpallet::call_index(8)]
+		#[pezpallet::weight(T::WeightInfo::remove_connections())]
 		pub fn remove_connections(
 			origin: OriginFor<T>,
 			node: PeerId,
@@ -448,7 +448,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	fn initialize_nodes(nodes: &Vec<(PeerId, T::AccountId)>) {
 		let peer_ids = nodes.iter().map(|item| item.0.clone()).collect::<BTreeSet<PeerId>>();
 		WellKnownNodes::<T>::put(&peer_ids);

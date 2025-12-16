@@ -13,7 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Tests for the validation of `pezpallet_xcm::Pallet::<T>::transfer_assets`.
+//! Tests for the validation of `pezpallet_xcm::Pezpallet::<T>::transfer_assets`.
 //! See the `pezpallet_xcm::transfer_assets_validation` module for more information.
 
 use crate::imports::*;

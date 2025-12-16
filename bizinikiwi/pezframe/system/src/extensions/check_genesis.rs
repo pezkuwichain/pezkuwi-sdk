@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use crate::{pezpallet_prelude::BlockNumberFor, Config, Pallet};
+use crate::{pezpallet_prelude::BlockNumberFor, Config, Pezpallet};
 use codec::{Decode, DecodeWithMemTracking, Encode};
 use scale_info::TypeInfo;
 use pezsp_runtime::{
@@ -57,7 +57,7 @@ impl<T: Config + Send + Sync> TransactionExtension<T::RuntimeCall> for CheckGene
 	const IDENTIFIER: &'static str = "CheckGenesis";
 	type Implicit = T::Hash;
 	fn implicit(&self) -> Result<Self::Implicit, TransactionValidityError> {
-		Ok(<Pallet<T>>::block_hash(BlockNumberFor::<T>::zero()))
+		Ok(<Pezpallet<T>>::block_hash(BlockNumberFor::<T>::zero()))
 	}
 	type Val = ();
 	type Pre = ();

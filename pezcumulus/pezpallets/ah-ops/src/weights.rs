@@ -26,9 +26,9 @@
 // frame-omni-bencher
 // v1
 // benchmark
-// pallet
+// pezpallet
 // --runtime=target/production/wbuild/asset-hub-pezkuwi-runtime/asset_hub_pezkuwi_runtime.wasm
-// --pallet
+// --pezpallet
 // pezpallet-ah-ops
 // --extrinsic
 // *

@@ -21,11 +21,11 @@ use alloc::{vec, vec::Vec};
 use codec::Encode;
 use pezframe_benchmarking::v2::*;
 use pezframe_support::{dispatch::DispatchClass, storage, traits::Get};
-use pezframe_system::{Call, Pallet as System, RawOrigin};
+use pezframe_system::{Call, Pezpallet as System, RawOrigin};
 use pezsp_core::storage::well_known_keys;
 use pezsp_runtime::traits::Hash;
 
-pub struct Pallet<T: Config>(System<T>);
+pub struct Pezpallet<T: Config>(System<T>);
 pub trait Config: pezframe_system::Config {
 	/// Adds ability to the Runtime to test against their sample code.
 	///
@@ -226,5 +226,5 @@ mod benchmarks {
 		Ok(())
 	}
 
-	impl_benchmark_test_suite!(Pallet, crate::mock::new_test_ext(), crate::mock::Test);
+	impl_benchmark_test_suite!(Pezpallet, crate::mock::new_test_ext(), crate::mock::Test);
 }

@@ -491,7 +491,7 @@ pub fn run() -> Result<()> {
 					cmd.run(client.clone(), inherent_data, Vec::new(), &ext_factory)
 						.map_err(Error::BizinikiwiCli)
 				}),
-				BenchmarkCmd::Pallet(cmd) => {
+				BenchmarkCmd::Pezpallet(cmd) => {
 					set_default_ss58_version(chain_spec);
 
 					if cfg!(feature = "runtime-benchmarks") {

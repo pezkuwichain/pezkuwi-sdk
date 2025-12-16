@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Benchmarks for the contracts pallet
+//! Benchmarks for the contracts pezpallet
 #![cfg(feature = "runtime-benchmarks")]
 
 mod call_builder;
@@ -33,7 +33,7 @@ use crate::{
 	},
 	storage::WriteOutcome,
 	wasm::BenchEnv,
-	Pallet as Contracts, *,
+	Pezpallet as Contracts, *,
 };
 use alloc::{vec, vec::Vec};
 use codec::{Encode, MaxEncodedLen};
@@ -101,7 +101,7 @@ where
 		module: WasmModule<T>,
 		data: Vec<u8>,
 	) -> Result<Contract<T>, &'static str> {
-		let value = Pallet::<T>::min_balance();
+		let value = Pezpallet::<T>::min_balance();
 		T::Currency::set_balance(&caller, caller_funding::<T>());
 		let salt = vec![0xff];
 		let addr = Contracts::<T>::contract_address(&caller, &module.hash, &data, &salt);
@@ -223,8 +223,8 @@ fn caller_funding<T: Config>() -> BalanceOf<T> {
 	where
 		<BalanceOf<T> as codec::HasCompact>::Type: Clone + Eq + PartialEq + core::fmt::Debug + scale_info::TypeInfo + codec::Encode,
 		T: Config + pezpallet_balances::Config,
-		BalanceOf<T>: From<<pezpallet_balances::Pallet<T> as Currency<T::AccountId>>::Balance>,
-		<pezpallet_balances::Pallet<T> as Currency<T::AccountId>>::Balance: From<BalanceOf<T>>,
+		BalanceOf<T>: From<<pezpallet_balances::Pezpallet<T> as Currency<T::AccountId>>::Balance>,
+		<pezpallet_balances::Pezpallet<T> as Currency<T::AccountId>>::Balance: From<BalanceOf<T>>,
 )]
 mod benchmarks {
 	use super::*;
@@ -272,11 +272,11 @@ mod benchmarks {
 		let contract =
 			<Contract<T>>::with_caller(whitelisted_caller(), WasmModule::dummy(), vec![])?;
 
-		v10::store_old_contract_info::<T, pezpallet_balances::Pallet<T>>(
+		v10::store_old_contract_info::<T, pezpallet_balances::Pezpallet<T>>(
 			contract.account_id.clone(),
 			contract.info()?,
 		);
-		let mut m = v10::Migration::<T, pezpallet_balances::Pallet<T>>::default();
+		let mut m = v10::Migration::<T, pezpallet_balances::Pezpallet<T>>::default();
 
 		#[block]
 		{
@@ -304,11 +304,11 @@ mod benchmarks {
 	// and repay deposits).
 	#[benchmark(pov_mode = Measured)]
 	fn v12_migration_step(c: Linear<0, { T::MaxCodeLen::get() }>) {
-		v12::store_old_dummy_code::<T, pezpallet_balances::Pallet<T>>(
+		v12::store_old_dummy_code::<T, pezpallet_balances::Pezpallet<T>>(
 			c as usize,
 			account::<T::AccountId>("account", 0, 0),
 		);
-		let mut m = v12::Migration::<T, pezpallet_balances::Pallet<T>>::default();
+		let mut m = v12::Migration::<T, pezpallet_balances::Pezpallet<T>>::default();
 
 		#[block]
 		{
@@ -338,8 +338,8 @@ mod benchmarks {
 	fn v14_migration_step() {
 		let account = account::<T::AccountId>("account", 0, 0);
 		T::Currency::set_balance(&account, caller_funding::<T>());
-		v14::store_dummy_code::<T, pezpallet_balances::Pallet<T>>(account);
-		let mut m = v14::Migration::<T, pezpallet_balances::Pallet<T>>::default();
+		v14::store_dummy_code::<T, pezpallet_balances::Pezpallet<T>>(account);
+		let mut m = v14::Migration::<T, pezpallet_balances::Pezpallet<T>>::default();
 
 		#[block]
 		{
@@ -378,7 +378,7 @@ mod benchmarks {
 		{
 			m.step(&mut WeightMeter::new());
 		}
-		let ed = Pallet::<T>::min_balance();
+		let ed = Pezpallet::<T>::min_balance();
 		let info = v16::ContractInfoOf::<T>::get(&contract.account_id).unwrap();
 		assert_eq!(info.storage_base_deposit, base_deposit - ed);
 		Ok(())
@@ -388,25 +388,25 @@ mod benchmarks {
 	#[benchmark(pov_mode = Measured)]
 	fn migration_noop() {
 		let version = LATEST_MIGRATION_VERSION;
-		StorageVersion::new(version).put::<Pallet<T>>();
+		StorageVersion::new(version).put::<Pezpallet<T>>();
 		#[block]
 		{
 			Migration::<T>::migrate(&mut WeightMeter::new());
 		}
-		assert_eq!(StorageVersion::get::<Pallet<T>>(), version);
+		assert_eq!(StorageVersion::get::<Pezpallet<T>>(), version);
 	}
 
 	// This benchmarks the weight of dispatching migrate to execute 1 `NoopMigration`
 	#[benchmark(pov_mode = Measured)]
 	fn migrate() {
 		let latest_version = LATEST_MIGRATION_VERSION;
-		StorageVersion::new(latest_version - 2).put::<Pallet<T>>();
+		StorageVersion::new(latest_version - 2).put::<Pezpallet<T>>();
 		<Migration<T, false> as pezframe_support::traits::OnRuntimeUpgrade>::on_runtime_upgrade();
 
 		#[extrinsic_call]
 		_(RawOrigin::Signed(whitelisted_caller()), Weight::MAX);
 
-		assert_eq!(StorageVersion::get::<Pallet<T>>(), latest_version - 1);
+		assert_eq!(StorageVersion::get::<Pezpallet<T>>(), latest_version - 1);
 	}
 
 	// This benchmarks the weight of running on_runtime_upgrade when there are no migration in
@@ -414,7 +414,7 @@ mod benchmarks {
 	#[benchmark(pov_mode = Measured)]
 	fn on_runtime_upgrade_noop() {
 		let latest_version = LATEST_MIGRATION_VERSION;
-		StorageVersion::new(latest_version).put::<Pallet<T>>();
+		StorageVersion::new(latest_version).put::<Pezpallet<T>>();
 		#[block]
 		{
 			<Migration<T, false> as pezframe_support::traits::OnRuntimeUpgrade>::on_runtime_upgrade();
@@ -427,7 +427,7 @@ mod benchmarks {
 	#[benchmark(pov_mode = Measured)]
 	fn on_runtime_upgrade_in_progress() {
 		let latest_version = LATEST_MIGRATION_VERSION;
-		StorageVersion::new(latest_version - 2).put::<Pallet<T>>();
+		StorageVersion::new(latest_version - 2).put::<Pezpallet<T>>();
 		let v = vec![42u8].try_into().ok();
 		MigrationInProgress::<T>::set(v.clone());
 		#[block]
@@ -443,7 +443,7 @@ mod benchmarks {
 	#[benchmark(pov_mode = Measured)]
 	fn on_runtime_upgrade() {
 		let latest_version = LATEST_MIGRATION_VERSION;
-		StorageVersion::new(latest_version - 2).put::<Pallet<T>>();
+		StorageVersion::new(latest_version - 2).put::<Pezpallet<T>>();
 		#[block]
 		{
 			<Migration<T, false> as pezframe_support::traits::OnRuntimeUpgrade>::on_runtime_upgrade();
@@ -466,7 +466,7 @@ mod benchmarks {
 			WasmModule::sized(c, Location::Deploy, false),
 			vec![],
 		)?;
-		let value = Pallet::<T>::min_balance();
+		let value = Pezpallet::<T>::min_balance();
 		let callee = instance.addr;
 
 		#[extrinsic_call]
@@ -486,7 +486,7 @@ mod benchmarks {
 	) {
 		let input = vec![42u8; i as usize];
 		let salt = vec![42u8; s as usize];
-		let value = Pallet::<T>::min_balance();
+		let value = Pezpallet::<T>::min_balance();
 		let caller = whitelisted_caller();
 		T::Currency::set_balance(&caller, caller_funding::<T>());
 		let WasmModule { code, hash, .. } = WasmModule::<T>::sized(c, Location::Call, false);
@@ -502,10 +502,10 @@ mod benchmarks {
 			T::Currency::balance_on_hold(&HoldReason::CodeUploadDepositReserve.into(), &caller);
 		assert_eq!(
 			T::Currency::balance(&caller),
-			caller_funding::<T>() - value - deposit - code_deposit - Pallet::<T>::min_balance(),
+			caller_funding::<T>() - value - deposit - code_deposit - Pezpallet::<T>::min_balance(),
 		);
 		// contract has the full value
-		assert_eq!(T::Currency::balance(&addr), value + Pallet::<T>::min_balance());
+		assert_eq!(T::Currency::balance(&addr), value + Pezpallet::<T>::min_balance());
 	}
 
 	// `i`: Size of the input in bytes.
@@ -517,7 +517,7 @@ mod benchmarks {
 	) -> Result<(), BenchmarkError> {
 		let input = vec![42u8; i as usize];
 		let salt = vec![42u8; s as usize];
-		let value = Pallet::<T>::min_balance();
+		let value = Pezpallet::<T>::min_balance();
 		let caller = whitelisted_caller();
 		T::Currency::set_balance(&caller, caller_funding::<T>());
 		let WasmModule { code, hash, .. } = WasmModule::<T>::dummy();
@@ -532,10 +532,10 @@ mod benchmarks {
 		// value was removed from the caller
 		assert_eq!(
 			T::Currency::balance(&caller),
-			caller_funding::<T>() - value - deposit - Pallet::<T>::min_balance(),
+			caller_funding::<T>() - value - deposit - Pezpallet::<T>::min_balance(),
 		);
 		// contract has the full value
-		assert_eq!(T::Currency::balance(&addr), value + Pallet::<T>::min_balance());
+		assert_eq!(T::Currency::balance(&addr), value + Pezpallet::<T>::min_balance());
 
 		Ok(())
 	}
@@ -552,7 +552,7 @@ mod benchmarks {
 		let data = vec![42u8; 1024];
 		let instance =
 			Contract::<T>::with_caller(whitelisted_caller(), WasmModule::dummy(), vec![])?;
-		let value = Pallet::<T>::min_balance();
+		let value = Pezpallet::<T>::min_balance();
 		let origin = RawOrigin::Signed(instance.caller.clone());
 		let callee = instance.addr.clone();
 		let before = T::Currency::balance(&instance.account_id);
@@ -565,7 +565,7 @@ mod benchmarks {
 		// value and value transferred via call should be removed from the caller
 		assert_eq!(
 			T::Currency::balance(&instance.caller),
-			caller_funding::<T>() - instance.value - value - deposit - Pallet::<T>::min_balance(),
+			caller_funding::<T>() - instance.value - value - deposit - Pezpallet::<T>::min_balance(),
 		);
 		// contract should have received the value
 		assert_eq!(T::Currency::balance(&instance.account_id), before + value);
@@ -1587,7 +1587,7 @@ mod benchmarks {
 	#[benchmark(pov_mode = Measured)]
 	fn seal_transfer() {
 		let account = account::<T::AccountId>("receiver", 0, 0);
-		let value = Pallet::<T>::min_balance();
+		let value = Pezpallet::<T>::min_balance();
 		assert!(value > 0u32.into());
 
 		let mut setup = CallSetup::<T>::default();
@@ -1716,7 +1716,7 @@ mod benchmarks {
 
 		let mut setup = CallSetup::<T>::default();
 		setup.set_origin(Origin::from_account_id(setup.contract().account_id.clone()));
-		setup.set_balance(value + (Pallet::<T>::min_balance() * 2u32.into()));
+		setup.set_balance(value + (Pezpallet::<T>::min_balance() * 2u32.into()));
 
 		let account_id = &setup.contract().account_id.clone();
 		let (mut ext, _) = setup.ext();
@@ -1761,7 +1761,7 @@ mod benchmarks {
 
 		assert_ok!(result);
 		assert!(ContractInfoOf::<T>::get(&addr).is_some());
-		assert_eq!(T::Currency::balance(&addr), Pallet::<T>::min_balance() + value);
+		assert_eq!(T::Currency::balance(&addr), Pezpallet::<T>::min_balance() + value);
 		Ok(())
 	}
 

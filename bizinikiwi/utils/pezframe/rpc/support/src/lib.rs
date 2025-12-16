@@ -86,27 +86,27 @@ use pezsp_storage::{StorageData, StorageKey};
 /// // Note that all fields are marked pub.
 /// pub use self::pezpallet_test::*;
 ///
-/// #[pezframe_support::pallet]
+/// #[pezframe_support::pezpallet]
 /// mod pezpallet_test {
 /// 	use super::*;
 /// 	use pezframe_support::pezpallet_prelude::*;
 ///
-/// 	#[pallet::pallet]
-/// 	pub struct Pallet<T>(_);
+/// 	#[pezpallet::pezpallet]
+/// 	pub struct Pezpallet<T>(_);
 ///
-/// 	#[pallet::config]
+/// 	#[pezpallet::config]
 /// 	pub trait Config: pezframe_system::Config {}
 ///
-/// 	#[pallet::storage]
+/// 	#[pezpallet::storage]
 /// 	pub type LastActionId<T> = StorageValue<_, u64, ValueQuery>;
 ///
-/// 	#[pallet::storage]
+/// 	#[pezpallet::storage]
 /// 	pub type Voxels<T> = StorageMap<_, Blake2_128Concat, Loc, Block>;
 ///
-/// 	#[pallet::storage]
+/// 	#[pezpallet::storage]
 /// 	pub type Actions<T> = StorageMap<_, Blake2_128Concat, u64, Loc>;
 ///
-/// 	#[pallet::storage]
+/// 	#[pezpallet::storage]
 /// 	pub type Prefab<T> = StorageDoubleMap<
 /// 		_,
 /// 		Blake2_128Concat, u128,

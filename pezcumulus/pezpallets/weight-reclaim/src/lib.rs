@@ -14,13 +14,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Pallet and transaction extensions to reclaim PoV proof size weight after an extrinsic has been
+//! Pezpallet and transaction extensions to reclaim PoV proof size weight after an extrinsic has been
 //! applied.
 //!
 //! This crate provides:
 //! * [`StorageWeightReclaim`] transaction extension: it must wrap the whole transaction extension
 //!   pipeline.
-//! * The pallet required for the transaction extensions weight information and benchmarks.
+//! * The pezpallet required for the transaction extensions weight information and benchmarks.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
@@ -48,21 +48,21 @@ pub mod benchmarks;
 mod tests;
 mod weights;
 
-pub use pallet::*;
+pub use pezpallet::*;
 pub use weights::WeightInfo;
 
 const LOG_TARGET: &'static str = "runtime::storage_reclaim_pallet";
 
-/// Pallet to use alongside the transaction extension [`StorageWeightReclaim`], the pallet provides
+/// Pezpallet to use alongside the transaction extension [`StorageWeightReclaim`], the pezpallet provides
 /// weight information and benchmarks.
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		type WeightInfo: WeightInfo;
 	}
@@ -301,6 +301,6 @@ where
 	) -> Result<(), TransactionValidityError> {
 		S::bare_post_dispatch(info, post_info, len, result)?;
 
-		pezframe_system::Pallet::<T>::reclaim_weight(info, post_info)
+		pezframe_system::Pezpallet::<T>::reclaim_weight(info, post_info)
 	}
 }

@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Benchmarking for assigned_slots pallet
+//! Benchmarking for assigned_slots pezpallet
 
 #![cfg(feature = "runtime-benchmarks")]
 use super::*;
@@ -33,7 +33,7 @@ type BalanceOf<T> = <<<T as Config>::Leaser as Leaser<BlockNumberFor<T>>>::Curre
 mod benchmarks {
 	use super::*;
 
-	use crate::assigned_slots::Pallet as AssignedSlots;
+	use crate::assigned_slots::Pezpallet as AssignedSlots;
 
 	fn register_teyrchain<T: Config>(para_id: ParaId) {
 		let who: T::AccountId = whitelisted_caller();
@@ -48,7 +48,7 @@ mod benchmarks {
 			worst_head_data,
 			worst_validation_code.clone()
 		));
-		assert_ok!(paras::Pallet::<T>::add_trusted_validation_code(
+		assert_ok!(paras::Pezpallet::<T>::add_trusted_validation_code(
 			pezframe_system::Origin::<T>::Root.into(),
 			worst_validation_code,
 		));
@@ -66,7 +66,7 @@ mod benchmarks {
 
 		let counter = PermanentSlotCount::<T>::get();
 		let current_lease_period: BlockNumberFor<T> =
-			T::Leaser::lease_period_index(pezframe_system::Pallet::<T>::block_number())
+			T::Leaser::lease_period_index(pezframe_system::Pezpallet::<T>::block_number())
 				.and_then(|x| Some(x.0))
 				.unwrap();
 		#[extrinsic_call]
@@ -92,7 +92,7 @@ mod benchmarks {
 		register_teyrchain::<T>(para_id);
 
 		let current_lease_period: BlockNumberFor<T> =
-			T::Leaser::lease_period_index(pezframe_system::Pallet::<T>::block_number())
+			T::Leaser::lease_period_index(pezframe_system::Pezpallet::<T>::block_number())
 				.and_then(|x| Some(x.0))
 				.unwrap();
 

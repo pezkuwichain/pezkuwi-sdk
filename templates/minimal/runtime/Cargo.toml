@@ -28,7 +28,7 @@ serde_json = { workspace = true, default-features = false, features = [
   "alloc",
 ] }
 
-# local pallet templates
+# local pezpallet templates
 pezpallet-minimal-template = { workspace = true }
 
 [build-dependencies]

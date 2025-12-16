@@ -23,54 +23,54 @@
 //! [pezkuwi]: https://img.shields.io/badge/polkadot-E6007A?style=for-the-badge&logo=polkadot&logoColor=white
 //! [github]: https://img.shields.io/badge/github-8da0cb?style=for-the-badge&labelColor=555555&logo=github
 //!
-//! # Timestamp Pallet
+//! # Timestamp Pezpallet
 //!
-//! A pallet that provides a way for consensus systems to set and check the onchain time.
+//! A pezpallet that provides a way for consensus systems to set and check the onchain time.
 //!
-//! ## Pallet API
+//! ## Pezpallet API
 //!
-//! See the [`pallet`] module for more information about the interfaces this pallet exposes,
+//! See the [`pezpallet`] module for more information about the interfaces this pezpallet exposes,
 //! including its configuration trait, dispatchables, storage items, events and errors.
 //!
 //! ## Overview
 //!
-//! The Timestamp pallet is designed to create a consensus-based time source. This helps ensure that
+//! The Timestamp pezpallet is designed to create a consensus-based time source. This helps ensure that
 //! nodes maintain a synchronized view of time that all network participants can agree on.
 //!
 //! It defines an _acceptable range_ using a configurable constant to specify how much time must
 //! pass before setting the new timestamp. Validator nodes in the network must verify that the
 //! timestamp falls within this acceptable range and reject blocks that do not.
 //!
-//! > **Note:** The timestamp set by this pallet is the recommended way to query the onchain time
+//! > **Note:** The timestamp set by this pezpallet is the recommended way to query the onchain time
 //! > instead of using block numbers alone. Measuring time with block numbers can cause cumulative
 //! > calculation errors if depended upon in time critical operations and hence should generally be
 //! > avoided.
 //!
 //! ## Example
 //!
-//! To get the current time for the current block in another pallet:
+//! To get the current time for the current block in another pezpallet:
 //!
 //! ```
 //! use pezpallet_timestamp::{self as timestamp};
 //!
-//! #[pezframe_support::pallet]
-//! pub mod pallet {
+//! #[pezframe_support::pezpallet]
+//! pub mod pezpallet {
 //! 	use super::*;
 //! 	use pezframe_support::pezpallet_prelude::*;
 //! 	use pezframe_system::pezpallet_prelude::*;
 //!
-//! 	#[pallet::pallet]
-//! 	pub struct Pallet<T>(_);
+//! 	#[pezpallet::pezpallet]
+//! 	pub struct Pezpallet<T>(_);
 //!
-//! 	#[pallet::config]
+//! 	#[pezpallet::config]
 //! 	pub trait Config: pezframe_system::Config + timestamp::Config {}
 //!
-//! 	#[pallet::call]
-//! 	impl<T: Config> Pallet<T> {
-//! 		#[pallet::weight(0)]
+//! 	#[pezpallet::call]
+//! 	impl<T: Config> Pezpallet<T> {
+//! 		#[pezpallet::weight(0)]
 //! 		pub fn get_time(origin: OriginFor<T>) -> DispatchResult {
 //! 			let _sender = ensure_signed(origin)?;
-//! 			let _now = timestamp::Pallet::<T>::get();
+//! 			let _now = timestamp::Pezpallet::<T>::get();
 //! 			Ok(())
 //! 		}
 //! 	}
@@ -78,7 +78,7 @@
 //! # fn main() {}
 //! ```
 //!
-//!  If [`Pallet::get`] is called prior to setting the timestamp, it will return the timestamp of
+//!  If [`Pezpallet::get`] is called prior to setting the timestamp, it will return the timestamp of
 //! the previous block.
 //!
 //! ## Low Level / Implementation Details
@@ -87,7 +87,7 @@
 //! submit. Inherents are a special type of extrinsic in Bizinikiwi chains that will always be
 //! included in a block.
 //!
-//! To provide inherent data to the runtime, this pallet implements
+//! To provide inherent data to the runtime, this pezpallet implements
 //! [`ProvideInherent`](pezframe_support::inherent::ProvideInherent). It will only create an inherent
 //! if the [`Call::set`] dispatchable is called, using the
 //! [`inherent`](pezframe_support::pezpallet_macros::inherent) macro which enables validator nodes to call
@@ -97,24 +97,24 @@
 //! a valid timestamp. If a block author sets a timestamp to anything that is more than this
 //! constant, a validator node will reject the block.
 //!
-//! The pallet also ensures that a timestamp is set at the start of each block by running an
+//! The pezpallet also ensures that a timestamp is set at the start of each block by running an
 //! assertion in the `on_finalize` runtime hook. See [`pezframe_support::traits::Hooks`] for more
 //! information about how hooks work.
 //!
 //! Because inherents are applied to a block in the order they appear in the runtime
-//! construction, the index of this pallet in
+//! construction, the index of this pezpallet in
 //! [`construct_runtime`](pezframe_support::construct_runtime) must always be less than any other
-//! pallet that depends on it.
+//! pezpallet that depends on it.
 //!
-//! The [`Config::OnTimestampSet`] configuration trait can be set to another pallet we want to
+//! The [`Config::OnTimestampSet`] configuration trait can be set to another pezpallet we want to
 //! notify that the timestamp has been updated, as long as it implements [`OnTimestampSet`].
 //! Examples are the Babe and Aura pallets.
-//! This pallet also implements [`Time`] and [`UnixTime`] so it can be used to configure other
-//! pallets that require these types (e.g. in Staking pallet).
+//! This pezpallet also implements [`Time`] and [`UnixTime`] so it can be used to configure other
+//! pallets that require these types (e.g. in Staking pezpallet).
 //!
 //! ## Panics
 //!
-//! There are 3 cases where this pallet could cause the runtime to panic.
+//! There are 3 cases where this pezpallet could cause the runtime to panic.
 //!
 //! 1. If no timestamp is set at the end of a block.
 //!
@@ -139,10 +139,10 @@ use pezsp_runtime::traits::{AtLeast32Bit, SaturatedConversion, Scale, Zero};
 use pezsp_timestamp::{InherentError, InherentType, INHERENT_IDENTIFIER};
 pub use weights::WeightInfo;
 
-pub use pallet::*;
+pub use pezpallet::*;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::{derive_impl, pezpallet_prelude::*};
 	use pezframe_system::pezpallet_prelude::*;
@@ -166,11 +166,11 @@ pub mod pallet {
 		}
 	}
 
-	/// The pallet configuration trait
-	#[pallet::config(with_default)]
+	/// The pezpallet configuration trait
+	#[pezpallet::config(with_default)]
 	pub trait Config: pezframe_system::Config {
 		/// Type used for expressing a timestamp.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		type Moment: Parameter
 			+ Default
 			+ AtLeast32Bit
@@ -179,7 +179,7 @@ pub mod pallet {
 			+ MaxEncodedLen
 			+ scale_info::StaticTypeInfo;
 
-		/// Something which can be notified (e.g. another pallet) when the timestamp is set.
+		/// Something which can be notified (e.g. another pezpallet) when the timestamp is set.
 		///
 		/// This can be set to `()` if it is not needed.
 		type OnTimestampSet: OnTimestampSet<Self::Moment>;
@@ -188,31 +188,31 @@ pub mod pallet {
 		///
 		/// Be aware that this is different to the *expected* period that the block production
 		/// apparatus provides. Your chosen consensus system will generally work with this to
-		/// determine a sensible block time. For example, in the Aura pallet it will be double this
+		/// determine a sensible block time. For example, in the Aura pezpallet it will be double this
 		/// period on default settings.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MinimumPeriod: Get<Self::Moment>;
 
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
 	/// The current time for the current block.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Now<T: Config> = StorageValue<_, T::Moment, ValueQuery>;
 
 	/// Whether the timestamp has been updated in this block.
 	///
 	/// This value is updated to `true` upon successful submission of a timestamp by a node.
 	/// It is then checked at the end of each block execution in the `on_finalize` hook.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type DidUpdate<T: Config> = StorageValue<_, bool, ValueQuery>;
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		/// A dummy `on_initialize` to return the amount of weight that `on_finalize` requires to
 		/// execute.
 		fn on_initialize(_n: BlockNumberFor<T>) -> Weight {
@@ -222,7 +222,7 @@ pub mod pallet {
 
 		/// At the end of block execution, the `on_finalize` hook checks that the timestamp was
 		/// updated. Upon success, it removes the boolean value from storage. If the value resolves
-		/// to `false`, the pallet will panic.
+		/// to `false`, the pezpallet will panic.
 		///
 		/// ## Complexity
 		/// - `O(1)`
@@ -231,8 +231,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Set the current time.
 		///
 		/// This call should be invoked exactly once per block. It will panic at the finalization
@@ -252,12 +252,12 @@ pub mod pallet {
 		/// - 1 storage read and 1 storage mutation (codec `O(1)` because of `DidUpdate::take` in
 		///   `on_finalize`)
 		/// - 1 event handler `on_timestamp_set`. Must be `O(1)`.
-		#[pallet::call_index(0)]
-		#[pallet::weight((
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight((
 			T::WeightInfo::set(),
 			DispatchClass::Mandatory
 		))]
-		pub fn set(origin: OriginFor<T>, #[pallet::compact] now: T::Moment) -> DispatchResult {
+		pub fn set(origin: OriginFor<T>, #[pezpallet::compact] now: T::Moment) -> DispatchResult {
 			ensure_none(origin)?;
 			assert!(!DidUpdate::<T>::exists(), "Timestamp must be updated only once in the block");
 			let prev = Now::<T>::get();
@@ -282,8 +282,8 @@ pub mod pallet {
 	/// - [`InherentError::TooFarInFuture`]: If the timestamp is larger than the current timestamp +
 	///   minimum drift period.
 	/// - [`InherentError::TooEarly`]: If the timestamp is less than the current + minimum period.
-	#[pallet::inherent]
-	impl<T: Config> ProvideInherent for Pallet<T> {
+	#[pezpallet::inherent]
+	impl<T: Config> ProvideInherent for Pezpallet<T> {
 		type Call = Call<T>;
 		type Error = InherentError;
 		const INHERENT_IDENTIFIER: InherentIdentifier = INHERENT_IDENTIFIER;
@@ -332,7 +332,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Get the current time for the current block.
 	///
 	/// NOTE: if this function is called prior to setting the timestamp,
@@ -350,7 +350,7 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-impl<T: Config> Time for Pallet<T> {
+impl<T: Config> Time for Pezpallet<T> {
 	/// A type that represents a unit of time.
 	type Moment = T::Moment;
 
@@ -362,7 +362,7 @@ impl<T: Config> Time for Pallet<T> {
 /// Before the timestamp inherent is applied, it returns the time of previous block.
 ///
 /// On genesis the time returned is not valid.
-impl<T: Config> UnixTime for Pallet<T> {
+impl<T: Config> UnixTime for Pezpallet<T> {
 	fn now() -> core::time::Duration {
 		// now is duration since unix epoch in millisecond as documented in
 		// `pezsp_timestamp::InherentDataProvider`.

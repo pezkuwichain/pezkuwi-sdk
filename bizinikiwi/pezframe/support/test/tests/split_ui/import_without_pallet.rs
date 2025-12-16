@@ -21,12 +21,12 @@ use pezframe_support::pezpallet_macros::*;
 
 #[pezpallet_section]
 mod storages {
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type MyStorageMap<T: Config> = StorageMap<_, _, u32, u64>;
 }
 
 #[import_section(storages)]
-pub mod pallet {
+pub mod pezpallet {
 	
 }
 

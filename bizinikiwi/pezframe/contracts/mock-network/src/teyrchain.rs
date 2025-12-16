@@ -18,7 +18,7 @@
 
 mod contracts_config;
 use crate::{
-	mocks::msg_queue::pallet as mock_msg_queue,
+	mocks::msg_queue::pezpallet as mock_msg_queue,
 	primitives::{AccountId, AssetIdForAssets, Balance},
 };
 use core::marker::PhantomData;

@@ -19,15 +19,15 @@
 
 use pezframe_support::pezpallet_macros::*;
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 mod first {
 	use super::*;
 
 	#[pezpallet_section]
 	mod section {
-		#[pallet::event]
-		#[pallet::generate_deposit(pub(super) fn deposit_event)]
+		#[pezpallet::event]
+		#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 		pub enum Event<T: Config> {
 			SomethingDone,
 		}
@@ -39,7 +39,7 @@ mod second {
 
 	#[pezpallet_section(section2)]
 	mod section {
-		#[pallet::error]
+		#[pezpallet::error]
 		pub enum Error<T> {
 			NoneValue,
 		}
@@ -48,22 +48,22 @@ mod second {
 
 #[import_section(first::section)]
 #[import_section(second::section2)]
-#[pezframe_support::pallet(dev_mode)]
-pub mod pallet {
+#[pezframe_support::pezpallet(dev_mode)]
+pub mod pezpallet {
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		pub fn my_call(_origin: OriginFor<T>) -> DispatchResult {
 			Self::deposit_event(Event::SomethingDone);
 			Ok(())

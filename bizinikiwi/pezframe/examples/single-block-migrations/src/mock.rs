@@ -26,17 +26,17 @@
 use crate::*;
 use pezframe_support::{derive_impl, weights::constants::ParityDbWeight};
 
-// Re-export crate as its pallet name for construct_runtime.
+// Re-export crate as its pezpallet name for construct_runtime.
 use crate as pezpallet_example_storage_migration;
 
 type Block = pezframe_system::mocking::MockBlock<MockRuntime>;
 
-// For testing the pallet, we construct a mock runtime.
+// For testing the pezpallet, we construct a mock runtime.
 pezframe_support::construct_runtime!(
 	pub struct MockRuntime {
-		System: pezframe_system::{Pallet, Call, Config<T>, Storage, Event<T>},
-		Balances: pezpallet_balances::{Pallet, Call, Storage, Config<T>, Event<T>},
-		Example: pezpallet_example_storage_migration::{Pallet, Call, Storage},
+		System: pezframe_system::{Pezpallet, Call, Config<T>, Storage, Event<T>},
+		Balances: pezpallet_balances::{Pezpallet, Call, Storage, Config<T>, Event<T>},
+		Example: pezpallet_example_storage_migration::{Pezpallet, Call, Storage},
 	}
 );
 

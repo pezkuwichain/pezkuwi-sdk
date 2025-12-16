@@ -141,7 +141,7 @@ pub mod system_teyrchain {
 	}
 }
 
-/// Pezkuwichain Treasury pallet instance.
+/// Pezkuwichain Treasury pezpallet instance.
 pub const TREASURY_PALLET_ID: u8 = 18;
 
 #[cfg(test)]

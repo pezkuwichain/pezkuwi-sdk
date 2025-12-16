@@ -15,8 +15,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! The implementation of the verifier pallet, and an implementation of [`crate::Verifier`] and
-//! [`crate::AsynchronousVerifier`] for [`Pallet`].
+//! The implementation of the verifier pezpallet, and an implementation of [`crate::Verifier`] and
+//! [`crate::AsynchronousVerifier`] for [`Pezpallet`].
 
 use super::*;
 use crate::{
@@ -36,7 +36,7 @@ use pezframe_support::{
 	traits::{defensive_prelude::*, Get},
 };
 use pezframe_system::pezpallet_prelude::*;
-use pallet::*;
+use pezpallet::*;
 use pezsp_npos_elections::{evaluate_support, ElectionScore};
 use pezsp_std::{collections::btree_map::BTreeMap, prelude::*};
 
@@ -48,7 +48,7 @@ pub(crate) type SupportsOfVerifier<V> = pezframe_election_provider_support::Boun
 
 pub(crate) type VerifierWeightsOf<T> = <T as super::Config>::WeightInfo;
 
-/// The status of this pallet.
+/// The status of this pezpallet.
 #[derive(
 	Encode, Decode, scale_info::TypeInfo, Clone, Copy, MaxEncodedLen, Debug, PartialEq, Eq,
 )]
@@ -107,28 +107,28 @@ impl pezsp_npos_elections::Backings for PartialBackings {
 	}
 }
 
-#[pezframe_support::pallet]
-pub(crate) mod pallet {
+#[pezframe_support::pezpallet]
+pub(crate) mod pezpallet {
 	use super::*;
 
-	#[pallet::config]
-	#[pallet::disable_pezframe_system_supertrait_check]
+	#[pezpallet::config]
+	#[pezpallet::disable_pezframe_system_supertrait_check]
 	pub trait Config: crate::Config {
 		/// Maximum number of backers, per winner, among all pages of an election.
 		///
 		/// This can only be checked at the very final step of verification.
 		///
 		/// NOTE: at the moment, we don't check this, and it is in place for future compatibility.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxBackersPerWinnerFinal: Get<u32>;
 
 		/// Maximum number of backers, per winner, per page.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxBackersPerWinner: Get<u32>;
 
 		/// Maximum number of supports (aka. winners/validators/targets) that can be represented in
 		/// a page of results.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxWinnersPerPage: Get<u32>;
 
 		/// Something that can provide the solution data to the verifier.
@@ -138,12 +138,12 @@ pub(crate) mod pallet {
 			Solution = SolutionOf<Self::MinerConfig>,
 		>;
 
-		/// The weight information of this pallet.
+		/// The weight information of this pezpallet.
 		type WeightInfo: super::WeightInfo;
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T> {
 		/// A verification failed at the given page.
 		///
@@ -168,7 +168,7 @@ pub(crate) mod pallet {
 	/// - `QueuedSolutionBackings`
 	///
 	/// As the name suggests, `QueuedValidVariant` points to the correct variant between
-	/// `QueuedSolutionX` and `QueuedSolutionY`. In the context of this pallet, by VALID and
+	/// `QueuedSolutionX` and `QueuedSolutionY`. In the context of this pezpallet, by VALID and
 	/// INVALID variant we mean either of these two storage items, based on the value of
 	/// `QueuedValidVariant`.
 	///
@@ -191,7 +191,7 @@ pub(crate) mod pallet {
 	/// - The number of existing keys in `QueuedSolutionBackings` must always match that of the
 	///   INVALID variant.
 	///
-	/// Moreover, the following conditions must be met when this pallet is in [`Status::Nothing`],
+	/// Moreover, the following conditions must be met when this pezpallet is in [`Status::Nothing`],
 	/// meaning that no ongoing asynchronous verification is ongoing.
 	///
 	/// - No keys should exist in the INVALID variant.
@@ -202,7 +202,7 @@ pub(crate) mod pallet {
 	/// > the number of keys in the VALID variant. In fact, an empty solution with score of [0, 0,
 	/// > 0] can also be correct.
 	///
-	/// No additional conditions must be met when the pallet is in [`Status::Ongoing`]. The number
+	/// No additional conditions must be met when the pezpallet is in [`Status::Ongoing`]. The number
 	/// of pages in
 	pub struct QueuedSolution<T: Config>(pezsp_std::marker::PhantomData<T>);
 	impl<T: Config> QueuedSolution<T> {
@@ -219,7 +219,7 @@ pub(crate) mod pallet {
 		}
 
 		fn round() -> u32 {
-			crate::Pallet::<T>::round()
+			crate::Pezpallet::<T>::round()
 		}
 
 		/// Finalize a correct solution.
@@ -275,14 +275,14 @@ pub(crate) mod pallet {
 		/// known to be valid. At this stage, we write to the invalid variant. Once all pages are
 		/// verified, a call to [`finalize_correct`] will seal the correct pages and flip the
 		/// invalid/valid variants.
-		pub(crate) fn set_invalid_page(page: PageIndex, supports: SupportsOfVerifier<Pallet<T>>) {
+		pub(crate) fn set_invalid_page(page: PageIndex, supports: SupportsOfVerifier<Pezpallet<T>>) {
 			use pezframe_support::traits::TryCollect;
 			Self::mutate_checked(|| {
 				let backings: BoundedVec<_, _> = supports
 					.iter()
 					.map(|(x, s)| (x.clone(), PartialBackings { total: s.total, backers: s.voters.len() as u32 } ))
 					.try_collect()
-					.expect("`SupportsOfVerifier` is bounded by <Pallet<T> as Verifier>::MaxWinnersPerPage, which is assured to be the same as `T::MaxWinnersPerPage` in an integrity test");
+					.expect("`SupportsOfVerifier` is bounded by <Pezpallet<T> as Verifier>::MaxWinnersPerPage, which is assured to be the same as `T::MaxWinnersPerPage` in an integrity test");
 				QueuedSolutionBackings::<T>::insert(Self::round(), page, backings);
 
 				match Self::invalid() {
@@ -300,7 +300,7 @@ pub(crate) mod pallet {
 		/// solution.
 		pub(crate) fn force_set_single_page_valid(
 			page: PageIndex,
-			supports: SupportsOfVerifier<Pallet<T>>,
+			supports: SupportsOfVerifier<Pezpallet<T>>,
 			score: ElectionScore,
 		) {
 			Self::mutate_checked(|| {
@@ -322,7 +322,7 @@ pub(crate) mod pallet {
 
 		pub(crate) fn force_set_multi_page_valid(
 			pages: Vec<PageIndex>,
-			supports: Vec<SupportsOfVerifier<Pallet<T>>>,
+			supports: Vec<SupportsOfVerifier<Pezpallet<T>>>,
 			score: ElectionScore,
 		) {
 			debug_assert_eq!(pages.len(), supports.len());
@@ -405,7 +405,7 @@ pub(crate) mod pallet {
 		/// Get a page of the current queued (aka valid) solution.
 		pub(crate) fn get_queued_solution_page(
 			page: PageIndex,
-		) -> Option<SupportsOfVerifier<Pallet<T>>> {
+		) -> Option<SupportsOfVerifier<Pezpallet<T>>> {
 			match Self::valid() {
 				ValidSolution::X => QueuedSolutionX::<T>::get(Self::round(), page),
 				ValidSolution::Y => QueuedSolutionY::<T>::get(Self::round(), page),
@@ -425,7 +425,7 @@ pub(crate) mod pallet {
 	#[cfg(any(test, feature = "runtime-benchmarks", feature = "try-runtime", debug_assertions))]
 	impl<T: Config> QueuedSolution<T> {
 		pub(crate) fn valid_iter(
-		) -> impl Iterator<Item = (PageIndex, SupportsOfVerifier<Pallet<T>>)> {
+		) -> impl Iterator<Item = (PageIndex, SupportsOfVerifier<Pezpallet<T>>)> {
 			match Self::valid() {
 				ValidSolution::X => QueuedSolutionX::<T>::iter_prefix(Self::round()),
 				ValidSolution::Y => QueuedSolutionY::<T>::iter_prefix(Self::round()),
@@ -433,14 +433,14 @@ pub(crate) mod pallet {
 		}
 
 		pub(crate) fn invalid_iter(
-		) -> impl Iterator<Item = (PageIndex, SupportsOfVerifier<Pallet<T>>)> {
+		) -> impl Iterator<Item = (PageIndex, SupportsOfVerifier<Pezpallet<T>>)> {
 			match Self::invalid() {
 				ValidSolution::X => QueuedSolutionX::<T>::iter_prefix(Self::round()),
 				ValidSolution::Y => QueuedSolutionY::<T>::iter_prefix(Self::round()),
 			}
 		}
 
-		pub(crate) fn get_valid_page(page: PageIndex) -> Option<SupportsOfVerifier<Pallet<T>>> {
+		pub(crate) fn get_valid_page(page: PageIndex) -> Option<SupportsOfVerifier<Pezpallet<T>>> {
 			match Self::valid() {
 				ValidSolution::X => QueuedSolutionX::<T>::get(Self::round(), page),
 				ValidSolution::Y => QueuedSolutionY::<T>::get(Self::round(), page),
@@ -464,7 +464,7 @@ pub(crate) mod pallet {
 		pub(crate) fn sanity_check() -> Result<(), pezsp_runtime::DispatchError> {
 			// score is correct and better than min-score.
 			ensure!(
-				Pallet::<T>::minimum_score()
+				Pezpallet::<T>::minimum_score()
 					.zip(Self::queued_score())
 					.map_or(true, |(min_score, score)| score.strict_better(min_score)),
 				"queued solution has weak score (min-score)"
@@ -509,30 +509,30 @@ pub(crate) mod pallet {
 	/// Writing theses supports on top of a *good* queued supports is wrong, since we might bail.
 	/// Writing them to a bugger and copying at the ned is slightly better, but expensive. This flag
 	/// system is best of both worlds.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	type QueuedSolutionX<T: Config> = StorageDoubleMap<
 		_,
 		Twox64Concat,
 		u32,
 		Twox64Concat,
 		PageIndex,
-		SupportsOfVerifier<Pallet<T>>,
+		SupportsOfVerifier<Pezpallet<T>>,
 	>;
 
 	/// The `Y` variant of the current queued solution. Might be the valid one or not.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	type QueuedSolutionY<T: Config> = StorageDoubleMap<
 		_,
 		Twox64Concat,
 		u32,
 		Twox64Concat,
 		PageIndex,
-		SupportsOfVerifier<Pallet<T>>,
+		SupportsOfVerifier<Pezpallet<T>>,
 	>;
 	/// Pointer to the variant of [`QueuedSolutionX`] or [`QueuedSolutionY`] that is currently
 	/// valid.
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	type QueuedValidVariant<T: Config> =
 		StorageMap<_, Twox64Concat, u32, ValidSolution, ValueQuery>;
 
@@ -544,7 +544,7 @@ pub(crate) mod pallet {
 	/// This can only ever live for the invalid variant of the solution. Once it is valid, we don't
 	/// need this information anymore; the score is already computed once in
 	/// [`QueuedSolutionScore`], and the backing counts are checked.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	type QueuedSolutionBackings<T: Config> = StorageDoubleMap<
 		_,
 		Twox64Concat,
@@ -557,25 +557,25 @@ pub(crate) mod pallet {
 	/// The score of the valid variant of [`QueuedSolution`].
 	///
 	/// This only ever lives for the `valid` variant.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	type QueuedSolutionScore<T: Config> = StorageMap<_, Twox64Concat, u32, ElectionScore>;
 
 	// -- ^^ private storage items, managed by `QueuedSolution`.
 
 	/// The minimum score that each solution must attain in order to be considered feasible.
-	#[pallet::storage]
-	#[pallet::getter(fn minimum_score)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn minimum_score)]
 	pub(crate) type MinimumScore<T: Config> = StorageValue<_, ElectionScore>;
 
 	/// Storage item for [`Status`].
-	#[pallet::storage]
-	#[pallet::getter(fn status_storage)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn status_storage)]
 	pub(crate) type StatusStorage<T: Config> = StorageValue<_, Status, ValueQuery>;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(PhantomData<T>);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(PhantomData<T>);
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(pezframe_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		/// Initial value for [`MinimumScore`]
@@ -583,18 +583,18 @@ pub(crate) mod pallet {
 		_marker: PhantomData<T>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			MinimumScore::<T>::put(self.minimum_score);
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {}
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn integrity_test() {
 			// ensure that we have funneled some of our type parameters EXACTLY as-is to the
 			// verifier trait interface we implement.
@@ -617,7 +617,7 @@ pub(crate) mod pallet {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	fn do_on_initialize() -> Weight {
 		if let Status::Ongoing(current_page) = Self::status_storage() {
 			let page_solution =
@@ -638,7 +638,7 @@ impl<T: Config> Pallet<T> {
 					Self::deposit_event(Event::<T>::Verified(current_page, supports.len() as u32));
 					QueuedSolution::<T>::set_invalid_page(current_page, supports);
 
-					if current_page > crate::Pallet::<T>::lsp() {
+					if current_page > crate::Pezpallet::<T>::lsp() {
 						// not last page, just tick forward.
 						StatusStorage::<T>::put(Status::Ongoing(current_page.saturating_sub(1)));
 						VerifierWeightsOf::<T>::on_initialize_valid_non_terminal()
@@ -927,7 +927,7 @@ pub fn feasibility_check_page_inner_with_snapshot<T: MinerConfig>(
 	Ok(bounded_supports)
 }
 
-impl<T: Config> Verifier for Pallet<T> {
+impl<T: Config> Verifier for Pezpallet<T> {
 	type AccountId = T::AccountId;
 	type Solution = SolutionOf<T::MinerConfig>;
 	type MaxBackersPerWinner = T::MaxBackersPerWinner;
@@ -985,11 +985,11 @@ impl<T: Config> Verifier for Pallet<T> {
 	}
 }
 
-impl<T: Config> AsynchronousVerifier for Pallet<T> {
+impl<T: Config> AsynchronousVerifier for Pezpallet<T> {
 	type SolutionDataProvider = T::SolutionDataProvider;
 
 	fn status() -> Status {
-		Pallet::<T>::status_storage()
+		Pezpallet::<T>::status_storage()
 	}
 
 	fn start() -> Result<(), &'static str> {
@@ -999,7 +999,7 @@ impl<T: Config> AsynchronousVerifier for Pallet<T> {
 			if Self::ensure_score_quality(claimed_score).is_err() {
 				// don't do anything, report back that this solution was garbage.
 				Self::deposit_event(Event::<T>::VerificationFailed(
-					crate::Pallet::<T>::msp(),
+					crate::Pezpallet::<T>::msp(),
 					FeasibilityError::ScoreTooLow,
 				));
 				T::SolutionDataProvider::report_result(VerificationResult::Rejected);
@@ -1007,7 +1007,7 @@ impl<T: Config> AsynchronousVerifier for Pallet<T> {
 				Ok(())
 			} else {
 				// This solution is good enough to win, we start verifying it in the next block.
-				StatusStorage::<T>::put(Status::Ongoing(crate::Pallet::<T>::msp()));
+				StatusStorage::<T>::put(Status::Ongoing(crate::Pezpallet::<T>::msp()));
 				Ok(())
 			}
 		} else {

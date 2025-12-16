@@ -154,7 +154,7 @@ fn fellowship_treasury_spend() {
 
 		// Assert events triggered by xcm pay program:
 		// 1. treasury asset transferred to spend beneficiary;
-		// 2. response to Relay Chain Treasury pallet instance sent back;
+		// 2. response to Relay Chain Treasury pezpallet instance sent back;
 		// 3. XCM program completed;
 		assert_expected_events!(
 			AssetHubZagros,
@@ -228,7 +228,7 @@ fn fellowship_treasury_spend() {
 
 		// Assert events triggered by xcm pay program:
 		// 1. treasury asset transferred to spend beneficiary;
-		// 2. response to Relay Chain Treasury pallet instance sent back;
+		// 2. response to Relay Chain Treasury pezpallet instance sent back;
 		// 3. XCM program completed;
 		assert_expected_events!(
 			AssetHubZagros,

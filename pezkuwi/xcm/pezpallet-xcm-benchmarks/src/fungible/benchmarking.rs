@@ -332,7 +332,7 @@ benchmarks_instance_pallet! {
 	}
 
 	impl_benchmark_test_suite!(
-		Pallet,
+		Pezpallet,
 		crate::fungible::mock::new_test_ext(),
 		crate::fungible::mock::Test
 	);

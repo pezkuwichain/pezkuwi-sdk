@@ -19,55 +19,55 @@
 
 use pezframe_support::{derive_impl, traits::ConstU32};
 
-pub use pallet::*;
+pub use pezpallet::*;
 
-#[pezframe_support::pallet(dev_mode)]
-pub mod pallet {
+#[pezframe_support::pezpallet(dev_mode)]
+pub mod pezpallet {
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	// The struct on which we build all of our Pallet logic.
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	// The struct on which we build all of our Pezpallet logic.
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	// Your Pallet's configuration trait, representing custom external types and interfaces.
-	#[pallet::config]
+	// Your Pezpallet's configuration trait, representing custom external types and interfaces.
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
 	// The MEL requirement for bounded pallets is skipped by `dev_mode`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	type MyStorage<T: Config> = StorageValue<_, Vec<u8>>;
 
 	// The Hasher requirement skipped by `dev_mode`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type MyStorageMap<T: Config> = StorageMap<_, _, u32, u64>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	type MyStorageDoubleMap<T: Config> = StorageDoubleMap<_, _, u32, _, u64, u64>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	type MyCountedStorageMap<T: Config> = CountedStorageMap<_, _, u32, u64>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type MyStorageMap2<T: Config> = StorageMap<Key = u32, Value = u64>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	type MyStorageDoubleMap2<T: Config> = StorageDoubleMap<Key1 = u32, Key2 = u64, Value = u64>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	type MyCountedStorageMap2<T: Config> = CountedStorageMap<Key = u32, Value = u64>;
 
-	// Your Pallet's callable functions.
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	// Your Pezpallet's callable functions.
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		// No need to define a `weight` attribute here because of `dev_mode`.
 		pub fn my_call(_origin: OriginFor<T>) -> DispatchResult {
 			Ok(())
 		}
 	}
 
-	// Your Pallet's internal functions.
-	impl<T: Config> Pallet<T> {}
+	// Your Pezpallet's internal functions.
+	impl<T: Config> Pezpallet<T> {}
 }
 
 #[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
@@ -104,12 +104,12 @@ pezframe_support::construct_runtime!(
 	pub struct Runtime
 	{
 		// Exclude part `Storage` in order not to check its metadata in tests.
-		System: pezframe_system exclude_parts { Pallet, Storage },
-		Example: pallet,
+		System: pezframe_system exclude_parts { Pezpallet, Storage },
+		Example: pezpallet,
 	}
 );
 
-impl pallet::Config for Runtime {}
+impl pezpallet::Config for Runtime {}
 
 fn main() {
 	use pezframe_support::pezpallet_prelude::*;
@@ -126,7 +126,7 @@ fn main() {
 	}
 
 	TestExternalities::default().execute_with(|| {
-		pallet::MyStorageMap::<Runtime>::insert(1, 2);
+		pezpallet::MyStorageMap::<Runtime>::insert(1, 2);
 		let mut k = [twox_128(b"Example"), twox_128(b"MyStorageMap")].concat();
 		k.extend(1u32.using_encoded(blake2_128_concat));
 		assert_eq!(unhashed::get::<u64>(&k), Some(2u64));

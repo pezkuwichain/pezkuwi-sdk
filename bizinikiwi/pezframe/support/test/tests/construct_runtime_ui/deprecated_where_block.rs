@@ -23,7 +23,7 @@ construct_runtime! {
 		NodeBlock = Block,
 		UncheckedExtrinsic = Uxt,
 	{
-		System: pezframe_system::{Pallet, Call, Storage, Config<T>, Event<T>},
+		System: pezframe_system::{Pezpallet, Call, Storage, Config<T>, Event<T>},
 	}
 }
 

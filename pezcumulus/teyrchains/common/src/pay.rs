@@ -132,7 +132,7 @@ pub mod benchmarks {
 	/// the payout made by [`LocalPay`].
 	///
 	/// ### Parameters:
-	/// - `PalletId`: The ID of the assets registry pallet.
+	/// - `PalletId`: The ID of the assets registry pezpallet.
 	/// - `AssetId`: The ID of the asset that will be created for the benchmark within `PalletId`.
 	pub struct LocalPayArguments<PalletId = ConstU8<0>>(PhantomData<PalletId>);
 	impl<PalletId: Get<u8>>

@@ -1,12 +1,12 @@
-//! # Template Pallet
+//! # Template Pezpallet
 //!
-//! A pallet with minimal functionality to help developers understand the essential components of
-//! writing a FRAME pallet. It is typically used in beginner tutorials or in Pezkuwi SDK template
-//! as a starting point for creating a new pallet and **not meant to be used in production**.
+//! A pezpallet with minimal functionality to help developers understand the essential components of
+//! writing a FRAME pezpallet. It is typically used in beginner tutorials or in Pezkuwi SDK template
+//! as a starting point for creating a new pezpallet and **not meant to be used in production**.
 //!
 //! ## Overview
 //!
-//! This template pallet contains basic examples of:
+//! This template pezpallet contains basic examples of:
 //! - declaring a storage item that stores a single block-number
 //! - declaring and using events
 //! - declaring and using errors
@@ -14,10 +14,10 @@
 //!   upon success
 //! - another dispatchable function that causes a custom error to be thrown
 //!
-//! Each pallet section is annotated with an attribute using the `#[pallet::...]` procedural macro.
-//! This macro generates the necessary code for a pallet to be aggregated into a FRAME runtime.
+//! Each pezpallet section is annotated with an attribute using the `#[pezpallet::...]` procedural macro.
+//! This macro generates the necessary code for a pezpallet to be aggregated into a FRAME runtime.
 //!
-//! To get started with pallet development, consider using this tutorial:
+//! To get started with pezpallet development, consider using this tutorial:
 //!
 //! <https://docs.pezkuwichain.io/sdk/master/polkadot_sdk_docs/guides/your_first_pallet/index.html>
 //!
@@ -26,28 +26,28 @@
 //! <https://docs.pezkuwichain.io/sdk/master/polkadot_sdk_docs/polkadot_sdk/frame_runtime/index.html>
 //!
 //! And looking at the frame [`kitchen-sink`](https://docs.pezkuwichain.io/sdk/master/pezpallet_example_kitchensink/index.html)
-//! pallet, a showcase of all pallet macros.
+//! pezpallet, a showcase of all pezpallet macros.
 //!
-//! ### Pallet Sections
+//! ### Pezpallet Sections
 //!
-//! The pallet sections in this template are:
+//! The pezpallet sections in this template are:
 //!
-//! - A **configuration trait** that defines the types and parameters which the pallet depends on
-//!   (denoted by the `#[pallet::config]` attribute). See: [`Config`].
-//! - A **means to store pezpallet-specific data** (denoted by the `#[pallet::storage]` attribute).
+//! - A **configuration trait** that defines the types and parameters which the pezpallet depends on
+//!   (denoted by the `#[pezpallet::config]` attribute). See: [`Config`].
+//! - A **means to store pezpallet-specific data** (denoted by the `#[pezpallet::storage]` attribute).
 //!   See: [`storage_types`].
-//! - A **declaration of the events** this pallet emits (denoted by the `#[pallet::event]`
+//! - A **declaration of the events** this pezpallet emits (denoted by the `#[pezpallet::event]`
 //!   attribute). See: [`Event`].
-//! - A **declaration of the errors** that this pallet can throw (denoted by the `#[pallet::error]`
+//! - A **declaration of the errors** that this pezpallet can throw (denoted by the `#[pezpallet::error]`
 //!   attribute). See: [`Error`].
-//! - A **set of dispatchable functions** that define the pallet's functionality (denoted by the
-//!   `#[pallet::call]` attribute). See: [`dispatchables`].
+//! - A **set of dispatchable functions** that define the pezpallet's functionality (denoted by the
+//!   `#[pezpallet::call]` attribute). See: [`dispatchables`].
 //!
-//! Run `cargo doc --package pezpallet-template --open` to view this pallet's documentation.
+//! Run `cargo doc --package pezpallet-template --open` to view this pezpallet's documentation.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 #[cfg(test)]
 mod mock;
@@ -63,25 +63,25 @@ mod benchmarking;
 // <https://docs.pezkuwichain.io/sdk/master/polkadot_sdk_docs/polkadot_sdk/frame_runtime/index.html>
 // <https://docs.pezkuwichain.io/sdk/master/polkadot_sdk_docs/guides/your_first_pallet/index.html>
 //
-// To see a full list of `pallet` macros and their use cases, see:
+// To see a full list of `pezpallet` macros and their use cases, see:
 // <https://docs.pezkuwichain.io/sdk/master/pezpallet_example_kitchensink/index.html>
 // <https://docs.pezkuwichain.io/sdk/master/pezframe_support/pezpallet_macros/index.html>
-#[frame::pallet]
-pub mod pallet {
+#[frame::pezpallet]
+pub mod pezpallet {
 	use frame::prelude::*;
 
-	/// Configure the pallet by specifying the parameters and types on which it depends.
-	#[pallet::config]
+	/// Configure the pezpallet by specifying the parameters and types on which it depends.
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
-		/// A type representing the weights required by the dispatchables of this pallet.
+		/// A type representing the weights required by the dispatchables of this pezpallet.
 		type WeightInfo: crate::weights::WeightInfo;
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
 	/// A struct to store a single block-number. Has all the right derives to store it in storage.
 	/// <https://docs.pezkuwichain.io/sdk/master/polkadot_sdk_docs/reference_docs/frame_storage_derives/index.html>
@@ -94,16 +94,16 @@ pub mod pallet {
 		pub(crate) block_number: BlockNumberFor<T>,
 	}
 
-	/// The pallet's storage items.
+	/// The pezpallet's storage items.
 	/// <https://docs.pezkuwichain.io/sdk/master/polkadot_sdk_docs/guides/your_first_pallet/index.html#storage>
 	/// <https://docs.pezkuwichain.io/sdk/master/pezframe_support/pezpallet_macros/attr.storage.html>
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Something<T: Config> = StorageValue<_, CompositeStruct<T>>;
 
 	/// Pallets use events to inform users when important changes are made.
 	/// <https://docs.pezkuwichain.io/sdk/master/polkadot_sdk_docs/guides/your_first_pallet/index.html#event-and-error>
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// We usually use passive tense for events.
 		SomethingStored { block_number: BlockNumberFor<T>, who: T::AccountId },
@@ -111,7 +111,7 @@ pub mod pallet {
 
 	/// Errors inform users that something went wrong.
 	/// <https://docs.pezkuwichain.io/sdk/master/polkadot_sdk_docs/guides/your_first_pallet/index.html#event-and-error>
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Error names should be descriptive.
 		NoneValue,
@@ -119,19 +119,19 @@ pub mod pallet {
 		StorageOverflow,
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {}
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {}
 
-	/// Dispatchable functions allows users to interact with the pallet and invoke state changes.
+	/// Dispatchable functions allows users to interact with the pezpallet and invoke state changes.
 	/// These functions materialize as "extrinsics", which are often compared to transactions.
 	/// Dispatchable functions must be annotated with a weight and must return a DispatchResult.
 	/// <https://docs.pezkuwichain.io/sdk/master/polkadot_sdk_docs/guides/your_first_pallet/index.html#dispatchables>
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// An example dispatchable that takes a singles value as a parameter, writes the value to
 		/// storage and emits an event. This function must be dispatched by a signed extrinsic.
-		#[pallet::call_index(0)]
-		#[pallet::weight(Weight::from_parts(10_000, 0) + T::DbWeight::get().writes(1))]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(Weight::from_parts(10_000, 0) + T::DbWeight::get().writes(1))]
 		pub fn do_something(origin: OriginFor<T>, bn: u32) -> DispatchResultWithPostInfo {
 			// Check that the extrinsic was signed and get the signer.
 			// This function will return an error if the extrinsic is not signed.
@@ -153,8 +153,8 @@ pub mod pallet {
 		}
 
 		/// An example dispatchable that may throw a custom error.
-		#[pallet::call_index(1)]
-		#[pallet::weight(Weight::from_parts(10_000, 0) + T::DbWeight::get().reads_writes(1,1))]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(Weight::from_parts(10_000, 0) + T::DbWeight::get().reads_writes(1,1))]
 		pub fn cause_error(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 			let _who = ensure_signed(origin)?;
 

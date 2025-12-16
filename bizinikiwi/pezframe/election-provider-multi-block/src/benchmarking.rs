@@ -17,7 +17,7 @@
 
 use crate::{
 	verifier::{self, Verifier},
-	Config, CurrentPhase, Pallet, Phase, Snapshot,
+	Config, CurrentPhase, Pezpallet, Phase, Snapshot,
 };
 use pezframe_benchmarking::v2::*;
 use pezframe_election_provider_support::{ElectionDataProvider, ElectionProvider};
@@ -28,7 +28,7 @@ benchmark with enough genesis stakers in staking (DataProvider) to fill a page o
 as per VoterSnapshotPerBlock and TargetSnapshotPerBlock. Generate at least \
 2 * VoterSnapshotPerBlock) nominators and TargetSnapshotPerBlock validators";
 
-// TODO: remove unwraps from all benchmarks of this pallet -- it makes debugging via wasm harder
+// TODO: remove unwraps from all benchmarks of this pezpallet -- it makes debugging via wasm harder
 
 #[benchmarks(where T: crate::signed::Config + crate::unsigned::Config + crate::verifier::Config)]
 mod benchmarks {
@@ -40,7 +40,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			Pallet::<T>::roll_next(true, false);
+			Pezpallet::<T>::roll_next(true, false);
 		}
 
 		assert_eq!(CurrentPhase::<T>::get(), Phase::Off);
@@ -53,13 +53,13 @@ mod benchmarks {
 
 		#[cfg(test)]
 		crate::mock::ElectionStart::set(pezsp_runtime::traits::Bounded::max_value());
-		crate::Pallet::<T>::start().unwrap();
+		crate::Pezpallet::<T>::start().unwrap();
 
 		assert_eq!(CurrentPhase::<T>::get(), Phase::Snapshot(T::Pages::get()));
 
 		#[block]
 		{
-			Pallet::<T>::roll_next(true, false);
+			Pezpallet::<T>::roll_next(true, false);
 		}
 
 		// we have collected the target snapshot only
@@ -81,10 +81,10 @@ mod benchmarks {
 
 		#[cfg(test)]
 		crate::mock::ElectionStart::set(pezsp_runtime::traits::Bounded::max_value());
-		crate::Pallet::<T>::start().unwrap();
+		crate::Pezpallet::<T>::start().unwrap();
 
 		// roll to the first block of the snapshot.
-		Pallet::<T>::roll_until_matches(|| {
+		Pezpallet::<T>::roll_until_matches(|| {
 			CurrentPhase::<T>::get() == Phase::Snapshot(T::Pages::get() - 1)
 		});
 
@@ -99,7 +99,7 @@ mod benchmarks {
 		// take one more snapshot page.
 		#[block]
 		{
-			Pallet::<T>::roll_next(true, false);
+			Pezpallet::<T>::roll_next(true, false);
 		}
 
 		// we have now collected the first page of voters.
@@ -118,9 +118,9 @@ mod benchmarks {
 	fn on_initialize_into_signed() -> Result<(), BenchmarkError> {
 		#[cfg(test)]
 		crate::mock::ElectionStart::set(pezsp_runtime::traits::Bounded::max_value());
-		crate::Pallet::<T>::start().unwrap();
+		crate::Pezpallet::<T>::start().unwrap();
 
-		Pallet::<T>::roll_until_before_matches(|| {
+		Pezpallet::<T>::roll_until_before_matches(|| {
 			matches!(CurrentPhase::<T>::get(), Phase::Signed(_))
 		});
 
@@ -128,7 +128,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			Pallet::<T>::roll_next(true, false);
+			Pezpallet::<T>::roll_next(true, false);
 		}
 
 		assert!(CurrentPhase::<T>::get().is_signed());
@@ -140,9 +140,9 @@ mod benchmarks {
 	fn on_initialize_into_signed_validation() -> Result<(), BenchmarkError> {
 		#[cfg(test)]
 		crate::mock::ElectionStart::set(pezsp_runtime::traits::Bounded::max_value());
-		crate::Pallet::<T>::start().unwrap();
+		crate::Pezpallet::<T>::start().unwrap();
 
-		Pallet::<T>::roll_until_before_matches(|| {
+		Pezpallet::<T>::roll_until_before_matches(|| {
 			matches!(CurrentPhase::<T>::get(), Phase::SignedValidation(_))
 		});
 
@@ -150,7 +150,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			Pallet::<T>::roll_next(true, false);
+			Pezpallet::<T>::roll_next(true, false);
 		}
 
 		Ok(())
@@ -160,16 +160,16 @@ mod benchmarks {
 	fn on_initialize_into_unsigned() -> Result<(), BenchmarkError> {
 		#[cfg(test)]
 		crate::mock::ElectionStart::set(pezsp_runtime::traits::Bounded::max_value());
-		crate::Pallet::<T>::start().unwrap();
+		crate::Pezpallet::<T>::start().unwrap();
 
-		Pallet::<T>::roll_until_before_matches(|| {
+		Pezpallet::<T>::roll_until_before_matches(|| {
 			matches!(CurrentPhase::<T>::get(), Phase::Unsigned(_))
 		});
 		assert!(matches!(CurrentPhase::<T>::get(), Phase::SignedValidation(_)));
 
 		#[block]
 		{
-			Pallet::<T>::roll_next(true, false);
+			Pezpallet::<T>::roll_next(true, false);
 		}
 
 		assert!(matches!(CurrentPhase::<T>::get(), Phase::Unsigned(_)));
@@ -180,14 +180,14 @@ mod benchmarks {
 	fn export_non_terminal() -> Result<(), BenchmarkError> {
 		#[cfg(test)]
 		crate::mock::ElectionStart::set(pezsp_runtime::traits::Bounded::max_value());
-		crate::Pallet::<T>::start().unwrap();
+		crate::Pezpallet::<T>::start().unwrap();
 
 		// submit a full solution.
-		crate::Pallet::<T>::roll_to_signed_and_submit_full_solution()?;
+		crate::Pezpallet::<T>::roll_to_signed_and_submit_full_solution()?;
 
 		// fully verify it in the signed validation phase.
 		assert!(T::Verifier::queued_score().is_none());
-		crate::Pallet::<T>::roll_until_matches(|| {
+		crate::Pezpallet::<T>::roll_until_matches(|| {
 			matches!(CurrentPhase::<T>::get(), Phase::Unsigned(_))
 		});
 
@@ -196,7 +196,7 @@ mod benchmarks {
 		assert_eq!(verifier::QueuedSolution::<T>::valid_iter().count() as u32, T::Pages::get());
 
 		// Roll to Done phase to start export
-		crate::Pallet::<T>::roll_until_matches(|| CurrentPhase::<T>::get().is_done());
+		crate::Pezpallet::<T>::roll_until_matches(|| CurrentPhase::<T>::get().is_done());
 
 		#[block]
 		{
@@ -215,14 +215,14 @@ mod benchmarks {
 	fn export_terminal() -> Result<(), BenchmarkError> {
 		#[cfg(test)]
 		crate::mock::ElectionStart::set(pezsp_runtime::traits::Bounded::max_value());
-		crate::Pallet::<T>::start().unwrap();
+		crate::Pezpallet::<T>::start().unwrap();
 
 		// submit a full solution.
-		crate::Pallet::<T>::roll_to_signed_and_submit_full_solution()?;
+		crate::Pezpallet::<T>::roll_to_signed_and_submit_full_solution()?;
 
 		// fully verify it in the signed validation phase.
 		ensure!(T::Verifier::queued_score().is_none(), "nothing should be queued");
-		crate::Pallet::<T>::roll_until_matches(|| {
+		crate::Pezpallet::<T>::roll_until_matches(|| {
 			matches!(CurrentPhase::<T>::get(), Phase::Unsigned(_))
 		});
 
@@ -234,7 +234,7 @@ mod benchmarks {
 		);
 
 		// Roll to Done phase
-		crate::Pallet::<T>::roll_until_matches(|| CurrentPhase::<T>::get().is_done());
+		crate::Pezpallet::<T>::roll_until_matches(|| CurrentPhase::<T>::get().is_done());
 
 		// Start export and fetch all pages except the last one
 		(1..=T::Pages::get() - 1).rev().for_each(T::DataProvider::fetch_page);
@@ -257,10 +257,10 @@ mod benchmarks {
 		// heaviest case is emergency set.
 		#[cfg(test)]
 		crate::mock::ElectionStart::set(pezsp_runtime::traits::Bounded::max_value());
-		crate::Pallet::<T>::start().unwrap();
+		crate::Pezpallet::<T>::start().unwrap();
 
 		// roll to signed so the snapshot exists
-		Pallet::<T>::roll_until_before_matches(|| {
+		Pezpallet::<T>::roll_until_before_matches(|| {
 			matches!(CurrentPhase::<T>::get(), Phase::Signed(_))
 		});
 
@@ -271,7 +271,7 @@ mod benchmarks {
 		#[block]
 		{
 			// fallback might decide to fail, that's okay..
-			let maybe_err = Pallet::<T>::manage(origin, crate::ManagerOperation::EmergencyFallback);
+			let maybe_err = Pezpallet::<T>::manage(origin, crate::ManagerOperation::EmergencyFallback);
 			//.. but it cannot be bad origin.
 			assert!(maybe_err.is_ok() || maybe_err.unwrap_err() != DispatchError::BadOrigin.into());
 		}
@@ -284,10 +284,10 @@ mod benchmarks {
 		// heaviest case is emergency set.
 		#[cfg(test)]
 		crate::mock::ElectionStart::set(pezsp_runtime::traits::Bounded::max_value());
-		crate::Pallet::<T>::start().unwrap();
+		crate::Pezpallet::<T>::start().unwrap();
 
 		// mine a single page solution.
-		let solution = crate::Pallet::<T>::roll_to_signed_and_mine_solution(1);
+		let solution = crate::Pezpallet::<T>::roll_to_signed_and_mine_solution(1);
 
 		// verify to get the support.
 		let (voter_pages, all_targets, desired_targets) =
@@ -316,7 +316,7 @@ mod benchmarks {
 			.map_err(|_| -> BenchmarkError { "cannot create admin origin".into() })?;
 		#[block]
 		{
-			assert_ok!(Pallet::<T>::admin(
+			assert_ok!(Pezpallet::<T>::admin(
 				origin,
 				crate::AdminOperation::EmergencySetSolution(
 					pezsp_std::boxed::Box::new(single_support),
@@ -332,7 +332,7 @@ mod benchmarks {
 	}
 
 	impl_benchmark_test_suite!(
-		Pallet,
+		Pezpallet,
 		crate::mock::ExtBuilder::full().build_unchecked(),
 		crate::mock::Runtime
 	);

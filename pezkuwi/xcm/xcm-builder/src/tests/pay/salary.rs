@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Tests for the integration between `PayOverXcm` and the salary pallet
+//! Tests for the integration between `PayOverXcm` and the salary pezpallet
 
 use super::{mock::*, *};
 
@@ -116,7 +116,7 @@ impl pezpallet_salary::Config for Test {
 }
 
 /// Scenario:
-/// The salary pallet is used to pay a member over XCM.
+/// The salary pezpallet is used to pay a member over XCM.
 /// The correct XCM message is generated and when executed in the remote chain,
 /// the member receives the salary.
 #[test]
@@ -130,7 +130,7 @@ fn salary_pay_over_xcm_works() {
 		// Check starting balance
 		assert_eq!(mock::Assets::balance(AssetIdGeneralIndex::get(), &recipient.clone()), 0);
 
-		// Use salary pallet to call `PayOverXcm::pay`
+		// Use salary pezpallet to call `PayOverXcm::pay`
 		assert_ok!(Salary::init(RuntimeOrigin::signed(recipient.clone())));
 		run_to(5);
 		assert_ok!(Salary::induct(RuntimeOrigin::signed(recipient.clone())));

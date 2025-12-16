@@ -1,7 +1,7 @@
 # Aura Module
 
-- [`aura::Config`](https://docs.rs/pezpallet-aura/latest/pallet_aura/pallet/trait.Config.html)
-- [`Pallet`](https://docs.rs/pezpallet-aura/latest/pallet_aura/pallet/struct.Pallet.html)
+- [`aura::Config`](https://docs.rs/pezpallet-aura/latest/pallet_aura/pezpallet/trait.Config.html)
+- [`Pezpallet`](https://docs.rs/pezpallet-aura/latest/pallet_aura/pezpallet/struct.Pezpallet.html)
 
 ## Overview
 

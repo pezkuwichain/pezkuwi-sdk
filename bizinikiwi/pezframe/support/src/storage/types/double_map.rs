@@ -43,7 +43,7 @@ use pezsp_metadata_ir::{StorageEntryMetadataIR, StorageEntryTypeIR};
 /// Also, conceptually, a double map is a special case of a
 /// [`StorageNMap`](pezframe_support::storage::types::StorageNMap) using two keys.
 ///
-/// For general information regarding the `#[pallet::storage]` attribute, refer to
+/// For general information regarding the `#[pezpallet::storage]` attribute, refer to
 /// [`crate::pezpallet_macros::storage`].
 ///
 /// # Examples
@@ -51,18 +51,18 @@ use pezsp_metadata_ir::{StorageEntryMetadataIR, StorageEntryTypeIR};
 /// ### Kitchen-sink
 ///
 /// ```
-/// #[pezframe_support::pallet]
-/// mod pallet {
+/// #[pezframe_support::pezpallet]
+/// mod pezpallet {
 /// # 	use pezframe_support::pezpallet_prelude::*;
-/// # 	#[pallet::config]
+/// # 	#[pezpallet::config]
 /// # 	pub trait Config: pezframe_system::Config {}
-/// # 	#[pallet::pallet]
-/// # 	pub struct Pallet<T>(_);
+/// # 	#[pezpallet::pezpallet]
+/// # 	pub struct Pezpallet<T>(_);
 ///     /// A kitchen-sink StorageDoubleMap, with all possible additional attributes.
-///     #[pallet::storage]
-///     #[pallet::getter(fn foo)]
-///     #[pallet::storage_prefix = "OtherFoo"]
-///     #[pallet::unbounded]
+///     #[pezpallet::storage]
+///     #[pezpallet::getter(fn foo)]
+///     #[pezpallet::storage_prefix = "OtherFoo"]
+///     #[pezpallet::unbounded]
 ///     pub type Foo<T> = StorageDoubleMap<
 /// 		_,
 ///         Blake2_128Concat,
@@ -74,7 +74,7 @@ use pezsp_metadata_ir::{StorageEntryMetadataIR, StorageEntryTypeIR};
 ///     >;
 ///
 /// 	/// Alternative named syntax.
-///     #[pallet::storage]
+///     #[pezpallet::storage]
 ///     pub type Bar<T> = StorageDoubleMap<
 ///         Hasher1 = Blake2_128Concat,
 ///         Key1 = u8,
@@ -138,7 +138,7 @@ where
 	Key2: MaxEncodedLen,
 {
 	fn get() -> u32 {
-		// The `max_len` of both key hashes plus the pallet prefix and storage prefix (which both
+		// The `max_len` of both key hashes plus the pezpallet prefix and storage prefix (which both
 		// are hashed with `Twox128`).
 		let z =
 			Hasher1::max_len::<Key1>() + Hasher2::max_len::<Key2>() + Twox128::max_len::<()>() * 2;

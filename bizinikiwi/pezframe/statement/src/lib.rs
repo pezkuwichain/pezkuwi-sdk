@@ -15,20 +15,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Supporting pallet for the statement store.
+//! Supporting pezpallet for the statement store.
 //!
-//! - [`Pallet`]
+//! - [`Pezpallet`]
 //!
 //! ## Overview
 //!
-//! The Statement pallet provides means to create and validate statements for the statement store.
+//! The Statement pezpallet provides means to create and validate statements for the statement store.
 //!
 //! For each statement validation function calculates the following three values based on the
 //! statement author balance:
 //! `max_count`: Maximum number of statements allowed for the author (signer) of this statement.
 //! `max_size`: Maximum total size of statements allowed for the author (signer) of this statement.
 //!
-//! This pallet also contains an offchain worker that turns on-chain statement events into
+//! This pezpallet also contains an offchain worker that turns on-chain statement events into
 //! statements. These statements are placed in the store and propagated over the network.
 
 #![cfg_attr(not(feature = "std"), no_std)]
@@ -51,12 +51,12 @@ mod mock;
 #[cfg(test)]
 mod tests;
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 const LOG_TARGET: &str = "runtime::statement";
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
 	pub type BalanceOf<T> =
@@ -64,7 +64,7 @@ pub mod pallet {
 
 	pub type AccountIdOf<T> = <T as pezframe_system::Config>::AccountId;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config
 	where
 		<Self as pezframe_system::Config>::AccountId: From<pezsp_statement_store::AccountId>,
@@ -75,30 +75,30 @@ pub mod pallet {
 		/// The currency which is used to calculate account limits.
 		type Currency: Inspect<Self::AccountId>;
 		/// Min balance for priority statements.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type StatementCost: Get<BalanceOf<Self>>;
 		/// Cost of data byte used for priority calculation.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type ByteCost: Get<BalanceOf<Self>>;
 		/// Minimum number of statements allowed per account.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MinAllowedStatements: Get<u32>;
 		/// Maximum number of statements allowed per account.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxAllowedStatements: Get<u32>;
 		/// Minimum data bytes allowed per account.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MinAllowedBytes: Get<u32>;
 		/// Maximum data bytes allowed per account.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxAllowedBytes: Get<u32>;
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(core::marker::PhantomData<T>);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(core::marker::PhantomData<T>);
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config>
 	where
 		<T as pezframe_system::Config>::AccountId: From<pezsp_statement_store::AccountId>,
@@ -107,28 +107,28 @@ pub mod pallet {
 		NewStatement { account: T::AccountId, statement: Statement },
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T>
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T>
 	where
 		<T as pezframe_system::Config>::AccountId: From<pezsp_statement_store::AccountId>,
 		pezsp_statement_store::AccountId: From<<T as pezframe_system::Config>::AccountId>,
-		<T as pezframe_system::Config>::RuntimeEvent: From<pallet::Event<T>>,
-		<T as pezframe_system::Config>::RuntimeEvent: TryInto<pallet::Event<T>>,
+		<T as pezframe_system::Config>::RuntimeEvent: From<pezpallet::Event<T>>,
+		<T as pezframe_system::Config>::RuntimeEvent: TryInto<pezpallet::Event<T>>,
 		pezsp_statement_store::BlockHash: From<<T as pezframe_system::Config>::Hash>,
 	{
 		fn offchain_worker(now: BlockNumberFor<T>) {
 			log::trace!(target: LOG_TARGET, "Collecting statements at #{:?}", now);
-			Pallet::<T>::collect_statements();
+			Pezpallet::<T>::collect_statements();
 		}
 	}
 }
 
-impl<T: Config> Pallet<T>
+impl<T: Config> Pezpallet<T>
 where
 	<T as pezframe_system::Config>::AccountId: From<pezsp_statement_store::AccountId>,
 	pezsp_statement_store::AccountId: From<<T as pezframe_system::Config>::AccountId>,
-	<T as pezframe_system::Config>::RuntimeEvent: From<pallet::Event<T>>,
-	<T as pezframe_system::Config>::RuntimeEvent: TryInto<pallet::Event<T>>,
+	<T as pezframe_system::Config>::RuntimeEvent: From<pezpallet::Event<T>>,
+	<T as pezframe_system::Config>::RuntimeEvent: TryInto<pezpallet::Event<T>>,
 	pezsp_statement_store::BlockHash: From<<T as pezframe_system::Config>::Hash>,
 {
 	/// Validate a statement against current state. This is supposed to be called by the statement
@@ -141,12 +141,12 @@ where
 		log::debug!(target: LOG_TARGET, "Validating statement {:?}", statement);
 		let account: T::AccountId = match statement.proof() {
 			Some(Proof::OnChain { who, block_hash, event_index }) => {
-				if pezframe_system::Pallet::<T>::parent_hash().as_ref() != block_hash.as_slice() {
+				if pezframe_system::Pezpallet::<T>::parent_hash().as_ref() != block_hash.as_slice() {
 					log::debug!(target: LOG_TARGET, "Bad block hash.");
 					return Err(InvalidStatement::BadProof);
 				}
 				let account: T::AccountId = (*who).into();
-				match pezframe_system::Pallet::<T>::event_no_consensus(*event_index as usize) {
+				match pezframe_system::Pezpallet::<T>::event_no_consensus(*event_index as usize) {
 					Some(e) => {
 						statement.remove_proof();
 						if let Ok(Event::NewStatement { account: a, statement: s }) = e.try_into() {
@@ -207,13 +207,13 @@ where
 
 	fn collect_statements() {
 		// Find `NewStatement` events and submit them to the store
-		for (index, event) in pezframe_system::Pallet::<T>::read_events_no_consensus().enumerate() {
+		for (index, event) in pezframe_system::Pezpallet::<T>::read_events_no_consensus().enumerate() {
 			if let Ok(Event::<T>::NewStatement { account, mut statement }) = event.event.try_into()
 			{
 				if statement.proof().is_none() {
 					let proof = Proof::OnChain {
 						who: account.into(),
-						block_hash: pezframe_system::Pallet::<T>::parent_hash().into(),
+						block_hash: pezframe_system::Pezpallet::<T>::parent_hash().into(),
 						event_index: index as u64,
 					};
 					statement.set_proof(proof);

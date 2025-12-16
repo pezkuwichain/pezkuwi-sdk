@@ -86,7 +86,7 @@ mod tests;
 pub mod weights;
 pub use weights::WeightInfo;
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 const LOG_TARGET: &str = "sassafras::runtime";
 
@@ -116,25 +116,25 @@ pub struct TicketsMetadata {
 	pub tickets_count: [u32; 2],
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	/// The Sassafras pallet.
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	/// The Sassafras pezpallet.
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
 	/// Configuration parameters.
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config + CreateBare<Call<Self>> {
 		/// Amount of slots that each epoch should last.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type EpochLength: Get<u32>;
 
 		/// Max number of authorities allowed.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxAuthorities: Get<u32>;
 
 		/// Epoch change trigger.
@@ -143,76 +143,76 @@ pub mod pallet {
 		/// and to perform the transition to the next epoch.
 		type EpochChangeTrigger: EpochChangeTrigger;
 
-		/// Weight information for all calls of this pallet.
+		/// Weight information for all calls of this pezpallet.
 		type WeightInfo: WeightInfo;
 	}
 
 	/// Sassafras runtime errors.
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Submitted configuration is invalid.
 		InvalidConfiguration,
 	}
 
 	/// Current epoch index.
-	#[pallet::storage]
-	#[pallet::getter(fn epoch_index)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn epoch_index)]
 	pub type EpochIndex<T> = StorageValue<_, u64, ValueQuery>;
 
 	/// Current epoch authorities.
-	#[pallet::storage]
-	#[pallet::getter(fn authorities)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn authorities)]
 	pub type Authorities<T: Config> = StorageValue<_, AuthoritiesVec<T>, ValueQuery>;
 
 	/// Next epoch authorities.
-	#[pallet::storage]
-	#[pallet::getter(fn next_authorities)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn next_authorities)]
 	pub type NextAuthorities<T: Config> = StorageValue<_, AuthoritiesVec<T>, ValueQuery>;
 
 	/// First block slot number.
 	///
 	/// As the slots may not be zero-based, we record the slot value for the fist block.
 	/// This allows to always compute relative indices for epochs and slots.
-	#[pallet::storage]
-	#[pallet::getter(fn genesis_slot)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn genesis_slot)]
 	pub type GenesisSlot<T> = StorageValue<_, Slot, ValueQuery>;
 
 	/// Current block slot number.
-	#[pallet::storage]
-	#[pallet::getter(fn current_slot)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn current_slot)]
 	pub type CurrentSlot<T> = StorageValue<_, Slot, ValueQuery>;
 
 	/// Current epoch randomness.
-	#[pallet::storage]
-	#[pallet::getter(fn randomness)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn randomness)]
 	pub type CurrentRandomness<T> = StorageValue<_, Randomness, ValueQuery>;
 
 	/// Next epoch randomness.
-	#[pallet::storage]
-	#[pallet::getter(fn next_randomness)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn next_randomness)]
 	pub type NextRandomness<T> = StorageValue<_, Randomness, ValueQuery>;
 
 	/// Randomness accumulator.
 	///
 	/// Excluded the first imported block, its value is updated on block finalization.
-	#[pallet::storage]
-	#[pallet::getter(fn randomness_accumulator)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn randomness_accumulator)]
 	pub(crate) type RandomnessAccumulator<T> = StorageValue<_, Randomness, ValueQuery>;
 
 	/// Per slot randomness used to feed the randomness accumulator.
 	///
 	/// The value is ephemeral and is cleared on block finalization.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type SlotRandomness<T> = StorageValue<_, Randomness>;
 
 	/// The configuration for the current epoch.
-	#[pallet::storage]
-	#[pallet::getter(fn config)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn config)]
 	pub type EpochConfig<T> = StorageValue<_, EpochConfiguration, ValueQuery>;
 
 	/// The configuration for the next epoch.
-	#[pallet::storage]
-	#[pallet::getter(fn next_config)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn next_config)]
 	pub type NextEpochConfig<T> = StorageValue<_, EpochConfiguration>;
 
 	/// Pending epoch configuration change that will be set as `NextEpochConfig` when the next
@@ -221,11 +221,11 @@ pub mod pallet {
 	/// In other words, a configuration change submitted during epoch N will be enacted on epoch
 	/// N+2. This is to maintain coherence for already submitted tickets for epoch N+1 that where
 	/// computed using configuration parameters stored for epoch N+1.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type PendingEpochConfigChange<T> = StorageValue<_, EpochConfiguration>;
 
 	/// Stored tickets metadata.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type TicketsMeta<T> = StorageValue<_, TicketsMetadata, ValueQuery>;
 
 	/// Tickets identifiers map.
@@ -243,11 +243,11 @@ pub mod pallet {
 	///
 	/// Be aware that entries within this map are never removed, only overwritten.
 	/// Last element index should be fetched from the [`TicketsMeta`] value.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type TicketsIds<T> = StorageMap<_, Identity, (u8, u32), TicketId>;
 
 	/// Tickets to be used for current and next epoch.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type TicketsData<T> = StorageMap<_, Identity, TicketId, TicketBody>;
 
 	/// Next epoch tickets unsorted segments.
@@ -256,29 +256,29 @@ pub mod pallet {
 	/// received via the `submit_tickets` extrinsic.
 	///
 	/// Each segment has max length [`SEGMENT_MAX_SIZE`].
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type UnsortedSegments<T: Config> =
 		StorageMap<_, Identity, u32, BoundedVec<TicketId, ConstU32<SEGMENT_MAX_SIZE>>, ValueQuery>;
 
 	/// The most recently set of tickets which are candidates to become the next
 	/// epoch tickets.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type SortedCandidates<T> =
 		StorageValue<_, BoundedVec<TicketId, EpochLengthFor<T>>, ValueQuery>;
 
 	/// Parameters used to construct the epoch's ring verifier.
 	///
 	/// In practice: Updatable Universal Reference String and the seed.
-	#[pallet::storage]
-	#[pallet::getter(fn ring_context)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn ring_context)]
 	pub type RingContext<T: Config> = StorageValue<_, vrf::RingContext>;
 
 	/// Ring verifier data for the current epoch.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type RingVerifierData<T: Config> = StorageValue<_, vrf::RingVerifierKey>;
 
 	/// Genesis configuration for Sassafras protocol.
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(pezframe_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		/// Genesis authorities.
@@ -290,28 +290,28 @@ pub mod pallet {
 		pub _phantom: core::marker::PhantomData<T>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			EpochConfig::<T>::put(self.epoch_config);
-			Pallet::<T>::genesis_authorities_initialize(&self.authorities);
+			Pezpallet::<T>::genesis_authorities_initialize(&self.authorities);
 
 			#[cfg(feature = "construct-dummy-ring-context")]
 			{
 				debug!(target: LOG_TARGET, "Constructing dummy ring context");
 				let ring_ctx = vrf::RingContext::new_testing();
 				RingContext::<T>::put(ring_ctx);
-				Pallet::<T>::update_ring_verifier(&self.authorities);
+				Pezpallet::<T>::update_ring_verifier(&self.authorities);
 			}
 		}
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn on_initialize(block_num: BlockNumberFor<T>) -> Weight {
-			debug_assert_eq!(block_num, pezframe_system::Pallet::<T>::block_number());
+			debug_assert_eq!(block_num, pezframe_system::Pezpallet::<T>::block_number());
 
-			let claim = <pezframe_system::Pallet<T>>::digest()
+			let claim = <pezframe_system::Pezpallet<T>>::digest()
 				.logs
 				.iter()
 				.find_map(|item| item.pre_runtime_try_to::<SlotClaim>(&SASSAFRAS_ENGINE_ID))
@@ -363,13 +363,13 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Submit next epoch tickets candidates.
 		///
 		/// The number of tickets allowed to be submitted in one call is equal to the epoch length.
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::submit_tickets(tickets.len() as u32))]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::submit_tickets(tickets.len() as u32))]
 		pub fn submit_tickets(
 			origin: OriginFor<T>,
 			tickets: BoundedVec<TicketEnvelope, EpochLengthFor<T>>,
@@ -456,8 +456,8 @@ pub mod pallet {
 		///
 		/// Multiple calls to this method will replace any existing planned config change
 		/// that has not been enacted yet.
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::plan_config_change())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::plan_config_change())]
 		pub fn plan_config_change(
 			origin: OriginFor<T>,
 			config: EpochConfiguration,
@@ -473,8 +473,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::validate_unsigned]
-	impl<T: Config> ValidateUnsigned for Pallet<T> {
+	#[pezpallet::validate_unsigned]
+	impl<T: Config> ValidateUnsigned for Pezpallet<T> {
 		type Call = Call<T>;
 
 		fn validate_unsigned(source: TransactionSource, call: &Self::Call) -> TransactionValidity {
@@ -514,7 +514,7 @@ pub mod pallet {
 }
 
 // Inherent methods
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Determine whether an epoch change should take place at this block.
 	///
 	/// Assumes that initialization has already taken place.
@@ -699,12 +699,12 @@ impl<T: Config> Pallet<T> {
 	fn deposit_next_epoch_descriptor_digest(desc: NextEpochDescriptor) {
 		let item = ConsensusLog::NextEpochData(desc);
 		let log = DigestItem::Consensus(SASSAFRAS_ENGINE_ID, item.encode());
-		<pezframe_system::Pallet<T>>::deposit_log(log)
+		<pezframe_system::Pezpallet<T>>::deposit_log(log)
 	}
 
 	// Initialize authorities on genesis phase.
 	//
-	// Genesis authorities may have been initialized via other means (e.g. via session pallet).
+	// Genesis authorities may have been initialized via other means (e.g. via session pezpallet).
 	//
 	// If this function has already been called with some authorities, then the new list
 	// should match the previously set one.
@@ -735,7 +735,7 @@ impl<T: Config> Pallet<T> {
 		// This is important to guarantee that a different set of tickets are produced for:
 		// - different chains which share the same ring parameters and
 		// - same chain started with a different slot base.
-		let genesis_hash = pezframe_system::Pallet::<T>::parent_hash();
+		let genesis_hash = pezframe_system::Pezpallet::<T>::parent_hash();
 		let mut buf = genesis_hash.as_ref().to_vec();
 		buf.extend_from_slice(&slot.to_le_bytes());
 		let randomness = hashing::blake2_256(buf.as_slice());
@@ -803,7 +803,7 @@ impl<T: Config> Pallet<T> {
 	///
 	/// Before importing the first block this returns `None`.
 	pub fn slot_ticket_id(slot: Slot) -> Option<TicketId> {
-		if pezframe_system::Pallet::<T>::block_number().is_zero() {
+		if pezframe_system::Pezpallet::<T>::block_number().is_zero() {
 			return None;
 		}
 		let epoch_idx = EpochIndex::<T>::get();
@@ -1048,11 +1048,11 @@ pub struct EpochChangeInternalTrigger;
 
 impl EpochChangeTrigger for EpochChangeInternalTrigger {
 	fn trigger<T: Config>(block_num: BlockNumberFor<T>) -> Weight {
-		if Pallet::<T>::should_end_epoch(block_num) {
-			let authorities = Pallet::<T>::next_authorities();
+		if Pezpallet::<T>::should_end_epoch(block_num) {
+			let authorities = Pezpallet::<T>::next_authorities();
 			let next_authorities = authorities.clone();
 			let len = next_authorities.len() as u32;
-			Pallet::<T>::enact_epoch_change(authorities, next_authorities);
+			Pezpallet::<T>::enact_epoch_change(authorities, next_authorities);
 			T::WeightInfo::enact_epoch_change(len, T::EpochLength::get())
 		} else {
 			Weight::zero()
@@ -1060,6 +1060,6 @@ impl EpochChangeTrigger for EpochChangeInternalTrigger {
 	}
 }
 
-impl<T: Config> BoundToRuntimeAppPublic for Pallet<T> {
+impl<T: Config> BoundToRuntimeAppPublic for Pezpallet<T> {
 	type Public = AuthorityId;
 }

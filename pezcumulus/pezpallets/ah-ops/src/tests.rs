@@ -125,12 +125,12 @@ fn sovereign_account_translation() {
 		if let Some((parent, index)) = derivation {
 			let parent = AccountId32::from_str(parent).unwrap();
 			let (got_to, _) =
-				crate::Pallet::<AssetHub>::try_rc_sovereign_derived_to_ah(&from, &parent, index)
+				crate::Pezpallet::<AssetHub>::try_rc_sovereign_derived_to_ah(&from, &parent, index)
 					.unwrap();
 			assert_eq!(got_to, to);
 		} else {
 			let (got_to, _) =
-				crate::Pallet::<AssetHub>::try_translate_rc_sovereign_to_ah(&from).unwrap();
+				crate::Pezpallet::<AssetHub>::try_translate_rc_sovereign_to_ah(&from).unwrap();
 			assert_eq!(got_to, to);
 		}
 	}
@@ -153,14 +153,14 @@ fn translate_sovereign_acc_good() {
 
 		// Works if the account does not exist
 		hypothetically!({
-			crate::Pallet::<AssetHub>::do_migrate_teyrchain_sovereign_derived_acc(
+			crate::Pezpallet::<AssetHub>::do_migrate_teyrchain_sovereign_derived_acc(
 				&from,
 				&to,
 				derivation_proof.clone(),
 			)
 			.unwrap();
 			// Also twice
-			crate::Pallet::<AssetHub>::do_migrate_teyrchain_sovereign_derived_acc(
+			crate::Pezpallet::<AssetHub>::do_migrate_teyrchain_sovereign_derived_acc(
 				&from,
 				&to,
 				derivation_proof.clone(),
@@ -171,14 +171,14 @@ fn translate_sovereign_acc_good() {
 		// But also if it exists
 		<AssetHub as crate::Config>::Currency::mint_into(&from, balance).unwrap();
 		hypothetically!({
-			crate::Pallet::<AssetHub>::do_migrate_teyrchain_sovereign_derived_acc(
+			crate::Pezpallet::<AssetHub>::do_migrate_teyrchain_sovereign_derived_acc(
 				&from,
 				&to,
 				derivation_proof.clone(),
 			)
 			.unwrap();
 			// Also twice
-			crate::Pallet::<AssetHub>::do_migrate_teyrchain_sovereign_derived_acc(
+			crate::Pezpallet::<AssetHub>::do_migrate_teyrchain_sovereign_derived_acc(
 				&from,
 				&to,
 				derivation_proof.clone(),
@@ -193,7 +193,7 @@ fn translate_sovereign_acc_good() {
 		// Can also have locks
 		<AssetHub as crate::Config>::Currency::set_lock(LID, &from, lock, WithdrawReasons::FEE);
 		hypothetically!({
-			crate::Pallet::<AssetHub>::do_migrate_teyrchain_sovereign_derived_acc(
+			crate::Pezpallet::<AssetHub>::do_migrate_teyrchain_sovereign_derived_acc(
 				&from,
 				&to,
 				derivation_proof.clone(),
@@ -225,7 +225,7 @@ fn contributions_withdrawn_works() {
 
 		// Initially no contributions exist, so should return true
 		assert!(
-			crate::Pallet::<AssetHub>::contributions_withdrawn(block_number, para_id),
+			crate::Pezpallet::<AssetHub>::contributions_withdrawn(block_number, para_id),
 			"Should return true when no contributions exist"
 		);
 
@@ -237,7 +237,7 @@ fn contributions_withdrawn_works() {
 
 		// Now should return false since there's a contribution
 		assert!(
-			!crate::Pallet::<AssetHub>::contributions_withdrawn(block_number, para_id),
+			!crate::Pezpallet::<AssetHub>::contributions_withdrawn(block_number, para_id),
 			"Should return false when contributions exist"
 		);
 
@@ -249,7 +249,7 @@ fn contributions_withdrawn_works() {
 
 		// Still should return false
 		assert!(
-			!crate::Pallet::<AssetHub>::contributions_withdrawn(block_number, para_id),
+			!crate::Pezpallet::<AssetHub>::contributions_withdrawn(block_number, para_id),
 			"Should return false when multiple contributions exist"
 		);
 
@@ -258,7 +258,7 @@ fn contributions_withdrawn_works() {
 
 		// Still should return false (one contribution remains)
 		assert!(
-			!crate::Pallet::<AssetHub>::contributions_withdrawn(block_number, para_id),
+			!crate::Pezpallet::<AssetHub>::contributions_withdrawn(block_number, para_id),
 			"Should return false when one contribution still exists"
 		);
 
@@ -267,14 +267,14 @@ fn contributions_withdrawn_works() {
 
 		// Now should return true again
 		assert!(
-			crate::Pallet::<AssetHub>::contributions_withdrawn(block_number, para_id),
+			crate::Pezpallet::<AssetHub>::contributions_withdrawn(block_number, para_id),
 			"Should return true after all contributions are removed"
 		);
 
 		// Test with different para_id - should still be true (no contributions)
 		let other_para_id: u16 = 2001;
 		assert!(
-			crate::Pallet::<AssetHub>::contributions_withdrawn(block_number, other_para_id),
+			crate::Pezpallet::<AssetHub>::contributions_withdrawn(block_number, other_para_id),
 			"Should return true for different para_id with no contributions"
 		);
 
@@ -286,13 +286,13 @@ fn contributions_withdrawn_works() {
 
 		// Original para_id should now be false
 		assert!(
-			!crate::Pallet::<AssetHub>::contributions_withdrawn(block_number, para_id),
+			!crate::Pezpallet::<AssetHub>::contributions_withdrawn(block_number, para_id),
 			"Should return false for para_id with contribution"
 		);
 
 		// Different para_id should still be true
 		assert!(
-			crate::Pallet::<AssetHub>::contributions_withdrawn(block_number, other_para_id),
+			crate::Pezpallet::<AssetHub>::contributions_withdrawn(block_number, other_para_id),
 			"Should return true for different para_id"
 		);
 	});

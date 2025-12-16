@@ -6,7 +6,7 @@ edition.workspace = true
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
-description = "FRAME pallet for conviction voting in referenda"
+description = "FRAME pezpallet for conviction voting in referenda"
 readme = "README.md"
 documentation = "https://docs.rs/pezpallet-conviction-voting"
 

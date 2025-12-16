@@ -4,7 +4,7 @@ use crate::{
 use pezframe_support::{assert_noop, assert_ok};
 use pezsp_runtime::DispatchError;
 
-type TikiPallet = crate::Pallet<Test>;
+type TikiPallet = crate::Pezpallet<Test>;
 
 // === Temel NFT ve Rol Testleri ===
 

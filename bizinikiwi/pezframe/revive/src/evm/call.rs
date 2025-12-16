@@ -19,7 +19,7 @@
 
 use crate::{
 	evm::{fees::InfoT, runtime::SetWeightLimit},
-	extract_code_and_data, BalanceOf, CallOf, Config, GenericTransaction, Pallet, Weight, Zero,
+	extract_code_and_data, BalanceOf, CallOf, Config, GenericTransaction, Pezpallet, Weight, Zero,
 	LOG_TARGET, RUNTIME_PALLETS_ADDR, U256,
 };
 use alloc::{boxed::Box, vec::Vec};
@@ -56,7 +56,7 @@ where
 	T: Config,
 	CallOf<T>: SetWeightLimit,
 {
-	let base_fee = <Pallet<T>>::evm_base_fee();
+	let base_fee = <Pezpallet<T>>::evm_base_fee();
 
 	let Some(gas) = tx.gas else {
 		log::debug!(target: LOG_TARGET, "No gas provided");
@@ -181,7 +181,7 @@ where
 		call.set_weight_limit(weight_limit);
 		let info = <T as Config>::FeeInfo::dispatch_info(&call);
 		let max_weight =
-			if apply_weight_cap { <Pallet<T>>::evm_max_extrinsic_weight() } else { Weight::MAX };
+			if apply_weight_cap { <Pezpallet<T>>::evm_max_extrinsic_weight() } else { Weight::MAX };
 		let overweight_by = info.total_weight().saturating_sub(max_weight);
 		let capped_weight = weight_limit.saturating_sub(overweight_by);
 		call.set_weight_limit(capped_weight);

@@ -16,7 +16,7 @@
 
 //! A module that is responsible for migration of storage.
 
-use crate::configuration::{self, migration::v11::V11HostConfiguration, Config, Pallet};
+use crate::configuration::{self, migration::v11::V11HostConfiguration, Config, Pezpallet};
 use alloc::vec::Vec;
 use pezframe_support::{
 	migrations::VersionedMigration,
@@ -35,11 +35,11 @@ mod v11 {
 
 	#[pezframe_support::storage_alias]
 	pub(crate) type ActiveConfig<T: Config> =
-		StorageValue<Pallet<T>, V11HostConfiguration<BlockNumberFor<T>>, OptionQuery>;
+		StorageValue<Pezpallet<T>, V11HostConfiguration<BlockNumberFor<T>>, OptionQuery>;
 
 	#[pezframe_support::storage_alias]
 	pub(crate) type PendingConfigs<T: Config> = StorageValue<
-		Pallet<T>,
+		Pezpallet<T>,
 		Vec<(SessionIndex, V11HostConfiguration<BlockNumberFor<T>>)>,
 		OptionQuery,
 	>;
@@ -50,11 +50,11 @@ mod v12 {
 
 	#[pezframe_support::storage_alias]
 	pub(crate) type ActiveConfig<T: Config> =
-		StorageValue<Pallet<T>, V12HostConfiguration<BlockNumberFor<T>>, OptionQuery>;
+		StorageValue<Pezpallet<T>, V12HostConfiguration<BlockNumberFor<T>>, OptionQuery>;
 
 	#[pezframe_support::storage_alias]
 	pub(crate) type PendingConfigs<T: Config> = StorageValue<
-		Pallet<T>,
+		Pezpallet<T>,
 		Vec<(SessionIndex, V12HostConfiguration<BlockNumberFor<T>>)>,
 		OptionQuery,
 	>;
@@ -64,7 +64,7 @@ pub type MigrateToV12<T> = VersionedMigration<
 	11,
 	12,
 	UncheckedMigrateToV12<T>,
-	Pallet<T>,
+	Pezpallet<T>,
 	<T as pezframe_system::Config>::DbWeight,
 >;
 
@@ -90,7 +90,7 @@ impl<T: Config> UncheckedOnRuntimeUpgrade for UncheckedMigrateToV12<T> {
 	fn post_upgrade(_state: Vec<u8>) -> Result<(), pezsp_runtime::TryRuntimeError> {
 		log::trace!(target: crate::configuration::LOG_TARGET, "Running post_upgrade() for HostConfiguration MigrateToV12");
 		ensure!(
-			StorageVersion::get::<Pallet<T>>() >= 12,
+			StorageVersion::get::<Pezpallet<T>>() >= 12,
 			"Storage version should be >= 12 after the migration"
 		);
 
@@ -340,7 +340,7 @@ mod tests {
 	}
 
 	// Test that migration doesn't panic in case there are no pending configurations upgrades in
-	// pallet's storage.
+	// pezpallet's storage.
 	#[test]
 	fn test_migrate_to_v12_no_pending() {
 		let v11 = V11HostConfiguration::<pezkuwi_primitives::BlockNumber>::default();

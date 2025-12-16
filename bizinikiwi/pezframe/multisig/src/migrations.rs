@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Migrations for Multisig Pallet
+// Migrations for Multisig Pezpallet
 
 use crate::*;
 use frame::prelude::*;
@@ -27,7 +27,7 @@ pub mod v1 {
 
 	#[frame::storage_alias]
 	type Calls<T: Config> = StorageMap<
-		Pallet<T>,
+		Pezpallet<T>,
 		Identity,
 		[u8; 32],
 		(OpaqueCall<T>, <T as pezframe_system::Config>::AccountId, BalanceOf<T>),
@@ -44,8 +44,8 @@ pub mod v1 {
 
 		fn on_runtime_upgrade() -> Weight {
 			use frame::traits::ReservableCurrency as _;
-			let current = Pallet::<T>::in_code_storage_version();
-			let onchain = Pallet::<T>::on_chain_storage_version();
+			let current = Pezpallet::<T>::in_code_storage_version();
+			let onchain = Pezpallet::<T>::on_chain_storage_version();
 
 			if onchain > 0 {
 				log!(info, "MigrateToV1 should be removed");
@@ -58,7 +58,7 @@ pub mod v1 {
 				call_count.saturating_inc();
 			});
 
-			current.put::<Pallet<T>>();
+			current.put::<Pezpallet<T>>();
 
 			T::DbWeight::get().reads_writes(
 				// Reads: Get Calls + Get Version

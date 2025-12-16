@@ -71,8 +71,8 @@ pub fn recognize_people<T: Config + Send + Sync>(
 ) -> Vec<(PersonalId, MemberOf<T>, SecretOf<T>)> {
 	let mut people = Vec::new();
 	for (secret, public) in members.iter() {
-		let person = pallet::Pallet::<T>::reserve_new_id();
-		pallet::Pallet::<T>::recognize_personhood(person, Some(public.clone())).unwrap();
+		let person = pezpallet::Pezpallet::<T>::reserve_new_id();
+		pezpallet::Pezpallet::<T>::recognize_personhood(person, Some(public.clone())).unwrap();
 		people.push((person, public.clone(), secret.clone()));
 	}
 
@@ -141,10 +141,10 @@ mod benches {
 		// Generate people and build a ring
 		let members = generate_members_for_ring::<T>(SEED);
 		recognize_people::<T>(&members);
-		assert_ok!(pallet::Pallet::<T>::onboard_people());
+		assert_ok!(pezpallet::Pezpallet::<T>::onboard_people());
 		let to_include =
-			pallet::Pallet::<T>::should_build_ring(RI_ZERO, T::MaxRingSize::get()).unwrap();
-		assert_ok!(pallet::Pallet::<T>::build_ring(RI_ZERO, to_include));
+			pezpallet::Pezpallet::<T>::should_build_ring(RI_ZERO, T::MaxRingSize::get()).unwrap();
+		assert_ok!(pezpallet::Pezpallet::<T>::build_ring(RI_ZERO, to_include));
 
 		// Create account and alias
 		let account: T::AccountId = whitelisted_caller();
@@ -157,8 +157,8 @@ mod benches {
 		};
 
 		// Set up alias account association
-		let block_number = pezframe_system::Pallet::<T>::block_number();
-		assert_ok!(pallet::Pallet::<T>::set_alias_account(
+		let block_number = pezframe_system::Pezpallet::<T>::block_number();
+		assert_ok!(pezpallet::Pezpallet::<T>::set_alias_account(
 			Origin::PersonalAlias(ra.clone()).into(),
 			account.clone(),
 			block_number
@@ -183,12 +183,12 @@ mod benches {
 		// Generate people and build a ring
 		let members = generate_members_for_ring::<T>(SEED);
 		recognize_people::<T>(&members);
-		assert_ok!(pallet::Pallet::<T>::onboard_people());
+		assert_ok!(pezpallet::Pezpallet::<T>::onboard_people());
 		let to_include =
-			pallet::Pallet::<T>::should_build_ring(RI_ZERO, T::MaxRingSize::get()).unwrap();
-		assert_ok!(pallet::Pallet::<T>::build_ring(RI_ZERO, to_include));
+			pezpallet::Pezpallet::<T>::should_build_ring(RI_ZERO, T::MaxRingSize::get()).unwrap();
+		assert_ok!(pezpallet::Pezpallet::<T>::build_ring(RI_ZERO, to_include));
 
-		let block_number = pezframe_system::Pallet::<T>::block_number();
+		let block_number = pezframe_system::Pezpallet::<T>::block_number();
 
 		let alias_value: Alias = [0u8; 32];
 		let alias = RevisedContextualAlias {
@@ -202,7 +202,7 @@ mod benches {
 
 		// An account had already been assigned to this alias
 		let old_account: T::AccountId = account("test_old", 0, SEED);
-		assert_ok!(pallet::Pallet::<T>::set_alias_account(
+		assert_ok!(pezpallet::Pezpallet::<T>::set_alias_account(
 			Origin::PersonalAlias(alias.clone()).into(),
 			old_account.clone(),
 			block_number
@@ -230,13 +230,13 @@ mod benches {
 		// Generate people and build a ring
 		let members = generate_members_for_ring::<T>(SEED);
 		recognize_people::<T>(&members);
-		assert_ok!(pallet::Pallet::<T>::onboard_people());
+		assert_ok!(pezpallet::Pezpallet::<T>::onboard_people());
 		let to_include =
-			pallet::Pallet::<T>::should_build_ring(RI_ZERO, T::MaxRingSize::get()).unwrap();
-		assert_ok!(pallet::Pallet::<T>::build_ring(RI_ZERO, to_include));
+			pezpallet::Pezpallet::<T>::should_build_ring(RI_ZERO, T::MaxRingSize::get()).unwrap();
+		assert_ok!(pezpallet::Pezpallet::<T>::build_ring(RI_ZERO, to_include));
 
 		let account: T::AccountId = account("test", 0, SEED);
-		let block_number = pezframe_system::Pallet::<T>::block_number();
+		let block_number = pezframe_system::Pezpallet::<T>::block_number();
 
 		let alias_value: Alias = [0u8; 32];
 		let alias = RevisedContextualAlias {
@@ -248,7 +248,7 @@ mod benches {
 			ring: 0,
 		};
 
-		assert_ok!(pallet::Pallet::<T>::set_alias_account(
+		assert_ok!(pezpallet::Pezpallet::<T>::set_alias_account(
 			Origin::PersonalAlias(alias.clone()).into(),
 			account.clone(),
 			block_number
@@ -273,7 +273,7 @@ mod benches {
 		_(SystemOrigin::Root, members.iter().map(|(_, m)| m.clone()).collect::<Vec<_>>());
 
 		for person in members {
-			assert!(pallet::Keys::<T>::get(person.1).is_some());
+			assert!(pezpallet::Keys::<T>::get(person.1).is_some());
 		}
 
 		Ok(())
@@ -286,20 +286,20 @@ mod benches {
 		// Generate people and build a ring
 		let members = generate_members_for_ring::<T>(SEED);
 		let people = recognize_people::<T>(&members);
-		assert_ok!(pallet::Pallet::<T>::onboard_people());
+		assert_ok!(pezpallet::Pezpallet::<T>::onboard_people());
 		let to_include =
-			pallet::Pallet::<T>::should_build_ring(RI_ZERO, T::MaxRingSize::get()).unwrap();
-		assert_ok!(pallet::Pallet::<T>::build_ring(RI_ZERO, to_include));
+			pezpallet::Pezpallet::<T>::should_build_ring(RI_ZERO, T::MaxRingSize::get()).unwrap();
+		assert_ok!(pezpallet::Pezpallet::<T>::build_ring(RI_ZERO, to_include));
 
 		// Get one of the generated people's information
 		let (personal_id, _, _): &(PersonalId, MemberOf<T>, SecretOf<T>) = &people[0];
 
 		let account: T::AccountId = account("test", 0, SEED);
-		let block_number = pezframe_system::Pallet::<T>::block_number();
+		let block_number = pezframe_system::Pezpallet::<T>::block_number();
 
 		// An account had already been assigned to this personal id
 		let old_account: T::AccountId = pezframe_benchmarking::account("test_old", 0, SEED);
-		assert_ok!(pallet::Pallet::<T>::set_personal_id_account(
+		assert_ok!(pezpallet::Pezpallet::<T>::set_personal_id_account(
 			Origin::PersonalIdentity(*personal_id).into(),
 			old_account.clone(),
 			block_number
@@ -323,20 +323,20 @@ mod benches {
 		// Generate people and build a ring
 		let members = generate_members_for_ring::<T>(SEED);
 		let people = recognize_people::<T>(&members);
-		assert_ok!(pallet::Pallet::<T>::onboard_people());
+		assert_ok!(pezpallet::Pezpallet::<T>::onboard_people());
 		let to_include =
-			pallet::Pallet::<T>::should_build_ring(RI_ZERO, T::MaxRingSize::get()).unwrap();
-		assert_ok!(pallet::Pallet::<T>::build_ring(RI_ZERO, to_include));
+			pezpallet::Pezpallet::<T>::should_build_ring(RI_ZERO, T::MaxRingSize::get()).unwrap();
+		assert_ok!(pezpallet::Pezpallet::<T>::build_ring(RI_ZERO, to_include));
 
 		// Get one of the generated people's information
 		let (personal_id, _, _): &(PersonalId, MemberOf<T>, SecretOf<T>) = &people[0];
 
 		let account: T::AccountId = account("test", 0, SEED);
-		let block_number = pezframe_system::Pallet::<T>::block_number();
+		let block_number = pezframe_system::Pezpallet::<T>::block_number();
 
 		// An account had already been assigned to this personal id
 		let old_account: T::AccountId = pezframe_benchmarking::account("test_old", 0, SEED);
-		assert_ok!(pallet::Pallet::<T>::set_personal_id_account(
+		assert_ok!(pezpallet::Pezpallet::<T>::set_personal_id_account(
 			Origin::PersonalIdentity(*personal_id).into(),
 			old_account.clone(),
 			block_number
@@ -372,35 +372,35 @@ mod benches {
 		let members = generate_members::<T>(SEED, 0, ring_size * 2);
 
 		recognize_people::<T>(&members);
-		assert_ok!(pallet::Pallet::<T>::onboard_people());
+		assert_ok!(pezpallet::Pezpallet::<T>::onboard_people());
 		assert_eq!(RingKeysStatus::<T>::get(RI_ZERO).total, ring_size);
 
-		assert_ok!(pallet::Pallet::<T>::onboard_people());
+		assert_ok!(pezpallet::Pezpallet::<T>::onboard_people());
 		assert_eq!(RingKeysStatus::<T>::get(1).total, ring_size);
 
-		assert_ok!(pallet::Pallet::<T>::build_ring(RI_ZERO, T::MaxRingSize::get()));
+		assert_ok!(pezpallet::Pezpallet::<T>::build_ring(RI_ZERO, T::MaxRingSize::get()));
 		assert_eq!(RingKeysStatus::<T>::get(RI_ZERO).included, ring_size);
 
-		assert_ok!(pallet::Pallet::<T>::build_ring(1, T::MaxRingSize::get()));
+		assert_ok!(pezpallet::Pezpallet::<T>::build_ring(1, T::MaxRingSize::get()));
 		assert_eq!(RingKeysStatus::<T>::get(1).included, ring_size);
 
 		// Suspend and remove more than half of the people in both rings
-		assert_ok!(pallet::Pallet::<T>::start_people_set_mutation_session());
+		assert_ok!(pezpallet::Pezpallet::<T>::start_people_set_mutation_session());
 		let suspensions: Vec<PersonalId> = (1..ring_size / 2 + 3)
 			.chain(ring_size + 1..ring_size * 3 / 2 + 3)
 			.map(|i| i as PersonalId)
 			.collect();
-		assert_ok!(pallet::Pallet::<T>::suspend_personhood(&suspensions));
-		assert_ok!(pallet::Pallet::<T>::end_people_set_mutation_session());
+		assert_ok!(pezpallet::Pezpallet::<T>::suspend_personhood(&suspensions));
+		assert_ok!(pezpallet::Pezpallet::<T>::end_people_set_mutation_session());
 
 		assert!(PendingSuspensions::<T>::get(RI_ZERO).len() > (ring_size / 2) as usize);
 		assert!(PendingSuspensions::<T>::get(1).len() > (ring_size / 2) as usize);
 
 		let mut meter = WeightMeter::new();
-		pallet::Pallet::<T>::migrate_keys(&mut meter);
+		pezpallet::Pezpallet::<T>::migrate_keys(&mut meter);
 
-		pallet::Pallet::<T>::remove_suspended_keys(RI_ZERO);
-		pallet::Pallet::<T>::remove_suspended_keys(1);
+		pezpallet::Pezpallet::<T>::remove_suspended_keys(RI_ZERO);
+		pezpallet::Pezpallet::<T>::remove_suspended_keys(1);
 
 		assert!(RingKeys::<T>::get(RI_ZERO).len() < (ring_size / 2) as usize);
 		assert!(RingKeys::<T>::get(1).len() < (ring_size / 2) as usize);
@@ -430,10 +430,10 @@ mod benches {
 		// Generate people and build a ring
 		let members = generate_members_for_ring::<T>(SEED);
 		recognize_people::<T>(&members);
-		assert_ok!(pallet::Pallet::<T>::onboard_people());
+		assert_ok!(pezpallet::Pezpallet::<T>::onboard_people());
 		let to_include =
-			pallet::Pallet::<T>::should_build_ring(RI_ZERO, T::MaxRingSize::get()).unwrap();
-		assert_ok!(pallet::Pallet::<T>::build_ring(RI_ZERO, to_include));
+			pezpallet::Pezpallet::<T>::should_build_ring(RI_ZERO, T::MaxRingSize::get()).unwrap();
+		assert_ok!(pezpallet::Pezpallet::<T>::build_ring(RI_ZERO, to_include));
 
 		let temp_key = new_member_from::<T>(u32::MAX, SEED).1;
 		KeyMigrationQueue::<T>::insert(0, temp_key);
@@ -456,15 +456,15 @@ mod benches {
 		// Generate people and build a ring
 		let members = generate_members_for_ring::<T>(SEED);
 		recognize_people::<T>(&members);
-		assert_ok!(pallet::Pallet::<T>::onboard_people());
+		assert_ok!(pezpallet::Pezpallet::<T>::onboard_people());
 		let to_include =
-			pallet::Pallet::<T>::should_build_ring(RI_ZERO, T::MaxRingSize::get()).unwrap();
-		assert_ok!(pallet::Pallet::<T>::build_ring(RI_ZERO, to_include));
+			pezpallet::Pezpallet::<T>::should_build_ring(RI_ZERO, T::MaxRingSize::get()).unwrap();
+		assert_ok!(pezpallet::Pezpallet::<T>::build_ring(RI_ZERO, to_include));
 
 		let temp_key = new_member_from::<T>(u32::MAX, SEED).1;
 
-		let new_person = pallet::Pallet::<T>::reserve_new_id();
-		pallet::Pallet::<T>::recognize_personhood(new_person, Some(temp_key.clone())).unwrap();
+		let new_person = pezpallet::Pezpallet::<T>::reserve_new_id();
+		pezpallet::Pezpallet::<T>::recognize_personhood(new_person, Some(temp_key.clone())).unwrap();
 
 		let new_key = new_member_from::<T>(u32::MAX - 1, SEED).1;
 
@@ -487,7 +487,7 @@ mod benches {
 		let ring_size: u32 = <T as Config>::MaxRingSize::get();
 		let members = generate_members::<T>(SEED, 0, queue_page_size);
 		recognize_people::<T>(&members);
-		assert_ok!(pallet::Pallet::<T>::onboard_people());
+		assert_ok!(pezpallet::Pezpallet::<T>::onboard_people());
 
 		// No ring built but people onboarded successfully
 		assert!(Root::<T>::get(RI_ZERO).is_none());
@@ -496,7 +496,7 @@ mod benches {
 
 		#[block]
 		{
-			let _ = Pallet::<T>::should_build_ring(RI_ZERO, T::MaxRingSize::get());
+			let _ = Pezpallet::<T>::should_build_ring(RI_ZERO, T::MaxRingSize::get());
 		}
 
 		Ok(())
@@ -511,7 +511,7 @@ mod benches {
 		let ring_size: u32 = <T as Config>::MaxRingSize::get();
 		let members = generate_members::<T>(SEED, 0, queue_page_size);
 		recognize_people::<T>(&members);
-		assert_ok!(pallet::Pallet::<T>::onboard_people());
+		assert_ok!(pezpallet::Pezpallet::<T>::onboard_people());
 
 		// No ring built but people onboarded successfully
 		assert!(Root::<T>::get(RI_ZERO).is_none());
@@ -520,7 +520,7 @@ mod benches {
 
 		#[block]
 		{
-			assert_ok!(Pallet::<T>::build_ring(RI_ZERO, n));
+			assert_ok!(Pezpallet::<T>::build_ring(RI_ZERO, n));
 		}
 
 		// The ring becomes built
@@ -539,10 +539,10 @@ mod benches {
 		let ring_size: u32 = <T as Config>::MaxRingSize::get();
 		let members = generate_members::<T>(SEED, 0, ring_size);
 		recognize_people::<T>(&members);
-		assert_ok!(pallet::Pallet::<T>::onboard_people());
+		assert_ok!(pezpallet::Pezpallet::<T>::onboard_people());
 		let to_include =
-			pallet::Pallet::<T>::should_build_ring(RI_ZERO, T::MaxRingSize::get()).unwrap();
-		assert_ok!(pallet::Pallet::<T>::build_ring(RI_ZERO, to_include));
+			pezpallet::Pezpallet::<T>::should_build_ring(RI_ZERO, T::MaxRingSize::get()).unwrap();
+		assert_ok!(pezpallet::Pezpallet::<T>::build_ring(RI_ZERO, to_include));
 		assert_eq!(RingKeys::<T>::get(RI_ZERO).len(), ring_size as usize);
 		assert_eq!(
 			RingKeysStatus::<T>::get(RI_ZERO),
@@ -577,7 +577,7 @@ mod benches {
 
 		#[block]
 		{
-			assert_ok!(Pallet::<T>::onboard_people());
+			assert_ok!(Pezpallet::<T>::onboard_people());
 		}
 
 		assert_eq!(RingKeys::<T>::get(1).len(), ring_size as usize);
@@ -594,17 +594,17 @@ mod benches {
 		let members = generate_members_for_ring::<T>(SEED);
 		let max_ring_size = T::MaxRingSize::get();
 		recognize_people::<T>(&members);
-		assert_ok!(pallet::Pallet::<T>::onboard_people());
-		let to_include = pallet::Pallet::<T>::should_build_ring(RI_ZERO, max_ring_size).unwrap();
-		assert_ok!(pallet::Pallet::<T>::build_ring(RI_ZERO, to_include));
+		assert_ok!(pezpallet::Pezpallet::<T>::onboard_people());
+		let to_include = pezpallet::Pezpallet::<T>::should_build_ring(RI_ZERO, max_ring_size).unwrap();
+		assert_ok!(pezpallet::Pezpallet::<T>::build_ring(RI_ZERO, to_include));
 
 		// Suspend all people in the ring
-		assert_ok!(pallet::Pallet::<T>::start_people_set_mutation_session());
+		assert_ok!(pezpallet::Pezpallet::<T>::start_people_set_mutation_session());
 		let suspensions: Vec<PersonalId> = (0..max_ring_size as PersonalId).collect();
-		assert_ok!(pallet::Pallet::<T>::suspend_personhood(&suspensions));
-		assert_ok!(pallet::Pallet::<T>::end_people_set_mutation_session());
+		assert_ok!(pezpallet::Pezpallet::<T>::suspend_personhood(&suspensions));
+		assert_ok!(pezpallet::Pezpallet::<T>::end_people_set_mutation_session());
 		let mut meter = WeightMeter::new();
-		pallet::Pallet::<T>::migrate_keys(&mut meter);
+		pezpallet::Pezpallet::<T>::migrate_keys(&mut meter);
 
 		// To make sure they are indeed pending suspension
 		assert_eq!(PendingSuspensions::<T>::get(RI_ZERO).len(), max_ring_size as usize);
@@ -626,28 +626,28 @@ mod benches {
 		// Generate people and build a ring
 		let members = generate_members_for_ring::<T>(SEED);
 		recognize_people::<T>(&members);
-		assert_ok!(pallet::Pallet::<T>::onboard_people());
+		assert_ok!(pezpallet::Pezpallet::<T>::onboard_people());
 		let to_include =
-			pallet::Pallet::<T>::should_build_ring(RI_ZERO, T::MaxRingSize::get()).unwrap();
-		assert_ok!(pallet::Pallet::<T>::build_ring(RI_ZERO, to_include));
+			pezpallet::Pezpallet::<T>::should_build_ring(RI_ZERO, T::MaxRingSize::get()).unwrap();
+		assert_ok!(pezpallet::Pezpallet::<T>::build_ring(RI_ZERO, to_include));
 
 		// For later verification
 		let initial_root = Root::<T>::get(RI_ZERO).unwrap();
 
 		// Suspend 'n' number of people in the ring
-		assert_ok!(pallet::Pallet::<T>::start_people_set_mutation_session());
+		assert_ok!(pezpallet::Pezpallet::<T>::start_people_set_mutation_session());
 		let suspensions: Vec<PersonalId> = (0..n as PersonalId).collect();
-		assert_ok!(pallet::Pallet::<T>::suspend_personhood(&suspensions));
-		assert_ok!(pallet::Pallet::<T>::end_people_set_mutation_session());
+		assert_ok!(pezpallet::Pezpallet::<T>::suspend_personhood(&suspensions));
+		assert_ok!(pezpallet::Pezpallet::<T>::end_people_set_mutation_session());
 		let mut meter = WeightMeter::new();
-		pallet::Pallet::<T>::migrate_keys(&mut meter);
+		pezpallet::Pezpallet::<T>::migrate_keys(&mut meter);
 
 		// To make sure they are indeed pending suspension
 		assert_eq!(PendingSuspensions::<T>::get(RI_ZERO).len(), n as usize);
 
 		#[block]
 		{
-			pallet::Pallet::<T>::remove_suspended_keys(RI_ZERO);
+			pezpallet::Pezpallet::<T>::remove_suspended_keys(RI_ZERO);
 		}
 
 		// Pending suspensions are cleared for the ring
@@ -673,23 +673,23 @@ mod benches {
 		// Generate people and build a ring
 		let members = generate_members_for_ring::<T>(SEED);
 		recognize_people::<T>(&members);
-		assert_ok!(pallet::Pallet::<T>::onboard_people());
+		assert_ok!(pezpallet::Pezpallet::<T>::onboard_people());
 		let to_include =
-			pallet::Pallet::<T>::should_build_ring(RI_ZERO, T::MaxRingSize::get()).unwrap();
-		assert_ok!(pallet::Pallet::<T>::build_ring(RI_ZERO, to_include));
+			pezpallet::Pezpallet::<T>::should_build_ring(RI_ZERO, T::MaxRingSize::get()).unwrap();
+		assert_ok!(pezpallet::Pezpallet::<T>::build_ring(RI_ZERO, to_include));
 
 		// Migrate 'n' number of people in the ring
 		for (personal_id, key) in (0..max_members as PersonalId)
 			.map(|i| new_member_from::<T>(u32::MAX - i as u32, SEED).1)
 			.enumerate()
 		{
-			assert_ok!(pallet::Pallet::<T>::migrate_included_key(
+			assert_ok!(pezpallet::Pezpallet::<T>::migrate_included_key(
 				Origin::PersonalIdentity(personal_id as PersonalId).into(),
 				key
 			));
 		}
-		assert_ok!(pallet::Pallet::<T>::start_people_set_mutation_session());
-		assert_ok!(pallet::Pallet::<T>::end_people_set_mutation_session());
+		assert_ok!(pezpallet::Pezpallet::<T>::start_people_set_mutation_session());
+		assert_ok!(pezpallet::Pezpallet::<T>::end_people_set_mutation_session());
 		assert!(PendingSuspensions::<T>::get(RI_ZERO).is_empty());
 		// All migrated keys are queued, but we only want one as this function benchmarks just one
 		// iteration of `migrate_keys`.
@@ -698,7 +698,7 @@ mod benches {
 
 		#[block]
 		{
-			assert_ok!(pallet::Pallet::<T>::migrate_keys_single_included_key(first_id, first_key));
+			assert_ok!(pezpallet::Pezpallet::<T>::migrate_keys_single_included_key(first_id, first_key));
 		}
 
 		// Pending suspensions are reflected in the ring status.
@@ -728,14 +728,14 @@ mod benches {
 
 		// Attempt to merge pages succeeds
 		let QueueMergeAction::Merge { initial_head, new_head, first_key_page, second_key_page } =
-			pallet::Pallet::<T>::should_merge_queue_pages()
+			pezpallet::Pezpallet::<T>::should_merge_queue_pages()
 		else {
 			panic!("should be mergeable")
 		};
 
 		#[block]
 		{
-			pallet::Pallet::<T>::merge_queue_pages(
+			pezpallet::Pezpallet::<T>::merge_queue_pages(
 				initial_head,
 				new_head,
 				first_key_page,
@@ -767,7 +767,7 @@ mod benches {
 
 		#[block]
 		{
-			pallet::Pallet::<T>::on_poll(0u32.into(), &mut meter);
+			pezpallet::Pezpallet::<T>::on_poll(0u32.into(), &mut meter);
 		}
 
 		assert_eq!(meter.consumed(), T::WeightInfo::on_poll_base());
@@ -783,14 +783,14 @@ mod benches {
 		let ring_size = T::MaxRingSize::get();
 		let members = generate_members::<T>(SEED, 0, queue_page_size + 1);
 		recognize_people::<T>(&members);
-		assert_ok!(pallet::Pallet::<T>::onboard_people());
+		assert_ok!(pezpallet::Pezpallet::<T>::onboard_people());
 
 		// No ring built but people onboarded successfully
 		assert!(Root::<T>::get(RI_ZERO).is_none());
 		assert_eq!(RingKeys::<T>::get(RI_ZERO).len(), ring_size as usize);
 		assert_eq!(RingKeysStatus::<T>::get(RI_ZERO), RingStatus { total: ring_size, included: 0 });
-		let to_include = Pallet::<T>::should_build_ring(RI_ZERO, ring_size).unwrap();
-		assert_ok!(Pallet::<T>::build_ring(RI_ZERO, to_include));
+		let to_include = Pezpallet::<T>::should_build_ring(RI_ZERO, ring_size).unwrap();
+		assert_ok!(Pezpallet::<T>::build_ring(RI_ZERO, to_include));
 		// The ring becomes built
 		assert!(Root::<T>::get(RI_ZERO).is_some());
 		assert_eq!(RingKeys::<T>::get(RI_ZERO).len(), ring_size as usize);
@@ -801,7 +801,7 @@ mod benches {
 
 		#[block]
 		{
-			pallet::Pallet::<T>::on_idle(0u32.into(), Weight::MAX);
+			pezpallet::Pezpallet::<T>::on_idle(0u32.into(), Weight::MAX);
 		}
 
 		Ok(())
@@ -814,10 +814,10 @@ mod benches {
 		// Generate people and build a ring
 		let members = generate_members_for_ring::<T>(SEED);
 		recognize_people::<T>(&members);
-		assert_ok!(pallet::Pallet::<T>::onboard_people());
+		assert_ok!(pezpallet::Pezpallet::<T>::onboard_people());
 		let to_include =
-			pallet::Pallet::<T>::should_build_ring(RI_ZERO, T::MaxRingSize::get()).unwrap();
-		assert_ok!(pallet::Pallet::<T>::build_ring(RI_ZERO, to_include));
+			pezpallet::Pezpallet::<T>::should_build_ring(RI_ZERO, T::MaxRingSize::get()).unwrap();
+		assert_ok!(pezpallet::Pezpallet::<T>::build_ring(RI_ZERO, to_include));
 
 		// Create account and alias
 		let account: T::AccountId = account("caller", 0, SEED);
@@ -830,8 +830,8 @@ mod benches {
 		};
 
 		// Set up alias account association
-		let block_number = pezframe_system::Pallet::<T>::block_number();
-		assert_ok!(pallet::Pallet::<T>::set_alias_account(
+		let block_number = pezframe_system::Pezpallet::<T>::block_number();
+		assert_ok!(pezpallet::Pezpallet::<T>::set_alias_account(
 			Origin::PersonalAlias(ra.clone()).into(),
 			account.clone(),
 			block_number
@@ -871,18 +871,18 @@ mod benches {
 		// Generate people and build a ring
 		let members = generate_members_for_ring::<T>(SEED);
 		let recognized_people = recognize_people::<T>(&members);
-		assert_ok!(pallet::Pallet::<T>::onboard_people());
+		assert_ok!(pezpallet::Pezpallet::<T>::onboard_people());
 		let to_include =
-			pallet::Pallet::<T>::should_build_ring(RI_ZERO, T::MaxRingSize::get()).unwrap();
-		assert_ok!(pallet::Pallet::<T>::build_ring(RI_ZERO, to_include));
+			pezpallet::Pezpallet::<T>::should_build_ring(RI_ZERO, T::MaxRingSize::get()).unwrap();
+		assert_ok!(pezpallet::Pezpallet::<T>::build_ring(RI_ZERO, to_include));
 
 		// Select one of the generated people's information
 		let (personal_id, _, _): &(PersonalId, MemberOf<T>, SecretOf<T>) = &recognized_people[0];
 
 		// Set up personal ID account association
 		let account: T::AccountId = account("caller", 0, SEED);
-		let block_number = pezframe_system::Pallet::<T>::block_number();
-		assert_ok!(pallet::Pallet::<T>::set_personal_id_account(
+		let block_number = pezframe_system::Pezpallet::<T>::block_number();
+		assert_ok!(pezpallet::Pezpallet::<T>::set_personal_id_account(
 			Origin::PersonalIdentity(*personal_id).into(),
 			account.clone(),
 			block_number
@@ -923,13 +923,13 @@ mod benches {
 		let account: T::AccountId = account("caller", 0, SEED);
 		let members = generate_members_for_ring::<T>(SEED);
 		recognize_people::<T>(&members);
-		assert_ok!(pallet::Pallet::<T>::onboard_people());
+		assert_ok!(pezpallet::Pezpallet::<T>::onboard_people());
 		let to_include =
-			pallet::Pallet::<T>::should_build_ring(RI_ZERO, T::MaxRingSize::get()).unwrap();
-		assert_ok!(pallet::Pallet::<T>::build_ring(RI_ZERO, to_include));
+			pezpallet::Pezpallet::<T>::should_build_ring(RI_ZERO, T::MaxRingSize::get()).unwrap();
+		assert_ok!(pezpallet::Pezpallet::<T>::build_ring(RI_ZERO, to_include));
 
 		// The call to set the alias, the only one valid for this extension code path.
-		let block_number = pezframe_system::Pallet::<T>::block_number();
+		let block_number = pezframe_system::Pezpallet::<T>::block_number();
 		let inner = Call::<T>::set_alias_account { account, call_valid_at: block_number };
 		let call: <T as pezframe_system::Config>::RuntimeCall = inner.into();
 
@@ -977,17 +977,17 @@ mod benches {
 		let account: T::AccountId = account("caller", 0, SEED);
 		let members = generate_members_for_ring::<T>(SEED);
 		let recognized_people = recognize_people::<T>(&members);
-		assert_ok!(pallet::Pallet::<T>::onboard_people());
+		assert_ok!(pezpallet::Pezpallet::<T>::onboard_people());
 		let to_include =
-			pallet::Pallet::<T>::should_build_ring(RI_ZERO, T::MaxRingSize::get()).unwrap();
-		assert_ok!(pallet::Pallet::<T>::build_ring(RI_ZERO, to_include));
+			pezpallet::Pezpallet::<T>::should_build_ring(RI_ZERO, T::MaxRingSize::get()).unwrap();
+		assert_ok!(pezpallet::Pezpallet::<T>::build_ring(RI_ZERO, to_include));
 
 		// Select one of the generated people's information
 		let (personal_id, _, secret): &(PersonalId, MemberOf<T>, SecretOf<T>) =
 			&recognized_people[0];
 
 		// The call to set the personal ID account, the only one valid for this extension code path.
-		let block_number = pezframe_system::Pallet::<T>::block_number();
+		let block_number = pezframe_system::Pezpallet::<T>::block_number();
 		let inner = Call::<T>::set_personal_id_account { account, call_valid_at: block_number };
 		let call: <T as pezframe_system::Config>::RuntimeCall = inner.into();
 		let ext_version: ExtensionVersion = 0;
@@ -1019,5 +1019,5 @@ mod benches {
 
 	// Implements a test for each benchmark. Execute with:
 	// `cargo test -p pezpallet-people --features runtime-benchmarks`.
-	impl_benchmark_test_suite!(Pallet, crate::mock::new_test_ext(), crate::mock::Test);
+	impl_benchmark_test_suite!(Pezpallet, crate::mock::new_test_ext(), crate::mock::Test);
 }

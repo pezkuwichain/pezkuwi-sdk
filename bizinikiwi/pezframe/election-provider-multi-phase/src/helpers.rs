@@ -28,7 +28,7 @@ macro_rules! log {
 	($level:tt, $pattern:expr $(, $values:expr)* $(,)?) => {
 		log::$level!(
 			target: $crate::LOG_TARGET,
-			concat!("[#{:?}] 🗳  ", $pattern), pezframe_system::Pallet::<T>::block_number() $(, $values)*
+			concat!("[#{:?}] 🗳  ", $pattern), pezframe_system::Pezpallet::<T>::block_number() $(, $values)*
 		)
 	};
 }

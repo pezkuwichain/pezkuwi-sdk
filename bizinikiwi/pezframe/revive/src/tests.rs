@@ -33,7 +33,7 @@ use crate::{
 	mock::MockHandler,
 	test_utils::*,
 	AccountId32Mapper, AddressMapper, BalanceOf, BalanceWithDust, Call, CodeInfoOf, Config,
-	DelegateInfo, ExecOrigin as Origin, ExecReturnValue, GenesisConfig, OriginFor, Pallet,
+	DelegateInfo, ExecOrigin as Origin, ExecReturnValue, GenesisConfig, OriginFor, Pezpallet,
 	PristineCode,
 };
 use pezframe_support::{
@@ -313,7 +313,7 @@ impl pezpallet_proxy::Config for Test {
 	type CallHasher = BlakeTwo256;
 	type AnnouncementDepositBase = ConstU64<1>;
 	type AnnouncementDepositFactor = ConstU64<1>;
-	type BlockNumberProvider = pezframe_system::Pallet<Test>;
+	type BlockNumberProvider = pezframe_system::Pezpallet<Test>;
 }
 
 parameter_types! {
@@ -455,7 +455,7 @@ impl Default for ExtBuilder {
 }
 
 impl ExtBuilder {
-	/// The pallet genesis config to use, or None if you don't want to include it.
+	/// The pezpallet genesis config to use, or None if you don't want to include it.
 	pub fn genesis_config(mut self, config: Option<crate::GenesisConfig<Test>>) -> Self {
 		self.genesis_config = config;
 		self
@@ -484,7 +484,7 @@ impl ExtBuilder {
 			.assimilate_storage(&mut t)
 			.unwrap();
 
-		let checking_account = Pallet::<Test>::checking_account();
+		let checking_account = Pezpallet::<Test>::checking_account();
 
 		pezpallet_balances::GenesisConfig::<Test> {
 			balances: vec![(checking_account.clone(), 1_000_000_000_000)],
@@ -501,9 +501,9 @@ impl ExtBuilder {
 		ext.execute_with(|| {
 			use pezframe_support::traits::OnGenesis;
 
-			Pallet::<Test>::on_genesis();
+			Pezpallet::<Test>::on_genesis();
 			if let Some(storage_version) = self.storage_version {
-				storage_version.put::<Pallet<Test>>();
+				storage_version.put::<Pezpallet<Test>>();
 			}
 			System::set_block_number(1)
 		});
@@ -513,7 +513,7 @@ impl ExtBuilder {
 			}
 		});
 		ext.execute_with(|| {
-			assert_ok!(Pallet::<Test>::map_account(RuntimeOrigin::signed(checking_account)));
+			assert_ok!(Pezpallet::<Test>::map_account(RuntimeOrigin::signed(checking_account)));
 		});
 		ext
 	}
@@ -531,7 +531,7 @@ impl Default for Origin<Test> {
 }
 
 /// A mock handler implementation for testing purposes.
-pub struct MockHandlerImpl<T: crate::pallet::Config> {
+pub struct MockHandlerImpl<T: crate::pezpallet::Config> {
 	// Always return this caller if set.
 	mock_caller: Option<H160>,
 	// Map of callee address to mocked call return value.
@@ -540,7 +540,7 @@ pub struct MockHandlerImpl<T: crate::pallet::Config> {
 	mock_delegate_caller: HashMap<Vec<u8>, DelegateInfo<T>>,
 }
 
-impl<T: crate::pallet::Config> MockHandler<T> for MockHandlerImpl<T> {
+impl<T: crate::pezpallet::Config> MockHandler<T> for MockHandlerImpl<T> {
 	fn mock_caller(&self, _frames_len: usize) -> Option<OriginFor<T>> {
 		self.mock_caller.as_ref().map(|mock_caller| {
 			OriginFor::<T>::signed(T::AddressMapper::to_fallback_account_id(mock_caller))
@@ -607,7 +607,7 @@ fn ext_builder_with_genesis_config_works() {
 		assert!(<Test as Config>::AddressMapper::is_mapped(&EVE));
 
 		// EOA is created
-		assert_eq!(Pallet::<Test>::evm_balance(&eoa.address), eoa.balance);
+		assert_eq!(Pezpallet::<Test>::evm_balance(&eoa.address), eoa.balance);
 
 		// Contract is created
 		for contract in [pvm_contract, evm_contract] {
@@ -622,12 +622,12 @@ fn ext_builder_with_genesis_config_works() {
 				PristineCode::<Test>::get(&contract_info.code_hash).unwrap(),
 				contract_data.code
 			);
-			assert_eq!(Pallet::<Test>::evm_nonce(&contract.address), contract.nonce);
-			assert_eq!(Pallet::<Test>::evm_balance(&contract.address), contract.balance);
+			assert_eq!(Pezpallet::<Test>::evm_nonce(&contract.address), contract.nonce);
+			assert_eq!(Pezpallet::<Test>::evm_balance(&contract.address), contract.balance);
 
 			for (key, value) in contract_data.storage.iter() {
 				assert_eq!(
-					Pallet::<Test>::get_storage(contract.address, key.0),
+					Pezpallet::<Test>::get_storage(contract.address, key.0),
 					Ok(Some(value.0.to_vec()))
 				);
 			}

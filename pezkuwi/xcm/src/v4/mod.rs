@@ -293,7 +293,7 @@ pub enum Response {
 	ExecutionResult(Option<(u32, Error)>),
 	/// An XCM version.
 	Version(super::Version),
-	/// The index, instance name, pallet name and version of some pallets.
+	/// The index, instance name, pezpallet name and version of some pallets.
 	PalletsInfo(BoundedVec<PalletInfo, MaxPalletsInfo>),
 	/// The status of a dispatch attempt using `Transact`.
 	DispatchResult(MaybeErrorCode),
@@ -881,9 +881,9 @@ pub enum Instruction<Call> {
 	///   parameter.
 	ExpectTransactStatus(MaybeErrorCode),
 
-	/// Query the existence of a particular pallet type.
+	/// Query the existence of a particular pezpallet type.
 	///
-	/// - `module_name`: The module name of the pallet to query.
+	/// - `module_name`: The module name of the pezpallet to query.
 	/// - `response_info`: Information for making the response.
 	///
 	/// Sends a `QueryResponse` to Origin whose data field `PalletsInfo` containing the information
@@ -897,17 +897,17 @@ pub enum Instruction<Call> {
 	/// Errors: *Fallible*.
 	QueryPallet { module_name: Vec<u8>, response_info: QueryResponseInfo },
 
-	/// Ensure that a particular pallet with a particular version exists.
+	/// Ensure that a particular pezpallet with a particular version exists.
 	///
-	/// - `index: Compact`: The index which identifies the pallet. An error if no pallet exists at
+	/// - `index: Compact`: The index which identifies the pezpallet. An error if no pezpallet exists at
 	///   this index.
-	/// - `name: Vec<u8>`: Name which must be equal to the name of the pallet.
+	/// - `name: Vec<u8>`: Name which must be equal to the name of the pezpallet.
 	/// - `module_name: Vec<u8>`: Module name which must be equal to the name of the module in
-	///   which the pallet exists.
+	///   which the pezpallet exists.
 	/// - `crate_major: Compact`: Version number which must be equal to the major version of the
-	///   crate which implements the pallet.
+	///   crate which implements the pezpallet.
 	/// - `min_crate_minor: Compact`: Version number which must be at most the minor version of the
-	///   crate which implements the pallet.
+	///   crate which implements the pezpallet.
 	///
 	/// Safety: No concerns.
 	///

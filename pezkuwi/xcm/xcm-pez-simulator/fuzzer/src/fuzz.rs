@@ -153,8 +153,8 @@ pub fn relay_ext() -> pezsp_io::TestExternalities {
 	ext
 }
 
-pub type RelayChainPalletXcm = pezpallet_xcm::Pallet<relay_chain::Runtime>;
-pub type TeyrchainPalletXcm = pezpallet_xcm::Pallet<teyrchain::Runtime>;
+pub type RelayChainPalletXcm = pezpallet_xcm::Pezpallet<relay_chain::Runtime>;
+pub type TeyrchainPalletXcm = pezpallet_xcm::Pezpallet<teyrchain::Runtime>;
 
 // We check XCM messages recursively for blocklisted messages
 fn recursively_matches_blocklisted_messages(message: &Instruction<()>) -> bool {

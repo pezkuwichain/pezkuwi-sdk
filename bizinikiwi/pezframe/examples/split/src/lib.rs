@@ -21,18 +21,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-//! # Split Example Pallet
+//! # Split Example Pezpallet
 //!
-//! **This pallet serves as an example and is not meant to be used in production.**
+//! **This pezpallet serves as an example and is not meant to be used in production.**
 //!
-//! A FRAME pallet demonstrating the ability to split sections across multiple files.
+//! A FRAME pezpallet demonstrating the ability to split sections across multiple files.
 //!
 //! Note that this is purely experimental at this point.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
-// Re-export pallet items so that they can be accessed from the crate namespace.
-pub use pallet::*;
+// Re-export pezpallet items so that they can be accessed from the crate namespace.
+pub use pezpallet::*;
 
 #[cfg(test)]
 mod mock;
@@ -50,30 +50,30 @@ pub use weights::*;
 use pezframe_support::pezpallet_macros::*;
 
 /// Imports a [`pezpallet_section`] defined at [`events::events`].
-/// This brings the events defined in that section into the pallet's namespace.
+/// This brings the events defined in that section into the pezpallet's namespace.
 #[import_section(events::events)]
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	/// Configure the pallet by specifying the parameters and types on which it depends.
-	#[pallet::config]
+	/// Configure the pezpallet by specifying the parameters and types on which it depends.
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
-		/// Type representing the weight of this pallet
+		/// Type representing the weight of this pezpallet
 		type WeightInfo: WeightInfo;
 	}
 
-	// The pallet's runtime storage items.
-	#[pallet::storage]
+	// The pezpallet's runtime storage items.
+	#[pezpallet::storage]
 	pub type Something<T> = StorageValue<_, u32>;
 
 	// Errors inform users that something went wrong.
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Error names should be descriptive.
 		NoneValue,
@@ -81,15 +81,15 @@ pub mod pallet {
 		StorageOverflow,
 	}
 
-	// Dispatchable functions allows users to interact with the pallet and invoke state changes.
+	// Dispatchable functions allows users to interact with the pezpallet and invoke state changes.
 	// These functions materialize as "extrinsics", which are often compared to transactions.
 	// Dispatchable functions must be annotated with a weight and must return a DispatchResult.
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// An example dispatchable that takes a singles value as a parameter, writes the value to
 		/// storage and emits an event. This function must be dispatched by a signed extrinsic.
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::do_something())]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::do_something())]
 		pub fn do_something(origin: OriginFor<T>, something: u32) -> DispatchResult {
 			// Check that the extrinsic was signed and get the signer.
 			// This function will return an error if the extrinsic is not signed.
@@ -105,8 +105,8 @@ pub mod pallet {
 		}
 
 		/// An example dispatchable that may throw a custom error.
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::cause_error())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::cause_error())]
 		pub fn cause_error(origin: OriginFor<T>) -> DispatchResult {
 			let _who = ensure_signed(origin)?;
 

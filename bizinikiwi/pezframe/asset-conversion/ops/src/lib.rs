@@ -17,9 +17,9 @@
 
 //! # Asset Conversion Operations Suite.
 //!
-//! This pallet provides operational functionalities for the Asset Conversion pallet,
+//! This pezpallet provides operational functionalities for the Asset Conversion pezpallet,
 //! allowing you to perform various migration and one-time-use operations. These operations
-//! are designed to facilitate updates and changes to the Asset Conversion pallet without
+//! are designed to facilitate updates and changes to the Asset Conversion pezpallet without
 //! breaking its API.
 //!
 //! ## Overview
@@ -39,7 +39,7 @@ mod mock;
 #[cfg(test)]
 mod tests;
 pub mod weights;
-pub use pallet::*;
+pub use pezpallet::*;
 pub use weights::WeightInfo;
 
 extern crate alloc;
@@ -54,16 +54,16 @@ use pezframe_support::traits::{
 use pezpallet_asset_conversion::{PoolLocator, Pools};
 use pezsp_runtime::traits::{TryConvert, Zero};
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config:
 		pezpallet_asset_conversion::Config<
 			PoolId = (
@@ -109,13 +109,13 @@ pub mod pallet {
 		/// [`pezpallet_asset_conversion::Config::PoolAssets`] registries.
 		type DepositAsset: FungibleMutate<Self::AccountId>;
 
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 	}
 
-	// Pallet's events.
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	// Pezpallet's events.
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// Indicates that a pool has been migrated to the new account ID.
 		MigratedToNewAccount {
@@ -128,7 +128,7 @@ pub mod pallet {
 		},
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Provided asset pair is not supported for pool.
 		InvalidAssetPair,
@@ -140,15 +140,15 @@ pub mod pallet {
 		PartialTransfer,
 	}
 
-	/// Pallet's callable functions.
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	/// Pezpallet's callable functions.
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Migrates an existing pool to a new account ID derivation method for a given asset pair.
 		/// If the migration is successful, transaction fees are refunded to the caller.
 		///
 		/// Must be signed.
-		#[pallet::call_index(0)]
-		#[pallet::weight(<T as Config>::WeightInfo::migrate_to_new_account())]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::migrate_to_new_account())]
 		pub fn migrate_to_new_account(
 			origin: OriginFor<T>,
 			asset1: Box<T::AssetKind>,
@@ -301,7 +301,7 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config> Pallet<T> {
+	impl<T: Config> Pezpallet<T> {
 		/// Returns the prior and new account IDs for a given pool ID. The prior account ID comes
 		/// first in the tuple.
 		#[cfg(not(any(test, feature = "runtime-benchmarks")))]
@@ -320,7 +320,7 @@ pub mod pallet {
 		///
 		/// This function is intended for use only in test and benchmark environments. The prior
 		/// account ID represents the new account ID from [`Config::PoolLocator`], allowing the use
-		/// of the main pallet's calls to set up a pool with liquidity placed in that account and
+		/// of the main pezpallet's calls to set up a pool with liquidity placed in that account and
 		/// migrate it to another account, which in this case is the result of
 		/// [`Config::PriorAccountIdConverter`].
 		#[cfg(any(test, feature = "runtime-benchmarks"))]

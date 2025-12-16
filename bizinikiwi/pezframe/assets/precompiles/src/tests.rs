@@ -72,7 +72,7 @@ fn precompile_transfer_works() {
 		let data =
 			IERC20::transferCall { to: to_addr.0.into(), value: U256::from(10) }.abi_encode();
 
-		pezpallet_revive::Pallet::<Test>::bare_call(
+		pezpallet_revive::Pezpallet::<Test>::bare_call(
 			RuntimeOrigin::signed(from),
 			H160::from(asset_addr),
 			0u32.into(),
@@ -111,7 +111,7 @@ fn total_supply_works() {
 
 		let data = IERC20::totalSupplyCall {}.abi_encode();
 
-		let data = pezpallet_revive::Pallet::<Test>::bare_call(
+		let data = pezpallet_revive::Pezpallet::<Test>::bare_call(
 			RuntimeOrigin::signed(owner),
 			H160::from(asset_addr),
 			0u32.into(),
@@ -144,7 +144,7 @@ fn balance_of_works() {
 		let account = <Test as pezpallet_revive::Config>::AddressMapper::to_address(&owner).0.into();
 		let data = IERC20::balanceOfCall { account }.abi_encode();
 
-		let data = pezpallet_revive::Pallet::<Test>::bare_call(
+		let data = pezpallet_revive::Pezpallet::<Test>::bare_call(
 			RuntimeOrigin::signed(owner),
 			H160::from(asset_addr),
 			0u32.into(),
@@ -190,7 +190,7 @@ fn approval_works() {
 		let data = IERC20::approveCall { spender: spender_addr.0.into(), value: U256::from(25) }
 			.abi_encode();
 
-		pezpallet_revive::Pallet::<Test>::bare_call(
+		pezpallet_revive::Pezpallet::<Test>::bare_call(
 			RuntimeOrigin::signed(owner),
 			H160::from(asset_addr),
 			0u32.into(),
@@ -213,7 +213,7 @@ fn approval_works() {
 			IERC20::allowanceCall { owner: owner_addr.0.into(), spender: spender_addr.0.into() }
 				.abi_encode();
 
-		let data = pezpallet_revive::Pallet::<Test>::bare_call(
+		let data = pezpallet_revive::Pezpallet::<Test>::bare_call(
 			RuntimeOrigin::signed(owner),
 			H160::from(asset_addr),
 			0u32.into(),
@@ -236,7 +236,7 @@ fn approval_works() {
 		}
 		.abi_encode();
 
-		pezpallet_revive::Pallet::<Test>::bare_call(
+		pezpallet_revive::Pezpallet::<Test>::bare_call(
 			RuntimeOrigin::signed(spender),
 			H160::from(asset_addr),
 			0u32.into(),

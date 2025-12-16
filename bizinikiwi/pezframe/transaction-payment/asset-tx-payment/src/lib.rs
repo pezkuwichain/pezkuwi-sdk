@@ -13,9 +13,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Asset Transaction Payment Pallet
+//! # Asset Transaction Payment Pezpallet
 //!
-//! This pallet allows runtimes that include it to pay for transactions in assets other than the
+//! This pezpallet allows runtimes that include it to pay for transactions in assets other than the
 //! main token of the chain.
 //!
 //! ## Overview
@@ -29,9 +29,9 @@
 //!
 //! ## Integration
 
-//! This pallet wraps FRAME's transaction payment pallet and functions as a replacement. This means
+//! This pezpallet wraps FRAME's transaction payment pezpallet and functions as a replacement. This means
 //! you should include both pallets in your `construct_runtime` macro, but only include this
-//! pallet's [`TransactionExtension`] ([`ChargeAssetTxPayment`]).
+//! pezpallet's [`TransactionExtension`] ([`ChargeAssetTxPayment`]).
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
@@ -112,13 +112,13 @@ pub enum InitialPayment<T: Config> {
 	Asset(Credit<T::AccountId, T::Fungibles>),
 }
 
-pub use pallet::*;
+pub use pezpallet::*;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config + pezpallet_transaction_payment::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
@@ -127,7 +127,7 @@ pub mod pallet {
 		type Fungibles: Balanced<Self::AccountId>;
 		/// The actual transaction charging logic that charges the fees.
 		type OnChargeAssetTransaction: OnChargeAssetTransaction<Self>;
-		/// The weight information of this pallet.
+		/// The weight information of this pezpallet.
 		type WeightInfo: WeightInfo;
 		/// Benchmark helper
 		#[cfg(feature = "runtime-benchmarks")]
@@ -138,8 +138,8 @@ pub mod pallet {
 		>;
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
 	#[cfg(feature = "runtime-benchmarks")]
 	/// Helper trait to benchmark the `ChargeAssetTxPayment` transaction extension.
@@ -151,8 +151,8 @@ pub mod pallet {
 		fn setup_balances_and_pool(asset_id: FunAssetIdParameter, account: AccountId);
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A transaction fee `actual_fee`, of which `tip` was added to the minimum inclusion fee,
 		/// has been paid by `who` in an asset `asset_id`.
@@ -335,7 +335,7 @@ where
 			return Ok((ValidTransaction::default(), Val::NoCharge, origin));
 		};
 		// Non-mutating call of `compute_fee` to calculate the fee used in the transaction priority.
-		let fee = pezpallet_transaction_payment::Pallet::<T>::compute_fee(len as u32, info, self.tip);
+		let fee = pezpallet_transaction_payment::Pezpallet::<T>::compute_fee(len as u32, info, self.tip);
 		self.can_withdraw_fee(&who, call, info, fee)?;
 		let priority = ChargeTransactionPayment::<T>::get_priority(info, len, self.tip, fee);
 		let val = Val::Charge { tip: self.tip, who: who.clone(), fee };
@@ -405,7 +405,7 @@ where
 				let unspent_weight = extension_weight.saturating_sub(actual_ext_weight);
 				let mut actual_post_info = *post_info;
 				actual_post_info.refund(unspent_weight);
-				let actual_fee = pezpallet_transaction_payment::Pallet::<T>::compute_actual_fee(
+				let actual_fee = pezpallet_transaction_payment::Pezpallet::<T>::compute_actual_fee(
 					len as u32,
 					info,
 					&actual_post_info,
@@ -421,7 +421,7 @@ where
 						tip.into(),
 						already_withdrawn.into(),
 					)?;
-				Pallet::<T>::deposit_event(Event::<T>::AssetTxFeePaid {
+				Pezpallet::<T>::deposit_event(Event::<T>::AssetTxFeePaid {
 					who,
 					actual_fee: converted_fee,
 					tip: converted_tip,

@@ -36,7 +36,7 @@ pub async fn execute<Runtime, Block>(
 	let mut ext = Builder::<Block>::new()
 		.mode(Mode::Online(OnlineConfig {
 			transport: ws_url.to_string().into(),
-			pallets: vec![pezpallet_staking::Pallet::<Runtime>::name().to_string()],
+			pallets: vec![pezpallet_staking::Pezpallet::<Runtime>::name().to_string()],
 			..Default::default()
 		}))
 		.build()
@@ -52,7 +52,7 @@ pub async fn execute<Runtime, Block>(
 		// run the actual migration
 		let moved = <Runtime as pezpallet_staking::Config>::VoterList::unsafe_regenerate(
 			pezpallet_staking::Nominators::<Runtime>::iter().map(|(n, _)| n),
-			Box::new(|x| Some(pezpallet_staking::Pallet::<Runtime>::weight_of(x))),
+			Box::new(|x| Some(pezpallet_staking::Pezpallet::<Runtime>::weight_of(x))),
 		);
 		log::info!(target: LOG_TARGET, "Moved {} nominators", moved);
 

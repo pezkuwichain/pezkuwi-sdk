@@ -30,7 +30,7 @@ impl RemarkBuilder {
 }
 
 impl pezframe_benchmarking_cli::ExtrinsicBuilder for RemarkBuilder {
-	fn pallet(&self) -> &str {
+	fn pezpallet(&self) -> &str {
 		"system"
 	}
 
@@ -69,7 +69,7 @@ impl TransferKeepAliveBuilder {
 }
 
 impl pezframe_benchmarking_cli::ExtrinsicBuilder for TransferKeepAliveBuilder {
-	fn pallet(&self) -> &str {
+	fn pezpallet(&self) -> &str {
 		"balances"
 	}
 

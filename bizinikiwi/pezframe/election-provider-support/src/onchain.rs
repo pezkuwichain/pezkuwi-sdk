@@ -95,7 +95,7 @@ pub trait Config {
 		BlockNumber = pezframe_system::pezpallet_prelude::BlockNumberFor<Self::System>,
 	>;
 
-	/// Weight information for extrinsics in this pallet.
+	/// Weight information for extrinsics in this pezpallet.
 	type WeightInfo: WeightInfo;
 
 	/// Elections bounds, to use when calling into [`Config::DataProvider`]. It might be overwritten
@@ -136,7 +136,7 @@ impl<T: Config> OnChainExecution<T> {
 			targets_len,
 			<T::DataProvider as ElectionDataProvider>::MaxVotesPerVoter::get(),
 		);
-		pezframe_system::Pallet::<T::System>::register_extra_weight_unchecked(
+		pezframe_system::Pezpallet::<T::System>::register_extra_weight_unchecked(
 			weight,
 			DispatchClass::Mandatory,
 		);

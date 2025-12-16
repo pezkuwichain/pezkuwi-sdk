@@ -15,17 +15,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Benchmarks for remarks pallet
+//! Benchmarks for remarks pezpallet
 
 #![cfg(feature = "runtime-benchmarks")]
 
 use super::*;
 use alloc::vec;
 use pezframe_benchmarking::v2::*;
-use pezframe_system::{EventRecord, Pallet as System, RawOrigin};
+use pezframe_system::{EventRecord, Pezpallet as System, RawOrigin};
 
 #[cfg(test)]
-use crate::Pallet as Remark;
+use crate::Pezpallet as Remark;
 
 fn assert_last_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
 	let events = System::<T>::events();

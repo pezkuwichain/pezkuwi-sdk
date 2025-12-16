@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Migrations for the AURA pallet.
+//! Migrations for the AURA pezpallet.
 
 use pezframe_support::{pezpallet_prelude::*, traits::Get, weights::Weight};
 

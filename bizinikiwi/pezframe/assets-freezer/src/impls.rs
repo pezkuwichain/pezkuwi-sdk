@@ -26,10 +26,10 @@ use frame::prelude::storage::StorageDoubleMap;
 use pezpallet_assets::FrozenBalance;
 
 // Implements [`FrozenBalance`] from [`pezpallet-assets`], so it can understand how much of an
-// account balance is frozen, and is able to signal to this pallet when to clear the state of an
+// account balance is frozen, and is able to signal to this pezpallet when to clear the state of an
 // account.
 impl<T: Config<I>, I: 'static> FrozenBalance<T::AssetId, T::AccountId, T::Balance>
-	for Pallet<T, I>
+	for Pezpallet<T, I>
 {
 	fn frozen_balance(asset: T::AssetId, who: &T::AccountId) -> Option<T::Balance> {
 		FrozenBalances::<T, I>::get(asset, who)
@@ -58,24 +58,24 @@ impl<T: Config<I>, I: 'static> FrozenBalance<T::AssetId, T::AccountId, T::Balanc
 // [`fungibles::InspectFreeze`](pezframe_support::traits::fungibles::InspectFreeze) and
 // [`fungibles::MutateFreeze`](pezframe_support::traits::fungibles::MutateFreeze). To do so, we'll
 // re-export all of `pezpallet-assets` implementation of the same trait.
-impl<T: Config<I>, I: 'static> Inspect<T::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Inspect<T::AccountId> for Pezpallet<T, I> {
 	type AssetId = T::AssetId;
 	type Balance = T::Balance;
 
 	fn total_issuance(asset: Self::AssetId) -> Self::Balance {
-		pezpallet_assets::Pallet::<T, I>::total_issuance(asset)
+		pezpallet_assets::Pezpallet::<T, I>::total_issuance(asset)
 	}
 
 	fn minimum_balance(asset: Self::AssetId) -> Self::Balance {
-		pezpallet_assets::Pallet::<T, I>::minimum_balance(asset)
+		pezpallet_assets::Pezpallet::<T, I>::minimum_balance(asset)
 	}
 
 	fn total_balance(asset: Self::AssetId, who: &T::AccountId) -> Self::Balance {
-		pezpallet_assets::Pallet::<T, I>::total_balance(asset, who)
+		pezpallet_assets::Pezpallet::<T, I>::total_balance(asset, who)
 	}
 
 	fn balance(asset: Self::AssetId, who: &T::AccountId) -> Self::Balance {
-		pezpallet_assets::Pallet::<T, I>::balance(asset, who)
+		pezpallet_assets::Pezpallet::<T, I>::balance(asset, who)
 	}
 
 	fn reducible_balance(
@@ -84,7 +84,7 @@ impl<T: Config<I>, I: 'static> Inspect<T::AccountId> for Pallet<T, I> {
 		preservation: Preservation,
 		force: Fortitude,
 	) -> Self::Balance {
-		pezpallet_assets::Pallet::<T, I>::reducible_balance(asset, who, preservation, force)
+		pezpallet_assets::Pezpallet::<T, I>::reducible_balance(asset, who, preservation, force)
 	}
 
 	fn can_deposit(
@@ -93,7 +93,7 @@ impl<T: Config<I>, I: 'static> Inspect<T::AccountId> for Pallet<T, I> {
 		amount: Self::Balance,
 		provenance: Provenance,
 	) -> DepositConsequence {
-		pezpallet_assets::Pallet::<T, I>::can_deposit(asset, who, amount, provenance)
+		pezpallet_assets::Pezpallet::<T, I>::can_deposit(asset, who, amount, provenance)
 	}
 
 	fn can_withdraw(
@@ -101,15 +101,15 @@ impl<T: Config<I>, I: 'static> Inspect<T::AccountId> for Pallet<T, I> {
 		who: &T::AccountId,
 		amount: Self::Balance,
 	) -> WithdrawConsequence<Self::Balance> {
-		pezpallet_assets::Pallet::<T, I>::can_withdraw(asset, who, amount)
+		pezpallet_assets::Pezpallet::<T, I>::can_withdraw(asset, who, amount)
 	}
 
 	fn asset_exists(asset: Self::AssetId) -> bool {
-		pezpallet_assets::Pallet::<T, I>::asset_exists(asset)
+		pezpallet_assets::Pezpallet::<T, I>::asset_exists(asset)
 	}
 }
 
-impl<T: Config<I>, I: 'static> InspectFreeze<T::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> InspectFreeze<T::AccountId> for Pezpallet<T, I> {
 	type Id = T::RuntimeFreezeReason;
 
 	fn balance_frozen(asset: Self::AssetId, id: &Self::Id, who: &T::AccountId) -> Self::Balance {
@@ -123,7 +123,7 @@ impl<T: Config<I>, I: 'static> InspectFreeze<T::AccountId> for Pallet<T, I> {
 	}
 }
 
-impl<T: Config<I>, I: 'static> MutateFreeze<T::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> MutateFreeze<T::AccountId> for Pezpallet<T, I> {
 	fn set_freeze(
 		asset: Self::AssetId,
 		id: &Self::Id,

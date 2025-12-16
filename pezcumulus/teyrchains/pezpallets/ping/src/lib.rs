@@ -14,7 +14,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Pallet to spam the XCM/UMP.
+//! Pezpallet to spam the XCM/UMP.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
@@ -28,24 +28,24 @@ use pezframe_system::Config as SystemConfig;
 use pezsp_runtime::traits::Saturating;
 use xcm::latest::prelude::*;
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 parameter_types! {
 	const MaxTeyrchains: u32 = 100;
 	const MaxPayloadSize: u32 = 1024;
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
 	/// The module configuration trait.
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
@@ -61,7 +61,7 @@ pub mod pallet {
 	}
 
 	/// The target teyrchains to ping.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type Targets<T: Config> = StorageValue<
 		_,
 		BoundedVec<(ParaId, BoundedVec<u8, MaxPayloadSize>), MaxTeyrchains>,
@@ -69,16 +69,16 @@ pub mod pallet {
 	>;
 
 	/// The total number of pings sent.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type PingCount<T: Config> = StorageValue<_, u32, ValueQuery>;
 
 	/// The sent pings.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type Pings<T: Config> =
 		StorageMap<_, Blake2_128Concat, u32, BlockNumberFor<T>, OptionQuery>;
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		PingSent(ParaId, u32, Vec<u8>, XcmHash, Assets),
 		Pinged(ParaId, u32, Vec<u8>),
@@ -89,7 +89,7 @@ pub mod pallet {
 		UnknownPong(ParaId, u32, Vec<u8>),
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Too many teyrchains have been added as a target.
 		TooManyTargets,
@@ -97,8 +97,8 @@ pub mod pallet {
 		PayloadTooLarge,
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn on_finalize(n: BlockNumberFor<T>) {
 			for (para, payload) in Targets::<T>::get().into_iter() {
 				let seq = PingCount::<T>::mutate(|seq| {
@@ -141,10 +141,10 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
-		#[pallet::call_index(0)]
-		#[pallet::weight({0})]
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight({0})]
 		pub fn start(origin: OriginFor<T>, para: ParaId, payload: Vec<u8>) -> DispatchResult {
 			ensure_root(origin)?;
 			let payload = BoundedVec::<u8, MaxPayloadSize>::try_from(payload)
@@ -155,8 +155,8 @@ pub mod pallet {
 			Ok(())
 		}
 
-		#[pallet::call_index(1)]
-		#[pallet::weight({0})]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight({0})]
 		pub fn start_many(
 			origin: OriginFor<T>,
 			para: ParaId,
@@ -175,8 +175,8 @@ pub mod pallet {
 			Ok(())
 		}
 
-		#[pallet::call_index(2)]
-		#[pallet::weight({0})]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight({0})]
 		pub fn stop(origin: OriginFor<T>, para: ParaId) -> DispatchResult {
 			ensure_root(origin)?;
 			Targets::<T>::mutate(|t| {
@@ -187,8 +187,8 @@ pub mod pallet {
 			Ok(())
 		}
 
-		#[pallet::call_index(3)]
-		#[pallet::weight({0})]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight({0})]
 		pub fn stop_all(origin: OriginFor<T>, maybe_para: Option<ParaId>) -> DispatchResult {
 			ensure_root(origin)?;
 			if let Some(para) = maybe_para {
@@ -199,8 +199,8 @@ pub mod pallet {
 			Ok(())
 		}
 
-		#[pallet::call_index(4)]
-		#[pallet::weight({0})]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight({0})]
 		pub fn ping(origin: OriginFor<T>, seq: u32, payload: Vec<u8>) -> DispatchResult {
 			// Only accept pings from other chains.
 			let para = ensure_sibling_para(<T as Config>::RuntimeOrigin::from(origin))?;
@@ -226,8 +226,8 @@ pub mod pallet {
 			Ok(())
 		}
 
-		#[pallet::call_index(5)]
-		#[pallet::weight({0})]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight({0})]
 		pub fn pong(origin: OriginFor<T>, seq: u32, payload: Vec<u8>) -> DispatchResult {
 			// Only accept pings from other chains.
 			let para = ensure_sibling_para(<T as Config>::RuntimeOrigin::from(origin))?;
@@ -237,7 +237,7 @@ pub mod pallet {
 					para,
 					seq,
 					payload,
-					pezframe_system::Pallet::<T>::block_number().saturating_sub(sent_at),
+					pezframe_system::Pezpallet::<T>::block_number().saturating_sub(sent_at),
 				));
 			} else {
 				// Pong received for a ping we apparently didn't send?!

@@ -21,7 +21,7 @@ use crate::*;
 use alloc::vec::Vec;
 use pezframe_support::pezpallet_prelude::*;
 
-impl<T: Config<I>, I: 'static> Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 	/// Get the owner of the item, if the item exists.
 	pub fn owner(collection: T::CollectionId, item: T::ItemId) -> Option<T::AccountId> {
 		Item::<T, I>::get(collection, item).map(|i| i.owner)

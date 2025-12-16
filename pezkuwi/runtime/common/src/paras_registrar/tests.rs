@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Tests for the paras_registrar pallet.
+//! Tests for the paras_registrar pezpallet.
 
 #[cfg(test)]
 use super::*;
@@ -257,7 +257,7 @@ fn deregister_works() {
 		assert!(Teyrchains::is_parathread(para_id));
 		assert_ok!(mock::Registrar::deregister(RuntimeOrigin::root(), para_id,));
 		run_to_session(START_SESSION_INDEX + 4);
-		assert!(paras::Pallet::<Test>::lifecycle(para_id).is_none());
+		assert!(paras::Pezpallet::<Test>::lifecycle(para_id).is_none());
 		assert_eq!(Balances::reserved_balance(&1), 0);
 	});
 }

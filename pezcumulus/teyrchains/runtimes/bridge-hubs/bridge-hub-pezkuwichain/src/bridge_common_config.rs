@@ -16,10 +16,10 @@
 
 //! Bridge definitions that can be used by multiple BridgeHub flavors.
 //! All configurations here should be dedicated to a single chain; in other words, we don't need two
-//! chains for a single pallet configuration.
+//! chains for a single pezpallet configuration.
 //!
-//! For example, the messaging pallet needs to know the sending and receiving chains, but the
-//! GRANDPA tracking pallet only needs to be aware of one chain.
+//! For example, the messaging pezpallet needs to know the sending and receiving chains, but the
+//! GRANDPA tracking pezpallet only needs to be aware of one chain.
 
 use super::{weights, AccountId, Balance, Balances, BlockNumber, Runtime, RuntimeEvent};
 use bp_relayers::RewardsAccountParams;
@@ -40,7 +40,7 @@ parameter_types! {
 	pub storage DeliveryRewardInBalance: u64 = 1_000_000;
 }
 
-/// Add GRANDPA bridge pallet to track Zagros relay chain.
+/// Add GRANDPA bridge pezpallet to track Zagros relay chain.
 pub type BridgeGrandpaZagrosInstance = pezpallet_bridge_grandpa::Instance3;
 impl pezpallet_bridge_grandpa::Config<BridgeGrandpaZagrosInstance> for Runtime {
 	type RuntimeEvent = RuntimeEvent;
@@ -51,7 +51,7 @@ impl pezpallet_bridge_grandpa::Config<BridgeGrandpaZagrosInstance> for Runtime {
 	type WeightInfo = weights::pezpallet_bridge_grandpa::WeightInfo<Runtime>;
 }
 
-/// Add teyrchain bridge pallet to track Zagros BridgeHub teyrchain
+/// Add teyrchain bridge pezpallet to track Zagros BridgeHub teyrchain
 pub type BridgeTeyrchainZagrosInstance = pezpallet_bridge_teyrchains::Instance3;
 impl pezpallet_bridge_teyrchains::Config<BridgeTeyrchainZagrosInstance> for Runtime {
 	type RuntimeEvent = RuntimeEvent;
@@ -72,7 +72,7 @@ impl pezpallet_bridge_relayers::Config<RelayersForLegacyLaneIdsMessagesInstance>
 	type RewardBalance = Balance;
 	type Reward = RewardsAccountParams<bp_messages::LegacyLaneId>;
 	type PaymentProcedure = bp_relayers::PayRewardFromAccount<
-		pezpallet_balances::Pallet<Runtime>,
+		pezpallet_balances::Pezpallet<Runtime>,
 		AccountId,
 		bp_messages::LegacyLaneId,
 		Self::RewardBalance,
@@ -96,7 +96,7 @@ impl pezpallet_bridge_relayers::Config<RelayersForPermissionlessLanesInstance> f
 	type RewardBalance = Balance;
 	type Reward = RewardsAccountParams<bp_messages::HashedLaneId>;
 	type PaymentProcedure = bp_relayers::PayRewardFromAccount<
-		pezpallet_balances::Pallet<Runtime>,
+		pezpallet_balances::Pezpallet<Runtime>,
 		AccountId,
 		bp_messages::HashedLaneId,
 		Self::RewardBalance,
@@ -113,7 +113,7 @@ impl pezpallet_bridge_relayers::Config<RelayersForPermissionlessLanesInstance> f
 	type WeightInfo = weights::pezpallet_bridge_relayers_permissionless_lanes::WeightInfo<Runtime>;
 }
 
-/// Add GRANDPA bridge pallet to track Pezkuwichain Bulletin chain.
+/// Add GRANDPA bridge pezpallet to track Pezkuwichain Bulletin chain.
 pub type BridgeGrandpaPezkuwichainBulletinInstance = pezpallet_bridge_grandpa::Instance4;
 impl pezpallet_bridge_grandpa::Config<BridgeGrandpaPezkuwichainBulletinInstance> for Runtime {
 	type RuntimeEvent = RuntimeEvent;
@@ -121,13 +121,13 @@ impl pezpallet_bridge_grandpa::Config<BridgeGrandpaPezkuwichainBulletinInstance>
 	type MaxFreeHeadersPerBlock = ConstU32<4>;
 	type FreeHeadersInterval = ConstU32<5>;
 	type HeadersToKeep = RelayChainHeadersToKeep;
-	// Technically this is incorrect - we have two pallet instances and ideally we shall
+	// Technically this is incorrect - we have two pezpallet instances and ideally we shall
 	// benchmark every instance separately. But the benchmarking engine has a flaw - it
 	// messes with components. E.g. in Kusama maximal validators count is 1024 and in
 	// Bulletin chain it is 100. But benchmarking engine runs Bulletin benchmarks using
 	// components range, computed for Kusama => it causes an error.
 	//
-	// In practice, however, GRANDPA pallet works the same way for all bridged chains, so
+	// In practice, however, GRANDPA pezpallet works the same way for all bridged chains, so
 	// weights are also the same for both bridges.
 	type WeightInfo = weights::pezpallet_bridge_grandpa::WeightInfo<Runtime>;
 }

@@ -167,7 +167,7 @@ where
 			_ => return,
 		};
 
-		// Don't canonicalize branches corresponding to blocks for which the MMR pallet
+		// Don't canonicalize branches corresponding to blocks for which the MMR pezpallet
 		// wasn't yet initialized.
 		if header.number < self.first_mmr_block {
 			return;
@@ -263,7 +263,7 @@ where
 	/// _canonical key_.
 	/// Prune leafs and nodes added by stale blocks in offchain db from _fork-aware key_.
 	pub fn canonicalize_and_prune(&mut self, notification: FinalityNotification<B>) {
-		// Update the first MMR block in case of a pallet reset.
+		// Update the first MMR block in case of a pezpallet reset.
 		self.handle_potential_pallet_reset(&notification);
 
 		// Move offchain MMR nodes for finalized blocks to canonical keys.
@@ -328,7 +328,7 @@ mod tests {
 		run_test_with_pezmmr_gadget(|client| async move {
 			// G -> A1 -> A2 -> A3 -> A4 -> A5
 			//      |           |
-			//      |           | -> pallet reset
+			//      |           | -> pezpallet reset
 			//      |
 			//      | -> first finality notification
 
@@ -427,7 +427,7 @@ mod tests {
 				//      |     |     | -> gadget start
 				//      |     |
 				//      |     | -> finalized before gadget start (missed notification)
-				//      |     |    + pallet reset
+				//      |     |    + pezpallet reset
 				//      |
 				//      | -> first mmr block
 				let blocks = mmr_blocks.lock();

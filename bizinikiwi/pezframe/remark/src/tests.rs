@@ -15,9 +15,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Tests for remarks pallet.
+//! Tests for remarks pezpallet.
 
-use super::{Error, Event, Pallet as Remark};
+use super::{Error, Event, Pezpallet as Remark};
 use crate::mock::*;
 use pezframe_support::{assert_noop, assert_ok};
 use pezframe_system::RawOrigin;
@@ -36,7 +36,7 @@ fn generates_event() {
 			sender: caller,
 		}
 		.into();
-		// this one we actually go into the system pallet and get the last event
+		// this one we actually go into the system pezpallet and get the last event
 		// because we know its there from block +1
 		let pezframe_system::EventRecord { event, .. } = &events[events.len() - 1];
 		assert_eq!(event, &system_event);

@@ -19,36 +19,36 @@ use pezframe_support::{
 	assert_noop, assert_ok, derive_impl, dispatch::DispatchResult, ensure,
 	pezpallet_prelude::ConstU32, storage::with_storage_layer,
 };
-use pallet::*;
+use pezpallet::*;
 use pezsp_io::TestExternalities;
 
-#[pezframe_support::pallet(dev_mode)]
-pub mod pallet {
+#[pezframe_support::pezpallet(dev_mode)]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Value<T> = StorageValue<_, u32, ValueQuery>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Map<T> = StorageMap<_, Blake2_128Concat, u32, u32, ValueQuery>;
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		Revert,
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
-		#[pallet::call_index(0)]
-		#[pallet::weight(1)]
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(1)]
 		pub fn set_value(_origin: OriginFor<T>, value: u32) -> DispatchResult {
 			Value::<T>::put(value);
 			ensure!(value != 1, Error::<T>::Revert);
@@ -95,7 +95,7 @@ impl Config for Runtime {}
 pezframe_support::construct_runtime!(
 	pub enum Runtime {
 		System: pezframe_system,
-		MyPallet: pallet,
+		MyPallet: pezpallet,
 	}
 );
 
@@ -230,11 +230,11 @@ fn storage_layer_commit_then_rollback() {
 fn storage_layer_in_pallet_call() {
 	TestExternalities::default().execute_with(|| {
 		use pezsp_runtime::traits::Dispatchable;
-		let call1 = RuntimeCall::MyPallet(pallet::Call::set_value { value: 2 });
+		let call1 = RuntimeCall::MyPallet(pezpallet::Call::set_value { value: 2 });
 		assert_ok!(call1.dispatch(RuntimeOrigin::signed(0)));
 		assert_eq!(Value::<Runtime>::get(), 2);
 
-		let call2 = RuntimeCall::MyPallet(pallet::Call::set_value { value: 1 });
+		let call2 = RuntimeCall::MyPallet(pezpallet::Call::set_value { value: 1 });
 		assert_noop!(call2.dispatch(RuntimeOrigin::signed(0)), Error::<Runtime>::Revert);
 	});
 }

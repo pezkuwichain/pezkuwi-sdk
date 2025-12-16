@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Storage migrations for the im-online pallet.
+//! Storage migrations for the im-online pezpallet.
 
 use super::*;
 use alloc::vec::Vec;
@@ -29,7 +29,7 @@ use pezsp_runtime::TryRuntimeError;
 /// The log target.
 const TARGET: &str = "runtime::im-online::migration::v1";
 
-/// The original data layout of the im-online pallet (`ReceivedHeartbeats` storage item).
+/// The original data layout of the im-online pezpallet (`ReceivedHeartbeats` storage item).
 mod v0 {
 	use super::*;
 	use pezframe_support::traits::WrapperOpaque;
@@ -44,7 +44,7 @@ mod v0 {
 
 	#[storage_alias]
 	pub(super) type ReceivedHeartbeats<T: Config> = StorageDoubleMap<
-		Pallet<T>,
+		Pezpallet<T>,
 		Twox64Concat,
 		SessionIndex,
 		Twox64Concat,
@@ -70,7 +70,7 @@ pub mod v1 {
 
 		fn on_runtime_upgrade() -> Weight {
 			let mut weight = T::DbWeight::get().reads(1);
-			if StorageVersion::get::<Pallet<T>>() != 0 {
+			if StorageVersion::get::<Pezpallet<T>>() != 0 {
 				log::warn!(
 					target: TARGET,
 					"Skipping migration because in-code storage version is not 0"
@@ -92,7 +92,7 @@ pub mod v1 {
 				crate::ReceivedHeartbeats::<T>::insert(session_index, auth_index, true);
 			}
 
-			StorageVersion::new(1).put::<Pallet<T>>();
+			StorageVersion::new(1).put::<Pezpallet<T>>();
 			weight.saturating_add(T::DbWeight::get().writes(1))
 		}
 
@@ -110,17 +110,17 @@ pub mod v1 {
 					old_received_heartbeats
 				);
 			}
-			ensure!(StorageVersion::get::<Pallet<T>>() >= 1, "must upgrade");
+			ensure!(StorageVersion::get::<Pezpallet<T>>() >= 1, "must upgrade");
 
 			Ok(())
 		}
 	}
 }
 
-/// Clears the pallet's offchain storage.
+/// Clears the pezpallet's offchain storage.
 ///
 /// Must be put in `OffchainWorkerApi::offchain_worker` after
-/// the pallet was removed.
+/// the pezpallet was removed.
 pub fn clear_offchain_storage(validator_set_size: u32) {
 	(0..validator_set_size).for_each(|idx| {
 		let key = {
@@ -141,10 +141,10 @@ mod test {
 	#[test]
 	fn migration_works() {
 		new_test_ext().execute_with(|| {
-			assert_eq!(StorageVersion::get::<Pallet<T>>(), 0);
+			assert_eq!(StorageVersion::get::<Pezpallet<T>>(), 0);
 
 			// Insert some received heartbeats into the v0 storage:
-			let current_session = <T as pallet::Config>::ValidatorSet::session_index();
+			let current_session = <T as pezpallet::Config>::ValidatorSet::session_index();
 			v0::ReceivedHeartbeats::<T>::insert(
 				&current_session,
 				0,
@@ -171,7 +171,7 @@ mod test {
 			assert!(crate::ReceivedHeartbeats::<T>::contains_key(&current_session, 0));
 			assert_eq!(Some(true), crate::ReceivedHeartbeats::<T>::get(&current_session, 1));
 
-			assert_eq!(StorageVersion::get::<Pallet<T>>(), 1);
+			assert_eq!(StorageVersion::get::<Pezpallet<T>>(), 1);
 		});
 	}
 }

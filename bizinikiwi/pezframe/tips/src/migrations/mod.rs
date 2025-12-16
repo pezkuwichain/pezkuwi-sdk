@@ -22,5 +22,5 @@
 /// own storage identifier.
 pub mod v4;
 
-/// A migration that unreserves all funds held in the context of this pallet.
+/// A migration that unreserves all funds held in the context of this pezpallet.
 pub mod unreserve_deposits;

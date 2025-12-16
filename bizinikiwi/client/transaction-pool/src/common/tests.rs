@@ -36,7 +36,7 @@ use pezsp_runtime::{
 };
 use std::{collections::HashSet, sync::Arc};
 use bizinikiwi_test_runtime::{
-	bizinikiwi_test_pallet::pallet::Call as PalletCall, BalancesCall, Block, BlockNumber, Extrinsic,
+	bizinikiwi_test_pallet::pezpallet::Call as PalletCall, BalancesCall, Block, BlockNumber, Extrinsic,
 	ExtrinsicBuilder, Hashing, RuntimeCall, Transfer, TransferData, H256,
 };
 

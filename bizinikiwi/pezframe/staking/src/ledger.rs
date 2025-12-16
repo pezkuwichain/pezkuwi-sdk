@@ -36,7 +36,7 @@ use pezsp_runtime::DispatchResult;
 use pezsp_staking::{StakingAccount, StakingInterface};
 
 use crate::{
-	asset, BalanceOf, Bonded, Config, Error, Ledger, Pallet, Payee, RewardDestination,
+	asset, BalanceOf, Bonded, Config, Error, Ledger, Pezpallet, Payee, RewardDestination,
 	StakingLedger, VirtualStakers,
 };
 
@@ -186,7 +186,7 @@ impl<T: Config> StakingLedger<T> {
 		}
 
 		// We skip locking virtual stakers.
-		if !Pallet::<T>::is_virtual_staker(&self.stash) {
+		if !Pezpallet::<T>::is_virtual_staker(&self.stash) {
 			// for direct stakers, update lock on stash based on ledger.
 			asset::update_stake::<T>(&self.stash, self.total)
 				.map_err(|_| Error::<T>::NotEnoughFunds)?;

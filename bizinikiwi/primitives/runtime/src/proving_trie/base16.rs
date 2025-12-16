@@ -19,7 +19,7 @@
 //! runtime. The `sp-trie` crate exposes all of these same functionality (and more), but this
 //! library is designed to work more easily with runtime native types, which simply need to
 //! implement `Encode`/`Decode`. It also exposes a runtime friendly `TrieError` type which can be
-//! use inside of a FRAME Pallet.
+//! use inside of a FRAME Pezpallet.
 //!
 //! Proofs are created with latest bizinikiwi trie format (`LayoutV1`), and are not compatible with
 //! proofs using `LayoutV0`.

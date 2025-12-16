@@ -295,7 +295,7 @@ fn ledger_consistency_active_balance_below_ed() {
 /// Automatic withdrawal of unlocking funds in staking propagates to the nomination pools and its
 /// state correctly.
 ///
-/// The staking pallet may withdraw unlocking funds from a pool's bonded account without a pool
+/// The staking pezpallet may withdraw unlocking funds from a pool's bonded account without a pool
 /// member or operator calling explicitly `Call::withdraw*`. This test verifies that the member's
 /// are eventually paid and the `TotalValueLocked` is kept in sync in those cases.
 fn automatic_unbonding_pools() {

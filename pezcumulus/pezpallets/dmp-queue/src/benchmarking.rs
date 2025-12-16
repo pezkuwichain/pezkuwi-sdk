@@ -38,7 +38,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			Pallet::<T>::on_idle(0u32.into(), Weight::MAX);
+			Pezpallet::<T>::on_idle(0u32.into(), Weight::MAX);
 		}
 
 		assert_last_event::<T>(Event::Exported { page: 0 }.into());
@@ -55,7 +55,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			Pallet::<T>::on_idle(0u32.into(), Weight::MAX);
+			Pezpallet::<T>::on_idle(0u32.into(), Weight::MAX);
 		}
 
 		assert_last_event::<T>(Event::Exported { page: 0 }.into());
@@ -73,7 +73,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			Pallet::<T>::on_idle(0u32.into(), Weight::MAX);
+			Pezpallet::<T>::on_idle(0u32.into(), Weight::MAX);
 		}
 
 		assert_last_event::<T>(Event::ExportedOverweight { index: 0 }.into());
@@ -91,17 +91,17 @@ mod benchmarks {
 
 		#[block]
 		{
-			Pallet::<T>::on_idle(0u32.into(), Weight::MAX);
+			Pezpallet::<T>::on_idle(0u32.into(), Weight::MAX);
 		}
 
 		assert_last_event::<T>(Event::ExportOverweightFailed { index: 0 }.into());
 	}
 
-	impl_benchmark_test_suite!(Pallet, crate::mock::new_test_ext(), crate::mock::Runtime);
+	impl_benchmark_test_suite!(Pezpallet, crate::mock::new_test_ext(), crate::mock::Runtime);
 }
 
 fn assert_last_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
-	let events = pezframe_system::Pallet::<T>::events();
+	let events = pezframe_system::Pezpallet::<T>::events();
 	let system_event: <T as pezframe_system::Config>::RuntimeEvent = generic_event.into();
 	let pezframe_system::EventRecord { event, .. } = events.last().expect("Event expected");
 	assert_eq!(event, &system_event.into());

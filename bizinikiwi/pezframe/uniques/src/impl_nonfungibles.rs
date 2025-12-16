@@ -26,7 +26,7 @@ use pezframe_support::{
 };
 use pezsp_runtime::{DispatchError, DispatchResult};
 
-impl<T: Config<I>, I: 'static> Inspect<<T as SystemConfig>::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Inspect<<T as SystemConfig>::AccountId> for Pezpallet<T, I> {
 	type ItemId = T::ItemId;
 	type CollectionId = T::CollectionId;
 
@@ -86,7 +86,7 @@ impl<T: Config<I>, I: 'static> Inspect<<T as SystemConfig>::AccountId> for Palle
 	}
 }
 
-impl<T: Config<I>, I: 'static> Create<<T as SystemConfig>::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Create<<T as SystemConfig>::AccountId> for Pezpallet<T, I> {
 	/// Create a `collection` of nonfungible items to be owned by `who` and managed by `admin`.
 	fn create_collection(
 		collection: &Self::CollectionId,
@@ -108,7 +108,7 @@ impl<T: Config<I>, I: 'static> Create<<T as SystemConfig>::AccountId> for Pallet
 	}
 }
 
-impl<T: Config<I>, I: 'static> Destroy<<T as SystemConfig>::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Destroy<<T as SystemConfig>::AccountId> for Pezpallet<T, I> {
 	type DestroyWitness = DestroyWitness;
 
 	fn get_destroy_witness(collection: &Self::CollectionId) -> Option<DestroyWitness> {
@@ -124,7 +124,7 @@ impl<T: Config<I>, I: 'static> Destroy<<T as SystemConfig>::AccountId> for Palle
 	}
 }
 
-impl<T: Config<I>, I: 'static> Mutate<<T as SystemConfig>::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Mutate<<T as SystemConfig>::AccountId> for Pezpallet<T, I> {
 	fn mint_into(
 		collection: &Self::CollectionId,
 		item: &Self::ItemId,
@@ -149,7 +149,7 @@ impl<T: Config<I>, I: 'static> Mutate<<T as SystemConfig>::AccountId> for Pallet
 	}
 }
 
-impl<T: Config<I>, I: 'static> Transfer<T::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Transfer<T::AccountId> for Pezpallet<T, I> {
 	fn transfer(
 		collection: &Self::CollectionId,
 		item: &Self::ItemId,
@@ -159,7 +159,7 @@ impl<T: Config<I>, I: 'static> Transfer<T::AccountId> for Pallet<T, I> {
 	}
 }
 
-impl<T: Config<I>, I: 'static> InspectEnumerable<T::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> InspectEnumerable<T::AccountId> for Pezpallet<T, I> {
 	type CollectionsIterator = KeyPrefixIterator<<T as Config<I>>::CollectionId>;
 	type ItemsIterator = KeyPrefixIterator<<T as Config<I>>::ItemId>;
 	type OwnedIterator =

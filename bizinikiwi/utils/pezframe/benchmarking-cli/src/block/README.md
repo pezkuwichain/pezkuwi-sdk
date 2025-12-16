@@ -2,7 +2,7 @@
 
 The whole benchmarking process in Bizinikiwi aims to predict the resource usage of an unexecuted block. This command
 measures how accurate this prediction was by executing a block and comparing the predicted weight to its actual resource
-usage. It can be used to measure the accuracy of the pallet benchmarking.
+usage. It can be used to measure the accuracy of the pezpallet benchmarking.
 
 In the following it will be explained once for PezkuwiChain and once for Bizinikiwi.
 

@@ -19,7 +19,7 @@
 
 use crate::{
 	storage::ContractInfo, AccountIdOf, BalanceOf, CodeInfo, Config, Error, Event, HoldReason,
-	Inspect, Origin, Pallet, StorageDeposit as Deposit, System, LOG_TARGET,
+	Inspect, Origin, Pezpallet, StorageDeposit as Deposit, System, LOG_TARGET,
 };
 
 use alloc::vec::Vec;
@@ -440,7 +440,7 @@ where
 		debug_assert!(matches!(self.contract_state(), ContractState::Alive));
 
 		// We need to make sure that the contract's account exists.
-		let ed = Pallet::<T>::min_balance();
+		let ed = Pezpallet::<T>::min_balance();
 		self.total_deposit = Deposit::Charge(ed);
 		T::Currency::transfer(origin, contract, ed, Preservation::Preserve)?;
 
@@ -520,7 +520,7 @@ impl<T: Config> Ext<T> for ReservingExt {
 		// as free balance after accounting for all deposits.
 		let max = T::Currency::reducible_balance(origin, Preservation::Preserve, Polite)
 			.saturating_sub(min_leftover)
-			.saturating_sub(Pallet::<T>::min_balance());
+			.saturating_sub(Pezpallet::<T>::min_balance());
 		let default = max.min(T::DefaultDepositLimit::get());
 		let limit = limit.unwrap_or(default);
 		ensure!(
@@ -552,7 +552,7 @@ impl<T: Config> Ext<T> for ReservingExt {
 					Fortitude::Polite,
 				)?;
 
-				Pallet::<T>::deposit_event(Event::StorageDepositTransferredAndHeld {
+				Pezpallet::<T>::deposit_event(Event::StorageDepositTransferredAndHeld {
 					from: origin.clone(),
 					to: contract.clone(),
 					amount: *amount,
@@ -569,7 +569,7 @@ impl<T: Config> Ext<T> for ReservingExt {
 					Fortitude::Polite,
 				)?;
 
-				Pallet::<T>::deposit_event(Event::StorageDepositTransferredAndReleased {
+				Pezpallet::<T>::deposit_event(Event::StorageDepositTransferredAndReleased {
 					from: contract.clone(),
 					to: origin.clone(),
 					amount: transferred,

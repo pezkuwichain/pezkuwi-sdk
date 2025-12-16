@@ -15,17 +15,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! The miner code for the EPMB pallet.
+//! The miner code for the EPMB pezpallet.
 //!
 //! It is broadly consisted of two main types:
 //!
 //! * [`crate::unsigned::miner::BaseMiner`], which is more generic, needs parameterization via
 //!   [`crate::unsigned::miner::MinerConfig`], and can be used by an external implementation.
 //! * [`crate::unsigned::miner::OffchainWorkerMiner`], which is more opinionated, and is used by
-//!   this pallet via the `offchain_worker` hook to also mine solutions during the
+//!   this pezpallet via the `offchain_worker` hook to also mine solutions during the
 //!   `Phase::Unsigned`.
 
-use super::{Call, Config, Pallet};
+use super::{Call, Config, Pezpallet};
 use crate::{
 	helpers,
 	types::{PadSolutionPages, *},
@@ -75,7 +75,7 @@ pub enum MinerError<T: MinerConfig> {
 	Solver(MinerSolverErrorOf<T>),
 	/// Snapshot data was unavailable unexpectedly.
 	SnapshotUnAvailable(SnapshotType),
-	/// The base, common errors from the pallet.
+	/// The base, common errors from the pezpallet.
 	Common(CommonError),
 	/// The solution generated from the miner is not feasible.
 	Feasibility(verifier::FeasibilityError),
@@ -112,7 +112,7 @@ impl<T: MinerConfig> From<CommonError> for MinerError<T> {
 pub enum OffchainMinerError<T: Config> {
 	/// An error in the base miner.
 	BaseMiner(MinerError<T::MinerConfig>),
-	/// The base, common errors from the pallet.
+	/// The base, common errors from the pezpallet.
 	Common(CommonError),
 	/// Something went wrong fetching the lock.
 	Lock(&'static str),
@@ -143,7 +143,7 @@ impl<T: Config> From<CommonError> for OffchainMinerError<T> {
 /// Configurations for the miner.
 ///
 /// This is extracted from the main crate's config so that an offchain miner can readily use the
-/// [`BaseMiner`] without needing to deal with the rest of the pallet's configuration.
+/// [`BaseMiner`] without needing to deal with the rest of the pezpallet's configuration.
 pub trait MinerConfig {
 	/// The account id type.
 	type AccountId: Ord + Clone + codec::Codec + core::fmt::Debug;
@@ -165,7 +165,7 @@ pub trait MinerConfig {
 	///
 	/// This value is not set in stone, and it is up to an individual miner to configure. A good
 	/// value is something like 75% of the total block length, which can be fetched from the system
-	/// pallet.
+	/// pezpallet.
 	type MaxLength: Get<u32>;
 	/// Maximum number of votes per voter.
 	///
@@ -208,7 +208,7 @@ pub trait MinerConfig {
 }
 
 /// A base miner that is only capable of mining a new solution and checking it against the state of
-/// this pallet for feasibility, and trimming its length/weight.
+/// this pezpallet for feasibility, and trimming its length/weight.
 pub struct BaseMiner<T: MinerConfig>(pezsp_std::marker::PhantomData<T>);
 
 /// Parameterized `BoundedSupports` for the miner.
@@ -690,7 +690,7 @@ impl<T: Config> OffchainWorkerMiner<T> {
 			.ok_or(MinerError::SnapshotUnAvailable(SnapshotType::Targets))?;
 
 		// This is the range of voters that we are interested in.
-		let voter_pages_range = crate::Pallet::<T>::msp_range_for(pages as usize);
+		let voter_pages_range = crate::Pezpallet::<T>::msp_range_for(pages as usize);
 
 		sublog!(
 			debug,
@@ -727,7 +727,7 @@ impl<T: Config> OffchainWorkerMiner<T> {
 			return Err(OffchainMinerError::<T>::ZeroPages);
 		}
 		let (voter_pages, all_targets, desired_targets) = Self::fetch_snapshot(pages)?;
-		let round = crate::Pallet::<T>::round();
+		let round = crate::Pezpallet::<T>::round();
 		BaseMiner::<T::MinerConfig>::mine_solution(MineInput {
 			desired_targets,
 			all_targets,
@@ -782,7 +782,7 @@ impl<T: Config> OffchainWorkerMiner<T> {
 		do_feasibility: bool,
 	) -> Result<(), OffchainMinerError<T>> {
 		// NOTE: we prefer cheap checks first, so first run unsigned checks.
-		Pallet::<T>::unsigned_specific_checks(paged_solution)?;
+		Pezpallet::<T>::unsigned_specific_checks(paged_solution)?;
 		Self::base_check_solution(paged_solution, maybe_snapshot_fingerprint, do_feasibility)
 	}
 
@@ -817,7 +817,7 @@ impl<T: Config> OffchainWorkerMiner<T> {
 		maybe_snapshot_fingerprint: Option<T::Hash>,
 		do_feasibility: bool,
 	) -> Result<(), OffchainMinerError<T>> {
-		let _ = crate::Pallet::<T>::snapshot_independent_checks(
+		let _ = crate::Pezpallet::<T>::snapshot_independent_checks(
 			paged_solution,
 			maybe_snapshot_fingerprint,
 		)?;

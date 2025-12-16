@@ -1,6 +1,6 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-//! # Pallet Presale - Multi-Presale Launchpad Platform
+//! # Pezpallet Presale - Multi-Presale Launchpad Platform
 //!
 //! ## Overview
 //!
@@ -26,7 +26,7 @@
 //! - **Bonus Tiers**: Reward larger contributions
 //! - **Emergency**: Pause, cancel, withdrawal controls
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 #[cfg(test)]
 mod mock;
@@ -42,8 +42,8 @@ pub use weights::*;
 
 extern crate alloc;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::{
 		dispatch::DispatchResult,
@@ -166,10 +166,10 @@ pub mod pallet {
 		pub grace_refund_fee_percent: u8,
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// Asset ID type
 		type AssetId: Parameter + Member + Copy + MaybeSerializeDeserialize + MaxEncodedLen;
@@ -189,32 +189,32 @@ pub mod pallet {
 		type Assets: Inspect<Self::AccountId, AssetId = Self::AssetId, Balance = Self::Balance>
 			+ Mutate<Self::AccountId>;
 
-		/// The presale pallet id, used for deriving sub-account treasuries
-		#[pallet::constant]
+		/// The presale pezpallet id, used for deriving sub-account treasuries
+		#[pezpallet::constant]
 		type PalletId: Get<PalletId>;
 
 		/// Platform treasury account (receives 50% of platform fee)
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type PlatformTreasury: Get<Self::AccountId>;
 
 		/// Staking reward pool account (receives 25% of platform fee)
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type StakingRewardPool: Get<Self::AccountId>;
 
 		/// Platform fee percentage (e.g., 2 for 2%)
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type PlatformFeePercent: Get<u8>;
 
 		/// Maximum number of contributors per presale
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxContributors: Get<u32>;
 
 		/// Maximum bonus tiers per presale
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxBonusTiers: Get<u32>;
 
 		/// Maximum whitelisted accounts per presale
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxWhitelistedAccounts: Get<u32>;
 
 		/// Origin that can create presales
@@ -228,19 +228,19 @@ pub mod pallet {
 	}
 
 	/// Next presale ID
-	#[pallet::storage]
-	#[pallet::getter(fn next_presale_id)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn next_presale_id)]
 	pub type NextPresaleId<T: Config> = StorageValue<_, PresaleId, ValueQuery>;
 
 	/// Presale configurations
-	#[pallet::storage]
-	#[pallet::getter(fn presales)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn presales)]
 	pub type Presales<T: Config> =
 		StorageMap<_, Blake2_128Concat, PresaleId, PresaleConfig<T, T::MaxBonusTiers>, OptionQuery>;
 
 	/// Contributions: (presale_id, account) => ContributionInfo
-	#[pallet::storage]
-	#[pallet::getter(fn contributions)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn contributions)]
 	pub type Contributions<T: Config> = StorageDoubleMap<
 		_,
 		Blake2_128Concat,
@@ -252,8 +252,8 @@ pub mod pallet {
 	>;
 
 	/// Contributors list per presale
-	#[pallet::storage]
-	#[pallet::getter(fn contributors)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn contributors)]
 	pub type Contributors<T: Config> = StorageMap<
 		_,
 		Blake2_128Concat,
@@ -263,13 +263,13 @@ pub mod pallet {
 	>;
 
 	/// Total raised per presale
-	#[pallet::storage]
-	#[pallet::getter(fn total_raised)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn total_raised)]
 	pub type TotalRaised<T: Config> = StorageMap<_, Blake2_128Concat, PresaleId, u128, ValueQuery>;
 
 	/// Whitelist: (presale_id, account) => is_whitelisted
-	#[pallet::storage]
-	#[pallet::getter(fn whitelisted)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn whitelisted)]
 	pub type WhitelistedAccounts<T: Config> = StorageDoubleMap<
 		_,
 		Blake2_128Concat,
@@ -281,8 +281,8 @@ pub mod pallet {
 	>;
 
 	/// Vesting claims: (presale_id, account) => claimed_amount
-	#[pallet::storage]
-	#[pallet::getter(fn vesting_claimed)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn vesting_claimed)]
 	pub type VestingClaimed<T: Config> = StorageDoubleMap<
 		_,
 		Blake2_128Concat,
@@ -294,20 +294,20 @@ pub mod pallet {
 	>;
 
 	/// Platform analytics
-	#[pallet::storage]
-	#[pallet::getter(fn total_platform_volume)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn total_platform_volume)]
 	pub type TotalPlatformVolume<T: Config> = StorageValue<_, u128, ValueQuery>;
 
-	#[pallet::storage]
-	#[pallet::getter(fn total_platform_fees)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn total_platform_fees)]
 	pub type TotalPlatformFees<T: Config> = StorageValue<_, u128, ValueQuery>;
 
-	#[pallet::storage]
-	#[pallet::getter(fn successful_presales)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn successful_presales)]
 	pub type SuccessfulPresales<T: Config> = StorageValue<_, u32, ValueQuery>;
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// Presale created [presale_id, owner, payment_asset, reward_asset]
 		PresaleCreated {
@@ -346,7 +346,7 @@ pub mod pallet {
 		},
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		PresaleNotFound,
 		PresaleNotActive,
@@ -377,11 +377,11 @@ pub mod pallet {
 		InvalidSoftCap,
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Create a new presale
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::PresaleWeightInfo::create_presale())]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::PresaleWeightInfo::create_presale())]
 		pub fn create_presale(
 			origin: OriginFor<T>,
 			payment_asset: T::AssetId,
@@ -410,7 +410,7 @@ pub mod pallet {
 			ensure!(grace_refund_fee_percent <= 100, Error::<T>::InvalidFeePercent);
 
 			let presale_id = NextPresaleId::<T>::get();
-			let start_block = <pezframe_system::Pallet<T>>::block_number();
+			let start_block = <pezframe_system::Pezpallet<T>>::block_number();
 
 			// Start with empty bonus tiers - can be added later
 			let bounded_bonus_tiers = BoundedVec::<BonusTier, T::MaxBonusTiers>::default();
@@ -462,8 +462,8 @@ pub mod pallet {
 		}
 
 		/// Contribute to a presale
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::PresaleWeightInfo::contribute())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::PresaleWeightInfo::contribute())]
 		pub fn contribute(
 			origin: OriginFor<T>,
 			presale_id: PresaleId,
@@ -477,7 +477,7 @@ pub mod pallet {
 			ensure!(presale.status == PresaleStatus::Active, Error::<T>::PresaleNotActive);
 			ensure!(amount > 0, Error::<T>::ZeroContribution);
 
-			let current_block = <pezframe_system::Pallet<T>>::block_number();
+			let current_block = <pezframe_system::Pezpallet<T>>::block_number();
 			let end_block = presale.start_block + presale.duration;
 			ensure!(current_block < end_block, Error::<T>::PresaleEnded);
 
@@ -574,8 +574,8 @@ pub mod pallet {
 		}
 
 		/// Finalize presale - checks soft cap and sets status to Successful or Failed
-		#[pallet::call_index(2)]
-		#[pallet::weight(T::PresaleWeightInfo::finalize_presale(Contributors::<T>::get(presale_id).len() as u32))]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(T::PresaleWeightInfo::finalize_presale(Contributors::<T>::get(presale_id).len() as u32))]
 		pub fn finalize_presale(origin: OriginFor<T>, presale_id: PresaleId) -> DispatchResult {
 			ensure_root(origin)?;
 
@@ -583,7 +583,7 @@ pub mod pallet {
 
 			ensure!(presale.status == PresaleStatus::Active, Error::<T>::PresaleNotActive);
 
-			let current_block = <pezframe_system::Pallet<T>>::block_number();
+			let current_block = <pezframe_system::Pezpallet<T>>::block_number();
 			let end_block = presale.start_block + presale.duration;
 			ensure!(current_block >= end_block, Error::<T>::PresaleNotEnded);
 
@@ -688,8 +688,8 @@ pub mod pallet {
 		}
 
 		/// Refund contribution (before presale ends)
-		#[pallet::call_index(3)]
-		#[pallet::weight(T::PresaleWeightInfo::refund())]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(T::PresaleWeightInfo::refund())]
 		pub fn refund(origin: OriginFor<T>, presale_id: PresaleId) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 
@@ -697,7 +697,7 @@ pub mod pallet {
 
 			ensure!(presale.status == PresaleStatus::Active, Error::<T>::RefundNotAllowed);
 
-			let current_block = <pezframe_system::Pallet<T>>::block_number();
+			let current_block = <pezframe_system::Pezpallet<T>>::block_number();
 			let end_block = presale.start_block + presale.duration;
 			ensure!(current_block < end_block, Error::<T>::RefundNotAllowed);
 
@@ -762,8 +762,8 @@ pub mod pallet {
 		}
 
 		/// Claim vested tokens
-		#[pallet::call_index(4)]
-		#[pallet::weight(T::PresaleWeightInfo::claim_vested())]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(T::PresaleWeightInfo::claim_vested())]
 		pub fn claim_vested(origin: OriginFor<T>, presale_id: PresaleId) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 
@@ -778,7 +778,7 @@ pub mod pallet {
 			ensure!(contribution_info.amount > 0, Error::<T>::NoContribution);
 			ensure!(!contribution_info.refunded, Error::<T>::NoContribution);
 
-			let current_block = <pezframe_system::Pallet<T>>::block_number();
+			let current_block = <pezframe_system::Pezpallet<T>>::block_number();
 			let end_block = presale.start_block + presale.duration;
 			let vesting_start = end_block + vesting.cliff_blocks;
 
@@ -845,8 +845,8 @@ pub mod pallet {
 		}
 
 		/// Add account to whitelist (presale owner only)
-		#[pallet::call_index(5)]
-		#[pallet::weight(T::PresaleWeightInfo::add_to_whitelist())]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(T::PresaleWeightInfo::add_to_whitelist())]
 		pub fn add_to_whitelist(
 			origin: OriginFor<T>,
 			presale_id: PresaleId,
@@ -866,8 +866,8 @@ pub mod pallet {
 		}
 
 		/// Cancel presale (emergency - owner or root)
-		#[pallet::call_index(6)]
-		#[pallet::weight(T::PresaleWeightInfo::cancel_presale())]
+		#[pezpallet::call_index(6)]
+		#[pezpallet::weight(T::PresaleWeightInfo::cancel_presale())]
 		pub fn cancel_presale(origin: OriginFor<T>, presale_id: PresaleId) -> DispatchResult {
 			// Either EmergencyOrigin or Root can cancel
 			if T::EmergencyOrigin::ensure_origin(origin.clone()).is_err() {
@@ -886,8 +886,8 @@ pub mod pallet {
 
 		/// Refund all contributors when presale is cancelled
 		/// Auto-refunds everyone with no fees
-		#[pallet::call_index(7)]
-		#[pallet::weight(T::PresaleWeightInfo::refund_cancelled_presale())]
+		#[pezpallet::call_index(7)]
+		#[pezpallet::weight(T::PresaleWeightInfo::refund_cancelled_presale())]
 		pub fn refund_cancelled_presale(
 			origin: OriginFor<T>,
 			presale_id: PresaleId,
@@ -902,7 +902,7 @@ pub mod pallet {
 				Error::<T>::PresaleNotFound
 			);
 
-			let current_block = <pezframe_system::Pallet<T>>::block_number();
+			let current_block = <pezframe_system::Pezpallet<T>>::block_number();
 			let treasury = Self::presale_account_id(presale_id);
 
 			// Refund all contributors (treasury fee refunded, burn+stakers portion non-refundable)
@@ -957,8 +957,8 @@ pub mod pallet {
 		/// Batch refund for FAILED presales (soft cap not reached)
 		/// Anyone can call this to help refund contributors
 		/// Processes refunds in batches to avoid gas limits
-		#[pallet::call_index(8)]
-		#[pallet::weight(T::PresaleWeightInfo::batch_refund_failed_presale(*batch_size))]
+		#[pezpallet::call_index(8)]
+		#[pezpallet::weight(T::PresaleWeightInfo::batch_refund_failed_presale(*batch_size))]
 		pub fn batch_refund_failed_presale(
 			origin: OriginFor<T>,
 			presale_id: PresaleId,
@@ -972,7 +972,7 @@ pub mod pallet {
 			// Only works on FAILED presales (soft cap not reached)
 			ensure!(presale.status == PresaleStatus::Failed, Error::<T>::PresaleNotFailed);
 
-			let current_block = <pezframe_system::Pallet<T>>::block_number();
+			let current_block = <pezframe_system::Pezpallet<T>>::block_number();
 			let treasury = Self::presale_account_id(presale_id);
 			let contributors = Contributors::<T>::get(presale_id);
 
@@ -1044,7 +1044,7 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config> Pallet<T> {
+	impl<T: Config> Pezpallet<T> {
 		/// Get presale sub-account treasury
 		pub fn presale_account_id(presale_id: PresaleId) -> T::AccountId {
 			use alloc::vec::Vec;

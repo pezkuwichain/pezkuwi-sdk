@@ -261,7 +261,7 @@ parameter_types! {
 pub type AssetsForceOrigin = EnsureRoot<AccountId>;
 
 // Called "Trust Backed" assets because these are generally registered by some account, and users of
-// the asset assume it has some claimed backing. The pallet is called `Assets` in
+// the asset assume it has some claimed backing. The pezpallet is called `Assets` in
 // `construct_runtime` to avoid breaking changes on storage reads.
 pub type TrustBackedAssetsInstance = pezpallet_assets::Instance1;
 type TrustBackedAssetsCall = pezpallet_assets::Call<Runtime, TrustBackedAssetsInstance>;
@@ -290,7 +290,7 @@ impl pezpallet_assets::Config<TrustBackedAssetsInstance> for Runtime {
 	type BenchmarkHelper = ();
 }
 
-// Allow Freezes for the `Assets` pallet
+// Allow Freezes for the `Assets` pezpallet
 pub type AssetsFreezerInstance = pezpallet_assets_freezer::Instance1;
 impl pezpallet_assets_freezer::Config<AssetsFreezerInstance> for Runtime {
 	type RuntimeFreezeReason = RuntimeFreezeReason;
@@ -334,7 +334,7 @@ impl pezpallet_assets::Config<PoolAssetsInstance> for Runtime {
 	type BenchmarkHelper = ();
 }
 
-// Allow Freezes for the `PoolAssets` pallet
+// Allow Freezes for the `PoolAssets` pezpallet
 pub type PoolAssetsFreezerInstance = pezpallet_assets_freezer::Instance3;
 impl pezpallet_assets_freezer::Config<PoolAssetsFreezerInstance> for Runtime {
 	type RuntimeFreezeReason = RuntimeFreezeReason;
@@ -447,7 +447,7 @@ impl pezpallet_asset_conversion::Config for Runtime {
 	#[cfg(feature = "runtime-benchmarks")]
 	type BenchmarkHelper = assets_common::benchmarks::AssetPairFactory<
 		ZagrosLocation,
-		teyrchain_info::Pallet<Runtime>,
+		teyrchain_info::Pezpallet<Runtime>,
 		xcm_config::TrustBackedAssetsPalletIndex,
 		xcm::v5::Location,
 	>;
@@ -515,7 +515,7 @@ impl pezpallet_asset_rewards::Config for Runtime {
 		ConstantStoragePrice<StakePoolCreationDeposit, Balance>,
 	>;
 	type WeightInfo = weights::pezpallet_asset_rewards::WeightInfo<Runtime>;
-	type BlockNumberProvider = pezframe_system::Pallet<Runtime>;
+	type BlockNumberProvider = pezframe_system::Pezpallet<Runtime>;
 	#[cfg(feature = "runtime-benchmarks")]
 	type BenchmarkHelper = PalletAssetRewardsBenchmarkHelper;
 }
@@ -556,7 +556,7 @@ impl pezpallet_assets::Config<ForeignAssetsInstance> for Runtime {
 	type Currency = Balances;
 	type CreateOrigin = ForeignCreators<
 		(
-			FromSiblingTeyrchain<teyrchain_info::Pallet<Runtime>, xcm::v5::Location>,
+			FromSiblingTeyrchain<teyrchain_info::Pezpallet<Runtime>, xcm::v5::Location>,
 			FromNetwork<xcm_config::UniversalLocation, EthereumNetwork, xcm::v5::Location>,
 			xcm_config::bridging::to_pezkuwichain::PezkuwichainAssetFromAssetHubPezkuwichain,
 		),
@@ -581,7 +581,7 @@ impl pezpallet_assets::Config<ForeignAssetsInstance> for Runtime {
 	type BenchmarkHelper = assets_common::benchmarks::LocationAssetsBenchmarkHelper;
 }
 
-// Allow Freezes for the `ForeignAssets` pallet
+// Allow Freezes for the `ForeignAssets` pezpallet
 pub type ForeignAssetsFreezerInstance = pezpallet_assets_freezer::Instance2;
 impl pezpallet_assets_freezer::Config<ForeignAssetsFreezerInstance> for Runtime {
 	type RuntimeFreezeReason = RuntimeFreezeReason;
@@ -805,7 +805,7 @@ impl pezcumulus_pezpallet_teyrchain_system::Config for Runtime {
 	type WeightInfo = weights::pezcumulus_pezpallet_teyrchain_system::WeightInfo<Runtime>;
 	type RuntimeEvent = RuntimeEvent;
 	type OnSystemEvent = ();
-	type SelfParaId = teyrchain_info::Pallet<Runtime>;
+	type SelfParaId = teyrchain_info::Pezpallet<Runtime>;
 	type DmpQueue = pezframe_support::traits::EnqueueWithOrigin<MessageQueue, RelayOrigin>;
 	type ReservedDmpWeight = ReservedDmpWeight;
 	type OutboundXcmpMessageSource = XcmpQueue;
@@ -846,7 +846,7 @@ impl pezpallet_message_queue::Config for Runtime {
 		RuntimeCall,
 	>;
 	type Size = u32;
-	// The XCMP queue pallet is only ever able to handle the `Sibling(ParaId)` origin:
+	// The XCMP queue pezpallet is only ever able to handle the `Sibling(ParaId)` origin:
 	type QueueChangeHandler = NarrowOriginToSibling<XcmpQueue>;
 	type QueuePausedQuery = NarrowOriginToSibling<XcmpQueue>;
 	type HeapSize = pezsp_core::ConstU32<{ 103 * 1024 }>;
@@ -1203,7 +1203,7 @@ construct_runtime!(
 		Sudo: pezpallet_sudo = 110,
 		PresetStore: pezpallet_staking_async_preset_store = 111,
 
-		// TODO: the pallet instance should be removed once all pools have migrated
+		// TODO: the pezpallet instance should be removed once all pools have migrated
 		// to the new account IDs.
 		AssetConversionMigration: pezpallet_asset_conversion_ops = 200,
 	}
@@ -1265,7 +1265,7 @@ impl
 	fn create_asset_id_parameter(
 		seed: u32,
 	) -> (pezcumulus_primitives_core::Location, pezcumulus_primitives_core::Location) {
-		// Use a different teyrchain' foreign assets pallet so that the asset is indeed foreign.
+		// Use a different teyrchain' foreign assets pezpallet so that the asset is indeed foreign.
 		let asset_id = pezcumulus_primitives_core::Location::new(
 			1,
 			[
@@ -1803,25 +1803,25 @@ impl_runtime_apis! {
 		) {
 			use pezframe_benchmarking::BenchmarkList;
 			use pezframe_support::traits::StorageInfoTrait;
-			use pezframe_system_benchmarking::Pallet as SystemBench;
-			use pezframe_system_benchmarking::extensions::Pallet as SystemExtensionsBench;
-			use pezcumulus_pezpallet_session_benchmarking::Pallet as SessionBench;
-			use pezpallet_xcm::benchmarking::Pallet as PalletXcmExtrinsicsBenchmark;
-			use pezpallet_xcm_bridge_hub_router::benchmarking::Pallet as XcmBridgeHubRouterBench;
+			use pezframe_system_benchmarking::Pezpallet as SystemBench;
+			use pezframe_system_benchmarking::extensions::Pezpallet as SystemExtensionsBench;
+			use pezcumulus_pezpallet_session_benchmarking::Pezpallet as SessionBench;
+			use pezpallet_xcm::benchmarking::Pezpallet as PalletXcmExtrinsicsBenchmark;
+			use pezpallet_xcm_bridge_hub_router::benchmarking::Pezpallet as XcmBridgeHubRouterBench;
 
 			// This is defined once again in dispatch_benchmark, because list_benchmarks!
 			// and add_benchmarks! are macros exported by define_benchmarks! macros and those types
 			// are referenced in that call.
-			type XcmBalances = pezpallet_xcm_benchmarks::fungible::Pallet::<Runtime>;
-			type XcmGeneric = pezpallet_xcm_benchmarks::generic::Pallet::<Runtime>;
+			type XcmBalances = pezpallet_xcm_benchmarks::fungible::Pezpallet::<Runtime>;
+			type XcmGeneric = pezpallet_xcm_benchmarks::generic::Pezpallet::<Runtime>;
 
 			// Benchmark files generated for `Assets/ForeignAssets` instances are by default
 			// `pezpallet_assets_assets.rs / pezpallet_assets_foreign_assets`, which is not really nice,
 			// so with this redefinition we can change names to nicer:
 			// `pezpallet_assets_local.rs / pezpallet_assets_foreign.rs`.
-			type Local = pezpallet_assets::Pallet::<Runtime, TrustBackedAssetsInstance>;
-			type Foreign = pezpallet_assets::Pallet::<Runtime, ForeignAssetsInstance>;
-			type Pool = pezpallet_assets::Pallet::<Runtime, PoolAssetsInstance>;
+			type Local = pezpallet_assets::Pezpallet::<Runtime, TrustBackedAssetsInstance>;
+			type Foreign = pezpallet_assets::Pezpallet::<Runtime, ForeignAssetsInstance>;
+			type Pool = pezpallet_assets::Pezpallet::<Runtime, PoolAssetsInstance>;
 
 			type ToPezkuwichain = XcmBridgeHubRouterBench<Runtime, ToPezkuwichainXcmRouterInstance>;
 
@@ -1837,8 +1837,8 @@ impl_runtime_apis! {
 		) -> Result<Vec<pezframe_benchmarking::BenchmarkBatch>, alloc::string::String> {
 			use pezframe_benchmarking::{BenchmarkBatch, BenchmarkError};
 			use pezsp_storage::TrackedStorageKey;
-			use pezframe_system_benchmarking::Pallet as SystemBench;
-			use pezframe_system_benchmarking::extensions::Pallet as SystemExtensionsBench;
+			use pezframe_system_benchmarking::Pezpallet as SystemBench;
+			use pezframe_system_benchmarking::extensions::Pezpallet as SystemExtensionsBench;
 			use xcm::prelude::WeightLimit;
 
 			// add a few custom keys to benchmarks.
@@ -1869,7 +1869,7 @@ impl_runtime_apis! {
 				}
 			}
 
-			use pezcumulus_pezpallet_session_benchmarking::Pallet as SessionBench;
+			use pezcumulus_pezpallet_session_benchmarking::Pezpallet as SessionBench;
 			impl pezcumulus_pezpallet_session_benchmarking::Config for Runtime {}
 
 			parameter_types! {
@@ -1880,7 +1880,7 @@ impl_runtime_apis! {
 				pub const RandomParaId: ParaId = ParaId::new(43211234);
 			}
 
-			use pezpallet_xcm::benchmarking::Pallet as PalletXcmExtrinsicsBenchmark;
+			use pezpallet_xcm::benchmarking::Pezpallet as PalletXcmExtrinsicsBenchmark;
 			impl pezpallet_xcm::benchmarking::Config for Runtime {
 				type DeliveryHelper = (
 					pezcumulus_primitives_utility::ToParentDeliveryHelper<
@@ -1980,7 +1980,7 @@ impl_runtime_apis! {
 			}
 
 			use pezpallet_xcm_bridge_hub_router::benchmarking::{
-				Pallet as XcmBridgeHubRouterBench,
+				Pezpallet as XcmBridgeHubRouterBench,
 				Config as XcmBridgeHubRouterConfig,
 			};
 
@@ -2138,12 +2138,12 @@ impl_runtime_apis! {
 				}
 			}
 
-			type XcmBalances = pezpallet_xcm_benchmarks::fungible::Pallet::<Runtime>;
-			type XcmGeneric = pezpallet_xcm_benchmarks::generic::Pallet::<Runtime>;
+			type XcmBalances = pezpallet_xcm_benchmarks::fungible::Pezpallet::<Runtime>;
+			type XcmGeneric = pezpallet_xcm_benchmarks::generic::Pezpallet::<Runtime>;
 
-			type Local = pezpallet_assets::Pallet::<Runtime, TrustBackedAssetsInstance>;
-			type Foreign = pezpallet_assets::Pallet::<Runtime, ForeignAssetsInstance>;
-			type Pool = pezpallet_assets::Pallet::<Runtime, PoolAssetsInstance>;
+			type Local = pezpallet_assets::Pezpallet::<Runtime, TrustBackedAssetsInstance>;
+			type Foreign = pezpallet_assets::Pezpallet::<Runtime, ForeignAssetsInstance>;
+			type Pool = pezpallet_assets::Pezpallet::<Runtime, PoolAssetsInstance>;
 
 			type ToPezkuwichain = XcmBridgeHubRouterBench<Runtime, ToPezkuwichainXcmRouterInstance>;
 
@@ -2236,7 +2236,7 @@ impl pezpallet_state_trie_migration::Config for Runtime {
 	type RuntimeHoldReason = RuntimeHoldReason;
 	type SignedDepositPerItem = MigrationSignedDepositPerItem;
 	type SignedDepositBase = MigrationSignedDepositBase;
-	// An origin that can control the whole pallet: should be Root, or a part of your council.
+	// An origin that can control the whole pezpallet: should be Root, or a part of your council.
 	type ControlOrigin = pezframe_system::EnsureSignedBy<RootMigController, AccountId>;
 	// specific account for the migration, can trigger the signed migrations.
 	type SignedFilter = pezframe_system::EnsureSignedBy<MigController, AccountId>;

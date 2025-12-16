@@ -246,7 +246,7 @@ impl LoadedModule {
 ///
 /// 1. General engine-side validation makes sure the module is consistent and does not contain
 ///    forbidden WebAssembly features.
-/// 2. Additional checks which are specific to smart contracts eligible for this pallet.
+/// 2. Additional checks which are specific to smart contracts eligible for this pezpallet.
 fn validate<E, T>(
 	code: &[u8],
 	schedule: &Schedule<T>,
@@ -293,7 +293,7 @@ where
 			)?,
 		};
 
-		// The we check that module satisfies constraints the pallet puts on contracts.
+		// The we check that module satisfies constraints the pezpallet puts on contracts.
 		contract_module.scan_exports()?;
 		contract_module.scan_imports::<T>(schedule)?;
 		Ok(contract_module)

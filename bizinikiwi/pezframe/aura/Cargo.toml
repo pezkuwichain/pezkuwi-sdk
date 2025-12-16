@@ -6,7 +6,7 @@ edition.workspace = true
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
-description = "FRAME AURA consensus pallet"
+description = "FRAME AURA consensus pezpallet"
 readme = "README.md"
 documentation = "https://docs.rs/pezpallet-aura"
 

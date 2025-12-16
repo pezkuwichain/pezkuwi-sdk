@@ -21,7 +21,7 @@
 use crate::{
 	migration::{IsFinished, MigrationStep},
 	weights::WeightInfo,
-	Config, Pallet, TrieId, Weight, LOG_TARGET,
+	Config, Pezpallet, TrieId, Weight, LOG_TARGET,
 };
 use alloc::vec::Vec;
 use codec::{Decode, Encode};
@@ -39,7 +39,7 @@ mod v10 {
 	}
 
 	#[storage_alias]
-	pub type DeletionQueue<T: Config> = StorageValue<Pallet<T>, Vec<DeletedContract>>;
+	pub type DeletionQueue<T: Config> = StorageValue<Pezpallet<T>, Vec<DeletedContract>>;
 }
 
 #[derive(Encode, Decode, TypeInfo, MaxEncodedLen, DefaultNoBound, Clone)]
@@ -60,10 +60,10 @@ pub fn fill_old_queue<T: Config>(len: usize) {
 }
 
 #[storage_alias]
-type DeletionQueue<T: Config> = StorageMap<Pallet<T>, Twox64Concat, u32, TrieId>;
+type DeletionQueue<T: Config> = StorageMap<Pezpallet<T>, Twox64Concat, u32, TrieId>;
 
 #[storage_alias]
-type DeletionQueueCounter<T: Config> = StorageValue<Pallet<T>, DeletionQueueManager<T>, ValueQuery>;
+type DeletionQueueCounter<T: Config> = StorageValue<Pezpallet<T>, DeletionQueueManager<T>, ValueQuery>;
 
 #[derive(Encode, Decode, MaxEncodedLen, DefaultNoBound)]
 pub struct Migration<T: Config> {

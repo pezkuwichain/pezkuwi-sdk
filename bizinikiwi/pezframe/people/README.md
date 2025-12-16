@@ -1,19 +1,19 @@
-# People Pallet
+# People Pezpallet
 
-A pallet managing the registry of proven individuals.
+A pezpallet managing the registry of proven individuals.
 
 ## Overview
 
-The People pallet stores and manages identifiers of individuals who have proven their personhood. It
+The People pezpallet stores and manages identifiers of individuals who have proven their personhood. It
 tracks their personal IDs, organizes their cryptographic keys into rings, and allows them to use
 contextual aliases through authentication in extensions. When transactions include cryptographic
-proofs of belonging to the people set, the pallet's transaction extension verifies these proofs
+proofs of belonging to the people set, the pezpallet's transaction extension verifies these proofs
 before allowing the transaction to proceed. This enables other pallets to check if actions come from
 unique persons while preserving privacy through the ring-based structure.
 
-The pallet accepts new persons after they prove their uniqueness elsewhere, stores their
+The pezpallet accepts new persons after they prove their uniqueness elsewhere, stores their
 information, and supports removing persons via suspensions. While other systems (e.g., wallets)
-generate the proofs, this pallet handles the storage of all necessary data and verifies the proofs
+generate the proofs, this pezpallet handles the storage of all necessary data and verifies the proofs
 when used.
 
 ## Key Features
@@ -47,7 +47,7 @@ when used.
  - `onboard_people_manual`: Manually onboard people into a ring. The transaction fee is refunded on
    a successful call.
 
-### Automated tasks performed by the pallet in hooks
+### Automated tasks performed by the pezpallet in hooks
 
 - Ring building: Build or update a ring's cryptographic commitment. This task processes queued keys
   into a ring commitment that enables proof generation and verification. Since ring construction, or
@@ -75,7 +75,7 @@ when used.
 
 ### Transaction Extension
 
-The pallet provides the `AsPerson` transaction extension that allows transactions to be dispatched
+The pezpallet provides the `AsPerson` transaction extension that allows transactions to be dispatched
 with special origins: `PersonalIdentity` and `PersonalAlias`. These origins prove the transaction
 comes from a unique person, either through their identity or through a contextual alias. To make use
 of the personhood system, other pallets should check for these origins.

@@ -93,6 +93,6 @@ Backed candidates sanitization removes malformed ones, candidates which have got
 or candidates produced by unassigned cores. Furthermore any backing votes from disabled validators for a candidate are
 dropped. This is part of the validator disabling strategy. After filtering the statements from disabled validators a
 backed candidate may end up with votes count less than `minimum_backing_votes` (a parameter from `HostConfiguration`).
-In this case the whole candidate is dropped otherwise it will be rejected by `process_candidates` from pallet inclusion.
+In this case the whole candidate is dropped otherwise it will be rejected by `process_candidates` from pezpallet inclusion.
 All checks related to backed candidates are implemented in `sanitize_backed_candidates` and
 `filter_backed_statements_from_disabled_validators`.

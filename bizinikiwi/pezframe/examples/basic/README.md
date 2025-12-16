@@ -1,13 +1,13 @@
 <!-- markdown-link-check-disable -->
-# Basic Example Pallet
+# Basic Example Pezpallet
 
 <!-- Original author of paragraph: @gavofyork -->
-The Example: A simple example of a FRAME pallet demonstrating
+The Example: A simple example of a FRAME pezpallet demonstrating
 concepts, APIs and structures common to most FRAME runtimes.
 
-Run `cargo doc --package pezpallet-example-basic --open` to view this pallet's documentation.
+Run `cargo doc --package pezpallet-example-basic --open` to view this pezpallet's documentation.
 
-**This pallet serves as an example and is not meant to be used in production.**
+**This pezpallet serves as an example and is not meant to be used in production.**
 
 ## Documentation Guidelines
 
@@ -15,8 +15,8 @@ Run `cargo doc --package pezpallet-example-basic --open` to view this pallet's d
 <!-- label 'S3-FRAME' -->
 <ul>
     <li>Documentation comments (i.e. <code>/// comment</code>) - should
-        accompany pallet functions and be restricted to the pallet interface,
-        not the internals of the pallet implementation. Only state inputs,
+        accompany pezpallet functions and be restricted to the pezpallet interface,
+        not the internals of the pezpallet implementation. Only state inputs,
         outputs, and a brief description that mentions whether calling it
         requires root, but without repeating the source code details.
         Capitalize the first word of each documentation comment and end it with
@@ -37,15 +37,15 @@ Run `cargo doc --package pezpallet-example-basic --open` to view this pallet's d
 ### Documentation Template:<br>
 
 Copy and paste this template from frame/examples/basic/src/lib.rs into file
-`frame/<INSERT_CUSTOM_PALLET_NAME>/src/lib.rs` of your own custom pallet and complete it.
+`frame/<INSERT_CUSTOM_PALLET_NAME>/src/lib.rs` of your own custom pezpallet and complete it.
 <details><p><pre>
-// Add heading with custom pallet name
+// Add heading with custom pezpallet name
 
-\# <INSERT_CUSTOM_PALLET_NAME> Pallet
+\# <INSERT_CUSTOM_PALLET_NAME> Pezpallet
 
 // Add simple description
 
-// Include the following links that shows what trait needs to be implemented to use the pallet
+// Include the following links that shows what trait needs to be implemented to use the pezpallet
 // and the supported dispatchables that are documented in the Call enum.
 
 - \[`<INSERT_CUSTOM_PALLET_NAME>::Config`](https://docs.rs/pezpallet-example-basic/latest/pallet_example_basic/trait.Config.html)
@@ -55,11 +55,11 @@ Copy and paste this template from frame/examples/basic/src/lib.rs into file
 \## Overview
 
 <!-- Original author of paragraph: Various. See https://github.com/pezkuwichain/kurdistan-sdk/issues/1 -->
-// Short description of pallet's purpose.
+// Short description of pezpallet's purpose.
 // Links to Traits that should be implemented.
-// What this pallet is for.
-// What functionality the pallet provides.
-// When to use the pallet (use case examples).
+// What this pezpallet is for.
+// What functionality the pezpallet provides.
+// When to use the pezpallet (use case examples).
 // How it is used.
 // Inputs it uses and the source of each input.
 // Outputs it produces.
@@ -69,18 +69,18 @@ Copy and paste this template from frame/examples/basic/src/lib.rs into file
 
 \## Terminology
 
-// Add terminology used in the custom pallet. Include concepts, storage items, or actions that you think
-// deserve to be noted to give context to the rest of the documentation or pallet usage. The author needs to
+// Add terminology used in the custom pezpallet. Include concepts, storage items, or actions that you think
+// deserve to be noted to give context to the rest of the documentation or pezpallet usage. The author needs to
 // use some judgment about what is included. We don't want a list of every storage item nor types - the user
 // can go to the code for that. For example, "transfer fee" is obvious and should not be included, but
-// "free balance" and "reserved balance" should be noted to give context to the pallet.
+// "free balance" and "reserved balance" should be noted to give context to the pezpallet.
 // Please do not link to outside resources. The reference docs should be the ultimate source of truth.
 
 <!-- Original author of heading: @Kianenigma in PR https://github.com/pezkuwichain/kurdistan-sdk/issues/52 -->
 
 \## Goals
 
-// Add goals that the custom pallet is designed to achieve.
+// Add goals that the custom pezpallet is designed to achieve.
 
 <!-- Original author of heading: @Kianenigma in PR https://github.com/pezkuwichain/kurdistan-sdk/issues/52 -->
 
@@ -90,14 +90,14 @@ Copy and paste this template from frame/examples/basic/src/lib.rs into file
 
 \#### <INSERT_SCENARIO_NAME>
 
-// Describe requirements prior to interacting with the custom pallet.
-// Describe the process of interacting with the custom pallet for this scenario and public API functions used.
+// Describe requirements prior to interacting with the custom pezpallet.
+// Describe the process of interacting with the custom pezpallet for this scenario and public API functions used.
 
 \## Interface
 
 \### Supported Origins
 
-// What origins are used and supported in this pallet (root, signed, none)
+// What origins are used and supported in this pezpallet (root, signed, none)
 // i.e. root when <code>\`ensure_root\`</code> used
 // i.e. none when <code>\`ensure_none\`</code> used
 // i.e. signed when <code>\`ensure_signed\`</code> used
@@ -132,14 +132,14 @@ Copy and paste this template from frame/examples/basic/src/lib.rs into file
 
 <!-- Original author of paragraph: @joepetrowski -->
 
-// A link to the rustdoc and any notes about usage in the pallet, not for specific functions.
-// For example, in the Balances Pallet: "Note that when using the publicly exposed functions,
+// A link to the rustdoc and any notes about usage in the pezpallet, not for specific functions.
+// For example, in the Balances Pezpallet: "Note that when using the publicly exposed functions,
 // you (the runtime developer) are responsible for implementing any necessary checks
 // (e.g. that the sender is the signer) before calling a function that will affect storage."
 
 <!-- Original author of paragraph: @AmarRSingh -->
 
-// It is up to the writer of the respective pallet (with respect to how much information to provide).
+// It is up to the writer of the respective pezpallet (with respect to how much information to provide).
 
 \#### Public Inspection functions - Immutable (getters)
 
@@ -166,19 +166,19 @@ Copy and paste this template from frame/examples/basic/src/lib.rs into file
 
 \### Storage Items
 
-// Explain any storage items included in this pallet
+// Explain any storage items included in this pezpallet
 
 \### Digest Items
 
-// Explain any digest items included in this pallet
+// Explain any digest items included in this pezpallet
 
 \### Inherent Data
 
-// Explain what inherent data (if any) is defined in the pallet and any other related types
+// Explain what inherent data (if any) is defined in the pezpallet and any other related types
 
 \### Events:
 
-// Insert events for this pallet if any
+// Insert events for this pezpallet if any
 
 \### Errors:
 
@@ -187,12 +187,12 @@ Copy and paste this template from frame/examples/basic/src/lib.rs into file
 \## Usage
 
 // Insert 2-3 examples of usage and code snippets that show how to
-// use <INSERT_CUSTOM_PALLET_NAME> Pallet in a custom pallet.
+// use <INSERT_CUSTOM_PALLET_NAME> Pezpallet in a custom pezpallet.
 
 \### Prerequisites
 
 // Show how to include necessary imports for <INSERT_CUSTOM_PALLET_NAME> and derive
-// your pallet configuration trait with the `INSERT_CUSTOM_PALLET_NAME` trait.
+// your pezpallet configuration trait with the `INSERT_CUSTOM_PALLET_NAME` trait.
 
 \```rust
 use <INSERT_CUSTOM_PALLET_NAME>;
@@ -220,7 +220,7 @@ pub trait Config: <INSERT_CUSTOM_PALLET_NAME>::Config { }
 
 // Dependencies on other FRAME pallets and the genesis config should be mentioned,
 // but not the Rust Standard Library.
-// Genesis configuration modifications that may be made to incorporate this pallet
+// Genesis configuration modifications that may be made to incorporate this pezpallet
 // Interaction with other pallets
 
 <!-- Original author of heading: @AmarRSingh -->

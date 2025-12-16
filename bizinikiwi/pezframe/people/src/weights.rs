@@ -24,8 +24,8 @@
 // Executed Command:
 // /Users/gav/Core/bizinikiwi/target/release/bizinikiwi
 // benchmark
-// pallet
-// --pallet
+// pezpallet
+// --pezpallet
 // pezpallet-ranked-collective
 // --extrinsic=*
 // --chain=dev

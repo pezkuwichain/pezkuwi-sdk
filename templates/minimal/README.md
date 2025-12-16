@@ -35,8 +35,8 @@
 - 🤏 This template is a minimal (in terms of complexity and the number of components)
 template for building a blockchain node.
 
-- 🔧 Its runtime is configured with a single custom pallet as a starting point, and a handful of ready-made pallets
-such as a [Balances pallet](https://docs.pezkuwichain.io/sdk/master/pallet_balances/index.html).
+- 🔧 Its runtime is configured with a single custom pezpallet as a starting point, and a handful of ready-made pallets
+such as a [Balances pezpallet](https://docs.pezkuwichain.io/sdk/master/pallet_balances/index.html).
 
 - 👤 The template has no consensus configured - it is best for experimenting with a single node network.
 

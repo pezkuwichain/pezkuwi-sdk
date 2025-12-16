@@ -41,7 +41,7 @@ where
 			transport: ws_url.to_string().into(),
 			// NOTE: we don't scrape pezpallet-staking, this kinda ensures that the source of the data
 			// is bags-list.
-			pallets: vec![pezpallet_bags_list::Pallet::<Runtime, pezpallet_bags_list::Instance1>::name()
+			pallets: vec![pezpallet_bags_list::Pezpallet::<Runtime, pezpallet_bags_list::Instance1>::name()
 				.to_string()],
 			at: None,
 			hashed_prefixes: vec![
@@ -75,7 +75,7 @@ where
 
 		// single page voter snapshot, thus page index == 0.
 		let voters =
-			<pezpallet_staking::Pallet<Runtime> as ElectionDataProvider>::electing_voters(bounds, Zero::zero())
+			<pezpallet_staking::Pezpallet<Runtime> as ElectionDataProvider>::electing_voters(bounds, Zero::zero())
 				.unwrap();
 
 		let mut voters_nominator_only = voters

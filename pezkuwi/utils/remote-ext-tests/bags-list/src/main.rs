@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Remote tests for bags-list pallet.
+//! Remote tests for bags-list pezpallet.
 
 use clap::{Parser, ValueEnum};
 

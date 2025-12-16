@@ -14,10 +14,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Pezcumulus extension pallet for AuRa
+//! Pezcumulus extension pezpallet for AuRa
 //!
-//! This pallet extends the Bizinikiwi AuRa pallet to make it compatible with teyrchains. It
-//! provides the [`Pallet`], the [`Config`] and the [`GenesisConfig`].
+//! This pezpallet extends the Bizinikiwi AuRa pezpallet to make it compatible with teyrchains. It
+//! provides the [`Pezpallet`], the [`Config`] and the [`GenesisConfig`].
 //!
 //! It is also required that the teyrchain runtime uses the provided [`BlockExecutor`] to properly
 //! check the constructed block on the relay chain.
@@ -45,26 +45,26 @@ mod test;
 
 pub use consensus_hook::FixedVelocityConsensusHook;
 
-type Aura<T> = pezpallet_aura::Pallet<T>;
+type Aura<T> = pezpallet_aura::Pezpallet<T>;
 
-pub use pallet::*;
+pub use pezpallet::*;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
 	/// The configuration trait.
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezpallet_aura::Config + pezframe_system::Config {}
 
-	#[pallet::pallet]
-	#[pallet::storage_version(migration::STORAGE_VERSION)]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(migration::STORAGE_VERSION)]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn on_finalize(_: BlockNumberFor<T>) {
 			// Update to the latest AuRa authorities.
 			Authorities::<T>::put(pezpallet_aura::Authorities::<T>::get());
@@ -83,7 +83,7 @@ pub mod pallet {
 	/// The authorities in AuRa are overwritten in `on_initialize` when we switch to a new session,
 	/// but we require the old authorities to verify the seal when validating a PoV. This will
 	/// always be updated to the latest AuRa authorities in `on_finalize`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type Authorities<T: Config> = StorageValue<
 		_,
 		BoundedVec<T::AuthorityId, <T as pezpallet_aura::Config>::MaxAuthorities>,
@@ -94,17 +94,17 @@ pub mod pallet {
 	///
 	/// This is updated in [`FixedVelocityConsensusHook::on_state_proof`] with the current relay
 	/// chain slot as provided by the relay chain state proof.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type RelaySlotInfo<T: Config> = StorageValue<_, (Slot, u32), OptionQuery>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(pezframe_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		#[serde(skip)]
 		pub _config: core::marker::PhantomData<T>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			let authorities = pezpallet_aura::Authorities::<T>::get();

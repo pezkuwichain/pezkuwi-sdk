@@ -13,14 +13,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Collator Selection pallet.
+//! Collator Selection pezpallet.
 //!
-//! A pallet to manage collators in a teyrchain.
+//! A pezpallet to manage collators in a teyrchain.
 //!
 //! ## Overview
 //!
-//! The Collator Selection pallet manages the collators of a teyrchain. **Collation is _not_ a
-//! secure activity** and this pallet does not implement any game-theoretic mechanisms to meet BFT
+//! The Collator Selection pezpallet manages the collators of a teyrchain. **Collation is _not_ a
+//! secure activity** and this pezpallet does not implement any game-theoretic mechanisms to meet BFT
 //! safety assumptions of the chosen set.
 //!
 //! ## Terminology
@@ -67,7 +67,7 @@
 //!
 //! ### Rewards
 //!
-//! The Collator Selection pallet maintains an on-chain account (the "Pot"). In each block, the
+//! The Collator Selection pezpallet maintains an on-chain account (the "Pot"). In each block, the
 //! collator who authored it receives:
 //!
 //! - Half the value of the Pot.
@@ -85,7 +85,7 @@ extern crate alloc;
 
 use core::marker::PhantomData;
 use pezframe_support::traits::TypedGet;
-pub use pallet::*;
+pub use pezpallet::*;
 
 #[cfg(test)]
 mod mock;
@@ -100,8 +100,8 @@ pub mod weights;
 
 const LOG_TARGET: &str = "runtime::collator-selection";
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	pub use crate::weights::WeightInfo;
 	use alloc::vec::Vec;
 	use core::ops::Div;
@@ -128,7 +128,7 @@ pub mod pallet {
 	type BalanceOf<T> =
 		<<T as Config>::Currency as Currency<<T as SystemConfig>::AccountId>>::Balance;
 
-	/// A convertor from collators id. Since this pallet does not have stash/controller, this is
+	/// A convertor from collators id. Since this pezpallet does not have stash/controller, this is
 	/// just identity.
 	pub struct IdentityCollator;
 	impl<T> pezsp_runtime::traits::Convert<T, Option<T>> for IdentityCollator {
@@ -137,8 +137,8 @@ pub mod pallet {
 		}
 	}
 
-	/// Configure the pallet by specifying the parameters and types on which it depends.
-	#[pallet::config]
+	/// Configure the pezpallet by specifying the parameters and types on which it depends.
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// Overarching event type.
 		#[allow(deprecated)]
@@ -147,31 +147,31 @@ pub mod pallet {
 		/// The currency mechanism.
 		type Currency: ReservableCurrency<Self::AccountId>;
 
-		/// Origin that can dictate updating parameters of this pallet.
+		/// Origin that can dictate updating parameters of this pezpallet.
 		type UpdateOrigin: EnsureOrigin<Self::RuntimeOrigin>;
 
 		/// Account Identifier from which the internal Pot is generated.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type PotId: Get<PalletId>;
 
 		/// Maximum number of candidates that we should have.
 		///
 		/// This does not take into account the invulnerables.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxCandidates: Get<u32>;
 
 		/// Minimum number eligible collators. Should always be greater than zero. This includes
 		/// Invulnerable collators. This ensures that there will always be one collator who can
 		/// produce a block.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MinEligibleCollators: Get<u32>;
 
 		/// Maximum number of invulnerables.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxInvulnerables: Get<u32>;
 
 		// Will be kicked if block is not produced in threshold.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type KickThreshold: Get<BlockNumberFor<Self>>;
 
 		/// A stable ID for a validator.
@@ -185,13 +185,13 @@ pub mod pallet {
 		/// Validate a user is registered
 		type ValidatorRegistration: ValidatorRegistration<Self::ValidatorId>;
 
-		/// The weight information of this pallet.
+		/// The weight information of this pezpallet.
 		type WeightInfo: WeightInfo;
 	}
 
-	#[pallet::extra_constants]
-	impl<T: Config> Pallet<T> {
-		/// Gets this pallet's derived pot account.
+	#[pezpallet::extra_constants]
+	impl<T: Config> Pezpallet<T> {
+		/// Gets this pezpallet's derived pot account.
 		fn pot_account() -> T::AccountId {
 			Self::account_id()
 		}
@@ -208,12 +208,12 @@ pub mod pallet {
 		pub deposit: Balance,
 	}
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T>(_);
 
 	/// The invulnerable, permissioned collators. This list must be sorted.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Invulnerables<T: Config> =
 		StorageValue<_, BoundedVec<T::AccountId, T::MaxInvulnerables>, ValueQuery>;
 
@@ -222,7 +222,7 @@ pub mod pallet {
 	///
 	/// This list is sorted in ascending order by deposit and when the deposits are equal, the least
 	/// recently updated is considered greater.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type CandidateList<T: Config> = StorageValue<
 		_,
 		BoundedVec<CandidateInfo<T::AccountId, BalanceOf<T>>, T::MaxCandidates>,
@@ -230,23 +230,23 @@ pub mod pallet {
 	>;
 
 	/// Last block authored by collator.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type LastAuthoredBlock<T: Config> =
 		StorageMap<_, Twox64Concat, T::AccountId, BlockNumberFor<T>, ValueQuery>;
 
 	/// Desired number of candidates.
 	///
 	/// This should ideally always be less than [`Config::MaxCandidates`] for weights to be correct.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type DesiredCandidates<T> = StorageValue<_, u32, ValueQuery>;
 
 	/// Fixed amount to deposit to become a collator.
 	///
 	/// When a collator calls `leave_intent` they immediately receive the deposit back.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type CandidacyBond<T> = StorageValue<_, BalanceOf<T>, ValueQuery>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		pub invulnerables: Vec<T::AccountId>,
@@ -254,7 +254,7 @@ pub mod pallet {
 		pub desired_candidates: u32,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			let duplicate_invulnerables = self
@@ -282,8 +282,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// New Invulnerables were set.
 		NewInvulnerables { invulnerables: Vec<T::AccountId> },
@@ -308,9 +308,9 @@ pub mod pallet {
 		InvalidInvulnerableSkipped { account_id: T::AccountId },
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
-		/// The pallet has too many candidates.
+		/// The pezpallet has too many candidates.
 		TooManyCandidates,
 		/// Leaving would result in too few candidates.
 		TooFewEligibleCollators,
@@ -346,8 +346,8 @@ pub mod pallet {
 		InvalidUnreserve,
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn integrity_test() {
 			assert!(T::MinEligibleCollators::get() > 0, "chain must require at least one collator");
 			assert!(
@@ -363,8 +363,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Set the list of invulnerable (fixed) collators. These collators must do some
 		/// preparation, namely to have registered session keys.
 		///
@@ -378,8 +378,8 @@ pub mod pallet {
 		/// `new`, they should be removed with `remove_invulnerable_candidate` after execution.
 		///
 		/// Must be called by the `UpdateOrigin`.
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::set_invulnerables(new.len() as u32))]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::set_invulnerables(new.len() as u32))]
 		pub fn set_invulnerables(origin: OriginFor<T>, new: Vec<T::AccountId>) -> DispatchResult {
 			T::UpdateOrigin::ensure_origin(origin)?;
 
@@ -450,8 +450,8 @@ pub mod pallet {
 		/// there should be no other way to have more candidates than the desired number.
 		///
 		/// The origin for this call must be the `UpdateOrigin`.
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::set_desired_candidates())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::set_desired_candidates())]
 		pub fn set_desired_candidates(
 			origin: OriginFor<T>,
 			max: u32,
@@ -473,8 +473,8 @@ pub mod pallet {
 		/// back.
 		///
 		/// The origin for this call must be the `UpdateOrigin`.
-		#[pallet::call_index(2)]
-		#[pallet::weight(T::WeightInfo::set_candidacy_bond(
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(T::WeightInfo::set_candidacy_bond(
 			T::MaxCandidates::get(),
 			T::MaxCandidates::get()
 		))]
@@ -519,8 +519,8 @@ pub mod pallet {
 		/// registered session keys and (b) be able to reserve the `CandidacyBond`.
 		///
 		/// This call is not available to `Invulnerable` collators.
-		#[pallet::call_index(3)]
-		#[pallet::weight(T::WeightInfo::register_as_candidate(T::MaxCandidates::get()))]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(T::WeightInfo::register_as_candidate(T::MaxCandidates::get()))]
 		pub fn register_as_candidate(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 			let who = ensure_signed(origin)?;
 
@@ -549,7 +549,7 @@ pub mod pallet {
 				T::Currency::reserve(&who, deposit)?;
 				LastAuthoredBlock::<T>::insert(
 					who.clone(),
-					pezframe_system::Pallet::<T>::block_number() + T::KickThreshold::get(),
+					pezframe_system::Pezpallet::<T>::block_number() + T::KickThreshold::get(),
 				);
 				candidates
 					.try_insert(0, CandidateInfo { who: who.clone(), deposit })
@@ -569,8 +569,8 @@ pub mod pallet {
 		///
 		/// This call will fail if the total number of candidates would drop below
 		/// `MinEligibleCollators`.
-		#[pallet::call_index(4)]
-		#[pallet::weight(T::WeightInfo::leave_intent(T::MaxCandidates::get()))]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(T::WeightInfo::leave_intent(T::MaxCandidates::get()))]
 		pub fn leave_intent(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 			let who = ensure_signed(origin)?;
 			ensure!(
@@ -588,8 +588,8 @@ pub mod pallet {
 		/// registered session keys. If `who` is a candidate, they will be removed.
 		///
 		/// The origin for this call must be the `UpdateOrigin`.
-		#[pallet::call_index(5)]
-		#[pallet::weight(T::WeightInfo::add_invulnerable(
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(T::WeightInfo::add_invulnerable(
 			T::MaxInvulnerables::get().saturating_sub(1),
 			T::MaxCandidates::get()
 		))]
@@ -641,8 +641,8 @@ pub mod pallet {
 		/// be sorted.
 		///
 		/// The origin for this call must be the `UpdateOrigin`.
-		#[pallet::call_index(6)]
-		#[pallet::weight(T::WeightInfo::remove_invulnerable(T::MaxInvulnerables::get()))]
+		#[pezpallet::call_index(6)]
+		#[pezpallet::weight(T::WeightInfo::remove_invulnerable(T::MaxInvulnerables::get()))]
 		pub fn remove_invulnerable(origin: OriginFor<T>, who: T::AccountId) -> DispatchResult {
 			T::UpdateOrigin::ensure_origin(origin)?;
 
@@ -669,8 +669,8 @@ pub mod pallet {
 		///
 		/// This call will fail if `origin` is not a collator candidate, the updated bond is lower
 		/// than the minimum candidacy bond, and/or the amount cannot be reserved.
-		#[pallet::call_index(7)]
-		#[pallet::weight(T::WeightInfo::update_bond(T::MaxCandidates::get()))]
+		#[pezpallet::call_index(7)]
+		#[pezpallet::weight(T::WeightInfo::update_bond(T::MaxCandidates::get()))]
 		pub fn update_bond(
 			origin: OriginFor<T>,
 			new_deposit: BalanceOf<T>,
@@ -731,8 +731,8 @@ pub mod pallet {
 		/// This call will fail if the caller is already a collator candidate or invulnerable, the
 		/// caller does not have registered session keys, the target is not a collator candidate,
 		/// and/or the `deposit` amount cannot be reserved.
-		#[pallet::call_index(8)]
-		#[pallet::weight(T::WeightInfo::take_candidate_slot(T::MaxCandidates::get()))]
+		#[pezpallet::call_index(8)]
+		#[pezpallet::weight(T::WeightInfo::take_candidate_slot(T::MaxCandidates::get()))]
 		pub fn take_candidate_slot(
 			origin: OriginFor<T>,
 			deposit: BalanceOf<T>,
@@ -803,7 +803,7 @@ pub mod pallet {
 			LastAuthoredBlock::<T>::remove(target_info.who.clone());
 			LastAuthoredBlock::<T>::insert(
 				who.clone(),
-				pezframe_system::Pallet::<T>::block_number() + T::KickThreshold::get(),
+				pezframe_system::Pezpallet::<T>::block_number() + T::KickThreshold::get(),
 			);
 
 			Self::deposit_event(Event::CandidateReplaced { old: target, new: who, deposit });
@@ -811,7 +811,7 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config> Pallet<T> {
+	impl<T: Config> Pezpallet<T> {
 		/// Get a unique, inaccessible account ID from the `PotId`.
 		pub fn account_id() -> T::AccountId {
 			T::PotId::get().into_account_truncating()
@@ -872,7 +872,7 @@ pub mod pallet {
 		///
 		/// Return value is the number of candidates left in the list.
 		pub fn kick_stale_candidates(candidates: impl IntoIterator<Item = T::AccountId>) -> u32 {
-			let now = pezframe_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pezpallet::<T>::block_number();
 			let kick_threshold = T::KickThreshold::get();
 			let min_collators = T::MinEligibleCollators::get();
 			candidates
@@ -907,9 +907,9 @@ pub mod pallet {
 				.expect("filter_map operation can't result in a bounded vec larger than its original; qed")
 		}
 
-		/// Ensure the correctness of the state of this pallet.
+		/// Ensure the correctness of the state of this pezpallet.
 		///
-		/// This should be valid before or after each state transition of this pallet.
+		/// This should be valid before or after each state transition of this pezpallet.
 		///
 		/// # Invariants
 		///
@@ -924,7 +924,7 @@ pub mod pallet {
 
 			pezframe_support::ensure!(
 				desired_candidates <= T::MaxCandidates::get(),
-				"Shouldn't demand more candidates than the pallet config allows."
+				"Shouldn't demand more candidates than the pezpallet config allows."
 			);
 
 			pezframe_support::ensure!(
@@ -940,7 +940,7 @@ pub mod pallet {
 	/// Keep track of number of authored blocks per authority, uncles are counted as well since
 	/// they're a valid proof of being online.
 	impl<T: Config + pezpallet_authorship::Config>
-		pezpallet_authorship::EventHandler<T::AccountId, BlockNumberFor<T>> for Pallet<T>
+		pezpallet_authorship::EventHandler<T::AccountId, BlockNumberFor<T>> for Pezpallet<T>
 	{
 		fn note_author(author: T::AccountId) {
 			let pot = Self::account_id();
@@ -952,9 +952,9 @@ pub mod pallet {
 			// `reward` is half of pot account minus ED, this should never fail.
 			let _success = T::Currency::transfer(&pot, &author, reward, KeepAlive);
 			debug_assert!(_success.is_ok());
-			LastAuthoredBlock::<T>::insert(author, pezframe_system::Pallet::<T>::block_number());
+			LastAuthoredBlock::<T>::insert(author, pezframe_system::Pezpallet::<T>::block_number());
 
-			pezframe_system::Pallet::<T>::register_extra_weight_unchecked(
+			pezframe_system::Pezpallet::<T>::register_extra_weight_unchecked(
 				T::WeightInfo::note_author(),
 				DispatchClass::Mandatory,
 			);
@@ -962,12 +962,12 @@ pub mod pallet {
 	}
 
 	/// Play the role of the session manager.
-	impl<T: Config> SessionManager<T::AccountId> for Pallet<T> {
+	impl<T: Config> SessionManager<T::AccountId> for Pezpallet<T> {
 		fn new_session(index: SessionIndex) -> Option<Vec<T::AccountId>> {
 			log::info!(
 				"assembling new collators for new session {} at #{:?}",
 				index,
-				<pezframe_system::Pallet<T>>::block_number(),
+				<pezframe_system::Pezpallet<T>>::block_number(),
 			);
 
 			// The `expect` below is safe because the list is a `BoundedVec` with a max size of
@@ -985,7 +985,7 @@ pub mod pallet {
 			let removed = candidates_len_before.saturating_sub(active_candidates_count);
 			let result = Self::assemble_collators();
 
-			pezframe_system::Pallet::<T>::register_extra_weight_unchecked(
+			pezframe_system::Pezpallet::<T>::register_extra_weight_unchecked(
 				T::WeightInfo::new_session(removed, candidates_len_before),
 				DispatchClass::Mandatory,
 			);
@@ -1008,6 +1008,6 @@ where
 {
 	type Type = <R as pezframe_system::Config>::AccountId;
 	fn get() -> Self::Type {
-		<crate::Pallet<R>>::account_id()
+		<crate::Pezpallet<R>>::account_id()
 	}
 }

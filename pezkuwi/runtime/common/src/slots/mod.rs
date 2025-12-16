@@ -19,7 +19,7 @@
 //! teyrchains and parathreads to be swapped.
 //!
 //! This doesn't handle the mechanics of determining which para ID actually ends up with a teyrchain
-//! lease. This must handled by a separately, through the trait interface that this pallet provides
+//! lease. This must handled by a separately, through the trait interface that this pezpallet provides
 //! or the root dispatchables.
 
 pub mod migration;
@@ -32,7 +32,7 @@ use pezframe_support::{
 	weights::Weight,
 };
 use pezframe_system::pezpallet_prelude::*;
-pub use pallet::*;
+pub use pezpallet::*;
 use pezkuwi_primitives::Id as ParaId;
 use pezsp_runtime::traits::{CheckedConversion, CheckedSub, Saturating, Zero};
 
@@ -63,15 +63,15 @@ impl WeightInfo for TestWeightInfo {
 	}
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::pallet]
-	#[pallet::without_storage_info]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::without_storage_info]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
@@ -84,17 +84,17 @@ pub mod pallet {
 		type Registrar: Registrar<AccountId = Self::AccountId>;
 
 		/// The number of blocks over which a single period lasts.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type LeasePeriod: Get<BlockNumberFor<Self>>;
 
 		/// The number of blocks to offset each lease period by.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type LeaseOffset: Get<BlockNumberFor<Self>>;
 
 		/// The origin which may forcibly create or clear leases. Root can always do this.
 		type ForceOrigin: EnsureOrigin<<Self as pezframe_system::Config>::RuntimeOrigin>;
 
-		/// Weight Information for the Extrinsics in the Pallet
+		/// Weight Information for the Extrinsics in the Pezpallet
 		type WeightInfo: WeightInfo;
 	}
 
@@ -107,19 +107,19 @@ pub mod pallet {
 	/// items are for the subsequent lease periods.
 	///
 	/// The default value (an empty list) implies that the teyrchain no longer exists (or never
-	/// existed) as far as this pallet is concerned.
+	/// existed) as far as this pezpallet is concerned.
 	///
 	/// If a teyrchain doesn't exist *yet* but is scheduled to exist in the future, then it
 	/// will be left-padded with one or more `None`s to denote the fact that nothing is held on
 	/// deposit for the non-existent chain currently, but is held at some point in the future.
 	///
 	/// It is illegal for a `None` value to trail in the list.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Leases<T: Config> =
 		StorageMap<_, Twox64Concat, ParaId, Vec<Option<(T::AccountId, BalanceOf<T>)>>, ValueQuery>;
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A new `[lease_period]` is beginning.
 		NewLeasePeriod { lease_period: LeasePeriodOf<T> },
@@ -136,7 +136,7 @@ pub mod pallet {
 		},
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// The teyrchain ID is not onboarding.
 		ParaNotOnboarding,
@@ -144,8 +144,8 @@ pub mod pallet {
 		LeaseError,
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn on_initialize(n: BlockNumberFor<T>) -> Weight {
 			if let Some((lease_period, first_block)) = Self::lease_period_index(n) {
 				// If we're beginning a new lease period then handle that.
@@ -159,14 +159,14 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Just a connect into the `lease_out` call, in case Root wants to force some lease to
 		/// happen independently of any other on-chain mechanism to use it.
 		///
 		/// The dispatch origin for this call must match `T::ForceOrigin`.
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::force_lease())]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::force_lease())]
 		pub fn force_lease(
 			origin: OriginFor<T>,
 			para: ParaId,
@@ -184,8 +184,8 @@ pub mod pallet {
 		/// Clear all leases for a Para Id, refunding any deposits back to the original owners.
 		///
 		/// The dispatch origin for this call must match `T::ForceOrigin`.
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::clear_all_leases())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::clear_all_leases())]
 		pub fn clear_all_leases(origin: OriginFor<T>, para: ParaId) -> DispatchResult {
 			T::ForceOrigin::ensure_origin(origin)?;
 			let deposits = Self::all_deposits_held(para);
@@ -207,8 +207,8 @@ pub mod pallet {
 		/// let them onboard from here.
 		///
 		/// Origin must be signed, but can be called by anyone.
-		#[pallet::call_index(2)]
-		#[pallet::weight(T::WeightInfo::trigger_onboard())]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(T::WeightInfo::trigger_onboard())]
 		pub fn trigger_onboard(origin: OriginFor<T>, para: ParaId) -> DispatchResult {
 			ensure_signed(origin)?;
 			let leases = Leases::<T>::get(para);
@@ -224,7 +224,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// A new lease period is beginning. We're at the start of the first block of it.
 	///
 	/// We need to on-board and off-board teyrchains as needed. We should also handle reducing/
@@ -328,13 +328,13 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-impl<T: Config> crate::traits::OnSwap for Pallet<T> {
+impl<T: Config> crate::traits::OnSwap for Pezpallet<T> {
 	fn on_swap(one: ParaId, other: ParaId) {
 		Leases::<T>::mutate(one, |x| Leases::<T>::mutate(other, |y| core::mem::swap(x, y)))
 	}
 }
 
-impl<T: Config> Leaser<BlockNumberFor<T>> for Pallet<T> {
+impl<T: Config> Leaser<BlockNumberFor<T>> for Pezpallet<T> {
 	type AccountId = T::AccountId;
 	type LeasePeriod = BlockNumberFor<T>;
 	type Currency = T::Currency;
@@ -346,7 +346,7 @@ impl<T: Config> Leaser<BlockNumberFor<T>> for Pallet<T> {
 		period_begin: Self::LeasePeriod,
 		period_count: Self::LeasePeriod,
 	) -> Result<(), LeaseError> {
-		let now = pezframe_system::Pallet::<T>::block_number();
+		let now = pezframe_system::Pezpallet::<T>::block_number();
 		let (current_lease_period, _) =
 			Self::lease_period_index(now).ok_or(LeaseError::NoLeasePeriod)?;
 		// Finally, we update the deposit held so it is `amount` for the new lease period
@@ -462,7 +462,7 @@ impl<T: Config> Leaser<BlockNumberFor<T>> for Pallet<T> {
 		first_period: Self::LeasePeriod,
 		last_period: Self::LeasePeriod,
 	) -> bool {
-		let now = pezframe_system::Pallet::<T>::block_number();
+		let now = pezframe_system::Pezpallet::<T>::block_number();
 		let (current_lease_period, _) = match Self::lease_period_index(now) {
 			Some(clp) => clp,
 			None => return true,
@@ -498,7 +498,7 @@ impl<T: Config> Leaser<BlockNumberFor<T>> for Pallet<T> {
 	}
 }
 
-/// tests for this pallet
+/// tests for this pezpallet
 #[cfg(test)]
 mod tests {
 	use super::*;
@@ -965,10 +965,10 @@ mod benchmarking {
 
 	use pezframe_benchmarking::v2::*;
 
-	use crate::slots::Pallet as Slots;
+	use crate::slots::Pezpallet as Slots;
 
 	fn assert_last_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
-		let events = pezframe_system::Pallet::<T>::events();
+		let events = pezframe_system::Pezpallet::<T>::events();
 		let system_event: <T as pezframe_system::Config>::RuntimeEvent = generic_event.into();
 		// compare to the last event record
 		let pezframe_system::EventRecord { event, .. } = &events[events.len() - 1];
@@ -989,7 +989,7 @@ mod benchmarking {
 			worst_head_data,
 			worst_validation_code.clone(),
 		));
-		assert_ok!(paras::Pallet::<T>::add_trusted_validation_code(
+		assert_ok!(paras::Pezpallet::<T>::add_trusted_validation_code(
 			pezframe_system::Origin::<T>::Root.into(),
 			worst_validation_code,
 		));
@@ -1009,7 +1009,7 @@ mod benchmarking {
 		#[benchmark]
 		fn force_lease() -> Result<(), BenchmarkError> {
 			// If there is an offset, we need to be on that block to be able to do lease things.
-			pezframe_system::Pallet::<T>::set_block_number(T::LeaseOffset::get() + One::one());
+			pezframe_system::Pezpallet::<T>::set_block_number(T::LeaseOffset::get() + One::one());
 			let para = ParaId::from(1337);
 			let leaser: T::AccountId = account("leaser", 0, 0);
 			T::Currency::make_free_balance_be(&leaser, BalanceOf::<T>::max_value());
@@ -1048,7 +1048,7 @@ mod benchmarking {
 			let period_count = 4u32.into();
 
 			// If there is an offset, we need to be on that block to be able to do lease things.
-			pezframe_system::Pallet::<T>::set_block_number(T::LeaseOffset::get() + One::one());
+			pezframe_system::Pezpallet::<T>::set_block_number(T::LeaseOffset::get() + One::one());
 
 			// Make T parathreads (on-demand teyrchains)
 			let paras_info = (0..t).map(|i| register_a_parathread::<T>(i)).collect::<Vec<_>>();
@@ -1105,7 +1105,7 @@ mod benchmarking {
 			let (para, _) = register_a_parathread::<T>(1);
 
 			// If there is an offset, we need to be on that block to be able to do lease things.
-			pezframe_system::Pallet::<T>::set_block_number(T::LeaseOffset::get() + One::one());
+			pezframe_system::Pezpallet::<T>::set_block_number(T::LeaseOffset::get() + One::one());
 
 			for i in 0..max_people {
 				let leaser = account("lease_deposit", i, 0);

@@ -300,9 +300,9 @@ pub fn take_storage_item<K: Encode + Sized, T: Decode + Sized, H: StorageHasher>
 	take_storage_value(module, item, key.using_encoded(H::hash).as_ref())
 }
 
-/// Move a storage from a pallet prefix to another pallet prefix.
+/// Move a storage from a pezpallet prefix to another pezpallet prefix.
 ///
-/// Keys used in pallet storages always start with:
+/// Keys used in pezpallet storages always start with:
 /// `concat(twox_128(pezpallet_name), twox_128(storage_name))`.
 ///
 /// This function will remove all value for which the key start with
@@ -311,7 +311,7 @@ pub fn take_storage_item<K: Encode + Sized, T: Decode + Sized, H: StorageHasher>
 ///
 /// # Example
 ///
-/// If a pallet named "my_example" has 2 storages named "Foo" and "Bar" and the pallet is renamed
+/// If a pezpallet named "my_example" has 2 storages named "Foo" and "Bar" and the pezpallet is renamed
 /// "my_new_example_name", a migration can be:
 /// ```
 /// # use pezframe_support::storage::migration::move_storage_from_pallet;
@@ -336,9 +336,9 @@ pub fn move_storage_from_pallet(
 	}
 }
 
-/// Move all storages from a pallet prefix to another pallet prefix.
+/// Move all storages from a pezpallet prefix to another pezpallet prefix.
 ///
-/// Keys used in pallet storages always start with:
+/// Keys used in pezpallet storages always start with:
 /// `concat(twox_128(pezpallet_name), twox_128(storage_name))`.
 ///
 /// This function will remove all value for which the key start with `twox_128(old_pallet_name)`
@@ -348,7 +348,7 @@ pub fn move_storage_from_pallet(
 ///
 /// # Example
 ///
-/// If a pallet named "my_example" has some storages and the pallet is renamed
+/// If a pezpallet named "my_example" has some storages and the pezpallet is renamed
 /// "my_new_example_name", a migration can be:
 /// ```
 /// # use pezframe_support::storage::migration::move_pallet;

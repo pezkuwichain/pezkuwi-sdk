@@ -214,7 +214,7 @@ mod imbalances {
 		fn drop(&mut self) {
 			if !self.0.is_zero() {
 				<super::TotalIssuance<T, I>>::mutate(|v| *v = v.saturating_add(self.0));
-				Pallet::<T, I>::deposit_event(Event::<T, I>::Issued { amount: self.0 });
+				Pezpallet::<T, I>::deposit_event(Event::<T, I>::Issued { amount: self.0 });
 			}
 		}
 	}
@@ -224,7 +224,7 @@ mod imbalances {
 		fn drop(&mut self) {
 			if !self.0.is_zero() {
 				<super::TotalIssuance<T, I>>::mutate(|v| *v = v.saturating_sub(self.0));
-				Pallet::<T, I>::deposit_event(Event::<T, I>::Rescinded { amount: self.0 });
+				Pezpallet::<T, I>::deposit_event(Event::<T, I>::Rescinded { amount: self.0 });
 			}
 		}
 	}
@@ -234,7 +234,7 @@ mod imbalances {
 	{
 		fn handle(amount: T::Balance) {
 			<super::TotalIssuance<T, I>>::mutate(|v| *v = v.saturating_sub(amount));
-			Pallet::<T, I>::deposit_event(Event::<T, I>::BurnedDebt { amount });
+			Pezpallet::<T, I>::deposit_event(Event::<T, I>::BurnedDebt { amount });
 		}
 	}
 
@@ -243,12 +243,12 @@ mod imbalances {
 	{
 		fn handle(amount: T::Balance) {
 			<super::TotalIssuance<T, I>>::mutate(|v| *v = v.saturating_add(amount));
-			Pallet::<T, I>::deposit_event(Event::<T, I>::MintedCredit { amount });
+			Pezpallet::<T, I>::deposit_event(Event::<T, I>::MintedCredit { amount });
 		}
 	}
 }
 
-impl<T: Config<I>, I: 'static> Currency<T::AccountId> for Pallet<T, I>
+impl<T: Config<I>, I: 'static> Currency<T::AccountId> for Pezpallet<T, I>
 where
 	T::Balance: MaybeSerializeDeserialize + Debug,
 {
@@ -301,7 +301,7 @@ where
 			});
 		});
 
-		Pallet::<T, I>::deposit_event(Event::<T, I>::Rescinded { amount });
+		Pezpallet::<T, I>::deposit_event(Event::<T, I>::Rescinded { amount });
 		PositiveImbalance::new(amount)
 	}
 
@@ -319,7 +319,7 @@ where
 			})
 		});
 
-		Pallet::<T, I>::deposit_event(Event::<T, I>::Issued { amount });
+		Pezpallet::<T, I>::deposit_event(Event::<T, I>::Issued { amount });
 		NegativeImbalance::new(amount)
 	}
 
@@ -385,7 +385,7 @@ where
 			|account, _is_new| -> Result<(Self::NegativeImbalance, Self::Balance), DispatchError> {
 				// Best value is the most amount we can slash following liveness rules.
 				let ed = T::ExistentialDeposit::get();
-				let actual = match system::Pallet::<T>::can_dec_provider(who) {
+				let actual = match system::Pezpallet::<T>::can_dec_provider(who) {
 					true => value.min(account.free),
 					false => value.min(account.free.saturating_sub(ed)),
 				};
@@ -544,7 +544,7 @@ fn ensure_can_reserve<T: Config<I>, I: 'static>(
 	value: T::Balance,
 	check_existential_deposit: bool,
 ) -> DispatchResult {
-	let AccountData { free, .. } = Pallet::<T, I>::account(who);
+	let AccountData { free, .. } = Pezpallet::<T, I>::account(who);
 
 	// Early validation: Check sufficient free balance
 	let new_free_balance = free.checked_sub(&value).ok_or(Error::<T, I>::InsufficientBalance)?;
@@ -558,7 +558,7 @@ fn ensure_can_reserve<T: Config<I>, I: 'static>(
 	Ok(())
 }
 
-impl<T: Config<I>, I: 'static> ReservableCurrency<T::AccountId> for Pallet<T, I>
+impl<T: Config<I>, I: 'static> ReservableCurrency<T::AccountId> for Pezpallet<T, I>
 where
 	T::Balance: MaybeSerializeDeserialize + Debug,
 {
@@ -689,7 +689,7 @@ where
 	}
 }
 
-impl<T: Config<I>, I: 'static> NamedReservableCurrency<T::AccountId> for Pallet<T, I>
+impl<T: Config<I>, I: 'static> NamedReservableCurrency<T::AccountId> for Pezpallet<T, I>
 where
 	T::Balance: MaybeSerializeDeserialize + Debug,
 {
@@ -918,7 +918,7 @@ where
 	}
 }
 
-impl<T: Config<I>, I: 'static> LockableCurrency<T::AccountId> for Pallet<T, I>
+impl<T: Config<I>, I: 'static> LockableCurrency<T::AccountId> for Pezpallet<T, I>
 where
 	T::Balance: MaybeSerializeDeserialize + Debug,
 {
@@ -988,7 +988,7 @@ where
 	}
 }
 
-impl<T: Config<I>, I: 'static> InspectLockableCurrency<T::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> InspectLockableCurrency<T::AccountId> for Pezpallet<T, I> {
 	fn balance_locked(id: LockIdentifier, who: &T::AccountId) -> Self::Balance {
 		Self::locks(who)
 			.into_iter()

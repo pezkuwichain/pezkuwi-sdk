@@ -47,7 +47,7 @@ pub fn prepare_inbound_xcm(xcm_message: Xcm<()>, destination: InteriorLocation) 
 }
 
 /// Helper that creates InitializationData mock data, that can be used to initialize bridge
-/// GRANDPA pallet
+/// GRANDPA pezpallet
 pub fn initialization_data<
 	Runtime: pezpallet_bridge_grandpa::Config<GrandpaPalletInstance>,
 	GrandpaPalletInstance: 'static,

@@ -15,12 +15,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Salary pallet benchmarking.
+//! Salary pezpallet benchmarking.
 
 #![cfg(feature = "runtime-benchmarks")]
 
 use super::*;
-use crate::Pallet as Salary;
+use crate::Pezpallet as Salary;
 
 use frame::benchmarking::prelude::*;
 const SEED: u32 = 0;

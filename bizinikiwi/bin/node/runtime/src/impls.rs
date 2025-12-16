@@ -49,7 +49,7 @@ impl OnUnbalanced<NegativeImbalance> for Author {
 pub struct CreditToBlockAuthor;
 impl HandleCredit<AccountId, Assets> for CreditToBlockAuthor {
 	fn handle_credit(credit: Credit<AccountId, Assets>) {
-		if let Some(author) = pezpallet_authorship::Pallet::<Runtime>::author() {
+		if let Some(author) = pezpallet_authorship::Pezpallet::<Runtime>::author() {
 			// Drop the result which will trigger the `OnDrop` of the imbalance in case of error.
 			let _ = Assets::resolve(&author, credit);
 		}

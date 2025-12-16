@@ -74,8 +74,8 @@ pub type TrustBackedAssetsConvertedConcreteId<
 pub type UniquesConvertedConcreteId<UniquesPalletLocation> = MatchedConvertedConcreteId<
 	CollectionId,
 	ItemId,
-	// The asset starts with the uniques pallet. The `CollectionId` of the asset is specified as a
-	// junction within the pallet itself.
+	// The asset starts with the uniques pezpallet. The `CollectionId` of the asset is specified as a
+	// junction within the pezpallet itself.
 	StartsWith<UniquesPalletLocation>,
 	CollectionIdForUniquesConvert<UniquesPalletLocation>,
 	TryConvertInto,
@@ -205,7 +205,7 @@ impl<
 	}
 
 	/// Provides a current prices. Wrapper over
-	/// `pezpallet_asset_conversion::Pallet::<T>::quote_price_tokens_for_exact_tokens`.
+	/// `pezpallet_asset_conversion::Pezpallet::<T>::quote_price_tokens_for_exact_tokens`.
 	///
 	/// An error of type `()` is returned if the version conversion fails for XCM locations.
 	/// This error should be mapped by the caller to a more descriptive one.
@@ -220,7 +220,7 @@ impl<
 		let asset_2: L = asset_2.try_into().map_err(|_| ())?;
 
 		// Quote swap price.
-		Ok(pezpallet_asset_conversion::Pallet::<Runtime>::quote_price_tokens_for_exact_tokens(
+		Ok(pezpallet_asset_conversion::Pezpallet::<Runtime>::quote_price_tokens_for_exact_tokens(
 			asset_1,
 			asset_2,
 			amount,
@@ -313,7 +313,7 @@ mod tests {
 				),
 				Ok((1234, 1000)),
 			),
-			// wrong pallet instance
+			// wrong pezpallet instance
 			(
 				ma_1000(0, [PalletInstance(77), GeneralIndex(1234)].into()),
 				Err(MatchError::AssetNotHandled),

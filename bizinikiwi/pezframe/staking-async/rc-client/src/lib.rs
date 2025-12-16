@@ -17,7 +17,7 @@
 
 //! The client for the relay chain, intended to be used in AssetHub.
 //!
-//! The counter-part for this pallet is `pezpallet-staking-async-ah-client` on the relay chain.
+//! The counter-part for this pezpallet is `pezpallet-staking-async-ah-client` on the relay chain.
 //!
 //! This documentation is divided into the following sections:
 //!
@@ -50,10 +50,10 @@
 //!
 //! ## Local Interfaces
 //!
-//! Within this pallet, we need to talk to the staking-async pallet in AH. This is done via
+//! Within this pezpallet, we need to talk to the staking-async pezpallet in AH. This is done via
 //! [`AHStakingInterface`] trait.
 //!
-//! The staking pallet in AH has no communication with session pallet whatsoever, therefore its
+//! The staking pezpallet in AH has no communication with session pezpallet whatsoever, therefore its
 //! implementation of `SessionManager`, and it associated type `SessionInterface` no longer exists.
 //! Moreover, pezpallet-staking-async no longer has a notion of timestamp locally, and only relies in
 //! the timestamp passed in in the `SessionReport`.
@@ -76,7 +76,7 @@
 //! Let's first consider the old school model, when staking and session lived in the same runtime.
 //! Assume 3 sessions is one era.
 //!
-//! The session pallet issues the following events:
+//! The session pezpallet issues the following events:
 //!
 //! end_session / start_session / new_session (plan session)
 //!
@@ -89,16 +89,16 @@
 //! Staking should then do the following:
 //!
 //! * once a request to plan session 3 comes in, it must return a validator set. This is queued
-//!   internally in the session pallet, and is enacted later.
+//!   internally in the session pezpallet, and is enacted later.
 //! * at the same time, staking increases its notion of `current_era` by 1. Yet, `active_era` is
 //!   intact. This is because the validator elected for era n+1 are not yet active in the session
-//!   pallet.
+//!   pezpallet.
 //! * once a request to _start_ session 3 comes in, staking will rotate its `active_era` to also be
 //!   incremented to n+1.
 //!
 //! ### Asynchronous Model
 //!
-//! Now, if staking lives in AH and the session pallet lives in the relay chain, how will this look
+//! Now, if staking lives in AH and the session pezpallet lives in the relay chain, how will this look
 //! like?
 //!
 //! Staking knows that by the time the relay-chain session index `3` (and later on `6` and so on) is
@@ -123,8 +123,8 @@ use pezsp_runtime::{traits::Convert, Perbill, TransactionOutcome};
 use pezsp_staking::SessionIndex;
 use xcm::latest::{send_xcm, Location, SendError, SendXcm, Xcm};
 
-/// Export everything needed for the pallet to be used in the runtime.
-pub use pallet::*;
+/// Export everything needed for the pezpallet to be used in the runtime.
+pub use pezpallet::*;
 
 const LOG_TARGET: &str = "runtime::staking-async::rc-client";
 
@@ -134,7 +134,7 @@ macro_rules! log {
 	($level:tt, $patter:expr $(, $values:expr)* $(,)?) => {
 		log::$level!(
 			target: $crate::LOG_TARGET,
-			concat!("[{:?}] ⬆️ ", $patter), <pezframe_system::Pallet<T>>::block_number() $(, $values)*
+			concat!("[{:?}] ⬆️ ", $patter), <pezframe_system::Pezpallet<T>>::block_number() $(, $values)*
 		)
 	};
 }
@@ -144,7 +144,7 @@ macro_rules! log {
 /// This trait should only encapsulate our _outgoing_ communication to the RC. Any incoming
 /// communication comes it directly via our calls.
 ///
-/// In a real runtime, this is implemented via XCM calls, much like how the core-time pallet works.
+/// In a real runtime, this is implemented via XCM calls, much like how the core-time pezpallet works.
 /// In a test runtime, it can be wired to direct function calls.
 pub trait SendToRelayChain {
 	/// The validator account ids.
@@ -168,7 +168,7 @@ impl SendToRelayChain for () {
 /// This trait should only encapsulate our outgoing communications. Any incoming message is handled
 /// with `Call`s.
 ///
-/// In a real runtime, this is implemented via XCM calls, much like how the coretime pallet works.
+/// In a real runtime, this is implemented via XCM calls, much like how the coretime pezpallet works.
 /// In a test runtime, it can be wired to direct function call.
 pub trait SendToAssetHub {
 	/// The validator account ids.
@@ -540,7 +540,7 @@ where
 
 /// Our communication trait of `pezpallet-staking-async-rc-client` -> `pezpallet-staking-async`.
 ///
-/// This is merely a shorthand to avoid tightly-coupling the staking pallet to this pallet. It
+/// This is merely a shorthand to avoid tightly-coupling the staking pezpallet to this pezpallet. It
 /// limits what we can say to `pezpallet-staking-async` to only these functions.
 pub trait AHStakingInterface {
 	/// The validator account id type.
@@ -590,8 +590,8 @@ pub struct Offence<AccountId> {
 	pub slash_fraction: Perbill,
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use alloc::vec;
 	use pezframe_system::pezpallet_prelude::{BlockNumberFor, *};
@@ -602,39 +602,39 @@ pub mod pallet {
 	/// An incomplete incoming session report that we have not acted upon yet.
 	// Note: this can remain unbounded, as the internals of `AHStakingInterface` is benchmarked, and
 	// is worst case.
-	#[pallet::storage]
-	#[pallet::unbounded]
+	#[pezpallet::storage]
+	#[pezpallet::unbounded]
 	pub type IncompleteSessionReport<T: Config> =
 		StorageValue<_, SessionReport<T::AccountId>, OptionQuery>;
 
 	/// The last session report's `end_index` that we have acted upon.
 	///
-	/// This allows this pallet to ensure a sequentially increasing sequence of session reports
+	/// This allows this pezpallet to ensure a sequentially increasing sequence of session reports
 	/// passed to staking.
 	///
 	/// Note that with the XCM being the backbone of communication, we have a guarantee on the
 	/// ordering of messages. As long as the RC sends session reports in order, we _eventually_
 	/// receive them in the same correct order as well.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type LastSessionReportEndingIndex<T: Config> = StorageValue<_, SessionIndex, OptionQuery>;
 
 	/// A validator set that is outgoing, and should be sent.
 	///
 	/// This will be attempted to be sent, possibly on every `on_initialize` call, until it is sent,
 	/// or the second value reaches zero, at which point we drop it.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	// TODO: for now we know this ValidatorSetReport is at most validator-count * 32, and we don't
 	// need its MEL critically.
-	#[pallet::unbounded]
+	#[pezpallet::unbounded]
 	pub type OutgoingValidatorSet<T: Config> =
 		StorageValue<_, (ValidatorSetReport<T::AccountId>, u32), OptionQuery>;
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn on_initialize(_: BlockNumberFor<T>) -> Weight {
 			if let Some((report, retries_left)) = OutgoingValidatorSet::<T>::take() {
 				match T::SendToRelayChain::validator_set(report.clone()) {
@@ -660,14 +660,14 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// An origin type that allows us to be sure a call is being dispatched by the relay chain.
 		///
 		/// It be can be configured to something like `Root` or relay chain or similar.
 		type RelayChainOrigin: EnsureOrigin<Self::RuntimeOrigin>;
 
-		/// Our communication handle to the local staking pallet.
+		/// Our communication handle to the local staking pezpallet.
 		type AHStakingInterface: AHStakingInterface<AccountId = Self::AccountId>;
 
 		/// Our communication handle to the relay chain.
@@ -679,8 +679,8 @@ pub mod pallet {
 		type MaxValidatorSetRetries: Get<u32>;
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(crate) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(crate) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A said session report was received.
 		SessionReportReceived {
@@ -720,7 +720,7 @@ pub mod pallet {
 		ValidatorSetDropped,
 	}
 
-	impl<T: Config> RcClientInterface for Pallet<T> {
+	impl<T: Config> RcClientInterface for Pezpallet<T> {
 		type AccountId = T::AccountId;
 
 		fn validator_set(
@@ -734,11 +734,11 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Called to indicate the start of a new session on the relay chain.
-		#[pallet::call_index(0)]
-		#[pallet::weight(
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(
 			// `LastSessionReportEndingIndex`: rw
 			// `IncompleteSessionReport`: rw
 			T::DbWeight::get().reads_writes(2, 2) + T::AHStakingInterface::weigh_on_relay_session_report(report)
@@ -816,8 +816,8 @@ pub mod pallet {
 			}
 		}
 
-		#[pallet::call_index(1)]
-		#[pallet::weight(
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(
 			T::AHStakingInterface::weigh_on_new_offences(offences.len() as u32)
 		)]
 		pub fn relay_new_offence_paged(

@@ -26,14 +26,14 @@
 // Executed Command:
 // target/production/pezkuwi
 // benchmark
-// pallet
+// pezpallet
 // --steps=50
 // --repeat=20
 // --extrinsic=*
 // --wasm-execution=compiled
 // --heap-pages=4096
 // --json-file=/builds/parity/mirrors/pezkuwi-sdk/.git/.artifacts/bench.json
-// --pallet=pezpallet_nomination_pools
+// --pezpallet=pezpallet_nomination_pools
 // --chain=zagros-dev
 // --header=./pezkuwi/file_header.txt
 // --output=./pezkuwi/runtime/zagros/src/weights/

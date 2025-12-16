@@ -1,19 +1,19 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-//! # Token Wrapper Pallet
+//! # Token Wrapper Pezpallet
 //!
-//! A pallet for wrapping native tokens (HEZ) into fungible assets (wHEZ)
+//! A pezpallet for wrapping native tokens (HEZ) into fungible assets (wHEZ)
 //! to enable DEX operations between native and asset tokens.
 //!
 //! ## Overview
 //!
-//! This pallet provides:
+//! This pezpallet provides:
 //! - `wrap`: Convert native HEZ to wHEZ (Asset ID 0)
 //! - `unwrap`: Convert wHEZ back to native HEZ
 //!
-//! The pallet maintains a 1:1 backing between HEZ and wHEZ.
+//! The pezpallet maintains a 1:1 backing between HEZ and wHEZ.
 
-pub use pallet::*;
+pub use pezpallet::*;
 pub use weights::WeightInfo;
 pub mod weights;
 
@@ -36,19 +36,19 @@ use pezframe_support::{
 use pezframe_system::pezpallet_prelude::*;
 use pezsp_runtime::traits::{AccountIdConversion, Saturating, Zero};
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
 	type BalanceOf<T> =
 		<<T as Config>::Currency as Currency<<T as pezframe_system::Config>::AccountId>>::Balance;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: crate::WeightInfo;
 
 		/// Native currency (HEZ)
@@ -62,12 +62,12 @@ pub mod pallet {
 			+ Mutate<Self::AccountId>
 			+ Create<Self::AccountId>;
 
-		/// Pallet ID for the wrapper account
-		#[pallet::constant]
+		/// Pezpallet ID for the wrapper account
+		#[pezpallet::constant]
 		type PalletId: Get<PalletId>;
 
 		/// Asset ID for wrapped token (wHEZ)
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type WrapperAssetId: Get<Self::AssetId>;
 	}
 
@@ -76,16 +76,16 @@ pub mod pallet {
 	// ============================================================================
 
 	/// Total amount of native tokens locked in wrapper
-	#[pallet::storage]
-	#[pallet::getter(fn total_locked)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn total_locked)]
 	pub type TotalLocked<T: Config> = StorageValue<_, BalanceOf<T>, ValueQuery>;
 
 	// ============================================================================
 	// EVENTS
 	// ============================================================================
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// Native token wrapped into asset token. [who, amount]
 		Wrapped { who: T::AccountId, amount: BalanceOf<T> },
@@ -97,7 +97,7 @@ pub mod pallet {
 	// ERRORS
 	// ============================================================================
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Insufficient balance for wrapping
 		InsufficientBalance,
@@ -117,22 +117,22 @@ pub mod pallet {
 	// DISPATCHABLE FUNCTIONS
 	// ============================================================================
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Wrap native tokens (HEZ) into wrapped asset tokens (wHEZ)
 		///
 		/// - `amount`: The amount of native tokens to wrap
 		///
 		/// This will:
-		/// 1. Transfer native tokens from user to pallet account (lock)
+		/// 1. Transfer native tokens from user to pezpallet account (lock)
 		/// 2. Mint equivalent amount of wrapped tokens to user
 		///
 		/// Emits `Wrapped` event.
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::wrap())]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::wrap())]
 		pub fn wrap(
 			origin: OriginFor<T>,
-			#[pallet::compact] amount: BalanceOf<T>,
+			#[pezpallet::compact] amount: BalanceOf<T>,
 		) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 
@@ -142,7 +142,7 @@ pub mod pallet {
 			// Check balance
 			ensure!(T::Currency::free_balance(&who) >= amount, Error::<T>::InsufficientBalance);
 
-			// Transfer native tokens to pallet account (lock them)
+			// Transfer native tokens to pezpallet account (lock them)
 			T::Currency::transfer(
 				&who,
 				&Self::account_id(),
@@ -173,11 +173,11 @@ pub mod pallet {
 		/// 2. Transfer equivalent native tokens back to user (unlock)
 		///
 		/// Emits `Unwrapped` event.
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::unwrap())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::unwrap())]
 		pub fn unwrap(
 			origin: OriginFor<T>,
-			#[pallet::compact] amount: BalanceOf<T>,
+			#[pezpallet::compact] amount: BalanceOf<T>,
 		) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 
@@ -222,8 +222,8 @@ pub mod pallet {
 	// HELPER FUNCTIONS
 	// ============================================================================
 
-	impl<T: Config> Pallet<T> {
-		/// Get the account ID of the pallet
+	impl<T: Config> Pezpallet<T> {
+		/// Get the account ID of the pezpallet
 		pub fn account_id() -> T::AccountId {
 			T::PalletId::get().into_account_truncating()
 		}

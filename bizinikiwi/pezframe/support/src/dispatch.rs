@@ -48,7 +48,7 @@ pub type DispatchResult = Result<(), pezsp_runtime::DispatchError>;
 /// The error type contained in a `DispatchResultWithPostInfo`.
 pub type DispatchErrorWithPostInfo = pezsp_runtime::DispatchErrorWithPostInfo<PostDispatchInfo>;
 
-/// Serializable version of pallet dispatchable.
+/// Serializable version of pezpallet dispatchable.
 pub trait Callable<T> {
 	type RuntimeCall: UnfilteredDispatchable + Codec + Clone + PartialEq + Eq;
 }
@@ -59,19 +59,19 @@ pub type CallableCallFor<A, R> = <A as Callable<R>>::RuntimeCall;
 
 /// Means to checks if the dispatchable is feeless.
 ///
-/// This is automatically implemented for all dispatchables during pallet expansion.
-/// If a call is marked by [`#[pallet::feeless_if]`](`macro@pezframe_support_procedural::feeless_if`)
+/// This is automatically implemented for all dispatchables during pezpallet expansion.
+/// If a call is marked by [`#[pezpallet::feeless_if]`](`macro@pezframe_support_procedural::feeless_if`)
 /// attribute, the corresponding closure is checked.
 pub trait CheckIfFeeless {
 	/// The Origin type of the runtime.
 	type Origin;
 
 	/// Checks if the dispatchable satisfies the feeless condition as defined by
-	/// [`#[pallet::feeless_if]`](`macro@pezframe_support_procedural::feeless_if`)
+	/// [`#[pezpallet::feeless_if]`](`macro@pezframe_support_procedural::feeless_if`)
 	fn is_feeless(&self, origin: &Self::Origin) -> bool;
 }
 
-/// Origin for the System pallet.
+/// Origin for the System pezpallet.
 #[derive(
 	PartialEq, Eq, Clone, Debug, Encode, Decode, DecodeWithMemTracking, TypeInfo, MaxEncodedLen,
 )]
@@ -82,7 +82,7 @@ pub enum RawOrigin<AccountId> {
 	Signed(AccountId),
 	/// It is signed by nobody, can be either:
 	/// * included and agreed upon by the validators anyway,
-	/// * or unsigned transaction validated by a pallet.
+	/// * or unsigned transaction validated by a pezpallet.
 	None,
 	/// It is signed by nobody, the extrinsic is authorized by the runtime.
 	///
@@ -249,7 +249,7 @@ impl<'a> OneOrMany<DispatchClass> for &'a [DispatchClass] {
 	}
 }
 
-/// A bundle of static information collected from the `#[pallet::weight]` attributes.
+/// A bundle of static information collected from the `#[pezpallet::weight]` attributes.
 #[derive(Clone, Copy, Eq, PartialEq, Default, Debug, Encode, Decode, TypeInfo)]
 pub struct DispatchInfo {
 	/// Weight of this transaction's call.
@@ -270,7 +270,7 @@ impl DispatchInfo {
 }
 
 /// A `Dispatchable` function (aka transaction) that can carry some static information along with
-/// it, using the `#[pallet::weight]` attribute.
+/// it, using the `#[pezpallet::weight]` attribute.
 pub trait GetDispatchInfo {
 	/// Return a `DispatchInfo`, containing relevant information of this dispatch.
 	///
@@ -727,17 +727,17 @@ mod weight_tests {
 		PostDispatchInfo { actual_weight: ref_time.map(|t| Weight::from_all(t)), pays_fee }
 	}
 
-	#[crate::pallet(dev_mode)]
+	#[crate::pezpallet(dev_mode)]
 	pub mod pezframe_system {
 		use super::{pezframe_system, pezframe_system::pezpallet_prelude::*};
 		pub use crate::dispatch::RawOrigin;
 		use crate::pezpallet_prelude::*;
 
-		#[pallet::pallet]
-		pub struct Pallet<T>(_);
+		#[pezpallet::pezpallet]
+		pub struct Pezpallet<T>(_);
 
-		#[pallet::config]
-		#[pallet::disable_pezframe_system_supertrait_check]
+		#[pezpallet::config]
+		#[pezpallet::disable_pezframe_system_supertrait_check]
 		pub trait Config: 'static {
 			type Block: Parameter + pezsp_runtime::traits::Block;
 			type AccountId;
@@ -750,65 +750,65 @@ mod weight_tests {
 			type DbWeight: Get<crate::weights::RuntimeDbWeight>;
 		}
 
-		#[pallet::error]
+		#[pezpallet::error]
 		pub enum Error<T> {
 			/// Required by construct_runtime
 			CallFiltered,
 		}
 
-		#[pallet::origin]
+		#[pezpallet::origin]
 		pub type Origin<T> = RawOrigin<<T as Config>::AccountId>;
 
-		#[pallet::call]
-		impl<T: Config> Pallet<T> {
+		#[pezpallet::call]
+		impl<T: Config> Pezpallet<T> {
 			// no arguments, fixed weight
-			#[pallet::weight(1000)]
+			#[pezpallet::weight(1000)]
 			pub fn f00(_origin: OriginFor<T>) -> DispatchResult {
 				unimplemented!();
 			}
 
-			#[pallet::weight((1000, DispatchClass::Mandatory))]
+			#[pezpallet::weight((1000, DispatchClass::Mandatory))]
 			pub fn f01(_origin: OriginFor<T>) -> DispatchResult {
 				unimplemented!();
 			}
 
-			#[pallet::weight((1000, Pays::No))]
+			#[pezpallet::weight((1000, Pays::No))]
 			pub fn f02(_origin: OriginFor<T>) -> DispatchResult {
 				unimplemented!();
 			}
 
-			#[pallet::weight((1000, DispatchClass::Operational, Pays::No))]
+			#[pezpallet::weight((1000, DispatchClass::Operational, Pays::No))]
 			pub fn f03(_origin: OriginFor<T>) -> DispatchResult {
 				unimplemented!();
 			}
 
 			// weight = a x 10 + b
-			#[pallet::weight(((_a * 10 + _eb * 1) as u64, DispatchClass::Normal, Pays::Yes))]
+			#[pezpallet::weight(((_a * 10 + _eb * 1) as u64, DispatchClass::Normal, Pays::Yes))]
 			pub fn f11(_origin: OriginFor<T>, _a: u32, _eb: u32) -> DispatchResult {
 				unimplemented!();
 			}
 
-			#[pallet::weight((0, DispatchClass::Operational, Pays::Yes))]
+			#[pezpallet::weight((0, DispatchClass::Operational, Pays::Yes))]
 			pub fn f12(_origin: OriginFor<T>, _a: u32, _eb: u32) -> DispatchResult {
 				unimplemented!();
 			}
 
-			#[pallet::weight(T::DbWeight::get().reads(3) + T::DbWeight::get().writes(2) + Weight::from_all(10_000))]
+			#[pezpallet::weight(T::DbWeight::get().reads(3) + T::DbWeight::get().writes(2) + Weight::from_all(10_000))]
 			pub fn f20(_origin: OriginFor<T>) -> DispatchResult {
 				unimplemented!();
 			}
 
-			#[pallet::weight(T::DbWeight::get().reads_writes(6, 5) + Weight::from_all(40_000))]
+			#[pezpallet::weight(T::DbWeight::get().reads_writes(6, 5) + Weight::from_all(40_000))]
 			pub fn f21(_origin: OriginFor<T>) -> DispatchResult {
 				unimplemented!();
 			}
 
-			#[pallet::weight(1000)]
+			#[pezpallet::weight(1000)]
 			pub fn f99(_origin: OriginFor<T>) -> DispatchResult {
 				Ok(())
 			}
 
-			#[pallet::weight(1000)]
+			#[pezpallet::weight(1000)]
 			pub fn f100(_origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 				Ok(crate::dispatch::PostDispatchInfo {
 					actual_weight: Some(Weight::from_parts(500, 0)),
@@ -862,50 +862,50 @@ mod weight_tests {
 
 	#[test]
 	fn weights_are_correct() {
-		// #[pallet::weight(1000)]
+		// #[pezpallet::weight(1000)]
 		let info = Call::<Runtime>::f00 {}.get_dispatch_info();
 		assert_eq!(info.total_weight(), Weight::from_parts(1000, 0));
 		assert_eq!(info.class, DispatchClass::Normal);
 		assert_eq!(info.pays_fee, Pays::Yes);
 
-		// #[pallet::weight((1000, DispatchClass::Mandatory))]
+		// #[pezpallet::weight((1000, DispatchClass::Mandatory))]
 		let info = Call::<Runtime>::f01 {}.get_dispatch_info();
 		assert_eq!(info.total_weight(), Weight::from_parts(1000, 0));
 		assert_eq!(info.class, DispatchClass::Mandatory);
 		assert_eq!(info.pays_fee, Pays::Yes);
 
-		// #[pallet::weight((1000, Pays::No))]
+		// #[pezpallet::weight((1000, Pays::No))]
 		let info = Call::<Runtime>::f02 {}.get_dispatch_info();
 		assert_eq!(info.total_weight(), Weight::from_parts(1000, 0));
 		assert_eq!(info.class, DispatchClass::Normal);
 		assert_eq!(info.pays_fee, Pays::No);
 
-		// #[pallet::weight((1000, DispatchClass::Operational, Pays::No))]
+		// #[pezpallet::weight((1000, DispatchClass::Operational, Pays::No))]
 		let info = Call::<Runtime>::f03 {}.get_dispatch_info();
 		assert_eq!(info.total_weight(), Weight::from_parts(1000, 0));
 		assert_eq!(info.class, DispatchClass::Operational);
 		assert_eq!(info.pays_fee, Pays::No);
 
-		// #[pallet::weight(((_a * 10 + _eb * 1) as u64, DispatchClass::Normal, Pays::Yes))]
+		// #[pezpallet::weight(((_a * 10 + _eb * 1) as u64, DispatchClass::Normal, Pays::Yes))]
 		let info = Call::<Runtime>::f11 { a: 13, eb: 20 }.get_dispatch_info();
 		assert_eq!(info.total_weight(), Weight::from_parts(150, 0)); // 13*10 + 20
 		assert_eq!(info.class, DispatchClass::Normal);
 		assert_eq!(info.pays_fee, Pays::Yes);
 
-		// #[pallet::weight((0, DispatchClass::Operational, Pays::Yes))]
+		// #[pezpallet::weight((0, DispatchClass::Operational, Pays::Yes))]
 		let info = Call::<Runtime>::f12 { a: 10, eb: 20 }.get_dispatch_info();
 		assert_eq!(info.total_weight(), Weight::zero());
 		assert_eq!(info.class, DispatchClass::Operational);
 		assert_eq!(info.pays_fee, Pays::Yes);
 
-		// #[pallet::weight(T::DbWeight::get().reads(3) + T::DbWeight::get().writes(2) +
+		// #[pezpallet::weight(T::DbWeight::get().reads(3) + T::DbWeight::get().writes(2) +
 		// Weight::from_all(10_000))]
 		let info = Call::<Runtime>::f20 {}.get_dispatch_info();
 		assert_eq!(info.total_weight(), Weight::from_parts(12300, 10000)); // 100*3 + 1000*2 + 10_1000
 		assert_eq!(info.class, DispatchClass::Normal);
 		assert_eq!(info.pays_fee, Pays::Yes);
 
-		// #[pallet::weight(T::DbWeight::get().reads_writes(6, 5) + Weight::from_all(40_000))]
+		// #[pezpallet::weight(T::DbWeight::get().reads_writes(6, 5) + Weight::from_all(40_000))]
 		let info = Call::<Runtime>::f21 {}.get_dispatch_info();
 		assert_eq!(info.total_weight(), Weight::from_parts(45600, 40000)); // 100*6 + 1000*5 + 40_1000
 		assert_eq!(info.class, DispatchClass::Normal);

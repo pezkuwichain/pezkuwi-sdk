@@ -15,14 +15,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License
 
-use crate::construct_runtime::Pallet;
+use crate::construct_runtime::Pezpallet;
 use proc_macro2::TokenStream;
 use quote::quote;
 use syn::Ident;
 
 pub fn expand_outer_validate_unsigned(
 	runtime: &Ident,
-	pezpallet_decls: &[Pallet],
+	pezpallet_decls: &[Pezpallet],
 	scrate: &TokenStream,
 ) -> TokenStream {
 	let mut pezpallet_names = Vec::new();

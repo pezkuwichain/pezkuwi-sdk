@@ -15,9 +15,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Multi-phase, multi-block, election provider pallet.
+//! # Multi-phase, multi-block, election provider pezpallet.
 //!
-//! > This pallet is sometimes abbreviated as `EPMB`, and `pezpallet_election_provider_multi_phase` as
+//! > This pezpallet is sometimes abbreviated as `EPMB`, and `pezpallet_election_provider_multi_phase` as
 //! > `EPM`.
 //!
 //! ## Overall idea
@@ -28,40 +28,40 @@
 //! Nonetheless, it has a limited capacity in terms of number of voters it can process in a **single
 //! block**.
 //!
-//! This pallet takes `EPM` system, keeps most of its ideas and core premises, and extends it to
-//! support paginated, multi-block operations. The final goal of this pallet is to scale linearly
+//! This pezpallet takes `EPM` system, keeps most of its ideas and core premises, and extends it to
+//! support paginated, multi-block operations. The final goal of this pezpallet is to scale linearly
 //! with the number of blocks allocated to the elections. Moreover, the amount of work that it does
 //! in one block should be bounded and measurable, making it suitable for a teyrchain. In principle,
 //! with large enough blocks (in a dedicated teyrchain), the number of voters included in the NPoS
 //! system can grow significantly (yet, obviously not indefinitely).
 //!
-//! Note that this pallet does not consider how the recipient is processing the results. To ensure
-//! scalability, the recipient of this pallet's data (i.e. `pezpallet-staking`) must also be capable of
+//! Note that this pezpallet does not consider how the recipient is processing the results. To ensure
+//! scalability, the recipient of this pezpallet's data (i.e. `pezpallet-staking`) must also be capable of
 //! pagination and multi-block processing.
 //!
 //! ## Companion pallets
 //!
-//! This pallet will only function in a sensible way if it is peered with its companion pallets.
+//! This pezpallet will only function in a sensible way if it is peered with its companion pallets.
 //!
-//! - The [`verifier`] pallet provides a standard implementation of the [`verifier::Verifier`]. This
-//!   pallet is mandatory.
+//! - The [`verifier`] pezpallet provides a standard implementation of the [`verifier::Verifier`]. This
+//!   pezpallet is mandatory.
 //! - The [`unsigned`] module provides the implementation of unsigned submission by validators. If
-//!   this pallet is included, then [`Config::UnsignedPhase`] will determine its duration.
+//!   this pezpallet is included, then [`Config::UnsignedPhase`] will determine its duration.
 //! - The [`signed`] module provides the implementation of the signed submission by any account. If
-//!   this pallet is included, the combined [`Config::SignedPhase`] and
+//!   this pezpallet is included, the combined [`Config::SignedPhase`] and
 //!   [`Config::SignedValidationPhase`] will determine its duration
 //!
 //! These pallets are in fact hierarchical. This particular one is the top level one. It contains
 //! the shared information that all child pallets use. All child pallets depend on the top level
-//! pallet ONLY, but not the other way around. For those cases, traits are used.
+//! pezpallet ONLY, but not the other way around. For those cases, traits are used.
 //!
 //! As in, notice that [`crate::verifier::Config`] relies on [`crate::Config`], but for the
 //! reverse, we rely on [`crate::verifier::Verifier`] trait, which is indeed part of
 //! [`crate::Config`]. This is merely an implementation opinion.
 //!
-//! ### Pallet Ordering:
+//! ### Pezpallet Ordering:
 //!
-//! TODO: @kiaenigma: this needs clarification and a enforcement. Signed pallet should come first.
+//! TODO: @kiaenigma: this needs clarification and a enforcement. Signed pezpallet should come first.
 //! Fixing this should yield removing `verifier_done` from the phase transition.
 //!
 //! The ordering of these pallets in a runtime should be:
@@ -76,14 +76,14 @@
 //!
 //! ## Pagination
 //!
-//! Most of the external APIs of this pallet are paginated. All pagination follow a pattern where if
+//! Most of the external APIs of this pezpallet are paginated. All pagination follow a pattern where if
 //! `N` pages exist, the first paginated call is `function(N-1)` and the last one is `function(0)`.
 //! For example, with 3 pages, the `elect` of [`ElectionProvider`] is expected to be called as
 //! `elect(2) -> elect(1) -> elect(0)`. In essence, calling a paginated function with index 0 is
 //! always a signal of termination, meaning that no further calls will follow.
 //!
 //! The snapshot creation for voters (Nominators in staking), submission of signed pages, validation
-//! of signed solutions and exporting of pages are all paginated. Note that this pallet is yet to
+//! of signed solutions and exporting of pages are all paginated. Note that this pezpallet is yet to
 //! support paginated target (Validators in staking) snapshotting.
 //!
 //! ### Terminology Note: `msp` and `lsp`
@@ -94,13 +94,13 @@
 //!
 //! ## Phases
 //!
-//! The operations in this pallet are divided intor rounds, a `u32` number stored in [`Round`].
-//! This value helps this pallet organize itself, and leaves the door open for lazy deletion of any
+//! The operations in this pezpallet are divided intor rounds, a `u32` number stored in [`Round`].
+//! This value helps this pezpallet organize itself, and leaves the door open for lazy deletion of any
 //! stale data. A round, under the happy path, starts by receiving the call to
 //! [`ElectionProvider::start`], and is terminated by receiving a call to
 //! [`ElectionProvider::elect`] with value 0.
 //!
-//! The timeline of pallet is overall as follows:
+//! The timeline of pezpallet is overall as follows:
 //!
 //! ```ignore
 //!  <  Off  >
@@ -121,10 +121,10 @@
 //! * Duration of `Signed`, `SignedValidation` and `Unsigned` are determined by
 //!   [`Config::SignedPhase`], [`Config::SignedValidationPhase`] and [`Config::UnsignedPhase`]
 //!   respectively.
-//! * [`Config::Pages`] calls to elect are expected, but all in all the pallet will close a round
+//! * [`Config::Pages`] calls to elect are expected, but all in all the pezpallet will close a round
 //!   once `elect(0)` is called.
 //!
-//! > Given this, it is rather important for the user of this pallet to ensure it always terminates
+//! > Given this, it is rather important for the user of this pezpallet to ensure it always terminates
 //! > election via `elect` before requesting a new one.
 //!
 //! ## Feasible Solution (correct solution)
@@ -149,7 +149,7 @@
 //!
 //! 1. Do nothing: [`Continue`]
 //! 2. Force us into the emergency phase: [`crate::InitiateEmergencyPhase`]. This initiates
-//!    [`Phase::Emergency`], which will halt almost all operations of this pallet, and it can only
+//!    [`Phase::Emergency`], which will halt almost all operations of this pezpallet, and it can only
 //!    be recovered by [`AdminOperation`], dispatched via [`Call::manage`].
 //! 3. compute an onchain from the give page of snapshot.
 //!
@@ -163,7 +163,7 @@
 //!    we don't have another choice as we cannot request another smaller snapshot from the data
 //!    provider mid-election without more bookkeeping on the staking side.
 //!
-//! If onchain solution is to be seriously considered, an improvement to this pallet should
+//! If onchain solution is to be seriously considered, an improvement to this pezpallet should
 //! re-request a smaller set of voters from `T::DataProvider` in a stateless manner.
 //!
 //! ### Signed Phase
@@ -182,15 +182,15 @@
 // - Naming convention is: `${singular}_page` for singular, e.g. `voter_page` for `Vec<Voter>`.
 //   `paged_${plural}` for plural, e.g. `paged_voters` for `Vec<Vec<Voter>>`.
 //
-// - Since this crate has multiple `Pallet` and `Configs`, in each sub-pallet, we only reference the
-//   local `Pallet` without a prefix and allow it to be imported via `use`. Avoid `super::Pallet`
-//   except for the case of a modules that want to reference their local `Pallet` . The
-//   `crate::Pallet` is always reserved for the parent pallet. Other sibling pallets must be
-//   referenced with full path, e.g. `crate::Verifier::Pallet`. Do NOT write something like `use
-//   unsigned::Pallet as UnsignedPallet`.
+// - Since this crate has multiple `Pezpallet` and `Configs`, in each sub-pezpallet, we only reference the
+//   local `Pezpallet` without a prefix and allow it to be imported via `use`. Avoid `super::Pezpallet`
+//   except for the case of a modules that want to reference their local `Pezpallet` . The
+//   `crate::Pezpallet` is always reserved for the parent pezpallet. Other sibling pallets must be
+//   referenced with full path, e.g. `crate::Verifier::Pezpallet`. Do NOT write something like `use
+//   unsigned::Pezpallet as UnsignedPallet`.
 //
 // - Respecting private storage items with wrapper We move all implementations out of the `mod
-//   pallet` as much as possible to ensure we NEVER access the internal storage items directly. All
+//   pezpallet` as much as possible to ensure we NEVER access the internal storage items directly. All
 //   operations should happen with the wrapper types.
 
 #![cfg_attr(not(feature = "std"), no_std)]
@@ -239,22 +239,22 @@ macro_rules! clear_round_based_map {
 	}};
 }
 
-/// The signed pallet
+/// The signed pezpallet
 pub mod signed;
-/// Common types of the pallet
+/// Common types of the pezpallet
 pub mod types;
-/// The unsigned pallet
+/// The unsigned pezpallet
 pub mod unsigned;
-/// The verifier pallet
+/// The verifier pezpallet
 pub mod verifier;
 /// The weight module
 pub mod weights;
 
-pub use pallet::*;
+pub use pezpallet::*;
 pub use types::*;
 pub use weights::traits::pezpallet_election_provider_multi_block::WeightInfo;
 
-/// A fallback implementation that transitions the pallet to the emergency phase.
+/// A fallback implementation that transitions the pezpallet to the emergency phase.
 pub struct InitiateEmergencyPhase<T>(pezsp_std::marker::PhantomData<T>);
 impl<T: Config> ElectionProvider for InitiateEmergencyPhase<T> {
 	type AccountId = T::AccountId;
@@ -267,7 +267,7 @@ impl<T: Config> ElectionProvider for InitiateEmergencyPhase<T> {
 	type MaxBackersPerWinnerFinal = <T::Verifier as Verifier>::MaxBackersPerWinnerFinal;
 
 	fn elect(_page: PageIndex) -> Result<BoundedSupportsOf<Self>, Self::Error> {
-		Pallet::<T>::phase_transition(Phase::Emergency);
+		Pezpallet::<T>::phase_transition(Phase::Emergency);
 		Err("Emergency phase started.")
 	}
 
@@ -382,7 +382,7 @@ impl<T: Config, Queued, NotQueued> IfSolutionQueuedElse<T, Queued, NotQueued> {
 		let queued_score = <T::Verifier as verifier::Verifier>::queued_score().is_some();
 		#[cfg(debug_assertions)]
 		{
-			let any_pages_queued = (Pallet::<T>::lsp()..=Pallet::<T>::msp()).any(|p| {
+			let any_pages_queued = (Pezpallet::<T>::lsp()..=Pezpallet::<T>::msp()).any(|p| {
 				<T::Verifier as verifier::Verifier>::get_queued_solution_page(p).is_some()
 			});
 			assert_eq!(
@@ -407,9 +407,9 @@ impl<T: Config, Queued: Get<Phase<T>>, NotQueued: Get<Phase<T>>> Get<Phase<T>>
 	}
 }
 
-/// Internal errors of the pallet. This is used in the implementation of [`ElectionProvider`].
+/// Internal errors of the pezpallet. This is used in the implementation of [`ElectionProvider`].
 ///
-/// Note that this is different from [`pallet::Error`].
+/// Note that this is different from [`pezpallet::Error`].
 #[derive(
 	pezframe_support::DebugNoBound, pezframe_support::PartialEqNoBound, pezframe_support::EqNoBound,
 )]
@@ -446,7 +446,7 @@ impl<T: Config> From<verifier::FeasibilityError> for ElectionError<T> {
 	}
 }
 
-/// Different operations that only the [`Config::AdminOrigin`] can perform on the pallet.
+/// Different operations that only the [`Config::AdminOrigin`] can perform on the pezpallet.
 #[derive(
 	Encode,
 	Decode,
@@ -464,7 +464,7 @@ pub enum AdminOperation<T: Config> {
 	/// Set the given (single page) emergency solution.
 	///
 	/// Can only be called in emergency phase.
-	EmergencySetSolution(Box<BoundedSupportsOf<Pallet<T>>>, ElectionScore),
+	EmergencySetSolution(Box<BoundedSupportsOf<Pezpallet<T>>>, ElectionScore),
 	/// Set the minimum untrusted score. This is directly communicated to the verifier component to
 	/// be taken into account.
 	///
@@ -474,7 +474,7 @@ pub enum AdminOperation<T: Config> {
 }
 
 /// Different operations that the [`Config::ManagerOrigin`] (or [`Config::AdminOrigin`]) can perform
-/// on the pallet.
+/// on the pezpallet.
 #[derive(
 	Encode,
 	Decode,
@@ -516,7 +516,7 @@ impl OnRoundRotation for () {
 /// pallets, once the round is over.
 ///
 /// This is intended to be phased out once we move to fully lazy deletion system to spare more PoV.
-/// In that case, simply use `()` on [`pallet::Config::OnRoundRotation`].
+/// In that case, simply use `()` on [`pezpallet::Config::OnRoundRotation`].
 pub struct CleanRound<T>(core::marker::PhantomData<T>);
 impl<T: Config> OnRoundRotation for CleanRound<T> {
 	fn on_round_rotation(_ending: u32) {
@@ -524,38 +524,38 @@ impl<T: Config> OnRoundRotation for CleanRound<T> {
 		T::Verifier::kill();
 
 		// Kill the snapshot.
-		pallet::Snapshot::<T>::kill();
+		pezpallet::Snapshot::<T>::kill();
 
-		// Nothing to do in the signed pallet -- it is already in lazy-deletion mode.
+		// Nothing to do in the signed pezpallet -- it is already in lazy-deletion mode.
 	}
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// Duration of the unsigned phase.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type UnsignedPhase: Get<BlockNumberFor<Self>>;
 		/// Duration of the signed phase.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type SignedPhase: Get<BlockNumberFor<Self>>;
 		/// Duration of the singed validation phase.
 		///
 		/// The duration of this should not be less than `T::Pages`, and there is no point in it
 		/// being more than `SignedPhase::MaxSubmission::get() * T::Pages`. TODO: integrity test for
 		/// it.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type SignedValidationPhase: Get<BlockNumberFor<Self>>;
 
 		/// The number of snapshot voters to fetch per block.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type VoterSnapshotPerBlock: Get<u32>;
 
 		/// The number of snapshot targets to fetch per block.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type TargetSnapshotPerBlock: Get<u32>;
 
 		/// The number of pages.
@@ -564,7 +564,7 @@ pub mod pallet {
 		///
 		/// The solutions may contain at MOST this many pages, but less pages are acceptable as
 		/// well.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type Pages: Get<PageIndex>;
 
 		/// Something that will provide the election data.
@@ -596,15 +596,15 @@ pub mod pallet {
 			MaxWinnersPerPage = <Self::Verifier as verifier::Verifier>::MaxWinnersPerPage,
 		>;
 
-		/// The verifier pallet's interface.
+		/// The verifier pezpallet's interface.
 		type Verifier: verifier::Verifier<
 				Solution = SolutionOf<Self::MinerConfig>,
 				AccountId = Self::AccountId,
 			> + verifier::AsynchronousVerifier;
 
-		/// The origin that can perform administration operations on this pallet.
+		/// The origin that can perform administration operations on this pezpallet.
 		///
-		/// This is the highest privilege origin of this pallet, and should be configured
+		/// This is the highest privilege origin of this pezpallet, and should be configured
 		/// restrictively.
 		type AdminOrigin: EnsureOrigin<Self::RuntimeOrigin>;
 
@@ -618,7 +618,7 @@ pub mod pallet {
 		/// Common implementation is [`ProceedRegardlessOf`] or [`RevertToSignedIfNotQueuedOf`].
 		type AreWeDone: Get<Phase<Self>>;
 
-		/// The weight of the pallet.
+		/// The weight of the pezpallet.
 		type WeightInfo: WeightInfo;
 
 		/// Single type that implement [`super::OnRoundRotation`] to do something when the round
@@ -626,15 +626,15 @@ pub mod pallet {
 		type OnRoundRotation: super::OnRoundRotation;
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
-		/// Manage this pallet.
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
+		/// Manage this pezpallet.
 		///
 		/// The origin of this call must be [`Config::ManagerOrigin`].
 		///
 		/// See [`ManagerOperation`] for various operations that are possible.
-		#[pallet::weight(T::WeightInfo::manage_fallback().max(T::WeightInfo::export_terminal()))]
-		#[pallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::manage_fallback().max(T::WeightInfo::export_terminal()))]
+		#[pezpallet::call_index(0)]
 		pub fn manage(origin: OriginFor<T>, op: ManagerOperation<T>) -> DispatchResultWithPostInfo {
 			T::ManagerOrigin::ensure_origin(origin.clone()).map(|_| ()).or_else(|_| {
 				// try admin origin as well as admin is a superset.
@@ -682,8 +682,8 @@ pub mod pallet {
 			}
 		}
 
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::admin_set())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::admin_set())]
 		pub fn admin(origin: OriginFor<T>, op: AdminOperation<T>) -> DispatchResultWithPostInfo {
 			T::AdminOrigin::ensure_origin(origin)?;
 			match op {
@@ -706,8 +706,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn on_initialize(_now: BlockNumberFor<T>) -> Weight {
 			let current_phase = CurrentPhase::<T>::get();
 			let weight1 = match current_phase {
@@ -790,7 +790,7 @@ pub mod pallet {
 			// We only accept data provider who's maximum votes per voter matches our
 			// `T::Solution`'s `LIMIT`.
 			//
-			// NOTE that this pallet does not really need to enforce this in runtime. The
+			// NOTE that this pezpallet does not really need to enforce this in runtime. The
 			// solution cannot represent any voters more than `LIMIT` anyhow.
 			assert_eq!(
 				<T::DataProvider as ElectionDataProvider>::MaxVotesPerVoter::get(),
@@ -821,8 +821,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A phase transition happened. Only checks major changes in the variants, not minor inner
 		/// values.
@@ -838,8 +838,8 @@ pub mod pallet {
 		UnexpectedVoterSnapshotFailed,
 	}
 
-	/// Error of the pallet that can be returned in response to dispatches.
-	#[pallet::error]
+	/// Error of the pezpallet that can be returned in response to dispatches.
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Triggering the `Fallback` failed.
 		Fallback,
@@ -871,16 +871,16 @@ pub mod pallet {
 	/// Internal counter for the number of rounds.
 	///
 	/// This is useful for de-duplication of transactions submitted to the pool, and general
-	/// diagnostics of the pallet.
+	/// diagnostics of the pezpallet.
 	///
 	/// This is merely incremented once per every time that an upstream `elect` is called.
-	#[pallet::storage]
-	#[pallet::getter(fn round)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn round)]
 	pub type Round<T: Config> = StorageValue<_, u32, ValueQuery>;
 
 	/// Current phase.
-	#[pallet::storage]
-	#[pallet::getter(fn current_phase)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn current_phase)]
 	pub type CurrentPhase<T: Config> = StorageValue<_, Phase<T>, ValueQuery>;
 
 	/// Wrapper struct for working with snapshots.
@@ -928,10 +928,10 @@ pub mod pallet {
 
 		pub(crate) fn set_targets(targets: BoundedVec<T::AccountId, T::TargetSnapshotPerBlock>) {
 			let hash = Self::write_storage_with_pre_allocate(
-				&PagedTargetSnapshot::<T>::hashed_key_for(Self::round(), Pallet::<T>::msp()),
+				&PagedTargetSnapshot::<T>::hashed_key_for(Self::round(), Pezpallet::<T>::msp()),
 				targets,
 			);
-			PagedTargetSnapshotHash::<T>::insert(Self::round(), Pallet::<T>::msp(), hash);
+			PagedTargetSnapshotHash::<T>::insert(Self::round(), Pezpallet::<T>::msp(), hash);
 		}
 
 		pub(crate) fn set_voters(page: PageIndex, voters: VoterPageOf<T::MinerConfig>) {
@@ -964,7 +964,7 @@ pub mod pallet {
 
 		pub(crate) fn targets() -> Option<BoundedVec<T::AccountId, T::TargetSnapshotPerBlock>> {
 			// NOTE: targets always have one index, which is 0, aka lsp.
-			PagedTargetSnapshot::<T>::get(Self::round(), Pallet::<T>::msp())
+			PagedTargetSnapshot::<T>::get(Self::round(), Pezpallet::<T>::msp())
 		}
 
 		/// Get a fingerprint of the snapshot, from all the hashes that are stored for each page of
@@ -976,7 +976,7 @@ pub mod pallet {
 		pub fn fingerprint() -> T::Hash {
 			let mut hashed_target_and_voters =
 				Self::targets_hash().unwrap_or_default().as_ref().to_vec();
-			let hashed_voters = (Pallet::<T>::msp()..=Pallet::<T>::lsp())
+			let hashed_voters = (Pezpallet::<T>::msp()..=Pezpallet::<T>::lsp())
 				.map(|i| PagedVoterSnapshotHash::<T>::get(Self::round(), i).unwrap_or_default())
 				.flat_map(|hash| <T::Hash as AsRef<[u8]>>::as_ref(&hash).to_owned())
 				.collect::<Vec<u8>>();
@@ -1001,11 +1001,11 @@ pub mod pallet {
 		}
 
 		pub(crate) fn targets_hash() -> Option<T::Hash> {
-			PagedTargetSnapshotHash::<T>::get(Self::round(), Pallet::<T>::msp())
+			PagedTargetSnapshotHash::<T>::get(Self::round(), Pezpallet::<T>::msp())
 		}
 
 		fn round() -> u32 {
-			Pallet::<T>::round()
+			Pezpallet::<T>::round()
 		}
 	}
 
@@ -1034,7 +1034,7 @@ pub mod pallet {
 			up_to_page = up_to_page.min(T::Pages::get());
 			// ensure that voter pages that should exist, indeed to exist..
 			let mut sum_existing_voters: usize = 0;
-			for p in (crate::Pallet::<T>::lsp()..=crate::Pallet::<T>::msp())
+			for p in (crate::Pezpallet::<T>::lsp()..=crate::Pezpallet::<T>::msp())
 				.rev()
 				.take(up_to_page as usize)
 			{
@@ -1052,7 +1052,7 @@ pub mod pallet {
 			}
 
 			// ..and those that should not exist, indeed DON'T.
-			for p in (crate::Pallet::<T>::lsp()..=crate::Pallet::<T>::msp())
+			for p in (crate::Pezpallet::<T>::lsp()..=crate::Pezpallet::<T>::msp())
 				.take((T::Pages::get() - up_to_page) as usize)
 			{
 				ensure!(
@@ -1083,7 +1083,7 @@ pub mod pallet {
 			);
 
 			// ensure that voter pages that should exist, indeed to exist..
-			for p in crate::Pallet::<T>::lsp()..=crate::Pallet::<T>::msp() {
+			for p in crate::Pezpallet::<T>::lsp()..=crate::Pezpallet::<T>::msp() {
 				ensure!(
 					Self::voters_hash(p).is_some() &&
 						Self::voters_decode_len(p).unwrap_or_default() as u32 ==
@@ -1100,7 +1100,7 @@ pub mod pallet {
 		}
 
 		pub(crate) fn targets_decode_len() -> Option<usize> {
-			PagedTargetSnapshot::<T>::decode_len(Self::round(), Pallet::<T>::msp())
+			PagedTargetSnapshot::<T>::decode_len(Self::round(), Pezpallet::<T>::msp())
 		}
 
 		pub(crate) fn voters_hash(page: PageIndex) -> Option<T::Hash> {
@@ -1110,7 +1110,7 @@ pub mod pallet {
 		pub(crate) fn sanity_check() -> Result<(), &'static str> {
 			// check the snapshot existence based on the phase. This checks all of the needed
 			// conditions except for the metadata values.
-			let phase = Pallet::<T>::current_phase();
+			let phase = Pezpallet::<T>::current_phase();
 			let _ = match phase {
 				// no page should exist in this phase.
 				Phase::Off => Self::ensure_snapshot(false, T::Pages::get()),
@@ -1151,7 +1151,7 @@ pub mod pallet {
 
 		pub(crate) fn voters_iter_flattened() -> impl Iterator<Item = VoterOf<T::MinerConfig>> {
 			let key_range =
-				(crate::Pallet::<T>::lsp()..=crate::Pallet::<T>::msp()).collect::<Vec<_>>();
+				(crate::Pezpallet::<T>::lsp()..=crate::Pezpallet::<T>::msp()).collect::<Vec<_>>();
 			key_range
 				.into_iter()
 				.flat_map(|k| PagedVoterSnapshot::<T>::get(Self::round(), k).unwrap_or_default())
@@ -1166,20 +1166,20 @@ pub mod pallet {
 		}
 
 		pub(crate) fn remove_target_page() {
-			PagedTargetSnapshot::<T>::remove(Self::round(), Pallet::<T>::msp());
+			PagedTargetSnapshot::<T>::remove(Self::round(), Pezpallet::<T>::msp());
 		}
 
 		pub(crate) fn remove_target(at: usize) {
 			PagedTargetSnapshot::<T>::mutate(
 				Self::round(),
-				crate::Pallet::<T>::msp(),
+				crate::Pezpallet::<T>::msp(),
 				|maybe_targets| {
 					if let Some(targets) = maybe_targets {
 						targets.remove(at);
 						// and update the hash.
 						PagedTargetSnapshotHash::<T>::insert(
 							Self::round(),
-							crate::Pallet::<T>::msp(),
+							crate::Pezpallet::<T>::msp(),
 							T::Hashing::hash(&targets.encode()),
 						)
 					} else {
@@ -1191,10 +1191,10 @@ pub mod pallet {
 	}
 
 	/// Desired number of targets to elect for this round.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type DesiredTargets<T> = StorageMap<_, Twox64Concat, u32, u32>;
 	/// Paginated voter snapshot. At most [`T::Pages`] keys will exist.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type PagedVoterSnapshot<T: Config> = StorageDoubleMap<
 		_,
 		Twox64Concat,
@@ -1206,13 +1206,13 @@ pub mod pallet {
 	/// Same as [`PagedVoterSnapshot`], but it will store the hash of the snapshot.
 	///
 	/// The hash is generated using [`pezframe_system::Config::Hashing`].
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type PagedVoterSnapshotHash<T: Config> =
 		StorageDoubleMap<_, Twox64Concat, u32, Twox64Concat, PageIndex, T::Hash>;
 	/// Paginated target snapshot.
 	///
 	/// For the time being, since we assume one pages of targets, at most ONE key will exist.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type PagedTargetSnapshot<T: Config> = StorageDoubleMap<
 		_,
 		Twox64Concat,
@@ -1224,15 +1224,15 @@ pub mod pallet {
 	/// Same as [`PagedTargetSnapshot`], but it will store the hash of the snapshot.
 	///
 	/// The hash is generated using [`pezframe_system::Config::Hashing`].
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type PagedTargetSnapshotHash<T: Config> =
 		StorageDoubleMap<_, Twox64Concat, u32, Twox64Concat, PageIndex, T::Hash>;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(PhantomData<T>);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(PhantomData<T>);
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Returns the most significant page of the snapshot.
 	///
 	/// Based on the contract of `ElectionDataProvider`, this is the first page that is filled.
@@ -1440,7 +1440,7 @@ impl<T: Config> Pallet<T> {
 #[allow(unused)]
 #[cfg(any(feature = "runtime-benchmarks", test))]
 // helper code for testing and benchmarking
-impl<T> Pallet<T>
+impl<T> Pezpallet<T>
 where
 	T: Config + crate::signed::Config + crate::unsigned::Config + crate::verifier::Config,
 	BlockNumberFor<T>: From<u32>,
@@ -1461,7 +1461,7 @@ where
 		loop {
 			let should_break = pezframe_support::storage::with_transaction(
 				|| -> TransactionOutcome<Result<_, DispatchError>> {
-					Pallet::<T>::roll_next(true, false);
+					Pezpallet::<T>::roll_next(true, false);
 					if criteria() {
 						TransactionOutcome::Rollback(Ok(true))
 					} else {
@@ -1500,12 +1500,12 @@ where
 		use types::Pagify;
 
 		// register alice
-		let alice = crate::Pallet::<T>::funded_account("alice", 0);
-		signed::Pallet::<T>::register(RawOrigin::Signed(alice.clone()).into(), score)?;
+		let alice = crate::Pezpallet::<T>::funded_account("alice", 0);
+		signed::Pezpallet::<T>::register(RawOrigin::Signed(alice.clone()).into(), score)?;
 
 		// submit pages
 		for (index, page) in solution_pages.pagify(T::Pages::get()) {
-			signed::Pallet::<T>::submit_page(
+			signed::Pezpallet::<T>::submit_page(
 				RawOrigin::Signed(alice.clone()).into(),
 				index,
 				Some(Box::new(page.clone())),
@@ -1557,27 +1557,27 @@ where
 
 	/// Roll all pallets forward, for the given number of blocks.
 	pub(crate) fn roll_to(n: BlockNumberFor<T>, with_signed: bool, try_state: bool) {
-		let now = pezframe_system::Pallet::<T>::block_number();
+		let now = pezframe_system::Pezpallet::<T>::block_number();
 		assert!(n > now, "cannot roll to current or past block");
 		let one: BlockNumberFor<T> = 1u32.into();
 		let mut i = now + one;
 		while i <= n {
-			pezframe_system::Pallet::<T>::set_block_number(i);
+			pezframe_system::Pezpallet::<T>::set_block_number(i);
 
-			Pallet::<T>::on_initialize(i);
-			verifier::Pallet::<T>::on_initialize(i);
-			unsigned::Pallet::<T>::on_initialize(i);
+			Pezpallet::<T>::on_initialize(i);
+			verifier::Pezpallet::<T>::on_initialize(i);
+			unsigned::Pezpallet::<T>::on_initialize(i);
 
 			if with_signed {
-				signed::Pallet::<T>::on_initialize(i);
+				signed::Pezpallet::<T>::on_initialize(i);
 			}
 
 			// invariants must hold at the end of each block.
 			if try_state {
-				Pallet::<T>::do_try_state(i).unwrap();
-				verifier::Pallet::<T>::do_try_state(i).unwrap();
-				unsigned::Pallet::<T>::do_try_state(i).unwrap();
-				signed::Pallet::<T>::do_try_state(i).unwrap();
+				Pezpallet::<T>::do_try_state(i).unwrap();
+				verifier::Pezpallet::<T>::do_try_state(i).unwrap();
+				unsigned::Pezpallet::<T>::do_try_state(i).unwrap();
+				signed::Pezpallet::<T>::do_try_state(i).unwrap();
 			}
 
 			i += one;
@@ -1587,14 +1587,14 @@ where
 	/// Roll to next block.
 	pub(crate) fn roll_next(with_signed: bool, try_state: bool) {
 		Self::roll_to(
-			pezframe_system::Pallet::<T>::block_number() + 1u32.into(),
+			pezframe_system::Pezpallet::<T>::block_number() + 1u32.into(),
 			with_signed,
 			try_state,
 		);
 	}
 }
 
-impl<T: Config> ElectionProvider for Pallet<T> {
+impl<T: Config> ElectionProvider for Pezpallet<T> {
 	type AccountId = T::AccountId;
 	type BlockNumber = BlockNumberFor<T>;
 	type Error = ElectionError<T>;
@@ -1630,7 +1630,7 @@ impl<T: Config> ElectionProvider for Pallet<T> {
 			.map_err(|err| {
 				// if any pages returns an error, we go into the emergency phase and don't do
 				// anything else anymore. This will prevent any new submissions to signed and
-				// unsigned pallet, and thus the verifier will also be almost stuck, except for the
+				// unsigned pezpallet, and thus the verifier will also be almost stuck, except for the
 				// submission of emergency solutions.
 				log!(debug, "fallback also ({:?}) failed for page {:?}", err, remaining);
 				err
@@ -2468,8 +2468,8 @@ mod election_provider {
 			assert_eq!(Round::<Runtime>::get(), 1);
 			// and the snapshot is cleared,
 			assert_storage_noop!(Snapshot::<Runtime>::kill());
-			// signed pallet is clean.
-			// NOTE: in the future, if and when we add lazy cleanup to the signed pallet, this
+			// signed pezpallet is clean.
+			// NOTE: in the future, if and when we add lazy cleanup to the signed pezpallet, this
 			// assertion might break.
 			assert_ok!(signed::Submissions::<Runtime>::ensure_killed(0));
 		});
@@ -2518,7 +2518,7 @@ mod election_provider {
 			assert_full_snapshot();
 
 			// there are 3 pages (indexes 2..=0), but we short circuit by just calling 0.
-			let _solution = crate::Pallet::<Runtime>::elect(0).unwrap();
+			let _solution = crate::Pezpallet::<Runtime>::elect(0).unwrap();
 
 			// round is incremented.
 			assert_eq!(MultiBlock::round(), round + 1);
@@ -2530,7 +2530,7 @@ mod election_provider {
 			assert_eq!(Round::<Runtime>::get(), 1);
 			// the snapshot is cleared,
 			assert_none_snapshot();
-			// and signed pallet is clean.
+			// and signed pezpallet is clean.
 			assert_ok!(signed::Submissions::<Runtime>::ensure_killed(round));
 		});
 	}
@@ -2580,7 +2580,7 @@ mod election_provider {
 			let solutions = (1..=MultiBlock::msp())
 				.rev() // 2, 1
 				.map(|page| {
-					crate::Pallet::<Runtime>::elect(page as PageIndex).unwrap();
+					crate::Pezpallet::<Runtime>::elect(page as PageIndex).unwrap();
 					assert!(MultiBlock::current_phase().is_export());
 				})
 				.collect::<Vec<_>>();
@@ -2675,7 +2675,7 @@ mod election_provider {
 			assert_eq!(MultiBlock::current_phase(), Phase::Off);
 			// the snapshot is cleared,
 			assert_storage_noop!(Snapshot::<Runtime>::kill());
-			// and signed pallet is clean.
+			// and signed pezpallet is clean.
 			assert_ok!(signed::Submissions::<Runtime>::ensure_killed(round));
 		});
 	}
@@ -2904,7 +2904,7 @@ mod manage_ops {
 	// This scenario have multiple outcomes:
 	// 1. rotate in off => almost a noop
 	// 2. rotate mid signed, validation, unsigned, done, but NOT export => clear all data, move to
-	//    next round and be off. Note: all of the data in this pallet is indexed by the round index,
+	//    next round and be off. Note: all of the data in this pezpallet is indexed by the round index,
 	//    so moving to the next round will implicitly make the old data unavaioable, even if not
 	//    cleared out. This secnario needs further testing.
 	// 3. rotate mid export: same as above, except staking will be out of sync and will also need
@@ -2923,7 +2923,7 @@ mod manage_ops {
 
 			// we have snapshot data now for this round.
 			assert_full_snapshot();
-			// there is some data in the verifier pallet
+			// there is some data in the verifier pezpallet
 			assert!(verifier::QueuedSolution::<T>::queued_score().is_some());
 			// phase is
 			assert_eq!(MultiBlock::current_phase(), Phase::SignedValidation(2));

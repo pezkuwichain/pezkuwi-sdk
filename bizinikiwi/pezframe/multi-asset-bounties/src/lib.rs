@@ -24,7 +24,7 @@
 //! [github]: https://img.shields.io/badge/github-8da0cb?style=for-the-badge&labelColor=555555&logo=github
 //!
 //!
-//! # Multi Asset Bounties Pallet ( `pezpallet-multi-asset-bounties` )
+//! # Multi Asset Bounties Pezpallet ( `pezpallet-multi-asset-bounties` )
 //!
 //! ## Bounty
 //!
@@ -62,9 +62,9 @@
 //! 2. Award a bounty to a beneficiary.
 #![doc = docify::embed!("src/tests.rs", award_bounty_works)]
 //!
-//! ## Pallet API
+//! ## Pezpallet API
 //!
-//! See the [`pallet`] module for more information about the interfaces this pallet exposes,
+//! See the [`pezpallet`] module for more information about the interfaces this pezpallet exposes,
 //! including its configuration trait, dispatchables, storage items, events and errors.
 
 #![cfg_attr(not(feature = "std"), no_std)]
@@ -75,7 +75,7 @@ mod tests;
 pub mod weights;
 #[cfg(feature = "runtime-benchmarks")]
 pub use benchmarking::ArgumentsFactory;
-pub use pallet::*;
+pub use pezpallet::*;
 pub use weights::WeightInfo;
 
 extern crate alloc;
@@ -256,17 +256,17 @@ impl<Id: Clone> PaymentState<Id> {
 	}
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(1);
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T, I = ()>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T, I = ()>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config {
 		/// The type in which the assets are measured.
 		type Balance: Balance;
@@ -289,18 +289,18 @@ pub mod pallet {
 		type BeneficiaryLookup: StaticLookup<Target = Self::Beneficiary>;
 
 		/// Minimum value for a bounty.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type BountyValueMinimum: Get<BalanceOf<Self, I>>;
 
 		/// Minimum value for a child-bounty.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type ChildBountyValueMinimum: Get<BalanceOf<Self, I>>;
 
 		/// Maximum number of child bounties that can be added to a parent bounty.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxActiveChildBountyCount: Get<u32>;
 
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 
 		/// Converts an `AssetKind` into the funding source account/location.
@@ -308,7 +308,7 @@ pub mod pallet {
 		/// Used when initiating funding and refund payments to and from a bounty.
 		type FundingSource: TryConvert<
 			Self::AssetKind,
-			<<Self as pallet::Config<I>>::Paymaster as PayWithSource>::Source,
+			<<Self as pezpallet::Config<I>>::Paymaster as PayWithSource>::Source,
 		>;
 
 		/// Converts a bounty index and `AssetKind` into its account/location.
@@ -316,7 +316,7 @@ pub mod pallet {
 		/// Used when initiating the funding, refund, and payout payments to and from a bounty.
 		type BountySource: TryConvert<
 			(BountyIndex, Self::AssetKind),
-			<<Self as pallet::Config<I>>::Paymaster as PayWithSource>::Source,
+			<<Self as pezpallet::Config<I>>::Paymaster as PayWithSource>::Source,
 		>;
 
 		/// Converts a parent bounty index, child bounty index, and `AssetKind` into the
@@ -326,7 +326,7 @@ pub mod pallet {
 		/// child-bounty.
 		type ChildBountySource: TryConvert<
 			(BountyIndex, BountyIndex, Self::AssetKind),
-			<<Self as pallet::Config<I>>::Paymaster as PayWithSource>::Source,
+			<<Self as pezpallet::Config<I>>::Paymaster as PayWithSource>::Source,
 		>;
 
 		/// Type for processing payments of [`Self::AssetKind`] from a `Source` in favor of
@@ -367,7 +367,7 @@ pub mod pallet {
 		>;
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T, I = ()> {
 		/// No child-/bounty at that index.
 		InvalidIndex,
@@ -410,8 +410,8 @@ pub mod pallet {
 		PreimageNotExist,
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config<I>, I: 'static = ()> {
 		/// A new bounty was created and funding has been initiated.
 		BountyCreated { index: BountyIndex },
@@ -461,8 +461,8 @@ pub mod pallet {
 		Paid { index: BountyIndex, child_index: Option<BountyIndex>, payment_id: PaymentIdOf<T, I> },
 	}
 
-	/// A reason for this pallet placing a hold on funds.
-	#[pallet::composite_enum]
+	/// A reason for this pezpallet placing a hold on funds.
+	#[pezpallet::composite_enum]
 	pub enum HoldReason<I: 'static = ()> {
 		/// The funds are held as deposit for the curator commitment to a bounty.
 		#[codec(index = 0)]
@@ -470,18 +470,18 @@ pub mod pallet {
 	}
 
 	/// Number of bounty proposals that have been made.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type BountyCount<T: Config<I>, I: 'static = ()> = StorageValue<_, BountyIndex, ValueQuery>;
 
 	/// Bounties that have been made.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Bounties<T: Config<I>, I: 'static = ()> =
 		StorageMap<_, Twox64Concat, BountyIndex, BountyOf<T, I>>;
 
 	/// Child bounties that have been added.
 	///
 	/// Indexed by `(parent_bounty_id, child_bounty_id)`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ChildBounties<T: Config<I>, I: 'static = ()> = StorageDoubleMap<
 		_,
 		Twox64Concat,
@@ -494,14 +494,14 @@ pub mod pallet {
 	/// Number of active child bounties per parent bounty.
 	///
 	/// Indexed by `parent_bounty_id`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ChildBountiesPerParent<T: Config<I>, I: 'static = ()> =
 		StorageMap<_, Twox64Concat, BountyIndex, u32, ValueQuery>;
 
 	/// Number of total child bounties per parent bounty, including completed bounties.
 	///
 	/// Indexed by `parent_bounty_id`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type TotalChildBountiesPerParent<T: Config<I>, I: 'static = ()> =
 		StorageMap<_, Twox64Concat, BountyIndex, u32, ValueQuery>;
 
@@ -509,13 +509,13 @@ pub mod pallet {
 	/// bounty payout when awarding bounty.
 	///
 	/// Indexed by `parent_bounty_id`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ChildBountiesValuePerParent<T: Config<I>, I: 'static = ()> =
 		StorageMap<_, Twox64Concat, BountyIndex, BalanceOf<T, I>, ValueQuery>;
 
 	/// The consideration cost incurred by the child-/bounty curator for committing to the role.
 	///
-	/// Determined by [`pallet::Config::Consideration`]. It is created when the curator accepts the
+	/// Determined by [`pezpallet::Config::Consideration`]. It is created when the curator accepts the
 	/// role, and is either burned if the curator misbehaves or consumed upon successful
 	/// completion of the child-/bounty.
 	///
@@ -524,7 +524,7 @@ pub mod pallet {
 	/// accepts the role for the parent bounty.
 	///
 	/// Indexed by `(parent_bounty_id, child_bounty_id)`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type CuratorDeposit<T: Config<I>, I: 'static = ()> = StorageDoubleMap<
 		_,
 		Twox64Concat,
@@ -540,8 +540,8 @@ pub mod pallet {
 		pub spend_in_context: BTreeMap<Balance, Balance>,
 	}
 
-	#[pallet::call]
-	impl<T: Config<I>, I: 'static> Pallet<T, I> {
+	#[pezpallet::call]
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 		/// Fund a new bounty with a proposed curator, initiating the payment from the
 		/// funding source to the bounty account/location.
 		///
@@ -566,12 +566,12 @@ pub mod pallet {
 		/// ## Events
 		///
 		/// Emits [`Event::BountyCreated`] and [`Event::Paid`] if successful.
-		#[pallet::call_index(0)]
-		#[pallet::weight(<T as Config<I>>::WeightInfo::fund_bounty())]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(<T as Config<I>>::WeightInfo::fund_bounty())]
 		pub fn fund_bounty(
 			origin: OriginFor<T>,
 			asset_kind: Box<T::AssetKind>,
-			#[pallet::compact] value: BalanceOf<T, I>,
+			#[pezpallet::compact] value: BalanceOf<T, I>,
 			curator: AccountIdLookupOf<T>,
 			metadata: T::Hash,
 		) -> DispatchResult {
@@ -640,12 +640,12 @@ pub mod pallet {
 		/// ## Events
 		///
 		/// Emits [`Event::ChildBountyCreated`] and [`Event::Paid`] if successful.
-		#[pallet::call_index(1)]
-		#[pallet::weight(<T as Config<I>>::WeightInfo::fund_child_bounty())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(<T as Config<I>>::WeightInfo::fund_child_bounty())]
 		pub fn fund_child_bounty(
 			origin: OriginFor<T>,
-			#[pallet::compact] parent_bounty_id: BountyIndex,
-			#[pallet::compact] value: BalanceOf<T, I>,
+			#[pezpallet::compact] parent_bounty_id: BountyIndex,
+			#[pezpallet::compact] value: BalanceOf<T, I>,
 			curator: Option<AccountIdLookupOf<T>>,
 			metadata: T::Hash,
 		) -> DispatchResult {
@@ -750,14 +750,14 @@ pub mod pallet {
 		/// ## Events
 		///
 		/// Emits [`Event::CuratorProposed`] if successful.
-		#[pallet::call_index(2)]
-		#[pallet::weight(match child_bounty_id {
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(match child_bounty_id {
 			None => <T as Config<I>>::WeightInfo::propose_curator_parent_bounty(),
 			Some(_) => <T as Config<I>>::WeightInfo::propose_curator_child_bounty(),
 		})]
 		pub fn propose_curator(
 			origin: OriginFor<T>,
-			#[pallet::compact] parent_bounty_id: BountyIndex,
+			#[pezpallet::compact] parent_bounty_id: BountyIndex,
 			child_bounty_id: Option<BountyIndex>,
 			curator: AccountIdLookupOf<T>,
 		) -> DispatchResult {
@@ -818,11 +818,11 @@ pub mod pallet {
 		/// ## Events
 		///
 		/// Emits [`Event::BountyBecameActive`] if successful.
-		#[pallet::call_index(3)]
-		#[pallet::weight(<T as Config<I>>::WeightInfo::accept_curator())]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(<T as Config<I>>::WeightInfo::accept_curator())]
 		pub fn accept_curator(
 			origin: OriginFor<T>,
-			#[pallet::compact] parent_bounty_id: BountyIndex,
+			#[pezpallet::compact] parent_bounty_id: BountyIndex,
 			child_bounty_id: Option<BountyIndex>,
 		) -> DispatchResult {
 			let signer = ensure_signed(origin)?;
@@ -877,11 +877,11 @@ pub mod pallet {
 		/// ## Events
 		///
 		/// Emits [`Event::CuratorUnassigned`] if successful.
-		#[pallet::call_index(4)]
-		#[pallet::weight(<T as Config<I>>::WeightInfo::unassign_curator())]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(<T as Config<I>>::WeightInfo::unassign_curator())]
 		pub fn unassign_curator(
 			origin: OriginFor<T>,
-			#[pallet::compact] parent_bounty_id: BountyIndex,
+			#[pezpallet::compact] parent_bounty_id: BountyIndex,
 			child_bounty_id: Option<BountyIndex>,
 		) -> DispatchResult {
 			let maybe_sender = ensure_signed(origin.clone())
@@ -978,11 +978,11 @@ pub mod pallet {
 		/// ## Events
 		///
 		/// Emits [`Event::BountyAwarded`] and [`Event::Paid`] if successful.
-		#[pallet::call_index(5)]
-		#[pallet::weight(<T as Config<I>>::WeightInfo::award_bounty())]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(<T as Config<I>>::WeightInfo::award_bounty())]
 		pub fn award_bounty(
 			origin: OriginFor<T>,
-			#[pallet::compact] parent_bounty_id: BountyIndex,
+			#[pezpallet::compact] parent_bounty_id: BountyIndex,
 			child_bounty_id: Option<BountyIndex>,
 			beneficiary: BeneficiaryLookupOf<T, I>,
 		) -> DispatchResult {
@@ -1052,14 +1052,14 @@ pub mod pallet {
 		/// ## Events
 		///
 		/// Emits [`Event::BountyCanceled`] and [`Event::Paid`] if successful.
-		#[pallet::call_index(6)]
-		#[pallet::weight(match child_bounty_id {
+		#[pezpallet::call_index(6)]
+		#[pezpallet::weight(match child_bounty_id {
 			None => <T as Config<I>>::WeightInfo::close_parent_bounty(),
 			Some(_) => <T as Config<I>>::WeightInfo::close_child_bounty(),
 		})]
 		pub fn close_bounty(
 			origin: OriginFor<T>,
-			#[pallet::compact] parent_bounty_id: BountyIndex,
+			#[pezpallet::compact] parent_bounty_id: BountyIndex,
 			child_bounty_id: Option<BountyIndex>,
 		) -> DispatchResult {
 			let maybe_sender = ensure_signed(origin.clone())
@@ -1149,13 +1149,13 @@ pub mod pallet {
 		/// Emits [`Event::BountyRefundProcessed`] if the refund payment has succeed.
 		/// Emits [`Event::BountyPayoutProcessed`] if the payout payment has succeed.
 		/// Emits [`Event::PaymentFailed`] if the funding, refund our payment payment has failed.
-		#[pallet::call_index(7)]
-		#[pallet::weight(<T as Config<I>>::WeightInfo::check_status_funding().max(
+		#[pezpallet::call_index(7)]
+		#[pezpallet::weight(<T as Config<I>>::WeightInfo::check_status_funding().max(
 			<T as Config<I>>::WeightInfo::check_status_refund(),
 		).max(<T as Config<I>>::WeightInfo::check_status_payout()))]
 		pub fn check_status(
 			origin: OriginFor<T>,
-			#[pallet::compact] parent_bounty_id: BountyIndex,
+			#[pezpallet::compact] parent_bounty_id: BountyIndex,
 			child_bounty_id: Option<BountyIndex>,
 		) -> DispatchResultWithPostInfo {
 			use BountyStatus::*;
@@ -1299,13 +1299,13 @@ pub mod pallet {
 		/// ## Events
 		///
 		/// Emits [`Event::Paid`] if the funding, refund or payout payment has initiated.
-		#[pallet::call_index(8)]
-		#[pallet::weight(<T as Config<I>>::WeightInfo::retry_payment_funding().max(
+		#[pezpallet::call_index(8)]
+		#[pezpallet::weight(<T as Config<I>>::WeightInfo::retry_payment_funding().max(
 			<T as Config<I>>::WeightInfo::retry_payment_refund(),
 		).max(<T as Config<I>>::WeightInfo::retry_payment_payout()))]
 		pub fn retry_payment(
 			origin: OriginFor<T>,
-			#[pallet::compact] parent_bounty_id: BountyIndex,
+			#[pezpallet::compact] parent_bounty_id: BountyIndex,
 			child_bounty_id: Option<BountyIndex>,
 		) -> DispatchResultWithPostInfo {
 			use BountyStatus::*;
@@ -1375,8 +1375,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::hooks]
-	impl<T: Config<I>, I: 'static> Hooks<SystemBlockNumberFor<T>> for Pallet<T, I> {
+	#[pezpallet::hooks]
+	impl<T: Config<I>, I: 'static> Hooks<SystemBlockNumberFor<T>> for Pezpallet<T, I> {
 		#[cfg(feature = "try-runtime")]
 		fn try_state(_n: SystemBlockNumberFor<T>) -> Result<(), pezsp_runtime::TryRuntimeError> {
 			Self::do_try_state()
@@ -1385,10 +1385,10 @@ pub mod pallet {
 }
 
 #[cfg(any(feature = "try-runtime", test))]
-impl<T: Config<I>, I: 'static> Pallet<T, I> {
-	/// Ensure the correctness of the state of this pallet.
+impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
+	/// Ensure the correctness of the state of this pezpallet.
 	///
-	/// This should be valid before or after each state transition of this pallet.
+	/// This should be valid before or after each state transition of this pezpallet.
 	pub fn do_try_state() -> Result<(), pezsp_runtime::TryRuntimeError> {
 		Self::try_state_bounties_count()?;
 
@@ -1433,7 +1433,7 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 	}
 }
 
-impl<T: Config<I>, I: 'static> Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 	/// The account/location of the funding source.
 	pub fn funding_source_account(
 		asset_kind: T::AssetKind,
@@ -1687,7 +1687,7 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 	) -> Result<PaymentState<PaymentIdOf<T, I>>, DispatchError> {
 		let payment_id = payment_status.get_attempt_id().ok_or(Error::<T, I>::UnexpectedStatus)?;
 
-		match <T as pallet::Config<I>>::Paymaster::check_payment(payment_id) {
+		match <T as pezpallet::Config<I>>::Paymaster::check_payment(payment_id) {
 			PaymentStatus::Success => {
 				Self::deposit_event(Event::<T, I>::BountyRefundProcessed {
 					index: parent_bounty_id,
@@ -1755,7 +1755,7 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 	) -> Result<PaymentState<PaymentIdOf<T, I>>, DispatchError> {
 		let payment_id = payment_status.get_attempt_id().ok_or(Error::<T, I>::UnexpectedStatus)?;
 
-		match <T as pallet::Config<I>>::Paymaster::check_payment(payment_id) {
+		match <T as pezpallet::Config<I>>::Paymaster::check_payment(payment_id) {
 			PaymentStatus::Success => {
 				let payout = Self::calculate_payout(parent_bounty_id, child_bounty_id, value);
 

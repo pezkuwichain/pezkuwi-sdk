@@ -16,7 +16,7 @@
 // limitations under the License.
 
 //! A migration that unreserves all deposit and unlocks all stake held in the context of this
-//! pallet.
+//! pezpallet.
 
 use alloc::collections::btree_map::BTreeMap;
 use core::iter::Sum;
@@ -43,17 +43,17 @@ pub trait UnlockConfig<I>: 'static {
 	type AccountId: Parameter + Ord;
 	/// The currency type used in the runtime.
 	///
-	/// Should match the currency type previously used for the pallet, if applicable.
+	/// Should match the currency type previously used for the pezpallet, if applicable.
 	type Currency: LockableCurrency<Self::AccountId> + ReservableCurrency<Self::AccountId>;
 	/// Base deposit to report a tip.
 	///
-	/// Should match the currency type previously used for the pallet, if applicable.
+	/// Should match the currency type previously used for the pezpallet, if applicable.
 	type TipReportDepositBase: pezsp_core::Get<BalanceOf<Self, I>>;
 	/// Deposit per byte to report a tip.
 	///
-	/// Should match the currency type previously used for the pallet, if applicable.
+	/// Should match the currency type previously used for the pezpallet, if applicable.
 	type DataDepositPerByte: pezsp_core::Get<BalanceOf<Self, I>>;
-	/// The name of the pallet as previously configured in
+	/// The name of the pezpallet as previously configured in
 	/// [`construct_runtime!`](pezframe_support::construct_runtime).
 	type PalletName: pezsp_core::Get<&'static str>;
 	/// The DB weight as configured in the runtime to calculate the correct weight.
@@ -80,21 +80,21 @@ type Tips<T: UnlockConfig<I>, I: 'static> = StorageMap<
 
 /// A migration that unreserves all tip deposits.
 ///
-/// Useful to prevent funds from being locked up when the pallet is deprecated.
+/// Useful to prevent funds from being locked up when the pezpallet is deprecated.
 ///
-/// The pallet should be made inoperable before or immediately after this migration is run.
+/// The pezpallet should be made inoperable before or immediately after this migration is run.
 ///
 /// (See also the `RemovePallet` migration in `frame/support/src/migrations.rs`)
 pub struct UnreserveDeposits<T: UnlockConfig<I>, I: 'static>(core::marker::PhantomData<(T, I)>);
 
 impl<T: UnlockConfig<I>, I: 'static> UnreserveDeposits<T, I> {
-	/// Calculates and returns the total amount reserved by each account by this pallet from open
+	/// Calculates and returns the total amount reserved by each account by this pezpallet from open
 	/// tips.
 	///
 	/// # Returns
 	///
 	/// * `BTreeMap<T::AccountId, T::Balance>`: Map of account IDs to their respective total
-	///   reserved balance by this pallet
+	///   reserved balance by this pezpallet
 	/// * `pezframe_support::weights::Weight`: The weight of this operation.
 	fn get_deposits() -> (BTreeMap<T::AccountId, BalanceOf<T, I>>, pezframe_support::weights::Weight) {
 		use pezsp_core::Get;
@@ -123,21 +123,21 @@ where
 	/// checks and prints some summary information.
 	///
 	/// Steps:
-	/// 1. Gets the deposited balances for each account stored in this pallet.
+	/// 1. Gets the deposited balances for each account stored in this pezpallet.
 	/// 2. Collects actual pre-migration reserved balances for each account.
 	/// 3. Checks the integrity of the deposited balances.
 	/// 4. Prints summary statistics about the state to be migrated.
 	/// 5. Returns the pre-migration actual reserved balance for each account that will
 	/// be part of the migration.
 	///
-	/// Fails with a `TryRuntimeError` if somehow the amount reserved by this pallet is greater than
+	/// Fails with a `TryRuntimeError` if somehow the amount reserved by this pezpallet is greater than
 	/// the actual total reserved amount for any accounts.
 	#[cfg(feature = "try-runtime")]
 	fn pre_upgrade() -> Result<alloc::vec::Vec<u8>, pezsp_runtime::TryRuntimeError> {
 		use codec::Encode;
 		use pezframe_support::ensure;
 
-		// Get the Tips pallet view of balances it has reserved
+		// Get the Tips pezpallet view of balances it has reserved
 		let (account_deposits, _) = Self::get_deposits();
 
 		// Get the actual amounts reserved for accounts with open tips
@@ -147,7 +147,7 @@ where
 			.collect();
 
 		// The deposit amount must be less than or equal to the reserved amount.
-		// If it is higher, there is either a bug with the pallet or a bug in the calculation of the
+		// If it is higher, there is either a bug with the pezpallet or a bug in the calculation of the
 		// deposit amount.
 		ensure!(
 			account_deposits.iter().all(|(account, deposit)| *deposit <=
@@ -170,7 +170,7 @@ where
 	fn on_runtime_upgrade() -> pezframe_support::weights::Weight {
 		use pezframe_support::traits::Get;
 
-		// Get staked and deposited balances as reported by this pallet.
+		// Get staked and deposited balances as reported by this pezpallet.
 		let (account_deposits, initial_reads) = Self::get_deposits();
 
 		// Deposited funds need to be unreserved.
@@ -198,7 +198,7 @@ where
 		)
 		.map_err(|_| "Failed to decode account_reserved_before_bytes")?;
 
-		// Get deposited balances as reported by this pallet.
+		// Get deposited balances as reported by this pezpallet.
 		let (account_deposits, _) = Self::get_deposits();
 
 		// Check that the reserved balance is reduced by the expected deposited amount.

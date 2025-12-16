@@ -26,7 +26,7 @@ use pezframe_support::{
 	weights::Weight,
 };
 
-/// Migrate the entire storage of this pallet to a new prefix.
+/// Migrate the entire storage of this pezpallet to a new prefix.
 ///
 /// This new prefix must be the same as the one set in construct_runtime. For safety, use
 /// `PalletInfo` to get it, as:
@@ -44,7 +44,7 @@ pub fn migrate<T: pezframe_system::Config, P: GetStorageVersion + PalletInfoAcce
 	if new_pallet_name == old_pallet_name {
 		log::info!(
 			target: LOG_TARGET,
-			"New pallet name is equal to the old pallet name. No migration needs to be done.",
+			"New pezpallet name is equal to the old pezpallet name. No migration needs to be done.",
 		);
 		return Weight::zero();
 	}

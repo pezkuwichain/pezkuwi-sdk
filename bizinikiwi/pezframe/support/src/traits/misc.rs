@@ -796,7 +796,7 @@ impl<T> IsType<T> for T {
 /// you need access to these sub types.
 ///
 /// For example, in FRAME, this trait is implemented for the runtime `Call` enum. Pallets use this
-/// to check if a certain call is an instance of the local pallet's `Call` enum.
+/// to check if a certain call is an instance of the local pezpallet's `Call` enum.
 ///
 /// # Example
 ///
@@ -1001,7 +1001,7 @@ where
 
 /// Something that can estimate the fee of a (frame-based) call.
 ///
-/// Typically, the same pallet that will charge transaction fees will implement this.
+/// Typically, the same pezpallet that will charge transaction fees will implement this.
 pub trait EstimateCallFee<Call, Balance> {
 	/// Estimate the fee of this call.
 	///

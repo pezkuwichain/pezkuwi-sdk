@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Tests for Utility Pallet
+// Tests for Utility Pezpallet
 
 #![cfg(test)]
 
@@ -39,27 +39,27 @@ use pezsp_runtime::{
 type BlockNumber = u64;
 
 // example module to test behaviors.
-#[pezframe_support::pallet(dev_mode)]
+#[pezframe_support::pezpallet(dev_mode)]
 pub mod example {
 	use pezframe_support::{dispatch::WithPostDispatchInfo, pezpallet_prelude::*};
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
-		#[pallet::call_index(0)]
-		#[pallet::weight(*_weight)]
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(*_weight)]
 		pub fn noop(_origin: OriginFor<T>, _weight: Weight) -> DispatchResult {
 			Ok(())
 		}
 
-		#[pallet::call_index(1)]
-		#[pallet::weight(*_start_weight)]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(*_start_weight)]
 		pub fn foobar(
 			origin: OriginFor<T>,
 			err: bool,
@@ -79,8 +79,8 @@ pub mod example {
 			}
 		}
 
-		#[pallet::call_index(2)]
-		#[pallet::weight(0)]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(0)]
 		pub fn big_variant(_origin: OriginFor<T>, _arg: [u8; 400]) -> DispatchResult {
 			Ok(())
 		}
@@ -88,16 +88,16 @@ pub mod example {
 }
 
 mod mock_democracy {
-	pub use pallet::*;
-	#[pezframe_support::pallet(dev_mode)]
-	pub mod pallet {
+	pub use pezpallet::*;
+	#[pezframe_support::pezpallet(dev_mode)]
+	pub mod pezpallet {
 		use pezframe_support::pezpallet_prelude::*;
 		use pezframe_system::pezpallet_prelude::*;
 
-		#[pallet::pallet]
-		pub struct Pallet<T>(_);
+		#[pezpallet::pezpallet]
+		pub struct Pezpallet<T>(_);
 
-		#[pallet::config]
+		#[pezpallet::config]
 		pub trait Config: pezframe_system::Config + Sized {
 			#[allow(deprecated)]
 			type RuntimeEvent: From<Event<Self>>
@@ -105,10 +105,10 @@ mod mock_democracy {
 			type ExternalMajorityOrigin: EnsureOrigin<Self::RuntimeOrigin>;
 		}
 
-		#[pallet::call]
-		impl<T: Config> Pallet<T> {
-			#[pallet::call_index(3)]
-			#[pallet::weight(0)]
+		#[pezpallet::call]
+		impl<T: Config> Pezpallet<T> {
+			#[pezpallet::call_index(3)]
+			#[pezpallet::weight(0)]
 			pub fn external_propose_majority(origin: OriginFor<T>) -> DispatchResult {
 				T::ExternalMajorityOrigin::ensure_origin(origin)?;
 				Self::deposit_event(Event::<T>::ExternalProposed);
@@ -116,8 +116,8 @@ mod mock_democracy {
 			}
 		}
 
-		#[pallet::event]
-		#[pallet::generate_deposit(pub(super) fn deposit_event)]
+		#[pezpallet::event]
+		#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 		pub enum Event<T: Config> {
 			ExternalProposed,
 		}

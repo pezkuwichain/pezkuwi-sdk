@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! End-to-end testing pallet for PoV benchmarking. Should only be deployed in a  testing runtime.
+//! End-to-end testing pezpallet for PoV benchmarking. Should only be deployed in a  testing runtime.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
@@ -25,51 +25,51 @@ mod weights;
 
 extern crate alloc;
 
-pub use pallet::*;
+pub use pezpallet::*;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use alloc::vec::Vec;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 	}
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type Value<T: Config> = StorageValue<Value = u32, QueryKind = OptionQuery>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type Value2<T: Config> = StorageValue<Value = u32, QueryKind = OptionQuery>;
 
 	/// A value without a MEL bound.
-	#[pallet::storage]
-	#[pallet::unbounded]
+	#[pezpallet::storage]
+	#[pezpallet::unbounded]
 	pub(crate) type UnboundedValue<T: Config> =
 		StorageValue<Value = Vec<u8>, QueryKind = OptionQuery>;
 
 	/// A value with a MEL bound of 32 byte.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type BoundedValue<T: Config> =
 		StorageValue<Value = BoundedVec<u8, ConstU32<32>>, QueryKind = OptionQuery>;
 
 	/// 4MiB value.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type LargeValue<T: Config> =
 		StorageValue<Value = BoundedVec<u8, ConstU32<{ 1 << 22 }>>, QueryKind = OptionQuery>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type LargeValue2<T: Config> =
 		StorageValue<Value = BoundedVec<u8, ConstU32<{ 1 << 22 }>>, QueryKind = OptionQuery>;
 
 	/// A map with a maximum of 1M entries.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type Map1M<T: Config> = StorageMap<
 		Hasher = Blake2_256,
 		Key = u32,
@@ -79,7 +79,7 @@ pub mod pallet {
 	>;
 
 	/// A map with a maximum of 16M entries.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type Map16M<T: Config> = StorageMap<
 		Hasher = Blake2_256,
 		Key = u32,
@@ -88,7 +88,7 @@ pub mod pallet {
 		MaxValues = ConstU32<16_000_000>,
 	>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type DoubleMap1M<T: Config> = StorageDoubleMap<
 		Hasher1 = Blake2_256,
 		Hasher2 = Blake2_256,
@@ -99,38 +99,38 @@ pub mod pallet {
 		MaxValues = ConstU32<1_000_000>,
 	>;
 
-	#[pallet::storage]
-	#[pallet::unbounded]
+	#[pezpallet::storage]
+	#[pezpallet::unbounded]
 	pub(crate) type UnboundedMap<T: Config> =
 		StorageMap<Hasher = Blake2_256, Key = u32, Value = Vec<u32>, QueryKind = OptionQuery>;
 
-	#[pallet::storage]
-	#[pallet::unbounded]
+	#[pezpallet::storage]
+	#[pezpallet::unbounded]
 	pub(crate) type UnboundedMap2<T: Config> =
 		StorageMap<Hasher = Blake2_256, Key = u32, Value = Vec<u32>, QueryKind = OptionQuery>;
 
-	#[pallet::storage]
-	#[pallet::unbounded]
+	#[pezpallet::storage]
+	#[pezpallet::unbounded]
 	pub(crate) type UnboundedMapTwox<T: Config> =
 		StorageMap<Hasher = Twox64Concat, Key = u32, Value = Vec<u32>, QueryKind = OptionQuery>;
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		TestEvent,
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
-		#[pallet::call_index(0)]
-		#[pallet::weight({0})]
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight({0})]
 		pub fn emit_event(_origin: OriginFor<T>) -> DispatchResult {
 			Self::deposit_event(Event::TestEvent);
 			Ok(())
 		}
 
-		#[pallet::call_index(1)]
-		#[pallet::weight({0})]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight({0})]
 		pub fn noop(_origin: OriginFor<T>) -> DispatchResult {
 			Ok(())
 		}

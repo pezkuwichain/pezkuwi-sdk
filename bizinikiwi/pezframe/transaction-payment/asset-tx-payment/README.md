@@ -1,8 +1,8 @@
 # pezpallet-asset-tx-payment
 
-## Asset Transaction Payment Pallet
+## Asset Transaction Payment Pezpallet
 
-This pallet allows runtimes that include it to pay for transactions in assets other than the
+This pezpallet allows runtimes that include it to pay for transactions in assets other than the
 native token of the chain.
 
 ### Overview
@@ -14,8 +14,8 @@ amount by converting the fee calculated by [`pezpallet-transaction-payment`] int
 asset.
 
 ### Integration
-This pallet wraps FRAME's transaction payment pallet and functions as a replacement. This means
+This pezpallet wraps FRAME's transaction payment pezpallet and functions as a replacement. This means
 you should include both pallets in your `construct_runtime` macro, but only include this
-pallet's [`TransactionExtension`] ([`ChargeAssetTxPayment`]).
+pezpallet's [`TransactionExtension`] ([`ChargeAssetTxPayment`]).
 
 License: Apache-2.0

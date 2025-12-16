@@ -1,12 +1,12 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-//! # Perwerde (Education) Pallet
+//! # Perwerde (Education) Pezpallet
 //!
-//! A pallet for managing educational courses, student enrollments, and achievement tracking.
+//! A pezpallet for managing educational courses, student enrollments, and achievement tracking.
 //!
 //! ## Overview
 //!
-//! The Perwerde pallet implements an on-chain educational platform where:
+//! The Perwerde pezpallet implements an on-chain educational platform where:
 //! - Educators create and manage courses with IPFS-linked content
 //! - Students enroll in courses and track their progress
 //! - Course completion earns points that contribute to trust scores
@@ -84,7 +84,7 @@
 //! }
 //! ```
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 #[cfg(feature = "runtime-benchmarks")]
 mod benchmarking;
@@ -99,8 +99,8 @@ mod tests;
 
 pub use weights::WeightInfo;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::{
 		dispatch::DispatchResult,
@@ -109,27 +109,27 @@ pub mod pallet {
 	};
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		type AdminOrigin: EnsureOrigin<Self::RuntimeOrigin, Success = Self::AccountId>;
 		type WeightInfo: WeightInfo;
 
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxCourseNameLength: Get<u32>;
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxCourseDescLength: Get<u32>;
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxCourseLinkLength: Get<u32>;
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxStudentsPerCourse: Get<u32>;
 
 		/// Maximum number of courses a single student can enroll in
 		/// Used for StudentCourses storage bound
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxCoursesPerStudent: Get<u32>;
 	}
 
@@ -161,24 +161,24 @@ pub mod pallet {
 		pub points_earned: u32,
 	}
 
-	#[pallet::storage]
-	#[pallet::getter(fn courses)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn courses)]
 	pub type Courses<T: Config> = StorageMap<_, Blake2_128Concat, u32, Course<T>, OptionQuery>;
 
-	#[pallet::storage]
-	#[pallet::getter(fn next_course_id)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn next_course_id)]
 	pub type NextCourseId<T: Config> = StorageValue<_, u32, ValueQuery>;
 
-	#[pallet::storage]
-	#[pallet::getter(fn enrollments)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn enrollments)]
 	pub type Enrollments<T: Config> =
 		StorageMap<_, Blake2_128Concat, (T::AccountId, u32), Enrollment<T>, OptionQuery>;
 
 	/// Per-student list of enrolled course IDs
 	/// UPDATED (Gemini suggestion): Uses MaxCoursesPerStudent instead of MaxStudentsPerCourse
 	/// This is the correct semantic - limits how many courses ONE student can take
-	#[pallet::storage]
-	#[pallet::getter(fn student_courses)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn student_courses)]
 	pub type StudentCourses<T: Config> = StorageMap<
 		_,
 		Blake2_128Concat,
@@ -187,8 +187,8 @@ pub mod pallet {
 		ValueQuery,
 	>;
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		CourseCreated { course_id: u32, owner: T::AccountId },
 		StudentEnrolled { student: T::AccountId, course_id: u32 },
@@ -196,7 +196,7 @@ pub mod pallet {
 		CourseArchived { course_id: u32 },
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		CourseNotFound,
 		AlreadyEnrolled,
@@ -207,10 +207,10 @@ pub mod pallet {
 		TooManyCourses,
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::create_course())]
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::create_course())]
 		pub fn create_course(
 			origin: OriginFor<T>,
 			name: BoundedVec<u8, T::MaxCourseNameLength>,
@@ -228,7 +228,7 @@ pub mod pallet {
 				description,
 				content_link,
 				status: CourseStatus::Active,
-				created_at: pezframe_system::Pallet::<T>::block_number(),
+				created_at: pezframe_system::Pezpallet::<T>::block_number(),
 			};
 
 			Courses::<T>::insert(course_id, course);
@@ -238,8 +238,8 @@ pub mod pallet {
 			Ok(())
 		}
 
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::enroll())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::enroll())]
 		pub fn enroll(origin: OriginFor<T>, course_id: u32) -> DispatchResult {
 			let student = ensure_signed(origin)?;
 			let course = Courses::<T>::get(course_id).ok_or(Error::<T>::CourseNotFound)?;
@@ -252,7 +252,7 @@ pub mod pallet {
 			let enrollment = Enrollment {
 				student: student.clone(),
 				course_id,
-				enrolled_at: pezframe_system::Pallet::<T>::block_number(),
+				enrolled_at: pezframe_system::Pezpallet::<T>::block_number(),
 				completed_at: None,
 				points_earned: 0,
 			};
@@ -268,8 +268,8 @@ pub mod pallet {
 
 		/// Mark a student's course as completed and award points
 		/// SECURITY: Only the course owner can mark completions, not students themselves
-		#[pallet::call_index(2)]
-		#[pallet::weight(T::WeightInfo::complete_course())]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(T::WeightInfo::complete_course())]
 		pub fn complete_course(
 			origin: OriginFor<T>,
 			student: T::AccountId,
@@ -288,7 +288,7 @@ pub mod pallet {
 			ensure!(enrollment.completed_at.is_none(), Error::<T>::CourseAlreadyCompleted);
 
 			// Mark completion
-			enrollment.completed_at = Some(pezframe_system::Pallet::<T>::block_number());
+			enrollment.completed_at = Some(pezframe_system::Pezpallet::<T>::block_number());
 			enrollment.points_earned = points;
 
 			Enrollments::<T>::insert((&student, course_id), enrollment);
@@ -297,8 +297,8 @@ pub mod pallet {
 			Ok(())
 		}
 
-		#[pallet::call_index(3)]
-		#[pallet::weight(T::WeightInfo::archive_course())]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(T::WeightInfo::archive_course())]
 		pub fn archive_course(origin: OriginFor<T>, course_id: u32) -> DispatchResult {
 			let caller = T::AdminOrigin::ensure_origin(origin)?;
 			let mut course = Courses::<T>::get(course_id).ok_or(Error::<T>::CourseNotFound)?;
@@ -312,7 +312,7 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config> Pallet<T> {
+	impl<T: Config> Pezpallet<T> {
 		pub fn get_perwerde_score(who: &T::AccountId) -> u32 {
 			StudentCourses::<T>::get(who)
 				.iter()

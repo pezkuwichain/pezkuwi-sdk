@@ -1,6 +1,6 @@
 [package]
 name = "pezpallet-ah-ops"
-description = "Operations cleanup pallet for the post-migration Asset Hub"
+description = "Operations cleanup pezpallet for the post-migration Asset Hub"
 license = "Apache-2.0"
 version = "0.1.0"
 edition.workspace = true

@@ -56,7 +56,7 @@ pub mod slots_crowdloan_index_migration {
 			// the para id must have a crowdloan
 			if let Some(fund) = crowdloan::Funds::<T>::get(para_id) {
 				let old_fund_account = old_fund_account_id::<T>(para_id);
-				let new_fund_account = crowdloan::Pallet::<T>::fund_account_id(fund.fund_index);
+				let new_fund_account = crowdloan::Pezpallet::<T>::fund_account_id(fund.fund_index);
 
 				// look for places the old account is used, and replace with the new account.
 				for (who, _amount) in leases.iter_mut().flatten() {

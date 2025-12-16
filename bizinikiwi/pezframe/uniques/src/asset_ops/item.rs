@@ -38,11 +38,11 @@ use pezsp_runtime::DispatchError;
 
 pub struct Item<PalletInstance>(PhantomData<PalletInstance>);
 
-impl<T: Config<I>, I: 'static> AssetDefinition for Item<Pallet<T, I>> {
+impl<T: Config<I>, I: 'static> AssetDefinition for Item<Pezpallet<T, I>> {
 	type Id = (T::CollectionId, T::ItemId);
 }
 
-impl<T: Config<I>, I: 'static> Inspect<Owner<T::AccountId>> for Item<Pallet<T, I>> {
+impl<T: Config<I>, I: 'static> Inspect<Owner<T::AccountId>> for Item<Pezpallet<T, I>> {
 	fn inspect(
 		(collection, item): &Self::Id,
 		_ownership: Owner<T::AccountId>,
@@ -53,7 +53,7 @@ impl<T: Config<I>, I: 'static> Inspect<Owner<T::AccountId>> for Item<Pallet<T, I
 	}
 }
 
-impl<T: Config<I>, I: 'static> Inspect<Bytes> for Item<Pallet<T, I>> {
+impl<T: Config<I>, I: 'static> Inspect<Bytes> for Item<Pezpallet<T, I>> {
 	fn inspect((collection, item): &Self::Id, _bytes: Bytes) -> Result<Vec<u8>, DispatchError> {
 		ItemMetadataOf::<T, I>::get(collection, item)
 			.map(|m| m.data.into())
@@ -61,7 +61,7 @@ impl<T: Config<I>, I: 'static> Inspect<Bytes> for Item<Pallet<T, I>> {
 	}
 }
 
-impl<'a, T: Config<I>, I: 'static> Inspect<Bytes<Attribute<'a>>> for Item<Pallet<T, I>> {
+impl<'a, T: Config<I>, I: 'static> Inspect<Bytes<Attribute<'a>>> for Item<Pezpallet<T, I>> {
 	fn inspect(
 		(collection, item): &Self::Id,
 		strategy: Bytes<Attribute>,
@@ -76,7 +76,7 @@ impl<'a, T: Config<I>, I: 'static> Inspect<Bytes<Attribute<'a>>> for Item<Pallet
 	}
 }
 
-impl<T: Config<I>, I: 'static> Inspect<CanUpdate<Owner<T::AccountId>>> for Item<Pallet<T, I>> {
+impl<T: Config<I>, I: 'static> Inspect<CanUpdate<Owner<T::AccountId>>> for Item<Pezpallet<T, I>> {
 	fn inspect(
 		(collection, item): &Self::Id,
 		_can_update: CanUpdate<Owner<T::AccountId>>,
@@ -88,21 +88,21 @@ impl<T: Config<I>, I: 'static> Inspect<CanUpdate<Owner<T::AccountId>>> for Item<
 	}
 }
 
-impl<T: Config<I>, I: 'static> Create<WithItemConfig<T, I>> for Item<Pallet<T, I>> {
+impl<T: Config<I>, I: 'static> Create<WithItemConfig<T, I>> for Item<Pezpallet<T, I>> {
 	fn create(
 		strategy: WithItemConfig<T, I>,
 	) -> Result<(T::CollectionId, T::ItemId), DispatchError> {
 		let WithConfig { config: ConfigValue::<_>(owner), extra: id_assignment } = strategy;
 		let (collection, item) = id_assignment.params;
 
-		<Pallet<T, I>>::do_mint(collection.clone(), item, owner, |_| Ok(()))?;
+		<Pezpallet<T, I>>::do_mint(collection.clone(), item, owner, |_| Ok(()))?;
 
 		Ok((collection, item))
 	}
 }
 
 impl<T: Config<I>, I: 'static> Create<CheckOrigin<T::RuntimeOrigin, WithItemConfig<T, I>>>
-	for Item<Pallet<T, I>>
+	for Item<Pezpallet<T, I>>
 {
 	fn create(
 		strategy: CheckOrigin<T::RuntimeOrigin, WithItemConfig<T, I>>,
@@ -115,7 +115,7 @@ impl<T: Config<I>, I: 'static> Create<CheckOrigin<T::RuntimeOrigin, WithItemConf
 
 		let signer = ensure_signed(origin)?;
 
-		<Pallet<T, I>>::do_mint(collection.clone(), item, owner, |collection_details| {
+		<Pezpallet<T, I>>::do_mint(collection.clone(), item, owner, |collection_details| {
 			ensure!(collection_details.issuer == signer, Error::<T, I>::NoPermission);
 			Ok(())
 		})?;
@@ -124,18 +124,18 @@ impl<T: Config<I>, I: 'static> Create<CheckOrigin<T::RuntimeOrigin, WithItemConf
 	}
 }
 
-impl<T: Config<I>, I: 'static> Update<Owner<T::AccountId>> for Item<Pallet<T, I>> {
+impl<T: Config<I>, I: 'static> Update<Owner<T::AccountId>> for Item<Pezpallet<T, I>> {
 	fn update(
 		(collection, item): &Self::Id,
 		_strategy: Owner<T::AccountId>,
 		dest: &T::AccountId,
 	) -> DispatchResult {
-		<Pallet<T, I>>::do_transfer(collection.clone(), *item, dest.clone(), |_, _| Ok(()))
+		<Pezpallet<T, I>>::do_transfer(collection.clone(), *item, dest.clone(), |_, _| Ok(()))
 	}
 }
 
 impl<T: Config<I>, I: 'static> Update<CheckOrigin<T::RuntimeOrigin, Owner<T::AccountId>>>
-	for Item<Pallet<T, I>>
+	for Item<Pezpallet<T, I>>
 {
 	fn update(
 		(collection, item): &Self::Id,
@@ -146,7 +146,7 @@ impl<T: Config<I>, I: 'static> Update<CheckOrigin<T::RuntimeOrigin, Owner<T::Acc
 
 		let signer = ensure_signed(origin)?;
 
-		<Pallet<T, I>>::do_transfer(
+		<Pezpallet<T, I>>::do_transfer(
 			collection.clone(),
 			*item,
 			dest.clone(),
@@ -161,7 +161,7 @@ impl<T: Config<I>, I: 'static> Update<CheckOrigin<T::RuntimeOrigin, Owner<T::Acc
 	}
 }
 
-impl<T: Config<I>, I: 'static> Update<ChangeOwnerFrom<T::AccountId>> for Item<Pallet<T, I>> {
+impl<T: Config<I>, I: 'static> Update<ChangeOwnerFrom<T::AccountId>> for Item<Pezpallet<T, I>> {
 	fn update(
 		(collection, item): &Self::Id,
 		strategy: ChangeOwnerFrom<T::AccountId>,
@@ -169,20 +169,20 @@ impl<T: Config<I>, I: 'static> Update<ChangeOwnerFrom<T::AccountId>> for Item<Pa
 	) -> DispatchResult {
 		let CheckState(from, ..) = strategy;
 
-		<Pallet<T, I>>::do_transfer(collection.clone(), *item, dest.clone(), |_, details| {
+		<Pezpallet<T, I>>::do_transfer(collection.clone(), *item, dest.clone(), |_, details| {
 			ensure!(details.owner == from, Error::<T, I>::WrongOwner);
 			Ok(())
 		})
 	}
 }
 
-impl<T: Config<I>, I: 'static> Stash<NoParams> for Item<Pallet<T, I>> {
+impl<T: Config<I>, I: 'static> Stash<NoParams> for Item<Pezpallet<T, I>> {
 	fn stash((collection, item): &Self::Id, _strategy: NoParams) -> DispatchResult {
-		<Pallet<T, I>>::do_burn(collection.clone(), *item, |_, _| Ok(()))
+		<Pezpallet<T, I>>::do_burn(collection.clone(), *item, |_, _| Ok(()))
 	}
 }
 
-impl<T: Config<I>, I: 'static> Stash<CheckOrigin<T::RuntimeOrigin>> for Item<Pallet<T, I>> {
+impl<T: Config<I>, I: 'static> Stash<CheckOrigin<T::RuntimeOrigin>> for Item<Pezpallet<T, I>> {
 	fn stash(
 		(collection, item): &Self::Id,
 		strategy: CheckOrigin<T::RuntimeOrigin>,
@@ -191,7 +191,7 @@ impl<T: Config<I>, I: 'static> Stash<CheckOrigin<T::RuntimeOrigin>> for Item<Pal
 
 		let signer = ensure_signed(origin)?;
 
-		<Pallet<T, I>>::do_burn(collection.clone(), *item, |collection_details, details| {
+		<Pezpallet<T, I>>::do_burn(collection.clone(), *item, |collection_details, details| {
 			let is_permitted = collection_details.admin == signer || details.owner == signer;
 			ensure!(is_permitted, Error::<T, I>::NoPermission);
 			Ok(())
@@ -199,11 +199,11 @@ impl<T: Config<I>, I: 'static> Stash<CheckOrigin<T::RuntimeOrigin>> for Item<Pal
 	}
 }
 
-impl<T: Config<I>, I: 'static> Stash<IfOwnedBy<T::AccountId>> for Item<Pallet<T, I>> {
+impl<T: Config<I>, I: 'static> Stash<IfOwnedBy<T::AccountId>> for Item<Pezpallet<T, I>> {
 	fn stash((collection, item): &Self::Id, strategy: IfOwnedBy<T::AccountId>) -> DispatchResult {
 		let CheckState(who, ..) = strategy;
 
-		<Pallet<T, I>>::do_burn(collection.clone(), *item, |_, d| {
+		<Pezpallet<T, I>>::do_burn(collection.clone(), *item, |_, d| {
 			ensure!(d.owner == who, Error::<T, I>::NoPermission);
 			Ok(())
 		})
@@ -216,7 +216,7 @@ impl<T: Config<I>, I: 'static> Stash<IfOwnedBy<T::AccountId>> for Item<Pallet<T,
 // If an NFT is minted for the first time, it can be regarded as "restored" with an empty data
 // because it is indistinguishable from a burned empty NFT from the chain's perspective.
 impl<T: Config<I>, I: 'static> Restore<WithConfig<ConfigValue<Owner<T::AccountId>>>>
-	for Item<Pallet<T, I>>
+	for Item<Pezpallet<T, I>>
 {
 	fn restore(
 		(collection, item): &Self::Id,

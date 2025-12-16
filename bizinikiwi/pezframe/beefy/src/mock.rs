@@ -46,7 +46,7 @@ use pezsp_consensus_beefy::{AncestryHelper, AncestryHelperWeightInfo, Commitment
 
 impl_opaque_keys! {
 	pub struct MockSessionKeys {
-		pub dummy: pezpallet_beefy::Pallet<Test>,
+		pub dummy: pezpallet_beefy::Pezpallet<Test>,
 	}
 }
 
@@ -246,7 +246,7 @@ impl pezpallet_staking::Config for Test {
 	type Currency = Balances;
 	type AdminOrigin = pezframe_system::EnsureRoot<Self::AccountId>;
 	type SessionInterface = Self;
-	type UnixTime = pezpallet_timestamp::Pallet<Test>;
+	type UnixTime = pezpallet_timestamp::Pezpallet<Test>;
 	type EraPayout = pezpallet_staking::ConvertCurve<RewardCurve>;
 	type NextNewSession = Session;
 	type ElectionProvider = onchain::OnChainExecution<OnChainSeqPhragmen>;
@@ -294,7 +294,7 @@ impl ExtBuilder {
 
 		BasicExternalities::execute_with_storage(&mut t, || {
 			for (ref id, ..) in &session_keys {
-				pezframe_system::Pallet::<Test>::inc_providers(id);
+				pezframe_system::Pezpallet::<Test>::inc_providers(id);
 			}
 		});
 

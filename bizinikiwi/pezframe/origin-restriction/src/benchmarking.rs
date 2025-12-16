@@ -15,14 +15,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Benchmarks for pallet origin restriction.
+//! Benchmarks for pezpallet origin restriction.
 
 use super::*;
 use pezframe_benchmarking::{v2::*, BenchmarkError};
 use pezsp_runtime::traits::DispatchTransaction;
 
 fn assert_last_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
-	pezframe_system::Pallet::<T>::assert_last_event(generic_event.into());
+	pezframe_system::Pezpallet::<T>::assert_last_event(generic_event.into());
 }
 
 #[benchmarks]
@@ -37,7 +37,7 @@ mod benches {
 
 		Usages::<T>::insert(&entity, Usage { used: 1u32.into(), at_block: 0u32.into() });
 
-		pezframe_system::Pallet::<T>::set_block_number(1_000u32.into());
+		pezframe_system::Pezpallet::<T>::set_block_number(1_000u32.into());
 
 		#[extrinsic_call]
 		_(pezframe_system::RawOrigin::Root, entity.clone());
@@ -67,5 +67,5 @@ mod benches {
 		Ok(())
 	}
 
-	impl_benchmark_test_suite!(Pallet, crate::mock::new_test_ext(), crate::mock::Test);
+	impl_benchmark_test_suite!(Pezpallet, crate::mock::new_test_ext(), crate::mock::Test);
 }

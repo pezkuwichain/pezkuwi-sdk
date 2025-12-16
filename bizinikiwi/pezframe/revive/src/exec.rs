@@ -32,7 +32,7 @@ use crate::{
 	transient_storage::TransientStorage,
 	AccountInfo, AccountInfoOf, BalanceOf, BalanceWithDust, Code, CodeInfo, CodeInfoOf,
 	CodeRemoved, Config, ContractInfo, Error, Event, HoldReason, ImmutableData, ImmutableDataOf,
-	Pallet as Contracts, RuntimeCosts, TrieId, LOG_TARGET,
+	Pezpallet as Contracts, RuntimeCosts, TrieId, LOG_TARGET,
 };
 use alloc::{
 	collections::{BTreeMap, BTreeSet},
@@ -54,7 +54,7 @@ use pezframe_support::{
 };
 use pezframe_system::{
 	pezpallet_prelude::{BlockNumberFor, OriginFor},
-	Pallet as System, RawOrigin,
+	Pezpallet as System, RawOrigin,
 };
 use pezsp_core::{
 	ecdsa::Public as ECDSAPublic,
@@ -152,7 +152,7 @@ impl<T: Into<DispatchError>> From<T> for ExecError {
 	}
 }
 
-/// The type of origins supported by the revive pallet.
+/// The type of origins supported by the revive pezpallet.
 #[derive(Clone, Encode, Decode, PartialEq, TypeInfo, RuntimeDebugNoBound)]
 pub enum Origin<T: Config> {
 	Root,
@@ -953,7 +953,7 @@ where
 		};
 
 		let mut timestamp = T::Time::now();
-		let mut block_number = <pezframe_system::Pallet<T>>::block_number();
+		let mut block_number = <pezframe_system::Pezpallet<T>>::block_number();
 		// if dry run with timestamp override is provided we simulate the run in a `pending` block
 		if let Some(timestamp_override) =
 			exec_config.is_dry_run.as_ref().and_then(|cfg| cfg.timestamp_override)
@@ -1234,7 +1234,7 @@ where
 				// if we reached this point the origin has an associated account.
 				let origin = &self.origin.account_id()?;
 
-				if !pezframe_system::Pallet::<T>::account_exists(&account_id) {
+				if !pezframe_system::Pezpallet::<T>::account_exists(&account_id) {
 					let ed = <Contracts<T>>::min_balance();
 					frame.nested_storage.record_charge(&StorageDeposit::Charge(ed))?;
 					<Contracts<T>>::charge_deposit(None, origin, account_id, ed, self.exec_config)?;
@@ -1712,7 +1712,7 @@ where
 	/// Returns the *free* balance of the supplied AccountId.
 	fn account_balance(&self, who: &T::AccountId) -> U256 {
 		let balance = AccountInfo::<T>::balance_of(AccountIdOrAddress::AccountId(who.clone()));
-		crate::Pallet::<T>::convert_native_to_evm(balance)
+		crate::Pezpallet::<T>::convert_native_to_evm(balance)
 	}
 
 	/// Certain APIs, e.g. `{set,get}_immutable_data` behave differently depending
@@ -1741,7 +1741,7 @@ where
 		// Fallback to the system block hash for older blocks
 		// 256 entries should suffice for all use cases, this mostly ensures
 		// our benchmarks are passing.
-		match crate::Pallet::<T>::eth_block_hash_from_number(block_number.into()) {
+		match crate::Pezpallet::<T>::eth_block_hash_from_number(block_number.into()) {
 			Some(hash) => Some(hash),
 			None => {
 				use codec::Decode;
@@ -1812,7 +1812,7 @@ where
 				addr,
 				*beneficiary,
 				self.top_frame().nested_gas.gas_left(),
-				crate::Pallet::<T>::evm_balance(&addr),
+				crate::Pezpallet::<T>::evm_balance(&addr),
 			);
 		});
 		let frame = top_frame_mut!(self);
@@ -2223,7 +2223,7 @@ where
 
 	fn minimum_balance(&self) -> U256 {
 		let min = T::Currency::minimum_balance();
-		crate::Pallet::<T>::convert_native_to_evm(min)
+		crate::Pezpallet::<T>::convert_native_to_evm(min)
 	}
 
 	fn deposit_event(&mut self, topics: Vec<H256>, data: Vec<u8>) {

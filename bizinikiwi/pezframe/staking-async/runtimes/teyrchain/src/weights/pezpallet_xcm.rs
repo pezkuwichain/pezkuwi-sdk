@@ -25,10 +25,10 @@
 // Executed Command:
 // target/production/pezkuwi-teyrchain
 // benchmark
-// pallet
+// pezpallet
 // --extrinsic=*
 // --chain=asset-hub-next-zagros-dev
-// --pallet=pezpallet_xcm
+// --pezpallet=pezpallet_xcm
 // --header=/__w/pezkuwi-sdk/pezkuwi-sdk/pezcumulus/file_header.txt
 // --output=./pezcumulus/teyrchains/runtimes/assets/asset-hub-next-zagros/src/weights
 // --wasm-execution=compiled

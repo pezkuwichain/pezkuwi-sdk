@@ -86,7 +86,7 @@ mod v2 {
 
 	#[storage_alias]
 	pub type AllowedRenewals<T: Config> = StorageMap<
-		Pallet<T>,
+		Pezpallet<T>,
 		Twox64Concat,
 		PotentialRenewalId,
 		PotentialRenewalRecordOf<T>,
@@ -135,14 +135,14 @@ mod v3 {
 		pezpallet_prelude::{OptionQuery, RuntimeDebug, TypeInfo},
 		storage_alias,
 	};
-	use pezframe_system::Pallet as System;
+	use pezframe_system::Pezpallet as System;
 	use pezsp_arithmetic::Perbill;
 
 	pub struct MigrateToV3Impl<T>(PhantomData<T>);
 
 	impl<T: Config> UncheckedOnRuntimeUpgrade for MigrateToV3Impl<T> {
 		fn on_runtime_upgrade() -> pezframe_support::weights::Weight {
-			let acc = Pallet::<T>::account_id();
+			let acc = Pezpallet::<T>::account_id();
 			System::<T>::inc_providers(&acc);
 			// calculate and return migration weights
 			T::DbWeight::get().writes(1)
@@ -150,13 +150,13 @@ mod v3 {
 
 		#[cfg(feature = "try-runtime")]
 		fn pre_upgrade() -> Result<Vec<u8>, pezsp_runtime::TryRuntimeError> {
-			Ok(System::<T>::providers(&Pallet::<T>::account_id()).encode())
+			Ok(System::<T>::providers(&Pezpallet::<T>::account_id()).encode())
 		}
 
 		#[cfg(feature = "try-runtime")]
 		fn post_upgrade(state: Vec<u8>) -> Result<(), pezsp_runtime::TryRuntimeError> {
 			let old_providers = u32::decode(&mut &state[..]).expect("Known good");
-			let new_providers = System::<T>::providers(&Pallet::<T>::account_id()) as u32;
+			let new_providers = System::<T>::providers(&Pezpallet::<T>::account_id()) as u32;
 
 			ensure!(new_providers == old_providers + 1, "Providers count should increase by one");
 			Ok(())
@@ -164,7 +164,7 @@ mod v3 {
 	}
 
 	#[storage_alias]
-	pub type Configuration<T: Config> = StorageValue<Pallet<T>, ConfigRecordOf<T>, OptionQuery>;
+	pub type Configuration<T: Config> = StorageValue<Pezpallet<T>, ConfigRecordOf<T>, OptionQuery>;
 	pub type ConfigRecordOf<T> =
 		ConfigRecord<pezframe_system::pezpallet_prelude::BlockNumberFor<T>, RelayBlockNumberOf<T>>;
 
@@ -193,7 +193,7 @@ mod v3 {
 	}
 
 	#[storage_alias]
-	pub type SaleInfo<T: Config> = StorageValue<Pallet<T>, SaleInfoRecordOf<T>, OptionQuery>;
+	pub type SaleInfo<T: Config> = StorageValue<Pezpallet<T>, SaleInfoRecordOf<T>, OptionQuery>;
 	pub type SaleInfoRecordOf<T> =
 		SaleInfoRecord<BalanceOf<T>, pezframe_system::pezpallet_prelude::BlockNumberFor<T>>;
 
@@ -402,12 +402,12 @@ pub mod v4 {
 	}
 }
 
-/// Migrate the pallet storage from `0` to `1`.
+/// Migrate the pezpallet storage from `0` to `1`.
 pub type MigrateV0ToV1<T> = pezframe_support::migrations::VersionedMigration<
 	0,
 	1,
 	v1::MigrateToV1Impl<T>,
-	Pallet<T>,
+	Pezpallet<T>,
 	<T as pezframe_system::Config>::DbWeight,
 >;
 
@@ -415,7 +415,7 @@ pub type MigrateV1ToV2<T> = pezframe_support::migrations::VersionedMigration<
 	1,
 	2,
 	v2::MigrateToV2Impl<T>,
-	Pallet<T>,
+	Pezpallet<T>,
 	<T as pezframe_system::Config>::DbWeight,
 >;
 
@@ -423,7 +423,7 @@ pub type MigrateV2ToV3<T> = pezframe_support::migrations::VersionedMigration<
 	2,
 	3,
 	v3::MigrateToV3Impl<T>,
-	Pallet<T>,
+	Pezpallet<T>,
 	<T as pezframe_system::Config>::DbWeight,
 >;
 
@@ -431,6 +431,6 @@ pub type MigrateV3ToV4<T, BlockConversion> = pezframe_support::migrations::Versi
 	3,
 	4,
 	v4::MigrateToV4Impl<T, BlockConversion>,
-	Pallet<T>,
+	Pezpallet<T>,
 	<T as pezframe_system::Config>::DbWeight,
 >;

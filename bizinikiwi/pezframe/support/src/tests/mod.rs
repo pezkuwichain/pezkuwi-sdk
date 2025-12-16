@@ -24,11 +24,11 @@ use pezsp_metadata_ir::{
 };
 use pezsp_runtime::{generic, traits::BlakeTwo256, BuildStorage};
 
-pub use self::pezframe_system::{pezpallet_prelude::*, Config, Pallet};
+pub use self::pezframe_system::{pezpallet_prelude::*, Config, Pezpallet};
 
 mod storage_alias;
 
-#[pallet]
+#[pezpallet]
 pub mod pezframe_system {
 	#[allow(unused)]
 	use super::{pezframe_system, pezframe_system::pezpallet_prelude::*};
@@ -55,34 +55,34 @@ pub mod pezframe_system {
 		}
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config(with_default, pezframe_system_config)]
-	#[pallet::disable_pezframe_system_supertrait_check]
+	#[pezpallet::config(with_default, pezframe_system_config)]
+	#[pezpallet::disable_pezframe_system_supertrait_check]
 	pub trait Config: 'static {
-		#[pallet::no_default]
+		#[pezpallet::no_default]
 		type Block: Parameter + pezsp_runtime::traits::Block;
 		type AccountId;
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		type BaseCallFilter: crate::traits::Contains<Self::RuntimeCall>;
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		type RuntimeOrigin;
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		type RuntimeCall;
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		type RuntimeTask: crate::traits::tasks::Task;
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		type PalletInfo: crate::traits::PalletInfo;
 		type DbWeight: Get<crate::weights::RuntimeDbWeight>;
-		#[pallet::constant]
-		#[pallet::no_default]
+		#[pezpallet::constant]
+		#[pezpallet::no_default]
 		#[deprecated = "this constant is deprecated"]
 		#[allow(deprecated)]
 		type ExampleConstant: Get<()>;
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Required by construct_runtime
 		CallFiltered,
@@ -94,13 +94,13 @@ pub mod pezframe_system {
 		FailedTask,
 	}
 
-	#[pallet::origin]
+	#[pezpallet::origin]
 	pub type Origin<T> = RawOrigin<<T as Config>::AccountId>;
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
-		#[pallet::call_index(0)]
-		#[pallet::weight(task.weight())]
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(task.weight())]
 		pub fn do_task(_origin: OriginFor<T>, task: T::RuntimeTask) -> DispatchResultWithPostInfo {
 			if !task.is_valid() {
 				return Err(Error::<T>::InvalidTask.into());
@@ -114,35 +114,35 @@ pub mod pezframe_system {
 		}
 	}
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	#[deprecated]
 	#[allow(deprecated)]
 	pub type Data<T> = StorageMap<_, Twox64Concat, u32, u64, ValueQuery>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	#[deprecated(note = "test")]
 	#[allow(deprecated)]
 	pub type OptionLinkedMap<T> = StorageMap<_, Blake2_128Concat, u32, u32, OptionQuery>;
 
-	#[pallet::storage]
-	#[pallet::getter(fn generic_data)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn generic_data)]
 	#[deprecated(note = "test", since = "test")]
 	#[allow(deprecated)]
 	pub type GenericData<T: Config> =
 		StorageMap<_, Identity, BlockNumberFor<T>, BlockNumberFor<T>, ValueQuery>;
 
-	#[pallet::storage]
-	#[pallet::getter(fn generic_data2)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn generic_data2)]
 	#[deprecated = "test"]
 	#[allow(deprecated)]
 	pub type GenericData2<T: Config> =
 		StorageMap<_, Blake2_128Concat, BlockNumberFor<T>, BlockNumberFor<T>, OptionQuery>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type DataDM<T> =
 		StorageDoubleMap<_, Twox64Concat, u32, Blake2_128Concat, u32, u64, ValueQuery>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type GenericDataDM<T: Config> = StorageDoubleMap<
 		_,
 		Blake2_128Concat,
@@ -153,7 +153,7 @@ pub mod pezframe_system {
 		ValueQuery,
 	>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type GenericData2DM<T: Config> = StorageDoubleMap<
 		_,
 		Blake2_128Concat,
@@ -164,8 +164,8 @@ pub mod pezframe_system {
 		OptionQuery,
 	>;
 
-	#[pallet::storage]
-	#[pallet::unbounded]
+	#[pezpallet::storage]
+	#[pezpallet::unbounded]
 	pub type AppendableDM<T: Config> = StorageDoubleMap<
 		_,
 		Blake2_128Concat,
@@ -176,7 +176,7 @@ pub mod pezframe_system {
 		ValueQuery,
 	>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	pub struct GenesisConfig<T: Config> {
 		pub data: Vec<(u32, u64)>,
 		pub test_config: Vec<(u32, u32, u64)>,
@@ -194,7 +194,7 @@ pub mod pezframe_system {
 		}
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		#[allow(deprecated)]
 		fn build(&self) {
@@ -208,11 +208,11 @@ pub mod pezframe_system {
 	}
 
 	/// Some running total.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Total<T: Config> = StorageValue<_, (u32, u32), ValueQuery>;
 
 	/// Numbers to be added into the total.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Numbers<T: Config> = StorageMap<_, Twox64Concat, u32, u32, OptionQuery>;
 
 	pub mod pezpallet_prelude {
@@ -731,14 +731,14 @@ fn expected_metadata() -> PalletStorageMetadataIR {
 
 #[test]
 fn store_metadata() {
-	let metadata = Pallet::<Runtime>::storage_metadata();
+	let metadata = Pezpallet::<Runtime>::storage_metadata();
 	pretty_assertions::assert_eq!(expected_metadata(), metadata);
 }
 
 #[test]
 fn constant_metadata() {
 	let metadata: Vec<pezsp_metadata_ir::PalletConstantMetadataIR> =
-		Pallet::<Runtime>::pezpallet_constants_metadata();
+		Pezpallet::<Runtime>::pezpallet_constants_metadata();
 	pretty_assertions::assert_eq!(
 		metadata,
 		vec![pezsp_metadata_ir::PalletConstantMetadataIR {

@@ -22,7 +22,7 @@ use pezsp_runtime::traits::{BlakeTwo256, IdentityLookup};
 
 type Block = pezframe_system::mocking::MockBlock<Runtime>;
 
-// For testing the pallet, we construct a mock runtime.
+// For testing the pezpallet, we construct a mock runtime.
 pezframe_support::construct_runtime!(
 	pub enum Runtime {
 		System: pezframe_system,

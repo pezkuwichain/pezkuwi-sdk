@@ -14,42 +14,42 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezcumulus.  If not, see <http://www.gnu.org/licenses/>.
 
-/// A special pallet that exposes dispatchables that are only useful for testing.
-pub use pallet::*;
+/// A special pezpallet that exposes dispatchables that are only useful for testing.
+pub use pezpallet::*;
 
 /// Some key that we set in genesis and only read in [`TestOnRuntimeUpgrade`] to ensure that
 /// [`OnRuntimeUpgrade`] works as expected.
 pub const TEST_RUNTIME_UPGRADE_KEY: &[u8] = b"+test_runtime_upgrade_key+";
 
-#[pezframe_support::pallet(dev_mode)]
-pub mod pallet {
+#[pezframe_support::pezpallet(dev_mode)]
+pub mod pezpallet {
 	use crate::test_pallet::TEST_RUNTIME_UPGRADE_KEY;
 	use alloc::vec;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config + pezcumulus_pezpallet_teyrchain_system::Config {}
 
 	/// A simple storage map for testing purposes.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type TestMap<T: Config> = StorageMap<_, Twox64Concat, u32, (), ValueQuery>;
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {}
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// A test dispatchable for setting a custom head data in `validate_block`.
-		#[pallet::weight(0)]
+		#[pezpallet::weight(0)]
 		pub fn set_custom_validation_head_data(
 			_: OriginFor<T>,
 			custom_header: alloc::vec::Vec<u8>,
 		) -> DispatchResult {
-			pezcumulus_pezpallet_teyrchain_system::Pallet::<T>::set_custom_validation_head_data(
+			pezcumulus_pezpallet_teyrchain_system::Pezpallet::<T>::set_custom_validation_head_data(
 				custom_header,
 			);
 			Ok(())
@@ -58,7 +58,7 @@ pub mod pallet {
 		/// A dispatchable that first reads two values from two different child tries, asserts they
 		/// are the expected values (if the values exist in the state) and then writes two different
 		/// values to these child tries.
-		#[pallet::weight(0)]
+		#[pezpallet::weight(0)]
 		pub fn read_and_write_child_tries(_: OriginFor<T>) -> DispatchResult {
 			let key = &b"hello"[..];
 			let first_trie = &b"first"[..];
@@ -91,7 +91,7 @@ pub mod pallet {
 		}
 
 		/// Stores `()` in `TestMap` for keys from 0 up to `max_key`.
-		#[pallet::weight(0)]
+		#[pezpallet::weight(0)]
 		pub fn store_values_in_map(_: OriginFor<T>, max_key: u32) -> DispatchResult {
 			for i in 0..=max_key {
 				TestMap::<T>::insert(i, ());
@@ -100,7 +100,7 @@ pub mod pallet {
 		}
 
 		/// Removes the value associated with `key` from `TestMap`.
-		#[pallet::weight(0)]
+		#[pezpallet::weight(0)]
 		pub fn remove_value_from_map(_: OriginFor<T>, key: u32) -> DispatchResult {
 			TestMap::<T>::remove(key);
 			Ok(())
@@ -108,13 +108,13 @@ pub mod pallet {
 	}
 
 	#[derive(pezframe_support::DefaultNoBound)]
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	pub struct GenesisConfig<T: Config> {
 		#[serde(skip)]
 		pub _config: core::marker::PhantomData<T>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			pezsp_io::storage::set(TEST_RUNTIME_UPGRADE_KEY, &[1, 2, 3, 4]);

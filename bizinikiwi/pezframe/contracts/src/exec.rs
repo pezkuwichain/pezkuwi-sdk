@@ -22,7 +22,7 @@ use crate::{
 	storage::{self, meter::Diff, WriteOutcome},
 	transient_storage::TransientStorage,
 	BalanceOf, CodeHash, CodeInfo, CodeInfoOf, Config, ContractInfo, ContractInfoOf,
-	DebugBufferVec, Determinism, Error, Event, Nonce, Origin, Pallet as Contracts, Schedule,
+	DebugBufferVec, Determinism, Error, Event, Nonce, Origin, Pezpallet as Contracts, Schedule,
 	LOG_TARGET,
 };
 use alloc::vec::Vec;
@@ -818,7 +818,7 @@ where
 			gas_meter,
 			storage_meter,
 			timestamp: T::Time::now(),
-			block_number: <pezframe_system::Pallet<T>>::block_number(),
+			block_number: <pezframe_system::Pezpallet<T>>::block_number(),
 			nonce,
 			first_frame,
 			frames: Default::default(),
@@ -1727,7 +1727,7 @@ mod tests {
 	use pezsp_runtime::{traits::Hash, DispatchError};
 	use std::{cell::RefCell, collections::hash_map::HashMap, rc::Rc};
 
-	type System = pezframe_system::Pallet<Test>;
+	type System = pezframe_system::Pezpallet<Test>;
 
 	type MockStack<'a> = Stack<'a, Test, MockExecutable>;
 

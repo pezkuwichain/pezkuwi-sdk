@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Child-bounties pallet benchmarking.
+//! Child-bounties pezpallet benchmarking.
 
 #![cfg(feature = "runtime-benchmarks")]
 
@@ -23,8 +23,8 @@ use alloc::vec;
 use pezframe_benchmarking::{v2::*, BenchmarkError};
 use pezframe_support::ensure;
 use pezframe_system::RawOrigin;
-use pezpallet_bounties::Pallet as Bounties;
-use pezpallet_treasury::Pallet as Treasury;
+use pezpallet_bounties::Pezpallet as Bounties;
+use pezpallet_treasury::Pezpallet as Treasury;
 use pezsp_runtime::traits::BlockNumberProvider;
 
 use crate::*;
@@ -120,7 +120,7 @@ fn activate_bounty<T: Config>(
 		T::SpendOrigin::try_successful_origin().map_err(|_| BenchmarkError::Weightless)?;
 	Bounties::<T>::approve_bounty(approve_origin, child_bounty_setup.bounty_id)?;
 	set_block_number::<T>(T::SpendPeriod::get());
-	Treasury::<T>::on_initialize(pezframe_system::Pallet::<T>::block_number());
+	Treasury::<T>::on_initialize(pezframe_system::Pezpallet::<T>::block_number());
 	Bounties::<T>::propose_curator(
 		RawOrigin::Root.into(),
 		child_bounty_setup.bounty_id,
@@ -142,7 +142,7 @@ fn activate_child_bounty<T: Config>(
 	let mut bounty_setup = activate_bounty::<T>(user, description)?;
 	let child_curator_lookup = T::Lookup::unlookup(bounty_setup.child_curator.clone());
 
-	Pallet::<T>::add_child_bounty(
+	Pezpallet::<T>::add_child_bounty(
 		RawOrigin::Signed(bounty_setup.curator.clone()).into(),
 		bounty_setup.bounty_id,
 		bounty_setup.child_bounty_value,
@@ -151,7 +151,7 @@ fn activate_child_bounty<T: Config>(
 
 	bounty_setup.child_bounty_id = ParentTotalChildBounties::<T>::get(bounty_setup.bounty_id) - 1;
 
-	Pallet::<T>::propose_curator(
+	Pezpallet::<T>::propose_curator(
 		RawOrigin::Signed(bounty_setup.curator.clone()).into(),
 		bounty_setup.bounty_id,
 		bounty_setup.child_bounty_id,
@@ -159,7 +159,7 @@ fn activate_child_bounty<T: Config>(
 		bounty_setup.child_bounty_fee,
 	)?;
 
-	Pallet::<T>::accept_curator(
+	Pezpallet::<T>::accept_curator(
 		RawOrigin::Signed(bounty_setup.child_curator.clone()).into(),
 		bounty_setup.bounty_id,
 		bounty_setup.child_bounty_id,
@@ -175,7 +175,7 @@ fn setup_pot_account<T: Config>() {
 }
 
 fn assert_last_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
-	pezframe_system::Pallet::<T>::assert_last_event(generic_event.into());
+	pezframe_system::Pezpallet::<T>::assert_last_event(generic_event.into());
 }
 
 #[benchmarks]
@@ -214,7 +214,7 @@ mod benchmarks {
 		let bounty_setup = activate_bounty::<T>(0, T::MaximumReasonLength::get())?;
 		let child_curator_lookup = T::Lookup::unlookup(bounty_setup.child_curator.clone());
 
-		Pallet::<T>::add_child_bounty(
+		Pezpallet::<T>::add_child_bounty(
 			RawOrigin::Signed(bounty_setup.curator.clone()).into(),
 			bounty_setup.bounty_id,
 			bounty_setup.child_bounty_value,
@@ -240,7 +240,7 @@ mod benchmarks {
 		let mut bounty_setup = activate_bounty::<T>(0, T::MaximumReasonLength::get())?;
 		let child_curator_lookup = T::Lookup::unlookup(bounty_setup.child_curator.clone());
 
-		Pallet::<T>::add_child_bounty(
+		Pezpallet::<T>::add_child_bounty(
 			RawOrigin::Signed(bounty_setup.curator.clone()).into(),
 			bounty_setup.bounty_id,
 			bounty_setup.child_bounty_value,
@@ -249,7 +249,7 @@ mod benchmarks {
 		bounty_setup.child_bounty_id =
 			ParentTotalChildBounties::<T>::get(bounty_setup.bounty_id) - 1;
 
-		Pallet::<T>::propose_curator(
+		Pezpallet::<T>::propose_curator(
 			RawOrigin::Signed(bounty_setup.curator.clone()).into(),
 			bounty_setup.bounty_id,
 			bounty_setup.child_bounty_id,
@@ -273,14 +273,14 @@ mod benchmarks {
 	fn unassign_curator() -> Result<(), BenchmarkError> {
 		setup_pot_account::<T>();
 		let bounty_setup = activate_child_bounty::<T>(0, T::MaximumReasonLength::get())?;
-		Treasury::<T>::on_initialize(pezframe_system::Pallet::<T>::block_number());
+		Treasury::<T>::on_initialize(pezframe_system::Pezpallet::<T>::block_number());
 		let bounty_update_period = T::BountyUpdatePeriod::get();
 		let inactivity_timeout = T::SpendPeriod::get().saturating_add(bounty_update_period);
 		set_block_number::<T>(inactivity_timeout.saturating_add(1u32.into()));
 
 		// If `BountyUpdatePeriod` overflows the inactivity timeout the benchmark still
 		// executes the slash
-		let origin: T::RuntimeOrigin = if Pallet::<T>::treasury_block_number() <= inactivity_timeout
+		let origin: T::RuntimeOrigin = if Pezpallet::<T>::treasury_block_number() <= inactivity_timeout
 		{
 			let child_curator = bounty_setup.child_curator;
 			T::RejectOrigin::try_successful_origin()
@@ -330,7 +330,7 @@ mod benchmarks {
 		let beneficiary_account = account("beneficiary", 0, SEED);
 		let beneficiary = T::Lookup::unlookup(beneficiary_account);
 
-		Pallet::<T>::award_child_bounty(
+		Pezpallet::<T>::award_child_bounty(
 			RawOrigin::Signed(bounty_setup.child_curator.clone()).into(),
 			bounty_setup.bounty_id,
 			bounty_setup.child_bounty_id,
@@ -366,7 +366,7 @@ mod benchmarks {
 		setup_pot_account::<T>();
 		let mut bounty_setup = activate_bounty::<T>(0, T::MaximumReasonLength::get())?;
 
-		Pallet::<T>::add_child_bounty(
+		Pezpallet::<T>::add_child_bounty(
 			RawOrigin::Signed(bounty_setup.curator.clone()).into(),
 			bounty_setup.bounty_id,
 			bounty_setup.child_bounty_value,
@@ -394,7 +394,7 @@ mod benchmarks {
 	fn close_child_bounty_active() -> Result<(), BenchmarkError> {
 		setup_pot_account::<T>();
 		let bounty_setup = activate_child_bounty::<T>(0, T::MaximumReasonLength::get())?;
-		Treasury::<T>::on_initialize(pezframe_system::Pallet::<T>::block_number());
+		Treasury::<T>::on_initialize(pezframe_system::Pezpallet::<T>::block_number());
 
 		#[extrinsic_call]
 		close_child_bounty(RawOrigin::Root, bounty_setup.bounty_id, bounty_setup.child_bounty_id);
@@ -411,7 +411,7 @@ mod benchmarks {
 	}
 
 	impl_benchmark_test_suite! {
-		Pallet,
+		Pezpallet,
 		tests::new_test_ext(),
 		tests::Test
 	}

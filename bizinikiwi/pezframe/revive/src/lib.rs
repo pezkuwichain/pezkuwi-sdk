@@ -82,7 +82,7 @@ use pezframe_support::{
 use pezframe_system::{
 	ensure_signed,
 	pezpallet_prelude::{BlockNumberFor, OriginFor},
-	Pallet as System,
+	Pezpallet as System,
 };
 use scale_info::TypeInfo;
 use pezsp_runtime::{
@@ -100,7 +100,7 @@ pub use crate::{
 		ReceiptInfo,
 	},
 	exec::{DelegateInfo, Executable, Key, MomentOf, Origin as ExecOrigin},
-	pallet::{genesis, *},
+	pezpallet::{genesis, *},
 	storage::{AccountInfo, ContractInfo},
 	vm::{BytecodeType, ContractBlob},
 };
@@ -135,8 +135,8 @@ const SENTINEL: u32 = u32::MAX;
 /// Example: `RUST_LOG=runtime::revive=debug my_code --dev`
 const LOG_TARGET: &str = "runtime::revive";
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::{pezpallet_prelude::*, traits::FindAuthor};
 	use pezframe_system::pezpallet_prelude::*;
@@ -146,11 +146,11 @@ pub mod pallet {
 	/// The in-code storage version.
 	pub(crate) const STORAGE_VERSION: StorageVersion = StorageVersion::new(0);
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config(with_default)]
+	#[pezpallet::config(with_default)]
 	pub trait Config: pezframe_system::Config {
 		/// The time implementation used to supply timestamps to contracts through `seal_now`.
 		type Time: Time<Moment: Into<U256>>;
@@ -158,23 +158,23 @@ pub mod pallet {
 		/// The balance type of [`Self::Currency`].
 		///
 		/// Just added here to add additional trait bounds.
-		#[pallet::no_default]
+		#[pezpallet::no_default]
 		type Balance: Balance + TryFrom<U256> + Into<U256> + Bounded + UniqueSaturatedInto<u64>;
 
 		/// The fungible in which fees are paid and contract balances are held.
-		#[pallet::no_default]
+		#[pezpallet::no_default]
 		type Currency: Inspect<Self::AccountId, Balance = Self::Balance>
 			+ Mutate<Self::AccountId>
 			+ MutateHold<Self::AccountId, Reason = Self::RuntimeHoldReason>
 			+ Balanced<Self::AccountId>;
 
 		/// The overarching event type.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// The overarching call type.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		type RuntimeCall: Parameter
 			+ Dispatchable<
 				RuntimeOrigin = OriginFor<Self>,
@@ -186,13 +186,13 @@ pub mod pallet {
 			+ GetDispatchInfo;
 
 		/// The overarching origin type.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		type RuntimeOrigin: IsType<OriginFor<Self>>
 			+ From<Origin<Self>>
 			+ Into<Result<Origin<Self>, OriginFor<Self>>>;
 
 		/// Overarching hold reason.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		type RuntimeHoldReason: From<HoldReason>;
 
 		/// Describes the weights of the dispatchables of this module and is also used to
@@ -202,7 +202,7 @@ pub mod pallet {
 		/// Type that allows the runtime authors to add new host functions for a contract to call.
 		///
 		/// Pass in a tuple of types that implement [`precompiles::Precompile`].
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		#[allow(private_bounds)]
 		type Precompiles: precompiles::Precompiles<Self>;
 
@@ -214,8 +214,8 @@ pub mod pallet {
 		/// # Note
 		///
 		/// It is safe to change this value on a live chain as all refunds are pro rata.
-		#[pallet::constant]
-		#[pallet::no_default_bounds]
+		#[pezpallet::constant]
+		#[pezpallet::no_default_bounds]
 		type DepositPerByte: Get<BalanceOf<Self>>;
 
 		/// The amount of balance a caller has to pay for each storage item.
@@ -223,8 +223,8 @@ pub mod pallet {
 		/// # Note
 		///
 		/// It is safe to change this value on a live chain as all refunds are pro rata.
-		#[pallet::constant]
-		#[pallet::no_default_bounds]
+		#[pezpallet::constant]
+		#[pezpallet::no_default_bounds]
 		type DepositPerItem: Get<BalanceOf<Self>>;
 
 		/// The amount of balance a caller has to pay for each child trie storage item.
@@ -236,18 +236,18 @@ pub mod pallet {
 		/// # Note
 		///
 		/// It is safe to change this value on a live chain as all refunds are pro rata.
-		#[pallet::constant]
-		#[pallet::no_default_bounds]
+		#[pezpallet::constant]
+		#[pezpallet::no_default_bounds]
 		type DepositPerChildTrieItem: Get<BalanceOf<Self>>;
 
 		/// The percentage of the storage deposit that should be held for using a code hash.
 		/// Instantiating a contract, protects the code from being removed. In order to prevent
 		/// abuse these actions are protected with a percentage of the code deposit.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type CodeHashLockupDepositPercent: Get<Perbill>;
 
 		/// Use either valid type is [`address::AccountId32Mapper`] or [`address::H160Mapper`].
-		#[pallet::no_default]
+		#[pezpallet::no_default]
 		type AddressMapper: AddressMapper<Self>;
 
 		/// Make contract callable functions marked as `#[unstable]` available.
@@ -259,18 +259,18 @@ pub mod pallet {
 		/// # Warning
 		///
 		/// Do **not** set to `true` on productions chains.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type UnsafeUnstableInterface: Get<bool>;
 
 		/// Allow EVM bytecode to be uploaded and instantiated.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type AllowEVMBytecode: Get<bool>;
 
 		/// Origin allowed to upload code.
 		///
 		/// By default, it is safe to set this to `EnsureSigned`, allowing anyone to upload contract
 		/// code.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		type UploadOrigin: EnsureOrigin<OriginFor<Self>, Success = Self::AccountId>;
 
 		/// Origin allowed to instantiate code.
@@ -283,19 +283,19 @@ pub mod pallet {
 		///
 		/// By default, it is safe to set this to `EnsureSigned`, allowing anyone to instantiate
 		/// contract code.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		type InstantiateOrigin: EnsureOrigin<OriginFor<Self>, Success = Self::AccountId>;
 
 		/// The amount of memory in bytes that teyrchain nodes a lot to the runtime.
 		///
-		/// This is used in [`Pallet::integrity_test`] to make sure that the runtime has enough
-		/// memory to support this pallet if set to the correct value.
+		/// This is used in [`Pezpallet::integrity_test`] to make sure that the runtime has enough
+		/// memory to support this pezpallet if set to the correct value.
 		type RuntimeMemory: Get<u32>;
 
 		/// The amount of memory in bytes that relay chain validators a lot to the PoV.
 		///
-		/// This is used in [`Pallet::integrity_test`] to make sure that the runtime has enough
-		/// memory to support this pallet if set to the correct value.
+		/// This is used in [`Pezpallet::integrity_test`] to make sure that the runtime has enough
+		/// memory to support this pezpallet if set to the correct value.
 		///
 		/// This value is usually higher than [`Self::RuntimeMemory`] to account for the fact
 		/// that validators have to hold all storage items in PvF memory.
@@ -305,18 +305,18 @@ pub mod pallet {
 		///
 		/// This is a unique identifier assigned to each blockchain network,
 		/// preventing replay attacks.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type ChainId: Get<u64>;
 
 		/// The ratio between the decimal representation of the native token and the ETH token.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type NativeToEthRatio: Get<u32>;
 
 		/// Set to [`crate::evm::fees::Info`] for a production runtime.
 		///
 		/// For mock runtimes that do not need to interact with any eth compat functionality
 		/// the default value of `()` will suffice.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		type FeeInfo: FeeInfo<Self>;
 
 		/// The fraction the maximum extrinsic weight `eth_transact` extrinsics are capped to.
@@ -331,15 +331,15 @@ pub mod pallet {
 		/// necessary.
 		///
 		///  Default: `0.5`.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxEthExtrinsicWeight: Get<FixedU128>;
 
 		/// Allows debug-mode configuration, such as enabling unlimited contract size.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type DebugEnabled: Get<bool>;
 	}
 
-	/// Container for different types that implement [`DefaultConfig`]` of this pallet.
+	/// Container for different types that implement [`DefaultConfig`]` of this pezpallet.
 	pub mod config_preludes {
 		use super::*;
 		use pezframe_support::{
@@ -367,7 +367,7 @@ pub mod pallet {
 			pub const MaxEthExtrinsicWeight: FixedU128 = FixedU128::from_rational(9, 10);
 		}
 
-		/// A type providing default configurations for this pallet in testing environment.
+		/// A type providing default configurations for this pezpallet in testing environment.
 		pub struct TestDefaultConfig;
 
 		impl Time for TestDefaultConfig {
@@ -422,7 +422,7 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::event]
+	#[pezpallet::event]
 	pub enum Event<T: Config> {
 		/// A custom event emitted by the contract.
 		ContractEmitted {
@@ -448,7 +448,7 @@ pub mod pallet {
 		EthExtrinsicRevert { dispatch_error: DispatchError },
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	#[repr(u8)]
 	pub enum Error<T> {
 		/// Invalid schedule supplied, e.g. with zero weight of a basic operation.
@@ -492,7 +492,7 @@ pub mod pallet {
 		TerminatedInConstructor = 0x13,
 		/// A call tried to invoke a contract that is flagged as non-reentrant.
 		ReentranceDenied = 0x14,
-		/// A contract called into the runtime which then called back into this pallet.
+		/// A contract called into the runtime which then called back into this pezpallet.
 		ReenteredPallet = 0x15,
 		/// A contract attempted to invoke a state modifying API while being in read-only mode.
 		StateChangeDenied = 0x16,
@@ -541,9 +541,9 @@ pub mod pallet {
 		/// Immutable data can only be set during deploys and only be read during calls.
 		/// Additionally, it is only valid to set the data once and it must not be empty.
 		InvalidImmutableAccess = 0x2A,
-		/// An `AccountID32` account tried to interact with the pallet without having a mapping.
+		/// An `AccountID32` account tried to interact with the pezpallet without having a mapping.
 		///
-		/// Call [`Pallet::map_account`] in order to create a mapping for the account.
+		/// Call [`Pezpallet::map_account`] in order to create a mapping for the account.
 		AccountUnmapped = 0x2B,
 		/// Tried to map an account that is already mapped.
 		AccountAlreadyMapped = 0x2C,
@@ -595,12 +595,12 @@ pub mod pallet {
 		BenchmarkingError = 0xFF,
 	}
 
-	/// A reason for the pallet revive placing a hold on funds.
-	#[pallet::composite_enum]
+	/// A reason for the pezpallet revive placing a hold on funds.
+	#[pezpallet::composite_enum]
 	pub enum HoldReason {
-		/// The Pallet has reserved it for storing code on-chain.
+		/// The Pezpallet has reserved it for storing code on-chain.
 		CodeUploadDepositReserve,
-		/// The Pallet has reserved it for storage deposit.
+		/// The Pezpallet has reserved it for storage deposit.
 		StorageDepositReserve,
 		/// Deposit for creating an address mapping in [`OriginalAccount`].
 		AddressMapping,
@@ -617,7 +617,7 @@ pub mod pallet {
 		TypeInfo,
 		RuntimeDebug,
 	)]
-	#[pallet::origin]
+	#[pezpallet::origin]
 	pub enum Origin<T: Config> {
 		EthTransaction(T::AccountId),
 	}
@@ -625,32 +625,32 @@ pub mod pallet {
 	/// A mapping from a contract's code hash to its code.
 	/// The code's size is bounded by [`crate::limits::BLOB_BYTES`] for PVM and
 	/// [`revm::primitives::eip170::MAX_CODE_SIZE`] for EVM bytecode.
-	#[pallet::storage]
-	#[pallet::unbounded]
+	#[pezpallet::storage]
+	#[pezpallet::unbounded]
 	pub(crate) type PristineCode<T: Config> = StorageMap<_, Identity, H256, Vec<u8>>;
 
 	/// A mapping from a contract's code hash to its code info.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type CodeInfoOf<T: Config> = StorageMap<_, Identity, H256, CodeInfo<T>>;
 
 	/// The data associated to a contract or externally owned account.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type AccountInfoOf<T: Config> = StorageMap<_, Identity, H160, AccountInfo<T>>;
 
 	/// The immutable data associated with a given account.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type ImmutableDataOf<T: Config> = StorageMap<_, Identity, H160, ImmutableData>;
 
 	/// Evicted contracts that await child trie deletion.
 	///
 	/// Child trie deletion is a heavy operation depending on the amount of storage items
 	/// stored in said trie. Therefore this operation is performed lazily in `on_idle`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type DeletionQueue<T: Config> = StorageMap<_, Twox64Concat, u32, TrieId>;
 
 	/// A pair of monotonic counters used to track the latest contract marked for deletion
 	/// and the latest deleted contract in queue.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type DeletionQueueCounter<T: Config> =
 		StorageValue<_, DeletionQueueManager<T>, ValueQuery>;
 
@@ -658,9 +658,9 @@ pub mod pallet {
 	///
 	/// When deriving a `H160` from an `AccountId32` we use a hash function. In order to
 	/// reconstruct the original account we need to store the reverse mapping here.
-	/// Register your `AccountId32` using [`Pallet::map_account`] in order to
-	/// use it with this pallet.
-	#[pallet::storage]
+	/// Register your `AccountId32` using [`Pezpallet::map_account`] in order to
+	/// use it with this pezpallet.
+	#[pezpallet::storage]
 	pub(crate) type OriginalAccount<T: Config> = StorageMap<_, Identity, H160, AccountId32>;
 
 	/// The current Ethereum block that is stored in the `on_finalize` method.
@@ -672,14 +672,14 @@ pub mod pallet {
 	///
 	/// Since the block is convenient to have around, and the extra details are capped
 	/// by a few hashes and the vector of transaction hashes, we store the block here.
-	#[pallet::storage]
-	#[pallet::unbounded]
+	#[pezpallet::storage]
+	#[pezpallet::unbounded]
 	pub(crate) type EthereumBlock<T> = StorageValue<_, EthBlock, ValueQuery>;
 
 	/// Mapping for block number and hashes.
 	///
 	/// The maximum number of elements stored is capped by the block hash count `BLOCK_HASH_COUNT`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type BlockHash<T: Config> =
 		StorageMap<_, Identity, BlockNumberFor<T>, H256, ValueQuery>;
 
@@ -689,13 +689,13 @@ pub mod pallet {
 	///
 	/// NOTE: The item is unbound and should therefore never be read on chain.
 	/// It could otherwise inflate the PoV size of a block.
-	#[pallet::storage]
-	#[pallet::unbounded]
+	#[pezpallet::storage]
+	#[pezpallet::unbounded]
 	pub(crate) type ReceiptInfoData<T: Config> = StorageValue<_, Vec<ReceiptGasInfo>, ValueQuery>;
 
 	/// Incremental ethereum block builder.
-	#[pallet::storage]
-	#[pallet::unbounded]
+	#[pezpallet::storage]
+	#[pezpallet::unbounded]
 	pub(crate) type EthBlockBuilderIR<T: Config> =
 		StorageValue<_, EthereumBlockBuilderIR<T>, ValueQuery>;
 
@@ -703,13 +703,13 @@ pub mod pallet {
 	///
 	/// These values are moved out of the `EthBlockBuilderIR` to avoid serializing and
 	/// deserializing them on every transaction. Instead, they are loaded when needed.
-	#[pallet::storage]
-	#[pallet::unbounded]
+	#[pezpallet::storage]
+	#[pezpallet::unbounded]
 	pub(crate) type EthBlockBuilderFirstValues<T: Config> =
 		StorageValue<_, Option<(Vec<u8>, Vec<u8>)>, ValueQuery>;
 
 	/// Debugging settings that can be configured when DebugEnabled config is true.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type DebugSettingsOf<T: Config> = StorageValue<_, DebugSettings, ValueQuery>;
 
 	pub mod genesis {
@@ -742,7 +742,7 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(Debug, PartialEq, pezframe_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		/// List of native Bizinikiwi accounts (typically `AccountId32`) to be mapped at genesis
@@ -759,15 +759,15 @@ pub mod pallet {
 		pub debug_settings: Option<DebugSettings>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			use crate::{exec::Key, vm::ContractBlob};
 			use pezframe_support::traits::fungible::Mutate;
 
-			if !System::<T>::account_exists(&Pallet::<T>::account_id()) {
+			if !System::<T>::account_exists(&Pezpallet::<T>::account_id()) {
 				let _ = T::Currency::mint_into(
-					&Pallet::<T>::account_id(),
+					&Pezpallet::<T>::account_id(),
 					T::Currency::minimum_balance(),
 				);
 			}
@@ -778,7 +778,7 @@ pub mod pallet {
 				}
 			}
 
-			let owner = Pallet::<T>::account_id();
+			let owner = Pezpallet::<T>::account_id();
 
 			for genesis::Account { address, balance, nonce, contract_data } in &self.accounts {
 				let account_id = T::AddressMapper::to_account_id(address);
@@ -837,7 +837,7 @@ pub mod pallet {
 					},
 				}
 
-				let _ = Pallet::<T>::set_evm_balance(address, *balance).inspect_err(|err| {
+				let _ = Pezpallet::<T>::set_evm_balance(address, *balance).inspect_err(|err| {
 					log::error!(target: LOG_TARGET, "Failed to set EVM balance for {address:?}: {err:?}");
 				});
 			}
@@ -846,7 +846,7 @@ pub mod pallet {
 			block_storage::on_finalize_build_eth_block::<T>(
 				// Make sure to use the block number from storage instead of the hardcoded 0.
 				// This enables testing tools like anvil to customise the genesis block number.
-				pezframe_system::Pallet::<T>::block_number(),
+				pezframe_system::Pezpallet::<T>::block_number(),
 			);
 
 			// Set debug settings.
@@ -856,8 +856,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn on_idle(_block: BlockNumberFor<T>, limit: Weight) -> Weight {
 			let mut meter = WeightMeter::with_limit(limit);
 			ContractInfo::<T>::process_deletion_queue_batch(&mut meter);
@@ -868,8 +868,8 @@ pub mod pallet {
 			// Kill related ethereum block storage items.
 			block_storage::on_initialize::<T>();
 
-			// Warm up the pallet account.
-			System::<T>::account_exists(&Pallet::<T>::account_id());
+			// Warm up the pezpallet account.
+			System::<T>::account_exists(&Pezpallet::<T>::account_id());
 			// Account for the fixed part of the costs incurred in `on_finalize`.
 			<T as Config>::WeightInfo::on_finalize_block_fixed()
 		}
@@ -950,7 +950,7 @@ pub mod pallet {
 			// for transactions. Transactions are bounded to `MAX_TRANSACTION_PAYLOAD_SIZE`.
 			//
 			// To determine the maximum size of the receipts, we know the following:
-			// - (I) first receipt is stored into pallet storage and not given to the hasher until
+			// - (I) first receipt is stored into pezpallet storage and not given to the hasher until
 			//   finalization.
 			// - (II) the hasher will not consume more memory than the receipts we are giving it.
 			// - (III) the hasher is capped by 3 x maximum entry for 3 or more transactions.
@@ -960,7 +960,7 @@ pub mod pallet {
 			// The worst case scenario for having one single transaction is for the transaction
 			// to emit the maximum receipt size (ie `max_events_size`). In this case,
 			// the maximum storage (and memory) consumed is bounded by `max_events_size` (II). The
-			// receipt is stored in pallet storage, and loaded from storage in the
+			// receipt is stored in pezpallet storage, and loaded from storage in the
 			// `on_finalize` hook (I).
 			//
 			// # Case 2. Two transactions
@@ -1030,8 +1030,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// A raw EVM transaction, typically dispatched by an Ethereum JSON-RPC server.
 		///
 		/// # Parameters
@@ -1045,8 +1045,8 @@ pub mod pallet {
 		/// runtime converts it into a [`pezsp_runtime::generic::CheckedExtrinsic`] by recovering the
 		/// signer and validating the transaction.
 		#[allow(unused_variables)]
-		#[pallet::call_index(0)]
-		#[pallet::weight(Weight::MAX)]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(Weight::MAX)]
 		pub fn eth_transact(origin: OriginFor<T>, payload: Vec<u8>) -> DispatchResultWithPostInfo {
 			Err(pezframe_system::Error::CallFiltered::<T>.into())
 		}
@@ -1067,21 +1067,21 @@ pub mod pallet {
 		/// * If the account is a regular account, any value will be transferred.
 		/// * If no account exists and the call value is not less than `existential_deposit`,
 		/// a regular account will be created and any value will be transferred.
-		#[pallet::call_index(1)]
-		#[pallet::weight(<T as Config>::WeightInfo::call().saturating_add(*gas_limit))]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::call().saturating_add(*gas_limit))]
 		pub fn call(
 			origin: OriginFor<T>,
 			dest: H160,
-			#[pallet::compact] value: BalanceOf<T>,
+			#[pezpallet::compact] value: BalanceOf<T>,
 			gas_limit: Weight,
-			#[pallet::compact] storage_deposit_limit: BalanceOf<T>,
+			#[pezpallet::compact] storage_deposit_limit: BalanceOf<T>,
 			data: Vec<u8>,
 		) -> DispatchResultWithPostInfo {
 			Self::ensure_non_contract_if_signed(&origin)?;
 			let mut output = Self::bare_call(
 				origin,
 				dest,
-				Pallet::<T>::convert_native_to_evm(value),
+				Pezpallet::<T>::convert_native_to_evm(value),
 				gas_limit,
 				storage_deposit_limit,
 				data,
@@ -1101,15 +1101,15 @@ pub mod pallet {
 		/// This function is identical to [`Self::instantiate_with_code`] but without the
 		/// code deployment step. Instead, the `code_hash` of an on-chain deployed vm binary
 		/// must be supplied.
-		#[pallet::call_index(2)]
-		#[pallet::weight(
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(
 			<T as Config>::WeightInfo::instantiate(data.len() as u32).saturating_add(*gas_limit)
 		)]
 		pub fn instantiate(
 			origin: OriginFor<T>,
-			#[pallet::compact] value: BalanceOf<T>,
+			#[pezpallet::compact] value: BalanceOf<T>,
 			gas_limit: Weight,
-			#[pallet::compact] storage_deposit_limit: BalanceOf<T>,
+			#[pezpallet::compact] storage_deposit_limit: BalanceOf<T>,
 			code_hash: pezsp_core::H256,
 			data: Vec<u8>,
 			salt: Option<[u8; 32]>,
@@ -1118,7 +1118,7 @@ pub mod pallet {
 			let data_len = data.len() as u32;
 			let mut output = Self::bare_instantiate(
 				origin,
-				Pallet::<T>::convert_native_to_evm(value),
+				Pezpallet::<T>::convert_native_to_evm(value),
 				gas_limit,
 				storage_deposit_limit,
 				Code::Existing(code_hash),
@@ -1165,16 +1165,16 @@ pub mod pallet {
 		/// - The smart-contract account is created at the computed address.
 		/// - The `value` is transferred to the new account.
 		/// - The `deploy` function is executed in the context of the newly-created account.
-		#[pallet::call_index(3)]
-		#[pallet::weight(
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(
 			<T as Config>::WeightInfo::instantiate_with_code(code.len() as u32, data.len() as u32)
 			.saturating_add(*gas_limit)
 		)]
 		pub fn instantiate_with_code(
 			origin: OriginFor<T>,
-			#[pallet::compact] value: BalanceOf<T>,
+			#[pezpallet::compact] value: BalanceOf<T>,
 			gas_limit: Weight,
-			#[pallet::compact] storage_deposit_limit: BalanceOf<T>,
+			#[pezpallet::compact] storage_deposit_limit: BalanceOf<T>,
 			code: Vec<u8>,
 			data: Vec<u8>,
 			salt: Option<[u8; 32]>,
@@ -1184,7 +1184,7 @@ pub mod pallet {
 			let data_len = data.len() as u32;
 			let mut output = Self::bare_instantiate(
 				origin,
-				Pallet::<T>::convert_native_to_evm(value),
+				Pezpallet::<T>::convert_native_to_evm(value),
 				gas_limit,
 				storage_deposit_limit,
 				Code::Upload(code),
@@ -1225,9 +1225,9 @@ pub mod pallet {
 		/// via the `CheckNonce` transaction extension. In contrast, [`Self::instantiate_with_code`]
 		/// also bumps the nonce after contract instantiation, since it may be invoked multiple
 		/// times within a batch call transaction.
-		#[pallet::call_index(10)]
-		#[pallet::weight(
-			<T as Config>::WeightInfo::eth_instantiate_with_code(code.len() as u32, data.len() as u32, Pallet::<T>::has_dust(*value).into())
+		#[pezpallet::call_index(10)]
+		#[pezpallet::weight(
+			<T as Config>::WeightInfo::eth_instantiate_with_code(code.len() as u32, data.len() as u32, Pezpallet::<T>::has_dust(*value).into())
 			.saturating_add(T::WeightInfo::on_finalize_block_per_tx(transaction_encoded.len() as u32))
 			.saturating_add(*gas_limit)
 		)]
@@ -1287,9 +1287,9 @@ pub mod pallet {
 
 		/// Same as [`Self::call`], but intended to be dispatched **only**
 		/// by an EVM transaction through the EVM compatibility layer.
-		#[pallet::call_index(11)]
-		#[pallet::weight(
-		    T::WeightInfo::eth_call(Pallet::<T>::has_dust(*value).into())
+		#[pezpallet::call_index(11)]
+		#[pezpallet::weight(
+		    T::WeightInfo::eth_call(Pezpallet::<T>::has_dust(*value).into())
 				.saturating_add(*gas_limit)
 				.saturating_add(T::WeightInfo::on_finalize_block_per_tx(transaction_encoded.len() as u32))
 		)]
@@ -1357,8 +1357,8 @@ pub mod pallet {
 		/// * `origin`: Must be an [`Origin::EthTransaction`] origin.
 		/// * `call`: The Bizinikiwi runtime call to execute.
 		/// * `transaction_encoded`: The RLP encoding of the Ethereum transaction,
-		#[pallet::call_index(12)]
-		#[pallet::weight(T::WeightInfo::eth_bizinikiwi_call(transaction_encoded.len() as u32).saturating_add(call.get_dispatch_info().call_weight))]
+		#[pezpallet::call_index(12)]
+		#[pezpallet::weight(T::WeightInfo::eth_bizinikiwi_call(transaction_encoded.len() as u32).saturating_add(call.get_dispatch_info().call_weight))]
 		pub fn eth_bizinikiwi_call(
 			origin: OriginFor<T>,
 			call: Box<<T as Config>::RuntimeCall>,
@@ -1409,12 +1409,12 @@ pub mod pallet {
 		///
 		/// If the refcount of the code reaches zero after terminating the last contract that
 		/// references this code, the code will be removed automatically.
-		#[pallet::call_index(4)]
-		#[pallet::weight(<T as Config>::WeightInfo::upload_code(code.len() as u32))]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::upload_code(code.len() as u32))]
 		pub fn upload_code(
 			origin: OriginFor<T>,
 			code: Vec<u8>,
-			#[pallet::compact] storage_deposit_limit: BalanceOf<T>,
+			#[pezpallet::compact] storage_deposit_limit: BalanceOf<T>,
 		) -> DispatchResult {
 			Self::ensure_non_contract_if_signed(&origin)?;
 			Self::bare_upload_code(origin, code, storage_deposit_limit).map(|_| ())
@@ -1424,8 +1424,8 @@ pub mod pallet {
 		///
 		/// A code can only be removed by its original uploader (its owner) and only if it is
 		/// not used by any contract.
-		#[pallet::call_index(5)]
-		#[pallet::weight(<T as Config>::WeightInfo::remove_code())]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::remove_code())]
 		pub fn remove_code(
 			origin: OriginFor<T>,
 			code_hash: pezsp_core::H256,
@@ -1446,8 +1446,8 @@ pub mod pallet {
 		/// This does **not** change the address of the contract in question. This means
 		/// that the contract address is no longer derived from its code hash after calling
 		/// this dispatchable.
-		#[pallet::call_index(6)]
-		#[pallet::weight(<T as Config>::WeightInfo::set_code())]
+		#[pezpallet::call_index(6)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::set_code())]
 		pub fn set_code(
 			origin: OriginFor<T>,
 			dest: H160,
@@ -1475,8 +1475,8 @@ pub mod pallet {
 		///
 		/// This will error if the origin is already mapped or is a eth native `Address20`. It will
 		/// take a deposit that can be released by calling [`Self::unmap_account`].
-		#[pallet::call_index(7)]
-		#[pallet::weight(<T as Config>::WeightInfo::map_account())]
+		#[pezpallet::call_index(7)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::map_account())]
 		pub fn map_account(origin: OriginFor<T>) -> DispatchResult {
 			Self::ensure_non_contract_if_signed(&origin)?;
 			let origin = ensure_signed(origin)?;
@@ -1487,8 +1487,8 @@ pub mod pallet {
 		///
 		/// There is no reason to ever call this function other than freeing up the deposit.
 		/// This is only useful when the account should no longer be used.
-		#[pallet::call_index(8)]
-		#[pallet::weight(<T as Config>::WeightInfo::unmap_account())]
+		#[pezpallet::call_index(8)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::unmap_account())]
 		pub fn unmap_account(origin: OriginFor<T>) -> DispatchResult {
 			let origin = ensure_signed(origin)?;
 			T::AddressMapper::unmap(&origin)
@@ -1499,8 +1499,8 @@ pub mod pallet {
 		/// Every `AccountId32` can control its corresponding fallback account. The fallback account
 		/// is the `AccountId20` with the last 12 bytes set to `0xEE`. This is essentially a
 		/// recovery function in case an `AccountId20` was used without creating a mapping first.
-		#[pallet::call_index(9)]
-		#[pallet::weight({
+		#[pezpallet::call_index(9)]
+		#[pezpallet::weight({
 			let dispatch_info = call.get_dispatch_info();
 			(
 				<T as Config>::WeightInfo::dispatch_as_fallback_account().saturating_add(dispatch_info.call_weight),
@@ -1536,7 +1536,7 @@ fn dispatch_result<R>(
 		.map_err(|e| DispatchErrorWithPostInfo { post_info, error: e })
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// A generalized version of [`Self::call`].
 	///
 	/// Identical to [`Self::call`] but tailored towards being called by other code within the
@@ -1590,7 +1590,7 @@ impl<T: Config> Pallet<T> {
 	pub fn prepare_dry_run(account: &T::AccountId) {
 		// Bump the  nonce to simulate what would happen
 		// `pre-dispatch` if the transaction was executed.
-		pezframe_system::Pallet::<T>::inc_account_nonce(account);
+		pezframe_system::Pezpallet::<T>::inc_account_nonce(account);
 	}
 
 	/// A generalized version of [`Self::instantiate`] or [`Self::instantiate_with_code`].
@@ -1750,7 +1750,7 @@ impl<T: Config> Pallet<T> {
 		if let Some(from) = &from {
 			let fees = if gas.is_some() { fees } else { Zero::zero() };
 			let balance = Self::evm_balance(from);
-			if balance < Pallet::<T>::convert_native_to_evm(fees).saturating_add(value) {
+			if balance < Pezpallet::<T>::convert_native_to_evm(fees).saturating_add(value) {
 				return Err(EthTransactError::Message(format!(
 					"insufficient funds for gas * price + value ({fees:?}): address {from:?} have {balance:?} (supplied gas {gas:?})",
 				)));
@@ -1792,7 +1792,7 @@ impl<T: Config> Pallet<T> {
 					Default::default()
 				} else {
 					// Dry run the call.
-					let result = crate::Pallet::<T>::bare_call(
+					let result = crate::Pezpallet::<T>::bare_call(
 						OriginFor::<T>::signed(origin),
 						dest,
 						value,
@@ -1833,7 +1833,7 @@ impl<T: Config> Pallet<T> {
 				};
 
 				// Dry run the call.
-				let result = crate::Pallet::<T>::bare_instantiate(
+				let result = crate::Pezpallet::<T>::bare_instantiate(
 					OriginFor::<T>::signed(origin),
 					value,
 					call_info.weight_limit,
@@ -2177,7 +2177,7 @@ impl<T: Config> Pallet<T> {
 			.map_err(ContractAccessError::StorageWriteFailed)
 	}
 
-	/// Pallet account, used to hold funds for contracts upload deposit.
+	/// Pezpallet account, used to hold funds for contracts upload deposit.
 	pub fn account_id() -> T::AccountId {
 		use pezframe_support::PalletId;
 		use pezsp_runtime::traits::AccountIdConversion;
@@ -2188,7 +2188,7 @@ impl<T: Config> Pallet<T> {
 	pub fn block_author() -> H160 {
 		use pezframe_support::traits::FindAuthor;
 
-		let digest = <pezframe_system::Pallet<T>>::digest();
+		let digest = <pezframe_system::Pezpallet<T>>::digest();
 		let pre_runtime_digests = digest.logs.iter().filter_map(|d| d.as_pre_runtime());
 
 		T::FindAuthor::find_author(pre_runtime_digests)
@@ -2227,7 +2227,7 @@ impl<T: Config> Pallet<T> {
 		Ok((module, deposit))
 	}
 
-	/// Run the supplied function `f` if no other instance of this pallet is on the stack.
+	/// Run the supplied function `f` if no other instance of this pezpallet is on the stack.
 	fn run_guarded<R, F: FnOnce() -> Result<R, ExecError>>(f: F) -> Result<R, ExecError> {
 		executing_contract::using_once(&mut false, || {
 			executing_contract::with(|f| {
@@ -2352,7 +2352,7 @@ impl<T: Config> Pallet<T> {
 			let available = T::Currency::balance_on_hold(&hold_reason, from);
 			if available < amount {
 				// The storage deposit accounting got out of sync with the balance: This would be a
-				// straight up bug in this pallet.
+				// straight up bug in this pezpallet.
 				log::error!(
 					target: LOG_TARGET,
 					"Failed to refund storage deposit {:?} from contract {:?} to origin {:?}. Not enough deposit: {:?}. This is a bug.",
@@ -2389,12 +2389,12 @@ impl<T: Config> Pallet<T> {
 		<T::Currency as Inspect<AccountIdOf<T>>>::minimum_balance()
 	}
 
-	/// Deposit a pallet revive event.
+	/// Deposit a pezpallet revive event.
 	///
 	/// This method will be called by the EVM to deposit events emitted by the contract.
 	/// Therefore all events must be contract emitted events.
 	fn deposit_event(event: Event<T>) {
-		<pezframe_system::Pallet<T>>::deposit_event(<T as Config>::RuntimeEvent::from(event))
+		<pezframe_system::Pezpallet<T>>::deposit_event(<T as Config>::RuntimeEvent::from(event))
 	}
 
 	// Returns Ok with the account that signed the eth transaction.
@@ -2482,7 +2482,7 @@ pezsp_api::decl_runtime_apis! {
 
 		/// Perform a call from a specified account to a given contract.
 		///
-		/// See [`crate::Pallet::bare_call`].
+		/// See [`crate::Pezpallet::bare_call`].
 		fn call(
 			origin: AccountId,
 			dest: H160,
@@ -2494,7 +2494,7 @@ pezsp_api::decl_runtime_apis! {
 
 		/// Instantiate a new contract.
 		///
-		/// See `[crate::Pallet::bare_instantiate]`.
+		/// See `[crate::Pezpallet::bare_instantiate]`.
 		fn instantiate(
 			origin: AccountId,
 			value: Balance,
@@ -2509,12 +2509,12 @@ pezsp_api::decl_runtime_apis! {
 		/// Perform an Ethereum call.
 		///
 		/// Deprecated use `v2` version instead.
-		/// See [`crate::Pallet::dry_run_eth_transact`]
+		/// See [`crate::Pezpallet::dry_run_eth_transact`]
 		fn eth_transact(tx: GenericTransaction) -> Result<EthTransactInfo<Balance>, EthTransactError>;
 
 		/// Perform an Ethereum call.
 		///
-		/// See [`crate::Pallet::dry_run_eth_transact`]
+		/// See [`crate::Pezpallet::dry_run_eth_transact`]
 		fn eth_transact_with_config(
 			tx: GenericTransaction,
 			config: DryRunConfig<Moment>,
@@ -2522,7 +2522,7 @@ pezsp_api::decl_runtime_apis! {
 
 		/// Upload new code without instantiating a contract from it.
 		///
-		/// See [`crate::Pallet::bare_upload_code`].
+		/// See [`crate::Pezpallet::bare_upload_code`].
 		fn upload_code(
 			origin: AccountId,
 			code: Vec<u8>,
@@ -2618,7 +2618,7 @@ macro_rules! impl_runtime_apis_plus_revive_traits {
 
 		impl $crate::evm::runtime::SetWeightLimit for RuntimeCall {
 			fn set_weight_limit(&mut self, weight_limit: Weight) -> Weight {
-				use $crate::pallet::Call as ReviveCall;
+				use $crate::pezpallet::Call as ReviveCall;
 				match self {
 					Self::$Revive(
 						ReviveCall::eth_call{ gas_limit, .. } |
@@ -2640,37 +2640,37 @@ macro_rules! impl_runtime_apis_plus_revive_traits {
 			impl pezpallet_revive::ReviveApi<Block, AccountId, Balance, Nonce, BlockNumber, __ReviveMacroMoment> for $Runtime
 			{
 				fn eth_block() -> $crate::EthBlock {
-					$crate::Pallet::<Self>::eth_block()
+					$crate::Pezpallet::<Self>::eth_block()
 				}
 
 				fn eth_block_hash(number: $crate::U256) -> Option<$crate::H256> {
-					$crate::Pallet::<Self>::eth_block_hash_from_number(number)
+					$crate::Pezpallet::<Self>::eth_block_hash_from_number(number)
 				}
 
 				fn eth_receipt_data() -> Vec<$crate::ReceiptGasInfo> {
-					$crate::Pallet::<Self>::eth_receipt_data()
+					$crate::Pezpallet::<Self>::eth_receipt_data()
 				}
 
 				fn balance(address: $crate::H160) -> $crate::U256 {
-					$crate::Pallet::<Self>::evm_balance(&address)
+					$crate::Pezpallet::<Self>::evm_balance(&address)
 				}
 
 				fn block_author() -> $crate::H160 {
-					$crate::Pallet::<Self>::block_author()
+					$crate::Pezpallet::<Self>::block_author()
 				}
 
 				fn block_gas_limit() -> $crate::U256 {
-					$crate::Pallet::<Self>::evm_block_gas_limit()
+					$crate::Pezpallet::<Self>::evm_block_gas_limit()
 				}
 
 				fn gas_price() -> $crate::U256 {
-					$crate::Pallet::<Self>::evm_base_fee()
+					$crate::Pezpallet::<Self>::evm_base_fee()
 				}
 
 				fn nonce(address: $crate::H160) -> Nonce {
 					use $crate::AddressMapper;
 					let account = <Self as $crate::Config>::AddressMapper::to_account_id(&address);
-					$crate::pezframe_system::Pallet::<Self>::account_nonce(account)
+					$crate::pezframe_system::Pezpallet::<Self>::account_nonce(account)
 				}
 
 				fn address(account_id: AccountId) -> $crate::H160 {
@@ -2686,7 +2686,7 @@ macro_rules! impl_runtime_apis_plus_revive_traits {
 						pezsp_runtime::traits::TransactionExtension,
 						pezsp_runtime::traits::Block as BlockT
 					};
-					$crate::Pallet::<Self>::dry_run_eth_transact(tx, Default::default())
+					$crate::Pezpallet::<Self>::dry_run_eth_transact(tx, Default::default())
 				}
 
 				fn eth_transact_with_config(
@@ -2698,7 +2698,7 @@ macro_rules! impl_runtime_apis_plus_revive_traits {
 						pezsp_runtime::traits::TransactionExtension,
 						pezsp_runtime::traits::Block as BlockT
 					};
-					$crate::Pallet::<Self>::dry_run_eth_transact(tx, config)
+					$crate::Pezpallet::<Self>::dry_run_eth_transact(tx, config)
 				}
 
 				fn call(
@@ -2713,11 +2713,11 @@ macro_rules! impl_runtime_apis_plus_revive_traits {
 					let blockweights: $crate::BlockWeights =
 						<Self as $crate::pezframe_system::Config>::BlockWeights::get();
 
-					$crate::Pallet::<Self>::prepare_dry_run(&origin);
-					$crate::Pallet::<Self>::bare_call(
+					$crate::Pezpallet::<Self>::prepare_dry_run(&origin);
+					$crate::Pezpallet::<Self>::bare_call(
 						<Self as $crate::pezframe_system::Config>::RuntimeOrigin::signed(origin),
 						dest,
-						$crate::Pallet::<Self>::convert_native_to_evm(value),
+						$crate::Pezpallet::<Self>::convert_native_to_evm(value),
 						gas_limit.unwrap_or(blockweights.max_block),
 						storage_deposit_limit.unwrap_or(u128::MAX),
 						input_data,
@@ -2738,10 +2738,10 @@ macro_rules! impl_runtime_apis_plus_revive_traits {
 					let blockweights: $crate::BlockWeights =
 						<Self as $crate::pezframe_system::Config>::BlockWeights::get();
 
-					$crate::Pallet::<Self>::prepare_dry_run(&origin);
-					$crate::Pallet::<Self>::bare_instantiate(
+					$crate::Pezpallet::<Self>::prepare_dry_run(&origin);
+					$crate::Pezpallet::<Self>::bare_instantiate(
 						<Self as $crate::pezframe_system::Config>::RuntimeOrigin::signed(origin),
-						$crate::Pallet::<Self>::convert_native_to_evm(value),
+						$crate::Pezpallet::<Self>::convert_native_to_evm(value),
 						gas_limit.unwrap_or(blockweights.max_block),
 						storage_deposit_limit.unwrap_or(u128::MAX),
 						code,
@@ -2758,7 +2758,7 @@ macro_rules! impl_runtime_apis_plus_revive_traits {
 				) -> $crate::CodeUploadResult<Balance> {
 					let origin =
 						<Self as $crate::pezframe_system::Config>::RuntimeOrigin::signed(origin);
-					$crate::Pallet::<Self>::bare_upload_code(
+					$crate::Pezpallet::<Self>::bare_upload_code(
 						origin,
 						code,
 						storage_deposit_limit.unwrap_or(u128::MAX),
@@ -2769,11 +2769,11 @@ macro_rules! impl_runtime_apis_plus_revive_traits {
 					address: $crate::H160,
 					key: Vec<u8>,
 				) -> $crate::GetStorageResult {
-					$crate::Pallet::<Self>::get_storage_var_key(address, key)
+					$crate::Pezpallet::<Self>::get_storage_var_key(address, key)
 				}
 
 				fn get_storage(address: $crate::H160, key: [u8; 32]) -> $crate::GetStorageResult {
-					$crate::Pallet::<Self>::get_storage(address, key)
+					$crate::Pezpallet::<Self>::get_storage(address, key)
 				}
 
 				fn trace_block(
@@ -2785,7 +2785,7 @@ macro_rules! impl_runtime_apis_plus_revive_traits {
 					let (header, extrinsics) = block.deconstruct();
 					<$Executive>::initialize_block(&header);
 					for (index, ext) in extrinsics.into_iter().enumerate() {
-						let mut tracer = $crate::Pallet::<Self>::evm_tracer(tracer_type.clone());
+						let mut tracer = $crate::Pezpallet::<Self>::evm_tracer(tracer_type.clone());
 						let t = tracer.as_tracing();
 						let _ = trace(t, || <$Executive>::apply_extrinsic(ext));
 
@@ -2804,7 +2804,7 @@ macro_rules! impl_runtime_apis_plus_revive_traits {
 				) -> Option<$crate::evm::Trace> {
 					use $crate::{pezsp_runtime::traits::Block, tracing::trace};
 
-					let mut tracer = $crate::Pallet::<Self>::evm_tracer(tracer_type);
+					let mut tracer = $crate::Pezpallet::<Self>::evm_tracer(tracer_type);
 					let (header, extrinsics) = block.deconstruct();
 
 					<$Executive>::initialize_block(&header);
@@ -2826,11 +2826,11 @@ macro_rules! impl_runtime_apis_plus_revive_traits {
 					tracer_type: $crate::evm::TracerType,
 				) -> Result<$crate::evm::Trace, $crate::EthTransactError> {
 					use $crate::tracing::trace;
-					let mut tracer = $crate::Pallet::<Self>::evm_tracer(tracer_type.clone());
+					let mut tracer = $crate::Pezpallet::<Self>::evm_tracer(tracer_type.clone());
 					let t = tracer.as_tracing();
 
 					t.watch_address(&tx.from.unwrap_or_default());
-					t.watch_address(&$crate::Pallet::<Self>::block_author());
+					t.watch_address(&$crate::Pezpallet::<Self>::block_author());
 					let result = trace(t, || Self::eth_transact(tx));
 
 					if let Some(trace) = tracer.collect_trace() {
@@ -2838,7 +2838,7 @@ macro_rules! impl_runtime_apis_plus_revive_traits {
 					} else if let Err(err) = result {
 						Err(err)
 					} else {
-						Ok($crate::Pallet::<Self>::evm_tracer(tracer_type).empty_trace())
+						Ok($crate::Pezpallet::<Self>::evm_tracer(tracer_type).empty_trace())
 					}
 				}
 
@@ -2847,7 +2847,7 @@ macro_rules! impl_runtime_apis_plus_revive_traits {
 				}
 
 				fn code(address: $crate::H160) -> Vec<u8> {
-					$crate::Pallet::<Self>::code(&address)
+					$crate::Pezpallet::<Self>::code(&address)
 				}
 
 				fn account_id(address: $crate::H160) -> AccountId {
@@ -2856,7 +2856,7 @@ macro_rules! impl_runtime_apis_plus_revive_traits {
 				}
 
 				fn new_balance_with_dust(balance: $crate::U256) -> Result<(Balance, u32), $crate::BalanceConversionError> {
-					$crate::Pallet::<Self>::new_balance_with_dust(balance)
+					$crate::Pezpallet::<Self>::new_balance_with_dust(balance)
 				}
 			}
 		}

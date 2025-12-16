@@ -45,9 +45,9 @@ macro_rules! impl_elections_weights {
 	};
 }
 
-/// The numbers configured here could always be more than the the maximum limits of staking pallet
+/// The numbers configured here could always be more than the the maximum limits of staking pezpallet
 /// to ensure election snapshot will not run out of memory. For now, we set them to smaller values
-/// since the staking is bounded and the weight pipeline takes hours for this single pallet.
+/// since the staking is bounded and the weight pipeline takes hours for this single pezpallet.
 pub struct BenchmarkConfig;
 impl pezpallet_election_provider_multi_phase::BenchmarkingConfig for BenchmarkConfig {
 	const VOTERS: [u32; 2] = [1000, 2000];

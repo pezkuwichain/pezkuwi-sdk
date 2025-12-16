@@ -73,7 +73,7 @@ pub fn display_and_check_bags<Runtime: RuntimeT<Instance1>>(
 		let vote_weight_thresh_as_unit = vote_weight_thresh_u64 as f64 / currency_unit as f64;
 		let pretty_thresh = format!("Threshold: {}. {}", vote_weight_thresh_as_unit, currency_name);
 
-		let bag = match pezpallet_bags_list::Pallet::<Runtime, Instance1>::list_bags_get(
+		let bag = match pezpallet_bags_list::Pezpallet::<Runtime, Instance1>::list_bags_get(
 			*vote_weight_thresh,
 		) {
 			Some(bag) => bag,

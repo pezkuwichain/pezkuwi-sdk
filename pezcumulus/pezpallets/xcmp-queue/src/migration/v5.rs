@@ -35,7 +35,7 @@ pub type MigrateV4ToV5<T> = pezframe_support::migrations::VersionedMigration<
 	4,
 	5,
 	unversioned::UncheckedMigrateV4ToV5<T>,
-	Pallet<T>,
+	Pezpallet<T>,
 	<T as pezframe_system::Config>::DbWeight,
 >;
 
@@ -45,11 +45,11 @@ mod v4 {
 
 	#[pezframe_support::storage_alias]
 	pub(super) type OutboundXcmpStatus<T: Config> =
-		StorageValue<Pallet<T>, Vec<OutboundChannelDetails>, ValueQuery>;
+		StorageValue<Pezpallet<T>, Vec<OutboundChannelDetails>, ValueQuery>;
 
 	#[pezframe_support::storage_alias]
 	pub(super) type OutboundXcmpMessages<T: Config> = StorageDoubleMap<
-		Pallet<T>,
+		Pezpallet<T>,
 		Blake2_128Concat,
 		ParaId,
 		Twox64Concat,
@@ -60,7 +60,7 @@ mod v4 {
 
 	#[pezframe_support::storage_alias]
 	pub(super) type SignalMessages<T: Config> =
-		StorageMap<Pallet<T>, Blake2_128Concat, ParaId, Vec<u8>, ValueQuery>;
+		StorageMap<Pezpallet<T>, Blake2_128Concat, ParaId, Vec<u8>, ValueQuery>;
 }
 
 // Private module to hide the migration.

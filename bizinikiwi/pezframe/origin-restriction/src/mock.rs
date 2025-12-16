@@ -51,35 +51,35 @@ pub type UncheckedExtrinsic = pezsp_runtime::generic::UncheckedExtrinsic<
 pub const CALL_WEIGHT: u64 = 15;
 pub const CALL_WEIGHT_EXCESS: u64 = 150;
 
-/// A small mock pallet to test calls from within the runtime.
-#[pezframe_support::pallet(dev_mode)]
+/// A small mock pezpallet to test calls from within the runtime.
+#[pezframe_support::pezpallet(dev_mode)]
 pub mod mock_pallet {
 	use super::{CALL_WEIGHT, CALL_WEIGHT_EXCESS};
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
-		#[pallet::call_index(0)]
-		#[pallet::weight(Weight::from_parts(CALL_WEIGHT, 0))]
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(Weight::from_parts(CALL_WEIGHT, 0))]
 		pub fn do_something(_origin: OriginFor<T>) -> DispatchResult {
 			Ok(())
 		}
 
-		#[pallet::call_index(1)]
-		#[pallet::weight(Weight::from_parts(CALL_WEIGHT, 0))]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(Weight::from_parts(CALL_WEIGHT, 0))]
 		pub fn do_something_refunded(_origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 			Ok(Pays::No.into())
 		}
 
-		#[pallet::call_index(2)]
-		#[pallet::weight(Weight::from_parts(CALL_WEIGHT_EXCESS, 0))]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(Weight::from_parts(CALL_WEIGHT_EXCESS, 0))]
 		pub fn do_something_allowed_excess(_origin: OriginFor<T>) -> DispatchResult {
 			Ok(())
 		}
@@ -95,7 +95,7 @@ pezframe_support::construct_runtime!(
 	}
 );
 
-/// Convenience aliases for the mock pallet calls.
+/// Convenience aliases for the mock pezpallet calls.
 pub type MockPalletCall = mock_pallet::Call<Test>;
 
 #[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]

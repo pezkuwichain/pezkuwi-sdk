@@ -1,12 +1,12 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-//! # Staking Score Pallet
+//! # Staking Score Pezpallet
 //!
-//! A pallet for calculating time-weighted staking scores based on stake amount and duration.
+//! A pezpallet for calculating time-weighted staking scores based on stake amount and duration.
 //!
 //! ## Overview
 //!
-//! The Staking Score pallet calculates reputation scores from staking behavior by considering:
+//! The Staking Score pezpallet calculates reputation scores from staking behavior by considering:
 //! - **Stake Amount**: How much a user has staked
 //! - **Stake Duration**: How long tokens have been staked
 //! - **Nomination Count**: Number of validators nominated
@@ -33,7 +33,7 @@
 //!
 //! ## Workflow
 //!
-//! 1. User stakes tokens via main staking pallet
+//! 1. User stakes tokens via main staking pezpallet
 //! 2. User calls `start_score_tracking()` to begin time tracking
 //! 3. Tracking start block is recorded
 //! 4. `pezpallet-trust` queries staking score via `StakingScoreProvider` trait
@@ -42,8 +42,8 @@
 //!
 //! ## Integration with Staking
 //!
-//! This pallet does not handle staking operations directly. It:
-//! - Reads staking data from main staking pallet via `StakingInfoProvider`
+//! This pezpallet does not handle staking operations directly. It:
+//! - Reads staking data from main staking pezpallet via `StakingInfoProvider`
 //! - Tracks when users want to start earning time bonuses
 //! - Calculates scores on-demand without modifying staking state
 //!
@@ -79,8 +79,8 @@
 //!
 //! ## Dependencies
 //!
-//! This pallet requires:
-//! - Main staking pallet implementing `StakingInfoProvider`
+//! This pezpallet requires:
+//! - Main staking pezpallet implementing `StakingInfoProvider`
 //! - `pezpallet-trust` as consumer of staking scores
 //!
 //! ## Runtime Integration Example
@@ -89,12 +89,12 @@
 //! impl pezpallet_staking_score::Config for Runtime {
 //!     type RuntimeEvent = RuntimeEvent;
 //!     type Balance = Balance;
-//!     type StakingInfo = Staking; // Main staking pallet
+//!     type StakingInfo = Staking; // Main staking pezpallet
 //!     type WeightInfo = pezpallet_staking_score::weights::BizinikiwiWeight<Runtime>;
 //! }
 //! ```
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 // Mock staking info provider for benchmarking - ADD THIS
 #[cfg(feature = "runtime-benchmarks")]
@@ -125,8 +125,8 @@ mod tests;
 
 pub mod weights;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::weights::WeightInfo; // Properly importing WeightInfo from parent module.
 	use core::ops::Div;
 	use pezframe_support::pezpallet_prelude::*;
@@ -140,10 +140,10 @@ pub mod pallet {
 	pub const MONTH_IN_BLOCKS: u32 = 30 * 24 * 60 * 10;
 	pub const UNITS: u128 = 1_000_000_000_000;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config
 	where
 		// Ensuring BlockNumber is convertible from u32.
@@ -169,19 +169,19 @@ pub mod pallet {
 	}
 
 	// --- Depolama (Storage) ---
-	#[pallet::storage]
-	#[pallet::getter(fn staking_start_block)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn staking_start_block)]
 	pub type StakingStartBlock<T: Config> =
 		StorageMap<_, Blake2_128Concat, T::AccountId, BlockNumberFor<T>, OptionQuery>;
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A user started time-based scoring.
 		ScoreTrackingStarted { who: T::AccountId, start_block: BlockNumberFor<T> },
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Puan takibini başlatmak için önce stake yapmış olmalısınız.
 		NoStakeFound,
@@ -189,12 +189,12 @@ pub mod pallet {
 		TrackingAlreadyStarted,
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Süreye dayalı puanlamayı manuel olarak aktive eder.
 		/// Bu fonksiyon, her kullanıcı tarafından sadece bir kez çağrılmalıdır.
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::start_score_tracking())]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::start_score_tracking())]
 		pub fn start_score_tracking(origin: OriginFor<T>) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 
@@ -212,7 +212,7 @@ pub mod pallet {
 			ensure!(!details.staked_amount.is_zero(), Error::<T>::NoStakeFound);
 
 			// 3. O anki blok numarasını kaydet.
-			let current_block = pezframe_system::Pallet::<T>::block_number();
+			let current_block = pezframe_system::Pezpallet::<T>::block_number();
 			StakingStartBlock::<T>::insert(&who, current_block);
 
 			Self::deposit_event(Event::ScoreTrackingStarted { who, start_block: current_block });
@@ -249,7 +249,7 @@ pub mod pallet {
 
 	// --- Trait Implementasyonu ---
 
-	impl<T: Config> StakingScoreProvider<T::AccountId, BlockNumberFor<T>> for Pallet<T> {
+	impl<T: Config> StakingScoreProvider<T::AccountId, BlockNumberFor<T>> for Pezpallet<T> {
 		fn get_staking_score(who: &T::AccountId) -> (RawScore, BlockNumberFor<T>) {
 			// 1. Staking detaylarını al. Eğer stake yoksa (None) 0 puan döndür.
 			let staking_details = match T::StakingInfo::get_staking_details(who) {
@@ -281,7 +281,7 @@ pub mod pallet {
 			{
 				// Eğer kullanıcı `start_score_tracking` çağırdıysa...
 				Some(start_block) => {
-					let current_block = pezframe_system::Pallet::<T>::block_number();
+					let current_block = pezframe_system::Pezpallet::<T>::block_number();
 					let duration_in_blocks = current_block.saturating_sub(start_block);
 
 					let multiplier = if duration_in_blocks >= (12 * MONTH_IN_BLOCKS).into() {
@@ -305,7 +305,7 @@ pub mod pallet {
 			// Nihai puanı hesapla ve 100 ile sınırla.
 			let final_score = match StakingStartBlock::<T>::get(who) {
 				Some(start_block) => {
-					let current_block = pezframe_system::Pallet::<T>::block_number();
+					let current_block = pezframe_system::Pezpallet::<T>::block_number();
 					let duration_in_blocks = current_block.saturating_sub(start_block);
 
 					if duration_in_blocks >= (12 * MONTH_IN_BLOCKS).into() {

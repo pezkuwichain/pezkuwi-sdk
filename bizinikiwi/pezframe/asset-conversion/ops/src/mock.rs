@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Test environment for Asset Conversion Ops pallet.
+//! Test environment for Asset Conversion Ops pezpallet.
 
 use crate as pezpallet_asset_conversion_ops;
 use core::default::Default;

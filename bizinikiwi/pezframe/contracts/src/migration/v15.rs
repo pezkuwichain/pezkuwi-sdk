@@ -25,7 +25,7 @@
 use crate::{
 	migration::{IsFinished, MigrationStep},
 	weights::WeightInfo,
-	AccountIdOf, BalanceOf, CodeHash, Config, HoldReason, Pallet, TrieId, Weight, LOG_TARGET,
+	AccountIdOf, BalanceOf, CodeHash, Config, HoldReason, Pezpallet, TrieId, Weight, LOG_TARGET,
 };
 #[cfg(feature = "try-runtime")]
 use alloc::vec::Vec;
@@ -41,7 +41,7 @@ use pezframe_support::{
 	weights::WeightMeter,
 	BoundedBTreeMap, DefaultNoBound,
 };
-use pezframe_system::Pallet as System;
+use pezframe_system::Pezpallet as System;
 use pezsp_core::hexdisplay::HexDisplay;
 #[cfg(feature = "try-runtime")]
 use pezsp_runtime::TryRuntimeError;
@@ -69,7 +69,7 @@ mod v14 {
 
 	#[storage_alias]
 	pub type ContractInfoOf<T: Config> = StorageMap<
-		Pallet<T>,
+		Pezpallet<T>,
 		Twox64Concat,
 		<T as pezframe_system::Config>::AccountId,
 		ContractInfo<T>,
@@ -112,7 +112,7 @@ struct ContractInfo<T: Config> {
 
 #[storage_alias]
 type ContractInfoOf<T: Config> =
-	StorageMap<Pallet<T>, Twox64Concat, <T as pezframe_system::Config>::AccountId, ContractInfo<T>>;
+	StorageMap<Pezpallet<T>, Twox64Concat, <T as pezframe_system::Config>::AccountId, ContractInfo<T>>;
 
 #[derive(Encode, Decode, MaxEncodedLen, DefaultNoBound)]
 pub struct Migration<T: Config> {

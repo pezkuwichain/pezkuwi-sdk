@@ -144,7 +144,7 @@ impl pezpallet_staking::Config for Test {
 	type OldCurrency = Balances;
 	type Currency = Balances;
 	type CurrencyBalance = <Self as pezpallet_balances::Config>::Balance;
-	type UnixTime = pezpallet_timestamp::Pallet<Self>;
+	type UnixTime = pezpallet_timestamp::Pezpallet<Self>;
 	type AdminOrigin = pezframe_system::EnsureRoot<Self::AccountId>;
 	type SessionInterface = Self;
 	type EraPayout = pezpallet_staking::ConvertCurve<RewardCurve>;

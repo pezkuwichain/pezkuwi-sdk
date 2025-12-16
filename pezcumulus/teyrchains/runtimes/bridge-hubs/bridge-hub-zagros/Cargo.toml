@@ -113,15 +113,15 @@ pezsnowbridge-merkle-tree = { workspace = true }
 pezsnowbridge-outbound-queue-primitives = { workspace = true }
 pezsnowbridge-outbound-queue-runtime-api = { workspace = true }
 pezsnowbridge-outbound-queue-v2-runtime-api = { workspace = true }
-snowbridge-pezpallet-ethereum-client = { workspace = true }
-snowbridge-pezpallet-inbound-queue = { workspace = true }
-snowbridge-pezpallet-inbound-queue-fixtures = { workspace = true }
-snowbridge-pezpallet-inbound-queue-v2 = { workspace = true }
-snowbridge-pezpallet-inbound-queue-v2-fixtures = { workspace = true }
-snowbridge-pezpallet-outbound-queue = { workspace = true }
-snowbridge-pezpallet-outbound-queue-v2 = { workspace = true }
-snowbridge-pezpallet-system = { workspace = true }
-snowbridge-pezpallet-system-v2 = { workspace = true }
+pezsnowbridge-pezpallet-ethereum-client = { workspace = true }
+pezsnowbridge-pezpallet-inbound-queue = { workspace = true }
+pezsnowbridge-pezpallet-inbound-queue-fixtures = { workspace = true }
+pezsnowbridge-pezpallet-inbound-queue-v2 = { workspace = true }
+pezsnowbridge-pezpallet-inbound-queue-v2-fixtures = { workspace = true }
+pezsnowbridge-pezpallet-outbound-queue = { workspace = true }
+pezsnowbridge-pezpallet-outbound-queue-v2 = { workspace = true }
+pezsnowbridge-pezpallet-system = { workspace = true }
+pezsnowbridge-pezpallet-system-v2 = { workspace = true }
 pezsnowbridge-system-runtime-api = { workspace = true }
 pezsnowbridge-system-v2-runtime-api = { workspace = true }
 
@@ -201,15 +201,15 @@ std = [
   "pezsnowbridge-outbound-queue-primitives/std",
   "pezsnowbridge-outbound-queue-runtime-api/std",
   "pezsnowbridge-outbound-queue-v2-runtime-api/std",
-  "snowbridge-pezpallet-ethereum-client/std",
-  "snowbridge-pezpallet-inbound-queue-fixtures/std",
-  "snowbridge-pezpallet-inbound-queue-v2-fixtures/std",
-  "snowbridge-pezpallet-inbound-queue-v2/std",
-  "snowbridge-pezpallet-inbound-queue/std",
-  "snowbridge-pezpallet-outbound-queue-v2/std",
-  "snowbridge-pezpallet-outbound-queue/std",
-  "snowbridge-pezpallet-system-v2/std",
-  "snowbridge-pezpallet-system/std",
+  "pezsnowbridge-pezpallet-ethereum-client/std",
+  "pezsnowbridge-pezpallet-inbound-queue-fixtures/std",
+  "pezsnowbridge-pezpallet-inbound-queue-v2-fixtures/std",
+  "pezsnowbridge-pezpallet-inbound-queue-v2/std",
+  "pezsnowbridge-pezpallet-inbound-queue/std",
+  "pezsnowbridge-pezpallet-outbound-queue-v2/std",
+  "pezsnowbridge-pezpallet-outbound-queue/std",
+  "pezsnowbridge-pezpallet-system-v2/std",
+  "pezsnowbridge-pezpallet-system/std",
   "pezsnowbridge-system-runtime-api/std",
   "pezsnowbridge-system-v2-runtime-api/std",
   "pezsp-api/std",
@@ -300,15 +300,15 @@ runtime-benchmarks = [
   "pezsnowbridge-outbound-queue-primitives/runtime-benchmarks",
   "pezsnowbridge-outbound-queue-runtime-api/runtime-benchmarks",
   "pezsnowbridge-outbound-queue-v2-runtime-api/runtime-benchmarks",
-  "snowbridge-pezpallet-ethereum-client/runtime-benchmarks",
-  "snowbridge-pezpallet-inbound-queue-fixtures/runtime-benchmarks",
-  "snowbridge-pezpallet-inbound-queue-v2-fixtures/runtime-benchmarks",
-  "snowbridge-pezpallet-inbound-queue-v2/runtime-benchmarks",
-  "snowbridge-pezpallet-inbound-queue/runtime-benchmarks",
-  "snowbridge-pezpallet-outbound-queue-v2/runtime-benchmarks",
-  "snowbridge-pezpallet-outbound-queue/runtime-benchmarks",
-  "snowbridge-pezpallet-system-v2/runtime-benchmarks",
-  "snowbridge-pezpallet-system/runtime-benchmarks",
+  "pezsnowbridge-pezpallet-ethereum-client/runtime-benchmarks",
+  "pezsnowbridge-pezpallet-inbound-queue-fixtures/runtime-benchmarks",
+  "pezsnowbridge-pezpallet-inbound-queue-v2-fixtures/runtime-benchmarks",
+  "pezsnowbridge-pezpallet-inbound-queue-v2/runtime-benchmarks",
+  "pezsnowbridge-pezpallet-inbound-queue/runtime-benchmarks",
+  "pezsnowbridge-pezpallet-outbound-queue-v2/runtime-benchmarks",
+  "pezsnowbridge-pezpallet-outbound-queue/runtime-benchmarks",
+  "pezsnowbridge-pezpallet-system-v2/runtime-benchmarks",
+  "pezsnowbridge-pezpallet-system/runtime-benchmarks",
   "pezsnowbridge-runtime-test-common/runtime-benchmarks",
   "pezsnowbridge-system-runtime-api/runtime-benchmarks",
   "pezsnowbridge-system-v2-runtime-api/runtime-benchmarks",
@@ -364,13 +364,13 @@ try-runtime = [
   "pezpallet-xcm/try-runtime",
   "pezkuwi-runtime-common/try-runtime",
   "pezsnowbridge-inbound-queue-primitives/try-runtime",
-  "snowbridge-pezpallet-ethereum-client/try-runtime",
-  "snowbridge-pezpallet-inbound-queue-v2/try-runtime",
-  "snowbridge-pezpallet-inbound-queue/try-runtime",
-  "snowbridge-pezpallet-outbound-queue-v2/try-runtime",
-  "snowbridge-pezpallet-outbound-queue/try-runtime",
-  "snowbridge-pezpallet-system-v2/try-runtime",
-  "snowbridge-pezpallet-system/try-runtime",
+  "pezsnowbridge-pezpallet-ethereum-client/try-runtime",
+  "pezsnowbridge-pezpallet-inbound-queue-v2/try-runtime",
+  "pezsnowbridge-pezpallet-inbound-queue/try-runtime",
+  "pezsnowbridge-pezpallet-outbound-queue-v2/try-runtime",
+  "pezsnowbridge-pezpallet-outbound-queue/try-runtime",
+  "pezsnowbridge-pezpallet-system-v2/try-runtime",
+  "pezsnowbridge-pezpallet-system/try-runtime",
   "pezsp-runtime/try-runtime",
   "teyrchain-info/try-runtime",
   "teyrchains-common/try-runtime",

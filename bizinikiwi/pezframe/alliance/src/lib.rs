@@ -15,9 +15,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Alliance Pallet
+//! # Alliance Pezpallet
 //!
-//! The Alliance Pallet provides a collective that curates a list of accounts and URLs, deemed by
+//! The Alliance Pezpallet provides a collective that curates a list of accounts and URLs, deemed by
 //! the voting members to be unscrupulous actors. The Alliance
 //!
 //! - provides a set of ethics against bad behavior, and
@@ -116,17 +116,17 @@ use pezframe_support::{
 };
 use scale_info::TypeInfo;
 
-pub use pallet::*;
+pub use pezpallet::*;
 pub use types::*;
 pub use weights::*;
 
-/// The log target of this pallet.
+/// The log target of this pezpallet.
 pub const LOG_TARGET: &str = "runtime::alliance";
 
 /// Simple index type for proposal counting.
 pub type ProposalIndex = u32;
 
-type UrlOf<T, I> = BoundedVec<u8, <T as pallet::Config<I>>::MaxWebsiteUrlLength>;
+type UrlOf<T, I> = BoundedVec<u8, <T as pezpallet::Config<I>>::MaxWebsiteUrlLength>;
 
 type BalanceOf<T, I> =
 	<<T as Config<I>>::Currency as Currency<<T as pezframe_system::Config>::AccountId>>::Balance;
@@ -225,15 +225,15 @@ type UnscrupulousItemOf<T, I> =
 
 type AccountIdLookupOf<T> = <<T as pezframe_system::Config>::Lookup as StaticLookup>::Source;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::pallet]
-	#[pallet::storage_version(migration::STORAGE_VERSION)]
-	pub struct Pallet<T, I = ()>(PhantomData<(T, I)>);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(migration::STORAGE_VERSION)]
+	pub struct Pezpallet<T, I = ()>(PhantomData<(T, I)>);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
@@ -279,41 +279,41 @@ pub mod pallet {
 		/// Maximum number of proposals allowed to be active in parallel.
 		type MaxProposals: Get<ProposalIndex>;
 
-		/// The maximum number of Fellows supported by the pallet. Used for weight estimation.
+		/// The maximum number of Fellows supported by the pezpallet. Used for weight estimation.
 		///
 		/// NOTE:
 		/// + Benchmarks will need to be re-run and weights adjusted if this changes.
-		/// + This pallet assumes that dependencies keep to the limit without enforcing it.
+		/// + This pezpallet assumes that dependencies keep to the limit without enforcing it.
 		type MaxFellows: Get<u32>;
 
-		/// The maximum number of Allies supported by the pallet. Used for weight estimation.
+		/// The maximum number of Allies supported by the pezpallet. Used for weight estimation.
 		///
 		/// NOTE:
 		/// + Benchmarks will need to be re-run and weights adjusted if this changes.
-		/// + This pallet assumes that dependencies keep to the limit without enforcing it.
+		/// + This pezpallet assumes that dependencies keep to the limit without enforcing it.
 		type MaxAllies: Get<u32>;
 
-		/// The maximum number of the unscrupulous items supported by the pallet.
-		#[pallet::constant]
+		/// The maximum number of the unscrupulous items supported by the pezpallet.
+		#[pezpallet::constant]
 		type MaxUnscrupulousItems: Get<u32>;
 
 		/// The maximum length of a website URL.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxWebsiteUrlLength: Get<u32>;
 
 		/// The deposit required for submitting candidacy.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type AllyDeposit: Get<BalanceOf<Self, I>>;
 
 		/// The maximum number of announcements.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxAnnouncementsCount: Get<u32>;
 
 		/// The maximum number of members per member role.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxMembersCount: Get<u32>;
 
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 
 		/// The number of blocks a member must wait between giving a retirement notice and retiring.
@@ -321,7 +321,7 @@ pub mod pallet {
 		type RetirementPeriod: Get<BlockNumberFor<Self>>;
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T, I = ()> {
 		/// The Alliance has not been initialized yet, therefore accounts cannot join it.
 		AllianceNotYetInitialized,
@@ -374,8 +374,8 @@ pub mod pallet {
 		FellowsMissing,
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config<I>, I: 'static = ()> {
 		/// A new rule has been set.
 		NewRuleSet { rule: Cid },
@@ -409,7 +409,7 @@ pub mod pallet {
 		FellowAbdicated { fellow: T::AccountId },
 	}
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(pezframe_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config<I>, I: 'static = ()> {
 		pub fellows: Vec<T::AccountId>,
@@ -418,24 +418,24 @@ pub mod pallet {
 		pub phantom: PhantomData<(T, I)>,
 	}
 
-	#[pallet::hooks]
-	impl<T: Config<I>, I: 'static> Hooks<BlockNumberFor<T>> for Pallet<T, I> {
+	#[pezpallet::hooks]
+	impl<T: Config<I>, I: 'static> Hooks<BlockNumberFor<T>> for Pezpallet<T, I> {
 		#[cfg(feature = "try-runtime")]
 		fn try_state(_n: BlockNumberFor<T>) -> Result<(), pezsp_runtime::TryRuntimeError> {
 			Self::do_try_state()
 		}
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config<I>, I: 'static> BuildGenesisConfig for GenesisConfig<T, I> {
 		fn build(&self) {
 			for m in self.fellows.iter().chain(self.allies.iter()) {
-				assert!(Pallet::<T, I>::has_identity(m).is_ok(), "Member does not set identity!");
+				assert!(Pezpallet::<T, I>::has_identity(m).is_ok(), "Member does not set identity!");
 			}
 
 			if !self.fellows.is_empty() {
 				assert!(
-					!Pallet::<T, I>::has_member(MemberRole::Fellow),
+					!Pezpallet::<T, I>::has_member(MemberRole::Fellow),
 					"Fellows are already initialized!"
 				);
 				let members: BoundedVec<T::AccountId, T::MaxMembersCount> =
@@ -444,7 +444,7 @@ pub mod pallet {
 			}
 			if !self.allies.is_empty() {
 				assert!(
-					!Pallet::<T, I>::has_member(MemberRole::Ally),
+					!Pezpallet::<T, I>::has_member(MemberRole::Ally),
 					"Allies are already initialized!"
 				);
 				assert!(
@@ -462,21 +462,21 @@ pub mod pallet {
 
 	/// The IPFS CID of the alliance rule.
 	/// Fellows can propose a new rule with a super-majority.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Rule<T: Config<I>, I: 'static = ()> = StorageValue<_, Cid, OptionQuery>;
 
 	/// The current IPFS CIDs of any announcements.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Announcements<T: Config<I>, I: 'static = ()> =
 		StorageValue<_, BoundedVec<Cid, T::MaxAnnouncementsCount>, ValueQuery>;
 
 	/// Maps members to their candidacy deposit.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type DepositOf<T: Config<I>, I: 'static = ()> =
 		StorageMap<_, Blake2_128Concat, T::AccountId, BalanceOf<T, I>, OptionQuery>;
 
 	/// Maps member type to members of each type.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Members<T: Config<I>, I: 'static = ()> = StorageMap<
 		_,
 		Twox64Concat,
@@ -487,37 +487,37 @@ pub mod pallet {
 
 	/// A set of members who gave a retirement notice. They can retire after the end of retirement
 	/// period stored as a future block number.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type RetiringMembers<T: Config<I>, I: 'static = ()> =
 		StorageMap<_, Blake2_128Concat, T::AccountId, BlockNumberFor<T>, OptionQuery>;
 
 	/// The current list of accounts deemed unscrupulous. These accounts non grata cannot submit
 	/// candidacy.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type UnscrupulousAccounts<T: Config<I>, I: 'static = ()> =
 		StorageValue<_, BoundedVec<T::AccountId, T::MaxUnscrupulousItems>, ValueQuery>;
 
 	/// The current list of websites deemed unscrupulous.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type UnscrupulousWebsites<T: Config<I>, I: 'static = ()> =
 		StorageValue<_, BoundedVec<UrlOf<T, I>, T::MaxUnscrupulousItems>, ValueQuery>;
 
-	#[pallet::call(weight(<T as Config<I>>::WeightInfo))]
-	impl<T: Config<I>, I: 'static> Pallet<T, I> {
+	#[pezpallet::call(weight(<T as Config<I>>::WeightInfo))]
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 		/// Add a new proposal to be voted on.
 		///
 		/// Must be called by a Fellow.
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::propose_proposed(
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::propose_proposed(
 			*length_bound, // B
 			T::MaxFellows::get(), // M
 			T::MaxProposals::get(), // P2
 		))]
 		pub fn propose(
 			origin: OriginFor<T>,
-			#[pallet::compact] threshold: u32,
+			#[pezpallet::compact] threshold: u32,
 			proposal: Box<<T as Config<I>>::Proposal>,
-			#[pallet::compact] length_bound: u32,
+			#[pezpallet::compact] length_bound: u32,
 		) -> DispatchResult {
 			let proposer = ensure_signed(origin)?;
 			ensure!(Self::has_voting_rights(&proposer), Error::<T, I>::NoVotingRights);
@@ -529,12 +529,12 @@ pub mod pallet {
 		/// Add an aye or nay vote for the sender to the given proposal.
 		///
 		/// Must be called by a Fellow.
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::vote(T::MaxFellows::get()))]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::vote(T::MaxFellows::get()))]
 		pub fn vote(
 			origin: OriginFor<T>,
 			proposal: T::Hash,
-			#[pallet::compact] index: ProposalIndex,
+			#[pezpallet::compact] index: ProposalIndex,
 			approve: bool,
 		) -> DispatchResult {
 			let who = ensure_signed(origin)?;
@@ -551,8 +551,8 @@ pub mod pallet {
 		/// The Alliance must be empty, and the call must provide some founding members.
 		///
 		/// Must be called by the Root origin.
-		#[pallet::call_index(3)]
-		#[pallet::weight(T::WeightInfo::init_members(
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(T::WeightInfo::init_members(
 			fellows.len() as u32,
 			allies.len() as u32,
 		))]
@@ -602,8 +602,8 @@ pub mod pallet {
 		/// Disband the Alliance, remove all active members and unreserve deposits.
 		///
 		/// Witness data must be set.
-		#[pallet::call_index(4)]
-		#[pallet::weight(T::WeightInfo::disband(
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(T::WeightInfo::disband(
 			witness.fellow_members,
 			witness.ally_members,
 			witness.fellow_members.saturating_add(witness.ally_members),
@@ -653,7 +653,7 @@ pub mod pallet {
 		}
 
 		/// Set a new IPFS CID to the alliance rule.
-		#[pallet::call_index(5)]
+		#[pezpallet::call_index(5)]
 		pub fn set_rule(origin: OriginFor<T>, rule: Cid) -> DispatchResult {
 			T::AdminOrigin::ensure_origin(origin)?;
 
@@ -664,7 +664,7 @@ pub mod pallet {
 		}
 
 		/// Make an announcement of a new IPFS CID about alliance issues.
-		#[pallet::call_index(6)]
+		#[pezpallet::call_index(6)]
 		pub fn announce(origin: OriginFor<T>, announcement: Cid) -> DispatchResult {
 			T::AnnouncementOrigin::ensure_origin(origin)?;
 
@@ -679,7 +679,7 @@ pub mod pallet {
 		}
 
 		/// Remove an announcement.
-		#[pallet::call_index(7)]
+		#[pezpallet::call_index(7)]
 		pub fn remove_announcement(origin: OriginFor<T>, announcement: Cid) -> DispatchResult {
 			T::AnnouncementOrigin::ensure_origin(origin)?;
 
@@ -696,7 +696,7 @@ pub mod pallet {
 		}
 
 		/// Submit oneself for candidacy. A fixed deposit is reserved.
-		#[pallet::call_index(8)]
+		#[pezpallet::call_index(8)]
 		pub fn join_alliance(origin: OriginFor<T>) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 
@@ -732,7 +732,7 @@ pub mod pallet {
 
 		/// A Fellow can nominate someone to join the alliance as an Ally. There is no deposit
 		/// required from the nominator or nominee.
-		#[pallet::call_index(9)]
+		#[pezpallet::call_index(9)]
 		pub fn nominate_ally(origin: OriginFor<T>, who: AccountIdLookupOf<T>) -> DispatchResult {
 			let nominator = ensure_signed(origin)?;
 			ensure!(Self::has_voting_rights(&nominator), Error::<T, I>::NoVotingRights);
@@ -756,7 +756,7 @@ pub mod pallet {
 		}
 
 		/// Elevate an Ally to Fellow.
-		#[pallet::call_index(10)]
+		#[pezpallet::call_index(10)]
 		pub fn elevate_ally(origin: OriginFor<T>, ally: AccountIdLookupOf<T>) -> DispatchResult {
 			T::MembershipManager::ensure_origin(origin)?;
 			let ally = T::Lookup::lookup(ally)?;
@@ -772,7 +772,7 @@ pub mod pallet {
 
 		/// As a member, give a retirement notice and start a retirement period required to pass in
 		/// order to retire.
-		#[pallet::call_index(11)]
+		#[pezpallet::call_index(11)]
 		pub fn give_retirement_notice(origin: OriginFor<T>) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 			let role = Self::member_role_of(&who).ok_or(Error::<T, I>::NotMember)?;
@@ -782,7 +782,7 @@ pub mod pallet {
 			Self::add_member(&who, MemberRole::Retiring)?;
 			<RetiringMembers<T, I>>::insert(
 				&who,
-				pezframe_system::Pallet::<T>::block_number()
+				pezframe_system::Pezpallet::<T>::block_number()
 					.saturating_add(T::RetirementPeriod::get()),
 			);
 
@@ -794,13 +794,13 @@ pub mod pallet {
 		///
 		/// This can only be done once you have called `give_retirement_notice` and the
 		/// `RetirementPeriod` has passed.
-		#[pallet::call_index(12)]
+		#[pezpallet::call_index(12)]
 		pub fn retire(origin: OriginFor<T>) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 			let retirement_period_end = RetiringMembers::<T, I>::get(&who)
 				.ok_or(Error::<T, I>::RetirementNoticeNotGiven)?;
 			ensure!(
-				pezframe_system::Pallet::<T>::block_number() >= retirement_period_end,
+				pezframe_system::Pezpallet::<T>::block_number() >= retirement_period_end,
 				Error::<T, I>::RetirementPeriodNotPassed
 			);
 
@@ -816,7 +816,7 @@ pub mod pallet {
 		}
 
 		/// Kick a member from the Alliance and slash its deposit.
-		#[pallet::call_index(13)]
+		#[pezpallet::call_index(13)]
 		pub fn kick_member(origin: OriginFor<T>, who: AccountIdLookupOf<T>) -> DispatchResult {
 			T::MembershipManager::ensure_origin(origin)?;
 			let member = T::Lookup::lookup(who)?;
@@ -833,8 +833,8 @@ pub mod pallet {
 		}
 
 		/// Add accounts or websites to the list of unscrupulous items.
-		#[pallet::call_index(14)]
-		#[pallet::weight(T::WeightInfo::add_unscrupulous_items(items.len() as u32, T::MaxWebsiteUrlLength::get()))]
+		#[pezpallet::call_index(14)]
+		#[pezpallet::weight(T::WeightInfo::add_unscrupulous_items(items.len() as u32, T::MaxWebsiteUrlLength::get()))]
 		pub fn add_unscrupulous_items(
 			origin: OriginFor<T>,
 			items: Vec<UnscrupulousItemOf<T, I>>,
@@ -863,8 +863,8 @@ pub mod pallet {
 		}
 
 		/// Deem some items no longer unscrupulous.
-		#[pallet::call_index(15)]
-		#[pallet::weight(<T as Config<I>>::WeightInfo::remove_unscrupulous_items(
+		#[pezpallet::call_index(15)]
+		#[pezpallet::weight(<T as Config<I>>::WeightInfo::remove_unscrupulous_items(
 			items.len() as u32, T::MaxWebsiteUrlLength::get()
 		))]
 		pub fn remove_unscrupulous_items(
@@ -889,8 +889,8 @@ pub mod pallet {
 		/// Close a vote that is either approved, disapproved, or whose voting period has ended.
 		///
 		/// Must be called by a Fellow.
-		#[pallet::call_index(16)]
-		#[pallet::weight({
+		#[pezpallet::call_index(16)]
+		#[pezpallet::weight({
 			let b = *length_bound;
 			let m = T::MaxFellows::get();
 			let p1 = *proposal_weight_bound;
@@ -904,9 +904,9 @@ pub mod pallet {
 		pub fn close(
 			origin: OriginFor<T>,
 			proposal_hash: T::Hash,
-			#[pallet::compact] index: ProposalIndex,
+			#[pezpallet::compact] index: ProposalIndex,
 			proposal_weight_bound: Weight,
-			#[pallet::compact] length_bound: u32,
+			#[pezpallet::compact] length_bound: u32,
 		) -> DispatchResultWithPostInfo {
 			let who = ensure_signed(origin)?;
 			ensure!(Self::has_voting_rights(&who), Error::<T, I>::NoVotingRights);
@@ -917,7 +917,7 @@ pub mod pallet {
 		/// Abdicate one's position as a voting member and just be an Ally. May be used by Fellows
 		/// who do not want to leave the Alliance but do not have the capacity to participate
 		/// operationally for some time.
-		#[pallet::call_index(17)]
+		#[pezpallet::call_index(17)]
 		pub fn abdicate_fellow_status(origin: OriginFor<T>) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 			let role = Self::member_role_of(&who).ok_or(Error::<T, I>::NotMember)?;
@@ -933,7 +933,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config<I>, I: 'static> Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 	/// Check if the Alliance has been initialized.
 	fn is_initialized() -> bool {
 		Self::has_member(MemberRole::Fellow) || Self::has_member(MemberRole::Ally)
@@ -1133,10 +1133,10 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 }
 
 #[cfg(any(feature = "try-runtime", test))]
-impl<T: Config<I>, I: 'static> Pallet<T, I> {
-	/// Ensure the correctness of the state of this pallet.
+impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
+	/// Ensure the correctness of the state of this pezpallet.
 	///
-	/// This should be valid before or after each state transition of this pallet.
+	/// This should be valid before or after each state transition of this pezpallet.
 	pub fn do_try_state() -> Result<(), pezsp_runtime::TryRuntimeError> {
 		Self::try_state_members_are_disjoint()?;
 		Self::try_state_members_are_sorted()?;

@@ -27,8 +27,8 @@ pub mod v1 {
 	pub struct MigrateToV1<T>(core::marker::PhantomData<T>);
 	impl<T: Config> OnRuntimeUpgrade for MigrateToV1<T> {
 		fn on_runtime_upgrade() -> Weight {
-			let current = Pallet::<T>::in_code_storage_version();
-			let onchain = Pallet::<T>::on_chain_storage_version();
+			let current = Pezpallet::<T>::in_code_storage_version();
+			let onchain = Pezpallet::<T>::on_chain_storage_version();
 
 			log!(
 				info,
@@ -41,7 +41,7 @@ pub mod v1 {
 				if SignedSubmissionIndices::<T>::exists() {
 					// This needs to be tested at a both a block height where this value exists, and
 					// when it doesn't.
-					let now = pezframe_system::Pallet::<T>::block_number();
+					let now = pezframe_system::Pezpallet::<T>::block_number();
 					let map = unhashed::get::<BTreeMap<ElectionScore, u32>>(
 						&SignedSubmissionIndices::<T>::hashed_key(),
 					)
@@ -67,7 +67,7 @@ pub mod v1 {
 					log!(info, "SignedSubmissionIndices did NOT exist.");
 				}
 
-				current.put::<Pallet<T>>();
+				current.put::<Pezpallet<T>>();
 				T::DbWeight::get().reads_writes(2, 1)
 			} else {
 				log!(info, "Migration did not execute. This probably should be removed");

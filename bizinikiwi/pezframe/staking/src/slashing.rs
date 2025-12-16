@@ -50,7 +50,7 @@
 //! Based on research at <https://research.web3.foundation/en/latest/polkadot/slashing/npos.html>
 
 use crate::{
-	asset, BalanceOf, Config, Error, Exposure, NegativeImbalanceOf, NominatorSlashInEra, Pallet,
+	asset, BalanceOf, Config, Error, Exposure, NegativeImbalanceOf, NominatorSlashInEra, Pezpallet,
 	Perbill, SpanSlash, UnappliedSlash, ValidatorSlashInEra,
 };
 use alloc::vec::Vec;
@@ -559,7 +559,7 @@ pub fn do_slash<T: Config>(
 	slash_era: EraIndex,
 ) {
 	let mut ledger =
-		match Pallet::<T>::ledger(pezsp_staking::StakingAccount::Stash(stash.clone())).defensive() {
+		match Pezpallet::<T>::ledger(pezsp_staking::StakingAccount::Stash(stash.clone())).defensive() {
 			Ok(ledger) => ledger,
 			Err(_) => return, // nothing to do.
 		};
@@ -571,7 +571,7 @@ pub fn do_slash<T: Config>(
 	}
 
 	// Skip slashing for virtual stakers. The pallets managing them should handle the slashing.
-	if !Pallet::<T>::is_virtual_staker(stash) {
+	if !Pezpallet::<T>::is_virtual_staker(stash) {
 		let (imbalance, missing) = asset::slash::<T>(stash, value);
 		slashed_imbalance.subsume(imbalance);
 
@@ -586,7 +586,7 @@ pub fn do_slash<T: Config>(
 		.defensive_proof("ledger fetched from storage so it exists in storage; qed.");
 
 	// trigger the event
-	<Pallet<T>>::deposit_event(super::Event::<T>::Slashed { staker: stash.clone(), amount: value });
+	<Pezpallet<T>>::deposit_event(super::Event::<T>::Slashed { staker: stash.clone(), amount: value });
 }
 
 /// Apply a previously-unapplied slash.

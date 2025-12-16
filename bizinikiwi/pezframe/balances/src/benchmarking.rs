@@ -15,12 +15,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Balances pallet benchmarking.
+//! Balances pezpallet benchmarking.
 
 #![cfg(feature = "runtime-benchmarks")]
 
 use super::*;
-use crate::Pallet as Balances;
+use crate::Pezpallet as Balances;
 
 use pezframe_benchmarking::v2::*;
 use pezframe_system::RawOrigin;
@@ -283,15 +283,15 @@ mod benchmarks {
 					frozen: Zero::zero(),
 					flags: ExtraFlags::old_logic(),
 				};
-				pezframe_system::Pallet::<T>::inc_providers(&user);
+				pezframe_system::Pezpallet::<T>::inc_providers(&user);
 				assert!(T::AccountStore::try_mutate_exists(&user, |a| -> DispatchResult {
 					*a = Some(account);
 					Ok(())
 				})
 				.is_ok());
 				assert!(!Balances::<T, I>::account(&user).flags.is_new_logic());
-				assert_eq!(pezframe_system::Pallet::<T>::providers(&user), 1);
-				assert_eq!(pezframe_system::Pallet::<T>::consumers(&user), 0);
+				assert_eq!(pezframe_system::Pezpallet::<T>::providers(&user), 1);
+				assert_eq!(pezframe_system::Pezpallet::<T>::consumers(&user), 0);
 				user
 			})
 			.collect();
@@ -302,8 +302,8 @@ mod benchmarks {
 		for i in 0..u {
 			let user: T::AccountId = account("old_user", i, SEED);
 			assert!(Balances::<T, I>::account(&user).flags.is_new_logic());
-			assert_eq!(pezframe_system::Pallet::<T>::providers(&user), 1);
-			assert_eq!(pezframe_system::Pallet::<T>::consumers(&user), 1);
+			assert_eq!(pezframe_system::Pezpallet::<T>::providers(&user), 1);
+			assert_eq!(pezframe_system::Pezpallet::<T>::consumers(&user), 1);
 		}
 	}
 

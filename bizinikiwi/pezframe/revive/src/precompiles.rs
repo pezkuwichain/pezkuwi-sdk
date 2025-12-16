@@ -19,7 +19,7 @@
 //!
 //! In order to add a pre-compile:
 //!
-//! - Implement [`Precompile`] on a type. Most likely another pallet.
+//! - Implement [`Precompile`] on a type. Most likely another pezpallet.
 //! - Add the type to a tuple passed into [`Config::Precompiles`].
 //! - Use the types inside the `run` module to test and benchmark your pre-compile.
 //!
@@ -62,7 +62,7 @@ pub(crate) const EVM_REVERT: [u8; 5] = pezsp_core::hex2array!("60006000fd");
 
 /// The composition of all available pre-compiles.
 ///
-/// This is how the rest of the pallet discovers and calls pre-compiles.
+/// This is how the rest of the pezpallet discovers and calls pre-compiles.
 pub(crate) type All<T> = (Builtin<T>, <T as Config>::Precompiles);
 
 /// Used by [`Precompile`] in order to declare at which addresses it will be called.

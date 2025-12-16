@@ -41,7 +41,7 @@ use pezsp_core::offchain::{testing::TestOffchainExt, OffchainDbExt, OffchainWork
 
 impl_opaque_keys! {
 	pub struct MockSessionKeys {
-		pub dummy: pezpallet_beefy::Pallet<Test>,
+		pub dummy: pezpallet_beefy::Pezpallet<Test>,
 	}
 }
 
@@ -194,7 +194,7 @@ pub fn new_test_ext_raw_authorities(authorities: Vec<(u64, BeefyId)>) -> TestExt
 
 	BasicExternalities::execute_with_storage(&mut t, || {
 		for (ref id, ..) in &session_keys {
-			pezframe_system::Pallet::<Test>::inc_providers(id);
+			pezframe_system::Pezpallet::<Test>::inc_providers(id);
 		}
 	});
 

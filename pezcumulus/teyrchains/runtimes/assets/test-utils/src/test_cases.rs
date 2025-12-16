@@ -133,10 +133,10 @@ pub fn teleports_for_native_asset_works<
 				AccountId::from(alice).into(),
 			);
 			// check Balances before
-			assert_eq!(<pezpallet_balances::Pallet<Runtime>>::free_balance(&target_account), 0.into());
+			assert_eq!(<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&target_account), 0.into());
 			if let Some((checking_account, initial_checking_account)) = checking_account.as_ref() {
 				assert_eq!(
-					<pezpallet_balances::Pallet<Runtime>>::free_balance(checking_account),
+					<pezpallet_balances::Pezpallet<Runtime>>::free_balance(checking_account),
 					*initial_checking_account
 				);
 			};
@@ -183,10 +183,10 @@ pub fn teleports_for_native_asset_works<
 			assert_ok!(outcome.ensure_complete());
 
 			// check Balances after
-			assert_ne!(<pezpallet_balances::Pallet<Runtime>>::free_balance(&target_account), 0.into());
+			assert_ne!(<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&target_account), 0.into());
 			if let Some((checking_account, initial_checking_account)) = checking_account.as_ref() {
 				assert_eq!(
-					<pezpallet_balances::Pallet<Runtime>>::free_balance(checking_account),
+					<pezpallet_balances::Pezpallet<Runtime>>::free_balance(checking_account),
 					*initial_checking_account - native_asset_amount_received
 				);
 			}
@@ -194,7 +194,7 @@ pub fn teleports_for_native_asset_works<
 			let native_asset_to_teleport_away = native_asset_amount_unit * 3.into();
 			// 2. try to teleport asset back to the relaychain
 			{
-				<pezcumulus_pezpallet_teyrchain_system::Pallet<Runtime> as UpwardMessageSender>::ensure_successful_delivery();
+				<pezcumulus_pezpallet_teyrchain_system::Pezpallet<Runtime> as UpwardMessageSender>::ensure_successful_delivery();
 
 				let dest = Location::parent();
 				let mut dest_beneficiary = Location::parent()
@@ -206,7 +206,7 @@ pub fn teleports_for_native_asset_works<
 				dest_beneficiary.reanchor(&dest, &XcmConfig::UniversalLocation::get()).unwrap();
 
 				let target_account_balance_before_teleport =
-					<pezpallet_balances::Pallet<Runtime>>::free_balance(&target_account);
+					<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&target_account);
 				assert!(
 					native_asset_to_teleport_away <
 						target_account_balance_before_teleport - existential_deposit
@@ -221,7 +221,7 @@ pub fn teleports_for_native_asset_works<
 						dest_beneficiary.clone(),
 						dest.clone(),
 					);
-				<pezpallet_balances::Pallet<Runtime>>::mint_into(
+				<pezpallet_balances::Pezpallet<Runtime>>::mint_into(
 					&target_account,
 					delivery_fees.into(),
 				)
@@ -240,12 +240,12 @@ pub fn teleports_for_native_asset_works<
 
 				// check balances
 				assert_eq!(
-					<pezpallet_balances::Pallet<Runtime>>::free_balance(&target_account),
+					<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&target_account),
 					target_account_balance_before_teleport - native_asset_to_teleport_away
 				);
 				if let Some((checking_account, initial_checking_account)) = checking_account.as_ref() {
 					assert_eq!(
-						<pezpallet_balances::Pallet<Runtime>>::free_balance(checking_account),
+						<pezpallet_balances::Pezpallet<Runtime>>::free_balance(checking_account),
 						*initial_checking_account - native_asset_amount_received + native_asset_to_teleport_away
 					);
 				}
@@ -273,7 +273,7 @@ pub fn teleports_for_native_asset_works<
 				dest_beneficiary.reanchor(&dest, &XcmConfig::UniversalLocation::get()).unwrap();
 
 				let target_account_balance_before_teleport =
-					<pezpallet_balances::Pallet<Runtime>>::free_balance(&target_account);
+					<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&target_account);
 
 				let native_asset_to_teleport_away = native_asset_amount_unit * 3.into();
 				assert!(
@@ -301,12 +301,12 @@ pub fn teleports_for_native_asset_works<
 
 				// check balances
 				assert_eq!(
-					<pezpallet_balances::Pallet<Runtime>>::free_balance(&target_account),
+					<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&target_account),
 					target_account_balance_before_teleport
 				);
 				if let Some((checking_account, initial_checking_account)) = checking_account.as_ref() {
 					assert_eq!(
-						<pezpallet_balances::Pallet<Runtime>>::free_balance(checking_account),
+						<pezpallet_balances::Pezpallet<Runtime>>::free_balance(checking_account),
 						*initial_checking_account - native_asset_amount_received + native_asset_to_teleport_away
 					);
 				}
@@ -467,23 +467,23 @@ pub fn teleports_for_foreign_assets_works<
 			);
 			// checks target_account before
 			assert_eq!(
-				<pezpallet_balances::Pallet<Runtime>>::free_balance(&target_account),
+				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&target_account),
 				existential_deposit
 			);
 			// check `CheckingAccount` before
 			assert_eq!(
-				<pezpallet_balances::Pallet<Runtime>>::free_balance(&CheckingAccount::get()),
+				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&CheckingAccount::get()),
 				existential_deposit
 			);
 			assert_eq!(
-				<pezpallet_assets::Pallet<Runtime, ForeignAssetsPalletInstance>>::balance(
+				<pezpallet_assets::Pezpallet<Runtime, ForeignAssetsPalletInstance>>::balance(
 					foreign_asset_id_location.clone().into(),
 					&target_account
 				),
 				0.into()
 			);
 			assert_eq!(
-				<pezpallet_assets::Pallet<Runtime, ForeignAssetsPalletInstance>>::balance(
+				<pezpallet_assets::Pezpallet<Runtime, ForeignAssetsPalletInstance>>::balance(
 					foreign_asset_id_location.clone().into(),
 					&CheckingAccount::get()
 				),
@@ -491,14 +491,14 @@ pub fn teleports_for_foreign_assets_works<
 			);
 			// check totals before
 			assert_total::<
-				pezpallet_assets::Pallet<Runtime, ForeignAssetsPalletInstance>,
+				pezpallet_assets::Pezpallet<Runtime, ForeignAssetsPalletInstance>,
 				AccountIdOf<Runtime>,
 			>(foreign_asset_id_location.clone(), 0, 0);
 
 			// create foreign asset (0 total issuance)
 			let asset_minimum_asset_balance = 3333333_u128;
 			assert_ok!(
-				<pezpallet_assets::Pallet<Runtime, ForeignAssetsPalletInstance>>::force_create(
+				<pezpallet_assets::Pezpallet<Runtime, ForeignAssetsPalletInstance>>::force_create(
 					RuntimeHelper::<Runtime>::root_origin(),
 					foreign_asset_id_location.clone().into(),
 					asset_owner.clone().into(),
@@ -507,13 +507,13 @@ pub fn teleports_for_foreign_assets_works<
 				)
 			);
 			assert_total::<
-				pezpallet_assets::Pallet<Runtime, ForeignAssetsPalletInstance>,
+				pezpallet_assets::Pezpallet<Runtime, ForeignAssetsPalletInstance>,
 				AccountIdOf<Runtime>,
 			>(foreign_asset_id_location.clone(), 0, 0);
 			assert!(teleported_foreign_asset_amount > asset_minimum_asset_balance);
 			// mark the foreign asset as teleportable
 			assert_ok!(
-				<pezpallet_assets::Pallet<Runtime, ForeignAssetsPalletInstance>>::set_reserves(
+				<pezpallet_assets::Pezpallet<Runtime, ForeignAssetsPalletInstance>>::set_reserves(
 					RuntimeHelper::<Runtime>::origin_of(asset_owner.into()),
 					foreign_asset_id_location.clone().into(),
 					vec![foreign_asset_reserve_data],
@@ -565,11 +565,11 @@ pub fn teleports_for_foreign_assets_works<
 
 			// checks target_account after
 			assert_eq!(
-				<pezpallet_balances::Pallet<Runtime>>::free_balance(&target_account),
+				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&target_account),
 				existential_deposit
 			);
 			assert_eq!(
-				<pezpallet_assets::Pallet<Runtime, ForeignAssetsPalletInstance>>::balance(
+				<pezpallet_assets::Pezpallet<Runtime, ForeignAssetsPalletInstance>>::balance(
 					foreign_asset_id_location.clone().into(),
 					&target_account
 				),
@@ -577,11 +577,11 @@ pub fn teleports_for_foreign_assets_works<
 			);
 			// checks `CheckingAccount` after
 			assert_eq!(
-				<pezpallet_balances::Pallet<Runtime>>::free_balance(&CheckingAccount::get()),
+				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&CheckingAccount::get()),
 				existential_deposit
 			);
 			assert_eq!(
-				<pezpallet_assets::Pallet<Runtime, ForeignAssetsPalletInstance>>::balance(
+				<pezpallet_assets::Pezpallet<Runtime, ForeignAssetsPalletInstance>>::balance(
 					foreign_asset_id_location.clone().into(),
 					&CheckingAccount::get()
 				),
@@ -589,7 +589,7 @@ pub fn teleports_for_foreign_assets_works<
 			);
 			// check total after (twice: target_account + CheckingAccount)
 			assert_total::<
-				pezpallet_assets::Pallet<Runtime, ForeignAssetsPalletInstance>,
+				pezpallet_assets::Pezpallet<Runtime, ForeignAssetsPalletInstance>,
 				AccountIdOf<Runtime>,
 			>(
 				foreign_asset_id_location.clone(),
@@ -609,7 +609,7 @@ pub fn teleports_for_foreign_assets_works<
 				dest_beneficiary.reanchor(&dest, &XcmConfig::UniversalLocation::get()).unwrap();
 
 				let target_account_balance_before_teleport =
-					<pezpallet_assets::Pallet<Runtime, ForeignAssetsPalletInstance>>::balance(
+					<pezpallet_assets::Pezpallet<Runtime, ForeignAssetsPalletInstance>>::balance(
 						foreign_asset_id_location.clone().into(),
 						&target_account,
 					);
@@ -630,7 +630,7 @@ pub fn teleports_for_foreign_assets_works<
 						dest_beneficiary.clone(),
 						dest.clone(),
 					);
-				<pezpallet_balances::Pallet<Runtime>>::mint_into(
+				<pezpallet_balances::Pezpallet<Runtime>>::mint_into(
 					&target_account,
 					delivery_fees.into(),
 				)
@@ -649,14 +649,14 @@ pub fn teleports_for_foreign_assets_works<
 
 				// check balances
 				assert_eq!(
-					<pezpallet_assets::Pallet<Runtime, ForeignAssetsPalletInstance>>::balance(
+					<pezpallet_assets::Pezpallet<Runtime, ForeignAssetsPalletInstance>>::balance(
 						foreign_asset_id_location.clone().into(),
 						&target_account
 					),
 					(target_account_balance_before_teleport - asset_to_teleport_away.into())
 				);
 				assert_eq!(
-					<pezpallet_assets::Pallet<Runtime, ForeignAssetsPalletInstance>>::balance(
+					<pezpallet_assets::Pezpallet<Runtime, ForeignAssetsPalletInstance>>::balance(
 						foreign_asset_id_location.clone().into(),
 						&CheckingAccount::get()
 					),
@@ -664,7 +664,7 @@ pub fn teleports_for_foreign_assets_works<
 				);
 				// check total after (twice: target_account + CheckingAccount)
 				assert_total::<
-					pezpallet_assets::Pallet<Runtime, ForeignAssetsPalletInstance>,
+					pezpallet_assets::Pezpallet<Runtime, ForeignAssetsPalletInstance>,
 					AccountIdOf<Runtime>,
 				>(
 					foreign_asset_id_location.clone(),
@@ -770,11 +770,11 @@ pub fn asset_transactor_transfer_with_local_consensus_currency_works<Runtime, Xc
 		.execute_with(|| {
 			// check Balances before
 			assert_eq!(
-				<pezpallet_balances::Pallet<Runtime>>::free_balance(&source_account),
+				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&source_account),
 				(BalanceOf::<Runtime>::from(10_u128) * unit)
 			);
 			assert_eq!(
-				<pezpallet_balances::Pallet<Runtime>>::free_balance(&target_account),
+				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&target_account),
 				(BalanceOf::<Runtime>::zero() * unit)
 			);
 
@@ -803,11 +803,11 @@ pub fn asset_transactor_transfer_with_local_consensus_currency_works<Runtime, Xc
 
 			// check Balances after
 			assert_eq!(
-				<pezpallet_balances::Pallet<Runtime>>::free_balance(source_account),
+				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(source_account),
 				(BalanceOf::<Runtime>::from(9_u128) * unit)
 			);
 			assert_eq!(
-				<pezpallet_balances::Pallet<Runtime>>::free_balance(target_account),
+				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(target_account),
 				(BalanceOf::<Runtime>::from(1_u128) * unit)
 			);
 
@@ -906,7 +906,7 @@ pub fn asset_transactor_transfer_with_pallet_assets_instance_works<
 			// create  some asset class
 			let asset_minimum_asset_balance = 3333333_u128;
 			let asset_id_as_location = AssetIdConverter::convert_back(&asset_id).unwrap();
-			assert_ok!(<pezpallet_assets::Pallet<Runtime, AssetsPalletInstance>>::force_create(
+			assert_ok!(<pezpallet_assets::Pezpallet<Runtime, AssetsPalletInstance>>::force_create(
 				RuntimeHelper::<Runtime>::root_origin(),
 				asset_id.clone().into(),
 				asset_owner.clone().into(),
@@ -915,7 +915,7 @@ pub fn asset_transactor_transfer_with_pallet_assets_instance_works<
 			));
 
 			// We first mint enough asset for the account to exist for assets
-			assert_ok!(<pezpallet_assets::Pallet<Runtime, AssetsPalletInstance>>::mint(
+			assert_ok!(<pezpallet_assets::Pezpallet<Runtime, AssetsPalletInstance>>::mint(
 				RuntimeHelper::<Runtime>::origin_of(asset_owner.clone()),
 				asset_id.clone().into(),
 				alice_account.clone().into(),
@@ -924,47 +924,47 @@ pub fn asset_transactor_transfer_with_pallet_assets_instance_works<
 
 			// check Assets before
 			assert_eq!(
-				<pezpallet_assets::Pallet<Runtime, AssetsPalletInstance>>::balance(
+				<pezpallet_assets::Pezpallet<Runtime, AssetsPalletInstance>>::balance(
 					asset_id.clone().into(),
 					&alice_account
 				),
 				(6 * asset_minimum_asset_balance).into()
 			);
 			assert_eq!(
-				<pezpallet_assets::Pallet<Runtime, AssetsPalletInstance>>::balance(
+				<pezpallet_assets::Pezpallet<Runtime, AssetsPalletInstance>>::balance(
 					asset_id.clone().into(),
 					&bob_account
 				),
 				0.into()
 			);
 			assert_eq!(
-				<pezpallet_assets::Pallet<Runtime, AssetsPalletInstance>>::balance(
+				<pezpallet_assets::Pezpallet<Runtime, AssetsPalletInstance>>::balance(
 					asset_id.clone().into(),
 					&charlie_account
 				),
 				0.into()
 			);
 			assert_eq!(
-				<pezpallet_assets::Pallet<Runtime, AssetsPalletInstance>>::balance(
+				<pezpallet_assets::Pezpallet<Runtime, AssetsPalletInstance>>::balance(
 					asset_id.clone().into(),
 					&asset_owner
 				),
 				0.into()
 			);
 			assert_eq!(
-				<pezpallet_balances::Pallet<Runtime>>::free_balance(&alice_account),
+				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&alice_account),
 				existential_deposit
 			);
 			assert_eq!(
-				<pezpallet_balances::Pallet<Runtime>>::free_balance(&bob_account),
+				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&bob_account),
 				existential_deposit
 			);
 			assert_eq!(
-				<pezpallet_balances::Pallet<Runtime>>::free_balance(&charlie_account),
+				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&charlie_account),
 				0.into()
 			);
 			assert_eq!(
-				<pezpallet_balances::Pallet<Runtime>>::free_balance(&asset_owner),
+				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&asset_owner),
 				existential_deposit
 			);
 			additional_checks_before();
@@ -1013,47 +1013,47 @@ pub fn asset_transactor_transfer_with_pallet_assets_instance_works<
 
 			// check Assets after
 			assert_eq!(
-				<pezpallet_assets::Pallet<Runtime, AssetsPalletInstance>>::balance(
+				<pezpallet_assets::Pezpallet<Runtime, AssetsPalletInstance>>::balance(
 					asset_id.clone().into(),
 					&alice_account
 				),
 				(5 * asset_minimum_asset_balance).into()
 			);
 			assert_eq!(
-				<pezpallet_assets::Pallet<Runtime, AssetsPalletInstance>>::balance(
+				<pezpallet_assets::Pezpallet<Runtime, AssetsPalletInstance>>::balance(
 					asset_id.clone().into(),
 					&bob_account
 				),
 				asset_minimum_asset_balance.into()
 			);
 			assert_eq!(
-				<pezpallet_assets::Pallet<Runtime, AssetsPalletInstance>>::balance(
+				<pezpallet_assets::Pezpallet<Runtime, AssetsPalletInstance>>::balance(
 					asset_id.clone().into(),
 					&charlie_account
 				),
 				0.into()
 			);
 			assert_eq!(
-				<pezpallet_assets::Pallet<Runtime, AssetsPalletInstance>>::balance(
+				<pezpallet_assets::Pezpallet<Runtime, AssetsPalletInstance>>::balance(
 					asset_id.into(),
 					&asset_owner
 				),
 				0.into()
 			);
 			assert_eq!(
-				<pezpallet_balances::Pallet<Runtime>>::free_balance(&alice_account),
+				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&alice_account),
 				existential_deposit
 			);
 			assert_eq!(
-				<pezpallet_balances::Pallet<Runtime>>::free_balance(&bob_account),
+				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&bob_account),
 				existential_deposit
 			);
 			assert_eq!(
-				<pezpallet_balances::Pallet<Runtime>>::free_balance(&charlie_account),
+				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&charlie_account),
 				0.into()
 			);
 			assert_eq!(
-				<pezpallet_balances::Pallet<Runtime>>::free_balance(&asset_owner),
+				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&asset_owner),
 				existential_deposit
 			);
 
@@ -1199,11 +1199,11 @@ pub fn create_and_manage_foreign_assets_for_local_consensus_teyrchain_assets_wor
 		.with_tracing()
 		.build()
 		.execute_with(|| {
-			assert!(<pezpallet_assets::Pallet<Runtime, ForeignAssetsPalletInstance>>::asset_ids()
+			assert!(<pezpallet_assets::Pezpallet<Runtime, ForeignAssetsPalletInstance>>::asset_ids()
 				.collect::<Vec<_>>()
 				.is_empty());
 			assert_eq!(
-				<pezpallet_balances::Pallet<Runtime>>::free_balance(&foreign_creator_as_account_id),
+				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&foreign_creator_as_account_id),
 				existential_deposit +
 					asset_deposit + metadata_deposit_base +
 					metadata_deposit_per_byte_eta +
@@ -1281,7 +1281,7 @@ pub fn create_and_manage_foreign_assets_for_local_consensus_teyrchain_assets_wor
 			assert_ok!(outcome.ensure_complete());
 
 			// check events
-			let mut events = <pezframe_system::Pallet<Runtime>>::events()
+			let mut events = <pezframe_system::Pezpallet<Runtime>>::events()
 				.into_iter()
 				.filter_map(|e| unwrap_pallet_assets_event(e.event.encode()));
 			assert!(events.any(|e| matches!(e, pezpallet_assets::Event::Created { .. })));
@@ -1289,51 +1289,51 @@ pub fn create_and_manage_foreign_assets_for_local_consensus_teyrchain_assets_wor
 			assert!(events.any(|e| matches!(e, pezpallet_assets::Event::TeamChanged { .. })));
 
 			// check assets after
-			assert!(!<pezpallet_assets::Pallet<Runtime, ForeignAssetsPalletInstance>>::asset_ids()
+			assert!(!<pezpallet_assets::Pezpallet<Runtime, ForeignAssetsPalletInstance>>::asset_ids()
 				.collect::<Vec<_>>()
 				.is_empty());
 
 			// check update metadata
 			use pezframe_support::traits::fungibles::roles::Inspect as InspectRoles;
 			assert_eq!(
-				<pezpallet_assets::Pallet<Runtime, ForeignAssetsPalletInstance>>::owner(
+				<pezpallet_assets::Pezpallet<Runtime, ForeignAssetsPalletInstance>>::owner(
 					asset_id.clone().into()
 				),
 				Some(foreign_creator_as_account_id.clone())
 			);
 			assert_eq!(
-				<pezpallet_assets::Pallet<Runtime, ForeignAssetsPalletInstance>>::admin(
+				<pezpallet_assets::Pezpallet<Runtime, ForeignAssetsPalletInstance>>::admin(
 					asset_id.clone().into()
 				),
 				Some(foreign_creator_as_account_id.clone())
 			);
 			assert_eq!(
-				<pezpallet_assets::Pallet<Runtime, ForeignAssetsPalletInstance>>::issuer(
+				<pezpallet_assets::Pezpallet<Runtime, ForeignAssetsPalletInstance>>::issuer(
 					asset_id.clone().into()
 				),
 				Some(foreign_creator_as_account_id.clone())
 			);
 			assert_eq!(
-				<pezpallet_assets::Pallet<Runtime, ForeignAssetsPalletInstance>>::freezer(
+				<pezpallet_assets::Pezpallet<Runtime, ForeignAssetsPalletInstance>>::freezer(
 					asset_id.clone().into()
 				),
 				Some(bob_account.clone())
 			);
 			assert!(
-				<pezpallet_balances::Pallet<Runtime>>::free_balance(&foreign_creator_as_account_id) >=
+				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&foreign_creator_as_account_id) >=
 					existential_deposit + buy_execution_fee_amount.into(),
 				"Free balance: {:?} should be ge {:?}",
-				<pezpallet_balances::Pallet<Runtime>>::free_balance(&foreign_creator_as_account_id),
+				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&foreign_creator_as_account_id),
 				existential_deposit + buy_execution_fee_amount.into()
 			);
 			assert_metadata::<
-				pezpallet_assets::Pallet<Runtime, ForeignAssetsPalletInstance>,
+				pezpallet_assets::Pezpallet<Runtime, ForeignAssetsPalletInstance>,
 				AccountIdOf<Runtime>,
 			>(asset_id.clone(), ASSET_NAME, ASSET_SYMBOL, 12);
 
 			// check if changed freezer, can freeze
 			assert_noop!(
-				<pezpallet_assets::Pallet<Runtime, ForeignAssetsPalletInstance>>::freeze(
+				<pezpallet_assets::Pezpallet<Runtime, ForeignAssetsPalletInstance>>::freeze(
 					RuntimeHelper::<Runtime>::origin_of(bob_account),
 					asset_id.clone().into(),
 					alice_account.clone().into()
@@ -1341,7 +1341,7 @@ pub fn create_and_manage_foreign_assets_for_local_consensus_teyrchain_assets_wor
 				pezpallet_assets::Error::<Runtime, ForeignAssetsPalletInstance>::NoAccount
 			);
 			assert_noop!(
-				<pezpallet_assets::Pallet<Runtime, ForeignAssetsPalletInstance>>::freeze(
+				<pezpallet_assets::Pezpallet<Runtime, ForeignAssetsPalletInstance>>::freeze(
 					RuntimeHelper::<Runtime>::origin_of(foreign_creator_as_account_id.clone()),
 					asset_id.into(),
 					alice_account.into()
@@ -1542,12 +1542,12 @@ pub fn reserve_transfer_native_asset_to_non_teleport_para_works<
 			let alice_account_init_balance = existential_deposit.saturating_mul(2.into()) +
 				balance_to_transfer.into() +
 				delivery_fees_buffer.into();
-			let _ = <pezpallet_balances::Pallet<Runtime>>::deposit_creating(
+			let _ = <pezpallet_balances::Pezpallet<Runtime>>::deposit_creating(
 				&alice_account,
 				alice_account_init_balance,
 			);
 			// SA of target location needs to have at least ED, otherwise making reserve fails
-			let _ = <pezpallet_balances::Pallet<Runtime>>::deposit_creating(
+			let _ = <pezpallet_balances::Pezpallet<Runtime>>::deposit_creating(
 				&reserve_account,
 				existential_deposit,
 			);
@@ -1555,13 +1555,13 @@ pub fn reserve_transfer_native_asset_to_non_teleport_para_works<
 			// we just check here, that user retains enough balance after withdrawal
 			// and also we check if `balance_to_transfer` is more than `existential_deposit`,
 			assert!(
-				(<pezpallet_balances::Pallet<Runtime>>::free_balance(&alice_account) -
+				(<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&alice_account) -
 					balance_to_transfer.into()) >=
 					existential_deposit
 			);
 			// SA has just ED
 			assert_eq!(
-				<pezpallet_balances::Pallet<Runtime>>::free_balance(&reserve_account),
+				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&reserve_account),
 				existential_deposit
 			);
 
@@ -1570,7 +1570,7 @@ pub fn reserve_transfer_native_asset_to_non_teleport_para_works<
 				Asset { fun: Fungible(balance_to_transfer.into()), id: AssetId(native_asset) };
 
 			// pezpallet_xcm call reserve transfer
-			assert_ok!(<pezpallet_xcm::Pallet<Runtime>>::transfer_assets_using_type_and_then(
+			assert_ok!(<pezpallet_xcm::Pezpallet<Runtime>>::transfer_assets_using_type_and_then(
 				RuntimeHelper::<Runtime, AllPalletsWithoutSystem>::origin_of(alice_account.clone()),
 				Box::new(dest.clone().into_versioned()),
 				Box::new(VersionedAssets::from(Assets::from(asset_to_transfer))),
@@ -1595,7 +1595,7 @@ pub fn reserve_transfer_native_asset_to_non_teleport_para_works<
 			);
 
 			// check that xcm was sent
-			let xcm_sent_message_hash = <pezframe_system::Pallet<Runtime>>::events()
+			let xcm_sent_message_hash = <pezframe_system::Pezpallet<Runtime>>::events()
 				.into_iter()
 				.filter_map(|e| unwrap_xcmp_queue_event(e.event.encode()))
 				.find_map(|e| match e {
@@ -1635,14 +1635,14 @@ pub fn reserve_transfer_native_asset_to_non_teleport_para_works<
 
 			// check alice account decreased by balance_to_transfer ( + delivery_fees)
 			assert_eq!(
-				<pezpallet_balances::Pallet<Runtime>>::free_balance(&alice_account),
+				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&alice_account),
 				alice_account_init_balance - balance_to_transfer.into() - delivery_fees.into()
 			);
 
 			// check reserve account
 			// check reserve account increased by balance_to_transfer
 			assert_eq!(
-				<pezpallet_balances::Pallet<Runtime>>::free_balance(&reserve_account),
+				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&reserve_account),
 				existential_deposit + balance_to_transfer.into()
 			);
 		})
@@ -1702,13 +1702,13 @@ where
 
 		// We need some balance to create an asset.
 		assert_ok!(
-			pezpallet_balances::Pallet::<Runtime>::mint_into(&test_account, 3_000_000_000_000,)
+			pezpallet_balances::Pezpallet::<Runtime>::mint_into(&test_account, 3_000_000_000_000,)
 		);
 
 		// Now we try to use an asset that's not in a pool.
 		let asset_id = 1984u32; // USDT.
 		let usdt_token: Location = (PalletInstance(50), GeneralIndex(asset_id.into())).into();
-		assert_ok!(pezpallet_assets::Pallet::<Runtime, pezpallet_assets::Instance1>::create(
+		assert_ok!(pezpallet_assets::Pezpallet::<Runtime, pezpallet_assets::Instance1>::create(
 			RuntimeOrigin::signed(test_account.clone()),
 			asset_id.into(),
 			test_account.clone().into(),
@@ -1719,7 +1719,7 @@ where
 		assert_eq!(execution_fees, Err(XcmPaymentApiError::AssetNotFound));
 
 		// We add it to a pool with native.
-		assert_ok!(pezpallet_asset_conversion::Pallet::<Runtime>::create_pool(
+		assert_ok!(pezpallet_asset_conversion::Pezpallet::<Runtime>::create_pool(
 			RuntimeOrigin::signed(test_account.clone()),
 			native_token.clone().try_into().unwrap(),
 			usdt_token.clone().try_into().unwrap()
@@ -1730,14 +1730,14 @@ where
 		assert_eq!(execution_fees, Err(XcmPaymentApiError::AssetNotFound));
 
 		// We mint some of the asset...
-		assert_ok!(pezpallet_assets::Pallet::<Runtime, pezpallet_assets::Instance1>::mint(
+		assert_ok!(pezpallet_assets::Pezpallet::<Runtime, pezpallet_assets::Instance1>::mint(
 			RuntimeOrigin::signed(test_account.clone()),
 			asset_id.into(),
 			test_account.clone().into(),
 			3_000_000_000_000,
 		));
 		// ...so we can add liquidity to the pool.
-		assert_ok!(pezpallet_asset_conversion::Pallet::<Runtime>::add_liquidity(
+		assert_ok!(pezpallet_asset_conversion::Pezpallet::<Runtime>::add_liquidity(
 			RuntimeOrigin::signed(test_account.clone()),
 			native_token.clone().try_into().unwrap(),
 			usdt_token.clone().try_into().unwrap(),
@@ -1749,7 +1749,7 @@ where
 		));
 
 		let expected_weight_usdt_fee: u128 =
-			pezpallet_asset_conversion::Pallet::<Runtime>::quote_price_tokens_for_exact_tokens(
+			pezpallet_asset_conversion::Pezpallet::<Runtime>::quote_price_tokens_for_exact_tokens(
 				usdt_token.clone(),
 				native_token,
 				expected_weight_native_fee,
@@ -1795,26 +1795,26 @@ pub fn setup_pool_for_paying_fees_with_foreign_assets<Runtime, RuntimeOrigin>(
 	let pool_liquidity: Balance =
 		existential_deposit.max(foreign_asset_id_minimum_balance).mul(100_000);
 
-	let _ = pezpallet_balances::Pallet::<Runtime>::force_set_balance(
+	let _ = pezpallet_balances::Pezpallet::<Runtime>::force_set_balance(
 		RuntimeOrigin::root(),
 		pool_owner.clone().into(),
 		(existential_deposit + pool_liquidity).mul(2).into(),
 	);
 
-	assert_ok!(pezpallet_assets::Pallet::<Runtime, pezpallet_assets::Instance2>::mint(
+	assert_ok!(pezpallet_assets::Pezpallet::<Runtime, pezpallet_assets::Instance2>::mint(
 		RuntimeOrigin::signed(foreign_asset_owner),
 		foreign_asset_id_location.clone().into(),
 		pool_owner.clone().into(),
 		(foreign_asset_id_minimum_balance + pool_liquidity).mul(2).into(),
 	));
 
-	assert_ok!(pezpallet_asset_conversion::Pallet::<Runtime>::create_pool(
+	assert_ok!(pezpallet_asset_conversion::Pezpallet::<Runtime>::create_pool(
 		RuntimeOrigin::signed(pool_owner.clone()),
 		Box::new(native_asset.clone().into()),
 		Box::new(foreign_asset_id_location.clone().into())
 	));
 
-	assert_ok!(pezpallet_asset_conversion::Pallet::<Runtime>::add_liquidity(
+	assert_ok!(pezpallet_asset_conversion::Pezpallet::<Runtime>::add_liquidity(
 		RuntimeOrigin::signed(pool_owner.clone()),
 		Box::new(native_asset.into()),
 		Box::new(foreign_asset_id_location.into()),
@@ -1875,7 +1875,7 @@ pub fn xcm_payment_api_foreign_asset_pool_works<
 		let native_asset_location = Location::parent();
 		let foreign_asset_id_minimum_balance = 1_000_000_000;
 
-		pezpallet_assets::Pallet::<Runtime, pezpallet_assets::Instance2>::force_create(
+		pezpallet_assets::Pezpallet::<Runtime, pezpallet_assets::Instance2>::force_create(
 			RuntimeHelper::<Runtime>::root_origin(),
 			foreign_asset_id_location.clone().into(),
 			foreign_asset_owner.clone().into(),
@@ -1907,7 +1907,7 @@ pub fn xcm_payment_api_foreign_asset_pool_works<
 		let weight_native_fee: u128 = WeightToFee::weight_to_fee(&xcm_weight).saturated_into();
 
 		let expected_weight_foreign_asset_fee: u128 =
-			pezpallet_asset_conversion::Pallet::<Runtime>::quote_price_tokens_for_exact_tokens(
+			pezpallet_asset_conversion::Pezpallet::<Runtime>::quote_price_tokens_for_exact_tokens(
 				foreign_asset_id_location.clone(),
 				native_asset_location,
 				weight_native_fee,

@@ -31,7 +31,7 @@ use crate::{
 	storage::meter::NestedMeter,
 	weights::WeightInfo,
 	AccountIdOf, BalanceOf, CodeInfoOf, CodeRemoved, Config, Error, ExecConfig, ExecError,
-	HoldReason, Pallet, PristineCode, StorageDeposit, Weight, LOG_TARGET,
+	HoldReason, Pezpallet, PristineCode, StorageDeposit, Weight, LOG_TARGET,
 };
 use alloc::vec::Vec;
 use codec::{Decode, Encode, MaxEncodedLen};
@@ -165,9 +165,9 @@ impl<T: Config> ContractBlob<T> {
 			if let Some(code_info) = existing {
 				ensure!(code_info.refcount == 0, <Error<T>>::CodeInUse);
 				ensure!(&code_info.owner == origin, BadOrigin);
-				<Pallet<T>>::refund_deposit(
+				<Pezpallet<T>>::refund_deposit(
 					HoldReason::CodeUploadDepositReserve,
-					&Pallet::<T>::account_id(),
+					&Pezpallet::<T>::account_id(),
 					&code_info.owner,
 					code_info.deposit,
 					None,
@@ -201,10 +201,10 @@ impl<T: Config> ContractBlob<T> {
 				None => {
 					let deposit = self.code_info.deposit;
 
-					<Pallet<T>>::charge_deposit(
+					<Pezpallet<T>>::charge_deposit(
 							Some(HoldReason::CodeUploadDepositReserve),
 							&self.code_info.owner,
-							&Pallet::<T>::account_id(),
+							&Pezpallet::<T>::account_id(),
 							deposit,
 							exec_config,
 						)
@@ -287,9 +287,9 @@ impl<T: Config> CodeInfo<T> {
 			let Some(code_info) = existing else { return Err(Error::<T>::CodeNotFound.into()) };
 
 			if code_info.refcount == 1 {
-				<Pallet<T>>::refund_deposit(
+				<Pezpallet<T>>::refund_deposit(
 					HoldReason::CodeUploadDepositReserve,
-					&Pallet::<T>::account_id(),
+					&Pezpallet::<T>::account_id(),
 					&code_info.owner,
 					code_info.deposit,
 					None,

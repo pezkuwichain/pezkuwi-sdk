@@ -19,7 +19,7 @@
 
 #![cfg(test)]
 
-use super::pallet;
+use super::pezpallet;
 use crate::mock::{build_ext_and_execute_test, Aura, MockDisabledValidators, System, Test};
 use codec::Encode;
 use pezframe_support::traits::OnInitialize;
@@ -29,8 +29,8 @@ use pezsp_runtime::{Digest, DigestItem};
 #[test]
 fn initial_values() {
 	build_ext_and_execute_test(vec![0, 1, 2, 3], || {
-		assert_eq!(pallet::CurrentSlot::<Test>::get(), 0u64);
-		assert_eq!(pallet::Authorities::<Test>::get().len(), Aura::authorities_len());
+		assert_eq!(pezpallet::CurrentSlot::<Test>::get(), 0u64);
+		assert_eq!(pezpallet::Authorities::<Test>::get().len(), Aura::authorities_len());
 		assert_eq!(Aura::authorities_len(), 4);
 	});
 }

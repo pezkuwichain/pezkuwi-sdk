@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Test environment for Nft fractionalization pallet.
+//! Test environment for Nft fractionalization pezpallet.
 
 use super::*;
 use crate as pezpallet_nft_fractionalization;
@@ -28,7 +28,7 @@ type Signature = MultiSignature;
 type AccountPublic = <Signature as Verify>::Signer;
 type AccountId = <AccountPublic as IdentifyAccount>::AccountId;
 
-// Configure a mock runtime to test the pallet.
+// Configure a mock runtime to test the pezpallet.
 construct_runtime!(
 	pub enum Test
 	{
@@ -108,7 +108,7 @@ impl pezpallet_nfts::Config for Test {
 	type OffchainSignature = Signature;
 	type OffchainPublic = AccountPublic;
 	type WeightInfo = ();
-	type BlockNumberProvider = pezframe_system::Pallet<Test>;
+	type BlockNumberProvider = pezframe_system::Pezpallet<Test>;
 	pezpallet_nfts::runtime_benchmarks_enabled! {
 		type Helper = ();
 	}

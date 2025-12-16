@@ -1,4 +1,4 @@
-# Pezkuwi SDK - Runtime Pallet Mapping
+# Pezkuwi SDK - Runtime Pezpallet Mapping
 
 **Generated:** 2025-12-08
 **Purpose:** Complete inventory of all pallets across production runtimes
@@ -497,7 +497,7 @@
 
 ## Custom Pallets Distribution Table
 
-| Pallet Name | Asset Hub PZ | Asset Hub ZG | People PZ | People ZG | PZ Relay | Test Runtimes | Benchmarks |
+| Pezpallet Name | Asset Hub PZ | Asset Hub ZG | People PZ | People ZG | PZ Relay | Test Runtimes | Benchmarks |
 | --- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | **pezpallet-pez-treasury** | ✓ | | | | | | ✅ |
 | **pezpallet-presale** | ✓ | | | | | | ✅ |
@@ -515,7 +515,7 @@
 | **teyrchain-info** | ✓ | ✓ | ✓ | ✓ | | ✓ | ❌ |
 
 **Legend:**
-- ✓ = Pallet is included in this runtime
+- ✓ = Pezpallet is included in this runtime
 - ✅ = Has benchmarks configured
 - ❌ = No benchmarks
 - Empty = Not included
@@ -606,13 +606,13 @@
 - **Location:** `/home/mamostehp/Pezkuwi-SDK/pezcumulus/teyrchains/pezpallets/teyrchain-info`
 - **Runtime:** All teyrchain runtimes
 - **Purpose:** Provides teyrchain ID information
-- **Benchmarks:** ❌ No (infrastructure pallet)
+- **Benchmarks:** ❌ No (infrastructure pezpallet)
 
 ---
 
 ## Architecture Notes
 
-### 🎯 Strategic Pallet Placement
+### 🎯 Strategic Pezpallet Placement
 
 1. **Asset Hub PezkuwiChain** - Economic Layer
    - PEZ treasury and presale management

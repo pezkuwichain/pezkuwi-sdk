@@ -18,12 +18,12 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 #![warn(missing_docs)]
 
-//! A BEEFY+MMR pallet combo.
+//! A BEEFY+MMR pezpallet combo.
 //!
 //! While both BEEFY and Merkle Mountain Range (MMR) can be used separately,
 //! these tools were designed to work together in unison.
 //!
-//! The pallet provides a standardized MMR Leaf format that can be used
+//! The pezpallet provides a standardized MMR Leaf format that can be used
 //! to bridge BEEFY+MMR-based networks (both standalone and Pezkuwi-like).
 //!
 //! The MMR leaf contains:
@@ -54,7 +54,7 @@ use pezsp_consensus_beefy::{
 use pezframe_support::{crypto::ecdsa::ECDSAExt, pezpallet_prelude::Weight, traits::Get};
 use pezframe_system::pezpallet_prelude::{BlockNumberFor, HeaderFor};
 
-pub use pallet::*;
+pub use pezpallet::*;
 pub use weights::WeightInfo;
 
 mod benchmarking;
@@ -79,7 +79,7 @@ where
 				<T as pezpallet_beefy::Config>::BeefyId,
 			>::MmrRoot(*root)),
 		);
-		pezframe_system::Pallet::<T>::deposit_log(digest);
+		pezframe_system::Pezpallet::<T>::deposit_log(digest);
 	}
 }
 
@@ -99,20 +99,20 @@ impl Convert<pezsp_consensus_beefy::ecdsa_crypto::AuthorityId, Vec<u8>> for Beef
 
 type MerkleRootOf<T> = <<T as pezpallet_mmr::Config>::Hashing as pezsp_runtime::traits::Hash>::Output;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	#![allow(missing_docs)]
 
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 
-	/// BEEFY-MMR pallet.
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	/// BEEFY-MMR pezpallet.
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
 	/// The module's configuration trait.
-	#[pallet::config]
-	#[pallet::disable_pezframe_system_supertrait_check]
+	#[pezpallet::config]
+	#[pezpallet::disable_pezframe_system_supertrait_check]
 	pub trait Config: pezpallet_mmr::Config + pezpallet_beefy::Config {
 		/// Current leaf version.
 		///
@@ -138,19 +138,19 @@ pub mod pallet {
 	}
 
 	/// Details of current BEEFY authority set.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type BeefyAuthorities<T: Config> =
 		StorageValue<_, BeefyAuthoritySet<MerkleRootOf<T>>, ValueQuery>;
 
 	/// Details of next BEEFY authority set.
 	///
 	/// This storage entry is used as cache for calls to `update_beefy_next_authority_set`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type BeefyNextAuthorities<T: Config> =
 		StorageValue<_, BeefyNextAuthoritySet<MerkleRootOf<T>>, ValueQuery>;
 }
 
-impl<T: Config> LeafDataProvider for Pallet<T> {
+impl<T: Config> LeafDataProvider for Pezpallet<T> {
 	type LeafData = MmrLeaf<
 		BlockNumberFor<T>,
 		<T as pezframe_system::Config>::Hash,
@@ -168,24 +168,24 @@ impl<T: Config> LeafDataProvider for Pallet<T> {
 	}
 }
 
-impl<T> pezsp_consensus_beefy::OnNewValidatorSet<<T as pezpallet_beefy::Config>::BeefyId> for Pallet<T>
+impl<T> pezsp_consensus_beefy::OnNewValidatorSet<<T as pezpallet_beefy::Config>::BeefyId> for Pezpallet<T>
 where
-	T: pallet::Config,
+	T: pezpallet::Config,
 {
 	/// Compute and cache BEEFY authority sets based on updated BEEFY validator sets.
 	fn on_new_validator_set(
 		current_set: &BeefyValidatorSet<<T as pezpallet_beefy::Config>::BeefyId>,
 		next_set: &BeefyValidatorSet<<T as pezpallet_beefy::Config>::BeefyId>,
 	) {
-		let current = Pallet::<T>::compute_authority_set(current_set);
-		let next = Pallet::<T>::compute_authority_set(next_set);
+		let current = Pezpallet::<T>::compute_authority_set(current_set);
+		let next = Pezpallet::<T>::compute_authority_set(next_set);
 		// cache the result
 		BeefyAuthorities::<T>::put(&current);
 		BeefyNextAuthorities::<T>::put(&next);
 	}
 }
 
-impl<T: Config> AncestryHelper<HeaderFor<T>> for Pallet<T>
+impl<T: Config> AncestryHelper<HeaderFor<T>> for Pezpallet<T>
 where
 	T: pezpallet_mmr::Config<Hashing = pezsp_consensus_beefy::MmrHashing>,
 {
@@ -193,7 +193,7 @@ where
 	type ValidationContext = MerkleRootOf<T>;
 
 	fn is_proof_optimal(proof: &Self::Proof) -> bool {
-		let is_proof_optimal = pezpallet_mmr::Pallet::<T>::is_ancestry_proof_optimal(proof);
+		let is_proof_optimal = pezpallet_mmr::Pezpallet::<T>::is_ancestry_proof_optimal(proof);
 
 		// We don't check the proof size when running benchmarks, since we use mock proofs
 		// which would cause the test to fail.
@@ -206,7 +206,7 @@ where
 
 	fn extract_validation_context(header: HeaderFor<T>) -> Option<Self::ValidationContext> {
 		// Check if the provided header is canonical.
-		let expected_hash = pezframe_system::Pallet::<T>::block_hash(header.number());
+		let expected_hash = pezframe_system::Pezpallet::<T>::block_hash(header.number());
 		if expected_hash != header.hash() {
 			return None;
 		}
@@ -227,7 +227,7 @@ where
 		context: Self::ValidationContext,
 	) -> bool {
 		let commitment_leaf_count =
-			match pezpallet_mmr::Pallet::<T>::block_num_to_leaf_count(commitment.block_number) {
+			match pezpallet_mmr::Pezpallet::<T>::block_num_to_leaf_count(commitment.block_number) {
 				Ok(commitment_leaf_count) => commitment_leaf_count,
 				Err(_) => {
 					// We can't prove that the commitment is non-canonical if the
@@ -243,7 +243,7 @@ where
 
 		let canonical_mmr_root = context;
 		let canonical_prev_root =
-			match pezpallet_mmr::Pallet::<T>::verify_ancestry_proof(canonical_mmr_root, proof) {
+			match pezpallet_mmr::Pezpallet::<T>::verify_ancestry_proof(canonical_mmr_root, proof) {
 				Ok(canonical_prev_root) => canonical_prev_root,
 				Err(_) => {
 					// Can't prove that the commitment is non-canonical if the proof
@@ -282,7 +282,7 @@ where
 	}
 }
 
-impl<T: Config> AncestryHelperWeightInfo<HeaderFor<T>> for Pallet<T>
+impl<T: Config> AncestryHelperWeightInfo<HeaderFor<T>> for Pezpallet<T>
 where
 	T: pezpallet_mmr::Config<Hashing = pezsp_consensus_beefy::MmrHashing>,
 {
@@ -310,7 +310,7 @@ where
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Return the currently active BEEFY authority set proof.
 	pub fn authority_set_proof() -> BeefyAuthoritySet<MerkleRootOf<T>> {
 		BeefyAuthorities::<T>::get()

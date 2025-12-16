@@ -28,7 +28,7 @@
 use super::*;
 
 #[allow(unused)]
-use crate::Pallet as Template;
+use crate::Pezpallet as Template;
 use pezframe_benchmarking::v2::*;
 use pezframe_system::RawOrigin;
 

@@ -155,7 +155,7 @@
 //!
 //! A call can be anything that implements [`Encode`][frame::deps::codec::Encode]. In FRAME-based
 //! runtimes, a call is represented as an enum of enums, where the outer enum represents the FRAME
-//! pallet being called, and the inner enum represents the call being made within that pallet, and
+//! pezpallet being called, and the inner enum represents the call being made within that pezpallet, and
 //! any arguments to it. Read more about the call enum
 //! [here][crate::reference_docs::frame_runtime_types].
 //!
@@ -172,15 +172,15 @@
 //! )
 //! ```
 //!
-//! - `pezpallet_index` is a single byte denoting the index of the pallet that we are calling into, and
+//! - `pezpallet_index` is a single byte denoting the index of the pezpallet that we are calling into, and
 //!   is what the tag of the outermost enum will encode to.
-//! - `call_index` is a single byte denoting the index of the call that we are making the pallet,
+//! - `call_index` is a single byte denoting the index of the call that we are making the pezpallet,
 //!   and is what the tag of the inner enum will encode to.
 //! - `call_args` are the SCALE encoded bytes for each of the arguments that the call expects, and
 //!   are typically provided as values to the inner enum.
 //!
 //! Information about the pallets that exist for a chain (including their indexes), the calls
-//! available in each pallet (including their indexes), and the arguments required for each call can
+//! available in each pezpallet (including their indexes), and the arguments required for each call can
 //! be found in the metadata for the chain. For V15 metadata, this information [is
 //! here][frame::deps::pezframe_support::__private::metadata::v15::PalletMetadata].
 //!
@@ -219,7 +219,7 @@
 //! in the [Checkable](pezsp_runtime::traits::Checkable) implementation of
 //! [UncheckedExtrinsic](pezsp_runtime::generic::UncheckedExtrinsic). Therefore, it is up to each
 //! extension to define the format of the payload it will try to check and authorize the right
-//! origin type. For an example, look into the [authorization example pallet
+//! origin type. For an example, look into the [authorization example pezpallet
 //! extensions](pezpallet_example_authorization_tx_extension::extensions)
 //!
 //! # Example Encoding
@@ -245,7 +245,7 @@ pub mod call_data {
 	}
 
 	// An inner enum represents the calls within
-	// a specific pallet. "PalletA" has one call,
+	// a specific pezpallet. "PalletA" has one call,
 	// "Foo".
 	#[derive(Encode, Decode, Clone)]
 	pub enum PalletACall {

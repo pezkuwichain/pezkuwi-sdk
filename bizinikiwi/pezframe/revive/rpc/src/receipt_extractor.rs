@@ -295,7 +295,7 @@ impl ReceiptExtractor {
 			})
 			.collect();
 
-		// Sanity check we received enough data from the pallet revive.
+		// Sanity check we received enough data from the pezpallet revive.
 		if receipt_data.len() != extrinsics.len() {
 			log::error!(
 				target: LOG_TARGET,

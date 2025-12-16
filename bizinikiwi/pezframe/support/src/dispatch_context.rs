@@ -27,7 +27,7 @@
 //! # FRAME integration
 //!
 //! The FRAME macros implement
-//! [`UnfilteredDispatchable`](pezframe_support::traits::UnfilteredDispatchable) for each pallet `Call`
+//! [`UnfilteredDispatchable`](pezframe_support::traits::UnfilteredDispatchable) for each pezpallet `Call`
 //! enum. Part of this implementation is the call to [`run_in_context`], so that each call to
 //! [`UnfilteredDispatchable::dispatch_bypass_filter`](crate::traits::UnfilteredDispatchable::dispatch_bypass_filter)
 //! or [`Dispatchable::dispatch`](pezsp_runtime::traits::Dispatchable::dispatch) will run in a dispatch
@@ -78,7 +78,7 @@
 //! });
 //! ```
 //!
-//! In your pallet you will only have to use [`with_context`], because as described above
+//! In your pezpallet you will only have to use [`with_context`], because as described above
 //! [`run_in_context`] will be handled by FRAME for you.
 
 use alloc::{

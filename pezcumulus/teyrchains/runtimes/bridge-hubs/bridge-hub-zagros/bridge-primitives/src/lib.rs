@@ -76,14 +76,14 @@ impl ChainWithMessages for BridgeHubZagros {
 /// Identifier of BridgeHubZagros in the Zagros relay chain.
 pub const BRIDGE_HUB_ZAGROS_TEYRCHAIN_ID: u32 = 1002;
 
-/// Name of the With-BridgeHubZagros messages pallet instance that is deployed at bridged chains.
+/// Name of the With-BridgeHubZagros messages pezpallet instance that is deployed at bridged chains.
 pub const WITH_BRIDGE_HUB_ZAGROS_MESSAGES_PALLET_NAME: &str = "BridgeZagrosMessages";
 
-/// Name of the With-BridgeHubZagros bridge-relayers pallet instance that is deployed at bridged
+/// Name of the With-BridgeHubZagros bridge-relayers pezpallet instance that is deployed at bridged
 /// chains.
 pub const WITH_BRIDGE_HUB_ZAGROS_RELAYERS_PALLET_NAME: &str = "BridgeRelayers";
 
-/// Pallet index of `BridgePezkuwichainMessages: pezpallet_bridge_messages::<Instance1>`.
+/// Pezpallet index of `BridgePezkuwichainMessages: pezpallet_bridge_messages::<Instance1>`.
 pub const WITH_BRIDGE_ZAGROS_TO_PEZKUWICHAIN_MESSAGES_PALLET_INDEX: u8 = 44;
 
 decl_bridge_finality_runtime_apis!(bridge_hub_zagros);
@@ -107,7 +107,7 @@ pezframe_support::parameter_types! {
 /// Wrapper over `BridgeHubZagros`'s `RuntimeCall` that can be used without a runtime.
 #[derive(Decode, Encode)]
 pub enum RuntimeCall {
-	/// Points to the `pezpallet_xcm_bridge_hub` pallet instance for `BridgeHubPezkuwichain`.
+	/// Points to the `pezpallet_xcm_bridge_hub` pezpallet instance for `BridgeHubPezkuwichain`.
 	#[codec(index = 45)]
 	XcmOverBridgeHubPezkuwichain(bp_xcm_bridge_hub::XcmBridgeHubCall),
 }

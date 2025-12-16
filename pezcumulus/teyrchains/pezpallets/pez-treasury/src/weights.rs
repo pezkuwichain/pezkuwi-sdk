@@ -11,10 +11,10 @@
 // ./target/release/frame-omni-bencher
 // v1
 // benchmark
-// pallet
+// pezpallet
 // --runtime
 // ./target/release/wbuild/asset-hub-pezkuwichain-runtime/asset_hub_pezkuwichain_runtime.wasm
-// --pallet
+// --pezpallet
 // pezpallet_pez_treasury
 // --extrinsic
 // *

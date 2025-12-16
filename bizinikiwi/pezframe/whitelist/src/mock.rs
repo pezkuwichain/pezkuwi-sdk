@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Mock for Whitelist Pallet
+// Mock for Whitelist Pezpallet
 
 #![cfg(test)]
 

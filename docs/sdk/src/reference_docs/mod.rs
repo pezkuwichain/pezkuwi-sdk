@@ -60,7 +60,7 @@ pub mod defensive_programming;
 /// `RuntimeCall`.
 pub mod frame_runtime_types;
 
-/// Learn about how to make a pallet/runtime that is fee-less and instead uses another mechanism to
+/// Learn about how to make a pezpallet/runtime that is fee-less and instead uses another mechanism to
 /// control usage and sybil attacks.
 pub mod fee_less_runtime;
 

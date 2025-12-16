@@ -51,7 +51,7 @@ pub use pezframe_support::{
 };
 pub use pezframe_system::{
 	limits::BlockWeights as BlockWeightsLimits, pezpallet_prelude::BlockNumberFor,
-	Config as SystemConfig, Pallet as SystemPallet,
+	Config as SystemConfig, Pezpallet as SystemPallet,
 };
 pub use pezpallet_balances::AccountData;
 pub use pezpallet_message_queue;
@@ -68,7 +68,7 @@ pub use pezsp_tracing;
 // Pezcumulus
 pub use pezcumulus_pezpallet_teyrchain_system::{
 	teyrchain_inherent::{deconstruct_teyrchain_inherent_data, InboundMessagesData},
-	Call as TeyrchainSystemCall, Pallet as TeyrchainSystemPallet,
+	Call as TeyrchainSystemCall, Pezpallet as TeyrchainSystemPallet,
 };
 pub use pezcumulus_primitives_core::{
 	relay_chain::{BlockNumber as RelayBlockNumber, HeadData, HrmpChannelId},
@@ -77,7 +77,7 @@ pub use pezcumulus_primitives_core::{
 pub use pezcumulus_primitives_teyrchain_inherent::TeyrchainInherentData;
 pub use pezcumulus_test_relay_sproof_builder::RelayStateSproofBuilder;
 pub use pezpallet_aura;
-pub use pezpallet_message_queue::{Config as MessageQueueConfig, Pallet as MessageQueuePallet};
+pub use pezpallet_message_queue::{Config as MessageQueueConfig, Pezpallet as MessageQueuePallet};
 pub use pezkuwi_primitives;
 pub use pezkuwi_runtime_teyrchains::inclusion::{AggregateMessageOrigin, UmpQueueId};
 pub use teyrchains_common::{AccountId, Balance};
@@ -711,7 +711,7 @@ macro_rules! decl_test_teyrchains {
 
 						// Initialze `System`.
 						let digest = <Self as Teyrchain>::DigestProvider::convert((block_number, relay_block_number));
-						let slot_duration = $crate::pezpallet_aura::Pallet::<$runtime::Runtime>::slot_duration();
+						let slot_duration = $crate::pezpallet_aura::Pezpallet::<$runtime::Runtime>::slot_duration();
 						<Self as Chain>::System::initialize(&block_number, &parent_head_data.hash(), &digest);
 
 						// Process `on_initialize` for all pallets except `System`.
@@ -1139,7 +1139,7 @@ macro_rules! decl_test_networks {
 							if $crate::PARA_IDS.with(|b| b.borrow_mut().get_mut(Self::name()).unwrap().contains(&to_para_id)) && para_id == to_para_id {
 								<$teyrchain<Self>>::ext_wrapper(|| {
 									<$teyrchain<Self> as Teyrchain>::XcmpMessageHandler::handle_xcmp_messages(iter.clone(), $crate::Weight::MAX);
-									// Nudge the MQ pallet to process immediately instead of in the next block.
+									// Nudge the MQ pezpallet to process immediately instead of in the next block.
 									let _ =  <$teyrchain<Self> as Teyrchain>::MessageProcessor::service_queues($crate::Weight::MAX);
 								});
 								let messages = messages.clone().iter().map(|(para_id, relay_block_number, message)| {

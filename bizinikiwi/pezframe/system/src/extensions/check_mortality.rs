@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use crate::{pezpallet_prelude::BlockNumberFor, BlockHash, Config, Pallet};
+use crate::{pezpallet_prelude::BlockNumberFor, BlockHash, Config, Pezpallet};
 use codec::{Decode, DecodeWithMemTracking, Encode};
 use pezframe_support::pezpallet_prelude::TransactionSource;
 use scale_info::TypeInfo;
@@ -62,12 +62,12 @@ impl<T: Config + Send + Sync> TransactionExtension<T::RuntimeCall> for CheckMort
 	type Implicit = T::Hash;
 
 	fn implicit(&self) -> Result<Self::Implicit, TransactionValidityError> {
-		let current_u64 = <Pallet<T>>::block_number().saturated_into::<u64>();
+		let current_u64 = <Pezpallet<T>>::block_number().saturated_into::<u64>();
 		let n = self.0.birth(current_u64).saturated_into::<BlockNumberFor<T>>();
 		if !<BlockHash<T>>::contains_key(n) {
 			Err(InvalidTransaction::AncientBirthBlock.into())
 		} else {
-			Ok(<Pallet<T>>::block_hash(n))
+			Ok(<Pezpallet<T>>::block_hash(n))
 		}
 	}
 	type Pre = ();
@@ -94,7 +94,7 @@ impl<T: Config + Send + Sync> TransactionExtension<T::RuntimeCall> for CheckMort
 		_inherited_implication: &impl Encode,
 		_source: TransactionSource,
 	) -> ValidateResult<Self::Val, T::RuntimeCall> {
-		let current_u64 = <Pallet<T>>::block_number().saturated_into::<u64>();
+		let current_u64 = <Pezpallet<T>>::block_number().saturated_into::<u64>();
 		let valid_till = self.0.death(current_u64);
 		Ok((
 			ValidTransaction {

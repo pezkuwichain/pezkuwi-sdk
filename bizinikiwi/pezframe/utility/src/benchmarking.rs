@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Benchmarks for Utility Pallet
+// Benchmarks for Utility Pezpallet
 
 #![cfg(feature = "runtime-benchmarks")]
 
@@ -28,7 +28,7 @@ use crate::*;
 const SEED: u32 = 0;
 
 fn assert_last_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
-	pezframe_system::Pallet::<T>::assert_last_event(generic_event.into());
+	pezframe_system::Pezpallet::<T>::assert_last_event(generic_event.into());
 }
 
 #[benchmarks]
@@ -116,7 +116,7 @@ mod benchmark {
 	}
 
 	impl_benchmark_test_suite! {
-		Pallet,
+		Pezpallet,
 		tests::new_test_ext(),
 		tests::Test
 	}

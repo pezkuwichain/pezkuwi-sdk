@@ -15,14 +15,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Asset Rate Pallet
+//! # Asset Rate Pezpallet
 //!
 //! - [`Config`]
 //! - [`Call`]
 //!
 //! ## Overview
 //!
-//! The AssetRate pallet provides means of setting conversion rates for some asset to native
+//! The AssetRate pezpallet provides means of setting conversion rates for some asset to native
 //! balance.
 //!
 //! The supported dispatchable functions are documented in the [`Call`] enum.
@@ -71,7 +71,7 @@ use pezsp_runtime::{
 	FixedPointNumber, FixedU128,
 };
 
-pub use pallet::*;
+pub use pezpallet::*;
 pub use weights::WeightInfo;
 
 #[cfg(feature = "runtime-benchmarks")]
@@ -86,23 +86,23 @@ pub use benchmarking::AssetKindFactory;
 
 // Type alias for `pezframe_system`'s account id.
 type AccountIdOf<T> = <T as pezframe_system::Config>::AccountId;
-// This pallet's asset kind and balance type.
+// This pezpallet's asset kind and balance type.
 type AssetKindOf<T> = <T as Config>::AssetKind;
 // Generic fungible balance type.
 type BalanceOf<T> = <<T as Config>::Currency as Inspect<AccountIdOf<T>>>::Balance;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
-		/// The Weight information for extrinsics in this pallet.
+		/// The Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 
 		/// The runtime event type.
@@ -118,7 +118,7 @@ pub mod pallet {
 		/// The origin permissioned to update an existing conversion rate for an asset.
 		type UpdateOrigin: EnsureOrigin<Self::RuntimeOrigin>;
 
-		/// The currency mechanism for this pallet.
+		/// The currency mechanism for this pezpallet.
 		type Currency: Inspect<Self::AccountId>;
 
 		/// The type for asset kinds for which the conversion rate to native balance is set.
@@ -132,12 +132,12 @@ pub mod pallet {
 	/// Maps an asset to its fixed point representation in the native balance.
 	///
 	/// E.g. `native_amount = asset_amount * ConversionRateToNative::<T>::get(asset_kind)`
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ConversionRateToNative<T: Config> =
 		StorageMap<_, Blake2_128Concat, T::AssetKind, FixedU128, OptionQuery>;
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		// Some `asset_kind` conversion rate was created.
 		AssetRateCreated { asset_kind: T::AssetKind, rate: FixedU128 },
@@ -147,7 +147,7 @@ pub mod pallet {
 		AssetRateUpdated { asset_kind: T::AssetKind, old: FixedU128, new: FixedU128 },
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// The given asset ID is unknown.
 		UnknownAssetKind,
@@ -157,14 +157,14 @@ pub mod pallet {
 		Overflow,
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Initialize a conversion rate to native balance for the given asset.
 		///
 		/// ## Complexity
 		/// - O(1)
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::create())]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::create())]
 		pub fn create(
 			origin: OriginFor<T>,
 			asset_kind: Box<T::AssetKind>,
@@ -186,8 +186,8 @@ pub mod pallet {
 		///
 		/// ## Complexity
 		/// - O(1)
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::update())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::update())]
 		pub fn update(
 			origin: OriginFor<T>,
 			asset_kind: Box<T::AssetKind>,
@@ -219,8 +219,8 @@ pub mod pallet {
 		///
 		/// ## Complexity
 		/// - O(1)
-		#[pallet::call_index(2)]
-		#[pallet::weight(T::WeightInfo::remove())]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(T::WeightInfo::remove())]
 		pub fn remove(origin: OriginFor<T>, asset_kind: Box<T::AssetKind>) -> DispatchResult {
 			T::RemoveOrigin::ensure_origin(origin)?;
 
@@ -237,45 +237,45 @@ pub mod pallet {
 }
 
 /// Exposes conversion of an arbitrary balance of an asset to native balance.
-impl<T> ConversionFromAssetBalance<BalanceOf<T>, AssetKindOf<T>, BalanceOf<T>> for Pallet<T>
+impl<T> ConversionFromAssetBalance<BalanceOf<T>, AssetKindOf<T>, BalanceOf<T>> for Pezpallet<T>
 where
 	T: Config,
 {
-	type Error = pallet::Error<T>;
+	type Error = pezpallet::Error<T>;
 
 	fn from_asset_balance(
 		balance: BalanceOf<T>,
 		asset_kind: AssetKindOf<T>,
-	) -> Result<BalanceOf<T>, pallet::Error<T>> {
-		let rate = pallet::ConversionRateToNative::<T>::get(asset_kind)
-			.ok_or(pallet::Error::<T>::UnknownAssetKind.into())?;
+	) -> Result<BalanceOf<T>, pezpallet::Error<T>> {
+		let rate = pezpallet::ConversionRateToNative::<T>::get(asset_kind)
+			.ok_or(pezpallet::Error::<T>::UnknownAssetKind.into())?;
 		Ok(rate.saturating_mul_int(balance))
 	}
 	/// Set a conversion rate to `1` for the `asset_id`.
 	#[cfg(feature = "runtime-benchmarks")]
 	fn ensure_successful(asset_id: AssetKindOf<T>) {
-		pallet::ConversionRateToNative::<T>::set(asset_id.clone(), Some(1.into()));
+		pezpallet::ConversionRateToNative::<T>::set(asset_id.clone(), Some(1.into()));
 	}
 }
 
 /// Exposes conversion of a native balance to an asset balance.
-impl<T> ConversionToAssetBalance<BalanceOf<T>, AssetKindOf<T>, BalanceOf<T>> for Pallet<T>
+impl<T> ConversionToAssetBalance<BalanceOf<T>, AssetKindOf<T>, BalanceOf<T>> for Pezpallet<T>
 where
 	T: Config,
 {
-	type Error = pallet::Error<T>;
+	type Error = pezpallet::Error<T>;
 
 	fn to_asset_balance(
 		balance: BalanceOf<T>,
 		asset_kind: AssetKindOf<T>,
-	) -> Result<BalanceOf<T>, pallet::Error<T>> {
-		let rate = pallet::ConversionRateToNative::<T>::get(asset_kind)
-			.ok_or(pallet::Error::<T>::UnknownAssetKind.into())?;
+	) -> Result<BalanceOf<T>, pezpallet::Error<T>> {
+		let rate = pezpallet::ConversionRateToNative::<T>::get(asset_kind)
+			.ok_or(pezpallet::Error::<T>::UnknownAssetKind.into())?;
 
 		// We cannot use `saturating_div` here so we use `checked_div`.
 		Ok(FixedU128::from_u32(1)
 			.checked_div(&rate)
-			.ok_or(pallet::Error::<T>::Overflow.into())?
+			.ok_or(pezpallet::Error::<T>::Overflow.into())?
 			.saturating_mul_int(balance))
 	}
 }

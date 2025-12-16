@@ -20,12 +20,12 @@
 //! The produced values do not fulfill the cryptographic requirements for random numbers.
 //! Should not be used for high-stake production use-cases.
 //!
-//! # Randomness Pallet
+//! # Randomness Pezpallet
 //!
-//! The Randomness Collective Flip pallet provides a [`random`](./struct.Module.html#method.random)
+//! The Randomness Collective Flip pezpallet provides a [`random`](./struct.Module.html#method.random)
 //! function that generates low-influence random values based on the block hashes from the previous
 //! `81` blocks. Low-influence randomness can be useful when defending against relatively weak
-//! adversaries. Using this pallet as a randomness source is advisable primarily in low-security
+//! adversaries. Using this pezpallet as a randomness source is advisable primarily in low-security
 //! situations like testing.
 //!
 //! ## Public Functions
@@ -36,7 +36,7 @@
 //!
 //! ### Prerequisites
 //!
-//! Import the Randomness Collective Flip pallet and derive your pallet's configuration trait from
+//! Import the Randomness Collective Flip pezpallet and derive your pezpallet's configuration trait from
 //! the system trait.
 //!
 //! ### Example - Get random seed for the current block
@@ -44,21 +44,21 @@
 //! ```
 //! use frame::{prelude::*, traits::Randomness};
 //!
-//! #[frame::pallet]
-//! pub mod pallet {
+//! #[frame::pezpallet]
+//! pub mod pezpallet {
 //!     use super::*;
 //!
-//!     #[pallet::pallet]
-//!     pub struct Pallet<T>(_);
+//!     #[pezpallet::pezpallet]
+//!     pub struct Pezpallet<T>(_);
 //!
-//!     #[pallet::config]
+//!     #[pezpallet::config]
 //!     pub trait Config: pezframe_system::Config + pezpallet_insecure_randomness_collective_flip::Config {}
 //!
-//!     #[pallet::call]
-//!     impl<T: Config> Pallet<T> {
-//!         #[pallet::weight(0)]
+//!     #[pezpallet::call]
+//!     impl<T: Config> Pezpallet<T> {
+//!         #[pezpallet::weight(0)]
 //!         pub fn random_module_example(origin: OriginFor<T>) -> DispatchResult {
-//!             let _random_value = pezpallet_insecure_randomness_collective_flip::Pallet::<T>::random(&b"my context"[..]);
+//!             let _random_value = pezpallet_insecure_randomness_collective_flip::Pezpallet::<T>::random(&b"my context"[..]);
 //!             Ok(())
 //!         }
 //!     }
@@ -81,22 +81,22 @@ fn block_number_to_index<T: Config>(block_number: BlockNumberFor<T>) -> usize {
 	index.try_into().ok().expect("Something % 81 is always smaller than usize; qed")
 }
 
-pub use pallet::*;
+pub use pezpallet::*;
 
-#[frame::pallet]
-pub mod pallet {
+#[frame::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn on_initialize(block_number: BlockNumberFor<T>) -> Weight {
-			let parent_hash = pezframe_system::Pallet::<T>::parent_hash();
+			let parent_hash = pezframe_system::Pezpallet::<T>::parent_hash();
 
 			RandomMaterial::<T>::mutate(|ref mut values| {
 				if values.try_push(parent_hash).is_err() {
@@ -112,11 +112,11 @@ pub mod pallet {
 	/// Series of block headers from the last 81 blocks that acts as random seed material. This
 	/// is arranged as a ring buffer with `block_number % 81` being the index into the `Vec` of
 	/// the oldest hash.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type RandomMaterial<T: Config> =
 		StorageValue<_, BoundedVec<T::Hash, ConstU32<RANDOM_MATERIAL_LEN>>, ValueQuery>;
 
-	impl<T: Config> Pallet<T> {
+	impl<T: Config> Pezpallet<T> {
 		/// Gets the random material storage value
 		pub fn random_material() -> BoundedVec<T::Hash, ConstU32<RANDOM_MATERIAL_LEN>> {
 			RandomMaterial::<T>::get()
@@ -124,7 +124,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> Randomness<T::Hash, BlockNumberFor<T>> for Pallet<T> {
+impl<T: Config> Randomness<T::Hash, BlockNumberFor<T>> for Pezpallet<T> {
 	/// This randomness uses a low-influence function, drawing upon the block hashes from the
 	/// previous 81 blocks. Its result for any given subject will be known far in advance by anyone
 	/// observing the chain. Any block producer has significant influence over their block hashes
@@ -136,7 +136,7 @@ impl<T: Config> Randomness<T::Hash, BlockNumberFor<T>> for Pallet<T> {
 	/// and mean that all bits of the resulting value are entirely manipulatable by the author of
 	/// the parent block, who can determine the value of `parent_hash`.
 	fn random(subject: &[u8]) -> (T::Hash, BlockNumberFor<T>) {
-		let block_number = pezframe_system::Pallet::<T>::block_number();
+		let block_number = pezframe_system::Pezpallet::<T>::block_number();
 		let index = block_number_to_index::<T>(block_number);
 
 		let hash_series = RandomMaterial::<T>::get();

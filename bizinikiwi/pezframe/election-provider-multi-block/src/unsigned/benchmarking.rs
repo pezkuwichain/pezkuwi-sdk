@@ -16,7 +16,7 @@
 // limitations under the License.
 
 use crate::{
-	unsigned::{miner::OffchainWorkerMiner, Call, Config, Pallet},
+	unsigned::{miner::OffchainWorkerMiner, Call, Config, Pezpallet},
 	verifier::Verifier,
 	CurrentPhase, Phase,
 };
@@ -34,9 +34,9 @@ mod benchmarks {
 	fn validate_unsigned() -> Result<(), BenchmarkError> {
 		#[cfg(test)]
 		crate::mock::ElectionStart::set(pezsp_runtime::traits::Bounded::max_value());
-		crate::Pallet::<T>::start().unwrap();
+		crate::Pezpallet::<T>::start().unwrap();
 
-		crate::Pallet::<T>::roll_until_matches(|| {
+		crate::Pezpallet::<T>::roll_until_matches(|| {
 			matches!(CurrentPhase::<T>::get(), Phase::Unsigned(_))
 		});
 		let call: Call<T> = OffchainWorkerMiner::<T>::mine_solution(T::MinerPages::get(), false)
@@ -45,7 +45,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			assert_ok!(Pallet::<T>::validate_unsigned(TransactionSource::Local, &call));
+			assert_ok!(Pezpallet::<T>::validate_unsigned(TransactionSource::Local, &call));
 		}
 
 		Ok(())
@@ -55,10 +55,10 @@ mod benchmarks {
 	fn submit_unsigned() -> Result<(), BenchmarkError> {
 		#[cfg(test)]
 		crate::mock::ElectionStart::set(pezsp_runtime::traits::Bounded::max_value());
-		crate::Pallet::<T>::start().unwrap();
+		crate::Pezpallet::<T>::start().unwrap();
 
 		// roll to unsigned phase open
-		crate::Pallet::<T>::roll_until_matches(|| {
+		crate::Pezpallet::<T>::roll_until_matches(|| {
 			matches!(CurrentPhase::<T>::get(), Phase::Unsigned(_))
 		});
 		// TODO: we need to better ensure that this is actually worst case
@@ -69,7 +69,7 @@ mod benchmarks {
 		assert!(T::Verifier::queued_score().is_none());
 		#[block]
 		{
-			assert_ok!(Pallet::<T>::submit_unsigned(RawOrigin::None.into(), Box::new(solution)));
+			assert_ok!(Pezpallet::<T>::submit_unsigned(RawOrigin::None.into(), Box::new(solution)));
 		}
 
 		// something is queued
@@ -81,10 +81,10 @@ mod benchmarks {
 	fn mine_solution(p: Linear<1, { T::Pages::get() }>) -> Result<(), BenchmarkError> {
 		#[cfg(test)]
 		crate::mock::ElectionStart::set(pezsp_runtime::traits::Bounded::max_value());
-		crate::Pallet::<T>::start().unwrap();
+		crate::Pezpallet::<T>::start().unwrap();
 
 		// roll to unsigned phase open
-		crate::Pallet::<T>::roll_until_matches(|| {
+		crate::Pezpallet::<T>::roll_until_matches(|| {
 			matches!(CurrentPhase::<T>::get(), Phase::Unsigned(_))
 		});
 
@@ -97,7 +97,7 @@ mod benchmarks {
 	}
 
 	impl_benchmark_test_suite!(
-		Pallet,
+		Pezpallet,
 		crate::mock::ExtBuilder::full().build_unchecked(),
 		crate::mock::Runtime
 	);

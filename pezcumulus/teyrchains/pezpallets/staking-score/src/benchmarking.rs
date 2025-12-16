@@ -1,7 +1,7 @@
 //! Benchmarking setup for pezpallet-staking-score
 
 use super::*;
-use crate::{Config, Pallet, StakingStartBlock};
+use crate::{Config, Pezpallet, StakingStartBlock};
 use pezframe_benchmarking::v2::*;
 use pezframe_system::RawOrigin;
 

@@ -26,19 +26,19 @@ use pezsp_runtime::{
 	BuildStorage,
 };
 
-#[pezframe_support::pallet]
+#[pezframe_support::pezpallet]
 mod pezpallet_test {
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T, I = ()>(PhantomData<(T, I)>);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T, I = ()>(PhantomData<(T, I)>);
 
 	pub trait OtherConfig {
 		type OtherEvent;
 	}
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config + OtherConfig {
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self, I>>
@@ -47,19 +47,19 @@ mod pezpallet_test {
 		type UpperBound: Get<u32>;
 	}
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type Value<T: Config<I>, I: 'static = ()> = StorageValue<_, u32, OptionQuery>;
 
-	#[pallet::event]
+	#[pezpallet::event]
 	pub enum Event<T: Config<I>, I: 'static = ()> {}
 
-	#[pallet::call]
-	impl<T: Config<I>, I: 'static> Pallet<T, I>
+	#[pezpallet::call]
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I>
 	where
 		<T as OtherConfig>::OtherEvent: Into<<T as Config<I>>::RuntimeEvent>,
 	{
-		#[pallet::call_index(0)]
-		#[pallet::weight({0})]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight({0})]
 		pub fn set_value(origin: OriginFor<T>, n: u32) -> DispatchResult {
 			let _sender = ensure_signed(origin)?;
 			assert!(n >= T::LowerBound::get());
@@ -67,8 +67,8 @@ mod pezpallet_test {
 			Ok(())
 		}
 
-		#[pallet::call_index(1)]
-		#[pallet::weight({0})]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight({0})]
 		pub fn dummy(origin: OriginFor<T>, _n: u32) -> DispatchResult {
 			let _sender = ensure_none(origin)?;
 			Ok(())
@@ -147,7 +147,7 @@ mod benchmarks {
 	use pezsp_core::Get;
 
 	// Additional used internally by the benchmark macro.
-	use super::pezpallet_test::{Call, Config, Pallet};
+	use super::pezpallet_test::{Call, Config, Pezpallet};
 
 	crate::benchmarks_instance_pallet! {
 		where_clause {
@@ -182,7 +182,7 @@ mod benchmarks {
 		}
 
 		impl_benchmark_test_suite!(
-			Pallet,
+			Pezpallet,
 			crate::tests_instance::new_test_ext(),
 			crate::tests_instance::Test
 		)
@@ -197,7 +197,7 @@ fn ensure_correct_instance_is_selected() {
 
 	let mut batches = Vec::<crate::BenchmarkBatch>::new();
 	let config = crate::BenchmarkConfig {
-		pallet: "pezpallet_test".bytes().collect::<Vec<_>>(),
+		pezpallet: "pezpallet_test".bytes().collect::<Vec<_>>(),
 		// We only want that this `instance` is used.
 		// Otherwise the wrong components are used.
 		instance: "TestPallet".bytes().collect::<Vec<_>>(),

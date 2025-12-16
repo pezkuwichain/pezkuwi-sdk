@@ -1613,15 +1613,15 @@ impl<Config: config::Config> XcmExecutor<Config> {
 				Ok(())
 			},
 			ExpectPallet { index, name, module_name, crate_major, min_crate_minor } => {
-				let pallet = Config::PalletInstancesInfo::infos()
+				let pezpallet = Config::PalletInstancesInfo::infos()
 					.into_iter()
 					.find(|x| x.index == index as usize)
 					.ok_or(XcmError::PalletNotFound)?;
-				ensure!(pallet.name.as_bytes() == &name[..], XcmError::NameMismatch);
-				ensure!(pallet.module_name.as_bytes() == &module_name[..], XcmError::NameMismatch);
-				let major = pallet.crate_version.major as u32;
+				ensure!(pezpallet.name.as_bytes() == &name[..], XcmError::NameMismatch);
+				ensure!(pezpallet.module_name.as_bytes() == &module_name[..], XcmError::NameMismatch);
+				let major = pezpallet.crate_version.major as u32;
 				ensure!(major == crate_major, XcmError::VersionIncompatible);
-				let minor = pallet.crate_version.minor as u32;
+				let minor = pezpallet.crate_version.minor as u32;
 				ensure!(minor >= min_crate_minor, XcmError::VersionIncompatible);
 				Ok(())
 			},

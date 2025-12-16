@@ -28,64 +28,64 @@ use pezsp_runtime::{
 	traits::{BlakeTwo256, Verify},
 };
 
-#[pezframe_support::pallet(dev_mode)]
+#[pezframe_support::pezpallet(dev_mode)]
 mod module_single_instance {
 
-	#[pallet::composite_enum]
+	#[pezpallet::composite_enum]
 	pub enum HoldReason {
 		ModuleSingleInstanceReason1,
 		ModuleSingleInstanceReason2,
 	}
 
-	#[pallet::composite_enum]
+	#[pezpallet::composite_enum]
 	pub enum FreezeReason {
 		ModuleSingleInstanceReason1,
 		ModuleSingleInstanceReason2,
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		type RuntimeHoldReason: From<HoldReason>;
 		type RuntimeFreezeReason: From<FreezeReason>;
 	}
 }
 
-#[pezframe_support::pallet(dev_mode)]
+#[pezframe_support::pezpallet(dev_mode)]
 mod module_multi_instance {
 
-	#[pallet::composite_enum]
+	#[pezpallet::composite_enum]
 	pub enum HoldReason<I: 'static = ()> {
 		ModuleMultiInstanceReason1,
 		ModuleMultiInstanceReason2,
 		ModuleMultiInstanceReason3,
 	}
 
-	#[pallet::composite_enum]
+	#[pezpallet::composite_enum]
 	pub enum FreezeReason<I: 'static = ()> {
 		ModuleMultiInstanceReason1,
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T, I = ()>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T, I = ()>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config {
 		type RuntimeHoldReason: From<HoldReason<I>>;
 		type RuntimeFreezeReason: From<FreezeReason<I>>;
 	}
 }
 
-#[pezframe_support::pallet(dev_mode)]
+#[pezframe_support::pezpallet(dev_mode)]
 mod module_composite_enum_consumer {
 	use super::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T, I = ()>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T, I = ()>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config {
 		// consume `HoldReason` `composite_enum`
 		type RuntimeHoldReason: VariantCount;

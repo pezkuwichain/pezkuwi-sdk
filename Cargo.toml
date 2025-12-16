@@ -12,58 +12,58 @@ repository = "https://github.com/pezkuwichain/pezkuwi-sdk.git"
 resolver = "2"
 
 members = [
-  "bridges/bin/runtime-common",
-  "bridges/chains/chain-pezcumulus",
-  "bridges/chains/chain-pezkuwi-bulletin",
-  "bridges/modules/beefy",
-  "bridges/modules/grandpa",
-  "bridges/modules/messages",
-  "bridges/modules/relayers",
-  "bridges/modules/teyrchains",
-  "bridges/modules/xcm-bridge-hub",
-  "bridges/modules/xcm-bridge-hub-router",
-  "bridges/primitives/beefy",
-  "bridges/primitives/header-chain",
-  "bridges/primitives/messages",
-  "bridges/primitives/pezkuwi-core",
-  "bridges/primitives/relayers",
-  "bridges/primitives/runtime",
-  "bridges/primitives/test-utils",
-  "bridges/primitives/teyrchains",
-  "bridges/primitives/xcm-bridge-hub",
-  "bridges/primitives/xcm-bridge-hub-router",
-  "bridges/relays/client-bizinikiwi",
-  "bridges/relays/equivocation",
-  "bridges/relays/finality",
-  "bridges/relays/lib-bizinikiwi-relay",
-  "bridges/relays/messages",
-  "bridges/relays/teyrchains",
-  "bridges/relays/utils",
-  "bridges/snowbridge/pezpallets/ethereum-client",
-  "bridges/snowbridge/pezpallets/ethereum-client/fixtures",
-  "bridges/snowbridge/pezpallets/inbound-queue",
-  "bridges/snowbridge/pezpallets/inbound-queue-v2",
-  "bridges/snowbridge/pezpallets/inbound-queue-v2/fixtures",
-  "bridges/snowbridge/pezpallets/inbound-queue/fixtures",
-  "bridges/snowbridge/pezpallets/outbound-queue",
-  "bridges/snowbridge/pezpallets/outbound-queue-v2",
-  "bridges/snowbridge/pezpallets/outbound-queue-v2/runtime-api",
-  "bridges/snowbridge/pezpallets/outbound-queue/runtime-api",
-  "bridges/snowbridge/pezpallets/system",
-  "bridges/snowbridge/pezpallets/system-frontend",
-  "bridges/snowbridge/pezpallets/system-v2",
-  "bridges/snowbridge/pezpallets/system-v2/runtime-api",
-  "bridges/snowbridge/pezpallets/system/runtime-api",
-  "bridges/snowbridge/primitives/beacon",
-  "bridges/snowbridge/primitives/core",
-  "bridges/snowbridge/primitives/ethereum",
-  "bridges/snowbridge/primitives/inbound-queue",
-  "bridges/snowbridge/primitives/merkle-tree",
-  "bridges/snowbridge/primitives/outbound-queue",
-  "bridges/snowbridge/primitives/verification",
-  "bridges/snowbridge/runtime/runtime-common",
-  "bridges/snowbridge/runtime/test-common",
-  "bridges/snowbridge/test-utils",
+  "pezbridges/bin/runtime-common",
+  "pezbridges/chains/chain-pezcumulus",
+  "pezbridges/chains/chain-pezkuwi-bulletin",
+  "pezbridges/modules/beefy",
+  "pezbridges/modules/grandpa",
+  "pezbridges/modules/messages",
+  "pezbridges/modules/relayers",
+  "pezbridges/modules/teyrchains",
+  "pezbridges/modules/xcm-bridge-hub",
+  "pezbridges/modules/xcm-bridge-hub-router",
+  "pezbridges/primitives/beefy",
+  "pezbridges/primitives/header-chain",
+  "pezbridges/primitives/messages",
+  "pezbridges/primitives/pezkuwi-core",
+  "pezbridges/primitives/relayers",
+  "pezbridges/primitives/runtime",
+  "pezbridges/primitives/test-utils",
+  "pezbridges/primitives/teyrchains",
+  "pezbridges/primitives/xcm-bridge-hub",
+  "pezbridges/primitives/xcm-bridge-hub-router",
+  "pezbridges/relays/client-bizinikiwi",
+  "pezbridges/relays/equivocation",
+  "pezbridges/relays/finality",
+  "pezbridges/relays/lib-bizinikiwi-relay",
+  "pezbridges/relays/messages",
+  "pezbridges/relays/teyrchains",
+  "pezbridges/relays/utils",
+  "pezbridges/snowbridge/pezpallets/ethereum-client",
+  "pezbridges/snowbridge/pezpallets/ethereum-client/fixtures",
+  "pezbridges/snowbridge/pezpallets/inbound-queue",
+  "pezbridges/snowbridge/pezpallets/inbound-queue-v2",
+  "pezbridges/snowbridge/pezpallets/inbound-queue-v2/fixtures",
+  "pezbridges/snowbridge/pezpallets/inbound-queue/fixtures",
+  "pezbridges/snowbridge/pezpallets/outbound-queue",
+  "pezbridges/snowbridge/pezpallets/outbound-queue-v2",
+  "pezbridges/snowbridge/pezpallets/outbound-queue-v2/runtime-api",
+  "pezbridges/snowbridge/pezpallets/outbound-queue/runtime-api",
+  "pezbridges/snowbridge/pezpallets/system",
+  "pezbridges/snowbridge/pezpallets/system-frontend",
+  "pezbridges/snowbridge/pezpallets/system-v2",
+  "pezbridges/snowbridge/pezpallets/system-v2/runtime-api",
+  "pezbridges/snowbridge/pezpallets/system/runtime-api",
+  "pezbridges/snowbridge/primitives/beacon",
+  "pezbridges/snowbridge/primitives/core",
+  "pezbridges/snowbridge/primitives/ethereum",
+  "pezbridges/snowbridge/primitives/inbound-queue",
+  "pezbridges/snowbridge/primitives/merkle-tree",
+  "pezbridges/snowbridge/primitives/outbound-queue",
+  "pezbridges/snowbridge/primitives/verification",
+  "pezbridges/snowbridge/runtime/runtime-common",
+  "pezbridges/snowbridge/runtime/test-common",
+  "pezbridges/snowbridge/test-utils",
   "pezcumulus/bin/pov-validator",
   "pezcumulus/client/bootnodes",
   "pezcumulus/client/cli",
@@ -111,8 +111,8 @@ members = [
   "pezcumulus/teyrchains/integration-tests/emulated/chains/relays/zagros",
   "pezcumulus/teyrchains/integration-tests/emulated/chains/teyrchains/assets/asset-hub-pezkuwichain",
   "pezcumulus/teyrchains/integration-tests/emulated/chains/teyrchains/assets/asset-hub-zagros",
-  "pezcumulus/teyrchains/integration-tests/emulated/chains/teyrchains/bridges/bridge-hub-pezkuwichain",
-  "pezcumulus/teyrchains/integration-tests/emulated/chains/teyrchains/bridges/bridge-hub-zagros",
+  "pezcumulus/teyrchains/integration-tests/emulated/chains/teyrchains/pezbridges/bridge-hub-pezkuwichain",
+  "pezcumulus/teyrchains/integration-tests/emulated/chains/teyrchains/pezbridges/bridge-hub-zagros",
   "pezcumulus/teyrchains/integration-tests/emulated/chains/teyrchains/collectives/collectives-zagros",
   "pezcumulus/teyrchains/integration-tests/emulated/chains/teyrchains/coretime/coretime-pezkuwichain",
   "pezcumulus/teyrchains/integration-tests/emulated/chains/teyrchains/coretime/coretime-zagros",
@@ -125,8 +125,8 @@ members = [
   "pezcumulus/teyrchains/integration-tests/emulated/networks/zagros-system",
   "pezcumulus/teyrchains/integration-tests/emulated/tests/assets/asset-hub-pezkuwichain",
   "pezcumulus/teyrchains/integration-tests/emulated/tests/assets/asset-hub-zagros",
-  "pezcumulus/teyrchains/integration-tests/emulated/tests/bridges/bridge-hub-pezkuwichain",
-  "pezcumulus/teyrchains/integration-tests/emulated/tests/bridges/bridge-hub-zagros",
+  "pezcumulus/teyrchains/integration-tests/emulated/tests/pezbridges/bridge-hub-pezkuwichain",
+  "pezcumulus/teyrchains/integration-tests/emulated/tests/pezbridges/bridge-hub-zagros",
   "pezcumulus/teyrchains/integration-tests/emulated/tests/collectives/collectives-zagros",
   "pezcumulus/teyrchains/integration-tests/emulated/tests/coretime/coretime-pezkuwichain",
   "pezcumulus/teyrchains/integration-tests/emulated/tests/coretime/coretime-zagros",
@@ -706,29 +706,29 @@ bounded-collections = { version = "0.3.2", default-features = false }
 bounded-vec = { version = "0.7" }
 bp-asset-hub-pezkuwichain = { path = "pezcumulus/teyrchains/runtimes/assets/asset-hub-pezkuwichain/bridge-primitives", default-features = false }
 bp-asset-hub-zagros = { path = "pezcumulus/teyrchains/runtimes/assets/asset-hub-zagros/bridge-primitives", default-features = false }
-bp-beefy = { path = "bridges/primitives/beefy", default-features = false }
-bp-bridge-hub-pezcumulus = { path = "bridges/chains/chain-pezcumulus", default-features = false }
+bp-beefy = { path = "pezbridges/primitives/beefy", default-features = false }
+bp-bridge-hub-pezcumulus = { path = "pezbridges/chains/chain-pezcumulus", default-features = false }
 bp-bridge-hub-pezkuwichain = { path = "pezcumulus/teyrchains/runtimes/bridge-hubs/bridge-hub-pezkuwichain/bridge-primitives", default-features = false }
 bp-bridge-hub-zagros = { path = "pezcumulus/teyrchains/runtimes/bridge-hubs/bridge-hub-zagros/bridge-primitives", default-features = false, package = "bp-bridge-hub-zagros" }
-bp-header-pez-chain = { path = "bridges/primitives/header-chain", default-features = false, package = "bp-header-pez-chain" }
-bp-messages = { path = "bridges/primitives/messages", default-features = false, package = "bp-messages" }
-bp-pezkuwi-bulletin = { path = "bridges/chains/chain-pezkuwi-bulletin", default-features = false, package = "bp-pezkuwi-bulletin" }
-bp-pezkuwi-core = { path = "bridges/primitives/pezkuwi-core", default-features = false, package = "bp-pezkuwi-core" }
+bp-header-pez-chain = { path = "pezbridges/primitives/header-chain", default-features = false, package = "bp-header-pez-chain" }
+bp-messages = { path = "pezbridges/primitives/messages", default-features = false, package = "bp-messages" }
+bp-pezkuwi-bulletin = { path = "pezbridges/chains/chain-pezkuwi-bulletin", default-features = false, package = "bp-pezkuwi-bulletin" }
+bp-pezkuwi-core = { path = "pezbridges/primitives/pezkuwi-core", default-features = false, package = "bp-pezkuwi-core" }
 bp-pezkuwichain = { path = "pezkuwi/runtime/pezkuwichain/bridge-primitives", default-features = false, package = "bp-pezkuwichain" }
-bp-relayers = { path = "bridges/primitives/relayers", default-features = false, package = "bp-relayers" }
-pezbp-runtime = { path = "bridges/primitives/runtime", default-features = false }
-bp-test-utils = { path = "bridges/primitives/test-utils", default-features = false }
-bp-teyrchains = { path = "bridges/primitives/teyrchains", default-features = false }
-bp-xcm-bridge-hub = { path = "bridges/primitives/xcm-bridge-hub", default-features = false }
-bp-xcm-bridge-hub-router = { path = "bridges/primitives/xcm-bridge-hub-router", default-features = false }
+bp-relayers = { path = "pezbridges/primitives/relayers", default-features = false, package = "bp-relayers" }
+pezbp-runtime = { path = "pezbridges/primitives/runtime", default-features = false }
+bp-test-utils = { path = "pezbridges/primitives/test-utils", default-features = false }
+bp-teyrchains = { path = "pezbridges/primitives/teyrchains", default-features = false }
+bp-xcm-bridge-hub = { path = "pezbridges/primitives/xcm-bridge-hub", default-features = false }
+bp-xcm-bridge-hub-router = { path = "pezbridges/primitives/xcm-bridge-hub-router", default-features = false }
 bp-zagros = { path = "pezkuwi/runtime/zagros/bridge-primitives", default-features = false }
 bridge-hub-common = { path = "pezcumulus/teyrchains/runtimes/bridge-hubs/common", default-features = false }
-pezbridge-hub-pezkuwichain-emulated-chain = { path = "pezcumulus/teyrchains/integration-tests/emulated/chains/teyrchains/bridges/bridge-hub-pezkuwichain" }
+pezbridge-hub-pezkuwichain-emulated-chain = { path = "pezcumulus/teyrchains/integration-tests/emulated/chains/teyrchains/pezbridges/bridge-hub-pezkuwichain" }
 pezbridge-hub-pezkuwichain-runtime = { path = "pezcumulus/teyrchains/runtimes/bridge-hubs/bridge-hub-pezkuwichain", default-features = false }
 pezbridge-hub-test-utils = { path = "pezcumulus/teyrchains/runtimes/bridge-hubs/test-utils", default-features = false }
-pezbridge-hub-zagros-emulated-chain = { path = "pezcumulus/teyrchains/integration-tests/emulated/chains/teyrchains/bridges/bridge-hub-zagros" }
+pezbridge-hub-zagros-emulated-chain = { path = "pezcumulus/teyrchains/integration-tests/emulated/chains/teyrchains/pezbridges/bridge-hub-zagros" }
 pezbridge-hub-zagros-runtime = { path = "pezcumulus/teyrchains/runtimes/bridge-hubs/bridge-hub-zagros" }
-pezbridge-runtime-common = { path = "bridges/bin/runtime-common", default-features = false }
+pezbridge-runtime-common = { path = "pezbridges/bin/runtime-common", default-features = false }
 bs58 = { version = "0.5.1", default-features = false }
 build-helper = { version = "0.1.1" }
 byte-slice-cast = { version = "1.2.1", default-features = false }
@@ -817,7 +817,7 @@ enumn = { version = "0.1.13" }
 env_filter = { version = "0.1.3" }
 env_logger = { version = "0.11.2" }
 environmental = { version = "1.1.4", default-features = false }
-pez-equivocation-detector = { path = "bridges/relays/equivocation" }
+pez-equivocation-detector = { path = "pezbridges/relays/equivocation" }
 ethabi = { version = "2.0.0", default-features = false, package = "ethabi-decode" }
 ethbloom = { version = "0.14.1", default-features = false }
 pez-ethereum-standards = { path = "bizinikiwi/primitives/pez-ethereum-standards" }
@@ -829,7 +829,7 @@ fdlimit = { version = "0.3.0" }
 femme = { version = "2.2.1" }
 filetime = { version = "0.2.16" }
 finality-grandpa = { version = "0.16.3", default-features = false }
-pez-finality-relay = { path = "bridges/relays/finality" }
+pez-finality-relay = { path = "pezbridges/relays/finality" }
 first-pezpallet = { package = "pezkuwi-sdk-docs-first-pezpallet", path = "docs/sdk/packages/guides/first-pezpallet", default-features = false }
 first-runtime = { package = "pezkuwi-sdk-docs-first-runtime", path = "docs/sdk/packages/guides/first-runtime", default-features = false }
 flate2 = { version = "1.0" }
@@ -932,7 +932,7 @@ memmap2 = { version = "0.9.3" }
 memory-db = { version = "0.34.0", default-features = false }
 merkleized-metadata = { version = "0.5.0" }
 merlin = { version = "3.0", default-features = false }
-pez-messages-relay = { path = "bridges/relays/messages" }
+pez-messages-relay = { path = "pezbridges/relays/messages" }
 metered = { version = "0.6.1", default-features = false, package = "prioritized-metered-channel" }
 milagro-bls = { version = "1.5.4", default-features = false, package = "snowbridge-milagro-bls" }
 pez-minimal-template-node = { path = "templates/minimal/node" }
@@ -985,10 +985,10 @@ pezpallet-balances = { path = "bizinikiwi/pezframe/balances", default-features =
 pezpallet-beefy = { path = "bizinikiwi/pezframe/beefy", default-features = false }
 pezpallet-beefy-mmr = { path = "bizinikiwi/pezframe/beefy-mmr", default-features = false }
 pezpallet-bounties = { path = "bizinikiwi/pezframe/bounties", default-features = false }
-pezpallet-bridge-grandpa = { path = "bridges/modules/grandpa", default-features = false }
-pezpallet-bridge-messages = { path = "bridges/modules/messages", default-features = false }
-pezpallet-bridge-relayers = { path = "bridges/modules/relayers", default-features = false }
-pezpallet-bridge-teyrchains = { path = "bridges/modules/teyrchains", default-features = false }
+pezpallet-bridge-grandpa = { path = "pezbridges/modules/grandpa", default-features = false }
+pezpallet-bridge-messages = { path = "pezbridges/modules/messages", default-features = false }
+pezpallet-bridge-relayers = { path = "pezbridges/modules/relayers", default-features = false }
+pezpallet-bridge-teyrchains = { path = "pezbridges/modules/teyrchains", default-features = false }
 pezpallet-broker = { path = "bizinikiwi/pezframe/broker", default-features = false }
 pezpallet-child-bounties = { path = "bizinikiwi/pezframe/child-bounties", default-features = false }
 pezpallet-collator-selection = { path = "pezcumulus/pezpallets/collator-selection", default-features = false }
@@ -1125,8 +1125,8 @@ pezpallet-vesting = { path = "bizinikiwi/pezframe/vesting", default-features = f
 pezpallet-whitelist = { path = "bizinikiwi/pezframe/whitelist", default-features = false }
 pezpallet-xcm = { path = "pezkuwi/xcm/pezpallet-xcm", default-features = false }
 pezpallet-xcm-benchmarks = { path = "pezkuwi/xcm/pezpallet-xcm-benchmarks", default-features = false }
-pezpallet-xcm-bridge-hub = { path = "bridges/modules/xcm-bridge-hub", default-features = false }
-pezpallet-xcm-bridge-hub-router = { path = "bridges/modules/xcm-bridge-hub-router", default-features = false }
+pezpallet-xcm-bridge-hub = { path = "pezbridges/modules/xcm-bridge-hub", default-features = false }
+pezpallet-xcm-bridge-hub-router = { path = "pezbridges/modules/xcm-bridge-hub-router", default-features = false }
 pezpallet-xcm-precompiles = { path = "pezkuwi/xcm/pezpallet-xcm/precompiles", default-features = false }
 parity-bytes = { version = "0.1.2", default-features = false }
 parity-db = { version = "0.4.12" }
@@ -1235,8 +1235,8 @@ rand_pcg = { version = "0.3.1" }
 rbtag = { version = "0.3" }
 ref-cast = { version = "1.0.23" }
 regex = { version = "1.10.2" }
-relay-bizinikiwi-client = { path = "bridges/relays/client-bizinikiwi" }
-relay-utils = { path = "bridges/relays/utils" }
+relay-bizinikiwi-client = { path = "pezbridges/relays/client-bizinikiwi" }
+relay-utils = { path = "pezbridges/relays/utils" }
 remote-externalities = { path = "bizinikiwi/utils/pezframe/remote-externalities", default-features = false, package = "frame-remote-externalities" }
 pez-revive-dev-node = { path = "bizinikiwi/pezframe/revive/dev-node/node" }
 pez-revive-dev-runtime = { path = "bizinikiwi/pezframe/revive/dev-node/runtime" }
@@ -1339,31 +1339,31 @@ simple-mermaid = { version = "0.1.1" }
 pez-slot-range-helper = { path = "pezkuwi/runtime/common/pez-slot-range-helper", default-features = false }
 slotmap = { version = "1.0" }
 smallvec = { version = "1.11.0", default-features = false }
-pezsnowbridge-beacon-primitives = { path = "bridges/snowbridge/primitives/beacon", default-features = false }
-pezsnowbridge-core = { path = "bridges/snowbridge/primitives/core", default-features = false }
-pezsnowbridge-ethereum = { path = "bridges/snowbridge/primitives/ethereum", default-features = false }
-pezsnowbridge-inbound-queue-primitives = { path = "bridges/snowbridge/primitives/inbound-queue", default-features = false }
-pezsnowbridge-merkle-tree = { path = "bridges/snowbridge/primitives/merkle-tree", default-features = false }
-pezsnowbridge-outbound-queue-primitives = { path = "bridges/snowbridge/primitives/outbound-queue", default-features = false }
-pezsnowbridge-outbound-queue-runtime-api = { path = "bridges/snowbridge/pezpallets/outbound-queue/runtime-api", default-features = false }
-pezsnowbridge-outbound-queue-v2-runtime-api = { path = "bridges/snowbridge/pezpallets/outbound-queue-v2/runtime-api", default-features = false }
-snowbridge-pezpallet-ethereum-client = { path = "bridges/snowbridge/pezpallets/ethereum-client", default-features = false }
-snowbridge-pezpallet-ethereum-client-fixtures = { path = "bridges/snowbridge/pezpallets/ethereum-client/fixtures", default-features = false }
-snowbridge-pezpallet-inbound-queue = { path = "bridges/snowbridge/pezpallets/inbound-queue", default-features = false }
-snowbridge-pezpallet-inbound-queue-fixtures = { path = "bridges/snowbridge/pezpallets/inbound-queue/fixtures", default-features = false }
-snowbridge-pezpallet-inbound-queue-v2 = { path = "bridges/snowbridge/pezpallets/inbound-queue-v2", default-features = false }
-snowbridge-pezpallet-inbound-queue-v2-fixtures = { path = "bridges/snowbridge/pezpallets/inbound-queue-v2/fixtures", default-features = false }
-snowbridge-pezpallet-outbound-queue = { path = "bridges/snowbridge/pezpallets/outbound-queue", default-features = false }
-snowbridge-pezpallet-outbound-queue-v2 = { path = "bridges/snowbridge/pezpallets/outbound-queue-v2", default-features = false }
-snowbridge-pezpallet-system = { path = "bridges/snowbridge/pezpallets/system", default-features = false }
-snowbridge-pezpallet-system-frontend = { path = "bridges/snowbridge/pezpallets/system-frontend", default-features = false }
-snowbridge-pezpallet-system-v2 = { path = "bridges/snowbridge/pezpallets/system-v2", default-features = false }
-snowpezbridge-runtime-common = { path = "bridges/snowbridge/runtime/runtime-common", default-features = false }
-pezsnowbridge-runtime-test-common = { path = "bridges/snowbridge/runtime/test-common", default-features = false }
-pezsnowbridge-system-runtime-api = { path = "bridges/snowbridge/pezpallets/system/runtime-api", default-features = false }
-pezsnowbridge-system-v2-runtime-api = { path = "bridges/snowbridge/pezpallets/system-v2/runtime-api", default-features = false }
-pezsnowbridge-test-utils = { path = "bridges/snowbridge/test-utils" }
-pezsnowbridge-verification-primitives = { path = "bridges/snowbridge/primitives/verification", default-features = false }
+pezsnowbridge-beacon-primitives = { path = "pezbridges/snowbridge/primitives/beacon", default-features = false }
+pezsnowbridge-core = { path = "pezbridges/snowbridge/primitives/core", default-features = false }
+pezsnowbridge-ethereum = { path = "pezbridges/snowbridge/primitives/ethereum", default-features = false }
+pezsnowbridge-inbound-queue-primitives = { path = "pezbridges/snowbridge/primitives/inbound-queue", default-features = false }
+pezsnowbridge-merkle-tree = { path = "pezbridges/snowbridge/primitives/merkle-tree", default-features = false }
+pezsnowbridge-outbound-queue-primitives = { path = "pezbridges/snowbridge/primitives/outbound-queue", default-features = false }
+pezsnowbridge-outbound-queue-runtime-api = { path = "pezbridges/snowbridge/pezpallets/outbound-queue/runtime-api", default-features = false }
+pezsnowbridge-outbound-queue-v2-runtime-api = { path = "pezbridges/snowbridge/pezpallets/outbound-queue-v2/runtime-api", default-features = false }
+pezsnowbridge-pezpallet-ethereum-client = { path = "pezbridges/snowbridge/pezpallets/ethereum-client", default-features = false }
+pezsnowbridge-pezpallet-ethereum-client-fixtures = { path = "pezbridges/snowbridge/pezpallets/ethereum-client/fixtures", default-features = false }
+pezsnowbridge-pezpallet-inbound-queue = { path = "pezbridges/snowbridge/pezpallets/inbound-queue", default-features = false }
+pezsnowbridge-pezpallet-inbound-queue-fixtures = { path = "pezbridges/snowbridge/pezpallets/inbound-queue/fixtures", default-features = false }
+pezsnowbridge-pezpallet-inbound-queue-v2 = { path = "pezbridges/snowbridge/pezpallets/inbound-queue-v2", default-features = false }
+pezsnowbridge-pezpallet-inbound-queue-v2-fixtures = { path = "pezbridges/snowbridge/pezpallets/inbound-queue-v2/fixtures", default-features = false }
+pezsnowbridge-pezpallet-outbound-queue = { path = "pezbridges/snowbridge/pezpallets/outbound-queue", default-features = false }
+pezsnowbridge-pezpallet-outbound-queue-v2 = { path = "pezbridges/snowbridge/pezpallets/outbound-queue-v2", default-features = false }
+pezsnowbridge-pezpallet-system = { path = "pezbridges/snowbridge/pezpallets/system", default-features = false }
+pezsnowbridge-pezpallet-system-frontend = { path = "pezbridges/snowbridge/pezpallets/system-frontend", default-features = false }
+pezsnowbridge-pezpallet-system-v2 = { path = "pezbridges/snowbridge/pezpallets/system-v2", default-features = false }
+snowpezbridge-runtime-common = { path = "pezbridges/snowbridge/runtime/runtime-common", default-features = false }
+pezsnowbridge-runtime-test-common = { path = "pezbridges/snowbridge/runtime/test-common", default-features = false }
+pezsnowbridge-system-runtime-api = { path = "pezbridges/snowbridge/pezpallets/system/runtime-api", default-features = false }
+pezsnowbridge-system-v2-runtime-api = { path = "pezbridges/snowbridge/pezpallets/system-v2/runtime-api", default-features = false }
+pezsnowbridge-test-utils = { path = "pezbridges/snowbridge/test-utils" }
+pezsnowbridge-verification-primitives = { path = "pezbridges/snowbridge/primitives/verification", default-features = false }
 soketto = { version = "0.8.0" }
 pez-solochain-template-runtime = { path = "templates/solochain/runtime" }
 pezsp-api = { path = "bizinikiwi/primitives/api", default-features = false }
@@ -1458,7 +1458,7 @@ tempfile = { version = "3.8.1" }
 teyrchain-info = { path = "pezcumulus/teyrchains/pezpallets/teyrchain-info", default-features = false, package = "pezstaging-teyrchain-info" }
 teyrchain-template-runtime = { path = "templates/teyrchain/runtime" }
 teyrchains-common = { path = "pezcumulus/teyrchains/common", default-features = false }
-teyrchains-relay = { path = "bridges/relays/teyrchains" }
+teyrchains-relay = { path = "pezbridges/relays/teyrchains" }
 teyrchains-runtimes-test-utils = { path = "pezcumulus/teyrchains/runtimes/test-utils", default-features = false }
 # pinned test-case to 3.3.1 because they support only the latest stable version of rust
 test-case = { version = "=3.3.1" }

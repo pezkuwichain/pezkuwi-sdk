@@ -16,7 +16,7 @@
 //! # Collectives Teyrchain
 //!
 //! This teyrchain is for collectives that serve the Zagros network.
-//! Each collective is defined by a specialized (possibly instanced) pallet.
+//! Each collective is defined by a specialized (possibly instanced) pezpallet.
 //!
 //! ### Governance
 //!
@@ -267,7 +267,7 @@ impl pezpallet_multisig::Config for Runtime {
 	type DepositFactor = DepositFactor;
 	type MaxSignatories = ConstU32<100>;
 	type WeightInfo = weights::pezpallet_multisig::WeightInfo<Runtime>;
-	type BlockNumberProvider = pezframe_system::Pallet<Runtime>;
+	type BlockNumberProvider = pezframe_system::Pezpallet<Runtime>;
 }
 
 impl pezpallet_utility::Config for Runtime {
@@ -402,7 +402,7 @@ impl pezpallet_proxy::Config for Runtime {
 	type CallHasher = BlakeTwo256;
 	type AnnouncementDepositBase = AnnouncementDepositBase;
 	type AnnouncementDepositFactor = AnnouncementDepositFactor;
-	type BlockNumberProvider = pezframe_system::Pallet<Runtime>;
+	type BlockNumberProvider = pezframe_system::Pezpallet<Runtime>;
 }
 
 parameter_types! {
@@ -414,7 +414,7 @@ impl pezcumulus_pezpallet_teyrchain_system::Config for Runtime {
 	type WeightInfo = weights::pezcumulus_pezpallet_teyrchain_system::WeightInfo<Runtime>;
 	type RuntimeEvent = RuntimeEvent;
 	type OnSystemEvent = ();
-	type SelfParaId = teyrchain_info::Pallet<Runtime>;
+	type SelfParaId = teyrchain_info::Pezpallet<Runtime>;
 	type DmpQueue = pezframe_support::traits::EnqueueWithOrigin<MessageQueue, RelayOrigin>;
 	type ReservedDmpWeight = ReservedDmpWeight;
 	type OutboundXcmpMessageSource = XcmpQueue;
@@ -452,7 +452,7 @@ impl pezpallet_message_queue::Config for Runtime {
 		RuntimeCall,
 	>;
 	type Size = u32;
-	// The XCMP queue pallet is only ever able to handle the `Sibling(ParaId)` origin:
+	// The XCMP queue pezpallet is only ever able to handle the `Sibling(ParaId)` origin:
 	type QueueChangeHandler = NarrowOriginToSibling<XcmpQueue>;
 	type QueuePausedQuery = NarrowOriginToSibling<XcmpQueue>;
 	type HeapSize = pezsp_core::ConstU32<{ 103 * 1024 }>;
@@ -646,7 +646,7 @@ impl pezpallet_scheduler::Config for Runtime {
 	type WeightInfo = weights::pezpallet_scheduler::WeightInfo<Runtime>;
 	type OriginPrivilegeCmp = EqualOrGreatestRootCmp;
 	type Preimages = Preimage;
-	type BlockNumberProvider = pezframe_system::Pallet<Runtime>;
+	type BlockNumberProvider = pezframe_system::Pezpallet<Runtime>;
 }
 
 parameter_types! {
@@ -1108,16 +1108,16 @@ impl_runtime_apis! {
 		) {
 			use pezframe_benchmarking::BenchmarkList;
 			use pezframe_support::traits::StorageInfoTrait;
-			use pezframe_system_benchmarking::Pallet as SystemBench;
-			use pezframe_system_benchmarking::extensions::Pallet as SystemExtensionsBench;
-			use pezcumulus_pezpallet_session_benchmarking::Pallet as SessionBench;
-			use pezpallet_xcm::benchmarking::Pallet as PalletXcmExtrinsicsBenchmark;
+			use pezframe_system_benchmarking::Pezpallet as SystemBench;
+			use pezframe_system_benchmarking::extensions::Pezpallet as SystemExtensionsBench;
+			use pezcumulus_pezpallet_session_benchmarking::Pezpallet as SessionBench;
+			use pezpallet_xcm::benchmarking::Pezpallet as PalletXcmExtrinsicsBenchmark;
 
 			// This is defined once again in dispatch_benchmark, because list_benchmarks!
 			// and add_benchmarks! are macros exported by define_benchmarks! macros and those types
 			// are referenced in that call.
-			type XcmBalances = pezpallet_xcm_benchmarks::fungible::Pallet::<Runtime>;
-			type XcmGeneric = pezpallet_xcm_benchmarks::generic::Pallet::<Runtime>;
+			type XcmBalances = pezpallet_xcm_benchmarks::fungible::Pezpallet::<Runtime>;
+			type XcmGeneric = pezpallet_xcm_benchmarks::generic::Pezpallet::<Runtime>;
 
 			let mut list = Vec::<BenchmarkList>::new();
 			list_benchmarks!(list, extra);
@@ -1133,8 +1133,8 @@ impl_runtime_apis! {
 			use pezframe_benchmarking::{BenchmarkBatch, BenchmarkError};
 			use pezsp_storage::TrackedStorageKey;
 
-			use pezframe_system_benchmarking::Pallet as SystemBench;
-			use pezframe_system_benchmarking::extensions::Pallet as SystemExtensionsBench;
+			use pezframe_system_benchmarking::Pezpallet as SystemBench;
+			use pezframe_system_benchmarking::extensions::Pezpallet as SystemExtensionsBench;
 			impl pezframe_system_benchmarking::Config for Runtime {
 				fn setup_set_code_requirements(code: &alloc::vec::Vec<u8>) -> Result<(), BenchmarkError> {
 					TeyrchainSystem::initialize_for_set_code_benchmark(code.len() as u32);
@@ -1146,7 +1146,7 @@ impl_runtime_apis! {
 				}
 			}
 
-			use pezcumulus_pezpallet_session_benchmarking::Pallet as SessionBench;
+			use pezcumulus_pezpallet_session_benchmarking::Pezpallet as SessionBench;
 			impl pezcumulus_pezpallet_session_benchmarking::Config for Runtime {}
 			use xcm_config::WndLocation;
 			use testnet_teyrchains_constants::zagros::locations::{AssetHubParaId, AssetHubLocation};
@@ -1158,7 +1158,7 @@ impl_runtime_apis! {
 				).into());
 			}
 
-			use pezpallet_xcm::benchmarking::Pallet as PalletXcmExtrinsicsBenchmark;
+			use pezpallet_xcm::benchmarking::Pezpallet as PalletXcmExtrinsicsBenchmark;
 			impl pezpallet_xcm::benchmarking::Config for Runtime {
 				type DeliveryHelper = pezkuwi_runtime_common::xcm_sender::ToTeyrchainDeliveryHelper<
 						xcm_config::XcmConfig,
@@ -1313,8 +1313,8 @@ impl_runtime_apis! {
 				}
 			}
 
-			type XcmBalances = pezpallet_xcm_benchmarks::fungible::Pallet::<Runtime>;
-			type XcmGeneric = pezpallet_xcm_benchmarks::generic::Pallet::<Runtime>;
+			type XcmBalances = pezpallet_xcm_benchmarks::fungible::Pezpallet::<Runtime>;
+			type XcmGeneric = pezpallet_xcm_benchmarks::generic::Pezpallet::<Runtime>;
 
 			use pezframe_support::traits::WhitelistedStorageKeys;
 			let whitelist: Vec<TrackedStorageKey> = AllPalletsWithSystem::whitelisted_storage_keys();
@@ -1372,7 +1372,7 @@ impl pezpallet_state_trie_migration::Config for Runtime {
 	type RuntimeHoldReason = RuntimeHoldReason;
 	type SignedDepositPerItem = MigrationSignedDepositPerItem;
 	type SignedDepositBase = MigrationSignedDepositBase;
-	// An origin that can control the whole pallet: should be Root, or a part of your council.
+	// An origin that can control the whole pezpallet: should be Root, or a part of your council.
 	type ControlOrigin = pezframe_system::EnsureSignedBy<RootMigController, AccountId>;
 	// specific account for the migration, can trigger the signed migrations.
 	type SignedFilter = pezframe_system::EnsureSignedBy<MigController, AccountId>;

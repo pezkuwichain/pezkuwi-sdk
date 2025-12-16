@@ -16,7 +16,7 @@
 // limitations under the License.
 
 //! This module contains helper functions for performing atomic swaps implemented in the NFTs
-//! pallet.
+//! pezpallet.
 //! The bitflag [`PalletFeature::Swaps`] needs to be set in [`Config::Features`] for NFTs
 //! to have the functionality defined in this module.
 
@@ -26,7 +26,7 @@ use pezframe_support::{
 	traits::{Currency, ExistenceRequirement::KeepAlive},
 };
 
-impl<T: Config<I>, I: 'static> Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 	/// Creates a new swap offer for the specified item.
 	///
 	/// This function is used to create a new swap offer for the specified item. The `caller`

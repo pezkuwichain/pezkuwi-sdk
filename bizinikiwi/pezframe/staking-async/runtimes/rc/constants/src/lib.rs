@@ -129,7 +129,7 @@ pub mod system_teyrchain {
 	}
 }
 
-/// Zagros Treasury pallet instance.
+/// Zagros Treasury pezpallet instance.
 pub const TREASURY_PALLET_ID: u8 = 37;
 
 /// XCM protocol related constants.

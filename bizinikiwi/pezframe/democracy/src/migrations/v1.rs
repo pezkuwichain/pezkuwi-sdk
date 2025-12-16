@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Storage migrations for the preimage pallet.
+//! Storage migrations for the preimage pezpallet.
 
 use crate::*;
 use pezframe_support::{pezpallet_prelude::*, storage_alias, traits::OnRuntimeUpgrade, BoundedVec};
@@ -25,25 +25,25 @@ use pezsp_core::H256;
 /// The log target.
 const TARGET: &'static str = "runtime::democracy::migration::v1";
 
-/// The original data layout of the democracy pallet without a specific version number.
+/// The original data layout of the democracy pezpallet without a specific version number.
 mod v0 {
 	use super::*;
 
 	#[storage_alias]
 	pub type PublicProps<T: Config> = StorageValue<
-		Pallet<T>,
+		Pezpallet<T>,
 		Vec<(PropIndex, <T as pezframe_system::Config>::Hash, <T as pezframe_system::Config>::AccountId)>,
 		ValueQuery,
 	>;
 
 	#[storage_alias]
 	pub type NextExternal<T: Config> =
-		StorageValue<Pallet<T>, (<T as pezframe_system::Config>::Hash, VoteThreshold)>;
+		StorageValue<Pezpallet<T>, (<T as pezframe_system::Config>::Hash, VoteThreshold)>;
 
 	#[cfg(feature = "try-runtime")]
 	#[storage_alias]
 	pub type ReferendumInfoOf<T: Config> = StorageMap<
-		Pallet<T>,
+		Pezpallet<T>,
 		pezframe_support::Twox64Concat,
 		ReferendumIndex,
 		ReferendumInfo<BlockNumberFor<T>, <T as pezframe_system::Config>::Hash, BalanceOf<T>>,
@@ -59,7 +59,7 @@ pub mod v1 {
 	impl<T: Config + pezframe_system::Config<Hash = H256>> OnRuntimeUpgrade for Migration<T> {
 		#[cfg(feature = "try-runtime")]
 		fn pre_upgrade() -> Result<Vec<u8>, pezsp_runtime::TryRuntimeError> {
-			ensure!(StorageVersion::get::<Pallet<T>>() == 0, "can only upgrade from version 0");
+			ensure!(StorageVersion::get::<Pezpallet<T>>() == 0, "can only upgrade from version 0");
 
 			let props_count = v0::PublicProps::<T>::get().len();
 			log::info!(target: TARGET, "{} public proposals will be migrated.", props_count,);
@@ -74,7 +74,7 @@ pub mod v1 {
 		#[allow(deprecated)]
 		fn on_runtime_upgrade() -> Weight {
 			let mut weight = T::DbWeight::get().reads(1);
-			if StorageVersion::get::<Pallet<T>>() != 0 {
+			if StorageVersion::get::<Pezpallet<T>>() != 0 {
 				log::warn!(
 					target: TARGET,
 					"skipping on_runtime_upgrade: executed on wrong storage version.\
@@ -124,14 +124,14 @@ pub mod v1 {
 				NextExternal::<T>::put((Bounded::from_legacy_hash(hash), threshold));
 			}
 
-			StorageVersion::new(1).put::<Pallet<T>>();
+			StorageVersion::new(1).put::<Pezpallet<T>>();
 
 			weight.saturating_add(T::DbWeight::get().reads_writes(1, 3))
 		}
 
 		#[cfg(feature = "try-runtime")]
 		fn post_upgrade(state: Vec<u8>) -> Result<(), pezsp_runtime::TryRuntimeError> {
-			ensure!(StorageVersion::get::<Pallet<T>>() == 1, "must upgrade");
+			ensure!(StorageVersion::get::<Pezpallet<T>>() == 1, "must upgrade");
 
 			let (old_props_count, old_ref_count): (u32, u32) =
 				Decode::decode(&mut &state[..]).expect("pre_upgrade provides a valid state; qed");
@@ -165,7 +165,7 @@ mod test {
 	#[test]
 	fn migration_works() {
 		new_test_ext().execute_with(|| {
-			assert_eq!(StorageVersion::get::<Pallet<T>>(), 0);
+			assert_eq!(StorageVersion::get::<Pezpallet<T>>(), 0);
 			// Insert some values into the v0 storage:
 
 			// Case 1: Ongoing referendum

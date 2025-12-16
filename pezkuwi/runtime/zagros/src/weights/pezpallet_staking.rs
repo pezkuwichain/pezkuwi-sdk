@@ -26,10 +26,10 @@
 // frame-omni-bencher
 // v1
 // benchmark
-// pallet
+// pezpallet
 // --extrinsic=*
 // --runtime=target/production/wbuild/zagros-runtime/zagros_runtime.wasm
-// --pallet=pezpallet_staking
+// --pezpallet=pezpallet_staking
 // --header=/__w/pezkuwi-sdk/pezkuwi-sdk/pezkuwi/file_header.txt
 // --output=./pezkuwi/runtime/zagros/src/weights
 // --wasm-execution=compiled

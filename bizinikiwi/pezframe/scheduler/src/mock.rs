@@ -29,7 +29,7 @@ use pezsp_runtime::{BuildStorage, Perbill};
 use pezsp_weights::constants::WEIGHT_REF_TIME_PER_SECOND;
 
 // Logger module to track execution.
-#[pezframe_support::pallet]
+#[pezframe_support::pezpallet]
 pub mod logger {
 	use super::{OriginCaller, OriginTrait};
 	use pezframe_support::{pezpallet_prelude::*, parameter_types};
@@ -42,13 +42,13 @@ pub mod logger {
 		Log::get().clone()
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Threshold<T: Config> = StorageValue<_, (BlockNumberFor<T>, BlockNumberFor<T>)>;
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Under the threshold.
 		TooEarly,
@@ -56,28 +56,28 @@ pub mod logger {
 		TooLate,
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {}
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {}
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		Logged(u32, Weight),
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T>
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T>
 	where
 		<T as pezframe_system::Config>::RuntimeOrigin: OriginTrait<PalletsOrigin = OriginCaller>,
 	{
-		#[pallet::call_index(0)]
-		#[pallet::weight(*weight)]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(*weight)]
 		pub fn log(origin: OriginFor<T>, i: u32, weight: Weight) -> DispatchResult {
 			Self::deposit_event(Event::Logged(i, weight));
 			Log::mutate(|log| {
@@ -86,8 +86,8 @@ pub mod logger {
 			Ok(())
 		}
 
-		#[pallet::call_index(1)]
-		#[pallet::weight(*weight)]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(*weight)]
 		pub fn log_without_filter(origin: OriginFor<T>, i: u32, weight: Weight) -> DispatchResult {
 			Self::deposit_event(Event::Logged(i, weight));
 			Log::mutate(|log| {
@@ -96,10 +96,10 @@ pub mod logger {
 			Ok(())
 		}
 
-		#[pallet::call_index(2)]
-		#[pallet::weight(*weight)]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(*weight)]
 		pub fn timed_log(origin: OriginFor<T>, i: u32, weight: Weight) -> DispatchResult {
-			let now = pezframe_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pezpallet::<T>::block_number();
 			let (start, end) = Threshold::<T>::get().unwrap_or((0u32.into(), u32::MAX.into()));
 			ensure!(now >= start, Error::<T>::TooEarly);
 			ensure!(now <= end, Error::<T>::TooLate);
@@ -230,7 +230,7 @@ impl Config for Test {
 	type MaxScheduledPerBlock = ConstU32<10>;
 	type WeightInfo = TestWeightInfo;
 	type Preimages = Preimage;
-	type BlockNumberProvider = pezframe_system::Pallet<Self>;
+	type BlockNumberProvider = pezframe_system::Pezpallet<Self>;
 }
 
 pub type LoggerCall = logger::Call<Test>;

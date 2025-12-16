@@ -1279,7 +1279,7 @@ pub trait Header:
 // via `HeaderFor` or `BlockNumberFor`.
 //
 // This is needed to fix the "cyclical" issue in loading Header/BlockNumber as part of a
-// `pallet::call`. Essentially, `construct_runtime` aggregates all calls to create a `RuntimeCall`
+// `pezpallet::call`. Essentially, `construct_runtime` aggregates all calls to create a `RuntimeCall`
 // that is then used to define `UncheckedExtrinsic`.
 // ```ignore
 // pub type UncheckedExtrinsic =
@@ -2427,11 +2427,11 @@ pub trait BlockNumberProvider {
 	///
 	/// In case of using crate `pezsp_runtime` with the crate `pezframe-system`,
 	/// it is already implemented for
-	/// `pezframe_system::Pallet<T: Config>` as:
+	/// `pezframe_system::Pezpallet<T: Config>` as:
 	///
 	/// ```ignore
 	/// fn current_block_number() -> Self {
-	///     pezframe_system::Pallet<Config>::block_number()
+	///     pezframe_system::Pezpallet<Config>::block_number()
 	/// }
 	/// ```
 	/// .

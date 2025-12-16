@@ -29,7 +29,7 @@ pub mod v0 {
 	/// All allowed relay-parents storage at version 0.
 	#[storage_alias]
 	pub(crate) type AllowedRelayParents<T: Config> = StorageValue<
-		Pallet<T>,
+		Pezpallet<T>,
 		super::v0::AllowedRelayParentsTracker<<T as pezframe_system::Config>::Hash, BlockNumberFor<T>>,
 		ValueQuery,
 	>;
@@ -124,7 +124,7 @@ mod v1 {
 		fn post_upgrade(state: Vec<u8>) -> Result<(), pezsp_runtime::TryRuntimeError> {
 			log::trace!(target: LOG_TARGET, "Running post_upgrade() for shared MigrateToV1");
 			ensure!(
-				Pallet::<T>::on_chain_storage_version() >= StorageVersion::new(1),
+				Pezpallet::<T>::on_chain_storage_version() >= StorageVersion::new(1),
 				"Storage version should be >= 1 after the migration"
 			);
 
@@ -151,7 +151,7 @@ pub type MigrateToV1<T> = pezframe_support::migrations::VersionedMigration<
 	0,
 	1,
 	v1::VersionUncheckedMigrateToV1<T>,
-	Pallet<T>,
+	Pezpallet<T>,
 	<T as pezframe_system::Config>::DbWeight,
 >;
 

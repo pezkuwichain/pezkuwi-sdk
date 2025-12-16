@@ -14,9 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! A pallet for any shared state that other pallets may want access to.
+//! A pezpallet for any shared state that other pallets may want access to.
 //!
-//! To avoid cyclic dependencies, it is important that this pallet is not
+//! To avoid cyclic dependencies, it is important that this pezpallet is not
 //! dependent on any of the other pallets.
 
 use alloc::{
@@ -35,7 +35,7 @@ use rand_chacha::ChaCha20Rng;
 
 use crate::configuration::HostConfiguration;
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 // `SESSION_DELAY` is used to delay any changes to Paras registration or configurations.
 // Wait until the session index is 2 larger then the current index to apply any changes,
@@ -144,52 +144,52 @@ impl<Hash: PartialEq + Copy, BlockNumber: AtLeast32BitUnsigned + Copy>
 	}
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(1);
 
-	#[pallet::pallet]
-	#[pallet::without_storage_info]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::without_storage_info]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		type DisabledValidators: pezframe_support::traits::DisabledValidators;
 	}
 
 	/// The current session index.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type CurrentSessionIndex<T: Config> = StorageValue<_, SessionIndex, ValueQuery>;
 
 	/// All the validators actively participating in teyrchain consensus.
 	/// Indices are into the broader validator set.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ActiveValidatorIndices<T: Config> = StorageValue<_, Vec<ValidatorIndex>, ValueQuery>;
 
 	/// The teyrchain attestation keys of the validators actively participating in teyrchain
 	/// consensus. This should be the same length as `ActiveValidatorIndices`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ActiveValidatorKeys<T: Config> = StorageValue<_, Vec<ValidatorId>, ValueQuery>;
 
 	/// All allowed relay-parents.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type AllowedRelayParents<T: Config> =
 		StorageValue<_, AllowedRelayParentsTracker<T::Hash, BlockNumberFor<T>>, ValueQuery>;
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {}
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {}
 }
 
-impl<T: Config> Pallet<T> {
-	/// Called by the initializer to initialize the configuration pallet.
+impl<T: Config> Pezpallet<T> {
+	/// Called by the initializer to initialize the configuration pezpallet.
 	pub(crate) fn initializer_initialize(_now: BlockNumberFor<T>) -> Weight {
 		Weight::zero()
 	}
 
-	/// Called by the initializer to finalize the configuration pallet.
+	/// Called by the initializer to finalize the configuration pezpallet.
 	pub(crate) fn initializer_finalize() {}
 
 	/// Called by the initializer to note that a new session has started.
@@ -240,7 +240,7 @@ impl<T: Config> Pallet<T> {
 		CurrentSessionIndex::<T>::get().saturating_add(SESSION_DELAY)
 	}
 
-	/// Fetches disabled validators list from session pallet.
+	/// Fetches disabled validators list from session pezpallet.
 	/// CAVEAT: this might produce incorrect results on session boundaries
 	pub fn disabled_validators() -> Vec<ValidatorIndex> {
 		let shuffled_indices = ActiveValidatorIndices::<T>::get();

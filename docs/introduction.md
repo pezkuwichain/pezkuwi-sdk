@@ -25,10 +25,10 @@ Welcome to Pezkuwi Network - a next-generation blockchain ecosystem built on Biz
 
 Pezkuwi Network aims to provide a secure, consistent, and scalable blockchain infrastructure that enables:
 
-- **Decentralized Governance** through the Welati pallet
+- **Decentralized Governance** through the Welati pezpallet
 - **Identity & Citizenship** via zero-knowledge KYC verification
 - **Community-Driven Economics** with dual-token system
-- **Education Platform** through Perwerde pallet
+- **Education Platform** through Perwerde pezpallet
 - **Trust-Based Networking** with reputation scoring
 
 ### 1.2. Core Features
@@ -39,7 +39,7 @@ Pezkuwi Network aims to provide a secure, consistent, and scalable blockchain in
 | **Asset Hub** | PEZ (ID:1) and wHEZ (ID:2) tokens at genesis | ✅ Complete |
 | **Identity Bootstrap** | Founder citizenship with IdentityKyc initialization | ✅ Complete |
 | **Validator Infrastructure** | TNPoS consensus with configurable validator sets | ✅ Complete |
-| **Treasury System** | PezTreasury pallet with 5B PEZ initial supply | ✅ Complete |
+| **Treasury System** | PezTreasury pezpallet with 5B PEZ initial supply | ✅ Complete |
 | **Synthetic Halving** | 48-month halving mechanism for reward distribution | ✅ Complete |
 
 ### 1.3. Network Architecture
@@ -139,7 +139,7 @@ Pezkuwi Network aims to provide a secure, consistent, and scalable blockchain in
 | Category | Percentage | Amount (PEZ) | Vesting/Lock |
 | --- | --- | --- | --- |
 | Treasury (Governance) | 20.25% | 1,012,500,000 | Governance controlled |
-| Presale | 1.875% | 93,750,000 | Presale pallet managed |
+| Presale | 1.875% | 93,750,000 | Presale pezpallet managed |
 | Founder | 1.875% | 93,750,000 | 4-year vesting |
 | Validator/Nominator Rewards | 76.00% | 3,800,000,000 | Synthetic halving distribution |
 
@@ -197,7 +197,7 @@ fn calculate_epoch_reward(current_month: u32) -> u128 {
 
 Pezkuwi Network includes 12 custom pallets:
 
-| # | Pallet | Purpose | Benchmarks |
+| # | Pezpallet | Purpose | Benchmarks |
 | --- | --- | --- | --- |
 | 1 | pezpallet-presale | Token launch platform | ✅ Complete |
 | 2 | pezpallet-identity-kyc | KYC verification (6 extrinsics) | ✅ Complete |
@@ -266,7 +266,7 @@ identity_kyc: IdentityKycConfig {
 | Relay Chain HEZ genesis distribution | ✅ Complete |
 | Bridge Hub Parachain ID fix (1013→1002) | ✅ Complete |
 | Dev preset compile tests | ✅ Complete |
-| All custom pallet benchmarks | ✅ Complete |
+| All custom pezpallet benchmarks | ✅ Complete |
 | Weight generation (real values) | ✅ Complete |
 
 ### 5.2. Phase 2: Testnet Presets (In Progress)

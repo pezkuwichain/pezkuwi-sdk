@@ -54,7 +54,7 @@ pub mod common;
 
 use common::{Assignment, AssignmentProvider};
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 #[cfg(test)]
 mod tests;
@@ -63,18 +63,18 @@ const LOG_TARGET: &str = "runtime::teyrchains::scheduler";
 
 pub mod migration;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(3);
 
-	#[pallet::pallet]
-	#[pallet::without_storage_info]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::without_storage_info]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config + configuration::Config + paras::Config {
 		type AssignmentProvider: AssignmentProvider<BlockNumberFor<Self>>;
 	}
@@ -86,7 +86,7 @@ pub mod pallet {
 	/// Bound: The number of cores is the sum of the numbers of teyrchains and parathread
 	/// multiplexers. Reasonably, 100-1000. The dominant factor is the number of validators: safe
 	/// upper bound at 10k.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ValidatorGroups<T> = StorageValue<_, Vec<Vec<ValidatorIndex>>, ValueQuery>;
 
 	/// The block number where the session start occurred. Used to track how many group rotations
@@ -96,12 +96,12 @@ pub mod pallet {
 	/// the block and enacted at the end of the block (at the finalization stage, to be exact).
 	/// Thus for all intents and purposes the effect of the session change is observed at the
 	/// block following the session change, block number of which we save in this storage value.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type SessionStartBlock<T: Config> = StorageValue<_, BlockNumberFor<T>, ValueQuery>;
 
 	/// One entry for each availability core. The `VecDeque` represents the assignments to be
 	/// scheduled on that core.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ClaimQueue<T> = StorageValue<_, BTreeMap<CoreIndex, VecDeque<Assignment>>, ValueQuery>;
 
 	/// Availability timeout status of a core.
@@ -119,13 +119,13 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> Pallet<T> {
-	/// Called by the initializer to initialize the scheduler pallet.
+impl<T: Config> Pezpallet<T> {
+	/// Called by the initializer to initialize the scheduler pezpallet.
 	pub(crate) fn initializer_initialize(_now: BlockNumberFor<T>) -> Weight {
 		Weight::zero()
 	}
 
-	/// Called by the initializer to finalize the scheduler pallet.
+	/// Called by the initializer to finalize the scheduler pezpallet.
 	pub(crate) fn initializer_finalize() {}
 
 	/// Called by the initializer to note that a new session has started.
@@ -190,7 +190,7 @@ impl<T: Config> Pallet<T> {
 		Self::maybe_resize_claim_queue();
 		Self::populate_claim_queue_after_session_change();
 
-		let now = pezframe_system::Pallet::<T>::block_number() + One::one();
+		let now = pezframe_system::Pezpallet::<T>::block_number() + One::one();
 		SessionStartBlock::<T>::set(now);
 	}
 
@@ -250,7 +250,7 @@ impl<T: Config> Pallet<T> {
 	pub(crate) fn availability_timeout_predicate(
 	) -> impl Fn(BlockNumberFor<T>) -> AvailabilityTimeoutStatus<BlockNumberFor<T>> {
 		let config = configuration::ActiveConfig::<T>::get();
-		let now = pezframe_system::Pallet::<T>::block_number();
+		let now = pezframe_system::Pezpallet::<T>::block_number();
 		let rotation_info = Self::group_rotation_info(now);
 
 		let next_rotation = rotation_info.next_rotation_at();
@@ -278,7 +278,7 @@ impl<T: Config> Pallet<T> {
 	/// this function returns false.
 	pub(crate) fn availability_timeout_check_required() -> bool {
 		let config = configuration::ActiveConfig::<T>::get();
-		let now = pezframe_system::Pallet::<T>::block_number() + One::one();
+		let now = pezframe_system::Pezpallet::<T>::block_number() + One::one();
 		let rotation_info = Self::group_rotation_info(now);
 
 		let current_window =

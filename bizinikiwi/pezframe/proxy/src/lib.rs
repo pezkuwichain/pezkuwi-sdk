@@ -15,8 +15,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Proxy Pallet
-//! A pallet allowing accounts to give permission to other accounts to dispatch types of calls from
+//! # Proxy Pezpallet
+//! A pezpallet allowing accounts to give permission to other accounts to dispatch types of calls from
 //! their signed origin.
 //!
 //! The accounts to which permission is delegated may be required to announce the action that they
@@ -39,7 +39,7 @@ use frame::{
 	prelude::*,
 	traits::{Currency, InstanceFilter, ReservableCurrency},
 };
-pub use pallet::*;
+pub use pezpallet::*;
 pub use weights::WeightInfo;
 
 type CallHashOf<T> = <<T as Config>::CallHasher as Hash>::Output;
@@ -120,15 +120,15 @@ pub enum DepositKind {
 	Announcements,
 }
 
-#[frame::pallet]
-pub mod pallet {
+#[frame::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
 	/// Configuration trait.
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
@@ -161,7 +161,7 @@ pub mod pallet {
 		///
 		/// This is held for an additional storage item whose value size is
 		/// `sizeof(Balance)` bytes and whose key size is `sizeof(AccountId)` bytes.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type ProxyDepositBase: Get<BalanceOf<Self>>;
 
 		/// The amount of currency needed per proxy added.
@@ -169,18 +169,18 @@ pub mod pallet {
 		/// This is held for adding 32 bytes plus an instance of `ProxyType` more into a
 		/// pre-existing storage value. Thus, when configuring `ProxyDepositFactor` one should take
 		/// into account `32 + proxy_type.encode().len()` bytes of data.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type ProxyDepositFactor: Get<BalanceOf<Self>>;
 
 		/// The maximum amount of proxies allowed for a single account.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxProxies: Get<u32>;
 
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 
 		/// The maximum amount of time-delayed announcements that are allowed to be pending.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxPending: Get<u32>;
 
 		/// The type of hash used for hashing the call.
@@ -190,43 +190,43 @@ pub mod pallet {
 		///
 		/// This is held when a new storage item holding a `Balance` is created (typically 16
 		/// bytes).
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type AnnouncementDepositBase: Get<BalanceOf<Self>>;
 
 		/// The amount of currency needed per announcement made.
 		///
 		/// This is held for adding an `AccountId`, `Hash` and `BlockNumber` (typically 68 bytes)
 		/// into a pre-existing storage value.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type AnnouncementDepositFactor: Get<BalanceOf<Self>>;
 
 		/// Query the current block number.
 		///
 		/// Must return monotonically increasing values when called from consecutive blocks.
 		/// Can be configured to return either:
-		/// - the local block number of the runtime via `pezframe_system::Pallet`
+		/// - the local block number of the runtime via `pezframe_system::Pezpallet`
 		/// - a remote block number, eg from the relay chain through `RelaychainDataProvider`
 		/// - an arbitrary value through a custom implementation of the trait
 		///
 		/// There is currently no migration provided to "hot-swap" block number providers and it may
 		/// result in undefined behavior when doing so. Teyrchains are therefore best off setting
-		/// this to their local block number provider if they have the pallet already deployed.
+		/// this to their local block number provider if they have the pezpallet already deployed.
 		///
 		/// Suggested values:
-		/// - Solo- and Relay-chains: `pezframe_system::Pallet`
+		/// - Solo- and Relay-chains: `pezframe_system::Pezpallet`
 		/// - Teyrchains that may produce blocks sparingly or only when needed (on-demand):
-		///   - already have the pallet deployed: `pezframe_system::Pallet`
-		///   - are freshly deploying this pallet: `RelaychainDataProvider`
+		///   - already have the pezpallet deployed: `pezframe_system::Pezpallet`
+		///   - are freshly deploying this pezpallet: `RelaychainDataProvider`
 		/// - Teyrchains with a reliably block production rate (PLO or bulk-coretime):
-		///   - already have the pallet deployed: `pezframe_system::Pallet`
-		///   - are freshly deploying this pallet: no strong recommendation. Both local and remote
+		///   - already have the pezpallet deployed: `pezframe_system::Pezpallet`
+		///   - are freshly deploying this pezpallet: no strong recommendation. Both local and remote
 		///     providers can be used. Relay provider can be a bit better in cases where the
 		///     teyrchain is lagging its block production to avoid clock skew.
 		type BlockNumberProvider: BlockNumberProvider;
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Dispatch the given `call` from an account that the sender is authorised for through
 		/// `add_proxy`.
 		///
@@ -236,8 +236,8 @@ pub mod pallet {
 		/// - `real`: The account that the proxy will make a call on behalf of.
 		/// - `force_proxy_type`: Specify the exact proxy type to be used and checked for this call.
 		/// - `call`: The call to be made by the `real` account.
-		#[pallet::call_index(0)]
-		#[pallet::weight({
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight({
 			let di = call.get_dispatch_info();
 			(T::WeightInfo::proxy(T::MaxProxies::get())
 				 // AccountData for inner call origin accountdata.
@@ -270,8 +270,8 @@ pub mod pallet {
 		/// - `proxy_type`: The permissions allowed for this proxy account.
 		/// - `delay`: The announcement period required of the initial proxy. Will generally be
 		/// zero.
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::add_proxy(T::MaxProxies::get()))]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::add_proxy(T::MaxProxies::get()))]
 		pub fn add_proxy(
 			origin: OriginFor<T>,
 			delegate: AccountIdLookupOf<T>,
@@ -290,8 +290,8 @@ pub mod pallet {
 		/// Parameters:
 		/// - `proxy`: The account that the `caller` would like to remove as a proxy.
 		/// - `proxy_type`: The permissions currently enabled for the removed proxy account.
-		#[pallet::call_index(2)]
-		#[pallet::weight(T::WeightInfo::remove_proxy(T::MaxProxies::get()))]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(T::WeightInfo::remove_proxy(T::MaxProxies::get()))]
 		pub fn remove_proxy(
 			origin: OriginFor<T>,
 			delegate: AccountIdLookupOf<T>,
@@ -309,8 +309,8 @@ pub mod pallet {
 		///
 		/// WARNING: This may be called on accounts created by `create_pure`, however if done, then
 		/// the unreserved fees will be inaccessible. **All access to this account will be lost.**
-		#[pallet::call_index(3)]
-		#[pallet::weight(T::WeightInfo::remove_proxies(T::MaxProxies::get()))]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(T::WeightInfo::remove_proxies(T::MaxProxies::get()))]
 		pub fn remove_proxies(origin: OriginFor<T>) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 			Self::remove_all_proxy_delegates(&who);
@@ -335,8 +335,8 @@ pub mod pallet {
 		/// same sender, with the same parameters.
 		///
 		/// Fails if there are insufficient funds to pay for deposit.
-		#[pallet::call_index(4)]
-		#[pallet::weight(T::WeightInfo::create_pure(T::MaxProxies::get()))]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(T::WeightInfo::create_pure(T::MaxProxies::get()))]
 		pub fn create_pure(
 			origin: OriginFor<T>,
 			proxy_type: T::ProxyType,
@@ -357,7 +357,7 @@ pub mod pallet {
 			T::Currency::reserve(&who, deposit)?;
 
 			Proxies::<T>::insert(&pure, (bounded_proxies, deposit));
-			let extrinsic_index = <pezframe_system::Pallet<T>>::extrinsic_index().unwrap_or_default();
+			let extrinsic_index = <pezframe_system::Pezpallet<T>>::extrinsic_index().unwrap_or_default();
 			Self::deposit_event(Event::PureCreated {
 				pure,
 				who,
@@ -386,15 +386,15 @@ pub mod pallet {
 		///
 		/// Fails with `NoPermission` in case the caller is not a previously created pure
 		/// account whose `create_pure` call has corresponding parameters.
-		#[pallet::call_index(5)]
-		#[pallet::weight(T::WeightInfo::kill_pure(T::MaxProxies::get()))]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(T::WeightInfo::kill_pure(T::MaxProxies::get()))]
 		pub fn kill_pure(
 			origin: OriginFor<T>,
 			spawner: AccountIdLookupOf<T>,
 			proxy_type: T::ProxyType,
 			index: u16,
-			#[pallet::compact] height: BlockNumberFor<T>,
-			#[pallet::compact] ext_index: u32,
+			#[pezpallet::compact] height: BlockNumberFor<T>,
+			#[pezpallet::compact] ext_index: u32,
 		) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 			let spawner = T::Lookup::lookup(spawner)?;
@@ -431,8 +431,8 @@ pub mod pallet {
 		/// Parameters:
 		/// - `real`: The account that the proxy will make a call on behalf of.
 		/// - `call_hash`: The hash of the call to be made by the `real` account.
-		#[pallet::call_index(6)]
-		#[pallet::weight(T::WeightInfo::announce(T::MaxPending::get(), T::MaxProxies::get()))]
+		#[pezpallet::call_index(6)]
+		#[pezpallet::weight(T::WeightInfo::announce(T::MaxPending::get(), T::MaxProxies::get()))]
 		pub fn announce(
 			origin: OriginFor<T>,
 			real: AccountIdLookupOf<T>,
@@ -481,8 +481,8 @@ pub mod pallet {
 		/// Parameters:
 		/// - `real`: The account that the proxy will make a call on behalf of.
 		/// - `call_hash`: The hash of the call to be made by the `real` account.
-		#[pallet::call_index(7)]
-		#[pallet::weight(T::WeightInfo::remove_announcement(
+		#[pezpallet::call_index(7)]
+		#[pezpallet::weight(T::WeightInfo::remove_announcement(
 			T::MaxPending::get(),
 			T::MaxProxies::get()
 		))]
@@ -508,8 +508,8 @@ pub mod pallet {
 		/// Parameters:
 		/// - `delegate`: The account that previously announced the call.
 		/// - `call_hash`: The hash of the call to be made.
-		#[pallet::call_index(8)]
-		#[pallet::weight(T::WeightInfo::reject_announcement(
+		#[pezpallet::call_index(8)]
+		#[pezpallet::weight(T::WeightInfo::reject_announcement(
 			T::MaxPending::get(),
 			T::MaxProxies::get()
 		))]
@@ -538,8 +538,8 @@ pub mod pallet {
 		/// - `real`: The account that the proxy will make a call on behalf of.
 		/// - `force_proxy_type`: Specify the exact proxy type to be used and checked for this call.
 		/// - `call`: The call to be made by the `real` account.
-		#[pallet::call_index(9)]
-		#[pallet::weight({
+		#[pezpallet::call_index(9)]
+		#[pezpallet::weight({
 			let di = call.get_dispatch_info();
 			(T::WeightInfo::proxy_announced(T::MaxPending::get(), T::MaxProxies::get())
 				 // AccountData for inner call origin accountdata.
@@ -581,8 +581,8 @@ pub mod pallet {
 		/// The transaction fee is waived if the deposit amount has changed.
 		///
 		/// Emits `DepositPoked` if successful.
-		#[pallet::call_index(10)]
-		#[pallet::weight(T::WeightInfo::poke_deposit())]
+		#[pezpallet::call_index(10)]
+		#[pezpallet::weight(T::WeightInfo::poke_deposit())]
 		pub fn poke_deposit(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 			let who = ensure_signed(origin)?;
 			let mut deposit_updated = false;
@@ -673,8 +673,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A proxy was executed correctly, with the given.
 		ProxyExecuted { result: DispatchResult },
@@ -724,7 +724,7 @@ pub mod pallet {
 		},
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// There are too many proxies registered or too many announcements pending.
 		TooMany,
@@ -746,7 +746,7 @@ pub mod pallet {
 
 	/// The set of account proxies. Maps the account which has delegated to the accounts
 	/// which are being delegated to, together with the amount held on deposit.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Proxies<T: Config> = StorageMap<
 		_,
 		Twox64Concat,
@@ -762,7 +762,7 @@ pub mod pallet {
 	>;
 
 	/// The announcements made by the proxy (key).
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Announcements<T: Config> = StorageMap<
 		_,
 		Twox64Concat,
@@ -774,8 +774,8 @@ pub mod pallet {
 		ValueQuery,
 	>;
 
-	#[pallet::view_functions]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::view_functions]
+	impl<T: Config> Pezpallet<T> {
 		/// Check if a `RuntimeCall` is allowed for a given `ProxyType`.
 		pub fn check_permissions(
 			call: <T as Config>::RuntimeCall,
@@ -791,7 +791,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Public function to proxies storage.
 	pub fn proxies(
 		account: T::AccountId,
@@ -832,7 +832,7 @@ impl<T: Config> Pallet<T> {
 		let (height, ext_index) = maybe_when.unwrap_or_else(|| {
 			(
 				T::BlockNumberProvider::current_block_number(),
-				pezframe_system::Pallet::<T>::extrinsic_index().unwrap_or_default(),
+				pezframe_system::Pezpallet::<T>::extrinsic_index().unwrap_or_default(),
 			)
 		});
 
@@ -1001,7 +1001,7 @@ impl<T: Config> Pallet<T> {
 		let mut origin: T::RuntimeOrigin = pezframe_system::RawOrigin::Signed(real).into();
 		origin.add_filter(move |c: &<T as pezframe_system::Config>::RuntimeCall| {
 			let c = <T as Config>::RuntimeCall::from_ref(c);
-			// We make sure the proxy call does access this pallet to change modify proxies.
+			// We make sure the proxy call does access this pezpallet to change modify proxies.
 			match c.is_sub_type() {
 				// Proxy call cannot add or remove a proxy with more permissions than it already
 				// has.

@@ -156,12 +156,12 @@ pub type Migrations = (
 	// unreleased
 	pezcumulus_pezpallet_xcmp_queue::migration::v4::MigrationToV4<Runtime>,
 	pezcumulus_pezpallet_xcmp_queue::migration::v5::MigrateV4ToV5<Runtime>,
-	snowbridge_pezpallet_system::migration::v0::InitializeOnUpgrade<
+	pezsnowbridge_pezpallet_system::migration::v0::InitializeOnUpgrade<
 		Runtime,
 		ConstU32<BRIDGE_HUB_ID>,
 		ConstU32<ASSET_HUB_ID>,
 	>,
-	snowbridge_pezpallet_system::migration::FeePerGasMigrationV0ToV1<Runtime>,
+	pezsnowbridge_pezpallet_system::migration::FeePerGasMigrationV0ToV1<Runtime>,
 	pezpallet_bridge_messages::migration::v1::MigrationToV1<
 		Runtime,
 		bridge_to_zagros_config::WithBridgeHubZagrosMessagesInstance,
@@ -312,9 +312,9 @@ impl pezframe_system::Config for Runtime {
 	type AccountData = pezpallet_balances::AccountData<Balance>;
 	/// The weight of database operations that the runtime can invoke.
 	type DbWeight = RocksDbWeight;
-	/// Weight information for the extrinsics of this pallet.
+	/// Weight information for the extrinsics of this pezpallet.
 	type SystemWeightInfo = weights::pezframe_system::WeightInfo<Runtime>;
-	/// Weight information for the extensions of this pallet.
+	/// Weight information for the extensions of this pezpallet.
 	type ExtensionsWeightInfo = weights::pezframe_system_extensions::WeightInfo<Runtime>;
 	/// Block & extrinsics weights: base values and limits.
 	type BlockWeights = RuntimeBlockWeights;
@@ -393,7 +393,7 @@ impl pezcumulus_pezpallet_teyrchain_system::Config for Runtime {
 	type WeightInfo = weights::pezcumulus_pezpallet_teyrchain_system::WeightInfo<Runtime>;
 	type RuntimeEvent = RuntimeEvent;
 	type OnSystemEvent = ();
-	type SelfParaId = teyrchain_info::Pallet<Runtime>;
+	type SelfParaId = teyrchain_info::Pezpallet<Runtime>;
 	type OutboundXcmpMessageSource = XcmpQueue;
 	type DmpQueue = pezframe_support::traits::EnqueueWithOrigin<MessageQueue, RelayOrigin>;
 	type ReservedDmpWeight = ReservedDmpWeight;
@@ -441,7 +441,7 @@ impl pezpallet_message_queue::Config for Runtime {
 		EthereumOutboundQueue,
 	>;
 	type Size = u32;
-	// The XCMP queue pallet is only ever able to handle the `Sibling(ParaId)` origin:
+	// The XCMP queue pezpallet is only ever able to handle the `Sibling(ParaId)` origin:
 	type QueueChangeHandler = NarrowOriginToSibling<XcmpQueue>;
 	type QueuePausedQuery = NarrowOriginToSibling<XcmpQueue>;
 	type HeapSize = pezsp_core::ConstU32<{ 103 * 1024 }>;
@@ -558,7 +558,7 @@ impl pezpallet_multisig::Config for Runtime {
 	type DepositFactor = DepositFactor;
 	type MaxSignatories = ConstU32<100>;
 	type WeightInfo = weights::pezpallet_multisig::WeightInfo<Runtime>;
-	type BlockNumberProvider = pezframe_system::Pallet<Runtime>;
+	type BlockNumberProvider = pezframe_system::Pezpallet<Runtime>;
 }
 
 impl pezpallet_utility::Config for Runtime {
@@ -599,7 +599,7 @@ construct_runtime!(
 		Utility: pezpallet_utility = 40,
 		Multisig: pezpallet_multisig = 36,
 
-		// Bridge relayers pallet, used by several bridges here.
+		// Bridge relayers pezpallet, used by several bridges here.
 		BridgeRelayers: pezpallet_bridge_relayers = 47,
 
 		// With-Zagros GRANDPA bridge module.
@@ -608,7 +608,7 @@ construct_runtime!(
 		BridgeZagrosTeyrchains: pezpallet_bridge_teyrchains::<Instance3> = 49,
 		// With-Zagros messaging bridge module.
 		BridgeZagrosMessages: pezpallet_bridge_messages::<Instance3> = 51,
-		// With-Zagros bridge hub pallet.
+		// With-Zagros bridge hub pezpallet.
 		XcmOverBridgeHubZagros: pezpallet_xcm_bridge_hub::<Instance1> = 52,
 
 		// With-Pezkuwichain Bulletin GRANDPA bridge module.
@@ -623,16 +623,16 @@ construct_runtime!(
 		// will be used for both Pezkuwichain and Pezkuwi Bulletin chains AND this name affects runtime
 		// storage keys, used by this runtime and the relayer process.
 		BridgePezkuwiBulletinMessages: pezpallet_bridge_messages::<Instance4> = 61,
-		// With-Pezkuwichain Bulletin bridge hub pallet.
+		// With-Pezkuwichain Bulletin bridge hub pezpallet.
 		XcmOverPezkuwiBulletin: pezpallet_xcm_bridge_hub::<Instance2> = 62,
 
-		// Bridge relayers pallet, used by several bridges here (another instance).
+		// Bridge relayers pezpallet, used by several bridges here (another instance).
 		BridgeRelayersForPermissionlessLanes: pezpallet_bridge_relayers::<Instance2> = 63,
 
-		EthereumInboundQueue: snowbridge_pezpallet_inbound_queue = 80,
-		EthereumOutboundQueue: snowbridge_pezpallet_outbound_queue = 81,
-		EthereumBeaconClient: snowbridge_pezpallet_ethereum_client = 82,
-		EthereumSystem: snowbridge_pezpallet_system = 83,
+		EthereumInboundQueue: pezsnowbridge_pezpallet_inbound_queue = 80,
+		EthereumOutboundQueue: pezsnowbridge_pezpallet_outbound_queue = 81,
+		EthereumBeaconClient: pezsnowbridge_pezpallet_ethereum_client = 82,
+		EthereumSystem: pezsnowbridge_pezpallet_system = 83,
 
 		// Message Queue. Importantly, is registered last so that messages are processed after
 		// the `on_initialize` hooks of bridging pallets.
@@ -640,11 +640,11 @@ construct_runtime!(
 	}
 );
 
-/// Proper alias for bridge GRANDPA pallet used to bridge with the bulletin chain.
+/// Proper alias for bridge GRANDPA pezpallet used to bridge with the bulletin chain.
 pub type BridgePezkuwichainBulletinGrandpa = BridgePezkuwiBulletinGrandpa;
-/// Proper alias for bridge messages pallet used to bridge with the bulletin chain.
+/// Proper alias for bridge messages pezpallet used to bridge with the bulletin chain.
 pub type BridgePezkuwichainBulletinMessages = BridgePezkuwiBulletinMessages;
-/// Proper alias for bridge messages pallet used to bridge with the bulletin chain.
+/// Proper alias for bridge messages pezpallet used to bridge with the bulletin chain.
 pub type XcmOverPezkuwichainBulletin = XcmOverPezkuwiBulletin;
 
 pezbridge_runtime_common::generate_bridge_reject_obsolete_headers_and_messages! {
@@ -704,10 +704,10 @@ mod benches {
 		[pezpallet_bridge_relayers, Legacy]
 		[pezpallet_bridge_relayers, PermissionlessLanes]
 		// Ethereum Bridge
-		[snowbridge_pezpallet_inbound_queue, EthereumInboundQueue]
-		[snowbridge_pezpallet_outbound_queue, EthereumOutboundQueue]
-		[snowbridge_pezpallet_system, EthereumSystem]
-		[snowbridge_pezpallet_ethereum_client, EthereumBeaconClient]
+		[pezsnowbridge_pezpallet_inbound_queue, EthereumInboundQueue]
+		[pezsnowbridge_pezpallet_outbound_queue, EthereumOutboundQueue]
+		[pezsnowbridge_pezpallet_system, EthereumSystem]
+		[pezsnowbridge_pezpallet_ethereum_client, EthereumBeaconClient]
 	);
 }
 
@@ -1016,17 +1016,17 @@ impl_runtime_apis! {
 
 	impl pezsnowbridge_outbound_queue_runtime_api::OutboundQueueApi<Block, Balance> for Runtime {
 		fn prove_message(leaf_index: u64) -> Option<pezsnowbridge_merkle_tree::MerkleProof> {
-			snowbridge_pezpallet_outbound_queue::api::prove_message::<Runtime>(leaf_index)
+			pezsnowbridge_pezpallet_outbound_queue::api::prove_message::<Runtime>(leaf_index)
 		}
 
 		fn calculate_fee(command: Command, parameters: Option<PricingParameters<Balance>>) -> Fee<Balance> {
-			snowbridge_pezpallet_outbound_queue::api::calculate_fee::<Runtime>(command, parameters)
+			pezsnowbridge_pezpallet_outbound_queue::api::calculate_fee::<Runtime>(command, parameters)
 		}
 	}
 
 	impl pezsnowbridge_system_runtime_api::ControlApi<Block> for Runtime {
 		fn agent_id(location: VersionedLocation) -> Option<AgentId> {
-			snowbridge_pezpallet_system::api::agent_id::<Runtime>(location)
+			pezsnowbridge_pezpallet_system::api::agent_id::<Runtime>(location)
 		}
 	}
 
@@ -1057,23 +1057,23 @@ impl_runtime_apis! {
 		) {
 			use pezframe_benchmarking::BenchmarkList;
 			use pezframe_support::traits::StorageInfoTrait;
-			use pezframe_system_benchmarking::Pallet as SystemBench;
-			use pezframe_system_benchmarking::extensions::Pallet as SystemExtensionsBench;
-			use pezcumulus_pezpallet_session_benchmarking::Pallet as SessionBench;
-			use pezpallet_xcm::benchmarking::Pallet as PalletXcmExtrinsicsBenchmark;
+			use pezframe_system_benchmarking::Pezpallet as SystemBench;
+			use pezframe_system_benchmarking::extensions::Pezpallet as SystemExtensionsBench;
+			use pezcumulus_pezpallet_session_benchmarking::Pezpallet as SessionBench;
+			use pezpallet_xcm::benchmarking::Pezpallet as PalletXcmExtrinsicsBenchmark;
 
 			// This is defined once again in dispatch_benchmark, because list_benchmarks!
 			// and add_benchmarks! are macros exported by define_benchmarks! macros and those types
 			// are referenced in that call.
-			type XcmBalances = pezpallet_xcm_benchmarks::fungible::Pallet::<Runtime>;
-			type XcmGeneric = pezpallet_xcm_benchmarks::generic::Pallet::<Runtime>;
+			type XcmBalances = pezpallet_xcm_benchmarks::fungible::Pezpallet::<Runtime>;
+			type XcmGeneric = pezpallet_xcm_benchmarks::generic::Pezpallet::<Runtime>;
 
-			use pezpallet_bridge_relayers::benchmarking::Pallet as BridgeRelayersBench;
+			use pezpallet_bridge_relayers::benchmarking::Pezpallet as BridgeRelayersBench;
 			// Change weight file names.
 			type ZagrosFinality = BridgeZagrosGrandpa;
-			type WithinZagros = pezpallet_bridge_teyrchains::benchmarking::Pallet::<Runtime, bridge_common_config::BridgeTeyrchainZagrosInstance>;
-			type PezkuwichainToZagros = pezpallet_bridge_messages::benchmarking::Pallet ::<Runtime, bridge_to_zagros_config::WithBridgeHubZagrosMessagesInstance>;
-			type PezkuwichainToPezkuwichainBulletin = pezpallet_bridge_messages::benchmarking::Pallet ::<Runtime, bridge_to_bulletin_config::WithPezkuwichainBulletinMessagesInstance>;
+			type WithinZagros = pezpallet_bridge_teyrchains::benchmarking::Pezpallet::<Runtime, bridge_common_config::BridgeTeyrchainZagrosInstance>;
+			type PezkuwichainToZagros = pezpallet_bridge_messages::benchmarking::Pezpallet ::<Runtime, bridge_to_zagros_config::WithBridgeHubZagrosMessagesInstance>;
+			type PezkuwichainToPezkuwichainBulletin = pezpallet_bridge_messages::benchmarking::Pezpallet ::<Runtime, bridge_to_bulletin_config::WithPezkuwichainBulletinMessagesInstance>;
 			type Legacy = BridgeRelayersBench::<Runtime, bridge_common_config::RelayersForLegacyLaneIdsMessagesInstance>;
 			type PermissionlessLanes = BridgeRelayersBench::<Runtime, bridge_common_config::RelayersForPermissionlessLanesInstance>;
 
@@ -1091,8 +1091,8 @@ impl_runtime_apis! {
 			use pezframe_benchmarking::{BenchmarkBatch, BenchmarkError};
 			use pezsp_storage::TrackedStorageKey;
 
-			use pezframe_system_benchmarking::Pallet as SystemBench;
-			use pezframe_system_benchmarking::extensions::Pallet as SystemExtensionsBench;
+			use pezframe_system_benchmarking::Pezpallet as SystemBench;
+			use pezframe_system_benchmarking::extensions::Pezpallet as SystemExtensionsBench;
 			impl pezframe_system_benchmarking::Config for Runtime {
 				fn setup_set_code_requirements(code: &alloc::vec::Vec<u8>) -> Result<(), BenchmarkError> {
 					TeyrchainSystem::initialize_for_set_code_benchmark(code.len() as u32);
@@ -1104,7 +1104,7 @@ impl_runtime_apis! {
 				}
 			}
 
-			use pezcumulus_pezpallet_session_benchmarking::Pallet as SessionBench;
+			use pezcumulus_pezpallet_session_benchmarking::Pezpallet as SessionBench;
 			impl pezcumulus_pezpallet_session_benchmarking::Config for Runtime {}
 
 			use xcm::latest::prelude::*;
@@ -1117,7 +1117,7 @@ impl_runtime_apis! {
 				).into());
 			}
 
-			use pezpallet_xcm::benchmarking::Pallet as PalletXcmExtrinsicsBenchmark;
+			use pezpallet_xcm::benchmarking::Pezpallet as PalletXcmExtrinsicsBenchmark;
 			impl pezpallet_xcm::benchmarking::Config for Runtime {
 				type DeliveryHelper = pezkuwi_runtime_common::xcm_sender::ToTeyrchainDeliveryHelper<
 						xcm_config::XcmConfig,
@@ -1326,13 +1326,13 @@ impl_runtime_apis! {
 				}
 			}
 
-			type XcmBalances = pezpallet_xcm_benchmarks::fungible::Pallet::<Runtime>;
-			type XcmGeneric = pezpallet_xcm_benchmarks::generic::Pallet::<Runtime>;
+			type XcmBalances = pezpallet_xcm_benchmarks::fungible::Pezpallet::<Runtime>;
+			type XcmGeneric = pezpallet_xcm_benchmarks::generic::Pezpallet::<Runtime>;
 
 			type ZagrosFinality = BridgeZagrosGrandpa;
-			type WithinZagros = pezpallet_bridge_teyrchains::benchmarking::Pallet::<Runtime, bridge_common_config::BridgeTeyrchainZagrosInstance>;
-			type PezkuwichainToZagros = pezpallet_bridge_messages::benchmarking::Pallet ::<Runtime, bridge_to_zagros_config::WithBridgeHubZagrosMessagesInstance>;
-			type PezkuwichainToPezkuwichainBulletin = pezpallet_bridge_messages::benchmarking::Pallet ::<Runtime, bridge_to_bulletin_config::WithPezkuwichainBulletinMessagesInstance>;
+			type WithinZagros = pezpallet_bridge_teyrchains::benchmarking::Pezpallet::<Runtime, bridge_common_config::BridgeTeyrchainZagrosInstance>;
+			type PezkuwichainToZagros = pezpallet_bridge_messages::benchmarking::Pezpallet ::<Runtime, bridge_to_zagros_config::WithBridgeHubZagrosMessagesInstance>;
+			type PezkuwichainToPezkuwichainBulletin = pezpallet_bridge_messages::benchmarking::Pezpallet ::<Runtime, bridge_to_bulletin_config::WithPezkuwichainBulletinMessagesInstance>;
 			type Legacy = BridgeRelayersBench::<Runtime, bridge_common_config::RelayersForLegacyLaneIdsMessagesInstance>;
 			type PermissionlessLanes = BridgeRelayersBench::<Runtime, bridge_common_config::RelayersForPermissionlessLanesInstance>;
 
@@ -1354,7 +1354,7 @@ impl_runtime_apis! {
 					let bench_lane_id = <Self as BridgeMessagesConfig<bridge_to_zagros_config::WithBridgeHubZagrosMessagesInstance>>::bench_lane_id();
 					use pezbp_runtime::Chain;
 					let bridged_chain_id =<Self as pezpallet_bridge_messages::Config<bridge_to_zagros_config::WithBridgeHubZagrosMessagesInstance>>::BridgedChain::ID;
-					pezpallet_bridge_relayers::Pallet::<Runtime, bridge_common_config::RelayersForLegacyLaneIdsMessagesInstance>::relayer_reward(
+					pezpallet_bridge_relayers::Pezpallet::<Runtime, bridge_common_config::RelayersForLegacyLaneIdsMessagesInstance>::relayer_reward(
 						relayer,
 						bp_relayers::RewardsAccountParams::new(
 							bench_lane_id,
@@ -1451,7 +1451,7 @@ impl_runtime_apis! {
 			use pezbridge_runtime_common::teyrchains_benchmarking::prepare_teyrchain_heads_proof;
 			use pezpallet_bridge_teyrchains::benchmarking::Config as BridgeTeyrchainsConfig;
 			use pezpallet_bridge_relayers::benchmarking::{
-				Pallet as BridgeRelayersBench,
+				Pezpallet as BridgeRelayersBench,
 				Config as BridgeRelayersConfig,
 			};
 

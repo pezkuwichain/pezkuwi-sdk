@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Benchmarks for the Sassafras pallet.
+//! Benchmarks for the Sassafras pezpallet.
 
 use crate::*;
 use pezsp_consensus_sassafras::{vrf::VrfSignature, EphemeralPublic, EpochConfiguration};
@@ -60,7 +60,7 @@ mod benchmarks {
 			vrf_signature: make_dummy_vrf_signature(),
 			ticket_claim: None,
 		};
-		pezframe_system::Pallet::<T>::deposit_log((&slot_claim).into());
+		pezframe_system::Pezpallet::<T>::deposit_log((&slot_claim).into());
 
 		// We currently don't account for the potential weight added by the `on_finalize`
 		// incremental sorting of the tickets.
@@ -69,8 +69,8 @@ mod benchmarks {
 		{
 			// According to `Hooks` trait docs, `on_finalize` `Weight` should be bundled
 			// together with `on_initialize` `Weight`.
-			Pallet::<T>::on_initialize(block_num);
-			Pallet::<T>::on_finalize(block_num)
+			Pezpallet::<T>::on_initialize(block_num);
+			Pezpallet::<T>::on_finalize(block_num)
 		}
 	}
 
@@ -149,10 +149,10 @@ mod benchmarks {
 
 		#[block]
 		{
-			Pallet::<T>::should_end_epoch(BlockNumberFor::<T>::from(3u32));
-			let next_authorities = Pallet::<T>::next_authorities();
+			Pezpallet::<T>::should_end_epoch(BlockNumberFor::<T>::from(3u32));
+			let next_authorities = Pezpallet::<T>::next_authorities();
 			// Using a different set of authorities triggers the recomputation of ring verifier.
-			Pallet::<T>::enact_epoch_change(Default::default(), next_authorities);
+			Pezpallet::<T>::enact_epoch_change(Default::default(), next_authorities);
 		}
 	}
 
@@ -170,7 +170,7 @@ mod benchmarks {
 		// (see `make_tickets_data` test).
 		NextRandomness::<T>::set([0; 32]);
 
-		Pallet::<T>::update_ring_verifier(&authorities);
+		Pezpallet::<T>::update_ring_verifier(&authorities);
 
 		// Set next epoch config to accept all the tickets
 		let next_config = EpochConfiguration { attempts_number: 1, redundancy_factor: u32::MAX };
@@ -209,7 +209,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			Pallet::<T>::update_ring_verifier(&authorities);
+			Pezpallet::<T>::update_ring_verifier(&authorities);
 		}
 	}
 
@@ -265,7 +265,7 @@ mod benchmarks {
 		log::debug!(target: LOG_TARGET, "Before sort: {:?}", meta);
 		#[block]
 		{
-			Pallet::<T>::sort_segments(u32::MAX, 0, &mut meta);
+			Pezpallet::<T>::sort_segments(u32::MAX, 0, &mut meta);
 		}
 		log::debug!(target: LOG_TARGET, "After sort: {:?}", meta);
 	}

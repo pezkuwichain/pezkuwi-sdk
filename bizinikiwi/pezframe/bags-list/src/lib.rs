@@ -25,35 +25,35 @@
 //! [github]:
 //!     https://img.shields.io/badge/github-8da0cb?style=for-the-badge&labelColor=555555&logo=github
 //!
-//!  # Bags-List Pallet
+//!  # Bags-List Pezpallet
 //!
 //! An onchain implementation of a semi-sorted linked list, with permissionless sorting and update
 //! operations.
 //!
-//! ## Pallet API
+//! ## Pezpallet API
 //!
-//! See the [`pallet`] module for more information about the interfaces this pallet exposes,
+//! See the [`pezpallet`] module for more information about the interfaces this pezpallet exposes,
 //! including its configuration trait, dispatchables, storage items, events and errors.
 //!
-//! This pallet provides an implementation of
+//! This pezpallet provides an implementation of
 //! [`pezframe_election_provider_support::SortedListProvider`] and it can typically be used by another
-//! pallet via this API.
+//! pezpallet via this API.
 //!
 //! ## Overview
 //!
-//! This pallet splits `AccountId`s into different bags. Within a bag, these `AccountId`s are stored
-//! as nodes in a linked-list manner. This pallet then provides iteration over all bags, which
+//! This pezpallet splits `AccountId`s into different bags. Within a bag, these `AccountId`s are stored
+//! as nodes in a linked-list manner. This pezpallet then provides iteration over all bags, which
 //! basically allows an infinitely large list of items to be kept in a sorted manner.
 //!
 //! Each bags has a upper and lower range of scores, denoted by [`Config::BagThresholds`]. All nodes
-//! within a bag must be within the range of the bag. If not, the permissionless [`Pallet::rebag`]
+//! within a bag must be within the range of the bag. If not, the permissionless [`Pezpallet::rebag`]
 //! can be used to move any node to the right bag.
 //!
 //! Once a `rebag` happens, the order within a node is still not enforced. To move a node to the
-//! optimal position in a bag, the [`Pallet::put_in_front_of`] or [`Pallet::put_in_front_of_other`]
+//! optimal position in a bag, the [`Pezpallet::put_in_front_of`] or [`Pezpallet::put_in_front_of_other`]
 //! can be used.
 //!
-//! Additional reading, about how this pallet is used in the context of Pezkuwi's staking system:
+//! Additional reading, about how this pezpallet is used in the context of Pezkuwi's staking system:
 //! <https://pezkuwichain.io/blog/staking-update-september-2021/#bags-list-in-depth>
 //!
 //! ## Examples
@@ -62,7 +62,7 @@
 //!
 //! ## Low Level / Implementation Details
 //!
-//! The data structure exposed by this pallet aims to be optimized for:
+//! The data structure exposed by this pezpallet aims to be optimized for:
 //!
 //! - insertions and removals.
 //! - iteration over the top* N items by score, where the precise ordering of items doesn't
@@ -148,7 +148,7 @@ mod tests;
 pub mod weights;
 
 pub use list::{notional_bag_for, Bag, List, ListError, Node};
-pub use pallet::*;
+pub use pezpallet::*;
 pub use weights::WeightInfo;
 
 pub(crate) const LOG_TARGET: &str = "runtime::bags-list";
@@ -160,8 +160,8 @@ macro_rules! log {
 		log::$level!(
 			target: crate::LOG_TARGET,
 			concat!("[{:?}] 👜 [{}]", $patter),
-			<pezframe_system::Pallet<T>>::block_number(),
-			<crate::Pallet::<T, I> as pezframe_support::traits::PalletInfoAccess>::name()
+			<pezframe_system::Pezpallet<T>>::block_number(),
+			<crate::Pezpallet::<T, I> as pezframe_support::traits::PalletInfoAccess>::name()
 			$(, $values)*
 		)
 	};
@@ -169,23 +169,23 @@ macro_rules! log {
 
 type AccountIdLookupOf<T> = <<T as pezframe_system::Config>::Lookup as StaticLookup>::Source;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T, I = ()>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T, I = ()>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self, I>>
 			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: weights::WeightInfo;
 
 		/// Something that provides the scores of ids.
@@ -234,14 +234,14 @@ pub mod pallet {
 		///
 		/// In the event that this list ever changes, a copy of the old bags list must be retained.
 		/// With that `List::migrate` can be called, which will perform the appropriate migration.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type BagThresholds: Get<&'static [Self::Score]>;
 
 		/// Maximum number of accounts that may be re-bagged automatically in `on_idle`.
 		///
 		/// A value of `0` (obtained by configuring `type MaxAutoRebagPerBlock = ();`) disables
 		/// the feature.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxAutoRebagPerBlock: Get<u32>;
 
 		/// The type used to dictate a node position relative to other nodes.
@@ -263,28 +263,28 @@ pub mod pallet {
 	/// A single node, within some bag.
 	///
 	/// Nodes store links forward and back within their respective bags.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ListNodes<T: Config<I>, I: 'static = ()> =
 		CountedStorageMap<_, Twox64Concat, T::AccountId, list::Node<T, I>>;
 
 	/// A bag stored in storage.
 	///
 	/// Stores a `Bag` struct, which stores head and tail pointers to itself.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ListBags<T: Config<I>, I: 'static = ()> =
 		StorageMap<_, Twox64Concat, T::Score, list::Bag<T, I>>;
 
 	/// Pointer that remembers the next node that will be auto-rebagged.
 	/// When `None`, the next scan will start from the list head again.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type NextNodeAutoRebagged<T: Config<I>, I: 'static = ()> =
 		StorageValue<_, T::AccountId, OptionQuery>;
 
-	/// Lock all updates to this pallet.
+	/// Lock all updates to this pezpallet.
 	///
 	/// If any nodes needs updating, removal or addition due to a temporary lock, the
 	/// [`Call::rebag`] can be used.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Lock<T: Config<I>, I: 'static = ()> = StorageValue<_, (), OptionQuery>;
 
 	/// Accounts that failed to be inserted into the bags-list due to locking.
@@ -293,7 +293,7 @@ pub mod pallet {
 	/// Note: This storage is intentionally unbounded. The following factors make bounding
 	/// unnecessary:
 	/// 1. The storage usage is temporary - accounts are processed and removed in `on_idle`
-	/// 2. The pallet is only locked during snapshot generation, which is weight-limited
+	/// 2. The pezpallet is only locked during snapshot generation, which is weight-limited
 	/// 3. Processing happens at multiple accounts per block, clearing even large backlogs quickly
 	/// 4. An artificial limit could be exhausted by an attacker, preventing legitimate
 	///    auto-rebagging from putting accounts in the correct position
@@ -301,12 +301,12 @@ pub mod pallet {
 	/// We don't store the score here - it's always fetched from `ScoreProvider` when processing,
 	/// ensuring we use the most up-to-date score (accounts may have been slashed, rewarded, etc.
 	/// while waiting in the queue).
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type PendingRebag<T: Config<I>, I: 'static = ()> =
 		CountedStorageMap<_, Twox64Concat, T::AccountId, ()>;
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(crate) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(crate) fn deposit_event)]
 	pub enum Event<T: Config<I>, I: 'static = ()> {
 		/// Moved an account from one bag to another.
 		Rebagged { who: T::AccountId, from: T::Score, to: T::Score },
@@ -314,11 +314,11 @@ pub mod pallet {
 		ScoreUpdated { who: T::AccountId, new_score: T::Score },
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T, I = ()> {
 		/// A error in the list interface implementation.
 		List(ListError),
-		/// Could not update a node, because the pallet is locked.
+		/// Could not update a node, because the pezpallet is locked.
 		Locked,
 	}
 
@@ -328,11 +328,11 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::view_functions]
-	impl<T: Config<I>, I: 'static> Pallet<T, I> {
+	#[pezpallet::view_functions]
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 		/// Get the current `score` of a given account.
 		///
-		/// Returns `(current, real_score)`, the former being the current score that this pallet is
+		/// Returns `(current, real_score)`, the former being the current score that this pezpallet is
 		/// aware of, which may or may not be up to date, and the latter being the real score, as
 		/// provided by
 		// [`Config::ScoreProvider`].
@@ -343,8 +343,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config<I>, I: 'static> Pallet<T, I> {
+	#[pezpallet::call]
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 		/// Declare that some `dislocated` account has, through rewards or penalties, sufficiently
 		/// changed its score that it should properly fall into a different bag than its current
 		/// one.
@@ -355,8 +355,8 @@ pub mod pallet {
 		/// `ScoreProvider`.
 		///
 		/// If `dislocated` does not exists, it returns an error.
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::rebag_non_terminal().max(T::WeightInfo::rebag_terminal()))]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::rebag_non_terminal().max(T::WeightInfo::rebag_terminal()))]
 		pub fn rebag(origin: OriginFor<T>, dislocated: AccountIdLookupOf<T>) -> DispatchResult {
 			ensure_signed(origin)?;
 			let dislocated = T::Lookup::lookup(dislocated)?;
@@ -377,8 +377,8 @@ pub mod pallet {
 		///
 		/// - both nodes are within the same bag,
 		/// - and `origin` has a greater `Score` than `lighter`.
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::put_in_front_of())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::put_in_front_of())]
 		pub fn put_in_front_of(
 			origin: OriginFor<T>,
 			lighter: AccountIdLookupOf<T>,
@@ -391,11 +391,11 @@ pub mod pallet {
 				.map_err::<DispatchError, _>(Into::into)
 		}
 
-		/// Same as [`Pallet::put_in_front_of`], but it can be called by anyone.
+		/// Same as [`Pezpallet::put_in_front_of`], but it can be called by anyone.
 		///
 		/// Fee is paid by the origin under all circumstances.
-		#[pallet::call_index(2)]
-		#[pallet::weight(T::WeightInfo::put_in_front_of())]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(T::WeightInfo::put_in_front_of())]
 		pub fn put_in_front_of_other(
 			origin: OriginFor<T>,
 			heavier: AccountIdLookupOf<T>,
@@ -411,8 +411,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::hooks]
-	impl<T: Config<I>, I: 'static> Hooks<BlockNumberFor<T>> for Pallet<T, I> {
+	#[pezpallet::hooks]
+	impl<T: Config<I>, I: 'static> Hooks<BlockNumberFor<T>> for Pezpallet<T, I> {
 		fn integrity_test() {
 			// to ensure they are strictly increasing, this also implies that duplicates are
 			// detected.
@@ -461,7 +461,7 @@ pub mod pallet {
 			}
 
 			if Self::ensure_unlocked().is_err() {
-				log!(debug, "Auto-rebag skipped: pallet is locked");
+				log!(debug, "Auto-rebag skipped: pezpallet is locked");
 				return meter.consumed();
 			}
 
@@ -515,7 +515,7 @@ pub mod pallet {
 
 				match Self::rebag_internal(&account) {
 					Err(Error::<T, I>::Locked) => {
-						defensive!("Pallet became locked during auto-rebag, stopping");
+						defensive!("Pezpallet became locked during auto-rebag, stopping");
 						break;
 					},
 					Err(e) => {
@@ -587,13 +587,13 @@ pub mod pallet {
 }
 
 #[cfg(any(test, feature = "try-runtime", feature = "fuzz"))]
-impl<T: Config<I>, I: 'static> Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 	pub fn do_try_state() -> Result<(), TryRuntimeError> {
 		List::<T, I>::do_try_state()
 	}
 }
 
-impl<T: Config<I>, I: 'static> Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 	/// Move an account from one bag to another, depositing an event on success.
 	///
 	/// If the account changed bags, returns `Ok(Some((from, to)))`.
@@ -631,7 +631,7 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 	///
 	/// Returns `Ok(Some((from, to)))` if rebagging occurred, or `Ok(None)` if nothing changed.
 	fn rebag_internal(account: &T::AccountId) -> Result<Option<(T::Score, T::Score)>, Error<T, I>> {
-		// Ensure the pallet is not locked
+		// Ensure the pezpallet is not locked
 		Self::ensure_unlocked().map_err(|_| Error::<T, I>::Locked)?;
 
 		PendingRebag::<T, I>::remove(account);
@@ -644,7 +644,7 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 			(true, Some(current_score)) => {
 				// The account exists and has a valid score, so try to rebag
 				log!(debug, "Attempting to rebag node {:?}", account);
-				Pallet::<T, I>::do_rebag(account, current_score)
+				Pezpallet::<T, I>::do_rebag(account, current_score)
 					.map_err::<Error<T, I>, _>(Into::into)
 			},
 			(false, Some(current_score)) => {
@@ -668,7 +668,7 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 	}
 }
 
-impl<T: Config<I>, I: 'static> SortedListProvider<T::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> SortedListProvider<T::AccountId> for Pezpallet<T, I> {
 	type Error = ListError;
 	type Score = T::Score;
 
@@ -708,8 +708,8 @@ impl<T: Config<I>, I: 'static> SortedListProvider<T::AccountId> for Pallet<T, I>
 	}
 
 	fn on_insert(id: T::AccountId, score: T::Score) -> Result<(), ListError> {
-		Pallet::<T, I>::ensure_unlocked().inspect_err(|_| {
-			// Pallet is locked - store in PendingRebag for later processing
+		Pezpallet::<T, I>::ensure_unlocked().inspect_err(|_| {
+			// Pezpallet is locked - store in PendingRebag for later processing
 			// Only queue if auto-rebagging is enabled
 			if T::MaxAutoRebagPerBlock::get() > 0u32 {
 				PendingRebag::<T, I>::insert(&id, ());
@@ -719,8 +719,8 @@ impl<T: Config<I>, I: 'static> SortedListProvider<T::AccountId> for Pallet<T, I>
 	}
 
 	fn on_update(id: &T::AccountId, new_score: T::Score) -> Result<(), ListError> {
-		Pallet::<T, I>::ensure_unlocked()?;
-		Pallet::<T, I>::do_rebag(id, new_score).map(|_| ())
+		Pezpallet::<T, I>::ensure_unlocked()?;
+		Pezpallet::<T, I>::do_rebag(id, new_score).map(|_| ())
 	}
 
 	fn get_score(id: &T::AccountId) -> Result<T::Score, ListError> {
@@ -728,7 +728,7 @@ impl<T: Config<I>, I: 'static> SortedListProvider<T::AccountId> for Pallet<T, I>
 	}
 
 	fn on_remove(id: &T::AccountId) -> Result<(), ListError> {
-		Pallet::<T, I>::ensure_unlocked()?;
+		Pezpallet::<T, I>::ensure_unlocked()?;
 		List::<T, I>::remove(id)
 	}
 
@@ -778,8 +778,8 @@ impl<T: Config<I>, I: 'static> SortedListProvider<T::AccountId> for Pallet<T, I>
 	}
 }
 
-impl<T: Config<I>, I: 'static> ScoreProvider<T::AccountId> for Pallet<T, I> {
-	type Score = <Pallet<T, I> as SortedListProvider<T::AccountId>>::Score;
+impl<T: Config<I>, I: 'static> ScoreProvider<T::AccountId> for Pezpallet<T, I> {
+	type Score = <Pezpallet<T, I> as SortedListProvider<T::AccountId>>::Score;
 
 	fn score(id: &T::AccountId) -> Option<T::Score> {
 		Node::<T, I>::get(id).map(|node| node.score())

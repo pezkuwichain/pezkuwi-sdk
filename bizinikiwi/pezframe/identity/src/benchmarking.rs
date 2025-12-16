@@ -15,13 +15,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Identity pallet benchmarking.
+//! Identity pezpallet benchmarking.
 
 #![cfg(feature = "runtime-benchmarks")]
 
 use super::*;
 
-use crate::{migration::v2::LazyMigrationV1ToV2, Pallet as Identity};
+use crate::{migration::v2::LazyMigrationV1ToV2, Pezpallet as Identity};
 use alloc::{vec, vec::Vec};
 use pezframe_benchmarking::{account, v2::*, whitelisted_caller, BenchmarkError};
 use pezframe_support::{
@@ -34,26 +34,26 @@ use pezsp_runtime::traits::{Bounded, One};
 const SEED: u32 = 0;
 
 fn assert_has_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
-	pezframe_system::Pallet::<T>::assert_has_event(generic_event.into());
+	pezframe_system::Pezpallet::<T>::assert_has_event(generic_event.into());
 }
 
 fn assert_last_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
-	pezframe_system::Pallet::<T>::assert_last_event(generic_event.into());
+	pezframe_system::Pezpallet::<T>::assert_last_event(generic_event.into());
 }
 
 fn run_to_block<T: Config>(n: pezframe_system::pezpallet_prelude::BlockNumberFor<T>) {
-	while pezframe_system::Pallet::<T>::block_number() < n {
-		crate::Pallet::<T>::on_finalize(pezframe_system::Pallet::<T>::block_number());
-		pezframe_system::Pallet::<T>::on_finalize(pezframe_system::Pallet::<T>::block_number());
-		pezframe_system::Pallet::<T>::set_block_number(
-			pezframe_system::Pallet::<T>::block_number() + One::one(),
+	while pezframe_system::Pezpallet::<T>::block_number() < n {
+		crate::Pezpallet::<T>::on_finalize(pezframe_system::Pezpallet::<T>::block_number());
+		pezframe_system::Pezpallet::<T>::on_finalize(pezframe_system::Pezpallet::<T>::block_number());
+		pezframe_system::Pezpallet::<T>::set_block_number(
+			pezframe_system::Pezpallet::<T>::block_number() + One::one(),
 		);
-		pezframe_system::Pallet::<T>::on_initialize(pezframe_system::Pallet::<T>::block_number());
-		crate::Pallet::<T>::on_initialize(pezframe_system::Pallet::<T>::block_number());
+		pezframe_system::Pezpallet::<T>::on_initialize(pezframe_system::Pezpallet::<T>::block_number());
+		crate::Pezpallet::<T>::on_initialize(pezframe_system::Pezpallet::<T>::block_number());
 	}
 }
 
-// Adds `r` registrars to the Identity Pallet. These registrars will have set fees and fields.
+// Adds `r` registrars to the Identity Pezpallet. These registrars will have set fees and fields.
 fn add_registrars<T: Config>(r: u32) -> Result<(), &'static str> {
 	for i in 0..r {
 		let registrar: T::AccountId = account("registrar", i, SEED);
@@ -706,7 +706,7 @@ mod benchmarks {
 		Identity::<T>::queue_acceptance(&caller, username.clone(), provider);
 
 		let expected_expiration =
-			pezframe_system::Pallet::<T>::block_number() + T::PendingUsernameExpiration::get();
+			pezframe_system::Pezpallet::<T>::block_number() + T::PendingUsernameExpiration::get();
 
 		run_to_block::<T>(expected_expiration + One::one());
 
@@ -796,11 +796,11 @@ mod benchmarks {
 			username.clone(),
 			Provider::AuthorityDeposit(username_deposit),
 		);
-		let now = pezframe_system::Pallet::<T>::block_number();
+		let now = pezframe_system::Pezpallet::<T>::block_number();
 		let expiry = now + T::UsernameGracePeriod::get();
 		UnbindingUsernames::<T>::insert(&username, expiry);
 
-		pezframe_system::Pallet::<T>::set_block_number(expiry);
+		pezframe_system::Pezpallet::<T>::set_block_number(expiry);
 
 		#[extrinsic_call]
 		_(RawOrigin::Signed(caller), username.clone());
@@ -839,7 +839,7 @@ mod benchmarks {
 			_ => unreachable!(),
 		};
 		Identity::<T>::insert_username(&caller, username.clone(), provider);
-		UnbindingUsernames::<T>::insert(&username, pezframe_system::Pallet::<T>::block_number());
+		UnbindingUsernames::<T>::insert(&username, pezframe_system::Pezpallet::<T>::block_number());
 
 		#[extrinsic_call]
 		_(RawOrigin::Root, username.clone());

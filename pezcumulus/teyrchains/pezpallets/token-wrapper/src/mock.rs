@@ -15,7 +15,7 @@ pub type AccountId = u64;
 pub type Balance = u128;
 pub type AssetId = u32;
 
-// Configure a mock runtime to test the pallet.
+// Configure a mock runtime to test the pezpallet.
 construct_runtime!(
 	pub enum Test {
 		System: pezframe_system,
@@ -149,7 +149,7 @@ pub fn new_test_ext() -> pezsp_io::TestExternalities {
 		assert_ok!(Assets::force_create(
 			RuntimeOrigin::root(),
 			0,                          // Asset ID
-			TokenWrapper::account_id(), // Owner = pallet account
+			TokenWrapper::account_id(), // Owner = pezpallet account
 			true,                       // is_sufficient
 			1,                          // min_balance
 		));

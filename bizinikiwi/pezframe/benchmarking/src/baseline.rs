@@ -16,13 +16,13 @@
 // limitations under the License.
 
 //! A set of benchmarks which can establish a global baseline for all other
-//! benchmarking. These benchmarks do not require a pallet to be deployed.
+//! benchmarking. These benchmarks do not require a pezpallet to be deployed.
 
 #![cfg(feature = "runtime-benchmarks")]
 
 use crate::benchmarks;
 use alloc::{vec, vec::Vec};
-use pezframe_system::Pallet as System;
+use pezframe_system::Pezpallet as System;
 use pezsp_runtime::{
 	traits::{AppVerify, Hash},
 	RuntimeAppPublic,
@@ -36,7 +36,7 @@ mod crypto {
 }
 pub type SignerId = crypto::Public;
 
-pub struct Pallet<T: Config>(System<T>);
+pub struct Pezpallet<T: Config>(System<T>);
 pub trait Config: pezframe_system::Config {}
 
 benchmarks! {
@@ -102,7 +102,7 @@ benchmarks! {
 	}
 
 	impl_benchmark_test_suite!(
-		Pallet,
+		Pezpallet,
 		mock::new_test_ext(),
 		mock::Test,
 	);

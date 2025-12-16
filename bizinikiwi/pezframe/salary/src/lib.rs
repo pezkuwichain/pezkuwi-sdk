@@ -32,13 +32,13 @@ mod tests;
 mod benchmarking;
 pub mod weights;
 
-pub use pallet::*;
+pub use pezpallet::*;
 pub use weights::WeightInfo;
 
 /// Payroll cycle.
 pub type Cycle = u32;
 
-/// The status of the pallet instance.
+/// The status of the pezpallet instance.
 #[derive(Encode, Decode, Eq, PartialEq, Clone, TypeInfo, MaxEncodedLen, RuntimeDebug)]
 pub struct StatusType<CycleIndex, BlockNumber, Balance> {
 	/// The index of the "current cycle" (i.e. the last cycle being processed).
@@ -75,15 +75,15 @@ pub struct ClaimantStatus<CycleIndex, Balance, Id> {
 	status: ClaimState<Balance, Id>,
 }
 
-#[frame::pallet]
-pub mod pallet {
+#[frame::pezpallet]
+pub mod pezpallet {
 	use super::*;
-	#[pallet::pallet]
-	pub struct Pallet<T, I = ()>(PhantomData<(T, I)>);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T, I = ()>(PhantomData<(T, I)>);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config {
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 
 		/// The runtime event type.
@@ -112,20 +112,20 @@ pub mod pallet {
 		///
 		/// The number of blocks between sequential payout cycles is the sum of this and
 		/// `PayoutPeriod`.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type RegistrationPeriod: Get<BlockNumberFor<Self>>;
 
 		/// The number of blocks within a cycle which accounts have to claim the payout.
 		///
 		/// The number of blocks between sequential payout cycles is the sum of this and
 		/// `RegistrationPeriod`.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type PayoutPeriod: Get<BlockNumberFor<Self>>;
 
 		/// The total budget per cycle.
 		///
 		/// This may change over the course of a cycle without any problem.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type Budget: Get<BalanceOf<Self, I>>;
 	}
 
@@ -136,16 +136,16 @@ pub mod pallet {
 	pub type ClaimantStatusOf<T, I> = ClaimantStatus<CycleIndexOf<T>, BalanceOf<T, I>, IdOf<T, I>>;
 
 	/// The overall status of the system.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Status<T: Config<I>, I: 'static = ()> = StorageValue<_, StatusOf<T, I>, OptionQuery>;
 
 	/// The status of a claimant.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Claimant<T: Config<I>, I: 'static = ()> =
 		StorageMap<_, Twox64Concat, T::AccountId, ClaimantStatusOf<T, I>, OptionQuery>;
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config<I>, I: 'static = ()> {
 		/// A member is inducted into the payroll.
 		Inducted { who: T::AccountId },
@@ -164,7 +164,7 @@ pub mod pallet {
 		Swapped { who: T::AccountId, new_who: T::AccountId },
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T, I = ()> {
 		/// The salary system has already been started.
 		AlreadyStarted,
@@ -196,16 +196,16 @@ pub mod pallet {
 		NotCurrent,
 	}
 
-	#[pallet::call]
-	impl<T: Config<I>, I: 'static> Pallet<T, I> {
+	#[pezpallet::call]
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 		/// Start the first payout cycle.
 		///
 		/// - `origin`: A `Signed` origin of an account.
-		#[pallet::weight(T::WeightInfo::init())]
-		#[pallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::init())]
+		#[pezpallet::call_index(0)]
 		pub fn init(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 			ensure_signed(origin)?;
-			let now = pezframe_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pezpallet::<T>::block_number();
 			ensure!(!Status::<T, I>::exists(), Error::<T, I>::AlreadyStarted);
 			let status = StatusType {
 				cycle_index: Zero::zero(),
@@ -223,11 +223,11 @@ pub mod pallet {
 		/// Move to next payout cycle, assuming that the present block is now within that cycle.
 		///
 		/// - `origin`: A `Signed` origin of an account.
-		#[pallet::weight(T::WeightInfo::bump())]
-		#[pallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::bump())]
+		#[pezpallet::call_index(1)]
 		pub fn bump(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 			ensure_signed(origin)?;
-			let now = pezframe_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pezpallet::<T>::block_number();
 			let cycle_period = Self::cycle_period();
 			let mut status = Status::<T, I>::get().ok_or(Error::<T, I>::NotStarted)?;
 			status.cycle_start.saturating_accrue(cycle_period);
@@ -243,8 +243,8 @@ pub mod pallet {
 		}
 
 		/// Induct oneself into the payout system.
-		#[pallet::weight(T::WeightInfo::induct())]
-		#[pallet::call_index(2)]
+		#[pezpallet::weight(T::WeightInfo::induct())]
+		#[pezpallet::call_index(2)]
 		pub fn induct(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 			let who = ensure_signed(origin)?;
 			let cycle_index = Status::<T, I>::get().ok_or(Error::<T, I>::NotStarted)?.cycle_index;
@@ -266,14 +266,14 @@ pub mod pallet {
 		/// started.
 		///
 		/// - `origin`: A `Signed` origin of an account which is a member of `Members`.
-		#[pallet::weight(T::WeightInfo::register())]
-		#[pallet::call_index(3)]
+		#[pezpallet::weight(T::WeightInfo::register())]
+		#[pezpallet::call_index(3)]
 		pub fn register(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 			let who = ensure_signed(origin)?;
 			let rank = T::Members::rank_of(&who).ok_or(Error::<T, I>::NotMember)?;
 			let mut status = Status::<T, I>::get().ok_or(Error::<T, I>::NotStarted)?;
 			let mut claimant = Claimant::<T, I>::get(&who).ok_or(Error::<T, I>::NotInducted)?;
-			let now = pezframe_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pezpallet::<T>::block_number();
 			ensure!(
 				now < status.cycle_start + T::RegistrationPeriod::get(),
 				Error::<T, I>::TooLate
@@ -298,8 +298,8 @@ pub mod pallet {
 		/// started but by no more than `PayoutPeriod` blocks.
 		///
 		/// - `origin`: A `Signed` origin of an account which is a member of `Members`.
-		#[pallet::weight(T::WeightInfo::payout())]
-		#[pallet::call_index(4)]
+		#[pezpallet::weight(T::WeightInfo::payout())]
+		#[pezpallet::call_index(4)]
 		pub fn payout(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 			let who = ensure_signed(origin)?;
 			Self::do_payout(who.clone(), who)?;
@@ -313,8 +313,8 @@ pub mod pallet {
 		///
 		/// - `origin`: A `Signed` origin of an account which is a member of `Members`.
 		/// - `beneficiary`: The account to receive payment.
-		#[pallet::weight(T::WeightInfo::payout_other())]
-		#[pallet::call_index(5)]
+		#[pezpallet::weight(T::WeightInfo::payout_other())]
+		#[pezpallet::call_index(5)]
 		pub fn payout_other(
 			origin: OriginFor<T>,
 			beneficiary: T::AccountId,
@@ -331,8 +331,8 @@ pub mod pallet {
 		///
 		/// - `origin`: A `Signed` origin of an account which is a member of `Members` who has
 		///   received a payment this cycle.
-		#[pallet::weight(T::WeightInfo::check_payment())]
-		#[pallet::call_index(6)]
+		#[pezpallet::weight(T::WeightInfo::check_payment())]
+		#[pezpallet::call_index(6)]
 		pub fn check_payment(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 			let who = ensure_signed(origin)?;
 
@@ -369,7 +369,7 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config<I>, I: 'static> Pallet<T, I> {
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 		pub fn status() -> Option<StatusOf<T, I>> {
 			Status::<T, I>::get()
 		}
@@ -383,7 +383,7 @@ pub mod pallet {
 			let mut status = Status::<T, I>::get().ok_or(Error::<T, I>::NotStarted)?;
 			let mut claimant = Claimant::<T, I>::get(&who).ok_or(Error::<T, I>::NotInducted)?;
 
-			let now = pezframe_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pezpallet::<T>::block_number();
 			ensure!(
 				now >= status.cycle_start + T::RegistrationPeriod::get(),
 				Error::<T, I>::TooEarly,
@@ -441,7 +441,7 @@ pub mod pallet {
 }
 
 impl<T: Config<I>, I: 'static>
-	RankedMembersSwapHandler<T::AccountId, <T::Members as RankedMembers>::Rank> for Pallet<T, I>
+	RankedMembersSwapHandler<T::AccountId, <T::Members as RankedMembers>::Rank> for Pezpallet<T, I>
 {
 	fn swapped(
 		who: &T::AccountId,
@@ -469,7 +469,7 @@ impl<T: Config<I>, I: 'static>
 
 #[cfg(feature = "runtime-benchmarks")]
 impl<T: Config<I>, I: 'static>
-	pezpallet_ranked_collective::BenchmarkSetup<<T as pezframe_system::Config>::AccountId> for Pallet<T, I>
+	pezpallet_ranked_collective::BenchmarkSetup<<T as pezframe_system::Config>::AccountId> for Pezpallet<T, I>
 {
 	fn ensure_member(who: &<T as pezframe_system::Config>::AccountId) {
 		Self::init(pezframe_system::RawOrigin::Signed(who.clone()).into()).unwrap();

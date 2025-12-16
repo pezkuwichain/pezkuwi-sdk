@@ -13,14 +13,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! The pallet benchmarks.
+//! The pezpallet benchmarks.
 
-use super::{Pallet as CollectiveContent, *};
+use super::{Pezpallet as CollectiveContent, *};
 use pezframe_benchmarking::v2::*;
 use pezframe_support::traits::EnsureOrigin;
 
 fn assert_last_event<T: Config<I>, I: 'static>(generic_event: <T as Config<I>>::RuntimeEvent) {
-	pezframe_system::Pallet::<T>::assert_last_event(generic_event.into());
+	pezframe_system::Pezpallet::<T>::assert_last_event(generic_event.into());
 }
 
 /// returns CID hash of 68 bytes of given `i`.
@@ -50,7 +50,7 @@ mod benchmarks {
 	#[benchmark]
 	fn announce() -> Result<(), BenchmarkError> {
 		let expire_at = DispatchTime::<_>::At(10u32.into());
-		let now = pezframe_system::Pallet::<T>::block_number();
+		let now = pezframe_system::Pezpallet::<T>::block_number();
 		let cid: OpaqueCid = create_cid(1);
 		let origin = T::AnnouncementOrigin::try_successful_origin()
 			.map_err(|_| BenchmarkError::Weightless)?;

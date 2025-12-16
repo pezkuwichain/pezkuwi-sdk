@@ -113,7 +113,7 @@ pub fn run() -> pezsc_cli::Result<()> {
 				// This switch needs to be in the client, since the client decides
 				// which sub-commands it wants to support.
 				match cmd {
-					BenchmarkCmd::Pallet(cmd) => {
+					BenchmarkCmd::Pezpallet(cmd) => {
 						if !cfg!(feature = "runtime-benchmarks") {
 							return Err(
 								"Runtime benchmarking wasn't enabled when building the node. \

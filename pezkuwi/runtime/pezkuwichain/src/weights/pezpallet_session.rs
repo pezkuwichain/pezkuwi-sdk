@@ -25,7 +25,7 @@
 // --chain=pezkuwichain-dev
 // --steps=50
 // --repeat=20
-// --pallet=pezpallet_session
+// --pezpallet=pezpallet_session
 // --extrinsic=*
 // --execution=wasm
 // --wasm-execution=compiled

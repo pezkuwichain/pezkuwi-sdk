@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Various basic types for use in the Uniques pallet.
+//! Various basic types for use in the Uniques pezpallet.
 
 use super::*;
 use pezframe_support::{
@@ -105,7 +105,7 @@ pub struct ItemDetails<AccountId, DepositBalance> {
 	pub approved: Option<AccountId>,
 	/// Whether the item can be transferred or not.
 	pub is_frozen: bool,
-	/// The amount held in the pallet's default account for this item. Free-hold items will have
+	/// The amount held in the pezpallet's default account for this item. Free-hold items will have
 	/// this as zero.
 	pub deposit: DepositBalance,
 }

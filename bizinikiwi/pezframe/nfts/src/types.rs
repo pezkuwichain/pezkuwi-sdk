@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! This module contains various basic types and data structures used in the NFTs pallet.
+//! This module contains various basic types and data structures used in the NFTs pezpallet.
 
 use super::*;
 use crate::macros::*;
@@ -160,7 +160,7 @@ pub struct ItemDetails<AccountId, Deposit, Approvals> {
 	pub owner: AccountId,
 	/// The approved transferrer of this item, if one is set.
 	pub approvals: Approvals,
-	/// The amount held in the pallet's default account for this item. Free-hold items will have
+	/// The amount held in the pezpallet's default account for this item. Free-hold items will have
 	/// this as zero.
 	pub deposit: Deposit,
 }
@@ -411,8 +411,8 @@ impl<Price, BlockNumber, CollectionId> Default for MintSettings<Price, BlockNumb
 	MaxEncodedLen,
 )]
 pub enum AttributeNamespace<AccountId> {
-	/// An attribute was set by the pallet.
-	Pallet,
+	/// An attribute was set by the pezpallet.
+	Pezpallet,
 	/// An attribute was set by collection's owner.
 	CollectionOwner,
 	/// An attribute was set by item's owner.

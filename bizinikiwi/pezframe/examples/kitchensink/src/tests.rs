@@ -26,18 +26,18 @@
 use crate::*;
 use pezframe_support::{assert_ok, derive_impl, parameter_types, traits::VariantCountOf};
 use pezsp_runtime::BuildStorage;
-// Reexport crate as its pallet name for construct_runtime.
+// Reexport crate as its pezpallet name for construct_runtime.
 use crate as pezpallet_example_kitchensink;
 
 type Block = pezframe_system::mocking::MockBlock<Test>;
 
-// For testing the pallet, we construct a mock runtime.
+// For testing the pezpallet, we construct a mock runtime.
 pezframe_support::construct_runtime!(
 	pub enum Test
 	{
-		System: pezframe_system::{Pallet, Call, Config<T>, Storage, Event<T>},
-		Balances: pezpallet_balances::{Pallet, Call, Storage, Config<T>, Event<T>},
-		Kitchensink: pezpallet_example_kitchensink::{Pallet, Call, Storage, Config<T>, Event<T>},
+		System: pezframe_system::{Pezpallet, Call, Config<T>, Storage, Event<T>},
+		Balances: pezpallet_balances::{Pezpallet, Call, Storage, Config<T>, Event<T>},
+		Kitchensink: pezpallet_example_kitchensink::{Pezpallet, Call, Storage, Config<T>, Event<T>},
 	}
 );
 

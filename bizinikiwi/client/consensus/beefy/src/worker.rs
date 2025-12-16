@@ -280,7 +280,7 @@ pub(crate) struct PersistedState<B: Block, AuthorityId: AuthorityIdBound> {
 	/// Chooses which incoming votes to accept and which votes to generate.
 	/// Keeps track of voting seen for current and future rounds.
 	voting_oracle: VoterOracle<B, AuthorityId>,
-	/// Pallet-beefy genesis block - block number when BEEFY consensus started for this chain.
+	/// Pezpallet-beefy genesis block - block number when BEEFY consensus started for this chain.
 	pezpallet_genesis: NumberFor<B>,
 }
 

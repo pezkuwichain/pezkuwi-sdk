@@ -14,10 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Benchmarking for paras_registrar pallet
+//! Benchmarking for paras_registrar pezpallet
 
 #[cfg(feature = "runtime-benchmarks")]
-use super::{Pallet as Registrar, *};
+use super::{Pezpallet as Registrar, *};
 use crate::traits::Registrar as RegistrarT;
 use pezframe_support::assert_ok;
 use pezframe_system::RawOrigin;
@@ -28,7 +28,7 @@ use pezsp_runtime::traits::Bounded;
 use pezframe_benchmarking::v2::*;
 
 fn assert_last_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
-	let events = pezframe_system::Pallet::<T>::events();
+	let events = pezframe_system::Pezpallet::<T>::events();
 	let system_event: <T as pezframe_system::Config>::RuntimeEvent = generic_event.into();
 	// compare to the last event record
 	let pezframe_system::EventRecord { event, .. } = &events[events.len() - 1];
@@ -48,7 +48,7 @@ fn register_para<T: Config>(id: u32) -> ParaId {
 		genesis_head,
 		validation_code.clone()
 	));
-	assert_ok!(pezkuwi_runtime_teyrchains::paras::Pallet::<T>::add_trusted_validation_code(
+	assert_ok!(pezkuwi_runtime_teyrchains::paras::Pezpallet::<T>::add_trusted_validation_code(
 		pezframe_system::Origin::<T>::Root.into(),
 		validation_code,
 	));
@@ -61,8 +61,8 @@ fn para_origin(id: u32) -> ParaOrigin {
 
 // This function moves forward to the next scheduled session for teyrchain lifecycle upgrades.
 fn next_scheduled_session<T: Config>() {
-	shared::Pallet::<T>::set_session_index(shared::Pallet::<T>::scheduled_session());
-	paras::Pallet::<T>::test_on_new_session();
+	shared::Pezpallet::<T>::set_session_index(shared::Pezpallet::<T>::scheduled_session());
+	paras::Pezpallet::<T>::test_on_new_session();
 }
 
 #[benchmarks(
@@ -83,7 +83,7 @@ mod benchmarks {
 			Event::<T>::Reserved { para_id: LOWEST_PUBLIC_ID, who: caller }.into(),
 		);
 		assert!(Paras::<T>::get(LOWEST_PUBLIC_ID).is_some());
-		assert_eq!(paras::Pallet::<T>::lifecycle(LOWEST_PUBLIC_ID), None);
+		assert_eq!(paras::Pezpallet::<T>::lifecycle(LOWEST_PUBLIC_ID), None);
 
 		Ok(())
 	}
@@ -101,13 +101,13 @@ mod benchmarks {
 		_(RawOrigin::Signed(caller.clone()), para, genesis_head, validation_code.clone());
 
 		assert_last_event::<T>(Event::<T>::Registered { para_id: para, manager: caller }.into());
-		assert_eq!(paras::Pallet::<T>::lifecycle(para), Some(ParaLifecycle::Onboarding));
-		assert_ok!(pezkuwi_runtime_teyrchains::paras::Pallet::<T>::add_trusted_validation_code(
+		assert_eq!(paras::Pezpallet::<T>::lifecycle(para), Some(ParaLifecycle::Onboarding));
+		assert_ok!(pezkuwi_runtime_teyrchains::paras::Pezpallet::<T>::add_trusted_validation_code(
 			pezframe_system::Origin::<T>::Root.into(),
 			validation_code,
 		));
 		next_scheduled_session::<T>();
-		assert_eq!(paras::Pallet::<T>::lifecycle(para), Some(ParaLifecycle::Parathread));
+		assert_eq!(paras::Pezpallet::<T>::lifecycle(para), Some(ParaLifecycle::Parathread));
 
 		Ok(())
 	}
@@ -124,13 +124,13 @@ mod benchmarks {
 		_(RawOrigin::Root, manager.clone(), deposit, para, genesis_head, validation_code.clone());
 
 		assert_last_event::<T>(Event::<T>::Registered { para_id: para, manager }.into());
-		assert_eq!(paras::Pallet::<T>::lifecycle(para), Some(ParaLifecycle::Onboarding));
-		assert_ok!(pezkuwi_runtime_teyrchains::paras::Pallet::<T>::add_trusted_validation_code(
+		assert_eq!(paras::Pezpallet::<T>::lifecycle(para), Some(ParaLifecycle::Onboarding));
+		assert_ok!(pezkuwi_runtime_teyrchains::paras::Pezpallet::<T>::add_trusted_validation_code(
 			pezframe_system::Origin::<T>::Root.into(),
 			validation_code,
 		));
 		next_scheduled_session::<T>();
-		assert_eq!(paras::Pallet::<T>::lifecycle(para), Some(ParaLifecycle::Parathread));
+		assert_eq!(paras::Pezpallet::<T>::lifecycle(para), Some(ParaLifecycle::Parathread));
 
 		Ok(())
 	}
@@ -164,8 +164,8 @@ mod benchmarks {
 		Registrar::<T>::make_teyrchain(teyrchain)?;
 		next_scheduled_session::<T>();
 
-		assert_eq!(paras::Pallet::<T>::lifecycle(teyrchain), Some(ParaLifecycle::Teyrchain));
-		assert_eq!(paras::Pallet::<T>::lifecycle(parathread), Some(ParaLifecycle::Parathread));
+		assert_eq!(paras::Pezpallet::<T>::lifecycle(teyrchain), Some(ParaLifecycle::Teyrchain));
+		assert_eq!(paras::Pezpallet::<T>::lifecycle(parathread), Some(ParaLifecycle::Parathread));
 
 		let caller: T::AccountId = whitelisted_caller();
 		Registrar::<T>::swap(teyrchain_origin.into(), teyrchain, parathread)?;
@@ -175,8 +175,8 @@ mod benchmarks {
 
 		next_scheduled_session::<T>();
 		// Swapped!
-		assert_eq!(paras::Pallet::<T>::lifecycle(teyrchain), Some(ParaLifecycle::Parathread));
-		assert_eq!(paras::Pallet::<T>::lifecycle(parathread), Some(ParaLifecycle::Teyrchain));
+		assert_eq!(paras::Pezpallet::<T>::lifecycle(teyrchain), Some(ParaLifecycle::Parathread));
+		assert_eq!(paras::Pezpallet::<T>::lifecycle(parathread), Some(ParaLifecycle::Teyrchain));
 
 		Ok(())
 	}

@@ -6,7 +6,7 @@ edition.workspace = true
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
-description = "FRAME pallet for inclusive on-chain decisions"
+description = "FRAME pezpallet for inclusive on-chain decisions"
 readme = "README.md"
 documentation = "https://docs.rs/pezpallet-referenda"
 

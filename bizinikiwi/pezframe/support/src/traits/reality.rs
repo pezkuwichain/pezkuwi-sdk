@@ -320,7 +320,7 @@ pub trait StatementOracle<RuntimeCall> {
 
 	/// Judge a `statement` and get a Judgement.
 	///
-	/// We only care about the pallet/call index of `callback`; it must take exactly three
+	/// We only care about the pezpallet/call index of `callback`; it must take exactly three
 	/// arguments:
 	///
 	/// - `Self::Ticket`: The ticket which was returned here to identify the judgement.

@@ -44,10 +44,10 @@
 // frame-omni-bencher
 // v1
 // benchmark
-// pallet
+// pezpallet
 // --extrinsic=*
 // --runtime=target/production/wbuild/pez-kitchensink-runtime/pez_kitchensink_runtime.wasm
-// --pallet=pezpallet_multisig
+// --pezpallet=pezpallet_multisig
 // --header=/__w/pezkuwi-sdk/pezkuwi-sdk/bizinikiwi/HEADER-APACHE2
 // --output=/__w/pezkuwi-sdk/pezkuwi-sdk/bizinikiwi/pezframe/multisig/src/weights.rs
 // --wasm-execution=compiled

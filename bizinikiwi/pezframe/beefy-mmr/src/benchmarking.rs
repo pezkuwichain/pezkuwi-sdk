@@ -15,17 +15,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Beefy pallet benchmarking.
+//! Beefy pezpallet benchmarking.
 
 #![cfg(feature = "runtime-benchmarks")]
 
 use super::*;
-use crate::Pallet as BeefyMmr;
+use crate::Pezpallet as BeefyMmr;
 use codec::Encode;
 use pezframe_benchmarking::v2::*;
 use pezframe_support::traits::Hooks;
-use pezframe_system::{Config as SystemConfig, Pallet as System};
-use pezpallet_mmr::{Nodes, Pallet as Mmr};
+use pezframe_system::{Config as SystemConfig, Pezpallet as System};
+use pezpallet_mmr::{Nodes, Pezpallet as Mmr};
 use pezsp_consensus_beefy::Payload;
 use pezsp_runtime::traits::One;
 
@@ -134,7 +134,7 @@ mod benchmarks {
 	}
 
 	impl_benchmark_test_suite!(
-		Pallet,
+		Pezpallet,
 		crate::mock::new_test_ext(Default::default()),
 		crate::mock::Test
 	);

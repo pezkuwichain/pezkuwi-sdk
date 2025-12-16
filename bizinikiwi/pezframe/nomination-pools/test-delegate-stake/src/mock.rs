@@ -97,7 +97,7 @@ parameter_types! {
 impl pezpallet_staking::Config for Runtime {
 	type OldCurrency = Balances;
 	type Currency = Balances;
-	type UnixTime = pezpallet_timestamp::Pallet<Self>;
+	type UnixTime = pezpallet_timestamp::Pezpallet<Self>;
 	type AdminOrigin = pezframe_system::EnsureRoot<Self::AccountId>;
 	type BondingDuration = BondingDuration;
 	type EraPayout = pezpallet_staking::ConvertCurve<RewardCurve>;
@@ -326,7 +326,7 @@ pub fn new_test_ext() -> pezsp_io::TestExternalities {
 
 	ext.execute_with(|| {
 		// for events to be deposited.
-		pezframe_system::Pallet::<Runtime>::set_block_number(1);
+		pezframe_system::Pezpallet::<Runtime>::set_block_number(1);
 
 		// set some limit for nominations.
 		assert_ok!(Staking::set_staking_configs(

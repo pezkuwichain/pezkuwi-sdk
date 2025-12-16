@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Two phase election pallet benchmarking.
+//! Two phase election pezpallet benchmarking.
 
 use core::cmp::Reverse;
 use pezframe_benchmarking::{v2::*, BenchmarkError};
@@ -201,7 +201,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			Pallet::<T>::on_initialize(1_u32.into());
+			Pezpallet::<T>::on_initialize(1_u32.into());
 		}
 
 		assert!(CurrentPhase::<T>::get().is_off());
@@ -214,7 +214,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			Pallet::<T>::phase_transition(Phase::Signed);
+			Pezpallet::<T>::phase_transition(Phase::Signed);
 		}
 
 		assert!(Snapshot::<T>::get().is_none());
@@ -228,8 +228,8 @@ mod benchmarks {
 
 		#[block]
 		{
-			let now = pezframe_system::Pallet::<T>::block_number();
-			Pallet::<T>::phase_transition(Phase::Unsigned((true, now)));
+			let now = pezframe_system::Pezpallet::<T>::block_number();
+			Pezpallet::<T>::phase_transition(Phase::Unsigned((true, now)));
 		}
 
 		assert!(Snapshot::<T>::get().is_none());
@@ -252,7 +252,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			Pallet::<T>::finalize_signed_phase_accept_solution(ready, &receiver, deposit, call_fee);
+			Pezpallet::<T>::finalize_signed_phase_accept_solution(ready, &receiver, deposit, call_fee);
 		}
 
 		assert_eq!(T::Currency::free_balance(&receiver), initial_balance + reward + call_fee);
@@ -272,7 +272,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			Pallet::<T>::finalize_signed_phase_reject_solution(&receiver, deposit)
+			Pezpallet::<T>::finalize_signed_phase_reject_solution(&receiver, deposit)
 		}
 
 		assert_eq!(T::Currency::free_balance(&receiver), T::Currency::minimum_balance());
@@ -298,7 +298,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			Pallet::<T>::create_snapshot_internal(targets, voters, desired_targets)
+			Pezpallet::<T>::create_snapshot_internal(targets, voters, desired_targets)
 		}
 
 		assert!(Snapshot::<T>::get().is_some());
@@ -308,7 +308,7 @@ mod benchmarks {
 		Ok(())
 	}
 
-	// A call to `<Pallet as ElectionProvider>::elect` where we only return the queued solution.
+	// A call to `<Pezpallet as ElectionProvider>::elect` where we only return the queued solution.
 	#[benchmark]
 	fn elect_queued(
 		// Number of assignments, i.e. `solution.len()`.
@@ -330,7 +330,7 @@ mod benchmarks {
 
 		let witness = SolutionOrSnapshotSize { voters: v, targets: t };
 		let raw_solution = solution_with_size::<T>(witness, a, d)?;
-		let ready_solution = Pallet::<T>::feasibility_check(raw_solution, ElectionCompute::Signed)
+		let ready_solution = Pezpallet::<T>::feasibility_check(raw_solution, ElectionCompute::Signed)
 			.map_err(<&str>::from)?;
 		CurrentPhase::<T>::put(Phase::Signed);
 		// Assume a queued solution is stored, regardless of where it comes from.
@@ -345,7 +345,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			result = <Pallet<T> as ElectionProvider>::elect(Zero::zero());
+			result = <Pezpallet<T> as ElectionProvider>::elect(Zero::zero());
 		}
 
 		assert!(result.is_ok());
@@ -364,8 +364,8 @@ mod benchmarks {
 	#[benchmark]
 	fn submit() -> Result<(), BenchmarkError> {
 		// The queue is full and the solution is only better than the worse.
-		Pallet::<T>::create_snapshot().map_err(<&str>::from)?;
-		Pallet::<T>::phase_transition(Phase::Signed);
+		Pezpallet::<T>::create_snapshot().map_err(<&str>::from)?;
+		Pezpallet::<T>::phase_transition(Phase::Signed);
 		Round::<T>::put(1);
 
 		let mut signed_submissions = SignedSubmissions::<T>::get();
@@ -397,7 +397,7 @@ mod benchmarks {
 
 		let caller = pezframe_benchmarking::whitelisted_caller();
 		let deposit =
-			Pallet::<T>::deposit_for(&solution, SnapshotMetadata::<T>::get().unwrap_or_default());
+			Pezpallet::<T>::deposit_for(&solution, SnapshotMetadata::<T>::get().unwrap_or_default());
 		T::Currency::make_free_balance_be(
 			&caller,
 			T::Currency::minimum_balance() * 1000u32.into() + deposit,
@@ -406,7 +406,7 @@ mod benchmarks {
 		#[extrinsic_call]
 		_(RawOrigin::Signed(caller), Box::new(solution));
 
-		assert!(Pallet::<T>::signed_submissions().len() as u32 == T::SignedMaxSubmissions::get());
+		assert!(Pezpallet::<T>::signed_submissions().len() as u32 == T::SignedMaxSubmissions::get());
 
 		Ok(())
 	}
@@ -472,7 +472,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			result = Pallet::<T>::feasibility_check(raw_solution, ElectionCompute::Unsigned);
+			result = Pezpallet::<T>::feasibility_check(raw_solution, ElectionCompute::Unsigned);
 		}
 
 		assert!(result.is_ok());
@@ -500,14 +500,14 @@ mod benchmarks {
 		let t = T::BenchmarkingConfig::MAXIMUM_TARGETS;
 
 		set_up_data_provider::<T>(v, t);
-		let now = pezframe_system::Pallet::<T>::block_number();
+		let now = pezframe_system::Pezpallet::<T>::block_number();
 		CurrentPhase::<T>::put(Phase::Unsigned((true, now)));
-		Pallet::<T>::create_snapshot().unwrap();
+		Pezpallet::<T>::create_snapshot().unwrap();
 
 		#[block]
 		{
 			// we can't really verify this as it won't write anything to state, check logs.
-			Pallet::<T>::offchain_worker(now)
+			Pezpallet::<T>::offchain_worker(now)
 		}
 	}
 
@@ -529,7 +529,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			Pallet::<T>::create_snapshot().map_err(|_| "could not create snapshot")?;
+			Pezpallet::<T>::create_snapshot().map_err(|_| "could not create snapshot")?;
 		}
 
 		assert!(Snapshot::<T>::get().is_some());
@@ -627,7 +627,7 @@ mod benchmarks {
 	}
 
 	impl_benchmark_test_suite! {
-		Pallet,
+		Pezpallet,
 		mock::ExtBuilder::default().build_offchainify(10).0,
 		mock::Runtime,
 	}

@@ -124,7 +124,7 @@ where
 		let versioned_xcm = W::wrap_version(&d, xcm).map_err(|()| DestinationUnsupported)?;
 		versioned_xcm.check_is_decodable().map_err(|()| ExceedsMaxMessageSize)?;
 		let blob = versioned_xcm.encode();
-		dmp::Pallet::<T>::can_queue_downward_message(&config, &para, &blob)
+		dmp::Pezpallet::<T>::can_queue_downward_message(&config, &para, &blob)
 			.map_err(Into::<SendError>::into)?;
 
 		Ok(((config, para, blob), price))
@@ -134,7 +134,7 @@ where
 		(config, para, blob): (HostConfiguration<BlockNumberFor<T>>, ParaId, Vec<u8>),
 	) -> Result<XcmHash, SendError> {
 		let hash = pezsp_io::hashing::blake2_256(&blob[..]);
-		dmp::Pallet::<T>::queue_downward_message(&config, para, blob)
+		dmp::Pezpallet::<T>::queue_downward_message(&config, para, blob)
 			.map(|()| hash)
 			.map_err(|error| {
 				log::debug!(
@@ -148,7 +148,7 @@ where
 	#[cfg(feature = "runtime-benchmarks")]
 	fn ensure_successful_delivery(location: Option<Location>) {
 		if let Some((0, [Teyrchain(id)])) = location.as_ref().map(|l| l.unpack()) {
-			dmp::Pallet::<T>::make_teyrchain_reachable(*id);
+			dmp::Pezpallet::<T>::make_teyrchain_reachable(*id);
 		}
 	}
 }
@@ -367,7 +367,7 @@ mod tests {
 				c.max_downward_message_size = u32::MAX;
 			});
 
-			dmp::Pallet::<crate::integration_tests::Test>::make_teyrchain_reachable(5555);
+			dmp::Pezpallet::<crate::integration_tests::Test>::make_teyrchain_reachable(5555);
 
 			// Check that the good message is validated:
 			assert_ok!(<Router as SendXcm>::validate(

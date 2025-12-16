@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Benchmarks for the bags list pallet.
+//! Benchmarks for the bags list pezpallet.
 
 use super::*;
 use crate::list::List;
@@ -58,7 +58,7 @@ benchmarks_instance_pallet! {
 			]
 		);
 	}: {
-		let voters = <Pallet<T, _> as SortedListProvider<T::AccountId>>::iter();
+		let voters = <Pezpallet<T, _> as SortedListProvider<T::AccountId>>::iter();
 		let len = voters.collect::<Vec<_>>().len();
 		assert_eq!(len as u32, n,"len is {}, expected {}", len, n);
 	}
@@ -93,7 +93,7 @@ benchmarks_instance_pallet! {
 		);
 	}: {
 		// this should only go into one of the bags
-		let voters = <Pallet<T, _> as SortedListProvider<T::AccountId>>::iter().take(n as usize / 4 );
+		let voters = <Pezpallet<T, _> as SortedListProvider<T::AccountId>>::iter().take(n as usize / 4 );
 		let len = voters.collect::<Vec<_>>().len();
 		assert_eq!(len as u32, n / 4,"len is {}, expected {}", len, n / 4);
 	}
@@ -127,7 +127,7 @@ benchmarks_instance_pallet! {
 		);
 	}: {
 		// this should only go into one of the bags
-		let mut iter_var = <Pallet<T, _> as SortedListProvider<T::AccountId>>::iter();
+		let mut iter_var = <Pezpallet<T, _> as SortedListProvider<T::AccountId>>::iter();
 		let mut voters = Vec::<T::AccountId>::with_capacity((n/4) as usize);
 		for _ in 0..(n/4) {
 			let next = iter_var.next().unwrap();
@@ -182,7 +182,7 @@ benchmarks_instance_pallet! {
 		// iter from someone in the 3rd bag, so this should touch ~75 nodes and 3 bags
 		let from: T::AccountId = account("node", 0, 2);
 	}: {
-		let voters = <Pallet<T, _> as SortedListProvider<T::AccountId>>::iter_from(&from).unwrap();
+		let voters = <Pezpallet<T, _> as SortedListProvider<T::AccountId>>::iter_from(&from).unwrap();
 		let len = voters.collect::<Vec<_>>().len();
 		assert_eq!(len as u32, 74,"len is {}, expected {}", len, 74);
 	}
@@ -386,7 +386,7 @@ benchmarks_instance_pallet! {
 		}
 
 		// Lock the list and simulate pending rebag insertions
-		<Pallet<T, I>>::lock();
+		<Pezpallet<T, I>>::lock();
 
 		// Create pending rebag entries (mix of valid and corrupted)
 		for i in 0..pending_count {
@@ -402,12 +402,12 @@ benchmarks_instance_pallet! {
 				T::ScoreProvider::set_score_of(&pending_node, pending_score);
 			}
 
-			let _ = <Pallet<T, I> as SortedListProvider<T::AccountId>>::on_insert(
+			let _ = <Pezpallet<T, I> as SortedListProvider<T::AccountId>>::on_insert(
 				pending_node, pending_score
 			);
 		}
 
-		<Pallet<T, I>>::unlock();
+		<Pezpallet<T, I>>::unlock();
 
 		// Now set new scores that will move nodes into higher bags
 		for i in 0..regular_count {
@@ -431,7 +431,7 @@ benchmarks_instance_pallet! {
 	}
 	: {
 		use pezframe_support::traits::Hooks;
-		<Pallet<T, I> as Hooks<_>>::on_idle(Default::default(), Weight::MAX);
+		<Pezpallet<T, I> as Hooks<_>>::on_idle(Default::default(), Weight::MAX);
 	}
 	verify {
 		// Verify all pending rebag entries were processed.
@@ -451,7 +451,7 @@ benchmarks_instance_pallet! {
 	}
 
 	impl_benchmark_test_suite!(
-		Pallet,
+		Pezpallet,
 		mock::ExtBuilder::default().skip_genesis_ids().build(),
 		mock::Runtime
 	);

@@ -1,6 +1,6 @@
 [package]
 authors.workspace = true
-description = "Simple pallet to select collators for a teyrchain."
+description = "Simple pezpallet to select collators for a teyrchain."
 edition.workspace = true
 homepage.workspace = true
 license = "Apache-2.0"

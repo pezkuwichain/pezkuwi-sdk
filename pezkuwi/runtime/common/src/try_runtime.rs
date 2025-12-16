@@ -21,7 +21,7 @@ use pezframe_support::{
 	dispatch::RawOrigin,
 	traits::{Get, Hooks},
 };
-use pezpallet_fast_unstake::{Pallet as FastUnstake, *};
+use pezpallet_fast_unstake::{Pezpallet as FastUnstake, *};
 use pezpallet_staking::*;
 
 /// register all inactive nominators for fast-unstake, and progress until they have all been
@@ -64,15 +64,15 @@ where
 		target: "runtime::test",
 		"registered {} successfully, starting at {:?}.",
 		Queue::<T>::count(),
-		pezframe_system::Pallet::<T>::block_number(),
+		pezframe_system::Pezpallet::<T>::block_number(),
 	);
 	while Queue::<T>::count() != 0 || Head::<T>::get().is_some() {
-		let now = pezframe_system::Pallet::<T>::block_number();
+		let now = pezframe_system::Pezpallet::<T>::block_number();
 		let weight = <T as pezframe_system::Config>::BlockWeights::get().max_block;
 		let consumed = FastUnstake::<T>::on_idle(now, weight);
 		log::debug!(target: "runtime::test", "consumed {:?} ({})", consumed, consumed.ref_time() as f32 / weight.ref_time() as f32);
 
-		pezframe_system::Pallet::<T>::read_events_no_consensus()
+		pezframe_system::Pezpallet::<T>::read_events_no_consensus()
 			.into_iter()
 			.map(|r| r.event)
 			.filter_map(|e| {
@@ -102,6 +102,6 @@ where
 			);
 		}
 
-		pezframe_system::Pallet::<T>::reset_events();
+		pezframe_system::Pezpallet::<T>::reset_events();
 	}
 }

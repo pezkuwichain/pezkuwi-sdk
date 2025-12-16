@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Generalized Message Queue Pallet
+//! # Generalized Message Queue Pezpallet
 //!
 //! Provides generalized message queuing and processing capabilities on a per-queue basis for
 //! arbitrary use-cases.
@@ -23,9 +23,9 @@
 //! # Design Goals
 //!
 //! 1. Minimal assumptions about `Message`s and `MessageOrigin`s. Both should be MEL bounded blobs.
-//!  This ensures the generality and reusability of the pallet.
+//!  This ensures the generality and reusability of the pezpallet.
 //! 2. Well known and tightly limited pre-dispatch PoV weights, especially for message execution.
-//!  This is paramount for the success of the pallet since message execution is done in
+//!  This is paramount for the success of the pezpallet since message execution is done in
 //!  `on_initialize` which must _never_ under-estimate its PoV weight. It also needs a frugal PoV
 //!  footprint since PoV is scarce and this is (possibly) done in every block. This must also hold
 //! in  the presence of unpredictable message size distributions.
@@ -33,14 +33,14 @@
 //!
 //! # Design
 //!
-//! The pallet has means to enqueue, store and process messages. This is implemented by having
+//! The pezpallet has means to enqueue, store and process messages. This is implemented by having
 //! *queues* which store enqueued messages and can be *served* to process said messages. A queue is
 //! identified by its origin in the `BookStateFor`. Each message has an origin which defines into
 //! which queue it will be stored. Messages are stored by being appended to the last [`Page`] of a
 //! book. Each book keeps track of its pages by indexing `Pages`. The `ReadyRing` contains all
 //! queues which hold at least one unprocessed message and are thereby *ready* to be serviced. The
 //! `ServiceHead` indicates which *ready* queue is the next to be serviced.
-//! The pallet implements [`pezframe_support::traits::EnqueueMessage`],
+//! The pezpallet implements [`pezframe_support::traits::EnqueueMessage`],
 //! [`pezframe_support::traits::ServiceQueues`] and has [`pezframe_support::traits::ProcessMessage`] and
 //! [`OnQueueChanged`] hooks to communicate with the outside world.
 //!
@@ -52,29 +52,29 @@
 //! logic of how to handle the message since they are blobs. Storage changes are not rolled back on
 //! error.
 //!
-//! A failed message can be temporarily or permanently overweight. The pallet will perpetually try
+//! A failed message can be temporarily or permanently overweight. The pezpallet will perpetually try
 //! to execute a temporarily overweight message. A permanently overweight message is skipped and
 //! must be executed manually.
 //!
 //! **Reentrancy**
 //!
-//! This pallet has two entry points for executing (possibly recursive) logic;
-//! [`Pallet::service_queues`] and [`Pallet::execute_overweight`]. Both entry points are guarded by
+//! This pezpallet has two entry points for executing (possibly recursive) logic;
+//! [`Pezpallet::service_queues`] and [`Pezpallet::execute_overweight`]. Both entry points are guarded by
 //! the same mutex to error on reentrancy. The only functions that are explicitly **allowed** to be
-//! called by a message processor are: [`Pallet::enqueue_message`] and
-//! [`Pallet::enqueue_messages`]. All other functions are forbidden and error with
+//! called by a message processor are: [`Pezpallet::enqueue_message`] and
+//! [`Pezpallet::enqueue_messages`]. All other functions are forbidden and error with
 //! [`Error::RecursiveDisallowed`].
 //!
 //! **Pagination**
 //!
 //! Queues are stored in a *paged* manner by splitting their messages into [`Page`]s. This results
-//! in a lot of complexity when implementing the pallet but is completely necessary to achieve the
+//! in a lot of complexity when implementing the pezpallet but is completely necessary to achieve the
 //! second #[Design Goal](design-goals). The problem comes from the fact a message can *possibly* be
 //! quite large, lets say 64KiB. This then results in a *MEL* of at least 64KiB which results in a
 //! PoV of at least 64KiB. Now we have the assumption that most messages are much shorter than their
 //! maximum allowed length. This would result in most messages having a pre-dispatch PoV size which
 //! is much larger than their post-dispatch PoV size, possibly by a factor of thousand. Disregarding
-//! this observation would cripple the processing power of the pallet since it cannot straighten out
+//! this observation would cripple the processing power of the pezpallet since it cannot straighten out
 //! this discrepancy at runtime. Conceptually, the implementation is packing as many messages into a
 //! single bounded vec, as actually fit into the bounds. This reduces the wasted PoV.
 //!
@@ -88,10 +88,10 @@
 //!
 //! **Weight Metering**
 //!
-//! The pallet utilizes the [`pezsp_weights::WeightMeter`] to manually track its consumption to always
+//! The pezpallet utilizes the [`pezsp_weights::WeightMeter`] to manually track its consumption to always
 //! stay within the required limit. This implies that the message processor hook can calculate the
 //! weight of a message without executing it. This restricts the possible use-cases but is necessary
-//! since the pallet runs in `on_initialize` which has a hard weight limit. The weight meter is used
+//! since the pezpallet runs in `on_initialize` which has a hard weight limit. The weight meter is used
 //! in a way that `can_accrue` and `check_accrue` are always used to check the remaining weight of
 //! an operation before committing to it. The process of exiting due to insufficient weight is
 //! termed "bailing".
@@ -110,14 +110,14 @@
 //!
 //! # Scenario: Message processing
 //!
-//! The pallet runs each block in `on_initialize` or when being manually called through
+//! The pezpallet runs each block in `on_initialize` or when being manually called through
 //! [`pezframe_support::traits::ServiceQueues::service_queues`].
 //!
 //! First it tries to "rotate" the `ReadyRing` by one through advancing the `ServiceHead` to the
 //! next *ready* queue. It then starts to service this queue by servicing as many pages of it as
 //! possible. Servicing a page means to execute as many message of it as possible. Each executed
 //! message is marked as *processed* if the [`Config::MessageProcessor`] return Ok. An event
-//! [`Event::Processed`] is emitted afterwards. It is possible that the weight limit of the pallet
+//! [`Event::Processed`] is emitted afterwards. It is possible that the weight limit of the pezpallet
 //! will never allow a specific message to be executed. In this case it remains as unprocessed and
 //! is skipped. This process stops if either there are no more messages in the queue or the
 //! remaining weight became insufficient to service this queue. If there is enough weight it tries
@@ -139,7 +139,7 @@
 //!
 //! # Terminology
 //!
-//! - `Message`: A blob of data into which the pallet has no introspection, defined as
+//! - `Message`: A blob of data into which the pezpallet has no introspection, defined as
 //! [`BoundedSlice<u8, MaxMessageLenOf<T>>`]. The message length is limited by [`MaxMessageLenOf`]
 //! which is calculated from [`Config::HeapSize`] and [`ItemHeader::max_encoded_len()`].
 //! - `MessageOrigin`: A generic *origin* of a message, defined as [`MessageOriginOf`]. The
@@ -153,7 +153,7 @@
 //!   queues via their `ready_neighbours` fields. A `Queue` is *ready* if it contains at least one
 //!   `Message` which can be processed. Can be empty.
 //! - `ServiceHead`: A pointer into the `ReadyRing` to the next `Queue` to be serviced.
-//! - (`un`)`processed`: A message is marked as *processed* after it was executed by the pallet. A
+//! - (`un`)`processed`: A message is marked as *processed* after it was executed by the pezpallet. A
 //!   message which was either: not yet executed or could not be executed remains as `unprocessed`
 //!   which is the default state for a message after being enqueued.
 //! - `knitting`/`unknitting`: The means of adding or removing a `Queue` from the `ReadyRing`.
@@ -176,7 +176,7 @@
 //!
 //! **Progress - Processing**
 //!
-//! The pallet will execute at least one unprocessed message per block, if there is any. Ensuring
+//! The pezpallet will execute at least one unprocessed message per block, if there is any. Ensuring
 //! this property needs careful consideration of the concrete weights, since it is possible that the
 //! weight limit of `on_initialize` never allows for the execution of even one message; trivially if
 //! the limit is set to zero. `integrity_test` can be used to ensure that this property holds.
@@ -219,7 +219,7 @@ use pezframe_support::{
 	BoundedSlice, CloneNoBound, DefaultNoBound,
 };
 use pezframe_system::pezpallet_prelude::*;
-pub use pallet::*;
+pub use pezpallet::*;
 use scale_info::TypeInfo;
 use pezsp_arithmetic::traits::{BaseArithmetic, Unsigned};
 use pezsp_core::{defer, H256};
@@ -494,21 +494,21 @@ pub trait ForceSetHead<O> {
 	fn force_set_head(weight: &mut WeightMeter, origin: &O) -> Result<bool, ()>;
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
 	/// The module configuration trait.
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 
 		/// Processor for a message.
@@ -540,7 +540,7 @@ pub mod pallet {
 		/// removed.
 		type QueueChangeHandler: OnQueueChanged<<Self::MessageProcessor as ProcessMessage>::Origin>;
 
-		/// Queried by the pallet to check whether a queue can be serviced.
+		/// Queried by the pezpallet to check whether a queue can be serviced.
 		///
 		/// This also applies to manual servicing via `execute_overweight` and `service_queues`. The
 		/// value of this is only polled once before servicing the queue. This means that changes to
@@ -552,13 +552,13 @@ pub mod pallet {
 		/// A good value depends on the expected message sizes, their weights, the weight that is
 		/// available for processing them and the maximal needed message size. The maximal message
 		/// size is slightly lower than this as defined by [`MaxMessageLenOf`].
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type HeapSize: Get<Self::Size>;
 
 		/// The maximum number of stale pages (i.e. of overweight messages) allowed before culling
 		/// can happen. Once there are more stale pages than this, then historical pages may be
 		/// dropped, even if they contain unprocessed overweight messages.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxStale: Get<u32>;
 
 		/// The amount of weight (if any) which should be provided to the message queue for
@@ -567,7 +567,7 @@ pub mod pallet {
 		/// This may be legitimately `None` in the case that you will call
 		/// `ServiceQueues::service_queues` manually or set [`Self::IdleMaxServiceWeight`] to have
 		/// it run in `on_idle`.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type ServiceWeight: Get<Option<Weight>>;
 
 		/// The maximum amount of weight (if any) to be used from remaining weight `on_idle` which
@@ -575,12 +575,12 @@ pub mod pallet {
 		/// Useful for teyrchains to process messages at the same block they are received.
 		///
 		/// If `None`, it will not call `ServiceQueues::service_queues` in `on_idle`.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type IdleMaxServiceWeight: Get<Option<Weight>>;
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// Message discarded due to an error in the `MessageProcessor` (usually a format error).
 		ProcessingFailed {
@@ -605,7 +605,7 @@ pub mod pallet {
 			/// Whether the message was processed.
 			///
 			/// Note that this does not mean that the underlying `MessageProcessor` was internally
-			/// successful. It *solely* means that the MQ pallet will treat this as a success
+			/// successful. It *solely* means that the MQ pezpallet will treat this as a success
 			/// condition and discard the message. Any internal error needs to be emitted as events
 			/// by the `MessageProcessor`.
 			success: bool,
@@ -630,7 +630,7 @@ pub mod pallet {
 		},
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Page is not reapable because it has items remaining to be processed and is not old
 		/// enough.
@@ -659,16 +659,16 @@ pub mod pallet {
 	}
 
 	/// The index of the first and last (non-empty) pages.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type BookStateFor<T: Config> =
 		StorageMap<_, Twox64Concat, MessageOriginOf<T>, BookState<MessageOriginOf<T>>, ValueQuery>;
 
 	/// The origin at which we should begin servicing.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ServiceHead<T: Config> = StorageValue<_, MessageOriginOf<T>, OptionQuery>;
 
 	/// The map of page indices to pages.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Pages<T: Config> = StorageDoubleMap<
 		_,
 		Twox64Concat,
@@ -679,8 +679,8 @@ pub mod pallet {
 		OptionQuery,
 	>;
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn on_initialize(_n: BlockNumberFor<T>) -> Weight {
 			if let Some(weight_limit) = T::ServiceWeight::get() {
 				Self::service_queues_impl(weight_limit, ServiceQueuesContext::OnInitialize)
@@ -709,15 +709,15 @@ pub mod pallet {
 		/// Check all compile-time assumptions about [`crate::Config`].
 		#[cfg(test)]
 		fn integrity_test() {
-			Self::do_integrity_test().expect("Pallet config is valid; qed")
+			Self::do_integrity_test().expect("Pezpallet config is valid; qed")
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Remove a page which has no more messages remaining to be processed or is stale.
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::reap_page())]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::reap_page())]
 		pub fn reap_page(
 			origin: OriginFor<T>,
 			message_origin: MessageOriginOf<T>,
@@ -740,8 +740,8 @@ pub mod pallet {
 		///   of the message.
 		///
 		/// Benchmark complexity considerations: O(index + weight_limit).
-		#[pallet::call_index(1)]
-		#[pallet::weight(
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(
 			T::WeightInfo::execute_overweight_page_updated().max(
 			T::WeightInfo::execute_overweight_page_removed()).saturating_add(*weight_limit)
 		)]
@@ -814,7 +814,7 @@ enum MessageExecutionStatus {
 	StackLimitReached,
 }
 
-/// The context to pass to [`Pallet::service_queues_impl`] through on_idle and on_initialize hooks
+/// The context to pass to [`Pezpallet::service_queues_impl`] through on_idle and on_initialize hooks
 /// We don't want to throw the defensive message if called from on_idle hook
 #[derive(PartialEq)]
 enum ServiceQueuesContext {
@@ -826,7 +826,7 @@ enum ServiceQueuesContext {
 	ServiceQueues,
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Knit `origin` into the ready ring right at the end.
 	///
 	/// Return the two ready ring neighbours of `origin`.
@@ -951,7 +951,7 @@ impl<T: Config> Pallet<T> {
 			.saturating_add(T::WeightInfo::ready_ring_unknit())
 	}
 
-	/// Checks invariants of the pallet config.
+	/// Checks invariants of the pezpallet config.
 	///
 	/// The results of this can only be relied upon if the config values are set to constants.
 	#[cfg(test)]
@@ -1391,7 +1391,7 @@ impl<T: Config> Pallet<T> {
 		ItemExecutionStatus::Executed(is_processed)
 	}
 
-	/// Ensure the correctness of state of this pallet.
+	/// Ensure the correctness of state of this pezpallet.
 	///
 	/// # Assumptions-
 	///
@@ -1679,9 +1679,9 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-impl<T: Config> ForceSetHead<MessageOriginOf<T>> for Pallet<T> {
+impl<T: Config> ForceSetHead<MessageOriginOf<T>> for Pezpallet<T> {
 	fn force_set_head(weight: &mut WeightMeter, origin: &MessageOriginOf<T>) -> Result<bool, ()> {
-		Pallet::<T>::set_service_head(weight, origin)
+		Pezpallet::<T>::set_service_head(weight, origin)
 	}
 }
 
@@ -1730,13 +1730,13 @@ pub type MaxMessageLenOf<T> =
 	MaxMessageLen<MessageOriginOf<T>, <T as Config>::Size, <T as Config>::HeapSize>;
 /// The maximal encoded origin length.
 pub type MaxOriginLenOf<T> = MaxEncodedLenOf<MessageOriginOf<T>>;
-/// The `MessageOrigin` of this pallet.
+/// The `MessageOrigin` of this pezpallet.
 pub type MessageOriginOf<T> = <<T as Config>::MessageProcessor as ProcessMessage>::Origin;
 /// The maximal heap size of a page.
 pub type HeapSizeU32Of<T> = IntoU32<<T as Config>::HeapSize, <T as Config>::Size>;
-/// The [`Page`] of this pallet.
+/// The [`Page`] of this pezpallet.
 pub type PageOf<T> = Page<<T as Config>::Size, <T as Config>::HeapSize>;
-/// The [`BookState`] of this pallet.
+/// The [`BookState`] of this pezpallet.
 pub type BookStateOf<T> = BookState<MessageOriginOf<T>>;
 
 /// Converts a [`pezsp_core::Get`] with returns a type that can be cast into an `u32` into a `Get`
@@ -1748,7 +1748,7 @@ impl<T: Get<O>, O: Into<u32>> Get<u32> for IntoU32<T, O> {
 	}
 }
 
-impl<T: Config> ServiceQueues for Pallet<T> {
+impl<T: Config> ServiceQueues for Pezpallet<T> {
 	type OverweightMessageAddress = (MessageOriginOf<T>, PageIndex, T::Size);
 
 	fn service_queues(weight_limit: Weight) -> Weight {
@@ -1773,7 +1773,7 @@ impl<T: Config> ServiceQueues for Pallet<T> {
 			return Err(ExecuteOverweightError::InsufficientWeight);
 		}
 
-		Pallet::<T>::do_execute_overweight(message_origin, page, index, weight.remaining()).map_err(
+		Pezpallet::<T>::do_execute_overweight(message_origin, page, index, weight.remaining()).map_err(
 			|e| match e {
 				Error::<T>::InsufficientWeight => ExecuteOverweightError::InsufficientWeight,
 				Error::<T>::AlreadyProcessed => ExecuteOverweightError::AlreadyProcessed,
@@ -1787,7 +1787,7 @@ impl<T: Config> ServiceQueues for Pallet<T> {
 	}
 }
 
-impl<T: Config> EnqueueMessage<MessageOriginOf<T>> for Pallet<T> {
+impl<T: Config> EnqueueMessage<MessageOriginOf<T>> for Pezpallet<T> {
 	type MaxMessageLen =
 		MaxMessageLen<<T::MessageProcessor as ProcessMessage>::Origin, T::Size, T::HeapSize>;
 
@@ -1822,7 +1822,7 @@ impl<T: Config> EnqueueMessage<MessageOriginOf<T>> for Pallet<T> {
 	}
 }
 
-impl<T: Config> QueueFootprintQuery<MessageOriginOf<T>> for Pallet<T> {
+impl<T: Config> QueueFootprintQuery<MessageOriginOf<T>> for Pezpallet<T> {
 	type MaxMessageLen =
 		MaxMessageLen<<T::MessageProcessor as ProcessMessage>::Origin, T::Size, T::HeapSize>;
 

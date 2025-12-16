@@ -19,14 +19,14 @@ pub use pezsp_inherents::{
 	CheckInherentsResult, InherentData, InherentIdentifier, IsFatalError, MakeFatalError,
 };
 
-/// A pallet that provides or verifies an inherent extrinsic will implement this trait.
+/// A pezpallet that provides or verifies an inherent extrinsic will implement this trait.
 ///
-/// The pallet may provide an inherent, verify an inherent, or both provide and verify.
+/// The pezpallet may provide an inherent, verify an inherent, or both provide and verify.
 ///
 /// Briefly, inherent extrinsics ("inherents") are extrinsics that are added to a block by the block
 /// producer. See [`pezsp_inherents`] for more documentation on inherents.
 pub trait ProvideInherent {
-	/// The call type of the pallet.
+	/// The call type of the pezpallet.
 	type Call;
 	/// The error returned by `check_inherent`.
 	type Error: codec::Encode + IsFatalError;

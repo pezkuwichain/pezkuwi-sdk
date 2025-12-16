@@ -40,11 +40,11 @@ use pezsp_runtime::{DispatchError, DispatchResult};
 
 pub struct Collection<PalletInstance>(PhantomData<PalletInstance>);
 
-impl<T: Config<I>, I: 'static> AssetDefinition for Collection<Pallet<T, I>> {
+impl<T: Config<I>, I: 'static> AssetDefinition for Collection<Pezpallet<T, I>> {
 	type Id = T::CollectionId;
 }
 
-impl<T: Config<I>, I: 'static> Inspect<Owner<T::AccountId>> for Collection<Pallet<T, I>> {
+impl<T: Config<I>, I: 'static> Inspect<Owner<T::AccountId>> for Collection<Pezpallet<T, I>> {
 	fn inspect(
 		collection: &Self::Id,
 		_ownership: Owner<T::AccountId>,
@@ -55,7 +55,7 @@ impl<T: Config<I>, I: 'static> Inspect<Owner<T::AccountId>> for Collection<Palle
 	}
 }
 
-impl<T: Config<I>, I: 'static> Inspect<Bytes> for Collection<Pallet<T, I>> {
+impl<T: Config<I>, I: 'static> Inspect<Bytes> for Collection<Pezpallet<T, I>> {
 	fn inspect(collection: &Self::Id, _bytes: Bytes) -> Result<Vec<u8>, DispatchError> {
 		CollectionMetadataOf::<T, I>::get(collection)
 			.map(|m| m.data.into())
@@ -63,7 +63,7 @@ impl<T: Config<I>, I: 'static> Inspect<Bytes> for Collection<Pallet<T, I>> {
 	}
 }
 
-impl<'a, T: Config<I>, I: 'static> Inspect<Bytes<Attribute<'a>>> for Collection<Pallet<T, I>> {
+impl<'a, T: Config<I>, I: 'static> Inspect<Bytes<Attribute<'a>>> for Collection<Pezpallet<T, I>> {
 	fn inspect(
 		collection: &Self::Id,
 		strategy: Bytes<Attribute>,
@@ -78,13 +78,13 @@ impl<'a, T: Config<I>, I: 'static> Inspect<Bytes<Attribute<'a>>> for Collection<
 	}
 }
 
-impl<T: Config<I>, I: 'static> Create<WithCollectionConfig<T, I>> for Collection<Pallet<T, I>> {
+impl<T: Config<I>, I: 'static> Create<WithCollectionConfig<T, I>> for Collection<Pezpallet<T, I>> {
 	fn create(strategy: WithCollectionConfig<T, I>) -> Result<T::CollectionId, DispatchError> {
 		let WithConfig { config, extra: id_assignment } = strategy;
 		let collection = id_assignment.params;
 		let (ConfigValue(owner), ConfigValue(admin)) = config;
 
-		<Pallet<T, I>>::do_create_collection(
+		<Pezpallet<T, I>>::do_create_collection(
 			collection.clone(),
 			owner.clone(),
 			admin.clone(),
@@ -98,7 +98,7 @@ impl<T: Config<I>, I: 'static> Create<WithCollectionConfig<T, I>> for Collection
 }
 
 impl<T: Config<I>, I: 'static> Create<CheckOrigin<T::RuntimeOrigin, WithCollectionConfig<T, I>>>
-	for Collection<Pallet<T, I>>
+	for Collection<Pezpallet<T, I>>
 {
 	fn create(
 		strategy: CheckOrigin<T::RuntimeOrigin, WithCollectionConfig<T, I>>,
@@ -124,16 +124,16 @@ impl<T: Config<I>, I: 'static> Create<CheckOrigin<T::RuntimeOrigin, WithCollecti
 	}
 }
 
-impl<T: Config<I>, I: 'static> Destroy<WithWitness<DestroyWitness>> for Collection<Pallet<T, I>> {
+impl<T: Config<I>, I: 'static> Destroy<WithWitness<DestroyWitness>> for Collection<Pezpallet<T, I>> {
 	fn destroy(collection: &Self::Id, strategy: WithWitness<DestroyWitness>) -> DispatchResult {
 		let CheckState(witness, _) = strategy;
 
-		<Pallet<T, I>>::do_destroy_collection(collection.clone(), witness, None).map(|_witness| ())
+		<Pezpallet<T, I>>::do_destroy_collection(collection.clone(), witness, None).map(|_witness| ())
 	}
 }
 
 impl<T: Config<I>, I: 'static> Destroy<IfOwnedBy<T::AccountId, WithWitness<DestroyWitness>>>
-	for Collection<Pallet<T, I>>
+	for Collection<Pezpallet<T, I>>
 {
 	fn destroy(
 		collection: &Self::Id,
@@ -141,13 +141,13 @@ impl<T: Config<I>, I: 'static> Destroy<IfOwnedBy<T::AccountId, WithWitness<Destr
 	) -> DispatchResult {
 		let CheckState(owner, CheckState(witness, _)) = strategy;
 
-		<Pallet<T, I>>::do_destroy_collection(collection.clone(), witness, Some(owner))
+		<Pezpallet<T, I>>::do_destroy_collection(collection.clone(), witness, Some(owner))
 			.map(|_witness| ())
 	}
 }
 
 impl<T: Config<I>, I: 'static> Destroy<CheckOrigin<T::RuntimeOrigin, WithWitness<DestroyWitness>>>
-	for Collection<Pallet<T, I>>
+	for Collection<Pezpallet<T, I>>
 {
 	fn destroy(
 		collection: &Self::Id,
@@ -160,7 +160,7 @@ impl<T: Config<I>, I: 'static> Destroy<CheckOrigin<T::RuntimeOrigin, WithWitness
 			Err(origin) => Some(ensure_signed(origin)?),
 		};
 
-		<Pallet<T, I>>::do_destroy_collection(collection.clone(), witness, maybe_check_owner)
+		<Pezpallet<T, I>>::do_destroy_collection(collection.clone(), witness, maybe_check_owner)
 			.map(|_witness| ())
 	}
 }

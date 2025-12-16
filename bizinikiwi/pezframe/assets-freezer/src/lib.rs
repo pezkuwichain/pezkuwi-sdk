@@ -21,25 +21,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-//! # Assets Freezer Pallet
+//! # Assets Freezer Pezpallet
 //!
-//! A pallet capable of freezing fungibles from `pezpallet-assets`. This is an extension of
+//! A pezpallet capable of freezing fungibles from `pezpallet-assets`. This is an extension of
 //! `pezpallet-assets`, wrapping [`fungibles::Inspect`](`Inspect`).
 //! It implements both
 //! [`fungibles::freeze::Inspect`](InspectFreeze) and
 //! [`fungibles::freeze::Mutate`](MutateFreeze). The complexity
 //! of the operations is `O(n)`. where `n` is the variant count of `RuntimeFreezeReason`.
 //!
-//! ## Pallet API
+//! ## Pezpallet API
 //!
-//! See the [`pallet`] module for more information about the interfaces this pallet exposes,
+//! See the [`pezpallet`] module for more information about the interfaces this pezpallet exposes,
 //! including its configuration trait, dispatchables, storage items, events and errors.
 //!
 //! ## Overview
 //!
-//! This pallet provides the following functionality:
+//! This pezpallet provides the following functionality:
 //!
-//! - Pallet hooks allowing [`pezpallet-assets`] to know the frozen balance for an account on a given
+//! - Pezpallet hooks allowing [`pezpallet-assets`] to know the frozen balance for an account on a given
 //!   asset (see [`pezpallet_assets::FrozenBalance`]).
 //! - An implementation of [`fungibles::freeze::Inspect`](InspectFreeze) and
 //!   [`fungibles::freeze::Mutate`](MutateFreeze), allowing other pallets to manage freezes for the
@@ -57,7 +57,7 @@ use frame::{
 	},
 };
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 #[cfg(feature = "try-runtime")]
 use frame::try_runtime::TryRuntimeError;
@@ -69,34 +69,34 @@ mod tests;
 
 mod impls;
 
-#[frame::pallet]
-pub mod pallet {
+#[frame::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::config(with_default)]
+	#[pezpallet::config(with_default)]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config + pezpallet_assets::Config<I> {
 		/// The overarching freeze reason.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		type RuntimeFreezeReason: Parameter + Member + MaxEncodedLen + Copy + VariantCount;
 
 		/// The overarching event type.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self, I>>
 			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T, I = ()> {
 		/// Number of freezes on an account would exceed `MaxFreezes`.
 		TooManyFreezes,
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T, I = ()>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T, I = ()>(_);
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config<I>, I: 'static = ()> {
 		// `who`s frozen balance was increased by `amount`.
 		Frozen { who: T::AccountId, asset_id: T::AssetId, amount: T::Balance },
@@ -105,7 +105,7 @@ pub mod pallet {
 	}
 
 	/// A map that stores freezes applied on an account for a given AssetId.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Freezes<T: Config<I>, I: 'static = ()> = StorageDoubleMap<
 		_,
 		Blake2_128Concat,
@@ -120,7 +120,7 @@ pub mod pallet {
 	>;
 
 	/// A map that stores the current total frozen balance for every account on a given AssetId.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type FrozenBalances<T: Config<I>, I: 'static = ()> = StorageDoubleMap<
 		_,
 		Blake2_128Concat,
@@ -130,8 +130,8 @@ pub mod pallet {
 		T::Balance,
 	>;
 
-	#[pallet::hooks]
-	impl<T: Config<I>, I: 'static> Hooks<BlockNumberFor<T>> for Pallet<T, I> {
+	#[pezpallet::hooks]
+	impl<T: Config<I>, I: 'static> Hooks<BlockNumberFor<T>> for Pezpallet<T, I> {
 		#[cfg(feature = "try-runtime")]
 		fn try_state(_: BlockNumberFor<T>) -> Result<(), TryRuntimeError> {
 			Self::do_try_state()
@@ -139,7 +139,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config<I>, I: 'static> Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 	fn update_freezes(
 		asset: T::AssetId,
 		who: &T::AccountId,

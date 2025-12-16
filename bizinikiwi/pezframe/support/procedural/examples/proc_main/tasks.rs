@@ -26,13 +26,13 @@ use pezframe_support_procedural::pezpallet_section;
 #[pezpallet_section]
 mod tasks_example {
 	#[docify::export(tasks_example)]
-	#[pallet::tasks_experimental]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::tasks_experimental]
+	impl<T: Config> Pezpallet<T> {
 		/// Add a pair of numbers into the totals and remove them.
-		#[pallet::task_list(Numbers::<T>::iter_keys())]
-		#[pallet::task_condition(|i| Numbers::<T>::contains_key(i))]
-		#[pallet::task_weight(0.into())]
-		#[pallet::task_index(0)]
+		#[pezpallet::task_list(Numbers::<T>::iter_keys())]
+		#[pezpallet::task_condition(|i| Numbers::<T>::contains_key(i))]
+		#[pezpallet::task_weight(0.into())]
+		#[pezpallet::task_index(0)]
 		pub fn add_number_into_total(i: u32) -> DispatchResult {
 			let v = Numbers::<T>::take(i).ok_or(Error::<T>::NotFound)?;
 			Total::<T>::mutate(|(total_keys, total_values)| {

@@ -15,14 +15,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Multi phase, offchain election provider pallet.
+//! # Multi phase, offchain election provider pezpallet.
 //!
 //! Currently, this election-provider has two distinct phases (see [`Phase`]), **signed** and
 //! **unsigned**.
 //!
 //! ## Phases
 //!
-//! The timeline of pallet is as follows. At each block,
+//! The timeline of pezpallet is as follows. At each block,
 //! [`pezframe_election_provider_support::ElectionDataProvider::next_election_prediction`] is used to
 //! estimate the time remaining to the next call to
 //! [`pezframe_election_provider_support::ElectionProvider::elect`]. Based on this, a phase is chosen.
@@ -35,15 +35,15 @@
 //!    Phase::Off   +       Phase::Signed     +      Phase::Unsigned      +
 //! ```
 //!
-//! Note that the unsigned phase starts [`pallet::Config::UnsignedPhase`] blocks before the
+//! Note that the unsigned phase starts [`pezpallet::Config::UnsignedPhase`] blocks before the
 //! `next_election_prediction`, but only ends when a call to [`ElectionProvider::elect`] happens. If
 //! no `elect` happens, the signed phase is extended.
 //!
-//! > Given this, it is rather important for the user of this pallet to ensure it always terminates
+//! > Given this, it is rather important for the user of this pezpallet to ensure it always terminates
 //! election via `elect` before requesting a new one.
 //!
 //! Each of the phases can be disabled by essentially setting their length to zero. If both phases
-//! have length zero, then the pallet essentially runs only the fallback strategy, denoted by
+//! have length zero, then the pezpallet essentially runs only the fallback strategy, denoted by
 //! [`Config::Fallback`].
 //!
 //! ### Signed Phase
@@ -51,7 +51,7 @@
 //! In the signed phase, solutions (of type [`RawSolution`]) are submitted and queued on chain. A
 //! deposit is reserved, based on the size of the solution, for the cost of keeping this solution
 //! on-chain for a number of blocks, and the potential weight of the solution upon being checked. A
-//! maximum of `pallet::Config::SignedMaxSubmissions` solutions are stored. The queue is always
+//! maximum of `pezpallet::Config::SignedMaxSubmissions` solutions are stored. The queue is always
 //! sorted based on score (worse to best).
 //!
 //! Upon arrival of a new solution:
@@ -67,7 +67,7 @@
 //! origin can not bail out in any way, if their solution is queued.
 //!
 //! Upon the end of the signed phase, the solutions are examined from best to worse (i.e. `pop()`ed
-//! until drained). Each solution undergoes an expensive `Pallet::feasibility_check`, which ensures
+//! until drained). Each solution undergoes an expensive `Pezpallet::feasibility_check`, which ensures
 //! the score claimed by this score was correct, and it is valid based on the election data (i.e.
 //! votes and targets). At each step, if the current best solution passes the feasibility check,
 //! it is considered to be the best one. The sender of the origin is rewarded, and the rest of the
@@ -111,9 +111,9 @@
 //! ### Fallback
 //!
 //! If we reach the end of both phases (i.e. call to [`ElectionProvider::elect`] happens) and no
-//! good solution is queued, then the fallback strategy [`pallet::Config::Fallback`] is used to
+//! good solution is queued, then the fallback strategy [`pezpallet::Config::Fallback`] is used to
 //! determine what needs to be done. The on-chain election is slow, and contains no balancing or
-//! reduction post-processing. If [`pallet::Config::Fallback`] fails, the next phase
+//! reduction post-processing. If [`pezpallet::Config::Fallback`] fails, the next phase
 //! [`Phase::Emergency`] is enabled, which is a more *fail-safe* approach.
 //!
 //! ### Emergency Phase
@@ -124,15 +124,15 @@
 //!    provided
 //! 2. Any other unforeseen internal error
 //!
-//! A call to `T::ElectionProvider::elect` is made, and `Ok(_)` cannot be returned, then the pallet
+//! A call to `T::ElectionProvider::elect` is made, and `Ok(_)` cannot be returned, then the pezpallet
 //! proceeds to the [`Phase::Emergency`]. During this phase, any solution can be submitted from
-//! [`Config::ForceOrigin`], without any checking, via [`Pallet::set_emergency_election_result`]
+//! [`Config::ForceOrigin`], without any checking, via [`Pezpallet::set_emergency_election_result`]
 //! transaction. Hence, `[`Config::ForceOrigin`]` should only be set to a trusted origin, such as
 //! the council or root. Once submitted, the forced solution is kept in [`QueuedSolution`] until the
 //! next call to `T::ElectionProvider::elect`, where it is returned and [`Phase`] goes back to
 //! `Off`.
 //!
-//! This implies that the user of this pallet (i.e. a staking pallet) should re-try calling
+//! This implies that the user of this pezpallet (i.e. a staking pezpallet) should re-try calling
 //! `T::ElectionProvider::elect` in case of error, until `OK(_)` is returned.
 //!
 //! To generate an emergency solution, one must only provide one argument: [`Supports`]. This is
@@ -140,7 +140,7 @@
 //! supports can be generated by any means. In the simplest case, it could be manual. For example,
 //! in the case of massive network failure or misbehavior, [`Config::ForceOrigin`] might decide to
 //! select only a small number of emergency winners (which would greatly restrict the next validator
-//! set, if this pallet is used with `pezpallet-staking`). If the failure is for other technical
+//! set, if this pezpallet is used with `pezpallet-staking`). If the failure is for other technical
 //! reasons, then a simple and safe way to generate supports is using the staking-miner binary
 //! provided in the Pezkuwi repository. This binary has a subcommand named `emergency-solution`
 //! which is capable of connecting to a live network, and generating appropriate `supports` using a
@@ -172,13 +172,13 @@
 //!
 //! ## Error types
 //!
-//! This pallet provides a verbose error system to ease future debugging and debugging. The overall
+//! This pezpallet provides a verbose error system to ease future debugging and debugging. The overall
 //! hierarchy of errors is as follows:
 //!
-//! 1. [`pallet::Error`]: These are the errors that can be returned in the dispatchables of the
-//!    pallet, either signed or unsigned. Since decomposition with nested enums is not possible
+//! 1. [`pezpallet::Error`]: These are the errors that can be returned in the dispatchables of the
+//!    pezpallet, either signed or unsigned. Since decomposition with nested enums is not possible
 //!    here, they are prefixed with the logical sub-system to which they belong.
-//! 2. [`ElectionError`]: These are the errors that can be generated while the pallet is doing
+//! 2. [`ElectionError`]: These are the errors that can be generated while the pezpallet is doing
 //!    something in automatic scenarios, such as `offchain_worker` or `on_initialize`. These errors
 //!    are helpful for logging and are thus nested as:
 //!    - [`ElectionError::Miner`]: wraps a [`unsigned::MinerError`].
@@ -192,10 +192,10 @@
 //!	## Multi-page election support
 //!
 //! The [`pezframe_election_provider_support::ElectionDataProvider`] and
-//! [`pezframe_election_provider_support::ElectionProvider`] traits used by this pallet can support a
+//! [`pezframe_election_provider_support::ElectionProvider`] traits used by this pezpallet can support a
 //! multi-page election.
 //!
-//! However, this pallet only supports single-page election and data
+//! However, this pezpallet only supports single-page election and data
 //! provider and all the relevant trait implementation and configurations reflect that assumption.
 //!
 //! If external callers request the election of a page index higher than 0, the election will fail
@@ -206,7 +206,7 @@
 //! **Emergency-phase recovery script**: This script should be taken out of staking-miner in
 //! pezkuwi and ideally live in `bizinikiwi/utils/pezframe/elections`.
 //!
-//! **Challenge Phase**. We plan on adding a third phase to the pallet, called the challenge phase.
+//! **Challenge Phase**. We plan on adding a third phase to the pezpallet, called the challenge phase.
 //! This is a phase in which no further solutions are processed, and the current best solution might
 //! be challenged by anyone (signed or unsigned). The main plan here is to enforce the solution to
 //! be PJR. Checking PJR on-chain is quite expensive, yet proving that a solution is **not** PJR is
@@ -284,7 +284,7 @@ mod remote_mining;
 #[macro_use]
 pub mod helpers;
 
-/// This pallet only supports a single page election flow.
+/// This pezpallet only supports a single page election flow.
 pub(crate) const SINGLE_PAGE: u32 = 0;
 const LOG_TARGET: &str = "runtime::election-provider";
 
@@ -310,7 +310,7 @@ pub type SolutionTargetIndexOf<T> = <SolutionOf<T> as NposSolution>::TargetIndex
 /// The accuracy of the election, when submitted from offchain. Derived from [`SolutionOf`].
 pub type SolutionAccuracyOf<T> =
 	<SolutionOf<<T as crate::Config>::MinerConfig> as NposSolution>::Accuracy;
-/// A ready solution parameterized with this pallet's miner config.
+/// A ready solution parameterized with this pezpallet's miner config.
 pub type ReadySolutionOf<T> = ReadySolution<
 	<T as MinerConfig>::AccountId,
 	<T as MinerConfig>::MaxWinners,
@@ -319,7 +319,7 @@ pub type ReadySolutionOf<T> = ReadySolution<
 /// The fallback election type.
 pub type FallbackErrorOf<T> = <<T as crate::Config>::Fallback as ElectionProvider>::Error;
 
-/// Configuration for the benchmarks of the pallet.
+/// Configuration for the benchmarks of the pezpallet.
 pub trait BenchmarkingConfig {
 	/// Range of voters.
 	const VOTERS: [u32; 2];
@@ -337,7 +337,7 @@ pub trait BenchmarkingConfig {
 	const MAXIMUM_TARGETS: u32;
 }
 
-/// Current phase of the pallet.
+/// Current phase of the pezpallet.
 #[derive(PartialEq, Eq, Clone, Copy, Encode, Decode, DecodeWithMemTracking, Debug, TypeInfo)]
 pub enum Phase<Bn> {
 	/// Nothing, the election is not happening.
@@ -425,7 +425,7 @@ impl Default for ElectionCompute {
 /// This is what will get submitted to the chain.
 ///
 /// Such a solution should never become effective in anyway before being checked by the
-/// `Pallet::feasibility_check`.
+/// `Pezpallet::feasibility_check`.
 #[derive(
 	PartialEq,
 	Eq,
@@ -515,9 +515,9 @@ pub struct SolutionOrSnapshotSize {
 	pub targets: u32,
 }
 
-/// Internal errors of the pallet.
+/// Internal errors of the pezpallet.
 ///
-/// Note that this is different from [`pallet::Error`].
+/// Note that this is different from [`pezpallet::Error`].
 #[derive(pezframe_support::DebugNoBound)]
 #[cfg_attr(feature = "runtime-benchmarks", derive(strum::IntoStaticStr))]
 pub enum ElectionError<T: Config> {
@@ -530,7 +530,7 @@ pub enum ElectionError<T: Config> {
 	/// An error nested in the fallback.
 	Fallback(FallbackErrorOf<T>),
 	/// An error occurred when requesting an election result. The caller expects a multi-paged
-	/// election, which this pallet does not support.
+	/// election, which this pezpallet does not support.
 	MultiPageNotSupported,
 	/// No solution has been queued.
 	NothingQueued,
@@ -576,7 +576,7 @@ pub enum FeasibilityError {
 	WrongWinnerCount,
 	/// The snapshot is not available.
 	///
-	/// Kinda defensive: The pallet should technically never attempt to do a feasibility check when
+	/// Kinda defensive: The pezpallet should technically never attempt to do a feasibility check when
 	/// no snapshot is present.
 	SnapshotUnavailable,
 	/// Internal error from the election crate.
@@ -605,16 +605,16 @@ impl From<pezsp_npos_elections::Error> for FeasibilityError {
 	}
 }
 
-pub use pallet::*;
-#[pezframe_support::pallet]
-pub mod pallet {
+pub use pezpallet::*;
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_election_provider_support::{InstantElectionProvider, NposSolver};
 	use pezframe_support::{pezpallet_prelude::*, traits::EstimateCallFee};
 	use pezframe_system::pezpallet_prelude::*;
 	use pezsp_runtime::traits::Convert;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config + CreateBare<Call<Self>> {
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>>
@@ -634,18 +634,18 @@ pub mod pallet {
 
 		/// The minimum amount of improvement to the solution score that defines a solution as
 		/// "better" in the Signed phase.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type BetterSignedThreshold: Get<Perbill>;
 
 		/// The repeat threshold of the offchain worker.
 		///
 		/// For example, if it is 5, that means that at least 5 blocks will elapse between attempts
 		/// to submit the worker's solution.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type OffchainRepeat: Get<BlockNumberFor<Self>>;
 
 		/// The priority of the unsigned transaction submitted in the unsigned-phase
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MinerTxPriority: Get<TransactionPriority>;
 
 		/// Configurations of the embedded miner.
@@ -666,43 +666,43 @@ pub mod pallet {
 		/// update this value during an election, you _must_ ensure that
 		/// `SignedSubmissionIndices.len()` is less than or equal to the new value. Otherwise,
 		/// attempts to submit new solutions may cause a runtime panic.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type SignedMaxSubmissions: Get<u32>;
 
 		/// Maximum weight of a signed solution.
 		///
 		/// If [`Config::MinerConfig`] is being implemented to submit signed solutions (outside of
-		/// this pallet), then [`MinerConfig::solution_weight`] is used to compare against
+		/// this pezpallet), then [`MinerConfig::solution_weight`] is used to compare against
 		/// this value.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type SignedMaxWeight: Get<Weight>;
 
 		/// The maximum amount of unchecked solutions to refund the call fee for.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type SignedMaxRefunds: Get<u32>;
 
 		/// Base reward for a signed solution
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type SignedRewardBase: Get<BalanceOf<Self>>;
 
 		/// Per-byte deposit for a signed solution.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type SignedDepositByte: Get<BalanceOf<Self>>;
 
 		/// Per-weight deposit for a signed solution.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type SignedDepositWeight: Get<BalanceOf<Self>>;
 
 		/// Maximum number of winners that an election supports.
 		///
 		/// Note: This must always be greater or equal to `T::DataProvider::desired_targets()`.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxWinners: Get<u32>;
 
 		/// Maximum number of voters that can support a winner in an election solution.
 		///
 		/// This is needed to ensure election computation is bounded.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxBackersPerWinner: Get<u32>;
 
 		/// Something that calculates the signed deposit base based on the signed submissions queue
@@ -748,43 +748,43 @@ pub mod pallet {
 		/// OCW election solution miner algorithm implementation.
 		type Solver: NposSolver<AccountId = Self::AccountId>;
 
-		/// Origin that can control this pallet. Note that any action taken by this origin (such)
+		/// Origin that can control this pezpallet. Note that any action taken by this origin (such)
 		/// as providing an emergency solution is not checked. Thus, it must be a trusted origin.
 		type ForceOrigin: EnsureOrigin<Self::RuntimeOrigin>;
 
 		/// The configuration of benchmarking.
 		type BenchmarkingConfig: BenchmarkingConfig;
 
-		/// The weight of the pallet.
+		/// The weight of the pezpallet.
 		type WeightInfo: WeightInfo;
 	}
 
 	// Expose miner configs over the metadata such that they can be re-implemented.
-	#[pallet::extra_constants]
-	impl<T: Config> Pallet<T> {
-		#[pallet::constant_name(MinerMaxLength)]
+	#[pezpallet::extra_constants]
+	impl<T: Config> Pezpallet<T> {
+		#[pezpallet::constant_name(MinerMaxLength)]
 		fn max_length() -> u32 {
 			<T::MinerConfig as MinerConfig>::MaxLength::get()
 		}
 
-		#[pallet::constant_name(MinerMaxWeight)]
+		#[pezpallet::constant_name(MinerMaxWeight)]
 		fn max_weight() -> Weight {
 			<T::MinerConfig as MinerConfig>::MaxWeight::get()
 		}
 
-		#[pallet::constant_name(MinerMaxVotesPerVoter)]
+		#[pezpallet::constant_name(MinerMaxVotesPerVoter)]
 		fn max_votes_per_voter() -> u32 {
 			<T::MinerConfig as MinerConfig>::MaxVotesPerVoter::get()
 		}
 
-		#[pallet::constant_name(MinerMaxWinners)]
+		#[pezpallet::constant_name(MinerMaxWinners)]
 		fn max_winners() -> u32 {
 			<T::MinerConfig as MinerConfig>::MaxWinners::get()
 		}
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn on_initialize(now: BlockNumberFor<T>) -> Weight {
 			let next_election = T::DataProvider::next_election_prediction(now).max(now);
 
@@ -870,7 +870,7 @@ pub mod pallet {
 			// This should only come useful in an **abrupt** termination of execution, otherwise the
 			// guard will be dropped upon successful execution.
 			let mut lock =
-				StorageLock::<BlockAndTime<pezframe_system::Pallet<T>>>::with_block_deadline(
+				StorageLock::<BlockAndTime<pezframe_system::Pezpallet<T>>>::with_block_deadline(
 					unsigned::OFFCHAIN_LOCK,
 					T::UnsignedPhase::get().saturated_into(),
 				);
@@ -911,7 +911,7 @@ pub mod pallet {
 			// We only accept data provider who's maximum votes per voter matches our
 			// `T::Solution`'s `LIMIT`.
 			//
-			// NOTE that this pallet does not really need to enforce this in runtime. The
+			// NOTE that this pezpallet does not really need to enforce this in runtime. The
 			// solution cannot represent any voters more than `LIMIT` anyhow.
 			assert_eq!(
 				<T::DataProvider as ElectionDataProvider>::MaxVotesPerVoter::get(),
@@ -920,7 +920,7 @@ pub mod pallet {
 
 			// While it won't cause any failures, setting `SignedMaxRefunds` gt
 			// `SignedMaxSubmissions` is a red flag that the developer does not understand how to
-			// configure this pallet.
+			// configure this pezpallet.
 			assert!(T::SignedMaxSubmissions::get() >= T::SignedMaxRefunds::get());
 		}
 
@@ -930,8 +930,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Submit a solution for the unsigned phase.
 		///
 		/// The dispatch origin fo this call must be __none__.
@@ -946,8 +946,8 @@ pub mod pallet {
 		/// putting their authoring reward at risk.
 		///
 		/// No deposit or reward is associated with this submission.
-		#[pallet::call_index(0)]
-		#[pallet::weight((
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight((
 			T::WeightInfo::submit_unsigned(
 				witness.voters,
 				witness.targets,
@@ -997,8 +997,8 @@ pub mod pallet {
 		/// Dispatch origin must be aligned with `T::ForceOrigin`.
 		///
 		/// This check can be turned off by setting the value to `None`.
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::DbWeight::get().writes(1))]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::DbWeight::get().writes(1))]
 		pub fn set_minimum_untrusted_score(
 			origin: OriginFor<T>,
 			maybe_next_score: Option<ElectionScore>,
@@ -1008,7 +1008,7 @@ pub mod pallet {
 			Ok(())
 		}
 
-		/// Set a solution in the queue, to be handed out to the client of this pallet in the next
+		/// Set a solution in the queue, to be handed out to the client of this pezpallet in the next
 		/// call to `ElectionProvider::elect`.
 		///
 		/// This can only be set by `T::ForceOrigin`, and only when the phase is `Emergency`.
@@ -1016,8 +1016,8 @@ pub mod pallet {
 		/// The solution is not checked for any feasibility and is assumed to be trustworthy, as any
 		/// feasibility check itself can in principle cause the election process to fail (due to
 		/// memory/weight constrains).
-		#[pallet::call_index(2)]
-		#[pallet::weight(T::DbWeight::get().reads_writes(1, 1))]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(T::DbWeight::get().reads_writes(1, 1))]
 		pub fn set_emergency_election_result(
 			origin: OriginFor<T>,
 			supports: Supports<T::AccountId>,
@@ -1056,8 +1056,8 @@ pub mod pallet {
 		///
 		/// A deposit is reserved and recorded for the solution. Based on the outcome, the solution
 		/// might be rewarded, slashed, or get all or a part of the deposit back.
-		#[pallet::call_index(3)]
-		#[pallet::weight(T::WeightInfo::submit())]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(T::WeightInfo::submit())]
 		pub fn submit(
 			origin: OriginFor<T>,
 			raw_solution: Box<RawSolution<SolutionOf<T::MinerConfig>>>,
@@ -1128,8 +1128,8 @@ pub mod pallet {
 		///
 		/// This can only be called when [`Phase::Emergency`] is enabled, as an alternative to
 		/// calling [`Call::set_emergency_election_result`].
-		#[pallet::call_index(4)]
-		#[pallet::weight(T::DbWeight::get().reads_writes(1, 1))]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(T::DbWeight::get().reads_writes(1, 1))]
 		pub fn governance_fallback(origin: OriginFor<T>) -> DispatchResult {
 			T::ForceOrigin::ensure_origin(origin)?;
 			ensure!(CurrentPhase::<T>::get().is_emergency(), Error::<T>::CallNotAllowed);
@@ -1162,8 +1162,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A solution was stored with the given compute.
 		///
@@ -1195,8 +1195,8 @@ pub mod pallet {
 		},
 	}
 
-	/// Error of the pallet that can be returned in response to dispatches.
-	#[pallet::error]
+	/// Error of the pezpallet that can be returned in response to dispatches.
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Submission was too early.
 		PreDispatchEarlySubmission,
@@ -1230,8 +1230,8 @@ pub mod pallet {
 		PreDispatchDifferentRound,
 	}
 
-	#[pallet::validate_unsigned]
-	impl<T: Config> ValidateUnsigned for Pallet<T> {
+	#[pezpallet::validate_unsigned]
+	impl<T: Config> ValidateUnsigned for Pezpallet<T> {
 		type Call = Call<T>;
 		fn validate_unsigned(source: TransactionSource, call: &Self::Call) -> TransactionValidity {
 			if let Call::submit_unsigned { raw_solution, .. } = call {
@@ -1277,7 +1277,7 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::type_value]
+	#[pezpallet::type_value]
 	pub fn DefaultForRound() -> u32 {
 		1
 	}
@@ -1285,41 +1285,41 @@ pub mod pallet {
 	/// Internal counter for the number of rounds.
 	///
 	/// This is useful for de-duplication of transactions submitted to the pool, and general
-	/// diagnostics of the pallet.
+	/// diagnostics of the pezpallet.
 	///
 	/// This is merely incremented once per every time that an upstream `elect` is called.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Round<T: Config> = StorageValue<_, u32, ValueQuery, DefaultForRound>;
 
 	/// Current phase.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type CurrentPhase<T: Config> = StorageValue<_, Phase<BlockNumberFor<T>>, ValueQuery>;
 
 	/// Current best solution, signed or unsigned, queued to be returned upon `elect`.
 	///
 	/// Always sorted by score.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type QueuedSolution<T: Config> = StorageValue<_, ReadySolutionOf<T::MinerConfig>>;
 
 	/// Snapshot data of the round.
 	///
 	/// This is created at the beginning of the signed phase and cleared upon calling `elect`.
 	/// Note: This storage type must only be mutated through [`SnapshotWrapper`].
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Snapshot<T: Config> = StorageValue<_, RoundSnapshot<T::AccountId, VoterOf<T>>>;
 
 	/// Desired number of targets to elect for this round.
 	///
 	/// Only exists when [`Snapshot`] is present.
 	/// Note: This storage type must only be mutated through [`SnapshotWrapper`].
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type DesiredTargets<T> = StorageValue<_, u32>;
 
 	/// The metadata of the [`RoundSnapshot`]
 	///
 	/// Only exists when [`Snapshot`] is present.
 	/// Note: This storage type must only be mutated through [`SnapshotWrapper`].
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type SnapshotMetadata<T: Config> = StorageValue<_, SolutionOrSnapshotSize>;
 
 	// The following storage items collectively comprise `SignedSubmissions<T>`, and should never be
@@ -1335,7 +1335,7 @@ pub mod pallet {
 	/// We can't just use `SignedSubmissionIndices.len()`, because that's a bounded set; past its
 	/// capacity, it will simply saturate. We can't just iterate over `SignedSubmissionsMap`,
 	/// because iteration is slow. Instead, we store the value here.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type SignedSubmissionNextIndex<T: Config> = StorageValue<_, u32, ValueQuery>;
 
 	/// A sorted, bounded vector of `(score, block_number, index)`, where each `index` points to a
@@ -1344,7 +1344,7 @@ pub mod pallet {
 	/// We never need to process more than a single signed submission at a time. Signed submissions
 	/// can be quite large, so we're willing to pay the cost of multiple database accesses to access
 	/// them one at a time instead of reading and decoding all of them at once.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type SignedSubmissionIndices<T: Config> =
 		StorageValue<_, SubmissionIndicesOf<T>, ValueQuery>;
 
@@ -1355,7 +1355,7 @@ pub mod pallet {
 	///
 	/// Twox note: the key of the map is an auto-incrementing index which users cannot inspect or
 	/// affect; we shouldn't need a cryptographically secure hasher.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type SignedSubmissionsMap<T: Config> =
 		StorageMap<_, Twox64Concat, u32, SignedSubmissionOf<T>, OptionQuery>;
 
@@ -1365,7 +1365,7 @@ pub mod pallet {
 	/// feasible.
 	///
 	/// Can be set via `set_minimum_untrusted_score`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type MinimumUntrustedScore<T: Config> = StorageValue<_, ElectionScore>;
 
 	/// The in-code storage version.
@@ -1373,10 +1373,10 @@ pub mod pallet {
 	/// v1: https://github.com/pezkuwichain/kurdistan-sdk/issues/38/
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(1);
 
-	#[pallet::pallet]
-	#[pallet::without_storage_info]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::without_storage_info]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T>(_);
 }
 
 /// This wrapper is created for handling the synchronization of [`Snapshot`], [`SnapshotMetadata`]
@@ -1412,11 +1412,11 @@ impl<T: Config> SnapshotWrapper<T> {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Internal counter for the number of rounds.
 	///
 	/// This is useful for de-duplication of transactions submitted to the pool, and general
-	/// diagnostics of the pallet.
+	/// diagnostics of the pezpallet.
 	///
 	/// This is merely incremented once per every time that an upstream `elect` is called.
 	pub fn round() -> u32 {
@@ -1505,7 +1505,7 @@ impl<T: Config> Pallet<T> {
 		CurrentPhase::<T>::put(to);
 	}
 
-	/// Parts of [`create_snapshot`] that happen inside of this pallet.
+	/// Parts of [`create_snapshot`] that happen inside of this pezpallet.
 	///
 	/// Extracted for easier weight calculation.
 	fn create_snapshot_internal(
@@ -1534,11 +1534,11 @@ impl<T: Config> Pallet<T> {
 		SnapshotWrapper::<T>::set(metadata, desired_targets, &buffer);
 	}
 
-	/// Parts of [`create_snapshot`] that happen outside of this pallet.
+	/// Parts of [`create_snapshot`] that happen outside of this pezpallet.
 	///
 	/// Extracted for easier weight calculation.
 	///
-	/// Note: this pallet only supports one page of voter and target snapshots.
+	/// Note: this pezpallet only supports one page of voter and target snapshots.
 	fn create_snapshot_external(
 	) -> Result<(Vec<T::AccountId>, Vec<VoterOf<T>>, u32), ElectionError<T>> {
 		let election_bounds = T::ElectionBounds::get();
@@ -1562,7 +1562,7 @@ impl<T: Config> Pallet<T> {
 			})
 			.map_err(ElectionError::DataProvider)?;
 
-		let mut desired_targets = <Pallet<T> as ElectionProvider>::desired_targets_checked()
+		let mut desired_targets = <Pezpallet<T> as ElectionProvider>::desired_targets_checked()
 			.map_err(|e| ElectionError::DataProvider(e))?;
 
 		// If `desired_targets` > `targets.len()`, cap `desired_targets` to that level and emit a
@@ -1590,7 +1590,7 @@ impl<T: Config> Pallet<T> {
 	/// Returns `Ok(())` if operation is okay.
 	///
 	/// This is a *self-weighing* function, it will register its own extra weight as
-	/// [`DispatchClass::Mandatory`] with the system pallet.
+	/// [`DispatchClass::Mandatory`] with the system pezpallet.
 	pub fn create_snapshot() -> Result<(), ElectionError<T>> {
 		// this is self-weighing itself..
 		let (targets, voters, desired_targets) = Self::create_snapshot_external()?;
@@ -1603,11 +1603,11 @@ impl<T: Config> Pallet<T> {
 		Ok(())
 	}
 
-	/// Register some amount of weight directly with the system pallet.
+	/// Register some amount of weight directly with the system pezpallet.
 	///
 	/// This is always mandatory weight.
 	fn register_weight(weight: Weight) {
-		pezframe_system::Pallet::<T>::register_extra_weight_unchecked(
+		pezframe_system::Pezpallet::<T>::register_extra_weight_unchecked(
 			weight,
 			DispatchClass::Mandatory,
 		);
@@ -1714,7 +1714,7 @@ impl<T: Config> Pallet<T> {
 }
 
 #[cfg(feature = "try-runtime")]
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	fn do_try_state() -> Result<(), TryRuntimeError> {
 		Self::try_state_snapshot()?;
 		Self::try_state_signed_submissions_map()?;
@@ -1795,7 +1795,7 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-impl<T: Config> ElectionProvider for Pallet<T> {
+impl<T: Config> ElectionProvider for Pezpallet<T> {
 	type AccountId = T::AccountId;
 	type BlockNumber = BlockNumberFor<T>;
 	type Error = ElectionError<T>;
@@ -1806,7 +1806,7 @@ impl<T: Config> ElectionProvider for Pallet<T> {
 	type DataProvider = T::DataProvider;
 
 	fn elect(page: PageIndex) -> Result<BoundedSupportsOf<Self>, Self::Error> {
-		// Note: this pallet **MUST** only by used in the single-page mode.
+		// Note: this pezpallet **MUST** only by used in the single-page mode.
 		ensure!(page == SINGLE_PAGE, ElectionError::<T>::MultiPageNotSupported);
 
 		let res = match Self::do_elect() {
@@ -1836,7 +1836,7 @@ impl<T: Config> ElectionProvider for Pallet<T> {
 	fn start() -> Result<(), Self::Error> {
 		log!(
 			warn,
-			"we received signal, but this pallet works in the basis of legacy pull based election"
+			"we received signal, but this pezpallet works in the basis of legacy pull based election"
 		);
 		Ok(())
 	}

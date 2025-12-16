@@ -34,7 +34,7 @@ use pezpallet_nomination_pools::{
 	BalanceOf, BondExtra, BondedPoolInner, BondedPools, ClaimPermission, ClaimPermissions,
 	Commission, CommissionChangeRate, CommissionClaimPermission, ConfigOp, GlobalMaxCommission,
 	MaxPoolMembers, MaxPoolMembersPerPool, MaxPools, Metadata, MinCreateBond, MinJoinBond,
-	Pallet as Pools, PoolId, PoolMembers, PoolRoles, PoolState, RewardPools, SubPoolsStorage,
+	Pezpallet as Pools, PoolId, PoolMembers, PoolRoles, PoolState, RewardPools, SubPoolsStorage,
 };
 use pezpallet_staking::MaxNominationsOf;
 use pezsp_runtime::{
@@ -58,7 +58,7 @@ pub trait Config:
 {
 }
 
-pub struct Pallet<T: Config>(Pools<T>);
+pub struct Pezpallet<T: Config>(Pools<T>);
 
 fn create_funded_user_with_balance<T: pezpallet_nomination_pools::Config>(
 	string: &'static str,
@@ -136,7 +136,7 @@ fn migrate_to_transfer_stake<T: Config>(pool_id: PoolId) {
 	// Note: we didn't require ED until pezpallet-staking migrated from locks to holds.
 	let _ = CurrencyOf::<T>::mint_into(&pool_acc, CurrencyOf::<T>::minimum_balance());
 
-	pezpallet_staking::Pallet::<T>::migrate_to_direct_staker(&pool_acc);
+	pezpallet_staking::Pezpallet::<T>::migrate_to_direct_staker(&pool_acc);
 }
 
 fn vote_to_balance<T: pezpallet_nomination_pools::Config>(
@@ -215,7 +215,7 @@ impl<T: Config> ListScenario<T> {
 			vec![account("random_validator", 0, USER_SEED)],
 		)?;
 
-		let weight_of = pezpallet_staking::Pallet::<T>::weight_of_fn();
+		let weight_of = pezpallet_staking::Pezpallet::<T>::weight_of_fn();
 		assert_eq!(vote_to_balance::<T>(weight_of(&pool_origin1)).unwrap(), origin_weight);
 		assert_eq!(vote_to_balance::<T>(weight_of(&pool_origin2)).unwrap(), origin_weight);
 		assert_eq!(vote_to_balance::<T>(weight_of(&pool_dest1)).unwrap(), dest_weight);
@@ -254,7 +254,7 @@ impl<T: Config> ListScenario<T> {
 		Pools::<T>::join(RuntimeOrigin::Signed(joiner.clone()).into(), amount, 1).unwrap();
 
 		// check that the vote weight is still the same as the original bonded
-		let weight_of = pezpallet_staking::Pallet::<T>::weight_of_fn();
+		let weight_of = pezpallet_staking::Pezpallet::<T>::weight_of_fn();
 		assert_eq!(vote_to_balance::<T>(weight_of(&self.origin1)).unwrap(), original_bonded);
 
 		// check the member was added correctly
@@ -992,7 +992,7 @@ mod benchmarks {
 				Some(deposit_amount),
 		);
 
-		// ugly type conversion between balances of pallet staking and pools (which really are same
+		// ugly type conversion between balances of pezpallet staking and pools (which really are same
 		// type). Maybe there is a better way?
 		let slash_amount: u128 = deposit_amount.into() / 2;
 
@@ -1173,5 +1173,5 @@ mod benchmarks {
 		assert_eq!(PoolMembers::<T>::get(&depositor).unwrap().total_balance(), deposit_amount);
 	}
 
-	impl_benchmark_test_suite!(Pallet, crate::mock::new_test_ext(), crate::mock::Runtime);
+	impl_benchmark_test_suite!(Pezpallet, crate::mock::new_test_ext(), crate::mock::Runtime);
 }

@@ -23,7 +23,7 @@ use pezframe_support::assert_ok;
 #[test]
 fn try_state_works_with_uninitialized_pallet() {
 	pezsp_io::TestExternalities::default().execute_with(|| {
-		// Verify the pallet is uninitialized
+		// Verify the pezpallet is uninitialized
 		assert!(ActiveEra::<Test>::get().is_none());
 		assert!(CurrentEra::<Test>::get().is_none());
 		assert_eq!(Bonded::<Test>::iter().count(), 0);

@@ -239,7 +239,7 @@ parameter_types! {
 
 const_assert!(NORMAL_DISPATCH_RATIO.deconstruct() >= AVERAGE_ON_INITIALIZE_RATIO.deconstruct());
 
-/// Calls that can bypass the safe-mode pallet.
+/// Calls that can bypass the safe-mode pezpallet.
 pub struct SafeModeWhitelistedCalls;
 impl Contains<RuntimeCall> for SafeModeWhitelistedCalls {
 	fn contains(call: &RuntimeCall) -> bool {
@@ -250,7 +250,7 @@ impl Contains<RuntimeCall> for SafeModeWhitelistedCalls {
 	}
 }
 
-/// Calls that cannot be paused by the tx-pause pallet.
+/// Calls that cannot be paused by the tx-pause pezpallet.
 pub struct TxPauseWhitelistedCalls;
 /// Whitelist `Balances::transfer_keep_alive`, all others are pauseable.
 impl Contains<RuntimeCallNameOf<Runtime>> for TxPauseWhitelistedCalls {
@@ -399,7 +399,7 @@ impl pezpallet_multisig::Config for Runtime {
 	type DepositFactor = DepositFactor;
 	type MaxSignatories = ConstU32<100>;
 	type WeightInfo = pezpallet_multisig::weights::BizinikiwiWeight<Runtime>;
-	type BlockNumberProvider = pezframe_system::Pallet<Runtime>;
+	type BlockNumberProvider = pezframe_system::Pezpallet<Runtime>;
 }
 
 parameter_types! {
@@ -488,7 +488,7 @@ impl pezpallet_proxy::Config for Runtime {
 	type CallHasher = BlakeTwo256;
 	type AnnouncementDepositBase = AnnouncementDepositBase;
 	type AnnouncementDepositFactor = AnnouncementDepositFactor;
-	type BlockNumberProvider = pezframe_system::Pallet<Runtime>;
+	type BlockNumberProvider = pezframe_system::Pezpallet<Runtime>;
 }
 
 parameter_types! {
@@ -510,7 +510,7 @@ impl pezpallet_scheduler::Config for Runtime {
 	type WeightInfo = pezpallet_scheduler::weights::BizinikiwiWeight<Runtime>;
 	type OriginPrivilegeCmp = EqualPrivilegeOnly;
 	type Preimages = Preimage;
-	type BlockNumberProvider = pezframe_system::Pallet<Runtime>;
+	type BlockNumberProvider = pezframe_system::Pezpallet<Runtime>;
 }
 
 impl pezpallet_glutton::Config for Runtime {
@@ -593,7 +593,7 @@ impl pezpallet_balances::Config for Runtime {
 	type DustRemoval = ();
 	type RuntimeEvent = RuntimeEvent;
 	type ExistentialDeposit = ExistentialDeposit;
-	type AccountStore = pezframe_system::Pallet<Runtime>;
+	type AccountStore = pezframe_system::Pezpallet<Runtime>;
 	type WeightInfo = pezpallet_balances::weights::BizinikiwiWeight<Runtime>;
 	type FreezeIdentifier = RuntimeFreezeReason;
 	type MaxFreezes = VariantCountOf<RuntimeFreezeReason>;
@@ -821,14 +821,14 @@ parameter_types! {
 
 	pub MaxNominations: u32 = <NposSolution16 as pezframe_election_provider_support::NposSolution>::LIMIT as u32;
 	pub MaxElectingVotersSolution: u32 = 40_000;
-	// The maximum winners that can be elected by the Election pallet which is equivalent to the
-	// maximum active validators the staking pallet can have.
+	// The maximum winners that can be elected by the Election pezpallet which is equivalent to the
+	// maximum active validators the staking pezpallet can have.
 	pub MaxActiveValidators: u32 = 1000;
 }
 
-/// The numbers configured here could always be more than the the maximum limits of staking pallet
+/// The numbers configured here could always be more than the the maximum limits of staking pezpallet
 /// to ensure election snapshot will not run out of memory. For now, we set them to smaller values
-/// since the staking is bounded and the weight pipeline takes hours for this single pallet.
+/// since the staking is bounded and the weight pipeline takes hours for this single pezpallet.
 pub struct ElectionProviderBenchmarkConfig;
 impl pezpallet_election_provider_multi_phase::BenchmarkingConfig for ElectionProviderBenchmarkConfig {
 	const VOTERS: [u32; 2] = [1000, 2000];
@@ -940,7 +940,7 @@ impl pezpallet_bags_list::Config<VoterBagsListInstance> for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo = pezpallet_bags_list::weights::BizinikiwiWeight<Runtime>;
 	/// The voter bags-list is loosely kept up to date, and the real source of truth for the score
-	/// of each node is the staking pallet.
+	/// of each node is the staking pezpallet.
 	type ScoreProvider = Staking;
 	type BagThresholds = BagThresholds;
 	type MaxAutoRebagPerBlock = AutoRebagNumber;
@@ -1051,7 +1051,7 @@ impl pezpallet_referenda::Config for Runtime {
 	type RuntimeCall = RuntimeCall;
 	type RuntimeEvent = RuntimeEvent;
 	type Scheduler = Scheduler;
-	type Currency = pezpallet_balances::Pallet<Self>;
+	type Currency = pezpallet_balances::Pezpallet<Self>;
 	type SubmitOrigin = EnsureSigned<AccountId>;
 	type CancelOrigin = EnsureRoot<AccountId>;
 	type KillOrigin = EnsureRoot<AccountId>;
@@ -1072,7 +1072,7 @@ impl pezpallet_referenda::Config<pezpallet_referenda::Instance2> for Runtime {
 	type RuntimeCall = RuntimeCall;
 	type RuntimeEvent = RuntimeEvent;
 	type Scheduler = Scheduler;
-	type Currency = pezpallet_balances::Pallet<Self>;
+	type Currency = pezpallet_balances::Pezpallet<Self>;
 	type SubmitOrigin = EnsureSigned<AccountId>;
 	type CancelOrigin = EnsureRoot<AccountId>;
 	type KillOrigin = EnsureRoot<AccountId>;
@@ -1486,7 +1486,7 @@ impl pezpallet_contracts::Config for Runtime {
 	type DepositPerByte = DepositPerByte;
 	type DefaultDepositLimit = DefaultDepositLimit;
 	type CallStack = [pezpallet_contracts::Frame<Self>; 5];
-	type WeightPrice = pezpallet_transaction_payment::Pallet<Self>;
+	type WeightPrice = pezpallet_transaction_payment::Pezpallet<Self>;
 	type WeightInfo = pezpallet_contracts::weights::BizinikiwiWeight<Self>;
 	type ChainExtension = ();
 	type Schedule = Schedule;
@@ -2004,7 +2004,7 @@ impl pezpallet_asset_rewards::Config for Runtime {
 		CreationHoldReason,
 		ConstantStoragePrice<StakePoolCreationDeposit, Balance>,
 	>;
-	type BlockNumberProvider = pezframe_system::Pallet<Runtime>;
+	type BlockNumberProvider = pezframe_system::Pezpallet<Runtime>;
 	#[cfg(feature = "runtime-benchmarks")]
 	type BenchmarkHelper = AssetRewardsBenchmarkHelper;
 }
@@ -2204,7 +2204,7 @@ impl pezpallet_nfts::Config for Runtime {
 	type Helper = ();
 	type CreateOrigin = AsEnsureOriginWithArg<EnsureSigned<AccountId>>;
 	type Locker = ();
-	type BlockNumberProvider = pezframe_system::Pallet<Runtime>;
+	type BlockNumberProvider = pezframe_system::Pezpallet<Runtime>;
 }
 
 impl pezpallet_transaction_storage::Config for Runtime {
@@ -2594,269 +2594,269 @@ mod runtime {
 	pub struct Runtime;
 
 	#[runtime::pezpallet_index(0)]
-	pub type System = pezframe_system::Pallet<Runtime>;
+	pub type System = pezframe_system::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(1)]
-	pub type Utility = pezpallet_utility::Pallet<Runtime>;
+	pub type Utility = pezpallet_utility::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(2)]
-	pub type Babe = pezpallet_babe::Pallet<Runtime>;
+	pub type Babe = pezpallet_babe::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(3)]
-	pub type Timestamp = pezpallet_timestamp::Pallet<Runtime>;
+	pub type Timestamp = pezpallet_timestamp::Pezpallet<Runtime>;
 
 	// Authorship must be before session in order to note author in the correct session and era
 	// for im-online and staking.
 	#[runtime::pezpallet_index(4)]
-	pub type Authorship = pezpallet_authorship::Pallet<Runtime>;
+	pub type Authorship = pezpallet_authorship::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(5)]
-	pub type Indices = pezpallet_indices::Pallet<Runtime>;
+	pub type Indices = pezpallet_indices::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(6)]
-	pub type Balances = pezpallet_balances::Pallet<Runtime>;
+	pub type Balances = pezpallet_balances::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(7)]
-	pub type TransactionPayment = pezpallet_transaction_payment::Pallet<Runtime>;
+	pub type TransactionPayment = pezpallet_transaction_payment::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(9)]
-	pub type AssetConversionTxPayment = pezpallet_asset_conversion_tx_payment::Pallet<Runtime>;
+	pub type AssetConversionTxPayment = pezpallet_asset_conversion_tx_payment::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(10)]
-	pub type ElectionProviderMultiPhase = pezpallet_election_provider_multi_phase::Pallet<Runtime>;
+	pub type ElectionProviderMultiPhase = pezpallet_election_provider_multi_phase::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(11)]
-	pub type Staking = pezpallet_staking::Pallet<Runtime>;
+	pub type Staking = pezpallet_staking::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(12)]
-	pub type Session = pezpallet_session::Pallet<Runtime>;
+	pub type Session = pezpallet_session::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(13)]
-	pub type Democracy = pezpallet_democracy::Pallet<Runtime>;
+	pub type Democracy = pezpallet_democracy::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(14)]
-	pub type Council = pezpallet_collective::Pallet<Runtime, Instance1>;
+	pub type Council = pezpallet_collective::Pezpallet<Runtime, Instance1>;
 
 	#[runtime::pezpallet_index(15)]
-	pub type TechnicalCommittee = pezpallet_collective::Pallet<Runtime, Instance2>;
+	pub type TechnicalCommittee = pezpallet_collective::Pezpallet<Runtime, Instance2>;
 
 	#[runtime::pezpallet_index(16)]
-	pub type Elections = pezpallet_elections_phragmen::Pallet<Runtime>;
+	pub type Elections = pezpallet_elections_phragmen::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(17)]
-	pub type TechnicalMembership = pezpallet_membership::Pallet<Runtime, Instance1>;
+	pub type TechnicalMembership = pezpallet_membership::Pezpallet<Runtime, Instance1>;
 
 	#[runtime::pezpallet_index(18)]
-	pub type Grandpa = pezpallet_grandpa::Pallet<Runtime>;
+	pub type Grandpa = pezpallet_grandpa::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(19)]
-	pub type Treasury = pezpallet_treasury::Pallet<Runtime>;
+	pub type Treasury = pezpallet_treasury::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(20)]
-	pub type AssetRate = pezpallet_asset_rate::Pallet<Runtime>;
+	pub type AssetRate = pezpallet_asset_rate::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(21)]
-	pub type Contracts = pezpallet_contracts::Pallet<Runtime>;
+	pub type Contracts = pezpallet_contracts::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(22)]
-	pub type Sudo = pezpallet_sudo::Pallet<Runtime>;
+	pub type Sudo = pezpallet_sudo::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(23)]
-	pub type ImOnline = pezpallet_im_online::Pallet<Runtime>;
+	pub type ImOnline = pezpallet_im_online::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(24)]
-	pub type AuthorityDiscovery = pezpallet_authority_discovery::Pallet<Runtime>;
+	pub type AuthorityDiscovery = pezpallet_authority_discovery::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(25)]
-	pub type Offences = pezpallet_offences::Pallet<Runtime>;
+	pub type Offences = pezpallet_offences::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(26)]
-	pub type Historical = pezpallet_session_historical::Pallet<Runtime>;
+	pub type Historical = pezpallet_session_historical::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(27)]
-	pub type RandomnessCollectiveFlip = pezpallet_insecure_randomness_collective_flip::Pallet<Runtime>;
+	pub type RandomnessCollectiveFlip = pezpallet_insecure_randomness_collective_flip::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(28)]
-	pub type Identity = pezpallet_identity::Pallet<Runtime>;
+	pub type Identity = pezpallet_identity::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(29)]
-	pub type Society = pezpallet_society::Pallet<Runtime>;
+	pub type Society = pezpallet_society::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(30)]
-	pub type Recovery = pezpallet_recovery::Pallet<Runtime>;
+	pub type Recovery = pezpallet_recovery::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(31)]
-	pub type Vesting = pezpallet_vesting::Pallet<Runtime>;
+	pub type Vesting = pezpallet_vesting::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(32)]
-	pub type Scheduler = pezpallet_scheduler::Pallet<Runtime>;
+	pub type Scheduler = pezpallet_scheduler::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(33)]
-	pub type Glutton = pezpallet_glutton::Pallet<Runtime>;
+	pub type Glutton = pezpallet_glutton::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(34)]
-	pub type Preimage = pezpallet_preimage::Pallet<Runtime>;
+	pub type Preimage = pezpallet_preimage::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(35)]
-	pub type Proxy = pezpallet_proxy::Pallet<Runtime>;
+	pub type Proxy = pezpallet_proxy::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(36)]
-	pub type Multisig = pezpallet_multisig::Pallet<Runtime>;
+	pub type Multisig = pezpallet_multisig::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(37)]
-	pub type Bounties = pezpallet_bounties::Pallet<Runtime>;
+	pub type Bounties = pezpallet_bounties::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(38)]
-	pub type Tips = pezpallet_tips::Pallet<Runtime>;
+	pub type Tips = pezpallet_tips::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(39)]
-	pub type Assets = pezpallet_assets::Pallet<Runtime, Instance1>;
+	pub type Assets = pezpallet_assets::Pezpallet<Runtime, Instance1>;
 
 	#[runtime::pezpallet_index(40)]
-	pub type PoolAssets = pezpallet_assets::Pallet<Runtime, Instance2>;
+	pub type PoolAssets = pezpallet_assets::Pezpallet<Runtime, Instance2>;
 
 	#[runtime::pezpallet_index(41)]
-	pub type Beefy = pezpallet_beefy::Pallet<Runtime>;
+	pub type Beefy = pezpallet_beefy::Pezpallet<Runtime>;
 
 	// MMR leaf construction must be after session in order to have a leaf's next_auth_set
 	// refer to block<N>. See issue pezkuwi-fellows/runtimes#160 for details.
 	#[runtime::pezpallet_index(42)]
-	pub type Mmr = pezpallet_mmr::Pallet<Runtime>;
+	pub type Mmr = pezpallet_mmr::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(43)]
-	pub type MmrLeaf = pezpallet_beefy_mmr::Pallet<Runtime>;
+	pub type MmrLeaf = pezpallet_beefy_mmr::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(44)]
-	pub type Lottery = pezpallet_lottery::Pallet<Runtime>;
+	pub type Lottery = pezpallet_lottery::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(45)]
-	pub type Nis = pezpallet_nis::Pallet<Runtime>;
+	pub type Nis = pezpallet_nis::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(46)]
-	pub type Uniques = pezpallet_uniques::Pallet<Runtime>;
+	pub type Uniques = pezpallet_uniques::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(47)]
-	pub type Nfts = pezpallet_nfts::Pallet<Runtime>;
+	pub type Nfts = pezpallet_nfts::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(48)]
-	pub type NftFractionalization = pezpallet_nft_fractionalization::Pallet<Runtime>;
+	pub type NftFractionalization = pezpallet_nft_fractionalization::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(49)]
-	pub type Salary = pezpallet_salary::Pallet<Runtime>;
+	pub type Salary = pezpallet_salary::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(50)]
-	pub type CoreFellowship = pezpallet_core_fellowship::Pallet<Runtime>;
+	pub type CoreFellowship = pezpallet_core_fellowship::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(51)]
-	pub type TransactionStorage = pezpallet_transaction_storage::Pallet<Runtime>;
+	pub type TransactionStorage = pezpallet_transaction_storage::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(52)]
-	pub type VoterList = pezpallet_bags_list::Pallet<Runtime, Instance1>;
+	pub type VoterList = pezpallet_bags_list::Pezpallet<Runtime, Instance1>;
 
 	#[runtime::pezpallet_index(53)]
-	pub type StateTrieMigration = pezpallet_state_trie_migration::Pallet<Runtime>;
+	pub type StateTrieMigration = pezpallet_state_trie_migration::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(54)]
-	pub type ChildBounties = pezpallet_child_bounties::Pallet<Runtime>;
+	pub type ChildBounties = pezpallet_child_bounties::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(55)]
-	pub type Referenda = pezpallet_referenda::Pallet<Runtime>;
+	pub type Referenda = pezpallet_referenda::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(56)]
-	pub type Remark = pezpallet_remark::Pallet<Runtime>;
+	pub type Remark = pezpallet_remark::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(57)]
-	pub type RootTesting = pezpallet_root_testing::Pallet<Runtime>;
+	pub type RootTesting = pezpallet_root_testing::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(58)]
-	pub type ConvictionVoting = pezpallet_conviction_voting::Pallet<Runtime>;
+	pub type ConvictionVoting = pezpallet_conviction_voting::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(59)]
-	pub type Whitelist = pezpallet_whitelist::Pallet<Runtime>;
+	pub type Whitelist = pezpallet_whitelist::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(60)]
-	pub type AllianceMotion = pezpallet_collective::Pallet<Runtime, Instance3>;
+	pub type AllianceMotion = pezpallet_collective::Pezpallet<Runtime, Instance3>;
 
 	#[runtime::pezpallet_index(61)]
-	pub type Alliance = pezpallet_alliance::Pallet<Runtime>;
+	pub type Alliance = pezpallet_alliance::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(62)]
-	pub type NominationPools = pezpallet_nomination_pools::Pallet<Runtime>;
+	pub type NominationPools = pezpallet_nomination_pools::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(63)]
-	pub type RankedPolls = pezpallet_referenda::Pallet<Runtime, Instance2>;
+	pub type RankedPolls = pezpallet_referenda::Pezpallet<Runtime, Instance2>;
 
 	#[runtime::pezpallet_index(64)]
-	pub type RankedCollective = pezpallet_ranked_collective::Pallet<Runtime>;
+	pub type RankedCollective = pezpallet_ranked_collective::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(65)]
-	pub type AssetConversion = pezpallet_asset_conversion::Pallet<Runtime>;
+	pub type AssetConversion = pezpallet_asset_conversion::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(66)]
-	pub type FastUnstake = pezpallet_fast_unstake::Pallet<Runtime>;
+	pub type FastUnstake = pezpallet_fast_unstake::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(67)]
-	pub type MessageQueue = pezpallet_message_queue::Pallet<Runtime>;
+	pub type MessageQueue = pezpallet_message_queue::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(68)]
-	pub type Pov = pezframe_benchmarking_pallet_pov::Pallet<Runtime>;
+	pub type Pov = pezframe_benchmarking_pallet_pov::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(69)]
-	pub type TxPause = pezpallet_tx_pause::Pallet<Runtime>;
+	pub type TxPause = pezpallet_tx_pause::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(70)]
-	pub type SafeMode = pezpallet_safe_mode::Pallet<Runtime>;
+	pub type SafeMode = pezpallet_safe_mode::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(71)]
-	pub type Statement = pezpallet_statement::Pallet<Runtime>;
+	pub type Statement = pezpallet_statement::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(72)]
-	pub type MultiBlockMigrations = pezpallet_migrations::Pallet<Runtime>;
+	pub type MultiBlockMigrations = pezpallet_migrations::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(73)]
-	pub type Broker = pezpallet_broker::Pallet<Runtime>;
+	pub type Broker = pezpallet_broker::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(74)]
-	pub type TasksExample = pezpallet_example_tasks::Pallet<Runtime>;
+	pub type TasksExample = pezpallet_example_tasks::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(75)]
-	pub type Mixnet = pezpallet_mixnet::Pallet<Runtime>;
+	pub type Mixnet = pezpallet_mixnet::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(76)]
-	pub type Parameters = pezpallet_parameters::Pallet<Runtime>;
+	pub type Parameters = pezpallet_parameters::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(77)]
-	pub type SkipFeelessPayment = pezpallet_skip_feeless_payment::Pallet<Runtime>;
+	pub type SkipFeelessPayment = pezpallet_skip_feeless_payment::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(78)]
-	pub type PalletExampleMbms = pezpallet_example_mbm::Pallet<Runtime>;
+	pub type PalletExampleMbms = pezpallet_example_mbm::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(79)]
-	pub type AssetConversionMigration = pezpallet_asset_conversion_ops::Pallet<Runtime>;
+	pub type AssetConversionMigration = pezpallet_asset_conversion_ops::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(80)]
-	pub type Revive = pezpallet_revive::Pallet<Runtime>;
+	pub type Revive = pezpallet_revive::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(81)]
-	pub type VerifySignature = pezpallet_verify_signature::Pallet<Runtime>;
+	pub type VerifySignature = pezpallet_verify_signature::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(82)]
-	pub type DelegatedStaking = pezpallet_delegated_staking::Pallet<Runtime>;
+	pub type DelegatedStaking = pezpallet_delegated_staking::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(83)]
-	pub type AssetRewards = pezpallet_asset_rewards::Pallet<Runtime>;
+	pub type AssetRewards = pezpallet_asset_rewards::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(84)]
-	pub type AssetsFreezer = pezpallet_assets_freezer::Pallet<Runtime, Instance1>;
+	pub type AssetsFreezer = pezpallet_assets_freezer::Pezpallet<Runtime, Instance1>;
 
 	#[runtime::pezpallet_index(85)]
-	pub type Oracle = pezpallet_oracle::Pallet<Runtime>;
+	pub type Oracle = pezpallet_oracle::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(89)]
-	pub type MetaTx = pezpallet_meta_tx::Pallet<Runtime>;
+	pub type MetaTx = pezpallet_meta_tx::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(90)]
-	pub type MultiAssetBounties = pezpallet_multi_asset_bounties::Pallet<Runtime>;
+	pub type MultiAssetBounties = pezpallet_multi_asset_bounties::Pezpallet<Runtime>;
 }
 
 /// The address format for describing accounts.
@@ -3407,12 +3407,12 @@ pezpallet_revive::impl_runtime_apis_plus_revive_traits!(
 	impl pezkuwi_sdk::pezpallet_oracle_runtime_api::OracleApi<Block, u32, u32, u128> for Runtime {
 		fn get_value(_provider_id: u32, key: u32) -> Option<u128> {
 			// ProviderId is unused as we only have 1 provider
-			pezpallet_oracle::Pallet::<Runtime>::get(&key).map(|v| v.value)
+			pezpallet_oracle::Pezpallet::<Runtime>::get(&key).map(|v| v.value)
 		}
 
 		fn get_all_values(_provider_id: u32) -> Vec<(u32, Option<u128>)> {
 			use pezpallet_oracle::DataProviderExtended;
-			pezpallet_oracle::Pallet::<Runtime>::get_all_values()
+			pezpallet_oracle::Pezpallet::<Runtime>::get_all_values()
 				.map(|(k, v)| (k, v.map(|tv| tv.value)))
 				.collect()
 		}
@@ -3794,16 +3794,16 @@ pezpallet_revive::impl_runtime_apis_plus_revive_traits!(
 			use pezframe_benchmarking::{baseline, BenchmarkList};
 			use pezframe_support::traits::StorageInfoTrait;
 
-			// Trying to add benchmarks directly to the Session Pallet caused cyclic dependency
+			// Trying to add benchmarks directly to the Session Pezpallet caused cyclic dependency
 			// issues. To get around that, we separated the Session benchmarks into its own crate,
 			// which is why we need these two lines below.
-			use pezpallet_session_benchmarking::Pallet as SessionBench;
-			use pezpallet_offences_benchmarking::Pallet as OffencesBench;
-			use pezpallet_election_provider_support_benchmarking::Pallet as EPSBench;
-			use pezframe_system_benchmarking::Pallet as SystemBench;
-			use pezframe_system_benchmarking::extensions::Pallet as SystemExtensionsBench;
-			use baseline::Pallet as BaselineBench;
-			use pezpallet_nomination_pools_benchmarking::Pallet as NominationPoolsBench;
+			use pezpallet_session_benchmarking::Pezpallet as SessionBench;
+			use pezpallet_offences_benchmarking::Pezpallet as OffencesBench;
+			use pezpallet_election_provider_support_benchmarking::Pezpallet as EPSBench;
+			use pezframe_system_benchmarking::Pezpallet as SystemBench;
+			use pezframe_system_benchmarking::extensions::Pezpallet as SystemExtensionsBench;
+			use baseline::Pezpallet as BaselineBench;
+			use pezpallet_nomination_pools_benchmarking::Pezpallet as NominationPoolsBench;
 
 			let mut list = Vec::<BenchmarkList>::new();
 			list_benchmarks!(list, extra);
@@ -3820,16 +3820,16 @@ pezpallet_revive::impl_runtime_apis_plus_revive_traits!(
 			use pezframe_benchmarking::{baseline, BenchmarkBatch};
 			use pezsp_storage::TrackedStorageKey;
 
-			// Trying to add benchmarks directly to the Session Pallet caused cyclic dependency
+			// Trying to add benchmarks directly to the Session Pezpallet caused cyclic dependency
 			// issues. To get around that, we separated the Session benchmarks into its own crate,
 			// which is why we need these two lines below.
-			use pezpallet_session_benchmarking::Pallet as SessionBench;
-			use pezpallet_offences_benchmarking::Pallet as OffencesBench;
-			use pezpallet_election_provider_support_benchmarking::Pallet as EPSBench;
-			use pezframe_system_benchmarking::Pallet as SystemBench;
-			use pezframe_system_benchmarking::extensions::Pallet as SystemExtensionsBench;
-			use baseline::Pallet as BaselineBench;
-			use pezpallet_nomination_pools_benchmarking::Pallet as NominationPoolsBench;
+			use pezpallet_session_benchmarking::Pezpallet as SessionBench;
+			use pezpallet_offences_benchmarking::Pezpallet as OffencesBench;
+			use pezpallet_election_provider_support_benchmarking::Pezpallet as EPSBench;
+			use pezframe_system_benchmarking::Pezpallet as SystemBench;
+			use pezframe_system_benchmarking::extensions::Pezpallet as SystemExtensionsBench;
+			use baseline::Pezpallet as BaselineBench;
+			use pezpallet_nomination_pools_benchmarking::Pezpallet as NominationPoolsBench;
 
 			impl pezpallet_session_benchmarking::Config for Runtime {}
 			impl pezpallet_offences_benchmarking::Config for Runtime {}

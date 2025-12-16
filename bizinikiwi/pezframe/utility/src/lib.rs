@@ -15,15 +15,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Utility Pallet
-//! A stateless pallet with helpers for dispatch management which does no re-authentication.
+//! # Utility Pezpallet
+//! A stateless pezpallet with helpers for dispatch management which does no re-authentication.
 //!
 //! - [`Config`]
 //! - [`Call`]
 //!
 //! ## Overview
 //!
-//! This pallet contains two basic pieces of functionality:
+//! This pezpallet contains two basic pieces of functionality:
 //! - Batch dispatch: A stateless operation, allowing any origin to execute multiple calls in a
 //!   single dispatch. This can be useful to amalgamate proposals, combining `set_code` with
 //!   corresponding `set_storage`s, for efficient multiple payouts with just a single signature
@@ -36,7 +36,7 @@
 //!   accounts are, for the purposes of proxy filtering considered exactly the same as the origin
 //!   and are thus hampered with the origin's filters.
 //!
-//! Since proxy filters are respected in all dispatches of this pallet, it should never need to be
+//! Since proxy filters are respected in all dispatches of this pezpallet, it should never need to be
 //! filtered by any proxy.
 //!
 //! ## Interface
@@ -73,19 +73,19 @@ use pezsp_io::hashing::blake2_256;
 use pezsp_runtime::traits::{BadOrigin, Dispatchable, TrailingZeroInput};
 pub use weights::WeightInfo;
 
-pub use pallet::*;
+pub use pezpallet::*;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::{dispatch::DispatchClass, pezpallet_prelude::*};
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
 	/// Configuration trait.
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
@@ -105,12 +105,12 @@ pub mod pallet {
 			Into<<Self as pezframe_system::Config>::RuntimeOrigin> +
 			IsType<<<Self as pezframe_system::Config>::RuntimeOrigin as pezframe_support::traits::OriginTrait>::PalletsOrigin>;
 
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event {
 		/// Batch of dispatches did not complete fully. Index of first failing dispatch given, as
 		/// well as the error.
@@ -137,8 +137,8 @@ pub mod pallet {
 	// algin the call size. The value is chosen big enough to hopefully never reach it.
 	const CALL_ALIGN: u32 = 1024;
 
-	#[pallet::extra_constants]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::extra_constants]
+	impl<T: Config> Pezpallet<T> {
 		/// The limit on the number of batched calls.
 		fn batched_calls_limit() -> u32 {
 			let allocator_limit = pezsp_core::MAX_POSSIBLE_ALLOCATION;
@@ -152,8 +152,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn integrity_test() {
 			// If you hit this error, you need to try to `Box` big dispatchable parameters.
 			assert!(
@@ -164,14 +164,14 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Too many calls batched.
 		TooManyCalls,
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Send a batch of dispatch calls.
 		///
 		/// May be called from any origin except `None`.
@@ -190,9 +190,9 @@ pub mod pallet {
 		/// `BatchInterrupted` event is deposited, along with the number of successful calls made
 		/// and the error of the failed call. If all were successful, then the `BatchCompleted`
 		/// event is deposited.
-		#[pallet::call_index(0)]
-		#[pallet::weight({
-			let (dispatch_weight, dispatch_class) = Pallet::<T>::weight_and_dispatch_class(&calls);
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight({
+			let (dispatch_weight, dispatch_class) = Pezpallet::<T>::weight_and_dispatch_class(&calls);
 			let dispatch_weight = dispatch_weight.saturating_add(T::WeightInfo::batch(calls.len() as u32));
 			(dispatch_weight, dispatch_class)
 		})]
@@ -246,13 +246,13 @@ pub mod pallet {
 		/// NOTE: If you need to ensure that any account-based filtering is not honored (i.e.
 		/// because you expect `proxy` to have been used prior in the call stack and you do not want
 		/// the call restrictions to apply to any sub-accounts), then use `as_multi_threshold_1`
-		/// in the Multisig pallet instead.
+		/// in the Multisig pezpallet instead.
 		///
 		/// NOTE: Prior to version *12, this was called `as_limited_sub`.
 		///
 		/// The dispatch origin for this call must be _Signed_.
-		#[pallet::call_index(1)]
-		#[pallet::weight({
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight({
 			let dispatch_info = call.get_dispatch_info();
 			(
 				T::WeightInfo::as_derivative()
@@ -299,9 +299,9 @@ pub mod pallet {
 		///
 		/// ## Complexity
 		/// - O(C) where C is the number of calls to be batched.
-		#[pallet::call_index(2)]
-		#[pallet::weight({
-			let (dispatch_weight, dispatch_class) = Pallet::<T>::weight_and_dispatch_class(&calls);
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight({
+			let (dispatch_weight, dispatch_class) = Pezpallet::<T>::weight_and_dispatch_class(&calls);
 			let dispatch_weight = dispatch_weight.saturating_add(T::WeightInfo::batch_all(calls.len() as u32));
 			(dispatch_weight, dispatch_class)
 		})]
@@ -358,8 +358,8 @@ pub mod pallet {
 		///
 		/// ## Complexity
 		/// - O(1).
-		#[pallet::call_index(3)]
-		#[pallet::weight({
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight({
 			let dispatch_info = call.get_dispatch_info();
 			(
 				T::WeightInfo::dispatch_as()
@@ -395,9 +395,9 @@ pub mod pallet {
 		///
 		/// ## Complexity
 		/// - O(C) where C is the number of calls to be batched.
-		#[pallet::call_index(4)]
-		#[pallet::weight({
-			let (dispatch_weight, dispatch_class) = Pallet::<T>::weight_and_dispatch_class(&calls);
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight({
+			let (dispatch_weight, dispatch_class) = Pezpallet::<T>::weight_and_dispatch_class(&calls);
 			let dispatch_weight = dispatch_weight.saturating_add(T::WeightInfo::force_batch(calls.len() as u32));
 			(dispatch_weight, dispatch_class)
 		})]
@@ -450,8 +450,8 @@ pub mod pallet {
 		/// Root origin to specify the weight of the call.
 		///
 		/// The dispatch origin for this call must be _Root_.
-		#[pallet::call_index(5)]
-		#[pallet::weight((*weight, call.get_dispatch_info().class))]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight((*weight, call.get_dispatch_info().class))]
 		pub fn with_weight(
 			origin: OriginFor<T>,
 			call: Box<<T as Config>::RuntimeCall>,
@@ -487,8 +487,8 @@ pub mod pallet {
 		/// ## Use Case
 		/// - Some use cases might involve submitting a `batch` type call in either main, fallback
 		///   or both.
-		#[pallet::call_index(6)]
-		#[pallet::weight({
+		#[pezpallet::call_index(6)]
+		#[pezpallet::weight({
 			let main = main.get_dispatch_info();
 			let fallback = fallback.get_dispatch_info();
 			(
@@ -558,11 +558,11 @@ pub mod pallet {
 
 		/// Dispatches a function call with a provided origin.
 		///
-		/// Almost the same as [`Pallet::dispatch_as`] but forwards any error of the inner call.
+		/// Almost the same as [`Pezpallet::dispatch_as`] but forwards any error of the inner call.
 		///
 		/// The dispatch origin for this call must be _Root_.
-		#[pallet::call_index(7)]
-		#[pallet::weight({
+		#[pezpallet::call_index(7)]
+		#[pezpallet::weight({
 			let dispatch_info = call.get_dispatch_info();
 			(
 				T::WeightInfo::dispatch_as_fallible()
@@ -585,7 +585,7 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config> Pallet<T> {
+	impl<T: Config> Pezpallet<T> {
 		/// Get the accumulated `weight` and the dispatch class for the given `calls`.
 		fn weight_and_dispatch_class(
 			calls: &[<T as Config>::RuntimeCall],
@@ -607,7 +607,7 @@ pub mod pallet {
 	}
 }
 
-/// A pallet identifier. These are per pallet and should be stored in a registry somewhere.
+/// A pezpallet identifier. These are per pezpallet and should be stored in a registry somewhere.
 #[derive(Clone, Copy, Eq, PartialEq, Encode, Decode)]
 #[allow(dead_code)]
 struct IndexedUtilityPalletId(u16);
@@ -616,9 +616,9 @@ impl TypeId for IndexedUtilityPalletId {
 	const TYPE_ID: [u8; 4] = *b"suba";
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	#[deprecated(
-		note = "`Pallet::derivative_account_id` will be removed after August 2025. Please instead use the freestanding module function `derivative_account_id`."
+		note = "`Pezpallet::derivative_account_id` will be removed after August 2025. Please instead use the freestanding module function `derivative_account_id`."
 	)]
 	pub fn derivative_account_id(who: T::AccountId, index: u16) -> T::AccountId {
 		derivative_account_id(who, index)

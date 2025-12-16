@@ -38,11 +38,11 @@ pub enum Select {
 	RoundRobin(u32),
 	/// Run only pallets who's name matches the given list.
 	///
-	/// Pallet names are obtained from [`super::PalletInfoAccess`].
+	/// Pezpallet names are obtained from [`super::PalletInfoAccess`].
 	Only(Vec<Vec<u8>>),
 	/// Run all pallets except those whose names match the given list.
 	///
-	/// Pallet names are obtained from [`super::PalletInfoAccess`].
+	/// Pezpallet names are obtained from [`super::PalletInfoAccess`].
 	AllExcept(Vec<Vec<u8>>),
 }
 
@@ -158,10 +158,10 @@ impl core::str::FromStr for UpgradeCheckSelect {
 	}
 }
 
-/// Execute some checks to ensure the internal state of a pallet is consistent.
+/// Execute some checks to ensure the internal state of a pezpallet is consistent.
 ///
 /// Usually, these checks should check all of the invariants that are expected to be held on all of
-/// the storage items of your pallet.
+/// the storage items of your pezpallet.
 ///
 /// This hook should not alter any storage.
 pub trait TryState<BlockNumber> {
@@ -237,7 +237,7 @@ impl<BlockNumber: Clone + core::fmt::Debug + AtLeast32BitUnsigned> TryState<Bloc
 						result = result.and(try_state_fn(n.clone(), targets.clone()));
 					} else {
 						log::warn!(
-							"Pallet {:?} not found",
+							"Pezpallet {:?} not found",
 							alloc::str::from_utf8(pezpallet_name).unwrap_or_default()
 						);
 					}
@@ -256,7 +256,7 @@ impl<BlockNumber: Clone + core::fmt::Debug + AtLeast32BitUnsigned> TryState<Bloc
 				excluded_pallet_names.iter().for_each(|excluded_name| {
 					if !try_state_fns.iter().any(|(name, _)| name.as_bytes() == excluded_name) {
 						log::warn!(
-							"Pallet {:?} not found while trying to filter it out in Select::AllExcept",
+							"Pezpallet {:?} not found while trying to filter it out in Select::AllExcept",
 							alloc::str::from_utf8(excluded_name).unwrap_or_default()
 						);
 					}

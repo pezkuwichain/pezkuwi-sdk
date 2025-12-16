@@ -46,18 +46,18 @@ mod tests {
 		storage::{generator::StorageValue, unhashed},
 	};
 
-	#[crate::pallet]
+	#[crate::pezpallet]
 	pub mod pezframe_system {
 		#[allow(unused)]
 		use super::{pezframe_system, pezframe_system::pezpallet_prelude::*};
 		pub use crate::dispatch::RawOrigin;
 		use crate::pezpallet_prelude::*;
 
-		#[pallet::pallet]
-		pub struct Pallet<T>(_);
+		#[pezpallet::pezpallet]
+		pub struct Pezpallet<T>(_);
 
-		#[pallet::config]
-		#[pallet::disable_pezframe_system_supertrait_check]
+		#[pezpallet::config]
+		#[pezpallet::disable_pezframe_system_supertrait_check]
 		pub trait Config: 'static {
 			type Block: pezsp_runtime::traits::Block;
 			type AccountId;
@@ -69,32 +69,32 @@ mod tests {
 			type DbWeight: Get<crate::weights::RuntimeDbWeight>;
 		}
 
-		#[pallet::origin]
+		#[pezpallet::origin]
 		pub type Origin<T> = RawOrigin<<T as Config>::AccountId>;
 
-		#[pallet::error]
+		#[pezpallet::error]
 		pub enum Error<T> {
 			/// Required by construct_runtime
 			CallFiltered,
 		}
 
-		#[pallet::call]
-		impl<T: Config> Pallet<T> {}
+		#[pezpallet::call]
+		impl<T: Config> Pezpallet<T> {}
 
-		#[pallet::storage]
+		#[pezpallet::storage]
 		pub type Value<T> = StorageValue<_, (u64, u64), ValueQuery>;
 
-		#[pallet::storage]
+		#[pezpallet::storage]
 		pub type Map<T> = StorageMap<_, Blake2_128Concat, u16, u64, ValueQuery>;
 
-		#[pallet::storage]
+		#[pezpallet::storage]
 		pub type NumberMap<T> = StorageMap<_, Identity, u32, u64, ValueQuery>;
 
-		#[pallet::storage]
+		#[pezpallet::storage]
 		pub type DoubleMap<T> =
 			StorageDoubleMap<_, Blake2_128Concat, u16, Twox64Concat, u32, u64, ValueQuery>;
 
-		#[pallet::storage]
+		#[pezpallet::storage]
 		pub type NMap<T> = StorageNMap<
 			_,
 			(storage::Key<Blake2_128Concat, u16>, storage::Key<Twox64Concat, u32>),

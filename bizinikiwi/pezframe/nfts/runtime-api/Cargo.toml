@@ -6,7 +6,7 @@ edition.workspace = true
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
-description = "Runtime API for the FRAME NFTs pallet."
+description = "Runtime API for the FRAME NFTs pezpallet."
 readme = "README.md"
 documentation = "https://docs.rs/pezpallet-nfts-runtime-api"
 

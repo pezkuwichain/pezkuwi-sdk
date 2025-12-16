@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Alliance pallet benchmarking.
+//! Alliance pezpallet benchmarking.
 
 #![cfg(feature = "runtime-benchmarks")]
 
@@ -24,16 +24,16 @@ use pezsp_runtime::traits::{Bounded, Hash, StaticLookup};
 
 use pezframe_benchmarking::{account, v2::*, BenchmarkError};
 use pezframe_support::traits::{EnsureOrigin, Get, UnfilteredDispatchable};
-use pezframe_system::{pezpallet_prelude::BlockNumberFor, Pallet as System, RawOrigin as SystemOrigin};
+use pezframe_system::{pezpallet_prelude::BlockNumberFor, Pezpallet as System, RawOrigin as SystemOrigin};
 
-use super::{Call as AllianceCall, Pallet as Alliance, *};
+use super::{Call as AllianceCall, Pezpallet as Alliance, *};
 
 const SEED: u32 = 0;
 
 const MAX_BYTES: u32 = 1_024;
 
 fn assert_last_event<T: Config<I>, I: 'static>(generic_event: <T as Config<I>>::RuntimeEvent) {
-	pezframe_system::Pallet::<T>::assert_last_event(generic_event.into());
+	pezframe_system::Pezpallet::<T>::assert_last_event(generic_event.into());
 }
 
 fn cid(input: impl AsRef<[u8]>) -> Cid {

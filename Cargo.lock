@@ -1466,6 +1466,7 @@ dependencies = [
  "pezpallet-xcm-bridge-hub-router",
  "pezpallet-xcm-precompiles",
  "pezsnowbridge-outbound-queue-primitives",
+ "pezsnowbridge-pezpallet-system-frontend",
  "pezsp-api",
  "pezsp-arithmetic",
  "pezsp-block-builder",
@@ -1492,7 +1493,6 @@ dependencies = [
  "primitive-types 0.13.1",
  "scale-info",
  "serde_json",
- "snowbridge-pezpallet-system-frontend",
  "snowpezbridge-runtime-common",
  "testnet-teyrchains-constants",
  "teyrchains-common",
@@ -10213,6 +10213,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "pez-erasure-coding-fuzzer"
+version = "1.0.0"
+dependencies = [
+ "honggfuzz",
+ "pezkuwi-erasure-coding",
+ "pezkuwi-pez-node-primitives",
+ "pezkuwi-primitives",
+]
+
+[[package]]
 name = "pez-ethereum-standards"
 version = "0.1.0"
 dependencies = [
@@ -10702,16 +10712,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "pez_erasure_coding_fuzzer"
-version = "1.0.0"
-dependencies = [
- "honggfuzz",
- "pezkuwi-erasure-coding",
- "pezkuwi-pez-node-primitives",
- "pezkuwi-primitives",
-]
-
-[[package]]
 name = "pezbp-runtime"
 version = "0.7.0"
 dependencies = [
@@ -10771,15 +10771,15 @@ dependencies = [
  "pezpallet-xcm",
  "pezsnowbridge-inbound-queue-primitives",
  "pezsnowbridge-outbound-queue-primitives",
+ "pezsnowbridge-pezpallet-inbound-queue-fixtures",
+ "pezsnowbridge-pezpallet-outbound-queue",
+ "pezsnowbridge-pezpallet-system",
  "pezsp-core",
  "pezsp-runtime",
  "pezstaging-xcm",
  "pezstaging-xcm-builder",
  "pezstaging-xcm-executor",
  "scale-info",
- "snowbridge-pezpallet-inbound-queue-fixtures",
- "snowbridge-pezpallet-outbound-queue",
- "snowbridge-pezpallet-system",
  "testnet-teyrchains-constants",
  "teyrchains-common",
 ]
@@ -10851,6 +10851,11 @@ dependencies = [
  "pezsnowbridge-merkle-tree",
  "pezsnowbridge-outbound-queue-primitives",
  "pezsnowbridge-outbound-queue-runtime-api",
+ "pezsnowbridge-pezpallet-ethereum-client",
+ "pezsnowbridge-pezpallet-inbound-queue",
+ "pezsnowbridge-pezpallet-inbound-queue-fixtures",
+ "pezsnowbridge-pezpallet-outbound-queue",
+ "pezsnowbridge-pezpallet-system",
  "pezsnowbridge-runtime-test-common",
  "pezsnowbridge-system-runtime-api",
  "pezsp-api",
@@ -10875,11 +10880,6 @@ dependencies = [
  "scale-info",
  "serde",
  "serde_json",
- "snowbridge-pezpallet-ethereum-client",
- "snowbridge-pezpallet-inbound-queue",
- "snowbridge-pezpallet-inbound-queue-fixtures",
- "snowbridge-pezpallet-outbound-queue",
- "snowbridge-pezpallet-system",
  "testnet-teyrchains-constants",
  "teyrchains-common",
  "teyrchains-runtimes-test-utils",
@@ -10969,6 +10969,13 @@ dependencies = [
  "pezsnowbridge-core",
  "pezsnowbridge-inbound-queue-primitives",
  "pezsnowbridge-outbound-queue-primitives",
+ "pezsnowbridge-pezpallet-inbound-queue",
+ "pezsnowbridge-pezpallet-inbound-queue-fixtures",
+ "pezsnowbridge-pezpallet-inbound-queue-v2",
+ "pezsnowbridge-pezpallet-outbound-queue",
+ "pezsnowbridge-pezpallet-outbound-queue-v2",
+ "pezsnowbridge-pezpallet-system",
+ "pezsnowbridge-pezpallet-system-v2",
  "pezsp-core",
  "pezsp-io",
  "pezsp-runtime",
@@ -10976,13 +10983,6 @@ dependencies = [
  "pezstaging-xcm-builder",
  "pezstaging-xcm-executor",
  "scale-info",
- "snowbridge-pezpallet-inbound-queue",
- "snowbridge-pezpallet-inbound-queue-fixtures",
- "snowbridge-pezpallet-inbound-queue-v2",
- "snowbridge-pezpallet-outbound-queue",
- "snowbridge-pezpallet-outbound-queue-v2",
- "snowbridge-pezpallet-system",
- "snowbridge-pezpallet-system-v2",
  "testnet-teyrchains-constants",
  "teyrchains-common",
 ]
@@ -11053,6 +11053,15 @@ dependencies = [
  "pezsnowbridge-outbound-queue-primitives",
  "pezsnowbridge-outbound-queue-runtime-api",
  "pezsnowbridge-outbound-queue-v2-runtime-api",
+ "pezsnowbridge-pezpallet-ethereum-client",
+ "pezsnowbridge-pezpallet-inbound-queue",
+ "pezsnowbridge-pezpallet-inbound-queue-fixtures",
+ "pezsnowbridge-pezpallet-inbound-queue-v2",
+ "pezsnowbridge-pezpallet-inbound-queue-v2-fixtures",
+ "pezsnowbridge-pezpallet-outbound-queue",
+ "pezsnowbridge-pezpallet-outbound-queue-v2",
+ "pezsnowbridge-pezpallet-system",
+ "pezsnowbridge-pezpallet-system-v2",
  "pezsnowbridge-runtime-test-common",
  "pezsnowbridge-system-runtime-api",
  "pezsnowbridge-system-v2-runtime-api",
@@ -11078,15 +11087,6 @@ dependencies = [
  "scale-info",
  "serde",
  "serde_json",
- "snowbridge-pezpallet-ethereum-client",
- "snowbridge-pezpallet-inbound-queue",
- "snowbridge-pezpallet-inbound-queue-fixtures",
- "snowbridge-pezpallet-inbound-queue-v2",
- "snowbridge-pezpallet-inbound-queue-v2-fixtures",
- "snowbridge-pezpallet-outbound-queue",
- "snowbridge-pezpallet-outbound-queue-v2",
- "snowbridge-pezpallet-system",
- "snowbridge-pezpallet-system-v2",
  "testnet-teyrchains-constants",
  "teyrchains-common",
  "teyrchains-runtimes-test-utils",
@@ -19953,6 +19953,253 @@ dependencies = [
 ]
 
 [[package]]
+name = "pezsnowbridge-pezpallet-ethereum-client"
+version = "0.2.0"
+dependencies = [
+ "hex-literal",
+ "parity-scale-codec",
+ "pezframe-benchmarking",
+ "pezframe-support",
+ "pezframe-system",
+ "pezpallet-timestamp",
+ "pezsnowbridge-beacon-primitives",
+ "pezsnowbridge-core",
+ "pezsnowbridge-ethereum",
+ "pezsnowbridge-pezpallet-ethereum-client-fixtures",
+ "pezsnowbridge-verification-primitives",
+ "pezsp-core",
+ "pezsp-io",
+ "pezsp-runtime",
+ "pezsp-std",
+ "scale-info",
+ "serde",
+ "serde_json",
+ "static_assertions",
+ "tracing",
+]
+
+[[package]]
+name = "pezsnowbridge-pezpallet-ethereum-client-fixtures"
+version = "0.9.0"
+dependencies = [
+ "hex-literal",
+ "pezsnowbridge-beacon-primitives",
+ "pezsnowbridge-verification-primitives",
+ "pezsp-core",
+ "pezsp-std",
+]
+
+[[package]]
+name = "pezsnowbridge-pezpallet-inbound-queue"
+version = "0.2.0"
+dependencies = [
+ "alloy-core",
+ "hex-literal",
+ "parity-scale-codec",
+ "pezframe-benchmarking",
+ "pezframe-support",
+ "pezframe-system",
+ "pezpallet-balances",
+ "pezsnowbridge-beacon-primitives",
+ "pezsnowbridge-core",
+ "pezsnowbridge-inbound-queue-primitives",
+ "pezsnowbridge-pezpallet-ethereum-client",
+ "pezsnowbridge-pezpallet-inbound-queue-fixtures",
+ "pezsp-core",
+ "pezsp-io",
+ "pezsp-keyring",
+ "pezsp-runtime",
+ "pezsp-std",
+ "pezstaging-xcm",
+ "pezstaging-xcm-executor",
+ "scale-info",
+ "serde",
+ "tracing",
+]
+
+[[package]]
+name = "pezsnowbridge-pezpallet-inbound-queue-fixtures"
+version = "0.10.0"
+dependencies = [
+ "hex-literal",
+ "pezsnowbridge-beacon-primitives",
+ "pezsnowbridge-core",
+ "pezsnowbridge-inbound-queue-primitives",
+ "pezsp-core",
+ "pezsp-std",
+]
+
+[[package]]
+name = "pezsnowbridge-pezpallet-inbound-queue-v2"
+version = "0.2.0"
+dependencies = [
+ "alloy-core",
+ "bp-relayers",
+ "hex-literal",
+ "parity-scale-codec",
+ "pezframe-benchmarking",
+ "pezframe-support",
+ "pezframe-system",
+ "pezpallet-balances",
+ "pezsnowbridge-beacon-primitives",
+ "pezsnowbridge-core",
+ "pezsnowbridge-inbound-queue-primitives",
+ "pezsnowbridge-pezpallet-inbound-queue-v2-fixtures",
+ "pezsnowbridge-test-utils",
+ "pezsp-core",
+ "pezsp-io",
+ "pezsp-keyring",
+ "pezsp-runtime",
+ "pezsp-std",
+ "pezstaging-xcm",
+ "pezstaging-xcm-builder",
+ "pezstaging-xcm-executor",
+ "scale-info",
+ "serde",
+ "tracing",
+]
+
+[[package]]
+name = "pezsnowbridge-pezpallet-inbound-queue-v2-fixtures"
+version = "0.10.0"
+dependencies = [
+ "hex-literal",
+ "pezsnowbridge-beacon-primitives",
+ "pezsnowbridge-core",
+ "pezsnowbridge-inbound-queue-primitives",
+ "pezsp-core",
+ "pezsp-std",
+]
+
+[[package]]
+name = "pezsnowbridge-pezpallet-outbound-queue"
+version = "0.2.0"
+dependencies = [
+ "bridge-hub-common",
+ "ethabi-decode",
+ "parity-scale-codec",
+ "pezframe-benchmarking",
+ "pezframe-support",
+ "pezframe-system",
+ "pezpallet-message-queue",
+ "pezsnowbridge-core",
+ "pezsnowbridge-merkle-tree",
+ "pezsnowbridge-outbound-queue-primitives",
+ "pezsp-arithmetic",
+ "pezsp-core",
+ "pezsp-io",
+ "pezsp-runtime",
+ "pezsp-std",
+ "scale-info",
+ "serde",
+]
+
+[[package]]
+name = "pezsnowbridge-pezpallet-outbound-queue-v2"
+version = "0.2.0"
+dependencies = [
+ "alloy-core",
+ "bp-relayers",
+ "ethabi-decode",
+ "hex-literal",
+ "parity-scale-codec",
+ "pezframe-benchmarking",
+ "pezframe-support",
+ "pezframe-system",
+ "pezpallet-message-queue",
+ "pezsnowbridge-beacon-primitives",
+ "pezsnowbridge-core",
+ "pezsnowbridge-merkle-tree",
+ "pezsnowbridge-outbound-queue-primitives",
+ "pezsnowbridge-test-utils",
+ "pezsnowbridge-verification-primitives",
+ "pezsp-arithmetic",
+ "pezsp-core",
+ "pezsp-io",
+ "pezsp-runtime",
+ "pezsp-std",
+ "pezstaging-xcm",
+ "pezstaging-xcm-builder",
+ "pezstaging-xcm-executor",
+ "scale-info",
+ "serde",
+]
+
+[[package]]
+name = "pezsnowbridge-pezpallet-system"
+version = "0.2.0"
+dependencies = [
+ "hex",
+ "hex-literal",
+ "parity-scale-codec",
+ "pezframe-benchmarking",
+ "pezframe-support",
+ "pezframe-system",
+ "pezkuwi-primitives",
+ "pezpallet-balances",
+ "pezpallet-message-queue",
+ "pezsnowbridge-core",
+ "pezsnowbridge-outbound-queue-primitives",
+ "pezsnowbridge-pezpallet-outbound-queue",
+ "pezsp-core",
+ "pezsp-io",
+ "pezsp-runtime",
+ "pezsp-std",
+ "pezstaging-xcm",
+ "pezstaging-xcm-executor",
+ "scale-info",
+ "tracing",
+]
+
+[[package]]
+name = "pezsnowbridge-pezpallet-system-frontend"
+version = "0.2.0"
+dependencies = [
+ "parity-scale-codec",
+ "pezframe-benchmarking",
+ "pezframe-support",
+ "pezframe-system",
+ "pezpallet-asset-conversion",
+ "pezpallet-balances",
+ "pezsnowbridge-core",
+ "pezsnowbridge-test-utils",
+ "pezsp-core",
+ "pezsp-io",
+ "pezsp-keyring",
+ "pezsp-runtime",
+ "pezsp-std",
+ "pezstaging-xcm",
+ "pezstaging-xcm-executor",
+ "scale-info",
+ "tracing",
+]
+
+[[package]]
+name = "pezsnowbridge-pezpallet-system-v2"
+version = "0.2.0"
+dependencies = [
+ "hex-literal",
+ "parity-scale-codec",
+ "pezframe-benchmarking",
+ "pezframe-support",
+ "pezframe-system",
+ "pezpallet-balances",
+ "pezsnowbridge-core",
+ "pezsnowbridge-outbound-queue-primitives",
+ "pezsnowbridge-pezpallet-system",
+ "pezsnowbridge-test-utils",
+ "pezsp-core",
+ "pezsp-io",
+ "pezsp-keyring",
+ "pezsp-runtime",
+ "pezsp-std",
+ "pezstaging-xcm",
+ "pezstaging-xcm-executor",
+ "scale-info",
+ "tracing",
+]
+
+[[package]]
 name = "pezsnowbridge-runtime-test-common"
 version = "0.2.0"
 dependencies = [
@@ -19968,6 +20215,10 @@ dependencies = [
  "pezpallet-utility",
  "pezpallet-xcm",
  "pezsnowbridge-core",
+ "pezsnowbridge-pezpallet-ethereum-client",
+ "pezsnowbridge-pezpallet-ethereum-client-fixtures",
+ "pezsnowbridge-pezpallet-outbound-queue",
+ "pezsnowbridge-pezpallet-system",
  "pezsp-core",
  "pezsp-io",
  "pezsp-keyring",
@@ -19975,10 +20226,6 @@ dependencies = [
  "pezstaging-teyrchain-info",
  "pezstaging-xcm",
  "pezstaging-xcm-executor",
- "snowbridge-pezpallet-ethereum-client",
- "snowbridge-pezpallet-ethereum-client-fixtures",
- "snowbridge-pezpallet-outbound-queue",
- "snowbridge-pezpallet-system",
  "teyrchains-runtimes-test-utils",
 ]
 
@@ -24341,253 +24588,6 @@ dependencies = [
  "scale-info",
  "snowbridge-amcl",
  "zeroize",
-]
-
-[[package]]
-name = "snowbridge-pezpallet-ethereum-client"
-version = "0.2.0"
-dependencies = [
- "hex-literal",
- "parity-scale-codec",
- "pezframe-benchmarking",
- "pezframe-support",
- "pezframe-system",
- "pezpallet-timestamp",
- "pezsnowbridge-beacon-primitives",
- "pezsnowbridge-core",
- "pezsnowbridge-ethereum",
- "pezsnowbridge-verification-primitives",
- "pezsp-core",
- "pezsp-io",
- "pezsp-runtime",
- "pezsp-std",
- "scale-info",
- "serde",
- "serde_json",
- "snowbridge-pezpallet-ethereum-client-fixtures",
- "static_assertions",
- "tracing",
-]
-
-[[package]]
-name = "snowbridge-pezpallet-ethereum-client-fixtures"
-version = "0.9.0"
-dependencies = [
- "hex-literal",
- "pezsnowbridge-beacon-primitives",
- "pezsnowbridge-verification-primitives",
- "pezsp-core",
- "pezsp-std",
-]
-
-[[package]]
-name = "snowbridge-pezpallet-inbound-queue"
-version = "0.2.0"
-dependencies = [
- "alloy-core",
- "hex-literal",
- "parity-scale-codec",
- "pezframe-benchmarking",
- "pezframe-support",
- "pezframe-system",
- "pezpallet-balances",
- "pezsnowbridge-beacon-primitives",
- "pezsnowbridge-core",
- "pezsnowbridge-inbound-queue-primitives",
- "pezsp-core",
- "pezsp-io",
- "pezsp-keyring",
- "pezsp-runtime",
- "pezsp-std",
- "pezstaging-xcm",
- "pezstaging-xcm-executor",
- "scale-info",
- "serde",
- "snowbridge-pezpallet-ethereum-client",
- "snowbridge-pezpallet-inbound-queue-fixtures",
- "tracing",
-]
-
-[[package]]
-name = "snowbridge-pezpallet-inbound-queue-fixtures"
-version = "0.10.0"
-dependencies = [
- "hex-literal",
- "pezsnowbridge-beacon-primitives",
- "pezsnowbridge-core",
- "pezsnowbridge-inbound-queue-primitives",
- "pezsp-core",
- "pezsp-std",
-]
-
-[[package]]
-name = "snowbridge-pezpallet-inbound-queue-v2"
-version = "0.2.0"
-dependencies = [
- "alloy-core",
- "bp-relayers",
- "hex-literal",
- "parity-scale-codec",
- "pezframe-benchmarking",
- "pezframe-support",
- "pezframe-system",
- "pezpallet-balances",
- "pezsnowbridge-beacon-primitives",
- "pezsnowbridge-core",
- "pezsnowbridge-inbound-queue-primitives",
- "pezsnowbridge-test-utils",
- "pezsp-core",
- "pezsp-io",
- "pezsp-keyring",
- "pezsp-runtime",
- "pezsp-std",
- "pezstaging-xcm",
- "pezstaging-xcm-builder",
- "pezstaging-xcm-executor",
- "scale-info",
- "serde",
- "snowbridge-pezpallet-inbound-queue-v2-fixtures",
- "tracing",
-]
-
-[[package]]
-name = "snowbridge-pezpallet-inbound-queue-v2-fixtures"
-version = "0.10.0"
-dependencies = [
- "hex-literal",
- "pezsnowbridge-beacon-primitives",
- "pezsnowbridge-core",
- "pezsnowbridge-inbound-queue-primitives",
- "pezsp-core",
- "pezsp-std",
-]
-
-[[package]]
-name = "snowbridge-pezpallet-outbound-queue"
-version = "0.2.0"
-dependencies = [
- "bridge-hub-common",
- "ethabi-decode",
- "parity-scale-codec",
- "pezframe-benchmarking",
- "pezframe-support",
- "pezframe-system",
- "pezpallet-message-queue",
- "pezsnowbridge-core",
- "pezsnowbridge-merkle-tree",
- "pezsnowbridge-outbound-queue-primitives",
- "pezsp-arithmetic",
- "pezsp-core",
- "pezsp-io",
- "pezsp-runtime",
- "pezsp-std",
- "scale-info",
- "serde",
-]
-
-[[package]]
-name = "snowbridge-pezpallet-outbound-queue-v2"
-version = "0.2.0"
-dependencies = [
- "alloy-core",
- "bp-relayers",
- "ethabi-decode",
- "hex-literal",
- "parity-scale-codec",
- "pezframe-benchmarking",
- "pezframe-support",
- "pezframe-system",
- "pezpallet-message-queue",
- "pezsnowbridge-beacon-primitives",
- "pezsnowbridge-core",
- "pezsnowbridge-merkle-tree",
- "pezsnowbridge-outbound-queue-primitives",
- "pezsnowbridge-test-utils",
- "pezsnowbridge-verification-primitives",
- "pezsp-arithmetic",
- "pezsp-core",
- "pezsp-io",
- "pezsp-runtime",
- "pezsp-std",
- "pezstaging-xcm",
- "pezstaging-xcm-builder",
- "pezstaging-xcm-executor",
- "scale-info",
- "serde",
-]
-
-[[package]]
-name = "snowbridge-pezpallet-system"
-version = "0.2.0"
-dependencies = [
- "hex",
- "hex-literal",
- "parity-scale-codec",
- "pezframe-benchmarking",
- "pezframe-support",
- "pezframe-system",
- "pezkuwi-primitives",
- "pezpallet-balances",
- "pezpallet-message-queue",
- "pezsnowbridge-core",
- "pezsnowbridge-outbound-queue-primitives",
- "pezsp-core",
- "pezsp-io",
- "pezsp-runtime",
- "pezsp-std",
- "pezstaging-xcm",
- "pezstaging-xcm-executor",
- "scale-info",
- "snowbridge-pezpallet-outbound-queue",
- "tracing",
-]
-
-[[package]]
-name = "snowbridge-pezpallet-system-frontend"
-version = "0.2.0"
-dependencies = [
- "parity-scale-codec",
- "pezframe-benchmarking",
- "pezframe-support",
- "pezframe-system",
- "pezpallet-asset-conversion",
- "pezpallet-balances",
- "pezsnowbridge-core",
- "pezsnowbridge-test-utils",
- "pezsp-core",
- "pezsp-io",
- "pezsp-keyring",
- "pezsp-runtime",
- "pezsp-std",
- "pezstaging-xcm",
- "pezstaging-xcm-executor",
- "scale-info",
- "tracing",
-]
-
-[[package]]
-name = "snowbridge-pezpallet-system-v2"
-version = "0.2.0"
-dependencies = [
- "hex-literal",
- "parity-scale-codec",
- "pezframe-benchmarking",
- "pezframe-support",
- "pezframe-system",
- "pezpallet-balances",
- "pezsnowbridge-core",
- "pezsnowbridge-outbound-queue-primitives",
- "pezsnowbridge-test-utils",
- "pezsp-core",
- "pezsp-io",
- "pezsp-keyring",
- "pezsp-runtime",
- "pezsp-std",
- "pezstaging-xcm",
- "pezstaging-xcm-executor",
- "scale-info",
- "snowbridge-pezpallet-system",
- "tracing",
 ]
 
 [[package]]

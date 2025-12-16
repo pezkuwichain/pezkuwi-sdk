@@ -95,7 +95,7 @@ pub trait OnChargeAssetTransaction<T: Config> {
 /// Allows specifying what to do with the withdrawn asset fees.
 pub trait HandleCredit<AccountId, B: Balanced<AccountId>> {
 	/// Implement to determine what to do with the withdrawn asset fees.
-	/// Default for `CreditOf` from the assets pallet is to burn and
+	/// Default for `CreditOf` from the assets pezpallet is to burn and
 	/// decrease total issuance.
 	fn handle_credit(credit: Credit<AccountId, B>);
 }
@@ -112,7 +112,7 @@ impl<A, B: Balanced<A>> HandleCredit<A, B> for () {
 /// The credit handler is given the complete fee in terms of the asset used for the transaction.
 pub struct FungiblesAdapter<CON, HC>(PhantomData<(CON, HC)>);
 
-/// Default implementation for a runtime instantiating this pallet, a balance to asset converter and
+/// Default implementation for a runtime instantiating this pezpallet, a balance to asset converter and
 /// a credit handler.
 impl<T, CON, HC> OnChargeAssetTransaction<T> for FungiblesAdapter<CON, HC>
 where

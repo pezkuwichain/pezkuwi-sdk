@@ -2,7 +2,7 @@
 
 # ignore zombienet as they do some deliberate custom toml stuff
 exclude = [
-  "bridges/testing/**",
+  "pezbridges/testing/**",
   "pezcumulus/zombienet/**",
   "pezkuwi/node/malus/integrationtests/**",
   "pezkuwi/zombienet_tests/**",

@@ -68,7 +68,7 @@ pub use impls::ToAuthor;
 #[deprecated(
 	note = "Please use fungible::Credit instead. This type will be removed some time after March 2024."
 )]
-pub type NegativeImbalance<T> = <pezpallet_balances::Pallet<T> as Currency<
+pub type NegativeImbalance<T> = <pezpallet_balances::Pezpallet<T> as Currency<
 	<T as pezframe_system::Config>::AccountId,
 >>::NegativeImbalance;
 
@@ -227,7 +227,7 @@ impl<T: pezpallet_session::Config> OneSessionHandler<T::AccountId>
 	fn on_disabled(_: u32) {}
 }
 
-/// A reasonable benchmarking config for staking pallet.
+/// A reasonable benchmarking config for staking pezpallet.
 pub struct StakingBenchmarkingConfig;
 impl pezpallet_staking::BenchmarkingConfig for StakingBenchmarkingConfig {
 	type MaxValidators = ConstU32<1000>;

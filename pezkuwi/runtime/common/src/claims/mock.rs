@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Mocking utilities for testing in claims pallet.
+//! Mocking utilities for testing in claims pezpallet.
 
 #[cfg(test)]
 use super::*;

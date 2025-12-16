@@ -24,18 +24,18 @@ use pezframe_support::{
 pub struct MigrateToTrackInactiveV2<T>(core::marker::PhantomData<T>);
 impl<T: Config> OnRuntimeUpgrade for MigrateToTrackInactiveV2<T> {
 	fn on_runtime_upgrade() -> Weight {
-		let on_chain_version = Pallet::<T>::on_chain_storage_version();
+		let on_chain_version = Pezpallet::<T>::on_chain_storage_version();
 
 		if on_chain_version == 1 {
 			let mut translated = 0u64;
 			for item in Funds::<T>::iter_values() {
 				let b =
-					CurrencyOf::<T>::total_balance(&Pallet::<T>::fund_account_id(item.fund_index));
+					CurrencyOf::<T>::total_balance(&Pezpallet::<T>::fund_account_id(item.fund_index));
 				CurrencyOf::<T>::deactivate(b);
 				translated.saturating_inc();
 			}
 
-			StorageVersion::new(2).put::<Pallet<T>>();
+			StorageVersion::new(2).put::<Pezpallet<T>>();
 			log::info!(target: "runtime::crowdloan", "Summed {} funds, storage to version 1", translated);
 			T::DbWeight::get().reads_writes(translated * 2 + 1, translated * 2 + 1)
 		} else {
@@ -48,7 +48,7 @@ impl<T: Config> OnRuntimeUpgrade for MigrateToTrackInactiveV2<T> {
 	fn pre_upgrade() -> Result<Vec<u8>, pezsp_runtime::TryRuntimeError> {
 		let total = Funds::<T>::iter_values()
 			.map(|item| {
-				CurrencyOf::<T>::total_balance(&Pallet::<T>::fund_account_id(item.fund_index))
+				CurrencyOf::<T>::total_balance(&Pezpallet::<T>::fund_account_id(item.fund_index))
 			})
 			.fold(BalanceOf::<T>::zero(), |a, i| a.saturating_add(i));
 		Ok((total, CurrencyOf::<T>::active_issuance()).encode())
@@ -70,7 +70,7 @@ pub mod crowdloan_index_migration {
 	use super::*;
 
 	#[storage_alias]
-	type NextTrieIndex<T: Config> = StorageValue<Pallet<T>, FundIndex>;
+	type NextTrieIndex<T: Config> = StorageValue<Pezpallet<T>, FundIndex>;
 
 	#[storage_alias]
 	type Leases<T: Config> = StorageMap<
@@ -148,7 +148,7 @@ pub mod crowdloan_index_migration {
 		// Migrate all accounts from `old_fund_account` to `fund_account` using `fund_index`.
 		for (para_id, fund) in Funds::<T>::iter() {
 			let old_fund_account = old_fund_account_id::<T>(para_id);
-			let new_fund_account = Pallet::<T>::fund_account_id(fund.fund_index);
+			let new_fund_account = Pezpallet::<T>::fund_account_id(fund.fund_index);
 
 			// Funds should only have a free balance and a reserve balance. Both of these are in the
 			// `Account` storage item, so we just swap them.
@@ -196,7 +196,7 @@ pub mod crowdloan_index_migration {
 			);
 
 			// New fund account has the correct balance.
-			let new_fund_account = Pallet::<T>::fund_account_id(fund.fund_index);
+			let new_fund_account = Pezpallet::<T>::fund_account_id(fund.fund_index);
 			let total_balance = CurrencyOf::<T>::total_balance(&new_fund_account);
 
 			ensure!(

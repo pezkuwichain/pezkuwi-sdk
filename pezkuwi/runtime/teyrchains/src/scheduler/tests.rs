@@ -690,7 +690,7 @@ fn session_change_decreasing_number_of_cores() {
 			_ => None,
 		});
 
-		scheduler::Pallet::<Test>::set_claim_queue(BTreeMap::from([
+		scheduler::Pezpallet::<Test>::set_claim_queue(BTreeMap::from([
 			(CoreIndex::from(0), VecDeque::from([assignment_a.clone()])),
 			// Leave a hole for core 1.
 			(CoreIndex::from(2), VecDeque::from([assignment_b.clone(), assignment_b.clone()])),

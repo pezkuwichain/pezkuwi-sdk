@@ -1,4 +1,4 @@
-# Pallet Broker
+# Pezpallet Broker
 
 Brokerage tool for managing PezkuwiChain Core scheduling.
 

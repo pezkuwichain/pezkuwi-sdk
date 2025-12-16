@@ -124,7 +124,7 @@ impl pezframe_election_provider_support::ElectionProvider for MockElection {
 impl pezpallet_staking::Config for Runtime {
 	type OldCurrency = Balances;
 	type Currency = Balances;
-	type UnixTime = pezpallet_timestamp::Pallet<Self>;
+	type UnixTime = pezpallet_timestamp::Pezpallet<Self>;
 	type AdminOrigin = pezframe_system::EnsureRoot<Self::AccountId>;
 	type BondingDuration = BondingDuration;
 	type EraPayout = pezpallet_staking::ConvertCurve<RewardCurve>;
@@ -265,7 +265,7 @@ impl ExtBuilder {
 
 		ext.execute_with(|| {
 			// for events to be deposited.
-			pezframe_system::Pallet::<Runtime>::set_block_number(1);
+			pezframe_system::Pezpallet::<Runtime>::set_block_number(1);
 
 			for era in 0..=(BondingDuration::get()) {
 				Self::register_stakers_for_era(era);
@@ -290,7 +290,7 @@ pub(crate) fn run_to_block(n: u64, on_idle: bool) {
 		n,
 		pezframe_system::RunToBlockHooks::default()
 			.before_finalize(|_| {
-				// Satisfy the timestamp pallet.
+				// Satisfy the timestamp pezpallet.
 				Timestamp::set_timestamp(0);
 			})
 			.after_initialize(|bn| {

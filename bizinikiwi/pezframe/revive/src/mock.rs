@@ -22,11 +22,11 @@
 use pezframe_system::pezpallet_prelude::OriginFor;
 use pezsp_core::{H160, U256};
 
-use crate::{exec::Origin, pallet, DelegateInfo, ExecReturnValue};
+use crate::{exec::Origin, pezpallet, DelegateInfo, ExecReturnValue};
 
 /// A trait that provides hooks for mocking EVM contract calls and callers.
 /// This is useful for testing and simulating contract interactions within foundry forge tests.
-pub trait MockHandler<T: pallet::Config> {
+pub trait MockHandler<T: pezpallet::Config> {
 	/// Mock an EVM contract call.
 	///
 	/// Returns `Some(ExecReturnValue)` if the call is mocked, otherwise `None`.

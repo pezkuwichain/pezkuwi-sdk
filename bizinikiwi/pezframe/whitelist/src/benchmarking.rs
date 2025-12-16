@@ -15,13 +15,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Whitelist pallet benchmarking.
+//! Whitelist pezpallet benchmarking.
 
 #![cfg(feature = "runtime-benchmarks")]
 
 use super::*;
 #[cfg(test)]
-use crate::Pallet as Whitelist;
+use crate::Pezpallet as Whitelist;
 use frame::benchmarking::prelude::*;
 
 #[benchmarks]
@@ -47,7 +47,7 @@ mod benchmarks {
 		let origin =
 			T::WhitelistOrigin::try_successful_origin().map_err(|_| BenchmarkError::Weightless)?;
 		let call_hash = Default::default();
-		Pallet::<T>::whitelist_call(origin.clone(), call_hash)
+		Pezpallet::<T>::whitelist_call(origin.clone(), call_hash)
 			.expect("whitelisting call must be successful");
 
 		#[extrinsic_call]
@@ -78,7 +78,7 @@ mod benchmarks {
 		let call_encoded_len = encoded_call.len() as u32;
 		let call_hash = T::Hashing::hash_of(&call);
 
-		Pallet::<T>::whitelist_call(origin.clone(), call_hash)
+		Pezpallet::<T>::whitelist_call(origin.clone(), call_hash)
 			.expect("whitelisting call must be successful");
 
 		T::Preimages::note(encoded_call.into()).unwrap();
@@ -100,7 +100,7 @@ mod benchmarks {
 		let call: <T as Config>::RuntimeCall = pezframe_system::Call::remark { remark }.into();
 		let call_hash = T::Hashing::hash_of(&call);
 
-		Pallet::<T>::whitelist_call(origin.clone(), call_hash)
+		Pezpallet::<T>::whitelist_call(origin.clone(), call_hash)
 			.expect("whitelisting call must be successful");
 
 		#[extrinsic_call]

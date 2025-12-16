@@ -5,7 +5,7 @@
 #![cfg(feature = "runtime-benchmarks")]
 
 use super::*;
-use crate::Pallet as TrustPallet;
+use crate::Pezpallet as TrustPallet;
 
 use pezframe_benchmarking::{v2::*, whitelisted_caller};
 use pezframe_support::pezpallet_prelude::*;

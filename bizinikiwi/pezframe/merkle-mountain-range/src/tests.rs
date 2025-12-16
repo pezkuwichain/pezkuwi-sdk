@@ -38,12 +38,12 @@ fn register_offchain_ext(ext: &mut TestState) {
 }
 
 fn new_block() -> Weight {
-	let number = pezframe_system::Pallet::<Test>::block_number() + 1;
+	let number = pezframe_system::Pezpallet::<Test>::block_number() + 1;
 	let hash = H256::repeat_byte(number as u8);
 	LeafDataTestValue::mutate(|r| r.a = number);
 
-	pezframe_system::Pallet::<Test>::reset_events();
-	pezframe_system::Pallet::<Test>::initialize(&number, &hash, &Default::default());
+	pezframe_system::Pezpallet::<Test>::reset_events();
+	pezframe_system::Pezpallet::<Test>::initialize(&number, &hash, &Default::default());
 	MMR::on_initialize(number)
 }
 
@@ -119,7 +119,7 @@ fn should_append_to_mmr_when_on_initialize_is_called() {
 	let (parent_b1, parent_b2) = ext.execute_with(|| {
 		// when
 		new_block();
-		let parent_b1 = <pezframe_system::Pallet<Test>>::parent_hash();
+		let parent_b1 = <pezframe_system::Pezpallet<Test>>::parent_hash();
 
 		// then
 		assert_eq!(crate::NumberOfLeaves::<Test>::get(), 1);
@@ -138,7 +138,7 @@ fn should_append_to_mmr_when_on_initialize_is_called() {
 
 		// when
 		new_block();
-		let parent_b2 = <pezframe_system::Pallet<Test>>::parent_hash();
+		let parent_b2 = <pezframe_system::Pezpallet<Test>>::parent_hash();
 
 		// then
 		assert_eq!(crate::NumberOfLeaves::<Test>::get(), 2);
@@ -256,11 +256,11 @@ fn should_generate_proofs_correctly() {
 	// to retrieve full leaf data.
 	register_offchain_ext(&mut ext);
 	ext.execute_with(|| {
-		let best_block_number = pezframe_system::Pallet::<Test>::block_number();
+		let best_block_number = pezframe_system::Pezpallet::<Test>::block_number();
 		// when generate proofs for all leaves.
 		let proofs = (1_u64..=best_block_number)
 			.into_iter()
-			.map(|block_num| crate::Pallet::<Test>::generate_proof(vec![block_num], None).unwrap())
+			.map(|block_num| crate::Pezpallet::<Test>::generate_proof(vec![block_num], None).unwrap())
 			.collect::<Vec<_>>();
 		// when generate historical proofs for all leaves
 		let historical_proofs = (1_u64..best_block_number)
@@ -269,7 +269,7 @@ fn should_generate_proofs_correctly() {
 				let mut proofs = vec![];
 				for historical_best_block in block_num..=num_blocks {
 					proofs.push(
-						crate::Pallet::<Test>::generate_proof(
+						crate::Pezpallet::<Test>::generate_proof(
 							vec![block_num],
 							Some(historical_best_block),
 						)
@@ -431,7 +431,7 @@ fn should_generate_batch_proof_correctly() {
 	register_offchain_ext(&mut ext);
 	ext.execute_with(|| {
 		// when generate proofs for a batch of leaves
-		let (.., proof) = crate::Pallet::<Test>::generate_proof(vec![1, 5, 6], None).unwrap();
+		let (.., proof) = crate::Pezpallet::<Test>::generate_proof(vec![1, 5, 6], None).unwrap();
 		// then
 		assert_eq!(
 			proof,
@@ -449,7 +449,7 @@ fn should_generate_batch_proof_correctly() {
 
 		// when generate historical proofs for a batch of leaves
 		let (.., historical_proof) =
-			crate::Pallet::<Test>::generate_proof(vec![1, 5, 6], Some(6)).unwrap();
+			crate::Pezpallet::<Test>::generate_proof(vec![1, 5, 6], Some(6)).unwrap();
 		// then
 		assert_eq!(
 			historical_proof,
@@ -465,7 +465,7 @@ fn should_generate_batch_proof_correctly() {
 
 		// when generate historical proofs for a batch of leaves
 		let (.., historical_proof) =
-			crate::Pallet::<Test>::generate_proof(vec![1, 5, 6], None).unwrap();
+			crate::Pezpallet::<Test>::generate_proof(vec![1, 5, 6], None).unwrap();
 		// then
 		assert_eq!(historical_proof, proof);
 	});
@@ -486,30 +486,30 @@ fn should_verify() {
 	register_offchain_ext(&mut ext);
 	let (leaves, proof5) = ext.execute_with(|| {
 		// when
-		crate::Pallet::<Test>::generate_proof(vec![5], None).unwrap()
+		crate::Pezpallet::<Test>::generate_proof(vec![5], None).unwrap()
 	});
 	let (simple_historical_leaves, simple_historical_proof5) = ext.execute_with(|| {
 		// when
-		crate::Pallet::<Test>::generate_proof(vec![5], Some(6)).unwrap()
+		crate::Pezpallet::<Test>::generate_proof(vec![5], Some(6)).unwrap()
 	});
 	let (advanced_historical_leaves, advanced_historical_proof5) = ext.execute_with(|| {
 		// when
-		crate::Pallet::<Test>::generate_proof(vec![5], Some(7)).unwrap()
+		crate::Pezpallet::<Test>::generate_proof(vec![5], Some(7)).unwrap()
 	});
 
 	ext.execute_with(|| {
 		add_blocks(7);
 		// then
-		assert_eq!(crate::Pallet::<Test>::verify_leaves(leaves, proof5), Ok(()));
+		assert_eq!(crate::Pezpallet::<Test>::verify_leaves(leaves, proof5), Ok(()));
 		assert_eq!(
-			crate::Pallet::<Test>::verify_leaves(
+			crate::Pezpallet::<Test>::verify_leaves(
 				simple_historical_leaves,
 				simple_historical_proof5
 			),
 			Ok(())
 		);
 		assert_eq!(
-			crate::Pallet::<Test>::verify_leaves(
+			crate::Pezpallet::<Test>::verify_leaves(
 				advanced_historical_leaves,
 				advanced_historical_proof5
 			),
@@ -524,17 +524,17 @@ fn generate_and_verify_batch_proof(
 	blocks_to_add: usize,
 ) {
 	let (leaves, proof) = ext.execute_with(|| {
-		crate::Pallet::<Test>::generate_proof(block_numbers.to_vec(), None).unwrap()
+		crate::Pezpallet::<Test>::generate_proof(block_numbers.to_vec(), None).unwrap()
 	});
 
-	let max_block_number = ext.execute_with(|| pezframe_system::Pallet::<Test>::block_number());
+	let max_block_number = ext.execute_with(|| pezframe_system::Pezpallet::<Test>::block_number());
 	let min_block_number = block_numbers.iter().max().unwrap();
 
 	// generate all possible historical proofs for the given blocks
 	let historical_proofs = (*min_block_number..=max_block_number)
 		.map(|best_block| {
 			ext.execute_with(|| {
-				crate::Pallet::<Test>::generate_proof(block_numbers.to_vec(), Some(best_block))
+				crate::Pezpallet::<Test>::generate_proof(block_numbers.to_vec(), Some(best_block))
 					.unwrap()
 			})
 		})
@@ -543,9 +543,9 @@ fn generate_and_verify_batch_proof(
 	ext.execute_with(|| {
 		add_blocks(blocks_to_add);
 		// then
-		assert_eq!(crate::Pallet::<Test>::verify_leaves(leaves, proof), Ok(()));
+		assert_eq!(crate::Pezpallet::<Test>::verify_leaves(leaves, proof), Ok(()));
 		historical_proofs.iter().for_each(|(leaves, proof)| {
-			assert_eq!(crate::Pallet::<Test>::verify_leaves(leaves.clone(), proof.clone()), Ok(()));
+			assert_eq!(crate::Pezpallet::<Test>::verify_leaves(leaves.clone(), proof.clone()), Ok(()));
 		});
 	})
 }
@@ -607,9 +607,9 @@ fn verification_should_be_stateless() {
 	let mut ext = new_test_ext();
 	let (root_6, root_7) = ext.execute_with(|| {
 		add_blocks(6);
-		let root_6 = crate::Pallet::<Test>::mmr_root();
+		let root_6 = crate::Pezpallet::<Test>::mmr_root();
 		add_blocks(1);
-		let root_7 = crate::Pallet::<Test>::mmr_root();
+		let root_7 = crate::Pezpallet::<Test>::mmr_root();
 		(root_6, root_7)
 	});
 	ext.persist_offchain_overlay();
@@ -619,11 +619,11 @@ fn verification_should_be_stateless() {
 	register_offchain_ext(&mut ext);
 	let (leaves, proof5) = ext.execute_with(|| {
 		// when
-		crate::Pallet::<Test>::generate_proof(vec![5], None).unwrap()
+		crate::Pezpallet::<Test>::generate_proof(vec![5], None).unwrap()
 	});
 	let (_, historical_proof5) = ext.execute_with(|| {
 		// when
-		crate::Pallet::<Test>::generate_proof(vec![5], Some(6)).unwrap()
+		crate::Pezpallet::<Test>::generate_proof(vec![5], Some(6)).unwrap()
 	});
 
 	// Verify proof without relying on any on-chain data.
@@ -655,9 +655,9 @@ fn should_verify_batch_proof_statelessly() {
 	let mut ext = new_test_ext();
 	let (root_6, root_7) = ext.execute_with(|| {
 		add_blocks(6);
-		let root_6 = crate::Pallet::<Test>::mmr_root();
+		let root_6 = crate::Pezpallet::<Test>::mmr_root();
 		add_blocks(1);
-		let root_7 = crate::Pallet::<Test>::mmr_root();
+		let root_7 = crate::Pezpallet::<Test>::mmr_root();
 		(root_6, root_7)
 	});
 	ext.persist_offchain_overlay();
@@ -667,11 +667,11 @@ fn should_verify_batch_proof_statelessly() {
 	register_offchain_ext(&mut ext);
 	let (leaves, proof) = ext.execute_with(|| {
 		// when
-		crate::Pallet::<Test>::generate_proof(vec![1, 4, 5], None).unwrap()
+		crate::Pezpallet::<Test>::generate_proof(vec![1, 4, 5], None).unwrap()
 	});
 	let (historical_leaves, historical_proof) = ext.execute_with(|| {
 		// when
-		crate::Pallet::<Test>::generate_proof(vec![1, 4, 5], Some(6)).unwrap()
+		crate::Pezpallet::<Test>::generate_proof(vec![1, 4, 5], Some(6)).unwrap()
 	});
 
 	// Verify proof without relying on any on-chain data.
@@ -711,11 +711,11 @@ fn should_verify_on_the_next_block_since_there_is_no_pruning_yet() {
 
 	ext.execute_with(|| {
 		// when
-		let (leaves, proof5) = crate::Pallet::<Test>::generate_proof(vec![5], None).unwrap();
+		let (leaves, proof5) = crate::Pezpallet::<Test>::generate_proof(vec![5], None).unwrap();
 		new_block();
 
 		// then
-		assert_eq!(crate::Pallet::<Test>::verify_leaves(leaves, proof5), Ok(()));
+		assert_eq!(crate::Pezpallet::<Test>::verify_leaves(leaves, proof5), Ok(()));
 	});
 }
 
@@ -735,27 +735,27 @@ fn should_verify_canonicalized() {
 	for blocknum in 0u32..(2 * block_hash_size).try_into().unwrap() {
 		ext.execute_with(|| {
 			new_block();
-			<Pallet<Test> as Hooks<BlockNumber>>::offchain_worker(blocknum.into());
+			<Pezpallet<Test> as Hooks<BlockNumber>>::offchain_worker(blocknum.into());
 		});
 		ext.persist_offchain_overlay();
 	}
 
 	// Generate proofs for some blocks.
 	let (leaves, proofs) =
-		ext.execute_with(|| crate::Pallet::<Test>::generate_proof(vec![1, 4, 5, 7], None).unwrap());
+		ext.execute_with(|| crate::Pezpallet::<Test>::generate_proof(vec![1, 4, 5, 7], None).unwrap());
 	// Verify all previously generated proofs.
 	ext.execute_with(|| {
-		assert_eq!(crate::Pallet::<Test>::verify_leaves(leaves, proofs), Ok(()));
+		assert_eq!(crate::Pezpallet::<Test>::verify_leaves(leaves, proofs), Ok(()));
 	});
 
 	// Generate proofs for some new blocks.
 	let (leaves, proofs) = ext.execute_with(|| {
-		crate::Pallet::<Test>::generate_proof(vec![block_hash_size + 7], None).unwrap()
+		crate::Pezpallet::<Test>::generate_proof(vec![block_hash_size + 7], None).unwrap()
 	});
 	// Add some more blocks then verify all previously generated proofs.
 	ext.execute_with(|| {
 		add_blocks(7);
-		assert_eq!(crate::Pallet::<Test>::verify_leaves(leaves, proofs), Ok(()));
+		assert_eq!(crate::Pezpallet::<Test>::verify_leaves(leaves, proofs), Ok(()));
 	});
 }
 
@@ -773,17 +773,17 @@ fn does_not_panic_when_generating_historical_proofs() {
 	register_offchain_ext(&mut ext);
 	ext.execute_with(|| {
 		// when leaf index is invalid
-		assert_eq!(crate::Pallet::<Test>::generate_proof(vec![10], None), Err(Error::LeafNotFound),);
+		assert_eq!(crate::Pezpallet::<Test>::generate_proof(vec![10], None), Err(Error::LeafNotFound),);
 
 		// when leaves count is invalid
 		assert_eq!(
-			crate::Pallet::<Test>::generate_proof(vec![3], Some(100)),
+			crate::Pezpallet::<Test>::generate_proof(vec![3], Some(100)),
 			Err(Error::GenerateProof),
 		);
 
 		// when both leaf index and leaves count are invalid
 		assert_eq!(
-			crate::Pallet::<Test>::generate_proof(vec![10], Some(100)),
+			crate::Pezpallet::<Test>::generate_proof(vec![10], Some(100)),
 			Err(Error::LeafNotFound),
 		);
 	});
@@ -798,27 +798,27 @@ fn generating_and_verifying_ancestry_proofs_works_correctly() {
 	ext.execute_with(|| {
 		for _ in 1..=500 {
 			add_blocks(1);
-			prev_roots.push(Pallet::<Test>::mmr_root())
+			prev_roots.push(Pezpallet::<Test>::mmr_root())
 		}
 	});
 	ext.persist_offchain_overlay();
 	register_offchain_ext(&mut ext);
 
 	ext.execute_with(|| {
-		let root = Pallet::<Test>::mmr_root();
+		let root = Pezpallet::<Test>::mmr_root();
 		// Check that generating and verifying ancestry proofs works correctly
 		// for each previous block
 		for prev_block_number in 1usize..=500 {
 			let proof =
-				Pallet::<Test>::generate_ancestry_proof(prev_block_number as u64, None).unwrap();
-			assert!(Pallet::<Test>::is_ancestry_proof_optimal(&proof));
+				Pezpallet::<Test>::generate_ancestry_proof(prev_block_number as u64, None).unwrap();
+			assert!(Pezpallet::<Test>::is_ancestry_proof_optimal(&proof));
 			assert_eq!(
-				Pallet::<Test>::verify_ancestry_proof(root, proof),
+				Pezpallet::<Test>::verify_ancestry_proof(root, proof),
 				Ok(prev_roots[prev_block_number - 1])
 			);
 		}
 
 		// Check that we can't generate ancestry proofs for a future block.
-		assert_eq!(Pallet::<Test>::generate_ancestry_proof(501, None), Err(Error::GenerateProof));
+		assert_eq!(Pezpallet::<Test>::generate_ancestry_proof(501, None), Err(Error::GenerateProof));
 	});
 }

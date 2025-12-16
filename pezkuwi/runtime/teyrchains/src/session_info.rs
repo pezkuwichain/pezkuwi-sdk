@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! The session info pallet provides information about validator sets
+//! The session info pezpallet provides information about validator sets
 //! from prior sessions needed for approvals and disputes.
 //!
 //! See the documentation on [session info][session-info-page] in the implementers' guide.
@@ -34,7 +34,7 @@ use pezkuwi_primitives::{
 	AssignmentId, AuthorityDiscoveryId, ExecutorParams, SessionIndex, SessionInfo,
 };
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 pub mod migration;
 
@@ -55,16 +55,16 @@ pub type IdentificationTuple<T> = (
 	>>::Identification,
 );
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::pallet]
-	#[pallet::storage_version(migration::STORAGE_VERSION)]
-	#[pallet::without_storage_info]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(migration::STORAGE_VERSION)]
+	#[pezpallet::without_storage_info]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config:
 		pezframe_system::Config
 		+ configuration::Config
@@ -82,33 +82,33 @@ pub mod pallet {
 	/// Assignment keys for the current session.
 	/// Note that this API is private due to it being prone to 'off-by-one' at session boundaries.
 	/// When in doubt, use `Sessions` API instead.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type AssignmentKeysUnsafe<T: Config> =
 		StorageValue<_, Vec<AssignmentId>, ValueQuery>;
 
 	/// The earliest session for which previous session info is stored.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type EarliestStoredSession<T: Config> = StorageValue<_, SessionIndex, ValueQuery>;
 
 	/// Session information in a rolling window.
 	/// Should have an entry in range `EarliestStoredSession..=CurrentSessionIndex`.
 	/// Does not have any entries before the session index in the first session change notification.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Sessions<T: Config> = StorageMap<_, Identity, SessionIndex, SessionInfo>;
 
 	/// The validator account keys of the validators actively participating in teyrchain consensus.
 	// We do not store this in `SessionInfo` to avoid leaking the `AccountId` type to the client,
 	// which would complicate the migration process if we are to change it in the future.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type AccountKeys<T: Config> = StorageMap<_, Identity, SessionIndex, Vec<AccountId<T>>>;
 
 	/// Executor parameter set for a given session index
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type SessionExecutorParams<T: Config> =
 		StorageMap<_, Identity, SessionIndex, ExecutorParams>;
 }
 
-/// An abstraction for the authority discovery pallet
+/// An abstraction for the authority discovery pezpallet
 /// to help with mock testing.
 pub trait AuthorityDiscoveryConfig {
 	/// Retrieve authority identifiers of the current authority set in canonical ordering.
@@ -117,11 +117,11 @@ pub trait AuthorityDiscoveryConfig {
 
 impl<T: pezpallet_authority_discovery::Config> AuthorityDiscoveryConfig for T {
 	fn authorities() -> Vec<AuthorityDiscoveryId> {
-		pezpallet_authority_discovery::Pallet::<T>::current_authorities().to_vec()
+		pezpallet_authority_discovery::Pezpallet::<T>::current_authorities().to_vec()
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Handle an incoming session change.
 	pub(crate) fn initializer_on_new_session(
 		notification: &crate::initializer::SessionChangeNotification<BlockNumberFor<T>>,
@@ -193,20 +193,20 @@ impl<T: Config> Pallet<T> {
 		SessionExecutorParams::<T>::insert(&new_session_index, config.executor_params);
 	}
 
-	/// Called by the initializer to initialize the session info pallet.
+	/// Called by the initializer to initialize the session info pezpallet.
 	pub(crate) fn initializer_initialize(_now: BlockNumberFor<T>) -> Weight {
 		Weight::zero()
 	}
 
-	/// Called by the initializer to finalize the session info pallet.
+	/// Called by the initializer to finalize the session info pezpallet.
 	pub(crate) fn initializer_finalize() {}
 }
 
-impl<T: Config> pezsp_runtime::BoundToRuntimeAppPublic for Pallet<T> {
+impl<T: Config> pezsp_runtime::BoundToRuntimeAppPublic for Pezpallet<T> {
 	type Public = AssignmentId;
 }
 
-impl<T: pezpallet_session::Config + Config> OneSessionHandler<T::AccountId> for Pallet<T> {
+impl<T: pezpallet_session::Config + Config> OneSessionHandler<T::AccountId> for Pezpallet<T> {
 	type Key = AssignmentId;
 
 	fn on_genesis_session<'a, I: 'a>(_validators: I)

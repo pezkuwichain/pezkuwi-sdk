@@ -4,7 +4,7 @@ use pezsp_core::H256;
 use pezsp_runtime::DispatchError;
 
 // Kolay erişim için paletimize bir takma ad veriyoruz.
-type IdentityKycPallet = crate::Pallet<Test>;
+type IdentityKycPallet = crate::Pezpallet<Test>;
 
 // ============================================================================
 // Genesis Config Tests

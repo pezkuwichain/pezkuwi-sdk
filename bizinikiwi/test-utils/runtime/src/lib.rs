@@ -344,7 +344,7 @@ construct_runtime!(
 	{
 		System: pezframe_system,
 		Babe: pezpallet_babe,
-		BizinikiwiTest: bizinikiwi_test_pallet::pallet,
+		BizinikiwiTest: bizinikiwi_test_pallet::pezpallet,
 		Utility: pezpallet_utility,
 		Balances: pezpallet_balances,
 	}
@@ -388,7 +388,7 @@ parameter_types! {
 }
 
 #[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
-impl pezframe_system::pallet::Config for Runtime {
+impl pezframe_system::pezpallet::Config for Runtime {
 	type BlockWeights = RuntimeBlockWeights;
 	type Nonce = Nonce;
 	type AccountId = AccountId;
@@ -736,7 +736,7 @@ impl_runtime_apis! {
 	impl pezsp_offchain::OffchainWorkerApi<Block> for Runtime {
 		fn offchain_worker(header: &<Block as BlockT>::Header) {
 			let ext = Extrinsic::new_bare(
-				bizinikiwi_test_pallet::pallet::Call::storage_change{
+				bizinikiwi_test_pallet::pezpallet::Call::storage_change{
 					key:b"some_key".encode(),
 					value:Some(header.number.encode())
 				}.into(),

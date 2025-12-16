@@ -236,8 +236,8 @@ fn create_inherent_data<Client: UsageProvider<Block> + HeaderBackend<Block>, Blo
 
 /// Identifies what kind of chain we are dealing with.
 ///
-/// Chains containing the `TeyrchainSystem` and `TeyrchainInfo` pallet are considered teyrchains.
-/// Chains containing the `ParaInherent` pallet are considered relay chains.
+/// Chains containing the `TeyrchainSystem` and `TeyrchainInfo` pezpallet are considered teyrchains.
+/// Chains containing the `ParaInherent` pezpallet are considered relay chains.
 fn identify_chain(metadata: &Metadata, para_id: Option<u32>) -> ChainType {
 	let teyrchain_info_exists = metadata.pallet_by_name("TeyrchainInfo").is_some();
 	let teyrchain_system_exists = metadata.pallet_by_name("TeyrchainSystem").is_some();
@@ -548,7 +548,7 @@ impl OverheadCmd {
 			+ pezsp_blockchain::HeaderBackend<Block>,
 		C::Api: ApiExt<Block> + BlockBuilderApi<Block>,
 	{
-		if ext_builder.pallet() != "system" || ext_builder.extrinsic() != "remark" {
+		if ext_builder.pezpallet() != "system" || ext_builder.extrinsic() != "remark" {
 			return Err(format!("The extrinsic builder is required to build `System::Remark` extrinsics but builds `{}` extrinsics instead", ext_builder.name()).into());
 		}
 

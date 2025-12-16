@@ -23,7 +23,7 @@ use pezsp_runtime::traits::BlakeTwo256;
 /// # Pezkuwi Omni Benchmarking CLI
 ///
 /// The Pezkuwi Omni benchmarker allows to benchmark the extrinsics of any Pezkuwi runtime. It is
-/// meant to replace the current manual integration of the `benchmark pallet` into every teyrchain
+/// meant to replace the current manual integration of the `benchmark pezpallet` into every teyrchain
 /// node. This reduces duplicate code and makes maintenance for builders easier. The CLI is
 /// currently only able to benchmark extrinsics. In the future it is planned to extend this to some
 /// other areas.
@@ -66,19 +66,19 @@ use pezsp_runtime::traits::BlakeTwo256;
 /// cargo build -p zagros-runtime --profile production --features runtime-benchmarks
 /// ```
 ///
-/// Now as an example, we benchmark the `balances` pallet:
+/// Now as an example, we benchmark the `balances` pezpallet:
 ///
 /// ```sh
-/// frame-omni-bencher v1 benchmark pallet \
+/// frame-omni-bencher v1 benchmark pezpallet \
 ///     --runtime target/release/wbuild/zagros-runtime/zagros-runtime.compact.compressed.wasm \
-///     --pallet "pezpallet_balances" --extrinsic ""
+///     --pezpallet "pezpallet_balances" --extrinsic ""
 /// ```
 ///
-/// For the exact arguments of the `pallet` command, please refer to the `pallet` sub-module.
+/// For the exact arguments of the `pezpallet` command, please refer to the `pezpallet` sub-module.
 ///
 /// ## Backwards Compatibility
 ///
-/// The exposed pallet sub-command is identical as the node-integrated CLI. The only difference is
+/// The exposed pezpallet sub-command is identical as the node-integrated CLI. The only difference is
 /// that it needs to be prefixed with a `v1` to ensure drop-in compatibility.
 #[derive(Parser, Debug)]
 #[clap(author, version, about, verbatim_doc_comment)]
@@ -133,14 +133,14 @@ impl V1SubCommand {
 	pub fn run(self) -> Result<()> {
 		match self {
 			V1SubCommand::Benchmark(V1BenchmarkCommand { sub }) => match sub {
-				BenchmarkCmd::Pallet(pallet) => {
-					pallet.run_with_spec::<BlakeTwo256, HostFunctions>(None)
+				BenchmarkCmd::Pezpallet(pezpallet) => {
+					pezpallet.run_with_spec::<BlakeTwo256, HostFunctions>(None)
 				},
 				BenchmarkCmd::Overhead(overhead_cmd) =>
 					overhead_cmd.run_with_default_builder_and_spec::<OpaqueBlock, HostFunctions>(None),
 				_ =>
 					return Err(
-						"Only the `v1 benchmark pallet` and `v1 benchmark overhead` command is currently supported".into()
+						"Only the `v1 benchmark pezpallet` and `v1 benchmark overhead` command is currently supported".into()
 					),
 			},
 		}

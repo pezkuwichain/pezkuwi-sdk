@@ -15,10 +15,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-pub use pallet::*;
+pub use pezpallet::*;
 
-#[pezframe_support::pallet(dev_mode)]
-pub mod pallet {
+#[pezframe_support::pezpallet(dev_mode)]
+pub mod pezpallet {
 	use pezframe_support::{
 		dispatch::{Pays, PostDispatchInfo},
 		ensure,
@@ -27,19 +27,19 @@ pub mod pallet {
 	};
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Dummy function that overcharges the predispatch weight, allowing us to test the correct
 		/// values of [`ContractResult::gas_consumed`] and [`ContractResult::gas_required`] in
 		/// tests.
-		#[pallet::call_index(1)]
-		#[pallet::weight(*pre_charge)]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(*pre_charge)]
 		pub fn overestimate_pre_charge(
 			origin: OriginFor<T>,
 			pre_charge: Weight,

@@ -19,9 +19,9 @@
 //!
 //! Allows dynamic, chain-state-based pausing and unpausing of specific extrinsics via call filters.
 //!
-//! ## Pallet API
+//! ## Pezpallet API
 //!
-//! See the [`pallet`] module for more information about the interfaces this pallet exposes,
+//! See the [`pezpallet`] module for more information about the interfaces this pezpallet exposes,
 //! including its configuration trait, dispatchables, storage items, events, and errors.
 //!
 //! ## Overview
@@ -36,7 +36,7 @@
 //! - Calls that should never be paused can be added to a whitelist.
 //! - Separate origins are configurable for pausing and pausing.
 //! - Pausing is triggered using the string representation of the call.
-//! - Pauses can target a single extrinsic or an entire pallet.
+//! - Pauses can target a single extrinsic or an entire pezpallet.
 //! - Pauses can target future extrinsics or pallets.
 //!
 //! ### Example
@@ -57,7 +57,7 @@
 //! Unpause specific all:
 #![doc = docify::embed!("src/tests.rs", can_unpause_specific_call)]
 //!
-//! Pause all calls in a pallet:
+//! Pause all calls in a pezpallet:
 #![doc = docify::embed!("src/tests.rs", can_pause_all_calls_in_pallet_except_on_whitelist)]
 //!
 //! ## Low Level / Implementation Details
@@ -82,28 +82,28 @@ use frame::{
 	prelude::*,
 	traits::{TransactionPause, TransactionPauseError},
 };
-pub use pallet::*;
+pub use pezpallet::*;
 pub use weights::*;
 
-/// The stringy name of a pallet from [`GetCallMetadata`] for [`Config::RuntimeCall`] variants.
+/// The stringy name of a pezpallet from [`GetCallMetadata`] for [`Config::RuntimeCall`] variants.
 pub type PalletNameOf<T> = BoundedVec<u8, <T as Config>::MaxNameLen>;
 
-/// The stringy name of a call (within a pallet) from [`GetCallMetadata`] for
+/// The stringy name of a call (within a pezpallet) from [`GetCallMetadata`] for
 /// [`Config::RuntimeCall`] variants.
 pub type PalletCallNameOf<T> = BoundedVec<u8, <T as Config>::MaxNameLen>;
 
-/// A fully specified pallet ([`PalletNameOf`]) and optional call ([`PalletCallNameOf`])
+/// A fully specified pezpallet ([`PalletNameOf`]) and optional call ([`PalletCallNameOf`])
 /// to partially or fully specify an item a variant of a  [`Config::RuntimeCall`].
 pub type RuntimeCallNameOf<T> = (PalletNameOf<T>, PalletCallNameOf<T>);
 
-#[frame::pallet]
-pub mod pallet {
+#[frame::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(PhantomData<T>);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(PhantomData<T>);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
@@ -126,26 +126,26 @@ pub mod pallet {
 
 		/// Contains all calls that cannot be paused.
 		///
-		/// The `TxMode` pallet cannot pause its own calls, and does not need to be explicitly
+		/// The `TxMode` pezpallet cannot pause its own calls, and does not need to be explicitly
 		/// added here.
 		type WhitelistedCalls: Contains<RuntimeCallNameOf<Self>>;
 
-		/// Maximum length for pallet name and call name SCALE encoded string names.
+		/// Maximum length for pezpallet name and call name SCALE encoded string names.
 		///
 		/// TOO LONG NAMES WILL BE TREATED AS PAUSED.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxNameLen: Get<u32>;
 
-		// Weight information for extrinsics in this pallet.
+		// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 	}
 
 	/// The set of calls that are explicitly paused.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type PausedCalls<T: Config> =
 		StorageMap<_, Blake2_128Concat, RuntimeCallNameOf<T>, (), OptionQuery>;
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// The call is paused.
 		IsPaused,
@@ -156,45 +156,45 @@ pub mod pallet {
 		/// The call is whitelisted and cannot be paused.
 		Unpausable,
 
-		// The pallet or call does not exist in the runtime.
+		// The pezpallet or call does not exist in the runtime.
 		NotFound,
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
-		/// This pallet, or a specific call is now paused.
+		/// This pezpallet, or a specific call is now paused.
 		CallPaused { full_name: RuntimeCallNameOf<T> },
-		/// This pallet, or a specific call is now unpaused.
+		/// This pezpallet, or a specific call is now unpaused.
 		CallUnpaused { full_name: RuntimeCallNameOf<T> },
 	}
 
-	/// Configure the initial state of this pallet in the genesis block.
-	#[pallet::genesis_config]
+	/// Configure the initial state of this pezpallet in the genesis block.
+	#[pezpallet::genesis_config]
 	#[derive(DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		/// Initially paused calls.
 		pub paused: Vec<RuntimeCallNameOf<T>>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			for call in &self.paused {
-				Pallet::<T>::ensure_can_pause(&call).expect("Genesis data is known good; qed");
+				Pezpallet::<T>::ensure_can_pause(&call).expect("Genesis data is known good; qed");
 				PausedCalls::<T>::insert(&call, ());
 			}
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Pause a call.
 		///
 		/// Can only be called by [`Config::PauseOrigin`].
 		/// Emits an [`Event::CallPaused`] event on success.
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::pause())]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::pause())]
 		pub fn pause(origin: OriginFor<T>, full_name: RuntimeCallNameOf<T>) -> DispatchResult {
 			T::PauseOrigin::ensure_origin(origin)?;
 
@@ -205,8 +205,8 @@ pub mod pallet {
 		///
 		/// Can only be called by [`Config::UnpauseOrigin`].
 		/// Emits an [`Event::CallUnpaused`] event on success.
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::unpause())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::unpause())]
 		pub fn unpause(origin: OriginFor<T>, ident: RuntimeCallNameOf<T>) -> DispatchResult {
 			T::UnpauseOrigin::ensure_origin(origin)?;
 
@@ -215,7 +215,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	pub(crate) fn do_pause(ident: RuntimeCallNameOf<T>) -> Result<(), Error<T>> {
 		Self::ensure_can_pause(&ident)?;
 		PausedCalls::<T>::insert(&ident, ());
@@ -242,19 +242,19 @@ impl<T: Config> Pallet<T> {
 	}
 
 	/// Same as [`Self::is_paused`] but for inputs unbound by max-encoded-len.
-	pub fn is_paused_unbound(pallet: Vec<u8>, call: Vec<u8>) -> bool {
-		let pallet = PalletNameOf::<T>::try_from(pallet);
+	pub fn is_paused_unbound(pezpallet: Vec<u8>, call: Vec<u8>) -> bool {
+		let pezpallet = PalletNameOf::<T>::try_from(pezpallet);
 		let call = PalletCallNameOf::<T>::try_from(call);
 
-		match (pallet, call) {
-			(Ok(pallet), Ok(call)) => Self::is_paused(&(pallet, call)),
+		match (pezpallet, call) {
+			(Ok(pezpallet), Ok(call)) => Self::is_paused(&(pezpallet, call)),
 			_ => true,
 		}
 	}
 
 	/// Ensure that this call can be paused.
 	pub fn ensure_can_pause(full_name: &RuntimeCallNameOf<T>) -> Result<(), Error<T>> {
-		// SAFETY: The `TxPause` pallet can never pause itself.
+		// SAFETY: The `TxPause` pezpallet can never pause itself.
 		if full_name.0.as_slice() == <Self as PalletInfoAccess>::name().as_bytes() {
 			return Err(Error::<T>::Unpausable);
 		}
@@ -279,18 +279,18 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-impl<T: pallet::Config> Contains<<T as pezframe_system::Config>::RuntimeCall> for Pallet<T>
+impl<T: pezpallet::Config> Contains<<T as pezframe_system::Config>::RuntimeCall> for Pezpallet<T>
 where
 	<T as pezframe_system::Config>::RuntimeCall: GetCallMetadata,
 {
 	/// Return whether the call is allowed to be dispatched.
 	fn contains(call: &<T as pezframe_system::Config>::RuntimeCall) -> bool {
 		let CallMetadata { pezpallet_name, function_name } = call.get_call_metadata();
-		!Pallet::<T>::is_paused_unbound(pezpallet_name.into(), function_name.into())
+		!Pezpallet::<T>::is_paused_unbound(pezpallet_name.into(), function_name.into())
 	}
 }
 
-impl<T: Config> TransactionPause for Pallet<T> {
+impl<T: Config> TransactionPause for Pezpallet<T> {
 	type CallIdentifier = RuntimeCallNameOf<T>;
 
 	fn is_paused(full_name: Self::CallIdentifier) -> bool {

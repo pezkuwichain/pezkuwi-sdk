@@ -20,7 +20,7 @@ use pezframe_support::construct_runtime;
 construct_runtime! {
 	pub struct Runtime
 	{
-		System: system::{Pallet},
+		System: system::{Pezpallet},
 		#[cfg(feature(test))]
 		Balance: balances::{Config, Call},
 	}

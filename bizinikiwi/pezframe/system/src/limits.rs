@@ -127,7 +127,7 @@ pub struct WeightsPerClass {
 /// during extrinsic execution.
 ///
 /// Each block starts with `base_block` weight being consumed right away. Next up the
-/// `on_initialize` pallet callbacks are invoked and their cost is added before any extrinsic
+/// `on_initialize` pezpallet callbacks are invoked and their cost is added before any extrinsic
 /// is executed. This cost is tracked as `Mandatory` dispatch class.
 ///
 /// ```text,ignore

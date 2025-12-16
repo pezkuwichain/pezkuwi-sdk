@@ -1,7 +1,7 @@
 # The `benchmark overhead` command
 
 Each time an extrinsic or a block is executed, a fixed weight is charged as "execution overhead". This is necessary
-since the weight that is calculated by the pallet benchmarks does not include this overhead. The exact overhead to can
+since the weight that is calculated by the pezpallet benchmarks does not include this overhead. The exact overhead to can
 vary per Bizinikiwi chain and needs to be calculated per chain. This command calculates the exact values of these
 overhead weights for any Bizinikiwi chain that supports it.
 

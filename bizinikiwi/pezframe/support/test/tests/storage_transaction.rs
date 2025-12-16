@@ -32,30 +32,30 @@ use pezsp_runtime::{
 	TransactionOutcome,
 };
 
-pub use self::pallet::*;
+pub use self::pezpallet::*;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
-		#[pallet::weight(0)]
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
+		#[pezpallet::weight(0)]
 		#[transactional]
 		pub fn value_commits(_origin: OriginFor<T>, v: u32) -> DispatchResult {
 			<Value<T>>::set(v);
 			Ok(())
 		}
 
-		#[pallet::weight(0)]
+		#[pezpallet::weight(0)]
 		#[transactional]
 		pub fn value_rollbacks(_origin: OriginFor<T>, v: u32) -> DispatchResult {
 			<Value<T>>::set(v);
@@ -63,11 +63,11 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Value<T: Config> = StorageValue<_, u32, ValueQuery>;
 
-	#[pallet::storage]
-	#[pallet::unbounded]
+	#[pezpallet::storage]
+	#[pezpallet::unbounded]
 	pub type Map<T: Config> = StorageMap<_, Twox64Concat, String, u32, ValueQuery>;
 }
 
@@ -83,7 +83,7 @@ pezframe_support::construct_runtime!(
 
 	{
 		System: pezframe_system,
-		MyPallet: pallet,
+		MyPallet: pezpallet,
 	}
 );
 
@@ -103,8 +103,8 @@ impl Config for Runtime {}
 #[test]
 fn storage_transaction_basic_commit() {
 	TestExternalities::default().execute_with(|| {
-		type Value = pallet::Value<Runtime>;
-		type Map = pallet::Map<Runtime>;
+		type Value = pezpallet::Value<Runtime>;
+		type Map = pezpallet::Map<Runtime>;
 
 		assert_eq!(Value::get(), 0);
 		assert!(!Map::contains_key("val0"));
@@ -125,8 +125,8 @@ fn storage_transaction_basic_commit() {
 #[test]
 fn storage_transaction_basic_rollback() {
 	TestExternalities::default().execute_with(|| {
-		type Value = pallet::Value<Runtime>;
-		type Map = pallet::Map<Runtime>;
+		type Value = pezpallet::Value<Runtime>;
+		type Map = pezpallet::Map<Runtime>;
 
 		assert_eq!(Value::get(), 0);
 		assert_eq!(Map::get("val0"), 0);
@@ -160,8 +160,8 @@ fn storage_transaction_basic_rollback() {
 #[test]
 fn storage_transaction_rollback_then_commit() {
 	TestExternalities::default().execute_with(|| {
-		type Value = pallet::Value<Runtime>;
-		type Map = pallet::Map<Runtime>;
+		type Value = pezpallet::Value<Runtime>;
+		type Map = pezpallet::Map<Runtime>;
 
 		Value::set(1);
 		Map::insert("val1", 1);
@@ -206,8 +206,8 @@ fn storage_transaction_rollback_then_commit() {
 #[test]
 fn storage_transaction_commit_then_rollback() {
 	TestExternalities::default().execute_with(|| {
-		type Value = pallet::Value<Runtime>;
-		type Map = pallet::Map<Runtime>;
+		type Value = pezpallet::Value<Runtime>;
+		type Map = pezpallet::Map<Runtime>;
 
 		Value::set(1);
 		Map::insert("val1", 1);
@@ -251,7 +251,7 @@ fn storage_transaction_commit_then_rollback() {
 
 #[test]
 fn transactional_annotation() {
-	type Value = pallet::Value<Runtime>;
+	type Value = pezpallet::Value<Runtime>;
 
 	fn set_value(v: u32) -> DispatchResult {
 		Value::set(v);

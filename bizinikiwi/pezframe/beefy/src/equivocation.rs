@@ -26,12 +26,12 @@
 //!
 //! These can be used in an offchain context in order to submit equivocation
 //! reporting extrinsics (from the client that's running the BEEFY protocol).
-//! And in a runtime context, so that the BEEFY pallet can validate the
+//! And in a runtime context, so that the BEEFY pezpallet can validate the
 //! equivocation proofs in the extrinsic and report the offences.
 //!
 //! IMPORTANT:
 //! When using this module for enabling equivocation reporting it is required
-//! that the `ValidateUnsigned` for the BEEFY pallet is used in the runtime
+//! that the `ValidateUnsigned` for the BEEFY pezpallet is used in the runtime
 //! definition.
 
 use alloc::{vec, vec::Vec};
@@ -56,7 +56,7 @@ use pezsp_staking::{
 	SessionIndex,
 };
 
-use super::{Call, Config, Error, Pallet, LOG_TARGET};
+use super::{Call, Config, Error, Pezpallet, LOG_TARGET};
 
 /// A round number and set id which point on the time of an offence.
 #[derive(Copy, Clone, PartialOrd, Ord, Eq, PartialEq, Encode, Decode)]
@@ -127,7 +127,7 @@ where
 ///   `offchain::CreateTransactionBase`.
 /// - On-chain validity checks and processing are mostly delegated to the user provided generic
 ///   types implementing `KeyOwnerProofSystem` and `ReportOffence` traits.
-/// - Offence reporter for unsigned transactions is fetched via the authorship pallet.
+/// - Offence reporter for unsigned transactions is fetched via the authorship pezpallet.
 pub struct EquivocationReportSystem<T, R, P, L>(core::marker::PhantomData<(T, R, P, L)>);
 
 /// Equivocation evidence convenience alias.
@@ -255,7 +255,7 @@ impl<T: Config> EquivocationEvidenceFor<T> {
 			EquivocationEvidenceFor::FutureBlockVotingProof(equivocation_proof, _) => {
 				let FutureBlockVotingProof { vote } = equivocation_proof;
 				// Check if the commitment actually targets a future block
-				if vote.commitment.block_number < pezframe_system::Pallet::<T>::block_number() {
+				if vote.commitment.block_number < pezframe_system::Pezpallet::<T>::block_number() {
 					return Err(Error::<T>::InvalidFutureBlockVotingProof);
 				}
 
@@ -326,7 +326,7 @@ where
 		evidence: EquivocationEvidenceFor<T>,
 	) -> Result<(), DispatchError> {
 		let maybe_slash_fraction = evidence.slash_fraction();
-		let reporter = reporter.or_else(|| pezpallet_authorship::Pallet::<T>::author());
+		let reporter = reporter.or_else(|| pezpallet_authorship::Pezpallet::<T>::author());
 
 		// We check the equivocation within the context of its set id (and associated session).
 		let set_id = evidence.set_id();
@@ -365,7 +365,7 @@ where
 /// It restricts calls to `report_equivocation_unsigned` to local calls (i.e. extrinsics generated
 /// on this node) or that already in a block. This guarantees that only block authors can include
 /// unsigned equivocation reports.
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	pub fn validate_unsigned(source: TransactionSource, call: &Call<T>) -> TransactionValidity {
 		// discard equivocation report not coming from the local node
 		match source {

@@ -2,9 +2,9 @@
 
 **DO NOT USE ON VALUE-BEARING CHAINS. THIS PALLET IS ONLY INTENDED FOR TESTING USAGE.**
 
-# Glutton Pallet
+# Glutton Pezpallet
 
-The `Glutton` pallet gets the name from its property to consume vast amounts of resources. It can be used to push
+The `Glutton` pezpallet gets the name from its property to consume vast amounts of resources. It can be used to push
 para-chains and their relay-chains to the limits. This is good for testing out theoretical limits in a practical way.
 
 The `Glutton` can be set to consume a fraction of the available block length and unused weight of a chain. It

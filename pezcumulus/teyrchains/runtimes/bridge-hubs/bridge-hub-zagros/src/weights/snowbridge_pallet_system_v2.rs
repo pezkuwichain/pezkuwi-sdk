@@ -24,15 +24,15 @@
 // Executed Command:
 // target/release/pezkuwi-teyrchain
 // benchmark
-// pallet
+// pezpallet
 // --chain
 // bridge-hub-pezkuwichain-dev
-// --pallet=snowbridge_pezpallet_system
+// --pezpallet=pezsnowbridge_pezpallet_system
 // --extrinsic=*
 // --execution=wasm
 // --wasm-execution=compiled
 // --output
-// teyrchains/runtimes/bridge-hubs/bridge-hub-pezkuwichain/src/weights/snowbridge_pezpallet_system.rs
+// teyrchains/runtimes/bridge-hubs/bridge-hub-pezkuwichain/src/weights/pezsnowbridge_pezpallet_system.rs
 
 #![cfg_attr(rustfmt, rustfmt_skip)]
 #![allow(unused_parens)]
@@ -44,7 +44,7 @@ use core::marker::PhantomData;
 
 /// Weight functions for `snowbridge_system`.
 pub struct WeightInfo<T>(PhantomData<T>);
-impl<T: pezframe_system::Config> snowbridge_pezpallet_system_v2::WeightInfo for WeightInfo<T> {
+impl<T: pezframe_system::Config> pezsnowbridge_pezpallet_system_v2::WeightInfo for WeightInfo<T> {
 	fn register_token() -> Weight {
 		// Proof Size summary in bytes:
 		//  Measured:  `256`

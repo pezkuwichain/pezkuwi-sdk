@@ -6,7 +6,7 @@ edition.workspace = true
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
-description = "FRAME pallet bags list remote test"
+description = "FRAME pezpallet bags list remote test"
 publish = false
 documentation = "https://docs.rs/pezpallet-bags-list-remote-tests"
 

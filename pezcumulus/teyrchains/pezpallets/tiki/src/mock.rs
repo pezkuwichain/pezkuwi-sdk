@@ -14,16 +14,16 @@ type Block = pezframe_system::mocking::MockBlock<Test>;
 pub type AccountId = u64;
 pub type Balance = u128;
 
-// Runtime'ı oluştur - Identity ve IdentityKyc pallet'lerini de ekle
+// Runtime'ı oluştur - Identity ve IdentityKyc pezpallet'lerini de ekle
 construct_runtime!(
 	pub enum Test
 	{
-		System: pezframe_system::{Pallet, Call, Config<T>, Storage, Event<T>},
-		Balances: pezpallet_balances::{Pallet, Call, Storage, Event<T>},
-		Identity: pezpallet_identity::{Pallet, Call, Storage, Event<T>},
-		IdentityKyc: pezpallet_identity_kyc::{Pallet, Call, Storage, Event<T>},
-		Nfts: pezpallet_nfts::{Pallet, Call, Storage, Event<T>},
-		Tiki: pezpallet_tiki::{Pallet, Call, Storage, Event<T>},
+		System: pezframe_system::{Pezpallet, Call, Config<T>, Storage, Event<T>},
+		Balances: pezpallet_balances::{Pezpallet, Call, Storage, Event<T>},
+		Identity: pezpallet_identity::{Pezpallet, Call, Storage, Event<T>},
+		IdentityKyc: pezpallet_identity_kyc::{Pezpallet, Call, Storage, Event<T>},
+		Nfts: pezpallet_nfts::{Pezpallet, Call, Storage, Event<T>},
+		Tiki: pezpallet_tiki::{Pezpallet, Call, Storage, Event<T>},
 	}
 );
 
@@ -249,7 +249,7 @@ pub fn advance_blocks(blocks: u64) {
 		let current_block = System::block_number();
 		System::set_block_number(current_block + 1);
 		// Trigger hooks for the new block
-		<pezpallet_tiki::Pallet<Test> as pezframe_support::traits::Hooks<u64>>::on_initialize(
+		<pezpallet_tiki::Pezpallet<Test> as pezframe_support::traits::Hooks<u64>>::on_initialize(
 			current_block + 1,
 		);
 	}

@@ -16,7 +16,7 @@
 
 //! A module that is responsible for migration of storage.
 
-use crate::configuration::{self, Config, Pallet};
+use crate::configuration::{self, Config, Pezpallet};
 use alloc::vec::Vec;
 use pezframe_support::{
 	pezpallet_prelude::*,
@@ -139,11 +139,11 @@ mod v8 {
 
 	#[pezframe_support::storage_alias]
 	pub(crate) type ActiveConfig<T: Config> =
-		StorageValue<Pallet<T>, V8HostConfiguration<BlockNumberFor<T>>, OptionQuery>;
+		StorageValue<Pezpallet<T>, V8HostConfiguration<BlockNumberFor<T>>, OptionQuery>;
 
 	#[pezframe_support::storage_alias]
 	pub(crate) type PendingConfigs<T: Config> = StorageValue<
-		Pallet<T>,
+		Pezpallet<T>,
 		Vec<(SessionIndex, V8HostConfiguration<BlockNumberFor<T>>)>,
 		OptionQuery,
 	>;
@@ -154,11 +154,11 @@ mod v9 {
 
 	#[pezframe_support::storage_alias]
 	pub(crate) type ActiveConfig<T: Config> =
-		StorageValue<Pallet<T>, V9HostConfiguration<BlockNumberFor<T>>, OptionQuery>;
+		StorageValue<Pezpallet<T>, V9HostConfiguration<BlockNumberFor<T>>, OptionQuery>;
 
 	#[pezframe_support::storage_alias]
 	pub(crate) type PendingConfigs<T: Config> = StorageValue<
-		Pallet<T>,
+		Pezpallet<T>,
 		Vec<(SessionIndex, V9HostConfiguration<BlockNumberFor<T>>)>,
 		OptionQuery,
 	>;
@@ -174,11 +174,11 @@ impl<T: Config> OnRuntimeUpgrade for MigrateToV9<T> {
 
 	fn on_runtime_upgrade() -> Weight {
 		log::info!(target: configuration::LOG_TARGET, "HostConfiguration MigrateToV9 started");
-		if StorageVersion::get::<Pallet<T>>() == 8 {
+		if StorageVersion::get::<Pezpallet<T>>() == 8 {
 			let weight_consumed = migrate_to_v9::<T>();
 
 			log::info!(target: configuration::LOG_TARGET, "HostConfiguration MigrateToV9 executed successfully");
-			StorageVersion::new(9).put::<Pallet<T>>();
+			StorageVersion::new(9).put::<Pezpallet<T>>();
 
 			weight_consumed
 		} else {
@@ -191,7 +191,7 @@ impl<T: Config> OnRuntimeUpgrade for MigrateToV9<T> {
 	fn post_upgrade(_state: Vec<u8>) -> Result<(), pezsp_runtime::TryRuntimeError> {
 		log::trace!(target: crate::configuration::LOG_TARGET, "Running post_upgrade() for HostConfiguration MigrateToV9");
 		ensure!(
-			StorageVersion::get::<Pallet<T>>() >= 9,
+			StorageVersion::get::<Pezpallet<T>>() >= 9,
 			"Storage version should be >= 9 after the migration"
 		);
 
@@ -406,7 +406,7 @@ mod tests {
 	}
 
 	// Test that migration doesn't panic in case there're no pending configurations upgrades in
-	// pallet's storage.
+	// pezpallet's storage.
 	#[test]
 	fn test_migrate_to_v9_no_pending() {
 		let v8 = V8HostConfiguration::<pezkuwi_primitives::BlockNumber>::default();

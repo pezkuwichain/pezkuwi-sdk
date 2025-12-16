@@ -25,7 +25,7 @@ use crate::{
 		},
 		Block, HashesOrTransactionInfos, TYPE_EIP1559, TYPE_EIP2930, TYPE_EIP4844, TYPE_EIP7702,
 	},
-	Config, Pallet, ReceiptGasInfo,
+	Config, Pezpallet, ReceiptGasInfo,
 };
 
 use alloc::{vec, vec::Vec};
@@ -41,7 +41,7 @@ const LOG_TARGET: &str = "runtime::revive::block_builder";
 
 /// Ethereum block builder designed to incrementally build the transaction and receipt trie roots.
 ///
-/// This builder is optimized to minimize memory usage and pallet storage by leveraging the internal
+/// This builder is optimized to minimize memory usage and pezpallet storage by leveraging the internal
 /// structure of the Ethereum trie and the RLP encoding of receipts.
 #[cfg_attr(test, derive(pezframe_support::DefaultNoBound))]
 pub struct EthereumBlockBuilder<T> {
@@ -59,7 +59,7 @@ pub struct EthereumBlockBuilder<T> {
 impl<T: crate::Config> EthereumBlockBuilder<T> {
 	/// Converts the builder into an intermediate representation.
 	///
-	/// The intermediate representation is extracted from the pallet storage.
+	/// The intermediate representation is extracted from the pezpallet storage.
 	pub fn to_ir(self) -> EthereumBlockBuilderIR<T> {
 		EthereumBlockBuilderIR {
 			transaction_root_builder: self.transaction_root_builder.to_ir(),
@@ -76,7 +76,7 @@ impl<T: crate::Config> EthereumBlockBuilder<T> {
 
 	/// Converts the intermediate representation back into a builder.
 	///
-	/// The intermediate representation is placed into the pallet storage.
+	/// The intermediate representation is placed into the pezpallet storage.
 	pub fn from_ir(ir: EthereumBlockBuilderIR<T>) -> Self {
 		Self {
 			transaction_root_builder: IncrementalHashBuilder::from_ir(ir.transaction_root_builder),
@@ -91,12 +91,12 @@ impl<T: crate::Config> EthereumBlockBuilder<T> {
 		}
 	}
 
-	/// Store the first transaction and receipt in pallet storage.
+	/// Store the first transaction and receipt in pezpallet storage.
 	fn pezpallet_put_first_values(&mut self, values: (Vec<u8>, Vec<u8>)) {
 		crate::EthBlockBuilderFirstValues::<T>::put(Some(values));
 	}
 
-	/// Take the first transaction and receipt from pallet storage.
+	/// Take the first transaction and receipt from pezpallet storage.
 	fn pezpallet_take_first_values(&mut self) -> Option<(Vec<u8>, Vec<u8>)> {
 		crate::EthBlockBuilderFirstValues::<T>::take()
 	}
@@ -131,17 +131,17 @@ impl<T: crate::Config> EthereumBlockBuilder<T> {
 
 		self.gas_info.push(receipt_gas_info);
 
-		// The first transaction and receipt are returned to be stored in the pallet storage.
+		// The first transaction and receipt are returned to be stored in the pezpallet storage.
 		// The index of the incremental hash builders already expects the next items.
 		if self.tx_hashes.len() == 1 {
-			log::trace!(target: LOG_TARGET, "Storing first transaction and receipt in pallet storage");
+			log::trace!(target: LOG_TARGET, "Storing first transaction and receipt in pezpallet storage");
 			self.pezpallet_put_first_values((transaction_encoded, encoded_receipt));
 			return;
 		}
 
 		if self.transaction_root_builder.needs_first_value(BuilderPhase::ProcessingValue) {
 			if let Some((first_tx, first_receipt)) = self.pezpallet_take_first_values() {
-				log::trace!(target: LOG_TARGET, "Loaded first transaction and receipt from pallet storage");
+				log::trace!(target: LOG_TARGET, "Loaded first transaction and receipt from pezpallet storage");
 				self.transaction_root_builder.set_first_value(first_tx);
 				self.receipts_root_builder.set_first_value(first_receipt);
 			} else {
@@ -166,7 +166,7 @@ impl<T: crate::Config> EthereumBlockBuilder<T> {
 		};
 		// Eth uses timestamps in seconds
 		let timestamp = (T::Time::now() / 1000u32.into()).into();
-		let block_author = Pallet::<T>::block_author();
+		let block_author = Pezpallet::<T>::block_author();
 
 		let eth_block_num: U256 = block_number.into();
 		self.build_block_with_params(eth_block_num, parent_hash, timestamp, block_author)
@@ -278,8 +278,8 @@ impl<T: Config> Default for EthereumBlockBuilderIR<T> {
 			gas_used: U256::zero(),
 			tx_hashes: Vec::new(),
 			gas_info: Vec::new(),
-			base_fee_per_gas: Pallet::<T>::evm_base_fee(),
-			block_gas_limit: Pallet::<T>::evm_block_gas_limit(),
+			base_fee_per_gas: Pezpallet::<T>::evm_base_fee(),
+			block_gas_limit: Pezpallet::<T>::evm_block_gas_limit(),
 			_phantom: core::marker::PhantomData,
 		}
 	}

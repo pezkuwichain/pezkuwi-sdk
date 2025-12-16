@@ -18,7 +18,7 @@
 //! # Aura Module
 //!
 //! - [`Config`]
-//! - [`Pallet`]
+//! - [`Pezpallet`]
 //!
 //! ## Overview
 //!
@@ -58,7 +58,7 @@ pub mod migrations;
 mod mock;
 mod tests;
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 const LOG_TARGET: &str = "runtime::aura";
 
@@ -66,7 +66,7 @@ const LOG_TARGET: &str = "runtime::aura";
 /// [`pezpallet_timestamp::Config::MinimumPeriod`] by multiplying it by two, to ensure
 /// that authors have the majority of their slot to author within.
 ///
-/// This was the default behavior of the Aura pallet and may be used for
+/// This was the default behavior of the Aura pezpallet and may be used for
 /// backwards compatibility.
 pub struct MinimumPeriodTimesTwo<T>(core::marker::PhantomData<T>);
 
@@ -76,13 +76,13 @@ impl<T: pezpallet_timestamp::Config> Get<T::Moment> for MinimumPeriodTimesTwo<T>
 	}
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezpallet_timestamp::Config + pezframe_system::Config {
 		/// The identifier type for an authority.
 		type AuthorityId: Member
@@ -90,7 +90,7 @@ pub mod pallet {
 			+ RuntimeAppPublic
 			+ MaybeSerializeDeserialize
 			+ MaxEncodedLen;
-		/// The maximum number of authorities that the pallet can hold.
+		/// The maximum number of authorities that the pezpallet can hold.
 		type MaxAuthorities: Get<u32>;
 
 		/// A way to check whether a given validator is disabled and should not be authoring blocks.
@@ -100,15 +100,15 @@ pub mod pallet {
 
 		/// Whether to allow block authors to create multiple blocks per slot.
 		///
-		/// If this is `true`, the pallet will allow slots to stay the same across sequential
-		/// blocks. If this is `false`, the pallet will require that subsequent blocks always have
+		/// If this is `true`, the pezpallet will allow slots to stay the same across sequential
+		/// blocks. If this is `false`, the pezpallet will require that subsequent blocks always have
 		/// higher slots than previous ones.
 		///
-		/// Regardless of the setting of this storage value, the pallet will always enforce the
+		/// Regardless of the setting of this storage value, the pezpallet will always enforce the
 		/// invariant that slots don't move backwards as the chain progresses.
 		///
-		/// The typical value for this should be 'false' unless this pallet is being augmented by
-		/// another pallet which enforces some limitation on the number of blocks authors can create
+		/// The typical value for this should be 'false' unless this pezpallet is being augmented by
+		/// another pezpallet which enforces some limitation on the number of blocks authors can create
 		/// using the same slot.
 		type AllowMultipleBlocksPerSlot: Get<bool>;
 
@@ -116,15 +116,15 @@ pub mod pallet {
 		/// The effective value of this type should not change while the chain is running.
 		///
 		/// For backwards compatibility either use [`MinimumPeriodTimesTwo`] or a const.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type SlotDuration: Get<<Self as pezpallet_timestamp::Config>::Moment>;
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(core::marker::PhantomData<T>);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(core::marker::PhantomData<T>);
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn on_initialize(_: BlockNumberFor<T>) -> Weight {
 			if let Some(new_slot) = Self::current_slot_from_digests() {
 				let current_slot = CurrentSlot::<T>::get();
@@ -163,31 +163,31 @@ pub mod pallet {
 	}
 
 	/// The current authority set.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Authorities<T: Config> =
 		StorageValue<_, BoundedVec<T::AuthorityId, T::MaxAuthorities>, ValueQuery>;
 
 	/// The current slot of this block.
 	///
 	/// This will be set in `on_initialize`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type CurrentSlot<T: Config> = StorageValue<_, Slot, ValueQuery>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(pezframe_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		pub authorities: Vec<T::AuthorityId>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
-			Pallet::<T>::initialize_authorities(&self.authorities);
+			Pezpallet::<T>::initialize_authorities(&self.authorities);
 		}
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Change authorities.
 	///
 	/// The storage will be applied immediately.
@@ -207,7 +207,7 @@ impl<T: Config> Pallet<T> {
 			AURA_ENGINE_ID,
 			ConsensusLog::AuthoritiesChange(new.into_inner()).encode(),
 		);
-		<pezframe_system::Pallet<T>>::deposit_log(log);
+		<pezframe_system::Pezpallet<T>>::deposit_log(log);
 	}
 
 	/// Initial authorities.
@@ -231,7 +231,7 @@ impl<T: Config> Pallet<T> {
 
 	/// Get the current slot from the pre-runtime digests.
 	fn current_slot_from_digests() -> Option<Slot> {
-		let digest = pezframe_system::Pallet::<T>::digest();
+		let digest = pezframe_system::Pezpallet::<T>::digest();
 		let pre_runtime_digests = digest.logs.iter().filter_map(|d| d.as_pre_runtime());
 		for (id, mut data) in pre_runtime_digests {
 			if id == AURA_ENGINE_ID {
@@ -247,9 +247,9 @@ impl<T: Config> Pallet<T> {
 		T::SlotDuration::get()
 	}
 
-	/// Ensure the correctness of the state of this pallet.
+	/// Ensure the correctness of the state of this pezpallet.
 	///
-	/// This should be valid before or after each state transition of this pallet.
+	/// This should be valid before or after each state transition of this pezpallet.
 	///
 	/// # Invariants
 	///
@@ -297,11 +297,11 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-impl<T: Config> pezsp_runtime::BoundToRuntimeAppPublic for Pallet<T> {
+impl<T: Config> pezsp_runtime::BoundToRuntimeAppPublic for Pezpallet<T> {
 	type Public = T::AuthorityId;
 }
 
-impl<T: Config> OneSessionHandler<T::AccountId> for Pallet<T> {
+impl<T: Config> OneSessionHandler<T::AccountId> for Pezpallet<T> {
 	type Key = T::AuthorityId;
 
 	fn on_genesis_session<'a, I: 'a>(validators: I)
@@ -340,11 +340,11 @@ impl<T: Config> OneSessionHandler<T::AccountId> for Pallet<T> {
 			ConsensusLog::<T::AuthorityId>::OnDisabled(i as AuthorityIndex).encode(),
 		);
 
-		<pezframe_system::Pallet<T>>::deposit_log(log);
+		<pezframe_system::Pezpallet<T>>::deposit_log(log);
 	}
 }
 
-impl<T: Config> FindAuthor<u32> for Pallet<T> {
+impl<T: Config> FindAuthor<u32> for Pezpallet<T> {
 	fn find_author<'a, I>(digests: I) -> Option<u32>
 	where
 		I: 'a + IntoIterator<Item = (ConsensusEngineId, &'a [u8])>,
@@ -381,15 +381,15 @@ impl<T: Config, Inner: FindAuthor<u32>> FindAuthor<T::AuthorityId>
 }
 
 /// Find the authority ID of the Aura authority who authored the current block.
-pub type AuraAuthorId<T> = FindAccountFromAuthorIndex<T, Pallet<T>>;
+pub type AuraAuthorId<T> = FindAccountFromAuthorIndex<T, Pezpallet<T>>;
 
-impl<T: Config> IsMember<T::AuthorityId> for Pallet<T> {
+impl<T: Config> IsMember<T::AuthorityId> for Pezpallet<T> {
 	fn is_member(authority_id: &T::AuthorityId) -> bool {
 		Authorities::<T>::get().iter().any(|id| id == authority_id)
 	}
 }
 
-impl<T: Config> OnTimestampSet<T::Moment> for Pallet<T> {
+impl<T: Config> OnTimestampSet<T::Moment> for Pezpallet<T> {
 	fn on_timestamp_set(moment: T::Moment) {
 		let slot_duration = Self::slot_duration();
 		assert!(!slot_duration.is_zero(), "Aura slot duration cannot be zero.");

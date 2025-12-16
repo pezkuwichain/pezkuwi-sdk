@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Tests for the alliance pallet.
+//! Tests for the alliance pezpallet.
 
 use pezframe_support::{assert_noop, assert_ok};
 use pezframe_system::{EventRecord, Phase};

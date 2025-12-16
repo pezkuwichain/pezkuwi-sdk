@@ -65,7 +65,7 @@ mod example_runtime {
 	pub type Signature = MultiSignature;
 	pub type BlockNumber = u32;
 
-	// For testing the pallet, we construct a mock runtime.
+	// For testing the pezpallet, we construct a mock runtime.
 	pezframe_support::construct_runtime!(
 		pub enum Runtime
 		{
@@ -92,7 +92,7 @@ mod example_runtime {
 		type BenchmarkHelper = ();
 	}
 
-	/// Type that enables any pallet to ask for a coowner origin.
+	/// Type that enables any pezpallet to ask for a coowner origin.
 	pub struct EnsureCoowner;
 	impl EnsureOrigin<RuntimeOrigin> for EnsureCoowner {
 		type Success = (AccountId, AccountId);

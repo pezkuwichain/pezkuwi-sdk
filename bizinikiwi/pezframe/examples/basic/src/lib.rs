@@ -21,11 +21,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-//! # Basic Example Pallet
+//! # Basic Example Pezpallet
 //!
-//! A pallet demonstrating concepts, APIs and structures common to most FRAME runtimes.
+//! A pezpallet demonstrating concepts, APIs and structures common to most FRAME runtimes.
 //!
-//! **This pallet serves as an example and is not meant to be used in production.**
+//! **This pezpallet serves as an example and is not meant to be used in production.**
 //!
 //! > Made with *Bizinikiwi*, for *Pezkuwi*.
 //!
@@ -35,20 +35,20 @@
 //! [pezkuwi]: https://img.shields.io/badge/polkadot-E6007A?style=for-the-badge&logo=polkadot&logoColor=white
 //! [github]: https://img.shields.io/badge/github-8da0cb?style=for-the-badge&labelColor=555555&logo=github
 //!
-//! ## Pallet API
+//! ## Pezpallet API
 //!
-//! See the [`pallet`] module for more information about the interfaces this pallet exposes,
+//! See the [`pezpallet`] module for more information about the interfaces this pezpallet exposes,
 //! including its configuration trait, dispatchables, storage items, events and errors.
 //!
 //! ## Overview
 //!
-//! This pallet provides basic examples of using:
+//! This pezpallet provides basic examples of using:
 //!
 //! - A custom weight calculator able to classify a call's dispatch class (see:
 //!   [`pezframe_support::dispatch::DispatchClass`])
-//! - Pallet hooks to implement some custom logic that's executed before and after a block is
+//! - Pezpallet hooks to implement some custom logic that's executed before and after a block is
 //!   imported (see: [`pezframe_support::traits::Hooks`])
-//! - Inherited weight annotation for pallet calls, used to create less repetition for calls that
+//! - Inherited weight annotation for pezpallet calls, used to create less repetition for calls that
 //!   use the [`Config::WeightInfo`] trait to calculate call weights. This can also be overridden,
 //!   as demonstrated by [`Call::set_dummy`].
 //! - A private function that performs a storage update.
@@ -83,8 +83,8 @@ use pezsp_runtime::{
 	transaction_validity::{InvalidTransaction, ValidTransaction},
 };
 
-// Re-export pallet items so that they can be accessed from the crate namespace.
-pub use pallet::*;
+// Re-export pezpallet items so that they can be accessed from the crate namespace.
+pub use pezpallet::*;
 
 #[cfg(test)]
 mod tests;
@@ -93,7 +93,7 @@ mod benchmarking;
 pub mod weights;
 pub use weights::*;
 
-/// A type alias for the balance type from this pallet's point of view.
+/// A type alias for the balance type from this pezpallet's point of view.
 type BalanceOf<T> = <T as pezpallet_balances::Config>::Balance;
 const MILLICENTS: u32 = 1_000_000_000;
 
@@ -103,7 +103,7 @@ const MILLICENTS: u32 = 1_000_000_000;
 // The `WeightData<T>` trait has access to the arguments of the dispatch that it wants to assign a
 // weight to. Nonetheless, the trait itself cannot make any assumptions about what the generic type
 // of the arguments (`T`) is. Based on our needs, we could replace `T` with a more concrete type
-// while implementing the trait. The `pallet::weight` expects whatever implements `WeighData<T>` to
+// while implementing the trait. The `pezpallet::weight` expects whatever implements `WeighData<T>` to
 // replace `T` with a tuple of the dispatch arguments. This is exactly how we will craft the
 // implementation below.
 //
@@ -144,39 +144,39 @@ impl<T: pezpallet_balances::Config> PaysFee<(&BalanceOf<T>,)> for WeightForSetDu
 	}
 }
 
-// Definition of the pallet logic, to be aggregated at runtime definition through
+// Definition of the pezpallet logic, to be aggregated at runtime definition through
 // `construct_runtime`.
-#[pezframe_support::pallet]
-pub mod pallet {
-	// Import various types used to declare pallet in scope.
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
+	// Import various types used to declare pezpallet in scope.
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	/// Our pallet's configuration trait. All our types and constants go in here. If the
-	/// pallet is dependent on specific other pallets, then their configuration traits
+	/// Our pezpallet's configuration trait. All our types and constants go in here. If the
+	/// pezpallet is dependent on specific other pallets, then their configuration traits
 	/// should be added to our implied traits list.
 	///
 	/// `pezframe_system::Config` should always be included.
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezpallet_balances::Config + pezframe_system::Config {
 		// Setting a constant config parameter from the runtime
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MagicNumber: Get<Self::Balance>;
 
-		/// Type representing the weight of this pallet
+		/// Type representing the weight of this pezpallet
 		type WeightInfo: WeightInfo;
 	}
 
-	// Simple declaration of the `Pallet` type. It is placeholder we use to implement traits and
+	// Simple declaration of the `Pezpallet` type. It is placeholder we use to implement traits and
 	// method.
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	// This pallet implements the [`pezframe_support::traits::Hooks`] trait to define some logic to
+	// This pezpallet implements the [`pezframe_support::traits::Hooks`] trait to define some logic to
 	// execute in some context.
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		// `on_initialize` is executed at the beginning of the block before any extrinsic are
 		// dispatched.
 		//
@@ -199,7 +199,7 @@ pub mod pallet {
 			// We don't do anything here.
 			// but we could dispatch extrinsic (transaction/unsigned/inherent) using
 			// pezsp_io::submit_extrinsic.
-			// To see example on offchain worker, please refer to example-offchain-worker pallet
+			// To see example on offchain worker, please refer to example-offchain-worker pezpallet
 			// accompanied in this repository.
 		}
 	}
@@ -234,10 +234,10 @@ pub mod pallet {
 	// against them as the first thing you do in your function. There are three convenience calls
 	// in system that do the matching for you and return a convenient result: `ensure_signed`,
 	// `ensure_root` and `ensure_none`.
-	#[pallet::call(weight(<T as Config>::WeightInfo))]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call(weight(<T as Config>::WeightInfo))]
+	impl<T: Config> Pezpallet<T> {
 		/// This is your public interface. Be extremely careful.
-		/// This is just a simple example of how to interact with the pallet from the external
+		/// This is just a simple example of how to interact with the pezpallet from the external
 		/// world.
 		// This just increases the value of `Dummy` by `increase_by`.
 		//
@@ -259,7 +259,7 @@ pub mod pallet {
 		// If you can't be certain that the operation will succeed without substantial computation
 		// then you have a classic blockchain attack scenario. The normal way of managing this is
 		// to attach a bond to the operation. As the first major alteration of storage, reserve
-		// some value from the sender's account (`Balances` Pallet has a `reserve` function for
+		// some value from the sender's account (`Balances` Pezpallet has a `reserve` function for
 		// exactly this scenario). This amount should be enough to cover any costs of the
 		// substantial execution in case it turns out that you can't proceed with the operation.
 		//
@@ -274,12 +274,12 @@ pub mod pallet {
 		//
 		// If you don't respect these rules, it is likely that your chain will be attackable.
 		//
-		// Each transaction must define a `#[pallet::weight(..)]` attribute to convey a set of
-		// static information about its dispatch. FRAME System and FRAME Executive pallet then use
+		// Each transaction must define a `#[pezpallet::weight(..)]` attribute to convey a set of
+		// static information about its dispatch. FRAME System and FRAME Executive pezpallet then use
 		// this information to properly execute the transaction, whilst keeping the total load of
 		// the chain in a moderate rate.
 		//
-		// The parenthesized value of the `#[pallet::weight(..)]` attribute can be any type that
+		// The parenthesized value of the `#[pezpallet::weight(..)]` attribute can be any type that
 		// implements a set of traits, namely [`WeighData`], [`ClassifyDispatch`], and
 		// [`PaysFee`]. The first conveys the weight (a numeric representation of pure
 		// execution time and difficulty) of the transaction and the second demonstrates the
@@ -289,7 +289,7 @@ pub mod pallet {
 		//
 		// The weight for this extrinsic we rely on the auto-generated `WeightInfo` from the
 		// benchmark toolchain.
-		#[pallet::call_index(0)]
+		#[pezpallet::call_index(0)]
 		pub fn accumulate_dummy(origin: OriginFor<T>, increase_by: T::Balance) -> DispatchResult {
 			// This is a public call, so we ensure that the origin is some signed account.
 			let _sender = ensure_signed(origin)?;
@@ -329,11 +329,11 @@ pub mod pallet {
 		//
 		// The weight for this extrinsic we use our own weight object `WeightForSetDummy` to
 		// determine its weight
-		#[pallet::call_index(1)]
-		#[pallet::weight(WeightForSetDummy::<T>(<BalanceOf<T>>::from(100u32)))]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(WeightForSetDummy::<T>(<BalanceOf<T>>::from(100u32)))]
 		pub fn set_dummy(
 			origin: OriginFor<T>,
-			#[pallet::compact] new_value: T::Balance,
+			#[pezpallet::compact] new_value: T::Balance,
 		) -> DispatchResult {
 			ensure_root(origin)?;
 
@@ -356,10 +356,10 @@ pub mod pallet {
 	/// Events are a simple means of reporting specific conditions and
 	/// circumstances that have happened that users, Dapps and/or chain explorers would find
 	/// interesting and otherwise difficult to detect.
-	#[pallet::event]
-	/// This attribute generate the function `deposit_event` to deposit one of this pallet event,
+	#[pezpallet::event]
+	/// This attribute generate the function `deposit_event` to deposit one of this pezpallet event,
 	/// it is optional, it is also possible to provide a custom implementation.
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		// Just a normal `enum`, here's a dummy event to ensure it compiles.
 		/// Dummy event, just here so there's a generic type that's used.
@@ -375,7 +375,7 @@ pub mod pallet {
 		},
 	}
 
-	// pallet::storage attributes allow for type-safe usage of the Bizinikiwi storage database,
+	// pezpallet::storage attributes allow for type-safe usage of the Bizinikiwi storage database,
 	// so you can keep things around between blocks.
 	//
 	// Any storage must be one of `StorageValue`, `StorageMap` or `StorageDoubleMap`.
@@ -387,22 +387,22 @@ pub mod pallet {
 	// - for `type Foo<T> = StorageValue<_, u32, ValueQuery>`:
 	//   - `Foo::put(1); Foo::get()` returns `1`;
 	//   - `Foo::kill(); Foo::get()` returns `0` (u32::default()).
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type Dummy<T: Config> = StorageValue<_, T::Balance>;
 
 	// A map that has enumerable entries.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type Bar<T: Config> = StorageMap<_, Blake2_128Concat, T::AccountId, T::Balance>;
 
 	// this one uses the query kind: `ValueQuery`, we'll demonstrate the usage of 'mutate' API.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type Foo<T: Config> = StorageValue<_, T::Balance, ValueQuery>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type CountedMap<T> = CountedStorageMap<_, Blake2_128Concat, u8, u16>;
 
 	// The genesis config type.
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(pezframe_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		pub dummy: T::Balance,
@@ -410,8 +410,8 @@ pub mod pallet {
 		pub foo: T::Balance,
 	}
 
-	// The build of genesis for the pallet.
-	#[pallet::genesis_build]
+	// The build of genesis for the pezpallet.
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			<Dummy<T>>::put(&self.dummy);
@@ -423,12 +423,12 @@ pub mod pallet {
 	}
 }
 
-// The main implementation block for the pallet. Functions here fall into three broad
+// The main implementation block for the pezpallet. Functions here fall into three broad
 // categories:
 // - Public interface. These are functions that are `pub` and generally fall into inspector
 // functions that do not write to storage and operation functions that do.
 // - Private functions. These are your usual private utilities unavailable to other pallets.
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	// Add public immutables and private mutables.
 	#[allow(dead_code)]
 	fn accumulate_foo(origin: T::RuntimeOrigin, increase_by: T::Balance) -> DispatchResult {
@@ -447,11 +447,11 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-// Similar to other FRAME pallets, your pallet can also define a transaction extension and perform
+// Similar to other FRAME pallets, your pezpallet can also define a transaction extension and perform
 // some checks and [pre/post]processing [before/after] the transaction. A transaction extension can
 // be any decodable type that implements `TransactionExtension`. See the trait definition for the
 // full list of bounds. As a convention, you can follow this approach to create an extension for
-// your pallet:
+// your pezpallet:
 //   - If the extension does not carry any data, then use a tuple struct with just a `marker`
 //     (needed for the compiler to accept `T: Config`) will suffice.
 //   - Otherwise, create a tuple struct which contains the external data. Of course, for the entire
@@ -466,7 +466,7 @@ impl<T: Config> Pallet<T> {
 // Using the extension, you can add some hooks to the life cycle of each transaction. Note that by
 // default, an extension is applied to all `Call` functions (i.e. all transactions). the `Call` enum
 // variant is given to each function of `TransactionExtension`. Hence, you can filter based on
-// pallet or a particular call if needed.
+// pezpallet or a particular call if needed.
 //
 // Some extra information, such as encoded length, some static dispatch info like weight and the
 // sender of the transaction (if signed) are also provided.

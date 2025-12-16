@@ -48,7 +48,7 @@ const ASSET_HUB_PEZKUWICHAIN_ED: Balance = ExistentialDeposit::get();
 /// PEZ Token Asset ID - Governance token with fixed 5B supply
 pub const PEZ_ASSET_ID: AssetIdForTrustBackedAssets = 1;
 
-/// Wrapped HEZ (wHEZ) Asset ID - Used by TokenWrapper pallet
+/// Wrapped HEZ (wHEZ) Asset ID - Used by TokenWrapper pezpallet
 pub const WHEZ_ASSET_ID: AssetIdForTrustBackedAssets = 2;
 
 /// PEZ Token decimals (same as HEZ)

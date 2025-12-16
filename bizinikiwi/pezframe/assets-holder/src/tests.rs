@@ -188,7 +188,7 @@ mod impl_hold_unbalanced {
 	// and `increase_balance` are intentionally left out without testing, since:
 	// 1. It is expected these methods are tested within `pezpallet-assets`, and
 	// 2. There are no valid cases that can be directly asserted using those methods in
-	// the scope of this pallet.
+	// the scope of this pezpallet.
 
 	#[test]
 	fn set_balance_on_hold_works() {

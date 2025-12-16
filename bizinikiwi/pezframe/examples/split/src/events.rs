@@ -23,12 +23,12 @@
 
 use pezframe_support::pezpallet_macros::*;
 
-/// A [`pezpallet_section`] that defines the events for a pallet.
-/// This can later be imported into the pallet using [`import_section`].
+/// A [`pezpallet_section`] that defines the events for a pezpallet.
+/// This can later be imported into the pezpallet using [`import_section`].
 #[pezpallet_section]
 mod events {
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// Event documentation should end with an array that provides descriptive names for event
 		/// parameters. [something, who]

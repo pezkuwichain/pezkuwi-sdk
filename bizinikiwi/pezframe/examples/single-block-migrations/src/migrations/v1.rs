@@ -37,15 +37,15 @@ mod v0 {
 
 	/// V0 type for [`crate::Value`].
 	#[storage_alias]
-	pub type Value<T: crate::Config> = StorageValue<crate::Pallet<T>, u32>;
+	pub type Value<T: crate::Config> = StorageValue<crate::Pezpallet<T>, u32>;
 }
 
-/// Implements [`UncheckedOnRuntimeUpgrade`], migrating the state of this pallet from V0 to V1.
+/// Implements [`UncheckedOnRuntimeUpgrade`], migrating the state of this pezpallet from V0 to V1.
 ///
 /// In V0 of the template [`crate::Value`] is just a `u32`. In V1, it has been upgraded to
 /// contain the struct [`crate::CurrentAndPreviousValue`].
 ///
-/// In this migration, update the on-chain storage for the pallet to reflect the new storage
+/// In this migration, update the on-chain storage for the pezpallet to reflect the new storage
 /// layout.
 pub struct InnerMigrateV0ToV1<T: crate::Config>(core::marker::PhantomData<T>);
 
@@ -123,7 +123,7 @@ pub type MigrateV0ToV1<T> = pezframe_support::migrations::VersionedMigration<
 	0, // The migration will only execute when the on-chain storage version is 0
 	1, // The on-chain storage version will be set to 1 after the migration is complete
 	InnerMigrateV0ToV1<T>,
-	crate::pallet::Pallet<T>,
+	crate::pezpallet::Pezpallet<T>,
 	<T as pezframe_system::Config>::DbWeight,
 >;
 

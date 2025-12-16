@@ -37,8 +37,8 @@ pub mod mock;
 mod tests;
 
 mod common_functions;
-/// A library providing the feature set of this pallet. It contains modules with helper methods that
-/// perform storage updates and checks required by this pallet's dispatchables. To use pallet level
+/// A library providing the feature set of this pezpallet. It contains modules with helper methods that
+/// perform storage updates and checks required by this pezpallet's dispatchables. To use pezpallet level
 /// features, make sure to set appropriate bitflags for [`Config::Features`] in your runtime
 /// configuration trait.
 mod features;
@@ -62,18 +62,18 @@ use pezsp_runtime::{
 	RuntimeDebug,
 };
 
-pub use pallet::*;
+pub use pezpallet::*;
 pub use types::*;
 pub use weights::WeightInfo;
 
-/// The log target of this pallet.
+/// The log target of this pezpallet.
 pub const LOG_TARGET: &'static str = "runtime::nfts";
 
-/// A type alias for the account ID type used in the dispatchable functions of this pallet.
+/// A type alias for the account ID type used in the dispatchable functions of this pezpallet.
 type AccountIdLookupOf<T> = <<T as SystemConfig>::Lookup as StaticLookup>::Source;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::{pezpallet_prelude::*, traits::ExistenceRequirement};
 	use pezframe_system::{ensure_signed, pezpallet_prelude::OriginFor};
@@ -81,9 +81,9 @@ pub mod pallet {
 	/// The in-code storage version.
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(1);
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T, I = ()>(PhantomData<(T, I)>);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T, I = ()>(PhantomData<(T, I)>);
 
 	#[cfg(feature = "runtime-benchmarks")]
 	pub trait BenchmarkHelper<CollectionId, ItemId, Public, AccountId, Signature> {
@@ -124,7 +124,7 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::config]
+	#[pezpallet::config]
 	/// The module configuration trait.
 	pub trait Config<I: 'static = ()>: pezframe_system::Config {
 		/// The overarching event type.
@@ -165,60 +165,60 @@ pub mod pallet {
 		type Locker: Locker<Self::CollectionId, Self::ItemId>;
 
 		/// The basic amount of funds that must be reserved for collection.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type CollectionDeposit: Get<DepositBalanceOf<Self, I>>;
 
 		/// The basic amount of funds that must be reserved for an item.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type ItemDeposit: Get<DepositBalanceOf<Self, I>>;
 
 		/// The basic amount of funds that must be reserved when adding metadata to your item.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MetadataDepositBase: Get<DepositBalanceOf<Self, I>>;
 
 		/// The basic amount of funds that must be reserved when adding an attribute to an item.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type AttributeDepositBase: Get<DepositBalanceOf<Self, I>>;
 
 		/// The additional funds that must be reserved for the number of bytes store in metadata,
 		/// either "normal" metadata or attribute metadata.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type DepositPerByte: Get<DepositBalanceOf<Self, I>>;
 
 		/// The maximum length of data stored on-chain.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type StringLimit: Get<u32>;
 
 		/// The maximum length of an attribute key.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type KeyLimit: Get<u32>;
 
 		/// The maximum length of an attribute value.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type ValueLimit: Get<u32>;
 
 		/// The maximum approvals an item could have.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type ApprovalsLimit: Get<u32>;
 
 		/// The maximum attributes approvals an item could have.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type ItemAttributesApprovalsLimit: Get<u32>;
 
 		/// The max number of tips a user could send.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxTips: Get<u32>;
 
 		/// The max duration in blocks for deadlines.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxDeadlineDuration: Get<BlockNumberFor<Self, I>>;
 
 		/// The max number of attributes a user could set per call.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxAttributesPerCall: Get<u32>;
 
-		/// Disables some of pallet's features.
-		#[pallet::constant]
+		/// Disables some of pezpallet's features.
+		#[pezpallet::constant]
 		type Features: Get<PalletFeatures>;
 
 		/// Off-Chain signature type.
@@ -241,15 +241,15 @@ pub mod pallet {
 			Self::OffchainSignature,
 		>;
 
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 
-		/// Provider for the block number. Normally this is the `pezframe_system` pallet.
+		/// Provider for the block number. Normally this is the `pezframe_system` pezpallet.
 		type BlockNumberProvider: BlockNumberProvider;
 	}
 
 	/// Details of a collection.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Collection<T: Config<I>, I: 'static = ()> = StorageMap<
 		_,
 		Blake2_128Concat,
@@ -258,13 +258,13 @@ pub mod pallet {
 	>;
 
 	/// The collection, if any, of which an account is willing to take ownership.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type OwnershipAcceptance<T: Config<I>, I: 'static = ()> =
 		StorageMap<_, Blake2_128Concat, T::AccountId, T::CollectionId>;
 
 	/// The items held by any given account; set out this way so that items owned by a single
 	/// account can be enumerated.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Account<T: Config<I>, I: 'static = ()> = StorageNMap<
 		_,
 		(
@@ -278,7 +278,7 @@ pub mod pallet {
 
 	/// The collections owned by any given account; set out this way so that collections owned by
 	/// a single account can be enumerated.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type CollectionAccount<T: Config<I>, I: 'static = ()> = StorageDoubleMap<
 		_,
 		Blake2_128Concat,
@@ -290,7 +290,7 @@ pub mod pallet {
 	>;
 
 	/// The items in existence and their ownership details.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	/// Stores collection roles as per account.
 	pub type CollectionRoleOf<T: Config<I>, I: 'static = ()> = StorageDoubleMap<
 		_,
@@ -303,7 +303,7 @@ pub mod pallet {
 	>;
 
 	/// The items in existence and their ownership details.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Item<T: Config<I>, I: 'static = ()> = StorageDoubleMap<
 		_,
 		Blake2_128Concat,
@@ -315,7 +315,7 @@ pub mod pallet {
 	>;
 
 	/// Metadata of a collection.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type CollectionMetadataOf<T: Config<I>, I: 'static = ()> = StorageMap<
 		_,
 		Blake2_128Concat,
@@ -325,7 +325,7 @@ pub mod pallet {
 	>;
 
 	/// Metadata of an item.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ItemMetadataOf<T: Config<I>, I: 'static = ()> = StorageDoubleMap<
 		_,
 		Blake2_128Concat,
@@ -337,7 +337,7 @@ pub mod pallet {
 	>;
 
 	/// Attributes of a collection.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Attribute<T: Config<I>, I: 'static = ()> = StorageNMap<
 		_,
 		(
@@ -351,7 +351,7 @@ pub mod pallet {
 	>;
 
 	/// A price of an item.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ItemPriceOf<T: Config<I>, I: 'static = ()> = StorageDoubleMap<
 		_,
 		Blake2_128Concat,
@@ -363,7 +363,7 @@ pub mod pallet {
 	>;
 
 	/// Item attribute approvals.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ItemAttributesApprovalsOf<T: Config<I>, I: 'static = ()> = StorageDoubleMap<
 		_,
 		Blake2_128Concat,
@@ -376,12 +376,12 @@ pub mod pallet {
 
 	/// Stores the `CollectionId` that is going to be used for the next collection.
 	/// This gets incremented whenever a new collection is created.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type NextCollectionId<T: Config<I>, I: 'static = ()> =
 		StorageValue<_, T::CollectionId, OptionQuery>;
 
 	/// Handles all the pending swaps.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type PendingSwapOf<T: Config<I>, I: 'static = ()> = StorageDoubleMap<
 		_,
 		Blake2_128Concat,
@@ -398,12 +398,12 @@ pub mod pallet {
 	>;
 
 	/// Config of a collection.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type CollectionConfigOf<T: Config<I>, I: 'static = ()> =
 		StorageMap<_, Blake2_128Concat, T::CollectionId, CollectionConfigFor<T, I>, OptionQuery>;
 
 	/// Config of an item.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ItemConfigOf<T: Config<I>, I: 'static = ()> = StorageDoubleMap<
 		_,
 		Blake2_128Concat,
@@ -414,8 +414,8 @@ pub mod pallet {
 		OptionQuery,
 	>;
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config<I>, I: 'static = ()> {
 		/// A `collection` was created.
 		Created { collection: T::CollectionId, creator: T::AccountId, owner: T::AccountId },
@@ -586,7 +586,7 @@ pub mod pallet {
 			item: T::ItemId,
 			namespace: AttributeNamespace<T::AccountId>,
 		},
-		/// A new attribute in the `Pallet` namespace was set for the `collection` or an `item`
+		/// A new attribute in the `Pezpallet` namespace was set for the `collection` or an `item`
 		/// within that `collection`.
 		PalletAttributeSet {
 			collection: T::CollectionId,
@@ -596,7 +596,7 @@ pub mod pallet {
 		},
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T, I = ()> {
 		/// The signing account has no permission to do the operation.
 		NoPermission,
@@ -690,8 +690,8 @@ pub mod pallet {
 		WitnessRequired,
 	}
 
-	#[pallet::call]
-	impl<T: Config<I>, I: 'static> Pallet<T, I> {
+	#[pezpallet::call]
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 		/// Issue a new collection of non-fungible items from a public origin.
 		///
 		/// This new collection has no items initially and its owner is the origin.
@@ -707,8 +707,8 @@ pub mod pallet {
 		/// Emits `Created` event when successful.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::create())]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::create())]
 		pub fn create(
 			origin: OriginFor<T>,
 			admin: AccountIdLookupOf<T>,
@@ -755,8 +755,8 @@ pub mod pallet {
 		/// Emits `ForceCreated` event when successful.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::force_create())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::force_create())]
 		pub fn force_create(
 			origin: OriginFor<T>,
 			owner: AccountIdLookupOf<T>,
@@ -799,8 +799,8 @@ pub mod pallet {
 		/// - `m = witness.item_metadatas`
 		/// - `c = witness.item_configs`
 		/// - `a = witness.attributes`
-		#[pallet::call_index(2)]
-		#[pallet::weight(T::WeightInfo::destroy(
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(T::WeightInfo::destroy(
 			witness.item_metadatas,
 			witness.item_configs,
 			witness.attributes,
@@ -839,8 +839,8 @@ pub mod pallet {
 		/// Emits `Issued` event when successful.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(3)]
-		#[pallet::weight(T::WeightInfo::mint())]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(T::WeightInfo::mint())]
 		pub fn mint(
 			origin: OriginFor<T>,
 			collection: T::CollectionId,
@@ -895,7 +895,7 @@ pub mod pallet {
 							let key = (
 								&collection_id,
 								Some(owned_item),
-								AttributeNamespace::Pallet,
+								AttributeNamespace::Pezpallet,
 								&Self::construct_attribute_key(pezpallet_attribute.encode())?,
 							);
 							let already_claimed = Attribute::<T, I>::contains_key(key.clone());
@@ -950,8 +950,8 @@ pub mod pallet {
 		/// Emits `Issued` event when successful.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(4)]
-		#[pallet::weight(T::WeightInfo::force_mint())]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(T::WeightInfo::force_mint())]
 		pub fn force_mint(
 			origin: OriginFor<T>,
 			collection: T::CollectionId,
@@ -984,8 +984,8 @@ pub mod pallet {
 		/// Emits `Burned`.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(5)]
-		#[pallet::weight(T::WeightInfo::burn())]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(T::WeightInfo::burn())]
 		pub fn burn(
 			origin: OriginFor<T>,
 			collection: T::CollectionId,
@@ -1017,8 +1017,8 @@ pub mod pallet {
 		/// Emits `Transferred`.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(6)]
-		#[pallet::weight(T::WeightInfo::transfer())]
+		#[pezpallet::call_index(6)]
+		#[pezpallet::weight(T::WeightInfo::transfer())]
 		pub fn transfer(
 			origin: OriginFor<T>,
 			collection: T::CollectionId,
@@ -1058,8 +1058,8 @@ pub mod pallet {
 		/// is not permitted to call it.
 		///
 		/// Weight: `O(items.len())`
-		#[pallet::call_index(7)]
-		#[pallet::weight(T::WeightInfo::redeposit(items.len() as u32))]
+		#[pezpallet::call_index(7)]
+		#[pezpallet::weight(T::WeightInfo::redeposit(items.len() as u32))]
 		pub fn redeposit(
 			origin: OriginFor<T>,
 			collection: T::CollectionId,
@@ -1118,8 +1118,8 @@ pub mod pallet {
 		/// Emits `ItemTransferLocked`.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(8)]
-		#[pallet::weight(T::WeightInfo::lock_item_transfer())]
+		#[pezpallet::call_index(8)]
+		#[pezpallet::weight(T::WeightInfo::lock_item_transfer())]
 		pub fn lock_item_transfer(
 			origin: OriginFor<T>,
 			collection: T::CollectionId,
@@ -1139,8 +1139,8 @@ pub mod pallet {
 		/// Emits `ItemTransferUnlocked`.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(9)]
-		#[pallet::weight(T::WeightInfo::unlock_item_transfer())]
+		#[pezpallet::call_index(9)]
+		#[pezpallet::weight(T::WeightInfo::unlock_item_transfer())]
 		pub fn unlock_item_transfer(
 			origin: OriginFor<T>,
 			collection: T::CollectionId,
@@ -1162,8 +1162,8 @@ pub mod pallet {
 		/// Emits `CollectionLocked`.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(10)]
-		#[pallet::weight(T::WeightInfo::lock_collection())]
+		#[pezpallet::call_index(10)]
+		#[pezpallet::weight(T::WeightInfo::lock_collection())]
 		pub fn lock_collection(
 			origin: OriginFor<T>,
 			collection: T::CollectionId,
@@ -1184,8 +1184,8 @@ pub mod pallet {
 		/// Emits `OwnerChanged`.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(11)]
-		#[pallet::weight(T::WeightInfo::transfer_ownership())]
+		#[pezpallet::call_index(11)]
+		#[pezpallet::weight(T::WeightInfo::transfer_ownership())]
 		pub fn transfer_ownership(
 			origin: OriginFor<T>,
 			collection: T::CollectionId,
@@ -1212,8 +1212,8 @@ pub mod pallet {
 		/// Emits `TeamChanged`.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(12)]
-		#[pallet::weight(T::WeightInfo::set_team())]
+		#[pezpallet::call_index(12)]
+		#[pezpallet::weight(T::WeightInfo::set_team())]
 		pub fn set_team(
 			origin: OriginFor<T>,
 			collection: T::CollectionId,
@@ -1240,8 +1240,8 @@ pub mod pallet {
 		/// Emits `OwnerChanged`.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(13)]
-		#[pallet::weight(T::WeightInfo::force_collection_owner())]
+		#[pezpallet::call_index(13)]
+		#[pezpallet::weight(T::WeightInfo::force_collection_owner())]
 		pub fn force_collection_owner(
 			origin: OriginFor<T>,
 			collection: T::CollectionId,
@@ -1262,8 +1262,8 @@ pub mod pallet {
 		/// Emits `CollectionConfigChanged`.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(14)]
-		#[pallet::weight(T::WeightInfo::force_collection_config())]
+		#[pezpallet::call_index(14)]
+		#[pezpallet::weight(T::WeightInfo::force_collection_config())]
 		pub fn force_collection_config(
 			origin: OriginFor<T>,
 			collection: T::CollectionId,
@@ -1287,8 +1287,8 @@ pub mod pallet {
 		/// Emits `TransferApproved` on success.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(15)]
-		#[pallet::weight(T::WeightInfo::approve_transfer())]
+		#[pezpallet::call_index(15)]
+		#[pezpallet::weight(T::WeightInfo::approve_transfer())]
 		pub fn approve_transfer(
 			origin: OriginFor<T>,
 			collection: T::CollectionId,
@@ -1323,8 +1323,8 @@ pub mod pallet {
 		/// Emits `ApprovalCancelled` on success.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(16)]
-		#[pallet::weight(T::WeightInfo::cancel_approval())]
+		#[pezpallet::call_index(16)]
+		#[pezpallet::weight(T::WeightInfo::cancel_approval())]
 		pub fn cancel_approval(
 			origin: OriginFor<T>,
 			collection: T::CollectionId,
@@ -1351,8 +1351,8 @@ pub mod pallet {
 		/// Emits `AllApprovalsCancelled` on success.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(17)]
-		#[pallet::weight(T::WeightInfo::clear_all_transfer_approvals())]
+		#[pezpallet::call_index(17)]
+		#[pezpallet::weight(T::WeightInfo::clear_all_transfer_approvals())]
 		pub fn clear_all_transfer_approvals(
 			origin: OriginFor<T>,
 			collection: T::CollectionId,
@@ -1381,8 +1381,8 @@ pub mod pallet {
 		/// Emits `ItemPropertiesLocked`.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(18)]
-		#[pallet::weight(T::WeightInfo::lock_item_properties())]
+		#[pezpallet::call_index(18)]
+		#[pezpallet::weight(T::WeightInfo::lock_item_properties())]
 		pub fn lock_item_properties(
 			origin: OriginFor<T>,
 			collection: T::CollectionId,
@@ -1424,8 +1424,8 @@ pub mod pallet {
 		/// Emits `AttributeSet`.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(19)]
-		#[pallet::weight(T::WeightInfo::set_attribute())]
+		#[pezpallet::call_index(19)]
+		#[pezpallet::weight(T::WeightInfo::set_attribute())]
 		pub fn set_attribute(
 			origin: OriginFor<T>,
 			collection: T::CollectionId,
@@ -1460,8 +1460,8 @@ pub mod pallet {
 		/// Emits `AttributeSet`.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(20)]
-		#[pallet::weight(T::WeightInfo::force_set_attribute())]
+		#[pezpallet::call_index(20)]
+		#[pezpallet::weight(T::WeightInfo::force_set_attribute())]
 		pub fn force_set_attribute(
 			origin: OriginFor<T>,
 			set_as: Option<T::AccountId>,
@@ -1490,8 +1490,8 @@ pub mod pallet {
 		/// Emits `AttributeCleared`.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(21)]
-		#[pallet::weight(T::WeightInfo::clear_attribute())]
+		#[pezpallet::call_index(21)]
+		#[pezpallet::weight(T::WeightInfo::clear_attribute())]
 		pub fn clear_attribute(
 			origin: OriginFor<T>,
 			collection: T::CollectionId,
@@ -1514,8 +1514,8 @@ pub mod pallet {
 		/// - `delegate`: The account to delegate permission to change attributes of the item.
 		///
 		/// Emits `ItemAttributesApprovalAdded` on success.
-		#[pallet::call_index(22)]
-		#[pallet::weight(T::WeightInfo::approve_item_attributes())]
+		#[pezpallet::call_index(22)]
+		#[pezpallet::weight(T::WeightInfo::approve_item_attributes())]
 		pub fn approve_item_attributes(
 			origin: OriginFor<T>,
 			collection: T::CollectionId,
@@ -1537,8 +1537,8 @@ pub mod pallet {
 		/// - `delegate`: The previously approved account to remove.
 		///
 		/// Emits `ItemAttributesApprovalRemoved` on success.
-		#[pallet::call_index(23)]
-		#[pallet::weight(T::WeightInfo::cancel_item_attributes_approval(
+		#[pezpallet::call_index(23)]
+		#[pezpallet::weight(T::WeightInfo::cancel_item_attributes_approval(
 			witness.account_attributes
 		))]
 		pub fn cancel_item_attributes_approval(
@@ -1569,8 +1569,8 @@ pub mod pallet {
 		/// Emits `ItemMetadataSet`.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(24)]
-		#[pallet::weight(T::WeightInfo::set_metadata())]
+		#[pezpallet::call_index(24)]
+		#[pezpallet::weight(T::WeightInfo::set_metadata())]
 		pub fn set_metadata(
 			origin: OriginFor<T>,
 			collection: T::CollectionId,
@@ -1596,8 +1596,8 @@ pub mod pallet {
 		/// Emits `ItemMetadataCleared`.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(25)]
-		#[pallet::weight(T::WeightInfo::clear_metadata())]
+		#[pezpallet::call_index(25)]
+		#[pezpallet::weight(T::WeightInfo::clear_metadata())]
 		pub fn clear_metadata(
 			origin: OriginFor<T>,
 			collection: T::CollectionId,
@@ -1624,8 +1624,8 @@ pub mod pallet {
 		/// Emits `CollectionMetadataSet`.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(26)]
-		#[pallet::weight(T::WeightInfo::set_collection_metadata())]
+		#[pezpallet::call_index(26)]
+		#[pezpallet::weight(T::WeightInfo::set_collection_metadata())]
 		pub fn set_collection_metadata(
 			origin: OriginFor<T>,
 			collection: T::CollectionId,
@@ -1649,8 +1649,8 @@ pub mod pallet {
 		/// Emits `CollectionMetadataCleared`.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(27)]
-		#[pallet::weight(T::WeightInfo::clear_collection_metadata())]
+		#[pezpallet::call_index(27)]
+		#[pezpallet::weight(T::WeightInfo::clear_collection_metadata())]
 		pub fn clear_collection_metadata(
 			origin: OriginFor<T>,
 			collection: T::CollectionId,
@@ -1671,8 +1671,8 @@ pub mod pallet {
 		///   ownership transferal.
 		///
 		/// Emits `OwnershipAcceptanceChanged`.
-		#[pallet::call_index(28)]
-		#[pallet::weight(T::WeightInfo::set_accept_ownership())]
+		#[pezpallet::call_index(28)]
+		#[pezpallet::weight(T::WeightInfo::set_accept_ownership())]
 		pub fn set_accept_ownership(
 			origin: OriginFor<T>,
 			maybe_collection: Option<T::CollectionId>,
@@ -1690,8 +1690,8 @@ pub mod pallet {
 		/// - `max_supply`: The maximum number of items a collection could have.
 		///
 		/// Emits `CollectionMaxSupplySet` event when successful.
-		#[pallet::call_index(29)]
-		#[pallet::weight(T::WeightInfo::set_collection_max_supply())]
+		#[pezpallet::call_index(29)]
+		#[pezpallet::weight(T::WeightInfo::set_collection_max_supply())]
 		pub fn set_collection_max_supply(
 			origin: OriginFor<T>,
 			collection: T::CollectionId,
@@ -1712,8 +1712,8 @@ pub mod pallet {
 		/// - `mint_settings`: The new mint settings.
 		///
 		/// Emits `CollectionMintSettingsUpdated` event when successful.
-		#[pallet::call_index(30)]
-		#[pallet::weight(T::WeightInfo::update_mint_settings())]
+		#[pezpallet::call_index(30)]
+		#[pezpallet::weight(T::WeightInfo::update_mint_settings())]
 		pub fn update_mint_settings(
 			origin: OriginFor<T>,
 			collection: T::CollectionId,
@@ -1736,8 +1736,8 @@ pub mod pallet {
 		///
 		/// Emits `ItemPriceSet` on success if the price is not `None`.
 		/// Emits `ItemPriceRemoved` on success if the price is `None`.
-		#[pallet::call_index(31)]
-		#[pallet::weight(T::WeightInfo::set_price())]
+		#[pezpallet::call_index(31)]
+		#[pezpallet::weight(T::WeightInfo::set_price())]
 		pub fn set_price(
 			origin: OriginFor<T>,
 			collection: T::CollectionId,
@@ -1759,8 +1759,8 @@ pub mod pallet {
 		/// - `bid_price`: The price the sender is willing to pay.
 		///
 		/// Emits `ItemBought` on success.
-		#[pallet::call_index(32)]
-		#[pallet::weight(T::WeightInfo::buy_item())]
+		#[pezpallet::call_index(32)]
+		#[pezpallet::weight(T::WeightInfo::buy_item())]
 		pub fn buy_item(
 			origin: OriginFor<T>,
 			collection: T::CollectionId,
@@ -1778,8 +1778,8 @@ pub mod pallet {
 		/// - `tips`: Tips array.
 		///
 		/// Emits `TipSent` on every tip transfer.
-		#[pallet::call_index(33)]
-		#[pallet::weight(T::WeightInfo::pay_tips(tips.len() as u32))]
+		#[pezpallet::call_index(33)]
+		#[pezpallet::weight(T::WeightInfo::pay_tips(tips.len() as u32))]
 		pub fn pay_tips(
 			origin: OriginFor<T>,
 			tips: BoundedVec<ItemTipOf<T, I>, T::MaxTips>,
@@ -1804,8 +1804,8 @@ pub mod pallet {
 		/// 	after which the swap will expire.
 		///
 		/// Emits `SwapCreated` on success.
-		#[pallet::call_index(34)]
-		#[pallet::weight(T::WeightInfo::create_swap())]
+		#[pezpallet::call_index(34)]
+		#[pezpallet::weight(T::WeightInfo::create_swap())]
 		pub fn create_swap(
 			origin: OriginFor<T>,
 			offered_collection: T::CollectionId,
@@ -1836,8 +1836,8 @@ pub mod pallet {
 		/// - `item`: The item an owner wants to give.
 		///
 		/// Emits `SwapCancelled` on success.
-		#[pallet::call_index(35)]
-		#[pallet::weight(T::WeightInfo::cancel_swap())]
+		#[pezpallet::call_index(35)]
+		#[pezpallet::weight(T::WeightInfo::cancel_swap())]
 		pub fn cancel_swap(
 			origin: OriginFor<T>,
 			offered_collection: T::CollectionId,
@@ -1859,8 +1859,8 @@ pub mod pallet {
 		/// - `witness_price`: A price that was previously agreed on.
 		///
 		/// Emits `SwapClaimed` on success.
-		#[pallet::call_index(36)]
-		#[pallet::weight(T::WeightInfo::claim_swap())]
+		#[pezpallet::call_index(36)]
+		#[pezpallet::weight(T::WeightInfo::claim_swap())]
 		pub fn claim_swap(
 			origin: OriginFor<T>,
 			send_collection: T::CollectionId,
@@ -1893,8 +1893,8 @@ pub mod pallet {
 		/// Emits `Issued` on success.
 		/// Emits `AttributeSet` if the attributes were provided.
 		/// Emits `ItemMetadataSet` if the metadata was not empty.
-		#[pallet::call_index(37)]
-		#[pallet::weight(T::WeightInfo::mint_pre_signed(mint_data.attributes.len() as u32))]
+		#[pezpallet::call_index(37)]
+		#[pezpallet::weight(T::WeightInfo::mint_pre_signed(mint_data.attributes.len() as u32))]
 		pub fn mint_pre_signed(
 			origin: OriginFor<T>,
 			mint_data: Box<PreSignedMintOf<T, I>>,
@@ -1919,8 +1919,8 @@ pub mod pallet {
 		/// Emits `AttributeSet` for each provided attribute.
 		/// Emits `ItemAttributesApprovalAdded` if the approval wasn't set before.
 		/// Emits `PreSignedAttributesSet` on success.
-		#[pallet::call_index(38)]
-		#[pallet::weight(T::WeightInfo::set_attributes_pre_signed(data.attributes.len() as u32))]
+		#[pezpallet::call_index(38)]
+		#[pezpallet::weight(T::WeightInfo::set_attributes_pre_signed(data.attributes.len() as u32))]
 		pub fn set_attributes_pre_signed(
 			origin: OriginFor<T>,
 			data: PreSignedAttributesOf<T, I>,

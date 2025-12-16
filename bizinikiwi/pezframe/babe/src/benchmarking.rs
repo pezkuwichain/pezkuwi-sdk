@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Benchmarks for the BABE Pallet.
+//! Benchmarks for the BABE Pezpallet.
 
 #![cfg(feature = "runtime-benchmarks")]
 
@@ -71,5 +71,5 @@ mod benchmarks {
 		assert!(pezsp_consensus_babe::check_equivocation_proof::<Header>(equivocation_proof2));
 	}
 
-	impl_benchmark_test_suite!(Pallet, crate::mock::new_test_ext(3), crate::mock::Test,);
+	impl_benchmark_test_suite!(Pezpallet, crate::mock::new_test_ext(3), crate::mock::Test,);
 }

@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Child-bounties pallet tests.
+//! Child-bounties pezpallet tests.
 
 #![cfg(test)]
 
@@ -94,7 +94,7 @@ parameter_types! {
 
 impl pezpallet_treasury::Config for Test {
 	type PalletId = TreasuryPalletId;
-	type Currency = pezpallet_balances::Pallet<Test>;
+	type Currency = pezpallet_balances::Pezpallet<Test>;
 	type RejectOrigin = pezframe_system::EnsureRoot<AccountId>;
 	type RuntimeEvent = RuntimeEvent;
 	type SpendPeriod = ConstU64<2>;

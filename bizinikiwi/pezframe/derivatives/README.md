@@ -15,10 +15,10 @@ The motivation differs depending on the scenario in question.
 
 ### The first scenario
 
-The `pezpallet-derivatives` can be helpful when another pallet, which hosts the derivative assets,
+The `pezpallet-derivatives` can be helpful when another pezpallet, which hosts the derivative assets,
 doesn't provide a good enough way to create new assets in the context of them being derivatives.
 
-For instance, the asset hosting pallet might have an asset class (NFT collection or fungible currency) creation extrinsic,
+For instance, the asset hosting pezpallet might have an asset class (NFT collection or fungible currency) creation extrinsic,
 but among its parameters, there could be things like some admin account, currency decimals, various permissions, etc.
 
 When creating a regular (i.e., non-derivative) asset class via such an extrinsic,
@@ -31,7 +31,7 @@ or we could provide an alternative API where the sensitive parameters are omitte
 
 The first approach dominates in the ecosystem at the moment since:
   1. It is simple
-  2. There was no pallet to make such an alternative API without rewriting individual
+  2. There was no pezpallet to make such an alternative API without rewriting individual
      asset-hosting pallets
   3. Only fungible derivatives were ever made (with rare exceptions like an NFT derivative
      collection on Karura).
@@ -54,7 +54,7 @@ So, providing an API for unprivileged derivative registration is a preferable ch
 
 Moreover, the future data communication via XCM can benefit both fungible and non-fungible
 derivative collections registration.
-  1. The `create_derivative` extrinsic of this pallet can be configured to initiate the
+  1. The `create_derivative` extrinsic of this pezpallet can be configured to initiate the
      registration process
   by sending the `ReportMetadata` instruction to the reserve chain. It can be configured such that
   this can be done by anyone.
@@ -72,13 +72,13 @@ This situation can arise in the following cases:
   `CollectionId` (the derivative ID type) to XCM `AssetId` (the original ID type)
   because `pezpallet-nfts` requires `CollectionId` to be incrementable.
   * It is desired to have a continuous ID space for all objects, both derivative and local.
-  For instance, one might want to reuse the existing pallet combinations (like `pezpallet-nfts`
-  instance + `pezpallet-nfts-fractionalization` instance) without adding new pallet instances between
+  For instance, one might want to reuse the existing pezpallet combinations (like `pezpallet-nfts`
+  instance + `pezpallet-nfts-fractionalization` instance) without adding new pezpallet instances between
   the one hosting NFTs and many special logic pallets. In this case, the original ID type would be
   `(AssetId, AssetInstance)`, and the derivative ID type can be anything.
 
 ## Usage examples
 
-The `src/mock/mod.rs` contains a mock runtime declaration that contains several instances of the pallet
+The `src/mock/mod.rs` contains a mock runtime declaration that contains several instances of the pezpallet
 to test the scenarios mentioned above.
 This test configuration can be viewed as a usage example alongside the tests in the `src/tests.rs`.

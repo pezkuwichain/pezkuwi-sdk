@@ -12,7 +12,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-//! Runtime configuration for MessageQueue pallet
+//! Runtime configuration for MessageQueue pezpallet
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
 use core::marker::PhantomData;
 use pezcumulus_primitives_core::{AggregateMessageOrigin as CumulusAggregateMessageOrigin, ParaId};
@@ -27,8 +27,8 @@ use pezsp_core::H256;
 use xcm::latest::prelude::{Junction, Location};
 
 /// The aggregate origin of an inbound message.
-/// This is specialized for BridgeHub, as the snowbridge-outbound-queue-pallet is also using
-/// the shared MessageQueue pallet.
+/// This is specialized for BridgeHub, as the snowbridge-outbound-queue-pezpallet is also using
+/// the shared MessageQueue pezpallet.
 #[derive(
 	Encode,
 	Decode,

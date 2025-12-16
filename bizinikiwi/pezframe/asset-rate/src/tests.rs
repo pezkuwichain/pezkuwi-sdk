@@ -18,7 +18,7 @@
 //! The crate's tests.
 
 use super::*;
-use crate::pallet as pezpallet_asset_rate;
+use crate::pezpallet as pezpallet_asset_rate;
 use pezframe_support::{assert_noop, assert_ok};
 use mock::{new_test_ext, AssetRate, RuntimeOrigin, Test};
 use pezsp_runtime::FixedU128;

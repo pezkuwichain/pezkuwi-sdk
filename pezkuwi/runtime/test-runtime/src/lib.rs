@@ -704,7 +704,7 @@ impl pezpallet_test_notifier::Config for Runtime {
 	type RuntimeCall = RuntimeCall;
 }
 
-#[pezframe_support::pallet(dev_mode)]
+#[pezframe_support::pezpallet(dev_mode)]
 pub mod pezpallet_test_notifier {
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
@@ -713,10 +713,10 @@ pub mod pezpallet_test_notifier {
 	use xcm::latest::prelude::*;
 	use xcm_executor::traits::QueryHandler as XcmQueryHandler;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config + pezpallet_xcm::Config {
 		#[allow(deprecated)]
 		type RuntimeEvent: IsType<<Self as pezframe_system::Config>::RuntimeEvent> + From<Event<Self>>;
@@ -725,30 +725,30 @@ pub mod pezpallet_test_notifier {
 		type RuntimeCall: IsType<<Self as pezpallet_xcm::Config>::RuntimeCall> + From<Call<Self>>;
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		QueryPrepared(QueryId),
 		NotifyQueryPrepared(QueryId),
 		ResponseReceived(Location, QueryId, Response),
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		UnexpectedId,
 		BadAccountFormat,
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
-		#[pallet::call_index(0)]
-		#[pallet::weight(1_000_000)]
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(1_000_000)]
 		pub fn prepare_new_query(origin: OriginFor<T>) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 			let id = who
 				.using_encoded(|mut d| <[u8; 32]>::decode(&mut d))
 				.map_err(|_| Error::<T>::BadAccountFormat)?;
-			let qid = <pezpallet_xcm::Pallet<T> as XcmQueryHandler>::new_query(
+			let qid = <pezpallet_xcm::Pezpallet<T> as XcmQueryHandler>::new_query(
 				Junction::AccountId32 { network: None, id },
 				100u32.into(),
 				Here,
@@ -757,8 +757,8 @@ pub mod pezpallet_test_notifier {
 			Ok(())
 		}
 
-		#[pallet::call_index(1)]
-		#[pallet::weight(1_000_000)]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(1_000_000)]
 		pub fn prepare_new_notify_query(origin: OriginFor<T>) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 			let id = who
@@ -766,7 +766,7 @@ pub mod pezpallet_test_notifier {
 				.map_err(|_| Error::<T>::BadAccountFormat)?;
 			let call =
 				Call::<T>::notification_received { query_id: 0, response: Default::default() };
-			let qid = pezpallet_xcm::Pallet::<T>::new_notify_query(
+			let qid = pezpallet_xcm::Pezpallet::<T>::new_notify_query(
 				Junction::AccountId32 { network: None, id },
 				<T as Config>::RuntimeCall::from(call),
 				100u32.into(),
@@ -776,8 +776,8 @@ pub mod pezpallet_test_notifier {
 			Ok(())
 		}
 
-		#[pallet::call_index(2)]
-		#[pallet::weight(1_000_000)]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(1_000_000)]
 		pub fn notification_received(
 			origin: OriginFor<T>,
 			query_id: QueryId,
@@ -1150,12 +1150,12 @@ pezsp_api::impl_runtime_apis! {
 	#[api_version(6)]
 	impl pezsp_consensus_beefy::BeefyApi<Block, BeefyId> for Runtime {
 		fn beefy_genesis() -> Option<BlockNumber> {
-			// dummy implementation due to lack of BEEFY pallet.
+			// dummy implementation due to lack of BEEFY pezpallet.
 			None
 		}
 
 		fn validator_set() -> Option<pezsp_consensus_beefy::ValidatorSet<BeefyId>> {
-			// dummy implementation due to lack of BEEFY pallet.
+			// dummy implementation due to lack of BEEFY pezpallet.
 			None
 		}
 

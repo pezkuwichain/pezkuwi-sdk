@@ -15,23 +15,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # People Pallet
+//! # People Pezpallet
 //!
-//! A pallet managing the registry of proven individuals.
+//! A pezpallet managing the registry of proven individuals.
 //!
 //! ## Overview
 //!
-//! The People pallet stores and manages identifiers of individuals who have proven their
+//! The People pezpallet stores and manages identifiers of individuals who have proven their
 //! personhood. It tracks their personal IDs, organizes their cryptographic keys into rings, and
 //! allows them to use contextual aliases through authentication in extensions. When transactions
-//! include cryptographic proofs of belonging to the people set, the pallet's transaction extension
+//! include cryptographic proofs of belonging to the people set, the pezpallet's transaction extension
 //! verifies these proofs before allowing the transaction to proceed. This enables other pallets to
 //! check if actions come from unique persons while preserving privacy through the ring-based
 //! structure.
 //!
-//! The pallet accepts new persons after they prove their uniqueness elsewhere, stores their
+//! The pezpallet accepts new persons after they prove their uniqueness elsewhere, stores their
 //! information, and supports removing persons via suspensions. While other systems (e.g., wallets)
-//! generate the proofs, this pallet handles the storage of all necessary data and verifies the
+//! generate the proofs, this pezpallet handles the storage of all necessary data and verifies the
 //! proofs when used.
 //!
 //! ## Key Features
@@ -65,7 +65,7 @@
 //! - `onboard_people_manual`: Manually onboard people into a ring. The transaction fee is refunded
 //!   on a successful call.
 //!
-//! ### Automated tasks performed by the pallet in hooks
+//! ### Automated tasks performed by the pezpallet in hooks
 //!
 //! - Ring building: Build or update a ring's cryptographic commitment. This task processes queued
 //!   keys into a ring commitment that enables proof generation and verification. Since ring
@@ -94,7 +94,7 @@
 //!
 //! ### Transaction Extension
 //!
-//! The pallet provides the `AsPerson` transaction extension that allows transactions to be
+//! The pezpallet provides the `AsPerson` transaction extension that allows transactions to be
 //! dispatched with special origins: `PersonalIdentity` and `PersonalAlias`. These origins prove the
 //! transaction comes from a unique person, either through their identity or through a contextual
 //! alias. To make use of the personhood system, other pallets should check for these origins.
@@ -127,7 +127,7 @@ pub mod benchmarking;
 pub mod extension;
 pub mod types;
 pub mod weights;
-pub use pallet::*;
+pub use pezpallet::*;
 pub use types::*;
 pub use weights::WeightInfo;
 
@@ -162,18 +162,18 @@ use verifiable::{Alias, GenerateVerifiable};
 #[cfg(feature = "runtime-benchmarks")]
 pub use benchmarking::BenchmarkHelper;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::{pezpallet_prelude::*, traits::Contains};
 	use pezframe_system::pezpallet_prelude::{BlockNumberFor, *};
 
 	const LOG_TARGET: &str = "runtime::people";
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config:
 		pezframe_system::Config<
 		RuntimeOrigin: From<Origin>
@@ -195,7 +195,7 @@ pub mod pallet {
 		>,
 	>
 	{
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 
 		/// The runtime event type.
@@ -214,16 +214,16 @@ pub mod pallet {
 		type AccountContexts: Contains<Context>;
 
 		/// Number of chunks per page.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type ChunkPageSize: Get<u32>;
 
 		/// Maximum number of people included in a ring before a new one is created.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxRingSize: Get<u32>;
 
 		/// Maximum number of people included in an onboarding queue page before a new one is
 		/// created.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type OnboardingQueuePageSize: Get<u32>;
 
 		/// Helper for benchmarks.
@@ -232,25 +232,25 @@ pub mod pallet {
 	}
 
 	/// The current individuals we recognise.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Root<T> = StorageMap<_, Blake2_128Concat, RingIndex, RingRoot<T>>;
 
 	/// Keeps track of the ring index currently being populated.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type CurrentRingIndex<T: Config> = StorageValue<_, u32, ValueQuery>;
 
 	/// Maximum number of people queued before onboarding to a ring.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type OnboardingSize<T: Config> = StorageValue<_, u32, ValueQuery>;
 
 	/// Hint for the maximum number of people that can be included in a ring through a single root
 	/// building call. If no value is set, then the onboarding size will be used instead.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type RingBuildingPeopleLimit<T: Config> = StorageValue<_, u32, OptionQuery>;
 
 	/// Both the keys that are included in built rings
 	/// and the keys that will be used in future rings.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type RingKeys<T: Config> = StorageMap<
 		_,
 		Blake2_128Concat,
@@ -261,18 +261,18 @@ pub mod pallet {
 
 	/// Stores the meta information for each ring, the number of keys and how many are actually
 	/// included in the root.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type RingKeysStatus<T: Config> =
 		StorageMap<_, Blake2_128Concat, RingIndex, RingStatus, ValueQuery>;
 
 	/// A map of all rings which currently have pending suspensions and need cleaning, along with
 	/// their respective number of suspended keys which need to be removed.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type PendingSuspensions<T: Config> =
 		StorageMap<_, Twox64Concat, RingIndex, BoundedVec<u32, T::MaxRingSize>, ValueQuery>;
 
 	/// The number of people currently included in a ring.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ActiveMembers<T: Config> = StorageValue<_, u32, ValueQuery>;
 
 	/// The current individuals we recognise, but not necessarily yet included in a ring.
@@ -280,24 +280,24 @@ pub mod pallet {
 	/// Look-up from the crypto (public) key to the immutable ID of the individual (`PersonalId`). A
 	/// person can have two different entries in this map if they queued a key migration which
 	/// hasn't been enacted yet.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Keys<T> = CountedStorageMap<_, Blake2_128Concat, MemberOf<T>, PersonalId>;
 
 	/// A map of all the people who have declared their intent to migrate their keys and are waiting
 	/// for the next mutation session.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type KeyMigrationQueue<T: Config> =
 		StorageMap<_, Blake2_128Concat, PersonalId, MemberOf<T>>;
 
 	/// The current individuals we recognise, but not necessarily yet included in a ring.
 	///
 	/// Immutable ID of the individual (`PersonalId`) to information about their key and status.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type People<T: Config> =
 		StorageMap<_, Blake2_128Concat, PersonalId, PersonRecord<MemberOf<T>, T::AccountId>>;
 
 	/// Conversion of a contextual alias to an account ID.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type AliasToAccount<T> = StorageMap<
 		_,
 		Blake2_128Concat,
@@ -307,7 +307,7 @@ pub mod pallet {
 	>;
 
 	/// Conversion of an account ID to a contextual alias.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type AccountToAlias<T> = StorageMap<
 		_,
 		Blake2_128Concat,
@@ -320,7 +320,7 @@ pub mod pallet {
 	///
 	/// Managed with `set_personal_id_account` and `unset_personal_id_account`.
 	/// Reverse lookup is inside `People` storage, inside the record.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type AccountToPersonalId<T> = StorageMap<
 		_,
 		Blake2_128Concat,
@@ -330,29 +330,29 @@ pub mod pallet {
 	>;
 
 	/// Paginated collection of static chunks used by the verifiable crypto.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Chunks<T> = StorageMap<_, Twox64Concat, PageIndex, ChunksOf<T>, OptionQuery>;
 
 	/// The next free and never reserved personal ID.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type NextPersonalId<T> = StorageValue<_, PersonalId, ValueQuery>;
 
-	/// The state of the pallet regarding the actions that are currently allowed to be performed on
+	/// The state of the pezpallet regarding the actions that are currently allowed to be performed on
 	/// all existing rings.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type RingsState<T> = StorageValue<_, RingMembersState, ValueQuery>;
 
 	/// Candidates' reserved identities which we track.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ReservedPersonalId<T: Config> =
 		StorageMap<_, Twox64Concat, PersonalId, (), OptionQuery>;
 
 	/// Keeps track of the page indices of the head and tail of the onboarding queue.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type QueuePageIndices<T: Config> = StorageValue<_, (PageIndex, PageIndex), ValueQuery>;
 
 	/// Paginated collection of people public keys ready to be included in a ring.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type OnboardingQueue<T> = StorageMap<
 		_,
 		Twox64Concat,
@@ -361,8 +361,8 @@ pub mod pallet {
 		ValueQuery,
 	>;
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// An individual has had their personhood recognised and indexed.
 		PersonhoodRecognized { who: PersonalId, key: MemberOf<T> },
@@ -370,8 +370,8 @@ pub mod pallet {
 		PersonOnboarding { who: PersonalId, key: MemberOf<T> },
 	}
 
-	#[pallet::extra_constants]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::extra_constants]
+	impl<T: Config> Pezpallet<T> {
 		/// The amount of block number tolerance we allow for a setup account transaction.
 		///
 		/// `set_alias_account` and `set_personal_id_account` calls contains
@@ -382,7 +382,7 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// The supplied identifier does not represent a person.
 		NotPerson,
@@ -451,7 +451,7 @@ pub mod pallet {
 		InvalidOnboardingSize,
 	}
 
-	#[pallet::origin]
+	#[pezpallet::origin]
 	#[derive(
 		Clone,
 		PartialEq,
@@ -468,8 +468,8 @@ pub mod pallet {
 		PersonalAlias(RevisedContextualAlias),
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn integrity_test() {
 			assert!(
 				<T as Config>::ChunkPageSize::get() > 0,
@@ -599,7 +599,7 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	pub struct GenesisConfig<T: Config> {
 		pub encoded_chunks: Vec<u8>,
 		#[serde(skip)]
@@ -623,7 +623,7 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			let chunks: Vec<<<T as Config>::Crypto as GenerateVerifiable>::StaticChunk> =
@@ -649,18 +649,18 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call(weight = <T as Config>::WeightInfo)]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call(weight = <T as Config>::WeightInfo)]
+	impl<T: Config> Pezpallet<T> {
 		/// Build a ring root by including registered people.
 		///
-		/// This task is performed automatically by the pallet through the `on_idle` hook whenever
+		/// This task is performed automatically by the pezpallet through the `on_idle` hook whenever
 		/// there is leftover weight in a block. This call is meant to be a backup in case of
 		/// extreme congestion and should be submitted by signed origins.
-		#[pallet::weight(
+		#[pezpallet::weight(
 			T::WeightInfo::should_build_ring(
 				limit.unwrap_or_else(T::MaxRingSize::get)
 			).saturating_add(T::WeightInfo::build_ring(limit.unwrap_or_else(T::MaxRingSize::get))))]
-		#[pallet::call_index(100)]
+		#[pezpallet::call_index(100)]
 		pub fn build_ring_manual(
 			origin: OriginFor<T>,
 			ring_index: RingIndex,
@@ -715,11 +715,11 @@ pub mod pallet {
 		/// registering them into the ring. This does not compute the root, that is done using
 		/// `build_ring`.
 		///
-		/// This task is performed automatically by the pallet through the `on_idle` hook whenever
+		/// This task is performed automatically by the pezpallet through the `on_idle` hook whenever
 		/// there is leftover weight in a block. This call is meant to be a backup in case of
 		/// extreme congestion and should be submitted by signed origins.
-		#[pallet::weight(T::WeightInfo::onboard_people())]
-		#[pallet::call_index(101)]
+		#[pezpallet::weight(T::WeightInfo::onboard_people())]
+		#[pezpallet::call_index(101)]
 		pub fn onboard_people_manual(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 			ensure_signed(origin)?;
 
@@ -815,7 +815,7 @@ pub mod pallet {
 		/// Merge the people in two rings into a single, new ring. In order for the rings to be
 		/// eligible for merging, they must be below 1/2 of max capacity, have no pending
 		/// suspensions and not be the top ring used for onboarding.
-		#[pallet::call_index(102)]
+		#[pezpallet::call_index(102)]
 		pub fn merge_rings(
 			origin: OriginFor<T>,
 			base_ring_index: RingIndex,
@@ -889,8 +889,8 @@ pub mod pallet {
 		///
 		/// This is a call version of the transaction extension `AsPersonalAliasWithAccount`.
 		/// It is recommended to use the transaction extension instead when suitable.
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::under_alias().saturating_add(call.get_dispatch_info().call_weight))]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::under_alias().saturating_add(call.get_dispatch_info().call_weight))]
 		pub fn under_alias(
 			origin: OriginFor<T>,
 			call: Box<<T as pezframe_system::Config>::RuntimeCall>,
@@ -916,14 +916,14 @@ pub mod pallet {
 		/// Parameters:
 		/// - `account`: The account to set the alias for.
 		/// - `call_valid_at`: The block number when the call becomes valid.
-		#[pallet::call_index(1)]
+		#[pezpallet::call_index(1)]
 		pub fn set_alias_account(
 			origin: OriginFor<T>,
 			account: T::AccountId,
 			call_valid_at: BlockNumberFor<T>,
 		) -> DispatchResultWithPostInfo {
 			let rev_ca = Self::ensure_revised_personal_alias(origin)?;
-			let now = pezframe_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pezpallet::<T>::block_number();
 			let time_tolerance = Self::account_setup_time_tolerance();
 			ensure!(
 				call_valid_at <= now && now <= call_valid_at.saturating_add(time_tolerance),
@@ -952,10 +952,10 @@ pub mod pallet {
 			if old_account.as_ref() != Some(&account) {
 				ensure!(!AccountToAlias::<T>::contains_key(&account), Error::<T>::AccountInUse);
 				if let Some(old_account) = &old_account {
-					pezframe_system::Pallet::<T>::dec_sufficients(old_account);
+					pezframe_system::Pezpallet::<T>::dec_sufficients(old_account);
 					AccountToAlias::<T>::remove(old_account);
 				}
-				pezframe_system::Pallet::<T>::inc_sufficients(&account);
+				pezframe_system::Pezpallet::<T>::inc_sufficients(&account);
 			}
 
 			AccountToAlias::<T>::insert(&account, &rev_ca);
@@ -969,12 +969,12 @@ pub mod pallet {
 		}
 
 		/// Remove the mapping from a particular alias to its registered account.
-		#[pallet::call_index(2)]
+		#[pezpallet::call_index(2)]
 		pub fn unset_alias_account(origin: OriginFor<T>) -> DispatchResult {
 			let alias = Self::ensure_personal_alias(origin)?;
 			let account = AliasToAccount::<T>::take(&alias).ok_or(Error::<T>::InvalidAccount)?;
 			AccountToAlias::<T>::remove(&account);
-			pezframe_system::Pallet::<T>::dec_sufficients(&account);
+			pezframe_system::Pezpallet::<T>::dec_sufficients(&account);
 
 			Ok(())
 		}
@@ -985,7 +985,7 @@ pub mod pallet {
 		/// order, the next available personal ID.
 		///
 		/// The origin for this call must have root privileges.
-		#[pallet::call_index(3)]
+		#[pezpallet::call_index(3)]
 		pub fn force_recognize_personhood(
 			origin: OriginFor<T>,
 			people: Vec<MemberOf<T>>,
@@ -1013,14 +1013,14 @@ pub mod pallet {
 		/// Parameters:
 		/// - `account`: The account to set the alias for.
 		/// - `call_valid_at`: The block number when the call becomes valid.
-		#[pallet::call_index(4)]
+		#[pezpallet::call_index(4)]
 		pub fn set_personal_id_account(
 			origin: OriginFor<T>,
 			account: T::AccountId,
 			call_valid_at: BlockNumberFor<T>,
 		) -> DispatchResultWithPostInfo {
 			let id = Self::ensure_personal_identity(origin)?;
-			let now = pezframe_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pezpallet::<T>::block_number();
 			let time_tolerance = Self::account_setup_time_tolerance();
 			ensure!(
 				call_valid_at <= now && now <= call_valid_at.saturating_add(time_tolerance),
@@ -1030,14 +1030,14 @@ pub mod pallet {
 			ensure!(!AccountToAlias::<T>::contains_key(&account), Error::<T>::AccountInUse);
 			let mut record = People::<T>::get(id).ok_or(Error::<T>::NotPerson)?;
 			let pays = if let Some(old_account) = record.account {
-				pezframe_system::Pallet::<T>::dec_sufficients(&old_account);
+				pezframe_system::Pezpallet::<T>::dec_sufficients(&old_account);
 				AccountToPersonalId::<T>::remove(&old_account);
 				Pays::Yes
 			} else {
 				Pays::No
 			};
 			record.account = Some(account.clone());
-			pezframe_system::Pallet::<T>::inc_sufficients(&account);
+			pezframe_system::Pezpallet::<T>::inc_sufficients(&account);
 			AccountToPersonalId::<T>::insert(&account, id);
 			People::<T>::insert(id, &record);
 
@@ -1045,13 +1045,13 @@ pub mod pallet {
 		}
 
 		/// Unset the personal id account.
-		#[pallet::call_index(5)]
+		#[pezpallet::call_index(5)]
 		pub fn unset_personal_id_account(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 			let id = Self::ensure_personal_identity(origin)?;
 			let mut record = People::<T>::get(id).ok_or(Error::<T>::NotPerson)?;
 			let account = record.account.take().ok_or(Error::<T>::InvalidAccount)?;
 			AccountToPersonalId::<T>::take(&account).ok_or(Error::<T>::InvalidAccount)?;
-			pezframe_system::Pallet::<T>::dec_sufficients(&account);
+			pezframe_system::Pezpallet::<T>::dec_sufficients(&account);
 			People::<T>::insert(id, &record);
 
 			Ok(Pays::Yes.into())
@@ -1060,7 +1060,7 @@ pub mod pallet {
 		/// Migrate the key for a person who was onboarded and is currently included in a ring. The
 		/// migration is not instant as the key replacement and subsequent inclusion in a new ring
 		/// root will happen only after the next mutation session.
-		#[pallet::call_index(6)]
+		#[pezpallet::call_index(6)]
 		pub fn migrate_included_key(
 			origin: OriginFor<T>,
 			new_key: MemberOf<T>,
@@ -1103,7 +1103,7 @@ pub mod pallet {
 
 		/// Migrate the key for a person who is currently onboarding. The operation is instant,
 		/// replacing the old key in the onboarding queue.
-		#[pallet::call_index(7)]
+		#[pezpallet::call_index(7)]
 		pub fn migrate_onboarding_key(
 			origin: OriginFor<T>,
 			new_key: MemberOf<T>,
@@ -1142,7 +1142,7 @@ pub mod pallet {
 		}
 
 		/// Force set the onboarding size for new people. This call requires root privileges.
-		#[pallet::call_index(8)]
+		#[pezpallet::call_index(8)]
 		pub fn set_onboarding_size(
 			origin: OriginFor<T>,
 			onboarding_size: u32,
@@ -1157,7 +1157,7 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config> Pallet<T> {
+	impl<T: Config> Pezpallet<T> {
 		/// If the conditions to build a ring are met, this function returns the number of people to
 		/// be included in a `build_ring` call. Otherwise, this function returns `None`.
 		pub(crate) fn should_build_ring(ring_index: RingIndex, limit: u32) -> Option<u32> {
@@ -1519,7 +1519,7 @@ pub mod pallet {
 							// It is expensive to shift the whole vec in the worst case to remove a
 							// suspended person from onboarding, but the pages will be small and
 							// suspension of people who are not yet onboarded is supposed to be
-							// extremely rare if not impossible as the pallet hooks should have
+							// extremely rare if not impossible as the pezpallet hooks should have
 							// plenty of time to include someone recognized before the beginning of
 							// the next suspension round. The only legitimate case when this could
 							// happen is if someone is sitting in the onboarding queue for a long
@@ -1744,7 +1744,7 @@ pub mod pallet {
 				}
 			});
 
-			// Make sure to remove the entry from the map so that the pallet hooks don't iterate
+			// Make sure to remove the entry from the map so that the pezpallet hooks don't iterate
 			// over it.
 			PendingSuspensions::<T>::remove(ring_index);
 			T::WeightInfo::remove_suspended_people(keys_len.try_into().unwrap_or(u32::MAX))
@@ -1789,7 +1789,7 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config> AddOnlyPeopleTrait for Pallet<T> {
+	impl<T: Config> AddOnlyPeopleTrait for Pezpallet<T> {
 		type Member = MemberOf<T>;
 
 		fn reserve_new_id() -> PersonalId {
@@ -1840,7 +1840,7 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config> PeopleTrait for Pallet<T> {
+	impl<T: Config> PeopleTrait for Pezpallet<T> {
 		fn suspend_personhood(suspensions: &[PersonalId]) -> DispatchResult {
 			Self::queue_personhood_suspensions(suspensions)
 		}

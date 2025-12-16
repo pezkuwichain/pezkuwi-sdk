@@ -115,7 +115,7 @@ impl ElectionDataProvider for MockStaking {
 	}
 
 	fn next_election_prediction(_: u64) -> u64 {
-		unreachable!("not used in this pallet")
+		unreachable!("not used in this pezpallet")
 	}
 
 	#[cfg(feature = "runtime-benchmarks")]

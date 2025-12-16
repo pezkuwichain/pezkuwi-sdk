@@ -1,5 +1,5 @@
-# Root Testing Pallet
+# Root Testing Pezpallet
 
-Pallet that contains extrinsics that can be useful in testing.
+Pezpallet that contains extrinsics that can be useful in testing.
 
-NOTE: This pallet should only be used for testing purposes and should not be used in production runtimes!
+NOTE: This pezpallet should only be used for testing purposes and should not be used in production runtimes!

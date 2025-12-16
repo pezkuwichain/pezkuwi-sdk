@@ -15,10 +15,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Asset Rewards pallet benchmarking.
+//! Asset Rewards pezpallet benchmarking.
 
 use super::*;
-use crate::Pallet as AssetRewards;
+use crate::Pezpallet as AssetRewards;
 use pezframe_benchmarking::{v2::*, whitelisted_caller, BenchmarkError};
 use pezframe_support::{
 	assert_ok,
@@ -27,7 +27,7 @@ use pezframe_support::{
 		Consideration, EnsureOrigin, Footprint,
 	},
 };
-use pezframe_system::{Pallet as System, RawOrigin};
+use pezframe_system::{Pezpallet as System, RawOrigin};
 use pezsp_runtime::{traits::One, Saturating};
 use pezsp_std::prelude::*;
 

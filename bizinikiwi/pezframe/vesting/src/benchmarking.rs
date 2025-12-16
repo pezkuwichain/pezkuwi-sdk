@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Vesting pallet benchmarking.
+//! Vesting pezpallet benchmarking.
 
 #![cfg(feature = "runtime-benchmarks")]
 
@@ -60,7 +60,7 @@ fn add_vesting_schedules<T: Config>(
 		total_locked += locked;
 
 		let schedule = VestingInfo::new(locked, per_block, starting_block.into());
-		assert_ok!(Pallet::<T>::do_vested_transfer(&source, target, schedule));
+		assert_ok!(Pezpallet::<T>::do_vested_transfer(&source, target, schedule));
 
 		// Top up to guarantee we can always transfer another schedule.
 		T::Currency::make_free_balance_be(&source, BalanceOf::<T>::max_value());
@@ -85,9 +85,9 @@ mod benchmarks {
 		let expected_balance = add_vesting_schedules::<T>(&caller, s)?;
 
 		// At block zero, everything is vested.
-		assert_eq!(pezframe_system::Pallet::<T>::block_number(), BlockNumberFor::<T>::zero());
+		assert_eq!(pezframe_system::Pezpallet::<T>::block_number(), BlockNumberFor::<T>::zero());
 		assert_eq!(
-			Pallet::<T>::vesting_balance(&caller),
+			Pezpallet::<T>::vesting_balance(&caller),
 			Some(expected_balance),
 			"Vesting schedule not added",
 		);
@@ -97,7 +97,7 @@ mod benchmarks {
 
 		// Nothing happened since everything is still vested.
 		assert_eq!(
-			Pallet::<T>::vesting_balance(&caller),
+			Pezpallet::<T>::vesting_balance(&caller),
 			Some(expected_balance),
 			"Vesting schedule was removed",
 		);
@@ -119,7 +119,7 @@ mod benchmarks {
 		// At block 21, everything is unlocked.
 		T::BlockNumberProvider::set_block_number(21_u32.into());
 		assert_eq!(
-			Pallet::<T>::vesting_balance(&caller),
+			Pezpallet::<T>::vesting_balance(&caller),
 			Some(BalanceOf::<T>::zero()),
 			"Vesting schedule still active",
 		);
@@ -128,7 +128,7 @@ mod benchmarks {
 		vest(RawOrigin::Signed(caller.clone()));
 
 		// Vesting schedule is removed!
-		assert_eq!(Pallet::<T>::vesting_balance(&caller), None, "Vesting schedule was not removed",);
+		assert_eq!(Pezpallet::<T>::vesting_balance(&caller), None, "Vesting schedule was not removed",);
 
 		Ok(())
 	}
@@ -146,9 +146,9 @@ mod benchmarks {
 		let expected_balance = add_vesting_schedules::<T>(&other, s)?;
 
 		// At block zero, everything is vested.
-		assert_eq!(pezframe_system::Pallet::<T>::block_number(), BlockNumberFor::<T>::zero());
+		assert_eq!(pezframe_system::Pezpallet::<T>::block_number(), BlockNumberFor::<T>::zero());
 		assert_eq!(
-			Pallet::<T>::vesting_balance(&other),
+			Pezpallet::<T>::vesting_balance(&other),
 			Some(expected_balance),
 			"Vesting schedule not added",
 		);
@@ -160,7 +160,7 @@ mod benchmarks {
 
 		// Nothing happened since everything is still vested.
 		assert_eq!(
-			Pallet::<T>::vesting_balance(&other),
+			Pezpallet::<T>::vesting_balance(&other),
 			Some(expected_balance),
 			"Vesting schedule was removed",
 		);
@@ -183,7 +183,7 @@ mod benchmarks {
 		T::BlockNumberProvider::set_block_number(21_u32.into());
 
 		assert_eq!(
-			Pallet::<T>::vesting_balance(&other),
+			Pezpallet::<T>::vesting_balance(&other),
 			Some(BalanceOf::<T>::zero()),
 			"Vesting schedule still active",
 		);
@@ -194,7 +194,7 @@ mod benchmarks {
 		vest_other(RawOrigin::Signed(caller.clone()), other_lookup);
 
 		// Vesting schedule is removed.
-		assert_eq!(Pallet::<T>::vesting_balance(&other), None, "Vesting schedule was not removed",);
+		assert_eq!(Pezpallet::<T>::vesting_balance(&other), None, "Vesting schedule was not removed",);
 
 		Ok(())
 	}
@@ -231,7 +231,7 @@ mod benchmarks {
 			"Transfer didn't happen",
 		);
 		assert_eq!(
-			Pallet::<T>::vesting_balance(&target),
+			Pezpallet::<T>::vesting_balance(&target),
 			Some(expected_balance),
 			"Lock not correctly updated",
 		);
@@ -272,7 +272,7 @@ mod benchmarks {
 			"Transfer didn't happen",
 		);
 		assert_eq!(
-			Pallet::<T>::vesting_balance(&target),
+			Pezpallet::<T>::vesting_balance(&target),
 			Some(expected_balance),
 			"Lock not correctly updated",
 		);
@@ -293,9 +293,9 @@ mod benchmarks {
 		let expected_balance = add_vesting_schedules::<T>(&caller, s)?;
 
 		// Schedules are not vesting at block 0.
-		assert_eq!(pezframe_system::Pallet::<T>::block_number(), BlockNumberFor::<T>::zero());
+		assert_eq!(pezframe_system::Pezpallet::<T>::block_number(), BlockNumberFor::<T>::zero());
 		assert_eq!(
-			Pallet::<T>::vesting_balance(&caller),
+			Pezpallet::<T>::vesting_balance(&caller),
 			Some(expected_balance),
 			"Vesting balance should equal sum locked of all schedules",
 		);
@@ -316,7 +316,7 @@ mod benchmarks {
 		let expected_index = (s - 2) as usize;
 		assert_eq!(Vesting::<T>::get(&caller).unwrap()[expected_index], expected_schedule);
 		assert_eq!(
-			Pallet::<T>::vesting_balance(&caller),
+			Pezpallet::<T>::vesting_balance(&caller),
 			Some(expected_balance),
 			"Vesting balance should equal total locked of all schedules",
 		);
@@ -351,7 +351,7 @@ mod benchmarks {
 		// block).
 		let expected_balance = total_transferred / 2_u32.into();
 		assert_eq!(
-			Pallet::<T>::vesting_balance(&caller),
+			Pezpallet::<T>::vesting_balance(&caller),
 			Some(expected_balance),
 			"Vesting balance should reflect that we are half way through all schedules duration",
 		);
@@ -384,7 +384,7 @@ mod benchmarks {
 			"New schedule is properly created and placed"
 		);
 		assert_eq!(
-			Pallet::<T>::vesting_balance(&caller),
+			Pezpallet::<T>::vesting_balance(&caller),
 			Some(expected_balance),
 			"Vesting balance should equal half total locked of all schedules",
 		);
@@ -436,7 +436,7 @@ mod benchmarks {
 	}
 
 	impl_benchmark_test_suite! {
-		Pallet,
+		Pezpallet,
 		mock::ExtBuilder::default().existential_deposit(256).build(),
 		mock::Test
 	}

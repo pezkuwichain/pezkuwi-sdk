@@ -73,12 +73,12 @@ impl<T: Config> Delegation<T> {
 			if self.amount == Zero::zero() {
 				<Delegators<T>>::remove(key);
 				// Remove provider if no delegation left.
-				let _ = pezframe_system::Pallet::<T>::dec_providers(key).defensive();
+				let _ = pezframe_system::Pezpallet::<T>::dec_providers(key).defensive();
 				return;
 			}
 		} else {
 			// this is a new delegation. Provide for this account.
-			pezframe_system::Pallet::<T>::inc_providers(key);
+			pezframe_system::Pezpallet::<T>::inc_providers(key);
 		}
 
 		<Delegators<T>>::insert(key, self);

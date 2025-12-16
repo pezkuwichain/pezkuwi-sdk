@@ -1,4 +1,4 @@
-# Remark Storage Pallet
+# Remark Storage Pezpallet
 
 Allows storing arbitrary data off chain.
 

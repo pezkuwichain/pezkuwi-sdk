@@ -29,7 +29,7 @@ macro_rules! whitelist {
 	};
 }
 
-/// Construct pallet benchmarks for weighing dispatchables.
+/// Construct pezpallet benchmarks for weighing dispatchables.
 ///
 /// Works around the idea of complexity parameters, named by a single letter (which is usually
 /// upper cased in complexity notation but is lower-cased for use in this macro).
@@ -125,7 +125,7 @@ macro_rules! whitelist {
 ///
 /// Test functions are automatically generated for each benchmark and are accessible to you when you
 /// run `cargo test`. All tests are named `test_benchmark_<benchmark_name>`, implemented on the
-/// Pallet struct, and run them in a test externalities environment. The test function runs your
+/// Pezpallet struct, and run them in a test externalities environment. The test function runs your
 /// benchmark just like a regular benchmark, but only testing at the lowest and highest values for
 /// each component. The function will return `Ok(())` if the benchmarks return no errors.
 ///
@@ -161,10 +161,10 @@ macro_rules! whitelist {
 /// #[test]
 /// fn test_benchmarks() {
 ///   new_test_ext().execute_with(|| {
-///     assert_ok!(Pallet::<Test>::test_benchmark_dummy());
-///     assert_err!(Pallet::<Test>::test_benchmark_other_name(), "Bad origin");
-///     assert_ok!(Pallet::<Test>::test_benchmark_sort_vector());
-///     assert_err!(Pallet::<Test>::test_benchmark_broken_benchmark(), "You forgot to sort!");
+///     assert_ok!(Pezpallet::<Test>::test_benchmark_dummy());
+///     assert_err!(Pezpallet::<Test>::test_benchmark_other_name(), "Bad origin");
+///     assert_ok!(Pezpallet::<Test>::test_benchmark_sort_vector());
+///     assert_err!(Pezpallet::<Test>::test_benchmark_broken_benchmark(), "You forgot to sort!");
 ///   });
 /// }
 /// ```
@@ -188,7 +188,7 @@ macro_rules! benchmarks {
 
 /// Same as [`benchmarks`] but for instantiable module.
 ///
-/// NOTE: For pallet declared with [`pezframe_support::pallet`], use [`benchmarks_instance_pallet`].
+/// NOTE: For pezpallet declared with [`pezframe_support::pezpallet`], use [`benchmarks_instance_pallet`].
 #[macro_export]
 macro_rules! benchmarks_instance {
 	(
@@ -207,9 +207,9 @@ macro_rules! benchmarks_instance {
 	}
 }
 
-/// Same as [`benchmarks`] but for instantiable pallet declared [`pezframe_support::pallet`].
+/// Same as [`benchmarks`] but for instantiable pezpallet declared [`pezframe_support::pezpallet`].
 ///
-/// NOTE: For pallet declared with `decl_module!`, use [`benchmarks_instance`].
+/// NOTE: For pezpallet declared with `decl_module!`, use [`benchmarks_instance`].
 #[macro_export]
 macro_rules! benchmarks_instance_pallet {
 	(
@@ -363,7 +363,7 @@ macro_rules! benchmarks_iter {
 			$( $rest )*
 		}
 	};
-	// detect and extract `#[pov_mode = Mode { Pallet::Storage: Mode ... }]` tag:
+	// detect and extract `#[pov_mode = Mode { Pezpallet::Storage: Mode ... }]` tag:
 	(
 		{ $($bench_module:ident, $new_test_ext:expr, $test:path $(, $( $args:tt )* )?)? }
 		{ $( $instance:ident: $instance_bound:tt )? }
@@ -939,7 +939,7 @@ macro_rules! selected_benchmark {
 		{ $( $instance:ident: $instance_bound:tt )? }
 		$( { $( $bench_inst:ident )? } $bench:ident )*
 	) => {
-		// The list of available benchmarks for this pallet.
+		// The list of available benchmarks for this pezpallet.
 		#[allow(non_camel_case_types)]
 		enum SelectedBenchmark {
 			$( $bench, )*
@@ -992,7 +992,7 @@ macro_rules! impl_benchmark {
 		// We only need to implement benchmarks for the runtime-benchmarks feature or testing.
 		#[cfg(any(feature = "runtime-benchmarks", test))]
 		impl<T: Config $(<$instance>, $instance: $instance_bound )? >
-			$crate::Benchmarking for Pallet<T $(, $instance)? >
+			$crate::Benchmarking for Pezpallet<T $(, $instance)? >
 			where T: pezframe_system::Config, $( $where_clause )*
 		{
 			fn benchmarks(extra: bool) -> $crate::__private::Vec<$crate::BenchmarkMetadata> {
@@ -1076,8 +1076,8 @@ macro_rules! impl_benchmark {
 				let mut results: $crate::__private::Vec<$crate::BenchmarkResult> = $crate::__private::Vec::new();
 				let on_before_start = || {
 					// Set the block number to at least 1 so events are deposited.
-					if $crate::__private::Zero::is_zero(&pezframe_system::Pallet::<T>::block_number()) {
-						pezframe_system::Pallet::<T>::set_block_number(1u32.into());
+					if $crate::__private::Zero::is_zero(&pezframe_system::Pezpallet::<T>::block_number()) {
+						pezframe_system::Pezpallet::<T>::set_block_number(1u32.into());
 					}
 
 					// Commit the externalities to the database, flushing the DB cache.
@@ -1165,7 +1165,7 @@ macro_rules! impl_benchmark {
 
 		#[cfg(test)]
 		impl<T: Config $(<$instance>, $instance: $instance_bound )? >
-			Pallet<T $(, $instance)? >
+			Pezpallet<T $(, $instance)? >
 		where T: pezframe_system::Config, $( $where_clause )*
 		{
 			/// Test a particular benchmark by name.
@@ -1175,7 +1175,7 @@ macro_rules! impl_benchmark {
 			/// that case.
 			///
 			/// This is generally intended to be used by child test modules such as those created
-			/// by the `impl_benchmark_test_suite` macro. However, it is not an error if a pallet
+			/// by the `impl_benchmark_test_suite` macro. However, it is not an error if a pezpallet
 			/// author chooses not to implement benchmarks.
 			#[allow(unused)]
 			fn test_bench_by_name(name: &[u8]) -> Result<(), $crate::BenchmarkError> {
@@ -1208,7 +1208,7 @@ macro_rules! impl_benchmark_test {
 		$crate::__private::paste::item! {
 			#[cfg(test)]
 			impl<T: Config $(<$instance>, $instance: $instance_bound )? >
-				Pallet<T $(, $instance)? >
+				Pezpallet<T $(, $instance)? >
 			where T: pezframe_system::Config, $( $where_clause )*
 			{
 				#[allow(unused)]
@@ -1226,8 +1226,8 @@ macro_rules! impl_benchmark_test {
 
 						let on_before_start = || {
 							// Set the block number to at least 1 so events are deposited.
-							if $crate::__private::Zero::is_zero(&pezframe_system::Pallet::<T>::block_number()) {
-								pezframe_system::Pallet::<T>::set_block_number(1u32.into());
+							if $crate::__private::Zero::is_zero(&pezframe_system::Pezpallet::<T>::block_number()) {
+								pezframe_system::Pezpallet::<T>::set_block_number(1u32.into());
 							}
 						};
 
@@ -1296,7 +1296,7 @@ macro_rules! impl_benchmark_test {
 /// When called in `pezpallet_example_basic` as
 ///
 /// ```rust,ignore
-/// impl_benchmark_test_suite!(Pallet, crate::tests::new_test_ext(), crate::tests::Test);
+/// impl_benchmark_test_suite!(Pezpallet, crate::tests::new_test_ext(), crate::tests::Test);
 /// ```
 ///
 /// It expands to the equivalent of:
@@ -1325,7 +1325,7 @@ macro_rules! impl_benchmark_test {
 /// benchmarks! {
 /// 	// Benchmarks omitted for brevity
 ///
-/// 	impl_benchmark_test_suite!(Pallet, crate::tests::new_test_ext(), crate::tests::Test);
+/// 	impl_benchmark_test_suite!(Pezpallet, crate::tests::new_test_ext(), crate::tests::Test);
 /// }
 /// ```
 ///
@@ -1396,11 +1396,11 @@ macro_rules! impl_benchmark_test {
 /// }
 ///
 /// mod tests {
-/// 	// because of macro syntax limitations, neither Pallet nor benches can be paths, but both have
+/// 	// because of macro syntax limitations, neither Pezpallet nor benches can be paths, but both have
 /// 	// to be idents in the scope of `impl_benchmark_test_suite`.
-/// 	use crate::{benches, Pallet};
+/// 	use crate::{benches, Pezpallet};
 ///
-/// 	impl_benchmark_test_suite!(Pallet, new_test_ext(), Test, benchmarks_path = benches);
+/// 	impl_benchmark_test_suite!(Pezpallet, new_test_ext(), Test, benchmarks_path = benches);
 ///
 /// 	// new_test_ext and the Test item are defined later in this module
 /// }
@@ -1738,7 +1738,7 @@ pub fn show_benchmark_debug_info(
 	error_message: &str,
 ) -> alloc::string::String {
 	alloc::format!(
-		"\n* Pallet: {}\n\
+		"\n* Pezpallet: {}\n\
 		* Benchmark: {}\n\
 		* Components: {:?}\n\
 		* Verify: {:?}\n\
@@ -1753,7 +1753,7 @@ pub fn show_benchmark_debug_info(
 	)
 }
 
-/// This macro adds pallet benchmarks to a `Vec<BenchmarkBatch>` object.
+/// This macro adds pezpallet benchmarks to a `Vec<BenchmarkBatch>` object.
 ///
 /// First create an object that holds in the input parameters for the benchmark:
 ///
@@ -1799,7 +1799,7 @@ pub fn show_benchmark_debug_info(
 ///
 /// At the end of `dispatch_benchmark`, you should return this batches object.
 ///
-/// In the case where you have multiple instances of a pallet that you need to separately benchmark,
+/// In the case where you have multiple instances of a pezpallet that you need to separately benchmark,
 /// the name of your module struct will be used as a suffix to your outputted weight file. For
 /// example:
 ///
@@ -1822,14 +1822,14 @@ macro_rules! add_benchmark {
 		let instance_string = stringify!($location).replace(" ", "").into_bytes();
 		let (config, whitelist) = $params;
 		let $crate::BenchmarkConfig {
-			pallet,
+			pezpallet,
 			instance,
 			benchmark,
 			selected_components,
 			verify,
 			internal_repeats,
 		} = config;
-		if &pallet[..] == &pezpallet_string[..] && &instance[..] == &instance_string[..] {
+		if &pezpallet[..] == &pezpallet_string[..] && &instance[..] == &instance_string[..] {
 			let benchmark_result = <$location as $crate::Benchmarking>::run_benchmark(
 				&benchmark[..],
 				&selected_components[..],
@@ -1883,7 +1883,7 @@ macro_rules! add_benchmark {
 
 			if let Some(final_results) = final_results {
 				$batches.push($crate::BenchmarkBatch {
-					pallet: pezpallet_string,
+					pezpallet: pezpallet_string,
 					instance: instance_string,
 					benchmark: benchmark.clone(),
 					results: final_results,
@@ -1902,8 +1902,8 @@ macro_rules! add_benchmark {
 /// let mut list = Vec::<BenchmarkList>::new();
 /// ```
 ///
-/// Then pass this `list` to the macro, along with the `extra` boolean, the pallet crate, and
-/// pallet struct:
+/// Then pass this `list` to the macro, along with the `extra` boolean, the pezpallet crate, and
+/// pezpallet struct:
 ///
 /// ```ignore
 /// list_benchmark!(list, extra, pezpallet_balances, Balances);
@@ -1919,7 +1919,7 @@ macro_rules! list_benchmark {
 		let instance_string = stringify!($location).replace(" ", "").into_bytes();
 		let benchmarks = <$location as $crate::Benchmarking>::benchmarks($extra);
 		let pezpallet_benchmarks = $crate::BenchmarkList {
-			pallet: pezpallet_string,
+			pezpallet: pezpallet_string,
 			instance: instance_string,
 			benchmarks: benchmarks.to_vec(),
 		};
@@ -1927,7 +1927,7 @@ macro_rules! list_benchmark {
 	};
 }
 
-/// Defines pallet configs that `add_benchmarks` and `list_benchmarks` use.
+/// Defines pezpallet configs that `add_benchmarks` and `list_benchmarks` use.
 /// Should be preferred instead of having a repetitive list of configs
 /// in `add_benchmark` and `list_benchmark`.
 #[macro_export]

@@ -101,26 +101,26 @@ impl DisputedBitfield {
 	}
 }
 
-pub use pallet::*;
+pub use pezpallet::*;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::pallet]
-	#[pallet::without_storage_info]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::without_storage_info]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
-	#[pallet::disable_pezframe_system_supertrait_check]
+	#[pezpallet::config]
+	#[pezpallet::disable_pezframe_system_supertrait_check]
 	pub trait Config:
 		inclusion::Config + scheduler::Config + initializer::Config + pezpallet_babe::Config
 	{
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Inclusion inherent called more than once per block.
 		TooManyInclusionInherents,
@@ -140,11 +140,11 @@ pub mod pallet {
 	/// due to the guarantees of FRAME's storage APIs.
 	///
 	/// If this is `None` at the end of the block, we panic and render the block invalid.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type Included<T> = StorageValue<_, ()>;
 
 	/// Scraped on chain data for extracting resolved disputes as well as backing votes.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type OnChainVotes<T: Config> = StorageValue<_, ScrapedOnChainVotes<T::Hash>>;
 
 	/// Update the disputes statements set part of the on-chain votes.
@@ -188,8 +188,8 @@ pub mod pallet {
 		})
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn on_initialize(_: BlockNumberFor<T>) -> Weight {
 			T::DbWeight::get().reads_writes(1, 1) // in `on_finalize`.
 		}
@@ -201,8 +201,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::inherent]
-	impl<T: Config> ProvideInherent for Pallet<T> {
+	#[pezpallet::inherent]
+	impl<T: Config> ProvideInherent for Pezpallet<T> {
 		type Call = Call<T>;
 		type Error = MakeFatalError<()>;
 		const INHERENT_IDENTIFIER: InherentIdentifier = TEYRCHAINS_INHERENT_IDENTIFIER;
@@ -218,11 +218,11 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Enter the paras inherent. This will process bitfields and backed candidates.
-		#[pallet::call_index(0)]
-		#[pallet::weight((
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight((
 			paras_inherent_total_weight::<T>(
 				data.backed_candidates.as_slice(),
 				&data.bitfields,
@@ -248,7 +248,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Create the `TeyrchainsInherentData` that gets passed to [`Self::enter`] in
 	/// [`Self::create_inherent`]. This code is pulled out of [`Self::create_inherent`] so it can be
 	/// unit tested.
@@ -299,14 +299,14 @@ impl<T: Config> Pallet<T> {
 			disputes.len()
 		);
 
-		let parent_hash = pezframe_system::Pallet::<T>::parent_hash();
+		let parent_hash = pezframe_system::Pezpallet::<T>::parent_hash();
 
 		ensure!(
 			parent_header.hash().as_ref() == parent_hash.as_ref(),
 			Error::<T>::InvalidParentHeader,
 		);
 
-		let now = pezframe_system::Pallet::<T>::block_number();
+		let now = pezframe_system::Pezpallet::<T>::block_number();
 		let config = configuration::ActiveConfig::<T>::get();
 
 		// Before anything else, update the allowed relay-parents.
@@ -342,7 +342,7 @@ impl<T: Config> Pallet<T> {
 		log::debug!(target: LOG_TARGET, "Time weight before filter: {}, candidates + bitfields: {}, disputes: {}", weight_before_filtering.ref_time(), candidates_weight.ref_time() + bitfields_weight.ref_time(), disputes_weight.ref_time());
 
 		let current_session = shared::CurrentSessionIndex::<T>::get();
-		let expected_bits = scheduler::Pallet::<T>::num_availability_cores();
+		let expected_bits = scheduler::Pezpallet::<T>::num_availability_cores();
 		let validator_public = shared::ActiveValidatorKeys::<T>::get();
 
 		// We are assuming (incorrectly) to have all the weight (for the mandatory class or even
@@ -480,7 +480,7 @@ impl<T: Config> Pallet<T> {
 
 		// Get the cores freed as a result of concluded invalid candidates.
 		let (freed_disputed, concluded_invalid_hashes): (Vec<CoreIndex>, BTreeSet<CandidateHash>) =
-			inclusion::Pallet::<T>::free_disputed(&current_concluded_invalid_disputes)
+			inclusion::Pezpallet::<T>::free_disputed(&current_concluded_invalid_disputes)
 				.into_iter()
 				.unzip();
 
@@ -503,7 +503,7 @@ impl<T: Config> Pallet<T> {
 		// Process new availability bitfields, yielding any availability cores whose
 		// work has now concluded.
 		let (enact_weight, freed_concluded) =
-			inclusion::Pallet::<T>::update_pending_availability_and_get_freed_cores(
+			inclusion::Pezpallet::<T>::update_pending_availability_and_get_freed_cores(
 				&validator_public[..],
 				bitfields.clone(),
 			);
@@ -537,8 +537,8 @@ impl<T: Config> Pallet<T> {
 		METRICS.on_candidates_included(freed_concluded.len() as u64);
 
 		// Get the timed out candidates
-		let freed_timeout = if scheduler::Pallet::<T>::availability_timeout_check_required() {
-			inclusion::Pallet::<T>::free_timedout()
+		let freed_timeout = if scheduler::Pezpallet::<T>::availability_timeout_check_required() {
+			inclusion::Pezpallet::<T>::free_timedout()
 		} else {
 			Vec::new()
 		};
@@ -590,13 +590,13 @@ impl<T: Config> Pallet<T> {
 		DispatchErrorWithPostInfo,
 	> {
 		let allowed_relay_parents = shared::AllowedRelayParents::<T>::get();
-		let upcoming_new_session = initializer::Pallet::<T>::upcoming_session_change();
+		let upcoming_new_session = initializer::Pezpallet::<T>::upcoming_session_change();
 
 		METRICS.on_candidates_processed_total(backed_candidates.len() as u64);
 
 		if !upcoming_new_session {
 			let occupied_cores =
-				inclusion::Pallet::<T>::get_occupied_cores().map(|(core, _)| core).collect();
+				inclusion::Pezpallet::<T>::get_occupied_cores().map(|(core, _)| core).collect();
 
 			let mut eligible: BTreeMap<ParaId, BTreeSet<CoreIndex>> = BTreeMap::new();
 			let mut total_eligible_cores = 0;
@@ -629,16 +629,16 @@ impl<T: Config> Pallet<T> {
 
 			// Process backed candidates according to scheduled cores.
 			let candidate_receipt_with_backing_validator_indices =
-				inclusion::Pallet::<T>::process_candidates(
+				inclusion::Pezpallet::<T>::process_candidates(
 					&allowed_relay_parents,
 					&backed_candidates_with_core,
-					scheduler::Pallet::<T>::group_validators,
+					scheduler::Pezpallet::<T>::group_validators,
 				)?;
 
 			// We need to advance the claim queue on all cores, except for the ones that did not
 			// get freed in this block. The ones that did not get freed also cannot be newly
 			// occupied.
-			scheduler::Pallet::<T>::advance_claim_queue(&occupied_cores);
+			scheduler::Pezpallet::<T>::advance_claim_queue(&occupied_cores);
 
 			Ok((candidate_receipt_with_backing_validator_indices, backed_candidates_with_core))
 		} else {
@@ -1262,7 +1262,7 @@ fn filter_backed_statements_from_disabled_validators<
 	allowed_relay_parents: &AllowedRelayParentsTracker<T::Hash, BlockNumberFor<T>>,
 ) {
 	let disabled_validators =
-		BTreeSet::<_>::from_iter(shared::Pallet::<T>::disabled_validators().into_iter());
+		BTreeSet::<_>::from_iter(shared::Pezpallet::<T>::disabled_validators().into_iter());
 
 	if disabled_validators.is_empty() {
 		// No disabled validators - nothing to do
@@ -1297,7 +1297,7 @@ fn filter_backed_statements_from_disabled_validators<
 		};
 
 		// Get the group index for the core
-		let group_idx = match scheduler::Pallet::<T>::group_assigned_to_core(
+		let group_idx = match scheduler::Pezpallet::<T>::group_assigned_to_core(
 			*core_idx,
 			relay_parent_block_number + One::one(),
 		) {
@@ -1309,7 +1309,7 @@ fn filter_backed_statements_from_disabled_validators<
 		};
 
 		// And finally get the validator group for this group index
-		let validator_group = match scheduler::Pallet::<T>::group_validators(group_idx) {
+		let validator_group = match scheduler::Pezpallet::<T>::group_validators(group_idx) {
 			Some(validator_group) => validator_group,
 			None => {
 				log::debug!(target: LOG_TARGET, "Can't get the validators from group {:?}. Dropping the candidate.", group_idx);
@@ -1372,11 +1372,11 @@ fn filter_unchained_candidates<T: inclusion::Config + paras::Config + inclusion:
 ) {
 	let mut para_latest_context: BTreeMap<ParaId, (HeadData, BlockNumberFor<T>)> = BTreeMap::new();
 	for para_id in candidates.keys() {
-		let Some(latest_head_data) = inclusion::Pallet::<T>::para_latest_head_data(&para_id) else {
+		let Some(latest_head_data) = inclusion::Pezpallet::<T>::para_latest_head_data(&para_id) else {
 			defensive!("Latest included head data for paraid {:?} is None", para_id);
 			continue;
 		};
-		let Some(latest_relay_parent) = inclusion::Pallet::<T>::para_most_recent_context(&para_id)
+		let Some(latest_relay_parent) = inclusion::Pezpallet::<T>::para_most_recent_context(&para_id)
 		else {
 			defensive!("Latest relay parent for paraid {:?} is None", para_id);
 			continue;
@@ -1578,7 +1578,7 @@ fn get_injected_core_index<T: configuration::Config + scheduler::Config + inclus
 		};
 
 	// Get the backing group of the candidate backed at `core_idx`.
-	let group_idx = match scheduler::Pallet::<T>::group_assigned_to_core(
+	let group_idx = match scheduler::Pezpallet::<T>::group_assigned_to_core(
 		core_idx,
 		relay_parent_block_number + One::one(),
 	) {
@@ -1593,7 +1593,7 @@ fn get_injected_core_index<T: configuration::Config + scheduler::Config + inclus
 		},
 	};
 
-	let group_validators = match scheduler::Pallet::<T>::group_validators(group_idx) {
+	let group_validators = match scheduler::Pezpallet::<T>::group_validators(group_idx) {
 		Some(validators) => validators,
 		None => return None,
 	};

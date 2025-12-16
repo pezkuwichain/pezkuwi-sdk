@@ -18,21 +18,21 @@
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 use pezframe_support::derive_impl;
 use pezsp_runtime::{BuildStorage, Perbill};
-#[pezframe_support::pallet]
+#[pezframe_support::pezpallet]
 mod module {
 	use pezframe_support::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event {
 		Complex(Vec<u8>, u32, u16, u128),
 	}
@@ -75,7 +75,7 @@ fn deposit_events(n: usize) {
 	let mut t = new_test_ext();
 	t.execute_with(|| {
 		for _ in 0..n {
-			module::Pallet::<Runtime>::deposit_event(module::Event::Complex(
+			module::Pezpallet::<Runtime>::deposit_event(module::Event::Complex(
 				vec![1, 2, 3],
 				2,
 				3,

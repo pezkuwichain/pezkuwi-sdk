@@ -18,7 +18,7 @@
 use crate::{
 	extension::{AsPerson, AsPersonInfo},
 	mock::*,
-	pallet::{AccountToPersonalId, Origin as PeopleOrigin},
+	pezpallet::{AccountToPersonalId, Origin as PeopleOrigin},
 	WeightInfo, *,
 };
 use pezframe_support::{
@@ -403,7 +403,7 @@ fn test_set_personal_id_account() {
 		assert!(People::<Test>::get(1).unwrap().account.is_none());
 
 		// Create an origin that represents a personal identity.
-		// (Recall that your pallet’s Origin enum has a variant PersonalIdentity.)
+		// (Recall that your pezpallet’s Origin enum has a variant PersonalIdentity.)
 		let origin = RuntimeOrigin::from(PeopleOrigin::PersonalIdentity(1));
 		// Call the extrinsic to set personal id account.
 		assert_ok!(PeoplePallet::set_personal_id_account(origin, 42, 0), Pays::No.into());
@@ -499,7 +499,7 @@ fn test_as_personal_identity_with_account_check_and_nonce() {
 			pezframe_system::CheckNonce::<Test>::from(nonce),
 		);
 		assert_ok!(exec_tx(Some(account), tx_ext, dummy_call.clone()));
-		assert_eq!(pezframe_system::Pallet::<Test>::account_nonce(account), 1);
+		assert_eq!(pezframe_system::Pezpallet::<Test>::account_nonce(account), 1);
 
 		// 2: another successful transaction
 		let nonce: u64 = 1;
@@ -508,7 +508,7 @@ fn test_as_personal_identity_with_account_check_and_nonce() {
 			pezframe_system::CheckNonce::<Test>::from(nonce),
 		);
 		assert_ok!(exec_tx(Some(account), tx_ext, dummy_call.clone()));
-		assert_eq!(pezframe_system::Pallet::<Test>::account_nonce(account), 2);
+		assert_eq!(pezframe_system::Pezpallet::<Test>::account_nonce(account), 2);
 
 		// 3: transaction fails because the nonce is wrong
 		let nonce: u64 = 1;
@@ -517,7 +517,7 @@ fn test_as_personal_identity_with_account_check_and_nonce() {
 			pezframe_system::CheckNonce::<Test>::from(nonce),
 		);
 		assert_noop!(exec_tx(Some(account), tx_ext, dummy_call), InvalidTransaction::Stale);
-		assert_eq!(pezframe_system::Pallet::<Test>::account_nonce(account), 2);
+		assert_eq!(pezframe_system::Pezpallet::<Test>::account_nonce(account), 2);
 	});
 }
 
@@ -2772,7 +2772,7 @@ fn test_under_alias_revision_check() {
 #[test]
 fn resetting_alias_account_for_new_revision_is_refunded() {
 	new_test_ext().execute_with(|| {
-		use crate::pallet::Origin as PeopleOrigin;
+		use crate::pezpallet::Origin as PeopleOrigin;
 		OnboardingSize::<Test>::set(1);
 
 		// Create a single person so that `build_ring` can work.

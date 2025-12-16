@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Tests for the Session Pallet
+// Tests for the Session Pezpallet
 
 use super::*;
 use crate::mock::{
@@ -489,7 +489,7 @@ fn set_keys_should_fail_with_insufficient_funds() {
 		// Account 999 is mocked to have KeyDeposit -1
 		let account_id = 999;
 		let keys = MockSessionKeys { dummy: UintAuthorityId(account_id).into() };
-		pezframe_system::Pallet::<Test>::inc_providers(&account_id);
+		pezframe_system::Pezpallet::<Test>::inc_providers(&account_id);
 		// Make sure we have a validator ID
 		ValidatorAccounts::mutate(|m| {
 			m.insert(account_id, account_id);
@@ -540,7 +540,7 @@ fn purge_keys_should_unhold_funds() {
 		});
 
 		// Ensure system providers are properly set for the test account
-		pezframe_system::Pallet::<Test>::inc_providers(&account_id);
+		pezframe_system::Pezpallet::<Test>::inc_providers(&account_id);
 
 		// First set the keys to reserve the deposit
 		let res = Session::set_keys(RuntimeOrigin::signed(account_id), keys, vec![]);

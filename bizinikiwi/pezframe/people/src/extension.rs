@@ -197,11 +197,11 @@ impl<T: Config + Send + Sync> TransactionExtension<<T as pezframe_system::Config
 				};
 
 				let ring = Root::<T>::get(ring_index).ok_or(InvalidTransaction::Call)?;
-				let now = pezframe_system::Pallet::<T>::block_number();
+				let now = pezframe_system::Pezpallet::<T>::block_number();
 				if now < *call_valid_at {
 					return Err(InvalidTransaction::Future.into());
 				}
-				let time_tolerance = Pallet::<T>::account_setup_time_tolerance();
+				let time_tolerance = Pezpallet::<T>::account_setup_time_tolerance();
 				if now > call_valid_at.saturating_add(time_tolerance) {
 					return Err(InvalidTransaction::Stale.into());
 				}
@@ -248,11 +248,11 @@ impl<T: Config + Send + Sync> TransactionExtension<<T as pezframe_system::Config
 					return Err(InvalidTransaction::Call.into());
 				};
 
-				let now = pezframe_system::Pallet::<T>::block_number();
+				let now = pezframe_system::Pezpallet::<T>::block_number();
 				if now < *call_valid_at {
 					return Err(InvalidTransaction::Future.into());
 				}
-				let time_tolerance = Pallet::<T>::account_setup_time_tolerance();
+				let time_tolerance = Pezpallet::<T>::account_setup_time_tolerance();
 				if now > call_valid_at.saturating_add(time_tolerance) {
 					return Err(InvalidTransaction::Stale.into());
 				}

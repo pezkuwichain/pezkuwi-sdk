@@ -3,12 +3,12 @@
 The System module provides low-level access to core types and cross-cutting utilities. It acts as the base layer for
 other pallets to interact with the Bizinikiwi framework components.
 
-- [`system::Config`](https://docs.rs/pezframe-system/latest/frame_system/pallet/trait.Config.html)
+- [`system::Config`](https://docs.rs/pezframe-system/latest/frame_system/pezpallet/trait.Config.html)
 
 ## Overview
 
 The System module defines the core data types used in a Bizinikiwi runtime. It also provides several utility functions
-(see [`Pallet`](https://docs.rs/pezframe-system/latest/frame_system/pallet/struct.Pallet.html)) for other FRAME pallets.
+(see [`Pezpallet`](https://docs.rs/pezframe-system/latest/frame_system/pezpallet/struct.Pezpallet.html)) for other FRAME pallets.
 
 In addition, it manages the storage items for extrinsics data, indexes, event records, and digest items, among other
 things that support the execution of the current block.
@@ -24,7 +24,7 @@ The System module does not implement any dispatchable functions.
 
 ### Public Functions
 
-See the [`Pallet`](https://docs.rs/pezframe-system/latest/frame_system/pallet/struct.Pallet.html) struct for details of
+See the [`Pezpallet`](https://docs.rs/pezframe-system/latest/frame_system/pezpallet/struct.Pezpallet.html) struct for details of
 publicly available functions.
 
 ### Signed Extensions
@@ -50,25 +50,25 @@ Import the System module and derive your module's configuration trait from the s
 ### Example - Get extrinsic count and parent hash for the current block
 
 ```rust
-#[frame_support::pallet]
-pub mod pallet {
+#[frame_support::pezpallet]
+pub mod pezpallet {
     use super::*;
     use frame_support::pallet_prelude::*;
     use frame_system::pallet_prelude::*;
 
-    #[pallet::config]
+    #[pezpallet::config]
     pub trait Config: frame_system::Config {}
 
-    #[pallet::pallet]
-    pub struct Pallet<T>(_);
+    #[pezpallet::pezpallet]
+    pub struct Pezpallet<T>(_);
 
-    #[pallet::call]
-    impl<T: Config> Pallet<T> {
-        #[pallet::weight(0)]
+    #[pezpallet::call]
+    impl<T: Config> Pezpallet<T> {
+        #[pezpallet::weight(0)]
         pub fn system_module_example(origin: OriginFor<T>) -> DispatchResult {
             let _sender = ensure_signed(origin)?;
-            let _extrinsic_count = <system::Pallet<T>>::extrinsic_count();
-            let _parent_hash = <system::Pallet<T>>::parent_hash();
+            let _extrinsic_count = <system::Pezpallet<T>>::extrinsic_count();
+            let _parent_hash = <system::Pezpallet<T>>::parent_hash();
             Ok(())
         }
     }

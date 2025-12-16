@@ -9,18 +9,18 @@ The format is based on [Keep a Changelog].
 ## 2.0.1-> 3.0.0 - Apollo 14
 
 Most notably, this is the first release of the new FRAME (2.0) with its new macro-syntax and some changes in types, and
-pallet versioning. This release also incorporates the faster and improve version 2.0 of the `parity-scale-codec` and
-upgraded dependencies all-around. While the `FinalityTracker` pallet has been dropped, this release marks the first
-public appearance of a few new pallets, too;Bounties, Lottery, Tips (extracted from the `Treasury`-pallet, see #7536)
+pezpallet versioning. This release also incorporates the faster and improve version 2.0 of the `parity-scale-codec` and
+upgraded dependencies all-around. While the `FinalityTracker` pezpallet has been dropped, this release marks the first
+public appearance of a few new pallets, too;Bounties, Lottery, Tips (extracted from the `Treasury`-pezpallet, see #7536)
 and Merkle-Mountain-Ranges (MMR).
 
 On the client side, the most notable changes are around the keystore, making it async and switching to a different
 signing model allowing for remote-signing to be implemented; and various changes to improve networking and light-client
 support, like adding the Grandpa warp sync request-response protocol (#7711).
 
-_Contracts_: Please note that the contracts pallet _is not part_ of this release. The pallet is not yet ready and will
-be released separately in the coming weeks. The currently released contracts pallet _is not compatible_ with the new
-FRAME, thus if you need the contracts pallet, we recommend you wait with the upgrade until it has been released, too.
+_Contracts_: Please note that the contracts pezpallet _is not part_ of this release. The pezpallet is not yet ready and will
+be released separately in the coming weeks. The currently released contracts pezpallet _is not compatible_ with the new
+FRAME, thus if you need the contracts pezpallet, we recommend you wait with the upgrade until it has been released, too.
 ### Upgrade instructions
 
 Not too much has changed on the top and API level for developing Bizinikiwi between 2.0 and 3.0. The easiest and quickest
@@ -56,18 +56,18 @@ board](https://github.com/paritytech/bizinikiwi/discussions).
 * Allow council to slash treasury tip (#7753)
 * Don't allow self proxies (#7803)
 * add a `current_epoch` to BabeApi (#7789)
-* Add `pallet` attribute macro to declare pallets (#6877)
+* Add `pezpallet` attribute macro to declare pallets (#6877)
 * Make it possible to calculate the storage root as often as you want (#7714)
-* Issue 7143 | Refactor Treasury Pallet into Bounties, Tips, and Proposals (#7536)
+* Issue 7143 | Refactor Treasury Pezpallet into Bounties, Tips, and Proposals (#7536)
 * Participating in Council Governance is Free for First Time Voters and Successful Closing (#7661)
 * Streamline frame_system weight parametrization (#6629)
 * Features needed for reserve-backed stablecoins (#7152)
 * `sudo_as` should return a result (#7620)
 * More Extensible Multiaddress Format (#7380)
 * Fix `on_runtime_upgrade` weight recording (#7480)
-* Implement batch_all and update Utility pallet for weight refunds (#7188)
+* Implement batch_all and update Utility pezpallet for weight refunds (#7188)
 * Fix wrong outgoing calculation in election (#7384)
-* Implements pallet versioning (#7208)
+* Implements pezpallet versioning (#7208)
 * Runtime worker threads (#7089)
 * Allow `schedule_after(0, ...)` to work (#7284)
 * Fix offchain election to respect the weight (#7215)
@@ -110,27 +110,27 @@ board](https://github.com/paritytech/bizinikiwi/discussions).
 
 #### API
 
-* pallet macro: easier syntax for `#[pallet::pallet]` with `struct Pallet<T>(_)` (#8091)
+* pezpallet macro: easier syntax for `#[pezpallet::pezpallet]` with `struct Pezpallet<T>(_)` (#8091)
 * WasmExecutor takes a cache directory (#8057)
 * Remove PalletInfo impl for () (#8090)
-* Migrate assets pallet to new macros (#7984)
+* Migrate assets pezpallet to new macros (#7984)
 * contracts: Make ChainExtension trait generic over the runtime (#8003)
 * Decouple the session validators from im-online (#7127)
 * Update `parity-scale-codec` to 2.0 (#7994)
-* Merkle Mountain Range pallet improvements (#7891)
+* Merkle Mountain Range pezpallet improvements (#7891)
 * Cleaner GRANDPA RPC API for proving finality (#7339)
-* Migrate pezframe-system to pallet attribute macro (#7898)
+* Migrate pezframe-system to pezpallet attribute macro (#7898)
 * Introduces account existence providers reference counting (#7363)
 * contracts: Lazy storage removal (#7740)
 * contracts: Allow runtime authors to define a chain extension (#7548)
 * Define ss58 prefix inside the runtime (#7810)
-* Add `pallet` attribute macro to declare pallets (#6877)
+* Add `pezpallet` attribute macro to declare pallets (#6877)
 * Add keccak-512 to host functions. (#7531)
-* Merkle Mountain Range pallet (#7312)
+* Merkle Mountain Range pezpallet (#7312)
 * Allow capping the amount of work performed when deleting a child trie (#7671)
 * add an upgrade_keys method for pezpallet-session (#7688)
 * Streamline frame_system weight parametrization (#6629)
-* Rename pallet trait `Trait` to `Config` (#7599)
+* Rename pezpallet trait `Trait` to `Config` (#7599)
 * contracts: Add `salt` argument to contract instantiation (#7482)
 * pezpallet-evm: move to Frontier (Part IV) (#7573)
 * refactor subtrait/elevated trait as not needed (#7497)
@@ -144,15 +144,15 @@ board](https://github.com/paritytech/bizinikiwi/discussions).
 * allow where clause in decl_error (#7324)
 * reschedule (#6860)
 * SystemOrigin trait (#7226)
-* permit setting treasury pallet initial funding through genesis (#7214)
+* permit setting treasury pezpallet initial funding through genesis (#7214)
 
 #### Runtime Migrations
 
-* Migrate assets pallet to new macros (#7984)
+* Migrate assets pezpallet to new macros (#7984)
 * Fix elections-phragmen and proxy issue (#7040)
 * Allow validators to block and kick their nominator set. (#7930)
-* Migrate pezframe-system to pallet attribute macro (#7898)
-* Implements pallet versioning (#7208)
+* Migrate pezframe-system to pezpallet attribute macro (#7898)
+* Implements pezpallet versioning (#7208)
 * Move proxies migration (#7205)
 
 
@@ -174,7 +174,7 @@ Patch release with backports to fix broken nightly builds. Namely contains backp
 * Rename `ModuleToIndex` to `PalletRuntimeSetup` (#7148)
 * Bounties (#5715)
 * pezpallet-collective: allow customized default vote (#6984)
-* add instantiable support for treasury pallet (#7058)
+* add instantiable support for treasury pezpallet (#7058)
 * frame/authority-discovery: Have authorities() return both current and next (#6788)
 * add generated weight info for pezpallet-collective (#6789)
 * Support Staking Payout to Any Account (#6832)
@@ -221,7 +221,7 @@ Patch release with backports to fix broken nightly builds. Namely contains backp
 * Custom Codec Implementation for NPoS Election (#6720)
 * Successful `note_imminent_preimage` is free (#6793)
 * pezpallet-democracy use of weightinfo (#6783)
-* Update Balances Pallet to use `WeightInfo` (#6610)
+* Update Balances Pezpallet to use `WeightInfo` (#6610)
 * pezpallet-evm: add builtin support for the four basic Ethereum precompiles (#6743)
 * Allow `PostDispatchInfo` to disable fees (#6749)
 * pezpallet-evm: add support for tuple-based precompile declarations (#6681)
@@ -310,7 +310,7 @@ Patch release with backports to fix broken nightly builds. Namely contains backp
 * Avoid multisig reentrancy (#6445)
 * Root origin use no filter by default. Scheduler and Democracy dispatch without asserting BaseCallFilter (#6408)
 * Scale and increase validator count (#6417)
-* Pallet: Atomic Swap (#6349)
+* Pezpallet: Atomic Swap (#6349)
 * Restrict remove_proxies (#6383)
 * Stored call in multisig (#6319)
 * Allow Sudo to do anything (#6375)
@@ -401,7 +401,7 @@ PR](https://github.com/pezkuwichain/kurdistan-sdk/issues/56).
 
 * Meter block import results via prometheus (#6025)
 * Added RuntimePublic for ecdsa public key. (#6029)
-* Benchmarks for elections-phragmen pallet (#5845)
+* Benchmarks for elections-phragmen pezpallet (#5845)
 * Monitor transactions rejected from the pool as invalid (#5992)
 * client/network: Remove default Kademlia DHT in favor of per protocol DHT (#5993)
 * Allow passing multiple --log CLI options (#5982)
@@ -456,7 +456,7 @@ PR](https://github.com/pezkuwichain/kurdistan-sdk/issues/56).
 * Unsigned Validation best practices (#5563)
 * Generate Unit Tests for Benchmarks (#5527)
 * Mandate weight annotation  (#5357)
-* Make Staking pallet using a proper Time module. (#4662)
+* Make Staking pezpallet using a proper Time module. (#4662)
 * Pass transaction source to validate_transaction (#5366)
 * on_initialize return weight consumed and default cost to default DispatchInfo instead of zero (#5382)
 
@@ -501,7 +501,7 @@ PR](https://github.com/pezkuwichain/kurdistan-sdk/issues/56).
 * Refactor session away from needless double_maps (#5202)
 * Remove `secp256k1` from WASM build (#5187)
 * Introduce default-setting prime for collective (#5137)
-* Adds `vested_transfer` to Vesting pallet (#5029)
+* Adds `vested_transfer` to Vesting pezpallet (#5029)
 * Change extrinsic_count to extrinsic_index in pezpallet-utility (#5044)
 
 ### Client

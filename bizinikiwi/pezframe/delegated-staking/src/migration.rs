@@ -48,11 +48,11 @@ pub mod unversioned {
 					weight.saturating_accrue(T::DbWeight::get().reads_writes(1, 0));
 
 					let new_proxy =
-						Pallet::<T>::generate_proxy_delegator(Agent::from(agent.clone()));
+						Pezpallet::<T>::generate_proxy_delegator(Agent::from(agent.clone()));
 
 					// accrue read writes for `do_migrate_delegation`
 					weight.saturating_accrue(T::DbWeight::get().reads_writes(8, 8));
-					let _ = Pallet::<T>::do_migrate_delegation(
+					let _ = Pezpallet::<T>::do_migrate_delegation(
 						Delegator::from(old_proxy.clone()),
 						new_proxy.clone(),
 						delegation.amount,
@@ -84,7 +84,7 @@ pub mod unversioned {
 
 			Agents::<T>::iter_keys().take(MaxAgents::get() as usize).for_each(|agent| {
 				let old_proxy: T::AccountId = old_proxy_delegator(agent.clone());
-				let held_balance = Pallet::<T>::held_balance_of(Delegator::from(old_proxy.clone()));
+				let held_balance = Pezpallet::<T>::held_balance_of(Delegator::from(old_proxy.clone()));
 				let delegation = Delegation::<T>::get(&old_proxy);
 				if delegation.is_some() || !held_balance.is_zero() {
 					log!(

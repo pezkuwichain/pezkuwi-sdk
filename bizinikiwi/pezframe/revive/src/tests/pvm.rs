@@ -41,7 +41,7 @@ use crate::{
 	tracing::trace,
 	weights::WeightInfo,
 	AccountInfo, AccountInfoOf, BalanceWithDust, Code, Combinator, Config, ContractInfo,
-	DebugSettings, DeletionQueueCounter, Error, ExecConfig, HoldReason, Origin, Pallet,
+	DebugSettings, DeletionQueueCounter, Error, ExecConfig, HoldReason, Origin, Pezpallet,
 	PristineCode, StorageDeposit, H160,
 };
 use assert_matches::assert_matches;
@@ -77,13 +77,13 @@ fn eth_call_transfer_with_dust_works() {
 		<Test as Config>::FeeInfo::deposit_txfee(<Test as Config>::Currency::issue(5_000_000_000));
 
 		let balance =
-			Pallet::<Test>::convert_native_to_evm(BalanceWithDust::new_unchecked::<Test>(100, 10));
+			Pezpallet::<Test>::convert_native_to_evm(BalanceWithDust::new_unchecked::<Test>(100, 10));
 		assert_ok!(builder::eth_call(addr)
 			.origin(Origin::EthTransaction(ALICE).into())
 			.value(balance)
 			.build());
 
-		assert_eq!(Pallet::<Test>::evm_balance(&addr), balance);
+		assert_eq!(Pezpallet::<Test>::evm_balance(&addr), balance);
 	});
 }
 
@@ -91,10 +91,10 @@ fn eth_call_transfer_with_dust_works() {
 fn set_evm_balance_for_eoa_works() {
 	ExtBuilder::default().existential_deposit(200).build().execute_with(|| {
 		let native_with_dust = BalanceWithDust::new_unchecked::<Test>(100, 10);
-		let evm_balance = Pallet::<Test>::convert_native_to_evm(native_with_dust);
-		let _ = Pallet::<Test>::set_evm_balance(&ALICE_ADDR, evm_balance);
+		let evm_balance = Pezpallet::<Test>::convert_native_to_evm(native_with_dust);
+		let _ = Pezpallet::<Test>::set_evm_balance(&ALICE_ADDR, evm_balance);
 
-		assert_eq!(Pallet::<Test>::evm_balance(&ALICE_ADDR), evm_balance);
+		assert_eq!(Pezpallet::<Test>::evm_balance(&ALICE_ADDR), evm_balance);
 	});
 }
 
@@ -106,11 +106,11 @@ fn set_evm_balance_works() {
 		let Contract { addr, .. } =
 			builder::bare_instantiate(Code::Upload(binary)).build_and_unwrap_contract();
 		let native_with_dust = BalanceWithDust::new_unchecked::<Test>(100, 10);
-		let evm_value = Pallet::<Test>::convert_native_to_evm(native_with_dust);
+		let evm_value = Pezpallet::<Test>::convert_native_to_evm(native_with_dust);
 
-		assert_ok!(Pallet::<Test>::set_evm_balance(&addr, evm_value));
+		assert_ok!(Pezpallet::<Test>::set_evm_balance(&addr, evm_value));
 
-		assert_eq!(Pallet::<Test>::evm_balance(&addr), evm_value);
+		assert_eq!(Pezpallet::<Test>::evm_balance(&addr), evm_value);
 	});
 }
 
@@ -128,10 +128,10 @@ fn contract_call_transfer_with_dust_works() {
 			builder::bare_instantiate(Code::Upload(binary_callee)).build_and_unwrap_contract();
 
 		let balance =
-			Pallet::<Test>::convert_native_to_evm(BalanceWithDust::new_unchecked::<Test>(100, 10));
+			Pezpallet::<Test>::convert_native_to_evm(BalanceWithDust::new_unchecked::<Test>(100, 10));
 		assert_ok!(builder::call(addr_caller).data((balance, addr_callee).encode()).build());
 
-		assert_eq!(Pallet::<Test>::evm_balance(&addr_callee), balance);
+		assert_eq!(Pezpallet::<Test>::evm_balance(&addr_callee), balance);
 	});
 }
 
@@ -1019,7 +1019,7 @@ fn self_destruct_by_precompile_works() {
 						reason: <Test as Config>::RuntimeHoldReason::Contracts(
 							HoldReason::CodeUploadDepositReserve,
 						),
-						source: Pallet::<Test>::account_id(),
+						source: Pezpallet::<Test>::account_id(),
 						dest: ALICE,
 						amount: upload_deposit,
 					}),
@@ -1254,7 +1254,7 @@ fn call_return_code() {
 		// Contract calls into Django which is no valid contract
 		// This will be a balance transfer into a new account
 		// with more than the contract has which will make the transfer fail
-		let value = Pallet::<Test>::convert_native_to_evm(min_balance * 200);
+		let value = Pezpallet::<Test>::convert_native_to_evm(min_balance * 200);
 		let result = builder::bare_call(bob.addr)
 			.data(
 				AsRef::<[u8]>::as_ref(&DJANGO_ADDR)
@@ -1271,7 +1271,7 @@ fn call_return_code() {
 		let alice_before = get_balance(&ALICE_FALLBACK);
 		assert_eq!(get_balance(&DJANGO_FALLBACK), 0);
 
-		let value = Pallet::<Test>::convert_native_to_evm(1u64);
+		let value = Pezpallet::<Test>::convert_native_to_evm(1u64);
 		let result = builder::bare_call(bob.addr)
 			.data(
 				AsRef::<[u8]>::as_ref(&DJANGO_ADDR)
@@ -1291,7 +1291,7 @@ fn call_return_code() {
 			.build_and_unwrap_contract();
 
 		// Sending more than the contract has will make the transfer fail.
-		let value = Pallet::<Test>::convert_native_to_evm(min_balance * 300);
+		let value = Pezpallet::<Test>::convert_native_to_evm(min_balance * 300);
 		let result = builder::bare_call(bob.addr)
 			.data(
 				AsRef::<[u8]>::as_ref(&django.addr)
@@ -1306,7 +1306,7 @@ fn call_return_code() {
 
 		// Contract has enough balance but callee reverts because "1" is passed.
 		<Test as Config>::Currency::set_balance(&bob.account_id, min_balance + 1000);
-		let value = Pallet::<Test>::convert_native_to_evm(5u64);
+		let value = Pezpallet::<Test>::convert_native_to_evm(5u64);
 		let result = builder::bare_call(bob.addr)
 			.data(
 				AsRef::<[u8]>::as_ref(&django.addr)
@@ -2112,7 +2112,7 @@ fn instantiate_with_zero_balance_works() {
 					phase: Phase::Initialization,
 					event: RuntimeEvent::Balances(pezpallet_balances::Event::TransferAndHold {
 						source: ALICE,
-						dest: Pallet::<Test>::account_id(),
+						dest: Pezpallet::<Test>::account_id(),
 						transferred: 777,
 						reason: <Test as Config>::RuntimeHoldReason::Contracts(
 							HoldReason::CodeUploadDepositReserve,
@@ -2201,7 +2201,7 @@ fn instantiate_with_below_existential_deposit_works() {
 					phase: Phase::Initialization,
 					event: RuntimeEvent::Balances(pezpallet_balances::Event::TransferAndHold {
 						source: ALICE,
-						dest: Pallet::<Test>::account_id(),
+						dest: Pezpallet::<Test>::account_id(),
 						transferred: 777,
 						reason: <Test as Config>::RuntimeHoldReason::Contracts(
 							HoldReason::CodeUploadDepositReserve,
@@ -2373,7 +2373,7 @@ fn storage_deposit_callee_works() {
 		let callee = get_contract(&addr_callee);
 		let deposit = DepositPerByte::get() * 100 + DepositPerItem::get() * 1 + 48;
 
-		assert_eq!(Pallet::<Test>::evm_balance(&addr_caller), U256::zero());
+		assert_eq!(Pezpallet::<Test>::evm_balance(&addr_caller), U256::zero());
 		assert_eq!(callee.total_deposit(), deposit + contract_base_deposit(&addr_callee));
 	});
 }
@@ -3389,7 +3389,7 @@ fn gas_price_api_works() {
 		assert_eq!(received.flags, ReturnFlags::empty());
 		assert_eq!(
 			u64::from_le_bytes(received.data[..].try_into().unwrap()),
-			u64::try_from(<Pallet<Test>>::evm_base_fee()).unwrap(),
+			u64::try_from(<Pezpallet<Test>>::evm_base_fee()).unwrap(),
 		);
 	});
 }
@@ -3410,7 +3410,7 @@ fn base_fee_api_works() {
 		assert_eq!(received.flags, ReturnFlags::empty());
 		assert_eq!(
 			U256::from_little_endian(received.data[..].try_into().unwrap()),
-			<Pallet<Test>>::evm_base_fee(),
+			<Pezpallet<Test>>::evm_base_fee(),
 		);
 	});
 }
@@ -3866,7 +3866,7 @@ fn origin_must_be_mapped() {
 		);
 
 		// after mapping eve is usable as an origin
-		<Pallet<Test>>::map_account(eve.clone()).unwrap();
+		<Pezpallet<Test>>::map_account(eve.clone()).unwrap();
 		assert_ok!(builder::bare_call(addr).origin(eve.clone()).build().result);
 		assert_ok!(builder::bare_instantiate(Code::Existing(hash)).origin(eve).build().result);
 	});
@@ -3933,7 +3933,7 @@ fn recovery_works() {
 
 		// she now uses the recovery function to move all funds from the fallback
 		// account to her real account
-		<Pallet<Test>>::dispatch_as_fallback_account(RuntimeOrigin::signed(EVE), Box::new(call))
+		<Pezpallet<Test>>::dispatch_as_fallback_account(RuntimeOrigin::signed(EVE), Box::new(call))
 			.unwrap();
 		assert_eq!(<Test as Config>::Currency::total_balance(&EVE_FALLBACK), 0);
 		assert_eq!(<Test as Config>::Currency::total_balance(&EVE), initial_contract_balance + 100);
@@ -3956,7 +3956,7 @@ fn gas_limit_api_works() {
 		assert_eq!(received.flags, ReturnFlags::empty());
 		assert_eq!(
 			u64::from_le_bytes(received.data[..].try_into().unwrap()),
-			<Pallet<Test>>::evm_block_gas_limit().saturated_into::<u64>(),
+			<Pezpallet<Test>>::evm_block_gas_limit().saturated_into::<u64>(),
 		);
 	});
 }
@@ -4552,7 +4552,7 @@ fn pure_precompile_works() {
 				.build_and_unwrap_result();
 
 			assert_eq!(
-				Pallet::<Test>::evm_balance(&precompile_addr),
+				Pezpallet::<Test>::evm_balance(&precompile_addr),
 				U256::from(100),
 				"{description}: unexpected balance"
 			);
@@ -4655,7 +4655,7 @@ fn precompiles_work() {
 			// no account or contract info should be created for a NoInfo pre-compile
 			assert!(get_contract_checked(&precompile_addr).is_none());
 			assert!(!System::account_exists(&id));
-			assert_eq!(Pallet::<Test>::evm_balance(&precompile_addr), U256::zero());
+			assert_eq!(Pezpallet::<Test>::evm_balance(&precompile_addr), U256::zero());
 
 			assert_eq!(result.flags, ReturnFlags::empty());
 			assert_eq!(u32::from_le_bytes(result.data[..4].try_into().unwrap()), error_code as u32);
@@ -4700,7 +4700,7 @@ fn precompiles_with_info_creates_contract() {
 			// a pre-compile with contract info should create an account on first call
 			assert!(get_contract_checked(&precompile_addr).is_some());
 			assert!(System::account_exists(&id));
-			assert_eq!(Pallet::<Test>::evm_balance(&precompile_addr), U256::from(0));
+			assert_eq!(Pezpallet::<Test>::evm_balance(&precompile_addr), U256::from(0));
 
 			assert_eq!(result.flags, ReturnFlags::empty());
 			assert_eq!(u32::from_le_bytes(result.data[..4].try_into().unwrap()), error_code as u32);
@@ -5010,17 +5010,17 @@ fn eip3607_reject_tx_from_contract_or_precompile() {
 				.build();
 			assert_err!(result, DispatchError::BadOrigin);
 
-			let result = <Pallet<Test>>::upload_code(
+			let result = <Pezpallet<Test>>::upload_code(
 				RuntimeOrigin::signed(origin.clone()),
 				Default::default(),
 				<BalanceOf<Test>>::MAX,
 			);
 			assert_err!(result, DispatchError::BadOrigin);
 
-			let result = <Pallet<Test>>::map_account(RuntimeOrigin::signed(origin.clone()));
+			let result = <Pezpallet<Test>>::map_account(RuntimeOrigin::signed(origin.clone()));
 			assert_err!(result, DispatchError::BadOrigin);
 
-			let result = <Pallet<Test>>::dispatch_as_fallback_account(
+			let result = <Pezpallet<Test>>::dispatch_as_fallback_account(
 				RuntimeOrigin::signed(origin.clone()),
 				call.clone(),
 			);
@@ -5081,7 +5081,7 @@ fn eip3607_allow_tx_from_contract_or_precompile_if_debug_setting_configured() {
 					.build();
 				assert_ok!(result);
 
-				let result = <Pallet<Test>>::dispatch_as_fallback_account(
+				let result = <Pezpallet<Test>>::dispatch_as_fallback_account(
 					RuntimeOrigin::signed(origin.clone()),
 					Box::new(RuntimeCall::Balances(pezpallet_balances::Call::transfer_all {
 						dest: EVE,
@@ -5090,7 +5090,7 @@ fn eip3607_allow_tx_from_contract_or_precompile_if_debug_setting_configured() {
 				);
 				assert_ok!(result);
 
-				let result = <Pallet<Test>>::upload_code(
+				let result = <Pezpallet<Test>>::upload_code(
 					RuntimeOrigin::signed(origin.clone()),
 					binary.clone(),
 					<BalanceOf<Test>>::MAX,
@@ -5112,28 +5112,28 @@ fn get_set_storage_key_works() {
 
 		let contract_key_to_test = [1; 32];
 		// Checking non-existing keys gets created.
-		let storage_value = Pallet::<Test>::get_storage(addr, contract_key_to_test).unwrap();
+		let storage_value = Pezpallet::<Test>::get_storage(addr, contract_key_to_test).unwrap();
 		assert_eq!(storage_value, None);
 
 		let value_to_write = Some(vec![1, 2, 3]);
 		let write_result =
-			Pallet::<Test>::set_storage(addr, contract_key_to_test, value_to_write.clone())
+			Pezpallet::<Test>::set_storage(addr, contract_key_to_test, value_to_write.clone())
 				.unwrap();
 		assert_eq!(write_result, WriteOutcome::New);
-		let storage_value = Pallet::<Test>::get_storage(addr, contract_key_to_test).unwrap();
+		let storage_value = Pezpallet::<Test>::get_storage(addr, contract_key_to_test).unwrap();
 		assert_eq!(storage_value, value_to_write);
 
 		// Check existing keys overwrite
 
 		let new_value_to_write = Some(vec![5, 1, 2, 3]);
 		let write_result =
-			Pallet::<Test>::set_storage(addr, contract_key_to_test, new_value_to_write.clone())
+			Pezpallet::<Test>::set_storage(addr, contract_key_to_test, new_value_to_write.clone())
 				.unwrap();
 		assert_eq!(
 			write_result,
 			WriteOutcome::Overwritten(value_to_write.map(|v| v.len()).unwrap_or_default() as u32)
 		);
-		let storage_value = Pallet::<Test>::get_storage(addr, contract_key_to_test).unwrap();
+		let storage_value = Pezpallet::<Test>::get_storage(addr, contract_key_to_test).unwrap();
 		assert_eq!(storage_value, new_value_to_write);
 	});
 }
@@ -5151,11 +5151,11 @@ fn get_set_storage_var_key_works() {
 		let contract_key_to_test = vec![1; 85];
 		// Checking non-existing keys gets created.
 		let storage_value =
-			Pallet::<Test>::get_storage_var_key(addr, contract_key_to_test.clone()).unwrap();
+			Pezpallet::<Test>::get_storage_var_key(addr, contract_key_to_test.clone()).unwrap();
 		assert_eq!(storage_value, None);
 
 		let value_to_write = Some(vec![1, 2, 3]);
-		let write_result = Pallet::<Test>::set_storage_var_key(
+		let write_result = Pezpallet::<Test>::set_storage_var_key(
 			addr,
 			contract_key_to_test.clone(),
 			value_to_write.clone(),
@@ -5163,13 +5163,13 @@ fn get_set_storage_var_key_works() {
 		.unwrap();
 		assert_eq!(write_result, WriteOutcome::New);
 		let storage_value =
-			Pallet::<Test>::get_storage_var_key(addr, contract_key_to_test.clone()).unwrap();
+			Pezpallet::<Test>::get_storage_var_key(addr, contract_key_to_test.clone()).unwrap();
 		assert_eq!(storage_value, value_to_write);
 
 		// Check existing keys overwrite
 
 		let new_value_to_write = Some(vec![5, 1, 2, 3]);
-		let write_result = Pallet::<Test>::set_storage_var_key(
+		let write_result = Pezpallet::<Test>::set_storage_var_key(
 			addr,
 			contract_key_to_test.clone(),
 			new_value_to_write.clone(),
@@ -5180,7 +5180,7 @@ fn get_set_storage_var_key_works() {
 			WriteOutcome::Overwritten(value_to_write.map(|v| v.len()).unwrap_or_default() as u32)
 		);
 		let storage_value =
-			Pallet::<Test>::get_storage_var_key(addr, contract_key_to_test.clone()).unwrap();
+			Pezpallet::<Test>::get_storage_var_key(addr, contract_key_to_test.clone()).unwrap();
 		assert_eq!(storage_value, new_value_to_write);
 	});
 }
@@ -5198,13 +5198,13 @@ fn get_set_immutables_works() {
 			.build_and_unwrap_contract();
 
 		// Checking non-existing keys gets created.
-		let immutable_data = Pallet::<Test>::get_immutables(addr).unwrap();
+		let immutable_data = Pezpallet::<Test>::get_immutables(addr).unwrap();
 		assert_eq!(immutable_data, data.to_vec());
 
 		let new_data = [0xdeu8; 8].to_vec();
 
-		Pallet::<Test>::set_immutables(addr, BoundedVec::truncate_from(new_data.clone())).unwrap();
-		let immutable_data = Pallet::<Test>::get_immutables(addr).unwrap();
+		Pezpallet::<Test>::set_immutables(addr, BoundedVec::truncate_from(new_data.clone())).unwrap();
+		let immutable_data = Pezpallet::<Test>::get_immutables(addr).unwrap();
 		assert_eq!(immutable_data, new_data);
 	});
 }
@@ -5310,7 +5310,7 @@ fn self_destruct_by_syscall_tracing_works() {
 						from: addr,
 						to: DJANGO_ADDR,
 						call_type: CallType::Selfdestruct,
-						value: Some(Pallet::<Test>::convert_native_to_evm(100_000u64)),
+						value: Some(Pezpallet::<Test>::convert_native_to_evm(100_000u64)),
 						..Default::default()
 					}],
 					..Default::default()
@@ -5357,10 +5357,10 @@ fn self_destruct_by_syscall_tracing_works() {
 					}
 				}"#;
 
-				let alice_balance_pre = Pallet::<Test>::evm_balance(&ALICE_ADDR);
+				let alice_balance_pre = Pezpallet::<Test>::evm_balance(&ALICE_ADDR);
 				let alice_balance_post = alice_balance_pre - 50_000_000u64;
-				let django_balance = Pallet::<Test>::evm_balance(&DJANGO_ADDR);
-				let contract_balance = Pallet::<Test>::evm_balance(&addr);
+				let django_balance = Pezpallet::<Test>::evm_balance(&DJANGO_ADDR);
+				let contract_balance = Pezpallet::<Test>::evm_balance(&addr);
 				let django_balance_post = contract_balance;
 
 				let json = json
@@ -5406,9 +5406,9 @@ fn self_destruct_by_syscall_tracing_works() {
 					}
 				}"#;
 
-				let alice_balance = Pallet::<Test>::evm_balance(&ALICE_ADDR);
-				let contract_balance = Pallet::<Test>::evm_balance(&addr);
-				let django_balance = Pallet::<Test>::evm_balance(&DJANGO_ADDR);
+				let alice_balance = Pezpallet::<Test>::evm_balance(&ALICE_ADDR);
+				let contract_balance = Pezpallet::<Test>::evm_balance(&addr);
+				let django_balance = Pezpallet::<Test>::evm_balance(&DJANGO_ADDR);
 
 				let json = json
 					.replace("{{ALICE_ADDR}}", &format!("{:#x}", ALICE_ADDR))

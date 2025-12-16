@@ -8,7 +8,7 @@
 - [ ] Bug fix (non-breaking change that fixes an issue)
 - [ ] New feature (non-breaking change that adds functionality)
 - [ ] Breaking change (fix or feature that would cause existing functionality to change)
-- [ ] Pallet change (changes to custom pallets in `/pezkuwi/pallets/`)
+- [ ] Pezpallet change (changes to custom pallets in `/pezkuwi/pallets/`)
 - [ ] Runtime change (changes to runtime configuration)
 - [ ] XCM/Cross-chain change
 - [ ] Documentation update
@@ -70,5 +70,5 @@ N/A
 **For Reviewers:**
 - Check that tests cover the changes adequately
 - Verify no regressions in existing functionality
-- For pallet changes: review weight calculations
+- For pezpallet changes: review weight calculations
 - For XCM changes: verify cross-chain compatibility

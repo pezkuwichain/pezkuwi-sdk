@@ -15,21 +15,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Democracy Pallet
+//! # Democracy Pezpallet
 //!
 //! - [`Config`]
 //! - [`Call`]
 //!
 //! ## Overview
 //!
-//! The Democracy pallet handles the administration of general stakeholder voting.
+//! The Democracy pezpallet handles the administration of general stakeholder voting.
 //!
 //! There are two different queues that a proposal can be added to before it
 //! becomes a referendum, 1) the proposal queue consisting of all public proposals
 //! and 2) the external queue consisting of a single proposal that originates
 //! from one of the _external_ origins (such as a collective group).
 //!
-//! Every launch period - a length defined in the runtime - the Democracy pallet
+//! Every launch period - a length defined in the runtime - the Democracy pezpallet
 //! launches a referendum from a proposal that it takes from either the proposal
 //! queue or the external queue in turn. Any token holder in the system can vote
 //! on referenda. The voting system
@@ -178,7 +178,7 @@ mod vote;
 mod vote_threshold;
 pub mod weights;
 pub use conviction::Conviction;
-pub use pallet::*;
+pub use pezpallet::*;
 pub use types::{
 	Delegations, MetadataOwner, PropIndex, ReferendumIndex, ReferendumInfo, ReferendumStatus,
 	Tally, UnvoteScope,
@@ -206,8 +206,8 @@ pub type CallOf<T> = <T as pezframe_system::Config>::RuntimeCall;
 pub type BoundedCallOf<T> = Bounded<CallOf<T>, <T as pezframe_system::Config>::Hashing>;
 type AccountIdLookupOf<T> = <<T as pezframe_system::Config>::Lookup as StaticLookup>::Source;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::{DispatchResult, *};
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
@@ -215,11 +215,11 @@ pub mod pallet {
 	/// The in-code storage version.
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(1);
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config + Sized {
 		type WeightInfo: WeightInfo;
 		#[allow(deprecated)]
@@ -236,7 +236,7 @@ pub mod pallet {
 		/// The Preimage provider.
 		type Preimages: QueryPreimage<H = Self::Hashing> + StorePreimage;
 
-		/// Currency type for this pallet.
+		/// Currency type for this pezpallet.
 		type Currency: ReservableCurrency<Self::AccountId>
 			+ LockableCurrency<Self::AccountId, Moment = BlockNumberFor<Self>>;
 
@@ -245,59 +245,59 @@ pub mod pallet {
 		/// It should generally be a little more than the unstake period to ensure that
 		/// voting stakers have an opportunity to remove themselves from the system in the case
 		/// where they are on the losing side of a vote.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type EnactmentPeriod: Get<BlockNumberFor<Self>>;
 
 		/// How often (in blocks) new public referenda are launched.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type LaunchPeriod: Get<BlockNumberFor<Self>>;
 
 		/// How often (in blocks) to check for new votes.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type VotingPeriod: Get<BlockNumberFor<Self>>;
 
 		/// The minimum period of vote locking.
 		///
 		/// It should be no shorter than enactment period to ensure that in the case of an approval,
 		/// those successful voters are locked into the consequences that their votes entail.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type VoteLockingPeriod: Get<BlockNumberFor<Self>>;
 
 		/// The minimum amount to be used as a deposit for a public referendum proposal.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MinimumDeposit: Get<BalanceOf<Self>>;
 
 		/// Indicator for whether an emergency origin is even allowed to happen. Some chains may
 		/// want to set this permanently to `false`, others may want to condition it on things such
 		/// as an upgrade having happened recently.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type InstantAllowed: Get<bool>;
 
 		/// Minimum voting period allowed for a fast-track referendum.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type FastTrackVotingPeriod: Get<BlockNumberFor<Self>>;
 
 		/// Period in blocks where an external proposal may not be re-submitted after being vetoed.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type CooloffPeriod: Get<BlockNumberFor<Self>>;
 
 		/// The maximum number of votes for an account.
 		///
 		/// Also used to compute weight, an overly big value can
 		/// lead to extrinsic with very big weight: see `delegate` for instance.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxVotes: Get<u32>;
 
 		/// The maximum number of public proposals that can exist at any time.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxProposals: Get<u32>;
 
 		/// The maximum number of deposits a public proposal may have at any time.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxDeposits: Get<u32>;
 
 		/// The maximum number of items which can be blacklisted.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxBlacklisted: Get<u32>;
 
 		/// Origin from which the next tabled referendum may be forced. This is a normal
@@ -347,11 +347,11 @@ pub mod pallet {
 	}
 
 	/// The number of (public) proposals that have been made so far.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type PublicPropCount<T> = StorageValue<_, PropIndex, ValueQuery>;
 
 	/// The public proposals. Unsorted. The second item is the proposal.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type PublicProps<T: Config> = StorageValue<
 		_,
 		BoundedVec<(PropIndex, BoundedCallOf<T>, T::AccountId), T::MaxProposals>,
@@ -361,7 +361,7 @@ pub mod pallet {
 	/// Those who have locked a deposit.
 	///
 	/// TWOX-NOTE: Safe, as increasing integer keys are safe.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type DepositOf<T: Config> = StorageMap<
 		_,
 		Twox64Concat,
@@ -370,18 +370,18 @@ pub mod pallet {
 	>;
 
 	/// The next free referendum index, aka the number of referenda started so far.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ReferendumCount<T> = StorageValue<_, ReferendumIndex, ValueQuery>;
 
 	/// The lowest referendum index representing an unbaked referendum. Equal to
 	/// `ReferendumCount` if there isn't a unbaked referendum.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type LowestUnbaked<T> = StorageValue<_, ReferendumIndex, ValueQuery>;
 
 	/// Information concerning any given referendum.
 	///
 	/// TWOX-NOTE: SAFE as indexes are not under an attacker’s control.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ReferendumInfoOf<T: Config> = StorageMap<
 		_,
 		Twox64Concat,
@@ -393,7 +393,7 @@ pub mod pallet {
 	/// have recorded. The second item is the total amount of delegations, that will be added.
 	///
 	/// TWOX-NOTE: SAFE as `AccountId`s are crypto hashes anyway.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type VotingOf<T: Config> = StorageMap<
 		_,
 		Twox64Concat,
@@ -404,19 +404,19 @@ pub mod pallet {
 
 	/// True if the last referendum tabled was submitted externally. False if it was a public
 	/// proposal.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type LastTabledWasExternal<T> = StorageValue<_, bool, ValueQuery>;
 
 	/// The referendum to be tabled whenever it would be valid to table an external proposal.
 	/// This happens when a referendum needs to be tabled and one of two conditions are met:
 	/// - `LastTabledWasExternal` is `false`; or
 	/// - `PublicProps` is empty.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type NextExternal<T: Config> = StorageValue<_, (BoundedCallOf<T>, VoteThreshold)>;
 
 	/// A record of who vetoed what. Maps proposal hash to a possible existent block number
 	/// (until when it may not be resubmitted) and who vetoed it.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Blacklist<T: Config> = StorageMap<
 		_,
 		Identity,
@@ -425,7 +425,7 @@ pub mod pallet {
 	>;
 
 	/// Record of all proposals that have been subject to emergency cancellation.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Cancellations<T: Config> = StorageMap<_, Identity, T::Hash, bool, ValueQuery>;
 
 	/// General information concerning any proposal or referendum.
@@ -434,17 +434,17 @@ pub mod pallet {
 	///
 	/// Consider a garbage collection for a metadata of finished referendums to `unrequest` (remove)
 	/// large preimages.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type MetadataOf<T: Config> = StorageMap<_, Blake2_128Concat, MetadataOwner, T::Hash>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(pezframe_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		#[serde(skip)]
 		_config: core::marker::PhantomData<T>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			PublicPropCount::<T>::put(0 as PropIndex);
@@ -453,8 +453,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A motion has been proposed by a public account.
 		Proposed { proposal_index: PropIndex, deposit: BalanceOf<T> },
@@ -509,7 +509,7 @@ pub mod pallet {
 		},
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Value too low
 		ValueLow,
@@ -562,16 +562,16 @@ pub mod pallet {
 		PreimageNotExist,
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		/// Weight: see `begin_block`
 		fn on_initialize(n: BlockNumberFor<T>) -> Weight {
 			Self::begin_block(n)
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Propose a sensitive action to be taken.
 		///
 		/// The dispatch origin of this call must be _Signed_ and the sender must
@@ -581,12 +581,12 @@ pub mod pallet {
 		/// - `value`: The amount of deposit (must be at least `MinimumDeposit`).
 		///
 		/// Emits `Proposed`.
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::propose())]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::propose())]
 		pub fn propose(
 			origin: OriginFor<T>,
 			proposal: BoundedCallOf<T>,
-			#[pallet::compact] value: BalanceOf<T>,
+			#[pezpallet::compact] value: BalanceOf<T>,
 		) -> DispatchResult {
 			let who = T::SubmitOrigin::ensure_origin(origin)?;
 			ensure!(value >= T::MinimumDeposit::get(), Error::<T>::ValueLow);
@@ -599,7 +599,7 @@ pub mod pallet {
 
 			if let Some((until, _)) = Blacklist::<T>::get(proposal_hash) {
 				ensure!(
-					pezframe_system::Pallet::<T>::block_number() >= until,
+					pezframe_system::Pezpallet::<T>::block_number() >= until,
 					Error::<T>::ProposalBlacklisted,
 				);
 			}
@@ -624,11 +624,11 @@ pub mod pallet {
 		/// must have funds to cover the deposit, equal to the original deposit.
 		///
 		/// - `proposal`: The index of the proposal to second.
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::second())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::second())]
 		pub fn second(
 			origin: OriginFor<T>,
-			#[pallet::compact] proposal: PropIndex,
+			#[pezpallet::compact] proposal: PropIndex,
 		) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 
@@ -650,11 +650,11 @@ pub mod pallet {
 		///
 		/// - `ref_index`: The index of the referendum to vote for.
 		/// - `vote`: The vote configuration.
-		#[pallet::call_index(2)]
-		#[pallet::weight(T::WeightInfo::vote_new().max(T::WeightInfo::vote_existing()))]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(T::WeightInfo::vote_new().max(T::WeightInfo::vote_existing()))]
 		pub fn vote(
 			origin: OriginFor<T>,
-			#[pallet::compact] ref_index: ReferendumIndex,
+			#[pezpallet::compact] ref_index: ReferendumIndex,
 			vote: AccountVote<BalanceOf<T>>,
 		) -> DispatchResult {
 			let who = ensure_signed(origin)?;
@@ -669,8 +669,8 @@ pub mod pallet {
 		/// -`ref_index`: The index of the referendum to cancel.
 		///
 		/// Weight: `O(1)`.
-		#[pallet::call_index(3)]
-		#[pallet::weight((T::WeightInfo::emergency_cancel(), DispatchClass::Operational))]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight((T::WeightInfo::emergency_cancel(), DispatchClass::Operational))]
 		pub fn emergency_cancel(
 			origin: OriginFor<T>,
 			ref_index: ReferendumIndex,
@@ -692,8 +692,8 @@ pub mod pallet {
 		/// The dispatch origin of this call must be `ExternalOrigin`.
 		///
 		/// - `proposal_hash`: The preimage hash of the proposal.
-		#[pallet::call_index(4)]
-		#[pallet::weight(T::WeightInfo::external_propose())]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(T::WeightInfo::external_propose())]
 		pub fn external_propose(
 			origin: OriginFor<T>,
 			proposal: BoundedCallOf<T>,
@@ -702,7 +702,7 @@ pub mod pallet {
 			ensure!(!NextExternal::<T>::exists(), Error::<T>::DuplicateProposal);
 			if let Some((until, _)) = Blacklist::<T>::get(proposal.hash()) {
 				ensure!(
-					pezframe_system::Pallet::<T>::block_number() >= until,
+					pezframe_system::Pezpallet::<T>::block_number() >= until,
 					Error::<T>::ProposalBlacklisted,
 				);
 			}
@@ -721,8 +721,8 @@ pub mod pallet {
 		/// pre-scheduled `external_propose` call.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(5)]
-		#[pallet::weight(T::WeightInfo::external_propose_majority())]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(T::WeightInfo::external_propose_majority())]
 		pub fn external_propose_majority(
 			origin: OriginFor<T>,
 			proposal: BoundedCallOf<T>,
@@ -743,8 +743,8 @@ pub mod pallet {
 		/// pre-scheduled `external_propose` call.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(6)]
-		#[pallet::weight(T::WeightInfo::external_propose_default())]
+		#[pezpallet::call_index(6)]
+		#[pezpallet::weight(T::WeightInfo::external_propose_default())]
 		pub fn external_propose_default(
 			origin: OriginFor<T>,
 			proposal: BoundedCallOf<T>,
@@ -770,8 +770,8 @@ pub mod pallet {
 		/// Emits `Started`.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(7)]
-		#[pallet::weight(T::WeightInfo::fast_track())]
+		#[pezpallet::call_index(7)]
+		#[pezpallet::weight(T::WeightInfo::fast_track())]
 		pub fn fast_track(
 			origin: OriginFor<T>,
 			proposal_hash: T::Hash,
@@ -802,7 +802,7 @@ pub mod pallet {
 			ensure!(proposal_hash == ext_proposal.hash(), Error::<T>::InvalidHash);
 
 			NextExternal::<T>::kill();
-			let now = pezframe_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pezpallet::<T>::block_number();
 			let ref_index = Self::inject_referendum(
 				now.saturating_add(voting_period),
 				ext_proposal,
@@ -822,8 +822,8 @@ pub mod pallet {
 		/// Emits `Vetoed`.
 		///
 		/// Weight: `O(V + log(V))` where V is number of `existing vetoers`
-		#[pallet::call_index(8)]
-		#[pallet::weight(T::WeightInfo::veto_external())]
+		#[pezpallet::call_index(8)]
+		#[pezpallet::weight(T::WeightInfo::veto_external())]
 		pub fn veto_external(origin: OriginFor<T>, proposal_hash: T::Hash) -> DispatchResult {
 			let who = T::VetoOrigin::ensure_origin(origin)?;
 
@@ -842,7 +842,7 @@ pub mod pallet {
 				.map_err(|_| Error::<T>::TooMany)?;
 
 			let until =
-				pezframe_system::Pallet::<T>::block_number().saturating_add(T::CooloffPeriod::get());
+				pezframe_system::Pezpallet::<T>::block_number().saturating_add(T::CooloffPeriod::get());
 			Blacklist::<T>::insert(&proposal_hash, (until, existing_vetoers));
 
 			Self::deposit_event(Event::<T>::Vetoed { who, proposal_hash, until });
@@ -858,11 +858,11 @@ pub mod pallet {
 		/// - `ref_index`: The index of the referendum to cancel.
 		///
 		/// # Weight: `O(1)`.
-		#[pallet::call_index(9)]
-		#[pallet::weight(T::WeightInfo::cancel_referendum())]
+		#[pezpallet::call_index(9)]
+		#[pezpallet::weight(T::WeightInfo::cancel_referendum())]
 		pub fn cancel_referendum(
 			origin: OriginFor<T>,
-			#[pallet::compact] ref_index: ReferendumIndex,
+			#[pezpallet::compact] ref_index: ReferendumIndex,
 		) -> DispatchResult {
 			ensure_root(origin)?;
 			Self::internal_cancel_referendum(ref_index);
@@ -891,8 +891,8 @@ pub mod pallet {
 		///   voted on. Weight is charged as if maximum votes.
 		// NOTE: weight must cover an incorrect voting of origin with max votes, this is ensure
 		// because a valid delegation cover decoding a direct voting with max votes.
-		#[pallet::call_index(10)]
-		#[pallet::weight(T::WeightInfo::delegate(T::MaxVotes::get()))]
+		#[pezpallet::call_index(10)]
+		#[pezpallet::weight(T::WeightInfo::delegate(T::MaxVotes::get()))]
 		pub fn delegate(
 			origin: OriginFor<T>,
 			to: AccountIdLookupOf<T>,
@@ -920,8 +920,8 @@ pub mod pallet {
 		///   voted on. Weight is charged as if maximum votes.
 		// NOTE: weight must cover an incorrect voting of origin with max votes, this is ensure
 		// because a valid delegation cover decoding a direct voting with max votes.
-		#[pallet::call_index(11)]
-		#[pallet::weight(T::WeightInfo::undelegate(T::MaxVotes::get()))]
+		#[pezpallet::call_index(11)]
+		#[pezpallet::weight(T::WeightInfo::undelegate(T::MaxVotes::get()))]
 		pub fn undelegate(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 			let who = ensure_signed(origin)?;
 			let votes = Self::try_undelegate(who)?;
@@ -933,8 +933,8 @@ pub mod pallet {
 		/// The dispatch origin of this call must be _Root_.
 		///
 		/// Weight: `O(1)`.
-		#[pallet::call_index(12)]
-		#[pallet::weight(T::WeightInfo::clear_public_proposals())]
+		#[pezpallet::call_index(12)]
+		#[pezpallet::weight(T::WeightInfo::clear_public_proposals())]
 		pub fn clear_public_proposals(origin: OriginFor<T>) -> DispatchResult {
 			ensure_root(origin)?;
 			PublicProps::<T>::kill();
@@ -948,8 +948,8 @@ pub mod pallet {
 		/// - `target`: The account to remove the lock on.
 		///
 		/// Weight: `O(R)` with R number of vote of target.
-		#[pallet::call_index(13)]
-		#[pallet::weight(T::WeightInfo::unlock_set(T::MaxVotes::get()).max(T::WeightInfo::unlock_remove(T::MaxVotes::get())))]
+		#[pezpallet::call_index(13)]
+		#[pezpallet::weight(T::WeightInfo::unlock_set(T::MaxVotes::get()).max(T::WeightInfo::unlock_remove(T::MaxVotes::get())))]
 		pub fn unlock(origin: OriginFor<T>, target: AccountIdLookupOf<T>) -> DispatchResult {
 			ensure_signed(origin)?;
 			let target = T::Lookup::lookup(target)?;
@@ -984,8 +984,8 @@ pub mod pallet {
 		///
 		/// Weight: `O(R + log R)` where R is the number of referenda that `target` has voted on.
 		///   Weight is calculated for the maximum number of vote.
-		#[pallet::call_index(14)]
-		#[pallet::weight(T::WeightInfo::remove_vote(T::MaxVotes::get()))]
+		#[pezpallet::call_index(14)]
+		#[pezpallet::weight(T::WeightInfo::remove_vote(T::MaxVotes::get()))]
 		pub fn remove_vote(origin: OriginFor<T>, index: ReferendumIndex) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 			Self::try_remove_vote(&who, index, UnvoteScope::Any)
@@ -1006,8 +1006,8 @@ pub mod pallet {
 		///
 		/// Weight: `O(R + log R)` where R is the number of referenda that `target` has voted on.
 		///   Weight is calculated for the maximum number of vote.
-		#[pallet::call_index(15)]
-		#[pallet::weight(T::WeightInfo::remove_other_vote(T::MaxVotes::get()))]
+		#[pezpallet::call_index(15)]
+		#[pezpallet::weight(T::WeightInfo::remove_other_vote(T::MaxVotes::get()))]
 		pub fn remove_other_vote(
 			origin: OriginFor<T>,
 			target: AccountIdLookupOf<T>,
@@ -1035,8 +1035,8 @@ pub mod pallet {
 		///
 		/// Weight: `O(p)` (though as this is an high-privilege dispatch, we assume it has a
 		///   reasonable value).
-		#[pallet::call_index(16)]
-		#[pallet::weight((T::WeightInfo::blacklist(), DispatchClass::Operational))]
+		#[pezpallet::call_index(16)]
+		#[pezpallet::weight((T::WeightInfo::blacklist(), DispatchClass::Operational))]
 		pub fn blacklist(
 			origin: OriginFor<T>,
 			proposal_hash: T::Hash,
@@ -1088,11 +1088,11 @@ pub mod pallet {
 		/// - `prop_index`: The index of the proposal to cancel.
 		///
 		/// Weight: `O(p)` where `p = PublicProps::<T>::decode_len()`
-		#[pallet::call_index(17)]
-		#[pallet::weight(T::WeightInfo::cancel_proposal())]
+		#[pezpallet::call_index(17)]
+		#[pezpallet::weight(T::WeightInfo::cancel_proposal())]
 		pub fn cancel_proposal(
 			origin: OriginFor<T>,
-			#[pallet::compact] prop_index: PropIndex,
+			#[pezpallet::compact] prop_index: PropIndex,
 		) -> DispatchResult {
 			T::CancelProposalOrigin::ensure_origin(origin)?;
 
@@ -1122,8 +1122,8 @@ pub mod pallet {
 		///     - `Root` to set a metadata for an ongoing referendum.
 		/// - `owner`: an identifier of a metadata owner.
 		/// - `maybe_hash`: The hash of an on-chain stored preimage. `None` to clear a metadata.
-		#[pallet::call_index(18)]
-		#[pallet::weight(
+		#[pezpallet::call_index(18)]
+		#[pezpallet::weight(
 			match (owner, maybe_hash) {
 				(MetadataOwner::External, Some(_)) => T::WeightInfo::set_external_metadata(),
 				(MetadataOwner::External, None) => T::WeightInfo::clear_external_metadata(),
@@ -1189,7 +1189,7 @@ pub trait EncodeInto: Encode {
 }
 impl<T: Encode> EncodeInto for T {}
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	// exposed immutables.
 
 	/// Get the amount locked in support of `proposal`; `None` if proposal isn't a valid proposal
@@ -1232,8 +1232,8 @@ impl<T: Config> Pallet<T> {
 		threshold: VoteThreshold,
 		delay: BlockNumberFor<T>,
 	) -> ReferendumIndex {
-		Pallet::<T>::inject_referendum(
-			pezframe_system::Pallet::<T>::block_number().saturating_add(T::VotingPeriod::get()),
+		Pezpallet::<T>::inject_referendum(
+			pezframe_system::Pezpallet::<T>::block_number().saturating_add(T::VotingPeriod::get()),
 			proposal,
 			threshold,
 			delay,
@@ -1348,7 +1348,7 @@ impl<T: Config> Pallet<T> {
 							let unlock_at = end.saturating_add(
 								T::VoteLockingPeriod::get().saturating_mul(lock_periods.into()),
 							);
-							let now = pezframe_system::Pallet::<T>::block_number();
+							let now = pezframe_system::Pezpallet::<T>::block_number();
 							if now < unlock_at {
 								ensure!(
 									matches!(scope, UnvoteScope::Any),
@@ -1441,7 +1441,7 @@ impl<T: Config> Pallet<T> {
 				} => {
 					// remove any delegation votes to our current target.
 					Self::reduce_upstream_delegation(&target, conviction.votes(balance));
-					let now = pezframe_system::Pallet::<T>::block_number();
+					let now = pezframe_system::Pezpallet::<T>::block_number();
 					let lock_periods = conviction.lock_periods().into();
 					let unlock_block = now
 						.saturating_add(T::VoteLockingPeriod::get().saturating_mul(lock_periods));
@@ -1481,7 +1481,7 @@ impl<T: Config> Pallet<T> {
 					// remove any delegation votes to our current target.
 					let votes =
 						Self::reduce_upstream_delegation(&target, conviction.votes(balance));
-					let now = pezframe_system::Pallet::<T>::block_number();
+					let now = pezframe_system::Pezpallet::<T>::block_number();
 					let lock_periods = conviction.lock_periods().into();
 					let unlock_block = now
 						.saturating_add(T::VoteLockingPeriod::get().saturating_mul(lock_periods));
@@ -1501,7 +1501,7 @@ impl<T: Config> Pallet<T> {
 	/// a security hole) but may be reduced from what they are currently.
 	fn update_lock(who: &T::AccountId) {
 		let lock_needed = VotingOf::<T>::mutate(who, |voting| {
-			voting.rejig(pezframe_system::Pallet::<T>::block_number());
+			voting.rejig(pezframe_system::Pezpallet::<T>::block_number());
 			voting.locked_balance()
 		});
 		if lock_needed.is_zero() {

@@ -35,24 +35,24 @@ use pezsp_metadata_ir::{StorageEntryMetadataIR, StorageEntryTypeIR};
 /// A type representing a *map* in storage. A *storage map* is a mapping of keys to values of a
 /// given type stored on-chain.
 ///
-/// For general information regarding the `#[pallet::storage]` attribute, refer to
+/// For general information regarding the `#[pezpallet::storage]` attribute, refer to
 /// [`crate::pezpallet_macros::storage`].
 ///
 /// # Example
 ///
 /// ```
-/// #[pezframe_support::pallet]
-/// mod pallet {
+/// #[pezframe_support::pezpallet]
+/// mod pezpallet {
 ///     # use pezframe_support::pezpallet_prelude::*;
-///     # #[pallet::config]
+///     # #[pezpallet::config]
 ///     # pub trait Config: pezframe_system::Config {}
-///     # #[pallet::pallet]
-///     # pub struct Pallet<T>(_);
+///     # #[pezpallet::pezpallet]
+///     # pub struct Pezpallet<T>(_);
 /// 	/// A kitchen-sink StorageMap, with all possible additional attributes.
-///     #[pallet::storage]
-/// 	#[pallet::getter(fn foo)]
-/// 	#[pallet::storage_prefix = "OtherFoo"]
-/// 	#[pallet::unbounded]
+///     #[pezpallet::storage]
+/// 	#[pezpallet::getter(fn foo)]
+/// 	#[pezpallet::storage_prefix = "OtherFoo"]
+/// 	#[pezpallet::unbounded]
 ///     pub type Foo<T> = StorageMap<
 /// 		_,
 /// 		Blake2_128Concat,
@@ -62,7 +62,7 @@ use pezsp_metadata_ir::{StorageEntryMetadataIR, StorageEntryTypeIR};
 /// 	>;
 ///
 /// 	/// Alternative named syntax.
-///     #[pallet::storage]
+///     #[pezpallet::storage]
 ///     pub type Bar<T> = StorageMap<
 /// 		Hasher = Blake2_128Concat,
 /// 		Key = u32,
@@ -89,7 +89,7 @@ where
 	Key: FullCodec + MaxEncodedLen,
 {
 	fn get() -> u32 {
-		// The `max_len` of the key hash plus the pallet prefix and storage prefix (which both are
+		// The `max_len` of the key hash plus the pezpallet prefix and storage prefix (which both are
 		// hashed with `Twox128`).
 		let z = Hasher::max_len::<Key>() + Twox128::max_len::<()>() * 2;
 		z as u32

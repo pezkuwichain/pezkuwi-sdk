@@ -79,7 +79,7 @@ fn examples_work() {
 		})
 }
 
-mod pallet {
+mod pezpallet {
 	use super::*;
 
 	#[test]
@@ -496,7 +496,7 @@ mod pallet {
 			// then
 			assert_noop!(
 				BagsList::put_in_front_of(RuntimeOrigin::signed(3), 2),
-				crate::pallet::Error::<Runtime>::List(ListError::NotHeavier)
+				crate::pezpallet::Error::<Runtime>::List(ListError::NotHeavier)
 			);
 		});
 	}
@@ -510,7 +510,7 @@ mod pallet {
 			// then
 			assert_noop!(
 				BagsList::put_in_front_of(RuntimeOrigin::signed(3), 4),
-				crate::pallet::Error::<Runtime>::List(ListError::NotHeavier)
+				crate::pezpallet::Error::<Runtime>::List(ListError::NotHeavier)
 			);
 		});
 	}
@@ -527,7 +527,7 @@ mod pallet {
 			// then
 			assert_noop!(
 				BagsList::put_in_front_of(RuntimeOrigin::signed(5), 4),
-				crate::pallet::Error::<Runtime>::List(ListError::NodeNotFound)
+				crate::pezpallet::Error::<Runtime>::List(ListError::NodeNotFound)
 			);
 		});
 
@@ -541,7 +541,7 @@ mod pallet {
 			// then
 			assert_noop!(
 				BagsList::put_in_front_of(RuntimeOrigin::signed(4), 5),
-				crate::pallet::Error::<Runtime>::List(ListError::NodeNotFound)
+				crate::pezpallet::Error::<Runtime>::List(ListError::NodeNotFound)
 			);
 		});
 	}
@@ -555,7 +555,7 @@ mod pallet {
 			// then
 			assert_noop!(
 				BagsList::put_in_front_of(RuntimeOrigin::signed(4), 1),
-				crate::pallet::Error::<Runtime>::List(ListError::NotInSameBag)
+				crate::pezpallet::Error::<Runtime>::List(ListError::NotInSameBag)
 			);
 		});
 	}

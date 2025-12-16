@@ -32,10 +32,10 @@ type HashOf<T> = <T as pezframe_system::Config>::Hash;
 
 /// Type alias to conveniently refer to the `Currency::Balance` associated type.
 pub type BalanceOf<T> =
-	<pezpallet_balances::Pallet<T> as Currency<<T as pezframe_system::Config>::AccountId>>::Balance;
+	<pezpallet_balances::Pezpallet<T> as Currency<<T as pezframe_system::Config>::AccountId>>::Balance;
 
-/// Proposal provider for alliance pallet.
-/// Adapter from collective pallet to alliance proposal provider trait.
+/// Proposal provider for alliance pezpallet.
+/// Adapter from collective pezpallet to alliance proposal provider trait.
 pub struct AllianceProposalProvider<T, I = ()>(PhantomData<(T, I)>);
 
 impl<T, I> ProposalProvider<AccountIdOf<T>, HashOf<T>, ProposalOf<T, I>>
@@ -50,7 +50,7 @@ where
 		proposal: Box<ProposalOf<T, I>>,
 		length_bound: u32,
 	) -> Result<(u32, u32), DispatchError> {
-		pezpallet_collective::Pallet::<T, I>::do_propose_proposed(
+		pezpallet_collective::Pezpallet::<T, I>::do_propose_proposed(
 			who,
 			threshold,
 			proposal,
@@ -64,7 +64,7 @@ where
 		index: ProposalIndex,
 		approve: bool,
 	) -> Result<bool, DispatchError> {
-		pezpallet_collective::Pallet::<T, I>::do_vote(who, proposal, index, approve)
+		pezpallet_collective::Pezpallet::<T, I>::do_vote(who, proposal, index, approve)
 	}
 
 	fn close_proposal(
@@ -73,7 +73,7 @@ where
 		proposal_weight_bound: Weight,
 		length_bound: u32,
 	) -> DispatchResultWithPostInfo {
-		pezpallet_collective::Pallet::<T, I>::do_close(
+		pezpallet_collective::Pezpallet::<T, I>::do_close(
 			proposal_hash,
 			proposal_index,
 			proposal_weight_bound,

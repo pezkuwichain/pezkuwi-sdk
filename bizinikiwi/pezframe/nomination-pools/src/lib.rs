@@ -17,7 +17,7 @@
 
 //! # Nomination Pools for Staking Delegation
 //!
-//! A pallet that allows members to delegate their stake to nominating pools. A nomination pool acts
+//! A pezpallet that allows members to delegate their stake to nominating pools. A nomination pool acts
 //! as nominator and nominates validators on the members' behalf.
 //!
 //! # Index
@@ -172,7 +172,7 @@
 //!
 //! ## Implementor's Guide
 //!
-//! Some notes and common mistakes that wallets/apps wishing to implement this pallet should be
+//! Some notes and common mistakes that wallets/apps wishing to implement this pezpallet should be
 //! aware of:
 //!
 //!
@@ -325,7 +325,7 @@
 //! ### Slashing
 //!
 //! This section assumes that the slash computation is executed by
-//! `pezpallet_staking::StakingLedger::slash`, which passes the information to this pallet via
+//! `pezpallet_staking::StakingLedger::slash`, which passes the information to this pezpallet via
 //! [`pezsp_staking::OnStakingUpdate::on_slash`].
 //!
 //! Unbonding pools need to be slashed to ensure all nominators whom where in the bonded pool while
@@ -382,7 +382,7 @@ use pezsp_staking::{EraIndex, StakingInterface};
 #[cfg(any(feature = "try-runtime", feature = "fuzzing", test, debug_assertions))]
 use pezsp_runtime::TryRuntimeError;
 
-/// The log target of this pallet.
+/// The log target of this pezpallet.
 pub const LOG_TARGET: &str = "runtime::nomination-pools";
 // syntactic sugar for logging.
 #[macro_export]
@@ -390,7 +390,7 @@ macro_rules! log {
 	($level:tt, $patter:expr $(, $values:expr)* $(,)?) => {
 		log::$level!(
 			target: $crate::LOG_TARGET,
-			concat!("[{:?}] 🏊‍♂️ ", $patter), <pezframe_system::Pallet<T>>::block_number() $(, $values)*
+			concat!("[{:?}] 🏊‍♂️ ", $patter), <pezframe_system::Pezpallet<T>>::block_number() $(, $values)*
 		)
 	};
 }
@@ -404,7 +404,7 @@ pub mod adapter;
 pub mod migration;
 pub mod weights;
 
-pub use pallet::*;
+pub use pezpallet::*;
 use pezsp_runtime::traits::BlockNumberProvider;
 pub use weights::WeightInfo;
 
@@ -421,7 +421,7 @@ pub type BlockNumberFor<T> =
 
 pub const POINTS_TO_BALANCE_INIT_RATIO: u32 = 1;
 
-/// Possible operations on the configuration values of this pallet.
+/// Possible operations on the configuration values of this pezpallet.
 #[derive(
 	Encode,
 	Decode,
@@ -916,7 +916,7 @@ impl<T: Config> Commission<T> {
 
 		if updated_current {
 			if let Some((_, payee)) = self.current.as_ref() {
-				Pallet::<T>::deposit_event(Event::<T>::PoolCommissionUpdated {
+				Pezpallet::<T>::deposit_event(Event::<T>::PoolCommissionUpdated {
 					pool_id,
 					current: Some((new_max, payee.clone())),
 				});
@@ -1048,12 +1048,12 @@ impl<T: Config> BondedPool<T> {
 
 	/// Get the bonded account id of this pool.
 	fn bonded_account(&self) -> T::AccountId {
-		Pallet::<T>::generate_bonded_account(self.id)
+		Pezpallet::<T>::generate_bonded_account(self.id)
 	}
 
 	/// Get the reward account id of this pool.
 	fn reward_account(&self) -> T::AccountId {
-		Pallet::<T>::generate_reward_account(self.id)
+		Pezpallet::<T>::generate_reward_account(self.id)
 	}
 
 	/// Consume self and put into storage.
@@ -1071,7 +1071,7 @@ impl<T: Config> BondedPool<T> {
 	/// This is often used for bonding and issuing new funds into the pool.
 	fn balance_to_point(&self, new_funds: BalanceOf<T>) -> BalanceOf<T> {
 		let bonded_balance = T::StakeAdapter::active_stake(Pool::from(self.bonded_account()));
-		Pallet::<T>::balance_to_point(bonded_balance, self.points, new_funds)
+		Pezpallet::<T>::balance_to_point(bonded_balance, self.points, new_funds)
 	}
 
 	/// Convert the given number of points to balance given the current pool state.
@@ -1079,7 +1079,7 @@ impl<T: Config> BondedPool<T> {
 	/// This is often used for unbonding.
 	fn points_to_balance(&self, points: BalanceOf<T>) -> BalanceOf<T> {
 		let bonded_balance = T::StakeAdapter::active_stake(Pool::from(self.bonded_account()));
-		Pallet::<T>::point_to_balance(bonded_balance, self.points, points)
+		Pezpallet::<T>::point_to_balance(bonded_balance, self.points, points)
 	}
 
 	/// Issue points to [`Self`] for `new_funds`.
@@ -1249,7 +1249,7 @@ impl<T: Config> BondedPool<T> {
 			is_full_unbond ||
 				balance_after_unbond >=
 					if is_depositor {
-						Pallet::<T>::depositor_min_bond()
+						Pezpallet::<T>::depositor_min_bond()
 					} else {
 						MinJoinBond::<T>::get()
 					},
@@ -1340,7 +1340,7 @@ impl<T: Config> BondedPool<T> {
 	fn set_state(&mut self, state: PoolState) {
 		if self.state != state {
 			self.state = state;
-			Pallet::<T>::deposit_event(Event::<T>::StateChanged {
+			Pezpallet::<T>::deposit_event(Event::<T>::StateChanged {
 				pool_id: self.id,
 				new_state: state,
 			});
@@ -1515,7 +1515,7 @@ impl<T: Config> RewardPool<T> {
 	/// This is sum of all the rewards that are claimable by pool members.
 	fn current_balance(id: PoolId) -> BalanceOf<T> {
 		T::Currency::reducible_balance(
-			&Pallet::<T>::generate_reward_account(id),
+			&Pezpallet::<T>::generate_reward_account(id),
 			Preservation::Expendable,
 			Fortitude::Polite,
 		)
@@ -1546,11 +1546,11 @@ pub struct UnbondPool<T: Config> {
 
 impl<T: Config> UnbondPool<T> {
 	fn balance_to_point(&self, new_funds: BalanceOf<T>) -> BalanceOf<T> {
-		Pallet::<T>::balance_to_point(self.balance, self.points, new_funds)
+		Pezpallet::<T>::balance_to_point(self.balance, self.points, new_funds)
 	}
 
 	fn point_to_balance(&self, points: BalanceOf<T>) -> BalanceOf<T> {
-		Pallet::<T>::point_to_balance(self.balance, self.points, points)
+		Pezpallet::<T>::point_to_balance(self.balance, self.points, points)
 	}
 
 	/// Issue the equivalent points of `new_funds` into self.
@@ -1652,8 +1652,8 @@ impl<T: Config> Get<u32> for TotalUnbondingPools<T> {
 	}
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::traits::StorageVersion;
 	use pezframe_system::pezpallet_prelude::{
@@ -1664,17 +1664,17 @@ pub mod pallet {
 	/// The in-code storage version.
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(8);
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: weights::WeightInfo;
 
 		/// The currency type used for nomination pool.
@@ -1698,8 +1698,8 @@ pub mod pallet {
 		/// prevented via a reasonable `MaxPointsToBalance`), for many many years to come.
 		type RewardCounter: FixedPointNumber + MaxEncodedLen + TypeInfo + Default + codec::FullCodec;
 
-		/// The nomination pool's pallet id.
-		#[pallet::constant]
+		/// The nomination pool's pezpallet id.
+		#[pezpallet::constant]
 		type PalletId: Get<pezframe_support::PalletId>;
 
 		/// The maximum pool points-to-balance ratio that an `open` pool can have.
@@ -1714,11 +1714,11 @@ pub mod pallet {
 		///
 		/// For a value of 10, the threshold would be a pool points-to-balance ratio of 10:1.
 		/// Such a scenario would also be the equivalent of the pool being 90% slashed.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxPointsToBalance: Get<u8>;
 
 		/// The maximum number of simultaneous unbonding chunks that can exist per member.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxUnbonding: Get<u32>;
 
 		/// Infallible method for converting `Currency::Balance` to `U256`.
@@ -1745,7 +1745,7 @@ pub mod pallet {
 		/// The origin that can manage pool configurations.
 		type AdminOrigin: EnsureOrigin<Self::RuntimeOrigin>;
 
-		/// Provider for the block number. Normally this is the `pezframe_system` pallet.
+		/// Provider for the block number. Normally this is the `pezframe_system` pezpallet.
 		type BlockNumberProvider: BlockNumberProvider;
 
 		/// Restrict some accounts from participating in a nomination pool.
@@ -1757,11 +1757,11 @@ pub mod pallet {
 	/// This might be lower but never higher than the sum of `total_balance` of all [`PoolMembers`]
 	/// because calling `pool_withdraw_unbonded` might decrease the total stake of the pool's
 	/// `bonded_account` without adjusting the pezpallet-internal `UnbondingPool`'s.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type TotalValueLocked<T: Config> = StorageValue<_, BalanceOf<T>, ValueQuery>;
 
 	/// Minimum amount to bond to join a pool.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type MinJoinBond<T: Config> = StorageValue<_, BalanceOf<T>, ValueQuery>;
 
 	/// Minimum bond required to create a pool.
@@ -1771,76 +1771,76 @@ pub mod pallet {
 	///
 	/// This is the value that will always exist in the staking ledger of the pool bonded account
 	/// while all other accounts leave.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type MinCreateBond<T: Config> = StorageValue<_, BalanceOf<T>, ValueQuery>;
 
 	/// Maximum number of nomination pools that can exist. If `None`, then an unbounded number of
 	/// pools can exist.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type MaxPools<T: Config> = StorageValue<_, u32, OptionQuery>;
 
 	/// Maximum number of members that can exist in the system. If `None`, then the count
 	/// members are not bound on a system wide basis.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type MaxPoolMembers<T: Config> = StorageValue<_, u32, OptionQuery>;
 
 	/// Maximum number of members that may belong to pool. If `None`, then the count of
 	/// members is not bound on a per pool basis.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type MaxPoolMembersPerPool<T: Config> = StorageValue<_, u32, OptionQuery>;
 
 	/// The maximum commission that can be charged by a pool. Used on commission payouts to bound
 	/// pool commissions that are > `GlobalMaxCommission`, necessary if a future
 	/// `GlobalMaxCommission` is lower than some current pool commissions.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type GlobalMaxCommission<T: Config> = StorageValue<_, Perbill, OptionQuery>;
 
 	/// Active members.
 	///
 	/// TWOX-NOTE: SAFE since `AccountId` is a secure hash.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type PoolMembers<T: Config> =
 		CountedStorageMap<_, Twox64Concat, T::AccountId, PoolMember<T>>;
 
 	/// Storage for bonded pools.
 	// To get or insert a pool see [`BondedPool::get`] and [`BondedPool::put`]
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type BondedPools<T: Config> =
 		CountedStorageMap<_, Twox64Concat, PoolId, BondedPoolInner<T>>;
 
 	/// Reward pools. This is where there rewards for each pool accumulate. When a members payout is
 	/// claimed, the balance comes out of the reward pool. Keyed by the bonded pools account.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type RewardPools<T: Config> = CountedStorageMap<_, Twox64Concat, PoolId, RewardPool<T>>;
 
 	/// Groups of unbonding pools. Each group of unbonding pools belongs to a
 	/// bonded pool, hence the name sub-pools. Keyed by the bonded pools account.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type SubPoolsStorage<T: Config> = CountedStorageMap<_, Twox64Concat, PoolId, SubPools<T>>;
 
 	/// Metadata for the pool.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Metadata<T: Config> =
 		CountedStorageMap<_, Twox64Concat, PoolId, BoundedVec<u8, T::MaxMetadataLen>, ValueQuery>;
 
 	/// Ever increasing number of all pools created so far.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type LastPoolId<T: Config> = StorageValue<_, u32, ValueQuery>;
 
 	/// A reverse lookup from the pool's account id to its id.
 	///
 	/// This is only used for slashing and on automatic withdraw update. In all other instances, the
 	/// pool id is used, and the accounts are deterministically derived from it.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ReversePoolIdLookup<T: Config> =
 		CountedStorageMap<_, Twox64Concat, T::AccountId, PoolId, OptionQuery>;
 
 	/// Map from a pool member account to their opted claim permission.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ClaimPermissions<T: Config> =
 		StorageMap<_, Twox64Concat, T::AccountId, ClaimPermission, ValueQuery>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	pub struct GenesisConfig<T: Config> {
 		pub min_join_bond: BalanceOf<T>,
 		pub min_create_bond: BalanceOf<T>,
@@ -1863,7 +1863,7 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			MinJoinBond::<T>::put(self.min_join_bond);
@@ -1884,9 +1884,9 @@ pub mod pallet {
 		}
 	}
 
-	/// Events of this pallet.
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(crate) fn deposit_event)]
+	/// Events of this pezpallet.
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(crate) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A pool has been created.
 		Created { depositor: T::AccountId, pool_id: PoolId },
@@ -1985,7 +1985,7 @@ pub mod pallet {
 		},
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	#[cfg_attr(test, derive(PartialEq))]
 	pub enum Error<T> {
 		/// A (bonded) pool id does not exist.
@@ -2008,7 +2008,7 @@ pub mod pallet {
 		CannotWithdrawAny,
 		/// The amount does not meet the minimum bond to either join or create a pool.
 		///
-		/// The depositor can never unbond to a value less than `Pallet::depositor_min_bond`. The
+		/// The depositor can never unbond to a value less than `Pezpallet::depositor_min_bond`. The
 		/// caller does not have nominating permissions for the pool. Members can never unbond to a
 		/// value below `MinJoinBond`.
 		MinimumBondNotMet,
@@ -2068,7 +2068,7 @@ pub mod pallet {
 		AlreadyMigrated,
 		/// The pool or member delegation has not migrated yet to delegate stake.
 		NotMigrated,
-		/// This call is not allowed in the current state of the pallet.
+		/// This call is not allowed in the current state of the pezpallet.
 		NotSupported,
 		/// Account is restricted from participation in pools. This may happen if the account is
 		/// staking in another way already.
@@ -2103,15 +2103,15 @@ pub mod pallet {
 	}
 
 	/// A reason for freezing funds.
-	#[pallet::composite_enum]
+	#[pezpallet::composite_enum]
 	pub enum FreezeReason {
 		/// Pool reward account is restricted from going below Existential Deposit.
 		#[codec(index = 0)]
 		PoolMinBalance,
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Stake funds with a pool. The amount to bond is delegated (or transferred based on
 		/// [`adapter::StakeStrategyType`]) from the member to the pool account and immediately
 		/// increases the pool's bond.
@@ -2128,11 +2128,11 @@ pub mod pallet {
 		/// * This call will *not* dust the member account, so the member must have at least
 		///   `existential deposit + amount` in their account.
 		/// * Only a pool with [`PoolState::Open`] can be joined
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::join())]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::join())]
 		pub fn join(
 			origin: OriginFor<T>,
-			#[pallet::compact] amount: BalanceOf<T>,
+			#[pezpallet::compact] amount: BalanceOf<T>,
 			pool_id: PoolId,
 		) -> DispatchResult {
 			let who = ensure_signed(origin)?;
@@ -2196,8 +2196,8 @@ pub mod pallet {
 		// NOTE: this transaction is implemented with the sole purpose of readability and
 		// correctness, not optimization. We read/write several storage items multiple times instead
 		// of just once, in the spirit reusing code.
-		#[pallet::call_index(1)]
-		#[pallet::weight(
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(
 			T::WeightInfo::bond_extra_transfer()
 			.max(T::WeightInfo::bond_extra_other())
 		)]
@@ -2221,8 +2221,8 @@ pub mod pallet {
 		/// members in the pools stake. Rewards do not "expire".
 		///
 		/// See `claim_payout_other` to claim rewards on behalf of some `other` pool member.
-		#[pallet::call_index(2)]
-		#[pallet::weight(T::WeightInfo::claim_payout())]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(T::WeightInfo::claim_payout())]
 		pub fn claim_payout(origin: OriginFor<T>) -> DispatchResult {
 			let signer = ensure_signed(origin)?;
 			// ensure signer is not in an un-migrated state.
@@ -2265,12 +2265,12 @@ pub mod pallet {
 		/// are available). However, it may not be possible to release the current unlocking chunks,
 		/// in which case, the result of this call will likely be the `NoMoreChunks` error from the
 		/// staking system.
-		#[pallet::call_index(3)]
-		#[pallet::weight(T::WeightInfo::unbond())]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(T::WeightInfo::unbond())]
 		pub fn unbond(
 			origin: OriginFor<T>,
 			member_account: AccountIdLookupOf<T>,
-			#[pallet::compact] unbonding_points: BalanceOf<T>,
+			#[pezpallet::compact] unbonding_points: BalanceOf<T>,
 		) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 			let member_account = T::Lookup::lookup(member_account)?;
@@ -2355,8 +2355,8 @@ pub mod pallet {
 		/// can be cleared by withdrawing. In the case there are too many unlocking chunks, the user
 		/// would probably see an error like `NoMoreChunks` emitted from the staking system when
 		/// they attempt to unbond.
-		#[pallet::call_index(4)]
-		#[pallet::weight(T::WeightInfo::pool_withdraw_unbonded(*num_slashing_spans))]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(T::WeightInfo::pool_withdraw_unbonded(*num_slashing_spans))]
 		pub fn pool_withdraw_unbonded(
 			origin: OriginFor<T>,
 			pool_id: PoolId,
@@ -2401,8 +2401,8 @@ pub mod pallet {
 		/// - If the pool has any pending slash, we also try to slash the member before letting them
 		/// withdraw. This calculation adds some weight overhead and is only defensive. In reality,
 		/// pool slashes must have been already applied via permissionless [`Call::apply_slash`].
-		#[pallet::call_index(5)]
-		#[pallet::weight(
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(
 			T::WeightInfo::withdraw_unbonded_kill(*num_slashing_spans)
 		)]
 		pub fn withdraw_unbonded(
@@ -2467,13 +2467,13 @@ pub mod pallet {
 
 			if stash_killed {
 				// Maybe an extra consumer left on the pool account, if so, remove it.
-				if pezframe_system::Pallet::<T>::consumers(&pool_account) == 1 {
-					pezframe_system::Pallet::<T>::dec_consumers(&pool_account);
+				if pezframe_system::Pezpallet::<T>::consumers(&pool_account) == 1 {
+					pezframe_system::Pezpallet::<T>::dec_consumers(&pool_account);
 				}
 
 				// Note: This is not pretty, but we have to do this because of a bug where old pool
 				// accounts might have had an extra consumer increment. We know at this point no
-				// other pallet should depend on pool account so safe to do this.
+				// other pezpallet should depend on pool account so safe to do this.
 				// Refer to following issues:
 				// - https://github.com/pezkuwichain/pezkuwi-sdk/issues/135
 				// - https://github.com/pezkuwichain/pezkuwi-sdk/issues/116
@@ -2554,7 +2554,7 @@ pub mod pallet {
 				});
 
 				if member_account == bonded_pool.roles.depositor {
-					Pallet::<T>::dissolve_pool(bonded_pool);
+					Pezpallet::<T>::dissolve_pool(bonded_pool);
 					Weight::default()
 				} else {
 					bonded_pool.dec_members().put();
@@ -2588,11 +2588,11 @@ pub mod pallet {
 		///
 		/// In addition to `amount`, the caller will transfer the existential deposit; so the caller
 		/// needs at have at least `amount + existential_deposit` transferable.
-		#[pallet::call_index(6)]
-		#[pallet::weight(T::WeightInfo::create())]
+		#[pezpallet::call_index(6)]
+		#[pezpallet::weight(T::WeightInfo::create())]
 		pub fn create(
 			origin: OriginFor<T>,
-			#[pallet::compact] amount: BalanceOf<T>,
+			#[pezpallet::compact] amount: BalanceOf<T>,
 			root: AccountIdLookupOf<T>,
 			nominator: AccountIdLookupOf<T>,
 			bouncer: AccountIdLookupOf<T>,
@@ -2613,11 +2613,11 @@ pub mod pallet {
 		///
 		/// same as `create` with the inclusion of
 		/// * `pool_id` - `A valid PoolId.
-		#[pallet::call_index(7)]
-		#[pallet::weight(T::WeightInfo::create())]
+		#[pezpallet::call_index(7)]
+		#[pezpallet::weight(T::WeightInfo::create())]
 		pub fn create_with_pool_id(
 			origin: OriginFor<T>,
-			#[pallet::compact] amount: BalanceOf<T>,
+			#[pezpallet::compact] amount: BalanceOf<T>,
 			root: AccountIdLookupOf<T>,
 			nominator: AccountIdLookupOf<T>,
 			bouncer: AccountIdLookupOf<T>,
@@ -2643,8 +2643,8 @@ pub mod pallet {
 		///
 		/// In addition to a `root` or `nominator` role of `origin`, the pool's depositor needs to
 		/// have at least `depositor_min_bond` in the pool to start nominating.
-		#[pallet::call_index(8)]
-		#[pallet::weight(T::WeightInfo::nominate(validators.len() as u32))]
+		#[pezpallet::call_index(8)]
+		#[pezpallet::weight(T::WeightInfo::nominate(validators.len() as u32))]
 		pub fn nominate(
 			origin: OriginFor<T>,
 			pool_id: PoolId,
@@ -2680,8 +2680,8 @@ pub mod pallet {
 		/// 1. signed by the bouncer, or the root role of the pool,
 		/// 2. if the pool conditions to be open are NOT met (as described by `ok_to_be_open`), and
 		///    then the state of the pool can be permissionlessly changed to `Destroying`.
-		#[pallet::call_index(9)]
-		#[pallet::weight(T::WeightInfo::set_state())]
+		#[pezpallet::call_index(9)]
+		#[pezpallet::weight(T::WeightInfo::set_state())]
 		pub fn set_state(
 			origin: OriginFor<T>,
 			pool_id: PoolId,
@@ -2711,8 +2711,8 @@ pub mod pallet {
 		///
 		/// The dispatch origin of this call must be signed by the bouncer, or the root role of the
 		/// pool.
-		#[pallet::call_index(10)]
-		#[pallet::weight(T::WeightInfo::set_metadata(metadata.len() as u32))]
+		#[pezpallet::call_index(10)]
+		#[pezpallet::weight(T::WeightInfo::set_metadata(metadata.len() as u32))]
 		pub fn set_metadata(
 			origin: OriginFor<T>,
 			pool_id: PoolId,
@@ -2748,8 +2748,8 @@ pub mod pallet {
 		/// * `max_members` - Set [`MaxPoolMembers`].
 		/// * `max_members_per_pool` - Set [`MaxPoolMembersPerPool`].
 		/// * `global_max_commission` - Set [`GlobalMaxCommission`].
-		#[pallet::call_index(11)]
-		#[pallet::weight(T::WeightInfo::set_configs())]
+		#[pezpallet::call_index(11)]
+		#[pezpallet::weight(T::WeightInfo::set_configs())]
 		pub fn set_configs(
 			origin: OriginFor<T>,
 			min_join_bond: ConfigOp<BalanceOf<T>>,
@@ -2797,8 +2797,8 @@ pub mod pallet {
 		///
 		/// It emits an event, notifying UIs of the role change. This event is quite relevant to
 		/// most pool members and they should be informed of changes to pool roles.
-		#[pallet::call_index(12)]
-		#[pallet::weight(T::WeightInfo::update_roles())]
+		#[pezpallet::call_index(12)]
+		#[pezpallet::weight(T::WeightInfo::update_roles())]
 		pub fn update_roles(
 			origin: OriginFor<T>,
 			pool_id: PoolId,
@@ -2849,7 +2849,7 @@ pub mod pallet {
 		/// Chill on behalf of the pool.
 		///
 		/// The dispatch origin of this call can be signed by the pool nominator or the pool
-		/// root role, same as [`Pallet::nominate`].
+		/// root role, same as [`Pezpallet::nominate`].
 		///
 		/// This directly forwards the call to an implementation of `StakingInterface` (e.g.,
 		/// `pezpallet-staking`) through [`Config::StakeAdapter`], on behalf of the bonded pool.
@@ -2863,8 +2863,8 @@ pub mod pallet {
 		///
 		/// # Conditions for permissioned dispatch:
 		/// * The caller is the pool's nominator or root.
-		#[pallet::call_index(13)]
-		#[pallet::weight(T::WeightInfo::chill())]
+		#[pezpallet::call_index(13)]
+		#[pezpallet::weight(T::WeightInfo::chill())]
 		pub fn chill(origin: OriginFor<T>, pool_id: PoolId) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 			let bonded_pool = BondedPool::<T>::get(pool_id).ok_or(Error::<T>::PoolNotFound)?;
@@ -2895,8 +2895,8 @@ pub mod pallet {
 		/// In the case of `origin != other`, `origin` can only bond extra pending rewards of
 		/// `other` members assuming set_claim_permission for the given member is
 		/// `PermissionlessCompound` or `PermissionlessAll`.
-		#[pallet::call_index(14)]
-		#[pallet::weight(
+		#[pezpallet::call_index(14)]
+		#[pezpallet::weight(
 			T::WeightInfo::bond_extra_transfer()
 			.max(T::WeightInfo::bond_extra_other())
 		)]
@@ -2923,8 +2923,8 @@ pub mod pallet {
 		///
 		/// * `origin` - Member of a pool.
 		/// * `permission` - The permission to be applied.
-		#[pallet::call_index(15)]
-		#[pallet::weight(T::DbWeight::get().reads_writes(1, 1))]
+		#[pezpallet::call_index(15)]
+		#[pezpallet::weight(T::DbWeight::get().reads_writes(1, 1))]
 		pub fn set_claim_permission(
 			origin: OriginFor<T>,
 			permission: ClaimPermission,
@@ -2954,8 +2954,8 @@ pub mod pallet {
 		///
 		/// Pool member `other` must have a `PermissionlessWithdraw` or `PermissionlessAll` claim
 		/// permission for this call to be successful.
-		#[pallet::call_index(16)]
-		#[pallet::weight(T::WeightInfo::claim_payout())]
+		#[pezpallet::call_index(16)]
+		#[pezpallet::weight(T::WeightInfo::claim_payout())]
 		pub fn claim_payout_other(origin: OriginFor<T>, other: T::AccountId) -> DispatchResult {
 			let signer = ensure_signed(origin)?;
 			// ensure member is not in an un-migrated state.
@@ -2973,8 +2973,8 @@ pub mod pallet {
 		/// tuple. Where a `current` of `None` is provided, any current commission will be removed.
 		///
 		/// - If a `None` is supplied to `new_commission`, existing commission will be removed.
-		#[pallet::call_index(17)]
-		#[pallet::weight(T::WeightInfo::set_commission())]
+		#[pezpallet::call_index(17)]
+		#[pezpallet::weight(T::WeightInfo::set_commission())]
 		pub fn set_commission(
 			origin: OriginFor<T>,
 			pool_id: PoolId,
@@ -3012,8 +3012,8 @@ pub mod pallet {
 		/// - Initial max can be set to any `Perbill`, and only smaller values thereafter.
 		/// - Current commission will be lowered in the event it is higher than a new max
 		///   commission.
-		#[pallet::call_index(18)]
-		#[pallet::weight(T::WeightInfo::set_commission_max())]
+		#[pezpallet::call_index(18)]
+		#[pezpallet::weight(T::WeightInfo::set_commission_max())]
 		pub fn set_commission_max(
 			origin: OriginFor<T>,
 			pool_id: PoolId,
@@ -3037,8 +3037,8 @@ pub mod pallet {
 		///
 		/// Initial change rate is not bounded, whereas subsequent updates can only be more
 		/// restrictive than the current.
-		#[pallet::call_index(19)]
-		#[pallet::weight(T::WeightInfo::set_commission_change_rate())]
+		#[pezpallet::call_index(19)]
+		#[pezpallet::weight(T::WeightInfo::set_commission_change_rate())]
 		pub fn set_commission_change_rate(
 			origin: OriginFor<T>,
 			pool_id: PoolId,
@@ -3076,8 +3076,8 @@ pub mod pallet {
 		///
 		/// Pending commissions are paid out and added to the total claimed commission.
 		/// The total pending commission is reset to zero.
-		#[pallet::call_index(20)]
-		#[pallet::weight(T::WeightInfo::claim_commission())]
+		#[pezpallet::call_index(20)]
+		#[pezpallet::weight(T::WeightInfo::claim_commission())]
 		pub fn claim_commission(origin: OriginFor<T>, pool_id: PoolId) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 			// ensure pool is not in an un-migrated state.
@@ -3093,8 +3093,8 @@ pub mod pallet {
 		/// insufficient to cover the ED deficit of the pool or vice-versa where there is excess
 		/// deposit to the pool. This call allows anyone to adjust the ED deposit of the
 		/// pool by either topping up the deficit or claiming the excess.
-		#[pallet::call_index(21)]
-		#[pallet::weight(T::WeightInfo::adjust_pool_deposit())]
+		#[pezpallet::call_index(21)]
+		#[pezpallet::weight(T::WeightInfo::adjust_pool_deposit())]
 		pub fn adjust_pool_deposit(origin: OriginFor<T>, pool_id: PoolId) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 			// ensure pool is not in an un-migrated state.
@@ -3107,8 +3107,8 @@ pub mod pallet {
 		///
 		/// Determines who can claim the pool's pending commission. Only the `Root` role of the pool
 		/// is able to configure commission claim permissions.
-		#[pallet::call_index(22)]
-		#[pallet::weight(T::WeightInfo::set_commission_claim_permission())]
+		#[pezpallet::call_index(22)]
+		#[pezpallet::weight(T::WeightInfo::set_commission_claim_permission())]
 		pub fn set_commission_claim_permission(
 			origin: OriginFor<T>,
 			pool_id: PoolId,
@@ -3133,15 +3133,15 @@ pub mod pallet {
 
 		/// Apply a pending slash on a member.
 		///
-		/// Fails unless [`crate::pallet::Config::StakeAdapter`] is of strategy type:
+		/// Fails unless [`crate::pezpallet::Config::StakeAdapter`] is of strategy type:
 		/// [`adapter::StakeStrategyType::Delegate`].
 		///
 		/// The pending slash amount of the member must be equal or more than `ExistentialDeposit`.
 		/// This call can be dispatched permissionlessly (i.e. by any account). If the execution
 		/// is successful, fee is refunded and caller may be rewarded with a part of the slash
-		/// based on the [`crate::pallet::Config::StakeAdapter`] configuration.
-		#[pallet::call_index(23)]
-		#[pallet::weight(T::WeightInfo::apply_slash())]
+		/// based on the [`crate::pezpallet::Config::StakeAdapter`] configuration.
+		#[pezpallet::call_index(23)]
+		#[pezpallet::weight(T::WeightInfo::apply_slash())]
 		pub fn apply_slash(
 			origin: OriginFor<T>,
 			member_account: AccountIdLookupOf<T>,
@@ -3161,15 +3161,15 @@ pub mod pallet {
 
 		/// Migrates delegated funds from the pool account to the `member_account`.
 		///
-		/// Fails unless [`crate::pallet::Config::StakeAdapter`] is of strategy type:
+		/// Fails unless [`crate::pezpallet::Config::StakeAdapter`] is of strategy type:
 		/// [`adapter::StakeStrategyType::Delegate`].
 		///
 		/// This is a permission-less call and refunds any fee if claim is successful.
 		///
 		/// If the pool has migrated to delegation based staking, the staked tokens of pool members
 		/// can be moved and held in their own account. See [`adapter::DelegateStake`]
-		#[pallet::call_index(24)]
-		#[pallet::weight(T::WeightInfo::migrate_delegation())]
+		#[pezpallet::call_index(24)]
+		#[pezpallet::weight(T::WeightInfo::migrate_delegation())]
 		pub fn migrate_delegation(
 			origin: OriginFor<T>,
 			member_account: AccountIdLookupOf<T>,
@@ -3211,7 +3211,7 @@ pub mod pallet {
 			ensure!(delegation.is_none(), Error::<T>::AlreadyMigrated);
 
 			T::StakeAdapter::migrate_delegation(
-				Pool::from(Pallet::<T>::generate_bonded_account(member.pool_id)),
+				Pool::from(Pezpallet::<T>::generate_bonded_account(member.pool_id)),
 				Member::from(member_account),
 				pool_contribution,
 			)?;
@@ -3223,14 +3223,14 @@ pub mod pallet {
 		/// Migrate pool from [`adapter::StakeStrategyType::Transfer`] to
 		/// [`adapter::StakeStrategyType::Delegate`].
 		///
-		/// Fails unless [`crate::pallet::Config::StakeAdapter`] is of strategy type:
+		/// Fails unless [`crate::pezpallet::Config::StakeAdapter`] is of strategy type:
 		/// [`adapter::StakeStrategyType::Delegate`].
 		///
 		/// This call can be dispatched permissionlessly, and refunds any fee if successful.
 		///
 		/// If the pool has already migrated to delegation based staking, this call will fail.
-		#[pallet::call_index(25)]
-		#[pallet::weight(T::WeightInfo::pool_migrate())]
+		#[pezpallet::call_index(25)]
+		#[pezpallet::weight(T::WeightInfo::pool_migrate())]
 		pub fn migrate_pool_to_delegate_stake(
 			origin: OriginFor<T>,
 			pool_id: PoolId,
@@ -3255,8 +3255,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<SystemBlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<SystemBlockNumberFor<T>> for Pezpallet<T> {
 		#[cfg(feature = "try-runtime")]
 		fn try_state(_n: SystemBlockNumberFor<T>) -> Result<(), TryRuntimeError> {
 			Self::do_try_state(u8::MAX)
@@ -3277,14 +3277,14 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// The amount of bond that MUST REMAIN IN BONDED in ALL POOLS.
 	///
 	/// It is the responsibility of the depositor to put these funds into the pool initially. Upon
 	/// unbond, they can never unbond to a value below this amount.
 	///
 	/// It is essentially `max { MinNominatorBond, MinCreateBond, MinJoinBond }`, where the former
-	/// is coming from the staking pallet and the latter two are configured in this pallet.
+	/// is coming from the staking pezpallet and the latter two are configured in this pezpallet.
 	pub fn depositor_min_bond() -> BalanceOf<T> {
 		T::StakeAdapter::minimum_nominator_bond()
 			.max(MinCreateBond::<T>::get())
@@ -3308,22 +3308,22 @@ impl<T: Config> Pallet<T> {
 
 		// Kill accounts from storage by making their balance go below ED. We assume that the
 		// accounts have no references that would prevent destruction once we get to this point. We
-		// don't work with the system pallet directly, but
+		// don't work with the system pezpallet directly, but
 		// 1. we drain the reward account and kill it. This account should never have any extra
 		// consumers anyway.
 		// 2. the bonded account should become a 'killed stash' in the staking system, and all of
 		//    its consumers removed.
 		defensive_assert!(
-			pezframe_system::Pallet::<T>::consumers(&reward_account) == 0,
+			pezframe_system::Pezpallet::<T>::consumers(&reward_account) == 0,
 			"reward account of dissolving pool should have no consumers"
 		);
 		defensive_assert!(
-			pezframe_system::Pallet::<T>::consumers(&bonded_account) == 0,
+			pezframe_system::Pezpallet::<T>::consumers(&bonded_account) == 0,
 			"bonded account of dissolving pool should have no consumers"
 		);
 		defensive_assert!(
 			T::StakeAdapter::total_stake(Pool::from(bonded_pool.bonded_account())) == Zero::zero(),
-			"dissolving pool should not have any stake in the staking pallet"
+			"dissolving pool should not have any stake in the staking pezpallet"
 		);
 
 		// This shouldn't fail, but if it does we don't really care. Remaining balance can consist
@@ -3521,7 +3521,7 @@ impl<T: Config> Pallet<T> {
 		let nominator = T::Lookup::lookup(nominator)?;
 		let bouncer = T::Lookup::lookup(bouncer)?;
 
-		ensure!(amount >= Pallet::<T>::depositor_min_bond(), Error::<T>::MinimumBondNotMet);
+		ensure!(amount >= Pezpallet::<T>::depositor_min_bond(), Error::<T>::MinimumBondNotMet);
 		ensure!(
 			MaxPools::<T>::get().map_or(true, |max_pools| BondedPools::<T>::count() < max_pools),
 			Error::<T>::MaxPools
@@ -3760,7 +3760,7 @@ impl<T: Config> Pallet<T> {
 
 		T::StakeAdapter::member_slash(
 			Member::from(member_account.clone()),
-			Pool::from(Pallet::<T>::generate_bonded_account(member.pool_id)),
+			Pool::from(Pezpallet::<T>::generate_bonded_account(member.pool_id)),
 			pending_slash,
 			reporter,
 		)
@@ -3779,7 +3779,7 @@ impl<T: Config> Pallet<T> {
 				pool_member
 		);
 
-		let pool_account = Pallet::<T>::generate_bonded_account(pool_member.pool_id);
+		let pool_account = Pezpallet::<T>::generate_bonded_account(pool_member.pool_id);
 		// if the pool doesn't have any pending slash, it implies the member also does not have any
 		// pending slash.
 		if T::StakeAdapter::pending_slash(Pool::from(pool_account.clone())).is_zero() {
@@ -3812,9 +3812,9 @@ impl<T: Config> Pallet<T> {
 		T::Currency::thaw(&FreezeReason::PoolMinBalance.into(), reward_acc)
 	}
 
-	/// Ensure the correctness of the state of this pallet.
+	/// Ensure the correctness of the state of this pezpallet.
 	///
-	/// This should be valid before or after each state transition of this pallet.
+	/// This should be valid before or after each state transition of this pezpallet.
 	///
 	/// ## Invariants:
 	///
@@ -4000,7 +4000,7 @@ impl<T: Config> Pallet<T> {
 		}
 
 		for (pool_id, _pool) in BondedPools::<T>::iter() {
-			let pool_account = Pallet::<T>::generate_bonded_account(pool_id);
+			let pool_account = Pezpallet::<T>::generate_bonded_account(pool_id);
 			let subs = SubPoolsStorage::<T>::get(pool_id).unwrap_or_default();
 
 			let sum_unbonding_balance = subs.sum_unbonding_balance();
@@ -4078,7 +4078,7 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Returns the pending rewards for the specified `who` account.
 	///
 	/// In the case of error, `None` is returned. Used by runtime API.
@@ -4116,7 +4116,7 @@ impl<T: Config> Pallet<T> {
 		if let Some(pool) = BondedPool::<T>::get(pool_id) {
 			let bonded_balance =
 				T::StakeAdapter::active_stake(Pool::from(Self::generate_bonded_account(pool_id)));
-			Pallet::<T>::balance_to_point(bonded_balance, pool.points, new_funds)
+			Pezpallet::<T>::balance_to_point(bonded_balance, pool.points, new_funds)
 		} else {
 			Zero::zero()
 		}
@@ -4148,7 +4148,7 @@ impl<T: Config> Pallet<T> {
 	///
 	/// Useful to check this before calling [`Call::migrate_pool_to_delegate_stake`].
 	pub fn api_pool_needs_delegate_migration(pool_id: PoolId) -> bool {
-		// if the `Delegate` strategy is not used in the pallet, then no migration required.
+		// if the `Delegate` strategy is not used in the pezpallet, then no migration required.
 		if T::StakeAdapter::strategy_type() != adapter::StakeStrategyType::Delegate {
 			return false;
 		}
@@ -4171,7 +4171,7 @@ impl<T: Config> Pallet<T> {
 	///
 	/// Useful to check this before calling [`Call::migrate_delegation`].
 	pub fn api_member_needs_delegate_migration(who: T::AccountId) -> bool {
-		// if the `Delegate` strategy is not used in the pallet, then no migration required.
+		// if the `Delegate` strategy is not used in the pezpallet, then no migration required.
 		if T::StakeAdapter::strategy_type() != adapter::StakeStrategyType::Delegate {
 			return false;
 		}
@@ -4218,7 +4218,7 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-impl<T: Config> pezsp_staking::OnStakingUpdate<T::AccountId, BalanceOf<T>> for Pallet<T> {
+impl<T: Config> pezsp_staking::OnStakingUpdate<T::AccountId, BalanceOf<T>> for Pezpallet<T> {
 	/// Reduces the balances of the [`SubPools`], that belong to the pool involved in the
 	/// slash, to the amount that is defined in the `slashed_unlocking` field of
 	/// [`pezsp_staking::OnStakingUpdate::on_slash`]

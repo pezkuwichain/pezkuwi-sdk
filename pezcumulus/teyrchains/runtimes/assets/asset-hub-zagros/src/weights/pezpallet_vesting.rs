@@ -25,14 +25,14 @@
 // Executed Command:
 // ./target/production/pezkuwi
 // benchmark
-// pallet
+// pezpallet
 // --chain=zagros-dev
 // --steps=50
 // --repeat=20
 // --no-storage-info
 // --no-median-slopes
 // --no-min-squares
-// --pallet=pezpallet_vesting
+// --pezpallet=pezpallet_vesting
 // --extrinsic=*
 // --execution=wasm
 // --wasm-execution=compiled

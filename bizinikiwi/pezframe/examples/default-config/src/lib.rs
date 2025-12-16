@@ -21,9 +21,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-//! # Default Config Pallet Example
+//! # Default Config Pezpallet Example
 //!
-//! A simple example of a FRAME pallet that utilizes [`pezframe_support::derive_impl`] to demonstrate
+//! A simple example of a FRAME pezpallet that utilizes [`pezframe_support::derive_impl`] to demonstrate
 //! the simpler way to implement `Config` trait of pallets. This example only showcases this in a
 //! `mock.rs` environment, but the same applies to a real runtime as well.
 //!
@@ -31,31 +31,31 @@
 //!
 //! Study the following types:
 //!
-//! - [`pallet::DefaultConfig`], and how it differs from [`pallet::Config`].
-//! - [`struct@pallet::config_preludes::TestDefaultConfig`] and how it implements
-//!   [`pallet::DefaultConfig`].
-//! - Notice how [`pallet::DefaultConfig`] is independent of [`pezframe_system::Config`].
+//! - [`pezpallet::DefaultConfig`], and how it differs from [`pezpallet::Config`].
+//! - [`struct@pezpallet::config_preludes::TestDefaultConfig`] and how it implements
+//!   [`pezpallet::DefaultConfig`].
+//! - Notice how [`pezpallet::DefaultConfig`] is independent of [`pezframe_system::Config`].
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
 extern crate alloc;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use pezframe_support::pezpallet_prelude::*;
 
-	/// This pallet is annotated to have a default config. This will auto-generate
+	/// This pezpallet is annotated to have a default config. This will auto-generate
 	/// [`DefaultConfig`].
 	///
-	/// It will be an identical, but won't have anything that is `#[pallet::no_default]`.
-	#[pallet::config(with_default)]
+	/// It will be an identical, but won't have anything that is `#[pezpallet::no_default]`.
+	#[pezpallet::config(with_default)]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching task type. This is coming from the runtime, and cannot have a default.  
 		/// In general, `Runtime*`-oriented types cannot have a sensible default.
-		#[pallet::no_default] // optional. `RuntimeEvent` is automatically excluded as well.
+		#[pezpallet::no_default] // optional. `RuntimeEvent` is automatically excluded as well.
 		type RuntimeTask: Task;
 
-		/// An input parameter to this pallet. This value can have a default, because it is not
+		/// An input parameter to this pezpallet. This value can have a default, because it is not
 		/// reliant on `pezframe_system::Config` or the overarching runtime in any way.
 		type WithDefaultValue: Get<u32>;
 
@@ -69,13 +69,13 @@ pub mod pallet {
 
 		/// We might choose to declare as one that doesn't have a default, for whatever semantical
 		/// reason.
-		#[pallet::no_default]
+		#[pezpallet::no_default]
 		type HasNoDefault: Get<u32>;
 
 		/// Some types can technically have no default, such as those the rely on
 		/// `pezframe_system::Config` but are not present in `pezframe_system::DefaultConfig`. For
 		/// example, a `RuntimeCall` cannot reasonably have a default.
-		#[pallet::no_default] // if we skip this, there will be a compiler error.
+		#[pezpallet::no_default] // if we skip this, there will be a compiler error.
 		type CannotHaveDefault: Get<Self::RuntimeCall>;
 
 		/// Something that is a normal type, with default.
@@ -86,13 +86,13 @@ pub mod pallet {
 		type OverwrittenDefaultType;
 	}
 
-	/// Container for different types that implement [`DefaultConfig`]` of this pallet.
+	/// Container for different types that implement [`DefaultConfig`]` of this pezpallet.
 	pub mod config_preludes {
 		// This will help use not need to disambiguate anything when using `derive_impl`.
 		use super::*;
 		use pezframe_support::derive_impl;
 
-		/// A type providing default configurations for this pallet in testing environment.
+		/// A type providing default configurations for this pezpallet in testing environment.
 		pub struct TestDefaultConfig;
 
 		#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig, no_aggregated_types)]
@@ -110,7 +110,7 @@ pub mod pallet {
 			type OverwrittenDefaultType = u32;
 		}
 
-		/// A type providing default configurations for this pallet in another environment. Examples
+		/// A type providing default configurations for this pezpallet in another environment. Examples
 		/// could be a teyrchain, or a solochain.
 		///
 		/// Appropriate derive for `pezframe_system::DefaultConfig` needs to be provided. In this
@@ -130,10 +130,10 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::event]
+	#[pezpallet::event]
 	pub enum Event<T: Config> {}
 }
 
@@ -141,7 +141,7 @@ pub mod pallet {
 pub mod tests {
 	use super::*;
 	use pezframe_support::{derive_impl, parameter_types};
-	use pallet::{self as pezpallet_default_config_example, config_preludes::*};
+	use pezpallet::{self as pezpallet_default_config_example, config_preludes::*};
 
 	type Block = pezframe_system::mocking::MockBlock<Runtime>;
 
@@ -196,7 +196,7 @@ pub mod tests {
 		pub const SomeCall: RuntimeCall = RuntimeCall::System(pezframe_system::Call::<Runtime>::remark { remark: alloc::vec![] });
 	}
 
-	#[derive_impl(TestDefaultConfig as pallet::DefaultConfig)]
+	#[derive_impl(TestDefaultConfig as pezpallet::DefaultConfig)]
 	impl pezpallet_default_config_example::Config for Runtime {
 		// This cannot have default.
 		type RuntimeTask = RuntimeTask;
@@ -211,7 +211,7 @@ pub mod tests {
 	#[test]
 	fn it_works() {
 		use pezframe_support::traits::Get;
-		use pallet::{Config, DefaultConfig};
+		use pezpallet::{Config, DefaultConfig};
 
 		// assert one of the value types that is not overwritten.
 		assert_eq!(

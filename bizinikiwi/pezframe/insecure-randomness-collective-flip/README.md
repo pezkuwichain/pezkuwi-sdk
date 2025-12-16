@@ -8,7 +8,7 @@ production use-cases.
 The Randomness Collective Flip module provides a
 [`random`](https://docs.rs/pezpallet-insecure-randomness-collective-flip/latest/pallet_insecure_randomness_collective_flip/struct.Module.html#method.random)
 function that generates low-influence random values based on the block hashes from the previous `81` blocks.
-Low-influence randomness can be useful when defending against relatively weak adversaries. Using this pallet as a
+Low-influence randomness can be useful when defending against relatively weak adversaries. Using this pezpallet as a
 randomness source is advisable primarily in low-security situations like testing.
 
 ## Public Functions
@@ -28,23 +28,23 @@ Import the Randomness Collective Flip module and derive your module's configurat
 ```rust
 use frame_support::traits::Randomness;
 
-#[frame_support::pallet]
-pub mod pallet {
+#[frame_support::pezpallet]
+pub mod pezpallet {
     use super::*;
     use frame_support::pallet_prelude::*;
     use frame_system::pallet_prelude::*;
 
-    #[pallet::pallet]
-    pub struct Pallet<T>(_);
+    #[pezpallet::pezpallet]
+    pub struct Pezpallet<T>(_);
 
-    #[pallet::config]
+    #[pezpallet::config]
     pub trait Config: frame_system::Config + pallet_insecure_randomness_collective_flip::Config {}
 
-    #[pallet::call]
-    impl<T: Config> Pallet<T> {
-        #[pallet::weight(0)]
+    #[pezpallet::call]
+    impl<T: Config> Pezpallet<T> {
+        #[pezpallet::weight(0)]
         pub fn random_module_example(origin: OriginFor<T>) -> DispatchResult {
-            let _random_value = pallet_insecure_randomness_collective_flip::Pallet::<T>::random(&b"my context"[..]);
+            let _random_value = pallet_insecure_randomness_collective_flip::Pezpallet::<T>::random(&b"my context"[..]);
             Ok(())
         }
     }

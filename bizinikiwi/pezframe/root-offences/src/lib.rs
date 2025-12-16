@@ -15,10 +15,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Root Offences Pallet
-//! Pallet that allows the root to create an offence.
+//! # Root Offences Pezpallet
+//! Pezpallet that allows the root to create an offence.
 //!
-//! NOTE: This pallet should be used for testing purposes.
+//! NOTE: This pezpallet should be used for testing purposes.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
@@ -29,13 +29,13 @@ mod tests;
 
 extern crate alloc;
 use alloc::{vec, vec::Vec};
-pub use pallet::*;
+pub use pezpallet::*;
 use pezpallet_session::historical::IdentificationTuple;
 use pezsp_runtime::{traits::Convert, Perbill};
 use pezsp_staking::offence::{Kind, Offence, OnOffenceHandler};
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
@@ -81,7 +81,7 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config:
 		pezframe_system::Config
 		+ pezpallet_staking::Config
@@ -106,19 +106,19 @@ pub mod pallet {
 		>;
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// An offence was created by root.
 		OffenceCreated { offenders: Vec<(T::AccountId, Perbill)> },
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
-		/// Failed to get the active era from the staking pallet.
+		/// Failed to get the active era from the staking pezpallet.
 		FailedToGetActiveEra,
 	}
 
@@ -127,14 +127,14 @@ pub mod pallet {
 		IdentificationTuple<T>,
 	>;
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Allows the `root`, for example sudo to create an offence.
 		///
 		/// If `identifications` is `Some`, then the given identification is used for offence. Else,
 		/// it is fetched live from `session::Historical`.
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::DbWeight::get().reads(2))]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::DbWeight::get().reads(2))]
 		pub fn create_offence(
 			origin: OriginFor<T>,
 			offenders: Vec<(T::AccountId, Perbill)>,
@@ -168,7 +168,7 @@ pub mod pallet {
 			Ok(())
 		}
 
-		/// Same as [`Pallet::create_offence`], but it reports the offence directly to a
+		/// Same as [`Pezpallet::create_offence`], but it reports the offence directly to a
 		/// [`Config::ReportOffence`], aka pezpallet-offences first.
 		///
 		/// This is useful for more accurate testing of the e2e offence processing pipeline, as it
@@ -177,8 +177,8 @@ pub mod pallet {
 		/// It generates an offence of type [`TestSpamOffence`], with cas a fixed `ID`, but can have
 		/// any `time_slot`, `session_index``, and `slash_fraction`. These values are the inputs of
 		/// transaction, int the same order, with an `IdentiticationTuple` coming first.
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::DbWeight::get().reads(2))]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::DbWeight::get().reads(2))]
 		pub fn report_offence(
 			origin: OriginFor<T>,
 			offences: Vec<(IdentificationTuple<T>, SessionIndex, u128, u32)>,
@@ -200,7 +200,7 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config> Pallet<T> {
+	impl<T: Config> Pezpallet<T> {
 		/// Returns a vector of offenders that are going to be slashed.
 		fn get_offence_details(
 			offenders: Vec<(T::AccountId, Perbill)>,
@@ -224,7 +224,7 @@ pub mod pallet {
 			maybe_session_index: Option<SessionIndex>,
 		) {
 			let session_index = maybe_session_index.unwrap_or_else(|| {
-				<pezpallet_session::Pallet<T> as pezframe_support::traits::ValidatorSet<
+				<pezpallet_session::Pezpallet<T> as pezframe_support::traits::ValidatorSet<
 						T::AccountId,
 					>>::session_index()
 			});

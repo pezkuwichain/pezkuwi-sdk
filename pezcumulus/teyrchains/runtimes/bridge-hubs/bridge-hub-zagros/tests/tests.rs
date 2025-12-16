@@ -107,7 +107,7 @@ fn construct_extrinsic(
 			pezframe_system::CheckGenesis::<Runtime>::new(),
 			pezframe_system::CheckEra::<Runtime>::from(Era::immortal()),
 			pezframe_system::CheckNonce::<Runtime>::from(
-				pezframe_system::Pallet::<Runtime>::account(&account_id).nonce,
+				pezframe_system::Pezpallet::<Runtime>::account(&account_id).nonce,
 			),
 			pezframe_system::CheckWeight::<Runtime>::new(),
 		),

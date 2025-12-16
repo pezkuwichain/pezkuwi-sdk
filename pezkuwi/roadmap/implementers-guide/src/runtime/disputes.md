@@ -1,4 +1,4 @@
-# Disputes Pallet
+# Disputes Pezpallet
 
 After a backed candidate is made available, it is included and proceeds into an acceptance period during which
 validators are randomly selected to do (secondary) approval checks of the parablock. Any reports disputing the validity
@@ -134,7 +134,7 @@ means persisted in the runtime storage. The filtering has got two purposes:
 * Limit the amount of data saved onchain.
 * Prevent persisting malicious dispute data onchain.
 
-*Implementation note*: Filtering is performed in function `filter_dispute_data` from `Disputes` pallet.
+*Implementation note*: Filtering is performed in function `filter_dispute_data` from `Disputes` pezpallet.
 
 The filtering is performed on the whole statement set which is about to be imported onchain. The following filters are
 applied:
@@ -164,4 +164,4 @@ inconclusive disputes are not slashed. Thanks to the applied filtering (describe
 confident that there are no spam disputes in the runtime. So if a validator is not voting it is due to another reason
 (e.g. being under DoS attack). There is no reason to punish such validators with a slash.
 
-*Implementation note*: Slashing is performed in `process_checked_dispute_data` from `Disputes` pallet.
+*Implementation note*: Slashing is performed in `process_checked_dispute_data` from `Disputes` pezpallet.

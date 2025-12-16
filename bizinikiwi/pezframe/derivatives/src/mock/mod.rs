@@ -17,33 +17,33 @@
 
 //! Test environment for `pezpallet-derivatives`.
 //!
-//! It contains a simple NFT-like `unique_items` pallet that emulate both NFT collections and their
-//! tokens (depending on the pallet instance). This test pallet is instatiated three times in the
+//! It contains a simple NFT-like `unique_items` pezpallet that emulate both NFT collections and their
+//! tokens (depending on the pezpallet instance). This test pezpallet is instatiated three times in the
 //! test environment to cover the usage scenarios of `pezpallet-derivatives` described in it's crate
 //! doc comment.
 //!
 //! * The first instance, called `PredefinedIdCollections`, emulates NFT collections that are
 //!   created with a predefined ID.
 //! The ID is set to XCM `AssetId`, so a derivative collection can be created directly using the
-//! foreign collection's ID. This pallet instance illustrates and tests the `pezpallet-derivatives`
+//! foreign collection's ID. This pezpallet instance illustrates and tests the `pezpallet-derivatives`
 //! usage scenario #1 (i.e., when no suitable way of directly creating a derivative collection is
-//! provided by the hosting pallet). The configuration of this instance can be found in the
+//! provided by the hosting pezpallet). The configuration of this instance can be found in the
 //! [predefined_id_collections] module. The corresponding `pezpallet-derivatives` instance is called
 //! `PredefinedIdDerivativeCollections`.
 //!
 //! * The second instance, called `AutoIdCollections`, emulates NFT collections that are created
 //!   with an automatically assigned ID (e.g., an incremental one).
 //! The ID is set to `u64`, so a mapping between the foreign collection's ID and the derivative
-//! collection ID is needed. This pallet instance illustrates and tests the `pezpallet-derivatives`
+//! collection ID is needed. This pezpallet instance illustrates and tests the `pezpallet-derivatives`
 //! usage scenario #2 combined with scenario #1 (since we also test manual collection creation and
 //! destruction). The configuration of this instance can be found in the [auto_id_collections]
 //! module. The corresponding `pezpallet-derivatives` instance is called `AutoIdDerivativeCollections`.
 //!
 //! * The third instance, called `PredefinedIdNfts`, emulates non-fungible tokens within collections
-//!   from the pallet's second instance.
+//!   from the pezpallet's second instance.
 //! The full NFT ID is a tuple consisting of the collection ID and a token ID, both of which are of
 //! the `u64` type. Since a foreign NFT is identified by `(AssetId, AssetInstance)`, we need the
-//! mapping between it and the derivative NFT ID. This pallet instance illustrates and tests the
+//! mapping between it and the derivative NFT ID. This pezpallet instance illustrates and tests the
 //! `pezpallet-derivatives` usage scenario #2 without scenario #1 (the manual creation and destruction
 //! of derivative NFTs is forbidden). The configuration of this instance can be found in the
 //! [auto_id_nfts] module. The corresponding `pezpallet-derivatives` instance is called
@@ -84,32 +84,32 @@ type AccountId = u64;
 type Block = pezframe_system::mocking::MockBlock<Test>;
 type Balance = u64;
 
-#[pezframe_support::pallet]
+#[pezframe_support::pezpallet]
 pub mod unique_items {
 	use pezframe_support::pezpallet_prelude::*;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config {
 		type ItemId: Member + Parameter + MaxEncodedLen + TypeInfo;
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T, I = ()>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T, I = ()>(_);
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T, I = ()> {
 		AlreadyExists,
 		NoPermission,
 		UnknownItem,
 	}
 
-	#[pallet::event]
+	#[pezpallet::event]
 	pub enum Event<T: Config<I>, I: 'static = ()> {}
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type CurrentItemId<T: Config<I>, I: 'static = ()> = StorageValue<_, T::ItemId, OptionQuery>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ItemOwner<T: Config<I>, I: 'static = ()> =
 		StorageMap<_, Blake2_128Concat, T::ItemId, T::AccountId, OptionQuery>;
 }
@@ -234,7 +234,7 @@ pub type CreateDerivativeOwnedBySovAcc<IdAssignment, CreateOp, InvalidAssetErr> 
 	>;
 
 /// The `pezpallet-derivatives` instance corresponding to the `PredefinedIdCollections` instance of the
-/// `unique_items` mock pallet.
+/// `unique_items` mock pezpallet.
 pub type PredefinedIdDerivativeCollectionsInstance = pezpallet_derivatives::Instance1;
 impl pezpallet_derivatives::Config<PredefinedIdDerivativeCollectionsInstance> for Test {
 	type WeightInfo = pezpallet_derivatives::TestWeightInfo;
@@ -246,7 +246,7 @@ impl pezpallet_derivatives::Config<PredefinedIdDerivativeCollectionsInstance> fo
 
 	type CreateOrigin = EnsureSigned<AccountId>;
 
-	// `NoStoredMapping` tells the pallet not to store the mapping between the `Original` and the
+	// `NoStoredMapping` tells the pezpallet not to store the mapping between the `Original` and the
 	// `Derivative`
 	type CreateOp = pezpallet_derivatives::NoStoredMapping<
 		CreateDerivativeOwnedBySovAcc<
@@ -261,7 +261,7 @@ impl pezpallet_derivatives::Config<PredefinedIdDerivativeCollectionsInstance> fo
 }
 
 /// The `pezpallet-derivatives` instance corresponding to the `AutoIdCollections` instance of the
-/// `unique_items` mock pallet.
+/// `unique_items` mock pezpallet.
 pub type AutoIdDerivativeCollectionsInstance = pezpallet_derivatives::Instance2;
 impl pezpallet_derivatives::Config<AutoIdDerivativeCollectionsInstance> for Test {
 	type WeightInfo = pezpallet_derivatives::TestWeightInfo;
@@ -274,7 +274,7 @@ impl pezpallet_derivatives::Config<AutoIdDerivativeCollectionsInstance> for Test
 
 	type CreateOrigin = EnsureSigned<AccountId>;
 
-	// `StoreMapping` tells the pallet to store the mapping between the `Original` and the
+	// `StoreMapping` tells the pezpallet to store the mapping between the `Original` and the
 	// `Derivative`
 	type CreateOp = pezpallet_derivatives::StoreMapping<
 		CreateDerivativeOwnedBySovAcc<
@@ -300,7 +300,7 @@ impl pezpallet_derivatives::Config<AutoIdDerivativeCollectionsInstance> for Test
 }
 
 /// The `pezpallet-derivatives` instance corresponding to the `PredefinedIdNfts` instance of the
-/// `unique_items` mock pallet.
+/// `unique_items` mock pezpallet.
 pub type DerivativeNftsInstance = pezpallet_derivatives::Instance3;
 impl pezpallet_derivatives::Config<DerivativeNftsInstance> for Test {
 	type WeightInfo = pezpallet_derivatives::TestWeightInfo;
@@ -319,7 +319,7 @@ impl pezpallet_derivatives::Config<DerivativeNftsInstance> for Test {
 	type DestroyOp = DisabledOps<Self::Original>;
 }
 
-/// Matches NFTs within the `PredefinedIdNfts` pallet.
+/// Matches NFTs within the `PredefinedIdNfts` pezpallet.
 /// These NFTs are considered "local" since they are minted on this chain.
 pub type LocalNftsMatcher = MatchInClassInstances<
 	MatchedConvertedConcreteId<

@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Implementation of `fungible` traits for Balances pallet.
+//! Implementation of `fungible` traits for Balances pezpallet.
 use super::*;
 use pezframe_support::traits::{
 	tokens::{
@@ -26,7 +26,7 @@ use pezframe_support::traits::{
 	AccountTouch,
 };
 
-impl<T: Config<I>, I: 'static> fungible::Inspect<T::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> fungible::Inspect<T::AccountId> for Pezpallet<T, I> {
 	type Balance = T::Balance;
 
 	fn total_issuance() -> Self::Balance {
@@ -60,10 +60,10 @@ impl<T: Config<I>, I: 'static> fungible::Inspect<T::AccountId> for Pallet<T, I> 
 		if preservation == Preserve
 			// ..or we don't want the account to die and our provider ref is needed for it to live..
 			|| preservation == Protect && !a.free.is_zero() &&
-				pezframe_system::Pallet::<T>::providers(who) == 1
+				pezframe_system::Pezpallet::<T>::providers(who) == 1
 			// ..or we don't care about the account dying but our provider ref is required..
 			|| preservation == Expendable && !a.free.is_zero() &&
-				!pezframe_system::Pallet::<T>::can_dec_provider(who)
+				!pezframe_system::Pezpallet::<T>::can_dec_provider(who)
 		{
 			// ..then the ED needed..
 			untouchable = untouchable.max(T::ExistentialDeposit::get());
@@ -126,11 +126,11 @@ impl<T: Config<I>, I: 'static> fungible::Inspect<T::AccountId> for Pallet<T, I> 
 
 		// Provider restriction - total account balance cannot be reduced to zero if it cannot
 		// sustain the loss of a provider reference.
-		// NOTE: This assumes that the pallet is a provider (which is true). Is this ever changes,
+		// NOTE: This assumes that the pezpallet is a provider (which is true). Is this ever changes,
 		// then this will need to adapt accordingly.
 		let ed = T::ExistentialDeposit::get();
 		let success = if new_free_balance < ed {
-			if pezframe_system::Pallet::<T>::can_dec_provider(who) {
+			if pezframe_system::Pezpallet::<T>::can_dec_provider(who) {
 				WithdrawConsequence::ReducedToZero(new_free_balance)
 			} else {
 				return WithdrawConsequence::WouldDie;
@@ -150,7 +150,7 @@ impl<T: Config<I>, I: 'static> fungible::Inspect<T::AccountId> for Pallet<T, I> 
 	}
 }
 
-impl<T: Config<I>, I: 'static> fungible::Unbalanced<T::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> fungible::Unbalanced<T::AccountId> for Pezpallet<T, I> {
 	fn handle_dust(dust: fungible::Dust<T::AccountId, Self>) {
 		T::DustRemoval::on_unbalanced(dust.into_credit());
 	}
@@ -188,7 +188,7 @@ impl<T: Config<I>, I: 'static> fungible::Unbalanced<T::AccountId> for Pallet<T, 
 	}
 }
 
-impl<T: Config<I>, I: 'static> fungible::Mutate<T::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> fungible::Mutate<T::AccountId> for Pezpallet<T, I> {
 	fn done_mint_into(who: &T::AccountId, amount: Self::Balance) {
 		Self::deposit_event(Event::<T, I>::Minted { who: who.clone(), amount });
 	}
@@ -210,7 +210,7 @@ impl<T: Config<I>, I: 'static> fungible::Mutate<T::AccountId> for Pallet<T, I> {
 	}
 }
 
-impl<T: Config<I>, I: 'static> fungible::MutateHold<T::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> fungible::MutateHold<T::AccountId> for Pezpallet<T, I> {
 	fn done_hold(reason: &Self::Reason, who: &T::AccountId, amount: Self::Balance) {
 		Self::deposit_event(Event::<T, I>::Held { reason: *reason, who: who.clone(), amount });
 	}
@@ -253,7 +253,7 @@ impl<T: Config<I>, I: 'static> fungible::MutateHold<T::AccountId> for Pallet<T, 
 	}
 }
 
-impl<T: Config<I>, I: 'static> fungible::InspectHold<T::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> fungible::InspectHold<T::AccountId> for Pezpallet<T, I> {
 	type Reason = T::RuntimeHoldReason;
 
 	fn total_balance_on_hold(who: &T::AccountId) -> T::Balance {
@@ -278,7 +278,7 @@ impl<T: Config<I>, I: 'static> fungible::InspectHold<T::AccountId> for Pallet<T,
 			.map_or_else(Zero::zero, |x| x.amount)
 	}
 	fn hold_available(reason: &Self::Reason, who: &T::AccountId) -> bool {
-		if pezframe_system::Pallet::<T>::providers(who) == 0 {
+		if pezframe_system::Pezpallet::<T>::providers(who) == 0 {
 			return false;
 		}
 		let holds = Holds::<T, I>::get(who);
@@ -289,7 +289,7 @@ impl<T: Config<I>, I: 'static> fungible::InspectHold<T::AccountId> for Pallet<T,
 	}
 }
 
-impl<T: Config<I>, I: 'static> fungible::UnbalancedHold<T::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> fungible::UnbalancedHold<T::AccountId> for Pezpallet<T, I> {
 	fn set_balance_on_hold(
 		reason: &Self::Reason,
 		who: &T::AccountId,
@@ -333,7 +333,7 @@ impl<T: Config<I>, I: 'static> fungible::UnbalancedHold<T::AccountId> for Pallet
 	}
 }
 
-impl<T: Config<I>, I: 'static> fungible::InspectFreeze<T::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> fungible::InspectFreeze<T::AccountId> for Pezpallet<T, I> {
 	type Id = T::FreezeIdentifier;
 
 	fn balance_frozen(id: &Self::Id, who: &T::AccountId) -> Self::Balance {
@@ -347,7 +347,7 @@ impl<T: Config<I>, I: 'static> fungible::InspectFreeze<T::AccountId> for Pallet<
 	}
 }
 
-impl<T: Config<I>, I: 'static> fungible::MutateFreeze<T::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> fungible::MutateFreeze<T::AccountId> for Pezpallet<T, I> {
 	fn set_freeze(id: &Self::Id, who: &T::AccountId, amount: Self::Balance) -> DispatchResult {
 		if amount.is_zero() {
 			return Self::thaw(id, who);
@@ -385,7 +385,7 @@ impl<T: Config<I>, I: 'static> fungible::MutateFreeze<T::AccountId> for Pallet<T
 	}
 }
 
-impl<T: Config<I>, I: 'static> fungible::Balanced<T::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> fungible::Balanced<T::AccountId> for Pezpallet<T, I> {
 	type OnDropCredit = NegativeImbalance<T, I>;
 	type OnDropDebt = PositiveImbalance<T, I>;
 
@@ -405,17 +405,17 @@ impl<T: Config<I>, I: 'static> fungible::Balanced<T::AccountId> for Pallet<T, I>
 	}
 }
 
-impl<T: Config<I>, I: 'static> fungible::BalancedHold<T::AccountId> for Pallet<T, I> {}
+impl<T: Config<I>, I: 'static> fungible::BalancedHold<T::AccountId> for Pezpallet<T, I> {}
 
 impl<T: Config<I>, I: 'static>
-	fungible::hold::DoneSlash<T::RuntimeHoldReason, T::AccountId, T::Balance> for Pallet<T, I>
+	fungible::hold::DoneSlash<T::RuntimeHoldReason, T::AccountId, T::Balance> for Pezpallet<T, I>
 {
 	fn done_slash(reason: &T::RuntimeHoldReason, who: &T::AccountId, amount: T::Balance) {
 		T::DoneSlashHandler::done_slash(reason, who, amount);
 	}
 }
 
-impl<T: Config<I>, I: 'static> AccountTouch<(), T::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> AccountTouch<(), T::AccountId> for Pezpallet<T, I> {
 	type Balance = T::Balance;
 	fn deposit_required(_: ()) -> Self::Balance {
 		Self::Balance::zero()

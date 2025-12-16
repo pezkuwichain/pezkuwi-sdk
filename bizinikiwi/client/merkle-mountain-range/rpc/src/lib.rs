@@ -18,7 +18,7 @@
 #![warn(missing_docs)]
 #![warn(unused_crate_dependencies)]
 
-//! Node-specific RPC methods for interaction with Merkle Mountain Range pallet.
+//! Node-specific RPC methods for interaction with Merkle Mountain Range pezpallet.
 
 use std::{marker::PhantomData, sync::Arc};
 
@@ -81,7 +81,7 @@ pub trait MmrApi<BlockHash, BlockNumber, MmrHash> {
 
 	/// Generate an MMR proof for the given `block_numbers`.
 	///
-	/// This method calls into a runtime with MMR pallet included and attempts to generate
+	/// This method calls into a runtime with MMR pezpallet included and attempts to generate
 	/// an MMR proof for the set of blocks that have the given `block_numbers` with the MMR root at
 	/// `best_known_block_number`. `best_known_block_number` must be larger than all the
 	/// `block_numbers` for the function to succeed.
@@ -108,7 +108,7 @@ pub trait MmrApi<BlockHash, BlockNumber, MmrHash> {
 
 	/// Generate an MMR ancestry proof for the given `prev_block_number`.
 	///
-	/// This method calls into a runtime with MMR pallet included and attempts to generate
+	/// This method calls into a runtime with MMR pezpallet included and attempts to generate
 	/// an MMR ancestry proof for the MMR root at the prior block with number `prev_block_number`,
 	/// with the reference MMR root at `best_known_block_number`. `best_known_block_number` must be
 	/// larger than the `prev_block_number` for the function to succeed.
@@ -134,7 +134,7 @@ pub trait MmrApi<BlockHash, BlockNumber, MmrHash> {
 
 	/// Verify an MMR `proof`.
 	///
-	/// This method calls into a runtime with MMR pallet included and attempts to verify
+	/// This method calls into a runtime with MMR pezpallet included and attempts to verify
 	/// an MMR proof.
 	///
 	/// Returns `true` if the proof is valid, else returns the verification error.
@@ -143,7 +143,7 @@ pub trait MmrApi<BlockHash, BlockNumber, MmrHash> {
 
 	/// Verify an MMR `proof` statelessly given an `mmr_root`.
 	///
-	/// This method calls into a runtime with MMR pallet included and attempts to verify
+	/// This method calls into a runtime with MMR pezpallet included and attempts to verify
 	/// an MMR proof against a provided MMR root.
 	///
 	/// Returns `true` if the proof is valid, else returns the verification error.

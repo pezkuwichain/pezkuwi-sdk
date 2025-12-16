@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Mostly pallet doc-tests. Real tests are in [`super::paged_list`] and crate
+//! Mostly pezpallet doc-tests. Real tests are in [`super::paged_list`] and crate
 //! `pezpallet-paged-list-fuzzer`.
 
 #![cfg(test)]

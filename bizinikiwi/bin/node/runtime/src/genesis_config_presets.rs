@@ -75,7 +75,7 @@ pub fn kitchensink_genesis(
 				.map(|x| x.0.clone())
 				.collect::<Vec<_>>()
 				.try_into()
-				.expect("Too many invulnerable validators: upper limit is MaxInvulnerables from pallet staking config"),
+				.expect("Too many invulnerable validators: upper limit is MaxInvulnerables from pezpallet staking config"),
 			slash_reward_fraction: Perbill::from_percent(10),
 			stakers,
 		},
@@ -87,7 +87,7 @@ pub fn kitchensink_genesis(
 		babe: BabeConfig { epoch_config: BABE_GENESIS_EPOCH_CONFIG },
 		society: SocietyConfig { pot: 0 },
 		assets: AssetsConfig {
-			// This asset is used by the NIS pallet as counterpart currency.
+			// This asset is used by the NIS pezpallet as counterpart currency.
 			assets: vec![(9, Sr25519Keyring::Alice.to_account_id(), true, 1)],
 			..Default::default()
 		},

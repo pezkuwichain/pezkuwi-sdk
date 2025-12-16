@@ -28,10 +28,10 @@
 // ./target/release/frame-omni-bencher
 // v1
 // benchmark
-// pallet
+// pezpallet
 // --runtime
 // ./target/release/wbuild/pezpallet-staking-async-teyrchain-runtime/pezpallet_staking_async_teyrchain_runtime.compact.compressed.wasm
-// --pallet
+// --pezpallet
 // pezpallet_staking_async
 // --extrinsic
 // *

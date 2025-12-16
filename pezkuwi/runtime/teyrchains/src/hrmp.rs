@@ -38,12 +38,12 @@ use pezsp_runtime::{
 	ArithmeticError,
 };
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 /// Maximum bound that can be set for inbound channels.
 ///
-/// If inaccurate, the weighing of this pallet might become inaccurate. It is expected form the
-/// `configurations` pallet to check these values before setting
+/// If inaccurate, the weighing of this pezpallet might become inaccurate. It is expected form the
+/// `configurations` pezpallet to check these values before setting
 pub const HRMP_MAX_INBOUND_CHANNELS_BOUND: u32 = 128;
 /// Same as [`HRMP_MAX_INBOUND_CHANNELS_BOUND`], but for outbound channels.
 pub const HRMP_MAX_OUTBOUND_CHANNELS_BOUND: u32 = 128;
@@ -165,7 +165,7 @@ pub struct HrmpChannel {
 	pub recipient_deposit: Balance,
 }
 
-/// An error returned by [`Pallet::check_hrmp_watermark`] that indicates an acceptance criteria
+/// An error returned by [`Pezpallet::check_hrmp_watermark`] that indicates an acceptance criteria
 /// check didn't pass.
 pub(crate) enum HrmpWatermarkAcceptanceErr<BlockNumber> {
 	AdvancementRule { new_watermark: BlockNumber, last_watermark: BlockNumber },
@@ -173,7 +173,7 @@ pub(crate) enum HrmpWatermarkAcceptanceErr<BlockNumber> {
 	LandsOnBlockWithNoMessages { new_watermark: BlockNumber },
 }
 
-/// An error returned by [`Pallet::check_outbound_hrmp`] that indicates an acceptance criteria check
+/// An error returned by [`Pezpallet::check_outbound_hrmp`] that indicates an acceptance criteria check
 /// didn't pass.
 pub(crate) enum OutboundHrmpAcceptanceErr {
 	MoreMessagesThanPermitted { sent: u32, permitted: u32 },
@@ -246,15 +246,15 @@ impl fmt::Debug for OutboundHrmpAcceptanceErr {
 	}
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::pallet]
-	#[pallet::without_storage_info]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::without_storage_info]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config:
 		pezframe_system::Config + configuration::Config + paras::Config + dmp::Config
 	{
@@ -272,7 +272,7 @@ pub mod pallet {
 		/// An interface for reserving deposits for opening channels.
 		///
 		/// NOTE that this Currency instance will be charged with the amounts defined in the
-		/// `Configuration` pallet. Specifically, that means that the `Balance` of the `Currency`
+		/// `Configuration` pezpallet. Specifically, that means that the `Balance` of the `Currency`
 		/// implementation should be the same as `Balance` as used in the `Configuration`.
 		type Currency: ReservableCurrency<Self::AccountId>;
 
@@ -280,7 +280,7 @@ pub mod pallet {
 		/// teyrchain.
 		type DefaultChannelSizeAndCapacityWithSystem: Get<(u32, u32)>;
 
-		/// Means of converting an `Xcm` into a `VersionedXcm`. This pallet sends HRMP XCM
+		/// Means of converting an `Xcm` into a `VersionedXcm`. This pezpallet sends HRMP XCM
 		/// notifications to the channel-related teyrchains, while the `WrapVersion` implementation
 		/// attempts to wrap them into the most suitable XCM version for the destination teyrchain.
 		///
@@ -288,12 +288,12 @@ pub mod pallet {
 		/// the default `()` implementation uses the latest XCM version for all teyrchains.
 		type VersionWrapper: xcm::WrapVersion;
 
-		/// Something that provides the weight of this pallet.
+		/// Something that provides the weight of this pezpallet.
 		type WeightInfo: WeightInfo;
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// Open HRMP channel requested.
 		OpenChannelRequested {
@@ -326,7 +326,7 @@ pub mod pallet {
 		OpenChannelDepositsUpdated { sender: ParaId, recipient: ParaId },
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// The sender tried to open a channel to themselves.
 		OpenHrmpChannelToSelf,
@@ -376,28 +376,28 @@ pub mod pallet {
 	///
 	/// Invariant:
 	/// - There are no channels that exists in list but not in the set and vice versa.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type HrmpOpenChannelRequests<T: Config> =
 		StorageMap<_, Twox64Concat, HrmpChannelId, HrmpOpenChannelRequest>;
 
 	// NOTE: could become bounded, but we don't have a global maximum for this.
 	// `HRMP_MAX_INBOUND_CHANNELS_BOUND` are per teyrchain, while this storage tracks the
 	// global state.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type HrmpOpenChannelRequestsList<T: Config> =
 		StorageValue<_, Vec<HrmpChannelId>, ValueQuery>;
 
 	/// This mapping tracks how many open channel requests are initiated by a given sender para.
 	/// Invariant: `HrmpOpenChannelRequests` should contain the same number of items that has
 	/// `(X, _)` as the number of `HrmpOpenChannelRequestCount` for `X`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type HrmpOpenChannelRequestCount<T: Config> =
 		StorageMap<_, Twox64Concat, ParaId, u32, ValueQuery>;
 
 	/// This mapping tracks how many open channel requests were accepted by a given recipient para.
 	/// Invariant: `HrmpOpenChannelRequests` should contain the same number of items `(_, X)` with
 	/// `confirmed` set to true, as the number of `HrmpAcceptedChannelRequestCount` for `X`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type HrmpAcceptedChannelRequestCount<T: Config> =
 		StorageMap<_, Twox64Concat, ParaId, u32, ValueQuery>;
 
@@ -408,10 +408,10 @@ pub mod pallet {
 	///
 	/// Invariant:
 	/// - There are no channels that exists in list but not in the set and vice versa.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type HrmpCloseChannelRequests<T: Config> = StorageMap<_, Twox64Concat, HrmpChannelId, ()>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type HrmpCloseChannelRequestsList<T: Config> =
 		StorageValue<_, Vec<HrmpChannelId>, ValueQuery>;
 
@@ -419,13 +419,13 @@ pub mod pallet {
 	/// Invariant:
 	/// - each para `P` used here as a key should satisfy `Paras::is_valid_para(P)` within a
 	///   session.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type HrmpWatermarks<T: Config> = StorageMap<_, Twox64Concat, ParaId, BlockNumberFor<T>>;
 
 	/// HRMP channel data associated with each para.
 	/// Invariant:
 	/// - each participant in the channel should satisfy `Paras::is_valid_para(P)` within a session.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type HrmpChannels<T: Config> = StorageMap<_, Twox64Concat, HrmpChannelId, HrmpChannel>;
 
 	/// Ingress/egress indexes allow to find all the senders and receivers given the opposite side.
@@ -441,19 +441,19 @@ pub mod pallet {
 	///   `HrmpChannels` as `(P, E)`.
 	/// - there should be no other dangling channels in `HrmpChannels`.
 	/// - the vectors are sorted.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type HrmpIngressChannelsIndex<T: Config> =
 		StorageMap<_, Twox64Concat, ParaId, Vec<ParaId>, ValueQuery>;
 
 	// NOTE that this field is used by teyrchains via merkle storage proofs, therefore changing
 	// the format will require migration of teyrchains.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type HrmpEgressChannelsIndex<T: Config> =
 		StorageMap<_, Twox64Concat, ParaId, Vec<ParaId>, ValueQuery>;
 
 	/// Storage for the messages for each channel.
 	/// Invariant: cannot be non-empty if the corresponding channel in `HrmpChannels` is `None`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type HrmpChannelContents<T: Config> = StorageMap<
 		_,
 		Twox64Concat,
@@ -468,7 +468,7 @@ pub mod pallet {
 	/// - The inner `Vec<ParaId>` cannot store two same `ParaId`.
 	/// - The outer vector is sorted ascending by block number and cannot store two items with the
 	///   same block number.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type HrmpChannelDigests<T: Config> =
 		StorageMap<_, Twox64Concat, ParaId, Vec<(BlockNumberFor<T>, Vec<ParaId>)>, ValueQuery>;
 
@@ -483,9 +483,9 @@ pub mod pallet {
 	/// As such, each channel initializer should satisfy the same constraints, namely:
 	///
 	/// 1. `max_capacity` and `max_message_size` should be within the limits set by the
-	///    configuration pallet.
+	///    configuration pezpallet.
 	/// 2. `sender` and `recipient` must be valid paras.
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		#[serde(skip)]
@@ -493,15 +493,15 @@ pub mod pallet {
 		preopen_hrmp_channels: Vec<(ParaId, ParaId, u32, u32)>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			initialize_storage::<T>(&self.preopen_hrmp_channels);
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Initiate opening a channel from a teyrchain to a given recipient with given channel
 		/// parameters.
 		///
@@ -512,8 +512,8 @@ pub mod pallet {
 		///
 		/// The channel can be opened only after the recipient confirms it and only on a session
 		/// change.
-		#[pallet::call_index(0)]
-		#[pallet::weight(<T as Config>::WeightInfo::hrmp_init_open_channel())]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::hrmp_init_open_channel())]
 		pub fn hrmp_init_open_channel(
 			origin: OriginFor<T>,
 			recipient: ParaId,
@@ -539,8 +539,8 @@ pub mod pallet {
 		/// Accept a pending open channel request from the given sender.
 		///
 		/// The channel will be opened only on the next session boundary.
-		#[pallet::call_index(1)]
-		#[pallet::weight(<T as Config>::WeightInfo::hrmp_accept_open_channel())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::hrmp_accept_open_channel())]
 		pub fn hrmp_accept_open_channel(origin: OriginFor<T>, sender: ParaId) -> DispatchResult {
 			let origin = ensure_teyrchain(<T as Config>::RuntimeOrigin::from(origin))?;
 			Self::accept_open_channel(origin, sender)?;
@@ -552,8 +552,8 @@ pub mod pallet {
 		/// recipient in the channel being closed.
 		///
 		/// The closure can only happen on a session change.
-		#[pallet::call_index(2)]
-		#[pallet::weight(<T as Config>::WeightInfo::hrmp_close_channel())]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::hrmp_close_channel())]
 		pub fn hrmp_close_channel(
 			origin: OriginFor<T>,
 			channel_id: HrmpChannelId,
@@ -571,8 +571,8 @@ pub mod pallet {
 		/// Number of inbound and outbound channels for `para` must be provided as witness data.
 		///
 		/// Origin must be the `ChannelManager`.
-		#[pallet::call_index(3)]
-		#[pallet::weight(<T as Config>::WeightInfo::force_clean_hrmp(*num_inbound, *num_outbound))]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::force_clean_hrmp(*num_inbound, *num_outbound))]
 		pub fn force_clean_hrmp(
 			origin: OriginFor<T>,
 			para: ParaId,
@@ -604,8 +604,8 @@ pub mod pallet {
 		/// Total number of opening channels must be provided as witness data.
 		///
 		/// Origin must be the `ChannelManager`.
-		#[pallet::call_index(4)]
-		#[pallet::weight(<T as Config>::WeightInfo::force_process_hrmp_open(*channels))]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::force_process_hrmp_open(*channels))]
 		pub fn force_process_hrmp_open(origin: OriginFor<T>, channels: u32) -> DispatchResult {
 			T::ChannelManager::ensure_origin(origin)?;
 
@@ -628,8 +628,8 @@ pub mod pallet {
 		/// Total number of closing channels must be provided as witness data.
 		///
 		/// Origin must be the `ChannelManager`.
-		#[pallet::call_index(5)]
-		#[pallet::weight(<T as Config>::WeightInfo::force_process_hrmp_close(*channels))]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::force_process_hrmp_close(*channels))]
 		pub fn force_process_hrmp_close(origin: OriginFor<T>, channels: u32) -> DispatchResult {
 			T::ChannelManager::ensure_origin(origin)?;
 
@@ -651,8 +651,8 @@ pub mod pallet {
 		///
 		/// Total number of open requests (i.e. `HrmpOpenChannelRequestsList`) must be provided as
 		/// witness data.
-		#[pallet::call_index(6)]
-		#[pallet::weight(<T as Config>::WeightInfo::hrmp_cancel_open_request(*open_requests))]
+		#[pezpallet::call_index(6)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::hrmp_cancel_open_request(*open_requests))]
 		pub fn hrmp_cancel_open_request(
 			origin: OriginFor<T>,
 			channel_id: HrmpChannelId,
@@ -677,8 +677,8 @@ pub mod pallet {
 		/// governed by the system, e.g. a system teyrchain.
 		///
 		/// Origin must be the `ChannelManager`.
-		#[pallet::call_index(7)]
-		#[pallet::weight(<T as Config>::WeightInfo::force_open_hrmp_channel(1))]
+		#[pezpallet::call_index(7)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::force_open_hrmp_channel(1))]
 		pub fn force_open_hrmp_channel(
 			origin: OriginFor<T>,
 			sender: ParaId,
@@ -727,8 +727,8 @@ pub mod pallet {
 		///
 		/// Any signed origin can call this function, but _both_ inputs MUST be system chains. If
 		/// the channel does not exist yet, there is no fee.
-		#[pallet::call_index(8)]
-		#[pallet::weight(<T as Config>::WeightInfo::establish_system_channel())]
+		#[pezpallet::call_index(8)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::establish_system_channel())]
 		pub fn establish_system_channel(
 			origin: OriginFor<T>,
 			sender: ParaId,
@@ -768,8 +768,8 @@ pub mod pallet {
 		/// - `recipient`: A chain, `ParaId`.
 		///
 		/// Any signed origin can call this function.
-		#[pallet::call_index(9)]
-		#[pallet::weight(<T as Config>::WeightInfo::poke_channel_deposits())]
+		#[pezpallet::call_index(9)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::poke_channel_deposits())]
 		pub fn poke_channel_deposits(
 			origin: OriginFor<T>,
 			sender: ParaId,
@@ -862,8 +862,8 @@ pub mod pallet {
 		/// - `target_system_chain`: A system chain, `ParaId`.
 		///
 		/// The origin needs to be the teyrchain origin.
-		#[pallet::call_index(10)]
-		#[pallet::weight(<T as Config>::WeightInfo::establish_channel_with_system())]
+		#[pezpallet::call_index(10)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::establish_channel_with_system())]
 		pub fn establish_channel_with_system(
 			origin: OriginFor<T>,
 			target_system_chain: ParaId,
@@ -910,7 +910,7 @@ fn initialize_storage<T: Config>(preopen_hrmp_channels: &[(ParaId, ParaId, u32, 
 			panic!("failed to initialize the genesis storage: {:?}", err);
 		}
 	}
-	Pallet::<T>::process_hrmp_open_channel_requests(&host_config);
+	Pezpallet::<T>::process_hrmp_open_channel_requests(&host_config);
 }
 
 fn preopen_hrmp_channel<T: Config>(
@@ -919,13 +919,13 @@ fn preopen_hrmp_channel<T: Config>(
 	max_capacity: u32,
 	max_message_size: u32,
 ) -> DispatchResult {
-	Pallet::<T>::init_open_channel(sender, recipient, max_capacity, max_message_size)?;
-	Pallet::<T>::accept_open_channel(recipient, sender)?;
+	Pezpallet::<T>::init_open_channel(sender, recipient, max_capacity, max_message_size)?;
+	Pezpallet::<T>::accept_open_channel(recipient, sender)?;
 	Ok(())
 }
 
 /// Routines and getters related to HRMP.
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Block initialization logic, called by initializer.
 	pub(crate) fn initializer_initialize(_now: BlockNumberFor<T>) -> Weight {
 		Weight::zero()
@@ -1080,8 +1080,8 @@ impl<T: Config> Pallet<T> {
 			let recipient_deposit = if system_channel { 0 } else { config.hrmp_recipient_deposit };
 
 			if request.confirmed {
-				if paras::Pallet::<T>::is_valid_para(channel_id.sender) &&
-					paras::Pallet::<T>::is_valid_para(channel_id.recipient)
+				if paras::Pezpallet::<T>::is_valid_para(channel_id.sender) &&
+					paras::Pezpallet::<T>::is_valid_para(channel_id.recipient)
 				{
 					HrmpChannels::<T>::insert(
 						&channel_id,
@@ -1374,7 +1374,7 @@ impl<T: Config> Pallet<T> {
 
 	/// Process the outbound HRMP messages by putting them into the appropriate recipient queues.
 	pub(crate) fn queue_outbound_hrmp(sender: ParaId, out_hrmp_msgs: HorizontalMessages) {
-		let now = pezframe_system::Pallet::<T>::block_number();
+		let now = pezframe_system::Pezpallet::<T>::block_number();
 
 		for out_msg in out_hrmp_msgs {
 			let channel_id = HrmpChannelId { sender, recipient: out_msg.recipient };
@@ -1437,7 +1437,7 @@ impl<T: Config> Pallet<T> {
 	/// will be required for `origin` (the sender) upon opening the request and the `recipient` upon
 	/// accepting it.
 	///
-	/// Basically the same as [`hrmp_init_open_channel`](Pallet::hrmp_init_open_channel) but
+	/// Basically the same as [`hrmp_init_open_channel`](Pezpallet::hrmp_init_open_channel) but
 	/// intended for calling directly from other pallets rather than dispatched.
 	pub fn init_open_channel(
 		origin: ParaId,
@@ -1447,7 +1447,7 @@ impl<T: Config> Pallet<T> {
 	) -> DispatchResult {
 		ensure!(origin != recipient, Error::<T>::OpenHrmpChannelToSelf);
 		ensure!(
-			paras::Pallet::<T>::is_valid_para(recipient),
+			paras::Pezpallet::<T>::is_valid_para(recipient),
 			Error::<T>::OpenHrmpChannelInvalidRecipient,
 		);
 
@@ -1526,7 +1526,7 @@ impl<T: Config> Pallet<T> {
 
 	/// Accept a pending open channel request from the given sender.
 	///
-	/// Basically the same as [`hrmp_accept_open_channel`](Pallet::hrmp_accept_open_channel) but
+	/// Basically the same as [`hrmp_accept_open_channel`](Pezpallet::hrmp_accept_open_channel) but
 	/// intended for calling directly from other pallets rather than dispatched.
 	pub fn accept_open_channel(origin: ParaId, sender: ParaId) -> DispatchResult {
 		let channel_id = HrmpChannelId { sender, recipient: origin };
@@ -1682,7 +1682,7 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Decreases the open channel request count for the given sender. If the value reaches zero
 	/// it is removed completely.
 	fn decrease_open_channel_request_count(sender: ParaId) {
@@ -1714,7 +1714,7 @@ impl<T: Config> Pallet<T> {
 		let assert_contains_only_onboarded = |paras: Vec<ParaId>, cause: &str| {
 			for para in paras {
 				assert!(
-					crate::paras::Pallet::<T>::is_valid_para(para),
+					crate::paras::Pezpallet::<T>::is_valid_para(para),
 					"{}: {:?} para is offboarded",
 					cause,
 					para
@@ -1859,7 +1859,7 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Wraps HRMP XCM notifications to the most suitable XCM version for the destination para.
 	/// If the XCM version is unknown, the latest XCM version is used as a best effort.
 	fn wrap_notification(
@@ -1899,7 +1899,7 @@ impl<T: Config> Pallet<T> {
 
 		// try to enqueue
 		if let Err(dmp::QueueDownwardMessageError::ExceedsMaxMessageSize) =
-			dmp::Pallet::<T>::queue_downward_message(&config, dest, notification_bytes)
+			dmp::Pezpallet::<T>::queue_downward_message(&config, dest, notification_bytes)
 		{
 			// this should never happen unless the max downward message size is configured to a
 			// jokingly small number.

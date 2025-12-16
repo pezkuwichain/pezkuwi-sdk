@@ -16,7 +16,7 @@
 
 //! This module focuses on the benchmarking of the `include_pvf_check_statement` dispatchable.
 
-use crate::{configuration, paras::*, shared::Pallet as ParasShared};
+use crate::{configuration, paras::*, shared::Pezpallet as ParasShared};
 use alloc::{vec, vec::Vec};
 use pezframe_support::assert_ok;
 use pezframe_system::RawOrigin;
@@ -80,7 +80,7 @@ where
 	let stmt_n_sig = stmts.pop().unwrap();
 
 	for (stmt, sig) in stmts {
-		let r = Pallet::<T>::include_pvf_check_statement(RawOrigin::None.into(), stmt, sig);
+		let r = Pezpallet::<T>::include_pvf_check_statement(RawOrigin::None.into(), stmt, sig);
 		assert!(r.is_ok());
 	}
 
@@ -99,7 +99,7 @@ where
 	initialize::<T>();
 	for i in 0..PARAS_NUM {
 		let id = ParaId::from(i as u32);
-		assert_ok!(Pallet::<T>::schedule_para_initialize(
+		assert_ok!(Pezpallet::<T>::schedule_para_initialize(
 			id,
 			ParaGenesisArgs {
 				para_kind: ParaKind::Teyrchain,
@@ -135,7 +135,7 @@ where
 
 	// 1. Make sure PVF pre-checking is enabled in the config.
 	let config = configuration::ActiveConfig::<T>::get();
-	configuration::Pallet::<T>::force_set_active_config(config.clone());
+	configuration::Pezpallet::<T>::force_set_active_config(config.clone());
 
 	// 2. initialize a new session with deterministic validator set.
 	ParasShared::<T>::set_active_validators_ascending(validators.clone());
@@ -160,7 +160,7 @@ where
 			let validation_code = validation_code();
 
 			let mut teyrchains = TeyrchainsCache::new();
-			Pallet::<T>::initialize_para_now(
+			Pezpallet::<T>::initialize_para_now(
 				&mut teyrchains,
 				id,
 				&ParaGenesisArgs {
@@ -173,7 +173,7 @@ where
 			// asap.
 			drop(teyrchains);
 
-			Pallet::<T>::schedule_code_upgrade(
+			Pezpallet::<T>::schedule_code_upgrade(
 				id,
 				validation_code,
 				/* relay_parent_number */ 1u32.into(),
@@ -181,7 +181,7 @@ where
 				UpgradeStrategy::SetGoAheadSignal,
 			);
 		} else {
-			let r = Pallet::<T>::schedule_para_initialize(
+			let r = Pezpallet::<T>::schedule_para_initialize(
 				id,
 				ParaGenesisArgs {
 					para_kind: ParaKind::Teyrchain,

@@ -33,7 +33,7 @@ mod v5;
 /// will be kept.
 ///
 /// This migration should be added with a runtime upgrade that introduces the
-/// `MaxSetIdSessionEntries` constant to the pallet (although it could also be
+/// `MaxSetIdSessionEntries` constant to the pezpallet (although it could also be
 /// done later on).
 pub struct CleanupSetIdSessionMap<T>(core::marker::PhantomData<T>);
 impl<T: Config> OnRuntimeUpgrade for CleanupSetIdSessionMap<T> {

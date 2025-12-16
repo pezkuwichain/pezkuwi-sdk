@@ -27,26 +27,26 @@ use pezsp_runtime::{
 };
 use std::cell::RefCell;
 
-#[pezframe_support::pallet(dev_mode)]
+#[pezframe_support::pezpallet(dev_mode)]
 mod pezpallet_test {
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		type LowerBound: Get<u32>;
 		type UpperBound: Get<u32>;
 		type MaybeItem: Get<Option<u32>>;
 	}
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type Value<T: Config> = StorageValue<_, u32, OptionQuery>;
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		pub fn set_value(origin: OriginFor<T>, n: u32) -> DispatchResult {
 			let _sender = ensure_signed(origin)?;
 			Value::<T>::put(n);
@@ -131,7 +131,7 @@ mod benchmarks {
 	use rusty_fork::rusty_fork_test;
 
 	// Additional used internally by the benchmark macro.
-	use super::pezpallet_test::{Call, Config, Pallet};
+	use super::pezpallet_test::{Call, Config, Pezpallet};
 
 	crate::benchmarks! {
 		where_clause {
@@ -340,18 +340,18 @@ mod benchmarks {
 	#[test]
 	fn benchmarks_generate_unit_tests() {
 		new_test_ext().execute_with(|| {
-			assert_ok!(Pallet::<Test>::test_benchmark_set_value());
-			assert_ok!(Pallet::<Test>::test_benchmark_other_name());
-			assert_ok!(Pallet::<Test>::test_benchmark_sort_vector());
-			assert_err!(Pallet::<Test>::test_benchmark_bad_origin(), "Bad origin");
-			assert_err!(Pallet::<Test>::test_benchmark_bad_verify(), "You forgot to sort!");
-			assert_ok!(Pallet::<Test>::test_benchmark_no_components());
-			assert_ok!(Pallet::<Test>::test_benchmark_variable_components());
+			assert_ok!(Pezpallet::<Test>::test_benchmark_set_value());
+			assert_ok!(Pezpallet::<Test>::test_benchmark_other_name());
+			assert_ok!(Pezpallet::<Test>::test_benchmark_sort_vector());
+			assert_err!(Pezpallet::<Test>::test_benchmark_bad_origin(), "Bad origin");
+			assert_err!(Pezpallet::<Test>::test_benchmark_bad_verify(), "You forgot to sort!");
+			assert_ok!(Pezpallet::<Test>::test_benchmark_no_components());
+			assert_ok!(Pezpallet::<Test>::test_benchmark_variable_components());
 			assert!(matches!(
-				Pallet::<Test>::test_benchmark_override_benchmark(),
+				Pezpallet::<Test>::test_benchmark_override_benchmark(),
 				Err(BenchmarkError::Override(_)),
 			));
-			assert_eq!(Pallet::<Test>::test_benchmark_skip_benchmark(), Err(BenchmarkError::Skip),);
+			assert_eq!(Pezpallet::<Test>::test_benchmark_skip_benchmark(), Err(BenchmarkError::Skip),);
 		});
 	}
 
@@ -361,18 +361,18 @@ mod benchmarks {
 		new_test_ext().execute_with(|| {
 			// It resets when the error happens in the setup:
 			assert_err!(
-				Pallet::<Test>::test_benchmark_modify_in_setup_then_error(),
+				Pezpallet::<Test>::test_benchmark_modify_in_setup_then_error(),
 				"Should error"
 			);
 			assert_eq!(Value::<Test>::get(), None);
 
 			// It resets when the error happens in the call:
-			assert_err!(Pallet::<Test>::test_benchmark_modify_in_call_then_error(), "Should error");
+			assert_err!(Pezpallet::<Test>::test_benchmark_modify_in_call_then_error(), "Should error");
 			assert_eq!(Value::<Test>::get(), None);
 
 			// It resets when the error happens in the verify:
 			assert_err!(
-				Pallet::<Test>::test_benchmark_modify_in_verify_then_error(),
+				Pezpallet::<Test>::test_benchmark_modify_in_verify_then_error(),
 				"Should error"
 			);
 			assert_eq!(Value::<Test>::get(), None);
@@ -414,7 +414,7 @@ mod benchmarks {
 		}
 
 		new_test_ext().execute_with(|| {
-			let got = Pallet::<Test>::test_benchmark_values_per_component()
+			let got = Pezpallet::<Test>::test_benchmark_values_per_component()
 				.map(|_| VALUES_PER_COMPONENT.with(|v| v.borrow().clone()));
 
 			assert_eq!(got, output);

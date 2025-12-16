@@ -1,12 +1,12 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-//! # PEZ Rewards Pallet
+//! # PEZ Rewards Pezpallet
 //!
-//! A pallet for distributing PEZ token rewards based on trust scores with epoch-based mechanics.
+//! A pezpallet for distributing PEZ token rewards based on trust scores with epoch-based mechanics.
 //!
 //! ## Overview
 //!
-//! This pallet implements a sophisticated reward distribution system that incentivizes
+//! This pezpallet implements a sophisticated reward distribution system that incentivizes
 //! ecosystem participation through trust-based rewards. The system operates in monthly
 //! epochs with automatic reward calculation, distribution, and clawback mechanisms.
 //!
@@ -68,7 +68,7 @@
 //!
 //! ## Dependencies
 //!
-//! This pallet requires integration with:
+//! This pezpallet requires integration with:
 //! - `pezpallet-trust` - Trust score provider
 //! - `pezpallet-pez-treasury` - Incentive pot funding source
 //! - `pezpallet-nfts` - Parliamentary NFT collection (optional)
@@ -90,7 +90,7 @@
 //! }
 //! ```
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 pub mod weights;
 pub use weights::WeightInfo;
@@ -118,8 +118,8 @@ use pezpallet_trust::TrustScoreProvider;
 use scale_info::TypeInfo;
 use pezsp_runtime::traits::{AccountIdConversion, Member, Saturating, Zero};
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
@@ -135,13 +135,13 @@ pub mod pallet {
 	pub const PARLIAMENTARY_NFT_COUNT: u32 = 201;
 	pub const PARLIAMENTARY_REWARD_PERCENT: u32 = 10; // 10% of incentive pool
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config + pezpallet_trust::Config + TypeInfo {
 		type Assets: Mutate<Self::AccountId>;
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type PezAssetId: Get<<Self::Assets as Inspect<Self::AccountId>>::AssetId>;
 		type WeightInfo: crate::weights::WeightInfo;
 
@@ -149,11 +149,11 @@ pub mod pallet {
 		type TrustScoreSource: pezpallet_trust::TrustScoreProvider<Self::AccountId>;
 
 		/// Authority to spend from incentive pot
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type IncentivePotId: Get<PalletId>;
 
 		/// Clawback recipient (Qazi Muhammed)
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type ClawbackRecipient: Get<Self::AccountId>;
 
 		/// Authority check for root origin
@@ -168,19 +168,19 @@ pub mod pallet {
 		<<T as Config>::Assets as Inspect<<T as pezframe_system::Config>::AccountId>>::Balance;
 
 	/// Storage holding epoch (period) information
-	#[pallet::storage]
-	#[pallet::getter(fn epoch_info)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn epoch_info)]
 	pub type EpochInfo<T: Config> = StorageValue<_, EpochData<T>, ValueQuery>;
 
 	/// Storage holding total reward pool for each epoch
-	#[pallet::storage]
-	#[pallet::getter(fn epoch_reward_pools)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn epoch_reward_pools)]
 	pub type EpochRewardPools<T: Config> =
 		StorageMap<_, Blake2_128Concat, u32, EpochRewardPool<T>, OptionQuery>;
 
 	/// Storage holding user's trust score for a specific epoch
-	#[pallet::storage]
-	#[pallet::getter(fn user_epoch_scores)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn user_epoch_scores)]
 	pub type UserEpochScores<T: Config> = StorageDoubleMap<
 		_,
 		Blake2_128Concat,
@@ -192,8 +192,8 @@ pub mod pallet {
 	>;
 
 	/// Storage tracking whether user has claimed reward from a specific epoch
-	#[pallet::storage]
-	#[pallet::getter(fn claimed_rewards)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn claimed_rewards)]
 	pub type ClaimedRewards<T: Config> = StorageDoubleMap<
 		_,
 		Blake2_128Concat,
@@ -205,14 +205,14 @@ pub mod pallet {
 	>;
 
 	/// Storage holding epoch state (Open, ClaimPeriod, Closed)
-	#[pallet::storage]
-	#[pallet::getter(fn epoch_status)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn epoch_status)]
 	pub type EpochStatus<T: Config> = StorageMap<_, Blake2_128Concat, u32, EpochState, ValueQuery>;
 
 	/// Parliamentary NFT ID to owner mapping
 	/// This will be populated by governance or runtime integration
-	#[pallet::storage]
-	#[pallet::getter(fn parliamentary_nft_owners)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn parliamentary_nft_owners)]
 	pub type ParliamentaryNftOwners<T: Config> = StorageMap<
 		_,
 		Blake2_128Concat,
@@ -256,8 +256,8 @@ pub mod pallet {
 
 	// Part to be added to Event enum in lib.rs (around line ~174)
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// New epoch started
 		NewEpochStarted { epoch_index: u32, start_block: BlockNumberFor<T> },
@@ -290,7 +290,7 @@ pub mod pallet {
 		ParliamentaryOwnerRegistered { nft_id: u32, owner: T::AccountId },
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Reward system not yet initialized
 		RewardsNotInitialized,
@@ -319,7 +319,7 @@ pub mod pallet {
 		                  * EpochNotFinished already exists in lib.rs as shown in 'help' */
 	}
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(pezframe_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		pub start_rewards_system: bool,
@@ -327,60 +327,60 @@ pub mod pallet {
 		pub _phantom: core::marker::PhantomData<T>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			if self.start_rewards_system {
-				let _ = Pallet::<T>::do_initialize_rewards_system();
+				let _ = Pezpallet::<T>::do_initialize_rewards_system();
 			}
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Initialize reward system (root only)
-		#[pallet::call_index(0)]
-		#[pallet::weight(<T as Config>::WeightInfo::initialize_rewards_system())]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::initialize_rewards_system())]
 		pub fn initialize_rewards_system(origin: OriginFor<T>) -> DispatchResult {
 			<T as Config>::ForceOrigin::ensure_origin(origin)?;
 			Self::do_initialize_rewards_system()
 		}
 
 		/// Record user's current trust score
-		#[pallet::call_index(1)]
-		#[pallet::weight(<T as Config>::WeightInfo::record_trust_score())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::record_trust_score())]
 		pub fn record_trust_score(origin: OriginFor<T>) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 			Self::do_record_trust_score(&who)
 		}
 
 		/// Finalize epoch and calculate reward pool (called by scheduler)
-		#[pallet::call_index(2)]
-		#[pallet::weight(<T as Config>::WeightInfo::finalize_epoch())]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::finalize_epoch())]
 		pub fn finalize_epoch(origin: OriginFor<T>) -> DispatchResult {
 			<T as Config>::ForceOrigin::ensure_origin(origin)?;
 			Self::do_finalize_epoch()
 		}
 
 		/// Claim reward
-		#[pallet::call_index(3)]
-		#[pallet::weight(<T as Config>::WeightInfo::claim_reward())]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::claim_reward())]
 		pub fn claim_reward(origin: OriginFor<T>, epoch_index: u32) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 			Self::do_claim_reward(&who, epoch_index)
 		}
 
 		/// Close epoch and claw back unclaimed rewards (called by scheduler)
-		#[pallet::call_index(4)]
-		#[pallet::weight(<T as Config>::WeightInfo::close_epoch())]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::close_epoch())]
 		pub fn close_epoch(origin: OriginFor<T>, epoch_index: u32) -> DispatchResult {
 			<T as Config>::ForceOrigin::ensure_origin(origin)?;
 			Self::do_close_epoch(epoch_index)
 		}
 
 		/// Register parliamentary NFT owner (governance only)
-		#[pallet::call_index(5)]
-		#[pallet::weight(<T as Config>::WeightInfo::register_parliamentary_nft_owner())]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::register_parliamentary_nft_owner())]
 		pub fn register_parliamentary_nft_owner(
 			origin: OriginFor<T>,
 			nft_id: u32,
@@ -392,7 +392,7 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config> Pallet<T> {
+	impl<T: Config> Pezpallet<T> {
 		/// Return incentive pot account
 		pub fn incentive_pot_account_id() -> T::AccountId {
 			<T as Config>::IncentivePotId::get().into_account_truncating()
@@ -405,7 +405,7 @@ pub mod pallet {
 				return Err(Error::<T>::AlreadyInitialized.into());
 			}
 
-			let current_block = pezframe_system::Pallet::<T>::block_number();
+			let current_block = pezframe_system::Pezpallet::<T>::block_number();
 
 			let epoch_data = EpochData {
 				current_epoch: 0,
@@ -453,7 +453,7 @@ pub mod pallet {
 		pub fn do_finalize_epoch() -> DispatchResult {
 			let mut epoch_data = EpochInfo::<T>::get();
 			let current_epoch = epoch_data.current_epoch;
-			let current_block = pezframe_system::Pallet::<T>::block_number();
+			let current_block = pezframe_system::Pezpallet::<T>::block_number();
 
 			// Check if epoch has finished
 			let epoch_duration = current_block.saturating_sub(epoch_data.epoch_start_block);
@@ -536,7 +536,7 @@ pub mod pallet {
 		}
 
 		pub fn do_claim_reward(who: &T::AccountId, epoch_index: u32) -> DispatchResult {
-			let current_block = pezframe_system::Pallet::<T>::block_number();
+			let current_block = pezframe_system::Pezpallet::<T>::block_number();
 
 			let epoch_state = EpochStatus::<T>::get(epoch_index);
 			ensure!(epoch_state == EpochState::ClaimPeriod, Error::<T>::ClaimPeriodExpired);
@@ -585,7 +585,7 @@ pub mod pallet {
 
 		/// Close epoch and claw back unclaimed rewards
 		pub fn do_close_epoch(epoch_index: u32) -> DispatchResult {
-			let current_block = pezframe_system::Pallet::<T>::block_number();
+			let current_block = pezframe_system::Pezpallet::<T>::block_number();
 
 			let epoch_state = EpochStatus::<T>::get(epoch_index);
 			ensure!(epoch_state == EpochState::ClaimPeriod, Error::<T>::EpochAlreadyClosed);

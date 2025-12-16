@@ -77,7 +77,7 @@ pezframe_election_provider_support::generate_solution_type!(
 	>(16)
 );
 
-/// All events of this pallet.
+/// All events of this pezpallet.
 pub(crate) fn multi_phase_events() -> Vec<super::Event<Runtime>> {
 	System::read_events_for_pallet::<super::Event<Runtime>>()
 }

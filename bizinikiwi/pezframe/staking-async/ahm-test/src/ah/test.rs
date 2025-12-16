@@ -45,7 +45,7 @@ fn on_receive_session_report() {
 			leftover: false,
 		};
 
-		assert_ok!(rc_client::Pallet::<T>::relay_session_report(
+		assert_ok!(rc_client::Pezpallet::<T>::relay_session_report(
 			RuntimeOrigin::root(),
 			session_report.clone(),
 		));
@@ -80,7 +80,7 @@ fn on_receive_session_report() {
 			roll_many(10);
 
 			// send the session report.
-			assert_ok!(rc_client::Pallet::<T>::relay_session_report(
+			assert_ok!(rc_client::Pezpallet::<T>::relay_session_report(
 				RuntimeOrigin::root(),
 				rc_client::SessionReport {
 					end_index: i,
@@ -105,7 +105,7 @@ fn on_receive_session_report() {
 		}
 
 		// Next session we will begin election.
-		assert_ok!(rc_client::Pallet::<T>::relay_session_report(
+		assert_ok!(rc_client::Pezpallet::<T>::relay_session_report(
 			RuntimeOrigin::root(),
 			rc_client::SessionReport {
 				end_index: 3,
@@ -219,7 +219,7 @@ fn validator_set_send_fail_retries() {
 			leftover: false,
 		};
 
-		assert_ok!(rc_client::Pallet::<T>::relay_session_report(
+		assert_ok!(rc_client::Pezpallet::<T>::relay_session_report(
 			RuntimeOrigin::root(),
 			session_report.clone(),
 		));
@@ -233,7 +233,7 @@ fn validator_set_send_fail_retries() {
 			roll_many(10);
 
 			// send the session report.
-			assert_ok!(rc_client::Pallet::<T>::relay_session_report(
+			assert_ok!(rc_client::Pezpallet::<T>::relay_session_report(
 				RuntimeOrigin::root(),
 				rc_client::SessionReport {
 					end_index: i,
@@ -258,7 +258,7 @@ fn validator_set_send_fail_retries() {
 		}
 
 		// Next session we will begin election.
-		assert_ok!(rc_client::Pallet::<T>::relay_session_report(
+		assert_ok!(rc_client::Pezpallet::<T>::relay_session_report(
 			RuntimeOrigin::root(),
 			rc_client::SessionReport {
 				end_index: 3,
@@ -391,7 +391,7 @@ fn roll_many_eras() {
 				None
 			};
 
-			assert_ok!(rc_client::Pallet::<T>::relay_session_report(
+			assert_ok!(rc_client::Pezpallet::<T>::relay_session_report(
 				RuntimeOrigin::root(),
 				rc_client::SessionReport {
 					end_index: session_counter,
@@ -459,7 +459,7 @@ fn receives_old_session_report() {
 			leftover: false,
 		};
 
-		assert_ok!(rc_client::Pallet::<T>::relay_session_report(
+		assert_ok!(rc_client::Pezpallet::<T>::relay_session_report(
 			RuntimeOrigin::root(),
 			session_report.clone(),
 		));
@@ -488,7 +488,7 @@ fn receives_old_session_report() {
 		assert_eq!(rc_client::LastSessionReportEndingIndex::<T>::get(), Some(0));
 
 		// then send it again, this is basically dropped, although it returns `Ok()`
-		assert_ok!(rc_client::Pallet::<T>::relay_session_report(
+		assert_ok!(rc_client::Pezpallet::<T>::relay_session_report(
 			RuntimeOrigin::root(),
 			session_report
 		));
@@ -510,7 +510,7 @@ fn receives_session_report_in_future() {
 
 		// Receive report for end of 1, start of 1 and plan 2.
 
-		assert_ok!(rc_client::Pallet::<T>::relay_session_report(
+		assert_ok!(rc_client::Pezpallet::<T>::relay_session_report(
 			RuntimeOrigin::root(),
 			rc_client::SessionReport {
 				end_index: 0,
@@ -544,7 +544,7 @@ fn receives_session_report_in_future() {
 		assert_eq!(staking_async::ErasRewardPoints::<T>::get(&0).total, 50);
 
 		// skip end_index 1, send 2
-		assert_ok!(rc_client::Pallet::<T>::relay_session_report(
+		assert_ok!(rc_client::Pezpallet::<T>::relay_session_report(
 			RuntimeOrigin::root(),
 			rc_client::SessionReport {
 				end_index: 2,
@@ -596,7 +596,7 @@ fn session_report_burst() {
 		// then send 20 sessions all at once. This is enough to schedule multiple elections, but we
 		// only schedule one.
 		for s in 1..=20 {
-			assert_ok!(rc_client::Pallet::<T>::relay_session_report(
+			assert_ok!(rc_client::Pezpallet::<T>::relay_session_report(
 				RuntimeOrigin::root(),
 				rc_client::SessionReport {
 					end_index: s,
@@ -651,7 +651,7 @@ fn on_offence_current_era() {
 		// flush the events.
 		let _ = staking_events_since_last_call();
 
-		assert_ok!(rc_client::Pallet::<Runtime>::relay_new_offence_paged(
+		assert_ok!(rc_client::Pezpallet::<Runtime>::relay_new_offence_paged(
 			RuntimeOrigin::root(),
 			vec![
 				(
@@ -748,7 +748,7 @@ fn on_offence_current_era_instant_apply() {
 			// flush the events.
 			let _ = staking_events_since_last_call();
 
-			assert_ok!(rc_client::Pallet::<Runtime>::relay_new_offence_paged(
+			assert_ok!(rc_client::Pezpallet::<Runtime>::relay_new_offence_paged(
 				RuntimeOrigin::root(),
 				vec![
 					(
@@ -831,12 +831,12 @@ fn on_offence_non_validator() {
 			// flush the events.
 			let _ = staking_events_since_last_call();
 
-			assert_ok!(rc_client::Pallet::<Runtime>::relay_new_offence_paged(
+			assert_ok!(rc_client::Pezpallet::<Runtime>::relay_new_offence_paged(
 				RuntimeOrigin::root(),
 				vec![(
 					5,
 					rc_client::Offence {
-						// this offender is unknown to the staking pallet.
+						// this offender is unknown to the staking pezpallet.
 						offender: 666,
 						reporters: vec![],
 						slash_fraction: Perbill::from_percent(50),
@@ -871,7 +871,7 @@ fn on_offence_previous_era() {
 		assert_eq!(oldest_reportable_era, 2);
 
 		// WHEN we report an offence older than Era 2 (oldest reportable era).
-		assert_ok!(rc_client::Pallet::<Runtime>::relay_new_offence_paged(
+		assert_ok!(rc_client::Pezpallet::<Runtime>::relay_new_offence_paged(
 			RuntimeOrigin::root(),
 			// offence is in era 1
 			vec![(
@@ -896,7 +896,7 @@ fn on_offence_previous_era() {
 
 		// WHEN: report an offence for the session belonging to the previous era
 		assert_eq!(Rotator::<Runtime>::era_start_session_index(2), Some(10));
-		assert_ok!(rc_client::Pallet::<Runtime>::relay_new_offence_paged(
+		assert_ok!(rc_client::Pezpallet::<Runtime>::relay_new_offence_paged(
 			RuntimeOrigin::root(),
 			// offence is in era 2
 			vec![(
@@ -971,7 +971,7 @@ fn on_offence_previous_era_instant_apply() {
 			// report an offence for the session belonging to the previous era
 			assert_eq!(Rotator::<Runtime>::era_start_session_index(1), Some(5));
 
-			assert_ok!(rc_client::Pallet::<Runtime>::relay_new_offence_paged(
+			assert_ok!(rc_client::Pezpallet::<Runtime>::relay_new_offence_paged(
 				RuntimeOrigin::root(),
 				// offence is in era 1
 				vec![(

@@ -15,14 +15,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! This module contains helper functions for the approval logic implemented in the NFTs pallet.
+//! This module contains helper functions for the approval logic implemented in the NFTs pezpallet.
 //! The bitflag [`PalletFeature::Approvals`] needs to be set in [`Config::Features`] for NFTs
 //! to have the functionality defined in this module.
 
 use crate::*;
 use pezframe_support::pezpallet_prelude::*;
 
-impl<T: Config<I>, I: 'static> Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 	/// Approves the transfer of an item to a delegate.
 	///
 	/// This function is used to approve the transfer of the specified `item` in the `collection` to

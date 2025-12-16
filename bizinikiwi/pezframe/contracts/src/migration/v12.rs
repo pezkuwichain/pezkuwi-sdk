@@ -21,7 +21,7 @@
 use crate::{
 	migration::{IsFinished, MigrationStep},
 	weights::WeightInfo,
-	AccountIdOf, BalanceOf, CodeHash, Config, Determinism, Pallet, Weight, LOG_TARGET,
+	AccountIdOf, BalanceOf, CodeHash, Config, Determinism, Pezpallet, Weight, LOG_TARGET,
 };
 use alloc::vec::Vec;
 use codec::{Decode, Encode};
@@ -72,11 +72,11 @@ mod v11 {
 
 	#[storage_alias]
 	pub type OwnerInfoOf<T: Config, OldCurrency> =
-		StorageMap<Pallet<T>, Identity, CodeHash<T>, OwnerInfo<T, OldCurrency>>;
+		StorageMap<Pezpallet<T>, Identity, CodeHash<T>, OwnerInfo<T, OldCurrency>>;
 
 	#[storage_alias]
 	pub type CodeStorage<T: Config> =
-		StorageMap<Pallet<T>, Identity, CodeHash<T>, PrefabWasmModule>;
+		StorageMap<Pezpallet<T>, Identity, CodeHash<T>, PrefabWasmModule>;
 }
 
 #[derive(Encode, Decode, scale_info::TypeInfo, MaxEncodedLen)]
@@ -97,10 +97,10 @@ where
 
 #[storage_alias]
 pub type CodeInfoOf<T: Config, OldCurrency> =
-	StorageMap<Pallet<T>, Identity, CodeHash<T>, CodeInfo<T, OldCurrency>>;
+	StorageMap<Pezpallet<T>, Identity, CodeHash<T>, CodeInfo<T, OldCurrency>>;
 
 #[storage_alias]
-pub type PristineCode<T: Config> = StorageMap<Pallet<T>, Identity, CodeHash<T>, Vec<u8>>;
+pub type PristineCode<T: Config> = StorageMap<Pezpallet<T>, Identity, CodeHash<T>, Vec<u8>>;
 
 #[cfg(feature = "runtime-benchmarks")]
 pub fn store_old_dummy_code<T: Config, OldCurrency>(len: usize, account: T::AccountId)

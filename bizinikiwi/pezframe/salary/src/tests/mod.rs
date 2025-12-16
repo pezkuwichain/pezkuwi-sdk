@@ -17,7 +17,7 @@
 
 #![cfg(test)]
 
-//! Unit and integration tests for the salary pallet.
+//! Unit and integration tests for the salary pezpallet.
 
 pub(crate) mod integration;
 pub(crate) mod unit;

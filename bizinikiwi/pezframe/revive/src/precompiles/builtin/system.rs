@@ -107,7 +107,7 @@ mod tests {
 	use crate::{
 		address::AddressMapper,
 		call_builder::{caller_funding, CallSetup},
-		pallet,
+		pezpallet,
 		precompiles::{
 			alloy::sol_types::{sol_data::Bytes, SolType},
 			tests::run_test_vectors,
@@ -158,9 +158,9 @@ mod tests {
 		ExtBuilder::default().build().execute_with(|| {
 			// given
 			let mapped_address = {
-				<Test as pallet::Config>::Currency::set_balance(&EVE, caller_funding::<Test>());
-				let _ = <Test as pallet::Config>::AddressMapper::map(&EVE);
-				<Test as pallet::Config>::AddressMapper::to_address(&EVE)
+				<Test as pezpallet::Config>::Currency::set_balance(&EVE, caller_funding::<Test>());
+				let _ = <Test as pezpallet::Config>::AddressMapper::map(&EVE);
+				<Test as pezpallet::Config>::AddressMapper::to_address(&EVE)
 			};
 
 			let mut call_setup = CallSetup::<Test>::default();

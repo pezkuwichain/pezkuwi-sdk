@@ -14,7 +14,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Migrates the storage from the previously deleted DMP pallet.
+//! Migrates the storage from the previously deleted DMP pezpallet.
 
 use crate::*;
 use alloc::vec::Vec;
@@ -41,12 +41,12 @@ pub type PageCounter = u32;
 
 /// The old `PageIndex` storage item.
 #[storage_alias]
-pub type PageIndex<T: Config> = StorageValue<Pallet<T>, PageIndexData, ValueQuery>;
+pub type PageIndex<T: Config> = StorageValue<Pezpallet<T>, PageIndexData, ValueQuery>;
 
 /// The old `Pages` storage item.
 #[storage_alias]
 pub type Pages<T: Config> = StorageMap<
-	Pallet<T>,
+	Pezpallet<T>,
 	Blake2_128Concat,
 	PageCounter,
 	Vec<(RelayBlockNumber, Vec<u8>)>,
@@ -56,7 +56,7 @@ pub type Pages<T: Config> = StorageMap<
 /// The old `Overweight` storage item.
 #[storage_alias]
 pub type Overweight<T: Config> = CountedStorageMap<
-	Pallet<T>,
+	Pezpallet<T>,
 	Blake2_128Concat,
 	OverweightIndex,
 	(RelayBlockNumber, Vec<u8>),
@@ -70,7 +70,7 @@ pub(crate) mod testing_only {
 	///
 	/// Note that the alias type is wrong on purpose.
 	#[storage_alias]
-	pub type Configuration<T: Config> = StorageValue<Pallet<T>, u32>;
+	pub type Configuration<T: Config> = StorageValue<Pezpallet<T>, u32>;
 }
 
 /// Migrates a single page to the `DmpSink`.

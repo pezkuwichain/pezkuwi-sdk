@@ -12,7 +12,7 @@ use pezsp_runtime::{
 
 type Block = pezframe_system::mocking::MockBlock<Test>;
 
-// Configure a mock runtime to test the pallet.
+// Configure a mock runtime to test the pezpallet.
 pezframe_support::construct_runtime!(
 	pub enum Test
 	{
@@ -182,7 +182,7 @@ pub fn presale_treasury(presale_id: u32) -> u64 {
 	use pezsp_io::hashing::blake2_256;
 
 	// Create a unique account ID for each presale by hashing pezpallet_id + presale_id
-	// This matches the logic in pezpallet_presale::Pallet::presale_account_id
+	// This matches the logic in pezpallet_presale::Pezpallet::presale_account_id
 	let pezpallet_id = PresalePalletId::get();
 	let mut buf = Vec::new();
 	buf.extend_from_slice(&pezpallet_id.0[..]);

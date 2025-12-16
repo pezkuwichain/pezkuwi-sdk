@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Tests for the glutton pallet.
+//! Tests for the glutton pezpallet.
 
 use super::{mock::*, *};
 
@@ -46,8 +46,8 @@ fn initialize_pallet_works() {
 			Error::<Test>::AlreadyInitialized
 		);
 
-		assert_eq!(TrashData::<Test>::get(0), Some(Pallet::<Test>::gen_value(0)));
-		assert_eq!(TrashData::<Test>::get(1), Some(Pallet::<Test>::gen_value(1)));
+		assert_eq!(TrashData::<Test>::get(0), Some(Pezpallet::<Test>::gen_value(0)));
+		assert_eq!(TrashData::<Test>::get(1), Some(Pezpallet::<Test>::gen_value(1)));
 		assert_eq!(TrashData::<Test>::get(2), None);
 
 		assert_eq!(TrashDataCount::<Test>::get(), 2);
@@ -321,11 +321,11 @@ fn waste_at_most_proof_size_weight_close_enough() {
 
 #[test]
 fn gen_value_works() {
-	let g0 = Pallet::<Test>::gen_value(0);
-	let g1 = Pallet::<Test>::gen_value(1);
+	let g0 = Pezpallet::<Test>::gen_value(0);
+	let g1 = Pezpallet::<Test>::gen_value(1);
 
 	assert_eq!(g0.len(), VALUE_SIZE);
 	assert_ne!(g0, g1, "Is distinct");
 	assert_ne!(g0, [0; VALUE_SIZE], "Is not zero");
-	assert_eq!(g0, Pallet::<Test>::gen_value(0), "Is deterministic");
+	assert_eq!(g0, Pezpallet::<Test>::gen_value(0), "Is deterministic");
 }

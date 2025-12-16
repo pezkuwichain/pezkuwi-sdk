@@ -15,12 +15,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Benchmarks for Asset Conversion Tx Payment Pallet's transaction extension
+//! Benchmarks for Asset Conversion Tx Payment Pezpallet's transaction extension
 
 extern crate alloc;
 
 use super::*;
-use crate::Pallet;
+use crate::Pezpallet;
 use pezframe_benchmarking::v2::*;
 use pezframe_support::{
 	dispatch::{DispatchInfo, PostDispatchInfo},
@@ -121,5 +121,5 @@ mod benchmarks {
 		}
 	}
 
-	impl_benchmark_test_suite!(Pallet, crate::mock::new_test_ext(), crate::mock::Runtime);
+	impl_benchmark_test_suite!(Pezpallet, crate::mock::new_test_ext(), crate::mock::Runtime);
 }

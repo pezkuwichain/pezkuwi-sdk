@@ -44,7 +44,7 @@ fn filter_dispute_set(stmts: MultiDisputeStatementSet) -> CheckedMultiDisputeSta
 		.into_iter()
 		.filter_map(|set| {
 			let filter =
-				Pallet::<Test>::filter_dispute_data(&set, post_conclusion_acceptance_period);
+				Pezpallet::<Test>::filter_dispute_data(&set, post_conclusion_acceptance_period);
 			filter.filter_statement_set(set)
 		})
 		.collect::<Vec<_>>()
@@ -86,7 +86,7 @@ type NewSession<'a> = (
 	Option<Vec<(&'a AccountId, ValidatorId)>>,
 );
 
-// Run to specific block, while calling disputes pallet hooks manually, because disputes is not
+// Run to specific block, while calling disputes pezpallet hooks manually, because disputes is not
 // integrated in initializer yet.
 pub(crate) fn run_to_block<'a>(
 	to: BlockNumber,
@@ -385,13 +385,13 @@ fn test_initializer_on_new_session() {
 		let v0 = <ValidatorId as CryptoType>::Pair::generate().0;
 
 		let candidate_hash = CandidateHash(pezsp_core::H256::repeat_byte(1));
-		Pallet::<Test>::note_included(0, candidate_hash, 0);
-		Pallet::<Test>::note_included(1, candidate_hash, 1);
-		Pallet::<Test>::note_included(2, candidate_hash, 2);
-		Pallet::<Test>::note_included(3, candidate_hash, 3);
-		Pallet::<Test>::note_included(4, candidate_hash, 4);
-		Pallet::<Test>::note_included(5, candidate_hash, 5);
-		Pallet::<Test>::note_included(6, candidate_hash, 5);
+		Pezpallet::<Test>::note_included(0, candidate_hash, 0);
+		Pezpallet::<Test>::note_included(1, candidate_hash, 1);
+		Pezpallet::<Test>::note_included(2, candidate_hash, 2);
+		Pezpallet::<Test>::note_included(3, candidate_hash, 3);
+		Pezpallet::<Test>::note_included(4, candidate_hash, 4);
+		Pezpallet::<Test>::note_included(5, candidate_hash, 5);
+		Pezpallet::<Test>::note_included(6, candidate_hash, 5);
 
 		run_to_block(7, |b| {
 			// a new session at each block
@@ -435,7 +435,7 @@ fn test_provide_data_duplicate_error() {
 			},
 		];
 
-		assert!(Pallet::<Test>::deduplicate_and_sort_dispute_data(&mut stmts).is_err());
+		assert!(Pezpallet::<Test>::deduplicate_and_sort_dispute_data(&mut stmts).is_err());
 		assert_eq!(stmts.len(), 2);
 	})
 }
@@ -488,7 +488,7 @@ fn test_provide_multi_dispute_is_providing() {
 		}];
 
 		assert_ok!(
-			Pallet::<Test>::process_checked_multi_dispute_data(
+			Pezpallet::<Test>::process_checked_multi_dispute_data(
 				&stmts
 					.into_iter()
 					.map(CheckedDisputeStatementSet::unchecked_from_unchecked)
@@ -545,7 +545,7 @@ fn test_disputes_with_missing_backing_votes_are_rejected() {
 			],
 		}];
 
-		assert!(Pallet::<Test>::process_checked_multi_dispute_data(
+		assert!(Pezpallet::<Test>::process_checked_multi_dispute_data(
 			&stmts
 				.into_iter()
 				.map(CheckedDisputeStatementSet::unchecked_from_unchecked)
@@ -607,7 +607,7 @@ fn test_freeze_on_note_included() {
 				),
 			],
 		}];
-		assert!(Pallet::<Test>::process_checked_multi_dispute_data(
+		assert!(Pezpallet::<Test>::process_checked_multi_dispute_data(
 			&stmts
 				.into_iter()
 				.map(CheckedDisputeStatementSet::unchecked_from_unchecked)
@@ -615,7 +615,7 @@ fn test_freeze_on_note_included() {
 		)
 		.is_ok());
 
-		Pallet::<Test>::note_included(3, candidate_hash, 3);
+		Pezpallet::<Test>::note_included(3, candidate_hash, 3);
 		assert_eq!(Frozen::<Test>::get(), Some(2));
 	});
 }
@@ -673,8 +673,8 @@ fn test_freeze_provided_against_supermajority_for_included() {
 			],
 		}];
 
-		Pallet::<Test>::note_included(3, candidate_hash, 3);
-		assert!(Pallet::<Test>::process_checked_multi_dispute_data(
+		Pezpallet::<Test>::note_included(3, candidate_hash, 3);
+		assert!(Pezpallet::<Test>::process_checked_multi_dispute_data(
 			&stmts
 				.into_iter()
 				.map(CheckedDisputeStatementSet::unchecked_from_unchecked)
@@ -755,8 +755,8 @@ fn test_freeze_provided_against_byzantine_threshold_for_included() {
 		}];
 
 		// Include the candidate and import the votes
-		Pallet::<Test>::note_included(3, candidate_hash, 3);
-		assert!(Pallet::<Test>::process_checked_multi_dispute_data(
+		Pezpallet::<Test>::note_included(3, candidate_hash, 3);
+		assert!(Pezpallet::<Test>::process_checked_multi_dispute_data(
 			&stmts
 				.into_iter()
 				.map(CheckedDisputeStatementSet::unchecked_from_unchecked)
@@ -768,7 +768,7 @@ fn test_freeze_provided_against_byzantine_threshold_for_included() {
 
 		// Now include one more block
 		run_to_block(7, |b| Some((true, b, active_set.clone(), Some(active_set.clone()))));
-		Pallet::<Test>::note_included(3, CandidateHash(pezsp_core::H256::repeat_byte(2)), 3);
+		Pezpallet::<Test>::note_included(3, CandidateHash(pezsp_core::H256::repeat_byte(2)), 3);
 
 		// And generate enough votes to reach supermajority of invalid votes
 		let stmts = vec![DisputeStatementSet {
@@ -801,7 +801,7 @@ fn test_freeze_provided_against_byzantine_threshold_for_included() {
 				),
 			],
 		}];
-		assert!(Pallet::<Test>::process_checked_multi_dispute_data(
+		assert!(Pezpallet::<Test>::process_checked_multi_dispute_data(
 			&stmts
 				.into_iter()
 				.map(CheckedDisputeStatementSet::unchecked_from_unchecked)
@@ -898,7 +898,7 @@ mod unconfirmed_disputes {
 			let stmts = filter_dispute_set(stmts);
 
 			// Not confirmed => should be filtered out
-			assert_ok!(Pallet::<Test>::process_checked_multi_dispute_data(&stmts), vec![],);
+			assert_ok!(Pezpallet::<Test>::process_checked_multi_dispute_data(&stmts), vec![],);
 		});
 	}
 
@@ -910,7 +910,7 @@ mod unconfirmed_disputes {
 		let stmts = vec![CheckedDisputeStatementSet::unchecked_from_unchecked(stmts)];
 
 		assert_matches!(
-			Pallet::<Test>::process_checked_multi_dispute_data(&stmts),
+			Pezpallet::<Test>::process_checked_multi_dispute_data(&stmts),
 			Err(DispatchError::Module(ModuleError{index: _, error: _, message})) => assert_eq!(message, Some("UnconfirmedDispute"))
 		);
 
@@ -1010,7 +1010,7 @@ fn test_provide_multi_dispute_success_and_other() {
 		let stmts = filter_dispute_set(stmts);
 
 		assert_ok!(
-			Pallet::<Test>::process_checked_multi_dispute_data(&stmts),
+			Pezpallet::<Test>::process_checked_multi_dispute_data(&stmts),
 			vec![(3, candidate_hash)],
 		);
 
@@ -1063,7 +1063,7 @@ fn test_provide_multi_dispute_success_and_other() {
 
 		let stmts = filter_dispute_set(stmts);
 		assert_ok!(
-			Pallet::<Test>::process_checked_multi_dispute_data(&stmts),
+			Pezpallet::<Test>::process_checked_multi_dispute_data(&stmts),
 			vec![(5, candidate_hash)],
 		);
 
@@ -1081,7 +1081,7 @@ fn test_provide_multi_dispute_success_and_other() {
 			)],
 		}];
 		let stmts = filter_dispute_set(stmts);
-		assert_ok!(Pallet::<Test>::process_checked_multi_dispute_data(&stmts), vec![]);
+		assert_ok!(Pezpallet::<Test>::process_checked_multi_dispute_data(&stmts), vec![]);
 
 		let stmts = vec![
 			// 0, 4, and 5 vote against 5
@@ -1140,10 +1140,10 @@ fn test_provide_multi_dispute_success_and_other() {
 			},
 		];
 		let stmts = filter_dispute_set(stmts);
-		assert_ok!(Pallet::<Test>::process_checked_multi_dispute_data(&stmts), vec![]);
+		assert_ok!(Pezpallet::<Test>::process_checked_multi_dispute_data(&stmts), vec![]);
 
 		assert_eq!(
-			Pallet::<Test>::disputes(),
+			Pezpallet::<Test>::disputes(),
 			vec![
 				(
 					5,
@@ -1168,9 +1168,9 @@ fn test_provide_multi_dispute_success_and_other() {
 			]
 		);
 
-		assert!(!Pallet::<Test>::concluded_invalid(3, candidate_hash));
-		assert!(!Pallet::<Test>::concluded_invalid(4, candidate_hash));
-		assert!(Pallet::<Test>::concluded_invalid(5, candidate_hash));
+		assert!(!Pezpallet::<Test>::concluded_invalid(3, candidate_hash));
+		assert!(!Pezpallet::<Test>::concluded_invalid(4, candidate_hash));
+		assert!(Pezpallet::<Test>::concluded_invalid(5, candidate_hash));
 
 		// Ensure the `reward_validator` function was correctly called
 		assert_eq!(
@@ -1329,7 +1329,7 @@ fn test_punish_post_conclusion() {
 
 		let stmts = filter_dispute_set(stmts);
 		assert_ok!(
-			Pallet::<Test>::process_checked_multi_dispute_data(&stmts),
+			Pezpallet::<Test>::process_checked_multi_dispute_data(&stmts),
 			vec![(session, candidate_hash)],
 		);
 
@@ -1368,7 +1368,7 @@ fn test_punish_post_conclusion() {
 		}];
 
 		let stmts = filter_dispute_set(stmts);
-		assert_ok!(Pallet::<Test>::process_checked_multi_dispute_data(&stmts), vec![],);
+		assert_ok!(Pezpallet::<Test>::process_checked_multi_dispute_data(&stmts), vec![],);
 
 		// Ensure punishment for is called
 		assert_eq!(
@@ -1403,14 +1403,14 @@ fn test_revert_and_freeze() {
 		Frozen::<Test>::put(Some(0));
 		assert_noop!(
 			{
-				Pallet::<Test>::revert_and_freeze(0);
+				Pezpallet::<Test>::revert_and_freeze(0);
 				Result::<(), ()>::Err(()) // Just a small trick in order to use `assert_noop`.
 			},
 			(),
 		);
 
 		Frozen::<Test>::kill();
-		Pallet::<Test>::revert_and_freeze(0);
+		Pezpallet::<Test>::revert_and_freeze(0);
 
 		assert_eq!(Frozen::<Test>::get(), Some(0));
 		assert_eq!(System::digest().logs[0], ConsensusLog::Revert(1).into());
@@ -1424,13 +1424,13 @@ fn test_revert_and_freeze_merges() {
 		Frozen::<Test>::put(Some(10));
 		assert_noop!(
 			{
-				Pallet::<Test>::revert_and_freeze(10);
+				Pezpallet::<Test>::revert_and_freeze(10);
 				Result::<(), ()>::Err(()) // Just a small trick in order to use `assert_noop`.
 			},
 			(),
 		);
 
-		Pallet::<Test>::revert_and_freeze(8);
+		Pezpallet::<Test>::revert_and_freeze(8);
 		assert_eq!(Frozen::<Test>::get(), Some(8));
 	})
 }
@@ -1959,7 +1959,7 @@ fn deduplication_and_sorting_works() {
 
 		let disputes_orig = disputes.clone();
 
-		<Pallet<Test> as DisputesHandler<BlockNumberFor<Test>>>::deduplicate_and_sort_dispute_data(
+		<Pezpallet<Test> as DisputesHandler<BlockNumberFor<Test>>>::deduplicate_and_sort_dispute_data(
 			&mut disputes,
 		)
 		.unwrap_err();
@@ -1991,7 +1991,7 @@ fn apply_filter_all<T: Config, I: IntoIterator<Item = DisputeStatementSet>>(
 	let mut acc = Vec::<CheckedDisputeStatementSet>::new();
 	for dispute_statement in sets {
 		if let Some(checked) =
-			<Pallet<T> as DisputesHandler<BlockNumberFor<T>>>::filter_dispute_data(
+			<Pezpallet<T> as DisputesHandler<BlockNumberFor<T>>>::filter_dispute_data(
 				dispute_statement,
 				post_conclusion_acceptance_period,
 			) {
@@ -2059,7 +2059,7 @@ fn filter_removes_duplicates_within_set() {
 
 		let post_conclusion_acceptance_period = 10;
 		let statements =
-			<Pallet<Test> as DisputesHandler<BlockNumberFor<Test>>>::filter_dispute_data(
+			<Pezpallet<Test> as DisputesHandler<BlockNumberFor<Test>>>::filter_dispute_data(
 				statements,
 				post_conclusion_acceptance_period,
 			);
@@ -2330,7 +2330,7 @@ fn filter_removes_duplicate_statements_sets() {
 		];
 
 		// `Err(())` indicates presence of duplicates
-		assert!(<Pallet::<Test> as DisputesHandler<
+		assert!(<Pezpallet::<Test> as DisputesHandler<
 			BlockNumberFor<Test>,
 		>>::deduplicate_and_sort_dispute_data(&mut sets)
 		.is_err());

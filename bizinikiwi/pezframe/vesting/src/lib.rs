@@ -15,15 +15,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Vesting Pallet
+//! # Vesting Pezpallet
 //!
 //! - [`Config`]
 //! - [`Call`]
 //!
 //! ## Overview
 //!
-//! A simple pallet providing a means of placing a linear curve on an account's locked balance. This
-//! pallet ensures that there is a lock in place preventing the balance to drop below the *unvested*
+//! A simple pezpallet providing a means of placing a linear curve on an account's locked balance. This
+//! pezpallet ensures that there is a lock in place preventing the balance to drop below the *unvested*
 //! amount for any reason other than the ones specified in `UnvestedFundsAllowedWithdrawReasons`
 //! configuration value.
 //!
@@ -35,7 +35,7 @@
 //!
 //! ## Interface
 //!
-//! This pallet implements the `VestingSchedule` trait.
+//! This pezpallet implements the `VestingSchedule` trait.
 //!
 //! ### Dispatchable Functions
 //!
@@ -81,7 +81,7 @@ use pezsp_runtime::{
 	DispatchError, RuntimeDebug,
 };
 
-pub use pallet::*;
+pub use pezpallet::*;
 pub use vesting_info::*;
 pub use weights::WeightInfo;
 
@@ -151,13 +151,13 @@ impl<T: Config> Get<u32> for MaxVestingSchedulesGet<T> {
 	}
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
@@ -170,10 +170,10 @@ pub mod pallet {
 		type BlockNumberToBalance: Convert<BlockNumberFor<Self>, BalanceOf<Self>>;
 
 		/// The minimum amount transferred to call `vested_transfer`.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MinVestedTransfer: Get<BalanceOf<Self>>;
 
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 
 		/// Reasons that determine under which conditions the balance may drop below
@@ -184,22 +184,22 @@ pub mod pallet {
 		///
 		/// Must return monotonically increasing values when called from consecutive blocks.
 		/// Can be configured to return either:
-		/// - the local block number of the runtime via `pezframe_system::Pallet`
+		/// - the local block number of the runtime via `pezframe_system::Pezpallet`
 		/// - a remote block number, eg from the relay chain through `RelaychainDataProvider`
 		/// - an arbitrary value through a custom implementation of the trait
 		///
 		/// There is currently no migration provided to "hot-swap" block number providers and it may
 		/// result in undefined behavior when doing so. Teyrchains are therefore best off setting
-		/// this to their local block number provider if they have the pallet already deployed.
+		/// this to their local block number provider if they have the pezpallet already deployed.
 		///
 		/// Suggested values:
-		/// - Solo- and Relay-chains: `pezframe_system::Pallet`
+		/// - Solo- and Relay-chains: `pezframe_system::Pezpallet`
 		/// - Teyrchains that may produce blocks sparingly or only when needed (on-demand):
-		///   - already have the pallet deployed: `pezframe_system::Pallet`
-		///   - are freshly deploying this pallet: `RelaychainDataProvider`
+		///   - already have the pezpallet deployed: `pezframe_system::Pezpallet`
+		///   - are freshly deploying this pezpallet: `RelaychainDataProvider`
 		/// - Teyrchains with a reliably block production rate (PLO or bulk-coretime):
-		///   - already have the pallet deployed: `pezframe_system::Pallet`
-		///   - are freshly deploying this pallet: no strong recommendation. Both local and remote
+		///   - already have the pezpallet deployed: `pezframe_system::Pezpallet`
+		///   - are freshly deploying this pezpallet: no strong recommendation. Both local and remote
 		///     providers can be used. Relay provider can be a bit better in cases where the
 		///     teyrchain is lagging its block production to avoid clock skew.
 		type BlockNumberProvider: BlockNumberProvider<BlockNumber = BlockNumberFor<Self>>;
@@ -208,23 +208,23 @@ pub mod pallet {
 		const MAX_VESTING_SCHEDULES: u32;
 	}
 
-	#[pallet::extra_constants]
-	impl<T: Config> Pallet<T> {
-		#[pallet::constant_name(MaxVestingSchedules)]
+	#[pezpallet::extra_constants]
+	impl<T: Config> Pezpallet<T> {
+		#[pezpallet::constant_name(MaxVestingSchedules)]
 		fn max_vesting_schedules() -> u32 {
 			T::MAX_VESTING_SCHEDULES
 		}
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn integrity_test() {
 			assert!(T::MAX_VESTING_SCHEDULES > 0, "`MaxVestingSchedules` must be greater than 0");
 		}
 	}
 
 	/// Information regarding the vesting of a given account.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Vesting<T: Config> = StorageMap<
 		_,
 		Blake2_128Concat,
@@ -232,22 +232,22 @@ pub mod pallet {
 		BoundedVec<VestingInfo<BalanceOf<T>, BlockNumberFor<T>>, MaxVestingSchedulesGet<T>>,
 	>;
 
-	/// Storage version of the pallet.
+	/// Storage version of the pezpallet.
 	///
 	/// New networks start with latest version, as determined by the genesis build.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type StorageVersion<T: Config> = StorageValue<_, Releases, ValueQuery>;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(pezframe_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		pub vesting: Vec<(T::AccountId, BlockNumberFor<T>, BlockNumberFor<T>, BalanceOf<T>)>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			use pezsp_runtime::traits::Saturating;
@@ -283,8 +283,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A vesting schedule has been created.
 		VestingCreated { account: T::AccountId, schedule_index: u32 },
@@ -295,8 +295,8 @@ pub mod pallet {
 		VestingCompleted { account: T::AccountId },
 	}
 
-	/// Error for the vesting pallet.
-	#[pallet::error]
+	/// Error for the vesting pezpallet.
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// The account given is not vesting.
 		NotVesting,
@@ -311,19 +311,19 @@ pub mod pallet {
 		InvalidScheduleParams,
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Unlock any vested funds of the sender account.
 		///
 		/// The dispatch origin for this call must be _Signed_ and the sender must have funds still
-		/// locked under this pallet.
+		/// locked under this pezpallet.
 		///
 		/// Emits either `VestingCompleted` or `VestingUpdated`.
 		///
 		/// ## Complexity
 		/// - `O(1)`.
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::vest_locked(MaxLocksOf::<T>::get(), T::MAX_VESTING_SCHEDULES)
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::vest_locked(MaxLocksOf::<T>::get(), T::MAX_VESTING_SCHEDULES)
 			.max(T::WeightInfo::vest_unlocked(MaxLocksOf::<T>::get(), T::MAX_VESTING_SCHEDULES))
 		)]
 		pub fn vest(origin: OriginFor<T>) -> DispatchResult {
@@ -336,14 +336,14 @@ pub mod pallet {
 		/// The dispatch origin for this call must be _Signed_.
 		///
 		/// - `target`: The account whose vested funds should be unlocked. Must have funds still
-		/// locked under this pallet.
+		/// locked under this pezpallet.
 		///
 		/// Emits either `VestingCompleted` or `VestingUpdated`.
 		///
 		/// ## Complexity
 		/// - `O(1)`.
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::vest_other_locked(MaxLocksOf::<T>::get(), T::MAX_VESTING_SCHEDULES)
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::vest_other_locked(MaxLocksOf::<T>::get(), T::MAX_VESTING_SCHEDULES)
 			.max(T::WeightInfo::vest_other_unlocked(MaxLocksOf::<T>::get(), T::MAX_VESTING_SCHEDULES))
 		)]
 		pub fn vest_other(origin: OriginFor<T>, target: AccountIdLookupOf<T>) -> DispatchResult {
@@ -365,8 +365,8 @@ pub mod pallet {
 		///
 		/// ## Complexity
 		/// - `O(1)`.
-		#[pallet::call_index(2)]
-		#[pallet::weight(
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(
 			T::WeightInfo::vested_transfer(MaxLocksOf::<T>::get(), T::MAX_VESTING_SCHEDULES)
 		)]
 		pub fn vested_transfer(
@@ -393,8 +393,8 @@ pub mod pallet {
 		///
 		/// ## Complexity
 		/// - `O(1)`.
-		#[pallet::call_index(3)]
-		#[pallet::weight(
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(
 			T::WeightInfo::force_vested_transfer(MaxLocksOf::<T>::get(), T::MAX_VESTING_SCHEDULES)
 		)]
 		pub fn force_vested_transfer(
@@ -430,8 +430,8 @@ pub mod pallet {
 		///
 		/// - `schedule1_index`: index of the first schedule to merge.
 		/// - `schedule2_index`: index of the second schedule to merge.
-		#[pallet::call_index(4)]
-		#[pallet::weight(
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(
 			T::WeightInfo::not_unlocking_merge_schedules(MaxLocksOf::<T>::get(), T::MAX_VESTING_SCHEDULES)
 			.max(T::WeightInfo::unlocking_merge_schedules(MaxLocksOf::<T>::get(), T::MAX_VESTING_SCHEDULES))
 		)]
@@ -465,8 +465,8 @@ pub mod pallet {
 		///
 		/// - `target`: An account that has a vesting schedule
 		/// - `schedule_index`: The vesting schedule index that should be removed
-		#[pallet::call_index(5)]
-		#[pallet::weight(
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(
 			T::WeightInfo::force_remove_vesting_schedule(MaxLocksOf::<T>::get(), T::MAX_VESTING_SCHEDULES)
 		)]
 		pub fn force_remove_vesting_schedule(
@@ -491,7 +491,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	// Public function for accessing vesting storage
 	pub fn vesting(
 		account: T::AccountId,
@@ -709,7 +709,7 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-impl<T: Config> VestingSchedule<T::AccountId> for Pallet<T>
+impl<T: Config> VestingSchedule<T::AccountId> for Pezpallet<T>
 where
 	BalanceOf<T>: MaybeSerializeDeserialize + Debug,
 {
@@ -813,9 +813,9 @@ where
 	}
 }
 
-/// An implementation that allows the Vesting Pallet to handle a vested transfer
-/// on behalf of another Pallet.
-impl<T: Config> VestedTransfer<T::AccountId> for Pallet<T>
+/// An implementation that allows the Vesting Pezpallet to handle a vested transfer
+/// on behalf of another Pezpallet.
+impl<T: Config> VestedTransfer<T::AccountId> for Pezpallet<T>
 where
 	BalanceOf<T>: MaybeSerializeDeserialize + Debug,
 {

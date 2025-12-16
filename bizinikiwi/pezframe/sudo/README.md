@@ -1,7 +1,7 @@
 # Sudo Module
 
-- [`Config`](https://docs.rs/pezpallet-sudo/latest/pallet_sudo/pallet/trait.Config.html)
-- [`Call`](https://docs.rs/pezpallet-sudo/latest/pallet_sudo/pallet/enum.Call.html)
+- [`Config`](https://docs.rs/pezpallet-sudo/latest/pallet_sudo/pezpallet/trait.Config.html)
+- [`Call`](https://docs.rs/pezpallet-sudo/latest/pallet_sudo/pezpallet/enum.Call.html)
 
 ## Overview
 
@@ -35,21 +35,21 @@ Learn more about privileged functions and `Root` origin in the [`Origin`] type d
 This is an example of a module that exposes a privileged function:
 
 ```rust
-#[frame_support::pallet]
-pub mod pallet {
+#[frame_support::pezpallet]
+pub mod pezpallet {
     use super::*;
     use frame_support::pallet_prelude::*;
     use frame_system::pallet_prelude::*;
 
-    #[pallet::pallet]
-    pub struct Pallet<T>(_);
+    #[pezpallet::pezpallet]
+    pub struct Pezpallet<T>(_);
 
-    #[pallet::config]
+    #[pezpallet::config]
     pub trait Config: frame_system::Config {}
 
-    #[pallet::call]
-    impl<T: Config> Pallet<T> {
-        #[pallet::weight(0)]
+    #[pezpallet::call]
+    impl<T: Config> Pezpallet<T> {
+        #[pezpallet::weight(0)]
         pub fn privileged_function(origin: OriginFor<T>) -> DispatchResult {
             ensure_root(origin)?;
 

@@ -357,8 +357,8 @@ fn maybe_new_session(n: u32) {
 		let session_index = shared::CurrentSessionIndex::<Test>::get() + 1;
 		let validators_pub_keys = validators_public_keys(VALIDATORS);
 
-		shared::Pallet::<Test>::set_session_index(session_index);
-		shared::Pallet::<Test>::set_active_validators_ascending(validators_pub_keys);
+		shared::Pezpallet::<Test>::set_session_index(session_index);
+		shared::Pezpallet::<Test>::set_active_validators_ascending(validators_pub_keys);
 		Paras::test_on_new_session();
 	}
 }

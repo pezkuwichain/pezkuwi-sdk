@@ -8,16 +8,16 @@
 //! Let's begin by starting to store a `NewType` in a storage item:
 //!
 //! ```compile_fail
-//! #[frame::pallet]
-//! pub mod pallet {
+//! #[frame::pezpallet]
+//! pub mod pezpallet {
 //! 	# use frame::prelude::*;
-//! 	# #[pallet::config]
+//! 	# #[pezpallet::config]
 //! 	# pub trait Config: pezframe_system::Config {}
-//! 	# #[pallet::pallet]
-//! 	# pub struct Pallet<T>(_);
+//! 	# #[pezpallet::pezpallet]
+//! 	# pub struct Pezpallet<T>(_);
 //! 	pub struct NewType(u32);
 //
-//! 	#[pallet::storage]
+//! 	#[pezpallet::storage]
 //! 	pub type Something<T> = StorageValue<_, NewType>;
 //! }
 //! ```
@@ -32,17 +32,17 @@
 //! This implies the following set of traits that need to be derived for a type to be stored in
 //! `frame` storage:
 //! ```rust
-//! #[frame::pallet]
-//! pub mod pallet {
+//! #[frame::pezpallet]
+//! pub mod pezpallet {
 //! 	# use frame::prelude::*;
-//! 	# #[pallet::config]
+//! 	# #[pezpallet::config]
 //! 	# pub trait Config: pezframe_system::Config {}
-//! 	# #[pallet::pallet]
-//! 	# pub struct Pallet<T>(_);
+//! 	# #[pezpallet::pezpallet]
+//! 	# pub struct Pezpallet<T>(_);
 //! 	#[derive(codec::Encode, codec::Decode, codec::MaxEncodedLen, scale_info::TypeInfo)]
 //! 	pub struct NewType(u32);
 //!
-//! 	#[pallet::storage]
+//! 	#[pezpallet::storage]
 //! 	pub type Something<T> = StorageValue<_, NewType>;
 //! }
 //! ```
@@ -50,17 +50,17 @@
 //! Next, let's look at how this will differ if we are to store a type that is derived from `T` in
 //! storage, such as [`frame::prelude::BlockNumberFor`]:
 //! ```compile_fail
-//! #[frame::pallet]
-//! pub mod pallet {
+//! #[frame::pezpallet]
+//! pub mod pezpallet {
 //! 	# use frame::prelude::*;
-//! 	# #[pallet::config]
+//! 	# #[pezpallet::config]
 //! 	# pub trait Config: pezframe_system::Config {}
-//! 	# #[pallet::pallet]
-//! 	# pub struct Pallet<T>(_);
+//! 	# #[pezpallet::pezpallet]
+//! 	# pub struct Pezpallet<T>(_);
 //! 	#[derive(codec::Encode, codec::Decode, codec::MaxEncodedLen, scale_info::TypeInfo)]
 //! 	pub struct NewType<T: Config>(BlockNumberFor<T>);
 //!
-//! 	#[pallet::storage]
+//! 	#[pezpallet::storage]
 //! 	pub type Something<T: Config> = StorageValue<_, NewType<T>>;
 //! }
 //! ```
@@ -84,18 +84,18 @@
 //! attribute to `NewType`. This additional macro will instruct the `derive` to skip the bound on
 //! `T`.
 //! ```rust
-//! #[frame::pallet]
-//! pub mod pallet {
+//! #[frame::pezpallet]
+//! pub mod pezpallet {
 //! 	# use frame::prelude::*;
-//! 	# #[pallet::config]
+//! 	# #[pezpallet::config]
 //! 	# pub trait Config: pezframe_system::Config {}
-//! 	# #[pallet::pallet]
-//! 	# pub struct Pallet<T>(_);
+//! 	# #[pezpallet::pezpallet]
+//! 	# pub struct Pezpallet<T>(_);
 //! 	#[derive(codec::Encode, codec::Decode, codec::MaxEncodedLen, scale_info::TypeInfo)]
 //! 	#[scale_info(skip_type_params(T))]
 //! 	pub struct NewType<T: Config>(BlockNumberFor<T>);
 //!
-//! 	#[pallet::storage]
+//! 	#[pezpallet::storage]
 //! 	pub type Something<T: Config> = StorageValue<_, NewType<T>>;
 //! }
 //! ```
@@ -104,18 +104,18 @@
 //! must also implement `Default`. This should be as simple as adding `derive(Default)` to it,
 //! right?
 //! ```compile_fail
-//! #[frame::pallet]
-//! pub mod pallet {
+//! #[frame::pezpallet]
+//! pub mod pezpallet {
 //! 	# use frame::prelude::*;
-//! 	# #[pallet::config]
+//! 	# #[pezpallet::config]
 //! 	# pub trait Config: pezframe_system::Config {}
-//! 	# #[pallet::pallet]
-//! 	# pub struct Pallet<T>(_);
+//! 	# #[pezpallet::pezpallet]
+//! 	# pub struct Pezpallet<T>(_);
 //! 	#[derive(codec::Encode, codec::Decode, codec::MaxEncodedLen, scale_info::TypeInfo, Default)]
 //! 	#[scale_info(skip_type_params(T))]
 //! 	pub struct NewType<T: Config>(BlockNumberFor<T>);
 //!
-//! 	#[pallet::storage]
+//! 	#[pezpallet::storage]
 //! 	pub type Something<T: Config> = StorageValue<_, NewType<T>, ValueQuery>;
 //! }
 //! ```
@@ -142,13 +142,13 @@
 //!
 //! We can fix the following example by using [`frame::prelude::DefaultNoBound`].
 //! ```rust
-//! #[frame::pallet]
-//! pub mod pallet {
+//! #[frame::pezpallet]
+//! pub mod pezpallet {
 //! 	# use frame::prelude::*;
-//! 	# #[pallet::config]
+//! 	# #[pezpallet::config]
 //! 	# pub trait Config: pezframe_system::Config {}
-//! 	# #[pallet::pallet]
-//! 	# pub struct Pallet<T>(_);
+//! 	# #[pezpallet::pezpallet]
+//! 	# pub struct Pezpallet<T>(_);
 //! 	#[derive(
 //! 		codec::Encode,
 //! 		codec::Decode,
@@ -159,7 +159,7 @@
 //! 	#[scale_info(skip_type_params(T))]
 //! 	pub struct NewType<T:Config>(BlockNumberFor<T>);
 //!
-//! 	#[pallet::storage]
+//! 	#[pezpallet::storage]
 //! 	pub type Something<T: Config> = StorageValue<_, NewType<T>, ValueQuery>;
 //! }
 //! ```
@@ -167,26 +167,26 @@
 //! Finally, if a custom type that is provided through `Config` is to be stored in the storage, it
 //! is subject to the same trait requirements. The following does not work:
 //! ```compile_fail
-//! #[frame::pallet]
-//! pub mod pallet {
+//! #[frame::pezpallet]
+//! pub mod pezpallet {
 //! 	use frame::prelude::*;
-//! 	#[pallet::config]
+//! 	#[pezpallet::config]
 //! 	pub trait Config: pezframe_system::Config {
 //! 		type CustomType;
 //! 	}
-//! 	#[pallet::pallet]
-//! 	pub struct Pallet<T>(_);
-//! 	#[pallet::storage]
+//! 	#[pezpallet::pezpallet]
+//! 	pub struct Pezpallet<T>(_);
+//! 	#[pezpallet::storage]
 //! 	pub type Something<T: Config> = StorageValue<_, T::CustomType>;
 //! }
 //! ```
 //! 
 //! But adding the right trait bounds will fix it.
 //! ```rust
-//! #[frame::pallet]
-//! pub mod pallet {
+//! #[frame::pezpallet]
+//! pub mod pezpallet {
 //! 	use frame::prelude::*;
-//! 	#[pallet::config]
+//! 	#[pezpallet::config]
 //! 	pub trait Config: pezframe_system::Config {
 //! 		type CustomType: codec::FullCodec
 //! 			+ codec::MaxEncodedLen
@@ -194,9 +194,9 @@
 //! 			+ Debug
 //! 			+ Default;
 //! 	}
-//! 	#[pallet::pallet]
-//! 	pub struct Pallet<T>(_);
-//! 	#[pallet::storage]
+//! 	#[pezpallet::pezpallet]
+//! 	pub struct Pezpallet<T>(_);
+//! 	#[pezpallet::storage]
 //! 	pub type Something<T: Config> = StorageValue<_, T::CustomType>;
 //! }
 //! ```

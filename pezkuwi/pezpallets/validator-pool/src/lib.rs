@@ -1,12 +1,12 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-//! # Validator Pool Pallet
+//! # Validator Pool Pezpallet
 //!
-//! A pallet for managing a decentralized validator pool with multi-category validation.
+//! A pezpallet for managing a decentralized validator pool with multi-category validation.
 //!
 //! ## Overview
 //!
-//! This pallet provides a flexible validator pool system that supports four distinct
+//! This pezpallet provides a flexible validator pool system that supports four distinct
 //! validator categories, each with unique requirements and reward mechanisms:
 //!
 //! - **Community Validators**: Require referral system participation
@@ -48,7 +48,7 @@
 //!
 //! ### Dependencies
 //!
-//! This pallet requires integration with:
+//! This pezpallet requires integration with:
 //! - `pezpallet-trust` - Trust score provider
 //! - `pezpallet-tiki` - Tiki score provider
 //! - `pezpallet-referral` - Referral system provider
@@ -74,7 +74,7 @@
 
 extern crate alloc;
 
-pub use pallet::*;
+pub use pezpallet::*;
 pub mod types;
 pub mod weights;
 
@@ -106,7 +106,7 @@ pub trait TikiScoreProvider<AccountId> {
 	fn get_tiki_score(who: &AccountId) -> u32;
 }
 
-/// Weight functions trait for this pallet.
+/// Weight functions trait for this pezpallet.
 pub trait WeightInfo {
 	fn join_validator_pool() -> Weight;
 	fn leave_validator_pool() -> Weight;
@@ -116,14 +116,14 @@ pub trait WeightInfo {
 	fn set_pool_parameters() -> Weight;
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config<RuntimeEvent: From<Event<Self>>> {
 		type WeightInfo: crate::WeightInfo;
 		type Randomness: Randomness<Self::Hash, BlockNumberFor<Self>>;
@@ -141,15 +141,15 @@ pub mod pallet {
 		type PoolManagerOrigin: EnsureOrigin<Self::RuntimeOrigin>;
 
 		/// Maximum number of validators per era
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxValidators: Get<u32>;
 
 		/// Maximum size of validator pool
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxPoolSize: Get<u32>;
 
 		/// Minimum stake amount for stake validators
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MinStakeAmount: Get<u128>;
 	}
 
@@ -158,46 +158,46 @@ pub mod pallet {
 	// ============================================================================
 
 	/// Current era index
-	#[pallet::storage]
-	#[pallet::getter(fn current_era)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn current_era)]
 	pub type CurrentEra<T: Config> = StorageValue<_, u32, ValueQuery>;
 
 	/// When current era started
-	#[pallet::storage]
-	#[pallet::getter(fn era_start)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn era_start)]
 	pub type EraStart<T: Config> = StorageValue<_, BlockNumberFor<T>, ValueQuery>;
 
 	/// Current selected validator set for this era
-	#[pallet::storage]
-	#[pallet::getter(fn current_validator_set)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn current_validator_set)]
 	pub type CurrentValidatorSet<T: Config> =
 		StorageValue<_, ValidatorSet<T::AccountId>, OptionQuery>;
 
 	/// Validator pool members and their categories
-	#[pallet::storage]
-	#[pallet::getter(fn pool_members)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn pool_members)]
 	pub type PoolMembers<T: Config> =
 		StorageMap<_, Blake2_128Concat, T::AccountId, ValidatorPoolCategory, OptionQuery>;
 
 	/// Performance metrics for each validator
-	#[pallet::storage]
-	#[pallet::getter(fn performance_metrics)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn performance_metrics)]
 	pub type PerformanceMetrics<T: Config> =
 		StorageMap<_, Blake2_128Concat, T::AccountId, ValidatorPerformance, ValueQuery>;
 
 	/// Validator selection history (last 5 eras)
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type SelectionHistory<T: Config> =
 		StorageMap<_, Blake2_128Concat, T::AccountId, BoundedVec<u32, ConstU32<5>>, ValueQuery>;
 
 	/// Pool size counter
-	#[pallet::storage]
-	#[pallet::getter(fn pool_size)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn pool_size)]
 	pub type PoolSize<T: Config> = StorageValue<_, u32, ValueQuery>;
 
 	/// Era length in blocks
-	#[pallet::storage]
-	#[pallet::getter(fn era_length)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn era_length)]
 	pub type EraLength<T: Config> = StorageValue<_, BlockNumberFor<T>, ValueQuery>;
 
 	// ============================================================================
@@ -205,56 +205,56 @@ pub mod pallet {
 	// ============================================================================
 
 	/// Current operation mode (Shadow or Active)
-	#[pallet::storage]
-	#[pallet::getter(fn operation_mode)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn operation_mode)]
 	pub type CurrentOperationMode<T: Config> = StorageValue<_, OperationMode, ValueQuery>;
 
 	/// TNPoS validator selection (shadow mode - what would have been selected)
-	#[pallet::storage]
-	#[pallet::getter(fn shadow_validator_set)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn shadow_validator_set)]
 	pub type ShadowValidatorSet<T: Config> =
 		StorageValue<_, ValidatorSet<T::AccountId>, OptionQuery>;
 
 	/// NPoS validator set for comparison (recorded from actual consensus)
-	#[pallet::storage]
-	#[pallet::getter(fn npos_validator_set)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn npos_validator_set)]
 	pub type NposValidatorSet<T: Config> =
 		StorageValue<_, BoundedVec<T::AccountId, ConstU32<100>>, ValueQuery>;
 
 	/// Latest shadow comparison result
-	#[pallet::storage]
-	#[pallet::getter(fn shadow_comparison)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn shadow_comparison)]
 	pub type LatestShadowComparison<T: Config> =
 		StorageValue<_, ShadowComparison<T::AccountId>, OptionQuery>;
 
 	/// Cumulative shadow statistics
-	#[pallet::storage]
-	#[pallet::getter(fn shadow_statistics)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn shadow_statistics)]
 	pub type CumulativeShadowStats<T: Config> = StorageValue<_, ShadowStatistics, ValueQuery>;
 
 	/// Per-era analysis data (keeps last 10 eras for detailed analysis)
-	#[pallet::storage]
-	#[pallet::getter(fn era_analysis)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn era_analysis)]
 	pub type EraAnalysisData<T: Config> =
 		StorageMap<_, Blake2_128Concat, u32, EraAnalysis, OptionQuery>;
 
 	/// Category distribution history (last 10 eras)
-	#[pallet::storage]
-	#[pallet::getter(fn category_distribution)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn category_distribution)]
 	pub type CategoryDistributionHistory<T: Config> =
 		StorageMap<_, Blake2_128Concat, u32, CategoryDistribution, OptionQuery>;
 
 	/// Shadow mode activation block
-	#[pallet::storage]
-	#[pallet::getter(fn shadow_mode_since)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn shadow_mode_since)]
 	pub type ShadowModeSince<T: Config> = StorageValue<_, BlockNumberFor<T>, OptionQuery>;
 
 	// ============================================================================
 	// EVENTS
 	// ============================================================================
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A validator joined the pool
 		ValidatorJoinedPool { validator: T::AccountId, category: ValidatorPoolCategory },
@@ -315,7 +315,7 @@ pub mod pallet {
 	// ERRORS
 	// ============================================================================
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Validator already in pool
 		AlreadyInPool,
@@ -351,8 +351,8 @@ pub mod pallet {
 	// HOOKS
 	// ============================================================================
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn on_initialize(block_number: BlockNumberFor<T>) -> Weight {
 			let mut weight = Weight::zero();
 
@@ -378,11 +378,11 @@ pub mod pallet {
 	// EXTRINSICS
 	// ============================================================================
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Join the validator pool
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::join_validator_pool())]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::join_validator_pool())]
 		pub fn join_validator_pool(
 			origin: OriginFor<T>,
 			category: ValidatorPoolCategory,
@@ -415,8 +415,8 @@ pub mod pallet {
 		}
 
 		/// Leave the validator pool
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::leave_validator_pool())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::leave_validator_pool())]
 		pub fn leave_validator_pool(origin: OriginFor<T>) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 
@@ -436,8 +436,8 @@ pub mod pallet {
 		}
 
 		/// Force new era (sudo only)
-		#[pallet::call_index(2)]
-		#[pallet::weight(T::WeightInfo::force_new_era(T::MaxPoolSize::get()))]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(T::WeightInfo::force_new_era(T::MaxPoolSize::get()))]
 		pub fn force_new_era(origin: OriginFor<T>) -> DispatchResult {
 			T::PoolManagerOrigin::ensure_origin(origin)?;
 			Self::do_new_era()?;
@@ -445,8 +445,8 @@ pub mod pallet {
 		}
 
 		/// Update validator category
-		#[pallet::call_index(3)]
-		#[pallet::weight(T::WeightInfo::update_category())]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(T::WeightInfo::update_category())]
 		pub fn update_category(
 			origin: OriginFor<T>,
 			new_category: ValidatorPoolCategory,
@@ -470,8 +470,8 @@ pub mod pallet {
 		}
 
 		/// Set pool parameters (sudo only)
-		#[pallet::call_index(4)]
-		#[pallet::weight(T::WeightInfo::set_pool_parameters())]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(T::WeightInfo::set_pool_parameters())]
 		pub fn set_pool_parameters(
 			origin: OriginFor<T>,
 			era_length: BlockNumberFor<T>,
@@ -489,8 +489,8 @@ pub mod pallet {
 		}
 
 		/// Update performance metrics (called by consensus)
-		#[pallet::call_index(5)]
-		#[pallet::weight(T::WeightInfo::update_performance_metrics())]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(T::WeightInfo::update_performance_metrics())]
 		pub fn update_performance_metrics(
 			origin: OriginFor<T>,
 			validator: T::AccountId,
@@ -525,8 +525,8 @@ pub mod pallet {
 		// ============================================================================
 
 		/// Set operation mode (Shadow or Active) - sudo only
-		#[pallet::call_index(6)]
-		#[pallet::weight(T::WeightInfo::set_pool_parameters())]
+		#[pezpallet::call_index(6)]
+		#[pezpallet::weight(T::WeightInfo::set_pool_parameters())]
 		pub fn set_operation_mode(origin: OriginFor<T>, new_mode: OperationMode) -> DispatchResult {
 			T::PoolManagerOrigin::ensure_origin(origin)?;
 
@@ -543,7 +543,7 @@ pub mod pallet {
 				_ => {},
 			}
 
-			let current_block = pezframe_system::Pallet::<T>::block_number();
+			let current_block = pezframe_system::Pezpallet::<T>::block_number();
 
 			// Update mode
 			CurrentOperationMode::<T>::put(new_mode);
@@ -563,8 +563,8 @@ pub mod pallet {
 		}
 
 		/// Record NPoS validators for shadow comparison - called by consensus/staking
-		#[pallet::call_index(7)]
-		#[pallet::weight(T::WeightInfo::update_performance_metrics())]
+		#[pezpallet::call_index(7)]
+		#[pezpallet::weight(T::WeightInfo::update_performance_metrics())]
 		pub fn record_npos_validators(
 			origin: OriginFor<T>,
 			validators: Vec<T::AccountId>,
@@ -596,8 +596,8 @@ pub mod pallet {
 		}
 
 		/// Record era end statistics for shadow analysis
-		#[pallet::call_index(8)]
-		#[pallet::weight(T::WeightInfo::update_performance_metrics())]
+		#[pezpallet::call_index(8)]
+		#[pezpallet::weight(T::WeightInfo::update_performance_metrics())]
 		pub fn record_era_end_stats(
 			origin: OriginFor<T>,
 			era_index: u32,
@@ -625,7 +625,7 @@ pub mod pallet {
 	// INTERNAL METHODS
 	// ============================================================================
 
-	impl<T: Config> Pallet<T> {
+	impl<T: Config> Pezpallet<T> {
 		/// Validate category requirements
 		fn validate_category_requirements(
 			who: &T::AccountId,
@@ -642,7 +642,7 @@ pub mod pallet {
 			{
 				match category {
 					ValidatorPoolCategory::StakeValidator { min_stake, trust_threshold } => {
-						// Check minimum stake (implementation depends on staking pallet)
+						// Check minimum stake (implementation depends on staking pezpallet)
 						ensure!(
 							*min_stake >= T::MinStakeAmount::get(),
 							Error::<T>::InsufficientStake
@@ -690,7 +690,7 @@ pub mod pallet {
 
 			// Update storage
 			CurrentEra::<T>::put(new_era);
-			EraStart::<T>::put(pezframe_system::Pallet::<T>::block_number());
+			EraStart::<T>::put(pezframe_system::Pezpallet::<T>::block_number());
 			CurrentValidatorSet::<T>::put(&new_validator_set);
 
 			// Update selection history for selected validators
@@ -863,7 +863,7 @@ pub mod pallet {
 			LatestShadowComparison::<T>::put(&comparison);
 
 			// Record era analysis
-			let block_number = pezframe_system::Pallet::<T>::block_number();
+			let block_number = pezframe_system::Pezpallet::<T>::block_number();
 			let era_analysis = EraAnalysis {
 				era_index,
 				recorded_at_block: block_number.try_into().unwrap_or(0u32),
@@ -1022,7 +1022,7 @@ pub mod pallet {
 	// SESSION MANAGER IMPLEMENTATION
 	// ============================================================================
 
-	impl<T: Config> pezpallet_session::SessionManager<T::AccountId> for Pallet<T> {
+	impl<T: Config> pezpallet_session::SessionManager<T::AccountId> for Pezpallet<T> {
 		fn new_session(new_index: u32) -> Option<Vec<T::AccountId>> {
 			// Behavior depends on operation mode
 			match Self::operation_mode() {
@@ -1093,7 +1093,7 @@ pub mod pallet {
 	// GENESIS CONFIG
 	// ============================================================================
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(pezframe_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		/// Initial operation mode
@@ -1104,7 +1104,7 @@ pub mod pallet {
 		pub initial_pool_members: Vec<(T::AccountId, ValidatorPoolCategory)>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			// Set operation mode

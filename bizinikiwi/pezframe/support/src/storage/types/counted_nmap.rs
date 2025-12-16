@@ -46,24 +46,24 @@ use pezsp_runtime::traits::Saturating;
 /// Whenever the counter needs to be updated, an additional read and write occurs to update that
 /// counter.
 ///
-/// For general information regarding the `#[pallet::storage]` attribute, refer to
+/// For general information regarding the `#[pezpallet::storage]` attribute, refer to
 /// [`crate::pezpallet_macros::storage`].
 ///
 /// # Example
 ///
 /// ```
-/// #[pezframe_support::pallet]
-/// mod pallet {
+/// #[pezframe_support::pezpallet]
+/// mod pezpallet {
 ///     # use pezframe_support::pezpallet_prelude::*;
-///     # #[pallet::config]
+///     # #[pezpallet::config]
 ///     # pub trait Config: pezframe_system::Config {}
-///     # #[pallet::pallet]
-///     # pub struct Pallet<T>(_);
+///     # #[pezpallet::pezpallet]
+///     # pub struct Pezpallet<T>(_);
 /// 	/// A kitchen-sink CountedStorageNMap, with all possible additional attributes.
-///     #[pallet::storage]
-/// 	#[pallet::getter(fn foo)]
-/// 	#[pallet::storage_prefix = "OtherFoo"]
-/// 	#[pallet::unbounded]
+///     #[pezpallet::storage]
+/// 	#[pezpallet::getter(fn foo)]
+/// 	#[pezpallet::storage_prefix = "OtherFoo"]
+/// 	#[pezpallet::unbounded]
 ///     pub type Foo<T> = CountedStorageNMap<
 /// 		_,
 /// 		(
@@ -76,7 +76,7 @@ use pezsp_runtime::traits::Saturating;
 /// 	>;
 ///
 /// 	/// Alternative named syntax.
-///     #[pallet::storage]
+///     #[pezpallet::storage]
 ///     pub type Bar<T> = CountedStorageNMap<
 /// 		Key = (
 /// 			NMapKey<Blake2_128Concat, u8>,

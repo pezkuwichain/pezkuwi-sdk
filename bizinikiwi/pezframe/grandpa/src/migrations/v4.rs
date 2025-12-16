@@ -25,7 +25,7 @@ use pezsp_io::hashing::twox_128;
 /// The old prefix.
 pub const OLD_PREFIX: &[u8] = b"GrandpaFinality";
 
-/// Migrate the entire storage of this pallet to a new prefix.
+/// Migrate the entire storage of this pezpallet to a new prefix.
 ///
 /// This new prefix must be the same as the one set in construct_runtime. For safety, use
 /// `PalletInfo` to get it, as:
@@ -36,11 +36,11 @@ pub fn migrate<T: crate::Config, N: AsRef<str>>(new_pallet_name: N) -> Weight {
 	if new_pallet_name.as_ref().as_bytes() == OLD_PREFIX {
 		log::info!(
 			target: LOG_TARGET,
-			"New pallet name is equal to the old prefix. No migration needs to be done.",
+			"New pezpallet name is equal to the old prefix. No migration needs to be done.",
 		);
 		return Weight::zero();
 	}
-	let storage_version = StorageVersion::get::<crate::Pallet<T>>();
+	let storage_version = StorageVersion::get::<crate::Pezpallet<T>>();
 	log::info!(
 		target: LOG_TARGET,
 		"Running migration to v3.1 for grandpa with storage version {:?}",
@@ -54,7 +54,7 @@ pub fn migrate<T: crate::Config, N: AsRef<str>>(new_pallet_name: N) -> Weight {
 			new_pallet_name.as_ref().as_bytes(),
 		);
 
-		StorageVersion::new(4).put::<crate::Pallet<T>>();
+		StorageVersion::new(4).put::<crate::Pezpallet<T>>();
 
 		<T as pezframe_system::Config>::BlockWeights::get().max_block
 	} else {
@@ -74,8 +74,8 @@ pub fn pre_migration<T: crate::Config, N: AsRef<str>>(new: N) {
 	let next_key = pezsp_io::storage::next_key(&twox_128(OLD_PREFIX)).unwrap();
 	assert!(next_key.starts_with(&twox_128(OLD_PREFIX)));
 
-	// The pallet version is already stored using the pallet name
-	let storage_key = StorageVersion::storage_key::<crate::Pallet<T>>();
+	// The pezpallet version is already stored using the pezpallet name
+	let storage_key = StorageVersion::storage_key::<crate::Pezpallet<T>>();
 
 	// ensure nothing is stored in the new prefix.
 	assert!(
@@ -83,7 +83,7 @@ pub fn pre_migration<T: crate::Config, N: AsRef<str>>(new: N) {
 			// either nothing is there
 			true,
 			// or we ensure that it has no common prefix with twox_128(new),
-			// or isn't the pallet version that is already stored using the pallet name
+			// or isn't the pezpallet version that is already stored using the pezpallet name
 			|next_key| {
 				!next_key.starts_with(&twox_128(new.as_bytes())) || next_key == storage_key
 			},
@@ -95,7 +95,7 @@ pub fn pre_migration<T: crate::Config, N: AsRef<str>>(new: N) {
 		),
 	);
 	// ensure storage version is 3.
-	assert_eq!(StorageVersion::get::<crate::Pallet<T>>(), 3);
+	assert_eq!(StorageVersion::get::<crate::Pezpallet<T>>(), 3);
 }
 
 /// Some checks for after migration. This can be linked to

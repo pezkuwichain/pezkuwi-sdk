@@ -312,7 +312,7 @@ pub struct OnDemandRevenueRecord<RelayBlockNumber, RelayBalance> {
 pub type OnDemandRevenueRecordOf<T> =
 	OnDemandRevenueRecord<RelayBlockNumberOf<T>, RelayBalanceOf<T>>;
 
-/// Configuration of this pallet.
+/// Configuration of this pezpallet.
 #[derive(
 	Encode,
 	Decode,

@@ -15,16 +15,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Recovery Pallet
+//! # Recovery Pezpallet
 //!
 //! - [`Config`]
 //! - [`Call`]
 //!
 //! ## Overview
 //!
-//! The Recovery pallet is an M-of-N social recovery tool for users to gain
+//! The Recovery pezpallet is an M-of-N social recovery tool for users to gain
 //! access to their accounts if the private key or other authentication mechanism
-//! is lost. Through this pallet, a user is able to make calls on-behalf-of another
+//! is lost. Through this pezpallet, a user is able to make calls on-behalf-of another
 //! account which they have recovered. The recovery process is protected by trusted
 //! "friends" whom the original account owner chooses. A threshold (M) out of N
 //! friends are needed to give another account access to the recoverable account.
@@ -88,14 +88,14 @@
 //! Furthermore, the malicious recovery attempt can only be successful if the
 //! attacker is also able to get enough friends to vouch for the recovery attempt.
 //! In the case where the account owner prevents a malicious recovery process,
-//! this pallet makes it near-zero cost to re-configure the recovery settings and
+//! this pezpallet makes it near-zero cost to re-configure the recovery settings and
 //! remove/replace friends who are acting inappropriately.
 //!
 //! ### Safety Considerations
 //!
-//! It is important to note that this is a powerful pallet that can compromise the
+//! It is important to note that this is a powerful pezpallet that can compromise the
 //! security of an account if used incorrectly. Some recommended practices for users
-//! of this pallet are:
+//! of this pezpallet are:
 //!
 //! * Configure a significant `delay_period` for your recovery process: As long as you have access
 //!   to your recoverable account, you need only check the blockchain once every `delay_period`
@@ -159,7 +159,7 @@ use frame::{
 	traits::{Currency, ReservableCurrency},
 };
 
-pub use pallet::*;
+pub use pezpallet::*;
 pub use weights::WeightInfo;
 
 #[cfg(feature = "runtime-benchmarks")]
@@ -225,21 +225,21 @@ pub enum DepositKind<T: Config> {
 	ActiveRecoveryFor(<T as pezframe_system::Config>::AccountId),
 }
 
-#[frame::pallet]
-pub mod pallet {
+#[frame::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
 	/// Configuration trait.
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 
 		/// The overarching call type.
@@ -252,22 +252,22 @@ pub mod pallet {
 		///
 		/// Must return monotonically increasing values when called from consecutive blocks.
 		/// Can be configured to return either:
-		/// - the local block number of the runtime via `pezframe_system::Pallet`
+		/// - the local block number of the runtime via `pezframe_system::Pezpallet`
 		/// - a remote block number, eg from the relay chain through `RelaychainDataProvider`
 		/// - an arbitrary value through a custom implementation of the trait
 		///
 		/// There is currently no migration provided to "hot-swap" block number providers and it may
 		/// result in undefined behavior when doing so. Teyrchains are therefore best off setting
-		/// this to their local block number provider if they have the pallet already deployed.
+		/// this to their local block number provider if they have the pezpallet already deployed.
 		///
 		/// Suggested values:
-		/// - Solo- and Relay-chains: `pezframe_system::Pallet`
+		/// - Solo- and Relay-chains: `pezframe_system::Pezpallet`
 		/// - Teyrchains that may produce blocks sparingly or only when needed (on-demand):
-		///   - already have the pallet deployed: `pezframe_system::Pallet`
-		///   - are freshly deploying this pallet: `RelaychainDataProvider`
+		///   - already have the pezpallet deployed: `pezframe_system::Pezpallet`
+		///   - are freshly deploying this pezpallet: `RelaychainDataProvider`
 		/// - Teyrchains with a reliably block production rate (PLO or bulk-coretime):
-		///   - already have the pallet deployed: `pezframe_system::Pallet`
-		///   - are freshly deploying this pallet: no strong recommendation. Both local and remote
+		///   - already have the pezpallet deployed: `pezframe_system::Pezpallet`
+		///   - are freshly deploying this pezpallet: no strong recommendation. Both local and remote
 		///     providers can be used. Relay provider can be a bit better in cases where the
 		///     teyrchain is lagging its block production to avoid clock skew.
 		type BlockNumberProvider: BlockNumberProvider;
@@ -279,7 +279,7 @@ pub mod pallet {
 		///
 		/// This is held for an additional storage item whose value size is
 		/// `2 + sizeof(BlockNumber, Balance)` bytes.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type ConfigDepositBase: Get<BalanceOf<Self>>;
 
 		/// The amount of currency needed per additional user when creating a recovery
@@ -287,16 +287,16 @@ pub mod pallet {
 		///
 		/// This is held for adding `sizeof(AccountId)` bytes more into a pre-existing storage
 		/// value.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type FriendDepositFactor: Get<BalanceOf<Self>>;
 
 		/// The maximum amount of friends allowed in a recovery configuration.
 		///
-		/// NOTE: The threshold programmed in this Pallet uses u16, so it does
+		/// NOTE: The threshold programmed in this Pezpallet uses u16, so it does
 		/// not really make sense to have a limit here greater than u16::MAX.
 		/// But also, that is a lot more than you should probably set this value
 		/// to anyway...
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxFriends: Get<u32>;
 
 		/// The base amount of currency needed to reserve for starting a recovery.
@@ -306,13 +306,13 @@ pub mod pallet {
 		/// deposit. It also acts to fund additional storage item whose value size is
 		/// `sizeof(BlockNumber, Balance + T * AccountId)` bytes. Where T is a configurable
 		/// threshold.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type RecoveryDeposit: Get<BalanceOf<Self>>;
 	}
 
 	/// Events type.
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A recovery process has been set up for an account.
 		RecoveryCreated { account: T::AccountId },
@@ -339,7 +339,7 @@ pub mod pallet {
 		},
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// User is not allowed to make a call on behalf of this account
 		NotAllowed,
@@ -376,8 +376,8 @@ pub mod pallet {
 	}
 
 	/// The set of recoverable accounts and their recovery configuration.
-	#[pallet::storage]
-	#[pallet::getter(fn recovery_config)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn recovery_config)]
 	pub type Recoverable<T: Config> = StorageMap<
 		_,
 		Twox64Concat,
@@ -389,8 +389,8 @@ pub mod pallet {
 	///
 	/// First account is the account to be recovered, and the second account
 	/// is the user trying to recover the account.
-	#[pallet::storage]
-	#[pallet::getter(fn active_recovery)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn active_recovery)]
 	pub type ActiveRecoveries<T: Config> = StorageDoubleMap<
 		_,
 		Twox64Concat,
@@ -403,12 +403,12 @@ pub mod pallet {
 	/// The list of allowed proxy accounts.
 	///
 	/// Map from the user who can access it to the recovered account.
-	#[pallet::storage]
-	#[pallet::getter(fn proxy)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn proxy)]
 	pub type Proxy<T: Config> = StorageMap<_, Blake2_128Concat, T::AccountId, T::AccountId>;
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Send a call through a recovered account.
 		///
 		/// The dispatch origin for this call must be _Signed_ and registered to
@@ -417,8 +417,8 @@ pub mod pallet {
 		/// Parameters:
 		/// - `account`: The recovered account you want to make a call on-behalf-of.
 		/// - `call`: The call you want to make with the recovered account.
-		#[pallet::call_index(0)]
-		#[pallet::weight({
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight({
 			let dispatch_info = call.get_dispatch_info();
 			(
 				T::WeightInfo::as_recovered().saturating_add(dispatch_info.call_weight),
@@ -447,8 +447,8 @@ pub mod pallet {
 		/// Parameters:
 		/// - `lost`: The "lost account" to be recovered.
 		/// - `rescuer`: The "rescuer account" which can call as the lost account.
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::set_recovered())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::set_recovered())]
 		pub fn set_recovered(
 			origin: OriginFor<T>,
 			lost: AccountIdLookupOf<T>,
@@ -482,8 +482,8 @@ pub mod pallet {
 		///   friends.
 		/// - `delay_period`: The number of blocks after a recovery attempt is initialized that
 		///   needs to pass before the account can be recovered.
-		#[pallet::call_index(2)]
-		#[pallet::weight(T::WeightInfo::create_recovery(friends.len() as u32))]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(T::WeightInfo::create_recovery(friends.len() as u32))]
 		pub fn create_recovery(
 			origin: OriginFor<T>,
 			friends: Vec<T::AccountId>,
@@ -529,8 +529,8 @@ pub mod pallet {
 		/// Parameters:
 		/// - `account`: The lost account that you want to recover. This account needs to be
 		///   recoverable (i.e. have a recovery configuration).
-		#[pallet::call_index(3)]
-		#[pallet::weight(T::WeightInfo::initiate_recovery())]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(T::WeightInfo::initiate_recovery())]
 		pub fn initiate_recovery(
 			origin: OriginFor<T>,
 			account: AccountIdLookupOf<T>,
@@ -574,8 +574,8 @@ pub mod pallet {
 		///
 		/// The combination of these two parameters must point to an active recovery
 		/// process.
-		#[pallet::call_index(4)]
-		#[pallet::weight(T::WeightInfo::vouch_recovery(T::MaxFriends::get()))]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(T::WeightInfo::vouch_recovery(T::MaxFriends::get()))]
 		pub fn vouch_recovery(
 			origin: OriginFor<T>,
 			lost: AccountIdLookupOf<T>,
@@ -618,8 +618,8 @@ pub mod pallet {
 		/// Parameters:
 		/// - `account`: The lost account that you want to claim has been successfully recovered by
 		///   you.
-		#[pallet::call_index(5)]
-		#[pallet::weight(T::WeightInfo::claim_recovery(T::MaxFriends::get()))]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(T::WeightInfo::claim_recovery(T::MaxFriends::get()))]
 		pub fn claim_recovery(
 			origin: OriginFor<T>,
 			account: AccountIdLookupOf<T>,
@@ -645,7 +645,7 @@ pub mod pallet {
 				recovery_config.threshold as usize <= active_recovery.friends.len(),
 				Error::<T>::Threshold
 			);
-			pezframe_system::Pallet::<T>::inc_consumers(&who).map_err(|_| Error::<T>::BadState)?;
+			pezframe_system::Pezpallet::<T>::inc_consumers(&who).map_err(|_| Error::<T>::BadState)?;
 			// Create the recovery storage item
 			Proxy::<T>::insert(&who, &account);
 			Self::deposit_event(Event::<T>::AccountRecovered {
@@ -666,8 +666,8 @@ pub mod pallet {
 		///
 		/// Parameters:
 		/// - `rescuer`: The account trying to rescue this recoverable account.
-		#[pallet::call_index(6)]
-		#[pallet::weight(T::WeightInfo::close_recovery(T::MaxFriends::get()))]
+		#[pezpallet::call_index(6)]
+		#[pezpallet::weight(T::WeightInfo::close_recovery(T::MaxFriends::get()))]
 		pub fn close_recovery(
 			origin: OriginFor<T>,
 			rescuer: AccountIdLookupOf<T>,
@@ -704,8 +704,8 @@ pub mod pallet {
 		///
 		/// The dispatch origin for this call must be _Signed_ and must be a
 		/// recoverable account (i.e. has a recovery configuration).
-		#[pallet::call_index(7)]
-		#[pallet::weight(T::WeightInfo::remove_recovery(T::MaxFriends::get()))]
+		#[pezpallet::call_index(7)]
+		#[pezpallet::weight(T::WeightInfo::remove_recovery(T::MaxFriends::get()))]
 		pub fn remove_recovery(origin: OriginFor<T>) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 			// Check there are no active recoveries
@@ -727,8 +727,8 @@ pub mod pallet {
 		///
 		/// Parameters:
 		/// - `account`: The recovered account you are able to call on-behalf-of.
-		#[pallet::call_index(8)]
-		#[pallet::weight(T::WeightInfo::cancel_recovered())]
+		#[pezpallet::call_index(8)]
+		#[pezpallet::weight(T::WeightInfo::cancel_recovered())]
 		pub fn cancel_recovered(
 			origin: OriginFor<T>,
 			account: AccountIdLookupOf<T>,
@@ -739,7 +739,7 @@ pub mod pallet {
 			ensure!(Self::proxy(&who) == Some(account), Error::<T>::NotAllowed);
 			Proxy::<T>::remove(&who);
 
-			pezframe_system::Pallet::<T>::dec_consumers(&who);
+			pezframe_system::Pezpallet::<T>::dec_consumers(&who);
 			Ok(())
 		}
 
@@ -766,8 +766,8 @@ pub mod pallet {
 		///
 		/// Emits `DepositPoked` if any deposit is updated.
 		/// Multiple events may be emitted in case both types of deposits are updated.
-		#[pallet::call_index(9)]
-		#[pallet::weight(T::WeightInfo::poke_deposit(T::MaxFriends::get()))]
+		#[pezpallet::call_index(9)]
+		#[pezpallet::weight(T::WeightInfo::poke_deposit(T::MaxFriends::get()))]
 		pub fn poke_deposit(
 			origin: OriginFor<T>,
 			maybe_account: Option<AccountIdLookupOf<T>>,
@@ -789,7 +789,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Check that friends list is sorted and has no duplicates.
 	fn is_sorted_and_unique(friends: &Vec<T::AccountId>) -> bool {
 		friends.windows(2).all(|w| w[0] < w[1])

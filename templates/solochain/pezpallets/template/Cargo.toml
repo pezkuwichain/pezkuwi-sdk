@@ -1,6 +1,6 @@
 [package]
 name = "pezpallet-template"
-description = "FRAME pallet template for defining custom runtime logic."
+description = "FRAME pezpallet template for defining custom runtime logic."
 version = "0.0.0"
 license = "Unlicense"
 authors.workspace = true

@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Remark storage pallet. Indexes remarks and stores them off chain.
+//! Remark storage pezpallet. Indexes remarks and stores them off chain.
 
 // Ensure we're `no_std` when compiling for Wasm.
 #![cfg_attr(not(feature = "std"), no_std)]
@@ -32,26 +32,26 @@ extern crate alloc;
 
 use alloc::vec::Vec;
 
-// Re-export pallet items so that they can be accessed from the crate namespace.
-pub use pallet::*;
+// Re-export pezpallet items so that they can be accessed from the crate namespace.
+pub use pezpallet::*;
 pub use weights::WeightInfo;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Attempting to store empty data.
 		Empty,
@@ -59,19 +59,19 @@ pub mod pallet {
 		BadContext,
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Index and store data off chain.
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::store(remark.len() as u32))]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::store(remark.len() as u32))]
 		pub fn store(origin: OriginFor<T>, remark: Vec<u8>) -> DispatchResultWithPostInfo {
 			ensure!(!remark.is_empty(), Error::<T>::Empty);
 			let sender = ensure_signed(origin)?;
 			let content_hash = pezsp_io::hashing::blake2_256(&remark);
-			let extrinsic_index = <pezframe_system::Pallet<T>>::extrinsic_index()
+			let extrinsic_index = <pezframe_system::Pezpallet<T>>::extrinsic_index()
 				.ok_or_else(|| Error::<T>::BadContext)?;
 			pezsp_io::transaction_index::index(extrinsic_index, remark.len() as u32, content_hash);
 			Self::deposit_event(Event::Stored { sender, content_hash: content_hash.into() });
@@ -79,8 +79,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// Stored data off chain.
 		Stored { sender: T::AccountId, content_hash: pezsp_core::H256 },

@@ -1,11 +1,11 @@
-# Session Pallet
+# Session Pezpallet
 
 The Session module allows validators to manage their session keys, provides a function for changing the session length,
 and handles session rotation.
 
 - [`session::Trait`](https://docs.rs/pezpallet-session/latest/pallet_session/trait.Config.html)
 - [`Call`](https://docs.rs/pezpallet-session/latest/pallet_session/enum.Call.html)
-- [`Pallet`](https://docs.rs/pezpallet-session/latest/pallet_session/struct.Pallet.html)
+- [`Pezpallet`](https://docs.rs/pezpallet-session/latest/pallet_session/struct.Pezpallet.html)
 
 ## Overview
 
@@ -29,8 +29,8 @@ operation will fail. This deposit is returned when the keys are purged. `set_key
 `ensure_signed`, which checks that the origin is a signed account. As such, the account ID of the origin stored in
 `NextKeys` may not necessarily be associated with a block author or a validator. The session keys of accounts are removed
 once their account balance is zero.
-- **Session length:** This pallet does not assume anything about the length of each session. Rather, it relies on an
-implementation of `ShouldEndSession` to dictate a new session's start. This pallet provides the `PeriodicSessions`
+- **Session length:** This pezpallet does not assume anything about the length of each session. Rather, it relies on an
+implementation of `ShouldEndSession` to dictate a new session's start. This pezpallet provides the `PeriodicSessions`
 struct for simple periodic sessions.
 - **Session rotation configuration:** Configure as either a 'normal' (rewardable session where rewards are applied) or
 'exceptional' (slashable) session rotation.
@@ -42,7 +42,7 @@ to storage where they will wait one session before being passed to the `SessionH
 
 ### Goals
 
-The Session pallet is designed to make the following possible:
+The Session pezpallet is designed to make the following possible:
 
 - Set session keys of the validator set for upcoming sessions.
 - Control the length of sessions.
@@ -65,7 +65,7 @@ rotation.
 
 ### Example from the FRAME
 
-The [Staking pallet](https://docs.rs/pezpallet-staking/latest/pallet_staking/) uses the Session pallet to get the validator
+The [Staking pezpallet](https://docs.rs/pezpallet-staking/latest/pallet_staking/) uses the Session pezpallet to get the validator
 set.
 
 ```rust

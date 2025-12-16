@@ -137,7 +137,7 @@ bp-bridge-hub-pezkuwichain = { workspace = true }
 bp-bridge-hub-zagros = { workspace = true }
 pezpallet-xcm-bridge-hub-router = { workspace = true }
 pezsnowbridge-outbound-queue-primitives = { workspace = true }
-snowbridge-pezpallet-system-frontend = { workspace = true }
+pezsnowbridge-pezpallet-system-frontend = { workspace = true }
 snowpezbridge-runtime-common = { workspace = true }
 
 [dev-dependencies]
@@ -231,7 +231,7 @@ runtime-benchmarks = [
   "pezkuwi-runtime-common/runtime-benchmarks",
   "pezkuwi-teyrchain-primitives/runtime-benchmarks",
   "pezsnowbridge-outbound-queue-primitives/runtime-benchmarks",
-  "snowbridge-pezpallet-system-frontend/runtime-benchmarks",
+  "pezsnowbridge-pezpallet-system-frontend/runtime-benchmarks",
   "snowpezbridge-runtime-common/runtime-benchmarks",
   "pezsp-api/runtime-benchmarks",
   "pezsp-block-builder/runtime-benchmarks",
@@ -318,7 +318,7 @@ try-runtime = [
   "pezpallet-xcm-precompiles/try-runtime",
   "pezpallet-xcm/try-runtime",
   "pezkuwi-runtime-common/try-runtime",
-  "snowbridge-pezpallet-system-frontend/try-runtime",
+  "pezsnowbridge-pezpallet-system-frontend/try-runtime",
   "snowpezbridge-runtime-common/try-runtime",
   "pezsp-runtime/try-runtime",
   "teyrchain-info/try-runtime",
@@ -408,7 +408,7 @@ std = [
   "scale-info/std",
   "serde_json/std",
   "pezsnowbridge-outbound-queue-primitives/std",
-  "snowbridge-pezpallet-system-frontend/std",
+  "pezsnowbridge-pezpallet-system-frontend/std",
   "snowpezbridge-runtime-common/std",
   "pezsp-api/std",
   "pezsp-arithmetic/std",

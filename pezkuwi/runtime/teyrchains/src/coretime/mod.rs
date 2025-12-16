@@ -25,7 +25,7 @@ use pezframe_support::{
 	traits::{defensive_prelude::*, Currency},
 };
 use pezframe_system::pezpallet_prelude::*;
-pub use pallet::*;
+pub use pezpallet::*;
 use pezpallet_broker::{CoreAssignment, CoreIndex as BrokerCoreIndex};
 use pezkuwi_primitives::{Balance, BlockNumber, CoreIndex, Id as ParaId};
 use pezsp_arithmetic::traits::SaturatedConversion;
@@ -75,7 +75,7 @@ pub type BalanceOf<T> = <<T as on_demand::Config>::Currency as Currency<
 	<T as pezframe_system::Config>::AccountId,
 >>::Balance;
 
-/// Broker pallet index on the coretime chain. Used to
+/// Broker pezpallet index on the coretime chain. Used to
 ///
 /// construct remote calls. The codec index must correspond to the index of `Broker` in the
 /// `construct_runtime` of the coretime chain.
@@ -85,7 +85,7 @@ enum BrokerRuntimePallets {
 	Broker(CoretimeCalls),
 }
 
-/// Call encoding for the calls needed from the Broker pallet.
+/// Call encoding for the calls needed from the Broker pezpallet.
 #[derive(Encode, Decode)]
 enum CoretimeCalls {
 	#[codec(index = 1)]
@@ -100,8 +100,8 @@ enum CoretimeCalls {
 	SwapLeases(ParaId, ParaId),
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 
 	use crate::configuration;
 	use pezsp_runtime::traits::TryConvert;
@@ -110,23 +110,23 @@ pub mod pallet {
 
 	use super::*;
 
-	#[pallet::pallet]
-	#[pallet::without_storage_info]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::without_storage_info]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config + assigner_coretime::Config + on_demand::Config {
 		type RuntimeOrigin: From<<Self as pezframe_system::Config>::RuntimeOrigin>
 			+ Into<result::Result<Origin, <Self as Config>::RuntimeOrigin>>;
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		/// The ParaId of the coretime chain.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type BrokerId: Get<u32>;
 		/// The coretime chain pot location.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type BrokerPotLocation: Get<InteriorLocation>;
-		/// Something that provides the weight of this pallet.
+		/// Something that provides the weight of this pezpallet.
 		type WeightInfo: WeightInfo;
 		/// The XCM sender.
 		type SendXcm: SendXcm;
@@ -141,8 +141,8 @@ pub mod pallet {
 		type MaxXcmTransactWeight: Get<Weight>;
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// The broker chain has asked for revenue information for a specific block.
 		RevenueInfoRequested { when: BlockNumberFor<T> },
@@ -150,7 +150,7 @@ pub mod pallet {
 		CoreAssigned { core: CoreIndex },
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// The paraid making the call is not the coretime brokerage system teyrchain.
 		NotBroker,
@@ -161,40 +161,40 @@ pub mod pallet {
 		AssetTransferFailed,
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {}
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Request the configuration to be updated with the specified number of cores. Warning:
 		/// Since this only schedules a configuration update, it takes two sessions to come into
 		/// effect.
 		///
 		/// - `origin`: Root or the Coretime Chain
 		/// - `count`: total number of cores
-		#[pallet::weight(<T as Config>::WeightInfo::request_core_count())]
-		#[pallet::call_index(1)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::request_core_count())]
+		#[pezpallet::call_index(1)]
 		pub fn request_core_count(origin: OriginFor<T>, count: u16) -> DispatchResult {
 			// Ignore requests not coming from the coretime chain or root.
 			Self::ensure_root_or_para(origin, <T as Config>::BrokerId::get().into())?;
 
-			configuration::Pallet::<T>::set_coretime_cores_unchecked(u32::from(count))
+			configuration::Pezpallet::<T>::set_coretime_cores_unchecked(u32::from(count))
 		}
 
 		/// Request to claim the instantaneous coretime sales revenue starting from the block it was
 		/// last claimed until and up to the block specified. The claimed amount value is sent back
 		/// to the Coretime chain in a `notify_revenue` message. At the same time, the amount is
 		/// teleported to the Coretime chain.
-		#[pallet::weight(<T as Config>::WeightInfo::request_revenue_at())]
-		#[pallet::call_index(2)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::request_revenue_at())]
+		#[pezpallet::call_index(2)]
 		pub fn request_revenue_at(origin: OriginFor<T>, when: BlockNumber) -> DispatchResult {
 			// Ignore requests not coming from the Coretime Chain or Root.
 			Self::ensure_root_or_para(origin, <T as Config>::BrokerId::get().into())?;
 			Self::notify_revenue(when)
 		}
 
-		#[pallet::weight(<T as Config>::WeightInfo::credit_account())]
-		#[pallet::call_index(3)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::credit_account())]
+		#[pezpallet::call_index(3)]
 		pub fn credit_account(
 			origin: OriginFor<T>,
 			who: T::AccountId,
@@ -203,7 +203,7 @@ pub mod pallet {
 			// Ignore requests not coming from the coretime chain or root.
 			Self::ensure_root_or_para(origin, <T as Config>::BrokerId::get().into())?;
 
-			on_demand::Pallet::<T>::credit_account(who, amount.saturated_into());
+			on_demand::Pezpallet::<T>::credit_account(who, amount.saturated_into());
 			Ok(())
 		}
 
@@ -216,10 +216,10 @@ pub mod pallet {
 		/// -`begin`: The starting blockheight of the instruction.
 		/// -`assignment`: How the blockspace should be utilised.
 		/// -`end_hint`: An optional hint as to when this particular set of instructions will end.
-		// The broker pallet's `CoreIndex` definition is `u16` but on the relay chain it's `struct
+		// The broker pezpallet's `CoreIndex` definition is `u16` but on the relay chain it's `struct
 		// CoreIndex(u32)`
-		#[pallet::call_index(4)]
-		#[pallet::weight(<T as Config>::WeightInfo::assign_core(assignment.len() as u32))]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::assign_core(assignment.len() as u32))]
 		pub fn assign_core(
 			origin: OriginFor<T>,
 			core: BrokerCoreIndex,
@@ -232,14 +232,14 @@ pub mod pallet {
 
 			let core = u32::from(core).into();
 
-			<assigner_coretime::Pallet<T>>::assign_core(core, begin, assignment, end_hint)?;
+			<assigner_coretime::Pezpallet<T>>::assign_core(core, begin, assignment, end_hint)?;
 			Self::deposit_event(Event::<T>::CoreAssigned { core });
 			Ok(())
 		}
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Ensure the origin is one of Root or the `para` itself.
 	fn ensure_root_or_para(
 		origin: <T as pezframe_system::Config>::RuntimeOrigin,
@@ -287,13 +287,13 @@ impl<T: Config> Pallet<T> {
 	/// The Relay-chain must be configured to ensure that only a single revenue information
 	/// destination exists.
 	pub fn notify_revenue(until: BlockNumber) -> DispatchResult {
-		let now = <pezframe_system::Pallet<T>>::block_number();
+		let now = <pezframe_system::Pezpallet<T>>::block_number();
 		let until_bnf: BlockNumberFor<T> = until.into();
 
 		// When cannot be in the future.
 		ensure!(until_bnf <= now, Error::<T>::RequestedFutureRevenue);
 
-		let amount = <on_demand::Pallet<T>>::claim_revenue_until(until_bnf);
+		let amount = <on_demand::Pezpallet<T>>::claim_revenue_until(until_bnf);
 		log::debug!(target: LOG_TARGET, "Revenue info requested: {:?}", amount);
 
 		let raw_revenue: Balance = amount.try_into().map_err(|_| {
@@ -328,7 +328,7 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-impl<T: Config> OnNewSession<BlockNumberFor<T>> for Pallet<T> {
+impl<T: Config> OnNewSession<BlockNumberFor<T>> for Pezpallet<T> {
 	fn on_new_session(notification: &SessionChangeNotification<BlockNumberFor<T>>) {
 		Self::initializer_on_new_session(notification);
 	}
@@ -353,7 +353,7 @@ fn do_notify_revenue<T: Config>(when: BlockNumber, raw_revenue: Balance) -> Resu
 
 	if raw_revenue > 0 {
 		let on_demand_pot =
-			T::AccountToLocation::try_convert(&<on_demand::Pallet<T>>::account_id()).map_err(
+			T::AccountToLocation::try_convert(&<on_demand::Pezpallet<T>>::account_id()).map_err(
 				|err| {
 					log::error!(
 						target: LOG_TARGET,

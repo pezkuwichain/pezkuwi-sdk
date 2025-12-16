@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Scheduler pallet benchmarking.
+//! Scheduler pezpallet benchmarking.
 
 use alloc::vec;
 use pezframe_benchmarking::v2::*;
@@ -35,7 +35,7 @@ const SEED: u32 = 0;
 const BLOCK_NUMBER: u32 = 2;
 
 fn assert_last_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
-	let events = pezframe_system::Pallet::<T>::events();
+	let events = pezframe_system::Pezpallet::<T>::events();
 	let system_event: <T as pezframe_system::Config>::RuntimeEvent = generic_event.into();
 	// compare to the last event record
 	let EventRecord { event, .. } = &events[events.len() - 1];
@@ -56,7 +56,7 @@ fn fill_schedule<T: Config>(when: BlockNumberFor<T>, n: u32) -> Result<(), &'sta
 		let call = make_call::<T>(None);
 		let period = Some(((i + 100).into(), 100));
 		let name = u32_to_name(i);
-		Pallet::<T>::do_schedule_named(name, t, period, 0, origin.clone(), call)?;
+		Pezpallet::<T>::do_schedule_named(name, t, period, 0, origin.clone(), call)?;
 	}
 	ensure!(Agenda::<T>::get(when).len() == n as usize, "didn't fill schedule");
 	Ok(())
@@ -141,7 +141,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			Pallet::<T>::service_agendas(&mut WeightMeter::new(), now, 0);
+			Pezpallet::<T>::service_agendas(&mut WeightMeter::new(), now, 0);
 		}
 
 		assert_eq!(IncompleteSince::<T>::get(), Some(now - One::one()));
@@ -158,7 +158,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			Pallet::<T>::service_agenda(&mut WeightMeter::new(), true, now, now, 0);
+			Pezpallet::<T>::service_agenda(&mut WeightMeter::new(), true, now, now, 0);
 		}
 
 		assert_eq!(Agenda::<T>::get(now).len() as u32, s);
@@ -178,7 +178,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			_result = Pallet::<T>::service_task(&mut counter, now, now, 0, true, task);
+			_result = Pezpallet::<T>::service_task(&mut counter, now, now, 0, true, task);
 		}
 
 		// assert!(_result.is_ok());
@@ -201,7 +201,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			_result = Pallet::<T>::service_task(&mut counter, now, now, 0, true, task);
+			_result = Pezpallet::<T>::service_task(&mut counter, now, now, 0, true, task);
 		}
 
 		// assert!(result.is_ok());
@@ -219,7 +219,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			_result = Pallet::<T>::service_task(&mut counter, now, now, 0, true, task);
+			_result = Pezpallet::<T>::service_task(&mut counter, now, now, 0, true, task);
 		}
 
 		// assert!(result.is_ok());
@@ -237,7 +237,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			_result = Pallet::<T>::service_task(&mut counter, now, now, 0, true, task);
+			_result = Pezpallet::<T>::service_task(&mut counter, now, now, 0, true, task);
 		}
 
 		// assert!(result.is_ok());
@@ -253,7 +253,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			result = Pallet::<T>::execute_dispatch(&mut counter, origin, call);
+			result = Pezpallet::<T>::execute_dispatch(&mut counter, origin, call);
 		}
 
 		assert!(result.is_ok());
@@ -271,7 +271,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			result = Pallet::<T>::execute_dispatch(&mut counter, origin, call);
+			result = Pezpallet::<T>::execute_dispatch(&mut counter, origin, call);
 		}
 
 		assert!(result.is_ok());
@@ -395,7 +395,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			Pallet::<T>::schedule_retry(
+			Pezpallet::<T>::schedule_retry(
 				&mut weight_counter,
 				when,
 				when,
@@ -474,7 +474,7 @@ mod benchmarks {
 		let address = Lookup::<T>::get(name).unwrap();
 		let (when, index) = address;
 		let period = BlockNumberFor::<T>::one();
-		assert!(Pallet::<T>::set_retry(RawOrigin::Root.into(), (when, index), 10, period).is_ok());
+		assert!(Pezpallet::<T>::set_retry(RawOrigin::Root.into(), (when, index), 10, period).is_ok());
 
 		#[extrinsic_call]
 		_(RawOrigin::Root, (when, index));
@@ -495,7 +495,7 @@ mod benchmarks {
 		let address = Lookup::<T>::get(name).unwrap();
 		let (when, index) = address;
 		let period = BlockNumberFor::<T>::one();
-		assert!(Pallet::<T>::set_retry_named(RawOrigin::Root.into(), name, 10, period).is_ok());
+		assert!(Pezpallet::<T>::set_retry_named(RawOrigin::Root.into(), name, 10, period).is_ok());
 
 		#[extrinsic_call]
 		_(RawOrigin::Root, name);
@@ -507,7 +507,7 @@ mod benchmarks {
 	}
 
 	impl_benchmark_test_suite! {
-		Pallet,
+		Pezpallet,
 		mock::new_test_ext(),
 		mock::Test
 	}

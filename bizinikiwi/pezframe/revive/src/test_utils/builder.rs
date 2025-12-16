@@ -18,7 +18,7 @@
 use super::{deposit_limit, GAS_LIMIT};
 use crate::{
 	address::AddressMapper, evm::TransactionSigned, AccountIdOf, BalanceOf, Code, Config,
-	ContractResult, ExecConfig, ExecReturnValue, InstantiateReturnValue, OriginFor, Pallet, Weight,
+	ContractResult, ExecConfig, ExecReturnValue, InstantiateReturnValue, OriginFor, Pezpallet, Weight,
 	U256,
 };
 use alloc::{vec, vec::Vec};
@@ -60,7 +60,7 @@ macro_rules! builder {
 
 			#[doc = concat!("Build the ", stringify!($method), " call")]
 			pub fn build(self) -> $result {
-				Pallet::<T>::$method(
+				Pezpallet::<T>::$method(
 					$(self.$field,)*
 				)
 			}
@@ -151,7 +151,7 @@ builder!(
 
 	/// Set the call's evm_value using a native_value amount.
 	pub fn native_value(mut self, value: BalanceOf<T>) -> Self {
-		self.evm_value = Pallet::<T>::convert_native_to_evm(value);
+		self.evm_value = Pezpallet::<T>::convert_native_to_evm(value);
 		self
 	}
 
@@ -221,7 +221,7 @@ builder!(
 
 	/// Set the call's evm_value using a native_value amount.
 	pub fn native_value(mut self, value: BalanceOf<T>) -> Self {
-		self.evm_value = Pallet::<T>::convert_native_to_evm(value);
+		self.evm_value = Pezpallet::<T>::convert_native_to_evm(value);
 		self
 	}
 

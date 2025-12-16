@@ -17,31 +17,31 @@
 
 // Create 3 pallets for testing the outer error enum construction:
 //
-// - `pallet`: declares an error with `#[pallet::error]`
-// - `pallet2`: declares an error with `#[pallet::error]`
+// - `pezpallet`: declares an error with `#[pezpallet::error]`
+// - `pallet2`: declares an error with `#[pezpallet::error]`
 // - `pallet3`: does not declare an error.
 
-#[pezframe_support::pallet(dev_mode)]
-pub mod pallet {
+#[pezframe_support::pezpallet(dev_mode)]
+pub mod pezpallet {
 	use pezframe_support::pezpallet_prelude::*;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config {
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self, I>>
 			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 	}
 
-	#[pallet::event]
+	#[pezpallet::event]
 	pub enum Event<T: Config<I>, I: 'static = ()> {
 		/// Something
 		Something(u32),
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T, I = ()>(PhantomData<(T, I)>);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T, I = ()>(PhantomData<(T, I)>);
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	pub struct GenesisConfig<T: Config<I>, I: 'static = ()> {
 		phantom: PhantomData<(T, I)>,
 	}
@@ -52,12 +52,12 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config<I>, I: 'static> BuildGenesisConfig for GenesisConfig<T, I> {
 		fn build(&self) {}
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	#[derive(PartialEq, Eq)]
 	pub enum Error<T, I = ()> {
 		/// doc comment put into metadata
@@ -66,27 +66,27 @@ pub mod pallet {
 	}
 }
 
-#[pezframe_support::pallet]
+#[pezframe_support::pezpallet]
 pub mod pallet2 {
 	use pezframe_support::pezpallet_prelude::*;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config {
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self, I>>
 			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 	}
 
-	#[pallet::event]
+	#[pezpallet::event]
 	pub enum Event<T: Config<I>, I: 'static = ()> {
 		/// Something
 		Something(u32),
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T, I = ()>(PhantomData<(T, I)>);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T, I = ()>(PhantomData<(T, I)>);
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	pub struct GenesisConfig<T: Config<I>, I: 'static = ()> {
 		phantom: PhantomData<(T, I)>,
 	}
@@ -97,12 +97,12 @@ pub mod pallet2 {
 		}
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config<I>, I: 'static> BuildGenesisConfig for GenesisConfig<T, I> {
 		fn build(&self) {}
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	#[derive(PartialEq, Eq)]
 	pub enum Error<T, I = ()> {
 		/// doc comment put into metadata
@@ -111,27 +111,27 @@ pub mod pallet2 {
 	}
 }
 
-#[pezframe_support::pallet]
+#[pezframe_support::pezpallet]
 pub mod pallet3 {
 	use pezframe_support::pezpallet_prelude::*;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config {
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self, I>>
 			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 	}
 
-	#[pallet::event]
+	#[pezpallet::event]
 	pub enum Event<T: Config<I>, I: 'static = ()> {
 		/// Something
 		Something(u32),
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T, I = ()>(PhantomData<(T, I)>);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T, I = ()>(PhantomData<(T, I)>);
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	pub struct GenesisConfig<T: Config<I>, I: 'static = ()> {
 		phantom: PhantomData<(T, I)>,
 	}
@@ -142,7 +142,7 @@ pub mod pallet3 {
 		}
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config<I>, I: 'static> BuildGenesisConfig for GenesisConfig<T, I> {
 		fn build(&self) {}
 	}

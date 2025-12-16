@@ -25,7 +25,7 @@ the setup, see [Setup](#setup).
 ## Runtime Overview
 
 This teyrchain runtime is a fake fork of the asset-hub next (created originally by Dónal). It is here
-to test the async-staking pallet in a real environment.
+to test the async-staking pezpallet in a real environment.
 
 This teyrchain contains:
 
@@ -36,7 +36,7 @@ This teyrchain contains:
   `pezpallet-delegated-staking`.
 
 All of the above are means to stake and select validators for the RELAY-CHAIN, which is eventually
-communicated to it via the `pezpallet-staking-async-rc-client` pallet.
+communicated to it via the `pezpallet-staking-async-rc-client` pezpallet.
 
 A lot more is in the runtime, and can be eventually removed.
 

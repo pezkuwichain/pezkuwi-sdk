@@ -33,7 +33,7 @@ To generate weights for all pallets in a particular runtime(s), run the followin
 For Bizinikiwi pallets (supports sub-modules too):
 
 ```sh
-/cmd bench --runtime dev --pallet pallet_asset_conversion_ops
+/cmd bench --runtime dev --pezpallet pallet_asset_conversion_ops
 ```
 
 > **📝 Note**: The action is not being run right-away, it will be queued and run in the next available runner.
@@ -50,13 +50,13 @@ For Bizinikiwi pallets (supports sub-modules too):
 This way it runs all possible runtimes for the specified pallets, if it finds them in the runtime
 
 ```sh
-/cmd bench --pallet pallet_balances pallet_xcm_benchmarks::generic pallet_xcm_benchmarks::fungible
+/cmd bench --pezpallet pallet_balances pallet_xcm_benchmarks::generic pallet_xcm_benchmarks::fungible
 ```
 
-If you want to run all specific pallet(s) for specific runtime(s), you can do it like this:
+If you want to run all specific pezpallet(s) for specific runtime(s), you can do it like this:
 
 ```sh
-/cmd bench --runtime bridge-hub-pezkuwi --pallet pallet_xcm_benchmarks::generic pallet_xcm_benchmarks::fungible
+/cmd bench --runtime bridge-hub-pezkuwi --pezpallet pallet_xcm_benchmarks::generic pallet_xcm_benchmarks::fungible
 ```
 
 > **💡Hint #1** : Sometimes when you run too many commands, or they keep failing and you're rerunning them again,
@@ -64,7 +64,7 @@ If you want to run all specific pallet(s) for specific runtime(s), you can do it
 > /cmd commands.
 
 ```sh
-/cmd bench --runtime kusama pezkuwi --pallet=pallet_balances --clean
+/cmd bench --runtime kusama pezkuwi --pezpallet=pallet_balances --clean
 ```
 
 > **💡Hint #2** : If you have questions or need help, feel free to tag @paritytech/opstooling (in github comments)

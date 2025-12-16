@@ -31,12 +31,12 @@ The crate is organized into three main sections:
    - Add items to preludes if they are likely to be used across numerous pallets
 
 2. **Top-level Exports**:
-   - The only non-module, non-prelude item exported from the top level is the `pallet` macro
-   - This enables the `#[frame::pallet] mod pallet { .. }` syntax
+   - The only non-module, non-prelude item exported from the top level is the `pezpallet` macro
+   - This enables the `#[frame::pezpallet] mod pezpallet { .. }` syntax
 
 3. **Module Organization**:
    - Create domain-specific modules (e.g., `hashing`) and add them to preludes when appropriate
-   - Keep items out of preludes if they are specific to a single pallet, even if they're in `pezframe-support`/`pezsp-runtime`
+   - Keep items out of preludes if they are specific to a single pezpallet, even if they're in `pezframe-support`/`pezsp-runtime`
    - Currency-related traits are kept separate to encourage deliberate choice between alternatives
    - `runtime::apis` should expose all common runtime APIs needed by FRAME-based runtimes
 

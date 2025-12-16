@@ -14,17 +14,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! The operational pallet for the Asset Hub, designed to manage and facilitate the migration of
+//! The operational pezpallet for the Asset Hub, designed to manage and facilitate the migration of
 //! subsystems such as Governance, Staking, Balances from the Relay Chain to the Asset Hub. This
-//! pallet works alongside its counterpart, `pezpallet_rc_migrator`, which handles migration
+//! pezpallet works alongside its counterpart, `pezpallet_rc_migrator`, which handles migration
 //! processes on the Relay Chain side.
 //!
-//! This pallet is responsible for controlling the initiation, progression, and completion of the
+//! This pezpallet is responsible for controlling the initiation, progression, and completion of the
 //! migration process, including managing its various stages and transferring the necessary data.
-//! The pallet directly accesses the storage of other pallets for read/write operations while
+//! The pezpallet directly accesses the storage of other pallets for read/write operations while
 //! maintaining compatibility with their existing APIs.
 //!
-//! To simplify development and avoid the need to edit the original pallets, this pallet may
+//! To simplify development and avoid the need to edit the original pallets, this pezpallet may
 //! duplicate private items such as storage entries from the original pallets. This ensures that the
 //! migration logic can be implemented without altering the original implementations.
 
@@ -38,7 +38,7 @@ mod mock;
 mod tests;
 pub mod weights;
 
-pub use pallet::*;
+pub use pezpallet::*;
 pub use weights::WeightInfo;
 
 use codec::DecodeAll;
@@ -56,18 +56,18 @@ use pezsp_application_crypto::ByteArray;
 use pezsp_runtime::{traits::BlockNumberProvider, AccountId32};
 use pezsp_std::prelude::*;
 
-/// The log target of this pallet.
+/// The log target of this pezpallet.
 pub const LOG_TARGET: &str = "runtime::ah-ops";
 
 pub type BalanceOf<T> = <T as pezpallet_balances::Config>::Balance;
 pub type DerivationIndex = u16;
 pub type ParaId = u16;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config:
 		pezframe_system::Config<AccountData = AccountData<u128>, AccountId = AccountId32>
 		+ pezpallet_balances::Config<Balance = u128>
@@ -85,7 +85,7 @@ pub mod pallet {
 		/// Access the block number of the Relay Chain.
 		type RcBlockNumberProvider: BlockNumberProvider<BlockNumber = BlockNumberFor<Self>>;
 
-		/// The Weight information for extrinsics in this pallet.
+		/// The Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 	}
 
@@ -103,7 +103,7 @@ pub mod pallet {
 	/// - The para_id of the lease slot.
 	/// - The account that will have the balance unreserved.
 	/// - The balance to be unreserved.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type RcLeaseReserve<T: Config> = StorageNMap<
 		_,
 		(
@@ -127,7 +127,7 @@ pub mod pallet {
 	///
 	/// The value is (fund_pot, balance). The contribution pot is the second key in the
 	/// `RcCrowdloanContribution` storage.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type RcCrowdloanContribution<T: Config> = StorageNMap<
 		_,
 		(
@@ -148,7 +148,7 @@ pub mod pallet {
 	/// - Block number after which this can be unreserved
 	/// - The para_id of the crowdloan
 	/// - The account that will have the balance unreserved
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type RcCrowdloanReserve<T: Config> = StorageNMap<
 		_,
 		(
@@ -160,7 +160,7 @@ pub mod pallet {
 		OptionQuery,
 	>;
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Either no lease deposit or already unreserved.
 		NoLeaseReserve,
@@ -202,8 +202,8 @@ pub mod pallet {
 		AccountIdentical,
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(crate) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(crate) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// Some lease reserve could not be unreserved and needs manual cleanup.
 		LeaseUnreserveRemaining {
@@ -239,11 +239,11 @@ pub mod pallet {
 		HoldReleased { account: T::AccountId, amount: BalanceOf<T>, reason: T::RuntimeHoldReason },
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Unreserve the deposit that was taken for creating a crowdloan.
 		///
 		/// This can be called by any signed origin. It unreserves the lease deposit on the account
@@ -252,8 +252,8 @@ pub mod pallet {
 		/// crowdloan account.
 		///
 		/// Solo bidder accounts that won lease auctions can use this to unreserve their amount.
-		#[pallet::call_index(0)]
-		#[pallet::weight(<T as Config>::WeightInfo::unreserve_lease_deposit())]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::unreserve_lease_deposit())]
 		pub fn unreserve_lease_deposit(
 			origin: OriginFor<T>,
 			block: BlockNumberFor<T>,
@@ -273,8 +273,8 @@ pub mod pallet {
 		/// - Won an auction and all leases expired
 		///
 		/// Can be called by any signed origin.
-		#[pallet::call_index(1)]
-		#[pallet::weight(<T as Config>::WeightInfo::withdraw_crowdloan_contribution())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::withdraw_crowdloan_contribution())]
 		pub fn withdraw_crowdloan_contribution(
 			origin: OriginFor<T>,
 			block: BlockNumberFor<T>,
@@ -295,8 +295,8 @@ pub mod pallet {
 		///
 		/// Can be called by any signed origin. The condition that all contributions are withdrawn
 		/// is in place since the reserve acts as a storage deposit.
-		#[pallet::call_index(2)]
-		#[pallet::weight(<T as Config>::WeightInfo::unreserve_crowdloan_reserve())]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::unreserve_crowdloan_reserve())]
 		pub fn unreserve_crowdloan_reserve(
 			origin: OriginFor<T>,
 			block: BlockNumberFor<T>,
@@ -315,8 +315,8 @@ pub mod pallet {
 		/// `SovereignMigrated` will be emitted if the account was migrated successfully.
 		///
 		/// Callable by any signed origin.
-		#[pallet::call_index(3)]
-		#[pallet::weight(T::DbWeight::get().reads_writes(15, 15)
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(T::DbWeight::get().reads_writes(15, 15)
 					.saturating_add(Weight::from_parts(0, 50_000)))]
 		pub fn migrate_teyrchain_sovereign_acc(
 			origin: OriginFor<T>,
@@ -334,8 +334,8 @@ pub mod pallet {
 		/// `SovereignMigrated` will be emitted if the account was migrated successfully.
 		///
 		/// Callable by any signed origin.
-		#[pallet::call_index(5)]
-		#[pallet::weight(T::DbWeight::get().reads_writes(15, 15)
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(T::DbWeight::get().reads_writes(15, 15)
 					.saturating_add(Weight::from_parts(0, 50_000)))]
 		pub fn migrate_teyrchain_sovereign_derived_acc(
 			origin: OriginFor<T>,
@@ -350,8 +350,8 @@ pub mod pallet {
 		}
 
 		/// Force unreserve a named or unnamed reserve.
-		#[pallet::call_index(4)]
-		#[pallet::weight(T::DbWeight::get().reads_writes(10, 10)
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(T::DbWeight::get().reads_writes(10, 10)
 					.saturating_add(Weight::from_parts(0, 50_000)))]
 		pub fn force_unreserve(
 			origin: OriginFor<T>,
@@ -365,7 +365,7 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config> Pallet<T> {
+	impl<T: Config> Pezpallet<T> {
 		pub fn do_unreserve_lease_deposit(
 			block: BlockNumberFor<T>,
 			depositor: T::AccountId,
@@ -464,7 +464,7 @@ pub mod pallet {
 			if from == to {
 				return Err(Error::<T>::AccountIdentical);
 			}
-			pezpallet_balances::Pallet::<T>::ensure_upgraded(from); // prevent future headache
+			pezpallet_balances::Pezpallet::<T>::ensure_upgraded(from); // prevent future headache
 
 			let (translated_acc, para_id, index) = if let Some((parent, index)) = derivation {
 				let (parent_translated, para_id) =
@@ -512,12 +512,12 @@ pub mod pallet {
 			defensive_assert!(missing == 0, "Should have unreserved the full amount");
 
 			// Set consumer refs to zero
-			let consumers = pezframe_system::Pallet::<T>::consumers(from);
+			let consumers = pezframe_system::Pezpallet::<T>::consumers(from);
 			pezframe_system::Account::<T>::mutate(from, |acc| {
 				acc.consumers = 0;
 			});
 			// We dont handle sufficients and there should be none
-			ensure!(pezframe_system::Pallet::<T>::sufficients(from) == 0, Error::<T>::InternalError);
+			ensure!(pezframe_system::Pezpallet::<T>::sufficients(from) == 0, Error::<T>::InternalError);
 
 			// Sanity check
 			let total = <T as Config>::Currency::total_balance(from);

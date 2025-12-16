@@ -60,7 +60,7 @@ fn construct_extrinsic(
 			pezframe_system::CheckGenesis::<Runtime>::new(),
 			pezframe_system::CheckEra::<Runtime>::from(Era::immortal()),
 			pezframe_system::CheckNonce::<Runtime>::from(
-				pezframe_system::Pallet::<Runtime>::account(&account_id).nonce,
+				pezframe_system::Pezpallet::<Runtime>::account(&account_id).nonce,
 			),
 			pezframe_system::CheckWeight::<Runtime>::new(),
 		),
@@ -240,32 +240,32 @@ mod bridge_hub_zagros_tests {
 			bp_bridge_hub_pezkuwichain::BRIDGE_HUB_PEZKUWICHAIN_TEYRCHAIN_ID,
 			Governance::get(),
 			vec![
-				(snowbridge_pezpallet_outbound_queue::Nonce::<Runtime>::hashed_key_for::<ChannelId>(
+				(pezsnowbridge_pezpallet_outbound_queue::Nonce::<Runtime>::hashed_key_for::<ChannelId>(
 					channel_id_one,
 				)
 				.to_vec(), 0u64.encode()),
-				(snowbridge_pezpallet_inbound_queue::Nonce::<Runtime>::hashed_key_for::<ChannelId>(
+				(pezsnowbridge_pezpallet_inbound_queue::Nonce::<Runtime>::hashed_key_for::<ChannelId>(
 					channel_id_one,
 				)
 				.to_vec(), 0u64.encode()),
 			],
 			|| {
 				// Outbound
-				snowbridge_pezpallet_outbound_queue::Nonce::<Runtime>::insert::<ChannelId, u64>(
+				pezsnowbridge_pezpallet_outbound_queue::Nonce::<Runtime>::insert::<ChannelId, u64>(
 					channel_id_one,
 					nonce,
 				);
-				snowbridge_pezpallet_outbound_queue::Nonce::<Runtime>::insert::<ChannelId, u64>(
+				pezsnowbridge_pezpallet_outbound_queue::Nonce::<Runtime>::insert::<ChannelId, u64>(
 					channel_id_two,
 					nonce,
 				);
 
 				// Inbound
-				snowbridge_pezpallet_inbound_queue::Nonce::<Runtime>::insert::<ChannelId, u64>(
+				pezsnowbridge_pezpallet_inbound_queue::Nonce::<Runtime>::insert::<ChannelId, u64>(
 					channel_id_one,
 					nonce,
 				);
-				snowbridge_pezpallet_inbound_queue::Nonce::<Runtime>::insert::<ChannelId, u64>(
+				pezsnowbridge_pezpallet_inbound_queue::Nonce::<Runtime>::insert::<ChannelId, u64>(
 					channel_id_two,
 					nonce,
 				);
@@ -273,21 +273,21 @@ mod bridge_hub_zagros_tests {
 			|| {
 				// Outbound
 				assert_eq!(
-					snowbridge_pezpallet_outbound_queue::Nonce::<Runtime>::get(channel_id_one),
+					pezsnowbridge_pezpallet_outbound_queue::Nonce::<Runtime>::get(channel_id_one),
 					0
 				);
 				assert_eq!(
-					snowbridge_pezpallet_outbound_queue::Nonce::<Runtime>::get(channel_id_two),
+					pezsnowbridge_pezpallet_outbound_queue::Nonce::<Runtime>::get(channel_id_two),
 					nonce
 				);
 
 				// Inbound
 				assert_eq!(
-					snowbridge_pezpallet_inbound_queue::Nonce::<Runtime>::get(channel_id_one),
+					pezsnowbridge_pezpallet_inbound_queue::Nonce::<Runtime>::get(channel_id_one),
 					0
 				);
 				assert_eq!(
-					snowbridge_pezpallet_inbound_queue::Nonce::<Runtime>::get(channel_id_two),
+					pezsnowbridge_pezpallet_inbound_queue::Nonce::<Runtime>::get(channel_id_two),
 					nonce
 				);
 			},

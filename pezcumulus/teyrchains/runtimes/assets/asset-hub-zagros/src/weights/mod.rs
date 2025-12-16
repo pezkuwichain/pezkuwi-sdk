@@ -63,8 +63,8 @@ pub mod pezpallet_xcm;
 pub mod pezpallet_xcm_bridge_hub_router;
 pub mod paritydb_weights;
 pub mod rocksdb_weights;
-pub mod snowbridge_pezpallet_system_backend;
-pub mod snowbridge_pezpallet_system_frontend;
+pub mod pezpezsnowbridge_pezpallet_system_backend;
+pub mod pezpezsnowbridge_pezpallet_system_frontend;
 pub mod xcm;
 
 pub use block_weights::constants::BlockExecutionWeight;

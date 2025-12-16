@@ -24,10 +24,10 @@ use xcm_executor::traits::FeeReason;
 
 type RuntimeOrigin<T> = <T as pezframe_system::Config>::RuntimeOrigin;
 
-/// Pallet we're benchmarking here.
-pub struct Pallet<T: Config>(crate::Pallet<T>);
+/// Pezpallet we're benchmarking here.
+pub struct Pezpallet<T: Config>(crate::Pezpallet<T>);
 
-/// Trait that must be implemented by runtime to be able to benchmark pallet properly.
+/// Trait that must be implemented by runtime to be able to benchmark pezpallet properly.
 pub trait Config: crate::Config + pezpallet_balances::Config {
 	/// Helper that ensures successful delivery for extrinsics/benchmarks which need `SendXcm`.
 	type DeliveryHelper: EnsureDelivery;
@@ -376,7 +376,7 @@ mod benchmarks {
 			FeeReason::ChargeFees,
 		);
 
-		let _ = crate::Pallet::<T>::request_version_notify(loc);
+		let _ = crate::Pezpallet::<T>::request_version_notify(loc);
 
 		#[extrinsic_call]
 		_(RawOrigin::Root, Box::new(versioned_loc));
@@ -398,7 +398,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			crate::Pallet::<T>::lazy_migration(
+			crate::Pezpallet::<T>::lazy_migration(
 				VersionMigrationStage::MigrateSupportedVersion,
 				Weight::zero(),
 			);
@@ -413,7 +413,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			crate::Pallet::<T>::lazy_migration(
+			crate::Pezpallet::<T>::lazy_migration(
 				VersionMigrationStage::MigrateVersionNotifiers,
 				Weight::zero(),
 			);
@@ -435,7 +435,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			crate::Pallet::<T>::lazy_migration(
+			crate::Pezpallet::<T>::lazy_migration(
 				VersionMigrationStage::NotifyCurrentTargets(None),
 				Weight::zero(),
 			);
@@ -456,7 +456,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			crate::Pallet::<T>::lazy_migration(
+			crate::Pezpallet::<T>::lazy_migration(
 				VersionMigrationStage::NotifyCurrentTargets(None),
 				Weight::zero(),
 			);
@@ -482,7 +482,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			crate::Pallet::<T>::lazy_migration(
+			crate::Pezpallet::<T>::lazy_migration(
 				VersionMigrationStage::MigrateAndNotifyOldTargets,
 				Weight::zero(),
 			);
@@ -498,7 +498,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			crate::Pallet::<T>::lazy_migration(
+			crate::Pezpallet::<T>::lazy_migration(
 				VersionMigrationStage::MigrateAndNotifyOldTargets,
 				Weight::zero(),
 			);
@@ -516,7 +516,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			crate::Pallet::<T>::lazy_migration(
+			crate::Pezpallet::<T>::lazy_migration(
 				VersionMigrationStage::MigrateAndNotifyOldTargets,
 				Weight::zero(),
 			);
@@ -533,7 +533,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			crate::Pallet::<T>::new_query(responder, timeout, match_querier);
+			crate::Pezpallet::<T>::new_query(responder, timeout, match_querier);
 		}
 	}
 
@@ -542,7 +542,7 @@ mod benchmarks {
 		let responder = Location::from(Parent);
 		let timeout = 1u32.into();
 		let match_querier = Location::from(Here);
-		let query_id = crate::Pallet::<T>::new_query(responder, timeout, match_querier);
+		let query_id = crate::Pezpallet::<T>::new_query(responder, timeout, match_querier);
 		let infos = (0..xcm::v3::MaxPalletsInfo::get())
 			.map(|_| {
 				PalletInfo::new(
@@ -564,14 +564,14 @@ mod benchmarks {
 				.unwrap()
 			})
 			.collect::<Vec<_>>();
-		crate::Pallet::<T>::expect_response(
+		crate::Pezpallet::<T>::expect_response(
 			query_id,
 			Response::PalletsInfo(infos.try_into().unwrap()),
 		);
 
 		#[block]
 		{
-			<crate::Pallet<T> as QueryHandler>::take_response(query_id);
+			<crate::Pezpallet<T> as QueryHandler>::take_response(query_id);
 		}
 	}
 
@@ -582,7 +582,7 @@ mod benchmarks {
 			.map_err(|_| BenchmarkError::Override(BenchmarkResult::from_weight(Weight::MAX)))?;
 		let asset: Asset = T::get_asset();
 		// Trap assets for claiming later
-		crate::Pallet::<T>::drop_assets(
+		crate::Pezpallet::<T>::drop_assets(
 			&claim_location,
 			asset.clone().into(),
 			&XcmContext { origin: None, message_id: [0u8; 32], topic: None },
@@ -618,7 +618,7 @@ mod benchmarks {
 		// Give some multiple of ED
 		let balance = T::ExistentialDeposit::get() * 1000000u32.into();
 		let _ =
-			<pezpallet_balances::Pallet::<T> as pezframe_support::traits::Currency<_>>::make_free_balance_be(&who, balance);
+			<pezpallet_balances::Pezpallet::<T> as pezframe_support::traits::Currency<_>>::make_free_balance_be(&who, balance);
 
 		let mut existing_aliases = BoundedVec::<OriginAliaser, MaxAuthorizedAliases>::new();
 		// prepopulate list with `max-1` aliases to benchmark worst case
@@ -686,7 +686,7 @@ mod benchmarks {
 		// Give some multiple of ED
 		let balance = T::ExistentialDeposit::get() * 1000000u32.into();
 		let _ =
-			<pezpallet_balances::Pallet::<T> as pezframe_support::traits::Currency<_>>::make_free_balance_be(&who, balance);
+			<pezpallet_balances::Pezpallet::<T> as pezframe_support::traits::Currency<_>>::make_free_balance_be(&who, balance);
 
 		let mut existing_aliases = BoundedVec::<OriginAliaser, MaxAuthorizedAliases>::new();
 		// prepopulate list with `max` aliases to benchmark worst case
@@ -728,7 +728,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			crate::Pallet::<T>::query_xcm_weight(versioned_msg)
+			crate::Pezpallet::<T>::query_xcm_weight(versioned_msg)
 				.map_err(|_| BenchmarkError::Override(BenchmarkResult::from_weight(Weight::MAX)))?;
 		}
 
@@ -736,7 +736,7 @@ mod benchmarks {
 	}
 
 	impl_benchmark_test_suite!(
-		Pallet,
+		Pezpallet,
 		crate::mock::new_test_ext_with_balances(Vec::new()),
 		crate::mock::Test
 	);
@@ -763,14 +763,14 @@ pub mod helpers {
 		let balance = amount * 10u32.into();
 		let who = whitelisted_caller();
 		let _ =
-			<pezpallet_balances::Pallet::<T> as pezframe_support::traits::Currency<_>>::make_free_balance_be(&who, balance);
+			<pezpallet_balances::Pezpallet::<T> as pezframe_support::traits::Currency<_>>::make_free_balance_be(&who, balance);
 		// verify initial balance
-		assert_eq!(pezpallet_balances::Pallet::<T>::free_balance(&who), balance);
+		assert_eq!(pezpallet_balances::Pezpallet::<T>::free_balance(&who), balance);
 
 		// verify transferred successfully
 		let verify = Box::new(move || {
 			// verify balance after transfer, decreased by transferred amount (and delivery fees)
-			assert!(pezpallet_balances::Pallet::<T>::free_balance(&who) <= balance - amount);
+			assert!(pezpallet_balances::Pezpallet::<T>::free_balance(&who) <= balance - amount);
 		});
 		Some((assets, fee_asset_id, destination, verify))
 	}

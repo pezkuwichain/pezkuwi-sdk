@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Runtime API definition for the FRAME NFTs pallet.
+//! Runtime API definition for the FRAME NFTs pezpallet.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 

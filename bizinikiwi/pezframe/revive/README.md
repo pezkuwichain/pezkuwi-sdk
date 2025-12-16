@@ -1,4 +1,4 @@
-# Revive Pallet
+# Revive Pezpallet
 
 This is an **experimental** module that provides functionality for the runtime to deploy and execute PolkaVM
 smart-contracts. It is a heavily modified `pallet_contracts` fork.
@@ -32,7 +32,7 @@ One `ref_time` `Weight` is defined as one picosecond of execution time on the ru
 
 #### Event-Aware Weight Accounting
 
-The pallet includes **event-aware weight accounting** for `finalize_block()` operations through the `OnFinalizeBlockParts`
+The pezpallet includes **event-aware weight accounting** for `finalize_block()` operations through the `OnFinalizeBlockParts`
 trait. The weight model uses differential benchmarking to precisely account for the computational cost of processing
 events during Ethereum block construction:
 
@@ -43,7 +43,7 @@ Total Weight = fixed_part +
 ```
 
 **High-Level Weight API (`OnFinalizeBlockParts` trait):**
-The pallet exposes these weight calculation methods for runtime use:
+The pezpallet exposes these weight calculation methods for runtime use:
 - **Fixed cost**: `on_finalize_block_fixed()` - Base overhead regardless of transaction/event count
 - **Per-transaction cost**: `on_finalize_block_per_tx(payload_size)` - Applied incrementally during each `eth_call()`
 - **Per-event cost**: `on_finalize_block_per_event(data_len)` - Applied dynamically during each `deposit_event()`
@@ -79,7 +79,7 @@ to handle that failure, either proceeding or reverting A's changes.
 ### Dispatchable functions
 
 Those are documented in the [reference
-documentation](https://docs.pezkuwichain.io/sdk/master/pallet_revive/pallet/dispatchables/index.html).
+documentation](https://docs.pezkuwichain.io/sdk/master/pallet_revive/pezpallet/dispatchables/index.html).
 
 ## Usage
 
@@ -103,7 +103,7 @@ cargo run --release -- --dev -lerror,runtime::revive::strace=trace,runtime::revi
 
 ## Unstable Interfaces
 
-Driven by the desire to have an iterative approach in developing new contract interfaces this pallet contains the
+Driven by the desire to have an iterative approach in developing new contract interfaces this pezpallet contains the
 concept of an unstable interface. Akin to the rust nightly compiler it allows us to add new interfaces but mark them as
 unstable so that contract languages can experiment with them and give feedback before we stabilize those.
 

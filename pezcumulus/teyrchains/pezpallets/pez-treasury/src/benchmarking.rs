@@ -3,7 +3,7 @@
 #![cfg(feature = "runtime-benchmarks")]
 
 use super::*;
-use crate::Pallet as PezTreasury;
+use crate::Pezpallet as PezTreasury;
 use pezframe_benchmarking::v2::*;
 use pezframe_support::traits::{
 	fungibles::{Inspect, Mutate},
@@ -77,9 +77,9 @@ mod benchmarks {
 			initial_monthly_amount * 10u32.into(),
 		);
 
-		let current_block = pezframe_system::Pallet::<T>::block_number();
+		let current_block = pezframe_system::Pezpallet::<T>::block_number();
 		let target_block = current_block + crate::BLOCKS_PER_MONTH.into() + 1u32.into();
-		pezframe_system::Pallet::<T>::set_block_number(target_block);
+		pezframe_system::Pezpallet::<T>::set_block_number(target_block);
 
 		#[extrinsic_call]
 		release_monthly_funds(RawOrigin::Root);

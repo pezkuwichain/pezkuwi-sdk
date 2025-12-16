@@ -214,7 +214,7 @@
 //!
 //! #### Bob's Overflowed Balance
 //!
-//! **Bob's** balance exceeds the `Balance` type on the `EduChain`. Because the pallet developer did
+//! **Bob's** balance exceeds the `Balance` type on the `EduChain`. Because the pezpallet developer did
 //! not handle the calculation to add to Bob's balance with any regard to this overflow, **Bob's**
 //! balance is now essentially `0`, the operation **wrapped**.
 //!
@@ -247,7 +247,7 @@
 //!
 //! A `u8` parameter, called `proposals_count`, represents the type for counting the number of
 //! proposals on-chain. Every time a new proposal is added to the system, this number increases.
-//! With the proposal pallet's high usage, it has reached `u8::MAX`’s limit of 255, causing
+//! With the proposal pezpallet's high usage, it has reached `u8::MAX`’s limit of 255, causing
 //! `proposals_count` to go to 0. Unfortunately, this results in new proposals overwriting old ones,
 //! effectively erasing any notion of past proposals!
 //!
@@ -276,7 +276,7 @@
 //! authoring, consensus, or other protocol-level dependencies, going through with an action may
 //! actually cause harm to the network, and thus stalling would be the better option.
 //!
-//! Take the example of the BABE pallet ([`pezpallet_babe`]), which doesn't allow for a validator to
+//! Take the example of the BABE pezpallet ([`pezpallet_babe`]), which doesn't allow for a validator to
 //! participate if it is disabled (see: [`frame::traits::DisabledValidators`]):
 //!
 //! ```ignore

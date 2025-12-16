@@ -24,10 +24,10 @@ mod runtime {
 	pub struct Test;
 
 	#[runtime::pezpallet_index(0)]
-	pub type System = pezframe_system::Pallet<Test>;
+	pub type System = pezframe_system::Pezpallet<Test>;
 
 	#[runtime::pezpallet_index(1)]
-	pub type Template = pezpallet_template::Pallet<Test>;
+	pub type Template = pezpallet_template::Pezpallet<Test>;
 }
 
 #[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]

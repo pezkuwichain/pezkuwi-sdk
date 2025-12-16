@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Pallet that serves no other purpose than benchmarking raw messages [`Xcm`].
+//! Pezpallet that serves no other purpose than benchmarking raw messages [`Xcm`].
 
 #![cfg_attr(not(feature = "std"), no_std)]
 

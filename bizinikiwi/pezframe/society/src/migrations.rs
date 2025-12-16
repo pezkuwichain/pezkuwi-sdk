@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Migrations for Society Pallet
+//! # Migrations for Society Pezpallet
 
 use super::*;
 use alloc::{vec, vec::Vec};
@@ -41,15 +41,15 @@ impl<
 {
 	#[cfg(feature = "try-runtime")]
 	fn pre_upgrade() -> Result<Vec<u8>, TryRuntimeError> {
-		let in_code = Pallet::<T, I>::in_code_storage_version();
-		let on_chain = Pallet::<T, I>::on_chain_storage_version();
+		let in_code = Pezpallet::<T, I>::in_code_storage_version();
+		let on_chain = Pezpallet::<T, I>::on_chain_storage_version();
 		ensure!(on_chain == 0 && in_code == 2, "pezpallet_society: invalid version");
 
 		Ok((v0::Candidates::<T, I>::get(), v0::Members::<T, I>::get()).encode())
 	}
 
 	fn on_runtime_upgrade() -> Weight {
-		let onchain = Pallet::<T, I>::on_chain_storage_version();
+		let onchain = Pezpallet::<T, I>::on_chain_storage_version();
 		if onchain < 2 {
 			log::info!(
 				target: TARGET,
@@ -85,7 +85,7 @@ impl<
 		assert_eq!(members, old_members);
 
 		ensure!(
-			Pallet::<T, I>::on_chain_storage_version() == 2,
+			Pezpallet::<T, I>::on_chain_storage_version() == 2,
 			"The onchain version must be updated after the migration."
 		);
 
@@ -100,7 +100,7 @@ pub type MigrateToV2<T, I, PastPayouts> = pezframe_support::migrations::Versione
 	0,
 	2,
 	VersionUncheckedMigrateToV2<T, I, PastPayouts>,
-	crate::pallet::Pallet<T, I>,
+	crate::pezpallet::Pezpallet<T, I>,
 	<T as pezframe_system::Config>::DbWeight,
 >;
 
@@ -121,19 +121,19 @@ pub(crate) mod v0 {
 
 	#[storage_alias]
 	pub type Bids<T: Config<I>, I: 'static> = StorageValue<
-		Pallet<T, I>,
+		Pezpallet<T, I>,
 		Vec<Bid<<T as pezframe_system::Config>::AccountId, BalanceOf<T, I>>>,
 		ValueQuery,
 	>;
 	#[storage_alias]
 	pub type Candidates<T: Config<I>, I: 'static> = StorageValue<
-		Pallet<T, I>,
+		Pezpallet<T, I>,
 		Vec<Bid<<T as pezframe_system::Config>::AccountId, BalanceOf<T, I>>>,
 		ValueQuery,
 	>;
 	#[storage_alias]
 	pub type Votes<T: Config<I>, I: 'static> = StorageDoubleMap<
-		Pallet<T, I>,
+		Pezpallet<T, I>,
 		Twox64Concat,
 		<T as pezframe_system::Config>::AccountId,
 		Twox64Concat,
@@ -142,24 +142,24 @@ pub(crate) mod v0 {
 	>;
 	#[storage_alias]
 	pub type SuspendedCandidates<T: Config<I>, I: 'static> = StorageMap<
-		Pallet<T, I>,
+		Pezpallet<T, I>,
 		Twox64Concat,
 		<T as pezframe_system::Config>::AccountId,
 		(BalanceOf<T, I>, BidKind<<T as pezframe_system::Config>::AccountId, BalanceOf<T, I>>),
 	>;
 	#[storage_alias]
 	pub type Members<T: Config<I>, I: 'static> =
-		StorageValue<Pallet<T, I>, Vec<<T as pezframe_system::Config>::AccountId>, ValueQuery>;
+		StorageValue<Pezpallet<T, I>, Vec<<T as pezframe_system::Config>::AccountId>, ValueQuery>;
 	#[storage_alias]
 	pub type Vouching<T: Config<I>, I: 'static> = StorageMap<
-		Pallet<T, I>,
+		Pezpallet<T, I>,
 		Twox64Concat,
 		<T as pezframe_system::Config>::AccountId,
 		VouchingStatus,
 	>;
 	#[storage_alias]
 	pub type Strikes<T: Config<I>, I: 'static> = StorageMap<
-		Pallet<T, I>,
+		Pezpallet<T, I>,
 		Twox64Concat,
 		<T as pezframe_system::Config>::AccountId,
 		StrikeCount,
@@ -167,7 +167,7 @@ pub(crate) mod v0 {
 	>;
 	#[storage_alias]
 	pub type Payouts<T: Config<I>, I: 'static> = StorageMap<
-		Pallet<T, I>,
+		Pezpallet<T, I>,
 		Twox64Concat,
 		<T as pezframe_system::Config>::AccountId,
 		Vec<(BlockNumberFor<T, I>, BalanceOf<T, I>)>,
@@ -175,7 +175,7 @@ pub(crate) mod v0 {
 	>;
 	#[storage_alias]
 	pub type SuspendedMembers<T: Config<I>, I: 'static> = StorageMap<
-		Pallet<T, I>,
+		Pezpallet<T, I>,
 		Twox64Concat,
 		<T as pezframe_system::Config>::AccountId,
 		bool,
@@ -183,13 +183,13 @@ pub(crate) mod v0 {
 	>;
 	#[storage_alias]
 	pub type Defender<T: Config<I>, I: 'static> =
-		StorageValue<Pallet<T, I>, <T as pezframe_system::Config>::AccountId>;
+		StorageValue<Pezpallet<T, I>, <T as pezframe_system::Config>::AccountId>;
 	#[storage_alias]
 	pub type DefenderVotes<T: Config<I>, I: 'static> =
-		StorageMap<Pallet<T, I>, Twox64Concat, <T as pezframe_system::Config>::AccountId, Vote>;
+		StorageMap<Pezpallet<T, I>, Twox64Concat, <T as pezframe_system::Config>::AccountId, Vote>;
 }
 
-/// Will panic if there are any inconsistencies in the pallet's state or old keys remaining.
+/// Will panic if there are any inconsistencies in the pezpallet's state or old keys remaining.
 pub fn assert_internal_consistency<T: Config<I>, I: Instance + 'static>() {
 	// Check all members are valid data.
 	let mut members = vec![];

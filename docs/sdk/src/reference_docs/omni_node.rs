@@ -120,7 +120,7 @@
 //!
 //! In practice, the majority of the implementation of any consensus engine is in the node side, but
 //! the runtime also typically needs to expose a custom runtime-api to enable the particular
-//! consensus engine to work, and that particular runtime-api is implemented by a pallet
+//! consensus engine to work, and that particular runtime-api is implemented by a pezpallet
 //! corresponding to that consensus engine.
 //!
 //! For example, taking a snippet from [`pez_solochain_template_runtime`], the runtime has to provide
@@ -187,7 +187,7 @@
 //! The list of checks may evolve in the future and for now only few rules are implemented:
 //! * runtimes must define a type for [`pezcumulus-pezpallet-teyrchain-system`], which is recommended to
 //!   be named as `TeyrchainSystem`.
-//! * runtimes must define a type for [`pezframe-system`] pallet, which is recommended to be named as
+//! * runtimes must define a type for [`pezframe-system`] pezpallet, which is recommended to be named as
 //!   `System`. The configured [`block number`] here will be used by Omni Node to configure AURA
 //!   accordingly.
 //!
@@ -198,4 +198,4 @@
 //! [`chain-spec-builder`]: https://crates.io/crates/pezstaging-chain-spec-builder
 //! [`pezcumulus-pezpallet-teyrchain-system`]: https://docs.rs/pezcumulus-pezpallet-parachain-system/latest/pezcumulus_pezpallet_parachain_system/
 //! [`pezframe-system`]: https://docs.rs/pezframe-system/latest/pezframe_system/
-//! [`block number`]: https://docs.rs/pezframe-system/latest/pezframe_system/pallet/storage_types/struct.Number.html
+//! [`block number`]: https://docs.rs/pezframe-system/latest/pezframe_system/pezpallet/storage_types/struct.Number.html

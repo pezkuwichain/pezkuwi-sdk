@@ -544,7 +544,7 @@ fn pot_accounts_are_different() {
 		let incentive = PezTreasury::incentive_pot_account_id();
 		let government = PezTreasury::government_pot_account_id();
 
-		println!("\n=== Account IDs from Pallet ===");
+		println!("\n=== Account IDs from Pezpallet ===");
 		println!("Treasury: {:?}", treasury);
 		println!("Incentive: {:?}", incentive);
 		println!("Government: {:?}", government);

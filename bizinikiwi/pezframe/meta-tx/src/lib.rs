@@ -15,23 +15,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Meta Tx (Meta Transaction) Pallet
+//! # Meta Tx (Meta Transaction) Pezpallet
 //!
-//! This pallet enables the dispatch of transactions that are authorized by one party (the signer)
+//! This pezpallet enables the dispatch of transactions that are authorized by one party (the signer)
 //! and executed by an untrusted third party (the relayer), who covers the transaction fees.
 //!
-//! ## Pallet API
+//! ## Pezpallet API
 //!
-//! See the [`pallet`] module for more information about the interfaces this pallet exposes,
+//! See the [`pezpallet`] module for more information about the interfaces this pezpallet exposes,
 //! including its configuration trait, dispatchables, storage items, events and errors.
 //!
 //! ## Overview
 //!
-//! The pallet provides a client-level API, typically not meant for direct use by end users.
+//! The pezpallet provides a client-level API, typically not meant for direct use by end users.
 //! A meta transaction, constructed with the help of a wallet, contains a target call, necessary
 //! extensions, and the signer's signature. This transaction is then broadcast, and any interested
 //! relayer can pick it up and execute it. The relayer submits a regular transaction via the
-//! [`dispatch`](`Pallet::dispatch`) function, passing the meta transaction as an argument to
+//! [`dispatch`](`Pezpallet::dispatch`) function, passing the meta transaction as an argument to
 //! execute the target call on behalf of the signer while covering the fees.
 //!
 //! ### Example
@@ -60,7 +60,7 @@ mod tests;
 pub mod weights;
 #[cfg(feature = "runtime-benchmarks")]
 pub use benchmarking::types::WeightlessExtension;
-pub use pallet::*;
+pub use pezpallet::*;
 pub use weights::WeightInfo;
 mod extension;
 pub use extension::MetaTxMarker;
@@ -102,11 +102,11 @@ impl<Call, Extension> MetaTx<Call, Extension> {
 /// The [`MetaTx`] for the given config.
 pub type MetaTxFor<T> = MetaTx<<T as pezframe_system::Config>::RuntimeCall, <T as Config>::Extension>;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config:
 		pezframe_system::Config<
 		RuntimeCall: Dispatchable<
@@ -117,7 +117,7 @@ pub mod pallet {
 		RuntimeOrigin: AsTransactionAuthorizedOrigin + From<SystemOrigin<Self::AccountId>>,
 	>
 	{
-		/// Weight information for calls in this pallet.
+		/// Weight information for calls in this pezpallet.
 		type WeightInfo: WeightInfo;
 		/// The overarching event type.
 		#[allow(deprecated)]
@@ -140,7 +140,7 @@ pub mod pallet {
 		type Extension: TransactionExtension<<Self as pezframe_system::Config>::RuntimeCall>;
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Invalid proof (e.g. signature).
 		BadProof,
@@ -156,8 +156,8 @@ pub mod pallet {
 		Invalid,
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(crate) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(crate) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A meta transaction has been dispatched.
 		///
@@ -166,17 +166,17 @@ pub mod pallet {
 		Dispatched { result: DispatchResultWithPostInfo },
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Dispatch a given meta transaction.
 		///
 		/// - `_origin`: Can be any kind of origin.
 		/// - `meta_tx`: Meta Transaction with a target call to be dispatched.
-		#[pallet::call_index(0)]
-		#[pallet::weight({
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight({
 			let dispatch_info = meta_tx.call.get_dispatch_info();
 			let extension_weight = meta_tx.extension.weight(&meta_tx.call);
 			let bare_call_weight = T::WeightInfo::bare_dispatch();

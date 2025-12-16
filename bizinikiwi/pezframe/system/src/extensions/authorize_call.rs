@@ -129,7 +129,7 @@ mod tests {
 		BuildStorage, DispatchError,
 	};
 
-	#[pezframe_support::pallet]
+	#[pezframe_support::pezpallet]
 	pub mod pallet1 {
 		use crate as pezframe_system;
 		use pezframe_support::pezpallet_prelude::*;
@@ -148,22 +148,22 @@ mod tests {
 			}
 		}
 
-		#[pallet::pallet]
-		pub struct Pallet<T>(_);
+		#[pezpallet::pezpallet]
+		pub struct Pezpallet<T>(_);
 
-		#[pallet::config]
+		#[pezpallet::config]
 		pub trait Config: pezframe_system::Config {}
 
-		#[pallet::call]
-		impl<T: Config> Pallet<T> {
-			#[pallet::weight(CALL_WEIGHT)]
-			#[pallet::call_index(0)]
-			#[pallet::authorize(|_source, valid| if *valid {
+		#[pezpallet::call]
+		impl<T: Config> Pezpallet<T> {
+			#[pezpallet::weight(CALL_WEIGHT)]
+			#[pezpallet::call_index(0)]
+			#[pezpallet::authorize(|_source, valid| if *valid {
 				Ok((valid_transaction(), Weight::zero()))
 			} else {
 				Err(TransactionValidityError::Invalid(InvalidTransaction::Call))
 			})]
-			#[pallet::weight_of_authorize(AUTH_WEIGHT)]
+			#[pezpallet::weight_of_authorize(AUTH_WEIGHT)]
 			pub fn call1(origin: OriginFor<T>, valid: bool) -> DispatchResult {
 				crate::ensure_authorized(origin)?;
 				let _ = valid;
@@ -189,10 +189,10 @@ mod tests {
 		pub struct Runtime;
 
 		#[runtime::pezpallet_index(0)]
-		pub type System = pezframe_system::Pallet<Runtime>;
+		pub type System = pezframe_system::Pezpallet<Runtime>;
 
 		#[runtime::pezpallet_index(1)]
-		pub type Pallet1 = pallet1::Pallet<Runtime>;
+		pub type Pallet1 = pallet1::Pezpallet<Runtime>;
 	}
 
 	pub type TransactionExtension = (pezframe_system::AuthorizeCall<Runtime>,);

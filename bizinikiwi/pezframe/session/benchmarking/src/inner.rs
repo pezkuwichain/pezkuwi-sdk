@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Benchmarks for the Session Pallet.
+//! Benchmarks for the Session Pezpallet.
 // This is separated into its own crate due to cyclic dependency issues.
 
 use alloc::{vec, vec::Vec};
@@ -28,7 +28,7 @@ use pezframe_support::{
 	traits::{Get, KeyOwnerProofSystem, OnInitialize},
 };
 use pezframe_system::{pezpallet_prelude::BlockNumberFor, RawOrigin};
-use pezpallet_session::{historical::Pallet as Historical, Pallet as Session, *};
+use pezpallet_session::{historical::Pezpallet as Historical, Pezpallet as Session, *};
 use pezpallet_staking::{
 	benchmarking::create_validator_with_nominators, testing_utils::create_validators,
 	MaxNominationsOf, RewardDestination,
@@ -36,15 +36,15 @@ use pezpallet_staking::{
 
 const MAX_VALIDATORS: u32 = 1000;
 
-pub struct Pallet<T: Config>(pezpallet_session::Pallet<T>);
+pub struct Pezpallet<T: Config>(pezpallet_session::Pezpallet<T>);
 pub trait Config:
 	pezpallet_session::Config + pezpallet_session::historical::Config + pezpallet_staking::Config
 {
 }
 
-impl<T: Config> OnInitialize<BlockNumberFor<T>> for Pallet<T> {
+impl<T: Config> OnInitialize<BlockNumberFor<T>> for Pezpallet<T> {
 	fn on_initialize(n: BlockNumberFor<T>) -> pezframe_support::weights::Weight {
-		pezpallet_session::Pallet::<T>::on_initialize(n)
+		pezpallet_session::Pezpallet::<T>::on_initialize(n)
 	}
 }
 
@@ -62,7 +62,7 @@ mod benchmarks {
 			true,
 			RewardDestination::Staked,
 		)?;
-		let v_controller = pezpallet_staking::Pallet::<T>::bonded(&v_stash).ok_or("not stash")?;
+		let v_controller = pezpallet_staking::Pezpallet::<T>::bonded(&v_stash).ok_or("not stash")?;
 
 		let keys = T::Keys::decode(&mut TrailingZeroInput::zeroes()).unwrap();
 		let proof: Vec<u8> = vec![0, 1, 2, 3];
@@ -87,7 +87,7 @@ mod benchmarks {
 			true,
 			RewardDestination::Staked,
 		)?;
-		let v_controller = pezpallet_staking::Pallet::<T>::bonded(&v_stash).ok_or("not stash")?;
+		let v_controller = pezpallet_staking::Pezpallet::<T>::bonded(&v_stash).ok_or("not stash")?;
 		let keys = T::Keys::decode(&mut TrailingZeroInput::zeroes()).unwrap();
 		let proof: Vec<u8> = vec![0, 1, 2, 3];
 		assert_ok!(Session::<T>::ensure_can_pay_key_deposit(&v_controller));
@@ -134,7 +134,7 @@ mod benchmarks {
 	}
 
 	impl_benchmark_test_suite!(
-		Pallet,
+		Pezpallet,
 		crate::mock::new_test_ext(),
 		crate::mock::Test,
 		extra = false
@@ -154,7 +154,7 @@ fn check_membership_proof_setup<T: Config>(
 		use rand::{RngCore, SeedableRng};
 
 		let validator = T::Lookup::lookup(who).unwrap();
-		let controller = pezpallet_staking::Pallet::<T>::bonded(&validator).unwrap();
+		let controller = pezpallet_staking::Pezpallet::<T>::bonded(&validator).unwrap();
 
 		let keys = {
 			let mut keys = [0u8; 128];
@@ -176,7 +176,7 @@ fn check_membership_proof_setup<T: Config>(
 		Session::<T>::set_keys(RawOrigin::Signed(controller).into(), keys, proof).unwrap();
 	}
 
-	Pallet::<T>::on_initialize(pezframe_system::pezpallet_prelude::BlockNumberFor::<T>::one());
+	Pezpallet::<T>::on_initialize(pezframe_system::pezpallet_prelude::BlockNumberFor::<T>::one());
 
 	// skip sessions until the new validator set is enacted
 	while Validators::<T>::get().len() < n as usize {

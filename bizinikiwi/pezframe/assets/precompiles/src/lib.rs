@@ -145,7 +145,7 @@ where
 			.map_err(|_| Error::Revert(Revert { reason: ERR_INVALID_CALLER.into() }))
 	}
 
-	/// Convert a `U256` value to the balance type of the pallet.
+	/// Convert a `U256` value to the balance type of the pezpallet.
 	fn to_balance(
 		value: alloy::primitives::U256,
 	) -> Result<<Runtime as Config<Instance>>::Balance, Error> {
@@ -189,7 +189,7 @@ where
 		);
 
 		let f = TransferFlags { keep_alive: false, best_effort: false, burn_dust: false };
-		pezpallet_assets::Pallet::<Runtime, Instance>::do_transfer(
+		pezpallet_assets::Pezpallet::<Runtime, Instance>::do_transfer(
 			asset_id,
 			&<Runtime as pezpallet_revive::Config>::AddressMapper::to_account_id(&from),
 			&dest,
@@ -219,7 +219,7 @@ where
 		env.charge(<Runtime as Config<Instance>>::WeightInfo::total_issuance())?;
 
 		let value =
-			Self::to_u256(pezpallet_assets::Pallet::<Runtime, Instance>::total_issuance(asset_id))?;
+			Self::to_u256(pezpallet_assets::Pezpallet::<Runtime, Instance>::total_issuance(asset_id))?;
 		return Ok(IERC20::totalSupplyCall::abi_encode_returns(&value));
 	}
 
@@ -233,7 +233,7 @@ where
 		let account = call.account.into_array().into();
 		let account = <Runtime as pezpallet_revive::Config>::AddressMapper::to_account_id(&account);
 		let value =
-			Self::to_u256(pezpallet_assets::Pallet::<Runtime, Instance>::balance(asset_id, account))?;
+			Self::to_u256(pezpallet_assets::Pezpallet::<Runtime, Instance>::balance(asset_id, account))?;
 		return Ok(IERC20::balanceOfCall::abi_encode_returns(&value));
 	}
 
@@ -250,7 +250,7 @@ where
 
 		let spender = call.spender.into_array().into();
 		let spender = <Runtime as pezpallet_revive::Config>::AddressMapper::to_account_id(&spender);
-		let value = Self::to_u256(pezpallet_assets::Pallet::<Runtime, Instance>::allowance(
+		let value = Self::to_u256(pezpallet_assets::Pezpallet::<Runtime, Instance>::allowance(
 			asset_id, &owner, &spender,
 		))?;
 
@@ -268,7 +268,7 @@ where
 		let spender = call.spender.into_array().into();
 		let spender = <Runtime as pezpallet_revive::Config>::AddressMapper::to_account_id(&spender);
 
-		pezpallet_assets::Pallet::<Runtime, Instance>::do_approve_transfer(
+		pezpallet_assets::Pezpallet::<Runtime, Instance>::do_approve_transfer(
 			asset_id,
 			&<Runtime as pezpallet_revive::Config>::AddressMapper::to_account_id(&owner),
 			&spender,
@@ -303,7 +303,7 @@ where
 		let to = call.to.into_array().into();
 		let to = <Runtime as pezpallet_revive::Config>::AddressMapper::to_account_id(&to);
 
-		pezpallet_assets::Pallet::<Runtime, Instance>::do_transfer_approved(
+		pezpallet_assets::Pezpallet::<Runtime, Instance>::do_transfer_approved(
 			asset_id,
 			&from,
 			&spender,

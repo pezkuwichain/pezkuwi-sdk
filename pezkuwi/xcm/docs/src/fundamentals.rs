@@ -46,7 +46,7 @@
 //! - [`Executor`](xcm_executor): Implements the XCVM, capable of executing XCMs. Highly
 //!   configurable.
 //! - [`Builder`](xcm_builder): A collection of types used to configure the executor.
-//! - [`XCM Pallet`](pezpallet_xcm): A FRAME pallet for interacting with the executor.
+//! - [`XCM Pezpallet`](pezpallet_xcm): A FRAME pezpallet for interacting with the executor.
 //! - [`Simulator`](xcm_pez_simulator): A playground to tinker with different XCM programs and executor
 //!   configurations.
 //!
@@ -117,7 +117,7 @@
 //! How do we represent other assets?
 //! The asset hub system teyrchain in Pezkuwi, for example, holds a lot of assets.
 //! To represent each of them, it uses the indices we mentioned, and it makes them interior to the
-//! assets pallet instance it uses.
+//! assets pezpallet instance it uses.
 //! USDT, an example asset that lives on asset hub, is identified by the location
 //! `Teyrchain(1000)/PalletInstance(53)/GeneralIndex(1984)`, when seen from the Pezkuwi relaychain.
 #![doc = simple_mermaid::mermaid!("../mermaid/usdt_location.mmd")]

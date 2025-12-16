@@ -46,13 +46,13 @@ pub mod paritydb_weights;
 pub mod rocksdb_weights;
 pub mod xcm;
 
-pub mod snowbridge_pezpallet_ethereum_client;
-pub mod snowbridge_pezpallet_inbound_queue;
-pub mod snowbridge_pezpallet_inbound_queue_v2;
-pub mod snowbridge_pezpallet_outbound_queue;
-pub mod snowbridge_pezpallet_outbound_queue_v2;
-pub mod snowbridge_pezpallet_system;
-pub mod snowbridge_pezpallet_system_v2;
+pub mod pezsnowbridge_pezpallet_ethereum_client;
+pub mod pezsnowbridge_pezpallet_inbound_queue;
+pub mod pezsnowbridge_pezpallet_inbound_queue_v2;
+pub mod pezsnowbridge_pezpallet_outbound_queue;
+pub mod pezsnowbridge_pezpallet_outbound_queue_v2;
+pub mod pezsnowbridge_pezpallet_system;
+pub mod pezsnowbridge_pezpallet_system_v2;
 
 pub use block_weights::constants::BlockExecutionWeight;
 pub use extrinsic_weights::constants::ExtrinsicBaseWeight;

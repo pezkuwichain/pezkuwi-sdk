@@ -14,7 +14,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 
-//! Storage migrations for the Staking pallet. The changelog for this is maintained at
+//! Storage migrations for the Staking pezpallet. The changelog for this is maintained at
 //! [CHANGELOG.md](https://github.com/pezkuwichain/pezkuwi-sdk/blob/master/bizinikiwi/pezframe/staking/CHANGELOG.md).
 
 use super::*;
@@ -39,7 +39,7 @@ enum ObsoleteReleases {
 	V8_0_0,  // populate `VoterList`.
 	V9_0_0,  // inject validators into `VoterList` as well.
 	V10_0_0, // remove `EarliestUnappliedSlash`.
-	V11_0_0, // Move pallet storage prefix, e.g. BagsList -> VoterBagsList
+	V11_0_0, // Move pezpallet storage prefix, e.g. BagsList -> VoterBagsList
 	V12_0_0, // remove `HistoryDepth`.
 }
 
@@ -51,7 +51,7 @@ impl Default for ObsoleteReleases {
 
 /// Alias to the old storage item used for release versioning. Obsolete since v13.
 #[storage_alias]
-type StorageVersion<T: Config> = StorageValue<Pallet<T>, ObsoleteReleases, ValueQuery>;
+type StorageVersion<T: Config> = StorageValue<Pezpallet<T>, ObsoleteReleases, ValueQuery>;
 
 /// Supports the migration of Validator Disabling from pezpallet-staking to pezpallet-session
 pub mod v17 {
@@ -59,7 +59,7 @@ pub mod v17 {
 
 	#[pezframe_support::storage_alias]
 	pub type DisabledValidators<T: Config> =
-		StorageValue<Pallet<T>, BoundedVec<(u32, OffenceSeverity), ConstU32<333>>, ValueQuery>;
+		StorageValue<Pezpallet<T>, BoundedVec<(u32, OffenceSeverity), ConstU32<333>>, ValueQuery>;
 
 	pub struct MigrateDisabledToSession<T>(core::marker::PhantomData<T>);
 	impl<T: Config> pezpallet_session::migrations::v1::MigrateDisabledValidators
@@ -84,7 +84,7 @@ pub mod v16 {
 
 	#[pezframe_support::storage_alias]
 	pub(crate) type DisabledValidators<T: Config> =
-		StorageValue<Pallet<T>, Vec<(u32, OffenceSeverity)>, ValueQuery>;
+		StorageValue<Pezpallet<T>, Vec<(u32, OffenceSeverity)>, ValueQuery>;
 
 	pub struct VersionUncheckedMigrateV15ToV16<T>(core::marker::PhantomData<T>);
 	impl<T: Config> UncheckedOnRuntimeUpgrade for VersionUncheckedMigrateV15ToV16<T> {
@@ -148,7 +148,7 @@ pub mod v16 {
 		15,
 		16,
 		VersionUncheckedMigrateV15ToV16<T>,
-		Pallet<T>,
+		Pezpallet<T>,
 		<T as pezframe_system::Config>::DbWeight,
 	>;
 }
@@ -157,11 +157,11 @@ pub mod v16 {
 pub mod v15 {
 	use super::*;
 
-	// The disabling strategy used by staking pallet
+	// The disabling strategy used by staking pezpallet
 	type DefaultDisablingStrategy = pezpallet_session::disabling::UpToLimitDisablingStrategy;
 
 	#[storage_alias]
-	pub(crate) type DisabledValidators<T: Config> = StorageValue<Pallet<T>, Vec<u32>, ValueQuery>;
+	pub(crate) type DisabledValidators<T: Config> = StorageValue<Pezpallet<T>, Vec<u32>, ValueQuery>;
 
 	pub struct VersionUncheckedMigrateV14ToV15<T>(core::marker::PhantomData<T>);
 	impl<T: Config> UncheckedOnRuntimeUpgrade for VersionUncheckedMigrateV14ToV15<T> {
@@ -197,7 +197,7 @@ pub mod v15 {
 		14,
 		15,
 		VersionUncheckedMigrateV14ToV15<T>,
-		Pallet<T>,
+		Pezpallet<T>,
 		<T as pezframe_system::Config>::DbWeight,
 	>;
 }
@@ -209,16 +209,16 @@ pub mod v14 {
 
 	#[pezframe_support::storage_alias]
 	pub(crate) type OffendingValidators<T: Config> =
-		StorageValue<Pallet<T>, Vec<(u32, bool)>, ValueQuery>;
+		StorageValue<Pezpallet<T>, Vec<(u32, bool)>, ValueQuery>;
 
 	pub struct MigrateToV14<T>(core::marker::PhantomData<T>);
 	impl<T: Config> OnRuntimeUpgrade for MigrateToV14<T> {
 		fn on_runtime_upgrade() -> Weight {
-			let in_code = Pallet::<T>::in_code_storage_version();
-			let on_chain = Pallet::<T>::on_chain_storage_version();
+			let in_code = Pezpallet::<T>::in_code_storage_version();
+			let on_chain = Pezpallet::<T>::on_chain_storage_version();
 
 			if in_code == 14 && on_chain == 13 {
-				in_code.put::<Pallet<T>>();
+				in_code.put::<Pezpallet<T>>();
 
 				log!(info, "staking v14 applied successfully.");
 				T::DbWeight::get().reads_writes(1, 1)
@@ -231,7 +231,7 @@ pub mod v14 {
 		#[cfg(feature = "try-runtime")]
 		fn post_upgrade(_state: Vec<u8>) -> Result<(), TryRuntimeError> {
 			pezframe_support::ensure!(
-				Pallet::<T>::on_chain_storage_version() >= 14,
+				Pezpallet::<T>::on_chain_storage_version() >= 14,
 				"v14 not applied"
 			);
 			Ok(())
@@ -255,12 +255,12 @@ pub mod v13 {
 		}
 
 		fn on_runtime_upgrade() -> Weight {
-			let in_code = Pallet::<T>::in_code_storage_version();
+			let in_code = Pezpallet::<T>::in_code_storage_version();
 			let onchain = StorageVersion::<T>::get();
 
 			if in_code == 13 && onchain == ObsoleteReleases::V12_0_0 {
 				StorageVersion::<T>::kill();
-				in_code.put::<Pallet<T>>();
+				in_code.put::<Pezpallet<T>>();
 
 				log!(info, "v13 applied successfully");
 				T::DbWeight::get().reads_writes(1, 2)
@@ -273,7 +273,7 @@ pub mod v13 {
 		#[cfg(feature = "try-runtime")]
 		fn post_upgrade(_state: Vec<u8>) -> Result<(), TryRuntimeError> {
 			pezframe_support::ensure!(
-				Pallet::<T>::on_chain_storage_version() == 13,
+				Pezpallet::<T>::on_chain_storage_version() == 13,
 				"v13 not applied"
 			);
 
@@ -292,7 +292,7 @@ pub mod v12 {
 	use pezframe_support::{pezpallet_prelude::ValueQuery, storage_alias};
 
 	#[storage_alias]
-	type HistoryDepth<T: Config> = StorageValue<Pallet<T>, u32, ValueQuery>;
+	type HistoryDepth<T: Config> = StorageValue<Pezpallet<T>, u32, ValueQuery>;
 
 	/// Clean up `T::HistoryDepth` from storage.
 	///
@@ -366,13 +366,13 @@ pub mod v11 {
 
 			pezframe_support::ensure!(
 				pezsp_io::storage::next_key(&old_pallet_prefix).is_some(),
-				"no data for the old pallet name has been detected"
+				"no data for the old pezpallet name has been detected"
 			);
 
 			Ok(Default::default())
 		}
 
-		/// Migrate the entire storage of this pallet to a new prefix.
+		/// Migrate the entire storage of this pezpallet to a new prefix.
 		///
 		/// This new prefix must be the same as the one set in construct_runtime. For safety, use
 		/// `PalletInfo` to get it, as:
@@ -413,7 +413,7 @@ pub mod v11 {
 			let old_pallet_name = N::get();
 			let new_pallet_name = <P as PalletInfoAccess>::name();
 
-			// skip storage prefix checks for the same pallet names
+			// skip storage prefix checks for the same pezpallet names
 			if new_pallet_name == old_pallet_name {
 				return Ok(());
 			}
@@ -421,14 +421,14 @@ pub mod v11 {
 			let old_pallet_prefix = twox_128(N::get().as_bytes());
 			pezframe_support::ensure!(
 				pezsp_io::storage::next_key(&old_pallet_prefix).is_none(),
-				"old pallet data hasn't been removed"
+				"old pezpallet data hasn't been removed"
 			);
 
 			let new_pallet_name = <P as PalletInfoAccess>::name();
 			let new_pallet_prefix = twox_128(new_pallet_name.as_bytes());
 			pezframe_support::ensure!(
 				pezsp_io::storage::next_key(&new_pallet_prefix).is_some(),
-				"new pallet data hasn't been created"
+				"new pezpallet data hasn't been created"
 			);
 
 			Ok(())

@@ -220,11 +220,11 @@ fn pezpallet_account_balance_consistency() {
 
 		let initial_pallet_balance = Balances::free_balance(&pezpallet_account);
 
-		// Wrap - pallet account should receive native tokens
+		// Wrap - pezpallet account should receive native tokens
 		assert_ok!(TokenWrapper::wrap(RuntimeOrigin::signed(user), amount));
 		assert_eq!(Balances::free_balance(&pezpallet_account), initial_pallet_balance + amount);
 
-		// Unwrap - pallet account should release native tokens
+		// Unwrap - pezpallet account should release native tokens
 		assert_ok!(TokenWrapper::unwrap(RuntimeOrigin::signed(user), amount));
 		assert_eq!(Balances::free_balance(&pezpallet_account), initial_pallet_balance);
 	});
@@ -245,7 +245,7 @@ fn wrap_unwrap_maintains_1_to_1_backing() {
 		let pezpallet_account = TokenWrapper::account_id();
 		let pezpallet_balance = Balances::free_balance(&pezpallet_account);
 
-		// Pallet should hold exactly the amount of wrapped tokens
+		// Pezpallet should hold exactly the amount of wrapped tokens
 		// (Note: may include existential deposit, so check >= total_wrapped)
 		assert!(pezpallet_balance >= total_wrapped);
 		assert_eq!(TokenWrapper::total_locked(), total_wrapped);

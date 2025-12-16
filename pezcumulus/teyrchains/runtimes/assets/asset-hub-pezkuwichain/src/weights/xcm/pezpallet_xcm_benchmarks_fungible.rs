@@ -25,10 +25,10 @@
 // frame-omni-bencher
 // v1
 // benchmark
-// pallet
+// pezpallet
 // --extrinsic=*
 // --runtime=target/production/wbuild/asset-hub-pezkuwichain-runtime/asset_hub_pezkuwichain_runtime.wasm
-// --pallet=pezpallet_xcm_benchmarks::fungible
+// --pezpallet=pezpallet_xcm_benchmarks::fungible
 // --header=/__w/pezkuwi-sdk/pezkuwi-sdk/pezcumulus/file_header.txt
 // --output=./pezcumulus/teyrchains/runtimes/assets/asset-hub-pezkuwichain/src/weights/xcm
 // --wasm-execution=compiled

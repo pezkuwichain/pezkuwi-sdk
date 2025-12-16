@@ -15,17 +15,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Assets Pallet
+//! # Assets Pezpallet
 //!
 //! A simple, secure module for dealing with sets of assets implementing
 //! [`fungible`](pezframe_support::traits::fungible) traits, via [`fungibles`] traits.
 //!
-//! The pallet makes heavy use of concepts such as Holds and Freezes from the
+//! The pezpallet makes heavy use of concepts such as Holds and Freezes from the
 //! [`pezframe_support::traits::fungible`] traits, therefore you should read and understand those docs
-//! as a prerequisite to understanding this pallet.
+//! as a prerequisite to understanding this pezpallet.
 //!
 //! See the [`frame_tokens`] reference docs for more information about the place of the
-//! Assets pallet in FRAME.
+//! Assets pezpallet in FRAME.
 //!
 //! ## Overview
 //!
@@ -131,7 +131,7 @@
 //! * `balance` - Get the asset `id` balance of `who`.
 //! * `total_supply` - Get the total supply of an asset `id`.
 //!
-//! Please refer to the [`Pallet`] struct for details on publicly available functions.
+//! Please refer to the [`Pezpallet`] struct for details on publicly available functions.
 //!
 //! ### Callbacks
 //!
@@ -196,7 +196,7 @@ use pezframe_support::{
 };
 use pezframe_system::Config as SystemConfig;
 
-pub use pallet::*;
+pub use pezpallet::*;
 pub use weights::WeightInfo;
 
 type AccountIdLookupOf<T> = <<T as pezframe_system::Config>::Lookup as StaticLookup>::Source;
@@ -247,8 +247,8 @@ where
 	}
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use codec::HasCompact;
 	use pezframe_support::{
@@ -263,9 +263,9 @@ pub mod pallet {
 	/// The maximum number of configurable reserve locations for one asset class.
 	pub const MAX_RESERVES: u32 = 5;
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T, I = ()>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T, I = ()>(_);
 
 	#[cfg(feature = "runtime-benchmarks")]
 	pub trait BenchmarkHelper<AssetIdParameter, ReserveIdParameter> {
@@ -316,11 +316,11 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::config(with_default)]
+	#[pezpallet::config(with_default)]
 	/// The module configuration trait.
 	pub trait Config<I: 'static = ()>: pezframe_system::Config {
 		/// The overarching event type.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self, I>>
 			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
@@ -339,14 +339,14 @@ pub mod pallet {
 		/// Max number of items to destroy per `destroy_accounts` and `destroy_approvals` call.
 		///
 		/// Must be configured to result in a weight that makes each call fit in a block.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type RemoveItemsLimit: Get<u32>;
 
 		/// Identifier for the class of asset.
 		type AssetId: Member + Parameter + Clone + MaybeSerializeDeserialize + MaxEncodedLen;
 
 		/// Wrapper around `Self::AssetId` to use in dispatchable call signatures. Allows the use
-		/// of compact encoding in instances of the pallet, which will prevent breaking changes
+		/// of compact encoding in instances of the pezpallet, which will prevent breaking changes
 		/// resulting from the removal of `HasCompact` from `Self::AssetId`.
 		///
 		/// This type includes the `From<Self::AssetId>` bound, since tightly coupled pallets may
@@ -358,12 +358,12 @@ pub mod pallet {
 		type ReserveData: Debug + Parameter + MaybeSerializeDeserialize + MaxEncodedLen;
 
 		/// The currency mechanism.
-		#[pallet::no_default]
+		#[pezpallet::no_default]
 		type Currency: ReservableCurrency<Self::AccountId>;
 
 		/// Standard asset class creation is only allowed if the origin attempting it and the
 		/// asset class are in this set.
-		#[pallet::no_default]
+		#[pezpallet::no_default]
 		type CreateOrigin: EnsureOriginWithArg<
 			Self::RuntimeOrigin,
 			Self::AssetId,
@@ -372,38 +372,38 @@ pub mod pallet {
 
 		/// The origin which may forcibly create or destroy an asset or otherwise alter privileged
 		/// attributes.
-		#[pallet::no_default]
+		#[pezpallet::no_default]
 		type ForceOrigin: EnsureOrigin<Self::RuntimeOrigin>;
 
 		/// The basic amount of funds that must be reserved for an asset.
-		#[pallet::constant]
-		#[pallet::no_default_bounds]
+		#[pezpallet::constant]
+		#[pezpallet::no_default_bounds]
 		type AssetDeposit: Get<DepositBalanceOf<Self, I>>;
 
 		/// The amount of funds that must be reserved for a non-provider asset account to be
 		/// maintained.
-		#[pallet::constant]
-		#[pallet::no_default_bounds]
+		#[pezpallet::constant]
+		#[pezpallet::no_default_bounds]
 		type AssetAccountDeposit: Get<DepositBalanceOf<Self, I>>;
 
 		/// The basic amount of funds that must be reserved when adding metadata to your asset.
-		#[pallet::constant]
-		#[pallet::no_default_bounds]
+		#[pezpallet::constant]
+		#[pezpallet::no_default_bounds]
 		type MetadataDepositBase: Get<DepositBalanceOf<Self, I>>;
 
 		/// The additional funds that must be reserved for the number of bytes you store in your
 		/// metadata.
-		#[pallet::constant]
-		#[pallet::no_default_bounds]
+		#[pezpallet::constant]
+		#[pezpallet::no_default_bounds]
 		type MetadataDepositPerByte: Get<DepositBalanceOf<Self, I>>;
 
 		/// The amount of funds that must be reserved when creating a new approval.
-		#[pallet::constant]
-		#[pallet::no_default_bounds]
+		#[pezpallet::constant]
+		#[pezpallet::no_default_bounds]
 		type ApprovalDeposit: Get<DepositBalanceOf<Self, I>>;
 
 		/// The maximum length of a name or symbol stored on-chain.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type StringLimit: Get<u32>;
 
 		/// A hook to allow a per-asset, per-account minimum balance to be enforced. This must be
@@ -425,7 +425,7 @@ pub mod pallet {
 		/// used to set up auto-incrementing asset IDs for this collection.
 		type CallbackHandle: AssetsCallback<Self::AssetId, Self::AccountId>;
 
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 
 		/// Helper trait for benchmarks.
@@ -433,7 +433,7 @@ pub mod pallet {
 		type BenchmarkHelper: BenchmarkHelper<Self::AssetIdParameter, Self::ReserveData>;
 	}
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	/// Details of an asset.
 	pub type Asset<T: Config<I>, I: 'static = ()> = StorageMap<
 		_,
@@ -442,7 +442,7 @@ pub mod pallet {
 		AssetDetails<T::Balance, T::AccountId, DepositBalanceOf<T, I>>,
 	>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	/// The holdings of a specific account for a specific asset.
 	pub type Account<T: Config<I>, I: 'static = ()> = StorageDoubleMap<
 		_,
@@ -453,7 +453,7 @@ pub mod pallet {
 		AssetAccountOf<T, I>,
 	>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	/// Approved balance transfers. First balance is the amount approved for transfer. Second
 	/// is the amount of `T::Currency` reserved for storing this.
 	/// First key is the asset ID, second key is the owner and third key is the delegate.
@@ -467,7 +467,7 @@ pub mod pallet {
 		Approval<T::Balance, DepositBalanceOf<T, I>>,
 	>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	/// Metadata of an asset.
 	pub type Metadata<T: Config<I>, I: 'static = ()> = StorageMap<
 		_,
@@ -478,7 +478,7 @@ pub mod pallet {
 	>;
 
 	/// Maps an asset to a list of its configured reserve information.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Reserves<T: Config<I>, I: 'static = ()> = StorageMap<
 		_,
 		Blake2_128Concat,
@@ -496,10 +496,10 @@ pub mod pallet {
 	///
 	/// The initial next asset ID can be set using the [`GenesisConfig`] or the
 	/// [SetNextAssetId](`migration::next_asset_id::SetNextAssetId`) migration.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type NextAssetId<T: Config<I>, I: 'static = ()> = StorageValue<_, T::AssetId, OptionQuery>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(pezframe_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config<I>, I: 'static = ()> {
 		/// Genesis assets: id, owner, is_sufficient, min_balance
@@ -519,7 +519,7 @@ pub mod pallet {
 		pub reserves: Vec<(T::AssetId, Vec<T::ReserveData>)>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config<I>, I: 'static> BuildGenesisConfig for GenesisConfig<T, I> {
 		fn build(&self) {
 			for (id, owner, is_sufficient, min_balance) in &self.assets {
@@ -563,7 +563,7 @@ pub mod pallet {
 			}
 
 			for (id, account_id, amount) in &self.accounts {
-				let result = <Pallet<T, I>>::increase_balance(
+				let result = <Pezpallet<T, I>>::increase_balance(
 					id.clone(),
 					account_id,
 					*amount,
@@ -591,8 +591,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config<I>, I: 'static = ()> {
 		/// Some asset class was created.
 		Created { asset_id: T::AssetId, creator: T::AccountId, owner: T::AccountId },
@@ -684,7 +684,7 @@ pub mod pallet {
 		ReservesRemoved { asset_id: T::AssetId },
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T, I = ()> {
 		/// Account balance must be greater than or equal to the transfer amount.
 		BalanceLow,
@@ -739,8 +739,8 @@ pub mod pallet {
 		TooManyReserves,
 	}
 
-	#[pallet::call(weight(<T as Config<I>>::WeightInfo))]
-	impl<T: Config<I>, I: 'static> Pallet<T, I> {
+	#[pezpallet::call(weight(<T as Config<I>>::WeightInfo))]
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 		/// Issue a new class of fungible assets from a public origin.
 		///
 		/// This new asset class has no assets initially and its owner is the origin.
@@ -760,7 +760,7 @@ pub mod pallet {
 		/// Emits `Created` event when successful.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(0)]
+		#[pezpallet::call_index(0)]
 		pub fn create(
 			origin: OriginFor<T>,
 			id: T::AssetIdParameter,
@@ -827,13 +827,13 @@ pub mod pallet {
 		/// Emits `ForceCreated` event when successful.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(1)]
+		#[pezpallet::call_index(1)]
 		pub fn force_create(
 			origin: OriginFor<T>,
 			id: T::AssetIdParameter,
 			owner: AccountIdLookupOf<T>,
 			is_sufficient: bool,
-			#[pallet::compact] min_balance: T::Balance,
+			#[pezpallet::compact] min_balance: T::Balance,
 		) -> DispatchResult {
 			T::ForceOrigin::ensure_origin(origin)?;
 			let owner = T::Lookup::lookup(owner)?;
@@ -853,7 +853,7 @@ pub mod pallet {
 		///
 		/// It will fail with either [`Error::ContainsHolds`] or [`Error::ContainsFreezes`] if
 		/// an account contains holds or freezes in place.
-		#[pallet::call_index(2)]
+		#[pezpallet::call_index(2)]
 		pub fn start_destroy(origin: OriginFor<T>, id: T::AssetIdParameter) -> DispatchResult {
 			let maybe_check_owner = match T::ForceOrigin::try_origin(origin) {
 				Ok(_) => None,
@@ -875,8 +875,8 @@ pub mod pallet {
 		///   asset.
 		///
 		/// Each call emits the `Event::DestroyedAccounts` event.
-		#[pallet::call_index(3)]
-		#[pallet::weight(T::WeightInfo::destroy_accounts(T::RemoveItemsLimit::get()))]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(T::WeightInfo::destroy_accounts(T::RemoveItemsLimit::get()))]
 		pub fn destroy_accounts(
 			origin: OriginFor<T>,
 			id: T::AssetIdParameter,
@@ -899,8 +899,8 @@ pub mod pallet {
 		///   asset.
 		///
 		/// Each call emits the `Event::DestroyedApprovals` event.
-		#[pallet::call_index(4)]
-		#[pallet::weight(T::WeightInfo::destroy_approvals(T::RemoveItemsLimit::get()))]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(T::WeightInfo::destroy_approvals(T::RemoveItemsLimit::get()))]
 		pub fn destroy_approvals(
 			origin: OriginFor<T>,
 			id: T::AssetIdParameter,
@@ -921,7 +921,7 @@ pub mod pallet {
 		///   asset.
 		///
 		/// Each successful call emits the `Event::Destroyed` event.
-		#[pallet::call_index(5)]
+		#[pezpallet::call_index(5)]
 		pub fn finish_destroy(origin: OriginFor<T>, id: T::AssetIdParameter) -> DispatchResult {
 			ensure_signed(origin)?;
 			let id: T::AssetId = id.into();
@@ -940,12 +940,12 @@ pub mod pallet {
 		///
 		/// Weight: `O(1)`
 		/// Modes: Pre-existing balance of `beneficiary`; Account pre-existence of `beneficiary`.
-		#[pallet::call_index(6)]
+		#[pezpallet::call_index(6)]
 		pub fn mint(
 			origin: OriginFor<T>,
 			id: T::AssetIdParameter,
 			beneficiary: AccountIdLookupOf<T>,
-			#[pallet::compact] amount: T::Balance,
+			#[pezpallet::compact] amount: T::Balance,
 		) -> DispatchResult {
 			let origin = ensure_signed(origin)?;
 			let beneficiary = T::Lookup::lookup(beneficiary)?;
@@ -969,12 +969,12 @@ pub mod pallet {
 		///
 		/// Weight: `O(1)`
 		/// Modes: Post-existence of `who`; Pre & post Zombie-status of `who`.
-		#[pallet::call_index(7)]
+		#[pezpallet::call_index(7)]
 		pub fn burn(
 			origin: OriginFor<T>,
 			id: T::AssetIdParameter,
 			who: AccountIdLookupOf<T>,
-			#[pallet::compact] amount: T::Balance,
+			#[pezpallet::compact] amount: T::Balance,
 		) -> DispatchResult {
 			let origin = ensure_signed(origin)?;
 			let who = T::Lookup::lookup(who)?;
@@ -1003,12 +1003,12 @@ pub mod pallet {
 		/// Weight: `O(1)`
 		/// Modes: Pre-existence of `target`; Post-existence of sender; Account pre-existence of
 		/// `target`.
-		#[pallet::call_index(8)]
+		#[pezpallet::call_index(8)]
 		pub fn transfer(
 			origin: OriginFor<T>,
 			id: T::AssetIdParameter,
 			target: AccountIdLookupOf<T>,
-			#[pallet::compact] amount: T::Balance,
+			#[pezpallet::compact] amount: T::Balance,
 		) -> DispatchResult {
 			let origin = ensure_signed(origin)?;
 			let dest = T::Lookup::lookup(target)?;
@@ -1036,12 +1036,12 @@ pub mod pallet {
 		/// Weight: `O(1)`
 		/// Modes: Pre-existence of `target`; Post-existence of sender; Account pre-existence of
 		/// `target`.
-		#[pallet::call_index(9)]
+		#[pezpallet::call_index(9)]
 		pub fn transfer_keep_alive(
 			origin: OriginFor<T>,
 			id: T::AssetIdParameter,
 			target: AccountIdLookupOf<T>,
-			#[pallet::compact] amount: T::Balance,
+			#[pezpallet::compact] amount: T::Balance,
 		) -> DispatchResult {
 			let source = ensure_signed(origin)?;
 			let dest = T::Lookup::lookup(target)?;
@@ -1070,13 +1070,13 @@ pub mod pallet {
 		/// Weight: `O(1)`
 		/// Modes: Pre-existence of `dest`; Post-existence of `source`; Account pre-existence of
 		/// `dest`.
-		#[pallet::call_index(10)]
+		#[pezpallet::call_index(10)]
 		pub fn force_transfer(
 			origin: OriginFor<T>,
 			id: T::AssetIdParameter,
 			source: AccountIdLookupOf<T>,
 			dest: AccountIdLookupOf<T>,
-			#[pallet::compact] amount: T::Balance,
+			#[pezpallet::compact] amount: T::Balance,
 		) -> DispatchResult {
 			let origin = ensure_signed(origin)?;
 			let source = T::Lookup::lookup(source)?;
@@ -1099,7 +1099,7 @@ pub mod pallet {
 		/// Emits `Frozen`.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(11)]
+		#[pezpallet::call_index(11)]
 		pub fn freeze(
 			origin: OriginFor<T>,
 			id: T::AssetIdParameter,
@@ -1136,7 +1136,7 @@ pub mod pallet {
 		/// Emits `Thawed`.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(12)]
+		#[pezpallet::call_index(12)]
 		pub fn thaw(
 			origin: OriginFor<T>,
 			id: T::AssetIdParameter,
@@ -1172,7 +1172,7 @@ pub mod pallet {
 		/// Emits `Frozen`.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(13)]
+		#[pezpallet::call_index(13)]
 		pub fn freeze_asset(origin: OriginFor<T>, id: T::AssetIdParameter) -> DispatchResult {
 			let origin = ensure_signed(origin)?;
 			let id: T::AssetId = id.into();
@@ -1198,7 +1198,7 @@ pub mod pallet {
 		/// Emits `Thawed`.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(14)]
+		#[pezpallet::call_index(14)]
 		pub fn thaw_asset(origin: OriginFor<T>, id: T::AssetIdParameter) -> DispatchResult {
 			let origin = ensure_signed(origin)?;
 			let id: T::AssetId = id.into();
@@ -1225,7 +1225,7 @@ pub mod pallet {
 		/// Emits `OwnerChanged`.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(15)]
+		#[pezpallet::call_index(15)]
 		pub fn transfer_ownership(
 			origin: OriginFor<T>,
 			id: T::AssetIdParameter,
@@ -1268,7 +1268,7 @@ pub mod pallet {
 		/// Emits `TeamChanged`.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(16)]
+		#[pezpallet::call_index(16)]
 		pub fn set_team(
 			origin: OriginFor<T>,
 			id: T::AssetIdParameter,
@@ -1312,8 +1312,8 @@ pub mod pallet {
 		/// Emits `MetadataSet`.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(17)]
-		#[pallet::weight(T::WeightInfo::set_metadata(name.len() as u32, symbol.len() as u32))]
+		#[pezpallet::call_index(17)]
+		#[pezpallet::weight(T::WeightInfo::set_metadata(name.len() as u32, symbol.len() as u32))]
 		pub fn set_metadata(
 			origin: OriginFor<T>,
 			id: T::AssetIdParameter,
@@ -1337,7 +1337,7 @@ pub mod pallet {
 		/// Emits `MetadataCleared`.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(18)]
+		#[pezpallet::call_index(18)]
 		pub fn clear_metadata(origin: OriginFor<T>, id: T::AssetIdParameter) -> DispatchResult {
 			let origin = ensure_signed(origin)?;
 			let id: T::AssetId = id.into();
@@ -1368,8 +1368,8 @@ pub mod pallet {
 		/// Emits `MetadataSet`.
 		///
 		/// Weight: `O(N + S)` where N and S are the length of the name and symbol respectively.
-		#[pallet::call_index(19)]
-		#[pallet::weight(T::WeightInfo::force_set_metadata(name.len() as u32, symbol.len() as u32))]
+		#[pezpallet::call_index(19)]
+		#[pezpallet::weight(T::WeightInfo::force_set_metadata(name.len() as u32, symbol.len() as u32))]
 		pub fn force_set_metadata(
 			origin: OriginFor<T>,
 			id: T::AssetIdParameter,
@@ -1420,7 +1420,7 @@ pub mod pallet {
 		/// Emits `MetadataCleared`.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(20)]
+		#[pezpallet::call_index(20)]
 		pub fn force_clear_metadata(
 			origin: OriginFor<T>,
 			id: T::AssetIdParameter,
@@ -1451,7 +1451,7 @@ pub mod pallet {
 		/// - `is_sufficient`: Whether a non-zero balance of this asset is deposit of sufficient
 		/// value to account for the state bloat associated with its balance storage. If set to
 		/// `true`, then non-zero balances may be stored without a `consumer` reference (and thus
-		/// an ED in the Balances pallet or whatever else is used to control user-account state
+		/// an ED in the Balances pezpallet or whatever else is used to control user-account state
 		/// growth).
 		/// - `is_frozen`: Whether this asset class is frozen except for permissioned/admin
 		/// instructions.
@@ -1459,7 +1459,7 @@ pub mod pallet {
 		/// Emits `AssetStatusChanged` with the identity of the asset.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(21)]
+		#[pezpallet::call_index(21)]
 		pub fn force_asset_status(
 			origin: OriginFor<T>,
 			id: T::AssetIdParameter,
@@ -1467,7 +1467,7 @@ pub mod pallet {
 			issuer: AccountIdLookupOf<T>,
 			admin: AccountIdLookupOf<T>,
 			freezer: AccountIdLookupOf<T>,
-			#[pallet::compact] min_balance: T::Balance,
+			#[pezpallet::compact] min_balance: T::Balance,
 			is_sufficient: bool,
 			is_frozen: bool,
 		) -> DispatchResult {
@@ -1515,12 +1515,12 @@ pub mod pallet {
 		/// Emits `ApprovedTransfer` on success.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(22)]
+		#[pezpallet::call_index(22)]
 		pub fn approve_transfer(
 			origin: OriginFor<T>,
 			id: T::AssetIdParameter,
 			delegate: AccountIdLookupOf<T>,
-			#[pallet::compact] amount: T::Balance,
+			#[pezpallet::compact] amount: T::Balance,
 		) -> DispatchResult {
 			let owner = ensure_signed(origin)?;
 			let delegate = T::Lookup::lookup(delegate)?;
@@ -1541,7 +1541,7 @@ pub mod pallet {
 		/// Emits `ApprovalCancelled` on success.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(23)]
+		#[pezpallet::call_index(23)]
 		pub fn cancel_approval(
 			origin: OriginFor<T>,
 			id: T::AssetIdParameter,
@@ -1577,7 +1577,7 @@ pub mod pallet {
 		/// Emits `ApprovalCancelled` on success.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(24)]
+		#[pezpallet::call_index(24)]
 		pub fn force_cancel_approval(
 			origin: OriginFor<T>,
 			id: T::AssetIdParameter,
@@ -1626,13 +1626,13 @@ pub mod pallet {
 		/// Emits `TransferredApproved` on success.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(25)]
+		#[pezpallet::call_index(25)]
 		pub fn transfer_approved(
 			origin: OriginFor<T>,
 			id: T::AssetIdParameter,
 			owner: AccountIdLookupOf<T>,
 			destination: AccountIdLookupOf<T>,
-			#[pallet::compact] amount: T::Balance,
+			#[pezpallet::compact] amount: T::Balance,
 		) -> DispatchResult {
 			let delegate = ensure_signed(origin)?;
 			let owner = T::Lookup::lookup(owner)?;
@@ -1650,8 +1650,8 @@ pub mod pallet {
 		/// - `id`: The identifier of the asset for the account to be created.
 		///
 		/// Emits `Touched` event when successful.
-		#[pallet::call_index(26)]
-		#[pallet::weight(T::WeightInfo::touch())]
+		#[pezpallet::call_index(26)]
+		#[pezpallet::weight(T::WeightInfo::touch())]
 		pub fn touch(origin: OriginFor<T>, id: T::AssetIdParameter) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 			let id: T::AssetId = id.into();
@@ -1671,8 +1671,8 @@ pub mod pallet {
 		/// the asset account contains holds or freezes in place.
 		///
 		/// Emits `Refunded` event when successful.
-		#[pallet::call_index(27)]
-		#[pallet::weight(T::WeightInfo::refund())]
+		#[pezpallet::call_index(27)]
+		#[pezpallet::weight(T::WeightInfo::refund())]
 		pub fn refund(
 			origin: OriginFor<T>,
 			id: T::AssetIdParameter,
@@ -1694,7 +1694,7 @@ pub mod pallet {
 		/// - `min_balance`: The new value of `min_balance`.
 		///
 		/// Emits `AssetMinBalanceChanged` event when successful.
-		#[pallet::call_index(28)]
+		#[pezpallet::call_index(28)]
 		pub fn set_min_balance(
 			origin: OriginFor<T>,
 			id: T::AssetIdParameter,
@@ -1739,8 +1739,8 @@ pub mod pallet {
 		/// - `who`: The account to be created.
 		///
 		/// Emits `Touched` event when successful.
-		#[pallet::call_index(29)]
-		#[pallet::weight(T::WeightInfo::touch_other())]
+		#[pezpallet::call_index(29)]
+		#[pezpallet::weight(T::WeightInfo::touch_other())]
 		pub fn touch_other(
 			origin: OriginFor<T>,
 			id: T::AssetIdParameter,
@@ -1765,8 +1765,8 @@ pub mod pallet {
 		/// the asset account contains holds or freezes in place.
 		///
 		/// Emits `Refunded` event when successful.
-		#[pallet::call_index(30)]
-		#[pallet::weight(T::WeightInfo::refund_other())]
+		#[pezpallet::call_index(30)]
+		#[pezpallet::weight(T::WeightInfo::refund_other())]
 		pub fn refund_other(
 			origin: OriginFor<T>,
 			id: T::AssetIdParameter,
@@ -1788,7 +1788,7 @@ pub mod pallet {
 		/// Emits `Blocked`.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(31)]
+		#[pezpallet::call_index(31)]
 		pub fn block(
 			origin: OriginFor<T>,
 			id: T::AssetIdParameter,
@@ -1831,8 +1831,8 @@ pub mod pallet {
 		///   of the funds the asset account has, causing the sender asset account to be killed
 		///   (false), or transfer everything except at least the minimum balance, which will
 		///   guarantee to keep the sender asset account alive (true).
-		#[pallet::call_index(32)]
-		#[pallet::weight(T::WeightInfo::transfer_all())]
+		#[pezpallet::call_index(32)]
+		#[pezpallet::weight(T::WeightInfo::transfer_all())]
 		pub fn transfer_all(
 			origin: OriginFor<T>,
 			id: T::AssetIdParameter,
@@ -1867,8 +1867,8 @@ pub mod pallet {
 		/// - `reserves`: The full list of trusted reserves information.
 		///
 		/// Emits `AssetMinBalanceChanged` event when successful.
-		#[pallet::call_index(33)]
-		#[pallet::weight(T::WeightInfo::set_reserves())]
+		#[pezpallet::call_index(33)]
+		#[pezpallet::weight(T::WeightInfo::set_reserves())]
 		pub fn set_reserves(
 			origin: OriginFor<T>,
 			id: T::AssetIdParameter,
@@ -1886,8 +1886,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::view_functions]
-	impl<T: Config<I>, I: 'static> Pallet<T, I> {
+	#[pezpallet::view_functions]
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 		/// Provide the asset details for asset `id`.
 		pub fn asset_details(
 			id: T::AssetId,
@@ -1915,7 +1915,7 @@ pub mod pallet {
 
 	/// Implements [`AccountTouch`] trait.
 	/// Note that a depositor can be any account, without any specific privilege.
-	impl<T: Config<I>, I: 'static> AccountTouch<T::AssetId, T::AccountId> for Pallet<T, I> {
+	impl<T: Config<I>, I: 'static> AccountTouch<T::AssetId, T::AccountId> for Pezpallet<T, I> {
 		type Balance = DepositBalanceOf<T, I>;
 
 		fn deposit_required(_: T::AssetId) -> Self::Balance {
@@ -1926,7 +1926,7 @@ pub mod pallet {
 			match Asset::<T, I>::get(&asset) {
 				// refer to the [`Self::new_account`] function for more details.
 				Some(info) if info.is_sufficient => false,
-				Some(_) if pezframe_system::Pallet::<T>::can_accrue_consumers(who, 2) => false,
+				Some(_) if pezframe_system::Pezpallet::<T>::can_accrue_consumers(who, 2) => false,
 				Some(_) => !Account::<T, I>::contains_key(asset, who),
 				_ => true,
 			}
@@ -1942,7 +1942,7 @@ pub mod pallet {
 	}
 
 	/// Implements [`ContainsPair`] trait for a pair of asset and account IDs.
-	impl<T: Config<I>, I: 'static> ContainsPair<T::AssetId, T::AccountId> for Pallet<T, I> {
+	impl<T: Config<I>, I: 'static> ContainsPair<T::AssetId, T::AccountId> for Pezpallet<T, I> {
 		/// Check if an account with the given asset ID and account address exists.
 		fn contains(asset: &T::AssetId, who: &T::AccountId) -> bool {
 			Account::<T, I>::contains_key(asset, who)
@@ -1951,7 +1951,7 @@ pub mod pallet {
 
 	/// Implements [`ProvideAssetReserves`] trait for getting the list of trusted reserves for a
 	/// given asset.
-	impl<T: Config<I>, I: 'static> ProvideAssetReserves<T::AssetId, T::ReserveData> for Pallet<T, I> {
+	impl<T: Config<I>, I: 'static> ProvideAssetReserves<T::AssetId, T::ReserveData> for Pezpallet<T, I> {
 		/// Provide the configured reserves for asset `id`.
 		fn reserves(id: &T::AssetId) -> Vec<T::ReserveData> {
 			Reserves::<T, I>::get(id).into_inner()

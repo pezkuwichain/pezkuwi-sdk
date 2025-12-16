@@ -31,7 +31,7 @@ use scale_info::{
 /// When the IR does not contain enough information to generate a specific version
 /// of the runtime metadata an appropriate default value is used (ie, empty vector).
 pub struct MetadataIR<T: Form = MetaForm> {
-	/// Pallet metadata.
+	/// Pezpallet metadata.
 	pub pallets: Vec<PalletMetadataIR<T>>,
 	/// Metadata of the extrinsic.
 	pub extrinsic: ExtrinsicMetadataIR<T>,
@@ -121,7 +121,7 @@ impl IntoPortable for RuntimeApiMethodParamMetadataIR {
 	}
 }
 
-/// Metadata of a pallet view function method.
+/// Metadata of a pezpallet view function method.
 #[derive(Clone, PartialEq, Eq, Encode, Decode, Debug)]
 pub struct PalletViewFunctionMetadataIR<T: Form = MetaForm> {
 	/// Method name.
@@ -153,7 +153,7 @@ impl IntoPortable for PalletViewFunctionMetadataIR {
 	}
 }
 
-/// Metadata of a pallet view function method argument.
+/// Metadata of a pezpallet view function method argument.
 #[derive(Clone, PartialEq, Eq, Encode, Decode, Debug)]
 pub struct PalletViewFunctionParamMetadataIR<T: Form = MetaForm> {
 	/// Parameter name.
@@ -173,29 +173,29 @@ impl IntoPortable for PalletViewFunctionParamMetadataIR {
 	}
 }
 
-/// The intermediate representation for a pallet metadata.
+/// The intermediate representation for a pezpallet metadata.
 #[derive(Clone, PartialEq, Eq, Encode, Debug)]
 pub struct PalletMetadataIR<T: Form = MetaForm> {
-	/// Pallet name.
+	/// Pezpallet name.
 	pub name: T::String,
-	/// Pallet storage metadata.
+	/// Pezpallet storage metadata.
 	pub storage: Option<PalletStorageMetadataIR<T>>,
-	/// Pallet calls metadata.
+	/// Pezpallet calls metadata.
 	pub calls: Option<PalletCallMetadataIR<T>>,
-	/// Pallet view functions metadata.
+	/// Pezpallet view functions metadata.
 	pub view_functions: Vec<PalletViewFunctionMetadataIR<T>>,
-	/// Pallet event metadata.
+	/// Pezpallet event metadata.
 	pub event: Option<PalletEventMetadataIR<T>>,
-	/// Pallet constants metadata.
+	/// Pezpallet constants metadata.
 	pub constants: Vec<PalletConstantMetadataIR<T>>,
-	/// Pallet error metadata.
+	/// Pezpallet error metadata.
 	pub error: Option<PalletErrorMetadataIR<T>>,
 	/// Config's trait associated types.
 	pub associated_types: Vec<PalletAssociatedTypeMetadataIR<T>>,
-	/// Define the index of the pallet, this index will be used for the encoding of pallet event,
+	/// Define the index of the pezpallet, this index will be used for the encoding of pezpallet event,
 	/// call and origin variants.
 	pub index: u8,
-	/// Pallet documentation.
+	/// Pezpallet documentation.
 	pub docs: Vec<T::String>,
 	/// Deprecation info
 	pub deprecation_info: ItemDeprecationInfoIR<T>,
@@ -263,7 +263,7 @@ impl IntoPortable for ExtrinsicMetadataIR {
 	}
 }
 
-/// Metadata of a pallet's associated type.
+/// Metadata of a pezpallet's associated type.
 #[derive(Clone, PartialEq, Eq, Encode, Debug)]
 pub struct PalletAssociatedTypeMetadataIR<T: Form = MetaForm> {
 	/// The name of the associated type.
@@ -309,7 +309,7 @@ impl IntoPortable for TransactionExtensionMetadataIR {
 	}
 }
 
-/// All metadata of the pallet's storage.
+/// All metadata of the pezpallet's storage.
 #[derive(Clone, PartialEq, Eq, Encode, Debug)]
 /// The common prefix used by all storage entries.
 pub struct PalletStorageMetadataIR<T: Form = MetaForm> {
@@ -427,12 +427,12 @@ impl IntoPortable for StorageEntryTypeIR {
 	}
 }
 
-/// Metadata for all calls in a pallet
+/// Metadata for all calls in a pezpallet
 #[derive(Clone, PartialEq, Eq, Encode, Debug)]
 pub struct PalletCallMetadataIR<T: Form = MetaForm> {
-	/// The corresponding enum type for the pallet call.
+	/// The corresponding enum type for the pezpallet call.
 	pub ty: T::Type,
-	/// Deprecation status of the pallet call
+	/// Deprecation status of the pezpallet call
 	pub deprecation_info: EnumDeprecationInfoIR<T>,
 }
 
@@ -447,7 +447,7 @@ impl IntoPortable for PalletCallMetadataIR {
 	}
 }
 
-/// Metadata about the pallet Event type.
+/// Metadata about the pezpallet Event type.
 #[derive(Clone, PartialEq, Eq, Encode, Debug)]
 pub struct PalletEventMetadataIR<T: Form = MetaForm> {
 	/// The Event type.
@@ -467,12 +467,12 @@ impl IntoPortable for PalletEventMetadataIR {
 	}
 }
 
-/// Metadata about one pallet constant.
+/// Metadata about one pezpallet constant.
 #[derive(Clone, PartialEq, Eq, Encode, Debug)]
 pub struct PalletConstantMetadataIR<T: Form = MetaForm> {
-	/// Name of the pallet constant.
+	/// Name of the pezpallet constant.
 	pub name: T::String,
-	/// Type of the pallet constant.
+	/// Type of the pezpallet constant.
 	pub ty: T::Type,
 	/// Value stored in the constant (SCALE encoded).
 	pub value: Vec<u8>,
@@ -496,7 +496,7 @@ impl IntoPortable for PalletConstantMetadataIR {
 	}
 }
 
-/// Metadata about a pallet error.
+/// Metadata about a pezpallet error.
 #[derive(Clone, PartialEq, Eq, Encode, Debug)]
 pub struct PalletErrorMetadataIR<T: Form = MetaForm> {
 	/// The error type information.
@@ -528,8 +528,8 @@ pub struct OuterEnumsIR<T: Form = MetaForm> {
 	///
 	/// The `Module` variant will be 5 scale encoded bytes which are normally decoded into
 	/// an `{ index: u8, error: [u8; 4] }` struct. This type ID points to an enum type which
-	/// instead interprets the first `index` byte as a pallet variant, and the remaining `error`
-	/// bytes as the appropriate `pallet::Error` type. It is an equally valid way to decode the
+	/// instead interprets the first `index` byte as a pezpallet variant, and the remaining `error`
+	/// bytes as the appropriate `pezpallet::Error` type. It is an equally valid way to decode the
 	/// error bytes, and can be more informative.
 	///
 	/// # Note

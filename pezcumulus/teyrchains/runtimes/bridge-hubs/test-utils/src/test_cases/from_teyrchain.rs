@@ -54,7 +54,7 @@ pub trait WithRemoteTeyrchainHelper {
 			InboundPayload = XcmAsPlainPayload,
 			OutboundPayload = XcmAsPlainPayload,
 		> + pezpallet_bridge_relayers::Config<Self::RPI, Reward = Self::RelayerReward>;
-	/// All pallets of this chain, excluding system pallet.
+	/// All pallets of this chain, excluding system pezpallet.
 	type AllPalletsWithoutSystem: OnInitialize<BlockNumberFor<Self::Runtime>>
 		+ OnFinalize<BlockNumberFor<Self::Runtime>>;
 	/// Instance of the `pezpallet-bridge-grandpa`, used to bridge with remote relay chain.
@@ -306,12 +306,12 @@ pub fn free_relay_extrinsic_works<RuntimeHelper>(
 
 			// relayer balance shall not change after relay and para header submissions
 			let initial_relayer_balance =
-				pezpallet_balances::Pallet::<RuntimeHelper::Runtime>::free_balance(
+				pezpallet_balances::Pezpallet::<RuntimeHelper::Runtime>::free_balance(
 					relayer_id_at_this_chain.clone(),
 				);
 
 			// initialize the `FreeHeadersRemaining` storage value
-			pezpallet_bridge_grandpa::Pallet::<RuntimeHelper::Runtime, RuntimeHelper::GPI>::on_initialize(
+			pezpallet_bridge_grandpa::Pezpallet::<RuntimeHelper::Runtime, RuntimeHelper::GPI>::on_initialize(
 				0u32.into(),
 			);
 

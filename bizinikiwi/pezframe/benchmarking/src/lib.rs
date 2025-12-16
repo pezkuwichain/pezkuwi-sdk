@@ -53,7 +53,7 @@ pub use analysis::{Analysis, AnalysisChoice, BenchmarkSelector};
 pub use utils::*;
 pub use v1::*;
 
-/// Contains macros, structs, and traits associated with v2 of the pallet benchmarking syntax.
+/// Contains macros, structs, and traits associated with v2 of the pezpallet benchmarking syntax.
 ///
 /// The [`v2::benchmarks`] and [`v2::instance_benchmarks`] macros can be used to designate a
 /// module as a benchmarking module that can contain benchmarks and benchmark tests. The
@@ -71,7 +71,7 @@ pub use v1::*;
 /// ```ignore
 /// #![cfg(feature = "runtime-benchmarks")]
 ///
-/// use super::{mock_helpers::*, Pallet as MyPallet};
+/// use super::{mock_helpers::*, Pezpallet as MyPallet};
 /// use pezframe_benchmarking::v2::*;
 ///
 /// #[benchmarks]
@@ -207,7 +207,7 @@ pub use v1::*;
 /// Some pallets require a where clause specifying constraints on their generics to make
 /// writing benchmarks feasible. To accommodate this situation, you can provide such a where
 /// clause as the (only) argument to the `#[benchmarks]` or `#[instance_benchmarks]` attribute
-/// macros. Below is an example of this taken from the `message-queue` pallet.
+/// macros. Below is an example of this taken from the `message-queue` pezpallet.
 ///
 /// ```ignore
 /// #[benchmarks(
@@ -226,7 +226,7 @@ pub use v1::*;
 /// Benchmark tests can be generated using the old syntax in `pezframe_benchmarking`,
 /// including the `pezframe_benchmarking::impl_benchmark_test_suite` macro.
 ///
-/// An example is shown below (taken from the `message-queue` pallet's `benchmarking` module):
+/// An example is shown below (taken from the `message-queue` pezpallet's `benchmarking` module):
 /// ```ignore
 /// #[benchmarks]
 /// mod benchmarks {
@@ -282,7 +282,7 @@ pub use v1::*;
 /// ```ignore
 /// #![cfg(feature = "runtime-benchmarks")]
 ///
-/// use super::{mock_helpers::*, Pallet as MyPallet};
+/// use super::{mock_helpers::*, Pezpallet as MyPallet};
 /// use pezframe_benchmarking::v2::*;
 ///
 /// #[benchmarks]
@@ -331,7 +331,7 @@ pub use v1::*;
 ///       function in v2, while `setup(y)?;` will be moved to the body of the function;
 ///    2. Move all the v1 setup code to the body of the v2 function;
 ///    3. Move the benchmarked code to the body of the v2 function under the appropriate macro
-///       attribute: `#[extrinsic_call]` for extrinsic pallet calls and `#[block]` for blocks of
+///       attribute: `#[extrinsic_call]` for extrinsic pezpallet calls and `#[block]` for blocks of
 ///       code;
 ///    4. Move the v1 verify code block to the body of the v2 function, after the
 ///       `#[extrinsic_call]` or `#[block]` attribute.

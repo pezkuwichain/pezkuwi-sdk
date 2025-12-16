@@ -15,9 +15,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Staking Async Pallet
+//! # Staking Async Pezpallet
 //!
-//! This pallet is a fork of the original `pezpallet-staking`, with a number of key differences:
+//! This pezpallet is a fork of the original `pezpallet-staking`, with a number of key differences:
 //!
 //! * It no longer has access to a secure timestamp, previously used to calculate the duration of an
 //!   era.
@@ -26,10 +26,10 @@
 //! * It is capable of working with a multi-page `ElectionProvider``, aka.
 //!   `pezpallet-election-provider-multi-block`.
 //!
-//! While `pezpallet-staking` was somewhat general-purpose, this pallet is absolutely NOT right from
+//! While `pezpallet-staking` was somewhat general-purpose, this pezpallet is absolutely NOT right from
 //! the get-go: It is designed to be used ONLY in Pezkuwi/Kusama AssetHub system teyrchains.
 //!
-//! The workings of this pallet can be divided into a number of subsystems, as follows.
+//! The workings of this pezpallet can be divided into a number of subsystems, as follows.
 //!
 //! ## User Interactions
 //!
@@ -45,7 +45,7 @@
 //!
 //! ## Slashing Pipeline and Withdrawal Restrictions
 //!
-//! This pallet implements a robust slashing mechanism that ensures the integrity of the staking
+//! This pezpallet implements a robust slashing mechanism that ensures the integrity of the staking
 //! system while preventing stakers from withdrawing funds that might still be subject to slashing.
 //!
 //! ### Overview of the Slashing Pipeline
@@ -190,7 +190,7 @@ mod tests;
 pub mod asset;
 pub mod election_size_tracker;
 pub mod ledger;
-mod pallet;
+mod pezpallet;
 pub mod session_rotation;
 pub mod slashing;
 pub mod weights;
@@ -220,7 +220,7 @@ pub use weights::WeightInfo;
 
 // public exports
 pub use ledger::{StakingLedger, UnlockChunk};
-pub use pallet::{pallet::*, UseNominatorsAndValidatorsMap, UseValidatorsMap};
+pub use pezpallet::{pezpallet::*, UseNominatorsAndValidatorsMap, UseValidatorsMap};
 
 pub(crate) const STAKING_ID: LockIdentifier = *b"staking ";
 pub(crate) const LOG_TARGET: &str = "runtime::staking-async";
@@ -231,12 +231,12 @@ macro_rules! log {
 	($level:tt, $patter:expr $(, $values:expr)* $(,)?) => {
 		log::$level!(
 			target: crate::LOG_TARGET,
-			concat!("[{:?}] 💸 ", $patter), <pezframe_system::Pallet<T>>::block_number() $(, $values)*
+			concat!("[{:?}] 💸 ", $patter), <pezframe_system::Pezpallet<T>>::block_number() $(, $values)*
 		)
 	};
 }
 
-/// Alias for a bounded set of exposures behind a validator, parameterized by this pallet's
+/// Alias for a bounded set of exposures behind a validator, parameterized by this pezpallet's
 /// election provider.
 pub type BoundedExposuresOf<T> = BoundedVec<
 	(
@@ -246,7 +246,7 @@ pub type BoundedExposuresOf<T> = BoundedVec<
 	MaxWinnersPerPageOf<<T as Config>::ElectionProvider>,
 >;
 
-/// Alias for the maximum number of winners (aka. active validators), as defined in by this pallet's
+/// Alias for the maximum number of winners (aka. active validators), as defined in by this pezpallet's
 /// config.
 pub type MaxWinnersOf<T> = <T as Config>::MaxValidatorSet;
 
@@ -260,7 +260,7 @@ pub type MaxNominationsOf<T> =
 /// Counter for the number of "reward" points earned by a given validator.
 pub type RewardPoint = u32;
 
-/// The balance type of this pallet.
+/// The balance type of this pezpallet.
 pub type BalanceOf<T> = <T as Config>::CurrencyBalance;
 
 type PositiveImbalanceOf<T> = Debt<<T as pezframe_system::Config>::AccountId, <T as Config>::Currency>;
@@ -566,7 +566,7 @@ impl<T: Config, RS: Get<BlockNumberFor<T>>, S: Get<BlockNumberFor<T>>> Get<Sessi
 	fn get() -> SessionIndex {
 		let election_duration = <T::ElectionProvider as ElectionProvider>::duration_with_export();
 		let sessions_needed = (election_duration + S::get()) / RS::get();
-		// add one, because we know the RC session pallet wants to buffer for one session, and
+		// add one, because we know the RC session pezpallet wants to buffer for one session, and
 		// another one cause we will receive activation report one session after that.
 		sessions_needed
 			.saturating_add(One::one())

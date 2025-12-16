@@ -34,14 +34,14 @@ mod v0 {
 	/// assigner.
 	/// NOTE: Ignoring the `OnEmpty` field for the migration.
 	#[storage_alias]
-	pub(super) type SpotTraffic<T: Config> = StorageValue<Pallet<T>, FixedU128, ValueQuery>;
+	pub(super) type SpotTraffic<T: Config> = StorageValue<Pezpallet<T>, FixedU128, ValueQuery>;
 
 	/// The order storage entry. Uses a VecDeque to be able to push to the front of the
 	/// queue from the scheduler on session boundaries.
 	/// NOTE: Ignoring the `OnEmpty` field for the migration.
 	#[storage_alias]
 	pub(super) type OnDemandQueue<T: Config> =
-		StorageValue<Pallet<T>, VecDeque<EnqueuedOrder>, ValueQuery>;
+		StorageValue<Pezpallet<T>, VecDeque<EnqueuedOrder>, ValueQuery>;
 }
 
 mod v1 {
@@ -58,13 +58,13 @@ mod v1 {
 			// Migrate the current traffic value
 			let config = configuration::ActiveConfig::<T>::get();
 			QueueStatus::<T>::mutate(|mut queue_status| {
-				Pallet::<T>::update_spot_traffic(&config, &mut queue_status);
+				Pezpallet::<T>::update_spot_traffic(&config, &mut queue_status);
 
 				let v0_queue = v0::OnDemandQueue::<T>::take();
 				// Process the v0 queue into v1.
 				v0_queue.into_iter().for_each(|enqueued_order| {
 					// Readding the old orders will use the new systems.
-					Pallet::<T>::add_on_demand_order(
+					Pezpallet::<T>::add_on_demand_order(
 						queue_status,
 						enqueued_order.para_id,
 						QueuePushDirection::Back,
@@ -135,7 +135,7 @@ pub type MigrateV0ToV1<T> = VersionedMigration<
 	0,
 	1,
 	v1::UncheckedMigrateToV1<T>,
-	Pallet<T>,
+	Pezpallet<T>,
 	<T as pezframe_system::Config>::DbWeight,
 >;
 

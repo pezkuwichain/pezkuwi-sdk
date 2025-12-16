@@ -19,22 +19,22 @@
 
 use pezframe_support::pezpallet_macros::*;
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 #[import_section(storages_dev)]
-#[pezframe_support::pallet(dev_mode)]
-pub mod pallet {
+#[pezframe_support::pezpallet(dev_mode)]
+pub mod pezpallet {
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		pub fn my_call(_origin: OriginFor<T>) -> DispatchResult {
 			MyStorageMap::<T>::insert(1, 2);
 			Ok(())

@@ -173,7 +173,7 @@ impl<AccountId> OnKycApproved<AccountId> for () {
 }
 
 /// Vatandaşlık NFT'si mintlemek için arayüz.
-/// Bu trait identity-kyc palletinde tanımlanır ve tiki pallet tarafından
+/// Bu trait identity-kyc palletinde tanımlanır ve tiki pezpallet tarafından
 /// implement edilir, böylece circular dependency oluşmaz.
 pub trait CitizenNftProvider<AccountId> {
 	fn mint_citizen_nft(who: &AccountId) -> pezsp_runtime::DispatchResult;
@@ -186,7 +186,7 @@ pub trait CitizenNftProvider<AccountId> {
 }
 
 /// Hook called when citizenship is revoked (for direct responsibility penalty)
-/// Defined here to avoid circular dependency, implemented by referral pallet
+/// Defined here to avoid circular dependency, implemented by referral pezpallet
 pub trait OnCitizenshipRevoked<AccountId> {
 	fn on_citizenship_revoked(who: &AccountId);
 }

@@ -1,10 +1,10 @@
-# NFTs pallet
+# NFTs pezpallet
 
-A pallet for dealing with non-fungible assets.
+A pezpallet for dealing with non-fungible assets.
 
 ## Overview
 
-The NFTs pallet provides functionality for non-fungible tokens' management, including:
+The NFTs pezpallet provides functionality for non-fungible tokens' management, including:
 
 * Collection Creation
 * NFT Minting
@@ -14,10 +14,10 @@ The NFTs pallet provides functionality for non-fungible tokens' management, incl
 * NFT Burning
 
 To use it in your runtime, you need to implement
-[`nfts::Config`](https://docs.pezkuwichain.io/bizinikiwi/master/pallet_nfts/pallet/trait.Config.html).
+[`nfts::Config`](https://docs.pezkuwichain.io/bizinikiwi/master/pallet_nfts/pezpallet/trait.Config.html).
 
 The supported dispatchable functions are documented in the
-[`nfts::Call`](https://docs.pezkuwichain.io/bizinikiwi/master/pallet_nfts/pallet/enum.Call.html) enum.
+[`nfts::Call`](https://docs.pezkuwichain.io/bizinikiwi/master/pallet_nfts/pezpallet/enum.Call.html) enum.
 
 ### Terminology
 
@@ -33,7 +33,7 @@ The supported dispatchable functions are documented in the
 
 ### Goals
 
-The NFTs pallet in Bizinikiwi is designed to make the following possible:
+The NFTs pezpallet in Bizinikiwi is designed to make the following possible:
 
 * Allow accounts to permissionlessly create nft collections.
 * Allow a named (permissioned) account to mint and burn unique items within a collection.
@@ -96,7 +96,7 @@ The NFTs pallet in Bizinikiwi is designed to make the following possible:
 * `force_collection_config`: Change collection's config.
 * `force_set_attribute`: Set an attribute.
 
-Please refer to the [`Call`](https://docs.pezkuwichain.io/bizinikiwi/master/pallet_nfts/pallet/enum.Call.html) enum and
+Please refer to the [`Call`](https://docs.pezkuwichain.io/bizinikiwi/master/pallet_nfts/pezpallet/enum.Call.html) enum and
 its associated variants for documentation on each function.
 
 ## Related Modules

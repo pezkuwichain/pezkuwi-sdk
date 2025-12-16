@@ -19,36 +19,36 @@
 
 use pezframe_support::derive_impl;
 
-pub use pallet::*;
+pub use pezpallet::*;
 
-#[pezframe_support::pallet(dev_mode)]
-pub mod pallet {
+#[pezframe_support::pezpallet(dev_mode)]
+pub mod pezpallet {
 	use pezframe_support::pezpallet_prelude::*;
 
-	// The struct on which we build all of our Pallet logic.
-	#[pallet::pallet]
-	pub struct Pallet<T, I = ()>(PhantomData<(T, I)>);
+	// The struct on which we build all of our Pezpallet logic.
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T, I = ()>(PhantomData<(T, I)>);
 
-	// Your Pallet's configuration trait, representing custom external types and interfaces.
-	#[pallet::config]
+	// Your Pezpallet's configuration trait, representing custom external types and interfaces.
+	#[pezpallet::config]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config {}
 	
-	#[pallet::composite_enum]
+	#[pezpallet::composite_enum]
 	pub enum HoldReason<I: 'static = ()> {
 		SomeHoldReason
 	}
 
-	#[pallet::composite_enum]
+	#[pezpallet::composite_enum]
 	pub enum FreezeReason<I: 'static = ()> {
 		SomeFreezeReason
 	}
 
-	#[pallet::composite_enum]
+	#[pezpallet::composite_enum]
 	pub enum SlashReason<I: 'static = ()> {
 		SomeSlashReason
 	}
 
-	#[pallet::composite_enum]
+	#[pezpallet::composite_enum]
 	pub enum LockId<I: 'static = ()> {
 		SomeLockId
 	}
@@ -68,13 +68,13 @@ pezframe_support::construct_runtime!(
 	{
 		// Exclude part `Storage` in order not to check its metadata in tests.
 		System: pezframe_system,
-		Pallet1: pallet,
-		Pallet2: pallet::<Instance2>,
+		Pallet1: pezpallet,
+		Pallet2: pezpallet::<Instance2>,
 	}
 );
 
-impl pallet::Config for Runtime {}
+impl pezpallet::Config for Runtime {}
 
-impl pallet::Config<pallet::Instance2> for Runtime {}
+impl pezpallet::Config<pezpallet::Instance2> for Runtime {}
 
 fn main() {}

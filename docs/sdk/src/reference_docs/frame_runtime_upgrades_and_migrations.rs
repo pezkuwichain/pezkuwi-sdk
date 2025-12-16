@@ -39,11 +39,11 @@
 //!
 //! Self-contained pieces of logic that execute after a runtime upgrade are called "Migrations".
 //!
-//! The typical use case of a migration is to 'migrate' pallet storage from one layout to another,
+//! The typical use case of a migration is to 'migrate' pezpallet storage from one layout to another,
 //! for example when the encoding of a storage item is changed. However, they can also execute
 //! arbitrary logic such as:
 //!
-//! - Calling arbitrary pallet methods.
+//! - Calling arbitrary pezpallet methods.
 //! - Mutating arbitrary on-chain state.
 //! - Cleaning up some old storage items that are no longer needed.
 //!
@@ -54,13 +54,13 @@
 //! - Are suitable for migrations which are guaranteed to not exceed the block weight.
 //! - Are simply implementations of [`OnRuntimeUpgrade`].
 //!
-//! To learn best practices for writing single block pallet storage migrations, see the
-//! [Single Block Migration Example Pallet](pezpallet_example_single_block_migrations).
+//! To learn best practices for writing single block pezpallet storage migrations, see the
+//! [Single Block Migration Example Pezpallet](pezpallet_example_single_block_migrations).
 //!
 //! ### Scheduling the Single Block Migrations to Run Next Runtime Upgrade
 //!
 //! Schedule migrations to run next runtime upgrade passing them as a parameter to your
-//! [`Config`](pezframe_system) pallet:
+//! [`Config`](pezframe_system) pezpallet:
 //!
 //! ```ignore
 //! /// Tuple of migrations (structs that implement `OnRuntimeUpgrade`)

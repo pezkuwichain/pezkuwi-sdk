@@ -22,7 +22,7 @@ use crate::{
 	test_utils::{builder::Contract, deposit_limit, ALICE},
 	tests::{assert_ok, builder, Contracts, ExtBuilder, RuntimeOrigin, System, Test, Timestamp},
 	BalanceWithDust, Code, Config, EthBlock, EthBlockBuilderFirstValues, EthBlockBuilderIR,
-	EthereumBlock, Pallet, ReceiptGasInfo, ReceiptInfoData,
+	EthereumBlock, Pezpallet, ReceiptGasInfo, ReceiptInfoData,
 };
 use alloy_consensus::RlpEncodableReceipt;
 use alloy_core::primitives::{FixedBytes, Log as AlloyLog};
@@ -87,7 +87,7 @@ fn transactions_are_captured() {
 		let Contract { addr: addr2, .. } =
 			builder::bare_instantiate(Code::Upload(gas_binary.clone())).build_and_unwrap_contract();
 		let balance =
-			Pallet::<Test>::convert_native_to_evm(BalanceWithDust::new_unchecked::<Test>(100, 10));
+			Pezpallet::<Test>::convert_native_to_evm(BalanceWithDust::new_unchecked::<Test>(100, 10));
 
 		<Test as Config>::FeeInfo::deposit_txfee(<Test as Config>::Currency::issue(5_000_000_000));
 
@@ -145,7 +145,7 @@ fn events_are_captured() {
 		// Bare call must not be captured.
 		builder::bare_instantiate(Code::Existing(code_hash)).build_and_unwrap_contract();
 		let balance =
-			Pallet::<Test>::convert_native_to_evm(BalanceWithDust::new_unchecked::<Test>(100, 10));
+			Pezpallet::<Test>::convert_native_to_evm(BalanceWithDust::new_unchecked::<Test>(100, 10));
 
 		<Test as Config>::FeeInfo::deposit_txfee(<Test as Config>::Currency::issue(
 			500_000_000_000,
@@ -155,7 +155,7 @@ fn events_are_captured() {
 
 		// The contract address is not exposed by the `eth_instantiate_with_code` call.
 		// Instead, extract the address from the frame system's last event.
-		let events = pezframe_system::Pallet::<Test>::events();
+		let events = pezframe_system::Pezpallet::<Test>::events();
 		let contract = events
 			.into_iter()
 			.filter_map(|event_record| match event_record.event {

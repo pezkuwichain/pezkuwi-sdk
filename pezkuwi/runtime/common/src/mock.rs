@@ -140,7 +140,7 @@ impl<T: pezframe_system::Config> Registrar for TestRegistrar<T> {
 		OPERATIONS.with(|x| {
 			x.borrow_mut().push((
 				id,
-				pezframe_system::Pallet::<T>::block_number().saturated_into(),
+				pezframe_system::Pezpallet::<T>::block_number().saturated_into(),
 				true,
 			))
 		});
@@ -174,7 +174,7 @@ impl<T: pezframe_system::Config> Registrar for TestRegistrar<T> {
 		OPERATIONS.with(|x| {
 			x.borrow_mut().push((
 				id,
-				pezframe_system::Pallet::<T>::block_number().saturated_into(),
+				pezframe_system::Pezpallet::<T>::block_number().saturated_into(),
 				false,
 			))
 		});
@@ -260,7 +260,7 @@ pub fn conclude_pvf_checking<T: paras::Config>(
 			validator_index: validator_index.into(),
 		};
 		let signature = key.sign(&statement.signing_payload());
-		let _ = paras::Pallet::<T>::include_pvf_check_statement(
+		let _ = paras::Pezpallet::<T>::include_pvf_check_statement(
 			pezframe_system::Origin::<T>::None.into(),
 			statement,
 			signature.into(),

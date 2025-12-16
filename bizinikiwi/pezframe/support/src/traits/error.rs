@@ -15,24 +15,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Traits for describing and constraining pallet error types.
+//! Traits for describing and constraining pezpallet error types.
 use codec::{Compact, Decode, Encode};
 use core::marker::PhantomData;
 
 /// Trait indicating that the implementing type is going to be included as a field in a variant of
-/// the `#[pallet::error]` enum type.
+/// the `#[pezpallet::error]` enum type.
 ///
 /// ## Notes
 ///
-/// The pallet error enum has a maximum encoded size as defined by
-/// [`pezframe_support::MAX_MODULE_ERROR_ENCODED_SIZE`]. If the pallet error type exceeds this size
+/// The pezpallet error enum has a maximum encoded size as defined by
+/// [`pezframe_support::MAX_MODULE_ERROR_ENCODED_SIZE`]. If the pezpallet error type exceeds this size
 /// limit, a static assertion during compilation will fail. The compilation error will be in the
 /// format of `error[E0080]: evaluation of constant value failed` due to the usage of
 /// const assertions.
 pub trait PalletError: Encode + Decode {
 	/// The maximum encoded size for the implementing type.
 	///
-	/// This will be used to check whether the pallet error type is less than or equal to
+	/// This will be used to check whether the pezpallet error type is less than or equal to
 	/// [`pezframe_support::MAX_MODULE_ERROR_ENCODED_SIZE`], and if it is, a compilation error will be
 	/// thrown.
 	const MAX_ENCODED_SIZE: usize;

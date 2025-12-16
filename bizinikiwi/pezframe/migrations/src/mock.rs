@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Mocked runtime for testing the migrations pallet.
+//! Mocked runtime for testing the migrations pezpallet.
 
 #![cfg(test)]
 
@@ -27,7 +27,7 @@ use pezsp_core::H256;
 
 type Block = pezframe_system::mocking::MockBlock<Test>;
 
-// Configure a mock runtime to test the pallet.
+// Configure a mock runtime to test the pezpallet.
 pezframe_support::construct_runtime!(
 	pub enum Test {
 		System: pezframe_system,

@@ -17,10 +17,10 @@
 
 //! ## The unsigned phase, and its miner.
 //!
-//! This pallet deals with unsigned submissions. These are backup, "possibly" multi-page submissions
+//! This pezpallet deals with unsigned submissions. These are backup, "possibly" multi-page submissions
 //! from validators.
 //!
-//! This pallet has two miners, described in [`unsigned::miner`].
+//! This pezpallet has two miners, described in [`unsigned::miner`].
 //!
 //! As it stands, a validator can, during the unsigned phase, submit up to
 //! [`unsigned::Config::MinerPages`] pages. While this can be more than 1, it can likely not be a
@@ -71,16 +71,16 @@
 
 /// Export weights
 pub use crate::weights::traits::pezpallet_election_provider_multi_block_unsigned::*;
-/// Exports of this pallet
-pub use pallet::*;
+/// Exports of this pezpallet
+pub use pezpallet::*;
 #[cfg(feature = "runtime-benchmarks")]
 mod benchmarking;
 
 /// The miner.
 pub mod miner;
 
-#[pezframe_support::pallet]
-mod pallet {
+#[pezframe_support::pezpallet]
+mod pezpallet {
 	use super::WeightInfo;
 	use crate::{
 		types::*,
@@ -102,8 +102,8 @@ mod pallet {
 
 	pub(crate) type UnsignedWeightsOf<T> = <T as Config>::WeightInfo;
 
-	#[pallet::config]
-	#[pallet::disable_pezframe_system_supertrait_check]
+	#[pezpallet::config]
+	#[pezpallet::disable_pezframe_system_supertrait_check]
 	pub trait Config: crate::Config + CreateBare<Call<Self>> {
 		/// The repeat threshold of the offchain worker.
 		///
@@ -127,15 +127,15 @@ mod pallet {
 		/// The number of pages that the offchain miner will try and submit.
 		type MinerPages: Get<PageIndex>;
 
-		/// Runtime weight information of this pallet.
+		/// Runtime weight information of this pezpallet.
 		type WeightInfo: WeightInfo;
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(PhantomData<T>);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(PhantomData<T>);
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Submit an unsigned solution.
 		///
 		/// This works very much like an inherent, as only the validators are permitted to submit
@@ -146,13 +146,13 @@ mod pallet {
 		/// verified on the fly.
 		///
 		/// The `paged_solution` may contain at most [`Config::MinerPages`] pages. They are
-		/// interpreted as msp -> lsp, as per [`crate::Pallet::msp_range_for`].
+		/// interpreted as msp -> lsp, as per [`crate::Pezpallet::msp_range_for`].
 		///
 		/// For example, if `Pages = 4`, and `MinerPages = 2`, our full snapshot range would be [0,
 		/// 1, 2, 3], with 3 being msp. But, in this case, then the `paged_raw_solution.pages` is
 		/// expected to correspond to `[snapshot(2), snapshot(3)]`.
-		#[pallet::weight((UnsignedWeightsOf::<T>::submit_unsigned(), DispatchClass::Operational))]
-		#[pallet::call_index(0)]
+		#[pezpallet::weight((UnsignedWeightsOf::<T>::submit_unsigned(), DispatchClass::Operational))]
+		#[pezpallet::call_index(0)]
 		pub fn submit_unsigned(
 			origin: OriginFor<T>,
 			paged_solution: Box<PagedRawSolution<T::MinerConfig>>,
@@ -168,7 +168,7 @@ mod pallet {
 			let claimed_score = paged_solution.score;
 
 			// we select the most significant pages, based on `T::MinerPages`.
-			let page_indices = crate::Pallet::<T>::msp_range_for(T::MinerPages::get() as usize);
+			let page_indices = crate::Pezpallet::<T>::msp_range_for(T::MinerPages::get() as usize);
 			<T::Verifier as Verifier>::verify_synchronous_multi(
 				paged_solution.solution_pages,
 				page_indices,
@@ -180,8 +180,8 @@ mod pallet {
 		}
 	}
 
-	#[pallet::validate_unsigned]
-	impl<T: Config> ValidateUnsigned for Pallet<T> {
+	#[pezpallet::validate_unsigned]
+	impl<T: Config> ValidateUnsigned for Pezpallet<T> {
 		type Call = Call<T>;
 		fn validate_unsigned(source: TransactionSource, call: &Self::Call) -> TransactionValidity {
 			if let Call::submit_unsigned { paged_solution, .. } = call {
@@ -232,8 +232,8 @@ mod pallet {
 		}
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn integrity_test() {
 			assert!(
 				UnsignedWeightsOf::<T>::submit_unsigned().all_lte(T::BlockWeights::get().max_block),
@@ -258,7 +258,7 @@ mod pallet {
 			// This should only come useful in an **abrupt** termination of execution, otherwise the
 			// guard will be dropped upon successful execution.
 			let mut lock =
-				StorageLock::<BlockAndTime<pezframe_system::Pallet<T>>>::with_block_deadline(
+				StorageLock::<BlockAndTime<pezframe_system::Pezpallet<T>>>::with_block_deadline(
 					miner::OffchainWorkerMiner::<T>::OFFCHAIN_LOCK,
 					T::UnsignedPhase::get().saturated_into(),
 				);
@@ -279,12 +279,12 @@ mod pallet {
 		}
 	}
 
-	impl<T: Config> Pallet<T> {
+	impl<T: Config> Pezpallet<T> {
 		/// Internal logic of the offchain worker, to be executed only when the offchain lock is
 		/// acquired with success.
 		fn do_synchronized_offchain_worker(now: BlockNumberFor<T>) {
 			use miner::OffchainWorkerMiner;
-			let current_phase = crate::Pallet::<T>::current_phase();
+			let current_phase = crate::Pezpallet::<T>::current_phase();
 			sublog!(
 				trace,
 				"unsigned",
@@ -334,18 +334,18 @@ mod pallet {
 			paged_solution: &PagedRawSolution<T::MinerConfig>,
 		) -> Result<(), CommonError> {
 			Self::unsigned_specific_checks(paged_solution)
-				.and(crate::Pallet::<T>::snapshot_independent_checks(paged_solution, None))
+				.and(crate::Pezpallet::<T>::snapshot_independent_checks(paged_solution, None))
 				.map_err(Into::into)
 		}
 
-		/// The checks that are specific to the (this) unsigned pallet.
+		/// The checks that are specific to the (this) unsigned pezpallet.
 		///
 		/// ensure solution has the correct phase, and it has only 1 page.
 		pub fn unsigned_specific_checks(
 			paged_solution: &PagedRawSolution<T::MinerConfig>,
 		) -> Result<(), CommonError> {
 			ensure!(
-				crate::Pallet::<T>::current_phase().is_unsigned(),
+				crate::Pezpallet::<T>::current_phase().is_unsigned(),
 				CommonError::EarlySubmission
 			);
 			ensure!(

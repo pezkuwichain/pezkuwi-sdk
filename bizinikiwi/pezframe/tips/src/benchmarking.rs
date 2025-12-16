@@ -27,7 +27,7 @@ use pezframe_system::RawOrigin;
 use pezsp_runtime::traits::Saturating;
 
 use super::*;
-use crate::Pallet as TipsMod;
+use crate::Pezpallet as TipsMod;
 
 const SEED: u32 = 0;
 

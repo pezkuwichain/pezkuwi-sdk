@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Mocking utilities for testing in paras_registrar pallet.
+//! Mocking utilities for testing in paras_registrar pezpallet.
 
 #[cfg(test)]
 use super::*;
@@ -204,7 +204,7 @@ pub const VALIDATORS: &[Sr25519Keyring] = &[
 ];
 
 pub fn run_to_block(n: BlockNumber) {
-	// NOTE that this function only simulates modules of interest. Depending on new pallet may
+	// NOTE that this function only simulates modules of interest. Depending on new pezpallet may
 	// require adding it here.
 	System::run_to_block_with::<AllPalletsWithSystem>(
 		n,
@@ -214,8 +214,8 @@ pub fn run_to_block(n: BlockNumber) {
 				let session_index = shared::CurrentSessionIndex::<Test>::get() + 1;
 				let validators_pub_keys = VALIDATORS.iter().map(|v| v.public().into()).collect();
 
-				shared::Pallet::<Test>::set_session_index(session_index);
-				shared::Pallet::<Test>::set_active_validators_ascending(validators_pub_keys);
+				shared::Pezpallet::<Test>::set_session_index(session_index);
+				shared::Pezpallet::<Test>::set_active_validators_ascending(validators_pub_keys);
 
 				Teyrchains::test_on_new_session();
 			}

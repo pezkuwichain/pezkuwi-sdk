@@ -25,7 +25,7 @@ mod benchmarks {
 	#[benchmark]
 	fn register_candidate() {
 		// --- SETUP ---
-		Pallet::<T>::initiate_election(
+		Pezpallet::<T>::initiate_election(
 			RawOrigin::Root.into(),
 			ElectionType::Parliamentary,
 			None,
@@ -52,7 +52,7 @@ mod benchmarks {
 	fn cast_vote() {
 		// --- SETUP ---
 		// 1. Prepare election and candidates
-		Pallet::<T>::initiate_election(
+		Pezpallet::<T>::initiate_election(
 			RawOrigin::Root.into(),
 			ElectionType::Parliamentary,
 			None,
@@ -70,7 +70,7 @@ mod benchmarks {
 
 		// KYC check is already bypassed in test environment
 
-		Pallet::<T>::register_candidate(
+		Pezpallet::<T>::register_candidate(
 			RawOrigin::Signed(candidate.clone()).into(),
 			0,
 			None,
@@ -80,7 +80,7 @@ mod benchmarks {
 
 		// 2. Advance to voting period
 		let election = ActiveElections::<T>::get(0).unwrap();
-		pezframe_system::Pallet::<T>::set_block_number(election.voting_start);
+		pezframe_system::Pezpallet::<T>::set_block_number(election.voting_start);
 
 		let candidates_to_vote_for = vec![candidate];
 
@@ -94,7 +94,7 @@ mod benchmarks {
 	fn finalize_election() {
 		// --- SETUP ---
 		// 1. Prepare election, candidate and a vote
-		Pallet::<T>::initiate_election(
+		Pezpallet::<T>::initiate_election(
 			RawOrigin::Root.into(),
 			ElectionType::Parliamentary,
 			None,
@@ -111,7 +111,7 @@ mod benchmarks {
 
 		// KYC check is already bypassed in test environment
 
-		Pallet::<T>::register_candidate(
+		Pezpallet::<T>::register_candidate(
 			RawOrigin::Signed(candidate.clone()).into(),
 			0,
 			None,
@@ -120,12 +120,12 @@ mod benchmarks {
 		.unwrap();
 
 		let election = ActiveElections::<T>::get(0).unwrap();
-		pezframe_system::Pallet::<T>::set_block_number(election.voting_start);
-		Pallet::<T>::cast_vote(RawOrigin::Signed(voter.clone()).into(), 0, vec![candidate], None)
+		pezframe_system::Pezpallet::<T>::set_block_number(election.voting_start);
+		Pezpallet::<T>::cast_vote(RawOrigin::Signed(voter.clone()).into(), 0, vec![candidate], None)
 			.unwrap();
 
 		// 2. Advance to election end time
-		pezframe_system::Pallet::<T>::set_block_number(election.end_block + 1u32.into());
+		pezframe_system::Pezpallet::<T>::set_block_number(election.end_block + 1u32.into());
 
 		#[extrinsic_call]
 		finalize_election(RawOrigin::Root, 0);
@@ -175,7 +175,7 @@ mod benchmarks {
 		CurrentOfficials::<T>::insert(GovernmentPosition::Serok, nominator.clone());
 
 		// Use a different role (Dozger) to avoid conflicts with nominate_official benchmark
-		Pallet::<T>::nominate_official(
+		Pezpallet::<T>::nominate_official(
 			RawOrigin::Signed(nominator).into(),
 			nominee.clone(),
 			OfficialRole::Dozger,
@@ -265,7 +265,7 @@ mod benchmarks {
 
 		let title = b"Test Proposal".to_vec().try_into().unwrap();
 		let description = b"Test proposal description".to_vec().try_into().unwrap();
-		Pallet::<T>::submit_proposal(
+		Pezpallet::<T>::submit_proposal(
 			RawOrigin::Signed(proposer).into(),
 			title,
 			description,
@@ -276,7 +276,7 @@ mod benchmarks {
 		.unwrap();
 
 		let proposal = ActiveProposals::<T>::get(0).unwrap();
-		pezframe_system::Pallet::<T>::set_block_number(proposal.voting_starts_at + 1u32.into());
+		pezframe_system::Pezpallet::<T>::set_block_number(proposal.voting_starts_at + 1u32.into());
 
 		let rationale = Some(b"Test vote rationale".to_vec().try_into().unwrap());
 
@@ -298,7 +298,7 @@ mod benchmarks {
 	}
 
 	impl_benchmark_test_suite!(
-		Pallet,
+		Pezpallet,
 		crate::mock::ExtBuilder::default().build(),
 		crate::mock::Test
 	);

@@ -32,7 +32,7 @@
 //! state consistency.
 
 use crate::{
-	asset, log, BalanceOf, Bonded, Config, DecodeWithMemTracking, Error, Ledger, Pallet, Payee,
+	asset, log, BalanceOf, Bonded, Config, DecodeWithMemTracking, Error, Ledger, Pezpallet, Payee,
 	RewardDestination, Vec, VirtualStakers,
 };
 use alloc::{collections::BTreeMap, fmt::Debug};
@@ -248,7 +248,7 @@ impl<T: Config> StakingLedger<T> {
 		}
 
 		// We skip locking virtual stakers.
-		if !Pallet::<T>::is_virtual_staker(&self.stash) {
+		if !Pezpallet::<T>::is_virtual_staker(&self.stash) {
 			// for direct stakers, update lock on stash based on ledger.
 			asset::update_stake::<T>(&self.stash, self.total)
 				.map_err(|_| Error::<T>::NotEnoughFunds)?;
@@ -327,7 +327,7 @@ impl<T: Config> StakingLedger<T> {
 				// if not virtual staker, clear locks.
 				asset::kill_stake::<T>(&ledger.stash)?;
 			}
-			Pallet::<T>::deposit_event(crate::Event::<T>::StakerRemoved {
+			Pezpallet::<T>::deposit_event(crate::Event::<T>::StakerRemoved {
 				stash: ledger.stash.clone(),
 			});
 			Ok(())

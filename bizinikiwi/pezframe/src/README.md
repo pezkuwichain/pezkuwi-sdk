@@ -13,17 +13,17 @@
 
 `pezkuwi-sdk-frame` is an umbrella crate for the
 [FRAME](https://docs.pezkuwichain.app/polkadot-protocol/glossary/#frame-framework-for-runtime-aggregation-of-modularized-entities)
-framework. It simplifies building FRAME pallets and runtimes by re-exporting all the necessary components for pallet development.
+framework. It simplifies building FRAME pallets and runtimes by re-exporting all the necessary components for pezpallet development.
 
 Outside the Pezkuwi SDK, `pezkuwi-sdk-frame` should be imported through the main Pezkuwi SDK [`umbrella crate`](../../../umbrella/src/lib.rs).
 
 ## 💻 Usage
 
-The main intended use of this crate is through **Preludes**, which re-export most of the components needed for pallet
+The main intended use of this crate is through **Preludes**, which re-export most of the components needed for pezpallet
 development. The available preludes are:
 
-- `prelude`: main prelude for pallet development, containing essential types and traits
-- `testing_prelude`: testing utilities and helpers for writing pallet tests
+- `prelude`: main prelude for pezpallet development, containing essential types and traits
+- `testing_prelude`: testing utilities and helpers for writing pezpallet tests
 - `runtime::prelude`: runtime-specific components for building blockchain runtimes
 - `benchmarking::prelude`: benchmarking components for performance testing
 - `weights_prelude`: components for the auto-generated `weight.rs` files

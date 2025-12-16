@@ -31,8 +31,8 @@ use honggfuzz::fuzz;
 use pezpallet_nomination_pools::{
 	log,
 	mock::*,
-	pallet as pools,
-	pallet::{BondedPools, Call as PoolsCall, Event as PoolsEvents, PoolMembers},
+	pezpallet as pools,
+	pezpallet::{BondedPools, Call as PoolsCall, Event as PoolsEvents, PoolMembers},
 	BondExtra, BondedPool, GlobalMaxCommission, LastPoolId, MaxPoolMembers, MaxPoolMembersPerPool,
 	MaxPools, MinCreateBond, MinJoinBond, PoolId,
 };

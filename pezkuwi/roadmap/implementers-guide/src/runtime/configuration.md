@@ -1,4 +1,4 @@
-# Configuration Pallet
+# Configuration Pezpallet
 
 This module is responsible for managing all configuration of the teyrchain host in-flight. It provides a central point
 for configuration updates to prevent races between configuration changes and teyrchain-processing logic. Configuration

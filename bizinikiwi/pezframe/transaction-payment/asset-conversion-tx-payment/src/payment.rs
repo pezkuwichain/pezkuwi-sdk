@@ -93,7 +93,7 @@ pub trait OnChargeAssetTransaction<T: Config> {
 /// - `S`: The swap implementation that can swap assets provided by user for the `A` asset.
 /// - OU: The handler for withdrawn `fee` and `tip`, passed in the respective order to
 ///   [OnUnbalanced::on_unbalanceds].
-/// - `T`: The pallet's configuration.
+/// - `T`: The pezpallet's configuration.
 pub struct SwapAssetAdapter<A, F, S, OU>(PhantomData<(A, F, S, OU)>);
 
 impl<A, F, S, OU, T> OnChargeAssetTransaction<T> for SwapAssetAdapter<A, F, S, OU>

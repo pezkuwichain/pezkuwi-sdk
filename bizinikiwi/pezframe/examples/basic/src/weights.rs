@@ -30,11 +30,11 @@
 // Executed Command:
 // ./target/release/bizinikiwi
 // benchmark
-// pallet
+// pezpallet
 // --chain=dev
 // --execution=wasm
 // --wasm-execution=compiled
-// --pallet=pezpallet_example_basic
+// --pezpallet=pezpallet_example_basic
 // --extrinsic=*
 // --steps=50
 // --repeat=20

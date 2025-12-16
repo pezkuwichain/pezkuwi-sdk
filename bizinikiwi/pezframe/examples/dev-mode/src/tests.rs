@@ -30,12 +30,12 @@ use pezsp_runtime::{
 	traits::{BlakeTwo256, IdentityLookup},
 	BuildStorage,
 };
-// Reexport crate as its pallet name for construct_runtime.
+// Reexport crate as its pezpallet name for construct_runtime.
 use crate as pezpallet_dev_mode;
 
 type Block = pezframe_system::mocking::MockBlock<Test>;
 
-// For testing the pallet, we construct a mock runtime.
+// For testing the pezpallet, we construct a mock runtime.
 pezframe_support::construct_runtime!(
 	pub enum Test
 	{

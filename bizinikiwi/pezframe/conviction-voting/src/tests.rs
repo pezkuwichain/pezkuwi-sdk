@@ -139,7 +139,7 @@ impl Polling<TallyOf<Test>> for TestPolls {
 			Some(Ongoing(..)) => {},
 			_ => return Err(()),
 		}
-		let now = pezframe_system::Pallet::<Test>::block_number();
+		let now = pezframe_system::Pezpallet::<Test>::block_number();
 		polls.insert(index, Completed(now, approved));
 		Polls::set(polls);
 		Ok(())
@@ -148,7 +148,7 @@ impl Polling<TallyOf<Test>> for TestPolls {
 
 impl Config for Test {
 	type RuntimeEvent = RuntimeEvent;
-	type Currency = pezpallet_balances::Pallet<Self>;
+	type Currency = pezpallet_balances::Pezpallet<Self>;
 	type VoteLockingPeriod = ConstU64<3>;
 	type MaxVotes = ConstU32<3>;
 	type WeightInfo = ();

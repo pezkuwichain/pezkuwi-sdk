@@ -6,7 +6,7 @@ edition.workspace = true
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
-description = "FRAME pallet for GRANDPA finality gadget"
+description = "FRAME pezpallet for GRANDPA finality gadget"
 readme = "README.md"
 documentation = "https://docs.rs/pezpallet-grandpa"
 

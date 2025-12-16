@@ -3,7 +3,7 @@
 #![cfg(feature = "runtime-benchmarks")]
 
 use super::*;
-use crate::Pallet as Referral;
+use crate::Pezpallet as Referral;
 use pezframe_benchmarking::v2::*;
 use pezframe_system::RawOrigin;
 

@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Default weights for the GRANDPA Pallet
+//! Default weights for the GRANDPA Pezpallet
 //! This file was not auto-generated.
 
 use pezframe_support::weights::{

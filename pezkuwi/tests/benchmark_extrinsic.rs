@@ -25,9 +25,9 @@ static EXTRINSICS: [(&str, &str); 2] = [("system", "remark"), ("balances", "tran
 #[test]
 fn benchmark_extrinsic_works() {
 	for runtime in RUNTIMES {
-		for (pallet, extrinsic) in EXTRINSICS {
+		for (pezpallet, extrinsic) in EXTRINSICS {
 			let runtime = format!("{}-dev", runtime);
-			assert!(benchmark_extrinsic(&runtime, pallet, extrinsic).is_ok());
+			assert!(benchmark_extrinsic(&runtime, pezpallet, extrinsic).is_ok());
 		}
 	}
 }
@@ -40,10 +40,10 @@ fn benchmark_extrinsic_rejects_non_dev_runtimes() {
 	}
 }
 
-fn benchmark_extrinsic(runtime: &str, pallet: &str, extrinsic: &str) -> Result<(), String> {
+fn benchmark_extrinsic(runtime: &str, pezpallet: &str, extrinsic: &str) -> Result<(), String> {
 	let status = Command::new(cargo_bin("pezkuwi"))
 		.args(["benchmark", "extrinsic", "--chain", runtime])
-		.args(["--pallet", pallet, "--extrinsic", extrinsic])
+		.args(["--pezpallet", pezpallet, "--extrinsic", extrinsic])
 		// Run with low repeats for faster execution.
 		.args(["--repeat=1", "--warmup=1", "--max-ext-per-block=1"])
 		.status()

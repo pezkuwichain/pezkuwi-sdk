@@ -15,10 +15,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Benchmarks for Sudo Pallet
+//! Benchmarks for Sudo Pezpallet
 
 use super::*;
-use crate::Pallet;
+use crate::Pezpallet;
 use alloc::{boxed::Box, vec};
 use pezframe_benchmarking::v2::*;
 use pezframe_support::dispatch::{DispatchInfo, GetDispatchInfo};
@@ -29,7 +29,7 @@ use pezsp_runtime::traits::{
 
 fn assert_last_event<T: Config>(generic_event: crate::Event<T>) {
 	let re: <T as Config>::RuntimeEvent = generic_event.into();
-	pezframe_system::Pallet::<T>::assert_last_event(re.into());
+	pezframe_system::Pezpallet::<T>::assert_last_event(re.into());
 }
 
 #[benchmarks(where
@@ -118,5 +118,5 @@ mod benchmarks {
 		}
 	}
 
-	impl_benchmark_test_suite!(Pallet, crate::mock::new_bench_ext(), crate::mock::Test);
+	impl_benchmark_test_suite!(Pezpallet, crate::mock::new_bench_ext(), crate::mock::Test);
 }

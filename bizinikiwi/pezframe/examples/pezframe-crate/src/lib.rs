@@ -23,24 +23,24 @@
 
 use frame::prelude::*;
 
-#[frame::pallet(dev_mode)]
-pub mod pallet {
+#[frame::pezpallet(dev_mode)]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::event]
+	#[pezpallet::event]
 	pub enum Event<T: Config> {}
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Value<T> = StorageValue<Value = u32>;
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		pub fn some_dispatchable(_origin: OriginFor<T>) -> DispatchResult {
 			Ok(())
 		}
@@ -49,7 +49,7 @@ pub mod pallet {
 
 #[cfg(test)]
 mod tests {
-	use crate::pallet as my_pallet;
+	use crate::pezpallet as my_pallet;
 	use frame::testing_prelude::*;
 
 	construct_runtime!(

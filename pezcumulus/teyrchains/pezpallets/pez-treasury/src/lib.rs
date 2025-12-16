@@ -1,12 +1,12 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-//! # PEZ Treasury Pallet
+//! # PEZ Treasury Pezpallet
 //!
-//! A pallet for managing the PEZ token distribution and treasury with automated halving mechanics.
+//! A pezpallet for managing the PEZ token distribution and treasury with automated halving mechanics.
 //!
 //! ## Overview
 //!
-//! This pallet manages the complete lifecycle of PEZ token distribution including:
+//! This pezpallet manages the complete lifecycle of PEZ token distribution including:
 //!
 //! - **Genesis Distribution**: One-time initial distribution to treasury, presale, and founder
 //!   accounts
@@ -68,7 +68,7 @@
 //! }
 //! ```
 
-pub use pallet::*;
+pub use pezpallet::*;
 pub use weights::WeightInfo;
 
 pub mod migrations;
@@ -95,8 +95,8 @@ use pezframe_system::pezpallet_prelude::BlockNumberFor;
 use scale_info::TypeInfo;
 use pezsp_runtime::traits::{AccountIdConversion, Saturating, Zero};
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
@@ -111,31 +111,31 @@ pub mod pallet {
 	pub const PRESALE_ALLOCATION: u128 = 93_750_000 * 1_000_000_000_000; // %1.875
 	pub const FOUNDER_ALLOCATION: u128 = 93_750_000 * 1_000_000_000_000; // %1.875
 
-	#[pallet::pallet]
-	#[pallet::storage_version(migrations::STORAGE_VERSION)]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(migrations::STORAGE_VERSION)]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config + TypeInfo {
 		type Assets: Mutate<Self::AccountId>;
 		type WeightInfo: weights::WeightInfo;
 
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type PezAssetId: Get<<Self::Assets as Inspect<Self::AccountId>>::AssetId>;
 
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type TreasuryPalletId: Get<PalletId>;
 
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type IncentivePotId: Get<PalletId>;
 
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type GovernmentPotId: Get<PalletId>;
 
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type PresaleAccount: Get<Self::AccountId>;
 
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type FounderAccount: Get<Self::AccountId>;
 
 		type ForceOrigin: EnsureOrigin<Self::RuntimeOrigin>;
@@ -144,25 +144,25 @@ pub mod pallet {
 	pub type BalanceOf<T> =
 		<<T as Config>::Assets as Inspect<<T as pezframe_system::Config>::AccountId>>::Balance;
 
-	#[pallet::storage]
-	#[pallet::getter(fn halving_info)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn halving_info)]
 	pub type HalvingInfo<T: Config> = StorageValue<_, HalvingData<T>, ValueQuery>;
 
-	#[pallet::storage]
-	#[pallet::getter(fn monthly_releases)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn monthly_releases)]
 	pub type MonthlyReleases<T: Config> =
 		StorageMap<_, Blake2_128Concat, u32, MonthlyRelease<T>, OptionQuery>;
 
-	#[pallet::storage]
-	#[pallet::getter(fn next_release_month)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn next_release_month)]
 	pub type NextReleaseMonth<T: Config> = StorageValue<_, u32, ValueQuery>;
 
-	#[pallet::storage]
-	#[pallet::getter(fn treasury_start_block)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn treasury_start_block)]
 	pub type TreasuryStartBlock<T: Config> = StorageValue<_, BlockNumberFor<T>, OptionQuery>;
 
-	#[pallet::storage]
-	#[pallet::getter(fn genesis_distribution_done)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn genesis_distribution_done)]
 	pub type GenesisDistributionDone<T: Config> = StorageValue<_, bool, ValueQuery>;
 
 	#[derive(Encode, Decode, Clone, PartialEq, Eq, RuntimeDebug, TypeInfo, MaxEncodedLen)]
@@ -195,8 +195,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		TreasuryInitialized {
 			start_block: BlockNumberFor<T>,
@@ -219,7 +219,7 @@ pub mod pallet {
 		},
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		TreasuryAlreadyInitialized,
 		TreasuryNotInitialized,
@@ -230,7 +230,7 @@ pub mod pallet {
 		GenesisDistributionAlreadyDone,
 	}
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(pezframe_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		pub initialize_treasury: bool,
@@ -238,40 +238,40 @@ pub mod pallet {
 		pub _phantom: core::marker::PhantomData<T>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			if self.initialize_treasury {
-				let _ = Pallet::<T>::do_initialize_treasury();
+				let _ = Pezpallet::<T>::do_initialize_treasury();
 			}
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::initialize_treasury())]
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::initialize_treasury())]
 		pub fn initialize_treasury(origin: OriginFor<T>) -> DispatchResult {
 			T::ForceOrigin::ensure_origin(origin)?;
 			Self::do_initialize_treasury()
 		}
 
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::release_monthly_funds())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::release_monthly_funds())]
 		pub fn release_monthly_funds(origin: OriginFor<T>) -> DispatchResult {
 			T::ForceOrigin::ensure_origin(origin)?;
 			Self::do_monthly_release()
 		}
 
-		#[pallet::call_index(2)]
-		#[pallet::weight(T::WeightInfo::force_genesis_distribution())]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(T::WeightInfo::force_genesis_distribution())]
 		pub fn force_genesis_distribution(origin: OriginFor<T>) -> DispatchResult {
 			T::ForceOrigin::ensure_origin(origin)?;
 			Self::do_genesis_distribution()
 		}
 	}
 
-	impl<T: Config> Pallet<T> {
+	impl<T: Config> Pezpallet<T> {
 		pub fn treasury_account_id() -> T::AccountId {
 			T::TreasuryPalletId::get().into_account_truncating()
 		}
@@ -327,7 +327,7 @@ pub mod pallet {
 				Error::<T>::TreasuryAlreadyInitialized
 			);
 
-			let current_block = pezframe_system::Pallet::<T>::block_number();
+			let current_block = pezframe_system::Pezpallet::<T>::block_number();
 
 			let treasury_balance = TREASURY_ALLOCATION;
 			let first_period_total =
@@ -361,7 +361,7 @@ pub mod pallet {
 		pub fn do_monthly_release() -> DispatchResult {
 			ensure!(TreasuryStartBlock::<T>::get().is_some(), Error::<T>::TreasuryNotInitialized);
 
-			let current_block = pezframe_system::Pallet::<T>::block_number();
+			let current_block = pezframe_system::Pezpallet::<T>::block_number();
 			let start_block = TreasuryStartBlock::<T>::get().unwrap();
 			let next_month = NextReleaseMonth::<T>::get();
 

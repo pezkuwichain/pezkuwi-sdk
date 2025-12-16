@@ -323,10 +323,10 @@ fn rewards_should_work() {
 		Payee::<Test>::insert(21, RewardDestination::Account(21));
 		Payee::<Test>::insert(101, RewardDestination::Account(101));
 
-		Pallet::<Test>::reward_by_ids(vec![(11, 50)]);
-		Pallet::<Test>::reward_by_ids(vec![(11, 50)]);
+		Pezpallet::<Test>::reward_by_ids(vec![(11, 50)]);
+		Pezpallet::<Test>::reward_by_ids(vec![(11, 50)]);
 		// This is the second validator of the current elected set.
-		Pallet::<Test>::reward_by_ids(vec![(21, 50)]);
+		Pezpallet::<Test>::reward_by_ids(vec![(21, 50)]);
 
 		// Compute total payout now for whole duration of the session.
 		let total_payout_0 = current_total_payout_for_duration(reward_time_per_era());
@@ -392,7 +392,7 @@ fn rewards_should_work() {
 		);
 
 		assert_eq_uvec!(Session::validators(), vec![11, 21]);
-		Pallet::<Test>::reward_by_ids(vec![(11, 1)]);
+		Pezpallet::<Test>::reward_by_ids(vec![(11, 1)]);
 
 		// Compute total payout now for whole duration as other parameter won't change
 		let total_payout_1 = current_total_payout_for_duration(reward_time_per_era());
@@ -639,8 +639,8 @@ fn nominating_and_rewards_should_work() {
 
 			// the total reward for era 0
 			let total_payout_0 = current_total_payout_for_duration(reward_time_per_era());
-			Pallet::<Test>::reward_by_ids(vec![(41, 1)]);
-			Pallet::<Test>::reward_by_ids(vec![(21, 1)]);
+			Pezpallet::<Test>::reward_by_ids(vec![(41, 1)]);
+			Pezpallet::<Test>::reward_by_ids(vec![(21, 1)]);
 
 			mock::start_active_era(1);
 
@@ -681,8 +681,8 @@ fn nominating_and_rewards_should_work() {
 
 			// the total reward for era 1
 			let total_payout_1 = current_total_payout_for_duration(reward_time_per_era());
-			Pallet::<Test>::reward_by_ids(vec![(21, 2)]);
-			Pallet::<Test>::reward_by_ids(vec![(11, 1)]);
+			Pezpallet::<Test>::reward_by_ids(vec![(21, 2)]);
+			Pezpallet::<Test>::reward_by_ids(vec![(11, 1)]);
 
 			mock::start_active_era(2);
 
@@ -1126,7 +1126,7 @@ fn reward_destination_works() {
 
 		// Compute total payout now for whole duration as other parameter won't change
 		let total_payout_0 = current_total_payout_for_duration(reward_time_per_era());
-		Pallet::<Test>::reward_by_ids(vec![(11, 1)]);
+		Pezpallet::<Test>::reward_by_ids(vec![(11, 1)]);
 
 		mock::start_active_era(1);
 		mock::make_all_reward_payment(0);
@@ -1155,7 +1155,7 @@ fn reward_destination_works() {
 
 		// Compute total payout now for whole duration as other parameter won't change
 		let total_payout_1 = current_total_payout_for_duration(reward_time_per_era());
-		Pallet::<Test>::reward_by_ids(vec![(11, 1)]);
+		Pezpallet::<Test>::reward_by_ids(vec![(11, 1)]);
 
 		mock::start_active_era(2);
 		mock::make_all_reward_payment(1);
@@ -1189,7 +1189,7 @@ fn reward_destination_works() {
 
 		// Compute total payout now for whole duration as other parameter won't change
 		let total_payout_2 = current_total_payout_for_duration(reward_time_per_era());
-		Pallet::<Test>::reward_by_ids(vec![(11, 1)]);
+		Pezpallet::<Test>::reward_by_ids(vec![(11, 1)]);
 
 		mock::start_active_era(3);
 		mock::make_all_reward_payment(2);
@@ -1237,7 +1237,7 @@ fn validator_payment_prefs_work() {
 		// Compute total payout now for whole duration as other parameter won't change
 		let total_payout_1 = current_total_payout_for_duration(reward_time_per_era());
 		let exposure_1 = Staking::eras_stakers(active_era(), &11);
-		Pallet::<Test>::reward_by_ids(vec![(11, 1)]);
+		Pezpallet::<Test>::reward_by_ids(vec![(11, 1)]);
 
 		mock::start_active_era(2);
 		mock::make_all_reward_payment(1);
@@ -1930,8 +1930,8 @@ fn reward_to_stake_works() {
 
 			// Compute total payout now for whole duration as other parameter won't change
 			let total_payout_0 = current_total_payout_for_duration(reward_time_per_era());
-			Pallet::<Test>::reward_by_ids(vec![(11, 1)]);
-			Pallet::<Test>::reward_by_ids(vec![(21, 1)]);
+			Pezpallet::<Test>::reward_by_ids(vec![(11, 1)]);
+			Pezpallet::<Test>::reward_by_ids(vec![(21, 1)]);
 
 			// New era --> rewards are paid --> stakes are changed
 			mock::start_active_era(1);
@@ -2430,10 +2430,10 @@ fn reward_from_authorship_event_handler_works() {
 	ExtBuilder::default().build_and_execute(|| {
 		use pezpallet_authorship::EventHandler;
 
-		assert_eq!(<pezpallet_authorship::Pallet<Test>>::author(), Some(11));
+		assert_eq!(<pezpallet_authorship::Pezpallet<Test>>::author(), Some(11));
 
-		Pallet::<Test>::note_author(11);
-		Pallet::<Test>::note_author(11);
+		Pezpallet::<Test>::note_author(11);
+		Pezpallet::<Test>::note_author(11);
 
 		// Not mandatory but must be coherent with rewards
 		assert_eq_uvec!(Session::validators(), vec![11, 21]);
@@ -2453,9 +2453,9 @@ fn add_reward_points_fns_works() {
 		// Not mandatory but must be coherent with rewards
 		assert_eq_uvec!(Session::validators(), vec![21, 11]);
 
-		Pallet::<Test>::reward_by_ids(vec![(21, 1), (11, 1), (11, 1)]);
+		Pezpallet::<Test>::reward_by_ids(vec![(21, 1), (11, 1), (11, 1)]);
 
-		Pallet::<Test>::reward_by_ids(vec![(21, 1), (11, 1), (11, 1)]);
+		Pezpallet::<Test>::reward_by_ids(vec![(21, 1), (11, 1), (11, 1)]);
 
 		assert_eq!(
 			ErasRewardPoints::<Test>::get(active_era()),
@@ -3179,13 +3179,13 @@ fn claim_reward_at_the_last_era_and_no_double_claim_and_invalid_claim() {
 		Payee::<Test>::insert(11, RewardDestination::Account(11));
 		Payee::<Test>::insert(101, RewardDestination::Account(101));
 
-		Pallet::<Test>::reward_by_ids(vec![(11, 1)]);
+		Pezpallet::<Test>::reward_by_ids(vec![(11, 1)]);
 		// Compute total payout now for whole duration as other parameter won't change
 		let total_payout_0 = current_total_payout_for_duration(reward_time_per_era());
 
 		mock::start_active_era(1);
 
-		Pallet::<Test>::reward_by_ids(vec![(11, 1)]);
+		Pezpallet::<Test>::reward_by_ids(vec![(11, 1)]);
 		// Increase total token issuance to affect the total payout.
 		let _ = Balances::deposit_creating(&999, 1_000_000_000);
 
@@ -3195,7 +3195,7 @@ fn claim_reward_at_the_last_era_and_no_double_claim_and_invalid_claim() {
 
 		mock::start_active_era(2);
 
-		Pallet::<Test>::reward_by_ids(vec![(11, 1)]);
+		Pezpallet::<Test>::reward_by_ids(vec![(11, 1)]);
 		// Increase total token issuance to affect the total payout.
 		let _ = Balances::deposit_creating(&999, 1_000_000_000);
 		// Compute total payout now for whole duration as other parameter won't change
@@ -3347,7 +3347,7 @@ fn test_nominators_over_max_exposure_page_size_are_rewarded() {
 		}
 		mock::start_active_era(1);
 
-		Pallet::<Test>::reward_by_ids(vec![(11, 1)]);
+		Pezpallet::<Test>::reward_by_ids(vec![(11, 1)]);
 		// compute and ensure the reward amount is greater than zero.
 		let _ = current_total_payout_for_duration(reward_time_per_era());
 
@@ -3388,7 +3388,7 @@ fn test_nominators_are_rewarded_for_all_exposure_page() {
 		}
 		mock::start_active_era(1);
 
-		Pallet::<Test>::reward_by_ids(vec![(11, 1)]);
+		Pezpallet::<Test>::reward_by_ids(vec![(11, 1)]);
 		// compute and ensure the reward amount is greater than zero.
 		let _ = current_total_payout_for_duration(reward_time_per_era());
 
@@ -6377,7 +6377,7 @@ fn can_page_exposure() {
 fn should_retain_era_info_only_upto_history_depth() {
 	ExtBuilder::default().build_and_execute(|| {
 		// remove existing exposure
-		Pallet::<Test>::clear_era_information(0);
+		Pezpallet::<Test>::clear_era_information(0);
 		let validator_stash = 10;
 
 		for era in 0..4 {
@@ -6399,7 +6399,7 @@ fn should_retain_era_info_only_upto_history_depth() {
 			assert_eq!(ErasStakersPaged::<Test>::iter_prefix((i as EraIndex,)).count(), 3);
 
 			// when clear era info
-			Pallet::<Test>::clear_era_information(i as EraIndex);
+			Pezpallet::<Test>::clear_era_information(i as EraIndex);
 
 			// then all era entries are cleared
 			assert_eq!(ClaimedRewards::<Test>::iter_prefix(i as EraIndex).count(), 0);
@@ -6416,9 +6416,9 @@ fn test_legacy_claimed_rewards_is_checked_at_reward_payout() {
 
 		// reward validator for next 2 eras
 		mock::start_active_era(1);
-		Pallet::<Test>::reward_by_ids(vec![(11, 1)]);
+		Pezpallet::<Test>::reward_by_ids(vec![(11, 1)]);
 		mock::start_active_era(2);
-		Pallet::<Test>::reward_by_ids(vec![(11, 1)]);
+		Pezpallet::<Test>::reward_by_ids(vec![(11, 1)]);
 		mock::start_active_era(3);
 
 		//verify rewards are not claimed
@@ -6524,7 +6524,7 @@ fn test_validator_exposure_is_backward_compatible_with_non_paged_rewards_payout(
 
 		mock::start_active_era(1);
 		// reward validator for current era
-		Pallet::<Test>::reward_by_ids(vec![(11, 1)]);
+		Pezpallet::<Test>::reward_by_ids(vec![(11, 1)]);
 
 		// start new era
 		mock::start_active_era(2);
@@ -7005,7 +7005,7 @@ mod staking_unchecked {
 			assert_eq!(asset::staked::<Test>(&200), 0);
 
 			// and they are marked as virtual stakers
-			assert_eq!(Pallet::<Test>::is_virtual_staker(&200), true);
+			assert_eq!(Pezpallet::<Test>::is_virtual_staker(&200), true);
 		});
 	}
 
@@ -8456,7 +8456,7 @@ mod migration_tests {
 mod getters {
 	use crate::{
 		mock::{self},
-		pallet::pallet::{Invulnerables, MinimumValidatorCount, ValidatorCount},
+		pezpallet::pezpallet::{Invulnerables, MinimumValidatorCount, ValidatorCount},
 		slashing,
 		tests::{Staking, Test},
 		ActiveEra, ActiveEraInfo, BalanceOf, CanceledSlashPayout, ClaimedRewards, CurrentEra,
@@ -8992,7 +8992,7 @@ mod hold_migration {
 			// AND Alice is partially unbonding.
 			assert_ok!(Staking::unbond(RuntimeOrigin::signed(alice), 300));
 
-			// AND Alice has some funds reserved with another pallet.
+			// AND Alice has some funds reserved with another pezpallet.
 			assert_ok!(Balances::reserve(&alice, reserved_by_another_pallet));
 
 			// convert stake to T::OldCurrency.
@@ -9068,7 +9068,7 @@ mod hold_migration {
 			bond_virtual_nominator(200, 201, 500, vec![11, 21]);
 
 			// previously the virtual nominator had a provider inc by the delegation system as
-			// well as a consumer by this pallet.
+			// well as a consumer by this pezpallet.
 			System::inc_providers(&200);
 			System::inc_consumers(&200).expect("has provider, can consume");
 

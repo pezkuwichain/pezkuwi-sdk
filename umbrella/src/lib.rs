@@ -23,7 +23,7 @@ pub use assets_common;
 #[cfg(feature = "binary-merkle-tree")]
 pub use binary_merkle_tree;
 
-/// A common interface for describing what a bridge pallet should be able to do.
+/// A common interface for describing what a bridge pezpallet should be able to do.
 #[cfg(feature = "bp-header-pez-chain")]
 pub use bp_header_pez_chain;
 
@@ -51,11 +51,11 @@ pub use bp_test_utils;
 #[cfg(feature = "bp-teyrchains")]
 pub use bp_teyrchains;
 
-/// Primitives of the xcm-bridge-hub pallet.
+/// Primitives of the xcm-bridge-hub pezpallet.
 #[cfg(feature = "bp-xcm-bridge-hub")]
 pub use bp_xcm_bridge_hub;
 
-/// Primitives of the xcm-bridge-hub fee pallet.
+/// Primitives of the xcm-bridge-hub fee pezpallet.
 #[cfg(feature = "bp-xcm-bridge-hub-router")]
 pub use bp_xcm_bridge_hub_router;
 
@@ -117,15 +117,15 @@ pub use pezcumulus_client_service;
 #[cfg(feature = "pezcumulus-client-teyrchain-inherent")]
 pub use pezcumulus_client_teyrchain_inherent;
 
-/// AURA consensus extension pallet for teyrchains.
+/// AURA consensus extension pezpallet for teyrchains.
 #[cfg(feature = "pezcumulus-pezpallet-aura-ext")]
 pub use pezcumulus_pezpallet_aura_ext;
 
-/// Migrates messages from the old DMP queue pallet.
+/// Migrates messages from the old DMP queue pezpallet.
 #[cfg(feature = "pezcumulus-pezpallet-dmp-queue")]
 pub use pezcumulus_pezpallet_dmp_queue;
 
-/// FRAME sessions pallet benchmarking.
+/// FRAME sessions pezpallet benchmarking.
 #[cfg(feature = "pezcumulus-pezpallet-session-benchmarking")]
 pub use pezcumulus_pezpallet_session_benchmarking;
 
@@ -133,27 +133,27 @@ pub use pezcumulus_pezpallet_session_benchmarking;
 #[cfg(feature = "pezcumulus-pezpallet-solo-to-para")]
 pub use pezcumulus_pezpallet_solo_to_para;
 
-/// Base pallet for pezcumulus-based teyrchains.
+/// Base pezpallet for pezcumulus-based teyrchains.
 #[cfg(feature = "pezcumulus-pezpallet-teyrchain-system")]
 pub use pezcumulus_pezpallet_teyrchain_system;
 
-/// Proc macros provided by the teyrchain-system pallet.
+/// Proc macros provided by the teyrchain-system pezpallet.
 #[cfg(feature = "pezcumulus-pezpallet-teyrchain-system-proc-macro")]
 pub use pezcumulus_pezpallet_teyrchain_system_proc_macro;
 
-/// pallet and transaction extensions for accurate proof size reclaim.
+/// pezpallet and transaction extensions for accurate proof size reclaim.
 #[cfg(feature = "pezcumulus-pezpallet-weight-reclaim")]
 pub use pezcumulus_pezpallet_weight_reclaim;
 
-/// Pallet for stuff specific to teyrchains' usage of XCM.
+/// Pezpallet for stuff specific to teyrchains' usage of XCM.
 #[cfg(feature = "pezcumulus-pezpallet-xcm")]
 pub use pezcumulus_pezpallet_xcm;
 
-/// Pallet to queue outbound and inbound XCMP messages.
+/// Pezpallet to queue outbound and inbound XCMP messages.
 #[cfg(feature = "pezcumulus-pezpallet-xcmp-queue")]
 pub use pezcumulus_pezpallet_xcmp_queue;
 
-/// Ping Pallet for Pezcumulus XCM/UMP testing.
+/// Ping Pezpallet for Pezcumulus XCM/UMP testing.
 #[cfg(feature = "pezcumulus-ping")]
 pub use pezcumulus_ping;
 
@@ -231,7 +231,7 @@ pub use pezframe_benchmarking;
 #[cfg(feature = "pezframe-benchmarking-cli")]
 pub use pezframe_benchmarking_cli;
 
-/// Pallet for testing FRAME PoV benchmarking.
+/// Pezpallet for testing FRAME PoV benchmarking.
 #[cfg(feature = "pezframe-benchmarking-pezpallet-pov")]
 pub use pezframe_benchmarking_pallet_pov;
 
@@ -296,23 +296,23 @@ pub use pez_generate_bags;
 #[cfg(feature = "pezmmr-gadget")]
 pub use pezmmr_gadget;
 
-/// Node-specific RPC methods for interaction with Merkle Mountain Range pallet.
+/// Node-specific RPC methods for interaction with Merkle Mountain Range pezpallet.
 #[cfg(feature = "pezmmr-rpc")]
 pub use pezmmr_rpc;
 
-/// The Alliance pallet provides a collective for standard-setting industry collaboration.
+/// The Alliance pezpallet provides a collective for standard-setting industry collaboration.
 #[cfg(feature = "pezpallet-alliance")]
 pub use pezpallet_alliance;
 
-/// FRAME asset conversion pallet.
+/// FRAME asset conversion pezpallet.
 #[cfg(feature = "pezpallet-asset-conversion")]
 pub use pezpallet_asset_conversion;
 
-/// FRAME asset conversion pallet's operations suite.
+/// FRAME asset conversion pezpallet's operations suite.
 #[cfg(feature = "pezpallet-asset-conversion-ops")]
 pub use pezpallet_asset_conversion_ops;
 
-/// Pallet to manage transaction payments in assets by converting them to native assets.
+/// Pezpallet to manage transaction payments in assets by converting them to native assets.
 #[cfg(feature = "pezpallet-asset-conversion-tx-payment")]
 pub use pezpallet_asset_conversion_tx_payment;
 
@@ -320,15 +320,15 @@ pub use pezpallet_asset_conversion_tx_payment;
 #[cfg(feature = "pezpallet-asset-rate")]
 pub use pezpallet_asset_rate;
 
-/// FRAME asset rewards pallet.
+/// FRAME asset rewards pezpallet.
 #[cfg(feature = "pezpallet-asset-rewards")]
 pub use pezpallet_asset_rewards;
 
-/// pallet to manage transaction payments in assets.
+/// pezpallet to manage transaction payments in assets.
 #[cfg(feature = "pezpallet-asset-tx-payment")]
 pub use pezpallet_asset_tx_payment;
 
-/// FRAME asset management pallet.
+/// FRAME asset management pezpallet.
 #[cfg(feature = "pezpallet-assets")]
 pub use pezpallet_assets;
 
@@ -344,15 +344,15 @@ pub use pezpallet_assets_holder;
 #[cfg(feature = "pezpallet-assets-precompiles")]
 pub use pezpallet_assets_precompiles;
 
-/// FRAME atomic swap pallet.
+/// FRAME atomic swap pezpallet.
 #[cfg(feature = "pezpallet-atomic-swap")]
 pub use pezpallet_atomic_swap;
 
-/// FRAME AURA consensus pallet.
+/// FRAME AURA consensus pezpallet.
 #[cfg(feature = "pezpallet-aura")]
 pub use pezpallet_aura;
 
-/// FRAME pallet for authority discovery.
+/// FRAME pezpallet for authority discovery.
 #[cfg(feature = "pezpallet-authority-discovery")]
 pub use pezpallet_authority_discovery;
 
@@ -365,15 +365,15 @@ pub use pezpallet_authorship;
 #[cfg(feature = "pezpallet-babe")]
 pub use pezpallet_babe;
 
-/// FRAME pallet bags list.
+/// FRAME pezpallet bags list.
 #[cfg(feature = "pezpallet-bags-list")]
 pub use pezpallet_bags_list;
 
-/// FRAME pallet to manage balances.
+/// FRAME pezpallet to manage balances.
 #[cfg(feature = "pezpallet-balances")]
 pub use pezpallet_balances;
 
-/// BEEFY FRAME pallet.
+/// BEEFY FRAME pezpallet.
 #[cfg(feature = "pezpallet-beefy")]
 pub use pezpallet_beefy;
 
@@ -381,7 +381,7 @@ pub use pezpallet_beefy;
 #[cfg(feature = "pezpallet-beefy-mmr")]
 pub use pezpallet_beefy_mmr;
 
-/// FRAME pallet to manage bounties.
+/// FRAME pezpallet to manage bounties.
 #[cfg(feature = "pezpallet-bounties")]
 pub use pezpallet_bounties;
 
@@ -406,11 +406,11 @@ pub use pezpallet_bridge_teyrchains;
 #[cfg(feature = "pezpallet-broker")]
 pub use pezpallet_broker;
 
-/// FRAME pallet to manage child bounties.
+/// FRAME pezpallet to manage child bounties.
 #[cfg(feature = "pezpallet-child-bounties")]
 pub use pezpallet_child_bounties;
 
-/// Simple pallet to select collators for a teyrchain.
+/// Simple pezpallet to select collators for a teyrchain.
 #[cfg(feature = "pezpallet-collator-selection")]
 pub use pezpallet_collator_selection;
 
@@ -423,7 +423,7 @@ pub use pezpallet_collective;
 #[cfg(feature = "pezpallet-collective-content")]
 pub use pezpallet_collective_content;
 
-/// FRAME pallet for WASM contracts.
+/// FRAME pezpallet for WASM contracts.
 #[cfg(feature = "pezpallet-contracts")]
 pub use pezpallet_contracts;
 
@@ -439,7 +439,7 @@ pub use pezpallet_contracts_proc_macro;
 #[cfg(feature = "pezpallet-contracts-uapi")]
 pub use pezpallet_contracts_uapi;
 
-/// FRAME pallet for conviction voting in referenda.
+/// FRAME pezpallet for conviction voting in referenda.
 #[cfg(feature = "pezpallet-conviction-voting")]
 pub use pezpallet_conviction_voting;
 
@@ -447,31 +447,31 @@ pub use pezpallet_conviction_voting;
 #[cfg(feature = "pezpallet-core-fellowship")]
 pub use pezpallet_core_fellowship;
 
-/// FRAME delegated staking pallet.
+/// FRAME delegated staking pezpallet.
 #[cfg(feature = "pezpallet-delegated-staking")]
 pub use pezpallet_delegated_staking;
 
-/// FRAME pallet for democracy.
+/// FRAME pezpallet for democracy.
 #[cfg(feature = "pezpallet-democracy")]
 pub use pezpallet_democracy;
 
-/// FRAME derivatives pallet.
+/// FRAME derivatives pezpallet.
 #[cfg(feature = "pezpallet-derivatives")]
 pub use pezpallet_derivatives;
 
-/// FRAME example pallet.
+/// FRAME example pezpallet.
 #[cfg(feature = "pezpallet-dev-mode")]
 pub use pezpallet_dev_mode;
 
-/// Dummy DIM Pallet.
+/// Dummy DIM Pezpallet.
 #[cfg(feature = "pezpallet-dummy-dim")]
 pub use pezpallet_dummy_dim;
 
-/// PALLET multi phase+block election providers.
+/// PEZPALLET multi phase+block election providers.
 #[cfg(feature = "pezpallet-election-provider-multi-block")]
 pub use pezpallet_election_provider_multi_block;
 
-/// PALLET two phase election providers.
+/// PEZPALLET two phase election providers.
 #[cfg(feature = "pezpallet-election-provider-multi-phase")]
 pub use pezpallet_election_provider_multi_phase;
 
@@ -479,143 +479,143 @@ pub use pezpallet_election_provider_multi_phase;
 #[cfg(feature = "pezpallet-election-provider-support-benchmarking")]
 pub use pezpallet_election_provider_support_benchmarking;
 
-/// FRAME pallet based on seq-Phragmén election method.
+/// FRAME pezpallet based on seq-Phragmén election method.
 #[cfg(feature = "pezpallet-elections-phragmen")]
 pub use pezpallet_elections_phragmen;
 
-/// FRAME fast unstake pallet.
+/// FRAME fast unstake pezpallet.
 #[cfg(feature = "pezpallet-fast-unstake")]
 pub use pezpallet_fast_unstake;
 
-/// FRAME pallet for pushing a chain to its weight limits.
+/// FRAME pezpallet for pushing a chain to its weight limits.
 #[cfg(feature = "pezpallet-glutton")]
 pub use pezpallet_glutton;
 
-/// FRAME pallet for GRANDPA finality gadget.
+/// FRAME pezpallet for GRANDPA finality gadget.
 #[cfg(feature = "pezpallet-grandpa")]
 pub use pezpallet_grandpa;
 
-/// FRAME identity management pallet.
+/// FRAME identity management pezpallet.
 #[cfg(feature = "pezpallet-identity")]
 pub use pezpallet_identity;
 
-/// FRAME's I'm online pallet.
+/// FRAME's I'm online pezpallet.
 #[cfg(feature = "pezpallet-im-online")]
 pub use pezpallet_im_online;
 
-/// FRAME indices management pallet.
+/// FRAME indices management pezpallet.
 #[cfg(feature = "pezpallet-indices")]
 pub use pezpallet_indices;
 
-/// Insecure do not use in production: FRAME randomness collective flip pallet.
+/// Insecure do not use in production: FRAME randomness collective flip pezpallet.
 #[cfg(feature = "pezpallet-insecure-randomness-collective-flip")]
 pub use pezpallet_insecure_randomness_collective_flip;
 
-/// FRAME Participation Lottery Pallet.
+/// FRAME Participation Lottery Pezpallet.
 #[cfg(feature = "pezpallet-lottery")]
 pub use pezpallet_lottery;
 
-/// FRAME membership management pallet.
+/// FRAME membership management pezpallet.
 #[cfg(feature = "pezpallet-membership")]
 pub use pezpallet_membership;
 
-/// FRAME pallet to queue and process messages.
+/// FRAME pezpallet to queue and process messages.
 #[cfg(feature = "pezpallet-message-queue")]
 pub use pezpallet_message_queue;
 
-/// FRAME pallet enabling meta transactions.
+/// FRAME pezpallet enabling meta transactions.
 #[cfg(feature = "pezpallet-meta-tx")]
 pub use pezpallet_meta_tx;
 
-/// FRAME pallet to execute multi-block migrations.
+/// FRAME pezpallet to execute multi-block migrations.
 #[cfg(feature = "pezpallet-migrations")]
 pub use pezpallet_migrations;
 
-/// FRAME's mixnet pallet.
+/// FRAME's mixnet pezpallet.
 #[cfg(feature = "pezpallet-mixnet")]
 pub use pezpallet_mixnet;
 
-/// FRAME Merkle Mountain Range pallet.
+/// FRAME Merkle Mountain Range pezpallet.
 #[cfg(feature = "pezpallet-mmr")]
 pub use pezpallet_mmr;
 
-/// FRAME pallet to manage multi-asset and cross-chain bounties.
+/// FRAME pezpallet to manage multi-asset and cross-chain bounties.
 #[cfg(feature = "pezpallet-multi-asset-bounties")]
 pub use pezpallet_multi_asset_bounties;
 
-/// FRAME multi-signature dispatch pallet.
+/// FRAME multi-signature dispatch pezpallet.
 #[cfg(feature = "pezpallet-multisig")]
 pub use pezpallet_multisig;
 
-/// FRAME pallet to convert non-fungible to fungible tokens.
+/// FRAME pezpallet to convert non-fungible to fungible tokens.
 #[cfg(feature = "pezpallet-nft-fractionalization")]
 pub use pezpallet_nft_fractionalization;
 
-/// FRAME NFTs pallet.
+/// FRAME NFTs pezpallet.
 #[cfg(feature = "pezpallet-nfts")]
 pub use pezpallet_nfts;
 
-/// Runtime API for the FRAME NFTs pallet.
+/// Runtime API for the FRAME NFTs pezpallet.
 #[cfg(feature = "pezpallet-nfts-runtime-api")]
 pub use pezpallet_nfts_runtime_api;
 
-/// FRAME pallet for rewarding account freezing.
+/// FRAME pezpallet for rewarding account freezing.
 #[cfg(feature = "pezpallet-nis")]
 pub use pezpallet_nis;
 
-/// FRAME pallet for node authorization.
+/// FRAME pezpallet for node authorization.
 #[cfg(feature = "pezpallet-node-authorization")]
 pub use pezpallet_node_authorization;
 
-/// FRAME nomination pools pallet.
+/// FRAME nomination pools pezpallet.
 #[cfg(feature = "pezpallet-nomination-pools")]
 pub use pezpallet_nomination_pools;
 
-/// FRAME nomination pools pallet benchmarking.
+/// FRAME nomination pools pezpallet benchmarking.
 #[cfg(feature = "pezpallet-nomination-pools-benchmarking")]
 pub use pezpallet_nomination_pools_benchmarking;
 
-/// Runtime API for nomination-pools FRAME pallet.
+/// Runtime API for nomination-pools FRAME pezpallet.
 #[cfg(feature = "pezpallet-nomination-pools-runtime-api")]
 pub use pezpallet_nomination_pools_runtime_api;
 
-/// FRAME offences pallet.
+/// FRAME offences pezpallet.
 #[cfg(feature = "pezpallet-offences")]
 pub use pezpallet_offences;
 
-/// FRAME offences pallet benchmarking.
+/// FRAME offences pezpallet benchmarking.
 #[cfg(feature = "pezpallet-offences-benchmarking")]
 pub use pezpallet_offences_benchmarking;
 
-/// FRAME oracle pallet for off-chain data.
+/// FRAME oracle pezpallet for off-chain data.
 #[cfg(feature = "pezpallet-oracle")]
 pub use pezpallet_oracle;
 
-/// Runtime API for the oracle pallet.
+/// Runtime API for the oracle pezpallet.
 #[cfg(feature = "pezpallet-oracle-runtime-api")]
 pub use pezpallet_oracle_runtime_api;
 
-/// Pallet to give some execution allowance for some origins.
+/// Pezpallet to give some execution allowance for some origins.
 #[cfg(feature = "pezpallet-origin-restriction")]
 pub use pezpallet_origin_restriction;
 
-/// FRAME pallet that provides a paged list data structure.
+/// FRAME pezpallet that provides a paged list data structure.
 #[cfg(feature = "pezpallet-paged-list")]
 pub use pezpallet_paged_list;
 
-/// Pallet to store and configure parameters.
+/// Pezpallet to store and configure parameters.
 #[cfg(feature = "pezpallet-parameters")]
 pub use pezpallet_parameters;
 
-/// Personhood-tracking pallet.
+/// Personhood-tracking pezpallet.
 #[cfg(feature = "pezpallet-people")]
 pub use pezpallet_people;
 
-/// FRAME pallet for storing preimages of hashes.
+/// FRAME pezpallet for storing preimages of hashes.
 #[cfg(feature = "pezpallet-preimage")]
 pub use pezpallet_preimage;
 
-/// FRAME proxying pallet.
+/// FRAME proxying pezpallet.
 #[cfg(feature = "pezpallet-proxy")]
 pub use pezpallet_proxy;
 
@@ -624,19 +624,19 @@ pub use pezpallet_proxy;
 #[cfg(feature = "pezpallet-ranked-collective")]
 pub use pezpallet_ranked_collective;
 
-/// FRAME account recovery pallet.
+/// FRAME account recovery pezpallet.
 #[cfg(feature = "pezpallet-recovery")]
 pub use pezpallet_recovery;
 
-/// FRAME pallet for inclusive on-chain decisions.
+/// FRAME pezpallet for inclusive on-chain decisions.
 #[cfg(feature = "pezpallet-referenda")]
 pub use pezpallet_referenda;
 
-/// Remark storage pallet.
+/// Remark storage pezpallet.
 #[cfg(feature = "pezpallet-remark")]
 pub use pezpallet_remark;
 
-/// FRAME pallet for PolkaVM contracts.
+/// FRAME pezpallet for PolkaVM contracts.
 #[cfg(feature = "pezpallet-revive")]
 pub use pezpallet_revive;
 
@@ -648,15 +648,15 @@ pub use pezpallet_revive_proc_macro;
 #[cfg(feature = "pezpallet-revive-uapi")]
 pub use pezpallet_revive_uapi;
 
-/// FRAME root offences pallet.
+/// FRAME root offences pezpallet.
 #[cfg(feature = "pezpallet-root-offences")]
 pub use pezpallet_root_offences;
 
-/// FRAME root testing pallet.
+/// FRAME root testing pezpallet.
 #[cfg(feature = "pezpallet-root-testing")]
 pub use pezpallet_root_testing;
 
-/// FRAME safe-mode pallet.
+/// FRAME safe-mode pezpallet.
 #[cfg(feature = "pezpallet-safe-mode")]
 pub use pezpallet_safe_mode;
 
@@ -664,78 +664,78 @@ pub use pezpallet_safe_mode;
 #[cfg(feature = "pezpallet-salary")]
 pub use pezpallet_salary;
 
-/// FRAME Scheduler pallet.
+/// FRAME Scheduler pezpallet.
 #[cfg(feature = "pezpallet-scheduler")]
 pub use pezpallet_scheduler;
 
-/// FRAME pallet for scored pools.
+/// FRAME pezpallet for scored pools.
 #[cfg(feature = "pezpallet-scored-pool")]
 pub use pezpallet_scored_pool;
 
-/// FRAME sessions pallet.
+/// FRAME sessions pezpallet.
 #[cfg(feature = "pezpallet-session")]
 pub use pezpallet_session;
 
-/// FRAME sessions pallet benchmarking.
+/// FRAME sessions pezpallet benchmarking.
 #[cfg(feature = "pezpallet-session-benchmarking")]
 pub use pezpallet_session_benchmarking;
 
-/// Pallet to skip payments for calls annotated with `feeless_if` if the respective conditions
+/// Pezpallet to skip payments for calls annotated with `feeless_if` if the respective conditions
 /// are satisfied.
 #[cfg(feature = "pezpallet-skip-feeless-payment")]
 pub use pezpallet_skip_feeless_payment;
 
-/// FRAME society pallet.
+/// FRAME society pezpallet.
 #[cfg(feature = "pezpallet-society")]
 pub use pezpallet_society;
 
-/// FRAME pallet staking.
+/// FRAME pezpallet staking.
 #[cfg(feature = "pezpallet-staking")]
 pub use pezpallet_staking;
 
-/// FRAME pallet staking async.
+/// FRAME pezpallet staking async.
 #[cfg(feature = "pezpallet-staking-async")]
 pub use pezpallet_staking_async;
 
-/// Pallet handling the communication with staking-rc-client. It's role is to glue the staking
-/// pallet (on AssetHub chain) and session pallet (on Relay Chain) in a transparent way.
+/// Pezpallet handling the communication with staking-rc-client. It's role is to glue the staking
+/// pezpallet (on AssetHub chain) and session pezpallet (on Relay Chain) in a transparent way.
 #[cfg(feature = "pezpallet-staking-async-ah-client")]
 pub use pezpallet_staking_async_ah_client;
 
-/// Pallet handling the communication with staking-ah-client. It's role is to glue the staking
-/// pallet (on AssetHub chain) and session pallet (on Relay Chain) in a transparent way.
+/// Pezpallet handling the communication with staking-ah-client. It's role is to glue the staking
+/// pezpallet (on AssetHub chain) and session pezpallet (on Relay Chain) in a transparent way.
 #[cfg(feature = "pezpallet-staking-async-rc-client")]
 pub use pezpallet_staking_async_rc_client;
 
-/// Reward function for FRAME staking pallet.
+/// Reward function for FRAME staking pezpallet.
 #[cfg(feature = "pezpallet-staking-async-reward-fn")]
 pub use pezpallet_staking_async_reward_fn;
 
-/// RPC runtime API for transaction payment FRAME pallet.
+/// RPC runtime API for transaction payment FRAME pezpallet.
 #[cfg(feature = "pezpallet-staking-async-runtime-api")]
 pub use pezpallet_staking_async_runtime_api;
 
-/// Reward Curve for FRAME staking pallet.
+/// Reward Curve for FRAME staking pezpallet.
 #[cfg(feature = "pezpallet-staking-reward-curve")]
 pub use pezpallet_staking_reward_curve;
 
-/// Reward function for FRAME staking pallet.
+/// Reward function for FRAME staking pezpallet.
 #[cfg(feature = "pezpallet-staking-reward-fn")]
 pub use pezpallet_staking_reward_fn;
 
-/// RPC runtime API for transaction payment FRAME pallet.
+/// RPC runtime API for transaction payment FRAME pezpallet.
 #[cfg(feature = "pezpallet-staking-runtime-api")]
 pub use pezpallet_staking_runtime_api;
 
-/// FRAME pallet migration of trie.
+/// FRAME pezpallet migration of trie.
 #[cfg(feature = "pezpallet-state-trie-migration")]
 pub use pezpallet_state_trie_migration;
 
-/// FRAME pallet for statement store.
+/// FRAME pezpallet for statement store.
 #[cfg(feature = "pezpallet-statement")]
 pub use pezpallet_statement;
 
-/// FRAME pallet for sudo.
+/// FRAME pezpallet for sudo.
 #[cfg(feature = "pezpallet-sudo")]
 pub use pezpallet_sudo;
 
@@ -743,59 +743,59 @@ pub use pezpallet_sudo;
 #[cfg(feature = "pezpallet-timestamp")]
 pub use pezpallet_timestamp;
 
-/// FRAME pallet to manage tips.
+/// FRAME pezpallet to manage tips.
 #[cfg(feature = "pezpallet-tips")]
 pub use pezpallet_tips;
 
-/// FRAME pallet to manage transaction payments.
+/// FRAME pezpallet to manage transaction payments.
 #[cfg(feature = "pezpallet-transaction-payment")]
 pub use pezpallet_transaction_payment;
 
-/// RPC interface for the transaction payment pallet.
+/// RPC interface for the transaction payment pezpallet.
 #[cfg(feature = "pezpallet-transaction-payment-rpc")]
 pub use pezpallet_transaction_payment_rpc;
 
-/// RPC runtime API for transaction payment FRAME pallet.
+/// RPC runtime API for transaction payment FRAME pezpallet.
 #[cfg(feature = "pezpallet-transaction-payment-rpc-runtime-api")]
 pub use pezpallet_transaction_payment_rpc_runtime_api;
 
-/// Storage chain pallet.
+/// Storage chain pezpallet.
 #[cfg(feature = "pezpallet-transaction-storage")]
 pub use pezpallet_transaction_storage;
 
-/// FRAME pallet to manage treasury.
+/// FRAME pezpallet to manage treasury.
 #[cfg(feature = "pezpallet-treasury")]
 pub use pezpallet_treasury;
 
-/// FRAME transaction pause pallet.
+/// FRAME transaction pause pezpallet.
 #[cfg(feature = "pezpallet-tx-pause")]
 pub use pezpallet_tx_pause;
 
-/// FRAME NFT asset management pallet.
+/// FRAME NFT asset management pezpallet.
 #[cfg(feature = "pezpallet-uniques")]
 pub use pezpallet_uniques;
 
-/// FRAME utilities pallet.
+/// FRAME utilities pezpallet.
 #[cfg(feature = "pezpallet-utility")]
 pub use pezpallet_utility;
 
-/// FRAME verify signature pallet.
+/// FRAME verify signature pezpallet.
 #[cfg(feature = "pezpallet-verify-signature")]
 pub use pezpallet_verify_signature;
 
-/// FRAME pallet for manage vesting.
+/// FRAME pezpallet for manage vesting.
 #[cfg(feature = "pezpallet-vesting")]
 pub use pezpallet_vesting;
 
-/// FRAME pallet for whitelisting calls, and dispatching from a specific origin.
+/// FRAME pezpallet for whitelisting calls, and dispatching from a specific origin.
 #[cfg(feature = "pezpallet-whitelist")]
 pub use pezpallet_whitelist;
 
-/// A pallet for handling XCM programs.
+/// A pezpallet for handling XCM programs.
 #[cfg(feature = "pezpallet-xcm")]
 pub use pezpallet_xcm;
 
-/// Benchmarks for the XCM pallet.
+/// Benchmarks for the XCM pezpallet.
 #[cfg(feature = "pezpallet-xcm-benchmarks")]
 pub use pezpallet_xcm_benchmarks;
 
@@ -1478,7 +1478,7 @@ pub use pezstaging_chain_spec_builder;
 #[cfg(feature = "pezstaging-node-inspect")]
 pub use pezstaging_node_inspect;
 
-/// Pallet to store the teyrchain ID.
+/// Pezpallet to store the teyrchain ID.
 #[cfg(feature = "pezstaging-teyrchain-info")]
 pub use pezstaging_teyrchain_info;
 

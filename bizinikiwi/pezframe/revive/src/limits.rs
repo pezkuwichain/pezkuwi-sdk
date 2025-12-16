@@ -61,7 +61,7 @@ pub const EVENT_BYTES: u32 = 64 * 1024;
 
 /// The extra ref time charge of deposit event per byte.
 ///
-/// This ensure the block builder has enough memory and pallet storage
+/// This ensure the block builder has enough memory and pezpallet storage
 /// to operate under worst case scenarios.
 pub const EXTRA_EVENT_CHARGE_PER_BYTE: u64 = 256 * 1024;
 

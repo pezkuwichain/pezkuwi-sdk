@@ -11,7 +11,7 @@ These are derived from the [json data file](ss58-registry.json) in this reposito
 	"prefix": 5,                       // unique u16
 	"network": "astar",                // unique no spaces
 	"displayName": "Astar Network",    //
-	"symbols": ["ASTR"],               // symbol for each instance of the Balances pallet (usually one)
+	"symbols": ["ASTR"],               // symbol for each instance of the Balances pezpallet (usually one)
 	"decimals": [18],                  // decimals for each symbol listed
 	"standardAccount": "*25519",       // Sr25519, Ed25519 or secp256k1
 	"website": "https://astar.network" // website or code repository of network

@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Tests and test utilities for transaction pause pallet.
+//! Tests and test utilities for transaction pause pezpallet.
 
 #![cfg(test)]
 
@@ -42,7 +42,7 @@ impl pezpallet_utility::Config for Test {
 	type WeightInfo = ();
 }
 
-/// Mocked proxies to check that tx-pause also works with the proxy pallet.
+/// Mocked proxies to check that tx-pause also works with the proxy pezpallet.
 #[derive(
 	Copy,
 	Clone,
@@ -100,7 +100,7 @@ impl pezpallet_proxy::Config for Test {
 	type MaxPending = ConstU32<2>;
 	type AnnouncementDepositBase = ConstU64<1>;
 	type AnnouncementDepositFactor = ConstU64<1>;
-	type BlockNumberProvider = pezframe_system::Pallet<Test>;
+	type BlockNumberProvider = pezframe_system::Pezpallet<Test>;
 }
 
 parameter_types! {

@@ -53,7 +53,7 @@ pub type AccountId = AccountId32;
 pub type Balance = u128;
 type Block = pezframe_system::mocking::MockBlock<Test>;
 
-#[pezframe_support::pallet]
+#[pezframe_support::pezpallet]
 pub mod pezpallet_test_notifier {
 	use crate::{ensure_response, QueryId};
 	use pezframe_support::pezpallet_prelude::*;
@@ -62,10 +62,10 @@ pub mod pezpallet_test_notifier {
 	use xcm::latest::prelude::*;
 	use xcm_executor::traits::QueryHandler;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config + crate::Config {
 		#[allow(deprecated)]
 		type RuntimeEvent: IsType<<Self as pezframe_system::Config>::RuntimeEvent> + From<Event<Self>>;
@@ -74,30 +74,30 @@ pub mod pezpallet_test_notifier {
 		type RuntimeCall: IsType<<Self as crate::Config>::RuntimeCall> + From<Call<Self>>;
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		QueryPrepared(QueryId),
 		NotifyQueryPrepared(QueryId),
 		ResponseReceived(Location, QueryId, Response),
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		UnexpectedId,
 		BadAccountFormat,
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
-		#[pallet::call_index(0)]
-		#[pallet::weight(Weight::from_parts(1_000_000, 1_000_000))]
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(Weight::from_parts(1_000_000, 1_000_000))]
 		pub fn prepare_new_query(origin: OriginFor<T>, querier: Location) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 			let id = who
 				.using_encoded(|mut d| <[u8; 32]>::decode(&mut d))
 				.map_err(|_| Error::<T>::BadAccountFormat)?;
-			let qid = <crate::Pallet<T> as QueryHandler>::new_query(
+			let qid = <crate::Pezpallet<T> as QueryHandler>::new_query(
 				Junction::AccountId32 { network: None, id },
 				100u32.into(),
 				querier,
@@ -106,8 +106,8 @@ pub mod pezpallet_test_notifier {
 			Ok(())
 		}
 
-		#[pallet::call_index(1)]
-		#[pallet::weight(Weight::from_parts(1_000_000, 1_000_000))]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(Weight::from_parts(1_000_000, 1_000_000))]
 		pub fn prepare_new_notify_query(origin: OriginFor<T>, querier: Location) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 			let id = who
@@ -115,7 +115,7 @@ pub mod pezpallet_test_notifier {
 				.map_err(|_| Error::<T>::BadAccountFormat)?;
 			let call =
 				Call::<T>::notification_received { query_id: 0, response: Default::default() };
-			let qid = crate::Pallet::<T>::new_notify_query(
+			let qid = crate::Pezpallet::<T>::new_notify_query(
 				Junction::AccountId32 { network: None, id },
 				<T as Config>::RuntimeCall::from(call),
 				100u32.into(),
@@ -125,8 +125,8 @@ pub mod pezpallet_test_notifier {
 			Ok(())
 		}
 
-		#[pallet::call_index(2)]
-		#[pallet::weight(Weight::from_parts(1_000_000, 1_000_000))]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(Weight::from_parts(1_000_000, 1_000_000))]
 		pub fn notification_received(
 			origin: OriginFor<T>,
 			query_id: QueryId,

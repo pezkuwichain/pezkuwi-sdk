@@ -349,7 +349,7 @@ impl TestCandidateBuilder {
 }
 
 pub(crate) fn make_vdata_hash(para_id: ParaId) -> Option<Hash> {
-	let relay_parent_number = pezframe_system::Pallet::<Test>::block_number() - 1;
+	let relay_parent_number = pezframe_system::Pezpallet::<Test>::block_number() - 1;
 	make_vdata_hash_with_block_number(para_id, relay_parent_number)
 }
 
@@ -371,7 +371,7 @@ fn simple_sanitize_bitfields(
 	disputed_bitfield: DisputedBitfield,
 	expected_bits: usize,
 ) -> SignedAvailabilityBitfields {
-	let parent_hash = pezframe_system::Pallet::<Test>::parent_hash();
+	let parent_hash = pezframe_system::Pezpallet::<Test>::parent_hash();
 	let session_index = shared::CurrentSessionIndex::<Test>::get();
 	let validators = shared::ActiveValidatorKeys::<Test>::get();
 
@@ -702,8 +702,8 @@ fn bitfield_checks() {
 	let validator_public = validator_pubkeys(&validators);
 
 	new_test_ext(genesis_config(paras.clone())).execute_with(|| {
-		shared::Pallet::<Test>::set_active_validators_ascending(validator_public.clone());
-		shared::Pallet::<Test>::set_session_index(5);
+		shared::Pezpallet::<Test>::set_active_validators_ascending(validator_public.clone());
+		shared::Pezpallet::<Test>::set_session_index(5);
 
 		let signing_context =
 			SigningContext { parent_hash: System::parent_hash(), session_index: 5 };
@@ -890,8 +890,8 @@ fn supermajority_bitfields_trigger_availability() {
 	let validator_public = validator_pubkeys(&validators);
 
 	new_test_ext(genesis_config(paras)).execute_with(|| {
-		shared::Pallet::<Test>::set_active_validators_ascending(validator_public.clone());
-		shared::Pallet::<Test>::set_session_index(5);
+		shared::Pezpallet::<Test>::set_active_validators_ascending(validator_public.clone());
+		shared::Pezpallet::<Test>::set_session_index(5);
 
 		let signing_context =
 			SigningContext { parent_hash: System::parent_hash(), session_index: 5 };
@@ -1220,8 +1220,8 @@ fn candidate_checks() {
 	let validator_public = validator_pubkeys(&validators);
 
 	new_test_ext(genesis_config(paras)).execute_with(|| {
-		shared::Pallet::<Test>::set_active_validators_ascending(validator_public.clone());
-		shared::Pallet::<Test>::set_session_index(5);
+		shared::Pezpallet::<Test>::set_active_validators_ascending(validator_public.clone());
+		shared::Pezpallet::<Test>::set_session_index(5);
 
 		run_to_block(5, |_| None);
 
@@ -1785,8 +1785,8 @@ fn backing_works() {
 	let validator_public = validator_pubkeys(&validators);
 
 	new_test_ext(genesis_config(paras)).execute_with(|| {
-		shared::Pallet::<Test>::set_active_validators_ascending(validator_public.clone());
-		shared::Pallet::<Test>::set_session_index(5);
+		shared::Pezpallet::<Test>::set_active_validators_ascending(validator_public.clone());
+		shared::Pezpallet::<Test>::set_session_index(5);
 
 		run_to_block(5, |_| None);
 
@@ -2068,8 +2068,8 @@ fn backing_works_with_elastic_scaling_mvp() {
 	let validator_public = validator_pubkeys(&validators);
 
 	new_test_ext(genesis_config(paras)).execute_with(|| {
-		shared::Pallet::<Test>::set_active_validators_ascending(validator_public.clone());
-		shared::Pallet::<Test>::set_session_index(5);
+		shared::Pezpallet::<Test>::set_active_validators_ascending(validator_public.clone());
+		shared::Pezpallet::<Test>::set_session_index(5);
 
 		run_to_block(5, |_| None);
 
@@ -2329,8 +2329,8 @@ fn can_include_candidate_with_ok_code_upgrade() {
 	let validator_public = validator_pubkeys(&validators);
 
 	new_test_ext(genesis_config(paras)).execute_with(|| {
-		shared::Pallet::<Test>::set_active_validators_ascending(validator_public.clone());
-		shared::Pallet::<Test>::set_session_index(5);
+		shared::Pezpallet::<Test>::set_active_validators_ascending(validator_public.clone());
+		shared::Pezpallet::<Test>::set_session_index(5);
 
 		run_to_block(5, |_| None);
 
@@ -2447,8 +2447,8 @@ fn check_allowed_relay_parents() {
 	config.configuration.config.scheduler_params.group_rotation_frequency = 1;
 
 	new_test_ext(config).execute_with(|| {
-		shared::Pallet::<Test>::set_active_validators_ascending(validator_public.clone());
-		shared::Pallet::<Test>::set_session_index(5);
+		shared::Pezpallet::<Test>::set_active_validators_ascending(validator_public.clone());
+		shared::Pezpallet::<Test>::set_session_index(5);
 
 		run_to_block(5, |_| None);
 
@@ -2637,8 +2637,8 @@ fn session_change_wipes() {
 	let validator_public = validator_pubkeys(&validators);
 
 	new_test_ext(genesis_config(paras)).execute_with(|| {
-		shared::Pallet::<Test>::set_active_validators_ascending(validator_public.clone());
-		shared::Pallet::<Test>::set_session_index(5);
+		shared::Pezpallet::<Test>::set_active_validators_ascending(validator_public.clone());
+		shared::Pezpallet::<Test>::set_session_index(5);
 
 		let validators_new =
 			vec![Sr25519Keyring::Alice, Sr25519Keyring::Bob, Sr25519Keyring::Charlie];
@@ -2743,8 +2743,8 @@ fn para_upgrade_delay_scheduled_from_inclusion() {
 	let validator_public = validator_pubkeys(&validators);
 
 	new_test_ext(genesis_config(paras)).execute_with(|| {
-		shared::Pallet::<Test>::set_active_validators_ascending(validator_public.clone());
-		shared::Pallet::<Test>::set_session_index(5);
+		shared::Pezpallet::<Test>::set_active_validators_ascending(validator_public.clone());
+		shared::Pezpallet::<Test>::set_session_index(5);
 
 		let new_validation_code: ValidationCode = vec![9, 8, 7, 6, 5, 4, 3, 2, 1].into();
 		let new_validation_code_hash = new_validation_code.hash();
@@ -2841,7 +2841,7 @@ fn para_upgrade_delay_scheduled_from_inclusion() {
 
 		assert!(PendingAvailability::<Test>::get(&chain_a).unwrap().is_empty());
 
-		let active_vote_state = paras::Pallet::<Test>::active_vote_state(&new_validation_code_hash)
+		let active_vote_state = paras::Pezpallet::<Test>::active_vote_state(&new_validation_code_hash)
 			.expect("prechecking must be initiated");
 
 		let cause = &active_vote_state.causes()[0];

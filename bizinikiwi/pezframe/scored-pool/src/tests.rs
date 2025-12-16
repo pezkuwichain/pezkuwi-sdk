@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Tests for the pallet.
+//! Tests for the pezpallet.
 
 use super::*;
 use mock::*;
@@ -23,9 +23,9 @@ use mock::*;
 use pezframe_support::{assert_noop, assert_ok, traits::OnInitialize};
 use pezsp_runtime::traits::BadOrigin;
 
-type ScoredPool = Pallet<Test>;
-type System = pezframe_system::Pallet<Test>;
-type Balances = pezpallet_balances::Pallet<Test>;
+type ScoredPool = Pezpallet<Test>;
+type System = pezframe_system::Pezpallet<Test>;
+type Balances = pezpallet_balances::Pezpallet<Test>;
 
 #[test]
 fn query_membership_works() {

@@ -79,8 +79,8 @@ use pezsp_std::prelude::*;
 
 /// Explore all weights
 pub use crate::weights::traits::pezpallet_election_provider_multi_block_signed::*;
-/// Exports of this pallet
-pub use pallet::*;
+/// Exports of this pezpallet
+pub use pezpallet::*;
 
 #[cfg(feature = "runtime-benchmarks")]
 mod benchmarking;
@@ -111,7 +111,7 @@ pub struct SubmissionMetadata<T: Config> {
 	pages: BoundedVec<bool, T::Pages>,
 }
 
-impl<T: Config> SolutionDataProvider for Pallet<T> {
+impl<T: Config> SolutionDataProvider for Pezpallet<T> {
 	type Solution = SolutionOf<T::MinerConfig>;
 
 	// `get_page` should only be called when a leader exists.
@@ -221,12 +221,12 @@ impl<Balance: From<u32> + Saturating, G: Get<Balance>> CalculatePageDeposit<Bala
 	}
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::config]
-	#[pallet::disable_pezframe_system_supertrait_check]
+	#[pezpallet::config]
+	#[pezpallet::disable_pezframe_system_supertrait_check]
 	pub trait Config: crate::Config {
 		/// Handler to the currency.
 		type Currency: Inspect<Self::AccountId>
@@ -239,7 +239,7 @@ pub mod pallet {
 		/// Extra deposit per-page.
 		type DepositPerPage: CalculatePageDeposit<BalanceOf<Self>>;
 
-		/// The fixed deposit charged upon [`Pallet::register`] from [`Invulnerables`].
+		/// The fixed deposit charged upon [`Pezpallet::register`] from [`Invulnerables`].
 		type InvulnerableDeposit: Get<BalanceOf<Self>>;
 
 		/// Base reward that is given to the winner.
@@ -250,7 +250,7 @@ pub mod pallet {
 		type MaxSubmissions: Get<u32>;
 
 		/// The ratio of the deposit to return in case a signed account submits a solution via
-		/// [`Pallet::register`], but later calls [`Pallet::bail`].
+		/// [`Pezpallet::register`], but later calls [`Pezpallet::bail`].
 		///
 		/// This should be large enough to cover for the deletion cost of possible all pages. To be
 		/// safe, you can put it to 100% to begin with to fully dis-incentivize bailing.
@@ -266,12 +266,12 @@ pub mod pallet {
 		/// submitter for the winner.
 		type EstimateCallFee: EstimateCallFee<Call<Self>, BalanceOf<Self>>;
 
-		/// Provided weights of this pallet.
+		/// Provided weights of this pezpallet.
 		type WeightInfo: WeightInfo;
 	}
 
 	/// The hold reason of this palelt.
-	#[pallet::composite_enum]
+	#[pezpallet::composite_enum]
 	pub enum HoldReason {
 		/// Because of submitting a signed solution.
 		#[codec(index = 0)]
@@ -287,7 +287,7 @@ pub mod pallet {
 	/// * If _ejected_ by better solution from [`SortedScores`], they will get their full deposit
 	///   back.
 	/// * They always get their tx-fee back even if they are _discarded_.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Invulnerables<T: Config> =
 		StorageValue<_, BoundedVec<T::AccountId, ConstU32<16>>, ValueQuery>;
 
@@ -327,7 +327,7 @@ pub mod pallet {
 	/// purely independent.
 	pub(crate) struct Submissions<T: Config>(pezsp_std::marker::PhantomData<T>);
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type SortedScores<T: Config> = StorageMap<
 		_,
 		Twox64Concat,
@@ -337,7 +337,7 @@ pub mod pallet {
 	>;
 
 	/// Triple map from (round, account, page) to a solution page.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	type SubmissionStorage<T: Config> = StorageNMap<
 		_,
 		(
@@ -353,7 +353,7 @@ pub mod pallet {
 	///
 	/// invariant: for any Key1 of type `AccountId` in [`Submissions`], this storage map also has a
 	/// value.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	type SubmissionMetadataStorage<T: Config> =
 		StorageDoubleMap<_, Twox64Concat, u32, Twox64Concat, T::AccountId, SubmissionMetadata<T>>;
 
@@ -472,7 +472,7 @@ pub mod pallet {
 				if sorted_scores.is_full() {
 					let remove_idx = sorted_scores
 						.iter()
-						.position(|(x, _)| !Pallet::<T>::is_invulnerable(x))
+						.position(|(x, _)| !Pezpallet::<T>::is_invulnerable(x))
 						.ok_or(Error::<T>::QueueFull)?;
 					if insert_idx > remove_idx {
 						// we have a better solution
@@ -496,14 +496,14 @@ pub mod pallet {
 						debug_assert!(_r.unique <= T::Pages::get());
 
 						if let Some(metadata) = maybe_metadata {
-							Pallet::<T>::settle_deposit(
+							Pezpallet::<T>::settle_deposit(
 								&discarded,
 								metadata.deposit,
 								T::EjectGraceRatio::get(),
 							);
 						}
 
-						Pallet::<T>::deposit_event(Event::<T>::Ejected(round, discarded));
+						Pezpallet::<T>::deposit_event(Event::<T>::Ejected(round, discarded));
 						true
 					} else {
 						// we don't have a better solution
@@ -542,10 +542,10 @@ pub mod pallet {
 
 		/// Get the deposit of a registration with the given number of pages.
 		fn deposit_for(who: &T::AccountId, pages: usize) -> BalanceOf<T> {
-			if Pallet::<T>::is_invulnerable(who) {
+			if Pezpallet::<T>::is_invulnerable(who) {
 				T::InvulnerableDeposit::get()
 			} else {
-				let round = Pallet::<T>::current_round();
+				let round = Pezpallet::<T>::current_round();
 				let queue_size = Self::submitters_count(round);
 				let base = T::DepositBase::calculate_base_deposit(queue_size);
 				let pages = T::DepositPerPage::calculate_page_deposit(queue_size, pages);
@@ -740,11 +740,11 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(PhantomData<T>);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(PhantomData<T>);
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// Upcoming submission has been registered for the given account, with the given score.
 		Registered(u32, T::AccountId, ElectionScore),
@@ -762,7 +762,7 @@ pub mod pallet {
 		Bailed(u32, T::AccountId),
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// The phase is not signed.
 		PhaseNotSigned,
@@ -784,17 +784,17 @@ pub mod pallet {
 		TooManyInvulnerables,
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Register oneself for an upcoming signed election.
-		#[pallet::weight(SignedWeightsOf::<T>::register_eject())]
-		#[pallet::call_index(0)]
+		#[pezpallet::weight(SignedWeightsOf::<T>::register_eject())]
+		#[pezpallet::call_index(0)]
 		pub fn register(
 			origin: OriginFor<T>,
 			claimed_score: ElectionScore,
 		) -> DispatchResultWithPostInfo {
 			let who = ensure_signed(origin)?;
-			ensure!(crate::Pallet::<T>::current_phase().is_signed(), Error::<T>::PhaseNotSigned);
+			ensure!(crate::Pezpallet::<T>::current_phase().is_signed(), Error::<T>::PhaseNotSigned);
 
 			// note: we could already check if this is a duplicate here, but prefer keeping the code
 			// simple for now.
@@ -825,21 +825,21 @@ pub mod pallet {
 
 		/// Submit a single page of a solution.
 		///
-		/// Must always come after [`Pallet::register`].
+		/// Must always come after [`Pezpallet::register`].
 		///
 		/// `maybe_solution` can be set to `None` to erase the page.
 		///
 		/// Collects deposits from the signed origin based on [`Config::DepositBase`] and
 		/// [`Config::DepositPerPage`].
-		#[pallet::weight(SignedWeightsOf::<T>::submit_page())]
-		#[pallet::call_index(1)]
+		#[pezpallet::weight(SignedWeightsOf::<T>::submit_page())]
+		#[pezpallet::call_index(1)]
 		pub fn submit_page(
 			origin: OriginFor<T>,
 			page: PageIndex,
 			maybe_solution: Option<Box<SolutionOf<T::MinerConfig>>>,
 		) -> DispatchResultWithPostInfo {
 			let who = ensure_signed(origin)?;
-			ensure!(crate::Pallet::<T>::current_phase().is_signed(), Error::<T>::PhaseNotSigned);
+			ensure!(crate::Pezpallet::<T>::current_phase().is_signed(), Error::<T>::PhaseNotSigned);
 			let is_set = maybe_solution.is_some();
 
 			let round = Self::current_round();
@@ -859,11 +859,11 @@ pub mod pallet {
 		/// A portion of the deposit may be returned, based on the [`Config::EjectGraceRatio`].
 		///
 		/// This will fully remove the solution from storage.
-		#[pallet::weight(SignedWeightsOf::<T>::bail())]
-		#[pallet::call_index(2)]
+		#[pezpallet::weight(SignedWeightsOf::<T>::bail())]
+		#[pezpallet::call_index(2)]
 		pub fn bail(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 			let who = ensure_signed(origin)?;
-			ensure!(crate::Pallet::<T>::current_phase().is_signed(), Error::<T>::PhaseNotSigned);
+			ensure!(crate::Pezpallet::<T>::current_phase().is_signed(), Error::<T>::PhaseNotSigned);
 			let round = Self::current_round();
 			let metadata = Submissions::<T>::take_submission_with_data(round, &who)
 				.ok_or(Error::<T>::NoSubmission)?;
@@ -881,8 +881,8 @@ pub mod pallet {
 		///
 		/// This can only be called for submissions that end up being discarded, as in they are not
 		/// processed and they end up lingering in the queue.
-		#[pallet::call_index(3)]
-		#[pallet::weight(SignedWeightsOf::<T>::clear_old_round_data(*witness_pages))]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(SignedWeightsOf::<T>::clear_old_round_data(*witness_pages))]
 		pub fn clear_old_round_data(
 			origin: OriginFor<T>,
 			round: u32,
@@ -925,8 +925,8 @@ pub mod pallet {
 		/// Set the invulnerable list.
 		///
 		/// Dispatch origin must the the same as [`crate::Config::AdminOrigin`].
-		#[pallet::call_index(4)]
-		#[pallet::weight(T::DbWeight::get().writes(1))]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(T::DbWeight::get().writes(1))]
 		pub fn set_invulnerables(origin: OriginFor<T>, inv: Vec<T::AccountId>) -> DispatchResult {
 			<T as crate::Config>::AdminOrigin::ensure_origin(origin)?;
 			let bounded: BoundedVec<_, ConstU32<16>> =
@@ -936,8 +936,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::view_functions]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::view_functions]
+	impl<T: Config> Pezpallet<T> {
 		/// Get the deposit amount that will be held for a solution of `pages`.
 		///
 		/// This allows an offchain application to know what [`Config::DepositPerPage`] and
@@ -948,14 +948,14 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn on_initialize(_: BlockNumberFor<T>) -> Weight {
 			// this code is only called when at the boundary of phase transition, which is already
-			// captured by the parent pallet. No need for weight.
+			// captured by the parent pezpallet. No need for weight.
 			let weight_taken_into_account: Weight = Default::default();
 
-			if crate::Pallet::<T>::current_phase().is_signed_validation_opened_now() {
+			if crate::Pezpallet::<T>::current_phase().is_signed_validation_opened_now() {
 				let maybe_leader = Submissions::<T>::leader(Self::current_round());
 				sublog!(
 					debug,
@@ -982,14 +982,14 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	#[cfg(any(feature = "try-runtime", test, feature = "runtime-benchmarks"))]
 	pub(crate) fn do_try_state(_n: BlockNumberFor<T>) -> Result<(), pezsp_runtime::TryRuntimeError> {
 		Submissions::<T>::sanity_check_round(Self::current_round())
 	}
 
 	fn current_round() -> u32 {
-		crate::Pallet::<T>::round()
+		crate::Pezpallet::<T>::round()
 	}
 
 	fn is_invulnerable(who: &T::AccountId) -> bool {
@@ -1040,7 +1040,7 @@ impl<T: Config> Pallet<T> {
 
 			// Try to start verification again if we still have submissions
 			if let crate::types::Phase::SignedValidation(remaining_blocks) =
-				crate::Pallet::<T>::current_phase()
+				crate::Pezpallet::<T>::current_phase()
 			{
 				// Only start verification if there are sufficient blocks remaining
 				// Note: SignedValidation(N) means N+1 blocks remaining in the phase

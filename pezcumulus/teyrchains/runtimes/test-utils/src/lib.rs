@@ -160,7 +160,7 @@ pub struct ExtBuilder<Runtime: BasicTeyrchainRuntime> {
 	balances: Vec<(AccountIdOf<Runtime>, BalanceOf<Runtime>)>,
 	// collators to test block prod
 	collators: Vec<AccountIdOf<Runtime>>,
-	// keys added to pallet session
+	// keys added to pezpallet session
 	keys: Vec<(AccountIdOf<Runtime>, ValidatorIdOf<Runtime>, SessionKeysOf<Runtime>)>,
 	// safe XCM version for pezpallet_xcm
 	safe_xcm_version: Option<XcmVersion>,
@@ -256,7 +256,7 @@ impl<Runtime: BasicTeyrchainRuntime> ExtBuilder<Runtime> {
 		let mut ext = pezsp_io::TestExternalities::new(t);
 
 		ext.execute_with(|| {
-			pezframe_system::Pallet::<Runtime>::set_block_number(1u32.into());
+			pezframe_system::Pezpallet::<Runtime>::set_block_number(1u32.into());
 		});
 
 		ext
@@ -281,7 +281,7 @@ where
 	pub fn run_to_block(n: u32, author: AccountIdOf<Runtime>) -> HeaderFor<Runtime> {
 		let mut last_header = None;
 		loop {
-			let block_number = pezframe_system::Pallet::<Runtime>::block_number();
+			let block_number = pezframe_system::Pezpallet::<Runtime>::block_number();
 			if block_number >= n.into() {
 				break;
 			}
@@ -289,14 +289,14 @@ where
 
 			// Inherent is not created at every block, don't finalize teyrchain
 			// system to avoid panicking.
-			let header = pezframe_system::Pallet::<Runtime>::finalize();
+			let header = pezframe_system::Pezpallet::<Runtime>::finalize();
 
 			let pre_digest =
 				Digest { logs: vec![DigestItem::PreRuntime(AURA_ENGINE_ID, author.encode())] };
-			pezframe_system::Pallet::<Runtime>::reset_events();
+			pezframe_system::Pezpallet::<Runtime>::reset_events();
 
 			let next_block_number = block_number + 1u32.into();
-			pezframe_system::Pallet::<Runtime>::initialize(
+			pezframe_system::Pezpallet::<Runtime>::initialize(
 				&next_block_number,
 				&header.hash(),
 				&pre_digest,
@@ -310,20 +310,20 @@ where
 	pub fn run_to_block_with_finalize(n: u32) -> HeaderFor<Runtime> {
 		let mut last_header = None;
 		loop {
-			let block_number = pezframe_system::Pallet::<Runtime>::block_number();
+			let block_number = pezframe_system::Pezpallet::<Runtime>::block_number();
 			if block_number >= n.into() {
 				break;
 			}
 			// Set the new block number and author
-			let header = pezframe_system::Pallet::<Runtime>::finalize();
+			let header = pezframe_system::Pezpallet::<Runtime>::finalize();
 
 			let pre_digest = Digest {
 				logs: vec![DigestItem::PreRuntime(AURA_ENGINE_ID, block_number.encode())],
 			};
-			pezframe_system::Pallet::<Runtime>::reset_events();
+			pezframe_system::Pezpallet::<Runtime>::reset_events();
 
 			let next_block_number = block_number + 1u32.into();
-			pezframe_system::Pallet::<Runtime>::initialize(
+			pezframe_system::Pezpallet::<Runtime>::initialize(
 				&next_block_number,
 				&header.hash(),
 				&pre_digest,
@@ -356,7 +356,7 @@ where
 			let (inherent_data, downward_messages, horizontal_messages) =
 				deconstruct_teyrchain_inherent_data(inherent_data);
 
-			let _ = pezcumulus_pezpallet_teyrchain_system::Pallet::<Runtime>::set_validation_data(
+			let _ = pezcumulus_pezpallet_teyrchain_system::Pezpallet::<Runtime>::set_validation_data(
 				Runtime::RuntimeOrigin::none(),
 				inherent_data,
 				InboundMessagesData::new(
@@ -364,12 +364,12 @@ where
 					horizontal_messages.into_abridged(&mut usize::MAX.clone()),
 				),
 			);
-			let _ = pezpallet_timestamp::Pallet::<Runtime>::set(
+			let _ = pezpallet_timestamp::Pezpallet::<Runtime>::set(
 				Runtime::RuntimeOrigin::none(),
 				300_u32.into(),
 			);
 			AllPalletsWithoutSystem::on_finalize(next_block_number);
-			let header = pezframe_system::Pallet::<Runtime>::finalize();
+			let header = pezframe_system::Pezpallet::<Runtime>::finalize();
 			last_header = Some(header);
 		}
 		last_header.expect("run_to_block empty block range")
@@ -380,7 +380,7 @@ where
 	}
 
 	pub fn block_number() -> U256 {
-		pezframe_system::Pallet::<Runtime>::block_number().into()
+		pezframe_system::Pezpallet::<Runtime>::block_number().into()
 	}
 
 	pub fn origin_of(
@@ -441,7 +441,7 @@ impl<
 		}
 
 		// do teleport
-		<pezpallet_xcm::Pallet<Runtime>>::limited_teleport_assets(
+		<pezpallet_xcm::Pezpallet<Runtime>>::limited_teleport_assets(
 			origin,
 			Box::new(dest.into()),
 			Box::new(beneficiary.into()),
@@ -609,7 +609,7 @@ impl<Runtime: pezframe_system::Config + pezpallet_xcm::Config, AllPalletsWithout
 	pub fn get_pallet_xcm_event_outcome(
 		unwrap_pallet_xcm_event: &Box<dyn Fn(Vec<u8>) -> Option<pezpallet_xcm::Event<Runtime>>>,
 	) -> Outcome {
-		<pezframe_system::Pallet<Runtime>>::events()
+		<pezframe_system::Pezpallet<Runtime>>::events()
 			.into_iter()
 			.filter_map(|e| unwrap_pallet_xcm_event(e.event.encode()))
 			.find_map(|e| match e {
@@ -630,7 +630,7 @@ impl<
 			dyn Fn(Vec<u8>) -> Option<pezcumulus_pezpallet_xcmp_queue::Event<Runtime>>,
 		>,
 	) -> Option<XcmHash> {
-		<pezframe_system::Pallet<Runtime>>::events()
+		<pezframe_system::Pezpallet<Runtime>>::events()
 			.into_iter()
 			.filter_map(|e| unwrap_xcmp_queue_event(e.event.encode()))
 			.find_map(|e| match e {

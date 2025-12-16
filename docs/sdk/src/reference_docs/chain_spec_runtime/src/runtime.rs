@@ -67,15 +67,15 @@ mod runtime {
 	)]
 	pub struct Runtime;
 
-	/// Mandatory system pallet that should always be included in a FRAME runtime.
+	/// Mandatory system pezpallet that should always be included in a FRAME runtime.
 	#[runtime::pezpallet_index(0)]
 	pub type System = pezframe_system;
 
-	/// Sample pallet 1
+	/// Sample pezpallet 1
 	#[runtime::pezpallet_index(1)]
 	pub type Bar = pezpallet_bar;
 
-	/// Sample pallet 2
+	/// Sample pezpallet 2
 	#[runtime::pezpallet_index(2)]
 	pub type Foo = pezpallet_foo;
 }
@@ -84,7 +84,7 @@ parameter_types! {
 	pub const Version: RuntimeVersion = VERSION;
 }
 
-/// Implements the types required for the system pallet.
+/// Implements the types required for the system pezpallet.
 #[derive_impl(pezframe_system::config_preludes::SolochainDefaultConfig)]
 impl pezframe_system::Config for Runtime {
 	type Block = Block;

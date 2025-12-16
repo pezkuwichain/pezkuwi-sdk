@@ -14,13 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Storage migration(s) related to disputes pallet
+//! Storage migration(s) related to disputes pezpallet
 
 use pezframe_support::traits::StorageVersion;
 
 pub mod v1 {
 	use super::*;
-	use crate::disputes::{Config, Pallet};
+	use crate::disputes::{Config, Pezpallet};
 	use alloc::vec::Vec;
 	use pezframe_support::{
 		pezpallet_prelude::*, storage_alias, traits::OnRuntimeUpgrade, weights::Weight,
@@ -28,17 +28,17 @@ pub mod v1 {
 	use pezkuwi_primitives::SessionIndex;
 
 	#[storage_alias]
-	type SpamSlots<T: Config> = StorageMap<Pallet<T>, Twox64Concat, SessionIndex, Vec<u32>>;
+	type SpamSlots<T: Config> = StorageMap<Pezpallet<T>, Twox64Concat, SessionIndex, Vec<u32>>;
 
 	pub struct MigrateToV1<T>(core::marker::PhantomData<T>);
 	impl<T: Config> OnRuntimeUpgrade for MigrateToV1<T> {
 		fn on_runtime_upgrade() -> Weight {
 			let mut weight: Weight = Weight::zero();
 
-			if StorageVersion::get::<Pallet<T>>() < 1 {
+			if StorageVersion::get::<Pezpallet<T>>() < 1 {
 				log::info!(target: crate::disputes::LOG_TARGET, "Migrating disputes storage to v1");
 				weight += migrate_to_v1::<T>();
-				StorageVersion::new(1).put::<Pallet<T>>();
+				StorageVersion::new(1).put::<Pezpallet<T>>();
 				weight = weight.saturating_add(T::DbWeight::get().reads_writes(1, 1));
 			} else {
 				log::info!(
@@ -58,7 +58,7 @@ pub mod v1 {
 				SpamSlots::<T>::iter().count()
 			);
 			ensure!(
-				StorageVersion::get::<Pallet<T>>() == 0,
+				StorageVersion::get::<Pezpallet<T>>() == 0,
 				"Storage version should be less than `1` before the migration",
 			);
 			Ok(Vec::new())
@@ -68,7 +68,7 @@ pub mod v1 {
 		fn post_upgrade(_state: Vec<u8>) -> Result<(), pezsp_runtime::TryRuntimeError> {
 			log::trace!(target: crate::disputes::LOG_TARGET, "Running post_upgrade()");
 			ensure!(
-				StorageVersion::get::<Pallet<T>>() >= 1,
+				StorageVersion::get::<Pezpallet<T>>() >= 1,
 				"Storage version should be `1` after the migration"
 			);
 			ensure!(
@@ -79,7 +79,7 @@ pub mod v1 {
 		}
 	}
 
-	/// Migrates the pallet storage to the most recent version, checking and setting the
+	/// Migrates the pezpallet storage to the most recent version, checking and setting the
 	/// `StorageVersion`.
 	pub fn migrate_to_v1<T: Config>() -> Weight {
 		let mut weight: Weight = Weight::zero();

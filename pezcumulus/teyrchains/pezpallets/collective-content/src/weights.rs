@@ -13,11 +13,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! The pallet weight info trait and its unit implementation.
+//! The pezpallet weight info trait and its unit implementation.
 
 use pezframe_support::weights::Weight;
 
-/// Weights information needed for the pallet.
+/// Weights information needed for the pezpallet.
 pub trait WeightInfo {
 	/// Returns the weight of the set_charter extrinsic.
 	fn set_charter() -> Weight;

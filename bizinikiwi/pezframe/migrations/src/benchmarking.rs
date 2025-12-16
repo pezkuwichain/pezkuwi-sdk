@@ -21,17 +21,17 @@ use super::*;
 
 use core::array;
 use pezframe_benchmarking::{v2::*, BenchmarkError};
-use pezframe_system::{Pallet as System, RawOrigin};
+use pezframe_system::{Pezpallet as System, RawOrigin};
 use pezsp_core::{twox_128, Get};
 use pezsp_io::{storage, KillStorageResult};
 use pezsp_runtime::traits::One;
 
 fn assert_has_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
-	pezframe_system::Pallet::<T>::assert_has_event(generic_event.into());
+	pezframe_system::Pezpallet::<T>::assert_has_event(generic_event.into());
 }
 
 fn assert_last_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
-	pezframe_system::Pallet::<T>::assert_last_event(generic_event.into());
+	pezframe_system::Pezpallet::<T>::assert_last_event(generic_event.into());
 }
 
 #[benchmarks]
@@ -46,7 +46,7 @@ mod benches {
 
 		#[block]
 		{
-			Pallet::<T>::onboard_new_mbms();
+			Pezpallet::<T>::onboard_new_mbms();
 		}
 
 		assert_last_event::<T>(Event::UpgradeStarted { migrations: 1 }.into());
@@ -59,7 +59,7 @@ mod benches {
 
 		#[block]
 		{
-			Pallet::<T>::progress_mbms(One::one());
+			Pezpallet::<T>::progress_mbms(One::one());
 		}
 	}
 
@@ -74,7 +74,7 @@ mod benches {
 
 		#[block]
 		{
-			Pallet::<T>::exec_migration(c, false, &mut meter);
+			Pezpallet::<T>::exec_migration(c, false, &mut meter);
 		}
 
 		assert_last_event::<T>(Event::UpgradeCompleted {}.into());
@@ -97,7 +97,7 @@ mod benches {
 
 		#[block]
 		{
-			Pallet::<T>::exec_migration(c, false, &mut meter);
+			Pezpallet::<T>::exec_migration(c, false, &mut meter);
 		}
 
 		assert_last_event::<T>(Event::MigrationSkipped { index: 0 }.into());
@@ -116,7 +116,7 @@ mod benches {
 
 		#[block]
 		{
-			Pallet::<T>::exec_migration(c, false, &mut meter);
+			Pezpallet::<T>::exec_migration(c, false, &mut meter);
 		}
 
 		assert_last_event::<T>(Event::MigrationAdvanced { index: 0, took: One::one() }.into());
@@ -135,7 +135,7 @@ mod benches {
 
 		#[block]
 		{
-			Pallet::<T>::exec_migration(c, false, &mut meter);
+			Pezpallet::<T>::exec_migration(c, false, &mut meter);
 		}
 
 		assert_last_event::<T>(Event::MigrationCompleted { index: 0, took: One::one() }.into());
@@ -153,7 +153,7 @@ mod benches {
 
 		#[block]
 		{
-			Pallet::<T>::exec_migration(c, false, &mut meter);
+			Pezpallet::<T>::exec_migration(c, false, &mut meter);
 		}
 
 		assert_has_event::<T>(Event::UpgradeFailed {}.into());
@@ -165,11 +165,11 @@ mod benches {
 	fn on_init_loop() {
 		T::Migrations::set_fail_after(0); // Should not be called anyway.
 		System::<T>::set_block_number(1u32.into());
-		<Pallet<T> as Hooks<BlockNumberFor<T>>>::on_runtime_upgrade();
+		<Pezpallet<T> as Hooks<BlockNumberFor<T>>>::on_runtime_upgrade();
 
 		#[block]
 		{
-			Pallet::<T>::on_initialize(1u32.into());
+			Pezpallet::<T>::on_initialize(1u32.into());
 		}
 	}
 
@@ -259,5 +259,5 @@ mod benches {
 
 	// Implements a test for each benchmark. Execute with:
 	// `cargo test -p pezpallet-migrations --features runtime-benchmarks`.
-	impl_benchmark_test_suite!(Pallet, crate::mock::new_test_ext(), crate::mock::Test);
+	impl_benchmark_test_suite!(Pezpallet, crate::mock::new_test_ext(), crate::mock::Test);
 }

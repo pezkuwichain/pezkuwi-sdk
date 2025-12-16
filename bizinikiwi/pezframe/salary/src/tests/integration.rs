@@ -142,7 +142,7 @@ pub fn new_test_ext() -> TestState {
 }
 
 fn assert_last_event(generic_event: <Test as Config>::RuntimeEvent) {
-	let events = pezframe_system::Pallet::<Test>::events();
+	let events = pezframe_system::Pezpallet::<Test>::events();
 	let system_event: <Test as pezframe_system::Config>::RuntimeEvent = generic_event.into();
 	let pezframe_system::EventRecord { event, .. } = events.last().expect("Event expected");
 	assert_eq!(event, &system_event.into());

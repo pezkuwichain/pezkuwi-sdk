@@ -6,7 +6,7 @@ edition.workspace = true
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
-description = "Example FRAME pallet for multi-block migrations"
+description = "Example FRAME pezpallet for multi-block migrations"
 publish = false
 documentation = "https://docs.rs/pezpallet-example-mbm"
 

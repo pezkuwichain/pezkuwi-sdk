@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Test environment for remarks pallet.
+//! Test environment for remarks pezpallet.
 
 use crate as pezpallet_remark;
 use pezframe_support::derive_impl;
@@ -23,7 +23,7 @@ use pezsp_runtime::BuildStorage;
 
 pub type Block = pezframe_system::mocking::MockBlock<Test>;
 
-// Configure a mock runtime to test the pallet.
+// Configure a mock runtime to test the pezpallet.
 pezframe_support::construct_runtime!(
 	pub enum Test
 	{

@@ -228,9 +228,9 @@ impl_runtime_apis! {
 		) {
 			use pezframe_benchmarking::{baseline, BenchmarkList};
 			use pezframe_support::traits::StorageInfoTrait;
-			use pezframe_system_benchmarking::Pallet as SystemBench;
-			use pezframe_system_benchmarking::extensions::Pallet as SystemExtensionsBench;
-			use baseline::Pallet as BaselineBench;
+			use pezframe_system_benchmarking::Pezpallet as SystemBench;
+			use pezframe_system_benchmarking::extensions::Pezpallet as SystemExtensionsBench;
+			use baseline::Pezpallet as BaselineBench;
 			use super::*;
 
 			let mut list = Vec::<BenchmarkList>::new();
@@ -247,9 +247,9 @@ impl_runtime_apis! {
 		) -> Result<Vec<pezframe_benchmarking::BenchmarkBatch>, alloc::string::String> {
 			use pezframe_benchmarking::{baseline, BenchmarkBatch};
 			use pezsp_storage::TrackedStorageKey;
-			use pezframe_system_benchmarking::Pallet as SystemBench;
-			use pezframe_system_benchmarking::extensions::Pallet as SystemExtensionsBench;
-			use baseline::Pallet as BaselineBench;
+			use pezframe_system_benchmarking::Pezpallet as SystemBench;
+			use pezframe_system_benchmarking::extensions::Pezpallet as SystemExtensionsBench;
+			use baseline::Pezpallet as BaselineBench;
 			use super::*;
 
 			impl pezframe_system_benchmarking::Config for Runtime {}

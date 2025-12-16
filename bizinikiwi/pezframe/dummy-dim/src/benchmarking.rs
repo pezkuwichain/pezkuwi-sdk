@@ -15,14 +15,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Dummy DIM pallet benchmarking.
+//! Dummy DIM pezpallet benchmarking.
 
 extern crate alloc;
 
 use alloc::vec::Vec;
 
 use super::*;
-use crate::Pallet as DummyDim;
+use crate::Pezpallet as DummyDim;
 
 use pezframe_benchmarking::v2::{benchmarks, *};
 use pezframe_support::{assert_ok, traits::Get};
@@ -32,7 +32,7 @@ type SecretOf<T> = <<T as Config>::People as AddOnlyPeopleTrait>::Secret;
 type MemberOf<T> = <<T as Config>::People as AddOnlyPeopleTrait>::Member;
 
 fn assert_last_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
-	pezframe_system::Pallet::<T>::assert_last_event(generic_event.into());
+	pezframe_system::Pezpallet::<T>::assert_last_event(generic_event.into());
 }
 
 fn new_member_from<T: Config>(id: PersonalId) -> (MemberOf<T>, SecretOf<T>) {
@@ -165,5 +165,5 @@ mod benches {
 
 	// Implements a test for each benchmark. Execute with:
 	// `cargo test -p pezpallet-dummy-dim --features runtime-benchmarks`.
-	impl_benchmark_test_suite!(Pallet, crate::mock::new_test_ext(), crate::mock::Test);
+	impl_benchmark_test_suite!(Pezpallet, crate::mock::new_test_ext(), crate::mock::Test);
 }

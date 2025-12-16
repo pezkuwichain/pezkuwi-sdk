@@ -126,7 +126,7 @@ where
 		let local_origin = Origin::Coowners(first_account, second_account);
 		// Turn it into a local `PalletsOrigin`.
 		let local_origin = <T as Config>::PalletsOrigin::from(local_origin);
-		// Then finally into a pallet `RuntimeOrigin`.
+		// Then finally into a pezpallet `RuntimeOrigin`.
 		let local_origin = <T as Config>::RuntimeOrigin::from(local_origin);
 		// Which the `set_caller_from` function will convert into the overarching `RuntimeOrigin`
 		// created by `construct_runtime!`.

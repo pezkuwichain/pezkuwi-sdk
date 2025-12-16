@@ -236,7 +236,7 @@ impl onchain::Config for OnChainSeqPhragmen {
 impl pezpallet_staking::Config for Runtime {
 	type OldCurrency = Balances;
 	type Currency = Balances;
-	type UnixTime = pezpallet_timestamp::Pallet<Self>;
+	type UnixTime = pezpallet_timestamp::Pezpallet<Self>;
 	type AdminOrigin = pezframe_system::EnsureRoot<Self::AccountId>;
 	type EraPayout = ();
 	type ElectionProvider = onchain::OnChainExecution<OnChainSeqPhragmen>;
@@ -337,7 +337,7 @@ impl ah_client::SendToAssetHub for DeliverToAH {
 			shared::CounterRCAHSessionReport::mutate(|x| *x += 1);
 			shared::in_ah(|| {
 				let origin = crate::ah::RuntimeOrigin::root();
-				rc_client::Pallet::<crate::ah::Runtime>::relay_session_report(
+				rc_client::Pezpallet::<crate::ah::Runtime>::relay_session_report(
 					origin,
 					session_report.clone(),
 				)
@@ -359,7 +359,7 @@ impl ah_client::SendToAssetHub for DeliverToAH {
 			shared::in_ah(|| {
 				crate::shared::CounterRCAHNewOffence::mutate(|x| *x += offences.len() as u32);
 				let origin = crate::ah::RuntimeOrigin::root();
-				rc_client::Pallet::<crate::ah::Runtime>::relay_new_offence_paged(
+				rc_client::Pezpallet::<crate::ah::Runtime>::relay_new_offence_paged(
 					origin,
 					offences.clone(),
 				)
@@ -378,7 +378,7 @@ parameter_types! {
 }
 
 pub fn historical_events_since_last_call() -> Vec<pezpallet_session::historical::Event<Runtime>> {
-	let all = pezframe_system::Pallet::<Runtime>::read_events_for_pallet::<
+	let all = pezframe_system::Pezpallet::<Runtime>::read_events_for_pallet::<
 		pezpallet_session::historical::Event<Runtime>,
 	>();
 	let seen = HistoricalEventsIndex::get();
@@ -387,7 +387,7 @@ pub fn historical_events_since_last_call() -> Vec<pezpallet_session::historical:
 }
 
 pub fn offence_events_since_last_call() -> Vec<pezpallet_offences::Event> {
-	let all = pezframe_system::Pallet::<Runtime>::read_events_for_pallet::<pezpallet_offences::Event>();
+	let all = pezframe_system::Pezpallet::<Runtime>::read_events_for_pallet::<pezpallet_offences::Event>();
 	let seen = OffenceEventsIndex::get();
 	OffenceEventsIndex::set(all.len());
 	all.into_iter().skip(seen).collect()
@@ -395,7 +395,7 @@ pub fn offence_events_since_last_call() -> Vec<pezpallet_offences::Event> {
 
 pub fn session_events_since_last_call() -> Vec<pezpallet_session::Event<Runtime>> {
 	let all =
-		pezframe_system::Pallet::<Runtime>::read_events_for_pallet::<pezpallet_session::Event<Runtime>>();
+		pezframe_system::Pezpallet::<Runtime>::read_events_for_pallet::<pezpallet_session::Event<Runtime>>();
 	let seen = SessionEventsIndex::get();
 	SessionEventsIndex::set(all.len());
 	all.into_iter().skip(seen).collect()
@@ -403,7 +403,7 @@ pub fn session_events_since_last_call() -> Vec<pezpallet_session::Event<Runtime>
 
 pub fn ah_client_events_since_last_call() -> Vec<ah_client::Event<Runtime>> {
 	let all =
-		pezframe_system::Pallet::<Runtime>::read_events_for_pallet::<ah_client::Event<Runtime>>();
+		pezframe_system::Pezpallet::<Runtime>::read_events_for_pallet::<ah_client::Event<Runtime>>();
 	let seen = AhClientEventsIndex::get();
 	AhClientEventsIndex::set(all.len());
 	all.into_iter().skip(seen).collect()
@@ -524,8 +524,8 @@ impl ExtBuilder {
 
 			for v in self.session_keys {
 				// min some funds, create account and ref counts
-				pezpallet_balances::Pallet::<T>::mint_into(&v, INITIAL_BALANCE).unwrap();
-				pezpallet_session::Pallet::<T>::set_keys(
+				pezpallet_balances::Pezpallet::<T>::mint_into(&v, INITIAL_BALANCE).unwrap();
+				pezpallet_session::Pezpallet::<T>::set_keys(
 					RuntimeOrigin::signed(v),
 					SessionKeys { other: UintAuthorityId(v) },
 					vec![],
@@ -559,7 +559,7 @@ pub(crate) fn receive_validator_set_at(
 		new_validator_set: new_validator_set.clone(),
 	};
 
-	assert_ok!(ah_client::Pallet::<Runtime>::validator_set(RuntimeOrigin::root(), report));
+	assert_ok!(ah_client::Pezpallet::<Runtime>::validator_set(RuntimeOrigin::root(), report));
 
 	// go forward till one more session such that these validators are in the session queue now
 	roll_until_matches(|| pezpallet_session::CurrentIndex::<Runtime>::get() == sessions + 1, false);

@@ -38,8 +38,8 @@
 - ☁️ It is based on the
   [Pezcumulus](https://docs.pezkuwichain.io/sdk/master/polkadot_sdk_docs/polkadot_sdk/pezcumulus/index.html) framework.
 
-- 🔧 Its runtime is configured with a single custom pallet as a starting point, and a handful of ready-made pallets
-  such as a [Balances pallet](https://docs.pezkuwichain.io/sdk/master/pallet_balances/index.html).
+- 🔧 Its runtime is configured with a single custom pezpallet as a starting point, and a handful of ready-made pallets
+  such as a [Balances pezpallet](https://docs.pezkuwichain.io/sdk/master/pallet_balances/index.html).
 
 - 👉 Learn more about teyrchains [here](https://wiki.network.pezkuwichain.io/docs/learn-parachains)
 

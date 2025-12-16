@@ -3,7 +3,7 @@ through dispatched calls from one of two specialized origins.
 
 The membership can be provided in one of two ways: either directly, using the Root-dispatchable
 function `set_members`, or indirectly, through implementing the `ChangeMembers`.
-The pallet assumes that the amount of members stays at or below `MaxMembers` for its weight
+The pezpallet assumes that the amount of members stays at or below `MaxMembers` for its weight
 calculations, but enforces this neither in `set_members` nor in `change_members_sorted`.
 
 A "prime" member may be set to help determine the default vote behavior based on chain

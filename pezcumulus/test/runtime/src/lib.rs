@@ -367,7 +367,7 @@ type ConsensusHook = pezcumulus_pezpallet_aura_ext::FixedVelocityConsensusHook<
 >;
 impl pezcumulus_pezpallet_teyrchain_system::Config for Runtime {
 	type WeightInfo = ();
-	type SelfParaId = teyrchain_info::Pallet<Runtime>;
+	type SelfParaId = teyrchain_info::Pezpallet<Runtime>;
 	type RuntimeEvent = RuntimeEvent;
 	type OnSystemEvent = ();
 	type OutboundXcmpMessageSource = ();

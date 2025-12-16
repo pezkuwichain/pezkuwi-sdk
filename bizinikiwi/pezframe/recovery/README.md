@@ -1,13 +1,13 @@
-# Recovery Pallet
+# Recovery Pezpallet
 
 - [`recovery::Config`](https://docs.rs/pezpallet-recovery/latest/pallet_recovery/trait.Config.html)
 - [`Call`](https://docs.rs/pezpallet-recovery/latest/pallet_recovery/enum.Call.html)
 
 ## Overview
 
-The Recovery pallet is an M-of-N social recovery tool for users to gain
+The Recovery pezpallet is an M-of-N social recovery tool for users to gain
 access to their accounts if the private key or other authentication mechanism
-is lost. Through this pallet, a user is able to make calls on-behalf-of another
+is lost. Through this pezpallet, a user is able to make calls on-behalf-of another
 account which they have recovered. The recovery process is protected by trusted
 "friends" whom the original account owner chooses. A threshold (M) out of N
 friends are needed to give another account access to the recoverable account.
@@ -75,14 +75,14 @@ essentially punish the malicious user.
 Furthermore, the malicious recovery attempt can only be successful if the
 attacker is also able to get enough friends to vouch for the recovery attempt.
 In the case where the account owner prevents a malicious recovery process,
-this pallet makes it near-zero cost to re-configure the recovery settings and
+this pezpallet makes it near-zero cost to re-configure the recovery settings and
 remove/replace friends who are acting inappropriately.
 
 ### Safety Considerations
 
-It is important to note that this is a powerful pallet that can compromise the
+It is important to note that this is a powerful pezpallet that can compromise the
 security of an account if used incorrectly. Some recommended practices for users
-of this pallet are:
+of this pezpallet are:
 
 - Configure a significant `delay_period` for your recovery process: As long as you
   have access to your recoverable account, you need only check the blockchain once

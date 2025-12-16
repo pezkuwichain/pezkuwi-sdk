@@ -22,23 +22,23 @@ use pezframe_support::{
 };
 
 fn migrate_v0_to_v1<T: Config<I>, I: 'static>(accounts: &[T::AccountId]) -> Weight {
-	let on_chain_version = Pallet::<T, I>::on_chain_storage_version();
+	let on_chain_version = Pezpallet::<T, I>::on_chain_storage_version();
 
 	if on_chain_version == 0 {
 		let total = accounts
 			.iter()
-			.map(|a| Pallet::<T, I>::total_balance(a))
+			.map(|a| Pezpallet::<T, I>::total_balance(a))
 			.fold(T::Balance::zero(), |a, e| a.saturating_add(e));
-		Pallet::<T, I>::deactivate(total);
+		Pezpallet::<T, I>::deactivate(total);
 
 		// Remove the old `StorageVersion` type.
 		pezframe_support::storage::unhashed::kill(&pezframe_support::storage::storage_prefix(
-			Pallet::<T, I>::name().as_bytes(),
+			Pezpallet::<T, I>::name().as_bytes(),
 			"StorageVersion".as_bytes(),
 		));
 
 		// Set storage version to `1`.
-		StorageVersion::new(1).put::<Pallet<T, I>>();
+		StorageVersion::new(1).put::<Pezpallet<T, I>>();
 
 		log::info!(target: LOG_TARGET, "Storage to version 1");
 		T::DbWeight::get().reads_writes(2 + accounts.len() as u64, 3)
@@ -76,19 +76,19 @@ impl<T: Config<I>, A: Get<Vec<T::AccountId>>, I: 'static> OnRuntimeUpgrade
 pub struct ResetInactive<T, I = ()>(PhantomData<(T, I)>);
 impl<T: Config<I>, I: 'static> OnRuntimeUpgrade for ResetInactive<T, I> {
 	fn on_runtime_upgrade() -> Weight {
-		let on_chain_version = Pallet::<T, I>::on_chain_storage_version();
+		let on_chain_version = Pezpallet::<T, I>::on_chain_storage_version();
 
 		if on_chain_version == 1 {
 			// Remove the old `StorageVersion` type.
 			pezframe_support::storage::unhashed::kill(&pezframe_support::storage::storage_prefix(
-				Pallet::<T, I>::name().as_bytes(),
+				Pezpallet::<T, I>::name().as_bytes(),
 				"StorageVersion".as_bytes(),
 			));
 
 			InactiveIssuance::<T, I>::kill();
 
 			// Set storage version to `0`.
-			StorageVersion::new(0).put::<Pallet<T, I>>();
+			StorageVersion::new(0).put::<Pezpallet<T, I>>();
 
 			log::info!(target: LOG_TARGET, "Storage to version 0");
 			T::DbWeight::get().reads_writes(1, 3)

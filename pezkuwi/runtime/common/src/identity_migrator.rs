@@ -13,20 +13,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! This pallet is designed to go into a source chain and destination chain to migrate data. The
+//! This pezpallet is designed to go into a source chain and destination chain to migrate data. The
 //! design motivations are:
 //!
 //! - Call some function on the source chain that executes some migration (clearing state,
 //!   forwarding an XCM program).
 //! - Call some function (probably from an XCM program) on the destination chain.
-//! - Avoid cluttering the source pallet with new dispatchables that are unrelated to its
+//! - Avoid cluttering the source pezpallet with new dispatchables that are unrelated to its
 //!   functionality and only used for migration.
 //!
-//! After the migration is complete, the pallet may be removed from both chains' runtimes as well as
+//! After the migration is complete, the pezpallet may be removed from both chains' runtimes as well as
 //! the `pezkuwi-runtime-common` crate.
 
 use pezframe_support::{dispatch::DispatchResult, traits::Currency, weights::Weight};
-pub use pallet::*;
+pub use pezpallet::*;
 use pezpallet_identity;
 use pezsp_core::Get;
 
@@ -57,13 +57,13 @@ impl WeightInfo for TestWeightInfo {
 	}
 }
 
-// Must use the same `Balance` as `T`'s Identity pallet to handle deposits.
+// Must use the same `Balance` as `T`'s Identity pezpallet to handle deposits.
 type BalanceOf<T> = <<T as pezpallet_identity::Config>::Currency as Currency<
 	<T as pezframe_system::Config>::AccountId,
 >>::Balance;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::{
 		dispatch::{DispatchResultWithPostInfo, PostDispatchInfo},
@@ -72,10 +72,10 @@ pub mod pallet {
 	};
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config + pezpallet_identity::Config {
 		/// Overarching event type.
 		#[allow(deprecated)]
@@ -88,12 +88,12 @@ pub mod pallet {
 		/// A handler for what to do when an identity is reaped.
 		type ReapIdentityHandler: OnReapIdentity<Self::AccountId>;
 
-		/// Weight information for the extrinsics in the pallet.
+		/// Weight information for the extrinsics in the pezpallet.
 		type WeightInfo: WeightInfo;
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// The identity and all sub accounts were reaped for `who`.
 		IdentityReaped { who: T::AccountId },
@@ -102,12 +102,12 @@ pub mod pallet {
 		DepositUpdated { who: T::AccountId, identity: BalanceOf<T>, subs: BalanceOf<T> },
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
-		/// Reap the `IdentityInfo` of `who` from the Identity pallet of `T`, unreserving any
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
+		/// Reap the `IdentityInfo` of `who` from the Identity pezpallet of `T`, unreserving any
 		/// deposits held and removing storage items associated with `who`.
-		#[pallet::call_index(0)]
-		#[pallet::weight(<T as pallet::Config>::WeightInfo::reap_identity(
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(<T as pezpallet::Config>::WeightInfo::reap_identity(
 				T::MaxRegistrars::get(),
 				T::MaxSubAccounts::get()
 		))]
@@ -119,11 +119,11 @@ pub mod pallet {
 			// - number of registrars (required to calculate weight)
 			// - byte size of `IdentityInfo` (required to calculate remote deposit)
 			// - number of sub accounts (required to calculate both weight and remote deposit)
-			let (registrars, bytes, subs) = pezpallet_identity::Pallet::<T>::reap_identity(&who)?;
+			let (registrars, bytes, subs) = pezpallet_identity::Pezpallet::<T>::reap_identity(&who)?;
 			T::ReapIdentityHandler::on_reap_identity(&who, bytes, subs)?;
 			Self::deposit_event(Event::IdentityReaped { who });
 			let post = PostDispatchInfo {
-				actual_weight: Some(<T as pallet::Config>::WeightInfo::reap_identity(
+				actual_weight: Some(<T as pezpallet::Config>::WeightInfo::reap_identity(
 					registrars, subs,
 				)),
 				pays_fee: Pays::No,
@@ -133,11 +133,11 @@ pub mod pallet {
 
 		/// Update the deposit of `who`. Meant to be called by the system with an XCM `Transact`
 		/// Instruction.
-		#[pallet::call_index(1)]
-		#[pallet::weight(<T as pallet::Config>::WeightInfo::poke_deposit())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(<T as pezpallet::Config>::WeightInfo::poke_deposit())]
 		pub fn poke_deposit(origin: OriginFor<T>, who: T::AccountId) -> DispatchResultWithPostInfo {
 			ensure_root(origin)?;
-			let (id_deposit, subs_deposit) = pezpallet_identity::Pallet::<T>::poke_deposit(&who)?;
+			let (id_deposit, subs_deposit) = pezpallet_identity::Pezpallet::<T>::poke_deposit(&who)?;
 			Self::deposit_event(Event::DepositUpdated {
 				who,
 				identity: id_deposit,
@@ -187,7 +187,7 @@ mod benchmarks {
 	use codec::Encode;
 	use pezframe_support::traits::EnsureOrigin;
 	use pezframe_system::RawOrigin;
-	use pezpallet_identity::{Data, IdentityInformationProvider, Judgement, Pallet as Identity};
+	use pezpallet_identity::{Data, IdentityInformationProvider, Judgement, Pezpallet as Identity};
 	use pezsp_runtime::{
 		traits::{Bounded, Hash, StaticLookup},
 		Saturating,
@@ -196,7 +196,7 @@ mod benchmarks {
 	const SEED: u32 = 0;
 
 	fn assert_last_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
-		let events = pezframe_system::Pallet::<T>::events();
+		let events = pezframe_system::Pezpallet::<T>::events();
 		let system_event: <T as pezframe_system::Config>::RuntimeEvent = generic_event.into();
 		let pezframe_system::EventRecord { event, .. } = &events[events.len() - 1];
 		assert_eq!(event, &system_event);
@@ -316,7 +316,7 @@ mod benchmarks {
 	}
 
 	impl_benchmark_test_suite!(
-		Pallet,
+		Pezpallet,
 		crate::integration_tests::new_test_ext(),
 		crate::integration_tests::Test,
 	);

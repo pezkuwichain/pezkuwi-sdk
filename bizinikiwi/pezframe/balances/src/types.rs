@@ -15,9 +15,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Types used in the pallet.
+//! Types used in the pezpallet.
 
-use crate::{Config, CreditOf, Event, Pallet};
+use crate::{Config, CreditOf, Event, Pezpallet};
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
 use core::ops::BitOr;
 use pezframe_support::traits::{Imbalance, LockIdentifier, OnUnbalanced, WithdrawReasons};
@@ -190,7 +190,7 @@ pub struct DustCleaner<T: Config<I>, I: 'static = ()>(
 impl<T: Config<I>, I: 'static> Drop for DustCleaner<T, I> {
 	fn drop(&mut self) {
 		if let Some((who, dust)) = self.0.take() {
-			Pallet::<T, I>::deposit_event(Event::DustLost { account: who, amount: dust.peek() });
+			Pezpallet::<T, I>::deposit_event(Event::DustLost { account: who, amount: dust.peek() });
 			T::DustRemoval::on_unbalanced(dust);
 		}
 	}

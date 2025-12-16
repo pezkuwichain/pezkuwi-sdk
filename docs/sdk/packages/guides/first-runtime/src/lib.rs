@@ -53,7 +53,7 @@ construct_runtime!(
 		Sudo: pezpallet_sudo,
 		TransactionPayment: pezpallet_transaction_payment,
 
-		// Our local pallet
+		// Our local pezpallet
 		FirstPallet: our_first_pallet,
 	}
 );
@@ -285,7 +285,7 @@ impl_runtime_apis! {
 	}
 }
 
-/// Just a handy re-definition of some types based on what is already provided to the pallet
+/// Just a handy re-definition of some types based on what is already provided to the pezpallet
 /// configs.
 pub mod interface {
 	use super::Runtime;

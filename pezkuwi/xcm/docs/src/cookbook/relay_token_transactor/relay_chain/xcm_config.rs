@@ -158,7 +158,7 @@ impl pezpallet_xcm::Config for Runtime {
 	// A currency to pay for things and its matcher, we are using the relay token
 	type Currency = Balances;
 	type CurrencyMatcher = IsConcrete<HereLocation>;
-	// Pallet benchmarks, no need for this example
+	// Pezpallet benchmarks, no need for this example
 	type WeightInfo = pezpallet_xcm::TestWeightInfo;
 	// Runtime types
 	type RuntimeOrigin = RuntimeOrigin;

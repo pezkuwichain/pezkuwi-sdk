@@ -51,7 +51,7 @@
 //!
 //! If the [`MigrationInProgress`] storage item exists, it means a migration is in progress, and its
 //! value holds a cursor for the current migration step. These migration steps are executed during
-//! [`Hooks<BlockNumber>::on_idle`] or when the [`Pallet::migrate`] dispatchable is
+//! [`Hooks<BlockNumber>::on_idle`] or when the [`Pezpallet::migrate`] dispatchable is
 //! called.
 //!
 //! While the migration is in progress, all dispatchables except `migrate`, are blocked, and returns
@@ -67,7 +67,7 @@ pub mod v15;
 pub mod v16;
 include!(concat!(env!("OUT_DIR"), "/migration_codegen.rs"));
 
-use crate::{weights::WeightInfo, Config, Error, MigrationInProgress, Pallet, Weight, LOG_TARGET};
+use crate::{weights::WeightInfo, Config, Error, MigrationInProgress, Pezpallet, Weight, LOG_TARGET};
 use codec::{Codec, Decode};
 use core::marker::PhantomData;
 use pezframe_support::{
@@ -237,9 +237,9 @@ pub struct Migration<T: Config, const TEST_ALL_STEPS: bool = true>(PhantomData<T
 impl<T: Config, const TEST_ALL_STEPS: bool> Migration<T, TEST_ALL_STEPS> {
 	fn run_all_steps() -> Result<(), TryRuntimeError> {
 		let mut meter = &mut WeightMeter::new();
-		let name = <Pallet<T>>::name();
+		let name = <Pezpallet<T>>::name();
 		loop {
-			let in_progress_version = <Pallet<T>>::on_chain_storage_version() + 1;
+			let in_progress_version = <Pezpallet<T>>::on_chain_storage_version() + 1;
 			let state = T::Migrations::pre_upgrade_step(in_progress_version)?;
 			let before = meter.consumed();
 			let status = Self::migrate(&mut meter);
@@ -255,7 +255,7 @@ impl<T: Config, const TEST_ALL_STEPS: bool> Migration<T, TEST_ALL_STEPS> {
 			}
 		}
 
-		let name = <Pallet<T>>::name();
+		let name = <Pezpallet<T>>::name();
 		log::info!(target: LOG_TARGET, "{name}: Migration steps weight = {}", meter.consumed());
 		Ok(())
 	}
@@ -263,9 +263,9 @@ impl<T: Config, const TEST_ALL_STEPS: bool> Migration<T, TEST_ALL_STEPS> {
 
 impl<T: Config, const TEST_ALL_STEPS: bool> OnRuntimeUpgrade for Migration<T, TEST_ALL_STEPS> {
 	fn on_runtime_upgrade() -> Weight {
-		let name = <Pallet<T>>::name();
-		let in_code_version = <Pallet<T>>::in_code_storage_version();
-		let on_chain_version = <Pallet<T>>::on_chain_storage_version();
+		let name = <Pezpallet<T>>::name();
+		let in_code_version = <Pezpallet<T>>::in_code_storage_version();
+		let on_chain_version = <Pezpallet<T>>::on_chain_storage_version();
 
 		if on_chain_version == in_code_version {
 			log::warn!(
@@ -309,8 +309,8 @@ impl<T: Config, const TEST_ALL_STEPS: bool> OnRuntimeUpgrade for Migration<T, TE
 		// We can't really do much here as our migrations do not happen during the runtime upgrade.
 		// Instead, we call the migrations `pre_upgrade` and `post_upgrade` hooks when we iterate
 		// over our migrations.
-		let on_chain_version = <Pallet<T>>::on_chain_storage_version();
-		let in_code_version = <Pallet<T>>::in_code_storage_version();
+		let on_chain_version = <Pezpallet<T>>::on_chain_storage_version();
+		let in_code_version = <Pezpallet<T>>::in_code_storage_version();
 
 		if on_chain_version == in_code_version {
 			return Ok(Default::default());
@@ -319,7 +319,7 @@ impl<T: Config, const TEST_ALL_STEPS: bool> OnRuntimeUpgrade for Migration<T, TE
 		log::debug!(
 			target: LOG_TARGET,
 			"Requested migration of {} from {:?}(on-chain storage version) to {:?}(in-code storage version)",
-			<Pallet<T>>::name(), on_chain_version, in_code_version
+			<Pezpallet<T>>::name(), on_chain_version, in_code_version
 		);
 
 		ensure!(
@@ -388,7 +388,7 @@ impl<T: Config, const TEST_ALL_STEPS: bool> Migration<T, TEST_ALL_STEPS> {
 	/// Execute the multi-step migration.
 	/// Returns whether or not a migration is in progress
 	pub(crate) fn migrate(mut meter: &mut WeightMeter) -> MigrateResult {
-		let name = <Pallet<T>>::name();
+		let name = <Pezpallet<T>>::name();
 
 		if meter.try_consume(T::WeightInfo::migrate()).is_err() {
 			return MigrateResult::NoMigrationPerformed;
@@ -401,7 +401,7 @@ impl<T: Config, const TEST_ALL_STEPS: bool> Migration<T, TEST_ALL_STEPS> {
 			};
 
 			// if a migration is running it is always upgrading to the next version
-			let storage_version = <Pallet<T>>::on_chain_storage_version();
+			let storage_version = <Pezpallet<T>>::on_chain_storage_version();
 			let in_progress_version = storage_version + 1;
 
 			log::info!(
@@ -419,8 +419,8 @@ impl<T: Config, const TEST_ALL_STEPS: bool> Migration<T, TEST_ALL_STEPS> {
 						MigrateResult::InProgress { steps_done }
 					},
 					StepResult::Completed { steps_done } => {
-						in_progress_version.put::<Pallet<T>>();
-						if <Pallet<T>>::in_code_storage_version() != in_progress_version {
+						in_progress_version.put::<Pezpallet<T>>();
+						if <Pezpallet<T>>::in_code_storage_version() != in_progress_version {
 							log::info!(
 								target: LOG_TARGET,
 								"{name}: Next migration is {:?},",
@@ -578,7 +578,7 @@ mod test {
 
 	#[test]
 	fn test_storage_version_matches_last_migration_file() {
-		assert_eq!(StorageVersion::new(LATEST_MIGRATION_VERSION), crate::pallet::STORAGE_VERSION);
+		assert_eq!(StorageVersion::new(LATEST_MIGRATION_VERSION), crate::pezpallet::STORAGE_VERSION);
 	}
 
 	#[test]
@@ -619,7 +619,7 @@ mod test {
 		type TestMigration = Migration<Test>;
 
 		ExtBuilder::default().build().execute_with(|| {
-			assert_eq!(StorageVersion::get::<Pallet<Test>>(), LATEST_MIGRATION_VERSION);
+			assert_eq!(StorageVersion::get::<Pezpallet<Test>>(), LATEST_MIGRATION_VERSION);
 			assert_eq!(
 				TestMigration::migrate(&mut WeightMeter::new()),
 				MigrateResult::NoMigrationInProgress
@@ -635,7 +635,7 @@ mod test {
 			.set_storage_version(LATEST_MIGRATION_VERSION - 2)
 			.build()
 			.execute_with(|| {
-				assert_eq!(StorageVersion::get::<Pallet<Test>>(), LATEST_MIGRATION_VERSION - 2);
+				assert_eq!(StorageVersion::get::<Pezpallet<Test>>(), LATEST_MIGRATION_VERSION - 2);
 				TestMigration::on_runtime_upgrade();
 				for (version, status) in [
 					(LATEST_MIGRATION_VERSION - 1, MigrateResult::InProgress { steps_done: 1 }),
@@ -643,7 +643,7 @@ mod test {
 				] {
 					assert_eq!(TestMigration::migrate(&mut WeightMeter::new()), status);
 					assert_eq!(
-						<Pallet<Test>>::on_chain_storage_version(),
+						<Pezpallet<Test>>::on_chain_storage_version(),
 						StorageVersion::new(version)
 					);
 				}
@@ -652,7 +652,7 @@ mod test {
 					TestMigration::migrate(&mut WeightMeter::new()),
 					MigrateResult::NoMigrationInProgress
 				);
-				assert_eq!(StorageVersion::get::<Pallet<Test>>(), LATEST_MIGRATION_VERSION);
+				assert_eq!(StorageVersion::get::<Pezpallet<Test>>(), LATEST_MIGRATION_VERSION);
 			});
 	}
 }

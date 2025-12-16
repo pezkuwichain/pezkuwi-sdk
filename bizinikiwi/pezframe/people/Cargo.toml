@@ -6,7 +6,7 @@ edition.workspace = true
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
-description = "Personhood-tracking pallet"
+description = "Personhood-tracking pezpallet"
 readme = "README.md"
 documentation = "https://docs.rs/pezpallet-people"
 

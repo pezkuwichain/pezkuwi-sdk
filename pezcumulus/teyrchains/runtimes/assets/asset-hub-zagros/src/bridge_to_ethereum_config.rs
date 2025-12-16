@@ -42,9 +42,9 @@ parameter_types! {
 	pub SystemFrontendPalletLocation: InteriorLocation = [PalletInstance(FRONTEND_PALLET_INDEX)].into();
 }
 
-impl snowbridge_pezpallet_system_frontend::Config for Runtime {
+impl pezsnowbridge_pezpallet_system_frontend::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
-	type WeightInfo = weights::snowbridge_pezpallet_system_frontend::WeightInfo<Runtime>;
+	type WeightInfo = weights::pezpezsnowbridge_pezpallet_system_frontend::WeightInfo<Runtime>;
 	#[cfg(feature = "runtime-benchmarks")]
 	type Helper = ();
 	type RegisterTokenOrigin = EitherOf<
@@ -58,7 +58,7 @@ impl snowbridge_pezpallet_system_frontend::Config for Runtime {
 			>,
 			ForeignAssetOwner<
 				(
-					FromSiblingTeyrchain<teyrchain_info::Pallet<Runtime>, Location>,
+					FromSiblingTeyrchain<teyrchain_info::Pezpallet<Runtime>, Location>,
 					xcm_config::bridging::to_pezkuwichain::PezkuwichainAssetFromAssetHubPezkuwichain,
 				),
 				ForeignAssets,
@@ -80,7 +80,7 @@ impl snowbridge_pezpallet_system_frontend::Config for Runtime {
 	type UniversalLocation = UniversalLocation;
 	type PalletLocation = SystemFrontendPalletLocation;
 	type Swap = AssetConversion;
-	type BackendWeightInfo = weights::snowbridge_pezpallet_system_backend::WeightInfo<Runtime>;
+	type BackendWeightInfo = weights::pezpezsnowbridge_pezpallet_system_backend::WeightInfo<Runtime>;
 	type AccountIdConverter = xcm_config::LocationToAccountId;
 }
 
@@ -125,7 +125,7 @@ pub mod benchmark_helpers {
 		}
 	}
 
-	impl snowbridge_pezpallet_system_frontend::BenchmarkHelper<RuntimeOrigin, AccountId> for () {
+	impl pezsnowbridge_pezpallet_system_frontend::BenchmarkHelper<RuntimeOrigin, AccountId> for () {
 		fn make_xcm_origin(location: Location) -> RuntimeOrigin {
 			RuntimeOrigin::from(pezpallet_xcm::Origin::Xcm(location))
 		}

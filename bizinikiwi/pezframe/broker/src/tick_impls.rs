@@ -22,7 +22,7 @@ use pezsp_arithmetic::traits::{One, SaturatedConversion, Saturating, Zero};
 use pezsp_runtime::traits::{BlockNumberProvider, ConvertBack, MaybeConvert};
 use CompletionStatus::Complete;
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Attempt to tick things along.
 	///
 	/// This may do several things:

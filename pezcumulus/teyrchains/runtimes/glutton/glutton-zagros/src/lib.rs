@@ -180,7 +180,7 @@ type ConsensusHook = pezcumulus_pezpallet_aura_ext::FixedVelocityConsensusHook<
 impl pezcumulus_pezpallet_teyrchain_system::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type OnSystemEvent = ();
-	type SelfParaId = teyrchain_info::Pallet<Runtime>;
+	type SelfParaId = teyrchain_info::Pezpallet<Runtime>;
 	type DmpQueue = pezframe_support::traits::EnqueueWithOrigin<MessageQueue, RelayOrigin>;
 	type OutboundXcmpMessageSource = ();
 	type ReservedDmpWeight = ReservedDmpWeight;
@@ -212,7 +212,7 @@ impl pezpallet_message_queue::Config for Runtime {
 	>;
 	type Size = u32;
 	type QueueChangeHandler = ();
-	// No XCMP queue pallet deployed.
+	// No XCMP queue pezpallet deployed.
 	type QueuePausedQuery = ();
 	type HeapSize = pezsp_core::ConstU32<{ 103 * 1024 }>;
 	type MaxStale = pezsp_core::ConstU32<8>;
@@ -449,8 +449,8 @@ impl_runtime_apis! {
 		) {
 			use pezframe_benchmarking::BenchmarkList;
 			use pezframe_support::traits::StorageInfoTrait;
-			use pezframe_system_benchmarking::Pallet as SystemBench;
-			use pezframe_system_benchmarking::extensions::Pallet as SystemExtensionsBench;
+			use pezframe_system_benchmarking::Pezpallet as SystemBench;
+			use pezframe_system_benchmarking::extensions::Pezpallet as SystemExtensionsBench;
 
 			let mut list = Vec::<BenchmarkList>::new();
 			list_benchmarks!(list, extra);
@@ -467,8 +467,8 @@ impl_runtime_apis! {
 			use pezframe_benchmarking::{BenchmarkBatch,  BenchmarkError};
 			use pezsp_storage::TrackedStorageKey;
 
-			use pezframe_system_benchmarking::Pallet as SystemBench;
-			use pezframe_system_benchmarking::extensions::Pallet as SystemExtensionsBench;
+			use pezframe_system_benchmarking::Pezpallet as SystemBench;
+			use pezframe_system_benchmarking::extensions::Pezpallet as SystemExtensionsBench;
 			impl pezframe_system_benchmarking::Config for Runtime {
 				fn setup_set_code_requirements(code: &alloc::vec::Vec<u8>) -> Result<(), BenchmarkError> {
 					TeyrchainSystem::initialize_for_set_code_benchmark(code.len() as u32);

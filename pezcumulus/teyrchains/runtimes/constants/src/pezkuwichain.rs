@@ -151,7 +151,7 @@ pub mod snowbridge {
 	use pezframe_support::parameter_types;
 	use xcm::prelude::{Location, NetworkId};
 
-	/// The pallet index of the Ethereum inbound queue pallet in the bridge hub runtime.
+	/// The pezpallet index of the Ethereum inbound queue pezpallet in the bridge hub runtime.
 	pub const INBOUND_QUEUE_PALLET_INDEX: u8 = 80;
 
 	parameter_types! {

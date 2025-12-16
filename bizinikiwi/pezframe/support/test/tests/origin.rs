@@ -26,29 +26,29 @@ use pezframe_support::{
 use pezsp_runtime::{generic, traits::BlakeTwo256};
 
 mod nested {
-	#[pezframe_support::pallet(dev_mode)]
+	#[pezframe_support::pezpallet(dev_mode)]
 	pub mod module {
 		use pezframe_support::pezpallet_prelude::*;
 		use pezframe_system::pezpallet_prelude::*;
 
-		#[pallet::pallet]
-		pub struct Pallet<T>(_);
+		#[pezpallet::pezpallet]
+		pub struct Pezpallet<T>(_);
 
-		#[pallet::config]
+		#[pezpallet::config]
 		pub trait Config: pezframe_system::Config {
 			#[allow(deprecated)]
 			type RuntimeEvent: From<Event<Self>>
 				+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		}
 
-		#[pallet::call]
-		impl<T: Config> Pallet<T> {
+		#[pezpallet::call]
+		impl<T: Config> Pezpallet<T> {
 			pub fn fail(_origin: OriginFor<T>) -> DispatchResult {
 				Err(Error::<T>::Something.into())
 			}
 		}
 
-		#[pallet::origin]
+		#[pezpallet::origin]
 		#[derive(
 			Clone,
 			PartialEq,
@@ -62,74 +62,74 @@ mod nested {
 		)]
 		pub struct Origin;
 
-		#[pallet::event]
+		#[pezpallet::event]
 		pub enum Event<T> {
 			A,
 		}
 
-		#[pallet::error]
+		#[pezpallet::error]
 		pub enum Error<T> {
 			Something,
 		}
 
-		#[pallet::genesis_config]
+		#[pezpallet::genesis_config]
 		#[derive(pezframe_support::DefaultNoBound)]
 		pub struct GenesisConfig<T: Config> {
 			#[serde(skip)]
 			pub _config: core::marker::PhantomData<T>,
 		}
 
-		#[pallet::genesis_build]
+		#[pezpallet::genesis_build]
 		impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 			fn build(&self) {}
 		}
 	}
 }
 
-#[pezframe_support::pallet(dev_mode)]
+#[pezframe_support::pezpallet(dev_mode)]
 pub mod module {
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		pub fn fail(_origin: OriginFor<T>) -> DispatchResult {
 			Err(Error::<T>::Something.into())
 		}
-		pub fn aux_1(_origin: OriginFor<T>, #[pallet::compact] _data: u32) -> DispatchResult {
+		pub fn aux_1(_origin: OriginFor<T>, #[pezpallet::compact] _data: u32) -> DispatchResult {
 			unreachable!()
 		}
 		pub fn aux_2(
 			_origin: OriginFor<T>,
 			_data: i32,
-			#[pallet::compact] _data2: u32,
+			#[pezpallet::compact] _data2: u32,
 		) -> DispatchResult {
 			unreachable!()
 		}
-		#[pallet::weight(0)]
+		#[pezpallet::weight(0)]
 		pub fn aux_3(_origin: OriginFor<T>, _data: i32, _data2: String) -> DispatchResult {
 			unreachable!()
 		}
-		#[pallet::weight(3)]
+		#[pezpallet::weight(3)]
 		pub fn aux_4(_origin: OriginFor<T>) -> DispatchResult {
 			unreachable!()
 		}
-		#[pallet::weight((5, DispatchClass::Operational))]
+		#[pezpallet::weight((5, DispatchClass::Operational))]
 		pub fn operational(_origin: OriginFor<T>) -> DispatchResult {
 			unreachable!()
 		}
 	}
 
-	#[pallet::origin]
+	#[pezpallet::origin]
 	#[derive(
 		Clone,
 		PartialEq,
@@ -143,24 +143,24 @@ pub mod module {
 	)]
 	pub struct Origin<T>(pub PhantomData<T>);
 
-	#[pallet::event]
+	#[pezpallet::event]
 	pub enum Event<T> {
 		A,
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		Something,
 	}
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(pezframe_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		#[serde(skip)]
 		pub _config: core::marker::PhantomData<T>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {}
 	}

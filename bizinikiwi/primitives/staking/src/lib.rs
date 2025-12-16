@@ -288,7 +288,7 @@ pub trait StakingInterface {
 	/// Checks whether the staker is a virtual account.
 	///
 	/// A virtual staker is an account whose locks are not managed by the [`StakingInterface`]
-	/// implementation but by an external pallet. See [`StakingUnchecked::virtual_bond`] for more
+	/// implementation but by an external pezpallet. See [`StakingUnchecked::virtual_bond`] for more
 	/// details.
 	fn is_virtual_staker(who: &Self::AccountId) -> bool;
 
@@ -324,13 +324,13 @@ pub trait StakingInterface {
 pub trait StakingUnchecked: StakingInterface {
 	/// Migrate an existing staker to a virtual staker.
 	///
-	/// It would release all funds held by the implementation pallet.
+	/// It would release all funds held by the implementation pezpallet.
 	fn migrate_to_virtual_staker(who: &Self::AccountId) -> DispatchResult;
 
 	/// Book-keep a new bond for `keyless_who` without applying any locks (hence virtual).
 	///
 	/// It is important that `keyless_who` is a keyless account and therefore cannot interact with
-	/// staking pallet directly. Caller is responsible for ensuring the passed amount is locked and
+	/// staking pezpallet directly. Caller is responsible for ensuring the passed amount is locked and
 	/// valid.
 	fn virtual_bond(
 		keyless_who: &Self::AccountId,

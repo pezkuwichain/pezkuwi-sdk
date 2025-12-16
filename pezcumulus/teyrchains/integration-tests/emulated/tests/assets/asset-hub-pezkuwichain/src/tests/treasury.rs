@@ -153,7 +153,7 @@ fn spend_roc_on_asset_hub() {
 
 		// Assert events triggered by xcm pay program:
 		// 1. treasury asset transferred to spend beneficiary;
-		// 2. response to Relay Chain Treasury pallet instance sent back;
+		// 2. response to Relay Chain Treasury pezpallet instance sent back;
 		// 3. XCM program completed;
 		assert_expected_events!(
 			AssetHubPezkuwichain,
@@ -229,7 +229,7 @@ fn create_and_claim_treasury_spend_in_usdt() {
 
 		// assert events triggered by xcm pay program
 		// 1. treasury asset transferred to spend beneficiary
-		// 2. response to Relay Chain treasury pallet instance sent back
+		// 2. response to Relay Chain treasury pezpallet instance sent back
 		// 3. XCM program completed
 		assert_expected_events!(
 			AssetHubPezkuwichain,

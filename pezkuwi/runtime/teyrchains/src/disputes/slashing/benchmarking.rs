@@ -56,7 +56,7 @@ where
 		use rand::{RngCore, SeedableRng};
 
 		let validator = T::Lookup::lookup(who).unwrap();
-		let controller = pezpallet_staking::Pallet::<T>::bonded(&validator).unwrap();
+		let controller = pezpallet_staking::Pezpallet::<T>::bonded(&validator).unwrap();
 
 		let keys = {
 			const SESSION_KEY_LEN: usize = 32;
@@ -76,35 +76,35 @@ where
 		let proof: Vec<u8> = vec![];
 
 		whitelist_account!(controller);
-		pezpallet_session::Pallet::<T>::ensure_can_pay_key_deposit(&controller).unwrap();
-		pezpallet_session::Pallet::<T>::set_keys(RawOrigin::Signed(controller).into(), keys, proof)
+		pezpallet_session::Pezpallet::<T>::ensure_can_pay_key_deposit(&controller).unwrap();
+		pezpallet_session::Pezpallet::<T>::set_keys(RawOrigin::Signed(controller).into(), keys, proof)
 			.expect("session::set_keys should work");
 	}
 
-	pezpallet_session::Pallet::<T>::on_initialize(BlockNumberFor::<T>::one());
-	initializer::Pallet::<T>::on_initialize(BlockNumberFor::<T>::one());
+	pezpallet_session::Pezpallet::<T>::on_initialize(BlockNumberFor::<T>::one());
+	initializer::Pezpallet::<T>::on_initialize(BlockNumberFor::<T>::one());
 
 	// signal to `pezpallet-staking`'s `ElectionProvider` to be ready asap.
 	use pezframe_election_provider_support::ElectionProvider;
 	<<T as pezpallet_staking::Config>::ElectionProvider as ElectionProvider>::asap();
 
 	// skip sessions until the new validator set is enacted
-	while pezpallet_session::Pallet::<T>::validators().len() < n as usize {
-		pezpallet_session::Pallet::<T>::rotate_session();
+	while pezpallet_session::Pezpallet::<T>::validators().len() < n as usize {
+		pezpallet_session::Pezpallet::<T>::rotate_session();
 	}
-	initializer::Pallet::<T>::on_finalize(BlockNumberFor::<T>::one());
+	initializer::Pezpallet::<T>::on_finalize(BlockNumberFor::<T>::one());
 
 	let session_index = crate::shared::CurrentSessionIndex::<T>::get();
 	let session_info = crate::session_info::Sessions::<T>::get(session_index);
 	let session_info = session_info.unwrap();
 	let validator_id = session_info.validators.get(ValidatorIndex::from(0)).unwrap().clone();
 	let key = (TEYRCHAIN_KEY_TYPE_ID, validator_id.clone());
-	let key_owner_proof = pezpallet_session::historical::Pallet::<T>::prove(key).unwrap();
+	let key_owner_proof = pezpallet_session::historical::Pezpallet::<T>::prove(key).unwrap();
 
 	// rotate a session to make sure `key_owner_proof` is historical
-	initializer::Pallet::<T>::on_initialize(BlockNumberFor::<T>::one());
-	pezpallet_session::Pallet::<T>::rotate_session();
-	initializer::Pallet::<T>::on_finalize(BlockNumberFor::<T>::one());
+	initializer::Pezpallet::<T>::on_initialize(BlockNumberFor::<T>::one());
+	pezpallet_session::Pezpallet::<T>::rotate_session();
+	initializer::Pezpallet::<T>::on_finalize(BlockNumberFor::<T>::one());
 
 	let idx = crate::shared::CurrentSessionIndex::<T>::get();
 	assert!(

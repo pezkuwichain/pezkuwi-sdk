@@ -17,9 +17,9 @@
 
 /// Version 1.
 ///
-/// In version 0 session historical pallet uses `Session` for storage module prefix.
+/// In version 0 session historical pezpallet uses `Session` for storage module prefix.
 /// In version 1 it uses its name as configured in `construct_runtime`.
-/// This migration moves session historical pallet storages from old prefix to new prefix.
+/// This migration moves session historical pezpallet storages from old prefix to new prefix.
 #[cfg(feature = "historical")]
 pub mod historical;
 pub mod v1;

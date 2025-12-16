@@ -23,7 +23,7 @@ use pezsp_runtime::{
 	traits::{BlakeTwo256, Verify},
 };
 
-#[pezframe_support::pallet]
+#[pezframe_support::pezpallet]
 mod module {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
@@ -79,42 +79,42 @@ mod module {
 		}
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config + TypeInfo {}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {}
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {}
 
 	/// requirements to enter and maintain status in roles
-	#[pallet::storage]
-	#[pallet::getter(fn parameters)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn parameters)]
 	pub type Parameters<T: Config> =
 		StorageMap<_, Blake2_128Concat, Role, RoleParameters<T>, OptionQuery>;
 
 	/// the roles members can enter into
-	#[pallet::storage]
-	#[pallet::getter(fn available_roles)]
-	#[pallet::unbounded]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn available_roles)]
+	#[pezpallet::unbounded]
 	pub type AvailableRoles<T: Config> = StorageValue<_, Vec<Role>, ValueQuery>;
 
 	/// Actors list
-	#[pallet::storage]
-	#[pallet::getter(fn actor_account_ids)]
-	#[pallet::unbounded]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn actor_account_ids)]
+	#[pezpallet::unbounded]
 	pub type ActorAccountIds<T: Config> = StorageValue<_, Vec<T::AccountId>>;
 
 	/// actor accounts associated with a role
-	#[pallet::storage]
-	#[pallet::getter(fn account_ids_by_role)]
-	#[pallet::unbounded]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn account_ids_by_role)]
+	#[pezpallet::unbounded]
 	pub type AccountIdsByRole<T: Config> = StorageMap<_, Blake2_128Concat, Role, Vec<T::AccountId>>;
 
 	/// tokens locked until given block number
-	#[pallet::storage]
-	#[pallet::getter(fn bondage)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn bondage)]
 	pub type Bondage<T: Config> = StorageMap<_, Blake2_128Concat, T::AccountId, BlockNumberFor<T>>;
 
 	/// First step before enter a role is registering intent with a new account/key.
@@ -123,17 +123,17 @@ mod module {
 	/// role. The account making the request will be bonded and must have
 	/// sufficient balance to cover the minimum stake for the role.
 	/// Bonding only occurs after successful entry into a role.
-	#[pallet::storage]
-	#[pallet::getter(fn role_entry_requests)]
-	#[pallet::unbounded]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn role_entry_requests)]
+	#[pezpallet::unbounded]
 	pub type RoleEntryRequests<T: Config> = StorageValue<_, Requests<T>>;
 
 	/// Entry request expires after this number of blocks
-	#[pallet::storage]
-	#[pallet::getter(fn request_life_time)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn request_life_time)]
 	pub type RequestLifeTime<T: Config> = StorageValue<_, u64, ValueQuery, ConstU64<0>>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(pezframe_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		pub enable_storage_role: bool,
@@ -142,7 +142,7 @@ mod module {
 		pub _config: core::marker::PhantomData<T>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			if self.enable_storage_role {

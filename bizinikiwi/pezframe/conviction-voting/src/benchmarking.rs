@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! ConvictionVoting pallet benchmarking.
+//! ConvictionVoting pezpallet benchmarking.
 
 use super::*;
 
@@ -32,7 +32,7 @@ use pezframe_support::{
 };
 use pezsp_runtime::traits::Bounded;
 
-use crate::Pallet as ConvictionVoting;
+use crate::Pezpallet as ConvictionVoting;
 
 const SEED: u32 = 0;
 

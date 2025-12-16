@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Society pallet benchmarking.
+//! Society pezpallet benchmarking.
 
 #![cfg(feature = "runtime-benchmarks")]
 
@@ -27,7 +27,7 @@ use pezframe_system::RawOrigin;
 use alloc::vec;
 use pezsp_runtime::traits::Bounded;
 
-use crate::Pallet as Society;
+use crate::Pezpallet as Society;
 
 fn set_block_number<T: Config<I>, I: 'static>(n: BlockNumberFor<T, I>) {
 	<T as Config<I>>::BlockNumberProvider::set_block_number(n);

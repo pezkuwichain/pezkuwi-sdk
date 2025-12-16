@@ -24,7 +24,7 @@ use crate::{
 	exec::AccountIdOf,
 	migration::{IsFinished, MigrationStep},
 	weights::WeightInfo,
-	BalanceOf, CodeHash, Config, Determinism, HoldReason, Pallet, Weight, LOG_TARGET,
+	BalanceOf, CodeHash, Config, Determinism, HoldReason, Pezpallet, Weight, LOG_TARGET,
 };
 #[cfg(feature = "try-runtime")]
 use alloc::collections::btree_map::BTreeMap;
@@ -71,7 +71,7 @@ mod v13 {
 
 	#[storage_alias]
 	pub type CodeInfoOf<T: Config, OldCurrency> =
-		StorageMap<Pallet<T>, Identity, CodeHash<T>, CodeInfo<T, OldCurrency>>;
+		StorageMap<Pezpallet<T>, Identity, CodeHash<T>, CodeInfo<T, OldCurrency>>;
 }
 
 #[cfg(feature = "runtime-benchmarks")]

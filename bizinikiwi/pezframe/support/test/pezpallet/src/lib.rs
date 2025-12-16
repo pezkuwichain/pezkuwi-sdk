@@ -15,40 +15,40 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! A basic pallet that can be used to test `construct_runtime!`.
+//! A basic pezpallet that can be used to test `construct_runtime!`.
 
 // Ensure docs are propagated properly by the macros.
 #![warn(missing_docs)]
 
-pub use pallet::*;
+pub use pezpallet::*;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use pezframe_support::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
 	/// I'm the documentation
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Value<T> = StorageValue<_, u32>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(pezframe_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		#[serde(skip)]
 		_config: core::marker::PhantomData<T>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {}
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Something failed
 		Test,

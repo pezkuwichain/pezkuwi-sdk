@@ -121,7 +121,7 @@ mod enter {
 		(0..(builder.max_cores() as usize - extra_cores)).for_each(|para_id| {
 			(0..elastic_paras.get(&(para_id as u32)).cloned().unwrap_or(1)).for_each(
 				|_para_local_core_idx| {
-					mock_assigner::Pallet::<Test>::add_test_assignment(Assignment::Bulk(
+					mock_assigner::Pezpallet::<Test>::add_test_assignment(Assignment::Bulk(
 						para_id.into(),
 					));
 				},
@@ -158,7 +158,7 @@ mod enter {
 
 		new_test_ext(config).execute_with(|| {
 			// V2 receipts are always enabled.
-			configuration::Pallet::<Test>::set_node_feature(
+			configuration::Pezpallet::<Test>::set_node_feature(
 				RuntimeOrigin::root(),
 				FeatureIndex::CandidateReceiptV2 as u8,
 				true,
@@ -201,11 +201,11 @@ mod enter {
 			inherent_data
 				.put_data(TEYRCHAINS_INHERENT_IDENTIFIER, &expected_para_inherent_data)
 				.unwrap();
-			assert!(!scheduler::Pallet::<Test>::claim_queue_is_empty());
+			assert!(!scheduler::Pezpallet::<Test>::claim_queue_is_empty());
 
 			// Nothing is filtered out (including the backed candidates.)
 			assert_eq!(
-				Pallet::<Test>::create_inherent_inner(&inherent_data.clone()).unwrap(),
+				Pezpallet::<Test>::create_inherent_inner(&inherent_data.clone()).unwrap(),
 				expected_para_inherent_data
 			);
 
@@ -254,7 +254,7 @@ mod enter {
 
 		new_test_ext(config).execute_with(|| {
 			// V2 receipts are always enabled.
-			configuration::Pallet::<Test>::set_node_feature(
+			configuration::Pezpallet::<Test>::set_node_feature(
 				RuntimeOrigin::root(),
 				FeatureIndex::CandidateReceiptV2 as u8,
 				true,
@@ -295,19 +295,19 @@ mod enter {
 				.put_data(TEYRCHAINS_INHERENT_IDENTIFIER, &expected_para_inherent_data)
 				.unwrap();
 
-			assert!(!scheduler::Pallet::<Test>::claim_queue_is_empty());
-			assert!(pallet::OnChainVotes::<Test>::get().is_none());
+			assert!(!scheduler::Pezpallet::<Test>::claim_queue_is_empty());
+			assert!(pezpallet::OnChainVotes::<Test>::get().is_none());
 
 			// Nothing is filtered out (including the backed candidates.)
 			assert_eq!(
-				Pallet::<Test>::create_inherent_inner(&inherent_data.clone()).unwrap(),
+				Pezpallet::<Test>::create_inherent_inner(&inherent_data.clone()).unwrap(),
 				expected_para_inherent_data
 			);
 
 			assert_eq!(
 				// The length of this vec is equal to the number of candidates, so we know our 5
 				// backed candidates did not get filtered out
-				pallet::OnChainVotes::<Test>::get()
+				pezpallet::OnChainVotes::<Test>::get()
 					.unwrap()
 					.backing_validators_per_candidate
 					.len(),
@@ -316,7 +316,7 @@ mod enter {
 
 			assert_eq!(
 				// The session of the on chain votes should equal the current session, which is 2
-				pallet::OnChainVotes::<Test>::get().unwrap().session,
+				pezpallet::OnChainVotes::<Test>::get().unwrap().session,
 				2
 			);
 
@@ -356,7 +356,7 @@ mod enter {
 
 		new_test_ext(config).execute_with(|| {
 			// V2 receipts are always enabled.
-			configuration::Pallet::<Test>::set_node_feature(
+			configuration::Pezpallet::<Test>::set_node_feature(
 				RuntimeOrigin::root(),
 				FeatureIndex::CandidateReceiptV2 as u8,
 				true,
@@ -394,7 +394,7 @@ mod enter {
 			assert_eq!(expected_para_inherent_data.backed_candidates.len(), 6);
 			// * 0 disputes.
 			assert_eq!(expected_para_inherent_data.disputes.len(), 0);
-			assert!(pallet::OnChainVotes::<Test>::get().is_none());
+			assert!(pezpallet::OnChainVotes::<Test>::get().is_none());
 
 			expected_para_inherent_data.backed_candidates = expected_para_inherent_data
 				.backed_candidates
@@ -410,17 +410,17 @@ mod enter {
 			let mut inherent_data = InherentData::new();
 			inherent_data.put_data(TEYRCHAINS_INHERENT_IDENTIFIER, &scenario.data).unwrap();
 
-			assert!(!scheduler::Pallet::<Test>::claim_queue_is_empty());
+			assert!(!scheduler::Pezpallet::<Test>::claim_queue_is_empty());
 
 			// The right candidates have been filtered out (the ones for cores 0,4,5)
 			assert_eq!(
-				Pallet::<Test>::create_inherent_inner(&inherent_data.clone()).unwrap(),
+				Pezpallet::<Test>::create_inherent_inner(&inherent_data.clone()).unwrap(),
 				expected_para_inherent_data
 			);
 
 			// 3 candidates have been backed (for cores 1,2 and 3)
 			assert_eq!(
-				pallet::OnChainVotes::<Test>::get()
+				pezpallet::OnChainVotes::<Test>::get()
 					.unwrap()
 					.backing_validators_per_candidate
 					.len(),
@@ -429,7 +429,7 @@ mod enter {
 
 			assert_eq!(
 				// The session of the on chain votes should equal the current session, which is 2
-				pallet::OnChainVotes::<Test>::get().unwrap().session,
+				pezpallet::OnChainVotes::<Test>::get().unwrap().session,
 				2
 			);
 
@@ -486,12 +486,12 @@ mod enter {
 
 			// Nothing has been filtered out.
 			assert_eq!(
-				Pallet::<Test>::create_inherent_inner(&inherent_data.clone()).unwrap(),
+				Pezpallet::<Test>::create_inherent_inner(&inherent_data.clone()).unwrap(),
 				data
 			);
 
 			// No more candidates have been backed
-			assert!(pallet::OnChainVotes::<Test>::get()
+			assert!(pezpallet::OnChainVotes::<Test>::get()
 				.unwrap()
 				.backing_validators_per_candidate
 				.is_empty());
@@ -583,7 +583,7 @@ mod enter {
 			inherent_data
 				.put_data(TEYRCHAINS_INHERENT_IDENTIFIER, &expected_para_inherent_data)
 				.unwrap();
-			assert!(!scheduler::Pallet::<Test>::claim_queue_is_empty());
+			assert!(!scheduler::Pezpallet::<Test>::claim_queue_is_empty());
 
 			// Simulate a session change scheduled to happen at the end of the block.
 			initializer::BufferedSessionChanges::<Test>::put(vec![BufferedSessionChange {
@@ -594,7 +594,7 @@ mod enter {
 
 			// Only backed candidates are filtered out.
 			assert_eq!(
-				Pallet::<Test>::create_inherent_inner(&inherent_data.clone()).unwrap(),
+				Pezpallet::<Test>::create_inherent_inner(&inherent_data.clone()).unwrap(),
 				expected_para_inherent_data
 			);
 
@@ -687,7 +687,7 @@ mod enter {
 			let candidate_hash = CandidateHash(pezsp_core::H256::repeat_byte(1));
 			let statements = generate_votes(3, candidate_hash);
 			set_scrapable_on_chain_disputes::<Test>(3, statements);
-			assert_matches!(pallet::OnChainVotes::<Test>::get(), Some(ScrapedOnChainVotes {
+			assert_matches!(pezpallet::OnChainVotes::<Test>::get(), Some(ScrapedOnChainVotes {
 				session,
 				..
 			} ) => {
@@ -706,7 +706,7 @@ mod enter {
 			let candidate_hash = CandidateHash(pezsp_core::H256::repeat_byte(2));
 			let statements = generate_votes(7, candidate_hash);
 			set_scrapable_on_chain_disputes::<Test>(7, statements);
-			assert_matches!(pallet::OnChainVotes::<Test>::get(), Some(ScrapedOnChainVotes {
+			assert_matches!(pezpallet::OnChainVotes::<Test>::get(), Some(ScrapedOnChainVotes {
 				session,
 				..
 			} ) => {
@@ -752,10 +752,10 @@ mod enter {
 				.put_data(TEYRCHAINS_INHERENT_IDENTIFIER, &expected_para_inherent_data)
 				.unwrap();
 
-			assert!(!scheduler::Pallet::<Test>::claim_queue_is_empty());
+			assert!(!scheduler::Pezpallet::<Test>::claim_queue_is_empty());
 
 			let multi_dispute_inherent_data =
-				Pallet::<Test>::create_inherent_inner(&inherent_data.clone()).unwrap();
+				Pezpallet::<Test>::create_inherent_inner(&inherent_data.clone()).unwrap();
 			// Dispute for session that lies too far in the future should be filtered out
 			assert!(multi_dispute_inherent_data != expected_para_inherent_data);
 
@@ -769,7 +769,7 @@ mod enter {
 
 			clear_dispute_storage::<Test>();
 
-			assert_ok!(Pallet::<Test>::enter(
+			assert_ok!(Pezpallet::<Test>::enter(
 				pezframe_system::RawOrigin::None.into(),
 				multi_dispute_inherent_data,
 			));
@@ -827,10 +827,10 @@ mod enter {
 				.put_data(TEYRCHAINS_INHERENT_IDENTIFIER, &expected_para_inherent_data)
 				.unwrap();
 
-			assert!(!scheduler::Pallet::<Test>::claim_queue_is_empty());
+			assert!(!scheduler::Pezpallet::<Test>::claim_queue_is_empty());
 
 			let limit_inherent_data =
-				Pallet::<Test>::create_inherent_inner(&inherent_data.clone()).unwrap();
+				Pezpallet::<Test>::create_inherent_inner(&inherent_data.clone()).unwrap();
 			// Expect that inherent data is filtered to include only 2 disputes
 			assert!(limit_inherent_data != expected_para_inherent_data);
 
@@ -841,7 +841,7 @@ mod enter {
 
 			clear_dispute_storage::<Test>();
 
-			assert_ok!(Pallet::<Test>::enter(
+			assert_ok!(Pezpallet::<Test>::enter(
 				pezframe_system::RawOrigin::None.into(),
 				limit_inherent_data,
 			));
@@ -902,11 +902,11 @@ mod enter {
 				.put_data(TEYRCHAINS_INHERENT_IDENTIFIER, &expected_para_inherent_data)
 				.unwrap();
 
-			assert!(!scheduler::Pallet::<Test>::claim_queue_is_empty());
+			assert!(!scheduler::Pezpallet::<Test>::claim_queue_is_empty());
 
 			// Nothing is filtered out (including the backed candidates.)
 			let limit_inherent_data =
-				Pallet::<Test>::create_inherent_inner(&inherent_data.clone()).unwrap();
+				Pezpallet::<Test>::create_inherent_inner(&inherent_data.clone()).unwrap();
 			assert!(limit_inherent_data != expected_para_inherent_data);
 
 			// Three disputes is over weight (see previous test), so we expect to only see 2
@@ -926,7 +926,7 @@ mod enter {
 
 			clear_dispute_storage::<Test>();
 
-			assert_ok!(Pallet::<Test>::enter(
+			assert_ok!(Pezpallet::<Test>::enter(
 				pezframe_system::RawOrigin::None.into(),
 				limit_inherent_data,
 			));
@@ -992,10 +992,10 @@ mod enter {
 				.put_data(TEYRCHAINS_INHERENT_IDENTIFIER, &expected_para_inherent_data)
 				.unwrap();
 
-			assert!(!scheduler::Pallet::<Test>::claim_queue_is_empty());
+			assert!(!scheduler::Pezpallet::<Test>::claim_queue_is_empty());
 
 			let limit_inherent_data =
-				Pallet::<Test>::create_inherent_inner(&inherent_data.clone()).unwrap();
+				Pezpallet::<Test>::create_inherent_inner(&inherent_data.clone()).unwrap();
 			assert_ne!(limit_inherent_data, expected_para_inherent_data);
 			assert!(inherent_data_weight(&limit_inherent_data)
 				.all_lte(inherent_data_weight(&expected_para_inherent_data)));
@@ -1016,7 +1016,7 @@ mod enter {
 
 			clear_dispute_storage::<Test>();
 
-			assert_ok!(Pallet::<Test>::enter(
+			assert_ok!(Pezpallet::<Test>::enter(
 				pezframe_system::RawOrigin::None.into(),
 				limit_inherent_data
 			));
@@ -1082,7 +1082,7 @@ mod enter {
 				.unwrap();
 
 			let limit_inherent_data =
-				Pallet::<Test>::create_inherent_inner(&inherent_data.clone()).unwrap();
+				Pezpallet::<Test>::create_inherent_inner(&inherent_data.clone()).unwrap();
 			assert_eq!(limit_inherent_data.bitfields.len(), 20);
 			assert_eq!(limit_inherent_data.disputes.len(), 2);
 			assert_eq!(limit_inherent_data.backed_candidates.len(), 0);
@@ -1098,7 +1098,7 @@ mod enter {
 			use crate::inclusion::WeightInfo as _;
 
 			// V2 receipts are always enabled.
-			configuration::Pallet::<Test>::set_node_feature(
+			configuration::Pezpallet::<Test>::set_node_feature(
 				RuntimeOrigin::root(),
 				FeatureIndex::CandidateReceiptV2 as u8,
 				true,
@@ -1148,7 +1148,7 @@ mod enter {
 				.unwrap();
 
 			let limit_inherent_data =
-				Pallet::<Test>::create_inherent_inner(&inherent_data.clone()).unwrap();
+				Pezpallet::<Test>::create_inherent_inner(&inherent_data.clone()).unwrap();
 			assert!(limit_inherent_data == expected_para_inherent_data);
 
 			// Cores were scheduled. We should put the assignments back, before calling enter().
@@ -1166,7 +1166,7 @@ mod enter {
 				.collect();
 			scheduler::ClaimQueue::<Test>::set(cores);
 
-			assert_ok!(Pallet::<Test>::enter(
+			assert_ok!(Pezpallet::<Test>::enter(
 				pezframe_system::RawOrigin::None.into(),
 				limit_inherent_data,
 			));
@@ -1212,7 +1212,7 @@ mod enter {
 
 		new_test_ext(config).execute_with(|| {
 			// V2 receipts are always enabled.
-			configuration::Pallet::<Test>::set_node_feature(
+			configuration::Pezpallet::<Test>::set_node_feature(
 				RuntimeOrigin::root(),
 				FeatureIndex::CandidateReceiptV2 as u8,
 				true,
@@ -1262,7 +1262,7 @@ mod enter {
 				.unwrap();
 
 			let limit_inherent_data =
-				Pallet::<Test>::create_inherent_inner(&inherent_data.clone()).unwrap();
+				Pezpallet::<Test>::create_inherent_inner(&inherent_data.clone()).unwrap();
 			// Expect that inherent data is filtered to include only 1 backed candidate and 2
 			// disputes
 			assert!(limit_inherent_data != expected_para_inherent_data);
@@ -1312,7 +1312,7 @@ mod enter {
 
 			clear_dispute_storage::<Test>();
 
-			assert_ok!(Pallet::<Test>::enter(
+			assert_ok!(Pezpallet::<Test>::enter(
 				pezframe_system::RawOrigin::None.into(),
 				limit_inherent_data,
 			));
@@ -1368,7 +1368,7 @@ mod enter {
 				.put_data(TEYRCHAINS_INHERENT_IDENTIFIER, &expected_para_inherent_data)
 				.unwrap();
 			let limit_inherent_data =
-				Pallet::<Test>::create_inherent_inner(&inherent_data.clone()).unwrap();
+				Pezpallet::<Test>::create_inherent_inner(&inherent_data.clone()).unwrap();
 			// Expect that inherent data is filtered to include only 1 backed candidate and 2
 			// disputes
 			assert!(limit_inherent_data != expected_para_inherent_data);
@@ -1402,7 +1402,7 @@ mod enter {
 		)));
 		new_test_ext(default_config()).execute_with(|| {
 			// V2 receipts are always enabled.
-			configuration::Pallet::<Test>::set_node_feature(
+			configuration::Pezpallet::<Test>::set_node_feature(
 				RuntimeOrigin::root(),
 				FeatureIndex::CandidateReceiptV2 as u8,
 				true,
@@ -1446,7 +1446,7 @@ mod enter {
 				.unwrap();
 
 			let limit_inherent_data =
-				Pallet::<Test>::create_inherent_inner(&inherent_data.clone()).unwrap();
+				Pezpallet::<Test>::create_inherent_inner(&inherent_data.clone()).unwrap();
 			// Expect that inherent data is filtered to include only 1 backed candidate and 2
 			// disputes
 			assert!(limit_inherent_data != expected_para_inherent_data);
@@ -1480,7 +1480,7 @@ mod enter {
 		)));
 		new_test_ext(MockGenesisConfig::default()).execute_with(|| {
 			// V2 receipts are always enabled.
-			configuration::Pallet::<Test>::set_node_feature(
+			configuration::Pezpallet::<Test>::set_node_feature(
 				RuntimeOrigin::root(),
 				FeatureIndex::CandidateReceiptV2 as u8,
 				true,
@@ -1522,7 +1522,7 @@ mod enter {
 				.unwrap();
 
 			let limit_inherent_data =
-				Pallet::<Test>::create_inherent_inner(&inherent_data.clone()).unwrap();
+				Pezpallet::<Test>::create_inherent_inner(&inherent_data.clone()).unwrap();
 			// Expect that inherent data is filtered to include only 1 backed candidate and 2
 			// disputes
 			assert!(limit_inherent_data != expected_para_inherent_data);
@@ -1592,7 +1592,7 @@ mod enter {
 			let mut backed_and_concluding = BTreeMap::new();
 
 			// Enable the v2 receipts.
-			configuration::Pallet::<Test>::set_node_feature(
+			configuration::Pezpallet::<Test>::set_node_feature(
 				RuntimeOrigin::root(),
 				FeatureIndex::CandidateReceiptV2 as u8,
 				v2_descriptor,
@@ -1725,7 +1725,7 @@ mod enter {
 			inherent_data
 				.put_data(TEYRCHAINS_INHERENT_IDENTIFIER, &expected_para_inherent_data)
 				.unwrap();
-			let dispatch_error = Pallet::<Test>::enter(
+			let dispatch_error = Pezpallet::<Test>::enter(
 				pezframe_system::RawOrigin::None.into(),
 				expected_para_inherent_data,
 			)
@@ -1781,11 +1781,11 @@ mod enter {
 
 			// We expect all backed candidates to be filtered out.
 			let filtered_para_inherend_data =
-				Pallet::<Test>::create_inherent_inner(&inherent_data).unwrap();
+				Pezpallet::<Test>::create_inherent_inner(&inherent_data).unwrap();
 
 			assert_eq!(filtered_para_inherend_data.backed_candidates.len(), 0);
 
-			let dispatch_error = Pallet::<Test>::enter(
+			let dispatch_error = Pezpallet::<Test>::enter(
 				pezframe_system::RawOrigin::None.into(),
 				unfiltered_para_inherent_data,
 			)
@@ -1804,7 +1804,7 @@ mod enter {
 
 		new_test_ext(config).execute_with(|| {
 			// Set the v2 receipts feature.
-			configuration::Pallet::<Test>::set_node_feature(
+			configuration::Pezpallet::<Test>::set_node_feature(
 				RuntimeOrigin::root(),
 				FeatureIndex::CandidateReceiptV2 as u8,
 				true,
@@ -1853,7 +1853,7 @@ mod enter {
 				.put_data(TEYRCHAINS_INHERENT_IDENTIFIER, &unfiltered_para_inherent_data)
 				.unwrap();
 
-			let dispatch_error = Pallet::<Test>::enter(
+			let dispatch_error = Pezpallet::<Test>::enter(
 				pezframe_system::RawOrigin::None.into(),
 				unfiltered_para_inherent_data,
 			)
@@ -1874,7 +1874,7 @@ mod enter {
 		// Invalid core selector. Cannot decode it.
 		new_test_ext(config).execute_with(|| {
 			// Set the V2 receipts feature.
-			configuration::Pallet::<Test>::set_node_feature(
+			configuration::Pezpallet::<Test>::set_node_feature(
 				RuntimeOrigin::root(),
 				FeatureIndex::CandidateReceiptV2 as u8,
 				true,
@@ -1918,7 +1918,7 @@ mod enter {
 				.put_data(TEYRCHAINS_INHERENT_IDENTIFIER, &unfiltered_para_inherent_data)
 				.unwrap();
 
-			let dispatch_error = Pallet::<Test>::enter(
+			let dispatch_error = Pezpallet::<Test>::enter(
 				pezframe_system::RawOrigin::None.into(),
 				unfiltered_para_inherent_data,
 			)
@@ -1934,7 +1934,7 @@ mod enter {
 		let config = default_config();
 		new_test_ext(config).execute_with(|| {
 			// Set the V2 receipts feature.
-			configuration::Pallet::<Test>::set_node_feature(
+			configuration::Pezpallet::<Test>::set_node_feature(
 				RuntimeOrigin::root(),
 				FeatureIndex::CandidateReceiptV2 as u8,
 				true,
@@ -1978,7 +1978,7 @@ mod enter {
 				.put_data(TEYRCHAINS_INHERENT_IDENTIFIER, &unfiltered_para_inherent_data)
 				.unwrap();
 
-			let dispatch_error = Pallet::<Test>::enter(
+			let dispatch_error = Pezpallet::<Test>::enter(
 				pezframe_system::RawOrigin::None.into(),
 				unfiltered_para_inherent_data,
 			)
@@ -2004,7 +2004,7 @@ mod enter {
 
 		new_test_ext(config).execute_with(|| {
 			// Enable the v2 receipts.
-			configuration::Pallet::<Test>::set_node_feature(
+			configuration::Pezpallet::<Test>::set_node_feature(
 				RuntimeOrigin::root(),
 				FeatureIndex::CandidateReceiptV2 as u8,
 				true,
@@ -2040,7 +2040,7 @@ mod enter {
 			// * 5 v2 candidate descriptors.
 			assert_eq!(inherent_data.backed_candidates.len(), 5);
 
-			Pallet::<Test>::enter(pezframe_system::RawOrigin::None.into(), inherent_data).unwrap();
+			Pezpallet::<Test>::enter(pezframe_system::RawOrigin::None.into(), inherent_data).unwrap();
 		});
 	}
 
@@ -2052,7 +2052,7 @@ mod enter {
 
 		new_test_ext(config).execute_with(|| {
 			// Enable the v2 receipts.
-			configuration::Pallet::<Test>::set_node_feature(
+			configuration::Pezpallet::<Test>::set_node_feature(
 				RuntimeOrigin::root(),
 				FeatureIndex::CandidateReceiptV2 as u8,
 				true,
@@ -2099,7 +2099,7 @@ mod enter {
 			// * 5 v2 candidate descriptors.
 			assert_eq!(inherent_data.backed_candidates.len(), 5);
 
-			Pallet::<Test>::enter(pezframe_system::RawOrigin::None.into(), inherent_data).unwrap();
+			Pezpallet::<Test>::enter(pezframe_system::RawOrigin::None.into(), inherent_data).unwrap();
 		});
 	}
 
@@ -2110,7 +2110,7 @@ mod enter {
 
 		new_test_ext(config).execute_with(|| {
 			// Enable the v2 receipts.
-			configuration::Pallet::<Test>::set_node_feature(
+			configuration::Pezpallet::<Test>::set_node_feature(
 				RuntimeOrigin::root(),
 				FeatureIndex::CandidateReceiptV2 as u8,
 				true,
@@ -2172,7 +2172,7 @@ mod enter {
 				.unwrap();
 
 			assert_eq!(
-				Pallet::<Test>::create_inherent_inner(&create_inherent_data).unwrap(),
+				Pezpallet::<Test>::create_inherent_inner(&create_inherent_data).unwrap(),
 				expected_inherent_data
 			);
 		});
@@ -2186,7 +2186,7 @@ mod enter {
 
 		new_test_ext(config).execute_with(|| {
 			// Enable the v2 receipts.
-			configuration::Pallet::<Test>::set_node_feature(
+			configuration::Pezpallet::<Test>::set_node_feature(
 				RuntimeOrigin::root(),
 				FeatureIndex::CandidateReceiptV2 as u8,
 				true,
@@ -2260,11 +2260,11 @@ mod enter {
 
 			// 1 candidate with invalid session is filtered out
 			assert_eq!(
-				Pallet::<Test>::create_inherent_inner(&create_inherent_data).unwrap(),
+				Pezpallet::<Test>::create_inherent_inner(&create_inherent_data).unwrap(),
 				expected_inherent_data
 			);
 
-			Pallet::<Test>::enter(pezframe_system::RawOrigin::None.into(), inherent_data).unwrap_err();
+			Pezpallet::<Test>::enter(pezframe_system::RawOrigin::None.into(), inherent_data).unwrap_err();
 		});
 	}
 
@@ -2278,7 +2278,7 @@ mod enter {
 
 		new_test_ext(config).execute_with(|| {
 			// V2 receipts are always enabled.
-			configuration::Pallet::<Test>::set_node_feature(
+			configuration::Pezpallet::<Test>::set_node_feature(
 				RuntimeOrigin::root(),
 				FeatureIndex::CandidateReceiptV2 as u8,
 				true,
@@ -2338,12 +2338,12 @@ mod enter {
 			expected_inherent_data.backed_candidates.remove(0);
 
 			assert_eq!(
-				Pallet::<Test>::create_inherent_inner(&create_inherent_data).unwrap(),
+				Pezpallet::<Test>::create_inherent_inner(&create_inherent_data).unwrap(),
 				expected_inherent_data
 			);
 
 			assert_eq!(
-				Pallet::<Test>::enter(pezframe_system::RawOrigin::None.into(), inherent_data)
+				Pezpallet::<Test>::enter(pezframe_system::RawOrigin::None.into(), inherent_data)
 					.unwrap_err()
 					.error,
 				Error::<Test>::InherentDataFilteredDuringExecution.into()
@@ -2644,9 +2644,9 @@ mod sanitizers {
 		fn get_test_data_one_core_per_para(backing_kind: BackingKind) -> TestData {
 			const RELAY_PARENT_NUM: u32 = 3;
 
-			// Add the relay parent to `shared` pallet. Otherwise some code (e.g. filtering backing
+			// Add the relay parent to `shared` pezpallet. Otherwise some code (e.g. filtering backing
 			// votes) won't behave correctly
-			shared::Pallet::<Test>::add_allowed_relay_parent(
+			shared::Pezpallet::<Test>::add_allowed_relay_parent(
 				default_header().hash(),
 				Default::default(),
 				Default::default(),
@@ -2682,10 +2682,10 @@ mod sanitizers {
 				.unwrap();
 			}
 
-			// Set active validators in `shared` pallet
+			// Set active validators in `shared` pezpallet
 			let validator_ids =
 				validators.iter().map(|v| v.public().into()).collect::<Vec<ValidatorId>>();
-			shared::Pallet::<Test>::set_active_validators_ascending(validator_ids);
+			shared::Pezpallet::<Test>::set_active_validators_ascending(validator_ids);
 
 			// Two scheduled teyrchains - ParaId(1) on CoreIndex(0) and ParaId(2) on CoreIndex(1)
 			let scheduled: BTreeMap<ParaId, BTreeSet<CoreIndex>> = (0_usize..2)
@@ -2699,13 +2699,13 @@ mod sanitizers {
 				.collect::<BTreeMap<_, _>>();
 
 			// Set the validator groups in `scheduler`
-			scheduler::Pallet::<Test>::set_validator_groups(vec![
+			scheduler::Pezpallet::<Test>::set_validator_groups(vec![
 				vec![ValidatorIndex(0), ValidatorIndex(1), ValidatorIndex(2), ValidatorIndex(3)],
 				vec![ValidatorIndex(4), ValidatorIndex(5), ValidatorIndex(6), ValidatorIndex(7)],
 			]);
 
 			// Update scheduler's claimqueue with the teyrchains
-			scheduler::Pallet::<Test>::set_claim_queue(BTreeMap::from([
+			scheduler::Pezpallet::<Test>::set_claim_queue(BTreeMap::from([
 				(
 					CoreIndex::from(0),
 					VecDeque::from([Assignment::Pool {
@@ -2723,30 +2723,30 @@ mod sanitizers {
 			]));
 
 			// Set the on-chain included head data for paras.
-			paras::Pallet::<Test>::set_current_head(ParaId::from(1), HeadData(vec![1]));
-			paras::Pallet::<Test>::set_current_head(ParaId::from(2), HeadData(vec![2]));
+			paras::Pezpallet::<Test>::set_current_head(ParaId::from(1), HeadData(vec![1]));
+			paras::Pezpallet::<Test>::set_current_head(ParaId::from(2), HeadData(vec![2]));
 
 			// Set the current_code_hash
-			paras::Pallet::<Test>::force_set_current_code(
+			paras::Pezpallet::<Test>::force_set_current_code(
 				RuntimeOrigin::root(),
 				ParaId::from(1),
 				ValidationCode(vec![1]),
 			)
 			.unwrap();
-			paras::Pallet::<Test>::force_set_current_code(
+			paras::Pezpallet::<Test>::force_set_current_code(
 				RuntimeOrigin::root(),
 				ParaId::from(2),
 				ValidationCode(vec![2]),
 			)
 			.unwrap();
 			// Set the most recent relay parent.
-			paras::Pallet::<Test>::force_set_most_recent_context(
+			paras::Pezpallet::<Test>::force_set_most_recent_context(
 				RuntimeOrigin::root(),
 				ParaId::from(1),
 				BlockNumberFor::<Test>::from(0u32),
 			)
 			.unwrap();
-			paras::Pallet::<Test>::force_set_most_recent_context(
+			paras::Pezpallet::<Test>::force_set_most_recent_context(
 				RuntimeOrigin::root(),
 				ParaId::from(2),
 				BlockNumberFor::<Test>::from(0u32),
@@ -2800,7 +2800,7 @@ mod sanitizers {
 
 			// State sanity checks
 			assert_eq!(
-				Pallet::<Test>::eligible_paras(&Default::default()).collect::<Vec<_>>(),
+				Pezpallet::<Test>::eligible_paras(&Default::default()).collect::<Vec<_>>(),
 				vec![(CoreIndex(0), ParaId::from(1)), (CoreIndex(1), ParaId::from(2))]
 			);
 			assert_eq!(
@@ -2876,13 +2876,13 @@ mod sanitizers {
 				.unwrap();
 			}
 
-			// Set active validators in `shared` pallet
+			// Set active validators in `shared` pezpallet
 			let validator_ids =
 				validators.iter().map(|v| v.public().into()).collect::<Vec<ValidatorId>>();
-			shared::Pallet::<Test>::set_active_validators_ascending(validator_ids);
+			shared::Pezpallet::<Test>::set_active_validators_ascending(validator_ids);
 
 			// Set the validator groups in `scheduler`
-			scheduler::Pallet::<Test>::set_validator_groups(vec![
+			scheduler::Pezpallet::<Test>::set_validator_groups(vec![
 				vec![ValidatorIndex(0)],
 				vec![ValidatorIndex(1)],
 				vec![ValidatorIndex(2)],
@@ -2894,7 +2894,7 @@ mod sanitizers {
 			]);
 
 			// Update scheduler's claimqueue with the teyrchains
-			scheduler::Pallet::<Test>::set_claim_queue(BTreeMap::from([
+			scheduler::Pezpallet::<Test>::set_claim_queue(BTreeMap::from([
 				(
 					CoreIndex::from(0),
 					VecDeque::from([Assignment::Pool {
@@ -2967,9 +2967,9 @@ mod sanitizers {
 				),
 			]));
 
-			// Add the relay parent to `shared` pallet. Otherwise some code (e.g. filtering backing
+			// Add the relay parent to `shared` pezpallet. Otherwise some code (e.g. filtering backing
 			// votes) won't behave correctly
-			shared::Pallet::<Test>::add_allowed_relay_parent(
+			shared::Pezpallet::<Test>::add_allowed_relay_parent(
 				relay_parent,
 				Default::default(),
 				scheduler::ClaimQueue::<Test>::get()
@@ -2984,14 +2984,14 @@ mod sanitizers {
 
 			// Set the on-chain included head data and current code hash.
 			for id in 1..=8u32 {
-				paras::Pallet::<Test>::set_current_head(ParaId::from(id), HeadData(vec![id as u8]));
-				paras::Pallet::<Test>::force_set_current_code(
+				paras::Pezpallet::<Test>::set_current_head(ParaId::from(id), HeadData(vec![id as u8]));
+				paras::Pezpallet::<Test>::force_set_current_code(
 					RuntimeOrigin::root(),
 					ParaId::from(id),
 					ValidationCode(vec![id as u8]),
 				)
 				.unwrap();
-				paras::Pallet::<Test>::force_set_most_recent_context(
+				paras::Pezpallet::<Test>::force_set_most_recent_context(
 					RuntimeOrigin::root(),
 					ParaId::from(id),
 					BlockNumberFor::<Test>::from(0u32),
@@ -3331,7 +3331,7 @@ mod sanitizers {
 
 			// State sanity checks
 			assert_eq!(
-				Pallet::<Test>::eligible_paras(&Default::default()).collect::<Vec<_>>(),
+				Pezpallet::<Test>::eligible_paras(&Default::default()).collect::<Vec<_>>(),
 				vec![
 					(CoreIndex(0), ParaId::from(1)),
 					(CoreIndex(1), ParaId::from(1)),
@@ -3346,7 +3346,7 @@ mod sanitizers {
 				]
 			);
 			let mut scheduled: BTreeMap<ParaId, BTreeSet<CoreIndex>> = BTreeMap::new();
-			for (core_idx, para_id) in Pallet::<Test>::eligible_paras(&Default::default()) {
+			for (core_idx, para_id) in Pezpallet::<Test>::eligible_paras(&Default::default()) {
 				scheduled.entry(para_id).or_default().insert(core_idx);
 			}
 
@@ -3408,13 +3408,13 @@ mod sanitizers {
 				.unwrap();
 			}
 
-			// Set active validators in `shared` pallet
+			// Set active validators in `shared` pezpallet
 			let validator_ids =
 				validators.iter().map(|v| v.public().into()).collect::<Vec<ValidatorId>>();
-			shared::Pallet::<Test>::set_active_validators_ascending(validator_ids);
+			shared::Pezpallet::<Test>::set_active_validators_ascending(validator_ids);
 
 			// Set the validator groups in `scheduler`
-			scheduler::Pallet::<Test>::set_validator_groups(vec![
+			scheduler::Pezpallet::<Test>::set_validator_groups(vec![
 				vec![ValidatorIndex(0)],
 				vec![ValidatorIndex(1)],
 				vec![ValidatorIndex(2)],
@@ -3427,7 +3427,7 @@ mod sanitizers {
 			]);
 
 			// Update scheduler's claimqueue with the teyrchains
-			scheduler::Pallet::<Test>::set_claim_queue(BTreeMap::from([
+			scheduler::Pezpallet::<Test>::set_claim_queue(BTreeMap::from([
 				(
 					CoreIndex::from(0),
 					VecDeque::from([Assignment::Pool {
@@ -3493,7 +3493,7 @@ mod sanitizers {
 				),
 			]));
 
-			shared::Pallet::<Test>::add_allowed_relay_parent(
+			shared::Pezpallet::<Test>::add_allowed_relay_parent(
 				relay_parent,
 				Default::default(),
 				scheduler::ClaimQueue::<Test>::get()
@@ -3508,14 +3508,14 @@ mod sanitizers {
 
 			// Set the on-chain included head data and current code hash.
 			for id in 1..=4u32 {
-				paras::Pallet::<Test>::set_current_head(ParaId::from(id), HeadData(vec![id as u8]));
-				paras::Pallet::<Test>::force_set_current_code(
+				paras::Pezpallet::<Test>::set_current_head(ParaId::from(id), HeadData(vec![id as u8]));
+				paras::Pezpallet::<Test>::force_set_current_code(
 					RuntimeOrigin::root(),
 					ParaId::from(id),
 					ValidationCode(vec![id as u8]),
 				)
 				.unwrap();
-				paras::Pallet::<Test>::force_set_most_recent_context(
+				paras::Pezpallet::<Test>::force_set_most_recent_context(
 					RuntimeOrigin::root(),
 					ParaId::from(id),
 					BlockNumberFor::<Test>::from(0u32),
@@ -3811,7 +3811,7 @@ mod sanitizers {
 
 			// State sanity checks
 			assert_eq!(
-				Pallet::<Test>::eligible_paras(&Default::default()).collect::<Vec<_>>(),
+				Pezpallet::<Test>::eligible_paras(&Default::default()).collect::<Vec<_>>(),
 				vec![
 					(CoreIndex(0), ParaId::from(1)),
 					(CoreIndex(1), ParaId::from(1)),
@@ -3825,7 +3825,7 @@ mod sanitizers {
 				]
 			);
 			let mut scheduled: BTreeMap<ParaId, BTreeSet<CoreIndex>> = BTreeMap::new();
-			for (core_idx, para_id) in Pallet::<Test>::eligible_paras(&Default::default()) {
+			for (core_idx, para_id) in Pezpallet::<Test>::eligible_paras(&Default::default()) {
 				scheduled.entry(para_id).or_default().insert(core_idx);
 			}
 
@@ -3878,9 +3878,9 @@ mod sanitizers {
 			}
 			.hash();
 
-			// Add the relay parent to `shared` pallet. Otherwise some code (e.g. filtering backing
+			// Add the relay parent to `shared` pezpallet. Otherwise some code (e.g. filtering backing
 			// votes) won't behave correctly
-			shared::Pallet::<Test>::add_allowed_relay_parent(
+			shared::Pezpallet::<Test>::add_allowed_relay_parent(
 				prev_relay_parent,
 				Default::default(),
 				Default::default(),
@@ -3888,7 +3888,7 @@ mod sanitizers {
 				2,
 			);
 
-			shared::Pallet::<Test>::add_allowed_relay_parent(
+			shared::Pezpallet::<Test>::add_allowed_relay_parent(
 				relay_parent,
 				Default::default(),
 				Default::default(),
@@ -3896,7 +3896,7 @@ mod sanitizers {
 				2,
 			);
 
-			shared::Pallet::<Test>::add_allowed_relay_parent(
+			shared::Pezpallet::<Test>::add_allowed_relay_parent(
 				next_relay_parent,
 				Default::default(),
 				Default::default(),
@@ -3927,13 +3927,13 @@ mod sanitizers {
 				.unwrap();
 			}
 
-			// Set active validators in `shared` pallet
+			// Set active validators in `shared` pezpallet
 			let validator_ids =
 				validators.iter().map(|v| v.public().into()).collect::<Vec<ValidatorId>>();
-			shared::Pallet::<Test>::set_active_validators_ascending(validator_ids);
+			shared::Pezpallet::<Test>::set_active_validators_ascending(validator_ids);
 
 			// Set the validator groups in `scheduler`
-			scheduler::Pallet::<Test>::set_validator_groups(vec![
+			scheduler::Pezpallet::<Test>::set_validator_groups(vec![
 				vec![ValidatorIndex(0)],
 				vec![ValidatorIndex(1)],
 				vec![ValidatorIndex(2)],
@@ -3943,7 +3943,7 @@ mod sanitizers {
 			]);
 
 			// Update scheduler's claimqueue with the teyrchains
-			scheduler::Pallet::<Test>::set_claim_queue(BTreeMap::from([
+			scheduler::Pezpallet::<Test>::set_claim_queue(BTreeMap::from([
 				(
 					CoreIndex::from(0),
 					VecDeque::from([Assignment::Pool {
@@ -3990,14 +3990,14 @@ mod sanitizers {
 
 			// Set the on-chain included head data and current code hash.
 			for id in 1..=2u32 {
-				paras::Pallet::<Test>::set_current_head(ParaId::from(id), HeadData(vec![id as u8]));
-				paras::Pallet::<Test>::force_set_current_code(
+				paras::Pezpallet::<Test>::set_current_head(ParaId::from(id), HeadData(vec![id as u8]));
+				paras::Pezpallet::<Test>::force_set_current_code(
 					RuntimeOrigin::root(),
 					ParaId::from(id),
 					ValidationCode(vec![id as u8]),
 				)
 				.unwrap();
-				paras::Pallet::<Test>::force_set_most_recent_context(
+				paras::Pezpallet::<Test>::force_set_most_recent_context(
 					RuntimeOrigin::root(),
 					ParaId::from(id),
 					BlockNumberFor::<Test>::from(0u32),
@@ -4224,7 +4224,7 @@ mod sanitizers {
 
 			// State sanity checks
 			assert_eq!(
-				Pallet::<Test>::eligible_paras(&Default::default()).collect::<Vec<_>>(),
+				Pezpallet::<Test>::eligible_paras(&Default::default()).collect::<Vec<_>>(),
 				vec![
 					(CoreIndex(0), ParaId::from(1)),
 					(CoreIndex(1), ParaId::from(1)),
@@ -4235,7 +4235,7 @@ mod sanitizers {
 				]
 			);
 			let mut scheduled: BTreeMap<ParaId, BTreeSet<CoreIndex>> = BTreeMap::new();
-			for (core_idx, para_id) in Pallet::<Test>::eligible_paras(&Default::default()) {
+			for (core_idx, para_id) in Pezpallet::<Test>::eligible_paras(&Default::default()) {
 				scheduled.entry(para_id).or_default().insert(core_idx);
 			}
 
@@ -4370,14 +4370,14 @@ mod sanitizers {
 					expected_backed_candidates_with_core,
 				} = get_test_data_for_relay_parent_ordering();
 
-				paras::Pallet::<Test>::force_set_most_recent_context(
+				paras::Pezpallet::<Test>::force_set_most_recent_context(
 					RuntimeOrigin::root(),
 					ParaId::from(1),
 					BlockNumberFor::<Test>::from(4u32),
 				)
 				.unwrap();
 
-				paras::Pallet::<Test>::force_set_most_recent_context(
+				paras::Pezpallet::<Test>::force_set_most_recent_context(
 					RuntimeOrigin::root(),
 					ParaId::from(2),
 					BlockNumberFor::<Test>::from(2u32),
@@ -4642,7 +4642,7 @@ mod sanitizers {
 				// Alice's one.
 				let mut hc = configuration::ActiveConfig::<Test>::get();
 				hc.minimum_backing_votes = 1;
-				configuration::Pallet::<Test>::force_set_active_config(hc);
+				configuration::Pezpallet::<Test>::force_set_active_config(hc);
 
 				// Verify the initial state is as expected
 				assert_eq!(
@@ -4900,10 +4900,10 @@ mod sanitizers {
 				);
 
 				let candidate_receipt_with_backing_validator_indices =
-					inclusion::Pallet::<Test>::process_candidates(
+					inclusion::Pezpallet::<Test>::process_candidates(
 						&shared::AllowedRelayParents::<Test>::get(),
 						&expected_backed_candidates_with_core,
-						scheduler::Pallet::<Test>::group_validators,
+						scheduler::Pezpallet::<Test>::group_validators,
 					)
 					.unwrap();
 

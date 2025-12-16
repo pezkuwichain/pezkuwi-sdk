@@ -17,19 +17,19 @@
 
 use syn::{Ident, PathArguments};
 
-/// The declaration of a pallet.
+/// The declaration of a pezpallet.
 #[derive(Debug, Clone)]
 pub struct PalletDeclaration {
-	/// The name of the pallet, e.g.`System` in `pub type System = pezframe_system`.
+	/// The name of the pezpallet, e.g.`System` in `pub type System = pezframe_system`.
 	pub name: Ident,
-	/// The path of the pallet, e.g. `pezframe_system` in `pub type System = pezframe_system`.
+	/// The path of the pezpallet, e.g. `pezframe_system` in `pub type System = pezframe_system`.
 	pub path: syn::Path,
-	/// The segment of the pallet, e.g. `Pallet` in `pub type System = pezframe_system::Pallet`.
+	/// The segment of the pezpallet, e.g. `Pezpallet` in `pub type System = pezframe_system::Pezpallet`.
 	pub pezpallet_segment: Option<syn::PathSegment>,
-	/// The runtime parameter of the pallet, e.g. `Runtime` in
-	/// `pub type System = pezframe_system::Pallet<Runtime>`.
+	/// The runtime parameter of the pezpallet, e.g. `Runtime` in
+	/// `pub type System = pezframe_system::Pezpallet<Runtime>`.
 	pub runtime_param: Option<Ident>,
-	/// The instance of the pallet, e.g. `Instance1` in `pub type Council =
+	/// The instance of the pezpallet, e.g. `Instance1` in `pub type Council =
 	/// pezpallet_collective<Instance1>`.
 	pub instance: Option<Ident>,
 }
@@ -52,7 +52,7 @@ impl PalletDeclaration {
 				args, ..
 			}) = segment.arguments.clone()
 			{
-				if segment.ident == "Pallet" {
+				if segment.ident == "Pezpallet" {
 					let mut segment = segment.clone();
 					segment.arguments = PathArguments::None;
 					pezpallet_segment = Some(segment.clone());
@@ -62,7 +62,7 @@ impl PalletDeclaration {
 					args_iter.next()
 				{
 					let ident = arg_path.path.require_ident()?.clone();
-					if segment.ident == "Pallet" {
+					if segment.ident == "Pezpallet" {
 						runtime_param = Some(ident);
 						if let Some(syn::GenericArgument::Type(syn::Type::Path(arg_path))) =
 							args_iter.next()
@@ -102,7 +102,7 @@ fn declaration_works() {
 		&parse_quote! { pub type System = pezframe_system; },
 		&parse_quote! { pezframe_system },
 	)
-	.expect("Failed to parse pallet declaration");
+	.expect("Failed to parse pezpallet declaration");
 
 	assert_eq!(decl.name, "System");
 	assert_eq!(decl.path, parse_quote! { pezframe_system });
@@ -120,7 +120,7 @@ fn declaration_works_with_instance() {
 		&parse_quote! { pub type System = pezframe_system<Instance1>; },
 		&parse_quote! { pezframe_system<Instance1> },
 	)
-	.expect("Failed to parse pallet declaration");
+	.expect("Failed to parse pezpallet declaration");
 
 	assert_eq!(decl.name, "System");
 	assert_eq!(decl.path, parse_quote! { pezframe_system });
@@ -135,16 +135,16 @@ fn declaration_works_with_pallet() {
 
 	let decl: PalletDeclaration = PalletDeclaration::try_from(
 		proc_macro2::Span::call_site(),
-		&parse_quote! { pub type System = pezframe_system::Pallet<Runtime>; },
-		&parse_quote! { pezframe_system::Pallet<Runtime> },
+		&parse_quote! { pub type System = pezframe_system::Pezpallet<Runtime>; },
+		&parse_quote! { pezframe_system::Pezpallet<Runtime> },
 	)
-	.expect("Failed to parse pallet declaration");
+	.expect("Failed to parse pezpallet declaration");
 
 	assert_eq!(decl.name, "System");
 	assert_eq!(decl.path, parse_quote! { pezframe_system });
 
 	let segment: syn::PathSegment =
-		syn::PathSegment { ident: parse_quote! { Pallet }, arguments: PathArguments::None };
+		syn::PathSegment { ident: parse_quote! { Pezpallet }, arguments: PathArguments::None };
 	assert_eq!(decl.pezpallet_segment, Some(segment));
 	assert_eq!(decl.runtime_param, Some(parse_quote! { Runtime }));
 	assert_eq!(decl.instance, None);
@@ -156,16 +156,16 @@ fn declaration_works_with_pallet_and_instance() {
 
 	let decl: PalletDeclaration = PalletDeclaration::try_from(
 		proc_macro2::Span::call_site(),
-		&parse_quote! { pub type System = pezframe_system::Pallet<Runtime, Instance1>; },
-		&parse_quote! { pezframe_system::Pallet<Runtime, Instance1> },
+		&parse_quote! { pub type System = pezframe_system::Pezpallet<Runtime, Instance1>; },
+		&parse_quote! { pezframe_system::Pezpallet<Runtime, Instance1> },
 	)
-	.expect("Failed to parse pallet declaration");
+	.expect("Failed to parse pezpallet declaration");
 
 	assert_eq!(decl.name, "System");
 	assert_eq!(decl.path, parse_quote! { pezframe_system });
 
 	let segment: syn::PathSegment =
-		syn::PathSegment { ident: parse_quote! { Pallet }, arguments: PathArguments::None };
+		syn::PathSegment { ident: parse_quote! { Pezpallet }, arguments: PathArguments::None };
 	assert_eq!(decl.pezpallet_segment, Some(segment));
 	assert_eq!(decl.runtime_param, Some(parse_quote! { Runtime }));
 	assert_eq!(decl.instance, Some(parse_quote! { Instance1 }));

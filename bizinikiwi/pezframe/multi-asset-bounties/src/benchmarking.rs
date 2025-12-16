@@ -15,13 +15,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Bounties pallet benchmarking.
+//! Bounties pezpallet benchmarking.
 
 #![cfg(feature = "runtime-benchmarks")]
 
 use super::*;
 use crate as pezpallet_bounties;
-use crate::Pallet as Bounties;
+use crate::Pezpallet as Bounties;
 
 use alloc::{borrow::Cow, vec};
 use pezframe_benchmarking::{v2::*, BenchmarkError};
@@ -80,13 +80,13 @@ const SEED: u32 = 0;
 fn assert_last_event<T: Config<I>, I: 'static>(
 	generic_event: <T as pezframe_system::Config>::RuntimeEvent,
 ) {
-	pezframe_system::Pallet::<T>::assert_last_event(generic_event.into());
+	pezframe_system::Pezpallet::<T>::assert_last_event(generic_event.into());
 }
 
 fn assert_has_event<T: Config<I>, I: 'static>(
 	generic_event: <T as pezframe_system::Config>::RuntimeEvent,
 ) {
-	pezframe_system::Pallet::<T>::assert_has_event(generic_event.into());
+	pezframe_system::Pezpallet::<T>::assert_has_event(generic_event.into());
 }
 
 pub fn get_payment_id<T: Config<I>, I: 'static>(
@@ -175,7 +175,7 @@ fn create_funded_bounty<T: Config<I>, I: 'static>() -> Result<BenchmarkBounty<T,
 	let s = create_parent_bounty::<T, I>()?;
 
 	let payment_id = get_payment_id::<T, I>(s.parent_bounty_id, None).expect("no payment attempt");
-	<T as pallet::Config<I>>::Paymaster::ensure_concluded(payment_id);
+	<T as pezpallet::Config<I>>::Paymaster::ensure_concluded(payment_id);
 
 	let caller = account("caller", 0, SEED);
 	Bounties::<T, I>::check_status(RawOrigin::Signed(caller).into(), s.parent_bounty_id, None)?;
@@ -219,7 +219,7 @@ fn create_funded_child_bounty<T: Config<I>, I: 'static>(
 
 	let payment_id = get_payment_id::<T, I>(s.parent_bounty_id, Some(s.child_bounty_id))
 		.expect("no payment attempt");
-	<T as pallet::Config<I>>::Paymaster::ensure_concluded(payment_id);
+	<T as pezpallet::Config<I>>::Paymaster::ensure_concluded(payment_id);
 	Bounties::<T, I>::check_status(
 		RawOrigin::Signed(caller).into(),
 		s.parent_bounty_id,
@@ -266,7 +266,7 @@ pub fn set_status<T: Config<I>, I: 'static>(
 	new_payment_status: PaymentState<PaymentIdOf<T, I>>,
 ) -> Result<(), BenchmarkError> {
 	let bounty =
-		pezpallet_bounties::Pallet::<T, I>::get_bounty_details(parent_bounty_id, child_bounty_id)
+		pezpallet_bounties::Pezpallet::<T, I>::get_bounty_details(parent_bounty_id, child_bounty_id)
 			.expect("no bounty");
 
 	let new_status = match bounty.3 {
@@ -283,7 +283,7 @@ pub fn set_status<T: Config<I>, I: 'static>(
 		_ => return Err(BenchmarkError::Stop("unexpected bounty status")),
 	};
 
-	let _ = pezpallet_bounties::Pallet::<T, I>::update_bounty_status(
+	let _ = pezpallet_bounties::Pezpallet::<T, I>::update_bounty_status(
 		parent_bounty_id,
 		child_bounty_id,
 		new_status,
@@ -731,7 +731,7 @@ mod benchmarks {
 			.into(),
 		);
 		assert_ne!(
-			<T as pallet::Config<I>>::Paymaster::check_payment(payment_id),
+			<T as pezpallet::Config<I>>::Paymaster::check_payment(payment_id),
 			PaymentStatus::Failure
 		);
 		assert!(Bounties::<T, I>::retry_payment(
@@ -753,7 +753,7 @@ mod benchmarks {
 			payment_status: PaymentState::Failed,
 			curator: Some(s.child_curator),
 		};
-		let _ = pezpallet_bounties::Pallet::<T, I>::update_bounty_status(
+		let _ = pezpallet_bounties::Pezpallet::<T, I>::update_bounty_status(
 			s.parent_bounty_id,
 			Some(s.child_bounty_id),
 			new_status,
@@ -779,7 +779,7 @@ mod benchmarks {
 			.into(),
 		);
 		assert_ne!(
-			<T as pallet::Config<I>>::Paymaster::check_payment(payment_id),
+			<T as pezpallet::Config<I>>::Paymaster::check_payment(payment_id),
 			PaymentStatus::Failure
 		);
 		assert!(Bounties::<T, I>::retry_payment(
@@ -802,7 +802,7 @@ mod benchmarks {
 			curator: s.child_curator.clone(),
 			beneficiary: s.beneficiary.clone(),
 		};
-		let _ = pezpallet_bounties::Pallet::<T, I>::update_bounty_status(
+		let _ = pezpallet_bounties::Pezpallet::<T, I>::update_bounty_status(
 			s.parent_bounty_id,
 			Some(s.child_bounty_id),
 			new_status,
@@ -828,7 +828,7 @@ mod benchmarks {
 			.into(),
 		);
 		assert_ne!(
-			<T as pallet::Config<I>>::Paymaster::check_payment(payment_id),
+			<T as pezpallet::Config<I>>::Paymaster::check_payment(payment_id),
 			PaymentStatus::Failure
 		);
 		assert!(Bounties::<T, I>::retry_payment(
@@ -842,7 +842,7 @@ mod benchmarks {
 	}
 
 	impl_benchmark_test_suite! {
-		Pallet,
+		Pezpallet,
 		crate::mock::ExtBuilder::default().build(),
 		crate::mock::Test
 	}

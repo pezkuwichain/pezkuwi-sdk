@@ -42,7 +42,7 @@ pub mod v1 {
 
 	#[storage_alias]
 	type ChildBountyDescriptions<T: Config + pezpallet_bounties::Config> = StorageMap<
-		Pallet<T>,
+		Pezpallet<T>,
 		Twox64Concat,
 		BountyIndex,
 		BoundedVec<u8, <T as pezpallet_bounties::Config>::MaximumReasonLength>,
@@ -90,7 +90,7 @@ pub mod v1 {
 				let old_child_bounty_account =
 					Self::old_child_bounty_account_id(old_child_bounty_id);
 				let new_child_bounty_account =
-					Pallet::<T>::child_bounty_account_id(parent_bounty_id, new_child_bounty_id);
+					Pezpallet::<T>::child_bounty_account_id(parent_bounty_id, new_child_bounty_id);
 				let old_balance = T::Currency::free_balance(&old_child_bounty_account);
 				log::info!(
 					"Transferring {:?} funds from old child bounty account {:?} to new child bounty account {:?}",
@@ -211,7 +211,7 @@ pub mod v1 {
 
 	impl<T: Config, TransferWeight: Get<Weight>> MigrateToV1Impl<T, TransferWeight> {
 		fn old_child_bounty_account_id(id: BountyIndex) -> T::AccountId {
-			// This function is taken from the parent (bounties) pallet, but the
+			// This function is taken from the parent (bounties) pezpallet, but the
 			// prefix is changed to have different AccountId when the index of
 			// parent and child is same.
 			T::PalletId::get().into_sub_account_truncating(("cb", id))
@@ -219,11 +219,11 @@ pub mod v1 {
 	}
 }
 
-/// Migrate the pallet storage from `0` to `1`.
+/// Migrate the pezpallet storage from `0` to `1`.
 pub type MigrateV0ToV1<T, TransferWeight> = pezframe_support::migrations::VersionedMigration<
 	0,
 	1,
 	v1::MigrateToV1Impl<T, TransferWeight>,
-	Pallet<T>,
+	Pezpallet<T>,
 	<T as pezframe_system::Config>::DbWeight,
 >;

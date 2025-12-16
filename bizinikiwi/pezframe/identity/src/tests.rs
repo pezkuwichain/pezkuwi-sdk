@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Tests for Identity Pallet
+// Tests for Identity Pezpallet
 
 use super::*;
 use crate::{
@@ -1316,7 +1316,7 @@ fn set_username_with_acceptance_should_work() {
 
 		// set up username
 		let username = test_username_of(b"101".to_vec(), suffix.clone());
-		let now = pezframe_system::Pallet::<Test>::block_number();
+		let now = pezframe_system::Pezpallet::<Test>::block_number();
 		let expiration = now + <<Test as Config>::PendingUsernameExpiration as Get<u64>>::get();
 
 		assert_ok!(Identity::set_username_for(
@@ -1683,7 +1683,7 @@ fn unaccepted_usernames_through_grant_should_expire() {
 
 		// set up username
 		let username = test_username_of(b"101".to_vec(), suffix.clone());
-		let now = pezframe_system::Pallet::<Test>::block_number();
+		let now = pezframe_system::Pezpallet::<Test>::block_number();
 		let expiration = now + <<Test as Config>::PendingUsernameExpiration as Get<u64>>::get();
 
 		let suffix: Suffix<Test> = suffix.try_into().unwrap();
@@ -1747,7 +1747,7 @@ fn unaccepted_usernames_through_deposit_should_expire() {
 
 		// set up username
 		let username = test_username_of(b"101".to_vec(), suffix.clone());
-		let now = pezframe_system::Pallet::<Test>::block_number();
+		let now = pezframe_system::Pezpallet::<Test>::block_number();
 		let expiration = now + <<Test as Config>::PendingUsernameExpiration as Get<u64>>::get();
 
 		let suffix: Suffix<Test> = suffix.try_into().unwrap();

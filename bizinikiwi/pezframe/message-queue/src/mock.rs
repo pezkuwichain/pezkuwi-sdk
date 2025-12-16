@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Test helpers and runtime setup for the message queue pallet.
+//! Test helpers and runtime setup for the message queue pezpallet.
 
 #![cfg(test)]
 
@@ -316,7 +316,7 @@ where
 	NumMessagesErrored::take();
 	let t = pezframe_system::GenesisConfig::<T>::default().build_storage().unwrap();
 	let mut ext = pezsp_io::TestExternalities::new(t);
-	ext.execute_with(|| pezframe_system::Pallet::<T>::set_block_number(1.into()));
+	ext.execute_with(|| pezframe_system::Pezpallet::<T>::set_block_number(1.into()));
 	ext
 }
 
@@ -327,7 +327,7 @@ where
 {
 	new_test_ext::<T>().execute_with(|| {
 		test();
-		pezpallet_message_queue::Pallet::<T>::do_try_state()
+		pezpallet_message_queue::Pezpallet::<T>::do_try_state()
 			.expect("All invariants must hold after a test");
 	});
 }
@@ -369,7 +369,7 @@ pub fn unknit(queue: &MessageOrigin) {
 }
 
 pub fn num_overweight_enqueued_events() -> u32 {
-	pezframe_system::Pallet::<Test>::events()
+	pezframe_system::Pezpallet::<Test>::events()
 		.into_iter()
 		.filter(|e| {
 			matches!(e.event, RuntimeEvent::MessageQueue(crate::Event::OverweightEnqueued { .. }))

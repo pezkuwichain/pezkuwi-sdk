@@ -21,9 +21,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-//! # Authorization Transaction Extension Example Pallet
+//! # Authorization Transaction Extension Example Pezpallet
 //!
-//! **This pallet serves as an example and is not meant to be used in production.**
+//! **This pezpallet serves as an example and is not meant to be used in production.**
 //!
 //! FRAME Transaction Extension reference implementation, origin mutation, origin authorization and
 //! integration in a `TransactionExtension` pipeline.
@@ -31,7 +31,7 @@
 //! The [TransactionExtension](pezsp_runtime::traits::TransactionExtension) used in this example is
 //! [AuthorizeCoownership](extensions::AuthorizeCoownership). If activated, the extension will
 //! authorize 2 signers as coowners, with a [coowner origin](pezpallet_coownership::Origin) specific to
-//! the [coownership example pallet](pezpallet_coownership), by validating a signature of the rest of
+//! the [coownership example pezpallet](pezpallet_coownership), by validating a signature of the rest of
 //! the transaction from each party. This means any extensions after ours in the pipeline, their
 //! implicits and the actual call. The extension pipeline used in our example checks the genesis
 //! hash, transaction version and mortality of the transaction after the `AuthorizeCoownership` runs
@@ -41,7 +41,7 @@
 //! In this example, aside from the [AuthorizeCoownership](extensions::AuthorizeCoownership)
 //! extension, we use the following pallets:
 //! - [pezpallet_coownership] - provides a coowner origin and the functionality to authorize it.
-//! - [pezpallet_assets] - a dummy asset pallet that tracks assets, identified by an
+//! - [pezpallet_assets] - a dummy asset pezpallet that tracks assets, identified by an
 //!   [AssetId](pezpallet_assets::AssetId), and their respective owners, which can be either an
 //!   [account](pezpallet_assets::Owner::Single) or a [pair of owners](pezpallet_assets::Owner::Double).
 //!
@@ -56,7 +56,7 @@
 //! ### Example usage
 #![doc = docify::embed!("src/tests.rs", create_coowned_asset_works)]
 //!
-//! This example does not focus on any pallet logic or syntax, but rather on `TransactionExtension`
+//! This example does not focus on any pezpallet logic or syntax, but rather on `TransactionExtension`
 //! functionality. The pallets used are just skeletons to provide storage state and custom origin
 //! choices and requirements, as shown in the examples. Any weight and/or
 //! transaction fee is out of scope for this example.
@@ -75,12 +75,12 @@ extern crate alloc;
 use pezframe_support::pezpallet_prelude::*;
 use pezframe_system::pezpallet_prelude::*;
 
-#[pezframe_support::pallet(dev_mode)]
+#[pezframe_support::pezpallet(dev_mode)]
 pub mod pezpallet_coownership {
 	use super::*;
 	use pezframe_support::traits::OriginTrait;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// The aggregated origin which the dispatch will take.
 		type RuntimeOrigin: OriginTrait<PalletsOrigin = Self::PalletsOrigin>
@@ -91,12 +91,12 @@ pub mod pezpallet_coownership {
 		type PalletsOrigin: From<Origin<Self>> + TryInto<Origin<Self>, Error = Self::PalletsOrigin>;
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	/// Origin that this pallet can authorize. For the purposes of this example, it's just two
+	/// Origin that this pezpallet can authorize. For the purposes of this example, it's just two
 	/// accounts that own something together.
-	#[pallet::origin]
+	#[pezpallet::origin]
 	#[derive(
 		Clone,
 		PartialEq,
@@ -113,7 +113,7 @@ pub mod pezpallet_coownership {
 	}
 }
 
-#[pezframe_support::pallet(dev_mode)]
+#[pezframe_support::pezpallet(dev_mode)]
 pub mod pezpallet_assets {
 	use super::*;
 
@@ -126,7 +126,7 @@ pub mod pezpallet_assets {
 		Double(AccountId, AccountId),
 	}
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// Type that can authorize an account pair coowner origin.
 		type CoownerOrigin: EnsureOrigin<
@@ -136,26 +136,26 @@ pub mod pezpallet_assets {
 	}
 
 	/// Map that holds the owner information for each asset it manages.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type AssetOwners<T> =
 		StorageMap<_, Blake2_128Concat, AssetId, Owner<<T as pezframe_system::Config>::AccountId>>;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Asset already exists.
 		AlreadyExists,
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Simple call that just creates an asset with a specific `AssetId`. This call will fail if
 		/// there is already an asset with the same `AssetId`.
 		///
 		/// The origin is either a single account (traditionally signed origin) or a coowner origin.
-		#[pallet::call_index(0)]
+		#[pezpallet::call_index(0)]
 		pub fn create_asset(origin: OriginFor<T>, asset_id: AssetId) -> DispatchResult {
 			let owner: Owner<T::AccountId> = match T::CoownerOrigin::try_origin(origin) {
 				Ok((first, second)) => Owner::Double(first, second),

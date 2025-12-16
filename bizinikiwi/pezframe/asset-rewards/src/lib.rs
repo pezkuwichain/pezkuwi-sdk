@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # FRAME Staking Rewards Pallet
+//! # FRAME Staking Rewards Pezpallet
 //!
 //! Allows accounts to be rewarded for holding `fungible` asset/s, for example LP tokens.
 //!
@@ -41,14 +41,14 @@
 //!
 //! ## Disambiguation
 //!
-//! While this pallet shares some terminology with the `staking-pool` and similar native staking
+//! While this pezpallet shares some terminology with the `staking-pool` and similar native staking
 //! related pallets, it is distinct and is entirely unrelated to native staking.
 //!
 //! ## Permissioning
 //!
 //! Currently, pool creation and management restricted to a configured Origin.
 //!
-//! Future iterations of this pallet may allow permissionless creation and management of pools.
+//! Future iterations of this pezpallet may allow permissionless creation and management of pools.
 //!
 //! Note: The permissioned origin must return an AccountId. This can be achieved for any Origin by
 //! wrapping it with `EnsureSuccess`.
@@ -59,8 +59,8 @@
 //! without side-effects.
 //!
 //! Storage interaction such as reads and writes are instead all performed in the top level
-//! pallet Call method, which while slightly more verbose, makes it easier to understand the
-//! code and reason about how storage reads and writes occur in the pallet.
+//! pezpallet Call method, which while slightly more verbose, makes it easier to understand the
+//! code and reason about how storage reads and writes occur in the pezpallet.
 //!
 //! ## Rewards Algorithm
 //!
@@ -80,7 +80,7 @@
 #![deny(missing_docs)]
 #![cfg_attr(not(feature = "std"), no_std)]
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 use codec::{Codec, Decode, Encode, MaxEncodedLen};
 use pezframe_support::{
@@ -125,10 +125,10 @@ pub type PoolInfoFor<T> = PoolInfo<
 	BlockNumberFor<T>,
 >;
 
-/// The block number type for the pallet.
+/// The block number type for the pezpallet.
 ///
 /// This type is derived from the `BlockNumberProvider` associated type in the `Config` trait.
-/// It represents the block number type that the pallet uses for scheduling and expiration.
+/// It represents the block number type that the pezpallet uses for scheduling and expiration.
 pub type BlockNumberFor<T> =
 	<<T as Config>::BlockNumberProvider as BlockNumberProvider>::BlockNumber;
 
@@ -167,7 +167,7 @@ pub struct PoolInfo<AccountId, AssetId, Balance, BlockNumber> {
 }
 
 pezsp_api::decl_runtime_apis! {
-	/// The runtime API for the asset rewards pallet.
+	/// The runtime API for the asset rewards pezpallet.
 	pub trait AssetRewards<Cost: MaybeDisplay + Codec> {
 		/// Get the cost of creating a pool.
 		///
@@ -176,8 +176,8 @@ pezsp_api::decl_runtime_apis! {
 	}
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::{
 		pezpallet_prelude::*,
@@ -198,35 +198,35 @@ pub mod pallet {
 		DispatchResult,
 	};
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	/// A reason for the pallet placing a hold on funds.
-	#[pallet::composite_enum]
+	/// A reason for the pezpallet placing a hold on funds.
+	#[pezpallet::composite_enum]
 	pub enum FreezeReason {
-		/// Funds are staked in the pallet.
+		/// Funds are staked in the pezpallet.
 		#[codec(index = 0)]
 		Staked,
 	}
 
-	/// A reason for the pallet placing a hold on funds.
-	#[pallet::composite_enum]
+	/// A reason for the pezpallet placing a hold on funds.
+	#[pezpallet::composite_enum]
 	pub enum HoldReason {
 		/// Cost associated with storing pool information on-chain.
 		#[codec(index = 0)]
 		PoolCreation,
 	}
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// Overarching event type.
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
-		/// The pallet's unique identifier, used to derive the pool's account ID.
+		/// The pezpallet's unique identifier, used to derive the pool's account ID.
 		///
 		/// The account ID is derived once during pool creation and stored in the storage.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type PalletId: Get<PalletId>;
 
 		/// Identifier for each type of asset.
@@ -263,17 +263,17 @@ pub mod pallet {
 		/// information itself, excluding any potential storage footprint related to the stakers.
 		type Consideration: Consideration<Self::AccountId, Footprint>;
 
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 
 		/// Provider for the current block number.
 		///
-		/// This provider is used to determine the current block number for the pallet.
+		/// This provider is used to determine the current block number for the pezpallet.
 		/// It must return monotonically increasing values when called from consecutive blocks.
 		///
-		/// It can be configured to use the local block number (via `pezframe_system::Pallet`) or a
+		/// It can be configured to use the local block number (via `pezframe_system::Pezpallet`) or a
 		/// remote block number (e.g., from a relay chain). However, note that using a remote
-		/// block number might have implications for the behavior of the pallet, especially if the
+		/// block number might have implications for the behavior of the pezpallet, especially if the
 		/// remote block number advances faster than the local block number.
 		///
 		/// It is recommended to use the local block number for solo chains and relay chains.
@@ -285,7 +285,7 @@ pub mod pallet {
 	}
 
 	/// State of pool stakers.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type PoolStakers<T: Config> = StorageDoubleMap<
 		_,
 		Blake2_128Concat,
@@ -296,25 +296,25 @@ pub mod pallet {
 	>;
 
 	/// State and configuration of each staking pool.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Pools<T: Config> = StorageMap<_, Blake2_128Concat, PoolId, PoolInfoFor<T>>;
 
 	/// The cost associated with storing pool information on-chain which was incurred by the pool
 	/// creator.
 	///
 	/// This cost may be [`None`], as determined by [`Config::Consideration`].
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type PoolCost<T: Config> =
 		StorageMap<_, Blake2_128Concat, PoolId, (T::AccountId, T::Consideration)>;
 
 	/// Stores the [`PoolId`] to use for the next pool.
 	///
 	/// Incremented when a new pool is created.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type NextPoolId<T: Config> = StorageValue<_, PoolId, ValueQuery>;
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// An account staked some tokens in a pool.
 		Staked {
@@ -392,7 +392,7 @@ pub mod pallet {
 		},
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// The staker does not have enough tokens to perform the operation.
 		NotEnoughTokens,
@@ -416,8 +416,8 @@ pub mod pallet {
 		NonEmptyPool,
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<SystemBlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<SystemBlockNumberFor<T>> for Pezpallet<T> {
 		fn integrity_test() {
 			// The AccountId is at least 16 bytes to contain the unique PalletId.
 			let pool_id: PoolId = 1;
@@ -430,9 +430,9 @@ pub mod pallet {
 		}
 	}
 
-	/// Pallet's callable functions.
-	#[pallet::call(weight(<T as Config>::WeightInfo))]
-	impl<T: Config> Pallet<T> {
+	/// Pezpallet's callable functions.
+	#[pezpallet::call(weight(<T as Config>::WeightInfo))]
+	impl<T: Config> Pezpallet<T> {
 		/// Create a new reward pool.
 		///
 		/// Parameters:
@@ -445,7 +445,7 @@ pub mod pallet {
 		/// - `admin`: the account allowed to extend the pool expiration, increase the rewards rate
 		///   and receive the unutilized reward tokens back after the pool completion. If `None`,
 		///   the caller is set as an admin.
-		#[pallet::call_index(0)]
+		#[pezpallet::call_index(0)]
 		pub fn create_pool(
 			origin: OriginFor<T>,
 			staked_asset_id: Box<T::AssetId>,
@@ -469,7 +469,7 @@ pub mod pallet {
 		/// Stake additional tokens in a pool.
 		///
 		/// A freeze is placed on the staked tokens.
-		#[pallet::call_index(1)]
+		#[pezpallet::call_index(1)]
 		pub fn stake(origin: OriginFor<T>, pool_id: PoolId, amount: T::Balance) -> DispatchResult {
 			let staker = ensure_signed(origin)?;
 
@@ -510,7 +510,7 @@ pub mod pallet {
 		/// - pool_id: the pool to unstake from.
 		/// - amount: the amount of tokens to unstake.
 		/// - staker: the account to unstake from. If `None`, the caller is used.
-		#[pallet::call_index(2)]
+		#[pezpallet::call_index(2)]
 		pub fn unstake(
 			origin: OriginFor<T>,
 			pool_id: PoolId,
@@ -565,7 +565,7 @@ pub mod pallet {
 		/// - origin: must be the `staker` if the pool is still active. Otherwise, any account.
 		/// - pool_id: the pool to harvest from.
 		/// - staker: the account for which to harvest rewards. If `None`, the caller is used.
-		#[pallet::call_index(3)]
+		#[pezpallet::call_index(3)]
 		pub fn harvest_rewards(
 			origin: OriginFor<T>,
 			pool_id: PoolId,
@@ -619,7 +619,7 @@ pub mod pallet {
 		/// Currently the reward rate can only be increased.
 		///
 		/// Only the pool admin may perform this operation.
-		#[pallet::call_index(4)]
+		#[pezpallet::call_index(4)]
 		pub fn set_pool_reward_rate_per_block(
 			origin: OriginFor<T>,
 			pool_id: PoolId,
@@ -637,7 +637,7 @@ pub mod pallet {
 		/// Modify a pool admin.
 		///
 		/// Only the pool admin may perform this operation.
-		#[pallet::call_index(5)]
+		#[pezpallet::call_index(5)]
 		pub fn set_pool_admin(
 			origin: OriginFor<T>,
 			pool_id: PoolId,
@@ -653,7 +653,7 @@ pub mod pallet {
 		/// Currently the expiry block can only be extended.
 		///
 		/// Only the pool admin may perform this operation.
-		#[pallet::call_index(6)]
+		#[pezpallet::call_index(6)]
 		pub fn set_pool_expiry_block(
 			origin: OriginFor<T>,
 			pool_id: PoolId,
@@ -669,7 +669,7 @@ pub mod pallet {
 		/// This method is not strictly necessary (tokens could be transferred directly to the
 		/// pool pot address), but is provided for convenience so manual derivation of the
 		/// account id is not required.
-		#[pallet::call_index(7)]
+		#[pezpallet::call_index(7)]
 		pub fn deposit_reward_tokens(
 			origin: OriginFor<T>,
 			pool_id: PoolId,
@@ -693,7 +693,7 @@ pub mod pallet {
 		///
 		/// Cleanup storage, release any associated storage cost and return the remaining reward
 		/// tokens to the admin.
-		#[pallet::call_index(8)]
+		#[pezpallet::call_index(8)]
 		pub fn cleanup_pool(origin: OriginFor<T>, pool_id: PoolId) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 
@@ -729,7 +729,7 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config> Pallet<T> {
+	impl<T: Config> Pezpallet<T> {
 		/// The pool creation footprint.
 		///
 		/// The footprint specifically accounts for the storage footprint of the pool's information
@@ -834,7 +834,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> RewardsPool<T::AccountId> for Pallet<T> {
+impl<T: Config> RewardsPool<T::AccountId> for Pezpallet<T> {
 	type AssetId = T::AssetId;
 	type BlockNumber = BlockNumberFor<T>;
 	type PoolId = PoolId;

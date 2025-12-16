@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Benchmarks for Indices Pallet
+// Benchmarks for Indices Pezpallet
 
 #![cfg(feature = "runtime-benchmarks")]
 
@@ -53,7 +53,7 @@ mod benchmarks {
 		let recipient_lookup = T::Lookup::unlookup(recipient.clone());
 		T::Currency::make_free_balance_be(&recipient, BalanceOf::<T>::max_value());
 		// Claim the index
-		Pallet::<T>::claim(RawOrigin::Signed(caller.clone()).into(), account_index)?;
+		Pezpallet::<T>::claim(RawOrigin::Signed(caller.clone()).into(), account_index)?;
 
 		#[extrinsic_call]
 		_(RawOrigin::Signed(caller.clone()), recipient_lookup, account_index);
@@ -69,7 +69,7 @@ mod benchmarks {
 		let caller: T::AccountId = whitelisted_caller();
 		T::Currency::make_free_balance_be(&caller, BalanceOf::<T>::max_value());
 		// Claim the index
-		Pallet::<T>::claim(RawOrigin::Signed(caller.clone()).into(), account_index)?;
+		Pezpallet::<T>::claim(RawOrigin::Signed(caller.clone()).into(), account_index)?;
 
 		#[extrinsic_call]
 		_(RawOrigin::Signed(caller.clone()), account_index);
@@ -88,7 +88,7 @@ mod benchmarks {
 		let recipient_lookup = T::Lookup::unlookup(recipient.clone());
 		T::Currency::make_free_balance_be(&recipient, BalanceOf::<T>::max_value());
 		// Claim the index
-		Pallet::<T>::claim(RawOrigin::Signed(original).into(), account_index)?;
+		Pezpallet::<T>::claim(RawOrigin::Signed(original).into(), account_index)?;
 
 		#[extrinsic_call]
 		_(RawOrigin::Root, recipient_lookup, account_index, false);
@@ -104,7 +104,7 @@ mod benchmarks {
 		let caller: T::AccountId = whitelisted_caller();
 		T::Currency::make_free_balance_be(&caller, BalanceOf::<T>::max_value());
 		// Claim the index
-		Pallet::<T>::claim(RawOrigin::Signed(caller.clone()).into(), account_index)?;
+		Pezpallet::<T>::claim(RawOrigin::Signed(caller.clone()).into(), account_index)?;
 
 		#[extrinsic_call]
 		_(RawOrigin::Signed(caller.clone()), account_index);
@@ -123,7 +123,7 @@ mod benchmarks {
 		let original_deposit = T::Deposit::get();
 
 		// Claim the index
-		Pallet::<T>::claim(RawOrigin::Signed(caller.clone()).into(), account_index)?;
+		Pezpallet::<T>::claim(RawOrigin::Signed(caller.clone()).into(), account_index)?;
 
 		// Verify the initial deposit amount in storage and reserved balance
 		assert_eq!(Accounts::<T>::get(account_index).unwrap().1, original_deposit);
@@ -168,5 +168,5 @@ mod benchmarks {
 
 	// TODO in another PR: lookup and unlookup trait weights (not critical)
 
-	impl_benchmark_test_suite!(Pallet, mock::new_test_ext(), mock::Test);
+	impl_benchmark_test_suite!(Pezpallet, mock::new_test_ext(), mock::Test);
 }

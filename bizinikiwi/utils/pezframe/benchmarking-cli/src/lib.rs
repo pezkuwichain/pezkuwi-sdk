@@ -21,7 +21,7 @@ mod block;
 mod extrinsic;
 mod machine;
 mod overhead;
-mod pallet;
+mod pezpallet;
 mod shared;
 mod storage;
 
@@ -32,7 +32,7 @@ pub use overhead::{
 	remark_builder::{DynamicRemarkBuilder, BizinikiwiRemarkBuilder},
 	OpaqueBlock, OverheadCmd,
 };
-pub use pallet::PalletCmd;
+pub use pezpallet::PalletCmd;
 pub use pezsc_service::BasePath;
 pub use storage::StorageCmd;
 
@@ -43,7 +43,7 @@ use pezsc_cli::{CliConfiguration, DatabaseParams, ImportParams, PruningParams, R
 /// Has no effect itself besides printing a help menu of the sub-commands.
 #[derive(Debug, clap::Subcommand)]
 pub enum BenchmarkCmd {
-	Pallet(PalletCmd),
+	Pezpallet(PalletCmd),
 	Storage(StorageCmd),
 	Overhead(OverheadCmd),
 	Block(BlockCmd),
@@ -59,7 +59,7 @@ macro_rules! unwrap_cmd {
 		$code:expr
 	} => {
 		match $self {
-			BenchmarkCmd::Pallet($cmd) => $code,
+			BenchmarkCmd::Pezpallet($cmd) => $code,
 			BenchmarkCmd::Storage($cmd) => $code,
 			BenchmarkCmd::Overhead($cmd) => $code,
 			BenchmarkCmd::Block($cmd) => $code,

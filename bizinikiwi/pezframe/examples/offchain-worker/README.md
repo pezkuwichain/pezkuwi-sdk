@@ -1,7 +1,7 @@
 <!-- markdown-link-check-disable -->
-# Offchain Worker Example Pallet
+# Offchain Worker Example Pezpallet
 
-The Offchain Worker Example: A simple pallet demonstrating
+The Offchain Worker Example: A simple pezpallet demonstrating
 concepts, APIs and structures common to most offchain workers.
 
 Run `cargo doc --package pezpallet-example-offchain-worker --open` to view this module's
@@ -11,7 +11,7 @@ documentation.
 - [`Call`](./enum.Call.html)
 - [`Module`](./struct.Module.html)
 
-**This pallet serves as an example showcasing Bizinikiwi off-chain worker and is not meant to be
+**This pezpallet serves as an example showcasing Bizinikiwi off-chain worker and is not meant to be
 used in production.**
 
 ## Overview

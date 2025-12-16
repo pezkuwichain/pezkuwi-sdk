@@ -1,6 +1,6 @@
 [package]
 name = "pezkuwi-sdk-docs-first-pezpallet"
-description = "A simple pallet created for the pezkuwi-sdk-docs guides"
+description = "A simple pezpallet created for the pezkuwi-sdk-docs guides"
 version = "0.0.0"
 license = "MIT-0"
 authors.workspace = true

@@ -42,8 +42,8 @@
 //!                                         ElectionProvider
 //! ```
 //!
-//! > It could also be possible that a third party pallet (C), provides the data of election to an
-//! > election provider (B), which then passes the election result to another pallet (A).
+//! > It could also be possible that a third party pezpallet (C), provides the data of election to an
+//! > election provider (B), which then passes the election result to another pezpallet (A).
 //!
 //! ## Election Types
 //!
@@ -101,13 +101,13 @@
 //!         type ElectionProvider: ElectionProvider<
 //!             AccountId = AccountId,
 //!             BlockNumber = BlockNumber,
-//!             DataProvider = Pallet<Self>,
+//!             DataProvider = Pezpallet<Self>,
 //!         >;
 //!     }
 //!
-//!     pub struct Pallet<T: Config>(std::marker::PhantomData<T>);
+//!     pub struct Pezpallet<T: Config>(std::marker::PhantomData<T>);
 //!
-//!     impl<T: Config> ElectionDataProvider for Pallet<T> {
+//!     impl<T: Config> ElectionDataProvider for Pezpallet<T> {
 //!         type AccountId = AccountId;
 //!         type BlockNumber = BlockNumber;
 //!         type MaxVotesPerVoter = ConstU32<100>;
@@ -181,7 +181,7 @@
 //!
 //!     struct Runtime;
 //!     impl generic_election_provider::Config for Runtime {
-//!         type DataProvider = data_provider_mod::Pallet<Runtime>;
+//!         type DataProvider = data_provider_mod::Pezpallet<Runtime>;
 //!         type MaxWinnersPerPage = MaxWinnersPerPage;
 //!         type MaxBackersPerWinner = MaxBackersPerWinner;
 //!         type Pages = Pages;
@@ -333,7 +333,7 @@ pub trait ElectionDataProvider {
 	/// targets that could become elected, thus "electable".
 	///
 	/// This should be implemented as a self-weighing function. The implementor should register its
-	/// appropriate weight at the end of execution with the system pallet directly.
+	/// appropriate weight at the end of execution with the system pezpallet directly.
 	fn electable_targets(
 		bounds: DataProviderBounds,
 		page: PageIndex,
@@ -354,7 +354,7 @@ pub trait ElectionDataProvider {
 	/// Note that if a notion of self-vote exists, it should be represented here.
 	///
 	/// This should be implemented as a self-weighing function. The implementor should register its
-	/// appropriate weight at the end of execution with the system pallet directly.
+	/// appropriate weight at the end of execution with the system pezpallet directly.
 	fn electing_voters(
 		bounds: DataProviderBounds,
 		page: PageIndex,
@@ -372,7 +372,7 @@ pub trait ElectionDataProvider {
 	/// The number of targets to elect.
 	///
 	/// This should be implemented as a self-weighing function. The implementor should register its
-	/// appropriate weight at the end of execution with the system pallet directly.
+	/// appropriate weight at the end of execution with the system pezpallet directly.
 	///
 	/// A sensible implementation should use the minimum between this value and
 	/// [`Self::targets().len()`], since desiring a winner set larger than candidates is not
@@ -634,7 +634,7 @@ pub trait SortedListProvider<AccountId> {
 	///
 	/// If this is implemented by a bags-list instance, it will be the smallest and largest bags.
 	///
-	/// This is useful to help another pallet that consumes this trait generate an even distribution
+	/// This is useful to help another pezpallet that consumes this trait generate an even distribution
 	/// of nodes for testing/genesis.
 	fn range() -> (Self::Score, Self::Score) {
 		(Self::Score::min_value(), Self::Score::max_value())

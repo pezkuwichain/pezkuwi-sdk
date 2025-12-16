@@ -17,8 +17,8 @@
 
 //! Ranked collective system.
 //!
-//! This is a membership pallet providing a `Tally` implementation ready for use with polling
-//! systems such as the Referenda pallet. Members each have a rank, with zero being the lowest.
+//! This is a membership pezpallet providing a `Tally` implementation ready for use with polling
+//! systems such as the Referenda pezpallet. Members each have a rank, with zero being the lowest.
 //! There is no complexity limitation on either the number of members at a rank or the number of
 //! ranks in the system thus allowing potentially public membership. A member of at least a given
 //! rank can be selected at random in O(1) time, allowing for various games to be constructed using
@@ -68,7 +68,7 @@ mod tests;
 mod benchmarking;
 pub mod weights;
 
-pub use pallet::*;
+pub use pezpallet::*;
 pub use weights::WeightInfo;
 
 /// A number of members.
@@ -114,7 +114,7 @@ impl<T: Config<I>, I: 'static, M: GetMaxVoters> Tally<T, I, M> {
 
 // All functions of VoteTally now include the class as a param.
 
-pub type TallyOf<T, I = ()> = Tally<T, I, Pallet<T, I>>;
+pub type TallyOf<T, I = ()> = Tally<T, I, Pezpallet<T, I>>;
 pub type PollIndexOf<T, I = ()> = <<T as Config<I>>::Polls as Polling<TallyOf<T, I>>>::Index;
 pub type ClassOf<T, I = ()> = <<T as Config<I>>::Polls as Polling<TallyOf<T, I>>>::Class;
 type AccountIdLookupOf<T> = <<T as pezframe_system::Config>::Lookup as StaticLookup>::Source;
@@ -162,7 +162,7 @@ impl<T: Config<I>, I: 'static, M: GetMaxVoters<Class = ClassOf<T, I>>>
 			for i in 0..max_voters {
 				let who: T::AccountId =
 					pezframe_benchmarking::account("ranked_collective_benchmarking", i, 0);
-				crate::Pallet::<T, I>::do_add_member_to_rank(
+				crate::Pezpallet::<T, I>::do_add_member_to_rank(
 					who,
 					T::MinRankOfClass::convert(class.clone()),
 					true,
@@ -263,7 +263,7 @@ pub trait GetMaxVoters {
 	/// Return the maximum number of voters for the poll class `c`.
 	fn get_max_voters(c: Self::Class) -> MemberIndex;
 }
-impl<T: Config<I>, I: 'static> GetMaxVoters for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> GetMaxVoters for Pezpallet<T, I> {
 	type Class = ClassOf<T, I>;
 	fn get_max_voters(c: Self::Class) -> MemberIndex {
 		MemberCount::<T, I>::get(T::MinRankOfClass::convert(c))
@@ -316,7 +316,7 @@ impl<T: Config<I>, I: 'static> EnsureOriginWithArg<T::RuntimeOrigin, Rank> for E
 	#[cfg(feature = "runtime-benchmarks")]
 	fn try_successful_origin(min_rank: &Rank) -> Result<T::RuntimeOrigin, ()> {
 		let who = pezframe_benchmarking::account::<T::AccountId>("successful_origin", 0, 0);
-		crate::Pallet::<T, I>::do_add_member_to_rank(who.clone(), *min_rank, true)
+		crate::Pezpallet::<T, I>::do_add_member_to_rank(who.clone(), *min_rank, true)
 			.expect("Could not add members for benchmarks");
 		Ok(pezframe_system::RawOrigin::Signed(who).into())
 	}
@@ -373,7 +373,7 @@ impl<T: Config<I>, I: 'static, const MIN_RANK: u16> EnsureOrigin<T::RuntimeOrigi
 	#[cfg(feature = "runtime-benchmarks")]
 	fn try_successful_origin() -> Result<T::RuntimeOrigin, ()> {
 		let who = pezframe_benchmarking::account::<T::AccountId>("successful_origin", 0, 0);
-		crate::Pallet::<T, I>::do_add_member_to_rank(who.clone(), MIN_RANK, true)
+		crate::Pezpallet::<T, I>::do_add_member_to_rank(who.clone(), MIN_RANK, true)
 			.expect("Could not add members for benchmarks");
 		Ok(pezframe_system::RawOrigin::Signed(who).into())
 	}
@@ -392,19 +392,19 @@ pub trait BenchmarkSetup<AccountId> {
 	fn ensure_member(acc: &AccountId);
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::{pezpallet_prelude::*, storage::KeyLenOf};
 	use pezframe_system::pezpallet_prelude::*;
 	use pezsp_runtime::traits::MaybeConvert;
 
-	#[pallet::pallet]
-	pub struct Pallet<T, I = ()>(PhantomData<(T, I)>);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T, I = ()>(PhantomData<(T, I)>);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config {
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 
 		/// The runtime event type.
@@ -441,8 +441,8 @@ pub mod pallet {
 
 		/// An external handler that will be notified when two members are swapped.
 		type MemberSwappedHandler: RankedMembersSwapHandler<
-			<Pallet<Self, I> as RankedMembers>::AccountId,
-			<Pallet<Self, I> as RankedMembers>::Rank,
+			<Pezpallet<Self, I> as RankedMembers>::AccountId,
+			<Pezpallet<Self, I> as RankedMembers>::Rank,
 		>;
 
 		/// Convert a rank_delta into a number of votes the rank gets.
@@ -466,28 +466,28 @@ pub mod pallet {
 
 	/// The number of members in the collective who have at least the rank according to the index
 	/// of the vec.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type MemberCount<T: Config<I>, I: 'static = ()> =
 		StorageMap<_, Twox64Concat, Rank, MemberIndex, ValueQuery>;
 
 	/// The current members of the collective.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Members<T: Config<I>, I: 'static = ()> =
 		StorageMap<_, Twox64Concat, T::AccountId, MemberRecord>;
 
 	/// The index of each ranks's member into the group of members who have at least that rank.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type IdToIndex<T: Config<I>, I: 'static = ()> =
 		StorageDoubleMap<_, Twox64Concat, Rank, Twox64Concat, T::AccountId, MemberIndex>;
 
 	/// The members in the collective by index. All indices in the range `0..MemberCount` will
 	/// return `Some`, however a member's index is not guaranteed to remain unchanged over time.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type IndexToId<T: Config<I>, I: 'static = ()> =
 		StorageDoubleMap<_, Twox64Concat, Rank, Twox64Concat, MemberIndex, T::AccountId>;
 
 	/// Votes on a given proposal, if it is ongoing.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Voting<T: Config<I>, I: 'static = ()> = StorageDoubleMap<
 		_,
 		Blake2_128Concat,
@@ -497,12 +497,12 @@ pub mod pallet {
 		VoteRecord,
 	>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type VotingCleanup<T: Config<I>, I: 'static = ()> =
 		StorageMap<_, Blake2_128Concat, PollIndexOf<T, I>, BoundedVec<u8, KeyLenOf<Voting<T, I>>>>;
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config<I>, I: 'static = ()> {
 		/// A member `who` has been added.
 		MemberAdded { who: T::AccountId },
@@ -517,7 +517,7 @@ pub mod pallet {
 		MemberExchanged { who: T::AccountId, new_who: T::AccountId },
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T, I = ()> {
 		/// Account is already a member.
 		AlreadyMember,
@@ -543,16 +543,16 @@ pub mod pallet {
 		TooManyMembers,
 	}
 
-	#[pallet::call]
-	impl<T: Config<I>, I: 'static> Pallet<T, I> {
+	#[pezpallet::call]
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 		/// Introduce a new member.
 		///
 		/// - `origin`: Must be the `AddOrigin`.
 		/// - `who`: Account of non-member which will become a member.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::add_member())]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::add_member())]
 		pub fn add_member(origin: OriginFor<T>, who: AccountIdLookupOf<T>) -> DispatchResult {
 			T::AddOrigin::ensure_origin(origin)?;
 			let who = T::Lookup::lookup(who)?;
@@ -565,8 +565,8 @@ pub mod pallet {
 		/// - `who`: Account of existing member.
 		///
 		/// Weight: `O(1)`
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::promote_member(0))]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::promote_member(0))]
 		pub fn promote_member(origin: OriginFor<T>, who: AccountIdLookupOf<T>) -> DispatchResult {
 			let max_rank = T::PromoteOrigin::ensure_origin(origin)?;
 			let who = T::Lookup::lookup(who)?;
@@ -580,8 +580,8 @@ pub mod pallet {
 		/// - `who`: Account of existing member of rank greater than zero.
 		///
 		/// Weight: `O(1)`, less if the member's index is highest in its rank.
-		#[pallet::call_index(2)]
-		#[pallet::weight(T::WeightInfo::demote_member(0))]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(T::WeightInfo::demote_member(0))]
 		pub fn demote_member(origin: OriginFor<T>, who: AccountIdLookupOf<T>) -> DispatchResult {
 			let max_rank = T::DemoteOrigin::ensure_origin(origin)?;
 			let who = T::Lookup::lookup(who)?;
@@ -595,8 +595,8 @@ pub mod pallet {
 		/// - `min_rank`: The rank of the member or greater.
 		///
 		/// Weight: `O(min_rank)`.
-		#[pallet::call_index(3)]
-		#[pallet::weight(T::WeightInfo::remove_member(*min_rank as u32))]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(T::WeightInfo::remove_member(*min_rank as u32))]
 		pub fn remove_member(
 			origin: OriginFor<T>,
 			who: AccountIdLookupOf<T>,
@@ -627,8 +627,8 @@ pub mod pallet {
 		/// fee.
 		///
 		/// Weight: `O(1)`, less if there was no previous vote on the poll by the member.
-		#[pallet::call_index(4)]
-		#[pallet::weight(T::WeightInfo::vote())]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(T::WeightInfo::vote())]
 		pub fn vote(
 			origin: OriginFor<T>,
 			poll: PollIndexOf<T, I>,
@@ -684,8 +684,8 @@ pub mod pallet {
 		/// Transaction fees are waived if the operation is successful.
 		///
 		/// Weight `O(max)` (less if there are fewer items to remove than `max`).
-		#[pallet::call_index(5)]
-		#[pallet::weight(T::WeightInfo::cleanup_poll(*max))]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(T::WeightInfo::cleanup_poll(*max))]
 		pub fn cleanup_poll(
 			origin: OriginFor<T>,
 			poll_index: PollIndexOf<T, I>,
@@ -717,8 +717,8 @@ pub mod pallet {
 		/// - `origin`: Must be the `ExchangeOrigin`.
 		/// - `who`: Account of existing member of rank greater than zero to be exchanged.
 		/// - `new_who`: New Account of existing member of rank greater than zero to exchanged to.
-		#[pallet::call_index(6)]
-		#[pallet::weight(T::WeightInfo::exchange_member())]
+		#[pezpallet::call_index(6)]
+		#[pezpallet::weight(T::WeightInfo::exchange_member())]
 		pub fn exchange_member(
 			origin: OriginFor<T>,
 			who: AccountIdLookupOf<T>,
@@ -745,15 +745,15 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::hooks]
-	impl<T: Config<I>, I: 'static> Hooks<BlockNumberFor<T>> for Pallet<T, I> {
+	#[pezpallet::hooks]
+	impl<T: Config<I>, I: 'static> Hooks<BlockNumberFor<T>> for Pezpallet<T, I> {
 		#[cfg(feature = "try-runtime")]
 		fn try_state(_n: BlockNumberFor<T>) -> Result<(), pezsp_runtime::TryRuntimeError> {
 			Self::do_try_state()
 		}
 	}
 
-	impl<T: Config<I>, I: 'static> Pallet<T, I> {
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 		fn ensure_member(who: &T::AccountId) -> Result<MemberRecord, DispatchError> {
 			Members::<T, I>::get(who).ok_or(Error::<T, I>::NotMember.into())
 		}
@@ -893,8 +893,8 @@ pub mod pallet {
 	}
 
 	#[cfg(any(feature = "try-runtime", test))]
-	impl<T: Config<I>, I: 'static> Pallet<T, I> {
-		/// Ensure the correctness of the state of this pallet.
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
+		/// Ensure the correctness of the state of this pezpallet.
 		pub fn do_try_state() -> Result<(), pezsp_runtime::TryRuntimeError> {
 			Self::try_state_members()?;
 			Self::try_state_index()?;
@@ -1018,7 +1018,7 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config<I>, I: 'static> RankedMembers for Pallet<T, I> {
+	impl<T: Config<I>, I: 'static> RankedMembers for Pezpallet<T, I> {
 		type AccountId = T::AccountId;
 		type Rank = Rank;
 

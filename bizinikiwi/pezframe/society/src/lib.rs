@@ -15,14 +15,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Society Pallet
+//! # Society Pezpallet
 //!
 //! - [`Config`]
 //! - [`Call`]
 //!
 //! ## Overview
 //!
-//! The Society pallet is an economic game which incentivizes users to participate
+//! The Society pezpallet is an economic game which incentivizes users to participate
 //! and maintain a membership society.
 //!
 //! ### User Types
@@ -76,7 +76,7 @@
 //! #### Society Treasury
 //!
 //! The membership society is independently funded by a treasury managed by this
-//! pallet. Some subset of this treasury is placed in a Society Pot, which is used
+//! pezpallet. Some subset of this treasury is placed in a Society Pot, which is used
 //! to determine the number of accepted bids.
 //!
 //! #### Rate of Growth
@@ -131,7 +131,7 @@
 //! the society. A vouching bid can additionally request some portion of that reward as a tip
 //! to the voucher for vouching for the prospective candidate.
 //!
-//! Every rotation period, Bids are ordered by reward amount, and the pallet
+//! Every rotation period, Bids are ordered by reward amount, and the pezpallet
 //! selects as many bids the Society Pot can support for that period.
 //!
 //! These selected bids become candidates and move on to the Candidate phase.
@@ -233,7 +233,7 @@
 //! #### For Super Users
 //!
 //! * `found` - The founder origin can initiate this society. Useful for bootstrapping the Society
-//! pallet on an already running chain.
+//! pezpallet on an already running chain.
 //! * `judge_suspended_member` - The suspension judgement origin is able to make
 //! judgement on a suspended member.
 //! * `judge_suspended_candidate` - The suspension judgement origin is able to
@@ -290,7 +290,7 @@ use pezsp_runtime::{
 
 pub use weights::WeightInfo;
 
-pub use pallet::*;
+pub use pezpallet::*;
 use pezsp_runtime::traits::BlockNumberProvider;
 
 pub type BlockNumberFor<T, I> =
@@ -486,23 +486,23 @@ pub type GroupParamsFor<T, I> = GroupParams<BalanceOf<T, I>>;
 
 pub(crate) const STORAGE_VERSION: StorageVersion = StorageVersion::new(2);
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T, I = ()>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T, I = ()>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self, I>>
 			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
-		/// The societies's pallet id
-		#[pallet::constant]
+		/// The societies's pezpallet id
+		#[pezpallet::constant]
 		type PalletId: Get<PalletId>;
 
 		/// The currency type used for bidding.
@@ -512,50 +512,50 @@ pub mod pallet {
 		type Randomness: Randomness<Self::Hash, BlockNumberFor<Self, I>>;
 
 		/// The maximum number of strikes before a member gets funds slashed.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type GraceStrikes: Get<u32>;
 
 		/// The amount of incentive paid within each period. Doesn't include VoterTip.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type PeriodSpend: Get<BalanceOf<Self, I>>;
 
 		/// The number of [Config::BlockNumberProvider] blocks on which new candidates should be
 		/// voted on. Together with
 		/// `ClaimPeriod`, this sums to the number of blocks between candidate intake periods.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type VotingPeriod: Get<BlockNumberFor<Self, I>>;
 
 		/// The number of [Config::BlockNumberProvider] blocks on which new candidates can claim
 		/// their membership and be the named head.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type ClaimPeriod: Get<BlockNumberFor<Self, I>>;
 
 		/// The maximum duration of the payout lock.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxLockDuration: Get<BlockNumberFor<Self, I>>;
 
 		/// The origin that is allowed to call `found`.
 		type FounderSetOrigin: EnsureOrigin<Self::RuntimeOrigin>;
 
 		/// The number of [Config::BlockNumberProvider] blocks between membership challenges.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type ChallengePeriod: Get<BlockNumberFor<Self, I>>;
 
 		/// The maximum number of payouts a member may have waiting unclaimed.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxPayouts: Get<u32>;
 
 		/// The maximum number of bids at once.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxBids: Get<u32>;
 
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
-		/// Provider for the block number. Normally this is the `pezframe_system` pallet.
+		/// Provider for the block number. Normally this is the `pezframe_system` pezpallet.
 		type BlockNumberProvider: BlockNumberProvider;
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T, I = ()> {
 		/// User is not a member.
 		NotMember,
@@ -625,8 +625,8 @@ pub mod pallet {
 		NoDeposit,
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config<I>, I: 'static = ()> {
 		/// The society is founded by the given identity.
 		Founded { founder: T::AccountId },
@@ -678,62 +678,62 @@ pub mod pallet {
 	pub type RawEvent<T, I = ()> = Event<T, I>;
 
 	/// The max number of members for the society at one time.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Parameters<T: Config<I>, I: 'static = ()> =
 		StorageValue<_, GroupParamsFor<T, I>, OptionQuery>;
 
 	/// Amount of our account balance that is specifically for the next round's bid(s).
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Pot<T: Config<I>, I: 'static = ()> = StorageValue<_, BalanceOf<T, I>, ValueQuery>;
 
 	/// The first member.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Founder<T: Config<I>, I: 'static = ()> = StorageValue<_, T::AccountId>;
 
 	/// The most primary from the most recently approved rank 0 members in the society.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Head<T: Config<I>, I: 'static = ()> = StorageValue<_, T::AccountId>;
 
 	/// A hash of the rules of this society concerning membership. Can only be set once and
 	/// only by the founder.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Rules<T: Config<I>, I: 'static = ()> = StorageValue<_, T::Hash>;
 
 	/// The current members and their rank. Doesn't include `SuspendedMembers`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Members<T: Config<I>, I: 'static = ()> =
 		StorageMap<_, Twox64Concat, T::AccountId, MemberRecord, OptionQuery>;
 
 	/// Information regarding rank-0 payouts, past and future.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Payouts<T: Config<I>, I: 'static = ()> =
 		StorageMap<_, Twox64Concat, T::AccountId, PayoutRecordFor<T, I>, ValueQuery>;
 
 	/// The number of items in `Members` currently. (Doesn't include `SuspendedMembers`.)
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type MemberCount<T: Config<I>, I: 'static = ()> = StorageValue<_, u32, ValueQuery>;
 
 	/// The current items in `Members` keyed by their unique index. Keys are densely populated
 	/// `0..MemberCount` (does not include `MemberCount`).
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type MemberByIndex<T: Config<I>, I: 'static = ()> =
 		StorageMap<_, Twox64Concat, u32, T::AccountId, OptionQuery>;
 
 	/// The set of suspended members, with their old membership record.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type SuspendedMembers<T: Config<I>, I: 'static = ()> =
 		StorageMap<_, Twox64Concat, T::AccountId, MemberRecord, OptionQuery>;
 
 	/// The number of rounds which have passed.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type RoundCount<T: Config<I>, I: 'static = ()> = StorageValue<_, RoundIndex, ValueQuery>;
 
 	/// The current bids, stored ordered by the value of the bid.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Bids<T: Config<I>, I: 'static = ()> =
 		StorageValue<_, BoundedVec<Bid<T::AccountId, BalanceOf<T, I>>, T::MaxBids>, ValueQuery>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Candidates<T: Config<I>, I: 'static = ()> = StorageMap<
 		_,
 		Blake2_128Concat,
@@ -743,11 +743,11 @@ pub mod pallet {
 	>;
 
 	/// The current skeptic.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Skeptic<T: Config<I>, I: 'static = ()> = StorageValue<_, T::AccountId, OptionQuery>;
 
 	/// Double map from Candidate -> Voter -> (Maybe) Vote.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Votes<T: Config<I>, I: 'static = ()> = StorageDoubleMap<
 		_,
 		Twox64Concat,
@@ -759,42 +759,42 @@ pub mod pallet {
 	>;
 
 	/// Clear-cursor for Vote, map from Candidate -> (Maybe) Cursor.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type VoteClearCursor<T: Config<I>, I: 'static = ()> =
 		StorageMap<_, Twox64Concat, T::AccountId, BoundedVec<u8, KeyLenOf<Votes<T, I>>>>;
 
 	/// At the end of the claim period, this contains the most recently approved members (along with
 	/// their bid and round ID) who is from the most recent round with the lowest bid. They will
 	/// become the new `Head`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type NextHead<T: Config<I>, I: 'static = ()> =
 		StorageValue<_, IntakeRecordFor<T, I>, OptionQuery>;
 
 	/// The number of challenge rounds there have been. Used to identify stale DefenderVotes.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ChallengeRoundCount<T: Config<I>, I: 'static = ()> =
 		StorageValue<_, RoundIndex, ValueQuery>;
 
 	/// The defending member currently being challenged, along with a running tally of votes.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Defending<T: Config<I>, I: 'static = ()> =
 		StorageValue<_, (T::AccountId, T::AccountId, Tally)>;
 
 	/// Votes for the defender, keyed by challenge round.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type DefenderVotes<T: Config<I>, I: 'static = ()> =
 		StorageDoubleMap<_, Twox64Concat, RoundIndex, Twox64Concat, T::AccountId, Vote>;
 
 	/// Next intake rotation scheduled with [Config::BlockNumberProvider].
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type NextIntakeAt<T: Config<I>, I: 'static = ()> = StorageValue<_, BlockNumberFor<T, I>>;
 
 	/// Next challenge rotation scheduled with [Config::BlockNumberProvider].
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type NextChallengeAt<T: Config<I>, I: 'static = ()> = StorageValue<_, BlockNumberFor<T, I>>;
 
-	#[pallet::hooks]
-	impl<T: Config<I>, I: 'static> Hooks<SystemBlockNumberFor<T>> for Pallet<T, I> {
+	#[pezpallet::hooks]
+	impl<T: Config<I>, I: 'static> Hooks<SystemBlockNumberFor<T>> for Pezpallet<T, I> {
 		fn on_initialize(_n: SystemBlockNumberFor<T>) -> Weight {
 			let mut weight = Weight::zero();
 			let weights = T::BlockWeights::get();
@@ -832,21 +832,21 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(pezframe_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config<I>, I: 'static = ()> {
 		pub pot: BalanceOf<T, I>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config<I>, I: 'static> BuildGenesisConfig for GenesisConfig<T, I> {
 		fn build(&self) {
 			Pot::<T, I>::put(self.pot);
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config<I>, I: 'static> Pallet<T, I> {
+	#[pezpallet::call]
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 		/// A user outside of the society can make a bid for entry.
 		///
 		/// Payment: The group's Candidate Deposit will be reserved for making a bid. It is returned
@@ -856,8 +856,8 @@ pub mod pallet {
 		///
 		/// Parameters:
 		/// - `value`: A one time payment the bid would like to receive when joining the society.
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::bid())]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::bid())]
 		pub fn bid(origin: OriginFor<T>, value: BalanceOf<T, I>) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 
@@ -885,8 +885,8 @@ pub mod pallet {
 		/// Payment: The bid deposit is unreserved if the user made a bid.
 		///
 		/// The dispatch origin for this call must be _Signed_ and a bidder.
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::unbid())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::unbid())]
 		pub fn unbid(origin: OriginFor<T>) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 
@@ -915,8 +915,8 @@ pub mod pallet {
 		/// a member in the society.
 		/// - `tip`: Your cut of the total `value` payout when the candidate is inducted into
 		/// the society. Tips larger than `value` will be saturated upon payout.
-		#[pallet::call_index(2)]
-		#[pallet::weight(T::WeightInfo::vouch())]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(T::WeightInfo::vouch())]
 		pub fn vouch(
 			origin: OriginFor<T>,
 			who: AccountIdLookupOf<T>,
@@ -962,8 +962,8 @@ pub mod pallet {
 		///
 		/// Parameters:
 		/// - `pos`: Position in the `Bids` vector of the bid who should be unvouched.
-		#[pallet::call_index(3)]
-		#[pallet::weight(T::WeightInfo::unvouch())]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(T::WeightInfo::unvouch())]
 		pub fn unvouch(origin: OriginFor<T>) -> DispatchResult {
 			let voucher = ensure_signed(origin)?;
 
@@ -988,8 +988,8 @@ pub mod pallet {
 		/// - `candidate`: The candidate that the member would like to bid on.
 		/// - `approve`: A boolean which says if the candidate should be approved (`true`) or
 		///   rejected (`false`).
-		#[pallet::call_index(4)]
-		#[pallet::weight(T::WeightInfo::vote())]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(T::WeightInfo::vote())]
 		pub fn vote(
 			origin: OriginFor<T>,
 			candidate: AccountIdLookupOf<T>,
@@ -1020,8 +1020,8 @@ pub mod pallet {
 		/// Parameters:
 		/// - `approve`: A boolean which says if the candidate should be
 		/// approved (`true`) or rejected (`false`).
-		#[pallet::call_index(5)]
-		#[pallet::weight(T::WeightInfo::defender_vote())]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(T::WeightInfo::defender_vote())]
 		pub fn defender_vote(origin: OriginFor<T>, approve: bool) -> DispatchResultWithPostInfo {
 			let voter = ensure_signed(origin)?;
 
@@ -1050,8 +1050,8 @@ pub mod pallet {
 		///
 		/// The dispatch origin for this call must be _Signed_ and a member with
 		/// payouts remaining.
-		#[pallet::call_index(6)]
-		#[pallet::weight(T::WeightInfo::payout())]
+		#[pezpallet::call_index(6)]
+		#[pezpallet::weight(T::WeightInfo::payout())]
 		pub fn payout(origin: OriginFor<T>) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 			ensure!(
@@ -1074,8 +1074,8 @@ pub mod pallet {
 
 		/// Repay the payment previously given to the member with the signed origin, remove any
 		/// pending payments, and elevate them from rank 0 to rank 1.
-		#[pallet::call_index(7)]
-		#[pallet::weight(T::WeightInfo::waive_repay())]
+		#[pezpallet::call_index(7)]
+		#[pezpallet::weight(T::WeightInfo::waive_repay())]
 		pub fn waive_repay(origin: OriginFor<T>, amount: BalanceOf<T, I>) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 			let mut record = Members::<T, I>::get(&who).ok_or(Error::<T, I>::NotMember)?;
@@ -1097,7 +1097,7 @@ pub mod pallet {
 		/// Found the society.
 		///
 		/// This is done as a discrete action in order to allow for the
-		/// pallet to be included into a running chain and can only be done once.
+		/// pezpallet to be included into a running chain and can only be done once.
 		///
 		/// The dispatch origin for this call must be from the _FounderSetOrigin_.
 		///
@@ -1111,8 +1111,8 @@ pub mod pallet {
 		/// - `rules` - The rules of this society concerning membership.
 		///
 		/// Complexity: O(1)
-		#[pallet::call_index(8)]
-		#[pallet::weight(T::WeightInfo::found_society())]
+		#[pezpallet::call_index(8)]
+		#[pezpallet::weight(T::WeightInfo::found_society())]
 		pub fn found_society(
 			origin: OriginFor<T>,
 			founder: AccountIdLookupOf<T>,
@@ -1142,8 +1142,8 @@ pub mod pallet {
 		/// The dispatch origin for this call must be Signed, and the signing account must be both
 		/// the `Founder` and the `Head`. This implies that it may only be done when there is one
 		/// member.
-		#[pallet::call_index(9)]
-		#[pallet::weight(T::WeightInfo::dissolve())]
+		#[pezpallet::call_index(9)]
+		#[pezpallet::weight(T::WeightInfo::dissolve())]
 		pub fn dissolve(origin: OriginFor<T>) -> DispatchResult {
 			let founder = ensure_signed(origin)?;
 			ensure!(Founder::<T, I>::get().as_ref() == Some(&founder), Error::<T, I>::NotFounder);
@@ -1187,8 +1187,8 @@ pub mod pallet {
 		/// - `who` - The suspended member to be judged.
 		/// - `forgive` - A boolean representing whether the suspension judgement origin forgives
 		///   (`true`) or rejects (`false`) a suspended member.
-		#[pallet::call_index(10)]
-		#[pallet::weight(T::WeightInfo::judge_suspended_member())]
+		#[pezpallet::call_index(10)]
+		#[pezpallet::weight(T::WeightInfo::judge_suspended_member())]
 		pub fn judge_suspended_member(
 			origin: OriginFor<T>,
 			who: AccountIdLookupOf<T>,
@@ -1229,8 +1229,8 @@ pub mod pallet {
 		/// - `max_strikes`: The maximum number of strikes a member may get before they become
 		///   suspended and may only be reinstated by the founder.
 		/// - `candidate_deposit`: The deposit required to make a bid for membership of the group.
-		#[pallet::call_index(11)]
-		#[pallet::weight(T::WeightInfo::set_parameters())]
+		#[pezpallet::call_index(11)]
+		#[pezpallet::weight(T::WeightInfo::set_parameters())]
 		pub fn set_parameters(
 			origin: OriginFor<T>,
 			max_members: u32,
@@ -1251,8 +1251,8 @@ pub mod pallet {
 
 		/// Punish the skeptic with a strike if they did not vote on a candidate. Callable by the
 		/// candidate.
-		#[pallet::call_index(12)]
-		#[pallet::weight(T::WeightInfo::punish_skeptic())]
+		#[pezpallet::call_index(12)]
+		#[pezpallet::weight(T::WeightInfo::punish_skeptic())]
 		pub fn punish_skeptic(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 			let candidate = ensure_signed(origin)?;
 			let mut candidacy =
@@ -1266,8 +1266,8 @@ pub mod pallet {
 
 		/// Transform an approved candidate into a member. Callable only by the
 		/// the candidate, and only after the period for voting has ended.
-		#[pallet::call_index(13)]
-		#[pallet::weight(T::WeightInfo::claim_membership())]
+		#[pezpallet::call_index(13)]
+		#[pezpallet::weight(T::WeightInfo::claim_membership())]
 		pub fn claim_membership(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 			let candidate = ensure_signed(origin)?;
 			let candidacy =
@@ -1281,8 +1281,8 @@ pub mod pallet {
 		/// Transform an approved candidate into a member. Callable only by the Signed origin of the
 		/// Founder, only after the period for voting has ended and only when the candidate is not
 		/// clearly rejected.
-		#[pallet::call_index(14)]
-		#[pallet::weight(T::WeightInfo::bestow_membership())]
+		#[pezpallet::call_index(14)]
+		#[pezpallet::weight(T::WeightInfo::bestow_membership())]
 		pub fn bestow_membership(
 			origin: OriginFor<T>,
 			candidate: T::AccountId,
@@ -1304,8 +1304,8 @@ pub mod pallet {
 		/// have a clear approval.
 		///
 		/// Any bid deposit is lost and voucher is banned.
-		#[pallet::call_index(15)]
-		#[pallet::weight(T::WeightInfo::kick_candidate())]
+		#[pezpallet::call_index(15)]
+		#[pezpallet::weight(T::WeightInfo::kick_candidate())]
 		pub fn kick_candidate(
 			origin: OriginFor<T>,
 			candidate: T::AccountId,
@@ -1327,8 +1327,8 @@ pub mod pallet {
 		/// Remove the candidate's application from the society. Callable only by the candidate.
 		///
 		/// Any bid deposit is lost and voucher is banned.
-		#[pallet::call_index(16)]
-		#[pallet::weight(T::WeightInfo::resign_candidacy())]
+		#[pezpallet::call_index(16)]
+		#[pezpallet::weight(T::WeightInfo::resign_candidacy())]
 		pub fn resign_candidacy(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 			let candidate = ensure_signed(origin)?;
 			let mut candidacy =
@@ -1346,8 +1346,8 @@ pub mod pallet {
 		/// a candidate with more rejections than approvals.
 		///
 		/// The bid deposit is lost and the voucher is banned.
-		#[pallet::call_index(17)]
-		#[pallet::weight(T::WeightInfo::drop_candidate())]
+		#[pezpallet::call_index(17)]
+		#[pezpallet::weight(T::WeightInfo::drop_candidate())]
 		pub fn drop_candidate(
 			origin: OriginFor<T>,
 			candidate: T::AccountId,
@@ -1365,8 +1365,8 @@ pub mod pallet {
 		/// Remove up to `max` stale votes for the given `candidate`.
 		///
 		/// May be called by any Signed origin, but only after the candidate's candidacy is ended.
-		#[pallet::call_index(18)]
-		#[pallet::weight(T::WeightInfo::cleanup_candidacy())]
+		#[pezpallet::call_index(18)]
+		#[pezpallet::weight(T::WeightInfo::cleanup_candidacy())]
 		pub fn cleanup_candidacy(
 			origin: OriginFor<T>,
 			candidate: T::AccountId,
@@ -1386,8 +1386,8 @@ pub mod pallet {
 		/// Remove up to `max` stale votes for the defender in the given `challenge_round`.
 		///
 		/// May be called by any Signed origin, but only after the challenge round is ended.
-		#[pallet::call_index(19)]
-		#[pallet::weight(T::WeightInfo::cleanup_challenge())]
+		#[pezpallet::call_index(19)]
+		#[pezpallet::weight(T::WeightInfo::cleanup_challenge())]
 		pub fn cleanup_challenge(
 			origin: OriginFor<T>,
 			challenge_round: RoundIndex,
@@ -1412,8 +1412,8 @@ pub mod pallet {
 		/// The transaction fee is waived if the deposit is changed after poking/reconsideration.
 		///
 		/// Emits `DepositPoked` if successful.
-		#[pallet::call_index(20)]
-		#[pallet::weight(T::WeightInfo::poke_deposit())]
+		#[pezpallet::call_index(20)]
+		#[pezpallet::weight(T::WeightInfo::poke_deposit())]
 		pub fn poke_deposit(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 			let who = ensure_signed(origin)?;
 
@@ -1495,7 +1495,7 @@ pub enum Period<BlockNumber> {
 	Intake { elapsed: BlockNumber },
 }
 
-impl<T: Config<I>, I: 'static> Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 	/// Get the period we are currently in.
 	fn period() -> Period<BlockNumberFor<T, I>> {
 		let claim_period = T::ClaimPeriod::get();
@@ -2175,7 +2175,7 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 	}
 }
 
-impl<T: Config<I>, I: 'static> OnUnbalanced<NegativeImbalanceOf<T, I>> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> OnUnbalanced<NegativeImbalanceOf<T, I>> for Pezpallet<T, I> {
 	fn on_nonzero_unbalanced(amount: NegativeImbalanceOf<T, I>) {
 		let numeric_amount = amount.peek();
 

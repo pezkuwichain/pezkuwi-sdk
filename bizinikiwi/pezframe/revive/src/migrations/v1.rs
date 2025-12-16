@@ -38,12 +38,12 @@ use alloc::vec::Vec;
 /// Module containing the old storage items.
 pub mod old {
 	use super::Config;
-	use crate::{pallet::Pallet, ContractInfo, H160};
+	use crate::{pezpallet::Pezpallet, ContractInfo, H160};
 	use pezframe_support::{storage_alias, Identity};
 
 	#[storage_alias]
 	/// The storage item that is being migrated from.
-	pub type ContractInfoOf<T: Config> = StorageMap<Pallet<T>, Identity, H160, ContractInfo<T>>;
+	pub type ContractInfoOf<T: Config> = StorageMap<Pezpallet<T>, Identity, H160, ContractInfo<T>>;
 }
 
 /// Migrates the items of the [`old::ContractInfoOf`] map into [`crate::AccountInfoOf`].

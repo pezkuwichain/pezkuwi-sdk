@@ -25,14 +25,14 @@
 // Executed Command:
 // ./target/production/pezkuwi
 // benchmark
-// pallet
+// pezpallet
 // --chain=pezkuwichain-dev
 // --steps=50
 // --repeat=20
 // --no-storage-info
 // --no-median-slopes
 // --no-min-squares
-// --pallet=runtime_common::coretime
+// --pezpallet=runtime_common::coretime
 // --extrinsic=*
 // --execution=wasm
 // --wasm-execution=compiled

@@ -22,7 +22,7 @@ Options:
     providing template runtimes. Also devs using pallets, FRAME etc directly. These are people who
     care about the protocol (WASM), not the meta-protocol (client).
   - `runtime_user`: Anyone using the runtime. Can be front-end devs reading the state, exchanges
-    listening for events, libraries that have hard-coded pallet indices etc. Anything that would
+    listening for events, libraries that have hard-coded pezpallet indices etc. Anything that would
     result in an observable change to the runtime behaviour must be marked with this.
   - `node_dev`: Those who build around the client side code. Alternative client builders, SMOLDOT,
   those who consume RPCs. These are people who are oblivious to the runtime changes. They only care
@@ -88,11 +88,11 @@ For example when you modified two crates and record the changes:
 crates:
   - name: frame-example
     bump: major
-  - name: frame-example-pallet
+  - name: frame-example-pezpallet
     bump: minor
 ```
 
-It means that downstream code using `frame-example-pallet` is still guaranteed to work as before,
+It means that downstream code using `frame-example-pezpallet` is still guaranteed to work as before,
 while code using `frame-example` might break.
 
 ### Dependencies
@@ -114,12 +114,12 @@ crates:
   - name: frame-example
     bump: major
     validate: false
-  - name: frame-example-pallet
+  - name: frame-example-pezpallet
     bump: minor
 ```
 
 By putting `validate: false` for `frame-example`, the version bump is ignored by the tooling. For
-`frame-example-pallet` the version bump is still validated by the CI check.
+`frame-example-pezpallet` the version bump is still validated by the CI check.
 
 ### Backporting PRs
 

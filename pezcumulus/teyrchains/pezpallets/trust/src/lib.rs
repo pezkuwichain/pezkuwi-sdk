@@ -1,13 +1,13 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-//! # Trust Score Pallet
+//! # Trust Score Pezpallet
 //!
-//! A pallet for calculating and managing composite trust scores based on multiple ecosystem
+//! A pezpallet for calculating and managing composite trust scores based on multiple ecosystem
 //! metrics.
 //!
 //! ## Overview
 //!
-//! The Trust Score pallet aggregates multiple reputation and activity metrics to produce
+//! The Trust Score pezpallet aggregates multiple reputation and activity metrics to produce
 //! a unified trust score for each citizen. This score is used throughout the ecosystem for:
 //!
 //! - Validator pool eligibility (trust-based validators)
@@ -68,7 +68,7 @@
 //!
 //! ## Dependencies
 //!
-//! This pallet requires integration with:
+//! This pezpallet requires integration with:
 //! - `pezpallet-identity-kyc` - Citizenship status verification
 //! - `pezpallet-staking-score` - Staking metrics provider
 //! - `pezpallet-referral` - Referral score provider
@@ -92,7 +92,7 @@
 //! }
 //! ```
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 pub mod weights;
 
@@ -122,7 +122,7 @@ pub trait ReferralScoreProvider<AccountId> {
 	fn get_referral_score(who: &AccountId) -> u32;
 }
 
-// Re-export from identity-kyc pallet
+// Re-export from identity-kyc pezpallet
 pub use pezpallet_identity_kyc::CitizenshipStatusProvider;
 
 pub trait TrustScoreUpdater<AccountId> {
@@ -141,17 +141,17 @@ pub trait TikiScoreProvider<AccountId> {
 	fn get_tiki_score(who: &AccountId) -> u32;
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::{weights::WeightInfo, *};
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 	use pezsp_runtime::traits::{Saturating, Zero};
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config + pezpallet_identity_kyc::Config {
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		type WeightInfo: WeightInfo;
@@ -168,16 +168,16 @@ pub mod pallet {
 			+ Into<u128>
 			+ TryFrom<u128>;
 
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type ScoreMultiplierBase: Get<u128>;
 
 		/// Block interval for Trust score updates (e.g. daily)
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type UpdateInterval: Get<BlockNumberFor<Self>>;
 
 		/// Maximum number of accounts to process per batch update
 		/// Prevents DoS by limiting computation per extrinsic call
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxBatchSize: Get<u32>;
 
 		type StakingScoreSource: StakingScoreProvider<Self::AccountId, BlockNumberFor<Self>>;
@@ -187,23 +187,23 @@ pub mod pallet {
 		type CitizenshipSource: CitizenshipStatusProvider<Self::AccountId>;
 	}
 
-	#[pallet::storage]
-	#[pallet::getter(fn trust_score_of)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn trust_score_of)]
 	pub type TrustScores<T: Config> =
 		StorageMap<_, Blake2_128Concat, T::AccountId, T::Score, ValueQuery>;
 
-	#[pallet::storage]
-	#[pallet::getter(fn total_active_trust_score)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn total_active_trust_score)]
 	pub type TotalActiveTrustScore<T: Config> = StorageValue<_, T::Score, ValueQuery>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type LastProcessedAccount<T: Config> = StorageValue<_, T::AccountId, OptionQuery>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type BatchUpdateInProgress<T: Config> = StorageValue<_, bool, ValueQuery>;
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A user's Trust Score was successfully updated.
 		TrustScoreUpdated { who: T::AccountId, old_score: T::Score, new_score: T::Score },
@@ -217,7 +217,7 @@ pub mod pallet {
 		PeriodicUpdateScheduled { next_block: BlockNumberFor<T> },
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	#[derive(PartialEq)]
 	pub enum Error<T> {
 		CalculationOverflow,
@@ -225,7 +225,7 @@ pub mod pallet {
 		UpdateInProgress,
 	}
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(pezframe_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		pub start_periodic_updates: bool,
@@ -233,13 +233,13 @@ pub mod pallet {
 		pub _phantom: core::marker::PhantomData<T>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			if self.start_periodic_updates {
 				// Schedule first periodic update for 1 day later
 				let _first_update_block =
-					pezframe_system::Pallet::<T>::block_number() + T::UpdateInterval::get();
+					pezframe_system::Pezpallet::<T>::block_number() + T::UpdateInterval::get();
 
 				// Note: Scheduler may not be available during Genesis build
 				// In this case, manual start required or scheduled in runtime
@@ -248,11 +248,11 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// To manually recalculate a specific user's Trust Score.
-		#[pallet::call_index(0)]
-		#[pallet::weight(<T as Config>::WeightInfo::force_recalculate_trust_score())]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::force_recalculate_trust_score())]
 		pub fn force_recalculate_trust_score(
 			origin: OriginFor<T>,
 			who: T::AccountId,
@@ -265,8 +265,8 @@ pub mod pallet {
 		/// Updates Trust Scores of all citizens in bulk
 		/// Works in batches for large user base using efficient pagination
 		/// UPDATED (Gemini suggestion): Uses iter_from for true O(1) resume
-		#[pallet::call_index(1)]
-		#[pallet::weight(<T as Config>::WeightInfo::update_all_trust_scores())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::update_all_trust_scores())]
 		pub fn update_all_trust_scores(origin: OriginFor<T>) -> DispatchResult {
 			ensure_root(origin)?;
 
@@ -327,8 +327,8 @@ pub mod pallet {
 		}
 
 		/// Periyodik güncellemeyi başlatan function
-		#[pallet::call_index(2)]
-		#[pallet::weight(<T as Config>::WeightInfo::periodic_trust_score_update())]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::periodic_trust_score_update())]
 		pub fn periodic_trust_score_update(origin: OriginFor<T>) -> DispatchResult {
 			ensure_root(origin)?;
 
@@ -339,7 +339,7 @@ pub mod pallet {
 			Self::update_all_trust_scores(OriginFor::<T>::root())?;
 
 			// Bir sonraki periyodik güncellemeyi schedule et
-			let current_block = pezframe_system::Pallet::<T>::block_number();
+			let current_block = pezframe_system::Pezpallet::<T>::block_number();
 			let next_update_block = current_block + T::UpdateInterval::get();
 
 			Self::deposit_event(Event::PeriodicUpdateScheduled { next_block: next_update_block });
@@ -348,7 +348,7 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config> Pallet<T> {
+	impl<T: Config> Pezpallet<T> {
 		pub fn calculate_trust_score(who: &T::AccountId) -> Result<T::Score, Error<T>> {
 			ensure!(T::CitizenshipSource::is_citizen(who), Error::<T>::NotACitizen);
 
@@ -407,13 +407,13 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config> TrustScoreProvider<T::AccountId> for Pallet<T> {
+	impl<T: Config> TrustScoreProvider<T::AccountId> for Pezpallet<T> {
 		fn trust_score_of(who: &T::AccountId) -> u128 {
 			Self::trust_score_of(who).into()
 		}
 	}
 
-	impl<T: Config> TrustScoreUpdater<T::AccountId> for Pallet<T> {
+	impl<T: Config> TrustScoreUpdater<T::AccountId> for Pezpallet<T> {
 		fn on_score_component_changed(who: &T::AccountId) {
 			if let Err(e) = Self::update_score_for_account(who) {
 				log::error!("Failed to update trust score for {:?}: {:?}", who, e);

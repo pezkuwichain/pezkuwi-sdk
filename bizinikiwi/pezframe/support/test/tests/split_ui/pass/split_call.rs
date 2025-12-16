@@ -20,15 +20,15 @@ use pezframe_support::pezpallet_macros::import_section;
 mod call;
 
 #[import_section(call::call)]
-#[pezframe_support::pallet(dev_mode)]
-pub mod pallet {
+#[pezframe_support::pezpallet(dev_mode)]
+pub mod pezpallet {
     use pezframe_support::pezpallet_prelude::*;
     use pezframe_system::pezpallet_prelude::*;
 
-    #[pallet::pallet]
-    pub struct Pallet<T>(_);
+    #[pezpallet::pezpallet]
+    pub struct Pezpallet<T>(_);
 
-    #[pallet::config]
+    #[pezpallet::config]
     pub trait Config: pezframe_system::Config {}
 }
 

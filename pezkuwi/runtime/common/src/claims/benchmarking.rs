@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Benchmarking for claims pallet
+//! Benchmarking for claims pezpallet
 
 #[cfg(feature = "runtime-benchmarks")]
 use super::*;
@@ -40,7 +40,7 @@ fn create_claim<T: Config>(input: u32) -> DispatchResult {
 	let secret_key = libsecp256k1::SecretKey::parse(&keccak_256(&input.encode())).unwrap();
 	let eth_address = eth(&secret_key);
 	let vesting = Some((100_000u32.into(), 1_000u32.into(), 100u32.into()));
-	super::Pallet::<T>::mint_claim(
+	super::Pezpallet::<T>::mint_claim(
 		RawOrigin::Root.into(),
 		eth_address,
 		VALUE.into(),
@@ -54,7 +54,7 @@ fn create_claim_attest<T: Config>(input: u32) -> DispatchResult {
 	let secret_key = libsecp256k1::SecretKey::parse(&keccak_256(&input.encode())).unwrap();
 	let eth_address = eth(&secret_key);
 	let vesting = Some((100_000u32.into(), 1_000u32.into(), 100u32.into()));
-	super::Pallet::<T>::mint_claim(
+	super::Pezpallet::<T>::mint_claim(
 		RawOrigin::Root.into(),
 		eth_address,
 		VALUE.into(),
@@ -87,7 +87,7 @@ mod benchmarks {
 		let account: T::AccountId = account("user", c, SEED);
 		let vesting = Some((100_000u32.into(), 1_000u32.into(), 100u32.into()));
 		let signature = sig::<T>(&secret_key, &account.encode(), &[][..]);
-		super::Pallet::<T>::mint_claim(
+		super::Pezpallet::<T>::mint_claim(
 			RawOrigin::Root.into(),
 			eth_address,
 			VALUE.into(),
@@ -104,7 +104,7 @@ mod benchmarks {
 		{
 			let call = <Call<T> as Decode>::decode(&mut &*call_enc)
 				.expect("call is encoded above, encoding must be correct");
-			super::Pallet::<T>::validate_unsigned(source, &call)
+			super::Pezpallet::<T>::validate_unsigned(source, &call)
 				.map_err(|e| -> &'static str { e.into() })?;
 			call.dispatch_bypass_filter(RawOrigin::None.into())?;
 		}
@@ -148,7 +148,7 @@ mod benchmarks {
 		let vesting = Some((100_000u32.into(), 1_000u32.into(), 100u32.into()));
 		let statement = StatementKind::Regular;
 		let signature = sig::<T>(&secret_key, &account.encode(), statement.to_text());
-		super::Pallet::<T>::mint_claim(
+		super::Pezpallet::<T>::mint_claim(
 			RawOrigin::Root.into(),
 			eth_address,
 			VALUE.into(),
@@ -168,7 +168,7 @@ mod benchmarks {
 		{
 			let call = <Call<T> as Decode>::decode(&mut &*call_enc)
 				.expect("call is encoded above, encoding must be correct");
-			super::Pallet::<T>::validate_unsigned(source, &call)
+			super::Pezpallet::<T>::validate_unsigned(source, &call)
 				.map_err(|e| -> &'static str { e.into() })?;
 			call.dispatch_bypass_filter(RawOrigin::None.into())?;
 		}
@@ -191,7 +191,7 @@ mod benchmarks {
 		let account: T::AccountId = account("user", c, SEED);
 		let vesting = Some((100_000u32.into(), 1_000u32.into(), 100u32.into()));
 		let statement = StatementKind::Regular;
-		super::Pallet::<T>::mint_claim(
+		super::Pezpallet::<T>::mint_claim(
 			RawOrigin::Root.into(),
 			eth_address,
 			VALUE.into(),
@@ -265,7 +265,7 @@ mod benchmarks {
 		#[block]
 		{
 			for _ in 0..i {
-				assert!(super::Pallet::<T>::eth_recover(&signature, &data, extra).is_some());
+				assert!(super::Pezpallet::<T>::eth_recover(&signature, &data, extra).is_some());
 			}
 		}
 	}
@@ -287,7 +287,7 @@ mod benchmarks {
 		let account: T::AccountId = account("user", c, SEED);
 		let vesting = Some((100_000u32.into(), 1_000u32.into(), 100u32.into()));
 		let statement = StatementKind::Regular;
-		super::Pallet::<T>::mint_claim(
+		super::Pezpallet::<T>::mint_claim(
 			RawOrigin::Root.into(),
 			eth_address,
 			VALUE.into(),
@@ -311,7 +311,7 @@ mod benchmarks {
 	}
 
 	impl_benchmark_test_suite!(
-		Pallet,
+		Pezpallet,
 		crate::claims::mock::new_test_ext(),
 		crate::claims::mock::Test,
 	);

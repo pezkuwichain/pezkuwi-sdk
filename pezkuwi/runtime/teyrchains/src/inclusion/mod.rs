@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! The inclusion pallet is responsible for inclusion and availability of scheduled teyrchains.
+//! The inclusion pezpallet is responsible for inclusion and availability of scheduled teyrchains.
 //!
 //! It is responsible for carrying candidates from being backable to being backed, and then from
 //! backed to included.
@@ -54,7 +54,7 @@ use pezkuwi_primitives::{
 use scale_info::TypeInfo;
 use pezsp_runtime::{traits::One, DispatchError, SaturatedConversion, Saturating};
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 #[cfg(test)]
 pub(crate) mod tests;
@@ -89,7 +89,7 @@ impl WeightInfo for () {
 /// Maximum value that `config.max_upward_message_size` can be set to.
 ///
 /// This is used for benchmarking sanely bounding relevant storage items. It is expected from the
-/// `configuration` pallet to check these values before setting.
+/// `configuration` pezpallet to check these values before setting.
 pub const MAX_UPWARD_MESSAGE_SIZE_BOUND: u32 = 128 * 1024;
 
 /// A backed candidate pending availability.
@@ -214,7 +214,7 @@ impl QueueFootprinter for () {
 	}
 }
 
-/// Aggregate message origin for the `MessageQueue` pallet.
+/// Aggregate message origin for the `MessageQueue` pezpallet.
 ///
 /// Can be extended to serve further use-cases besides just UMP. Is stored in storage, so any change
 /// to existing values will require a migration.
@@ -235,7 +235,7 @@ pub enum AggregateMessageOrigin {
 	Ump(UmpQueueId),
 }
 
-/// Identifies a UMP queue inside the `MessageQueue` pallet.
+/// Identifies a UMP queue inside the `MessageQueue` pezpallet.
 ///
 /// It is written in verbose form since future variants like `Here` and `Bridged` are already
 /// foreseeable.
@@ -268,17 +268,17 @@ impl From<u32> for AggregateMessageOrigin {
 pub type MaxUmpMessageLenOf<T> =
 	<<T as Config>::MessageQueue as EnqueueMessage<AggregateMessageOrigin>>::MaxMessageLen;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(1);
-	#[pallet::pallet]
-	#[pallet::without_storage_info]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::without_storage_info]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config:
 		pezframe_system::Config
 		+ shared::Config
@@ -301,12 +301,12 @@ pub mod pallet {
 		type MessageQueue: EnqueueMessage<AggregateMessageOrigin>
 			+ QueueFootprintQuery<AggregateMessageOrigin, MaxMessageLen = MaxUmpMessageLenOf<Self>>;
 
-		/// Weight info for the calls of this pallet.
+		/// Weight info for the calls of this pezpallet.
 		type WeightInfo: WeightInfo;
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A candidate was backed. `[candidate, head_data]`
 		CandidateBacked(CandidateReceipt<T::Hash>, HeadData, CoreIndex, GroupIndex),
@@ -318,7 +318,7 @@ pub mod pallet {
 		UpwardMessagesReceived { from: ParaId, count: u32 },
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Validator index out of bounds.
 		ValidatorIndexOutOfBounds,
@@ -364,8 +364,8 @@ pub mod pallet {
 	/// Use a different prefix post-migration to v1, since the v0 `PendingAvailability` storage
 	/// would otherwise have the exact same prefix which could cause undefined behaviour when doing
 	/// the migration.
-	#[pallet::storage]
-	#[pallet::storage_prefix = "V1"]
+	#[pezpallet::storage]
+	#[pezpallet::storage_prefix = "V1"]
 	pub(crate) type PendingAvailability<T: Config> = StorageMap<
 		_,
 		Twox64Concat,
@@ -373,8 +373,8 @@ pub mod pallet {
 		VecDeque<CandidatePendingAvailability<T::Hash, BlockNumberFor<T>>>,
 	>;
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {}
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {}
 }
 
 const LOG_TARGET: &str = "runtime::inclusion";
@@ -421,7 +421,7 @@ impl From<hrmp::OutboundHrmpAcceptanceErr> for AcceptanceCheckErr {
 	}
 }
 
-/// An error returned by [`Pallet::check_upward_messages`] that indicates a violation of one of
+/// An error returned by [`Pezpallet::check_upward_messages`] that indicates a violation of one of
 /// acceptance criteria rules.
 #[cfg_attr(test, derive(PartialEq))]
 #[allow(dead_code)]
@@ -468,7 +468,7 @@ impl fmt::Debug for UmpAcceptanceCheckErr {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Block initialization logic, called by initializer.
 	pub(crate) fn initializer_initialize(_now: BlockNumberFor<T>) -> Weight {
 		Weight::zero()
@@ -647,7 +647,7 @@ impl<T: Config> Pallet<T> {
 			return Ok(Default::default());
 		}
 
-		let now = pezframe_system::Pallet::<T>::block_number();
+		let now = pezframe_system::Pezpallet::<T>::block_number();
 		let validators = shared::ActiveValidatorKeys::<T>::get();
 
 		// Collect candidate receipts with backers.
@@ -679,7 +679,7 @@ impl<T: Config> Pallet<T> {
 				// group assigned to core at block `N + 1`. Thus,
 				// `relay_parent_number + 1` will always land in the current
 				// session.
-				let group_idx = scheduler::Pallet::<T>::group_assigned_to_core(
+				let group_idx = scheduler::Pezpallet::<T>::group_assigned_to_core(
 					*core,
 					relay_parent_number + One::one(),
 				)
@@ -880,9 +880,9 @@ impl<T: Config> Pallet<T> {
 
 		if let Some(new_code) = commitments.new_validation_code {
 			// Block number of candidate's inclusion.
-			let now = pezframe_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pezpallet::<T>::block_number();
 
-			paras::Pallet::<T>::schedule_code_upgrade(
+			paras::Pezpallet::<T>::schedule_code_upgrade(
 				receipt.descriptor.para_id(),
 				new_code,
 				now,
@@ -892,7 +892,7 @@ impl<T: Config> Pallet<T> {
 		}
 
 		// enact the messaging facet of the candidate.
-		dmp::Pallet::<T>::prune_dmq(
+		dmp::Pezpallet::<T>::prune_dmq(
 			receipt.descriptor.para_id(),
 			commitments.processed_downward_messages,
 		);
@@ -900,11 +900,11 @@ impl<T: Config> Pallet<T> {
 			receipt.descriptor.para_id(),
 			commitments.upward_messages.as_slice(),
 		);
-		hrmp::Pallet::<T>::prune_hrmp(
+		hrmp::Pezpallet::<T>::prune_hrmp(
 			receipt.descriptor.para_id(),
 			BlockNumberFor::<T>::from(commitments.hrmp_watermark),
 		);
-		hrmp::Pallet::<T>::queue_outbound_hrmp(
+		hrmp::Pezpallet::<T>::queue_outbound_hrmp(
 			receipt.descriptor.para_id(),
 			commitments.horizontal_messages,
 		);
@@ -916,7 +916,7 @@ impl<T: Config> Pallet<T> {
 			backing_group,
 		));
 
-		paras::Pallet::<T>::note_new_head(
+		paras::Pezpallet::<T>::note_new_head(
 			receipt.descriptor.para_id(),
 			commitments.head_data,
 			relay_parent_number,
@@ -938,7 +938,7 @@ impl<T: Config> Pallet<T> {
 		let upward_messages = skip_ump_signals(upward_messages.iter()).collect::<Vec<_>>();
 
 		// Cannot send UMP messages while off-boarding.
-		if paras::Pallet::<T>::is_offboarding(para) {
+		if paras::Pezpallet::<T>::is_offboarding(para) {
 			ensure!(upward_messages.is_empty(), UmpAcceptanceCheckErr::IsOffboarding);
 		}
 
@@ -1022,7 +1022,7 @@ impl<T: Config> Pallet<T> {
 	///
 	/// Returns a vector of cleaned-up core IDs.
 	pub(crate) fn free_timedout() -> Vec<CoreIndex> {
-		let timeout_pred = scheduler::Pallet::<T>::availability_timeout_predicate();
+		let timeout_pred = scheduler::Pezpallet::<T>::availability_timeout_predicate();
 
 		let timed_out: Vec<_> = Self::free_failed_cores(
 			|candidate| timeout_pred(candidate.backed_in_number).timed_out,
@@ -1193,7 +1193,7 @@ impl AcceptanceCheckErr {
 	}
 }
 
-impl<T: Config> OnQueueChanged<AggregateMessageOrigin> for Pallet<T> {
+impl<T: Config> OnQueueChanged<AggregateMessageOrigin> for Pezpallet<T> {
 	// Write back the remaining queue capacity into `relay_dispatch_queue_remaining_capacity`.
 	fn on_queue_changed(origin: AggregateMessageOrigin, fp: QueueFootprint) {
 		let para = match origin {
@@ -1339,7 +1339,7 @@ impl<T: Config> CandidateCheckContext<T> {
 				.map_err(|_| AcceptanceCheckErr::NewCodeTooLarge)?;
 
 			ensure!(
-				paras::Pallet::<T>::can_upgrade_validation_code(para_id),
+				paras::Pezpallet::<T>::can_upgrade_validation_code(para_id),
 				AcceptanceCheckErr::PrematureCodeUpgrade,
 			);
 			ensure!(
@@ -1349,7 +1349,7 @@ impl<T: Config> CandidateCheckContext<T> {
 		}
 
 		// check if the candidate passes the messaging acceptance criteria
-		dmp::Pallet::<T>::check_processed_downward_messages(
+		dmp::Pezpallet::<T>::check_processed_downward_messages(
 			para_id,
 			relay_parent_number,
 			processed_downward_messages,
@@ -1364,7 +1364,7 @@ impl<T: Config> CandidateCheckContext<T> {
 			);
 			e
 		})?;
-		Pallet::<T>::check_upward_messages(&self.config, para_id, upward_messages).map_err(
+		Pezpallet::<T>::check_upward_messages(&self.config, para_id, upward_messages).map_err(
 			|e| {
 				log::debug!(
 					target: LOG_TARGET,
@@ -1375,7 +1375,7 @@ impl<T: Config> CandidateCheckContext<T> {
 				e
 			},
 		)?;
-		hrmp::Pallet::<T>::check_hrmp_watermark(para_id, relay_parent_number, hrmp_watermark)
+		hrmp::Pezpallet::<T>::check_hrmp_watermark(para_id, relay_parent_number, hrmp_watermark)
 			.map_err(|e| {
 				log::debug!(
 					target: LOG_TARGET,
@@ -1386,7 +1386,7 @@ impl<T: Config> CandidateCheckContext<T> {
 				);
 				e
 			})?;
-		hrmp::Pallet::<T>::check_outbound_hrmp(&self.config, para_id, horizontal_messages)
+		hrmp::Pezpallet::<T>::check_outbound_hrmp(&self.config, para_id, horizontal_messages)
 			.map_err(|e| {
 				log::debug!(
 					target: LOG_TARGET,
@@ -1401,7 +1401,7 @@ impl<T: Config> CandidateCheckContext<T> {
 	}
 }
 
-impl<T: Config> QueueFootprinter for Pallet<T> {
+impl<T: Config> QueueFootprinter for Pezpallet<T> {
 	type Origin = UmpQueueId;
 
 	fn message_count(origin: Self::Origin) -> u64 {

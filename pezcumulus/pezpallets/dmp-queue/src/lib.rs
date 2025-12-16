@@ -13,20 +13,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! This pallet used to implement a message queue for downward messages from the relay-chain.
+//! This pezpallet used to implement a message queue for downward messages from the relay-chain.
 //!
 //! It is now deprecated and has been refactored to simply drain any remaining messages into
 //! something implementing `HandleMessage`. It proceeds in the state of
-//! [`MigrationState`] one by one by their listing in the source code. The pallet can be removed
+//! [`MigrationState`] one by one by their listing in the source code. The pezpallet can be removed
 //! from the runtime once `Completed` was emitted.
 
 #![cfg_attr(not(feature = "std"), no_std)]
-#![allow(deprecated)] // The pallet itself is deprecated.
+#![allow(deprecated)] // The pezpallet itself is deprecated.
 
 extern crate alloc;
 
 use migration::*;
-pub use pallet::*;
+pub use pezpallet::*;
 
 mod benchmarking;
 mod migration;
@@ -40,11 +40,11 @@ pub use weights::WeightInfo;
 pub type MaxDmpMessageLenOf<T> =
 	<<T as Config>::DmpSink as pezframe_support::traits::HandleMessage>::MaxMessageLen;
 
-#[pezframe_support::pallet]
+#[pezframe_support::pezpallet]
 #[deprecated(
 	note = "`pezcumulus-pezpallet-dmp-queue` will be removed after November 2024. It can be removed once its lazy migration completed. See <https://github.com/pezkuwichain/kurdistan-sdk/issues/101>."
 )]
-pub mod pallet {
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::{pezpallet_prelude::*, traits::HandleMessage, weights::WeightMeter};
 	use pezframe_system::pezpallet_prelude::*;
@@ -52,11 +52,11 @@ pub mod pallet {
 
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(2);
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type of the runtime.
 		#[allow(deprecated)]
@@ -65,15 +65,15 @@ pub mod pallet {
 		/// The sink for all DMP messages that the lazy migration will use.
 		type DmpSink: HandleMessage;
 
-		/// Weight info for this pallet (only needed for the lazy migration).
+		/// Weight info for this pezpallet (only needed for the lazy migration).
 		type WeightInfo: WeightInfo;
 	}
 
-	/// The migration state of this pallet.
-	#[pallet::storage]
+	/// The migration state of this pezpallet.
+	#[pezpallet::storage]
 	pub type MigrationStatus<T> = StorageValue<_, MigrationState, ValueQuery>;
 
-	/// The lazy-migration state of the pallet.
+	/// The lazy-migration state of the pezpallet.
 	#[derive(
 		codec::Encode, codec::Decode, Debug, PartialEq, Eq, Clone, MaxEncodedLen, TypeInfo,
 	)]
@@ -96,7 +96,7 @@ pub mod pallet {
 		CompletedOverweightExport,
 		/// The storage cleanup started.
 		StartedCleanup { cursor: Option<BoundedVec<u8, ConstU32<1024>>> },
-		/// The migration finished. The pallet can now be removed from the runtime.
+		/// The migration finished. The pezpallet can now be removed from the runtime.
 		Completed,
 	}
 
@@ -106,8 +106,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// The export of pages started.
 		StartedExport,
@@ -137,21 +137,21 @@ pub mod pallet {
 		/// The export of overweight messages completed.
 		CompletedOverweightExport,
 
-		/// The cleanup of remaining pallet storage started.
+		/// The cleanup of remaining pezpallet storage started.
 		StartedCleanup,
 
 		/// Some debris was cleaned up.
 		CleanedSome { keys_removed: u32 },
 
-		/// The cleanup of remaining pallet storage completed.
+		/// The cleanup of remaining pezpallet storage completed.
 		Completed { error: bool },
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {}
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn integrity_test() {
 			let w = Self::on_idle_weight();
 			assert!(w != Weight::zero());
@@ -244,7 +244,7 @@ pub mod pallet {
 				MigrationState::StartedCleanup { cursor } => {
 					log::debug!(target: LOG, "Cleaning up");
 					let hashed_prefix =
-						twox_128(<Pallet<T> as PalletInfoAccess>::name().as_bytes());
+						twox_128(<Pezpallet<T> as PalletInfoAccess>::name().as_bytes());
 
 					let result = pezframe_support::storage::unhashed::clear_prefix(
 						&hashed_prefix,
@@ -253,7 +253,7 @@ pub mod pallet {
 					);
 					Self::deposit_event(Event::CleanedSome { keys_removed: result.backend });
 
-					// GOTCHA! We deleted *all* pallet storage; hence we also our own
+					// GOTCHA! We deleted *all* pezpallet storage; hence we also our own
 					// `MigrationState`. BUT we insert it back:
 					if let Some(unbound_cursor) = result.maybe_cursor {
 						if let Ok(cursor) = unbound_cursor.try_into() {
@@ -273,7 +273,7 @@ pub mod pallet {
 					}
 				},
 				MigrationState::Completed => {
-					log::debug!(target: LOG, "Idle; you can remove this pallet");
+					log::debug!(target: LOG, "Idle; you can remove this pezpallet");
 				},
 			}
 
@@ -281,7 +281,7 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config> Pallet<T> {
+	impl<T: Config> Pezpallet<T> {
 		/// The worst-case weight of [`Self::on_idle`].
 		pub fn on_idle_weight() -> Weight {
 			<T as crate::Config>::WeightInfo::on_idle_good_msg()

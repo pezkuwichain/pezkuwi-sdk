@@ -29,5 +29,5 @@ impl pezpallet_contracts::Config for Runtime {
 	type Currency = Balances;
 	type Schedule = Schedule;
 	type Time = super::Timestamp;
-	type Xcm = pezpallet_xcm::Pallet<Self>;
+	type Xcm = pezpallet_xcm::Pezpallet<Self>;
 }

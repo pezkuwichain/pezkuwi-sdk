@@ -17,15 +17,15 @@
 
 //! # Atomic Swap
 //!
-//! A pallet for atomically sending funds.
+//! A pezpallet for atomically sending funds.
 //!
 //! - [`Config`]
 //! - [`Call`]
-//! - [`Pallet`]
+//! - [`Pezpallet`]
 //!
 //! ## Overview
 //!
-//! A pallet for atomically sending funds from an origin to a target. A proof
+//! A pezpallet for atomically sending funds from an origin to a target. A proof
 //! is used to allow the target to approve (claim) the swap. If the swap is not
 //! claimed within a specified duration of time, the sender may cancel it.
 //!
@@ -171,14 +171,14 @@ where
 	}
 }
 
-pub use pallet::*;
+pub use pezpallet::*;
 
-#[frame::pallet]
-pub mod pallet {
+#[frame::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	/// Atomic swap's pallet configuration trait.
-	#[pallet::config]
+	/// Atomic swap's pezpallet configuration trait.
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
@@ -195,14 +195,14 @@ pub mod pallet {
 		/// If B sees A is on a blockchain with larger proof length limit, then it should kindly
 		/// refuse to accept the atomic swap request if A generates the proof, and asks that B
 		/// generates the proof instead.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type ProofLimit: Get<u32>;
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type PendingSwaps<T: Config> = StorageDoubleMap<
 		_,
 		Twox64Concat,
@@ -212,7 +212,7 @@ pub mod pallet {
 		PendingSwap<T>,
 	>;
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Swap already exists.
 		AlreadyExist,
@@ -232,9 +232,9 @@ pub mod pallet {
 		DurationNotPassed,
 	}
 
-	/// Event of atomic swap pallet.
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	/// Event of atomic swap pezpallet.
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// Swap created.
 		NewSwap { account: T::AccountId, proof: HashedProof, swap: PendingSwap<T> },
@@ -244,8 +244,8 @@ pub mod pallet {
 		SwapCancelled { account: T::AccountId, proof: HashedProof },
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Register a new atomic swap, declaring an intention to send funds from origin to target
 		/// on the current blockchain. The target can claim the fund using the revealed proof. If
 		/// the fund is not claimed after `duration` blocks, then the sender can cancel the swap.
@@ -258,8 +258,8 @@ pub mod pallet {
 		/// - `duration`: Locked duration of the atomic swap. For safety reasons, it is recommended
 		///   that the revealer uses a shorter duration than the counterparty, to prevent the
 		///   situation where the revealer reveals the proof too late around the end block.
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::DbWeight::get().reads_writes(1, 1).ref_time().saturating_add(40_000_000))]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::DbWeight::get().reads_writes(1, 1).ref_time().saturating_add(40_000_000))]
 		pub fn create_swap(
 			origin: OriginFor<T>,
 			target: T::AccountId,
@@ -278,7 +278,7 @@ pub mod pallet {
 			let swap = PendingSwap {
 				source,
 				action,
-				end_block: pezframe_system::Pallet::<T>::block_number() + duration,
+				end_block: pezframe_system::Pezpallet::<T>::block_number() + duration,
 			};
 			PendingSwaps::<T>::insert(target.clone(), hashed_proof, swap.clone());
 
@@ -294,8 +294,8 @@ pub mod pallet {
 		/// - `proof`: Revealed proof of the claim.
 		/// - `action`: Action defined in the swap, it must match the entry in blockchain. Otherwise
 		///   the operation fails. This is used for weight calculation.
-		#[pallet::call_index(1)]
-		#[pallet::weight(
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(
 			T::DbWeight::get().reads_writes(1, 1)
 				.saturating_add(action.weight())
 				.ref_time()
@@ -335,8 +335,8 @@ pub mod pallet {
 		///
 		/// - `target`: Target of the original atomic swap.
 		/// - `hashed_proof`: Hashed proof of the original atomic swap.
-		#[pallet::call_index(2)]
-		#[pallet::weight(T::DbWeight::get().reads_writes(1, 1).ref_time().saturating_add(40_000_000))]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(T::DbWeight::get().reads_writes(1, 1).ref_time().saturating_add(40_000_000))]
 		pub fn cancel_swap(
 			origin: OriginFor<T>,
 			target: T::AccountId,
@@ -347,7 +347,7 @@ pub mod pallet {
 			let swap = PendingSwaps::<T>::get(&target, hashed_proof).ok_or(Error::<T>::NotExist)?;
 			ensure!(swap.source == source, Error::<T>::SourceMismatch);
 			ensure!(
-				pezframe_system::Pallet::<T>::block_number() >= swap.end_block,
+				pezframe_system::Pezpallet::<T>::block_number() >= swap.end_block,
 				Error::<T>::DurationNotPassed,
 			);
 

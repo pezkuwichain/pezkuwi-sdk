@@ -24,25 +24,25 @@
 //!
 //! ## Overview
 //!
-//! The pallet takes care of executing a batch of multi-step migrations over multiple blocks. The
+//! The pezpallet takes care of executing a batch of multi-step migrations over multiple blocks. The
 //! process starts on each runtime upgrade. Normal and operational transactions are paused while
 //! migrations are on-going.
 //!
 //! ### Example
 //!
-//! This example demonstrates a simple mocked walk through of a basic success scenario. The pallet
+//! This example demonstrates a simple mocked walk through of a basic success scenario. The pezpallet
 //! is configured with two migrations: one succeeding after just one step, and the second one
 //! succeeding after two steps. A runtime upgrade is then enacted and the block number is advanced
 //! until all migrations finish executing. Afterwards, the recorded historic migrations are
 //! checked and events are asserted.
 #![doc = docify::embed!("src/tests.rs", simple_works)]
 //!
-//! ## Pallet API
+//! ## Pezpallet API
 //!
-//! See the [`pallet`] module for more information about the interfaces this pallet exposes,
+//! See the [`pezpallet`] module for more information about the interfaces this pezpallet exposes,
 //! including its configuration trait, dispatchables, storage items, events and errors.
 //!
-//! Otherwise noteworthy API of this pallet include its implementation of the
+//! Otherwise noteworthy API of this pezpallet include its implementation of the
 //! [`MultiStepMigrator`] trait. This must be plugged into
 //! [`pezframe_system::Config::MultiBlockMigrator`] for proper function.
 //!
@@ -62,23 +62,23 @@
 //!
 //! ### Design
 //!
-//! Migrations are provided to the pallet through the associated type [`Config::Migrations`] of type
+//! Migrations are provided to the pezpallet through the associated type [`Config::Migrations`] of type
 //! [`SteppedMigrations`]. This allows multiple migrations to be aggregated through a tuple. It
 //! simplifies the trait bounds since all associated types of the trait must be provided by the
-//! pallet. The actual progress of the pallet is stored in the [`Cursor`] storage item. This can
+//! pezpallet. The actual progress of the pezpallet is stored in the [`Cursor`] storage item. This can
 //! either be [`MigrationCursor::Active`] or [`MigrationCursor::Stuck`]. In the active case it
 //! points to the currently active migration and stores its inner cursor. The inner cursor can then
 //! be used by the migration to store its inner state and advance. Each time when the migration
-//! returns `Some(cursor)`, it signals the pallet that it is not done yet.
+//! returns `Some(cursor)`, it signals the pezpallet that it is not done yet.
 //!
 //! The cursor is reset on each runtime upgrade. This ensures that it starts to execute at the
 //! first migration in the vector. The pallets cursor is only ever incremented or set to `Stuck`
-//! once it encounters an error (Goal 4). Once in the stuck state, the pallet will stay stuck until
+//! once it encounters an error (Goal 4). Once in the stuck state, the pezpallet will stay stuck until
 //! it is fixed through manual governance intervention.
 //!
-//! As soon as the cursor of the pallet becomes `Some(_)`; [`MultiStepMigrator::ongoing`] returns
+//! As soon as the cursor of the pezpallet becomes `Some(_)`; [`MultiStepMigrator::ongoing`] returns
 //! `true` (Goal 2). This can be used by upstream code to possibly pause transactions.
-//! In `on_initialize` the pallet will load the current migration and check whether it was already
+//! In `on_initialize` the pezpallet will load the current migration and check whether it was already
 //! executed in the past by checking for membership of its ID in the [`Historic`] set. Historic
 //! migrations are skipped without causing an error. Each successfully executed migration is added
 //! to this set (Goal 5).
@@ -90,18 +90,18 @@
 //! This function wraps the inner `step` function into a transactional layer to allow rollback in
 //! the error case (Goal 6).
 //!
-//! Weight limits must be checked by the migration itself. The pallet provides a [`WeightMeter`] for
-//! that purpose. The pallet may return [`SteppedMigrationError::InsufficientWeight`] at any point.
+//! Weight limits must be checked by the migration itself. The pezpallet provides a [`WeightMeter`] for
+//! that purpose. The pezpallet may return [`SteppedMigrationError::InsufficientWeight`] at any point.
 //! In that scenario, one of two things will happen: if that migration was exclusively executed
 //! in this block, and therefore required more than the maximum amount of weight possible, the
 //! process becomes `Stuck`. Otherwise, one re-attempt is executed with the same logic in the next
 //! block (Goal 3). Progress through the migrations is guaranteed by providing a timeout for each
-//! migration via [`SteppedMigration::max_steps`]. The pallet **ONLY** guarantees progress if this
+//! migration via [`SteppedMigration::max_steps`]. The pezpallet **ONLY** guarantees progress if this
 //! is set to sensible limits (Goal 7).
 //!
 //! ### Scenario: Governance cleanup
 //!
-//! Every now and then, governance can make use of the [`clear_historic`][Pallet::clear_historic]
+//! Every now and then, governance can make use of the [`clear_historic`][Pezpallet::clear_historic]
 //! call. This ensures that no old migrations pile up in the [`Historic`] set. This can be done very
 //! rarely, since the storage should not grow quickly and the lookup weight does not suffer much.
 //! Another possibility would be to have a synchronous single-block migration perpetually deployed
@@ -153,7 +153,7 @@ pub mod weights;
 
 extern crate alloc;
 
-pub use pallet::*;
+pub use pezpallet::*;
 pub use weights::WeightInfo;
 
 use alloc::vec::Vec;
@@ -169,7 +169,7 @@ use pezframe_support::{
 };
 use pezframe_system::{
 	pezpallet_prelude::{BlockNumberFor, *},
-	Pallet as System,
+	Pezpallet as System,
 };
 use pezsp_runtime::Saturating;
 
@@ -311,27 +311,27 @@ struct PreUpgradeBytesWrapper(pub Vec<u8>);
 
 /// Data stored by the pre-upgrade hook of the MBMs. Only used for `try-runtime` testing.
 ///
-/// Define this outside of the pallet so it is not confused with actual storage.
+/// Define this outside of the pezpallet so it is not confused with actual storage.
 #[cfg(feature = "try-runtime")]
 #[pezframe_support::storage_alias]
 type PreUpgradeBytes<T: Config> =
-	StorageMap<Pallet<T>, Twox64Concat, IdentifierOf<T>, PreUpgradeBytesWrapper, ValueQuery>;
+	StorageMap<Pezpallet<T>, Twox64Concat, IdentifierOf<T>, PreUpgradeBytesWrapper, ValueQuery>;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
 	/// The in-code storage version.
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(0);
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config(with_default)]
+	#[pezpallet::config(with_default)]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type of the runtime.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
@@ -340,28 +340,28 @@ pub mod pallet {
 		/// Should only be updated in a runtime-upgrade once all the old migrations have completed.
 		/// (Check that [`Cursor`] is `None`).
 		#[cfg(not(feature = "runtime-benchmarks"))]
-		#[pallet::no_default]
+		#[pezpallet::no_default]
 		type Migrations: SteppedMigrations;
 
 		/// Mocked migrations for benchmarking only.
 		///
 		/// Should be configured to [`crate::mock_helpers::MockedMigrations`] in benchmarks.
 		#[cfg(feature = "runtime-benchmarks")]
-		#[pallet::no_default]
+		#[pezpallet::no_default]
 		type Migrations: MockedMigrations;
 
 		/// The maximal length of an encoded cursor.
 		///
 		/// A good default needs to selected such that no migration will ever have a cursor with MEL
 		/// above this limit. This is statically checked in `integrity_test`.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type CursorMaxLen: Get<u32>;
 
 		/// The maximal length of an encoded identifier.
 		///
 		/// A good default needs to selected such that no migration will ever have an identifier
 		/// with MEL above this limit. This is statically checked in `integrity_test`.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type IdentifierMaxLen: Get<u32>;
 
 		/// Notifications for status updates of a runtime upgrade.
@@ -375,7 +375,7 @@ pub mod pallet {
 		/// The maximum weight to spend each block to execute migrations.
 		type MaxServiceWeight: Get<Weight>;
 
-		/// Weight information for the calls and functions of this pallet.
+		/// Weight information for the calls and functions of this pezpallet.
 		type WeightInfo: WeightInfo;
 	}
 
@@ -390,10 +390,10 @@ pub mod pallet {
 		use pezframe_system::limits::BlockWeights;
 
 		/// Provides a viable default config that can be used with
-		/// [`derive_impl`](`pezframe_support::derive_impl`) to derive a testing pallet config
+		/// [`derive_impl`](`pezframe_support::derive_impl`) to derive a testing pezpallet config
 		/// based on this one.
 		///
-		/// See `Test` in the `default-config` example pallet's `test.rs` for an example of
+		/// See `Test` in the `default-config` example pezpallet's `test.rs` for an example of
 		/// a downstream user of this particular `TestDefaultConfig`
 		pub struct TestDefaultConfig;
 
@@ -421,18 +421,18 @@ pub mod pallet {
 	/// The currently active migration to run and its cursor.
 	///
 	/// `None` indicates that no migration is running.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Cursor<T: Config> = StorageValue<_, CursorOf<T>, OptionQuery>;
 
 	/// Set of all successfully executed migrations.
 	///
 	/// This is used as blacklist, to not re-execute migrations that have not been removed from the
 	/// codebase yet. Governance can regularly clear this out via `clear_historic`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Historic<T: Config> = StorageMap<_, Twox64Concat, IdentifierOf<T>, (), OptionQuery>;
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A Runtime upgrade started.
 		///
@@ -487,14 +487,14 @@ pub mod pallet {
 		},
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// The operation cannot complete since some MBMs are ongoing.
 		Ongoing,
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn on_runtime_upgrade() -> Weight {
 			Self::onboard_new_mbms()
 		}
@@ -504,7 +504,7 @@ pub mod pallet {
 			// Check that the migrations tuple is legit.
 			pezframe_support::assert_ok!(T::Migrations::integrity_test());
 
-			// Very important! Ensure that the pallet is configured in `System::Config`.
+			// Very important! Ensure that the pezpallet is configured in `System::Config`.
 			{
 				assert!(!Cursor::<T>::exists(), "Externalities storage should be clean");
 				assert!(!<T as pezframe_system::Config>::MultiBlockMigrator::ongoing());
@@ -545,14 +545,14 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call(weight = T::WeightInfo)]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call(weight = T::WeightInfo)]
+	impl<T: Config> Pezpallet<T> {
 		/// Allows root to set a cursor to forcefully start, stop or forward the migration process.
 		///
 		/// Should normally not be needed and is only in place as emergency measure. Note that
 		/// restarting the migration process in this manner will not call the
 		/// [`MigrationStatusHandler::started`] hook or emit an `UpgradeStarted` event.
-		#[pallet::call_index(0)]
+		#[pezpallet::call_index(0)]
 		pub fn force_set_cursor(
 			origin: OriginFor<T>,
 			cursor: Option<CursorOf<T>>,
@@ -570,7 +570,7 @@ pub mod pallet {
 		/// `started_at` value to the next block number. Otherwise this would not be possible, since
 		/// `force_set_cursor` takes an absolute block number. Setting `started_at` to `None`
 		/// indicates that the current block number plus one should be used.
-		#[pallet::call_index(1)]
+		#[pezpallet::call_index(1)]
 		pub fn force_set_active_cursor(
 			origin: OriginFor<T>,
 			index: u32,
@@ -595,7 +595,7 @@ pub mod pallet {
 		///
 		/// This process happens automatically on a runtime upgrade. It is in place as an emergency
 		/// measurement. The cursor needs to be `None` for this to succeed.
-		#[pallet::call_index(2)]
+		#[pezpallet::call_index(2)]
 		pub fn force_onboard_mbms(origin: OriginFor<T>) -> DispatchResult {
 			ensure_root(origin)?;
 
@@ -610,8 +610,8 @@ pub mod pallet {
 		/// `map_cursor` must be set to the last value that was returned by the
 		/// `HistoricCleared` event. The first time `None` can be used. `limit` must be chosen in a
 		/// way that will result in a sensible weight.
-		#[pallet::call_index(3)]
-		#[pallet::weight(T::WeightInfo::clear_historic(selector.limit()))]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(T::WeightInfo::clear_historic(selector.limit()))]
 		pub fn clear_historic(
 			origin: OriginFor<T>,
 			selector: HistoricCleanupSelector<IdentifierOf<T>>,
@@ -636,7 +636,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Onboard all new Multi-Block-Migrations and start the process of executing them.
 	///
 	/// Should only be called once all previous migrations completed.
@@ -858,7 +858,7 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-impl<T: Config> MultiStepMigrator for Pallet<T> {
+impl<T: Config> MultiStepMigrator for Pezpallet<T> {
 	fn ongoing() -> bool {
 		Cursor::<T>::exists()
 	}

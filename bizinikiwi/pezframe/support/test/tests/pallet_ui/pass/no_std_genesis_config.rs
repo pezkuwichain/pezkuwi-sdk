@@ -58,7 +58,7 @@ construct_runtime! {
 	pub struct Runtime
 	{
 		System: pezframe_system,
-		Pallet: test_pallet,
+		Pezpallet: test_pallet,
 	}
 }
 

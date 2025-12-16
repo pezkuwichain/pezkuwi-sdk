@@ -2,7 +2,7 @@
 
 ## Bounty
 
-> NOTE: This pallet is tightly coupled with pezpallet-treasury.
+> NOTE: This pezpallet is tightly coupled with pezpallet-treasury.
 
 A Bounty Spending is a reward for a specified body of work - or specified set of objectives -
 that needs to be executed for a predefined Treasury amount to be paid out. A curator is assigned
@@ -18,7 +18,7 @@ election. The Council also gets to cancel the bounty if deemed necessary before 
 curator or once the bounty is active or payout is pending, resulting in the slash of the
 curator's deposit.
 
-This pallet may opt into using a [`ChildBountyManager`] that enables bounties to be split into
+This pezpallet may opt into using a [`ChildBountyManager`] that enables bounties to be split into
 sub-bounties, as children of an established bounty (called the parent in the context of it's
 children).
 

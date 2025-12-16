@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Unit tests for the parameters pallet.
+//! Unit tests for the parameters pezpallet.
 
 #![cfg(test)]
 
@@ -159,7 +159,7 @@ fn set_parameters_to_default_emits_events_works() {
 			Origin::root(),
 			Pallet1(pallet1::Parameters::Key3(pallet1::Key3, Some(2))),
 		));
-		assert_eq!(pezframe_system::Pallet::<Runtime>::events().len(), 2);
+		assert_eq!(pezframe_system::Pezpallet::<Runtime>::events().len(), 2);
 	});
 }
 

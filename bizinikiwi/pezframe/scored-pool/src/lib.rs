@@ -15,9 +15,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Scored Pool Pallet
+//! # Scored Pool Pezpallet
 //!
-//! The pallet maintains a scored membership pool. Each entity in the
+//! The pezpallet maintains a scored membership pool. Each entity in the
 //! pool can be attributed a `Score`. From this pool a set `Members`
 //! is constructed. This set contains the `MemberCount` highest
 //! scoring entities. Unscored entities are never part of `Members`.
@@ -39,7 +39,7 @@
 //!
 //! - [`Config`]
 //! - [`Call`]
-//! - [`Pallet`]
+//! - [`Pezpallet`]
 //!
 //! ## Interface
 //!
@@ -56,25 +56,25 @@
 //! ```
 //! use pezpallet_scored_pool::{self as scored_pool};
 //!
-//! #[pezframe_support::pallet]
-//! pub mod pallet {
+//! #[pezframe_support::pezpallet]
+//! pub mod pezpallet {
 //! 	use super::*;
 //! 	use pezframe_support::pezpallet_prelude::*;
 //! 	use pezframe_system::pezpallet_prelude::*;
 //!
-//! 	#[pallet::pallet]
-//! 	pub struct Pallet<T>(_);
+//! 	#[pezpallet::pezpallet]
+//! 	pub struct Pezpallet<T>(_);
 //!
-//! 	#[pallet::config]
+//! 	#[pezpallet::config]
 //! 	pub trait Config: pezframe_system::Config + scored_pool::Config {}
 //!
-//! 	#[pallet::call]
-//! 	impl<T: Config> Pallet<T> {
-//! 		#[pallet::weight({0})]
+//! 	#[pezpallet::call]
+//! 	impl<T: Config> Pezpallet<T> {
+//! 		#[pezpallet::weight({0})]
 //! 		pub fn candidate(origin: OriginFor<T>) -> DispatchResult {
 //! 			let who = ensure_signed(origin)?;
 //!
-//! 			let _ = <scored_pool::Pallet<T>>::submit_candidacy(
+//! 			let _ = <scored_pool::Pezpallet<T>>::submit_candidacy(
 //! 				T::RuntimeOrigin::from(Some(who.clone()).into())
 //! 			);
 //! 			Ok(())
@@ -87,7 +87,7 @@
 //!
 //! ## Dependencies
 //!
-//! This pallet depends on the [System pallet](../pezframe_system/index.html).
+//! This pezpallet depends on the [System pezpallet](../pezframe_system/index.html).
 
 // Ensure we're `no_std` when compiling for Wasm.
 #![cfg_attr(not(feature = "std"), no_std)]
@@ -110,7 +110,7 @@ use pezframe_support::{
 	traits::{ChangeMembers, Currency, Get, InitializeMembers, ReservableCurrency},
 	BoundedVec,
 };
-pub use pallet::*;
+pub use pezpallet::*;
 use pezsp_runtime::traits::{AtLeast32Bit, StaticLookup, Zero};
 
 type BalanceOf<T, I> =
@@ -133,22 +133,22 @@ enum ChangeReceiver {
 	MembershipChanged,
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T, I = ()>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T, I = ()>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config {
 		/// The currency used for deposits.
 		type Currency: Currency<Self::AccountId> + ReservableCurrency<Self::AccountId>;
 
 		/// Maximum members length allowed.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaximumMembers: Get<u32>;
 
 		/// The score attributed to a member or candidate.
@@ -170,12 +170,12 @@ pub mod pallet {
 		// The deposit which is reserved from candidates if they want to
 		// start a candidacy. The deposit gets returned when the candidacy is
 		// withdrawn or when the candidate is kicked.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type CandidateDeposit: Get<BalanceOf<Self, I>>;
 
 		/// Every `Period` blocks the `Members` are filled with the highest scoring
 		/// members in the `Pool`.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type Period: Get<BlockNumberFor<Self>>;
 
 		/// The receiver of the signal for when the membership has been initialized.
@@ -197,8 +197,8 @@ pub mod pallet {
 		type KickOrigin: EnsureOrigin<Self::RuntimeOrigin>;
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config<I>, I: 'static = ()> {
 		/// The given member was removed. See the transaction for who.
 		MemberRemoved,
@@ -214,8 +214,8 @@ pub mod pallet {
 		CandidateScored,
 	}
 
-	/// Error for the scored-pool pallet.
-	#[pallet::error]
+	/// Error for the scored-pool pezpallet.
+	#[pezpallet::error]
 	pub enum Error<T, I = ()> {
 		/// Already a member.
 		AlreadyInPool,
@@ -229,8 +229,8 @@ pub mod pallet {
 
 	/// The current pool of candidates, stored as an ordered Bounded Vec
 	/// (ordered descending by score, `None` last, highest first).
-	#[pallet::storage]
-	#[pallet::getter(fn pool)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn pool)]
 	pub(crate) type Pool<T: Config<I>, I: 'static = ()> = StorageValue<_, PoolT<T, I>, ValueQuery>;
 
 	/// A Map of the candidates. The information in this Map is redundant
@@ -238,30 +238,30 @@ pub mod pallet {
 	/// check if a candidate is already in the pool, without having to
 	/// iterate over the entire pool (the `Pool` is not sorted by
 	/// `T::AccountId`, but by `T::Score` instead).
-	#[pallet::storage]
-	#[pallet::getter(fn candidate_exists)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn candidate_exists)]
 	pub(crate) type CandidateExists<T: Config<I>, I: 'static = ()> =
 		StorageMap<_, Twox64Concat, T::AccountId, bool, ValueQuery>;
 
 	/// The current membership, stored as an ordered Vec.
-	#[pallet::storage]
-	#[pallet::getter(fn members)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn members)]
 	pub(crate) type Members<T: Config<I>, I: 'static = ()> =
 		StorageValue<_, MembersT<T, I>, ValueQuery>;
 
 	/// Size of the `Members` set.
-	#[pallet::storage]
-	#[pallet::getter(fn member_count)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn member_count)]
 	pub(crate) type MemberCount<T, I = ()> = StorageValue<_, u32, ValueQuery>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(pezframe_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config<I>, I: 'static = ()> {
 		pub pool: PoolT<T, I>,
 		pub member_count: u32,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config<I>, I: 'static> BuildGenesisConfig for GenesisConfig<T, I> {
 		fn build(&self) {
 			let mut pool = self.pool.clone();
@@ -277,28 +277,28 @@ pub mod pallet {
 			// Sorts the `Pool` by score in a descending order. Entities which
 			// have a score of `None` are sorted to the end of the bounded vec.
 			pool.sort_by_key(|(_, maybe_score)| Reverse(maybe_score.unwrap_or_default()));
-			<Pallet<T, I>>::update_member_count(self.member_count)
+			<Pezpallet<T, I>>::update_member_count(self.member_count)
 				.expect("Number of allowed members exceeded");
 			<Pool<T, I>>::put(&pool);
-			<Pallet<T, I>>::refresh_members(pool, ChangeReceiver::MembershipInitialized);
+			<Pezpallet<T, I>>::refresh_members(pool, ChangeReceiver::MembershipInitialized);
 		}
 	}
 
-	#[pallet::hooks]
-	impl<T: Config<I>, I: 'static> Hooks<BlockNumberFor<T>> for Pallet<T, I> {
+	#[pezpallet::hooks]
+	impl<T: Config<I>, I: 'static> Hooks<BlockNumberFor<T>> for Pezpallet<T, I> {
 		/// Every `Period` blocks the `Members` set is refreshed from the
 		/// highest scoring members in the pool.
 		fn on_initialize(n: pezframe_system::pezpallet_prelude::BlockNumberFor<T>) -> Weight {
 			if n % T::Period::get() == Zero::zero() {
 				let pool = <Pool<T, I>>::get();
-				<Pallet<T, I>>::refresh_members(pool, ChangeReceiver::MembershipChanged);
+				<Pezpallet<T, I>>::refresh_members(pool, ChangeReceiver::MembershipChanged);
 			}
 			Weight::zero()
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config<I>, I: 'static> Pallet<T, I> {
+	#[pezpallet::call]
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 		/// Add `origin` to the pool of candidates.
 		///
 		/// This results in `CandidateDeposit` being reserved from
@@ -310,8 +310,8 @@ pub mod pallet {
 		///
 		/// The `index` parameter of this function must be set to
 		/// the index of the transactor in the `Pool`.
-		#[pallet::call_index(0)]
-		#[pallet::weight({0})]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight({0})]
 		pub fn submit_candidacy(origin: OriginFor<T>) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 			ensure!(!<CandidateExists<T, I>>::contains_key(&who), Error::<T, I>::AlreadyInPool);
@@ -340,8 +340,8 @@ pub mod pallet {
 		///
 		/// The `index` parameter of this function must be set to
 		/// the index of the transactor in the `Pool`.
-		#[pallet::call_index(1)]
-		#[pallet::weight({0})]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight({0})]
 		pub fn withdraw_candidacy(origin: OriginFor<T>, index: u32) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 
@@ -359,8 +359,8 @@ pub mod pallet {
 		///
 		/// The `index` parameter of this function must be set to
 		/// the index of `dest` in the `Pool`.
-		#[pallet::call_index(2)]
-		#[pallet::weight({0})]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight({0})]
 		pub fn kick(
 			origin: OriginFor<T>,
 			dest: AccountIdLookupOf<T>,
@@ -384,8 +384,8 @@ pub mod pallet {
 		///
 		/// The `index` parameter of this function must be set to
 		/// the index of the `dest` in the `Pool`.
-		#[pallet::call_index(3)]
-		#[pallet::weight({0})]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight({0})]
 		pub fn score(
 			origin: OriginFor<T>,
 			dest: AccountIdLookupOf<T>,
@@ -424,8 +424,8 @@ pub mod pallet {
 		/// (this happens each `Period`).
 		///
 		/// May only be called from root.
-		#[pallet::call_index(4)]
-		#[pallet::weight({0})]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight({0})]
 		pub fn change_member_count(origin: OriginFor<T>, count: u32) -> DispatchResult {
 			ensure_root(origin)?;
 			Self::update_member_count(count).map_err(Into::into)
@@ -433,7 +433,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config<I>, I: 'static> Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 	/// Fetches the `MemberCount` highest scoring members from
 	/// `Pool` and puts them into `Members`.
 	///
@@ -475,7 +475,7 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 		remove: T::AccountId,
 		index: u32,
 	) -> Result<(), Error<T, I>> {
-		// all callers of this function in this pallet also check
+		// all callers of this function in this pezpallet also check
 		// the index for validity before calling this function.
 		// nevertheless we check again here, to assert that there was
 		// no mistake when invoking this sensible function.

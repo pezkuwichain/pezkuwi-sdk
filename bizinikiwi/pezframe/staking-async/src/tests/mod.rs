@@ -650,7 +650,7 @@ mod staking_unchecked {
 			assert_eq!(asset::staked::<Test>(&200), 0);
 
 			// and they are marked as virtual stakers
-			assert_eq!(Pallet::<Test>::is_virtual_staker(&200), true);
+			assert_eq!(Pezpallet::<Test>::is_virtual_staker(&200), true);
 		});
 	}
 
@@ -997,7 +997,7 @@ mod hold_migration {
 			bond_virtual_nominator(200, 201, 500, vec![11, 21]);
 
 			// previously the virtual nominator had a provider inc by the delegation system as
-			// well as a consumer by this pallet.
+			// well as a consumer by this pezpallet.
 			System::inc_providers(&200);
 			System::inc_consumers(&200).expect("has provider, can consume");
 

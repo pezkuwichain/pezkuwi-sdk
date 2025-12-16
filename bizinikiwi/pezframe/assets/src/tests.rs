@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Tests for Assets pallet.
+//! Tests for Assets pezpallet.
 
 use super::*;
 use crate::{mock::*, Error};
@@ -2049,8 +2049,8 @@ fn asset_create_and_destroy_is_reverted_if_callback_fails() {
 #[test]
 fn multiple_transfer_alls_work_ok() {
 	new_test_ext().execute_with(|| {
-		// Only run PoC when the system pallet is enabled, since the underlying bug is in the
-		// system pallet it won't work with BalancesAccountStore
+		// Only run PoC when the system pezpallet is enabled, since the underlying bug is in the
+		// system pezpallet it won't work with BalancesAccountStore
 		// Start with a balance of 100
 		Balances::force_set_balance(RuntimeOrigin::root(), 1, 100).unwrap();
 		// Emulate a sufficient, in reality this could be reached by transferring a sufficient
@@ -2160,7 +2160,7 @@ fn asset_id_cannot_be_reused() {
 		assert!(!Asset::<Test>::contains_key(0));
 
 		// Enable auto increment. Next asset id must be 5.
-		pallet::NextAssetId::<Test>::put(5);
+		pezpallet::NextAssetId::<Test>::put(5);
 
 		assert_noop!(Assets::create(RuntimeOrigin::signed(1), 0, 1, 1), Error::<Test>::BadAssetId);
 		assert_noop!(Assets::create(RuntimeOrigin::signed(1), 1, 1, 1), Error::<Test>::BadAssetId);

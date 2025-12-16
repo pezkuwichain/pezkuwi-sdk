@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Runtime API definition for the FRAME Broker pallet.
+//! Runtime API definition for the FRAME Broker pezpallet.
 
 use codec::Codec;
 use pezsp_runtime::DispatchError;

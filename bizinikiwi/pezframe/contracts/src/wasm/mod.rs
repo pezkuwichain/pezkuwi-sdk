@@ -46,7 +46,7 @@ use crate::{
 	gas::{GasMeter, Token},
 	weights::WeightInfo,
 	AccountIdOf, BadOrigin, BalanceOf, CodeHash, CodeInfoOf, CodeVec, Config, Error, Event,
-	HoldReason, Pallet, PristineCode, Schedule, Weight, LOG_TARGET,
+	HoldReason, Pezpallet, PristineCode, Schedule, Weight, LOG_TARGET,
 };
 use alloc::vec::Vec;
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
@@ -126,7 +126,7 @@ pub enum Determinism {
 	/// Allow calling or uploading an indeterministic code.
 	///
 	/// This is only possible when calling into `pezpallet-contracts` directly via
-	/// [`crate::Pallet::bare_call`].
+	/// [`crate::Pezpallet::bare_call`].
 	///
 	/// # Note
 	///
@@ -191,7 +191,7 @@ impl<T: Config> WasmBlob<T> {
 
 				*existing = None;
 				<PristineCode<T>>::remove(&code_hash);
-				<Pallet<T>>::deposit_event(Event::CodeRemoved {
+				<Pezpallet<T>>::deposit_event(Event::CodeRemoved {
 					code_hash,
 					deposit_released,
 					remover,
@@ -279,7 +279,7 @@ impl<T: Config> WasmBlob<T> {
 					self.code_info.refcount = 0;
 					<PristineCode<T>>::insert(code_hash, &self.code);
 					*stored_code_info = Some(self.code_info.clone());
-					<Pallet<T>>::deposit_event(Event::CodeStored {
+					<Pezpallet<T>>::deposit_event(Event::CodeStored {
 						code_hash,
 						deposit_held: deposit,
 						uploader: self.code_info.owner.clone(),
@@ -512,7 +512,7 @@ mod tests {
 		storage::WriteOutcome,
 		tests::{RuntimeCall, Test, ALICE, BOB},
 		transient_storage::TransientStorage,
-		BalanceOf, CodeHash, Error, Origin, Pallet as Contracts,
+		BalanceOf, CodeHash, Error, Origin, Pezpallet as Contracts,
 	};
 	use assert_matches::assert_matches;
 	use pezframe_support::{

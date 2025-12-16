@@ -24,7 +24,7 @@
 //!
 //! ## Overview
 //!
-//! The executive module is not a typical pallet providing functionality around a specific feature.
+//! The executive module is not a typical pezpallet providing functionality around a specific feature.
 //! It is a cross-cutting framework component for the FRAME. It works in conjunction with the
 //! [FRAME System module](../pezframe_system/index.html) to perform these cross-cutting functions.
 //!
@@ -221,7 +221,7 @@ impl core::fmt::Debug for ExecutiveError {
 /// - `Block`: The block type of the runtime
 /// - `Context`: The context that is used when checking an extrinsic.
 /// - `UnsignedValidator`: The unsigned transaction validator of the runtime.
-/// - `AllPalletsWithSystem`: Tuple that contains all pallets including frame system pallet. Will be
+/// - `AllPalletsWithSystem`: Tuple that contains all pallets including frame system pezpallet. Will be
 ///   used to call hooks e.g. `on_initialize`.
 /// - [**DEPRECATED** `OnRuntimeUpgrade`]: This parameter is deprecated and will be removed after
 ///   September 2026. Use type `SingleBlockMigrations` in pezframe_system::Config instead.
@@ -359,12 +359,12 @@ where
 		})?;
 
 		// In this case there were no transactions to trigger this state transition:
-		if !<pezframe_system::Pallet<System>>::inherents_applied() {
+		if !<pezframe_system::Pezpallet<System>>::inherents_applied() {
 			Self::inherents_applied();
 		}
 
 		// post-extrinsics book-keeping
-		<pezframe_system::Pallet<System>>::note_finished_extrinsics();
+		<pezframe_system::Pezpallet<System>>::note_finished_extrinsics();
 		<System as pezframe_system::Config>::PostTransactions::post_transactions();
 
 		let header = block.header();
@@ -389,7 +389,7 @@ where
 		// do some of the checks that would normally happen in `final_checks`, but perhaps skip
 		// the state root check.
 		{
-			let new_header = <pezframe_system::Pallet<System>>::finalize();
+			let new_header = <pezframe_system::Pezpallet<System>>::finalize();
 			let items_zip = header.digest().logs().iter().zip(new_header.digest().logs().iter());
 			for (header_item, computed_item) in items_zip {
 				header_item.check_equal(computed_item);
@@ -417,7 +417,7 @@ where
 			header.number(),
 		);
 
-		Ok(pezframe_system::Pallet::<System>::block_weight().total())
+		Ok(pezframe_system::Pezpallet::<System>::block_weight().total())
 	}
 
 	/// Execute all Migrations of this runtime.
@@ -479,7 +479,7 @@ where
 		// Check all storage invariants:
 		if checks.try_state() {
 			AllPalletsWithSystem::try_state(
-				pezframe_system::Pallet::<System>::block_number(),
+				pezframe_system::Pezpallet::<System>::block_number(),
 				try_state_select,
 			)?;
 		}
@@ -522,7 +522,7 @@ where
 
 /// Extension trait for [`OnInitialize`].
 ///
-/// It takes care to register the weight of each pallet directly after executing its
+/// It takes care to register the weight of each pezpallet directly after executing its
 /// `on_initialize`.
 ///
 /// The trait is sealed.
@@ -539,7 +539,7 @@ pezframe_support::impl_for_tuples_attr! {
 			for_tuples!( #(
 				let individual_weight = Tuple::on_initialize(n);
 
-				<pezframe_system::Pallet<T>>::register_extra_weight_unchecked(
+				<pezframe_system::Pezpallet<T>>::register_extra_weight_unchecked(
 					individual_weight,
 					DispatchClass::Mandatory,
 				);
@@ -635,7 +635,7 @@ where
 		// Reset events before apply runtime upgrade hook.
 		// This is required to preserve events from runtime upgrade hook.
 		// This means the format of all the event related storage must always be compatible.
-		<pezframe_system::Pallet<System>>::reset_events();
+		<pezframe_system::Pezpallet<System>>::reset_events();
 
 		let mut weight = Weight::zero();
 		if Self::runtime_upgraded() {
@@ -647,11 +647,11 @@ where
 				),
 			);
 		}
-		<pezframe_system::Pallet<System>>::initialize(block_number, parent_hash, digest);
+		<pezframe_system::Pezpallet<System>>::initialize(block_number, parent_hash, digest);
 
 		weight = System::BlockWeights::get().base_block.saturating_add(weight);
 		// Register the base block weight and optional `on_runtime_upgrade` weight.
-		<pezframe_system::Pallet<System>>::register_extra_weight_unchecked(
+		<pezframe_system::Pezpallet<System>>::register_extra_weight_unchecked(
 			weight,
 			DispatchClass::Mandatory,
 		);
@@ -666,7 +666,7 @@ where
 			"[{block_number:?}]: Block initialization weight consumption: {weight:?}",
 		);
 
-		pezframe_system::Pallet::<System>::note_finished_initialize();
+		pezframe_system::Pezpallet::<System>::note_finished_initialize();
 		<System as pezframe_system::Config>::PreInherents::pre_inherents();
 	}
 
@@ -685,7 +685,7 @@ where
 		let n = *header.number();
 		assert!(
 			n > BlockNumberFor::<System>::zero() &&
-				<pezframe_system::Pallet<System>>::block_hash(n - BlockNumberFor::<System>::one()) ==
+				<pezframe_system::Pezpallet<System>>::block_hash(n - BlockNumberFor::<System>::one()) ==
 					*header.parent_hash(),
 			"Parent hash should be valid.",
 		);
@@ -712,11 +712,11 @@ where
 			}
 
 			// In this case there were no transactions to trigger this state transition:
-			if !<pezframe_system::Pallet<System>>::inherents_applied() {
+			if !<pezframe_system::Pezpallet<System>>::inherents_applied() {
 				Self::inherents_applied();
 			}
 
-			<pezframe_system::Pallet<System>>::note_finished_extrinsics();
+			<pezframe_system::Pezpallet<System>>::note_finished_extrinsics();
 			<System as pezframe_system::Config>::PostTransactions::post_transactions();
 
 			let header = block.header();
@@ -730,17 +730,17 @@ where
 	///
 	/// It advances the Multi-Block-Migrations or runs the `on_poll` hook.
 	pub fn inherents_applied() {
-		<pezframe_system::Pallet<System>>::note_inherents_applied();
+		<pezframe_system::Pezpallet<System>>::note_inherents_applied();
 		<System as pezframe_system::Config>::PostInherents::post_inherents();
 
 		if <System as pezframe_system::Config>::MultiBlockMigrator::ongoing() {
 			let used_weight = <System as pezframe_system::Config>::MultiBlockMigrator::step();
-			<pezframe_system::Pallet<System>>::register_extra_weight_unchecked(
+			<pezframe_system::Pezpallet<System>>::register_extra_weight_unchecked(
 				used_weight,
 				DispatchClass::Mandatory,
 			);
 		} else {
-			let block_number = <pezframe_system::Pallet<System>>::block_number();
+			let block_number = <pezframe_system::Pezpallet<System>>::block_number();
 			Self::on_poll_hook(block_number);
 		}
 	}
@@ -790,26 +790,26 @@ where
 		pezsp_tracing::enter_span!(pezsp_tracing::Level::TRACE, "finalize_block");
 
 		// In this case there were no transactions to trigger this state transition:
-		if !<pezframe_system::Pallet<System>>::inherents_applied() {
+		if !<pezframe_system::Pezpallet<System>>::inherents_applied() {
 			Self::inherents_applied();
 		}
 
-		<pezframe_system::Pallet<System>>::note_finished_extrinsics();
+		<pezframe_system::Pezpallet<System>>::note_finished_extrinsics();
 		<System as pezframe_system::Config>::PostTransactions::post_transactions();
-		let block_number = <pezframe_system::Pallet<System>>::block_number();
+		let block_number = <pezframe_system::Pezpallet<System>>::block_number();
 		Self::on_idle_hook(block_number);
 		Self::on_finalize_hook(block_number);
-		<pezframe_system::Pallet<System>>::finalize()
+		<pezframe_system::Pezpallet<System>>::finalize()
 	}
 
-	/// Run the `on_idle` hook of all pallet, but only if there is weight remaining and there are no
+	/// Run the `on_idle` hook of all pezpallet, but only if there is weight remaining and there are no
 	/// ongoing MBMs.
 	fn on_idle_hook(block_number: NumberFor<Block>) {
 		if <System as pezframe_system::Config>::MultiBlockMigrator::ongoing() {
 			return;
 		}
 
-		let weight = <pezframe_system::Pallet<System>>::block_weight();
+		let weight = <pezframe_system::Pezpallet<System>>::block_weight();
 		let max_weight = <System::BlockWeights as pezframe_support::traits::Get<_>>::get().max_block;
 		let remaining_weight = max_weight.saturating_sub(weight.total());
 
@@ -818,7 +818,7 @@ where
 				block_number,
 				remaining_weight,
 			);
-			<pezframe_system::Pallet<System>>::register_extra_weight_unchecked(
+			<pezframe_system::Pezpallet<System>>::register_extra_weight_unchecked(
 				used_weight,
 				DispatchClass::Mandatory,
 			);
@@ -831,7 +831,7 @@ where
 			"on_poll should not be called during migrations"
 		);
 
-		let weight = <pezframe_system::Pallet<System>>::block_weight();
+		let weight = <pezframe_system::Pezpallet<System>>::block_weight();
 		let max_weight = <System::BlockWeights as pezframe_support::traits::Get<_>>::get().max_block;
 		let remaining = max_weight.saturating_sub(weight.total());
 
@@ -841,14 +841,14 @@ where
 				block_number,
 				&mut meter,
 			);
-			<pezframe_system::Pallet<System>>::register_extra_weight_unchecked(
+			<pezframe_system::Pezpallet<System>>::register_extra_weight_unchecked(
 				meter.consumed(),
 				DispatchClass::Mandatory,
 			);
 		}
 	}
 
-	/// Run the `on_finalize` hook of all pallet.
+	/// Run the `on_finalize` hook of all pezpallet.
 	fn on_finalize_hook(block_number: NumberFor<Block>) {
 		<AllPalletsWithSystem as OnFinalize<BlockNumberFor<System>>>::on_finalize(block_number);
 	}
@@ -882,14 +882,14 @@ where
 
 		let dispatch_info = xt.get_dispatch_info();
 
-		if !is_inherent && !<pezframe_system::Pallet<System>>::inherents_applied() {
+		if !is_inherent && !<pezframe_system::Pezpallet<System>>::inherents_applied() {
 			Self::inherents_applied();
 		}
 
 		// We don't need to make sure to `note_extrinsic` only after we know it's going to be
 		// executed to prevent it from leaking in storage since at this point, it will either
 		// execute or panic (and revert storage changes).
-		<pezframe_system::Pallet<System>>::note_extrinsic(encoded);
+		<pezframe_system::Pezpallet<System>>::note_extrinsic(encoded);
 
 		// AUDIT: Under no circumstances may this function panic from here onwards.
 
@@ -903,7 +903,7 @@ where
 			return Err(InvalidTransaction::BadMandatory.into());
 		}
 
-		<pezframe_system::Pallet<System>>::note_applied_extrinsic(&r, dispatch_info);
+		<pezframe_system::Pezpallet<System>>::note_applied_extrinsic(&r, dispatch_info);
 
 		Ok(r.map(|_| ()).map_err(|e| e.error))
 	}
@@ -920,7 +920,7 @@ where
 	fn final_checks(header: &pezframe_system::pezpallet_prelude::HeaderFor<System>) {
 		pezsp_tracing::enter_span!(pezsp_tracing::Level::TRACE, "final_checks");
 		// remove temporaries
-		let new_header = <pezframe_system::Pallet<System>>::finalize();
+		let new_header = <pezframe_system::Pezpallet<System>>::finalize();
 
 		// check digest
 		assert_eq!(
@@ -958,8 +958,8 @@ where
 		pezsp_io::init_tracing();
 		use pezsp_tracing::{enter_span, within_span};
 
-		<pezframe_system::Pallet<System>>::initialize(
-			&(pezframe_system::Pallet::<System>::block_number() + One::one()),
+		<pezframe_system::Pezpallet<System>>::initialize(
+			&(pezframe_system::Pezpallet::<System>::block_number() + One::one()),
 			&block_hash,
 			&Default::default(),
 		);
@@ -1003,13 +1003,13 @@ where
 		let digests = header.digest().clone();
 
 		// Let's deposit all the logs we are not yet aware of. These are the logs set by the `node`.
-		let existing_digest = pezframe_system::Pallet::<System>::digest();
+		let existing_digest = pezframe_system::Pezpallet::<System>::digest();
 		for digest in digests.logs().iter().filter(|d| !existing_digest.logs.contains(d)) {
-			pezframe_system::Pallet::<System>::deposit_log(digest.clone());
+			pezframe_system::Pezpallet::<System>::deposit_log(digest.clone());
 		}
 
 		// Initialize the intra block entropy, which is maybe used by offchain workers.
-		pezframe_system::Pallet::<System>::initialize_intra_block_entropy(header.parent_hash());
+		pezframe_system::Pezpallet::<System>::initialize_intra_block_entropy(header.parent_hash());
 
 		// Frame system only inserts the parent hash into the block hashes as normally we don't know
 		// the hash for the header before. However, here we are aware of the hash and we can add it

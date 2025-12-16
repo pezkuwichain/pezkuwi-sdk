@@ -72,7 +72,7 @@
 //! For more details see the [latest documenting
 //! guidelines](https://github.com/pezkuwichain/pezkuwi-sdk/blob/master/docs/contributor/DOCUMENTATION_GUIDELINES.md).
 //!
-//! #### Example: Explaining `#[pallet::call]`
+//! #### Example: Explaining `#[pezpallet::call]`
 //!
 //! <details>
 //! <summary>
@@ -82,15 +82,15 @@
 //!
 //!
 //! ```
-//! #[frame::pallet(dev_mode)]
-//! pub mod pallet {
+//! #[frame::pezpallet(dev_mode)]
+//! pub mod pezpallet {
 //! #   use frame::prelude::*;
-//! #   #[pallet::config]
+//! #   #[pezpallet::config]
 //! #   pub trait Config: pezframe_system::Config {}
-//! #   #[pallet::pallet]
-//! #   pub struct Pallet<T>(_);
-//!     #[pallet::call]
-//!     impl<T: Config> Pallet<T> {
+//! #   #[pezpallet::pezpallet]
+//! #   pub struct Pezpallet<T>(_);
+//!     #[pezpallet::call]
+//!     impl<T: Config> Pezpallet<T> {
 //!         pub fn a_simple_call(origin: OriginFor<T>, data: u32) -> DispatchResult {
 //!             ensure!(data > 10, "SomeStaticString");
 //!             todo!();
@@ -101,7 +101,7 @@
 //!
 //! * Before even getting started, what is with all of this `<T: Config>`? We link to
 //! [`crate::reference_docs::trait_based_programming`].
-//! * First, the name. Why is this called `pallet::call`? This goes back to `enum Call`, which is
+//! * First, the name. Why is this called `pezpallet::call`? This goes back to `enum Call`, which is
 //! explained in [`crate::reference_docs::frame_runtime_types`]. Build on top of this!
 //! * Then, what is `origin`? Just an account id? [`crate::reference_docs::frame_origin`].
 //! * Then, what is `DispatchResult`? Why is this called *dispatch*? Probably something that can be

@@ -19,9 +19,9 @@
 //!
 //! Trigger for stopping all extrinsics outside of a specific whitelist.
 //!
-//! ## Pallet API
+//! ## Pezpallet API
 //!
-//! See the [`pallet`] module for more information about the interfaces this pallet exposes,
+//! See the [`pezpallet`] module for more information about the interfaces this pezpallet exposes,
 //! including its configuration trait, dispatchables, storage items, events, and errors.
 //!
 //! ## Overview
@@ -83,72 +83,72 @@ use frame::{
 	traits::{fungible, CallMetadata, GetCallMetadata, SafeModeNotify},
 };
 
-pub use pallet::*;
+pub use pezpallet::*;
 pub use weights::*;
 
 type BalanceOf<T> =
 	<<T as Config>::Currency as fungible::Inspect<<T as pezframe_system::Config>::AccountId>>::Balance;
 
-#[frame::pallet]
-pub mod pallet {
+#[frame::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(PhantomData<T>);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(PhantomData<T>);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
-		/// Currency type for this pallet, used for Deposits.
+		/// Currency type for this pezpallet, used for Deposits.
 		type Currency: Inspect<Self::AccountId>
 			+ Mutate<Self::AccountId, Reason = Self::RuntimeHoldReason>;
 
 		/// The hold reason when reserving funds for entering or extending the safe-mode.
 		type RuntimeHoldReason: From<HoldReason>;
 
-		/// Contains all runtime calls in any pallet that can be dispatched even while the safe-mode
+		/// Contains all runtime calls in any pezpallet that can be dispatched even while the safe-mode
 		/// is entered.
 		///
-		/// The safe-mode pallet cannot disable it's own calls, and does not need to be explicitly
+		/// The safe-mode pezpallet cannot disable it's own calls, and does not need to be explicitly
 		/// added here.
 		type WhitelistedCalls: Contains<Self::RuntimeCall>;
 
-		/// For how many blocks the safe-mode will be entered by [`Pallet::enter`].
-		#[pallet::constant]
+		/// For how many blocks the safe-mode will be entered by [`Pezpallet::enter`].
+		#[pezpallet::constant]
 		type EnterDuration: Get<BlockNumberFor<Self>>;
 
-		/// For how many blocks the safe-mode can be extended by each [`Pallet::extend`] call.
+		/// For how many blocks the safe-mode can be extended by each [`Pezpallet::extend`] call.
 		///
 		/// This does not impose a hard limit as the safe-mode can be extended multiple times.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type ExtendDuration: Get<BlockNumberFor<Self>>;
 
-		/// The amount that will be reserved upon calling [`Pallet::enter`].
+		/// The amount that will be reserved upon calling [`Pezpallet::enter`].
 		///
 		/// `None` disallows permissionlessly enabling the safe-mode and is a sane default.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type EnterDepositAmount: Get<Option<BalanceOf<Self>>>;
 
-		/// The amount that will be reserved upon calling [`Pallet::extend`].
+		/// The amount that will be reserved upon calling [`Pezpallet::extend`].
 		///
 		/// `None` disallows permissionlessly extending the safe-mode and is a sane default.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type ExtendDepositAmount: Get<Option<BalanceOf<Self>>>;
 
-		/// The origin that may call [`Pallet::force_enter`].
+		/// The origin that may call [`Pezpallet::force_enter`].
 		///
 		/// The `Success` value is the number of blocks that this origin can enter safe-mode for.
 		type ForceEnterOrigin: EnsureOrigin<Self::RuntimeOrigin, Success = BlockNumberFor<Self>>;
 
-		/// The origin that may call [`Pallet::force_extend`].
+		/// The origin that may call [`Pezpallet::force_extend`].
 		///
 		/// The `Success` value is the number of blocks that this origin can extend the safe-mode.
 		type ForceExtendOrigin: EnsureOrigin<Self::RuntimeOrigin, Success = BlockNumberFor<Self>>;
 
-		/// The origin that may call [`Pallet::force_enter`].
+		/// The origin that may call [`Pezpallet::force_enter`].
 		type ForceExitOrigin: EnsureOrigin<Self::RuntimeOrigin>;
 
 		/// The only origin that can force to release or slash a deposit.
@@ -158,21 +158,21 @@ pub mod pallet {
 		type Notify: SafeModeNotify;
 
 		/// The minimal duration a deposit will remain reserved after safe-mode is entered or
-		/// extended, unless [`Pallet::force_release_deposit`] is successfully called sooner.
+		/// extended, unless [`Pezpallet::force_release_deposit`] is successfully called sooner.
 		///
 		/// Every deposit is tied to a specific activation or extension, thus each deposit can be
 		/// released independently after the delay for it has passed.
 		///
 		/// `None` disallows permissionlessly releasing the safe-mode deposits and is a sane
 		/// default.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type ReleaseDelay: Get<Option<BlockNumberFor<Self>>>;
 
-		// Weight information for extrinsics in this pallet.
+		// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// The safe-mode is (already or still) entered.
 		Entered,
@@ -180,7 +180,7 @@ pub mod pallet {
 		/// The safe-mode is (already or still) exited.
 		Exited,
 
-		/// This functionality of the pallet is disabled by the configuration.
+		/// This functionality of the pezpallet is disabled by the configuration.
 		NotConfigured,
 
 		/// There is no balance reserved.
@@ -196,8 +196,8 @@ pub mod pallet {
 		CurrencyError,
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// The safe-mode was entered until inclusively this block.
 		Entered { until: BlockNumberFor<T> },
@@ -245,7 +245,7 @@ pub mod pallet {
 		/// The safe-mode was automatically deactivated after it's duration ran out.
 		Timeout,
 
-		/// The safe-mode was forcefully deactivated by [`Pallet::force_exit`].
+		/// The safe-mode was forcefully deactivated by [`Pezpallet::force_exit`].
 		Force,
 	}
 
@@ -254,14 +254,14 @@ pub mod pallet {
 	///  Set to `None` when safe-mode is exited.
 	///
 	/// Safe-mode is automatically exited when the current block number exceeds this value.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type EnteredUntil<T: Config> = StorageValue<_, BlockNumberFor<T>, OptionQuery>;
 
 	/// Holds the reserve that was taken from an account at a specific block number.
 	///
 	/// This helps governance to have an overview of outstanding deposits that should be returned or
 	/// slashed.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Deposits<T: Config> = StorageDoubleMap<
 		_,
 		Twox64Concat,
@@ -272,14 +272,14 @@ pub mod pallet {
 		OptionQuery,
 	>;
 
-	/// Configure the initial state of this pallet in the genesis block.
-	#[pallet::genesis_config]
+	/// Configure the initial state of this pezpallet in the genesis block.
+	#[pezpallet::genesis_config]
 	#[derive(DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		pub entered_until: Option<BlockNumberFor<T>>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			if let Some(block) = self.entered_until {
@@ -288,24 +288,24 @@ pub mod pallet {
 		}
 	}
 
-	/// A reason for the pallet placing a hold on funds.
-	#[pallet::composite_enum]
+	/// A reason for the pezpallet placing a hold on funds.
+	#[pezpallet::composite_enum]
 	pub enum HoldReason {
 		/// Funds are held for entering or extending the safe-mode.
 		#[codec(index = 0)]
 		EnterOrExtend,
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Enter safe-mode permissionlessly for [`Config::EnterDuration`] blocks.
 		///
 		/// Reserves [`Config::EnterDepositAmount`] from the caller's account.
 		/// Emits an [`Event::Entered`] event on success.
 		/// Errors with [`Error::Entered`] if the safe-mode is already entered.
 		/// Errors with [`Error::NotConfigured`] if the deposit amount is `None`.
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::enter())]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::enter())]
 		pub fn enter(origin: OriginFor<T>) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 
@@ -318,8 +318,8 @@ pub mod pallet {
 		/// Errors with [`Error::Entered`] if the safe-mode is already entered.
 		///
 		/// Can only be called by the [`Config::ForceEnterOrigin`] origin.
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::force_enter())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::force_enter())]
 		pub fn force_enter(origin: OriginFor<T>) -> DispatchResult {
 			let duration = T::ForceEnterOrigin::ensure_origin(origin)?;
 
@@ -337,8 +337,8 @@ pub mod pallet {
 		/// This may be called by any signed origin with [`Config::ExtendDepositAmount`] free
 		/// currency to reserve. This call can be disabled for all origins by configuring
 		/// [`Config::ExtendDepositAmount`] to `None`.
-		#[pallet::call_index(2)]
-		#[pallet::weight(T::WeightInfo::extend())]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(T::WeightInfo::extend())]
 		pub fn extend(origin: OriginFor<T>) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 
@@ -351,8 +351,8 @@ pub mod pallet {
 		/// Errors with [`Error::Exited`] if the safe-mode is inactive.
 		///
 		/// Can only be called by the [`Config::ForceExtendOrigin`] origin.
-		#[pallet::call_index(3)]
-		#[pallet::weight(T::WeightInfo::force_extend())]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(T::WeightInfo::force_extend())]
 		pub fn force_extend(origin: OriginFor<T>) -> DispatchResult {
 			let duration = T::ForceExtendOrigin::ensure_origin(origin)?;
 
@@ -364,12 +364,12 @@ pub mod pallet {
 		/// Emits an [`Event::Exited`] with [`ExitReason::Force`] event on success.
 		/// Errors with [`Error::Exited`] if the safe-mode is inactive.
 		///
-		/// Note: `safe-mode` will be automatically deactivated by [`Pallet::on_initialize`] hook
+		/// Note: `safe-mode` will be automatically deactivated by [`Pezpallet::on_initialize`] hook
 		/// after the block height is greater than the [`EnteredUntil`] storage item.
 		/// Emits an [`Event::Exited`] with [`ExitReason::Timeout`] event when deactivated in the
 		/// hook.
-		#[pallet::call_index(4)]
-		#[pallet::weight(T::WeightInfo::force_exit())]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(T::WeightInfo::force_exit())]
 		pub fn force_exit(origin: OriginFor<T>) -> DispatchResult {
 			T::ForceExitOrigin::ensure_origin(origin)?;
 
@@ -385,8 +385,8 @@ pub mod pallet {
 		/// Errors with [`Error::Entered`] if safe-mode is entered.
 		///
 		/// Can only be called by the [`Config::ForceDepositOrigin`] origin.
-		#[pallet::call_index(5)]
-		#[pallet::weight(T::WeightInfo::force_slash_deposit())]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(T::WeightInfo::force_slash_deposit())]
 		pub fn force_slash_deposit(
 			origin: OriginFor<T>,
 			account: T::AccountId,
@@ -409,8 +409,8 @@ pub mod pallet {
 		/// Errors with [`Error::CannotReleaseYet`] if [`Config::ReleaseDelay`] block have not
 		/// passed since safe-mode was entered. Errors with [`Error::NoDeposit`] if the payee has no
 		/// reserved currency at the block specified.
-		#[pallet::call_index(6)]
-		#[pallet::weight(T::WeightInfo::release_deposit())]
+		#[pezpallet::call_index(6)]
+		#[pezpallet::weight(T::WeightInfo::release_deposit())]
 		pub fn release_deposit(
 			origin: OriginFor<T>,
 			account: T::AccountId,
@@ -432,8 +432,8 @@ pub mod pallet {
 		/// specified block.
 		///
 		/// Can only be called by the [`Config::ForceDepositOrigin`] origin.
-		#[pallet::call_index(7)]
-		#[pallet::weight(T::WeightInfo::force_release_deposit())]
+		#[pezpallet::call_index(7)]
+		#[pezpallet::weight(T::WeightInfo::force_release_deposit())]
 		pub fn force_release_deposit(
 			origin: OriginFor<T>,
 			account: T::AccountId,
@@ -445,8 +445,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		/// Automatically exits safe-mode when the current block number is greater than
 		/// [`EnteredUntil`].
 		fn on_initialize(current: BlockNumberFor<T>) -> Weight {
@@ -464,8 +464,8 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> Pallet<T> {
-	/// Logic for the [`crate::Pallet::enter`] and [`crate::Pallet::force_enter`] calls.
+impl<T: Config> Pezpallet<T> {
+	/// Logic for the [`crate::Pezpallet::enter`] and [`crate::Pezpallet::force_enter`] calls.
 	pub(crate) fn do_enter(
 		who: Option<T::AccountId>,
 		duration: BlockNumberFor<T>,
@@ -477,14 +477,14 @@ impl<T: Config> Pallet<T> {
 			Self::hold(who, amount)?;
 		}
 
-		let until = <pezframe_system::Pallet<T>>::block_number().saturating_add(duration);
+		let until = <pezframe_system::Pezpallet<T>>::block_number().saturating_add(duration);
 		EnteredUntil::<T>::put(until);
 		Self::deposit_event(Event::Entered { until });
 		T::Notify::entered();
 		Ok(())
 	}
 
-	/// Logic for the [`crate::Pallet::extend`] and [`crate::Pallet::force_extend`] calls.
+	/// Logic for the [`crate::Pezpallet::extend`] and [`crate::Pezpallet::force_extend`] calls.
 	pub(crate) fn do_extend(
 		who: Option<T::AccountId>,
 		duration: BlockNumberFor<T>,
@@ -502,7 +502,7 @@ impl<T: Config> Pallet<T> {
 		Ok(())
 	}
 
-	/// Logic for the [`crate::Pallet::force_exit`] call.
+	/// Logic for the [`crate::Pezpallet::force_exit`] call.
 	///
 	/// Errors if safe-mode is already exited.
 	pub(crate) fn do_exit(reason: ExitReason) -> Result<(), Error<T>> {
@@ -512,8 +512,8 @@ impl<T: Config> Pallet<T> {
 		Ok(())
 	}
 
-	/// Logic for the [`crate::Pallet::release_deposit`] and
-	/// [`crate::Pallet::force_release_deposit`] calls.
+	/// Logic for the [`crate::Pezpallet::release_deposit`] and
+	/// [`crate::Pezpallet::force_release_deposit`] calls.
 	pub(crate) fn do_release(
 		force: bool,
 		account: T::AccountId,
@@ -525,7 +525,7 @@ impl<T: Config> Pallet<T> {
 			ensure!(!Self::is_entered(), Error::<T>::Entered);
 
 			let delay = T::ReleaseDelay::get().ok_or(Error::<T>::NotConfigured)?;
-			let now = <pezframe_system::Pallet<T>>::block_number();
+			let now = <pezframe_system::Pezpallet<T>>::block_number();
 			ensure!(now > block.saturating_add(delay), Error::<T>::CannotReleaseYet);
 		}
 
@@ -540,7 +540,7 @@ impl<T: Config> Pallet<T> {
 		Ok(())
 	}
 
-	/// Logic for the [`crate::Pallet::slash_deposit`] call.
+	/// Logic for the [`crate::Pezpallet::slash_deposit`] call.
 	pub(crate) fn do_force_deposit(
 		account: T::AccountId,
 		block: BlockNumberFor<T>,
@@ -564,7 +564,7 @@ impl<T: Config> Pallet<T> {
 	///
 	/// Errors if the account already has a hold for the same reason.
 	fn hold(who: T::AccountId, amount: BalanceOf<T>) -> Result<(), Error<T>> {
-		let block = <pezframe_system::Pallet<T>>::block_number();
+		let block = <pezframe_system::Pezpallet<T>>::block_number();
 		if !T::Currency::balance_on_hold(&HoldReason::EnterOrExtend.into(), &who).is_zero() {
 			return Err(Error::<T>::AlreadyDeposited.into());
 		}
@@ -588,8 +588,8 @@ impl<T: Config> Pallet<T> {
 		T::RuntimeCall: GetCallMetadata,
 	{
 		let CallMetadata { pezpallet_name, .. } = call.get_call_metadata();
-		// SAFETY: The `SafeMode` pallet is always allowed.
-		if pezpallet_name == <Pallet<T> as PalletInfoAccess>::name() {
+		// SAFETY: The `SafeMode` pezpallet is always allowed.
+		if pezpallet_name == <Pezpallet<T> as PalletInfoAccess>::name() {
 			return true;
 		}
 
@@ -601,17 +601,17 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-impl<T: Config> Contains<T::RuntimeCall> for Pallet<T>
+impl<T: Config> Contains<T::RuntimeCall> for Pezpallet<T>
 where
 	T::RuntimeCall: GetCallMetadata,
 {
 	/// Return whether the given call is allowed to be dispatched.
 	fn contains(call: &T::RuntimeCall) -> bool {
-		Pallet::<T>::is_allowed(call)
+		Pezpallet::<T>::is_allowed(call)
 	}
 }
 
-impl<T: Config> frame::traits::SafeMode for Pallet<T> {
+impl<T: Config> frame::traits::SafeMode for Pezpallet<T> {
 	type BlockNumber = BlockNumberFor<T>;
 
 	fn is_entered() -> bool {
@@ -620,7 +620,7 @@ impl<T: Config> frame::traits::SafeMode for Pallet<T> {
 
 	fn remaining() -> Option<BlockNumberFor<T>> {
 		EnteredUntil::<T>::get().map(|until| {
-			let now = <pezframe_system::Pallet<T>>::block_number();
+			let now = <pezframe_system::Pezpallet<T>>::block_number();
 			until.saturating_sub(now)
 		})
 	}

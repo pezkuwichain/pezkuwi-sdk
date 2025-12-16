@@ -45,11 +45,11 @@ mod v1 {
 	}
 }
 
-/// Migrate the pallet storage from `0` to `1`.
+/// Migrate the pezpallet storage from `0` to `1`.
 pub type MigrateV0ToV1<T, I> = pezframe_support::migrations::VersionedMigration<
 	0,
 	1,
 	v1::UncheckedMigrateToV1Impl<T, I>,
-	Pallet<T, I>,
+	Pezpallet<T, I>,
 	<T as pezframe_system::Config>::DbWeight,
 >;

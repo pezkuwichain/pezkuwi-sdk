@@ -45,7 +45,7 @@ The staking system in Bizinikiwi NPoS is designed to make the following possible
 
 Almost any interaction with the Staking module requires a process of _**bonding**_ (also known as becoming a _staker_). To
 become *bonded*, a fund-holding account known as the _stash account_ (which holds some or all of the funds that become
-frozen in place as part of the staking process) gets assigned by the pallet to a _controller account_. The controller account
+frozen in place as part of the staking process) gets assigned by the pezpallet to a _controller account_. The controller account
 then issues instructions on how funds shall be used.
 
 An account can become a bonded stash account using the
@@ -141,25 +141,25 @@ The Staking module contains many public storage items and (im)mutable functions.
 ```rust
 use pallet_staking::{self as staking};
 
-#[frame_support::pallet]
-pub mod pallet {
+#[frame_support::pezpallet]
+pub mod pezpallet {
     use super::*;
     use frame_support::pallet_prelude::*;
     use frame_system::pallet_prelude::*;
 
-    #[pallet::pallet]
-    pub struct Pallet<T>(_);
+    #[pezpallet::pezpallet]
+    pub struct Pezpallet<T>(_);
 
-    #[pallet::config]
+    #[pezpallet::config]
     pub trait Config: frame_system::Config + staking::Config {}
 
-    #[pallet::call]
-    impl<T: Config> Pallet<T> {
+    #[pezpallet::call]
+    impl<T: Config> Pezpallet<T> {
         /// Reward a validator.
-        #[pallet::weight(0)]
+        #[pezpallet::weight(0)]
         pub fn reward_myself(origin: OriginFor<T>) -> DispatchResult {
             let reported = ensure_signed(origin)?;
-            <staking::Pallet<T>>::reward_by_ids(vec![(reported, 10)]);
+            <staking::Pezpallet<T>>::reward_by_ids(vec![(reported, 10)]);
             Ok(())
         }
     }

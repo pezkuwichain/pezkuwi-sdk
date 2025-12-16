@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Benchmarks for the revive pallet.
+//! Benchmarks for the revive pezpallet.
 
 #![cfg(feature = "runtime-benchmarks")]
 use crate::{
@@ -41,7 +41,7 @@ use crate::{
 		evm::{instructions, instructions::utility::IntoAddress, Interpreter},
 		pvm,
 	},
-	Pallet as Contracts, *,
+	Pezpallet as Contracts, *,
 };
 use alloc::{vec, vec::Vec};
 use alloy_core::sol_types::{SolInterface, SolValue};
@@ -100,10 +100,10 @@ macro_rules! build_runtime(
 	};
 );
 
-/// Get the pallet account and whitelist it for benchmarking.
+/// Get the pezpallet account and whitelist it for benchmarking.
 /// The account is warmed up `on_initialize` so read should not impact the PoV.
 fn whitelisted_pallet_account<T: Config>() -> T::AccountId {
-	let pezpallet_account = Pallet::<T>::account_id();
+	let pezpallet_account = Pezpallet::<T>::account_id();
 	whitelist_account!(pezpallet_account);
 	pezpallet_account
 }
@@ -156,7 +156,7 @@ mod benchmarks {
 	fn call_with_pvm_code_per_byte(c: Linear<0, { 100 * 1024 }>) -> Result<(), BenchmarkError> {
 		let instance =
 			Contract::<T>::with_caller(whitelisted_caller(), VmBinaryModule::sized(c), vec![])?;
-		let value = Pallet::<T>::min_balance();
+		let value = Pezpallet::<T>::min_balance();
 		let storage_deposit = default_deposit_limit::<T>();
 
 		#[extrinsic_call]
@@ -179,7 +179,7 @@ mod benchmarks {
 	fn call_with_evm_code_per_byte(c: Linear<1, { 10 * 1024 }>) -> Result<(), BenchmarkError> {
 		let instance =
 			Contract::<T>::with_caller(whitelisted_caller(), VmBinaryModule::evm_sized(c), vec![])?;
-		let value = Pallet::<T>::min_balance();
+		let value = Pezpallet::<T>::min_balance();
 		let storage_deposit = default_deposit_limit::<T>();
 
 		#[extrinsic_call]
@@ -212,12 +212,12 @@ mod benchmarks {
 			VmBinaryModule::with_num_instructions(limits::code::BASIC_BLOCK_SIZE),
 			vec![],
 		)?;
-		let value = Pallet::<T>::min_balance();
+		let value = Pezpallet::<T>::min_balance();
 		let storage_deposit = default_deposit_limit::<T>();
 
 		#[block]
 		{
-			Pallet::<T>::call(
+			Pezpallet::<T>::call(
 				RawOrigin::Signed(instance.caller.clone()).into(),
 				instance.address,
 				value,
@@ -240,7 +240,7 @@ mod benchmarks {
 		let pezpallet_account = whitelisted_pallet_account::<T>();
 		let input = vec![42u8; i as usize];
 		let salt = [42u8; 32];
-		let value = Pallet::<T>::min_balance();
+		let value = Pezpallet::<T>::min_balance();
 		let caller = whitelisted_caller();
 		T::Currency::set_balance(&caller, caller_funding::<T>());
 		let VmBinaryModule { code, .. } = VmBinaryModule::sized(c);
@@ -255,7 +255,7 @@ mod benchmarks {
 
 		let deposit =
 			T::Currency::balance_on_hold(&HoldReason::StorageDepositReserve.into(), &account_id);
-		// uploading the code reserves some balance in the pallet's account
+		// uploading the code reserves some balance in the pezpallet's account
 		let code_deposit = T::Currency::balance_on_hold(
 			&HoldReason::CodeUploadDepositReserve.into(),
 			&pezpallet_account,
@@ -267,10 +267,10 @@ mod benchmarks {
 			caller_funding::<T>() -
 				value - deposit -
 				code_deposit - mapping_deposit -
-				Pallet::<T>::min_balance(),
+				Pezpallet::<T>::min_balance(),
 		);
 		// contract has the full value
-		assert_eq!(T::Currency::balance(&account_id), value + Pallet::<T>::min_balance());
+		assert_eq!(T::Currency::balance(&account_id), value + Pezpallet::<T>::min_balance());
 	}
 
 	// `c`: Size of the code in bytes.
@@ -287,11 +287,11 @@ mod benchmarks {
 		// Use an `effective_gas_price` that is not a multiple of `T::NativeToEthRatio`
 		// to hit the code that charge the rounding error so that tx_cost == effective_gas_price *
 		// gas_used
-		let effective_gas_price = Pallet::<T>::evm_base_fee() + 1;
-		let value = Pallet::<T>::min_balance();
+		let effective_gas_price = Pezpallet::<T>::evm_base_fee() + 1;
+		let value = Pezpallet::<T>::min_balance();
 		let dust = 42u32 * d;
 		let evm_value =
-			Pallet::<T>::convert_native_to_evm(BalanceWithDust::new_unchecked::<T>(value, dust));
+			Pezpallet::<T>::convert_native_to_evm(BalanceWithDust::new_unchecked::<T>(value, dust));
 		let caller = whitelisted_caller();
 		T::Currency::set_balance(&caller, caller_funding::<T>());
 		let VmBinaryModule { code, .. } = VmBinaryModule::sized(c);
@@ -320,7 +320,7 @@ mod benchmarks {
 		);
 
 		// contract has the full value
-		assert_eq!(Pallet::<T>::evm_balance(&addr), evm_value);
+		assert_eq!(Pezpallet::<T>::evm_balance(&addr), evm_value);
 		Ok(())
 	}
 
@@ -328,7 +328,7 @@ mod benchmarks {
 	fn deposit_eth_extrinsic_revert_event() {
 		#[block]
 		{
-			Pallet::<T>::deposit_event(Event::<T>::EthExtrinsicRevert {
+			Pezpallet::<T>::deposit_event(Event::<T>::EthExtrinsicRevert {
 				dispatch_error: crate::Error::<T>::BenchmarkingError.into(),
 			});
 		}
@@ -341,7 +341,7 @@ mod benchmarks {
 		let pezpallet_account = whitelisted_pallet_account::<T>();
 		let input = vec![42u8; i as usize];
 		let salt = [42u8; 32];
-		let value = Pallet::<T>::min_balance();
+		let value = Pezpallet::<T>::min_balance();
 		let caller = whitelisted_caller();
 		T::Currency::set_balance(&caller, caller_funding::<T>());
 		let origin = RawOrigin::Signed(caller.clone());
@@ -371,10 +371,10 @@ mod benchmarks {
 			caller_funding::<T>() -
 				value - deposit -
 				code_deposit - mapping_deposit -
-				Pallet::<T>::min_balance(),
+				Pezpallet::<T>::min_balance(),
 		);
 		// contract has the full value
-		assert_eq!(T::Currency::balance(&account_id), value + Pallet::<T>::min_balance());
+		assert_eq!(T::Currency::balance(&account_id), value + Pezpallet::<T>::min_balance());
 
 		Ok(())
 	}
@@ -392,7 +392,7 @@ mod benchmarks {
 		let data = vec![42u8; 1024];
 		let instance =
 			Contract::<T>::with_caller(whitelisted_caller(), VmBinaryModule::dummy(), vec![])?;
-		let value = Pallet::<T>::min_balance();
+		let value = Pezpallet::<T>::min_balance();
 		let origin = RawOrigin::Signed(instance.caller.clone());
 		let before = T::Currency::balance(&instance.account_id);
 		let storage_deposit = default_deposit_limit::<T>();
@@ -414,7 +414,7 @@ mod benchmarks {
 			caller_funding::<T>() -
 				value - deposit -
 				code_deposit - mapping_deposit -
-				Pallet::<T>::min_balance()
+				Pezpallet::<T>::min_balance()
 		);
 		// contract should have received the value
 		assert_eq!(T::Currency::balance(&instance.account_id), before + value);
@@ -434,11 +434,11 @@ mod benchmarks {
 		// Use an `effective_gas_price` that is not a multiple of `T::NativeToEthRatio`
 		// to hit the code that charge the rounding error so that tx_cost == effective_gas_price *
 		// gas_used
-		let effective_gas_price = Pallet::<T>::evm_base_fee() + 1;
-		let value = Pallet::<T>::min_balance();
+		let effective_gas_price = Pezpallet::<T>::evm_base_fee() + 1;
+		let value = Pezpallet::<T>::min_balance();
 		let dust = 42u32 * d;
 		let evm_value =
-			Pallet::<T>::convert_native_to_evm(BalanceWithDust::new_unchecked::<T>(value, dust));
+			Pezpallet::<T>::convert_native_to_evm(BalanceWithDust::new_unchecked::<T>(value, dust));
 
 		// need to pass the overdraw check
 		<T as Config>::FeeInfo::deposit_txfee(
@@ -446,7 +446,7 @@ mod benchmarks {
 		);
 
 		let origin = Origin::EthTransaction(instance.caller.clone());
-		let before = Pallet::<T>::evm_balance(&instance.address);
+		let before = Pezpallet::<T>::evm_balance(&instance.address);
 
 		#[extrinsic_call]
 		_(
@@ -461,7 +461,7 @@ mod benchmarks {
 		);
 
 		// contract should have received the value
-		assert_eq!(Pallet::<T>::evm_balance(&instance.address), before + evm_value);
+		assert_eq!(Pezpallet::<T>::evm_balance(&instance.address), before + evm_value);
 		// contract should still exist
 		instance.info()?;
 
@@ -493,7 +493,7 @@ mod benchmarks {
 		let storage_deposit = default_deposit_limit::<T>();
 		#[extrinsic_call]
 		_(origin, code, storage_deposit);
-		// uploading the code reserves some balance in the pallet's account
+		// uploading the code reserves some balance in the pezpallet's account
 		assert!(T::Currency::total_balance_on_hold(&pezpallet_account) > 0u32.into());
 		assert!(<Contract<T>>::code_exists(&hash));
 	}
@@ -817,7 +817,7 @@ mod benchmarks {
 	fn seal_balance() {
 		build_runtime!(runtime, contract, memory: [[0u8;32], ]);
 		contract.set_balance(BalanceWithDust::new_unchecked::<T>(
-			Pallet::<T>::min_balance() * 2u32.into(),
+			Pezpallet::<T>::min_balance() * 2u32.into(),
 			42u32,
 		));
 
@@ -829,8 +829,8 @@ mod benchmarks {
 		assert_ok!(result);
 		assert_eq!(
 			U256::from_little_endian(&memory[..]),
-			Pallet::<T>::convert_native_to_evm(BalanceWithDust::new_unchecked::<T>(
-				Pallet::<T>::min_balance(),
+			Pezpallet::<T>::convert_native_to_evm(BalanceWithDust::new_unchecked::<T>(
+				Pezpallet::<T>::min_balance(),
 				42
 			))
 		);
@@ -843,7 +843,7 @@ mod benchmarks {
 		<T as Config>::AddressMapper::map_no_deposit(&account).unwrap();
 
 		let address = T::AddressMapper::to_address(&account);
-		let balance = Pallet::<T>::min_balance() * 2u32.into();
+		let balance = Pezpallet::<T>::min_balance() * 2u32.into();
 		T::Currency::set_balance(&account, balance);
 		AccountInfoOf::<T>::insert(&address, AccountInfo { dust: 42, ..Default::default() });
 
@@ -858,8 +858,8 @@ mod benchmarks {
 		assert_ok!(result);
 		assert_eq!(
 			U256::from_little_endian(&memory[..len]),
-			Pallet::<T>::convert_native_to_evm(BalanceWithDust::new_unchecked::<T>(
-				Pallet::<T>::min_balance(),
+			Pezpallet::<T>::convert_native_to_evm(BalanceWithDust::new_unchecked::<T>(
+				Pezpallet::<T>::min_balance(),
 				42
 			))
 		);
@@ -938,7 +938,7 @@ mod benchmarks {
 				input_bytes,
 			);
 		}
-		let min: U256 = crate::Pallet::<T>::convert_native_to_evm(T::Currency::minimum_balance());
+		let min: U256 = crate::Pezpallet::<T>::convert_native_to_evm(T::Currency::minimum_balance());
 		let min =
 			crate::precompiles::alloy::primitives::aliases::U256::abi_decode(&min.to_big_endian())
 				.unwrap();
@@ -988,7 +988,7 @@ mod benchmarks {
 		{
 			result = runtime.bench_gas_limit(&mut memory);
 		}
-		assert_eq!(U256::from(result.unwrap()), <Pallet<T>>::evm_block_gas_limit());
+		assert_eq!(U256::from(result.unwrap()), <Pezpallet<T>>::evm_block_gas_limit());
 	}
 
 	#[benchmark(pov_mode = Measured)]
@@ -999,7 +999,7 @@ mod benchmarks {
 		{
 			result = runtime.bench_gas_price(memory.as_mut_slice());
 		}
-		assert_eq!(U256::from(result.unwrap()), <Pallet<T>>::evm_base_fee());
+		assert_eq!(U256::from(result.unwrap()), <Pezpallet<T>>::evm_base_fee());
 	}
 
 	#[benchmark(pov_mode = Measured)]
@@ -1011,7 +1011,7 @@ mod benchmarks {
 			result = runtime.bench_base_fee(memory.as_mut_slice(), 0);
 		}
 		assert_ok!(result);
-		assert_eq!(U256::from_little_endian(&memory[..]), <crate::Pallet<T>>::evm_base_fee());
+		assert_eq!(U256::from_little_endian(&memory[..]), <crate::Pezpallet<T>>::evm_base_fee());
 	}
 
 	#[benchmark(pov_mode = Measured)]
@@ -1034,16 +1034,16 @@ mod benchmarks {
 		// To get safe benchmark results despite that, populate it with a bunch of random logs to
 		// ensure iteration over many items (we just overestimate the cost of the API).
 		for i in 0..16 {
-			pezframe_system::Pallet::<T>::deposit_log(DigestItem::PreRuntime(
+			pezframe_system::Pezpallet::<T>::deposit_log(DigestItem::PreRuntime(
 				[i, i, i, i],
 				vec![i; 128],
 			));
-			pezframe_system::Pallet::<T>::deposit_log(DigestItem::Consensus(
+			pezframe_system::Pezpallet::<T>::deposit_log(DigestItem::Consensus(
 				[i, i, i, i],
 				vec![i; 128],
 			));
-			pezframe_system::Pallet::<T>::deposit_log(DigestItem::Seal([i, i, i, i], vec![i; 128]));
-			pezframe_system::Pallet::<T>::deposit_log(DigestItem::Other(vec![i; 128]));
+			pezframe_system::Pezpallet::<T>::deposit_log(DigestItem::Seal([i, i, i, i], vec![i; 128]));
+			pezframe_system::Pezpallet::<T>::deposit_log(DigestItem::Other(vec![i; 128]));
 		}
 
 		// The content of the pre-runtime digest log depends on the configured consensus.
@@ -1054,22 +1054,22 @@ mod benchmarks {
 		let primary_pre_digest = vec![0; <PrimaryPreDigest as MaxEncodedLen>::max_encoded_len()];
 		let pre_digest =
 			PreDigest::Primary(PrimaryPreDigest::decode(&mut &primary_pre_digest[..]).unwrap());
-		pezframe_system::Pallet::<T>::deposit_log(DigestItem::PreRuntime(
+		pezframe_system::Pezpallet::<T>::deposit_log(DigestItem::PreRuntime(
 			BABE_ENGINE_ID,
 			pre_digest.encode(),
 		));
-		pezframe_system::Pallet::<T>::deposit_log(DigestItem::Seal(
+		pezframe_system::Pezpallet::<T>::deposit_log(DigestItem::Seal(
 			BABE_ENGINE_ID,
 			pre_digest.encode(),
 		));
 
 		// Construct a `Digest` log fixture returning some value in AURA
 		let slot = Slot::default();
-		pezframe_system::Pallet::<T>::deposit_log(DigestItem::PreRuntime(
+		pezframe_system::Pezpallet::<T>::deposit_log(DigestItem::PreRuntime(
 			AURA_ENGINE_ID,
 			slot.encode(),
 		));
-		pezframe_system::Pallet::<T>::deposit_log(DigestItem::Seal(AURA_ENGINE_ID, slot.encode()));
+		pezframe_system::Pezpallet::<T>::deposit_log(DigestItem::Seal(AURA_ENGINE_ID, slot.encode()));
 
 		let result;
 		#[block]
@@ -1225,7 +1225,7 @@ mod benchmarks {
 
 		assert!(PristineCode::<T>::get(code_hash).is_some());
 
-		T::Currency::set_balance(&instance.account_id, Pallet::<T>::min_balance() * 10u32.into());
+		T::Currency::set_balance(&instance.account_id, Pezpallet::<T>::min_balance() * 10u32.into());
 
 		let result;
 		#[block]
@@ -1248,7 +1248,7 @@ mod benchmarks {
 
 		// Check that the beneficiary received the balance
 		let balance = <T as Config>::Currency::balance(&beneficiary);
-		assert_eq!(balance, Pallet::<T>::min_balance() + Pallet::<T>::min_balance() * 9u32.into());
+		assert_eq!(balance, Pezpallet::<T>::min_balance() + Pezpallet::<T>::min_balance() * 9u32.into());
 
 		Ok(())
 	}
@@ -1869,7 +1869,7 @@ mod benchmarks {
 		let value: BalanceOf<T> = (1_000_000u32 * t).into();
 		let dust = 100u32 * d;
 		let evm_value =
-			Pallet::<T>::convert_native_to_evm(BalanceWithDust::new_unchecked::<T>(value, dust));
+			Pezpallet::<T>::convert_native_to_evm(BalanceWithDust::new_unchecked::<T>(value, dust));
 		let value_bytes = evm_value.encode();
 
 		let deposit: BalanceOf<T> = (u32::MAX - 100).into();
@@ -1882,7 +1882,7 @@ mod benchmarks {
 		// This is why we set the input here instead of passig it as pointer to the `bench_call`.
 		setup.set_data(vec![42; i as usize]);
 		setup.set_origin(ExecOrigin::from_account_id(setup.contract().account_id.clone()));
-		setup.set_balance(value + 1u32.into() + Pallet::<T>::min_balance());
+		setup.set_balance(value + 1u32.into() + Pezpallet::<T>::min_balance());
 
 		let (mut ext, _) = setup.ext();
 		let mut runtime = pvm::Runtime::<_, [u8]>::new(&mut ext, vec![]);
@@ -1904,7 +1904,7 @@ mod benchmarks {
 
 		assert_eq!(result.unwrap(), ReturnErrorCode::Success);
 		assert_eq!(
-			Pallet::<T>::evm_balance(&callee_addr),
+			Pezpallet::<T>::evm_balance(&callee_addr),
 			evm_value,
 			"{callee_addr:?} balance should hold {evm_value:?}"
 		);
@@ -2025,7 +2025,7 @@ mod benchmarks {
 		let value: BalanceOf<T> = (1_000_000u32 * t).into();
 		let dust = 100u32 * d;
 		let evm_value =
-			Pallet::<T>::convert_native_to_evm(BalanceWithDust::new_unchecked::<T>(value, dust));
+			Pezpallet::<T>::convert_native_to_evm(BalanceWithDust::new_unchecked::<T>(value, dust));
 		let value_bytes = evm_value.encode();
 		let value_len = value_bytes.len() as u32;
 
@@ -2035,7 +2035,7 @@ mod benchmarks {
 
 		let mut setup = CallSetup::<T>::default();
 		setup.set_origin(ExecOrigin::from_account_id(setup.contract().account_id.clone()));
-		setup.set_balance(value + 1u32.into() + (Pallet::<T>::min_balance() * 2u32.into()));
+		setup.set_balance(value + 1u32.into() + (Pezpallet::<T>::min_balance() * 2u32.into()));
 
 		let account_id = &setup.contract().account_id.clone();
 		let (mut ext, _) = setup.ext();
@@ -2076,7 +2076,7 @@ mod benchmarks {
 		assert!(AccountInfo::<T>::load_contract(&addr).is_some());
 
 		assert_eq!(
-			Pallet::<T>::evm_balance(&addr),
+			Pezpallet::<T>::evm_balance(&addr),
 			evm_value,
 			"{addr:?} balance should hold {evm_value:?}"
 		);
@@ -2103,7 +2103,7 @@ mod benchmarks {
 		let value = {
 			let value: BalanceOf<T> = (1_000_000u32 * t).into();
 			let dust = 100u32 * d;
-			Pallet::<T>::convert_native_to_evm(BalanceWithDust::new_unchecked::<T>(value, dust))
+			Pezpallet::<T>::convert_native_to_evm(BalanceWithDust::new_unchecked::<T>(value, dust))
 		};
 
 		let init_code = vec![BENCH_INIT_CODE; i as usize];
@@ -2126,8 +2126,8 @@ mod benchmarks {
 		assert!(result.is_continue());
 		let addr = interpreter.stack.top().unwrap().into_address();
 		assert!(AccountInfo::<T>::load_contract(&addr).is_some());
-		assert_eq!(Pallet::<T>::code(&addr).len(), revm::primitives::eip170::MAX_CODE_SIZE);
-		assert_eq!(Pallet::<T>::evm_balance(&addr), value, "balance should hold {value:?}");
+		assert_eq!(Pezpallet::<T>::code(&addr).len(), revm::primitives::eip170::MAX_CODE_SIZE);
+		assert_eq!(Pezpallet::<T>::evm_balance(&addr), value, "balance should hold {value:?}");
 		Ok(())
 	}
 
@@ -2741,13 +2741,13 @@ mod benchmarks {
 		let instance =
 			Contract::<T>::with_caller(signer_caller.clone(), VmBinaryModule::dummy(), vec![])?;
 		let storage_deposit = default_deposit_limit::<T>();
-		let value = Pallet::<T>::min_balance();
+		let value = Pezpallet::<T>::min_balance();
 		let evm_value =
-			Pallet::<T>::convert_native_to_evm(BalanceWithDust::new_unchecked::<T>(value, 0));
+			Pezpallet::<T>::convert_native_to_evm(BalanceWithDust::new_unchecked::<T>(value, 0));
 
 		// Setup block
 		let current_block = BlockNumberFor::<T>::from(1u32);
-		pezframe_system::Pallet::<T>::set_block_number(current_block);
+		pezframe_system::Pezpallet::<T>::set_block_number(current_block);
 
 		Ok((instance, storage_deposit, evm_value, signer_key, current_block))
 	}
@@ -2779,13 +2779,13 @@ mod benchmarks {
 		// Pre-populate InflightTransactions with n transactions of fixed size
 		if n > 0 {
 			// Initialize block
-			let _ = Pallet::<T>::on_initialize(current_block);
+			let _ = Pezpallet::<T>::on_initialize(current_block);
 
 			// Create input data of fixed size for consistent transaction payloads
 			let input_data = vec![0x42u8; fixed_payload_size];
 			let receipt_gas_info = ReceiptGasInfo {
 				gas_used: U256::from(1_000_000),
-				effective_gas_price: Pallet::<T>::evm_base_fee(),
+				effective_gas_price: Pezpallet::<T>::evm_base_fee(),
 			};
 
 			for _ in 0..n {
@@ -2821,11 +2821,11 @@ mod benchmarks {
 		#[block]
 		{
 			// Measure only the finalization cost with n transactions of fixed size
-			let _ = Pallet::<T>::on_finalize(current_block);
+			let _ = Pezpallet::<T>::on_finalize(current_block);
 		}
 
 		// Verify transaction count
-		assert_eq!(Pallet::<T>::eth_block().transactions.len(), n as usize);
+		assert_eq!(Pezpallet::<T>::eth_block().transactions.len(), n as usize);
 
 		Ok(())
 	}
@@ -2855,13 +2855,13 @@ mod benchmarks {
 		let fixed_tx_count = 10u32;
 
 		// Initialize block
-		let _ = Pallet::<T>::on_initialize(current_block);
+		let _ = Pezpallet::<T>::on_initialize(current_block);
 
 		// Create input data of variable size p for realistic transaction payloads
 		let input_data = vec![0x42u8; d as usize];
 		let receipt_gas_info = ReceiptGasInfo {
 			gas_used: U256::from(1_000_000),
-			effective_gas_price: Pallet::<T>::evm_base_fee(),
+			effective_gas_price: Pezpallet::<T>::evm_base_fee(),
 		};
 
 		for _ in 0..fixed_tx_count {
@@ -2896,11 +2896,11 @@ mod benchmarks {
 		#[block]
 		{
 			// Measure only the finalization cost with fixed count, variable payload size
-			let _ = Pallet::<T>::on_finalize(current_block);
+			let _ = Pezpallet::<T>::on_finalize(current_block);
 		}
 
 		// Verify transaction count
-		assert_eq!(Pallet::<T>::eth_block().transactions.len(), fixed_tx_count as usize);
+		assert_eq!(Pezpallet::<T>::eth_block().transactions.len(), fixed_tx_count as usize);
 
 		Ok(())
 	}
@@ -2938,7 +2938,7 @@ mod benchmarks {
 
 		let receipt_gas_info = ReceiptGasInfo {
 			gas_used: U256::from(1_000_000),
-			effective_gas_price: Pallet::<T>::evm_base_fee(),
+			effective_gas_price: Pezpallet::<T>::evm_base_fee(),
 		};
 
 		// Store transaction
@@ -2967,14 +2967,14 @@ mod benchmarks {
 		#[block]
 		{
 			// Initialize block
-			let _ = Pallet::<T>::on_initialize(current_block);
+			let _ = Pezpallet::<T>::on_initialize(current_block);
 
 			// Measure the finalization cost with e events
-			let _ = Pallet::<T>::on_finalize(current_block);
+			let _ = Pezpallet::<T>::on_finalize(current_block);
 		}
 
 		// Verify transaction count
-		assert_eq!(Pallet::<T>::eth_block().transactions.len(), 1);
+		assert_eq!(Pezpallet::<T>::eth_block().transactions.len(), 1);
 
 		Ok(())
 	}
@@ -3003,7 +3003,7 @@ mod benchmarks {
 
 		let receipt_gas_info = ReceiptGasInfo {
 			gas_used: U256::from(1_000_000),
-			effective_gas_price: Pallet::<T>::evm_base_fee(),
+			effective_gas_price: Pezpallet::<T>::evm_base_fee(),
 		};
 
 		// Store transaction
@@ -3052,14 +3052,14 @@ mod benchmarks {
 		#[block]
 		{
 			// Initialize block
-			let _ = Pallet::<T>::on_initialize(current_block);
+			let _ = Pezpallet::<T>::on_initialize(current_block);
 
 			// Measure the finalization cost with d bytes of event data
-			let _ = Pallet::<T>::on_finalize(current_block);
+			let _ = Pezpallet::<T>::on_finalize(current_block);
 		}
 
 		// Verify transaction count
-		assert_eq!(Pallet::<T>::eth_block().transactions.len(), 1);
+		assert_eq!(Pezpallet::<T>::eth_block().transactions.len(), 1);
 
 		Ok(())
 	}

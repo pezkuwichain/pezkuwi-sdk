@@ -26,7 +26,7 @@ use pezframe_support::{
 		DefensiveResult, OnUnbalanced,
 	},
 };
-use pezframe_system::Pallet as System;
+use pezframe_system::Pezpallet as System;
 use pezpallet_broker::{
 	CoreAssignment, CoreIndex, CoretimeInterface, PartsOf57600, RCBlockNumberOf, TaskId,
 };
@@ -82,7 +82,7 @@ fn burn_at_relay(stash: &AccountId, value: Balance) -> Result<(), XcmError> {
 	Ok(())
 }
 
-/// A type containing the encoding of the coretime pallet in the Relay chain runtime. Used to
+/// A type containing the encoding of the coretime pezpallet in the Relay chain runtime. Used to
 /// construct any remote calls. The codec index must correspond to the index of `Coretime` in the
 /// `construct_runtime` of the Relay chain.
 #[derive(Encode, Decode)]
@@ -91,7 +91,7 @@ enum RelayRuntimePallets {
 	Coretime(CoretimeProviderCalls),
 }
 
-/// Call encoding for the calls needed from the relay coretime pallet.
+/// Call encoding for the calls needed from the relay coretime pezpallet.
 #[derive(Encode, Decode)]
 enum CoretimeProviderCalls {
 	#[codec(index = 1)]

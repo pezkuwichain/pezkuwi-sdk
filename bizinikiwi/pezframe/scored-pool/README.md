@@ -39,25 +39,25 @@ by the next highest scoring candidate in the pool, if available.
 ```rust
 use pallet_scored_pool::{self as scored_pool};
 
-#[frame_support::pallet]
-pub mod pallet {
+#[frame_support::pezpallet]
+pub mod pezpallet {
     use super::*;
     use frame_support::pallet_prelude::*;
     use frame_system::pallet_prelude::*;
 
-    #[pallet::pallet]
-    pub struct Pallet<T>(_);
+    #[pezpallet::pezpallet]
+    pub struct Pezpallet<T>(_);
 
-    #[pallet::config]
+    #[pezpallet::config]
     pub trait Config: frame_system::Config + scored_pool::Config {}
 
-    #[pallet::call]
-    impl<T: Config> Pallet<T> {
-        #[pallet::weight(0)]
+    #[pezpallet::call]
+    impl<T: Config> Pezpallet<T> {
+        #[pezpallet::weight(0)]
         pub fn candidate(origin: OriginFor<T>) -> DispatchResult {
             let who = ensure_signed(origin)?;
 
-            let _ = <scored_pool::Pallet<T>>::submit_candidacy(
+            let _ = <scored_pool::Pezpallet<T>>::submit_candidacy(
                 T::RuntimeOrigin::from(Some(who.clone()).into())
             );
             Ok(())

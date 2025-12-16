@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Benchmarks for the GRANDPA pallet.
+//! Benchmarks for the GRANDPA pezpallet.
 
 use super::*;
 use pezframe_benchmarking::v2::*;
@@ -73,7 +73,7 @@ mod benchmarks {
 	}
 
 	impl_benchmark_test_suite!(
-		Pallet,
+		Pezpallet,
 		crate::mock::new_test_ext(vec![(1, 1), (2, 1), (3, 1)]),
 		crate::mock::Test,
 	);

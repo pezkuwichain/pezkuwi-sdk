@@ -16,12 +16,12 @@
 // limitations under the License.
 
 //! This module contains helper methods to perform functionality associated with minting and burning
-//! items for the NFTs pallet.
+//! items for the NFTs pezpallet.
 
 use crate::*;
 use pezframe_support::{pezpallet_prelude::*, traits::ExistenceRequirement};
 
-impl<T: Config<I>, I: 'static> Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 	/// Mint a new unique item with the given `collection`, `item`, and other minting configuration
 	/// details.
 	///

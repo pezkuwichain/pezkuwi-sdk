@@ -115,13 +115,13 @@ pub enum Error {
 	/// Used by `ExpectAsset`, `ExpectError` and `ExpectOrigin` when the expectation was not true.
 	#[codec(index = 22)]
 	ExpectationFalse,
-	/// The provided pallet index was not found.
+	/// The provided pezpallet index was not found.
 	#[codec(index = 23)]
 	PalletNotFound,
-	/// The given pallet's name is different to that expected.
+	/// The given pezpallet's name is different to that expected.
 	#[codec(index = 24)]
 	NameMismatch,
-	/// The given pallet's version has an incompatible version to that expected.
+	/// The given pezpallet's version has an incompatible version to that expected.
 	#[codec(index = 25)]
 	VersionIncompatible,
 	/// The given operation would lead to an overflow of the Holding Register.

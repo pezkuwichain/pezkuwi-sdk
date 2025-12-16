@@ -15,10 +15,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Democracy pallet benchmarking.
+//! Democracy pezpallet benchmarking.
 
 use super::*;
-use crate::Pallet as Referenda;
+use crate::Pezpallet as Referenda;
 use alloc::{borrow::Cow, vec, vec::Vec};
 use assert_matches::assert_matches;
 use pezframe_benchmarking::v1::{
@@ -38,7 +38,7 @@ fn set_block_number<T: Config<I>, I: 'static>(n: BlockNumberFor<T, I>) {
 }
 
 fn assert_last_event<T: Config<I>, I: 'static>(generic_event: <T as Config<I>>::RuntimeEvent) {
-	pezframe_system::Pallet::<T>::assert_last_event(generic_event.into());
+	pezframe_system::Pezpallet::<T>::assert_last_event(generic_event.into());
 }
 
 fn funded_account<T: Config<I>, I: 'static>(name: &'static str, index: u32) -> T::AccountId {

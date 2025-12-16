@@ -30,7 +30,7 @@ mod dynamic_params;
 mod key_prefix;
 mod match_and_insert;
 mod no_bound;
-mod pallet;
+mod pezpallet;
 mod pezpallet_error;
 mod runtime;
 mod storage_alias;
@@ -99,14 +99,14 @@ fn counter_prefix(prefix: &str) -> String {
 ///         NodeBlock = node::Block,
 ///         UncheckedExtrinsic = UncheckedExtrinsic
 ///     {
-///         System: pezframe_system::{Pallet, Call, Event<T>, Config<T>} = 0,
-///         Test: path::to::test::{Pallet, Call} = 1,
+///         System: pezframe_system::{Pezpallet, Call, Event<T>, Config<T>} = 0,
+///         Test: path::to::test::{Pezpallet, Call} = 1,
 ///
 ///         // Pallets with instances.
-///         Test2_Instance1: test2::<Instance1>::{Pallet, Call, Storage, Event<T, I>, Config<T, I>, Origin<T, I>},
-///         Test2_DefaultInstance: test2::{Pallet, Call, Storage, Event<T>, Config<T>, Origin<T>} = 4,
+///         Test2_Instance1: test2::<Instance1>::{Pezpallet, Call, Storage, Event<T, I>, Config<T, I>, Origin<T, I>},
+///         Test2_DefaultInstance: test2::{Pezpallet, Call, Storage, Event<T>, Config<T>, Origin<T>} = 4,
 ///
-///         // Pallets declared with `pallet` attribute macro: no need to define the parts
+///         // Pallets declared with `pezpallet` attribute macro: no need to define the parts
 ///         Test3_Instance1: test3::<Instance1>,
 ///         Test3_DefaultInstance: test3,
 ///
@@ -114,59 +114,59 @@ fn counter_prefix(prefix: &str) -> String {
 ///         Test4_Instance1: test4::<Instance1> exclude_parts { Call, Origin },
 ///         Test4_DefaultInstance: test4 exclude_parts { Storage },
 ///
-///         // with `use_parts` keyword, a subset of the pallet parts can be specified.
-///         Test4_Instance1: test4::<Instance1> use_parts { Pallet, Call},
-///         Test4_DefaultInstance: test4 use_parts { Pallet },
+///         // with `use_parts` keyword, a subset of the pezpallet parts can be specified.
+///         Test4_Instance1: test4::<Instance1> use_parts { Pezpallet, Call},
+///         Test4_DefaultInstance: test4 use_parts { Pezpallet },
 ///     }
 /// )
 /// ```
 ///
-/// Each pallet is declared as such:
-/// * `Identifier`: name given to the pallet that uniquely identifies it.
+/// Each pezpallet is declared as such:
+/// * `Identifier`: name given to the pezpallet that uniquely identifies it.
 ///
 /// * `:`: colon separator
 ///
-/// * `path::to::pallet`: identifiers separated by colons which declare the path to a pallet
+/// * `path::to::pezpallet`: identifiers separated by colons which declare the path to a pezpallet
 ///   definition.
 ///
-/// * `::<InstanceN>` optional: specify the instance of the pallet to use. If not specified it will
+/// * `::<InstanceN>` optional: specify the instance of the pezpallet to use. If not specified it will
 ///   use the default instance (or the only instance in case of non-instantiable pallets).
 ///
-/// * `::{ Part1, Part2<T>, .. }` optional if pallet declared with `pezframe_support::pallet`: Comma
-///   separated parts declared with their generic. If a pallet is declared with
-///   `pezframe_support::pallet` macro then the parts can be automatically derived if not explicitly
-///   provided. We provide support for the following module parts in a pallet:
+/// * `::{ Part1, Part2<T>, .. }` optional if pezpallet declared with `pezframe_support::pezpallet`: Comma
+///   separated parts declared with their generic. If a pezpallet is declared with
+///   `pezframe_support::pezpallet` macro then the parts can be automatically derived if not explicitly
+///   provided. We provide support for the following module parts in a pezpallet:
 ///
-///   - `Pallet` - Required for all pallets
-///   - `Call` - If the pallet has callable functions
-///   - `Storage` - If the pallet uses storage
-///   - `Event` or `Event<T>` (if the event is generic) - If the pallet emits events
-///   - `Origin` or `Origin<T>` (if the origin is generic) - If the pallet has instantiable origins
-///   - `Config` or `Config<T>` (if the config is generic) - If the pallet builds the genesis
+///   - `Pezpallet` - Required for all pallets
+///   - `Call` - If the pezpallet has callable functions
+///   - `Storage` - If the pezpallet uses storage
+///   - `Event` or `Event<T>` (if the event is generic) - If the pezpallet emits events
+///   - `Origin` or `Origin<T>` (if the origin is generic) - If the pezpallet has instantiable origins
+///   - `Config` or `Config<T>` (if the config is generic) - If the pezpallet builds the genesis
 ///     storage with `GenesisConfig`
-///   - `Inherent` - If the pallet provides/can check inherents.
-///   - `ValidateUnsigned` - If the pallet validates unsigned extrinsics.
+///   - `Inherent` - If the pezpallet provides/can check inherents.
+///   - `ValidateUnsigned` - If the pezpallet validates unsigned extrinsics.
 ///
 ///   It is important to list these parts here to export them correctly in the metadata or to make
-/// the pallet usable in the runtime.
+/// the pezpallet usable in the runtime.
 ///
 /// * `exclude_parts { Part1, Part2 }` optional: comma separated parts without generics. I.e. one of
-///   `Pallet`, `Call`, `Storage`, `Event`, `Origin`, `Config`, `Inherent`, `ValidateUnsigned`. It
+///   `Pezpallet`, `Call`, `Storage`, `Event`, `Origin`, `Config`, `Inherent`, `ValidateUnsigned`. It
 ///   is incompatible with `use_parts`. This specifies the part to exclude. In order to select
-///   subset of the pallet parts.
+///   subset of the pezpallet parts.
 ///
 ///   For example excluding the part `Call` can be useful if the runtime doesn't want to make the
-///   pallet calls available.
+///   pezpallet calls available.
 ///
 /// * `use_parts { Part1, Part2 }` optional: comma separated parts without generics. I.e. one of
-///   `Pallet`, `Call`, `Storage`, `Event`, `Origin`, `Config`, `Inherent`, `ValidateUnsigned`. It
+///   `Pezpallet`, `Call`, `Storage`, `Event`, `Origin`, `Config`, `Inherent`, `ValidateUnsigned`. It
 ///   is incompatible with `exclude_parts`. This specifies the part to use. In order to select a
-///   subset of the pallet parts.
+///   subset of the pezpallet parts.
 ///
 ///   For example not using the part `Call` can be useful if the runtime doesn't want to make the
-///   pallet calls available.
+///   pezpallet calls available.
 ///
-/// * `= $n` optional: number to define at which index the pallet variants in `OriginCaller`, `Call`
+/// * `= $n` optional: number to define at which index the pezpallet variants in `OriginCaller`, `Call`
 ///   and `Event` are encoded, and to define the ModuleToIndex value.
 ///
 ///   if `= $n` is not given, then index is resolved in the same way as fieldless enum in Rust
@@ -181,13 +181,13 @@ fn counter_prefix(prefix: &str) -> String {
 /// # Note
 ///
 /// The population of the genesis storage depends on the order of pallets. So, if one of your
-/// pallets depends on another pallet, the pallet that is depended upon needs to come before
-/// the pallet depending on it.
+/// pallets depends on another pezpallet, the pezpallet that is depended upon needs to come before
+/// the pezpallet depending on it.
 ///
 /// # Type definitions
 ///
-/// * The macro generates a type alias for each pallet to their `Pallet`. E.g. `type System =
-///   pezframe_system::Pallet<Runtime>`
+/// * The macro generates a type alias for each pezpallet to their `Pezpallet`. E.g. `type System =
+///   pezframe_system::Pezpallet<Runtime>`
 #[proc_macro]
 pub fn construct_runtime(input: TokenStream) -> TokenStream {
 	construct_runtime::construct_runtime(input)
@@ -196,10 +196,10 @@ pub fn construct_runtime(input: TokenStream) -> TokenStream {
 ///
 /// ---
 ///
-/// Documentation for this macro can be found at `pezframe_support::pallet`.
+/// Documentation for this macro can be found at `pezframe_support::pezpallet`.
 #[proc_macro_attribute]
-pub fn pallet(attr: TokenStream, item: TokenStream) -> TokenStream {
-	pallet::pallet(attr, item)
+pub fn pezpallet(attr: TokenStream, item: TokenStream) -> TokenStream {
+	pezpallet::pezpallet(attr, item)
 }
 
 /// An attribute macro that can be attached to a (non-empty) module declaration. Doing so will
@@ -403,7 +403,7 @@ pub fn derive_default_no_bound(input: TokenStream) -> TokenStream {
 	no_bound::default::derive_default_no_bound(input)
 }
 
-/// Macro used internally in FRAME to generate the crate version for a pallet.
+/// Macro used internally in FRAME to generate the crate version for a pezpallet.
 #[proc_macro]
 pub fn crate_to_crate_version(input: TokenStream) -> TokenStream {
 	crate_version::crate_to_crate_version(input)
@@ -424,7 +424,7 @@ pub fn impl_key_prefix_for_tuples(input: TokenStream) -> TokenStream {
 		.into()
 }
 
-/// Internal macro use by pezframe_support to generate dummy part checker for old pallet declaration
+/// Internal macro use by pezframe_support to generate dummy part checker for old pezpallet declaration
 #[proc_macro]
 pub fn __generate_dummy_part_checker(input: TokenStream) -> TokenStream {
 	dummy_part_checker::generate_dummy_part_checker(input)
@@ -537,28 +537,28 @@ pub fn storage_alias(attributes: TokenStream, input: TokenStream) -> TokenStream
 /// attached with [`#[inject_runtime_type]`]) should not be injected with the respective concrete
 /// types. By default, all such types are injected.
 ///
-/// You can also make use of `#[pallet::no_default]` on specific items in your default impl that you
+/// You can also make use of `#[pezpallet::no_default]` on specific items in your default impl that you
 /// want to ensure will not be copied over but that you nonetheless want to use locally in the
-/// context of the foreign impl and the pallet (or context) in which it is defined.
+/// context of the foreign impl and the pezpallet (or context) in which it is defined.
 ///
-/// ## Use-Case Example: Auto-Derive Test Pallet Config Traits
+/// ## Use-Case Example: Auto-Derive Test Pezpallet Config Traits
 ///
-/// The `#[derive_imp(..)]` attribute can be used to derive a test pallet `Config` based on an
-/// existing pallet `Config` that has been marked with
-/// [`#[pallet::config(with_default)]`](`macro@config`) (which under the hood, generates a
-/// `DefaultConfig` trait in the pallet in which the macro was invoked).
+/// The `#[derive_imp(..)]` attribute can be used to derive a test pezpallet `Config` based on an
+/// existing pezpallet `Config` that has been marked with
+/// [`#[pezpallet::config(with_default)]`](`macro@config`) (which under the hood, generates a
+/// `DefaultConfig` trait in the pezpallet in which the macro was invoked).
 ///
 /// In this case, the `#[derive_impl(..)]` attribute should be attached to an `impl` block that
 /// implements a compatible `Config` such as `pezframe_system::Config` for a test/mock runtime, and
 /// should receive as its first argument the path to a `DefaultConfig` impl that has been registered
 /// via [`#[register_default_impl]`](`macro@register_default_impl`), and as its second argument, the
-/// path to the auto-generated `DefaultConfig` for the existing pallet `Config` we want to base our
+/// path to the auto-generated `DefaultConfig` for the existing pezpallet `Config` we want to base our
 /// test config off of.
 ///
-/// The following is what the `basic` example pallet would look like with a default testing config:
+/// The following is what the `basic` example pezpallet would look like with a default testing config:
 ///
 /// ```ignore
-/// #[derive_impl(pezframe_system::config_preludes::TestDefaultConfig as pezframe_system::pallet::DefaultConfig)]
+/// #[derive_impl(pezframe_system::config_preludes::TestDefaultConfig as pezframe_system::pezpallet::DefaultConfig)]
 /// impl pezframe_system::Config for Test {
 ///     // These are all defined by system as mandatory.
 ///     type BaseCallFilter = pezframe_support::traits::Everything;
@@ -603,7 +603,7 @@ pub fn storage_alias(attributes: TokenStream, input: TokenStream) -> TokenStream
 /// ```ignore
 /// impl pezframe_system::Config for Test {
 ///     use pezframe_system::config_preludes::TestDefaultConfig;
-///     use pezframe_system::pallet::DefaultConfig;
+///     use pezframe_system::pezpallet::DefaultConfig;
 ///
 ///     type BaseCallFilter = pezframe_support::traits::Everything;
 ///     type RuntimeEvent = RuntimeEvent;
@@ -637,10 +637,10 @@ pub fn storage_alias(attributes: TokenStream, input: TokenStream) -> TokenStream
 /// Note that items that are _not_ present in our local `DefaultConfig` are automatically copied
 /// from the foreign trait (in this case `TestDefaultConfig`) into the local trait impl (in this
 /// case `Test`), unless the trait item in the local trait impl is marked with
-/// [`#[pallet::no_default]`](`macro@no_default`), in which case it cannot be overridden, and any
+/// [`#[pezpallet::no_default]`](`macro@no_default`), in which case it cannot be overridden, and any
 /// attempts to do so will result in a compiler error.
 ///
-/// See `frame/examples/default-config/tests.rs` for a runnable end-to-end example pallet that makes
+/// See `frame/examples/default-config/tests.rs` for a runnable end-to-end example pezpallet that makes
 /// use of `derive_impl` to derive its testing config.
 ///
 /// See [here](`macro@config`) for more information and caveats about the auto-generated
@@ -649,7 +649,7 @@ pub fn storage_alias(attributes: TokenStream, input: TokenStream) -> TokenStream
 /// ## Optional Conventions
 ///
 /// Note that as an optional convention, we encourage creating a `config_preludes` module inside of
-/// your pallet. This is the convention we follow for `pezframe_system`'s `TestDefaultConfig` which, as
+/// your pezpallet. This is the convention we follow for `pezframe_system`'s `TestDefaultConfig` which, as
 /// shown above, is located at `pezframe_system::config_preludes::TestDefaultConfig`. This is just a
 /// suggested convention -- there is nothing in the code that expects modules with these names to be
 /// in place, so there is no imperative to follow this pattern unless desired.
@@ -836,11 +836,11 @@ pub fn inject_runtime_type(_: TokenStream, tokens: TokenStream) -> TokenStream {
 	tokens
 }
 
-/// Used internally to decorate pallet attribute macro stubs when they are erroneously used
-/// outside of a pallet module
+/// Used internally to decorate pezpallet attribute macro stubs when they are erroneously used
+/// outside of a pezpallet module
 fn pezpallet_macro_stub() -> TokenStream {
 	quote!(compile_error!(
-		"This attribute can only be used from within a pallet module marked with `#[pezframe_support::pallet]`"
+		"This attribute can only be used from within a pezpallet module marked with `#[pezframe_support::pezpallet]`"
 	))
 	.into()
 }
@@ -927,7 +927,7 @@ pub fn call(_: TokenStream, _: TokenStream) -> TokenStream {
 	pezpallet_macro_stub()
 }
 
-/// Each dispatchable may also be annotated with the `#[pallet::call_index($idx)]` attribute,
+/// Each dispatchable may also be annotated with the `#[pezpallet::call_index($idx)]` attribute,
 /// which explicitly defines the codec index for the dispatchable function in the `Call` enum.
 ///
 /// ---
@@ -1125,16 +1125,16 @@ pub fn composite_enum(_: TokenStream, _: TokenStream) -> TokenStream {
 /// The off-chain worker can then create and submit all such work items at any given time.
 ///
 /// These work items are defined as instances of the `Task` trait (found at
-/// `pezframe_support::traits::Task`). [`pallet:tasks_experimental`](macro@tasks_experimental) when
-/// attached to an `impl` block inside a pallet, will generate an enum `Task<T>` whose variants
+/// `pezframe_support::traits::Task`). [`pezpallet:tasks_experimental`](macro@tasks_experimental) when
+/// attached to an `impl` block inside a pezpallet, will generate an enum `Task<T>` whose variants
 /// are mapped to functions inside this `impl` block.
 ///
 /// Each such function must have the following set of attributes:
 ///
-/// * [`pallet::task_list`](macro@task_list)
-/// * [`pallet::task_condition`](macro@task_condition)
-/// * [`pallet::task_weight`](macro@task_weight)
-/// * [`pallet::task_index`](macro@task_index)
+/// * [`pezpallet::task_list`](macro@task_list)
+/// * [`pezpallet::task_condition`](macro@task_condition)
+/// * [`pezpallet::task_weight`](macro@task_weight)
+/// * [`pezpallet::task_index`](macro@task_index)
 ///
 /// All of such Tasks are then aggregated into a `RuntimeTask` by
 /// [`construct_runtime`](macro@construct_runtime).
@@ -1157,7 +1157,7 @@ pub fn tasks_experimental(_: TokenStream, _: TokenStream) -> TokenStream {
 /// Allows defining an iterator over available work items for a task.
 ///
 /// This attribute is attached to a function inside an `impl` block annotated with
-/// [`pallet::tasks_experimental`](macro@tasks_experimental).
+/// [`pezpallet::tasks_experimental`](macro@tasks_experimental).
 ///
 /// It takes an iterator as input that yields a tuple with same types as the function
 /// arguments.
@@ -1169,7 +1169,7 @@ pub fn task_list(_: TokenStream, _: TokenStream) -> TokenStream {
 /// Allows defining conditions for a task to run.
 ///
 /// This attribute is attached to a function inside an `impl` block annotated with
-/// [`pallet::tasks_experimental`](macro@tasks_experimental) to define the conditions for a
+/// [`pezpallet::tasks_experimental`](macro@tasks_experimental) to define the conditions for a
 /// given work item to be valid.
 ///
 /// It takes a closure as input, which is then used to define the condition. The closure
@@ -1183,7 +1183,7 @@ pub fn task_condition(_: TokenStream, _: TokenStream) -> TokenStream {
 /// Allows defining the weight of a task.
 ///
 /// This attribute is attached to a function inside an `impl` block annotated with
-/// [`pallet::tasks_experimental`](macro@tasks_experimental) define the weight of a given work
+/// [`pezpallet::tasks_experimental`](macro@tasks_experimental) define the weight of a given work
 /// item.
 ///
 /// It takes a closure as input, which should return a `Weight` value.
@@ -1195,7 +1195,7 @@ pub fn task_weight(_: TokenStream, _: TokenStream) -> TokenStream {
 /// Allows defining an index for a task.
 ///
 /// This attribute is attached to a function inside an `impl` block annotated with
-/// [`pallet::tasks_experimental`](macro@tasks_experimental) to define the index of a given
+/// [`pezpallet::tasks_experimental`](macro@tasks_experimental) to define the index of a given
 /// work item.
 ///
 /// It takes an integer literal as input, which is then used to define the index. This
@@ -1245,17 +1245,17 @@ pub fn import_section(attr: TokenStream, tokens: TokenStream) -> TokenStream {
 	let foreign_mod = parse_macro_input!(attr as ItemMod);
 	let mut internal_mod = parse_macro_input!(tokens as ItemMod);
 
-	// check that internal_mod is a pallet module
+	// check that internal_mod is a pezpallet module
 	if !internal_mod.attrs.iter().any(|attr| {
 		if let Some(last_seg) = attr.path().segments.last() {
-			last_seg.ident == "pallet"
+			last_seg.ident == "pezpallet"
 		} else {
 			false
 		}
 	}) {
 		return Error::new(
 			internal_mod.ident.span(),
-			"`#[import_section]` can only be applied to a valid pallet module",
+			"`#[import_section]` can only be applied to a valid pezpallet module",
 		)
 		.to_compile_error()
 		.into();
@@ -1289,13 +1289,13 @@ pub fn import_section(attr: TokenStream, tokens: TokenStream) -> TokenStream {
 /// # Note
 ///
 /// The population of the genesis storage depends on the order of pallets. So, if one of your
-/// pallets depends on another pallet, the pallet that is depended upon needs to come before
-/// the pallet depending on it.
+/// pallets depends on another pezpallet, the pezpallet that is depended upon needs to come before
+/// the pezpallet depending on it.
 ///
 /// # Type definitions
 ///
-/// * The macro generates a type alias for each pallet to their `Pallet`. E.g. `type System =
-///   pezframe_system::Pallet<Runtime>`
+/// * The macro generates a type alias for each pezpallet to their `Pezpallet`. E.g. `type System =
+///   pezframe_system::Pezpallet<Runtime>`
 #[proc_macro_attribute]
 pub fn runtime(attr: TokenStream, item: TokenStream) -> TokenStream {
 	runtime::runtime(attr, item)
@@ -1367,51 +1367,51 @@ pub fn dynamic_aggregated_params_internal(attrs: TokenStream, input: TokenStream
 /// `pezframe_system::CreateAuthorizedTransaction`. This trait allows to specify which transaction
 /// extension to use when creating a transaction for an authorized call.
 ///
-/// # Usage in the pallet
+/// # Usage in the pezpallet
 ///
 /// ## Example/Overview:
 ///
 /// ```
 /// # #[allow(unused)]
-/// #[pezframe_support::pallet]
-/// pub mod pallet {
+/// #[pezframe_support::pezpallet]
+/// pub mod pezpallet {
 ///     use pezframe_support::pezpallet_prelude::*;
 ///     use pezframe_system::pezpallet_prelude::*;
 ///
-///     #[pallet::pallet]
-///     pub struct Pallet<T>(_);
+///     #[pezpallet::pezpallet]
+///     pub struct Pezpallet<T>(_);
 ///
-///     #[pallet::config]
+///     #[pezpallet::config]
 ///     pub trait Config: pezframe_system::Config {}
 ///
-///     #[pallet::call]
-///     impl<T: Config> Pallet<T> {
-///         #[pallet::weight(Weight::zero())]
-///         #[pallet::authorize(|_source, foo| if *foo == 42 {
+///     #[pezpallet::call]
+///     impl<T: Config> Pezpallet<T> {
+///         #[pezpallet::weight(Weight::zero())]
+///         #[pezpallet::authorize(|_source, foo| if *foo == 42 {
 ///             // The amount to refund, here we refund nothing
 ///             let refund = Weight::zero();
 ///             // The validity, here we accept the call and it provides itself.
 ///             // See `ValidTransaction` for more information.
-///             let validity = ValidTransaction::with_tag_prefix("my-pallet")
+///             let validity = ValidTransaction::with_tag_prefix("my-pezpallet")
 ///                 .and_provides("some_call")
 ///                 .into();
 ///             Ok((validity, refund))
 ///         } else {
 ///             Err(TransactionValidityError::Invalid(InvalidTransaction::Call))
 ///         })]
-///         #[pallet::weight_of_authorize(Weight::zero())]
-///         #[pallet::call_index(0)]
+///         #[pezpallet::weight_of_authorize(Weight::zero())]
+///         #[pezpallet::call_index(0)]
 ///         pub fn some_call(origin: OriginFor<T>, arg: u32) -> DispatchResult {
 ///             ensure_authorized(origin)?;
 ///
 ///             Ok(())
 ///         }
 ///
-///         #[pallet::weight(Weight::zero())]
+///         #[pezpallet::weight(Weight::zero())]
 ///         // We can also give the callback as a function
-///         #[pallet::authorize(Self::authorize_some_other_call)]
-///         #[pallet::weight_of_authorize(Weight::zero())]
-///         #[pallet::call_index(1)]
+///         #[pezpallet::authorize(Self::authorize_some_other_call)]
+///         #[pezpallet::weight_of_authorize(Weight::zero())]
+///         #[pezpallet::call_index(1)]
 ///         pub fn some_other_call(origin: OriginFor<T>, arg: u32) -> DispatchResult {
 ///             ensure_authorized(origin)?;
 ///
@@ -1419,7 +1419,7 @@ pub fn dynamic_aggregated_params_internal(attrs: TokenStream, input: TokenStream
 ///         }
 ///     }
 ///
-///     impl<T: Config> Pallet<T> {
+///     impl<T: Config> Pezpallet<T> {
 ///         fn authorize_some_other_call(
 ///             source: TransactionSource,
 ///             foo: &u32
@@ -1460,15 +1460,15 @@ pub fn dynamic_aggregated_params_internal(attrs: TokenStream, input: TokenStream
 ///
 /// Authorize process comes with 2 attributes macro on top of the authorized call:
 ///
-/// * `#[pallet::authorize($authorized_function)]` - defines the function that authorizes the call.
+/// * `#[pezpallet::authorize($authorized_function)]` - defines the function that authorizes the call.
 ///   First argument is the transaction source `TransactionSource` then followed by the same as call
 ///   arguments but by reference `&`. Return type is `TransactionValidityWithRefund`.
-/// * `#[pallet::weight_of_authorize($weight)]` - defines the value of the weight of the authorize
-///   function. This attribute is similar to `#[pallet::weight]`:
+/// * `#[pezpallet::weight_of_authorize($weight)]` - defines the value of the weight of the authorize
+///   function. This attribute is similar to `#[pezpallet::weight]`:
 ///   * it can be ignore in `dev_mode`
 ///   * it can be automatically infered from weight info. For the call `foo` the function
 ///     `authorize_foo` in the weight info will be used. (weight info needs to be provided in the
-///     call attribute: `#[pallet::call(weight = T::WeightInfo)]`).
+///     call attribute: `#[pezpallet::call(weight = T::WeightInfo)]`).
 ///   * it can be a fixed value like `Weight::from_all(0)` (not recommended in production).
 ///
 ///   The weight must be small enough so that nodes don't get DDOS by validating transactions.
@@ -1498,7 +1498,7 @@ pub fn authorize(_: TokenStream, _: TokenStream) -> TokenStream {
 /// See [`authorize`](macro@authorize) for more information on how authorization works.
 ///
 /// Defines the value of the weight of the authorize function. This attribute is similar to
-/// `#[pallet::weight]`:
+/// `#[pezpallet::weight]`:
 /// * it can be ignore in `dev_mode`
 /// * it can be automatically infered from weight info. For the call `foo` the function
 ///   `authorize_foo` in the weight info will be used.

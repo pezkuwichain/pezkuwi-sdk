@@ -24,10 +24,10 @@
 // Executed Command:
 // ./target/production/pezkuwi-teyrchain
 // benchmark
-// pallet
+// pezpallet
 // --chain=asset-hub-next-zagros-dev
 // --wasm-execution=compiled
-// --pallet=pezpallet_utility
+// --pezpallet=pezpallet_utility
 // --no-storage-info
 // --no-median-slopes
 // --no-min-squares

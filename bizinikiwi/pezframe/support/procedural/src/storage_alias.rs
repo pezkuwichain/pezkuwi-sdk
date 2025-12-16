@@ -17,7 +17,7 @@
 
 //! Implementation of the `storage_alias` attribute macro.
 
-use crate::{counter_prefix, pallet::parse::helper};
+use crate::{counter_prefix, pezpallet::parse::helper};
 use pezframe_support_procedural_tools::generate_access_from_frame_or_crate;
 use proc_macro2::{Span, TokenStream};
 use quote::{quote, ToTokens};
@@ -116,7 +116,7 @@ mod storage_types {
 mod prefix_types {
 	// Use the verbatim/unmodified input name as the prefix.
 	syn::custom_keyword!(verbatim);
-	// The input type is a pallet and its pallet name should be used as the prefix.
+	// The input type is a pezpallet and its pezpallet name should be used as the prefix.
 	syn::custom_keyword!(pezpallet_name);
 	// The input type implements `Get<'static str>` and this `str` should be used as the prefix.
 	syn::custom_keyword!(dynamic);
@@ -459,7 +459,7 @@ impl Parse for Input {
 enum PrefixType {
 	/// An appropriate prefix will be determined automatically.
 	///
-	/// If generics are passed, this is assumed to be a pallet and the pallet name should be used.
+	/// If generics are passed, this is assumed to be a pezpallet and the pezpallet name should be used.
 	/// Otherwise use the verbatim passed name as prefix.
 	Compatibility,
 	/// The provided ident/name will be used as the prefix.

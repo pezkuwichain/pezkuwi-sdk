@@ -68,7 +68,7 @@
 //! ```ignore
 //! const RELAY_PARENT_OFFSET = 2;
 //! ```
-//! 2. Pass this constant to the `teyrchain-system` pallet.
+//! 2. Pass this constant to the `teyrchain-system` pezpallet.
 //!
 //! ```ignore
 //! impl pezcumulus_pezpallet_teyrchain_system::Config for Runtime {

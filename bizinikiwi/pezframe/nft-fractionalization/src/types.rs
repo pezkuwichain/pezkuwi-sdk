@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Various basic types for use in the Nft fractionalization pallet.
+//! Various basic types for use in the Nft fractionalization pezpallet.
 
 use super::*;
 use codec::{Decode, Encode, MaxEncodedLen};

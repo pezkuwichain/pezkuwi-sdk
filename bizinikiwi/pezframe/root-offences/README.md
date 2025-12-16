@@ -1,5 +1,5 @@
-# Root Offences Pallet
+# Root Offences Pezpallet
 
-Pallet that allows the root to create an offence.
+Pezpallet that allows the root to create an offence.
 
-NOTE: This pallet should only be used for testing purposes.
+NOTE: This pezpallet should only be used for testing purposes.

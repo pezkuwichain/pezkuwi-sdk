@@ -24,7 +24,7 @@ use crate::{
 		v1,
 		v1::{weights, weights::WeightInfo},
 	},
-	Config, Pallet,
+	Config, Pezpallet,
 };
 use pezframe_benchmarking::v2::*;
 use pezframe_support::{migrations::SteppedMigration, weights::WeightMeter};
@@ -50,5 +50,5 @@ mod benches {
 		assert_eq!(meter.consumed(), weights::BizinikiwiWeight::<T>::step() * 2);
 	}
 
-	impl_benchmark_test_suite!(Pallet, crate::mock::new_test_ext(), crate::mock::Runtime);
+	impl_benchmark_test_suite!(Pezpallet, crate::mock::new_test_ext(), crate::mock::Runtime);
 }

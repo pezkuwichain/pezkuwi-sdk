@@ -481,7 +481,7 @@ pub struct ElectionResult<AccountId, P: PerThing> {
 ///
 /// This complements the [`ElectionResult`] and is needed to run the balancing post-processing.
 ///
-/// This, at the current version, resembles the `Exposure` defined in the Staking pallet, yet they
+/// This, at the current version, resembles the `Exposure` defined in the Staking pezpallet, yet they
 /// do not necessarily have to be the same.
 #[derive(RuntimeDebug, Encode, Decode, DecodeWithMemTracking, Clone, Eq, PartialEq, TypeInfo)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]

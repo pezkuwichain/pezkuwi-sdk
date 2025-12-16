@@ -1,8 +1,8 @@
-# Referenda Pallet
+# Referenda Pezpallet
 
-- [`Config`](https://docs.rs/pezpallet-referenda/latest/pallet_referenda/pallet/trait.Config.html)
-- [`Call`](https://docs.rs/pezpallet-referenda/latest/pallet_referenda/pallet/enum.Call.html)
+- [`Config`](https://docs.rs/pezpallet-referenda/latest/pallet_referenda/pezpallet/trait.Config.html)
+- [`Call`](https://docs.rs/pezpallet-referenda/latest/pallet_referenda/pezpallet/enum.Call.html)
 
 ## Overview
 
-The Referenda pallet handles the administration of general stakeholder voting.
+The Referenda pezpallet handles the administration of general stakeholder voting.

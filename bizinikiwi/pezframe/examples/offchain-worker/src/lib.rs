@@ -22,9 +22,9 @@
 // SOFTWARE.
 
 //! <!-- markdown-link-check-disable -->
-//! # Offchain Worker Example Pallet
+//! # Offchain Worker Example Pezpallet
 //!
-//! The Offchain Worker Example: A simple pallet demonstrating
+//! The Offchain Worker Example: A simple pezpallet demonstrating
 //! concepts, APIs and structures common to most offchain workers.
 //!
 //! Run `cargo doc --package pezpallet-example-offchain-worker --open` to view this module's
@@ -32,9 +32,9 @@
 //!
 //! - [`Config`]
 //! - [`Call`]
-//! - [`Pallet`]
+//! - [`Pezpallet`]
 //!
-//! **This pallet serves as an example showcasing Bizinikiwi off-chain worker and is not meant to
+//! **This pezpallet serves as an example showcasing Bizinikiwi off-chain worker and is not meant to
 //! be used in production.**
 //!
 //! ## Overview
@@ -120,16 +120,16 @@ pub mod crypto {
 	}
 }
 
-pub use pallet::*;
+pub use pezpallet::*;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	/// This pallet's configuration trait
-	#[pallet::config]
+	/// This pezpallet's configuration trait
+	#[pezpallet::config]
 	pub trait Config:
 		CreateSignedTransaction<Call<Self>> + CreateBare<Call<Self>> + pezframe_system::Config
 	{
@@ -143,33 +143,33 @@ pub mod pallet {
 		/// To avoid sending too many transactions, we only attempt to send one
 		/// every `GRACE_PERIOD` blocks. We use Local Storage to coordinate
 		/// sending between distinct runs of this offchain worker.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type GracePeriod: Get<BlockNumberFor<Self>>;
 
 		/// Number of blocks of cooldown after unsigned transaction is included.
 		///
 		/// This ensures that we only accept unsigned transactions once, every `UnsignedInterval`
 		/// blocks.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type UnsignedInterval: Get<BlockNumberFor<Self>>;
 
 		/// A configuration for base priority of unsigned transactions.
 		///
 		/// This is exposed so that it can be tuned for particular runtime, when
 		/// multiple pallets send unsigned transactions.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type UnsignedPriority: Get<TransactionPriority>;
 
 		/// Maximum number of prices.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxPrices: Get<u32>;
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		/// Offchain Worker entry point.
 		///
 		/// By implementing `fn offchain_worker` you declare a new offchain worker.
@@ -190,7 +190,7 @@ pub mod pallet {
 			// to the storage and other included pallets.
 			//
 			// We can easily import `pezframe_system` and retrieve a block hash of the parent block.
-			let parent_hash = <system::Pallet<T>>::block_hash(block_number - 1u32.into());
+			let parent_hash = <system::Pezpallet<T>>::block_hash(block_number - 1u32.into());
 			log::debug!("Current block: {:?} (parent hash: {:?})", block_number, parent_hash);
 
 			// It's a good practice to keep `fn offchain_worker()` function minimal, and move most
@@ -219,9 +219,9 @@ pub mod pallet {
 		}
 	}
 
-	/// A public part of the pallet.
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	/// A public part of the pezpallet.
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Submit new price to the list.
 		///
 		/// This method is a public function of the module and can be called from within
@@ -236,8 +236,8 @@ pub mod pallet {
 		/// working and receives (and provides) meaningful data.
 		/// This example is not focused on correctness of the oracle itself, but rather its
 		/// purpose is to showcase offchain worker capabilities.
-		#[pallet::call_index(0)]
-		#[pallet::weight({0})]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight({0})]
 		pub fn submit_price(origin: OriginFor<T>, price: u32) -> DispatchResultWithPostInfo {
 			// Retrieve sender of the transaction.
 			let who = ensure_signed(origin)?;
@@ -262,8 +262,8 @@ pub mod pallet {
 		///
 		/// This example is not focused on correctness of the oracle itself, but rather its
 		/// purpose is to showcase offchain worker capabilities.
-		#[pallet::call_index(1)]
-		#[pallet::weight({0})]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight({0})]
 		pub fn submit_price_unsigned(
 			origin: OriginFor<T>,
 			_block_number: BlockNumberFor<T>,
@@ -274,13 +274,13 @@ pub mod pallet {
 			// Add the price to the on-chain list, but mark it as coming from an empty address.
 			Self::add_price(None, price);
 			// now increment the block number at which we expect next unsigned transaction.
-			let current_block = <system::Pallet<T>>::block_number();
+			let current_block = <system::Pezpallet<T>>::block_number();
 			<NextUnsignedAt<T>>::put(current_block + T::UnsignedInterval::get());
 			Ok(().into())
 		}
 
-		#[pallet::call_index(2)]
-		#[pallet::weight({0})]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight({0})]
 		pub fn submit_price_unsigned_with_signed_payload(
 			origin: OriginFor<T>,
 			price_payload: PricePayload<T::Public, BlockNumberFor<T>>,
@@ -291,22 +291,22 @@ pub mod pallet {
 			// Add the price to the on-chain list, but mark it as coming from an empty address.
 			Self::add_price(None, price_payload.price);
 			// now increment the block number at which we expect next unsigned transaction.
-			let current_block = <system::Pallet<T>>::block_number();
+			let current_block = <system::Pezpallet<T>>::block_number();
 			<NextUnsignedAt<T>>::put(current_block + T::UnsignedInterval::get());
 			Ok(().into())
 		}
 	}
 
-	/// Events for the pallet.
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	/// Events for the pezpallet.
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// Event generated when new price is accepted to contribute to the average.
 		NewPrice { price: u32, maybe_who: Option<T::AccountId> },
 	}
 
-	#[pallet::validate_unsigned]
-	impl<T: Config> ValidateUnsigned for Pallet<T> {
+	#[pezpallet::validate_unsigned]
+	impl<T: Config> ValidateUnsigned for Pezpallet<T> {
 		type Call = Call<T>;
 
 		/// Validate unsigned call to this module.
@@ -338,7 +338,7 @@ pub mod pallet {
 	/// A vector of recently submitted prices.
 	///
 	/// This is used to calculate average price, should have bounded size.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type Prices<T: Config> = StorageValue<_, BoundedVec<u32, T::MaxPrices>, ValueQuery>;
 
 	/// Defines the block when next unsigned transaction will be accepted.
@@ -346,7 +346,7 @@ pub mod pallet {
 	/// To prevent spam of unsigned (and unpaid!) transactions on the network,
 	/// we only allow one transaction every `T::UnsignedInterval` blocks.
 	/// This storage entry defines when new transaction is going to be accepted.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type NextUnsignedAt<T: Config> = StorageValue<_, BlockNumberFor<T>, ValueQuery>;
 }
 
@@ -375,7 +375,7 @@ enum TransactionType {
 	None,
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Chooses which transaction type to send.
 	///
 	/// This function serves mostly to showcase `StorageValue` helper
@@ -465,7 +465,7 @@ impl<T: Config> Pallet<T> {
 		// local keystore with expected `KEY_TYPE`.
 		let results = signer.send_signed_transaction(|_account| {
 			// Received price is wrapped into a call to `submit_price` public function of this
-			// pallet. This means that the transaction, when executed, will simply call that
+			// pezpallet. This means that the transaction, when executed, will simply call that
 			// function passing `price` as an argument.
 			Call::submit_price { price }
 		});
@@ -496,7 +496,7 @@ impl<T: Config> Pallet<T> {
 		let price = Self::fetch_price().map_err(|_| "Failed to fetch price")?;
 
 		// Received price is wrapped into a call to `submit_price_unsigned` public function of this
-		// pallet. This means that the transaction, when executed, will simply call that function
+		// pezpallet. This means that the transaction, when executed, will simply call that function
 		// passing `price` as an argument.
 		let call = Call::submit_price_unsigned { block_number, price };
 
@@ -690,7 +690,7 @@ impl<T: Config> Pallet<T> {
 			return InvalidTransaction::Stale.into();
 		}
 		// Let's make sure to reject transactions from the future.
-		let current_block = <system::Pallet<T>>::block_number();
+		let current_block = <system::Pezpallet<T>>::block_number();
 		if &current_block < block_number {
 			return InvalidTransaction::Future.into();
 		}

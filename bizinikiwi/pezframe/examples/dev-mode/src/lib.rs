@@ -22,12 +22,12 @@
 // SOFTWARE.
 
 //! <!-- markdown-link-check-disable -->
-//! # Dev Mode Example Pallet
+//! # Dev Mode Example Pezpallet
 //!
-//! A simple example of a FRAME pallet demonstrating
-//! the ease of requirements for a pallet in dev mode.
+//! A simple example of a FRAME pezpallet demonstrating
+//! the ease of requirements for a pezpallet in dev mode.
 //!
-//! Run `cargo doc --package pezpallet-dev-mode --open` to view this pallet's documentation.
+//! Run `cargo doc --package pezpallet-dev-mode --open` to view this pezpallet's documentation.
 //!
 //! **Dev mode is not meant to be used in production.**
 
@@ -40,32 +40,32 @@ use alloc::{vec, vec::Vec};
 use pezframe_support::dispatch::DispatchResult;
 use pezframe_system::ensure_signed;
 
-// Re-export pallet items so that they can be accessed from the crate namespace.
-pub use pallet::*;
+// Re-export pezpallet items so that they can be accessed from the crate namespace.
+pub use pezpallet::*;
 
 #[cfg(test)]
 mod tests;
 
-/// A type alias for the balance type from this pallet's point of view.
+/// A type alias for the balance type from this pezpallet's point of view.
 type BalanceOf<T> = <T as pezpallet_balances::Config>::Balance;
 
-/// Enable `dev_mode` for this pallet.
-#[pezframe_support::pallet(dev_mode)]
-pub mod pallet {
+/// Enable `dev_mode` for this pezpallet.
+#[pezframe_support::pezpallet(dev_mode)]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezpallet_balances::Config + pezframe_system::Config {}
 
-	// Simple declaration of the `Pallet` type. It is placeholder we use to implement traits and
+	// Simple declaration of the `Pezpallet` type. It is placeholder we use to implement traits and
 	// method.
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		// No need to define a `call_index` attribute here because of `dev_mode`.
 		// No need to define a `weight` attribute here because of `dev_mode`.
 		pub fn add_dummy(origin: OriginFor<T>, id: T::AccountId) -> DispatchResult {
@@ -88,7 +88,7 @@ pub mod pallet {
 		// No need to define a `weight` attribute here because of `dev_mode`.
 		pub fn set_bar(
 			origin: OriginFor<T>,
-			#[pallet::compact] new_value: T::Balance,
+			#[pezpallet::compact] new_value: T::Balance,
 		) -> DispatchResult {
 			let sender = ensure_signed(origin)?;
 
@@ -101,8 +101,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		AddDummy { account: T::AccountId },
 		SetBar { account: T::AccountId, balance: BalanceOf<T> },
@@ -110,15 +110,15 @@ pub mod pallet {
 
 	/// The MEL requirement for bounded pallets is skipped by `dev_mode`.
 	/// This means that all storages are marked as unbounded.
-	/// This is equivalent to specifying `#[pallet::unbounded]` on this type definitions.
+	/// This is equivalent to specifying `#[pezpallet::unbounded]` on this type definitions.
 	/// When the dev_mode is removed, we would need to implement implement `MaxEncodedLen`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Dummy<T: Config> = StorageValue<_, Vec<T::AccountId>>;
 
 	/// The Hasher requirement is skipped by `dev_mode`. So, second parameter can be `_`
 	/// and `Blake2_128Concat` is used as a default.
 	/// When the dev_mode is removed, we would need to specify the hasher like so:
 	/// `pub type Bar<T: Config> = StorageMap<_, Blake2_128Concat, T::AccountId, T::Balance>;`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Bar<T: Config> = StorageMap<_, _, T::AccountId, T::Balance>;
 }

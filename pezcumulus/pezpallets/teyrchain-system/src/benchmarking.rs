@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Benchmarking for the teyrchain-system pallet.
+//! Benchmarking for the teyrchain-system pezpallet.
 
 #![cfg(feature = "runtime-benchmarks")]
 
@@ -44,7 +44,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			Pallet::<T>::enqueue_inbound_downward_messages(
+			Pezpallet::<T>::enqueue_inbound_downward_messages(
 				head,
 				InboundDownwardMessages::new(msgs).into_abridged(&mut usize::MAX.clone()),
 			);
@@ -65,7 +65,7 @@ mod benchmarks {
 	}
 
 	impl_benchmark_test_suite! {
-		Pallet,
+		Pezpallet,
 		crate::mock::new_test_ext(),
 		crate::mock::Test
 	}

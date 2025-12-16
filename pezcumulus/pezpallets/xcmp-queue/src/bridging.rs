@@ -13,7 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use crate::{pallet, OutboundState};
+use crate::{pezpallet, OutboundState};
 use pezcumulus_primitives_core::ParaId;
 use xcm::latest::prelude::*;
 
@@ -34,7 +34,7 @@ impl<Runtime: crate::Config> bp_xcm_bridge_hub_router::XcmChannelStatusProvider
 		// if the inbound channel with recipient is suspended, it means that we are unable to
 		// receive congestion reports from the `with` location. So we assume the pipeline is
 		// congested too.
-		if pallet::Pallet::<Runtime>::is_inbound_channel_suspended(sibling_para_id) {
+		if pezpallet::Pezpallet::<Runtime>::is_inbound_channel_suspended(sibling_para_id) {
 			return true;
 		}
 
@@ -59,7 +59,7 @@ impl<Runtime: crate::Config> OutXcmpChannelStatusProvider<Runtime> {
 
 		// let's find the channel's state with the sibling teyrchain,
 		let Some((outbound_state, queued_pages)) =
-			pallet::Pallet::<Runtime>::outbound_channel_state(sibling_para_id)
+			pezpallet::Pezpallet::<Runtime>::outbound_channel_state(sibling_para_id)
 		else {
 			return false;
 		};
@@ -97,5 +97,5 @@ impl<Runtime: crate::Config> bp_xcm_bridge_hub_router::XcmChannelStatusProvider
 
 #[cfg(feature = "runtime-benchmarks")]
 pub fn suspend_channel_for_benchmarks<T: crate::Config>(target: ParaId) {
-	pallet::Pallet::<T>::suspend_channel(target)
+	pezpallet::Pezpallet::<T>::suspend_channel(target)
 }

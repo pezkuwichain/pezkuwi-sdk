@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Elections-Phragmen pallet benchmarking.
+//! Elections-Phragmen pezpallet benchmarking.
 
 #![cfg(feature = "runtime-benchmarks")]
 
@@ -51,7 +51,7 @@ fn as_lookup<T: Config>(account: T::AccountId) -> AccountIdLookupOf<T> {
 // Get a reasonable amount of stake based on the execution trait's configuration.
 fn default_stake<T: Config>(num_votes: u32) -> BalanceOf<T> {
 	let min = T::Currency::minimum_balance();
-	Pallet::<T>::deposit_of(num_votes as usize).max(min)
+	Pezpallet::<T>::deposit_of(num_votes as usize).max(min)
 }
 
 // Get the current number of candidates.
@@ -67,7 +67,7 @@ fn submit_candidates<T: Config>(
 	(0..c)
 		.map(|i| {
 			let account = endowed_account::<T>(prefix, i);
-			Pallet::<T>::submit_candidacy(
+			Pezpallet::<T>::submit_candidacy(
 				RawOrigin::Signed(account.clone()).into(),
 				candidate_count::<T>(),
 			)
@@ -96,7 +96,7 @@ fn submit_voter<T: Config>(
 	votes: Vec<T::AccountId>,
 	stake: BalanceOf<T>,
 ) -> DispatchResultWithPostInfo {
-	Pallet::<T>::vote(RawOrigin::Signed(caller).into(), votes, stake)
+	Pezpallet::<T>::vote(RawOrigin::Signed(caller).into(), votes, stake)
 }
 
 // Create `num_voter` voters who randomly vote for at most `votes` of `all_candidates` if
@@ -122,7 +122,7 @@ fn distribute_voters<T: Config>(
 fn fill_seats_up_to<T: Config>(m: u32) -> Result<Vec<T::AccountId>, &'static str> {
 	submit_candidates_with_self_vote::<T>(m, "fill_seats_up_to")?;
 	assert_eq!(Candidates::<T>::get().len() as u32, m, "wrong number of candidates.");
-	Pallet::<T>::do_phragmen();
+	Pezpallet::<T>::do_phragmen();
 	assert_eq!(Candidates::<T>::get().len(), 0, "some candidates remaining.");
 	assert_eq!(
 		Members::<T>::get().len() + RunnersUp::<T>::get().len(),
@@ -325,7 +325,7 @@ mod benchmarks {
 		let members_and_runners_up = fill_seats_up_to::<T>(m)?;
 
 		let bailing = members_and_runners_up[0].clone();
-		assert!(Pallet::<T>::is_member(&bailing));
+		assert!(Pezpallet::<T>::is_member(&bailing));
 
 		whitelist!(bailing);
 
@@ -351,7 +351,7 @@ mod benchmarks {
 		let members_and_runners_up = fill_seats_up_to::<T>(m)?;
 
 		let bailing = members_and_runners_up[T::DesiredMembers::get() as usize + 1].clone();
-		assert!(Pallet::<T>::is_runner_up(&bailing));
+		assert!(Pezpallet::<T>::is_runner_up(&bailing));
 
 		whitelist!(bailing);
 
@@ -389,7 +389,7 @@ mod benchmarks {
 		clean::<T>();
 
 		fill_seats_up_to::<T>(m)?;
-		let removing = as_lookup::<T>(Pallet::<T>::members_ids()[0].clone());
+		let removing = as_lookup::<T>(Pezpallet::<T>::members_ids()[0].clone());
 
 		#[extrinsic_call]
 		remove_member(RawOrigin::Root, removing, true, false);
@@ -421,7 +421,7 @@ mod benchmarks {
 		Candidates::<T>::kill();
 
 		// Now everyone is defunct.
-		assert!(Voting::<T>::iter().all(|(_, v)| Pallet::<T>::is_defunct_voter(&v.votes)));
+		assert!(Voting::<T>::iter().all(|(_, v)| Pezpallet::<T>::is_defunct_voter(&v.votes)));
 		assert_eq!(Voting::<T>::iter().count() as u32, v);
 
 		#[extrinsic_call]
@@ -461,7 +461,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			Pallet::<T>::on_initialize(T::TermDuration::get());
+			Pezpallet::<T>::on_initialize(T::TermDuration::get());
 		}
 
 		assert_eq!(Members::<T>::get().len() as u32, T::DesiredMembers::get().min(c));
@@ -478,7 +478,7 @@ mod benchmarks {
 	}
 
 	impl_benchmark_test_suite! {
-		Pallet,
+		Pezpallet,
 		tests::ExtBuilder::default().desired_members(13).desired_runners_up(7),
 		tests::Test,
 		exec_name = build_and_execute,

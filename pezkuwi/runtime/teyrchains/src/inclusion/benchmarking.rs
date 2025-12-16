@@ -30,7 +30,7 @@ use crate::{
 	initializer, HeadData, ValidationCode,
 };
 
-fn create_candidate_commitments<T: crate::hrmp::pallet::Config>(
+fn create_candidate_commitments<T: crate::hrmp::pezpallet::Config>(
 	para_id: ParaId,
 	head_data: HeadData,
 	max_msg_len: usize,
@@ -103,7 +103,7 @@ mod benchmarks {
 		let validators = generate_validator_pairs::<T>(n_validators);
 
 		let session = SessionIndex::from(0_u32);
-		initializer::Pallet::<T>::test_trigger_on_new_session(
+		initializer::Pezpallet::<T>::test_trigger_on_new_session(
 			false,
 			session,
 			validators.iter().map(|(a, v)| (a, v.clone())),
@@ -133,11 +133,11 @@ mod benchmarks {
 
 		let receipt = CommittedCandidateReceipt::<T::Hash> { descriptor, commitments };
 
-		Pallet::<T>::receive_upward_messages(para, &vec![vec![0; max_len]; 1]);
+		Pezpallet::<T>::receive_upward_messages(para, &vec![vec![0; max_len]; 1]);
 
 		#[block]
 		{
-			Pallet::<T>::enact_candidate(
+			Pezpallet::<T>::enact_candidate(
 				relay_parent_number,
 				receipt,
 				backers,
@@ -149,7 +149,7 @@ mod benchmarks {
 	}
 
 	impl_benchmark_test_suite! {
-		Pallet,
+		Pezpallet,
 		crate::mock::new_test_ext(Default::default()),
 		crate::mock::Test
 	}

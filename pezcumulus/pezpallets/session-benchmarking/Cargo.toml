@@ -6,7 +6,7 @@ edition.workspace = true
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
-description = "FRAME sessions pallet benchmarking"
+description = "FRAME sessions pezpallet benchmarking"
 readme = "README.md"
 documentation = "https://docs.rs/pezcumulus-pezpallet-session-benchmarking"
 

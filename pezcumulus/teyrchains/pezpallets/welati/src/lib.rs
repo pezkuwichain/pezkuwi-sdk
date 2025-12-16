@@ -1,13 +1,13 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-//! # Welati (Governance) Pallet
+//! # Welati (Governance) Pezpallet
 //!
-//! A comprehensive governance pallet implementing elections, voting, and government structure
+//! A comprehensive governance pezpallet implementing elections, voting, and government structure
 //! management.
 //!
 //! ## Overview
 //!
-//! The Welati pallet provides complete governance infrastructure including:
+//! The Welati pezpallet provides complete governance infrastructure including:
 //! - **Presidential Elections**: Direct democratic election of Serok (President)
 //! - **Parliamentary Elections**: District-based representation in parliament
 //! - **Cabinet Formation**: Prime Minister selection and ministerial appointments
@@ -136,7 +136,7 @@
 //! }
 //! ```
 
-pub use pallet::*;
+pub use pezpallet::*;
 pub mod migrations;
 pub mod types;
 pub mod weights; // Storage migrations
@@ -150,7 +150,7 @@ mod tests;
 
 use crate::types::*;
 
-/// Weight functions trait for this pallet.
+/// Weight functions trait for this pezpallet.
 pub trait WeightInfo {
 	fn initiate_election() -> Weight;
 	fn register_candidate() -> Weight;
@@ -208,15 +208,15 @@ pub trait CitizenInfo {
 	fn citizen_count() -> u32;
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::pallet]
-	#[pallet::storage_version(migrations::STORAGE_VERSION)]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(migrations::STORAGE_VERSION)]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config:
 		pezframe_system::Config
 		+ pezpallet_tiki::Config
@@ -237,21 +237,21 @@ pub mod pallet {
 		type CitizenSource: CitizenInfo;
 		type KycSource: KycStatus<Self::AccountId>;
 
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type ParliamentSize: Get<u32>;
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type DiwanSize: Get<u32>;
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type ElectionPeriod: Get<BlockNumberFor<Self>>;
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type CandidacyPeriod: Get<BlockNumberFor<Self>>;
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type CampaignPeriod: Get<BlockNumberFor<Self>>;
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type ElectoralDistricts: Get<u32>;
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type CandidacyDeposit: Get<u128>;
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type PresidentialEndorsements: Get<u32>;
 		type ParliamentaryEndorsements: Get<u32>;
 	}
@@ -259,48 +259,48 @@ pub mod pallet {
 	// --- CORE GOVERNANCE STORAGE ---
 
 	/// Storage holding current government positions
-	#[pallet::storage]
-	#[pallet::getter(fn current_officials)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn current_officials)]
 	pub type CurrentOfficials<T: Config> =
 		StorageMap<_, Blake2_128Concat, GovernmentPosition, T::AccountId, OptionQuery>;
 
 	/// Storage holding current ministers
-	#[pallet::storage]
-	#[pallet::getter(fn current_ministers)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn current_ministers)]
 	pub type CurrentMinisters<T: Config> =
 		StorageMap<_, Blake2_128Concat, MinisterRole, T::AccountId, OptionQuery>;
 
 	/// Storage holding parliament members
-	#[pallet::storage]
-	#[pallet::getter(fn parliament_members)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn parliament_members)]
 	pub type ParliamentMembers<T: Config> =
 		StorageValue<_, BoundedVec<ParliamentMember<T>, T::ParliamentSize>, ValueQuery>;
 
 	/// Storage holding Diwan members
-	#[pallet::storage]
-	#[pallet::getter(fn diwan_members)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn diwan_members)]
 	pub type DiwanMembers<T: Config> =
 		StorageValue<_, BoundedVec<DiwanMember<T>, T::DiwanSize>, ValueQuery>;
 
 	/// Storage holding appointed government officials (OfficialRole)
-	#[pallet::storage]
-	#[pallet::getter(fn appointed_officials)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn appointed_officials)]
 	pub type AppointedOfficials<T: Config> =
 		StorageMap<_, Blake2_128Concat, OfficialRole, T::AccountId, OptionQuery>;
 
 	// --- ELECTION SYSTEM STORAGE ---
 
 	/// Storage holding active elections
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ActiveElections<T: Config> =
 		StorageMap<_, Blake2_128Concat, u32, ElectionInfo<T>, OptionQuery>;
 
 	/// Next election ID
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type NextElectionId<T: Config> = StorageValue<_, u32, ValueQuery>;
 
 	/// Storage holding election candidates
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ElectionCandidates<T: Config> = StorageDoubleMap<
 		_,
 		Blake2_128Concat,
@@ -312,7 +312,7 @@ pub mod pallet {
 	>;
 
 	/// Storage holding election votes
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ElectionVotes<T: Config> = StorageDoubleMap<
 		_,
 		Blake2_128Concat,
@@ -324,19 +324,19 @@ pub mod pallet {
 	>;
 
 	/// Storage holding election results
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ElectionResults<T: Config> =
 		StorageMap<_, Blake2_128Concat, u32, ElectionResult<T>, OptionQuery>;
 
 	/// Storage holding electoral districts
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ElectoralDistrictConfig<T: Config> =
 		StorageMap<_, Blake2_128Concat, u32, ElectoralDistrict, ValueQuery>;
 
 	// --- APPOINTMENT SYSTEM STORAGE ---
 
 	/// Storage holding pending nominations
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type PendingNominations<T: Config> = StorageDoubleMap<
 		_,
 		Blake2_128Concat,
@@ -348,27 +348,27 @@ pub mod pallet {
 	>;
 
 	/// Storage holding appointment processes
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type AppointmentProcesses<T: Config> =
 		StorageMap<_, Blake2_128Concat, u32, AppointmentProcess<T>, OptionQuery>;
 
 	/// Next appointment process ID
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type NextAppointmentId<T: Config> = StorageValue<_, u32, ValueQuery>;
 
 	// --- COLLECTIVE DECISION STORAGE ---
 
 	/// Storage holding active proposals
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ActiveProposals<T: Config> =
 		StorageMap<_, Blake2_128Concat, u32, CollectiveProposal<T>, OptionQuery>;
 
 	/// Next proposal ID
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type NextProposalId<T: Config> = StorageValue<_, u32, ValueQuery>;
 
 	/// Storage holding collective votes
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type CollectiveVotes<T: Config> = StorageDoubleMap<
 		_,
 		Blake2_128Concat,
@@ -380,12 +380,12 @@ pub mod pallet {
 	>;
 
 	/// Storage holding governance metrics
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type GovernanceStats<T: Config> = StorageValue<_, GovernanceMetrics<T>, OptionQuery>;
 
 	// --- Events ---
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		// --- ELECTION EVENTS ---
 		/// Election started
@@ -481,7 +481,7 @@ pub mod pallet {
 		},
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		// General errors
 		InsufficientTrustScore,
@@ -531,11 +531,11 @@ pub mod pallet {
 	}
 
 	// --- Extrinsics ---
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Initiates a new election
-		#[pallet::call_index(0)]
-		#[pallet::weight(<T as pallet::Config>::WeightInfo::initiate_election())]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(<T as pezpallet::Config>::WeightInfo::initiate_election())]
 		pub fn initiate_election(
 			origin: OriginFor<T>,
 			election_type: ElectionType,
@@ -547,7 +547,7 @@ pub mod pallet {
 			let election_id = NextElectionId::<T>::get();
 			NextElectionId::<T>::put(election_id.saturating_add(1));
 
-			let current_block = <pezframe_system::Pallet<T>>::block_number();
+			let current_block = <pezframe_system::Pezpallet<T>>::block_number();
 
 			let candidacy_deadline;
 			let campaign_start;
@@ -628,8 +628,8 @@ pub mod pallet {
 		}
 
 		/// Register as election candidate
-		#[pallet::call_index(1)]
-		#[pallet::weight(<T as pallet::Config>::WeightInfo::register_candidate())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(<T as pezpallet::Config>::WeightInfo::register_candidate())]
 		pub fn register_candidate(
 			origin: OriginFor<T>,
 			election_id: u32,
@@ -641,7 +641,7 @@ pub mod pallet {
 			let mut election =
 				ActiveElections::<T>::get(election_id).ok_or(Error::<T>::ElectionNotFound)?;
 
-			let current_block = pezframe_system::Pallet::<T>::block_number();
+			let current_block = pezframe_system::Pezpallet::<T>::block_number();
 			ensure!(
 				current_block <= election.candidacy_deadline,
 				Error::<T>::CandidacyPeriodExpired
@@ -651,7 +651,7 @@ pub mod pallet {
 			#[cfg(not(any(test, feature = "runtime-benchmarks")))]
 			{
 				ensure!(
-					<pezpallet_identity_kyc::Pallet<T> as KycStatus<T::AccountId>>::get_kyc_status(
+					<pezpallet_identity_kyc::Pezpallet<T> as KycStatus<T::AccountId>>::get_kyc_status(
 						&candidate
 					) == KycLevel::Approved,
 					Error::<T>::NotACitizen
@@ -684,7 +684,7 @@ pub mod pallet {
 			{
 				for endorser in &endorsers {
 					ensure!(
-						<pezpallet_identity_kyc::Pallet<T> as KycStatus<T::AccountId>>::get_kyc_status(
+						<pezpallet_identity_kyc::Pezpallet<T> as KycStatus<T::AccountId>>::get_kyc_status(
 							endorser
 						) == KycLevel::Approved,
 						Error::<T>::NotACitizen
@@ -729,8 +729,8 @@ pub mod pallet {
 		}
 
 		/// Cast vote
-		#[pallet::call_index(2)]
-		#[pallet::weight(<T as pallet::Config>::WeightInfo::cast_vote())]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(<T as pezpallet::Config>::WeightInfo::cast_vote())]
 		pub fn cast_vote(
 			origin: OriginFor<T>,
 			election_id: u32,
@@ -742,7 +742,7 @@ pub mod pallet {
 			let mut election =
 				ActiveElections::<T>::get(election_id).ok_or(Error::<T>::ElectionNotFound)?;
 
-			let current_block = pezframe_system::Pallet::<T>::block_number();
+			let current_block = pezframe_system::Pezpallet::<T>::block_number();
 			ensure!(
 				current_block >= election.voting_start && current_block <= election.end_block,
 				Error::<T>::VotingPeriodNotStarted
@@ -752,7 +752,7 @@ pub mod pallet {
 			#[cfg(not(any(test, feature = "runtime-benchmarks")))]
 			{
 				ensure!(
-					<pezpallet_identity_kyc::Pallet<T> as KycStatus<T::AccountId>>::get_kyc_status(
+					<pezpallet_identity_kyc::Pezpallet<T> as KycStatus<T::AccountId>>::get_kyc_status(
 						&voter
 					) == KycLevel::Approved,
 					Error::<T>::NotACitizen
@@ -805,15 +805,15 @@ pub mod pallet {
 		}
 
 		/// Finalizes election and determines winners
-		#[pallet::call_index(3)]
-		#[pallet::weight(<T as pallet::Config>::WeightInfo::finalize_election())]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(<T as pezpallet::Config>::WeightInfo::finalize_election())]
 		pub fn finalize_election(origin: OriginFor<T>, election_id: u32) -> DispatchResult {
 			ensure_root(origin)?;
 
 			let mut election =
 				ActiveElections::<T>::get(election_id).ok_or(Error::<T>::ElectionNotFound)?;
 
-			let current_block = pezframe_system::Pallet::<T>::block_number();
+			let current_block = pezframe_system::Pezpallet::<T>::block_number();
 			ensure!(current_block > election.end_block, Error::<T>::ElectionNotActive);
 
 			ensure!(
@@ -869,12 +869,12 @@ pub mod pallet {
 			Ok(())
 		}
 
-		#[pallet::call_index(10)]
-		#[pallet::weight(<T as pallet::Config>::WeightInfo::nominate_official())]
-		#[pallet::feeless_if(|origin: &OriginFor<T>, _nominee: &T::AccountId, _role: &OfficialRole, _justification: &BoundedVec<u8, ConstU32<1000>>| -> bool {
+		#[pezpallet::call_index(10)]
+		#[pezpallet::weight(<T as pezpallet::Config>::WeightInfo::nominate_official())]
+		#[pezpallet::feeless_if(|origin: &OriginFor<T>, _nominee: &T::AccountId, _role: &OfficialRole, _justification: &BoundedVec<u8, ConstU32<1000>>| -> bool {
             // Governance members are exempt from fees when performing official duties
             match ensure_signed(origin.clone()) {
-                Ok(who) => Pallet::<T>::is_governance_member(&who),
+                Ok(who) => Pezpallet::<T>::is_governance_member(&who),
                 Err(_) => false,
             }
         })]
@@ -908,7 +908,7 @@ pub mod pallet {
 			let process_id = NextAppointmentId::<T>::get();
 			NextAppointmentId::<T>::mutate(|id| *id = id.saturating_add(1));
 
-			let current_block = pezframe_system::Pallet::<T>::block_number();
+			let current_block = pezframe_system::Pezpallet::<T>::block_number();
 			let deadline = current_block + BlockNumberFor::<T>::from(14400u32 * 7u32); // 7 days
 
 			// Create nomination info
@@ -949,12 +949,12 @@ pub mod pallet {
 			Ok(())
 		}
 
-		#[pallet::call_index(11)]
-		#[pallet::weight(<T as pallet::Config>::WeightInfo::approve_appointment())]
-		#[pallet::feeless_if(|origin: &OriginFor<T>, _process_id: &u32| -> bool {
+		#[pezpallet::call_index(11)]
+		#[pezpallet::weight(<T as pezpallet::Config>::WeightInfo::approve_appointment())]
+		#[pezpallet::feeless_if(|origin: &OriginFor<T>, _process_id: &u32| -> bool {
             // Serok (President) is exempt from fees when approving appointments
             match ensure_signed(origin.clone()) {
-                Ok(who) => Pallet::<T>::is_serok(&who),
+                Ok(who) => Pezpallet::<T>::is_serok(&who),
                 Err(_) => false,
             }
         })]
@@ -981,7 +981,7 @@ pub mod pallet {
 				.ok_or(Error::<T>::NominationNotFound)?;
 
 			// Update nomination
-			let current_block = pezframe_system::Pallet::<T>::block_number();
+			let current_block = pezframe_system::Pezpallet::<T>::block_number();
 			nomination.approved = true;
 			nomination.approver = Some(approver.clone());
 			nomination.approved_at = Some(current_block);
@@ -1007,12 +1007,12 @@ pub mod pallet {
 			Ok(())
 		}
 
-		#[pallet::call_index(20)]
-		#[pallet::weight(<T as pallet::Config>::WeightInfo::submit_proposal())]
-		#[pallet::feeless_if(|origin: &OriginFor<T>, _title: &BoundedVec<u8, ConstU32<100>>, _description: &BoundedVec<u8, ConstU32<1000>>, _decision_type: &CollectiveDecisionType, _priority: &ProposalPriority, _call: &Option<Box<<T as pezframe_system::Config>::RuntimeCall>>| -> bool {
+		#[pezpallet::call_index(20)]
+		#[pezpallet::weight(<T as pezpallet::Config>::WeightInfo::submit_proposal())]
+		#[pezpallet::feeless_if(|origin: &OriginFor<T>, _title: &BoundedVec<u8, ConstU32<100>>, _description: &BoundedVec<u8, ConstU32<1000>>, _decision_type: &CollectiveDecisionType, _priority: &ProposalPriority, _call: &Option<Box<<T as pezframe_system::Config>::RuntimeCall>>| -> bool {
             // Governance members are exempt from fees when submitting proposals
             match ensure_signed(origin.clone()) {
-                Ok(who) => Pallet::<T>::is_governance_member(&who),
+                Ok(who) => Pezpallet::<T>::is_governance_member(&who),
                 Err(_) => false,
             }
         })]
@@ -1033,7 +1033,7 @@ pub mod pallet {
 			let proposal_id = NextProposalId::<T>::get();
 			NextProposalId::<T>::put(proposal_id.saturating_add(1));
 
-			let current_block = <pezframe_system::Pallet<T>>::block_number();
+			let current_block = <pezframe_system::Pezpallet<T>>::block_number();
 			let voting_starts_at = current_block + 14400u32.into();
 			let expires_at = voting_starts_at + T::ElectionPeriod::get();
 
@@ -1068,12 +1068,12 @@ pub mod pallet {
 			Ok(())
 		}
 
-		#[pallet::call_index(21)]
-		#[pallet::weight(<T as pallet::Config>::WeightInfo::vote_on_proposal())]
-		#[pallet::feeless_if(|origin: &OriginFor<T>, _proposal_id: &u32, _vote: &VoteChoice, _rationale: &Option<BoundedVec<u8, ConstU32<500>>>| -> bool {
+		#[pezpallet::call_index(21)]
+		#[pezpallet::weight(<T as pezpallet::Config>::WeightInfo::vote_on_proposal())]
+		#[pezpallet::feeless_if(|origin: &OriginFor<T>, _proposal_id: &u32, _vote: &VoteChoice, _rationale: &Option<BoundedVec<u8, ConstU32<500>>>| -> bool {
             // Governance members are exempt from fees when voting
             match ensure_signed(origin.clone()) {
-                Ok(who) => Pallet::<T>::is_governance_member(&who),
+                Ok(who) => Pezpallet::<T>::is_governance_member(&who),
                 Err(_) => false,
             }
         })]
@@ -1116,7 +1116,7 @@ pub mod pallet {
 				voter: voter.clone(),
 				proposal_id,
 				vote,
-				voted_at: pezframe_system::Pallet::<T>::block_number(),
+				voted_at: pezframe_system::Pezpallet::<T>::block_number(),
 				rationale,
 			};
 
@@ -1142,7 +1142,7 @@ pub mod pallet {
 	}
 
 	// ====== PUBLIC GETTERS FOR TESTS ======
-	impl<T: Config> Pallet<T> {
+	impl<T: Config> Pezpallet<T> {
 		pub fn active_elections(election_id: u32) -> Option<ElectionInfo<T>> {
 			ActiveElections::<T>::get(election_id)
 		}
@@ -1194,7 +1194,7 @@ pub mod pallet {
 	}
 
 	// ====== HELPER FUNCTIONS ======
-	impl<T: Config> Pallet<T> {
+	impl<T: Config> Pezpallet<T> {
 		/// Serok origin check
 		pub fn ensure_serok(origin: OriginFor<T>) -> Result<T::AccountId, DispatchError> {
 			let who = ensure_signed(origin)?;
@@ -1354,7 +1354,7 @@ pub mod pallet {
 						CurrentOfficials::<T>::insert(GovernmentPosition::Serok, winner);
 					},
 				ElectionType::Parliamentary => {
-					let current_block = pezframe_system::Pallet::<T>::block_number();
+					let current_block = pezframe_system::Pezpallet::<T>::block_number();
 					let term_end = current_block +
 						BlockNumberFor::<T>::from(4u32 * 365u32 * 24u32 * 60u32 * 10u32);
 
@@ -1433,7 +1433,7 @@ pub mod pallet {
 /// For Serok origin check
 pub struct EnsureSerok<T>(pezsp_std::marker::PhantomData<T>);
 
-impl<T: pallet::Config> EnsureOrigin<<T as pezframe_system::Config>::RuntimeOrigin>
+impl<T: pezpallet::Config> EnsureOrigin<<T as pezframe_system::Config>::RuntimeOrigin>
 	for EnsureSerok<T>
 {
 	type Success = T::AccountId;
@@ -1444,7 +1444,7 @@ impl<T: pallet::Config> EnsureOrigin<<T as pezframe_system::Config>::RuntimeOrig
 		match o.clone().into() {
 			Ok(pezframe_system::RawOrigin::Signed(who)) => {
 				if let Some(current_serok) =
-					pallet::Pallet::<T>::current_officials(GovernmentPosition::Serok)
+					pezpallet::Pezpallet::<T>::current_officials(GovernmentPosition::Serok)
 				{
 					if who == current_serok {
 						return Ok(who);
@@ -1459,7 +1459,7 @@ impl<T: pallet::Config> EnsureOrigin<<T as pezframe_system::Config>::RuntimeOrig
 	#[cfg(feature = "runtime-benchmarks")]
 	fn try_successful_origin() -> Result<<T as pezframe_system::Config>::RuntimeOrigin, ()> {
 		let serok_account: T::AccountId = pezframe_benchmarking::account("serok", 0, 0);
-		pallet::CurrentOfficials::<T>::insert(GovernmentPosition::Serok, serok_account.clone());
+		pezpallet::CurrentOfficials::<T>::insert(GovernmentPosition::Serok, serok_account.clone());
 		Ok(pezframe_system::RawOrigin::Signed(serok_account).into())
 	}
 }
@@ -1467,7 +1467,7 @@ impl<T: pallet::Config> EnsureOrigin<<T as pezframe_system::Config>::RuntimeOrig
 /// For Parliament member origin check
 pub struct EnsureParlementer<T>(pezsp_std::marker::PhantomData<T>);
 
-impl<T: pallet::Config> EnsureOrigin<<T as pezframe_system::Config>::RuntimeOrigin>
+impl<T: pezpallet::Config> EnsureOrigin<<T as pezframe_system::Config>::RuntimeOrigin>
 	for EnsureParlementer<T>
 {
 	type Success = T::AccountId;
@@ -1477,7 +1477,7 @@ impl<T: pallet::Config> EnsureOrigin<<T as pezframe_system::Config>::RuntimeOrig
 	) -> Result<Self::Success, <T as pezframe_system::Config>::RuntimeOrigin> {
 		match o.clone().into() {
 			Ok(pezframe_system::RawOrigin::Signed(who)) => {
-				let parliament_members = pallet::Pallet::<T>::parliament_members();
+				let parliament_members = pezpallet::Pezpallet::<T>::parliament_members();
 				if parliament_members.iter().any(|member| member.account == who) {
 					return Ok(who);
 				}
@@ -1508,7 +1508,7 @@ impl<T: pallet::Config> EnsureOrigin<<T as pezframe_system::Config>::RuntimeOrig
 /// For Diwan origin check
 pub struct EnsureDiwan<T>(pezsp_std::marker::PhantomData<T>);
 
-impl<T: pallet::Config> EnsureOrigin<<T as pezframe_system::Config>::RuntimeOrigin>
+impl<T: pezpallet::Config> EnsureOrigin<<T as pezframe_system::Config>::RuntimeOrigin>
 	for EnsureDiwan<T>
 {
 	type Success = T::AccountId;
@@ -1518,7 +1518,7 @@ impl<T: pallet::Config> EnsureOrigin<<T as pezframe_system::Config>::RuntimeOrig
 	) -> Result<Self::Success, <T as pezframe_system::Config>::RuntimeOrigin> {
 		match o.clone().into() {
 			Ok(pezframe_system::RawOrigin::Signed(who)) => {
-				let diwan_members = pallet::Pallet::<T>::diwan_members();
+				let diwan_members = pezpallet::Pezpallet::<T>::diwan_members();
 				if diwan_members.iter().any(|member| member.account == who) {
 					return Ok(who);
 				}
@@ -1548,7 +1548,7 @@ impl<T: pallet::Config> EnsureOrigin<<T as pezframe_system::Config>::RuntimeOrig
 
 // ====== HELPER FUNCTIONS FOR FEE EXEMPTION ======
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Check if an account is any type of governance member
 	/// Used for fee exemption in governance-related transactions
 	pub fn is_governance_member(who: &T::AccountId) -> bool {

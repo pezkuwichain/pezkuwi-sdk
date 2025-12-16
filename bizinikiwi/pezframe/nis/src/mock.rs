@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Test environment for NIS pallet.
+//! Test environment for NIS pezpallet.
 
 use frame::{runtime::prelude::*, testing_prelude::*, traits::StorageMapShim};
 
@@ -25,7 +25,7 @@ pub type Balance = u64;
 
 type Block = pezframe_system::mocking::MockBlock<Test>;
 
-// Configure a mock runtime to test the pallet.
+// Configure a mock runtime to test the pezpallet.
 #[frame_construct_runtime]
 mod runtime {
 	#[runtime::runtime]

@@ -20,7 +20,7 @@
 use super::*;
 use pezsp_staking::{DelegationInterface, DelegationMigrator, OnStakingUpdate};
 
-impl<T: Config> DelegationInterface for Pallet<T> {
+impl<T: Config> DelegationInterface for Pezpallet<T> {
 	type Balance = BalanceOf<T>;
 	type AccountId = T::AccountId;
 
@@ -46,7 +46,7 @@ impl<T: Config> DelegationInterface for Pallet<T> {
 		agent: Agent<Self::AccountId>,
 		reward_account: &Self::AccountId,
 	) -> DispatchResult {
-		Pallet::<T>::register_agent(
+		Pezpallet::<T>::register_agent(
 			RawOrigin::Signed(agent.clone().get()).into(),
 			reward_account.clone(),
 		)
@@ -54,7 +54,7 @@ impl<T: Config> DelegationInterface for Pallet<T> {
 
 	/// Remove `Agent` registration.
 	fn remove_agent(agent: Agent<Self::AccountId>) -> DispatchResult {
-		Pallet::<T>::remove_agent(RawOrigin::Signed(agent.clone().get()).into())
+		Pezpallet::<T>::remove_agent(RawOrigin::Signed(agent.clone().get()).into())
 	}
 
 	/// Add more delegation to the `Agent` account.
@@ -63,7 +63,7 @@ impl<T: Config> DelegationInterface for Pallet<T> {
 		agent: Agent<Self::AccountId>,
 		amount: Self::Balance,
 	) -> DispatchResult {
-		Pallet::<T>::delegate_to_agent(RawOrigin::Signed(who.get()).into(), agent.get(), amount)
+		Pezpallet::<T>::delegate_to_agent(RawOrigin::Signed(who.get()).into(), agent.get(), amount)
 	}
 
 	/// Withdraw delegation of `delegator` to `Agent`.
@@ -76,7 +76,7 @@ impl<T: Config> DelegationInterface for Pallet<T> {
 		amount: Self::Balance,
 		num_slashing_spans: u32,
 	) -> DispatchResult {
-		Pallet::<T>::release_delegation(
+		Pezpallet::<T>::release_delegation(
 			RawOrigin::Signed(agent.get()).into(),
 			delegator.get(),
 			amount,
@@ -95,11 +95,11 @@ impl<T: Config> DelegationInterface for Pallet<T> {
 		value: Self::Balance,
 		maybe_reporter: Option<Self::AccountId>,
 	) -> pezsp_runtime::DispatchResult {
-		Pallet::<T>::do_slash(agent, delegator, value, maybe_reporter)
+		Pezpallet::<T>::do_slash(agent, delegator, value, maybe_reporter)
 	}
 }
 
-impl<T: Config> DelegationMigrator for Pallet<T> {
+impl<T: Config> DelegationMigrator for Pezpallet<T> {
 	type Balance = BalanceOf<T>;
 	type AccountId = T::AccountId;
 
@@ -107,14 +107,14 @@ impl<T: Config> DelegationMigrator for Pallet<T> {
 		agent: Agent<Self::AccountId>,
 		reward_account: &Self::AccountId,
 	) -> DispatchResult {
-		Pallet::<T>::migrate_to_agent(RawOrigin::Signed(agent.get()).into(), reward_account.clone())
+		Pezpallet::<T>::migrate_to_agent(RawOrigin::Signed(agent.get()).into(), reward_account.clone())
 	}
 	fn migrate_delegation(
 		agent: Agent<Self::AccountId>,
 		delegator: Delegator<Self::AccountId>,
 		value: Self::Balance,
 	) -> DispatchResult {
-		Pallet::<T>::migrate_delegation(
+		Pezpallet::<T>::migrate_delegation(
 			RawOrigin::Signed(agent.get()).into(),
 			delegator.get(),
 			value,
@@ -138,7 +138,7 @@ impl<T: Config> DelegationMigrator for Pallet<T> {
 	}
 }
 
-impl<T: Config> OnStakingUpdate<T::AccountId, BalanceOf<T>> for Pallet<T> {
+impl<T: Config> OnStakingUpdate<T::AccountId, BalanceOf<T>> for Pezpallet<T> {
 	fn on_slash(
 		who: &T::AccountId,
 		_slashed_active: BalanceOf<T>,

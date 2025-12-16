@@ -40,7 +40,7 @@
 //! 3. Accessing frame/bizinikiwi dependencies directly: `deps`.
 //!
 //! The main intended use of this crate is through preludes, which re-export most of the components
-//! needed for pallet development. Domain-specific modules serve as a backup for organization, and
+//! needed for pezpallet development. Domain-specific modules serve as a backup for organization, and
 //! `deps` provides direct access to all dependencies if needed.
 //!
 //!
@@ -49,17 +49,17 @@
 //! ```
 //! use pezkuwi_sdk_frame as frame;
 //!
-//! #[frame::pallet]
-//! pub mod pallet {
+//! #[frame::pezpallet]
+//! pub mod pezpallet {
 //! 	# use pezkuwi_sdk_frame as frame;
 //! 	use frame::prelude::*;
 //! 	// ^^ using the prelude!
 //!
-//! 	#[pallet::config]
+//! 	#[pezpallet::config]
 //! 	pub trait Config: pezframe_system::Config {}
 //!
-//! 	#[pallet::pallet]
-//! 	pub struct Pallet<T>(_);
+//! 	#[pezpallet::pezpallet]
+//! 	pub struct Pezpallet<T>(_);
 //! }
 //!
 //! #[cfg(test)]
@@ -89,7 +89,7 @@
 //! pezkuwi-sdk-frame = { version = "foo", features = ["runtime"] }
 //! ```
 //!
-//! If you just want to build a pallet instead, import it as
+//! If you just want to build a pezpallet instead, import it as
 //!
 //! ```text
 //! pezkuwi-sdk-frame = { version = "foo" }
@@ -107,7 +107,7 @@
 //! Please note that this crate can only be imported as `pezkuwi-sdk-frame` or `frame`. This is due
 //! to compatibility matters with `pezframe-support`.
 //!
-//! A typical pallet's `Cargo.toml` using this crate looks like:
+//! A typical pezpallet's `Cargo.toml` using this crate looks like:
 //!
 //! ```ignore
 //! [dependencies]
@@ -137,7 +137,7 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 #[doc(no_inline)]
-pub use pezframe_support::pallet;
+pub use pezframe_support::pezpallet;
 
 #[doc(no_inline)]
 pub use pezframe_support::pezpallet_macros::{import_section, pezpallet_section};
@@ -148,27 +148,27 @@ pub use log;
 #[doc(inline)]
 pub use pezframe_support::storage_alias;
 
-/// Macros used within the main [`pallet`] macro.
+/// Macros used within the main [`pezpallet`] macro.
 ///
-/// Note: All of these macros are "stubs" and not really usable outside `#[pallet] mod pallet { ..
+/// Note: All of these macros are "stubs" and not really usable outside `#[pezpallet] mod pezpallet { ..
 /// }`. They are mainly provided for documentation and IDE support.
 ///
 /// To view a list of all the macros and their documentation, follow the links in the 'Re-exports'
 /// section below:
 pub mod pezpallet_macros {
 	#[doc(no_inline)]
-	pub use pezframe_support::{derive_impl, pallet, pezpallet_macros::*};
+	pub use pezframe_support::{derive_impl, pezpallet, pezpallet_macros::*};
 }
 
 /// The main prelude of FRAME.
 ///
-/// This prelude should almost always be the first line of code in any pallet or runtime.
+/// This prelude should almost always be the first line of code in any pezpallet or runtime.
 ///
 /// ```
 /// use pezkuwi_sdk_frame::prelude::*;
 ///
-/// // rest of your pallet..
-/// mod pallet {}
+/// // rest of your pezpallet..
+/// mod pezpallet {}
 /// ```
 pub mod prelude {
 	/// `pezframe_system`'s parent crate, which is mandatory in all pallets build with this crate.
@@ -178,7 +178,7 @@ pub mod prelude {
 	#[doc(inline)]
 	pub use pezframe_system;
 
-	/// Pallet prelude of `pezframe-support`.
+	/// Pezpallet prelude of `pezframe-support`.
 	///
 	/// Note: this needs to revised once `pezframe-support` evolves.
 	#[doc(no_inline)]
@@ -198,7 +198,7 @@ pub mod prelude {
 		PalletId,
 	};
 
-	/// Pallet prelude of `pezframe-system`.
+	/// Pezpallet prelude of `pezframe-system`.
 	#[doc(no_inline)]
 	pub use pezframe_system::pezpallet_prelude::*;
 
@@ -248,7 +248,7 @@ pub mod try_runtime {
 	pub use pezsp_runtime::TryRuntimeError;
 }
 
-/// Prelude to be included in the `benchmarking.rs` of a pallet.
+/// Prelude to be included in the `benchmarking.rs` of a pezpallet.
 ///
 /// It supports both the `benchmarking::v1::benchmarks` and `benchmarking::v2::benchmark` syntax.
 ///
@@ -265,8 +265,8 @@ pub mod benchmarking {
 		// all benchmarking functions.
 		pub use pezframe_benchmarking::benchmarking::*;
 		// The system origin, which is very often needed in benchmarking code. Might be tricky only
-		// if the pallet defines its own `#[pallet::origin]` and call it `RawOrigin`.
-		pub use pezframe_system::{Pallet as System, RawOrigin};
+		// if the pezpallet defines its own `#[pezpallet::origin]` and call it `RawOrigin`.
+		pub use pezframe_system::{Pezpallet as System, RawOrigin};
 	}
 
 	#[deprecated(
@@ -284,11 +284,11 @@ pub mod benchmarking {
 			whitelisted_caller,
 		};
 		pub use pezframe_support::traits::UnfilteredDispatchable;
-		pub use pezframe_system::{Pallet as System, RawOrigin};
+		pub use pezframe_system::{Pezpallet as System, RawOrigin};
 	}
 }
 
-/// Prelude to be included in the `weight.rs` of each pallet.
+/// Prelude to be included in the `weight.rs` of each pezpallet.
 ///
 /// ```
 /// pub use pezkuwi_sdk_frame::weights_prelude::*;
@@ -371,7 +371,7 @@ pub mod runtime {
 		/// This is the newer version of [`construct_runtime`].
 		pub use pezframe_support::runtime as frame_construct_runtime;
 
-		/// Macro to easily derive the `Config` trait of various pallet for `Runtime`.
+		/// Macro to easily derive the `Config` trait of various pezpallet for `Runtime`.
 		pub use pezframe_support::derive_impl;
 
 		/// Macros to easily impl traits such as `Get` for types.

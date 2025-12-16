@@ -25,10 +25,10 @@
 // frame-omni-bencher
 // v1
 // benchmark
-// pallet
+// pezpallet
 // --extrinsic=*
 // --runtime=target/production/wbuild/pezbridge-hub-pezkuwichain-runtime/pezbridge_hub_pezkuwichain_runtime.wasm
-// --pallet=pezpallet_timestamp
+// --pezpallet=pezpallet_timestamp
 // --header=/__w/pezkuwi-sdk/pezkuwi-sdk/pezcumulus/file_header.txt
 // --output=./pezcumulus/teyrchains/runtimes/bridge-hubs/bridge-hub-pezkuwichain/src/weights
 // --wasm-execution=compiled

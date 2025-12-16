@@ -30,12 +30,12 @@ use crate::*;
 use pezframe_benchmarking::v2::*;
 use pezframe_system::RawOrigin;
 
-// To actually run this benchmark on pezpallet-example-basic, we need to put this pallet into the
+// To actually run this benchmark on pezpallet-example-basic, we need to put this pezpallet into the
 //   runtime and compile it with `runtime-benchmarks` feature. The detail procedures are
 //   documented at:
 //   https://docs.pezkuwichain.io/reference/how-to-guides/weights/add-benchmarks/
 //
-// The auto-generated weight estimate of this pallet is copied over to the `weights.rs` file.
+// The auto-generated weight estimate of this pezpallet is copied over to the `weights.rs` file.
 // The exact command of how the estimate generated is printed at the top of the file.
 
 // Details on using the benchmarks macro can be seen at:
@@ -120,5 +120,5 @@ mod benchmarks {
 	//
 	// The line generates three steps per benchmark, with repeat=1 and the three steps are
 	//   [low, mid, high] of the range.
-	impl_benchmark_test_suite!(Pallet, crate::tests::new_test_ext(), crate::tests::Test);
+	impl_benchmark_test_suite!(Pezpallet, crate::tests::new_test_ext(), crate::tests::Test);
 }

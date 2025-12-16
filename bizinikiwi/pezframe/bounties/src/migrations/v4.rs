@@ -29,7 +29,7 @@ use pezsp_io::{hashing::twox_128, storage};
 
 use crate as pezpallet_bounties;
 
-/// Migrate the storage of the bounties pallet to a new prefix, leaving all other storage untouched
+/// Migrate the storage of the bounties pezpallet to a new prefix, leaving all other storage untouched
 ///
 /// This new prefix must be the same as the one set in construct_runtime. For safety, use
 /// `PalletInfo` to get it, as:
@@ -52,7 +52,7 @@ pub fn migrate<
 	if new_pallet_name == old_pallet_name {
 		log::info!(
 			target: "runtime::bounties",
-			"New pallet name is equal to the old prefix. No migration needs to be done.",
+			"New pezpallet name is equal to the old prefix. No migration needs to be done.",
 		);
 		return Weight::zero();
 	}
@@ -149,7 +149,7 @@ pub fn pre_migration<T: pezpallet_bounties::Config, P: GetStorageVersion + 'stat
 			// either nothing is there
 			true,
 			// or we ensure that the next key has no common prefix with twox_128(new),
-			// or is the pallet version that is already stored using the pallet name
+			// or is the pezpallet version that is already stored using the pezpallet name
 			|next_key| {
 				storage::next_key(&next_key).map_or(true, |next_key| {
 					!next_key.starts_with(&new_pallet_prefix) || next_key == storage_version_key

@@ -30,12 +30,12 @@
 //!
 //! Allows to update configuration parameters at runtime.
 //!
-//! ## Pallet API
+//! ## Pezpallet API
 //!
-//! This pallet exposes two APIs; one *inbound* side to update parameters, and one *outbound* side
+//! This pezpallet exposes two APIs; one *inbound* side to update parameters, and one *outbound* side
 //! to access said parameters. Parameters themselves are defined in the runtime config and will be
 //! aggregated into an enum. Each parameter is addressed by a `key` and can have a default value.
-//! This is not done by the pallet but through the [`pezframe_support::dynamic_params::dynamic_params`]
+//! This is not done by the pezpallet but through the [`pezframe_support::dynamic_params::dynamic_params`]
 //! macro or alternatives.
 //!
 //! Note that this is incurring one storage read per access. This should not be a problem in most
@@ -43,7 +43,7 @@
 //!
 //! ### Inbound
 //!
-//! The inbound side solely consists of the [`Pallet::set_parameter`] extrinsic to update the value
+//! The inbound side solely consists of the [`Pezpallet::set_parameter`] extrinsic to update the value
 //! of a parameter. Each parameter can have their own admin origin as given by the
 //! [`Config::AdminOrigin`].
 //!
@@ -55,15 +55,15 @@
 //! [`pezframe_support::dynamic_params:dynamic_pallet_params`] to define and expose parameters in a
 //! typed manner.
 //!
-//! See the [`pallet`] module for more information about the interfaces this pallet exposes,
+//! See the [`pezpallet`] module for more information about the interfaces this pezpallet exposes,
 //! including its configuration trait, dispatchables, storage items, events and errors.
 //!
 //! ## Overview
 //!
-//! This pallet is a good fit for updating parameters without a runtime upgrade. It is very handy to
+//! This pezpallet is a good fit for updating parameters without a runtime upgrade. It is very handy to
 //! not require a runtime upgrade for a simple parameter change since runtime upgrades require a lot
 //! of diligence and always bear risks. It seems overkill to update the whole runtime for a simple
-//! parameter change. This pallet allows for fine-grained control over who can update what.
+//! parameter change. This pezpallet allows for fine-grained control over who can update what.
 //! The only down-side is that it trades off performance with convenience and should therefore only
 //! be used in places where that is proven to be uncritical. Values that are rarely accessed but
 //! change often would be a perfect fit.
@@ -76,12 +76,12 @@
 //! A permissioned origin can be define on a per-key basis like this:
 #![doc = docify::embed!("src/tests/mock.rs", custom_origin)]
 //!
-//! The pallet will also require a default value for benchmarking. Ideally this is the variant with
+//! The pezpallet will also require a default value for benchmarking. Ideally this is the variant with
 //! the longest encoded length. Although in either case the PoV benchmarking will take the worst
 //! case over the whole enum.
 #![doc = docify::embed!("src/tests/mock.rs", benchmarking_default)]
 //!
-//! Now the aggregated parameter needs to be injected into the pallet config:
+//! Now the aggregated parameter needs to be injected into the pezpallet config:
 #![doc = docify::embed!("src/tests/mock.rs", impl_config)]
 //!
 //! As last step, the parameters can now be used in other pallets 🙌
@@ -94,14 +94,14 @@
 //!
 //! ## Low Level / Implementation Details
 //!
-//! The pallet stores the parameters in a storage map and implements the matching `Get<Value>` for
+//! The pezpallet stores the parameters in a storage map and implements the matching `Get<Value>` for
 //! each `Key` type. The `Get` then accesses the `Parameters` map to retrieve the value. An event is
 //! emitted every time that a value was updated. It is even emitted when the value is changed to the
 //! same.
 //!
 //! The key and value types themselves are defined by macros and aggregated into a runtime wide
-//! enum. This enum is then injected into the pallet. This allows it to be used without any changes
-//! to the pallet that the parameter will be utilized by.
+//! enum. This enum is then injected into the pezpallet. This allows it to be used without any changes
+//! to the pezpallet that the parameter will be utilized by.
 //!
 //! ### Design Goals
 //!
@@ -131,7 +131,7 @@ mod benchmarking;
 mod tests;
 mod weights;
 
-pub use pallet::*;
+pub use pezpallet::*;
 pub use weights::WeightInfo;
 
 /// The key type of a parameter.
@@ -140,36 +140,36 @@ type KeyOf<T> = <<T as Config>::RuntimeParameters as AggregatedKeyValue>::Key;
 /// The value type of a parameter.
 type ValueOf<T> = <<T as Config>::RuntimeParameters as AggregatedKeyValue>::Value;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::config(with_default)]
+	#[pezpallet::config(with_default)]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// The overarching KV type of the parameters.
 		///
 		/// Usually created by [`pezframe_support::dynamic_params`] or equivalent.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		type RuntimeParameters: AggregatedKeyValue;
 
 		/// The origin which may update a parameter.
 		///
 		/// The key of the parameter is passed in as second argument to allow for fine grained
 		/// control.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		type AdminOrigin: EnsureOriginWithArg<Self::RuntimeOrigin, KeyOf<Self>>;
 
 		/// Weight information for extrinsics in this module.
 		type WeightInfo: WeightInfo;
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(crate) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(crate) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A Parameter was set.
 		///
@@ -185,21 +185,21 @@ pub mod pallet {
 	}
 
 	/// Stored parameters.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Parameters<T: Config> =
 		StorageMap<_, Blake2_128Concat, KeyOf<T>, ValueOf<T>, OptionQuery>;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Set the value of a parameter.
 		///
 		/// The dispatch origin of this call must be `AdminOrigin` for the given `key`. Values be
 		/// deleted by setting them to `None`.
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::set_parameter())]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::set_parameter())]
 		pub fn set_parameter(
 			origin: OriginFor<T>,
 			key_value: T::RuntimeParameters,
@@ -245,7 +245,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> RuntimeParameterStore for Pallet<T> {
+impl<T: Config> RuntimeParameterStore for Pezpallet<T> {
 	type AggregatedKeyValue = T::RuntimeParameters;
 
 	fn get<KV, K>(key: K) -> Option<K::Value>

@@ -15,14 +15,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Pallet State Trie Migration
+//! # Pezpallet State Trie Migration
 //!
 //! Reads and writes all keys and values in the entire state in a systematic way. This is useful for
 //! upgrading a chain to [`sp-core::StateVersion::V1`], where all keys need to be touched.
 //!
 //! ## Migration Types
 //!
-//! This pallet provides 2 ways to do this, each of which is suited for a particular use-case, and
+//! This pezpallet provides 2 ways to do this, each of which is suited for a particular use-case, and
 //! can be enabled independently.
 //!
 //! ### Auto migration
@@ -43,21 +43,21 @@
 //! can be a good safe alternative, if the former system is not desirable.
 //!
 //! The (minor) caveat of this approach is that we cannot know in advance how many bytes reading a
-//! certain number of keys will incur. To overcome this, the runtime needs to configure this pallet
+//! certain number of keys will incur. To overcome this, the runtime needs to configure this pezpallet
 //! with a `SignedDepositPerItem`. This is the per-item deposit that the origin of the signed
 //! migration transactions need to have in their account (on top of the normal fee) and if the size
 //! witness data that they claim is incorrect, this deposit is slashed.
 //!
 //! ---
 //!
-//! Initially, this pallet does not contain any auto migration. They must be manually enabled by the
+//! Initially, this pezpallet does not contain any auto migration. They must be manually enabled by the
 //! `ControlOrigin`.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
 extern crate alloc;
 
-pub use pallet::*;
+pub use pezpallet::*;
 pub mod weights;
 
 const LOG_TARGET: &str = "runtime::state-trie-migration";
@@ -67,13 +67,13 @@ macro_rules! log {
 	($level:tt, $patter:expr $(, $values:expr)* $(,)?) => {
 		log::$level!(
 			target: crate::LOG_TARGET,
-			concat!("[{:?}] 🤖 ", $patter), pezframe_system::Pallet::<T>::block_number() $(, $values)*
+			concat!("[{:?}] 🤖 ", $patter), pezframe_system::Pezpallet::<T>::block_number() $(, $values)*
 		)
 	};
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 
 	pub use crate::weights::WeightInfo;
 
@@ -279,7 +279,7 @@ pub mod pallet {
 
 		/// Migrate AT MOST ONE KEY. This can be either a top or a child key.
 		///
-		/// This function is *the* core of this entire pallet.
+		/// This function is *the* core of this entire pezpallet.
 		fn migrate_tick(&mut self) -> Result<(), Error<T>> {
 			match (&self.progress_top, &self.progress_child) {
 				(Progress::ToStart, _) => self.migrate_top(),
@@ -324,7 +324,7 @@ pub mod pallet {
 			let (maybe_current_child, child_root) = match (&self.progress_child, &self.progress_top)
 			{
 				(Progress::LastKey(last_child), Progress::LastKey(last_top)) => {
-					let child_root = Pallet::<T>::transform_child_key_or_halt(last_top);
+					let child_root = Pezpallet::<T>::transform_child_key_or_halt(last_top);
 					let maybe_current_child: Option<BoundedVec<u8, T::MaxKeyLen>> =
 						if let Some(next) = child_io::next_key(child_root, last_child) {
 							Some(next.try_into().map_err(|_| Error::<T>::KeyTooLong)?)
@@ -335,7 +335,7 @@ pub mod pallet {
 					(maybe_current_child, child_root)
 				},
 				(Progress::ToStart, Progress::LastKey(last_top)) => {
-					let child_root = Pallet::<T>::transform_child_key_or_halt(last_top);
+					let child_root = Pezpallet::<T>::transform_child_key_or_halt(last_top);
 					// Start with the empty key as first key.
 					(Some(Default::default()), child_root)
 				},
@@ -448,9 +448,9 @@ pub mod pallet {
 		Auto,
 	}
 
-	/// Inner events of this pallet.
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	/// Inner events of this pezpallet.
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// Given number of `(top, child)` keys were migrated respectively, with the given
 		/// `compute`.
@@ -463,9 +463,9 @@ pub mod pallet {
 		Halted { error: Error<T> },
 	}
 
-	/// The outer Pallet struct.
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	/// The outer Pezpallet struct.
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
 	/// Default implementations of [`DefaultConfig`], which can be used to implement [`Config`].
 	pub mod config_preludes {
@@ -486,39 +486,39 @@ pub mod pallet {
 		}
 	}
 
-	/// The reason for this pallet placing a hold on funds.
-	#[pallet::composite_enum]
+	/// The reason for this pezpallet placing a hold on funds.
+	#[pezpallet::composite_enum]
 	pub enum HoldReason {
 		/// The funds are held as a deposit for slashing.
 		#[codec(index = 0)]
 		SlashForMigrate,
 	}
 
-	/// Configurations of this pallet.
-	#[pallet::config(with_default)]
+	/// Configurations of this pezpallet.
+	#[pezpallet::config(with_default)]
 	pub trait Config: pezframe_system::Config {
-		/// Origin that can control the configurations of this pallet.
-		#[pallet::no_default]
+		/// Origin that can control the configurations of this pezpallet.
+		#[pezpallet::no_default]
 		type ControlOrigin: EnsureOrigin<Self::RuntimeOrigin>;
 
 		/// Filter on which origin that trigger the manual migrations.
-		#[pallet::no_default]
+		#[pezpallet::no_default]
 		type SignedFilter: EnsureOrigin<Self::RuntimeOrigin, Success = Self::AccountId>;
 
 		/// The overarching event type.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		/// The currency provider type.
-		#[pallet::no_default]
+		#[pezpallet::no_default]
 		type Currency: InspectHold<Self::AccountId>
 			+ Mutate<Self::AccountId>
 			+ MutateHold<Self::AccountId, Reason = Self::RuntimeHoldReason>
 			+ Balanced<Self::AccountId>;
 
 		/// The overarching runtime hold reason.
-		#[pallet::no_default_bounds]
+		#[pezpallet::no_default_bounds]
 		type RuntimeHoldReason: From<HoldReason>;
 
 		/// Maximal number of bytes that a key can have.
@@ -543,50 +543,50 @@ pub mod pallet {
 		/// For more info see
 		/// <https://www.shawntabrizi.com/blog/bizinikiwi/querying-bizinikiwi-storage-via-rpc/>
 
-		#[pallet::constant]
-		#[pallet::no_default]
+		#[pezpallet::constant]
+		#[pezpallet::no_default]
 		type MaxKeyLen: Get<u32>;
 
 		/// The amount of deposit collected per item in advance, for signed migrations.
 		///
 		/// This should reflect the average storage value size in the worse case.
-		#[pallet::no_default]
+		#[pezpallet::no_default]
 		type SignedDepositPerItem: Get<BalanceOf<Self>>;
 
 		/// The base value of [`Config::SignedDepositPerItem`].
 		///
 		/// Final deposit is `items * SignedDepositPerItem + SignedDepositBase`.
-		#[pallet::no_default]
+		#[pezpallet::no_default]
 		type SignedDepositBase: Get<BalanceOf<Self>>;
 
-		/// The weight information of this pallet.
-		#[pallet::no_default]
+		/// The weight information of this pezpallet.
+		#[pezpallet::no_default]
 		type WeightInfo: WeightInfo;
 	}
 
 	/// Migration progress.
 	///
 	/// This stores the snapshot of the last migrated keys. It can be set into motion and move
-	/// forward by any of the means provided by this pallet.
-	#[pallet::storage]
-	#[pallet::getter(fn migration_process)]
+	/// forward by any of the means provided by this pezpallet.
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn migration_process)]
 	pub type MigrationProcess<T> = StorageValue<_, MigrationTask<T>, ValueQuery>;
 
 	/// The limits that are imposed on automatic migrations.
 	///
 	/// If set to None, then no automatic migration happens.
-	#[pallet::storage]
-	#[pallet::getter(fn auto_limits)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn auto_limits)]
 	pub type AutoLimits<T> = StorageValue<_, Option<MigrationLimits>, ValueQuery>;
 
 	/// The maximum limits that the signed migration could use.
 	///
 	/// If not set, no signed submission is allowed.
-	#[pallet::storage]
-	#[pallet::getter(fn signed_migration_max_limits)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn signed_migration_max_limits)]
 	pub type SignedMigrationMaxLimits<T> = StorageValue<_, MigrationLimits, OptionQuery>;
 
-	#[pallet::error]
+	#[pezpallet::error]
 	#[derive(Clone, PartialEq)]
 	pub enum Error<T> {
 		/// Max signed limits not respected.
@@ -609,13 +609,13 @@ pub mod pallet {
 		BadChildRoot,
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Control the automatic migration.
 		///
 		/// The dispatch origin of this call must be [`Config::ControlOrigin`].
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::DbWeight::get().reads_writes(1, 1))]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::DbWeight::get().reads_writes(1, 1))]
 		pub fn control_auto_migration(
 			origin: OriginFor<T>,
 			maybe_config: Option<MigrationLimits>,
@@ -646,10 +646,10 @@ pub mod pallet {
 		/// Based on the documentation of [`MigrationTask::migrate_until_exhaustion`], the
 		/// recommended way of doing this is to pass a `limit` that only bounds `count`, as the
 		/// `size` limit can always be overwritten.
-		#[pallet::call_index(1)]
-		#[pallet::weight(
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(
 			// the migration process
-			Pallet::<T>::dynamic_weight(limits.item, * real_size_upper)
+			Pezpallet::<T>::dynamic_weight(limits.item, * real_size_upper)
 			// rest of the operations, like deposit etc.
 			+ T::WeightInfo::continue_migrate()
 		)]
@@ -702,7 +702,7 @@ pub mod pallet {
 
 			// refund and correct the weight.
 			let actual_weight = Some(
-				Pallet::<T>::dynamic_weight(limits.item, task.dyn_size)
+				Pezpallet::<T>::dynamic_weight(limits.item, task.dyn_size)
 					.saturating_add(T::WeightInfo::continue_migrate()),
 			);
 
@@ -718,12 +718,12 @@ pub mod pallet {
 		///
 		/// This does not affect the global migration process tracker ([`MigrationProcess`]), and
 		/// should only be used in case any keys are leftover due to a bug.
-		#[pallet::call_index(2)]
-		#[pallet::weight(
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(
 			T::WeightInfo::migrate_custom_top_success()
 				.max(T::WeightInfo::migrate_custom_top_fail())
 			.saturating_add(
-				Pallet::<T>::dynamic_weight(keys.len() as u32, *witness_size)
+				Pezpallet::<T>::dynamic_weight(keys.len() as u32, *witness_size)
 			)
 		)]
 		pub fn migrate_custom_top(
@@ -760,7 +760,7 @@ pub mod pallet {
 				Ok(PostDispatchInfo {
 					actual_weight: Some(
 						T::WeightInfo::migrate_custom_top_success().saturating_add(
-							Pallet::<T>::dynamic_weight(keys.len() as u32, dyn_size),
+							Pezpallet::<T>::dynamic_weight(keys.len() as u32, dyn_size),
 						),
 					),
 					pays_fee: Pays::Yes,
@@ -774,12 +774,12 @@ pub mod pallet {
 		///
 		/// This does not affect the global migration process tracker ([`MigrationProcess`]), and
 		/// should only be used in case any keys are leftover due to a bug.
-		#[pallet::call_index(3)]
-		#[pallet::weight(
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(
 			T::WeightInfo::migrate_custom_child_success()
 				.max(T::WeightInfo::migrate_custom_child_fail())
 			.saturating_add(
-				Pallet::<T>::dynamic_weight(child_keys.len() as u32, *total_size)
+				Pezpallet::<T>::dynamic_weight(child_keys.len() as u32, *total_size)
 			)
 		)]
 		pub fn migrate_custom_child(
@@ -822,7 +822,7 @@ pub mod pallet {
 				Ok(PostDispatchInfo {
 					actual_weight: Some(
 						T::WeightInfo::migrate_custom_child_success().saturating_add(
-							Pallet::<T>::dynamic_weight(child_keys.len() as u32, total_size),
+							Pezpallet::<T>::dynamic_weight(child_keys.len() as u32, total_size),
 						),
 					),
 					pays_fee: Pays::Yes,
@@ -831,8 +831,8 @@ pub mod pallet {
 		}
 
 		/// Set the maximum limit of the signed migration.
-		#[pallet::call_index(4)]
-		#[pallet::weight(T::DbWeight::get().reads_writes(1, 1))]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(T::DbWeight::get().reads_writes(1, 1))]
 		pub fn set_signed_max_limits(
 			origin: OriginFor<T>,
 			limits: MigrationLimits,
@@ -851,8 +851,8 @@ pub mod pallet {
 		///
 		/// In case you mess things up, you can also, in principle, use this to reset the migration
 		/// process.
-		#[pallet::call_index(5)]
-		#[pallet::weight(T::DbWeight::get().reads_writes(1, 1))]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(T::DbWeight::get().reads_writes(1, 1))]
 		pub fn force_set_progress(
 			origin: OriginFor<T>,
 			progress_top: ProgressOf<T>,
@@ -867,8 +867,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn on_initialize(_: BlockNumberFor<T>) -> Weight {
 			if let Some(limits) = Self::auto_limits() {
 				let mut task = Self::migration_process();
@@ -905,7 +905,7 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config> Pallet<T> {
+	impl<T: Config> Pezpallet<T> {
 		/// The real weight of a migration of the given number of `items` with total `size`.
 		fn dynamic_weight(items: u32, size: u32) -> pezframe_support::pezpallet_prelude::Weight {
 			let items = items as u64;
@@ -977,7 +977,7 @@ pub mod pallet {
 
 #[cfg(feature = "runtime-benchmarks")]
 mod benchmarks {
-	use super::{pallet::Pallet as StateTrieMigration, *};
+	use super::{pezpallet::Pezpallet as StateTrieMigration, *};
 	use alloc::vec;
 	use pezframe_benchmarking::v2::*;
 	use pezframe_support::traits::fungible::{Inspect, Mutate};
@@ -1080,7 +1080,7 @@ mod benchmarks {
 				)
 				.is_ok());
 
-				pezframe_system::Pallet::<T>::assert_last_event(
+				pezframe_system::Pezpallet::<T>::assert_last_event(
 					<T as Config>::RuntimeEvent::from(crate::Event::Slashed {
 						who: caller.clone(),
 						amount: StateTrieMigration::<T>::calculate_deposit_for(1u32),
@@ -1177,7 +1177,7 @@ mod mock {
 
 	type Block = pezframe_system::mocking::MockBlockU32<Test>;
 
-	// Configure a mock runtime to test the pallet.
+	// Configure a mock runtime to test the pezpallet.
 	pezframe_support::construct_runtime!(
 		pub enum Test
 		{
@@ -1723,13 +1723,13 @@ mod test {
 /// Exported set of tests to be called against different runtimes.
 #[cfg(feature = "remote-test")]
 pub(crate) mod remote_tests {
-	use crate::{AutoLimits, MigrationLimits, Pallet as StateTrieMigration, LOG_TARGET};
+	use crate::{AutoLimits, MigrationLimits, Pezpallet as StateTrieMigration, LOG_TARGET};
 	use codec::Encode;
 	use pezframe_support::{
 		traits::{Get, Hooks},
 		weights::Weight,
 	};
-	use pezframe_system::{pezpallet_prelude::BlockNumberFor, Pallet as System};
+	use pezframe_system::{pezpallet_prelude::BlockNumberFor, Pezpallet as System};
 	use remote_externalities::Mode;
 	use pezsp_core::H256;
 	use pezsp_runtime::{
@@ -1779,7 +1779,7 @@ pub(crate) mod remote_tests {
 		let mut now = ext.execute_with(|| {
 			AutoLimits::<Runtime>::put(Some(limits));
 			// requires the block number type in our tests to be same as with mainnet, u32.
-			pezframe_system::Pallet::<Runtime>::block_number()
+			pezframe_system::Pezpallet::<Runtime>::block_number()
 		});
 
 		let mut duration: BlockNumberFor<Runtime> = Zero::zero();

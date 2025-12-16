@@ -26,7 +26,7 @@ pezsp_api::decl_runtime_apis! {
 		/// dry-run runtime upgrades, returning the total weight consumed.
 		///
 		/// This should do EXACTLY the same operations as the runtime would have done in the case of
-		/// a runtime upgrade (e.g. pallet ordering must be the same)
+		/// a runtime upgrade (e.g. pezpallet ordering must be the same)
 		///
 		/// Returns the consumed weight of the migration in case of a successful one, combined with
 		/// the total allowed block weight of the runtime.

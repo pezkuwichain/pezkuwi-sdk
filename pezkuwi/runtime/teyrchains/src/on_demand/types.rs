@@ -16,7 +16,7 @@
 
 //! On demand module types.
 
-use super::{alloc, pallet::Config};
+use super::{alloc, pezpallet::Config};
 use alloc::collections::BinaryHeap;
 use core::cmp::{Ord, Ordering, PartialOrd};
 use pezframe_support::{

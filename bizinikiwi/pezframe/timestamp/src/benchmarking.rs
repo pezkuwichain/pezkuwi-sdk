@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Timestamp pallet benchmarking.
+//! Timestamp pezpallet benchmarking.
 
 #![cfg(feature = "runtime-benchmarks")]
 
@@ -53,7 +53,7 @@ mod benchmarks {
 	#[benchmark]
 	fn on_finalize() {
 		let t = MAX_TIME;
-		Pallet::<T>::set(RawOrigin::None.into(), t.into()).unwrap();
+		Pezpallet::<T>::set(RawOrigin::None.into(), t.into()).unwrap();
 		assert!(DidUpdate::<T>::exists(), "Time was not set.");
 
 		// Ignore read/write to `DidUpdate` since it is transient.
@@ -62,14 +62,14 @@ mod benchmarks {
 
 		#[block]
 		{
-			Pallet::<T>::on_finalize(t.into());
+			Pezpallet::<T>::on_finalize(t.into());
 		}
 
 		assert!(!DidUpdate::<T>::exists(), "Time was not removed.");
 	}
 
 	impl_benchmark_test_suite! {
-		Pallet,
+		Pezpallet,
 		mock::new_test_ext(),
 		mock::Test
 	}

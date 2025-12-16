@@ -84,7 +84,7 @@ pub type SecretarySalaryInstance = pezpallet_salary::Instance3;
 
 parameter_types! {
 	// The interior location on AssetHub for the paying account. This is the Secretary Salary
-	// pallet instance. This sovereign account will need funding.
+	// pezpallet instance. This sovereign account will need funding.
 	pub SecretarySalaryInteriorLocation: InteriorLocation = PalletInstance(<crate::SecretarySalary as PalletInfoAccess>::index() as u8).into();
 }
 
@@ -124,7 +124,7 @@ impl pezpallet_salary::Config<SecretarySalaryInstance> for Runtime {
 		SecretarySalaryPaymaster,
 		OpenHrmpChannel<ConstU32<1000>>,
 	>;
-	type Members = pezpallet_ranked_collective::Pallet<Runtime, SecretaryCollectiveInstance>;
+	type Members = pezpallet_ranked_collective::Pezpallet<Runtime, SecretaryCollectiveInstance>;
 
 	#[cfg(not(feature = "runtime-benchmarks"))]
 	type Salary = SalaryForRank;

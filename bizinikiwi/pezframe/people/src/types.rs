@@ -174,7 +174,7 @@ pub struct RingStatus {
 	pub included: u32,
 }
 
-/// The state of a person's key within the pallet along with its position in relevant structures.
+/// The state of a person's key within the pezpallet along with its position in relevant structures.
 ///
 /// Differentiates between individuals included in a ring, those being onboarded and the suspended
 /// ones. For those already included, provides ring index and position in it. For those being

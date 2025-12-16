@@ -206,19 +206,19 @@ pub struct RuntimeVersion {
 	/// All existing calls (dispatchables) are fully compatible when this number doesn't change. If
 	/// this number changes, then [`spec_version`](Self::spec_version) must change, also.
 	///
-	/// This number must change when an existing call (pallet index, call index) is changed,
+	/// This number must change when an existing call (pezpallet index, call index) is changed,
 	/// either through an alteration in its user-level semantics, a parameter
-	/// added/removed, a parameter type changed, or a call/pallet changing its index. An alteration
+	/// added/removed, a parameter type changed, or a call/pezpallet changing its index. An alteration
 	/// of the user level semantics is for example when the call was before `transfer` and now is
 	/// `transfer_all`, the semantics of the call changed completely.
 	///
-	/// Removing a pallet or a call doesn't require a *bump* as long as no pallet or call is put at
+	/// Removing a pezpallet or a call doesn't require a *bump* as long as no pezpallet or call is put at
 	/// the same index. Removing doesn't require a bump as the chain will reject a transaction
-	/// referencing this removed call/pallet while decoding and thus, the user isn't at risk to
-	/// execute any unknown call. FRAME runtime devs have control over the index of a call/pallet
+	/// referencing this removed call/pezpallet while decoding and thus, the user isn't at risk to
+	/// execute any unknown call. FRAME runtime devs have control over the index of a call/pezpallet
 	/// to prevent that an index gets reused.
 	///
-	/// Adding a new pallet or call also doesn't require a *bump* as long as they also don't reuse
+	/// Adding a new pezpallet or call also doesn't require a *bump* as long as they also don't reuse
 	/// any previously used index.
 	///
 	/// This number should never decrease.

@@ -15,15 +15,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! A lottery pallet that uses participation in the network to purchase tickets.
+//! A lottery pezpallet that uses participation in the network to purchase tickets.
 //!
-//! With this pallet, you can configure a lottery, which is a pot of money that
+//! With this pezpallet, you can configure a lottery, which is a pot of money that
 //! users contribute to, and that is reallocated to a single user at the end of
 //! the lottery period. Just like a normal lottery system, to participate, you
 //! need to "buy a ticket", which is used to fund the pot.
 //!
 //! The unique feature of this lottery system is that tickets can only be
-//! purchased by making a "valid call" dispatched through this pallet.
+//! purchased by making a "valid call" dispatched through this pezpallet.
 //! By configuring certain calls to be valid for the lottery, you can encourage
 //! users to make those calls on your network. An example of how this could be
 //! used is to set validator nominations as a valid lottery call. If the lottery
@@ -31,14 +31,14 @@
 //! validators every month. A user can only purchase one ticket per valid call
 //! per lottery.
 //!
-//! This pallet can be configured to use dynamically set calls or statically set
+//! This pezpallet can be configured to use dynamically set calls or statically set
 //! calls. Call validation happens through the `ValidateCall` implementation.
-//! This pallet provides one implementation of this using the `CallIndices`
+//! This pezpallet provides one implementation of this using the `CallIndices`
 //! storage item. You can also make your own implementation at the runtime level
 //! which can contain much more complex logic, such as validation of the
-//! parameters, which this pallet alone cannot do.
+//! parameters, which this pezpallet alone cannot do.
 //!
-//! This pallet uses the modulus operator to pick a random winner. It is known
+//! This pezpallet uses the modulus operator to pick a random winner. It is known
 //! that this might introduce a bias if the random number chosen in a range that
 //! is not perfectly divisible by the total number of participants. The
 //! `MaxGenerateRandom` configuration can help mitigate this by generating new
@@ -66,7 +66,7 @@ use pezframe_support::{
 	traits::{Currency, ExistenceRequirement::KeepAlive, Get, Randomness, ReservableCurrency},
 	PalletId,
 };
-pub use pallet::*;
+pub use pezpallet::*;
 use pezsp_runtime::{
 	traits::{AccountIdConversion, Dispatchable, Saturating, Zero},
 	ArithmeticError, DispatchError, RuntimeDebug,
@@ -76,7 +76,7 @@ pub use weights::WeightInfo;
 type BalanceOf<T> =
 	<<T as Config>::Currency as Currency<<T as pezframe_system::Config>::AccountId>>::Balance;
 
-// Any runtime call can be encoded into two bytes which represent the pallet and call index.
+// Any runtime call can be encoded into two bytes which represent the pezpallet and call index.
 // We use this to uniquely match someone's incoming call with the calls configured for the lottery.
 type CallIndex = (u8, u8);
 
@@ -107,7 +107,7 @@ impl<T: Config> ValidateCall<T> for () {
 	}
 }
 
-impl<T: Config> ValidateCall<T> for Pallet<T> {
+impl<T: Config> ValidateCall<T> for Pezpallet<T> {
 	fn validate_call(call: &<T as Config>::RuntimeCall) -> bool {
 		let valid_calls = CallIndices::<T>::get();
 		let call_index = match Self::call_to_index(call) {
@@ -118,20 +118,20 @@ impl<T: Config> ValidateCall<T> for Pallet<T> {
 	}
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	/// The pallet's config trait.
-	#[pallet::config]
+	/// The pezpallet's config trait.
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
-		/// The Lottery's pallet id
-		#[pallet::constant]
+		/// The Lottery's pezpallet id
+		#[pezpallet::constant]
 		type PalletId: Get<PalletId>;
 
 		/// A dispatchable call.
@@ -154,7 +154,7 @@ pub mod pallet {
 		type ManagerOrigin: EnsureOrigin<Self::RuntimeOrigin>;
 
 		/// The max number of calls available in a single lottery.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxCalls: Get<u32>;
 
 		/// Used to determine if a call would be valid for purchasing a ticket.
@@ -167,15 +167,15 @@ pub mod pallet {
 		/// Number of time we should try to generate a random number that has no modulo bias.
 		/// The larger this number, the more potential computation is used for picking the winner,
 		/// but also the more likely that the chosen winner is done fairly.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxGenerateRandom: Get<u32>;
 
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A lottery has been started!
 		LotteryStarted,
@@ -187,7 +187,7 @@ pub mod pallet {
 		TicketBought { who: T::AccountId, call_index: CallIndex },
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// A lottery has not been configured.
 		NotConfigured,
@@ -205,16 +205,16 @@ pub mod pallet {
 		EncodingFailed,
 	}
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type LotteryIndex<T> = StorageValue<_, u32, ValueQuery>;
 
 	/// The configuration for the current lottery.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type Lottery<T: Config> =
 		StorageValue<_, LotteryConfig<BlockNumberFor<T>, BalanceOf<T>>>;
 
 	/// Users who have purchased a ticket. (Lottery Index, Tickets Purchased)
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type Participants<T: Config> = StorageMap<
 		_,
 		Twox64Concat,
@@ -224,24 +224,24 @@ pub mod pallet {
 	>;
 
 	/// Total number of tickets sold.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type TicketsCount<T> = StorageValue<_, u32, ValueQuery>;
 
 	/// Each ticket's owner.
 	///
 	/// May have residual storage from previous lotteries. Use `TicketsCount` to see which ones
 	/// are actually valid ticket mappings.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type Tickets<T: Config> = StorageMap<_, Twox64Concat, u32, T::AccountId>;
 
-	/// The calls stored in this pallet to be used in an active lottery if configured
+	/// The calls stored in this pezpallet to be used in an active lottery if configured
 	/// by `Config::ValidateCall`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type CallIndices<T: Config> =
 		StorageValue<_, BoundedVec<CallIndex, T::MaxCalls>, ValueQuery>;
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn on_initialize(n: BlockNumberFor<T>) -> Weight {
 			Lottery::<T>::mutate(|mut lottery| -> Weight {
 				if let Some(config) = &mut lottery {
@@ -285,8 +285,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Buy a ticket to enter the lottery.
 		///
 		/// This extrinsic acts as a passthrough function for `call`. In all
@@ -298,8 +298,8 @@ pub mod pallet {
 		/// should listen for the `TicketBought` event.
 		///
 		/// This extrinsic must be called by a signed origin.
-		#[pallet::call_index(0)]
-		#[pallet::weight(
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(
 			T::WeightInfo::buy_ticket()
 				.saturating_add(call.get_dispatch_info().call_weight)
 		)]
@@ -317,11 +317,11 @@ pub mod pallet {
 		/// Set calls in storage which can be used to purchase a lottery ticket.
 		///
 		/// This function only matters if you use the `ValidateCall` implementation
-		/// provided by this pallet, which uses storage to determine the valid calls.
+		/// provided by this pezpallet, which uses storage to determine the valid calls.
 		///
 		/// This extrinsic must be called by the Manager origin.
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::set_calls(calls.len() as u32))]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::set_calls(calls.len() as u32))]
 		pub fn set_calls(
 			origin: OriginFor<T>,
 			calls: Vec<<T as Config>::RuntimeCall>,
@@ -348,8 +348,8 @@ pub mod pallet {
 		/// * `length`: How long the lottery should run for starting at the current block.
 		/// * `delay`: How long after the lottery end we should wait before picking a winner.
 		/// * `repeat`: If the lottery should repeat when completed.
-		#[pallet::call_index(2)]
-		#[pallet::weight(T::WeightInfo::start_lottery())]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(T::WeightInfo::start_lottery())]
 		pub fn start_lottery(
 			origin: OriginFor<T>,
 			price: BalanceOf<T>,
@@ -362,7 +362,7 @@ pub mod pallet {
 				ensure!(lottery.is_none(), Error::<T>::InProgress);
 				let index = LotteryIndex::<T>::get();
 				let new_index = index.checked_add(1).ok_or(ArithmeticError::Overflow)?;
-				let start = pezframe_system::Pallet::<T>::block_number();
+				let start = pezframe_system::Pezpallet::<T>::block_number();
 				// Use new_index to more easily track everything with the current state.
 				*lottery = Some(LotteryConfig { price, start, length, delay, repeat });
 				LotteryIndex::<T>::put(new_index);
@@ -382,8 +382,8 @@ pub mod pallet {
 		/// The lottery will continue to run to completion.
 		///
 		/// This extrinsic must be called by the `ManagerOrigin`.
-		#[pallet::call_index(3)]
-		#[pallet::weight(T::WeightInfo::stop_repeat())]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(T::WeightInfo::stop_repeat())]
 		pub fn stop_repeat(origin: OriginFor<T>) -> DispatchResult {
 			T::ManagerOrigin::ensure_origin(origin)?;
 			Lottery::<T>::mutate(|mut lottery| {
@@ -396,7 +396,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// The account ID of the lottery pot.
 	///
 	/// This actually does computation. If you need to keep using it, then make sure you cache the
@@ -440,7 +440,7 @@ impl<T: Config> Pallet<T> {
 	fn do_buy_ticket(caller: &T::AccountId, call: &<T as Config>::RuntimeCall) -> DispatchResult {
 		// Check the call is valid lottery
 		let config = Lottery::<T>::get().ok_or(Error::<T>::NotConfigured)?;
-		let block_number = pezframe_system::Pallet::<T>::block_number();
+		let block_number = pezframe_system::Pezpallet::<T>::block_number();
 		ensure!(
 			block_number < config.start.saturating_add(config.length),
 			Error::<T>::AlreadyEnded

@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Benchmarks for the MMR pallet.
+//! Benchmarks for the MMR pezpallet.
 
 #![cfg(feature = "runtime-benchmarks")]
 
@@ -31,15 +31,15 @@ benchmarks_instance_pallet! {
 
 		let leaves = x as NodeIndex;
 
-		<<T as pallet::Config::<I>>::BenchmarkHelper as BenchmarkHelper>::setup();
+		<<T as pezpallet::Config::<I>>::BenchmarkHelper as BenchmarkHelper>::setup();
 		for leaf in 0..(leaves - 1) {
-			<Pallet::<T, I> as OnInitialize<BlockNumberFor<T>>>::on_initialize((leaf as u32).into());
+			<Pezpallet::<T, I> as OnInitialize<BlockNumberFor<T>>>::on_initialize((leaf as u32).into());
 		}
 	}: {
-		<Pallet::<T, I> as OnInitialize<BlockNumberFor<T>>>::on_initialize((leaves as u32 - 1).into());
+		<Pezpallet::<T, I> as OnInitialize<BlockNumberFor<T>>>::on_initialize((leaves as u32 - 1).into());
 	} verify {
 		assert_eq!(crate::NumberOfLeaves::<T, I>::get(), leaves);
 	}
 
-	impl_benchmark_test_suite!(Pallet, crate::tests::new_test_ext(), crate::mock::Test);
+	impl_benchmark_test_suite!(Pezpallet, crate::tests::new_test_ext(), crate::mock::Test);
 }

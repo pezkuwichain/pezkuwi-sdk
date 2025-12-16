@@ -106,7 +106,7 @@ PEZKUWI_TEYRCHAIN_BINARY=~/local_bridge_testing/bin/pezkuwi-teyrchain \
 ### Init bridge and run relayer between BridgeHubpezkuwichain and BridgeHubzagros
 
 **Accounts of BridgeHub teyrchains:**
-- `Bob` is pallet owner of all bridge pallets
+- `Bob` is pezpallet owner of all bridge pallets
 
 #### Run with script
 ```
@@ -116,15 +116,15 @@ cd <pezkuwi-sdk-git-repo-dir>
 ```
 
 **Check relay-chain headers relaying:**
-- pezkuwichain teyrchain: - https://pezkuwichain.io/?rpc=ws%3A%2F%2F127.0.0.1%3A8943#/chainstate - Pallet:
+- pezkuwichain teyrchain: - https://pezkuwichain.io/?rpc=ws%3A%2F%2F127.0.0.1%3A8943#/chainstate - Pezpallet:
   **bridgezagrosGrandpa** - Keys: **bestFinalized()**
-- zagros teyrchain: - https://pezkuwichain.io/?rpc=ws%3A%2F%2F127.0.0.1%3A8945#/chainstate - Pallet:
+- zagros teyrchain: - https://pezkuwichain.io/?rpc=ws%3A%2F%2F127.0.0.1%3A8945#/chainstate - Pezpallet:
   **bridgepezkuwichainGrandpa** - Keys: **bestFinalized()**
 
 **Check teyrchain headers relaying:**
-- pezkuwichain teyrchain: - https://pezkuwichain.io/?rpc=ws%3A%2F%2F127.0.0.1%3A8943#/chainstate - Pallet:
+- pezkuwichain teyrchain: - https://pezkuwichain.io/?rpc=ws%3A%2F%2F127.0.0.1%3A8943#/chainstate - Pezpallet:
   **bridgezagrosTeyrchains** - Keys: **parasInfo(None)**
-- zagros teyrchain: - https://pezkuwichain.io/?rpc=ws%3A%2F%2F127.0.0.1%3A8945#/chainstate - Pallet:
+- zagros teyrchain: - https://pezkuwichain.io/?rpc=ws%3A%2F%2F127.0.0.1%3A8945#/chainstate - Pezpallet:
   **bridgepezkuwichainTeyrchains** - Keys: **parasInfo(None)**
 
 ### Initialize configuration for transfer asset over bridge (TYRs/WNDs)

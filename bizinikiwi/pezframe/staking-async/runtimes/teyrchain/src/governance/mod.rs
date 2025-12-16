@@ -115,7 +115,7 @@ parameter_types! {
 	pub const TreasuryPalletId: PalletId = PalletId(*b"py/trsry");
 	pub const PayoutSpendPeriod: BlockNumber = 30 * DAYS;
 	// The asset's interior location for the paying account. This is the Treasury
-	// pallet instance (which sits at index 37).
+	// pezpallet instance (which sits at index 37).
 	pub TreasuryInteriorLocation: InteriorLocation = PalletInstance(37).into();
 
 	pub const TipCountdown: BlockNumber = 1 * DAYS;

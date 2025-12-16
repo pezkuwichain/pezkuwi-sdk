@@ -261,14 +261,14 @@ fn should_cleanup_received_heartbeats_on_session_end() {
 		let _ = heartbeat(1, 2, 0, 1.into(), Session::validators()).unwrap();
 
 		// the heartbeat is stored
-		assert!(!super::pallet::ReceivedHeartbeats::<Runtime>::get(2, 0).is_none());
+		assert!(!super::pezpallet::ReceivedHeartbeats::<Runtime>::get(2, 0).is_none());
 
 		advance_session();
 
 		// after the session has ended we have already processed the heartbeat
 		// message, so any messages received on the previous session should have
 		// been pruned.
-		assert!(super::pallet::ReceivedHeartbeats::<Runtime>::get(2, 0).is_none());
+		assert!(super::pezpallet::ReceivedHeartbeats::<Runtime>::get(2, 0).is_none());
 	});
 }
 

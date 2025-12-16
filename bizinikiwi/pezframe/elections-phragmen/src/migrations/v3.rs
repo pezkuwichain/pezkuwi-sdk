@@ -18,7 +18,7 @@
 //! Migrations to version [`3.0.0`], as denoted by the changelog.
 
 use super::super::LOG_TARGET;
-use crate::{Config, Pallet};
+use crate::{Config, Pezpallet};
 use alloc::vec::Vec;
 use codec::{Decode, Encode, FullCodec};
 use pezframe_support::{
@@ -51,25 +51,25 @@ pub trait V2ToV3 {
 
 #[pezframe_support::storage_alias]
 type Candidates<V, T: Config> =
-	StorageValue<Pallet<T>, Vec<(<V as V2ToV3>::AccountId, <V as V2ToV3>::Balance)>, ValueQuery>;
+	StorageValue<Pezpallet<T>, Vec<(<V as V2ToV3>::AccountId, <V as V2ToV3>::Balance)>, ValueQuery>;
 
 #[pezframe_support::storage_alias]
 type Members<V, T: Config> = StorageValue<
-	Pallet<T>,
+	Pezpallet<T>,
 	Vec<SeatHolder<<V as V2ToV3>::AccountId, <V as V2ToV3>::Balance>>,
 	ValueQuery,
 >;
 
 #[pezframe_support::storage_alias]
 type RunnersUp<V, T: Config> = StorageValue<
-	Pallet<T>,
+	Pezpallet<T>,
 	Vec<SeatHolder<<V as V2ToV3>::AccountId, <V as V2ToV3>::Balance>>,
 	ValueQuery,
 >;
 
 #[pezframe_support::storage_alias]
 type Voting<V, T: Config> = StorageMap<
-	Pallet<T>,
+	Pezpallet<T>,
 	Twox64Concat,
 	<V as V2ToV3>::AccountId,
 	Voter<<V as V2ToV3>::AccountId, <V as V2ToV3>::Balance>,
@@ -88,7 +88,7 @@ pub fn apply<V: V2ToV3, T: Config>(
 	old_voter_bond: V::Balance,
 	old_candidacy_bond: V::Balance,
 ) -> Weight {
-	let storage_version = StorageVersion::get::<Pallet<T>>();
+	let storage_version = StorageVersion::get::<Pezpallet<T>>();
 	log::info!(
 		target: LOG_TARGET,
 		"Running migration for elections-phragmen with storage version {:?}",
@@ -101,7 +101,7 @@ pub fn apply<V: V2ToV3, T: Config>(
 		migrate_runners_up_to_recorded_deposit::<V, T>(old_candidacy_bond);
 		migrate_members_to_recorded_deposit::<V, T>(old_candidacy_bond);
 
-		StorageVersion::new(3).put::<Pallet<T>>();
+		StorageVersion::new(3).put::<Pezpallet<T>>();
 
 		Weight::MAX
 	} else {

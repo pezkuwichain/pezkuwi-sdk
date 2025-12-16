@@ -181,12 +181,12 @@ pub struct SeatHolder<AccountId, Balance> {
 	pub deposit: Balance,
 }
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 type AccountIdLookupOf<T> = <<T as pezframe_system::Config>::Lookup as StaticLookup>::Source;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
@@ -194,18 +194,18 @@ pub mod pallet {
 	/// The in-code storage version.
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(4);
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	#[pallet::without_storage_info]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	#[pezpallet::without_storage_info]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
-		/// Identifier for the elections-phragmen pallet's lock
-		#[pallet::constant]
+		/// Identifier for the elections-phragmen pezpallet's lock
+		#[pezpallet::constant]
 		type PalletId: Get<LockIdentifier>;
 
 		/// The currency that people are electing with.
@@ -223,18 +223,18 @@ pub mod pallet {
 		type CurrencyToVote: CurrencyToVote<BalanceOf<Self>>;
 
 		/// How much should be locked up in order to submit one's candidacy.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type CandidacyBond: Get<BalanceOf<Self>>;
 
 		/// Base deposit associated with voting.
 		///
-		/// This should be sensibly high to economically ensure the pallet cannot be attacked by
+		/// This should be sensibly high to economically ensure the pezpallet cannot be attacked by
 		/// creating a gigantic number of votes.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type VotingBondBase: Get<BalanceOf<Self>>;
 
 		/// The amount of bond that need to be locked for each vote (32 bytes).
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type VotingBondFactor: Get<BalanceOf<Self>>;
 
 		/// Handler for the unbalanced reduction when a candidate has lost (and is not a runner-up)
@@ -244,17 +244,17 @@ pub mod pallet {
 		type KickedMember: OnUnbalanced<NegativeImbalanceOf<Self>>;
 
 		/// Number of members to elect.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type DesiredMembers: Get<u32>;
 
 		/// Number of runners_up to keep.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type DesiredRunnersUp: Get<u32>;
 
 		/// How long each seat is kept. This defines the next block number at which an election
 		/// round will happen. If set to zero, no elections are ever triggered and the module will
 		/// be in passive mode.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type TermDuration: Get<BlockNumberFor<Self>>;
 
 		/// The maximum number of candidates in a phragmen election.
@@ -263,7 +263,7 @@ pub mod pallet {
 		/// consider how it will impact `T::WeightInfo::election_phragmen`.
 		///
 		/// When this limit is reached no more candidates are accepted in the election.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxCandidates: Get<u32>;
 
 		/// The maximum number of voters to allow in a phragmen election.
@@ -272,22 +272,22 @@ pub mod pallet {
 		/// consider how it will impact `T::WeightInfo::election_phragmen`.
 		///
 		/// When the limit is reached the new voters are ignored.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxVoters: Get<u32>;
 
 		/// Maximum numbers of votes per voter.
 		///
 		/// Warning: This impacts the size of the election which is run onchain. Chose wisely, and
 		/// consider how it will impact `T::WeightInfo::election_phragmen`.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxVotesPerVoter: Get<u32>;
 
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		/// What to do at the end of each block.
 		///
 		/// Checks if an election needs to happen or not.
@@ -341,8 +341,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Vote for a set of candidates for the upcoming round of election. This can be called to
 		/// set the initial votes, or update already existing votes.
 		///
@@ -362,8 +362,8 @@ pub mod pallet {
 		///
 		/// It is the responsibility of the caller to **NOT** place all of their balance into the
 		/// lock and keep some for further operations.
-		#[pallet::call_index(0)]
-		#[pallet::weight(
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(
 			T::WeightInfo::vote_more(votes.len() as u32)
 			.max(T::WeightInfo::vote_less(votes.len() as u32))
 			.max(T::WeightInfo::vote_equal(votes.len() as u32))
@@ -371,7 +371,7 @@ pub mod pallet {
 		pub fn vote(
 			origin: OriginFor<T>,
 			votes: Vec<T::AccountId>,
-			#[pallet::compact] value: BalanceOf<T>,
+			#[pezpallet::compact] value: BalanceOf<T>,
 		) -> DispatchResultWithPostInfo {
 			let who = ensure_signed(origin)?;
 
@@ -427,8 +427,8 @@ pub mod pallet {
 		/// This removes the lock and returns the deposit.
 		///
 		/// The dispatch origin of this call must be signed and be a voter.
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::remove_voter())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::remove_voter())]
 		pub fn remove_voter(origin: OriginFor<T>) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 			ensure!(Self::is_voter(&who), Error::<T>::MustBeVoter);
@@ -451,11 +451,11 @@ pub mod pallet {
 		/// The number of current candidates must be provided as witness data.
 		/// ## Complexity
 		/// O(C + log(C)) where C is candidate_count.
-		#[pallet::call_index(2)]
-		#[pallet::weight(T::WeightInfo::submit_candidacy(*candidate_count))]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(T::WeightInfo::submit_candidacy(*candidate_count))]
 		pub fn submit_candidacy(
 			origin: OriginFor<T>,
-			#[pallet::compact] candidate_count: u32,
+			#[pezpallet::compact] candidate_count: u32,
 		) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 
@@ -498,8 +498,8 @@ pub mod pallet {
 		///   - Renouncing::Candidate(count): O(count + log(count))
 		///   - Renouncing::Member: O(1)
 		///   - Renouncing::RunnerUp: O(1)
-		#[pallet::call_index(3)]
-		#[pallet::weight(match *renouncing {
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(match *renouncing {
 			Renouncing::Candidate(count) => T::WeightInfo::renounce_candidacy_candidate(count),
 			Renouncing::Member => T::WeightInfo::renounce_candidacy_members(),
 			Renouncing::RunnerUp => T::WeightInfo::renounce_candidacy_runners_up(),
@@ -559,8 +559,8 @@ pub mod pallet {
 		///
 		/// ## Complexity
 		/// - Check details of remove_and_replace_member() and do_phragmen().
-		#[pallet::call_index(4)]
-		#[pallet::weight(if *rerun_election {
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(if *rerun_election {
 			T::WeightInfo::remove_member_without_replacement()
 		} else {
 			T::WeightInfo::remove_member_with_replacement()
@@ -594,8 +594,8 @@ pub mod pallet {
 		///
 		/// ## Complexity
 		/// - Check is_defunct_voter() details.
-		#[pallet::call_index(5)]
-		#[pallet::weight(T::WeightInfo::clean_defunct_voters(*num_voters, *num_defunct))]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(T::WeightInfo::clean_defunct_voters(*num_voters, *num_defunct))]
 		pub fn clean_defunct_voters(
 			origin: OriginFor<T>,
 			num_voters: u32,
@@ -613,8 +613,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A new term with new_members. This indicates that enough candidates existed to run
 		/// the election, not that enough have been elected. The inner value must be examined
@@ -644,7 +644,7 @@ pub mod pallet {
 		},
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Cannot vote when no candidates or members exist.
 		UnableToVote,
@@ -685,7 +685,7 @@ pub mod pallet {
 	/// The current elected members.
 	///
 	/// Invariant: Always sorted based on account id.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Members<T: Config> =
 		StorageValue<_, Vec<SeatHolder<T::AccountId, BalanceOf<T>>>, ValueQuery>;
 
@@ -693,7 +693,7 @@ pub mod pallet {
 	///
 	/// Invariant: Always sorted based on rank (worse to best). Upon removal of a member, the
 	/// last (i.e. _best_) runner-up will be replaced.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type RunnersUp<T: Config> =
 		StorageValue<_, Vec<SeatHolder<T::AccountId, BalanceOf<T>>>, ValueQuery>;
 
@@ -703,27 +703,27 @@ pub mod pallet {
 	/// Second element is the deposit.
 	///
 	/// Invariant: Always sorted based on account id.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Candidates<T: Config> = StorageValue<_, Vec<(T::AccountId, BalanceOf<T>)>, ValueQuery>;
 
 	/// The total number of vote rounds that have happened, excluding the upcoming one.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ElectionRounds<T: Config> = StorageValue<_, u32, ValueQuery>;
 
 	/// Votes and locked stake of a particular voter.
 	///
 	/// TWOX-NOTE: SAFE as `AccountId` is a crypto hash.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Voting<T: Config> =
 		StorageMap<_, Twox64Concat, T::AccountId, Voter<T::AccountId, BalanceOf<T>>, ValueQuery>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(pezframe_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		pub members: Vec<(T::AccountId, BalanceOf<T>)>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			assert!(
@@ -782,7 +782,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// The deposit value of `count` votes.
 	fn deposit_of(count: usize) -> BalanceOf<T> {
 		T::VotingBondBase::get()
@@ -1156,13 +1156,13 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-impl<T: Config> Contains<T::AccountId> for Pallet<T> {
+impl<T: Config> Contains<T::AccountId> for Pezpallet<T> {
 	fn contains(who: &T::AccountId) -> bool {
 		Self::is_member(who)
 	}
 }
 
-impl<T: Config> SortedMembers<T::AccountId> for Pallet<T> {
+impl<T: Config> SortedMembers<T::AccountId> for Pezpallet<T> {
 	fn contains(who: &T::AccountId) -> bool {
 		Self::is_member(who)
 	}
@@ -1171,7 +1171,7 @@ impl<T: Config> SortedMembers<T::AccountId> for Pallet<T> {
 		Self::members_ids()
 	}
 
-	// A special function to populate members in this pallet for passing Origin
+	// A special function to populate members in this pezpallet for passing Origin
 	// checks in runtime benchmarking.
 	#[cfg(feature = "runtime-benchmarks")]
 	fn add(who: &T::AccountId) {
@@ -1189,7 +1189,7 @@ impl<T: Config> SortedMembers<T::AccountId> for Pallet<T> {
 	}
 }
 
-impl<T: Config> ContainsLengthBound for Pallet<T> {
+impl<T: Config> ContainsLengthBound for Pezpallet<T> {
 	fn min_len() -> usize {
 		0
 	}
@@ -1201,7 +1201,7 @@ impl<T: Config> ContainsLengthBound for Pallet<T> {
 }
 
 #[cfg(any(feature = "try-runtime", test))]
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	fn do_try_state() -> Result<(), TryRuntimeError> {
 		Self::try_state_members()?;
 		Self::try_state_runners_up()?;
@@ -1264,8 +1264,8 @@ impl<T: Config> Pallet<T> {
 	//  - Members and candidates sets are disjoint;
 	//  - Members and runners-ups sets are disjoint.
 	fn try_state_members_disjoint() -> Result<(), TryRuntimeError> {
-		match Self::intersects(&Pallet::<T>::members_ids(), &Self::candidates_ids()) &&
-			Self::intersects(&Pallet::<T>::members_ids(), &Self::runners_up_ids())
+		match Self::intersects(&Pezpallet::<T>::members_ids(), &Self::candidates_ids()) &&
+			Self::intersects(&Pezpallet::<T>::members_ids(), &Self::runners_up_ids())
 		{
 			true =>
 				Err("Members set should be disjoint from candidates and runners-up sets".into()),
@@ -1322,7 +1322,7 @@ mod tests {
 
 	#[derive_impl(pezpallet_balances::config_preludes::TestDefaultConfig)]
 	impl pezpallet_balances::Config for Test {
-		type AccountStore = pezframe_system::Pallet<Test>;
+		type AccountStore = pezframe_system::Pezpallet<Test>;
 	}
 
 	pezframe_support::parameter_types! {

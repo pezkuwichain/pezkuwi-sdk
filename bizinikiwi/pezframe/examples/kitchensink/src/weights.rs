@@ -32,10 +32,10 @@
 // Executed Command:
 // ./target/release/node-template
 // benchmark
-// pallet
+// pezpallet
 // --chain
 // dev
-// --pallet
+// --pezpallet
 // pezpallet_example_kitchensink
 // --extrinsic
 // *

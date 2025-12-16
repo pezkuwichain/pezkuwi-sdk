@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! The paras pallet acts as the main registry of paras.
+//! The paras pezpallet acts as the main registry of paras.
 //!
 //! # Tracking State of Paras
 //!
@@ -22,7 +22,7 @@
 //! are active and what their current state is. The current state of a para consists of the current
 //! head data and the current validation code (AKA Teyrchain Validation Function (PVF)).
 //!
-//! A para is not considered live until it is registered and activated in this pallet.
+//! A para is not considered live until it is registered and activated in this pezpallet.
 //!
 //! The set of teyrchains cannot change except at session boundaries. This is primarily to ensure
 //! that the number and meaning of bits required for the availability bitfields does not change
@@ -78,7 +78,7 @@
 //! part of this process, validators from the active set will take the validation code and check if
 //! it is malicious. Once they did that and have their judgement, either accept or reject, they
 //! issue a statement in a form of an unsigned extrinsic. This extrinsic is processed by this
-//! pallet. Once supermajority is gained for accept, then the process that initiated the check is
+//! pezpallet. Once supermajority is gained for accept, then the process that initiated the check is
 //! resumed (as mentioned before this can be either upgrading of validation code or onboarding). If
 //! getting a supermajority becomes impossible (>1/3 of validators have already voted against), then
 //! we reject.
@@ -144,7 +144,7 @@ pub mod benchmarking;
 #[cfg(test)]
 pub(crate) mod tests;
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 const LOG_TARGET: &str = "runtime::paras";
 
@@ -638,8 +638,8 @@ impl WeightInfo for TestWeightInfo {
 	}
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::traits::{
 		fungible::{Inspect, Mutate},
@@ -652,11 +652,11 @@ pub mod pallet {
 
 	type BalanceOf<T> = <<T as Config>::Fungible as Inspect<AccountIdFor<T>>>::Balance;
 
-	#[pallet::pallet]
-	#[pallet::without_storage_info]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::without_storage_info]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config:
 		pezframe_system::Config
 		+ configuration::Config
@@ -666,7 +666,7 @@ pub mod pallet {
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type UnsignedPriority: Get<TransactionPriority>;
 
 		type NextSessionRotation: EstimateNextSessionRotation<BlockNumberFor<Self>>;
@@ -674,13 +674,13 @@ pub mod pallet {
 		/// Retrieve how many UMP messages are enqueued for this para-chain.
 		///
 		/// This is used to judge whether or not a para-chain can offboard. Per default this should
-		/// be set to the `ParaInclusion` pallet.
+		/// be set to the `ParaInclusion` pezpallet.
 		type QueueFootprinter: QueueFootprinter<Origin = UmpQueueId>;
 
 		/// Runtime hook for when a teyrchain head is updated.
 		type OnNewHead: OnNewHead;
 
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 
 		/// Runtime hook for assigning coretime for a given teyrchain.
@@ -699,20 +699,20 @@ pub mod pallet {
 		/// ([`configuration::HostConfiguration::validation_upgrade_cooldown`]). This cooldown
 		/// exists to prevent spamming the relay chain with runtime upgrades. But as life is going
 		/// on, mistakes can happen and a consequent may be required. The cooldown period can be
-		/// removed by using [`Pallet::remove_upgrade_cooldown`]. This dispatchable will use this
+		/// removed by using [`Pezpallet::remove_upgrade_cooldown`]. This dispatchable will use this
 		/// multiplier to determine the cost for removing the upgrade cooldown. Time left for the
 		/// cooldown multiplied with this multiplier determines the cost.
 		type CooldownRemovalMultiplier: Get<BalanceOf<Self>>;
 
-		/// The origin that can authorize [`Pallet::authorize_force_set_current_code_hash`].
+		/// The origin that can authorize [`Pezpallet::authorize_force_set_current_code_hash`].
 		///
-		/// In the end this allows [`Pallet::apply_authorized_force_set_current_code`] to force set
+		/// In the end this allows [`Pezpallet::apply_authorized_force_set_current_code`] to force set
 		/// the current code without paying any fee. So, the origin should be chosen with care.
 		type AuthorizeCurrentCodeOrigin: EnsureOriginWithArg<Self::RuntimeOrigin, ParaId>;
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// Current code has been updated for a Para. `para_id`
 		CurrentCodeUpdated(ParaId),
@@ -749,7 +749,7 @@ pub mod pallet {
 		},
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Para is not registered in our system.
 		NotRegistered,
@@ -789,7 +789,7 @@ pub mod pallet {
 	///
 	/// Invariant:
 	/// - There are no PVF pre-checking votes that exists in list but not in the set and vice versa.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type PvfActiveVoteMap<T: Config> = StorageMap<
 		_,
 		Twox64Concat,
@@ -799,7 +799,7 @@ pub mod pallet {
 	>;
 
 	/// The list of all currently active PVF votes. Auxiliary to `PvfActiveVoteMap`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type PvfActiveVoteList<T: Config> =
 		StorageValue<_, Vec<ValidationCodeHash>, ValueQuery>;
 
@@ -807,39 +807,39 @@ pub mod pallet {
 	/// included.
 	///
 	/// Consider using the [`TeyrchainsCache`] type of modifying.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Teyrchains<T: Config> = StorageValue<_, Vec<ParaId>, ValueQuery>;
 
 	/// The current lifecycle of a all known Para IDs.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type ParaLifecycles<T: Config> = StorageMap<_, Twox64Concat, ParaId, ParaLifecycle>;
 
 	/// The head-data of every registered para.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Heads<T: Config> = StorageMap<_, Twox64Concat, ParaId, HeadData>;
 
 	/// The context (relay-chain block number) of the most recent teyrchain head.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type MostRecentContext<T: Config> = StorageMap<_, Twox64Concat, ParaId, BlockNumberFor<T>>;
 
 	/// The validation code hash of every live para.
 	///
 	/// Corresponding code can be retrieved with [`CodeByHash`].
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type CurrentCodeHash<T: Config> = StorageMap<_, Twox64Concat, ParaId, ValidationCodeHash>;
 
 	/// Actual past code hash, indicated by the para id as well as the block number at which it
 	/// became outdated.
 	///
 	/// Corresponding code can be retrieved with [`CodeByHash`].
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type PastCodeHash<T: Config> =
 		StorageMap<_, Twox64Concat, (ParaId, BlockNumberFor<T>), ValidationCodeHash>;
 
 	/// Past code of teyrchains. The teyrchains themselves may not be registered anymore,
 	/// but we also keep their code on-chain for the same amount of time as outdated code
 	/// to keep it available for approval checkers.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type PastCodeMeta<T: Config> =
 		StorageMap<_, Twox64Concat, ParaId, ParaPastCodeMeta<BlockNumberFor<T>>, ValueQuery>;
 
@@ -849,7 +849,7 @@ pub mod pallet {
 	/// This is to ensure the entire acceptance period is covered, not an offset acceptance period
 	/// starting from the time at which the teyrchain perceives a code upgrade as having occurred.
 	/// Multiple entries for a single para are permitted. Ordered ascending by block number.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type PastCodePruning<T: Config> =
 		StorageValue<_, Vec<(ParaId, BlockNumberFor<T>)>, ValueQuery>;
 
@@ -857,7 +857,7 @@ pub mod pallet {
 	///
 	/// The change will be applied after the first parablock for this ID included which executes
 	/// in the context of a relay chain block with a number >= `expected_at`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type FutureCodeUpgrades<T: Config> = StorageMap<_, Twox64Concat, ParaId, BlockNumberFor<T>>;
 
 	/// The list of upcoming future code upgrades.
@@ -868,18 +868,18 @@ pub mod pallet {
 	/// progress or not.
 	///
 	/// Ordered ascending by block number.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type FutureCodeUpgradesAt<T: Config> =
 		StorageValue<_, Vec<(ParaId, BlockNumberFor<T>)>, ValueQuery>;
 
 	/// The actual future code hash of a para.
 	///
 	/// Corresponding code can be retrieved with [`CodeByHash`].
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type FutureCodeHash<T: Config> = StorageMap<_, Twox64Concat, ParaId, ValidationCodeHash>;
 
 	/// The code hash authorizations for a para which will expire `expire_at` `BlockNumberFor<T>`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type AuthorizedCodeHash<T: Config> =
 		StorageMap<_, Twox64Concat, ParaId, AuthorizedCodeHashAndExpiry<BlockNumberFor<T>>>;
 
@@ -893,7 +893,7 @@ pub mod pallet {
 	///
 	/// NOTE that this field is used by teyrchains via merkle storage proofs, therefore changing
 	/// the format will require migration of teyrchains.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type UpgradeGoAheadSignal<T: Config> =
 		StorageMap<_, Twox64Concat, ParaId, UpgradeGoAhead>;
 
@@ -906,14 +906,14 @@ pub mod pallet {
 	///
 	/// NOTE that this field is used by teyrchains via merkle storage proofs, therefore changing
 	/// the format will require migration of teyrchains.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type UpgradeRestrictionSignal<T: Config> =
 		StorageMap<_, Twox64Concat, ParaId, UpgradeRestriction>;
 
 	/// The list of teyrchains that are awaiting for their upgrade restriction to cooldown.
 	///
 	/// Ordered ascending by block number.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type UpgradeCooldowns<T: Config> =
 		StorageValue<_, Vec<(ParaId, BlockNumberFor<T>)>, ValueQuery>;
 
@@ -923,12 +923,12 @@ pub mod pallet {
 	/// is expected at.
 	///
 	/// Ordered ascending by block number.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type UpcomingUpgrades<T: Config> =
 		StorageValue<_, Vec<(ParaId, BlockNumberFor<T>)>, ValueQuery>;
 
 	/// The actions to perform during the start of a specific session index.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ActionsQueue<T: Config> =
 		StorageMap<_, Twox64Concat, SessionIndex, Vec<ParaId>, ValueQuery>;
 
@@ -936,12 +936,12 @@ pub mod pallet {
 	///
 	/// NOTE that after PVF pre-checking is enabled the para genesis arg will have it's code set
 	/// to empty. Instead, the code will be saved into the storage right away via `CodeByHash`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type UpcomingParasGenesis<T: Config> =
 		StorageMap<_, Twox64Concat, ParaId, ParaGenesisArgs>;
 
 	/// The number of reference on the validation code in [`CodeByHash`] storage.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type CodeByHashRefs<T: Config> =
 		StorageMap<_, Identity, ValidationCodeHash, u32, ValueQuery>;
 
@@ -949,10 +949,10 @@ pub mod pallet {
 	///
 	/// This storage is consistent with [`FutureCodeHash`], [`CurrentCodeHash`] and
 	/// [`PastCodeHash`].
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type CodeByHash<T: Config> = StorageMap<_, Identity, ValidationCodeHash, ValidationCode>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		#[serde(skip)]
@@ -960,7 +960,7 @@ pub mod pallet {
 		pub paras: Vec<(ParaId, ParaGenesisArgs)>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			let mut teyrchains = TeyrchainsCache::new();
@@ -968,7 +968,7 @@ pub mod pallet {
 				if genesis_args.validation_code.0.is_empty() {
 					panic!("empty validation code is not allowed in genesis");
 				}
-				Pallet::<T>::initialize_para_now(&mut teyrchains, *id, genesis_args);
+				Pezpallet::<T>::initialize_para_now(&mut teyrchains, *id, genesis_args);
 				if genesis_args.para_kind == ParaKind::Teyrchain {
 					T::AssignCoretime::assign_coretime(*id)
 						.expect("Assigning coretime works at genesis; qed");
@@ -978,11 +978,11 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Set the storage for the teyrchain validation code immediately.
-		#[pallet::call_index(0)]
-		#[pallet::weight(<T as Config>::WeightInfo::force_set_current_code(new_code.0.len() as u32))]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::force_set_current_code(new_code.0.len() as u32))]
 		pub fn force_set_current_code(
 			origin: OriginFor<T>,
 			para: ParaId,
@@ -994,8 +994,8 @@ pub mod pallet {
 		}
 
 		/// Set the storage for the current teyrchain head data immediately.
-		#[pallet::call_index(1)]
-		#[pallet::weight(<T as Config>::WeightInfo::force_set_current_head(new_head.0.len() as u32))]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::force_set_current_head(new_head.0.len() as u32))]
 		pub fn force_set_current_head(
 			origin: OriginFor<T>,
 			para: ParaId,
@@ -1007,8 +1007,8 @@ pub mod pallet {
 		}
 
 		/// Schedule an upgrade as if it was scheduled in the given relay parent block.
-		#[pallet::call_index(2)]
-		#[pallet::weight(<T as Config>::WeightInfo::force_schedule_code_upgrade(new_code.0.len() as u32))]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::force_schedule_code_upgrade(new_code.0.len() as u32))]
 		pub fn force_schedule_code_upgrade(
 			origin: OriginFor<T>,
 			para: ParaId,
@@ -1029,15 +1029,15 @@ pub mod pallet {
 		}
 
 		/// Note a new block head for para within the context of the current block.
-		#[pallet::call_index(3)]
-		#[pallet::weight(<T as Config>::WeightInfo::force_note_new_head(new_head.0.len() as u32))]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::force_note_new_head(new_head.0.len() as u32))]
 		pub fn force_note_new_head(
 			origin: OriginFor<T>,
 			para: ParaId,
 			new_head: HeadData,
 		) -> DispatchResult {
 			ensure_root(origin)?;
-			let now = pezframe_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pezpallet::<T>::block_number();
 			Self::note_new_head(para, new_head, now);
 			Self::deposit_event(Event::NewHeadNoted(para));
 			Ok(())
@@ -1046,8 +1046,8 @@ pub mod pallet {
 		/// Put a teyrchain directly into the next session's action queue.
 		/// We can't queue it any sooner than this without going into the
 		/// initializer...
-		#[pallet::call_index(4)]
-		#[pallet::weight(<T as Config>::WeightInfo::force_queue_action())]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::force_queue_action())]
 		pub fn force_queue_action(origin: OriginFor<T>, para: ParaId) -> DispatchResult {
 			ensure_root(origin)?;
 			let next_session = shared::CurrentSessionIndex::<T>::get().saturating_add(One::one());
@@ -1074,8 +1074,8 @@ pub mod pallet {
 		///
 		/// This function is mainly meant to be used for upgrading teyrchains that do not follow
 		/// the go-ahead signal while the PVF pre-checking feature is enabled.
-		#[pallet::call_index(5)]
-		#[pallet::weight(<T as Config>::WeightInfo::add_trusted_validation_code(validation_code.0.len() as u32))]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::add_trusted_validation_code(validation_code.0.len() as u32))]
 		pub fn add_trusted_validation_code(
 			origin: OriginFor<T>,
 			validation_code: ValidationCode,
@@ -1094,7 +1094,7 @@ pub mod pallet {
 
 				let cfg = configuration::ActiveConfig::<T>::get();
 				Self::enact_pvf_accepted(
-					pezframe_system::Pallet::<T>::block_number(),
+					pezframe_system::Pezpallet::<T>::block_number(),
 					&code_hash,
 					&vote.causes,
 					vote.age,
@@ -1123,8 +1123,8 @@ pub mod pallet {
 		/// This is better than removing the storage directly, because it will not remove the code
 		/// that was suddenly got used by some teyrchain while this dispatchable was pending
 		/// dispatching.
-		#[pallet::call_index(6)]
-		#[pallet::weight(<T as Config>::WeightInfo::poke_unused_validation_code())]
+		#[pezpallet::call_index(6)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::poke_unused_validation_code())]
 		pub fn poke_unused_validation_code(
 			origin: OriginFor<T>,
 			validation_code_hash: ValidationCodeHash,
@@ -1138,8 +1138,8 @@ pub mod pallet {
 
 		/// Includes a statement for a PVF pre-checking vote. Potentially, finalizes the vote and
 		/// enacts the results if that was the last vote before achieving the supermajority.
-		#[pallet::call_index(7)]
-		#[pallet::weight(
+		#[pezpallet::call_index(7)]
+		#[pezpallet::weight(
 			<T as Config>::WeightInfo::include_pvf_check_statement_finalize_upgrade_accept()
 				.max(<T as Config>::WeightInfo::include_pvf_check_statement_finalize_upgrade_reject())
 				.max(<T as Config>::WeightInfo::include_pvf_check_statement_finalize_onboarding_accept()
@@ -1204,7 +1204,7 @@ pub mod pallet {
 					PvfCheckOutcome::Accepted => {
 						let cfg = configuration::ActiveConfig::<T>::get();
 						Self::enact_pvf_accepted(
-							pezframe_system::Pallet::<T>::block_number(),
+							pezframe_system::Pezpallet::<T>::block_number(),
 							&stmt.subject,
 							&active_vote.causes,
 							active_vote.age,
@@ -1229,8 +1229,8 @@ pub mod pallet {
 		}
 
 		/// Set the storage for the current teyrchain head data immediately.
-		#[pallet::call_index(8)]
-		#[pallet::weight(<T as Config>::WeightInfo::force_set_most_recent_context())]
+		#[pezpallet::call_index(8)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::force_set_most_recent_context())]
 		pub fn force_set_most_recent_context(
 			origin: OriginFor<T>,
 			para: ParaId,
@@ -1245,8 +1245,8 @@ pub mod pallet {
 		///
 		/// The cost for removing the cooldown earlier depends on the time left for the cooldown
 		/// multiplied by [`Config::CooldownRemovalMultiplier`]. The paid tokens are burned.
-		#[pallet::call_index(9)]
-		#[pallet::weight(<T as Config>::WeightInfo::remove_upgrade_cooldown())]
+		#[pezpallet::call_index(9)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::remove_upgrade_cooldown())]
 		pub fn remove_upgrade_cooldown(origin: OriginFor<T>, para: ParaId) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 
@@ -1283,15 +1283,15 @@ pub mod pallet {
 		/// If not applied, it will be removed at the `System::block_number() + valid_period` block.
 		///
 		/// This can be useful, when triggering `Paras::force_set_current_code(para, code)`
-		/// from a different chain than the one where the `Paras` pallet is deployed.
+		/// from a different chain than the one where the `Paras` pezpallet is deployed.
 		///
 		/// The main purpose is to avoid transferring the entire `code` Wasm blob between chains.
 		/// Instead, we authorize `code_hash` with `root`, which can later be applied by
 		/// `Paras::apply_authorized_force_set_current_code(para, code)` by anyone.
 		///
 		/// Authorizations are stored in an **overwriting manner**.
-		#[pallet::call_index(10)]
-		#[pallet::weight(<T as Config>::WeightInfo::authorize_force_set_current_code_hash())]
+		#[pezpallet::call_index(10)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::authorize_force_set_current_code_hash())]
 		pub fn authorize_force_set_current_code_hash(
 			origin: OriginFor<T>,
 			para: ParaId,
@@ -1302,7 +1302,7 @@ pub mod pallet {
 			// The requested para must be a valid para (neither onboarding nor offboarding).
 			ensure!(Self::is_valid_para(para), Error::<T>::NotRegistered);
 
-			let now = pezframe_system::Pallet::<T>::block_number();
+			let now = pezframe_system::Pezpallet::<T>::block_number();
 			let expire_at = now.saturating_add(valid_period);
 
 			// Insert the authorized code hash and ensure it overwrites the existing one for a para.
@@ -1321,8 +1321,8 @@ pub mod pallet {
 
 		/// Applies the already authorized current code for the teyrchain,
 		/// triggering the same functionality as `force_set_current_code`.
-		#[pallet::call_index(11)]
-		#[pallet::weight(<T as Config>::WeightInfo::apply_authorized_force_set_current_code(new_code.0.len() as u32))]
+		#[pezpallet::call_index(11)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::apply_authorized_force_set_current_code(new_code.0.len() as u32))]
 		pub fn apply_authorized_force_set_current_code(
 			_origin: OriginFor<T>,
 			para: ParaId,
@@ -1342,19 +1342,19 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config> Pallet<T> {
+	impl<T: Config> Pezpallet<T> {
 		pub(crate) fn calculate_remove_upgrade_cooldown_cost(
 			cooldown_until: BlockNumberFor<T>,
 		) -> BalanceOf<T> {
 			let time_left =
-				cooldown_until.saturating_sub(pezframe_system::Pallet::<T>::block_number());
+				cooldown_until.saturating_sub(pezframe_system::Pezpallet::<T>::block_number());
 
 			BalanceOf::<T>::from(time_left).saturating_mul(T::CooldownRemovalMultiplier::get())
 		}
 	}
 
-	#[pallet::view_functions]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::view_functions]
+	impl<T: Config> Pezpallet<T> {
 		/// Returns the cost for removing an upgrade cooldown for the given `para`.
 		pub fn remove_upgrade_cooldown_cost(para: ParaId) -> BalanceOf<T> {
 			UpgradeCooldowns::<T>::get()
@@ -1365,8 +1365,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::validate_unsigned]
-	impl<T: Config> ValidateUnsigned for Pallet<T> {
+	#[pezpallet::validate_unsigned]
+	impl<T: Config> ValidateUnsigned for Pezpallet<T> {
 		type Call = Call<T>;
 
 		fn validate_unsigned(_source: TransactionSource, call: &Self::Call) -> TransactionValidity {
@@ -1420,7 +1420,7 @@ pub mod pallet {
 				Call::apply_authorized_force_set_current_code { para, new_code } =>
 					match Self::validate_code_is_authorized(new_code, para) {
 						Ok(authorized_code) => {
-							let now = pezframe_system::Pallet::<T>::block_number();
+							let now = pezframe_system::Pezpallet::<T>::block_number();
 							let longevity = authorized_code.expire_at.saturating_sub(now);
 
 							ValidTransaction::with_tag_prefix("ApplyAuthorizedForceSetCurrentCode")
@@ -1465,7 +1465,7 @@ const INVALID_TX_UNAUTHORIZED_CODE: u8 = 4;
 /// communicate via offchain XCMP. Snowbridge will still work as it only cares about `BridgeHub`.
 pub const MAX_PARA_HEADS: usize = 1024;
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// This is a call to schedule code upgrades for teyrchains which is safe to be called
 	/// outside of this module. That means this function does all checks necessary to ensure
 	/// that some external code is allowed to trigger a code upgrade. We do not do auth checks,
@@ -1482,7 +1482,7 @@ impl<T: Config> Pallet<T> {
 		ensure!(new_code.0.len() >= MIN_CODE_SIZE as usize, Error::<T>::InvalidCode);
 		ensure!(new_code.0.len() <= config.max_code_size as usize, Error::<T>::InvalidCode);
 
-		let current_block = pezframe_system::Pallet::<T>::block_number();
+		let current_block = pezframe_system::Pezpallet::<T>::block_number();
 		// Schedule the upgrade with a delay just like if a teyrchain triggered the upgrade.
 		let upgrade_block = current_block.saturating_add(config.validation_upgrade_delay);
 		Self::schedule_code_upgrade(id, new_code, upgrade_block, &config, upgrade_strategy);
@@ -1496,7 +1496,7 @@ impl<T: Config> Pallet<T> {
 		Self::deposit_event(Event::CurrentHeadUpdated(para));
 	}
 
-	/// Called by the initializer to initialize the paras pallet.
+	/// Called by the initializer to initialize the paras pezpallet.
 	pub(crate) fn initializer_initialize(now: BlockNumberFor<T>) -> Weight {
 		Self::prune_old_code(now) +
 			Self::process_scheduled_upgrade_changes(now) +
@@ -1504,7 +1504,7 @@ impl<T: Config> Pallet<T> {
 			Self::prune_expired_authorizations(now)
 	}
 
-	/// Called by the initializer to finalize the paras pallet.
+	/// Called by the initializer to finalize the paras pezpallet.
 	pub(crate) fn initializer_finalize(now: BlockNumberFor<T>) {
 		Self::process_scheduled_upgrade_cooldowns(now);
 	}
@@ -1526,7 +1526,7 @@ impl<T: Config> Pallet<T> {
 			let code = CodeByHash::<T>::get(&code_hash);
 			if code.is_none() {
 				log::error!(
-					"Pallet paras storage is inconsistent, code not found for hash {}",
+					"Pezpallet paras storage is inconsistent, code not found for hash {}",
 					code_hash,
 				);
 				debug_assert!(false, "inconsistent paras storages");
@@ -1556,7 +1556,7 @@ impl<T: Config> Pallet<T> {
 	fn apply_actions_queue(session: SessionIndex) -> Vec<ParaId> {
 		let actions = ActionsQueue::<T>::take(session);
 		let mut teyrchains = TeyrchainsCache::new();
-		let now = pezframe_system::Pallet::<T>::block_number();
+		let now = pezframe_system::Pezpallet::<T>::block_number();
 		let mut outgoing = Vec::new();
 
 		for para in actions {
@@ -1977,7 +1977,7 @@ impl<T: Config> Pallet<T> {
 
 		let expected_at = expected_at.saturated_into();
 		let log = ConsensusLog::ParaScheduleUpgradeCode(id, *code_hash, expected_at);
-		pezframe_system::Pallet::<T>::deposit_log(log.into());
+		pezframe_system::Pezpallet::<T>::deposit_log(log.into());
 
 		weight
 	}
@@ -2033,7 +2033,7 @@ impl<T: Config> Pallet<T> {
 	/// does not guarantee that the teyrchain will eventually be onboarded. This can happen in case
 	/// the PVF does not pass PVF pre-checking.
 	///
-	/// The Para ID should be not activated in this pallet. The validation code supplied in
+	/// The Para ID should be not activated in this pezpallet. The validation code supplied in
 	/// `genesis_data` should not be empty. If those conditions are not met, then the para cannot
 	/// be onboarded.
 	pub(crate) fn schedule_para_initialize(
@@ -2307,13 +2307,13 @@ impl<T: Config> Pallet<T> {
 					// The code is known and there is no active PVF vote for it meaning it is
 					// already checked -- fast track the PVF checking into the accepted state.
 					weight += T::DbWeight::get().reads(1);
-					let now = pezframe_system::Pallet::<T>::block_number();
+					let now = pezframe_system::Pezpallet::<T>::block_number();
 					weight += Self::enact_pvf_accepted(now, &code_hash, &[cause], 0, cfg);
 				} else {
 					// PVF is not being pre-checked and it is not known. Start a new pre-checking
 					// process.
 					weight += T::DbWeight::get().reads_writes(3, 2);
-					let now = pezframe_system::Pallet::<T>::block_number();
+					let now = pezframe_system::Pezpallet::<T>::block_number();
 					let n_validators = shared::ActiveValidatorKeys::<T>::get().len();
 					PvfActiveVoteMap::<T>::insert(
 						&code_hash,
@@ -2401,10 +2401,10 @@ impl<T: Config> Pallet<T> {
 		CurrentCodeHash::<T>::insert(&id, &new_code_hash);
 
 		let log = ConsensusLog::ParaUpgradeCode(id, new_code_hash);
-		<pezframe_system::Pallet<T>>::deposit_log(log.into());
+		<pezframe_system::Pezpallet<T>>::deposit_log(log.into());
 
 		// `now` is only used for registering pruning as part of `fn note_past_code`
-		let now = <pezframe_system::Pallet<T>>::block_number();
+		let now = <pezframe_system::Pezpallet<T>>::block_number();
 
 		let weight = if let Some(prior_code_hash) = maybe_prior_code_hash {
 			Self::note_past_code(id, at, now, prior_code_hash)
@@ -2420,7 +2420,7 @@ impl<T: Config> Pallet<T> {
 	fn do_force_set_current_code_update(para: ParaId, new_code: ValidationCode) {
 		let new_code_hash = new_code.hash();
 		Self::increase_code_ref(&new_code_hash, &new_code);
-		Self::set_current_code(para, new_code_hash, pezframe_system::Pallet::<T>::block_number());
+		Self::set_current_code(para, new_code_hash, pezframe_system::Pezpallet::<T>::block_number());
 		Self::deposit_event(Event::CurrentCodeUpdated(para));
 	}
 
@@ -2502,7 +2502,7 @@ impl<T: Config> Pallet<T> {
 
 	/// Return the session index that should be used for any future scheduled changes.
 	fn scheduled_session() -> SessionIndex {
-		shared::Pallet::<T>::scheduled_session()
+		shared::Pezpallet::<T>::scheduled_session()
 	}
 
 	/// Store the validation code if not already stored, and increase the number of reference.
@@ -2542,7 +2542,7 @@ impl<T: Config> Pallet<T> {
 		weight
 	}
 
-	/// Test function for triggering a new session in this pallet.
+	/// Test function for triggering a new session in this pezpallet.
 	#[cfg(any(feature = "std", feature = "runtime-benchmarks", test))]
 	pub fn test_on_new_session() {
 		Self::initializer_on_new_session(&SessionChangeNotification {
@@ -2601,7 +2601,7 @@ impl<T: Config> Pallet<T> {
 		para: &ParaId,
 	) -> Result<AuthorizedCodeHashAndExpiry<BlockNumberFor<T>>, Error<T>> {
 		let authorized = AuthorizedCodeHash::<T>::get(para).ok_or(Error::<T>::NothingAuthorized)?;
-		let now = pezframe_system::Pallet::<T>::block_number();
+		let now = pezframe_system::Pezpallet::<T>::block_number();
 		ensure!(authorized.expire_at > now, Error::<T>::InvalidBlockNumber);
 		ensure!(authorized.code_hash == code.hash(), Error::<T>::Unauthorized);
 		Ok(authorized)

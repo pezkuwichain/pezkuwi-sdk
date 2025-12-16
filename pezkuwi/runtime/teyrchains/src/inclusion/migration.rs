@@ -14,7 +14,7 @@
 pub use v1::MigrateToV1;
 
 pub mod v0 {
-	use crate::inclusion::{Config, Pallet};
+	use crate::inclusion::{Config, Pezpallet};
 	use bitvec::{order::Lsb0 as BitOrderLsb0, vec::BitVec};
 	use codec::{Decode, Encode};
 	use pezframe_support::{storage_alias, Twox64Concat};
@@ -45,7 +45,7 @@ pub mod v0 {
 
 	#[storage_alias]
 	pub type PendingAvailability<T: Config> = StorageMap<
-		Pallet<T>,
+		Pezpallet<T>,
 		Twox64Concat,
 		ParaId,
 		CandidatePendingAvailability<<T as pezframe_system::Config>::Hash, BlockNumberFor<T>>,
@@ -53,11 +53,11 @@ pub mod v0 {
 
 	#[storage_alias]
 	pub type PendingAvailabilityCommitments<T: Config> =
-		StorageMap<Pallet<T>, Twox64Concat, ParaId, CandidateCommitments>;
+		StorageMap<Pezpallet<T>, Twox64Concat, ParaId, CandidateCommitments>;
 
 	#[storage_alias]
 	pub type AvailabilityBitfields<T: Config> = StorageMap<
-		Pallet<T>,
+		Pezpallet<T>,
 		Twox64Concat,
 		ValidatorIndex,
 		AvailabilityBitfieldRecord<BlockNumberFor<T>>,
@@ -70,7 +70,7 @@ mod v1 {
 		PendingAvailabilityCommitments as V0PendingAvailabilityCommitments,
 	};
 	use crate::inclusion::{
-		CandidatePendingAvailability as V1CandidatePendingAvailability, Config, Pallet,
+		CandidatePendingAvailability as V1CandidatePendingAvailability, Config, Pezpallet,
 		PendingAvailability as V1PendingAvailability,
 	};
 	use alloc::{collections::vec_deque::VecDeque, vec::Vec};
@@ -158,7 +158,7 @@ mod v1 {
 		fn post_upgrade(state: Vec<u8>) -> Result<(), pezsp_runtime::TryRuntimeError> {
 			log::trace!(target: crate::inclusion::LOG_TARGET, "Running post_upgrade() for inclusion MigrateToV1");
 			ensure!(
-				Pallet::<T>::on_chain_storage_version() >= StorageVersion::new(1),
+				Pezpallet::<T>::on_chain_storage_version() >= StorageVersion::new(1),
 				"Storage version should be >= 1 after the migration"
 			);
 
@@ -201,7 +201,7 @@ mod v1 {
 		0,
 		1,
 		VersionUncheckedMigrateToV1<T>,
-		Pallet<T>,
+		Pezpallet<T>,
 		<T as pezframe_system::Config>::DbWeight,
 	>;
 }

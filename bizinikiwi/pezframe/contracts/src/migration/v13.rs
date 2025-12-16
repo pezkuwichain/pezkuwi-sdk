@@ -21,7 +21,7 @@
 use crate::{
 	migration::{IsFinished, MigrationStep},
 	weights::WeightInfo,
-	AccountIdOf, BalanceOf, CodeHash, Config, Pallet, TrieId, Weight, LOG_TARGET,
+	AccountIdOf, BalanceOf, CodeHash, Config, Pezpallet, TrieId, Weight, LOG_TARGET,
 };
 use codec::{Decode, Encode};
 use pezframe_support::{pezpallet_prelude::*, storage_alias, weights::WeightMeter, DefaultNoBound};
@@ -45,7 +45,7 @@ mod v12 {
 
 	#[storage_alias]
 	pub type ContractInfoOf<T: Config> = StorageMap<
-		Pallet<T>,
+		Pezpallet<T>,
 		Twox64Concat,
 		<T as pezframe_system::Config>::AccountId,
 		ContractInfo<T>,
@@ -73,7 +73,7 @@ pub fn store_old_contract_info<T: Config>(account: T::AccountId, info: crate::Co
 
 #[storage_alias]
 pub type ContractInfoOf<T: Config> =
-	StorageMap<Pallet<T>, Twox64Concat, <T as pezframe_system::Config>::AccountId, ContractInfo<T>>;
+	StorageMap<Pezpallet<T>, Twox64Concat, <T as pezframe_system::Config>::AccountId, ContractInfo<T>>;
 
 #[derive(Encode, Decode, CloneNoBound, PartialEq, Eq, RuntimeDebug, TypeInfo, MaxEncodedLen)]
 #[scale_info(skip_type_params(T))]

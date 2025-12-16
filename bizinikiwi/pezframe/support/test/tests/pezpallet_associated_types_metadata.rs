@@ -24,47 +24,47 @@ pub type Header = pezsp_runtime::generic::Header<u32, pezsp_runtime::traits::Bla
 pub type Block = pezsp_runtime::generic::Block<Header, UncheckedExtrinsic>;
 pub type UncheckedExtrinsic = pezsp_runtime::generic::UncheckedExtrinsic<u32, RuntimeCall, (), ()>;
 
-/// Pallet without collectable associated types.
-#[pezframe_support::pallet]
-pub mod pallet {
+/// Pezpallet without collectable associated types.
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use pezframe_support::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		// Runtime events already propagated to the metadata.
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		// Constants are already propagated.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MyGetParam2: Get<u32>;
 	}
 
-	#[pallet::event]
+	#[pezpallet::event]
 	pub enum Event<T: Config> {
 		TestEvent,
 	}
 }
 
-/// Pallet with default collectable associated types.
-#[pezframe_support::pallet]
+/// Pezpallet with default collectable associated types.
+#[pezframe_support::pezpallet]
 pub mod pallet2 {
 	use pezframe_support::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		// Runtime events already propagated to the metadata.
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		// Constants are already propagated.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MyGetParam2: Get<u32>;
 
 		// Associated type included by default, because it requires TypeInfo bound.
@@ -79,33 +79,33 @@ pub mod pallet2 {
 		type NotIncluded: From<u8>;
 	}
 
-	#[pallet::event]
+	#[pezpallet::event]
 	pub enum Event<T: Config> {
 		TestEvent,
 	}
 }
 
-/// Pallet with implicit collectable associated types.
-#[pezframe_support::pallet]
+/// Pezpallet with implicit collectable associated types.
+#[pezframe_support::pezpallet]
 pub mod pallet3 {
 	use pezframe_support::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
 	// Associated types are not collected by default.
-	#[pallet::config(without_automatic_metadata)]
+	#[pezpallet::config(without_automatic_metadata)]
 	pub trait Config: pezframe_system::Config {
 		// Runtime events already propagated to the metadata.
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
 		// Constants are already propagated.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MyGetParam2: Get<u32>;
 
 		// Explicitly include associated types.
-		#[pallet::include_metadata]
+		#[pezpallet::include_metadata]
 		type Nonce: TypeInfo;
 
 		type AccountData: Parameter;
@@ -113,13 +113,13 @@ pub mod pallet3 {
 		type NotIncluded: From<u8>;
 	}
 
-	#[pallet::event]
+	#[pezpallet::event]
 	pub enum Event<T: Config> {
 		TestEvent,
 	}
 }
 
-impl pallet::Config for Runtime {
+impl pezpallet::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type MyGetParam2 = ConstU32<10>;
 }
@@ -170,7 +170,7 @@ pezframe_support::construct_runtime!(
 	pub enum Runtime
 	{
 		System: pezframe_system,
-		Example: pallet,
+		Example: pezpallet,
 		DefaultInclusion: pallet2,
 		ExplicitInclusion: pallet3,
 	}
@@ -189,13 +189,13 @@ fn associated_types_metadata() {
 	let ir = Runtime::metadata_ir();
 
 	// No associated types to collect.
-	let pallet = ir.pallets.iter().find(|pallet| pallet.name == "Example").unwrap();
-	pretty_assertions::assert_eq!(pallet.associated_types, vec![]);
+	let pezpallet = ir.pallets.iter().find(|pezpallet| pezpallet.name == "Example").unwrap();
+	pretty_assertions::assert_eq!(pezpallet.associated_types, vec![]);
 
 	// Collect by default types that implement TypeInfo or Parameter.
-	let pallet = ir.pallets.iter().find(|pallet| pallet.name == "DefaultInclusion").unwrap();
+	let pezpallet = ir.pallets.iter().find(|pezpallet| pezpallet.name == "DefaultInclusion").unwrap();
 	pretty_assertions::assert_eq!(
-		pallet.associated_types,
+		pezpallet.associated_types,
 		vec![
 			PalletAssociatedTypeMetadataIR {
 				name: "Nonce",
@@ -211,9 +211,9 @@ fn associated_types_metadata() {
 	);
 
 	// Explicitly include associated types.
-	let pallet = ir.pallets.iter().find(|pallet| pallet.name == "ExplicitInclusion").unwrap();
+	let pezpallet = ir.pallets.iter().find(|pezpallet| pezpallet.name == "ExplicitInclusion").unwrap();
 	pretty_assertions::assert_eq!(
-		pallet.associated_types,
+		pezpallet.associated_types,
 		vec![PalletAssociatedTypeMetadataIR {
 			name: "Nonce",
 			ty: meta_type::<u64>(),
@@ -221,10 +221,10 @@ fn associated_types_metadata() {
 		}]
 	);
 
-	// Check system pallet.
-	let pallet = ir.pallets.iter().find(|pallet| pallet.name == "System").unwrap();
+	// Check system pezpallet.
+	let pezpallet = ir.pallets.iter().find(|pezpallet| pezpallet.name == "System").unwrap();
 	pretty_assertions::assert_eq!(
-		pallet.associated_types,
+		pezpallet.associated_types,
 		vec![
 			PalletAssociatedTypeMetadataIR {
 				name: "RuntimeCall",
@@ -264,7 +264,7 @@ fn associated_types_metadata() {
                 ty: meta_type::<()>(),
                 docs: maybe_docs(vec![
                     " Data to be associated with an account (other than nonce/transaction counter, which this",
-                    " pallet does regardless).",
+                    " pezpallet does regardless).",
                 ]),
             },
 		]

@@ -522,7 +522,7 @@ fn mock_delegatecall_hook_works(caller_type: FixtureType, callee_type: FixtureTy
 						DelegateInfo {
 							callee: callee_addr,
 							caller: ExecOrigin::<Test>::from_runtime_origin(crate::OriginFor::<Test>::signed(
-								<Test as crate::pallet::Config>::AddressMapper::to_fallback_account_id(
+								<Test as crate::pezpallet::Config>::AddressMapper::to_fallback_account_id(
 									&caller_addr,
 								),
 							)).expect("Conversion to ExecOrigin must work"),

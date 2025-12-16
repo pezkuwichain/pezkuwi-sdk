@@ -52,7 +52,7 @@ fn reserve_asset_transfers_work() {
 	});
 
 	// ALICE on the Relay Chain sends some Relay Chain native tokens to BOB on the teyrchain.
-	// The transfer is done with the `transfer_assets` extrinsic in the XCM pallet.
+	// The transfer is done with the `transfer_assets` extrinsic in the XCM pezpallet.
 	// The extrinsic figures out it should do a reserve asset transfer
 	// with the local chain as reserve.
 	Relay::execute_with(|| {

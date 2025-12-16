@@ -6,7 +6,7 @@ edition.workspace = true
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
-description = "FRAME election provider multi phase pallet tests with staking pallet, bags-list and session pallets"
+description = "FRAME election provider multi phase pezpallet tests with staking pezpallet, bags-list and session pallets"
 publish = false
 documentation = "https://docs.rs/pezpallet-election-provider-e2e-test"
 

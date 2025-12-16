@@ -15,14 +15,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Benchmarks for Multisig Pallet
+// Benchmarks for Multisig Pezpallet
 
 #![cfg(feature = "runtime-benchmarks")]
 
 use super::*;
 use frame::benchmarking::prelude::*;
 
-use crate::Pallet as Multisig;
+use crate::Pezpallet as Multisig;
 
 const SEED: u32 = 0;
 

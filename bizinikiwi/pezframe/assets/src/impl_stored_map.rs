@@ -15,11 +15,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Assets pallet's `StoredMap` implementation.
+//! Assets pezpallet's `StoredMap` implementation.
 
 use super::*;
 
-impl<T: Config<I>, I: 'static> StoredMap<(T::AssetId, T::AccountId), T::Extra> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> StoredMap<(T::AssetId, T::AccountId), T::Extra> for Pezpallet<T, I> {
 	fn get(id_who: &(T::AssetId, T::AccountId)) -> T::Extra {
 		let (id, who) = id_who;
 		Account::<T, I>::get(id, who).map(|a| a.extra).unwrap_or_default()

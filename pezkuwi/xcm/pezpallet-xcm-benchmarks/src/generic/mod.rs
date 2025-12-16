@@ -14,15 +14,15 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 #[cfg(feature = "runtime-benchmarks")]
 pub mod benchmarking;
 #[cfg(test)]
 mod mock;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use pezframe_benchmarking::BenchmarkError;
 	use pezframe_support::{dispatch::GetDispatchInfo, pezpallet_prelude::Encode};
 	use pezsp_runtime::traits::Dispatchable;
@@ -30,7 +30,7 @@ pub mod pallet {
 		Asset, Assets, InteriorLocation, Junction, Location, NetworkId, Response, WeightLimit,
 	};
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config + crate::Config {
 		type RuntimeCall: Dispatchable<RuntimeOrigin = Self::RuntimeOrigin>
 			+ GetDispatchInfo
@@ -97,19 +97,19 @@ pub mod pallet {
 		/// If set to `Err`, benchmarks which rely on a universal alias will be skipped.
 		fn alias_origin() -> Result<(Location, Location), BenchmarkError>;
 
-		/// Returns a valid pallet info for `ExpectPallet` or `QueryPallet` benchmark.
+		/// Returns a valid pezpallet info for `ExpectPallet` or `QueryPallet` benchmark.
 		///
-		/// By default returns `pezframe_system::Pallet` info with expected pallet index `0`.
+		/// By default returns `pezframe_system::Pezpallet` info with expected pezpallet index `0`.
 		fn valid_pallet() -> pezframe_support::traits::PalletInfoData {
 			pezframe_support::traits::PalletInfoData {
-				index: <pezframe_system::Pallet<Self> as pezframe_support::traits::PalletInfoAccess>::index(),
-				name: <pezframe_system::Pallet<Self> as pezframe_support::traits::PalletInfoAccess>::name(),
-				module_name: <pezframe_system::Pallet<Self> as pezframe_support::traits::PalletInfoAccess>::module_name(),
-				crate_version: <pezframe_system::Pallet<Self> as pezframe_support::traits::PalletInfoAccess>::crate_version(),
+				index: <pezframe_system::Pezpallet<Self> as pezframe_support::traits::PalletInfoAccess>::index(),
+				name: <pezframe_system::Pezpallet<Self> as pezframe_support::traits::PalletInfoAccess>::name(),
+				module_name: <pezframe_system::Pezpallet<Self> as pezframe_support::traits::PalletInfoAccess>::module_name(),
+				crate_version: <pezframe_system::Pezpallet<Self> as pezframe_support::traits::PalletInfoAccess>::crate_version(),
 			}
 		}
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T, I = ()>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T, I = ()>(_);
 }

@@ -134,7 +134,7 @@ impl pezpallet_staking::Config for Test {
 	type OldCurrency = Balances;
 	type Currency = Balances;
 	type CurrencyBalance = <Self as pezpallet_balances::Config>::Balance;
-	type UnixTime = pezpallet_timestamp::Pallet<Self>;
+	type UnixTime = pezpallet_timestamp::Pezpallet<Self>;
 	type AdminOrigin = pezframe_system::EnsureRoot<Self::AccountId>;
 	type SessionInterface = Self;
 	type EraPayout = pezpallet_staking::ConvertCurve<RewardCurve>;
@@ -188,13 +188,13 @@ pub type UncheckedExtrinsic = pezsp_runtime::generic::UncheckedExtrinsic<u32, Ru
 pezframe_support::construct_runtime!(
 	pub enum Test
 	{
-		System: system::{Pallet, Call, Event<T>},
+		System: system::{Pezpallet, Call, Event<T>},
 		Balances: pezpallet_balances,
 		Staking: pezpallet_staking,
 		Session: pezpallet_session,
-		ImOnline: pezpallet_im_online::{Pallet, Call, Storage, Event<T>, ValidateUnsigned, Config<T>},
-		Offences: pezpallet_offences::{Pallet, Storage, Event},
-		Historical: pezpallet_session_historical::{Pallet, Event<T>},
+		ImOnline: pezpallet_im_online::{Pezpallet, Call, Storage, Event<T>, ValidateUnsigned, Config<T>},
+		Offences: pezpallet_offences::{Pezpallet, Storage, Event},
+		Historical: pezpallet_session_historical::{Pezpallet, Event<T>},
 	}
 );
 

@@ -50,7 +50,7 @@ parameter_types! {
 pub struct MockOnKycApproved;
 impl crate::types::OnKycApproved<AccountId> for MockOnKycApproved {
 	fn on_kyc_approved(_who: &AccountId, _referrer: &AccountId) {
-		// No-op for tests - in real runtime this triggers referral pallet
+		// No-op for tests - in real runtime this triggers referral pezpallet
 	}
 }
 

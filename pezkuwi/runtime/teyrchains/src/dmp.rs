@@ -58,7 +58,7 @@ use pezsp_runtime::{
 };
 use xcm::latest::SendError;
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 #[cfg(test)]
 mod tests;
@@ -83,7 +83,7 @@ impl From<QueueDownwardMessageError> for SendError {
 	}
 }
 
-/// An error returned by [`Pallet::check_processed_downward_messages`] that indicates an acceptance
+/// An error returned by [`Pezpallet::check_processed_downward_messages`] that indicates an acceptance
 /// check didn't pass.
 pub(crate) enum ProcessedDownwardMessagesAcceptanceErr {
 	/// If there are pending messages then `processed_downward_messages` should be at least 1,
@@ -108,19 +108,19 @@ impl fmt::Debug for ProcessedDownwardMessagesAcceptanceErr {
 	}
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::pallet]
-	#[pallet::without_storage_info]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::without_storage_info]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config + configuration::Config + paras::Config {}
 
 	/// The downward messages addressed for a certain para.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type DownwardMessageQueues<T: Config> = StorageMap<
 		_,
 		Twox64Concat,
@@ -136,17 +136,17 @@ pub mod pallet {
 	/// - `prev_head`: is the previous head hash or zero if none.
 	/// - `B`: is the relay-chain block number in which a message was appended.
 	/// - `H(M)`: is the hash of the message being appended.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type DownwardMessageQueueHeads<T: Config> =
 		StorageMap<_, Twox64Concat, ParaId, Hash, ValueQuery>;
 
 	/// The factor to multiply the base delivery fee by.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type DeliveryFeeFactor<T: Config> =
-		StorageMap<_, Twox64Concat, ParaId, FixedU128, ValueQuery, GetMinFeeFactor<Pallet<T>>>;
+		StorageMap<_, Twox64Concat, ParaId, FixedU128, ValueQuery, GetMinFeeFactor<Pezpallet<T>>>;
 }
 /// Routines and getters related to downward message passing.
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Block initialization logic, called by initializer.
 	pub(crate) fn initializer_initialize(_now: BlockNumberFor<T>) -> Weight {
 		Weight::zero()
@@ -220,7 +220,7 @@ impl<T: Config> Pallet<T> {
 		Self::can_queue_downward_message(config, &para, &msg)?;
 
 		let inbound =
-			InboundDownwardMessage { msg, sent_at: pezframe_system::Pallet::<T>::block_number() };
+			InboundDownwardMessage { msg, sent_at: pezframe_system::Pezpallet::<T>::block_number() };
 
 		// obtain the new link in the MQC and update the head.
 		DownwardMessageQueueHeads::<T>::mutate(para, |head| {
@@ -338,7 +338,7 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-impl<T: Config> FeeTracker for Pallet<T> {
+impl<T: Config> FeeTracker for Pezpallet<T> {
 	type Id = ParaId;
 
 	fn get_fee_factor(id: Self::Id) -> FixedU128 {
@@ -351,7 +351,7 @@ impl<T: Config> FeeTracker for Pallet<T> {
 }
 
 #[cfg(feature = "runtime-benchmarks")]
-impl<T: Config> crate::EnsureForTeyrchain for Pallet<T> {
+impl<T: Config> crate::EnsureForTeyrchain for Pezpallet<T> {
 	fn ensure(para: ParaId) {
 		Self::make_teyrchain_reachable(para);
 	}

@@ -26,18 +26,18 @@ use pezframe_support::{traits::Get, BoundedVec};
 use pezsp_runtime::SaturatedConversion;
 use pezsp_std::{collections::btree_map::BTreeMap, convert::TryInto, prelude::*};
 
-/// Emit a log specific to this pallet, setting the target to [`crate::LOG_PREFIX`]
+/// Emit a log specific to this pezpallet, setting the target to [`crate::LOG_PREFIX`]
 #[macro_export]
 macro_rules! log {
 	($level:tt, $pattern:expr $(, $values:expr)* $(,)?) => {
 		log::$level!(
 			target: $crate::LOG_PREFIX,
-			concat!("[#{:?}] 🗳🗳🗳  ", $pattern), <pezframe_system::Pallet<T>>::block_number() $(, $values)*
+			concat!("[#{:?}] 🗳🗳🗳  ", $pattern), <pezframe_system::Pezpallet<T>>::block_number() $(, $values)*
 		)
 	};
 }
 
-/// Emit a log within a submodule of the pallet
+/// Emit a log within a submodule of the pezpallet
 #[macro_export]
 macro_rules! sublog {
 	($level:tt, $sub_pallet:tt, $pattern:expr $(, $values:expr)* $(,)?) => {
@@ -46,7 +46,7 @@ macro_rules! sublog {
 		#[cfg(feature = "std")]
 		log::$level!(
 			target: format!("{}::{}", $crate::LOG_PREFIX, $sub_pallet).as_ref(),
-			concat!("[#{:?}] 🗳🗳🗳  ", $pattern), <pezframe_system::Pallet<T>>::block_number() $(, $values )*
+			concat!("[#{:?}] 🗳🗳🗳  ", $pattern), <pezframe_system::Pezpallet<T>>::block_number() $(, $values )*
 		)
 	};
 }

@@ -87,9 +87,9 @@ pub(crate) fn expand_variant_count(
 		// we don't specify instance:
 		//
 		// ```
-		// pub struct Pallet<T, I = ()>{..}
+		// pub struct Pezpallet<T, I = ()>{..}
 		//
-		// #[pallet::composite_enum]
+		// #[pezpallet::composite_enum]
 		// pub enum HoldReason<I: 'static = ()> {..}
 		//
 		// Pallet1: pezpallet_x,  // <- default type parameter

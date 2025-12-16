@@ -1343,7 +1343,7 @@ impl<T> Iterator for ChildTriePrefixIterator<T> {
 
 /// Trait for storage types that store all its value after a unique prefix.
 pub trait StoragePrefixedContainer {
-	/// Pallet prefix. Used for generating final key.
+	/// Pezpallet prefix. Used for generating final key.
 	fn pezpallet_prefix() -> &'static [u8];
 
 	/// Storage prefix. Used for generating final key.
@@ -1362,7 +1362,7 @@ pub trait StoragePrefixedContainer {
 /// Twox128(pezpallet_prefix) ++ Twox128(storage_prefix)
 /// ```
 pub trait StoragePrefixedMap<Value: FullCodec> {
-	/// Pallet prefix. Used for generating final key.
+	/// Pezpallet prefix. Used for generating final key.
 	fn pezpallet_prefix() -> &'static [u8]; // TODO move to StoragePrefixedContainer
 
 	/// Storage prefix. Used for generating final key.
@@ -1733,7 +1733,7 @@ where
 	}
 }
 
-/// Returns the storage prefix for a specific pallet name and storage name.
+/// Returns the storage prefix for a specific pezpallet name and storage name.
 ///
 /// The storage prefix is `concat(twox_128(pezpallet_name), twox_128(storage_name))`.
 pub fn storage_prefix(pezpallet_name: &[u8], storage_name: &[u8]) -> [u8; 32] {

@@ -16,16 +16,16 @@
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
-//! `pezcumulus-pezpallet-teyrchain-system` is a base pallet for Pezcumulus-based teyrchains.
+//! `pezcumulus-pezpallet-teyrchain-system` is a base pezpallet for Pezcumulus-based teyrchains.
 //!
-//! This pallet handles low-level details of being a teyrchain. Its responsibilities include:
+//! This pezpallet handles low-level details of being a teyrchain. Its responsibilities include:
 //!
 //! - ingestion of the teyrchain validation data;
 //! - ingestion and dispatch of incoming downward and lateral messages;
 //! - coordinating upgrades with the Relay Chain; and
 //! - communication of teyrchain outputs, such as sent messages, signaling an upgrade, etc.
 //!
-//! Users must ensure that they register this pallet as an inherent provider.
+//! Users must ensure that they register this pezpallet as an inherent provider.
 
 extern crate alloc;
 
@@ -109,7 +109,7 @@ pub use pezcumulus_pezpallet_teyrchain_system_proc_macro::register_validate_bloc
 pub use relay_state_snapshot::{MessagingStateSnapshot, RelayChainStateProof};
 pub use unincluded_segment::{Ancestor, UsedBandwidth};
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 const LOG_TARGET: &str = "teyrchain-system";
 
@@ -185,19 +185,19 @@ pub mod ump_constants {
 	pub const THRESHOLD_FACTOR: u32 = 2;
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezcumulus_primitives_core::CoreInfoExistsAtMaxOnce;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	#[pallet::storage_version(migration::STORAGE_VERSION)]
-	#[pallet::without_storage_info]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(migration::STORAGE_VERSION)]
+	#[pezpallet::without_storage_info]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config<OnSetCode = TeyrchainSetCode<Self>> {
 		/// The overarching event type.
 		#[allow(deprecated)]
@@ -207,7 +207,7 @@ pub mod pallet {
 		type OnSystemEvent: OnSystemEvent;
 
 		/// Returns the teyrchain ID we are running with.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type SelfParaId: Get<ParaId>;
 
 		/// The place where outbound XCMP messages come from. This is queried in `finalize_block`.
@@ -224,7 +224,7 @@ pub mod pallet {
 
 		/// The message handler that will be invoked when messages are received via XCMP.
 		///
-		/// This should normally link to the XCMP Queue pallet.
+		/// This should normally link to the XCMP Queue pezpallet.
 		type XcmpMessageHandler: XcmpMessageHandler;
 
 		/// The weight we reserve at the beginning of the block for processing XCMP messages.
@@ -265,8 +265,8 @@ pub mod pallet {
 		type RelayParentOffset: Get<u32>;
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		/// Handles actually sending upward messages by moving them from `PendingUpwardMessages` to
 		/// `UpwardMessages`. Decreases the delivery fee factor if after sending messages, the queue
 		/// total size is less than the threshold (see [`ump_constants::THRESHOLD_FACTOR`]).
@@ -363,7 +363,7 @@ pub mod pallet {
 				*up = up.split_off(num as usize);
 
 				if let Some(core_info) =
-					CumulusDigestItem::find_core_info(&pezframe_system::Pallet::<T>::digest())
+					CumulusDigestItem::find_core_info(&pezframe_system::Pezpallet::<T>::digest())
 				{
 					PendingUpwardSignals::<T>::append(
 						UMPSignal::SelectCore(core_info.selector, core_info.claim_queue_offset)
@@ -403,7 +403,7 @@ pub mod pallet {
 				as usize;
 
 			// Note: this internally calls the `GetChannelInfo` implementation for this
-			// pallet, which draws on the `RelevantMessagingState`. That in turn has
+			// pezpallet, which draws on the `RelevantMessagingState`. That in turn has
 			// been adjusted above to reflect the correct limits in all channels.
 			let outbound_messages =
 				T::OutboundXcmpMessageSource::take_outbound_messages(maximum_channels)
@@ -470,7 +470,7 @@ pub mod pallet {
 			{
 				<UnincludedSegment<T>>::mutate(|chain| {
 					if let Some(ancestor) = chain.last_mut() {
-						let parent = pezframe_system::Pallet::<T>::parent_hash();
+						let parent = pezframe_system::Pezpallet::<T>::parent_hash();
 						// Ancestor is the latest finalized block, thus current parent is
 						// its output head.
 						ancestor.replace_para_head_hash(parent);
@@ -536,7 +536,7 @@ pub mod pallet {
 
 			// We need to ensure that `CoreInfo` digest exists only once.
 			match CumulusDigestItem::core_info_exists_at_max_once(
-				&pezframe_system::Pallet::<T>::digest(),
+				&pezframe_system::Pezpallet::<T>::digest(),
 			) {
 				CoreInfoExistsAtMaxOnce::Once(core_info) => {
 					assert_eq!(
@@ -556,8 +556,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Set the current validation data.
 		///
 		/// This should be invoked exactly once per block. It will panic at the finalization
@@ -567,8 +567,8 @@ pub mod pallet {
 		///
 		/// As a side effect, this function upgrades the current validation function
 		/// if the appropriate time has come.
-		#[pallet::call_index(0)]
-		#[pallet::weight((0, DispatchClass::Mandatory))]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight((0, DispatchClass::Mandatory))]
 		// TODO: This weight should be corrected. Currently the weight is registered manually in the
 		// call with `register_extra_weight_unchecked`.
 		pub fn set_validation_data(
@@ -636,7 +636,7 @@ pub mod pallet {
 			// Deposit a log indicating the relay-parent storage root.
 			// TODO: remove this in favor of the relay-parent's hash after
 			// https://github.com/pezkuwichain/kurdistan-sdk/issues/92
-			pezframe_system::Pallet::<T>::deposit_log(
+			pezframe_system::Pezpallet::<T>::deposit_log(
 				pezcumulus_primitives_core::rpsr_digest::relay_parent_storage_root_item(
 					vfp.relay_parent_storage_root,
 					vfp.relay_parent_number,
@@ -669,7 +669,7 @@ pub mod pallet {
 					);
 					let validation_code = <PendingValidationCode<T>>::take();
 
-					pezframe_system::Pallet::<T>::update_code_in_storage(&validation_code);
+					pezframe_system::Pezpallet::<T>::update_code_in_storage(&validation_code);
 					<T::OnSystemEvent as OnSystemEvent>::on_validation_code_applied();
 					Self::deposit_event(Event::ValidationFunctionApplied {
 						relay_chain_block_num: vfp.relay_parent_number,
@@ -719,7 +719,7 @@ pub mod pallet {
 				vfp.relay_parent_number,
 			));
 
-			pezframe_system::Pallet::<T>::register_extra_weight_unchecked(
+			pezframe_system::Pezpallet::<T>::register_extra_weight_unchecked(
 				total_weight,
 				DispatchClass::Mandatory,
 			);
@@ -727,8 +727,8 @@ pub mod pallet {
 			Ok(())
 		}
 
-		#[pallet::call_index(1)]
-		#[pallet::weight((1_000, DispatchClass::Operational))]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight((1_000, DispatchClass::Operational))]
 		pub fn sudo_send_upward_message(
 			origin: OriginFor<T>,
 			message: UpwardMessage,
@@ -738,12 +738,12 @@ pub mod pallet {
 			Ok(())
 		}
 
-		// WARNING: call indices 2 and 3 were used in a former version of this pallet. Using them
-		// again will require to bump the transaction version of runtimes using this pallet.
+		// WARNING: call indices 2 and 3 were used in a former version of this pezpallet. Using them
+		// again will require to bump the transaction version of runtimes using this pezpallet.
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// The validation function has been scheduled to apply.
 		ValidationFunctionStored,
@@ -759,7 +759,7 @@ pub mod pallet {
 		UpwardMessageSent { message_hash: Option<XcmHash> },
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Attempt to upgrade validation function while existing upgrade pending.
 		OverlappingUpgrades,
@@ -781,14 +781,14 @@ pub mod pallet {
 	/// relay-chain state.
 	///
 	/// The segment length is limited by the capacity returned from the [`ConsensusHook`] configured
-	/// in the pallet.
-	#[pallet::storage]
+	/// in the pezpallet.
+	#[pezpallet::storage]
 	pub type UnincludedSegment<T: Config> = StorageValue<_, Vec<Ancestor<T::Hash>>, ValueQuery>;
 
 	/// Storage field that keeps track of bandwidth used by the unincluded segment along with the
 	/// latest HRMP watermark. Used for limiting the acceptance of new blocks with
 	/// respect to relay chain constraints.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type AggregatedUnincludedSegment<T: Config> =
 		StorageValue<_, SegmentTracker<T::Hash>, OptionQuery>;
 
@@ -798,31 +798,31 @@ pub mod pallet {
 	/// As soon as the relay chain gives us the go-ahead signal, we will overwrite the
 	/// [`:code`][pezsp_core::storage::well_known_keys::CODE] which will result the next block process
 	/// with the new validation code. This concludes the upgrade process.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type PendingValidationCode<T: Config> = StorageValue<_, Vec<u8>, ValueQuery>;
 
 	/// Validation code that is set by the teyrchain and is to be communicated to collator and
 	/// consequently the relay-chain.
 	///
-	/// This will be cleared in `on_initialize` of each new block if no other pallet already set
+	/// This will be cleared in `on_initialize` of each new block if no other pezpallet already set
 	/// the value.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type NewValidationCode<T: Config> = StorageValue<_, Vec<u8>, OptionQuery>;
 
 	/// The [`PersistedValidationData`] set for this block.
 	///
-	/// This value is expected to be set only once by the [`Pallet::set_validation_data`] inherent.
-	#[pallet::storage]
+	/// This value is expected to be set only once by the [`Pezpallet::set_validation_data`] inherent.
+	#[pezpallet::storage]
 	pub type ValidationData<T: Config> = StorageValue<_, PersistedValidationData>;
 
 	/// Were the validation data set to notify the relay chain?
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type DidSetValidationCode<T: Config> = StorageValue<_, bool, ValueQuery>;
 
 	/// The relay chain block number associated with the last teyrchain block.
 	///
 	/// This is updated in `on_finalize`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type LastRelayChainBlockNumber<T: Config> =
 		StorageValue<_, RelayChainBlockNumber, ValueQuery>;
 
@@ -833,7 +833,7 @@ pub mod pallet {
 	/// This storage item is a mirror of the corresponding value for the current teyrchain from the
 	/// relay-chain. This value is ephemeral which means it doesn't hit the storage. This value is
 	/// set after the inherent.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type UpgradeRestrictionSignal<T: Config> =
 		StorageValue<_, Option<relay_chain::UpgradeRestriction>, ValueQuery>;
 
@@ -842,7 +842,7 @@ pub mod pallet {
 	/// This storage item is a mirror of the corresponding value for the current teyrchain from the
 	/// relay-chain. This value is ephemeral which means it doesn't hit the storage. This value is
 	/// set after the inherent.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type UpgradeGoAhead<T: Config> =
 		StorageValue<_, Option<relay_chain::UpgradeGoAhead>, ValueQuery>;
 
@@ -852,7 +852,7 @@ pub mod pallet {
 	/// before processing of the inherent, e.g. in `on_initialize` this data may be stale.
 	///
 	/// This data is also absent from the genesis.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type RelayStateProof<T: Config> = StorageValue<_, pezsp_trie::StorageProof>;
 
 	/// The snapshot of some state related to messaging relevant to the current teyrchain as per
@@ -862,7 +862,7 @@ pub mod pallet {
 	/// before processing of the inherent, e.g. in `on_initialize` this data may be stale.
 	///
 	/// This data is also absent from the genesis.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type RelevantMessagingState<T: Config> = StorageValue<_, MessagingStateSnapshot>;
 
 	/// The teyrchain host configuration that was obtained from the relay parent.
@@ -871,98 +871,98 @@ pub mod pallet {
 	/// before processing of the inherent, e.g. in `on_initialize` this data may be stale.
 	///
 	/// This data is also absent from the genesis.
-	#[pallet::storage]
-	#[pallet::disable_try_decode_storage]
+	#[pezpallet::storage]
+	#[pezpallet::disable_try_decode_storage]
 	pub type HostConfiguration<T: Config> = StorageValue<_, AbridgedHostConfiguration>;
 
 	/// The last downward message queue chain head we have observed.
 	///
 	/// This value is loaded before and saved after processing inbound downward messages carried
 	/// by the system inherent.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type LastDmqMqcHead<T: Config> = StorageValue<_, MessageQueueChain, ValueQuery>;
 
 	/// The message queue chain heads we have observed per each channel incoming channel.
 	///
 	/// This value is loaded before and saved after processing inbound downward messages carried
 	/// by the system inherent.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type LastHrmpMqcHeads<T: Config> =
 		StorageValue<_, BTreeMap<ParaId, MessageQueueChain>, ValueQuery>;
 
 	/// Number of downward messages processed in a block.
 	///
 	/// This will be cleared in `on_initialize` of each new block.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ProcessedDownwardMessages<T: Config> = StorageValue<_, u32, ValueQuery>;
 
 	/// The last processed downward message.
 	///
 	/// We need to keep track of this to filter the messages that have been already processed.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type LastProcessedDownwardMessage<T: Config> = StorageValue<_, InboundMessageId>;
 
 	/// HRMP watermark that was set in a block.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type HrmpWatermark<T: Config> = StorageValue<_, relay_chain::BlockNumber, ValueQuery>;
 
 	/// The last processed HRMP message.
 	///
 	/// We need to keep track of this to filter the messages that have been already processed.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type LastProcessedHrmpMessage<T: Config> = StorageValue<_, InboundMessageId>;
 
 	/// HRMP messages that were sent in a block.
 	///
 	/// This will be cleared in `on_initialize` of each new block.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type HrmpOutboundMessages<T: Config> =
 		StorageValue<_, Vec<OutboundHrmpMessage>, ValueQuery>;
 
 	/// Upward messages that were sent in a block.
 	///
 	/// This will be cleared in `on_initialize` for each new block.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type UpwardMessages<T: Config> = StorageValue<_, Vec<UpwardMessage>, ValueQuery>;
 
 	/// Upward messages that are still pending and not yet sent to the relay chain.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type PendingUpwardMessages<T: Config> = StorageValue<_, Vec<UpwardMessage>, ValueQuery>;
 
 	/// Upward signals that are still pending and not yet sent to the relay chain.
 	///
 	/// This will be cleared in `on_finalize` for each block.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type PendingUpwardSignals<T: Config> = StorageValue<_, Vec<UpwardMessage>, ValueQuery>;
 
 	/// The factor to multiply the base delivery fee by for UMP.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type UpwardDeliveryFeeFactor<T: Config> =
-		StorageValue<_, FixedU128, ValueQuery, GetMinFeeFactor<Pallet<T>>>;
+		StorageValue<_, FixedU128, ValueQuery, GetMinFeeFactor<Pezpallet<T>>>;
 
 	/// The number of HRMP messages we observed in `on_initialize` and thus used that number for
 	/// announcing the weight of `on_initialize` and `on_finalize`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type AnnouncedHrmpMessagesPerCandidate<T: Config> = StorageValue<_, u32, ValueQuery>;
 
 	/// The weight we reserve at the beginning of the block for processing XCMP messages. This
 	/// overrides the amount set in the Config trait.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ReservedXcmpWeightOverride<T: Config> = StorageValue<_, Weight>;
 
 	/// The weight we reserve at the beginning of the block for processing DMP messages. This
 	/// overrides the amount set in the Config trait.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ReservedDmpWeightOverride<T: Config> = StorageValue<_, Weight>;
 
 	/// A custom head data that should be returned as result of `validate_block`.
 	///
-	/// See `Pallet::set_custom_validation_head_data` for more information.
-	#[pallet::storage]
+	/// See `Pezpallet::set_custom_validation_head_data` for more information.
+	#[pezpallet::storage]
 	pub type CustomValidationHeadData<T: Config> = StorageValue<_, Vec<u8>, OptionQuery>;
 
-	#[pallet::inherent]
-	impl<T: Config> ProvideInherent for Pallet<T> {
+	#[pezpallet::inherent]
+	impl<T: Config> ProvideInherent for Pezpallet<T> {
 		type Call = Call<T>;
 		type Error = pezsp_inherents::MakeFatalError<()>;
 		const INHERENT_IDENTIFIER: InherentIdentifier =
@@ -998,14 +998,14 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(pezframe_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		#[serde(skip)]
 		pub _config: core::marker::PhantomData<T>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			// TODO: Remove after https://github.com/pezkuwichain/kurdistan-sdk/issues/93
@@ -1014,7 +1014,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Get the unincluded segment size after the given hash.
 	///
 	/// If the unincluded segment doesn't contain the given hash, this returns the
@@ -1028,7 +1028,7 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-impl<T: Config> FeeTracker for Pallet<T> {
+impl<T: Config> FeeTracker for Pezpallet<T> {
 	type Id = ();
 
 	fn get_fee_factor(_id: Self::Id) -> FixedU128 {
@@ -1040,14 +1040,14 @@ impl<T: Config> FeeTracker for Pallet<T> {
 	}
 }
 
-impl<T: Config> ListChannelInfos for Pallet<T> {
+impl<T: Config> ListChannelInfos for Pezpallet<T> {
 	fn outgoing_channels() -> Vec<ParaId> {
 		let Some(state) = RelevantMessagingState::<T>::get() else { return Vec::new() };
 		state.egress_channels.into_iter().map(|(id, _)| id).collect()
 	}
 }
 
-impl<T: Config> GetChannelInfo for Pallet<T> {
+impl<T: Config> GetChannelInfo for Pezpallet<T> {
 	fn get_channel_status(id: ParaId) -> ChannelStatus {
 		// Note, that we are using `relevant_messaging_state` which may be from the previous
 		// block, in case this is called from `on_initialize`, i.e. before the inherent with
@@ -1104,7 +1104,7 @@ impl<T: Config> GetChannelInfo for Pallet<T> {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// The bandwidth limit per block that applies when receiving messages from the relay chain via
 	/// DMP or XCMP.
 	///
@@ -1151,7 +1151,7 @@ impl<T: Config> Pallet<T> {
 		Call::set_validation_data { data, inbound_messages_data }
 	}
 
-	/// Enqueue all inbound downward messages relayed by the collator into the MQ pallet.
+	/// Enqueue all inbound downward messages relayed by the collator into the MQ pezpallet.
 	///
 	/// Checks if the sequence of the messages is valid, dispatches them and communicates the
 	/// number of processed messages to the collator via a storage update.
@@ -1352,7 +1352,7 @@ impl<T: Config> Pallet<T> {
 			(Some(h), true) => {
 				assert_eq!(
 					h,
-					pezframe_system::Pallet::<T>::parent_hash(),
+					pezframe_system::Pezpallet::<T>::parent_hash(),
 					"expected parent to be included"
 				);
 
@@ -1362,7 +1362,7 @@ impl<T: Config> Pallet<T> {
 			(None, true) => {
 				// All this logic is essentially a workaround to support collators which
 				// might still not provide the included block with the state proof.
-				pezframe_system::Pallet::<T>::parent_hash()
+				pezframe_system::Pezpallet::<T>::parent_hash()
 			},
 			(None, false) => panic!("included head not present in relay storage proof"),
 		};
@@ -1540,7 +1540,7 @@ impl<T: Config> Pallet<T> {
 
 	/// Open HRMP channel for using it in benchmarks or tests.
 	///
-	/// The caller assumes that the pallet will accept regular outbound message to the sibling
+	/// The caller assumes that the pezpallet will accept regular outbound message to the sibling
 	/// `target_teyrchain` after this call. No other assumptions are made.
 	#[cfg(any(feature = "runtime-benchmarks", feature = "std"))]
 	pub fn open_outbound_hrmp_channel_for_benchmarks_or_tests(target_teyrchain: ParaId) {
@@ -1564,7 +1564,7 @@ impl<T: Config> Pallet<T> {
 
 	/// Open HRMP channel for using it in benchmarks or tests.
 	///
-	/// The caller assumes that the pallet will accept regular outbound message to the sibling
+	/// The caller assumes that the pezpallet will accept regular outbound message to the sibling
 	/// `target_teyrchain` after this call. No other assumptions are made.
 	#[cfg(any(feature = "runtime-benchmarks", feature = "std"))]
 	pub fn open_custom_outbound_hrmp_channel_for_benchmarks_or_tests(
@@ -1615,11 +1615,11 @@ impl<T: Config> Pallet<T> {
 pub struct TeyrchainSetCode<T>(core::marker::PhantomData<T>);
 impl<T: Config> pezframe_system::SetCode<T> for TeyrchainSetCode<T> {
 	fn set_code(code: Vec<u8>) -> DispatchResult {
-		Pallet::<T>::schedule_code_upgrade(code)
+		Pezpallet::<T>::schedule_code_upgrade(code)
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Puts a message in the `PendingUpwardMessages` storage item.
 	/// The message will be later sent in `on_finalize`.
 	/// Checks host configuration to see if message is too big.
@@ -1681,7 +1681,7 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-impl<T: Config> UpwardMessageSender for Pallet<T> {
+impl<T: Config> UpwardMessageSender for Pezpallet<T> {
 	fn send_upward_message(message: UpwardMessage) -> Result<(u32, XcmHash), MessageSendError> {
 		Self::send_upward_message(message)
 	}
@@ -1723,7 +1723,7 @@ impl<T: Config> UpwardMessageSender for Pallet<T> {
 	}
 }
 
-impl<T: Config> InspectMessageQueues for Pallet<T> {
+impl<T: Config> InspectMessageQueues for Pezpallet<T> {
 	fn clear_messages() {
 		PendingUpwardMessages::<T>::kill();
 	}
@@ -1751,7 +1751,7 @@ impl<T: Config> InspectMessageQueues for Pallet<T> {
 }
 
 #[cfg(feature = "runtime-benchmarks")]
-impl<T: Config> pezkuwi_runtime_teyrchains::EnsureForTeyrchain for Pallet<T> {
+impl<T: Config> pezkuwi_runtime_teyrchains::EnsureForTeyrchain for Pezpallet<T> {
 	fn ensure(para_id: ParaId) {
 		if let ChannelStatus::Closed = Self::get_channel_status(para_id) {
 			Self::open_outbound_hrmp_channel_for_benchmarks_or_tests(para_id)
@@ -1805,7 +1805,7 @@ pub trait RelaychainStateProvider {
 /// data.
 ///
 /// When validation data is not available (e.g. within `on_initialize`), it will fallback to use
-/// [`Pallet::last_relay_block_number()`].
+/// [`Pezpallet::last_relay_block_number()`].
 ///
 /// **NOTE**: This has been deprecated, please use [`RelaychainDataProvider`]
 #[deprecated = "Use `RelaychainDataProvider` instead"]
@@ -1819,7 +1819,7 @@ pub type RelaychainBlockNumberProvider<T> = RelaychainDataProvider<T>;
 /// - [`current_relay_chain_state`](Self::current_relay_chain_state): Will return the default value
 ///   of [`RelayChainState`].
 /// - [`current_block_number`](Self::current_block_number): Will return
-///   [`Pallet::last_relay_block_number()`].
+///   [`Pezpallet::last_relay_block_number()`].
 pub struct RelaychainDataProvider<T>(core::marker::PhantomData<T>);
 
 impl<T: Config> BlockNumberProvider for RelaychainDataProvider<T> {
@@ -1828,7 +1828,7 @@ impl<T: Config> BlockNumberProvider for RelaychainDataProvider<T> {
 	fn current_block_number() -> relay_chain::BlockNumber {
 		ValidationData::<T>::get()
 			.map(|d| d.relay_parent_number)
-			.unwrap_or_else(|| Pallet::<T>::last_relay_block_number())
+			.unwrap_or_else(|| Pezpallet::<T>::last_relay_block_number())
 	}
 
 	#[cfg(any(feature = "std", feature = "runtime-benchmarks", test))]

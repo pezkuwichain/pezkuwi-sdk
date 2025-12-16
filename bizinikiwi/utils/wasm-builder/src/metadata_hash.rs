@@ -119,7 +119,7 @@ fn extract_ss58_prefix(metadata: &RuntimeMetadata) -> u16 {
 		.pallets
 		.iter()
 		.find(|p| p.name == "System")
-		.expect("Each FRAME runtime has the `System` pallet; qed");
+		.expect("Each FRAME runtime has the `System` pezpallet; qed");
 
 	system
 		.constants

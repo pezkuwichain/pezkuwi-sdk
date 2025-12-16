@@ -1,8 +1,8 @@
-# Default Config Example Pallet
+# Default Config Example Pezpallet
 
-An example pallet demonstrating the ability to derive default testing configs via
-`#[derive_impl]` and `#[pallet::config(with_default)]`.
+An example pezpallet demonstrating the ability to derive default testing configs via
+`#[derive_impl]` and `#[pezpallet::config(with_default)]`.
 
-Run `cargo doc --package pezpallet-default-config-example --open` to view this pallet's documentation.
+Run `cargo doc --package pezpallet-default-config-example --open` to view this pezpallet's documentation.
 
 License: MIT-0

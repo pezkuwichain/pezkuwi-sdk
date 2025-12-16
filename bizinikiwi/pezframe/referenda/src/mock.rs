@@ -83,7 +83,7 @@ impl pezpallet_scheduler::Config for Test {
 	type WeightInfo = ();
 	type OriginPrivilegeCmp = EqualPrivilegeOnly;
 	type Preimages = Preimage;
-	type BlockNumberProvider = pezframe_system::Pallet<Test>;
+	type BlockNumberProvider = pezframe_system::Pezpallet<Test>;
 }
 #[derive_impl(pezpallet_balances::config_preludes::TestDefaultConfig)]
 impl pezpallet_balances::Config for Test {
@@ -196,7 +196,7 @@ impl Config for Test {
 	type RuntimeCall = RuntimeCall;
 	type RuntimeEvent = RuntimeEvent;
 	type Scheduler = Scheduler;
-	type Currency = pezpallet_balances::Pallet<Self>;
+	type Currency = pezpallet_balances::Pezpallet<Self>;
 	type SubmitOrigin = pezframe_system::EnsureSigned<u64>;
 	type CancelOrigin = EnsureSignedBy<Four, u64>;
 	type KillOrigin = EnsureRoot<u64>;

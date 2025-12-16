@@ -91,7 +91,7 @@ where
 		_len: usize,
 		_result: &DispatchResult,
 	) -> Result<Weight, TransactionValidityError> {
-		crate::Pallet::<T>::reclaim_weight(info, post_info).map(|()| Weight::zero())
+		crate::Pezpallet::<T>::reclaim_weight(info, post_info).map(|()| Weight::zero())
 	}
 
 	fn bare_validate(
@@ -116,7 +116,7 @@ where
 		_len: usize,
 		_result: &DispatchResult,
 	) -> Result<(), TransactionValidityError> {
-		crate::Pallet::<T>::reclaim_weight(info, post_info)
+		crate::Pezpallet::<T>::reclaim_weight(info, post_info)
 	}
 }
 

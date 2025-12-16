@@ -26,10 +26,10 @@
 // Executed Command:
 // ./target/production/pezkuwi-teyrchain
 // benchmark
-// pallet
+// pezpallet
 // --chain=asset-hub-next-zagros-dev
 // --wasm-execution=compiled
-// --pallet=pezpallet_nft_fractionalization
+// --pezpallet=pezpallet_nft_fractionalization
 // --no-storage-info
 // --no-median-slopes
 // --no-min-squares

@@ -142,7 +142,7 @@ PezkuwiChain is a decentralized system of nodes (Validators, Nominators, Full No
 ---
 
 ## 9. Governance Model & 10. Security
-Governance is managed on-chain via the `welati` pallet, allowing PEZ holders to propose, vote on, and enact changes. Security is multi-layered, leveraging Rust's memory safety, the battle-tested framework, forkless upgrades, and the economic and social disincentives for bad actors provided by TNPoS.
+Governance is managed on-chain via the `welati` pezpallet, allowing PEZ holders to propose, vote on, and enact changes. Security is multi-layered, leveraging Rust's memory safety, the battle-tested framework, forkless upgrades, and the economic and social disincentives for bad actors provided by TNPoS.
 
 ---
 ## 11. Roadmap & 12. Use Cases
@@ -205,13 +205,13 @@ The project operates under the Kurdistan Talent Institute License. It is a utili
 - **FRAME:** The framework used for building blockchain runtimes with modular pallets.
 - **HEZ:** The native inflationary token of PezkuwiChain, used for staking, transaction fees, and network security.
 - **NPoS (Nominated Proof-of-Stake):** The consensus mechanism where nominators elect validators.
-- **Pallet:** A modular component in the Bizinikiwi runtime that provides specific functionality.
+- **Pezpallet:** A modular component in the Bizinikiwi runtime that provides specific functionality.
 - **PEZ:** The fixed-supply governance token of PezkuwiChain (5 billion total), used for governance and rewards.
 - **TNPoS (Trust-enhanced Nominated Proof-of-Stake):** PezkuwiChain's novel consensus mechanism that integrates trust scores.
 - **Trust Score:** A reputation metric calculated by `pezpallet-trust`.
 - **Wasm (WebAssembly):** The portable binary instruction format used for the PezkuwiChain runtime, enabling forkless upgrades.
-- **welati:** The governance pallet for PezkuwiChain. The name means "citizen" in Kurdish.
-- **perwerde:** The education and certification pallet. The name means "education" in Kurdish.
+- **welati:** The governance pezpallet for PezkuwiChain. The name means "citizen" in Kurdish.
+- **perwerde:** The education and certification pezpallet. The name means "education" in Kurdish.
 - **XCM (Cross-Consensus Messaging):** A messaging format for communication between different consensus systems.
 
 ---

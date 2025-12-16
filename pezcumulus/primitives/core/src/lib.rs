@@ -368,7 +368,7 @@ pub fn extract_relay_parent(digest: &Digest) -> Option<relay_chain::Hash> {
 /// <https://github.com/pezkuwichain/kurdistan-sdk/issues/92> via
 /// <https://github.com/pezkuwichain/kurdistan-sdk/issues/169>.
 ///
-/// Runtimes using the teyrchain-system pallet are expected to produce this digest item,
+/// Runtimes using the teyrchain-system pezpallet are expected to produce this digest item,
 /// but will stop as soon as they are able to provide the relay-parent hash directly.
 ///
 /// The relay-chain storage root is, in practice, a unique identifier of a block

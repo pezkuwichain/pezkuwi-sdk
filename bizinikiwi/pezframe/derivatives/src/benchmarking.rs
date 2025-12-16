@@ -15,10 +15,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use super::{Pallet as Derivatives, *};
+use super::{Pezpallet as Derivatives, *};
 use pezframe_benchmarking::v2::*;
 
-pub struct Pallet<T: Config<I>, I: 'static = ()>(Derivatives<T, I>);
+pub struct Pezpallet<T: Config<I>, I: 'static = ()>(Derivatives<T, I>);
 
 pub trait Config<I: 'static = ()>: super::Config<I> {
 	fn max_original() -> OriginalOf<Self, I>;

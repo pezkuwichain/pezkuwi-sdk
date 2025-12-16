@@ -13,7 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Storage migrations for the Identity pallet.
+//! Storage migrations for the Identity pezpallet.
 
 extern crate alloc;
 
@@ -39,7 +39,7 @@ pub mod versioned {
 		0,
 		1,
 		v1::VersionUncheckedMigrateV0ToV1<T, KL>,
-		crate::pallet::Pallet<T>,
+		crate::pezpallet::Pezpallet<T>,
 		<T as pezframe_system::Config>::DbWeight,
 	>;
 }
@@ -50,13 +50,13 @@ mod types_v0 {
 
 	#[storage_alias]
 	pub type IdentityOf<T: Config> = StorageMap<
-		Pallet<T>,
+		Pezpallet<T>,
 		Twox64Concat,
 		<T as pezframe_system::Config>::AccountId,
 		Registration<
 			BalanceOf<T>,
-			<T as pallet::Config>::MaxRegistrars,
-			<T as pallet::Config>::IdentityInformation,
+			<T as pezpallet::Config>::MaxRegistrars,
+			<T as pezpallet::Config>::IdentityInformation,
 		>,
 		OptionQuery,
 	>;
@@ -68,14 +68,14 @@ mod types_v1 {
 
 	#[storage_alias]
 	pub type IdentityOf<T: Config> = StorageMap<
-		Pallet<T>,
+		Pezpallet<T>,
 		Twox64Concat,
 		<T as pezframe_system::Config>::AccountId,
 		(
 			Registration<
 				BalanceOf<T>,
-				<T as pallet::Config>::MaxRegistrars,
-				<T as pallet::Config>::IdentityInformation,
+				<T as pezpallet::Config>::MaxRegistrars,
+				<T as pezpallet::Config>::IdentityInformation,
 			>,
 			Option<Username<T>>,
 		),
@@ -84,7 +84,7 @@ mod types_v1 {
 
 	#[storage_alias]
 	pub type UsernameAuthorities<T: Config> = StorageMap<
-		Pallet<T>,
+		Pezpallet<T>,
 		Twox64Concat,
 		<T as pezframe_system::Config>::AccountId,
 		AuthorityProperties<Suffix<T>>,
@@ -93,7 +93,7 @@ mod types_v1 {
 
 	#[storage_alias]
 	pub type AccountOfUsername<T: Config> = StorageMap<
-		Pallet<T>,
+		Pezpallet<T>,
 		Blake2_128Concat,
 		Username<T>,
 		<T as pezframe_system::Config>::AccountId,
@@ -103,7 +103,7 @@ mod types_v1 {
 	#[cfg(feature = "try-runtime")]
 	#[storage_alias]
 	pub type PendingUsernames<T: Config> = StorageMap<
-		Pallet<T>,
+		Pezpallet<T>,
 		Blake2_128Concat,
 		Username<T>,
 		(<T as pezframe_system::Config>::AccountId, BlockNumberFor<T>),
@@ -243,7 +243,7 @@ pub mod v2 {
 			mut cursor: Option<Self::Cursor>,
 			meter: &mut WeightMeter,
 		) -> Result<Option<Self::Cursor>, SteppedMigrationError> {
-			if Pallet::<T>::on_chain_storage_version() != Self::id().version_from as u16 {
+			if Pezpallet::<T>::on_chain_storage_version() != Self::id().version_from as u16 {
 				return Ok(None);
 			}
 
@@ -313,7 +313,7 @@ pub mod v2 {
 					// After the last obsolete username was cleared from storage, the migration is
 					// done.
 					Some(MigrationState::Finished) => {
-						StorageVersion::new(Self::id().version_to as u16).put::<Pallet<T>>();
+						StorageVersion::new(Self::id().version_to as u16).put::<Pezpallet<T>>();
 						return Ok(None);
 					},
 				};
@@ -494,8 +494,8 @@ pub mod v2 {
 					(
 						Registration<
 							BalanceOf<T>,
-							<T as pallet::Config>::MaxRegistrars,
-							<T as pallet::Config>::IdentityInformation,
+							<T as pezpallet::Config>::MaxRegistrars,
+							<T as pezpallet::Config>::IdentityInformation,
 						>,
 						Option<Username<T>>,
 					),
@@ -697,7 +697,7 @@ pub mod v2 {
 		#[test]
 		fn migrate_to_v2() {
 			new_test_ext().execute_with(|| {
-				StorageVersion::new(1).put::<Pallet<Test>>();
+				StorageVersion::new(1).put::<Pezpallet<Test>>();
 				// Set up the first authority.
 				let authority_1 = account_from_u8(151);
 				let suffix_1: Suffix<Test> = b"evn".to_vec().try_into().unwrap();
@@ -786,7 +786,7 @@ pub mod v2 {
 				{
 					cursor = Some(new_cursor);
 				}
-				assert_eq!(Pallet::<Test>::on_chain_storage_version(), 2);
+				assert_eq!(Pezpallet::<Test>::on_chain_storage_version(), 2);
 
 				// Check that the authorities were migrated.
 				let expected_prop =

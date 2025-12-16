@@ -32,7 +32,7 @@
 //!
 //! IMPORTANT:
 //! When using this module for enabling equivocation reporting it is required
-//! that the `ValidateUnsigned` for the GRANDPA pallet is used in the runtime
+//! that the `ValidateUnsigned` for the GRANDPA pezpallet is used in the runtime
 //! definition.
 
 use alloc::{boxed::Box, vec, vec::Vec};
@@ -54,7 +54,7 @@ use pezsp_staking::{
 	SessionIndex,
 };
 
-use super::{Call, Config, Error, Pallet, LOG_TARGET};
+use super::{Call, Config, Error, Pezpallet, LOG_TARGET};
 
 /// A round number and set id which point on the time of an offence.
 #[derive(Copy, Clone, PartialOrd, Ord, Eq, PartialEq, Encode, Decode)]
@@ -113,7 +113,7 @@ impl<Offender: Clone> Offence<Offender> for EquivocationOffence<Offender> {
 ///   `offchain::CreateTransactionBase`.
 /// - On-chain validity checks and processing are mostly delegated to the user provided generic
 ///   types implementing `KeyOwnerProofSystem` and `ReportOffence` traits.
-/// - Offence reporter for unsigned transactions is fetched via the the authorship pallet.
+/// - Offence reporter for unsigned transactions is fetched via the the authorship pezpallet.
 pub struct EquivocationReportSystem<T, R, P, L>(core::marker::PhantomData<(T, R, P, L)>);
 
 impl<T, R, P, L>
@@ -177,7 +177,7 @@ where
 		evidence: (EquivocationProof<T::Hash, BlockNumberFor<T>>, T::KeyOwnerProof),
 	) -> Result<(), DispatchError> {
 		let (equivocation_proof, key_owner_proof) = evidence;
-		let reporter = reporter.or_else(|| pezpallet_authorship::Pallet::<T>::author());
+		let reporter = reporter.or_else(|| pezpallet_authorship::Pezpallet::<T>::author());
 		let offender = equivocation_proof.offender().clone();
 
 		// We check the equivocation within the context of its set id (and
@@ -239,7 +239,7 @@ where
 /// It restricts calls to `report_equivocation_unsigned` to local calls (i.e. extrinsics generated
 /// on this node) or that already in a block. This guarantees that only block authors can include
 /// unsigned equivocation reports.
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	pub fn validate_unsigned(source: TransactionSource, call: &Call<T>) -> TransactionValidity {
 		if let Call::report_equivocation_unsigned { equivocation_proof, key_owner_proof } = call {
 			// discard equivocation report not coming from the local node

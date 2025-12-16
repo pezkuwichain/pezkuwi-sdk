@@ -144,7 +144,7 @@ pub trait QuotePrice {
 	) -> Option<Self::Balance>;
 }
 
-impl<T: Config> Swap<T::AccountId> for Pallet<T> {
+impl<T: Config> Swap<T::AccountId> for Pezpallet<T> {
 	type Balance = T::Balance;
 	type AssetKind = T::AssetKind;
 
@@ -191,7 +191,7 @@ impl<T: Config> Swap<T::AccountId> for Pallet<T> {
 	}
 }
 
-impl<T: Config> SwapCredit<T::AccountId> for Pallet<T> {
+impl<T: Config> SwapCredit<T::AccountId> for Pezpallet<T> {
 	type Balance = T::Balance;
 	type AssetKind = T::AssetKind;
 	type Credit = CreditOf<T>;
@@ -239,7 +239,7 @@ impl<T: Config> SwapCredit<T::AccountId> for Pallet<T> {
 	}
 }
 
-impl<T: Config> QuotePrice for Pallet<T> {
+impl<T: Config> QuotePrice for Pezpallet<T> {
 	type Balance = T::Balance;
 	type AssetKind = T::AssetKind;
 	fn quote_price_exact_tokens_for_tokens(

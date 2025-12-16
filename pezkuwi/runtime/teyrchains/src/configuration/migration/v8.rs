@@ -16,7 +16,7 @@
 
 //! A module that is responsible for migration of storage.
 
-use crate::configuration::{self, Config, Pallet};
+use crate::configuration::{self, Config, Pezpallet};
 use alloc::vec::Vec;
 use pezframe_support::{
 	pezpallet_prelude::*,
@@ -136,11 +136,11 @@ mod v7 {
 
 	#[pezframe_support::storage_alias]
 	pub(crate) type ActiveConfig<T: Config> =
-		StorageValue<Pallet<T>, V7HostConfiguration<BlockNumberFor<T>>, OptionQuery>;
+		StorageValue<Pezpallet<T>, V7HostConfiguration<BlockNumberFor<T>>, OptionQuery>;
 
 	#[pezframe_support::storage_alias]
 	pub(crate) type PendingConfigs<T: Config> = StorageValue<
-		Pallet<T>,
+		Pezpallet<T>,
 		Vec<(SessionIndex, V7HostConfiguration<BlockNumberFor<T>>)>,
 		OptionQuery,
 	>;
@@ -151,11 +151,11 @@ mod v8 {
 
 	#[pezframe_support::storage_alias]
 	pub(crate) type ActiveConfig<T: Config> =
-		StorageValue<Pallet<T>, V8HostConfiguration<BlockNumberFor<T>>, OptionQuery>;
+		StorageValue<Pezpallet<T>, V8HostConfiguration<BlockNumberFor<T>>, OptionQuery>;
 
 	#[pezframe_support::storage_alias]
 	pub(crate) type PendingConfigs<T: Config> = StorageValue<
-		Pallet<T>,
+		Pezpallet<T>,
 		Vec<(SessionIndex, V8HostConfiguration<BlockNumberFor<T>>)>,
 		OptionQuery,
 	>;
@@ -171,11 +171,11 @@ impl<T: Config> OnRuntimeUpgrade for MigrateToV8<T> {
 
 	fn on_runtime_upgrade() -> Weight {
 		log::info!(target: configuration::LOG_TARGET, "HostConfiguration MigrateToV8 started");
-		if StorageVersion::get::<Pallet<T>>() == 7 {
+		if StorageVersion::get::<Pezpallet<T>>() == 7 {
 			let weight_consumed = migrate_to_v8::<T>();
 
 			log::info!(target: configuration::LOG_TARGET, "HostConfiguration MigrateToV8 executed successfully");
-			StorageVersion::new(8).put::<Pallet<T>>();
+			StorageVersion::new(8).put::<Pezpallet<T>>();
 
 			weight_consumed
 		} else {
@@ -188,7 +188,7 @@ impl<T: Config> OnRuntimeUpgrade for MigrateToV8<T> {
 	fn post_upgrade(_state: Vec<u8>) -> Result<(), pezsp_runtime::TryRuntimeError> {
 		log::trace!(target: crate::configuration::LOG_TARGET, "Running post_upgrade() for HostConfiguration MigrateToV8");
 		ensure!(
-			StorageVersion::get::<Pallet<T>>() >= 8,
+			StorageVersion::get::<Pezpallet<T>>() >= 8,
 			"Storage version should be >= 8 after the migration"
 		);
 
@@ -401,7 +401,7 @@ mod tests {
 	}
 
 	// Test that migration doesn't panic in case there're no pending configurations upgrades in
-	// pallet's storage.
+	// pezpallet's storage.
 	#[test]
 	fn test_migrate_to_v8_no_pending() {
 		let v7 = V7HostConfiguration::<pezkuwi_primitives::BlockNumber>::default();

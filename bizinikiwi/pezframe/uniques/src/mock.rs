@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Test environment for Uniques pallet.
+//! Test environment for Uniques pezpallet.
 
 use super::*;
 use crate as pezpallet_uniques;

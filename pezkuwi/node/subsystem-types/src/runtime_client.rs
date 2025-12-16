@@ -326,7 +326,7 @@ pub trait RuntimeApiSubsystemClient {
 	) -> Result<ApprovalVotingParams, ApiError>;
 
 	// == v11: Claim queue ==
-	/// Fetch the `ClaimQueue` from scheduler pallet
+	/// Fetch the `ClaimQueue` from scheduler pezpallet
 	async fn claim_queue(&self, at: Hash) -> Result<BTreeMap<CoreIndex, VecDeque<Id>>, ApiError>;
 
 	// == v11: Elastic scaling support ==

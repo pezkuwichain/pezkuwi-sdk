@@ -15,12 +15,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Referenda Pallet
+//! # Referenda Pezpallet
 //!
 //! ## Overview
 //!
-//! A pallet for executing referenda. No voting logic is present here, and the `Polling` and
-//! `PollStatus` traits are used to allow the voting logic (likely in a pallet) to be utilized.
+//! A pezpallet for executing referenda. No voting logic is present here, and the `Polling` and
+//! `PollStatus` traits are used to allow the voting logic (likely in a pezpallet) to be utilized.
 //!
 //! A referendum is a vote on whether a proposal should be dispatched from a particular origin. The
 //! origin is used to determine which one of several _tracks_ that a referendum happens under.
@@ -95,7 +95,7 @@ pub mod weights;
 
 use self::branch::{BeginDecidingBranch, OneFewerDecidingBranch, ServiceBranch};
 pub use self::{
-	pallet::*,
+	pezpallet::*,
 	types::{
 		BalanceOf, BlockNumberFor, BoundedCallOf, CallOf, ConstTrackInfo, Curve, DecidingStatus,
 		DecidingStatusOf, Deposit, InsertSorted, NegativeImbalanceOf, PalletsOriginOf,
@@ -120,8 +120,8 @@ pub use pezframe_support::traits::Get;
 
 const ASSEMBLY_ID: LockIdentifier = *b"assembly";
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::{pezpallet_prelude::*, traits::EnsureOriginWithArg};
 	use pezframe_system::pezpallet_prelude::{
@@ -132,11 +132,11 @@ pub mod pallet {
 	/// The in-code storage version.
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(1);
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T, I = ()>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T, I = ()>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config + Sized {
 		// System level stuff.
 		type RuntimeCall: Parameter
@@ -147,7 +147,7 @@ pub mod pallet {
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self, I>>
 			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 		/// The Scheduler.
 		type Scheduler: ScheduleAnon<
@@ -161,7 +161,7 @@ pub mod pallet {
 				PalletsOriginOf<Self>,
 				Hasher = Self::Hashing,
 			>;
-		/// Currency type for this pallet.
+		/// Currency type for this pezpallet.
 		type Currency: ReservableCurrency<Self::AccountId>;
 		// Origins and unbalances.
 		/// Origin from which proposals may be submitted.
@@ -189,22 +189,22 @@ pub mod pallet {
 
 		// Constants
 		/// The minimum amount to be used as a deposit for a public referendum proposal.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type SubmissionDeposit: Get<BalanceOf<Self, I>>;
 
 		/// Maximum size of the referendum queue for a single track.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxQueued: Get<u32>;
 
 		/// The number of blocks after submission that a referendum must begin being decided by.
 		/// Once this passes, then anyone may cancel the referendum.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type UndecidingTimeout: Get<BlockNumberFor<Self, I>>;
 
 		/// Quantization level for the referendum wakeup scheduler. A higher number will result in
 		/// fewer storage reads/writes needed for smaller voters, but also result in delays to the
 		/// automatic referendum status changes. Explicit servicing instructions are unaffected.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type AlarmInterval: Get<BlockNumberFor<Self, I>>;
 
 		// The other stuff.
@@ -220,16 +220,16 @@ pub mod pallet {
 
 		/// Provider for the block number.
 		///
-		/// Normally this is the `pezframe_system` pallet.
+		/// Normally this is the `pezframe_system` pezpallet.
 		type BlockNumberProvider: BlockNumberProvider;
 	}
 
-	#[pallet::extra_constants]
-	impl<T: Config<I>, I: 'static> Pallet<T, I> {
+	#[pezpallet::extra_constants]
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 		/// A list of tracks.
 		///
 		/// Note: if the tracks are dynamic, the value in the static metadata might be inaccurate.
-		#[pallet::constant_name(Tracks)]
+		#[pezpallet::constant_name(Tracks)]
 		fn tracks() -> Vec<(TrackIdOf<T, I>, ConstTrackInfo<BalanceOf<T, I>, BlockNumberFor<T, I>>)>
 		{
 			T::Tracks::tracks()
@@ -255,11 +255,11 @@ pub mod pallet {
 	}
 
 	/// The next free referendum index, aka the number of referenda started so far.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ReferendumCount<T, I = ()> = StorageValue<_, ReferendumIndex, ValueQuery>;
 
 	/// Information concerning any given referendum.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ReferendumInfoFor<T: Config<I>, I: 'static = ()> =
 		StorageMap<_, Blake2_128Concat, ReferendumIndex, ReferendumInfoOf<T, I>>;
 
@@ -267,7 +267,7 @@ pub mod pallet {
 	/// conviction-weighted approvals.
 	///
 	/// This should be empty if `DecidingCount` is less than `TrackInfo::max_deciding`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type TrackQueue<T: Config<I>, I: 'static = ()> = StorageMap<
 		_,
 		Twox64Concat,
@@ -277,7 +277,7 @@ pub mod pallet {
 	>;
 
 	/// The number of referenda being decided currently.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type DecidingCount<T: Config<I>, I: 'static = ()> =
 		StorageMap<_, Twox64Concat, TrackIdOf<T, I>, u32, ValueQuery>;
 
@@ -287,12 +287,12 @@ pub mod pallet {
 	///
 	/// Consider a garbage collection for a metadata of finished referendums to `unrequest` (remove)
 	/// large preimages.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type MetadataOf<T: Config<I>, I: 'static = ()> =
 		StorageMap<_, Blake2_128Concat, ReferendumIndex, T::Hash>;
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config<I>, I: 'static = ()> {
 		/// A referendum has been submitted.
 		Submitted {
@@ -412,7 +412,7 @@ pub mod pallet {
 		},
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T, I = ()> {
 		/// Referendum is not ongoing.
 		NotOngoing,
@@ -444,8 +444,8 @@ pub mod pallet {
 		PreimageStoredWithDifferentLength,
 	}
 
-	#[pallet::hooks]
-	impl<T: Config<I>, I: 'static> Hooks<SystemBlockNumberFor<T>> for Pallet<T, I> {
+	#[pezpallet::hooks]
+	impl<T: Config<I>, I: 'static> Hooks<SystemBlockNumberFor<T>> for Pezpallet<T, I> {
 		#[cfg(feature = "try-runtime")]
 		fn try_state(_n: SystemBlockNumberFor<T>) -> Result<(), pezsp_runtime::TryRuntimeError> {
 			Self::do_try_state()?;
@@ -458,8 +458,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config<I>, I: 'static> Pallet<T, I> {
+	#[pezpallet::call]
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 		/// Propose a referendum on a privileged action.
 		///
 		/// - `origin`: must be `SubmitOrigin` and the account must have `SubmissionDeposit` funds
@@ -469,8 +469,8 @@ pub mod pallet {
 		/// - `enactment_moment`: The moment that the proposal should be enacted.
 		///
 		/// Emits `Submitted`.
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::submit())]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::submit())]
 		pub fn submit(
 			origin: OriginFor<T>,
 			proposal_origin: Box<PalletsOriginOf<T>>,
@@ -528,8 +528,8 @@ pub mod pallet {
 		///   posted.
 		///
 		/// Emits `DecisionDepositPlaced`.
-		#[pallet::call_index(1)]
-		#[pallet::weight(ServiceBranch::max_weight_of_deposit::<T, I>())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(ServiceBranch::max_weight_of_deposit::<T, I>())]
 		pub fn place_decision_deposit(
 			origin: OriginFor<T>,
 			index: ReferendumIndex,
@@ -556,8 +556,8 @@ pub mod pallet {
 		///   refunded.
 		///
 		/// Emits `DecisionDepositRefunded`.
-		#[pallet::call_index(2)]
-		#[pallet::weight(T::WeightInfo::refund_decision_deposit())]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(T::WeightInfo::refund_decision_deposit())]
 		pub fn refund_decision_deposit(
 			origin: OriginFor<T>,
 			index: ReferendumIndex,
@@ -586,8 +586,8 @@ pub mod pallet {
 		/// - `index`: The index of the referendum to be cancelled.
 		///
 		/// Emits `Cancelled`.
-		#[pallet::call_index(3)]
-		#[pallet::weight(T::WeightInfo::cancel())]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(T::WeightInfo::cancel())]
 		pub fn cancel(origin: OriginFor<T>, index: ReferendumIndex) -> DispatchResult {
 			T::CancelOrigin::ensure_origin(origin)?;
 			let status = Self::ensure_ongoing(index)?;
@@ -611,8 +611,8 @@ pub mod pallet {
 		/// - `index`: The index of the referendum to be cancelled.
 		///
 		/// Emits `Killed` and `DepositSlashed`.
-		#[pallet::call_index(4)]
-		#[pallet::weight(T::WeightInfo::kill())]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(T::WeightInfo::kill())]
 		pub fn kill(origin: OriginFor<T>, index: ReferendumIndex) -> DispatchResult {
 			T::KillOrigin::ensure_origin(origin)?;
 			let status = Self::ensure_ongoing(index)?;
@@ -633,8 +633,8 @@ pub mod pallet {
 		///
 		/// - `origin`: must be `Root`.
 		/// - `index`: the referendum to be advanced.
-		#[pallet::call_index(5)]
-		#[pallet::weight(ServiceBranch::max_weight_of_nudge::<T, I>())]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(ServiceBranch::max_weight_of_nudge::<T, I>())]
 		pub fn nudge_referendum(
 			origin: OriginFor<T>,
 			index: ReferendumIndex,
@@ -660,8 +660,8 @@ pub mod pallet {
 		/// `DecidingCount` is not yet updated. This means that we should either:
 		/// - begin deciding another referendum (and leave `DecidingCount` alone); or
 		/// - decrement `DecidingCount`.
-		#[pallet::call_index(6)]
-		#[pallet::weight(OneFewerDecidingBranch::max_weight::<T, I>())]
+		#[pezpallet::call_index(6)]
+		#[pezpallet::weight(OneFewerDecidingBranch::max_weight::<T, I>())]
 		pub fn one_fewer_deciding(
 			origin: OriginFor<T>,
 			track: TrackIdOf<T, I>,
@@ -694,8 +694,8 @@ pub mod pallet {
 		///   refunded.
 		///
 		/// Emits `SubmissionDepositRefunded`.
-		#[pallet::call_index(7)]
-		#[pallet::weight(T::WeightInfo::refund_submission_deposit())]
+		#[pezpallet::call_index(7)]
+		#[pezpallet::weight(T::WeightInfo::refund_submission_deposit())]
 		pub fn refund_submission_deposit(
 			origin: OriginFor<T>,
 			index: ReferendumIndex,
@@ -725,8 +725,8 @@ pub mod pallet {
 		///   metadata of a finished referendum.
 		/// - `index`:  The index of a referendum to set or clear metadata for.
 		/// - `maybe_hash`: The hash of an on-chain stored preimage. `None` to clear a metadata.
-		#[pallet::call_index(8)]
-		#[pallet::weight(
+		#[pezpallet::call_index(8)]
+		#[pezpallet::weight(
 			maybe_hash.map_or(
 				T::WeightInfo::clear_metadata(), |_| T::WeightInfo::set_some_metadata())
 			)]
@@ -754,7 +754,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config<I>, I: 'static> Polling<T::Tally> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Polling<T::Tally> for Pezpallet<T, I> {
 	type Index = ReferendumIndex;
 	type Votes = VotesOf<T, I>;
 	type Moment = BlockNumberFor<T, I>;
@@ -861,7 +861,7 @@ impl<T: Config<I>, I: 'static> Polling<T::Tally> for Pallet<T, I> {
 	}
 }
 
-impl<T: Config<I>, I: 'static> Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 	/// Check that referendum `index` is in the `Ongoing` state and return the `ReferendumStatus`
 	/// value, or `Err` otherwise.
 	pub fn ensure_ongoing(
@@ -1331,7 +1331,7 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 		}
 	}
 
-	/// Ensure the correctness of the state of this pallet.
+	/// Ensure the correctness of the state of this pezpallet.
 	///
 	/// The following assertions must always apply.
 	///

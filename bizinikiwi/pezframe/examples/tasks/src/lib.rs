@@ -15,15 +15,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! This pallet demonstrates the use of the `pallet::task` api for service work.
+//! This pezpallet demonstrates the use of the `pezpallet::task` api for service work.
 #![cfg_attr(not(feature = "std"), no_std)]
 
 use pezframe_support::dispatch::DispatchResult;
 use pezframe_system::offchain::CreateBare;
 #[cfg(feature = "experimental")]
 use pezframe_system::offchain::SubmitTransaction;
-// Re-export pallet items so that they can be accessed from the crate namespace.
-pub use pallet::*;
+// Re-export pezpallet items so that they can be accessed from the crate namespace.
+pub use pezpallet::*;
 
 pub mod mock;
 pub mod tests;
@@ -37,25 +37,25 @@ pub use weights::*;
 #[cfg(feature = "experimental")]
 const LOG_TARGET: &str = "pezpallet-example-tasks";
 
-#[pezframe_support::pallet(dev_mode)]
-pub mod pallet {
+#[pezframe_support::pezpallet(dev_mode)]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// The referenced task was not found.
 		NotFound,
 	}
 
-	#[pallet::tasks_experimental]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::tasks_experimental]
+	impl<T: Config> Pezpallet<T> {
 		/// Add a pair of numbers into the totals and remove them.
-		#[pallet::task_list(Numbers::<T>::iter_keys())]
-		#[pallet::task_condition(|i| Numbers::<T>::contains_key(i))]
-		#[pallet::task_weight(T::WeightInfo::add_number_into_total())]
-		#[pallet::task_index(0)]
+		#[pezpallet::task_list(Numbers::<T>::iter_keys())]
+		#[pezpallet::task_condition(|i| Numbers::<T>::contains_key(i))]
+		#[pezpallet::task_weight(T::WeightInfo::add_number_into_total())]
+		#[pezpallet::task_index(0)]
 		pub fn add_number_into_total(i: u32) -> DispatchResult {
 			let v = Numbers::<T>::take(i).ok_or(Error::<T>::NotFound)?;
 			Total::<T>::mutate(|(total_keys, total_values)| {
@@ -66,8 +66,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		#[cfg(feature = "experimental")]
 		fn offchain_worker(_block_number: BlockNumberFor<T>) {
 			if let Some(key) = Numbers::<T>::iter_keys().next() {
@@ -90,7 +90,7 @@ pub mod pallet {
 		fn offchain_worker(_block_number: BlockNumberFor<T>) {}
 	}
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: CreateBare<pezframe_system::Call<Self>> + pezframe_system::Config {
 		type RuntimeTask: pezframe_support::traits::Task
 			+ IsType<<Self as pezframe_system::Config>::RuntimeTask>
@@ -98,14 +98,14 @@ pub mod pallet {
 		type WeightInfo: WeightInfo;
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
 	/// Some running total.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Total<T: Config> = StorageValue<_, (u32, u32), ValueQuery>;
 
 	/// Numbers to be added into the total.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Numbers<T: Config> = StorageMap<_, Twox64Concat, u32, u32, OptionQuery>;
 }

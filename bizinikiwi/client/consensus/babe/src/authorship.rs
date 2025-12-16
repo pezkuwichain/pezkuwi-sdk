@@ -44,7 +44,7 @@ pub(super) fn calculate_primary_threshold(
 	use num_traits::{cast::ToPrimitive, identities::One};
 
 	// Prevent div by zero and out of bounds access.
-	// While Babe's pallet implementation that ships with FRAME performs a sanity check over
+	// While Babe's pezpallet implementation that ships with FRAME performs a sanity check over
 	// configuration parameters, this is not sufficient to guarantee that `c.1` is non-zero
 	// (i.e. third party implementations are possible).
 	if c.1 == 0 || authority_index >= authorities.len() {

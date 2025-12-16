@@ -5,7 +5,7 @@ use frame::{
 	testing_prelude::*,
 };
 
-// Configure a mock runtime to test the pallet.
+// Configure a mock runtime to test the pezpallet.
 #[frame_construct_runtime]
 mod test_runtime {
 	#[runtime::runtime]

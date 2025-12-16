@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Storage migrations for the referenda pallet.
+//! Storage migrations for the referenda pezpallet.
 
 use super::*;
 use codec::{Decode, Encode, EncodeLike, MaxEncodedLen};
@@ -96,7 +96,7 @@ pub mod v0 {
 
 	#[storage_alias]
 	pub type ReferendumInfoFor<T: Config<I>, I: 'static> =
-		StorageMap<Pallet<T, I>, Blake2_128Concat, ReferendumIndex, ReferendumInfoOf<T, I>>;
+		StorageMap<Pezpallet<T, I>, Blake2_128Concat, ReferendumIndex, ReferendumInfoOf<T, I>>;
 }
 
 pub mod v1 {
@@ -118,7 +118,7 @@ pub mod v1 {
 
 	#[storage_alias]
 	pub type ReferendumInfoFor<T: Config<I>, I: 'static> =
-		StorageMap<Pallet<T, I>, Blake2_128Concat, ReferendumIndex, ReferendumInfoOf<T, I>>;
+		StorageMap<Pezpallet<T, I>, Blake2_128Concat, ReferendumIndex, ReferendumInfoOf<T, I>>;
 
 	/// Transforms a submission deposit of ReferendumInfo(Approved|Rejected|Cancelled|TimedOut) to
 	/// optional value, making it refundable.
@@ -136,8 +136,8 @@ pub mod v1 {
 		}
 
 		fn on_runtime_upgrade() -> Weight {
-			let in_code_version = Pallet::<T, I>::in_code_storage_version();
-			let on_chain_version = Pallet::<T, I>::on_chain_storage_version();
+			let in_code_version = Pezpallet::<T, I>::in_code_storage_version();
+			let on_chain_version = Pezpallet::<T, I>::on_chain_storage_version();
 			let mut weight = T::DbWeight::get().reads(1);
 			log::info!(
 				target: TARGET,
@@ -169,14 +169,14 @@ pub mod v1 {
 					weight.saturating_accrue(T::DbWeight::get().reads(1));
 				}
 			});
-			StorageVersion::new(1).put::<Pallet<T, I>>();
+			StorageVersion::new(1).put::<Pezpallet<T, I>>();
 			weight.saturating_accrue(T::DbWeight::get().writes(1));
 			weight
 		}
 
 		#[cfg(feature = "try-runtime")]
 		fn post_upgrade(state: Vec<u8>) -> Result<(), TryRuntimeError> {
-			let on_chain_version = Pallet::<T, I>::on_chain_storage_version();
+			let on_chain_version = Pezpallet::<T, I>::on_chain_storage_version();
 			ensure!(on_chain_version == 1, "must upgrade from version 0 to 1.");
 			let pre_referendum_count: u32 = Decode::decode(&mut &state[..])
 				.expect("failed to decode the state from pre-upgrade.");
@@ -234,7 +234,7 @@ pub mod switch_block_number_provider {
 
 		#[cfg(feature = "try-runtime")]
 		fn post_upgrade(state: Vec<u8>) -> Result<(), TryRuntimeError> {
-			let on_chain_version = Pallet::<T, I>::on_chain_storage_version();
+			let on_chain_version = Pezpallet::<T, I>::on_chain_storage_version();
 			ensure!(on_chain_version == 1, "must upgrade from version 1 to 2.");
 			let pre_referendum_count: u32 = Decode::decode(&mut &state[..])
 				.expect("failed to decode the state from pre-upgrade.");
@@ -250,8 +250,8 @@ pub mod switch_block_number_provider {
 		BlockConverter: BlockNumberConversion<SystemBlockNumberFor<T>, BlockNumberFor<T, I>>,
 		T: Config<I>,
 	{
-		let in_code_version = Pallet::<T, I>::in_code_storage_version();
-		let on_chain_version = Pallet::<T, I>::on_chain_storage_version();
+		let in_code_version = Pezpallet::<T, I>::in_code_storage_version();
+		let on_chain_version = Pezpallet::<T, I>::on_chain_storage_version();
 		let mut weight = T::DbWeight::get().reads(1);
 		log::info!(
 			target: "runtime::referenda::migration::change_block_number_provider",

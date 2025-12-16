@@ -24,7 +24,7 @@ use pezframe_support::{
 };
 use pezsp_runtime::{DispatchError, DispatchResult};
 
-impl<T: Config<I>, I: 'static> Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 	/// Perform a transfer of an item from one account to another within a collection.
 	///
 	/// # Errors

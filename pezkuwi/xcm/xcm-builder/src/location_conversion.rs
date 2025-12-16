@@ -58,7 +58,7 @@ pub struct DescribePalletTerminal;
 impl DescribeLocation for DescribePalletTerminal {
 	fn describe_location(l: &Location) -> Option<Vec<u8>> {
 		match l.unpack() {
-			(0, [PalletInstance(i)]) => Some((b"Pallet", Compact::<u32>::from(*i as u32)).encode()),
+			(0, [PalletInstance(i)]) => Some((b"Pezpallet", Compact::<u32>::from(*i as u32)).encode()),
 			_ => return None,
 		}
 	}

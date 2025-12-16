@@ -1,6 +1,6 @@
-# Alliance Pallet
+# Alliance Pezpallet
 
-The Alliance Pallet provides a collective that curates a list of accounts and URLs, deemed by
+The Alliance Pezpallet provides a collective that curates a list of accounts and URLs, deemed by
 the voting members to be unscrupulous actors. The Alliance
 
 - provides a set of ethics against bad behavior, and

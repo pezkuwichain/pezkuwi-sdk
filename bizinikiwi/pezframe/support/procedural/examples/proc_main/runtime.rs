@@ -19,63 +19,63 @@
 use super::{pezframe_system, Block};
 use crate::derive_impl;
 
-#[crate::pallet(dev_mode)]
+#[crate::pezpallet(dev_mode)]
 mod pezpallet_basic {
 	use super::pezframe_system;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 }
 
 impl pezpallet_basic::Config for Runtime {}
 
-#[crate::pallet(dev_mode)]
+#[crate::pezpallet(dev_mode)]
 mod pezpallet_with_disabled_call {
 	use super::pezframe_system;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 }
 
 impl pezpallet_with_disabled_call::Config for Runtime {}
 
-#[crate::pallet(dev_mode)]
+#[crate::pezpallet(dev_mode)]
 mod pezpallet_with_disabled_unsigned {
 	use super::pezframe_system;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 }
 
 impl pezpallet_with_disabled_unsigned::Config for Runtime {}
 
-#[crate::pallet]
+#[crate::pezpallet]
 mod pezpallet_with_instance {
 	use super::pezframe_system;
 
-	#[pallet::pallet]
-	pub struct Pallet<T, I = ()>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T, I = ()>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config {}
 }
 
 #[allow(unused)]
-type Instance1 = pezpallet_with_instance::Pallet<pezpallet_with_instance::Instance1>;
+type Instance1 = pezpallet_with_instance::Pezpallet<pezpallet_with_instance::Instance1>;
 
 impl pezpallet_with_instance::Config<pezpallet_with_instance::Instance1> for Runtime {}
 
 #[allow(unused)]
-type Instance2 = pezpallet_with_instance::Pallet<pezpallet_with_instance::Instance2>;
+type Instance2 = pezpallet_with_instance::Pezpallet<pezpallet_with_instance::Instance2>;
 
 impl pezpallet_with_instance::Config<pezpallet_with_instance::Instance2> for Runtime {}
 
@@ -104,30 +104,30 @@ mod runtime {
 	)]
 	pub struct Runtime;
 
-	// Use the concrete pallet type
+	// Use the concrete pezpallet type
 	#[runtime::pezpallet_index(0)]
-	pub type System = pezframe_system::Pallet<Runtime>;
+	pub type System = pezframe_system::Pezpallet<Runtime>;
 
-	// Use path to the pallet
+	// Use path to the pezpallet
 	#[runtime::pezpallet_index(1)]
 	pub type Basic = pezpallet_basic;
 
-	// Use the concrete pallet type with instance
+	// Use the concrete pezpallet type with instance
 	#[runtime::pezpallet_index(2)]
-	pub type PalletWithInstance1 = pezpallet_with_instance::Pallet<Runtime, Instance1>;
+	pub type PalletWithInstance1 = pezpallet_with_instance::Pezpallet<Runtime, Instance1>;
 
-	// Use path to the pallet with instance
+	// Use path to the pezpallet with instance
 	#[runtime::pezpallet_index(3)]
 	pub type PalletWithInstance2 = pezpallet_with_instance<Instance2>;
 
-	// Ensure that the runtime does not export the calls from the pallet
+	// Ensure that the runtime does not export the calls from the pezpallet
 	#[runtime::pezpallet_index(4)]
 	#[runtime::disable_call]
 	#[deprecated = "example"]
-	pub type PalletWithDisabledCall = pezpallet_with_disabled_call::Pallet<Runtime>;
+	pub type PalletWithDisabledCall = pezpallet_with_disabled_call::Pezpallet<Runtime>;
 
-	// Ensure that the runtime does not export the unsigned calls from the pallet
+	// Ensure that the runtime does not export the unsigned calls from the pezpallet
 	#[runtime::pezpallet_index(5)]
 	#[runtime::disable_unsigned]
-	pub type PalletWithDisabledUnsigned = pezpallet_with_disabled_unsigned::Pallet<Runtime>;
+	pub type PalletWithDisabledUnsigned = pezpallet_with_disabled_unsigned::Pezpallet<Runtime>;
 }

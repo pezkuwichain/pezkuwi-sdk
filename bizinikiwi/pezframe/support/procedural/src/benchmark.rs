@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Home of the parsing and expansion code for the new pallet benchmarking syntax
+//! Home of the parsing and expansion code for the new pezpallet benchmarking syntax
 
 use derive_syn_parse::Parse;
 use pezframe_support_procedural_tools::generate_access_from_frame_or_crate;
@@ -155,7 +155,7 @@ struct PovModeKeyAttr {
 pub enum PovEstimationMode {
 	/// Use the maximal encoded length as provided by [`codec::MaxEncodedLen`].
 	MaxEncodedLen,
-	/// Measure the accessed value size in the pallet benchmarking and add some trie overhead.
+	/// Measure the accessed value size in the pezpallet benchmarking and add some trie overhead.
 	Measured,
 	/// Do not estimate the PoV size for this storage item or benchmark.
 	Ignored,
@@ -684,7 +684,7 @@ pub fn benchmarks(
 				}
 			}
 			#[cfg(any(feature = "runtime-benchmarks", test))]
-			impl<#type_use_generics> #krate::Benchmarking for Pallet<#type_use_generics>
+			impl<#type_use_generics> #krate::Benchmarking for Pezpallet<#type_use_generics>
 			where T: #pezframe_system::Config,#where_clause
 			{
 				fn benchmarks(
@@ -770,8 +770,8 @@ pub fn benchmarks(
 
 					let on_before_start = || {
 						// Set the block number to at least 1 so events are deposited.
-						if #krate::__private::Zero::is_zero(&#pezframe_system::Pallet::<T>::block_number()) {
-							#pezframe_system::Pallet::<T>::set_block_number(1u32.into());
+						if #krate::__private::Zero::is_zero(&#pezframe_system::Pezpallet::<T>::block_number()) {
+							#pezframe_system::Pezpallet::<T>::set_block_number(1u32.into());
 						}
 
 						// Commit the externalities to the database, flushing the DB cache.
@@ -851,7 +851,7 @@ pub fn benchmarks(
 			}
 
 			#[cfg(test)]
-			impl<#type_use_generics> Pallet<#type_use_generics> where T: #pezframe_system::Config, #where_clause {
+			impl<#type_use_generics> Pezpallet<#type_use_generics> where T: #pezframe_system::Config, #where_clause {
 				/// Test a particular benchmark by name.
 				///
 				/// This isn't called `test_benchmark_by_name` just in case some end-user eventually
@@ -859,7 +859,7 @@ pub fn benchmarks(
 				/// that case.
 				///
 				/// This is generally intended to be used by child test modules such as those created
-				/// by the `impl_benchmark_test_suite` macro. However, it is not an error if a pallet
+				/// by the `impl_benchmark_test_suite` macro. However, it is not an error if a pezpallet
 				/// author chooses not to implement benchmarks.
 				#[allow(unused)]
 				fn test_bench_by_name(name: &[u8]) -> Result<(), #krate::BenchmarkError> {
@@ -1131,7 +1131,7 @@ fn expand_benchmark(
 		}
 
 		#[cfg(test)]
-		impl<#type_use_generics> Pallet<#type_use_generics> where T: #pezframe_system::Config, #where_clause {
+		impl<#type_use_generics> Pezpallet<#type_use_generics> where T: #pezframe_system::Config, #where_clause {
 			#[allow(unused)]
 			fn #test_ident() -> Result<(), #krate::BenchmarkError> {
 				let selected_benchmark = SelectedBenchmark::#name;
@@ -1146,8 +1146,8 @@ fn expand_benchmark(
 
 					let on_before_start = || {
 						// Set the block number to at least 1 so events are deposited.
-						if #krate::__private::Zero::is_zero(&#pezframe_system::Pallet::<T>::block_number()) {
-							#pezframe_system::Pallet::<T>::set_block_number(1u32.into());
+						if #krate::__private::Zero::is_zero(&#pezframe_system::Pezpallet::<T>::block_number()) {
+							#pezframe_system::Pezpallet::<T>::set_block_number(1u32.into());
 						}
 					};
 

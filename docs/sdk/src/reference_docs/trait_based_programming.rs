@@ -9,8 +9,8 @@
 //! section.
 //! Moreover, we use the [`frame::traits::Get`].
 //!
-//! First, imagine we are writing a FRAME pallet. We represent this pallet with a `struct Pallet`,
-//! and this pallet wants to implement the functionalities of that pallet, for example a simple
+//! First, imagine we are writing a FRAME pezpallet. We represent this pezpallet with a `struct Pezpallet`,
+//! and this pezpallet wants to implement the functionalities of that pezpallet, for example a simple
 //! `transfer` function. For the sake of education, we are interested in having a `MinTransfer`
 //! amount, expressed as a [`frame::traits::Get`], which will dictate what is the minimum amount
 //! that can be transferred.
@@ -26,10 +26,10 @@
 //! In a broad sense, there are two avenues in exposing configurability:
 //!
 //! 1. For *values* that need to be generic, for example `MinTransfer`, we attach them to the
-//!    `Pallet` struct as fields:
+//!    `Pezpallet` struct as fields:
 //!
 //! ```
-//! struct Pallet {
+//! struct Pezpallet {
 //! 	min_transfer: u128,
 //! }
 //! ```
@@ -38,7 +38,7 @@
 //!    as:
 //!
 //! ```
-//! struct Pallet<AccountId> {
+//! struct Pezpallet<AccountId> {
 //! 	min_transfer: u128,
 //!     _marker: std::marker::PhantomData<AccountId>,
 //! }
@@ -48,13 +48,13 @@
 //! use *types* to declare both *values* and *types* as generic. This is the essence of why the
 //! `Get` trait exists.
 //!
-//! This would bring us to the second iteration of the pallet, which would look like:
+//! This would bring us to the second iteration of the pezpallet, which would look like:
 #![doc = docify::embed!("./src/reference_docs/trait_based_programming.rs", generic)]
 //!
 //! In this example, we managed to make all 3 of our types generic. Taking the example of the
 //! `AccountId`, one should read the above as following:
 //!
-//! > The `Pallet` does not know what type `AccountId` concretely is, but it knows that it is
+//! > The `Pezpallet` does not know what type `AccountId` concretely is, but it knows that it is
 //! > something that adheres to being `From<[u8; 32]>`.
 //!
 //! This method would work, but it suffers from two downsides:
@@ -117,13 +117,13 @@ use frame::traits::Get;
 
 #[docify::export]
 mod basic {
-	struct Pallet;
+	struct Pezpallet;
 
 	type AccountId = frame::deps::pezsp_runtime::AccountId32;
 	type Balance = u128;
 	type MinTransfer = frame::traits::ConstU128<10>;
 
-	impl Pallet {
+	impl Pezpallet {
 		fn transfer(_from: AccountId, _to: AccountId, _amount: Balance) {
 			todo!()
 		}
@@ -134,11 +134,11 @@ mod basic {
 mod generic {
 	use super::*;
 
-	struct Pallet<AccountId, Balance, MinTransfer> {
+	struct Pezpallet<AccountId, Balance, MinTransfer> {
 		_marker: std::marker::PhantomData<(AccountId, Balance, MinTransfer)>,
 	}
 
-	impl<AccountId, Balance, MinTransfer> Pallet<AccountId, Balance, MinTransfer>
+	impl<AccountId, Balance, MinTransfer> Pezpallet<AccountId, Balance, MinTransfer>
 	where
 		Balance: frame::traits::AtLeast32BitUnsigned,
 		MinTransfer: frame::traits::Get<Balance>,
@@ -161,8 +161,8 @@ mod trait_based {
 		type MinTransfer: frame::traits::Get<Self::Balance>;
 	}
 
-	struct Pallet<T: Config>(std::marker::PhantomData<T>);
-	impl<T: Config> Pallet<T> {
+	struct Pezpallet<T: Config>(std::marker::PhantomData<T>);
+	impl<T: Config> Pezpallet<T> {
 		fn transfer(_from: T::AccountId, _to: T::AccountId, amount: T::Balance) {
 			assert!(amount >= T::MinTransfer::get());
 			unimplemented!();
@@ -183,8 +183,8 @@ mod with_system {
 		type MinTransfer: frame::traits::Get<Self::Balance>;
 	}
 
-	pub struct Pallet<T: Config>(std::marker::PhantomData<T>);
-	impl<T: Config> Pallet<T> {
+	pub struct Pezpallet<T: Config>(std::marker::PhantomData<T>);
+	impl<T: Config> Pezpallet<T> {
 		fn transfer(_from: T::AccountId, _to: T::AccountId, amount: T::Balance) {
 			assert!(amount >= T::MinTransfer::get());
 			unimplemented!();
@@ -213,8 +213,8 @@ mod fully_qualified_complicated {
 		type Currency: CurrencyTrait;
 	}
 
-	struct Pallet<T: Config>(std::marker::PhantomData<T>);
-	impl<T: Config> Pallet<T> {
+	struct Pezpallet<T: Config>(std::marker::PhantomData<T>);
+	impl<T: Config> Pezpallet<T> {
 		fn transfer(
 			_from: T::AccountId,
 			_to: T::AccountId,

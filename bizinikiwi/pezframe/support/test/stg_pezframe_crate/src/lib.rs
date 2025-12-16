@@ -15,34 +15,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// ! A basic pallet to test it compiles along with a runtime using it when `pezframe_system` and
+// ! A basic pezpallet to test it compiles along with a runtime using it when `pezframe_system` and
 // `pezframe_support` are reexported by a `frame` crate.
 
 use frame::deps::{pezframe_support, pezframe_system};
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	// The only valid syntax here is the following or
 	// ```
 	// pub trait Config: frame::deps::pezframe_system::Config {}
 	// ```
 	pub trait Config: pezframe_system::Config {}
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(pezframe_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		#[serde(skip)]
 		_config: core::marker::PhantomData<T>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {}
 	}
@@ -53,12 +53,12 @@ pub mod pallet {
 mod tests {
 	use super::{
 		pezframe_support::{construct_runtime, derive_impl},
-		pezframe_system, pallet,
+		pezframe_system, pezpallet,
 	};
 
 	type Block = pezframe_system::mocking::MockBlock<Runtime>;
 
-	impl crate::pallet::Config for Runtime {}
+	impl crate::pezpallet::Config for Runtime {}
 
 	#[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
 	impl pezframe_system::Config for Runtime {
@@ -69,7 +69,7 @@ mod tests {
 		pub struct Runtime
 		{
 			System: pezframe_system,
-			Pallet: pallet,
+			Pezpallet: pezpallet,
 		}
 	}
 }

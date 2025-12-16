@@ -772,7 +772,7 @@ pub enum RuntimeApiRequest {
 	/// Approval voting params
 	/// `V10`
 	ApprovalVotingParams(SessionIndex, RuntimeApiSender<ApprovalVotingParams>),
-	/// Fetch the `ClaimQueue` from scheduler pallet
+	/// Fetch the `ClaimQueue` from scheduler pezpallet
 	/// `V11`
 	ClaimQueue(RuntimeApiSender<BTreeMap<CoreIndex, VecDeque<ParaId>>>),
 	/// Get the candidates pending availability for a particular teyrchain

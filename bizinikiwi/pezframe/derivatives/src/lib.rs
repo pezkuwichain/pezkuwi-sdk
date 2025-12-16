@@ -29,10 +29,10 @@
 //!
 //! #### The first scenario
 //!
-//! The `pezpallet-derivatives` can be helpful when another pallet, which hosts the derivative assets,
+//! The `pezpallet-derivatives` can be helpful when another pezpallet, which hosts the derivative assets,
 //! doesn't provide a good enough way to create new assets in the context of them being derivatives.
 //!
-//! For instance, the asset hosting pallet might have an asset class (NFT collection or fungible
+//! For instance, the asset hosting pezpallet might have an asset class (NFT collection or fungible
 //! currency) creation extrinsic, but among its parameters, there could be things like some admin
 //! account, currency decimals, various permissions, etc. When creating a regular (i.e.,
 //! non-derivative) asset class via such an extrinsic, these parameters allow one to conveniently
@@ -45,7 +45,7 @@
 //!
 //! The first approach dominates in the ecosystem at the moment since:
 //! 1. It is simple
-//! 2. There was no pallet to make such an alternative API without rewriting individual
+//! 2. There was no pezpallet to make such an alternative API without rewriting individual
 //!    asset-hosting pallets
 //! 3. Only fungible derivatives were ever made (with rare exceptions like an NFT derivative
 //!    collection on Karura).
@@ -70,7 +70,7 @@
 //!
 //! Moreover, the future data communication via XCM can benefit both fungible and non-fungible
 //! derivative collections registration.
-//! 1. The `create_derivative` extrinsic of this pallet can be configured to initiate the
+//! 1. The `create_derivative` extrinsic of this pezpallet can be configured to initiate the
 //!    registration process
 //! by sending the `ReportMetadata` instruction to the reserve chain. It can be configured such that
 //! this can be done by anyone.
@@ -89,8 +89,8 @@
 //! `CollectionId` (the derivative ID type) to XCM `AssetId` (the original ID type)
 //! because `pezpallet-nfts` requires `CollectionId` to be incrementable.
 //! * It is desired to have a continuous ID space for all objects, both derivative and local.
-//! For instance, one might want to reuse the existing pallet combinations (like `pezpallet-nfts`
-//! instance + `pezpallet-nfts-fractionalization` instance) without adding new pallet instances between
+//! For instance, one might want to reuse the existing pezpallet combinations (like `pezpallet-nfts`
+//! instance + `pezpallet-nfts-fractionalization` instance) without adding new pezpallet instances between
 //! the one hosting NFTs and many special logic pallets. In this case, the original ID type would be
 //! `(AssetId, AssetInstance)`, and the derivative ID type can be anything.
 
@@ -108,7 +108,7 @@ use pezframe_support::{
 use pezframe_system::pezpallet_prelude::*;
 use pezsp_runtime::DispatchResult;
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 pub mod misc;
 
@@ -123,7 +123,7 @@ mod mock;
 #[cfg(test)]
 mod tests;
 
-/// The log target of this pallet.
+/// The log target of this pezpallet.
 pub const LOG_TARGET: &'static str = "runtime::xcm::derivatives";
 
 /// A helper type representing the intention to store
@@ -134,14 +134,14 @@ type OriginalOf<T, I> = <T as Config<I>>::Original;
 type DerivativeOf<T, I> = <T as Config<I>>::Derivative;
 type DerivativeExtraOf<T, I> = <T as Config<I>>::DerivativeExtra;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T, I = ()>(PhantomData<(T, I)>);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T, I = ()>(PhantomData<(T, I)>);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config {
 		type WeightInfo: WeightInfo;
 
@@ -180,23 +180,23 @@ pub mod pallet {
 		type DestroyOp: AssetDefinition<Id = Self::Original> + Destroy<NoParams>;
 	}
 
-	#[pallet::storage]
-	#[pallet::getter(fn original_to_derivative)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn original_to_derivative)]
 	pub type OriginalToDerivative<T: Config<I>, I: 'static = ()> =
 		StorageMap<_, Blake2_128Concat, OriginalOf<T, I>, DerivativeOf<T, I>, OptionQuery>;
 
-	#[pallet::storage]
-	#[pallet::getter(fn derivative_to_original)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn derivative_to_original)]
 	pub type DerivativeToOriginal<T: Config<I>, I: 'static = ()> =
 		StorageMap<_, Blake2_128Concat, DerivativeOf<T, I>, OriginalOf<T, I>, OptionQuery>;
 
-	#[pallet::storage]
-	#[pallet::getter(fn derivative_extra)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn derivative_extra)]
 	pub type DerivativeExtra<T: Config<I>, I: 'static = ()> =
 		StorageMap<_, Blake2_128Concat, DerivativeOf<T, I>, DerivativeExtraOf<T, I>, OptionQuery>;
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(crate) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(crate) fn deposit_event)]
 	pub enum Event<T: Config<I>, I: 'static = ()> {
 		/// A derivative is created.
 		DerivativeCreated { original: OriginalOf<T, I> },
@@ -208,7 +208,7 @@ pub mod pallet {
 		DerivativeDestroyed { original: OriginalOf<T, I> },
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T, I = ()> {
 		/// A derivative already exists.
 		DerivativeAlreadyExists,
@@ -229,9 +229,9 @@ pub mod pallet {
 		InvalidAsset,
 	}
 
-	#[pallet::call(weight(T::WeightInfo))]
-	impl<T: Config<I>, I: 'static> Pallet<T, I> {
-		#[pallet::call_index(0)]
+	#[pezpallet::call(weight(T::WeightInfo))]
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
+		#[pezpallet::call_index(0)]
 		pub fn create_derivative(
 			origin: OriginFor<T>,
 			original: OriginalOf<T, I>,
@@ -250,7 +250,7 @@ pub mod pallet {
 			Ok(())
 		}
 
-		#[pallet::call_index(1)]
+		#[pezpallet::call_index(1)]
 		pub fn destroy_derivative(
 			origin: OriginFor<T>,
 			original: OriginalOf<T, I>,
@@ -269,7 +269,7 @@ pub mod pallet {
 }
 
 impl<T: Config<I>, I: 'static> DerivativesRegistry<OriginalOf<T, I>, DerivativeOf<T, I>>
-	for Pallet<T, I>
+	for Pezpallet<T, I>
 {
 	fn try_register_derivative(
 		original: &OriginalOf<T, I>,
@@ -310,7 +310,7 @@ impl<T: Config<I>, I: 'static> DerivativesRegistry<OriginalOf<T, I>, DerivativeO
 }
 
 impl<T: Config<I>, I: 'static> IterDerivativesRegistry<OriginalOf<T, I>, DerivativeOf<T, I>>
-	for Pallet<T, I>
+	for Pezpallet<T, I>
 {
 	fn iter_originals() -> impl Iterator<Item = OriginalOf<T, I>> {
 		<OriginalToDerivative<T, I>>::iter_keys()
@@ -326,7 +326,7 @@ impl<T: Config<I>, I: 'static> IterDerivativesRegistry<OriginalOf<T, I>, Derivat
 }
 
 impl<T: Config<I>, I: 'static> DerivativesExtra<DerivativeOf<T, I>, DerivativeExtraOf<T, I>>
-	for Pallet<T, I>
+	for Pezpallet<T, I>
 {
 	fn get_derivative_extra(derivative: &DerivativeOf<T, I>) -> Option<DerivativeExtraOf<T, I>> {
 		<DerivativeExtra<T, I>>::get(derivative)
@@ -409,8 +409,8 @@ where
 }
 
 /// Gets the `InvalidAsset` error from the given `pezpallet-derivatives` instance.
-pub struct InvalidAssetError<Pallet>(PhantomData<Pallet>);
-impl<T: Config<I>, I: 'static> TypedGet for InvalidAssetError<Pallet<T, I>> {
+pub struct InvalidAssetError<Pezpallet>(PhantomData<Pezpallet>);
+impl<T: Config<I>, I: 'static> TypedGet for InvalidAssetError<Pezpallet<T, I>> {
 	type Type = Error<T, I>;
 
 	fn get() -> Self::Type {

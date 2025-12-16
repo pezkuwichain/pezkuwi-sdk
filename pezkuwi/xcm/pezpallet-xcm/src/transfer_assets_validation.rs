@@ -20,7 +20,7 @@
 //! reserve location will be adjusted accordingly to be Asset Hub.
 //! For more information, see <https://github.com/pezkuwichain/pezkuwi-sdk/issues/158>.
 
-use crate::{Config, Error, Pallet};
+use crate::{Config, Error, Pezpallet};
 use alloc::vec::Vec;
 use hex_literal::hex;
 use pezsp_core::Get;
@@ -31,7 +31,7 @@ use xcm_executor::traits::TransferType;
 const PASEO_GENESIS_HASH: [u8; 32] =
 	hex!["77afd6190f1554ad45fd0d31aee62aacc33c6db0ea801129acb813f913e0764f"];
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Check if network native asset reserve transfers should be blocked during Asset Hub
 	/// Migration.
 	///

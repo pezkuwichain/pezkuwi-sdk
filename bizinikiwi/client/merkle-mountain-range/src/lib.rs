@@ -66,7 +66,7 @@ where
 	BE: Backend<B>,
 	Self::Api: MmrApi<B, MmrRootHash, NumberFor<B>>,
 {
-	/// Get the block number where the mmr pallet was added to the runtime.
+	/// Get the block number where the mmr pezpallet was added to the runtime.
 	fn first_mmr_block_num(&self, notification: &FinalityNotification<B>) -> Option<NumberFor<B>> {
 		let best_block_hash = notification.header.hash();
 		let best_block_number = *notification.header.number();

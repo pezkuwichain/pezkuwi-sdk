@@ -67,7 +67,7 @@ construct_runtime! {
 	pub struct Runtime
 	{
 		System: pezframe_system,
-		Pallet: crate,
+		Pezpallet: crate,
 		Migrator: pezpallet_migrations,
 	}
 }

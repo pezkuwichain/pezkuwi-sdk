@@ -28,24 +28,24 @@ It is submitted as an Unsigned Transaction via off-chain workers.
 ```rust
 use pallet_im_online::{self as im_online};
 
-#[frame_support::pallet]
-pub mod pallet {
+#[frame_support::pezpallet]
+pub mod pezpallet {
     use super::*;
     use frame_support::pallet_prelude::*;
     use frame_system::pallet_prelude::*;
 
-    #[pallet::pallet]
-    pub struct Pallet<T>(_);
+    #[pezpallet::pezpallet]
+    pub struct Pezpallet<T>(_);
 
-    #[pallet::config]
+    #[pezpallet::config]
     pub trait Config: frame_system::Config + im_online::Config {}
 
-    #[pallet::call]
-    impl<T: Config> Pallet<T> {
-        #[pallet::weight(0)]
+    #[pezpallet::call]
+    impl<T: Config> Pezpallet<T> {
+        #[pezpallet::weight(0)]
         pub fn is_online(origin: OriginFor<T>, authority_index: u32) -> DispatchResult {
             let _sender = ensure_signed(origin)?;
-            let _is_online = <im_online::Pallet<T>>::is_online(authority_index);
+            let _is_online = <im_online::Pezpallet<T>>::is_online(authority_index);
             Ok(())
         }
     }

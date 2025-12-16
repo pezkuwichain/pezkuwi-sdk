@@ -23,9 +23,9 @@
 
 use pezframe_support::traits::FindAuthor;
 
-pub use pallet::*;
+pub use pezpallet::*;
 
-/// An event handler for the authorship pallet. There is a dummy implementation
+/// An event handler for the authorship pezpallet. There is a dummy implementation
 /// for `()`, which does nothing.
 #[impl_trait_for_tuples::impl_for_tuples(30)]
 pub trait EventHandler<Author, BlockNumber> {
@@ -33,13 +33,13 @@ pub trait EventHandler<Author, BlockNumber> {
 	fn note_author(author: Author);
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// Find the author of a block.
 		type FindAuthor: FindAuthor<Self::AccountId>;
@@ -47,11 +47,11 @@ pub mod pallet {
 		type EventHandler: EventHandler<Self::AccountId, BlockNumberFor<Self>>;
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn on_initialize(_: BlockNumberFor<T>) -> Weight {
 			if let Some(author) = Self::author() {
 				T::EventHandler::note_author(author);
@@ -66,13 +66,13 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::storage]
-	#[pallet::whitelist_storage]
+	#[pezpallet::storage]
+	#[pezpallet::whitelist_storage]
 	/// Author of current block.
 	pub(super) type Author<T: Config> = StorageValue<_, T::AccountId, OptionQuery>;
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Fetch the author of the block.
 	///
 	/// This is safe to invoke in `on_initialize` implementations, as well
@@ -83,7 +83,7 @@ impl<T: Config> Pallet<T> {
 			return Some(author);
 		}
 
-		let digest = <pezframe_system::Pallet<T>>::digest();
+		let digest = <pezframe_system::Pezpallet<T>>::digest();
 		let pre_runtime_digests = digest.logs.iter().filter_map(|d| d.as_pre_runtime());
 		T::FindAuthor::find_author(pre_runtime_digests).inspect(|a| {
 			<Author<T>>::put(&a);
@@ -117,7 +117,7 @@ mod tests {
 		type Block = Block;
 	}
 
-	impl pallet::Config for Test {
+	impl pezpallet::Config for Test {
 		type FindAuthor = AuthorGiven;
 		type EventHandler = ();
 	}

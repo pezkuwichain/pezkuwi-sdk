@@ -91,8 +91,8 @@ pub mod v1 {
 	pub struct MigrateToV1<T>(core::marker::PhantomData<T>);
 	impl<T: Config> OnRuntimeUpgrade for MigrateToV1<T> {
 		fn on_runtime_upgrade() -> Weight {
-			let in_code_version = Pallet::<T>::in_code_storage_version();
-			let on_chain_version = Pallet::<T>::on_chain_storage_version();
+			let in_code_version = Pezpallet::<T>::in_code_storage_version();
+			let on_chain_version = Pezpallet::<T>::on_chain_storage_version();
 			if on_chain_version == 0 && in_code_version == 1 {
 				let mut translated = 0u64;
 				Asset::<T>::translate::<
@@ -102,7 +102,7 @@ pub mod v1 {
 					translated.saturating_inc();
 					Some(old_value.migrate_to_v1())
 				});
-				in_code_version.put::<Pallet<T>>();
+				in_code_version.put::<Pezpallet<T>>();
 				log::info!(
 					target: LOG_TARGET,
 					"Upgraded {} pools, storage to version {:?}",
@@ -122,7 +122,7 @@ pub mod v1 {
 		#[cfg(feature = "try-runtime")]
 		fn pre_upgrade() -> Result<Vec<u8>, TryRuntimeError> {
 			pezframe_support::ensure!(
-				Pallet::<T>::on_chain_storage_version() == 0,
+				Pezpallet::<T>::on_chain_storage_version() == 0,
 				"must upgrade linearly"
 			);
 			let prev_count = Asset::<T>::iter().count();
@@ -140,8 +140,8 @@ pub mod v1 {
 				"the asset count before and after the migration should be the same"
 			);
 
-			let in_code_version = Pallet::<T>::in_code_storage_version();
-			let on_chain_version = Pallet::<T>::on_chain_storage_version();
+			let in_code_version = Pezpallet::<T>::in_code_storage_version();
+			let on_chain_version = Pezpallet::<T>::on_chain_storage_version();
 
 			pezframe_support::ensure!(in_code_version == 1, "must_upgrade");
 			ensure!(

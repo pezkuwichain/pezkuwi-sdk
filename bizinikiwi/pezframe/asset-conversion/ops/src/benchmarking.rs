@@ -15,17 +15,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Asset Conversion Ops pallet benchmarking.
+//! Asset Conversion Ops pezpallet benchmarking.
 
 use super::*;
-use crate::Pallet as AssetConversionOps;
+use crate::Pezpallet as AssetConversionOps;
 use pezframe_benchmarking::{v2::*, whitelisted_caller};
 use pezframe_support::{
 	assert_ok,
 	traits::fungibles::{Create, Inspect, Mutate},
 };
 use pezframe_system::RawOrigin as SystemOrigin;
-use pezpallet_asset_conversion::{BenchmarkHelper, Pallet as AssetConversion};
+use pezpallet_asset_conversion::{BenchmarkHelper, Pezpallet as AssetConversion};
 use pezsp_core::Get;
 use pezsp_runtime::traits::One;
 
@@ -122,7 +122,7 @@ where
 }
 
 fn assert_last_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
-	let events = pezframe_system::Pallet::<T>::events();
+	let events = pezframe_system::Pezpallet::<T>::events();
 	let system_event: <T as pezframe_system::Config>::RuntimeEvent = generic_event.into();
 	// compare to the last event record
 	let pezframe_system::EventRecord { event, .. } = &events[events.len() - 1];

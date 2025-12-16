@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Traits relating to pallet hooks.
+//! Traits relating to pezpallet hooks.
 //!
 //! See [`Hooks`] as the main entry-point.
 
@@ -146,7 +146,7 @@ impl_for_tuples_attr! {
 impl_for_tuples_attr! {
 	/// A trait that will be called at genesis.
 	///
-	/// Implementing this trait for a pallet let's you express operations that should
+	/// Implementing this trait for a pezpallet let's you express operations that should
 	/// happen at genesis. It will be called in an externalities provided environment and
 	/// will set the genesis state after all pallets have written their genesis state.
 	pub trait OnGenesis {
@@ -332,7 +332,7 @@ impl_for_tuples_attr! {
 }
 
 #[cfg_attr(doc, aquamarine::aquamarine)]
-/// The pallet hooks trait. This is merely an umbrella trait for:
+/// The pezpallet hooks trait. This is merely an umbrella trait for:
 ///
 /// - [`OnInitialize`]
 /// - [`OnFinalize`]
@@ -349,7 +349,7 @@ impl_for_tuples_attr! {
 ///
 /// ## Summary
 ///
-/// In short, the following diagram shows the flow of hooks in a pallet
+/// In short, the following diagram shows the flow of hooks in a pezpallet
 ///
 /// ```mermaid
 /// graph LR
@@ -397,7 +397,7 @@ impl_for_tuples_attr! {
 /// > because they are not part of the consensus/main block building logic. See
 /// > [`OffchainWorker`](crate::traits::misc::OffchainWorker) for more information.
 ///
-/// To learn more about the execution of hooks see the FRAME `Executive` pallet which is in charge
+/// To learn more about the execution of hooks see the FRAME `Executive` pezpallet which is in charge
 /// of dispatching extrinsics and calling hooks in the correct order.
 pub trait Hooks<BlockNumber> {
 	/// Block initialization hook. This is called at the very beginning of block execution.
@@ -438,11 +438,11 @@ pub trait Hooks<BlockNumber> {
 	/// [`Hooks::on_finalize`], which comes next, is also already accounted for via
 	/// `on_initialize`), this hook consumes anything that is leftover.
 	///
-	/// Each pallet's `on_idle` is chosen to be the first to execute in a round-robin fashion
+	/// Each pezpallet's `on_idle` is chosen to be the first to execute in a round-robin fashion
 	/// indexed by the block number.
 	///
 	/// Return the weight used, the caller will use this to calculate the remaining weight and then
-	/// call the next pallet `on_idle` hook if there is still weight left.
+	/// call the next pezpallet `on_idle` hook if there is still weight left.
 	///
 	/// Any implementation should always respect `_remaining_weight` and never consume (and
 	/// therefore return) more than this amount.
@@ -459,10 +459,10 @@ pub trait Hooks<BlockNumber> {
 	fn on_poll(_n: BlockNumber, _weight: &mut WeightMeter) {}
 
 	/// Hook executed when a code change (aka. a "runtime upgrade") is detected by the FRAME
-	/// `Executive` pallet.
+	/// `Executive` pezpallet.
 	///
-	/// Be aware that this is called before [`Hooks::on_initialize`] of any pallet; therefore, a lot
-	/// of the critical storage items such as `block_number` in system pallet might have not been
+	/// Be aware that this is called before [`Hooks::on_initialize`] of any pezpallet; therefore, a lot
+	/// of the critical storage items such as `block_number` in system pezpallet might have not been
 	/// set yet.
 	///
 	/// Similar to [`Hooks::on_initialize`], any code in this block is mandatory and MUST execute.
@@ -477,7 +477,7 @@ pub trait Hooks<BlockNumber> {
 	/// [`UncheckedOnRuntimeUpgrade`], passing it to [`crate::migrations::VersionedMigration`],
 	/// which already implements [`OnRuntimeUpgrade`].
 	///
-	/// ## Implementation Note: Pallet Versioning
+	/// ## Implementation Note: Pezpallet Versioning
 	///
 	/// Implementations of this hook are typically wrapped in
 	/// [`crate::migrations::VersionedMigration`] to ensure the migration is executed exactly
@@ -496,7 +496,7 @@ pub trait Hooks<BlockNumber> {
 		Weight::zero()
 	}
 
-	/// Execute the sanity checks of this pallet, per block.
+	/// Execute the sanity checks of this pezpallet, per block.
 	///
 	/// It should focus on certain checks to ensure that the state is sensible. This is never
 	/// executed in a consensus code-path, therefore it can consume as much weight as it needs.
@@ -531,7 +531,7 @@ pub trait Hooks<BlockNumber> {
 		Ok(())
 	}
 
-	/// Implementing this function on a pallet allows you to perform long-running tasks that are
+	/// Implementing this function on a pezpallet allows you to perform long-running tasks that are
 	/// dispatched as separate threads, and entirely independent of the main blockchain execution.
 	///
 	/// This function can freely read from the state, but any change it makes to the state is
@@ -548,14 +548,14 @@ pub trait Hooks<BlockNumber> {
 	/// flags related to offchain-workers to learn more.
 	fn offchain_worker(_n: BlockNumber) {}
 
-	/// Check the integrity of this pallet's configuration.
+	/// Check the integrity of this pezpallet's configuration.
 	///
 	/// Any code located in this hook is placed in an auto-generated test, and generated as a part
 	/// of [`crate::construct_runtime`]'s expansion. Look for a test case with a name along the
 	/// lines of: `__construct_runtime_integrity_test`.
 	///
 	/// This hook is the location where the values/types provided to the `Config` trait
-	/// of the pallet can be tested for correctness. For example, if two `type Foo: Get<u32>` and
+	/// of the pezpallet can be tested for correctness. For example, if two `type Foo: Get<u32>` and
 	/// `type Bar: Get<u32>` where `Foo::get()` must always be greater than `Bar::get()`, such
 	/// checks can be asserted upon here.
 	///
@@ -576,14 +576,14 @@ impl BuildGenesisConfig for () {
 	fn build(&self) {}
 }
 
-/// A trait to define the build function of a genesis config, T and I are placeholder for pallet
-/// trait and pallet instance.
+/// A trait to define the build function of a genesis config, T and I are placeholder for pezpallet
+/// trait and pezpallet instance.
 #[deprecated(
 	note = "GenesisBuild is planned to be removed in December 2023. Use BuildGenesisConfig instead of it."
 )]
 pub trait GenesisBuild<T, I = ()>: pezsp_runtime::traits::MaybeSerializeDeserialize {
 	/// The build function is called within an externalities allowing storage APIs.
-	/// Thus one can write to storage using regular pallet storages.
+	/// Thus one can write to storage using regular pezpallet storages.
 	fn build(&self);
 
 	/// Build the storage using `build` inside default storage.

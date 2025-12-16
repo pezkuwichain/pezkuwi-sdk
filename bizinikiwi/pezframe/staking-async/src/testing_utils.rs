@@ -18,7 +18,7 @@
 //! Testing utils for staking. Provides some common functions to setup staking state, such as
 //! bonding validators, nominators, and generating different types of solutions.
 
-use crate::{Pallet as Staking, *};
+use crate::{Pezpallet as Staking, *};
 use pezframe_benchmarking::account;
 use pezframe_system::RawOrigin;
 use rand_chacha::{
@@ -257,7 +257,7 @@ pub fn migrate_to_old_currency<T: Config>(who: T::AccountId) {
 	asset::kill_stake::<T>(&who).expect("remove hold failed");
 
 	// replicate old behaviour of explicit increment of consumer.
-	pezframe_system::Pallet::<T>::inc_consumers(&who).expect("increment consumer failed");
+	pezframe_system::Pezpallet::<T>::inc_consumers(&who).expect("increment consumer failed");
 }
 
 /// Set active era to the given era index.

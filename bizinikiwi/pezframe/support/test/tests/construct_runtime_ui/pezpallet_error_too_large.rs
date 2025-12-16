@@ -19,15 +19,15 @@ use pezframe_support::{construct_runtime, derive_impl};
 use pezsp_core::sr25519;
 use pezsp_runtime::{generic, traits::BlakeTwo256};
 
-#[pezframe_support::pallet]
-mod pallet {
-	#[pallet::config]
+#[pezframe_support::pezpallet]
+mod pezpallet {
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(core::marker::PhantomData<T>);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(core::marker::PhantomData<T>);
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		MyError(crate::Nested1),
 	}
@@ -83,7 +83,7 @@ pub type Header = generic::Header<BlockNumber, BlakeTwo256>;
 pub type Block = generic::Block<Header, UncheckedExtrinsic>;
 pub type UncheckedExtrinsic = generic::UncheckedExtrinsic<u32, RuntimeCall, Signature, ()>;
 
-impl pallet::Config for Runtime {}
+impl pezpallet::Config for Runtime {}
 
 #[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
 impl pezframe_system::Config for Runtime {
@@ -115,8 +115,8 @@ impl pezframe_system::Config for Runtime {
 construct_runtime! {
 	pub struct Runtime
 	{
-		System: pezframe_system::{Pallet, Call, Storage, Config<T>, Event<T>},
-		Pallet: pallet::{Pallet},
+		System: pezframe_system::{Pezpallet, Call, Storage, Config<T>, Event<T>},
+		Pezpallet: pezpallet::{Pezpallet},
 	}
 }
 

@@ -70,7 +70,7 @@ type LeftFungibles<T> = fungibles::UnionOf<RightFungible<T>, T, ConvertToValue<L
 ///
 /// By using this type, we can navigate through each branch of [`fungible::UnionOf`],
 /// [`fungibles::UnionOf`], and [`ItemOf`] to access the underlying `fungibles::*`
-/// implementation provided by the pallet.
+/// implementation provided by the pezpallet.
 type First<T> = fungibles::UnionOf<T, LeftFungibles<T>, ConvertToValue<RightAsset>, (), u64>;
 
 #[test]

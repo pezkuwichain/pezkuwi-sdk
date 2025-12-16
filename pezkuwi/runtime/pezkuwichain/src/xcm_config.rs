@@ -71,7 +71,7 @@ pub type LocationConverter = (
 /// Our asset transactor. This is what allows us to interest with the runtime facilities from the
 /// point of view of XCM-only concepts like `Location` and `Asset`.
 ///
-/// Ours is only aware of the Balances pallet, which is mapped to `RocLocation`.
+/// Ours is only aware of the Balances pezpallet, which is mapped to `RocLocation`.
 pub type LocalAssetTransactor = FungibleAdapter<
 	// Use this currency:
 	Balances,
@@ -257,7 +257,7 @@ pub type FellowsToPlurality = OriginToPluralityVoice<RuntimeOrigin, Fellows, Fel
 /// Type to convert the Treasury origin to a Plurality `Location` value.
 pub type TreasurerToPlurality = OriginToPluralityVoice<RuntimeOrigin, Treasurer, TreasuryBodyId>;
 
-/// Type to convert a pallet `Origin` type value into a `Location` value which represents an
+/// Type to convert a pezpallet `Origin` type value into a `Location` value which represents an
 /// interior location of this chain for a destination chain.
 pub type LocalPalletOriginToLocation = (
 	// StakingAdmin origin to be used in XCM as a corresponding Plurality `Location` value.

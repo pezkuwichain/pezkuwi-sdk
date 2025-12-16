@@ -30,7 +30,7 @@ use pezsp_arithmetic::{
 };
 use pezsp_runtime::traits::{AccountIdConversion, BlockNumberProvider};
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	pub fn current_timeslice() -> Timeslice {
 		let latest = RCBlockNumberProviderOf::<T::Coretime>::current_block_number();
 		let timeslice_period = T::TimeslicePeriod::get();

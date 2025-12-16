@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Benchmarks for NIS Pallet
+//! Benchmarks for NIS Pezpallet
 
 #![cfg(feature = "runtime-benchmarks")]
 
@@ -39,10 +39,10 @@ fn fill_queues<T: Config>() -> Result<(), DispatchError> {
 	T::Currency::set_balance(&caller, T::MinBid::get() * BalanceOf::<T>::from(queues + bids));
 
 	for _ in 0..bids {
-		Pallet::<T>::place_bid(RawOrigin::Signed(caller.clone()).into(), T::MinBid::get(), 1)?;
+		Pezpallet::<T>::place_bid(RawOrigin::Signed(caller.clone()).into(), T::MinBid::get(), 1)?;
 	}
 	for d in 1..queues {
-		Pallet::<T>::place_bid(RawOrigin::Signed(caller.clone()).into(), T::MinBid::get(), 1 + d)?;
+		Pezpallet::<T>::place_bid(RawOrigin::Signed(caller.clone()).into(), T::MinBid::get(), 1 + d)?;
 	}
 	Ok(())
 }
@@ -58,7 +58,7 @@ mod benchmarks {
 		let bid = T::MinBid::get();
 		T::Currency::set_balance(&caller, (ed + bid) * BalanceOf::<T>::from(l + 1) + bid);
 		for _ in 0..l {
-			Pallet::<T>::place_bid(RawOrigin::Signed(caller.clone()).into(), T::MinBid::get(), 1)?;
+			Pezpallet::<T>::place_bid(RawOrigin::Signed(caller.clone()).into(), T::MinBid::get(), 1)?;
 		}
 
 		#[extrinsic_call]
@@ -81,7 +81,7 @@ mod benchmarks {
 		let ql = T::MaxQueueLen::get();
 		T::Currency::set_balance(&caller, (ed + bid) * BalanceOf::<T>::from(ql + 1) + bid);
 		for _ in 0..T::MaxQueueLen::get() {
-			Pallet::<T>::place_bid(RawOrigin::Signed(caller.clone()).into(), T::MinBid::get(), 1)?;
+			Pezpallet::<T>::place_bid(RawOrigin::Signed(caller.clone()).into(), T::MinBid::get(), 1)?;
 		}
 
 		#[extrinsic_call]
@@ -105,7 +105,7 @@ mod benchmarks {
 		let bid = T::MinBid::get();
 		T::Currency::set_balance(&caller, (ed + bid) * BalanceOf::<T>::from(l + 1) + bid);
 		for _ in 0..l {
-			Pallet::<T>::place_bid(RawOrigin::Signed(caller.clone()).into(), T::MinBid::get(), 1)?;
+			Pezpallet::<T>::place_bid(RawOrigin::Signed(caller.clone()).into(), T::MinBid::get(), 1)?;
 		}
 
 		#[extrinsic_call]
@@ -128,18 +128,18 @@ mod benchmarks {
 		let bid = T::MinBid::get().max(One::one());
 		let ed = T::Currency::minimum_balance();
 		T::Currency::set_balance(&caller, ed + bid);
-		Pallet::<T>::place_bid(RawOrigin::Signed(caller.clone()).into(), bid, 1)?;
-		Pallet::<T>::process_queues(Perquintill::one(), 1, 1, &mut WeightCounter::unlimited());
-		Pallet::<T>::communify(RawOrigin::Signed(caller.clone()).into(), 0)?;
-		let original = T::Currency::balance(&Pallet::<T>::account_id());
-		T::Currency::set_balance(&Pallet::<T>::account_id(), BalanceOf::<T>::min_value());
+		Pezpallet::<T>::place_bid(RawOrigin::Signed(caller.clone()).into(), bid, 1)?;
+		Pezpallet::<T>::process_queues(Perquintill::one(), 1, 1, &mut WeightCounter::unlimited());
+		Pezpallet::<T>::communify(RawOrigin::Signed(caller.clone()).into(), 0)?;
+		let original = T::Currency::balance(&Pezpallet::<T>::account_id());
+		T::Currency::set_balance(&Pezpallet::<T>::account_id(), BalanceOf::<T>::min_value());
 
 		#[extrinsic_call]
 		_(origin as T::RuntimeOrigin);
 
 		// Must fund at least 99.999% of the required amount.
 		let missing =
-			Perquintill::from_rational(T::Currency::balance(&Pallet::<T>::account_id()), original)
+			Perquintill::from_rational(T::Currency::balance(&Pezpallet::<T>::account_id()), original)
 				.left_from_one();
 		assert!(missing <= Perquintill::one() / 100_000);
 
@@ -153,14 +153,14 @@ mod benchmarks {
 		let bid = T::MinBid::get().max(One::one()) * 100u32.into();
 		let ed = T::Currency::minimum_balance();
 		T::Currency::set_balance(&caller, ed + bid + bid);
-		Pallet::<T>::place_bid(RawOrigin::Signed(caller.clone()).into(), bid, 1)?;
-		Pallet::<T>::place_bid(RawOrigin::Signed(caller.clone()).into(), bid, 1)?;
-		Pallet::<T>::process_queues(Perquintill::one(), 1, 2, &mut WeightCounter::unlimited());
+		Pezpallet::<T>::place_bid(RawOrigin::Signed(caller.clone()).into(), bid, 1)?;
+		Pezpallet::<T>::place_bid(RawOrigin::Signed(caller.clone()).into(), bid, 1)?;
+		Pezpallet::<T>::process_queues(Perquintill::one(), 1, 2, &mut WeightCounter::unlimited());
 
 		#[extrinsic_call]
 		_(RawOrigin::Signed(caller.clone()), 0);
 
-		assert_eq!(Pallet::<T>::owner(&0), None);
+		assert_eq!(Pezpallet::<T>::owner(&0), None);
 
 		Ok(())
 	}
@@ -172,15 +172,15 @@ mod benchmarks {
 		let bid = T::MinBid::get().max(One::one());
 		let ed = T::Currency::minimum_balance();
 		T::Currency::set_balance(&caller, ed + bid + bid);
-		Pallet::<T>::place_bid(RawOrigin::Signed(caller.clone()).into(), bid, 1)?;
-		Pallet::<T>::place_bid(RawOrigin::Signed(caller.clone()).into(), bid, 1)?;
-		Pallet::<T>::process_queues(Perquintill::one(), 1, 2, &mut WeightCounter::unlimited());
-		Pallet::<T>::communify(RawOrigin::Signed(caller.clone()).into(), 0)?;
+		Pezpallet::<T>::place_bid(RawOrigin::Signed(caller.clone()).into(), bid, 1)?;
+		Pezpallet::<T>::place_bid(RawOrigin::Signed(caller.clone()).into(), bid, 1)?;
+		Pezpallet::<T>::process_queues(Perquintill::one(), 1, 2, &mut WeightCounter::unlimited());
+		Pezpallet::<T>::communify(RawOrigin::Signed(caller.clone()).into(), 0)?;
 
 		#[extrinsic_call]
 		_(RawOrigin::Signed(caller.clone()), 0);
 
-		assert_eq!(Pallet::<T>::owner(&0), Some(caller));
+		assert_eq!(Pezpallet::<T>::owner(&0), Some(caller));
 
 		Ok(())
 	}
@@ -200,10 +200,10 @@ mod benchmarks {
 				.0
 				.saturating_reciprocal_mul_ceil(T::Currency::balance(&caller)),
 		);
-		Pallet::<T>::place_bid(RawOrigin::Signed(caller.clone()).into(), bid, 1)?;
-		Pallet::<T>::place_bid(RawOrigin::Signed(caller.clone()).into(), bid, 1)?;
-		Pallet::<T>::process_queues(Perquintill::one(), 1, 2, &mut WeightCounter::unlimited());
-		pezframe_system::Pallet::<T>::set_block_number(Receipts::<T>::get(0).unwrap().expiry);
+		Pezpallet::<T>::place_bid(RawOrigin::Signed(caller.clone()).into(), bid, 1)?;
+		Pezpallet::<T>::place_bid(RawOrigin::Signed(caller.clone()).into(), bid, 1)?;
+		Pezpallet::<T>::process_queues(Perquintill::one(), 1, 2, &mut WeightCounter::unlimited());
+		pezframe_system::Pezpallet::<T>::set_block_number(Receipts::<T>::get(0).unwrap().expiry);
 
 		#[extrinsic_call]
 		_(RawOrigin::Signed(caller.clone()), 0, None);
@@ -228,11 +228,11 @@ mod benchmarks {
 				.0
 				.saturating_reciprocal_mul_ceil(T::Currency::balance(&caller)),
 		);
-		Pallet::<T>::place_bid(RawOrigin::Signed(caller.clone()).into(), bid, 1)?;
-		Pallet::<T>::place_bid(RawOrigin::Signed(caller.clone()).into(), bid, 1)?;
-		Pallet::<T>::process_queues(Perquintill::one(), 1, 2, &mut WeightCounter::unlimited());
-		pezframe_system::Pallet::<T>::set_block_number(Receipts::<T>::get(0).unwrap().expiry);
-		Pallet::<T>::communify(RawOrigin::Signed(caller.clone()).into(), 0)?;
+		Pezpallet::<T>::place_bid(RawOrigin::Signed(caller.clone()).into(), bid, 1)?;
+		Pezpallet::<T>::place_bid(RawOrigin::Signed(caller.clone()).into(), bid, 1)?;
+		Pezpallet::<T>::process_queues(Perquintill::one(), 1, 2, &mut WeightCounter::unlimited());
+		pezframe_system::Pezpallet::<T>::set_block_number(Receipts::<T>::get(0).unwrap().expiry);
+		Pezpallet::<T>::communify(RawOrigin::Signed(caller.clone()).into(), 0)?;
 
 		#[extrinsic_call]
 		_(RawOrigin::Signed(caller.clone()), 0);
@@ -248,7 +248,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			Pallet::<T>::process_queues(
+			Pezpallet::<T>::process_queues(
 				Perquintill::one(),
 				Zero::zero(),
 				u32::max_value(),
@@ -261,13 +261,13 @@ mod benchmarks {
 
 	#[benchmark]
 	fn process_queue() {
-		let our_account = Pallet::<T>::account_id();
-		let issuance = Pallet::<T>::issuance();
+		let our_account = Pezpallet::<T>::account_id();
+		let issuance = Pezpallet::<T>::issuance();
 		let mut summary = Summary::<T>::get();
 
 		#[block]
 		{
-			Pallet::<T>::process_queue(
+			Pezpallet::<T>::process_queue(
 				1_u32,
 				1_u32.into(),
 				&our_account,
@@ -288,13 +288,13 @@ mod benchmarks {
 		let ed = T::Currency::minimum_balance();
 		T::Currency::set_balance(&who, ed + min_bid);
 		let bid = Bid { amount: T::MinBid::get(), who };
-		let our_account = Pallet::<T>::account_id();
-		let issuance = Pallet::<T>::issuance();
+		let our_account = Pezpallet::<T>::account_id();
+		let issuance = Pezpallet::<T>::issuance();
 		let mut summary = Summary::<T>::get();
 
 		#[block]
 		{
-			Pallet::<T>::process_bid(
+			Pezpallet::<T>::process_bid(
 				bid,
 				2_u32.into(),
 				&our_account,
@@ -307,7 +307,7 @@ mod benchmarks {
 	}
 
 	impl_benchmark_test_suite! {
-		Pallet,
+		Pezpallet,
 		mock::new_test_ext_empty(),
 		mock::Test
 	}

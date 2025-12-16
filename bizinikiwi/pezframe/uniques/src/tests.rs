@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Tests for Uniques pallet.
+//! Tests for Uniques pezpallet.
 
 use crate::{mock::*, Event, *};
 use pezframe_support::{assert_noop, assert_ok, traits::Currency};

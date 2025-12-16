@@ -17,7 +17,7 @@
 
 #![cfg(feature = "runtime-benchmarks")]
 
-use super::{Pallet as TxPause, *};
+use super::{Pezpallet as TxPause, *};
 use alloc::vec;
 use frame::benchmarking::prelude::*;
 
@@ -28,7 +28,7 @@ mod benchmarks {
 	#[benchmark]
 	fn pause() {
 		let origin = T::PauseOrigin::try_successful_origin()
-			.expect("Tx-pause pallet is not usable without pause origin");
+			.expect("Tx-pause pezpallet is not usable without pause origin");
 		let full_name = name::<T>();
 
 		#[extrinsic_call]
@@ -40,7 +40,7 @@ mod benchmarks {
 	#[benchmark]
 	fn unpause() {
 		let unpause_origin = T::UnpauseOrigin::try_successful_origin()
-			.expect("Tx-pause pallet is not usable without pause origin");
+			.expect("Tx-pause pezpallet is not usable without pause origin");
 		let full_name = name::<T>();
 		TxPause::<T>::do_pause(full_name.clone()).unwrap();
 

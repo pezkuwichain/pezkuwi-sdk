@@ -187,7 +187,7 @@ pub type AmbassadorCoreInstance = pezpallet_core_fellowship::Instance2;
 impl pezpallet_core_fellowship::Config<AmbassadorCoreInstance> for Runtime {
 	type WeightInfo = weights::pezpallet_core_fellowship_ambassador_core::WeightInfo<Runtime>;
 	type RuntimeEvent = RuntimeEvent;
-	type Members = pezpallet_ranked_collective::Pallet<Runtime, AmbassadorCollectiveInstance>;
+	type Members = pezpallet_ranked_collective::Pezpallet<Runtime, AmbassadorCollectiveInstance>;
 	type Balance = Balance;
 	// Parameters are set by any of:
 	// - Root;
@@ -230,7 +230,7 @@ pub type AmbassadorSalaryInstance = pezpallet_salary::Instance2;
 
 parameter_types! {
 	// The interior location on AssetHub for the paying account. This is the Ambassador Salary
-	// pallet instance (which sits at index 74). This sovereign account will need funding.
+	// pezpallet instance (which sits at index 74). This sovereign account will need funding.
 	pub AmbassadorSalaryLocation: InteriorLocation = PalletInstance(74).into();
 }
 
@@ -257,10 +257,10 @@ impl pezpallet_salary::Config<AmbassadorSalaryInstance> for Runtime {
 		AmbassadorSalaryPaymaster,
 		crate::impls::benchmarks::OpenHrmpChannel<ConstU32<1000>>,
 	>;
-	type Members = pezpallet_ranked_collective::Pallet<Runtime, AmbassadorCollectiveInstance>;
+	type Members = pezpallet_ranked_collective::Pezpallet<Runtime, AmbassadorCollectiveInstance>;
 
 	#[cfg(not(feature = "runtime-benchmarks"))]
-	type Salary = pezpallet_core_fellowship::Pallet<Runtime, AmbassadorCoreInstance>;
+	type Salary = pezpallet_core_fellowship::Pezpallet<Runtime, AmbassadorCoreInstance>;
 	#[cfg(feature = "runtime-benchmarks")]
 	type Salary = pezframe_support::traits::tokens::ConvertRank<
 		crate::impls::benchmarks::RankToSalary<Balances>,

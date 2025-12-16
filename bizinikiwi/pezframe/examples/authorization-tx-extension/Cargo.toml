@@ -6,7 +6,7 @@ edition.workspace = true
 license = "MIT-0"
 homepage.workspace = true
 repository.workspace = true
-description = "FRAME example authorization transaction extension pallet"
+description = "FRAME example authorization transaction extension pezpallet"
 publish = false
 documentation = "https://docs.rs/pezpallet-example-authorization-tx-extension"
 

@@ -1,4 +1,4 @@
-# Inclusion Pallet
+# Inclusion Pezpallet
 
 > NOTE: This module has suffered changes for the elastic scaling implementation. As a result, parts of this document may
 be out of date and will be updated at a later time. Issue tracking the update:
@@ -44,7 +44,7 @@ PendingAvailabilityCommitments: map ParaId => CandidateCommitments;
 
 * `MessageQueue`: The message queue provides general queueing and processing functionality. Currently it replaces the
   old `UMP` dispatch queue. Other use-cases can be implemented as well by adding new variants to
-  `AggregateMessageOrigin`. Normally it should be set to an instance of the `MessageQueue` pallet.
+  `AggregateMessageOrigin`. Normally it should be set to an instance of the `MessageQueue` pezpallet.
 
 ## Session Change
 
@@ -57,7 +57,7 @@ Optional:
 
 ## Initialization
 
-No initialization routine runs for this module. However, the initialization of the `MessageQueue` pallet will attempt to
+No initialization routine runs for this module. However, the initialization of the `MessageQueue` pezpallet will attempt to
 process any pending UMP messages.
 
 
@@ -166,7 +166,7 @@ All failed checks should lead to an unrecoverable error making the block invalid
   the candidate hash is one of the disputed candidates, then clean up the corresponding storage for that candidate and
   the commitments. Return a vector of cleaned-up core IDs.
 
-These functions were formerly part of the UMP pallet:
+These functions were formerly part of the UMP pezpallet:
 
 * `check_upward_messages(P: ParaId, Vec<UpwardMessage>)`:
     1. Checks that the teyrchain is not currently offboarding and error otherwise.

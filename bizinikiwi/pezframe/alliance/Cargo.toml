@@ -6,7 +6,7 @@ edition.workspace = true
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
-description = "The Alliance pallet provides a collective for standard-setting industry collaboration."
+description = "The Alliance pezpallet provides a collective for standard-setting industry collaboration."
 readme = "README.md"
 documentation = "https://docs.rs/pezpallet-alliance"
 

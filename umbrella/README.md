@@ -25,7 +25,7 @@ You may have seen another umbrella crate named `pezkuwi-sdk-frame`, also known a
 For clarification, while
 `pezkuwi-sdk` aims to ease dependency management, `pezkuwi-sdk-frame` intends to simplify
 [FRAME](https://docs.pezkuwichain.app/polkadot-protocol/glossary/#frame-framework-for-runtime-aggregation-of-modularized-entities)
-pallet implementation, as demonstrated in the example below.
+pezpallet implementation, as demonstrated in the example below.
 
 ## 💻 Usage
 
@@ -119,7 +119,7 @@ where `std` isn't available.
 pezkuwi-sdk = { version = "0.12.0", features = ["runtime"], default-features = false }
 ```
 
-When building a runtime or writing an application pallet, `pezkuwi-sdk-frame` can be a handy
+When building a runtime or writing an application pezpallet, `pezkuwi-sdk-frame` can be a handy
 toolkit to start with. It gathers all the common types, traits, and functions from many different
 crates so that you can import them with a one-liner.
 
@@ -129,8 +129,8 @@ crates so that you can import them with a one-liner.
 // It's a convention to rename it to `frame`.
 use pezkuwi_sdk::pezkuwi_sdk_frame as frame;
 
-#[frame::pallet(dev_mode)]
-pub mod pallet {
+#[frame::pezpallet(dev_mode)]
+pub mod pezpallet {
     // Import declarations aren't automatically inherited.
     // Need to "re-import" to make `frame` available here.
     use super::*;
@@ -139,17 +139,17 @@ pub mod pallet {
 
     pub type Balance = u128;
 
-    #[pallet::pallet]
-    pub struct Pallet<T>(_);
+    #[pezpallet::pezpallet]
+    pub struct Pezpallet<T>(_);
 
-    #[pallet::config]
-    #[pallet::disable_frame_system_supertrait_check]
+    #[pezpallet::config]
+    #[pezpallet::disable_frame_system_supertrait_check]
     pub trait Config: frame_system::Config {}
 
-    #[pallet::storage]
+    #[pezpallet::storage]
     pub type Balances<T: Config> = StorageMap<_, _, T::AccountId, Balance>;
 
-    impl<T: Config> Pallet<T> {
+    impl<T: Config> Pezpallet<T> {
         pub fn transfer(
             from: T::RuntimeOrigin,
             to: T::AccountId,

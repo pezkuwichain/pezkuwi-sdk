@@ -15,11 +15,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Staking pallet benchmarking.
+//! Staking pezpallet benchmarking.
 
 use super::*;
 #[allow(unused_imports)]
-use crate::Pallet as RankedCollective;
+use crate::Pezpallet as RankedCollective;
 use alloc::vec::Vec;
 use pezframe_benchmarking::{
 	v1::{account, BenchmarkError},
@@ -32,23 +32,23 @@ use pezframe_system::{pezpallet_prelude::BlockNumberFor, RawOrigin as SystemOrig
 const SEED: u32 = 0;
 
 fn assert_last_event<T: Config<I>, I: 'static>(generic_event: <T as Config<I>>::RuntimeEvent) {
-	pezframe_system::Pallet::<T>::assert_last_event(generic_event.into());
+	pezframe_system::Pezpallet::<T>::assert_last_event(generic_event.into());
 }
 
 fn assert_has_event<T: Config<I>, I: 'static>(generic_event: <T as Config<I>>::RuntimeEvent) {
-	pezframe_system::Pallet::<T>::assert_has_event(generic_event.into());
+	pezframe_system::Pezpallet::<T>::assert_has_event(generic_event.into());
 }
 
 fn make_member<T: Config<I>, I: 'static>(rank: Rank) -> T::AccountId {
 	let who = account::<T::AccountId>("member", MemberCount::<T, I>::get(0), SEED);
 	let who_lookup = T::Lookup::unlookup(who.clone());
-	assert_ok!(Pallet::<T, I>::add_member(
+	assert_ok!(Pezpallet::<T, I>::add_member(
 		T::AddOrigin::try_successful_origin()
 			.expect("AddOrigin has no successful origin required for the benchmark"),
 		who_lookup.clone(),
 	));
 	for _ in 0..rank {
-		assert_ok!(Pallet::<T, I>::promote_member(
+		assert_ok!(Pezpallet::<T, I>::promote_member(
 			T::PromoteOrigin::try_successful_origin()
 				.expect("PromoteOrigin has no successful origin required for the benchmark"),
 			who_lookup.clone(),
@@ -59,8 +59,8 @@ fn make_member<T: Config<I>, I: 'static>(rank: Rank) -> T::AccountId {
 
 #[instance_benchmarks(
 where
-	<<T as pallet::Config<I>>::Polls as pezframe_support::traits::Polling<Tally<T, I, pallet::Pallet<T, I>>>>::Index: From<u8>,
-	<T as pezframe_system::Config>::RuntimeEvent: TryInto<pallet::Event<T, I>>,
+	<<T as pezpallet::Config<I>>::Polls as pezframe_support::traits::Polling<Tally<T, I, pezpallet::Pezpallet<T, I>>>>::Index: From<u8>,
+	<T as pezframe_system::Config>::RuntimeEvent: TryInto<pezpallet::Event<T, I>>,
 )]
 mod benchmarks {
 	use super::*;
@@ -186,7 +186,7 @@ mod benchmarks {
 
 		// Convert the class to a rank if it exists, otherwise use the default rank.
 		let rank = class.as_ref().map_or(
-			<Pallet<T, I> as pezframe_support::traits::RankedMembers>::Rank::default(),
+			<Pezpallet<T, I> as pezframe_support::traits::RankedMembers>::Rank::default(),
 			|class| T::MinRankOfClass::convert(class.clone()),
 		);
 
@@ -206,7 +206,7 @@ mod benchmarks {
 		#[block]
 		{
 			let vote_result =
-				Pallet::<T, I>::vote(SystemOrigin::Signed(caller.clone()).into(), poll, true);
+				Pezpallet::<T, I>::vote(SystemOrigin::Signed(caller.clone()).into(), poll, true);
 
 			// If the class exists, expect success; otherwise expect a "NotPolling" error.
 			if class.is_some() {
@@ -218,7 +218,7 @@ mod benchmarks {
 
 		// Vote logic for a negative vote (false).
 		let vote_result =
-			Pallet::<T, I>::vote(SystemOrigin::Signed(caller.clone()).into(), poll, false);
+			Pezpallet::<T, I>::vote(SystemOrigin::Signed(caller.clone()).into(), poll, false);
 
 		// Check the result of the negative vote.
 		if class.is_some() {
@@ -230,7 +230,7 @@ mod benchmarks {
 		// If the class exists, verify the vote event and tally.
 		if let Some(_) = class {
 			// Get the actual vote weight from the latest event's VoteRecord::Nay
-			let mut events = pezframe_system::Pallet::<T>::events();
+			let mut events = pezframe_system::Pezpallet::<T>::events();
 			let last_event = events.pop().expect("At least one event should exist");
 			let event: Event<T, I> = last_event
 				.event
@@ -260,7 +260,7 @@ mod benchmarks {
 
 		// Convert the class to a rank, or use a default rank if no class exists.
 		let rank = class.as_ref().map_or(
-			<Pallet<T, I> as pezframe_support::traits::RankedMembers>::Rank::default(),
+			<Pezpallet<T, I> as pezframe_support::traits::RankedMembers>::Rank::default(),
 			|class| T::MinRankOfClass::convert(class.clone()),
 		);
 
@@ -276,7 +276,7 @@ mod benchmarks {
 		// Simulate voting by `n` members.
 		for _ in 0..n {
 			let voter = make_member::<T, I>(rank);
-			let result = Pallet::<T, I>::vote(SystemOrigin::Signed(voter).into(), poll, true);
+			let result = Pezpallet::<T, I>::vote(SystemOrigin::Signed(voter).into(), poll, true);
 
 			// Check voting results based on class existence.
 			if class.is_some() {

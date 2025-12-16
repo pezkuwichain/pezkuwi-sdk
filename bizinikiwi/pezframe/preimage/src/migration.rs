@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Storage migrations for the preimage pallet.
+//! Storage migrations for the preimage pezpallet.
 
 use super::*;
 use alloc::collections::btree_map::BTreeMap;
@@ -32,7 +32,7 @@ use pezsp_runtime::TryRuntimeError;
 /// The log target.
 const TARGET: &'static str = "runtime::preimage::migration::v1";
 
-/// The original data layout of the preimage pallet without a specific version number.
+/// The original data layout of the preimage pezpallet without a specific version number.
 mod v0 {
 	use super::*;
 
@@ -44,7 +44,7 @@ mod v0 {
 
 	#[storage_alias]
 	pub type PreimageFor<T: Config> = StorageMap<
-		Pallet<T>,
+		Pezpallet<T>,
 		Identity,
 		<T as pezframe_system::Config>::Hash,
 		BoundedVec<u8, ConstU32<MAX_SIZE>>,
@@ -52,7 +52,7 @@ mod v0 {
 
 	#[storage_alias]
 	pub type StatusFor<T: Config> = StorageMap<
-		Pallet<T>,
+		Pezpallet<T>,
 		Identity,
 		<T as pezframe_system::Config>::Hash,
 		OldRequestStatus<<T as pezframe_system::Config>::AccountId, BalanceOf<T>>,
@@ -84,7 +84,7 @@ pub mod v1 {
 	impl<T: Config> OnRuntimeUpgrade for Migration<T> {
 		#[cfg(feature = "try-runtime")]
 		fn pre_upgrade() -> Result<Vec<u8>, TryRuntimeError> {
-			ensure!(StorageVersion::get::<Pallet<T>>() == 0, "can only upgrade from version 0");
+			ensure!(StorageVersion::get::<Pezpallet<T>>() == 0, "can only upgrade from version 0");
 
 			let images = v0::image_count::<T>().expect("v0 storage corrupted");
 			log::info!(target: TARGET, "Migrating {} images", &images);
@@ -93,7 +93,7 @@ pub mod v1 {
 
 		fn on_runtime_upgrade() -> Weight {
 			let mut weight = T::DbWeight::get().reads(1);
-			if StorageVersion::get::<Pallet<T>>() != 0 {
+			if StorageVersion::get::<Pezpallet<T>>() != 0 {
 				log::warn!(
 					target: TARGET,
 					"skipping MovePreimagesIntoBuckets: executed on wrong storage version.\
@@ -148,7 +148,7 @@ pub mod v1 {
 
 				weight.saturating_accrue(T::DbWeight::get().writes(2));
 			}
-			StorageVersion::new(1).put::<Pallet<T>>();
+			StorageVersion::new(1).put::<Pezpallet<T>>();
 
 			weight.saturating_add(T::DbWeight::get().writes(1))
 		}
@@ -167,7 +167,7 @@ pub mod v1 {
 					old_images
 				);
 			}
-			ensure!(StorageVersion::get::<Pallet<T>>() == 1, "must upgrade");
+			ensure!(StorageVersion::get::<Pezpallet<T>>() == 1, "must upgrade");
 			Ok(())
 		}
 	}
@@ -200,7 +200,7 @@ mod test {
 	#[test]
 	fn migration_works() {
 		new_test_ext().execute_with(|| {
-			assert_eq!(StorageVersion::get::<Pallet<T>>(), 0);
+			assert_eq!(StorageVersion::get::<Pezpallet<T>>(), 0);
 			// Insert some preimages into the v0 storage:
 
 			// Case 1: Unrequested without deposit
@@ -230,7 +230,7 @@ mod test {
 			// V0 and V1 share the same prefix, so `iter_values` still counts the same.
 			assert_eq!(v0::image_count::<T>(), Some(3));
 			assert_eq!(v1::image_count::<T>(), Some(3)); // One gets skipped therefore 3.
-			assert_eq!(StorageVersion::get::<Pallet<T>>(), 1);
+			assert_eq!(StorageVersion::get::<Pezpallet<T>>(), 1);
 
 			// Case 1: Unrequested without deposit becomes system-requested
 			let (p, h) = preimage::<T>(128);

@@ -3,7 +3,7 @@
 #![cfg(feature = "runtime-benchmarks")]
 
 use super::*;
-use crate::Pallet as IdentityKyc;
+use crate::Pezpallet as IdentityKyc;
 use pezframe_benchmarking::v2::*;
 use pezframe_support::traits::Currency;
 use pezframe_system::RawOrigin;

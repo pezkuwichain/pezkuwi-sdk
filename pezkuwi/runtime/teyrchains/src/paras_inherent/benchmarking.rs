@@ -133,7 +133,7 @@ mod benchmarks {
 			},
 		>,
 	) -> Result<(), BenchmarkError> {
-		configuration::Pallet::<T>::set_node_feature(
+		configuration::Pezpallet::<T>::set_node_feature(
 			RawOrigin::Root.into(),
 			FeatureIndex::CandidateReceiptV2 as u8,
 			true,
@@ -153,7 +153,7 @@ mod benchmarks {
 		assert_eq!(benchmark.backed_candidates.len(), 1);
 		// with `v` validity votes.
 		let votes = min(
-			scheduler::Pallet::<T>::group_validators(GroupIndex::from(0)).unwrap().len(),
+			scheduler::Pezpallet::<T>::group_validators(GroupIndex::from(0)).unwrap().len(),
 			v as usize,
 		);
 		assert_eq!(benchmark.backed_candidates.get(0).unwrap().validity_votes().len(), votes);
@@ -191,7 +191,7 @@ mod benchmarks {
 
 	#[benchmark]
 	fn enter_backed_candidate_code_upgrade() -> Result<(), BenchmarkError> {
-		configuration::Pallet::<T>::set_node_feature(
+		configuration::Pezpallet::<T>::set_node_feature(
 			RawOrigin::Root.into(),
 			FeatureIndex::CandidateReceiptV2 as u8,
 			true,
@@ -212,7 +212,7 @@ mod benchmarks {
 		let mut benchmark = scenario.data.clone();
 
 		let votes = min(
-			scheduler::Pallet::<T>::group_validators(GroupIndex::from(0)).unwrap().len(),
+			scheduler::Pezpallet::<T>::group_validators(GroupIndex::from(0)).unwrap().len(),
 			BenchBuilder::<T>::fallback_min_backing_votes() as usize,
 		);
 
@@ -252,7 +252,7 @@ mod benchmarks {
 	}
 
 	impl_benchmark_test_suite! {
-		Pallet,
+		Pezpallet,
 		crate::mock::new_test_ext(Default::default()),
 		crate::mock::Test
 	}

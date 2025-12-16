@@ -63,7 +63,7 @@ mod calls {
 	#[test]
 	fn cannot_register_if_not_signed() {
 		ExtBuilder::signed().build_and_execute(|| {
-			assert!(!crate::Pallet::<T>::current_phase().is_signed());
+			assert!(!crate::Pezpallet::<T>::current_phase().is_signed());
 			assert_noop!(
 				SignedPallet::register(RuntimeOrigin::signed(99), Default::default()),
 				Error::<T>::PhaseNotSigned
@@ -655,7 +655,7 @@ mod e2e {
 			// 99 now has their deposit returned.
 			assert_eq!(balances(99), (100, 0));
 
-			// signed pallet should be in 100% clean state.
+			// signed pezpallet should be in 100% clean state.
 			assert_ok!(Submissions::<Runtime>::ensure_killed(0));
 		})
 	}
@@ -675,7 +675,7 @@ mod e2e {
 			assert_eq!(Submissions::<Runtime>::submitters_count(current_round), 1);
 
 			roll_to_signed_validation_open();
-			roll_next(); // one block so signed pallet will send start signal.
+			roll_next(); // one block so signed pezpallet will send start signal.
 			roll_to_full_verification();
 
 			// Check that rejection events were properly generated
@@ -696,13 +696,13 @@ mod e2e {
 			);
 
 			// Verify no-restart conditions are met
-			assert!(crate::Pallet::<Runtime>::current_phase().is_signed_validation());
+			assert!(crate::Pezpallet::<Runtime>::current_phase().is_signed_validation());
 			assert!(!Submissions::<Runtime>::has_leader(current_round));
 			assert_eq!(Submissions::<Runtime>::submitters_count(current_round), 0);
 			assert_eq!(VerifierPallet::status(), crate::verifier::Status::Nothing);
 
 			// Verifier should remain idle for the rest of the signed validation phase
-			while crate::Pallet::<Runtime>::current_phase().is_signed_validation() {
+			while crate::Pezpallet::<Runtime>::current_phase().is_signed_validation() {
 				roll_next();
 				assert_eq!(VerifierPallet::status(), crate::verifier::Status::Nothing);
 			}
@@ -817,7 +817,7 @@ mod e2e {
 				roll_to_signed_validation_open();
 				assert_eq!(MultiBlock::current_phase(), Phase::SignedValidation(3));
 				assert!(matches!(VerifierPallet::status(), crate::verifier::Status::Nothing));
-				roll_next(); // one block so signed-pallet will send the start signal
+				roll_next(); // one block so signed-pezpallet will send the start signal
 				assert_eq!(MultiBlock::current_phase(), Phase::SignedValidation(2));
 				assert!(matches!(VerifierPallet::status(), crate::verifier::Status::Ongoing(2)));
 
@@ -959,11 +959,11 @@ mod e2e {
 				);
 
 				// we have 1 block left in signed verification, but we cannot do anything here.
-				assert_eq!(crate::Pallet::<T>::current_phase(), Phase::SignedValidation(0));
+				assert_eq!(crate::Pezpallet::<T>::current_phase(), Phase::SignedValidation(0));
 
 				// we go back to signed next
 				roll_next();
-				assert_eq!(crate::Pallet::<T>::current_phase(), Phase::Signed(4));
+				assert_eq!(crate::Pezpallet::<T>::current_phase(), Phase::Signed(4));
 
 				// no one submits again, and we go to verification again
 				roll_to_signed_validation_open();
@@ -995,15 +995,15 @@ mod e2e {
 					vec![crate::signed::Event::Rewarded(0, 999, 7)]
 				);
 
-				// verifier is `Nothing`, and will remain so as signed-pallet will not start it
+				// verifier is `Nothing`, and will remain so as signed-pezpallet will not start it
 				// again.
 
-				assert_eq!(crate::Pallet::<T>::current_phase(), Phase::SignedValidation(0));
+				assert_eq!(crate::Pezpallet::<T>::current_phase(), Phase::SignedValidation(0));
 				assert_eq!(VerifierPallet::status(), crate::verifier::Status::Nothing);
 
 				// next block we go to done
 				roll_next();
-				assert_eq!(crate::Pallet::<T>::current_phase(), Phase::Done);
+				assert_eq!(crate::Pezpallet::<T>::current_phase(), Phase::Done);
 				assert_eq!(VerifierPallet::status(), crate::verifier::Status::Nothing);
 			})
 	}
@@ -1042,7 +1042,7 @@ mod e2e {
 				assert_eq!(Submissions::<Runtime>::submitters_count(current_round), 2);
 
 				roll_to_signed_validation_open();
-				roll_next(); // one block so signed-pallet will send the start signal
+				roll_next(); // one block so signed-pezpallet will send the start signal
 				assert!(matches!(MultiBlock::current_phase(), Phase::SignedValidation(_)));
 				assert!(matches!(VerifierPallet::status(), crate::verifier::Status::Ongoing(_)));
 
@@ -1099,7 +1099,7 @@ mod e2e {
 				assert_eq!(VerifierPallet::status(), crate::verifier::Status::Nothing);
 
 				roll_to_signed_validation_open();
-				roll_next(); // one block so signed-pallet will send the start signal
+				roll_next(); // one block so signed-pezpallet will send the start signal
 
 				// Now in the next validation phase, the good solution starts verification
 				assert!(matches!(VerifierPallet::status(), crate::verifier::Status::Ongoing(_)));
@@ -1111,7 +1111,7 @@ mod e2e {
 				roll_next(); // Process page 0
 
 				// Good solution should be fully verified and accepted
-				assert_eq!(crate::Pallet::<T>::current_phase(), Phase::SignedValidation(0));
+				assert_eq!(crate::Pezpallet::<T>::current_phase(), Phase::SignedValidation(0));
 				assert_eq!(VerifierPallet::status(), crate::verifier::Status::Nothing);
 				assert_eq!(Submissions::<Runtime>::submitters_count(current_round), 0);
 			});
@@ -1158,7 +1158,7 @@ mod e2e {
 
 				// Move to verification phase
 				roll_to_signed_validation_open();
-				roll_next(); // one block so signed-pallet will send the start signal
+				roll_next(); // one block so signed-pezpallet will send the start signal
 				assert!(matches!(VerifierPallet::status(), crate::verifier::Status::Ongoing(_)));
 
 				// Process first invalid solution (91)
@@ -1228,7 +1228,7 @@ mod e2e {
 					]
 				);
 
-				assert_eq!(crate::Pallet::<T>::current_phase(), Phase::SignedValidation(0));
+				assert_eq!(crate::Pezpallet::<T>::current_phase(), Phase::SignedValidation(0));
 				assert_eq!(VerifierPallet::status(), crate::verifier::Status::Nothing);
 
 				// Check that all expected events were emitted in the correct order
@@ -1249,7 +1249,7 @@ mod e2e {
 
 				// finally done
 				roll_next();
-				assert_eq!(crate::Pallet::<T>::current_phase(), Phase::Done);
+				assert_eq!(crate::Pezpallet::<T>::current_phase(), Phase::Done);
 				// verifier has done nothing
 				assert_eq!(VerifierPallet::status(), crate::verifier::Status::Nothing);
 				assert!(
@@ -1605,7 +1605,7 @@ mod invulnerables {
 			assert_ok!(SignedPallet::register(RuntimeOrigin::signed(99), invalid_score));
 
 			roll_to_signed_validation_open();
-			roll_next(); // one block so signed pallet will send start signal.
+			roll_next(); // one block so signed pezpallet will send start signal.
 			roll_to_full_verification();
 
 			// Check that rejection events were properly generated
@@ -1678,7 +1678,7 @@ mod defensive_tests {
 
 			// Delete the score storage
 			let full_key =
-				crate::signed::pallet::SortedScores::<Runtime>::hashed_key_for(current_round);
+				crate::signed::pezpallet::SortedScores::<Runtime>::hashed_key_for(current_round);
 			unhashed::kill(&full_key);
 
 			// Complete verification - this should trigger score unavailable detection

@@ -381,7 +381,7 @@ fn full_native_block_import_works() {
 			EventRecord {
 				phase: Phase::ApplyExtrinsic(1),
 				event: RuntimeEvent::Balances(pezpallet_balances::Event::Deposit {
-					who: pezpallet_treasury::Pallet::<Runtime>::account_id(),
+					who: pezpallet_treasury::Pezpallet::<Runtime>::account_id(),
 					amount: fees_after_refund,
 				}),
 				topics: vec![],
@@ -478,7 +478,7 @@ fn full_native_block_import_works() {
 			EventRecord {
 				phase: Phase::ApplyExtrinsic(1),
 				event: RuntimeEvent::Balances(pezpallet_balances::Event::Deposit {
-					who: pezpallet_treasury::Pallet::<Runtime>::account_id(),
+					who: pezpallet_treasury::Pezpallet::<Runtime>::account_id(),
 					amount: fees_after_refund,
 				}),
 				topics: vec![],
@@ -525,7 +525,7 @@ fn full_native_block_import_works() {
 			EventRecord {
 				phase: Phase::ApplyExtrinsic(2),
 				event: RuntimeEvent::Balances(pezpallet_balances::Event::Deposit {
-					who: pezpallet_treasury::Pallet::<Runtime>::account_id(),
+					who: pezpallet_treasury::Pezpallet::<Runtime>::account_id(),
 					amount: fees_after_refund,
 				}),
 				topics: vec![],
@@ -701,7 +701,7 @@ fn deploying_wasm_contract_should_work() {
 	let transfer_ch = <Runtime as pezframe_system::Config>::Hashing::hash(&transfer_code);
 
 	let addr =
-		pezpallet_contracts::Pallet::<Runtime>::contract_address(&charlie(), &transfer_ch, &[], &[]);
+		pezpallet_contracts::Pezpallet::<Runtime>::contract_address(&charlie(), &transfer_ch, &[], &[]);
 
 	let time = 42 * 1000;
 	let b = construct_block(
@@ -747,7 +747,7 @@ fn deploying_wasm_contract_should_work() {
 	t.execute_with(|| {
 		// Verify that the contract does exist by querying some of its storage items
 		// It does not matter that the storage item itself does not exist.
-		assert!(&pezpallet_contracts::Pallet::<Runtime>::get_storage(addr, vec![]).is_ok());
+		assert!(&pezpallet_contracts::Pezpallet::<Runtime>::get_storage(addr, vec![]).is_ok());
 	});
 }
 

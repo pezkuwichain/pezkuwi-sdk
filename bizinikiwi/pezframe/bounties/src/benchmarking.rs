@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Bounties pallet benchmarking.
+//! Bounties pezpallet benchmarking.
 
 use super::*;
 
@@ -24,8 +24,8 @@ use pezframe_benchmarking::v2::*;
 use pezframe_system::{pezpallet_prelude::BlockNumberFor as SystemBlockNumberFor, RawOrigin};
 use pezsp_runtime::traits::{BlockNumberProvider, Bounded};
 
-use crate::Pallet as Bounties;
-use pezpallet_treasury::Pallet as Treasury;
+use crate::Pezpallet as Bounties;
+use pezpallet_treasury::Pezpallet as Treasury;
 
 const SEED: u32 = 0;
 
@@ -87,7 +87,7 @@ fn create_bounty<T: Config<I>, I: 'static>(
 		T::SpendOrigin::try_successful_origin().map_err(|_| BenchmarkError::Weightless)?;
 	Bounties::<T, I>::approve_bounty(approve_origin.clone(), bounty_id)?;
 	set_block_number::<T, I>(T::SpendPeriod::get());
-	Treasury::<T, I>::on_initialize(pezframe_system::Pallet::<T>::block_number());
+	Treasury::<T, I>::on_initialize(pezframe_system::Pezpallet::<T>::block_number());
 	Bounties::<T, I>::propose_curator(approve_origin, bounty_id, curator_lookup.clone(), fee)?;
 	Bounties::<T, I>::accept_curator(RawOrigin::Signed(curator).into(), bounty_id)?;
 	Ok((curator_lookup, bounty_id))
@@ -100,7 +100,7 @@ fn setup_pot_account<T: Config<I>, I: 'static>() {
 }
 
 fn assert_last_event<T: Config<I>, I: 'static>(generic_event: <T as Config<I>>::RuntimeEvent) {
-	pezframe_system::Pallet::<T>::assert_last_event(generic_event.into());
+	pezframe_system::Pezpallet::<T>::assert_last_event(generic_event.into());
 }
 
 #[instance_benchmarks]
@@ -141,7 +141,7 @@ mod benchmarks {
 			T::SpendOrigin::try_successful_origin().map_err(|_| BenchmarkError::Weightless)?;
 		Bounties::<T, I>::approve_bounty(approve_origin.clone(), bounty_id)?;
 		set_block_number::<T, I>(T::SpendPeriod::get());
-		Treasury::<T, I>::on_initialize(pezframe_system::Pallet::<T>::block_number());
+		Treasury::<T, I>::on_initialize(pezframe_system::Pezpallet::<T>::block_number());
 
 		#[extrinsic_call]
 		_(approve_origin as T::RuntimeOrigin, bounty_id, curator_lookup, fee);
@@ -175,7 +175,7 @@ mod benchmarks {
 	fn unassign_curator() -> Result<(), BenchmarkError> {
 		setup_pot_account::<T, I>();
 		let (curator_lookup, _) = create_bounty::<T, I>()?;
-		Treasury::<T, I>::on_initialize(pezframe_system::Pallet::<T>::block_number());
+		Treasury::<T, I>::on_initialize(pezframe_system::Pezpallet::<T>::block_number());
 		let bounty_id = BountyCount::<T, I>::get() - 1;
 		let bounty_update_period = T::BountyUpdatePeriod::get();
 		let inactivity_timeout = T::SpendPeriod::get().saturating_add(bounty_update_period);
@@ -183,7 +183,7 @@ mod benchmarks {
 
 		// If `BountyUpdatePeriod` overflows the inactivity timeout the benchmark still executes the
 		// slash
-		let origin = if Pallet::<T, I>::treasury_block_number() <= inactivity_timeout {
+		let origin = if Pezpallet::<T, I>::treasury_block_number() <= inactivity_timeout {
 			let curator = T::Lookup::lookup(curator_lookup).map_err(<&str>::from)?;
 			T::RejectOrigin::try_successful_origin()
 				.unwrap_or_else(|_| RawOrigin::Signed(curator).into())
@@ -210,7 +210,7 @@ mod benchmarks {
 			T::SpendOrigin::try_successful_origin().map_err(|_| BenchmarkError::Weightless)?;
 		Bounties::<T, I>::approve_bounty(approve_origin.clone(), bounty_id)?;
 		set_block_number::<T, I>(T::SpendPeriod::get());
-		Treasury::<T, I>::on_initialize(pezframe_system::Pallet::<T>::block_number());
+		Treasury::<T, I>::on_initialize(pezframe_system::Pezpallet::<T>::block_number());
 		Bounties::<T, I>::propose_curator(approve_origin, bounty_id, curator_lookup, fee)?;
 
 		#[extrinsic_call]
@@ -223,7 +223,7 @@ mod benchmarks {
 	fn award_bounty() -> Result<(), BenchmarkError> {
 		setup_pot_account::<T, I>();
 		let (curator_lookup, _) = create_bounty::<T, I>()?;
-		Treasury::<T, I>::on_initialize(pezframe_system::Pallet::<T>::block_number());
+		Treasury::<T, I>::on_initialize(pezframe_system::Pezpallet::<T>::block_number());
 
 		let bounty_id = BountyCount::<T, I>::get() - 1;
 		let curator = T::Lookup::lookup(curator_lookup).map_err(<&str>::from)?;
@@ -240,7 +240,7 @@ mod benchmarks {
 	fn claim_bounty() -> Result<(), BenchmarkError> {
 		setup_pot_account::<T, I>();
 		let (curator_lookup, _) = create_bounty::<T, I>()?;
-		Treasury::<T, I>::on_initialize(pezframe_system::Pallet::<T>::block_number());
+		Treasury::<T, I>::on_initialize(pezframe_system::Pezpallet::<T>::block_number());
 
 		let bounty_id = BountyCount::<T, I>::get() - 1;
 		let curator = T::Lookup::lookup(curator_lookup).map_err(<&str>::from)?;
@@ -291,7 +291,7 @@ mod benchmarks {
 	fn close_bounty_active() -> Result<(), BenchmarkError> {
 		setup_pot_account::<T, I>();
 		let (_, _) = create_bounty::<T, I>()?;
-		Treasury::<T, I>::on_initialize(pezframe_system::Pallet::<T>::block_number());
+		Treasury::<T, I>::on_initialize(pezframe_system::Pezpallet::<T>::block_number());
 		let bounty_id = BountyCount::<T, I>::get() - 1;
 		let approve_origin =
 			T::RejectOrigin::try_successful_origin().map_err(|_| BenchmarkError::Weightless)?;
@@ -308,7 +308,7 @@ mod benchmarks {
 	fn extend_bounty_expiry() -> Result<(), BenchmarkError> {
 		setup_pot_account::<T, I>();
 		let (curator_lookup, _) = create_bounty::<T, I>()?;
-		Treasury::<T, I>::on_initialize(pezframe_system::Pallet::<T>::block_number());
+		Treasury::<T, I>::on_initialize(pezframe_system::Pezpallet::<T>::block_number());
 
 		let bounty_id = BountyCount::<T, I>::get() - 1;
 		let curator = T::Lookup::lookup(curator_lookup).map_err(<&str>::from)?;

@@ -23,7 +23,7 @@ use pezframe_support::traits::{OnRuntimeUpgrade, UncheckedOnRuntimeUpgrade};
 #[cfg(feature = "try-runtime")]
 use pezsp_runtime::TryRuntimeError;
 
-/// Exports for versioned migration `type`s for this pallet.
+/// Exports for versioned migration `type`s for this pezpallet.
 pub mod versioned {
 	use super::*;
 
@@ -32,7 +32,7 @@ pub mod versioned {
 		7,
 		8,
 		v8::VersionUncheckedMigrateV7ToV8<T>,
-		crate::pallet::Pallet<T>,
+		crate::pezpallet::Pezpallet<T>,
 		<T as pezframe_system::Config>::DbWeight,
 	>;
 
@@ -42,7 +42,7 @@ pub mod versioned {
 		6,
 		7,
 		v7::VersionUncheckedMigrateV6ToV7<T>,
-		crate::pallet::Pallet<T>,
+		crate::pezpallet::Pezpallet<T>,
 		<T as pezframe_system::Config>::DbWeight,
 	>;
 
@@ -51,7 +51,7 @@ pub mod versioned {
 		5,
 		6,
 		v6::MigrateToV6<T>,
-		crate::pallet::Pallet<T>,
+		crate::pezpallet::Pezpallet<T>,
 		<T as pezframe_system::Config>::DbWeight,
 	>;
 }
@@ -112,7 +112,7 @@ pub mod unversioned {
 	/// [`adapter::StakeStrategyType::Delegate`].
 	///
 	/// Note: This only migrates the pools, the members are not migrated. They can use the
-	/// permission-less [`Pallet::migrate_delegation()`] to migrate their funds.
+	/// permission-less [`Pezpallet::migrate_delegation()`] to migrate their funds.
 	///
 	/// This migration does not break any existing pool storage item, does not need to happen in any
 	/// sequence and hence can be applied unversioned on a production runtime.
@@ -132,13 +132,13 @@ pub mod unversioned {
 			let mut count: u32 = 0;
 
 			BondedPools::<T>::iter_keys().take(MaxPools::get() as usize).for_each(|id| {
-				let pool_acc = Pallet::<T>::generate_bonded_account(id);
+				let pool_acc = Pezpallet::<T>::generate_bonded_account(id);
 
 				// only migrate if the pool is in Transfer Strategy.
 				if T::StakeAdapter::pool_strategy(Pool::from(pool_acc)) ==
 					adapter::StakeStrategyType::Transfer
 				{
-					let _ = Pallet::<T>::migrate_to_delegate_stake(id).map_err(|err| {
+					let _ = Pezpallet::<T>::migrate_to_delegate_stake(id).map_err(|err| {
 						log!(
 							warn,
 							"failed to migrate pool {:?} to delegate stake strategy with err: {:?}",
@@ -178,7 +178,7 @@ pub mod unversioned {
 
 			let mut pool_balances: Vec<BalanceOf<T>> = Vec::new();
 			BondedPools::<T>::iter_keys().take(MaxPools::get() as usize).for_each(|id| {
-				let pool_account = Pallet::<T>::generate_bonded_account(id);
+				let pool_account = Pezpallet::<T>::generate_bonded_account(id);
 
 				// we ensure migration is idempotent.
 				let pool_balance = T::StakeAdapter::total_balance(Pool::from(pool_account.clone()))
@@ -198,7 +198,7 @@ pub mod unversioned {
 			for (index, id) in
 				BondedPools::<T>::iter_keys().take(MaxPools::get() as usize).enumerate()
 			{
-				let pool_account = Pallet::<T>::generate_bonded_account(id);
+				let pool_account = Pezpallet::<T>::generate_bonded_account(id);
 				if T::StakeAdapter::pool_strategy(Pool::from(pool_account.clone())) ==
 					adapter::StakeStrategyType::Transfer
 				{
@@ -332,14 +332,14 @@ pub(crate) mod v7 {
 	impl<T: Config> V7BondedPool<T> {
 		#[allow(dead_code)]
 		fn bonded_account(&self) -> T::AccountId {
-			Pallet::<T>::generate_bonded_account(self.id)
+			Pezpallet::<T>::generate_bonded_account(self.id)
 		}
 	}
 
 	// NOTE: We cannot put a V7 prefix here since that would change the storage key.
 	#[pezframe_support::storage_alias]
 	pub type BondedPools<T: Config> =
-		CountedStorageMap<Pallet<T>, Twox64Concat, PoolId, V7BondedPoolInner<T>>;
+		CountedStorageMap<Pezpallet<T>, Twox64Concat, PoolId, V7BondedPoolInner<T>>;
 
 	pub struct VersionUncheckedMigrateV6ToV7<T>(core::marker::PhantomData<T>);
 	impl<T: Config> UncheckedOnRuntimeUpgrade for VersionUncheckedMigrateV6ToV7<T> {
@@ -388,7 +388,7 @@ pub(crate) mod v7 {
 			);
 
 			ensure!(
-				Pallet::<T>::on_chain_storage_version() >= 7,
+				Pezpallet::<T>::on_chain_storage_version() >= 7,
 				"nomination-pools::migration::v7: wrong storage version"
 			);
 
@@ -406,8 +406,8 @@ mod v6 {
 
 	impl<T: Config> MigrateToV6<T> {
 		fn freeze_ed(pool_id: PoolId) -> Result<(), ()> {
-			let reward_acc = Pallet::<T>::generate_reward_account(pool_id);
-			Pallet::<T>::freeze_pool_deposit(&reward_acc).map_err(|e| {
+			let reward_acc = Pezpallet::<T>::generate_reward_account(pool_id);
+			Pezpallet::<T>::freeze_pool_deposit(&reward_acc).map_err(|e| {
 				log!(error, "Failed to freeze ED for pool {} with error: {:?}", pool_id, e);
 				()
 			})
@@ -442,7 +442,7 @@ mod v6 {
 		#[cfg(feature = "try-runtime")]
 		fn post_upgrade(_data: Vec<u8>) -> Result<(), TryRuntimeError> {
 			// there should be no ED imbalances anymore..
-			Pallet::<T>::check_ed_imbalance().map(|_| ())
+			Pezpallet::<T>::check_ed_imbalance().map(|_| ())
 		}
 	}
 }
@@ -473,8 +473,8 @@ pub mod v5 {
 	pub struct MigrateToV5<T>(core::marker::PhantomData<T>);
 	impl<T: Config> OnRuntimeUpgrade for MigrateToV5<T> {
 		fn on_runtime_upgrade() -> Weight {
-			let in_code = Pallet::<T>::in_code_storage_version();
-			let onchain = Pallet::<T>::on_chain_storage_version();
+			let in_code = Pezpallet::<T>::in_code_storage_version();
+			let onchain = Pezpallet::<T>::on_chain_storage_version();
 
 			log!(
 				info,
@@ -490,7 +490,7 @@ pub mod v5 {
 					Some(old_value.migrate_to_v5())
 				});
 
-				in_code.put::<Pallet<T>>();
+				in_code.put::<Pezpallet<T>>();
 				log!(info, "Upgraded {} pools, storage to version {:?}", translated, in_code);
 
 				// reads: translated + onchain version.
@@ -560,7 +560,7 @@ pub mod v5 {
 				"a commission value has been incorrectly set"
 			);
 			ensure!(
-				Pallet::<T>::on_chain_storage_version() >= 5,
+				Pezpallet::<T>::on_chain_storage_version() >= 5,
 				"nomination-pools::migration::v5: wrong storage version"
 			);
 
@@ -628,8 +628,8 @@ pub mod v4 {
 	#[allow(deprecated)]
 	impl<T: Config, U: Get<Perbill>> OnRuntimeUpgrade for MigrateToV4<T, U> {
 		fn on_runtime_upgrade() -> Weight {
-			let current = Pallet::<T>::in_code_storage_version();
-			let onchain = Pallet::<T>::on_chain_storage_version();
+			let current = Pezpallet::<T>::in_code_storage_version();
+			let onchain = Pezpallet::<T>::on_chain_storage_version();
 
 			log!(
 				info,
@@ -654,7 +654,7 @@ pub mod v4 {
 					Some(old_value.migrate_to_v4())
 				});
 
-				StorageVersion::new(4).put::<Pallet<T>>();
+				StorageVersion::new(4).put::<Pezpallet<T>>();
 				log!(info, "Upgraded {} pools, storage to version {:?}", translated, current);
 
 				// reads: translated + onchain version.
@@ -694,7 +694,7 @@ pub mod v4 {
 				"global maximum commission error"
 			);
 			ensure!(
-				Pallet::<T>::on_chain_storage_version() >= 4,
+				Pezpallet::<T>::on_chain_storage_version() >= 4,
 				"nomination-pools::migration::v4: wrong storage version"
 			);
 			Ok(())
@@ -709,8 +709,8 @@ pub mod v3 {
 	pub struct MigrateToV3<T>(core::marker::PhantomData<T>);
 	impl<T: Config> OnRuntimeUpgrade for MigrateToV3<T> {
 		fn on_runtime_upgrade() -> Weight {
-			let current = Pallet::<T>::in_code_storage_version();
-			let onchain = Pallet::<T>::on_chain_storage_version();
+			let current = Pezpallet::<T>::in_code_storage_version();
+			let onchain = Pezpallet::<T>::on_chain_storage_version();
 
 			if onchain == 2 {
 				log!(
@@ -733,7 +733,7 @@ pub mod v3 {
 						metadata_removed += 1;
 						Metadata::<T>::remove(&id);
 					});
-				StorageVersion::new(3).put::<Pallet<T>>();
+				StorageVersion::new(3).put::<Pezpallet<T>>();
 				// metadata iterated + bonded pools read + a storage version read
 				let total_reads = metadata_iterated * 2 + 1;
 				// metadata removed + a storage version write
@@ -757,7 +757,7 @@ pub mod v3 {
 				"not all of the stale metadata has been removed"
 			);
 			ensure!(
-				Pallet::<T>::on_chain_storage_version() >= 3,
+				Pezpallet::<T>::on_chain_storage_version() >= 3,
 				"nomination-pools::migration::v3: wrong storage version"
 			);
 			Ok(())
@@ -890,7 +890,7 @@ pub mod v2 {
 					};
 
 					let accumulated_reward = RewardPool::<T>::current_balance(id);
-					let reward_account = Pallet::<T>::generate_reward_account(id);
+					let reward_account = Pezpallet::<T>::generate_reward_account(id);
 					let mut sum_paid_out = BalanceOf::<T>::zero();
 
 					members
@@ -938,7 +938,7 @@ pub mod v2 {
 								sum_paid_out = sum_paid_out.saturating_add(last_claim);
 							}
 
-							Pallet::<T>::deposit_event(Event::<T>::PaidOut {
+							Pezpallet::<T>::deposit_event(Event::<T>::PaidOut {
 								member: who.clone(),
 								pool_id: id,
 								payout: last_claim,
@@ -981,7 +981,7 @@ pub mod v2 {
 				total_points_locked,
 				current
 			);
-			current.put::<Pallet<T>>();
+			current.put::<Pezpallet<T>>();
 
 			T::DbWeight::get().reads_writes(members_translated + 1, reward_pools_translated + 1)
 		}
@@ -989,8 +989,8 @@ pub mod v2 {
 
 	impl<T: Config> OnRuntimeUpgrade for MigrateToV2<T> {
 		fn on_runtime_upgrade() -> Weight {
-			let current = Pallet::<T>::in_code_storage_version();
-			let onchain = Pallet::<T>::on_chain_storage_version();
+			let current = Pezpallet::<T>::in_code_storage_version();
+			let onchain = Pezpallet::<T>::on_chain_storage_version();
 
 			log!(
 				info,
@@ -1013,7 +1013,7 @@ pub mod v2 {
 			RewardPools::<T>::iter().try_for_each(|(id, _)| -> Result<(), TryRuntimeError> {
 				ensure!(
 					<T::Currency as pezframe_support::traits::fungible::Inspect<T::AccountId>>::balance(
-						&Pallet::<T>::generate_reward_account(id)
+						&Pezpallet::<T>::generate_reward_account(id)
 					) >= T::Currency::minimum_balance(),
 					"Reward accounts must have greater balance than ED."
 				);
@@ -1027,7 +1027,7 @@ pub mod v2 {
 		fn post_upgrade(_: Vec<u8>) -> Result<(), TryRuntimeError> {
 			// new version must be set.
 			ensure!(
-				Pallet::<T>::on_chain_storage_version() == 2,
+				Pezpallet::<T>::on_chain_storage_version() == 2,
 				"The onchain version must be updated after the migration."
 			);
 
@@ -1107,8 +1107,8 @@ pub mod v1 {
 	pub struct MigrateToV1<T>(core::marker::PhantomData<T>);
 	impl<T: Config> OnRuntimeUpgrade for MigrateToV1<T> {
 		fn on_runtime_upgrade() -> Weight {
-			let current = Pallet::<T>::in_code_storage_version();
-			let onchain = Pallet::<T>::on_chain_storage_version();
+			let current = Pezpallet::<T>::in_code_storage_version();
+			let onchain = Pezpallet::<T>::on_chain_storage_version();
 
 			log!(
 				info,
@@ -1125,7 +1125,7 @@ pub mod v1 {
 					Some(old_value.migrate_to_v1())
 				});
 
-				current.put::<Pallet<T>>();
+				current.put::<Pezpallet<T>>();
 
 				log!(info, "Upgraded {} pools, storage to version {:?}", translated, current);
 
@@ -1140,10 +1140,10 @@ pub mod v1 {
 		fn post_upgrade(_: Vec<u8>) -> Result<(), TryRuntimeError> {
 			// new version must be set.
 			ensure!(
-				Pallet::<T>::on_chain_storage_version() == 1,
+				Pezpallet::<T>::on_chain_storage_version() == 1,
 				"The onchain version must be updated after the migration."
 			);
-			Pallet::<T>::try_state(pezframe_system::Pallet::<T>::block_number())?;
+			Pezpallet::<T>::try_state(pezframe_system::Pezpallet::<T>::block_number())?;
 			Ok(())
 		}
 	}
@@ -1155,7 +1155,7 @@ mod helpers {
 	pub(crate) fn calculate_tvl_by_total_stake<T: Config>() -> BalanceOf<T> {
 		BondedPools::<T>::iter_keys()
 			.map(|id| {
-				T::StakeAdapter::total_stake(Pool::from(Pallet::<T>::generate_bonded_account(id)))
+				T::StakeAdapter::total_stake(Pool::from(Pezpallet::<T>::generate_bonded_account(id)))
 			})
 			.reduce(|acc, total_balance| acc + total_balance)
 			.unwrap_or_default()

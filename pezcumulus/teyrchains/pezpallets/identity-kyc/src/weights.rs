@@ -28,7 +28,7 @@
 // ./target/release/frame-omni-bencher
 // v1
 // benchmark
-// pallet
+// pezpallet
 // --runtime
 // target/release/wbuild/people-pezkuwichain-runtime/people_pezkuwichain_runtime.compact.compressed.wasm
 // --pallets

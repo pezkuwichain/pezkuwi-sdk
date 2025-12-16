@@ -15,7 +15,7 @@
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
 use crate::{
-	pallet::CurrentMigration, Config, CurrentXcmVersion, Pallet, VersionMigrationStage,
+	pezpallet::CurrentMigration, Config, CurrentXcmVersion, Pezpallet, VersionMigrationStage,
 	VersionNotifyTargets,
 };
 use pezframe_support::{
@@ -215,7 +215,7 @@ pub mod data {
 		}
 	}
 
-	impl<T: Config> Pallet<T> {
+	impl<T: Config> Pezpallet<T> {
 		/// Migrates relevant data to the `required_xcm_version`.
 		pub(crate) fn migrate_data_to_xcm_version(
 			weight: &mut Weight,
@@ -418,7 +418,7 @@ pub mod v1 {
 		fn on_runtime_upgrade() -> Weight {
 			let mut weight = T::DbWeight::get().reads(1);
 
-			if StorageVersion::get::<Pallet<T>>() != 0 {
+			if StorageVersion::get::<Pezpallet<T>>() != 0 {
 				tracing::warn!("skipping v1, should be removed");
 				return weight;
 			}
@@ -437,7 +437,7 @@ pub mod v1 {
 
 			tracing::info!("v1 applied successfully");
 			weight.saturating_accrue(T::DbWeight::get().writes(1));
-			StorageVersion::new(1).put::<Pallet<T>>();
+			StorageVersion::new(1).put::<Pezpallet<T>>();
 			weight
 		}
 	}
@@ -450,7 +450,7 @@ pub mod v1 {
 		0,
 		1,
 		VersionUncheckedMigrateToV1<T>,
-		crate::pallet::Pallet<T>,
+		crate::pezpallet::Pezpallet<T>,
 		<T as pezframe_system::Config>::DbWeight,
 	>;
 }
@@ -471,7 +471,7 @@ impl<T: Config> OnRuntimeUpgrade for MigrateToLatestXcmVersion<T> {
 
 		// migrate other operational data to the latest XCM version in-place
 		let latest = CurrentXcmVersion::get();
-		Pallet::<T>::migrate_data_to_xcm_version(&mut weight, latest);
+		Pezpallet::<T>::migrate_data_to_xcm_version(&mut weight, latest);
 
 		weight
 	}

@@ -15,14 +15,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # I'm online Pallet
+//! # I'm online Pezpallet
 //!
-//! If the local node is a validator (i.e. contains an authority key), this pallet
+//! If the local node is a validator (i.e. contains an authority key), this pezpallet
 //! gossips a heartbeat transaction with each new session. The heartbeat functions
 //! as a simple mechanism to signal that the node is online in the current era.
 //!
 //! Received heartbeats are tracked for one era and reset with each new era. The
-//! pallet exposes two public functions to query if a heartbeat has been received
+//! pezpallet exposes two public functions to query if a heartbeat has been received
 //! in the current era or session.
 //!
 //! The heartbeat is a signed transaction, which was signed using the session key
@@ -31,7 +31,7 @@
 //!
 //! - [`Config`]
 //! - [`Call`]
-//! - [`Pallet`]
+//! - [`Pezpallet`]
 //!
 //! ## Interface
 //!
@@ -44,24 +44,24 @@
 //! ```
 //! use pezpallet_im_online::{self as im_online};
 //!
-//! #[pezframe_support::pallet]
-//! pub mod pallet {
+//! #[pezframe_support::pezpallet]
+//! pub mod pezpallet {
 //! 	use super::*;
 //! 	use pezframe_support::pezpallet_prelude::*;
 //! 	use pezframe_system::pezpallet_prelude::*;
 //!
-//! 	#[pallet::pallet]
-//! 	pub struct Pallet<T>(_);
+//! 	#[pezpallet::pezpallet]
+//! 	pub struct Pezpallet<T>(_);
 //!
-//! 	#[pallet::config]
+//! 	#[pezpallet::config]
 //! 	pub trait Config: pezframe_system::Config + im_online::Config {}
 //!
-//! 	#[pallet::call]
-//! 	impl<T: Config> Pallet<T> {
-//! 		#[pallet::weight(0)]
+//! 	#[pezpallet::call]
+//! 	impl<T: Config> Pezpallet<T> {
+//! 		#[pezpallet::weight(0)]
 //! 		pub fn is_online(origin: OriginFor<T>, authority_index: u32) -> DispatchResult {
 //! 			let _sender = ensure_signed(origin)?;
-//! 			let _is_online = <im_online::Pallet<T>>::is_online(authority_index);
+//! 			let _is_online = <im_online::Pezpallet<T>>::is_online(authority_index);
 //! 			Ok(())
 //! 		}
 //! 	}
@@ -71,7 +71,7 @@
 //!
 //! ## Dependencies
 //!
-//! This pallet depends on the [Session pallet](../pezpallet_session/index.html).
+//! This pezpallet depends on the [Session pezpallet](../pezpallet_session/index.html).
 
 // Ensure we're `no_std` when compiling for Wasm.
 #![cfg_attr(not(feature = "std"), no_std)]
@@ -98,7 +98,7 @@ use pezframe_system::{
 	offchain::{CreateBare, SubmitTransaction},
 	pezpallet_prelude::*,
 };
-pub use pallet::*;
+pub use pezpallet::*;
 use scale_info::TypeInfo;
 use pezsp_application_crypto::RuntimeAppPublic;
 use pezsp_runtime::{
@@ -249,18 +249,18 @@ pub type IdentificationTuple<T> = (
 
 type OffchainResult<T, A> = Result<A, OffchainErr<BlockNumberFor<T>>>;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
 	/// The in-code storage version.
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(1);
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: CreateBare<Call<Self>> + pezframe_system::Config {
 		/// The identifier type for an authority.
 		type AuthorityId: Member
@@ -303,15 +303,15 @@ pub mod pallet {
 		///
 		/// This is exposed so that it can be tuned for particular runtime, when
 		/// multiple pallets send unsigned transactions.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type UnsignedPriority: Get<TransactionPriority>;
 
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A new heartbeat was received from `AuthorityId`.
 		HeartbeatReceived { authority_id: T::AuthorityId },
@@ -321,7 +321,7 @@ pub mod pallet {
 		SomeOffline { offline: Vec<IdentificationTuple<T>> },
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Non existent public key.
 		InvalidKey,
@@ -340,22 +340,22 @@ pub mod pallet {
 	/// This value will only be used as a fallback if we fail to get a proper session
 	/// progress estimate from `NextSessionRotation`, as those estimates should be
 	/// more accurate then the value we calculate for `HeartbeatAfter`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type HeartbeatAfter<T: Config> = StorageValue<_, BlockNumberFor<T>, ValueQuery>;
 
 	/// The current set of keys that may issue a heartbeat.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Keys<T: Config> =
 		StorageValue<_, WeakBoundedVec<T::AuthorityId, T::MaxKeys>, ValueQuery>;
 
 	/// For each session index, we keep a mapping of `SessionIndex` and `AuthIndex`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ReceivedHeartbeats<T: Config> =
 		StorageDoubleMap<_, Twox64Concat, SessionIndex, Twox64Concat, AuthIndex, bool>;
 
 	/// For each session index, we keep a mapping of `ValidatorId<T>` to the
 	/// number of blocks authored by the given authority.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type AuthoredBlocks<T: Config> = StorageDoubleMap<
 		_,
 		Twox64Concat,
@@ -366,28 +366,28 @@ pub mod pallet {
 		ValueQuery,
 	>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(pezframe_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		pub keys: Vec<T::AuthorityId>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
-			Pallet::<T>::initialize_keys(&self.keys);
+			Pezpallet::<T>::initialize_keys(&self.keys);
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// ## Complexity:
 		/// - `O(K)` where K is length of `Keys` (heartbeat.validators_len)
 		///   - `O(K)`: decoding of length `K`
 		// NOTE: the weight includes the cost of validate_unsigned as it is part of the cost to
 		// import block with such an extrinsic.
-		#[pallet::call_index(0)]
-		#[pallet::weight(<T as Config>::WeightInfo::validate_unsigned_and_then_heartbeat(
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::validate_unsigned_and_then_heartbeat(
 			heartbeat.validators_len,
 		))]
 		pub fn heartbeat(
@@ -418,8 +418,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn offchain_worker(now: BlockNumberFor<T>) {
 			// Only send messages if we are a potential validator.
 			if pezsp_io::offchain::is_validator() {
@@ -447,13 +447,13 @@ pub mod pallet {
 	/// incorrect.
 	pub(crate) const INVALID_VALIDATORS_LEN: u8 = 10;
 
-	#[pallet::validate_unsigned]
-	impl<T: Config> ValidateUnsigned for Pallet<T> {
+	#[pezpallet::validate_unsigned]
+	impl<T: Config> ValidateUnsigned for Pezpallet<T> {
 		type Call = Call<T>;
 
 		fn validate_unsigned(_source: TransactionSource, call: &Self::Call) -> TransactionValidity {
 			if let Call::heartbeat { heartbeat, signature } = call {
-				if <Pallet<T>>::is_online(heartbeat.authority_index) {
+				if <Pezpallet<T>>::is_online(heartbeat.authority_index) {
 					// we already received a heartbeat for this authority
 					return InvalidTransaction::Stale.into();
 				}
@@ -504,14 +504,14 @@ pub mod pallet {
 /// Keep track of number of authored blocks per authority, uncles are counted as
 /// well since they're a valid proof of being online.
 impl<T: Config + pezpallet_authorship::Config>
-	pezpallet_authorship::EventHandler<ValidatorId<T>, BlockNumberFor<T>> for Pallet<T>
+	pezpallet_authorship::EventHandler<ValidatorId<T>, BlockNumberFor<T>> for Pezpallet<T>
 {
 	fn note_author(author: ValidatorId<T>) {
 		Self::note_authorship(author);
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Returns `true` if a heartbeat has been received for the authority at
 	/// `authority_index` in the authorities series or if the authority has
 	/// authored at least one block, during the current session. Otherwise
@@ -736,11 +736,11 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-impl<T: Config> pezsp_runtime::BoundToRuntimeAppPublic for Pallet<T> {
+impl<T: Config> pezsp_runtime::BoundToRuntimeAppPublic for Pezpallet<T> {
 	type Public = T::AuthorityId;
 }
 
-impl<T: Config> OneSessionHandler<T::AccountId> for Pallet<T> {
+impl<T: Config> OneSessionHandler<T::AccountId> for Pezpallet<T> {
 	type Key = T::AuthorityId;
 
 	fn on_genesis_session<'a, I: 'a>(validators: I)
@@ -758,7 +758,7 @@ impl<T: Config> OneSessionHandler<T::AccountId> for Pallet<T> {
 		// Tell the offchain worker to start making the next session's heartbeats.
 		// Since we consider producing blocks as being online,
 		// the heartbeat is deferred a bit to prevent spamming.
-		let block_number = <pezframe_system::Pallet<T>>::block_number();
+		let block_number = <pezframe_system::Pezpallet<T>>::block_number();
 		let half_session = T::NextSessionRotation::average_session_length() / 2u32.into();
 		<HeartbeatAfter<T>>::put(block_number + half_session);
 

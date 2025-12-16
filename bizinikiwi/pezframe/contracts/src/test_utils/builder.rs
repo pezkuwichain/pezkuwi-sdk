@@ -19,7 +19,7 @@ use super::GAS_LIMIT;
 use crate::{
 	AccountIdLookupOf, AccountIdOf, BalanceOf, Code, CodeHash, CollectEvents, Config,
 	ContractExecResult, ContractInstantiateResult, DebugInfo, Determinism, EventRecordOf,
-	ExecReturnValue, InstantiateReturnValue, OriginFor, Pallet, Weight,
+	ExecReturnValue, InstantiateReturnValue, OriginFor, Pezpallet, Weight,
 };
 use codec::{Encode, HasCompact};
 use core::fmt::Debug;
@@ -64,7 +64,7 @@ macro_rules! builder {
 
 			#[doc = concat!("Build the ", stringify!($method), " call")]
 			pub fn build(self) -> $result {
-				Pallet::<T>::$method(
+				Pezpallet::<T>::$method(
 					$(self.$field,)*
 				)
 			}

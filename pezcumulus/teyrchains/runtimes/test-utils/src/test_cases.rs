@@ -233,7 +233,7 @@ where
 {
 	ExtBuilder::<Runtime>::default().build().execute_with(|| {
 		// check before
-		assert!(pezframe_system::Pallet::<Runtime>::authorized_upgrade().is_none());
+		assert!(pezframe_system::Pezpallet::<Runtime>::authorized_upgrade().is_none());
 
 		// execute call as governance does
 		let code_hash = Runtime::Hash::default();
@@ -245,7 +245,7 @@ where
 		)?;
 
 		// check after
-		match pezframe_system::Pallet::<Runtime>::authorized_upgrade() {
+		match pezframe_system::Pezpallet::<Runtime>::authorized_upgrade() {
 			None => Err(Either::Left(pezframe_system::Error::<Runtime>::NothingAuthorized.into())),
 			Some(_) => Ok(()),
 		}

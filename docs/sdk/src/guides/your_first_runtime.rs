@@ -1,13 +1,13 @@
 //! # Your first Runtime
 //!
-//! This guide will walk you through the steps to add your pallet to a runtime.
+//! This guide will walk you through the steps to add your pezpallet to a runtime.
 //!
 //! The good news is, in [`crate::guides::your_first_pallet`], we have already created a _test_
 //! runtime that was used for testing, and a real runtime is not that much different!
 //!
 //! ## Setup
 //!
-//! A runtime shares a few similar setup requirements as with a pallet:
+//! A runtime shares a few similar setup requirements as with a pezpallet:
 //!
 //! * importing [`frame`], [`codec`], and [`scale_info`] crates.
 //! * following the [`std` feature-gating](crate::pezkuwi_sdk::bizinikiwi#wasm-build) pattern.
@@ -50,8 +50,8 @@
 #![doc = docify::embed!("./packages/guides/first-runtime/src/lib.rs", config_impls)]
 //!
 //! Notice how we use [`frame::pezpallet_macros::derive_impl`] to provide "default" configuration items
-//! for each pallet. Feel free to dive into the definition of each default prelude (eg.
-//! [`frame::prelude::pezframe_system::pallet::config_preludes`]) to learn more which types are exactly
+//! for each pezpallet. Feel free to dive into the definition of each default prelude (eg.
+//! [`frame::prelude::pezframe_system::pezpallet::config_preludes`]) to learn more which types are exactly
 //! used.
 //!
 //! Recall that in test runtime in [`crate::guides::your_first_pallet`], we provided `type AccountId
@@ -164,10 +164,10 @@
 //!    [`crate::reference_docs::frame_runtime_upgrades_and_migrations`].
 //! 4. Learn more about adding and implementing runtime apis in
 //!    [`crate::reference_docs::custom_runtime_api_rpc`].
-//! 5. To see a complete example of a runtime+pallet that is similar to this guide, please see
+//! 5. To see a complete example of a runtime+pezpallet that is similar to this guide, please see
 //!    [`crate::pezkuwi_sdk::templates`].
 //!
-//! [`SolochainDefaultConfig`]: struct@pezframe_system::pallet::config_preludes::SolochainDefaultConfig
+//! [`SolochainDefaultConfig`]: struct@pezframe_system::pezpallet::config_preludes::SolochainDefaultConfig
 
 #[cfg(test)]
 mod tests {

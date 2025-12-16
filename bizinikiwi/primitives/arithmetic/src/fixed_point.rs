@@ -32,7 +32,7 @@
 )]
 //!
 //! For a much more comprehensive example, be sure to look at the source for broker (the "coretime")
-//! pallet.
+//! pezpallet.
 //!
 //! #### Fixed Point Types in Practice
 //!

@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Tests for the purchase pallet.
+//! Tests for the purchase pezpallet.
 
 #[cfg(test)]
 use super::*;

@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Bounties pallet tests.
+//! Bounties pezpallet tests.
 
 #![cfg(test)]
 
@@ -254,7 +254,7 @@ impl ExtBuilder {
 		.unwrap()
 		.into();
 		ext.execute_with(|| {
-			pezframe_system::Pallet::<Test>::set_block_number(1);
+			pezframe_system::Pezpallet::<Test>::set_block_number(1);
 		});
 		ext
 	}
@@ -326,7 +326,7 @@ pub fn get_payment_id(
 	child_bounty_id: Option<BountyIndex>,
 ) -> Option<u64> {
 	let bounty =
-		pezpallet_bounties::Pallet::<Test>::get_bounty_details(parent_bounty_id, child_bounty_id)
+		pezpallet_bounties::Pezpallet::<Test>::get_bounty_details(parent_bounty_id, child_bounty_id)
 			.expect("no bounty");
 
 	match bounty.3 {

@@ -32,7 +32,7 @@ use pezframe_support::{
 	weights::Weight,
 };
 use pezframe_system::pezpallet_prelude::BlockNumberFor;
-pub use pallet::*;
+pub use pezpallet::*;
 use pezkuwi_primitives::Id as ParaId;
 use pezsp_runtime::traits::{CheckedSub, One, Saturating, Zero};
 
@@ -77,17 +77,17 @@ type WinningData<T> = [Option<(<T as pezframe_system::Config>::AccountId, ParaId
 type WinnersData<T> =
 	Vec<(<T as pezframe_system::Config>::AccountId, ParaId, BalanceOf<T>, SlotRange)>;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::{dispatch::DispatchClass, pezpallet_prelude::*, traits::EnsureOrigin};
 	use pezframe_system::{ensure_root, ensure_signed, pezpallet_prelude::*};
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
 	/// The module's configuration trait.
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
@@ -104,13 +104,13 @@ pub mod pallet {
 		type Registrar: Registrar<AccountId = Self::AccountId>;
 
 		/// The number of blocks over which an auction may be retroactively ended.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type EndingPeriod: Get<BlockNumberFor<Self>>;
 
 		/// The length of each sample to take during the ending period.
 		///
 		/// `EndingPeriod` / `SampleLength` = Total # of Samples
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type SampleLength: Get<BlockNumberFor<Self>>;
 
 		/// Something that provides randomness in the runtime.
@@ -119,12 +119,12 @@ pub mod pallet {
 		/// The origin which may initiate auctions.
 		type InitiateOrigin: EnsureOrigin<Self::RuntimeOrigin>;
 
-		/// Weight Information for the Extrinsics in the Pallet
+		/// Weight Information for the Extrinsics in the Pezpallet
 		type WeightInfo: WeightInfo;
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// An auction started. Provides its index and the block number where it will begin to
 		/// close and the first lease period of the quadruplet that is auctioned.
@@ -156,7 +156,7 @@ pub mod pallet {
 		WinningOffset { auction_index: AuctionIndex, block_number: BlockNumberFor<T> },
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// This auction is already in progress.
 		AuctionInProgress,
@@ -175,7 +175,7 @@ pub mod pallet {
 	}
 
 	/// Number of auctions started so far.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type AuctionCounter<T> = StorageValue<_, AuctionIndex, ValueQuery>;
 
 	/// Information relating to the current auction, if there is one.
@@ -183,36 +183,36 @@ pub mod pallet {
 	/// The first item in the tuple is the lease period index that the first of the four
 	/// contiguous lease periods on auction is for. The second is the block number when the
 	/// auction will "begin to end", i.e. the first block of the Ending Period of the auction.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type AuctionInfo<T: Config> = StorageValue<_, (LeasePeriodOf<T>, BlockNumberFor<T>)>;
 
 	/// Amounts currently reserved in the accounts of the bidders currently winning
 	/// (sub-)ranges.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ReservedAmounts<T: Config> =
 		StorageMap<_, Twox64Concat, (T::AccountId, ParaId), BalanceOf<T>>;
 
 	/// The winning bids for each of the 10 ranges at each sample in the final Ending Period of
 	/// the current auction. The map's key is the 0-based index into the Sample Size. The
 	/// first sample of the ending period is 0; the last is `Sample Size - 1`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Winning<T: Config> = StorageMap<_, Twox64Concat, BlockNumberFor<T>, WinningData<T>>;
 
-	#[pallet::extra_constants]
-	impl<T: Config> Pallet<T> {
-		#[pallet::constant_name(SlotRangeCount)]
+	#[pezpallet::extra_constants]
+	impl<T: Config> Pezpallet<T> {
+		#[pezpallet::constant_name(SlotRangeCount)]
 		fn slot_range_count() -> u32 {
 			SlotRange::SLOT_RANGE_COUNT as u32
 		}
 
-		#[pallet::constant_name(LeasePeriodsPerSlot)]
+		#[pezpallet::constant_name(LeasePeriodsPerSlot)]
 		fn lease_periods_per_slot() -> u32 {
 			SlotRange::LEASE_PERIODS_PER_SLOT as u32
 		}
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn on_initialize(n: BlockNumberFor<T>) -> Weight {
 			let mut weight = T::DbWeight::get().reads(1);
 
@@ -243,19 +243,19 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Create a new auction.
 		///
 		/// This can only happen when there isn't already an auction in progress and may only be
 		/// called by the root origin. Accepts the `duration` of this auction and the
 		/// `lease_period_index` of the initial lease period of the four that are to be auctioned.
-		#[pallet::call_index(0)]
-		#[pallet::weight((T::WeightInfo::new_auction(), DispatchClass::Operational))]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight((T::WeightInfo::new_auction(), DispatchClass::Operational))]
 		pub fn new_auction(
 			origin: OriginFor<T>,
-			#[pallet::compact] duration: BlockNumberFor<T>,
-			#[pallet::compact] lease_period_index: LeasePeriodOf<T>,
+			#[pezpallet::compact] duration: BlockNumberFor<T>,
+			#[pezpallet::compact] lease_period_index: LeasePeriodOf<T>,
 		) -> DispatchResult {
 			T::InitiateOrigin::ensure_origin(origin)?;
 			Self::do_new_auction(duration, lease_period_index)
@@ -277,15 +277,15 @@ pub mod pallet {
 		/// absolute lease period index value, not an auction-specific offset.
 		/// - `amount` is the amount to bid to be held as deposit for the teyrchain should the
 		/// bid win. This amount is held throughout the range.
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::bid())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::bid())]
 		pub fn bid(
 			origin: OriginFor<T>,
-			#[pallet::compact] para: ParaId,
-			#[pallet::compact] auction_index: AuctionIndex,
-			#[pallet::compact] first_slot: LeasePeriodOf<T>,
-			#[pallet::compact] last_slot: LeasePeriodOf<T>,
-			#[pallet::compact] amount: BalanceOf<T>,
+			#[pezpallet::compact] para: ParaId,
+			#[pezpallet::compact] auction_index: AuctionIndex,
+			#[pezpallet::compact] first_slot: LeasePeriodOf<T>,
+			#[pezpallet::compact] last_slot: LeasePeriodOf<T>,
+			#[pezpallet::compact] amount: BalanceOf<T>,
 		) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 			Self::handle_bid(who, para, auction_index, first_slot, last_slot, amount)?;
@@ -295,8 +295,8 @@ pub mod pallet {
 		/// Cancel an in-progress auction.
 		///
 		/// Can only be called by Root origin.
-		#[pallet::call_index(2)]
-		#[pallet::weight(T::WeightInfo::cancel_auction())]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(T::WeightInfo::cancel_auction())]
 		pub fn cancel_auction(origin: OriginFor<T>) -> DispatchResult {
 			ensure_root(origin)?;
 			// Unreserve all bids.
@@ -311,7 +311,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config> Auctioneer<BlockNumberFor<T>> for Pallet<T> {
+impl<T: Config> Auctioneer<BlockNumberFor<T>> for Pezpallet<T> {
 	type AccountId = T::AccountId;
 	type LeasePeriod = BlockNumberFor<T>;
 	type Currency = CurrencyOf<T>;
@@ -371,7 +371,7 @@ impl<T: Config> Auctioneer<BlockNumberFor<T>> for Pallet<T> {
 	}
 }
 
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	// A trick to allow me to initialize large arrays with nothing in them.
 	const EMPTY: Option<(<T as pezframe_system::Config>::AccountId, ParaId, BalanceOf<T>)> = None;
 
@@ -386,7 +386,7 @@ impl<T: Config> Pallet<T> {
 	) -> DispatchResult {
 		let maybe_auction = AuctionInfo::<T>::get();
 		ensure!(maybe_auction.is_none(), Error::<T>::AuctionInProgress);
-		let now = pezframe_system::Pallet::<T>::block_number();
+		let now = pezframe_system::Pezpallet::<T>::block_number();
 		if let Some((current_lease_period, _)) = T::Leaser::lease_period_index(now) {
 			// If there is no active lease period, then we don't need to make this check.
 			ensure!(lease_period_index >= current_lease_period, Error::<T>::LeasePeriodInPast);
@@ -399,7 +399,7 @@ impl<T: Config> Pallet<T> {
 		});
 
 		// Set the information.
-		let ending = pezframe_system::Pallet::<T>::block_number().saturating_add(duration);
+		let ending = pezframe_system::Pezpallet::<T>::block_number().saturating_add(duration);
 		AuctionInfo::<T>::put((lease_period_index, ending));
 
 		Self::deposit_event(Event::<T>::AuctionStarted {
@@ -435,7 +435,7 @@ impl<T: Config> Pallet<T> {
 
 		// Get the auction status and the current sample block. For the starting period, the sample
 		// block is zero.
-		let auction_status = Self::auction_status(pezframe_system::Pallet::<T>::block_number());
+		let auction_status = Self::auction_status(pezframe_system::Pezpallet::<T>::block_number());
 		// The offset into the ending samples of the auction.
 		let offset = match auction_status {
 			AuctionStatus::NotStarted => return Err(Error::<T>::AuctionEnded.into()),

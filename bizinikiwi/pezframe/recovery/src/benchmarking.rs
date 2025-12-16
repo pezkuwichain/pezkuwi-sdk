@@ -19,7 +19,7 @@
 
 use super::*;
 
-use crate::Pallet;
+use crate::Pezpallet;
 use alloc::{boxed::Box, vec, vec::Vec};
 use frame::benchmarking::prelude::*;
 
@@ -27,11 +27,11 @@ const SEED: u32 = 0;
 const DEFAULT_DELAY: u32 = 0;
 
 fn assert_last_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
-	pezframe_system::Pallet::<T>::assert_last_event(generic_event.into());
+	pezframe_system::Pezpallet::<T>::assert_last_event(generic_event.into());
 }
 
 fn assert_has_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
-	pezframe_system::Pallet::<T>::assert_has_event(generic_event.into());
+	pezframe_system::Pezpallet::<T>::assert_has_event(generic_event.into());
 }
 
 fn get_total_deposit<T: Config>(
@@ -362,9 +362,9 @@ mod benchmarks {
 		let account: T::AccountId = account("account", 0, SEED);
 		let account_lookup = T::Lookup::unlookup(account.clone());
 
-		pezframe_system::Pallet::<T>::inc_providers(&caller);
+		pezframe_system::Pezpallet::<T>::inc_providers(&caller);
 
-		pezframe_system::Pallet::<T>::inc_consumers(&caller)?;
+		pezframe_system::Pezpallet::<T>::inc_consumers(&caller)?;
 
 		Proxy::<T>::insert(&caller, &account);
 
@@ -465,5 +465,5 @@ mod benchmarks {
 		Ok(())
 	}
 
-	impl_benchmark_test_suite!(Pallet, crate::mock::new_test_ext(), crate::mock::Test);
+	impl_benchmark_test_suite!(Pezpallet, crate::mock::new_test_ext(), crate::mock::Test);
 }

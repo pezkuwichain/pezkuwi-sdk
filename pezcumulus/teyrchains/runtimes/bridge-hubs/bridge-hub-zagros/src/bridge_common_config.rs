@@ -16,10 +16,10 @@
 
 //! Bridge definitions that can be used by multiple BridgeHub flavors.
 //! All configurations here should be dedicated to a single chain; in other words, we don't need two
-//! chains for a single pallet configuration.
+//! chains for a single pezpallet configuration.
 //!
-//! For example, the messaging pallet needs to know the sending and receiving chains, but the
-//! GRANDPA tracking pallet only needs to be aware of one chain.
+//! For example, the messaging pezpallet needs to know the sending and receiving chains, but the
+//! GRANDPA tracking pezpallet only needs to be aware of one chain.
 
 use super::{weights, AccountId, Balance, Balances, BlockNumber, Runtime, RuntimeEvent};
 use crate::{
@@ -43,7 +43,7 @@ parameter_types! {
 	pub const RelayerStakeReserveId: [u8; 8] = *b"brdgrlrs";
 }
 
-/// Showcasing that we can handle multiple different rewards with the same pallet.
+/// Showcasing that we can handle multiple different rewards with the same pezpallet.
 #[derive(
 	Clone,
 	Copy,

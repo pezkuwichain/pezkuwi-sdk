@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Integration test together with the ranked-collective pallet.
+//! Integration test together with the ranked-collective pezpallet.
 
 #![allow(deprecated)]
 
@@ -156,7 +156,7 @@ fn signed(who: u64) -> RuntimeOrigin {
 }
 
 fn assert_last_event(generic_event: <Test as Config>::RuntimeEvent) {
-	let events = pezframe_system::Pallet::<Test>::events();
+	let events = pezframe_system::Pezpallet::<Test>::events();
 	let system_event: <Test as pezframe_system::Config>::RuntimeEvent = generic_event.into();
 	let pezframe_system::EventRecord { event, .. } = events.last().expect("Event expected");
 	assert_eq!(event, &system_event.into());

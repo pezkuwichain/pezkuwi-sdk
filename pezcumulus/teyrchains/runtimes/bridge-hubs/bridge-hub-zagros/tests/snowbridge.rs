@@ -27,7 +27,7 @@ use pezbridge_hub_zagros_runtime::{
 use codec::{Decode, Encode};
 use pezcumulus_primitives_core::XcmError::FailedToTransactAsset;
 use pezframe_support::parameter_types;
-use snowbridge_pezpallet_ethereum_client::WeightInfo;
+use pezsnowbridge_pezpallet_ethereum_client::WeightInfo;
 use pezsp_core::H160;
 use pezsp_runtime::{
 	generic::{Era, SignedPayload},
@@ -98,9 +98,9 @@ pub fn transfer_token_to_ethereum_insufficient_fund() {
 fn max_message_queue_service_weight_is_more_than_beacon_extrinsic_weights() {
 	let max_message_queue_weight = MessageQueueServiceWeight::get();
 	let force_checkpoint =
-		<Runtime as snowbridge_pezpallet_ethereum_client::Config>::WeightInfo::force_checkpoint();
+		<Runtime as pezsnowbridge_pezpallet_ethereum_client::Config>::WeightInfo::force_checkpoint();
 	let submit_checkpoint =
-		<Runtime as snowbridge_pezpallet_ethereum_client::Config>::WeightInfo::submit();
+		<Runtime as pezsnowbridge_pezpallet_ethereum_client::Config>::WeightInfo::submit();
 	max_message_queue_weight.all_gt(force_checkpoint);
 	max_message_queue_weight.all_gt(submit_checkpoint);
 }
@@ -124,7 +124,7 @@ fn ethereum_to_pezkuwi_message_extrinsics_work() {
 }
 
 /// Tests that the digest items are as expected when a Ethereum Outbound message is received.
-/// If the MessageQueue pallet is configured before (i.e. the MessageQueue pallet is listed before
+/// If the MessageQueue pezpallet is configured before (i.e. the MessageQueue pezpallet is listed before
 /// the EthereumOutboundQueue in the construct_runtime macro) the EthereumOutboundQueue, this test
 /// will fail.
 #[test]
@@ -164,7 +164,7 @@ fn construct_extrinsic(
 			pezframe_system::CheckGenesis::<Runtime>::new(),
 			pezframe_system::CheckEra::<Runtime>::from(Era::immortal()),
 			pezframe_system::CheckNonce::<Runtime>::from(
-				pezframe_system::Pallet::<Runtime>::account(&account_id).nonce,
+				pezframe_system::Pezpallet::<Runtime>::account(&account_id).nonce,
 			),
 			pezframe_system::CheckWeight::<Runtime>::new(),
 		),

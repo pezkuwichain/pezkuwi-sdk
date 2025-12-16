@@ -14,13 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Declaration of the teyrchain specific origin and a pallet that hosts it.
+//! Declaration of the teyrchain specific origin and a pezpallet that hosts it.
 
 use core::result;
 use pezkuwi_primitives::Id as ParaId;
 use pezsp_runtime::traits::BadOrigin;
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 /// Ensure that the origin `o` represents a teyrchain.
 /// Returns `Ok` with the teyrchain ID that effected the extrinsic or an `Err` otherwise.
@@ -34,24 +34,24 @@ where
 	}
 }
 
-/// There is no way to register an origin type in `construct_runtime` without a pallet the origin
+/// There is no way to register an origin type in `construct_runtime` without a pezpallet the origin
 /// belongs to.
 ///
 /// This module fulfills only the single purpose of housing the `Origin` in `construct_runtime`.
 // ideally, though, the `construct_runtime` should support a free-standing origin.
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
 	/// Origin for the teyrchains.
-	#[pallet::origin]
+	#[pezpallet::origin]
 	#[derive(
 		PartialEq,
 		Eq,

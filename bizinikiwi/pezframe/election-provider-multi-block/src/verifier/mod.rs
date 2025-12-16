@@ -15,18 +15,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # The Verifier Pallet
+//! # The Verifier Pezpallet
 //!
-//! This pallet has no end-user functionality, and is only used internally by other pallets in the
+//! This pezpallet has no end-user functionality, and is only used internally by other pallets in the
 //! EPMB machinery to verify solutions.
 //!
 //! ### *Feasibility* Check
 //!
-//! Before explaining the pallet itself, it should be explained what a *verification* even means.
+//! Before explaining the pezpallet itself, it should be explained what a *verification* even means.
 //! Verification of a solution page ([`crate::unsigned::miner::MinerConfig::Solution`]) includes the
 //! process of checking all of its edges against a snapshot to be correct. For instance, all voters
 //! that are presented in a solution page must have actually voted for the winner that they are
-//! backing, based on the snapshot kept in the parent pallet.
+//! backing, based on the snapshot kept in the parent pezpallet.
 //!
 //! Such checks are bound to each page of the solution, and happen per-page. After checking all of
 //! the edges in each page, a handful of other checks are performed. These checks cannot happen
@@ -48,11 +48,11 @@
 //!
 //! ## Modes of Verification
 //!
-//! The verifier pallet provide two modes of functionality:
+//! The verifier pezpallet provide two modes of functionality:
 //!
 //! 1. Single or multi-page, synchronous verification. This is useful in the context of single-page,
 //!    emergency, or unsigned solutions that need to be verified on the fly. This is similar to how
-//!    the old school `multi-phase` pallet works. See [`Verifier::verify_synchronous`] and
+//!    the old school `multi-phase` pezpallet works. See [`Verifier::verify_synchronous`] and
 //!    [`Verifier::verify_synchronous_multi`].
 //! 2. Multi-page, asynchronous verification. This is useful in the context of multi-page, signed
 //!    solutions. See [`verifier::AsynchronousVerifier`] and [`verifier::SolutionDataProvider`].
@@ -78,7 +78,7 @@ pub use crate::weights::traits::pezpallet_election_provider_multi_block_verifier
 
 use pezframe_election_provider_support::PageIndex;
 use impls::SupportsOfVerifier;
-pub use impls::{feasibility_check_page_inner_with_snapshot, pallet::*, Status};
+pub use impls::{feasibility_check_page_inner_with_snapshot, pezpallet::*, Status};
 use pezsp_core::Get;
 use pezsp_npos_elections::ElectionScore;
 use pezsp_std::{fmt::Debug, prelude::*};
@@ -99,7 +99,7 @@ pub enum FeasibilityError {
 	WrongWinnerCount,
 	/// The snapshot is not available.
 	///
-	/// Kinda defensive: The pallet should technically never attempt to do a feasibility check
+	/// Kinda defensive: The pezpallet should technically never attempt to do a feasibility check
 	/// when no snapshot is present.
 	SnapshotUnavailable,
 	/// A vote is invalid.
@@ -144,7 +144,7 @@ pub trait Verifier {
 	/// Maximum number of winners that can be represented in each page.
 	///
 	/// A reasonable value for this should be the maximum number of winners that the election user
-	/// (e.g. the staking pallet) could ever desire.
+	/// (e.g. the staking pezpallet) could ever desire.
 	type MaxWinnersPerPage: Get<u32>;
 
 	/// Maximum number of backers, per winner, among all pages of an election.
@@ -227,7 +227,7 @@ pub enum VerificationResult {
 
 /// Something that can provide candidate solutions to the verifier.
 ///
-/// In reality, this can be implemented by the [`crate::signed::Pallet`], where signed solutions are
+/// In reality, this can be implemented by the [`crate::signed::Pezpallet`], where signed solutions are
 /// queued and sorted based on claimed score, and they are put forth one by one, from best to worse.
 pub trait SolutionDataProvider {
 	/// The opaque solution type.
@@ -280,7 +280,7 @@ pub trait AsynchronousVerifier: Verifier {
 	///    derived from a full solution) are valid and the solution is verified. The solution is
 	///    queued and is ready for further export.
 	/// 2. The solution checks verification at one of the steps. Nothing is stored inside the
-	///    verifier pallet and all intermediary data is removed.
+	///    verifier pezpallet and all intermediary data is removed.
 	///
 	/// In both cases, the [`SolutionDataProvider`] is informed via
 	/// [`SolutionDataProvider::report_result`]. It is sensible for the data provide to call `start`

@@ -46,7 +46,7 @@ use xcm::latest::prelude::*;
 #[allow(clippy::large_enum_variant)]
 #[derive(Encode, Decode, Debug, PartialEq, Eq, Clone, TypeInfo)]
 pub enum Call {
-	/// `ToZagrosXcmRouter` bridge pallet.
+	/// `ToZagrosXcmRouter` bridge pezpallet.
 	#[codec(index = 45)]
 	ToZagrosXcmRouter(XcmBridgeHubRouterCall),
 }
@@ -54,7 +54,7 @@ pub enum Call {
 pezframe_support::parameter_types! {
 	/// Some sane weight to execute `xcm::Transact(pezpallet-xcm-bridge-hub-router::Call::report_bridge_status)`.
 	pub const XcmBridgeHubRouterTransactCallMaxWeight: pezframe_support::weights::Weight = pezframe_support::weights::Weight::from_parts(200_000_000, 6144);
-	/// Should match the `AssetDeposit` of the `ForeignAssets` pallet on Asset Hub.
+	/// Should match the `AssetDeposit` of the `ForeignAssets` pezpallet on Asset Hub.
 	pub const CreateForeignAssetDeposit: u128 = UNITS / 10;
 }
 
@@ -137,15 +137,15 @@ pub type AccountSigner = MultiSigner;
 /// The address format for describing accounts.
 pub type Address = MultiAddress<AccountId, ()>;
 
-/// Name of the With-AssetHubPezkuwichain messages pallet instance that is deployed at bridged
+/// Name of the With-AssetHubPezkuwichain messages pezpallet instance that is deployed at bridged
 /// chains.
 pub const WITH_ASSET_HUB_PEZKUWICHAIN_MESSAGES_PALLET_NAME: &str = "BridgePezkuwichainMessages";
 
-/// Name of the With-AssetHubPezkuwichain bridge-relayers pallet instance that is deployed at
+/// Name of the With-AssetHubPezkuwichain bridge-relayers pezpallet instance that is deployed at
 /// bridged chains.
 pub const WITH_ASSET_HUB_PEZKUWICHAIN_RELAYERS_PALLET_NAME: &str = "BridgeRelayers";
 
-/// Pallet index of `BridgeZagrosMessages: pezpallet_bridge_messages::<Instance1>`.
+/// Pezpallet index of `BridgeZagrosMessages: pezpallet_bridge_messages::<Instance1>`.
 pub const WITH_BRIDGE_PEZKUWICHAIN_TO_ZAGROS_MESSAGES_PALLET_INDEX: u8 = 62;
 
 decl_bridge_finality_runtime_apis!(asset_hub_pezkuwichain);

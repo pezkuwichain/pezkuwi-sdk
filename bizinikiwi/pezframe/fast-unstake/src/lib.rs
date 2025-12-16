@@ -23,9 +23,9 @@
 //! [pezkuwi]: https://img.shields.io/badge/polkadot-E6007A?style=for-the-badge&logo=polkadot&logoColor=white
 //! [github]: https://img.shields.io/badge/github-8da0cb?style=for-the-badge&labelColor=555555&logo=github
 //!
-//! # Fast Unstake Pallet
+//! # Fast Unstake Pezpallet
 //!
-//! A pallet to allow participants of the staking system (represented by [`Config::Staking`], being
+//! A pezpallet to allow participants of the staking system (represented by [`Config::Staking`], being
 //! [`StakingInterface`]) to unstake quicker, if and only if they meet the condition of not being
 //! exposed to any slashes.
 //!
@@ -34,7 +34,7 @@
 //! If a nominator is not exposed anywhere in the staking system, checked via
 //! [`StakingInterface::is_exposed_in_era`] (i.e. "has not actively backed any validators in the
 //! last [`StakingInterface::bonding_duration`] days"), then they can register themselves in this
-//! pallet and unstake faster than having to wait an entire bonding duration.
+//! pezpallet and unstake faster than having to wait an entire bonding duration.
 //!
 //! *Being exposed with validator* from the point of view of the staking system means earning
 //! rewards with the validator, and also being at the risk of slashing with the validator. This is
@@ -42,11 +42,11 @@
 //! [here](https://pezkuwichain.io/blog/staking-update-february-2022/).
 //!
 //! Stakers who are certain about NOT being exposed can register themselves with
-//! [`Pallet::register_fast_unstake`]. This will chill, fully unbond the staker and place them
+//! [`Pezpallet::register_fast_unstake`]. This will chill, fully unbond the staker and place them
 //! in the queue to be checked.
 //!
 //! A successful registration implies being fully unbonded and chilled in the staking system. These
-//! effects persist even if the fast-unstake registration is retracted (see [`Pallet::deregister`]
+//! effects persist even if the fast-unstake registration is retracted (see [`Pezpallet::deregister`]
 //! and further).
 //!
 //! Once registered as a fast-unstaker, the staker will be queued and checked by the system. This
@@ -55,7 +55,7 @@
 //!
 //! A fast-unstaker is either in [`Queue`] or actively being checked, at which point it lives in
 //! [`Head`]. Once in [`Head`], the request cannot be retracted anymore. But, once in [`Queue`], it
-//! can, via [`Pallet::deregister`].
+//! can, via [`Pezpallet::deregister`].
 //!
 //! A deposit equal to [`Config::Deposit`] is collected for this process, and is returned in case a
 //! successful unstake occurs (`Event::Unstaked` signals that).
@@ -66,7 +66,7 @@
 //! If unsuccessful, meaning that the staker was exposed, the aforementioned deposit will be slashed
 //! for the amount of wasted work they have inflicted on the chain.
 //!
-//! All in all, this pallet is meant to provide an easy off-ramp for some stakers.
+//! All in all, this pezpallet is meant to provide an easy off-ramp for some stakers.
 //!
 //! ### Example
 //!
@@ -76,21 +76,21 @@
 //! 2. Fast unstake failing because a nominator is exposed.
 #![doc = docify::embed!("src/tests.rs", exposed_nominator_cannot_unstake)]
 //!
-//! ## Pallet API
+//! ## Pezpallet API
 //!
-//! See the [`pallet`] module for more information about the interfaces this pallet exposes,
+//! See the [`pezpallet`] module for more information about the interfaces this pezpallet exposes,
 //! including its configuration trait, dispatchables, storage items, events and errors.
 //!
 //! ## Low Level / Implementation Details
 //!
-//! This pallet works off the basis of `on_idle`, meaning that it provides no guarantee about when
+//! This pezpallet works off the basis of `on_idle`, meaning that it provides no guarantee about when
 //! it will succeed, if at all. Moreover, the queue implementation is unordered. In case of
 //! congestion, no FIFO ordering is provided.
 //!
 //! A few important considerations can be concluded based on the `on_idle`-based implementation:
 //!
-//! * It is crucial for the weights of this pallet to be correct. The code inside
-//! [`Pallet::on_idle`] MUST be able to measure itself and report the remaining weight correctly
+//! * It is crucial for the weights of this pezpallet to be correct. The code inside
+//! [`Pezpallet::on_idle`] MUST be able to measure itself and report the remaining weight correctly
 //! after execution.
 //!
 //! * If the weight measurement is incorrect, it can lead to perpetual overweight (consequently
@@ -98,7 +98,7 @@
 //!
 //! * The amount of weight that `on_idle` consumes is a direct function of [`ErasToCheckPerBlock`].
 //!
-//! * Thus, a correct value of [`ErasToCheckPerBlock`] (which can be set via [`Pallet::control`])
+//! * Thus, a correct value of [`ErasToCheckPerBlock`] (which can be set via [`Pezpallet::control`])
 //!   should be chosen, such that a reasonable amount of weight is used `on_idle`. If
 //!   [`ErasToCheckPerBlock`] is too large, `on_idle` will always conclude that it has not enough
 //!   weight to proceed, and will early-return. Nonetheless, this should also be *safe* as long as
@@ -106,15 +106,15 @@
 //!
 //! * See the inline code-comments on `do_on_idle` (private) for more details.
 //!
-//! * For further safety, in case of any unforeseen errors, the pallet will emit
+//! * For further safety, in case of any unforeseen errors, the pezpallet will emit
 //!   [`Event::InternalError`] and set [`ErasToCheckPerBlock`] back to 0, which essentially means
-//!   the pallet will halt/disable itself.
+//!   the pezpallet will halt/disable itself.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
 extern crate alloc;
 
-pub use pallet::*;
+pub use pezpallet::*;
 
 #[cfg(test)]
 mod mock;
@@ -135,7 +135,7 @@ pub use pezframe_support::traits::Hooks;
 #[cfg(doc)]
 pub use pezsp_staking::StakingInterface;
 
-/// The logging target of this pallet.
+/// The logging target of this pezpallet.
 pub const LOG_TARGET: &'static str = "runtime::fast-unstake";
 
 #[macro_export]
@@ -143,13 +143,13 @@ macro_rules! log {
 	($level:tt, $patter:expr $(, $values:expr)* $(,)?) => {
 		log::$level!(
 			target: crate::LOG_TARGET,
-			concat!("[{:?}] 💨 ", $patter), pezframe_system::Pallet::<T>::block_number() $(, $values)*
+			concat!("[{:?}] 💨 ", $patter), pezframe_system::Pezpallet::<T>::block_number() $(, $values)*
 		)
 	};
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use crate::types::*;
 	use alloc::vec::Vec;
@@ -167,11 +167,11 @@ pub mod pallet {
 
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(1);
 
-	#[pallet::pallet]
-	#[pallet::storage_version(STORAGE_VERSION)]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
@@ -184,10 +184,10 @@ pub mod pallet {
 
 		/// Deposit to take for unstaking, to make sure we're able to slash the it in order to cover
 		/// the costs of resources on unsuccessful unstake.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type Deposit: Get<BalanceOf<Self>>;
 
-		/// The origin that can control this pallet, in other words invoke [`Pallet::control`].
+		/// The origin that can control this pezpallet, in other words invoke [`Pezpallet::control`].
 		type ControlOrigin: pezframe_support::traits::EnsureOrigin<Self::RuntimeOrigin>;
 
 		/// Batch size.
@@ -198,42 +198,42 @@ pub mod pallet {
 		/// The access to staking functionality.
 		type Staking: StakingInterface<Balance = BalanceOf<Self>, AccountId = Self::AccountId>;
 
-		/// Maximum value for `ErasToCheckPerBlock`, checked in [`Pallet::control`].
+		/// Maximum value for `ErasToCheckPerBlock`, checked in [`Pezpallet::control`].
 		///
 		/// This should be slightly bigger than the actual value in order to have accurate
 		/// benchmarks.
 		type MaxErasToCheckPerBlock: Get<u32>;
 
-		/// The weight information of this pallet.
+		/// The weight information of this pezpallet.
 		type WeightInfo: WeightInfo;
 	}
 
 	/// The current "head of the queue" being unstaked.
 	///
 	/// The head in itself can be a batch of up to [`Config::BatchSize`] stakers.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Head<T: Config> = StorageValue<_, UnstakeRequest<T>, OptionQuery>;
 
 	/// The map of all accounts wishing to be unstaked.
 	///
 	/// Keeps track of `AccountId` wishing to unstake and it's corresponding deposit.
 	// Hasher: Twox safe since `AccountId` is a secure hash.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Queue<T: Config> = CountedStorageMap<_, Twox64Concat, T::AccountId, BalanceOf<T>>;
 
 	/// Number of eras to check per block.
 	///
-	/// If set to 0, this pallet does absolutely nothing. Cannot be set to more than
+	/// If set to 0, this pezpallet does absolutely nothing. Cannot be set to more than
 	/// [`Config::MaxErasToCheckPerBlock`].
 	///
-	/// Based on the amount of weight available at [`Pallet::on_idle`], up to this many eras are
+	/// Based on the amount of weight available at [`Pezpallet::on_idle`], up to this many eras are
 	/// checked. The checking is represented by updating [`UnstakeRequest::checked`], which is
 	/// stored in [`Head`].
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type ErasToCheckPerBlock<T: Config> = StorageValue<_, u32, ValueQuery>;
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A staker was unstaked.
 		Unstaked { stash: T::AccountId, result: DispatchResult },
@@ -250,7 +250,7 @@ pub mod pallet {
 		InternalError,
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	#[cfg_attr(test, derive(PartialEq))]
 	pub enum Error<T> {
 		/// The provided Controller account was not found.
@@ -265,12 +265,12 @@ pub mod pallet {
 		NotQueued,
 		/// The provided un-staker is already in Head, and cannot deregister.
 		AlreadyHead,
-		/// The call is not allowed at this point because the pallet is not active.
+		/// The call is not allowed at this point because the pezpallet is not active.
 		CallNotAllowed,
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn on_idle(_: BlockNumberFor<T>, remaining_weight: Weight) -> Weight {
 			if remaining_weight.any_lt(T::DbWeight::get().reads(2)) {
 				return Weight::from_parts(0, 0);
@@ -301,8 +301,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Register oneself for fast-unstake.
 		///
 		/// ## Dispatch Origin
@@ -329,8 +329,8 @@ pub mod pallet {
 		/// ## Events
 		///
 		/// Some events from the staking and currency system might be emitted.
-		#[pallet::call_index(0)]
-		#[pallet::weight(<T as Config>::WeightInfo::register_fast_unstake())]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::register_fast_unstake())]
 		pub fn register_fast_unstake(origin: OriginFor<T>) -> DispatchResult {
 			let ctrl = ensure_signed(origin)?;
 
@@ -364,14 +364,14 @@ pub mod pallet {
 		/// This is useful if one is registered, they are still waiting, and they change their mind.
 		///
 		/// Note that the associated stash is still fully unbonded and chilled as a consequence of
-		/// calling [`Pallet::register_fast_unstake`]. Therefore, this should probably be followed
+		/// calling [`Pezpallet::register_fast_unstake`]. Therefore, this should probably be followed
 		/// by a call to `rebond` in the staking system.
 		///
 		/// ## Events
 		///
 		/// Some events from the staking and currency system might be emitted.
-		#[pallet::call_index(1)]
-		#[pallet::weight(<T as Config>::WeightInfo::deregister())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::deregister())]
 		pub fn deregister(origin: OriginFor<T>) -> DispatchResult {
 			let ctrl = ensure_signed(origin)?;
 
@@ -393,7 +393,7 @@ pub mod pallet {
 			Ok(())
 		}
 
-		/// Control the operation of this pallet.
+		/// Control the operation of this pezpallet.
 		///
 		/// ## Dispatch Origin
 		///
@@ -406,8 +406,8 @@ pub mod pallet {
 		/// ## Events
 		///
 		/// No events are emitted from this dispatch.
-		#[pallet::call_index(2)]
-		#[pallet::weight(<T as Config>::WeightInfo::control())]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(<T as Config>::WeightInfo::control())]
 		pub fn control(origin: OriginFor<T>, eras_to_check: EraIndex) -> DispatchResult {
 			T::ControlOrigin::ensure_origin(origin)?;
 			ensure!(eras_to_check <= T::MaxErasToCheckPerBlock::get(), Error::<T>::CallNotAllowed);
@@ -416,7 +416,7 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config> Pallet<T> {
+	impl<T: Config> Pezpallet<T> {
 		/// Returns `true` if `staker` is anywhere to be found in the `head`.
 		pub(crate) fn is_head(staker: &T::AccountId) -> bool {
 			Head::<T>::get().map_or(false, |UnstakeRequest { stashes, .. }| {
@@ -424,7 +424,7 @@ pub mod pallet {
 			})
 		}
 
-		/// Halt the operations of this pallet.
+		/// Halt the operations of this pezpallet.
 		pub(crate) fn halt(reason: &'static str) {
 			pezframe_support::defensive!(reason);
 			ErasToCheckPerBlock::<T>::put(0);
@@ -617,7 +617,7 @@ pub mod pallet {
 							});
 						},
 					Err(_) => {
-						// don't put the head back in -- there is an internal error in the pallet.
+						// don't put the head back in -- there is an internal error in the pezpallet.
 						Self::halt("checked is pruned via retain above")
 					},
 				}

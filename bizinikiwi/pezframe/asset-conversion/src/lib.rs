@@ -15,21 +15,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! # Bizinikiwi Asset Conversion pallet
+//! # Bizinikiwi Asset Conversion pezpallet
 //!
-//! Bizinikiwi Asset Conversion pallet based on the [Uniswap V2](https://github.com/Uniswap/v2-core) logic.
+//! Bizinikiwi Asset Conversion pezpallet based on the [Uniswap V2](https://github.com/Uniswap/v2-core) logic.
 //!
 //! ## Overview
 //!
-//! This pallet allows you to:
+//! This pezpallet allows you to:
 //!
-//!  - [create a liquidity pool](`Pallet::create_pool()`) for 2 assets
-//!  - [provide the liquidity](`Pallet::add_liquidity()`) and receive back an LP token
-//!  - [exchange the LP token back to assets](`Pallet::remove_liquidity()`)
-//!  - [swap a specific amount of assets for another](`Pallet::swap_exact_tokens_for_tokens()`) if
+//!  - [create a liquidity pool](`Pezpallet::create_pool()`) for 2 assets
+//!  - [provide the liquidity](`Pezpallet::add_liquidity()`) and receive back an LP token
+//!  - [exchange the LP token back to assets](`Pezpallet::remove_liquidity()`)
+//!  - [swap a specific amount of assets for another](`Pezpallet::swap_exact_tokens_for_tokens()`) if
 //!    there is a pool created, or
 //!  - [swap some assets for a specific amount of
-//!    another](`Pallet::swap_tokens_for_exact_tokens()`).
+//!    another](`Pezpallet::swap_tokens_for_exact_tokens()`).
 //!  - [query for an exchange price](`AssetConversionApi::quote_price_exact_tokens_for_tokens`) via
 //!    a runtime call endpoint
 //!  - [query the size of a liquidity pool](`AssetConversionApi::get_reserves`) via a runtime api
@@ -40,7 +40,7 @@
 //! non-native asset 1, you would pass in a path of `[HEZ, 1]` or `[1, HEZ]`. If you want to swap
 //! from non-native asset 1 to non-native asset 2, you would pass in a path of `[1, HEZ, 2]`.
 //!
-//! (For an example of configuring this pallet to use `Location` as an asset id, see the
+//! (For an example of configuring this pezpallet to use `Location` as an asset id, see the
 //! pezcumulus repo).
 //!
 //! Here is an example `state_call` that asks for a quote of a pool of native versus asset 1:
@@ -67,7 +67,7 @@ pub mod weights;
 #[cfg(feature = "runtime-benchmarks")]
 pub use benchmarking::{BenchmarkHelper, NativeOrWithIdFactory};
 pub use liquidity::*;
-pub use pallet::*;
+pub use pezpallet::*;
 pub use swap::*;
 pub use types::*;
 pub use weights::WeightInfo;
@@ -98,17 +98,17 @@ use pezsp_runtime::{
 	DispatchError, Saturating, TokenError, TransactionOutcome,
 };
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 	use pezframe_support::{pezpallet_prelude::*, traits::fungibles::Refund};
 	use pezframe_system::pezpallet_prelude::*;
 	use pezsp_arithmetic::{traits::Unsigned, Permill};
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// Overarching event type.
 		#[allow(deprecated)]
@@ -149,7 +149,7 @@ pub mod pallet {
 		/// Asset class for the lp tokens from [`Self::PoolAssets`].
 		type PoolAssetId: AssetId + PartialOrd + Incrementable + From<u32>;
 
-		/// Registry for the lp tokens. Ideally only this pallet should have create permissions on
+		/// Registry for the lp tokens. Ideally only this pezpallet should have create permissions on
 		/// the assets.
 		type PoolAssets: Inspect<Self::AccountId, AssetId = Self::PoolAssetId, Balance = Self::Balance>
 			+ Create<Self::AccountId>
@@ -158,37 +158,37 @@ pub mod pallet {
 			+ Refund<Self::AccountId, AssetId = Self::PoolAssetId>;
 
 		/// A % the liquidity providers will take of every swap. Represents 10ths of a percent.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type LPFee: Get<u32>;
 
 		/// A one-time fee to setup the pool.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type PoolSetupFee: Get<Self::Balance>;
 
 		/// Asset class from [`Config::Assets`] used to pay the [`Config::PoolSetupFee`].
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type PoolSetupFeeAsset: Get<Self::AssetKind>;
 
 		/// Handler for the [`Config::PoolSetupFee`].
 		type PoolSetupFeeTarget: OnUnbalanced<CreditOf<Self>>;
 
 		/// A fee to withdraw the liquidity.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type LiquidityWithdrawalFee: Get<Permill>;
 
 		/// The minimum LP token amount that could be minted. Ameliorates rounding errors.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MintMinLiquidity: Get<Self::Balance>;
 
 		/// The max number of hops in a swap.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxSwapPathLength: Get<u32>;
 
-		/// The pallet's id, used for deriving its sovereign account ID.
-		#[pallet::constant]
+		/// The pezpallet's id, used for deriving its sovereign account ID.
+		#[pezpallet::constant]
 		type PalletId: Get<PalletId>;
 
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 
 		/// The benchmarks need a way to create asset ids from u32s.
@@ -198,18 +198,18 @@ pub mod pallet {
 
 	/// Map from `PoolAssetId` to `PoolInfo`. This establishes whether a pool has been officially
 	/// created rather than people sending tokens directly to a pool's public account.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Pools<T: Config> =
 		StorageMap<_, Blake2_128Concat, T::PoolId, PoolInfo<T::PoolAssetId>, OptionQuery>;
 
 	/// Stores the `PoolAssetId` that is going to be used for the next lp token.
 	/// This gets incremented whenever a new lp pool is created.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type NextPoolAssetId<T: Config> = StorageValue<_, T::PoolAssetId, OptionQuery>;
 
-	// Pallet's events.
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	// Pezpallet's events.
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A successful call of the `CreatePool` extrinsic will create this event.
 		PoolCreated {
@@ -296,7 +296,7 @@ pub mod pallet {
 		},
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Provided asset pair is not supported for pool.
 		InvalidAssetPair,
@@ -349,8 +349,8 @@ pub mod pallet {
 		BelowMinimum,
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn integrity_test() {
 			assert!(
 				T::MaxSwapPathLength::get() > 1,
@@ -359,15 +359,15 @@ pub mod pallet {
 		}
 	}
 
-	/// Pallet's callable functions.
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	/// Pezpallet's callable functions.
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Creates an empty liquidity pool and an associated new `lp_token` asset
 		/// (the id of which is returned in the `Event::PoolCreated` event).
 		///
-		/// Once a pool is created, someone may [`Pallet::add_liquidity`] to it.
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::create_pool())]
+		/// Once a pool is created, someone may [`Pezpallet::add_liquidity`] to it.
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::create_pool())]
 		pub fn create_pool(
 			origin: OriginFor<T>,
 			asset1: Box<T::AssetKind>,
@@ -386,14 +386,14 @@ pub mod pallet {
 		/// `mint_to` will be sent the liquidity tokens that represent this share of the pool.
 		///
 		/// NOTE: when encountering an incorrect exchange rate and non-withdrawable pool liquidity,
-		/// batch an atomic call with [`Pallet::add_liquidity`] and
-		/// [`Pallet::swap_exact_tokens_for_tokens`] or [`Pallet::swap_tokens_for_exact_tokens`]
+		/// batch an atomic call with [`Pezpallet::add_liquidity`] and
+		/// [`Pezpallet::swap_exact_tokens_for_tokens`] or [`Pezpallet::swap_tokens_for_exact_tokens`]
 		/// calls to render the liquidity withdrawable and rectify the exchange rate.
 		///
 		/// Once liquidity is added, someone may successfully call
-		/// [`Pallet::swap_exact_tokens_for_tokens`].
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::add_liquidity())]
+		/// [`Pezpallet::swap_exact_tokens_for_tokens`].
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::add_liquidity())]
 		pub fn add_liquidity(
 			origin: OriginFor<T>,
 			asset1: Box<T::AssetKind>,
@@ -421,8 +421,8 @@ pub mod pallet {
 		/// Allows you to remove liquidity by providing the `lp_token_burn` tokens that will be
 		/// burned in the process. With the usage of `amount1_min_receive`/`amount2_min_receive`
 		/// it's possible to control the min amount of returned tokens you're happy with.
-		#[pallet::call_index(2)]
-		#[pallet::weight(T::WeightInfo::remove_liquidity())]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(T::WeightInfo::remove_liquidity())]
 		pub fn remove_liquidity(
 			origin: OriginFor<T>,
 			asset1: Box<T::AssetKind>,
@@ -451,8 +451,8 @@ pub mod pallet {
 		///
 		/// [`AssetConversionApi::quote_price_exact_tokens_for_tokens`] runtime call can be called
 		/// for a quote.
-		#[pallet::call_index(3)]
-		#[pallet::weight(T::WeightInfo::swap_exact_tokens_for_tokens(path.len() as u32))]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(T::WeightInfo::swap_exact_tokens_for_tokens(path.len() as u32))]
 		pub fn swap_exact_tokens_for_tokens(
 			origin: OriginFor<T>,
 			path: Vec<Box<T::AssetKind>>,
@@ -479,8 +479,8 @@ pub mod pallet {
 		///
 		/// [`AssetConversionApi::quote_price_tokens_for_exact_tokens`] runtime call can be called
 		/// for a quote.
-		#[pallet::call_index(4)]
-		#[pallet::weight(T::WeightInfo::swap_tokens_for_exact_tokens(path.len() as u32))]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(T::WeightInfo::swap_tokens_for_exact_tokens(path.len() as u32))]
 		pub fn swap_tokens_for_exact_tokens(
 			origin: OriginFor<T>,
 			path: Vec<Box<T::AssetKind>>,
@@ -512,8 +512,8 @@ pub mod pallet {
 		/// - `asset2`: The asset ID of an existing pool with a pair (asset1, asset2).
 		///
 		/// Emits `Touched` event when successful.
-		#[pallet::call_index(5)]
-		#[pallet::weight(T::WeightInfo::touch(3))]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(T::WeightInfo::touch(3))]
 		pub fn touch(
 			origin: OriginFor<T>,
 			asset1: Box<T::AssetKind>,
@@ -545,7 +545,7 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config> Pallet<T> {
+	impl<T: Config> Pezpallet<T> {
 		/// Create a new liquidity pool.
 		///
 		/// **Warning**: The storage must be rolled back on error.
@@ -1281,8 +1281,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::view_functions]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::view_functions]
+	impl<T: Config> Pezpallet<T> {
 		/// Returns the balance of each asset in the pool.
 		/// The tuple result is in the order requested (not necessarily the same as pool order).
 		pub fn get_reserves(
@@ -1368,7 +1368,7 @@ pezsp_api::decl_runtime_apis! {
 		Balance: pezframe_support::traits::tokens::Balance + MaybeDisplay,
 		AssetId: Codec,
 	{
-		/// Provides a quote for [`Pallet::swap_tokens_for_exact_tokens`].
+		/// Provides a quote for [`Pezpallet::swap_tokens_for_exact_tokens`].
 		///
 		/// Note that the price may have changed by the time the transaction is executed.
 		/// (Use `amount_in_max` to control slippage.)
@@ -1379,7 +1379,7 @@ pezsp_api::decl_runtime_apis! {
 			include_fee: bool,
 		) -> Option<Balance>;
 
-		/// Provides a quote for [`Pallet::swap_exact_tokens_for_tokens`].
+		/// Provides a quote for [`Pezpallet::swap_exact_tokens_for_tokens`].
 		///
 		/// Note that the price may have changed by the time the transaction is executed.
 		/// (Use `amount_out_min` to control slippage.)

@@ -1,4 +1,4 @@
-# Shared Pallet
+# Shared Pezpallet
 
 This module is responsible for managing shared storage and configuration for other modules.
 

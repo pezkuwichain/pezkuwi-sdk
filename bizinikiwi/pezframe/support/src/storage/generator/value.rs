@@ -31,7 +31,7 @@ pub trait StorageValue<T: FullCodec> {
 	/// The type that get/take returns.
 	type Query;
 
-	/// Pallet prefix. Used for generating final key.
+	/// Pezpallet prefix. Used for generating final key.
 	fn pezpallet_prefix() -> &'static [u8];
 
 	/// Storage prefix. Used for generating final key.

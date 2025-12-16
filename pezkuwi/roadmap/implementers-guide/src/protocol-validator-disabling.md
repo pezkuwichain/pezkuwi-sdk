@@ -268,7 +268,7 @@ the set by slashes. ([**Point 6.**](#system-overview))
 ## Forcing New Era
 
 Previous implementation of disabling had some limited mechanisms allowing for validators disablement and if too many
-were disabled forcing a new era (new election). Frame staking pallet offered the ability to force a new era but it was
+were disabled forcing a new era (new election). Frame staking pezpallet offered the ability to force a new era but it was
 also deemed unsafe as it could be abused and compromised the security of the network for instance by weakening the
 randomness used throughout the protocol.
 

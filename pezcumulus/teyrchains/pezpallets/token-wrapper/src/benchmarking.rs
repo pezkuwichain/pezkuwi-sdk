@@ -4,7 +4,7 @@
 
 use super::*;
 #[allow(unused)]
-use crate::Pallet as TokenWrapper;
+use crate::Pezpallet as TokenWrapper;
 use pezframe_benchmarking::v2::*;
 use pezframe_support::traits::Currency;
 use pezframe_system::RawOrigin;
@@ -16,10 +16,10 @@ mod benchmarks {
 	#[benchmark]
 	fn wrap() {
 		let caller: T::AccountId = whitelisted_caller();
-		let pezpallet_account = Pallet::<T>::account_id();
+		let pezpallet_account = Pezpallet::<T>::account_id();
 		let amount = 10_000u32.into();
 
-		// Fund both caller and pallet account
+		// Fund both caller and pezpallet account
 		let funding = <T::Currency as Currency<T::AccountId>>::minimum_balance()
 			.saturating_mul(1000u32.into());
 
@@ -40,7 +40,7 @@ mod benchmarks {
 	#[benchmark]
 	fn unwrap() {
 		let caller: T::AccountId = whitelisted_caller();
-		let pezpallet_account = Pallet::<T>::account_id();
+		let pezpallet_account = Pezpallet::<T>::account_id();
 		let amount = 10_000u32.into();
 
 		// Fund both accounts
@@ -55,7 +55,7 @@ mod benchmarks {
 			T::Assets::create(T::WrapperAssetId::get(), pezpallet_account.clone(), true, 1u32.into());
 
 		// Wrap first
-		let _ = Pallet::<T>::wrap(RawOrigin::Signed(caller.clone()).into(), amount);
+		let _ = Pezpallet::<T>::wrap(RawOrigin::Signed(caller.clone()).into(), amount);
 
 		#[extrinsic_call]
 		_(RawOrigin::Signed(caller.clone()), amount);
@@ -64,5 +64,5 @@ mod benchmarks {
 		assert_eq!(T::Assets::balance(T::WrapperAssetId::get(), &caller), 0u32.into());
 	}
 
-	impl_benchmark_test_suite!(Pallet, crate::mock::new_test_ext(), crate::mock::Test);
+	impl_benchmark_test_suite!(Pezpallet, crate::mock::new_test_ext(), crate::mock::Test);
 }

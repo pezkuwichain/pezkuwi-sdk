@@ -31,7 +31,7 @@
 //!
 //! ## Context
 //!
-//! First, let's look at where the `origin` type is encountered in a typical pallet. The `origin:
+//! First, let's look at where the `origin` type is encountered in a typical pezpallet. The `origin:
 //! OriginFor<T>` has to be the first argument of any given callable extrinsic in FRAME:
 #![doc = docify::embed!("./src/reference_docs/frame_origin.rs", call_simple)]
 //!
@@ -44,12 +44,12 @@
 //! amalgamated at the runtime level. Read [`crate::reference_docs::frame_runtime_types`] to
 //! familiarize yourself with these types.
 //!
-//! To understand this better, we will next create a pallet with a custom origin, which will add a
+//! To understand this better, we will next create a pezpallet with a custom origin, which will add a
 //! new variant to `RuntimeOrigin`.
 //!
-//! ## Adding Custom Pallet Origin to the Runtime
+//! ## Adding Custom Pezpallet Origin to the Runtime
 //!
-//! For example, given a pallet that defines the following custom origin:
+//! For example, given a pezpallet that defines the following custom origin:
 #![doc = docify::embed!("./src/reference_docs/frame_origin.rs", custom_origin)]
 //!
 //! And a runtime with the following pallets:
@@ -57,7 +57,7 @@
 //!
 //! The type [`crate::reference_docs::frame_origin::runtime_for_origin::RuntimeOrigin`] is expanded.
 //! This `RuntimeOrigin` contains a variant for the [`pezframe_system::RawOrigin`] and the custom
-//! origin of the pallet.
+//! origin of the pezpallet.
 //!
 //! > Notice how the [`pezframe_system::ensure_signed`] is nothing more than a `match` statement. If
 //! > you want to know where the actual origin of an extrinsic is set (and the signature
@@ -67,30 +67,30 @@
 //!
 //! ## Asserting on a Custom Internal Origin
 //!
-//! In order to assert on a custom origin that is defined within your pallet, we need a way to first
+//! In order to assert on a custom origin that is defined within your pezpallet, we need a way to first
 //! convert the `<T as pezframe_system::Config>::RuntimeOrigin` into the local `enum Origin` of the
-//! current pallet. This is a common process that is explained in
+//! current pezpallet. This is a common process that is explained in
 //! [`crate::reference_docs::frame_runtime_types#
 //! adding-further-constraints-to-runtime-composite-enums`].
 //!
 //! We use the same process here to express that `RuntimeOrigin` has a number of additional bounds,
 //! as follows.
 //!
-//! 1. Defining a custom `RuntimeOrigin` with further bounds in the pallet.
+//! 1. Defining a custom `RuntimeOrigin` with further bounds in the pezpallet.
 #![doc = docify::embed!("./src/reference_docs/frame_origin.rs", custom_origin_bound)]
 //!
-//! 2. Using it in the pallet.
+//! 2. Using it in the pezpallet.
 #![doc = docify::embed!("./src/reference_docs/frame_origin.rs", custom_origin_usage)]
 //!
 //! ## Asserting on a Custom External Origin
 //!
-//! Very often, a pallet wants to have a parameterized origin that is **NOT** defined within the
-//! pallet. In other words, a pallet wants to delegate an origin check to something that is
+//! Very often, a pezpallet wants to have a parameterized origin that is **NOT** defined within the
+//! pezpallet. In other words, a pezpallet wants to delegate an origin check to something that is
 //! specified later at the runtime level. Like many other parameterizations in FRAME, this implies
 //! adding a new associated type to `trait Config`.
 #![doc = docify::embed!("./src/reference_docs/frame_origin.rs", external_origin_def)]
 //!
-//! Then, within the pallet, we can simply use this "unknown" origin check type:
+//! Then, within the pezpallet, we can simply use this "unknown" origin check type:
 #![doc = docify::embed!("./src/reference_docs/frame_origin.rs", external_origin_usage)]
 //!
 //! Finally, at the runtime, any implementation of [`frame::traits::EnsureOrigin`] can be passed.
@@ -112,7 +112,7 @@
 //! ## Obtaining Abstract Origins
 //!
 //! So far we have learned that FRAME pallets can assert on custom and abstract origin types,
-//! whether they are defined within the pallet or not. But how can we obtain these abstract origins?
+//! whether they are defined within the pezpallet or not. But how can we obtain these abstract origins?
 //!
 //! > All extrinsics that come from the outer world can generally only be obtained as either
 //! > `signed` or `none` origin.
@@ -130,19 +130,19 @@
 
 use frame::prelude::*;
 
-#[frame::pallet(dev_mode)]
+#[frame::pezpallet(dev_mode)]
 pub mod pezpallet_for_origin {
 	use super::*;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
 	#[docify::export(call_simple)]
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		pub fn do_something(_origin: OriginFor<T>) -> DispatchResult {
 			//              ^^^^^^^^^^^^^^^^^^^^^
 			todo!();
@@ -150,23 +150,23 @@ pub mod pezpallet_for_origin {
 	}
 }
 
-#[frame::pallet(dev_mode)]
+#[frame::pezpallet(dev_mode)]
 pub mod pezpallet_with_custom_origin {
 	use super::*;
 
 	#[docify::export(custom_origin_bound)]
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		type RuntimeOrigin: From<<Self as pezframe_system::Config>::RuntimeOrigin>
 			+ Into<Result<Origin, <Self as Config>::RuntimeOrigin>>;
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
 	#[docify::export(custom_origin)]
 	/// A dummy custom origin.
-	#[pallet::origin]
+	#[pezpallet::origin]
 	#[derive(
 		PartialEq,
 		Eq,
@@ -186,8 +186,8 @@ pub mod pezpallet_with_custom_origin {
 	}
 
 	#[docify::export(custom_origin_usage)]
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		pub fn only_validators(origin: OriginFor<T>) -> DispatchResult {
 			// first, we convert from `<T as pezframe_system::Config>::RuntimeOrigin` to `<T as
 			// Config>::RuntimeOrigin`
@@ -225,21 +225,21 @@ pub mod runtime_for_origin {
 	}
 }
 
-#[frame::pallet(dev_mode)]
+#[frame::pezpallet(dev_mode)]
 pub mod pezpallet_with_external_origin {
 	use super::*;
 	#[docify::export(external_origin_def)]
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		type ExternalOrigin: EnsureOrigin<Self::RuntimeOrigin>;
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
 	#[docify::export(external_origin_usage)]
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		pub fn externally_checked_ext(origin: OriginFor<T>) -> DispatchResult {
 			T::ExternalOrigin::ensure_origin(origin)?;
 			todo!();

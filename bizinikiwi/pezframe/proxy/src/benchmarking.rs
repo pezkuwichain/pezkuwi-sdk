@@ -15,12 +15,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Benchmarks for Proxy Pallet
+// Benchmarks for Proxy Pezpallet
 
 #![cfg(feature = "runtime-benchmarks")]
 
 use super::*;
-use crate::Pallet as Proxy;
+use crate::Pezpallet as Proxy;
 use alloc::{boxed::Box, vec};
 use frame::benchmarking::prelude::{
 	account, benchmarks, impl_test_function, whitelisted_caller, BenchmarkError, RawOrigin,
@@ -29,11 +29,11 @@ use frame::benchmarking::prelude::{
 const SEED: u32 = 0;
 
 fn assert_last_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
-	pezframe_system::Pallet::<T>::assert_last_event(generic_event.into());
+	pezframe_system::Pezpallet::<T>::assert_last_event(generic_event.into());
 }
 
 fn assert_has_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
-	pezframe_system::Pallet::<T>::assert_has_event(generic_event.into());
+	pezframe_system::Pezpallet::<T>::assert_has_event(generic_event.into());
 }
 
 fn add_proxies<T: Config>(n: u32, maybe_who: Option<T::AccountId>) -> Result<(), &'static str> {
@@ -298,7 +298,7 @@ mod benchmarks {
 			0,
 		);
 
-		let pure_account = Pallet::<T>::pure_account(&caller, &T::ProxyType::default(), 0, None);
+		let pure_account = Pezpallet::<T>::pure_account(&caller, &T::ProxyType::default(), 0, None);
 		assert_last_event::<T>(
 			Event::PureCreated {
 				pure: pure_account,
@@ -306,7 +306,7 @@ mod benchmarks {
 				proxy_type: T::ProxyType::default(),
 				disambiguation_index: 0,
 				at: <T as Config>::BlockNumberProvider::current_block_number(),
-				extrinsic_index: pezframe_system::Pallet::<T>::extrinsic_index().unwrap_or_default(),
+				extrinsic_index: pezframe_system::Pezpallet::<T>::extrinsic_index().unwrap_or_default(),
 			}
 			.into(),
 		);
@@ -319,15 +319,15 @@ mod benchmarks {
 		let caller: T::AccountId = whitelisted_caller();
 		let caller_lookup = T::Lookup::unlookup(caller.clone());
 		T::Currency::make_free_balance_be(&caller, BalanceOf::<T>::max_value());
-		Pallet::<T>::create_pure(
+		Pezpallet::<T>::create_pure(
 			RawOrigin::Signed(whitelisted_caller()).into(),
 			T::ProxyType::default(),
 			BlockNumberFor::<T>::zero(),
 			0,
 		)?;
 		let height = T::BlockNumberProvider::current_block_number();
-		let ext_index = pezframe_system::Pallet::<T>::extrinsic_index().unwrap_or(0);
-		let pure_account = Pallet::<T>::pure_account(&caller, &T::ProxyType::default(), 0, None);
+		let ext_index = pezframe_system::Pezpallet::<T>::extrinsic_index().unwrap_or(0);
+		let pure_account = Pezpallet::<T>::pure_account(&caller, &T::ProxyType::default(), 0, None);
 
 		add_proxies::<T>(p, Some(pure_account.clone()))?;
 		ensure!(Proxies::<T>::contains_key(&pure_account), "pure proxy not created");

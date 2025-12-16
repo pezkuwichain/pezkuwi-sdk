@@ -6,7 +6,7 @@ version = "31.0.0"
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
-description = "FRAME pallet to queue and process messages"
+description = "FRAME pezpallet to queue and process messages"
 documentation = "https://docs.rs/pezpallet-message-queue"
 
 [lints]

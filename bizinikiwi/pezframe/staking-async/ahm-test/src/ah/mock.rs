@@ -97,7 +97,7 @@ pub(crate) fn roll_until_next_active(mut end_index: SessionIndex) -> Vec<Account
 			leftover: false,
 			validator_points: Default::default(),
 		};
-		assert_ok!(pezpallet_staking_async_rc_client::Pallet::<Runtime>::relay_session_report(
+		assert_ok!(pezpallet_staking_async_rc_client::Pezpallet::<Runtime>::relay_session_report(
 			RuntimeOrigin::root(),
 			report
 		));
@@ -148,7 +148,7 @@ pub(crate) fn roll_until_next_active(mut end_index: SessionIndex) -> Vec<Account
 		leftover: false,
 		validator_points: Default::default(),
 	};
-	assert_ok!(pezpallet_staking_async_rc_client::Pallet::<Runtime>::relay_session_report(
+	assert_ok!(pezpallet_staking_async_rc_client::Pezpallet::<Runtime>::relay_session_report(
 		RuntimeOrigin::root(),
 		report
 	));
@@ -403,7 +403,7 @@ impl pezpallet_staking_async_rc_client::SendToRelayChain for DeliverToRelay {
 			shared::CounterAHRCValidatorSet::mutate(|x| *x += 1);
 			shared::in_rc(|| {
 				let origin = crate::rc::RuntimeOrigin::root();
-				pezpallet_staking_async_ah_client::Pallet::<crate::rc::Runtime>::validator_set(
+				pezpallet_staking_async_ah_client::Pezpallet::<crate::rc::Runtime>::validator_set(
 					origin,
 					report.clone(),
 				)

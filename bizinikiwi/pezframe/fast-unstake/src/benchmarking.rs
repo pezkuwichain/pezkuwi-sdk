@@ -58,7 +58,7 @@ fn fund_and_bond_account<T: Config>(account: &T::AccountId) {
 }
 
 pub(crate) fn fast_unstake_events<T: Config>() -> Vec<crate::Event<T>> {
-	pezframe_system::Pallet::<T>::events()
+	pezframe_system::Pezpallet::<T>::events()
 		.into_iter()
 		.map(|r| r.event)
 		.filter_map(|e| <T as Config>::RuntimeEvent::from(e).try_into().ok())
@@ -92,7 +92,7 @@ fn setup_staking<T: Config>(v: u32, until: EraIndex) {
 
 fn on_idle_full_block<T: Config>() {
 	let remaining_weight = <T as pezframe_system::Config>::BlockWeights::get().max_block;
-	Pallet::<T>::on_idle(Zero::zero(), remaining_weight);
+	Pezpallet::<T>::on_idle(Zero::zero(), remaining_weight);
 }
 
 #[benchmarks]
@@ -103,7 +103,7 @@ mod benchmarks {
 	fn on_idle_unstake(b: Linear<1, { T::BatchSize::get() }>) {
 		ErasToCheckPerBlock::<T>::put(1);
 		for who in create_unexposed_batch::<T>(b).into_iter() {
-			assert_ok!(Pallet::<T>::register_fast_unstake(RawOrigin::Signed(who.clone()).into(),));
+			assert_ok!(Pezpallet::<T>::register_fast_unstake(RawOrigin::Signed(who.clone()).into(),));
 		}
 
 		// Run on_idle once. This will check era 0.
@@ -143,7 +143,7 @@ mod benchmarks {
 			.into_iter()
 			.map(|s| {
 				assert_ok!(
-					Pallet::<T>::register_fast_unstake(RawOrigin::Signed(s.clone()).into(),)
+					Pezpallet::<T>::register_fast_unstake(RawOrigin::Signed(s.clone()).into(),)
 				);
 				(s, T::Deposit::get())
 			})
@@ -186,7 +186,7 @@ mod benchmarks {
 	fn deregister() {
 		ErasToCheckPerBlock::<T>::put(1);
 		let who = create_unexposed_batch::<T>(1).get(0).cloned().unwrap();
-		assert_ok!(Pallet::<T>::register_fast_unstake(RawOrigin::Signed(who.clone()).into(),));
+		assert_ok!(Pezpallet::<T>::register_fast_unstake(RawOrigin::Signed(who.clone()).into(),));
 		assert_eq!(Queue::<T>::count(), 1);
 		whitelist_account!(who);
 
@@ -207,5 +207,5 @@ mod benchmarks {
 		Ok(())
 	}
 
-	impl_benchmark_test_suite!(Pallet, mock::ExtBuilder::default().build(), mock::Runtime);
+	impl_benchmark_test_suite!(Pezpallet, mock::ExtBuilder::default().build(), mock::Runtime);
 }

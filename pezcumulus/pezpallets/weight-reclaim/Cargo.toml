@@ -6,7 +6,7 @@ edition.workspace = true
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
-description = "pallet and transaction extensions for accurate proof size reclaim"
+description = "pezpallet and transaction extensions for accurate proof size reclaim"
 documentation = "https://docs.rs/pezcumulus-pezpallet-weight-reclaim"
 
 [lints]

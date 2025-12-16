@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Democracy pallet benchmarking.
+//! Democracy pezpallet benchmarking.
 
 #![cfg(feature = "runtime-benchmarks")]
 
@@ -29,7 +29,7 @@ use pezframe_support::{
 use pezframe_system::{pezpallet_prelude::BlockNumberFor, RawOrigin};
 use pezsp_runtime::{traits::Bounded, BoundedVec};
 
-use crate::Pallet as Democracy;
+use crate::Pezpallet as Democracy;
 
 const REFERENDUM_COUNT_HINT: u32 = 10;
 const SEED: u32 = 0;
@@ -78,11 +78,11 @@ fn account_vote<T: Config>(b: BalanceOf<T>) -> AccountVote<BalanceOf<T>> {
 }
 
 fn assert_last_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
-	pezframe_system::Pallet::<T>::assert_last_event(generic_event.into());
+	pezframe_system::Pezpallet::<T>::assert_last_event(generic_event.into());
 }
 
 fn assert_has_event<T: Config>(generic_event: <T as Config>::RuntimeEvent) {
-	pezframe_system::Pallet::<T>::assert_has_event(generic_event.into());
+	pezframe_system::Pezpallet::<T>::assert_has_event(generic_event.into());
 }
 
 // note a new preimage.

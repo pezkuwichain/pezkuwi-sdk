@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Test environment for Asset Rewards pallet.
+//! Test environment for Asset Rewards pezpallet.
 
 use super::*;
 use crate as pezpallet_asset_rewards;
@@ -124,7 +124,7 @@ impl EnsureOrigin<RuntimeOrigin> for MockPermissionedOrigin {
 	}
 }
 
-/// Allow Freezes for the `Assets` pallet
+/// Allow Freezes for the `Assets` pezpallet
 impl pezpallet_assets_freezer::Config<pezpallet_assets_freezer::Instance1> for MockRuntime {
 	type RuntimeFreezeReason = RuntimeFreezeReason;
 	type RuntimeEvent = RuntimeEvent;
@@ -168,7 +168,7 @@ impl Config for MockRuntime {
 		CreationHoldReason,
 		LinearStoragePrice<ConstU128<100>, ConstU128<0>, u128>,
 	>;
-	type BlockNumberProvider = pezframe_system::Pallet<Self>;
+	type BlockNumberProvider = pezframe_system::Pezpallet<Self>;
 	#[cfg(feature = "runtime-benchmarks")]
 	type BenchmarkHelper = AssetRewardsBenchmarkHelper;
 }

@@ -22,7 +22,7 @@ use crate::{
 	exec::AccountIdOf,
 	migration::{IsFinished, MigrationStep},
 	weights::WeightInfo,
-	CodeHash, Config, Pallet, TrieId, Weight, LOG_TARGET,
+	CodeHash, Config, Pezpallet, TrieId, Weight, LOG_TARGET,
 };
 use codec::{Decode, Encode};
 use core::{
@@ -74,7 +74,7 @@ mod v9 {
 
 	#[storage_alias]
 	pub type ContractInfoOf<T: Config, OldCurrency> = StorageMap<
-		Pallet<T>,
+		Pezpallet<T>,
 		Twox64Concat,
 		<T as pezframe_system::Config>::AccountId,
 		ContractInfo<T, OldCurrency>,
@@ -136,7 +136,7 @@ pub struct Migration<T: Config, OldCurrency = ()> {
 
 #[storage_alias]
 type ContractInfoOf<T: Config, OldCurrency> = StorageMap<
-	Pallet<T>,
+	Pezpallet<T>,
 	Twox64Concat,
 	<T as pezframe_system::Config>::AccountId,
 	ContractInfo<T, OldCurrency>,

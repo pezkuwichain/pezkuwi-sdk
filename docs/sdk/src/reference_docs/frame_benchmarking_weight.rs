@@ -47,7 +47,7 @@
 //! the 20ms. In a benchmarked environment, it can examine the transactions for their upper bound,
 //! and include the ones that are known to fit based on the worst case.
 //!
-//! The benchmarking code can be written as a part of FRAME pallet, using the macros provided in
+//! The benchmarking code can be written as a part of FRAME pezpallet, using the macros provided in
 //! [`pezframe_benchmarking`]. See any of the existing pallets in `pezkuwi-sdk`, or the pallets in our
 //! [`crate::pezkuwi_sdk::templates`] for examples.
 //!
@@ -72,12 +72,12 @@
 //! If this block of code is to be benchmarked, then the benchmarking code must be written such that
 //! it captures the worst case.
 //!
-//! ## Gluing Pallet Benchmarking with Runtime
+//! ## Gluing Pezpallet Benchmarking with Runtime
 //!
 //! FRAME pallets are mandated to provide their own benchmarking code. Runtimes contain the
 //! boilerplate needed to run these benchmarking (see [Running Benchmarks
 //! below](#running-benchmarks)). The outcome of running these benchmarks are meant to be fed back
-//! into the pallet via a conventional `trait WeightInfo` on `Config`:
+//! into the pezpallet via a conventional `trait WeightInfo` on `Config`:
 #![doc = docify::embed!("src/reference_docs/pezframe_benchmarking_weight.rs", WeightInfo)]
 //!
 //! Then, individual functions of this trait are the final values that we assigned to the
@@ -130,9 +130,9 @@
 //! [PolkaVM]: https://github.com/koute/polkavm
 //! [JAM]: https://graypaper.com
 
-#[frame::pallet(dev_mode)]
+#[frame::pezpallet(dev_mode)]
 #[allow(unused_variables, unreachable_code, unused, clippy::diverging_sub_expression)]
-pub mod pallet {
+pub mod pezpallet {
 	use frame::prelude::*;
 
 	#[docify::export]
@@ -140,18 +140,18 @@ pub mod pallet {
 		fn simple_transfer() -> Weight;
 	}
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		type WeightInfo: WeightInfo;
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		#[docify::export]
-		#[pallet::weight(10_000)]
+		#[pezpallet::weight(10_000)]
 		pub fn simple_transfer(
 			origin: OriginFor<T>,
 			destination: T::AccountId,
@@ -167,7 +167,7 @@ pub mod pallet {
 		}
 
 		#[docify::export]
-		#[pallet::weight(T::WeightInfo::simple_transfer())]
+		#[pezpallet::weight(T::WeightInfo::simple_transfer())]
 		pub fn simple_transfer_2(
 			origin: OriginFor<T>,
 			destination: T::AccountId,
@@ -184,7 +184,7 @@ pub mod pallet {
 
 		#[docify::export]
 		// This is the worst-case, pre-dispatch weight.
-		#[pallet::weight(T::WeightInfo::simple_transfer())]
+		#[pezpallet::weight(T::WeightInfo::simple_transfer())]
 		pub fn simple_transfer_3(
 			origin: OriginFor<T>,
 			destination: T::AccountId,

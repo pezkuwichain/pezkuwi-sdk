@@ -217,7 +217,7 @@ to the society.
 #### For Super Users
 
 - `found` - The founder origin can initiate this society. Useful for bootstrapping the Society
-pallet on an already running chain.
+pezpallet on an already running chain.
 - `judge_suspended_member` - The suspension judgement origin is able to make
 judgement on a suspended member.
 - `judge_suspended_candidate` - The suspension judgement origin is able to

@@ -18,14 +18,14 @@
 //! A mechanism for runtime authors to augment the functionality of contracts.
 //!
 //! The runtime is able to call into any contract and retrieve the result using
-//! [`bare_call`](crate::Pallet::bare_call). This already allows customization of runtime
+//! [`bare_call`](crate::Pezpallet::bare_call). This already allows customization of runtime
 //! behaviour by user generated code (contracts). However, often it is more straightforward
 //! to allow the reverse behaviour: The contract calls into the runtime. We call the latter
 //! one a "chain extension" because it allows the chain to extend the set of functions that are
 //! callable by a contract.
 //!
 //! In order to create a chain extension the runtime author implements the [`ChainExtension`]
-//! trait and declares it in this pallet's [configuration Trait](crate::Config). All types
+//! trait and declares it in this pezpallet's [configuration Trait](crate::Config). All types
 //! required for this endeavour are defined or re-exported in this module. There is an
 //! implementation on `()` which can be used to signal that no chain extension is available.
 //!
@@ -53,7 +53,7 @@
 //! [`charge_weight`](Environment::charge_weight) function must be called **before**
 //! carrying out any action that causes the consumption of the chargeable weight.
 //! It cannot be overstated how delicate of a process the creation of a chain extension
-//! is. Check whether using [`bare_call`](crate::Pallet::bare_call) suffices for the
+//! is. Check whether using [`bare_call`](crate::Pezpallet::bare_call) suffices for the
 //! use case at hand.
 //!
 //! # Benchmarking
@@ -90,7 +90,7 @@ pub type Result<T> = core::result::Result<T, DispatchError>;
 /// A trait used to extend the set of contract callable functions.
 ///
 /// In order to create a custom chain extension this trait must be implemented and supplied
-/// to the pallet contracts configuration trait as the associated type of the same name.
+/// to the pezpallet contracts configuration trait as the associated type of the same name.
 /// Consult the [module documentation](self) for a general explanation of chain extensions.
 ///
 /// # Lifetime

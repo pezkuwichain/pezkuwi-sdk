@@ -39,16 +39,16 @@ pub trait Currency {}
 // Test for:
 // * No default instance
 // * Origin, Inherent, Event
-#[pezframe_support::pallet(dev_mode)]
+#[pezframe_support::pezpallet(dev_mode)]
 mod module1 {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T, I = ()>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T, I = ()>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config {
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event<Self, I>>
@@ -58,9 +58,9 @@ mod module1 {
 		type GenericType: Parameter + Member + MaybeSerializeDeserialize + Default + MaxEncodedLen;
 	}
 
-	#[pallet::call]
-	impl<T: Config<I>, I: 'static> Pallet<T, I> {
-		#[pallet::weight(0)]
+	#[pezpallet::call]
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
+		#[pezpallet::weight(0)]
 		pub fn one(origin: OriginFor<T>) -> DispatchResult {
 			ensure_root(origin)?;
 			Self::deposit_event(Event::AnotherVariant(3));
@@ -68,15 +68,15 @@ mod module1 {
 		}
 	}
 
-	#[pallet::storage]
-	#[pallet::getter(fn value)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn value)]
 	pub type Value<T: Config<I>, I: 'static = ()> = StorageValue<_, T::GenericType, ValueQuery>;
 
-	#[pallet::storage]
-	#[pallet::getter(fn map)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn map)]
 	pub type Map<T: Config<I>, I: 'static = ()> = StorageMap<_, Identity, u32, u64, ValueQuery>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	pub struct GenesisConfig<T: Config<I>, I: 'static = ()> {
 		pub value: <T as Config<I>>::GenericType,
 		pub test: BlockNumberFor<T>,
@@ -88,7 +88,7 @@ mod module1 {
 		}
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config<I>, I: 'static> BuildGenesisConfig for GenesisConfig<T, I>
 	where
 		BlockNumberFor<T>: std::fmt::Display,
@@ -99,20 +99,20 @@ mod module1 {
 		}
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T, I = ()> {
 		/// Test
 		Test,
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config<I>, I: 'static = ()> {
 		_Phantom(PhantomData<T>),
 		AnotherVariant(u32),
 	}
 
-	#[pallet::origin]
+	#[pezpallet::origin]
 	#[derive(
 		Clone,
 		PartialEq,
@@ -132,8 +132,8 @@ mod module1 {
 
 	pub const INHERENT_IDENTIFIER: InherentIdentifier = *b"12345678";
 
-	#[pallet::inherent]
-	impl<T: Config<I>, I: 'static> ProvideInherent for Pallet<T, I>
+	#[pezpallet::inherent]
+	impl<T: Config<I>, I: 'static> ProvideInherent for Pezpallet<T, I>
 	where
 		BlockNumberFor<T>: From<u32>,
 	{
@@ -158,15 +158,15 @@ mod module1 {
 // Test for:
 // * default instance
 // * use of no_genesis_config_phantom_data
-#[pezframe_support::pallet]
+#[pezframe_support::pezpallet]
 mod module2 {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T, I = ()>(PhantomData<(T, I)>);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T, I = ()>(PhantomData<(T, I)>);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config {
 		type Amount: Parameter + MaybeSerializeDeserialize + Default + MaxEncodedLen;
 		#[allow(deprecated)]
@@ -175,22 +175,22 @@ mod module2 {
 		type RuntimeOrigin: From<Origin<Self, I>>;
 	}
 
-	impl<T: Config<I>, I: 'static> Currency for Pallet<T, I> {}
+	impl<T: Config<I>, I: 'static> Currency for Pezpallet<T, I> {}
 
-	#[pallet::call]
-	impl<T: Config<I>, I: 'static> Pallet<T, I> {}
+	#[pezpallet::call]
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I> {}
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Value<T: Config<I>, I: 'static = ()> = StorageValue<_, T::Amount, ValueQuery>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Map<T: Config<I>, I: 'static = ()> = StorageMap<_, Identity, u64, u64, ValueQuery>;
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type DoubleMap<T: Config<I>, I: 'static = ()> =
 		StorageDoubleMap<_, Identity, u64, Identity, u64, u64, ValueQuery>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	pub struct GenesisConfig<T: Config<I>, I: 'static = ()> {
 		pub value: T::Amount,
 		pub map: Vec<(u64, u64)>,
@@ -207,7 +207,7 @@ mod module2 {
 		}
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config<I>, I: 'static> BuildGenesisConfig for GenesisConfig<T, I>
 	where
 		BlockNumberFor<T>: std::fmt::Display,
@@ -223,12 +223,12 @@ mod module2 {
 		}
 	}
 
-	#[pallet::event]
+	#[pezpallet::event]
 	pub enum Event<T: Config<I>, I: 'static = ()> {
 		Variant(T::Amount),
 	}
 
-	#[pallet::origin]
+	#[pezpallet::origin]
 	#[derive(
 		Clone,
 		PartialEq,
@@ -248,8 +248,8 @@ mod module2 {
 
 	pub const INHERENT_IDENTIFIER: InherentIdentifier = *b"12345678";
 
-	#[pallet::inherent]
-	impl<T: Config<I>, I: 'static> ProvideInherent for Pallet<T, I> {
+	#[pezpallet::inherent]
+	impl<T: Config<I>, I: 'static> ProvideInherent for Pezpallet<T, I> {
 		type Call = Call<T, I>;
 		type Error = MakeFatalError<()>;
 		const INHERENT_IDENTIFIER: InherentIdentifier = INHERENT_IDENTIFIER;
@@ -270,15 +270,15 @@ mod module2 {
 
 // Test for:
 // * Depends on multiple instances of a module with instances
-#[pezframe_support::pallet]
+#[pezframe_support::pezpallet]
 mod module3 {
 	use super::*;
 	use pezframe_support::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T, I = ()>(PhantomData<(T, I)>);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T, I = ()>(PhantomData<(T, I)>);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config<I: 'static = ()>:
 		pezframe_system::Config + module2::Config<I> + module2::Config<module2::Instance1>
 	{
@@ -286,8 +286,8 @@ mod module3 {
 		type Currency2: Currency;
 	}
 
-	#[pallet::call]
-	impl<T: Config<I>, I: 'static> Pallet<T, I> {}
+	#[pezpallet::call]
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I> {}
 }
 
 pub type BlockNumber = u32;

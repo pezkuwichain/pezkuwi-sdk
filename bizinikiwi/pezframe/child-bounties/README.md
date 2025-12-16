@@ -1,8 +1,8 @@
-# Child Bounties Pallet ( `pezpallet-child-bounties` )
+# Child Bounties Pezpallet ( `pezpallet-child-bounties` )
 
 ## Child Bounty
 
-> NOTE: This pallet is tightly coupled with `pezpallet-treasury` and `pezpallet-bounties`.
+> NOTE: This pezpallet is tightly coupled with `pezpallet-treasury` and `pezpallet-bounties`.
 
 With child bounties, a large bounty proposal can be divided into smaller chunks,
 for parallel execution, and for efficient governance and tracking of spent funds.

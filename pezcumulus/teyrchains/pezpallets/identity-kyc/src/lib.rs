@@ -1,12 +1,12 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
-//! # Identity & KYC Pallet - TRUSTLESS MODEL
+//! # Identity & KYC Pezpallet - TRUSTLESS MODEL
 //!
 //! A privacy-preserving, decentralized citizenship verification system.
 //!
 //! ## Overview
 //!
-//! This pallet implements a **TRUSTLESS** citizenship verification where:
+//! This pezpallet implements a **TRUSTLESS** citizenship verification where:
 //! - NO personal data is stored on-chain (only hash)
 //! - NO central authority/bot approves applications
 //! - Existing citizens vouch for new applicants (referral-based)
@@ -95,7 +95,7 @@
 //! }
 //! ```
 
-pub use pallet::*;
+pub use pezpallet::*;
 pub mod types;
 use types::*;
 pub mod weights;
@@ -115,14 +115,14 @@ use pezframe_support::{pezpallet_prelude::*, traits::ReservableCurrency};
 use pezframe_system::pezpallet_prelude::*;
 use pezsp_core::H256;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		type Currency: ReservableCurrency<Self::AccountId>;
@@ -132,25 +132,25 @@ pub mod pallet {
 
 		type WeightInfo: WeightInfo;
 
-		/// Hook called when citizenship is approved - used by referral pallet
+		/// Hook called when citizenship is approved - used by referral pezpallet
 		type OnKycApproved: crate::types::OnKycApproved<Self::AccountId>;
 
-		/// Hook called when citizenship is revoked - used by referral pallet for penalty
+		/// Hook called when citizenship is revoked - used by referral pezpallet for penalty
 		type OnCitizenshipRevoked: crate::types::OnCitizenshipRevoked<Self::AccountId>;
 
-		/// Provider for minting citizen NFTs - used by tiki pallet
+		/// Provider for minting citizen NFTs - used by tiki pezpallet
 		type CitizenNftProvider: crate::types::CitizenNftProvider<Self::AccountId>;
 
 		/// Deposit required to apply (spam prevention, returned on approval)
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type KycApplicationDeposit: Get<BalanceOf<Self>>;
 
 		/// Max string length for legacy storage
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxStringLength: Get<u32>;
 
 		/// Max CID length for legacy storage
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxCidLength: Get<u32>;
 	}
 
@@ -162,39 +162,39 @@ pub mod pallet {
 
 	/// Citizenship applications (applicant -> application)
 	/// PRIVACY: Only hash stored, no personal data
-	#[pallet::storage]
-	#[pallet::getter(fn applications)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn applications)]
 	pub type Applications<T: Config> =
 		StorageMap<_, Blake2_128Concat, T::AccountId, CitizenshipApplication<T::AccountId>>;
 
 	/// Current citizenship status per account
-	#[pallet::storage]
-	#[pallet::getter(fn kyc_status_of)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn kyc_status_of)]
 	pub type KycStatuses<T: Config> =
 		StorageMap<_, Blake2_128Concat, T::AccountId, KycLevel, ValueQuery>;
 
 	/// Identity hashes of approved citizens (for verification)
 	/// Can be used to prove citizenship without revealing identity
-	#[pallet::storage]
-	#[pallet::getter(fn identity_hash_of)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn identity_hash_of)]
 	pub type IdentityHashes<T: Config> = StorageMap<_, Blake2_128Concat, T::AccountId, H256>;
 
 	/// Referrer of approved citizens (for direct responsibility tracking)
 	/// Kept permanently for penalty system even after application is removed
-	#[pallet::storage]
-	#[pallet::getter(fn citizen_referrer)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn citizen_referrer)]
 	pub type CitizenReferrers<T: Config> =
 		StorageMap<_, Blake2_128Concat, T::AccountId, T::AccountId>;
 
 	// ============= LEGACY STORAGE (for migration) =============
 
 	/// Legacy: Identity info storage (deprecated, kept for migration)
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type Identities<T: Config> =
 		StorageMap<_, Blake2_128Concat, T::AccountId, IdentityInfo<T::MaxStringLength>>;
 
 	/// Legacy: Pending KYC applications (deprecated, kept for migration)
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub type PendingKycApplications<T: Config> = StorageMap<
 		_,
 		Blake2_128Concat,
@@ -206,7 +206,7 @@ pub mod pallet {
 
 	/// Genesis configuration for bootstrapping initial citizens
 	/// BOOTSTRAP: Solves chicken-egg problem - first citizens need to exist for others to join
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(pezframe_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		/// List of founding citizens (AccountId, IdentityHash)
@@ -216,7 +216,7 @@ pub mod pallet {
 		pub _phantom: core::marker::PhantomData<T>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			// Initialize founding citizens with Approved status
@@ -231,8 +231,8 @@ pub mod pallet {
 
 	// ============= EVENTS =============
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// New citizenship application submitted
 		CitizenshipApplied { applicant: T::AccountId, referrer: T::AccountId, identity_hash: H256 },
@@ -250,7 +250,7 @@ pub mod pallet {
 
 	// ============= ERRORS =============
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// Application already exists for this account
 		ApplicationAlreadyExists,
@@ -276,8 +276,8 @@ pub mod pallet {
 
 	// ============= EXTRINSICS =============
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
 		/// Apply for citizenship with identity hash and referrer
 		///
 		/// TRUSTLESS: No admin involved, referrer vouches for applicant
@@ -292,8 +292,8 @@ pub mod pallet {
 		/// 2. Deposit is reserved (spam prevention)
 		/// 3. Status becomes PendingReferral
 		/// 4. Referrer must call approve_referral
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::apply_for_citizenship())]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::apply_for_citizenship())]
 		pub fn apply_for_citizenship(
 			origin: OriginFor<T>,
 			identity_hash: H256,
@@ -342,8 +342,8 @@ pub mod pallet {
 		/// # Requirements
 		/// - Caller must be the referrer specified in the application
 		/// - Application must be in PendingReferral state
-		#[pallet::call_index(1)]
-		#[pallet::weight(T::WeightInfo::approve_referral())]
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::approve_referral())]
 		pub fn approve_referral(origin: OriginFor<T>, applicant: T::AccountId) -> DispatchResult {
 			let caller = ensure_signed(origin)?;
 
@@ -378,8 +378,8 @@ pub mod pallet {
 		/// 3. Status becomes Approved
 		/// 4. Citizen NFT (Welati) is minted
 		/// 5. Referral hooks are triggered
-		#[pallet::call_index(2)]
-		#[pallet::weight(T::WeightInfo::confirm_citizenship())]
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(T::WeightInfo::confirm_citizenship())]
 		pub fn confirm_citizenship(origin: OriginFor<T>) -> DispatchResult {
 			let applicant = ensure_signed(origin)?;
 
@@ -413,7 +413,7 @@ pub mod pallet {
 				// Don't fail - user is still a citizen
 			}
 
-			// Trigger referral hooks (for referral pallet)
+			// Trigger referral hooks (for referral pezpallet)
 			// Pass referrer parameter to avoid data loss between pallets
 			T::OnKycApproved::on_kyc_approved(&applicant, &application.referrer);
 
@@ -424,9 +424,9 @@ pub mod pallet {
 		/// Revoke citizenship (governance only)
 		///
 		/// Used for malicious actors identified by governance
-		/// DIRECT RESPONSIBILITY: Triggers penalty for the referrer via referral pallet
-		#[pallet::call_index(3)]
-		#[pallet::weight(T::WeightInfo::revoke_citizenship())]
+		/// DIRECT RESPONSIBILITY: Triggers penalty for the referrer via referral pezpallet
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(T::WeightInfo::revoke_citizenship())]
 		pub fn revoke_citizenship(origin: OriginFor<T>, who: T::AccountId) -> DispatchResult {
 			T::GovernanceOrigin::ensure_origin(origin)?;
 
@@ -444,7 +444,7 @@ pub mod pallet {
 			}
 
 			// Trigger direct responsibility penalty for the referrer
-			// This hook notifies the referral pallet to penalize the referrer
+			// This hook notifies the referral pezpallet to penalize the referrer
 			T::OnCitizenshipRevoked::on_citizenship_revoked(&who);
 
 			Self::deposit_event(Event::CitizenshipRevoked { who });
@@ -454,8 +454,8 @@ pub mod pallet {
 		/// Renounce citizenship (voluntary exit)
 		///
 		/// Users can freely leave the system
-		#[pallet::call_index(4)]
-		#[pallet::weight(T::WeightInfo::renounce_citizenship())]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(T::WeightInfo::renounce_citizenship())]
 		pub fn renounce_citizenship(origin: OriginFor<T>) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 
@@ -478,8 +478,8 @@ pub mod pallet {
 		///
 		/// Useful if referrer is unresponsive or user made a mistake.
 		/// SAFETY: Only works in PendingReferral state (not yet approved)
-		#[pallet::call_index(5)]
-		#[pallet::weight(T::WeightInfo::cancel_application())]
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(T::WeightInfo::cancel_application())]
 		pub fn cancel_application(origin: OriginFor<T>) -> DispatchResult {
 			let applicant = ensure_signed(origin)?;
 
@@ -509,13 +509,13 @@ pub mod pallet {
 
 pub use types::KycStatus;
 
-impl<T: Config> types::KycStatus<T::AccountId> for Pallet<T> {
+impl<T: Config> types::KycStatus<T::AccountId> for Pezpallet<T> {
 	fn get_kyc_status(who: &T::AccountId) -> KycLevel {
 		KycStatuses::<T>::get(who)
 	}
 }
 
-impl<T: Config> IdentityInfoProvider<T::AccountId, T::MaxStringLength> for Pallet<T> {
+impl<T: Config> IdentityInfoProvider<T::AccountId, T::MaxStringLength> for Pezpallet<T> {
 	fn get_identity_info(who: &T::AccountId) -> Option<IdentityInfo<T::MaxStringLength>> {
 		// Legacy: Return from old storage if exists
 		Identities::<T>::get(who)
@@ -523,7 +523,7 @@ impl<T: Config> IdentityInfoProvider<T::AccountId, T::MaxStringLength> for Palle
 }
 
 /// Helper methods for checking citizenship
-impl<T: Config> Pallet<T> {
+impl<T: Config> Pezpallet<T> {
 	/// Check if account is a citizen
 	pub fn is_citizen(who: &T::AccountId) -> bool {
 		KycStatuses::<T>::get(who) == KycLevel::Approved
@@ -551,12 +551,12 @@ impl<T: Config> Pallet<T> {
 	}
 }
 
-/// Trait for trust pallet integration
+/// Trait for trust pezpallet integration
 pub trait CitizenshipStatusProvider<AccountId> {
 	fn is_citizen(who: &AccountId) -> bool;
 }
 
-impl<T: Config> CitizenshipStatusProvider<T::AccountId> for Pallet<T> {
+impl<T: Config> CitizenshipStatusProvider<T::AccountId> for Pezpallet<T> {
 	fn is_citizen(who: &T::AccountId) -> bool {
 		KycStatuses::<T>::get(who) == KycLevel::Approved
 	}

@@ -14,31 +14,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Minimal Pallet that injects a TeyrchainId into Runtime storage from
+//! Minimal Pezpallet that injects a TeyrchainId into Runtime storage from
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
-pub use pallet::*;
+pub use pezpallet::*;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use pezcumulus_primitives_core::ParaId;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {}
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {}
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {}
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	pub struct GenesisConfig<T: Config> {
 		#[serde(skip)]
 		pub _config: core::marker::PhantomData<T>,
@@ -51,29 +51,29 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			TeyrchainId::<T>::put(self.teyrchain_id);
 		}
 	}
 
-	#[pallet::type_value]
+	#[pezpallet::type_value]
 	pub(super) fn DefaultForTeyrchainId() -> ParaId {
 		100.into()
 	}
 
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type TeyrchainId<T: Config> =
 		StorageValue<_, ParaId, ValueQuery, DefaultForTeyrchainId>;
 
-	impl<T: Config> Get<ParaId> for Pallet<T> {
+	impl<T: Config> Get<ParaId> for Pezpallet<T> {
 		fn get() -> ParaId {
 			TeyrchainId::<T>::get()
 		}
 	}
 
-	impl<T: Config> Pallet<T> {
+	impl<T: Config> Pezpallet<T> {
 		pub fn teyrchain_id() -> ParaId {
 			TeyrchainId::<T>::get()
 		}

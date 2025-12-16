@@ -21,7 +21,7 @@ use crate::{
 	test_utils::{builder::Contract, ALICE},
 	tests::{builder, Contracts, ExtBuilder, System, Test, Timestamp},
 	vm::evm::DIFFICULTY,
-	Code, Config, DryRunConfig, ExecConfig, Pallet,
+	Code, Config, DryRunConfig, ExecConfig, Pezpallet,
 };
 
 use alloy_core::sol_types::{SolCall, SolInterface};
@@ -179,7 +179,7 @@ fn gaslimit_works(fixture_type: FixtureType) {
 			.data(BlockInfo::BlockInfoCalls::gaslimit(BlockInfo::gaslimitCall {}).abi_encode())
 			.build_and_unwrap_result();
 		let decoded = BlockInfo::gaslimitCall::abi_decode_returns(&result.data).unwrap();
-		assert_eq!(<Pallet<Test>>::evm_block_gas_limit(), decoded.into());
+		assert_eq!(<Pezpallet<Test>>::evm_block_gas_limit(), decoded.into());
 	});
 }
 
@@ -197,7 +197,7 @@ fn base_fee_works(fixture_type: FixtureType) {
 			.data(BlockInfo::BlockInfoCalls::basefee(BlockInfo::basefeeCall {}).abi_encode())
 			.build_and_unwrap_result();
 		let decoded = BlockInfo::basefeeCall::abi_decode_returns(&result.data).unwrap();
-		assert_eq!(<crate::Pallet<Test>>::evm_base_fee().as_u64(), decoded);
+		assert_eq!(<crate::Pezpallet<Test>>::evm_base_fee().as_u64(), decoded);
 	});
 }
 

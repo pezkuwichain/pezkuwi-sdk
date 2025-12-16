@@ -151,5 +151,5 @@ pub fn relay_ext() -> pezsp_io::TestExternalities {
 	ext
 }
 
-pub type TeyrchainPalletXcm = pezpallet_xcm::Pallet<teyrchain::Runtime>;
-pub type TeyrchainBalances = pezpallet_balances::Pallet<teyrchain::Runtime>;
+pub type TeyrchainPalletXcm = pezpallet_xcm::Pezpallet<teyrchain::Runtime>;
+pub type TeyrchainBalances = pezpallet_balances::Pezpallet<teyrchain::Runtime>;

@@ -105,7 +105,7 @@ impl ExtBuilder {
 		.unwrap();
 
 		if let Some(multiplier) = self.initial_multiplier {
-			pallet::GenesisConfig::<Runtime> { multiplier, ..Default::default() }
+			pezpallet::GenesisConfig::<Runtime> { multiplier, ..Default::default() }
 				.assimilate_storage(&mut t)
 				.unwrap();
 		}
@@ -401,7 +401,7 @@ fn compute_fee_works_without_multiplier() {
 				class: DispatchClass::Operational,
 				pays_fee: Pays::No,
 			};
-			assert_eq!(Pallet::<Runtime>::compute_fee(0, &dispatch_info, 10), 10);
+			assert_eq!(Pezpallet::<Runtime>::compute_fee(0, &dispatch_info, 10), 10);
 			// No tip, only base fee works
 			let dispatch_info = DispatchInfo {
 				call_weight: Weight::from_parts(0, 0),
@@ -409,11 +409,11 @@ fn compute_fee_works_without_multiplier() {
 				class: DispatchClass::Operational,
 				pays_fee: Pays::Yes,
 			};
-			assert_eq!(Pallet::<Runtime>::compute_fee(0, &dispatch_info, 0), 100);
+			assert_eq!(Pezpallet::<Runtime>::compute_fee(0, &dispatch_info, 0), 100);
 			// Tip + base fee works
-			assert_eq!(Pallet::<Runtime>::compute_fee(0, &dispatch_info, 69), 169);
+			assert_eq!(Pezpallet::<Runtime>::compute_fee(0, &dispatch_info, 69), 169);
 			// Len (byte fee) + base fee works
-			assert_eq!(Pallet::<Runtime>::compute_fee(42, &dispatch_info, 0), 520);
+			assert_eq!(Pezpallet::<Runtime>::compute_fee(42, &dispatch_info, 0), 520);
 			// Weight fee + base fee works
 			let dispatch_info = DispatchInfo {
 				call_weight: Weight::from_parts(1000, 0),
@@ -421,7 +421,7 @@ fn compute_fee_works_without_multiplier() {
 				class: DispatchClass::Operational,
 				pays_fee: Pays::Yes,
 			};
-			assert_eq!(Pallet::<Runtime>::compute_fee(0, &dispatch_info, 0), 1100);
+			assert_eq!(Pezpallet::<Runtime>::compute_fee(0, &dispatch_info, 0), 1100);
 		});
 }
 
@@ -442,7 +442,7 @@ fn compute_fee_works_with_multiplier() {
 				class: DispatchClass::Operational,
 				pays_fee: Pays::Yes,
 			};
-			assert_eq!(Pallet::<Runtime>::compute_fee(0, &dispatch_info, 0), 100);
+			assert_eq!(Pezpallet::<Runtime>::compute_fee(0, &dispatch_info, 0), 100);
 
 			// Everything works together :)
 			let dispatch_info = DispatchInfo {
@@ -453,7 +453,7 @@ fn compute_fee_works_with_multiplier() {
 			};
 			// 123 weight, 456 length, 100 base
 			assert_eq!(
-				Pallet::<Runtime>::compute_fee(456, &dispatch_info, 789),
+				Pezpallet::<Runtime>::compute_fee(456, &dispatch_info, 789),
 				100 + (3 * 123 / 2) + 4560 + 789,
 			);
 		});
@@ -477,7 +477,7 @@ fn compute_fee_works_with_negative_multiplier() {
 				class: DispatchClass::Operational,
 				pays_fee: Pays::Yes,
 			};
-			assert_eq!(Pallet::<Runtime>::compute_fee(0, &dispatch_info, 0), 100);
+			assert_eq!(Pezpallet::<Runtime>::compute_fee(0, &dispatch_info, 0), 100);
 
 			// Everything works together.
 			let dispatch_info = DispatchInfo {
@@ -488,7 +488,7 @@ fn compute_fee_works_with_negative_multiplier() {
 			};
 			// 123 weight, 456 length, 100 base
 			assert_eq!(
-				Pallet::<Runtime>::compute_fee(456, &dispatch_info, 789),
+				Pezpallet::<Runtime>::compute_fee(456, &dispatch_info, 789),
 				100 + (123 / 2) + 4560 + 789,
 			);
 		});
@@ -510,7 +510,7 @@ fn compute_fee_does_not_overflow() {
 				pays_fee: Pays::Yes,
 			};
 			assert_eq!(
-				Pallet::<Runtime>::compute_fee(u32::MAX, &dispatch_info, u64::MAX),
+				Pezpallet::<Runtime>::compute_fee(u32::MAX, &dispatch_info, u64::MAX),
 				u64::MAX
 			);
 		});
@@ -640,7 +640,7 @@ fn refund_consistent_with_actual_weight() {
 
 			let refund_based_fee = prev_balance - Balances::free_balance(2);
 			let actual_fee =
-				Pallet::<Runtime>::compute_actual_fee(len as u32, &info, &actual_post_info, tip);
+				Pezpallet::<Runtime>::compute_actual_fee(len as u32, &info, &actual_post_info, tip);
 
 			// 33 call weight, 10 ext weight, 10 length, 7 base, 5 tip
 			assert_eq!(actual_fee, 7 + 10 + ((33 + 10) * 5 / 4) + 5);
@@ -814,7 +814,7 @@ fn post_info_can_change_pays_fee() {
 
 			let refund_based_fee = prev_balance - Balances::free_balance(2);
 			let actual_fee =
-				Pallet::<Runtime>::compute_actual_fee(len as u32, &info, &post_info, tip);
+				Pezpallet::<Runtime>::compute_actual_fee(len as u32, &info, &post_info, tip);
 
 			// Only 5 tip is paid
 			assert_eq!(actual_fee, 5);

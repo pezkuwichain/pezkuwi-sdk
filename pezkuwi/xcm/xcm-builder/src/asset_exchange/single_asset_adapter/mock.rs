@@ -166,7 +166,7 @@ parameter_types! {
 /// Adapter for the native token.
 pub type FungibleTransactor = FungibleAdapter<
 	// Use this implementation of the `fungible::*` traits.
-	// `Balances` is the name given to the balances pallet
+	// `Balances` is the name given to the balances pezpallet
 	Balances,
 	// This transactor deals with the native token.
 	IsConcrete<HereLocation>,
@@ -330,7 +330,7 @@ impl pezpallet_xcm::Config for Runtime {
 	// A currency to pay for things and its matcher, we are using the relay token
 	type Currency = Balances;
 	type CurrencyMatcher = crate::IsConcrete<HereLocation>;
-	// Pallet benchmarks, no need for this recipe
+	// Pezpallet benchmarks, no need for this recipe
 	type WeightInfo = pezpallet_xcm::TestWeightInfo;
 	// Runtime types
 	type RuntimeOrigin = RuntimeOrigin;

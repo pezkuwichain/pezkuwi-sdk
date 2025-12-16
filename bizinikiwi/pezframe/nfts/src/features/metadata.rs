@@ -21,7 +21,7 @@ use crate::*;
 use alloc::vec::Vec;
 use pezframe_support::pezpallet_prelude::*;
 
-impl<T: Config<I>, I: 'static> Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 	/// Sets the metadata for a specific item within a collection.
 	///
 	/// - `maybe_check_origin`: An optional account ID that is allowed to set the metadata. If

@@ -19,13 +19,13 @@ use pezframe_support::construct_runtime;
 use pezsp_runtime::{generic, traits::BlakeTwo256};
 use pezsp_core::sr25519;
 
-#[pezframe_support::pallet]
-mod pallet {
-	#[pallet::config]
+#[pezframe_support::pezpallet]
+mod pezpallet {
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 }
 
 pub type Signature = sr25519::Signature;
@@ -34,13 +34,13 @@ pub type Header = generic::Header<BlockNumber, BlakeTwo256>;
 pub type Block = generic::Block<Header, UncheckedExtrinsic>;
 pub type UncheckedExtrinsic = generic::UncheckedExtrinsic<u32, RuntimeCall, Signature, ()>;
 
-impl pallet::Config for Runtime {}
+impl pezpallet::Config for Runtime {}
 
 construct_runtime! {
 	pub struct Runtime
 	{
-		System: system::{Pallet, Call, Storage, Config<T>, Event<T>},
-		Pallet: pallet exclude_parts { Pallet } use_parts { Pallet },
+		System: system::{Pezpallet, Call, Storage, Config<T>, Event<T>},
+		Pezpallet: pezpallet exclude_parts { Pezpallet } use_parts { Pezpallet },
 	}
 }
 

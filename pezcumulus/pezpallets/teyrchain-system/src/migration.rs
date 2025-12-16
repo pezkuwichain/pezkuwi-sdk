@@ -14,7 +14,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use crate::{Config, Pallet, ReservedDmpWeightOverride, ReservedXcmpWeightOverride};
+use crate::{Config, Pezpallet, ReservedDmpWeightOverride, ReservedXcmpWeightOverride};
 use pezframe_support::{
 	pezpallet_prelude::*,
 	traits::{Get, OnRuntimeUpgrade, StorageVersion},
@@ -24,25 +24,25 @@ use pezframe_support::{
 /// The in-code storage version.
 pub const STORAGE_VERSION: StorageVersion = StorageVersion::new(2);
 
-/// Migrates the pallet storage to the most recent version.
+/// Migrates the pezpallet storage to the most recent version.
 pub struct Migration<T: Config>(PhantomData<T>);
 
 impl<T: Config> OnRuntimeUpgrade for Migration<T> {
 	fn on_runtime_upgrade() -> Weight {
 		let mut weight: Weight = T::DbWeight::get().reads(2);
 
-		if StorageVersion::get::<Pallet<T>>() == 0 {
+		if StorageVersion::get::<Pezpallet<T>>() == 0 {
 			weight = weight
 				.saturating_add(v1::migrate::<T>())
 				.saturating_add(T::DbWeight::get().writes(1));
-			StorageVersion::new(1).put::<Pallet<T>>();
+			StorageVersion::new(1).put::<Pezpallet<T>>();
 		}
 
-		if StorageVersion::get::<Pallet<T>>() == 1 {
+		if StorageVersion::get::<Pezpallet<T>>() == 1 {
 			weight = weight
 				.saturating_add(v2::migrate::<T>())
 				.saturating_add(T::DbWeight::get().writes(1));
-			StorageVersion::new(2).put::<Pallet<T>>();
+			StorageVersion::new(2).put::<Pezpallet<T>>();
 		}
 
 		weight
@@ -78,13 +78,13 @@ mod v2 {
 /// V1: `LastUpgrade` block number is removed from the storage since the upgrade
 /// mechanism now uses signals instead of block offsets.
 mod v1 {
-	use crate::{Config, Pallet};
+	use crate::{Config, Pezpallet};
 	#[allow(deprecated)]
 	use pezframe_support::{migration::remove_storage_prefix, pezpallet_prelude::*};
 
 	pub fn migrate<T: Config>() -> Weight {
 		#[allow(deprecated)]
-		remove_storage_prefix(<Pallet<T>>::name().as_bytes(), b"LastUpgrade", b"");
+		remove_storage_prefix(<Pezpallet<T>>::name().as_bytes(), b"LastUpgrade", b"");
 		T::DbWeight::get().writes(1)
 	}
 }

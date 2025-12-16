@@ -49,7 +49,7 @@ trait WeighAssets {
 	fn weigh_assets(&self, balances_weight: Weight) -> Weight;
 }
 
-// Pezkuwichain only knows about one asset, the balances pallet.
+// Pezkuwichain only knows about one asset, the balances pezpallet.
 const MAX_ASSETS: u64 = 1;
 
 impl WeighAssets for AssetFilter {

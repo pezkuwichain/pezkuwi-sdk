@@ -29,7 +29,7 @@ use xcm_builder::{
 
 type Block = pezframe_system::mocking::MockBlock<Test>;
 
-// For testing the pallet, we construct a mock runtime.
+// For testing the pezpallet, we construct a mock runtime.
 pezframe_support::construct_runtime!(
 	pub enum Test
 	{

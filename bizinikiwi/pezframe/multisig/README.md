@@ -1,8 +1,8 @@
 # Multisig Module
 A module for doing multisig dispatch.
 
-- [`Config`](https://docs.rs/pezpallet-multisig/latest/pallet_multisig/pallet/trait.Config.html)
-- [`Call`](https://docs.rs/pezpallet-multisig/latest/pallet_multisig/pallet/enum.Call.html)
+- [`Config`](https://docs.rs/pezpallet-multisig/latest/pallet_multisig/pezpallet/trait.Config.html)
+- [`Call`](https://docs.rs/pezpallet-multisig/latest/pallet_multisig/pezpallet/enum.Call.html)
 
 ## Overview
 

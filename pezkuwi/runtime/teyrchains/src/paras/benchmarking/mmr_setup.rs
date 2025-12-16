@@ -14,13 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Implements benchmarking setup for the `merkle-mountain-range` pallet.
+//! Implements benchmarking setup for the `merkle-mountain-range` pezpallet.
 
 use crate::paras::*;
 use pezpallet_mmr::BenchmarkHelper;
 use pezsp_std::vec;
 
-/// Struct to setup benchmarks for the `merkle-mountain-range` pallet.
+/// Struct to setup benchmarks for the `merkle-mountain-range` pezpallet.
 pub struct MmrSetup<T>(core::marker::PhantomData<T>);
 
 impl<T> BenchmarkHelper for MmrSetup<T>
@@ -34,7 +34,7 @@ where
 		for para in 0..MAX_PARA_HEADS {
 			let id = (para as u32).into();
 			let h = head.clone().into();
-			Pallet::<T>::heads_insert(&id, h);
+			Pezpallet::<T>::heads_insert(&id, h);
 		}
 	}
 }

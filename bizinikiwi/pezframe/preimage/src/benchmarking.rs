@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Preimage pallet benchmarking.
+//! Preimage pezpallet benchmarking.
 
 use alloc::vec;
 use pezframe_benchmarking::v2::*;
@@ -71,7 +71,7 @@ mod benchmarks {
 		#[extrinsic_call]
 		_(RawOrigin::Signed(caller), preimage);
 
-		assert!(Pallet::<T>::have_preimage(&hash));
+		assert!(Pezpallet::<T>::have_preimage(&hash));
 	}
 
 	// Cheap note - will not reserve since it was requested.
@@ -79,7 +79,7 @@ mod benchmarks {
 	fn note_requested_preimage(s: Linear<0, MAX_SIZE>) {
 		let caller = funded_account::<T>();
 		let (preimage, hash) = sized_preimage_and_hash::<T>(s);
-		assert_ok!(Pallet::<T>::request_preimage(
+		assert_ok!(Pezpallet::<T>::request_preimage(
 			T::ManagerOrigin::try_successful_origin()
 				.expect("ManagerOrigin has no successful origin required for the benchmark"),
 			hash,
@@ -88,7 +88,7 @@ mod benchmarks {
 		#[extrinsic_call]
 		note_preimage(RawOrigin::Signed(caller), preimage);
 
-		assert!(Pallet::<T>::have_preimage(&hash));
+		assert!(Pezpallet::<T>::have_preimage(&hash));
 	}
 
 	// Cheap note - will not reserve since it's the manager.
@@ -97,12 +97,12 @@ mod benchmarks {
 		let o = T::ManagerOrigin::try_successful_origin()
 			.expect("ManagerOrigin has no successful origin required for the benchmark");
 		let (preimage, hash) = sized_preimage_and_hash::<T>(s);
-		assert_ok!(Pallet::<T>::request_preimage(o.clone(), hash,));
+		assert_ok!(Pezpallet::<T>::request_preimage(o.clone(), hash,));
 
 		#[extrinsic_call]
 		note_preimage(o as T::RuntimeOrigin, preimage);
 
-		assert!(Pallet::<T>::have_preimage(&hash));
+		assert!(Pezpallet::<T>::have_preimage(&hash));
 	}
 
 	// Expensive unnote - will unreserve.
@@ -110,12 +110,12 @@ mod benchmarks {
 	fn unnote_preimage() {
 		let caller = funded_account::<T>();
 		let (preimage, hash) = preimage_and_hash::<T>();
-		assert_ok!(Pallet::<T>::note_preimage(RawOrigin::Signed(caller.clone()).into(), preimage));
+		assert_ok!(Pezpallet::<T>::note_preimage(RawOrigin::Signed(caller.clone()).into(), preimage));
 
 		#[extrinsic_call]
 		_(RawOrigin::Signed(caller), hash);
 
-		assert!(!Pallet::<T>::have_preimage(&hash));
+		assert!(!Pezpallet::<T>::have_preimage(&hash));
 	}
 
 	// Cheap unnote - will not unreserve since there's no deposit held.
@@ -124,12 +124,12 @@ mod benchmarks {
 		let o = T::ManagerOrigin::try_successful_origin()
 			.expect("ManagerOrigin has no successful origin required for the benchmark");
 		let (preimage, hash) = preimage_and_hash::<T>();
-		assert_ok!(Pallet::<T>::note_preimage(o.clone(), preimage,));
+		assert_ok!(Pezpallet::<T>::note_preimage(o.clone(), preimage,));
 
 		#[extrinsic_call]
 		unnote_preimage(o as T::RuntimeOrigin, hash);
 
-		assert!(!Pallet::<T>::have_preimage(&hash));
+		assert!(!Pezpallet::<T>::have_preimage(&hash));
 	}
 
 	// Expensive request - will unreserve the noter's deposit.
@@ -139,7 +139,7 @@ mod benchmarks {
 			.expect("ManagerOrigin has no successful origin required for the benchmark");
 		let (preimage, hash) = preimage_and_hash::<T>();
 		let noter = funded_account::<T>();
-		assert_ok!(Pallet::<T>::note_preimage(RawOrigin::Signed(noter.clone()).into(), preimage));
+		assert_ok!(Pezpallet::<T>::note_preimage(RawOrigin::Signed(noter.clone()).into(), preimage));
 
 		#[extrinsic_call]
 		_(o as T::RuntimeOrigin, hash);
@@ -160,7 +160,7 @@ mod benchmarks {
 		let o = T::ManagerOrigin::try_successful_origin()
 			.expect("ManagerOrigin has no successful origin required for the benchmark");
 		let (preimage, hash) = preimage_and_hash::<T>();
-		assert_ok!(Pallet::<T>::note_preimage(o.clone(), preimage,));
+		assert_ok!(Pezpallet::<T>::note_preimage(o.clone(), preimage,));
 
 		#[extrinsic_call]
 		request_preimage(o as T::RuntimeOrigin, hash);
@@ -190,7 +190,7 @@ mod benchmarks {
 		let o = T::ManagerOrigin::try_successful_origin()
 			.expect("ManagerOrigin has no successful origin required for the benchmark");
 		let (_, hash) = preimage_and_hash::<T>();
-		assert_ok!(Pallet::<T>::request_preimage(o.clone(), hash,));
+		assert_ok!(Pezpallet::<T>::request_preimage(o.clone(), hash,));
 
 		#[extrinsic_call]
 		request_preimage(o as T::RuntimeOrigin, hash);
@@ -205,8 +205,8 @@ mod benchmarks {
 		let o = T::ManagerOrigin::try_successful_origin()
 			.expect("ManagerOrigin has no successful origin required for the benchmark");
 		let (preimage, hash) = preimage_and_hash::<T>();
-		assert_ok!(Pallet::<T>::request_preimage(o.clone(), hash,));
-		assert_ok!(Pallet::<T>::note_preimage(o.clone(), preimage));
+		assert_ok!(Pezpallet::<T>::request_preimage(o.clone(), hash,));
+		assert_ok!(Pezpallet::<T>::note_preimage(o.clone(), preimage));
 
 		#[extrinsic_call]
 		_(o as T::RuntimeOrigin, hash);
@@ -220,7 +220,7 @@ mod benchmarks {
 		let o = T::ManagerOrigin::try_successful_origin()
 			.expect("ManagerOrigin has no successful origin required for the benchmark");
 		let (_, hash) = preimage_and_hash::<T>();
-		assert_ok!(Pallet::<T>::request_preimage(o.clone(), hash,));
+		assert_ok!(Pezpallet::<T>::request_preimage(o.clone(), hash,));
 
 		#[extrinsic_call]
 		unrequest_preimage(o as T::RuntimeOrigin, hash);
@@ -234,8 +234,8 @@ mod benchmarks {
 		let o = T::ManagerOrigin::try_successful_origin()
 			.expect("ManagerOrigin has no successful origin required for the benchmark");
 		let (_, hash) = preimage_and_hash::<T>();
-		assert_ok!(Pallet::<T>::request_preimage(o.clone(), hash,));
-		assert_ok!(Pallet::<T>::request_preimage(o.clone(), hash,));
+		assert_ok!(Pezpallet::<T>::request_preimage(o.clone(), hash,));
+		assert_ok!(Pezpallet::<T>::request_preimage(o.clone(), hash,));
 
 		#[extrinsic_call]
 		unrequest_preimage(o as T::RuntimeOrigin, hash);
@@ -259,7 +259,7 @@ mod benchmarks {
 	}
 
 	impl_benchmark_test_suite! {
-		Pallet,
+		Pezpallet,
 		mock::new_test_ext(),
 		mock::Test
 	}

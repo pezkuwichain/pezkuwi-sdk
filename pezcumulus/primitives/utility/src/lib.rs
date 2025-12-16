@@ -52,7 +52,7 @@ mod tests;
 /// `UpwardMessageSender` trait impl into a `SendXcm` trait impl.
 ///
 /// NOTE: This is a pretty dumb "just send it" router; we will probably want to introduce queuing
-/// to UMP eventually and when we do, the pallet which implements the queuing will be responsible
+/// to UMP eventually and when we do, the pezpallet which implements the queuing will be responsible
 /// for the `SendXcm` implementation.
 pub struct ParentAsUmp<T, W, P>(PhantomData<(T, W, P)>);
 impl<T, W, P> SendXcm for ParentAsUmp<T, W, P>

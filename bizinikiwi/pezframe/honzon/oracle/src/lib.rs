@@ -17,22 +17,22 @@
 
 //! # Oracle
 //!
-//! A pallet that provides a decentralized and trustworthy way to bring external, off-chain data
+//! A pezpallet that provides a decentralized and trustworthy way to bring external, off-chain data
 //! onto the blockchain.
 //!
-//! ## Pallet API
+//! ## Pezpallet API
 //!
-//! See the [`pallet`] module for more information about the interfaces this pallet exposes,
+//! See the [`pezpallet`] module for more information about the interfaces this pezpallet exposes,
 //! including its configuration trait, dispatchables, storage items, events and errors.
 //!
 //! ## Overview
 //!
-//! The Oracle pallet enables blockchain applications to access real-world data through a
+//! The Oracle pezpallet enables blockchain applications to access real-world data through a
 //! decentralized network of trusted data providers. It's designed to be flexible and can handle
 //! various types of external data such as cryptocurrency prices, weather data, sports scores, or
 //! any other off-chain information that needs to be brought on-chain.
 //!
-//! The pallet operates on a permissioned model where only authorized oracle operators can submit
+//! The pezpallet operates on a permissioned model where only authorized oracle operators can submit
 //! data. This ensures data quality and prevents spam while maintaining decentralization through
 //! multiple independent operators. The system aggregates data from multiple sources using
 //! configurable algorithms, typically taking the median to resist outliers and manipulation
@@ -61,7 +61,7 @@
 //!
 //! ### Design
 //!
-//! The pallet uses a dual-storage approach:
+//! The pezpallet uses a dual-storage approach:
 //! - [`RawValues`]: Stores individual operator submissions with timestamps
 //! - [`Values`]: Stores the final aggregated values after processing
 //!
@@ -106,7 +106,7 @@ mod mock;
 mod tests;
 pub mod weights;
 
-pub use pallet::*;
+pub use pezpallet::*;
 pub use weights::WeightInfo;
 
 #[cfg(feature = "runtime-benchmarks")]
@@ -127,8 +127,8 @@ impl<OracleKey, OracleValue, L: Get<u32>> BenchmarkHelper<OracleKey, OracleValue
 	}
 }
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
 	pub(crate) type MomentOf<T, I = ()> = <<T as Config<I>>::Time as Time>::Moment;
@@ -158,7 +158,7 @@ pub mod pallet {
 		pub timestamp: Moment,
 	}
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config<I: 'static = ()>: pezframe_system::Config {
 		/// A hook to be called when new data is received.
 		///
@@ -192,11 +192,11 @@ pub mod pallet {
 		/// temperatures, scores).
 		type OracleValue: Parameter + Member + Ord + MaxEncodedLen;
 
-		/// The pallet ID.
+		/// The pezpallet ID.
 		///
-		/// Will be used to derive the pallet's account, which is used as the oracle account
+		/// Will be used to derive the pezpallet's account, which is used as the oracle account
 		/// when values are fed by root.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type PalletId: Get<PalletId>;
 
 		/// The source of oracle members.
@@ -206,20 +206,20 @@ pub mod pallet {
 		/// management of oracle operators.
 		type Members: SortedMembers<Self::AccountId>;
 
-		/// Weight information for extrinsics in this pallet.
+		/// Weight information for extrinsics in this pezpallet.
 		type WeightInfo: WeightInfo;
 
 		/// The maximum number of oracle operators that can feed data in a single block.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxHasDispatchedSize: Get<u32>;
 
 		/// The maximum number of key-value pairs that can be submitted in a single extrinsic.
-		#[pallet::constant]
+		#[pezpallet::constant]
 		type MaxFeedValues: Get<u32>;
 
 		/// A helper trait for benchmarking oracle operations.
 		///
-		/// Provides sample data for benchmarking the oracle pallet, allowing accurate
+		/// Provides sample data for benchmarking the oracle pezpallet, allowing accurate
 		/// weight calculations and performance testing.
 		#[cfg(feature = "runtime-benchmarks")]
 		type BenchmarkHelper: BenchmarkHelper<
@@ -229,7 +229,7 @@ pub mod pallet {
 		>;
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T, I = ()> {
 		/// The sender is not a member of the oracle and does not have
 		/// permission to feed data.
@@ -240,8 +240,8 @@ pub mod pallet {
 		ExceedsMaxHasDispatchedSize,
 	}
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(crate) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(crate) fn deposit_event)]
 	pub enum Event<T: Config<I>, I: 'static = ()> {
 		/// New data has been fed into the oracle.
 		NewFeedData {
@@ -263,8 +263,8 @@ pub mod pallet {
 	/// No storage deposits are required as this data is considered essential for the oracle's
 	/// operation and data integrity. The storage cost is borne by the blockchain as part of the
 	/// oracle infrastructure.
-	#[pallet::storage]
-	#[pallet::getter(fn raw_values)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn raw_values)]
 	pub type RawValues<T: Config<I>, I: 'static = ()> = StorageDoubleMap<
 		_,
 		Twox64Concat,
@@ -277,8 +277,8 @@ pub mod pallet {
 	/// The aggregated values for each oracle key.
 	///
 	/// Maps `OracleKey` to `TimestampedValue`.
-	#[pallet::storage]
-	#[pallet::getter(fn values)]
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn values)]
 	pub type Values<T: Config<I>, I: 'static = ()> =
 		StorageMap<_, Twox64Concat, <T as Config<I>>::OracleKey, TimestampedValueOf<T, I>>;
 
@@ -290,15 +290,15 @@ pub mod pallet {
 	///
 	/// The storage is cleared at the end of each block in the `on_finalize` hook, resetting
 	/// the state for the next block.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type HasDispatched<T: Config<I>, I: 'static = ()> =
 		StorageValue<_, BoundedBTreeSet<T::AccountId, T::MaxHasDispatchedSize>, ValueQuery>;
 
-	#[pallet::pallet]
-	pub struct Pallet<T, I = ()>(PhantomData<(T, I)>);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T, I = ()>(PhantomData<(T, I)>);
 
-	#[pallet::hooks]
-	impl<T: Config<I>, I: 'static> Hooks<BlockNumberFor<T>> for Pallet<T, I> {
+	#[pezpallet::hooks]
+	impl<T: Config<I>, I: 'static> Hooks<BlockNumberFor<T>> for Pezpallet<T, I> {
 		/// `on_initialize` to return the weight used in `on_finalize`.
 		fn on_initialize(_n: BlockNumberFor<T>) -> Weight {
 			T::WeightInfo::on_finalize()
@@ -310,21 +310,21 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::view_functions]
-	impl<T: Config<I>, I: 'static> Pallet<T, I> {
+	#[pezpallet::view_functions]
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 		/// Retrieve the aggregated oracle value for a specific key, including its timestamp.
 		pub fn get_value(key: T::OracleKey) -> Option<TimestampedValueOf<T, I>> {
 			Self::get(&key)
 		}
 
-		/// Retrieve every aggregated oracle value tracked by the pallet.
+		/// Retrieve every aggregated oracle value tracked by the pezpallet.
 		pub fn all_values() -> Vec<(T::OracleKey, TimestampedValueOf<T, I>)> {
 			<Values<T, I>>::iter().collect()
 		}
 	}
 
-	#[pallet::call]
-	impl<T: Config<I>, I: 'static> Pallet<T, I> {
+	#[pezpallet::call]
+	impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 		/// Feeds external data values into the oracle system.
 		///
 		/// ## Dispatch Origin
@@ -354,8 +354,8 @@ pub mod pallet {
 		/// ## Events
 		///
 		/// - [`Event::NewFeedData`]: Emitted when data is successfully fed into the oracle
-		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::feed_values(values.len() as u32))]
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::feed_values(values.len() as u32))]
 		pub fn feed_values(
 			origin: OriginFor<T>,
 			values: BoundedVec<(T::OracleKey, T::OracleValue), T::MaxFeedValues>,
@@ -378,7 +378,7 @@ pub mod pallet {
 	}
 }
 
-impl<T: Config<I>, I: 'static> Pallet<T, I> {
+impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 	fn get_pallet_account() -> T::AccountId {
 		T::PalletId::get().into_account_truncating()
 	}
@@ -429,7 +429,7 @@ impl<T: Config<I>, I: 'static> Pallet<T, I> {
 	}
 }
 
-impl<T: Config<I>, I: 'static> ChangeMembers<T::AccountId> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> ChangeMembers<T::AccountId> for Pezpallet<T, I> {
 	fn change_members_sorted(
 		_incoming: &[T::AccountId],
 		outgoing: &[T::AccountId],
@@ -446,13 +446,13 @@ impl<T: Config<I>, I: 'static> ChangeMembers<T::AccountId> for Pallet<T, I> {
 	}
 }
 
-impl<T: Config<I>, I: 'static> DataProvider<T::OracleKey, T::OracleValue> for Pallet<T, I> {
+impl<T: Config<I>, I: 'static> DataProvider<T::OracleKey, T::OracleValue> for Pezpallet<T, I> {
 	fn get(key: &T::OracleKey) -> Option<T::OracleValue> {
 		Self::get(key).map(|timestamped_value| timestamped_value.value)
 	}
 }
 impl<T: Config<I>, I: 'static> DataProviderExtended<T::OracleKey, TimestampedValueOf<T, I>>
-	for Pallet<T, I>
+	for Pezpallet<T, I>
 {
 	fn get_all_values() -> impl Iterator<Item = (T::OracleKey, Option<TimestampedValueOf<T, I>>)> {
 		<Values<T, I>>::iter().map(|(k, v)| (k, Some(v)))
@@ -460,7 +460,7 @@ impl<T: Config<I>, I: 'static> DataProviderExtended<T::OracleKey, TimestampedVal
 }
 
 impl<T: Config<I>, I: 'static> DataFeeder<T::OracleKey, T::OracleValue, T::AccountId>
-	for Pallet<T, I>
+	for Pezpallet<T, I>
 {
 	fn feed_value(
 		who: Option<T::AccountId>,

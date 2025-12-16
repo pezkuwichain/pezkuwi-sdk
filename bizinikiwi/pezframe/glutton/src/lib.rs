@@ -17,12 +17,12 @@
 
 //! # WARNING
 //!
-//! **DO NOT USE ON VALUE-BEARING CHAINS. THIS PALLET IS ONLY INTENDED FOR TESTING USAGE.**
+//! **DO NOT USE ON VALUE-BEARING CHAINS. THIS PEZPALLET IS ONLY INTENDED FOR TESTING USAGE.**
 //!
-//! # Glutton Pallet
+//! # Glutton Pezpallet
 //!
-//! Pallet that consumes `ref_time` and `proof_size` of a block. Based on the `Compute` and
-//! `Storage` parameters the pallet consumes the adequate amount of weight.
+//! Pezpallet that consumes `ref_time` and `proof_size` of a block. Based on the `Compute` and
+//! `Storage` parameters the pezpallet consumes the adequate amount of weight.
 
 #![deny(missing_docs)]
 #![cfg_attr(not(feature = "std"), no_std)]
@@ -44,7 +44,7 @@ use pezframe_system::pezpallet_prelude::*;
 use pezsp_io::hashing::twox_256;
 use pezsp_runtime::{traits::Zero, FixedPointNumber, FixedU64};
 
-pub use pallet::*;
+pub use pezpallet::*;
 pub use weights::WeightInfo;
 
 /// The size of each value in the `TrashData` storage in bytes.
@@ -54,32 +54,32 @@ pub const MAX_TRASH_DATA_ENTRIES: u32 = 65_000;
 /// Hard limit for any other resource limit (in units).
 pub const RESOURCE_HARD_LIMIT: FixedU64 = FixedU64::from_u32(10);
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {
 		/// The overarching event type.
 		#[allow(deprecated)]
 		type RuntimeEvent: From<Event> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 
-		/// The admin origin that can set computational limits and initialize the pallet.
+		/// The admin origin that can set computational limits and initialize the pezpallet.
 		type AdminOrigin: EnsureOrigin<Self::RuntimeOrigin>;
 
-		/// Weight information for this pallet.
+		/// Weight information for this pezpallet.
 		type WeightInfo: WeightInfo;
 	}
 
-	#[pallet::pallet]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	pub struct Pezpallet<T>(_);
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event {
-		/// The pallet has been (re)initialized.
+		/// The pezpallet has been (re)initialized.
 		PalletInitialized {
-			/// Whether the pallet has been re-initialized.
+			/// Whether the pezpallet has been re-initialized.
 			reinit: bool,
 		},
 		/// The computation limit has been updated.
@@ -99,9 +99,9 @@ pub mod pallet {
 		},
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
-		/// The pallet was already initialized.
+		/// The pezpallet was already initialized.
 		///
 		/// Set `witness_count` to `Some` to bypass this error.
 		AlreadyInitialized,
@@ -114,21 +114,21 @@ pub mod pallet {
 	///
 	/// `1.0` is mapped to `100%`. Must be at most [`crate::RESOURCE_HARD_LIMIT`]. Setting this to
 	/// over `1.0` could stall the chain.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type Compute<T: Config> = StorageValue<_, FixedU64, ValueQuery>;
 
 	/// The proportion of the remaining `proof_size` to consume during `on_idle`.
 	///
 	/// `1.0` is mapped to `100%`. Must be at most [`crate::RESOURCE_HARD_LIMIT`]. Setting this to
 	/// over `1.0` could stall the chain.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type Storage<T: Config> = StorageValue<_, FixedU64, ValueQuery>;
 
 	/// The proportion of the `block length` to consume on each block.
 	///
 	/// `1.0` is mapped to `100%`. Must be at most [`crate::RESOURCE_HARD_LIMIT`]. Setting this to
 	/// over `1.0` could stall the chain.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type Length<T: Config> = StorageValue<_, FixedU64, ValueQuery>;
 
 	/// Storage map used for wasting proof size.
@@ -137,9 +137,9 @@ pub mod pallet {
 	/// set to 65k, which is just below the next jump at 16^4. This is important to reduce the proof
 	/// size benchmarking overestimate. The assumption here is that we won't have more than 65k *
 	/// 1KiB = 65MiB of proof size wasting in practice. However, this limit is not enforced, so the
-	/// pallet would also work out of the box with more entries, but its benchmarked proof weight
+	/// pezpallet would also work out of the box with more entries, but its benchmarked proof weight
 	/// would possibly be underestimated in that case.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type TrashData<T: Config> = StorageMap<
 		Hasher = Twox64Concat,
 		Key = u32,
@@ -149,10 +149,10 @@ pub mod pallet {
 	>;
 
 	/// The current number of entries in `TrashData`.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(crate) type TrashDataCount<T: Config> = StorageValue<_, u32, ValueQuery>;
 
-	#[pallet::genesis_config]
+	#[pezpallet::genesis_config]
 	#[derive(DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		/// The compute limit.
@@ -168,7 +168,7 @@ pub mod pallet {
 		pub _config: core::marker::PhantomData<T>,
 	}
 
-	#[pallet::genesis_build]
+	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
 			assert!(
@@ -178,7 +178,7 @@ pub mod pallet {
 			);
 
 			(0..self.trash_data_count)
-				.for_each(|i| TrashData::<T>::insert(i, Pallet::<T>::gen_value(i)));
+				.for_each(|i| TrashData::<T>::insert(i, Pezpallet::<T>::gen_value(i)));
 
 			TrashDataCount::<T>::set(self.trash_data_count);
 
@@ -193,8 +193,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn integrity_test() {
 			assert!(
 				!T::WeightInfo::waste_ref_time_iter(1).ref_time().is_zero(),
@@ -228,8 +228,8 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::inherent]
-	impl<T: Config> ProvideInherent for Pallet<T> {
+	#[pezpallet::inherent]
+	impl<T: Config> ProvideInherent for Pezpallet<T> {
 		type Call = Call<T>;
 		type Error = pezsp_inherents::MakeFatalError<()>;
 
@@ -262,16 +262,16 @@ pub mod pallet {
 		}
 	}
 
-	#[pallet::call(weight = T::WeightInfo)]
-	impl<T: Config> Pallet<T> {
-		/// Initialize the pallet. Should be called once, if no genesis state was provided.
+	#[pezpallet::call(weight = T::WeightInfo)]
+	impl<T: Config> Pezpallet<T> {
+		/// Initialize the pezpallet. Should be called once, if no genesis state was provided.
 		///
 		/// `current_count` is the current number of elements in `TrashData`. This can be set to
-		/// `None` when the pallet is first initialized.
+		/// `None` when the pezpallet is first initialized.
 		///
 		/// Only callable by Root or `AdminOrigin`. A good default for `new_count` is `5_000`.
-		#[pallet::call_index(0)]
-		#[pallet::weight(
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(
 			T::WeightInfo::initialize_pallet_grow(witness_count.unwrap_or_default())
 				.max(T::WeightInfo::initialize_pallet_shrink(witness_count.unwrap_or_default()))
 		)]
@@ -303,7 +303,7 @@ pub mod pallet {
 		/// Set how much of the remaining `ref_time` weight should be consumed by `on_idle`.
 		///
 		/// Only callable by Root or `AdminOrigin`.
-		#[pallet::call_index(1)]
+		#[pezpallet::call_index(1)]
 		pub fn set_compute(origin: OriginFor<T>, compute: FixedU64) -> DispatchResult {
 			T::AdminOrigin::ensure_origin_or_root(origin)?;
 
@@ -321,7 +321,7 @@ pub mod pallet {
 		/// therefore translate to less than 100% actual consumption.
 		///
 		/// Only callable by Root or `AdminOrigin`.
-		#[pallet::call_index(2)]
+		#[pezpallet::call_index(2)]
 		pub fn set_storage(origin: OriginFor<T>, storage: FixedU64) -> DispatchResult {
 			T::AdminOrigin::ensure_origin_or_root(origin)?;
 
@@ -333,8 +333,8 @@ pub mod pallet {
 		}
 
 		/// Increase the block size by including the specified garbage bytes.
-		#[pallet::call_index(3)]
-		#[pallet::weight((0, DispatchClass::Mandatory))]
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight((0, DispatchClass::Mandatory))]
 		pub fn bloat(_origin: OriginFor<T>, _garbage: Vec<[u8; VALUE_SIZE]>) -> DispatchResult {
 			Ok(())
 		}
@@ -345,8 +345,8 @@ pub mod pallet {
 		///  be close to zero.
 		///
 		/// Only callable by Root or `AdminOrigin`.
-		#[pallet::call_index(4)]
-		#[pallet::weight({1})]
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight({1})]
 		pub fn set_block_length(origin: OriginFor<T>, block_length: FixedU64) -> DispatchResult {
 			T::AdminOrigin::ensure_origin_or_root(origin)?;
 
@@ -358,7 +358,7 @@ pub mod pallet {
 		}
 	}
 
-	impl<T: Config> Pallet<T> {
+	impl<T: Config> Pezpallet<T> {
 		/// Waste at most the remaining proof size of `meter`.
 		///
 		/// Tries to come as close to the limit as possible.

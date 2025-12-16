@@ -22,14 +22,14 @@ use alloc::vec::Vec;
 use pezcumulus_pezpallet_teyrchain_system as teyrchain_system;
 use pezframe_support::pezpallet_prelude::*;
 use pezframe_system::pezpallet_prelude::*;
-pub use pallet::*;
+pub use pezpallet::*;
 use pezkuwi_primitives::PersistedValidationData;
 
-#[pezframe_support::pallet]
-pub mod pallet {
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
 	use super::*;
 
-	#[pallet::config]
+	#[pezpallet::config]
 	pub trait Config:
 		pezframe_system::Config + teyrchain_system::Config + pezpallet_sudo::Config
 	{
@@ -37,18 +37,18 @@ pub mod pallet {
 		type RuntimeEvent: From<Event> + IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 	}
 
-	#[pallet::pallet]
-	#[pallet::without_storage_info]
-	pub struct Pallet<T>(_);
+	#[pezpallet::pezpallet]
+	#[pezpallet::without_storage_info]
+	pub struct Pezpallet<T>(_);
 
 	/// In case of a scheduled migration, this storage field contains the custom head data to be
 	/// applied.
-	#[pallet::storage]
+	#[pezpallet::storage]
 	pub(super) type PendingCustomValidationHeadData<T: Config> =
 		StorageValue<_, Vec<u8>, OptionQuery>;
 
-	#[pallet::event]
-	#[pallet::generate_deposit(pub(super) fn deposit_event)]
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event {
 		/// The custom validation head data has been scheduled to apply.
 		CustomValidationHeadDataStored,
@@ -57,16 +57,16 @@ pub mod pallet {
 		CustomValidationHeadDataApplied,
 	}
 
-	#[pallet::error]
+	#[pezpallet::error]
 	pub enum Error<T> {
 		/// CustomHeadData is not stored in storage.
 		NoCustomHeadData,
 	}
 
-	#[pallet::call]
-	impl<T: Config> Pallet<T> {
-		#[pallet::call_index(0)]
-		#[pallet::weight({0})]
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight({0})]
 		pub fn schedule_migration(
 			origin: OriginFor<T>,
 			code: Vec<u8>,
@@ -74,13 +74,13 @@ pub mod pallet {
 		) -> DispatchResult {
 			ensure_root(origin)?;
 
-			teyrchain_system::Pallet::<T>::schedule_code_upgrade(code)?;
+			teyrchain_system::Pezpallet::<T>::schedule_code_upgrade(code)?;
 			Self::store_pending_custom_validation_head_data(head_data);
 			Ok(())
 		}
 	}
 
-	impl<T: Config> Pallet<T> {
+	impl<T: Config> Pezpallet<T> {
 		/// Set a custom head data that should only be applied when upgradeGoAheadSignal from
 		/// the Relay Chain is GoAhead
 		fn store_pending_custom_validation_head_data(head_data: Vec<u8>) {
@@ -92,16 +92,16 @@ pub mod pallet {
 		/// the relay chain.
 		fn set_pending_custom_validation_head_data() {
 			if let Some(head_data) = <PendingCustomValidationHeadData<T>>::take() {
-				teyrchain_system::Pallet::<T>::set_custom_validation_head_data(head_data);
+				teyrchain_system::Pezpallet::<T>::set_custom_validation_head_data(head_data);
 				Self::deposit_event(Event::CustomValidationHeadDataApplied);
 			}
 		}
 	}
 
-	impl<T: Config> teyrchain_system::OnSystemEvent for Pallet<T> {
+	impl<T: Config> teyrchain_system::OnSystemEvent for Pezpallet<T> {
 		fn on_validation_data(_data: &PersistedValidationData) {}
 		fn on_validation_code_applied() {
-			crate::Pallet::<T>::set_pending_custom_validation_head_data();
+			crate::Pezpallet::<T>::set_pending_custom_validation_head_data();
 		}
 	}
 }
