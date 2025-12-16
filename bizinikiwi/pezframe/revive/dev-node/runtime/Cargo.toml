@@ -20,10 +20,14 @@ pezkuwi-sdk = { workspace = true, features = [
   "pezpallet-transaction-payment",
   "pezpallet-transaction-payment-rpc-runtime-api",
   "pezkuwi-runtime-common",
+  "pezsp-api",
+  "pezsp-keyring",
+  "pezsp-weights",
   "runtime",
   "teyrchains-common",
   "with-tracing",
 ] }
+pezsp-runtime = { workspace = true }
 scale-info = { workspace = true }
 serde_json = { workspace = true, default-features = false, features = [
   "alloc",
@@ -40,6 +44,7 @@ default = ["std"]
 std = [
   "codec/std",
   "pezkuwi-sdk/std",
+  "pezsp-runtime/std",
   "scale-info/std",
   "serde_json/std",
   "pezsp-debug-derive/std",

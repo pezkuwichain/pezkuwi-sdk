@@ -10576,6 +10576,7 @@ dependencies = [
  "parity-scale-codec",
  "pezkuwi-sdk",
  "pezsp-debug-derive",
+ "pezsp-runtime",
  "scale-info",
  "serde_json",
 ]
