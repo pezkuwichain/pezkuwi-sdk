@@ -44,7 +44,7 @@ parameter_types! {
 
 impl pezsnowbridge_pezpallet_system_frontend::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
-	type WeightInfo = weights::pezpezsnowbridge_pezpallet_system_frontend::WeightInfo<Runtime>;
+	type WeightInfo = weights::pezsnowbridge_pezpallet_system_frontend::WeightInfo<Runtime>;
 	#[cfg(feature = "runtime-benchmarks")]
 	type Helper = ();
 	type RegisterTokenOrigin = EitherOf<
@@ -80,7 +80,7 @@ impl pezsnowbridge_pezpallet_system_frontend::Config for Runtime {
 	type UniversalLocation = UniversalLocation;
 	type PalletLocation = SystemFrontendPalletLocation;
 	type Swap = AssetConversion;
-	type BackendWeightInfo = weights::pezpezsnowbridge_pezpallet_system_backend::WeightInfo<Runtime>;
+	type BackendWeightInfo = weights::pezsnowbridge_pezpallet_system_backend::WeightInfo<Runtime>;
 	type AccountIdConverter = xcm_config::LocationToAccountId;
 }
 

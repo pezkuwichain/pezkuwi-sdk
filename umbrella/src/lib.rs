@@ -233,7 +233,7 @@ pub use pezframe_benchmarking_cli;
 
 /// Pezpallet for testing FRAME PoV benchmarking.
 #[cfg(feature = "pezframe-benchmarking-pezpallet-pov")]
-pub use pezframe_benchmarking_pallet_pov;
+pub use pezframe_benchmarking_pezpallet_pov;
 
 /// NPoS Solution Type.
 #[cfg(feature = "pezframe-election-provider-solution-type")]

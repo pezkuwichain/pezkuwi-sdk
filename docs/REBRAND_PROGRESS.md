@@ -1,109 +1,151 @@
 # Rebrand İlerleme Listesi
 
-**Başlangıç:** 2025-12-15
+**Son Güncelleme:** 2025-12-16
 **Toplam Crate:** 76 (REBRAND_MAP'ten)
+**Rebrand Durumu:** 75/76 tamamlandı (98.7%)
 
 ## Durum Açıklamaları
 - ⏳ Bekliyor
-- 🔍 Taranıyor
-- 🔧 Düzeltiliyor
-- ✅ Tamamlandı (cargo check passed)
-- ❌ Hatalı
+- ✅ Rebrand Tamamlandı (Cargo.toml name doğru)
+- 🔨 Derleme Hatası (rebrand tamam ama compile hatası var)
+- ❌ Eksik/Bulunamadı
+
+---
+
+## Özet
+
+| Kategori | Toplam | Tamamlanan | Durum |
+|----------|--------|------------|-------|
+| pez-* prefix | 29 | 29 | ✅ |
+| pezbridge-* | 8 | 8 | ✅ |
+| pezsnowbridge-* | 25 | 24 | ⚠️ 1 eksik |
+| xcm-pez-* | 8 | 8 | ✅ |
+| pezmmr-* | 2 | 2 | ✅ |
+| bp/pezbp-* | 2 | 2 | ✅ |
+| peztest-* | 1 | 1 | ✅ |
+| asset-test-pezutils | 1 | 1 | ✅ |
+| **TOPLAM** | **76** | **75** | **98.7%** |
 
 ---
 
 ## İlerleme Tablosu
 
-| # | Eski İsim | Yeni İsim | Durum | Notlar |
-|---|-----------|-----------|-------|--------|
-| 1 | asset-test-utils | asset-test-pezutils | ✅ | Temiz, cargo check passed |
-| 2 | chain-spec-guide-runtime | pez-chain-spec-guide-runtime | ✅ | Temiz, cargo check passed |
-| 3 | equivocation-detector | pez-equivocation-detector | ✅ | Temiz, cargo check passed |
-| 4 | erasure-coding-fuzzer | pez-erasure-coding-fuzzer | ✅ | İsim düzeltildi, cargo check passed |
-| 5 | ethereum-standards | pez-ethereum-standards | ✅ | Temiz, cargo check passed |
-| 6 | finality-relay | pez-finality-relay | ✅ | Temiz + bridges→pezbridges dizin rebrand |
-| 7 | fork-tree | pez-fork-tree | ✅ | Temiz, cargo check passed |
-| 8 | generate-bags | pez-generate-bags | ✅ | Temiz, cargo check passed |
-| 9 | kitchensink-runtime | pez-kitchensink-runtime | ⏳ | |
-| 10 | messages-relay | pez-messages-relay | ⏳ | |
-| 11 | minimal-template-node | pez-minimal-template-node | ⏳ | |
-| 12 | minimal-template-runtime | pez-minimal-template-runtime | ⏳ | |
-| 13 | node-bench | pez-node-bench | ⏳ | |
-| 14 | node-primitives | pez-node-primitives | ⏳ | |
-| 15 | node-rpc | pez-node-rpc | ⏳ | |
-| 16 | node-runtime-generate-bags | pez-node-runtime-generate-bags | ⏳ | |
-| 17 | node-template-release | pez-node-template-release | ⏳ | |
-| 18 | node-testing | pez-node-testing | ⏳ | |
-| 19 | penpal-emulated-chain | pez-penpal-emulated-chain | ⏳ | |
-| 20 | penpal-runtime | pez-penpal-runtime | ⏳ | |
-| 21 | remote-ext-tests-bags-list | pez-remote-ext-tests-bags-list | ⏳ | |
-| 22 | revive-dev-node | pez-revive-dev-node | ⏳ | |
-| 23 | revive-dev-runtime | pez-revive-dev-runtime | ⏳ | |
-| 24 | slot-range-helper | pez-slot-range-helper | ⏳ | |
-| 25 | solochain-template-node | pez-solochain-template-node | ⏳ | |
-| 26 | solochain-template-runtime | pez-solochain-template-runtime | ⏳ | |
-| 27 | subkey | pez-subkey | ⏳ | |
-| 28 | template-zombienet-tests | pez-template-zombienet-tests | ⏳ | |
-| 29 | test-runtime-constants | peztest-runtime-constants | ⏳ | |
-| 30 | tracing-gum | pez-tracing-gum | ⏳ | |
-| 31 | tracing-gum-proc-macro | pez-tracing-gum-proc-macro | ⏳ | |
-| 32 | bp-header-chain | bp-header-pez-chain | ⏳ | |
-| 33 | bp-runtime | pezbp-runtime | ⏳ | |
-| 34 | bridge-hub-pezkuwichain-emulated-chain | pezbridge-hub-pezkuwichain-emulated-chain | ⏳ | |
-| 35 | bridge-hub-pezkuwichain-integration-tests | pezbridge-hub-pezkuwichain-integration-tests | ⏳ | |
-| 36 | bridge-hub-pezkuwichain-runtime | pezbridge-hub-pezkuwichain-runtime | ⏳ | |
-| 37 | bridge-hub-test-utils | pezbridge-hub-test-utils | ⏳ | |
-| 38 | bridge-hub-zagros-emulated-chain | pezbridge-hub-zagros-emulated-chain | ⏳ | |
-| 39 | bridge-hub-zagros-integration-tests | pezbridge-hub-zagros-integration-tests | ⏳ | |
-| 40 | bridge-hub-zagros-runtime | pezbridge-hub-zagros-runtime | ⏳ | |
-| 41 | bridge-runtime-common | pezbridge-runtime-common | ⏳ | |
-| 42 | mmr-gadget | pezmmr-gadget | ⏳ | |
-| 43 | mmr-rpc | pezmmr-rpc | ⏳ | |
-| 44 | snowbridge-beacon-primitives | pezsnowbridge-beacon-primitives | ⏳ | |
-| 45 | snowbridge-core | pezsnowbridge-core | ⏳ | |
-| 46 | snowbridge-ethereum | pezsnowbridge-ethereum | ⏳ | |
-| 47 | snowbridge-inbound-queue-primitives | pezsnowbridge-inbound-queue-primitives | ⏳ | |
-| 48 | snowbridge-merkle-tree | pezsnowbridge-merkle-tree | ⏳ | |
-| 49 | snowbridge-outbound-queue-primitives | pezsnowbridge-outbound-queue-primitives | ⏳ | |
-| 50 | snowbridge-outbound-queue-runtime-api | pezsnowbridge-outbound-queue-runtime-api | ⏳ | |
-| 51 | snowbridge-outbound-queue-v2-runtime-api | pezsnowbridge-outbound-queue-v2-runtime-api | ⏳ | |
-| 52 | snowbridge-pezpallet-ethereum-client | pezsnowbridge-pezpallet-ethereum-client | ⏳ | |
-| 53 | snowbridge-pezpallet-ethereum-client-fixtures | pezsnowbridge-pezpallet-ethereum-client-fixtures | ⏳ | |
-| 54 | snowbridge-pezpallet-inbound-queue | pezsnowbridge-pezpallet-inbound-queue | ⏳ | |
-| 55 | snowbridge-pezpallet-inbound-queue-fixtures | pezsnowbridge-pezpallet-inbound-queue-fixtures | ⏳ | |
-| 56 | snowbridge-pezpallet-inbound-queue-v2 | pezsnowbridge-pezpallet-inbound-queue-v2 | ⏳ | |
-| 57 | snowbridge-pezpallet-inbound-queue-v2-fixtures | pezsnowbridge-pezpallet-inbound-queue-v2-fixtures | ⏳ | |
-| 58 | snowbridge-pezpallet-outbound-queue | pezsnowbridge-pezpallet-outbound-queue | ⏳ | |
-| 59 | snowbridge-pezpallet-outbound-queue-v2 | pezsnowbridge-pezpallet-outbound-queue-v2 | ⏳ | |
-| 60 | snowbridge-pezpallet-system | pezsnowbridge-pezpallet-system | ⏳ | |
-| 61 | snowbridge-pezpallet-system-frontend | pezsnowbridge-pezpallet-system-frontend | ⏳ | |
-| 62 | snowbridge-pezpallet-system-v2 | pezsnowbridge-pezpallet-system-v2 | ⏳ | |
-| 63 | snowbridge-runtime-common | pezsnowbridge-runtime-common | ⏳ | |
-| 64 | snowbridge-runtime-test-common | pezsnowbridge-runtime-test-common | ⏳ | |
-| 65 | snowbridge-system-runtime-api | pezsnowbridge-system-runtime-api | ⏳ | |
-| 66 | snowbridge-system-v2-runtime-api | pezsnowbridge-system-v2-runtime-api | ⏳ | |
-| 67 | snowbridge-test-utils | pezsnowbridge-test-utils | ⏳ | |
-| 68 | snowbridge-verification-primitives | pezsnowbridge-verification-primitives | ⏳ | |
-| 69 | xcm-docs | xcm-pez-docs | ⏳ | |
-| 70 | xcm-emulator | xcm-pez-emulator | ⏳ | |
-| 71 | xcm-executor-integration-tests | xcm-pez-executor-integration-tests | ⏳ | |
-| 72 | xcm-procedural | xcm-pez-procedural | ⏳ | |
-| 73 | xcm-runtime-apis | xcm-runtime-pezapis | ⏳ | |
-| 74 | xcm-simulator | xcm-pez-simulator | ⏳ | |
-| 75 | xcm-simulator-example | xcm-pez-simulator-example | ⏳ | |
-| 76 | xcm-simulator-fuzzer | xcm-pez-simulator-fuzzer | ⏳ | |
+| # | Yeni İsim | Durum | Konum |
+|---|-----------|-------|-------|
+| 1 | asset-test-pezutils | ✅ | pezcumulus/teyrchains/runtimes/assets/test-utils |
+| 2 | pez-chain-spec-guide-runtime | ✅ | docs/sdk/src/reference_docs/chain_spec_runtime |
+| 3 | pez-equivocation-detector | ✅ | pezbridges/relays/equivocation |
+| 4 | pez-erasure-coding-fuzzer | ✅ | pezkuwi/erasure-coding/fuzzer |
+| 5 | pez-ethereum-standards | ✅ | bizinikiwi/primitives/pez-ethereum-standards |
+| 6 | pez-finality-relay | ✅ | pezbridges/relays/finality |
+| 7 | pez-fork-tree | ✅ | bizinikiwi/utils/pez-fork-tree |
+| 8 | pez-generate-bags | ✅ | bizinikiwi/utils/pezframe/pez-generate-bags |
+| 9 | pez-kitchensink-runtime | ✅🔨 | bizinikiwi/bin/node/runtime (622 derleme hatası) |
+| 10 | pez-messages-relay | ✅ | pezbridges/relays/messages |
+| 11 | pez-minimal-template-node | ✅ | templates/minimal/node |
+| 12 | pez-minimal-template-runtime | ✅ | templates/minimal/runtime |
+| 13 | pez-node-bench | ✅ | bizinikiwi/bin/node/bench |
+| 14 | pez-node-primitives | ✅ | bizinikiwi/bin/node/primitives |
+| 15 | pez-node-rpc | ✅ | bizinikiwi/bin/node/rpc |
+| 16 | node-runtime-pez-generate-bags | ✅ | bizinikiwi/utils/pezframe/pez-generate-bags/node-runtime |
+| 17 | pez-node-template-release | ✅ | bizinikiwi/scripts/ci/pez-node-template-release |
+| 18 | pez-node-testing | ✅ | bizinikiwi/bin/node/testing |
+| 19 | pez-penpal-emulated-chain | ✅ | pezcumulus/teyrchains/integration-tests/emulated/chains/teyrchains/testing/penpal |
+| 20 | pez-penpal-runtime | ✅ | pezcumulus/teyrchains/runtimes/testing/penpal |
+| 21 | pez-remote-ext-tests-bags-list | ✅ | pezkuwi/utils/remote-ext-tests/bags-list |
+| 22 | pez-revive-dev-node | ✅ | bizinikiwi/pezframe/revive/dev-node/node |
+| 23 | pez-revive-dev-runtime | ✅ | bizinikiwi/pezframe/revive/dev-node/runtime |
+| 24 | pez-slot-range-helper | ✅ | pezkuwi/runtime/common/pez-slot-range-helper |
+| 25 | pez-solochain-template-node | ✅ | templates/solochain/node |
+| 26 | pez-solochain-template-runtime | ✅ | templates/solochain/runtime |
+| 27 | pez-subkey | ✅ | bizinikiwi/bin/utils/pez-subkey |
+| 28 | pez-template-zombienet-tests | ✅ | templates/zombienet |
+| 29 | peztest-runtime-constants | ✅ | pezkuwi/runtime/test-runtime/constants |
+| 30 | pez-tracing-gum | ✅ | pezkuwi/node/gum |
+| 31 | pez-tracing-gum-proc-macro | ✅ | pezkuwi/node/gum/proc-macro |
+| 32 | bp-header-pez-chain | ✅ | pezbridges/primitives/header-chain |
+| 33 | pezbp-runtime | ✅ | pezbridges/primitives/runtime |
+| 34 | pezbridge-hub-pezkuwichain-emulated-chain | ✅ | pezcumulus/teyrchains/integration-tests/emulated/chains/teyrchains/pezbridges/bridge-hub-pezkuwichain |
+| 35 | pezbridge-hub-pezkuwichain-integration-tests | ✅ | pezcumulus/teyrchains/integration-tests/emulated/tests/pezbridges/bridge-hub-pezkuwichain |
+| 36 | pezbridge-hub-pezkuwichain-runtime | ✅ | pezcumulus/teyrchains/runtimes/bridge-hubs/bridge-hub-pezkuwichain |
+| 37 | pezbridge-hub-test-utils | ✅ | pezcumulus/teyrchains/runtimes/bridge-hubs/test-utils |
+| 38 | pezbridge-hub-zagros-emulated-chain | ✅ | pezcumulus/teyrchains/integration-tests/emulated/chains/teyrchains/pezbridges/bridge-hub-zagros |
+| 39 | pezbridge-hub-zagros-integration-tests | ✅ | pezcumulus/teyrchains/integration-tests/emulated/tests/pezbridges/bridge-hub-zagros |
+| 40 | pezbridge-hub-zagros-runtime | ✅ | pezcumulus/teyrchains/runtimes/bridge-hubs/bridge-hub-zagros |
+| 41 | pezbridge-runtime-common | ✅ | pezbridges/bin/runtime-common |
+| 42 | pezmmr-gadget | ✅ | bizinikiwi/client/merkle-mountain-range |
+| 43 | pezmmr-rpc | ✅ | bizinikiwi/client/merkle-mountain-range/rpc |
+| 44 | pezsnowbridge-beacon-primitives | ✅ | pezbridges/snowbridge/primitives/beacon |
+| 45 | pezsnowbridge-core | ✅ | pezbridges/snowbridge/primitives/core |
+| 46 | pezsnowbridge-ethereum | ✅ | pezbridges/snowbridge/primitives/ethereum |
+| 47 | pezsnowbridge-inbound-queue-primitives | ✅ | pezbridges/snowbridge/primitives/inbound-queue |
+| 48 | pezsnowbridge-merkle-tree | ✅ | pezbridges/snowbridge/primitives/merkle-tree |
+| 49 | pezsnowbridge-outbound-queue-primitives | ✅ | pezbridges/snowbridge/primitives/outbound-queue |
+| 50 | pezsnowbridge-outbound-queue-runtime-api | ✅ | pezbridges/snowbridge/pezpallets/outbound-queue/runtime-api |
+| 51 | pezsnowbridge-outbound-queue-v2-runtime-api | ✅ | pezbridges/snowbridge/pezpallets/outbound-queue-v2/runtime-api |
+| 52 | pezsnowbridge-pezpallet-ethereum-client | ✅ | pezbridges/snowbridge/pezpallets/ethereum-client |
+| 53 | pezsnowbridge-pezpallet-ethereum-client-fixtures | ✅ | pezbridges/snowbridge/pezpallets/ethereum-client/fixtures |
+| 54 | pezsnowbridge-pezpallet-inbound-queue | ✅ | pezbridges/snowbridge/pezpallets/inbound-queue |
+| 55 | pezsnowbridge-pezpallet-inbound-queue-fixtures | ✅ | pezbridges/snowbridge/pezpallets/inbound-queue/fixtures |
+| 56 | pezsnowbridge-pezpallet-inbound-queue-v2 | ✅ | pezbridges/snowbridge/pezpallets/inbound-queue-v2 |
+| 57 | pezsnowbridge-pezpallet-inbound-queue-v2-fixtures | ✅ | pezbridges/snowbridge/pezpallets/inbound-queue-v2/fixtures |
+| 58 | pezsnowbridge-pezpallet-outbound-queue | ✅ | pezbridges/snowbridge/pezpallets/outbound-queue |
+| 59 | pezsnowbridge-pezpallet-outbound-queue-v2 | ✅ | pezbridges/snowbridge/pezpallets/outbound-queue-v2 |
+| 60 | pezsnowbridge-pezpallet-system | ✅ | pezbridges/snowbridge/pezpallets/system |
+| 61 | pezsnowbridge-pezpallet-system-frontend | ✅ | pezbridges/snowbridge/pezpallets/system-frontend |
+| 62 | pezsnowbridge-pezpallet-system-v2 | ✅ | pezbridges/snowbridge/pezpallets/system-v2 |
+| 63 | pezsnowbridge-runtime-common | ❌ | Mevcut değil veya farklı isimle |
+| 64 | pezsnowbridge-runtime-test-common | ✅ | pezbridges/snowbridge/runtime/test-common |
+| 65 | pezsnowbridge-system-runtime-api | ✅ | pezbridges/snowbridge/pezpallets/system/runtime-api |
+| 66 | pezsnowbridge-system-v2-runtime-api | ✅ | pezbridges/snowbridge/pezpallets/system-v2/runtime-api |
+| 67 | pezsnowbridge-test-utils | ✅ | pezbridges/snowbridge/test-utils |
+| 68 | pezsnowbridge-verification-primitives | ✅ | pezbridges/snowbridge/primitives/verification |
+| 69 | xcm-pez-docs | ✅ | pezkuwi/xcm/docs |
+| 70 | xcm-pez-emulator | ✅ | pezcumulus/xcm/xcm-pez-emulator |
+| 71 | xcm-pez-executor-integration-tests | ✅ | pezkuwi/xcm/xcm-executor/integration-tests |
+| 72 | xcm-pez-procedural | ✅ | pezkuwi/xcm/procedural |
+| 73 | xcm-runtime-pezapis | ✅ | pezkuwi/xcm/xcm-runtime-pezapis |
+| 74 | xcm-pez-simulator | ✅ | pezkuwi/xcm/xcm-pez-simulator |
+| 75 | xcm-pez-simulator-example | ✅ | pezkuwi/xcm/xcm-pez-simulator/example |
+| 76 | xcm-pez-simulator-fuzzer | ✅ | pezkuwi/xcm/xcm-pez-simulator/fuzzer |
 
 ---
 
-## İstatistikler
+## Bilinen Derleme Sorunları
 
-- **Tamamlanan:** 0/76
-- **Devam Eden:** 0/76
-- **Bekleyen:** 76/76
+Bu crate'lerin rebrand'i tamamlandı ancak derleme hataları var:
+
+1. **pez-kitchensink-runtime** - 622 hata (macro expansion ve type resolution sorunları)
+2. **pezkuwi-sdk (umbrella)** - pezframe_benchmarking_pezpallet_pov import düzeltildi
+
+### Bu Oturumda Düzeltilen Sorunlar:
+
+1. `pezpallet-contracts-fixtures/build/Cargo.toml` - workspace inheritance kaldırıldı
+2. `pezpallet-revive-fixtures/build.rs` - panic_immediate_abort yeni syntax'a güncellendi
+3. `asset-hub-zagros pezpezsnowbridge` → `pezsnowbridge` double prefix düzeltildi
+4. `bridge-hub-pezkuwichain/weights` - snowbridge_pezpallet → pezsnowbridge_pezpallet dosya rename
+5. `bridge-hub-zagros/weights` - aynı rename
+6. `umbrella/src/lib.rs` - pezframe_benchmarking_pallet_pov → pezframe_benchmarking_pezpallet_pov
+
+---
+
+## Sonraki Adımlar
+
+1. [ ] Derleme hatalarını düzelt (pez-kitchensink-runtime öncelikli)
+2. [ ] Workspace-wide cargo check geçmeli
+3. [ ] Crates.io publish planına geç
+4. [ ] CI/CD workflow'larını güncelle
 
 ---
 
 ## Log
+
+### 2025-12-16
+- Rebrand durumu tam olarak değerlendirildi
+- 75/76 crate rebrand tamamlanmış bulundu
+- pezsnowbridge-runtime-common mevcut değil (muhtemelen merge edilmiş)
+- REBRAND_PROGRESS.md gerçek durumu yansıtacak şekilde güncellendi
+- Birkaç derleme hatası düzeltildi (fixtures build scripts, weight file renames)
 
 ### 2025-12-15
 - İlerleme listesi oluşturuldu

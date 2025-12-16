@@ -4,12 +4,13 @@ version = "0.6.3"
 edition = "2021"
 
 # Binary targets are injected dynamically by the build script.
+# Note: workspace = true fields removed because this is compiled in a temp directory
 description = "Pezkuwi SDK component: contracts"
 documentation = "https://docs.rs/contracts"
-repository = { workspace = true }
-homepage = { workspace = true }
-authors = { workspace = true }
-license = { workspace = true }
+repository = "https://github.com/pezkuwichain/pezkuwi-sdk"
+homepage = "https://pezkuwi.io"
+authors = ["Pezkuwi Chain <admin@pezkuwi.io>"]
+license = "Apache-2.0"
 [[bin]]
 
 # All paths or versions are injected dynamically by the build script.
