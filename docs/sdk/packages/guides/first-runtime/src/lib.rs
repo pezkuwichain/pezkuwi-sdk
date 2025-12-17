@@ -21,12 +21,14 @@
 
 extern crate alloc;
 use alloc::{vec, vec::Vec};
-use first_pallet::pezpallet_v2 as our_first_pallet;
+use first_pezpallet::pezpallet_v2 as our_first_pallet;
 use frame::{
 	prelude::*,
 	runtime::{apis, prelude::*},
+	deps::pezsp_genesis_builder::DEV_RUNTIME_PRESET,
 };
 use pezpallet_transaction_payment_rpc_runtime_api::{FeeDetails, RuntimeDispatchInfo};
+use pezsp_keyring::Sr25519Keyring;
 
 #[docify::export]
 #[runtime_version]
