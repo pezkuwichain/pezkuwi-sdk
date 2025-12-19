@@ -33,7 +33,7 @@ use pezpallet_revive::{
 };
 use pezsp_core::keccak_256;
 use std::{future::Future, pin::Pin, sync::Arc};
-use subxt::{blocks::ExtrinsicDetails, OnlineClient};
+use pezkuwi_subxt::{blocks::ExtrinsicDetails, OnlineClient};
 
 type FetchReceiptDataFn = Arc<
 	dyn Fn(H256) -> Pin<Box<dyn Future<Output = Option<Vec<ReceiptGasInfo>>> + Send>> + Send + Sync,
@@ -147,7 +147,7 @@ impl ReceiptExtractor {
 		&self,
 		bizinikiwi_block: &BizinikiwiBlock,
 		eth_block_hash: H256,
-		ext: subxt::blocks::ExtrinsicDetails<SrcChainConfig, subxt::OnlineClient<SrcChainConfig>>,
+		ext: pezkuwi_subxt::blocks::ExtrinsicDetails<SrcChainConfig, pezkuwi_subxt::OnlineClient<SrcChainConfig>>,
 		call: EthTransact,
 		receipt_gas_info: ReceiptGasInfo,
 		transaction_index: usize,

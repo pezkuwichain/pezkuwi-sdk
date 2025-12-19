@@ -10,6 +10,7 @@ repository = "https://github.com/pezkuwichain/pezkuwi-sdk.git"
 
 [workspace]
 resolver = "2"
+exclude = ["vendor/pezkuwi-subxt"]
 
 members = [
 	"bizinikiwi/bin/node/bench",
@@ -1446,23 +1447,23 @@ ssz_rs_derive = { version = "0.9.0", default-features = false }
 static_assertions = { version = "1.1.0", default-features = false }
 static_init = { version = "1.0.3" }
 strum = { version = "0.26.3", default-features = false }
-# Pezkuwi-subxt (forked from subxt with pezsp_runtime support)
-subxt = { git = "https://github.com/pezkuwichain/pezkuwi-subxt.git", branch = "master", package = "pezkuwi-subxt", default-features = false }
-subxt-core = { git = "https://github.com/pezkuwichain/pezkuwi-subxt.git", branch = "master", package = "pezkuwi-subxt-core", default-features = false }
-subxt-metadata = { git = "https://github.com/pezkuwichain/pezkuwi-subxt.git", branch = "master", package = "pezkuwi-subxt-metadata", default-features = false }
-subxt-rpcs = { git = "https://github.com/pezkuwichain/pezkuwi-subxt.git", branch = "master", package = "pezkuwi-subxt-rpcs", default-features = false }
-subxt-signer = { git = "https://github.com/pezkuwichain/pezkuwi-subxt.git", branch = "master", package = "pezkuwi-subxt-signer" }
+# Pezkuwi-subxt (forked from subxt with pezsp_runtime support) - using path dependencies
+subxt = { path = "vendor/pezkuwi-subxt/subxt", package = "pezkuwi-subxt", default-features = false }
+subxt-core = { path = "vendor/pezkuwi-subxt/core", package = "pezkuwi-subxt-core", default-features = false }
+subxt-metadata = { path = "vendor/pezkuwi-subxt/metadata", package = "pezkuwi-subxt-metadata", default-features = false }
+subxt-rpcs = { path = "vendor/pezkuwi-subxt/rpcs", package = "pezkuwi-subxt-rpcs", default-features = false }
+subxt-signer = { path = "vendor/pezkuwi-subxt/signer", package = "pezkuwi-subxt-signer" }
 # Internal pezkuwi-subxt dependencies (same crates with pezkuwi- prefixed keys)
-pezkuwi-subxt = { git = "https://github.com/pezkuwichain/pezkuwi-subxt.git", branch = "master", default-features = false }
-pezkuwi-subxt-core = { git = "https://github.com/pezkuwichain/pezkuwi-subxt.git", branch = "master", default-features = false }
-pezkuwi-subxt-codegen = { git = "https://github.com/pezkuwichain/pezkuwi-subxt.git", branch = "master" }
-pezkuwi-subxt-metadata = { git = "https://github.com/pezkuwichain/pezkuwi-subxt.git", branch = "master", default-features = false }
-pezkuwi-subxt-macro = { git = "https://github.com/pezkuwichain/pezkuwi-subxt.git", branch = "master" }
-pezkuwi-subxt-rpcs = { git = "https://github.com/pezkuwichain/pezkuwi-subxt.git", branch = "master", default-features = false }
-pezkuwi-subxt-signer = { git = "https://github.com/pezkuwichain/pezkuwi-subxt.git", branch = "master", default-features = false }
-pezkuwi-subxt-lightclient = { git = "https://github.com/pezkuwichain/pezkuwi-subxt.git", branch = "master", default-features = false }
-pezkuwi-subxt-utils-fetchmetadata = { git = "https://github.com/pezkuwichain/pezkuwi-subxt.git", branch = "master", default-features = false }
-pezkuwi-subxt-utils-stripmetadata = { git = "https://github.com/pezkuwichain/pezkuwi-subxt.git", branch = "master" }
+pezkuwi-subxt = { path = "vendor/pezkuwi-subxt/subxt", default-features = false }
+pezkuwi-subxt-core = { path = "vendor/pezkuwi-subxt/core", default-features = false }
+pezkuwi-subxt-codegen = { path = "vendor/pezkuwi-subxt/codegen" }
+pezkuwi-subxt-metadata = { path = "vendor/pezkuwi-subxt/metadata", default-features = false }
+pezkuwi-subxt-macro = { path = "vendor/pezkuwi-subxt/macro" }
+pezkuwi-subxt-rpcs = { path = "vendor/pezkuwi-subxt/rpcs", default-features = false }
+pezkuwi-subxt-signer = { path = "vendor/pezkuwi-subxt/signer", default-features = false }
+pezkuwi-subxt-lightclient = { path = "vendor/pezkuwi-subxt/lightclient", default-features = false }
+pezkuwi-subxt-utils-fetchmetadata = { path = "vendor/pezkuwi-subxt/utils/fetch-metadata", default-features = false }
+pezkuwi-subxt-utils-stripmetadata = { path = "vendor/pezkuwi-subxt/utils/strip-metadata" }
 syn = { version = "2.0.87" }
 sysinfo = { version = "0.30" }
 tar = { version = "0.4" }

@@ -123,7 +123,7 @@ pub fn generate_calls(
             use super::root_mod;
             use super::#types_mod_ident;
 
-            type DispatchError = #types_mod_ident::pezsp_runtime::DispatchError;
+            type DispatchError = ::pezsp_runtime::DispatchError;
 
             pub mod types {
                 use super::#types_mod_ident;

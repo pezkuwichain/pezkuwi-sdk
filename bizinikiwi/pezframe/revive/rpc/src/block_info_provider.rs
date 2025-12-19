@@ -23,7 +23,7 @@ use crate::{
 use jsonrpsee::core::async_trait;
 use pezsp_core::H256;
 use std::sync::Arc;
-use subxt::{backend::legacy::LegacyRpcMethods, OnlineClient};
+use pezkuwi_subxt::{backend::legacy::LegacyRpcMethods, OnlineClient};
 use tokio::sync::RwLock;
 
 /// BlockInfoProvider cache and retrieves information about blocks.
@@ -75,7 +75,7 @@ impl SubxtBlockInfoProvider {
 		api: OnlineClient<SrcChainConfig>,
 		rpc: LegacyRpcMethods<SrcChainConfig>,
 	) -> Result<Self, ClientError> {
-		let latest = Arc::new(api.blocks().at_latest().await?);
+		let latest = Arc::new(api.blocks().at_latest().await.map_err(pezkuwi_subxt::Error::from)?);
 		Ok(Self {
 			api,
 			rpc,
@@ -127,8 +127,8 @@ impl BlockInfoProvider for SubxtBlockInfoProvider {
 
 		match self.api.blocks().at(hash).await {
 			Ok(block) => Ok(Some(Arc::new(block))),
-			Err(subxt::Error::Block(subxt::error::BlockError::NotFound(_))) => Ok(None),
-			Err(err) => Err(err.into()),
+			Err(pezkuwi_subxt::error::BlockError::BlockNotFound { .. }) => Ok(None),
+			Err(err) => Err(pezkuwi_subxt::Error::from(err).into()),
 		}
 	}
 
@@ -148,8 +148,8 @@ impl BlockInfoProvider for SubxtBlockInfoProvider {
 
 		match self.api.blocks().at(*hash).await {
 			Ok(block) => Ok(Some(Arc::new(block))),
-			Err(subxt::Error::Block(subxt::error::BlockError::NotFound(_))) => Ok(None),
-			Err(err) => Err(err.into()),
+			Err(pezkuwi_subxt::error::BlockError::BlockNotFound { .. }) => Ok(None),
+			Err(err) => Err(pezkuwi_subxt::Error::from(err).into()),
 		}
 	}
 }

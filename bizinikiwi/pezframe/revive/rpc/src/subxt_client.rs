@@ -17,46 +17,46 @@
 //! The generated subxt client.
 //! Generated against a bizinikiwi chain configured with [`pezpallet_revive`] using:
 //! subxt metadata  --url ws://localhost:9944 -o rpc/revive_chain.scale
-pub use subxt::config::PolkadotConfig as SrcChainConfig;
+pub use pezkuwi_subxt::config::PolkadotConfig as SrcChainConfig;
 
-#[subxt::subxt(
+#[pezkuwi_subxt::subxt(
 	runtime_metadata_path = "revive_chain.scale",
 	// Note: subxt hardcodes sp_runtime paths internally but our metadata uses pezsp_runtime
 	// This requires either forking subxt or using compatible metadata
 	// TODO remove once subxt use the same U256 type
 	substitute_type(
 		path = "primitive_types::U256",
-		with = "::subxt::utils::Static<::pezsp_core::U256>"
+		with = "::pezkuwi_subxt::utils::Static<::pezsp_core::U256>"
 	),
 
 	// pezsp_runtime substitutions (rebranded paths from Pezkuwi SDK)
 	substitute_type(
 		path = "pezsp_runtime::DispatchError",
-		with = "::subxt::utils::Static<::pezsp_runtime::DispatchError>"
+		with = "::pezkuwi_subxt::utils::Static<::pezsp_runtime::DispatchError>"
 	),
 	substitute_type(
 		path = "pezsp_runtime::ModuleError",
-		with = "::subxt::utils::Static<::pezsp_runtime::ModuleError>"
+		with = "::pezkuwi_subxt::utils::Static<::pezsp_runtime::ModuleError>"
 	),
 	substitute_type(
 		path = "pezsp_runtime::TokenError",
-		with = "::subxt::utils::Static<::pezsp_runtime::TokenError>"
+		with = "::pezkuwi_subxt::utils::Static<::pezsp_runtime::TokenError>"
 	),
 	substitute_type(
 		path = "pezsp_arithmetic::ArithmeticError",
-		with = "::subxt::utils::Static<::pezsp_runtime::ArithmeticError>"
+		with = "::pezkuwi_subxt::utils::Static<::pezsp_runtime::ArithmeticError>"
 	),
 	substitute_type(
 		path = "pezsp_runtime::TransactionalError",
-		with = "::subxt::utils::Static<::pezsp_runtime::TransactionalError>"
+		with = "::pezkuwi_subxt::utils::Static<::pezsp_runtime::TransactionalError>"
 	),
 	substitute_type(
 		path = "pezsp_runtime::MultiSignature",
-		with = "::subxt::utils::Static<::pezsp_runtime::MultiSignature>"
+		with = "::pezkuwi_subxt::utils::Static<::pezsp_runtime::MultiSignature>"
 	),
 	substitute_type(
 		path = "pezsp_runtime::generic::block::Block<A, B, C, D, E>",
-		with = "::subxt::utils::Static<::pezsp_runtime::generic::Block<
+		with = "::pezkuwi_subxt::utils::Static<::pezsp_runtime::generic::Block<
 		::pezsp_runtime::generic::Header<u32, pezsp_runtime::traits::BlakeTwo256>,
 		::pezsp_runtime::OpaqueExtrinsic
 		>>"
@@ -65,45 +65,45 @@ pub use subxt::config::PolkadotConfig as SrcChainConfig;
 	// pezsp_weights substitutions
 	substitute_type(
 		path = "pezsp_weights::weight_v2::Weight",
-		with = "::subxt::utils::Static<::pezsp_weights::Weight>"
+		with = "::pezkuwi_subxt::utils::Static<::pezsp_weights::Weight>"
 	),
 
 	// pezpallet_revive substitutions (rebranded paths)
 	substitute_type(
 		path = "pezpallet_revive::evm::api::debug_rpc_types::Trace",
-		with = "::subxt::utils::Static<::pezpallet_revive::evm::Trace>"
+		with = "::pezkuwi_subxt::utils::Static<::pezpallet_revive::evm::Trace>"
 	),
 	substitute_type(
 		path = "pezpallet_revive::evm::api::debug_rpc_types::TracerType",
-		with = "::subxt::utils::Static<::pezpallet_revive::evm::TracerType>"
+		with = "::pezkuwi_subxt::utils::Static<::pezpallet_revive::evm::TracerType>"
 	),
 	substitute_type(
 		path = "pezpallet_revive::evm::api::rpc_types_gen::GenericTransaction",
-		with = "::subxt::utils::Static<::pezpallet_revive::evm::GenericTransaction>"
+		with = "::pezkuwi_subxt::utils::Static<::pezpallet_revive::evm::GenericTransaction>"
 	),
 	substitute_type(
 		path = "pezpallet_revive::evm::api::rpc_types::DryRunConfig<M>",
-		with = "::subxt::utils::Static<::pezpallet_revive::evm::DryRunConfig<M>>"
+		with = "::pezkuwi_subxt::utils::Static<::pezpallet_revive::evm::DryRunConfig<M>>"
 	),
 	substitute_type(
 		path = "pezpallet_revive::primitives::EthTransactInfo<B>",
-		with = "::subxt::utils::Static<::pezpallet_revive::EthTransactInfo<B>>"
+		with = "::pezkuwi_subxt::utils::Static<::pezpallet_revive::EthTransactInfo<B>>"
 	),
 	substitute_type(
 		path = "pezpallet_revive::primitives::EthTransactError",
-		with = "::subxt::utils::Static<::pezpallet_revive::EthTransactError>"
+		with = "::pezkuwi_subxt::utils::Static<::pezpallet_revive::EthTransactError>"
 	),
 	substitute_type(
 		path = "pezpallet_revive::primitives::ExecReturnValue",
-		with = "::subxt::utils::Static<::pezpallet_revive::ExecReturnValue>"
+		with = "::pezkuwi_subxt::utils::Static<::pezpallet_revive::ExecReturnValue>"
 	),
 	substitute_type(
 		path = "pezpallet_revive::evm::api::rpc_types_gen::Block",
-		with = "::subxt::utils::Static<::pezpallet_revive::evm::Block>"
+		with = "::pezkuwi_subxt::utils::Static<::pezpallet_revive::evm::Block>"
 	),
 	substitute_type(
 		path = "pezpallet_revive::evm::block_hash::ReceiptGasInfo",
-		with = "::subxt::utils::Static<::pezpallet_revive::evm::ReceiptGasInfo>"
+		with = "::pezkuwi_subxt::utils::Static<::pezpallet_revive::evm::ReceiptGasInfo>"
 	),
 	derive_for_all_types = "codec::Encode, codec::Decode"
 )]

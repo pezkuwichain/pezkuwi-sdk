@@ -38,9 +38,9 @@ use pezpallet_revive::{
 	},
 };
 use std::{sync::Arc, thread};
-use subxt::{
+use pezkuwi_subxt::{
 	backend::rpc::RpcClient,
-	ext::subxt_rpcs::rpc_params,
+	ext::pezkuwi_subxt_rpcs::rpc_params,
 	tx::{SubmittableTransaction, TxStatus},
 	OnlineClient,
 };
@@ -155,14 +155,14 @@ async fn prepare_bizinikiwi_transactions(
 	let mut bizinikiwi_txs = Vec::new();
 	for i in 0..count {
 		let remark_data = format!("Hello from test {}", i);
-		let call = subxt::dynamic::tx(
+		let call = pezkuwi_subxt::dynamic::tx(
 			"System",
 			"remark",
-			vec![subxt::dynamic::Value::from_bytes(remark_data.as_bytes())],
+			vec![pezkuwi_subxt::dynamic::Value::from_bytes(remark_data.as_bytes())],
 		);
 
 		// Note: Using polkadot config from subxt (external crate)
-		let params = subxt::config::polkadot::PolkadotExtrinsicParamsBuilder::new()
+		let params = pezkuwi_subxt::config::polkadot::PolkadotExtrinsicParamsBuilder::new()
 			.nonce(nonce)
 			.build();
 
@@ -423,7 +423,7 @@ async fn test_runtime_api_dry_run_addr_works(client: Arc<WsClient>) -> anyhow::R
 	let (bytes, _) = pezpallet_revive_fixtures::compile_module("dummy")?;
 
 	let payload = subxt_client::apis().revive_api().instantiate(
-		subxt::utils::AccountId32(origin),
+		pezkuwi_subxt::utils::AccountId32(origin),
 		value,
 		None,
 		None,
@@ -747,12 +747,12 @@ async fn test_runtime_pallets_address_upload_code(client: Arc<WsClient>) -> anyh
 	};
 
 	// Step 1: Encode the Bizinikiwi upload_code call
-	let upload_call = subxt::dynamic::tx(
+	let upload_call = pezkuwi_subxt::dynamic::tx(
 		"Revive",
 		"upload_code",
 		vec![
-			subxt::dynamic::Value::from_bytes(&bytecode),
-			subxt::dynamic::Value::u128(u128::max_value()), // storage_deposit_limit
+			pezkuwi_subxt::dynamic::Value::from_bytes(&bytecode),
+			pezkuwi_subxt::dynamic::Value::u128(u128::max_value()), // storage_deposit_limit
 		],
 	);
 	let encoded_call = node_client.tx().call_data(&upload_call)?;

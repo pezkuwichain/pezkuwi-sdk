@@ -48,7 +48,7 @@ pezsp-runtime = { workspace = true, default-features = true }
 pezsp-timestamp = { workspace = true }
 pezsp-weights = { workspace = true, default-features = true }
 sqlx = { workspace = true, features = ["macros", "runtime-tokio", "sqlite"] }
-subxt = { workspace = true, default-features = true, features = [
+pezkuwi-subxt = { workspace = true, default-features = true, features = [
   "reconnecting-rpc-client",
 ] }
 subxt-signer = { workspace = true, features = ["unstable-eth"] }

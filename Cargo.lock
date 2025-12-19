@@ -2321,7 +2321,7 @@ dependencies = [
  "pezsp-consensus-babe",
  "pezsp-consensus-grandpa",
  "pezsp-core",
- "pezsp-crypto-hashing",
+ "pezsp-crypto-hashing 0.1.0",
  "pezsp-debug-derive",
  "pezsp-externalities",
  "pezsp-genesis-builder",
@@ -2398,13 +2398,13 @@ dependencies = [
  "jsonrpsee",
  "parity-scale-codec",
  "parking_lot 0.12.5",
+ "pezkuwi-subxt",
+ "pezkuwi-subxt-core",
+ "pezkuwi-subxt-rpcs",
+ "pezkuwi-subxt-signer",
  "rand 0.8.5",
  "serde",
  "serde_json",
- "subxt",
- "subxt-core",
- "subxt-rpcs",
- "subxt-signer",
  "termplot",
  "thiserror 1.0.69",
  "time",
@@ -5691,6 +5691,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "frame-decode"
+version = "0.15.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0fb3bfa2988ef40247e0e0eecfb171a01ad6f4e399485503aad4c413a5f236f3"
+dependencies = [
+ "frame-metadata",
+ "parity-scale-codec",
+ "scale-decode",
+ "scale-encode",
+ "scale-info",
+ "scale-info-legacy",
+ "scale-type-resolver",
+ "sp-crypto-hashing",
+ "thiserror 2.0.17",
+]
+
+[[package]]
 name = "frame-election-solution-type-fuzzer"
 version = "2.0.0-alpha.5"
 dependencies = [
@@ -5744,7 +5761,7 @@ dependencies = [
  "log",
  "parity-scale-codec",
  "pezsp-core",
- "pezsp-crypto-hashing",
+ "pezsp-crypto-hashing 0.1.0",
  "pezsp-io",
  "pezsp-runtime",
  "pezsp-state-machine",
@@ -6399,6 +6416,8 @@ version = "0.16.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "841d1cc9bed7f9236f321df977030373f4a4163ae1a7dbfe1a51a2c1a51d9100"
 dependencies = [
+ "allocator-api2",
+ "equivalent",
  "foldhash 0.2.0",
  "serde",
  "serde_core",
@@ -10449,7 +10468,7 @@ dependencies = [
  "pezsp-blockchain",
  "pezsp-consensus",
  "pezsp-core",
- "pezsp-crypto-hashing",
+ "pezsp-crypto-hashing 0.1.0",
  "pezsp-inherents",
  "pezsp-keyring",
  "pezsp-runtime",
@@ -11456,7 +11475,7 @@ dependencies = [
  "pezsc-client-api",
  "pezsc-consensus-babe",
  "pezsc-network-types",
- "pezsp-crypto-hashing",
+ "pezsp-crypto-hashing 0.1.0",
  "pezsp-inherents",
  "pezsp-runtime",
  "pezsp-state-machine",
@@ -11565,7 +11584,7 @@ dependencies = [
  "pezsp-consensus-babe",
  "pezsp-consensus-slots",
  "pezsp-core",
- "pezsp-crypto-hashing",
+ "pezsp-crypto-hashing 0.1.0",
  "pezsp-externalities",
  "pezsp-inherents",
  "pezsp-io",
@@ -12170,6 +12189,8 @@ dependencies = [
  "pezframe-support",
  "pezframe-system",
  "pezkuwi-primitives",
+ "pezkuwi-subxt",
+ "pezkuwi-subxt-signer",
  "pezkuwi-teyrchain-primitives",
  "pezsc-block-builder",
  "pezsc-chain-spec",
@@ -12205,8 +12226,6 @@ dependencies = [
  "rand_pcg",
  "serde",
  "serde_json",
- "subxt",
- "subxt-signer",
  "thiserror 1.0.69",
  "thousands",
  "zagros-runtime",
@@ -12327,7 +12346,7 @@ dependencies = [
  "pezsp-api",
  "pezsp-arithmetic",
  "pezsp-core",
- "pezsp-crypto-hashing",
+ "pezsp-crypto-hashing 0.1.0",
  "pezsp-crypto-hashing-proc-macro",
  "pezsp-debug-derive",
  "pezsp-genesis-builder",
@@ -12365,7 +12384,7 @@ dependencies = [
  "pezframe-support",
  "pezframe-support-procedural-tools",
  "pezframe-system",
- "pezsp-crypto-hashing",
+ "pezsp-crypto-hashing 0.1.0",
  "pezsp-io",
  "pezsp-metadata-ir",
  "pezsp-runtime",
@@ -12795,7 +12814,7 @@ dependencies = [
  "pezsp-authority-discovery",
  "pezsp-consensus-babe",
  "pezsp-core",
- "pezsp-crypto-hashing",
+ "pezsp-crypto-hashing 0.1.0",
  "pezsp-keyring",
  "pezsp-keystore",
  "pezsp-tracing",
@@ -13217,7 +13236,7 @@ dependencies = [
  "pezsc-executor-common",
  "pezsc-executor-wasmtime",
  "pezsp-core",
- "pezsp-crypto-hashing",
+ "pezsp-crypto-hashing 0.1.0",
  "pezsp-externalities",
  "pezsp-io",
  "pezsp-tracing",
@@ -13486,6 +13505,7 @@ dependencies = [
  "pezframe-try-runtime",
  "pezkuwi-cli",
  "pezkuwi-primitives",
+ "pezkuwi-subxt-metadata",
  "pezpallet-transaction-payment",
  "pezpallet-transaction-payment-rpc",
  "pezpallet-transaction-payment-rpc-runtime-api",
@@ -13534,7 +13554,6 @@ dependencies = [
  "scale-info",
  "serde",
  "serde_json",
- "subxt-metadata",
  "teyrchains-common",
  "tokio",
  "wait-timeout",
@@ -13763,7 +13782,7 @@ dependencies = [
  "pezsp-application-crypto",
  "pezsp-arithmetic",
  "pezsp-core",
- "pezsp-crypto-hashing",
+ "pezsp-crypto-hashing 0.1.0",
  "pezsp-inherents",
  "pezsp-io",
  "pezsp-keyring",
@@ -14117,7 +14136,7 @@ dependencies = [
  "pezsp-core-hashing",
  "pezsp-core-hashing-proc-macro",
  "pezsp-crypto-ec-utils",
- "pezsp-crypto-hashing",
+ "pezsp-crypto-hashing 0.1.0",
  "pezsp-crypto-hashing-proc-macro",
  "pezsp-database",
  "pezsp-debug-derive",
@@ -14566,6 +14585,190 @@ dependencies = [
 ]
 
 [[package]]
+name = "pezkuwi-subxt"
+version = "0.44.0"
+dependencies = [
+ "async-trait",
+ "derive-where",
+ "either",
+ "frame-metadata",
+ "futures",
+ "hex",
+ "jsonrpsee",
+ "parity-scale-codec",
+ "pezkuwi-subxt-core",
+ "pezkuwi-subxt-lightclient",
+ "pezkuwi-subxt-macro",
+ "pezkuwi-subxt-metadata",
+ "pezkuwi-subxt-rpcs",
+ "pezsp-crypto-hashing 0.1.0 (git+https://github.com/pezkuwichain/pezkuwi-sdk.git?branch=main)",
+ "primitive-types 0.13.1",
+ "scale-bits",
+ "scale-decode",
+ "scale-encode",
+ "scale-info",
+ "scale-value",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.17",
+ "tokio",
+ "tokio-util",
+ "tracing",
+ "url",
+ "wasm-bindgen-futures",
+ "web-time",
+]
+
+[[package]]
+name = "pezkuwi-subxt-codegen"
+version = "0.44.0"
+dependencies = [
+ "heck 0.5.0",
+ "parity-scale-codec",
+ "pezkuwi-subxt-metadata",
+ "proc-macro2 1.0.103",
+ "quote 1.0.42",
+ "scale-info",
+ "scale-typegen 0.12.0",
+ "syn 2.0.111",
+ "thiserror 2.0.17",
+]
+
+[[package]]
+name = "pezkuwi-subxt-core"
+version = "0.44.0"
+dependencies = [
+ "base58",
+ "blake2 0.10.6",
+ "derive-where",
+ "frame-decode 0.15.0",
+ "frame-metadata",
+ "hashbrown 0.14.5",
+ "hex",
+ "impl-serde",
+ "keccak-hash",
+ "parity-scale-codec",
+ "pezkuwi-subxt-metadata",
+ "pezsp-crypto-hashing 0.1.0 (git+https://github.com/pezkuwichain/pezkuwi-sdk.git?branch=main)",
+ "primitive-types 0.13.1",
+ "scale-bits",
+ "scale-decode",
+ "scale-encode",
+ "scale-info",
+ "scale-value",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.17",
+ "tracing",
+]
+
+[[package]]
+name = "pezkuwi-subxt-lightclient"
+version = "0.44.0"
+dependencies = [
+ "futures",
+ "futures-util",
+ "serde",
+ "serde_json",
+ "smoldot-light 0.18.0",
+ "thiserror 2.0.17",
+ "tokio",
+ "tokio-stream",
+ "tracing",
+]
+
+[[package]]
+name = "pezkuwi-subxt-macro"
+version = "0.44.0"
+dependencies = [
+ "darling 0.20.11",
+ "parity-scale-codec",
+ "pezkuwi-subxt-codegen",
+ "pezkuwi-subxt-metadata",
+ "pezkuwi-subxt-utils-fetchmetadata",
+ "proc-macro-error2",
+ "quote 1.0.42",
+ "scale-typegen 0.12.0",
+ "syn 2.0.111",
+]
+
+[[package]]
+name = "pezkuwi-subxt-metadata"
+version = "0.44.0"
+dependencies = [
+ "frame-decode 0.15.0",
+ "frame-metadata",
+ "hashbrown 0.14.5",
+ "parity-scale-codec",
+ "pezsp-crypto-hashing 0.1.0 (git+https://github.com/pezkuwichain/pezkuwi-sdk.git?branch=main)",
+ "scale-info",
+ "scale-info-legacy",
+ "scale-type-resolver",
+ "thiserror 2.0.17",
+]
+
+[[package]]
+name = "pezkuwi-subxt-rpcs"
+version = "0.44.0"
+dependencies = [
+ "derive-where",
+ "finito",
+ "frame-metadata",
+ "futures",
+ "hex",
+ "impl-serde",
+ "jsonrpsee",
+ "parity-scale-codec",
+ "pezkuwi-subxt-core",
+ "pezkuwi-subxt-lightclient",
+ "primitive-types 0.13.1",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.17",
+ "tokio",
+ "tokio-util",
+ "tracing",
+ "url",
+]
+
+[[package]]
+name = "pezkuwi-subxt-signer"
+version = "0.44.0"
+dependencies = [
+ "base64 0.22.1",
+ "bip32",
+ "bip39",
+ "cfg-if",
+ "crypto_secretbox",
+ "hex",
+ "hmac 0.12.1",
+ "keccak-hash",
+ "parity-scale-codec",
+ "pbkdf2",
+ "pezkuwi-subxt-core",
+ "pezsp-crypto-hashing 0.1.0 (git+https://github.com/pezkuwichain/pezkuwi-sdk.git?branch=main)",
+ "regex",
+ "schnorrkel 0.11.5",
+ "scrypt",
+ "secp256k1 0.30.0",
+ "secrecy 0.10.3",
+ "serde",
+ "serde_json",
+ "sha2 0.10.9",
+ "thiserror 2.0.17",
+ "zeroize",
+]
+
+[[package]]
+name = "pezkuwi-subxt-utils-fetchmetadata"
+version = "0.44.0"
+dependencies = [
+ "hex",
+ "parity-scale-codec",
+ "thiserror 2.0.17",
+]
+
+[[package]]
 name = "pezkuwi-test-client"
 version = "1.0.0"
 dependencies = [
@@ -14791,6 +14994,7 @@ dependencies = [
  "parity-scale-codec",
  "pezcumulus-zombienet-sdk-helpers",
  "pezkuwi-primitives",
+ "pezkuwi-subxt",
  "pezpallet-revive",
  "pezsc-executor",
  "pezsc-runtime-utilities",
@@ -14799,7 +15003,6 @@ dependencies = [
  "rand 0.8.5",
  "serde",
  "serde_json",
- "subxt",
  "tokio",
  "tokio-util",
  "zombienet-orchestrator",
@@ -15118,7 +15321,7 @@ dependencies = [
  "pezpallet-collective",
  "pezpallet-identity",
  "pezsp-core",
- "pezsp-crypto-hashing",
+ "pezsp-crypto-hashing 0.1.0",
  "pezsp-io",
  "pezsp-runtime",
  "scale-info",
@@ -16445,7 +16648,7 @@ dependencies = [
  "pezframe-system",
  "pezsp-arithmetic",
  "pezsp-core",
- "pezsp-crypto-hashing",
+ "pezsp-crypto-hashing 0.1.0",
  "pezsp-io",
  "pezsp-runtime",
  "pezsp-tracing",
@@ -17079,6 +17282,7 @@ dependencies = [
  "pezframe-benchmarking",
  "pezframe-support",
  "pezframe-system",
+ "pezkuwi-subxt-signer",
  "pezpallet-balances",
  "pezpallet-proxy",
  "pezpallet-revive-fixtures",
@@ -17112,7 +17316,6 @@ dependencies = [
  "secp256k1 0.28.2",
  "serde",
  "serde_json",
- "subxt-signer",
  "test-case",
 ]
 
@@ -17132,6 +17335,8 @@ dependencies = [
  "parity-scale-codec",
  "pez-revive-dev-node",
  "pez-revive-dev-runtime",
+ "pezkuwi-subxt",
+ "pezkuwi-subxt-signer",
  "pezpallet-revive",
  "pezpallet-revive-fixtures",
  "pezsc-cli",
@@ -17140,7 +17345,7 @@ dependencies = [
  "pezsc-service",
  "pezsp-arithmetic",
  "pezsp-core",
- "pezsp-crypto-hashing",
+ "pezsp-crypto-hashing 0.1.0",
  "pezsp-io",
  "pezsp-rpc",
  "pezsp-runtime",
@@ -17151,8 +17356,6 @@ dependencies = [
  "serde",
  "serde_json",
  "sqlx",
- "subxt",
- "subxt-signer",
  "thiserror 1.0.69",
  "tokio",
 ]
@@ -17264,7 +17467,7 @@ dependencies = [
  "pezframe-system",
  "pezsp-consensus-sassafras",
  "pezsp-core",
- "pezsp-crypto-hashing",
+ "pezsp-crypto-hashing 0.1.0",
  "pezsp-io",
  "pezsp-runtime",
  "scale-info",
@@ -17368,7 +17571,7 @@ dependencies = [
  "pezframe-system",
  "pezpallet-balances",
  "pezsp-arithmetic",
- "pezsp-crypto-hashing",
+ "pezsp-crypto-hashing 0.1.0",
  "pezsp-io",
  "pezsp-runtime",
  "rand_chacha 0.3.1",
@@ -18404,7 +18607,7 @@ dependencies = [
  "pezsp-blockchain",
  "pezsp-consensus-babe",
  "pezsp-core",
- "pezsp-crypto-hashing",
+ "pezsp-crypto-hashing 0.1.0",
  "pezsp-genesis-builder",
  "pezsp-io",
  "pezsp-keyring",
@@ -18624,7 +18827,7 @@ dependencies = [
  "pezsp-consensus-babe",
  "pezsp-consensus-slots",
  "pezsp-core",
- "pezsp-crypto-hashing",
+ "pezsp-crypto-hashing 0.1.0",
  "pezsp-inherents",
  "pezsp-keyring",
  "pezsp-keystore",
@@ -18771,7 +18974,7 @@ dependencies = [
  "pezsp-consensus",
  "pezsp-consensus-grandpa",
  "pezsp-core",
- "pezsp-crypto-hashing",
+ "pezsp-crypto-hashing 0.1.0",
  "pezsp-keyring",
  "pezsp-keystore",
  "pezsp-runtime",
@@ -18910,7 +19113,7 @@ dependencies = [
  "pezsc-tracing",
  "pezsp-api",
  "pezsp-core",
- "pezsp-crypto-hashing",
+ "pezsp-crypto-hashing 0.1.0",
  "pezsp-externalities",
  "pezsp-io",
  "pezsp-maybe-compressed-blob",
@@ -19067,7 +19270,7 @@ dependencies = [
  "pezsp-blockchain",
  "pezsp-consensus",
  "pezsp-core",
- "pezsp-crypto-hashing",
+ "pezsp-crypto-hashing 0.1.0",
  "pezsp-runtime",
  "pezsp-tracing",
  "pin-project",
@@ -19346,7 +19549,7 @@ dependencies = [
  "pezsp-blockchain",
  "pezsp-consensus",
  "pezsp-core",
- "pezsp-crypto-hashing",
+ "pezsp-crypto-hashing 0.1.0",
  "pezsp-keystore",
  "pezsp-offchain",
  "pezsp-rpc",
@@ -19465,15 +19668,15 @@ dependencies = [
  "parity-scale-codec",
  "pezcumulus-primitives-proof-size-hostfunction",
  "pezcumulus-test-runtime",
+ "pezkuwi-subxt",
  "pezsc-executor",
  "pezsc-executor-common",
  "pezsp-core",
- "pezsp-crypto-hashing",
+ "pezsp-crypto-hashing 0.1.0",
  "pezsp-io",
  "pezsp-state-machine",
  "pezsp-version",
  "pezsp-wasm-interface",
- "subxt",
  "thiserror 1.0.69",
 ]
 
@@ -19649,7 +19852,7 @@ dependencies = [
  "log",
  "pezsc-telemetry",
  "pezsp-core",
- "pezsp-crypto-hashing",
+ "pezsp-crypto-hashing 0.1.0",
  "pezsp-io",
  "pezsp-runtime",
  "rand 0.8.5",
@@ -19747,7 +19950,7 @@ dependencies = [
  "pezsp-blockchain",
  "pezsp-consensus",
  "pezsp-core",
- "pezsp-crypto-hashing",
+ "pezsp-crypto-hashing 0.1.0",
  "pezsp-runtime",
  "pezsp-tracing",
  "pezsp-transaction-pool",
@@ -19896,7 +20099,7 @@ dependencies = [
  "hex-literal",
  "parity-scale-codec",
  "pezsp-core",
- "pezsp-crypto-hashing",
+ "pezsp-crypto-hashing 0.1.0",
  "pezsp-runtime",
  "pezsp-tracing",
  "scale-info",
@@ -20375,7 +20578,7 @@ dependencies = [
  "integer-sqrt",
  "num-traits",
  "parity-scale-codec",
- "pezsp-crypto-hashing",
+ "pezsp-crypto-hashing 0.1.0",
  "primitive-types 0.13.1",
  "rand 0.8.5",
  "scale-info",
@@ -20486,7 +20689,7 @@ dependencies = [
  "pezsp-api",
  "pezsp-application-crypto",
  "pezsp-core",
- "pezsp-crypto-hashing",
+ "pezsp-crypto-hashing 0.1.0",
  "pezsp-io",
  "pezsp-keystore",
  "pezsp-mmr-primitives",
@@ -20576,7 +20779,7 @@ dependencies = [
  "parking_lot 0.12.5",
  "paste",
  "pezkuwi-ss58-registry",
- "pezsp-crypto-hashing",
+ "pezsp-crypto-hashing 0.1.0",
  "pezsp-debug-derive",
  "pezsp-externalities",
  "pezsp-std",
@@ -20610,7 +20813,7 @@ dependencies = [
 name = "pezsp-core-hashing"
 version = "15.0.0"
 dependencies = [
- "pezsp-crypto-hashing",
+ "pezsp-crypto-hashing 0.1.0",
 ]
 
 [[package]]
@@ -20654,10 +20857,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "pezsp-crypto-hashing"
+version = "0.1.0"
+source = "git+https://github.com/pezkuwichain/pezkuwi-sdk.git?branch=main#fdd023c4994dbf312d0aaf422cc49a8ea9168378"
+dependencies = [
+ "blake2b_simd",
+ "byteorder",
+ "digest 0.10.7",
+ "sha2 0.10.9",
+ "sha3",
+ "twox-hash 1.6.3",
+]
+
+[[package]]
 name = "pezsp-crypto-hashing-proc-macro"
 version = "0.1.0"
 dependencies = [
- "pezsp-crypto-hashing",
+ "pezsp-crypto-hashing 0.1.0",
  "quote 1.0.42",
  "syn 2.0.111",
 ]
@@ -20723,7 +20939,7 @@ dependencies = [
  "log",
  "parity-scale-codec",
  "pezsp-core",
- "pezsp-crypto-hashing",
+ "pezsp-crypto-hashing 0.1.0",
  "pezsp-externalities",
  "pezsp-keystore",
  "pezsp-runtime-interface",
@@ -21018,7 +21234,7 @@ dependencies = [
  "pezsp-api",
  "pezsp-application-crypto",
  "pezsp-core",
- "pezsp-crypto-hashing",
+ "pezsp-crypto-hashing 0.1.0",
  "pezsp-externalities",
  "pezsp-runtime",
  "pezsp-runtime-interface",
@@ -21216,6 +21432,7 @@ dependencies = [
  "pez-node-rpc",
  "pez-node-testing",
  "pezkuwi-sdk",
+ "pezkuwi-subxt-signer",
  "pezsc-service-test",
  "pezsp-keyring",
  "pezsp-runtime",
@@ -21227,7 +21444,6 @@ dependencies = [
  "serde",
  "serde_json",
  "soketto",
- "subxt-signer",
  "tempfile",
  "tokio",
  "tokio-util",
@@ -23671,6 +23887,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "scale-info-legacy"
+version = "0.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4afb76e1b2cb589b97278e2f1e2e290c9b7c51d6ac69afab9e1d7d1e136a9276"
+dependencies = [
+ "hashbrown 0.16.1",
+ "scale-type-resolver",
+ "serde",
+ "smallstr",
+ "smallvec",
+ "thiserror 2.0.17",
+ "yap",
+]
+
+[[package]]
 name = "scale-type-resolver"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -23685,6 +23916,19 @@ name = "scale-typegen"
 version = "0.11.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "05c61b6b706a3eaad63b506ab50a1d2319f817ae01cf753adcc3f055f9f0fcd6"
+dependencies = [
+ "proc-macro2 1.0.103",
+ "quote 1.0.42",
+ "scale-info",
+ "syn 2.0.111",
+ "thiserror 2.0.17",
+]
+
+[[package]]
+name = "scale-typegen"
+version = "0.12.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "642d2f13f3fc9a34ea2c1e36142984eba78cd2405a61632492f8b52993e98879"
 dependencies = [
  "proc-macro2 1.0.103",
  "quote 1.0.42",
@@ -24428,6 +24672,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "smallstr"
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "862077b1e764f04c251fe82a2ef562fd78d7cadaeb072ca7c2bcaf7217b1ff3b"
+dependencies = [
+ "smallvec",
+]
+
+[[package]]
 name = "smallvec"
 version = "1.15.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -24458,6 +24711,60 @@ name = "smoldot"
 version = "0.19.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e16e5723359f0048bf64bfdfba64e5732a56847d42c4fd3fe56f18280c813413"
+dependencies = [
+ "arrayvec 0.7.6",
+ "async-lock",
+ "atomic-take",
+ "base64 0.22.1",
+ "bip39",
+ "blake2-rfc",
+ "bs58",
+ "chacha20",
+ "crossbeam-queue",
+ "derive_more 2.1.0",
+ "ed25519-zebra",
+ "either",
+ "event-listener 5.4.1",
+ "fnv",
+ "futures-lite 2.6.1",
+ "futures-util",
+ "hashbrown 0.15.5",
+ "hex",
+ "hmac 0.12.1",
+ "itertools 0.14.0",
+ "libm",
+ "libsecp256k1",
+ "merlin",
+ "nom 8.0.0",
+ "num-bigint",
+ "num-rational",
+ "num-traits",
+ "pbkdf2",
+ "pin-project",
+ "poly1305",
+ "rand 0.8.5",
+ "rand_chacha 0.3.1",
+ "ruzstd",
+ "schnorrkel 0.11.5",
+ "serde",
+ "serde_json",
+ "sha2 0.10.9",
+ "sha3",
+ "siphasher 1.0.1",
+ "slab",
+ "smallvec",
+ "soketto",
+ "twox-hash 2.1.2",
+ "wasmi 0.40.0",
+ "x25519-dalek",
+ "zeroize",
+]
+
+[[package]]
+name = "smoldot"
+version = "0.20.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "724ab10d6485cccb4bab080ce436c0b361295274aec7847d7ba84ab1a79a5132"
 dependencies = [
  "arrayvec 0.7.6",
  "async-lock",
@@ -24539,7 +24846,43 @@ dependencies = [
  "siphasher 1.0.1",
  "slab",
  "smol",
- "smoldot",
+ "smoldot 0.19.4",
+ "zeroize",
+]
+
+[[package]]
+name = "smoldot-light"
+version = "0.18.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e8b4d4971f06f2471f4e57a662dbe8047fa0cc020957764a6211f3fad371f7bd"
+dependencies = [
+ "async-channel 2.5.0",
+ "async-lock",
+ "base64 0.22.1",
+ "blake2-rfc",
+ "bs58",
+ "derive_more 2.1.0",
+ "either",
+ "event-listener 5.4.1",
+ "fnv",
+ "futures-channel",
+ "futures-lite 2.6.1",
+ "futures-util",
+ "hashbrown 0.15.5",
+ "hex",
+ "itertools 0.14.0",
+ "log",
+ "lru 0.12.5",
+ "parking_lot 0.12.5",
+ "pin-project",
+ "rand 0.8.5",
+ "rand_chacha 0.3.1",
+ "serde",
+ "serde_json",
+ "siphasher 1.0.1",
+ "slab",
+ "smol",
+ "smoldot 0.20.0",
  "zeroize",
 ]
 
@@ -25266,7 +25609,7 @@ dependencies = [
  "proc-macro2 1.0.103",
  "quote 1.0.42",
  "scale-info",
- "scale-typegen",
+ "scale-typegen 0.11.1",
  "subxt-metadata",
  "syn 2.0.111",
  "thiserror 2.0.17",
@@ -25281,7 +25624,7 @@ dependencies = [
  "base58",
  "blake2 0.10.6",
  "derive-where",
- "frame-decode",
+ "frame-decode 0.8.3",
  "frame-metadata",
  "hashbrown 0.14.5",
  "hex",
@@ -25312,7 +25655,7 @@ dependencies = [
  "futures-util",
  "serde",
  "serde_json",
- "smoldot-light",
+ "smoldot-light 0.17.2",
  "thiserror 2.0.17",
  "tokio",
  "tokio-stream",
@@ -25329,7 +25672,7 @@ dependencies = [
  "parity-scale-codec",
  "proc-macro-error2",
  "quote 1.0.42",
- "scale-typegen",
+ "scale-typegen 0.11.1",
  "subxt-codegen",
  "subxt-metadata",
  "subxt-utils-fetchmetadata",
@@ -25342,7 +25685,7 @@ version = "0.43.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2c134068711c0c46906abc0e6e4911204420331530738e18ca903a5469364d9f"
 dependencies = [
- "frame-decode",
+ "frame-decode 0.8.3",
  "frame-metadata",
  "hashbrown 0.14.5",
  "parity-scale-codec",
@@ -25358,7 +25701,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "25de7727144780d780a6a7d78bbfd28414b8adbab68b05e87329c367d7705be4"
 dependencies = [
  "derive-where",
- "finito",
  "frame-metadata",
  "futures",
  "hex",
@@ -25371,7 +25713,6 @@ dependencies = [
  "subxt-core",
  "subxt-lightclient",
  "thiserror 2.0.17",
- "tokio",
  "tokio-util",
  "tracing",
  "url",
@@ -25384,13 +25725,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9a9bd240ae819f64ac6898d7ec99a88c8b838dba2fb9d83b843feb70e77e34c8"
 dependencies = [
  "base64 0.22.1",
- "bip32",
  "bip39",
  "cfg-if",
  "crypto_secretbox",
  "hex",
  "hmac 0.12.1",
- "keccak-hash",
  "parity-scale-codec",
  "pbkdf2",
  "regex",
@@ -28404,7 +28743,7 @@ dependencies = [
  "pezsp-arithmetic",
  "pezsp-consensus-aura",
  "pezsp-core",
- "pezsp-crypto-hashing",
+ "pezsp-crypto-hashing 0.1.0",
  "pezsp-io",
  "pezsp-runtime",
  "pezsp-tracing",

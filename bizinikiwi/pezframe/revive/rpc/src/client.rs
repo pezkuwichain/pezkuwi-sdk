@@ -39,7 +39,7 @@ use pezsp_weights::Weight;
 use runtime_api::RuntimeApi;
 use std::{ops::Range, sync::Arc, time::Duration};
 use storage_api::StorageApi;
-use subxt::{
+use pezkuwi_subxt::{
 	backend::{
 		legacy::{rpc_methods::SystemHealth, LegacyRpcMethods},
 		rpc::{
@@ -48,14 +48,14 @@ use subxt::{
 		},
 	},
 	config::{HashFor, Header},
-	ext::subxt_rpcs::rpc_params,
+	ext::pezkuwi_subxt_rpcs::rpc_params,
 	Config, OnlineClient,
 };
 use thiserror::Error;
 use tokio::sync::Mutex;
 
 /// The bizinikiwi block type.
-pub type BizinikiwiBlock = subxt::blocks::Block<SrcChainConfig, OnlineClient<SrcChainConfig>>;
+pub type BizinikiwiBlock = pezkuwi_subxt::blocks::Block<SrcChainConfig, OnlineClient<SrcChainConfig>>;
 
 /// The bizinikiwi block header.
 pub type BizinikiwiBlockHeader = <SrcChainConfig as Config>::Header;
@@ -84,11 +84,11 @@ pub enum ClientError {
 	/// A [`jsonrpsee::core::ClientError`] wrapper error.
 	#[error(transparent)]
 	Jsonrpsee(#[from] jsonrpsee::core::ClientError),
-	/// A [`subxt::Error`] wrapper error.
+	/// A [`pezkuwi_subxt::Error`] wrapper error.
 	#[error(transparent)]
-	SubxtError(#[from] subxt::Error),
+	SubxtError(#[from] pezkuwi_subxt::Error),
 	#[error(transparent)]
-	RpcError(#[from] subxt::ext::subxt_rpcs::Error),
+	RpcError(#[from] pezkuwi_subxt::ext::pezkuwi_subxt_rpcs::Error),
 	/// A [`sqlx::Error`] wrapper error.
 	#[error(transparent)]
 	SqlxError(#[from] sqlx::Error),
@@ -131,6 +131,49 @@ pub enum ClientError {
 	#[error("Receipt data length mismatch")]
 	ReceiptDataLengthMismatch,
 }
+
+impl From<pezkuwi_subxt::error::EventsError> for ClientError {
+	fn from(err: pezkuwi_subxt::error::EventsError) -> Self {
+		ClientError::SubxtError(pezkuwi_subxt::Error::from(err))
+	}
+}
+
+impl From<pezkuwi_subxt::error::ExtrinsicError> for ClientError {
+	fn from(err: pezkuwi_subxt::error::ExtrinsicError) -> Self {
+		ClientError::SubxtError(pezkuwi_subxt::Error::from(err))
+	}
+}
+
+impl From<pezkuwi_subxt::error::BlockError> for ClientError {
+	fn from(err: pezkuwi_subxt::error::BlockError) -> Self {
+		ClientError::SubxtError(pezkuwi_subxt::Error::from(err))
+	}
+}
+
+impl From<pezkuwi_subxt::error::BackendError> for ClientError {
+	fn from(err: pezkuwi_subxt::error::BackendError) -> Self {
+		ClientError::SubxtError(pezkuwi_subxt::Error::from(err))
+	}
+}
+
+impl From<pezkuwi_subxt::error::RuntimeApiError> for ClientError {
+	fn from(err: pezkuwi_subxt::error::RuntimeApiError) -> Self {
+		ClientError::SubxtError(pezkuwi_subxt::Error::from(err))
+	}
+}
+
+impl From<pezkuwi_subxt::error::ConstantError> for ClientError {
+	fn from(err: pezkuwi_subxt::error::ConstantError) -> Self {
+		ClientError::SubxtError(pezkuwi_subxt::Error::from(err))
+	}
+}
+
+impl From<pezkuwi_subxt::error::OnlineClientError> for ClientError {
+	fn from(err: pezkuwi_subxt::error::OnlineClientError) -> Self {
+		ClientError::SubxtError(pezkuwi_subxt::Error::from(err))
+	}
+}
+
 const LOG_TARGET: &str = "eth-rpc::client";
 
 const REVERT_CODE: i32 = 3;
@@ -139,10 +182,10 @@ const NOTIFIER_CAPACITY: usize = 16;
 impl From<ClientError> for ErrorObjectOwned {
 	fn from(err: ClientError) -> Self {
 		match err {
-			ClientError::SubxtError(subxt::Error::Rpc(subxt::error::RpcError::ClientError(
-				subxt::ext::subxt_rpcs::Error::User(err),
-			))) |
-			ClientError::RpcError(subxt::ext::subxt_rpcs::Error::User(err)) =>
+			ClientError::SubxtError(pezkuwi_subxt::Error::OtherRpcClientError(
+				pezkuwi_subxt::ext::pezkuwi_subxt_rpcs::Error::User(err),
+			)) |
+			ClientError::RpcError(pezkuwi_subxt::ext::pezkuwi_subxt_rpcs::Error::User(err)) =>
 				ErrorObjectOwned::owned::<Vec<u8>>(err.code, err.message, None),
 			ClientError::TransactError(EthTransactError::Data(data)) => {
 				let msg = match decode_revert_reason(&data) {
@@ -433,7 +476,7 @@ impl Client {
 
 	/// Get the storage API for the given block.
 	pub fn storage_api(&self, block_hash: H256) -> StorageApi {
-		StorageApi::new(self.api.storage().at(block_hash))
+		StorageApi::new(self.api.storage().at(block_hash), block_hash)
 	}
 
 	/// Get the runtime API for the given block.
@@ -454,7 +497,7 @@ impl Client {
 	/// Expose the transaction API.
 	pub async fn submit(
 		&self,
-		call: subxt::tx::DefaultPayload<EthTransact>,
+		call: pezkuwi_subxt::tx::DefaultPayload<EthTransact>,
 	) -> Result<H256, ClientError> {
 		let ext = self.api.tx().create_unsigned(&call).map_err(ClientError::from)?;
 		let hash: H256 = self

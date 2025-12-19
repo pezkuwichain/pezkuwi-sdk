@@ -268,7 +268,7 @@ impl RuntimeGenerator {
                 pub static RUNTIME_APIS: [&str; #runtime_api_names_len] = [ #(#runtime_api_names,)* ];
 
                 /// The error type that is returned when there is a runtime issue.
-                pub type DispatchError = #types_mod_ident::pezsp_runtime::DispatchError;
+                pub type DispatchError = ::pezsp_runtime::DispatchError;
 
                 /// The outer event enum.
                 pub type Event = #event_path;

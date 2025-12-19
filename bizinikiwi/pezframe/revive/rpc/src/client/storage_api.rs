@@ -23,16 +23,17 @@ use crate::{
 	},
 	ClientError, H160,
 };
-use subxt::{storage::Storage, OnlineClient};
+use pezkuwi_subxt::{storage::StorageClientAt, OnlineClient};
+use pezsp_core::H256;
 
 /// A wrapper around the Bizinikiwi Storage API.
 #[derive(Clone)]
-pub struct StorageApi(Storage<SrcChainConfig, OnlineClient<SrcChainConfig>>);
+pub struct StorageApi(StorageClientAt<SrcChainConfig, OnlineClient<SrcChainConfig>>, H256);
 
 impl StorageApi {
 	/// Create a new instance of the StorageApi.
-	pub fn new(api: Storage<SrcChainConfig, OnlineClient<SrcChainConfig>>) -> Self {
-		Self(api)
+	pub fn new(api: StorageClientAt<SrcChainConfig, OnlineClient<SrcChainConfig>>, block_hash: H256) -> Self {
+		Self(api, block_hash)
 	}
 
 	/// Get the contract info for the given contract address.
@@ -41,12 +42,16 @@ impl StorageApi {
 		contract_address: &H160,
 	) -> Result<ContractInfo, ClientError> {
 		// TODO: remove once subxt is updated
-		let contract_address: subxt::utils::H160 = contract_address.0.into();
+		let contract_address: pezkuwi_subxt::utils::H160 = contract_address.0.into();
 
-		let query = subxt_client::storage().revive().account_info_of(contract_address);
-		let Some(info) = self.0.fetch(&query).await? else {
+		let query = subxt_client::storage().revive().account_info_of();
+		let Some(storage_value) = self.0.try_fetch(query, (contract_address,)).await
+			.map_err(|e| ClientError::SubxtError(e.into()))?
+		else {
 			return Err(ClientError::ContractNotFound);
 		};
+		let info = storage_value.decode()
+			.map_err(|e| ClientError::SubxtError(pezkuwi_subxt::Error::from(e)))?;
 
 		let AccountType::Contract(contract_info) = info.account_type else {
 			return Err(ClientError::ContractNotFound);
