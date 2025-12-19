@@ -21,13 +21,15 @@ pub use subxt::config::PolkadotConfig as SrcChainConfig;
 
 #[subxt::subxt(
 	runtime_metadata_path = "revive_chain.scale",
+	// Note: subxt hardcodes sp_runtime paths internally but our metadata uses pezsp_runtime
+	// This requires either forking subxt or using compatible metadata
 	// TODO remove once subxt use the same U256 type
 	substitute_type(
 		path = "primitive_types::U256",
 		with = "::subxt::utils::Static<::pezsp_core::U256>"
 	),
 
-	// The metadata is generated from our rebranded runtime, so paths already use pezsp_* names
+	// pezsp_runtime substitutions (rebranded paths from Pezkuwi SDK)
 	substitute_type(
 		path = "pezsp_runtime::DispatchError",
 		with = "::subxt::utils::Static<::pezsp_runtime::DispatchError>"
@@ -52,7 +54,6 @@ pub use subxt::config::PolkadotConfig as SrcChainConfig;
 		path = "pezsp_runtime::MultiSignature",
 		with = "::subxt::utils::Static<::pezsp_runtime::MultiSignature>"
 	),
-
 	substitute_type(
 		path = "pezsp_runtime::generic::block::Block<A, B, C, D, E>",
 		with = "::subxt::utils::Static<::pezsp_runtime::generic::Block<
@@ -60,6 +61,14 @@ pub use subxt::config::PolkadotConfig as SrcChainConfig;
 		::pezsp_runtime::OpaqueExtrinsic
 		>>"
 	),
+
+	// pezsp_weights substitutions
+	substitute_type(
+		path = "pezsp_weights::weight_v2::Weight",
+		with = "::subxt::utils::Static<::pezsp_weights::Weight>"
+	),
+
+	// pezpallet_revive substitutions (rebranded paths)
 	substitute_type(
 		path = "pezpallet_revive::evm::api::debug_rpc_types::Trace",
 		with = "::subxt::utils::Static<::pezpallet_revive::evm::Trace>"
@@ -68,7 +77,6 @@ pub use subxt::config::PolkadotConfig as SrcChainConfig;
 		path = "pezpallet_revive::evm::api::debug_rpc_types::TracerType",
 		with = "::subxt::utils::Static<::pezpallet_revive::evm::TracerType>"
 	),
-
 	substitute_type(
 		path = "pezpallet_revive::evm::api::rpc_types_gen::GenericTransaction",
 		with = "::subxt::utils::Static<::pezpallet_revive::evm::GenericTransaction>"
@@ -88,10 +96,6 @@ pub use subxt::config::PolkadotConfig as SrcChainConfig;
 	substitute_type(
 		path = "pezpallet_revive::primitives::ExecReturnValue",
 		with = "::subxt::utils::Static<::pezpallet_revive::ExecReturnValue>"
-	),
-	substitute_type(
-		path = "pezsp_weights::weight_v2::Weight",
-		with = "::subxt::utils::Static<::pezsp_weights::Weight>"
 	),
 	substitute_type(
 		path = "pezpallet_revive::evm::api::rpc_types_gen::Block",

@@ -447,3 +447,76 @@ Düzeltme 2-3 denemede işe yaramazsa → ROLLBACK
 ```
 
 ---
+
+## 🔧 DEVAM EDEN GÖREV: pezpallet-revive-eth-rpc DERLEME
+
+**Son güncelleme:** 2025-12-19 14:50 UTC
+
+### Mevcut Durum
+
+`pezpallet-revive-eth-rpc` crate'i compile edilemiyor. İlerleme kaydedildi ama henüz tamamlanmadı.
+
+### TAMAMLANAN ADIMLAR ✅
+
+1. ✅ `pez-revive-dev-node` başarıyla derlendi
+2. ✅ Dev node çalıştırıldı
+3. ✅ Yeni metadata generate edildi (`revive_chain.scale`)
+   - Artık sadece `pezsp_runtime`, `pezpallet_revive` path'leri var
+   - `sp_runtime`, `pallet_revive` (upstream) yok
+4. ✅ `no_default_substitutions` eklendi (`subxt_client.rs`)
+
+### KALAN SORUNLAR
+
+**SORUN 1: subxt hala `sp_runtime` arıyor**
+
+`no_default_substitutions` eklense de subxt bazı type'lar için hala `sp_runtime` path'i kullanıyor:
+```
+error[E0433]: could not find `sp_runtime` in `runtime_types`
+```
+
+**Olası çözüm:** `crate_path` veya ek `substitute_type` direktifleri gerekebilir.
+
+**SORUN 2: H160, H256 type substitutions eksik**
+
+`no_default_substitutions` ile varsayılan type mapping'ler de kayboluyor:
+```
+error[E0277]: the trait bound `H160: From<[u8; 20]>` is not satisfied
+```
+
+**Çözüm:** Eksik type'lar için substitute_type ekle:
+```rust
+substitute_type(
+    path = "primitive_types::H160",
+    with = "::subxt::utils::Static<::pezsp_core::H160>"
+),
+substitute_type(
+    path = "primitive_types::H256",
+    with = "::subxt::utils::Static<::pezsp_core::H256>"
+),
+```
+
+**SORUN 3: SQLX Query Cache**
+
+```
+error: `SQLX_OFFLINE=true` but there is no cached data for this query
+```
+
+**Çözüm seçenekleri:**
+1. `cargo sqlx prepare` ile cache regenerate (PostgreSQL/SQLite gerekli)
+2. `query!` → `query_unchecked!` ile compile-time check'i devre dışı bırak
+
+### SONRAKİ ADIMLAR
+
+1. [ ] H160, H256 ve diğer primitive_types için substitute_type ekle
+2. [ ] `crate_path` veya alternatif subxt yapılandırması araştır
+3. [ ] SQLX sorununu çöz (unchecked query veya cache regenerate)
+4. [ ] `cargo check -p pezpallet-revive-eth-rpc` başarılı olmalı
+5. [ ] `cargo check --workspace` başarılı olmalı
+
+### İlgili Dosyalar
+
+- `bizinikiwi/pezframe/revive/rpc/src/subxt_client.rs` - subxt macro
+- `bizinikiwi/pezframe/revive/rpc/revive_chain.scale` - YENİ metadata (tamamen rebranded)
+- `bizinikiwi/pezframe/revive/rpc/.sqlx/` - SQLX query cache (güncellenmeli)
+
+---

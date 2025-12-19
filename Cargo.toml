@@ -1,10 +1,10 @@
 [workspace.package]
 authors = [
-	"Kurdistan Tech Institute <info@pezkuwichain.io>",
+	"Kurdistan Tech Institute <admin@pezkuwichain.io>",
 	"Parity Technologies <admin@parity.io>",
 ]
 edition = "2021"
-homepage = "https://docs.pezkuwichain.io/sdk/"
+homepage = "https://pezkuwichain.io/"
 license = "GPL-3.0-only"
 repository = "https://github.com/pezkuwichain/pezkuwi-sdk.git"
 
@@ -1446,11 +1446,23 @@ ssz_rs_derive = { version = "0.9.0", default-features = false }
 static_assertions = { version = "1.1.0", default-features = false }
 static_init = { version = "1.0.3" }
 strum = { version = "0.26.3", default-features = false }
-subxt = { version = "0.43", default-features = false }
-subxt-core = { version = "0.43", default-features = false }
-subxt-metadata = { version = "0.43", default-features = false }
-subxt-rpcs = { version = "0.43", default-features = false }
-subxt-signer = { version = "0.43" }
+# Pezkuwi-subxt (forked from subxt with pezsp_runtime support)
+subxt = { git = "https://github.com/pezkuwichain/pezkuwi-subxt.git", branch = "master", package = "pezkuwi-subxt", default-features = false }
+subxt-core = { git = "https://github.com/pezkuwichain/pezkuwi-subxt.git", branch = "master", package = "pezkuwi-subxt-core", default-features = false }
+subxt-metadata = { git = "https://github.com/pezkuwichain/pezkuwi-subxt.git", branch = "master", package = "pezkuwi-subxt-metadata", default-features = false }
+subxt-rpcs = { git = "https://github.com/pezkuwichain/pezkuwi-subxt.git", branch = "master", package = "pezkuwi-subxt-rpcs", default-features = false }
+subxt-signer = { git = "https://github.com/pezkuwichain/pezkuwi-subxt.git", branch = "master", package = "pezkuwi-subxt-signer" }
+# Internal pezkuwi-subxt dependencies (same crates with pezkuwi- prefixed keys)
+pezkuwi-subxt = { git = "https://github.com/pezkuwichain/pezkuwi-subxt.git", branch = "master", default-features = false }
+pezkuwi-subxt-core = { git = "https://github.com/pezkuwichain/pezkuwi-subxt.git", branch = "master", default-features = false }
+pezkuwi-subxt-codegen = { git = "https://github.com/pezkuwichain/pezkuwi-subxt.git", branch = "master" }
+pezkuwi-subxt-metadata = { git = "https://github.com/pezkuwichain/pezkuwi-subxt.git", branch = "master", default-features = false }
+pezkuwi-subxt-macro = { git = "https://github.com/pezkuwichain/pezkuwi-subxt.git", branch = "master" }
+pezkuwi-subxt-rpcs = { git = "https://github.com/pezkuwichain/pezkuwi-subxt.git", branch = "master", default-features = false }
+pezkuwi-subxt-signer = { git = "https://github.com/pezkuwichain/pezkuwi-subxt.git", branch = "master", default-features = false }
+pezkuwi-subxt-lightclient = { git = "https://github.com/pezkuwichain/pezkuwi-subxt.git", branch = "master", default-features = false }
+pezkuwi-subxt-utils-fetchmetadata = { git = "https://github.com/pezkuwichain/pezkuwi-subxt.git", branch = "master", default-features = false }
+pezkuwi-subxt-utils-stripmetadata = { git = "https://github.com/pezkuwichain/pezkuwi-subxt.git", branch = "master" }
 syn = { version = "2.0.87" }
 sysinfo = { version = "0.30" }
 tar = { version = "0.4" }
