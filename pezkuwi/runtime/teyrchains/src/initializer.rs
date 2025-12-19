@@ -247,7 +247,7 @@ impl<T: Config> Pezpallet<T> {
 		let random_seed = {
 			let mut buf = [0u8; 32];
 			// TODO: audit usage of randomness API
-			// https://github.com/pezkuwichain/kurdistan-sdk/issues/139
+			// https://github.com/pezkuwichain/pezkuwi-sdk/issues/139
 			let (random_hash, _) = T::Randomness::random(&b"paras"[..]);
 			let len = core::cmp::min(32, random_hash.as_ref().len());
 			buf[..len].copy_from_slice(&random_hash.as_ref()[..len]);

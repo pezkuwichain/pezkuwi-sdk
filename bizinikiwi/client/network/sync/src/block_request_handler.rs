@@ -386,7 +386,7 @@ where
 					// receiving we need to add the engine ID tag.
 					// The ID tag is hardcoded here to avoid depending on the GRANDPA crate, and
 					// will be removed once we remove the backwards compatibility.
-					// See: https://github.com/pezkuwichain/kurdistan-sdk/issues/32
+					// See: https://github.com/pezkuwichain/pezkuwi-sdk/issues/32
 					let justification =
 						justifications.and_then(|just| just.into_justification(*b"FRNK"));
 

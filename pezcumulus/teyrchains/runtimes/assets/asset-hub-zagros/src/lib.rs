@@ -285,7 +285,7 @@ parameter_types! {
 	pub const ApprovalDeposit: Balance = EXISTENTIAL_DEPOSIT;
 	pub const AssetsStringLimit: u32 = 50;
 	/// Key = 32 bytes, Value = 36 bytes (32+1+1+1+1)
-	// https://github.com/pezkuwichain/kurdistan-sdk/blob/main/bizinikiwi/pezframe/assets/src/lib.rs#L257L271
+	// https://github.com/pezkuwichain/pezkuwi-sdk/blob/main/bizinikiwi/pezframe/assets/src/lib.rs#L257L271
 	pub const MetadataDepositBase: Balance = deposit(1, 68);
 	pub const MetadataDepositPerByte: Balance = deposit(0, 1);
 }
@@ -1566,7 +1566,7 @@ impl pezframe_support::traits::OnRuntimeUpgrade for DeleteUndecodableStorage {
 /// Migration to initialize storage versions for pallets added after genesis.
 ///
 /// Ideally this would be done automatically (see
-/// <https://github.com/pezkuwichain/kurdistan-sdk/issues/102>), but it probably won't be ready for some
+/// <https://github.com/pezkuwichain/pezkuwi-sdk/issues/102>), but it probably won't be ready for some
 /// time and it's beneficial to get try-runtime-cli on-runtime-upgrade checks into the CI, so we're
 /// doing it manually.
 pub struct InitStorageVersions;

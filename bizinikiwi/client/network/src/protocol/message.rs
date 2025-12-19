@@ -61,9 +61,9 @@ pub mod generic {
 	}
 
 	/// Status sent on connection.
-	// TODO https://github.com/pezkuwichain/kurdistan-sdk/issues/24: replace the `Status`
+	// TODO https://github.com/pezkuwichain/pezkuwi-sdk/issues/24: replace the `Status`
 	// struct with this one, after waiting a few releases beyond `NetworkSpecialization`'s
-	// removal (https://github.com/pezkuwichain/kurdistan-sdk/issues/55)
+	// removal (https://github.com/pezkuwichain/pezkuwi-sdk/issues/55)
 	//
 	// and set MIN_VERSION to 6.
 	#[derive(Debug, PartialEq, Eq, Clone, Encode, Decode)]

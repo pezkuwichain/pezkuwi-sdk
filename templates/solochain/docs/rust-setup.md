@@ -151,7 +151,7 @@ configure your Rust compiler to use [`nightly` builds](https://doc.rust-lang.org
 allow you to compile Bizinikiwi runtime code to the Wasm target.
 
 > There are upstream issues in Rust that need to be resolved before all of Bizinikiwi can use the stable Rust toolchain.
-> [This is our tracking issue](https://github.com/pezkuwichain/kurdistan-sdk/issues/9) if you're curious as to why and how
+> [This is our tracking issue](https://github.com/pezkuwichain/pezkuwi-sdk/issues/9) if you're curious as to why and how
 > this will be resolved.
 
 #### Latest nightly for Bizinikiwi `master`

@@ -485,7 +485,7 @@ where
 
 		loop {
 			// This loop can hit the node with very rapid requests, occasionally causing it to
-			// error out in CI (https://github.com/pezkuwichain/kurdistan-sdk/issues/14), so we retry.
+			// error out in CI (https://github.com/pezkuwichain/pezkuwi-sdk/issues/14), so we retry.
 			let retry_strategy =
 				FixedInterval::new(Self::KEYS_PAGE_RETRY_INTERVAL).take(Self::MAX_RETRIES);
 			let get_page_closure =

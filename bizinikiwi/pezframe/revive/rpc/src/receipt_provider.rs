@@ -60,7 +60,7 @@ impl BlockHashMap {
 
 /// Provides information about a block,
 /// This is an abstratction on top of [`BizinikiwiBlock`] that can't be mocked in tests.
-/// Can be removed once <https://github.com/pezkuwichain/kurdistan-sdk/issues/188> is fixed.
+/// Can be removed once <https://github.com/pezkuwichain/pezkuwi-sdk/issues/188> is fixed.
 pub trait BlockInfo {
 	/// Returns the block hash.
 	fn hash(&self) -> H256;
@@ -299,7 +299,7 @@ impl<B: BlockInfoProvider> ReceiptProvider<B> {
 
 	/// Insert receipts into the provider.
 	///
-	/// Note: Can be merged into `insert_block_receipts` once <https://github.com/pezkuwichain/kurdistan-sdk/issues/188> is fixed and subxt let
+	/// Note: Can be merged into `insert_block_receipts` once <https://github.com/pezkuwichain/pezkuwi-sdk/issues/188> is fixed and subxt let
 	/// us create Mock `BizinikiwiBlock`
 	async fn insert(
 		&self,

@@ -221,15 +221,15 @@ Upstream Polkadot SDK'de TODO/issue referansları varsa, bunları **tracking iss
 
 **1. Upstream'de Kontrol Et:**
 ```bash
-# Örnek: pezkuwichain/kurdistan-sdk/issues/133 için
-grep -r "pezkuwichain/kurdistan-sdk/issues/133" /home/mamostehp/polkadot-sdk-check/
+# Örnek: pezkuwichain/pezkuwi-sdk/issues/133 için
+grep -r "pezkuwichain/pezkuwi-sdk/issues/133" /home/mamostehp/polkadot-sdk-check/
 ```
 
 **2. Tracking Issue Oluştur:**
 ```bash
 gh issue create --repo pezkuwichain/pezkuwi-sdk --label "upstream-tracking" \
   --title "[Upstream Tracking] paritytech/polkadot#2403" \
-  --body "**Upstream:** https://github.com/pezkuwichain/kurdistan-sdk/issues/133
+  --body "**Upstream:** https://github.com/pezkuwichain/pezkuwi-sdk/issues/133
 
 **Status Tracking:**
 - [x] Pending - Upstream not yet resolved
@@ -250,7 +250,7 @@ Periodically check upstream and update checkboxes above based on status changes.
 **3. Koddaki Linki Güncelle:**
 ```rust
 // ÖNCEKİ:
-// https://github.com/pezkuwichain/kurdistan-sdk/issues/133
+// https://github.com/pezkuwichain/pezkuwi-sdk/issues/133
 
 // SONRA (bizim tracking issue'ya işaret et):
 // https://github.com/pezkuwichain/pezkuwi-sdk/issues/163

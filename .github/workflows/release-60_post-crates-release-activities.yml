@@ -64,7 +64,7 @@ jobs:
           echo "Using pgpkms-git at: $PGPKMS_PATH"
           git config --global gpg.program "$PGPKMS_PATH"
           git config --global user.name "ParityReleases"
-          git config --global user.email "release-team@kurdistan-tech.io"
+          git config --global user.email "release-team@pezkuwichain.io"
           git config --global user.signingKey "D8018FBB3F534D866A45998293C5FB5F6A367B51"
 
       - name: Bump NODE_VERSION for pezkuwi

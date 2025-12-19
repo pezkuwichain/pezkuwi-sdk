@@ -194,7 +194,7 @@ pub trait DisputesHandler<BlockNumber: Ord> {
 	) -> Result<(), ()> {
 		// TODO: Consider trade-of to avoid `O(n * log(n))` average lookups of `included_state`
 		// TODO: instead make a single pass and store the values lazily.
-		// TODO: https://github.com/pezkuwichain/kurdistan-sdk/issues/150
+		// TODO: https://github.com/pezkuwichain/pezkuwi-sdk/issues/150
 		let n = statement_sets.len();
 
 		statement_sets.sort_by(dispute_ordering_compare::<Self, BlockNumber>);
@@ -893,7 +893,7 @@ impl<T: Config> Pezpallet<T> {
 				BackersOnDisputes::<T>::remove_prefix(to_prune, None);
 
 				// This is larger, and will be extracted to the `shared` pezpallet for more proper
-				// pruning. TODO: https://github.com/pezkuwichain/kurdistan-sdk/issues/145
+				// pruning. TODO: https://github.com/pezkuwichain/pezkuwi-sdk/issues/145
 				#[allow(deprecated)]
 				Included::<T>::remove_prefix(to_prune, None);
 			}

@@ -379,7 +379,7 @@ pub trait ElectionDataProvider {
 	/// [`Self::targets().len()`], since desiring a winner set larger than candidates is not
 	/// feasible.
 	///
-	/// This is documented further in issue: <https://github.com/pezkuwichain/kurdistan-sdk/issues/35>
+	/// This is documented further in issue: <https://github.com/pezkuwichain/pezkuwi-sdk/issues/35>
 	fn desired_targets() -> data_provider::Result<u32>;
 
 	/// Provide a best effort prediction about when the next election is about to happen.

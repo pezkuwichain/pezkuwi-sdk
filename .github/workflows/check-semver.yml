@@ -73,9 +73,9 @@ jobs:
           rustup target add wasm32-unknown-unknown --toolchain $TOOLCHAIN
           rustup component add rust-src --toolchain $TOOLCHAIN
 
-      - name: Install kurdistan-tech-publish
+      - name: Install pezkuwi-publish
         # Set the target dir to cache the build.
-        run: CARGO_TARGET_DIR=./target/ cargo install kurdistan-tech-publish@0.10.6 --locked -q
+        run: CARGO_TARGET_DIR=./target/ cargo install pezkuwi-publish@0.10.6 --locked -q
 
       - name: Get original PR number
         shell: bash
@@ -125,10 +125,10 @@ jobs:
 
           prdoc_file="prdoc/pr_$PR.prdoc"
 
-          # Always run kurdistan-tech-publish to check for all issues (mismatches and missing crates)
+          # Always run pezkuwi-publish to check for all issues (mismatches and missing crates)
           # Capture output to check for specific error types
           parity_output=$(mktemp)
-          if ! kurdistan-tech-publish --color always prdoc --since old --validate prdoc/pr_$PR.prdoc $PRDOC_EXTRA_ARGS -v --toolchain $TOOLCHAIN 2>&1 | tee "$parity_output"; then
+          if ! pezkuwi-publish --color always prdoc --since old --validate prdoc/pr_$PR.prdoc $PRDOC_EXTRA_ARGS -v --toolchain $TOOLCHAIN 2>&1 | tee "$parity_output"; then
 
             # Check if there are missing crates (files changed but not listed in prdoc)
             if grep -q "Files changed but crate not listed in PR Doc" "$parity_output"; then
@@ -202,7 +202,7 @@ jobs:
               rm -f "$minor_patch_temp"
 
               if [ "$has_validate_false" = true ]; then
-                  echo "ℹ️ Found minor/patch bumps with validate: false override. Semver validation was skipped for these crates by kurdistan-tech-publish."
+                  echo "ℹ️ Found minor/patch bumps with validate: false override. Semver validation was skipped for these crates by pezkuwi-publish."
               fi
           fi
 

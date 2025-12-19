@@ -233,7 +233,7 @@ image: "paritytech/tools:latest"
 
 ```yaml
 # Satır 24: Yorum - bizinikiwi PR referansı
-# https://github.com/pezkuwichain/kurdistan-sdk/issues/54
+# https://github.com/pezkuwichain/pezkuwi-sdk/issues/54
 # DEĞİŞTİR: https://github.com/paritytech/polkadot-sdk/pull/XXX (veya kaldır)
 
 # Satır 204: Docker image
@@ -241,7 +241,7 @@ paritytech/pez-node-bench-regression-guard:latest
 # NOT: Bu image paritytech'e ait. Fork veya alternatif gerekli.
 
 # Satır 248: Yorum
-# https://github.com/pezkuwichain/kurdistan-sdk/issues/58
+# https://github.com/pezkuwichain/pezkuwi-sdk/issues/58
 # DEĞİŞTİR: Güncellenebilir
 
 # Satır 385: Revive URL (BIRAKILMALI - harici dependency)

@@ -159,7 +159,7 @@ parameter_types! {
 		.build_or_panic();
 }
 
-// TODO [#78] may need to be updated after https://github.com/pezkuwichain/kurdistan-sdk/issues/88
+// TODO [#78] may need to be updated after https://github.com/pezkuwichain/pezkuwi-sdk/issues/88
 /// Maximal number of messages in single delivery transaction.
 pub const MAX_MESSAGES_IN_DELIVERY_TRANSACTION: MessageNonce = 128;
 

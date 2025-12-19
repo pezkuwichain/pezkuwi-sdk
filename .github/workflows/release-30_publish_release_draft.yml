@@ -292,7 +292,7 @@ jobs:
       matrix:
         channel:
           - name: "Team: RelEng Internal"
-            room: '!GvAyzgCDgaVrvibaAF:kurdistan-tech.io'
+            room: '!GvAyzgCDgaVrvibaAF:pezkuwichain.io'
 
     steps:
       - name: Send Matrix message to ${{ matrix.channel.name }}
@@ -300,7 +300,7 @@ jobs:
         with:
           room_id: ${{ matrix.channel.room }}
           access_token: ${{ secrets.RELEASENOTES_MATRIX_V2_ACCESS_TOKEN }}
-          server: m.kurdistan-tech.io
+          server: m.pezkuwichain.io
           message: |
             **New version of pezkuwi tagged**: ${{ needs.validate-inputs.outputs.release_tag }}<br/>
             And release draft is release created in [pezkuwi-sdk repo](https://github.com/pezkuwichain/pezkuwi-sdk/releases)

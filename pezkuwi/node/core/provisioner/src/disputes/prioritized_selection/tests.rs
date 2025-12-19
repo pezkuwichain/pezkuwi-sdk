@@ -221,7 +221,7 @@ fn partitioning_happy_case() {
 // achieved with or without the 'help' of a double vote (a validator voting for and against at the
 // same time). This makes the test a bit pointless but anyway I'm leaving it here to make this
 // decision explicit and have the test code ready in case this behavior needs to be further tested
-// in the future. Link to the PR with the discussions: https://github.com/pezkuwichain/kurdistan-sdk/issues/177
+// in the future. Link to the PR with the discussions: https://github.com/pezkuwichain/pezkuwi-sdk/issues/177
 #[test]
 fn partitioning_doubled_onchain_vote() {
 	let mut input = BTreeMap::<(SessionIndex, CandidateHash), DisputeStatus>::new();

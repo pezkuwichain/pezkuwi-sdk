@@ -437,7 +437,7 @@ fn construct_runtime_final_expansion(
 					"use `pezframe_system::Config` to set the `Block` type and delete this clause.
 				It is planned to be removed in December 2023",
 				)
-				.help_links(&["https://github.com/pezkuwichain/kurdistan-sdk/issues/51"])
+				.help_links(&["https://github.com/pezkuwichain/pezkuwi-sdk/issues/51"])
 				.span(where_section.span)
 				.build_or_panic(),
 		)

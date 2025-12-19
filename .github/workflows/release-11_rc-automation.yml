@@ -17,7 +17,7 @@ jobs:
       matrix:
         channel:
           - name: "RelEng: Pezkuwi Release Coordination"
-            room: '!cqAmzdIcbOFwrdrubV:kurdistan-tech.io'
+            room: '!cqAmzdIcbOFwrdrubV:pezkuwichain.io'
     environment: release
     env:
       PGP_KMS_KEY: ${{ secrets.PGP_KMS_SIGN_COMMITS_KEY }}
@@ -57,7 +57,7 @@ jobs:
           git config --global commit.gpgsign true
           git config --global gpg.program /home/runner/.local/bin/pgpkms-git
           git config --global user.name "ParityReleases"
-          git config --global user.email "release-team@kurdistan-tech.io"
+          git config --global user.email "release-team@pezkuwichain.io"
           git config --global user.signingKey "D8018FBB3F534D866A45998293C5FB5F6A367B51"
 
       - name: Compute next rc tag
@@ -101,6 +101,6 @@ jobs:
         with:
           room_id: ${{ matrix.channel.room }}
           access_token: ${{ secrets.RELEASENOTES_MATRIX_V2_ACCESS_TOKEN }}
-          server: m.kurdistan-tech.io
+          server: m.pezkuwichain.io
           message: |
             Release process for pezkuwi ${{ steps.compute_tag.outputs.new_tag }} has been started.<br/>

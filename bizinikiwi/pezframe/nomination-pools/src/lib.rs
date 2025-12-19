@@ -339,7 +339,7 @@
 //!
 //! To be fair to joiners, this implementation also need joining pools, which are actively staking,
 //! in addition to the unbonding pools. For maintenance simplicity these are not implemented.
-//! Related: <https://github.com/pezkuwichain/kurdistan-sdk/issues/4>
+//! Related: <https://github.com/pezkuwichain/pezkuwi-sdk/issues/4>
 //!
 //! ### Limitations
 //!

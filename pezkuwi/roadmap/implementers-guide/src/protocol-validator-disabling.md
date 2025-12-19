@@ -430,7 +430,7 @@ Implementation of the above design covers a few additional areas that allow for 
     > This would guarantee determinism as different nodes can see different leaves, but this approach was leaving too
     > wide of a window because of Async-Backing. Relay Parent could have been significantly in the past and it would
     > give a lot of time for past session disputes to be spammed.
-1. Do not block finality for "disabled" disputes [#3358](https://github.com/pezkuwichain/kurdistan-sdk/issues/114)
+1. Do not block finality for "disabled" disputes [#3358](https://github.com/pezkuwichain/pezkuwi-sdk/issues/114)
     - Emergency fix to not block finality for disputes initiated only by disabled validators
 1. Re-enable small offender when approaching BZT (**Runtime**) #TODO
     - When BZT limit is reached and there are more offenders to be disabled re-enable the smallest offenders to disable

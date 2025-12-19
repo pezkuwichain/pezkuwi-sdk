@@ -1195,7 +1195,7 @@ fn message_queue_chain() {
 	// the types are nominally different, they have the same structure and computation of the
 	// new head doesn't differ.
 	//
-	// These cases are taken from https://github.com/pezkuwichain/kurdistan-sdk/issues/173
+	// These cases are taken from https://github.com/pezkuwichain/pezkuwi-sdk/issues/173
 	assert_eq!(
 		MessageQueueChain::default()
 			.extend_downward(&InboundDownwardMessage { sent_at: 2, msg: vec![1, 2, 3] })

@@ -2366,7 +2366,7 @@ async fn handle_collation_fetch_response(
 				"Request timed out"
 			);
 			// For now we don't want to change reputation on timeout, to mitigate issues like
-			// this: https://github.com/pezkuwichain/kurdistan-sdk/issues/152
+			// this: https://github.com/pezkuwichain/pezkuwi-sdk/issues/152
 			Err(None)
 		},
 		Err(RequestError::NetworkError(err)) => {

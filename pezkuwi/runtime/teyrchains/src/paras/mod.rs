@@ -398,7 +398,7 @@ pub(crate) enum PvfCheckCause<BlockNumber> {
 		/// instead of its relay parent -- in order to keep PVF available in case of chain
 		/// reversions.
 		///
-		/// See https://github.com/pezkuwichain/kurdistan-sdk/issues/151 for detailed explanation.
+		/// See https://github.com/pezkuwichain/pezkuwi-sdk/issues/151 for detailed explanation.
 		included_at: BlockNumber,
 		/// Whether or not the upgrade should be enacted directly.
 		///
@@ -2080,7 +2080,7 @@ impl<T: Config> Pezpallet<T> {
 		//
 		// This is only an intermediate solution and should be fixed in foreseeable future.
 		//
-		// [soaking issue]: https://github.com/pezkuwichain/kurdistan-sdk/issues/146
+		// [soaking issue]: https://github.com/pezkuwichain/pezkuwi-sdk/issues/146
 		let validation_code =
 			mem::replace(&mut genesis_data.validation_code, ValidationCode(Vec::new()));
 		UpcomingParasGenesis::<T>::insert(&id, genesis_data);

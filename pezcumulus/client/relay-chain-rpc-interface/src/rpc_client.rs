@@ -784,7 +784,7 @@ pub fn distribute_header(header: RelayHeader, senders: &mut Vec<Sender<RelayHead
 					Err(error) if error.is_disconnected() => false,
 					// Channel is full. This should not happen.
 					// TODO: Improve error handling here
-					// https://github.com/pezkuwichain/kurdistan-sdk/issues/90
+					// https://github.com/pezkuwichain/pezkuwi-sdk/issues/90
 					Err(error) => {
 						tracing::error!(target: LOG_TARGET, ?error, "Event distribution channel has reached its limit. This can lead to missed notifications.");
 						true

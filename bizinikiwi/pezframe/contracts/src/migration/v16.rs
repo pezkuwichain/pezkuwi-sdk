@@ -16,7 +16,7 @@
 // limitations under the License.
 
 //! Remove ED from storage base deposit.
-//! See <https://github.com/pezkuwichain/kurdistan-sdk/issues/116>.
+//! See <https://github.com/pezkuwichain/pezkuwi-sdk/issues/116>.
 
 use crate::{
 	migration::{IsFinished, MigrationStep},

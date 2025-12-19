@@ -2081,7 +2081,7 @@ pub mod node_features {
 	#[derive(Clone, Copy)]
 	pub enum FeatureIndex {
 		/// Tells if tranch0 assignments could be sent in a single certificate.
-		/// Reserved for: `<https://github.com/pezkuwichain/kurdistan-sdk/issues/99>`
+		/// Reserved for: `<https://github.com/pezkuwichain/pezkuwi-sdk/issues/99>`
 		EnableAssignmentsV2 = 0,
 		/// This feature enables the extension of `BackedCandidate::validator_indices` by 8 bits.
 		/// The value stored there represents the assumed core index where the candidates
@@ -2146,7 +2146,7 @@ pub struct SchedulerParams<BlockNumber> {
 	/// How many cores are managed by the coretime chain.
 	pub num_cores: u32,
 	/// Deprecated and no longer used by the runtime.
-	/// Removal is tracked by <https://github.com/pezkuwichain/kurdistan-sdk/issues/98>.
+	/// Removal is tracked by <https://github.com/pezkuwichain/pezkuwi-sdk/issues/98>.
 	#[deprecated]
 	pub max_availability_timeouts: u32,
 	/// The maximum queue size of the pay as you go module.
@@ -2159,7 +2159,7 @@ pub struct SchedulerParams<BlockNumber> {
 	/// The minimum amount needed to claim a slot in the spot pricing queue.
 	pub on_demand_base_fee: Balance,
 	/// Deprecated and no longer used by the runtime.
-	/// Removal is tracked by <https://github.com/pezkuwichain/kurdistan-sdk/issues/98>.
+	/// Removal is tracked by <https://github.com/pezkuwichain/pezkuwi-sdk/issues/98>.
 	#[deprecated]
 	pub ttl: BlockNumber,
 }

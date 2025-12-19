@@ -116,7 +116,7 @@ The main event loop of a collator node:
 ---
 ### Cross-chain Messaging
 
-https://hackmd.io/ILoQltEISP697oMYe4HbrA?view https://github.com/pezkuwichain/kurdistan-sdk/issues/163
+https://hackmd.io/ILoQltEISP697oMYe4HbrA?view https://github.com/pezkuwichain/pezkuwi-sdk/issues/163
 
 The biggest sub-project of the teyrchains roadmap - how messages are sent between teyrchains. This involves the
 state-machine ordering of incoming messages, protocols for fetching those messages, and node logic for persisting the

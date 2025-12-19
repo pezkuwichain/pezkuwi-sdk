@@ -549,7 +549,7 @@ async fn can_sync_explicit_forks() {
 
 // TODO: for unknown reason, this test is flaky on a multithreaded runtime, so we run it
 //       in a single-threaded mode.
-//       See issue https://github.com/pezkuwichain/kurdistan-sdk/issues/20.
+//       See issue https://github.com/pezkuwichain/pezkuwi-sdk/issues/20.
 #[tokio::test]
 async fn syncs_header_only_forks() {
 	pezsp_tracing::try_init_simple();

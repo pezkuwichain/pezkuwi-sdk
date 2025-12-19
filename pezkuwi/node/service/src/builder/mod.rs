@@ -794,7 +794,7 @@ where
 		let config = pezsc_consensus_grandpa::Config {
 			// FIXME bizinikiwi#1578 make this available through chainspec
 			// Grandpa performance can be improved a bit by tuning this parameter, see:
-			// https://github.com/pezkuwichain/kurdistan-sdk/issues/157
+			// https://github.com/pezkuwichain/pezkuwi-sdk/issues/157
 			gossip_duration: Duration::from_millis(1000),
 			justification_generation_period: GRANDPA_JUSTIFICATION_PERIOD,
 			name: Some(name),

@@ -186,7 +186,7 @@ The project operates under the Kurdistan Talent Institute License. It is a utili
 ### Email Contacts
 *   **General Inquiries:** `info@pezkuwichain.io`
 *   **Technical Support:** `tech@pezkuwichain.io`
-*   **Government Relations:** `tech@kurdistan.gov`
+*   **Government Relations:** `tech@kurdistan.gov`, `admin@pezkuwichain.io`
 
 ### Developer Resources
 *   **Developer Portal:** `https://developers.pezkuwichain.io`

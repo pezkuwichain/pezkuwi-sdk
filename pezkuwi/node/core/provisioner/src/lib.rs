@@ -416,7 +416,7 @@ fn note_provisionable_data(
 		// parablocks once they are included. But we can do slightly better by
 		// allowing disagreeing backers to record their disagreement and initiate a
 		// dispute once the parablock in question has been included. This potential
-		// change is tracked by: https://github.com/pezkuwichain/kurdistan-sdk/issues/140
+		// change is tracked by: https://github.com/pezkuwichain/pezkuwi-sdk/issues/140
 		ProvisionableData::Dispute(_, _) => {},
 	}
 }

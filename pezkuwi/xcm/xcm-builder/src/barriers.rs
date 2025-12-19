@@ -546,7 +546,7 @@ where
 	}
 }
 
-// See issue <https://github.com/pezkuwichain/kurdistan-sdk/issues/155>
+// See issue <https://github.com/pezkuwichain/pezkuwi-sdk/issues/155>
 pub struct DenyReserveTransferToRelayChain;
 impl DenyExecution for DenyReserveTransferToRelayChain {
 	fn deny_execution<RuntimeCall>(

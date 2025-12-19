@@ -108,7 +108,7 @@
 //!
 //! ## Additional Resources
 //!
-//! - <https://github.com/pezkuwichain/kurdistan-sdk/issues/13>
+//! - <https://github.com/pezkuwichain/pezkuwi-sdk/issues/13>
 //! - [Bizinikiwi Seminar - Traits and Generic Types](https://www.youtube.com/watch?v=6cp10jVWNl4)
 //! - <https://exchange.pezkuwichain.app/questions/2228/type-casting-to-trait-t-as-config>
 #![allow(unused)]

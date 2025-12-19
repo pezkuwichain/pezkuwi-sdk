@@ -1,14 +1,14 @@
-# Kurdistan SDK — Sovereign Blockchain Infrastructure
+# Pezkuwi SDK — Sovereign Blockchain Infrastructure
 
 **Developed and maintained by Kurdistan Tech Institute**
 
-Kurdistan SDK is a fully independent blockchain development framework, providing all the tools needed to build sovereign, interoperable blockchain networks for stateless nations and distributed communities.
+Pezkuwi SDK is a fully independent blockchain development framework, providing all the tools needed to build sovereign, interoperable blockchain networks for stateless nations and distributed communities.
 
 ---
 
 ## Origin
 
-Kurdistan SDK originated as a fork of Polkadot SDK (stable2512). It has since been completely rebranded and restructured as an independent project under Kurdistan Tech Institute stewardship. All crate names, dependencies, and documentation have been updated to reflect this independence.
+Pezkuwi SDK originated as a fork of Polkadot SDK (stable2512). It has since been completely rebranded and restructured as an independent project under Kurdistan Tech Institute stewardship. All crate names, dependencies, and documentation have been updated to reflect this independence.
 
 ---
 
@@ -16,12 +16,12 @@ Kurdistan SDK originated as a fork of Polkadot SDK (stable2512). It has since be
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    Kurdistan SDK Ecosystem                   │
+│                    Pezkuwi SDK Ecosystem                    │
 ├─────────────────────────────────────────────────────────────┤
 │                                                              │
 │   ┌─────────────────────┐    ┌─────────────────────────┐    │
 │   │   Bizinikiwi        │    │      PezCumulus         │    │
-│   │   (Core Framework)  │    │     (Parachain SDK)     │    │
+│   │   (Core Framework)  │    │     (TeyrChain SDK)     │    │
 │   │                     │    │                         │    │
 │   │  • Runtime Engine   │    │  • Collator Framework   │    │
 │   │  • Consensus        │    │  • XCM Integration      │    │
@@ -31,7 +31,7 @@ Kurdistan SDK originated as a fork of Polkadot SDK (stable2512). It has since be
 │              └──────────┬───────────────┘                    │
 │                         │                                    │
 │              ┌──────────▼───────────┐                        │
-│              │   KurdistanChain       │                        │
+│              │   PezkuwiChain       │                        │
 │              │   (Reference Impl)   │                        │
 │              │   • TeyrChain        │                        │
 │              │   • Zagros Runtime   │                        │
@@ -43,12 +43,12 @@ Kurdistan SDK originated as a fork of Polkadot SDK (stable2512). It has since be
 
 ## Crate Naming Convention
 
-Kurdistan SDK uses a distinct naming scheme to ensure complete independence:
+Pezkuwi SDK uses a distinct naming scheme to ensure complete independence:
 
 | Component | Prefix | Example |
 |-----------|--------|---------|
-| Core Framework (ex-Bizinikiwi) | `bizinikiwi-` | `bizinikiwi-runtime` |
-| Parachain SDK (ex-Pezcumulus) | `pezcumulus-` | `pezcumulus-client` |
+| Core Framework | `bizinikiwi-` | `bizinikiwi-runtime` |
+| TeyrChain SDK | `pezcumulus-` | `pezcumulus-client` |
 | Client Crates | `pezsc-` | `pezsc-network`, `pezsc-consensus` |
 | Primitives | `pezsp-` | `pezsp-runtime`, `pezsp-core` |
 | Framework | `pezframe-` | `pezframe-support`, `pezframe-system` |
@@ -57,9 +57,9 @@ Kurdistan SDK uses a distinct naming scheme to ensure complete independence:
 
 ---
 
-## KurdistanChain — Reference Implementation
+## PezkuwiChain — Reference Implementation
 
-KurdistanChain is the flagship blockchain built on Kurdistan SDK, designed for Kurdish digital sovereignty.
+PezkuwiChain is the flagship blockchain built on Pezkuwi SDK, designed for Kurdish digital sovereignty.
 
 ### Token Economics
 
@@ -75,7 +75,7 @@ KurdistanChain is the flagship blockchain built on Kurdistan SDK, designed for K
 
 ### Custom Pallets
 
-| Pezpallet | Purpose |
+| Pallet | Purpose |
 |--------|---------|
 | `pezpallet-presale` | Multi-round token launches with vesting |
 | `pezpallet-identity-kyc` | Decentralized identity verification |
@@ -99,70 +99,6 @@ Trust-enhanced Nominated Proof-of-Stake combines:
 
 ---
 
-## Quick Start
-
-```bash
-# Clone repository
-git clone https://github.com/pezkuwichain/kurdistan-sdk.git
-cd kurdistan-sdk
-
-# Build release
-cargo build --release
-
-# Build with benchmarks
-cargo build --release --features runtime-benchmarks
-
-# Run development node
-./target/release/kurdistan-node --dev
-```
-
----
-
-## Documentation
-
-| Resource | URL |
-|----------|-----|
-| Main Docs | [docs.pezkuwichain.io](https://docs.pezkuwichain.io) |
-| API Reference | [api.pezkuwichain.io](https://api.pezkuwichain.io) |
-| Website | [pezkuwichain.io](https://pezkuwichain.io) |
-
----
-
-## Community
-
-| Platform | Link |
-|----------|------|
-| Telegram | [@pezkuwichain](https://t.me/pezkuwichain) |
-| Discord | [discord.gg/pezkuwichain](https://discord.gg/pezkuwichain) |
-| Twitter | [@pezkuwichain](https://twitter.com/pezkuwichain) |
-| GitHub | [github.com/pezkuwichain](https://github.com/pezkuwichain) |
-
----
-
-## Contributing
-
-Kurdistan SDK is developed by Kurdistan Tech Institute with community contributions.
-
-See [CONTRIBUTING.md](./docs/contributor/CONTRIBUTING.md) for guidelines.
-
----
-
-## License
-
-Kurdistan SDK is licensed under Apache 2.0. See [LICENSE](./LICENSE) for details.
-
----
-
-<div align="center">
-
-**Kurdistan Tech Institute**
-
-*Building sovereign infrastructure for stateless nations*
-
-</div>
-```
-
-
 ## TNPoS Consensus — World's First Trust-Augmented PoS
 
 **Trust-enhanced Nominated Proof-of-Stake** combines:
@@ -171,10 +107,10 @@ Kurdistan SDK is licensed under Apache 2.0. See [LICENSE](./LICENSE) for details
 - **Performance Metrics**: Uptime, finality participation, historical behavior
 
 **Key Innovations**:
-- 🔬 First implementation of social trust in consensus (academic contribution)
-- 🏛️ Parliamentary NFT System: 201 non-transferable governance seats
-- 🔐 Sybil-resistant via citizenship verification (Tiki pezpallet)
-- 📊 Multi-dimensional validator scoring
+- First implementation of social trust in consensus (academic contribution)
+- Parliamentary NFT System: 201 non-transferable governance seats
+- Sybil-resistant via citizenship verification (Tiki pallet)
+- Multi-dimensional validator scoring
 
 ---
 
@@ -185,7 +121,7 @@ Polkadot Asset Hub (USDT)
          │
          │ XCM Reserve Transfer
          ▼
-TeyrChain Parachain
+TeyrChain (Parachain)
          │
          ├─► Presale contributions
          ├─► DEX trading (future)
@@ -203,9 +139,9 @@ TeyrChain Parachain
 
 | Stage | Validators | Status |
 |-------|------------|--------|
-| Dev Mode | 1 |   |
-| Local Testnet | 2 |   |
-| **Alfa Testnet** | 4 |   |
+| Dev Mode | 1 | ✅ |
+| Local Testnet | 2 | ✅ |
+| **Alfa Testnet** | 4 | ✅ |
 | Beta Testnet | 8 | Q1 2026 |
 | Staging | 20 | Q1 2026 |
 | **Mainnet** | 100 | Q2 2026 |
@@ -214,7 +150,7 @@ TeyrChain Parachain
 
 ## Multi-Nation Platform Vision
 
-KurdistanChain is designed to host **multiple digital nations** simultaneously:
+PezkuwiChain is designed to host **multiple digital nations** simultaneously:
 
 | Nation Type | Example | Target Population |
 |-------------|---------|-------------------|
@@ -249,8 +185,8 @@ KurdistanChain is designed to host **multiple digital nations** simultaneously:
 
 ```bash
 # Clone repository
-git clone https://github.com/pezkuwichain/kurdistan-sdk.git
-cd kurdistan-sdk
+git clone https://github.com/pezkuwichain/pezkuwi-sdk.git
+cd pezkuwi-sdk
 
 # Build release
 cargo build --release
@@ -259,7 +195,7 @@ cargo build --release
 cargo build --release --features runtime-benchmarks
 
 # Run local testnet
-./target/release/kurdistan-node --dev
+./target/release/pezkuwi-node --dev
 ```
 
 ---
@@ -283,105 +219,99 @@ cargo build --release --features runtime-benchmarks
 | Twitter | [@pezkuwichain](https://twitter.com/pezkuwichain) |
 | GitHub | [github.com/pezkuwichain](https://github.com/pezkuwichain) |
 | Medium | [@pezkuwichain](https://medium.com/@pezkuwichain) |
-| Facebook | [KurdistanChain](https://www.facebook.com/profile.php?id=61582484611719) |
+| Facebook | [PezkuwiChain](https://www.facebook.com/profile.php?id=61582484611719) |
 
 ---
 
 <div align="center">
 
-![SDK Logo](./docs/images/Kurdistan_Logo_Horizontal_Pink_White.png#gh-dark-mode-only)
-![SDK Logo](./docs/images/Kurdistan_Logo_Horizontal_Pink_Black.png#gh-light-mode-only)
+![SDK Logo](./docs/images/Pezkuwi_Logo_Horizontal_Pink_White.png#gh-dark-mode-only)
+![SDK Logo](./docs/images/Pezkuwi_Logo_Horizontal_Pink_Black.png#gh-light-mode-only)
 
-# Kurdistan SDK
+# Pezkuwi SDK
 
-![GitHub stars](https://img.shields.io/github/stars/pezkuwichain/kurdistan-sdk)&nbsp;&nbsp;![GitHub
-forks](https://img.shields.io/github/forks/pezkuwichain/kurdistan-sdk)
+![GitHub stars](https://img.shields.io/github/stars/pezkuwichain/pezkuwi-sdk)&nbsp;&nbsp;![GitHub forks](https://img.shields.io/github/forks/pezkuwichain/pezkuwi-sdk)
 
 <!-- markdownlint-disable-next-line MD013 -->
-[![StackExchange](https://img.shields.io/badge/StackExchange-Community%20&%20Support-222222?logo=stackexchange)](https://pezkuwichain.app/community)&nbsp;&nbsp;![GitHub contributors](https://img.shields.io/github/contributors/pezkuwichain/kurdistan-sdk)&nbsp;&nbsp;![GitHub commit activity](https://img.shields.io/github/commit-activity/m/pezkuwichain/kurdistan-sdk)&nbsp;&nbsp;![GitHub last commit](https://img.shields.io/github/last-commit/pezkuwichain/kurdistan-sdk)
+[![StackExchange](https://img.shields.io/badge/StackExchange-Community%20&%20Support-222222?logo=stackexchange)](https://pezkuwichain.app/community)&nbsp;&nbsp;![GitHub contributors](https://img.shields.io/github/contributors/pezkuwichain/pezkuwi-sdk)&nbsp;&nbsp;![GitHub commit activity](https://img.shields.io/github/commit-activity/m/pezkuwichain/pezkuwi-sdk)&nbsp;&nbsp;![GitHub last commit](https://img.shields.io/github/last-commit/pezkuwichain/pezkuwi-sdk)
 
-> The Kurdistan SDK repository provides all the components needed to start building on the
-> [KurdistanChain](https://pezkuwichain.app/) network, a multi-chain blockchain platform that enables
+> The Pezkuwi SDK repository provides all the components needed to start building on the
+> [PezkuwiChain](https://pezkuwichain.app/) network, a multi-chain blockchain platform that enables
 > different blockchains to interoperate and share information in a secure and scalable way.
 
 </div>
 
-## ⚡ Quickstart
+## Quickstart
+
 If you want to get an example node running quickly you can execute the following getting started script:
 
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/pezkuwichain/pezkuwi-sdk/master/scripts/getting-started.sh | bash
 ```
-curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/pezkuwichain/kurdistan-sdk/master/scripts/getting-started.sh | bash
-```
 
-## 👩🏽‍💻 Building
+## Building
 
-In order to build this project you need to install some dependencies, follow the instructions in [this guide](https://docs.pezkuwichain.io/develop/teyrchains/install-kurdistan-sdk).
+In order to build this project you need to install some dependencies, follow the instructions in [this guide](https://docs.pezkuwichain.io/develop/teyrchains/install-pezkuwi-sdk).
 
-## 📚 Documentation
+## Documentation
 
-- [Kurdistan Documentation Portal](https://docs.pezkuwichain.io)
-- [rust-docs](https://pezkuwichain.github.io/kurdistan-sdk/master/kurdistan_sdk_docs/index.html): Where we keep track of
-the API docs of our Rust crates. Includes:
-  - [Introduction](https://pezkuwichain.github.io/kurdistan-sdk/master/kurdistan_sdk_docs/kurdistan_sdk/index.html)
-    to each component of the Kurdistan SDK: Substrate, FRAME, Cumulus, and XCM
-  - [Guides](https://pezkuwichain.github.io/kurdistan-sdk/master/kurdistan_sdk_docs/guides/index.html),
-    namely how to build your first FRAME pezpallet
-  - [Templates](https://pezkuwichain.github.io/kurdistan-sdk/master/kurdistan_sdk_docs/kurdistan_sdk/templates/index.html)
-    for starting a new project.
-  - [External Resources](https://pezkuwichain.github.io/kurdistan-sdk/master/kurdistan_sdk_docs/external_resources/index.html)
-- Have a question? You can ask in the Kurdistan SDK Developers Chat.
-Messages from either of these channels are bridged to the other, so you can use whichever one you like.
+- [Pezkuwi Documentation Portal](https://docs.pezkuwichain.io)
+- [rust-docs](https://pezkuwichain.github.io/pezkuwi-sdk/master/pezkuwi_sdk_docs/index.html): Where we keep track of the API docs of our Rust crates. Includes:
+  - [Introduction](https://pezkuwichain.github.io/pezkuwi-sdk/master/pezkuwi_sdk_docs/pezkuwi_sdk/index.html) to each component of the Pezkuwi SDK: Bizinikiwi, FRAME, PezCumulus, and XCM
+  - [Guides](https://pezkuwichain.github.io/pezkuwi-sdk/master/pezkuwi_sdk_docs/guides/index.html), namely how to build your first FRAME pallet
+  - [Templates](https://pezkuwichain.github.io/pezkuwi-sdk/master/pezkuwi_sdk_docs/pezkuwi_sdk/templates/index.html) for starting a new project.
+  - [External Resources](https://pezkuwichain.github.io/pezkuwi-sdk/master/pezkuwi_sdk_docs/external_resources/index.html)
+- Have a question? You can ask in the Pezkuwi SDK Developers Chat.
   - [Telegram](https://t.me/DKSPezkuwiChain)
   - [Matrix](https://matrix.to/#/#pezkuwidevs:matrix.org)
   - [Discord](https://discord.gg/Y3VyEC6h8W)
-  - [Kurdistan and Substrate StackExchange](https://pezkuwichain.io/forum)
+  - [Pezkuwi StackExchange](https://pezkuwichain.io/forum)
 
-## 🚀 Releases
+## Releases
 
 <!-- markdownlint-disable-next-line MD013 -->
-![Current Stable Release](https://raw.githubusercontent.com/pezkuwichain/release-registry/main/badges/kurdistan-sdk-latest.svg)&nbsp;&nbsp;![Next Stable Release](https://raw.githubusercontent.com/pezkuwichain/release-registry/main/badges/kurdistan-sdk-next.svg)
+![Current Stable Release](https://raw.githubusercontent.com/pezkuwichain/release-registry/main/badges/pezkuwi-sdk-latest.svg)&nbsp;&nbsp;![Next Stable Release](https://raw.githubusercontent.com/pezkuwichain/release-registry/main/badges/pezkuwi-sdk-next.svg)
 
-The Kurdistan SDK is released every three months as a `Kurdistan stableYYMM` release. Each stable release is supported for
-one year with patches. See the next upcoming versions in the [Release
-Registry](https://github.com/pezkuwichain/release-registry/) and more docs in [RELEASE.md](./docs/RELEASE.md).
+The Pezkuwi SDK is released every three months as a `Pezkuwi stableYYMM` release. Each stable release is supported for one year with patches. See the next upcoming versions in the [Release Registry](https://github.com/pezkuwichain/release-registry/) and more docs in [RELEASE.md](./docs/RELEASE.md).
 
-You can use [`psvm`](https://github.com/pezkuwichain/psvm) to update all dependencies to a specific
-version without needing to manually select the correct version for each crate.
+You can use [`psvm`](https://github.com/pezkuwichain/psvm) to update all dependencies to a specific version without needing to manually select the correct version for each crate.
 
-## 🛠️ Tooling
+## Tooling
 
-[Kurdistan SDK Version Manager](https://github.com/pezkuwichain/psvm):
-A simple tool to manage and update the Kurdistan SDK dependencies in any Cargo.toml file.
-It will automatically update the Kurdistan SDK dependencies to their correct crates.io version.
+[Pezkuwi SDK Version Manager](https://github.com/pezkuwichain/psvm): A simple tool to manage and update the Pezkuwi SDK dependencies in any Cargo.toml file. It will automatically update the Pezkuwi SDK dependencies to their correct crates.io version.
 
-## 🔐 Security
+## Security
 
-The security policy and procedures can be found in
-[docs/contributor/SECURITY.md](./docs/contributor/SECURITY.md).
+The security policy and procedures can be found in [docs/contributor/SECURITY.md](./docs/contributor/SECURITY.md).
 
-## 🤍 Contributing & Code of Conduct
+## Contributing & Code of Conduct
 
-Ensure you follow our [contribution guidelines](./docs/contributor/CONTRIBUTING.md). In every
-interaction and contribution, this project adheres to the [Contributor Covenant Code of
-Conduct](./docs/contributor/CODE_OF_CONDUCT.md).
+Ensure you follow our [contribution guidelines](./docs/contributor/CONTRIBUTING.md). In every interaction and contribution, this project adheres to the [Contributor Covenant Code of Conduct](./docs/contributor/CODE_OF_CONDUCT.md).
 
-### 👾 Ready to Contribute?
+### Ready to Contribute?
 
-Take a look at the issues labeled with [`mentor`](https://github.com/pezkuwichain/kurdistan-sdk/labels/C1-mentor)
-(or alternatively [this](https://mentor.tasty.limo/) page, created by one of the maintainers) label to get started!
-We always recognize valuable contributions by proposing an on-chain tip to the KurdistanChain network as a token of our
-appreciation.
+Take a look at the issues labeled with [`mentor`](https://github.com/pezkuwichain/pezkuwi-sdk/labels/C1-mentor) (or alternatively [this](https://mentor.tasty.limo/) page, created by one of the maintainers) label to get started! We always recognize valuable contributions by proposing an on-chain tip to the PezkuwiChain network as a token of our appreciation.
 
-## Kurdistan Fellowship
+## Pezkuwi Fellowship
 
-Development in this repo usually goes hand in hand with the `fellowship` organization. In short,
-this repository provides all the SDK pieces needed to build both KurdistanChain and its teyrchains. But,
-the actual KurdistanChain runtime lives in the `fellowship/runtimes` repository. Read more about the
-fellowship, this separation, the RFC process
-[here](https://kurdistan-fellows.github.io/dashboard/).
+Development in this repo usually goes hand in hand with the `fellowship` organization. In short, this repository provides all the SDK pieces needed to build both PezkuwiChain and its teyrchains. But, the actual PezkuwiChain runtime lives in the `fellowship/runtimes` repository. Read more about the fellowship, this separation, the RFC process [here](https://pezkuwi-fellows.github.io/dashboard/).
 
 ## History
 
-This repository is the amalgamation of 3 separate repositories that used to make up Kurdistan SDK,
-namely Substrate, Kurdistan and Cumulus. Read more about the merge and its history
-[here](https://kurdistan-public.notion.site/Kurdistan-SDK-FAQ-fbc4cecc2c46443fb37b9eeec2f0d85f).
+This repository is the amalgamation of 3 separate repositories that used to make up Pezkuwi SDK, namely Bizinikiwi, Pezkuwi and PezCumulus. Read more about the merge and its history [here](https://pezkuwi-public.notion.site/Pezkuwi-SDK-FAQ-fbc4cecc2c46443fb37b9eeec2f0d85f).
+
+---
+
+## License
+
+Pezkuwi SDK is licensed under Apache 2.0. See [LICENSE](./LICENSE) for details.
+
+---
+
+<div align="center">
+
+**Kurdistan Tech Institute**
+
+*Building sovereign infrastructure for stateless nations*
+
+</div>

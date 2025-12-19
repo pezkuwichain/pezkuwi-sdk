@@ -46,7 +46,7 @@ jobs:
         shell: bash
         run: |
           if [[ "${{ inputs.binary }}" == "pezkuwi-teyrchain" ]]; then
-            echo "RUNNER=kurdistan-tech-large" >> $GITHUB_OUTPUT
+            echo "RUNNER=pezkuwichain-large" >> $GITHUB_OUTPUT
           else
             echo "RUNNER=ubuntu-latest" >> $GITHUB_OUTPUT
           fi

@@ -37,7 +37,7 @@ jobs:
         COMMIT=$(git rev-parse tags/$AUDITED)
         #$(git branch --contains $COMMIT | grep -q $UNSTABLE) || (echo "The '$AUDITED' tag is not on the '$UNSTABLE' branch." && exit 1)
 
-        git config --global user.email "admin@kurdistan-tech.io"
+        git config --global user.email "admin@pezkuwichain.io"
         git config --global user.name "Kurdistan-Tech Release Team"
 
     - name: Prepare commit
