@@ -1,0 +1,7 @@
+error: At least one of 'runtime_metadata_path', 'runtime_metadata_insecure_url'  or  'runtime_path` can be provided
+ --> src/incorrect/need_url_or_path.rs:1:1
+  |
+1 | #[subxt::subxt()]
+  | ^^^^^^^^^^^^^^^^^
+  |
+  = note: this error originates in the attribute macro `subxt::subxt` (in Nightly builds, run with -Z macro-backtrace for more info)

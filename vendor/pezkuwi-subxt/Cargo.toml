@@ -1,0 +1,182 @@
+[workspace]
+# All pezkuwi-subxt crates
+members = [
+    "cli",
+    "codegen",
+    "core",
+    "lightclient",
+    "macro",
+    "metadata",
+    "rpcs",
+    "signer",
+    "subxt",
+    "utils/fetch-metadata",
+    "utils/strip-metadata",
+]
+
+# Exclude testing and examples for now
+exclude = [
+    "historic",
+    "testing",
+    "scripts",
+    "examples",
+]
+resolver = "2"
+
+[workspace.package]
+authors = ["Pezkuwi Chain <admin@pezkuwichain.io>"]
+edition = "2024"
+version = "0.44.0"
+rust-version = "1.85.0"
+license = "Apache-2.0 OR GPL-3.0"
+repository = "https://github.com/pezkuwichain/pezkuwi-subxt"
+documentation = "https://docs.rs/pezkuwi-subxt"
+homepage = "https://pezkuwichain.org/"
+
+[workspace.lints.rust]
+bad_style = "deny"
+improper_ctypes = "deny"
+missing_docs = "deny"
+non_shorthand_field_patterns = "deny"
+no_mangle_generic_items = "deny"
+overflowing_literals = "deny"
+path_statements = "deny"
+patterns_in_fns_without_body = "deny"
+unconditional_recursion = "deny"
+unused_allocation = "deny"
+unused_comparisons = "deny"
+unused_parens = "deny"
+unused_extern_crates = "deny"
+
+[workspace.lints.clippy]
+type_complexity = "allow"
+# Priority -1 means that it can overwritten by other lints, https://rust-lang.github.io/rust-clippy/master/index.html#/lint_groups_priority
+all = { level = "deny", priority = -1 }
+
+[workspace.dependencies]
+async-trait = "0.1.83"
+assert_matches = "1.5.0"
+base58 = { version = "0.2.0" }
+bitvec = { version = "1", default-features = false }
+blake2 = { version = "0.10.6", default-features = false }
+clap = { version = "4.5.18", features = ["derive", "cargo"] }
+cfg-if = "1.0.0"
+criterion = "0.5.1"
+codec = { package = "parity-scale-codec", version = "3.7.4", default-features = false }
+color-eyre = "0.6.3"
+console_error_panic_hook = "0.1.7"
+darling = "0.20.10"
+derive-where = "1.2.7"
+either = { version = "1.13.0", default-features = false }
+finito = { version = "0.1.0", default-features = false }
+frame-decode = { version = "0.15.0", default-features = false }
+frame-metadata = { version = "23.0.0", default-features = false }
+futures = { version = "0.3.31", default-features = false, features = ["std"] }
+getrandom = { version = "0.2", default-features = false }
+hashbrown = "0.14.5"
+hex = { version = "0.4.3", default-features = false, features = ["alloc"] }
+heck = "0.5.0"
+impl-serde = { version = "0.5.0", default-features = false }
+indoc = "2"
+jsonrpsee = { version = "0.24.5" }
+pretty_assertions = "1.4.1"
+primitive-types = { version = "0.13.1", default-features = false }
+proc-macro-error2 = "2.0.0"
+proc-macro2 = "1.0.86"
+quote = "1.0.37"
+regex = { version = "1.11.0", default-features = false }
+scale-info = { version = "2.11.4", default-features = false }
+scale-value = { version = "0.18.1", default-features = false }
+scale-bits = { version = "0.7.0", default-features = false }
+scale-decode = { version = "0.16.2", default-features = false }
+scale-encode = { version = "0.10.0", default-features = false }
+scale-type-resolver = { version = "0.2.0" }
+scale-info-legacy = { version = "0.4.0", default-features = false }
+scale-typegen = "0.12.0"
+scale-typegen-description = "0.11.0"
+serde = { version = "1.0.210", default-features = false, features = ["derive"] }
+serde_json = { version = "1.0.128", default-features = false }
+syn = { version = "2.0.77", features = ["full", "extra-traits"] }
+thiserror = { version = "2.0.0", default-features = false }
+tokio = { version = "1.44.2", default-features = false }
+tracing = { version = "0.1.40", default-features = false }
+tracing-wasm = "0.2.1"
+tracing-subscriber = { version = "0.3.20", features = ["env-filter"] }
+trybuild = "1.0.99"
+url = "2.5.2"
+wat = "1.228.0"
+wasm-bindgen-test = "0.3.24"
+which = "6.0.3"
+strip-ansi-escapes = "0.2.0"
+proptest = "1.5.0"
+hex-literal = "0.4.1"
+tower = "0.4"
+hyper = "1"
+http-body = "1"
+
+# Light client support:
+smoldot = { version = "0.20.0", default-features = false }
+smoldot-light = { version = "0.18.0", default-features = false }
+tokio-stream = "0.1.16"
+futures-util = "0.3.31"
+rand = "0.8.5"
+pin-project = "1.1.5"
+
+# Light client wasm:
+web-sys = { version = "0.3.70", features = ["BinaryType", "CloseEvent", "MessageEvent", "WebSocket"] }
+wasm-bindgen = "0.2.93"
+send_wrapper = "0.6.0"
+js-sys = "0.3.70"
+wasm-bindgen-futures = "0.4.43"
+futures-timer = "3"
+web-time = { version = "1.1", default-features = false }
+tokio-util = "0.7.12"
+
+# Pezkuwi SDK crates (rebranded from Substrate) - using git deps:
+pezsc-executor = { git = "https://github.com/pezkuwichain/pezkuwi-sdk.git", branch = "main", default-features = false }
+pezsc-executor-common = { git = "https://github.com/pezkuwichain/pezkuwi-sdk.git", branch = "main", default-features = false }
+pezsp-crypto-hashing = { git = "https://github.com/pezkuwichain/pezkuwi-sdk.git", branch = "main", default-features = false }
+pezsp-core = { git = "https://github.com/pezkuwichain/pezkuwi-sdk.git", branch = "main", default-features = false }
+pezsp-keyring = { git = "https://github.com/pezkuwichain/pezkuwi-sdk.git", branch = "main", default-features = false }
+pezsp-maybe-compressed-blob = { git = "https://github.com/pezkuwichain/pezkuwi-sdk.git", branch = "main", default-features = false }
+pezsp-io = { git = "https://github.com/pezkuwichain/pezkuwi-sdk.git", branch = "main", default-features = false }
+pezsp-state-machine = { git = "https://github.com/pezkuwichain/pezkuwi-sdk.git", branch = "main", default-features = false }
+pezsp-runtime = { git = "https://github.com/pezkuwichain/pezkuwi-sdk.git", branch = "main", default-features = false }
+
+# Pezkuwi-Subxt workspace crates:
+pezkuwi-subxt = { version = "0.44.0", path = "subxt", default-features = false }
+pezkuwi-subxt-core = { version = "0.44.0", path = "core", default-features = false }
+pezkuwi-subxt-macro = { version = "0.44.0", path = "macro" }
+pezkuwi-subxt-metadata = { version = "0.44.0", path = "metadata", default-features = false }
+pezkuwi-subxt-codegen = { version = "0.44.0", path = "codegen" }
+pezkuwi-subxt-signer = { version = "0.44.0", path = "signer", default-features = false }
+pezkuwi-subxt-rpcs = { version = "0.44.0", path = "rpcs", default-features = false }
+pezkuwi-subxt-lightclient = { version = "0.44.0", path = "lightclient", default-features = false }
+pezkuwi-subxt-utils-fetchmetadata = { version = "0.44.0", path = "utils/fetch-metadata", default-features = false }
+pezkuwi-subxt-utils-stripmetadata = { version = "0.44.0", path = "utils/strip-metadata", default-features = false }
+test-runtime = { path = "testing/test-runtime" }
+bizinikiwi-runner = { path = "testing/substrate-runner" }
+
+# subxt-signer deps that I expect aren't useful anywhere else:
+bip39 = { version = "2.1.0", default-features = false }
+bip32 = { version = "0.5.2", default-features = false }
+hmac = { version = "0.12.1", default-features = false }
+pbkdf2 = { version = "0.12.2", default-features = false }
+schnorrkel = { version = "0.11.4", default-features = false }
+secp256k1 = { version = "0.30.0", default-features = false }
+keccak-hash = { version = "0.11.0", default-features = false }
+secrecy = "0.10.3"
+sha2 = { version = "0.10.8", default-features = false }
+zeroize = { version = "1", default-features = false }
+base64 = { version = "0.22.1", default-features = false }
+scrypt = { version = "0.11.0", default-features = false }
+crypto_secretbox = { version = "0.1.1", default-features = false }
+
+[profile.dev.package.smoldot-light]
+opt-level = 2
+[profile.test.package.smoldot-light]
+opt-level = 2
+[profile.dev.package.smoldot]
+opt-level = 2
+[profile.test.package.smoldot]
+opt-level = 2
