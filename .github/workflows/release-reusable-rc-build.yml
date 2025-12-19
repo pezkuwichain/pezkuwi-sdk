@@ -167,7 +167,7 @@ jobs:
        - name: Set workspace environment variable
          # relevant for artifacts upload, which can not interpolate Github Action variable syntax when
          # used within valid paths. We can not use root-based paths either, since it is set as read-only
-         # on the `kurdistan-tech-macos` runner.
+         # on the `pezkuwichain-macos` runner.
          run: echo "ARTIFACTS_PATH=${GITHUB_WORKSPACE}/artifacts/${{ matrix.binaries }}" >> $GITHUB_ENV
 
        - name: Set up Homebrew

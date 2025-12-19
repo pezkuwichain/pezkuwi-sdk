@@ -114,7 +114,7 @@ pub(crate) struct Initialized {
 	/// blocks) we will be too slow importing all votes from unfinalized chains on startup
 	/// (dispute-coordinator gets killed because of unresponsiveness).
 	///
-	/// https://github.com/pezkuwichain/kurdistan-sdk/issues/168
+	/// https://github.com/pezkuwichain/pezkuwi-sdk/issues/168
 	///
 	/// To resolve this, we limit the amount of votes imported at once to
 	/// `CHAIN_IMPORT_MAX_BATCH_SIZE` and put the rest here for later processing.
@@ -771,7 +771,7 @@ impl Initialized {
 				.handle_import_statements(
 					ctx,
 					overlay_db,
-					// TODO <https://github.com/pezkuwichain/kurdistan-sdk/issues/147>
+					// TODO <https://github.com/pezkuwichain/pezkuwi-sdk/issues/147>
 					MaybeCandidateReceipt::AssumeBackingVotePresent(candidate_hash),
 					session,
 					statements,

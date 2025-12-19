@@ -225,7 +225,7 @@ impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 			return;
 		}
 
-		// TODO: https://github.com/pezkuwichain/kurdistan-sdk/issues/83 we either need fishermens
+		// TODO: https://github.com/pezkuwichain/pezkuwi-sdk/issues/83 we either need fishermens
 		// to watch this rule violation (suspended, but keep sending new messages), or we need a
 		// hard limit for that like other XCM queues have
 

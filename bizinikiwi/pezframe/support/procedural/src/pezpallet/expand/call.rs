@@ -106,8 +106,8 @@ pub fn expand_call(def: &mut Def) -> proc_macro2::TokenStream {
 			.old("use implicit call indices")
 			.new("ensure that all calls have a `pezpallet::call_index` attribute or put the pezpallet into `dev` mode")
 			.help_links(&[
-				"https://github.com/pezkuwichain/kurdistan-sdk/issues/39",
-				"https://github.com/pezkuwichain/kurdistan-sdk/issues/36"
+				"https://github.com/pezkuwichain/pezkuwi-sdk/issues/39",
+				"https://github.com/pezkuwichain/pezkuwi-sdk/issues/36"
 			])
 			.span(method.name.span())
 			.build_or_panic();

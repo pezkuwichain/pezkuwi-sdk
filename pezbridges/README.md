@@ -31,7 +31,7 @@ rustup target add wasm32-unknown-unknown --toolchain nightly
 Once this is configured you can build and test the repo as follows:
 
 ```
-git clone https://github.com/pezkuwichain/kurdistan-sdk/tree/main/bridges
+git clone https://github.com/pezkuwichain/pezkuwi-sdk/tree/main/bridges
 cd parity-bridges-common
 cargo build --all
 cargo test --all

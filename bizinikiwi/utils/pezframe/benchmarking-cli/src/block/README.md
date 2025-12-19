@@ -106,8 +106,8 @@ License: Apache-2.0
 <!-- LINKS -->
 
 [Polkachu]: https://polkachu.com/snapshots
-[here]: https://github.com/pezkuwichain/kurdistan-sdk/issues/6
-[pezkuwi#5192]: https://github.com/pezkuwichain/kurdistan-sdk/issues/154
+[here]: https://github.com/pezkuwichain/pezkuwi-sdk/issues/6
+[pezkuwi#5192]: https://github.com/pezkuwichain/pezkuwi-sdk/issues/154
 
 [`--db`]: ../shared/README.md#arguments
 [`--pruning`]: ../shared/README.md#arguments

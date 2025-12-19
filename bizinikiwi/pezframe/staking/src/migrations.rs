@@ -204,7 +204,7 @@ pub mod v15 {
 }
 
 /// Migration of era exposure storage items to paged exposures.
-/// Changelog: [v14.](https://github.com/pezkuwichain/kurdistan-sdk/blob/main/bizinikiwi/pezframe/staking/CHANGELOG.md#14)
+/// Changelog: [v14.](https://github.com/pezkuwichain/pezkuwi-sdk/blob/main/bizinikiwi/pezframe/staking/CHANGELOG.md#14)
 pub mod v14 {
 	use super::*;
 

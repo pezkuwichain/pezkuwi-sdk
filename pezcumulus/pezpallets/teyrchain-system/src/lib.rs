@@ -636,7 +636,7 @@ pub mod pezpallet {
 			total_weight += Self::maybe_drop_included_ancestors(&relay_state_proof, capacity);
 			// Deposit a log indicating the relay-parent storage root.
 			// TODO: remove this in favor of the relay-parent's hash after
-			// https://github.com/pezkuwichain/kurdistan-sdk/issues/92
+			// https://github.com/pezkuwichain/pezkuwi-sdk/issues/92
 			pezframe_system::Pezpallet::<T>::deposit_log(
 				pezcumulus_primitives_core::rpsr_digest::relay_parent_storage_root_item(
 					vfp.relay_parent_storage_root,
@@ -1010,7 +1010,7 @@ pub mod pezpallet {
 	#[pezpallet::genesis_build]
 	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
 		fn build(&self) {
-			// TODO: Remove after https://github.com/pezkuwichain/kurdistan-sdk/issues/93
+			// TODO: Remove after https://github.com/pezkuwichain/pezkuwi-sdk/issues/93
 			pezsp_io::storage::set(b":c", &[]);
 		}
 	}

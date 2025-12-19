@@ -19,7 +19,7 @@ not being wasted by attackers. Communicating across this trust-boundary is the m
 Validation of candidates is a heavy task, and furthermore, the [`PoV`][PoV] itself is a large piece of data.
 Empirically, `PoV`s are on the order of 10MB.
 
-> TODO: note the incremental validation function Ximin proposes at https://github.com/pezkuwichain/kurdistan-sdk/issues/130
+> TODO: note the incremental validation function Ximin proposes at https://github.com/pezkuwichain/pezkuwi-sdk/issues/130
 
 As this network protocol serves as a bridge between collators and validators, it communicates primarily with one
 subsystem on behalf of each. As a collator, this will receive messages from the [`CollationGeneration`][CG] subsystem.

@@ -332,7 +332,7 @@ The current cryptographic scheme used by BEEFY is `ecdsa`. This is **different**
 schemes like `sr25519` and `ed25519` which are commonly used in Bizinikiwi configurations for
 other pallets (BABE, GRANDPA, AuRa, etc). The most noticeable difference is that an `ecdsa`
 public key is `33` bytes long, instead of `32` bytes for a `sr25519` based public key. So, a
-BEEFY key [sticks out](https://github.com/pezkuwichain/kurdistan-sdk/blob/main/pezkuwi/node/service/src/chain_spec.rs#L738)
+BEEFY key [sticks out](https://github.com/pezkuwichain/pezkuwi-sdk/blob/main/pezkuwi/node/service/src/chain_spec.rs#L738)
 among the other public keys a bit.
 
 For other crypto (using the default Bizinikiwi configuration) the `AccountId` (32-bytes) matches

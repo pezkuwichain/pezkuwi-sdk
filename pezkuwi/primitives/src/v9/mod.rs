@@ -169,7 +169,7 @@ impl From<u32> for ChunkIndex {
 	}
 }
 
-// We should really get https://github.com/pezkuwichain/kurdistan-sdk/issues/133 going ..
+// We should really get https://github.com/pezkuwichain/pezkuwi-sdk/issues/133 going ..
 impl From<u32> for ValidatorIndex {
 	fn from(n: u32) -> Self {
 		ValidatorIndex(n)
@@ -838,7 +838,7 @@ impl<N: Saturating + BaseArithmetic + Copy> GroupRotationInfo<N> {
 pub struct ScheduledCore {
 	/// The ID of a para scheduled.
 	pub para_id: Id,
-	/// DEPRECATED: see: <https://github.com/pezkuwichain/kurdistan-sdk/issues/171>
+	/// DEPRECATED: see: <https://github.com/pezkuwichain/pezkuwi-sdk/issues/171>
 	///
 	/// Will be removed in a future version.
 	pub collator: Option<CollatorId>,
@@ -1536,7 +1536,7 @@ pub fn effective_minimum_backing_votes(
 /// Information about validator sets of a session.
 ///
 /// NOTE: `SessionInfo` is frozen. Do not include new fields, consider creating a separate runtime
-/// API. Reasoning and further outlook [here](https://github.com/pezkuwichain/kurdistan-sdk/issues/167).
+/// API. Reasoning and further outlook [here](https://github.com/pezkuwichain/pezkuwi-sdk/issues/167).
 #[derive(Clone, Encode, Decode, RuntimeDebug, TypeInfo)]
 #[cfg_attr(feature = "std", derive(PartialEq))]
 pub struct SessionInfo {

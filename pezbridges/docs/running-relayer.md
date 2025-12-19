@@ -68,7 +68,7 @@ by lurking in the code.
 We also have the WiP prototype of relayers coordination protocol, where relayers will get some guarantee
 that their transactions will be prioritized over other relayers transactions at their assigned slots.
 That is planned for the future version of bridge and the progress is
-[tracked here](https://github.com/pezkuwichain/kurdistan-sdk/issues/85).
+[tracked here](https://github.com/pezkuwichain/pezkuwi-sdk/issues/85).
 
 </details>
 

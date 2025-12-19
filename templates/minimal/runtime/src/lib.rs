@@ -342,7 +342,7 @@ impl_runtime_apis! {
 ///
 /// Other types should preferably be private.
 // TODO: this should be standardized in some way, see:
-// https://github.com/pezkuwichain/kurdistan-sdk/issues/3
+// https://github.com/pezkuwichain/pezkuwi-sdk/issues/3
 pub mod interface {
 	use super::Runtime;
 	use pezkuwi_sdk::{pezkuwi_sdk_frame as frame, *};

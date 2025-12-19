@@ -285,7 +285,7 @@ fn service_queues_low_weight_defensive() {
 	});
 }
 
-/// Regression test for <https://github.com/pezkuwichain/kurdistan-sdk/issues/109>.
+/// Regression test for <https://github.com/pezkuwichain/pezkuwi-sdk/issues/109>.
 #[test]
 fn service_queues_regression_1873() {
 	use MessageOrigin::*;

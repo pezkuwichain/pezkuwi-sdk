@@ -362,7 +362,7 @@ pub async fn submit_extrinsic_and_wait_for_finalization_success<S: Signer<Polkad
 		.await?;
 
 	// Below we use the low level API to replicate the `wait_for_in_block` behaviour
-	// which was removed in subxt 0.33.0. See https://github.com/pezkuwichain/kurdistan-sdk/issues/189.
+	// which was removed in subxt 0.33.0. See https://github.com/pezkuwichain/pezkuwi-sdk/issues/189.
 	while let Some(status) = tx.next().await {
 		let status = status?;
 		match &status {

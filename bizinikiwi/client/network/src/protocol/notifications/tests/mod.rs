@@ -350,7 +350,7 @@ async fn reconnect_after_disconnect() {
 		// Due to the bug in `Notifications`, the disconnected node does not always detect that
 		// it was disconnected. The closed inbound substream is tolerated by design, and the
 		// closed outbound substream is not detected until something is sent into it.
-		// See [PR #13396](https://github.com/pezkuwichain/kurdistan-sdk/issues/45).
+		// See [PR #13396](https://github.com/pezkuwichain/pezkuwi-sdk/issues/45).
 		// This happens if the disconnecting node reconnects to it fast enough.
 		// In this case the disconnected node does not transit via `ServiceState::NotConnected`
 		// and stays in `ServiceState::FirstConnec`.

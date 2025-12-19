@@ -104,7 +104,7 @@ Eğer cargo check 100+ hata veriyorsa:
 
 ## REFERANS: REBRAND_MAP
 
-Tam crate isim değişiklikleri için `/home/mamostehp/kurdistan-sdk/REBRAND_PROGRESS.md` dosyasına bak.
+Tam crate isim değişiklikleri için `/home/mamostehp/pezkuwi-sdk/REBRAND_PROGRESS.md` dosyasına bak.
 Terminoloji kılavuzu için `.claude/TERMINOLOGY.md` dosyasına bak.
 
 ---

@@ -471,7 +471,7 @@ pub(crate) async fn handle_new_head<
 		let validator_group_lens: Vec<usize> =
 			session_info.validator_groups.iter().map(|v| v.len()).collect();
 		// insta-approve candidates on low-node testnets:
-		// cf. https://github.com/pezkuwichain/kurdistan-sdk/issues/134
+		// cf. https://github.com/pezkuwichain/pezkuwi-sdk/issues/134
 		let num_candidates = included_candidates.len();
 		let approved_bitfield = {
 			if needed_approvals == 0 {

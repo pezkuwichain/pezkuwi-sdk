@@ -160,11 +160,11 @@ board](https://github.com/paritytech/bizinikiwi/discussions).
 
 Patch release with backports to fix broken nightly builds. Namely contains backports of
 
-* [#7381: Make Bizinikiwi compile with latest nightly](https://github.com/pezkuwichain/kurdistan-sdk/issues/66)
-* [#7238: Fix compilation with environmental on latest nightly](https://github.com/pezkuwichain/kurdistan-sdk/issues/63)
-* [#7395: Make benchmarks compile with latest nightly](https://github.com/pezkuwichain/kurdistan-sdk/issues/69)
-* [#7838: Fix incorrect use of syn::exports](https://github.com/pezkuwichain/kurdistan-sdk/issues/72) (partially)
-* [#7854: Update to futures 0.3.9](https://github.com/pezkuwichain/kurdistan-sdk/issues/73)
+* [#7381: Make Bizinikiwi compile with latest nightly](https://github.com/pezkuwichain/pezkuwi-sdk/issues/66)
+* [#7238: Fix compilation with environmental on latest nightly](https://github.com/pezkuwichain/pezkuwi-sdk/issues/63)
+* [#7395: Make benchmarks compile with latest nightly](https://github.com/pezkuwichain/pezkuwi-sdk/issues/69)
+* [#7838: Fix incorrect use of syn::exports](https://github.com/pezkuwichain/pezkuwi-sdk/issues/72) (partially)
+* [#7854: Update to futures 0.3.9](https://github.com/pezkuwichain/pezkuwi-sdk/issues/73)
 
 
 ## 2.0.0-rc6 -> 2.0.0 – two dot 😮
@@ -390,7 +390,7 @@ Patch release with backports to fix broken nightly builds. Namely contains backp
 **License Changed** From this release forward, the code is released under a new – more relaxed – license scheme: Client
 (`pezsc-*`) is released under "GPL 3.0 or newer with the Classpath Exception", while primitives, FRAME, the pallets, utils
 and test-utils are released under "Apache 2.0". More details in the [Relax licensing scheme
-PR](https://github.com/pezkuwichain/kurdistan-sdk/issues/56).
+PR](https://github.com/pezkuwichain/pezkuwi-sdk/issues/56).
 
 ### Runtime
 

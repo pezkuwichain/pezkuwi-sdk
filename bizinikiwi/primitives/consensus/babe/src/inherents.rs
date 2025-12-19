@@ -54,7 +54,7 @@ impl BabeInherentData for InherentData {
 }
 
 /// Provides the slot duration inherent data for BABE.
-// TODO: Remove in the future. https://github.com/pezkuwichain/kurdistan-sdk/issues/31
+// TODO: Remove in the future. https://github.com/pezkuwichain/pezkuwi-sdk/issues/31
 #[cfg(feature = "std")]
 pub struct InherentDataProvider {
 	slot: InherentType,

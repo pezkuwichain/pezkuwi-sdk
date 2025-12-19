@@ -238,7 +238,7 @@ impl<T: Config> StakingLedger<T> {
 		if let Some(bonded_ledger) = Ledger::<T>::get(&self.stash) {
 			// there is a ledger bonded by the stash. In this case, the stash of the bonded ledger
 			// should be the same as the ledger's stash. Otherwise fail to prevent data
-			// inconsistencies. See <https://github.com/pezkuwichain/kurdistan-sdk/issues/117> for more
+			// inconsistencies. See <https://github.com/pezkuwichain/pezkuwi-sdk/issues/117> for more
 			// details.
 			ensure!(bonded_ledger.stash == self.stash, Error::<T>::BadState);
 		}

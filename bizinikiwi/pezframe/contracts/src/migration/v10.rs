@@ -16,7 +16,7 @@
 // limitations under the License.
 
 //! Don't rely on reserved balances keeping an account alive
-//! See <https://github.com/pezkuwichain/kurdistan-sdk/issues/44>.
+//! See <https://github.com/pezkuwichain/pezkuwi-sdk/issues/44>.
 
 use crate::{
 	exec::AccountIdOf,

@@ -238,7 +238,7 @@ pub(crate) fn new_test_ext() -> pezsp_io::TestExternalities {
 	config.assimilate_storage(&mut storage).unwrap();
 
 	let mut ext: pezsp_io::TestExternalities = storage.into();
-	// Clear thread local vars for https://github.com/pezkuwichain/kurdistan-sdk/issues/2.
+	// Clear thread local vars for https://github.com/pezkuwichain/pezkuwi-sdk/issues/2.
 	ext.execute_with(|| take_hooks());
 	ext.execute_with(|| System::set_block_number(1));
 	ext

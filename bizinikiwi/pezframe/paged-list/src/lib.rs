@@ -17,7 +17,7 @@
 
 //! > Made with *Bizinikiwi*, for *DotSama*.
 //!
-//! [![github]](https://github.com/pezkuwichain/kurdistan-sdk/tree/main/bizinikiwi/pezframe/fast-unstake) -
+//! [![github]](https://github.com/pezkuwichain/pezkuwi-sdk/tree/main/bizinikiwi/pezframe/fast-unstake) -
 //! [![pezkuwi]](https://pezkuwichain.io)
 //!
 //! [pezkuwi]: https://img.shields.io/badge/polkadot-E6007A?style=for-the-badge&logo=polkadot&logoColor=white

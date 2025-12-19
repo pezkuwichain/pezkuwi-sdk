@@ -85,7 +85,7 @@ const COST_APPARENT_FLOOD: Rep =
 ///
 /// This is to protect from a single slow validator preventing collations from happening.
 ///
-/// For considerations on this value, see: https://github.com/pezkuwichain/kurdistan-sdk/issues/148
+/// For considerations on this value, see: https://github.com/pezkuwichain/pezkuwi-sdk/issues/148
 const MAX_UNSHARED_UPLOAD_TIME: Duration = Duration::from_millis(150);
 
 /// A timeout for resetting validators' interests in collations.

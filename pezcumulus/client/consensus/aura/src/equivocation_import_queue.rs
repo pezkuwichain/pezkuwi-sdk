@@ -263,7 +263,7 @@ fn slot_now(slot_duration: SlotDuration) -> Slot {
 /// The others are generated explicitly internally.
 ///
 /// This should only be used for runtimes where the runtime does not check all inherents and
-/// seals in `execute_block` (see <https://github.com/pezkuwichain/kurdistan-sdk/issues/91>)
+/// seals in `execute_block` (see <https://github.com/pezkuwichain/pezkuwi-sdk/issues/91>)
 pub fn fully_verifying_import_queue<P, Client, Block: BlockT, I, CIDP>(
 	client: Arc<Client>,
 	block_import: I,

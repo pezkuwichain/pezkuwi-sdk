@@ -31,9 +31,9 @@ jobs:
         with:
           save-if: ${{ github.ref == 'refs/heads/master' }}
 
-      - name: install kurdistan-tech-publish
+      - name: install pezkuwi-publish
         run: |
-          cargo install kurdistan-tech-publish@0.10.6 --locked -q
+          cargo install pezkuwi-publish@0.10.6 --locked -q
 
       - name: set current PR's prdoc name in a variable
         env:
@@ -41,20 +41,20 @@ jobs:
         run: |
           echo "CURRENT_PRDOC=pr_${GITHUB_PR_NUM}.prdoc" >> $GITHUB_ENV
 
-      - name: kurdistan-tech-publish update plan w/o current prdoc
+      - name: pezkuwi-publish update plan w/o current prdoc
         run: |
           if [ -f prdoc/$CURRENT_PRDOC ]; then
             mv prdoc/$CURRENT_PRDOC .
           fi
-          kurdistan-tech-publish --color always plan --skip-check --prdoc prdoc/
+          pezkuwi-publish --color always plan --skip-check --prdoc prdoc/
 
       # The code base is not in master's state (due to commits brought by the
       # current PR), but we're interested in all master's prdocs to be applied
       # as if master is a stable branch, and in next steps we're following up with
       # a patch release of all crates based on some newly added prdocs
       # (meaning only the current prdoc).
-      - name: kurdistan-tech-publish apply plan on the code state prior to current prdoc
-        run: kurdistan-tech-publish --color always apply --registry
+      - name: pezkuwi-publish apply plan on the code state prior to current prdoc
+        run: pezkuwi-publish --color always apply --registry
 
       - name: move all prdocs except current one to unstable dir
         run: |
@@ -64,21 +64,21 @@ jobs:
             mv $CURRENT_PRDOC prdoc
           fi
 
-      - name: kurdistan-tech-publish update plan just for PR's prdoc
+      - name: pezkuwi-publish update plan just for PR's prdoc
         run: |
           if [ -f "prdoc/$CURRENT_PRDOC" ]; then
-            kurdistan-tech-publish --color always plan --skip-check --prdoc prdoc/
+            pezkuwi-publish --color always plan --skip-check --prdoc prdoc/
           fi
 
-      - name: kurdistan-tech-publish apply plan
+      - name: pezkuwi-publish apply plan
         run: |
           if [ -f "prdoc/$CURRENT_PRDOC" ]; then
-            kurdistan-tech-publish --color always apply --registry
+            pezkuwi-publish --color always apply --registry
           fi
 
-      - name: kurdistan-tech-publish check compile
+      - name: pezkuwi-publish check compile
         run: |
-          packages="$(kurdistan-tech-publish apply --print)"
+          packages="$(pezkuwi-publish apply --print)"
 
           if [ -n "$packages" ]; then
             cargo --color always check $(printf -- '-p %s ' $packages)

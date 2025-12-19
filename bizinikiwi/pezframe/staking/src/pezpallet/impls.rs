@@ -1526,7 +1526,7 @@ impl<T: Config> ElectionDataProvider for Pezpallet<T> {
 		let targets = Self::get_npos_targets(bounds);
 
 		// We can't handle this case yet -- return an error. WIP to improve handling this case in
-		// <https://github.com/pezkuwichain/kurdistan-sdk/issues/43>.
+		// <https://github.com/pezkuwichain/pezkuwi-sdk/issues/43>.
 		if bounds.exhausted(None, CountBound(T::TargetList::count()).into()) {
 			return Err("Target snapshot too big");
 		}

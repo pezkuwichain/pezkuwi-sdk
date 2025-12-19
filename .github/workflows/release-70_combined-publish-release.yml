@@ -51,7 +51,7 @@ on:
         description: Owner of the container image repo
         required: true
         type: string
-        default: kurdistan-tech
+        default: pezkuwichain
 
       version:
         description: Version for Docker tags in format v1.16.0 or v1.16.0-rc1

@@ -60,7 +60,7 @@ jobs:
       - run: mv ./target/doc ./crate-docs
       - name: Inject Simple Analytics script
         run: |
-          script_content="<script async defer src=\"https://apisa.kurdistan-tech.io/latest.js\"></script><noscript><img src=\"https://apisa.kurdistan-tech.io/latest.js\" alt=\"\" referrerpolicy=\"no-referrer-when-downgrade\" /></noscript>"
+          script_content="<script async defer src=\"https://apisa.pezkuwichain.io/latest.js\"></script><noscript><img src=\"https://apisa.pezkuwichain.io/latest.js\" alt=\"\" referrerpolicy=\"no-referrer-when-downgrade\" /></noscript>"
           docs_dir="./crate-docs"
 
           inject_simple_analytics() {
@@ -167,7 +167,7 @@ jobs:
           sed -i.bak '/extraheader/d' ./.git/config
 
           echo "${Green}Git push${NC}"
-          git config user.email "ci@kurdistan-tech.io"
+          git config user.email "ci@pezkuwichain.io"
           git config user.name "${APP_NAME}"
           git commit --amend -m "___Updated docs" || echo "___Nothing to commit___"
           git push origin gh-pages --force

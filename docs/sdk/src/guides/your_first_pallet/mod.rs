@@ -201,7 +201,7 @@
 //! Idiomatic FRAME pallets often use Builder pattern to define their initial state.
 //!
 //! > The Pezkuwi Blockchain Academy's Rust entrance exam has a
-//! > [section](https://github.com/pezkuwichain/kurdistan_blockchain-akademy/blob/main/src/m_builder.rs)
+//! > [section](https://github.com/pezkuwichain/pezkuwi_blockchain-academy/blob/main/src/m_builder.rs)
 //! > on this that you can use to learn the Builder Pattern.
 //!
 //! Let's see how we can implement a better test setup using this pattern. First, we define a

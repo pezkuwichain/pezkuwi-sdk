@@ -365,8 +365,8 @@ pub fn extract_relay_parent(digest: &Digest) -> Option<relay_chain::Hash> {
 /// Utilities for handling the relay-parent storage root as a digest item.
 ///
 /// This is not intended to be part of the public API, as it is a workaround for
-/// <https://github.com/pezkuwichain/kurdistan-sdk/issues/92> via
-/// <https://github.com/pezkuwichain/kurdistan-sdk/issues/169>.
+/// <https://github.com/pezkuwichain/pezkuwi-sdk/issues/92> via
+/// <https://github.com/pezkuwichain/pezkuwi-sdk/issues/169>.
 ///
 /// Runtimes using the teyrchain-system pezpallet are expected to produce this digest item,
 /// but will stop as soon as they are able to provide the relay-parent hash directly.
