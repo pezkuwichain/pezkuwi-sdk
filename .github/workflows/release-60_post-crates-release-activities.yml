@@ -206,8 +206,8 @@ jobs:
         run: |
           echo "Running workspace check..."
           python3 .github/scripts/check-workspace.py . --exclude \
-            "bizinikiwi/frame/contracts/fixtures/build" \
-            "bizinikiwi/frame/contracts/fixtures/contracts/common"
+            "bizinikiwi/pezframe/contracts/fixtures/build" \
+            "bizinikiwi/pezframe/contracts/fixtures/contracts/common"
 
       - name: Deny git dependencies
         run: |
