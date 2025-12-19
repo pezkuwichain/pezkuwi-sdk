@@ -23,7 +23,7 @@ use pezsc_executor::WasmExecutor;
 use pezsc_runtime_utilities::fetch_latest_metadata_from_code_blob;
 use scale_info::{form::PortableForm, TypeDef, TypeDefPrimitive};
 use std::fmt::Display;
-use subxt_metadata::{Metadata, StorageEntryType};
+use subxt_metadata::Metadata;
 
 /// Expected teyrchain system pezpallet runtime type name.
 pub const DEFAULT_TEYRCHAIN_SYSTEM_PALLET_NAME: &str = "TeyrchainSystem";
@@ -149,11 +149,15 @@ impl MetadataInspector {
 		pezpallet_metadata
 			.and_then(|inner| inner.storage())
 			.and_then(|inner| inner.entry_by_name("Number"))
-			.and_then(|number_ty| match number_ty.entry_type() {
-				StorageEntryType::Plain(ty_id) => Some(ty_id),
-				_ => None,
+			.and_then(|number_ty| {
+				// Plain storage has no keys, Map storage has keys
+				if number_ty.keys().len() == 0 {
+					Some(number_ty.value_ty())
+				} else {
+					None
+				}
 			})
-			.and_then(|ty_id| self.0.types().resolve(*ty_id))
+			.and_then(|ty_id| self.0.types().resolve(ty_id))
 			.and_then(|portable_type| BlockNumber::from_type_def(&portable_type.type_def))
 	}
 

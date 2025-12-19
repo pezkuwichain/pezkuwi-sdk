@@ -317,12 +317,15 @@ pub async fn check_account_nonce<C: subxt::Config>(
 where
 	AccountIdOf<C>: Send + Sync + AsRef<[u8]>,
 {
-	let storage_query =
-		subxt::dynamic::storage("System", "Account", vec![Value::from_bytes(account.clone())]);
-	let result = api.storage().at_latest().await?.fetch(&storage_query).await?;
-	let value = result
-		.ok_or(format!("Sender account {:?} does not exist", hex::encode(account.clone())))?
-		.to_value()?;
+	let storage_query = subxt::dynamic::storage("System", "Account");
+	let storage_at = api.storage().at_latest().await?;
+	let storage_value = storage_at
+		.try_fetch(storage_query, (Value::from_bytes(account.clone()),))
+		.await?
+		.ok_or_else(|| format!("Sender account {:?} does not exist", hex::encode(account.clone())))?;
+	let value: subxt::dynamic::Value = storage_value
+		.decode()
+		.map_err(|e| format!("Failed to decode storage: {:?}", e))?;
 
 	debug!(target:LOG_TARGET,"account has free balance: {:?}", value.at("data").at("free"));
 	debug!(target:LOG_TARGET,"account has nonce: {:?}", value.at("nonce"));

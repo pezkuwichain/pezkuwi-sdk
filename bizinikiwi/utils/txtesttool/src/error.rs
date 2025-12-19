@@ -17,3 +17,9 @@ pub enum Error {
 	#[error("Mortal transaction lifetime surpassed, block number: {0}")]
 	MortalLifetimeSurpassed(u64),
 }
+
+impl From<subxt::error::ExtrinsicError> for Error {
+	fn from(err: subxt::error::ExtrinsicError) -> Self {
+		Error::Subxt(subxt::Error::from(err))
+	}
+}
