@@ -41,12 +41,12 @@ rules:
     teams:
       - core-devs
 
-  # if there are any changes in the bridges subtree (in case of backport changes back to bridges repo)
-  - name: Bridges subtree files
+  # if there are any changes in the pezbridges subtree
+  - name: Pezbridges subtree files
     type: basic
     condition:
       include:
-        - ^bridges/.*
+        - ^pezbridges/.*
     minApprovals: 1
     teams:
       - bridges-core
@@ -56,8 +56,8 @@ rules:
     type: basic
     condition:
       include:
-        - ^bizinikiwi/frame/contracts/.*
-        - ^bizinikiwi/frame/revive/.*
+        - ^bizinikiwi/pezframe/contracts/.*
+        - ^bizinikiwi/pezframe/revive/.*
     minApprovals: 1
     teams:
       - smart-contracts
