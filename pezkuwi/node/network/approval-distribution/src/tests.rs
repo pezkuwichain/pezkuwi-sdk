@@ -678,7 +678,7 @@ fn delay_reputation_change() {
 	);
 }
 
-/// <https://github.com/pezkuwichain/kurdistan-sdk/issues/172#discussion_r547594835>
+/// <https://github.com/pezkuwichain/pezkuwi-sdk/issues/172#discussion_r547594835>
 ///
 /// 1. Send a view update that removes block B from their view.
 /// 2. Send a message from B that they incur `COST_UNEXPECTED_MESSAGE` for, but then they receive
@@ -782,7 +782,7 @@ fn spam_attack_results_in_negative_reputation_change() {
 /// Upon receiving them, they both will try to send the message each other.
 /// This test makes sure they will not punish each other for such duplicate messages.
 ///
-/// See <https://github.com/pezkuwichain/kurdistan-sdk/issues/135>.
+/// See <https://github.com/pezkuwichain/pezkuwi-sdk/issues/135>.
 #[test]
 fn peer_sending_us_the_same_we_just_sent_them_is_ok() {
 	let parent_hash = Hash::repeat_byte(0xFF);
@@ -2361,7 +2361,7 @@ fn sends_assignments_even_when_state_is_approved_v2() {
 	);
 }
 
-/// <https://github.com/pezkuwichain/kurdistan-sdk/issues/176>
+/// <https://github.com/pezkuwichain/pezkuwi-sdk/issues/176>
 ///
 /// 1. Receive remote peer view update with an unknown head
 /// 2. Receive assignments for that unknown head
@@ -4253,7 +4253,7 @@ fn subsystem_rejects_wrong_claimed_assignments() {
 /// assignment and Delay tranche assignments land on the same candidate. The delay tranche0 can be
 /// safely ignored and we don't need to gossip it however, the compact tranche0 assignment should be
 /// gossiped, because other candidates are included in it, this test makes sure this invariant is
-/// upheld, see  https://github.com/pezkuwichain/kurdistan-sdk/issues/172#discussion_r557628699, for
+/// upheld, see  https://github.com/pezkuwichain/pezkuwi-sdk/issues/172#discussion_r557628699, for
 /// this edge case.
 #[test]
 fn subsystem_accepts_tranche0_duplicate_assignments() {

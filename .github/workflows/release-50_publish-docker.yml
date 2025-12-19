@@ -38,7 +38,7 @@ on:
         description: Owner of the container image repo
         required: true
         type: string
-        default: kurdistan-tech
+        default: pezkuwichain
 
       version:
         description: Version of the pezkuwi node release in format v1.16.0 or v1.16.0-rc1
@@ -73,7 +73,7 @@ on:
         description: Owner of the container image repo
         required: true
         type: string
-        default: kurdistan-tech
+        default: pezkuwichain
 
       version:
         description: Version of the pezkuwi node release in format v1.16.0 or v1.16.0-rc1

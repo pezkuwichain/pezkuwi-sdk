@@ -10,5 +10,5 @@
 //! - [Pezkuwi NFT Marketplace Tutorial by Pezkuwi Fellow Shawn Tabrizi](https://www.shawntabrizi.com/bizinikiwi-collectables-workshop/)
 //! - [HEZ Code School](https://pezkuwichain.io/docs/introduction)
 //! - [Pezkuwi Developers Github Organization](https://github.com/polkadot-developers/)
-//! - [Pezkuwi Blockchain Academy](https://github.com/pezkuwichain/kurdistan_blockchain-akademy)
+//! - [Pezkuwi Blockchain Academy](https://github.com/pezkuwichain/pezkuwi_blockchain-academy)
 //! - [Pezkuwi Wiki](https://wiki.network.pezkuwichain.io/)

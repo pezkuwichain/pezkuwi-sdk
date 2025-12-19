@@ -495,7 +495,7 @@ pub struct UnlockChunk<Balance: HasCompact + MaxEncodedLen> {
 ///
 /// TODO: move struct definition and full implementation into `/src/ledger.rs`. Currently
 /// leaving here to enforce a clean PR diff, given how critical this logic is. Tracking issue
-/// <https://github.com/pezkuwichain/kurdistan-sdk/issues/21>.
+/// <https://github.com/pezkuwichain/pezkuwi-sdk/issues/21>.
 #[derive(
 	PartialEqNoBound,
 	EqNoBound,

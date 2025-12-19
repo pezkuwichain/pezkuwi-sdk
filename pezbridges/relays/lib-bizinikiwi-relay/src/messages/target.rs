@@ -189,7 +189,7 @@ impl<
 		//
 		// this may lead to multiple reconnects to the same node during the same call and it
 		// needs to be addressed in the future
-		// TODO: https://github.com/pezkuwichain/kurdistan-sdk/issues/82
+		// TODO: https://github.com/pezkuwichain/pezkuwi-sdk/issues/82
 		if let Some(ref mut source_to_target_headers_relay) = self.source_to_target_headers_relay {
 			source_to_target_headers_relay.reconnect().await?;
 		}

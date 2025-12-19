@@ -5,7 +5,7 @@
 //!
 //! > As of now, many of these important types are generated within the internals of
 //! > [`construct_runtime`], and there is no easy way for you to visually know they exist.
-//! > [#pezkuwi-sdk#1378](https://github.com/pezkuwichain/kurdistan-sdk/issues/105) is meant to
+//! > [#pezkuwi-sdk#1378](https://github.com/pezkuwichain/pezkuwi-sdk/issues/105) is meant to
 //! > significantly improve this. Exploring the rust-docs of a runtime, such as [`runtime`] which is
 //! > defined in this module is as of now the best way to learn about these types.
 //!

@@ -2075,7 +2075,7 @@ where
 // This is purely during a backwards compatible transitionary period and should be removed
 // once we can assume all nodes can send and receive multiple Justifications
 // The ID tag is hardcoded here to avoid depending on the GRANDPA crate.
-// See: https://github.com/pezkuwichain/kurdistan-sdk/issues/32
+// See: https://github.com/pezkuwichain/pezkuwi-sdk/issues/32
 fn legacy_justification_mapping(
 	justification: Option<EncodedJustification>,
 ) -> Option<Justifications> {

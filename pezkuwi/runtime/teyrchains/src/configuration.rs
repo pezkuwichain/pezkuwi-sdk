@@ -135,7 +135,7 @@ pub struct HostConfiguration<BlockNumber> {
 	/// revert [`validation_upgrade_delay`](Self::validation_upgrade_delay) many blocks back and
 	/// still find the new code in the storage by hash.
 	///
-	/// [#4601]: https://github.com/pezkuwichain/kurdistan-sdk/issues/151
+	/// [#4601]: https://github.com/pezkuwichain/pezkuwi-sdk/issues/151
 	pub validation_upgrade_delay: BlockNumber,
 	/// Asynchronous backing parameters.
 	pub async_backing_params: AsyncBackingParams,
@@ -513,20 +513,20 @@ pub mod pezpallet {
 
 	/// The in-code storage version.
 	///
-	/// v0-v1:  <https://github.com/pezkuwichain/kurdistan-sdk/issues/174>
-	/// v1-v2:  <https://github.com/pezkuwichain/kurdistan-sdk/issues/175>
-	/// v2-v3:  <https://github.com/pezkuwichain/kurdistan-sdk/issues/178>
-	/// v3-v4:  <https://github.com/pezkuwichain/kurdistan-sdk/issues/180>
-	/// v4-v5:  <https://github.com/pezkuwichain/kurdistan-sdk/issues/182>
-	///       + <https://github.com/pezkuwichain/kurdistan-sdk/issues/183>
-	///       + <https://github.com/pezkuwichain/kurdistan-sdk/issues/181>
-	/// v5-v6:  <https://github.com/pezkuwichain/kurdistan-sdk/issues/179> (remove UMP dispatch queue)
-	/// v6-v7:  <https://github.com/pezkuwichain/kurdistan-sdk/issues/185>
-	/// v7-v8:  <https://github.com/pezkuwichain/kurdistan-sdk/issues/184>
-	/// v8-v9:  <https://github.com/pezkuwichain/kurdistan-sdk/issues/186>
-	/// v9-v10: <https://github.com/pezkuwichain/kurdistan-sdk/issues/110>
-	/// v10-11: <https://github.com/pezkuwichain/kurdistan-sdk/issues/100>
-	/// v11-12: <https://github.com/pezkuwichain/kurdistan-sdk/issues/112>
+	/// v0-v1:  <https://github.com/pezkuwichain/pezkuwi-sdk/issues/174>
+	/// v1-v2:  <https://github.com/pezkuwichain/pezkuwi-sdk/issues/175>
+	/// v2-v3:  <https://github.com/pezkuwichain/pezkuwi-sdk/issues/178>
+	/// v3-v4:  <https://github.com/pezkuwichain/pezkuwi-sdk/issues/180>
+	/// v4-v5:  <https://github.com/pezkuwichain/pezkuwi-sdk/issues/182>
+	///       + <https://github.com/pezkuwichain/pezkuwi-sdk/issues/183>
+	///       + <https://github.com/pezkuwichain/pezkuwi-sdk/issues/181>
+	/// v5-v6:  <https://github.com/pezkuwichain/pezkuwi-sdk/issues/179> (remove UMP dispatch queue)
+	/// v6-v7:  <https://github.com/pezkuwichain/pezkuwi-sdk/issues/185>
+	/// v7-v8:  <https://github.com/pezkuwichain/pezkuwi-sdk/issues/184>
+	/// v8-v9:  <https://github.com/pezkuwichain/pezkuwi-sdk/issues/186>
+	/// v9-v10: <https://github.com/pezkuwichain/pezkuwi-sdk/issues/110>
+	/// v10-11: <https://github.com/pezkuwichain/pezkuwi-sdk/issues/100>
+	/// v11-12: <https://github.com/pezkuwichain/pezkuwi-sdk/issues/112>
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(12);
 
 	#[pezpallet::pezpallet]

@@ -64,7 +64,7 @@
 //! preferred tool to test migrations is
 //! [`try-runtime-cli`](https://github.com/paritytech/try-runtime-cli). Support will be added to
 //! dry-run MBMs once they are stable
-//! (tracked: <https://github.com/pezkuwichain/kurdistan-sdk/issues/190>).
+//! (tracked: <https://github.com/pezkuwichain/pezkuwi-sdk/issues/190>).
 
 pub mod migrations;
 mod mock;

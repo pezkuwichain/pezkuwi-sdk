@@ -17,7 +17,7 @@
 
 //! Update the code owner balance, make the code upload deposit balance to be held instead of
 //! reserved. Since [`Currency`](pezframe_support::traits::Currency) has been
-//! [deprecated](https://github.com/pezkuwichain/kurdistan-sdk/issues/40), we need the deposits to be
+//! [deprecated](https://github.com/pezkuwichain/pezkuwi-sdk/issues/40), we need the deposits to be
 //! handled by the [`pezframe_support::traits::fungible`] traits.
 
 use crate::{

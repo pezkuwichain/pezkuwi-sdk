@@ -31,7 +31,7 @@ pub trait Environment<C: Chain>: Send + Sync {
 	async fn header_id_by_hash(&self, hash: HashOf<C>) -> Result<HeaderIdOf<C>, Error>;
 }
 
-// TODO (https://github.com/pezkuwichain/kurdistan-sdk/issues/84): remove `Environment` trait
+// TODO (https://github.com/pezkuwichain/pezkuwi-sdk/issues/84): remove `Environment` trait
 // after test client is implemented
 #[async_trait]
 impl<C: Chain, T: crate::client::Client<C>> Environment<C> for T {
@@ -78,7 +78,7 @@ impl<C: Chain, E: Environment<C>> TransactionTracker<C, E> {
 		Self { environment, stall_timeout, transaction_hash, subscription }
 	}
 
-	// TODO (https://github.com/pezkuwichain/kurdistan-sdk/issues/84): remove me after
+	// TODO (https://github.com/pezkuwichain/pezkuwi-sdk/issues/84): remove me after
 	// test client is implemented
 	/// Converts self into tracker with different environment.
 	pub fn switch_environment<NewE: Environment<C>>(
@@ -236,7 +236,7 @@ async fn watch_transaction_status<
 			Some(TransactionStatusOf::<C>::InBlock(block_hash)) => {
 				// TODO: read matching system event (ExtrinsicSuccess or ExtrinsicFailed), log it
 				// here and use it later (on finality) for reporting invalid transaction
-				// https://github.com/pezkuwichain/kurdistan-sdk/issues/79
+				// https://github.com/pezkuwichain/pezkuwi-sdk/issues/79
 				tracing::trace!(
 					target: "bridge",
 					node=%C::NAME,

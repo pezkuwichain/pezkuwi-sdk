@@ -516,7 +516,7 @@ impl<T: Config> Pezpallet<T> {
 	/// You should call this function with different seed values until the random
 	/// number lies within `u32::MAX - u32::MAX % n`.
 	/// TODO: deal with randomness freshness
-	/// https://github.com/pezkuwichain/kurdistan-sdk/issues/33
+	/// https://github.com/pezkuwichain/pezkuwi-sdk/issues/33
 	fn generate_random_number(seed: u32) -> u32 {
 		let (random_seed, _) = T::Randomness::random(&(T::PalletId::get(), seed).encode());
 		let random_number = <u32>::decode(&mut random_seed.as_ref())

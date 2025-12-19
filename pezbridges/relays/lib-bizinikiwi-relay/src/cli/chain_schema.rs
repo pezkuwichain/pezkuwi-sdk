@@ -92,7 +92,7 @@ macro_rules! declare_chain_runtime_version_params_cli_schema {
 macro_rules! declare_chain_connection_params_cli_schema {
 	($chain:ident, $chain_prefix:ident) => {
 		pezbp_runtime::paste::item! {
-			// TODO: https://github.com/pezkuwichain/kurdistan-sdk/issues/86
+			// TODO: https://github.com/pezkuwichain/pezkuwi-sdk/issues/86
 			// remove all obsolete arguments (separate URI components)
 
 			#[doc = $chain " connection params."]

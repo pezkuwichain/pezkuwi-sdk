@@ -1371,7 +1371,7 @@ pub mod pezpallet {
 
 	/// The in-code storage version.
 	///
-	/// v1: https://github.com/pezkuwichain/kurdistan-sdk/issues/38/
+	/// v1: https://github.com/pezkuwichain/pezkuwi-sdk/issues/38/
 	const STORAGE_VERSION: StorageVersion = StorageVersion::new(1);
 
 	#[pezpallet::pezpallet]

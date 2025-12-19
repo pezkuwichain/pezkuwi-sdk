@@ -200,7 +200,7 @@ pub mod pezpallet {
 
 		/// Runtime's universal location.
 		type UniversalLocation: Get<InteriorLocation>;
-		// TODO: https://github.com/pezkuwichain/kurdistan-sdk/issues/80 remove `ChainId` and
+		// TODO: https://github.com/pezkuwichain/pezkuwi-sdk/issues/80 remove `ChainId` and
 		// replace it with the `NetworkId` - then we'll be able to use
 		// `T as pezpallet_bridge_messages::Config<T::BridgeMessagesPalletInstance>::BridgedChain::NetworkId`
 		/// Bridged network as relative location of bridged `GlobalConsensus`.
@@ -295,7 +295,7 @@ pub mod pezpallet {
 		/// The states after this call: bridge is `Opened`, outbound lane is `Opened`, inbound lane
 		/// is `Opened`.
 		#[pezpallet::call_index(0)]
-		#[pezpallet::weight(Weight::zero())] // TODO:(bridges-v2) - https://github.com/pezkuwichain/kurdistan-sdk/issues/87 - add benchmarks impl
+		#[pezpallet::weight(Weight::zero())] // TODO:(bridges-v2) - https://github.com/pezkuwichain/pezkuwi-sdk/issues/87 - add benchmarks impl
 		pub fn open_bridge(
 			origin: OriginFor<T>,
 			bridge_destination_universal_location: Box<VersionedInteriorLocation>,
@@ -333,7 +333,7 @@ pub mod pezpallet {
 		/// The states after this call: everything is either `Closed`, or purged from the
 		/// runtime storage.
 		#[pezpallet::call_index(1)]
-		#[pezpallet::weight(Weight::zero())] // TODO:(bridges-v2) - https://github.com/pezkuwichain/kurdistan-sdk/issues/87 - add benchmarks impl
+		#[pezpallet::weight(Weight::zero())] // TODO:(bridges-v2) - https://github.com/pezkuwichain/pezkuwi-sdk/issues/87 - add benchmarks impl
 		pub fn close_bridge(
 			origin: OriginFor<T>,
 			bridge_destination_universal_location: Box<VersionedInteriorLocation>,
@@ -343,7 +343,7 @@ pub mod pezpallet {
 			let locations =
 				Self::bridge_locations_from_origin(origin, bridge_destination_universal_location)?;
 
-			// TODO: https://github.com/pezkuwichain/kurdistan-sdk/issues/81 - may do refund here, if
+			// TODO: https://github.com/pezkuwichain/pezkuwi-sdk/issues/81 - may do refund here, if
 			// bridge/lanes are already closed + for messages that are not pruned
 
 			// update bridge metadata - this also guarantees that the bridge is in the proper state

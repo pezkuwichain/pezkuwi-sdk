@@ -18,7 +18,7 @@ Prerequisites for running the tests locally:
   `pezkuwi/api-cli` package. Use `yarn global add @pezkuwi/api-cli` to install it.
 
 - build Bizinikiwi relay by running `cargo build -p bizinikiwi-relay --release` command in the
-  [`pezkuwichain/kurdistan-sdk`](https://github.com/pezkuwichain/kurdistan-sdk/tree/main/bridges) repository clone;
+  [`pezkuwichain/pezkuwi-sdk`](https://github.com/pezkuwichain/pezkuwi-sdk/tree/main/bridges) repository clone;
 
 - copy the `bizinikiwi-relay` binary, built in the previous step, to `~/local_bridge_testing/bin/bizinikiwi-relay`;
 

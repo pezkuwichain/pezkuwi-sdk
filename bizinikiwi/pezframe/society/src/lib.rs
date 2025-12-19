@@ -803,7 +803,7 @@ pub mod pezpallet {
 			let phrase = b"society_rotation";
 			// we'll need a random seed here.
 			// TODO: deal with randomness freshness
-			// https://github.com/pezkuwichain/kurdistan-sdk/issues/34
+			// https://github.com/pezkuwichain/pezkuwi-sdk/issues/34
 			let (seed, _) = T::Randomness::random(phrase);
 			// seed needs to be guaranteed to be 32 bytes.
 			let seed = <[u8; 32]>::decode(&mut TrailingZeroInput::new(seed.as_ref()))

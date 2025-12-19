@@ -181,7 +181,7 @@ pub trait Backend<Block: BlockT>:
 	/// chain or descendants of it.
 	///
 	/// Returns `Ok(None)` if `base_hash` is not found in search space.
-	// TODO: document time complexity of this, see [#1444](https://github.com/pezkuwichain/kurdistan-sdk/issues/18)
+	// TODO: document time complexity of this, see [#1444](https://github.com/pezkuwichain/pezkuwi-sdk/issues/18)
 	fn longest_containing(
 		&self,
 		base_hash: Block::Hash,

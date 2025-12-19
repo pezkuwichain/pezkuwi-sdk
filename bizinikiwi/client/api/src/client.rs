@@ -73,7 +73,7 @@ pub trait BlockchainEvents<Block: BlockT> {
 	///
 	/// The events for this notification stream are emitted:
 	/// - During initial sync process: if there is a re-org while importing blocks. See
-	/// [here](https://github.com/pezkuwichain/kurdistan-sdk/issues/60#issuecomment-694091901) for the
+	/// [here](https://github.com/pezkuwichain/pezkuwi-sdk/issues/60#issuecomment-694091901) for the
 	/// rationale behind this.
 	/// - After initial sync process: on every imported block, regardless of whether it is
 	/// the new best block or not, causes a re-org or not.

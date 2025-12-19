@@ -168,7 +168,7 @@ impl PartialOrd for CommittedCandidateReceipt {
 impl Ord for CommittedCandidateReceipt {
 	fn cmp(&self, other: &Self) -> core::cmp::Ordering {
 		// TODO: compare signatures or something more sane
-		// https://github.com/pezkuwichain/kurdistan-sdk/issues/132
+		// https://github.com/pezkuwichain/pezkuwi-sdk/issues/132
 		self.descriptor()
 			.para_id
 			.cmp(&other.descriptor().para_id)
