@@ -1,0 +1,29 @@
+name: Release - Publish pezkuwi RPM package
+
+# This workflow publishes the pezkuwi RPM package by calling a reusable workflow.
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Current final release tag in the format pezkuwi-stableYYMM or pezkuwi-stable-YYMM-X
+        default: pezkuwi-stable2412
+        required: true
+        type: string
+
+  workflow_call:
+    inputs:
+      tag:
+        description: Current final release tag in the format pezkuwi-stableYYMM or pezkuwi-stable-YYMM-X
+        required: true
+        type: string
+
+jobs:
+  call-publish-workflow:
+    uses: ./.github/workflows/release-reusable-publish-packages.yml
+    with:
+      tag: ${{ inputs.tag }}
+      distribution: ${{ inputs.distribution }}
+      package_type: 'rpm'
+      aws_repo_base_path: "s3://releases-package-repos"
+      cloudfront_distribution_id: "E36FKEYWDXAZYJ"
+    secrets: inherit

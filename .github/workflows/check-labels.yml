@@ -1,0 +1,55 @@
+name: Check labels
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+    types: [labeled, opened, synchronize, unlabeled]
+  merge_group:
+
+jobs:
+  check-labels:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check labels
+        env:
+          GITHUB_PR: ${{ github.event.pull_request.number }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          API_BASE: https://api.github.com/repos
+          REPO: ${{ github.repository }}
+        run: |
+          if [ ${{ github.ref }} == "refs/heads/master" ] || [ ${{ github.ref }} == "refs/heads/main" ]; then
+            echo "Skipping main/master"
+            exit 0
+          fi
+          if [ $(echo ${{ github.ref }} | grep -c "gh-readonly-queue") -eq 1 ]; then
+            echo "Skipping merge queue"
+            exit 0
+          fi
+
+          echo "REPO: ${REPO}"
+          echo "GITHUB_PR: ${GITHUB_PR}"
+
+          # Fetch the labels for the PR under test
+          echo "Fetch the labels for $API_BASE/${REPO}/pulls/${GITHUB_PR}"
+          labels=$( curl -H "Authorization: token ${GITHUB_TOKEN}" -s "$API_BASE/${REPO}/pulls/${GITHUB_PR}" | jq '.labels | .[] | .name' | tr "\n" "," )
+          echo "Labels: ${labels}"
+
+          # Basic label checks for Pezkuwi SDK
+          # Check for required labels (customize as needed)
+          if [ -z "${labels}" ]; then
+            echo "::warning::No labels found on PR. Consider adding appropriate labels."
+          else
+            echo "Labels found: ${labels}"
+            # Check for T- (type) labels
+            if echo "${labels}" | grep -q '"T-'; then
+              echo "Type label found"
+            else
+              echo "::notice::Consider adding a type label (T-*)"
+            fi
+          fi
+
+          echo "Label check completed"

@@ -1,0 +1,99 @@
+name: Release - Announce release to Discord
+on:
+  release:
+    types:
+      - published
+      - prereleased
+
+jobs:
+  ping_discord:
+    runs-on: ubuntu-latest
+    environment: release
+    # Discord notification - Pezkuwi uses Discord instead of Matrix
+    # Server ID: 1444335345935057049
+    # Discord webhook should be configured in repository secrets as PEZKUWI_DISCORD_WEBHOOK
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          ref: ${{ github.event.release.tag_name }}
+
+      - name: Extract node version
+        id: extract_version
+        run: |
+          . ./.github/scripts/common/lib.sh
+
+          version=v$(get_pezkuwi_node_version_from_code)
+          echo "Extracted node version: $version"
+          echo "node_version=$version" >> $GITHUB_OUTPUT
+
+      - name: Send Discord notification
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.PEZKUWI_DISCORD_WEBHOOK }}
+        run: |
+          if [ -z "$DISCORD_WEBHOOK" ]; then
+            echo "::notice::Discord webhook not configured. Release notification skipped."
+            echo "Release: ${{ github.event.release.tag_name }}"
+            echo "URL: ${{ github.event.release.html_url }}"
+            echo "Node Version: ${{ steps.extract_version.outputs.node_version }}"
+            exit 0
+          fi
+
+          RELEASE_TYPE="${{ github.event.action }}"
+          TAG_NAME="${{ github.event.release.tag_name }}"
+          RELEASE_URL="${{ github.event.release.html_url }}"
+          NODE_VERSION="${{ steps.extract_version.outputs.node_version }}"
+          REPO_NAME="${{ github.event.repository.full_name }}"
+
+          # Set emoji based on release type
+          if [ "${{ github.event.release.prerelease }}" == "true" ]; then
+            EMOJI="🧪"
+            TITLE="Pre-release Published"
+          else
+            EMOJI="🚀"
+            TITLE="New Release Published"
+          fi
+
+          # Create Discord embed payload
+          PAYLOAD=$(cat <<'PAYLOAD_EOF'
+          {
+            "embeds": [{
+              "title": "EMOJI_PLACEHOLDER TITLE_PLACEHOLDER",
+              "description": "A new node release has been RELEASE_TYPE_PLACEHOLDER in **REPO_NAME_PLACEHOLDER**",
+              "color": 5814783,
+              "fields": [
+                {
+                  "name": "Release Version",
+                  "value": "[TAG_NAME_PLACEHOLDER](RELEASE_URL_PLACEHOLDER)",
+                  "inline": true
+                },
+                {
+                  "name": "Node Version",
+                  "value": "NODE_VERSION_PLACEHOLDER",
+                  "inline": true
+                }
+              ],
+              "footer": {
+                "text": "Pezkuwi SDK Release"
+              },
+              "timestamp": "TIMESTAMP_PLACEHOLDER"
+            }]
+          }
+          PAYLOAD_EOF
+          )
+
+          # Replace placeholders with actual values
+          TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          PAYLOAD="${PAYLOAD//EMOJI_PLACEHOLDER/$EMOJI}"
+          PAYLOAD="${PAYLOAD//TITLE_PLACEHOLDER/$TITLE}"
+          PAYLOAD="${PAYLOAD//RELEASE_TYPE_PLACEHOLDER/$RELEASE_TYPE}"
+          PAYLOAD="${PAYLOAD//REPO_NAME_PLACEHOLDER/$REPO_NAME}"
+          PAYLOAD="${PAYLOAD//TAG_NAME_PLACEHOLDER/$TAG_NAME}"
+          PAYLOAD="${PAYLOAD//RELEASE_URL_PLACEHOLDER/$RELEASE_URL}"
+          PAYLOAD="${PAYLOAD//NODE_VERSION_PLACEHOLDER/$NODE_VERSION}"
+          PAYLOAD="${PAYLOAD//TIMESTAMP_PLACEHOLDER/$TIMESTAMP}"
+
+          curl -H "Content-Type: application/json" \
+               -d "$PAYLOAD" \
+               "$DISCORD_WEBHOOK"

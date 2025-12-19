@@ -1,0 +1,45 @@
+name: Claim Crates
+
+on:
+  workflow_dispatch:
+
+jobs:
+  claim-crates:
+    runs-on: ubuntu-latest
+    environment: master
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v4.1.7
+
+      - name: Check for publishable crates
+        id: check-publishable
+        run: |
+          # Find crates that are publishable (don't have publish = false)
+          PUBLISHABLE=$(find . -name "Cargo.toml" -exec grep -L 'publish = false' {} \; | grep -v target | head -20)
+          if [ -z "$PUBLISHABLE" ]; then
+            echo "No publishable crates found (all have publish = false)"
+            echo "has_publishable=false" >> $GITHUB_OUTPUT
+          else
+            echo "Found publishable crates:"
+            echo "$PUBLISHABLE"
+            echo "has_publishable=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Rust Cache
+        if: steps.check-publishable.outputs.has_publishable == 'true'
+        uses: Swatinem/rust-cache@f13886b937689c021905a6b90929199931d60db1 # v2.8.1
+        with:
+          save-if: ${{ github.ref == 'refs/heads/master' }}
+
+      - name: Claim crates on crates.io (when ready)
+        if: steps.check-publishable.outputs.has_publishable == 'true'
+        env:
+          PEZKUWI_CRATESIO_TOKEN: ${{ secrets.PEZKUWI_CRATESIO_TOKEN }}
+        run: |
+          echo "Publishable crates detected - claim will run when pezkuwi-publish tool is ready"
+          # TODO: Replace with pezkuwi-publish when available
+          # cargo install pezkuwi-publish --locked -q
+          # pezkuwi-publish --color always claim
+
+      - name: Skip - all crates have publish = false
+        if: steps.check-publishable.outputs.has_publishable == 'false'
+        run: echo "All crates have publish = false, skipping crate claiming"

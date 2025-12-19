@@ -1,0 +1,723 @@
+# GHA for build-*
+name: Build and push images
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  merge_group:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions: read-all
+
+env:
+  COMMIT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+
+jobs:
+  #
+  #
+  #
+  isdraft:
+    uses: ./.github/workflows/reusable-isdraft.yml
+  preflight:
+    needs: isdraft
+    uses: ./.github/workflows/reusable-preflight.yml
+
+  ### Build ########################
+
+  #
+  #
+  #
+  build-linux-stable:
+    needs: [preflight]
+    runs-on: ${{ needs.preflight.outputs.RUNNER }}
+    timeout-minutes: 60
+    container:
+      image: ${{ needs.preflight.outputs.IMAGE }}
+    env:
+      RUST_TOOLCHAIN: stable
+      # Enable debug assertions since we are running optimized builds for testing
+      # but still want to have debug assertions.
+      RUSTFLAGS: "-Cdebug-assertions=y -Dwarnings"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: build
+        id: required
+        run: |
+          cargo build --locked --profile testnet --features pyroscope,fast-runtime --bin pezkuwi --bin pezkuwi-prepare-worker --bin pezkuwi-execute-worker
+          PEZKUWICHAIN_EPOCH_DURATION=10 ./pezkuwi/scripts/build-only-wasm.sh pezkuwichain-runtime $(pwd)/runtimes/pezkuwichain-runtime-10/
+          PEZKUWICHAIN_EPOCH_DURATION=100 ./pezkuwi/scripts/build-only-wasm.sh pezkuwichain-runtime $(pwd)/runtimes/pezkuwichain-runtime-100/
+          PEZKUWICHAIN_EPOCH_DURATION=600 ./pezkuwi/scripts/build-only-wasm.sh pezkuwichain-runtime $(pwd)/runtimes/pezkuwichain-runtime-600/
+          pwd
+          ls -alR runtimes
+      - name: pack artifacts
+        run: |
+          mkdir -p ./artifacts
+          VERSION="${{ needs.preflight.outputs.SOURCE_REF_SLUG }}" # will be tag or branch name
+          mv ./target/testnet/pezkuwi ./artifacts/.
+          mv ./target/testnet/pezkuwi-prepare-worker ./artifacts/.
+          mv ./target/testnet/pezkuwi-execute-worker ./artifacts/.
+          mv ./runtimes/ ./artifacts/.
+          cd artifacts/
+          sha256sum pezkuwi | tee pezkuwi.sha256
+          shasum -c pezkuwi.sha256
+          cd ../
+          EXTRATAG="${{ needs.preflight.outputs.SOURCE_REF_SLUG }}-${COMMIT_SHA}"
+          echo "Pezkuwi version = ${VERSION} (EXTRATAG = ${EXTRATAG})"
+          echo -n ${VERSION} > ./artifacts/VERSION
+          echo -n ${EXTRATAG} > ./artifacts/EXTRATAG
+          echo -n ${GITHUB_RUN_ID} > ./artifacts/BUILD_LINUX_JOB_ID
+          RELEASE_VERSION=$(./artifacts/pezkuwi -V | awk '{print $2}'| awk -F "-" '{print $1}')
+          echo -n "v${RELEASE_VERSION}" > ./artifacts/BUILD_RELEASE_VERSION
+          cp -r docker/* ./artifacts
+
+      - name: tar
+        run: tar -cvf artifacts.tar artifacts
+
+      - name: upload artifacts
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: ${{ github.job }}-${{ needs.preflight.outputs.SOURCE_REF_SLUG }}
+          path: artifacts.tar
+          retention-days: 1
+  #
+  #
+  #
+  build-linux-stable-pezcumulus:
+    needs: [preflight]
+    runs-on: ${{ needs.preflight.outputs.RUNNER }}
+    timeout-minutes: 60
+    container:
+      image: ${{ needs.preflight.outputs.IMAGE }}
+    env:
+      RUSTFLAGS: "-Cdebug-assertions=y -Dwarnings"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: build
+        id: required
+        run: |
+          echo "___Building a binary, please refrain from using it in production since it goes with the debug assertions.___"
+          cargo build --release --locked -p pezkuwi-teyrchain-bin --bin pezkuwi-teyrchain
+          echo "___Packing the artifacts___"
+          mkdir -p ./artifacts
+          mv ./target/release/pezkuwi-teyrchain ./artifacts/.
+          echo "___The VERSION is either a tag name or the curent branch if triggered not by a tag___"
+          echo ${{ needs.preflight.outputs.SOURCE_REF_SLUG }} | tee ./artifacts/VERSION
+
+      - name: tar
+        run: tar -cvf artifacts.tar artifacts
+
+      - name: upload artifacts
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: ${{ github.job }}-${{ needs.preflight.outputs.SOURCE_REF_SLUG }}
+          path: artifacts.tar
+          retention-days: 1
+  #
+  #
+  #
+  build-test-teyrchain:
+    needs: [preflight]
+    runs-on: ${{ needs.preflight.outputs.RUNNER }}
+    timeout-minutes: 60
+    container:
+      image: ${{ needs.preflight.outputs.IMAGE }}
+    env:
+      RUSTFLAGS: "-Cdebug-assertions=y -Dwarnings"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: build
+        id: required
+        run: |
+          echo "___Building a binary, please refrain from using it in production since it goes with the debug assertions.___"
+          cargo build --release --locked -p pezcumulus-test-service --bin test-teyrchain
+      - name: pack artifacts
+        run: |
+          echo "___Packing the artifacts___"
+          mkdir -p ./artifacts
+          mv ./target/release/test-teyrchain ./artifacts/.
+          mkdir -p ./artifacts/zombienet
+          mv ./target/release/wbuild/pezcumulus-test-runtime/wasm_binary_spec_version_incremented.rs.compact.compressed.wasm ./artifacts/zombienet/.
+          mv ./target/release/wbuild/pezcumulus-test-runtime/wasm_binary_elastic_scaling.rs.compact.compressed.wasm ./artifacts/zombienet/.
+          mv ./target/release/wbuild/pezcumulus-test-runtime/wasm_binary_elastic_scaling_12s_slot.rs.compact.compressed.wasm ./artifacts/zombienet/.
+
+      - name: tar
+        run: tar -cvf artifacts.tar artifacts
+
+      - name: upload artifacts
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: ${{ github.job }}-${{ needs.preflight.outputs.SOURCE_REF_SLUG }}
+          path: artifacts.tar
+          retention-days: 1
+  #
+  #
+  #
+  build-test-collators:
+    needs: [preflight]
+    runs-on: ${{ needs.preflight.outputs.RUNNER }}
+    timeout-minutes: 60
+    container:
+      image: ${{ needs.preflight.outputs.IMAGE }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: build
+        id: required
+        run: |
+          cargo build --locked --profile testnet -p test-teyrchain-adder-collator
+          cargo build --locked --profile testnet -p test-teyrchain-undying-collator
+      - name: pack artifacts
+        run: |
+          mkdir -p ./artifacts
+          mv ./target/testnet/adder-collator ./artifacts/.
+          mv ./target/testnet/undying-collator ./artifacts/.
+          echo -n "${{ needs.preflight.outputs.SOURCE_REF_SLUG }}" > ./artifacts/VERSION
+          echo -n "${{ needs.preflight.outputs.SOURCE_REF_SLUG }}-${COMMIT_SHA}" > ./artifacts/EXTRATAG
+          echo "adder-collator version = $(cat ./artifacts/VERSION) (EXTRATAG = $(cat ./artifacts/EXTRATAG))"
+          echo "undying-collator version = $(cat ./artifacts/VERSION) (EXTRATAG = $(cat ./artifacts/EXTRATAG))"
+          cp -r ./docker/* ./artifacts
+
+      - name: tar
+        run: tar -cvf artifacts.tar artifacts
+
+      - name: upload artifacts
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: ${{ github.job }}-${{ needs.preflight.outputs.SOURCE_REF_SLUG }}
+          path: artifacts.tar
+          retention-days: 1
+  #
+  #
+  #
+  build-malus:
+    needs: [preflight]
+    runs-on: ${{ needs.preflight.outputs.RUNNER }}
+    timeout-minutes: 60
+    container:
+      image: ${{ needs.preflight.outputs.IMAGE }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: build
+        id: required
+        run: |
+          cargo build --locked --profile testnet -p pezkuwi-test-malus --bin malus --bin pezkuwi-prepare-worker --bin pezkuwi-execute-worker
+      - name: pack artifacts
+        run: |
+          mkdir -p ./artifacts
+          mv ./target/testnet/malus ./artifacts/.
+          mv ./target/testnet/pezkuwi-execute-worker ./artifacts/.
+          mv ./target/testnet/pezkuwi-prepare-worker ./artifacts/.
+          echo -n "${{ needs.preflight.outputs.SOURCE_REF_SLUG }}" > ./artifacts/VERSION
+          echo -n "${{ needs.preflight.outputs.SOURCE_REF_SLUG }}-${COMMIT_SHA}" > ./artifacts/EXTRATAG
+          echo "pezkuwi-test-malus = $(cat ./artifacts/VERSION) (EXTRATAG = $(cat ./artifacts/EXTRATAG))"
+          cp -r ./docker/* ./artifacts
+
+      - name: tar
+        run: tar -cvf artifacts.tar artifacts
+
+      - name: upload artifacts
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: ${{ github.job }}-${{ needs.preflight.outputs.SOURCE_REF_SLUG }}
+          path: artifacts.tar
+          retention-days: 1
+  #
+  #
+  #
+  build-linux-bizinikiwi:
+    needs: [preflight]
+    runs-on: ${{ needs.preflight.outputs.RUNNER }}
+    timeout-minutes: 60
+    container:
+      image: ${{ needs.preflight.outputs.IMAGE }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: build
+        id: required
+        run: |
+          mkdir -p ./artifacts/bizinikiwi/
+          WASM_BUILD_NO_COLOR=1 cargo build --locked --release -p pez-staging-node-cli
+          ls -la target/release/
+      - name: pack artifacts
+        shell: bash
+        run: |
+          mv target/release/bizinikiwi-node ./artifacts/bizinikiwi/bizinikiwi
+          echo -n "Bizinikiwi version = "
+          if [[ "${{ github.ref }}" == "refs/tags/"* ]]; then
+          echo "${{ github.ref_name }}" | tee ./artifacts/bizinikiwi/VERSION;
+          else
+          ./artifacts/bizinikiwi/bizinikiwi --version |
+          cut -d ' ' -f 2 | tee ./artifacts/bizinikiwi/VERSION;
+          fi
+          sha256sum ./artifacts/bizinikiwi/bizinikiwi | tee ./artifacts/bizinikiwi/bizinikiwi.sha256
+          cp -r ./docker/dockerfiles/bizinikiwi_injected.Dockerfile ./artifacts/bizinikiwi/
+
+      - name: tar
+        run: tar -cvf artifacts.tar artifacts
+
+      - name: upload artifacts
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: ${{ github.job }}-${{ needs.preflight.outputs.SOURCE_REF_SLUG }}
+          path: artifacts.tar
+          retention-days: 1
+  #
+  #
+  #
+  build-templates-node:
+    needs: [preflight]
+    runs-on: ${{ needs.preflight.outputs.RUNNER }}
+    timeout-minutes: 60
+    container:
+      image: ${{ needs.preflight.outputs.IMAGE }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: build
+        id: required
+        run: |
+          cargo build --locked --package teyrchain-template-node --release
+          cargo build --locked --package pez-minimal-template-node --release
+          cargo build --locked --package pez-solochain-template-node --release
+      - name: pack artifacts
+        run: |
+          mkdir -p ./artifacts
+          mv ./target/release/teyrchain-template-node ./artifacts/.
+          mv ./target/release/pez-minimal-template-node ./artifacts/.
+          mv ./target/release/pez-solochain-template-node ./artifacts/.
+          echo -n "${{ needs.preflight.outputs.SOURCE_REF_SLUG }}" > ./artifacts/VERSION
+          echo -n "${{ needs.preflight.outputs.SOURCE_REF_SLUG }}-${COMMIT_SHA}" > ./artifacts/EXTRATAG
+          echo "pezkuwi-test-malus = $(cat ./artifacts/VERSION) (EXTRATAG = $(cat ./artifacts/EXTRATAG))"
+
+      - name: tar
+        run: tar -cvf artifacts.tar artifacts
+
+      - name: upload artifacts
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: ${{ github.job }}-${{ needs.preflight.outputs.SOURCE_REF_SLUG }}
+          path: artifacts.tar
+          retention-days: 1
+
+
+  ### Build zombienet test artifacts ########################
+
+  #
+  #
+  #
+  prepare-bridges-zombienet-artifacts:
+    needs: [preflight]
+    runs-on: ${{ needs.preflight.outputs.RUNNER }}
+    timeout-minutes: 60
+    container:
+      image: ${{ needs.preflight.outputs.IMAGE }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: build
+        run: |
+          cargo build --locked --profile testnet -p pezkuwi-test-malus --bin malus --bin pezkuwi-prepare-worker --bin pezkuwi-execute-worker
+      - name: pack artifacts
+        run: |
+          mkdir -p ./artifacts/bridges-pezkuwi-sdk/bridges
+          cp -r bridges/testing ./artifacts/bridges-pezkuwi-sdk/bridges/testing
+
+      - name: tar
+        run: tar -cvf artifacts.tar artifacts
+
+      - name: upload artifacts
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: ${{ github.job }}-${{ needs.preflight.outputs.SOURCE_REF_SLUG }}
+          path: artifacts.tar
+          retention-days: 1
+
+  #
+  #
+  #
+  prepare-pezkuwi-zombienet-artifacts:
+    needs: [preflight]
+    runs-on: ${{ needs.preflight.outputs.RUNNER }}
+    timeout-minutes: 60
+    container:
+      image: ${{ needs.preflight.outputs.IMAGE }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: build
+        run: |
+          cargo nextest --manifest-path pezkuwi/zombienet-sdk-tests/Cargo.toml archive --locked --features zombie-metadata,zombie-ci --archive-file pezkuwi-zombienet-tests.tar.zst
+      - name: pack artifacts
+        run: |
+          mkdir -p artifacts
+          cp pezkuwi-zombienet-tests.tar.zst ./artifacts
+
+      - name: tar
+        run: tar -cvf artifacts.tar artifacts
+
+      - name: upload artifacts
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: ${{ github.job }}-${{ needs.preflight.outputs.SOURCE_REF_SLUG }}
+          path: artifacts.tar
+          retention-days: 1
+
+  #
+  #
+  #
+  prepare-pezcumulus-zombienet-artifacts:
+    needs: [preflight]
+    runs-on: ${{ needs.preflight.outputs.RUNNER }}
+    timeout-minutes: 60
+    container:
+      image: ${{ needs.preflight.outputs.IMAGE }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: build
+        run: |
+          cargo nextest --manifest-path pezcumulus/zombienet/zombienet-sdk/Cargo.toml archive --locked --features zombie-ci --archive-file pezcumulus-zombienet-tests.tar.zst
+      - name: pack artifacts
+        run: |
+          mkdir -p artifacts
+          cp pezcumulus-zombienet-tests.tar.zst ./artifacts
+
+      - name: tar
+        run: tar -cvf artifacts.tar artifacts
+
+      - name: upload artifacts
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: ${{ github.job }}-${{ needs.preflight.outputs.SOURCE_REF_SLUG }}
+          path: artifacts.tar
+          retention-days: 1
+
+  prepare-teyrchain-templates-zombienet-artifacts:
+    needs: [preflight]
+    runs-on: ${{ needs.preflight.outputs.RUNNER }}
+    timeout-minutes: 60
+    container:
+      image: ${{ needs.preflight.outputs.IMAGE }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: build
+        run: |
+          cargo nextest --manifest-path templates/zombienet/Cargo.toml archive --locked --features zombienet --archive-file teyrchain-templates-zombienet-tests.tar.zst
+      - name: pack artifacts
+        run: |
+          mkdir -p artifacts
+          cp teyrchain-templates-zombienet-tests.tar.zst ./artifacts
+
+      - name: tar
+        run: tar -cvf artifacts.tar artifacts
+
+      - name: upload artifacts
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: ${{ github.job }}-${{ needs.preflight.outputs.SOURCE_REF_SLUG }}
+          path: artifacts.tar
+          retention-days: 1
+
+  ### Publish ########################
+
+  #
+  #
+  #
+  build-push-image-test-teyrchain:
+    needs: [preflight, build-test-teyrchain]
+    runs-on: ${{ needs.preflight.outputs.RUNNER_DEFAULT }}
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+      - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
+        with:
+          name: build-test-teyrchain-${{ needs.preflight.outputs.SOURCE_REF_SLUG }}
+
+      - name: tar
+        run: tar -xvf artifacts.tar
+
+      - name: build and push image
+        uses: ./.github/actions/build-push-image
+        with:
+          image-name: "test-teyrchain"
+          dockerfile: "docker/dockerfiles/test-teyrchain_injected.Dockerfile"
+          username: ${{ secrets.PEZKUWI_DOCKERHUB_USERNAME }}
+          password: ${{ secrets.PEZKUWI_DOCKERHUB_PASSWORD }}
+
+  #
+  #
+  #
+  build-push-image-pezkuwi-debug:
+    needs: [preflight, build-linux-stable]
+    runs-on: ${{ needs.preflight.outputs.RUNNER_DEFAULT }}
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+      - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
+        with:
+          name: build-linux-stable-${{ needs.preflight.outputs.SOURCE_REF_SLUG }}
+
+      - name: tar
+        run: tar -xvf artifacts.tar
+
+      - name: build and push image
+        uses: ./.github/actions/build-push-image
+        with:
+          image-name: "pezkuwi-debug"
+          dockerfile: "docker/dockerfiles/pezkuwi/pezkuwi_injected_debug.Dockerfile"
+          username: ${{ secrets.PEZKUWI_DOCKERHUB_USERNAME }}
+          password: ${{ secrets.PEZKUWI_DOCKERHUB_PASSWORD }}
+
+  #
+  #
+  #
+  build-push-image-colander:
+    needs: [preflight, build-test-collators]
+    runs-on: ${{ needs.preflight.outputs.RUNNER_DEFAULT }}
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+      - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
+        with:
+          name: build-test-collators-${{ needs.preflight.outputs.SOURCE_REF_SLUG }}
+
+      - name: tar
+        run: tar -xvf artifacts.tar
+
+      - name: build and push image
+        uses: ./.github/actions/build-push-image
+        with:
+          image-name: "colander"
+          dockerfile: "docker/dockerfiles/collator_injected.Dockerfile"
+          username: ${{ secrets.PEZKUWI_DOCKERHUB_USERNAME }}
+          password: ${{ secrets.PEZKUWI_DOCKERHUB_PASSWORD }}
+
+  #
+  #
+  #
+  build-push-image-malus:
+    needs: [preflight, build-malus]
+    runs-on: ${{ needs.preflight.outputs.RUNNER_DEFAULT }}
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+      - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
+        with:
+          name: build-malus-${{ needs.preflight.outputs.SOURCE_REF_SLUG }}
+
+      - name: tar
+        run: tar -xvf artifacts.tar
+
+      - name: build and push image
+        uses: ./.github/actions/build-push-image
+        with:
+          image-name: "malus"
+          dockerfile: "docker/dockerfiles/malus_injected.Dockerfile"
+          username: ${{ secrets.PEZKUWI_DOCKERHUB_USERNAME }}
+          password: ${{ secrets.PEZKUWI_DOCKERHUB_PASSWORD }}
+
+  #
+  #
+  #
+  build-push-image-bizinikiwi-pr:
+    needs: [preflight, build-linux-bizinikiwi]
+    runs-on: ${{ needs.preflight.outputs.RUNNER_DEFAULT }}
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+      - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
+        with:
+          name: build-linux-bizinikiwi-${{ needs.preflight.outputs.SOURCE_REF_SLUG }}
+
+      - name: tar
+        run: tar -xvf artifacts.tar
+
+      - name: build and push image
+        uses: ./.github/actions/build-push-image
+        with:
+          image-name: "bizinikiwi"
+          dockerfile: "docker/dockerfiles/bizinikiwi_injected.Dockerfile"
+          username: ${{ secrets.PEZKUWI_DOCKERHUB_USERNAME }}
+          password: ${{ secrets.PEZKUWI_DOCKERHUB_PASSWORD }}
+
+  #
+  #
+  #
+  # unlike other images, bridges+zombienet image is based on Zombienet image that pulls required binaries
+  # from other fresh images (pezkuwi and pezcumulus)
+  build-push-image-bridges-zombienet-tests:
+    needs:
+      [
+        preflight,
+        build-linux-stable,
+        build-linux-stable-pezcumulus,
+        prepare-bridges-zombienet-artifacts,
+      ]
+    runs-on: ${{ needs.preflight.outputs.RUNNER_DEFAULT }}
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+      - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
+        with:
+          name: build-linux-stable-${{ needs.preflight.outputs.SOURCE_REF_SLUG }}
+      - name: tar
+        run: |
+          tar -xvf artifacts.tar
+          rm artifacts.tar
+
+      - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
+        with:
+          name: build-linux-stable-pezcumulus-${{ needs.preflight.outputs.SOURCE_REF_SLUG }}
+      - name: tar
+        run: |
+          tar -xvf artifacts.tar
+          rm artifacts.tar
+
+      - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
+        with:
+          name: prepare-bridges-zombienet-artifacts-${{ needs.preflight.outputs.SOURCE_REF_SLUG }}
+      - name: tar
+        run: |
+          tar -xvf artifacts.tar
+          rm artifacts.tar
+
+      - name: build and push image
+        uses: ./.github/actions/build-push-image
+        with:
+          image-name: "bridges-zombienet-tests"
+          dockerfile: "docker/dockerfiles/bridges_zombienet_tests_injected.Dockerfile"
+          username: ${{ secrets.PEZKUWI_DOCKERHUB_USERNAME }}
+          password: ${{ secrets.PEZKUWI_DOCKERHUB_PASSWORD }}
+
+  #
+  #
+  #
+  build-push-image-pezkuwi-teyrchain-debug:
+    needs: [preflight, build-linux-stable-pezcumulus]
+    runs-on: ${{ needs.preflight.outputs.RUNNER_DEFAULT }}
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+      - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
+        with:
+          name: build-linux-stable-pezcumulus-${{ needs.preflight.outputs.SOURCE_REF_SLUG }}
+
+      - name: tar
+        run: tar -xvf artifacts.tar
+
+      - name: build and push image
+        uses: ./.github/actions/build-push-image
+        with:
+          image-name: "pezkuwi-teyrchain-debug"
+          dockerfile: "docker/dockerfiles/pezkuwi-teyrchain/pezkuwi-teyrchain-debug_unsigned_injected.Dockerfile"
+          username: ${{ secrets.PEZKUWI_DOCKERHUB_USERNAME }}
+          password: ${{ secrets.PEZKUWI_DOCKERHUB_PASSWORD }}
+
+  confirm-required-build-jobs-passed:
+    runs-on: ubuntu-latest
+    name: All builds passed
+    # If any new job gets added, be sure to add it to this array
+    needs:
+      - build-linux-stable
+      - build-linux-stable-pezcumulus
+      - build-test-teyrchain
+      - build-test-collators
+      - build-malus
+      - build-linux-bizinikiwi
+      - build-templates-node
+    if: always() && !cancelled()
+    outputs:
+      build_success: ${{ steps.check_success.outputs.build_success }}
+    steps:
+      - name: Check build success
+        id: check_success
+        run: |
+          tee resultfile <<< '${{ toJSON(needs) }}'
+          FAILURES=$(cat resultfile | grep '"result": "failure"' | wc -l)
+          if [ $FAILURES -gt 0 ]; then
+            echo "### At least one required job failed ❌" >> $GITHUB_STEP_SUMMARY
+            echo "build_success=false" >> $GITHUB_OUTPUT
+            exit 1
+          else
+            echo '### Good job! All the required jobs passed 🚀' >> $GITHUB_STEP_SUMMARY
+            echo "build_success=true" >> $GITHUB_OUTPUT
+          fi
+
+  trigger-zombienet-pezkuwi:
+    needs: [preflight, confirm-required-build-jobs-passed]
+    if: ${{ needs.confirm-required-build-jobs-passed.outputs.build_success == 'true' }}
+    uses: ./.github/workflows/zombienet_pezkuwi.yml
+    with:
+      build_run_id: ${{ github.run_id }}
+      ref_slug: ${{ needs.preflight.outputs.SOURCE_REF_SLUG }}
+
+  trigger-zombienet-pezcumulus:
+    needs: [preflight, confirm-required-build-jobs-passed]
+    if: ${{ needs.confirm-required-build-jobs-passed.outputs.build_success == 'true' }}
+    uses: ./.github/workflows/zombienet_pezcumulus.yml
+    with:
+      build_run_id: ${{ github.run_id }}
+      ref_slug: ${{ needs.preflight.outputs.SOURCE_REF_SLUG }}
+
+  trigger-zombienet-bizinikiwi:
+    needs: [preflight, confirm-required-build-jobs-passed]
+    if: ${{ needs.confirm-required-build-jobs-passed.outputs.build_success == 'true' }}
+    uses: ./.github/workflows/zombienet_bizinikiwi.yml
+    with:
+      build_run_id: ${{ github.run_id }}
+      ref_slug: ${{ needs.preflight.outputs.SOURCE_REF_SLUG }}
+
+  trigger-zombienet-teyrchain-template:
+    needs: [preflight, confirm-required-build-jobs-passed]
+    if: ${{ needs.confirm-required-build-jobs-passed.outputs.build_success == 'true' }}
+    uses: ./.github/workflows/zombienet_teyrchain-template.yml
+    with:
+      build_run_id: ${{ github.run_id }}
+      ref_slug: ${{ needs.preflight.outputs.SOURCE_REF_SLUG }}
+
+  confirm-zombienet-tests-passed:
+    runs-on: ubuntu-latest
+    name: All zombienet tests passed
+    needs:
+      - trigger-zombienet-pezkuwi
+      - trigger-zombienet-pezcumulus
+      - trigger-zombienet-bizinikiwi
+      - trigger-zombienet-teyrchain-template
+    if: always() && !cancelled()
+    steps:
+      - name: Check zombienet success
+        id: check_success
+        run: |
+          tee resultfile <<< '${{ toJSON(needs) }}'
+          FAILURES=$(grep -c '"result": "failure"' resultfile || true)
+          if [ "$FAILURES" -gt 0 ]; then
+            echo "### At least one zombienet job failed ❌" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          else
+            echo '### Good job! All zombienet jobs passed 🚀' >> $GITHUB_STEP_SUMMARY
+          fi

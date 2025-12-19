@@ -1,0 +1,12 @@
+name: Reusable Disk Cleanup
+
+on:
+  workflow_call:
+
+jobs:
+  # This is a no-op job that other workflows can use to trigger disk cleanup
+  # The actual cleanup happens via the composite action
+  placeholder:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Disk cleanup is handled by the composite action"

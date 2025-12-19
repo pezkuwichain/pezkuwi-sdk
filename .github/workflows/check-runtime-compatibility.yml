@@ -1,0 +1,108 @@
+name: check-runtime-compatibility
+
+# DISABLED: Pezkuwi does not have public RPC endpoints yet.
+# Re-enable when public nodes are available at pezkuwichain.io
+# To enable: remove 'if: false' from the job below
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  merge_group:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  isdraft:
+    uses: ./.github/workflows/reusable-isdraft.yml
+  preflight:
+    needs: isdraft
+    uses: ./.github/workflows/reusable-preflight.yml
+
+  check-runtime-compatibility:
+    runs-on: ${{ needs.preflight.outputs.RUNNER }}
+    # DISABLED until Pezkuwi public RPC endpoints are available
+    if: false # ${{ needs.preflight.outputs.changes_rust }}
+    timeout-minutes: 30
+    needs: [preflight]
+    container:
+      image: ${{ needs.preflight.outputs.IMAGE }}
+    strategy:
+      fail-fast: false
+      matrix:
+        network:
+          [
+            zagros,
+            asset-hub-zagros,
+            bridge-hub-zagros,
+            collectives-zagros,
+            coretime-zagros,
+          ]
+        include:
+          - network: zagros
+            package: zagros-runtime
+            wasm: zagros_runtime.compact.compressed.wasm
+            uri: "wss://try-runtime-zagros.pezkuwichain.io:443"
+          - network: asset-hub-zagros
+            package: asset-hub-zagros-runtime
+            wasm: asset_hub_zagros_runtime.compact.compressed.wasm
+            uri: "wss://zagros-asset-hub-rpc.pezkuwichain.io:443"
+          - network: bridge-hub-zagros
+            package: bridge-hub-zagros-runtime
+            wasm: bridge_hub_zagros_runtime.compact.compressed.wasm
+            uri: "wss://zagros-bridge-hub-rpc.pezkuwichain.io:443"
+          - network: collectives-zagros
+            package: collectives-zagros-runtime
+            wasm: collectives_zagros_runtime.compact.compressed.wasm
+            uri: "wss://zagros-collectives-rpc.pezkuwichain.io:443"
+          - network: coretime-zagros
+            package: coretime-zagros-runtime
+            wasm: coretime_zagros_runtime.compact.compressed.wasm
+            uri: "wss://zagros-coretime-rpc.pezkuwichain.io:443"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+      - name: Build Runtime
+        id: build-runtime
+        run: |
+          echo "---------- Building ${{ matrix.package }} runtime with on-chain-release-build ----------"
+          cargo build --release --locked -p ${{ matrix.package }} --features on-chain-release-build -q
+
+      - name: Setup Node.js
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: "24.x"
+          registry-url: "https://npm.pkg.github.com"
+
+      - name: Check Runtime Compatibility
+        id: check-compatibility
+        run: |
+          echo "---------- Checking runtime compatibility for ${{ matrix.network }} ----------"
+          npx @pezkuwi-api/check-runtime@latest problems ${{ matrix.uri }} --wasm ./target/release/wbuild/${{ matrix.package }}/${{ matrix.wasm }}
+
+
+  # name of this job must be unique across all workflows
+  # otherwise GitHub will mark all these jobs as required
+  confirm-runtime-compatibility-checks-passed:
+    runs-on: ubuntu-latest
+    name: All runtime compatibility checks passed
+    needs: [check-runtime-compatibility]
+    if: always() && !cancelled()
+    steps:
+      - run: |
+          tee resultfile <<< '${{ toJSON(needs) }}'
+          FAILURES=$(cat resultfile | grep '"result": "failure"' | wc -l)
+          if [ $FAILURES -gt 0 ]; then
+            echo "### At least one required job failed ❌" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          else
+            echo '### Good job! All the required jobs passed 🚀' >> $GITHUB_STEP_SUMMARY
+          fi

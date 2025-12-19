@@ -1,0 +1,73 @@
+# PezkuwiChain Code Owners
+#
+# A codeowner oversees part of the codebase. If an owned file is changed,
+# the corresponding codeowner receives a review request.
+#
+# For details about syntax, see:
+# https://help.github.com/en/articles/about-code-owners
+
+# Global - Core Team
+* @pezkuwichain/core
+
+# Custom Pallets - Pallet Team
+/pezkuwi/pallets/ @pezkuwichain/pallets
+
+# Presale Pallet - Critical financial code
+/pezkuwi/pallets/presale/ @pezkuwichain/core @pezkuwichain/pallets
+
+# Treasury & Rewards - Financial critical
+/pezkuwi/pallets/pez-treasury/ @pezkuwichain/core
+/pezkuwi/pallets/pez-rewards/ @pezkuwichain/core
+
+# Identity & KYC - Privacy sensitive
+/pezkuwi/pallets/identity-kyc/ @pezkuwichain/core
+/pezkuwi/pallets/tiki/ @pezkuwichain/core
+
+# Governance - Critical
+/pezkuwi/pallets/welati/ @pezkuwichain/core
+
+# Runtime configurations
+/pezkuwi/runtime/ @pezkuwichain/core
+
+# TeyrChain Parachain Runtime
+/pezkuwi/runtime/parachain/ @pezkuwichain/core
+
+# PezkuwiChain Relay Runtime
+/pezkuwi/runtime/pezkuwichain/ @pezkuwichain/core
+
+# XCM Configuration - Cross-chain critical
+/pezkuwi/runtime/parachain/src/configs/xcm_config.rs @pezkuwichain/core
+
+# Chain specifications
+/chain-specs/ @pezkuwichain/core
+
+# CI/CD
+/.github/ @pezkuwichain/devops
+/.gitlab-ci.yml @pezkuwichain/devops
+/.gitlab/ @pezkuwichain/devops
+
+# Documentation
+/docs/ @pezkuwichain/docs
+README.md @pezkuwichain/core
+
+# Scripts
+/scripts/ @pezkuwichain/devops
+
+# Substrate Core (inherited from upstream)
+/substrate/frame/ @pezkuwichain/core
+/substrate/client/ @pezkuwichain/core
+/substrate/primitives/ @pezkuwichain/core
+
+# Cumulus (parachain framework)
+/cumulus/ @pezkuwichain/core
+
+# Polkadot (relay chain framework)
+/polkadot/ @pezkuwichain/core
+
+# XCM
+/polkadot/xcm/ @pezkuwichain/core
+
+# Security-sensitive files
+Cargo.toml @pezkuwichain/core
+Cargo.lock @pezkuwichain/core
+rust-toolchain.toml @pezkuwichain/core

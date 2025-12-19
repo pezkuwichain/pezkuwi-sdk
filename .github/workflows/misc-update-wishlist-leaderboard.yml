@@ -1,0 +1,18 @@
+# DISABLED: This workflow was for Kurdistan-Tech's wishlist leaderboard feature.
+# Pezkuwi SDK will implement its own community engagement features.
+
+name: Update wishlist leaderboard (DISABLED)
+
+on:
+  workflow_dispatch:
+    inputs:
+      note:
+        description: 'This workflow is disabled - Pezkuwi will implement own solution'
+        required: false
+
+jobs:
+  disabled:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notice
+        run: echo "Wishlist leaderboard is disabled - Pezkuwi SDK uses different community engagement"

@@ -1,0 +1,300 @@
+name: Release - Build node release candidate
+
+on:
+  workflow_dispatch:
+    inputs:
+      binary:
+        description: Binary to be build for the release
+        default: all
+        type: choice
+        options:
+          - pezkuwi
+          - pezkuwi-teyrchain
+          - pezkuwi-omni-node
+          - pezframe-omni-bencher
+          - chain-spec-builder
+          - bizinikiwi-node
+          - eth-rpc
+          - pez-subkey
+          - all
+
+      release_tag:
+        description: Tag matching the actual release candidate with the format pezkuwi-stableYYMM(-X)-rcX or pezkuwi-stableYYMM(-X)
+        type: string
+
+  workflow_call:
+    inputs:
+      binary:
+        description: Binary to be built for the release
+        default: all
+        type: string
+      release_tag:
+        description: Tag matching the actual release candidate with the format pezkuwi-stableYYMM(-X)-rcY or pezkuwi-stableYYMM(-X)
+        type: string
+
+jobs:
+  # DISABLED: Workflow synchronization check
+  # check-synchronization:
+  #   uses: pezkuwichain-release/sync-workflows/.github/workflows/check-synchronization.yml@main
+  #   secrets:
+  #     fork_writer_app_key: ${{ secrets.UPSTREAM_CONTENT_SYNC_APP_KEY }}
+
+  validate-inputs:
+    runs-on: ubuntu-latest
+    outputs:
+        release_tag: ${{ steps.validate_inputs.outputs.release_tag }}
+
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+      - name: Validate inputs
+        id: validate_inputs
+        run: |
+          . ./.github/scripts/common/lib.sh
+
+          RELEASE_TAG=$(validate_stable_tag ${{ inputs.release_tag }})
+          echo "release_tag=${RELEASE_TAG}" >> $GITHUB_OUTPUT
+
+  build-pezkuwi-binary:
+    needs: [validate-inputs]
+    if: ${{ inputs.binary == 'pezkuwi' || inputs.binary == 'all' }}
+    uses: "./.github/workflows/release-reusable-rc-build.yml"
+    with:
+      binary: '["pezkuwi", "pezkuwi-prepare-worker", "pezkuwi-execute-worker"]'
+      package: pezkuwi
+      release_tag: ${{ needs.validate-inputs.outputs.release_tag }}
+      target: x86_64-unknown-linux-gnu
+    secrets: inherit
+
+    permissions:
+      id-token: write
+      attestations: write
+      contents: read
+
+  build-pezkuwi-teyrchain-binary:
+    needs: [validate-inputs]
+    if: ${{ inputs.binary == 'pezkuwi-teyrchain' || inputs.binary == 'all' }}
+    uses: "./.github/workflows/release-reusable-rc-build.yml"
+    with:
+      binary: '["pezkuwi-teyrchain"]'
+      package: "pezkuwi-teyrchain-bin"
+      release_tag: ${{ needs.validate-inputs.outputs.release_tag }}
+      target: x86_64-unknown-linux-gnu
+    secrets: inherit
+    permissions:
+      id-token: write
+      attestations: write
+      contents: read
+
+  build-pezkuwi-omni-node-binary:
+    needs: [validate-inputs]
+    if: ${{ inputs.binary == 'pezkuwi-omni-node' || inputs.binary == 'all' }}
+    uses: "./.github/workflows/release-reusable-rc-build.yml"
+    with:
+      binary: '["pezkuwi-omni-node"]'
+      package: "pezkuwi-omni-node"
+      release_tag: ${{ needs.validate-inputs.outputs.release_tag }}
+      target: x86_64-unknown-linux-gnu
+      features: runtime-benchmarks
+    secrets: inherit
+    permissions:
+      id-token: write
+      attestations: write
+      contents: read
+
+  build-pezframe-omni-bencher-binary:
+    needs: [validate-inputs]
+    if: ${{ inputs.binary == 'pezframe-omni-bencher' || inputs.binary == 'all' }}
+    uses: "./.github/workflows/release-reusable-rc-build.yml"
+    with:
+      binary: '["pezframe-omni-bencher"]'
+      package: "pezframe-omni-bencher"
+      release_tag: ${{ needs.validate-inputs.outputs.release_tag }}
+      target: x86_64-unknown-linux-gnu
+    secrets: inherit
+    permissions:
+      id-token: write
+      attestations: write
+      contents: read
+
+  build-chain-spec-builder-binary:
+    needs: [validate-inputs]
+    if: ${{ inputs.binary == 'chain-spec-builder' || inputs.binary == 'all' }}
+    uses: "./.github/workflows/release-reusable-rc-build.yml"
+    with:
+      binary: '["chain-spec-builder"]'
+      package: pez-staging-chain-spec-builder
+      release_tag: ${{ needs.validate-inputs.outputs.release_tag }}
+      target: x86_64-unknown-linux-gnu
+    secrets: inherit
+    permissions:
+      id-token: write
+      attestations: write
+      contents: read
+
+  build-bizinikiwi-node-binary:
+    needs: [validate-inputs]
+    if: ${{ inputs.binary == 'bizinikiwi-node' || inputs.binary == 'all' }}
+    uses: "./.github/workflows/release-reusable-rc-build.yml"
+    with:
+      binary: '["bizinikiwi-node"]'
+      package: pez-staging-node-cli
+      release_tag: ${{ needs.validate-inputs.outputs.release_tag }}
+      target: x86_64-unknown-linux-gnu
+    secrets: inherit
+    permissions:
+      id-token: write
+      attestations: write
+      contents: read
+
+  build-eth-rpc-binary:
+    needs: [validate-inputs]
+    if: ${{ inputs.binary == 'eth-rpc' || inputs.binary == 'all' }}
+    uses: "./.github/workflows/release-reusable-rc-build.yml"
+    with:
+      binary: '["eth-rpc"]'
+      package: pezpallet-revive-eth-rpc
+      release_tag: ${{ needs.validate-inputs.outputs.release_tag }}
+      target: x86_64-unknown-linux-gnu
+    secrets: inherit
+    permissions:
+      id-token: write
+      attestations: write
+      contents: read
+
+  build-pez-subkey-binary:
+    needs: [validate-inputs]
+    if: ${{ inputs.binary == 'pez-subkey' || inputs.binary == 'all' }}
+    uses: "./.github/workflows/release-reusable-rc-build.yml"
+    with:
+      binary: '["pez-subkey"]'
+      package: pez-subkey
+      release_tag: ${{ needs.validate-inputs.outputs.release_tag }}
+      target: x86_64-unknown-linux-gnu
+    secrets: inherit
+    permissions:
+      id-token: write
+      attestations: write
+      contents: read
+
+  build-pezkuwi-macos-binary:
+    needs: [validate-inputs]
+    if: ${{ inputs.binary == 'pezkuwi' || inputs.binary == 'all' }}
+    uses: "./.github/workflows/release-reusable-rc-build.yml"
+    with:
+      binary: '["pezkuwi", "pezkuwi-prepare-worker", "pezkuwi-execute-worker"]'
+      package: pezkuwi
+      release_tag: ${{ needs.validate-inputs.outputs.release_tag }}
+      target: aarch64-apple-darwin
+    secrets: inherit
+    permissions:
+      id-token: write
+      attestations: write
+      contents: read
+
+  build-pezkuwi-teyrchain-macos-binary:
+    needs: [validate-inputs]
+    if: ${{ inputs.binary == 'pezkuwi-teyrchain' || inputs.binary == 'all' }}
+    uses: "./.github/workflows/release-reusable-rc-build.yml"
+    with:
+      binary: '["pezkuwi-teyrchain"]'
+      package: pezkuwi-teyrchain-bin
+      release_tag: ${{ needs.validate-inputs.outputs.release_tag }}
+      target: aarch64-apple-darwin
+    secrets: inherit
+    permissions:
+      id-token: write
+      attestations: write
+      contents: read
+
+  build-pezkuwi-omni-node-macos-binary:
+    needs: [validate-inputs]
+    if: ${{ inputs.binary == 'pezkuwi-omni-node' || inputs.binary == 'all' }}
+    uses: "./.github/workflows/release-reusable-rc-build.yml"
+    with:
+      binary: '["pezkuwi-omni-node"]'
+      package: pezkuwi-omni-node
+      release_tag: ${{ needs.validate-inputs.outputs.release_tag }}
+      target: aarch64-apple-darwin
+      features: runtime-benchmarks
+    secrets: inherit
+    permissions:
+      id-token: write
+      attestations: write
+      contents: read
+
+  build-pezframe-omni-bencher-macos-binary:
+    needs: [validate-inputs]
+    if: ${{ inputs.binary == 'pezframe-omni-bencher' || inputs.binary == 'all' }}
+    uses: "./.github/workflows/release-reusable-rc-build.yml"
+    with:
+      binary: '["pezframe-omni-bencher"]'
+      package: pezframe-omni-bencher
+      release_tag: ${{ needs.validate-inputs.outputs.release_tag }}
+      target: aarch64-apple-darwin
+    secrets: inherit
+    permissions:
+      id-token: write
+      attestations: write
+      contents: read
+
+  build-chain-spec-builder-macos-binary:
+    needs: [validate-inputs]
+    if: ${{ inputs.binary == 'chain-spec-builder' || inputs.binary == 'all' }}
+    uses: "./.github/workflows/release-reusable-rc-build.yml"
+    with:
+      binary: '["chain-spec-builder"]'
+      package: pez-staging-chain-spec-builder
+      release_tag: ${{ needs.validate-inputs.outputs.release_tag }}
+      target: aarch64-apple-darwin
+    secrets: inherit
+    permissions:
+      id-token: write
+      attestations: write
+      contents: read
+
+  build-bizinikiwi-node-macos-binary:
+    needs: [validate-inputs]
+    if: ${{ inputs.binary == 'bizinikiwi-node' || inputs.binary == 'all' }}
+    uses: "./.github/workflows/release-reusable-rc-build.yml"
+    with:
+      binary: '["bizinikiwi-node"]'
+      package: pez-staging-node-cli
+      release_tag: ${{ needs.validate-inputs.outputs.release_tag }}
+      target: aarch64-apple-darwin
+    secrets: inherit
+    permissions:
+      id-token: write
+      attestations: write
+      contents: read
+
+  build-eth-rpc-macos-binary:
+    needs: [validate-inputs]
+    if: ${{ inputs.binary == 'eth-rpc' || inputs.binary == 'all' }}
+    uses: "./.github/workflows/release-reusable-rc-build.yml"
+    with:
+      binary: '["eth-rpc"]'
+      package: pezpallet-revive-eth-rpc
+      release_tag: ${{ needs.validate-inputs.outputs.release_tag }}
+      target: aarch64-apple-darwin
+    secrets: inherit
+    permissions:
+      id-token: write
+      attestations: write
+      contents: read
+
+  build-pez-subkey-macos-binary:
+    needs: [validate-inputs]
+    if: ${{ inputs.binary == 'pez-subkey' || inputs.binary == 'all' }}
+    uses: "./.github/workflows/release-reusable-rc-build.yml"
+    with:
+      binary: '["pez-subkey"]'
+      package: pez-subkey
+      release_tag: ${{ needs.validate-inputs.outputs.release_tag }}
+      target: aarch64-apple-darwin
+    secrets: inherit
+    permissions:
+      id-token: write
+      attestations: write
+      contents: read

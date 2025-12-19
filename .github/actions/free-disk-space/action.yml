@@ -1,0 +1,49 @@
+name: 'Free Disk Space'
+description: 'Frees up disk space on GitHub Actions runners by removing unnecessary software'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Free Disk Space (Ubuntu)
+      shell: bash
+      run: |
+        echo "=== Disk space before cleanup ==="
+        df -h /
+
+        echo "=== Removing unnecessary packages ==="
+        # Remove Android SDK (12GB+)
+        sudo rm -rf /usr/local/lib/android || true
+
+        # Remove .NET SDK (2GB+)
+        sudo rm -rf /usr/share/dotnet || true
+
+        # Remove Haskell/GHC (5GB+)
+        sudo rm -rf /opt/ghc || true
+        sudo rm -rf /usr/local/.ghcup || true
+
+        # Remove Swift (1.5GB+)
+        sudo rm -rf /usr/share/swift || true
+
+        # Remove CodeQL (1GB+)
+        sudo rm -rf /opt/hostedtoolcache/CodeQL || true
+
+        # Remove unused tool caches
+        sudo rm -rf /opt/hostedtoolcache/Python || true
+        sudo rm -rf /opt/hostedtoolcache/Ruby || true
+        sudo rm -rf /opt/hostedtoolcache/go || true
+        sudo rm -rf /opt/hostedtoolcache/node || true
+
+        # Remove large packages
+        sudo apt-get remove -y '^dotnet-.*' '^llvm-.*' 'php.*' '^mongodb-.*' '^mysql-.*' azure-cli google-cloud-cli google-chrome-stable firefox powershell mono-devel libgl1-mesa-dri --fix-missing 2>/dev/null || true
+        sudo apt-get autoremove -y 2>/dev/null || true
+        sudo apt-get clean 2>/dev/null || true
+
+        # Remove Docker images
+        docker system prune -af 2>/dev/null || true
+
+        # Remove swap (1GB+)
+        sudo swapoff -a || true
+        sudo rm -f /swapfile || true
+
+        echo "=== Disk space after cleanup ==="
+        df -h /

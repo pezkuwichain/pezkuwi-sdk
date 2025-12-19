@@ -1,0 +1,18 @@
+# DISABLED: This workflow was for Kurdistan-Tech DevOps notifications.
+# Pezkuwi SDK will implement its own notification system if needed.
+
+name: Notify DevOps when burn-in label applied (DISABLED)
+
+on:
+  workflow_dispatch:
+    inputs:
+      note:
+        description: 'This workflow is disabled - Kurdistan-Tech Matrix notifications not applicable'
+        required: false
+
+jobs:
+  disabled:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notice
+        run: echo "Burn-in label notification is disabled - Pezkuwi SDK uses different DevOps channels"

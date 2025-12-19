@@ -1,0 +1,128 @@
+name: Checks
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  merge_group:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  isdraft:
+    uses: ./.github/workflows/reusable-isdraft.yml
+  preflight:
+    needs: isdraft
+    uses: ./.github/workflows/reusable-preflight.yml
+
+  cargo-clippy:
+    runs-on: ${{ needs.preflight.outputs.RUNNER }}
+    needs: [preflight]
+    if: ${{ needs.preflight.outputs.changes_rust }}
+    timeout-minutes: 60
+    container:
+      image: ${{ needs.preflight.outputs.IMAGE }}
+    env:
+      RUSTFLAGS: "-D warnings"
+      SKIP_WASM_BUILD: 1
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v4.1.7
+
+      - name: Free disk space
+        run: |
+          df -h
+          # Remove unnecessary files to free disk space
+          sudo rm -rf /usr/share/dotnet 2>/dev/null || true
+          sudo rm -rf /usr/local/lib/android 2>/dev/null || true
+          sudo rm -rf /opt/ghc 2>/dev/null || true
+          sudo rm -rf /opt/hostedtoolcache 2>/dev/null || true
+          cargo clean 2>/dev/null || true
+          rm -rf ~/.cargo/registry/cache 2>/dev/null || true
+          rm -rf ~/.cargo/git/db 2>/dev/null || true
+          df -h
+
+      - name: script
+        id: required
+        run: |
+          cargo clippy --all-targets --all-features --locked --workspace --quiet
+
+  check-try-runtime:
+    runs-on: ${{ needs.preflight.outputs.RUNNER }}
+    needs: [preflight]
+    if: ${{ needs.preflight.outputs.changes_rust }}
+    timeout-minutes: 60
+    container:
+      image: ${{ needs.preflight.outputs.IMAGE }}
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v4.1.7
+
+      - name: Free disk space
+        run: |
+          df -h
+          # Remove unnecessary files to free disk space
+          sudo rm -rf /usr/share/dotnet 2>/dev/null || true
+          sudo rm -rf /usr/local/lib/android 2>/dev/null || true
+          sudo rm -rf /opt/ghc 2>/dev/null || true
+          sudo rm -rf /opt/hostedtoolcache 2>/dev/null || true
+          cargo clean 2>/dev/null || true
+          rm -rf ~/.cargo/registry/cache 2>/dev/null || true
+          rm -rf ~/.cargo/git/db 2>/dev/null || true
+          df -h
+
+      - name: script
+        id: required
+        run: |
+          cargo check --locked --all --features try-runtime --quiet
+          # this is taken from pezcumulus
+          # Check that teyrchain-template will compile with `try-runtime` feature flag.
+          cargo check --locked -p teyrchain-template-node --features try-runtime
+          # add after https://github.com/pezkuwichain/bizinikiwi/pull/14502 is merged
+          # experimental code may rely on try-runtime and vice-versa
+          cargo check --locked --all --features try-runtime,experimental --quiet
+
+  # check-core-crypto-features works fast without forklift
+  check-core-crypto-features:
+    runs-on: ${{ needs.preflight.outputs.RUNNER }}
+    needs: [preflight]
+    if: ${{ needs.preflight.outputs.changes_rust }}
+    timeout-minutes: 30
+    container:
+      image: ${{ needs.preflight.outputs.IMAGE }}
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v4.1.7
+      - name: script
+        id: required
+        run: |
+          cd bizinikiwi/primitives/core
+          ./check-features-variants.sh
+          cd -
+          cd bizinikiwi/primitives/application-crypto
+          ./check-features-variants.sh
+          cd -
+          cd bizinikiwi/primitives/keyring
+          ./check-features-variants.sh
+          cd -
+  # name of this job must be unique across all workflows
+  # otherwise GitHub will mark all these jobs as required
+  confirm-required-checks-passed:
+    runs-on: ubuntu-latest
+    name: All checks passed
+    # If any new job gets added, be sure to add it to this array
+    needs: [cargo-clippy, check-try-runtime, check-core-crypto-features]
+    if: always() && !cancelled()
+    steps:
+      - run: |
+          tee resultfile <<< '${{ toJSON(needs) }}'
+          FAILURES=$(cat resultfile | grep '"result": "failure"' | wc -l)
+          if [ $FAILURES -gt 0 ]; then
+            echo "### At least one required job failed ❌" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          else
+            echo '### Good job! All the required jobs passed 🚀' >> $GITHUB_STEP_SUMMARY
+          fi

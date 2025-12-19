@@ -1,0 +1,145 @@
+[
+  {
+    "name": "dev",
+    "package": "kitchensink-runtime",
+    "path": "substrate/frame",
+    "header": "substrate/HEADER-APACHE2",
+    "template": "substrate/.maintain/frame-weight-template.hbs",
+    "bench_features": "runtime-benchmarks",
+    "bench_flags": "--exclude-pallets=pallet_xcm,pallet_xcm_benchmarks::fungible,pallet_xcm_benchmarks::generic,pallet_nomination_pools,pallet_remark,pallet_transaction_storage",
+    "uri": null,
+    "is_relay": false
+  },
+  {
+    "name": "zagros",
+    "package": "zagros-runtime",
+    "path": "pezkuwi/runtime/zagros",
+    "header": "pezkuwi/file_header.txt",
+    "template": "pezkuwi/xcm/pallet-xcm-benchmarks/template.hbs",
+    "bench_flags": "",
+    "bench_features": "runtime-benchmarks",
+    "uri": "wss://try-runtime-zagros.pezkuwichain.io:443",
+    "is_relay": true
+  },
+  {
+    "name": "pezkuwichain",
+    "package": "pezkuwichain-runtime",
+    "path": "pezkuwi/runtime/pezkuwichain",
+    "header": "pezkuwi/file_header.txt",
+    "template": "pezkuwi/xcm/pallet-xcm-benchmarks/template.hbs",
+    "bench_features": "runtime-benchmarks",
+    "bench_flags": "",
+    "uri": "wss://try-runtime-pezkuwichain.pezkuwichain.io:443",
+    "is_relay": true
+  },
+  {
+    "name": "asset-hub-zagros",
+    "package": "asset-hub-zagros-runtime",
+    "path": "cumulus/teyrchains/runtimes/assets/asset-hub-zagros",
+    "header": "cumulus/file_header.txt",
+    "template": "cumulus/templates/xcm-bench-template.hbs",
+    "bench_features": "runtime-benchmarks",
+    "bench_flags": "",
+    "uri": "wss://zagros-asset-hub-rpc.pezkuwichain.io:443",
+    "is_relay": false
+  },
+  {
+    "name": "asset-hub-pezkuwichain",
+    "package": "asset-hub-pezkuwichain-runtime",
+    "path": "cumulus/teyrchains/runtimes/assets/asset-hub-pezkuwichain",
+    "header": "cumulus/file_header.txt",
+    "template": "cumulus/templates/xcm-bench-template.hbs",
+    "bench_features": "runtime-benchmarks",
+    "bench_flags": "",
+    "uri": "wss://pezkuwichain-asset-hub-rpc.pezkuwichain.io:443",
+    "is_relay": false
+  },
+  {
+    "name": "bridge-hub-pezkuwichain",
+    "package": "bridge-hub-pezkuwichain-runtime",
+    "path": "cumulus/teyrchains/runtimes/bridge-hubs/bridge-hub-pezkuwichain",
+    "header": "cumulus/file_header.txt",
+    "template": "cumulus/templates/xcm-bench-template.hbs",
+    "bench_features": "runtime-benchmarks",
+    "bench_flags": "",
+    "uri": "wss://pezkuwichain-bridge-hub-rpc.pezkuwichain.io:443",
+    "is_relay": false
+  },
+  {
+    "name": "bridge-hub-zagros",
+    "package": "bridge-hub-zagros-runtime",
+    "path": "cumulus/teyrchains/runtimes/bridge-hubs/bridge-hub-zagros",
+    "header": "cumulus/file_header.txt",
+    "template": "cumulus/templates/xcm-bench-template.hbs",
+    "bench_features": "runtime-benchmarks",
+    "bench_flags": "",
+    "uri": "wss://zagros-bridge-hub-rpc.pezkuwichain.io:443",
+    "is_relay": false
+  },
+  {
+    "name": "collectives-zagros",
+    "package": "collectives-zagros-runtime",
+    "path": "cumulus/teyrchains/runtimes/collectives/collectives-zagros",
+    "header": "cumulus/file_header.txt",
+    "template": "cumulus/templates/xcm-bench-template.hbs",
+    "bench_features": "runtime-benchmarks",
+    "bench_flags": "",
+    "uri": "wss://zagros-collectives-rpc.pezkuwichain.io:443",
+    "is_relay": false
+  },
+  {
+    "name": "coretime-pezkuwichain",
+    "package": "coretime-pezkuwichain-runtime",
+    "path": "cumulus/teyrchains/runtimes/coretime/coretime-pezkuwichain",
+    "header": "cumulus/file_header.txt",
+    "template": "cumulus/templates/xcm-bench-template.hbs",
+    "bench_features": "runtime-benchmarks",
+    "bench_flags": "",
+    "uri": "wss://pezkuwichain-coretime-rpc.pezkuwichain.io:443",
+    "is_relay": false
+  },
+  {
+    "name": "coretime-zagros",
+    "package": "coretime-zagros-runtime",
+    "path": "cumulus/teyrchains/runtimes/coretime/coretime-zagros",
+    "header": "cumulus/file_header.txt",
+    "template": "cumulus/templates/xcm-bench-template.hbs",
+    "bench_features": "runtime-benchmarks",
+    "bench_flags": "",
+    "uri": "wss://zagros-coretime-rpc.pezkuwichain.io:443",
+    "is_relay": false
+  },
+  {
+    "name": "glutton-zagros",
+    "package": "glutton-zagros-runtime",
+    "path": "cumulus/teyrchains/runtimes/glutton/glutton-zagros",
+    "header": "cumulus/file_header.txt",
+    "template": "cumulus/templates/xcm-bench-template.hbs",
+    "bench_features": "runtime-benchmarks",
+    "bench_flags": "",
+    "uri": null,
+    "is_relay": false
+  },
+  {
+    "name": "people-pezkuwichain",
+    "package": "people-pezkuwichain-runtime",
+    "path": "cumulus/teyrchains/runtimes/people/people-pezkuwichain",
+    "header": "cumulus/file_header.txt",
+    "template": "cumulus/templates/xcm-bench-template.hbs",
+    "bench_features": "runtime-benchmarks",
+    "bench_flags": "",
+    "uri": "wss://pezkuwichain-people-rpc.pezkuwichain.io:443",
+    "is_relay": false
+  },
+  {
+    "name": "people-zagros",
+    "package": "people-zagros-runtime",
+    "path": "cumulus/teyrchains/runtimes/people/people-zagros",
+    "header": "cumulus/file_header.txt",
+    "template": "cumulus/templates/xcm-bench-template.hbs",
+    "bench_features": "runtime-benchmarks",
+    "bench_flags": "",
+    "uri": "wss://zagros-people-rpc.pezkuwichain.io:443",
+    "is_relay": false
+  }
+]

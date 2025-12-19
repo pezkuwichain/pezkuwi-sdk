@@ -1,0 +1,90 @@
+name: Release - Build runtimes
+
+on:
+  workflow_dispatch:
+    inputs:
+      chain:
+        description: The chain to use
+        default: all
+        required: true
+        type: choice
+        options:
+          - all
+          - zagros
+          - asset-hub-zagros
+          - bridge-hub-zagros
+          - collectives-zagros
+          - coretime-zagros
+          - glutton-zagros
+          - people-zagros
+      runtime_dir:
+        description: The runtime dir to be used (⚠️ this parameter is optional and needed only in case of the single runtime build, set it accordingly to the runtime you want to build)
+        default: pezkuwi/runtime/zagros
+        type: choice
+        options:
+          - pezkuwi/runtime/zagros
+          - pezcumulus/teyrchains/runtimes/assets/asset-hub-zagros
+          - pezcumulus/teyrchains/runtimes/bridge-hubs/bridge-hub-zagros
+          - pezcumulus/teyrchains/runtimes/collectives/collectives-zagros
+          - pezcumulus/teyrchains/runtimes/coretime/coretime-zagros
+          - pezcumulus/teyrchains/runtimes/people/people-zagros
+          - pezcumulus/teyrchains/runtimes/glutton/glutton-zagros
+
+      release_tag:
+        description: Tag matching the actual release candidate with the format pezkuwi-stableYYMM(-X)-rcY or pezkuwi-stableYYMM(-X)
+        type: string
+
+  workflow_call:
+    inputs:
+      chain:
+        description: The chain to use
+        default: all
+        required: true
+        type: string
+      runtime_dir:
+        description: The runtime dir to be used (⚠️ this parameter is optional and needed only in case of the single runtime build, set it accordingly to the runtime you want to build)
+        default: pezkuwi/runtime/zagros
+        type: string
+      release_tag:
+        description: Tag matching the actual release candidate with the format pezkuwi-stableYYMM(-X)-rcY or pezkuwi-stableYYMM(-X)
+        type: string
+    outputs:
+      published_runtimes:
+        value: ${{ jobs.build-runtimes.outputs.published_runtimes }}
+
+jobs:
+  # DISABLED: Workflow synchronization check
+  # check-synchronization:
+  #   uses: pezkuwichain-release/sync-workflows/.github/workflows/check-synchronization.yml@main
+  #   secrets:
+  #     fork_writer_app_key: ${{ secrets.UPSTREAM_CONTENT_SYNC_APP_KEY }}
+
+  validate-inputs:
+    runs-on: ubuntu-latest
+    outputs:
+        release_tag: ${{ steps.validate_inputs.outputs.release_tag }}
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+      - name: Validate inputs
+        id: validate_inputs
+        run: |
+          . ./.github/scripts/common/lib.sh
+
+          RELEASE_TAG=$(validate_stable_tag ${{ inputs.release_tag }})
+          echo "release_tag=${RELEASE_TAG}" >> $GITHUB_OUTPUT
+
+  build-runtimes:
+    needs: [validate-inputs]
+    uses: "./.github/workflows/release-srtool.yml"
+    with:
+       excluded_runtimes: "asset-hub-pezkuwichain bridge-hub-pezkuwichain coretime-pezkuwichain people-pezkuwichain pezkuwichain pezkuwichain-teyrchain bizinikiwi-test bp pezcumulus-test kitchensink minimal-template teyrchain-template penpal pezkuwi-test seedling shell pezframe-try sp solochain-template pezkuwi-sdk-docs-first pezpallet-staking-async-teyrchain pezpallet-staking-async-rc pezframe-storage-access-test yet-another-teyrchain revive-dev"
+       build_opts: "--features on-chain-release-build"
+       profile: production
+       chain: ${{ inputs.chain }}
+       runtime_dir: ${{ inputs.runtime_dir }}
+    permissions:
+      id-token: write
+      attestations: write
+      contents: read
