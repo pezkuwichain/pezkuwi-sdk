@@ -10315,6 +10315,7 @@ dependencies = [
  "jsonrpsee",
  "pez-minimal-template-runtime",
  "pezkuwi-sdk",
+ "pezsp-runtime",
 ]
 
 [[package]]
@@ -10567,6 +10568,7 @@ dependencies = [
  "jsonrpsee",
  "pez-revive-dev-runtime",
  "pezkuwi-sdk",
+ "pezsp-runtime",
 ]
 
 [[package]]
@@ -14004,6 +14006,7 @@ dependencies = [
  "pezpallet-revive-proc-macro",
  "pezpallet-revive-uapi",
  "pezpallet-root-offences",
+ "pezpallet-root-testing",
  "pezpallet-safe-mode",
  "pezpallet-salary",
  "pezpallet-scheduler",
@@ -14132,6 +14135,7 @@ dependencies = [
  "pezsp-offchain",
  "pezsp-panic-handler",
  "pezsp-rpc",
+ "pezsp-runtime",
  "pezsp-runtime-interface",
  "pezsp-runtime-interface-proc-macro",
  "pezsp-session",
@@ -21214,6 +21218,7 @@ dependencies = [
  "pezkuwi-sdk",
  "pezsc-service-test",
  "pezsp-keyring",
+ "pezsp-runtime",
  "pezstaging-node-inspect",
  "pretty_assertions",
  "rand 0.8.5",
@@ -25884,6 +25889,7 @@ dependencies = [
  "log",
  "parity-scale-codec",
  "pezkuwi-sdk",
+ "pezsp-runtime",
  "serde",
  "teyrchain-template-runtime",
 ]
@@ -25900,6 +25906,7 @@ dependencies = [
  "pezcumulus-pezpallet-teyrchain-system",
  "pezkuwi-sdk",
  "pezpallet-teyrchain-template",
+ "pezsp-runtime",
  "scale-info",
  "serde_json",
  "smallvec",
@@ -28615,6 +28622,7 @@ dependencies = [
  "parity-scale-codec",
  "pezcumulus-pezpallet-teyrchain-system",
  "pezkuwi-sdk",
+ "pezsp-runtime",
  "scale-info",
  "serde_json",
 ]

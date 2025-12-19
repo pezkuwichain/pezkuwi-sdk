@@ -123,14 +123,24 @@ pezkuwi-sdk = { features = [
   "pezsc-transaction-pool",
   "pezsc-transaction-pool-api",
   "pezsc-utils",
+  "pezsp-api",
   "pezsp-blockchain",
   "pezsp-consensus",
+  "pezsp-core",
   "pezsp-core-hashing",
   "pezsp-core-hashing-proc-macro",
   "pezsp-database",
+  "pezsp-inherents",
+  "pezsp-io",
+  "pezsp-keystore",
   "pezsp-maybe-compressed-blob",
+  "pezsp-mmr-primitives",
   "pezsp-panic-handler",
   "pezsp-rpc",
+  "pezsp-statement-store",
+  "pezsp-timestamp",
+  "pezsp-tracing",
+  "pezsp-transaction-storage-proof",
   "pezstaging-chain-spec-builder",
   "pezstaging-node-inspect",
   "pezstaging-tracking-allocator",
@@ -145,6 +155,9 @@ pezkuwi-sdk = { features = [
   "bizinikiwi-wasm-builder",
   "pez-tracing-gum",
 ], workspace = true, default-features = true }
+
+# Direct dependency needed (not through umbrella due to macro visibility issues)
+pezsp-runtime = { workspace = true }
 
 # Shared code between the staging node and kitchensink runtime:
 pez-kitchensink-runtime = { workspace = true }
@@ -205,6 +218,7 @@ runtime-benchmarks = [
   "pezkuwi-sdk/runtime-benchmarks",
   "pezsc-service-test/runtime-benchmarks",
   "pezsp-keyring/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
   "bizinikiwi-cli-test-utils/runtime-benchmarks",
 ]
 try-runtime = [

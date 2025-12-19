@@ -18,7 +18,7 @@ use tokio::{
 use zombienet_sdk::subxt::{
 	self,
 	blocks::Block,
-	config::{bizinikiwi::DigestItem, polkadot::PolkadotExtrinsicParamsBuilder},
+	config::{polkadot::PolkadotExtrinsicParamsBuilder, substrate::DigestItem},
 	dynamic::Value,
 	events::Events,
 	ext::scale_value::value,
@@ -70,7 +70,7 @@ fn find_event_and_decode_fields<T: Decode>(
 	let mut result = vec![];
 	for event in events.iter() {
 		let event = event?;
-		if event.pezpallet_name() == pezpallet && event.variant_name() == variant {
+		if event.pallet_name() == pezpallet && event.variant_name() == variant {
 			let field_bytes = event.field_bytes().to_vec();
 			result.push(T::decode(&mut &field_bytes[..])?);
 		}
@@ -84,7 +84,7 @@ async fn is_session_change(
 	let events = block.events().await?;
 	Ok(events.iter().any(|event| {
 		event.as_ref().is_ok_and(|event| {
-			event.pezpallet_name() == "Session" && event.variant_name() == "NewSession"
+			event.pallet_name() == "Session" && event.variant_name() == "NewSession"
 		})
 	}))
 }

@@ -24,7 +24,10 @@ jsonrpsee = { features = ["server"], workspace = true }
 log = { workspace = true, default-features = true }
 serde = { features = ["derive"], workspace = true, default-features = true }
 
-pezkuwi-sdk = { workspace = true, features = ["node", "pezkuwi-primitives"] }
+# Direct dependency needed (not through umbrella due to macro visibility issues)
+pezsp-runtime = { workspace = true }
+
+pezkuwi-sdk = { workspace = true, features = ["node", "pezkuwi-primitives", "pezsp-keystore", "pezsp-timestamp"] }
 
 teyrchain-template-runtime = { workspace = true }
 
@@ -36,7 +39,7 @@ pezkuwi-sdk = { workspace = true, features = ["bizinikiwi-build-script-utils"] }
 
 [features]
 default = ["std"]
-std = ["log/std", "pezkuwi-sdk/std", "teyrchain-template-runtime/std"]
+std = ["log/std", "pezkuwi-sdk/std", "pezsp-runtime/std", "teyrchain-template-runtime/std"]
 runtime-benchmarks = [
   "pezkuwi-sdk/runtime-benchmarks",
   "teyrchain-template-runtime/runtime-benchmarks",

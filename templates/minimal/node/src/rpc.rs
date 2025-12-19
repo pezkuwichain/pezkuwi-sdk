@@ -48,11 +48,11 @@ where
 	C: Send
 		+ Sync
 		+ 'static
-		+ pezsp_api::ProvideRuntimeApi<OpaqueBlock>
+		+ pezkuwi_sdk::pezsp_api::ProvideRuntimeApi<OpaqueBlock>
 		+ HeaderBackend<OpaqueBlock>
 		+ HeaderMetadata<OpaqueBlock, Error = BlockChainError>
 		+ 'static,
-	C::Api: pezsp_block_builder::BlockBuilder<OpaqueBlock>,
+	C::Api: pezkuwi_sdk::pezsp_block_builder::BlockBuilder<OpaqueBlock>,
 	C::Api: bizinikiwi_frame_rpc_system::AccountNonceApi<OpaqueBlock, AccountId, Nonce>,
 	P: TransactionPool + 'static,
 {

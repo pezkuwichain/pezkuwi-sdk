@@ -27,6 +27,32 @@ pub use subxt::config::PolkadotConfig as SrcChainConfig;
 		with = "::subxt::utils::Static<::pezsp_core::U256>"
 	),
 
+	// The metadata is generated from our rebranded runtime, so paths already use pezsp_* names
+	substitute_type(
+		path = "pezsp_runtime::DispatchError",
+		with = "::subxt::utils::Static<::pezsp_runtime::DispatchError>"
+	),
+	substitute_type(
+		path = "pezsp_runtime::ModuleError",
+		with = "::subxt::utils::Static<::pezsp_runtime::ModuleError>"
+	),
+	substitute_type(
+		path = "pezsp_runtime::TokenError",
+		with = "::subxt::utils::Static<::pezsp_runtime::TokenError>"
+	),
+	substitute_type(
+		path = "pezsp_arithmetic::ArithmeticError",
+		with = "::subxt::utils::Static<::pezsp_runtime::ArithmeticError>"
+	),
+	substitute_type(
+		path = "pezsp_runtime::TransactionalError",
+		with = "::subxt::utils::Static<::pezsp_runtime::TransactionalError>"
+	),
+	substitute_type(
+		path = "pezsp_runtime::MultiSignature",
+		with = "::subxt::utils::Static<::pezsp_runtime::MultiSignature>"
+	),
+
 	substitute_type(
 		path = "pezsp_runtime::generic::block::Block<A, B, C, D, E>",
 		with = "::subxt::utils::Static<::pezsp_runtime::generic::Block<

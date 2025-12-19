@@ -16,6 +16,8 @@ workspace = true
 [dependencies]
 codec = { workspace = true }
 pezkuwi-sdk = { workspace = true, features = [
+  "pezsp-api",
+  "pezsp-keyring",
   "pezpallet-balances",
   "pezpallet-sudo",
   "pezpallet-timestamp",

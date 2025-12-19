@@ -49,7 +49,7 @@ fn testnet_genesis(
 		session: SessionConfig {
 			keys: invulnerables
 				.into_iter()
-				.map(|(acc, aura)| {
+				.map(|(acc, aura): (AccountId, AuraId)| {
 					(
 						acc.clone(),                 // account id
 						acc,                         // validator id
@@ -70,7 +70,7 @@ fn local_testnet_genesis() -> Value {
 			(Sr25519Keyring::Alice.to_account_id(), Sr25519Keyring::Alice.public().into()),
 			(Sr25519Keyring::Bob.to_account_id(), Sr25519Keyring::Bob.public().into()),
 		],
-		Sr25519Keyring::well_known().map(|k| k.to_account_id()).collect(),
+		Sr25519Keyring::well_known().map(|k: Sr25519Keyring| k.to_account_id()).collect(),
 		Sr25519Keyring::Alice.to_account_id(),
 		TEYRCHAIN_ID.into(),
 	)
@@ -83,7 +83,7 @@ fn development_config_genesis() -> Value {
 			(Sr25519Keyring::Alice.to_account_id(), Sr25519Keyring::Alice.public().into()),
 			(Sr25519Keyring::Bob.to_account_id(), Sr25519Keyring::Bob.public().into()),
 		],
-		Sr25519Keyring::well_known().map(|k| k.to_account_id()).collect(),
+		Sr25519Keyring::well_known().map(|k: Sr25519Keyring| k.to_account_id()).collect(),
 		Sr25519Keyring::Alice.to_account_id(),
 		TEYRCHAIN_ID.into(),
 	)

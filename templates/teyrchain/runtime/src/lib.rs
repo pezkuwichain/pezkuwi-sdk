@@ -137,8 +137,8 @@ impl WeightToFeePolynomial for WeightToFee {
 /// to even the core data structures.
 pub mod opaque {
 	use super::*;
-	pub use pezkuwi_sdk::pezsp_runtime::OpaqueExtrinsic as UncheckedExtrinsic;
-	use pezkuwi_sdk::pezsp_runtime::{
+	pub use pezsp_runtime::OpaqueExtrinsic as UncheckedExtrinsic;
+	use pezsp_runtime::{
 		generic,
 		traits::{BlakeTwo256, Hash as HashT},
 	};

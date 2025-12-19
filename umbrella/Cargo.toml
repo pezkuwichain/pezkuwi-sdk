@@ -139,6 +139,7 @@ std = [
 	"pezpallet-remark?/std",
 	"pezpallet-revive?/std",
 	"pezpallet-root-offences?/std",
+	"pezpallet-root-testing?/std",
 	"pezpallet-safe-mode?/std",
 	"pezpallet-salary?/std",
 	"pezpallet-scheduler?/std",
@@ -204,6 +205,7 @@ std = [
 	"pezsp-npos-elections?/std",
 	"pezsp-offchain?/std",
 	"pezsp-runtime-interface?/std",
+	"pezsp-runtime?/std",
 	"pezsp-session?/std",
 	"pezsp-staking?/std",
 	"pezsp-state-machine?/std",
@@ -430,6 +432,7 @@ runtime-benchmarks = [
 	"pezpallet-remark?/runtime-benchmarks",
 	"pezpallet-revive?/runtime-benchmarks",
 	"pezpallet-root-offences?/runtime-benchmarks",
+	"pezpallet-root-testing?/runtime-benchmarks",
 	"pezpallet-safe-mode?/runtime-benchmarks",
 	"pezpallet-salary?/runtime-benchmarks",
 	"pezpallet-scheduler?/runtime-benchmarks",
@@ -528,6 +531,7 @@ runtime-benchmarks = [
 	"pezsp-npos-elections?/runtime-benchmarks",
 	"pezsp-offchain?/runtime-benchmarks",
 	"pezsp-runtime-interface?/runtime-benchmarks",
+	"pezsp-runtime?/runtime-benchmarks",
 	"pezsp-session?/runtime-benchmarks",
 	"pezsp-staking?/runtime-benchmarks",
 	"pezsp-state-machine?/runtime-benchmarks",
@@ -649,6 +653,7 @@ try-runtime = [
 	"pezpallet-remark?/try-runtime",
 	"pezpallet-revive?/try-runtime",
 	"pezpallet-root-offences?/try-runtime",
+	"pezpallet-root-testing?/try-runtime",
 	"pezpallet-safe-mode?/try-runtime",
 	"pezpallet-salary?/try-runtime",
 	"pezpallet-scheduler?/try-runtime",
@@ -869,6 +874,7 @@ runtime-full = [
 	"pezpallet-revive-proc-macro",
 	"pezpallet-revive-uapi",
 	"pezpallet-root-offences",
+	"pezpallet-root-testing",
 	"pezpallet-safe-mode",
 	"pezpallet-salary",
 	"pezpallet-scheduler",
@@ -1833,6 +1839,11 @@ default-features = false
 optional = true
 path = "../bizinikiwi/pezframe/root-offences"
 
+[dependencies.pezpallet-root-testing]
+default-features = false
+optional = true
+path = "../bizinikiwi/pezframe/root-testing"
+
 [dependencies.pezpallet-safe-mode]
 default-features = false
 optional = true
@@ -2162,6 +2173,11 @@ path = "../bizinikiwi/primitives/npos-elections"
 default-features = false
 optional = true
 path = "../bizinikiwi/primitives/offchain"
+
+[dependencies.pezsp-runtime]
+default-features = false
+optional = true
+path = "../bizinikiwi/primitives/runtime"
 
 [dependencies.pezsp-runtime-interface]
 default-features = false

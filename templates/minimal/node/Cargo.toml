@@ -24,8 +24,19 @@ futures = { features = ["thread-pool"], workspace = true }
 futures-timer = { workspace = true }
 jsonrpsee = { features = ["server"], workspace = true }
 
+# Direct dependency needed (not through umbrella due to macro visibility issues)
+pezsp-runtime = { workspace = true }
+
 pez-minimal-template-runtime = { workspace = true }
-pezkuwi-sdk = { workspace = true, features = ["experimental", "node"] }
+pezkuwi-sdk = { workspace = true, features = [
+  "experimental",
+  "node",
+  "pezsp-api",
+  "pezsp-block-builder",
+  "pezsp-genesis-builder",
+  "pezsp-io",
+  "pezsp-timestamp",
+] }
 
 [build-dependencies]
 pezkuwi-sdk = { workspace = true, features = ["bizinikiwi-build-script-utils"] }

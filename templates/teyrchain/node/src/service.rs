@@ -41,8 +41,8 @@ use pezsc_network::{NetworkBackend, NetworkBlock};
 use pezsc_service::{Configuration, PartialComponents, TFullBackend, TFullClient, TaskManager};
 use pezsc_telemetry::{Telemetry, TelemetryHandle, TelemetryWorker, TelemetryWorkerHandle};
 use pezsc_transaction_pool_api::OffchainTransactionPoolFactory;
-use pezsp_api::ProvideRuntimeApi;
-use pezsp_keystore::KeystorePtr;
+use pezkuwi_sdk::pezsp_api::ProvideRuntimeApi;
+use pezkuwi_sdk::pezsp_keystore::KeystorePtr;
 use prometheus_endpoint::Registry;
 
 #[docify::export(wasm_executor)]
@@ -161,7 +161,7 @@ fn build_import_queue(
 		client,
 		block_import,
 		move |_, _| async move {
-			let timestamp = pezsp_timestamp::InherentDataProvider::from_system_time();
+			let timestamp = pezkuwi_sdk::pezsp_timestamp::InherentDataProvider::from_system_time();
 			Ok(timestamp)
 		},
 		&task_manager.spawn_essential_handle(),

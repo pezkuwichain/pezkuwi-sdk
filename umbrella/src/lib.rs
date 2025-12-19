@@ -903,6 +903,10 @@ pub use pezpallet_revive_uapi;
 #[cfg(feature = "pezpallet-root-offences")]
 pub use pezpallet_root_offences;
 
+/// FRAME root testing pezpallet.
+#[cfg(feature = "pezpallet-root-testing")]
+pub use pezpallet_root_testing;
+
 /// FRAME safe-mode pezpallet.
 #[cfg(feature = "pezpallet-safe-mode")]
 pub use pezpallet_safe_mode;

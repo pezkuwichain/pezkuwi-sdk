@@ -30,7 +30,26 @@ smallvec = { workspace = true, default-features = true }
 # Local
 pezpallet-teyrchain-template = { workspace = true }
 
+# Direct dependency needed for runtime (not through umbrella due to macro visibility issues)
+pezsp-runtime = { workspace = true }
+
 pezkuwi-sdk = { workspace = true, default-features = false, features = [
+  # Primitives needed for runtime
+  "pezsp-core",
+  "pezsp-consensus-aura",
+  "pezsp-version",
+  "pezsp-genesis-builder",
+  "pezsp-keyring",
+  "pezsp-api",
+  "pezsp-block-builder",
+  "pezsp-inherents",
+  "pezsp-transaction-pool",
+  "pezsp-offchain",
+  "pezsp-session",
+  "pezframe-support",
+  "pezframe-system",
+  "pezframe-executive",
+
   "pezpallet-aura",
   "pezpallet-authorship",
   "pezpallet-balances",
@@ -78,6 +97,7 @@ std = [
   "log/std",
   "pezpallet-teyrchain-template/std",
   "pezkuwi-sdk/std",
+  "pezsp-runtime/std",
   "scale-info/std",
   "serde_json/std",
   "bizinikiwi-wasm-builder",
@@ -87,6 +107,7 @@ runtime-benchmarks = [
   "hex-literal",
   "pezpallet-teyrchain-template/runtime-benchmarks",
   "pezkuwi-sdk/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
   "bizinikiwi-wasm-builder?/runtime-benchmarks",
 ]
 try-runtime = [

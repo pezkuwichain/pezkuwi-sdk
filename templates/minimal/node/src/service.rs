@@ -24,12 +24,12 @@ use pezkuwi_sdk::{
 	pezsc_service::{error::Error as ServiceError, Configuration, TaskManager},
 	pezsc_telemetry::{Telemetry, TelemetryWorker},
 	pezsc_transaction_pool_api::OffchainTransactionPoolFactory,
-	pezsp_runtime::traits::Block as BlockT,
 	*,
 };
+use pezsp_runtime::traits::Block as BlockT;
 use std::sync::Arc;
 
-type HostFunctions = pezsp_io::BizinikiwiHostFunctions;
+type HostFunctions = pezkuwi_sdk::pezsp_io::BizinikiwiHostFunctions;
 
 #[docify::export]
 pub(crate) type FullClient =
@@ -215,7 +215,7 @@ pub fn new_full<Network: pezsc_network::NetworkBackend<Block, <Block as BlockT>:
 				select_chain,
 				consensus_data_provider: None,
 				create_inherent_data_providers: move |_, ()| async move {
-					Ok(pezsp_timestamp::InherentDataProvider::from_system_time())
+					Ok(pezkuwi_sdk::pezsp_timestamp::InherentDataProvider::from_system_time())
 				},
 			};
 
@@ -251,7 +251,7 @@ pub fn new_full<Network: pezsc_network::NetworkBackend<Block, <Block as BlockT>:
 				commands_stream: Box::pin(commands_stream),
 				consensus_data_provider: None,
 				create_inherent_data_providers: move |_, ()| async move {
-					Ok(pezsp_timestamp::InherentDataProvider::from_system_time())
+					Ok(pezkuwi_sdk::pezsp_timestamp::InherentDataProvider::from_system_time())
 				},
 			};
 			let authorship_future = pezsc_consensus_manual_seal::run_manual_seal(params);

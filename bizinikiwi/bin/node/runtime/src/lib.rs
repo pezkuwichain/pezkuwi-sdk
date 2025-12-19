@@ -2332,7 +2332,7 @@ impl pezpallet_alliance::Config for Runtime {
 	type RetirementPeriod = RetirementPeriod;
 }
 
-impl pezframe_benchmarking_pallet_pov::Config for Runtime {
+impl pezframe_benchmarking_pezpallet_pov::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 }
 
@@ -2806,7 +2806,7 @@ mod runtime {
 	pub type MessageQueue = pezpallet_message_queue::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(68)]
-	pub type Pov = pezframe_benchmarking_pallet_pov::Pezpallet<Runtime>;
+	pub type Pov = pezframe_benchmarking_pezpallet_pov::Pezpallet<Runtime>;
 
 	#[runtime::pezpallet_index(69)]
 	pub type TxPause = pezpallet_tx_pause::Pezpallet<Runtime>;
@@ -2865,9 +2865,6 @@ mod runtime {
 	#[runtime::pezpallet_index(90)]
 	pub type MultiAssetBounties = pezpallet_multi_asset_bounties::Pezpallet<Runtime>;
 }
-
-// Re-export all pallet types from the runtime module
-pub use runtime::*;
 
 /// The address format for describing accounts.
 pub type Address = pezsp_runtime::MultiAddress<AccountId, AccountIndex>;
@@ -3109,7 +3106,7 @@ impl
 mod benches {
 	pezkuwi_sdk::pezframe_benchmarking::define_benchmarks!(
 		[pezframe_benchmarking, BaselineBench::<Runtime>]
-		[pezframe_benchmarking_pallet_pov, Pov]
+		[pezframe_benchmarking_pezpallet_pov, Pov]
 		[pezpallet_alliance, Alliance]
 		[pezpallet_assets, Assets]
 		[pezpallet_babe, Babe]
