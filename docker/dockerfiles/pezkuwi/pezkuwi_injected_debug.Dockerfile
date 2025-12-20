@@ -8,11 +8,11 @@ ARG IMAGE_NAME
 LABEL io.parity.image.authors="devops-team@parity.io" \
 	io.parity.image.vendor="Parity Technologies" \
 	io.parity.image.title="${IMAGE_NAME}" \
-	io.parity.image.description="Polkadot: a platform for web3" \
-	io.parity.image.source="https://github.com/pezkuwichain/pezkuwichain-sdk/blob/${VCS_REF}/docker/dockerfiles/polkadot/polkadot_injected_debug.Dockerfile" \
+	io.parity.image.description="Pezkuwi: a platform for web3" \
+	io.parity.image.source="https://github.com/pezkuwichain/pezkuwi-sdk/blob/${VCS_REF}/docker/dockerfiles/pezkuwi/pezkuwi_injected_debug.Dockerfile" \
 	io.parity.image.revision="${VCS_REF}" \
 	io.parity.image.created="${BUILD_DATE}" \
-	io.parity.image.documentation="https://github.com/pezkuwichain/pezkuwichain-sdk"
+	io.parity.image.documentation="https://github.com/pezkuwichain/pezkuwi-sdk"
 
 # show backtraces
 ENV RUST_BACKTRACE 1
@@ -26,26 +26,26 @@ RUN apt-get update && \
 	apt-get autoremove -y && \
 	apt-get clean && \
 	find /var/lib/apt/lists/ -type f -not -name lock -delete; \
-	# add user and link ~/.local/share/polkadot to /data
-	useradd -m -u 1000 -U -s /bin/sh -d /polkadot polkadot && \
-	mkdir -p /data /polkadot/.local/share /polkdot/runtimes && \
-	chown -R polkadot:polkadot /data && \
-	ln -s /data /polkadot/.local/share/polkadot
+	# add user and link ~/.local/share/pezkuwi to /data
+	useradd -m -u 1000 -U -s /bin/sh -d /pezkuwi pezkuwi && \
+	mkdir -p /data /pezkuwi/.local/share /pezkuwi/runtimes && \
+	chown -R pezkuwi:pezkuwi /data && \
+	ln -s /data /pezkuwi/.local/share/pezkuwi
 
-# add polkadot binaries to docker image
-COPY ./artifacts/polkadot ./artifacts/polkadot-execute-worker ./artifacts/polkadot-prepare-worker /usr/local/bin
+# add pezkuwi binaries to docker image
+COPY ./artifacts/pezkuwi ./artifacts/pezkuwi-execute-worker ./artifacts/pezkuwi-prepare-worker /usr/local/bin
 
 # add runtime binaries to docker image
-COPY ./artifacts/runtimes /polkadot/runtimes/
+COPY ./artifacts/runtimes /pezkuwi/runtimes/
 
-USER polkadot
+USER pezkuwi
 
 # check if executable works in this container
-RUN /usr/local/bin/polkadot --version
-RUN /usr/local/bin/polkadot-execute-worker --version
-RUN /usr/local/bin/polkadot-prepare-worker --version
+RUN /usr/local/bin/pezkuwi --version
+RUN /usr/local/bin/pezkuwi-execute-worker --version
+RUN /usr/local/bin/pezkuwi-prepare-worker --version
 
 EXPOSE 30333 9933 9944
-VOLUME ["/polkadot"]
+VOLUME ["/pezkuwi"]
 
-ENTRYPOINT ["/usr/local/bin/polkadot"]
+ENTRYPOINT ["/usr/local/bin/pezkuwi"]

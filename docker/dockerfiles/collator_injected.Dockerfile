@@ -10,10 +10,10 @@ LABEL io.parity.image.authors="devops-team@parity.io" \
 	io.parity.image.vendor="Parity Technologies" \
 	io.parity.image.title="${IMAGE_NAME}" \
 	io.parity.image.description="Injected adder-collator Docker image" \
-	io.parity.image.source="https://github.com/pezkuwichain/pezkuwichain-sdk/blob/${VCS_REF}/docker/dockerfiles/collator_injected.Dockerfile" \
+	io.parity.image.source="https://github.com/pezkuwichain/pezkuwi-sdk/blob/${VCS_REF}/docker/dockerfiles/collator_injected.Dockerfile" \
 	io.parity.image.revision="${VCS_REF}" \
 	io.parity.image.created="${BUILD_DATE}" \
-	io.parity.image.documentation="https://github.com/pezkuwichain/pezkuwichain-sdk/"
+	io.parity.image.documentation="https://github.com/pezkuwichain/pezkuwi-sdk/"
 
 # show backtraces
 ENV RUST_BACKTRACE 1
@@ -31,7 +31,7 @@ RUN apt-get update && \
 	useradd -m -u 1000 -U -s /bin/sh -d /adder-collator adder-collator && \
 	mkdir -p /data /adder-collator/.local/share && \
 	chown -R adder-collator:adder-collator /data && \
-	ln -s /data /adder-collator/.local/share/polkadot
+	ln -s /data /adder-collator/.local/share/pezkuwi
 
 # add adder-collator binary to docker image
 COPY ./artifacts/adder-collator /usr/local/bin

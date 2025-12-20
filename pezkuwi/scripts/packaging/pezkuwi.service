@@ -1,13 +1,13 @@
 [Unit]
-Description=Polkadot Node
+Description=Pezkuwi Node
 After=network.target
-Documentation=https://github.com/pezkuwichain/pezkuwichain-sdk
+Documentation=https://github.com/pezkuwichain/pezkuwi-sdk
 
 [Service]
-EnvironmentFile=-/etc/default/polkadot
-ExecStart=/usr/bin/polkadot $POLKADOT_CLI_ARGS
-User=polkadot
-Group=polkadot
+EnvironmentFile=-/etc/default/pezkuwi
+ExecStart=/usr/bin/pezkuwi $PEZKUWI_CLI_ARGS
+User=pezkuwi
+Group=pezkuwi
 Restart=always
 RestartSec=120
 CapabilityBoundingSet=

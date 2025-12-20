@@ -124,7 +124,7 @@
  * ### Receiver-side Risk: Weight Exhaustion
  *
  * Both DMP and UMP messages are processed through the message-queue pallet:
- * - Weight check: bizinikiwi/frame/message-queue/src/lib.rs:1591 in `process_message_payload()`
+ * - Weight check: bizinikiwi/pezframe/message-queue/src/lib.rs:1591 in `process_message_payload()`
  * - Messages exceeding `overweight_limit` are marked as overweight
  * - Configuration: `ServiceWeight` and `IdleMaxServiceWeight`
  * - Overweight handling: Permanently overweight messages require manual execution via `execute_overweight()`

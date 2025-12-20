@@ -2,7 +2,7 @@ FROM docker.io/paritytech/base-bin
 
 # This file allows building a Generic container image
 # based on one or multiple pre-built Linux binaries.
-# Some defaults are set to polkadot but all can be overridden.
+# Some defaults are set to pezkuwi but all can be overridden.
 
 SHELL ["/bin/bash", "-c"]
 
@@ -12,11 +12,11 @@ ARG BUILD_DATE
 ARG IMAGE_NAME
 
 # That can be a single one or a comma separated list
-ARG BINARY=polkadot
+ARG BINARY=pezkuwi
 
 ARG BIN_FOLDER=.
-ARG DOC_URL=https://github.com/pezkuwichain/pezkuwichain-sdk
-ARG DESCRIPTION="Polkadot: a platform for web3"
+ARG DOC_URL=https://github.com/pezkuwichain/pezkuwi-sdk
+ARG DESCRIPTION="Pezkuwi: a platform for web3"
 ARG AUTHORS="devops-team@parity.io"
 ARG VENDOR="Parity Technologies"
 
@@ -27,13 +27,13 @@ LABEL io.parity.image.authors=${AUTHORS} \
 	io.parity.image.created="${BUILD_DATE}" \
 	io.parity.image.documentation="${DOC_URL}" \
 	io.parity.image.description="${DESCRIPTION}" \
-	io.parity.image.source="https://github.com/pezkuwichain/pezkuwichain-sdk/blob/${VCS_REF}/docker/dockerfiles/binary_injected.Dockerfile"
+	io.parity.image.source="https://github.com/pezkuwichain/pezkuwi-sdk/blob/${VCS_REF}/docker/dockerfiles/binary_injected.Dockerfile"
 
 USER root
 WORKDIR /app
 
 # add binary to docker image
-# sample for polkadot: COPY ./polkadot ./polkadot-*-worker /usr/local/bin/
+# sample for pezkuwi: COPY ./pezkuwi ./pezkuwi-*-worker /usr/local/bin/
 COPY entrypoint.sh .
 COPY "bin/*" "/usr/local/bin/"
 RUN chmod -R a+rx "/usr/local/bin"
