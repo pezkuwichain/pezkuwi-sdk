@@ -8,11 +8,11 @@ ARG IMAGE_NAME
 LABEL io.parity.image.authors="devops-team@parity.io" \
 	io.parity.image.vendor="Parity Technologies" \
 	io.parity.image.title="${IMAGE_NAME}" \
-	io.parity.image.description="Test parachain for Zombienet" \
-	io.parity.image.source="https://github.com/pezkuwichain/pezkuwichain-sdk/blob/${VCS_REF}/docker/dockerfiles/test-parachain_injected.Dockerfile" \
+	io.parity.image.description="Test teyrchain for Zombienet" \
+	io.parity.image.source="https://github.com/pezkuwichain/pezkuwi-sdk/blob/${VCS_REF}/docker/dockerfiles/test-teyrchain_injected.Dockerfile" \
 	io.parity.image.revision="${VCS_REF}" \
 	io.parity.image.created="${BUILD_DATE}" \
-	io.parity.image.documentation="https://github.com/pezkuwichain/pezkuwichain-sdk/tree/master/pezcumulus"
+	io.parity.image.documentation="https://github.com/pezkuwichain/pezkuwi-sdk/tree/master/pezcumulus"
 
 # show backtraces
 ENV RUST_BACKTRACE 1
@@ -27,23 +27,23 @@ RUN apt-get update && \
 	apt-get autoremove -y && \
 	apt-get clean && \
 	find /var/lib/apt/lists/ -type f -not -name lock -delete; \
-	# add user and link ~/.local/share/test-parachain to /data
-	useradd -m -u 10000 -U -s /bin/sh -d /test-parachain test-parachain && \
-	mkdir -p /data /test-parachain/.local/share && \
-	chown -R test-parachain:test-parachain /data && \
-	ln -s /data /test-parachain/.local/share/test-parachain && \
+	# add user and link ~/.local/share/test-teyrchain to /data
+	useradd -m -u 10000 -U -s /bin/sh -d /test-teyrchain test-teyrchain && \
+	mkdir -p /data /test-teyrchain/.local/share && \
+	chown -R test-teyrchain:test-teyrchain /data && \
+	ln -s /data /test-teyrchain/.local/share/test-teyrchain && \
 	mkdir -p /specs
 
-# add test-parachain binary to the docker image
-COPY ./artifacts/test-parachain /usr/local/bin
-COPY ./pezcumulus/parachains/chain-specs/*.json /specs/
+# add test-teyrchain binary to the docker image
+COPY ./artifacts/test-teyrchain /usr/local/bin
+COPY ./pezcumulus/teyrchains/chain-specs/*.json /specs/
 
-USER test-parachain
+USER test-teyrchain
 
 # check if executable works in this container
-RUN /usr/local/bin/test-parachain --version
+RUN /usr/local/bin/test-teyrchain --version
 
 EXPOSE 30333 9933 9944
-VOLUME ["/test-parachain"]
+VOLUME ["/test-teyrchain"]
 
-ENTRYPOINT ["/usr/local/bin/test-parachain"]
+ENTRYPOINT ["/usr/local/bin/test-teyrchain"]

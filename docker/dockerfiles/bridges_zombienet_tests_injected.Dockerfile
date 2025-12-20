@@ -19,10 +19,10 @@ LABEL io.parity.image.authors="devops-team@parity.io" \
 	io.parity.image.vendor="Parity Technologies" \
 	io.parity.image.title="${IMAGE_NAME}" \
 	io.parity.image.description="Bridges Zombienet tests." \
-	io.parity.image.source="https://github.com/pezkuwichain/pezkuwichain-sdk/blob/${VCS_REF}/docker/dockerfiles/bridges_zombienet_tests_injected.Dockerfile" \
+	io.parity.image.source="https://github.com/pezkuwichain/pezkuwi-sdk/blob/${VCS_REF}/docker/dockerfiles/bridges_zombienet_tests_injected.Dockerfile" \
 	io.parity.image.revision="${VCS_REF}" \
 	io.parity.image.created="${BUILD_DATE}" \
-	io.parity.image.documentation="https://github.com/pezkuwichain/pezkuwichain-sdk/bridges/testing"
+	io.parity.image.documentation="https://github.com/pezkuwichain/pezkuwi-sdk/pezbridges/testing"
 
 # show backtraces
 ENV RUST_BACKTRACE 1
@@ -32,27 +32,27 @@ USER root
 RUN apt-get update && apt-get install -y procps sudo
 RUN yarn global add @polkadot/api-cli
 
-# add polkadot binary to the docker image
-COPY ./artifacts/polkadot /usr/local/bin/
-COPY ./artifacts/polkadot-execute-worker /usr/local/bin/
-COPY ./artifacts/polkadot-prepare-worker /usr/local/bin/
-# add polkadot-parachain binary to the docker image
-COPY ./artifacts/polkadot-parachain /usr/local/bin
+# add pezkuwi binary to the docker image
+COPY ./artifacts/pezkuwi /usr/local/bin/
+COPY ./artifacts/pezkuwi-execute-worker /usr/local/bin/
+COPY ./artifacts/pezkuwi-prepare-worker /usr/local/bin/
+# add pezkuwi-teyrchain binary to the docker image
+COPY ./artifacts/pezkuwi-teyrchain /usr/local/bin
 # copy bizinikiwi-relay to the docker image
 COPY --from=relay-builder /home/user/bizinikiwi-relay /usr/local/bin/
 # we need bridges zombienet runner and tests
-RUN	mkdir -p /home/nonroot/bridges-polkadot-sdk
-COPY ./artifacts/bridges-polkadot-sdk /home/nonroot/bridges-polkadot-sdk
+RUN	mkdir -p /home/nonroot/bridges-pezkuwi-sdk
+COPY ./artifacts/bridges-pezkuwi-sdk /home/nonroot/bridges-pezkuwi-sdk
 # also prepare `generate_hex_encoded_call` for running
 RUN set -eux; \
-	cd /home/nonroot/bridges-polkadot-sdk/bridges/testing/framework/utils/generate_hex_encoded_call; \
+	cd /home/nonroot/bridges-pezkuwi-sdk/pezbridges/testing/framework/utils/generate_hex_encoded_call; \
 	npm install
 
 # use the non-root user
 USER node
 # check if executable works in this container
-RUN /usr/local/bin/polkadot --version
-RUN /usr/local/bin/polkadot-parachain --version
+RUN /usr/local/bin/pezkuwi --version
+RUN /usr/local/bin/pezkuwi-teyrchain --version
 RUN /usr/local/bin/bizinikiwi-relay --version
 
 # https://polkadot.js.org/apps/?rpc=ws://127.0.0.1:{PORT}#/explorer
