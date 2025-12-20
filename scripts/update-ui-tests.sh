@@ -37,7 +37,7 @@ export RUSTFLAGS="-C debug-assertions -D warnings"
 
 # ./bizinikiwi
 $RUSTUP_RUN cargo test -q --locked --manifest-path bizinikiwi/primitives/runtime-interface/Cargo.toml ui
-$RUSTUP_RUN cargo test -q --locked -p sp-api-test ui
-$RUSTUP_RUN cargo test -q --locked -p frame-election-provider-solution-type ui
-$RUSTUP_RUN cargo test -q --locked -p frame-support-test --features=no-metadata-docs,try-runtime,experimental ui
-$RUSTUP_RUN cargo test -q --locked -p xcm-procedural ui
+$RUSTUP_RUN cargo test -q --locked -p pezsp-api-test ui
+$RUSTUP_RUN cargo test -q --locked -p pezframe-election-provider-solution-type ui
+$RUSTUP_RUN cargo test -q --locked -p pezframe-support-test --features=no-metadata-docs,try-runtime,experimental ui
+$RUSTUP_RUN cargo test -q --locked -p xcm-pez-procedural ui

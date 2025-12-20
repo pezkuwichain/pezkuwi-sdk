@@ -3,16 +3,16 @@ FROM docker.io/paritytech/base-bin
 # metadata
 ARG VCS_REF
 ARG BUILD_DATE
-ARG POLKADOT_VERSION
+ARG PEZKUWI_VERSION
 
 LABEL io.parity.image.authors="devops-team@parity.io" \
 	io.parity.image.vendor="Parity Technologies" \
-	io.parity.image.title="parity/polkadot" \
-	io.parity.image.description="Polkadot: a platform for web3. This is the official Parity image with an injected binary." \
-	io.parity.image.source="https://github.com/pezkuwichain/pezkuwichain-sdk/blob/${VCS_REF}/scripts/ci/dockerfiles/polkadot/polkadot_injected_debian.Dockerfile" \
+	io.parity.image.title="parity/pezkuwi" \
+	io.parity.image.description="Pezkuwi: a platform for web3. This is the official Parity image with an injected binary." \
+	io.parity.image.source="https://github.com/pezkuwichain/pezkuwi-sdk/blob/${VCS_REF}/docker/dockerfiles/pezkuwi/pezkuwi_injected_debian.Dockerfile" \
 	io.parity.image.revision="${VCS_REF}" \
 	io.parity.image.created="${BUILD_DATE}" \
-	io.parity.image.documentation="https://github.com/pezkuwichain/pezkuwichain-sdk/"
+	io.parity.image.documentation="https://github.com/pezkuwichain/pezkuwi-sdk/"
 
 USER root
 
@@ -21,22 +21,22 @@ ENV RUST_BACKTRACE 1
 
 RUN \
 	apt-get update && \
-	apt-get install -y --no-install-recommends polkadot=${POLKADOT_VERSION#?} && \
+	apt-get install -y --no-install-recommends pezkuwi=${PEZKUWI_VERSION#?} && \
 	apt-get autoremove -y && \
 	apt-get clean && \
 	rm -rf /var/lib/apt/lists/* ; \
-	mkdir -p /data /polkadot/.local/share && \
+	mkdir -p /data /pezkuwi/.local/share && \
 	chown -R parity:parity /data && \
-	ln -s /data /polkadot/.local/share/polkadot
+	ln -s /data /pezkuwi/.local/share/pezkuwi
 
 USER parity
 
 # check if executable works in this container
-RUN /usr/bin/polkadot --version
-RUN /usr/lib/polkadot/polkadot-execute-worker --version
-RUN /usr/lib/polkadot/polkadot-prepare-worker --version
+RUN /usr/bin/pezkuwi --version
+RUN /usr/lib/pezkuwi/pezkuwi-execute-worker --version
+RUN /usr/lib/pezkuwi/pezkuwi-prepare-worker --version
 
 EXPOSE 30333 9933 9944 9615
-VOLUME ["/polkadot"]
+VOLUME ["/pezkuwi"]
 
-ENTRYPOINT ["/usr/bin/polkadot"]
+ENTRYPOINT ["/usr/bin/pezkuwi"]

@@ -2,6 +2,6 @@
 
 ## [Pezkuwi](https://pezkuwichain.io/)
 
-## [GitHub](https://github.com/paritytech/polkadot)
+## [GitHub](https://github.com/pezkuwichain/pezkuwi-sdk)
 
 ## [Pezkuwi Wiki](https://wiki.network.pezkuwichain.io/)

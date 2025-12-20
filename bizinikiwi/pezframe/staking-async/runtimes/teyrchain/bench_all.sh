@@ -1,4 +1,4 @@
-# run this, then copy all files to `bizinikiwi/frame/election-provider-multi-block/src/weights/`
+# run this, then copy all files to `bizinikiwi/pezframe/election-provider-multi-block/src/weights/`
 source ~/.zshrc
 
 STEPS=2
@@ -10,11 +10,11 @@ LOG="runtime::multiblock-election=info,runtime::staking-async=info,pezkuwi_sdk_f
 if [[ "${NO_COMPILE}" == "1" ]]; then
     echo "Skipping compilation because 'NO_COMPILE' was set"
 else
-	cargo build --release -p frame-omni-bencher
-  	FORCE_WASM_BUILD=$RANDOM  WASMTIME_BACKTRACE_DETAILS=1 RUST_LOG=${LOG} cargo build --release -p pallet-staking-async-teyrchain-runtime --features runtime-benchmarks
+	cargo build --release -p pezframe-omni-bencher
+  	FORCE_WASM_BUILD=$RANDOM  WASMTIME_BACKTRACE_DETAILS=1 RUST_LOG=${LOG} cargo build --release -p pezpallet-staking-async-teyrchain-runtime --features runtime-benchmarks
 fi
 
-WASM_BLOB_PATH=../../../../../target/release/wbuild/pallet-staking-async-teyrchain-runtime/pallet_staking_async_teyrchain_runtime.compact.wasm
+WASM_BLOB_PATH=../../../../../target/release/wbuild/pezpallet-staking-async-teyrchain-runtime/pezpallet_staking_async_teyrchain_runtime.compact.wasm
 
 echo "WASM_BLOB_PATH: $WASM_BLOB_PATH"
 echo "Last modified date of WASM_BLOB:"
@@ -29,14 +29,14 @@ run_benchmark() {
   echo "Outputting to '$output_file'"
 
   WASMTIME_BACKTRACE_DETAILS=1 RUST_LOG=${LOG} \
-    ../../../../../target/release/frame-omni-bencher v1 benchmark pallet \
+    ../../../../../target/release/pezframe-omni-bencher v1 benchmark pallet \
     --pallet "$pallet_name" \
     --extrinsic "*" \
     --runtime "$WASM_BLOB_PATH" \
     --steps "$STEPS" \
     --repeat "$REPEAT" \
     --genesis-builder-preset "$genesis_preset" \
-    --template "../../../../../bizinikiwi/frame/election-provider-multi-block/src/template.hbs" \
+    --template "../../../../../bizinikiwi/pezframe/election-provider-multi-block/src/template.hbs" \
     --heap-pages 65000 \
     --output "$output_file"
 }
