@@ -41,7 +41,7 @@
 - 🔧 Its runtime is configured with a single custom pezpallet as a starting point, and a handful of ready-made pallets
   such as a [Balances pezpallet](https://docs.pezkuwichain.io/sdk/master/pallet_balances/index.html).
 
-- 👉 Learn more about teyrchains [Pezkuwi Wiki](https://wiki.network.pezkuwichain.io/docs/learn-teyrchains)
+- 👉 Learn more about teyrchains in the [Pezkuwi Wiki](https://wiki.network.pezkuwichain.io/docs/learn-teyrchains)
 
 ## Template Structure
 
@@ -135,7 +135,7 @@ Follow through the next section for more details on how to do it.
 ### Zombienet setup with Omni Node
 
 Assuming we continue from the last step of the previous section, we have a chain spec and we need to setup a relay chain.
-We can install `zombienet` as described [Zombienet installation guide](https://paritytech.github.io/zombienet/install.html#installation), and
+We can install `zombienet` as described in the [Zombienet installation guide](https://paritytech.github.io/zombienet/install.html#installation), and
 `zombienet-omni-node.toml` contains the network specification we want to start.
 
 #### Relay chain prerequisites
@@ -183,7 +183,7 @@ cargo install --path node --locked
 
 #### Setup and start the network
 
-For setup, please consider the instructions for `zombienet` installation [Zombienet installation guide](https://paritytech.github.io/zombienet/install.html#installation)
+For setup, please consider the [Zombienet installation guide](https://paritytech.github.io/zombienet/install.html#installation)
 and [relay chain prerequisites](#relay-chain-prerequisites).
 
 We're left just with starting the network:
@@ -259,8 +259,7 @@ relay chain network (see [Teyrchain Template node](#teyrchain-template-node) set
 
 - 🧑‍🏫 To learn about Pezkuwi in general, [docs.Pezkuwi.com](https://docs.pezkuwichain.io/) website is a good starting point.
 
-- 🧑‍🔧 For technical introduction, [the Pezkuwi SDK documentation](https://github.com/pezkuwichain/pezkuwi-sdk#-documentation) are
-  the Pezkuwi SDK documentation resources.
+- 🧑‍🔧 For technical introduction, see [the Pezkuwi SDK documentation](https://github.com/pezkuwichain/pezkuwi-sdk#-documentation).
 
 - 👥 Additionally, there are [GitHub issues](https://github.com/pezkuwichain/pezkuwi-sdk/issues) and
   [Bizinikiwi StackExchange](https://exchange.pezkuwichain.app/).
