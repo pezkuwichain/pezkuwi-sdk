@@ -112,6 +112,9 @@ impl pezpallet_assets::Config for Test {
 	type WeightInfo = ();
 	type RemoveItemsLimit = ConstU32<1000>;
 	type Holder = ();
+	type ReserveData = ();
+	#[cfg(feature = "runtime-benchmarks")]
+	type BenchmarkHelper = ();
 }
 
 parameter_types! {
@@ -120,9 +123,9 @@ parameter_types! {
 }
 
 impl pezpallet_token_wrapper::Config for Test {
-	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo = crate::weights::BizinikiwiWeight<Test>;
 	type Currency = Balances;
+	type AssetId = AssetId;
 	type Assets = Assets;
 	type PalletId = TokenWrapperPalletId;
 	type WrapperAssetId = WrapperAssetId;

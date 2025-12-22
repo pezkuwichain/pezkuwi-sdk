@@ -33,8 +33,8 @@ pezframe-support = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-  "pezframe-election-provider-solution-type/runtime-benchmarks",
-  "pezframe-election-provider-support/runtime-benchmarks",
-  "pezframe-support/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
+	"pezframe-election-provider-solution-type/runtime-benchmarks",
+	"pezframe-election-provider-support/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]

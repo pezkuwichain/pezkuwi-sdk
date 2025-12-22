@@ -30,6 +30,12 @@ use crate::{
 use anyhow::anyhow;
 use clap::Parser;
 use jsonrpsee::ws_client::{WsClient, WsClientBuilder};
+use pezkuwi_subxt::{
+	backend::rpc::RpcClient,
+	ext::pezkuwi_subxt_rpcs::rpc_params,
+	tx::{SubmittableTransaction, TxStatus},
+	OnlineClient,
+};
 use pezpallet_revive::{
 	create1,
 	evm::{
@@ -38,12 +44,6 @@ use pezpallet_revive::{
 	},
 };
 use std::{sync::Arc, thread};
-use pezkuwi_subxt::{
-	backend::rpc::RpcClient,
-	ext::pezkuwi_subxt_rpcs::rpc_params,
-	tx::{SubmittableTransaction, TxStatus},
-	OnlineClient,
-};
 
 const LOG_TARGET: &str = "eth-rpc-tests";
 
@@ -148,7 +148,7 @@ async fn prepare_evm_transactions<Client: EthRpcClient + Sync + Send>(
 /// Prepare multiple Bizinikiwi transfer transactions with sequential nonces
 async fn prepare_bizinikiwi_transactions(
 	node_client: &OnlineClient<SrcChainConfig>,
-	signer: &subxt_signer::sr25519::Keypair,
+	signer: &pezkuwi_subxt_signer::sr25519::Keypair,
 	count: usize,
 ) -> anyhow::Result<Vec<SubmittableTransaction<SrcChainConfig, OnlineClient<SrcChainConfig>>>> {
 	let mut nonce = node_client.tx().account_nonce(&signer.public_key().into()).await?;
@@ -161,8 +161,8 @@ async fn prepare_bizinikiwi_transactions(
 			vec![pezkuwi_subxt::dynamic::Value::from_bytes(remark_data.as_bytes())],
 		);
 
-		// Note: Using polkadot config from subxt (external crate)
-		let params = pezkuwi_subxt::config::polkadot::PolkadotExtrinsicParamsBuilder::new()
+		// Note: Using pezkuwi config from subxt (external crate)
+		let params = pezkuwi_subxt::config::pezkuwi::PezkuwiExtrinsicParamsBuilder::new()
 			.nonce(nonce)
 			.build();
 
@@ -305,7 +305,7 @@ async fn run_all_eth_rpc_tests() -> anyhow::Result<()> {
 }
 
 async fn test_transfer(client: Arc<WsClient>) -> anyhow::Result<()> {
-	let ethan = Account::from(subxt_signer::eth::dev::ethan());
+	let ethan = Account::from(pezkuwi_subxt_signer::eth::dev::ethan());
 	let initial_balance = client.get_balance(ethan.address(), BlockTag::Latest.into()).await?;
 
 	let value = 1_000_000_000_000_000_000_000u128.into();
@@ -332,7 +332,7 @@ async fn test_deploy_and_call(client: Arc<WsClient>) -> anyhow::Result<()> {
 	let account = Account::default();
 
 	// Balance transfer
-	let ethan = Account::from(subxt_signer::eth::dev::ethan());
+	let ethan = Account::from(pezkuwi_subxt_signer::eth::dev::ethan());
 	let initial_balance = client.get_balance(ethan.address(), BlockTag::Latest.into()).await?;
 	let value = 1_000_000_000_000_000_000_000u128.into();
 	let tx = TransactionBuilder::new(&client).value(value).to(ethan.address()).send().await?;
@@ -446,7 +446,7 @@ async fn test_runtime_api_dry_run_addr_works(client: Arc<WsClient>) -> anyhow::R
 }
 
 async fn test_invalid_transaction(client: Arc<WsClient>) -> anyhow::Result<()> {
-	let ethan = Account::from(subxt_signer::eth::dev::ethan());
+	let ethan = Account::from(pezkuwi_subxt_signer::eth::dev::ethan());
 
 	let err = TransactionBuilder::new(&client)
 		.value(U256::from(1_000_000_000_000u128))
@@ -473,8 +473,9 @@ async fn get_evm_block_from_storage(
 		.unwrap();
 
 	let query = subxt_client::storage().revive().ethereum_block();
-	let Some(block) = node_client.storage().at(block_hash).fetch(&query).await.unwrap() else {
-		return Err(anyhow!("EVM block {block_hash:?} not found"));
+	let block = match node_client.storage().at(block_hash).fetch(&query, ()).await {
+		Ok(value) => value.decode()?,
+		Err(_) => return Err(anyhow!("EVM block {block_hash:?} not found")),
 	};
 	Ok(block.0)
 }
@@ -664,7 +665,7 @@ async fn test_block_hash_for_tag_with_block_tags_works(
 async fn test_multiple_transactions_in_block(client: Arc<WsClient>) -> anyhow::Result<()> {
 	let num_transactions = 20;
 	let alith = Account::default();
-	let ethan = Account::from(subxt_signer::eth::dev::ethan());
+	let ethan = Account::from(pezkuwi_subxt_signer::eth::dev::ethan());
 	let amount = U256::from(1_000_000_000_000_000_000u128);
 
 	// Prepare EVM transfer transactions
@@ -689,7 +690,7 @@ async fn test_mixed_evm_bizinikiwi_transactions(client: Arc<WsClient>) -> anyhow
 	let num_bizinikiwi_txs = 7;
 
 	let alith = Account::default();
-	let ethan = Account::from(subxt_signer::eth::dev::ethan());
+	let ethan = Account::from(pezkuwi_subxt_signer::eth::dev::ethan());
 	let amount = U256::from(500_000_000_000_000_000u128);
 
 	// Prepare EVM transactions
@@ -699,7 +700,7 @@ async fn test_mixed_evm_bizinikiwi_transactions(client: Arc<WsClient>) -> anyhow
 
 	// Prepare bizinikiwi transactions (simple remarks)
 	log::trace!(target: LOG_TARGET, "Creating {num_bizinikiwi_txs} bizinikiwi remark transactions");
-	let alice_signer = subxt_signer::sr25519::dev::alice();
+	let alice_signer = pezkuwi_subxt_signer::sr25519::dev::alice();
 	let (node_client, _, _) = client::connect(SharedResources::pez_node_rpc_url()).await.unwrap();
 
 	let bizinikiwi_txs =
@@ -777,11 +778,12 @@ async fn test_runtime_pallets_address_upload_code(client: Arc<WsClient>) -> anyh
 
 	// Step 5: Verify the code was actually uploaded
 	let code_hash = H256(pezsp_io::hashing::keccak_256(&bytecode));
-	let query = subxt_client::storage().revive().pristine_code(code_hash);
+	let query = subxt_client::storage().revive().pristine_code();
 	let block_hash: pezsp_core::H256 = get_bizinikiwi_block_hash(receipt.block_number).await?;
-	let stored_code = node_client.storage().at(block_hash).fetch(&query).await?;
-	assert!(stored_code.is_some(), "Code with hash {code_hash:?} should exist in storage");
-	assert_eq!(stored_code.unwrap(), bytecode, "Stored code should match the uploaded bytecode");
+	let stored_code: Vec<u8> = node_client.storage().at(block_hash).fetch(&query, (code_hash,)).await
+		.expect("Code with hash should exist in storage")
+		.decode()?;
+	assert_eq!(stored_code, bytecode, "Stored code should match the uploaded bytecode");
 
 	Ok(())
 }

@@ -17,7 +17,7 @@ use std::{
 	sync::atomic::{AtomicUsize, Ordering},
 	time::Duration,
 };
-use subxt::ext::codec::{Decode, Encode};
+use pezkuwi_subxt::ext::codec::{Decode, Encode};
 use tokio::task::yield_now;
 use tracing::trace;
 

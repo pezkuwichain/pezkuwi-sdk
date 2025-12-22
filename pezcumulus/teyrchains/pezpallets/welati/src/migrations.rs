@@ -15,6 +15,10 @@ pub const STORAGE_VERSION: StorageVersion = StorageVersion::new(1);
 pub mod v1 {
 	use super::*;
 
+	/// Type alias for the pre-upgrade state tuple to reduce type complexity
+	#[cfg(feature = "try-runtime")]
+	type PreUpgradeState = (u32, u32, u32, u32, u32, u32, u32, u32, u32, u32, u32, u32, u32, u32);
+
 	pub struct MigrateToV1<T>(PhantomData<T>);
 
 	impl<T: Config> OnRuntimeUpgrade for MigrateToV1<T> {
@@ -22,13 +26,10 @@ pub mod v1 {
 			let current = Pezpallet::<T>::on_chain_storage_version();
 
 			log::info!(
-				"🔄 Running migration for pezpallet-welati from {:?} to {:?}",
-				current,
-				STORAGE_VERSION
+				"🔄 Running migration for pezpallet-welati from {current:?} to {STORAGE_VERSION:?}"
 			);
 
 			if current == StorageVersion::new(0) {
-				let migrated;
 				let mut weight = Weight::zero();
 
 				// Example migration logic for governance storage
@@ -40,18 +41,14 @@ pub mod v1 {
 				let elections_count = ActiveElections::<T>::iter().count() as u64;
 				let proposals_count = ActiveProposals::<T>::iter().count() as u64;
 
-				migrated = officials_count + ministers_count + elections_count + proposals_count;
+				let migrated = officials_count + ministers_count + elections_count + proposals_count;
 
 				// Update storage version
 				STORAGE_VERSION.put::<Pezpallet<T>>();
 
-				log::info!("✅ Migrated {} entries in pezpallet-welati", migrated);
+				log::info!("✅ Migrated {migrated} entries in pezpallet-welati");
 				log::info!(
-					"   Officials: {}, Ministers: {}, Elections: {}, Proposals: {}",
-					officials_count,
-					ministers_count,
-					elections_count,
-					proposals_count
+					"   Officials: {officials_count}, Ministers: {ministers_count}, Elections: {elections_count}, Proposals: {proposals_count}"
 				);
 
 				// Return weight used
@@ -62,8 +59,7 @@ pub mod v1 {
 				weight
 			} else {
 				log::info!(
-					"👌 pezpallet-welati migration not needed, current version is {:?}",
-					current
+					"👌 pezpallet-welati migration not needed, current version is {current:?}"
 				);
 				T::DbWeight::get().reads(1)
 			}
@@ -74,7 +70,7 @@ pub mod v1 {
 			let current = Pezpallet::<T>::on_chain_storage_version();
 
 			log::info!("🔍 Pre-upgrade check for pezpallet-welati");
-			log::info!("   Current version: {:?}", current);
+			log::info!("   Current version: {current:?}");
 
 			// Encode current storage counts for verification
 			let officials_count = CurrentOfficials::<T>::iter().count() as u32;
@@ -92,20 +88,20 @@ pub mod v1 {
 			let proposals_count = ActiveProposals::<T>::iter().count() as u32;
 			let collective_votes_count = CollectiveVotes::<T>::iter().count() as u32;
 
-			log::info!("   CurrentOfficials entries: {}", officials_count);
-			log::info!("   CurrentMinisters entries: {}", ministers_count);
-			log::info!("   ParliamentMembers entries: {}", parliament_count);
-			log::info!("   DiwanMembers entries: {}", diwan_count);
-			log::info!("   AppointedOfficials entries: {}", appointed_count);
-			log::info!("   ActiveElections entries: {}", elections_count);
-			log::info!("   ElectionCandidates entries: {}", candidates_count);
-			log::info!("   ElectionVotes entries: {}", votes_count);
-			log::info!("   ElectionResults entries: {}", results_count);
-			log::info!("   ElectoralDistrictConfig entries: {}", districts_count);
-			log::info!("   PendingNominations entries: {}", nominations_count);
-			log::info!("   AppointmentProcesses entries: {}", appointments_count);
-			log::info!("   ActiveProposals entries: {}", proposals_count);
-			log::info!("   CollectiveVotes entries: {}", collective_votes_count);
+			log::info!("   CurrentOfficials entries: {officials_count}");
+			log::info!("   CurrentMinisters entries: {ministers_count}");
+			log::info!("   ParliamentMembers entries: {parliament_count}");
+			log::info!("   DiwanMembers entries: {diwan_count}");
+			log::info!("   AppointedOfficials entries: {appointed_count}");
+			log::info!("   ActiveElections entries: {elections_count}");
+			log::info!("   ElectionCandidates entries: {candidates_count}");
+			log::info!("   ElectionVotes entries: {votes_count}");
+			log::info!("   ElectionResults entries: {results_count}");
+			log::info!("   ElectoralDistrictConfig entries: {districts_count}");
+			log::info!("   PendingNominations entries: {nominations_count}");
+			log::info!("   AppointmentProcesses entries: {appointments_count}");
+			log::info!("   ActiveProposals entries: {proposals_count}");
+			log::info!("   CollectiveVotes entries: {collective_votes_count}");
 
 			Ok((
 				officials_count,
@@ -147,7 +143,7 @@ pub mod v1 {
 				pre_appointments_count,
 				pre_proposals_count,
 				pre_collective_votes_count,
-			): (u32, u32, u32, u32, u32, u32, u32, u32, u32, u32, u32, u32, u32, u32) =
+			): PreUpgradeState =
 				Decode::decode(&mut &state[..])
 					.map_err(|_| "Failed to decode pre-upgrade state")?;
 
@@ -156,7 +152,7 @@ pub mod v1 {
 			// Verify storage version was updated
 			let current_version = Pezpallet::<T>::on_chain_storage_version();
 			assert_eq!(current_version, STORAGE_VERSION, "Storage version not updated correctly");
-			log::info!("✅ Storage version updated to {:?}", current_version);
+			log::info!("✅ Storage version updated to {current_version:?}");
 
 			// Verify storage counts (should be same or more, never less)
 			let post_officials_count = CurrentOfficials::<T>::iter().count() as u32;
@@ -174,68 +170,20 @@ pub mod v1 {
 			let post_proposals_count = ActiveProposals::<T>::iter().count() as u32;
 			let post_collective_votes_count = CollectiveVotes::<T>::iter().count() as u32;
 
-			log::info!(
-				"   CurrentOfficials entries: {} -> {}",
-				pre_officials_count,
-				post_officials_count
-			);
-			log::info!(
-				"   CurrentMinisters entries: {} -> {}",
-				pre_ministers_count,
-				post_ministers_count
-			);
-			log::info!(
-				"   ParliamentMembers entries: {} -> {}",
-				pre_parliament_count,
-				post_parliament_count
-			);
-			log::info!("   DiwanMembers entries: {} -> {}", pre_diwan_count, post_diwan_count);
-			log::info!(
-				"   AppointedOfficials entries: {} -> {}",
-				pre_appointed_count,
-				post_appointed_count
-			);
-			log::info!(
-				"   ActiveElections entries: {} -> {}",
-				pre_elections_count,
-				post_elections_count
-			);
-			log::info!(
-				"   ElectionCandidates entries: {} -> {}",
-				pre_candidates_count,
-				post_candidates_count
-			);
-			log::info!("   ElectionVotes entries: {} -> {}", pre_votes_count, post_votes_count);
-			log::info!(
-				"   ElectionResults entries: {} -> {}",
-				pre_results_count,
-				post_results_count
-			);
-			log::info!(
-				"   ElectoralDistrictConfig entries: {} -> {}",
-				pre_districts_count,
-				post_districts_count
-			);
-			log::info!(
-				"   PendingNominations entries: {} -> {}",
-				pre_nominations_count,
-				post_nominations_count
-			);
-			log::info!(
-				"   AppointmentProcesses entries: {} -> {}",
-				pre_appointments_count,
-				post_appointments_count
-			);
-			log::info!(
-				"   ActiveProposals entries: {} -> {}",
-				pre_proposals_count,
-				post_proposals_count
-			);
-			log::info!(
-				"   CollectiveVotes entries: {} -> {}",
-				pre_collective_votes_count,
-				post_collective_votes_count
-			);
+			log::info!("   CurrentOfficials entries: {pre_officials_count} -> {post_officials_count}");
+			log::info!("   CurrentMinisters entries: {pre_ministers_count} -> {post_ministers_count}");
+			log::info!("   ParliamentMembers entries: {pre_parliament_count} -> {post_parliament_count}");
+			log::info!("   DiwanMembers entries: {pre_diwan_count} -> {post_diwan_count}");
+			log::info!("   AppointedOfficials entries: {pre_appointed_count} -> {post_appointed_count}");
+			log::info!("   ActiveElections entries: {pre_elections_count} -> {post_elections_count}");
+			log::info!("   ElectionCandidates entries: {pre_candidates_count} -> {post_candidates_count}");
+			log::info!("   ElectionVotes entries: {pre_votes_count} -> {post_votes_count}");
+			log::info!("   ElectionResults entries: {pre_results_count} -> {post_results_count}");
+			log::info!("   ElectoralDistrictConfig entries: {pre_districts_count} -> {post_districts_count}");
+			log::info!("   PendingNominations entries: {pre_nominations_count} -> {post_nominations_count}");
+			log::info!("   AppointmentProcesses entries: {pre_appointments_count} -> {post_appointments_count}");
+			log::info!("   ActiveProposals entries: {pre_proposals_count} -> {post_proposals_count}");
+			log::info!("   CollectiveVotes entries: {pre_collective_votes_count} -> {post_collective_votes_count}");
 
 			// Verify no data was lost
 			assert!(

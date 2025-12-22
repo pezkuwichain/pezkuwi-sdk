@@ -67,7 +67,9 @@ pub fn get_preset(id: &PresetId) -> Option<Vec<u8>> {
 		yap_teyrchain_genesis(
 			Sr25519Keyring::Alice.to_account_id(),
 			authorities,
-			Sr25519Keyring::well_known().map(|x: Sr25519Keyring| x.to_account_id()).collect(),
+			Sr25519Keyring::well_known()
+				.map(|x: Sr25519Keyring| x.to_account_id())
+				.collect(),
 			ENDOWMENT,
 			DEFAULT_PARA_ID,
 		)

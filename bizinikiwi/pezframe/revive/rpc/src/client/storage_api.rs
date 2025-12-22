@@ -28,11 +28,14 @@ use pezsp_core::H256;
 
 /// A wrapper around the Bizinikiwi Storage API.
 #[derive(Clone)]
-pub struct StorageApi(StorageClientAt<SrcChainConfig, OnlineClient<SrcChainConfig>>, H256);
+pub struct StorageApi(StorageClientAt<SrcChainConfig, OnlineClient<SrcChainConfig>>, #[expect(dead_code)] H256);
 
 impl StorageApi {
 	/// Create a new instance of the StorageApi.
-	pub fn new(api: StorageClientAt<SrcChainConfig, OnlineClient<SrcChainConfig>>, block_hash: H256) -> Self {
+	pub fn new(
+		api: StorageClientAt<SrcChainConfig, OnlineClient<SrcChainConfig>>,
+		block_hash: H256,
+	) -> Self {
 		Self(api, block_hash)
 	}
 
@@ -45,12 +48,16 @@ impl StorageApi {
 		let contract_address: pezkuwi_subxt::utils::H160 = contract_address.0.into();
 
 		let query = subxt_client::storage().revive().account_info_of();
-		let Some(storage_value) = self.0.try_fetch(query, (contract_address,)).await
+		let Some(storage_value) = self
+			.0
+			.try_fetch(query, (contract_address,))
+			.await
 			.map_err(|e| ClientError::SubxtError(e.into()))?
 		else {
 			return Err(ClientError::ContractNotFound);
 		};
-		let info = storage_value.decode()
+		let info = storage_value
+			.decode()
 			.map_err(|e| ClientError::SubxtError(pezkuwi_subxt::Error::from(e)))?;
 
 		let AccountType::Contract(contract_info) = info.account_type else {

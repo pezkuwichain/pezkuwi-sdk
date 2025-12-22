@@ -31,6 +31,6 @@ pezframe-support = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-  "pezframe-support/runtime-benchmarks",
-  "xcm/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
 ]

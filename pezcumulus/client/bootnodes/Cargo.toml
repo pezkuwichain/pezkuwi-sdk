@@ -40,10 +40,10 @@ pezcumulus-relay-chain-interface = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-  "pezcumulus-primitives-core/runtime-benchmarks",
-  "pezcumulus-relay-chain-interface/runtime-benchmarks",
-  "pezsc-network/runtime-benchmarks",
-  "pezsc-service/runtime-benchmarks",
-  "pezsp-consensus-babe/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
+	"pezcumulus-primitives-core/runtime-benchmarks",
+	"pezcumulus-relay-chain-interface/runtime-benchmarks",
+	"pezsc-network/runtime-benchmarks",
+	"pezsc-service/runtime-benchmarks",
+	"pezsp-consensus-babe/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]

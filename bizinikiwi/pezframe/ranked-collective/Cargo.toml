@@ -18,40 +18,40 @@ targets = ["x86_64-unknown-linux-gnu"]
 
 [dependencies]
 codec = { features = ["derive"], workspace = true }
+impl-trait-for-tuples = { workspace = true }
+log = { workspace = true }
 pezframe-benchmarking = { optional = true, workspace = true }
 pezframe-support = { workspace = true }
 pezframe-system = { workspace = true }
-impl-trait-for-tuples = { workspace = true }
-log = { workspace = true }
-scale-info = { features = ["derive"], workspace = true }
 pezsp-arithmetic = { workspace = true }
 pezsp-core = { workspace = true }
 pezsp-io = { workspace = true }
 pezsp-runtime = { workspace = true }
+scale-info = { features = ["derive"], workspace = true }
 
 [features]
 default = ["std"]
 std = [
-  "codec/std",
-  "pezframe-benchmarking?/std",
-  "pezframe-support/std",
-  "pezframe-system/std",
-  "log/std",
-  "scale-info/std",
-  "pezsp-arithmetic/std",
-  "pezsp-core/std",
-  "pezsp-io/std",
-  "pezsp-runtime/std",
+	"codec/std",
+	"log/std",
+	"pezframe-benchmarking?/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
+	"pezsp-arithmetic/std",
+	"pezsp-core/std",
+	"pezsp-io/std",
+	"pezsp-runtime/std",
+	"scale-info/std",
 ]
 runtime-benchmarks = [
-  "pezframe-benchmarking/runtime-benchmarks",
-  "pezframe-support/runtime-benchmarks",
-  "pezframe-system/runtime-benchmarks",
-  "pezsp-io/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
+	"pezframe-benchmarking/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]
 try-runtime = [
-  "pezframe-support/try-runtime",
-  "pezframe-system/try-runtime",
-  "pezsp-runtime/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezsp-runtime/try-runtime",
 ]

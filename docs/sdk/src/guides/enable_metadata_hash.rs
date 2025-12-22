@@ -44,8 +44,8 @@
 //! ### Runtime integration
 //!
 //! From the runtime side only the
-//! [`CheckMetadataHash`](pezframe_metadata_hash_extension::CheckMetadataHash) needs to be added to the
-//! list of signed extension:
+//! [`CheckMetadataHash`](pezframe_metadata_hash_extension::CheckMetadataHash) needs to be added to
+//! the list of signed extension:
 #![doc = docify::embed!("../../templates/teyrchain/runtime/src/lib.rs", template_signed_extra)]
 //!
 //! > **Note:**
@@ -76,7 +76,8 @@
 //!
 //! > **Note:**
 //! >
-//! > The `metadata-hash` feature needs to be enabled for the `bizinikiwi-wasm-builder` to enable the
+//! > The `metadata-hash` feature needs to be enabled for the `bizinikiwi-wasm-builder` to enable
+//! > the
 //! > code for being able to generate the metadata hash. It is also recommended to put the metadata
 //! > hash generation behind a feature in the runtime as shown above. The reason behind is that it
 //! > adds a lot of code which increases the compile time and the generation itself also increases

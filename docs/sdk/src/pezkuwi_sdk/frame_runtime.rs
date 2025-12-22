@@ -34,14 +34,14 @@
 //! about its own responsibilities and make as few assumptions about the general runtime as
 //! possible. A pezpallet is analogous to a _module_ in the runtime.
 //!
-//! A pezpallet is defined as a `mod pezpallet` wrapped by the [`frame::pezpallet`] macro. Within this macro,
-//! pezpallet components/parts can be defined. Most notable of these parts are:
+//! A pezpallet is defined as a `mod pezpallet` wrapped by the [`frame::pezpallet`] macro. Within
+//! this macro, pezpallet components/parts can be defined. Most notable of these parts are:
 //!
-//! - [Config](frame::pezpallet_macros::config), allowing a pezpallet to make itself configurable and
-//!   generic over types, values and such.
+//! - [Config](frame::pezpallet_macros::config), allowing a pezpallet to make itself configurable
+//!   and generic over types, values and such.
 //! - [Storage](frame::pezpallet_macros::storage), allowing a pezpallet to define onchain storage.
-//! - [Dispatchable function](frame::pezpallet_macros::call), allowing a pezpallet to define extrinsics
-//!   that are callable by end users, from the outer world.
+//! - [Dispatchable function](frame::pezpallet_macros::call), allowing a pezpallet to define
+//!   extrinsics that are callable by end users, from the outer world.
 //! - [Events](frame::pezpallet_macros::event), allowing a pezpallet to emit events.
 //! - [Errors](frame::pezpallet_macros::error), allowing a pezpallet to emit well-formed errors.
 //!
@@ -75,7 +75,8 @@
 //!
 //! ## More Examples
 //!
-//! You can find more FRAME examples that revolve around specific features at [`pezpallet_examples`].
+//! You can find more FRAME examples that revolve around specific features at
+//! [`pezpallet_examples`].
 //!
 //! ## Alternatives 🌈
 //!
@@ -105,7 +106,8 @@ pub mod pezpallet {
 		/// A type that is not known now, but the runtime that will contain this pezpallet will
 		/// know it later, therefore we define it here as an associated type.
 		#[allow(deprecated)]
-		type RuntimeEvent: IsType<<Self as pezframe_system::Config>::RuntimeEvent> + From<Event<Self>>;
+		type RuntimeEvent: IsType<<Self as pezframe_system::Config>::RuntimeEvent>
+			+ From<Event<Self>>;
 
 		/// A parameterize-able value that we receive later via the `Get<_>` trait.
 		type ValueParameter: Get<u32>;
@@ -145,9 +147,9 @@ pub mod pezpallet {
 	}
 }
 
-/// A simple runtime that contains the above pezpallet and `pezframe_system`, the mandatory pezpallet of
-/// all runtimes. This runtime is for testing, but it shares a lot of similarities with a *real*
-/// runtime.
+/// A simple runtime that contains the above pezpallet and `pezframe_system`, the mandatory
+/// pezpallet of all runtimes. This runtime is for testing, but it shares a lot of similarities with
+/// a *real* runtime.
 #[docify::export]
 pub mod runtime {
 	use super::pezpallet as pezpallet_example;

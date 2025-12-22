@@ -15,8 +15,8 @@ homepage = { workspace = true }
 workspace = true
 
 [build-dependencies]
-rustversion = { workspace = true }
 bizinikiwi-wasm-builder = { workspace = true, default-features = true }
+rustversion = { workspace = true }
 
 [features]
 default = ["std"]

@@ -26,11 +26,11 @@ log = { workspace = true, default-features = true }
 
 pezkuwi-cli = { workspace = true, default-features = true }
 pezkuwi-erasure-coding = { workspace = true, default-features = true }
-pezkuwi-pez-node-primitives = { workspace = true, default-features = true }
 pezkuwi-node-subsystem = { workspace = true, default-features = true }
+pezkuwi-pez-node-primitives = { workspace = true, default-features = true }
 pezkuwi-primitives = { workspace = true, default-features = true }
 pezkuwi-service = { features = [
-  "pezkuwichain-native",
+	"pezkuwichain-native",
 ], workspace = true, default-features = true }
 test-teyrchain-undying = { workspace = true }
 
@@ -41,7 +41,7 @@ pezsp-core = { workspace = true, default-features = true }
 
 [dev-dependencies]
 pezkuwi-node-core-pvf = { features = [
-  "test-utils",
+	"test-utils",
 ], workspace = true, default-features = true }
 pezkuwi-test-service = { workspace = true }
 pezkuwi-teyrchain-primitives = { workspace = true, default-features = true }
@@ -52,18 +52,18 @@ tokio = { features = ["macros"], workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-  "pezkuwi-cli/runtime-benchmarks",
-  "pezkuwi-erasure-coding/runtime-benchmarks",
-  "pezkuwi-node-core-pvf/runtime-benchmarks",
-  "pezkuwi-pez-node-primitives/runtime-benchmarks",
-  "pezkuwi-node-subsystem/runtime-benchmarks",
-  "pezkuwi-primitives/runtime-benchmarks",
-  "pezkuwi-service/runtime-benchmarks",
-  "pezkuwi-test-service/runtime-benchmarks",
-  "pezkuwi-teyrchain-primitives/runtime-benchmarks",
-  "pezsc-cli/runtime-benchmarks",
-  "pezsc-client-api/runtime-benchmarks",
-  "pezsc-service/runtime-benchmarks",
-  "pezsp-keyring/runtime-benchmarks",
-  "test-teyrchain-undying/runtime-benchmarks",
+	"pezkuwi-cli/runtime-benchmarks",
+	"pezkuwi-erasure-coding/runtime-benchmarks",
+	"pezkuwi-node-core-pvf/runtime-benchmarks",
+	"pezkuwi-node-subsystem/runtime-benchmarks",
+	"pezkuwi-pez-node-primitives/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"pezkuwi-service/runtime-benchmarks",
+	"pezkuwi-test-service/runtime-benchmarks",
+	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
+	"pezsc-cli/runtime-benchmarks",
+	"pezsc-client-api/runtime-benchmarks",
+	"pezsc-service/runtime-benchmarks",
+	"pezsp-keyring/runtime-benchmarks",
+	"test-teyrchain-undying/runtime-benchmarks",
 ]

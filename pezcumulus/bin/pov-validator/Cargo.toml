@@ -28,9 +28,9 @@ tracing-subscriber = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-  "pezkuwi-pez-node-primitives/runtime-benchmarks",
-  "pezkuwi-primitives/runtime-benchmarks",
-  "pezkuwi-teyrchain-primitives/runtime-benchmarks",
-  "pezsc-executor/runtime-benchmarks",
-  "pezsp-io/runtime-benchmarks",
+	"pezkuwi-pez-node-primitives/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
+	"pezsc-executor/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
 ]

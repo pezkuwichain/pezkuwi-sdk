@@ -6,7 +6,7 @@ use std::time::Duration;
 
 use crate::utils::{initialize_network, BEST_BLOCK_METRIC};
 
-use pezcumulus_zombienet_sdk_helpers::assign_cores;
+use pezcumulus_zombienet_sdk_helpers::{assign_cores};
 use serde_json::json;
 use zombienet_orchestrator::network::node::LogLineCountOptions;
 use zombienet_sdk::{NetworkConfig, NetworkConfigBuilder};
@@ -105,10 +105,10 @@ async fn build_network_config() -> Result<NetworkConfig, anyhow::Error> {
 				}))
 				// Have to set a `with_node` outside of the loop below, so that `r` has the right
 				// type.
-				.with_node(|node| node.with_name("alice").with_args(vec![]));
+				.with_validator(|node| node.with_name("alice").with_args(vec![]));
 
 			(0..5).fold(r, |acc, i| {
-				acc.with_node(|node| {
+				acc.with_validator(|node| {
 					node.with_name(&format!("validator-{i}")).with_args(vec![
 						("-lruntime=debug,teyrchain=trace").into(),
 					])
@@ -119,7 +119,7 @@ async fn build_network_config() -> Result<NetworkConfig, anyhow::Error> {
 			p.with_id(PARA_ID_1)
 				.with_chain("elastic-scaling")
 				.with_default_command("test-teyrchain")
-				.with_default_image(images.pezcumulus.as_str())
+				.with_default_image(images.pezcumulus())
 				.with_collator(|n|
 					n.with_name("collator-elastic")
 						.with_args(vec![
@@ -131,7 +131,7 @@ async fn build_network_config() -> Result<NetworkConfig, anyhow::Error> {
 		.with_teyrchain(|p| {
 			p.with_id(PARA_ID_2)
 				.with_default_command("test-teyrchain")
-				.with_default_image(images.pezcumulus.as_str())
+				.with_default_image(images.pezcumulus())
 				.with_collator(|n|
 					n.with_name("collator-single-core")
 						.with_args(vec![

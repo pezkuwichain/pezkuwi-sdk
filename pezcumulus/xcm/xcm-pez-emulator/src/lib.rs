@@ -434,13 +434,13 @@ macro_rules! decl_test_relay_chains {
 			}
 
 			$crate::paste::paste! {
-				pub trait [<$name RelayPallet>] {
+				pub trait [<$name RelayPezpallet>] {
 					$(
 						type $pezpallet_name;
 					)?
 				}
 
-				impl<N: $crate::Network> [<$name RelayPallet>] for $name<N> {
+				impl<N: $crate::Network> [<$name RelayPezpallet>] for $name<N> {
 					$(
 						type $pezpallet_name = $pezpallet_path;
 					)?
@@ -793,13 +793,13 @@ macro_rules! decl_test_teyrchains {
 			}
 
 			$crate::paste::paste! {
-				pub trait [<$name ParaPallet>] {
+				pub trait [<$name ParaPezpallet>] {
 					$(
 						type $pezpallet_name;
 					)*
 				}
 
-				impl<N: $crate::Network> [<$name ParaPallet>] for $name<N> {
+				impl<N: $crate::Network> [<$name ParaPezpallet>] for $name<N> {
 					$(
 						type $pezpallet_name = $pezpallet_path;
 					)*

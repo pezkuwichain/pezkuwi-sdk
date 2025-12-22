@@ -18,7 +18,7 @@ use std::{
 	sync::Arc,
 	time::{Duration, Instant, SystemTime},
 };
-use subxt_core::config::Hash as BlockHash;
+use pezkuwi_subxt_core::config::Hash as BlockHash;
 use tokio::{
 	select,
 	sync::mpsc::{channel, Receiver, Sender},
@@ -433,10 +433,10 @@ mod tests {
 		subxt_transaction::{EthRuntimeConfig, EthTransaction, EthTransactionsSink},
 		transaction::AccountMetadata,
 	};
-	use subxt::{
-		config::substrate::SubstrateExtrinsicParamsBuilder as Params, dynamic::Value, OnlineClient,
+	use pezkuwi_subxt::{
+		config::DefaultExtrinsicParamsBuilder as Params, dynamic::Value, OnlineClient,
 	};
-	use subxt_signer::eth::dev;
+	use pezkuwi_subxt_signer::eth::dev;
 	use tracing::trace;
 
 	pub type FakeTxTask = DefaultTxTask<FakeTransaction>;
@@ -484,10 +484,10 @@ mod tests {
 		}
 
 		let tx_params = tx_params.build();
-		// let tx_call = subxt::dynamic::tx("System", "remark",
+		// let tx_call = pezkuwi_subxt::dynamic::tx("System", "remark",
 		// vec![Value::from_bytes("heeelooo")]);
 
-		let tx_call = subxt::dynamic::tx(
+		let tx_call = pezkuwi_subxt::dynamic::tx(
 			"Balances",
 			"transfer_keep_alive",
 			vec![

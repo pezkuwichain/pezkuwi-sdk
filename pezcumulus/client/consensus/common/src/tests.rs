@@ -1687,7 +1687,7 @@ fn find_potential_parents_aligned_with_pending() {
 		// Check correctness.
 		assert_eq!(expected_parents.len(), expected_len);
 
-		potential_parents.iter().for_each(|p| log::info!("result: {:?}", p));
+		potential_parents.iter().for_each(|p| log::info!("result: {p:?}"));
 		for i in 0..expected_len {
 			let parent = &potential_parents[i];
 			let expected = expected_parents

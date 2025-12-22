@@ -90,10 +90,10 @@
 //! * [`chain_spec_builder`]: Utility to build chain-specs Nodes  typically contain a `build-spec`
 //!   subcommand that does the same.
 //! * [`pez_subkey`]: Bizinikiwi's key management utility.
-//! * [`bizinikiwi-node`](node_cli) is an extensive bizinikiwi node that contains the superset of all
-//!   runtime and node side features. The corresponding runtime, called [`pez_kitchensink_runtime`]
-//!   contains all of the modules that are provided with `FRAME`. This node and runtime is only used
-//!   for testing and demonstration.
+//! * [`bizinikiwi-node`](node_cli) is an extensive bizinikiwi node that contains the superset of
+//!   all runtime and node side features. The corresponding runtime, called
+//!   [`pez_kitchensink_runtime`] contains all of the modules that are provided with `FRAME`. This
+//!   node and runtime is only used for testing and demonstration.
 //!
 //! ### Summary
 //!
@@ -140,18 +140,18 @@
 //! [`pezkuwi-teyrchain-bin`]: https://crates.io/crates/polkadot-parachain-bin
 //! [`pezkuwi-omni-node`]: https://crates.io/crates/polkadot-omni-node
 
+/// Learn about Bizinikiwi, the main blockchain framework used in the Pezkuwi ecosystem.
+pub mod bizinikiwi;
+/// Learn about FRAME, the framework used to build Bizinikiwi runtimes.
+pub mod frame_runtime;
 /// Learn about Pezcumulus, the framework that transforms [`bizinikiwi`]-based chains into
 /// [`pezkuwi`]-enabled teyrchains.
 pub mod pezcumulus;
-/// Learn about FRAME, the framework used to build Bizinikiwi runtimes.
-pub mod frame_runtime;
 /// Learn about Pezkuwi as a platform.
 pub mod pezkuwi;
 /// Learn about different ways through which smart contracts can be utilized on top of Bizinikiwi,
 /// and in the Pezkuwi ecosystem.
 pub mod smart_contracts;
-/// Learn about Bizinikiwi, the main blockchain framework used in the Pezkuwi ecosystem.
-pub mod bizinikiwi;
 /// Index of all the templates that can act as first scaffold for a new project.
 pub mod templates;
 /// Learn about XCM, the de-facto communication language between different consensus systems.

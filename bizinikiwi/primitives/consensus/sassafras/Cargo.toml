@@ -22,40 +22,40 @@ targets = ["x86_64-unknown-linux-gnu"]
 
 [dependencies]
 codec = { workspace = true }
-scale-info = { features = ["derive"], workspace = true }
-serde = { features = ["derive"], optional = true, workspace = true }
 pezsp-api = { workspace = true }
 pezsp-application-crypto = { features = [
-  "bandersnatch-experimental",
+	"bandersnatch-experimental",
 ], workspace = true }
 pezsp-consensus-slots = { workspace = true }
 pezsp-core = { features = ["bandersnatch-experimental"], workspace = true }
 pezsp-runtime = { workspace = true }
+scale-info = { features = ["derive"], workspace = true }
+serde = { features = ["derive"], optional = true, workspace = true }
 
 [features]
 default = ["std"]
 std = [
-  "codec/std",
-  "scale-info/std",
-  "serde/std",
-  "pezsp-api/std",
-  "pezsp-application-crypto/std",
-  "pezsp-consensus-slots/std",
-  "pezsp-core/std",
-  "pezsp-runtime/std",
+	"codec/std",
+	"pezsp-api/std",
+	"pezsp-application-crypto/std",
+	"pezsp-consensus-slots/std",
+	"pezsp-core/std",
+	"pezsp-runtime/std",
+	"scale-info/std",
+	"serde/std",
 ]
 
 # Serde support without relying on std features.
 serde = [
-  "dep:serde",
-  "scale-info/serde",
-  "pezsp-application-crypto/serde",
-  "pezsp-consensus-slots/serde",
-  "pezsp-core/serde",
-  "pezsp-runtime/serde",
+	"dep:serde",
+	"pezsp-application-crypto/serde",
+	"pezsp-consensus-slots/serde",
+	"pezsp-core/serde",
+	"pezsp-runtime/serde",
+	"scale-info/serde",
 ]
 runtime-benchmarks = [
-  "pezsp-api/runtime-benchmarks",
-  "pezsp-consensus-slots/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
+	"pezsp-consensus-slots/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]

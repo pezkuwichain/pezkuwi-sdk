@@ -13,7 +13,7 @@ use zombienet_configuration::types::Arg;
 use zombienet_orchestrator::network::node::LogLineCountOptions;
 use zombienet_sdk::{
 	environment::Provider,
-	subxt::{OnlineClient, PolkadotConfig},
+	subxt::{OnlineClient, PezkuwiConfig},
 	NetworkConfig, NetworkConfigBuilder, RegistrationStrategy,
 };
 
@@ -48,7 +48,7 @@ async fn pov_recovery() -> Result<(), anyhow::Error> {
 	network.register_parachain(PARA_ID).await?;
 
 	let validator = network.get_node("validator-0")?;
-	let validator_client: OnlineClient<PolkadotConfig> = validator.wait_client().await?;
+	let validator_client: OnlineClient<PezkuwiConfig> = validator.wait_client().await?;
 
 	log::info!("Ensuring teyrchain is registered within 30 blocks");
 	assert_para_is_registered(&validator_client, ParaId::from(PARA_ID), 30).await?;
@@ -156,14 +156,14 @@ async fn build_network_config() -> Result<NetworkConfig, anyhow::Error> {
 							}
 						}
 				}))
-				.with_node(|node| {
+				.with_validator(|node| {
 					node.with_name("validator-0").validator(true).with_args(vec![
 						("-lteyrchain::availability=trace,sync=info,teyrchain=debug,libp2p_mdns=debug,info").into(),
 					])
 				});
 
 			(1..validator_cnt).fold(r, |acc, i| {
-				acc.with_node(|node| {
+				acc.with_validator(|node| {
 					node.with_name(&format!("validator-{i}")).with_args(vec![
 						("-lteyrchain::availability=trace,sync=debug,teyrchain=debug,libp2p_mdns=debug").into(),
 						("--reserved-only").into(),
@@ -176,7 +176,7 @@ async fn build_network_config() -> Result<NetworkConfig, anyhow::Error> {
 			p.with_id(PARA_ID)
 				.with_registration_strategy(RegistrationStrategy::Manual)
 				.with_default_command("test-teyrchain")
-				.with_default_image(images.pezcumulus.as_str())
+				.with_default_image(images.pezcumulus())
 				.with_collator(|c| {
 					c.with_name("bob")
 						.validator(true)

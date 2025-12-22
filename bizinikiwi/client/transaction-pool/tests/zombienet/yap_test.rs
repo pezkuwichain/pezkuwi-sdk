@@ -22,12 +22,12 @@
 // https://github.com/pezkuwichain/pezkuwi-sdk/issues/124#issuecomment-2808830472
 
 use crate::zombienet::{BlockSubscriptionType, NetworkSpawner, ScenarioBuilderSharedParams};
-use pezcumulus_zombienet_sdk_helpers::create_assign_core_call;
+use pezcumulus_zombienet_sdk_helpers::{create_assign_core_call};
 use serde_json::json;
 use txtesttool::{execution_log::ExecutionLog, scenario::ScenarioBuilder};
 use zombienet_sdk::{
-	subxt::{OnlineClient, PolkadotConfig},
-	subxt_signer::sr25519::dev,
+	pezkuwi_subxt::{OnlineClient, PezkuwiConfig},
+	pezkuwi_subxt_signer::sr25519::dev,
 	NetworkConfigBuilder,
 };
 
@@ -42,7 +42,7 @@ async fn slot_based_3cores_test() -> Result<(), anyhow::Error> {
 				let r = r
 					.with_chain("pezkuwichain-local")
 					.with_default_command("pezkuwi")
-					.with_default_image(images.pezkuwi.as_str())
+					.with_default_image(images.pezkuwi())
 					.with_default_args(vec![("-lteyrchain=debug").into()])
 					.with_genesis_overrides(json!({
 						"configuration": {
@@ -60,16 +60,16 @@ async fn slot_based_3cores_test() -> Result<(), anyhow::Error> {
 					})
 					// Have to set a `with_node` outside of the loop below, so that `r` has the
 					// right type.
-					.with_node(|node| node.with_name(names[0]));
+					.with_validator(|node| node.with_name(names[0]));
 
-				(1..3).fold(r, |acc, i| acc.with_node(|node| node.with_name(names[i])))
+				(1..3).fold(r, |acc, i| acc.with_validator(|node| node.with_name(names[i])))
 			})
 			.with_teyrchain(|p| {
 				// Para 2200 uses the new RFC103-enabled collator which sends the UMP signal
 				// commitment for selecting the core index
 				p.with_id(2200)
 					.with_default_command("pezkuwi-teyrchain")
-					.with_default_image(images.pezcumulus.as_str())
+					.with_default_image(images.pezcumulus())
 					.with_chain("yap-pezkuwichain-local-2200")
 					.with_genesis_overrides(json!({
 						"balances": {
@@ -96,7 +96,7 @@ async fn slot_based_3cores_test() -> Result<(), anyhow::Error> {
 
 	let relay_node = spawner.network().get_node("alice")?;
 
-	let relay_client: OnlineClient<PolkadotConfig> = relay_node.wait_client().await?;
+	let relay_client: OnlineClient<PezkuwiConfig> = relay_node.wait_client().await?;
 	let alice = dev::alice();
 
 	let assign_cores_call = create_assign_core_call(&[(0, 2200), (1, 2200)]);

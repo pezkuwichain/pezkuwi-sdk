@@ -27,8 +27,6 @@ pezsc-client-api = { workspace = true, default-features = true }
 pezsc-executor = { workspace = true, default-features = true }
 pezsc-network = { workspace = true, default-features = true }
 pezsc-telemetry = { workspace = true, default-features = true }
-serde = { features = ["derive"], workspace = true, default-features = true }
-serde_json = { workspace = true, default-features = true }
 pezsp-blockchain = { workspace = true, default-features = true }
 pezsp-core = { workspace = true, default-features = true }
 pezsp-crypto-hashing = { workspace = true, default-features = true }
@@ -37,26 +35,28 @@ pezsp-io = { workspace = true }
 pezsp-runtime = { workspace = true, default-features = true }
 pezsp-state-machine = { workspace = true, default-features = true }
 pezsp-tracing = { workspace = true, default-features = true }
+serde = { features = ["derive"], workspace = true, default-features = true }
+serde_json = { workspace = true, default-features = true }
 
 [dev-dependencies]
-pretty_assertions = { workspace = true }
-regex = { workspace = true }
+bizinikiwi-test-runtime = { workspace = true }
 pezsp-application-crypto = { features = ["serde"], workspace = true }
 pezsp-consensus-babe = { features = ["serde"], workspace = true }
 pezsp-keyring = { workspace = true, default-features = true }
-bizinikiwi-test-runtime = { workspace = true }
+pretty_assertions = { workspace = true }
+regex = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-  "pezsc-client-api/runtime-benchmarks",
-  "pezsc-executor/runtime-benchmarks",
-  "pezsc-network/runtime-benchmarks",
-  "pezsp-blockchain/runtime-benchmarks",
-  "pezsp-consensus-babe/runtime-benchmarks",
-  "pezsp-genesis-builder/runtime-benchmarks",
-  "pezsp-io/runtime-benchmarks",
-  "pezsp-keyring/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "pezsp-state-machine/runtime-benchmarks",
-  "bizinikiwi-test-runtime/runtime-benchmarks",
+	"bizinikiwi-test-runtime/runtime-benchmarks",
+	"pezsc-client-api/runtime-benchmarks",
+	"pezsc-executor/runtime-benchmarks",
+	"pezsc-network/runtime-benchmarks",
+	"pezsp-blockchain/runtime-benchmarks",
+	"pezsp-consensus-babe/runtime-benchmarks",
+	"pezsp-genesis-builder/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-keyring/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-state-machine/runtime-benchmarks",
 ]

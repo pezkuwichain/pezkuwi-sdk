@@ -35,7 +35,7 @@ async fn dispute_old_finalized() -> Result<(), anyhow::Error> {
 			let r = r
 				.with_chain("pezkuwichain-local")
 				.with_default_command("pezkuwi")
-				.with_default_image(images.pezkuwi.as_str())
+				.with_default_image(images.pezkuwi())
 				.with_default_args(vec![("-lteyrchain=debug").into()])
 				.with_genesis_overrides(json!({
 					"patch": {
@@ -56,7 +56,7 @@ async fn dispute_old_finalized() -> Result<(), anyhow::Error> {
 						.with_request_cpu("1")
 				});
 			// Add malus validator
-			let r = r.with_node(|node| {
+			let r = r.with_validator(|node| {
 				node.with_name("malus")
 					.with_args(vec![
 						"-lteyrchain=debug,MALUS=trace".into(),
@@ -75,7 +75,7 @@ async fn dispute_old_finalized() -> Result<(), anyhow::Error> {
 			});
 			// Add honest validators
 			let r = (0..6).fold(r, |acc, i| {
-				acc.with_node(|node| {
+				acc.with_validator(|node| {
 					node.with_name(&format!("honest-{i}"))
 						.with_args(vec!["-lteyrchain=debug".into()])
 				})

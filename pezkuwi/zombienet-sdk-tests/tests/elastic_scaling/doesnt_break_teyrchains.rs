@@ -31,7 +31,7 @@ async fn doesnt_break_teyrchains_test() -> Result<(), anyhow::Error> {
 			let r = r
 				.with_chain("pezkuwichain-local")
 				.with_default_command("pezkuwi")
-				.with_default_image(images.pezkuwi.as_str())
+				.with_default_image(images.pezkuwi())
 				.with_default_args(vec![("-lteyrchain=debug").into()])
 				.with_genesis_overrides(json!({
 					"configuration": {
@@ -45,16 +45,16 @@ async fn doesnt_break_teyrchains_test() -> Result<(), anyhow::Error> {
 				}))
 				// Have to set a `with_node` outside of the loop below, so that `r` has the right
 				// type.
-				.with_node(|node| node.with_name("validator-0"));
+				.with_validator(|node| node.with_name("validator-0"));
 
-			(1..4).fold(r, |acc, i| acc.with_node(|node| node.with_name(&format!("validator-{i}"))))
+			(1..4).fold(r, |acc, i| acc.with_validator(|node| node.with_name(&format!("validator-{i}"))))
 		})
 		.with_teyrchain(|p| {
 			// Use pezkuwichain-teyrchain default, which has 6 second slot time. Also, don't use
 			// slot-based collator.
 			p.with_id(2000)
 				.with_default_command("pezkuwi-teyrchain")
-				.with_default_image(images.pezcumulus.as_str())
+				.with_default_image(images.pezcumulus())
 				.with_default_args(vec![("-lteyrchain=debug,aura=debug").into()])
 				.with_collator(|n| n.with_name("collator-2000"))
 		})

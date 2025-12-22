@@ -8,12 +8,12 @@ use std::time::Duration;
 use crate::utils::initialize_network;
 
 use pezcumulus_zombienet_sdk_helpers::{
-	assert_para_throughput, assign_cores, runtime_upgrade, wait_for_upgrade,
+	assert_para_throughput, assign_cores, runtime_upgrade, wait_for_upgrade, 
 };
 use pezkuwi_primitives::Id as ParaId;
 use rstest::rstest;
 use zombienet_sdk::{
-	subxt::{OnlineClient, PolkadotConfig},
+	subxt::{OnlineClient, PezkuwiConfig},
 	NetworkConfig, NetworkConfigBuilder,
 };
 
@@ -44,7 +44,7 @@ async fn elastic_scaling_upgrade_to_3_cores(
 	let network = initialize_network(config).await?;
 
 	let alice = network.get_node("validator0")?;
-	let alice_client: OnlineClient<PolkadotConfig> = alice.wait_client().await?;
+	let alice_client: OnlineClient<PezkuwiConfig> = alice.wait_client().await?;
 
 	assign_cores(alice, PARA_ID, vec![0]).await?;
 
@@ -69,7 +69,7 @@ async fn elastic_scaling_upgrade_to_3_cores(
 	assign_cores(alice, PARA_ID, vec![1, 2]).await?;
 	let timeout_secs: u64 = 250;
 	let collator0 = network.get_node("collator0")?;
-	let collator0_client: OnlineClient<PolkadotConfig> = collator0.wait_client().await?;
+	let collator0_client: OnlineClient<PezkuwiConfig> = collator0.wait_client().await?;
 
 	let current_spec_version =
 		collator0_client.backend().current_runtime_version().await?.spec_version;
@@ -81,13 +81,10 @@ async fn elastic_scaling_upgrade_to_3_cores(
 	runtime_upgrade(&network, collator0, PARA_ID, wasm).await?;
 
 	let collator1 = network.get_node("collator1")?;
-	let collator1_client: OnlineClient<PolkadotConfig> = collator1.wait_client().await?;
+	let collator1_client: OnlineClient<PezkuwiConfig> = collator1.wait_client().await?;
 	let expected_spec_version = current_spec_version + 1;
 
-	log::info!(
-		"Waiting (up to {timeout_secs}s) for teyrchain runtime upgrade to version {}",
-		expected_spec_version
-	);
+	log::info!("Waiting (up to {timeout_secs}s) for teyrchain runtime upgrade to version {expected_spec_version}");
 	tokio::time::timeout(
 		Duration::from_secs(timeout_secs),
 		wait_for_upgrade(collator1_client, expected_spec_version),
@@ -145,16 +142,16 @@ async fn build_network_config(async_backing: bool) -> Result<NetworkConfig, anyh
 				.with_default_command("pezkuwi")
 				.with_default_image(images.polkadot.as_str())
 				.with_default_args(vec![("-lteyrchain=debug").into()])
-				.with_node(|node| node.with_name("validator0"))
-				.with_node(|node| node.with_name("validator1"))
-				.with_node(|node| node.with_name("validator2"))
+				.with_validator(|node| node.with_name("validator0"))
+				.with_validator(|node| node.with_name("validator1"))
+				.with_validator(|node| node.with_name("validator2"))
 		})
 		.with_teyrchain(|p| {
 			p.with_id(PARA_ID)
 				.with_default_command("test-teyrchain")
 				.onboard_as_teyrchain(false)
 				.with_chain(chain)
-				.with_default_image(images.pezcumulus.as_str())
+				.with_default_image(images.pezcumulus())
 				.with_collator(|n| {
 					n.with_name("collator0").validator(true).with_args(vec![
 						"--authoring=slot-based".into(),

@@ -32,12 +32,12 @@ thiserror = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-  "pezcumulus-primitives-core/runtime-benchmarks",
-  "pezkuwi-overseer/runtime-benchmarks",
-  "pezsc-client-api/runtime-benchmarks",
-  "pezsc-network/runtime-benchmarks",
-  "pezsp-api/runtime-benchmarks",
-  "pezsp-blockchain/runtime-benchmarks",
-  "pezsp-state-machine/runtime-benchmarks",
-  "pezsp-version/runtime-benchmarks",
+	"pezcumulus-primitives-core/runtime-benchmarks",
+	"pezkuwi-overseer/runtime-benchmarks",
+	"pezsc-client-api/runtime-benchmarks",
+	"pezsc-network/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
+	"pezsp-blockchain/runtime-benchmarks",
+	"pezsp-state-machine/runtime-benchmarks",
+	"pezsp-version/runtime-benchmarks",
 ]

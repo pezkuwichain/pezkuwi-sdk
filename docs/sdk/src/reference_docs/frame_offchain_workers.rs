@@ -11,8 +11,8 @@
 //!
 //! Recall from [`crate::reference_docs::wasm_meta_protocol`] that the node and the runtime
 //! communicate with one another via host functions and runtime APIs. Many of these interactions
-//! contribute to the actual state transition of the blockchain. For example [`pezsp_api::Core`] is the
-//! main runtime API that is called to execute new blocks.
+//! contribute to the actual state transition of the blockchain. For example [`pezsp_api::Core`] is
+//! the main runtime API that is called to execute new blocks.
 //!
 //! Offchain workers are in principle not different in any way: It is a runtime API exposed by the
 //! wasm blob ([`pezsp_offchain::OffchainWorkerApi`]), and the node software calls into it when it
@@ -77,8 +77,8 @@
 //! }
 //! ```
 //!
-//! Additionally, [`pezsp_runtime::offchain`] provides a set of utilities that can be used to moderate
-//! the execution of offchain workers.
+//! Additionally, [`pezsp_runtime::offchain`] provides a set of utilities that can be used to
+//! moderate the execution of offchain workers.
 //!
 //! ## Think Twice: Why Use Bizinikiwi's Offchain Workers?
 //!

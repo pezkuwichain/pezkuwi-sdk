@@ -16,18 +16,18 @@ workspace = true
 targets = ["x86_64-unknown-linux-gnu"]
 
 [dependencies]
+bizinikiwi-state-trie-migration-rpc = { optional = true, workspace = true, default-features = true }
 codec = { workspace = true }
+log = { workspace = true }
 pezframe-benchmarking = { optional = true, workspace = true }
 pezframe-support = { workspace = true }
 pezframe-system = { workspace = true }
-log = { workspace = true }
-remote-externalities = { optional = true, workspace = true, default-features = true }
-scale-info = { features = ["derive"], workspace = true }
-serde = { optional = true, workspace = true, default-features = true }
 pezsp-core = { workspace = true }
 pezsp-io = { workspace = true }
 pezsp-runtime = { workspace = true }
-bizinikiwi-state-trie-migration-rpc = { optional = true, workspace = true, default-features = true }
+remote-externalities = { optional = true, workspace = true, default-features = true }
+scale-info = { features = ["derive"], workspace = true }
+serde = { optional = true, workspace = true, default-features = true }
 thousands = { optional = true, workspace = true }
 zstd = { optional = true, workspace = true }
 
@@ -39,40 +39,40 @@ tokio = { features = ["macros"], workspace = true, default-features = true }
 [features]
 default = ["std"]
 std = [
-  "codec/std",
-  "pezframe-benchmarking?/std",
-  "pezframe-support/std",
-  "pezframe-system/std",
-  "log/std",
-  "pezpallet-balances/std",
-  "scale-info/std",
-  "pezsp-core/std",
-  "pezsp-io/std",
-  "pezsp-runtime/std",
-  "pezsp-tracing/std",
+	"codec/std",
+	"log/std",
+	"pezframe-benchmarking?/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
+	"pezpallet-balances/std",
+	"pezsp-core/std",
+	"pezsp-io/std",
+	"pezsp-runtime/std",
+	"pezsp-tracing/std",
+	"scale-info/std",
 ]
 runtime-benchmarks = [
-  "pezframe-benchmarking",
-  "pezframe-benchmarking/runtime-benchmarks",
-  "pezframe-support/runtime-benchmarks",
-  "pezframe-system/runtime-benchmarks",
-  "pezpallet-balances/runtime-benchmarks",
-  "remote-externalities?/runtime-benchmarks",
-  "pezsp-io/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "bizinikiwi-state-trie-migration-rpc?/runtime-benchmarks",
+	"bizinikiwi-state-trie-migration-rpc?/runtime-benchmarks",
+	"pezframe-benchmarking",
+	"pezframe-benchmarking/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezpallet-balances/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"remote-externalities?/runtime-benchmarks",
 ]
 try-runtime = [
-  "pezframe-support/try-runtime",
-  "pezframe-system/try-runtime",
-  "pezpallet-balances/try-runtime",
-  "pezsp-runtime/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezpallet-balances/try-runtime",
+	"pezsp-runtime/try-runtime",
 ]
 remote-test = [
-  "remote-externalities",
-  "serde",
-  "std",
-  "bizinikiwi-state-trie-migration-rpc",
-  "thousands",
-  "zstd",
+	"bizinikiwi-state-trie-migration-rpc",
+	"remote-externalities",
+	"serde",
+	"std",
+	"thousands",
+	"zstd",
 ]

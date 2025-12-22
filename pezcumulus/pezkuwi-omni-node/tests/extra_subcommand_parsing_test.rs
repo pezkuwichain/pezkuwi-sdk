@@ -14,16 +14,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#![allow(deprecated)]
+
 /// Integration tests that spawn the actual binary `pezkuwi-omni-node`
 /// using `assert_cmd`. We verify that the help text
 /// excludes the `export-chain-spec` sub‑command exactly as intended
+use assert_cmd::cargo::cargo_bin;
 use assert_cmd::Command;
 
 #[test]
 fn pezkuwi_omni_node_help_excludes_export_chain_spec() {
 	// Run `pezkuwi-omni-node --help` and capture stdout.
-	let output = Command::cargo_bin("pezkuwi-omni-node")
-		.expect("binary `pezkuwi-omni-node` should be built by the workspace")
+	let output = Command::new(cargo_bin("pezkuwi-omni-node"))
 		.arg("--help")
 		.assert()
 		.success()

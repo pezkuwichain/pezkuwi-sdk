@@ -40,13 +40,13 @@ bizinikiwi-test-runtime-client = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-  "pezsc-client-api/runtime-benchmarks",
-  "pezsc-consensus/runtime-benchmarks",
-  "pezsp-blockchain/runtime-benchmarks",
-  "pezsp-consensus-slots/runtime-benchmarks",
-  "pezsp-consensus/runtime-benchmarks",
-  "pezsp-inherents/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "pezsp-state-machine/runtime-benchmarks",
-  "bizinikiwi-test-runtime-client/runtime-benchmarks",
+	"bizinikiwi-test-runtime-client/runtime-benchmarks",
+	"pezsc-client-api/runtime-benchmarks",
+	"pezsc-consensus/runtime-benchmarks",
+	"pezsp-blockchain/runtime-benchmarks",
+	"pezsp-consensus-slots/runtime-benchmarks",
+	"pezsp-consensus/runtime-benchmarks",
+	"pezsp-inherents/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-state-machine/runtime-benchmarks",
 ]

@@ -10,7 +10,6 @@ use pezframe_support::traits::{Currency, Get};
 use pezpallet_balances::Pezpallet as Balances;
 use pezsp_runtime::traits::StaticLookup;
 extern crate alloc;
-use alloc::vec;
 
 // Gerekli trait kısıtlamalarını ana benchmarks bloğuna ekliyoruz.
 #[benchmarks(
@@ -22,10 +21,9 @@ mod benchmarks {
 	use super::*;
 
 	// Bu yardımcı fonksiyon, runtime'da tanımlanan Tiki koleksiyonunu oluşturur.
-	fn ensure_collection_exists<T: Config>()
+	fn ensure_collection_exists<T: Config + pezpallet_balances::Config>()
 	where
-		T::CollectionId: Copy + Default + PartialOrd,
-		T: pezpallet_balances::Config,
+		T::CollectionId: Default + PartialOrd,
 	{
 		let collection_id = T::TikiCollectionId::get();
 		// Koleksiyon sahibi olarak fonlanmış `whitelisted_caller`'ı kullanıyoruz.
@@ -51,10 +49,9 @@ mod benchmarks {
 	}
 
 	// Helper to ensure user has a citizen NFT
-	fn ensure_citizen_nft<T: Config>(who: T::AccountId) -> Result<(), DispatchError>
+	fn ensure_citizen_nft<T: Config + pezpallet_balances::Config>(who: T::AccountId) -> Result<(), DispatchError>
 	where
-		T::CollectionId: Copy + Default + PartialOrd,
-		T: pezpallet_balances::Config,
+		T::CollectionId: Default + PartialOrd,
 	{
 		ensure_collection_exists::<T>();
 
@@ -80,7 +77,7 @@ mod benchmarks {
 		ensure_citizen_nft::<T>(dest.clone())?;
 
 		#[extrinsic_call]
-		_(RawOrigin::Root, T::Lookup::unlookup(dest.clone()), tiki.clone());
+		_(RawOrigin::Root, T::Lookup::unlookup(dest.clone()), tiki);
 
 		// For non-unique roles, check user has the role
 		assert!(Tiki::<T>::user_tikis(&dest).contains(&tiki));
@@ -95,13 +92,13 @@ mod benchmarks {
 
 		// Ensure the dest account has a citizen NFT and the tiki before revoking
 		ensure_citizen_nft::<T>(dest.clone())?;
-		Tiki::<T>::internal_grant_role(&dest, tiki.clone())?; // Use internal function to grant without origin check
+		Tiki::<T>::internal_grant_role(&dest, tiki)?; // Use internal function to grant without origin check
 
 		// Verify the role was granted
 		assert!(Tiki::<T>::user_tikis(&dest).contains(&tiki));
 
 		#[extrinsic_call]
-		_(RawOrigin::Root, T::Lookup::unlookup(dest.clone()), tiki.clone());
+		_(RawOrigin::Root, T::Lookup::unlookup(dest.clone()), tiki);
 
 		// User should no longer have this role
 		assert!(!Tiki::<T>::user_tikis(&dest).contains(&tiki));
@@ -137,7 +134,7 @@ mod benchmarks {
 		ensure_citizen_nft::<T>(dest.clone())?;
 
 		#[extrinsic_call]
-		_(RawOrigin::Root, T::Lookup::unlookup(dest.clone()), tiki.clone());
+		_(RawOrigin::Root, T::Lookup::unlookup(dest.clone()), tiki);
 
 		// Rolün verildiğini doğrula
 		assert!(Tiki::<T>::has_tiki(&dest, &tiki));
@@ -154,7 +151,7 @@ mod benchmarks {
 		ensure_citizen_nft::<T>(dest.clone())?;
 
 		#[extrinsic_call]
-		_(RawOrigin::Root, T::Lookup::unlookup(dest.clone()), tiki.clone());
+		_(RawOrigin::Root, T::Lookup::unlookup(dest.clone()), tiki);
 
 		// Rolün verildiğini doğrula
 		assert!(Tiki::<T>::has_tiki(&dest, &tiki));

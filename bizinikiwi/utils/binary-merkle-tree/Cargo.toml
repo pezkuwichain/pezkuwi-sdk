@@ -28,9 +28,9 @@ debug = ["array-bytes", "log"]
 default = ["debug", "std"]
 runtime-benchmarks = ["pezsp-runtime/runtime-benchmarks"]
 std = [
-  "codec/std",
-  "hash-db/std",
-  "log/std",
-  "pezsp-core/std",
-  "pezsp-runtime/std",
+	"codec/std",
+	"hash-db/std",
+	"log/std",
+	"pezsp-core/std",
+	"pezsp-runtime/std",
 ]

@@ -94,16 +94,17 @@
 //! address is the first generic parameter of [`pezsp_runtime::generic::UncheckedExtrinsic`], and so
 //! can vary from chain to chain.
 //!
-//! The address type used on the Pezkuwi relay chain is [`pezsp_runtime::MultiAddress<AccountId32>`],
-//! where `AccountId32` is defined [here][`pezsp_core::crypto::AccountId32`]. When constructing a
-//! signed extrinsic to be submitted to a Pezkuwi node, you'll always use the
-//! [`pezsp_runtime::MultiAddress::Id`] variant to wrap your `AccountId32`.
+//! The address type used on the Pezkuwi relay chain is
+//! [`pezsp_runtime::MultiAddress<AccountId32>`], where `AccountId32` is defined
+//! [here][`pezsp_core::crypto::AccountId32`]. When constructing a signed extrinsic to be submitted
+//! to a Pezkuwi node, you'll always use the [`pezsp_runtime::MultiAddress::Id`] variant to wrap
+//! your `AccountId32`.
 //!
 //! #### signature
 //!
 //! This is the [SCALE encoded][frame::deps::codec] signature. The signature type is configured via
-//! the third generic parameter of [`pezsp_runtime::generic::UncheckedExtrinsic`], which determines the
-//! shape of the signature and signing algorithm that should be used.
+//! the third generic parameter of [`pezsp_runtime::generic::UncheckedExtrinsic`], which determines
+//! the shape of the signature and signing algorithm that should be used.
 //!
 //! The signature is obtained by signing the _signed payload_ bytes (see below on how this is
 //! constructed) using the private key associated with the address and correct algorithm.
@@ -123,9 +124,9 @@
 //! This is the concatenation of the [SCALE encoded][frame::deps::codec] bytes representing first a
 //! single byte describing the extension version (this is bumped whenever a change occurs in the
 //! transaction extension pipeline) followed by the bytes of each of the [_transaction
-//! extensions_][pezsp_runtime::traits::TransactionExtension], and are configured by the fourth generic
-//! parameter of [`pezsp_runtime::generic::UncheckedExtrinsic`]. Learn more about transaction
-//! extensions [here][crate::reference_docs::transaction_extensions].
+//! extensions_][pezsp_runtime::traits::TransactionExtension], and are configured by the fourth
+//! generic parameter of [`pezsp_runtime::generic::UncheckedExtrinsic`]. Learn more about
+//! transaction extensions [here][crate::reference_docs::transaction_extensions].
 //!
 //! When it comes to constructing an extrinsic, each transaction extension has two things that we
 //! are interested in here:
@@ -155,8 +156,8 @@
 //!
 //! A call can be anything that implements [`Encode`][frame::deps::codec::Encode]. In FRAME-based
 //! runtimes, a call is represented as an enum of enums, where the outer enum represents the FRAME
-//! pezpallet being called, and the inner enum represents the call being made within that pezpallet, and
-//! any arguments to it. Read more about the call enum
+//! pezpallet being called, and the inner enum represents the call being made within that pezpallet,
+//! and any arguments to it. Read more about the call enum
 //! [here][crate::reference_docs::frame_runtime_types].
 //!
 //! FRAME `Call` enums are automatically generated, and end up looking something like this:
@@ -172,16 +173,16 @@
 //! )
 //! ```
 //!
-//! - `pezpallet_index` is a single byte denoting the index of the pezpallet that we are calling into, and
-//!   is what the tag of the outermost enum will encode to.
+//! - `pezpallet_index` is a single byte denoting the index of the pezpallet that we are calling
+//!   into, and is what the tag of the outermost enum will encode to.
 //! - `call_index` is a single byte denoting the index of the call that we are making the pezpallet,
 //!   and is what the tag of the inner enum will encode to.
 //! - `call_args` are the SCALE encoded bytes for each of the arguments that the call expects, and
 //!   are typically provided as values to the inner enum.
 //!
 //! Information about the pallets that exist for a chain (including their indexes), the calls
-//! available in each pezpallet (including their indexes), and the arguments required for each call can
-//! be found in the metadata for the chain. For V15 metadata, this information [is
+//! available in each pezpallet (including their indexes), and the arguments required for each call
+//! can be found in the metadata for the chain. For V15 metadata, this information [is
 //! here][frame::deps::pezframe_support::__private::metadata::v15::PalletMetadata].
 //!
 //! # The Signed Payload Format
@@ -207,8 +208,8 @@
 //!
 //! Once we've concatenated those together, we hash the result using a Blake2 256bit hasher.
 //!
-//! The [`pezsp_runtime::generic::SignedPayload`] type takes care of assembling the correct payload for
-//! us, given `call_data` and a tuple of transaction extensions.
+//! The [`pezsp_runtime::generic::SignedPayload`] type takes care of assembling the correct payload
+//! for us, given `call_data` and a tuple of transaction extensions.
 //!
 //! # The General Transaction Format
 //!
@@ -224,8 +225,8 @@
 //!
 //! # Example Encoding
 //!
-//! Using [`pezsp_runtime::generic::UncheckedExtrinsic`], we can construct and encode an extrinsic as
-//! follows:
+//! Using [`pezsp_runtime::generic::UncheckedExtrinsic`], we can construct and encode an extrinsic
+//! as follows:
 #![doc = docify::embed!("./src/reference_docs/extrinsic_encoding.rs", encoding_example)]
 
 #[docify::export]

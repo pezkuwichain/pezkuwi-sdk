@@ -43,7 +43,8 @@
 //!
 //! ## Usage
 //!
-//! > Note: You can see a live example in the `pezstaging-node-cli` and `pez-kitchensink-runtime` crates.
+//! > Note: You can see a live example in the `pezstaging-node-cli` and `pez-kitchensink-runtime`
+//! > crates.
 //!
 //! The umbrella crate can be added to your runtime crate like this:
 //!

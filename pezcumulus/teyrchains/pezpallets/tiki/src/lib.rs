@@ -133,12 +133,10 @@ pub mod pezpallet {
 
 	#[pezpallet::config]
 	pub trait Config:
-		pezframe_system::Config
+		pezframe_system::Config<RuntimeEvent: From<Event<Self>>>
 		+ pezpallet_nfts::Config<ItemId = u32>
 		+ pezpallet_identity_kyc::Config
 	{
-		type RuntimeEvent: From<Event<Self>>
-			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		type AdminOrigin: EnsureOrigin<Self::RuntimeOrigin>;
 		type WeightInfo: weights::WeightInfo;
 
@@ -480,7 +478,7 @@ pub mod pezpallet {
 					if Self::citizen_nft(&account).is_none() {
 						// Mint NFT (log error but continue on failure)
 						if Self::mint_citizen_nft_for_user(&account).is_err() {
-							log::warn!("Failed to mint citizen NFT for account: {:?}", account);
+							log::warn!("Failed to mint citizen NFT for account: {account:?}");
 						}
 					}
 				}
@@ -661,7 +659,7 @@ pub mod pezpallet {
 			)
 			.is_err()
 			{
-				log::warn!("Failed to set metadata for NFT: {:?}", nft_id_u32);
+				log::warn!("Failed to set metadata for NFT: {nft_id_u32:?}");
 			}
 
 			Ok(())

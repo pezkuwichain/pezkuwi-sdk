@@ -30,7 +30,7 @@ async fn slot_based_3cores_test() -> Result<(), anyhow::Error> {
 			let r = r
 				.with_chain("pezkuwichain-local")
 				.with_default_command("pezkuwi")
-				.with_default_image(images.pezkuwi.as_str())
+				.with_default_image(images.pezkuwi())
 				.with_default_args(vec![("-lteyrchain=debug").into()])
 				.with_genesis_overrides(json!({
 					"configuration": {
@@ -48,17 +48,17 @@ async fn slot_based_3cores_test() -> Result<(), anyhow::Error> {
 				})
 				// Have to set a `with_node` outside of the loop below, so that `r` has the right
 				// type.
-				.with_node(|node| node.with_name("validator-0"));
+				.with_validator(|node| node.with_name("validator-0"));
 
 			(1..12)
-				.fold(r, |acc, i| acc.with_node(|node| node.with_name(&format!("validator-{i}"))))
+				.fold(r, |acc, i| acc.with_validator(|node| node.with_name(&format!("validator-{i}"))))
 		})
 		.with_teyrchain(|p| {
 			// Para 2100 uses the old elastic scaling mvp, which doesn't send the new UMP signal
 			// commitment for selecting the core index.
 			p.with_id(2100)
 				.with_default_command("test-teyrchain")
-				.with_default_image(images.pezcumulus.as_str())
+				.with_default_image(images.pezcumulus())
 				.with_chain("elastic-scaling-mvp")
 				.with_default_args(vec![
 					"--authoring=slot-based".into(),
@@ -71,7 +71,7 @@ async fn slot_based_3cores_test() -> Result<(), anyhow::Error> {
 			// for selecting the core index
 			p.with_id(2200)
 				.with_default_command("test-teyrchain")
-				.with_default_image(images.pezcumulus.as_str())
+				.with_default_image(images.pezcumulus())
 				.with_chain("elastic-scaling")
 				.with_default_args(vec![
 					"--authoring=slot-based".into(),

@@ -18,16 +18,16 @@ name = "bags-list"
 path = "src/main.rs"
 
 [dependencies]
-pezframe-election-provider-support = { features = [
-  "fuzz",
-], workspace = true, default-features = true }
 honggfuzz = { workspace = true }
+pezframe-election-provider-support = { features = [
+	"fuzz",
+], workspace = true, default-features = true }
 pezpallet-bags-list = { features = [
-  "fuzz",
+	"fuzz",
 ], workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-  "pezframe-election-provider-support/runtime-benchmarks",
-  "pezpallet-bags-list/runtime-benchmarks",
+	"pezframe-election-provider-support/runtime-benchmarks",
+	"pezpallet-bags-list/runtime-benchmarks",
 ]

@@ -1,7 +1,7 @@
 use crate as pezpallet_identity_kyc;
 use pezframe_support::{
 	construct_runtime, derive_impl, parameter_types,
-	traits::{ConstU128, ConstU32},
+	traits::ConstU128,
 };
 use pezframe_system::EnsureRoot;
 use pezsp_core::H256;
@@ -79,7 +79,6 @@ impl crate::types::CitizenNftProvider<AccountId> for MockCitizenNftProvider {
 }
 
 impl crate::Config for Test {
-	type RuntimeEvent = RuntimeEvent;
 	type Currency = Balances;
 	type GovernanceOrigin = EnsureRoot<Self::AccountId>;
 	type WeightInfo = ();
@@ -124,6 +123,7 @@ pub fn new_test_ext() -> pezsp_io::TestExternalities {
 }
 
 /// Build test externalities without founding citizens (for edge case tests)
+#[allow(dead_code)]
 pub fn new_test_ext_empty() -> pezsp_io::TestExternalities {
 	let mut t = pezframe_system::GenesisConfig::<Test>::default().build_storage().unwrap();
 

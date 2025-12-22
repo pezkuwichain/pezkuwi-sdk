@@ -39,12 +39,17 @@ pezkuwi-sdk = { workspace = true, features = ["bizinikiwi-build-script-utils"] }
 
 [features]
 default = ["std"]
-std = ["log/std", "pezkuwi-sdk/std", "pezsp-runtime/std", "teyrchain-template-runtime/std"]
+std = [
+	"log/std",
+	"pezkuwi-sdk/std",
+	"pezsp-runtime/std",
+	"teyrchain-template-runtime/std",
+]
 runtime-benchmarks = [
-  "pezkuwi-sdk/runtime-benchmarks",
-  "teyrchain-template-runtime/runtime-benchmarks",
+	"pezkuwi-sdk/runtime-benchmarks",
+	"teyrchain-template-runtime/runtime-benchmarks",
 ]
 try-runtime = [
-  "pezkuwi-sdk/try-runtime",
-  "teyrchain-template-runtime/try-runtime",
+	"pezkuwi-sdk/try-runtime",
+	"teyrchain-template-runtime/try-runtime",
 ]

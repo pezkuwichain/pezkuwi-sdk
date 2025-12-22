@@ -18,8 +18,8 @@ color-eyre = { workspace = true }
 
 # Local
 pezkuwi-omni-node-lib = { workspace = true, features = [
-  "pezkuwichain-native",
-  "zagros-native",
+	"pezkuwichain-native",
+	"zagros-native",
 ] }
 
 [dev-dependencies]

@@ -14,16 +14,16 @@
 //!
 //! #### Pezcumulus Pallets
 //!
-//! A teyrchain runtime should use a number of pallets that are provided by Pezcumulus and Bizinikiwi.
-//! Notably:
+//! A teyrchain runtime should use a number of pallets that are provided by Pezcumulus and
+//! Bizinikiwi. Notably:
 //!
 //! - [`pezframe-system`](frame::prelude::pezframe_system), like all FRAME-based runtimes.
 //! - [`pezcumulus_pezpallet_teyrchain_system`]
 //! - [`teyrchain_info`]
 #![doc = docify::embed!("./src/pezkuwi_sdk/pezcumulus.rs", system_pallets)]
 //!
-//! Given that all Pezcumulus-based runtimes use a simple Aura-based consensus mechanism, the following
-//! pallets also need to be added:
+//! Given that all Pezcumulus-based runtimes use a simple Aura-based consensus mechanism, the
+//! following pallets also need to be added:
 //!
 //! - [`pezpallet_timestamp`]
 //! - [`pezpallet_aura`]

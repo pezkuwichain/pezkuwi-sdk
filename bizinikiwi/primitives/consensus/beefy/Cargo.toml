@@ -17,8 +17,6 @@ targets = ["x86_64-unknown-linux-gnu"]
 
 [dependencies]
 codec = { features = ["derive"], workspace = true }
-scale-info = { features = ["derive"], workspace = true }
-serde = { optional = true, features = ["alloc", "derive"], workspace = true }
 pezsp-api = { workspace = true }
 pezsp-application-crypto = { workspace = true }
 pezsp-core = { workspace = true }
@@ -28,6 +26,8 @@ pezsp-keystore = { workspace = true }
 pezsp-mmr-primitives = { workspace = true }
 pezsp-runtime = { workspace = true }
 pezsp-weights = { workspace = true }
+scale-info = { features = ["derive"], workspace = true }
+serde = { optional = true, features = ["alloc", "derive"], workspace = true }
 strum = { features = ["derive"], workspace = true }
 
 [dev-dependencies]
@@ -37,39 +37,39 @@ w3f-bls = { features = ["std"], workspace = true, default-features = true }
 [features]
 default = ["std"]
 std = [
-  "codec/std",
-  "scale-info/std",
-  "serde/std",
-  "pezsp-api/std",
-  "pezsp-application-crypto/std",
-  "pezsp-core/std",
-  "pezsp-crypto-hashing/std",
-  "pezsp-io/std",
-  "pezsp-keystore/std",
-  "pezsp-mmr-primitives/std",
-  "pezsp-runtime/std",
-  "pezsp-weights/std",
-  "strum/std",
+	"codec/std",
+	"pezsp-api/std",
+	"pezsp-application-crypto/std",
+	"pezsp-core/std",
+	"pezsp-crypto-hashing/std",
+	"pezsp-io/std",
+	"pezsp-keystore/std",
+	"pezsp-mmr-primitives/std",
+	"pezsp-runtime/std",
+	"pezsp-weights/std",
+	"scale-info/std",
+	"serde/std",
+	"strum/std",
 ]
 
 # Serde support without relying on std features.
 serde = [
-  "dep:serde",
-  "scale-info/serde",
-  "pezsp-application-crypto/serde",
-  "pezsp-core/serde",
-  "pezsp-runtime/serde",
+	"dep:serde",
+	"pezsp-application-crypto/serde",
+	"pezsp-core/serde",
+	"pezsp-runtime/serde",
+	"scale-info/serde",
 ]
 
 # This feature adds BLS crypto primitives. It should not be used in production since
 # the BLS implementation and interface may still be subject to significant change.
 bls-experimental = [
-  "pezsp-application-crypto/bls-experimental",
-  "pezsp-core/bls-experimental",
+	"pezsp-application-crypto/bls-experimental",
+	"pezsp-core/bls-experimental",
 ]
 runtime-benchmarks = [
-  "pezsp-api/runtime-benchmarks",
-  "pezsp-io/runtime-benchmarks",
-  "pezsp-mmr-primitives/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-mmr-primitives/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]

@@ -29,18 +29,18 @@ bizinikiwi-wasm-builder = { optional = true, workspace = true, default-features 
 default = ["std"]
 no_std = []
 std = [
-  "codec/std",
-  "pezcumulus-pezpallet-teyrchain-system/std",
-  "pezsp-core/std",
-  "pezsp-runtime/std",
-  "pezsp-state-machine/std",
-  "pezsp-trie/std",
-  "bizinikiwi-wasm-builder",
+	"bizinikiwi-wasm-builder",
+	"codec/std",
+	"pezcumulus-pezpallet-teyrchain-system/std",
+	"pezsp-core/std",
+	"pezsp-runtime/std",
+	"pezsp-state-machine/std",
+	"pezsp-trie/std",
 ]
 runtime-benchmarks = [
-  "pezcumulus-pezpallet-teyrchain-system/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "pezsp-state-machine/runtime-benchmarks",
-  "pezsp-trie/runtime-benchmarks",
-  "bizinikiwi-wasm-builder?/runtime-benchmarks",
+	"bizinikiwi-wasm-builder?/runtime-benchmarks",
+	"pezcumulus-pezpallet-teyrchain-system/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-state-machine/runtime-benchmarks",
+	"pezsp-trie/runtime-benchmarks",
 ]

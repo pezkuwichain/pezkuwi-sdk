@@ -33,27 +33,27 @@ xcm-executor = { workspace = true }
 [features]
 default = ["std"]
 std = [
-  "codec/std",
-  "pezframe-support/std",
-  "pezframe-system/std",
-  "pezpallet-xcm/std",
-  "pezsp-arithmetic/std",
-  "pezsp-std/std",
-  "tracing/std",
-  "xcm-builder/std",
-  "xcm-executor/std",
-  "xcm/std",
+	"codec/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
+	"pezpallet-xcm/std",
+	"pezsp-arithmetic/std",
+	"pezsp-std/std",
+	"tracing/std",
+	"xcm-builder/std",
+	"xcm-executor/std",
+	"xcm/std",
 ]
 runtime-benchmarks = [
-  "pezframe-support/runtime-benchmarks",
-  "pezframe-system/runtime-benchmarks",
-  "pezpallet-xcm/runtime-benchmarks",
-  "xcm-builder/runtime-benchmarks",
-  "xcm-executor/runtime-benchmarks",
-  "xcm/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezpallet-xcm/runtime-benchmarks",
+	"xcm-builder/runtime-benchmarks",
+	"xcm-executor/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
 ]
 try-runtime = [
-  "pezframe-support/try-runtime",
-  "pezframe-system/try-runtime",
-  "pezpallet-xcm/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezpallet-xcm/try-runtime",
 ]

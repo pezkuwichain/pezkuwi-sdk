@@ -208,7 +208,7 @@ impl<Client: EthRpcClient + Send + Sync> TransactionBuilder<Client> {
 
 #[test]
 fn test_dummy_payload_has_correct_len() {
-	let signer = Account::from(subxt_signer::eth::dev::ethan());
+	let signer = Account::from(pezkuwi_subxt_signer::eth::dev::ethan());
 	let unsigned_tx: TransactionUnsigned =
 		TransactionLegacyUnsigned { input: vec![42u8; 100].into(), ..Default::default() }.into();
 

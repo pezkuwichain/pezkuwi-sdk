@@ -138,5 +138,5 @@ mod benchmarks {
 		assert_eq!(EraLength::<T>::get(), new_era_length);
 	}
 
-	impl_benchmark_test_suite!(ValidatorPool, crate::mock::new_test_ext(), crate::mock::Test);
+	impl_benchmark_test_suite!(Pezpallet, crate::mock::new_test_ext(), crate::mock::Test);
 }

@@ -29,13 +29,13 @@ pezsp-runtime = { workspace = true }
 
 pez-minimal-template-runtime = { workspace = true }
 pezkuwi-sdk = { workspace = true, features = [
-  "experimental",
-  "node",
-  "pezsp-api",
-  "pezsp-block-builder",
-  "pezsp-genesis-builder",
-  "pezsp-io",
-  "pezsp-timestamp",
+	"experimental",
+	"node",
+	"pezsp-api",
+	"pezsp-block-builder",
+	"pezsp-genesis-builder",
+	"pezsp-io",
+	"pezsp-timestamp",
 ] }
 
 [build-dependencies]
@@ -45,6 +45,6 @@ pezkuwi-sdk = { workspace = true, features = ["bizinikiwi-build-script-utils"] }
 default = ["std"]
 std = ["pez-minimal-template-runtime/std", "pezkuwi-sdk/std"]
 runtime-benchmarks = [
-  "pez-minimal-template-runtime/runtime-benchmarks",
-  "pezkuwi-sdk/runtime-benchmarks",
+	"pez-minimal-template-runtime/runtime-benchmarks",
+	"pezkuwi-sdk/runtime-benchmarks",
 ]

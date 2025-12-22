@@ -21,10 +21,9 @@ name = "bench"
 harness = false
 
 [dependencies]
+bizinikiwi-test-runtime-client = { workspace = true }
 codec = { workspace = true, default-features = true }
-rustversion = { workspace = true }
 pezsc-block-builder = { workspace = true, default-features = true }
-scale-info = { features = ["derive"], workspace = true }
 pezsp-api = { workspace = true, default-features = true }
 pezsp-consensus = { workspace = true, default-features = true }
 pezsp-externalities = { workspace = true, default-features = true }
@@ -33,7 +32,8 @@ pezsp-runtime = { workspace = true, default-features = true }
 pezsp-state-machine = { workspace = true, default-features = true }
 pezsp-tracing = { workspace = true, default-features = true }
 pezsp-version = { workspace = true, default-features = true }
-bizinikiwi-test-runtime-client = { workspace = true }
+rustversion = { workspace = true }
+scale-info = { features = ["derive"], workspace = true }
 trybuild = { workspace = true }
 
 [dev-dependencies]
@@ -47,11 +47,11 @@ static_assertions = { workspace = true, default-features = true }
 enable-pezstaging-api = []
 disable-ui-tests = []
 runtime-benchmarks = [
-  "pezsc-block-builder/runtime-benchmarks",
-  "pezsp-api/runtime-benchmarks",
-  "pezsp-consensus/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "pezsp-state-machine/runtime-benchmarks",
-  "pezsp-version/runtime-benchmarks",
-  "bizinikiwi-test-runtime-client/runtime-benchmarks",
+	"bizinikiwi-test-runtime-client/runtime-benchmarks",
+	"pezsc-block-builder/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
+	"pezsp-consensus/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-state-machine/runtime-benchmarks",
+	"pezsp-version/runtime-benchmarks",
 ]

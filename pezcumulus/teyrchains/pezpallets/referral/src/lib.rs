@@ -120,9 +120,11 @@ pub mod pezpallet {
 	pub struct Pezpallet<T>(_);
 
 	#[pezpallet::config]
-	pub trait Config: pezframe_system::Config + pezpallet_identity_kyc::Config + TypeInfo {
-		type RuntimeEvent: From<Event<Self>>
-			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+	pub trait Config:
+		pezframe_system::Config<RuntimeEvent: From<Event<Self>>>
+		+ pezpallet_identity_kyc::Config
+		+ TypeInfo
+	{
 		type WeightInfo: weights::WeightInfo;
 
 		/// Default referrer account - used when no referrer is specified

@@ -39,9 +39,9 @@
 //!
 //! Self-contained pieces of logic that execute after a runtime upgrade are called "Migrations".
 //!
-//! The typical use case of a migration is to 'migrate' pezpallet storage from one layout to another,
-//! for example when the encoding of a storage item is changed. However, they can also execute
-//! arbitrary logic such as:
+//! The typical use case of a migration is to 'migrate' pezpallet storage from one layout to
+//! another, for example when the encoding of a storage item is changed. However, they can also
+//! execute arbitrary logic such as:
 //!
 //! - Calling arbitrary pezpallet methods.
 //! - Mutating arbitrary on-chain state.

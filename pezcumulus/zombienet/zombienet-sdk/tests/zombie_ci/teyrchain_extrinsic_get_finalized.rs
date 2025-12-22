@@ -5,10 +5,10 @@ use anyhow::anyhow;
 use tokio::time::Duration;
 
 use crate::utils::{initialize_network, BEST_BLOCK_METRIC};
-use pezcumulus_zombienet_sdk_helpers::submit_extrinsic_and_wait_for_finalization_success_with_timeout;
+use pezcumulus_zombienet_sdk_helpers::{submit_extrinsic_and_wait_for_finalization_success_with_timeout};
 use zombienet_orchestrator::network::node::{LogLineCount, LogLineCountOptions};
 use zombienet_sdk::{
-	subxt::{self, dynamic::Value, OnlineClient, PolkadotConfig},
+	subxt::{self, dynamic::Value, OnlineClient, PezkuwiConfig},
 	subxt_signer::sr25519::dev,
 	NetworkConfig, NetworkConfigBuilder,
 };
@@ -105,7 +105,7 @@ async fn teyrchain_extrinsic_gets_finalized() -> Result<(), anyhow::Error> {
 
 	log::info!("Ensuring teyrchain extrinsic gets finalized");
 	let call = subxt::dynamic::tx("System", "remark", vec![Value::from_bytes("xxx".as_bytes())]);
-	let charlie_client: OnlineClient<PolkadotConfig> = charlie.wait_client().await?;
+	let charlie_client: OnlineClient<PezkuwiConfig> = charlie.wait_client().await?;
 
 	let res = submit_extrinsic_and_wait_for_finalization_success_with_timeout(
 		&charlie_client,
@@ -140,14 +140,14 @@ async fn build_network_config() -> Result<NetworkConfig, anyhow::Error> {
 			r.with_chain("pezkuwichain-local")
 				.with_default_command("pezkuwi")
 				.with_default_image(images.polkadot.as_str())
-				.with_node(|node| node.with_name("alice"))
-				.with_node(|node| node.with_name("bob"))
+				.with_validator(|node| node.with_name("alice"))
+				.with_validator(|node| node.with_name("bob"))
 		})
 		.with_teyrchain(|p| {
 			p.with_id(PARA_ID)
 				.with_chain("asset-hub-pezkuwichain-local")
 				.with_default_command("pezkuwi-teyrchain")
-				.with_default_image(images.pezcumulus.as_str())
+				.with_default_image(images.pezcumulus())
 				.with_collator(|n| {
 					n.with_name("charlie").validator(true).with_args(vec![
 						("--force-authoring").into(),

@@ -94,6 +94,7 @@ impl pezpallet_assets::Config for Test {
 	type RemoveItemsLimit = ConstU32<1000>;
 	type CallbackHandle = ();
 	type Holder = ();
+	type ReserveData = ();
 	#[cfg(feature = "runtime-benchmarks")]
 	type BenchmarkHelper = ();
 }
@@ -109,7 +110,6 @@ parameter_types! {
 }
 
 impl pezpallet_presale::Config for Test {
-	type RuntimeEvent = RuntimeEvent;
 	type AssetId = u32;
 	type Balance = u128;
 	type Assets = Assets;
@@ -174,7 +174,7 @@ pub fn create_assets() {
 pub fn mint_assets(asset_id: u32, account: u64, amount: u128) {
 	use pezframe_support::assert_ok;
 
-	assert_ok!(Assets::mint(RuntimeOrigin::signed(1), asset_id.into(), account, amount));
+	assert_ok!(Assets::mint(RuntimeOrigin::signed(1), asset_id, account, amount));
 }
 
 // Helper to get presale sub-account treasury for a specific presale ID

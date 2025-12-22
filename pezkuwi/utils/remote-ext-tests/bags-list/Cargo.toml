@@ -28,8 +28,8 @@ tokio = { features = ["macros"], workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-  "pezframe-system/runtime-benchmarks",
-  "pezpallet-bags-list-remote-tests/runtime-benchmarks",
-  "zagros-runtime-constants/runtime-benchmarks",
-  "zagros-runtime/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezpallet-bags-list-remote-tests/runtime-benchmarks",
+	"zagros-runtime-constants/runtime-benchmarks",
+	"zagros-runtime/runtime-benchmarks",
 ]

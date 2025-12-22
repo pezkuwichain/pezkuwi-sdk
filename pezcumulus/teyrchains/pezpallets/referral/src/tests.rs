@@ -1,5 +1,5 @@
 use crate::{
-	mock::*, pezpallet::ReferralInfo, Error, Event, PendingReferrals, ReferralCount, Referrals,
+	mock::*, Error, Event, PendingReferrals, ReferralCount, Referrals,
 	ReferrerStatsStorage,
 };
 use pezframe_support::{assert_noop, assert_ok};
@@ -215,25 +215,25 @@ fn referral_score_tier_0_to_10() {
 
 	new_test_ext().execute_with(|| {
 		// Update stats directly for testing
-		ReferrerStatsStorage::<Test>::mutate(&REFERRER, |stats| {
+		ReferrerStatsStorage::<Test>::mutate(REFERRER, |stats| {
 			stats.total_referrals = 0;
 		});
 		assert_eq!(ReferralPallet::get_referral_score(&REFERRER), 0);
 
 		// 1 referral = 10 points
-		ReferrerStatsStorage::<Test>::mutate(&REFERRER, |stats| {
+		ReferrerStatsStorage::<Test>::mutate(REFERRER, |stats| {
 			stats.total_referrals = 1;
 		});
 		assert_eq!(ReferralPallet::get_referral_score(&REFERRER), 10);
 
 		// 5 referrals = 50 points
-		ReferrerStatsStorage::<Test>::mutate(&REFERRER, |stats| {
+		ReferrerStatsStorage::<Test>::mutate(REFERRER, |stats| {
 			stats.total_referrals = 5;
 		});
 		assert_eq!(ReferralPallet::get_referral_score(&REFERRER), 50);
 
 		// 10 referrals = 100 points
-		ReferrerStatsStorage::<Test>::mutate(&REFERRER, |stats| {
+		ReferrerStatsStorage::<Test>::mutate(REFERRER, |stats| {
 			stats.total_referrals = 10;
 		});
 		assert_eq!(ReferralPallet::get_referral_score(&REFERRER), 100);
@@ -246,19 +246,19 @@ fn referral_score_tier_11_to_50() {
 
 	new_test_ext().execute_with(|| {
 		// 11 referrals: 100 + (1 * 5) = 105
-		ReferrerStatsStorage::<Test>::mutate(&REFERRER, |stats| {
+		ReferrerStatsStorage::<Test>::mutate(REFERRER, |stats| {
 			stats.total_referrals = 11;
 		});
 		assert_eq!(ReferralPallet::get_referral_score(&REFERRER), 105);
 
 		// 20 referrals: 100 + (10 * 5) = 150
-		ReferrerStatsStorage::<Test>::mutate(&REFERRER, |stats| {
+		ReferrerStatsStorage::<Test>::mutate(REFERRER, |stats| {
 			stats.total_referrals = 20;
 		});
 		assert_eq!(ReferralPallet::get_referral_score(&REFERRER), 150);
 
 		// 50 referrals: 100 + (40 * 5) = 300
-		ReferrerStatsStorage::<Test>::mutate(&REFERRER, |stats| {
+		ReferrerStatsStorage::<Test>::mutate(REFERRER, |stats| {
 			stats.total_referrals = 50;
 		});
 		assert_eq!(ReferralPallet::get_referral_score(&REFERRER), 300);
@@ -271,19 +271,19 @@ fn referral_score_tier_51_to_100() {
 
 	new_test_ext().execute_with(|| {
 		// 51 referrals: 300 + (1 * 4) = 304
-		ReferrerStatsStorage::<Test>::mutate(&REFERRER, |stats| {
+		ReferrerStatsStorage::<Test>::mutate(REFERRER, |stats| {
 			stats.total_referrals = 51;
 		});
 		assert_eq!(ReferralPallet::get_referral_score(&REFERRER), 304);
 
 		// 75 referrals: 300 + (25 * 4) = 400
-		ReferrerStatsStorage::<Test>::mutate(&REFERRER, |stats| {
+		ReferrerStatsStorage::<Test>::mutate(REFERRER, |stats| {
 			stats.total_referrals = 75;
 		});
 		assert_eq!(ReferralPallet::get_referral_score(&REFERRER), 400);
 
 		// 100 referrals: 300 + (50 * 4) = 500
-		ReferrerStatsStorage::<Test>::mutate(&REFERRER, |stats| {
+		ReferrerStatsStorage::<Test>::mutate(REFERRER, |stats| {
 			stats.total_referrals = 100;
 		});
 		assert_eq!(ReferralPallet::get_referral_score(&REFERRER), 500);
@@ -296,13 +296,13 @@ fn referral_score_capped_at_500() {
 
 	new_test_ext().execute_with(|| {
 		// 101+ referrals capped at 500
-		ReferrerStatsStorage::<Test>::mutate(&REFERRER, |stats| {
+		ReferrerStatsStorage::<Test>::mutate(REFERRER, |stats| {
 			stats.total_referrals = 101;
 		});
 		assert_eq!(ReferralPallet::get_referral_score(&REFERRER), 500);
 
 		// Even 1000 referrals = 500
-		ReferrerStatsStorage::<Test>::mutate(&REFERRER, |stats| {
+		ReferrerStatsStorage::<Test>::mutate(REFERRER, |stats| {
 			stats.total_referrals = 1000;
 		});
 		assert_eq!(ReferralPallet::get_referral_score(&REFERRER), 500);
@@ -315,7 +315,7 @@ fn referral_score_with_balanced_penalty() {
 
 	new_test_ext().execute_with(|| {
 		// 10 good referrals = 100 points
-		ReferrerStatsStorage::<Test>::mutate(&REFERRER, |stats| {
+		ReferrerStatsStorage::<Test>::mutate(REFERRER, |stats| {
 			stats.total_referrals = 10;
 			stats.revoked_referrals = 0;
 		});
@@ -325,7 +325,7 @@ fn referral_score_with_balanced_penalty() {
 		// Penalty: (4 * 10) / 4 = 10 points deducted
 		// Base score: 6 * 10 = 60
 		// Final: 60 - 10 = 50
-		ReferrerStatsStorage::<Test>::mutate(&REFERRER, |stats| {
+		ReferrerStatsStorage::<Test>::mutate(REFERRER, |stats| {
 			stats.total_referrals = 10;
 			stats.revoked_referrals = 4;
 		});
@@ -335,7 +335,7 @@ fn referral_score_with_balanced_penalty() {
 		// Penalty: (8 * 10) / 4 = 20 points deducted
 		// Base score: 100 + (2 * 5) = 110
 		// Final: 110 - 20 = 90
-		ReferrerStatsStorage::<Test>::mutate(&REFERRER, |stats| {
+		ReferrerStatsStorage::<Test>::mutate(REFERRER, |stats| {
 			stats.total_referrals = 20;
 			stats.revoked_referrals = 8;
 		});
@@ -353,7 +353,7 @@ fn referral_score_cannot_go_negative() {
 		// Penalty: (5 * 10) / 4 = 12 points
 		// Base score: 0
 		// Final: 0 - 12 = 0 (saturating_sub)
-		ReferrerStatsStorage::<Test>::mutate(&REFERRER, |stats| {
+		ReferrerStatsStorage::<Test>::mutate(REFERRER, |stats| {
 			stats.total_referrals = 5;
 			stats.revoked_referrals = 5;
 		});
@@ -398,7 +398,7 @@ fn get_inviter_returns_none_for_non_referred() {
 
 #[test]
 fn force_confirm_referral_works() {
-	use crate::types::{InviterProvider, ReferralScoreProvider};
+	use crate::types::InviterProvider;
 
 	new_test_ext().execute_with(|| {
 		// Force confirm referral (sudo-only)

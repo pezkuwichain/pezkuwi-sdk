@@ -287,7 +287,6 @@ impl pezpallet_identity_kyc::types::CitizenNftProvider<AccountId> for CitizenNft
 }
 
 impl pezpallet_identity_kyc::Config for Runtime {
-	type RuntimeEvent = RuntimeEvent;
 	type Currency = Balances;
 	// Kademeli yetki devri: Root → Diwan → Teknik Komisyon
 	// Vatandaşlık kararları için Divan (Anayasa Mahkemesi) yetkili
@@ -358,7 +357,6 @@ impl pezframe_support::traits::EnsureOrigin<RuntimeOrigin> for PerwerdeAdminOrig
 }
 
 impl pezpallet_perwerde::Config for Runtime {
-	type RuntimeEvent = RuntimeEvent;
 	type AdminOrigin = PerwerdeAdminOrigin;
 	type WeightInfo = pezpallet_perwerde::weights::BizinikiwiWeight<Runtime>;
 	type MaxCourseNameLength = MaxCourseNameLength;
@@ -380,7 +378,6 @@ parameter_types! {
 }
 
 impl pezpallet_referral::Config for Runtime {
-	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo = pezpallet_referral::weights::BizinikiwiWeight<Runtime>;
 	type DefaultReferrer = DefaultReferrer;
 	type PenaltyPerRevocation = PenaltyPerRevocation;
@@ -444,7 +441,6 @@ parameter_types! {
 }
 
 impl pezpallet_tiki::Config for Runtime {
-	type RuntimeEvent = RuntimeEvent;
 	// Kademeli yetki devri: Root → Teknik Komisyon
 	// NFT/Rol yönetimi için Teknik Komisyon yetkili
 	type AdminOrigin = crate::RootOrTechnicalCommittee;
@@ -496,7 +492,6 @@ impl pezpallet_staking_score::StakingInfoProvider<AccountId, Balance> for Stakin
 }
 
 impl pezpallet_staking_score::Config for Runtime {
-	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo = pezpallet_staking_score::weights::BizinikiwiWeight<Runtime>;
 	type Balance = Balance;
 	type StakingInfo = StakingInfoProvider;
@@ -613,7 +608,6 @@ impl pezpallet_trust::CitizenshipStatusProvider<AccountId> for CitizenshipSource
 }
 
 impl pezpallet_trust::Config for Runtime {
-	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo = pezpallet_trust::weights::BizinikiwiWeight<Runtime>;
 	type Score = u128;
 	type ScoreMultiplierBase = ScoreMultiplierBase;
@@ -833,7 +827,6 @@ impl pezpallet_tiki::TikiScoreProvider<AccountId> for WelatiTikiScoreSource {
 }
 
 impl pezpallet_welati::Config for Runtime {
-	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo = ();
 	type Randomness = TimestampRandomness;
 	type RuntimeCall = RuntimeCall;

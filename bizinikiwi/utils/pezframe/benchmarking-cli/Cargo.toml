@@ -23,22 +23,20 @@ chrono = { workspace = true }
 clap = { features = ["derive"], workspace = true }
 codec = { workspace = true, default-features = true }
 comfy-table = { workspace = true }
-pezcumulus-client-teyrchain-inherent = { workspace = true, default-features = true }
-pezcumulus-primitives-proof-size-hostfunction = { workspace = true, default-features = true }
 env_filter = { workspace = true }
-pezframe-benchmarking = { workspace = true, default-features = true }
 frame-storage-access-test-runtime = { workspace = true, default-features = true }
-pezframe-support = { workspace = true, default-features = true }
-pezframe-system = { workspace = true, default-features = true }
 gethostname = { workspace = true }
 handlebars = { workspace = true }
 itertools = { workspace = true }
 linked-hash-map = { workspace = true }
 log = { workspace = true, default-features = true }
+pezcumulus-client-teyrchain-inherent = { workspace = true, default-features = true }
+pezcumulus-primitives-proof-size-hostfunction = { workspace = true, default-features = true }
+pezframe-benchmarking = { workspace = true, default-features = true }
+pezframe-support = { workspace = true, default-features = true }
+pezframe-system = { workspace = true, default-features = true }
 pezkuwi-primitives = { workspace = true, default-features = true }
 pezkuwi-teyrchain-primitives = { workspace = true, default-features = true }
-rand = { features = ["small_rng"], workspace = true, default-features = true }
-rand_pcg = { workspace = true }
 pezsc-block-builder = { workspace = true, default-features = true }
 pezsc-chain-spec = { workspace = true }
 pezsc-cli = { workspace = true, default-features = false }
@@ -50,8 +48,6 @@ pezsc-executor-wasmtime = { workspace = true }
 pezsc-runtime-utilities = { workspace = true, default-features = true }
 pezsc-service = { workspace = true, default-features = false }
 pezsc-sysinfo = { workspace = true, default-features = true }
-serde = { workspace = true, default-features = true }
-serde_json = { workspace = true, default-features = true }
 pezsp-api = { workspace = true, default-features = true }
 pezsp-block-builder = { workspace = true, default-features = true }
 pezsp-blockchain = { workspace = true, default-features = true }
@@ -71,52 +67,56 @@ pezsp-transaction-pool = { workspace = true, default-features = true }
 pezsp-trie = { workspace = true, default-features = true }
 pezsp-version = { workspace = true, default-features = true }
 pezsp-wasm-interface = { workspace = true, default-features = true }
-subxt = { workspace = true, features = ["native"] }
-subxt-signer = { workspace = true, features = ["unstable-eth"] }
+rand = { features = ["small_rng"], workspace = true, default-features = true }
+rand_pcg = { workspace = true }
+serde = { workspace = true, default-features = true }
+serde_json = { workspace = true, default-features = true }
+pezkuwi-subxt = { workspace = true, features = ["native"] }
+pezkuwi-subxt-signer = { workspace = true, features = ["unstable-eth", "sr25519", "subxt"] }
 thiserror = { workspace = true }
 thousands = { workspace = true }
 
 [dev-dependencies]
-pezcumulus-test-runtime = { workspace = true, default-features = true }
 bizinikiwi-test-runtime = { workspace = true, default-features = true }
+pezcumulus-test-runtime = { workspace = true, default-features = true }
 zagros-runtime = { workspace = true, default-features = true }
 
 [features]
 default = []
 runtime-benchmarks = [
-  "pezcumulus-client-teyrchain-inherent/runtime-benchmarks",
-  "pezcumulus-primitives-proof-size-hostfunction/runtime-benchmarks",
-  "pezcumulus-test-runtime/runtime-benchmarks",
-  "pezframe-benchmarking/runtime-benchmarks",
-  "frame-storage-access-test-runtime/runtime-benchmarks",
-  "pezframe-support/runtime-benchmarks",
-  "pezframe-system/runtime-benchmarks",
-  "pezkuwi-primitives/runtime-benchmarks",
-  "pezkuwi-teyrchain-primitives/runtime-benchmarks",
-  "pezsc-block-builder/runtime-benchmarks",
-  "pezsc-chain-spec/runtime-benchmarks",
-  "pezsc-cli/runtime-benchmarks",
-  "pezsc-client-api/runtime-benchmarks",
-  "pezsc-client-db/runtime-benchmarks",
-  "pezsc-executor-wasmtime/runtime-benchmarks",
-  "pezsc-executor/runtime-benchmarks",
-  "pezsc-runtime-utilities/runtime-benchmarks",
-  "pezsc-service/runtime-benchmarks",
-  "pezsc-sysinfo/runtime-benchmarks",
-  "pezsp-api/runtime-benchmarks",
-  "pezsp-block-builder/runtime-benchmarks",
-  "pezsp-blockchain/runtime-benchmarks",
-  "pezsp-genesis-builder/runtime-benchmarks",
-  "pezsp-inherents/runtime-benchmarks",
-  "pezsp-io/runtime-benchmarks",
-  "pezsp-runtime-interface/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "pezsp-state-machine/runtime-benchmarks",
-  "pezsp-timestamp/runtime-benchmarks",
-  "pezsp-transaction-pool/runtime-benchmarks",
-  "pezsp-trie/runtime-benchmarks",
-  "pezsp-version/runtime-benchmarks",
-  "bizinikiwi-test-runtime/runtime-benchmarks",
-  "zagros-runtime/runtime-benchmarks",
+	"bizinikiwi-test-runtime/runtime-benchmarks",
+	"frame-storage-access-test-runtime/runtime-benchmarks",
+	"pezcumulus-client-teyrchain-inherent/runtime-benchmarks",
+	"pezcumulus-primitives-proof-size-hostfunction/runtime-benchmarks",
+	"pezcumulus-test-runtime/runtime-benchmarks",
+	"pezframe-benchmarking/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
+	"pezsc-block-builder/runtime-benchmarks",
+	"pezsc-chain-spec/runtime-benchmarks",
+	"pezsc-cli/runtime-benchmarks",
+	"pezsc-client-api/runtime-benchmarks",
+	"pezsc-client-db/runtime-benchmarks",
+	"pezsc-executor-wasmtime/runtime-benchmarks",
+	"pezsc-executor/runtime-benchmarks",
+	"pezsc-runtime-utilities/runtime-benchmarks",
+	"pezsc-service/runtime-benchmarks",
+	"pezsc-sysinfo/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
+	"pezsp-block-builder/runtime-benchmarks",
+	"pezsp-blockchain/runtime-benchmarks",
+	"pezsp-genesis-builder/runtime-benchmarks",
+	"pezsp-inherents/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-runtime-interface/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-state-machine/runtime-benchmarks",
+	"pezsp-timestamp/runtime-benchmarks",
+	"pezsp-transaction-pool/runtime-benchmarks",
+	"pezsp-trie/runtime-benchmarks",
+	"pezsp-version/runtime-benchmarks",
+	"zagros-runtime/runtime-benchmarks",
 ]
 rocksdb = ["pezsc-cli/rocksdb", "pezsc-client-db/rocksdb"]

@@ -9,11 +9,11 @@
 //! section.
 //! Moreover, we use the [`frame::traits::Get`].
 //!
-//! First, imagine we are writing a FRAME pezpallet. We represent this pezpallet with a `struct Pezpallet`,
-//! and this pezpallet wants to implement the functionalities of that pezpallet, for example a simple
-//! `transfer` function. For the sake of education, we are interested in having a `MinTransfer`
-//! amount, expressed as a [`frame::traits::Get`], which will dictate what is the minimum amount
-//! that can be transferred.
+//! First, imagine we are writing a FRAME pezpallet. We represent this pezpallet with a `struct
+//! Pezpallet`, and this pezpallet wants to implement the functionalities of that pezpallet, for
+//! example a simple `transfer` function. For the sake of education, we are interested in having a
+//! `MinTransfer` amount, expressed as a [`frame::traits::Get`], which will dictate what is the
+//! minimum amount that can be transferred.
 //!
 //! We can foremost write this as simple as the following snippet:
 #![doc = docify::embed!("./src/reference_docs/trait_based_programming.rs", basic)]

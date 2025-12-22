@@ -24,7 +24,7 @@ pezsp-runtime = { workspace = true }
 default = ["std"]
 std = ["pezframe-support/std", "pezkuwi-primitives/std", "pezsp-runtime/std"]
 runtime-benchmarks = [
-  "pezframe-support/runtime-benchmarks",
-  "pezkuwi-primitives/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]

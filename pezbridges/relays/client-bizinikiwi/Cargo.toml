@@ -23,12 +23,12 @@ num-traits = { workspace = true, default-features = true }
 quick_cache = { workspace = true }
 rand = { workspace = true, default-features = true }
 scale-info = { features = [
-  "derive",
+	"derive",
 ], workspace = true, default-features = true }
 serde_json = { workspace = true }
 thiserror = { workspace = true }
 tokio = { features = [
-  "rt-multi-thread",
+	"rt-multi-thread",
 ], workspace = true, default-features = true }
 tracing = { workspace = true }
 
@@ -36,8 +36,8 @@ tracing = { workspace = true }
 bp-header-pez-chain = { workspace = true, default-features = true }
 bp-messages = { workspace = true, default-features = true }
 bp-pezkuwi-core = { workspace = true, default-features = true }
-pezbp-runtime = { workspace = true, default-features = true }
 pez-finality-relay = { workspace = true }
+pezbp-runtime = { workspace = true, default-features = true }
 relay-utils = { workspace = true }
 
 # Bizinikiwi Dependencies
@@ -63,22 +63,22 @@ xcm = { workspace = true, default-features = true }
 default = []
 test-helpers = []
 runtime-benchmarks = [
-  "bp-header-pez-chain/runtime-benchmarks",
-  "bp-messages/runtime-benchmarks",
-  "bp-pezkuwi-core/runtime-benchmarks",
-  "pezbp-runtime/runtime-benchmarks",
-  "pez-finality-relay/runtime-benchmarks",
-  "pezframe-support/runtime-benchmarks",
-  "pezpallet-transaction-payment-rpc-runtime-api/runtime-benchmarks",
-  "pezpallet-transaction-payment/runtime-benchmarks",
-  "pezpallet-utility/runtime-benchmarks",
-  "relay-utils/runtime-benchmarks",
-  "pezsc-chain-spec/runtime-benchmarks",
-  "pezsc-rpc-api/runtime-benchmarks",
-  "pezsc-transaction-pool-api/runtime-benchmarks",
-  "pezsp-consensus-grandpa/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "pezsp-trie/runtime-benchmarks",
-  "pezsp-version/runtime-benchmarks",
-  "xcm/runtime-benchmarks",
+	"bp-header-pez-chain/runtime-benchmarks",
+	"bp-messages/runtime-benchmarks",
+	"bp-pezkuwi-core/runtime-benchmarks",
+	"pez-finality-relay/runtime-benchmarks",
+	"pezbp-runtime/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezpallet-transaction-payment-rpc-runtime-api/runtime-benchmarks",
+	"pezpallet-transaction-payment/runtime-benchmarks",
+	"pezpallet-utility/runtime-benchmarks",
+	"pezsc-chain-spec/runtime-benchmarks",
+	"pezsc-rpc-api/runtime-benchmarks",
+	"pezsc-transaction-pool-api/runtime-benchmarks",
+	"pezsp-consensus-grandpa/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-trie/runtime-benchmarks",
+	"pezsp-version/runtime-benchmarks",
+	"relay-utils/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
 ]

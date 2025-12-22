@@ -29,17 +29,17 @@ pezsp-std = { workspace = true }
 [features]
 default = ["std"]
 std = [
-  "bp-header-pez-chain/std",
-  "bp-pezkuwi-core/std",
-  "pezbp-runtime/std",
-  "pezframe-support/std",
-  "pezsp-api/std",
-  "pezsp-std/std",
+	"bp-header-pez-chain/std",
+	"bp-pezkuwi-core/std",
+	"pezbp-runtime/std",
+	"pezframe-support/std",
+	"pezsp-api/std",
+	"pezsp-std/std",
 ]
 runtime-benchmarks = [
-  "bp-header-pez-chain/runtime-benchmarks",
-  "bp-pezkuwi-core/runtime-benchmarks",
-  "pezbp-runtime/runtime-benchmarks",
-  "pezframe-support/runtime-benchmarks",
-  "pezsp-api/runtime-benchmarks",
+	"bp-header-pez-chain/runtime-benchmarks",
+	"bp-pezkuwi-core/runtime-benchmarks",
+	"pezbp-runtime/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
 ]

@@ -28,7 +28,7 @@ async fn shared_core_idle_teyrchain_test() -> Result<(), anyhow::Error> {
 			let r = r
 				.with_chain("pezkuwichain-local")
 				.with_default_command("pezkuwi")
-				.with_default_image(images.pezkuwi.as_str())
+				.with_default_image(images.pezkuwi())
 				.with_default_args(vec![("-lteyrchain=debug").into()])
 				.with_genesis_overrides(json!({
 					"configuration": {
@@ -40,9 +40,9 @@ async fn shared_core_idle_teyrchain_test() -> Result<(), anyhow::Error> {
 						}
 					}
 				}))
-				.with_node(|node| node.with_name("validator-0"));
+				.with_validator(|node| node.with_name("validator-0"));
 
-			(1..4).fold(r, |acc, i| acc.with_node(|node| node.with_name(&format!("validator-{i}"))))
+			(1..4).fold(r, |acc, i| acc.with_validator(|node| node.with_name(&format!("validator-{i}"))))
 		})
 		.with_teyrchain(|p| {
 			p.with_id(2000)
@@ -50,7 +50,7 @@ async fn shared_core_idle_teyrchain_test() -> Result<(), anyhow::Error> {
 				// assign it to the para.
 				.onboard_as_teyrchain(false)
 				.with_default_command("pezkuwi-teyrchain")
-				.with_default_image(images.pezcumulus.as_str())
+				.with_default_image(images.pezcumulus())
 				.with_default_args(vec![
 					("-lteyrchain=debug,aura=debug").into(),
 					"--authoring=slot-based".into(),

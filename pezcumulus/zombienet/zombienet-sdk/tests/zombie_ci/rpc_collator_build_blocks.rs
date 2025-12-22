@@ -6,11 +6,11 @@ use std::time::Duration;
 
 use crate::utils::{initialize_network, BEST_BLOCK_METRIC};
 
-use pezcumulus_zombienet_sdk_helpers::assert_para_throughput;
+use pezcumulus_zombienet_sdk_helpers::{assert_para_throughput};
 use pezkuwi_primitives::Id as ParaId;
 use zombienet_orchestrator::network::node::LogLineCountOptions;
 use zombienet_sdk::{
-	subxt::{OnlineClient, PolkadotConfig},
+	subxt::{OnlineClient, PezkuwiConfig},
 	NetworkConfig, NetworkConfigBuilder,
 };
 
@@ -28,7 +28,7 @@ async fn rpc_collator_builds_blocks() -> Result<(), anyhow::Error> {
 	let network = initialize_network(config).await?;
 
 	let alice = network.get_node("alice")?;
-	let alice_client: OnlineClient<PolkadotConfig> = alice.wait_client().await?;
+	let alice_client: OnlineClient<PezkuwiConfig> = alice.wait_client().await?;
 
 	log::info!("Ensuring teyrchain making progress");
 	assert_para_throughput(
@@ -113,17 +113,17 @@ async fn build_network_config() -> Result<NetworkConfig, anyhow::Error> {
 				.with_default_command("pezkuwi")
 				.with_default_image(images.polkadot.as_str())
 				.with_default_args(vec![("-lteyrchain=debug").into()])
-				.with_node(|node| node.with_name("alice"))
-				.with_node(|node| node.with_name("bob"))
-				.with_node(|node| node.with_name("charlie"))
-				.with_node(|node| node.with_name("one").validator(false))
-				.with_node(|node| node.with_name("two").validator(false))
-				.with_node(|node| node.with_name("three").validator(false))
+				.with_validator(|node| node.with_name("alice"))
+				.with_validator(|node| node.with_name("bob"))
+				.with_validator(|node| node.with_name("charlie"))
+				.with_validator(|node| node.with_name("one").validator(false))
+				.with_validator(|node| node.with_name("two").validator(false))
+				.with_validator(|node| node.with_name("three").validator(false))
 		})
 		.with_teyrchain(|p| {
 			p.with_id(PARA_ID)
 				.with_default_command("test-teyrchain")
-				.with_default_image(images.pezcumulus.as_str())
+				.with_default_image(images.pezcumulus())
 				.with_default_args(vec![
 					("-lteyrchain=trace,blockchain-rpc-client=debug").into(),
 					(

@@ -19,7 +19,6 @@ parking_lot = { workspace = true, default-features = true }
 tracing = { workspace = true, default-features = true }
 
 # Bizinikiwi
-prometheus-endpoint = { workspace = true, default-features = true }
 pezsc-consensus = { workspace = true, default-features = true }
 pezsp-api = { workspace = true, default-features = true }
 pezsp-block-builder = { workspace = true, default-features = true }
@@ -28,6 +27,7 @@ pezsp-consensus = { workspace = true, default-features = true }
 pezsp-core = { workspace = true, default-features = true }
 pezsp-inherents = { workspace = true, default-features = true }
 pezsp-runtime = { workspace = true, default-features = true }
+prometheus-endpoint = { workspace = true, default-features = true }
 
 # Pezcumulus
 pezcumulus-client-consensus-common = { workspace = true, default-features = true }
@@ -36,14 +36,14 @@ pezcumulus-relay-chain-interface = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-  "pezcumulus-client-consensus-common/runtime-benchmarks",
-  "pezcumulus-primitives-core/runtime-benchmarks",
-  "pezcumulus-relay-chain-interface/runtime-benchmarks",
-  "pezsc-consensus/runtime-benchmarks",
-  "pezsp-api/runtime-benchmarks",
-  "pezsp-block-builder/runtime-benchmarks",
-  "pezsp-blockchain/runtime-benchmarks",
-  "pezsp-consensus/runtime-benchmarks",
-  "pezsp-inherents/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
+	"pezcumulus-client-consensus-common/runtime-benchmarks",
+	"pezcumulus-primitives-core/runtime-benchmarks",
+	"pezcumulus-relay-chain-interface/runtime-benchmarks",
+	"pezsc-consensus/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
+	"pezsp-block-builder/runtime-benchmarks",
+	"pezsp-blockchain/runtime-benchmarks",
+	"pezsp-consensus/runtime-benchmarks",
+	"pezsp-inherents/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]

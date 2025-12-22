@@ -9,7 +9,7 @@ use pezcumulus_zombienet_sdk_helpers::{assert_finality_lag, assert_para_throughp
 use pezkuwi_primitives::Id as ParaId;
 use serde_json::json;
 use zombienet_sdk::{
-	subxt::{OnlineClient, PolkadotConfig},
+	subxt::{OnlineClient, PezkuwiConfig},
 	NetworkConfig, NetworkConfigBuilder,
 };
 
@@ -33,7 +33,7 @@ async fn elastic_scaling_multiple_blocks_per_slot() -> Result<(), anyhow::Error>
 	let relay_node = network.get_node("validator-0")?;
 	let para_node_elastic = network.get_node("collator-1")?;
 
-	let relay_client: OnlineClient<PolkadotConfig> = relay_node.wait_client().await?;
+	let relay_client: OnlineClient<PezkuwiConfig> = relay_node.wait_client().await?;
 	assert_para_throughput(
 		&relay_client,
 		10,
@@ -94,13 +94,13 @@ async fn build_network_config() -> Result<NetworkConfig, anyhow::Error> {
 				}))
 				// Have to set a `with_node` outside of the loop below, so that `r` has the right
 				// type.
-				.with_node(|node| node.with_name("validator-0"));
-			(1..9).fold(r, |acc, i| acc.with_node(|node| node.with_name(&format!("validator-{i}"))))
+				.with_validator(|node| node.with_name("validator-0"));
+			(1..9).fold(r, |acc, i| acc.with_validator(|node| node.with_name(&format!("validator-{i}"))))
 		})
 		.with_teyrchain(|p| {
 			p.with_id(PARA_ID)
 				.with_default_command("test-teyrchain")
-				.with_default_image(images.pezcumulus.as_str())
+				.with_default_image(images.pezcumulus())
 				.with_chain("elastic-scaling-multi-block-slot")
 				.with_default_args(vec![
 					("--authoring").into(),

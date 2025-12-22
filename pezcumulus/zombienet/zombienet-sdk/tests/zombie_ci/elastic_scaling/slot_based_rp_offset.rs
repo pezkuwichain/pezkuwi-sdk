@@ -8,7 +8,7 @@ use anyhow::anyhow;
 use pezcumulus_zombienet_sdk_helpers::{assert_relay_parent_offset, assign_cores};
 use serde_json::json;
 use zombienet_sdk::{
-	subxt::{OnlineClient, PolkadotConfig},
+	subxt::{OnlineClient, PezkuwiConfig},
 	NetworkConfigBuilder,
 };
 
@@ -42,14 +42,14 @@ async fn elastic_scaling_slot_based_relay_parent_offset_test() -> Result<(), any
 				}))
 				// Have to set a `with_node` outside of the loop below, so that `r` has the right
 				// type.
-				.with_node(|node| node.with_name("validator-0"));
+				.with_validator(|node| node.with_name("validator-0"));
 
-			(1..6).fold(r, |acc, i| acc.with_node(|node| node.with_name(&format!("validator-{i}"))))
+			(1..6).fold(r, |acc, i| acc.with_validator(|node| node.with_name(&format!("validator-{i}"))))
 		})
 		.with_teyrchain(|p| {
 			p.with_id(2400)
 				.with_default_command("test-teyrchain")
-				.with_default_image(images.pezcumulus.as_str())
+				.with_default_image(images.pezcumulus())
 				.with_chain("relay-parent-offset")
 				.with_default_args(vec![
 					"--authoring=slot-based".into(),
@@ -71,7 +71,7 @@ async fn elastic_scaling_slot_based_relay_parent_offset_test() -> Result<(), any
 	let network = spawn_fn(config).await?;
 
 	let relay_node = network.get_node("validator-0")?;
-	let relay_client: OnlineClient<PolkadotConfig> = relay_node.wait_client().await?;
+	let relay_client: OnlineClient<PezkuwiConfig> = relay_node.wait_client().await?;
 
 	let para_node_rp_offset = network.get_node("collator-rp-offset")?;
 

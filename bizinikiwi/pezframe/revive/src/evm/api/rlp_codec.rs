@@ -682,7 +682,7 @@ mod test {
 			gas: U256::from(21000),
 			nonce: U256::from(1),
 			gas_price: U256::from("0x640000006a"),
-			to: Some(Account::from(subxt_signer::eth::dev::baltathar()).address()),
+			to: Some(Account::from(pezkuwi_subxt_signer::eth::dev::baltathar()).address()),
 			value: U256::from(123123),
 			input: Bytes(vec![]),
 			r#type: TypeLegacy,

@@ -10,14 +10,14 @@ use crate::{
 	runner::DefaultTxTask,
 	subxt_transaction::{
 		build_subxt_tx, EthPayloadBuilderFn, EthRuntimeConfig, EthTransaction, EthTransactionsSink,
-		HashOf, SubPayloadBuilderFn, SubstrateTransaction, SubstrateTransactionsSink,
+		HashOf, SubPayloadBuilderFn, BizinikiwTransaction, BizinikiwTransactionsSink,
 	},
 };
 use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
 use std::any::Any;
-use subxt::{tx::TxStatus, OnlineClient, PolkadotConfig};
-use subxt_core::config::Hash as BlockHash;
+use pezkuwi_subxt::{tx::TxStatus, OnlineClient, PezkuwiConfig};
+use pezkuwi_subxt_core::config::Hash as BlockHash;
 
 /// Parameters for building a transaction.
 pub(crate) struct BuildTransactionParams<'a> {
@@ -46,13 +46,13 @@ pub(crate) trait TransactionBuilder {
 
 /// Substrate transactions builder.
 #[derive(Default)]
-pub(crate) struct SubstrateTransactionBuilder {}
+pub(crate) struct BizinikiwTransactionBuilder {}
 
 #[async_trait]
-impl TransactionBuilder for SubstrateTransactionBuilder {
-	type HashType = HashOf<PolkadotConfig>;
-	type Transaction = SubstrateTransaction;
-	type Sink = SubstrateTransactionsSink;
+impl TransactionBuilder for BizinikiwTransactionBuilder {
+	type HashType = HashOf<PezkuwiConfig>;
+	type Transaction = BizinikiwTransaction;
+	type Sink = BizinikiwTransactionsSink;
 	type PayloadBuilder = SubPayloadBuilderFn;
 
 	async fn build_transaction<'a>(
@@ -215,7 +215,7 @@ impl<H> TransactionStatus<H> {
 
 impl<H: BlockHash + std::fmt::Debug> TransactionStatus<H> {}
 
-impl<C: subxt::Config> From<TxStatus<C, OnlineClient<C>>> for TransactionStatus<HashOf<C>> {
+impl<C: pezkuwi_subxt::Config> From<TxStatus<C, OnlineClient<C>>> for TransactionStatus<HashOf<C>> {
 	fn from(value: TxStatus<C, OnlineClient<C>>) -> Self {
 		match value {
 			TxStatus::Validated => TransactionStatus::Validated,

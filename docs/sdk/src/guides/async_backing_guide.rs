@@ -99,8 +99,8 @@
 //! }
 //! ```
 //!
-//! 6. Update `pezsp_consensus_aura::AuraApi::slot_duration` in `pezsp_api::impl_runtime_apis` to match
-//!    the constant `SLOT_DURATION`
+//! 6. Update `pezsp_consensus_aura::AuraApi::slot_duration` in `pezsp_api::impl_runtime_apis` to
+//!    match the constant `SLOT_DURATION`
 #![doc = docify::embed!("../../templates/teyrchain/runtime/src/apis.rs", impl_slot_duration)]
 //!
 //! 7. Implement the `AuraUnincludedSegmentApi`, which allows the collator client to query its
@@ -139,8 +139,8 @@
 //! 1. Import `pezcumulus_primitives_core::ValidationCode` to `node/src/service.rs`.
 #![doc = docify::embed!("../../templates/teyrchain/node/src/service.rs", pezcumulus_primitives)]
 //!
-//! 2. In `node/src/service.rs`, modify `pezsc_service::spawn_tasks` to use a clone of `Backend` rather
-//!    than the original
+//! 2. In `node/src/service.rs`, modify `pezsc_service::spawn_tasks` to use a clone of `Backend`
+//!    rather than the original
 //! ```ignore
 //! pezsc_service::spawn_tasks(pezsc_service::SpawnTasksParams {
 //!     ..
@@ -224,9 +224,9 @@
 //! 4. Update `MAXIMUM_BLOCK_WEIGHT` to reflect the increased time available for block production.
 #![doc = docify::embed!("../../templates/teyrchain/runtime/src/lib.rs", max_block_weight)]
 //!
-//! 5. Add a feature flagged alternative for `MinimumPeriod` in `pezpallet_timestamp`. The type should
-//!    be `ConstU64<0>` with the feature flag experimental, and `ConstU64<{SLOT_DURATION / 2}>`
-//!    without.
+//! 5. Add a feature flagged alternative for `MinimumPeriod` in `pezpallet_timestamp`. The type
+//!    should be `ConstU64<0>` with the feature flag experimental, and `ConstU64<{SLOT_DURATION /
+//!    2}>` without.
 //! ```ignore
 //! impl pezpallet_timestamp::Config for Runtime {
 //!     ..

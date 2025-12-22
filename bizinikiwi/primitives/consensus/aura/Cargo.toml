@@ -19,39 +19,39 @@ targets = ["x86_64-unknown-linux-gnu"]
 [dependencies]
 async-trait = { optional = true, workspace = true }
 codec = { workspace = true }
-scale-info = { features = ["derive"], workspace = true }
 pezsp-api = { workspace = true }
 pezsp-application-crypto = { workspace = true }
 pezsp-consensus-slots = { workspace = true }
 pezsp-inherents = { workspace = true }
 pezsp-runtime = { workspace = true }
 pezsp-timestamp = { workspace = true }
+scale-info = { features = ["derive"], workspace = true }
 
 [features]
 default = ["std"]
 std = [
-  "async-trait",
-  "codec/std",
-  "scale-info/std",
-  "pezsp-api/std",
-  "pezsp-application-crypto/std",
-  "pezsp-consensus-slots/std",
-  "pezsp-inherents/std",
-  "pezsp-runtime/std",
-  "pezsp-timestamp/std",
+	"async-trait",
+	"codec/std",
+	"pezsp-api/std",
+	"pezsp-application-crypto/std",
+	"pezsp-consensus-slots/std",
+	"pezsp-inherents/std",
+	"pezsp-runtime/std",
+	"pezsp-timestamp/std",
+	"scale-info/std",
 ]
 
 # Serde support without relying on std features.
 serde = [
-  "scale-info/serde",
-  "pezsp-application-crypto/serde",
-  "pezsp-consensus-slots/serde",
-  "pezsp-runtime/serde",
+	"pezsp-application-crypto/serde",
+	"pezsp-consensus-slots/serde",
+	"pezsp-runtime/serde",
+	"scale-info/serde",
 ]
 runtime-benchmarks = [
-  "pezsp-api/runtime-benchmarks",
-  "pezsp-consensus-slots/runtime-benchmarks",
-  "pezsp-inherents/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "pezsp-timestamp/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
+	"pezsp-consensus-slots/runtime-benchmarks",
+	"pezsp-inherents/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-timestamp/runtime-benchmarks",
 ]

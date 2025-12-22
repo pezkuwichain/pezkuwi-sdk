@@ -14,6 +14,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#![allow(deprecated)]
+
 use assert_cmd::cargo::cargo_bin;
 use nix::sys::signal::SIGINT;
 use std::process::Command;

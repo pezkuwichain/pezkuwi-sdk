@@ -25,7 +25,7 @@ async fn approval_voting_coalescing_test() -> Result<(), anyhow::Error> {
 		let r = r
 			.with_chain("pezkuwichain-local")
 			.with_default_command("pezkuwi")
-			.with_default_image(images.pezkuwi.as_str())
+			.with_default_image(images.pezkuwi())
 			.with_default_args(vec![("-lteyrchain=debug,runtime=debug").into()])
 			.with_genesis_overrides(json!({
 				"configuration": {
@@ -39,9 +39,9 @@ async fn approval_voting_coalescing_test() -> Result<(), anyhow::Error> {
 					}
 				}
 			}))
-			.with_node(|node| node.with_name("validator-0"));
+			.with_validator(|node| node.with_name("validator-0"));
 
-		(1..12).fold(r, |acc, i| acc.with_node(|node| node.with_name(&format!("validator-{i}"))))
+		(1..12).fold(r, |acc, i| acc.with_validator(|node| node.with_name(&format!("validator-{i}"))))
 	});
 
 	for para_id in 2000..2008 {

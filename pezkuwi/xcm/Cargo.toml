@@ -18,14 +18,14 @@ bounded-collections = { features = ["serde"], workspace = true }
 codec = { features = ["derive", "max-encoded-len"], workspace = true }
 derive-where = { workspace = true }
 environmental = { workspace = true }
-pezframe-support = { workspace = true }
 hex-literal = { workspace = true, default-features = true }
 impl-trait-for-tuples = { workspace = true }
+pezframe-support = { workspace = true }
+pezsp-runtime = { workspace = true }
+pezsp-weights = { features = ["serde"], workspace = true }
 scale-info = { features = ["derive", "serde"], workspace = true }
 schemars = { default-features = true, optional = true, workspace = true }
 serde = { features = ["alloc", "derive", "rc"], workspace = true }
-pezsp-runtime = { workspace = true }
-pezsp-weights = { features = ["serde"], workspace = true }
 tracing = { workspace = true }
 xcm-pez-procedural = { workspace = true, default-features = true }
 
@@ -36,24 +36,24 @@ pezsp-io = { workspace = true, default-features = true }
 default = ["std"]
 wasm-api = []
 std = [
-  "bounded-collections/std",
-  "codec/std",
-  "environmental/std",
-  "pezframe-support/std",
-  "scale-info/std",
-  "serde/std",
-  "pezsp-runtime/std",
-  "pezsp-weights/std",
-  "tracing/std",
+	"bounded-collections/std",
+	"codec/std",
+	"environmental/std",
+	"pezframe-support/std",
+	"pezsp-runtime/std",
+	"pezsp-weights/std",
+	"scale-info/std",
+	"serde/std",
+	"tracing/std",
 ]
 json-schema = [
-  "bounded-collections/json-schema",
-  "dep:schemars",
-  "pezsp-weights/json-schema",
+	"bounded-collections/json-schema",
+	"dep:schemars",
+	"pezsp-weights/json-schema",
 ]
 runtime-benchmarks = [
-  "pezframe-support/runtime-benchmarks",
-  "pezsp-io/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "xcm-pez-procedural/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"xcm-pez-procedural/runtime-benchmarks",
 ]

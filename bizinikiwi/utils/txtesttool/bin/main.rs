@@ -14,13 +14,13 @@ use bizinikiwi_txtesttool::{
 	scenario::{AccountsDescription, ChainType, ScenarioBuilder, ScenarioType},
 	subxt_transaction::{
 		self, generate_ecdsa_keypair, generate_sr25519_keypair, EthRuntimeConfig, EthTransaction,
-		EthTransactionsSink, SubstrateTransaction, SubstrateTransactionsSink, SENDER_SEED,
+		EthTransactionsSink, BizinikiwTransaction, BizinikiwTransactionsSink, SENDER_SEED,
 	},
 };
 use clap::Parser;
 use codec::Compact;
 use std::{fs, fs::File, io::BufReader, time::Duration};
-use subxt::{ext::frame_metadata::RuntimeMetadataPrefixed, PolkadotConfig};
+use pezkuwi_subxt::{ext::frame_metadata::RuntimeMetadataPrefixed, PezkuwiConfig};
 use tracing::info;
 
 macro_rules! populate_scenario_builder {
@@ -143,7 +143,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 					} else {
 						AccountsDescription::Keyring(account.clone())
 					};
-					let sink = SubstrateTransactionsSink::new_with_uri_with_accounts_description(
+					let sink = BizinikiwTransactionsSink::new_with_uri_with_accounts_description(
 						ws,
 						desc,
 						generate_sr25519_keypair,
@@ -161,7 +161,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 		CliCommand::Metadata { ws } => {
 			// Handle metadata command
 			use codec::Decode;
-			let api = subxt::OnlineClient::<EthRuntimeConfig>::from_insecure_url(ws).await?;
+			let api = pezkuwi_subxt::OnlineClient::<EthRuntimeConfig>::from_insecure_url(ws).await?;
 			let runtime_apis = api.runtime_api().at_latest().await?;
 			let raw_bytes: Vec<u8> = runtime_apis.call_raw("Metadata_metadata", None).await?;
 			let (_, meta): (Compact<u32>, RuntimeMetadataPrefixed) =
@@ -172,7 +172,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 			match chain {
 				ChainType::Sub => {
 					let block_monitor =
-						BlockMonitor::<PolkadotConfig>::new_with_options(ws, *display).await;
+						BlockMonitor::<PezkuwiConfig>::new_with_options(ws, *display).await;
 					async {
 						loop {
 							tokio::time::sleep(Duration::from_secs(10)).await
@@ -197,7 +197,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 		},
 		CliCommand::LoadLog { chain, log_file, show_graphs, out_csv_filename, .. } => match chain {
 			ChainType::Sub => {
-				let logs = Journal::<DefaultTxTask<SubstrateTransaction>>::load_logs(
+				let logs = Journal::<DefaultTxTask<BizinikiwTransaction>>::load_logs(
 					log_file,
 					out_csv_filename,
 				);
@@ -223,7 +223,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 			let accounts_description = AccountsDescription::Derived(*start_id..last_id + 1);
 			let funded_accounts = match chain {
 				ChainType::Sub => {
-					let accounts = subxt_transaction::derive_accounts::<PolkadotConfig, _, _>(
+					let accounts = subxt_transaction::derive_accounts::<PezkuwiConfig, _, _>(
 						accounts_description.clone(),
 						SENDER_SEED,
 						generate_sr25519_keypair,
@@ -232,7 +232,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 						.values()
 						.map(|keypair| {
 							serde_json::json!((
-								<PolkadotConfig as subxt::Config>::AccountId::from(
+								<PezkuwiConfig as pezkuwi_subxt::Config>::AccountId::from(
 									keypair.0.clone().public_key()
 								),
 								balance,

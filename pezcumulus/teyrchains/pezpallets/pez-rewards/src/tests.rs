@@ -439,14 +439,14 @@ fn close_epoch_works_after_claim_period() {
 		assert_ok!(PezRewards::record_trust_score(RuntimeOrigin::signed(bob()))); // Claim edecek
 
 		let incentive_pot = PezRewards::incentive_pot_account_id();
-		let pot_balance_before_finalize = pez_balance(&incentive_pot);
+		let _pot_balance_before_finalize = pez_balance(&incentive_pot);
 
 		advance_blocks(crate::BLOCKS_PER_EPOCH as u64);
 		assert_ok!(PezRewards::finalize_epoch(RuntimeOrigin::root()));
 
 		let reward_pool = PezRewards::get_epoch_reward_pool(0).unwrap();
-		let alice_reward = reward_pool.reward_per_trust_point * 100;
-		let bob_reward = reward_pool.reward_per_trust_point * 50;
+		let _alice_reward = reward_pool.reward_per_trust_point * 100;
+		let _bob_reward = reward_pool.reward_per_trust_point * 50;
 
 		assert_ok!(PezRewards::claim_reward(RuntimeOrigin::signed(bob()), 0)); // Bob claim etti
 

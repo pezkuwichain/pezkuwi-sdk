@@ -45,13 +45,13 @@ fn update_score_for_account_works() {
 	new_test_ext().execute_with(|| {
 		let account = 1u64;
 
-		let initial_score = TrustPallet::trust_score_of(&account);
+		let initial_score = TrustPallet::trust_score_of(account);
 		assert_eq!(initial_score, 0);
 
 		let new_score = TrustPallet::update_score_for_account(&account).unwrap();
 		assert!(new_score > 0);
 
-		let stored_score = TrustPallet::trust_score_of(&account);
+		let stored_score = TrustPallet::trust_score_of(account);
 		assert_eq!(stored_score, new_score);
 
 		let total_score = TrustPallet::total_active_trust_score();
@@ -82,7 +82,7 @@ fn force_recalculate_trust_score_works() {
 
 		assert_ok!(TrustPallet::force_recalculate_trust_score(RuntimeOrigin::root(), account));
 
-		let score = TrustPallet::trust_score_of(&account);
+		let score = TrustPallet::trust_score_of(account);
 		assert!(score > 0);
 	});
 }
@@ -193,12 +193,12 @@ fn trust_score_updater_trait_works() {
 
 		let account = 1u64;
 
-		let initial_score = TrustPallet::trust_score_of(&account);
+		let initial_score = TrustPallet::trust_score_of(account);
 		assert_eq!(initial_score, 0);
 
 		TrustPallet::on_score_component_changed(&account);
 
-		let updated_score = TrustPallet::trust_score_of(&account);
+		let updated_score = TrustPallet::trust_score_of(account);
 		assert!(updated_score > 0);
 	});
 }
@@ -266,7 +266,7 @@ fn update_all_trust_scores_multiple_users() {
 
 		// Verify at least one user has score (depends on mock KYC setup)
 		let total = TrustPallet::total_active_trust_score();
-		assert!(total >= 0); // May be 0 if no users have KYC approved in mock
+		assert!(total < u128::MAX); // May be 0 if no users have KYC approved in mock
 	});
 }
 
@@ -290,7 +290,7 @@ fn update_all_trust_scores_updates_total() {
 
 		let final_total = TrustPallet::total_active_trust_score();
 		// Total should remain valid (may stay 0 if no approved KYC users)
-		assert!(final_total >= 0);
+		assert!(final_total < u128::MAX);
 	});
 }
 
@@ -351,7 +351,7 @@ fn calculate_trust_score_all_zero_components() {
 
 		let score = TrustPallet::calculate_trust_score(&account).unwrap();
 		// Should be greater than 0 (mock provides some values)
-		assert!(score >= 0);
+		assert!(score < u128::MAX);
 	});
 }
 
@@ -400,8 +400,8 @@ fn multiple_users_independent_scores() {
 		assert_ne!(score2, 0);
 
 		// Verify stored separately
-		assert_eq!(TrustPallet::trust_score_of(&user1), score1);
-		assert_eq!(TrustPallet::trust_score_of(&user2), score2);
+		assert_eq!(TrustPallet::trust_score_of(user1), score1);
+		assert_eq!(TrustPallet::trust_score_of(user2), score2);
 	});
 }
 
@@ -412,10 +412,9 @@ fn multiple_users_independent_scores() {
 #[test]
 fn trust_score_provider_trait_returns_zero_initially() {
 	new_test_ext().execute_with(|| {
-		use crate::TrustScoreProvider;
 
 		let account = 1u64;
-		let score = TrustPallet::trust_score_of(&account);
+		let score = TrustPallet::trust_score_of(account);
 		assert_eq!(score, 0);
 	});
 }
@@ -423,12 +422,11 @@ fn trust_score_provider_trait_returns_zero_initially() {
 #[test]
 fn trust_score_provider_trait_returns_updated_score() {
 	new_test_ext().execute_with(|| {
-		use crate::TrustScoreProvider;
 
 		let account = 1u64;
 		TrustPallet::update_score_for_account(&account).unwrap();
 
-		let score = TrustPallet::trust_score_of(&account);
+		let score = TrustPallet::trust_score_of(account);
 		assert!(score > 0);
 	});
 }
@@ -436,13 +434,12 @@ fn trust_score_provider_trait_returns_updated_score() {
 #[test]
 fn trust_score_provider_trait_multiple_users() {
 	new_test_ext().execute_with(|| {
-		use crate::TrustScoreProvider;
 
 		TrustPallet::update_score_for_account(&1u64).unwrap();
 		TrustPallet::update_score_for_account(&2u64).unwrap();
 
-		let score1 = TrustPallet::trust_score_of(&1u64);
-		let score2 = TrustPallet::trust_score_of(&2u64);
+		let score1 = TrustPallet::trust_score_of(1u64);
+		let score2 = TrustPallet::trust_score_of(2u64);
 
 		assert!(score1 > 0);
 		assert!(score2 > 0);
@@ -464,7 +461,7 @@ fn storage_consistency_after_multiple_updates() {
 		}
 
 		// Score should still be consistent
-		let stored = TrustPallet::trust_score_of(&account);
+		let stored = TrustPallet::trust_score_of(account);
 		let calculated = TrustPallet::calculate_trust_score(&account).unwrap();
 
 		assert_eq!(stored, calculated);

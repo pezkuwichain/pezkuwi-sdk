@@ -17,15 +17,16 @@ workspace = true
 targets = ["x86_64-unknown-linux-gnu"]
 
 [dependencies]
+bizinikiwi-test-client = { workspace = true }
 codec = { workspace = true, default-features = true }
-pezframe-metadata-hash-extension = { workspace = true, default-features = true }
-pezframe-system = { workspace = true, default-features = true }
 fs_extra = { workspace = true }
 futures = { workspace = true }
-pez-kitchensink-runtime = { workspace = true }
 log = { workspace = true, default-features = true }
 node-cli = { workspace = true }
+pez-kitchensink-runtime = { workspace = true }
 pez-node-primitives = { workspace = true, default-features = true }
+pezframe-metadata-hash-extension = { workspace = true, default-features = true }
+pezframe-system = { workspace = true, default-features = true }
 pezpallet-asset-conversion = { workspace = true, default-features = true }
 pezpallet-asset-conversion-tx-payment = { workspace = true, default-features = true }
 pezpallet-revive = { workspace = true, default-features = true }
@@ -33,12 +34,12 @@ pezpallet-skip-feeless-payment = { workspace = true, default-features = true }
 pezsc-block-builder = { workspace = true, default-features = true }
 pezsc-client-api = { workspace = true, default-features = true }
 pezsc-client-db = { features = [
-  "rocksdb",
+	"rocksdb",
 ], workspace = true, default-features = true }
 pezsc-consensus = { workspace = true, default-features = true }
 pezsc-executor = { workspace = true, default-features = true }
 pezsc-service = { features = [
-  "rocksdb",
+	"rocksdb",
 ], workspace = true, default-features = true }
 pezsp-api = { workspace = true, default-features = true }
 pezsp-block-builder = { workspace = true, default-features = true }
@@ -50,33 +51,32 @@ pezsp-inherents = { workspace = true, default-features = true }
 pezsp-keyring = { workspace = true, default-features = true }
 pezsp-runtime = { workspace = true, default-features = true }
 pezsp-timestamp = { workspace = true }
-bizinikiwi-test-client = { workspace = true }
 tempfile = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-  "pezframe-metadata-hash-extension/runtime-benchmarks",
-  "pezframe-system/runtime-benchmarks",
-  "pez-kitchensink-runtime/runtime-benchmarks",
-  "node-cli/runtime-benchmarks",
-  "pez-node-primitives/runtime-benchmarks",
-  "pezpallet-asset-conversion-tx-payment/runtime-benchmarks",
-  "pezpallet-asset-conversion/runtime-benchmarks",
-  "pezpallet-revive/runtime-benchmarks",
-  "pezpallet-skip-feeless-payment/runtime-benchmarks",
-  "pezsc-block-builder/runtime-benchmarks",
-  "pezsc-client-api/runtime-benchmarks",
-  "pezsc-client-db/runtime-benchmarks",
-  "pezsc-consensus/runtime-benchmarks",
-  "pezsc-executor/runtime-benchmarks",
-  "pezsc-service/runtime-benchmarks",
-  "pezsp-api/runtime-benchmarks",
-  "pezsp-block-builder/runtime-benchmarks",
-  "pezsp-blockchain/runtime-benchmarks",
-  "pezsp-consensus/runtime-benchmarks",
-  "pezsp-inherents/runtime-benchmarks",
-  "pezsp-keyring/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "pezsp-timestamp/runtime-benchmarks",
-  "bizinikiwi-test-client/runtime-benchmarks",
+	"bizinikiwi-test-client/runtime-benchmarks",
+	"node-cli/runtime-benchmarks",
+	"pez-kitchensink-runtime/runtime-benchmarks",
+	"pez-node-primitives/runtime-benchmarks",
+	"pezframe-metadata-hash-extension/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezpallet-asset-conversion-tx-payment/runtime-benchmarks",
+	"pezpallet-asset-conversion/runtime-benchmarks",
+	"pezpallet-revive/runtime-benchmarks",
+	"pezpallet-skip-feeless-payment/runtime-benchmarks",
+	"pezsc-block-builder/runtime-benchmarks",
+	"pezsc-client-api/runtime-benchmarks",
+	"pezsc-client-db/runtime-benchmarks",
+	"pezsc-consensus/runtime-benchmarks",
+	"pezsc-executor/runtime-benchmarks",
+	"pezsc-service/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
+	"pezsp-block-builder/runtime-benchmarks",
+	"pezsp-blockchain/runtime-benchmarks",
+	"pezsp-consensus/runtime-benchmarks",
+	"pezsp-inherents/runtime-benchmarks",
+	"pezsp-keyring/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-timestamp/runtime-benchmarks",
 ]

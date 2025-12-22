@@ -23,18 +23,18 @@ pezsp-keyring = { workspace = true }
 xcm = { workspace = true }
 
 # Pezcumulus
-pezcumulus-primitives-core = { workspace = true }
 emulated-integration-tests-common = { workspace = true }
 pez-penpal-runtime = { workspace = true }
+pezcumulus-primitives-core = { workspace = true }
 teyrchains-common = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-  "pezcumulus-primitives-core/runtime-benchmarks",
-  "emulated-integration-tests-common/runtime-benchmarks",
-  "pezframe-support/runtime-benchmarks",
-  "pez-penpal-runtime/runtime-benchmarks",
-  "pezsp-keyring/runtime-benchmarks",
-  "teyrchains-common/runtime-benchmarks",
-  "xcm/runtime-benchmarks",
+	"emulated-integration-tests-common/runtime-benchmarks",
+	"pez-penpal-runtime/runtime-benchmarks",
+	"pezcumulus-primitives-core/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezsp-keyring/runtime-benchmarks",
+	"teyrchains-common/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
 ]

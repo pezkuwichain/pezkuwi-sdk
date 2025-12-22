@@ -28,10 +28,10 @@ pezsp-runtime = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-  "pezsc-chain-spec/runtime-benchmarks",
-  "pezsc-cli/runtime-benchmarks",
-  "pezsc-client-api/runtime-benchmarks",
-  "pezsc-service/runtime-benchmarks",
-  "pezsp-blockchain/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
+	"pezsc-chain-spec/runtime-benchmarks",
+	"pezsc-cli/runtime-benchmarks",
+	"pezsc-client-api/runtime-benchmarks",
+	"pezsc-service/runtime-benchmarks",
+	"pezsp-blockchain/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]

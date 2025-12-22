@@ -18,6 +18,6 @@ pezkuwi-overseer = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-  "pezkuwi-node-subsystem-types/runtime-benchmarks",
-  "pezkuwi-overseer/runtime-benchmarks",
+	"pezkuwi-node-subsystem-types/runtime-benchmarks",
+	"pezkuwi-overseer/runtime-benchmarks",
 ]

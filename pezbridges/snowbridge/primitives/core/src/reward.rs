@@ -173,8 +173,7 @@ mod tests {
 		}
 	}
 
-	pub enum BridgeReward {
-		#[allow(dead_code)]
+	pub enum _BridgeReward {
 		Snowbridge,
 	}
 
@@ -182,7 +181,7 @@ mod tests {
 		pub AssetHubLocation: Location = Location::new(1,[Teyrchain(1000)]);
 		pub InboundQueueLocation: InteriorLocation = [PalletInstance(84)].into();
 		pub EthereumNetwork: NetworkId = NetworkId::Ethereum { chain_id: 11155111 };
-		pub const DefaultMyRewardKind: BridgeReward = BridgeReward::Snowbridge;
+		pub const DefaultMyRewardKind: _BridgeReward = _BridgeReward::Snowbridge;
 	}
 
 	pub enum Weightless {}

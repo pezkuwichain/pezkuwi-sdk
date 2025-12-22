@@ -1,7 +1,6 @@
 use pezkuwi_sdk::*;
 
 use log::info;
-use pezsp_runtime;
 use pezcumulus_client_service::storage_proof_size::HostFunctions as ReclaimHostFunctions;
 use pezframe_benchmarking_cli::{BenchmarkCmd, BIZINIKIWI_REFERENCE_HARDWARE};
 use pezsc_cli::{
@@ -9,6 +8,7 @@ use pezsc_cli::{
 	KeystoreParams, NetworkParams, Result, RpcEndpoint, SharedParams,
 };
 use pezsc_service::config::{BasePath, PrometheusConfig};
+use pezsp_runtime;
 use teyrchain_template_runtime::Block;
 
 use crate::{

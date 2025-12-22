@@ -22,9 +22,7 @@ pub mod v1 {
 			let current = Pezpallet::<T>::on_chain_storage_version();
 
 			log::info!(
-				"🔄 Running migration for pezpallet-pez-treasury from {:?} to {:?}",
-				current,
-				STORAGE_VERSION
+				"🔄 Running migration for pezpallet-pez-treasury from {current:?} to {STORAGE_VERSION:?}"
 			);
 
 			if current == StorageVersion::new(0) {
@@ -49,9 +47,8 @@ pub mod v1 {
 				// Update storage version
 				STORAGE_VERSION.put::<Pezpallet<T>>();
 
-				log::info!("✅ Migrated {} entries in pezpallet-pez-treasury", migrated);
-				log::info!("   MonthlyReleases: {}, HalvingInfo: {}, TreasuryStartBlock: {}, GenesisDistributionDone: {}",
-                    monthly_releases_count, has_halving_info, has_treasury_start, has_genesis_done);
+				log::info!("✅ Migrated {migrated} entries in pezpallet-pez-treasury");
+				log::info!("   MonthlyReleases: {monthly_releases_count}, HalvingInfo: {has_halving_info}, TreasuryStartBlock: {has_treasury_start}, GenesisDistributionDone: {has_genesis_done}");
 
 				// Return weight used
 				// Reads: all storage items + version read
@@ -61,8 +58,7 @@ pub mod v1 {
 				weight
 			} else {
 				log::info!(
-					"👌 pezpallet-pez-treasury migration not needed, current version is {:?}",
-					current
+					"👌 pezpallet-pez-treasury migration not needed, current version is {current:?}"
 				);
 				T::DbWeight::get().reads(1)
 			}
@@ -70,10 +66,11 @@ pub mod v1 {
 
 		#[cfg(feature = "try-runtime")]
 		fn pre_upgrade() -> Result<pezsp_std::vec::Vec<u8>, pezsp_runtime::TryRuntimeError> {
+			use codec::Encode;
 			let current = Pezpallet::<T>::on_chain_storage_version();
 
 			log::info!("🔍 Pre-upgrade check for pezpallet-pez-treasury");
-			log::info!("   Current version: {:?}", current);
+			log::info!("   Current version: {current:?}");
 
 			// Encode current storage counts for verification
 			let monthly_releases_count = MonthlyReleases::<T>::iter().count() as u32;
@@ -81,10 +78,10 @@ pub mod v1 {
 			let has_treasury_start = TreasuryStartBlock::<T>::get().is_some();
 			let genesis_done = GenesisDistributionDone::<T>::get();
 
-			log::info!("   MonthlyReleases entries: {}", monthly_releases_count);
-			log::info!("   NextReleaseMonth: {}", next_release_month);
-			log::info!("   TreasuryStartBlock exists: {}", has_treasury_start);
-			log::info!("   GenesisDistributionDone: {}", genesis_done);
+			log::info!("   MonthlyReleases entries: {monthly_releases_count}");
+			log::info!("   NextReleaseMonth: {next_release_month}");
+			log::info!("   TreasuryStartBlock exists: {has_treasury_start}");
+			log::info!("   GenesisDistributionDone: {genesis_done}");
 
 			Ok((monthly_releases_count, next_release_month, has_treasury_start, genesis_done)
 				.encode())
@@ -109,7 +106,7 @@ pub mod v1 {
 			// Verify storage version was updated
 			let current_version = Pezpallet::<T>::on_chain_storage_version();
 			assert_eq!(current_version, STORAGE_VERSION, "Storage version not updated correctly");
-			log::info!("✅ Storage version updated to {:?}", current_version);
+			log::info!("✅ Storage version updated to {current_version:?}");
 
 			// Verify storage counts (should be same or more, never less)
 			let post_monthly_releases_count = MonthlyReleases::<T>::iter().count() as u32;
@@ -118,21 +115,15 @@ pub mod v1 {
 			let post_genesis_done = GenesisDistributionDone::<T>::get();
 
 			log::info!(
-				"   MonthlyReleases entries: {} -> {}",
-				pre_monthly_releases_count,
-				post_monthly_releases_count
+				"   MonthlyReleases entries: {pre_monthly_releases_count} -> {post_monthly_releases_count}"
 			);
 			log::info!(
-				"   NextReleaseMonth: {} -> {}",
-				pre_next_release_month,
-				post_next_release_month
+				"   NextReleaseMonth: {pre_next_release_month} -> {post_next_release_month}"
 			);
 			log::info!(
-				"   TreasuryStartBlock exists: {} -> {}",
-				pre_has_treasury_start,
-				post_has_treasury_start
+				"   TreasuryStartBlock exists: {pre_has_treasury_start} -> {post_has_treasury_start}"
 			);
-			log::info!("   GenesisDistributionDone: {} -> {}", pre_genesis_done, post_genesis_done);
+			log::info!("   GenesisDistributionDone: {pre_genesis_done} -> {post_genesis_done}");
 
 			// Verify no data was lost
 			assert!(

@@ -20,30 +20,30 @@ targets = ["x86_64-unknown-linux-gnu"]
 codec = { features = ["derive"], workspace = true }
 impl-serde = { optional = true, workspace = true }
 parity-wasm = { optional = true, workspace = true }
-scale-info = { features = ["derive"], workspace = true }
-serde = { features = ["alloc", "derive"], optional = true, workspace = true }
 pezsp-crypto-hashing-proc-macro = { workspace = true, default-features = true }
 pezsp-runtime = { workspace = true }
 pezsp-std = { workspace = true }
 pezsp-version-proc-macro = { workspace = true }
+scale-info = { features = ["derive"], workspace = true }
+serde = { features = ["alloc", "derive"], optional = true, workspace = true }
 thiserror = { optional = true, workspace = true }
 
 [features]
 default = ["std"]
 std = [
-  "codec/std",
-  "impl-serde/std",
-  "parity-wasm",
-  "scale-info/std",
-  "serde/std",
-  "pezsp-runtime/std",
-  "pezsp-std/std",
-  "thiserror",
+	"codec/std",
+	"impl-serde/std",
+	"parity-wasm",
+	"pezsp-runtime/std",
+	"pezsp-std/std",
+	"scale-info/std",
+	"serde/std",
+	"thiserror",
 ]
 
 # Serde support without relying on std features.
 serde = ["dep:serde", "impl-serde", "pezsp-runtime/serde"]
 runtime-benchmarks = [
-  "pezsp-runtime/runtime-benchmarks",
-  "pezsp-version-proc-macro/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-version-proc-macro/runtime-benchmarks",
 ]

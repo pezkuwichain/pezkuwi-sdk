@@ -7,13 +7,13 @@ use std::{sync::Arc, time::Duration};
 use crate::utils::{initialize_network, BEST_BLOCK_METRIC};
 
 use pezcumulus_zombienet_sdk_helpers::{
-	assert_para_is_registered, assert_para_throughput, assign_cores,
+	assert_para_is_registered, assert_para_throughput, assign_cores, 
 };
 use pezkuwi_primitives::Id as ParaId;
 use serde_json::json;
 use zombienet_orchestrator::network::node::LogLineCountOptions;
 use zombienet_sdk::{
-	subxt::{OnlineClient, PolkadotConfig},
+	subxt::{OnlineClient, PezkuwiConfig},
 	NetworkConfig, NetworkConfigBuilder, RegistrationStrategy,
 };
 
@@ -52,7 +52,7 @@ async fn elastic_scaling_pov_recovery() -> Result<(), anyhow::Error> {
 		.is_ok());
 
 	log::info!("Registering teyrchain para_id = {PARA_ID}");
-	let relay_client: OnlineClient<PolkadotConfig> = alice.wait_client().await?;
+	let relay_client: OnlineClient<PezkuwiConfig> = alice.wait_client().await?;
 	network.register_parachain(PARA_ID).await?;
 
 	log::info!("Ensuring teyrchain is registered within 30 blocks");
@@ -158,10 +158,10 @@ async fn build_network_config() -> Result<NetworkConfig, anyhow::Error> {
 				}))
 				// Have to set a `with_node` outside of the loop below, so that `r` has the right
 				// type.
-				.with_node(|node| node.with_name("alice").with_args(vec![]));
+				.with_validator(|node| node.with_name("alice").with_args(vec![]));
 
 			(0..4).fold(r, |acc, i| {
-				acc.with_node(|node| {
+				acc.with_validator(|node| {
 					node.with_name(&format!("validator-{i}")).with_args(vec![
 						("-lruntime=debug,teyrchain=trace").into(),
 						("--reserved-only").into(),
@@ -175,7 +175,7 @@ async fn build_network_config() -> Result<NetworkConfig, anyhow::Error> {
 				.with_chain("elastic-scaling")
 				.with_registration_strategy(RegistrationStrategy::Manual)
 				.with_default_command("test-teyrchain")
-				.with_default_image(images.pezcumulus.as_str())
+				.with_default_image(images.pezcumulus())
 				.with_default_resources(|resources| {
 					// These settings are applicable only for `k8s` provider.
 					// Leaving them in case we switch to `k8s` some day.

@@ -123,9 +123,9 @@
 //! consensus engine to work, and that particular runtime-api is implemented by a pezpallet
 //! corresponding to that consensus engine.
 //!
-//! For example, taking a snippet from [`pez_solochain_template_runtime`], the runtime has to provide
-//! this additional runtime-api (compared to [`pez_minimal_template_runtime`]), if the node software is
-//! configured to use the Aura consensus engine:
+//! For example, taking a snippet from [`pez_solochain_template_runtime`], the runtime has to
+//! provide this additional runtime-api (compared to [`pez_minimal_template_runtime`]), if the node
+//! software is configured to use the Aura consensus engine:
 //!
 //! ```text
 //! impl pezsp_consensus_aura::AuraApi<Block, AuraId> for Runtime {
@@ -148,14 +148,14 @@
 //! * [`pezsc_consensus_manual_seal`]: Useful for testing, where any node can produce a block at any
 //!   time. This is often combined with a fixed interval at which a block is produced.
 //! * [`pezsc_consensus_aura`]/[`pezpallet_aura`]: A simple round-robin block authoring mechanism.
-//! * [`pezsc_consensus_babe`]/[`pezpallet_babe`]: A more advanced block authoring mechanism, capable of
-//!   anonymizing the next block author.
+//! * [`pezsc_consensus_babe`]/[`pezpallet_babe`]: A more advanced block authoring mechanism,
+//!   capable of anonymizing the next block author.
 //! * [`pezsc_consensus_pow`]: Proof of Work block authoring.
 //!
 //! For finality, there is one main option shipped with pezkuwi-sdk:
 //!
-//! * [`pezsc_consensus_grandpa`]/[`pezpallet_grandpa`]: A finality gadget that uses a voting mechanism to
-//!   decide when a block
+//! * [`pezsc_consensus_grandpa`]/[`pezpallet_grandpa`]: A finality gadget that uses a voting
+//!   mechanism to decide when a block
 //!
 //! **The most important lesson here is that the node and the runtime must have matching consensus
 //! components.**
@@ -185,11 +185,11 @@
 //! failure.
 //!
 //! The list of checks may evolve in the future and for now only few rules are implemented:
-//! * runtimes must define a type for [`pezcumulus-pezpallet-teyrchain-system`], which is recommended to
-//!   be named as `TeyrchainSystem`.
-//! * runtimes must define a type for [`pezframe-system`] pezpallet, which is recommended to be named as
-//!   `System`. The configured [`block number`] here will be used by Omni Node to configure AURA
-//!   accordingly.
+//! * runtimes must define a type for [`pezcumulus-pezpallet-teyrchain-system`], which is
+//!   recommended to be named as `TeyrchainSystem`.
+//! * runtimes must define a type for [`pezframe-system`] pezpallet, which is recommended to be
+//!   named as `System`. The configured [`block number`] here will be used by Omni Node to configure
+//!   AURA accordingly.
 //!
 //! [`templates`]: crate::pezkuwi_sdk::templates
 //! [`teyrchain-template`]: https://github.com/pezkuwichain/pezkuwi-sdk-teyrchain-template

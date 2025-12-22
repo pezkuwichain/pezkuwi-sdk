@@ -28,9 +28,6 @@ itertools = { workspace = true }
 libp2p-identity = { features = ["ed25519", "peerid"], workspace = true }
 log = { workspace = true, default-features = true }
 names = { workspace = true }
-rand = { workspace = true, default-features = true }
-regex = { workspace = true }
-rpassword = { workspace = true }
 pezsc-client-api = { workspace = true, default-features = true }
 pezsc-client-db = { workspace = true, default-features = false }
 pezsc-keystore = { workspace = true, default-features = true }
@@ -41,8 +38,6 @@ pezsc-telemetry = { workspace = true, default-features = true }
 pezsc-tracing = { workspace = true, default-features = true }
 pezsc-transaction-pool = { workspace = true, default-features = true }
 pezsc-utils = { workspace = true, default-features = true }
-serde = { workspace = true, default-features = true }
-serde_json = { workspace = true, default-features = true }
 pezsp-blockchain = { workspace = true, default-features = true }
 pezsp-core = { workspace = true, default-features = true }
 pezsp-keyring = { workspace = true, default-features = true }
@@ -50,11 +45,16 @@ pezsp-keystore = { workspace = true, default-features = true }
 pezsp-panic-handler = { workspace = true, default-features = true }
 pezsp-runtime = { workspace = true, default-features = true }
 pezsp-version = { workspace = true, default-features = true }
+rand = { workspace = true, default-features = true }
+regex = { workspace = true }
+rpassword = { workspace = true }
+serde = { workspace = true, default-features = true }
+serde_json = { workspace = true, default-features = true }
 thiserror = { workspace = true }
 tokio = { features = [
-  "parking_lot",
-  "rt-multi-thread",
-  "signal",
+	"parking_lot",
+	"rt-multi-thread",
+	"signal",
 ], workspace = true, default-features = true }
 
 [dev-dependencies]
@@ -66,15 +66,15 @@ tempfile = { workspace = true }
 default = ["rocksdb"]
 rocksdb = ["pezsc-client-db/rocksdb"]
 runtime-benchmarks = [
-  "pezsc-client-api/runtime-benchmarks",
-  "pezsc-client-db/runtime-benchmarks",
-  "pezsc-mixnet/runtime-benchmarks",
-  "pezsc-network/runtime-benchmarks",
-  "pezsc-service/runtime-benchmarks",
-  "pezsc-tracing/runtime-benchmarks",
-  "pezsc-transaction-pool/runtime-benchmarks",
-  "pezsp-blockchain/runtime-benchmarks",
-  "pezsp-keyring/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "pezsp-version/runtime-benchmarks",
+	"pezsc-client-api/runtime-benchmarks",
+	"pezsc-client-db/runtime-benchmarks",
+	"pezsc-mixnet/runtime-benchmarks",
+	"pezsc-network/runtime-benchmarks",
+	"pezsc-service/runtime-benchmarks",
+	"pezsc-tracing/runtime-benchmarks",
+	"pezsc-transaction-pool/runtime-benchmarks",
+	"pezsp-blockchain/runtime-benchmarks",
+	"pezsp-keyring/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-version/runtime-benchmarks",
 ]

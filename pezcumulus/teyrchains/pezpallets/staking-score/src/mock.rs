@@ -3,27 +3,21 @@
 use crate as pezpallet_staking_score;
 use pezframe_support::{
 	construct_runtime, derive_impl, parameter_types,
-	traits::{ConstU128, ConstU32, ConstU64, Everything, Hooks},
+	traits::{ConstU128, ConstU32, ConstU64},
 	weights::constants::RocksDbWeight,
 };
 use pezframe_system::EnsureRoot;
-use pezsp_core::H256;
-use pezsp_runtime::{
-	traits::{BlakeTwo256, IdentityLookup},
-	BuildStorage,
-};
+use pezsp_runtime::BuildStorage;
 use pezsp_staking::{StakerStatus, StakingAccount};
-use std::collections::BTreeMap;
 
 // Paletimizdeki sabitleri import ediyoruz.
-use crate::{MONTH_IN_BLOCKS, UNITS};
+use crate::UNITS;
 
 // --- Tip Takma Adları ---
 type Block = pezframe_system::mocking::MockBlock<Test>;
 pub type AccountId = u64;
 pub type Balance = u128;
 pub type BlockNumber = u64;
-pub type Nonce = u64;
 pub type SessionIndex = u32;
 pub type EraIndex = u32;
 
@@ -43,8 +37,8 @@ parameter_types! {
 	pub static MaxWinners: u32 = 100;
 	pub static MaxBackersPerWinner: u32 = 64;
 	// Yeni eklenenler: pezpallet_staking::Config için gerekli minimum bond miktarları.
-	pub const MinNominatorBond: Balance = 1 * UNITS; // Testler için yeterince küçük bir değer.
-	pub const MinValidatorBond: Balance = 1 * UNITS; // Testler için yeterince küçük bir değer.
+	pub const MinNominatorBond: Balance = UNITS; // Testler için yeterince küçük bir değer.
+	pub const MinValidatorBond: Balance = UNITS; // Testler için yeterince küçük bir değer.
 }
 
 // --- construct_runtime! Makrosu ---
@@ -122,7 +116,7 @@ impl pezpallet_session::Config for Test {
 impl pezpallet_session::historical::Config for Test {
 	type RuntimeEvent = RuntimeEvent;
 	type FullIdentification = pezpallet_staking::Exposure<AccountId, Balance>;
-	type FullIdentificationOf = pezpallet_staking::ExposureOf<Test>;
+	type FullIdentificationOf = pezpallet_staking::DefaultExposureOf<Test>;
 }
 
 impl pezpallet_timestamp::Config for Test {
@@ -183,7 +177,7 @@ impl pezpallet_staking::Config for Test {
 pub struct StakingDataProvider;
 impl crate::StakingInfoProvider<AccountId, Balance> for StakingDataProvider {
 	fn get_staking_details(who: &AccountId) -> Option<crate::StakingDetails<Balance>> {
-		if let Ok(ledger) = Staking::ledger(StakingAccount::Stash(who.clone())) {
+		if let Ok(ledger) = Staking::ledger(StakingAccount::Stash(*who)) {
 			let nominations_count = Staking::nominators(who).map_or(0, |n| n.targets.len() as u32);
 			let unlocking_chunks_count = ledger.unlocking.len() as u32;
 
@@ -199,7 +193,6 @@ impl crate::StakingInfoProvider<AccountId, Balance> for StakingDataProvider {
 }
 
 impl crate::Config for Test {
-	type RuntimeEvent = RuntimeEvent;
 	type Balance = Balance;
 	type WeightInfo = ();
 	type StakingInfo = StakingDataProvider;
@@ -235,17 +228,6 @@ impl Default for ExtBuilder {
 }
 
 impl ExtBuilder {
-	pub fn add_staker(
-		mut self,
-		stash: AccountId,
-		ctrl: AccountId,
-		stake: Balance,
-		status: StakerStatus<AccountId>,
-	) -> Self {
-		self.stakers.push((stash, ctrl, stake, status));
-		self
-	}
-
 	pub fn build(self) -> pezsp_io::TestExternalities {
 		let mut storage =
 			pezframe_system::GenesisConfig::<Test>::default().build_storage().unwrap();
@@ -281,7 +263,7 @@ impl ExtBuilder {
 				.iter()
 				.filter_map(|(stash, _, _, status)| {
 					if let StakerStatus::Validator = status {
-						Some(stash.clone())
+						Some(*stash)
 					} else {
 						None
 					}
@@ -312,28 +294,10 @@ impl ExtBuilder {
 		.assimilate_storage(&mut storage)
 		.unwrap();
 
-		let mut ext = pezsp_io::TestExternalities::new(storage);
-		// run_to_block çağrısını ExtBuilder::build_and_execute içinde veya
-		// benchmarking setup'ında yapmak daha doğru. Burada sadece temel storage'ı kuruyoruz.
-		ext
+		pezsp_io::TestExternalities::new(storage)
 	}
 
-	pub fn build_and_execute(self, test: impl FnOnce() -> ()) {
+	pub fn build_and_execute(self, test: impl FnOnce()) {
 		self.build().execute_with(test);
-	}
-}
-
-/// Bloğu `n`'e kadar ilerletir.
-pub fn run_to_block(n: BlockNumber) {
-	while System::block_number() < n {
-		if System::block_number() > 1 {
-			System::on_finalize(System::block_number());
-			Session::on_finalize(System::block_number());
-			Staking::on_finalize(System::block_number());
-		}
-		System::set_block_number(System::block_number() + 1);
-		System::on_initialize(System::block_number());
-		Session::on_initialize(System::block_number());
-		Staking::on_initialize(System::block_number());
 	}
 }

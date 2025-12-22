@@ -31,18 +31,18 @@ static_assertions = { workspace = true, default-features = true }
 
 [dev-dependencies]
 criterion = { workspace = true, default-features = true }
+pezsp-crypto-hashing = { workspace = true, default-features = true }
 primitive-types = { workspace = true, default-features = true }
 rand = { workspace = true, default-features = true }
-pezsp-crypto-hashing = { workspace = true, default-features = true }
 
 [features]
 default = ["std"]
 std = [
-  "codec/std",
-  "num-traits/std",
-  "scale-info/std",
-  "serde/std",
-  "pezsp-crypto-hashing/std",
+	"codec/std",
+	"num-traits/std",
+	"pezsp-crypto-hashing/std",
+	"scale-info/std",
+	"serde/std",
 ]
 # Serde support without relying on std features.
 serde = ["dep:serde", "scale-info/serde"]

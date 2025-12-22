@@ -17,7 +17,7 @@ bounded-collections = { workspace = true }
 codec = { features = ["derive"], workspace = true }
 scale-info = { features = ["derive"], workspace = true }
 serde = { optional = true, features = [
-  "derive",
+	"derive",
 ], workspace = true, default-features = true }
 tracing = { workspace = true }
 
@@ -33,59 +33,59 @@ xcm-executor = { workspace = true }
 xcm-runtime-pezapis = { workspace = true }
 
 # marked optional, used in benchmarking
-pezframe-benchmarking = { optional = true, workspace = true }
 hex-literal = { workspace = true, default-features = false }
+pezframe-benchmarking = { optional = true, workspace = true }
 pezpallet-balances = { optional = true, workspace = true }
 
 [dev-dependencies]
-pezpallet-assets = { workspace = true, default-features = true }
 pezkuwi-runtime-teyrchains = { workspace = true, default-features = true }
 pezkuwi-teyrchain-primitives = { workspace = true, default-features = true }
+pezpallet-assets = { workspace = true, default-features = true }
 pezsp-tracing = { workspace = true, default-features = true }
 xcm-pez-simulator = { workspace = true, default-features = true }
 
 [features]
 default = ["std"]
 std = [
-  "bounded-collections/std",
-  "codec/std",
-  "pezframe-benchmarking?/std",
-  "pezframe-support/std",
-  "pezframe-system/std",
-  "pezpallet-balances/std",
-  "scale-info/std",
-  "serde",
-  "pezsp-core/std",
-  "pezsp-io/std",
-  "pezsp-runtime/std",
-  "tracing/std",
-  "xcm-builder/std",
-  "xcm-executor/std",
-  "xcm-runtime-pezapis/std",
-  "xcm/std",
+	"bounded-collections/std",
+	"codec/std",
+	"pezframe-benchmarking?/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
+	"pezpallet-balances/std",
+	"pezsp-core/std",
+	"pezsp-io/std",
+	"pezsp-runtime/std",
+	"scale-info/std",
+	"serde",
+	"tracing/std",
+	"xcm-builder/std",
+	"xcm-executor/std",
+	"xcm-runtime-pezapis/std",
+	"xcm/std",
 ]
 runtime-benchmarks = [
-  "pezframe-benchmarking/runtime-benchmarks",
-  "pezframe-support/runtime-benchmarks",
-  "pezframe-system/runtime-benchmarks",
-  "pezpallet-assets/runtime-benchmarks",
-  "pezpallet-balances/runtime-benchmarks",
-  "pezkuwi-runtime-teyrchains/runtime-benchmarks",
-  "pezkuwi-teyrchain-primitives/runtime-benchmarks",
-  "pezsp-io/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "xcm-builder/runtime-benchmarks",
-  "xcm-executor/runtime-benchmarks",
-  "xcm-runtime-pezapis/runtime-benchmarks",
-  "xcm-pez-simulator/runtime-benchmarks",
-  "xcm/runtime-benchmarks",
+	"pezframe-benchmarking/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezkuwi-runtime-teyrchains/runtime-benchmarks",
+	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
+	"pezpallet-assets/runtime-benchmarks",
+	"pezpallet-balances/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"xcm-builder/runtime-benchmarks",
+	"xcm-executor/runtime-benchmarks",
+	"xcm-pez-simulator/runtime-benchmarks",
+	"xcm-runtime-pezapis/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
 ]
 test-utils = ["std"]
 try-runtime = [
-  "pezframe-support/try-runtime",
-  "pezframe-system/try-runtime",
-  "pezpallet-assets/try-runtime",
-  "pezpallet-balances/try-runtime",
-  "pezkuwi-runtime-teyrchains/try-runtime",
-  "pezsp-runtime/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezkuwi-runtime-teyrchains/try-runtime",
+	"pezpallet-assets/try-runtime",
+	"pezpallet-balances/try-runtime",
+	"pezsp-runtime/try-runtime",
 ]

@@ -18,14 +18,12 @@ targets = ["x86_64-unknown-linux-gnu"]
 
 [dependencies]
 codec = { workspace = true }
-pezframe-support = { workspace = true }
-pezframe-support-procedural = { workspace = true }
-pezframe-system = { workspace = true }
 linregress = { optional = true, workspace = true }
 log = { workspace = true }
 paste = { workspace = true, default-features = true }
-scale-info = { features = ["derive"], workspace = true }
-serde = { optional = true, workspace = true, default-features = true }
+pezframe-support = { workspace = true }
+pezframe-support-procedural = { workspace = true }
+pezframe-system = { workspace = true }
 pezsp-api = { workspace = true }
 pezsp-application-crypto = { workspace = true }
 pezsp-core = { workspace = true }
@@ -33,46 +31,48 @@ pezsp-io = { workspace = true }
 pezsp-runtime = { workspace = true }
 pezsp-runtime-interface = { workspace = true }
 pezsp-storage = { workspace = true }
+scale-info = { features = ["derive"], workspace = true }
+serde = { optional = true, workspace = true, default-features = true }
 static_assertions = { workspace = true, default-features = true }
 
 [dev-dependencies]
 array-bytes = { workspace = true, default-features = true }
-rusty-fork = { workspace = true }
 pezsc-client-db = { workspace = true }
 pezsp-externalities = { workspace = true }
 pezsp-keystore = { workspace = true, default-features = true }
 pezsp-state-machine = { workspace = true }
+rusty-fork = { workspace = true }
 
 [features]
 default = ["std"]
 std = [
-  "codec/std",
-  "pezframe-support-procedural/std",
-  "pezframe-support/std",
-  "pezframe-system/std",
-  "linregress",
-  "log/std",
-  "scale-info/std",
-  "serde",
-  "pezsp-api/std",
-  "pezsp-application-crypto/std",
-  "pezsp-core/std",
-  "pezsp-externalities/std",
-  "pezsp-io/std",
-  "pezsp-keystore/std",
-  "pezsp-runtime-interface/std",
-  "pezsp-runtime/std",
-  "pezsp-state-machine/std",
-  "pezsp-storage/std",
+	"codec/std",
+	"linregress",
+	"log/std",
+	"pezframe-support-procedural/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
+	"pezsp-api/std",
+	"pezsp-application-crypto/std",
+	"pezsp-core/std",
+	"pezsp-externalities/std",
+	"pezsp-io/std",
+	"pezsp-keystore/std",
+	"pezsp-runtime-interface/std",
+	"pezsp-runtime/std",
+	"pezsp-state-machine/std",
+	"pezsp-storage/std",
+	"scale-info/std",
+	"serde",
 ]
 runtime-benchmarks = [
-  "pezframe-support-procedural/runtime-benchmarks",
-  "pezframe-support/runtime-benchmarks",
-  "pezframe-system/runtime-benchmarks",
-  "pezsc-client-db/runtime-benchmarks",
-  "pezsp-api/runtime-benchmarks",
-  "pezsp-io/runtime-benchmarks",
-  "pezsp-runtime-interface/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "pezsp-state-machine/runtime-benchmarks",
+	"pezframe-support-procedural/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezsc-client-db/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-runtime-interface/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-state-machine/runtime-benchmarks",
 ]

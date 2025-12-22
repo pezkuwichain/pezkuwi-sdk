@@ -1,7 +1,5 @@
 // pezkuwi/pallets/pez-treasury/src/benchmarking.rs
 
-#![cfg(feature = "runtime-benchmarks")]
-
 use super::*;
 use crate::Pezpallet as PezTreasury;
 use pezframe_benchmarking::v2::*;
@@ -58,7 +56,7 @@ mod benchmarks {
 		crate::NextReleaseMonth::<T>::kill();
 		crate::GenesisDistributionDone::<T>::kill();
 		// Deprecated `remove_all` yerine `clear` kullanılıyor.
-		crate::MonthlyReleases::<T>::clear(u32::MAX, None);
+		let _ = crate::MonthlyReleases::<T>::clear(u32::MAX, None);
 
 		// First do genesis distribution to properly fund the treasury
 		PezTreasury::<T>::do_genesis_distribution().unwrap();

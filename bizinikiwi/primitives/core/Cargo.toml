@@ -25,6 +25,7 @@ harness = false
 [dependencies]
 bip39 = { workspace = true, default-features = false, features = ["alloc"] }
 bitflags = { workspace = true }
+bizinikiwi-bip39 = { workspace = true }
 bounded-collections = { workspace = true, features = ["scale-codec"] }
 bs58 = { optional = true, workspace = true }
 codec = { features = ["derive", "max-encoded-len"], workspace = true }
@@ -36,19 +37,18 @@ itertools = { optional = true, workspace = true }
 log = { workspace = true }
 parking_lot = { optional = true, workspace = true, default-features = true }
 paste = { workspace = true, default-features = true }
-primitive-types = { features = ["codec", "scale-info"], workspace = true }
-rand = { features = [
-  "small_rng",
-], optional = true, workspace = true, default-features = true }
-scale-info = { features = ["derive"], workspace = true }
-secrecy = { features = ["alloc"], workspace = true }
-serde = { optional = true, features = ["alloc", "derive"], workspace = true }
 pezsp-debug-derive = { workspace = true }
 pezsp-externalities = { optional = true, workspace = true }
 pezsp-std = { workspace = true }
 pezsp-storage = { workspace = true }
+primitive-types = { features = ["codec", "scale-info"], workspace = true }
+rand = { features = [
+	"small_rng",
+], optional = true, workspace = true, default-features = true }
+scale-info = { features = ["derive"], workspace = true }
+secrecy = { features = ["alloc"], workspace = true }
+serde = { optional = true, features = ["alloc", "derive"], workspace = true }
 ss58-registry = { workspace = true }
-bizinikiwi-bip39 = { workspace = true }
 thiserror = { optional = true, workspace = true }
 tracing = { optional = true, workspace = true, default-features = true }
 zeroize = { workspace = true }
@@ -59,14 +59,14 @@ blake2 = { optional = true, workspace = true }
 ed25519-zebra = { workspace = true }
 libsecp256k1 = { features = ["static-context"], workspace = true }
 merlin = { workspace = true }
-schnorrkel = { features = ["preaudit_deprecated"], workspace = true }
 pezsp-crypto-hashing = { workspace = true }
+schnorrkel = { features = ["preaudit_deprecated"], workspace = true }
 # k256 crate, better portability, intended to be used in bizinikiwi-runtimes (no-std)
 k256 = { features = ["alloc", "ecdsa"], workspace = true }
 # secp256k1 crate, better performance, intended to be used on host side (std)
 secp256k1 = { features = [
-  "alloc",
-  "recovery",
+	"alloc",
+	"recovery",
 ], optional = true, workspace = true }
 
 # bls crypto
@@ -75,8 +75,8 @@ w3f-bls = { optional = true, workspace = true }
 
 # bandersnatch crypto
 ark-vrf = { optional = true, workspace = true, features = [
-  "bandersnatch",
-  "ring",
+	"bandersnatch",
+	"ring",
 ] }
 
 [target.'cfg(not(bizinikiwi_runtime))'.dependencies]
@@ -92,62 +92,62 @@ serde_json = { workspace = true, default-features = true }
 [features]
 default = ["std"]
 std = [
-  "ark-vrf?/std",
-  "bip39/rand",
-  "bip39/std",
-  "blake2/std",
-  "bounded-collections/std",
-  "bs58/std",
-  "codec/std",
-  "ed25519-zebra/std",
-  "full_crypto",
-  "futures/std",
-  "futures/thread-pool",
-  "hash-db/std",
-  "hash256-std-hasher/std",
-  "impl-serde/std",
-  "itertools",
-  "k256/std",
-  "libsecp256k1/std",
-  "log/std",
-  "merlin/std",
-  "parking_lot",
-  "primitive-types/byteorder",
-  "primitive-types/rustc-hex",
-  "primitive-types/serde",
-  "primitive-types/std",
-  "rand",
-  "scale-info/std",
-  "schnorrkel/std",
-  "secp256k1/global-context",
-  "secp256k1/std",
-  "serde/std",
-  "sha2?/std",
-  "pezsp-crypto-hashing/std",
-  "pezsp-debug-derive/std",
-  "pezsp-externalities/std",
-  "pezsp-std/std",
-  "pezsp-storage/std",
-  "ss58-registry/std",
-  "bizinikiwi-bip39/std",
-  "thiserror",
-  "tracing",
-  "w3f-bls?/std",
-  "zeroize/alloc",
-  "zeroize/std",
+	"ark-vrf?/std",
+	"bip39/rand",
+	"bip39/std",
+	"bizinikiwi-bip39/std",
+	"blake2/std",
+	"bounded-collections/std",
+	"bs58/std",
+	"codec/std",
+	"ed25519-zebra/std",
+	"full_crypto",
+	"futures/std",
+	"futures/thread-pool",
+	"hash-db/std",
+	"hash256-std-hasher/std",
+	"impl-serde/std",
+	"itertools",
+	"k256/std",
+	"libsecp256k1/std",
+	"log/std",
+	"merlin/std",
+	"parking_lot",
+	"pezsp-crypto-hashing/std",
+	"pezsp-debug-derive/std",
+	"pezsp-externalities/std",
+	"pezsp-std/std",
+	"pezsp-storage/std",
+	"primitive-types/byteorder",
+	"primitive-types/rustc-hex",
+	"primitive-types/serde",
+	"primitive-types/std",
+	"rand",
+	"scale-info/std",
+	"schnorrkel/std",
+	"secp256k1/global-context",
+	"secp256k1/std",
+	"serde/std",
+	"sha2?/std",
+	"ss58-registry/std",
+	"thiserror",
+	"tracing",
+	"w3f-bls?/std",
+	"zeroize/alloc",
+	"zeroize/std",
 ]
 
 # Serde support without relying on std features.
 serde = [
-  "blake2",
-  "bounded-collections/serde",
-  "bs58/alloc",
-  "dep:serde",
-  "impl-serde",
-  "k256/serde",
-  "primitive-types/serde_no_std",
-  "scale-info/serde",
-  "pezsp-storage/serde",
+	"blake2",
+	"bounded-collections/serde",
+	"bs58/alloc",
+	"dep:serde",
+	"impl-serde",
+	"k256/serde",
+	"pezsp-storage/serde",
+	"primitive-types/serde_no_std",
+	"scale-info/serde",
 ]
 
 # This feature enables all crypto primitives for `no_std` builds like microcontrollers

@@ -19,13 +19,13 @@ targets = ["x86_64-unknown-linux-gnu"]
 [dependencies]
 codec = { features = ["derive"], workspace = true }
 impl-serde = { optional = true, workspace = true }
+pezsp-debug-derive = { workspace = true }
 ref-cast = { workspace = true }
 serde = { features = ["alloc", "derive"], optional = true, workspace = true }
-pezsp-debug-derive = { workspace = true }
 
 [features]
 default = ["std"]
-std = ["codec/std", "impl-serde/std", "serde/std", "pezsp-debug-derive/std"]
+std = ["codec/std", "impl-serde/std", "pezsp-debug-derive/std", "serde/std"]
 
 # Serde support without relying on std features.
 serde = ["dep:serde", "impl-serde"]

@@ -21,7 +21,6 @@ log = { workspace = true, default-features = true }
 tracing = { workspace = true, default-features = true }
 
 # Bizinikiwi
-prometheus-endpoint = { workspace = true, default-features = true }
 pezsc-client-api = { workspace = true, default-features = true }
 pezsc-consensus = { workspace = true, default-features = true }
 pezsc-consensus-babe = { workspace = true, default-features = true }
@@ -34,6 +33,7 @@ pezsp-runtime = { workspace = true, default-features = true }
 pezsp-timestamp = { workspace = true, default-features = true }
 pezsp-trie = { workspace = true, default-features = true }
 pezsp-version = { workspace = true, default-features = true }
+prometheus-endpoint = { workspace = true, default-features = true }
 
 # Pezkuwi
 pezkuwi-primitives = { workspace = true, default-features = true }
@@ -58,22 +58,22 @@ pezcumulus-test-relay-sproof-builder = { workspace = true, default-features = tr
 
 [features]
 runtime-benchmarks = [
-  "pezcumulus-client-pov-recovery/runtime-benchmarks",
-  "pezcumulus-primitives-core/runtime-benchmarks",
-  "pezcumulus-relay-chain-interface/runtime-benchmarks",
-  "pezcumulus-relay-chain-streams/runtime-benchmarks",
-  "pezcumulus-test-client/runtime-benchmarks",
-  "pezcumulus-test-relay-sproof-builder/runtime-benchmarks",
-  "pezkuwi-primitives/runtime-benchmarks",
-  "pezsc-client-api/runtime-benchmarks",
-  "pezsc-consensus-babe/runtime-benchmarks",
-  "pezsc-consensus/runtime-benchmarks",
-  "pezsc-network/runtime-benchmarks",
-  "pezsp-blockchain/runtime-benchmarks",
-  "pezsp-consensus-slots/runtime-benchmarks",
-  "pezsp-consensus/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "pezsp-timestamp/runtime-benchmarks",
-  "pezsp-trie/runtime-benchmarks",
-  "pezsp-version/runtime-benchmarks",
+	"pezcumulus-client-pov-recovery/runtime-benchmarks",
+	"pezcumulus-primitives-core/runtime-benchmarks",
+	"pezcumulus-relay-chain-interface/runtime-benchmarks",
+	"pezcumulus-relay-chain-streams/runtime-benchmarks",
+	"pezcumulus-test-client/runtime-benchmarks",
+	"pezcumulus-test-relay-sproof-builder/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"pezsc-client-api/runtime-benchmarks",
+	"pezsc-consensus-babe/runtime-benchmarks",
+	"pezsc-consensus/runtime-benchmarks",
+	"pezsc-network/runtime-benchmarks",
+	"pezsp-blockchain/runtime-benchmarks",
+	"pezsp-consensus-slots/runtime-benchmarks",
+	"pezsp-consensus/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-timestamp/runtime-benchmarks",
+	"pezsp-trie/runtime-benchmarks",
+	"pezsp-version/runtime-benchmarks",
 ]

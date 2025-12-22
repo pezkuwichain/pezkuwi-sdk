@@ -15,16 +15,16 @@ workspace = true
 
 [dependencies]
 codec = { workspace = true, default-features = true }
+futures = { workspace = true }
 pezframe-support = { workspace = true }
 pezframe-system = { workspace = true, default-features = true }
-futures = { workspace = true }
-pezpallet-sudo = { workspace = true, default-features = true }
-pezpallet-transaction-payment = { workspace = true, default-features = true }
-pezpallet-xcm = { workspace = true, default-features = true }
 pezkuwi-runtime-teyrchains = { workspace = true, default-features = true }
 pezkuwi-test-client = { workspace = true }
 pezkuwi-test-runtime = { workspace = true }
 pezkuwi-test-service = { workspace = true }
+pezpallet-sudo = { workspace = true, default-features = true }
+pezpallet-transaction-payment = { workspace = true, default-features = true }
+pezpallet-xcm = { workspace = true, default-features = true }
 pezsp-consensus = { workspace = true, default-features = true }
 pezsp-keyring = { workspace = true, default-features = true }
 pezsp-runtime = { workspace = true }
@@ -36,27 +36,27 @@ xcm-executor = { workspace = true, default-features = true }
 [features]
 default = ["std"]
 std = [
-  "pezframe-support/std",
-  "pezframe-system/std",
-  "pezpallet-sudo/std",
-  "pezkuwi-runtime-teyrchains/std",
-  "pezsp-runtime/std",
-  "xcm/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
+	"pezkuwi-runtime-teyrchains/std",
+	"pezpallet-sudo/std",
+	"pezsp-runtime/std",
+	"xcm/std",
 ]
 runtime-benchmarks = [
-  "pezframe-support/runtime-benchmarks",
-  "pezframe-system/runtime-benchmarks",
-  "pezpallet-sudo/runtime-benchmarks",
-  "pezpallet-transaction-payment/runtime-benchmarks",
-  "pezpallet-xcm/runtime-benchmarks",
-  "pezkuwi-runtime-teyrchains/runtime-benchmarks",
-  "pezkuwi-test-client/runtime-benchmarks",
-  "pezkuwi-test-runtime/runtime-benchmarks",
-  "pezkuwi-test-service/runtime-benchmarks",
-  "pezsp-consensus/runtime-benchmarks",
-  "pezsp-keyring/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "pezsp-state-machine/runtime-benchmarks",
-  "xcm-executor/runtime-benchmarks",
-  "xcm/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezkuwi-runtime-teyrchains/runtime-benchmarks",
+	"pezkuwi-test-client/runtime-benchmarks",
+	"pezkuwi-test-runtime/runtime-benchmarks",
+	"pezkuwi-test-service/runtime-benchmarks",
+	"pezpallet-sudo/runtime-benchmarks",
+	"pezpallet-transaction-payment/runtime-benchmarks",
+	"pezpallet-xcm/runtime-benchmarks",
+	"pezsp-consensus/runtime-benchmarks",
+	"pezsp-keyring/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-state-machine/runtime-benchmarks",
+	"xcm-executor/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
 ]

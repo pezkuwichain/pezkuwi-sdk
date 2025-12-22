@@ -19,6 +19,8 @@ targets = ["x86_64-unknown-linux-gnu"]
 [dependencies]
 array-bytes = { workspace = true, default-features = true }
 async-channel = { workspace = true }
+bizinikiwi-test-runtime = { workspace = true }
+bizinikiwi-test-runtime-client = { workspace = true }
 codec = { workspace = true, default-features = true }
 fdlimit = { workspace = true }
 futures = { workspace = true }
@@ -42,28 +44,26 @@ pezsp-runtime = { workspace = true, default-features = true }
 pezsp-state-machine = { workspace = true, default-features = true }
 pezsp-storage = { workspace = true, default-features = true }
 pezsp-tracing = { workspace = true, default-features = true }
-bizinikiwi-test-runtime = { workspace = true }
-bizinikiwi-test-runtime-client = { workspace = true }
 tempfile = { workspace = true }
 tokio = { features = ["time"], workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-  "pezsc-block-builder/runtime-benchmarks",
-  "pezsc-client-api/runtime-benchmarks",
-  "pezsc-client-db/runtime-benchmarks",
-  "pezsc-consensus/runtime-benchmarks",
-  "pezsc-executor/runtime-benchmarks",
-  "pezsc-network-sync/runtime-benchmarks",
-  "pezsc-network/runtime-benchmarks",
-  "pezsc-service/runtime-benchmarks",
-  "pezsc-transaction-pool-api/runtime-benchmarks",
-  "pezsp-api/runtime-benchmarks",
-  "pezsp-blockchain/runtime-benchmarks",
-  "pezsp-consensus/runtime-benchmarks",
-  "pezsp-io/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "pezsp-state-machine/runtime-benchmarks",
-  "bizinikiwi-test-runtime-client/runtime-benchmarks",
-  "bizinikiwi-test-runtime/runtime-benchmarks",
+	"bizinikiwi-test-runtime-client/runtime-benchmarks",
+	"bizinikiwi-test-runtime/runtime-benchmarks",
+	"pezsc-block-builder/runtime-benchmarks",
+	"pezsc-client-api/runtime-benchmarks",
+	"pezsc-client-db/runtime-benchmarks",
+	"pezsc-consensus/runtime-benchmarks",
+	"pezsc-executor/runtime-benchmarks",
+	"pezsc-network-sync/runtime-benchmarks",
+	"pezsc-network/runtime-benchmarks",
+	"pezsc-service/runtime-benchmarks",
+	"pezsc-transaction-pool-api/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
+	"pezsp-blockchain/runtime-benchmarks",
+	"pezsp-consensus/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-state-machine/runtime-benchmarks",
 ]

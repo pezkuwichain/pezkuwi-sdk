@@ -26,17 +26,17 @@ pezsp-runtime = { workspace = true }
 [features]
 default = ["std"]
 std = [
-  "codec/std",
-  "pezframe-benchmarking?/std",
-  "pezframe-election-provider-support/std",
-  "pezframe-system/std",
-  "pezsp-npos-elections/std",
-  "pezsp-runtime/std",
+	"codec/std",
+	"pezframe-benchmarking?/std",
+	"pezframe-election-provider-support/std",
+	"pezframe-system/std",
+	"pezsp-npos-elections/std",
+	"pezsp-runtime/std",
 ]
 runtime-benchmarks = [
-  "pezframe-benchmarking/runtime-benchmarks",
-  "pezframe-election-provider-support/runtime-benchmarks",
-  "pezframe-system/runtime-benchmarks",
-  "pezsp-npos-elections/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
+	"pezframe-benchmarking/runtime-benchmarks",
+	"pezframe-election-provider-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezsp-npos-elections/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]

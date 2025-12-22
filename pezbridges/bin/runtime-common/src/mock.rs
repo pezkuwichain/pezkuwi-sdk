@@ -15,8 +15,10 @@
 // along with Parity Bridges Common.  If not, see <http://www.gnu.org/licenses/>.
 
 //! A mock runtime for testing different stuff in the crate.
+//! Mock types are used by macros but clippy doesn't see the usage.
 
 #![cfg(test)]
+#![allow(dead_code)]
 
 use bp_header_pez_chain::ChainWithGrandpa;
 use bp_messages::{

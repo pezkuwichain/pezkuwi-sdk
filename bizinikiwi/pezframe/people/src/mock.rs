@@ -102,7 +102,7 @@ parameter_types! {
 	pub static MaxRingSize: u32 = 10;
 }
 
-pub const MOCK_CONTEXT: Context = *b"pop:pezkuwi.network/mock       ";
+pub const MOCK_CONTEXT: Context = *b"pop:network.pezkuwichain.io/mock";
 match_types! {
 	pub type TestAccountContexts: impl Contains<Context> = {
 		&MOCK_CONTEXT

@@ -18,8 +18,8 @@ use pezpallet_revive_eth_rpc::subxt_client::{
 	self, revive::calls::types::InstantiateWithCode, SrcChainConfig,
 };
 use pezsp_weights::Weight;
-use subxt::OnlineClient;
-use subxt_signer::sr25519::dev;
+use pezkuwi_subxt::OnlineClient;
+use pezkuwi_subxt_signer::sr25519::dev;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {

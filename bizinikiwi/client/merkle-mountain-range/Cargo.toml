@@ -29,22 +29,22 @@ pezsp-mmr-primitives = { workspace = true, default-features = true }
 pezsp-runtime = { workspace = true, default-features = true }
 
 [dev-dependencies]
+bizinikiwi-test-runtime-client = { workspace = true }
 parking_lot = { workspace = true, default-features = true }
 pezsc-block-builder = { workspace = true, default-features = true }
 pezsp-tracing = { workspace = true, default-features = true }
-bizinikiwi-test-runtime-client = { workspace = true }
 tokio = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-  "pezsc-block-builder/runtime-benchmarks",
-  "pezsc-client-api/runtime-benchmarks",
-  "pezsc-offchain/runtime-benchmarks",
-  "pezsp-api/runtime-benchmarks",
-  "pezsp-blockchain/runtime-benchmarks",
-  "pezsp-consensus-beefy/runtime-benchmarks",
-  "pezsp-consensus/runtime-benchmarks",
-  "pezsp-mmr-primitives/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "bizinikiwi-test-runtime-client/runtime-benchmarks",
+	"bizinikiwi-test-runtime-client/runtime-benchmarks",
+	"pezsc-block-builder/runtime-benchmarks",
+	"pezsc-client-api/runtime-benchmarks",
+	"pezsc-offchain/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
+	"pezsp-blockchain/runtime-benchmarks",
+	"pezsp-consensus-beefy/runtime-benchmarks",
+	"pezsp-consensus/runtime-benchmarks",
+	"pezsp-mmr-primitives/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]
