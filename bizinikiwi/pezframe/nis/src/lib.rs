@@ -1071,10 +1071,10 @@ pub mod pezpallet {
 			let expiry = now.saturating_add(T::BasePeriod::get().saturating_mul(duration.into()));
 			let mut count = 0;
 
-			while count < max_bids &&
-				!queue.is_empty() &&
-				!remaining.is_zero() &&
-				weight.check_accrue(T::WeightInfo::process_bid())
+			while count < max_bids
+				&& !queue.is_empty()
+				&& !remaining.is_zero()
+				&& weight.check_accrue(T::WeightInfo::process_bid())
 			{
 				let bid = match queue.pop() {
 					Some(b) => b,

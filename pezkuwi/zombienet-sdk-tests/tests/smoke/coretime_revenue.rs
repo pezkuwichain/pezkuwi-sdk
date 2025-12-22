@@ -11,9 +11,7 @@
 
 use anyhow::anyhow;
 
-#[pezkuwi_subxt::subxt(
-	runtime_metadata_path = "metadata-files/coretime-pezkuwichain-local.scale"
-)]
+#[pezkuwi_subxt::subxt(runtime_metadata_path = "metadata-files/coretime-pezkuwichain-local.scale")]
 mod coretime_pezkuwichain {}
 
 #[pezkuwi_subxt::subxt(runtime_metadata_path = "metadata-files/pezkuwichain-local.scale")]
@@ -105,10 +103,8 @@ macro_rules! trace_event {
 	};
 }
 
-async fn para_watcher<C: pezkuwi_subxt::Config + Clone>(
-	api: OnlineClient<C>,
-	events: EventOf<C>,
-) where
+async fn para_watcher<C: pezkuwi_subxt::Config + Clone>(api: OnlineClient<C>, events: EventOf<C>)
+where
 	<C::Header as pezkuwi_subxt::config::Header>::Number: Display,
 {
 	let mut blocks_sub = api.blocks().subscribe_finalized().await.unwrap();
@@ -135,10 +131,8 @@ async fn para_watcher<C: pezkuwi_subxt::Config + Clone>(
 	}
 }
 
-async fn relay_watcher<C: pezkuwi_subxt::Config + Clone>(
-	api: OnlineClient<C>,
-	events: EventOf<C>,
-) where
+async fn relay_watcher<C: pezkuwi_subxt::Config + Clone>(api: OnlineClient<C>, events: EventOf<C>)
+where
 	<C::Header as pezkuwi_subxt::config::Header>::Number: Display,
 {
 	let mut blocks_sub = api.blocks().subscribe_finalized().await.unwrap();
@@ -177,9 +171,9 @@ async fn wait_for_event<
 	loop {
 		let mut events = events.write().await;
 		if let Some(entry) = events.iter().find(|&e| {
-			e.1.pezpallet_name() == pezpallet &&
-				e.1.variant_name() == variant &&
-				predicate(&e.1.as_event::<E>().unwrap().unwrap())
+			e.1.pezpallet_name() == pezpallet
+				&& e.1.variant_name() == variant
+				&& predicate(&e.1.as_event::<E>().unwrap().unwrap())
 		}) {
 			let entry = entry.clone();
 			events.retain(|e| e.0 > entry.0);
@@ -190,10 +184,8 @@ async fn wait_for_event<
 	}
 }
 
-async fn ti_watcher<C: pezkuwi_subxt::Config + Clone>(
-	api: OnlineClient<C>,
-	prefix: &'static str,
-) where
+async fn ti_watcher<C: pezkuwi_subxt::Config + Clone>(api: OnlineClient<C>, prefix: &'static str)
+where
 	<C::Header as pezkuwi_subxt::config::Header>::Number: Display,
 {
 	let mut blocks_sub = api.blocks().subscribe_finalized().await.unwrap();

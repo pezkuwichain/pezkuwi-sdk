@@ -112,8 +112,9 @@ pub fn take_or_else<T: Codec + Sized, F: FnOnce() -> T>(
 /// Check to see if `key` has an explicit entry in storage.
 pub fn exists(child_info: &ChildInfo, key: &[u8]) -> bool {
 	match child_info.child_type() {
-		ChildType::ParentKeyId =>
-			pezsp_io::default_child_storage::exists(child_info.storage_key(), key),
+		ChildType::ParentKeyId => {
+			pezsp_io::default_child_storage::exists(child_info.storage_key(), key)
+		},
 	}
 }
 
@@ -139,8 +140,9 @@ pub fn exists(child_info: &ChildInfo, key: &[u8]) -> bool {
 #[deprecated = "Use `clear_storage` instead"]
 pub fn kill_storage(child_info: &ChildInfo, limit: Option<u32>) -> KillStorageResult {
 	match child_info.child_type() {
-		ChildType::ParentKeyId =>
-			pezsp_io::default_child_storage::storage_kill(child_info.storage_key(), limit),
+		ChildType::ParentKeyId => {
+			pezsp_io::default_child_storage::storage_kill(child_info.storage_key(), limit)
+		},
 	}
 }
 
@@ -185,8 +187,9 @@ pub fn clear_storage(
 	// enabled.
 	// pezsp_io::default_child_storage::storage_kill(prefix, maybe_limit, maybe_cursor)
 	let r = match child_info.child_type() {
-		ChildType::ParentKeyId =>
-			pezsp_io::default_child_storage::storage_kill(child_info.storage_key(), maybe_limit),
+		ChildType::ParentKeyId => {
+			pezsp_io::default_child_storage::storage_kill(child_info.storage_key(), maybe_limit)
+		},
 	};
 	use pezsp_io::KillStorageResult::*;
 	let (maybe_cursor, backend) = match r {
@@ -208,24 +211,27 @@ pub fn kill(child_info: &ChildInfo, key: &[u8]) {
 /// Get a Vec of bytes from storage.
 pub fn get_raw(child_info: &ChildInfo, key: &[u8]) -> Option<Vec<u8>> {
 	match child_info.child_type() {
-		ChildType::ParentKeyId =>
-			pezsp_io::default_child_storage::get(child_info.storage_key(), key),
+		ChildType::ParentKeyId => {
+			pezsp_io::default_child_storage::get(child_info.storage_key(), key)
+		},
 	}
 }
 
 /// Put a raw byte slice into storage.
 pub fn put_raw(child_info: &ChildInfo, key: &[u8], value: &[u8]) {
 	match child_info.child_type() {
-		ChildType::ParentKeyId =>
-			pezsp_io::default_child_storage::set(child_info.storage_key(), key, value),
+		ChildType::ParentKeyId => {
+			pezsp_io::default_child_storage::set(child_info.storage_key(), key, value)
+		},
 	}
 }
 
 /// Calculate current child root value.
 pub fn root(child_info: &ChildInfo, version: StateVersion) -> Vec<u8> {
 	match child_info.child_type() {
-		ChildType::ParentKeyId =>
-			pezsp_io::default_child_storage::root(child_info.storage_key(), version),
+		ChildType::ParentKeyId => {
+			pezsp_io::default_child_storage::root(child_info.storage_key(), version)
+		},
 	}
 }
 

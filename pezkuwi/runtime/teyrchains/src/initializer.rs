@@ -173,16 +173,16 @@ pub mod pezpallet {
 			// - DMP
 			// - UMP
 			// - HRMP
-			let total_weight = configuration::Pezpallet::<T>::initializer_initialize(now) +
-				shared::Pezpallet::<T>::initializer_initialize(now) +
-				paras::Pezpallet::<T>::initializer_initialize(now) +
-				scheduler::Pezpallet::<T>::initializer_initialize(now) +
-				inclusion::Pezpallet::<T>::initializer_initialize(now) +
-				session_info::Pezpallet::<T>::initializer_initialize(now) +
-				T::DisputesHandler::initializer_initialize(now) +
-				T::SlashingHandler::initializer_initialize(now) +
-				dmp::Pezpallet::<T>::initializer_initialize(now) +
-				hrmp::Pezpallet::<T>::initializer_initialize(now);
+			let total_weight = configuration::Pezpallet::<T>::initializer_initialize(now)
+				+ shared::Pezpallet::<T>::initializer_initialize(now)
+				+ paras::Pezpallet::<T>::initializer_initialize(now)
+				+ scheduler::Pezpallet::<T>::initializer_initialize(now)
+				+ inclusion::Pezpallet::<T>::initializer_initialize(now)
+				+ session_info::Pezpallet::<T>::initializer_initialize(now)
+				+ T::DisputesHandler::initializer_initialize(now)
+				+ T::SlashingHandler::initializer_initialize(now)
+				+ dmp::Pezpallet::<T>::initializer_initialize(now)
+				+ hrmp::Pezpallet::<T>::initializer_initialize(now);
 
 			HasInitialized::<T>::set(Some(()));
 

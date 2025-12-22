@@ -65,7 +65,10 @@ pub const HEZ_AIRDROP_ALLOCATION: u128 = 40_000_000 * TYR;
 // COMPILE-TIME VALIDATION: Ensure allocations sum to 200M genesis supply
 // ===========================================================================
 const _: () = assert!(
-	HEZ_FOUNDER_ALLOCATION + HEZ_PRESALE_ALLOCATION + HEZ_TREASURY_ALLOCATION + HEZ_AIRDROP_ALLOCATION
+	HEZ_FOUNDER_ALLOCATION
+		+ HEZ_PRESALE_ALLOCATION
+		+ HEZ_TREASURY_ALLOCATION
+		+ HEZ_AIRDROP_ALLOCATION
 		== 200_000_000 * TYR,
 	"HEZ allocations MUST sum to genesis supply (200M)"
 );
@@ -164,9 +167,9 @@ fn default_teyrchains_host_configuration(
 			allowed_ancestry_len: 0,
 		},
 		node_features: bitvec::vec::BitVec::from_element(
-			(1u8 << (FeatureIndex::ElasticScalingMVP as usize)) |
-				(1u8 << (FeatureIndex::EnableAssignmentsV2 as usize)) |
-				(1u8 << (FeatureIndex::CandidateReceiptV2 as usize)),
+			(1u8 << (FeatureIndex::ElasticScalingMVP as usize))
+				| (1u8 << (FeatureIndex::EnableAssignmentsV2 as usize))
+				| (1u8 << (FeatureIndex::CandidateReceiptV2 as usize)),
 		),
 		scheduler_params: SchedulerParams {
 			lookahead: 3,
@@ -189,8 +192,10 @@ fn default_teyrchains_host_configuration_is_consistent() {
 #[test]
 fn hez_allocations_sum_to_200m() {
 	// Runtime validation that allocations sum to 200M
-	let total = HEZ_FOUNDER_ALLOCATION + HEZ_PRESALE_ALLOCATION +
-		HEZ_TREASURY_ALLOCATION + HEZ_AIRDROP_ALLOCATION;
+	let total = HEZ_FOUNDER_ALLOCATION
+		+ HEZ_PRESALE_ALLOCATION
+		+ HEZ_TREASURY_ALLOCATION
+		+ HEZ_AIRDROP_ALLOCATION;
 	assert_eq!(total, 200_000_000 * TYR, "HEZ total supply must equal 200M");
 }
 

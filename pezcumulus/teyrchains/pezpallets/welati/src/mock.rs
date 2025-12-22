@@ -125,7 +125,9 @@ parameter_types! {
 pub struct NftsBenchmarkHelper;
 
 #[cfg(feature = "runtime-benchmarks")]
-impl pezpallet_nfts::BenchmarkHelper<u32, u32, UintAuthorityId, AccountId, TestSignature> for NftsBenchmarkHelper {
+impl pezpallet_nfts::BenchmarkHelper<u32, u32, UintAuthorityId, AccountId, TestSignature>
+	for NftsBenchmarkHelper
+{
 	fn collection(i: u16) -> u32 {
 		i.into()
 	}
@@ -192,10 +194,13 @@ parameter_types! {
 pub struct IdentityBenchmarkHelper;
 
 #[cfg(feature = "runtime-benchmarks")]
-impl pezpallet_identity::BenchmarkHelper<UintAuthorityId, TestSignature> for IdentityBenchmarkHelper {
+impl pezpallet_identity::BenchmarkHelper<UintAuthorityId, TestSignature>
+	for IdentityBenchmarkHelper
+{
 	fn sign_message(message: &[u8]) -> (UintAuthorityId, TestSignature) {
 		let signer = UintAuthorityId(0);
-		let signature = <UintAuthorityId as RuntimeAppPublic>::sign(&signer, &message.to_vec()).unwrap();
+		let signature =
+			<UintAuthorityId as RuntimeAppPublic>::sign(&signer, &message.to_vec()).unwrap();
 		(signer, signature)
 	}
 }

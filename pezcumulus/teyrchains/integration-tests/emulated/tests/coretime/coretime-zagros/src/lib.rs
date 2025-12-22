@@ -28,26 +28,18 @@ mod imports {
 	};
 	pub(crate) use zagros_system_emulated_network::{
 		asset_hub_zagros_emulated_chain::{
-			genesis::ED as ASSET_HUB_ZAGROS_ED,
-			AssetHubZagrosParaPezpallet,
+			genesis::ED as ASSET_HUB_ZAGROS_ED, AssetHubZagrosParaPezpallet,
 		},
 		collectives_zagros_emulated_chain::CollectivesZagrosParaPezpallet,
 		coretime_zagros_emulated_chain::{
 			self, coretime_zagros_runtime::ExistentialDeposit as CoretimeZagrosExistentialDeposit,
-			genesis::ED as CORETIME_ZAGROS_ED,
-			CoretimeZagrosParaPezpallet,
+			genesis::ED as CORETIME_ZAGROS_ED, CoretimeZagrosParaPezpallet,
 			CoretimeZagrosParaPezpallet as CoretimeZagrosPallet,
 		},
 		people_zagros_emulated_chain::PeopleZagrosParaPezpallet,
-		pez_penpal_emulated_chain::{
-			PenpalAssetOwner,
-			PenpalBParaPezpallet,
-		},
+		pez_penpal_emulated_chain::{PenpalAssetOwner, PenpalBParaPezpallet},
 		pezbridge_hub_zagros_emulated_chain::BridgeHubZagrosParaPezpallet,
-		zagros_emulated_chain::{
-			genesis::ED as ZAGROS_ED,
-			ZagrosRelayPezpallet,
-		},
+		zagros_emulated_chain::{genesis::ED as ZAGROS_ED, ZagrosRelayPezpallet},
 		AssetHubZagrosPara as AssetHubZagros, AssetHubZagrosParaReceiver as AssetHubZagrosReceiver,
 		AssetHubZagrosParaSender as AssetHubZagrosSender, BridgeHubZagrosPara as BridgeHubZagros,
 		CollectivesZagrosPara as CollectivesZagros, CoretimeZagrosPara as CoretimeZagros,

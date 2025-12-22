@@ -191,11 +191,12 @@ mod v1 {
 			for (core_index, core) in availability_cores.into_iter().enumerate() {
 				let new_core = if let Some(core) = core {
 					match core {
-						v0::CoreOccupied::Teyrchain =>
+						v0::CoreOccupied::Teyrchain => {
 							v1::CoreOccupied::Paras(v1::ParasEntry::new(
 								V0Assignment { para_id: teyrchains[core_index] },
 								now,
-							)),
+							))
+						},
 						v0::CoreOccupied::Parathread(entry) => v1::CoreOccupied::Paras(
 							v1::ParasEntry::new(V0Assignment { para_id: entry.claim.0 }, now),
 						),
@@ -223,8 +224,8 @@ mod v1 {
 
 		#[cfg(feature = "try-runtime")]
 		fn pre_upgrade() -> Result<Vec<u8>, pezsp_runtime::DispatchError> {
-			let n: u32 = v0::Scheduled::<T>::get().len() as u32 +
-				v0::AvailabilityCores::<T>::get().iter().filter(|c| c.is_some()).count() as u32;
+			let n: u32 = v0::Scheduled::<T>::get().len() as u32
+				+ v0::AvailabilityCores::<T>::get().iter().filter(|c| c.is_some()).count() as u32;
 
 			log::info!(
 				target: crate::scheduler::LOG_TARGET,
@@ -250,8 +251,8 @@ mod v1 {
 				.count();
 
 			ensure!(
-				Pezpallet::<T>::claim_queue_len() as u32 + availability_cores_waiting as u32 ==
-					expected_len,
+				Pezpallet::<T>::claim_queue_len() as u32 + availability_cores_waiting as u32
+					== expected_len,
 				"ClaimQueue and AvailabilityCores should have the correct length",
 			);
 

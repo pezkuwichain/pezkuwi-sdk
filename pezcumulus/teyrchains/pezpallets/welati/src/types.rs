@@ -1339,31 +1339,33 @@ impl OfficialRoleInfo for OfficialRole {
 
 	fn nominating_minister(&self) -> MinisterRole {
 		match self {
-			OfficialRole::Dadger |
-			OfficialRole::Dozger |
-			OfficialRole::Hiquqnas |
-			OfficialRole::Noter => MinisterRole::AdvaletWeziri,
+			OfficialRole::Dadger
+			| OfficialRole::Dozger
+			| OfficialRole::Hiquqnas
+			| OfficialRole::Noter => MinisterRole::AdvaletWeziri,
 
-			OfficialRole::Xezinedar | OfficialRole::Bacgir | OfficialRole::GerinendeyeCavkaniye =>
-				MinisterRole::XezineWeziri,
+			OfficialRole::Xezinedar | OfficialRole::Bacgir | OfficialRole::GerinendeyeCavkaniye => {
+				MinisterRole::XezineWeziri
+			},
 
-			OfficialRole::OperatoreTore |
-			OfficialRole::PisporeEwlehiyaSiber |
-			OfficialRole::GerinendeyeDaneye => MinisterRole::TeknolojîWeziri,
+			OfficialRole::OperatoreTore
+			| OfficialRole::PisporeEwlehiyaSiber
+			| OfficialRole::GerinendeyeDaneye => MinisterRole::TeknolojîWeziri,
 
 			OfficialRole::Berdevk | OfficialRole::Qeydkar => MinisterRole::NavxweWeziri,
 
-			OfficialRole::Balyoz | OfficialRole::Navbeynkar | OfficialRole::ParezvaneCandi =>
-				MinisterRole::DerveWeziri,
+			OfficialRole::Balyoz | OfficialRole::Navbeynkar | OfficialRole::ParezvaneCandi => {
+				MinisterRole::DerveWeziri
+			},
 
 			OfficialRole::Mufetis | OfficialRole::KaliteKontrolker => MinisterRole::DenetimWeziri,
 
 			OfficialRole::Bazargan | OfficialRole::RêvebereProjeyê => MinisterRole::AbûrîWeziri,
 
-			OfficialRole::Feqi |
-			OfficialRole::Perwerdekar |
-			OfficialRole::Rewsenbir |
-			OfficialRole::Mamoste => MinisterRole::PerwerdeDiyanetWeziri,
+			OfficialRole::Feqi
+			| OfficialRole::Perwerdekar
+			| OfficialRole::Rewsenbir
+			| OfficialRole::Mamoste => MinisterRole::PerwerdeDiyanetWeziri,
 
 			// Mela özel durum - doğrudan Serok atar
 			OfficialRole::Mela => MinisterRole::AdvaletWeziri, // Placeholder
@@ -1373,11 +1375,11 @@ impl OfficialRoleInfo for OfficialRole {
 	fn requires_parliament_approval(&self) -> bool {
 		match self {
 			// Yüksek düzey pozisyonlar Parlamento onayı gerektirir
-			OfficialRole::Dadger |
-			OfficialRole::Xezinedar |
-			OfficialRole::PisporeEwlehiyaSiber |
-			OfficialRole::Mufetis |
-			OfficialRole::Balyoz => true,
+			OfficialRole::Dadger
+			| OfficialRole::Xezinedar
+			| OfficialRole::PisporeEwlehiyaSiber
+			| OfficialRole::Mufetis
+			| OfficialRole::Balyoz => true,
 			// Diğerleri sadece Serok onayı
 			_ => false,
 		}

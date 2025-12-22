@@ -58,16 +58,14 @@ mod imports {
 				CustomizableAssetFromSystemAssetHub as PenpalCustomizableAssetFromSystemAssetHub,
 				UniversalLocation as PenpalUniversalLocation,
 			},
-			PenpalAParaPezpallet as PenpalAPallet,
-			PenpalAssetOwner,
+			PenpalAParaPezpallet as PenpalAPallet, PenpalAssetOwner,
 		},
 		pezbridge_hub_pezkuwichain_emulated_chain::{
 			genesis::ED as BRIDGE_HUB_PEZKUWICHAIN_ED, BridgeHubPezkuwichainExistentialDeposit,
 			BridgeHubPezkuwichainParaPezpallet,
 		},
 		pezkuwichain_emulated_chain::{
-			genesis::ED as PEZKUWICHAIN_ED,
-			PezkuwichainRelayPezpallet,
+			genesis::ED as PEZKUWICHAIN_ED, PezkuwichainRelayPezpallet,
 			PezkuwichainRelayPezpallet as PezkuwichainPallet,
 		},
 		AssetHubPezkuwichainPara as AssetHubPezkuwichain,

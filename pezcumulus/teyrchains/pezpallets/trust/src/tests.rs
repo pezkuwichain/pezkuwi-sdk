@@ -303,8 +303,8 @@ fn update_all_trust_scores_emits_event() {
 
 		let events = System::events();
 		let bulk_update_event = events.iter().any(|event| {
-			matches!(event.event, RuntimeEvent::TrustPallet(Event::BulkTrustScoreUpdate { .. })) ||
-				matches!(
+			matches!(event.event, RuntimeEvent::TrustPallet(Event::BulkTrustScoreUpdate { .. }))
+				|| matches!(
 					event.event,
 					RuntimeEvent::TrustPallet(Event::AllTrustScoresUpdated { .. })
 				)
@@ -412,7 +412,6 @@ fn multiple_users_independent_scores() {
 #[test]
 fn trust_score_provider_trait_returns_zero_initially() {
 	new_test_ext().execute_with(|| {
-
 		let account = 1u64;
 		let score = TrustPallet::trust_score_of(account);
 		assert_eq!(score, 0);
@@ -422,7 +421,6 @@ fn trust_score_provider_trait_returns_zero_initially() {
 #[test]
 fn trust_score_provider_trait_returns_updated_score() {
 	new_test_ext().execute_with(|| {
-
 		let account = 1u64;
 		TrustPallet::update_score_for_account(&account).unwrap();
 
@@ -434,7 +432,6 @@ fn trust_score_provider_trait_returns_updated_score() {
 #[test]
 fn trust_score_provider_trait_multiple_users() {
 	new_test_ext().execute_with(|| {
-
 		TrustPallet::update_score_for_account(&1u64).unwrap();
 		TrustPallet::update_score_for_account(&2u64).unwrap();
 

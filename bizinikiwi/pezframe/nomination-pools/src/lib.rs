@@ -644,9 +644,10 @@ impl<T: Config> PoolMember<T> {
 	) -> Result<(), Error<T>> {
 		if let Some(new_points) = self.points.checked_sub(&points_dissolved) {
 			match self.unbonding_eras.get_mut(&unbonding_era) {
-				Some(already_unbonding_points) =>
+				Some(already_unbonding_points) => {
 					*already_unbonding_points =
-						already_unbonding_points.saturating_add(points_issued),
+						already_unbonding_points.saturating_add(points_issued)
+				},
 				None => self
 					.unbonding_eras
 					.try_insert(unbonding_era, points_issued)
@@ -1138,8 +1139,8 @@ impl<T: Config> BondedPool<T> {
 	}
 
 	fn can_nominate(&self, who: &T::AccountId) -> bool {
-		self.is_root(who) ||
-			self.roles.nominator.as_ref().map_or(false, |nominator| nominator == who)
+		self.is_root(who)
+			|| self.roles.nominator.as_ref().map_or(false, |nominator| nominator == who)
 	}
 
 	fn can_kick(&self, who: &T::AccountId) -> bool {
@@ -1246,9 +1247,9 @@ impl<T: Config> BondedPool<T> {
 
 		// any unbond must comply with the balance condition:
 		ensure!(
-			is_full_unbond ||
-				balance_after_unbond >=
-					if is_depositor {
+			is_full_unbond
+				|| balance_after_unbond
+					>= if is_depositor {
 						Pezpallet::<T>::depositor_min_bond()
 					} else {
 						MinJoinBond::<T>::get()
@@ -2876,8 +2877,8 @@ pub mod pezpallet {
 				.ok_or(Error::<T>::PoolMemberNotFound)?
 				.active_points();
 
-			if bonded_pool.points_to_balance(depositor_points) >=
-				T::StakeAdapter::minimum_nominator_bond()
+			if bonded_pool.points_to_balance(depositor_points)
+				>= T::StakeAdapter::minimum_nominator_bond()
 			{
 				ensure!(bonded_pool.can_nominate(&who), Error::<T>::NotNominator);
 			}
@@ -3246,8 +3247,8 @@ pub mod pezpallet {
 			// ensure pool exists.
 			let bonded_pool = BondedPool::<T>::get(pool_id).ok_or(Error::<T>::PoolNotFound)?;
 			ensure!(
-				T::StakeAdapter::pool_strategy(Pool::from(bonded_pool.bonded_account())) ==
-					adapter::StakeStrategyType::Transfer,
+				T::StakeAdapter::pool_strategy(Pool::from(bonded_pool.bonded_account()))
+					== adapter::StakeStrategyType::Transfer,
 				Error::<T>::AlreadyMigrated
 			);
 
@@ -3620,10 +3621,12 @@ impl<T: Config> Pezpallet<T> {
 		)?;
 
 		let (points_issued, bonded) = match extra {
-			BondExtra::FreeBalance(amount) =>
-				(bonded_pool.try_bond_funds(&member_account, amount, BondType::Extra)?, amount),
-			BondExtra::Rewards =>
-				(bonded_pool.try_bond_funds(&member_account, claimed, BondType::Extra)?, claimed),
+			BondExtra::FreeBalance(amount) => {
+				(bonded_pool.try_bond_funds(&member_account, amount, BondType::Extra)?, amount)
+			},
+			BondExtra::Rewards => {
+				(bonded_pool.try_bond_funds(&member_account, claimed, BondType::Extra)?, claimed)
+			},
 		};
 
 		bonded_pool.ok_to_be_open()?;
@@ -3776,8 +3779,8 @@ impl<T: Config> Pezpallet<T> {
 	) -> Result<BalanceOf<T>, DispatchError> {
 		// only executed in tests: ensure the member account is correct.
 		debug_assert!(
-			PoolMembers::<T>::get(member_account.clone().get()).expect("member must exist") ==
-				pool_member
+			PoolMembers::<T>::get(member_account.clone().get()).expect("member must exist")
+				== pool_member
 		);
 
 		let pool_account = Pezpallet::<T>::generate_bonded_account(pool_member.pool_id);
@@ -3879,8 +3882,8 @@ impl<T: Config> Pezpallet<T> {
 
 		for id in reward_pools {
 			let account = Self::generate_reward_account(id);
-			if T::Currency::reducible_balance(&account, Preservation::Expendable, Fortitude::Polite) <
-				T::Currency::minimum_balance()
+			if T::Currency::reducible_balance(&account, Preservation::Expendable, Fortitude::Polite)
+				< T::Currency::minimum_balance()
 			{
 				log!(
 					warn,
@@ -3925,8 +3928,8 @@ impl<T: Config> Pezpallet<T> {
 		RewardPools::<T>::iter_keys().try_for_each(|id| -> Result<(), TryRuntimeError> {
 			// the sum of the pending rewards must be less than the leftover balance. Since the
 			// reward math rounds down, we might accumulate some dust here.
-			let pending_rewards_lt_leftover_bal = RewardPool::<T>::current_balance(id) >=
-				pools_members_pending_rewards.get(&id).copied().unwrap_or_default();
+			let pending_rewards_lt_leftover_bal = RewardPool::<T>::current_balance(id)
+				>= pools_members_pending_rewards.get(&id).copied().unwrap_or_default();
 
 			// If this happens, this is most likely due to an old bug and not a recent code change.
 			// We warn about this in try-runtime checks but do not panic.
@@ -3958,8 +3961,8 @@ impl<T: Config> Pezpallet<T> {
 
 			let depositor = PoolMembers::<T>::get(&bonded_pool.roles.depositor).unwrap();
 			let depositor_has_enough_stake = bonded_pool
-				.is_destroying_and_only_depositor(depositor.active_points()) ||
-				depositor.active_points() >= MinCreateBond::<T>::get();
+				.is_destroying_and_only_depositor(depositor.active_points())
+				|| depositor.active_points() >= MinCreateBond::<T>::get();
 			if !depositor_has_enough_stake {
 				log!(
 					warn,
@@ -4162,8 +4165,8 @@ impl<T: Config> Pezpallet<T> {
 		let pool_account = Self::generate_bonded_account(pool_id);
 
 		// true if pool is still not migrated to `DelegateStake`.
-		T::StakeAdapter::pool_strategy(Pool::from(pool_account)) !=
-			adapter::StakeStrategyType::Delegate
+		T::StakeAdapter::pool_strategy(Pool::from(pool_account))
+			!= adapter::StakeStrategyType::Delegate
 	}
 
 	/// Checks whether member delegation needs to be migrated to

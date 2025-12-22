@@ -583,13 +583,13 @@ pub mod pezpallet {
 			T::ChannelManager::ensure_origin(origin)?;
 
 			ensure!(
-				HrmpIngressChannelsIndex::<T>::decode_len(para).unwrap_or_default() <=
-					num_inbound as usize,
+				HrmpIngressChannelsIndex::<T>::decode_len(para).unwrap_or_default()
+					<= num_inbound as usize,
 				Error::<T>::WrongWitness
 			);
 			ensure!(
-				HrmpEgressChannelsIndex::<T>::decode_len(para).unwrap_or_default() <=
-					num_outbound as usize,
+				HrmpEgressChannelsIndex::<T>::decode_len(para).unwrap_or_default()
+					<= num_outbound as usize,
 				Error::<T>::WrongWitness
 			);
 
@@ -611,8 +611,8 @@ pub mod pezpallet {
 			T::ChannelManager::ensure_origin(origin)?;
 
 			ensure!(
-				HrmpOpenChannelRequestsList::<T>::decode_len().unwrap_or_default() as u32 <=
-					channels,
+				HrmpOpenChannelRequestsList::<T>::decode_len().unwrap_or_default() as u32
+					<= channels,
 				Error::<T>::WrongWitness
 			);
 
@@ -635,8 +635,8 @@ pub mod pezpallet {
 			T::ChannelManager::ensure_origin(origin)?;
 
 			ensure!(
-				HrmpCloseChannelRequestsList::<T>::decode_len().unwrap_or_default() as u32 <=
-					channels,
+				HrmpCloseChannelRequestsList::<T>::decode_len().unwrap_or_default() as u32
+					<= channels,
 				Error::<T>::WrongWitness
 			);
 
@@ -661,8 +661,8 @@ pub mod pezpallet {
 		) -> DispatchResult {
 			let origin = ensure_teyrchain(<T as Config>::RuntimeOrigin::from(origin))?;
 			ensure!(
-				HrmpOpenChannelRequestsList::<T>::decode_len().unwrap_or_default() as u32 <=
-					open_requests,
+				HrmpOpenChannelRequestsList::<T>::decode_len().unwrap_or_default() as u32
+					<= open_requests,
 				Error::<T>::WrongWitness
 			);
 			Self::cancel_open_request(origin, channel_id.clone())?;
@@ -795,8 +795,8 @@ pub mod pezpallet {
 					let current_recipient_deposit = channel.recipient_deposit;
 
 					// nothing to update
-					if current_sender_deposit == new_sender_deposit &&
-						current_recipient_deposit == new_recipient_deposit
+					if current_sender_deposit == new_sender_deposit
+						&& current_recipient_deposit == new_recipient_deposit
 					{
 						return Ok(());
 					}
@@ -1081,8 +1081,8 @@ impl<T: Config> Pezpallet<T> {
 			let recipient_deposit = if system_channel { 0 } else { config.hrmp_recipient_deposit };
 
 			if request.confirmed {
-				if paras::Pezpallet::<T>::is_valid_para(channel_id.sender) &&
-					paras::Pezpallet::<T>::is_valid_para(channel_id.recipient)
+				if paras::Pezpallet::<T>::is_valid_para(channel_id.sender)
+					&& paras::Pezpallet::<T>::is_valid_para(channel_id.recipient)
 				{
 					HrmpChannels::<T>::insert(
 						&channel_id,
@@ -1256,8 +1256,9 @@ impl<T: Config> Pezpallet<T> {
 				// the messages must be sorted in ascending order and there must be no two messages
 				// sent to the same recipient. Thus we can check that every recipient is strictly
 				// greater than the previous one.
-				Some(last_recipient) if out_msg.recipient <= last_recipient =>
-					return Err(OutboundHrmpAcceptanceErr::NotSorted { idx }),
+				Some(last_recipient) if out_msg.recipient <= last_recipient => {
+					return Err(OutboundHrmpAcceptanceErr::NotSorted { idx })
+				},
 				_ => last_recipient = Some(out_msg.recipient),
 			}
 

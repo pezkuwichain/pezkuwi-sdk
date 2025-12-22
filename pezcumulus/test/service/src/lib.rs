@@ -273,7 +273,7 @@ async fn build_relay_chain_interface(
 			Some("Relaychain"),
 		)
 		.map_err(|e| RelayChainError::Application(Box::new(e) as Box<_>))?,
-		pezcumulus_client_cli::RelayChainMode::ExternalRpc(rpc_target_urls) =>
+		pezcumulus_client_cli::RelayChainMode::ExternalRpc(rpc_target_urls) => {
 			return build_minimal_relay_chain_node_with_rpc(
 				relay_chain_config,
 				teyrchain_prometheus_registry,
@@ -281,7 +281,8 @@ async fn build_relay_chain_interface(
 				rpc_target_urls,
 			)
 			.await
-			.map(|r| r.0),
+			.map(|r| r.0)
+		},
 	};
 
 	task_manager.add_child(relay_chain_node.task_manager);
@@ -716,7 +717,7 @@ impl TestNodeBuilder {
 
 		let (task_manager, client, network, rpc_handlers, transaction_pool, backend) =
 			match relay_chain_config.network.network_backend {
-				pezsc_network::config::NetworkBackendType::Libp2p =>
+				pezsc_network::config::NetworkBackendType::Libp2p => {
 					start_node_impl::<_, pezsc_network::NetworkWorker<_, _>>(
 						teyrchain_config,
 						self.collator_key,
@@ -729,8 +730,9 @@ impl TestNodeBuilder {
 						false,
 					)
 					.await
-					.expect("could not create Pezcumulus test service"),
-				pezsc_network::config::NetworkBackendType::Litep2p =>
+					.expect("could not create Pezcumulus test service")
+				},
+				pezsc_network::config::NetworkBackendType::Litep2p => {
 					start_node_impl::<_, pezsc_network::Litep2pNetworkBackend>(
 						teyrchain_config,
 						self.collator_key,
@@ -743,7 +745,8 @@ impl TestNodeBuilder {
 						false,
 					)
 					.await
-					.expect("could not create Pezcumulus test service"),
+					.expect("could not create Pezcumulus test service")
+				},
 			};
 		let peer_id = network.local_peer_id();
 		let multiaddr = pezkuwi_test_service::get_listen_address(network.clone()).await;

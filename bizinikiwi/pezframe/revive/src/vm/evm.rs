@@ -62,8 +62,8 @@ impl<T: Config> Token<T> for EVMGas {
 impl<T: Config> ContractBlob<T> {
 	/// Create a new contract from EVM init code.
 	pub fn from_evm_init_code(code: Vec<u8>, owner: AccountIdOf<T>) -> Result<Self, DispatchError> {
-		if code.len() > revm::primitives::eip3860::MAX_INITCODE_SIZE &&
-			!DebugSettings::is_unlimited_contract_size_allowed::<T>()
+		if code.len() > revm::primitives::eip3860::MAX_INITCODE_SIZE
+			&& !DebugSettings::is_unlimited_contract_size_allowed::<T>()
 		{
 			return Err(<Error<T>>::BlobTooLarge.into());
 		}
@@ -98,8 +98,8 @@ impl<T: Config> ContractBlob<T> {
 		code: Vec<u8>,
 		owner: AccountIdOf<T>,
 	) -> Result<Self, DispatchError> {
-		if code.len() > revm::primitives::eip170::MAX_CODE_SIZE &&
-			!DebugSettings::is_unlimited_contract_size_allowed::<T>()
+		if code.len() > revm::primitives::eip170::MAX_CODE_SIZE
+			&& !DebugSettings::is_unlimited_contract_size_allowed::<T>()
 		{
 			return Err(<Error<T>>::BlobTooLarge.into());
 		}

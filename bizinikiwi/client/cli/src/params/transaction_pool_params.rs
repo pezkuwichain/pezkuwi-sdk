@@ -32,10 +32,12 @@ pub enum TransactionPoolType {
 impl Into<pezsc_transaction_pool::TransactionPoolType> for TransactionPoolType {
 	fn into(self) -> pezsc_transaction_pool::TransactionPoolType {
 		match self {
-			TransactionPoolType::SingleState =>
-				pezsc_transaction_pool::TransactionPoolType::SingleState,
-			TransactionPoolType::ForkAware =>
-				pezsc_transaction_pool::TransactionPoolType::ForkAware,
+			TransactionPoolType::SingleState => {
+				pezsc_transaction_pool::TransactionPoolType::SingleState
+			},
+			TransactionPoolType::ForkAware => {
+				pezsc_transaction_pool::TransactionPoolType::ForkAware
+			},
 		}
 	}
 }

@@ -49,11 +49,7 @@ fn grant_appointed_role_works() {
 		assert_ok!(TikiPallet::force_mint_citizen_nft(RuntimeOrigin::root(), user_account));
 
 		// Tiki ver
-		assert_ok!(TikiPallet::grant_tiki(
-			RuntimeOrigin::root(),
-			user_account,
-			tiki_to_grant
-		));
+		assert_ok!(TikiPallet::grant_tiki(RuntimeOrigin::root(), user_account, tiki_to_grant));
 
 		// Kullanıcının rollerini kontrol et
 		let user_tikis = TikiPallet::user_tikis(user_account);
@@ -189,11 +185,7 @@ fn grant_earned_role_works() {
 		assert_ok!(TikiPallet::force_mint_citizen_nft(RuntimeOrigin::root(), user_account));
 
 		// Earned rolü ver
-		assert_ok!(TikiPallet::grant_earned_role(
-			RuntimeOrigin::root(),
-			user_account,
-			earned_role
-		));
+		assert_ok!(TikiPallet::grant_earned_role(RuntimeOrigin::root(), user_account, earned_role));
 
 		// Rolün eklendiğini kontrol et
 		assert!(TikiPallet::user_tikis(user_account).contains(&earned_role));
@@ -237,11 +229,7 @@ fn unique_roles_work_correctly() {
 		assert_ok!(TikiPallet::force_mint_citizen_nft(RuntimeOrigin::root(), user2));
 
 		// İlk kullanıcıya unique rolü ver (elected role olarak)
-		assert_ok!(TikiPallet::grant_elected_role(
-			RuntimeOrigin::root(),
-			user1,
-			unique_role
-		));
+		assert_ok!(TikiPallet::grant_elected_role(RuntimeOrigin::root(), user1, unique_role));
 
 		// İkinci kullanıcıya aynı rolü vermeye çalış
 		assert_noop!(
@@ -279,21 +267,13 @@ fn revoke_tiki_works() {
 
 		// NFT bas ve role ver
 		assert_ok!(TikiPallet::force_mint_citizen_nft(RuntimeOrigin::root(), user_account));
-		assert_ok!(TikiPallet::grant_tiki(
-			RuntimeOrigin::root(),
-			user_account,
-			tiki_to_revoke
-		));
+		assert_ok!(TikiPallet::grant_tiki(RuntimeOrigin::root(), user_account, tiki_to_revoke));
 
 		// Rolün eklendiğini kontrol et
 		assert!(TikiPallet::user_tikis(user_account).contains(&tiki_to_revoke));
 
 		// Rolü kaldır
-		assert_ok!(TikiPallet::revoke_tiki(
-			RuntimeOrigin::root(),
-			user_account,
-			tiki_to_revoke
-		));
+		assert_ok!(TikiPallet::revoke_tiki(RuntimeOrigin::root(), user_account, tiki_to_revoke));
 
 		// Rolün kaldırıldığını kontrol et
 		assert!(!TikiPallet::user_tikis(user_account).contains(&tiki_to_revoke));
@@ -332,11 +312,7 @@ fn revoke_unique_role_clears_holder() {
 
 		// NFT bas ve unique rolü ver
 		assert_ok!(TikiPallet::force_mint_citizen_nft(RuntimeOrigin::root(), user));
-		assert_ok!(TikiPallet::grant_elected_role(
-			RuntimeOrigin::root(),
-			user,
-			unique_role
-		));
+		assert_ok!(TikiPallet::grant_elected_role(RuntimeOrigin::root(), user, unique_role));
 
 		// TikiHolder'da kayıtlı olduğunu kontrol et
 		assert_eq!(TikiPallet::tiki_holder(unique_role), Some(user));

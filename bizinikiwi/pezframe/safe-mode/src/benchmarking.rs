@@ -100,8 +100,9 @@ mod benchmarks {
 
 		assert_eq!(
 			EnteredUntil::<T>::get().unwrap(),
-			pezframe_system::Pezpallet::<T>::block_number() +
-				1u32.into() + T::ExtendDuration::get()
+			pezframe_system::Pezpallet::<T>::block_number()
+				+ 1u32.into()
+				+ T::ExtendDuration::get()
 		);
 		Ok(())
 	}

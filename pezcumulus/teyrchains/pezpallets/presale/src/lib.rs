@@ -60,7 +60,18 @@ pub mod pezpallet {
 
 	pub type PresaleId = u32;
 
-	#[derive(Clone, Copy, Encode, Decode, DecodeWithMemTracking, Eq, PartialEq, RuntimeDebug, MaxEncodedLen, TypeInfo)]
+	#[derive(
+		Clone,
+		Copy,
+		Encode,
+		Decode,
+		DecodeWithMemTracking,
+		Eq,
+		PartialEq,
+		RuntimeDebug,
+		MaxEncodedLen,
+		TypeInfo,
+	)]
 	#[cfg_attr(feature = "std", derive(serde::Serialize, serde::Deserialize))]
 	pub enum PresaleStatus {
 		Pending,    // Not started yet
@@ -72,7 +83,18 @@ pub mod pezpallet {
 		Finalized,  // Tokens distributed (after Successful)
 	}
 
-	#[derive(Clone, Copy, Encode, Decode, DecodeWithMemTracking, Eq, PartialEq, RuntimeDebug, MaxEncodedLen, TypeInfo)]
+	#[derive(
+		Clone,
+		Copy,
+		Encode,
+		Decode,
+		DecodeWithMemTracking,
+		Eq,
+		PartialEq,
+		RuntimeDebug,
+		MaxEncodedLen,
+		TypeInfo,
+	)]
 	#[cfg_attr(feature = "std", derive(serde::Serialize, serde::Deserialize))]
 	#[codec(dumb_trait_bound)]
 	pub enum AccessControl {
@@ -80,7 +102,18 @@ pub mod pezpallet {
 		Whitelist, // Only whitelisted accounts
 	}
 
-	#[derive(Clone, Copy, Encode, Decode, DecodeWithMemTracking, Eq, PartialEq, RuntimeDebug, MaxEncodedLen, TypeInfo)]
+	#[derive(
+		Clone,
+		Copy,
+		Encode,
+		Decode,
+		DecodeWithMemTracking,
+		Eq,
+		PartialEq,
+		RuntimeDebug,
+		MaxEncodedLen,
+		TypeInfo,
+	)]
 	#[cfg_attr(feature = "std", derive(serde::Serialize, serde::Deserialize))]
 	#[codec(dumb_trait_bound)]
 	pub struct BonusTier {
@@ -90,7 +123,18 @@ pub mod pezpallet {
 		pub bonus_percentage: u8,
 	}
 
-	#[derive(Clone, Copy, Encode, Decode, DecodeWithMemTracking, Eq, PartialEq, RuntimeDebug, MaxEncodedLen, TypeInfo)]
+	#[derive(
+		Clone,
+		Copy,
+		Encode,
+		Decode,
+		DecodeWithMemTracking,
+		Eq,
+		PartialEq,
+		RuntimeDebug,
+		MaxEncodedLen,
+		TypeInfo,
+	)]
 	#[cfg_attr(feature = "std", derive(serde::Serialize, serde::Deserialize))]
 	#[codec(dumb_trait_bound)]
 	pub struct VestingSchedule<BlockNumber> {
@@ -102,7 +146,18 @@ pub mod pezpallet {
 		pub cliff_blocks: BlockNumber,
 	}
 
-	#[derive(Clone, Copy, Encode, Decode, DecodeWithMemTracking, Eq, PartialEq, RuntimeDebug, MaxEncodedLen, TypeInfo)]
+	#[derive(
+		Clone,
+		Copy,
+		Encode,
+		Decode,
+		DecodeWithMemTracking,
+		Eq,
+		PartialEq,
+		RuntimeDebug,
+		MaxEncodedLen,
+		TypeInfo,
+	)]
 	#[cfg_attr(feature = "std", derive(serde::Serialize, serde::Deserialize))]
 	#[codec(dumb_trait_bound)]
 	pub struct ContributionLimits {
@@ -116,7 +171,18 @@ pub mod pezpallet {
 		pub hard_cap: u128,
 	}
 
-	#[derive(Clone, Copy, Encode, Decode, DecodeWithMemTracking, Eq, PartialEq, RuntimeDebug, MaxEncodedLen, TypeInfo)]
+	#[derive(
+		Clone,
+		Copy,
+		Encode,
+		Decode,
+		DecodeWithMemTracking,
+		Eq,
+		PartialEq,
+		RuntimeDebug,
+		MaxEncodedLen,
+		TypeInfo,
+	)]
 	#[cfg_attr(feature = "std", derive(serde::Serialize, serde::Deserialize))]
 	#[codec(dumb_trait_bound)]
 	pub struct RefundConfig<BlockNumber> {
@@ -128,7 +194,18 @@ pub mod pezpallet {
 		pub grace_refund_fee_percent: u8,
 	}
 
-	#[derive(Clone, Copy, Encode, Decode, DecodeWithMemTracking, Eq, PartialEq, RuntimeDebug, MaxEncodedLen, TypeInfo)]
+	#[derive(
+		Clone,
+		Copy,
+		Encode,
+		Decode,
+		DecodeWithMemTracking,
+		Eq,
+		PartialEq,
+		RuntimeDebug,
+		MaxEncodedLen,
+		TypeInfo,
+	)]
 	#[cfg_attr(feature = "std", derive(serde::Serialize, serde::Deserialize))]
 	#[codec(dumb_trait_bound)]
 	pub struct PresaleCreationParams<BlockNumber> {
@@ -146,7 +223,18 @@ pub mod pezpallet {
 		pub refund_config: RefundConfig<BlockNumber>,
 	}
 
-	#[derive(Clone, Copy, Encode, Decode, DecodeWithMemTracking, Eq, PartialEq, RuntimeDebug, MaxEncodedLen, TypeInfo)]
+	#[derive(
+		Clone,
+		Copy,
+		Encode,
+		Decode,
+		DecodeWithMemTracking,
+		Eq,
+		PartialEq,
+		RuntimeDebug,
+		MaxEncodedLen,
+		TypeInfo,
+	)]
 	#[cfg_attr(feature = "std", derive(serde::Serialize, serde::Deserialize))]
 	#[codec(dumb_trait_bound)]
 	pub struct ContributionInfo<BlockNumber> {
@@ -162,7 +250,17 @@ pub mod pezpallet {
 		pub refund_fee_paid: u128,
 	}
 
-	#[derive(Clone, Encode, Decode, DecodeWithMemTracking, Eq, PartialEq, RuntimeDebug, TypeInfo, MaxEncodedLen)]
+	#[derive(
+		Clone,
+		Encode,
+		Decode,
+		DecodeWithMemTracking,
+		Eq,
+		PartialEq,
+		RuntimeDebug,
+		TypeInfo,
+		MaxEncodedLen,
+	)]
 	#[scale_info(skip_type_params(T, MaxBonusTiers))]
 	#[codec(mel_bound(T: Config, MaxBonusTiers: Get<u32>))]
 	pub struct PresaleConfig<T: Config, MaxBonusTiers: Get<u32>> {
@@ -428,9 +526,15 @@ pub mod pezpallet {
 
 			ensure!(params.tokens_for_sale > 0, Error::<T>::InvalidTokensForSale);
 			ensure!(params.limits.soft_cap > 0, Error::<T>::InvalidTokensForSale);
-			ensure!(params.limits.soft_cap <= params.limits.hard_cap, Error::<T>::InvalidTokensForSale);
+			ensure!(
+				params.limits.soft_cap <= params.limits.hard_cap,
+				Error::<T>::InvalidTokensForSale
+			);
 			ensure!(params.refund_config.refund_fee_percent <= 100, Error::<T>::InvalidFeePercent);
-			ensure!(params.refund_config.grace_refund_fee_percent <= 100, Error::<T>::InvalidFeePercent);
+			ensure!(
+				params.refund_config.grace_refund_fee_percent <= 100,
+				Error::<T>::InvalidFeePercent
+			);
 
 			let presale_id = NextPresaleId::<T>::get();
 			let start_block = <pezframe_system::Pezpallet<T>>::block_number();
@@ -639,8 +743,8 @@ pub mod pezpallet {
 					// Handle vesting
 					if let Some(ref vesting) = presale.vesting {
 						let immediate = total_reward
-							.saturating_mul(vesting.immediate_release_percent as u128) /
-							100;
+							.saturating_mul(vesting.immediate_release_percent as u128)
+							/ 100;
 
 						if immediate > 0 {
 							let immediate_balance: T::Balance = immediate.into();
@@ -737,8 +841,7 @@ pub mod pezpallet {
 			let treasury = Self::presale_account_id(presale_id);
 
 			// Step 1: Transfer refund amount to user
-			let refund_amount_balance: T::Balance =
-				refund_amount.into();
+			let refund_amount_balance: T::Balance = refund_amount.into();
 			T::Assets::transfer(
 				presale.payment_asset,
 				&treasury,
@@ -819,10 +922,9 @@ pub mod pezpallet {
 				let vested_percent = elapsed_u128.saturating_mul(100) / duration_u128;
 				let immediate_percent = vesting.immediate_release_percent as u128;
 				let vesting_percent = 100u128.saturating_sub(immediate_percent);
-				let vested_amount = total_with_bonus
-					.saturating_mul(vesting_percent)
-					.saturating_mul(vested_percent) /
-					10000;
+				let vested_amount =
+					total_with_bonus.saturating_mul(vesting_percent).saturating_mul(vested_percent)
+						/ 10000;
 				let total_unlocked = vested_amount.saturating_add(already_claimed);
 				total_unlocked.saturating_sub(already_claimed)
 			};
@@ -831,8 +933,7 @@ pub mod pezpallet {
 
 			// Transfer tokens
 			let treasury = Self::presale_account_id(presale_id);
-			let claimable_balance: T::Balance =
-				claimable.into();
+			let claimable_balance: T::Balance = claimable.into();
 			T::Assets::transfer(
 				presale.reward_asset,
 				&treasury,
@@ -920,15 +1021,13 @@ pub mod pezpallet {
 						// Calculate non-refundable portion (burn + stakers = 50% of platform fee)
 						let platform_fee = contribution_info
 							.amount
-							.saturating_mul(T::PlatformFeePercent::get() as u128) /
-							100;
+							.saturating_mul(T::PlatformFeePercent::get() as u128)
+							/ 100;
 						let non_refundable = platform_fee.saturating_mul(50) / 100; // 1% (burn 25% + stakers 25%)
 
 						// Refund = 99% (contribution - non_refundable portion)
-						let refund_amount: T::Balance = contribution_info
-							.amount
-							.saturating_sub(non_refundable)
-							.into();
+						let refund_amount: T::Balance =
+							contribution_info.amount.saturating_sub(non_refundable).into();
 
 						T::Assets::transfer(
 							presale.payment_asset,
@@ -998,15 +1097,13 @@ pub mod pezpallet {
 						// Calculate non-refundable portion (burn + stakers = 50% of platform fee)
 						let platform_fee = contribution_info
 							.amount
-							.saturating_mul(T::PlatformFeePercent::get() as u128) /
-							100;
+							.saturating_mul(T::PlatformFeePercent::get() as u128)
+							/ 100;
 						let non_refundable = platform_fee.saturating_mul(50) / 100; // 1% (burn 25% + stakers 25%)
 
 						// Refund = 99% (contribution - non_refundable portion)
-						let refund_amount: T::Balance = contribution_info
-							.amount
-							.saturating_sub(non_refundable)
-							.into();
+						let refund_amount: T::Balance =
+							contribution_info.amount.saturating_sub(non_refundable).into();
 
 						T::Assets::transfer(
 							presale.payment_asset,
@@ -1082,12 +1179,9 @@ pub mod pezpallet {
 			let to_burn = total_fee.saturating_mul(25) / 100; // 25%
 			let to_stakers = total_fee.saturating_mul(25) / 100; // 25%
 
-			let to_treasury_balance: T::Balance =
-				to_treasury.into();
-			let to_burn_balance: T::Balance =
-				to_burn.into();
-			let to_stakers_balance: T::Balance =
-				to_stakers.into();
+			let to_treasury_balance: T::Balance = to_treasury.into();
+			let to_burn_balance: T::Balance = to_burn.into();
+			let to_stakers_balance: T::Balance = to_stakers.into();
 
 			// Note: Balance check removed - rely on Preservation::Expendable to handle insufficient
 			// balance gracefully The operations below will transfer/burn as much as possible

@@ -83,8 +83,8 @@ pub fn init_logger() {
 		}
 		impl<S> Filter<S> for F {
 			fn enabled(&self, meta: &Metadata<'_>, cx: &Context<'_, S>) -> bool {
-				!self.env_filter.enabled(meta, cx.clone()) &&
-					meta.target() == execution_log::STAT_TARGET
+				!self.env_filter.enabled(meta, cx.clone())
+					&& meta.target() == execution_log::STAT_TARGET
 			}
 		}
 

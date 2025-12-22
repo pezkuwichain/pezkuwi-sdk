@@ -1871,9 +1871,9 @@ fn metadata_v15() {
 		},
 	];
 
-	let empty_doc = pallets[0].event.as_ref().unwrap().ty.type_info().docs.is_empty() &&
-		pallets[0].error.as_ref().unwrap().ty.type_info().docs.is_empty() &&
-		pallets[0].calls.as_ref().unwrap().ty.type_info().docs.is_empty();
+	let empty_doc = pallets[0].event.as_ref().unwrap().ty.type_info().docs.is_empty()
+		&& pallets[0].error.as_ref().unwrap().ty.type_info().docs.is_empty()
+		&& pallets[0].calls.as_ref().unwrap().ty.type_info().docs.is_empty();
 
 	if cfg!(feature = "no-metadata-docs") {
 		assert!(empty_doc)
@@ -2462,8 +2462,8 @@ fn post_runtime_upgrade_detects_storage_version_issues() {
 
 		// The version isn't changed, we should detect it.
 		assert!(
-			Executive::try_runtime_upgrade(UpgradeCheckSelect::PreAndPost).unwrap_err() ==
-				"On chain and in-code storage version do not match. Missing runtime upgrade?"
+			Executive::try_runtime_upgrade(UpgradeCheckSelect::PreAndPost).unwrap_err()
+				== "On chain and in-code storage version do not match. Missing runtime upgrade?"
 					.into()
 		);
 	});
@@ -2493,8 +2493,8 @@ fn post_runtime_upgrade_detects_storage_version_issues() {
 		// any storage version "enabled".
 		assert!(
 			ExecutiveWithUpgradePallet4::try_runtime_upgrade(UpgradeCheckSelect::PreAndPost)
-				.unwrap_err() ==
-				"On chain storage version set, while the pezpallet \
+				.unwrap_err()
+				== "On chain storage version set, while the pezpallet \
 				doesn't have the `#[pezpallet::storage_version(VERSION)]` attribute."
 					.into()
 		);
@@ -2523,11 +2523,11 @@ fn test_dispatch_context() {
 fn test_call_feature_parsing() {
 	let call = pezpallet::Call::<Runtime>::check_for_dispatch_context {};
 	match call {
-		pezpallet::Call::<Runtime>::check_for_dispatch_context {} |
-		pezpallet::Call::<Runtime>::foo { .. } |
-		pezpallet::Call::foo_storage_layer { .. } |
-		pezpallet::Call::foo_index_out_of_order {} |
-		pezpallet::Call::foo_no_post_info {} => (),
+		pezpallet::Call::<Runtime>::check_for_dispatch_context {}
+		| pezpallet::Call::<Runtime>::foo { .. }
+		| pezpallet::Call::foo_storage_layer { .. }
+		| pezpallet::Call::foo_index_out_of_order {}
+		| pezpallet::Call::foo_no_post_info {} => (),
 		#[cfg(feature = "frame-feature-testing")]
 		pezpallet::Call::foo_feature_test {} => (),
 		pezpallet::Call::__Ignore(_, _) => (),
@@ -2539,11 +2539,11 @@ fn test_call_feature_parsing() {
 fn test_error_feature_parsing() {
 	let err = pezpallet::Error::<Runtime>::InsufficientProposersBalance;
 	match err {
-		pezpallet::Error::InsufficientProposersBalance |
-		pezpallet::Error::NonExistentStorageValue |
-		pezpallet::Error::Code(_) |
-		pezpallet::Error::Skipped(_) |
-		pezpallet::Error::CompactU8(_) => (),
+		pezpallet::Error::InsufficientProposersBalance
+		| pezpallet::Error::NonExistentStorageValue
+		| pezpallet::Error::Code(_)
+		| pezpallet::Error::Skipped(_)
+		| pezpallet::Error::CompactU8(_) => (),
 		#[cfg(feature = "frame-feature-testing")]
 		pezpallet::Error::FeatureTest => (),
 		pezpallet::Error::__Ignore(_, _) => (),

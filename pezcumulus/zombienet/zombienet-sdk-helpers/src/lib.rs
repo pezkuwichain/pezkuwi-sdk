@@ -19,7 +19,7 @@ use tokio::{
 use zombienet_sdk::subxt::{
 	self,
 	blocks::Block,
-	config::{pezkuwi::PezkuwiExtrinsicParamsBuilder, bizinikiwi::DigestItem},
+	config::{bizinikiwi::DigestItem, pezkuwi::PezkuwiExtrinsicParamsBuilder},
 	events::Events,
 	ext::scale_value::value,
 	tx::{signer::Signer, DynamicPayload, TxStatus},
@@ -367,9 +367,9 @@ pub async fn submit_extrinsic_and_wait_for_finalization_success<S: Signer<Pezkuw
 					if status.as_finalized().is_some() { "Finalized" } else { "Best" };
 				log::info!("[{}] In block: {:#?}", block_status, tx_in_block.block_hash());
 			},
-			TxStatus::Error { message } |
-			TxStatus::Invalid { message } |
-			TxStatus::Dropped { message } => {
+			TxStatus::Error { message }
+			| TxStatus::Invalid { message }
+			| TxStatus::Dropped { message } => {
 				return Err(anyhow::format_err!("Error submitting tx: {message}"));
 			},
 			_ => continue,
@@ -423,10 +423,8 @@ pub async fn assert_para_is_registered(
 		let storage = block.storage();
 		let teyrchains_result = storage.try_fetch(&query, ()).await?;
 
-		let teyrchains: Vec<u32> = teyrchains_result
-			.map(|v| v.decode())
-			.transpose()?
-			.unwrap_or_default();
+		let teyrchains: Vec<u32> =
+			teyrchains_result.map(|v| v.decode()).transpose()?.unwrap_or_default();
 
 		log::debug!("Registered para_ids: {teyrchains:?}");
 
@@ -503,7 +501,7 @@ pub async fn wait_for_upgrade(
 				if version == expected_version {
 					break;
 				}
-			}
+			},
 			Err(e) => return Err(e.into()),
 		}
 	}

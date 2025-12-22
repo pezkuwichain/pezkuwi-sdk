@@ -101,7 +101,10 @@ fn asset_hub_pezkuwichain_genesis(
 ) -> serde_json::Value {
 	// Verify total PEZ minted at genesis equals PEZ_TOTAL_SUPPLY (5 billion)
 	debug_assert_eq!(
-		PEZ_TREASURY_ALLOCATION + PEZ_REWARDS_POOL + PEZ_FOUNDER_ALLOCATION + PEZ_PRESALE_ALLOCATION,
+		PEZ_TREASURY_ALLOCATION
+			+ PEZ_REWARDS_POOL
+			+ PEZ_FOUNDER_ALLOCATION
+			+ PEZ_PRESALE_ALLOCATION,
 		PEZ_TOTAL_SUPPLY,
 		"PEZ genesis allocations must equal total supply"
 	);

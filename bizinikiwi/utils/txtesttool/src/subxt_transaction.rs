@@ -10,12 +10,6 @@ use crate::{
 use async_trait::async_trait;
 use futures::StreamExt;
 use parking_lot::RwLock;
-use std::{
-	any::Any,
-	collections::HashMap,
-	sync::Arc,
-	time::{Duration, Instant},
-};
 pub use pezkuwi_subxt::dynamic;
 use pezkuwi_subxt::{
 	backend::rpc::RpcClient,
@@ -36,6 +30,12 @@ use pezkuwi_subxt_signer::{
 	eth::{dev as eth_dev, Keypair as EthKeypair, Signature},
 	sr25519::{dev as sr25519_dev, Keypair as SrPair},
 };
+use std::{
+	any::Any,
+	collections::HashMap,
+	sync::Arc,
+	time::{Duration, Instant},
+};
 use tracing::{debug, error, trace};
 
 const LOG_TARGET: &str = "subxt_tx";
@@ -49,14 +49,17 @@ impl pezkuwi_subxt::Config for EthRuntimeConfig {
 	type Address = AccountId20;
 	type Signature = Signature;
 	type Hasher = pezkuwi_subxt::config::bizinikiwi::BlakeTwo256;
-	type Header =
-		pezkuwi_subxt::config::bizinikiwi::BizinikiwiHeader<u32, pezkuwi_subxt::config::bizinikiwi::BlakeTwo256>;
+	type Header = pezkuwi_subxt::config::bizinikiwi::BizinikiwiHeader<
+		u32,
+		pezkuwi_subxt::config::bizinikiwi::BlakeTwo256,
+	>;
 	type ExtrinsicParams = pezkuwi_subxt::config::DefaultExtrinsicParams<Self>;
 	type AssetId = u32;
 }
 
 /// Type alias for subxt config hash (Output of Hasher).
-pub(crate) type HashOf<C> = <<C as pezkuwi_subxt::Config>::Hasher as pezkuwi_subxt::config::Hasher>::Output;
+pub(crate) type HashOf<C> =
+	<<C as pezkuwi_subxt::Config>::Hasher as pezkuwi_subxt::config::Hasher>::Output;
 /// Type alias for subxt account id.
 pub(crate) type AccountIdOf<C> = <C as pezkuwi_subxt::Config>::AccountId;
 
@@ -325,9 +328,8 @@ where
 		.ok_or_else(|| {
 			format!("Sender account {:?} does not exist", hex::encode(account.clone()))
 		})?;
-	let value: pezkuwi_subxt::dynamic::Value = storage_value
-		.decode()
-		.map_err(|e| format!("Failed to decode storage: {e:?}"))?;
+	let value: pezkuwi_subxt::dynamic::Value =
+		storage_value.decode().map_err(|e| format!("Failed to decode storage: {e:?}"))?;
 
 	debug!(target:LOG_TARGET,"account has free balance: {:?}", value.at("data").at("free"));
 	debug!(target:LOG_TARGET,"account has nonce: {:?}", value.at("nonce"));
@@ -612,8 +614,9 @@ where
 	for _ in 0..DEFAULT_RETRIES_FOR_PARTIAL_TX_CREATION {
 		let params = tx_params(mortality, nonce as u64, tip);
 		match sink.api().tx().create_partial(&tx_call, from_account_id, params.into()).await {
-			Ok(tx) =>
-				return subxt_transaction(sink, tx, from_keypair, nonce, mortality, account).await,
+			Ok(tx) => {
+				return subxt_transaction(sink, tx, from_keypair, nonce, mortality, account).await
+			},
 			Err(_) => continue,
 		}
 	}

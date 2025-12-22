@@ -583,8 +583,9 @@ pub(crate) fn process_storage_results(
 			let mut prefix_result = result.clone();
 			let key_info = storage_info_map.get(&prefix);
 			let pezpallet_name = match key_info {
-				Some(k) =>
-					String::from_utf8(k.pezpallet_name.clone()).expect("encoded from string"),
+				Some(k) => {
+					String::from_utf8(k.pezpallet_name.clone()).expect("encoded from string")
+				},
 				None => "".to_string(),
 			};
 			let storage_name = match key_info {
@@ -606,8 +607,8 @@ pub(crate) fn process_storage_results(
 				},
 				None => None,
 			};
-			let is_all_ignored = pov_modes.get(&("ALL".to_string(), "ALL".to_string())) ==
-				Some(&PovEstimationMode::Ignored);
+			let is_all_ignored = pov_modes.get(&("ALL".to_string(), "ALL".to_string()))
+				== Some(&PovEstimationMode::Ignored);
 			if is_all_ignored && override_pov_mode != Some(&PovEstimationMode::Ignored) {
 				panic!("The syntax currently does not allow to exclude single keys from a top-level `Ignored` pov-mode.");
 			}

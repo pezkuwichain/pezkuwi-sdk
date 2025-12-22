@@ -794,10 +794,12 @@ pub mod pezpallet {
 					// delegate to the fallback implementation.
 					T::Fallback::on_offence(offenders, slash_fraction, slash_session)
 				},
-				OperatingMode::Buffered =>
-					Self::on_offence_buffered(offenders, slash_fraction, slash_session),
-				OperatingMode::Active =>
-					Self::on_offence_active(offenders, slash_fraction, slash_session),
+				OperatingMode::Buffered => {
+					Self::on_offence_buffered(offenders, slash_fraction, slash_session)
+				},
+				OperatingMode::Active => {
+					Self::on_offence_active(offenders, slash_fraction, slash_session)
+				},
 			}
 		}
 	}

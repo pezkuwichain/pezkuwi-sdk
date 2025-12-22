@@ -201,9 +201,7 @@ async fn statement_store_memory_stress_bench() -> Result<(), anyhow::Error> {
 						break;
 					}
 
-					info!(
-						"Failed to submit statement, retrying in {RETRY_DELAY_MS}ms: {err:?}"
-					);
+					info!("Failed to submit statement, retrying in {RETRY_DELAY_MS}ms: {err:?}");
 					tokio::time::sleep(Duration::from_millis(RETRY_DELAY_MS)).await;
 				}
 			}

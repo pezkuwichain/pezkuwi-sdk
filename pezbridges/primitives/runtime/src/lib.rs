@@ -311,10 +311,10 @@ pub trait StorageDoubleMapKeyProvider {
 		let storage_prefix_hashed = pezframe_support::Twox128::hash(Self::MAP_NAME.as_bytes());
 
 		let mut final_key = Vec::with_capacity(
-			pezpallet_prefix_hashed.len() +
-				storage_prefix_hashed.len() +
-				key1_hashed.as_ref().len() +
-				key2_hashed.as_ref().len(),
+			pezpallet_prefix_hashed.len()
+				+ storage_prefix_hashed.len()
+				+ key1_hashed.as_ref().len()
+				+ key2_hashed.as_ref().len(),
 		);
 
 		final_key.extend_from_slice(&pezpallet_prefix_hashed[..]);
@@ -398,7 +398,9 @@ pub trait OwnedBridgeModule<T: pezframe_system::Config> {
 			Ok(RawOrigin::Root) => Ok(()),
 			Ok(RawOrigin::Signed(ref signer))
 				if Self::OwnerStorage::get().as_ref() == Some(signer) =>
-				Ok(()),
+			{
+				Ok(())
+			},
 			_ => Err(BadOrigin),
 		}
 	}

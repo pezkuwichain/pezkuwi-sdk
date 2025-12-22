@@ -50,8 +50,9 @@ async fn slot_based_3cores_test() -> Result<(), anyhow::Error> {
 				// type.
 				.with_validator(|node| node.with_name("validator-0"));
 
-			(1..12)
-				.fold(r, |acc, i| acc.with_validator(|node| node.with_name(&format!("validator-{i}"))))
+			(1..12).fold(r, |acc, i| {
+				acc.with_validator(|node| node.with_name(&format!("validator-{i}")))
+			})
 		})
 		.with_teyrchain(|p| {
 			// Para 2100 uses the old elastic scaling mvp, which doesn't send the new UMP signal

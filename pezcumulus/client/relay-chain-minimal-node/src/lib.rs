@@ -109,19 +109,21 @@ async fn build_interface(
 	let blockchain_rpc_client = Arc::new(BlockChainRpcClient::new(client.clone()));
 	let collator_node =
 		match pezkuwi_config.network.network_backend {
-			pezsc_network::config::NetworkBackendType::Libp2p =>
+			pezsc_network::config::NetworkBackendType::Libp2p => {
 				new_minimal_relay_chain::<
 					RelayBlock,
 					pezsc_network::NetworkWorker<RelayBlock, RelayHash>,
 				>(pezkuwi_config, collator_pair.clone(), blockchain_rpc_client)
-				.await?,
-			pezsc_network::config::NetworkBackendType::Litep2p =>
+				.await?
+			},
+			pezsc_network::config::NetworkBackendType::Litep2p => {
 				new_minimal_relay_chain::<RelayBlock, pezsc_network::Litep2pNetworkBackend>(
 					pezkuwi_config,
 					collator_pair.clone(),
 					blockchain_rpc_client,
 				)
-				.await?,
+				.await?
+			},
 		};
 	task_manager.add_child(collator_node.task_manager);
 	Ok((
