@@ -326,7 +326,7 @@ where
 		let mut remove_leaf = |number, hash| {
 			log::debug!(target: LOG_TARGET, "Removing block (@{}) {:?}", number, hash);
 			if let Err(err) = self.backend.remove_leaf_block(hash) {
-				log::debug!(target: LOG_TARGET, "Remove not possible for {}: {}", hash, err);
+				log::debug!(target: LOG_TARGET, "Remove not possible for {hash}: {err}");
 				return false;
 			}
 			self.levels.get_mut(&number).map(|level| level.remove(&hash));

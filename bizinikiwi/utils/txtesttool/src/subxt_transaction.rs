@@ -16,8 +16,8 @@ use std::{
 	sync::Arc,
 	time::{Duration, Instant},
 };
-pub use subxt::dynamic;
-use subxt::{
+pub use pezkuwi_subxt::dynamic;
+use pezkuwi_subxt::{
 	backend::rpc::RpcClient,
 	config::{
 		transaction_extensions::{
@@ -29,10 +29,10 @@ use subxt::{
 	dynamic::{At, Value},
 	ext::scale_value::value,
 	tx::{DynamicPayload, PartialTransaction, Signer, SubmittableTransaction},
-	OnlineClient, PolkadotConfig,
+	OnlineClient, PezkuwiConfig,
 };
-use subxt_core::{config::SubstrateExtrinsicParamsBuilder, utils::AccountId20};
-use subxt_signer::{
+use pezkuwi_subxt_core::{config::DefaultExtrinsicParamsBuilder, utils::AccountId20};
+use pezkuwi_subxt_signer::{
 	eth::{dev as eth_dev, Keypair as EthKeypair, Signature},
 	sr25519::{dev as sr25519_dev, Keypair as SrPair},
 };
@@ -44,25 +44,25 @@ const DEFAULT_RETRIES_FOR_PARTIAL_TX_CREATION: usize = 10;
 #[derive(Clone)]
 /// Ethereum runtime config definition for subxt usage purposes.
 pub enum EthRuntimeConfig {}
-impl subxt::Config for EthRuntimeConfig {
+impl pezkuwi_subxt::Config for EthRuntimeConfig {
 	type AccountId = AccountId20;
 	type Address = AccountId20;
 	type Signature = Signature;
-	type Hasher = subxt::config::substrate::BlakeTwo256;
+	type Hasher = pezkuwi_subxt::config::bizinikiwi::BlakeTwo256;
 	type Header =
-		subxt::config::substrate::SubstrateHeader<u32, subxt::config::substrate::BlakeTwo256>;
-	type ExtrinsicParams = subxt::config::SubstrateExtrinsicParams<Self>;
+		pezkuwi_subxt::config::bizinikiwi::BizinikiwiHeader<u32, pezkuwi_subxt::config::bizinikiwi::BlakeTwo256>;
+	type ExtrinsicParams = pezkuwi_subxt::config::DefaultExtrinsicParams<Self>;
 	type AssetId = u32;
 }
 
 /// Type alias for subxt config hash (Output of Hasher).
-pub(crate) type HashOf<C> = <<C as subxt::Config>::Hasher as subxt::config::Hasher>::Output;
+pub(crate) type HashOf<C> = <<C as pezkuwi_subxt::Config>::Hasher as pezkuwi_subxt::config::Hasher>::Output;
 /// Type alias for subxt account id.
-pub(crate) type AccountIdOf<C> = <C as subxt::Config>::AccountId;
+pub(crate) type AccountIdOf<C> = <C as pezkuwi_subxt::Config>::AccountId;
 
 /// A subxt transaction abstraction.
 #[derive(Clone)]
-pub struct SubxtTransaction<C: subxt::Config> {
+pub struct SubxtTransaction<C: pezkuwi_subxt::Config> {
 	transaction: Arc<SubmittableTransaction<C, OnlineClient<C>>>,
 	nonce: u128,
 	valid_until: Option<u64>,
@@ -73,10 +73,10 @@ pub struct SubxtTransaction<C: subxt::Config> {
 pub type EthTransaction = SubxtTransaction<EthRuntimeConfig>;
 /// Holds the RPC API connection for transaction execution.
 pub type EthTransactionsSink = SubxtTransactionsSink<EthRuntimeConfig, EthKeypair>;
-/// Transaction type that runs on `substrate` compatible chains.
-pub type SubstrateTransaction = SubxtTransaction<PolkadotConfig>;
+/// Transaction type that runs on `bizinikiwi` compatible chains.
+pub type BizinikiwTransaction = SubxtTransaction<PezkuwiConfig>;
 /// Holds the RPC API connection for transaction execution.
-pub type SubstrateTransactionsSink = SubxtTransactionsSink<PolkadotConfig, SrPair>;
+pub type BizinikiwTransactionsSink = SubxtTransactionsSink<PezkuwiConfig, SrPair>;
 
 /// Context for building transaction payloads.
 /// Generic over account type `A` to support both Substrate and Ethereum chains.
@@ -91,16 +91,16 @@ pub struct TxPayloadBuildContext<'a, A> {
 	pub nonce: u128,
 }
 
-/// Context type alias for Substrate chains.
-pub type SubTxBuildContext<'a> = TxPayloadBuildContext<'a, AccountIdOf<PolkadotConfig>>;
+/// Context type alias for Bizinikiwi chains.
+pub type SubTxBuildContext<'a> = TxPayloadBuildContext<'a, AccountIdOf<PezkuwiConfig>>;
 /// Context type alias for Ethereum chains.
 pub type EthTxBuildContext<'a> = TxPayloadBuildContext<'a, AccountId20>;
 
 /// Generic payload builder function type.
 pub type PayloadBuilderFn<A> =
 	Arc<dyn Fn(&TxPayloadBuildContext<A>) -> DynamicPayload + Send + Sync>;
-/// Payload builder type alias for Substrate chains.
-pub type SubPayloadBuilderFn = PayloadBuilderFn<AccountIdOf<PolkadotConfig>>;
+/// Payload builder type alias for Bizinikiwi chains.
+pub type SubPayloadBuilderFn = PayloadBuilderFn<AccountIdOf<PezkuwiConfig>>;
 /// Payload builder type alias for Ethereum chains.
 pub type EthPayloadBuilderFn = PayloadBuilderFn<AccountId20>;
 
@@ -114,14 +114,14 @@ where
 	Arc::new(move |ctx| {
 		let i = hex::encode(ctx.to_account_id.as_ref()).as_bytes().last().copied().unwrap();
 		let data = vec![i; size_kb as usize * 1024];
-		subxt::dynamic::tx("System", "remark", vec![data])
+		pezkuwi_subxt::dynamic::tx("System", "remark", vec![data])
 	})
 }
 
 /// Creates a transfer payload builder for Substrate chains.
 pub fn sub_transfer_payload_builder() -> SubPayloadBuilderFn {
 	Arc::new(|ctx| {
-		subxt::dynamic::tx(
+		pezkuwi_subxt::dynamic::tx(
 			"Balances",
 			"transfer_keep_alive",
 			vec![
@@ -135,7 +135,7 @@ pub fn sub_transfer_payload_builder() -> SubPayloadBuilderFn {
 /// Creates a transfer payload builder for Ethereum chains.
 pub fn eth_transfer_payload_builder() -> EthPayloadBuilderFn {
 	Arc::new(|ctx| {
-		subxt::dynamic::tx(
+		pezkuwi_subxt::dynamic::tx(
 			"Balances",
 			"transfer_keep_alive",
 			vec![
@@ -146,7 +146,7 @@ pub fn eth_transfer_payload_builder() -> EthPayloadBuilderFn {
 	})
 }
 
-impl<C: subxt::Config> SubxtTransaction<C> {
+impl<C: pezkuwi_subxt::Config> SubxtTransaction<C> {
 	pub fn new(
 		transaction: SubmittableTransaction<C, OnlineClient<C>>,
 		nonce: u128,
@@ -157,9 +157,9 @@ impl<C: subxt::Config> SubxtTransaction<C> {
 	}
 }
 
-// type TransactionSubxt2 = subxt::tx::DynamicPayload;
+// type TransactionSubxt2 = pezkuwi_subxt::tx::DynamicPayload;
 
-impl<C: subxt::Config> Transaction for SubxtTransaction<C> {
+impl<C: pezkuwi_subxt::Config> Transaction for SubxtTransaction<C> {
 	type HashType = HashOf<C>;
 	fn hash(&self) -> Self::HashType {
 		self.transaction.hash()
@@ -179,7 +179,7 @@ impl<C: subxt::Config> Transaction for SubxtTransaction<C> {
 }
 
 #[derive(Clone)]
-pub struct SubxtTransactionsSink<C: subxt::Config, KP: Signer<C>> {
+pub struct SubxtTransactionsSink<C: pezkuwi_subxt::Config, KP: Signer<C>> {
 	api: OnlineClient<C>,
 	from_accounts: Arc<RwLock<HashMap<String, (KP, AccountMetadata)>>>,
 	to_accounts: Arc<RwLock<HashMap<String, (KP, AccountMetadata)>>>,
@@ -195,7 +195,7 @@ impl<C, KP> SubxtTransactionsSink<C, KP>
 where
 	AccountIdOf<C>: Send + Sync + AsRef<[u8]>,
 	KP: Signer<C> + Clone + Send + Sync + 'static,
-	C: subxt::Config,
+	C: pezkuwi_subxt::Config,
 {
 	pub async fn new() -> Self {
 		Self {
@@ -300,7 +300,7 @@ where
 			.rpc_client
 			.request::<Vec<serde_json::Value>>(
 				"author_pendingExtrinsics",
-				subxt_rpcs::rpc_params!(),
+				pezkuwi_subxt_rpcs::rpc_params!(),
 			)
 			.await
 			.expect("author_pendingExtrinsics should not fail")
@@ -310,22 +310,24 @@ where
 }
 
 /// Fetches an account storage and returns its nonce.
-pub async fn check_account_nonce<C: subxt::Config>(
+pub async fn check_account_nonce<C: pezkuwi_subxt::Config>(
 	api: OnlineClient<C>,
 	account: AccountIdOf<C>,
 ) -> Result<u128, Box<dyn std::error::Error>>
 where
 	AccountIdOf<C>: Send + Sync + AsRef<[u8]>,
 {
-	let storage_query = subxt::dynamic::storage("System", "Account");
+	let storage_query = pezkuwi_subxt::dynamic::storage("System", "Account");
 	let storage_at = api.storage().at_latest().await?;
 	let storage_value = storage_at
 		.try_fetch(storage_query, (Value::from_bytes(account.clone()),))
 		.await?
-		.ok_or_else(|| format!("Sender account {:?} does not exist", hex::encode(account.clone())))?;
-	let value: subxt::dynamic::Value = storage_value
+		.ok_or_else(|| {
+			format!("Sender account {:?} does not exist", hex::encode(account.clone()))
+		})?;
+	let value: pezkuwi_subxt::dynamic::Value = storage_value
 		.decode()
-		.map_err(|e| format!("Failed to decode storage: {:?}", e))?;
+		.map_err(|e| format!("Failed to decode storage: {e:?}"))?;
 
 	debug!(target:LOG_TARGET,"account has free balance: {:?}", value.at("data").at("free"));
 	debug!(target:LOG_TARGET,"account has nonce: {:?}", value.at("nonce"));
@@ -343,7 +345,7 @@ where
 impl<C, KP> TransactionsSink<HashOf<C>> for SubxtTransactionsSink<C, KP>
 where
 	AccountIdOf<C>: Send + Sync + AsRef<[u8]>,
-	C: subxt::Config,
+	C: pezkuwi_subxt::Config,
 	KP: Signer<C> + Clone + Send + Sync + 'static,
 {
 	async fn submit_and_watch(
@@ -413,8 +415,8 @@ pub fn generate_ecdsa_keypair(description: AccountGenerateRequest) -> EthKeypair
 		AccountGenerateRequest::Derived(seed, i) => {
 			use std::str::FromStr;
 			let derivation = format!("{seed}//{i}");
-			let u = subxt_signer::SecretUri::from_str(&derivation).unwrap();
-			<subxt_signer::ecdsa::Keypair>::from_uri(&u).unwrap().into()
+			let u = pezkuwi_subxt_signer::SecretUri::from_str(&derivation).unwrap();
+			<pezkuwi_subxt_signer::ecdsa::Keypair>::from_uri(&u).unwrap().into()
 		},
 	}
 }
@@ -434,8 +436,8 @@ pub fn generate_sr25519_keypair(description: AccountGenerateRequest) -> SrPair {
 		AccountGenerateRequest::Derived(seed, i) => {
 			use std::str::FromStr;
 			let derivation = format!("{seed}//{i}");
-			let u = subxt_signer::SecretUri::from_str(&derivation).unwrap();
-			<subxt_signer::sr25519::Keypair>::from_uri(&u).unwrap()
+			let u = pezkuwi_subxt_signer::SecretUri::from_str(&derivation).unwrap();
+			<pezkuwi_subxt_signer::sr25519::Keypair>::from_uri(&u).unwrap()
 		},
 	}
 }
@@ -458,7 +460,7 @@ pub fn derive_accounts<C, KP, G>(
 	generate: G,
 ) -> HashMap<String, (KP, AccountMetadata)>
 where
-	C: subxt::Config,
+	C: pezkuwi_subxt::Config,
 	KP: Signer<C> + Send + Sync + 'static,
 	G: GenerateKeyPairFunction<KP>,
 {
@@ -514,21 +516,21 @@ where
 }
 
 #[allow(clippy::too_many_arguments)]
-async fn create_online_transaction<C: subxt::Config, KP, B>(
+async fn create_online_transaction<C: pezkuwi_subxt::Config, KP, B>(
 	from_keypair: &KP,
 	nonce: u128,
 	mortality: &Option<u64>,
 	account: &str,
 	sink: &SubxtTransactionsSink<C, KP>,
-	from_account_id: &<C as subxt::Config>::AccountId,
-	to_account_id: &<C as subxt::Config>::AccountId,
+	from_account_id: &<C as pezkuwi_subxt::Config>::AccountId,
+	to_account_id: &<C as pezkuwi_subxt::Config>::AccountId,
 	tip: u128,
 	payload_builder: &B,
 ) -> Result<SubxtTransaction<C>, Error>
 where
 	AccountIdOf<C>: Send + Sync + AsRef<[u8]>,
 	KP: Signer<C> + Clone + Send + Sync + 'static,
-	<<C as subxt::Config>::ExtrinsicParams as subxt::config::ExtrinsicParams<C>>::Params: From<(
+	<<C as pezkuwi_subxt::Config>::ExtrinsicParams as pezkuwi_subxt::config::ExtrinsicParams<C>>::Params: From<(
 		(),
 		(),
 		(),
@@ -547,12 +549,12 @@ where
 	// handle an error which happens when trying to create a partial tx that is based on a
 	// certain finalized block returned by the RPC, which is then reported as not found).
 	// Retrying seems to fix the issue.
-	fn tx_params<CC: subxt::Config>(
+	fn tx_params<CC: pezkuwi_subxt::Config>(
 		mortality: &Option<u64>,
 		nonce: u64,
 		tip: u128,
 	) -> <DefaultExtrinsicParams<CC> as ExtrinsicParams<CC>>::Params {
-		let mut params = <SubstrateExtrinsicParamsBuilder<CC>>::new().nonce(nonce).tip(tip);
+		let mut params = <DefaultExtrinsicParamsBuilder<CC>>::new().nonce(nonce).tip(tip);
 		if let Some(mortal) = mortality {
 			params = params.mortal(*mortal);
 		}
@@ -564,7 +566,7 @@ where
 	// The mortality of the transaction involves setting up a block until the transaction is valid,
 	// which needs fetching the last finalized block number on chain similarly to subxt:
 	// https://github.com/paritytech/subxt/blob/77b6abccbacf194f3889610024e2f4024e8c2822/subxt/src/tx/tx_client.rs#L600
-	async fn subxt_transaction<CC: subxt::Config, KEYP>(
+	async fn subxt_transaction<CC: pezkuwi_subxt::Config, KEYP>(
 		sink: &SubxtTransactionsSink<CC, KEYP>,
 		mut partial_tx: PartialTransaction<CC, OnlineClient<CC>>,
 		from_keypair: &KEYP,
@@ -628,9 +630,9 @@ pub(crate) async fn build_subxt_tx<C, KP, B>(
 ) -> SubxtTransaction<C>
 where
 	AccountIdOf<C>: Send + Sync + AsRef<[u8]>,
-	C: subxt::Config,
+	C: pezkuwi_subxt::Config,
 	KP: Signer<C> + Clone + Send + Sync + 'static,
-	<<C as subxt::Config>::ExtrinsicParams as subxt::config::ExtrinsicParams<C>>::Params: From<(
+	<<C as pezkuwi_subxt::Config>::ExtrinsicParams as pezkuwi_subxt::config::ExtrinsicParams<C>>::Params: From<(
 		(),
 		(),
 		(),
@@ -684,7 +686,7 @@ where
 		.await
 		.expect("failed to create mortal transaction")
 	} else {
-		let tx_params = <SubstrateExtrinsicParamsBuilder<C>>::new()
+		let tx_params = <DefaultExtrinsicParamsBuilder<C>>::new()
 			.nonce(nonce as u64)
 			.tip(tip)
 			.build()
@@ -713,7 +715,7 @@ where
 
 #[cfg(test)]
 mod tests {
-	use subxt::SubstrateConfig;
+	use pezkuwi_subxt::BizinikiwConfig;
 
 	use crate::{
 		subxt_transaction::{
@@ -724,7 +726,7 @@ mod tests {
 
 	#[tokio::test]
 	async fn test_derive_accounts_len() {
-		let accounts = derive_accounts::<SubstrateConfig, subxt_signer::sr25519::Keypair, _>(
+		let accounts = derive_accounts::<BizinikiwConfig, pezkuwi_subxt_signer::sr25519::Keypair, _>(
 			crate::scenario::AccountsDescription::Derived(0..11),
 			SENDER_SEED,
 			generate_sr25519_keypair,
@@ -744,7 +746,7 @@ mod tests {
 			assert_eq!(AccountMetadata::Derived(id), meta);
 		}
 
-		let accounts = derive_accounts::<SubstrateConfig, subxt_signer::sr25519::Keypair, _>(
+		let accounts = derive_accounts::<BizinikiwConfig, pezkuwi_subxt_signer::sr25519::Keypair, _>(
 			crate::scenario::AccountsDescription::Keyring("alice".to_string()),
 			SENDER_SEED,
 			generate_sr25519_keypair,

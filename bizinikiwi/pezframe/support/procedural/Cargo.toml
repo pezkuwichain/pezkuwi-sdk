@@ -27,45 +27,45 @@ cfg-expr = { workspace = true }
 derive-syn-parse = { workspace = true }
 docify = { workspace = true }
 expander = { workspace = true }
-pezframe-support-procedural-tools = { workspace = true, default-features = true }
 itertools = { workspace = true }
 macro_magic = { features = ["proc_support"], workspace = true }
+pezframe-support-procedural-tools = { workspace = true, default-features = true }
+pezsp-crypto-hashing = { workspace = true }
 proc-macro-warning = { workspace = true }
 proc-macro2 = { workspace = true }
 quote = { workspace = true }
-pezsp-crypto-hashing = { workspace = true }
 syn = { features = ["full", "parsing", "visit-mut"], workspace = true }
 
 [dev-dependencies]
 codec = { features = [
-  "derive",
-  "max-encoded-len",
+	"derive",
+	"max-encoded-len",
 ], workspace = true, default-features = true }
 pezframe-benchmarking = { workspace = true, default-features = true }
 pezframe-support = { workspace = true, default-features = true }
 pezframe-system = { workspace = true, default-features = true }
-pretty_assertions = { workspace = true }
-regex = { workspace = true }
-scale-info = { features = [
-  "derive",
-], workspace = true, default-features = true }
 pezsp-io = { workspace = true, default-features = true }
 pezsp-metadata-ir = { workspace = true, default-features = true }
 pezsp-runtime = { features = [
-  "serde",
+	"serde",
+], workspace = true, default-features = true }
+pretty_assertions = { workspace = true }
+regex = { workspace = true }
+scale-info = { features = [
+	"derive",
 ], workspace = true, default-features = true }
 
 [features]
 default = ["std"]
 std = [
-  "codec/std",
-  "pezframe-benchmarking/std",
-  "pezframe-support/std",
-  "pezframe-system/std",
-  "scale-info/std",
-  "pezsp-crypto-hashing/std",
-  "pezsp-metadata-ir/std",
-  "pezsp-runtime/std",
+	"codec/std",
+	"pezframe-benchmarking/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
+	"pezsp-crypto-hashing/std",
+	"pezsp-metadata-ir/std",
+	"pezsp-runtime/std",
+	"scale-info/std",
 ]
 no-metadata-docs = []
 experimental = []
@@ -74,9 +74,9 @@ experimental = []
 tuples-96 = []
 tuples-128 = []
 runtime-benchmarks = [
-  "pezframe-benchmarking/runtime-benchmarks",
-  "pezframe-support/runtime-benchmarks",
-  "pezframe-system/runtime-benchmarks",
-  "pezsp-io/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
+	"pezframe-benchmarking/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]

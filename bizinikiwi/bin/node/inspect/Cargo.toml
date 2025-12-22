@@ -30,11 +30,11 @@ thiserror = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-  "pezsc-cli/runtime-benchmarks",
-  "pezsc-client-api/runtime-benchmarks",
-  "pezsc-service/runtime-benchmarks",
-  "pezsp-blockchain/runtime-benchmarks",
-  "pezsp-io/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "pezsp-statement-store/runtime-benchmarks",
+	"pezsc-cli/runtime-benchmarks",
+	"pezsc-client-api/runtime-benchmarks",
+	"pezsc-service/runtime-benchmarks",
+	"pezsp-blockchain/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-statement-store/runtime-benchmarks",
 ]

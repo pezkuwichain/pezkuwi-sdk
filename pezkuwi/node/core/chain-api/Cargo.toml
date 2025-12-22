@@ -25,22 +25,22 @@ pezsc-consensus-babe = { workspace = true, default-features = true }
 codec = { workspace = true, default-features = true }
 futures = { features = ["thread-pool"], workspace = true }
 maplit = { workspace = true }
-pezkuwi-pez-node-primitives = { workspace = true, default-features = true }
 pezkuwi-node-subsystem-test-helpers = { workspace = true }
+pezkuwi-pez-node-primitives = { workspace = true, default-features = true }
 pezkuwi-primitives = { workspace = true, default-features = true }
 pezsp-blockchain = { workspace = true, default-features = true }
 pezsp-core = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-  "gum/runtime-benchmarks",
-  "pezkuwi-node-metrics/runtime-benchmarks",
-  "pezkuwi-pez-node-primitives/runtime-benchmarks",
-  "pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
-  "pezkuwi-node-subsystem-types/runtime-benchmarks",
-  "pezkuwi-node-subsystem/runtime-benchmarks",
-  "pezkuwi-primitives/runtime-benchmarks",
-  "pezsc-client-api/runtime-benchmarks",
-  "pezsc-consensus-babe/runtime-benchmarks",
-  "pezsp-blockchain/runtime-benchmarks",
+	"gum/runtime-benchmarks",
+	"pezkuwi-node-metrics/runtime-benchmarks",
+	"pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
+	"pezkuwi-node-subsystem-types/runtime-benchmarks",
+	"pezkuwi-node-subsystem/runtime-benchmarks",
+	"pezkuwi-pez-node-primitives/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"pezsc-client-api/runtime-benchmarks",
+	"pezsc-consensus-babe/runtime-benchmarks",
+	"pezsp-blockchain/runtime-benchmarks",
 ]

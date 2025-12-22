@@ -28,18 +28,14 @@ futures = { workspace = true, features = ["thread-pool"] }
 hex = { workspace = true }
 jsonrpsee = { workspace = true, features = ["full"] }
 log = { workspace = true }
+pezkuwi-subxt = { workspace = true, default-features = true, features = [
+	"reconnecting-rpc-client",
+] }
 pezpallet-revive = { workspace = true, default-features = true }
-prometheus-endpoint = { workspace = true, default-features = true }
-rlp = { workspace = true }
 pezsc-cli = { workspace = true, default-features = true }
 pezsc-rpc = { workspace = true, default-features = true }
 pezsc-rpc-api = { workspace = true, default-features = true }
 pezsc-service = { workspace = true, default-features = true }
-serde = { workspace = true, default-features = true, features = [
-  "alloc",
-  "derive",
-] }
-serde_json = { workspace = true }
 pezsp-arithmetic = { workspace = true, default-features = true }
 pezsp-core = { workspace = true, default-features = true }
 pezsp-crypto-hashing = { workspace = true }
@@ -47,20 +43,24 @@ pezsp-rpc = { workspace = true, default-features = true }
 pezsp-runtime = { workspace = true, default-features = true }
 pezsp-timestamp = { workspace = true }
 pezsp-weights = { workspace = true, default-features = true }
-sqlx = { workspace = true, features = ["macros", "runtime-tokio", "sqlite"] }
-pezkuwi-subxt = { workspace = true, default-features = true, features = [
-  "reconnecting-rpc-client",
+prometheus-endpoint = { workspace = true, default-features = true }
+rlp = { workspace = true }
+serde = { workspace = true, default-features = true, features = [
+	"alloc",
+	"derive",
 ] }
-subxt-signer = { workspace = true, features = ["unstable-eth"] }
+serde_json = { workspace = true }
+sqlx = { workspace = true, features = ["macros", "runtime-tokio", "sqlite"] }
+pezkuwi-subxt-signer = { workspace = true, features = ["unstable-eth"] }
 thiserror = { workspace = true }
 tokio = { workspace = true, features = ["full"] }
 
 [dev-dependencies]
 env_logger = { workspace = true }
-pezpallet-revive-fixtures = { workspace = true, default-features = true }
-pretty_assertions = { workspace = true }
 pez-revive-dev-node = { workspace = true }
+pezpallet-revive-fixtures = { workspace = true, default-features = true }
 pezsp-io = { workspace = true, default-features = true }
+pretty_assertions = { workspace = true }
 
 [build-dependencies]
 git2 = { workspace = true }
@@ -70,14 +70,14 @@ pezsp-runtime = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-  "pezpallet-revive/runtime-benchmarks",
-  "pez-revive-dev-node/runtime-benchmarks",
-  "pez-revive-dev-runtime/runtime-benchmarks",
-  "pezsc-cli/runtime-benchmarks",
-  "pezsc-rpc-api/runtime-benchmarks",
-  "pezsc-rpc/runtime-benchmarks",
-  "pezsc-service/runtime-benchmarks",
-  "pezsp-io/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "pezsp-timestamp/runtime-benchmarks",
+	"pez-revive-dev-node/runtime-benchmarks",
+	"pez-revive-dev-runtime/runtime-benchmarks",
+	"pezpallet-revive/runtime-benchmarks",
+	"pezsc-cli/runtime-benchmarks",
+	"pezsc-rpc-api/runtime-benchmarks",
+	"pezsc-rpc/runtime-benchmarks",
+	"pezsc-service/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-timestamp/runtime-benchmarks",
 ]

@@ -15,38 +15,38 @@ workspace = true
 [dependencies]
 codec = { features = ["derive"], workspace = true }
 environmental = { workspace = true }
+impl-trait-for-tuples = { workspace = true }
 pezframe-benchmarking = { optional = true, workspace = true }
 pezframe-support = { workspace = true }
-impl-trait-for-tuples = { workspace = true }
-scale-info = { features = ["derive", "serde"], workspace = true }
 pezsp-arithmetic = { workspace = true }
 pezsp-core = { workspace = true }
 pezsp-io = { workspace = true }
 pezsp-runtime = { workspace = true }
 pezsp-weights = { workspace = true }
+scale-info = { features = ["derive", "serde"], workspace = true }
 tracing = { workspace = true }
 xcm = { workspace = true }
 
 [features]
 default = ["std"]
 runtime-benchmarks = [
-  "pezframe-benchmarking/runtime-benchmarks",
-  "pezframe-support/runtime-benchmarks",
-  "pezsp-io/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "xcm/runtime-benchmarks",
+	"pezframe-benchmarking/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
 ]
 std = [
-  "codec/std",
-  "environmental/std",
-  "pezframe-benchmarking/std",
-  "pezframe-support/std",
-  "scale-info/std",
-  "pezsp-arithmetic/std",
-  "pezsp-core/std",
-  "pezsp-io/std",
-  "pezsp-runtime/std",
-  "pezsp-weights/std",
-  "tracing/std",
-  "xcm/std",
+	"codec/std",
+	"environmental/std",
+	"pezframe-benchmarking/std",
+	"pezframe-support/std",
+	"pezsp-arithmetic/std",
+	"pezsp-core/std",
+	"pezsp-io/std",
+	"pezsp-runtime/std",
+	"pezsp-weights/std",
+	"scale-info/std",
+	"tracing/std",
+	"xcm/std",
 ]

@@ -103,7 +103,6 @@ impl SortedMembers<AccountId> for TestAdminProvider {
 }
 
 impl pezpallet_perwerde::Config for Test {
-	type RuntimeEvent = RuntimeEvent;
 	// AdminOrigin'i, kendi yazdığımız ve sadece 0'ı admin kabul eden sağlayıcıya bağlıyoruz.
 	type AdminOrigin = EnsureSignedBy<TestAdminProvider, AccountId>;
 	type WeightInfo = ();

@@ -26,10 +26,10 @@ thiserror = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-  "gum/runtime-benchmarks",
-  "pezkuwi-node-subsystem/runtime-benchmarks",
-  "pezkuwi-overseer/runtime-benchmarks",
-  "pezkuwi-primitives/runtime-benchmarks",
-  "pezsp-blockchain/runtime-benchmarks",
-  "pezsp-inherents/runtime-benchmarks",
+	"gum/runtime-benchmarks",
+	"pezkuwi-node-subsystem/runtime-benchmarks",
+	"pezkuwi-overseer/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"pezsp-blockchain/runtime-benchmarks",
+	"pezsp-inherents/runtime-benchmarks",
 ]

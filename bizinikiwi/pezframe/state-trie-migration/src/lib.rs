@@ -77,7 +77,7 @@ pub mod pezpallet {
 
 	pub use crate::weights::WeightInfo;
 
-	use alloc::{vec, vec::Vec};
+	use alloc::vec::Vec;
 	use core::ops::Deref;
 	use pezframe_support::{
 		dispatch::{DispatchErrorWithPostInfo, PostDispatchInfo},

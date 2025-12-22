@@ -13,13 +13,13 @@ readme = "README.md"
 targets = ["x86_64-unknown-linux-gnu"]
 
 [dependencies]
-codec = { package = "parity-scale-codec", version = "3.0.0", default-features = false, features = ["derive"] }
 cfg-if = "1.0.0"
+codec = { package = "parity-scale-codec", version = "3.0.0", default-features = false, features = ["derive"] }
 scale-info = { version = "2.0.0", default-features = false, optional = true, features = ["derive"] }
 serde = { version = "1.0.101", default-features = false, optional = true, features = ["derive"] }
 
 [features]
-default = ["std", "current"]
+default = ["current", "std"]
 
 # Feature flag for pre-V14 versions.
 legacy = []
@@ -32,8 +32,8 @@ unstable = ["current"]
 
 # Serde support without relying on std features
 serde_full = [
-	"scale-info/serde",
 	"codec/serde",
+	"scale-info/serde",
 	"serde",
 	"serde/alloc",
 ]
@@ -42,9 +42,9 @@ serde_full = [
 decode = ["scale-info/decode"]
 
 std = [
-	"decode",
-	"serde_full",
 	"codec/std",
+	"decode",
 	"scale-info/std",
 	"serde/std",
+	"serde_full",
 ]

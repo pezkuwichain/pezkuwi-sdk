@@ -59,139 +59,139 @@ log = { workspace = true, default-features = true }
 rand = { workspace = true, default-features = true }
 serde = { features = ["derive"], workspace = true, default-features = true }
 serde_json = { workspace = true, default-features = true }
-subxt-signer = { workspace = true, features = ["unstable-eth"] }
+pezkuwi-subxt-signer = { workspace = true, features = ["unstable-eth"] }
 
 # The Pezkuwi-SDK:
 pezkuwi-sdk = { features = [
-  "pez-fork-tree",
-  "pezframe-benchmarking-cli",
-  "frame-remote-externalities",
-  "pezframe-support-procedural-tools",
-  "pez-generate-bags",
-  "pezmmr-gadget",
-  "pezmmr-rpc",
-  "pezpallet-transaction-payment-rpc",
-  "pezsc-allocator",
-  "pezsc-authority-discovery",
-  "pezsc-basic-authorship",
-  "pezsc-block-builder",
-  "pezsc-chain-spec",
-  "pezsc-cli",
-  "pezsc-client-api",
-  "pezsc-client-db",
-  "pezsc-consensus",
-  "pezsc-consensus-aura",
-  "pezsc-consensus-babe",
-  "pezsc-consensus-babe-rpc",
-  "pezsc-consensus-beefy",
-  "pezsc-consensus-beefy-rpc",
-  "pezsc-consensus-epochs",
-  "pezsc-consensus-grandpa",
-  "pezsc-consensus-grandpa-rpc",
-  "pezsc-consensus-manual-seal",
-  "pezsc-consensus-pow",
-  "pezsc-consensus-slots",
-  "pezsc-executor",
-  "pezsc-executor-common",
-  "pezsc-executor-polkavm",
-  "pezsc-executor-wasmtime",
-  "pezsc-informant",
-  "pezsc-keystore",
-  "pezsc-mixnet",
-  "pezsc-network",
-  "pezsc-network-common",
-  "pezsc-network-gossip",
-  "pezsc-network-light",
-  "pezsc-network-statement",
-  "pezsc-network-sync",
-  "pezsc-network-transactions",
-  "pezsc-network-types",
-  "pezsc-offchain",
-  "pezsc-proposer-metrics",
-  "pezsc-rpc",
-  "pezsc-rpc-api",
-  "pezsc-rpc-server",
-  "pezsc-rpc-spec-v2",
-  "pezsc-service",
-  "pezsc-state-db",
-  "pezsc-statement-store",
-  "pezsc-storage-monitor",
-  "pezsc-sync-state-rpc",
-  "pezsc-sysinfo",
-  "pezsc-telemetry",
-  "pezsc-tracing",
-  "pezsc-transaction-pool",
-  "pezsc-transaction-pool-api",
-  "pezsc-utils",
-  "pezsp-api",
-  "pezsp-blockchain",
-  "pezsp-consensus",
-  "pezsp-core",
-  "pezsp-core-hashing",
-  "pezsp-core-hashing-proc-macro",
-  "pezsp-database",
-  "pezsp-inherents",
-  "pezsp-io",
-  "pezsp-keystore",
-  "pezsp-maybe-compressed-blob",
-  "pezsp-mmr-primitives",
-  "pezsp-panic-handler",
-  "pezsp-rpc",
-  "pezsp-statement-store",
-  "pezsp-timestamp",
-  "pezsp-tracing",
-  "pezsp-transaction-storage-proof",
-  "pezstaging-chain-spec-builder",
-  "pezstaging-node-inspect",
-  "pezstaging-tracking-allocator",
-  "std",
-  "pez-subkey",
-  "bizinikiwi-build-script-utils",
-  "bizinikiwi-frame-rpc-support",
-  "bizinikiwi-frame-rpc-system",
-  "bizinikiwi-prometheus-endpoint",
-  "bizinikiwi-rpc-client",
-  "bizinikiwi-state-trie-migration-rpc",
-  "bizinikiwi-wasm-builder",
-  "pez-tracing-gum",
+	"bizinikiwi-build-script-utils",
+	"bizinikiwi-frame-rpc-support",
+	"bizinikiwi-frame-rpc-system",
+	"bizinikiwi-prometheus-endpoint",
+	"bizinikiwi-rpc-client",
+	"bizinikiwi-state-trie-migration-rpc",
+	"bizinikiwi-wasm-builder",
+	"frame-remote-externalities",
+	"pez-fork-tree",
+	"pez-generate-bags",
+	"pez-subkey",
+	"pez-tracing-gum",
+	"pezframe-benchmarking-cli",
+	"pezframe-support-procedural-tools",
+	"pezmmr-gadget",
+	"pezmmr-rpc",
+	"pezpallet-transaction-payment-rpc",
+	"pezsc-allocator",
+	"pezsc-authority-discovery",
+	"pezsc-basic-authorship",
+	"pezsc-block-builder",
+	"pezsc-chain-spec",
+	"pezsc-cli",
+	"pezsc-client-api",
+	"pezsc-client-db",
+	"pezsc-consensus",
+	"pezsc-consensus-aura",
+	"pezsc-consensus-babe",
+	"pezsc-consensus-babe-rpc",
+	"pezsc-consensus-beefy",
+	"pezsc-consensus-beefy-rpc",
+	"pezsc-consensus-epochs",
+	"pezsc-consensus-grandpa",
+	"pezsc-consensus-grandpa-rpc",
+	"pezsc-consensus-manual-seal",
+	"pezsc-consensus-pow",
+	"pezsc-consensus-slots",
+	"pezsc-executor",
+	"pezsc-executor-common",
+	"pezsc-executor-polkavm",
+	"pezsc-executor-wasmtime",
+	"pezsc-informant",
+	"pezsc-keystore",
+	"pezsc-mixnet",
+	"pezsc-network",
+	"pezsc-network-common",
+	"pezsc-network-gossip",
+	"pezsc-network-light",
+	"pezsc-network-statement",
+	"pezsc-network-sync",
+	"pezsc-network-transactions",
+	"pezsc-network-types",
+	"pezsc-offchain",
+	"pezsc-proposer-metrics",
+	"pezsc-rpc",
+	"pezsc-rpc-api",
+	"pezsc-rpc-server",
+	"pezsc-rpc-spec-v2",
+	"pezsc-service",
+	"pezsc-state-db",
+	"pezsc-statement-store",
+	"pezsc-storage-monitor",
+	"pezsc-sync-state-rpc",
+	"pezsc-sysinfo",
+	"pezsc-telemetry",
+	"pezsc-tracing",
+	"pezsc-transaction-pool",
+	"pezsc-transaction-pool-api",
+	"pezsc-utils",
+	"pezsp-api",
+	"pezsp-blockchain",
+	"pezsp-consensus",
+	"pezsp-core",
+	"pezsp-core-hashing",
+	"pezsp-core-hashing-proc-macro",
+	"pezsp-database",
+	"pezsp-inherents",
+	"pezsp-io",
+	"pezsp-keystore",
+	"pezsp-maybe-compressed-blob",
+	"pezsp-mmr-primitives",
+	"pezsp-panic-handler",
+	"pezsp-rpc",
+	"pezsp-statement-store",
+	"pezsp-timestamp",
+	"pezsp-tracing",
+	"pezsp-transaction-storage-proof",
+	"pezstaging-chain-spec-builder",
+	"pezstaging-node-inspect",
+	"pezstaging-tracking-allocator",
+	"std",
 ], workspace = true, default-features = true }
 
 # Direct dependency needed (not through umbrella due to macro visibility issues)
 pezsp-runtime = { workspace = true }
 
 # Shared code between the staging node and kitchensink runtime:
-pez-kitchensink-runtime = { workspace = true }
 node-inspect = { optional = true, workspace = true, default-features = true }
+pez-kitchensink-runtime = { workspace = true }
 pez-node-primitives = { workspace = true, default-features = true }
 pez-node-rpc = { workspace = true }
 
 [dev-dependencies]
 assert_cmd = { workspace = true }
 criterion = { features = [
-  "async_tokio",
+	"async_tokio",
 ], workspace = true, default-features = true }
 nix = { features = ["signal"], workspace = true }
+pezsp-keyring = { workspace = true }
 pretty_assertions.workspace = true
 regex = { workspace = true }
 scale-info = { features = [
-  "derive",
-  "serde",
+	"derive",
+	"serde",
 ], workspace = true, default-features = true }
 soketto = { workspace = true }
-pezsp-keyring = { workspace = true }
 tempfile = { workspace = true }
 tokio = { features = [
-  "macros",
-  "parking_lot",
-  "time",
+	"macros",
+	"parking_lot",
+	"time",
 ], workspace = true, default-features = true }
 tokio-util = { features = ["compat"], workspace = true }
 wat = { workspace = true }
 
 # These testing-only dependencies are not exported by the Pezkuwi-SDK crate:
+bizinikiwi-cli-test-utils = { workspace = true }
 pez-node-testing = { workspace = true }
 pezsc-service-test = { workspace = true }
-bizinikiwi-cli-test-utils = { workspace = true }
 
 [build-dependencies]
 clap = { optional = true, workspace = true }
@@ -200,29 +200,29 @@ clap_complete = { optional = true, workspace = true }
 node-inspect = { optional = true, workspace = true, default-features = true }
 
 pezkuwi-sdk = { features = [
-  "pezframe-benchmarking-cli",
-  "pezsc-cli",
-  "pezsc-storage-monitor",
-  "bizinikiwi-build-script-utils",
+	"bizinikiwi-build-script-utils",
+	"pezframe-benchmarking-cli",
+	"pezsc-cli",
+	"pezsc-storage-monitor",
 ], optional = true, workspace = true, default-features = true }
 
 [features]
 default = ["cli"]
 cli = ["clap", "clap_complete", "node-inspect", "pezkuwi-sdk"]
 runtime-benchmarks = [
-  "pez-kitchensink-runtime/runtime-benchmarks",
-  "node-inspect?/runtime-benchmarks",
-  "pez-node-primitives/runtime-benchmarks",
-  "pez-node-rpc/runtime-benchmarks",
-  "pez-node-testing/runtime-benchmarks",
-  "pezkuwi-sdk/runtime-benchmarks",
-  "pezsc-service-test/runtime-benchmarks",
-  "pezsp-keyring/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "bizinikiwi-cli-test-utils/runtime-benchmarks",
+	"bizinikiwi-cli-test-utils/runtime-benchmarks",
+	"node-inspect?/runtime-benchmarks",
+	"pez-kitchensink-runtime/runtime-benchmarks",
+	"pez-node-primitives/runtime-benchmarks",
+	"pez-node-rpc/runtime-benchmarks",
+	"pez-node-testing/runtime-benchmarks",
+	"pezkuwi-sdk/runtime-benchmarks",
+	"pezsc-service-test/runtime-benchmarks",
+	"pezsp-keyring/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]
 try-runtime = [
-  "pez-kitchensink-runtime/try-runtime",
-  "pezkuwi-sdk/try-runtime",
-  "bizinikiwi-cli-test-utils/try-runtime",
+	"bizinikiwi-cli-test-utils/try-runtime",
+	"pez-kitchensink-runtime/try-runtime",
+	"pezkuwi-sdk/try-runtime",
 ]

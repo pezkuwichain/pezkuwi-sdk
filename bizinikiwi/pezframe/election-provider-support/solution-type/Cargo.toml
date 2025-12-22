@@ -26,18 +26,18 @@ syn = { features = ["full", "visit"], workspace = true }
 
 [dev-dependencies]
 codec = { workspace = true, default-features = true }
-scale-info = { workspace = true, default-features = true }
 pezsp-arithmetic = { workspace = true, default-features = true }
+scale-info = { workspace = true, default-features = true }
 # used by generate_solution_type:
 # NOTE: we have to explicitly specify `std` because of trybuild
 pezframe-election-provider-support = { workspace = true, default-features = true, features = [
-  "std",
+	"std",
 ] }
 pezframe-support = { workspace = true, default-features = true }
 trybuild = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-  "pezframe-election-provider-support/runtime-benchmarks",
-  "pezframe-support/runtime-benchmarks",
+	"pezframe-election-provider-support/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
 ]

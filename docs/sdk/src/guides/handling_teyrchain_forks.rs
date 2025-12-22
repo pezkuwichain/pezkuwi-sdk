@@ -28,10 +28,10 @@
 //! latency and reduces throughput, affecting the overall performance of the teyrchain.
 //!
 //! # Building on Older Pelay Parents
-//! Pezcumulus offers a way to mitigate the occurence of forks. Instead of picking a block at the tip
-//! of the relay chain to build blocks, the node side can pick a relay chain block that is older. By
-//! building on 12s old relay chain blocks, forks will already have settled and the teyrchain can
-//! build fork-free.
+//! Pezcumulus offers a way to mitigate the occurence of forks. Instead of picking a block at the
+//! tip of the relay chain to build blocks, the node side can pick a relay chain block that is
+//! older. By building on 12s old relay chain blocks, forks will already have settled and the
+//! teyrchain can build fork-free.
 //!
 //! ```text
 //! Without offset:

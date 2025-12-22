@@ -5,10 +5,10 @@ use anyhow::anyhow;
 
 use crate::utils::{initialize_network, BEST_BLOCK_METRIC};
 
-use pezcumulus_zombienet_sdk_helpers::assert_para_throughput;
+use pezcumulus_zombienet_sdk_helpers::{assert_para_throughput};
 use pezkuwi_primitives::Id as ParaId;
 use zombienet_sdk::{
-	subxt::{OnlineClient, PolkadotConfig},
+	subxt::{OnlineClient, PezkuwiConfig},
 	NetworkConfig, NetworkConfigBuilder,
 };
 
@@ -25,7 +25,7 @@ async fn sync_blocks_from_tip_without_connected_collator() -> Result<(), anyhow:
 
 	let relay_alice = network.get_node("alice")?;
 
-	let relay_client: OnlineClient<PolkadotConfig> = relay_alice.wait_client().await?;
+	let relay_client: OnlineClient<PezkuwiConfig> = relay_alice.wait_client().await?;
 
 	log::info!("Ensuring teyrchain making progress");
 	assert_para_throughput(
@@ -83,13 +83,13 @@ async fn build_network_config() -> Result<NetworkConfig, anyhow::Error> {
 					// Leaving them in case we switch to `k8s` some day.
 					resources.with_request_cpu(2).with_request_memory("2G")
 				})
-				.with_node(|node| node.with_name("alice"))
-				.with_node(|node| node.with_name("bob"))
+				.with_validator(|node| node.with_name("alice"))
+				.with_validator(|node| node.with_name("bob"))
 		})
 		.with_teyrchain(|p| {
 			p.with_id(PARA_ID)
 				.with_default_command("test-teyrchain")
-				.with_default_image(images.pezcumulus.as_str())
+				.with_default_image(images.pezcumulus())
 				.with_default_args(vec![("-lteyrchain=debug").into()])
 				.with_collator(|n| n.with_name("dave").validator(false))
 				.with_collator(|n| n.with_name("charlie").validator(true))

@@ -20,20 +20,20 @@ targets = ["x86_64-unknown-linux-gnu"]
 codec = { features = ["derive"], workspace = true }
 futures = { workspace = true }
 parking_lot = { workspace = true, default-features = true }
-schnellru = { workspace = true }
 pezsp-api = { workspace = true, default-features = true }
 pezsp-consensus = { workspace = true, default-features = true }
 pezsp-core = { workspace = true, default-features = true }
 pezsp-database = { workspace = true, default-features = true }
 pezsp-runtime = { workspace = true, default-features = true }
 pezsp-state-machine = { workspace = true, default-features = true }
+schnellru = { workspace = true }
 thiserror = { workspace = true }
 tracing = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-  "pezsp-api/runtime-benchmarks",
-  "pezsp-consensus/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "pezsp-state-machine/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
+	"pezsp-consensus/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-state-machine/runtime-benchmarks",
 ]

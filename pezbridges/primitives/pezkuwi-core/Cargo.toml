@@ -16,7 +16,7 @@ workspace = true
 codec = { features = ["derive"], workspace = true }
 scale-info = { features = ["derive"], workspace = true }
 serde = { optional = true, features = [
-  "derive",
+	"derive",
 ], workspace = true, default-features = true }
 
 # Bridge Dependencies
@@ -36,21 +36,21 @@ hex = { workspace = true, default-features = true }
 [features]
 default = ["std"]
 std = [
-  "bp-messages/std",
-  "pezbp-runtime/std",
-  "codec/std",
-  "pezframe-support/std",
-  "pezframe-system/std",
-  "scale-info/std",
-  "serde",
-  "pezsp-core/std",
-  "pezsp-runtime/std",
-  "pezsp-std/std",
+	"bp-messages/std",
+	"codec/std",
+	"pezbp-runtime/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
+	"pezsp-core/std",
+	"pezsp-runtime/std",
+	"pezsp-std/std",
+	"scale-info/std",
+	"serde",
 ]
 runtime-benchmarks = [
-  "bp-messages/runtime-benchmarks",
-  "pezbp-runtime/runtime-benchmarks",
-  "pezframe-support/runtime-benchmarks",
-  "pezframe-system/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
+	"bp-messages/runtime-benchmarks",
+	"pezbp-runtime/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]

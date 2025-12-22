@@ -26,9 +26,9 @@ pezsp-runtime = { workspace = true, default-features = true }
 
 fatality = { workspace = true }
 pezkuwi-node-network-protocol = { workspace = true, default-features = true }
-pezkuwi-pez-node-primitives = { workspace = true, default-features = true }
 pezkuwi-node-subsystem = { workspace = true, default-features = true }
 pezkuwi-node-subsystem-util = { workspace = true, default-features = true }
+pezkuwi-pez-node-primitives = { workspace = true, default-features = true }
 pezkuwi-primitives = { workspace = true, default-features = true }
 thiserror = { workspace = true }
 tokio-util = { workspace = true }
@@ -36,13 +36,13 @@ tokio-util = { workspace = true }
 # experimental-collator-protocol disabled, while the rust compiler claims that having optional
 # dev-dependencies is not possible.
 tokio = { features = [
-  "macros",
+	"macros",
 ], workspace = true, default-features = true, optional = true }
 
 [dev-dependencies]
 assert_matches = { workspace = true }
-rstest = { workspace = true }
 pezsp-tracing = { workspace = true }
+rstest = { workspace = true }
 
 codec = { features = ["std"], workspace = true, default-features = true }
 pezsc-keystore = { workspace = true, default-features = true }
@@ -58,15 +58,15 @@ pezkuwi-primitives-test-helpers = { workspace = true }
 default = []
 experimental-collator-protocol = ["async-trait", "tokio"]
 runtime-benchmarks = [
-  "gum/runtime-benchmarks",
-  "pezkuwi-node-network-protocol/runtime-benchmarks",
-  "pezkuwi-pez-node-primitives/runtime-benchmarks",
-  "pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
-  "pezkuwi-node-subsystem-util/runtime-benchmarks",
-  "pezkuwi-node-subsystem/runtime-benchmarks",
-  "pezkuwi-primitives-test-helpers/runtime-benchmarks",
-  "pezkuwi-primitives/runtime-benchmarks",
-  "pezsc-network/runtime-benchmarks",
-  "pezsp-keyring/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
+	"gum/runtime-benchmarks",
+	"pezkuwi-node-network-protocol/runtime-benchmarks",
+	"pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
+	"pezkuwi-node-subsystem-util/runtime-benchmarks",
+	"pezkuwi-node-subsystem/runtime-benchmarks",
+	"pezkuwi-pez-node-primitives/runtime-benchmarks",
+	"pezkuwi-primitives-test-helpers/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"pezsc-network/runtime-benchmarks",
+	"pezsp-keyring/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]

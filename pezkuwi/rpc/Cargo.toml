@@ -13,10 +13,12 @@ documentation = "https://docs.rs/pezkuwi-rpc"
 workspace = true
 
 [dependencies]
+bizinikiwi-frame-rpc-system = { workspace = true, default-features = true }
+bizinikiwi-state-trie-migration-rpc = { workspace = true, default-features = true }
 jsonrpsee = { features = ["server"], workspace = true }
+pezkuwi-primitives = { workspace = true, default-features = true }
 pezmmr-rpc = { workspace = true, default-features = true }
 pezpallet-transaction-payment-rpc = { workspace = true, default-features = true }
-pezkuwi-primitives = { workspace = true, default-features = true }
 pezsc-chain-spec = { workspace = true, default-features = true }
 pezsc-client-api = { workspace = true, default-features = true }
 pezsc-consensus-babe = { workspace = true, default-features = true }
@@ -37,32 +39,30 @@ pezsp-consensus-babe = { workspace = true, default-features = true }
 pezsp-consensus-beefy = { workspace = true, default-features = true }
 pezsp-keystore = { workspace = true, default-features = true }
 pezsp-runtime = { workspace = true, default-features = true }
-bizinikiwi-frame-rpc-system = { workspace = true, default-features = true }
-bizinikiwi-state-trie-migration-rpc = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-  "pezmmr-rpc/runtime-benchmarks",
-  "pezpallet-transaction-payment-rpc/runtime-benchmarks",
-  "pezkuwi-primitives/runtime-benchmarks",
-  "pezsc-chain-spec/runtime-benchmarks",
-  "pezsc-client-api/runtime-benchmarks",
-  "pezsc-consensus-babe-rpc/runtime-benchmarks",
-  "pezsc-consensus-babe/runtime-benchmarks",
-  "pezsc-consensus-beefy-rpc/runtime-benchmarks",
-  "pezsc-consensus-beefy/runtime-benchmarks",
-  "pezsc-consensus-grandpa-rpc/runtime-benchmarks",
-  "pezsc-consensus-grandpa/runtime-benchmarks",
-  "pezsc-rpc/runtime-benchmarks",
-  "pezsc-sync-state-rpc/runtime-benchmarks",
-  "pezsc-transaction-pool-api/runtime-benchmarks",
-  "pezsp-api/runtime-benchmarks",
-  "pezsp-block-builder/runtime-benchmarks",
-  "pezsp-blockchain/runtime-benchmarks",
-  "pezsp-consensus-babe/runtime-benchmarks",
-  "pezsp-consensus-beefy/runtime-benchmarks",
-  "pezsp-consensus/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "bizinikiwi-frame-rpc-system/runtime-benchmarks",
-  "bizinikiwi-state-trie-migration-rpc/runtime-benchmarks",
+	"bizinikiwi-frame-rpc-system/runtime-benchmarks",
+	"bizinikiwi-state-trie-migration-rpc/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"pezmmr-rpc/runtime-benchmarks",
+	"pezpallet-transaction-payment-rpc/runtime-benchmarks",
+	"pezsc-chain-spec/runtime-benchmarks",
+	"pezsc-client-api/runtime-benchmarks",
+	"pezsc-consensus-babe-rpc/runtime-benchmarks",
+	"pezsc-consensus-babe/runtime-benchmarks",
+	"pezsc-consensus-beefy-rpc/runtime-benchmarks",
+	"pezsc-consensus-beefy/runtime-benchmarks",
+	"pezsc-consensus-grandpa-rpc/runtime-benchmarks",
+	"pezsc-consensus-grandpa/runtime-benchmarks",
+	"pezsc-rpc/runtime-benchmarks",
+	"pezsc-sync-state-rpc/runtime-benchmarks",
+	"pezsc-transaction-pool-api/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
+	"pezsp-block-builder/runtime-benchmarks",
+	"pezsp-blockchain/runtime-benchmarks",
+	"pezsp-consensus-babe/runtime-benchmarks",
+	"pezsp-consensus-beefy/runtime-benchmarks",
+	"pezsp-consensus/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]

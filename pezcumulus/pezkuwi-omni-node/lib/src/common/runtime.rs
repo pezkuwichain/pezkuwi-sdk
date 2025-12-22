@@ -23,7 +23,7 @@ use pezsc_executor::WasmExecutor;
 use pezsc_runtime_utilities::fetch_latest_metadata_from_code_blob;
 use scale_info::{form::PortableForm, TypeDef, TypeDefPrimitive};
 use std::fmt::Display;
-use subxt_metadata::Metadata;
+use pezkuwi_subxt_metadata::Metadata;
 
 /// Expected teyrchain system pezpallet runtime type name.
 pub const DEFAULT_TEYRCHAIN_SYSTEM_PALLET_NAME: &str = "TeyrchainSystem";
@@ -190,7 +190,7 @@ mod tests {
 	use pezsc_executor::WasmExecutor;
 	use pezsc_runtime_utilities::fetch_latest_metadata_from_code_blob;
 
-	fn pezcumulus_test_runtime_metadata() -> subxt_metadata::Metadata {
+	fn pezcumulus_test_runtime_metadata() -> pezkuwi_subxt_metadata::Metadata {
 		let opaque_metadata = fetch_latest_metadata_from_code_blob(
 			&WasmExecutor::<TeyrchainHostFunctions>::builder()
 				.with_allow_missing_host_functions(true)
@@ -199,7 +199,7 @@ mod tests {
 		)
 		.unwrap();
 
-		subxt_metadata::Metadata::decode(&mut (*opaque_metadata).as_slice()).unwrap()
+		pezkuwi_subxt_metadata::Metadata::decode(&mut (*opaque_metadata).as_slice()).unwrap()
 	}
 
 	#[test]

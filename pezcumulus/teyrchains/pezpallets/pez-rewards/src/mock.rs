@@ -194,7 +194,6 @@ parameter_types! {
 }
 
 impl pezpallet_identity_kyc::Config for Test {
-	type RuntimeEvent = RuntimeEvent;
 	type Currency = Balances;
 	type GovernanceOrigin = EnsureRoot<H256>;
 	type WeightInfo = ();
@@ -226,7 +225,6 @@ parameter_types! {
 }
 
 impl pezpallet_trust::Config for Test {
-	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo = ();
 	type Score = u128;
 	type ScoreMultiplierBase = ConstU128<1>;
@@ -267,7 +265,6 @@ impl crate::weights::WeightInfo for MockWeightInfo {
 	}
 }
 impl pezpallet_pez_rewards::Config for Test {
-	type RuntimeEvent = RuntimeEvent;
 	type Assets = Assets;
 	type TrustScoreSource = MockTrustScore;
 	type IncentivePotId = IncentivePotId;

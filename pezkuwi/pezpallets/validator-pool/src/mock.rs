@@ -162,7 +162,7 @@ impl crate::WeightInfo for MockWeightInfo {
 		pezframe_support::weights::Weight::from_parts(10_000, 0)
 	}
 
-	fn force_new_era() -> pezframe_support::weights::Weight {
+	fn force_new_era(_p: u32) -> pezframe_support::weights::Weight {
 		pezframe_support::weights::Weight::from_parts(50_000, 0)
 	}
 
@@ -176,7 +176,6 @@ impl crate::WeightInfo for MockWeightInfo {
 }
 
 impl Config for Test {
-	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo = MockWeightInfo;
 	type Randomness = MockRandomness;
 	type TrustSource = TestTrustProvider;
@@ -251,6 +250,7 @@ pub fn run_to_block(n: u64) {
 	}
 }
 
+#[allow(dead_code)]
 pub fn advance_era() {
 	let current_era_start = ValidatorPool::era_start();
 	let era_length = ValidatorPool::era_length();

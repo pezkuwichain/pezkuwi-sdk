@@ -18,11 +18,11 @@ targets = ["x86_64-unknown-linux-gnu"]
 
 [dependencies]
 codec = { features = ["derive"], workspace = true }
-scale-info = { features = ["derive"], workspace = true }
-serde = { features = ["alloc", "derive"], optional = true, workspace = true }
 pezsp-arithmetic = { workspace = true }
 pezsp-core = { workspace = true }
 pezsp-runtime = { workspace = true }
+scale-info = { features = ["derive"], workspace = true }
+serde = { features = ["alloc", "derive"], optional = true, workspace = true }
 
 [dev-dependencies]
 bizinikiwi-test-utils = { workspace = true }
@@ -31,20 +31,20 @@ bizinikiwi-test-utils = { workspace = true }
 default = ["std"]
 bench = []
 std = [
-  "codec/std",
-  "scale-info/std",
-  "serde/std",
-  "pezsp-arithmetic/std",
-  "pezsp-core/std",
-  "pezsp-runtime/std",
+	"codec/std",
+	"pezsp-arithmetic/std",
+	"pezsp-core/std",
+	"pezsp-runtime/std",
+	"scale-info/std",
+	"serde/std",
 ]
 
 # Serde support without relying on std features.
 serde = [
-  "dep:serde",
-  "scale-info/serde",
-  "pezsp-arithmetic/serde",
-  "pezsp-core/serde",
-  "pezsp-runtime/serde",
+	"dep:serde",
+	"pezsp-arithmetic/serde",
+	"pezsp-core/serde",
+	"pezsp-runtime/serde",
+	"scale-info/serde",
 ]
 runtime-benchmarks = ["pezsp-runtime/runtime-benchmarks"]

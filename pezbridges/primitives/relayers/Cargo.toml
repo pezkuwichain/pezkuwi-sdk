@@ -19,8 +19,8 @@ scale-info = { features = ["bit-vec", "derive"], workspace = true }
 # Bridge Dependencies
 bp-header-pez-chain = { workspace = true }
 bp-messages = { workspace = true }
-pezbp-runtime = { workspace = true }
 bp-teyrchains = { workspace = true }
+pezbp-runtime = { workspace = true }
 
 # Bizinikiwi Dependencies
 pezframe-support = { workspace = true }
@@ -35,25 +35,25 @@ hex-literal = { workspace = true, default-features = true }
 [features]
 default = ["std"]
 std = [
-  "bp-header-pez-chain/std",
-  "bp-messages/std",
-  "pezbp-runtime/std",
-  "bp-teyrchains/std",
-  "codec/std",
-  "pezframe-support/std",
-  "pezframe-system/std",
-  "pezpallet-utility/std",
-  "scale-info/std",
-  "pezsp-runtime/std",
-  "pezsp-std/std",
+	"bp-header-pez-chain/std",
+	"bp-messages/std",
+	"bp-teyrchains/std",
+	"codec/std",
+	"pezbp-runtime/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
+	"pezpallet-utility/std",
+	"pezsp-runtime/std",
+	"pezsp-std/std",
+	"scale-info/std",
 ]
 runtime-benchmarks = [
-  "bp-header-pez-chain/runtime-benchmarks",
-  "bp-messages/runtime-benchmarks",
-  "pezbp-runtime/runtime-benchmarks",
-  "bp-teyrchains/runtime-benchmarks",
-  "pezframe-support/runtime-benchmarks",
-  "pezframe-system/runtime-benchmarks",
-  "pezpallet-utility/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
+	"bp-header-pez-chain/runtime-benchmarks",
+	"bp-messages/runtime-benchmarks",
+	"bp-teyrchains/runtime-benchmarks",
+	"pezbp-runtime/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezpallet-utility/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]

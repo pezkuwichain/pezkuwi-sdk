@@ -11,8 +11,8 @@ use crate::{error::Error, transaction::TransactionMonitor};
 use async_trait::async_trait;
 use clap::ValueEnum;
 use futures::Future;
-use subxt::{blocks::Block, OnlineClient};
-use subxt_core::config::Header;
+use pezkuwi_subxt::{blocks::Block, OnlineClient};
+use pezkuwi_subxt_core::config::Header;
 use tokio::{
 	select,
 	sync::{mpsc, oneshot},
@@ -38,7 +38,7 @@ type TxSubmissionListener<C> = mpsc::Receiver<ListenerInfo<C>>;
 /// Sending end of a channel used by the runner to submit to the block monitor a listener for
 /// unwatched transactions finalization.
 type TxSubmissionSender<C> = mpsc::Sender<ListenerInfo<C>>;
-type HashOf<C> = <<C as subxt::Config>::Hasher as subxt::config::Hasher>::Output;
+type HashOf<C> = <<C as pezkuwi_subxt::Config>::Hasher as pezkuwi_subxt::config::Hasher>::Output;
 
 #[derive(ValueEnum, Copy, Clone, Debug)]
 pub enum BlockMonitorDisplayOptions {
@@ -57,12 +57,12 @@ impl BlockMonitorDisplayOptions {
 }
 
 #[derive(Clone)]
-pub struct BlockMonitor<C: subxt::Config> {
+pub struct BlockMonitor<C: pezkuwi_subxt::Config> {
 	listener_request_tx: TxSubmissionSender<C>,
 }
 
 #[async_trait]
-impl<C: subxt::Config> TransactionMonitor<HashOf<C>> for BlockMonitor<C> {
+impl<C: pezkuwi_subxt::Config> TransactionMonitor<HashOf<C>> for BlockMonitor<C> {
 	async fn wait(&self, tx_hash: HashOf<C>, until: Option<u64>) -> Result<HashOf<C>, Error> {
 		let listener = self.register_listener(tx_hash, until).await;
 		listener.await.map_err(|err| {
@@ -71,7 +71,7 @@ impl<C: subxt::Config> TransactionMonitor<HashOf<C>> for BlockMonitor<C> {
 	}
 }
 
-impl<C: subxt::Config> BlockMonitor<C> {
+impl<C: pezkuwi_subxt::Config> BlockMonitor<C> {
 	/// Instantiates a [`BlockMonitor`].
 	pub async fn new(uri: &str) -> Self {
 		trace!(uri, "BlockNumber::new");

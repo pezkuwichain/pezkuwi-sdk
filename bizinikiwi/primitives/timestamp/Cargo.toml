@@ -26,13 +26,13 @@ thiserror = { optional = true, workspace = true }
 [features]
 default = ["std"]
 std = [
-  "async-trait",
-  "codec/std",
-  "pezsp-inherents/std",
-  "pezsp-runtime/std",
-  "thiserror",
+	"async-trait",
+	"codec/std",
+	"pezsp-inherents/std",
+	"pezsp-runtime/std",
+	"thiserror",
 ]
 runtime-benchmarks = [
-  "pezsp-inherents/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
+	"pezsp-inherents/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]

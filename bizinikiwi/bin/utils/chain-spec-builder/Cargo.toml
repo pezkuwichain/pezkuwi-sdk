@@ -32,21 +32,21 @@ doctest = false
 clap = { features = ["derive"], workspace = true }
 docify = { workspace = true }
 pezsc-chain-spec = { features = [
-  "clap",
+	"clap",
 ], workspace = true, default-features = true }
+pezsp-tracing = { workspace = true, default-features = true }
 serde = { workspace = true, default-features = true }
 serde_json = { workspace = true, default-features = true }
-pezsp-tracing = { workspace = true, default-features = true }
 
 [dev-dependencies]
+bizinikiwi-test-runtime = { workspace = true }
 cmd_lib = { workspace = true }
 pretty_assertions = { workspace = true }
-bizinikiwi-test-runtime = { workspace = true }
 
 [features]
 # `cargo build --feature=generate-readme` updates the `README.md` file.
 generate-readme = []
 runtime-benchmarks = [
-  "pezsc-chain-spec/runtime-benchmarks",
-  "bizinikiwi-test-runtime/runtime-benchmarks",
+	"bizinikiwi-test-runtime/runtime-benchmarks",
+	"pezsc-chain-spec/runtime-benchmarks",
 ]

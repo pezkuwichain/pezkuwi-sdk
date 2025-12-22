@@ -31,14 +31,14 @@ pezsp-std = { workspace = true }
 [features]
 default = ["std"]
 std = [
-  "pezsnowbridge-beacon-primitives/std",
-  "pezsnowbridge-core/std",
-  "pezsnowbridge-inbound-queue-primitives/std",
-  "pezsp-core/std",
-  "pezsp-std/std",
+	"pezsnowbridge-beacon-primitives/std",
+	"pezsnowbridge-core/std",
+	"pezsnowbridge-inbound-queue-primitives/std",
+	"pezsp-core/std",
+	"pezsp-std/std",
 ]
 runtime-benchmarks = [
-  "pezsnowbridge-beacon-primitives/runtime-benchmarks",
-  "pezsnowbridge-core/runtime-benchmarks",
-  "pezsnowbridge-inbound-queue-primitives/runtime-benchmarks",
+	"pezsnowbridge-beacon-primitives/runtime-benchmarks",
+	"pezsnowbridge-core/runtime-benchmarks",
+	"pezsnowbridge-inbound-queue-primitives/runtime-benchmarks",
 ]

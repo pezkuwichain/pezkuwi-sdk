@@ -21,6 +21,7 @@ use crate::{
 	ClientError,
 };
 use futures::TryFutureExt;
+use pezkuwi_subxt::{error::RuntimeApiError, OnlineClient};
 use pezpallet_revive::{
 	evm::{
 		Block as EthBlock, BlockNumberOrTagOrHash, BlockTag, GenericTransaction, ReceiptGasInfo,
@@ -30,16 +31,14 @@ use pezpallet_revive::{
 };
 use pezsp_core::H256;
 use pezsp_timestamp::Timestamp;
-use pezkuwi_subxt::{
-	error::RuntimeApiError,
-	OnlineClient,
-};
 
 const LOG_TARGET: &str = "eth-rpc::runtime_api";
 
 /// A Wrapper around subxt Runtime API
 #[derive(Clone)]
-pub struct RuntimeApi(pezkuwi_subxt::runtime_api::RuntimeApi<SrcChainConfig, OnlineClient<SrcChainConfig>>);
+pub struct RuntimeApi(
+	pezkuwi_subxt::runtime_api::RuntimeApi<SrcChainConfig, OnlineClient<SrcChainConfig>>,
+);
 
 impl RuntimeApi {
 	/// Create a new instance.

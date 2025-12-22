@@ -29,19 +29,19 @@ scale-info = { features = ["derive"], workspace = true }
 [features]
 default = ["std"]
 std = [
-  "codec/std",
-  "pezframe-support/std",
-  "pezframe-system/std",
-  "scale-info/std",
-  "pezsp-runtime/std",
+	"codec/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
+	"pezsp-runtime/std",
+	"scale-info/std",
 ]
 runtime-benchmarks = [
-  "pezframe-support/runtime-benchmarks",
-  "pezframe-system/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]
 try-runtime = [
-  "pezframe-support/try-runtime",
-  "pezframe-system/try-runtime",
-  "pezsp-runtime/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezsp-runtime/try-runtime",
 ]

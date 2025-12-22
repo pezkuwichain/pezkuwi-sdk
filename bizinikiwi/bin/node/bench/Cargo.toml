@@ -23,20 +23,17 @@ derive_more = { features = ["display"], workspace = true }
 fs_extra = { workspace = true }
 futures = { features = ["thread-pool"], workspace = true }
 hash-db = { workspace = true, default-features = true }
-pez-kitchensink-runtime = { workspace = true }
 kvdb = { workspace = true }
 kvdb-rocksdb = { workspace = true }
 log = { workspace = true, default-features = true }
+parity-db = { workspace = true }
+pez-kitchensink-runtime = { workspace = true }
 pez-node-primitives = { workspace = true, default-features = true }
 pez-node-testing = { workspace = true }
-parity-db = { workspace = true }
-rand = { features = ["small_rng"], workspace = true, default-features = true }
 pezsc-basic-authorship = { workspace = true, default-features = true }
 pezsc-client-api = { workspace = true, default-features = true }
 pezsc-transaction-pool = { workspace = true, default-features = true }
 pezsc-transaction-pool-api = { workspace = true, default-features = true }
-serde = { workspace = true, default-features = true }
-serde_json = { workspace = true, default-features = true }
 pezsp-consensus = { workspace = true, default-features = true }
 pezsp-core = { workspace = true, default-features = true }
 pezsp-inherents = { workspace = true, default-features = true }
@@ -45,21 +42,24 @@ pezsp-state-machine = { workspace = true, default-features = true }
 pezsp-timestamp = { workspace = true }
 pezsp-tracing = { workspace = true, default-features = true }
 pezsp-trie = { workspace = true, default-features = true }
+rand = { features = ["small_rng"], workspace = true, default-features = true }
+serde = { workspace = true, default-features = true }
+serde_json = { workspace = true, default-features = true }
 tempfile = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-  "pez-kitchensink-runtime/runtime-benchmarks",
-  "pez-node-primitives/runtime-benchmarks",
-  "pez-node-testing/runtime-benchmarks",
-  "pezsc-basic-authorship/runtime-benchmarks",
-  "pezsc-client-api/runtime-benchmarks",
-  "pezsc-transaction-pool-api/runtime-benchmarks",
-  "pezsc-transaction-pool/runtime-benchmarks",
-  "pezsp-consensus/runtime-benchmarks",
-  "pezsp-inherents/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "pezsp-state-machine/runtime-benchmarks",
-  "pezsp-timestamp/runtime-benchmarks",
-  "pezsp-trie/runtime-benchmarks",
+	"pez-kitchensink-runtime/runtime-benchmarks",
+	"pez-node-primitives/runtime-benchmarks",
+	"pez-node-testing/runtime-benchmarks",
+	"pezsc-basic-authorship/runtime-benchmarks",
+	"pezsc-client-api/runtime-benchmarks",
+	"pezsc-transaction-pool-api/runtime-benchmarks",
+	"pezsc-transaction-pool/runtime-benchmarks",
+	"pezsp-consensus/runtime-benchmarks",
+	"pezsp-inherents/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-state-machine/runtime-benchmarks",
+	"pezsp-timestamp/runtime-benchmarks",
+	"pezsp-trie/runtime-benchmarks",
 ]

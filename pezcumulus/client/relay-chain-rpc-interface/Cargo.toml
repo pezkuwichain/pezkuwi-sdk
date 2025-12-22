@@ -18,7 +18,6 @@ pezkuwi-overseer = { workspace = true, default-features = true }
 pezcumulus-primitives-core = { workspace = true, default-features = true }
 pezcumulus-relay-chain-interface = { workspace = true, default-features = true }
 
-prometheus-endpoint = { workspace = true, default-features = true }
 pezsc-client-api = { workspace = true, default-features = true }
 pezsc-rpc-api = { workspace = true, default-features = true }
 pezsc-service = { workspace = true, default-features = true }
@@ -29,6 +28,7 @@ pezsp-runtime = { workspace = true, default-features = true }
 pezsp-state-machine = { workspace = true, default-features = true }
 pezsp-storage = { workspace = true, default-features = true }
 pezsp-version = { workspace = true, default-features = true }
+prometheus-endpoint = { workspace = true, default-features = true }
 
 tokio = { features = ["sync"], workspace = true, default-features = true }
 
@@ -49,15 +49,15 @@ portpicker = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-  "pezcumulus-primitives-core/runtime-benchmarks",
-  "pezcumulus-relay-chain-interface/runtime-benchmarks",
-  "pezkuwi-overseer/runtime-benchmarks",
-  "pezsc-client-api/runtime-benchmarks",
-  "pezsc-rpc-api/runtime-benchmarks",
-  "pezsc-service/runtime-benchmarks",
-  "pezsp-authority-discovery/runtime-benchmarks",
-  "pezsp-consensus-babe/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "pezsp-state-machine/runtime-benchmarks",
-  "pezsp-version/runtime-benchmarks",
+	"pezcumulus-primitives-core/runtime-benchmarks",
+	"pezcumulus-relay-chain-interface/runtime-benchmarks",
+	"pezkuwi-overseer/runtime-benchmarks",
+	"pezsc-client-api/runtime-benchmarks",
+	"pezsc-rpc-api/runtime-benchmarks",
+	"pezsc-service/runtime-benchmarks",
+	"pezsp-authority-discovery/runtime-benchmarks",
+	"pezsp-consensus-babe/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-state-machine/runtime-benchmarks",
+	"pezsp-version/runtime-benchmarks",
 ]

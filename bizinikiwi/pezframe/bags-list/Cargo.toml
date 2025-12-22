@@ -41,53 +41,53 @@ pezsp-io = { optional = true, workspace = true }
 pezsp-tracing = { optional = true, workspace = true }
 
 [dev-dependencies]
+bizinikiwi-test-utils = { workspace = true }
 pezframe-benchmarking = { workspace = true, default-features = true }
 pezframe-election-provider-support = { workspace = true, default-features = true }
 pezpallet-balances = { workspace = true, default-features = true }
 pezsp-core = { workspace = true, default-features = true }
 pezsp-io = { workspace = true, default-features = true }
 pezsp-tracing = { workspace = true, default-features = true }
-bizinikiwi-test-utils = { workspace = true }
 
 [features]
 default = ["std"]
 std = [
-  "codec/std",
-  "pezframe-benchmarking?/std",
-  "pezframe-election-provider-support/std",
-  "pezframe-support/std",
-  "pezframe-system/std",
-  "log/std",
-  "pezpallet-balances?/std",
-  "scale-info/std",
-  "pezsp-core?/std",
-  "pezsp-io?/std",
-  "pezsp-runtime/std",
-  "pezsp-tracing?/std",
+	"codec/std",
+	"log/std",
+	"pezframe-benchmarking?/std",
+	"pezframe-election-provider-support/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
+	"pezpallet-balances?/std",
+	"pezsp-core?/std",
+	"pezsp-io?/std",
+	"pezsp-runtime/std",
+	"pezsp-tracing?/std",
+	"scale-info/std",
 ]
 runtime-benchmarks = [
-  "pezframe-benchmarking/runtime-benchmarks",
-  "pezframe-election-provider-support/runtime-benchmarks",
-  "pezframe-support/runtime-benchmarks",
-  "pezframe-system/runtime-benchmarks",
-  "pezpallet-balances/runtime-benchmarks",
-  "pezsp-core",
-  "pezsp-io",
-  "pezsp-io?/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "pezsp-tracing",
+	"pezframe-benchmarking/runtime-benchmarks",
+	"pezframe-election-provider-support/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezpallet-balances/runtime-benchmarks",
+	"pezsp-core",
+	"pezsp-io",
+	"pezsp-io?/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-tracing",
 ]
 fuzz = [
-  "pezframe-election-provider-support/fuzz",
-  "pezpallet-balances",
-  "pezsp-core",
-  "pezsp-io",
-  "pezsp-tracing",
+	"pezframe-election-provider-support/fuzz",
+	"pezpallet-balances",
+	"pezsp-core",
+	"pezsp-io",
+	"pezsp-tracing",
 ]
 try-runtime = [
-  "pezframe-election-provider-support/try-runtime",
-  "pezframe-support/try-runtime",
-  "pezframe-system/try-runtime",
-  "pezpallet-balances?/try-runtime",
-  "pezsp-runtime/try-runtime",
+	"pezframe-election-provider-support/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezpallet-balances?/try-runtime",
+	"pezsp-runtime/try-runtime",
 ]

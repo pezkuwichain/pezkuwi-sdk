@@ -39,8 +39,8 @@
 //! The node and the runtime need to communicate. This is done through two concepts:
 //!
 //! 1. **Host functions**: a way for the (WASM) runtime to talk to the node. All host functions are
-//!    defined in [`pezsp_io`]. For example, [`pezsp_io::storage`] are the set of host functions that
-//!    allow the runtime to read and write data to the on-chain state.
+//!    defined in [`pezsp_io`]. For example, [`pezsp_io::storage`] are the set of host functions
+//!    that allow the runtime to read and write data to the on-chain state.
 //! 2. **Runtime APIs**: a way for the node to talk to the WASM runtime. Runtime APIs are defined
 //!    using macros and utilities in [`pezsp_api`]. For example, [`pezsp_api::Core`] is the most
 //!    fundamental runtime API that any blockchain must implement in order to be able to (re)
@@ -127,10 +127,10 @@
 //! onchain. Else, nodes who run the native runtime will come to a different state transition. How
 //! do nodes determine if two runtimes are the same? Through the very important
 //! [`pezsp_version::RuntimeVersion`]. All runtimes expose their version via a runtime api
-//! ([`pezsp_api::Core::version`]) that returns this struct. The node software, or other applications,
-//! inspect this struct to examine the identity of a runtime, and to determine if two runtimes are
-//! the same. Namely, [`pezsp_version::RuntimeVersion::spec_version`] is the main key that implies two
-//! runtimes are the same.
+//! ([`pezsp_api::Core::version`]) that returns this struct. The node software, or other
+//! applications, inspect this struct to examine the identity of a runtime, and to determine if two
+//! runtimes are the same. Namely, [`pezsp_version::RuntimeVersion::spec_version`] is the main key
+//! that implies two runtimes are the same.
 //!
 //! Therefore, it is utmost important to make sure before any runtime upgrade, the spec version is
 //! updated.

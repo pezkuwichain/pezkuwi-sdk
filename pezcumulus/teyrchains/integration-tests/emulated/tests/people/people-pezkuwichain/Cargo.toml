@@ -31,13 +31,13 @@ teyrchains-common = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-  "asset-test-pezutils/runtime-benchmarks",
-  "emulated-integration-tests-common/runtime-benchmarks",
-  "pezframe-support/runtime-benchmarks",
-  "pezpallet-balances/runtime-benchmarks",
-  "pezkuwichain-system-emulated-network/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "teyrchains-common/runtime-benchmarks",
-  "xcm-executor/runtime-benchmarks",
-  "xcm/runtime-benchmarks",
+	"asset-test-pezutils/runtime-benchmarks",
+	"emulated-integration-tests-common/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezkuwichain-system-emulated-network/runtime-benchmarks",
+	"pezpallet-balances/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"teyrchains-common/runtime-benchmarks",
+	"xcm-executor/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
 ]

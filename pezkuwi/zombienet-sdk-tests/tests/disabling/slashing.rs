@@ -32,7 +32,7 @@ async fn dispute_past_session_slashing() -> Result<(), anyhow::Error> {
 		.with_relaychain(|r| {
 			r.with_chain("zagros-local")
 				.with_default_command("pezkuwi")
-				.with_default_image(images.pezkuwi.as_str())
+				.with_default_image(images.pezkuwi())
 				.with_default_args(vec![
 					"--no-hardware-benchmarks".into(),
 					"-lteyrchain=debug,runtime=debug".into(),
@@ -50,10 +50,10 @@ async fn dispute_past_session_slashing() -> Result<(), anyhow::Error> {
 						}
 					}
 				}))
-				.with_node(|node| node.with_name("honest-validator-0"))
-				.with_node(|node| node.with_name("honest-validator-1"))
-				.with_node(|node| node.with_name("honest-flaky-validator-0"))
-				.with_node(|node| {
+				.with_validator(|node| node.with_name("honest-validator-0"))
+				.with_validator(|node| node.with_name("honest-validator-1"))
+				.with_validator(|node| node.with_name("honest-flaky-validator-0"))
+				.with_validator(|node| {
 					node.with_name("malicious-backer")
 						.with_image(
 							std::env::var("MALUS_IMAGE")
@@ -72,7 +72,7 @@ async fn dispute_past_session_slashing() -> Result<(), anyhow::Error> {
 		.with_teyrchain(|p| {
 			p.with_id(1337)
 				.with_default_command("pezkuwi-teyrchain")
-				.with_default_image(images.pezcumulus.as_str())
+				.with_default_image(images.pezcumulus())
 				.with_default_args(vec!["-lteyrchain=debug".into()])
 				.with_collator(|n| n.with_name("collator-1337"))
 		})

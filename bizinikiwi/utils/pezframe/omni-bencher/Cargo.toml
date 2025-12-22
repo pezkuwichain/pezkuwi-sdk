@@ -1,5 +1,5 @@
 [package]
-name = "frame-omni-bencher"
+name = "pezframe-omni-bencher"
 version = "0.1.0"
 description = "Freestanding benchmark runner for any Pezkuwi runtime."
 authors.workspace = true
@@ -7,7 +7,7 @@ edition.workspace = true
 repository.workspace = true
 license.workspace = true
 readme = "README.md"
-documentation = "https://docs.rs/frame-omni-bencher"
+documentation = "https://docs.pezkuwichain.io/pezframe-omni-bencher"
 homepage = { workspace = true }
 
 [lints]
@@ -31,12 +31,12 @@ tempfile = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-  "pezcumulus-primitives-proof-size-hostfunction/runtime-benchmarks",
-  "pezcumulus-test-runtime/runtime-benchmarks",
-  "pezframe-benchmarking-cli/runtime-benchmarks",
-  "pezsc-chain-spec/runtime-benchmarks",
-  "pezsc-cli/runtime-benchmarks",
-  "pezsp-genesis-builder/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "pezsp-statement-store/runtime-benchmarks",
+	"pezcumulus-primitives-proof-size-hostfunction/runtime-benchmarks",
+	"pezcumulus-test-runtime/runtime-benchmarks",
+	"pezframe-benchmarking-cli/runtime-benchmarks",
+	"pezsc-chain-spec/runtime-benchmarks",
+	"pezsc-cli/runtime-benchmarks",
+	"pezsp-genesis-builder/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-statement-store/runtime-benchmarks",
 ]

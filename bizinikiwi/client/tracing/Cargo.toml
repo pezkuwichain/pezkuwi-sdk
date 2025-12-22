@@ -40,22 +40,22 @@ is-terminal = { workspace = true }
 libc = { workspace = true }
 log = { workspace = true, default-features = true }
 parking_lot = { workspace = true, default-features = true }
-rustc-hash = { workspace = true }
 pezsc-client-api = { workspace = true, default-features = true }
 pezsc-tracing-proc-macro = { workspace = true, default-features = true }
-serde = { workspace = true, default-features = true }
 pezsp-api = { workspace = true, default-features = true }
 pezsp-blockchain = { workspace = true, default-features = true }
 pezsp-core = { workspace = true, default-features = true }
 pezsp-rpc = { workspace = true, default-features = true }
 pezsp-runtime = { workspace = true, default-features = true }
 pezsp-tracing = { workspace = true, default-features = true }
+rustc-hash = { workspace = true }
+serde = { workspace = true, default-features = true }
 thiserror = { workspace = true }
 tracing = { workspace = true, default-features = true }
 tracing-log = { workspace = true, features = ["interest-cache"] }
 tracing-subscriber = { workspace = true, features = [
-  "env-filter",
-  "parking_lot",
+	"env-filter",
+	"parking_lot",
 ] }
 
 [dev-dependencies]
@@ -65,8 +65,8 @@ tracing-subscriber = { workspace = true, features = ["chrono", "parking_lot"] }
 
 [features]
 runtime-benchmarks = [
-  "pezsc-client-api/runtime-benchmarks",
-  "pezsp-api/runtime-benchmarks",
-  "pezsp-blockchain/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
+	"pezsc-client-api/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
+	"pezsp-blockchain/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]

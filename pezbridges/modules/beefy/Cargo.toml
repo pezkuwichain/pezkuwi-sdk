@@ -35,41 +35,41 @@ bp-test-utils = { workspace = true, default-features = true }
 mmr-lib = { workspace = true, default-features = true }
 pezpallet-beefy-mmr = { workspace = true, default-features = true }
 pezpallet-mmr = { workspace = true, default-features = true }
-rand = { workspace = true, default-features = true }
 pezsp-consensus-beefy = { workspace = true, default-features = true }
 pezsp-io = { workspace = true, default-features = true }
+rand = { workspace = true, default-features = true }
 
 [features]
 default = ["std"]
 std = [
-  "bp-beefy/std",
-  "pezbp-runtime/std",
-  "codec/std",
-  "pezframe-support/std",
-  "pezframe-system/std",
-  "scale-info/std",
-  "serde/std",
-  "pezsp-core/std",
-  "pezsp-runtime/std",
-  "pezsp-std/std",
-  "tracing/std",
+	"bp-beefy/std",
+	"codec/std",
+	"pezbp-runtime/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
+	"pezsp-core/std",
+	"pezsp-runtime/std",
+	"pezsp-std/std",
+	"scale-info/std",
+	"serde/std",
+	"tracing/std",
 ]
 try-runtime = [
-  "pezframe-support/try-runtime",
-  "pezframe-system/try-runtime",
-  "pezpallet-beefy-mmr/try-runtime",
-  "pezpallet-mmr/try-runtime",
-  "pezsp-runtime/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezpallet-beefy-mmr/try-runtime",
+	"pezpallet-mmr/try-runtime",
+	"pezsp-runtime/try-runtime",
 ]
 runtime-benchmarks = [
-  "bp-beefy/runtime-benchmarks",
-  "pezbp-runtime/runtime-benchmarks",
-  "bp-test-utils/runtime-benchmarks",
-  "pezframe-support/runtime-benchmarks",
-  "pezframe-system/runtime-benchmarks",
-  "pezpallet-beefy-mmr/runtime-benchmarks",
-  "pezpallet-mmr/runtime-benchmarks",
-  "pezsp-consensus-beefy/runtime-benchmarks",
-  "pezsp-io/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
+	"bp-beefy/runtime-benchmarks",
+	"bp-test-utils/runtime-benchmarks",
+	"pezbp-runtime/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezpallet-beefy-mmr/runtime-benchmarks",
+	"pezpallet-mmr/runtime-benchmarks",
+	"pezsp-consensus-beefy/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]

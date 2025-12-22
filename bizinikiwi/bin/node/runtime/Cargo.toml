@@ -22,21 +22,22 @@ targets = ["x86_64-unknown-linux-gnu"]
 array-bytes = { workspace = true }
 codec = { features = ["derive", "max-encoded-len"], workspace = true }
 log = { workspace = true }
+pezsp-debug-derive = { workspace = true, features = ["force-debug"] }
 rand = { workspace = true, optional = true }
 rand_pcg = { workspace = true, optional = true }
 scale-info = { features = ["derive", "serde"], workspace = true }
 serde_json = { features = ["alloc", "arbitrary_precision"], workspace = true }
-pezsp-debug-derive = { workspace = true, features = ["force-debug"] }
 static_assertions = { workspace = true, default-features = true }
 
 # pezpallet-asset-conversion: turn on "num-traits" feature
 primitive-types = { features = [
-  "codec",
-  "num-traits",
-  "scale-info",
+	"codec",
+	"num-traits",
+	"scale-info",
 ], workspace = true }
 
 pezkuwi-sdk = { features = ["runtime-full", "tuples-96"], workspace = true }
+pezframe-try-runtime = { optional = true, workspace = true }
 pezsp-runtime = { path = "../../../primitives/runtime", default-features = false }
 
 # shared code between runtime and node
@@ -53,33 +54,36 @@ bizinikiwi-wasm-builder = { optional = true, workspace = true, default-features 
 default = ["std"]
 with-tracing = ["pezkuwi-sdk/with-tracing"]
 std = [
-  "codec/std",
-  "log/std",
-  "pez-node-primitives/std",
-  "pezpallet-example-mbm/std",
-  "pezpallet-example-tasks/std",
-  "pezkuwi-sdk/std",
-  "pezsp-runtime/std",
-  "primitive-types/std",
-  "rand?/std",
-  "scale-info/std",
-  "serde_json/std",
-  "pezsp-debug-derive/std",
-  "bizinikiwi-wasm-builder",
+	"bizinikiwi-wasm-builder",
+	"codec/std",
+	"log/std",
+	"pez-node-primitives/std",
+	"pezframe-try-runtime?/std",
+	"pezkuwi-sdk/std",
+	"pezpallet-example-mbm/std",
+	"pezpallet-example-tasks/std",
+	"pezsp-debug-derive/std",
+	"pezsp-runtime/std",
+	"primitive-types/std",
+	"rand?/std",
+	"scale-info/std",
+	"serde_json/std",
 ]
 runtime-benchmarks = [
-  "pez-node-primitives/runtime-benchmarks",
-  "pezpallet-example-mbm/runtime-benchmarks",
-  "pezpallet-example-tasks/runtime-benchmarks",
-  "pezkuwi-sdk/runtime-benchmarks",
-  "rand",
-  "rand_pcg",
-  "bizinikiwi-wasm-builder?/runtime-benchmarks",
+	"bizinikiwi-wasm-builder?/runtime-benchmarks",
+	"pez-node-primitives/runtime-benchmarks",
+	"pezkuwi-sdk/runtime-benchmarks",
+	"pezpallet-example-mbm/runtime-benchmarks",
+	"pezpallet-example-tasks/runtime-benchmarks",
+	"rand",
+	"rand_pcg",
 ]
 try-runtime = [
-  "pezpallet-example-mbm/try-runtime",
-  "pezpallet-example-tasks/try-runtime",
-  "pezkuwi-sdk/try-runtime",
+	"pezframe-try-runtime",
+	"pezframe-try-runtime/try-runtime",
+	"pezkuwi-sdk/try-runtime",
+	"pezpallet-example-mbm/try-runtime",
+	"pezpallet-example-tasks/try-runtime",
 ]
 experimental = ["pezpallet-example-tasks/experimental"]
 metadata-hash = ["bizinikiwi-wasm-builder/metadata-hash"]

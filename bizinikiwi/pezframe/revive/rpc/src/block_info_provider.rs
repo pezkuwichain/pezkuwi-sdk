@@ -21,9 +21,9 @@ use crate::{
 	ClientError,
 };
 use jsonrpsee::core::async_trait;
+use pezkuwi_subxt::{backend::legacy::LegacyRpcMethods, OnlineClient};
 use pezsp_core::H256;
 use std::sync::Arc;
-use pezkuwi_subxt::{backend::legacy::LegacyRpcMethods, OnlineClient};
 use tokio::sync::RwLock;
 
 /// BlockInfoProvider cache and retrieves information about blocks.

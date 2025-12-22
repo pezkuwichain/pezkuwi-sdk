@@ -39,55 +39,55 @@ strum = { features = ["derive"], optional = true, workspace = true }
 hex = { workspace = true, default-features = true, optional = true }
 remote-externalities = { workspace = true, default-features = true, optional = true }
 tokio = { features = [
-  "macros",
+	"macros",
 ], workspace = true, default-features = true, optional = true }
 
 [dev-dependencies]
+parking_lot = { workspace = true, default-features = true }
 pezframe-benchmarking = { workspace = true, default-features = true }
 pezpallet-balances = { workspace = true, default-features = true }
-parking_lot = { workspace = true, default-features = true }
-rand = { workspace = true, default-features = true }
 pezsp-tracing = { workspace = true, default-features = true }
+rand = { workspace = true, default-features = true }
 
 
 [features]
 remote-mining = ["hex", "remote-externalities", "tokio"]
 default = ["std"]
 std = [
-  "codec/std",
-  "pezframe-benchmarking?/std",
-  "pezframe-election-provider-support/std",
-  "pezframe-support/std",
-  "pezframe-system/std",
-  "log/std",
-  "pezpallet-balances/std",
-  "rand/std",
-  "scale-info/std",
-  "pezsp-arithmetic/std",
-  "pezsp-core/std",
-  "pezsp-io/std",
-  "pezsp-npos-elections/std",
-  "pezsp-runtime/std",
-  "pezsp-tracing/std",
-  "strum/std",
+	"codec/std",
+	"log/std",
+	"pezframe-benchmarking?/std",
+	"pezframe-election-provider-support/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
+	"pezpallet-balances/std",
+	"pezsp-arithmetic/std",
+	"pezsp-core/std",
+	"pezsp-io/std",
+	"pezsp-npos-elections/std",
+	"pezsp-runtime/std",
+	"pezsp-tracing/std",
+	"rand/std",
+	"scale-info/std",
+	"strum/std",
 ]
 runtime-benchmarks = [
-  "pezframe-benchmarking/runtime-benchmarks",
-  "pezframe-election-provider-support/runtime-benchmarks",
-  "pezframe-support/runtime-benchmarks",
-  "pezframe-system/runtime-benchmarks",
-  "pezpallet-balances/runtime-benchmarks",
-  "rand",
-  "remote-externalities?/runtime-benchmarks",
-  "pezsp-io/runtime-benchmarks",
-  "pezsp-npos-elections/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "strum",
+	"pezframe-benchmarking/runtime-benchmarks",
+	"pezframe-election-provider-support/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezpallet-balances/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-npos-elections/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"rand",
+	"remote-externalities?/runtime-benchmarks",
+	"strum",
 ]
 try-runtime = [
-  "pezframe-election-provider-support/try-runtime",
-  "pezframe-support/try-runtime",
-  "pezframe-system/try-runtime",
-  "pezpallet-balances/try-runtime",
-  "pezsp-runtime/try-runtime",
+	"pezframe-election-provider-support/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezpallet-balances/try-runtime",
+	"pezsp-runtime/try-runtime",
 ]

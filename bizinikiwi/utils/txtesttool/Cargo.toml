@@ -15,28 +15,28 @@ path = "bin/main.rs"
 
 [dependencies]
 async-trait = { workspace = true }
+average = "0.15.1"
+chrono = { workspace = true }
+clap = { workspace = true, features = ["derive"] }
+clap_derive = "4.0.0-rc.1"
+codec = { workspace = true }
+ctrlc = "3.4.4"
 futures = { workspace = true }
 futures-util = { workspace = true }
+hex = { workspace = true, default-features = true }
 jsonrpsee = { workspace = true, features = [
 	"async-client",
 	"client-web-transport",
 	"jsonrpsee-types",
 ] }
-average = "0.15.1"
-chrono = { workspace = true }
-clap = { workspace = true, features = ["derive"] }
-clap_derive = "4.0.0-rc.1"
-ctrlc = "3.4.4"
-hex = { workspace = true, default-features = true }
-codec = { workspace = true }
 parking_lot = { workspace = true, default-features = true }
 rand = { workspace = true, default-features = true }
 serde = { workspace = true, default-features = true }
 serde_json = { workspace = true, features = ["arbitrary_precision"] }
-subxt = { workspace = true, default-features = true }
-subxt-core = { workspace = true, default-features = true }
-subxt-rpcs = { workspace = true, default-features = true }
-subxt-signer = { workspace = true, features = ["unstable-eth"] }
+pezkuwi-subxt = { workspace = true, default-features = true }
+pezkuwi-subxt-core = { workspace = true, default-features = true }
+pezkuwi-subxt-rpcs = { workspace = true, default-features = true }
+pezkuwi-subxt-signer = { workspace = true, features = ["unstable-eth", "sr25519", "subxt"] }
 termplot = "0.1.1"
 thiserror = { workspace = true }
 time = { version = "0.3.36", features = [

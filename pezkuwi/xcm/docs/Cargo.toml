@@ -22,9 +22,9 @@ xcm-pez-simulator = { workspace = true, default-features = true }
 codec = { workspace = true, default-features = true }
 frame = { features = ["runtime"], workspace = true, default-features = true }
 pezkuwi-runtime-teyrchains = { workspace = true, default-features = true }
-scale-info = { workspace = true }
 pezsp-io = { workspace = true, default-features = true }
 pezsp-runtime = { workspace = true, default-features = true }
+scale-info = { workspace = true }
 
 # Some pallets
 pezpallet-balances = { workspace = true, default-features = true }
@@ -39,15 +39,15 @@ test-log = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-  "frame/runtime-benchmarks",
-  "pezpallet-balances/runtime-benchmarks",
-  "pezpallet-message-queue/runtime-benchmarks",
-  "pezpallet-xcm/runtime-benchmarks",
-  "pezkuwi-runtime-teyrchains/runtime-benchmarks",
-  "pezsp-io/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "xcm-builder/runtime-benchmarks",
-  "xcm-executor/runtime-benchmarks",
-  "xcm-pez-simulator/runtime-benchmarks",
-  "xcm/runtime-benchmarks",
+	"frame/runtime-benchmarks",
+	"pezkuwi-runtime-teyrchains/runtime-benchmarks",
+	"pezpallet-balances/runtime-benchmarks",
+	"pezpallet-message-queue/runtime-benchmarks",
+	"pezpallet-xcm/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"xcm-builder/runtime-benchmarks",
+	"xcm-executor/runtime-benchmarks",
+	"xcm-pez-simulator/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
 ]

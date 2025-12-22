@@ -1,14 +1,10 @@
 //! Benchmarking setup for pezpallet-perwerde
-#![cfg(feature = "runtime-benchmarks")]
 
 use super::{Pezpallet as Perwerde, *};
 use pezframe_benchmarking::v2::*;
 use pezframe_support::{pezpallet_prelude::Get, BoundedVec};
 use pezframe_system::RawOrigin;
 extern crate alloc;
-use alloc::vec;
-
-const SEED: u32 = 0;
 
 // Helper function to create BoundedVec in benchmarks
 fn create_bounded_vec<L: Get<u32>>(s: &[u8]) -> BoundedVec<u8, L> {

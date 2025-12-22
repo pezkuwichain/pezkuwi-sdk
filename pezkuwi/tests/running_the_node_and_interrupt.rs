@@ -14,6 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
+#![allow(deprecated)]
+
+#[allow(deprecated)]
 use assert_cmd::cargo::cargo_bin;
 use std::process::{self, Command};
 use tempfile::tempdir;

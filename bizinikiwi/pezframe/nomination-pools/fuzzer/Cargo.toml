@@ -24,7 +24,7 @@ path = "src/call.rs"
 honggfuzz = { workspace = true }
 
 pezpallet-nomination-pools = { features = [
-  "fuzzing",
+	"fuzzing",
 ], workspace = true, default-features = true }
 
 pezframe-support = { workspace = true, default-features = true }
@@ -39,9 +39,9 @@ rand = { features = ["small_rng"], workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-  "pezframe-support/runtime-benchmarks",
-  "pezframe-system/runtime-benchmarks",
-  "pezpallet-nomination-pools/runtime-benchmarks",
-  "pezsp-io/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezpallet-nomination-pools/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]

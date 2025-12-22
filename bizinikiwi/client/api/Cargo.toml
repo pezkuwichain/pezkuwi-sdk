@@ -22,7 +22,6 @@ fnv = { workspace = true }
 futures = { workspace = true }
 log = { workspace = true, default-features = true }
 parking_lot = { workspace = true, default-features = true }
-prometheus-endpoint = { workspace = true, default-features = true }
 pezsc-executor = { workspace = true, default-features = true }
 pezsc-transaction-pool-api = { workspace = true, default-features = true }
 pezsc-utils = { workspace = true, default-features = true }
@@ -36,19 +35,20 @@ pezsp-runtime = { workspace = true }
 pezsp-state-machine = { workspace = true, default-features = true }
 pezsp-storage = { workspace = true, default-features = true }
 pezsp-trie = { workspace = true, default-features = true }
+prometheus-endpoint = { workspace = true, default-features = true }
 
 [dev-dependencies]
 bizinikiwi-test-runtime = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-  "pezsc-executor/runtime-benchmarks",
-  "pezsc-transaction-pool-api/runtime-benchmarks",
-  "pezsp-api/runtime-benchmarks",
-  "pezsp-blockchain/runtime-benchmarks",
-  "pezsp-consensus/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "pezsp-state-machine/runtime-benchmarks",
-  "pezsp-trie/runtime-benchmarks",
-  "bizinikiwi-test-runtime/runtime-benchmarks",
+	"bizinikiwi-test-runtime/runtime-benchmarks",
+	"pezsc-executor/runtime-benchmarks",
+	"pezsc-transaction-pool-api/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
+	"pezsp-blockchain/runtime-benchmarks",
+	"pezsp-consensus/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-state-machine/runtime-benchmarks",
+	"pezsp-trie/runtime-benchmarks",
 ]

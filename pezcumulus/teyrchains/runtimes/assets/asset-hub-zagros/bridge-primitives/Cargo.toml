@@ -27,8 +27,8 @@ pezsp-core = { workspace = true }
 # Bridge Dependencies
 bp-bridge-hub-pezcumulus = { workspace = true }
 bp-messages = { workspace = true }
-pezbp-runtime = { workspace = true }
 bp-xcm-bridge-hub-router = { workspace = true }
+pezbp-runtime = { workspace = true }
 testnet-teyrchains-constants = { features = ["zagros"], workspace = true }
 
 # Pezkuwi dependencies
@@ -37,25 +37,25 @@ xcm = { workspace = true }
 [features]
 default = ["std"]
 std = [
-  "bp-bridge-hub-pezcumulus/std",
-  "bp-messages/std",
-  "pezbp-runtime/std",
-  "bp-xcm-bridge-hub-router/std",
-  "codec/std",
-  "pezframe-support/std",
-  "scale-info/std",
-  "pezsp-api/std",
-  "pezsp-core/std",
-  "testnet-teyrchains-constants/std",
-  "xcm/std",
+	"bp-bridge-hub-pezcumulus/std",
+	"bp-messages/std",
+	"bp-xcm-bridge-hub-router/std",
+	"codec/std",
+	"pezbp-runtime/std",
+	"pezframe-support/std",
+	"pezsp-api/std",
+	"pezsp-core/std",
+	"scale-info/std",
+	"testnet-teyrchains-constants/std",
+	"xcm/std",
 ]
 runtime-benchmarks = [
-  "bp-bridge-hub-pezcumulus/runtime-benchmarks",
-  "bp-messages/runtime-benchmarks",
-  "pezbp-runtime/runtime-benchmarks",
-  "bp-xcm-bridge-hub-router/runtime-benchmarks",
-  "pezframe-support/runtime-benchmarks",
-  "pezsp-api/runtime-benchmarks",
-  "testnet-teyrchains-constants/runtime-benchmarks",
-  "xcm/runtime-benchmarks",
+	"bp-bridge-hub-pezcumulus/runtime-benchmarks",
+	"bp-messages/runtime-benchmarks",
+	"bp-xcm-bridge-hub-router/runtime-benchmarks",
+	"pezbp-runtime/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
+	"testnet-teyrchains-constants/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
 ]

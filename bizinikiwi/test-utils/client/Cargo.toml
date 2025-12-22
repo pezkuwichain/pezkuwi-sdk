@@ -23,30 +23,30 @@ codec = { workspace = true, default-features = true }
 futures = { workspace = true }
 pezsc-client-api = { workspace = true, default-features = true }
 pezsc-client-db = { features = [
-  "test-helpers",
+	"test-helpers",
 ], workspace = true, default-features = false }
 pezsc-consensus = { workspace = true, default-features = true }
 pezsc-executor = { workspace = true, default-features = true }
 pezsc-service = { workspace = true, default-features = false }
-serde = { workspace = true, default-features = true }
-serde_json = { workspace = true, default-features = true }
 pezsp-blockchain = { workspace = true, default-features = true }
 pezsp-consensus = { workspace = true, default-features = true }
 pezsp-core = { workspace = true, default-features = true }
 pezsp-keyring = { workspace = true, default-features = true }
 pezsp-keystore = { workspace = true, default-features = true }
 pezsp-runtime = { workspace = true, default-features = true }
+serde = { workspace = true, default-features = true }
+serde_json = { workspace = true, default-features = true }
 tokio = { features = ["sync"], workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-  "pezsc-client-api/runtime-benchmarks",
-  "pezsc-client-db/runtime-benchmarks",
-  "pezsc-consensus/runtime-benchmarks",
-  "pezsc-executor/runtime-benchmarks",
-  "pezsc-service/runtime-benchmarks",
-  "pezsp-blockchain/runtime-benchmarks",
-  "pezsp-consensus/runtime-benchmarks",
-  "pezsp-keyring/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
+	"pezsc-client-api/runtime-benchmarks",
+	"pezsc-client-db/runtime-benchmarks",
+	"pezsc-consensus/runtime-benchmarks",
+	"pezsc-executor/runtime-benchmarks",
+	"pezsc-service/runtime-benchmarks",
+	"pezsp-blockchain/runtime-benchmarks",
+	"pezsp-consensus/runtime-benchmarks",
+	"pezsp-keyring/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]

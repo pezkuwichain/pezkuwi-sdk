@@ -20,19 +20,19 @@ pezsp-core = { workspace = true }
 
 # Pezcumulus
 coretime-zagros-runtime = { workspace = true, default-features = true }
-pezcumulus-primitives-core = { workspace = true }
 emulated-integration-tests-common = { workspace = true }
+pezcumulus-primitives-core = { workspace = true }
 testnet-teyrchains-constants = { features = [
-  "zagros",
+	"zagros",
 ], workspace = true, default-features = true }
 teyrchains-common = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-  "coretime-zagros-runtime/runtime-benchmarks",
-  "pezcumulus-primitives-core/runtime-benchmarks",
-  "emulated-integration-tests-common/runtime-benchmarks",
-  "pezframe-support/runtime-benchmarks",
-  "testnet-teyrchains-constants/runtime-benchmarks",
-  "teyrchains-common/runtime-benchmarks",
+	"coretime-zagros-runtime/runtime-benchmarks",
+	"emulated-integration-tests-common/runtime-benchmarks",
+	"pezcumulus-primitives-core/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"testnet-teyrchains-constants/runtime-benchmarks",
+	"teyrchains-common/runtime-benchmarks",
 ]

@@ -18,7 +18,7 @@
 #![cfg(feature = "experimental")]
 
 #[pezframe_support::pezpallet(dev_mode)]
-mod my_pallet {
+mod my_pezpallet {
 	use pezframe_support::pezpallet_prelude::{StorageValue, ValueQuery};
 
 	#[pezpallet::config]
@@ -36,8 +36,8 @@ mod my_pallet {
 		#[pezpallet::task_condition(|i, j| i == 0u32 && j == 2u64)]
 		#[pezpallet::task_list(vec![(0u32, 2u64), (2u32, 4u64)].iter())]
 		#[pezpallet::task_weight(0.into())]
-		fn foo(i: u32, j: u64) -> pezframe_support::pezpallet_prelude::DispatchResult {
-			<SomeStorage<T, I>>::put((i, j));
+		fn foo(_i: u32, _j: u64) -> pezframe_support::pezpallet_prelude::DispatchResult {
+			<SomeStorage<T, I>>::put((_i, _j));
 			Ok(())
 		}
 	}
@@ -45,7 +45,7 @@ mod my_pallet {
 
 // Another pezpallet for which we won't implement the default instance.
 #[pezframe_support::pezpallet(dev_mode)]
-mod my_pallet_2 {
+mod my_pezpallet_2 {
 	use pezframe_support::pezpallet_prelude::{StorageValue, ValueQuery};
 
 	#[pezpallet::config]
@@ -63,8 +63,8 @@ mod my_pallet_2 {
 		#[pezpallet::task_condition(|i, j| i == 0u32 && j == 2u64)]
 		#[pezpallet::task_list(vec![(0u32, 2u64), (2u32, 4u64)].iter())]
 		#[pezpallet::task_weight(0.into())]
-		fn foo(i: u32, j: u64) -> pezframe_support::pezpallet_prelude::DispatchResult {
-			<SomeStorage<T, I>>::put((i, j));
+		fn foo(_i: u32, _j: u64) -> pezframe_support::pezpallet_prelude::DispatchResult {
+			<SomeStorage<T, I>>::put((_i, _j));
 			Ok(())
 		}
 	}
@@ -80,11 +80,11 @@ pezframe_support::construct_runtime!(
 	pub enum Runtime
 	{
 		System: pezframe_system,
-		MyPallet: my_pallet,
-		MyPallet2: my_pallet::<Instance2>,
+		MyPallet: my_pezpallet,
+		MyPallet2: my_pezpallet::<Instance2>,
 		#[cfg(feature = "frame-feature-testing")]
-		MyPallet3: my_pallet::<Instance3>,
-		MyPallet4: my_pallet_2::<Instance1>,
+		MyPallet3: my_pezpallet::<Instance3>,
+		MyPallet4: my_pezpallet_2::<Instance1>,
 	}
 );
 
@@ -96,14 +96,14 @@ impl pezframe_system::Config for Runtime {
 	type AccountId = AccountId;
 }
 
-impl my_pallet::Config for Runtime {}
+impl my_pezpallet::Config for Runtime {}
 
-impl my_pallet::Config<pezframe_support::instances::Instance2> for Runtime {}
+impl my_pezpallet::Config<pezframe_support::instances::Instance2> for Runtime {}
 
 #[cfg(feature = "frame-feature-testing")]
-impl my_pallet::Config<pezframe_support::instances::Instance3> for Runtime {}
+impl my_pezpallet::Config<pezframe_support::instances::Instance3> for Runtime {}
 
-impl my_pallet_2::Config<pezframe_support::instances::Instance1> for Runtime {}
+impl my_pezpallet_2::Config<pezframe_support::instances::Instance1> for Runtime {}
 
 fn new_test_ext() -> pezsp_io::TestExternalities {
 	use pezsp_runtime::BuildStorage;
@@ -116,21 +116,21 @@ fn tasks_work() {
 	new_test_ext().execute_with(|| {
 		use pezframe_support::instances::{Instance1, Instance2};
 
-		let task = RuntimeTask::MyPallet(my_pallet::Task::<Runtime>::Foo { i: 0u32, j: 2u64 });
+		let task = RuntimeTask::MyPallet(my_pezpallet::Task::<Runtime>::Foo { _i: 0u32, _j: 2u64 });
 
 		pezframe_support::assert_ok!(System::do_task(RuntimeOrigin::signed(1), task.clone(),));
-		assert_eq!(my_pallet::SomeStorage::<Runtime>::get(), (0, 2));
+		assert_eq!(my_pezpallet::SomeStorage::<Runtime>::get(), (0, 2));
 
-		let task = RuntimeTask::MyPallet2(my_pallet::Task::<Runtime, _>::Foo { i: 0u32, j: 2u64 });
+		let task = RuntimeTask::MyPallet2(my_pezpallet::Task::<Runtime, _>::Foo { _i: 0u32, _j: 2u64 });
 
 		pezframe_support::assert_ok!(System::do_task(RuntimeOrigin::signed(1), task.clone(),));
-		assert_eq!(my_pallet::SomeStorage::<Runtime, Instance2>::get(), (0, 2));
+		assert_eq!(my_pezpallet::SomeStorage::<Runtime, Instance2>::get(), (0, 2));
 
 		let task =
-			RuntimeTask::MyPallet4(my_pallet_2::Task::<Runtime, _>::Foo { i: 0u32, j: 2u64 });
+			RuntimeTask::MyPallet4(my_pezpallet_2::Task::<Runtime, _>::Foo { _i: 0u32, _j: 2u64 });
 
 		pezframe_support::assert_ok!(System::do_task(RuntimeOrigin::signed(1), task.clone(),));
-		assert_eq!(my_pallet_2::SomeStorage::<Runtime, Instance1>::get(), (0, 2));
+		assert_eq!(my_pezpallet_2::SomeStorage::<Runtime, Instance1>::get(), (0, 2));
 	});
 }
 
@@ -141,7 +141,7 @@ fn do_task_unsigned_validation_rejects_external_source() {
 			InvalidTransaction, TransactionSource, TransactionValidityError, ValidateUnsigned,
 		};
 
-		let task = RuntimeTask::MyPallet(my_pallet::Task::<Runtime>::Foo { i: 0u32, j: 2u64 });
+		let task = RuntimeTask::MyPallet(my_pezpallet::Task::<Runtime>::Foo { _i: 0u32, _j: 2u64 });
 		let call = pezframe_system::Call::do_task { task };
 
 		assert!(matches!(

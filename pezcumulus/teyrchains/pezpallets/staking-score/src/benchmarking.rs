@@ -1,7 +1,6 @@
 //! Benchmarking setup for pezpallet-staking-score
 
-use super::*;
-use crate::{Config, Pezpallet, StakingStartBlock};
+use crate::{Call, Config, Pezpallet, StakingStartBlock};
 use pezframe_benchmarking::v2::*;
 use pezframe_system::RawOrigin;
 
@@ -27,9 +26,5 @@ mod benchmarks {
 		assert!(StakingStartBlock::<T>::get(&caller).is_some());
 	}
 
-	impl_benchmark_test_suite!(
-		StakingScore,
-		crate::mock::ExtBuilder::default().build(),
-		crate::mock::Test,
-	);
+	// Benchmark test suite is in tests.rs with mock runtime
 }

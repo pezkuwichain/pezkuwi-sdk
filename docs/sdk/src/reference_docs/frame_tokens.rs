@@ -50,20 +50,20 @@
 //! trait implementations.
 //!
 //! **Traits** define common interfaces that types of tokens should implement. For example, the
-//! [`fungible::Inspect`](`pezframe_support::traits::fungible::Inspect`) trait specifies an interface
-//! for *inspecting* token state such as the total issuance of the token, the balance of individual
-//! accounts, etc.
+//! [`fungible::Inspect`](`pezframe_support::traits::fungible::Inspect`) trait specifies an
+//! interface for *inspecting* token state such as the total issuance of the token, the balance of
+//! individual accounts, etc.
 //!
 //! **Trait implementations** are concrete implementations of these traits. For example, one of the
 //! many traits [`pezpallet_balances`] implements is
-//! [`fungible::Inspect`](`pezframe_support::traits::fungible::Inspect`)[^1]. It provides the concrete
-//! way of inspecting the total issuance, balance of accounts, etc. There can be many
+//! [`fungible::Inspect`](`pezframe_support::traits::fungible::Inspect`)[^1]. It provides the
+//! concrete way of inspecting the total issuance, balance of accounts, etc. There can be many
 //! implementations of the same traits.
 //!
 //! [^1]: Rust Advanced Tip: The knowledge that [`pezpallet_balances`] implements
-//! [`fungible::Inspect`](`pezframe_support::traits::fungible::Inspect`) is not some arcane knowledge
-//! that you have to know by heart or memorize. One can simply look at the list of the implementors
-//! of any trait in the Rust Doc to find all implementors (e.g.
+//! [`fungible::Inspect`](`pezframe_support::traits::fungible::Inspect`) is not some arcane
+//! knowledge that you have to know by heart or memorize. One can simply look at the list of the
+//! implementors of any trait in the Rust Doc to find all implementors (e.g.
 //! [Mutate trait implementors](https://docs.pezkuwichain.io/sdk/master/pezframe_support/traits/tokens/fungible/trait.Mutate.html#implementors)),
 //! or use the `rust-analyzer`'s `Implementations` action.
 //!
@@ -75,15 +75,16 @@
 //! pezpallet may use [`pezpallet_balances`] in a tightly coupled manner, directly calling methods
 //! on the pezpallet to reserve and unreserve deposits. This approach works well,
 //! until someone has a use case requiring that an asset from a different pezpallet such as
-//! [`pezpallet_assets`] is used for the deposit. Rather than tightly coupling [`pezpallet_preimage`] to
-//! [`pezpallet_balances`], [`pezpallet_assets`], and every other token-handling pezpallet, a user
-//! could possibly specify that [`pezpallet_preimage`] does not specify a concrete pezpallet as a
-//! dependency, but instead accepts any dependency which implements the
+//! [`pezpallet_assets`] is used for the deposit. Rather than tightly coupling
+//! [`pezpallet_preimage`] to [`pezpallet_balances`], [`pezpallet_assets`], and every other
+//! token-handling pezpallet, a user could possibly specify that [`pezpallet_preimage`] does not
+//! specify a concrete pezpallet as a dependency, but instead accepts any dependency which
+//! implements the
 //! [`currency::ReservableCurrency`](`pezframe_support::traits::tokens::currency::ReservableCurrency`)
 //! trait, namely via its [`Config::Currency`](`pezpallet_preimage::pezpallet::Config::Currency`)
-//! associated type. This allows [`pezpallet_preimage`] to support any arbitrary pezpallet implementing
-//! this trait, without needing any knowledge of what those pallets may be or requiring changes to
-//! support new pallets which may be written in the future.
+//! associated type. This allows [`pezpallet_preimage`] to support any arbitrary pezpallet
+//! implementing this trait, without needing any knowledge of what those pallets may be or requiring
+//! changes to support new pallets which may be written in the future.
 //!
 //! Read more about coupling, and the benefits of loose coupling
 //! [here](crate::reference_docs::frame_pallet_coupling).
@@ -103,14 +104,14 @@
 //!
 //! ## Fungible Token Trait Implementations in FRAME
 //!
-//! [`pezpallet_balances`] implements [`fungible`](`pezframe_support::traits::fungible`), and is the most
-//! commonly used fungible implementation in FRAME. Most of the time, it's used for managing the
-//! native token of the blockchain network it's used in.
+//! [`pezpallet_balances`] implements [`fungible`](`pezframe_support::traits::fungible`), and is the
+//! most commonly used fungible implementation in FRAME. Most of the time, it's used for managing
+//! the native token of the blockchain network it's used in.
 //!
-//! [`pezpallet_assets`] implements [`fungibles`](`pezframe_support::traits::fungibles`), and is another
-//! popular fungible token implementation. It supports the creation and management of multiple
-//! assets in a single crate, making it a good choice when a network requires more assets in
-//! addition to its native token.
+//! [`pezpallet_assets`] implements [`fungibles`](`pezframe_support::traits::fungibles`), and is
+//! another popular fungible token implementation. It supports the creation and management of
+//! multiple assets in a single crate, making it a good choice when a network requires more assets
+//! in addition to its native token.
 //!
 //! ## Non-Fungible Tokens in FRAME
 //!

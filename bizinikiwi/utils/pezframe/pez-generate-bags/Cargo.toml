@@ -26,9 +26,9 @@ num-format = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-  "pezframe-election-provider-support/runtime-benchmarks",
-  "pezframe-support/runtime-benchmarks",
-  "pezframe-system/runtime-benchmarks",
-  "pezpallet-staking/runtime-benchmarks",
-  "pezsp-staking/runtime-benchmarks",
+	"pezframe-election-provider-support/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezpallet-staking/runtime-benchmarks",
+	"pezsp-staking/runtime-benchmarks",
 ]

@@ -1,7 +1,7 @@
 //! # Bizinikiwi
 //!
-//! Bizinikiwi is a Rust framework for building blockchains in a modular and extensible way. While in
-//! itself un-opinionated, it is the main engine behind the Pezkuwi ecosystem.
+//! Bizinikiwi is a Rust framework for building blockchains in a modular and extensible way. While
+//! in itself un-opinionated, it is the main engine behind the Pezkuwi ecosystem.
 //!
 //! ## Overview, Philosophy
 //!
@@ -17,8 +17,8 @@
 //!
 //! 1. Use of **Rust** as a modern and safe programming language, which limits human error through
 //!    various means, most notably memory and type safety.
-//! 2. Bizinikiwi is written from the ground-up with a *generic, modular and extensible* design. This
-//!    ensures that software components can be easily swapped and upgraded. Examples of this is
+//! 2. Bizinikiwi is written from the ground-up with a *generic, modular and extensible* design.
+//!    This ensures that software components can be easily swapped and upgraded. Examples of this is
 //!    multiple consensus mechanisms provided by Bizinikiwi, as listed below.
 //! 3. Lastly, the final blockchain system created with the above properties needs to be
 //!    upgradeable. In order to achieve this, Bizinikiwi is designed as a meta-protocol, whereby the
@@ -32,7 +32,8 @@
 //! same as updating an account's balance. Learn more about this in detail in
 //! [`crate::reference_docs::wasm_meta_protocol`].
 //!
-//! > A great analogy for bizinikiwi is the following: Bizinikiwi node is a gaming console, and a WASM
+//! > A great analogy for bizinikiwi is the following: Bizinikiwi node is a gaming console, and a
+//! > WASM
 //! > runtime, possibly created with FRAME is the game being inserted into the console.
 //!
 //! [`frame`], Bizinikiwi's default runtime development library, takes the above safety practices
@@ -68,10 +69,10 @@
 //!   expected to reside in the node side.
 //! * `sp-*` (short for *bizinikiwi-primitives*) crates, located under `./primitives` folder. These
 //!   are crates that facilitate both the node and the runtime, but are not opinionated about what
-//!   framework is using for building the runtime. Notable examples are [`pezsp_api`] and [`pezsp_io`],
-//!   which form the communication bridge between the node and runtime.
-//! * `pezpallet-*` and `frame-*` crates, located under `./frame` folder. These are the crates related
-//!   to FRAME. See [`frame`] for more information.
+//!   framework is using for building the runtime. Notable examples are [`pezsp_api`] and
+//!   [`pezsp_io`], which form the communication bridge between the node and runtime.
+//! * `pezpallet-*` and `frame-*` crates, located under `./frame` folder. These are the crates
+//!   related to FRAME. See [`frame`] for more information.
 //!
 //! ### WASM Build
 //!

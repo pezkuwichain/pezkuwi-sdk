@@ -519,8 +519,6 @@ macro_rules! generate_feature_enabled_macro {
 
 #[cfg(test)]
 mod tests {
-	use super::*;
-
 	generate_feature_enabled_macro!(if_test, test, $);
 	generate_feature_enabled_macro!(if_not_test, not(test), $);
 

@@ -22,23 +22,23 @@ exclude-from-umbrella = true
 [dependencies]
 codec = { features = ["derive"], workspace = true }
 pezframe-support = { workspace = true }
-scale-info = { features = ["derive"], workspace = true }
 pezsnowbridge-merkle-tree = { workspace = true }
 pezsp-api = { workspace = true }
 pezsp-std = { workspace = true }
+scale-info = { features = ["derive"], workspace = true }
 
 [features]
 default = ["std"]
 std = [
-  "codec/std",
-  "pezframe-support/std",
-  "scale-info/std",
-  "pezsnowbridge-merkle-tree/std",
-  "pezsp-api/std",
-  "pezsp-std/std",
+	"codec/std",
+	"pezframe-support/std",
+	"pezsnowbridge-merkle-tree/std",
+	"pezsp-api/std",
+	"pezsp-std/std",
+	"scale-info/std",
 ]
 runtime-benchmarks = [
-  "pezframe-support/runtime-benchmarks",
-  "pezsnowbridge-merkle-tree/runtime-benchmarks",
-  "pezsp-api/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezsnowbridge-merkle-tree/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
 ]

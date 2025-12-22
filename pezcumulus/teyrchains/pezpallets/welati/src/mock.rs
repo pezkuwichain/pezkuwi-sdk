@@ -10,6 +10,11 @@ use pezsp_runtime::{
 	BuildStorage,
 };
 
+#[cfg(feature = "runtime-benchmarks")]
+use pezsp_runtime::testing::{TestSignature, UintAuthorityId};
+#[cfg(feature = "runtime-benchmarks")]
+use pezsp_runtime::RuntimeAppPublic;
+
 type Block = pezframe_system::mocking::MockBlock<Test>;
 type AccountId = u64;
 type Balance = u128;
@@ -115,6 +120,28 @@ parameter_types! {
 	pub const MaxAttributesPerCall: u32 = 1;
 }
 
+// Custom BenchmarkHelper for pezpallet_nfts (uses u64 AccountId in mock)
+#[cfg(feature = "runtime-benchmarks")]
+pub struct NftsBenchmarkHelper;
+
+#[cfg(feature = "runtime-benchmarks")]
+impl pezpallet_nfts::BenchmarkHelper<u32, u32, UintAuthorityId, AccountId, TestSignature> for NftsBenchmarkHelper {
+	fn collection(i: u16) -> u32 {
+		i.into()
+	}
+	fn item(i: u16) -> u32 {
+		i.into()
+	}
+	fn signer() -> (UintAuthorityId, AccountId) {
+		let signer = UintAuthorityId(0);
+		let account: AccountId = 1u64;
+		(signer, account)
+	}
+	fn sign(signer: &UintAuthorityId, data: &[u8]) -> TestSignature {
+		<UintAuthorityId as RuntimeAppPublic>::sign(signer, &data.to_vec()).unwrap()
+	}
+}
+
 impl pezpallet_nfts::Config for Test {
 	type RuntimeEvent = RuntimeEvent;
 	type CollectionId = u32;
@@ -142,7 +169,7 @@ impl pezpallet_nfts::Config for Test {
 	type WeightInfo = ();
 	type BlockNumberProvider = System;
 	#[cfg(feature = "runtime-benchmarks")]
-	type Helper = ();
+	type Helper = NftsBenchmarkHelper;
 }
 
 // Identity Configuration - MINIMAL for pezpallet-tiki dependency
@@ -158,6 +185,19 @@ parameter_types! {
 	pub const MaxSuffixLength: u32 = 7;
 	pub const PendingUsernameExpiration: u64 = 100;
 	pub const UsernameGracePeriod: u64 = 100;
+}
+
+// Custom BenchmarkHelper for pezpallet_identity (uses TestSignature in mock)
+#[cfg(feature = "runtime-benchmarks")]
+pub struct IdentityBenchmarkHelper;
+
+#[cfg(feature = "runtime-benchmarks")]
+impl pezpallet_identity::BenchmarkHelper<UintAuthorityId, TestSignature> for IdentityBenchmarkHelper {
+	fn sign_message(message: &[u8]) -> (UintAuthorityId, TestSignature) {
+		let signer = UintAuthorityId(0);
+		let signature = <UintAuthorityId as RuntimeAppPublic>::sign(&signer, &message.to_vec()).unwrap();
+		(signer, signature)
+	}
 }
 
 impl pezpallet_identity::Config for Test {
@@ -182,7 +222,7 @@ impl pezpallet_identity::Config for Test {
 	type OffchainSignature = pezsp_runtime::testing::TestSignature;
 	type SigningPublicKey = pezsp_runtime::testing::UintAuthorityId;
 	#[cfg(feature = "runtime-benchmarks")]
-	type BenchmarkHelper = ();
+	type BenchmarkHelper = IdentityBenchmarkHelper;
 }
 
 // Identity KYC Configuration
@@ -218,7 +258,6 @@ impl pezpallet_identity_kyc::types::CitizenNftProvider<AccountId> for NoOpCitize
 }
 
 impl pezpallet_identity_kyc::Config for Test {
-	type RuntimeEvent = RuntimeEvent;
 	type Currency = Balances;
 	type GovernanceOrigin = pezframe_system::EnsureRoot<AccountId>;
 	type WeightInfo = ();
@@ -246,7 +285,6 @@ impl pezpallet_staking_score::StakingInfoProvider<AccountId, Balance> for MockSt
 
 // Staking Score Configuration
 impl pezpallet_staking_score::Config for Test {
-	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo = ();
 	type Balance = Balance;
 	type StakingInfo = MockStakingInfo;
@@ -259,7 +297,6 @@ parameter_types! {
 }
 
 impl pezpallet_referral::Config for Test {
-	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo = ();
 	type DefaultReferrer = DefaultReferrerAccount;
 	type PenaltyPerRevocation = PenaltyPerRevocation;
@@ -272,7 +309,6 @@ parameter_types! {
 }
 
 impl pezpallet_tiki::Config for Test {
-	type RuntimeEvent = RuntimeEvent;
 	type AdminOrigin = pezframe_system::EnsureRoot<AccountId>;
 	type WeightInfo = ();
 	type MaxTikisPerUser = MaxTikisPerUser;
@@ -348,7 +384,6 @@ parameter_types! {
 }
 
 impl pezpallet_trust::Config for Test {
-	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo = ();
 	type Score = u128;
 	type ScoreMultiplierBase = ScoreMultiplierBase;
@@ -375,7 +410,6 @@ parameter_types! {
 }
 
 impl pezpallet_welati::Config for Test {
-	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo = ();
 	type Randomness = MockRandomness;
 	type RuntimeCall = RuntimeCall;
@@ -474,10 +508,4 @@ pub fn run_to_block(n: u64) {
 
 pub fn last_event() -> RuntimeEvent {
 	System::events().pop().expect("Event expected").event
-}
-
-pub fn events() -> Vec<RuntimeEvent> {
-	let evt = System::events().into_iter().map(|evt| evt.event).collect::<Vec<_>>();
-	System::reset_events();
-	evt
 }

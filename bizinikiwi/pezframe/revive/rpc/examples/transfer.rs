@@ -25,7 +25,7 @@ async fn main() -> anyhow::Result<()> {
 
 	let alith = Account::default();
 	let alith_address = alith.address();
-	let ethan = Account::from(subxt_signer::eth::dev::ethan());
+	let ethan = Account::from(pezkuwi_subxt_signer::eth::dev::ethan());
 	let value = 1_000_000_000_000_000_000_000u128.into();
 
 	let print_balance = || async {

@@ -43,13 +43,13 @@ pezkuwichain-runtime = { workspace = true }
 [features]
 builder = []
 jemalloc-allocator = [
-  "dep:tikv-jemalloc-ctl",
-  "dep:tikv-jemallocator",
-  "pezkuwi-node-core-pvf-common/jemalloc-allocator",
+	"dep:tikv-jemalloc-ctl",
+	"dep:tikv-jemallocator",
+	"pezkuwi-node-core-pvf-common/jemalloc-allocator",
 ]
 runtime-benchmarks = [
-  "gum/runtime-benchmarks",
-  "pezkuwi-node-core-pvf-common/runtime-benchmarks",
-  "pezkuwi-primitives/runtime-benchmarks",
-  "pezkuwichain-runtime/runtime-benchmarks",
+	"gum/runtime-benchmarks",
+	"pezkuwi-node-core-pvf-common/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"pezkuwichain-runtime/runtime-benchmarks",
 ]

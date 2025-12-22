@@ -30,9 +30,9 @@ tracing-core = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-  "pezsc-executor/runtime-benchmarks",
-  "pezsp-io/runtime-benchmarks",
-  "pezsp-runtime-interface/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "pezsp-state-machine/runtime-benchmarks",
+	"pezsc-executor/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-runtime-interface/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-state-machine/runtime-benchmarks",
 ]

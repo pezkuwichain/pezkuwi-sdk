@@ -18,13 +18,12 @@
 /// using `assert_cmd`. We verify that the help text
 /// includes the `export-chain-spec` sub‑command exactly as intended
 /// and that invoking the sub‑command executes successfully.
-use assert_cmd::Command;
+use assert_cmd::{cargo_bin, Command};
 
 #[test]
 fn pezkuwi_teyrchain_help_includes_export_chain_spec_and_command_runs() {
 	// 1) Check that help text lists the extra command.
-	let help_output = Command::cargo_bin("pezkuwi-teyrchain")
-		.expect("binary `pezkuwi-pFarachain` should be built by the workspace")
+	let help_output = Command::new(cargo_bin!("pezkuwi-teyrchain"))
 		.arg("--help")
 		.assert()
 		.success()
@@ -39,8 +38,7 @@ fn pezkuwi_teyrchain_help_includes_export_chain_spec_and_command_runs() {
 	);
 
 	// 2) Call the sub‑command with `--help` to ensure it dispatches correctly.
-	Command::cargo_bin("pezkuwi-teyrchain")
-		.expect("binary `pezkuwi-teyrchain` should be built by the workspace")
+	Command::new(cargo_bin!("pezkuwi-teyrchain"))
 		.args(&["export-chain-spec", "--help"])
 		.assert()
 		.success();

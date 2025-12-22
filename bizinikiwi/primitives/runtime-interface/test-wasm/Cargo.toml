@@ -29,9 +29,9 @@ bizinikiwi-wasm-builder = { optional = true, workspace = true, default-features 
 [features]
 default = ["std"]
 std = [
-  "bytes/std",
-  "pezsp-core/std",
-  "pezsp-io/std",
-  "pezsp-runtime-interface/std",
-  "bizinikiwi-wasm-builder",
+	"bizinikiwi-wasm-builder",
+	"bytes/std",
+	"pezsp-core/std",
+	"pezsp-io/std",
+	"pezsp-runtime-interface/std",
 ]

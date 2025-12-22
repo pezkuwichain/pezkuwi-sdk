@@ -46,11 +46,8 @@ use pezsp_genesis_builder::PresetId;
 use pezsp_keyring::Sr25519Keyring;
 
 // ============================================================================
-// HEZ TOKEN GENESIS CONSTANTS
+// HEZ TOKEN GENESIS CONSTANTS (Total Supply: 200 Million HEZ)
 // ============================================================================
-
-/// Total HEZ genesis supply: 200 Million
-pub const HEZ_GENESIS_SUPPLY: u128 = 200_000_000 * TYR;
 
 /// Founder allocation: 10% = 20,000,000 HEZ
 pub const HEZ_FOUNDER_ALLOCATION: u128 = 20_000_000 * TYR;
@@ -65,14 +62,11 @@ pub const HEZ_TREASURY_ALLOCATION: u128 = 40_000_000 * TYR;
 pub const HEZ_AIRDROP_ALLOCATION: u128 = 40_000_000 * TYR;
 
 // ===========================================================================
-// COMPILE-TIME VALIDATION: Ensure allocation integrity
+// COMPILE-TIME VALIDATION: Ensure allocations sum to 200M genesis supply
 // ===========================================================================
 const _: () = assert!(
-	HEZ_FOUNDER_ALLOCATION +
-		HEZ_PRESALE_ALLOCATION +
-		HEZ_TREASURY_ALLOCATION +
-		HEZ_AIRDROP_ALLOCATION ==
-		HEZ_GENESIS_SUPPLY,
+	HEZ_FOUNDER_ALLOCATION + HEZ_PRESALE_ALLOCATION + HEZ_TREASURY_ALLOCATION + HEZ_AIRDROP_ALLOCATION
+		== 200_000_000 * TYR,
 	"HEZ allocations MUST sum to genesis supply (200M)"
 );
 
@@ -190,6 +184,14 @@ fn default_teyrchains_host_configuration(
 #[test]
 fn default_teyrchains_host_configuration_is_consistent() {
 	default_teyrchains_host_configuration().panic_if_not_consistent();
+}
+
+#[test]
+fn hez_allocations_sum_to_200m() {
+	// Runtime validation that allocations sum to 200M
+	let total = HEZ_FOUNDER_ALLOCATION + HEZ_PRESALE_ALLOCATION +
+		HEZ_TREASURY_ALLOCATION + HEZ_AIRDROP_ALLOCATION;
+	assert_eq!(total, 200_000_000 * TYR, "HEZ total supply must equal 200M");
 }
 
 fn pezkuwichain_testnet_genesis(

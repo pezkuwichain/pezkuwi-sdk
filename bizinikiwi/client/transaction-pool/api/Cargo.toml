@@ -18,10 +18,10 @@ codec = { workspace = true, default-features = true }
 futures = { workspace = true }
 indexmap = { workspace = true }
 log = { workspace = true, default-features = true }
-serde = { features = ["derive"], workspace = true, default-features = true }
 pezsp-blockchain = { workspace = true, default-features = true }
 pezsp-core = { workspace = true }
 pezsp-runtime = { workspace = true }
+serde = { features = ["derive"], workspace = true, default-features = true }
 thiserror = { workspace = true }
 
 [dev-dependencies]
@@ -29,6 +29,6 @@ serde_json = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-  "pezsp-blockchain/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
+	"pezsp-blockchain/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]

@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use anyhow::anyhow;
+
 use codec::{Compact, Decode};
 use futures::stream::StreamExt;
 use pezcumulus_primitives_core::{relay_chain, rpsr_digest::RPSR_CONSENSUS_ID};
@@ -18,13 +19,12 @@ use tokio::{
 use zombienet_sdk::subxt::{
 	self,
 	blocks::Block,
-	config::{polkadot::PolkadotExtrinsicParamsBuilder, substrate::DigestItem},
-	dynamic::Value,
+	config::{pezkuwi::PezkuwiExtrinsicParamsBuilder, bizinikiwi::DigestItem},
 	events::Events,
 	ext::scale_value::value,
 	tx::{signer::Signer, DynamicPayload, TxStatus},
 	utils::H256,
-	OnlineClient, PolkadotConfig,
+	OnlineClient, PezkuwiConfig,
 };
 
 use zombienet_sdk::{
@@ -33,11 +33,6 @@ use zombienet_sdk::{
 };
 
 use zombienet_configuration::types::AssetLocation;
-
-// Type aliases for Pezkuwi SDK terminology compatibility
-// These map external crate types to our internal naming convention
-// Note: PolkadotExtrinsicParamsBuilder requires a generic type parameter
-type PezkuwiExtrinsicParamsBuilder<T> = PolkadotExtrinsicParamsBuilder<T>;
 
 // Maximum number of blocks to wait for a session change.
 // If it does not arrive for whatever reason, we should not wait forever.
@@ -63,7 +58,7 @@ pub fn create_assign_core_call(core_and_para: &[(u32, u32)]) -> DynamicPayload {
 
 /// Find an event in subxt `Events` and attempt to decode the fields fo the event.
 fn find_event_and_decode_fields<T: Decode>(
-	events: &Events<PolkadotConfig>,
+	events: &Events<PezkuwiConfig>,
 	pezpallet: &str,
 	variant: &str,
 ) -> Result<Vec<T>, anyhow::Error> {
@@ -79,7 +74,7 @@ fn find_event_and_decode_fields<T: Decode>(
 }
 /// Returns `true` if the `block` is a session change.
 async fn is_session_change(
-	block: &Block<PolkadotConfig, OnlineClient<PolkadotConfig>>,
+	block: &Block<PezkuwiConfig, OnlineClient<PezkuwiConfig>>,
 ) -> Result<bool, anyhow::Error> {
 	let events = block.events().await?;
 	Ok(events.iter().any(|event| {
@@ -94,7 +89,7 @@ async fn is_session_change(
 // The throughput is measured as total number of backed candidates in a window of relay chain
 // blocks. Relay chain blocks with session changes are generally ignores.
 pub async fn assert_para_throughput(
-	relay_client: &OnlineClient<PolkadotConfig>,
+	relay_client: &OnlineClient<PezkuwiConfig>,
 	stop_after: u32,
 	expected_candidate_ranges: HashMap<ParaId, Range<u32>>,
 ) -> Result<(), anyhow::Error> {
@@ -129,7 +124,7 @@ pub async fn assert_para_throughput(
 			let para_id = receipt.descriptor.para_id();
 			log::debug!("Block backed for para_id {para_id}");
 			if !valid_para_ids.contains(&para_id) {
-				return Err(anyhow!("Invalid ParaId detected: {}", para_id));
+				return Err(anyhow!("Invalid ParaId detected: {para_id}"));
 			};
 			*(candidate_count.entry(para_id).or_default()) += 1;
 		}
@@ -164,7 +159,7 @@ pub async fn assert_para_throughput(
 /// The session change is detected by inspecting the events in the block.
 pub async fn wait_for_first_session_change(
 	blocks_sub: &mut zombienet_sdk::subxt::backend::StreamOfResults<
-		Block<PolkadotConfig, OnlineClient<PolkadotConfig>>,
+		Block<PezkuwiConfig, OnlineClient<PezkuwiConfig>>,
 	>,
 ) -> Result<(), anyhow::Error> {
 	wait_for_nth_session_change(blocks_sub, 1).await
@@ -175,7 +170,7 @@ pub async fn wait_for_first_session_change(
 /// The session change is detected by inspecting the events in the block.
 pub async fn wait_for_nth_session_change(
 	blocks_sub: &mut zombienet_sdk::subxt::backend::StreamOfResults<
-		Block<PolkadotConfig, OnlineClient<PolkadotConfig>>,
+		Block<PezkuwiConfig, OnlineClient<PezkuwiConfig>>,
 	>,
 	mut sessions_to_wait: u32,
 ) -> Result<(), anyhow::Error> {
@@ -204,7 +199,7 @@ pub async fn wait_for_nth_session_change(
 
 // Helper function that asserts the maximum finality lag.
 pub async fn assert_finality_lag(
-	client: &OnlineClient<PolkadotConfig>,
+	client: &OnlineClient<PezkuwiConfig>,
 	maximum_lag: u32,
 ) -> Result<(), anyhow::Error> {
 	let mut best_stream = client.blocks().subscribe_best().await?;
@@ -224,7 +219,7 @@ pub async fn assert_finality_lag(
 
 /// Assert that finality has not stalled.
 pub async fn assert_blocks_are_being_finalized(
-	client: &OnlineClient<PolkadotConfig>,
+	client: &OnlineClient<PezkuwiConfig>,
 ) -> Result<(), anyhow::Error> {
 	let sleep_duration = Duration::from_secs(12);
 	let mut finalized_blocks = client.blocks().subscribe_finalized().await?;
@@ -259,8 +254,8 @@ pub async fn assert_blocks_are_being_finalized(
 /// * `offset` - Expected minimum offset between relay parent and highest seen relay block
 /// * `block_limit` - Number of teyrchain blocks to verify before completing
 pub async fn assert_relay_parent_offset(
-	relay_client: &OnlineClient<PolkadotConfig>,
-	para_client: &OnlineClient<PolkadotConfig>,
+	relay_client: &OnlineClient<PezkuwiConfig>,
+	para_client: &OnlineClient<PezkuwiConfig>,
 	offset: u32,
 	block_limit: u32,
 ) -> Result<(), anyhow::Error> {
@@ -305,7 +300,7 @@ pub async fn assert_relay_parent_offset(
 				};
 				let para_block_number = para_block.number();
 				seen_parents.insert(relay_parent_state_root, para_block);
-				log::debug!("Teyrchain block #{} was built on relay parent #{relay_parent_number}, highest seen was {highest_relay_block_seen}", para_block_number);
+				log::debug!("Teyrchain block #{para_block_number} was built on relay parent #{relay_parent_number}, highest seen was {highest_relay_block_seen}");
 				assert!(highest_relay_block_seen < offset || relay_parent_number <= highest_relay_block_seen.saturating_sub(offset), "Relay parent is not at the correct offset! relay_parent: #{relay_parent_number} highest_seen_relay_block: #{highest_relay_block_seen}");
 				// As per explanation above, we need to check that no teyrchain blocks are build
 				// on the forbidden parents.
@@ -347,12 +342,12 @@ fn extract_relay_parent_storage_root(
 /// Submits the given `call` as transaction and waits for it successful finalization.
 ///
 /// The transaction is send as immortal transaction.
-pub async fn submit_extrinsic_and_wait_for_finalization_success<S: Signer<PolkadotConfig>>(
-	client: &OnlineClient<PolkadotConfig>,
+pub async fn submit_extrinsic_and_wait_for_finalization_success<S: Signer<PezkuwiConfig>>(
+	client: &OnlineClient<PezkuwiConfig>,
 	call: &DynamicPayload,
 	signer: &S,
 ) -> Result<(), anyhow::Error> {
-	let extensions = PezkuwiExtrinsicParamsBuilder::<PolkadotConfig>::new().immortal().build();
+	let extensions = PezkuwiExtrinsicParamsBuilder::<PezkuwiConfig>::new().immortal().build();
 
 	let mut tx = client
 		.tx()
@@ -388,9 +383,9 @@ pub async fn submit_extrinsic_and_wait_for_finalization_success<S: Signer<Polkad
 /// If the transaction does not reach the finalized state in `timeout_secs` an error is returned.
 /// The transaction is send as immortal transaction.
 pub async fn submit_extrinsic_and_wait_for_finalization_success_with_timeout<
-	S: Signer<PolkadotConfig>,
+	S: Signer<PezkuwiConfig>,
 >(
-	client: &OnlineClient<PolkadotConfig>,
+	client: &OnlineClient<PezkuwiConfig>,
 	call: &DynamicPayload,
 	signer: &S,
 	timeout_secs: impl Into<u64>,
@@ -404,7 +399,7 @@ pub async fn submit_extrinsic_and_wait_for_finalization_success_with_timeout<
 
 	match res {
 		Ok(Ok(_)) => Ok(()),
-		Ok(Err(e)) => Err(anyhow!("Error waiting for metric: {}", e)),
+		Ok(Err(e)) => Err(anyhow!("Error waiting for metric: {e}")),
 		// timeout
 		Err(_) => Err(anyhow!("Timeout ({secs}), waiting for extrinsic finalization")),
 	}
@@ -412,28 +407,28 @@ pub async fn submit_extrinsic_and_wait_for_finalization_success_with_timeout<
 
 /// Asserts that the given `para_id` is registered at the relay chain.
 pub async fn assert_para_is_registered(
-	relay_client: &OnlineClient<PolkadotConfig>,
+	relay_client: &OnlineClient<PezkuwiConfig>,
 	para_id: ParaId,
 	blocks_to_wait: u32,
 ) -> Result<(), anyhow::Error> {
 	let mut blocks_sub = relay_client.blocks().subscribe_all().await?;
 	let para_id: u32 = para_id.into();
 
-	let keys: Vec<Value> = vec![];
-	let query = subxt::dynamic::storage("Paras", "Teyrchains", keys);
+	let query = subxt::dynamic::storage::<(), Vec<u32>>("Paras", "Teyrchains");
 
 	let mut blocks_cnt = 0;
 	while let Some(block) = blocks_sub.next().await {
 		let block = block?;
 		log::debug!("Relay block #{}, checking if para_id {para_id} is registered", block.number(),);
-		let teyrchains = block.storage().fetch(&query).await?;
+		let storage = block.storage();
+		let teyrchains_result = storage.try_fetch(&query, ()).await?;
 
-		let teyrchains: Vec<u32> = match teyrchains {
-			Some(teyrchains) => teyrchains.as_type()?,
-			None => vec![],
-		};
+		let teyrchains: Vec<u32> = teyrchains_result
+			.map(|v| v.decode())
+			.transpose()?
+			.unwrap_or_default();
 
-		log::debug!("Registered para_ids: {:?}", teyrchains);
+		log::debug!("Registered para_ids: {teyrchains:?}");
 
 		if teyrchains.iter().any(|p| para_id.eq(p)) {
 			log::debug!("para_id {para_id} registered");
@@ -460,7 +455,7 @@ pub async fn runtime_upgrade(
 	para_id: u32,
 	wasm_path: &str,
 ) -> Result<(), anyhow::Error> {
-	log::info!("Performing runtime upgrade for teyrchain {}, wasm: {}", para_id, wasm_path);
+	log::info!("Performing runtime upgrade for teyrchain {para_id}, wasm: {wasm_path}");
 	// Note: External zombienet_sdk uses 'parachain' method name - this is the external API
 	let teyrchain = network.parachain(para_id).unwrap();
 
@@ -474,12 +469,12 @@ pub async fn assign_cores(
 	para_id: u32,
 	cores: Vec<u32>,
 ) -> Result<(), anyhow::Error> {
-	log::info!("Assigning {:?} cores to teyrchain {}", cores, para_id);
+	log::info!("Assigning {cores:?} cores to teyrchain {para_id}");
 
 	let assign_cores_call =
 		create_assign_core_call(&cores.into_iter().map(|core| (core, para_id)).collect::<Vec<_>>());
 
-	let client: OnlineClient<PolkadotConfig> = node.wait_client().await?;
+	let client: OnlineClient<PezkuwiConfig> = node.wait_client().await?;
 	let res = submit_extrinsic_and_wait_for_finalization_success_with_timeout(
 		&client,
 		&assign_cores_call,
@@ -494,17 +489,22 @@ pub async fn assign_cores(
 }
 
 pub async fn wait_for_upgrade(
-	client: OnlineClient<PolkadotConfig>,
+	client: OnlineClient<PezkuwiConfig>,
 	expected_version: u32,
 ) -> Result<(), anyhow::Error> {
 	let updater = client.updater();
 	let mut update_stream = updater.runtime_updates().await?;
 
-	while let Some(Ok(update)) = update_stream.next().await {
-		let version = update.runtime_version().spec_version;
-		log::info!("Update runtime spec version {version}");
-		if version == expected_version {
-			break;
+	loop {
+		match update_stream.next().await {
+			Ok(update) => {
+				let version = update.runtime_version().spec_version;
+				log::info!("Update runtime spec version {version}");
+				if version == expected_version {
+					break;
+				}
+			}
+			Err(e) => return Err(e.into()),
 		}
 	}
 	Ok(())

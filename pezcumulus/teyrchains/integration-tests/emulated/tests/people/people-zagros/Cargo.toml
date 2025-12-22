@@ -36,16 +36,16 @@ zagros-system-emulated-network = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-  "emulated-integration-tests-common/runtime-benchmarks",
-  "pezframe-support/runtime-benchmarks",
-  "pezpallet-balances/runtime-benchmarks",
-  "pezpallet-identity/runtime-benchmarks",
-  "pezpallet-message-queue/runtime-benchmarks",
-  "pezpallet-xcm/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "teyrchains-common/runtime-benchmarks",
-  "xcm-executor/runtime-benchmarks",
-  "xcm/runtime-benchmarks",
-  "zagros-runtime/runtime-benchmarks",
-  "zagros-system-emulated-network/runtime-benchmarks",
+	"emulated-integration-tests-common/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezpallet-balances/runtime-benchmarks",
+	"pezpallet-identity/runtime-benchmarks",
+	"pezpallet-message-queue/runtime-benchmarks",
+	"pezpallet-xcm/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"teyrchains-common/runtime-benchmarks",
+	"xcm-executor/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
+	"zagros-runtime/runtime-benchmarks",
+	"zagros-system-emulated-network/runtime-benchmarks",
 ]

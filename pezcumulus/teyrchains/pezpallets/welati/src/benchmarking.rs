@@ -1,5 +1,3 @@
-#![cfg(feature = "runtime-benchmarks")]
-
 use super::*;
 use crate::types::*;
 use pezframe_benchmarking::v2::*;
@@ -165,7 +163,7 @@ mod benchmarks {
 
 		assert_eq!(NextAppointmentId::<T>::get(), 1);
 		// Verify that the role is still not filled (nomination doesn't fill it, approval does)
-		assert!(!AppointedOfficials::<T>::contains_key(&OfficialRole::Dadger));
+		assert!(!AppointedOfficials::<T>::contains_key(OfficialRole::Dadger));
 	}
 
 	#[benchmark]
@@ -198,7 +196,7 @@ mod benchmarks {
 		assert_eq!(NextAppointmentId::<T>::get(), 1);
 		// CRITICAL: Verify that the role was assigned in AppointedOfficials storage
 		// This tests the new storage write we added in lib.rs approve_appointment()
-		assert_eq!(AppointedOfficials::<T>::get(&OfficialRole::Dozger), Some(nominee));
+		assert_eq!(AppointedOfficials::<T>::get(OfficialRole::Dozger), Some(nominee));
 	}
 
 	// ----------------------------------------------------------------

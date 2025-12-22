@@ -20,7 +20,6 @@ targets = ["x86_64-unknown-linux-gnu"]
 log = { workspace = true, default-features = true }
 parity-db = { workspace = true }
 parking_lot = { workspace = true, default-features = true }
-prometheus-endpoint = { workspace = true, default-features = true }
 pezsc-client-api = { workspace = true, default-features = true }
 pezsc-keystore = { workspace = true, default-features = true }
 pezsc-network-statement = { workspace = true, default-features = true }
@@ -29,6 +28,7 @@ pezsp-blockchain = { workspace = true, default-features = true }
 pezsp-core = { workspace = true, default-features = true }
 pezsp-runtime = { workspace = true, default-features = true }
 pezsp-statement-store = { workspace = true, default-features = true }
+prometheus-endpoint = { workspace = true, default-features = true }
 tokio = { features = ["time"], workspace = true, default-features = true }
 
 [dev-dependencies]
@@ -43,10 +43,10 @@ required-features = []
 
 [features]
 runtime-benchmarks = [
-  "pezsc-client-api/runtime-benchmarks",
-  "pezsc-network-statement/runtime-benchmarks",
-  "pezsp-api/runtime-benchmarks",
-  "pezsp-blockchain/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "pezsp-statement-store/runtime-benchmarks",
+	"pezsc-client-api/runtime-benchmarks",
+	"pezsc-network-statement/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
+	"pezsp-blockchain/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-statement-store/runtime-benchmarks",
 ]

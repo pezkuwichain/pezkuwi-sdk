@@ -254,11 +254,11 @@ fn rpc_module(is_dev: bool, client: Client) -> Result<RpcModule<()>, pezsc_servi
 	let eth_api = EthRpcServerImpl::new(client.clone())
 		.with_accounts(if is_dev {
 			vec![
-				crate::Account::from(subxt_signer::eth::dev::alith()),
-				crate::Account::from(subxt_signer::eth::dev::baltathar()),
-				crate::Account::from(subxt_signer::eth::dev::charleth()),
-				crate::Account::from(subxt_signer::eth::dev::dorothy()),
-				crate::Account::from(subxt_signer::eth::dev::ethan()),
+				crate::Account::from(pezkuwi_subxt_signer::eth::dev::alith()),
+				crate::Account::from(pezkuwi_subxt_signer::eth::dev::baltathar()),
+				crate::Account::from(pezkuwi_subxt_signer::eth::dev::charleth()),
+				crate::Account::from(pezkuwi_subxt_signer::eth::dev::dorothy()),
+				crate::Account::from(pezkuwi_subxt_signer::eth::dev::ethan()),
 			]
 		} else {
 			vec![]

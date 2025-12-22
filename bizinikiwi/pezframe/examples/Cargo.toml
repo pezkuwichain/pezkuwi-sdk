@@ -21,9 +21,9 @@ pezpallet-default-config-example = { workspace = true }
 pezpallet-dev-mode = { workspace = true }
 pezpallet-example-authorization-tx-extension = { workspace = true }
 pezpallet-example-basic = { workspace = true }
-pezpallet-example-pezframe-crate = { workspace = true }
 pezpallet-example-kitchensink = { workspace = true }
 pezpallet-example-offchain-worker = { workspace = true }
+pezpallet-example-pezframe-crate = { workspace = true }
 pezpallet-example-single-block-migrations = { workspace = true }
 pezpallet-example-split = { workspace = true }
 pezpallet-example-tasks = { workspace = true }
@@ -32,40 +32,40 @@ pezpallet-example-view-functions = { workspace = true }
 [features]
 default = ["std"]
 std = [
-  "pezpallet-default-config-example/std",
-  "pezpallet-dev-mode/std",
-  "pezpallet-example-authorization-tx-extension/std",
-  "pezpallet-example-basic/std",
-  "pezpallet-example-pezframe-crate/std",
-  "pezpallet-example-kitchensink/std",
-  "pezpallet-example-offchain-worker/std",
-  "pezpallet-example-single-block-migrations/std",
-  "pezpallet-example-split/std",
-  "pezpallet-example-tasks/std",
-  "pezpallet-example-view-functions/std",
+	"pezpallet-default-config-example/std",
+	"pezpallet-dev-mode/std",
+	"pezpallet-example-authorization-tx-extension/std",
+	"pezpallet-example-basic/std",
+	"pezpallet-example-kitchensink/std",
+	"pezpallet-example-offchain-worker/std",
+	"pezpallet-example-pezframe-crate/std",
+	"pezpallet-example-single-block-migrations/std",
+	"pezpallet-example-split/std",
+	"pezpallet-example-tasks/std",
+	"pezpallet-example-view-functions/std",
 ]
 try-runtime = [
-  "pezpallet-default-config-example/try-runtime",
-  "pezpallet-dev-mode/try-runtime",
-  "pezpallet-example-authorization-tx-extension/try-runtime",
-  "pezpallet-example-basic/try-runtime",
-  "pezpallet-example-kitchensink/try-runtime",
-  "pezpallet-example-offchain-worker/try-runtime",
-  "pezpallet-example-single-block-migrations/try-runtime",
-  "pezpallet-example-split/try-runtime",
-  "pezpallet-example-tasks/try-runtime",
-  "pezpallet-example-view-functions/try-runtime",
+	"pezpallet-default-config-example/try-runtime",
+	"pezpallet-dev-mode/try-runtime",
+	"pezpallet-example-authorization-tx-extension/try-runtime",
+	"pezpallet-example-basic/try-runtime",
+	"pezpallet-example-kitchensink/try-runtime",
+	"pezpallet-example-offchain-worker/try-runtime",
+	"pezpallet-example-single-block-migrations/try-runtime",
+	"pezpallet-example-split/try-runtime",
+	"pezpallet-example-tasks/try-runtime",
+	"pezpallet-example-view-functions/try-runtime",
 ]
 runtime-benchmarks = [
-  "pezpallet-default-config-example/runtime-benchmarks",
-  "pezpallet-dev-mode/runtime-benchmarks",
-  "pezpallet-example-authorization-tx-extension/runtime-benchmarks",
-  "pezpallet-example-basic/runtime-benchmarks",
-  "pezpallet-example-pezframe-crate/runtime-benchmarks",
-  "pezpallet-example-kitchensink/runtime-benchmarks",
-  "pezpallet-example-offchain-worker/runtime-benchmarks",
-  "pezpallet-example-single-block-migrations/runtime-benchmarks",
-  "pezpallet-example-split/runtime-benchmarks",
-  "pezpallet-example-tasks/runtime-benchmarks",
-  "pezpallet-example-view-functions/runtime-benchmarks",
+	"pezpallet-default-config-example/runtime-benchmarks",
+	"pezpallet-dev-mode/runtime-benchmarks",
+	"pezpallet-example-authorization-tx-extension/runtime-benchmarks",
+	"pezpallet-example-basic/runtime-benchmarks",
+	"pezpallet-example-kitchensink/runtime-benchmarks",
+	"pezpallet-example-offchain-worker/runtime-benchmarks",
+	"pezpallet-example-pezframe-crate/runtime-benchmarks",
+	"pezpallet-example-single-block-migrations/runtime-benchmarks",
+	"pezpallet-example-split/runtime-benchmarks",
+	"pezpallet-example-tasks/runtime-benchmarks",
+	"pezpallet-example-view-functions/runtime-benchmarks",
 ]

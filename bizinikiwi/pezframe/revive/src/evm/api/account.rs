@@ -23,16 +23,16 @@ use pezsp_runtime::AccountId32;
 
 /// A simple account that can sign transactions
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Account(subxt_signer::eth::Keypair);
+pub struct Account(pezkuwi_subxt_signer::eth::Keypair);
 
 impl Default for Account {
 	fn default() -> Self {
-		Self(subxt_signer::eth::dev::alith())
+		Self(pezkuwi_subxt_signer::eth::dev::alith())
 	}
 }
 
-impl From<subxt_signer::eth::Keypair> for Account {
-	fn from(kp: subxt_signer::eth::Keypair) -> Self {
+impl From<pezkuwi_subxt_signer::eth::Keypair> for Account {
+	fn from(kp: pezkuwi_subxt_signer::eth::Keypair) -> Self {
 		Self(kp)
 	}
 }
@@ -40,7 +40,7 @@ impl From<subxt_signer::eth::Keypair> for Account {
 impl Account {
 	/// Create a new account from a secret
 	pub fn from_secret_key(secret_key: [u8; 32]) -> Self {
-		subxt_signer::eth::Keypair::from_secret_key(secret_key).unwrap().into()
+		pezkuwi_subxt_signer::eth::Keypair::from_secret_key(secret_key).unwrap().into()
 	}
 
 	/// Get the [`H160`] address of the account.

@@ -21,21 +21,21 @@ derive_more = { workspace = true, default-features = true }
 futures = { workspace = true }
 libc = { workspace = true }
 log = { workspace = true, default-features = true }
-rand = { workspace = true, default-features = true }
-rand_pcg = { workspace = true }
-regex = { workspace = true }
 pezsc-telemetry = { workspace = true, default-features = true }
-serde = { features = ["derive"], workspace = true, default-features = true }
-serde_json = { workspace = true, default-features = true }
 pezsp-core = { workspace = true, default-features = true }
 pezsp-crypto-hashing = { workspace = true, default-features = true }
 pezsp-io = { workspace = true, default-features = true }
+rand = { workspace = true, default-features = true }
+rand_pcg = { workspace = true }
+regex = { workspace = true }
+serde = { features = ["derive"], workspace = true, default-features = true }
+serde_json = { workspace = true, default-features = true }
 
 [dev-dependencies]
 pezsp-runtime = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-  "pezsp-io/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]

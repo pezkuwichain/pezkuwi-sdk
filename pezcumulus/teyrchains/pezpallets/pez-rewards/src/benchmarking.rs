@@ -1,7 +1,5 @@
 // pezkuwi/pallets/pez-rewards/src/benchmarking.rs
 
-#![cfg(feature = "runtime-benchmarks")]
-
 use super::{BalanceOf, Call, Config};
 use crate::{Pezpallet as PezRewards, Pezpallet};
 use pezframe_benchmarking::v2::*;
@@ -10,7 +8,7 @@ use pezframe_support::traits::{
 	Currency, Get,
 };
 use pezframe_system::{Pezpallet as System, RawOrigin};
-use pezsp_runtime::traits::{Bounded, Saturating, StaticLookup, Zero}; // AccountIdConversion removed
+use pezsp_runtime::traits::{Bounded, Saturating, Zero};
 
 const SEED: u32 = 0;
 
@@ -58,7 +56,7 @@ mod benchmarks {
 	#[benchmark]
 	fn initialize_rewards_system() {
 		crate::EpochInfo::<T>::kill();
-		crate::EpochStatus::<T>::clear(u32::MAX, None);
+		let _ = crate::EpochStatus::<T>::clear(u32::MAX, None);
 
 		#[extrinsic_call]
 		initialize_rewards_system(RawOrigin::Root);

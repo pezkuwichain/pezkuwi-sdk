@@ -49,10 +49,10 @@
 //! their `Config` need to be implemented for `struct Runtime`:
 #![doc = docify::embed!("./packages/guides/first-runtime/src/lib.rs", config_impls)]
 //!
-//! Notice how we use [`frame::pezpallet_macros::derive_impl`] to provide "default" configuration items
-//! for each pezpallet. Feel free to dive into the definition of each default prelude (eg.
-//! [`frame::prelude::pezframe_system::pezpallet::config_preludes`]) to learn more which types are exactly
-//! used.
+//! Notice how we use [`frame::pezpallet_macros::derive_impl`] to provide "default" configuration
+//! items for each pezpallet. Feel free to dive into the definition of each default prelude (eg.
+//! [`frame::prelude::pezframe_system::pezpallet::config_preludes`]) to learn more which types are
+//! exactly used.
 //!
 //! Recall that in test runtime in [`crate::guides::your_first_pallet`], we provided `type AccountId
 //! = u64` to `pezframe_system`, while in this case we rely on whatever is provided by
@@ -136,8 +136,9 @@
 //! The implementation of these function can naturally vary from one runtime to the other, but the
 //! overall pattern is common. For the case of this runtime, we do the following:
 //!
-//! 1. Expose one non-default preset, namely [`pezsp_genesis_builder::DEV_RUNTIME_PRESET`]. This means
-//!    our runtime has two "presets" of genesis state in total: `DEV_RUNTIME_PRESET` and `None`.
+//! 1. Expose one non-default preset, namely [`pezsp_genesis_builder::DEV_RUNTIME_PRESET`]. This
+//!    means our runtime has two "presets" of genesis state in total: `DEV_RUNTIME_PRESET` and
+//!    `None`.
 #![doc = docify::embed!("./packages/guides/first-runtime/src/lib.rs", preset_names)]
 //!
 //! For `build_state` and `get_preset`, we use the helper functions provide by frame:

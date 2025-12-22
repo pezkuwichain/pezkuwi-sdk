@@ -637,7 +637,7 @@ fn shadow_comparison_recorded() {
 		let comparison = ValidatorPool::shadow_comparison();
 		assert!(comparison.is_some());
 		let comp = comparison.unwrap();
-		assert!(comp.overlap_count > 0 || comp.tnpos_only.len() > 0 || comp.npos_only.len() > 0);
+		assert!(comp.overlap_count > 0 || !comp.tnpos_only.is_empty() || !comp.npos_only.is_empty());
 	});
 }
 

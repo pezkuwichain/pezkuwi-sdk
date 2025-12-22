@@ -26,9 +26,9 @@ pezsp-trie = { workspace = true, default-features = true }
 trie-db = { workspace = true, default-features = true }
 
 jsonrpsee = { features = [
-  "client-core",
-  "macros",
-  "server-core",
+	"client-core",
+	"macros",
+	"server-core",
 ], workspace = true }
 
 # Bizinikiwi Dependencies
@@ -38,9 +38,9 @@ pezsp-runtime = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-  "pezsc-client-api/runtime-benchmarks",
-  "pezsc-rpc-api/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "pezsp-state-machine/runtime-benchmarks",
-  "pezsp-trie/runtime-benchmarks",
+	"pezsc-client-api/runtime-benchmarks",
+	"pezsc-rpc-api/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-state-machine/runtime-benchmarks",
+	"pezsp-trie/runtime-benchmarks",
 ]

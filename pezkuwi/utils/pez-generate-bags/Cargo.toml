@@ -21,6 +21,6 @@ zagros-runtime = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-  "pez-generate-bags/runtime-benchmarks",
-  "zagros-runtime/runtime-benchmarks",
+	"pez-generate-bags/runtime-benchmarks",
+	"zagros-runtime/runtime-benchmarks",
 ]

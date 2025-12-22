@@ -54,9 +54,6 @@ pub const WHEZ_ASSET_ID: AssetIdForTrustBackedAssets = 2;
 /// PEZ Token decimals (same as HEZ)
 pub const PEZ_DECIMALS: u8 = 12;
 
-/// Total PEZ supply: 5 Billion
-pub const PEZ_TOTAL_SUPPLY: Balance = 5_000_000_000 * TYR;
-
 /// Treasury allocation: 20.25% = 1,012,500,000 PEZ
 pub const PEZ_TREASURY_ALLOCATION: Balance = 1_012_500_000 * TYR;
 
@@ -69,17 +66,15 @@ pub const PEZ_PRESALE_ALLOCATION: Balance = 93_750_000 * TYR;
 /// Rewards pool: 76% = 3,800,000,000 PEZ (distributed via sentetik halving)
 pub const PEZ_REWARDS_POOL: Balance = 3_800_000_000 * TYR;
 
-// Compile-time verification that all allocations sum to PEZ_TOTAL_SUPPLY
-const _: () = {
-	assert!(
-		PEZ_TREASURY_ALLOCATION +
-			PEZ_FOUNDER_ALLOCATION +
-			PEZ_PRESALE_ALLOCATION +
-			PEZ_REWARDS_POOL ==
-			PEZ_TOTAL_SUPPLY,
-		"PEZ allocations must sum to exactly 5 billion tokens"
-	);
-};
+/// Total PEZ supply: 5 Billion (derived from allocations)
+pub const PEZ_TOTAL_SUPPLY: Balance =
+	PEZ_TREASURY_ALLOCATION + PEZ_FOUNDER_ALLOCATION + PEZ_PRESALE_ALLOCATION + PEZ_REWARDS_POOL;
+
+// Compile-time verification that total equals expected 5 billion
+const _: () = assert!(
+	PEZ_TOTAL_SUPPLY == 5_000_000_000 * TYR,
+	"PEZ allocations must sum to exactly 5 billion tokens"
+);
 
 /// Genesis configuration for Asset Hub Pezkuwichain
 ///
@@ -104,6 +99,13 @@ fn asset_hub_pezkuwichain_genesis(
 	foreign_assets: Vec<(Location, AccountId, Balance)>,
 	foreign_assets_endowed_accounts: Vec<(Location, AccountId, Balance)>,
 ) -> serde_json::Value {
+	// Verify total PEZ minted at genesis equals PEZ_TOTAL_SUPPLY (5 billion)
+	debug_assert_eq!(
+		PEZ_TREASURY_ALLOCATION + PEZ_REWARDS_POOL + PEZ_FOUNDER_ALLOCATION + PEZ_PRESALE_ALLOCATION,
+		PEZ_TOTAL_SUPPLY,
+		"PEZ genesis allocations must equal total supply"
+	);
+
 	build_struct_json_patch!(RuntimeGenesisConfig {
 		balances: BalancesConfig {
 			balances: endowed_accounts.iter().cloned().map(|k| (k, endowment)).collect(),

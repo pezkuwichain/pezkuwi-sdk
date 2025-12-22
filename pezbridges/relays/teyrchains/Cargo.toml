@@ -25,12 +25,12 @@ bp-pezkuwi-core = { workspace = true, default-features = true }
 relay-bizinikiwi-client = { workspace = true }
 
 [dev-dependencies]
-relay-bizinikiwi-client = { features = ["test-helpers"], workspace = true }
 pezsp-core = { workspace = true, default-features = true }
+relay-bizinikiwi-client = { features = ["test-helpers"], workspace = true }
 
 [features]
 runtime-benchmarks = [
-  "bp-pezkuwi-core/runtime-benchmarks",
-  "relay-bizinikiwi-client/runtime-benchmarks",
-  "relay-utils/runtime-benchmarks",
+	"bp-pezkuwi-core/runtime-benchmarks",
+	"relay-bizinikiwi-client/runtime-benchmarks",
+	"relay-utils/runtime-benchmarks",
 ]

@@ -403,7 +403,7 @@ fn calculate_vote_weight_works() {
 		assert_eq!(Welati::calculate_vote_weight(&1, &ElectionType::Parliamentary), 1);
 
 		let weight = Welati::calculate_vote_weight(&1, &ElectionType::SpeakerElection);
-		assert!(weight >= 1 && weight <= 10);
+		assert!((1..=10).contains(&weight));
 	});
 }
 

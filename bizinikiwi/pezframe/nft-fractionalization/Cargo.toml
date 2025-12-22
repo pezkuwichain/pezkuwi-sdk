@@ -30,23 +30,23 @@ pezpallet-balances = { workspace = true, default-features = true }
 [features]
 default = ["std"]
 std = [
-  "codec/std",
-  "frame/std",
-  "log/std",
-  "pezpallet-assets/std",
-  "pezpallet-balances/std",
-  "pezpallet-nfts/std",
-  "scale-info/std",
+	"codec/std",
+	"frame/std",
+	"log/std",
+	"pezpallet-assets/std",
+	"pezpallet-balances/std",
+	"pezpallet-nfts/std",
+	"scale-info/std",
 ]
 runtime-benchmarks = [
-  "frame/runtime-benchmarks",
-  "pezpallet-assets/runtime-benchmarks",
-  "pezpallet-balances/runtime-benchmarks",
-  "pezpallet-nfts/runtime-benchmarks",
+	"frame/runtime-benchmarks",
+	"pezpallet-assets/runtime-benchmarks",
+	"pezpallet-balances/runtime-benchmarks",
+	"pezpallet-nfts/runtime-benchmarks",
 ]
 try-runtime = [
-  "frame/try-runtime",
-  "pezpallet-assets/try-runtime",
-  "pezpallet-balances/try-runtime",
-  "pezpallet-nfts/try-runtime",
+	"frame/try-runtime",
+	"pezpallet-assets/try-runtime",
+	"pezpallet-balances/try-runtime",
+	"pezpallet-nfts/try-runtime",
 ]

@@ -15,21 +15,21 @@ workspace = true
 [dependencies]
 codec = { features = ["bit-vec", "derive"], workspace = true }
 pezkuwi-primitives = { features = [
-  "test",
+	"test",
 ], workspace = true, default-features = true }
-rand = { workspace = true, default-features = true }
-scale-info = { features = ["bit-vec", "derive", "serde"], workspace = true }
 pezsp-application-crypto = { workspace = true }
 pezsp-core = { features = ["std"], workspace = true, default-features = true }
 pezsp-keyring = { workspace = true, default-features = true }
 pezsp-runtime = { workspace = true, default-features = true }
+rand = { workspace = true, default-features = true }
+scale-info = { features = ["bit-vec", "derive", "serde"], workspace = true }
 
 [dev-dependencies]
 bitvec = { features = ["alloc", "serde"], workspace = true }
 
 [features]
 runtime-benchmarks = [
-  "pezkuwi-primitives/runtime-benchmarks",
-  "pezsp-keyring/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"pezsp-keyring/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]

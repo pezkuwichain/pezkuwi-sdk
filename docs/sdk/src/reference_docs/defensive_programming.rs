@@ -124,7 +124,8 @@
 //! A developer should use fixed-point instead of floating-point arithmetic to mitigate the
 //! potential for inaccuracy, rounding errors, or other unexpected behavior.
 //!
-//! - [Fixed point types](pezsp_arithmetic::fixed_point) and their associated usage can be found here.
+//! - [Fixed point types](pezsp_arithmetic::fixed_point) and their associated usage can be found
+//!   here.
 //! - [PerThing](pezsp_arithmetic::per_things) and its associated types can be found here.
 //!
 //! Using floating point number types (i.e. f32, f64) in the runtime should be avoided, as a single non-deterministic result could cause chaos for blockchain consensus along with the issues above. For more on the specifics of the peculiarities of floating point calculations, [watch this video by the Computerphile](https://www.youtube.com/watch?v=PZRI1IfStY0).
@@ -214,9 +215,9 @@
 //!
 //! #### Bob's Overflowed Balance
 //!
-//! **Bob's** balance exceeds the `Balance` type on the `EduChain`. Because the pezpallet developer did
-//! not handle the calculation to add to Bob's balance with any regard to this overflow, **Bob's**
-//! balance is now essentially `0`, the operation **wrapped**.
+//! **Bob's** balance exceeds the `Balance` type on the `EduChain`. Because the pezpallet developer
+//! did not handle the calculation to add to Bob's balance with any regard to this overflow,
+//! **Bob's** balance is now essentially `0`, the operation **wrapped**.
 //!
 //! <details>
 //!   <summary><b>Solution: Saturating or Checked</b></summary>
@@ -276,8 +277,8 @@
 //! authoring, consensus, or other protocol-level dependencies, going through with an action may
 //! actually cause harm to the network, and thus stalling would be the better option.
 //!
-//! Take the example of the BABE pezpallet ([`pezpallet_babe`]), which doesn't allow for a validator to
-//! participate if it is disabled (see: [`frame::traits::DisabledValidators`]):
+//! Take the example of the BABE pezpallet ([`pezpallet_babe`]), which doesn't allow for a validator
+//! to participate if it is disabled (see: [`frame::traits::DisabledValidators`]):
 //!
 //! ```ignore
 //! if T::DisabledValidators::is_disabled(authority_index) {

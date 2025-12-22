@@ -18,22 +18,22 @@ targets = ["x86_64-unknown-linux-gnu"]
 [dependencies]
 bounded-collections = { workspace = true }
 codec = { features = ["derive"], workspace = true }
+pezsp-arithmetic = { workspace = true }
+pezsp-debug-derive = { workspace = true }
 scale-info = { features = ["derive"], workspace = true }
 schemars = { optional = true, workspace = true }
 serde = { optional = true, features = ["alloc", "derive"], workspace = true }
 smallvec = { workspace = true, default-features = true }
-pezsp-arithmetic = { workspace = true }
-pezsp-debug-derive = { workspace = true }
 
 [features]
 default = ["std"]
 std = [
-  "bounded-collections/std",
-  "codec/std",
-  "scale-info/std",
-  "serde/std",
-  "pezsp-arithmetic/std",
-  "pezsp-debug-derive/std",
+	"bounded-collections/std",
+	"codec/std",
+	"pezsp-arithmetic/std",
+	"pezsp-debug-derive/std",
+	"scale-info/std",
+	"serde/std",
 ]
 # By default some types have documentation, `full-metadata-docs` allows to add documentation to
 # more types in the metadata.
@@ -41,10 +41,10 @@ full-metadata-docs = ["scale-info/docs"]
 
 # Serde support without relying on std features.
 serde = [
-  "bounded-collections/serde",
-  "dep:serde",
-  "scale-info/serde",
-  "pezsp-arithmetic/serde",
+	"bounded-collections/serde",
+	"dep:serde",
+	"pezsp-arithmetic/serde",
+	"scale-info/serde",
 ]
 
 json-schema = ["dep:schemars"]

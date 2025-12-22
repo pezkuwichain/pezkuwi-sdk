@@ -103,9 +103,9 @@
 mod tests {
 	use assert_cmd::assert::OutputAssertExt;
 	use cmd_lib::*;
-	use rand::Rng;
 	use pezsc_chain_spec::{DEV_RUNTIME_PRESET, LOCAL_TESTNET_RUNTIME_PRESET};
 	use pezsp_genesis_builder::PresetId;
+	use rand::Rng;
 	use std::{
 		io::{BufRead, BufReader},
 		path::PathBuf,

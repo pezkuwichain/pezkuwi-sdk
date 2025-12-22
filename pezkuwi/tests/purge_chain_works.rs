@@ -15,7 +15,9 @@
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
 #![cfg(unix)]
+#![allow(deprecated)]
 
+#[allow(deprecated)]
 use assert_cmd::cargo::cargo_bin;
 use common::run_with_timeout;
 use nix::{

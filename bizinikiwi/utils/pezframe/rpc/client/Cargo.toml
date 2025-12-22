@@ -20,19 +20,19 @@ async-trait = { workspace = true }
 jsonrpsee = { features = ["ws-client"], workspace = true }
 log = { workspace = true, default-features = true }
 pezsc-rpc-api = { workspace = true, default-features = true }
-serde = { workspace = true, default-features = true }
 pezsp-runtime = { workspace = true, default-features = true }
+serde = { workspace = true, default-features = true }
 
 [dev-dependencies]
 pezsp-core = { workspace = true, default-features = true }
 tokio = { features = [
-  "macros",
-  "rt-multi-thread",
-  "sync",
+	"macros",
+	"rt-multi-thread",
+	"sync",
 ], workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-  "pezsc-rpc-api/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
+	"pezsc-rpc-api/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]

@@ -92,7 +92,6 @@ impl pezpallet_identity_kyc::types::CitizenNftProvider<u64> for NoOpCitizenNftPr
 }
 
 impl pezpallet_identity_kyc::Config for Test {
-	type RuntimeEvent = RuntimeEvent;
 	type Currency = Balances;
 	type GovernanceOrigin = pezframe_system::EnsureRoot<u64>;
 	type WeightInfo = ();
@@ -147,7 +146,6 @@ impl pezpallet_trust::CitizenshipStatusProvider<u64> for MockCitizenshipStatusPr
 }
 
 impl pezpallet_trust::Config for Test {
-	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo = ();
 	type Score = u128;
 	type ScoreMultiplierBase = ScoreMultiplierBase;

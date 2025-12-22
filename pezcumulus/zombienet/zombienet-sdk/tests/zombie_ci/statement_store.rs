@@ -6,7 +6,7 @@
 
 use anyhow::anyhow;
 use pezsp_core::{Bytes, Encode};
-use zombienet_sdk::{subxt::ext::subxt_rpcs::rpc_params, NetworkConfigBuilder};
+use zombienet_sdk::{subxt::ext::pezkuwi_subxt_rpcs::rpc_params, NetworkConfigBuilder};
 
 #[tokio::test(flavor = "multi_thread")]
 async fn statement_store() -> Result<(), anyhow::Error> {
@@ -25,14 +25,14 @@ async fn statement_store() -> Result<(), anyhow::Error> {
 				.with_default_args(vec!["-lteyrchain=debug".into()])
 				// Have to set a `with_node` outside of the loop below, so that `r` has the right
 				// type.
-				.with_node(|node| node.with_name("validator-0"));
+				.with_validator(|node| node.with_name("validator-0"));
 
-			(1..6).fold(r, |acc, i| acc.with_node(|node| node.with_name(&format!("validator-{i}"))))
+			(1..6).fold(r, |acc, i| acc.with_validator(|node| node.with_name(&format!("validator-{i}"))))
 		})
 		.with_teyrchain(|p| {
 			p.with_id(2400)
 				.with_default_command("pezkuwi-teyrchain")
-				.with_default_image(images.pezcumulus.as_str())
+				.with_default_image(images.pezcumulus())
 				.with_chain("people-zagros-local")
 				.with_default_args(vec![
 					"--force-authoring".into(),

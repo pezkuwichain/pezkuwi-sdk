@@ -26,9 +26,9 @@ gum = { workspace = true, default-features = true }
 schnellru = { workspace = true }
 thiserror = { workspace = true }
 
-pezkuwi-pez-node-primitives = { workspace = true, default-features = true }
 pezkuwi-node-subsystem = { workspace = true, default-features = true }
 pezkuwi-node-subsystem-util = { workspace = true, default-features = true }
+pezkuwi-pez-node-primitives = { workspace = true, default-features = true }
 pezkuwi-primitives = { workspace = true, default-features = true }
 
 pezsc-keystore = { workspace = true, default-features = true }
@@ -53,13 +53,13 @@ pezkuwi-subsystem-bench = { workspace = true }
 disputes = []
 subsystem-benchmarks = []
 runtime-benchmarks = [
-  "gum/runtime-benchmarks",
-  "pezkuwi-pez-node-primitives/runtime-benchmarks",
-  "pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
-  "pezkuwi-node-subsystem-util/runtime-benchmarks",
-  "pezkuwi-node-subsystem/runtime-benchmarks",
-  "pezkuwi-primitives-test-helpers/runtime-benchmarks",
-  "pezkuwi-primitives/runtime-benchmarks",
-  "pezkuwi-subsystem-bench/runtime-benchmarks",
-  "pezsp-keyring/runtime-benchmarks",
+	"gum/runtime-benchmarks",
+	"pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
+	"pezkuwi-node-subsystem-util/runtime-benchmarks",
+	"pezkuwi-node-subsystem/runtime-benchmarks",
+	"pezkuwi-pez-node-primitives/runtime-benchmarks",
+	"pezkuwi-primitives-test-helpers/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"pezkuwi-subsystem-bench/runtime-benchmarks",
+	"pezsp-keyring/runtime-benchmarks",
 ]
