@@ -1,5 +1,6 @@
 [package]
 name = "pezkuwi-sdk"
+version = "0.1.0"
 description = "Pezkuwi SDK umbrella crate."
 license = "Apache-2.0"
 
@@ -45,6 +46,7 @@ std = [
 	"pezframe-election-provider-support?/std",
 	"pezframe-executive?/std",
 	"pezframe-metadata-hash-extension?/std",
+	"pezframe-metadata?/std",
 	"pezframe-support-procedural?/std",
 	"pezframe-support?/std",
 	"pezframe-system-benchmarking?/std",
@@ -56,6 +58,10 @@ std = [
 	"pezkuwi-runtime-metrics?/std",
 	"pezkuwi-runtime-teyrchains?/std",
 	"pezkuwi-sdk-frame?/std",
+	"pezkuwi-ss58-registry?/std",
+	"pezkuwi-subxt-core?/std",
+	"pezkuwi-subxt-metadata?/std",
+	"pezkuwi-subxt-signer?/std",
 	"pezkuwi-teyrchain-primitives?/std",
 	"pezpallet-alliance?/std",
 	"pezpallet-asset-conversion-ops?/std",
@@ -139,7 +145,6 @@ std = [
 	"pezpallet-remark?/std",
 	"pezpallet-revive?/std",
 	"pezpallet-root-offences?/std",
-	"pezpallet-root-testing?/std",
 	"pezpallet-safe-mode?/std",
 	"pezpallet-salary?/std",
 	"pezpallet-scheduler?/std",
@@ -205,7 +210,6 @@ std = [
 	"pezsp-npos-elections?/std",
 	"pezsp-offchain?/std",
 	"pezsp-runtime-interface?/std",
-	"pezsp-runtime?/std",
 	"pezsp-session?/std",
 	"pezsp-staking?/std",
 	"pezsp-state-machine?/std",
@@ -432,7 +436,6 @@ runtime-benchmarks = [
 	"pezpallet-remark?/runtime-benchmarks",
 	"pezpallet-revive?/runtime-benchmarks",
 	"pezpallet-root-offences?/runtime-benchmarks",
-	"pezpallet-root-testing?/runtime-benchmarks",
 	"pezpallet-safe-mode?/runtime-benchmarks",
 	"pezpallet-salary?/runtime-benchmarks",
 	"pezpallet-scheduler?/runtime-benchmarks",
@@ -531,7 +534,6 @@ runtime-benchmarks = [
 	"pezsp-npos-elections?/runtime-benchmarks",
 	"pezsp-offchain?/runtime-benchmarks",
 	"pezsp-runtime-interface?/runtime-benchmarks",
-	"pezsp-runtime?/runtime-benchmarks",
 	"pezsp-session?/runtime-benchmarks",
 	"pezsp-staking?/runtime-benchmarks",
 	"pezsp-state-machine?/runtime-benchmarks",
@@ -653,7 +655,6 @@ try-runtime = [
 	"pezpallet-remark?/try-runtime",
 	"pezpallet-revive?/try-runtime",
 	"pezpallet-root-offences?/try-runtime",
-	"pezpallet-root-testing?/try-runtime",
 	"pezpallet-safe-mode?/try-runtime",
 	"pezpallet-salary?/try-runtime",
 	"pezpallet-scheduler?/try-runtime",
@@ -685,11 +686,12 @@ try-runtime = [
 	"pezpallet-xcm?/try-runtime",
 	"pezstaging-teyrchain-info?/try-runtime",
 	"teyrchains-common?/try-runtime",
-	"pezsp-runtime?/try-runtime"
 ]
 serde = [
 	"bp-pezkuwi-core?/serde",
 	"pezframe-benchmarking?/serde",
+	"pezframe-metadata?/serde",
+	"pezkuwi-subxt-signer?/serde",
 	"pezpallet-asset-tx-payment?/serde",
 	"pezpallet-beefy-mmr?/serde",
 	"pezpallet-beefy?/serde",
@@ -724,7 +726,6 @@ serde = [
 	"pezsp-storage?/serde",
 	"pezsp-version?/serde",
 	"pezsp-weights?/serde",
-	"pezsp-runtime?/serde"
 ]
 experimental = [
 	"pezframe-support-procedural?/experimental",
@@ -777,6 +778,7 @@ runtime-full = [
 	"pezframe-election-provider-solution-type",
 	"pezframe-election-provider-support",
 	"pezframe-executive",
+	"pezframe-metadata",
 	"pezframe-metadata-hash-extension",
 	"pezframe-support",
 	"pezframe-support-procedural",
@@ -790,6 +792,11 @@ runtime-full = [
 	"pezkuwi-runtime-metrics",
 	"pezkuwi-runtime-teyrchains",
 	"pezkuwi-sdk-frame",
+	"pezkuwi-ss58-registry",
+	"pezkuwi-subxt-core",
+	"pezkuwi-subxt-macro",
+	"pezkuwi-subxt-metadata",
+	"pezkuwi-subxt-signer",
 	"pezkuwi-teyrchain-primitives",
 	"pezpallet-alliance",
 	"pezpallet-asset-conversion",
@@ -876,7 +883,6 @@ runtime-full = [
 	"pezpallet-revive-proc-macro",
 	"pezpallet-revive-uapi",
 	"pezpallet-root-offences",
-	"pezpallet-root-testing",
 	"pezpallet-safe-mode",
 	"pezpallet-salary",
 	"pezpallet-scheduler",
@@ -975,6 +981,7 @@ runtime = [
 	"pezframe-election-provider-solution-type",
 	"pezframe-election-provider-support",
 	"pezframe-executive",
+	"pezframe-metadata",
 	"pezframe-metadata-hash-extension",
 	"pezframe-support",
 	"pezframe-support-procedural",
@@ -984,6 +991,7 @@ runtime = [
 	"pezframe-system-rpc-runtime-api",
 	"pezkuwi-sdk-frame",
 	"pezkuwi-sdk-frame?/runtime",
+	"pezkuwi-subxt?/runtime",
 ]
 node = [
 	"asset-test-pezutils",
@@ -1061,6 +1069,12 @@ node = [
 	"pezkuwi-service",
 	"pezkuwi-statement-distribution",
 	"pezkuwi-statement-table",
+	"pezkuwi-subxt",
+	"pezkuwi-subxt-codegen",
+	"pezkuwi-subxt-lightclient",
+	"pezkuwi-subxt-rpcs",
+	"pezkuwi-subxt-utils-fetchmetadata",
+	"pezkuwi-subxt-utils-stripmetadata",
 	"pezmmr-gadget",
 	"pezmmr-rpc",
 	"pezpallet-contracts-mock-network",
@@ -1133,6 +1147,12 @@ node = [
 	"teyrchains-runtimes-test-utils",
 	"xcm-pez-emulator",
 	"xcm-pez-simulator",
+	"zombienet-configuration",
+	"zombienet-orchestrator",
+	"zombienet-prom-metrics-parser",
+	"zombienet-provider",
+	"zombienet-sdk",
+	"zombienet-support",
 ]
 tuples-96 = [
 	"pezframe-support-procedural?/tuples-96",
@@ -1346,6 +1366,11 @@ default-features = false
 optional = true
 path = "../bizinikiwi/pezframe/executive"
 
+[dependencies.pezframe-metadata]
+default-features = false
+optional = true
+path = "../bizinikiwi/pezframe/pezframe-metadata"
+
 [dependencies.pezframe-metadata-hash-extension]
 default-features = false
 optional = true
@@ -1410,6 +1435,31 @@ path = "../pezkuwi/runtime/teyrchains"
 default-features = false
 optional = true
 path = "../bizinikiwi/pezframe"
+
+[dependencies.pezkuwi-ss58-registry]
+default-features = false
+optional = true
+path = "../vendor/ss58-registry"
+
+[dependencies.pezkuwi-subxt-core]
+default-features = false
+optional = true
+path = "../vendor/pezkuwi-subxt/core"
+
+[dependencies.pezkuwi-subxt-macro]
+default-features = false
+optional = true
+path = "../vendor/pezkuwi-subxt/macro"
+
+[dependencies.pezkuwi-subxt-metadata]
+default-features = false
+optional = true
+path = "../vendor/pezkuwi-subxt/metadata"
+
+[dependencies.pezkuwi-subxt-signer]
+default-features = false
+optional = true
+path = "../vendor/pezkuwi-subxt/signer"
 
 [dependencies.pezkuwi-teyrchain-primitives]
 default-features = false
@@ -1841,11 +1891,6 @@ default-features = false
 optional = true
 path = "../bizinikiwi/pezframe/root-offences"
 
-[dependencies.pezpallet-root-testing]
-default-features = false
-optional = true
-path = "../bizinikiwi/pezframe/root-testing"
-
 [dependencies.pezpallet-safe-mode]
 default-features = false
 optional = true
@@ -2175,11 +2220,6 @@ path = "../bizinikiwi/primitives/npos-elections"
 default-features = false
 optional = true
 path = "../bizinikiwi/primitives/offchain"
-
-[dependencies.pezsp-runtime]
-default-features = false
-optional = true
-path = "../bizinikiwi/primitives/runtime"
 
 [dependencies.pezsp-runtime-interface]
 default-features = false
@@ -2681,6 +2721,36 @@ default-features = false
 optional = true
 path = "../pezkuwi/statement-table"
 
+[dependencies.pezkuwi-subxt]
+default-features = false
+optional = true
+path = "../vendor/pezkuwi-subxt/subxt"
+
+[dependencies.pezkuwi-subxt-codegen]
+default-features = false
+optional = true
+path = "../vendor/pezkuwi-subxt/codegen"
+
+[dependencies.pezkuwi-subxt-lightclient]
+default-features = false
+optional = true
+path = "../vendor/pezkuwi-subxt/lightclient"
+
+[dependencies.pezkuwi-subxt-rpcs]
+default-features = false
+optional = true
+path = "../vendor/pezkuwi-subxt/rpcs"
+
+[dependencies.pezkuwi-subxt-utils-fetchmetadata]
+default-features = false
+optional = true
+path = "../vendor/pezkuwi-subxt/utils/fetch-metadata"
+
+[dependencies.pezkuwi-subxt-utils-stripmetadata]
+default-features = false
+optional = true
+path = "../vendor/pezkuwi-subxt/utils/strip-metadata"
+
 [dependencies.pezmmr-gadget]
 default-features = false
 optional = true
@@ -3035,6 +3105,36 @@ path = "../pezcumulus/xcm/xcm-pez-emulator"
 default-features = false
 optional = true
 path = "../pezkuwi/xcm/xcm-pez-simulator"
+
+[dependencies.zombienet-configuration]
+default-features = false
+optional = true
+path = "../vendor/pezkuwi-zombienet-sdk/crates/configuration"
+
+[dependencies.zombienet-orchestrator]
+default-features = false
+optional = true
+path = "../vendor/pezkuwi-zombienet-sdk/crates/orchestrator"
+
+[dependencies.zombienet-prom-metrics-parser]
+default-features = false
+optional = true
+path = "../vendor/pezkuwi-zombienet-sdk/crates/prom-metrics-parser"
+
+[dependencies.zombienet-provider]
+default-features = false
+optional = true
+path = "../vendor/pezkuwi-zombienet-sdk/crates/provider"
+
+[dependencies.zombienet-sdk]
+default-features = false
+optional = true
+path = "../vendor/pezkuwi-zombienet-sdk/crates/sdk"
+
+[dependencies.zombienet-support]
+default-features = false
+optional = true
+path = "../vendor/pezkuwi-zombienet-sdk/crates/support"
 
 [package.metadata.docs.rs]
 features = ["node", "runtime-full"]

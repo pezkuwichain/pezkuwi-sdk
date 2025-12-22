@@ -27,7 +27,7 @@ use scale_info::{
 };
 
 // These types have not changed, so we re-export from our v14/v15 definitions:
-pub use super::v14::{StorageEntryModifier, StorageEntryType, StorageHasher, StorageEntryMetadata};
+pub use super::v14::{StorageEntryMetadata, StorageEntryModifier, StorageEntryType, StorageHasher};
 pub use super::v15::{CustomMetadata, CustomValueMetadata, OuterEnums};
 
 /// The metadata for a method or function parameter. This is identical to
@@ -80,14 +80,7 @@ impl RuntimeMetadataV16 {
 		let outer_enums = outer_enums.into_portable(&mut registry);
 		let custom = custom.into_portable(&mut registry);
 
-		Self {
-			types: registry.into(),
-			pezpallets,
-			extrinsic,
-			apis,
-			outer_enums,
-			custom,
-		}
+		Self { types: registry.into(), pezpallets, extrinsic, apis, outer_enums, custom }
 	}
 }
 
@@ -528,7 +521,7 @@ impl IntoPortable for ItemDeprecationInfo {
 				let note = note.into_portable(registry);
 				let since = since.map(|x| x.into_portable(registry));
 				ItemDeprecationInfo::Deprecated { note, since }
-			}
+			},
 		}
 	}
 }
@@ -565,10 +558,7 @@ impl IntoPortable for EnumDeprecationInfo {
 	type Output = EnumDeprecationInfo<PortableForm>;
 
 	fn into_portable(self, registry: &mut Registry) -> Self::Output {
-		let entries = self
-			.0
-			.into_iter()
-			.map(|(k, entry)| (k, entry.into_portable(registry)));
+		let entries = self.0.into_iter().map(|(k, entry)| (k, entry.into_portable(registry)));
 		EnumDeprecationInfo(entries.collect())
 	}
 }
@@ -606,7 +596,7 @@ impl IntoPortable for VariantDeprecationInfo {
 				let note = note.into_portable(registry);
 				let since = since.map(|x| x.into_portable(registry));
 				VariantDeprecationInfo::Deprecated { note, since }
-			}
+			},
 			Self::DeprecatedWithoutNote => VariantDeprecationInfo::DeprecatedWithoutNote,
 		}
 	}

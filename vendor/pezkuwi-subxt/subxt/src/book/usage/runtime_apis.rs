@@ -58,7 +58,7 @@
 //! ```rust,ignore
 #![doc = include_str!("../../../examples/runtime_apis_static.rs")]
 //! ```
-//! 
+//!
 //! ### Making a dynamic Runtime API call
 //!
 //! If you'd prefer to construct the call at runtime, you can do this using the
@@ -66,7 +66,7 @@
 //! ```rust,ignore
 #![doc = include_str!("../../../examples/runtime_apis_dynamic.rs")]
 //! ```
-//! 
+//!
 //! ### Making a raw call
 //!
 //! This is generally discouraged in favour of one of the above, but may be necessary (especially if

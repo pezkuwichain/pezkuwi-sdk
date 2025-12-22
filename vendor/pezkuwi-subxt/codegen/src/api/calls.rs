@@ -8,8 +8,8 @@ use pezkuwi_subxt_metadata::PalletMetadata;
 use proc_macro2::TokenStream as TokenStream2;
 use quote::{format_ident, quote};
 use scale_typegen::{
+	typegen::ir::{type_ir::CompositeIRKind, ToTokensWithSettings},
 	TypeGenerator,
-	typegen::ir::{ToTokensWithSettings, type_ir::CompositeIRKind},
 };
 
 /// Generate calls from the provided pallet's metadata. Each call returns a `StaticPayload`

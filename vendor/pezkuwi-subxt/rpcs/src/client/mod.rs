@@ -51,5 +51,5 @@ pub use round_robin_rpc_client::RoundRobinRpcClient;
 mod rpc_client;
 mod rpc_client_t;
 
-pub use rpc_client::{RpcClient, RpcParams, RpcSubscription, rpc_params};
+pub use rpc_client::{rpc_params, RpcClient, RpcParams, RpcSubscription};
 pub use rpc_client_t::{RawRpcFuture, RawRpcSubscription, RawValue, RpcClientT};

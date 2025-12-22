@@ -53,12 +53,12 @@ mod storage_value;
 
 pub mod address;
 
-use crate::{Metadata, error::StorageError};
+use crate::{error::StorageError, Metadata};
 use address::Address;
 use alloc::string::ToString;
 
 pub use prefix_of::{EqualOrPrefixOf, PrefixOf};
-pub use storage_entry::{StorageEntry, entry};
+pub use storage_entry::{entry, StorageEntry};
 pub use storage_key::{StorageHasher, StorageKey, StorageKeyPart};
 pub use storage_key_value::StorageKeyValue;
 pub use storage_value::StorageValue;
@@ -86,5 +86,9 @@ pub fn validate<Addr: Address>(address: Addr, metadata: &Metadata) -> Result<(),
 		}
 	})?;
 
-	if storage_hash != hash { Err(StorageError::IncompatibleCodegen) } else { Ok(()) }
+	if storage_hash != hash {
+		Err(StorageError::IncompatibleCodegen)
+	} else {
+		Ok(())
+	}
 }

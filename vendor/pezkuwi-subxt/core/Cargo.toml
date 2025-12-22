@@ -30,6 +30,11 @@ std = [
 	"serde/std",
 	"serde_json/std",
 	"tracing/std",
+	"bitvec/std",
+	"blake2/std",
+	"frame-decode/std",
+	"keccak-hash/std",
+	"pezkuwi-subxt-signer/std"
 ]
 
 [dependencies]

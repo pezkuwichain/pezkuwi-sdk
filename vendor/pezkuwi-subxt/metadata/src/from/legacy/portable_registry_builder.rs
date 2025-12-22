@@ -4,8 +4,8 @@ use alloc::{
 	string::ToString,
 	vec::Vec,
 };
-use scale_info::{PortableRegistry, PortableType, form::PortableForm};
-use scale_info_legacy::{LookupName, TypeRegistrySet, type_registry::TypeRegistryResolveError};
+use scale_info::{form::PortableForm, PortableRegistry, PortableType};
+use scale_info_legacy::{type_registry::TypeRegistryResolveError, LookupName, TypeRegistrySet};
 use scale_type_resolver::{
 	BitsOrderFormat, BitsStoreFormat, FieldIter, PathIter, Primitive, ResolvedTypeVisitor,
 	UnhandledKind, VariantIter,
@@ -459,9 +459,9 @@ fn prepare_path<'info, Path: PathIter<'info>>(
 
 	// Non-compliant paths are converted to our default path
 	let non_compliant_path = path[0..path.len() - 1].iter().any(|&p| {
-		p.is_empty() ||
-			p.starts_with(|c: char| !c.is_ascii_alphabetic()) ||
-			p.contains(|c: char| !c.is_ascii_alphanumeric() || c.is_ascii_uppercase())
+		p.is_empty()
+			|| p.starts_with(|c: char| !c.is_ascii_alphabetic())
+			|| p.contains(|c: char| !c.is_ascii_alphanumeric() || c.is_ascii_uppercase())
 	});
 	if non_compliant_path {
 		let last = *path.last().unwrap();

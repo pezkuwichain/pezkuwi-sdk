@@ -5,10 +5,10 @@
 //! An ecdsa keypair implementation.
 use codec::Encode;
 
-use crate::crypto::{DeriveJunction, SecretUri, seed_from_entropy};
+use crate::crypto::{seed_from_entropy, DeriveJunction, SecretUri};
 use core::str::FromStr;
 use hex::FromHex;
-use secp256k1::{Message, Secp256k1, SecretKey, ecdsa::RecoverableSignature};
+use secp256k1::{ecdsa::RecoverableSignature, Message, Secp256k1, SecretKey};
 use secrecy::ExposeSecret;
 
 use thiserror::Error as DeriveError;
@@ -135,9 +135,10 @@ impl Keypair {
 		for junction in junctions {
 			match junction {
 				DeriveJunction::Soft(_) => return Err(Error::SoftJunction),
-				DeriveJunction::Hard(junction_bytes) =>
+				DeriveJunction::Hard(junction_bytes) => {
 					acc = ("Secp256k1HDKD", acc, junction_bytes)
-						.using_encoded(pezsp_crypto_hashing::blake2_256),
+						.using_encoded(pezsp_crypto_hashing::blake2_256)
+				},
 			}
 		}
 		Self::from_secret_key(acc)

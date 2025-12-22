@@ -6,7 +6,7 @@ use super::CodegenError;
 use pezkuwi_subxt_metadata::PalletMetadata;
 use proc_macro2::TokenStream as TokenStream2;
 use quote::quote;
-use scale_typegen::{TypeGenerator, typegen::ir::ToTokensWithSettings};
+use scale_typegen::{typegen::ir::ToTokensWithSettings, TypeGenerator};
 
 /// Generate events from the provided pallet metadata.
 ///

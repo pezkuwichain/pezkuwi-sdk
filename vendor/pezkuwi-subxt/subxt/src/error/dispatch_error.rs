@@ -8,7 +8,7 @@
 use super::{DispatchErrorDecodeError, ModuleErrorDecodeError, ModuleErrorDetailsError};
 use crate::metadata::Metadata;
 use core::fmt::Debug;
-use scale_decode::{DecodeAsType, TypeResolver, visitor::DecodeAsTypeResult};
+use scale_decode::{visitor::DecodeAsTypeResult, DecodeAsType, TypeResolver};
 use std::{borrow::Cow, marker::PhantomData};
 
 /// An error dispatching a transaction.

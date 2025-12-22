@@ -2,7 +2,7 @@
 // This file is dual-licensed as Apache-2.0 or GPL-3.0.
 // see LICENSE for license details.
 
-use super::{ChainHeadRpcMethods, follow_stream::FollowStream};
+use super::{follow_stream::FollowStream, ChainHeadRpcMethods};
 use crate::{
 	config::{Config, Hash, HashFor},
 	error::BackendError,
@@ -229,20 +229,27 @@ impl<H: Hash> Stream for FollowStreamUnpin<H> {
 					FollowStreamMsg::Event(FollowEvent::Stop)
 				},
 				// These events aren't interesting; we just forward them on:
-				FollowStreamMsg::Event(FollowEvent::OperationBodyDone(details)) =>
-					FollowStreamMsg::Event(FollowEvent::OperationBodyDone(details)),
-				FollowStreamMsg::Event(FollowEvent::OperationCallDone(details)) =>
-					FollowStreamMsg::Event(FollowEvent::OperationCallDone(details)),
-				FollowStreamMsg::Event(FollowEvent::OperationStorageItems(details)) =>
-					FollowStreamMsg::Event(FollowEvent::OperationStorageItems(details)),
-				FollowStreamMsg::Event(FollowEvent::OperationWaitingForContinue(details)) =>
-					FollowStreamMsg::Event(FollowEvent::OperationWaitingForContinue(details)),
-				FollowStreamMsg::Event(FollowEvent::OperationStorageDone(details)) =>
-					FollowStreamMsg::Event(FollowEvent::OperationStorageDone(details)),
-				FollowStreamMsg::Event(FollowEvent::OperationInaccessible(details)) =>
-					FollowStreamMsg::Event(FollowEvent::OperationInaccessible(details)),
-				FollowStreamMsg::Event(FollowEvent::OperationError(details)) =>
-					FollowStreamMsg::Event(FollowEvent::OperationError(details)),
+				FollowStreamMsg::Event(FollowEvent::OperationBodyDone(details)) => {
+					FollowStreamMsg::Event(FollowEvent::OperationBodyDone(details))
+				},
+				FollowStreamMsg::Event(FollowEvent::OperationCallDone(details)) => {
+					FollowStreamMsg::Event(FollowEvent::OperationCallDone(details))
+				},
+				FollowStreamMsg::Event(FollowEvent::OperationStorageItems(details)) => {
+					FollowStreamMsg::Event(FollowEvent::OperationStorageItems(details))
+				},
+				FollowStreamMsg::Event(FollowEvent::OperationWaitingForContinue(details)) => {
+					FollowStreamMsg::Event(FollowEvent::OperationWaitingForContinue(details))
+				},
+				FollowStreamMsg::Event(FollowEvent::OperationStorageDone(details)) => {
+					FollowStreamMsg::Event(FollowEvent::OperationStorageDone(details))
+				},
+				FollowStreamMsg::Event(FollowEvent::OperationInaccessible(details)) => {
+					FollowStreamMsg::Event(FollowEvent::OperationInaccessible(details))
+				},
+				FollowStreamMsg::Event(FollowEvent::OperationError(details)) => {
+					FollowStreamMsg::Event(FollowEvent::OperationError(details))
+				},
 			};
 
 			// Return our event.
@@ -352,8 +359,8 @@ impl<H: Hash> FollowStreamUnpin<H> {
 
 		let mut blocks_to_unpin = vec![];
 		for (hash, details) in &self.pinned {
-			if rel_block_age.saturating_sub(details.rel_block_age) >= self.max_block_life ||
-				(unpin_flags.contains(hash) && details.can_be_unpinned)
+			if rel_block_age.saturating_sub(details.rel_block_age) >= self.max_block_life
+				|| (unpin_flags.contains(hash) && details.can_be_unpinned)
 			{
 				// The block is too old, or it's been flagged to be unpinned and won't be in a
 				// future backend event, so we can unpin it for real now.
@@ -460,7 +467,7 @@ impl<H: Hash> Drop for BlockRef<H> {
 #[cfg(test)]
 pub(super) mod test_utils {
 	use super::{
-		super::follow_stream::{FollowStream, test_utils::test_stream_getter},
+		super::follow_stream::{test_utils::test_stream_getter, FollowStream},
 		*,
 	};
 	use crate::config::bizinikiwi::H256;

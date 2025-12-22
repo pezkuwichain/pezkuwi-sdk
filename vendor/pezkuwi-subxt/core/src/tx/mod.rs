@@ -60,10 +60,10 @@ pub mod payload;
 pub mod signer;
 
 use crate::{
-	Metadata,
 	config::{Config, ExtrinsicParams, ExtrinsicParamsEncoder, HashFor, Hasher},
 	error::ExtrinsicError,
 	utils::Encoded,
+	Metadata,
 };
 use alloc::{borrow::Cow, string::ToString, vec::Vec};
 use codec::{Compact, Encode};
@@ -95,7 +95,11 @@ pub fn validate<Call: Payload>(call: &Call, metadata: &Metadata) -> Result<(), E
 			call_name: call_name.to_string(),
 		})?;
 
-	if details.hash != expected_hash { Err(ExtrinsicError::IncompatibleCodegen) } else { Ok(()) }
+	if details.hash != expected_hash {
+		Err(ExtrinsicError::IncompatibleCodegen)
+	} else {
+		Ok(())
+	}
 }
 
 /// Returns the suggested transaction versions to build for a given chain, or an error
@@ -252,7 +256,11 @@ impl<T: Config> PartialTransactionV4<T> {
 		self.additional_and_extra_params.encode_signer_payload_value_to(&mut bytes);
 		self.additional_and_extra_params.encode_implicit_to(&mut bytes);
 
-		if bytes.len() > 256 { f(Cow::Borrowed(&blake2_256(&bytes))) } else { f(Cow::Owned(bytes)) }
+		if bytes.len() > 256 {
+			f(Cow::Borrowed(&blake2_256(&bytes)))
+		} else {
+			f(Cow::Owned(bytes))
+		}
 	}
 
 	/// Return the V4 signer payload for this extrinsic. These are the bytes that must

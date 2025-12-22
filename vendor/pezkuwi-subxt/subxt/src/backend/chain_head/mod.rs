@@ -19,21 +19,21 @@ mod storage_items;
 use self::follow_stream_driver::FollowStreamFinalizedHeads;
 use crate::{
 	backend::{
-		Backend, BlockRef, BlockRefT, RuntimeVersion, StorageResponse, StreamOf, StreamOfResults,
-		TransactionStatus, utils::retry,
+		utils::retry, Backend, BlockRef, BlockRefT, RuntimeVersion, StorageResponse, StreamOf,
+		StreamOfResults, TransactionStatus,
 	},
 	config::{Config, Hash, HashFor},
 	error::{BackendError, RpcError},
 };
 use async_trait::async_trait;
 use follow_stream_driver::{FollowStreamDriver, FollowStreamDriverHandle};
-use futures::{Stream, StreamExt, future::Either};
+use futures::{future::Either, Stream, StreamExt};
 use pezkuwi_subxt_rpcs::{
-	RpcClient,
 	methods::chain_head::{
 		FollowEvent, MethodResponse, RuntimeEvent, StorageQuery, StorageQueryType,
 		StorageResultType,
 	},
+	RpcClient,
 };
 use std::{collections::HashMap, task::Poll};
 use storage_items::StorageItems;
@@ -432,8 +432,9 @@ impl<T: Config + Send + Sync + 'static> Backend<T> for ChainHeadBackend<T> {
 			.events()
 			.filter_map(|ev| {
 				let out = match ev {
-					FollowEvent::Initialized(init) =>
-						init.finalized_block_hashes.last().map(|b| b.clone().into()),
+					FollowEvent::Initialized(init) => {
+						init.finalized_block_hashes.last().map(|b| b.clone().into())
+					},
 					_ => None,
 				};
 				std::future::ready(out)
@@ -597,22 +598,28 @@ impl<T: Config + Send + Sync + 'static> Backend<T> for ChainHeadBackend<T> {
 						match tx_status {
 							RpcTransactionStatus::Validated => TransactionStatus::Validated,
 							RpcTransactionStatus::Broadcasted => TransactionStatus::Broadcasted,
-							RpcTransactionStatus::BestChainBlockIncluded { block: None } =>
-								TransactionStatus::NoLongerInBestBlock,
-							RpcTransactionStatus::BestChainBlockIncluded { block: Some(block) } =>
+							RpcTransactionStatus::BestChainBlockIncluded { block: None } => {
+								TransactionStatus::NoLongerInBestBlock
+							},
+							RpcTransactionStatus::BestChainBlockIncluded { block: Some(block) } => {
 								TransactionStatus::InBestBlock {
 									hash: BlockRef::from_hash(block.hash),
-								},
-							RpcTransactionStatus::Finalized { block } =>
+								}
+							},
+							RpcTransactionStatus::Finalized { block } => {
 								TransactionStatus::InFinalizedBlock {
 									hash: BlockRef::from_hash(block.hash),
-								},
-							RpcTransactionStatus::Error { error } =>
-								TransactionStatus::Error { message: error },
-							RpcTransactionStatus::Invalid { error } =>
-								TransactionStatus::Invalid { message: error },
-							RpcTransactionStatus::Dropped { error } =>
-								TransactionStatus::Dropped { message: error },
+								}
+							},
+							RpcTransactionStatus::Error { error } => {
+								TransactionStatus::Error { message: error }
+							},
+							RpcTransactionStatus::Invalid { error } => {
+								TransactionStatus::Invalid { message: error }
+							},
+							RpcTransactionStatus::Dropped { error } => {
+								TransactionStatus::Dropped { message: error }
+							},
 						}
 					})
 					.map_err(Into::into)
@@ -782,15 +789,19 @@ impl<T: Config + Send + Sync + 'static> Backend<T> for ChainHeadBackend<T> {
 							};
 							TransactionStatus::InBestBlock { hash: block_ref }
 						},
-						RpcTransactionStatus::BestChainBlockIncluded { block: None } =>
-							TransactionStatus::NoLongerInBestBlock,
+						RpcTransactionStatus::BestChainBlockIncluded { block: None } => {
+							TransactionStatus::NoLongerInBestBlock
+						},
 						RpcTransactionStatus::Broadcasted => TransactionStatus::Broadcasted,
-						RpcTransactionStatus::Dropped { error, .. } =>
-							TransactionStatus::Dropped { message: error },
-						RpcTransactionStatus::Error { error } =>
-							TransactionStatus::Error { message: error },
-						RpcTransactionStatus::Invalid { error } =>
-							TransactionStatus::Invalid { message: error },
+						RpcTransactionStatus::Dropped { error, .. } => {
+							TransactionStatus::Dropped { message: error }
+						},
+						RpcTransactionStatus::Error { error } => {
+							TransactionStatus::Error { message: error }
+						},
+						RpcTransactionStatus::Invalid { error } => {
+							TransactionStatus::Invalid { message: error }
+						},
 						RpcTransactionStatus::Validated => TransactionStatus::Validated,
 					};
 					return Poll::Ready(Some(Ok(tx_progress_ev)));

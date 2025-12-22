@@ -5,10 +5,10 @@
 use super::TryFromError;
 
 use crate::{
+	utils::{ordered_map::OrderedMap, variant_index::VariantIndex},
 	ConstantMetadata, ExtrinsicMetadata, Metadata, OuterEnumsMetadata, PalletMetadataInner,
 	RuntimeApiMetadataInner, RuntimeApiMethodMetadataInner, StorageEntryMetadata, StorageMetadata,
 	TransactionExtensionMetadataInner,
-	utils::{ordered_map::OrderedMap, variant_index::VariantIndex},
 };
 use alloc::{collections::BTreeMap, vec, vec::Vec};
 use frame_decode::{runtime_apis::RuntimeApiTypeInfo, storage::StorageTypeInfo};

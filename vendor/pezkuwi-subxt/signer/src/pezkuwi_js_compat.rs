@@ -6,8 +6,8 @@
 
 use base64::Engine;
 use crypto_secretbox::{
-	Key, Nonce, XSalsa20Poly1305,
 	aead::{Aead, KeyInit},
+	Key, Nonce, XSalsa20Poly1305,
 };
 use pezkuwi_subxt_core::utils::AccountId32;
 use serde::Deserialize;
@@ -86,11 +86,11 @@ impl KeyringPairJson {
 	fn decrypt(self, password: &str) -> Result<sr25519::Keypair, Error> {
 		// Check encoding.
 		// https://github.com/pezkuwi-js/common/blob/37fa211fdb141d4f6eb32e8f377a4651ed2d9068/packages/keyring/src/keyring.ts#L166
-		if self.encoding.version != "3" ||
-			!self.encoding.content.contains(&"pkcs8".to_owned()) ||
-			!self.encoding.content.contains(&"sr25519".to_owned()) ||
-			!self.encoding.r#type.contains(&"scrypt".to_owned()) ||
-			!self.encoding.r#type.contains(&"xsalsa20-poly1305".to_owned())
+		if self.encoding.version != "3"
+			|| !self.encoding.content.contains(&"pkcs8".to_owned())
+			|| !self.encoding.content.contains(&"sr25519".to_owned())
+			|| !self.encoding.r#type.contains(&"scrypt".to_owned())
+			|| !self.encoding.r#type.contains(&"xsalsa20-poly1305".to_owned())
 		{
 			return Err(Error::UnsupportedEncoding);
 		}
@@ -139,8 +139,8 @@ impl KeyringPairJson {
 		let div = &plaintext[80..85];
 		let public_key = &plaintext[85..117];
 
-		if header != [48, 83, 2, 1, 1, 48, 5, 6, 3, 43, 101, 112, 4, 34, 4, 32] ||
-			div != [161, 35, 3, 33, 0]
+		if header != [48, 83, 2, 1, 1, 48, 5, 6, 3, 43, 101, 112, 4, 34, 4, 32]
+			|| div != [161, 35, 3, 33, 0]
 		{
 			return Err(Error::InvalidKeys);
 		}
@@ -149,8 +149,8 @@ impl KeyringPairJson {
 		let keypair = sr25519::Keypair::from_ed25519_bytes(secret_key)?;
 
 		// Ensure keys are correct.
-		if keypair.public_key().0 != public_key ||
-			keypair.public_key().to_account_id() != self.address
+		if keypair.public_key().0 != public_key
+			|| keypair.public_key().to_account_id() != self.address
 		{
 			return Err(Error::InvalidKeys);
 		}

@@ -8,15 +8,15 @@
 use self::rpc_methods::TransactionStatus as RpcTransactionStatus;
 use crate::{
 	backend::{
+		utils::{retry, retry_stream},
 		Backend, BlockRef, RuntimeVersion, StorageResponse, StreamOf, StreamOfResults,
 		TransactionStatus,
-		utils::{retry, retry_stream},
 	},
 	config::{Config, HashFor, Header},
 	error::BackendError,
 };
 use async_trait::async_trait;
-use futures::{Future, FutureExt, Stream, StreamExt, TryStreamExt, future, future::Either, stream};
+use futures::{future, future::Either, stream, Future, FutureExt, Stream, StreamExt, TryStreamExt};
 use pezkuwi_subxt_rpcs::RpcClient;
 use std::{
 	collections::VecDeque,
@@ -360,10 +360,10 @@ impl<T: Config + Send + Sync + 'static> Backend<T> for LegacyBackend<T> {
 		let sub = self.methods.author_submit_and_watch_extrinsic(extrinsic).await?;
 
 		let sub = sub.filter_map(|r| {
-			let mapped = r
-				.map_err(|e| e.into())
-				.map(|tx| {
-					match tx {
+			let mapped =
+				r.map_err(|e| e.into())
+					.map(|tx| {
+						match tx {
 						// We ignore these because they don't map nicely to the new API. They don't
 						// signal "end states" so this should be fine.
 						RpcTransactionStatus::Future => None,
@@ -394,8 +394,8 @@ impl<T: Config + Send + Sync + 'static> Backend<T> for LegacyBackend<T> {
 									.into(),
 						}),
 					}
-				})
-				.transpose();
+					})
+					.transpose();
 
 			future::ready(mapped)
 		});
@@ -504,8 +504,8 @@ impl<T: Config> Stream for StorageFetchDescendantKeysStream<T> {
 
 				match keys {
 					Ok(mut keys) => {
-						if this.pagination_start_key.is_some() &&
-							keys.first() == this.pagination_start_key.as_ref()
+						if this.pagination_start_key.is_some()
+							&& keys.first() == this.pagination_start_key.as_ref()
 						{
 							// Currently, Smoldot returns the "start key" as the first key in the
 							// input (see https://github.com/smol-dot/smoldot/issues/1692), whereas Bizinikiwi doesn't.

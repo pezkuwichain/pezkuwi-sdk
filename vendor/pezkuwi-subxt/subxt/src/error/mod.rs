@@ -178,7 +178,9 @@ pub enum BackendError {
 	MetadataVersionNotFound(u32),
 	#[error("Backend error: Could not codec::Decode Runtime API response: {0}")]
 	CouldNotScaleDecodeRuntimeResponse(codec::Error),
-	#[error("Backend error: Could not codec::Decode metadata bytes into pezkuwi_subxt::Metadata: {0}")]
+	#[error(
+		"Backend error: Could not codec::Decode metadata bytes into pezkuwi_subxt::Metadata: {0}"
+	)]
 	CouldNotDecodeMetadata(codec::Error),
 	// This is for errors in `Backend` implementations which aren't any of the "pre-defined" set
 	// above:
@@ -253,11 +255,11 @@ pub enum BlockError {
 impl BlockError {
 	fn backend_error(&self) -> Option<&BackendError> {
 		match self {
-			BlockError::CouldNotGetBlockHeader { reason: e, .. } |
-			BlockError::CouldNotGetLatestBlock(e) |
-			BlockError::CouldNotSubscribeToAllBlocks(e) |
-			BlockError::CouldNotSubscribeToBestBlocks(e) |
-			BlockError::CouldNotSubscribeToFinalizedBlocks(e) => Some(e),
+			BlockError::CouldNotGetBlockHeader { reason: e, .. }
+			| BlockError::CouldNotGetLatestBlock(e)
+			| BlockError::CouldNotSubscribeToAllBlocks(e)
+			| BlockError::CouldNotSubscribeToBestBlocks(e)
+			| BlockError::CouldNotSubscribeToFinalizedBlocks(e) => Some(e),
 			_ => None,
 		}
 	}
@@ -305,10 +307,10 @@ pub enum OnlineClientError {
 impl OnlineClientError {
 	fn backend_error(&self) -> Option<&BackendError> {
 		match self {
-			OnlineClientError::CannotGetLatestFinalizedBlock(e) |
-			OnlineClientError::CannotGetGenesisHash(e) |
-			OnlineClientError::CannotGetCurrentRuntimeVersion(e) |
-			OnlineClientError::CannotFetchMetadata(e) => Some(e),
+			OnlineClientError::CannotGetLatestFinalizedBlock(e)
+			| OnlineClientError::CannotGetGenesisHash(e)
+			| OnlineClientError::CannotGetCurrentRuntimeVersion(e)
+			| OnlineClientError::CannotFetchMetadata(e) => Some(e),
 			_ => None,
 		}
 	}
@@ -328,7 +330,9 @@ pub enum RuntimeUpdaterError {
 	CannotGetNextRuntimeVersion(BackendError),
 	#[error("Error subscribing to runtime updates: Cannot stream finalized blocks: {0}")]
 	CannotStreamFinalizedBlocks(BackendError),
-	#[error("Error subscribing to runtime updates: Cannot get next finalized block in stream: {0}")]
+	#[error(
+		"Error subscribing to runtime updates: Cannot get next finalized block in stream: {0}"
+	)]
 	CannotGetNextFinalizedBlock(BackendError),
 	#[error("Cannot fetch new metadata for runtime update: {0}")]
 	CannotFetchNewMetadata(BackendError),
@@ -345,11 +349,11 @@ pub enum RuntimeUpdaterError {
 impl RuntimeUpdaterError {
 	fn backend_error(&self) -> Option<&BackendError> {
 		match self {
-			RuntimeUpdaterError::CannotStreamRuntimeVersion(e) |
-			RuntimeUpdaterError::CannotGetNextRuntimeVersion(e) |
-			RuntimeUpdaterError::CannotStreamFinalizedBlocks(e) |
-			RuntimeUpdaterError::CannotGetNextFinalizedBlock(e) |
-			RuntimeUpdaterError::CannotFetchNewMetadata(e) => Some(e),
+			RuntimeUpdaterError::CannotStreamRuntimeVersion(e)
+			| RuntimeUpdaterError::CannotGetNextRuntimeVersion(e)
+			| RuntimeUpdaterError::CannotStreamFinalizedBlocks(e)
+			| RuntimeUpdaterError::CannotGetNextFinalizedBlock(e)
+			| RuntimeUpdaterError::CannotFetchNewMetadata(e) => Some(e),
 			_ => None,
 		}
 	}
@@ -369,7 +373,9 @@ pub enum RuntimeUpdateeApplyError {
 #[derive(Debug, thiserror::Error)]
 #[allow(missing_docs)]
 pub enum RuntimeApiError {
-	#[error("Cannot access Runtime APIs at latest block: Cannot fetch latest finalized block: {0}")]
+	#[error(
+		"Cannot access Runtime APIs at latest block: Cannot fetch latest finalized block: {0}"
+	)]
 	CannotGetLatestFinalizedBlock(BackendError),
 	#[error("{0}")]
 	OfflineError(#[from] CoreRuntimeApiError),
@@ -380,8 +386,8 @@ pub enum RuntimeApiError {
 impl RuntimeApiError {
 	fn backend_error(&self) -> Option<&BackendError> {
 		match self {
-			RuntimeApiError::CannotGetLatestFinalizedBlock(e) |
-			RuntimeApiError::CannotCallApi(e) => Some(e),
+			RuntimeApiError::CannotGetLatestFinalizedBlock(e)
+			| RuntimeApiError::CannotCallApi(e) => Some(e),
 			_ => None,
 		}
 	}
@@ -403,8 +409,8 @@ pub enum EventsError {
 impl EventsError {
 	fn backend_error(&self) -> Option<&BackendError> {
 		match self {
-			EventsError::CannotGetLatestFinalizedBlock(e) |
-			EventsError::CannotFetchEventBytes(e) => Some(e),
+			EventsError::CannotGetLatestFinalizedBlock(e)
+			| EventsError::CannotFetchEventBytes(e) => Some(e),
 			_ => None,
 		}
 	}
@@ -456,12 +462,12 @@ pub enum ExtrinsicError {
 impl ExtrinsicError {
 	fn backend_error(&self) -> Option<&BackendError> {
 		match self {
-			ExtrinsicError::CannotGetBlockBody(e) |
-			ExtrinsicError::CannotGetLatestFinalizedBlock(e) |
-			ExtrinsicError::ErrorSubmittingTransaction(e) |
-			ExtrinsicError::TransactionStatusStreamError(e) |
-			ExtrinsicError::CannotGetFeeInfo(e) |
-			ExtrinsicError::CannotGetValidationInfo(e) => Some(e),
+			ExtrinsicError::CannotGetBlockBody(e)
+			| ExtrinsicError::CannotGetLatestFinalizedBlock(e)
+			| ExtrinsicError::ErrorSubmittingTransaction(e)
+			| ExtrinsicError::TransactionStatusStreamError(e)
+			| ExtrinsicError::CannotGetFeeInfo(e)
+			| ExtrinsicError::CannotGetValidationInfo(e) => Some(e),
 			ExtrinsicError::AccountNonceError { reason, .. } => reason.backend_error(),
 			_ => None,
 		}
@@ -486,8 +492,8 @@ pub enum ViewFunctionError {
 impl ViewFunctionError {
 	fn backend_error(&self) -> Option<&BackendError> {
 		match self {
-			ViewFunctionError::CannotGetLatestFinalizedBlock(e) |
-			ViewFunctionError::CannotCallApi(e) => Some(e),
+			ViewFunctionError::CannotGetLatestFinalizedBlock(e)
+			| ViewFunctionError::CannotCallApi(e) => Some(e),
 			_ => None,
 		}
 	}
@@ -565,8 +571,8 @@ impl TransactionEventsError {
 	fn backend_error(&self) -> Option<&BackendError> {
 		match self {
 			TransactionEventsError::CannotFetchBlockBody { error, .. } => Some(error),
-			TransactionEventsError::CannotDecodeEventInBlock { error, .. } |
-			TransactionEventsError::CannotFetchEventsForTransaction { error, .. } => error.backend_error(),
+			TransactionEventsError::CannotDecodeEventInBlock { error, .. }
+			| TransactionEventsError::CannotFetchEventsForTransaction { error, .. } => error.backend_error(),
 			_ => None,
 		}
 	}
@@ -658,10 +664,10 @@ pub enum StorageError {
 impl StorageError {
 	fn backend_error(&self) -> Option<&BackendError> {
 		match self {
-			StorageError::CannotGetLatestFinalizedBlock(e) |
-			StorageError::CannotFetchValue(e) |
-			StorageError::CannotIterateValues(e) |
-			StorageError::StreamFailure(e) => Some(e),
+			StorageError::CannotGetLatestFinalizedBlock(e)
+			| StorageError::CannotFetchValue(e)
+			| StorageError::CannotIterateValues(e)
+			| StorageError::StreamFailure(e) => Some(e),
 			_ => None,
 		}
 	}

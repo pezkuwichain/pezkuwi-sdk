@@ -5,7 +5,7 @@
 use super::PhantomDataSendSync;
 use codec::{Compact, Decode, DecodeAll, Encode};
 use derive_where::derive_where;
-use scale_decode::{IntoVisitor, TypeResolver, Visitor, ext::scale_type_resolver::visitor};
+use scale_decode::{ext::scale_type_resolver::visitor, IntoVisitor, TypeResolver, Visitor};
 use scale_encode::EncodeAsType;
 
 use alloc::{format, vec::Vec};
@@ -108,9 +108,12 @@ impl<T, R: TypeResolver> Visitor for WrapperKeepOpaqueVisitor<T, R> {
 		};
 
 		if value.name() != Some("WrapperKeepOpaque") {
-			return Err(Error::new(ErrorKind::VisitorDecodeError(DecodeError::TypeResolvingError(
-				format!("Expected a type named 'WrapperKeepOpaque', got: {:?}", value.name()),
-			))));
+			return Err(Error::new(ErrorKind::VisitorDecodeError(
+				DecodeError::TypeResolvingError(format!(
+					"Expected a type named 'WrapperKeepOpaque', got: {:?}",
+					value.name()
+				)),
+			)));
 		}
 
 		if value.remaining() != 2 {
@@ -159,7 +162,7 @@ mod test {
 	impl<T: scale_info::TypeInfo + 'static> scale_info::TypeInfo for WrapperKeepOpaque<T> {
 		type Identity = Self;
 		fn type_info() -> scale_info::Type {
-			use scale_info::{Path, Type, TypeParameter, build::Fields, meta_type};
+			use scale_info::{build::Fields, meta_type, Path, Type, TypeParameter};
 
 			Type::builder()
 				.path(Path::new("WrapperKeepOpaque", module_path!()))

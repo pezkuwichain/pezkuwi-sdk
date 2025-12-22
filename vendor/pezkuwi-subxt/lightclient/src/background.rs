@@ -2,8 +2,8 @@
 // This file is dual-licensed as Apache-2.0 or GPL-3.0.
 // see LICENSE for license details.
 
-use crate::{JsonRpcError, LightClientRpcError, rpc::RpcResponse, shared_client::SharedClient};
-use futures::{FutureExt, stream::StreamExt};
+use crate::{rpc::RpcResponse, shared_client::SharedClient, JsonRpcError, LightClientRpcError};
+use futures::{stream::StreamExt, FutureExt};
 use serde_json::value::RawValue;
 use smoldot_light::platform::PlatformRef;
 use std::{collections::HashMap, str::FromStr};

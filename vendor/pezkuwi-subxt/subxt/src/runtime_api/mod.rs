@@ -8,7 +8,7 @@ mod runtime_client;
 mod runtime_types;
 
 pub use pezkuwi_subxt_core::runtime_api::payload::{
-	DynamicPayload, Payload, StaticPayload, dynamic,
+	dynamic, DynamicPayload, Payload, StaticPayload,
 };
 pub use runtime_client::RuntimeApiClient;
 pub use runtime_types::RuntimeApi;

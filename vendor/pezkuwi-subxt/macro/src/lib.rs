@@ -5,7 +5,7 @@
 //! Subxt macro for generating Bizinikiwi runtime interfaces.
 
 use codec::Decode;
-use darling::{FromMeta, ast::NestedMeta};
+use darling::{ast::NestedMeta, FromMeta};
 use pezkuwi_subxt_codegen::{CodegenBuilder, CodegenError, Metadata};
 use proc_macro::TokenStream;
 use proc_macro_error2::{abort_call_site, proc_macro_error};
@@ -261,7 +261,7 @@ fn fetch_metadata(
 		},
 		#[cfg(feature = "runtime-metadata-insecure-url")]
 		(None, Some(url_string)) => {
-			use pezkuwi_subxt_utils_fetchmetadata::{MetadataVersion, Url, from_url_blocking};
+			use pezkuwi_subxt_utils_fetchmetadata::{from_url_blocking, MetadataVersion, Url};
 
 			let url = Url::parse(url_string).unwrap_or_else(|_| {
 				abort_call_site!("Cannot download metadata; invalid url: {}", url_string)

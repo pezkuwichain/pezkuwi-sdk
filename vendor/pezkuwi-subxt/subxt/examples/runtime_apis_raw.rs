@@ -1,10 +1,10 @@
 #![allow(missing_docs)]
 use pezkuwi_subxt::{
-	OnlineClient, PezkuwiConfig,
 	ext::{
 		codec::{Compact, Decode},
 		frame_metadata::RuntimeMetadataPrefixed,
 	},
+	OnlineClient, PezkuwiConfig,
 };
 
 #[pezkuwi_subxt::subxt(runtime_metadata_path = "../artifacts/pezkuwi_metadata_small.scale")]

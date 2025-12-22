@@ -8,7 +8,7 @@
 //! ```rust,ignore
 #![doc = include_str!("../examples/tx_basic.rs")]
 //! ```
-//! 
+//!
 //! Take a look at [the Subxt guide](book) to learn more about how to use Subxt.
 
 #![cfg_attr(docsrs, feature(doc_cfg))]
@@ -60,10 +60,10 @@ pub mod view_functions;
 pub mod config {
 	pub use pezkuwi_subxt_core::{
 		config::{
-			Config, DefaultExtrinsicParams, DefaultExtrinsicParamsBuilder, ExtrinsicParams,
-			ExtrinsicParamsEncoder, Hash, HashFor, Hasher, Header, PezkuwiConfig,
-			PezkuwiExtrinsicParams, BizinikiwConfig, BizinikiwiExtrinsicParams,
-			TransactionExtension, pezkuwi, bizinikiwi, transaction_extensions,
+			bizinikiwi, pezkuwi, transaction_extensions, BizinikiwConfig,
+			BizinikiwiExtrinsicParams, Config, DefaultExtrinsicParams,
+			DefaultExtrinsicParamsBuilder, ExtrinsicParams, ExtrinsicParamsEncoder, Hash, HashFor,
+			Hasher, Header, PezkuwiConfig, PezkuwiExtrinsicParams, TransactionExtension,
 		},
 		error::ExtrinsicParamsError,
 	};
@@ -88,7 +88,7 @@ cfg_unstable_light_client! {
 // but leave most types behind their respective modules.
 pub use crate::{
 	client::{OfflineClient, OnlineClient},
-	config::{Config, PezkuwiConfig, BizinikiwConfig},
+	config::{BizinikiwConfig, Config, PezkuwiConfig},
 	error::Error,
 	metadata::Metadata,
 };

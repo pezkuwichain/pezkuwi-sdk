@@ -2,7 +2,7 @@
 
 use super::{StreamOf, StreamOfResults};
 use crate::error::BackendError;
-use futures::{FutureExt, Stream, StreamExt, future::BoxFuture};
+use futures::{future::BoxFuture, FutureExt, Stream, StreamExt};
 use std::{future::Future, pin::Pin, task::Poll};
 
 /// Resubscribe callback.

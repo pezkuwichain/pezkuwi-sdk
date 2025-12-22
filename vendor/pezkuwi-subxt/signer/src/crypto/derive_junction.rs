@@ -94,6 +94,10 @@ impl<T: AsRef<str>> From<T> for DeriveJunction {
 			DeriveJunction::soft(code)
 		};
 
-		if hard { res.harden() } else { res }
+		if hard {
+			res.harden()
+		} else {
+			res
+		}
 	}
 }

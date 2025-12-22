@@ -89,9 +89,9 @@ impl PlatformRef for SubxtPlatform {
 	fn supports_connection_type(&self, connection_type: ConnectionType) -> bool {
 		let result = matches!(
 			connection_type,
-			ConnectionType::WebSocketIpv4 { .. } |
-				ConnectionType::WebSocketIpv6 { .. } |
-				ConnectionType::WebSocketDns { .. }
+			ConnectionType::WebSocketIpv4 { .. }
+				| ConnectionType::WebSocketIpv6 { .. }
+				| ConnectionType::WebSocketDns { .. }
 		);
 
 		tracing::trace!(

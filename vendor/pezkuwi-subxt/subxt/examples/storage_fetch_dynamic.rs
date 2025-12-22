@@ -1,10 +1,10 @@
 #![allow(missing_docs)]
-use pezkuwi_subxt_signer::sr25519::dev;
 use pezkuwi_subxt::{
-	OnlineClient, PezkuwiConfig,
 	dynamic::{At, Value},
 	utils::AccountId32,
+	OnlineClient, PezkuwiConfig,
 };
+use pezkuwi_subxt_signer::sr25519::dev;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -16,7 +16,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	// to access a value; an AccountId32. In this example we don't know the
 	// return type and so we set it to `Value`, which anything can decode into.
 	let account: AccountId32 = dev::alice().public_key().into();
-	let storage_query = pezkuwi_subxt::dynamic::storage::<(AccountId32,), Value>("System", "Account");
+	let storage_query =
+		pezkuwi_subxt::dynamic::storage::<(AccountId32,), Value>("System", "Account");
 
 	// Use that query to access a storage entry, fetch a result and decode the value.
 	let client_at = api.storage().at_latest().await?;

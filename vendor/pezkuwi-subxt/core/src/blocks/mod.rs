@@ -69,7 +69,7 @@ mod extrinsics;
 mod static_extrinsic;
 
 pub use crate::error::ExtrinsicError;
-use crate::{Metadata, config::Config, error::ExtrinsicDecodeErrorAt};
+use crate::{config::Config, error::ExtrinsicDecodeErrorAt, Metadata};
 use alloc::vec::Vec;
 pub use extrinsic_transaction_extensions::{
 	ExtrinsicTransactionExtension, ExtrinsicTransactionExtensions,

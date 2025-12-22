@@ -8,7 +8,7 @@ mod view_function_types;
 mod view_functions_client;
 
 pub use pezkuwi_subxt_core::view_functions::payload::{
-	DynamicPayload, Payload, StaticPayload, dynamic,
+	dynamic, DynamicPayload, Payload, StaticPayload,
 };
 pub use view_function_types::ViewFunctionsApi;
 pub use view_functions_client::ViewFunctionsClient;

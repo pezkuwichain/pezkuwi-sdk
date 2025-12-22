@@ -40,7 +40,7 @@
 
 pub mod address;
 
-use crate::{Metadata, error::ConstantError};
+use crate::{error::ConstantError, Metadata};
 use address::Address;
 use alloc::{borrow::ToOwned, string::ToString, vec::Vec};
 use frame_decode::constants::ConstantTypeInfo;

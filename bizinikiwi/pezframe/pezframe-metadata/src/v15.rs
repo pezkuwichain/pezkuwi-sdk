@@ -27,9 +27,9 @@ use scale_info::{
 };
 
 pub use super::v14::{
-	PezpalletCallMetadata, PezpalletConstantMetadata, PezpalletErrorMetadata, PezpalletEventMetadata,
-	PezpalletStorageMetadata, StorageEntryMetadata, StorageEntryModifier, StorageEntryType,
-	StorageHasher,
+	PezpalletCallMetadata, PezpalletConstantMetadata, PezpalletErrorMetadata,
+	PezpalletEventMetadata, PezpalletStorageMetadata, StorageEntryMetadata, StorageEntryModifier,
+	StorageEntryType, StorageHasher,
 };
 
 /// Latest runtime metadata
@@ -82,15 +82,7 @@ impl RuntimeMetadataV15 {
 		let outer_enums = outer_enums.into_portable(&mut registry);
 		let custom = custom.into_portable(&mut registry);
 
-		Self {
-			types: registry.into(),
-			pezpallets,
-			extrinsic,
-			ty,
-			apis,
-			outer_enums,
-			custom,
-		}
+		Self { types: registry.into(), pezpallets, extrinsic, ty, apis, outer_enums, custom }
 	}
 }
 
@@ -343,10 +335,7 @@ impl IntoPortable for CustomValueMetadata {
 	type Output = CustomValueMetadata<PortableForm>;
 
 	fn into_portable(self, registry: &mut Registry) -> Self::Output {
-		CustomValueMetadata {
-			ty: registry.register_type(&self.ty),
-			value: self.value,
-		}
+		CustomValueMetadata { ty: registry.register_type(&self.ty), value: self.value }
 	}
 }
 

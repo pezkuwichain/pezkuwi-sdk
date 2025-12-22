@@ -6,7 +6,7 @@ use heck::ToSnakeCase as _;
 use pezkuwi_subxt_metadata::PalletMetadata;
 use proc_macro2::TokenStream as TokenStream2;
 use quote::{format_ident, quote};
-use scale_typegen::{TypeGenerator, typegen::ir::ToTokensWithSettings};
+use scale_typegen::{typegen::ir::ToTokensWithSettings, TypeGenerator};
 
 use super::CodegenError;
 

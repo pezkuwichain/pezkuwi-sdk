@@ -5,9 +5,9 @@
 
 #![allow(missing_docs)]
 
-use pezkuwi_subxt_core::utils::AccountId20;
-use pezkuwi_subxt_signer::eth::{Signature, dev};
 use pezkuwi_subxt::OnlineClient;
+use pezkuwi_subxt_core::utils::AccountId20;
+use pezkuwi_subxt_signer::eth::{dev, Signature};
 
 #[pezkuwi_subxt::subxt(runtime_metadata_path = "../artifacts/frontier_metadata_small.scale")]
 mod eth_runtime {}
@@ -19,8 +19,10 @@ impl pezkuwi_subxt::Config for EthRuntimeConfig {
 	type Address = AccountId20;
 	type Signature = Signature;
 	type Hasher = pezkuwi_subxt::config::bizinikiwi::BlakeTwo256;
-	type Header =
-		pezkuwi_subxt::config::bizinikiwi::BizinikiwiHeader<u32, pezkuwi_subxt::config::bizinikiwi::BlakeTwo256>;
+	type Header = pezkuwi_subxt::config::bizinikiwi::BizinikiwiHeader<
+		u32,
+		pezkuwi_subxt::config::bizinikiwi::BlakeTwo256,
+	>;
 	type ExtrinsicParams = pezkuwi_subxt::config::BizinikiwiExtrinsicParams<Self>;
 	type AssetId = u32;
 }

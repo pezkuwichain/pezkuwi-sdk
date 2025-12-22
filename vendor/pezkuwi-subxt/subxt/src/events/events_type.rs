@@ -1,7 +1,7 @@
 use crate::{
-	Metadata,
 	config::{Config, HashFor},
 	error::EventsError,
+	Metadata,
 };
 use derive_where::derive_where;
 use pezkuwi_subxt_core::events::{EventDetails as CoreEventDetails, Events as CoreEvents};

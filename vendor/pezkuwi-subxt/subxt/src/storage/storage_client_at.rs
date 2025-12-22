@@ -11,9 +11,9 @@ use crate::{
 use derive_where::derive_where;
 use futures::StreamExt;
 use pezkuwi_subxt_core::{
-	Metadata,
-	storage::{PrefixOf, address::Address},
+	storage::{address::Address, PrefixOf},
 	utils::{Maybe, Yes},
+	Metadata,
 };
 use std::marker::PhantomData;
 
@@ -100,7 +100,7 @@ where
 		key_parts: KeyParts,
 	) -> Result<
 		impl futures::Stream<Item = Result<StorageKeyValue<'_, Addr>, StorageError>>
-		+ use<'_, Addr, Client, T, KeyParts>,
+			+ use<'_, Addr, Client, T, KeyParts>,
 		StorageError,
 	> {
 		let entry = pezkuwi_subxt_core::storage::entry(addr, &self.metadata)?;
@@ -283,7 +283,7 @@ where
 		key_parts: KeyParts,
 	) -> Result<
 		impl futures::Stream<Item = Result<StorageKeyValue<'atblock, Addr>, StorageError>>
-		+ use<'atblock, Addr, Client, T, KeyParts>,
+			+ use<'atblock, Addr, Client, T, KeyParts>,
 		StorageError,
 	> {
 		iter(self.inner.clone(), &self.client, self.block_ref.hash(), key_parts).await
@@ -357,7 +357,7 @@ async fn iter<
 	key_parts: KeyParts,
 ) -> Result<
 	impl futures::Stream<Item = Result<StorageKeyValue<'atblock, Addr>, StorageError>>
-	+ use<'atblock, Addr, Client, T, KeyParts>,
+		+ use<'atblock, Addr, Client, T, KeyParts>,
 	StorageError,
 > {
 	let key_bytes = entry.iter_key(key_parts)?;

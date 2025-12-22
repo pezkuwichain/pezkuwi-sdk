@@ -5,9 +5,9 @@
 //! Miscellaneous utility helpers.
 
 pub use pezkuwi_subxt_core::utils::{
-	AccountId32, Encoded, Era, H160, H256, H512, KeyedVec, MultiAddress, MultiSignature,
-	PhantomDataSendSync, Static, UncheckedExtrinsic, WrapperKeepOpaque, Yes, bits,
-	strip_compact_prefix, to_hex,
+	bits, strip_compact_prefix, to_hex, AccountId32, Encoded, Era, KeyedVec, MultiAddress,
+	MultiSignature, PhantomDataSendSync, Static, UncheckedExtrinsic, WrapperKeepOpaque, Yes, H160,
+	H256, H512,
 };
 
 pub use pezkuwi_subxt_rpcs::utils::url_is_secure;

@@ -161,7 +161,7 @@
 //! ```rust,ignore
 #![doc = include_str ! ("../../../examples/setup_config_transaction_extension.rs")]
 //! ```
-//! 
+//!
 //! ### Implementing [`crate::config::ExtrinsicParams`] from scratch
 //!
 //! Alternately, you are free to implement [`crate::config::ExtrinsicParams`] entirely from scratch if you know exactly what "extra" and
@@ -171,7 +171,7 @@
 //! ```rust,ignore
 #![doc = include_str ! ("../../../examples/setup_config_custom.rs")]
 //! ```
-//! 
+//!
 //! ### Using a type from the metadata as a config parameter
 //!
 //! You can also use types that are generated from chain metadata as type parameters of the Config trait.

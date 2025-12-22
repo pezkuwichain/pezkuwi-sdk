@@ -6,8 +6,8 @@
 
 #![allow(missing_docs, unused)]
 
-use sp_core::{Pair as _, sr25519};
-use pezkuwi_subxt::{Config, OnlineClient, PezkuwiConfig, config::bizinikiwi::MultiAddress};
+use pezkuwi_subxt::{config::bizinikiwi::MultiAddress, Config, OnlineClient, PezkuwiConfig};
+use sp_core::{sr25519, Pair as _};
 
 #[pezkuwi_subxt::subxt(runtime_metadata_path = "../artifacts/pezkuwi_metadata_small.scale")]
 pub mod pezkuwi {}
@@ -16,13 +16,13 @@ pub mod pezkuwi {}
 /// and that PezkuwiConfig is the runtime configuration.
 mod pair_signer {
 	use super::*;
-	use sp_runtime::{
-		MultiSignature as SpMultiSignature,
-		traits::{IdentifyAccount, Verify},
-	};
 	use pezkuwi_subxt::{
 		config::bizinikiwi::{AccountId32, MultiSignature},
 		tx::Signer,
+	};
+	use sp_runtime::{
+		traits::{IdentifyAccount, Verify},
+		MultiSignature as SpMultiSignature,
 	};
 
 	/// A [`Signer`] implementation for [`sp_core::sr25519::Pair`].

@@ -58,7 +58,7 @@
 //! ```rust,ignore
 #![doc = include_str!("../../../examples/blocks_subscribing.rs")]
 //! ```
-//! 
+//!
 //! ### Statically decode the extrinsic into [a specific pallet call](crate::blocks::ExtrinsicDetails::as_extrinsic())
 //!
 //! This is useful if you are expecting a specific extrinsic to be part of some block. If the extrinsic you try to decode
@@ -73,7 +73,7 @@
 //! ```rust,ignore  
 #![doc = include_str!("../../../examples/block_decoding_static.rs")]
 //! ```
-//! 
+//!
 //! ### Dynamically decode the extrinsic
 //!
 //! Sometimes you might use subxt with metadata that is not known at compile time. In this case, you do not
@@ -87,7 +87,7 @@
 //! ```rust,ignore
 #![doc = include_str!("../../../examples/block_decoding_dynamic.rs")]
 //! ```
-//! 
+//!
 //! ##  Decoding transaction extensions
 //!
 //! Extrinsics can contain transaction extensions. The transaction extensions can be different across chains.
