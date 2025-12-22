@@ -10,7 +10,7 @@ use crate::{
 };
 use alloc::vec::Vec;
 use hashbrown::HashMap;
-use scale_info::{Field, PortableRegistry, TypeDef, TypeDefVariant, Variant, form::PortableForm};
+use scale_info::{form::PortableForm, Field, PortableRegistry, TypeDef, TypeDefVariant, Variant};
 
 // The number of bytes our `hash` function produces.
 pub(crate) const HASH_LEN: usize = 32;
@@ -115,7 +115,11 @@ fn get_type_def_variant_hash(
 			.as_ref()
 			.map(|only_these_variants| only_these_variants.contains(&var.name.as_str()))
 			.unwrap_or(true);
-		if should_hash { xor(bytes, get_variant_hash(registry, var, cache)) } else { bytes }
+		if should_hash {
+			xor(bytes, get_variant_hash(registry, var, cache))
+		} else {
+			bytes
+		}
 	});
 	concat_and_hash2(&variant_id_bytes, &variant_field_bytes)
 }
@@ -521,7 +525,11 @@ impl<'a> MetadataHasher<'a> {
 				.unwrap_or(true);
 			// We don't care what order the pallets are seen in, so XOR their
 			// hashes together to be order independent.
-			if should_hash { xor(bytes, get_pallet_hash(pallet)) } else { bytes }
+			if should_hash {
+				xor(bytes, get_pallet_hash(pallet))
+			} else {
+				bytes
+			}
 		});
 
 		let apis_hash = metadata.runtime_api_traits().fold([0u8; HASH_LEN], |bytes, api| {
@@ -534,7 +542,11 @@ impl<'a> MetadataHasher<'a> {
 				.unwrap_or(true);
 			// We don't care what order the runtime APIs are seen in, so XOR their
 			// hashes together to be order independent.
-			if should_hash { xor(bytes, get_runtime_apis_hash(api)) } else { bytes }
+			if should_hash {
+				xor(bytes, get_runtime_apis_hash(api))
+			} else {
+				bytes
+			}
 		});
 
 		let outer_enums_hash = concat_and_hash3(
@@ -566,7 +578,7 @@ mod tests {
 	use super::*;
 	use bitvec::{order::Lsb0, vec::BitVec};
 	use frame_metadata::v15;
-	use scale_info::{Registry, meta_type};
+	use scale_info::{meta_type, Registry};
 
 	// Define recursive types.
 	#[allow(dead_code)]

@@ -46,9 +46,9 @@ use pezkuwi_subxt_metadata::PalletMetadata;
 use scale_decode::{DecodeAsFields, DecodeAsType};
 
 use crate::{
-	Metadata,
 	config::{Config, HashFor},
 	error::EventsError,
+	Metadata,
 };
 
 /// Create a new [`Events`] instance from the given bytes.
@@ -466,16 +466,16 @@ pub struct EventMetadataDetails<'a> {
 #[cfg(test)]
 pub(crate) mod test_utils {
 	use super::*;
-	use crate::config::{HashFor, BizinikiwConfig};
+	use crate::config::{BizinikiwConfig, HashFor};
 	use codec::Encode;
 	use frame_metadata::{
-		RuntimeMetadataPrefixed,
 		v15::{
 			CustomMetadata, ExtrinsicMetadata, OuterEnums, PalletEventMetadata, PalletMetadata,
 			RuntimeMetadataV15,
 		},
+		RuntimeMetadataPrefixed,
 	};
-	use scale_info::{TypeInfo, meta_type};
+	use scale_info::{meta_type, TypeInfo};
 
 	/// An "outer" events enum containing exactly one event.
 	#[derive(
@@ -611,7 +611,7 @@ pub(crate) mod test_utils {
 #[cfg(test)]
 mod tests {
 	use super::{
-		test_utils::{AllEvents, EventRecord, event_record, events, events_raw},
+		test_utils::{event_record, events, events_raw, AllEvents, EventRecord},
 		*,
 	};
 	use crate::{config::BizinikiwConfig, events::Phase};

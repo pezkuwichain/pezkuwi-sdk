@@ -43,7 +43,7 @@
 
 pub mod payload;
 
-use crate::{Metadata, error::RuntimeApiError};
+use crate::{error::RuntimeApiError, Metadata};
 use alloc::{
 	format,
 	string::{String, ToString},
@@ -75,7 +75,11 @@ pub fn validate<P: Payload>(payload: P, metadata: &Metadata) -> Result<(), Runti
 				method_name: method_name.to_string(),
 			})?;
 
-	if hash != api_method.hash() { Err(RuntimeApiError::IncompatibleCodegen) } else { Ok(()) }
+	if hash != api_method.hash() {
+		Err(RuntimeApiError::IncompatibleCodegen)
+	} else {
+		Ok(())
+	}
 }
 
 /// Return the name of the runtime API call from the payload.

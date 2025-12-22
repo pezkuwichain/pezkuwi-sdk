@@ -1,5 +1,5 @@
 #![allow(missing_docs)]
-use pezkuwi_subxt::{OnlineClient, PezkuwiConfig, dynamic::Value};
+use pezkuwi_subxt::{dynamic::Value, OnlineClient, PezkuwiConfig};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {

@@ -2,7 +2,7 @@
 // This file is dual-licensed as Apache-2.0 or GPL-3.0.
 // see LICENSE for license details.
 
-use crate::{Config, client::OfflineClientT, error::ConstantError};
+use crate::{client::OfflineClientT, error::ConstantError, Config};
 use derive_where::derive_where;
 use pezkuwi_subxt_core::constants::address::Address;
 

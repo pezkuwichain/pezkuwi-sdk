@@ -15,7 +15,14 @@ description = "Command line utilities for checking metadata compatibility betwee
 
 [features]
 default = ["legacy", "std"]
-std = ["frame-metadata/std", "scale-info/std"]
+std = [
+	"frame-metadata/std",
+	"scale-info/std",
+	"bitvec/std",
+	"frame-decode/std",
+	"codec/std",
+	"pezsp-crypto-hashing/std"
+]
 
 # Enable decoding of legacy metadata, too.
 # std required by frame-metadata to decode <V14.

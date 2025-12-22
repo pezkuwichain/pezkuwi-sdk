@@ -147,15 +147,17 @@ impl IterateTypeIds for v14::RuntimeMetadataV14 {
 		let pallet_types = self.pallets.iter_mut().flat_map(|pallet| {
 			let pallet_call_types = pallet.calls.as_mut().into_iter().map(|calls| &mut calls.ty.id);
 
-			let pallet_storage_types =
-				pallet.storage.as_mut().into_iter().flat_map(|s| &mut s.entries).flat_map(
-					|storage_entry| match &mut storage_entry.ty {
-						v14::StorageEntryType::Plain(ty) =>
-							Either::Left(core::iter::once(&mut ty.id)),
-						v14::StorageEntryType::Map { key, value, .. } =>
-							Either::Right([&mut key.id, &mut value.id].into_iter()),
+			let pallet_storage_types = pallet
+				.storage
+				.as_mut()
+				.into_iter()
+				.flat_map(|s| &mut s.entries)
+				.flat_map(|storage_entry| match &mut storage_entry.ty {
+					v14::StorageEntryType::Plain(ty) => Either::Left(core::iter::once(&mut ty.id)),
+					v14::StorageEntryType::Map { key, value, .. } => {
+						Either::Right([&mut key.id, &mut value.id].into_iter())
 					},
-				);
+				});
 
 			let pallet_constant_types =
 				pallet.constants.iter_mut().map(|constant| &mut constant.ty.id);
@@ -193,15 +195,17 @@ impl IterateTypeIds for v15::RuntimeMetadataV15 {
 		let pallet_types = self.pallets.iter_mut().flat_map(|pallet| {
 			let pallet_call_types = pallet.calls.as_mut().into_iter().map(|calls| &mut calls.ty.id);
 
-			let pallet_storage_types =
-				pallet.storage.as_mut().into_iter().flat_map(|s| &mut s.entries).flat_map(
-					|storage_entry| match &mut storage_entry.ty {
-						v14::StorageEntryType::Plain(ty) =>
-							Either::Left(core::iter::once(&mut ty.id)),
-						v14::StorageEntryType::Map { key, value, .. } =>
-							Either::Right([&mut key.id, &mut value.id].into_iter()),
+			let pallet_storage_types = pallet
+				.storage
+				.as_mut()
+				.into_iter()
+				.flat_map(|s| &mut s.entries)
+				.flat_map(|storage_entry| match &mut storage_entry.ty {
+					v14::StorageEntryType::Plain(ty) => Either::Left(core::iter::once(&mut ty.id)),
+					v14::StorageEntryType::Map { key, value, .. } => {
+						Either::Right([&mut key.id, &mut value.id].into_iter())
 					},
-				);
+				});
 
 			let pallet_constant_types =
 				pallet.constants.iter_mut().map(|constant| &mut constant.ty.id);
@@ -267,15 +271,17 @@ impl IterateTypeIds for v16::RuntimeMetadataV16 {
 		let pallet_types = self.pallets.iter_mut().flat_map(|pallet| {
 			let pallet_call_types = pallet.calls.as_mut().into_iter().map(|calls| &mut calls.ty.id);
 
-			let pallet_storage_types =
-				pallet.storage.as_mut().into_iter().flat_map(|s| &mut s.entries).flat_map(
-					|storage_entry| match &mut storage_entry.ty {
-						v16::StorageEntryType::Plain(ty) =>
-							Either::Left(core::iter::once(&mut ty.id)),
-						v16::StorageEntryType::Map { key, value, .. } =>
-							Either::Right([&mut key.id, &mut value.id].into_iter()),
+			let pallet_storage_types = pallet
+				.storage
+				.as_mut()
+				.into_iter()
+				.flat_map(|s| &mut s.entries)
+				.flat_map(|storage_entry| match &mut storage_entry.ty {
+					v16::StorageEntryType::Plain(ty) => Either::Left(core::iter::once(&mut ty.id)),
+					v16::StorageEntryType::Map { key, value, .. } => {
+						Either::Right([&mut key.id, &mut value.id].into_iter())
 					},
-				);
+				});
 
 			let pallet_constant_types =
 				pallet.constants.iter_mut().map(|constant| &mut constant.ty.id);

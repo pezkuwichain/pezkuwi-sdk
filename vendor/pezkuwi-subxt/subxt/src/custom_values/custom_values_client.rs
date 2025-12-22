@@ -1,4 +1,4 @@
-use crate::{Config, client::OfflineClientT, error::CustomValueError};
+use crate::{client::OfflineClientT, error::CustomValueError, Config};
 use derive_where::derive_where;
 
 use pezkuwi_subxt_core::custom_values::address::{Address, Maybe};
@@ -45,13 +45,13 @@ impl<T: Config, Client: OfflineClientT<T>> CustomValuesClient<T, Client> {
 #[cfg(test)]
 mod tests {
 	use crate::{
-		Metadata, OfflineClient, BizinikiwConfig,
 		custom_values::{self, CustomValuesClient},
+		BizinikiwConfig, Metadata, OfflineClient,
 	};
 	use codec::Encode;
 	use pezkuwi_subxt_core::client::RuntimeVersion;
 	use scale_decode::DecodeAsType;
-	use scale_info::{TypeInfo, form::PortableForm};
+	use scale_info::{form::PortableForm, TypeInfo};
 	use std::collections::BTreeMap;
 
 	#[derive(Debug, Clone, PartialEq, Eq, Encode, TypeInfo, DecodeAsType)]

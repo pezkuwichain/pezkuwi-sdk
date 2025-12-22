@@ -43,15 +43,15 @@ use frame_decode::{
 };
 
 use hashbrown::HashMap;
-use scale_info::{PortableRegistry, Variant, form::PortableForm};
+use scale_info::{form::PortableForm, PortableRegistry, Variant};
 use utils::{
 	ordered_map::OrderedMap,
-	validation::{HASH_LEN, get_custom_value_hash},
+	validation::{get_custom_value_hash, HASH_LEN},
 	variant_index::VariantIndex,
 };
 
 pub use frame_decode::storage::StorageHasher;
-pub use from::{SUPPORTED_METADATA_VERSIONS, TryFromError};
+pub use from::{TryFromError, SUPPORTED_METADATA_VERSIONS};
 pub use utils::validation::MetadataHasher;
 
 #[cfg(feature = "legacy")]

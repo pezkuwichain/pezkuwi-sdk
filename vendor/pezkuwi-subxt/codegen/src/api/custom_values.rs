@@ -4,7 +4,7 @@
 
 use heck::ToSnakeCase as _;
 use pezkuwi_subxt_metadata::{CustomValueMetadata, Metadata};
-use scale_typegen::{TypeGenerator, typegen::ir::ToTokensWithSettings};
+use scale_typegen::{typegen::ir::ToTokensWithSettings, TypeGenerator};
 use std::collections::HashSet;
 
 use proc_macro2::TokenStream as TokenStream2;

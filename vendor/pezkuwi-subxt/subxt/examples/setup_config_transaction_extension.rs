@@ -1,15 +1,15 @@
 #![allow(missing_docs)]
 use codec::Encode;
-use pezkuwi_subxt_signer::sr25519::dev;
-use scale_encode::EncodeAsType;
-use scale_info::PortableRegistry;
 use pezkuwi_subxt::{
 	client::ClientState,
 	config::{
-		Config, DefaultExtrinsicParamsBuilder, ExtrinsicParams, ExtrinsicParamsEncoder,
-		ExtrinsicParamsError, transaction_extensions,
+		transaction_extensions, Config, DefaultExtrinsicParamsBuilder, ExtrinsicParams,
+		ExtrinsicParamsEncoder, ExtrinsicParamsError,
 	},
 };
+use pezkuwi_subxt_signer::sr25519::dev;
+use scale_encode::EncodeAsType;
+use scale_info::PortableRegistry;
 
 #[pezkuwi_subxt::subxt(runtime_metadata_path = "../artifacts/pezkuwi_metadata_small.scale")]
 pub mod runtime {}

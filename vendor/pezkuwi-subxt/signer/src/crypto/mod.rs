@@ -12,7 +12,7 @@ mod secret_uri;
 mod seed_from_entropy;
 
 pub use derive_junction::DeriveJunction;
-pub use secret_uri::{DEV_PHRASE, SecretUri, SecretUriError};
+pub use secret_uri::{SecretUri, SecretUriError, DEV_PHRASE};
 
 #[cfg(any(feature = "sr25519", feature = "ecdsa"))]
 pub use seed_from_entropy::seed_from_entropy;

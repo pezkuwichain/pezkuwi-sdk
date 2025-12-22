@@ -46,7 +46,7 @@
 //! ```rust,ignore
 #![doc = include_str!("../../../examples/constants_static.rs")]
 //! ```
-//! 
+//!
 //! And here's one using a dynamic query:
 //! ```rust,ignore
 #![doc = include_str!("../../../examples/constants_dynamic.rs")]

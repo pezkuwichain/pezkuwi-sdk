@@ -28,8 +28,8 @@
 
 use super::{RawRpcFuture, RawRpcSubscription, RpcClientT};
 use std::sync::{
-	Arc,
 	atomic::{AtomicUsize, Ordering},
+	Arc,
 };
 
 /// A simple RPC client which is provided a set of clients on initialization and

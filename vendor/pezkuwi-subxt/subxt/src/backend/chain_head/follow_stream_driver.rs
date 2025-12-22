@@ -297,10 +297,12 @@ impl<H: Hash> Shared<H> {
 					.collect();
 
 				shared.block_events_for_new_subscriptions.retain(|ev| match ev {
-					FollowEvent::NewBlock(new_block_ev) =>
-						!to_remove.contains(&new_block_ev.block_hash.hash()),
-					FollowEvent::BestBlockChanged(best_block_ev) =>
-						!to_remove.contains(&best_block_ev.best_block_hash.hash()),
+					FollowEvent::NewBlock(new_block_ev) => {
+						!to_remove.contains(&new_block_ev.block_hash.hash())
+					},
+					FollowEvent::BestBlockChanged(best_block_ev) => {
+						!to_remove.contains(&best_block_ev.best_block_hash.hash())
+					},
 					_ => true,
 				});
 			},

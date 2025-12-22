@@ -4,7 +4,7 @@
 
 use crate::config::transaction_extensions::CheckMortalityParams;
 
-use super::{Config, ExtrinsicParams, HashFor, transaction_extensions};
+use super::{transaction_extensions, Config, ExtrinsicParams, HashFor};
 
 /// The default [`super::ExtrinsicParams`] implementation understands common signed extensions
 /// and how to apply them to a given chain.

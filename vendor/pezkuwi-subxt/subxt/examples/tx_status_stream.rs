@@ -1,6 +1,6 @@
 #![allow(missing_docs)]
+use pezkuwi_subxt::{tx::TxStatus, OnlineClient, PezkuwiConfig};
 use pezkuwi_subxt_signer::sr25519::dev;
-use pezkuwi_subxt::{OnlineClient, PezkuwiConfig, tx::TxStatus};
 
 // Generate an interface that we can use from the node's metadata.
 #[pezkuwi_subxt::subxt(runtime_metadata_path = "../artifacts/pezkuwi_metadata_small.scale")]

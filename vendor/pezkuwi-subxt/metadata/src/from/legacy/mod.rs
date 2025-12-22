@@ -3,8 +3,8 @@ mod portable_registry_builder;
 mod tests;
 
 use crate::{
-	Metadata,
 	utils::{ordered_map::OrderedMap, variant_index::VariantIndex},
+	Metadata,
 };
 use alloc::{borrow::ToOwned, collections::BTreeMap, format, string::ToString, vec::Vec};
 use frame_decode::{
@@ -15,7 +15,7 @@ use frame_decode::{
 };
 use frame_metadata::v15;
 use portable_registry_builder::PortableRegistryBuilder;
-use scale_info_legacy::{TypeRegistrySet, type_registry::RuntimeApiName};
+use scale_info_legacy::{type_registry::RuntimeApiName, TypeRegistrySet};
 
 /// Options to configure the legacy translating.
 pub(crate) struct Opts {

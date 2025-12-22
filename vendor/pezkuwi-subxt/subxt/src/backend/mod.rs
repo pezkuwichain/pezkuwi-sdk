@@ -25,9 +25,8 @@ use std::{pin::Pin, sync::Arc};
 /// [`crate::ext::pezkuwi_subxt_rpcs`].
 pub mod rpc {
 	pub use pezkuwi_subxt_rpcs::{
-		RpcClient, RpcClientT,
 		client::{RawRpcFuture, RawRpcSubscription, RawValue, RpcParams},
-		rpc_params,
+		rpc_params, RpcClient, RpcClientT,
 	};
 
 	crate::macros::cfg_reconnecting_rpc_client! {
@@ -123,7 +122,7 @@ pub trait Backend<T: Config>: sealed::Sealed + Send + Sync + 'static {
 
 	/// A stream of all new runtime versions as they occur.
 	async fn stream_runtime_version(&self)
-	-> Result<StreamOfResults<RuntimeVersion>, BackendError>;
+		-> Result<StreamOfResults<RuntimeVersion>, BackendError>;
 
 	/// A stream of all new block headers as they arrive.
 	async fn stream_all_block_headers(
@@ -390,10 +389,10 @@ mod test {
 	use crate::backend::StorageResponse;
 	use core::convert::Infallible;
 	use futures::StreamExt;
-	use pezkuwi_subxt_core::{Config, config::DefaultExtrinsicParams};
+	use pezkuwi_subxt_core::{config::DefaultExtrinsicParams, Config};
 	use pezkuwi_subxt_rpcs::client::{
-		MockRpcClient,
 		mock_rpc_client::{Json, MockRpcClientBuilder},
+		MockRpcClient,
 	};
 	use primitive_types::H256;
 	use rpc::RpcClientT;
@@ -429,7 +428,7 @@ mod test {
 	mod legacy {
 		use super::*;
 		use crate::{
-			backend::legacy::{LegacyBackend, rpc_methods::RuntimeVersion},
+			backend::legacy::{rpc_methods::RuntimeVersion, LegacyBackend},
 			error::RpcError,
 		};
 
@@ -688,7 +687,7 @@ mod test {
 			I: IntoIterator<Item = usize> + Send,
 			I::IntoIter: Send + Sync + 'static,
 		{
-			use pezkuwi_subxt_rpcs::{Error, UserError, client::mock_rpc_client::AndThen};
+			use pezkuwi_subxt_rpcs::{client::mock_rpc_client::AndThen, Error, UserError};
 
 			let recv = Arc::new(tokio::sync::Mutex::new(recv));
 			let mut ids = ids.into_iter();
@@ -824,13 +823,11 @@ mod test {
 				.await
 				.unwrap();
 
-			assert!(
-				response
-					.next()
-					.await
-					.unwrap()
-					.is_err_and(|e| matches!(e, BackendError::Other(e) if e == "error"))
-			);
+			assert!(response
+				.next()
+				.await
+				.unwrap()
+				.is_err_and(|e| matches!(e, BackendError::Other(e) if e == "error")));
 			assert!(response.next().await.is_none());
 		}
 

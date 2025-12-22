@@ -67,7 +67,7 @@
 //! ```rust,ignore
 #![doc = include_str!("../../examples/tx_basic.rs")]
 //! ```
-//! 
+//!
 //! This example assumes that a Pezkuwi node is running locally (Subxt endeavors to support all
 //! recent releases). Typically, to use Subxt to talk to some custom Bizinikiwi node (for example a
 //! parachain node), you'll want to:

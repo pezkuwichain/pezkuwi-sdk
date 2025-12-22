@@ -7,7 +7,7 @@
 
 pub mod payload;
 
-use crate::{Metadata, error::ViewFunctionError};
+use crate::{error::ViewFunctionError, Metadata};
 use alloc::{string::ToString, vec::Vec};
 use payload::Payload;
 use scale_decode::IntoVisitor;
@@ -33,7 +33,11 @@ pub fn validate<P: Payload>(payload: P, metadata: &Metadata) -> Result<(), ViewF
 			function_name: function_name.to_string(),
 		})?;
 
-	if hash != view_function.hash() { Err(ViewFunctionError::IncompatibleCodegen) } else { Ok(()) }
+	if hash != view_function.hash() {
+		Err(ViewFunctionError::IncompatibleCodegen)
+	} else {
+		Ok(())
+	}
 }
 
 /// The name of the Runtime API call which can execute

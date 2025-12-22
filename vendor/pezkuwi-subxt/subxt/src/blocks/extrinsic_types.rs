@@ -3,7 +3,7 @@
 // see LICENSE for license details.
 
 use crate::{
-	blocks::block_types::{CachedEvents, get_events},
+	blocks::block_types::{get_events, CachedEvents},
 	client::{OfflineClientT, OnlineClientT},
 	config::{Config, HashFor},
 	error::{EventsError, ExtrinsicDecodeErrorAt, ExtrinsicError},

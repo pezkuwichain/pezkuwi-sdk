@@ -4,11 +4,11 @@
 
 use futures::StreamExt;
 use pezkuwi_subxt::{
-	OnlineClient, PezkuwiConfig,
 	backend::{
 		chain_head::{ChainHeadBackend, ChainHeadBackendBuilder},
 		rpc::RpcClient,
 	},
+	OnlineClient, PezkuwiConfig,
 };
 
 // Generate an interface that we can use from the node's metadata.

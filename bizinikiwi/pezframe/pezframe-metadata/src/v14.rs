@@ -64,12 +64,7 @@ impl RuntimeMetadataV14 {
 		let pezpallets = registry.map_into_portable(pezpallets);
 		let extrinsic = extrinsic.into_portable(&mut registry);
 		let ty = registry.register_type(&runtime_type);
-		Self {
-			types: registry.into(),
-			pezpallets,
-			extrinsic,
-			ty,
-		}
+		Self { types: registry.into(), pezpallets, extrinsic, ty }
 	}
 }
 
@@ -298,11 +293,7 @@ impl IntoPortable for StorageEntryType {
 	fn into_portable(self, registry: &mut Registry) -> Self::Output {
 		match self {
 			Self::Plain(plain) => StorageEntryType::Plain(registry.register_type(&plain)),
-			Self::Map {
-				hashers,
-				key,
-				value,
-			} => StorageEntryType::Map {
+			Self::Map { hashers, key, value } => StorageEntryType::Map {
 				hashers,
 				key: registry.register_type(&key),
 				value: registry.register_type(&value),
@@ -328,9 +319,7 @@ impl IntoPortable for PezpalletCallMetadata {
 	type Output = PezpalletCallMetadata<PortableForm>;
 
 	fn into_portable(self, registry: &mut Registry) -> Self::Output {
-		PezpalletCallMetadata {
-			ty: registry.register_type(&self.ty),
-		}
+		PezpalletCallMetadata { ty: registry.register_type(&self.ty) }
 	}
 }
 
@@ -353,9 +342,7 @@ impl IntoPortable for PezpalletEventMetadata {
 	type Output = PezpalletEventMetadata<PortableForm>;
 
 	fn into_portable(self, registry: &mut Registry) -> Self::Output {
-		PezpalletEventMetadata {
-			ty: registry.register_type(&self.ty),
-		}
+		PezpalletEventMetadata { ty: registry.register_type(&self.ty) }
 	}
 }
 
@@ -411,9 +398,7 @@ impl IntoPortable for PezpalletErrorMetadata {
 	type Output = PezpalletErrorMetadata<PortableForm>;
 
 	fn into_portable(self, registry: &mut Registry) -> Self::Output {
-		PezpalletErrorMetadata {
-			ty: registry.register_type(&self.ty),
-		}
+		PezpalletErrorMetadata { ty: registry.register_type(&self.ty) }
 	}
 }
 

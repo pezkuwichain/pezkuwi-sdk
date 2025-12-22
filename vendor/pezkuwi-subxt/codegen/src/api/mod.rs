@@ -15,17 +15,17 @@ mod storage;
 
 use pezkuwi_subxt_metadata::Metadata;
 use scale_typegen::{
-	TypeGenerator,
 	typegen::{
 		ir::{
-			ToTokensWithSettings,
 			type_ir::{CompositeFieldIR, CompositeIR, CompositeIRKind},
+			ToTokensWithSettings,
 		},
 		type_params::TypeParameters,
 		type_path::TypePath,
 	},
+	TypeGenerator,
 };
-use syn::{Ident, parse_quote};
+use syn::{parse_quote, Ident};
 
 use crate::{
 	api::custom_values::generate_custom_values, error::CodegenError, ir, subxt_type_gen_settings,
@@ -438,16 +438,18 @@ pub fn generate_type_alias_mod(
 		CompositeIRKind::NoFields => {
 			return quote!(); // no types mod generated for unit structs.
 		},
-		CompositeIRKind::Named(named) =>
+		CompositeIRKind::Named(named) => {
 			for (name, field) in named.iter_mut() {
 				let alias_name = format_ident!("{}", name.to_string().to_upper_camel_case());
 				modify_field_to_be_type_alias(field, alias_name);
-			},
-		CompositeIRKind::Unnamed(unnamed) =>
+			}
+		},
+		CompositeIRKind::Unnamed(unnamed) => {
 			for (i, field) in unnamed.iter_mut().enumerate() {
 				let alias_name = format_ident!("Field{}", i);
 				modify_field_to_be_type_alias(field, alias_name);
-			},
+			}
+		},
 	};
 
 	let types_mod_ident = type_gen.types_mod_ident();

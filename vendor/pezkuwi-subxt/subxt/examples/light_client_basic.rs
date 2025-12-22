@@ -1,6 +1,6 @@
 #![allow(missing_docs)]
 use futures::StreamExt;
-use pezkuwi_subxt::{PezkuwiConfig, client::OnlineClient, lightclient::LightClient};
+use pezkuwi_subxt::{client::OnlineClient, lightclient::LightClient, PezkuwiConfig};
 
 // Generate an interface that we can use from the node's metadata.
 #[pezkuwi_subxt::subxt(runtime_metadata_path = "../artifacts/pezkuwi_metadata_small.scale")]

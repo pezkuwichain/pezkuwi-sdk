@@ -45,7 +45,7 @@
 //! ```rust,ignore
 #![doc = include_str!("../../../examples/setup_client_custom_rpc.rs")]
 //! ```
-//! 
+//!
 //! ### Creating an [`crate::OfflineClient`]:
 //! ```rust,ignore
 #![doc = include_str!("../../../examples/setup_client_offline.rs")]

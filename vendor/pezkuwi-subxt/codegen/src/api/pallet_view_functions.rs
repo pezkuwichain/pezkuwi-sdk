@@ -8,7 +8,7 @@ use crate::CodegenError;
 use pezkuwi_subxt_metadata::{PalletMetadata, ViewFunctionMetadata};
 use proc_macro2::TokenStream as TokenStream2;
 use quote::{format_ident, quote};
-use scale_typegen::{TypeGenerator, typegen::ir::ToTokensWithSettings};
+use scale_typegen::{typegen::ir::ToTokensWithSettings, TypeGenerator};
 use std::collections::HashSet;
 
 pub fn generate_pallet_view_functions(

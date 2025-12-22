@@ -2,7 +2,7 @@
 // This file is dual-licensed as Apache-2.0 or GPL-3.0.
 // see LICENSE for license details.
 
-use super::{PrefixOf, StorageKeyValue, StorageValue, address::Address};
+use super::{address::Address, PrefixOf, StorageKeyValue, StorageValue};
 use crate::{error::StorageError, utils::YesMaybe};
 use alloc::{sync::Arc, vec::Vec};
 use frame_decode::storage::{IntoEncodableValues, StorageInfo};

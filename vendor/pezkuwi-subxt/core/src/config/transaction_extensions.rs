@@ -398,13 +398,14 @@ impl<T: Config> CheckMortalityParams<T> {
 impl<T: Config> Params<T> for CheckMortalityParams<T> {
 	fn inject_block(&mut self, from_block_n: u64, from_block_hash: HashFor<T>) {
 		match &self.0 {
-			CheckMortalityParamsInner::MortalForBlocks(n) |
-			CheckMortalityParamsInner::MortalForBlocksOrImmortalIfNotPossible(n) =>
+			CheckMortalityParamsInner::MortalForBlocks(n)
+			| CheckMortalityParamsInner::MortalForBlocksOrImmortalIfNotPossible(n) => {
 				self.0 = CheckMortalityParamsInner::MortalFromBlock {
 					for_n_blocks: *n,
 					from_block_n,
 					from_block_hash,
-				},
+				}
+			},
 			_ => {
 				// Don't change anything if explicit Immortal or explicit block set.
 			},
@@ -670,10 +671,10 @@ fn is_type_empty(type_id: u32, types: &scale_info::PortableRegistry) -> bool {
 		TypeDef::Array(a) => a.len == 0 || is_type_empty(a.type_param.id, types),
 		TypeDef::Tuple(t) => t.fields.iter().all(|f| is_type_empty(f.id, types)),
 		// Explicitly list these in case any additions are made in the future.
-		TypeDef::BitSequence(_) |
-		TypeDef::Variant(_) |
-		TypeDef::Sequence(_) |
-		TypeDef::Compact(_) |
-		TypeDef::Primitive(_) => false,
+		TypeDef::BitSequence(_)
+		| TypeDef::Variant(_)
+		| TypeDef::Sequence(_)
+		| TypeDef::Compact(_)
+		| TypeDef::Primitive(_) => false,
 	}
 }

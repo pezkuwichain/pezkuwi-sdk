@@ -19,8 +19,8 @@ use getrandom as _;
 use api::RuntimeGenerator;
 use proc_macro2::TokenStream as TokenStream2;
 use scale_typegen::{
+	typegen::settings::{substitutes::absolute_path, AllocCratePath},
 	DerivesRegistry, TypeGeneratorSettings, TypeSubstitutes, TypegenError,
-	typegen::settings::{AllocCratePath, substitutes::absolute_path},
 };
 use std::collections::HashMap;
 use syn::parse_quote;

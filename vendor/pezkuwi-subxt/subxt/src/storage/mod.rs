@@ -7,6 +7,6 @@
 mod storage_client;
 mod storage_client_at;
 
-pub use pezkuwi_subxt_core::storage::address::{Address, DynamicAddress, StaticAddress, dynamic};
+pub use pezkuwi_subxt_core::storage::address::{dynamic, Address, DynamicAddress, StaticAddress};
 pub use storage_client::StorageClient;
 pub use storage_client_at::{StorageClientAt, StorageEntryClient, StorageKeyValue, StorageValue};

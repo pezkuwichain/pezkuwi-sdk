@@ -4,8 +4,7 @@
 
 use super::{OfflineClient, OfflineClientT};
 use crate::{
-	Metadata,
-	backend::{Backend, BackendExt, StreamOfResults, legacy::LegacyBackend, rpc::RpcClient},
+	backend::{legacy::LegacyBackend, rpc::RpcClient, Backend, BackendExt, StreamOfResults},
 	blocks::{BlockRef, BlocksClient},
 	config::{Config, HashFor},
 	constants::ConstantsClient,
@@ -16,9 +15,10 @@ use crate::{
 	storage::StorageClient,
 	tx::TxClient,
 	view_functions::ViewFunctionsClient,
+	Metadata,
 };
 use derive_where::derive_where;
-use futures::{TryFutureExt, future};
+use futures::{future, TryFutureExt};
 use pezkuwi_subxt_core::client::{ClientState, RuntimeVersion};
 use std::sync::{Arc, RwLock};
 

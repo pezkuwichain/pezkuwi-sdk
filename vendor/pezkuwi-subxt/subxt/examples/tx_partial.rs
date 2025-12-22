@@ -1,6 +1,6 @@
 #![allow(missing_docs)]
-use pezkuwi_subxt_signer::sr25519::dev;
 use pezkuwi_subxt::{OnlineClient, PezkuwiConfig};
+use pezkuwi_subxt_signer::sr25519::dev;
 
 type BoxedError = Box<dyn std::error::Error + Send + Sync + 'static>;
 
