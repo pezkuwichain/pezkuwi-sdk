@@ -8,22 +8,21 @@ publish = true
 license.workspace = true
 repository.workspace = true
 description = "Zombienet sdk config builder, allow to build a network configuration"
-keywords = ["zombienet", "configuration", "sdk"]
+keywords = ["configuration", "sdk", "zombienet"]
 
 [dependencies]
-regex = { workspace = true }
+anyhow = { workspace = true }
 lazy_static = { workspace = true }
 multiaddr = { workspace = true }
-url = { workspace = true, features = ["serde"] }
-thiserror = { workspace = true }
-anyhow = { workspace = true }
-serde = { workspace = true, features = ["derive"] }
-toml = { workspace = true }
-serde_json = { workspace = true }
+regex = { workspace = true }
 reqwest = { workspace = true }
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
 tokio = { workspace = true, features = ["fs"] }
+toml = { workspace = true }
 tracing = { workspace = true }
+url = { workspace = true, features = ["serde"] }
 
 # zombienet deps
 support = { workspace = true }
-

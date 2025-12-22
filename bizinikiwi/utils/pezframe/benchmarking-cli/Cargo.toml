@@ -37,7 +37,11 @@ pezframe-support = { workspace = true, default-features = true }
 pezframe-system = { workspace = true, default-features = true }
 pezkuwi-primitives = { workspace = true, default-features = true }
 pezkuwi-subxt = { workspace = true, features = ["native"] }
-pezkuwi-subxt-signer = { workspace = true, features = ["sr25519", "subxt", "unstable-eth"] }
+pezkuwi-subxt-signer = { workspace = true, features = [
+	"sr25519",
+	"subxt",
+	"unstable-eth",
+] }
 pezkuwi-teyrchain-primitives = { workspace = true, default-features = true }
 pezsc-block-builder = { workspace = true, default-features = true }
 pezsc-chain-spec = { workspace = true }
