@@ -1,0 +1,28 @@
+[package]
+name = "zombienet-support"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish = true
+license.workspace = true
+repository.workspace = true
+description = "Support crates with common traits/structs and helpers"
+keywords = ["zombienet"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+async-trait = { workspace = true }
+futures = { workspace = true }
+reqwest = { workspace = true }
+tokio = { workspace = true, features = ["full"] }
+uuid = { workspace = true, features = ["v4"] }
+nix = { workspace = true, features = ["signal"] }
+rand = { workspace = true }
+regex = { workspace = true }
+tracing = { workspace = true }
+lazy_static = { workspace = true }
+serde_json = { workspace = true }

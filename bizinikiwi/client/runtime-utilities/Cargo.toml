@@ -30,9 +30,9 @@ thiserror = { workspace = true }
 [dev-dependencies]
 pezcumulus-primitives-proof-size-hostfunction = { workspace = true, default-features = true }
 pezcumulus-test-runtime = { workspace = true, default-features = true }
+pezkuwi-subxt = { workspace = true, features = ["native"] }
 pezsp-io = { workspace = true, default-features = true }
 pezsp-version = { workspace = true, default-features = true }
-pezkuwi-subxt = { workspace = true, features = ["native"] }
 
 [features]
 runtime-benchmarks = [

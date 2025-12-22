@@ -20,13 +20,13 @@ futures = { workspace = true }
 log = { workspace = true }
 pezcumulus-zombienet-sdk-helpers = { workspace = true }
 pezkuwi-primitives = { workspace = true, default-features = true }
+pezkuwi-subxt = { workspace = true, default-features = false, features = ["native"] }
 pezpallet-revive = { workspace = true, features = ["std"] }
 pezsp-core = { workspace = true }
 pezsp-runtime = { workspace = true }
 rand = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
-pezkuwi-subxt = { workspace = true, default-features = false, features = ["native"] }
 tokio = { workspace = true, features = ["rt-multi-thread"] }
 tokio-util = { workspace = true, features = ["time"] }
 zombienet-orchestrator = { workspace = true }
@@ -43,6 +43,7 @@ runtime-benchmarks = [
 	"pezsc-executor/runtime-benchmarks",
 	"pezsc-runtime-utilities/runtime-benchmarks",
 	"pezsp-io/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks"
 ]
 
 [build-dependencies]

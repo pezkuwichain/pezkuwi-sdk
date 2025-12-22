@@ -52,6 +52,10 @@ bn = { workspace = true }
 pezframe-benchmarking = { optional = true, workspace = true }
 pezframe-support = { workspace = true }
 pezframe-system = { workspace = true }
+pezkuwi-subxt-signer = { workspace = true, optional = true, features = [
+	"subxt",
+	"unstable-eth",
+] }
 pezpallet-revive-fixtures = { workspace = true, optional = true }
 pezpallet-revive-proc-macro = { workspace = true }
 pezpallet-revive-uapi = { workspace = true, features = [
@@ -69,10 +73,6 @@ pezsp-io = { workspace = true }
 pezsp-runtime = { workspace = true }
 pezsp-version = { workspace = true }
 ripemd = { workspace = true }
-pezkuwi-subxt-signer = { workspace = true, optional = true, features = [
-	"unstable-eth",
-	"subxt",
-] }
 
 [dev-dependencies]
 alloy-consensus = { workspace = true, default-features = true }
@@ -113,6 +113,7 @@ std = [
 	"pezframe-benchmarking?/std",
 	"pezframe-support/std",
 	"pezframe-system/std",
+	"pezkuwi-subxt-signer",
 	"pezpallet-proxy/std",
 	"pezpallet-revive-fixtures?/std",
 	"pezpallet-timestamp/std",
@@ -139,7 +140,7 @@ std = [
 	"secp256k1/std",
 	"serde/std",
 	"serde_json/std",
-	"pezkuwi-subxt-signer",
+	"pezkuwi-subxt-signer?/std"
 ]
 runtime-benchmarks = [
 	"k256",
