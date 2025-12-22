@@ -19,7 +19,7 @@ jobs:
           app_id: ${{ secrets.PROJECT_APP_ID }}
           private_key: ${{ secrets.PROJECT_APP_KEY }}
       - name: Sync issues
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           github-token: ${{ steps.generate_token.outputs.token }}
           script: |
