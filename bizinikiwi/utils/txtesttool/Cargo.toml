@@ -33,7 +33,11 @@ parking_lot = { workspace = true, default-features = true }
 pezkuwi-subxt = { workspace = true, default-features = true }
 pezkuwi-subxt-core = { workspace = true, default-features = true }
 pezkuwi-subxt-rpcs = { workspace = true, default-features = true }
-pezkuwi-subxt-signer = { workspace = true, features = ["sr25519", "subxt", "unstable-eth"] }
+pezkuwi-subxt-signer = { workspace = true, features = [
+	"sr25519",
+	"subxt",
+	"unstable-eth",
+] }
 rand = { workspace = true, default-features = true }
 serde = { workspace = true, default-features = true }
 serde_json = { workspace = true, features = ["arbitrary_precision"] }

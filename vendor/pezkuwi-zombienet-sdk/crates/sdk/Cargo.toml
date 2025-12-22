@@ -8,17 +8,17 @@ publish = true
 license.workspace = true
 repository.workspace = true
 description = "Zombienet SDK, entrypoint for using zombienet"
-keywords = ["zombienet", "sdk"]
+keywords = ["sdk", "zombienet"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 async-trait = { workspace = true }
-tokio = { workspace = true }
 futures = { workspace = true }
 lazy_static = { workspace = true }
 pezkuwi-subxt = { workspace = true }
 pezkuwi-subxt-signer = { workspace = true, features = ["subxt"] }
+tokio = { workspace = true }
 
 # Zombienet deps
 configuration = { workspace = true }
@@ -27,7 +27,7 @@ provider = { workspace = true }
 support = { workspace = true }
 
 [dev-dependencies]
-tracing-subscriber = { workspace = true }
-kube = { workspace = true, features = ["ws", "runtime"] }
 k8s-openapi = { workspace = true, features = ["v1_27"] }
-serde_json = {workspace = true }
+kube = { workspace = true, features = ["runtime", "ws"] }
+serde_json = { workspace = true }
+tracing-subscriber = { workspace = true }

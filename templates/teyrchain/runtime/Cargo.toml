@@ -110,10 +110,10 @@ runtime-benchmarks = [
 	"bizinikiwi-wasm-builder?/runtime-benchmarks",
 	"hex-literal",
 	"pezcumulus-pezpallet-teyrchain-system/runtime-benchmarks",
+	"pezframe-try-runtime?/runtime-benchmarks",
 	"pezkuwi-sdk/runtime-benchmarks",
 	"pezpallet-teyrchain-template/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
-	"pezframe-try-runtime?/runtime-benchmarks"
 ]
 try-runtime = [
 	"pezcumulus-pezpallet-teyrchain-system/try-runtime",
@@ -121,7 +121,7 @@ try-runtime = [
 	"pezframe-try-runtime/try-runtime",
 	"pezkuwi-sdk/try-runtime",
 	"pezpallet-teyrchain-template/try-runtime",
-	"pezsp-runtime/try-runtime"
+	"pezsp-runtime/try-runtime",
 ]
 
 # Enable the metadata hash generation.

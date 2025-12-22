@@ -8,7 +8,7 @@ publish = true
 license.workspace = true
 repository.workspace = true
 description = "Prometheus metric parser, parse metrics provided by internal prometheus server"
-keywords = ["zombienet", "prometheus"]
+keywords = ["prometheus", "zombienet"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
