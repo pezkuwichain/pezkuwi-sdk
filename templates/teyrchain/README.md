@@ -261,7 +261,7 @@ relay chain network (see [Teyrchain Template node](#teyrchain-template-node) set
 
 - 🧑‍🏫 To learn about Pezkuwi in general, [docs.Pezkuwi.com](https://docs.pezkuwichain.io/) website is a good starting point.
 
-- 🧑‍🔧 For technical introduction, see the [Pezkuwi SDK documentation](https://github.com/pezkuwichain/pezkuwi-sdk#-documentation).
+- 🧑‍🔧 For technical introduction, see [the Pezkuwi SDK documentation](https://github.com/pezkuwichain/pezkuwi-sdk#-documentation).
 
 - 👥 Additionally, there are [GitHub issues](https://github.com/pezkuwichain/pezkuwi-sdk/issues) and
   [Bizinikiwi StackExchange](https://exchange.pezkuwichain.app/).
