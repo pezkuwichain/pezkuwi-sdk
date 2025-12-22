@@ -46,7 +46,7 @@ Pezkuwi SDK originated as a fork of Polkadot SDK (stable2512). It has since been
 Pezkuwi SDK uses a distinct naming scheme to ensure complete independence:
 
 | Component | Prefix | Example |
-|-----------|--------|---------|
+| --- | --- | --- |
 | Core Framework | `bizinikiwi-` | `bizinikiwi-runtime` |
 | TeyrChain SDK | `pezcumulus-` | `pezcumulus-client` |
 | Client Crates | `pezsc-` | `pezsc-network`, `pezsc-consensus` |
@@ -76,7 +76,7 @@ PezkuwiChain is the flagship blockchain built on Pezkuwi SDK, designed for Kurdi
 ### Custom Pallets
 
 | Pallet | Purpose |
-|--------|---------|
+| --- | --- |
 | `pezpallet-presale` | Multi-round token launches with vesting |
 | `pezpallet-identity-kyc` | Decentralized identity verification |
 | `pezpallet-welati` | Democratic governance and voting |
@@ -138,7 +138,7 @@ TeyrChain (Parachain)
 ## Network Roadmap
 
 | Stage | Validators | Status |
-|-------|------------|--------|
+| --- | --- | --- |
 | Dev Mode | 1 | ✅ |
 | Local Testnet | 2 | ✅ |
 | **Alfa Testnet** | 4 | ✅ |
@@ -153,7 +153,7 @@ TeyrChain (Parachain)
 PezkuwiChain is designed to host **multiple digital nations** simultaneously:
 
 | Nation Type | Example | Target Population |
-|-------------|---------|-------------------|
+| --- | --- | --- |
 | **Ethnic** | Kurdish (PEZ) | 40M+ globally |
 | **Ethnic** | Catalan | 10M+ |
 | **Ethnic** | Tibetan | 6M+ diaspora |
@@ -203,7 +203,7 @@ cargo build --release --features runtime-benchmarks
 ## Links
 
 | Resource | URL |
-|----------|-----|
+| --- | --- |
 | Website | [pezkuwichain.io](https://pezkuwichain.io) |
 | App | [pezkuwichain.app](https://pezkuwichain.app) |
 | Explorer | [explorer.pezkuwichain.io](https://explorer.pezkuwichain.io) |
@@ -213,7 +213,7 @@ cargo build --release --features runtime-benchmarks
 ## Community
 
 | Platform | Link |
-|----------|------|
+| --- | --- |
 | Telegram | [@pezkuwichain](https://t.me/pezkuwichain) |
 | Discord | [discord.gg/pezkuwichain](https://discord.gg/pezkuwichain) |
 | Twitter | [@pezkuwichain](https://twitter.com/pezkuwichain) |
@@ -294,11 +294,11 @@ Take a look at the issues labeled with [`mentor`](https://github.com/pezkuwichai
 
 ## Pezkuwi Fellowship
 
-Development in this repo usually goes hand in hand with the `fellowship` organization. In short, this repository provides all the SDK pieces needed to build both PezkuwiChain and its teyrchains. But, the actual PezkuwiChain runtime lives in the `fellowship/runtimes` repository. Read more about the fellowship, this separation, the RFC process [here](https://pezkuwi-fellows.github.io/dashboard/).
+Development in this repo usually goes hand in hand with the `fellowship` organization. In short, this repository provides all the SDK pieces needed to build both PezkuwiChain and its teyrchains. But, the actual PezkuwiChain runtime lives in the `fellowship/runtimes` repository. Read more about the fellowship, this separation, and the RFC process in the [Pezkuwi Fellows repository](https://github.com/pezkuwichain/pezkuwi-fellows).
 
 ## History
 
-This repository is the amalgamation of 3 separate repositories that used to make up Pezkuwi SDK, namely Bizinikiwi, Pezkuwi and PezCumulus. Read more about the merge and its history [here](https://pezkuwi-public.notion.site/Pezkuwi-SDK-FAQ-fbc4cecc2c46443fb37b9eeec2f0d85f).
+This repository is the amalgamation of 3 separate repositories that used to make up Pezkuwi SDK, namely Bizinikiwi, Pezkuwi and PezCumulus. Read more about the SDK in the [Pezkuwi SDK Documentation](https://docs.pezkuwichain.io/pezkuwi_sdk_docs/index.html).
 
 ---
 

@@ -64,7 +64,7 @@ merged faster.
 
 ### Labels
 
-The set of labels and their description can be found [here](https://docs.pezkuwichain.io/labels/doc_polkadot-sdk.html).
+The set of labels and their description can be found in the [label documentation](https://docs.pezkuwichain.io/labels/doc_polkadot-sdk.html).
 
 ### Process
 
@@ -111,7 +111,7 @@ Template](./PULL_REQUEST_TEMPLATE.md). Moreover, all pull requests must have a p
 
 Pull Requests labelled with ⁠`R0-no-crate-publish-required` are exempt from ⁠prdoc documentation requirements.
 
-See more about `prdoc` [here](./prdoc.md)
+See more about `prdoc` in the [prdoc documentation](./prdoc.md)
 
 ## Crate Configuration `Cargo.toml`
 

@@ -75,8 +75,8 @@ There are good sources to look into:
   Crate](https://blog.guillaume-gomez.fr/articles/2020-03-12+Guide+on+how+to+write+documentation+for+a+Rust+crate)
 
 As mentioned
-[here](https://web.mit.edu/rust-lang_v1.25/arch/amd64_ubuntu1404/share/doc/rust/html/book/first-edition/documentation.html#writing-documentation-comments)
-and [here](https://blog.guillaume-gomez.fr/articles/2020-03-12+Guide+on+how+to+write+documentation+for+a+Rust+crate),
+[the Rust documentation guide](https://web.mit.edu/rust-lang_v1.25/arch/amd64_ubuntu1404/share/doc/rust/html/book/first-edition/documentation.html#writing-documentation-comments)
+and [the documentation blog post](https://blog.guillaume-gomez.fr/articles/2020-03-12+Guide+on+how+to+write+documentation+for+a+Rust+crate),
 always start with a **single sentence** demonstrating what is documented. All additional documentation should be added
 *after a newline*. Strive to make the first sentence succinct and short.The reason for this is the first paragraph of
 docs about an item (everything before the first newline) is used as the excerpt that rust doc displays about this item
@@ -98,8 +98,8 @@ returned, and if the `Error` variants are overly complicated.
 
 Strive to include correct links to other items in your written docs as much as possible.
 Read more about how to correctly use links in your rust-docs
-[here](https://doc.rust-lang.org/rustdoc/write-documentation/linking-to-items-by-name.html#valid-links) and
-[here](https://rust-lang.github.io/rfcs/1946-intra-rustdoc-links.html#additions-to-the-documentation-syntax).
+[the rustdoc linking documentation](https://doc.rust-lang.org/rustdoc/write-documentation/linking-to-items-by-name.html#valid-links) and
+[the RFC on intra-doc links](https://rust-lang.github.io/rfcs/1946-intra-rustdoc-links.html#additions-to-the-documentation-syntax).
 In other words, avoid `` `some_func` `` and instead use ``[`some_func`]``.
 
 > While you are linking, you might become conscious of the fact that you are in need of linking to (too many) foreign
@@ -127,8 +127,8 @@ proc macro crate, but often will no longer function when these proc macros are r
 The exception is doc links to *other proc macros* which will function just fine if they are also being re-exported. It
 is also often necessary to disambiguate between a proc macro and a function of the same name, which can be done using
 the `macro@my_macro_name` syntax in your link. Read more about how to correctly use links in your rust-docs
-[here](https://doc.rust-lang.org/rustdoc/write-documentation/linking-to-items-by-name.html#valid-links) and
-[here](https://rust-lang.github.io/rfcs/1946-intra-rustdoc-links.html#additions-to-the-documentation-syntax).
+[the rustdoc linking documentation](https://doc.rust-lang.org/rustdoc/write-documentation/linking-to-items-by-name.html#valid-links) and
+[the RFC on intra-doc links](https://rust-lang.github.io/rfcs/1946-intra-rustdoc-links.html#additions-to-the-documentation-syntax).
 
 ---
 

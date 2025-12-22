@@ -468,7 +468,7 @@ finalized in the first place. Not allowing disputing already finalized blocks ac
 as it massively reduces the amount of candidates that can be disputed.
 
 This makes attempts to overwhelm the system with disputes significantly harder and counter measures way easier. We can
-limit inclusion for example (as suggested [here](https://github.com/pezkuwichain/pezkuwi-sdk/issues/162) in case of high
+limit inclusion for example (as suggested [this GitHub issue](https://github.com/pezkuwichain/pezkuwi-sdk/issues/162) in case of high
 dispute load. Another measure we have at our disposal is that on finality lag block production will slow down,
 implicitly reducing the rate of new candidates that can be disputed. Hence, the cutting-off of the unlimited candidate
 supply of already finalized blocks, guarantees the necessary DoS protection and ensures we can have measures in place to

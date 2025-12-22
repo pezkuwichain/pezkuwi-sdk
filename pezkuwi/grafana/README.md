@@ -9,7 +9,7 @@ monitor the liveliness and performance of a network and its validators.
 
 Just import the dashboard JSON files from this folder in your Grafana installation. All dashboards are grouped in
 folder per category (like for example `teyrchains`). The files have been created by Grafana export functionality and
-follow the data model specified [here](https://grafana.com/docs/grafana/latest/dashboards/json-model/).
+follow the data model specified [Grafana JSON model documentation](https://grafana.com/docs/grafana/latest/dashboards/json-model/).
 
 We aim to keep the dashboards here in sync with the implementation, except dashboards for development and
 testing.

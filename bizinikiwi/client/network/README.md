@@ -32,7 +32,7 @@ Bizinikiwi uses:
 - Bootstrap nodes. These are hard-coded node identities and addresses passed alongside with
 the network configuration.
 - mDNS. We perform a UDP broadcast on the local network. Nodes that listen may respond with
-their identity. More info [here](https://github.com/libp2p/specs/blob/master/discovery/mdns.md).
+their identity. More info [libp2p mDNS specification](https://github.com/libp2p/specs/blob/master/discovery/mdns.md).
 mDNS can be disabled in the network configuration.
 - Kademlia random walk. Once connected, we perform random Kademlia `FIND_NODE` requests on the
 configured Kademlia DHTs (one per configured chain protocol) in order for nodes to propagate to

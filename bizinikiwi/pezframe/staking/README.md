@@ -192,7 +192,7 @@ The remaining reward is sent to the configurable end-point
 Validators and nominators are rewarded at the end of each era. The total reward of an era is calculated using the era
 duration and the staking rate (the total amount of tokens staked by nominators and validators, divided by the total
 token supply). It aims to incentivize toward a defined staking rate. The full specification can be found
-[here](https://research.web3.foundation/en/latest/polkadot/economics/1-token-economics.html#inflation-model).
+[the Web3 Foundation research on token economics](https://research.web3.foundation/en/latest/polkadot/economics/1-token-economics.html#inflation-model).
 
 Total reward is split among validators and their nominators depending on the number of points they received during the
 era. Points are added to a validator using
@@ -245,7 +245,7 @@ to remove some of the chunks.
 ### Election Algorithm
 
 The current election algorithm is implemented based on _Phragmén_. The reference implementation can be found
-[here](https://github.com/w3f/consensus/tree/master/NPoS).
+[the NPoS consensus documentation](https://github.com/w3f/consensus/tree/master/NPoS).
 
 The election algorithm, aside from electing the validators with the most stake value and votes, tries to divide the
 nominator votes among candidates in an equal manner. To further assure this, an optional post-processing can be applied

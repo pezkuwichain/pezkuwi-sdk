@@ -4,7 +4,7 @@ The implementers' guide is compiled from several source files with [`mdBook`](ht
 
 ## Hosted build
 
-This is available [here](https://docs.pezkuwichain.io/sdk/book/).
+This is available [the hosted documentation](https://docs.pezkuwichain.io/sdk/book/).
 
 ## Local build
 
