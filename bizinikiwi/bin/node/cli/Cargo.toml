@@ -225,5 +225,5 @@ try-runtime = [
 	"bizinikiwi-cli-test-utils/try-runtime",
 	"pez-kitchensink-runtime/try-runtime",
 	"pezkuwi-sdk/try-runtime",
-	"pezsp-runtime/try-runtime"
+	"pezsp-runtime/try-runtime",
 ]

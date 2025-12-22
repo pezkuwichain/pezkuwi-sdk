@@ -72,13 +72,13 @@ std = [
 runtime-benchmarks = [
 	"bizinikiwi-wasm-builder?/runtime-benchmarks",
 	"pez-node-primitives/runtime-benchmarks",
+	"pezframe-try-runtime?/runtime-benchmarks",
 	"pezkuwi-sdk/runtime-benchmarks",
 	"pezpallet-example-mbm/runtime-benchmarks",
 	"pezpallet-example-tasks/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 	"rand",
 	"rand_pcg",
-	"pezframe-try-runtime?/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks"
 ]
 try-runtime = [
 	"pezframe-try-runtime",
@@ -86,7 +86,7 @@ try-runtime = [
 	"pezkuwi-sdk/try-runtime",
 	"pezpallet-example-mbm/try-runtime",
 	"pezpallet-example-tasks/try-runtime",
-	"pezsp-runtime/try-runtime"
+	"pezsp-runtime/try-runtime",
 ]
 experimental = ["pezpallet-example-tasks/experimental"]
 metadata-hash = ["bizinikiwi-wasm-builder/metadata-hash"]

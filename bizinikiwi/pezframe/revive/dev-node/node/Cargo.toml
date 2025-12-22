@@ -43,13 +43,9 @@ pezkuwi-sdk = { workspace = true, features = ["bizinikiwi-build-script-utils"] }
 
 [features]
 default = ["std"]
-std = [
-	"pez-revive-dev-runtime/std",
-	"pezkuwi-sdk/std",
-	"pezsp-runtime/std"
-]
+std = ["pez-revive-dev-runtime/std", "pezkuwi-sdk/std", "pezsp-runtime/std"]
 runtime-benchmarks = [
 	"pez-revive-dev-runtime/runtime-benchmarks",
 	"pezkuwi-sdk/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks"
+	"pezsp-runtime/runtime-benchmarks",
 ]

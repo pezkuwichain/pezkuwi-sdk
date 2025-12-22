@@ -114,6 +114,7 @@ std = [
 	"pezframe-support/std",
 	"pezframe-system/std",
 	"pezkuwi-subxt-signer",
+	"pezkuwi-subxt-signer?/std",
 	"pezpallet-proxy/std",
 	"pezpallet-revive-fixtures?/std",
 	"pezpallet-timestamp/std",
@@ -140,7 +141,6 @@ std = [
 	"secp256k1/std",
 	"serde/std",
 	"serde_json/std",
-	"pezkuwi-subxt-signer?/std"
 ]
 runtime-benchmarks = [
 	"k256",

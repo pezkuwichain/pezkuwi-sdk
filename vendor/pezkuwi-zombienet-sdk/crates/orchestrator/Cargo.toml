@@ -8,47 +8,46 @@ publish = true
 license.workspace = true
 repository.workspace = true
 description = "Zombienet Orchestrator, drive network spwan through providers"
-keywords = ["zombienet", "orchestrator", "sdk"]
+keywords = ["orchestrator", "sdk", "zombienet"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-tokio = { workspace = true, features = ["time"] }
-thiserror = { workspace = true }
-multiaddr = { workspace = true }
-serde_json = { workspace = true, features = ["arbitrary_precision"] }
-futures = { workspace = true }
 anyhow = { workspace = true }
-rand = { workspace = true }
-sha2 = { workspace = true, default-features = false }
+async-trait = { workspace = true }
+fancy-regex = { workspace = true }
+futures = { workspace = true }
+glob-match = { workspace = true }
 hex = { workspace = true }
-sp-core = { workspace = true }
 libp2p = { workspace = true }
+libsecp256k1 = { workspace = true }
+multiaddr = { workspace = true }
 pezkuwi-subxt = { workspace = true }
 pezkuwi-subxt-signer = { workspace = true }
+rand = { workspace = true }
+regex = { workspace = true }
 reqwest = { workspace = true }
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true, features = ["arbitrary_precision"] }
+sha2 = { workspace = true, default-features = false }
+sp-core = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true, features = ["time"] }
 tracing = { workspace = true }
 uuid = { workspace = true }
-regex = { workspace = true }
-glob-match = { workspace = true }
-async-trait = { workspace = true }
-serde = { workspace = true, features = ["derive"] }
-libsecp256k1 = { workspace = true  }
-fancy-regex = { workspace = true }
 # staging-chain-spec-builder = { workspace = true }
 # parity-scale-codec = { version = "3.7.5", features = ["derive"] }
 # sc-chain-spec = {workspace = true, default-features = false}
-sc-chain-spec = { workspace = true }
 erased-serde = { workspace = true }
+sc-chain-spec = { workspace = true }
 
 # Zombienet deps
 configuration = { workspace = true }
-support = { workspace = true }
-provider = { workspace = true }
 prom-metrics-parser = { workspace = true }
+provider = { workspace = true }
+support = { workspace = true }
 
 [dev-dependencies]
-toml = { workspace = true }
 async-trait = { workspace = true }
 lazy_static = { workspace = true }
-
+toml = { workspace = true }

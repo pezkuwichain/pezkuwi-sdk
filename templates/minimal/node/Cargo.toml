@@ -46,10 +46,10 @@ default = ["std"]
 std = [
 	"pez-minimal-template-runtime/std",
 	"pezkuwi-sdk/std",
-	"pezsp-runtime/std"
+	"pezsp-runtime/std",
 ]
 runtime-benchmarks = [
 	"pez-minimal-template-runtime/runtime-benchmarks",
 	"pezkuwi-sdk/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks"
+	"pezsp-runtime/runtime-benchmarks",
 ]
