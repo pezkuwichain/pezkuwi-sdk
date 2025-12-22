@@ -1,8 +1,8 @@
 #![allow(missing_docs)]
-use pezkuwi_subxt_signer::sr25519::dev;
 use pezkuwi_subxt::{
-	OnlineClient, PezkuwiConfig, config::pezkuwi::PezkuwiExtrinsicParamsBuilder as Params,
+	config::pezkuwi::PezkuwiExtrinsicParamsBuilder as Params, OnlineClient, PezkuwiConfig,
 };
+use pezkuwi_subxt_signer::sr25519::dev;
 
 #[pezkuwi_subxt::subxt(runtime_metadata_path = "../artifacts/pezkuwi_metadata_small.scale")]
 pub mod pezkuwi {}

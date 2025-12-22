@@ -1,6 +1,6 @@
 #![allow(missing_docs)]
 use pezkuwi_subxt::{
-	OfflineClient, config::PezkuwiConfig, ext::codec::Decode, metadata::Metadata, utils::H256,
+	config::PezkuwiConfig, ext::codec::Decode, metadata::Metadata, utils::H256, OfflineClient,
 };
 
 #[tokio::main]

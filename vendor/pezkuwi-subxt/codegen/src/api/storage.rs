@@ -172,7 +172,7 @@ fn generate_storage_entry_fns(
 mod tests {
 	use frame_metadata::v15;
 	use pezkuwi_subxt_metadata::Metadata;
-	use scale_info::{MetaType, meta_type};
+	use scale_info::{meta_type, MetaType};
 
 	// TODO: Think about adding tests for storage codegen which can use this sort of function.
 	#[allow(dead_code)]

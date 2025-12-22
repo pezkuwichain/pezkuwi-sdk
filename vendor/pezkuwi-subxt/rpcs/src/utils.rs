@@ -26,5 +26,9 @@ pub fn url_is_secure(url: &str) -> Result<bool, Error> {
 
 /// Validates, that the given Url is secure ("https" or "wss" scheme) or is referring to localhost.
 pub fn validate_url_is_secure(url: &str) -> Result<(), Error> {
-	if !url_is_secure(url)? { Err(Error::InsecureUrl(url.into())) } else { Ok(()) }
+	if !url_is_secure(url)? {
+		Err(Error::InsecureUrl(url.into()))
+	} else {
+		Ok(())
+	}
 }

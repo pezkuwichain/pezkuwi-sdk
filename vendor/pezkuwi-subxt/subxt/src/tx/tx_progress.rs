@@ -347,11 +347,11 @@ mod test {
 	use pezkuwi_subxt_core::client::RuntimeVersion;
 
 	use crate::{
-		BizinikiwConfig,
 		backend::{StreamOfResults, TransactionStatus},
 		client::{OfflineClientT, OnlineClientT},
 		config::{Config, HashFor},
 		tx::TxProgress,
+		BizinikiwConfig,
 	};
 
 	type MockTxProgress = TxProgress<BizinikiwConfig, MockClient>;

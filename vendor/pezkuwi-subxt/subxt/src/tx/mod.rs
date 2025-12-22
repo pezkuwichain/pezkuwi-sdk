@@ -13,7 +13,7 @@ mod tx_client;
 mod tx_progress;
 
 pub use pezkuwi_subxt_core::tx::{
-	payload::{DefaultPayload, DynamicPayload, Payload, dynamic},
+	payload::{dynamic, DefaultPayload, DynamicPayload, Payload},
 	signer::{self, Signer},
 };
 pub use tx_client::{

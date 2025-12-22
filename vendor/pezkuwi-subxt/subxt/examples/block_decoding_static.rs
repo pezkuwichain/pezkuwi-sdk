@@ -1,7 +1,7 @@
 #![allow(missing_docs)]
 use pezkuwi_subxt::{
-	OnlineClient, PezkuwiConfig,
 	utils::{AccountId32, MultiAddress},
+	OnlineClient, PezkuwiConfig,
 };
 
 use codec::Decode;
@@ -55,5 +55,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 fn display_address(addr: &MultiAddress<AccountId32, ()>) -> String {
-	if let MultiAddress::Id(id32) = addr { format!("{id32}") } else { "MultiAddress::...".into() }
+	if let MultiAddress::Id(id32) = addr {
+		format!("{id32}")
+	} else {
+		"MultiAddress::...".into()
+	}
 }

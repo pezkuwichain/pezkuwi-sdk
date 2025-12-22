@@ -57,14 +57,14 @@
 //! ```rust,ignore
 #![doc = include_str!("../../../examples/storage_fetch.rs")]
 //! ```
-//! 
+//!
 //! For completeness, below is an example using a dynamic query instead. Dynamic queries can define the types that
 //! they wish to accept inputs and decode the return value into ([`crate::dynamic::Value`] can be used here anywhere we
 //! are not sure of the specific types).
 //! ```rust,ignore
 #![doc = include_str!("../../../examples/storage_fetch_dynamic.rs")]
 //! ```
-//! 
+//!
 //! ### Iterating storage entries
 //!
 //! Many storage entries are maps of values; as well as fetching individual values, it's possible to
@@ -72,7 +72,7 @@
 //! ```rust,ignore
 #![doc = include_str!("../../../examples/storage_iterating.rs")]
 //! ```
-//! 
+//!
 //! Here's the same logic but using dynamically constructed values instead:
 //! ```rust,ignore
 #![doc = include_str!("../../../examples/storage_iterating_dynamic.rs")]

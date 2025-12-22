@@ -10,8 +10,8 @@ use std::time::Duration;
 
 use futures::StreamExt;
 use pezkuwi_subxt::{
-	OnlineClient, PezkuwiConfig,
 	backend::rpc::reconnecting_rpc_client::{ExponentialBackoff, RpcClient},
+	OnlineClient, PezkuwiConfig,
 };
 
 // Generate an interface that we can use from the node's metadata.

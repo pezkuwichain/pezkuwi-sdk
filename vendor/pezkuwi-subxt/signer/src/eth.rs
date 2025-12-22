@@ -106,7 +106,7 @@ impl Keypair {
 
 	/// Obtain the [`eth::PublicKey`] of this keypair.
 	pub fn public_key(&self) -> PublicKey {
-		let uncompressed = self.0.0.public_key().serialize_uncompressed();
+		let uncompressed = self.0 .0.public_key().serialize_uncompressed();
 		PublicKey(uncompressed)
 	}
 
@@ -576,7 +576,7 @@ mod test {
 
 		for (case_idx, (keypair, exp_account_id, exp_priv_key)) in cases.into_iter().enumerate() {
 			let act_account_id = keypair.public_key().to_account_id().checksum();
-			let act_priv_key = format!("0x{}", &keypair.0.0.display_secret());
+			let act_priv_key = format!("0x{}", &keypair.0 .0.display_secret());
 
 			assert_eq!(exp_account_id, act_account_id, "account ID mismatch in {case_idx}");
 			assert_eq!(exp_priv_key, act_priv_key, "private key mismatch in {case_idx}");

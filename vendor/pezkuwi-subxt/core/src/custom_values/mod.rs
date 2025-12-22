@@ -32,7 +32,7 @@
 
 pub mod address;
 
-use crate::{Metadata, error::CustomValueError, utils::Maybe};
+use crate::{error::CustomValueError, utils::Maybe, Metadata};
 use address::Address;
 use alloc::vec::Vec;
 use frame_decode::custom_values::CustomValueTypeInfo;
@@ -99,7 +99,7 @@ mod tests {
 	use alloc::collections::BTreeMap;
 	use codec::Encode;
 	use scale_decode::DecodeAsType;
-	use scale_info::{TypeInfo, form::PortableForm};
+	use scale_info::{form::PortableForm, TypeInfo};
 
 	use alloc::{borrow::ToOwned, string::String, vec};
 

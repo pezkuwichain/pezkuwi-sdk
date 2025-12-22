@@ -7,8 +7,8 @@
 //! methods exposed here.
 
 use crate::{
+	client::{rpc_params, RpcClient, RpcSubscription},
 	Error, Hash, RpcConfig,
-	client::{RpcClient, RpcSubscription, rpc_params},
 };
 use derive_where::derive_where;
 use futures::{Stream, StreamExt};
@@ -891,10 +891,10 @@ impl<H: Hash> Stream for TransactionSubscription<H> {
 		if let Poll::Ready(Some(Ok(res))) = &res {
 			if matches!(
 				res,
-				TransactionStatus::Dropped { .. } |
-					TransactionStatus::Error { .. } |
-					TransactionStatus::Invalid { .. } |
-					TransactionStatus::Finalized { .. }
+				TransactionStatus::Dropped { .. }
+					| TransactionStatus::Error { .. }
+					| TransactionStatus::Invalid { .. }
+					| TransactionStatus::Finalized { .. }
 			) {
 				// No more events will occur after these ones.
 				self.done = true

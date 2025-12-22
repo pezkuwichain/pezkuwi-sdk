@@ -29,6 +29,16 @@ std = [
 	"serde?/std",
 	"serde_json?/std",
 	"sha2/std",
+	"bip32?/std",
+	"getrandom?/std",
+	"hex/std",
+	"keccak-hash?/std",
+	"codec/std",
+	"pezkuwi-subxt-core?/std",
+	"pezsp-core/std",
+	"pezsp-crypto-hashing/std",
+	"pezsp-keyring/std",
+	"zeroize/std"
 ]
 
 # Pick the signer implementation(s) you need by enabling the

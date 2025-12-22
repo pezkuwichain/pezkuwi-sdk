@@ -1,12 +1,12 @@
 #![allow(missing_docs)]
+use pezkuwi_subxt::{
+	backend::rpc::{RawRpcFuture, RawRpcSubscription, RawValue, RpcClient, RpcClientT},
+	OnlineClient, PezkuwiConfig,
+};
 use std::{
 	fmt::Write,
 	pin::Pin,
 	sync::{Arc, Mutex},
-};
-use pezkuwi_subxt::{
-	OnlineClient, PezkuwiConfig,
-	backend::rpc::{RawRpcFuture, RawRpcSubscription, RawValue, RpcClient, RpcClientT},
 };
 
 // A dummy RPC client that doesn't actually handle requests properly

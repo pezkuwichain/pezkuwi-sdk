@@ -432,16 +432,21 @@ fn codegen_works() {
 			};
 
 			match &metadata {
-				RuntimeMetadata::V9(m) =>
-					pezkuwi_subxt_codegen::Metadata::from_v9(m, &types_for_spec),
-				RuntimeMetadata::V10(m) =>
-					pezkuwi_subxt_codegen::Metadata::from_v10(m, &types_for_spec),
-				RuntimeMetadata::V11(m) =>
-					pezkuwi_subxt_codegen::Metadata::from_v11(m, &types_for_spec),
-				RuntimeMetadata::V12(m) =>
-					pezkuwi_subxt_codegen::Metadata::from_v12(m, &types_for_spec),
-				RuntimeMetadata::V13(m) =>
-					pezkuwi_subxt_codegen::Metadata::from_v13(m, &types_for_spec),
+				RuntimeMetadata::V9(m) => {
+					pezkuwi_subxt_codegen::Metadata::from_v9(m, &types_for_spec)
+				},
+				RuntimeMetadata::V10(m) => {
+					pezkuwi_subxt_codegen::Metadata::from_v10(m, &types_for_spec)
+				},
+				RuntimeMetadata::V11(m) => {
+					pezkuwi_subxt_codegen::Metadata::from_v11(m, &types_for_spec)
+				},
+				RuntimeMetadata::V12(m) => {
+					pezkuwi_subxt_codegen::Metadata::from_v12(m, &types_for_spec)
+				},
+				RuntimeMetadata::V13(m) => {
+					pezkuwi_subxt_codegen::Metadata::from_v13(m, &types_for_spec)
+				},
 				_ => panic!("Metadata version {} not expected", metadata.version()),
 			}
 			.expect("Could not convert to pezkuwi_subxt_metadata::Metadata")

@@ -33,7 +33,7 @@
 //! ```rust,ignore
 #![doc = include_str!("../../../examples/light_client_basic.rs")]
 //! ```
-//! 
+//!
 //! ### Connecting to a local node
 //!
 //! This example connects to a local chain and submits a transaction. To run this, you first need
@@ -41,7 +41,7 @@
 //! ```text
 //! pezkuwi --dev --node-key 0000000000000000000000000000000000000000000000000000000000000001
 //! ```
-//! 
+//!
 //! Then, the following code will download a chain spec from this local node, alter the bootnodes
 //! to point only to the local node, and then submit a transaction through it.
 //! ```rust,ignore

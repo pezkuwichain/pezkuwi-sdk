@@ -5,8 +5,8 @@
 
 ## Son Güncelleme
 - **Tarih:** 2024-12-22
-- **Son Tamamlanan:** cargo clippy düzeltildi
-- **Aktif Görev:** FAZ 1 - CI Yeşil Işık
+- **Son Tamamlanan:** Vendor integration (pezkuwi-subxt, pezkuwi-zombienet-sdk)
+- **Aktif Görev:** FAZ 1 - CI Yeşil Işık (umbrella check sırada)
 
 ---
 
@@ -15,19 +15,19 @@
 ### checks.yml (3 job)
 | Job | Durum | Komut | Notlar |
 |-----|-------|-------|--------|
-| cargo-clippy | ✅ TAMAMLANDI | `RUSTFLAGS="-D warnings" SKIP_WASM_BUILD=1 cargo clippy --all-targets --all-features --locked --workspace --quiet` | 5 dosya düzeltildi |
+| cargo-clippy | ✅ TAMAMLANDI | `RUSTFLAGS="-D warnings" SKIP_WASM_BUILD=1 cargo clippy --all-targets --all-features --locked --workspace --quiet` | 36 dosya düzeltildi |
 | check-try-runtime | ⏳ BEKLEMEDE | Workflow'dan kontrol et | |
 | check-core-crypto-features | ⏳ BEKLEMEDE | `check-features-variants.sh` | |
 
 ### checks-quick.yml (10 job)
 | Job | Durum | Komut | Notlar |
 |-----|-------|-------|--------|
-| fmt | ⏳ BEKLEMEDE | `cargo fmt --all -- --check` | |
-| check-toml-format | ⏳ BEKLEMEDE | `taplo format --check --config .config/taplo.toml` | |
-| check-zepter | ⏳ BEKLEMEDE | `zepter run check` | Önce: `cargo install zepter@1.82.1` |
-| check-workspace | ⏳ BEKLEMEDE | `python3 .github/scripts/check-workspace.py .` | |
-| check-umbrella | ⏳ BEKLEMEDE | `python3 scripts/generate-umbrella.py` | |
-| check-dependency-rules | ⏳ BEKLEMEDE | `.gitlab/ensure-deps.sh` | |
+| fmt | ✅ TAMAMLANDI | `cargo fmt --all -- --check` | rustfmt.toml stable-only yapıldı, 898 dosya formatlandı |
+| check-toml-format | ✅ TAMAMLANDI | `taplo format --check --config .config/taplo.toml` | 10 dosya düzeltildi |
+| check-zepter | ✅ TAMAMLANDI | `zepter run check` | 18 feature propagation düzeltildi |
+| check-workspace | ✅ TAMAMLANDI | `python3 .github/scripts/check-workspace.py .` | 606 crate, 6919 link doğrulandı |
+| check-dependency-rules | ✅ TAMAMLANDI | `python3 .github/scripts/deny-git-deps.py .` | Git deps path'e çevrildi |
+| check-umbrella | ⏳ BEKLEMEDE | `python3 scripts/generate-umbrella.py` | Sırada |
 | test-rust-features | ⏳ BEKLEMEDE | `.gitlab/rust-features.sh .` | |
 | check-markdown | ⏳ BEKLEMEDE | `markdownlint --config .github/.markdownlint.yaml --ignore target .` | |
 | check-fail-ci | ⏳ BEKLEMEDE | `rg "FAIL-CI" --type rust` | Basit, muhtemelen OK |
@@ -84,7 +84,7 @@
 
 ## TAMAMLANAN DÜZELTMELER
 
-### 2024-12-22: Clippy Düzeltmeleri
+### 2024-12-22: Oturum 1 - Clippy Düzeltmeleri
 
 **Dosya 1:** `pezcumulus/pezkuwi-omni-node/tests/extra_subcommand_parsing_test.rs`
 - Sorun: deprecated `cargo_bin` function
@@ -122,14 +122,36 @@
 - Sorun: Field name `i` → `_i`
 - Çözüm: `AddNumberIntoTotal { i:` → `AddNumberIntoTotal { _i:`
 
+### 2024-12-22: Oturum 2 - Format ve Vendor Entegrasyonu
+
+**rustfmt.toml Stable Migration:**
+- Sorun: rustfmt.toml nightly-only özellikler kullanıyordu
+- Çözüm: 9 nightly özellik kaldırıldı (imports_granularity, wrap_comments, vb.)
+- Etki: 898 dosya yeniden formatlandı
+
+**Vendor Entegrasyonu:**
+- `pezkuwi-subxt` → `vendor/pezkuwi-subxt/` (monorepo'ya dahil)
+- `pezkuwi-zombienet-sdk` → `vendor/pezkuwi-zombienet-sdk/` (monorepo'ya dahil)
+- Git bağımlılıkları path bağımlılıklarına çevrildi
+- Test/example crate'ler vendor'dan çıkarıldı (gereksiz)
+- 606 crate workspace'e dahil edildi
+- 6919 internal dependency link doğrulandı
+
+**Zepter Düzeltmeleri (18 adet):**
+- runtime-benchmarks feature propagation (8 düzeltme)
+- std feature propagation (4 düzeltme)
+- try-runtime feature propagation (5 düzeltme)
+- serde feature propagation (1 düzeltme)
+
 ---
 
 ## SONRAKİ ADIMLAR
 
-1. **cargo fmt --all -- --check** çalıştır
-2. Hataları düzelt (varsa)
-3. Bu dosyayı güncelle
-4. Sonraki job'a geç
+1. **check-umbrella** çalıştır
+2. **test-rust-features** çalıştır
+3. **check-markdown** çalıştır
+4. **check-fail-ci** çalıştır
+5. **check-readme** çalıştır
 
 ---
 
@@ -146,14 +168,27 @@
 │   └── taplo.toml             # TOML formatter config
 ├── .claude/
 │   ├── CLAUDE_RULES.md        # Rebrand kuralları
-│   └── TERMINOLOGY.md         # Terminoloji mapping
+│   ├── TERMINOLOGY.md         # Terminoloji mapping
+│   └── WORKFLOW_PLAN.md       # Bu dosya
 ├── scripts/
 │   └── generate-umbrella.py   # Umbrella crate generator
 ├── .gitlab/
 │   ├── ensure-deps.sh         # Dependency rules
 │   └── rust-features.sh       # Feature testing
+├── vendor/
+│   ├── pezkuwi-subxt/         # Vendored subxt (10 crate)
+│   ├── pezkuwi-zombienet-sdk/ # Vendored zombienet (6 crate)
+│   └── ss58-registry/         # SS58 registry
 └── crate_placeholders/        # 150 placeholder crate
 ```
+
+---
+
+## GIT COMMIT GEÇMİŞİ
+
+1. `fix: Resolve cargo clippy errors and add CI workflow plan` - 1393 dosya
+2. `style: Migrate to stable-only rustfmt configuration` - 898 dosya
+3. `feat: Vendor pezkuwi-subxt and pezkuwi-zombienet-sdk into monorepo` - 386 dosya
 
 ---
 
@@ -162,3 +197,4 @@
 - Her büyük değişiklikten önce git commit yap
 - Hata düzeltirken rebrand'i bozma
 - Çıktıları takip et, 100+ hata varsa kategorize et
+- GitHub repolarını archive et: pezkuwi-subxt, pezkuwi-zombienet-sdk

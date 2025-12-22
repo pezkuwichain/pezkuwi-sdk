@@ -8,5 +8,5 @@ mod custom_values_client;
 
 pub use custom_values_client::CustomValuesClient;
 pub use pezkuwi_subxt_core::custom_values::address::{
-	Address, DynamicAddress, StaticAddress, dynamic,
+	dynamic, Address, DynamicAddress, StaticAddress,
 };

@@ -3,10 +3,10 @@
 // see LICENSE for license details.
 
 use crate::{
-	Metadata,
 	blocks::extrinsic_transaction_extensions::ExtrinsicTransactionExtensions,
 	config::{Config, HashFor, Hasher},
 	error::{ExtrinsicDecodeErrorAt, ExtrinsicDecodeErrorAtReason, ExtrinsicError},
+	Metadata,
 };
 use alloc::{sync::Arc, vec::Vec};
 use frame_decode::extrinsics::Extrinsic;
@@ -284,8 +284,8 @@ where
 	/// Attempt to decode these [`ExtrinsicDetails`] into a type representing the extrinsic fields.
 	/// Such types are exposed in the codegen as `pallet_name::calls::types::CallName` types.
 	pub fn as_extrinsic<E: StaticExtrinsic>(&self) -> Result<Option<E>, ExtrinsicError> {
-		if self.decoded_info().pallet_name() == E::PALLET &&
-			self.decoded_info().call_name() == E::CALL
+		if self.decoded_info().pallet_name() == E::PALLET
+			&& self.decoded_info().call_name() == E::CALL
 		{
 			let mut fields = self.decoded_info().call_data().map(|d| {
 				let name = if d.name().is_empty() { None } else { Some(d.name()) };
@@ -340,13 +340,13 @@ mod tests {
 	use assert_matches::assert_matches;
 	use codec::{Decode, Encode};
 	use frame_metadata::{
-		RuntimeMetadataPrefixed,
 		v15::{
 			CustomMetadata, ExtrinsicMetadata, OuterEnums, PalletCallMetadata, PalletMetadata,
 			RuntimeMetadataV15,
 		},
+		RuntimeMetadataPrefixed,
 	};
-	use scale_info::{TypeInfo, meta_type};
+	use scale_info::{meta_type, TypeInfo};
 	use scale_value::Value;
 
 	// Extrinsic needs to contain at least the generic type parameter "Call"

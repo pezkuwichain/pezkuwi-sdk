@@ -8,8 +8,8 @@ use alloc::{vec, vec::Vec};
 use codec::{Compact, Input};
 use core::marker::PhantomData;
 use scale_bits::{
-	Bits,
 	scale::format::{Format, OrderFormat, StoreFormat},
+	Bits,
 };
 use scale_decode::{IntoVisitor, TypeResolver};
 

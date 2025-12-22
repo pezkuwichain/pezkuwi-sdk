@@ -11,7 +11,7 @@ mod wasm_platform;
 #[cfg(feature = "web")]
 mod wasm_socket;
 
-pub use helpers::{DefaultPlatform, build_platform};
+pub use helpers::{build_platform, DefaultPlatform};
 
 #[cfg(feature = "native")]
 mod helpers {

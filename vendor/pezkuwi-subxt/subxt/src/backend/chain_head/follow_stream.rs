@@ -227,8 +227,8 @@ pub(super) mod test_utils {
 		BestBlockChanged, Finalized, Initialized, NewBlock,
 	};
 	use std::sync::{
-		Arc,
 		atomic::{AtomicUsize, Ordering},
+		Arc,
 	};
 
 	/// Given some events, returns a follow stream getter that we can use in

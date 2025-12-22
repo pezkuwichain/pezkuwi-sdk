@@ -5,9 +5,9 @@
 use super::TryFromError;
 
 use crate::{
+	utils::{ordered_map::OrderedMap, variant_index::VariantIndex},
 	ConstantMetadata, CustomMetadataInner, ExtrinsicMetadata, Metadata, OuterEnumsMetadata,
 	PalletMetadataInner, StorageEntryMetadata, StorageMetadata, TransactionExtensionMetadataInner,
-	utils::{ordered_map::OrderedMap, variant_index::VariantIndex},
 };
 use alloc::{borrow::ToOwned, collections::BTreeMap, format, string::String, vec, vec::Vec};
 use frame_decode::storage::StorageTypeInfo;

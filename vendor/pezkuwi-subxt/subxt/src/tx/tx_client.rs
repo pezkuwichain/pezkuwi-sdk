@@ -12,7 +12,7 @@ use crate::{
 };
 use codec::{Compact, Decode, Encode};
 use derive_where::derive_where;
-use futures::future::{TryFutureExt, try_join};
+use futures::future::{try_join, TryFutureExt};
 use pezkuwi_subxt_core::tx::TransactionVersion;
 
 /// A client for working with transactions.
@@ -122,18 +122,20 @@ impl<T: Config, C: OfflineClientT<T>> TxClient<T, C> {
 	{
 		let metadata = self.client.metadata();
 		let tx = match pezkuwi_subxt_core::tx::suggested_version(&metadata)? {
-			TransactionVersion::V4 =>
+			TransactionVersion::V4 => {
 				PartialTransactionInner::V4(pezkuwi_subxt_core::tx::create_v4_signed(
 					call,
 					&self.client.client_state(),
 					params,
-				)?),
-			TransactionVersion::V5 =>
+				)?)
+			},
+			TransactionVersion::V5 => {
 				PartialTransactionInner::V5(pezkuwi_subxt_core::tx::create_v5_general(
 					call,
 					&self.client.client_state(),
 					params,
-				)?),
+				)?)
+			},
 		};
 
 		Ok(PartialTransaction { client: self.client.clone(), inner: tx })
@@ -419,10 +421,12 @@ where
 		signature: &T::Signature,
 	) -> SubmittableTransaction<T, C> {
 		let tx = match &mut self.inner {
-			PartialTransactionInner::V4(tx) =>
-				tx.sign_with_account_and_signature(account_id.clone(), signature),
-			PartialTransactionInner::V5(tx) =>
-				tx.sign_with_account_and_signature(account_id, signature),
+			PartialTransactionInner::V4(tx) => {
+				tx.sign_with_account_and_signature(account_id.clone(), signature)
+			},
+			PartialTransactionInner::V5(tx) => {
+				tx.sign_with_account_and_signature(account_id, signature)
+			},
 		};
 
 		SubmittableTransaction { client: self.client.clone(), inner: tx }
@@ -509,22 +513,24 @@ where
 		// If we get a bad status or error back straight away then error, else return the hash.
 		match sub.next().await {
 			Some(Ok(status)) => match status {
-				TransactionStatus::Validated |
-				TransactionStatus::Broadcasted |
-				TransactionStatus::InBestBlock { .. } |
-				TransactionStatus::NoLongerInBestBlock |
-				TransactionStatus::InFinalizedBlock { .. } => Ok(ext_hash),
+				TransactionStatus::Validated
+				| TransactionStatus::Broadcasted
+				| TransactionStatus::InBestBlock { .. }
+				| TransactionStatus::NoLongerInBestBlock
+				| TransactionStatus::InFinalizedBlock { .. } => Ok(ext_hash),
 				TransactionStatus::Error { message } => Err(
 					ExtrinsicError::TransactionStatusError(TransactionStatusError::Error(message)),
 				),
-				TransactionStatus::Invalid { message } =>
+				TransactionStatus::Invalid { message } => {
 					Err(ExtrinsicError::TransactionStatusError(TransactionStatusError::Invalid(
 						message,
-					))),
-				TransactionStatus::Dropped { message } =>
+					)))
+				},
+				TransactionStatus::Dropped { message } => {
 					Err(ExtrinsicError::TransactionStatusError(TransactionStatusError::Dropped(
 						message,
-					))),
+					)))
+				},
 			},
 			Some(Err(e)) => Err(ExtrinsicError::TransactionStatusStreamError(e)),
 			None => Err(ExtrinsicError::UnexpectedEndOfTransactionStatusStream),
