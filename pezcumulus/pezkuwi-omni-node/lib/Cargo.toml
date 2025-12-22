@@ -29,8 +29,8 @@ serde_json = { workspace = true, default-features = true }
 
 # Local
 jsonrpsee = { features = ["server"], workspace = true }
-scale-info = { workspace = true }
 pezkuwi-subxt-metadata = { workspace = true, default-features = true }
+scale-info = { workspace = true }
 teyrchains-common = { workspace = true, default-features = true }
 
 # Bizinikiwi

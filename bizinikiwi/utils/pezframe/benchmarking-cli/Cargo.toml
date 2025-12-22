@@ -36,6 +36,8 @@ pezframe-benchmarking = { workspace = true, default-features = true }
 pezframe-support = { workspace = true, default-features = true }
 pezframe-system = { workspace = true, default-features = true }
 pezkuwi-primitives = { workspace = true, default-features = true }
+pezkuwi-subxt = { workspace = true, features = ["native"] }
+pezkuwi-subxt-signer = { workspace = true, features = ["sr25519", "subxt", "unstable-eth"] }
 pezkuwi-teyrchain-primitives = { workspace = true, default-features = true }
 pezsc-block-builder = { workspace = true, default-features = true }
 pezsc-chain-spec = { workspace = true }
@@ -71,8 +73,6 @@ rand = { features = ["small_rng"], workspace = true, default-features = true }
 rand_pcg = { workspace = true }
 serde = { workspace = true, default-features = true }
 serde_json = { workspace = true, default-features = true }
-pezkuwi-subxt = { workspace = true, features = ["native"] }
-pezkuwi-subxt-signer = { workspace = true, features = ["unstable-eth", "sr25519", "subxt"] }
 thiserror = { workspace = true }
 thousands = { workspace = true }
 

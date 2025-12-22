@@ -56,10 +56,10 @@ codec = { workspace = true, default-features = true }
 futures = { workspace = true }
 jsonrpsee = { features = ["server"], workspace = true }
 log = { workspace = true, default-features = true }
+pezkuwi-subxt-signer = { workspace = true, features = ["unstable-eth"] }
 rand = { workspace = true, default-features = true }
 serde = { features = ["derive"], workspace = true, default-features = true }
 serde_json = { workspace = true, default-features = true }
-pezkuwi-subxt-signer = { workspace = true, features = ["unstable-eth"] }
 
 # The Pezkuwi-SDK:
 pezkuwi-sdk = { features = [
@@ -225,4 +225,5 @@ try-runtime = [
 	"bizinikiwi-cli-test-utils/try-runtime",
 	"pez-kitchensink-runtime/try-runtime",
 	"pezkuwi-sdk/try-runtime",
+	"pezsp-runtime/try-runtime"
 ]

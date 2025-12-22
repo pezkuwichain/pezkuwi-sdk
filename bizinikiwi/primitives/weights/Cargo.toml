@@ -34,6 +34,7 @@ std = [
 	"pezsp-debug-derive/std",
 	"scale-info/std",
 	"serde/std",
+	"schemars?/std"
 ]
 # By default some types have documentation, `full-metadata-docs` allows to add documentation to
 # more types in the metadata.
