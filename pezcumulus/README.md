@@ -34,7 +34,7 @@ A PezkuwiChain [collator](https://wiki.network.pezkuwichain.io/docs/en/learn-col
 `pezkuwi-teyrchain` binary (previously called `pezkuwi-collator`).
 
 You may run `pezkuwi-teyrchain` locally after building it or using one of the container option described
-[here](../docs/contributor/container.md).
+[the container setup guide](../docs/contributor/container.md).
 
 ### Relay Chain Interaction
 To operate a teyrchain node, a connection to the corresponding relay chain is necessary. This can be achieved in one of

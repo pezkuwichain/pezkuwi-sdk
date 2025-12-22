@@ -15,7 +15,7 @@
 ## Özet
 
 | Kategori | Toplam | Tamamlanan | Durum |
-|----------|--------|------------|-------|
+| --- | --- | --- | --- |
 | pez-* prefix | 29 | 29 | ✅ |
 | pezbridge-* | 8 | 8 | ✅ |
 | pezsnowbridge-* | 25 | 24 | ⚠️ 1 eksik |
@@ -31,7 +31,7 @@
 ## İlerleme Tablosu
 
 | # | Yeni İsim | Durum | Konum |
-|---|-----------|-------|-------|
+| --- | --- | --- | --- |
 | 1 | asset-test-pezutils | ✅ | pezcumulus/teyrchains/runtimes/assets/test-utils |
 | 2 | pez-chain-spec-guide-runtime | ✅ | docs/sdk/src/reference_docs/chain_spec_runtime |
 | 3 | pez-equivocation-detector | ✅ | pezbridges/relays/equivocation |

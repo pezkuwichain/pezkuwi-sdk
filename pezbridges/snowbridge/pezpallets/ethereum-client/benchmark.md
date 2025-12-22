@@ -7,11 +7,11 @@ for it is super helpful.
 
 # Benchmark
 We add several benchmarks
-[here](https://github.com/Snowfork/snowbridge/blob/8891ca3cdcf2e04d8118c206588c956541ae4710/parachain/pallets/ethereum-client/src/benchmarking/mod.rs#L98-L124)
+[the benchmarking module](https://github.com/Snowfork/snowbridge/blob/8891ca3cdcf2e04d8118c206588c956541ae4710/parachain/pallets/ethereum-client/src/benchmarking/mod.rs#L98-L124)
 as following to demonstrate
 [bls_fast_aggregate_verify](https://github.com/Snowfork/snowbridge/blob/8891ca3cdcf2e04d8118c206588c956541ae4710/parachain/pallets/ethereum-client/src/lib.rs#L764)
 is the main bottleneck. Test data
-[here](https://github.com/Snowfork/snowbridge/blob/8891ca3cdcf2e04d8118c206588c956541ae4710/parachain/pallets/ethereum-client/src/benchmarking/data_mainnet.rs#L553-L1120)
+[the test data file](https://github.com/Snowfork/snowbridge/blob/8891ca3cdcf2e04d8118c206588c956541ae4710/parachain/pallets/ethereum-client/src/benchmarking/data_mainnet.rs#L553-L1120)
 is real from goerli network which contains 512 public keys from sync committee.
 
 ## sync_committee_period_update
@@ -68,12 +68,12 @@ benchmark pezpallet \
 
 ### [Weights](https://github.com/Snowfork/pezcumulus/blob/ron/benchmark-beacon-bridge/parachains/runtimes/bridge-hubs/bridge-hub-rococo/src/weights/snowbridge_pezpallet_ethereum_client.rs)
 
-|extrinsic       | minimum execution time benchmarked(us) |
-| --------------------------------------- |----------------------------------------|
-|sync_committee_period_update | 123_126                                |
-|bls_fast_aggregate_verify| 121_083                                |
-|bls_aggregate_pubkey | 90_306                                  |
-|bls_verify_message | 28_000                                  |
+| extrinsic | minimum execution time benchmarked(us) |
+| --- | --- |
+| sync_committee_period_update | 123_126 |
+| bls_fast_aggregate_verify | 121_083 |
+| bls_aggregate_pubkey | 90_306 |
+| bls_verify_message | 28_000 |
 
 - [bls_fast_aggregate_verify](#bls_fast_aggregate_verify) consumes 98% execution time of [sync_committee_period_update](#sync_committee_period_update)
 

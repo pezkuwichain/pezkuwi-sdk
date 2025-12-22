@@ -8,7 +8,7 @@ All teyrchain blocks that end up in the finalized relay chain should be valid. T
 only backed, but not included.
 
 We have two primary components for ensuring that nothing invalid ends up in the finalized relay chain:
-  * Approval Checking, as described [here](./protocol-approval.md) and implemented accordingly in the [Approval
+  * Approval Checking, as described [the approval protocol](./protocol-approval.md) and implemented accordingly in the [Approval
 Voting](node/approval/approval-voting.md) subsystem. This protocol can be shown to prevent invalid teyrchain blocks
 from making their way into the finalized relay chain as long as the amount of attempts are limited.
   * Disputes, this protocol, which ensures that each attempt to include something bad is caught, and the offending

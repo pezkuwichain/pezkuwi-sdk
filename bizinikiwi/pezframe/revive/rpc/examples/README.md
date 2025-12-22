@@ -43,6 +43,6 @@ JS examples have been moved to the [evm-test-suite](https://github.com/paritytec
 
 ### Configure MetaMask
 
-See the doc [here](https://contracts.polkadot.io/work-with-a-local-node#metemask-configuration) for more
+See the doc [the Polkadot Contracts documentation](https://contracts.polkadot.io/work-with-a-local-node#metemask-configuration) for more
 information on how to configure MetaMask.
 
