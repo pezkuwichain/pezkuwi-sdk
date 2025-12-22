@@ -27,6 +27,6 @@ pezpallet-paged-list = { features = ["std"], workspace = true }
 default = ["std"]
 std = ["frame/std", "pezpallet-paged-list/std"]
 runtime-benchmarks = [
-  "frame/runtime-benchmarks",
-  "pezpallet-paged-list/runtime-benchmarks",
+	"frame/runtime-benchmarks",
+	"pezpallet-paged-list/runtime-benchmarks",
 ]

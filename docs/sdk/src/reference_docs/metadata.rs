@@ -9,9 +9,9 @@
 //! it is hard to know the types internal to the runtime, specifically in light of the fact that
 //! they can change at any point in time.
 //!
-//! This is why all Bizinikiwi-based runtimes must expose a [`pezsp_api::Metadata`] api, which mandates
-//! the runtime to return a description of itself. The return type of this api is `Vec<u8>`, meaning
-//! that it is up to the runtime developer to decide on the format of this.
+//! This is why all Bizinikiwi-based runtimes must expose a [`pezsp_api::Metadata`] api, which
+//! mandates the runtime to return a description of itself. The return type of this api is
+//! `Vec<u8>`, meaning that it is up to the runtime developer to decide on the format of this.
 //!
 //! All [`crate::pezkuwi_sdk::frame_runtime`] based runtimes expose a specific metadata language,
 //! maintained in <https://github.com/paritytech/frame-metadata> which is adopted in the Pezkuwi

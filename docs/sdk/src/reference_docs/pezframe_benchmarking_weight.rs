@@ -48,8 +48,8 @@
 //! and include the ones that are known to fit based on the worst case.
 //!
 //! The benchmarking code can be written as a part of FRAME pezpallet, using the macros provided in
-//! [`pezframe_benchmarking`]. See any of the existing pallets in `pezkuwi-sdk`, or the pallets in our
-//! [`crate::pezkuwi_sdk::templates`] for examples.
+//! [`pezframe_benchmarking`]. See any of the existing pallets in `pezkuwi-sdk`, or the pallets in
+//! our [`crate::pezkuwi_sdk::templates`] for examples.
 //!
 //! ## Weight
 //!

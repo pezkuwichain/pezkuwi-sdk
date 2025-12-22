@@ -21,16 +21,16 @@ use pezsc_client_api::UsageProvider;
 use pezsp_api::{ApiExt, Core, Metadata, ProvideRuntimeApi};
 use pezsp_runtime::{traits::Block as BlockT, OpaqueExtrinsic};
 use std::sync::Arc;
-use subxt::{
+use pezkuwi_subxt::{
 	client::RuntimeVersion as SubxtRuntimeVersion,
-	config::{substrate::SubstrateExtrinsicParamsBuilder, HashFor},
-	Config, OfflineClient, SubstrateConfig,
+	config::{bizinikiwi::BizinikiwiExtrinsicParamsBuilder as ParamsBuilder, HashFor},
+	Config, OfflineClient, BizinikiwConfig,
 };
 
-/// Bizinikiwi configuration - based on SubstrateConfig
-pub type BizinikiwiConfig = SubstrateConfig;
-/// Bizinikiwi extrinsic params builder - based on SubstrateExtrinsicParamsBuilder
-pub type BizinikiwiExtrinsicParamsBuilder = SubstrateExtrinsicParamsBuilder<BizinikiwiConfig>;
+/// Bizinikiwi configuration
+pub type BizinikiwiConfig = BizinikiwConfig;
+/// Bizinikiwi extrinsic params builder
+pub type BizinikiwiExtrinsicParamsBuilder = ParamsBuilder<BizinikiwiConfig>;
 
 pub type BizinikiwiRemarkBuilder = DynamicRemarkBuilder<BizinikiwiConfig>;
 
@@ -83,7 +83,7 @@ impl<C: Config> DynamicRemarkBuilder<C> {
 			spec_version: version.spec_version,
 			transaction_version: version.transaction_version,
 		};
-		let metadata = subxt::Metadata::decode(&mut (*opaque_metadata).as_slice())?;
+		let metadata = pezkuwi_subxt::Metadata::decode(&mut (*opaque_metadata).as_slice())?;
 		let genesis = HashFor::<C>::decode(&mut &genesis.encode()[..])
 			.map_err(|_| "Incompatible hash types?")?;
 
@@ -94,7 +94,7 @@ impl<C: Config> DynamicRemarkBuilder<C> {
 impl<C: Config> DynamicRemarkBuilder<C> {
 	/// Constructs a new remark builder.
 	pub fn new(
-		metadata: subxt::Metadata,
+		metadata: pezkuwi_subxt::Metadata,
 		genesis_hash: HashFor<C>,
 		runtime_version: SubxtRuntimeVersion,
 	) -> Self {
@@ -112,8 +112,8 @@ impl ExtrinsicBuilder for DynamicRemarkBuilder<BizinikiwiConfig> {
 	}
 
 	fn build(&self, nonce: u32) -> std::result::Result<OpaqueExtrinsic, &'static str> {
-		let signer = subxt_signer::sr25519::dev::alice();
-		let dynamic_tx = subxt::dynamic::tx("System", "remark", vec![Vec::<u8>::new()]);
+		let signer = pezkuwi_subxt_signer::sr25519::dev::alice();
+		let dynamic_tx = pezkuwi_subxt::dynamic::tx("System", "remark", vec![Vec::<u8>::new()]);
 
 		let params = BizinikiwiExtrinsicParamsBuilder::new().nonce(nonce.into()).build();
 

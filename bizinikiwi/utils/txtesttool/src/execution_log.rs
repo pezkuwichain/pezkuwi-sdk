@@ -22,7 +22,7 @@ use std::{
 	},
 	time::{Duration, SystemTime},
 };
-use subxt_core::config::Hash as BlockHash;
+use pezkuwi_subxt_core::config::Hash as BlockHash;
 use tracing::{debug, info, trace};
 
 pub const STAT_TARGET: &str = "stat";

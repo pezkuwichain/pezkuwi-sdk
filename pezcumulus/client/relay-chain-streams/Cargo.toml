@@ -29,9 +29,9 @@ pezcumulus-relay-chain-interface = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-  "pezcumulus-relay-chain-interface/runtime-benchmarks",
-  "pezkuwi-node-subsystem/runtime-benchmarks",
-  "pezkuwi-primitives/runtime-benchmarks",
-  "pezsp-api/runtime-benchmarks",
-  "pezsp-consensus/runtime-benchmarks",
+	"pezcumulus-relay-chain-interface/runtime-benchmarks",
+	"pezkuwi-node-subsystem/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
+	"pezsp-consensus/runtime-benchmarks",
 ]

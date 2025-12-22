@@ -28,25 +28,25 @@ pezcumulus-primitives-core = { workspace = true }
 [features]
 default = ["std"]
 std = [
-  "codec/std",
-  "pezcumulus-primitives-core/std",
-  "pezframe-support/std",
-  "pezframe-system/std",
-  "scale-info/std",
-  "pezsp-io/std",
-  "pezsp-runtime/std",
-  "xcm/std",
+	"codec/std",
+	"pezcumulus-primitives-core/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
+	"pezsp-io/std",
+	"pezsp-runtime/std",
+	"scale-info/std",
+	"xcm/std",
 ]
 try-runtime = [
-  "pezframe-support/try-runtime",
-  "pezframe-system/try-runtime",
-  "pezsp-runtime/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezsp-runtime/try-runtime",
 ]
 runtime-benchmarks = [
-  "pezcumulus-primitives-core/runtime-benchmarks",
-  "pezframe-support/runtime-benchmarks",
-  "pezframe-system/runtime-benchmarks",
-  "pezsp-io/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "xcm/runtime-benchmarks",
+	"pezcumulus-primitives-core/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
 ]

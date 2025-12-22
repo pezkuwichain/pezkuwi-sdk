@@ -19,12 +19,13 @@ targets = ["x86_64-unknown-linux-gnu"]
 [dependencies]
 async-channel = { workspace = true }
 async-trait = { workspace = true }
+bizinikiwi-test-runtime = { workspace = true }
+bizinikiwi-test-runtime-client = { workspace = true }
 futures = { workspace = true }
 futures-timer = { workspace = true }
 libp2p = { workspace = true }
 log = { workspace = true, default-features = true }
 parking_lot = { workspace = true, default-features = true }
-rand = { workspace = true, default-features = true }
 pezsc-block-builder = { workspace = true, default-features = true }
 pezsc-client-api = { workspace = true, default-features = true }
 pezsc-consensus = { workspace = true, default-features = true }
@@ -40,23 +41,22 @@ pezsp-consensus = { workspace = true, default-features = true }
 pezsp-core = { workspace = true, default-features = true }
 pezsp-runtime = { workspace = true, default-features = true }
 pezsp-tracing = { workspace = true, default-features = true }
-bizinikiwi-test-runtime = { workspace = true }
-bizinikiwi-test-runtime-client = { workspace = true }
+rand = { workspace = true, default-features = true }
 tokio = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-  "pezsc-block-builder/runtime-benchmarks",
-  "pezsc-client-api/runtime-benchmarks",
-  "pezsc-consensus/runtime-benchmarks",
-  "pezsc-network-common/runtime-benchmarks",
-  "pezsc-network-light/runtime-benchmarks",
-  "pezsc-network-sync/runtime-benchmarks",
-  "pezsc-network/runtime-benchmarks",
-  "pezsc-service/runtime-benchmarks",
-  "pezsp-blockchain/runtime-benchmarks",
-  "pezsp-consensus/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "bizinikiwi-test-runtime-client/runtime-benchmarks",
-  "bizinikiwi-test-runtime/runtime-benchmarks",
+	"bizinikiwi-test-runtime-client/runtime-benchmarks",
+	"bizinikiwi-test-runtime/runtime-benchmarks",
+	"pezsc-block-builder/runtime-benchmarks",
+	"pezsc-client-api/runtime-benchmarks",
+	"pezsc-consensus/runtime-benchmarks",
+	"pezsc-network-common/runtime-benchmarks",
+	"pezsc-network-light/runtime-benchmarks",
+	"pezsc-network-sync/runtime-benchmarks",
+	"pezsc-network/runtime-benchmarks",
+	"pezsc-service/runtime-benchmarks",
+	"pezsp-blockchain/runtime-benchmarks",
+	"pezsp-consensus/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]

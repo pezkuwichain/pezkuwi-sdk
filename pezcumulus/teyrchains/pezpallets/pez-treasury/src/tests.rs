@@ -545,9 +545,9 @@ fn pot_accounts_are_different() {
 		let government = PezTreasury::government_pot_account_id();
 
 		println!("\n=== Account IDs from Pezpallet ===");
-		println!("Treasury: {:?}", treasury);
-		println!("Incentive: {:?}", incentive);
-		println!("Government: {:?}", government);
+		println!("Treasury: {treasury:?}");
+		println!("Incentive: {incentive:?}");
+		println!("Government: {government:?}");
 		println!("================================\n");
 
 		// Tüm üçü farklı olmalı
@@ -832,8 +832,6 @@ fn treasury_never_goes_negative() {
 				let after_balance = Assets::balance(PezAssetId::get(), treasury_account());
 				// Balance should decrease or stay the same, never increase
 				assert!(after_balance <= before_balance);
-				// Balance should never go below zero
-				assert!(after_balance >= 0);
 			} else {
 				// If release fails, balance should be unchanged
 				assert_eq!(before_balance, Assets::balance(PezAssetId::get(), treasury_account()));
@@ -942,7 +940,7 @@ fn first_period_total_is_half_of_treasury() {
 
 		let diff = expected_first_period.saturating_sub(first_period_total);
 		// Kalanların toplamı 48'den az olmalı (her ay en fazla 1 birim kalan)
-		assert!(diff < 48, "Rounding error too large: {}", diff);
+		assert!(diff < 48, "Rounding error too large: {diff}");
 	});
 }
 
@@ -964,6 +962,6 @@ fn geometric_series_sum_validates() {
 		// first_period_total * 2 = treasury_allocation
 		let diff = treasury_allocation.saturating_sub(first_period_total * 2);
 		// Kalanların toplamı (2 ile çarpılmış) 96'dan az olmalı
-		assert!(diff < 96, "Rounding error too large: {}", diff);
+		assert!(diff < 96, "Rounding error too large: {diff}");
 	});
 }

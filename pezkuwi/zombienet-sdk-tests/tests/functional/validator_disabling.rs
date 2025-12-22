@@ -25,7 +25,7 @@ async fn validator_disabling_test() -> Result<(), anyhow::Error> {
 			let r = r
 				.with_chain("zagros-local") // Use zagros-local so the disabling can take effect.
 				.with_default_command("pezkuwi")
-				.with_default_image(images.pezkuwi.as_str())
+				.with_default_image(images.pezkuwi())
 				.with_default_args(vec![("-lteyrchain=debug").into()])
 				.with_genesis_overrides(json!({
 					"configuration": {
@@ -39,7 +39,7 @@ async fn validator_disabling_test() -> Result<(), anyhow::Error> {
 					}
 				}))
 				// Adding malicious validator.
-				.with_node(|node| {
+				.with_validator(|node| {
 					node.with_name("malus-validator")
 						.with_image(
 							std::env::var("MALUS_IMAGE")
@@ -58,7 +58,7 @@ async fn validator_disabling_test() -> Result<(), anyhow::Error> {
 				});
 			// Also honest validators.
 			let r = (0..3).fold(r, |acc, i| {
-				acc.with_node(|node| {
+				acc.with_validator(|node| {
 					node.with_name(&format!("honest-validator-{i}"))
 						.with_args(vec![("-lteyrchain=debug,runtime::staking=debug".into())])
 						.invulnerable(false)
@@ -70,7 +70,7 @@ async fn validator_disabling_test() -> Result<(), anyhow::Error> {
 			p.with_id(1000)
 				.with_default_command("adder-collator")
 				.pezcumulus_based(false)
-				.with_default_image(images.pezcumulus.as_str())
+				.with_default_image(images.pezcumulus())
 				.with_default_args(vec!["-lteyrchain=debug".into()])
 				.with_collator(|n| n.with_name("alice"))
 		})

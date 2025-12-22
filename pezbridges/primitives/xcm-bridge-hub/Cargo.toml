@@ -33,21 +33,21 @@ xcm = { workspace = true }
 [features]
 default = ["std"]
 std = [
-  "bp-messages/std",
-  "pezbp-runtime/std",
-  "codec/std",
-  "pezframe-support/std",
-  "scale-info/std",
-  "serde/std",
-  "pezsp-core/std",
-  "pezsp-io/std",
-  "pezsp-std/std",
-  "xcm/std",
+	"bp-messages/std",
+	"codec/std",
+	"pezbp-runtime/std",
+	"pezframe-support/std",
+	"pezsp-core/std",
+	"pezsp-io/std",
+	"pezsp-std/std",
+	"scale-info/std",
+	"serde/std",
+	"xcm/std",
 ]
 runtime-benchmarks = [
-  "bp-messages/runtime-benchmarks",
-  "pezbp-runtime/runtime-benchmarks",
-  "pezframe-support/runtime-benchmarks",
-  "pezsp-io/runtime-benchmarks",
-  "xcm/runtime-benchmarks",
+	"bp-messages/runtime-benchmarks",
+	"pezbp-runtime/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
 ]

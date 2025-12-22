@@ -8,7 +8,7 @@ repository = "https://github.com/pezkuwichain/pezkuwi-sdk"
 homepage = "https://pezkuwichain.io"
 documentation = "https://docs.pezkuwichain.io/sdk/"
 authors = ["Kurdistan Tech Institute <info@pezkuwichain.io>"]
-keywords = ["pezkuwichain", "blockchain", "sdk"]
+keywords = ["blockchain", "pezkuwichain", "sdk"]
 categories = ["cryptography::cryptocurrencies"]
 
 [workspace]

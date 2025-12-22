@@ -52,7 +52,7 @@ where
 				GeneralIndex(seed2.into()),
 			],
 		);
-		if seed1 % 2 == 0 {
+		if seed1.is_multiple_of(2) {
 			(
 				with_id
 					.try_into()

@@ -17,6 +17,8 @@ workspace = true
 targets = ["x86_64-unknown-linux-gnu"]
 
 [dependencies]
+bizinikiwi-test-client = { workspace = true }
+bizinikiwi-test-runtime = { workspace = true }
 futures = { workspace = true }
 pezsc-block-builder = { workspace = true, default-features = true }
 pezsc-client-api = { workspace = true, default-features = true }
@@ -26,19 +28,17 @@ pezsp-blockchain = { workspace = true, default-features = true }
 pezsp-consensus = { workspace = true, default-features = true }
 pezsp-core = { workspace = true, default-features = true }
 pezsp-runtime = { workspace = true, default-features = true }
-bizinikiwi-test-client = { workspace = true }
-bizinikiwi-test-runtime = { workspace = true }
 
 [features]
 bls-experimental = ["bizinikiwi-test-runtime/bls-experimental"]
 runtime-benchmarks = [
-  "pezsc-block-builder/runtime-benchmarks",
-  "pezsc-client-api/runtime-benchmarks",
-  "pezsc-consensus/runtime-benchmarks",
-  "pezsp-api/runtime-benchmarks",
-  "pezsp-blockchain/runtime-benchmarks",
-  "pezsp-consensus/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "bizinikiwi-test-client/runtime-benchmarks",
-  "bizinikiwi-test-runtime/runtime-benchmarks",
+	"bizinikiwi-test-client/runtime-benchmarks",
+	"bizinikiwi-test-runtime/runtime-benchmarks",
+	"pezsc-block-builder/runtime-benchmarks",
+	"pezsc-client-api/runtime-benchmarks",
+	"pezsc-consensus/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
+	"pezsp-blockchain/runtime-benchmarks",
+	"pezsp-consensus/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]

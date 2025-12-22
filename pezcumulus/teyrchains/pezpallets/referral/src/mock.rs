@@ -3,7 +3,7 @@
 use crate as pezpallet_referral;
 use pezframe_support::{
 	construct_runtime, derive_impl, parameter_types,
-	traits::{ConstU128, ConstU32},
+	traits::ConstU128,
 };
 use pezframe_system::EnsureRoot;
 use pezsp_core::H256;
@@ -66,7 +66,6 @@ impl pezpallet_identity_kyc::types::CitizenNftProvider<AccountId> for MockCitize
 }
 
 impl pezpallet_identity_kyc::Config for Test {
-	type RuntimeEvent = RuntimeEvent;
 	type Currency = Balances;
 	type GovernanceOrigin = EnsureRoot<AccountId>;
 	type WeightInfo = ();
@@ -87,7 +86,6 @@ impl pezframe_support::traits::Get<AccountId> for DefaultReferrerAccount {
 }
 
 impl pezpallet_referral::Config for Test {
-	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo = ();
 	type DefaultReferrer = DefaultReferrerAccount;
 	type PenaltyPerRevocation = PenaltyPerRevocationAmount;
@@ -123,9 +121,4 @@ pub fn new_test_ext() -> pezsp_io::TestExternalities {
 	let mut ext = pezsp_io::TestExternalities::new(t);
 	ext.execute_with(|| System::set_block_number(1));
 	ext
-}
-
-/// Build test externalities for penalty tests (needs revoked citizens)
-pub fn new_test_ext_with_citizens() -> pezsp_io::TestExternalities {
-	new_test_ext()
 }

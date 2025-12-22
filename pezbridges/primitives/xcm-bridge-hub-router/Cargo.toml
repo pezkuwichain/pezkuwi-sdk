@@ -26,13 +26,13 @@ xcm = { workspace = true }
 [features]
 default = ["std"]
 std = [
-  "codec/std",
-  "scale-info/std",
-  "pezsp-core/std",
-  "pezsp-runtime/std",
-  "xcm/std",
+	"codec/std",
+	"pezsp-core/std",
+	"pezsp-runtime/std",
+	"scale-info/std",
+	"xcm/std",
 ]
 runtime-benchmarks = [
-  "pezsp-runtime/runtime-benchmarks",
-  "xcm/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
 ]

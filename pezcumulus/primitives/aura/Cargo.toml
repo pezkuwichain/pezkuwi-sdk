@@ -21,6 +21,6 @@ pezsp-consensus-aura = { workspace = true }
 default = ["std"]
 std = ["pezsp-api/std", "pezsp-consensus-aura/std"]
 runtime-benchmarks = [
-  "pezsp-api/runtime-benchmarks",
-  "pezsp-consensus-aura/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
+	"pezsp-consensus-aura/runtime-benchmarks",
 ]

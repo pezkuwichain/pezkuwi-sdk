@@ -27,24 +27,24 @@ jsonrpsee = { features = ["server"], workspace = true }
 # Direct dependency needed (not through umbrella due to macro visibility issues)
 pezsp-runtime = { workspace = true }
 
-pezkuwi-sdk = { workspace = true, features = [
-  "experimental",
-  "node",
-  "pezsp-core",
-  "pezsp-io",
-  "pezsp-genesis-builder",
-  "pezsp-block-builder",
-  "pezsp-timestamp",
-] }
 pez-revive-dev-runtime = { workspace = true }
+pezkuwi-sdk = { workspace = true, features = [
+	"experimental",
+	"node",
+	"pezsp-block-builder",
+	"pezsp-core",
+	"pezsp-genesis-builder",
+	"pezsp-io",
+	"pezsp-timestamp",
+] }
 
 [build-dependencies]
 pezkuwi-sdk = { workspace = true, features = ["bizinikiwi-build-script-utils"] }
 
 [features]
 default = ["std"]
-std = ["pezkuwi-sdk/std", "pez-revive-dev-runtime/std"]
+std = ["pez-revive-dev-runtime/std", "pezkuwi-sdk/std"]
 runtime-benchmarks = [
-  "pezkuwi-sdk/runtime-benchmarks",
-  "pez-revive-dev-runtime/runtime-benchmarks",
+	"pez-revive-dev-runtime/runtime-benchmarks",
+	"pezkuwi-sdk/runtime-benchmarks",
 ]

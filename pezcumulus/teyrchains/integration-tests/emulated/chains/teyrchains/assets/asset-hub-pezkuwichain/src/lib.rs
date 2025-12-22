@@ -71,7 +71,7 @@ impl_foreign_assets_helpers_for_teyrchain!(
 impl_xcm_helpers_for_teyrchain!(AssetHubPezkuwichain);
 impl_bridge_helpers_for_chain!(
 	AssetHubPezkuwichain,
-	ParaPallet,
+	ParaPezpallet,
 	PezkuwiXcm,
 	bp_bridge_hub_pezkuwichain::RuntimeCall::XcmOverBridgeHubZagros
 );

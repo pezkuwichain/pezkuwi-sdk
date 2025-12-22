@@ -20,12 +20,12 @@ scale-info = { workspace = true }
 [features]
 default = ["std"]
 std = [
-  "codec/std",
-  "frame/std",
-  "pezpallet-staking-async-ah-client/std",
-  "scale-info/std",
+	"codec/std",
+	"frame/std",
+	"pezpallet-staking-async-ah-client/std",
+	"scale-info/std",
 ]
 runtime-benchmarks = [
-  "frame/runtime-benchmarks",
-  "pezpallet-staking-async-ah-client/runtime-benchmarks",
+	"frame/runtime-benchmarks",
+	"pezpallet-staking-async-ah-client/runtime-benchmarks",
 ]

@@ -28,8 +28,8 @@
 //! host function for this purpose. For convenience, pezcumulus provides
 //! [`TeyrchainHostFunctions`](pezcumulus_client_service::TeyrchainHostFunctions), a set of
 //! host functions typically used by pezcumulus-based teyrchains. In the binary crate of your
-//! teyrchain, find the instantiation of the [`WasmExecutor`](pezsc_executor::WasmExecutor) and set the
-//! correct generic type.
+//! teyrchain, find the instantiation of the [`WasmExecutor`](pezsc_executor::WasmExecutor) and set
+//! the correct generic type.
 //!
 //! This example from the teyrchain-template shows a type definition that includes the correct
 //! host functions.

@@ -34,7 +34,7 @@ pezsp-core = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-  "bp-messages/runtime-benchmarks",
-  "pez-finality-relay/runtime-benchmarks",
-  "relay-utils/runtime-benchmarks",
+	"bp-messages/runtime-benchmarks",
+	"pez-finality-relay/runtime-benchmarks",
+	"relay-utils/runtime-benchmarks",
 ]

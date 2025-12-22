@@ -23,12 +23,11 @@ codec = { workspace = true, default-features = true }
 futures = { workspace = true }
 futures-timer = { workspace = true }
 jsonrpsee = { features = [
-  "client-core",
-  "macros",
-  "server-core",
+	"client-core",
+	"macros",
+	"server-core",
 ], workspace = true }
 log = { workspace = true, default-features = true }
-prometheus-endpoint = { workspace = true, default-features = true }
 pezsc-client-api = { workspace = true, default-features = true }
 pezsc-consensus = { workspace = true, default-features = true }
 pezsc-consensus-aura = { workspace = true, default-features = true }
@@ -36,7 +35,6 @@ pezsc-consensus-babe = { workspace = true, default-features = true }
 pezsc-consensus-epochs = { workspace = true, default-features = true }
 pezsc-transaction-pool = { workspace = true, default-features = true }
 pezsc-transaction-pool-api = { workspace = true, default-features = true }
-serde = { features = ["derive"], workspace = true, default-features = true }
 pezsp-api = { workspace = true, default-features = true }
 pezsp-blockchain = { workspace = true, default-features = true }
 pezsp-consensus = { workspace = true, default-features = true }
@@ -48,36 +46,38 @@ pezsp-inherents = { workspace = true, default-features = true }
 pezsp-keystore = { workspace = true, default-features = true }
 pezsp-runtime = { workspace = true, default-features = true }
 pezsp-timestamp = { workspace = true, default-features = true }
+prometheus-endpoint = { workspace = true, default-features = true }
+serde = { features = ["derive"], workspace = true, default-features = true }
 thiserror = { workspace = true }
 
 [dev-dependencies]
-pezsc-basic-authorship = { workspace = true, default-features = true }
 bizinikiwi-test-runtime-client = { workspace = true }
 bizinikiwi-test-runtime-transaction-pool = { workspace = true }
+pezsc-basic-authorship = { workspace = true, default-features = true }
 tokio = { features = [
-  "macros",
-  "rt-multi-thread",
+	"macros",
+	"rt-multi-thread",
 ], workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-  "pezsc-basic-authorship/runtime-benchmarks",
-  "pezsc-client-api/runtime-benchmarks",
-  "pezsc-consensus-aura/runtime-benchmarks",
-  "pezsc-consensus-babe/runtime-benchmarks",
-  "pezsc-consensus-epochs/runtime-benchmarks",
-  "pezsc-consensus/runtime-benchmarks",
-  "pezsc-transaction-pool-api/runtime-benchmarks",
-  "pezsc-transaction-pool/runtime-benchmarks",
-  "pezsp-api/runtime-benchmarks",
-  "pezsp-blockchain/runtime-benchmarks",
-  "pezsp-consensus-aura/runtime-benchmarks",
-  "pezsp-consensus-babe/runtime-benchmarks",
-  "pezsp-consensus-slots/runtime-benchmarks",
-  "pezsp-consensus/runtime-benchmarks",
-  "pezsp-inherents/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "pezsp-timestamp/runtime-benchmarks",
-  "bizinikiwi-test-runtime-client/runtime-benchmarks",
-  "bizinikiwi-test-runtime-transaction-pool/runtime-benchmarks",
+	"bizinikiwi-test-runtime-client/runtime-benchmarks",
+	"bizinikiwi-test-runtime-transaction-pool/runtime-benchmarks",
+	"pezsc-basic-authorship/runtime-benchmarks",
+	"pezsc-client-api/runtime-benchmarks",
+	"pezsc-consensus-aura/runtime-benchmarks",
+	"pezsc-consensus-babe/runtime-benchmarks",
+	"pezsc-consensus-epochs/runtime-benchmarks",
+	"pezsc-consensus/runtime-benchmarks",
+	"pezsc-transaction-pool-api/runtime-benchmarks",
+	"pezsc-transaction-pool/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
+	"pezsp-blockchain/runtime-benchmarks",
+	"pezsp-consensus-aura/runtime-benchmarks",
+	"pezsp-consensus-babe/runtime-benchmarks",
+	"pezsp-consensus-slots/runtime-benchmarks",
+	"pezsp-consensus/runtime-benchmarks",
+	"pezsp-inherents/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-timestamp/runtime-benchmarks",
 ]

@@ -29,12 +29,12 @@ hashbrown = { workspace = true }
 memory-db = { workspace = true }
 nohash-hasher = { optional = true, workspace = true }
 parking_lot = { optional = true, workspace = true, default-features = true }
+pezsp-core = { workspace = true }
+pezsp-externalities = { workspace = true }
 prometheus-endpoint = { optional = true, workspace = true, default-features = true }
 rand = { optional = true, workspace = true, default-features = true }
 scale-info = { features = ["derive"], workspace = true }
 schnellru = { optional = true, workspace = true }
-pezsp-core = { workspace = true }
-pezsp-externalities = { workspace = true }
 thiserror = { optional = true, workspace = true }
 tracing = { optional = true, workspace = true, default-features = true }
 trie-db = { workspace = true }
@@ -50,23 +50,23 @@ trie-standardmap = { workspace = true }
 [features]
 default = ["std"]
 std = [
-  "ahash",
-  "codec/std",
-  "foldhash/std",
-  "hash-db/std",
-  "memory-db/std",
-  "nohash-hasher",
-  "parking_lot",
-  "prometheus-endpoint",
-  "rand",
-  "scale-info/std",
-  "schnellru",
-  "pezsp-core/std",
-  "pezsp-externalities/std",
-  "pezsp-runtime/std",
-  "thiserror",
-  "tracing",
-  "trie-db/std",
-  "trie-root/std",
+	"ahash",
+	"codec/std",
+	"foldhash/std",
+	"hash-db/std",
+	"memory-db/std",
+	"nohash-hasher",
+	"parking_lot",
+	"pezsp-core/std",
+	"pezsp-externalities/std",
+	"pezsp-runtime/std",
+	"prometheus-endpoint",
+	"rand",
+	"scale-info/std",
+	"schnellru",
+	"thiserror",
+	"tracing",
+	"trie-db/std",
+	"trie-root/std",
 ]
 runtime-benchmarks = ["pezsp-runtime/runtime-benchmarks"]

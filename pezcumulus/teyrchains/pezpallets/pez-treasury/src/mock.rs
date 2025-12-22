@@ -1,7 +1,7 @@
 // pezkuwi/pallets/pez-treasury/src/mock.rs
 // VERSION 3: AccountId tipi H256 yapıldı (u64 yerine)
 
-use crate as pezpallet_pez_treasury;
+use crate::{self as pezpallet_pez_treasury, weights};
 use pezframe_support::{
 	assert_ok, construct_runtime, parameter_types,
 	traits::{ConstU128, ConstU32, OnFinalize, OnInitialize},
@@ -155,9 +155,8 @@ parameter_types! {
 }
 
 impl pezpallet_pez_treasury::Config for Test {
-	type RuntimeEvent = RuntimeEvent;
 	type Assets = Assets;
-	type WeightInfo = ();
+	type WeightInfo = weights::BizinikiwiWeight<Test>;
 	type PezAssetId = PezAssetId;
 	type TreasuryPalletId = PezTreasuryPalletId;
 	type IncentivePotId = PezIncentivePotId;

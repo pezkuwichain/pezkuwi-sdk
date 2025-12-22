@@ -31,7 +31,7 @@ pezpallet-balances = { workspace = true, default-features = true }
 default = ["std"]
 std = ["codec/std", "frame/std", "log/std", "scale-info/std"]
 runtime-benchmarks = [
-  "frame/runtime-benchmarks",
-  "pezpallet-balances/runtime-benchmarks",
+	"frame/runtime-benchmarks",
+	"pezpallet-balances/runtime-benchmarks",
 ]
 try-runtime = ["frame/try-runtime", "pezpallet-balances/try-runtime"]

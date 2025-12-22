@@ -34,24 +34,24 @@ pezcumulus-primitives-core = { workspace = true }
 [features]
 default = ["std"]
 std = [
-  "pezcumulus-primitives-core/std",
-  "pezframe-support/std",
-  "pezkuwi-core-primitives/std",
-  "pezkuwichain-runtime-constants?/std",
-  "pezsp-runtime/std",
-  "xcm/std",
-  "zagros-runtime-constants?/std",
+	"pezcumulus-primitives-core/std",
+	"pezframe-support/std",
+	"pezkuwi-core-primitives/std",
+	"pezkuwichain-runtime-constants?/std",
+	"pezsp-runtime/std",
+	"xcm/std",
+	"zagros-runtime-constants?/std",
 ]
 
 # Test runtimes specific features.
 pezkuwichain = ["pezkuwichain-runtime-constants"]
 zagros = ["zagros-runtime-constants"]
 runtime-benchmarks = [
-  "pezcumulus-primitives-core/runtime-benchmarks",
-  "pezframe-support/runtime-benchmarks",
-  "pezkuwi-core-primitives/runtime-benchmarks",
-  "pezkuwichain-runtime-constants?/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "xcm/runtime-benchmarks",
-  "zagros-runtime-constants?/runtime-benchmarks",
+	"pezcumulus-primitives-core/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezkuwi-core-primitives/runtime-benchmarks",
+	"pezkuwichain-runtime-constants?/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
+	"zagros-runtime-constants?/runtime-benchmarks",
 ]

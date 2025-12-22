@@ -123,9 +123,7 @@ pub mod pezpallet {
 	pub struct Pezpallet<T>(_);
 
 	#[pezpallet::config]
-	pub trait Config: pezframe_system::Config {
-		type RuntimeEvent: From<Event<Self>>
-			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+	pub trait Config: pezframe_system::Config<RuntimeEvent: From<Event<Self>>> {
 		type Currency: ReservableCurrency<Self::AccountId>;
 
 		/// Origin that can revoke citizenship (governance/root)
@@ -410,7 +408,7 @@ pub mod pezpallet {
 
 			// Mint citizen NFT with self-confirmation (Welati tiki)
 			if let Err(e) = T::CitizenNftProvider::mint_citizen_nft_confirmed(&applicant) {
-				log::warn!("Failed to mint citizen NFT for {:?}: {:?}", applicant, e);
+				log::warn!("Failed to mint citizen NFT for {applicant:?}: {e:?}");
 				// Don't fail - user is still a citizen
 			}
 
@@ -441,7 +439,7 @@ pub mod pezpallet {
 
 			// Burn citizen NFT
 			if let Err(e) = T::CitizenNftProvider::burn_citizen_nft(&who) {
-				log::warn!("Failed to burn citizen NFT for {:?}: {:?}", who, e);
+				log::warn!("Failed to burn citizen NFT for {who:?}: {e:?}");
 			}
 
 			// Trigger direct responsibility penalty for the referrer

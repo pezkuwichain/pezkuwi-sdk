@@ -19,6 +19,6 @@ pezkuwi-primitives = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-  "gum/runtime-benchmarks",
-  "pezkuwi-primitives/runtime-benchmarks",
+	"gum/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
 ]

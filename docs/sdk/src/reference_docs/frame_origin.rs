@@ -6,8 +6,8 @@
 //!
 //! FRAME's origin abstractions allow you to convey meanings far beyond just an account-id being the
 //! caller of an extrinsic. Nonetheless, an account-id having signed an extrinsic is one of the
-//! meanings that an origin can convey. This is the commonly used [`pezframe_system::ensure_signed`],
-//! where the return value happens to be an account-id.
+//! meanings that an origin can convey. This is the commonly used
+//! [`pezframe_system::ensure_signed`], where the return value happens to be an account-id.
 //!
 //! Instead, let's establish the following as the correct definition of an origin:
 //!
@@ -44,8 +44,8 @@
 //! amalgamated at the runtime level. Read [`crate::reference_docs::frame_runtime_types`] to
 //! familiarize yourself with these types.
 //!
-//! To understand this better, we will next create a pezpallet with a custom origin, which will add a
-//! new variant to `RuntimeOrigin`.
+//! To understand this better, we will next create a pezpallet with a custom origin, which will add
+//! a new variant to `RuntimeOrigin`.
 //!
 //! ## Adding Custom Pezpallet Origin to the Runtime
 //!
@@ -67,9 +67,9 @@
 //!
 //! ## Asserting on a Custom Internal Origin
 //!
-//! In order to assert on a custom origin that is defined within your pezpallet, we need a way to first
-//! convert the `<T as pezframe_system::Config>::RuntimeOrigin` into the local `enum Origin` of the
-//! current pezpallet. This is a common process that is explained in
+//! In order to assert on a custom origin that is defined within your pezpallet, we need a way to
+//! first convert the `<T as pezframe_system::Config>::RuntimeOrigin` into the local `enum Origin`
+//! of the current pezpallet. This is a common process that is explained in
 //! [`crate::reference_docs::frame_runtime_types#
 //! adding-further-constraints-to-runtime-composite-enums`].
 //!
@@ -103,8 +103,8 @@
 //! to us, and are defined in other pallets.
 //!
 //! For example, [`pezpallet_collective`] defines [`pezpallet_collective::EnsureMember`] and
-//! [`pezpallet_collective::EnsureProportionMoreThan`] and many more, which is exactly what we alluded
-//! to earlier in this document.
+//! [`pezpallet_collective::EnsureProportionMoreThan`] and many more, which is exactly what we
+//! alluded to earlier in this document.
 //!
 //! Make sure to check the full list of [implementors of
 //! `EnsureOrigin`](frame::traits::EnsureOrigin#implementors) for more inspiration.
@@ -112,7 +112,8 @@
 //! ## Obtaining Abstract Origins
 //!
 //! So far we have learned that FRAME pallets can assert on custom and abstract origin types,
-//! whether they are defined within the pezpallet or not. But how can we obtain these abstract origins?
+//! whether they are defined within the pezpallet or not. But how can we obtain these abstract
+//! origins?
 //!
 //! > All extrinsics that come from the outer world can generally only be obtained as either
 //! > `signed` or `none` origin.

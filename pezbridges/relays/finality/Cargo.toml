@@ -28,6 +28,6 @@ parking_lot = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-  "bp-header-pez-chain/runtime-benchmarks",
-  "relay-utils/runtime-benchmarks",
+	"bp-header-pez-chain/runtime-benchmarks",
+	"relay-utils/runtime-benchmarks",
 ]

@@ -18,7 +18,7 @@ environmental = { workspace = true }
 log = { workspace = true }
 scale-info = { features = ["derive"], workspace = true }
 serde = { optional = true, features = [
-  "derive",
+	"derive",
 ], workspace = true, default-features = true }
 
 pezsp-arithmetic = { workspace = true }
@@ -33,37 +33,37 @@ pezframe-system = { workspace = true }
 
 [dev-dependencies]
 pezframe-support = { workspace = true, features = ["experimental"] }
-rand = { workspace = true, default-features = true }
-rand_distr = { workspace = true }
 pezsp-crypto-hashing = { workspace = true, default-features = true }
 pezsp-tracing = { workspace = true, default-features = true }
+rand = { workspace = true, default-features = true }
+rand_distr = { workspace = true }
 
 [features]
 default = ["std"]
 std = [
-  "codec/std",
-  "environmental/std",
-  "pezframe-benchmarking?/std",
-  "pezframe-support/std",
-  "pezframe-system/std",
-  "log/std",
-  "scale-info/std",
-  "pezsp-arithmetic/std",
-  "pezsp-core/std",
-  "pezsp-io/std",
-  "pezsp-runtime/std",
-  "pezsp-tracing/std",
-  "pezsp-weights/std",
+	"codec/std",
+	"environmental/std",
+	"log/std",
+	"pezframe-benchmarking?/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
+	"pezsp-arithmetic/std",
+	"pezsp-core/std",
+	"pezsp-io/std",
+	"pezsp-runtime/std",
+	"pezsp-tracing/std",
+	"pezsp-weights/std",
+	"scale-info/std",
 ]
 runtime-benchmarks = [
-  "pezframe-benchmarking/runtime-benchmarks",
-  "pezframe-support/runtime-benchmarks",
-  "pezframe-system/runtime-benchmarks",
-  "pezsp-io/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
+	"pezframe-benchmarking/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]
 try-runtime = [
-  "pezframe-support/try-runtime",
-  "pezframe-system/try-runtime",
-  "pezsp-runtime/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezsp-runtime/try-runtime",
 ]

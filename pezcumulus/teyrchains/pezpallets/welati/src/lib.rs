@@ -196,7 +196,9 @@ use pezframe_support::{
 	weights::Weight,
 };
 use pezframe_system::pezpallet_prelude::*;
-use pezpallet_identity_kyc::types::{KycLevel, KycStatus};
+#[cfg(not(any(test, feature = "runtime-benchmarks")))]
+use pezpallet_identity_kyc::types::KycLevel;
+use pezpallet_identity_kyc::types::KycStatus;
 use pezpallet_tiki::{Tiki, TikiScoreProvider};
 use pezpallet_trust::TrustScoreProvider;
 use pezsp_runtime::traits::Dispatchable;
@@ -218,14 +220,12 @@ pub mod pezpallet {
 
 	#[pezpallet::config]
 	pub trait Config:
-		pezframe_system::Config
+		pezframe_system::Config<RuntimeEvent: From<Event<Self>>>
 		+ pezpallet_tiki::Config
 		+ pezpallet_trust::Config
 		+ pezpallet_identity_kyc::Config
 		+ core::fmt::Debug
 	{
-		type RuntimeEvent: From<Event<Self>>
-			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
 		type WeightInfo: crate::WeightInfo;
 		type Randomness: Randomness<Self::Hash, BlockNumberFor<Self>>;
 		type RuntimeCall: Parameter
@@ -603,7 +603,7 @@ pub mod pezpallet {
 
 			let election_info = ElectionInfo {
 				election_id,
-				election_type: election_type.clone(),
+				election_type,
 				start_block: current_block,
 				candidacy_deadline,
 				campaign_start,
@@ -897,11 +897,11 @@ pub mod pezpallet {
 			ensure!(is_serok || is_minister, Error::<T>::NotAuthorizedToNominate);
 
 			// Check if role is already filled
-			ensure!(!AppointedOfficials::<T>::contains_key(&role), Error::<T>::RoleAlreadyFilled);
+			ensure!(!AppointedOfficials::<T>::contains_key(role), Error::<T>::RoleAlreadyFilled);
 
 			// Check if this specific nominee already has a pending nomination for this role
 			ensure!(
-				!PendingNominations::<T>::contains_key(&role, &nominee),
+				!PendingNominations::<T>::contains_key(role, &nominee),
 				Error::<T>::RoleAlreadyFilled
 			);
 
@@ -924,17 +924,17 @@ pub mod pezpallet {
 			};
 
 			// Store nomination
-			PendingNominations::<T>::insert(&role, &nominee, nomination);
+			PendingNominations::<T>::insert(role, &nominee, nomination);
 
 			// Create appointment process
 			let documents: BoundedVec<BoundedVec<u8, ConstU32<1000>>, ConstU32<10>> =
-				vec![justification.try_into().map_err(|_| Error::<T>::CalculationOverflow)?]
+				vec![justification]
 					.try_into()
 					.map_err(|_| Error::<T>::CalculationOverflow)?;
 
 			let appointment_process = AppointmentProcess {
 				process_id,
-				position: role.clone(),
+				position: role,
 				nominating_minister: nominator.clone(),
 				nominee: nominee.clone(),
 				initiated_at: current_block,
@@ -978,7 +978,7 @@ pub mod pezpallet {
 			);
 
 			// Get nomination
-			let mut nomination = PendingNominations::<T>::get(&process.position, &process.nominee)
+			let mut nomination = PendingNominations::<T>::get(process.position, &process.nominee)
 				.ok_or(Error::<T>::NominationNotFound)?;
 
 			// Update nomination
@@ -992,11 +992,11 @@ pub mod pezpallet {
 			process.status = AppointmentStatus::Approved;
 
 			// Store updates
-			PendingNominations::<T>::insert(&process.position, &process.nominee, nomination);
+			PendingNominations::<T>::insert(process.position, &process.nominee, nomination);
 			AppointmentProcesses::<T>::insert(process_id, process.clone());
 
 			// Assign the official to the role
-			AppointedOfficials::<T>::insert(&process.position, &process.nominee);
+			AppointedOfficials::<T>::insert(process.position, &process.nominee);
 
 			Self::deposit_event(Event::AppointmentApproved {
 				process_id,
@@ -1259,7 +1259,7 @@ pub mod pezpallet {
 				_ => {
 					let trust_score = T::TrustScoreSource::trust_score_of(voter);
 					let weight = (trust_score / 100) as u32;
-					weight.max(1).min(10)
+					weight.clamp(1, 10)
 				},
 			}
 		}

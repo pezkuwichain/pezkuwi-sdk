@@ -41,49 +41,49 @@ pezsnowbridge-outbound-queue-primitives = { workspace = true }
 [dev-dependencies]
 hex = { workspace = true, default-features = true }
 hex-literal = { workspace = true, default-features = true }
+pezkuwi-primitives = { workspace = true, default-features = true }
 pezpallet-balances = { workspace = true, default-features = true }
 pezpallet-message-queue = { workspace = true, default-features = true }
-pezkuwi-primitives = { workspace = true, default-features = true }
 pezsnowbridge-pezpallet-outbound-queue = { workspace = true, default-features = true }
 
 [features]
 default = ["std"]
 std = [
-  "codec/std",
-  "pezframe-benchmarking?/std",
-  "pezframe-support/std",
-  "pezframe-system/std",
-  "scale-info/std",
-  "pezsnowbridge-core/std",
-  "pezsnowbridge-outbound-queue-primitives/std",
-  "pezsp-core/std",
-  "pezsp-io/std",
-  "pezsp-runtime/std",
-  "pezsp-std/std",
-  "tracing/std",
-  "xcm-executor/std",
-  "xcm/std",
+	"codec/std",
+	"pezframe-benchmarking?/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
+	"pezsnowbridge-core/std",
+	"pezsnowbridge-outbound-queue-primitives/std",
+	"pezsp-core/std",
+	"pezsp-io/std",
+	"pezsp-runtime/std",
+	"pezsp-std/std",
+	"scale-info/std",
+	"tracing/std",
+	"xcm-executor/std",
+	"xcm/std",
 ]
 runtime-benchmarks = [
-  "pezframe-benchmarking/runtime-benchmarks",
-  "pezframe-support/runtime-benchmarks",
-  "pezframe-system/runtime-benchmarks",
-  "pezpallet-balances/runtime-benchmarks",
-  "pezpallet-message-queue/runtime-benchmarks",
-  "pezkuwi-primitives/runtime-benchmarks",
-  "pezsnowbridge-core/runtime-benchmarks",
-  "pezsnowbridge-outbound-queue-primitives/runtime-benchmarks",
-  "pezsnowbridge-pezpallet-outbound-queue/runtime-benchmarks",
-  "pezsp-io/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "xcm-executor/runtime-benchmarks",
-  "xcm/runtime-benchmarks",
+	"pezframe-benchmarking/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"pezpallet-balances/runtime-benchmarks",
+	"pezpallet-message-queue/runtime-benchmarks",
+	"pezsnowbridge-core/runtime-benchmarks",
+	"pezsnowbridge-outbound-queue-primitives/runtime-benchmarks",
+	"pezsnowbridge-pezpallet-outbound-queue/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"xcm-executor/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
 ]
 try-runtime = [
-  "pezframe-support/try-runtime",
-  "pezframe-system/try-runtime",
-  "pezpallet-balances/try-runtime",
-  "pezpallet-message-queue/try-runtime",
-  "pezsnowbridge-pezpallet-outbound-queue/try-runtime",
-  "pezsp-runtime/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezpallet-balances/try-runtime",
+	"pezpallet-message-queue/try-runtime",
+	"pezsnowbridge-pezpallet-outbound-queue/try-runtime",
+	"pezsp-runtime/try-runtime",
 ]

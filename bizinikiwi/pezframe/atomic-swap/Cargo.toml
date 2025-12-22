@@ -29,6 +29,6 @@ default = ["std"]
 std = ["codec/std", "frame/std", "pezpallet-balances/std", "scale-info/std"]
 try-runtime = ["frame/try-runtime", "pezpallet-balances/try-runtime"]
 runtime-benchmarks = [
-  "frame/runtime-benchmarks",
-  "pezpallet-balances/runtime-benchmarks",
+	"frame/runtime-benchmarks",
+	"pezpallet-balances/runtime-benchmarks",
 ]

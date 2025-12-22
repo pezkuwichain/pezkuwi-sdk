@@ -42,8 +42,8 @@
 //!
 //! ### Shell Pezpallet
 //!
-//! Consider the following as a "shell pezpallet". We continue building the rest of this pezpallet based
-//! on this template.
+//! Consider the following as a "shell pezpallet". We continue building the rest of this pezpallet
+//! based on this template.
 //!
 //! [`pezpallet::config`] and [`pezpallet::pezpallet`] are both mandatory parts of any
 //! pezpallet. Refer to the documentation of each to get an overview of what they do.
@@ -59,18 +59,20 @@
 //! issuance.
 //!
 //! > For the rest of this guide, we will opt for a balance type of `u128`. For the sake of
-//! > simplicity, we are hardcoding this type. In a real pezpallet is best practice to define it as a
+//! > simplicity, we are hardcoding this type. In a real pezpallet is best practice to define it as
+//! > a
 //! > generic bounded type in the `Config` trait, and then specify it in the implementation.
 #![doc = docify::embed!("./packages/guides/first-pezpallet/src/lib.rs", Balance)]
 //!
-//! The definition of these two storage items, based on [`pezpallet::storage`] details, is as follows:
+//! The definition of these two storage items, based on [`pezpallet::storage`] details, is as
+//! follows:
 #![doc = docify::embed!("./packages/guides/first-pezpallet/src/lib.rs", TotalIssuance)]
 #![doc = docify::embed!("./packages/guides/first-pezpallet/src/lib.rs", Balances)]
 //!
 //! ### Dispatchables
 //!
-//! Next, we will define the dispatchable functions. As per [`pezpallet::call`], these will be defined
-//! as normal `fn`s attached to `struct Pezpallet`.
+//! Next, we will define the dispatchable functions. As per [`pezpallet::call`], these will be
+//! defined as normal `fn`s attached to `struct Pezpallet`.
 #![doc = docify::embed!("./packages/guides/first-pezpallet/src/lib.rs", impl_pallet)]
 //!
 //! The logic of these functions is self-explanatory. Instead, we will focus on the FRAME-related
@@ -143,16 +145,16 @@
 //! Next, we create a "test runtime" in order to test our pezpallet. Recall from
 //! [`crate::pezkuwi_sdk::frame_runtime`] that a runtime is a collection of pallets, expressed
 //! through [`frame::runtime::prelude::construct_runtime`]. All runtimes also have to include
-//! [`frame::prelude::pezframe_system`]. So we expect to see a runtime with two pezpallet, `pezframe_system`
-//! and the one we just wrote.
+//! [`frame::prelude::pezframe_system`]. So we expect to see a runtime with two pezpallet,
+//! `pezframe_system` and the one we just wrote.
 #![doc = docify::embed!("./packages/guides/first-pezpallet/src/lib.rs", runtime)]
 //!
 //! > [`frame::pezpallet_macros::derive_impl`] is a FRAME feature that enables developers to have
 //! > defaults for associated types.
 //!
-//! Recall that within our pezpallet, (almost) all blocks of code are generic over `<T: Config>`. And,
-//! because `trait Config: pezframe_system::Config`, we can get access to all items in `Config` (or
-//! `pezframe_system::Config`) using `T::NameOfItem`. This is all within the boundaries of how
+//! Recall that within our pezpallet, (almost) all blocks of code are generic over `<T: Config>`.
+//! And, because `trait Config: pezframe_system::Config`, we can get access to all items in `Config`
+//! (or `pezframe_system::Config`) using `T::NameOfItem`. This is all within the boundaries of how
 //! Rust traits and generics work. If unfamiliar with this pattern, read
 //! [`crate::reference_docs::trait_based_programming`] before going further.
 //!
@@ -164,12 +166,13 @@
 //!
 //! Another way to think about this is that within a pezpallet, a lot of types are "unknown" and, we
 //! only know that they will be provided at some later point. For example, when you write
-//! `T::AccountId` (which is short for `<T as pezframe_system::Config>::AccountId`) in your pezpallet,
-//! you are in fact saying "*Some type `AccountId` that will be known later*". That "later" is in
-//! fact when you specify these types when you implement all `Config` traits for `Runtime`.
+//! `T::AccountId` (which is short for `<T as pezframe_system::Config>::AccountId`) in your
+//! pezpallet, you are in fact saying "*Some type `AccountId` that will be known later*". That
+//! "later" is in fact when you specify these types when you implement all `Config` traits for
+//! `Runtime`.
 //!
-//! As you see above, `pezframe_system::Config` is setting the `AccountId` to `u64`. Of course, a real
-//! runtime will not use this type, and instead reside to a proper type like a 32-byte standard
+//! As you see above, `pezframe_system::Config` is setting the `AccountId` to `u64`. Of course, a
+//! real runtime will not use this type, and instead reside to a proper type like a 32-byte standard
 //! public key. This is a HUGE benefit that FRAME developers can tap into: through the framework
 //! being so generic, different types can always be customized to simple things when needed.
 //!
@@ -178,8 +181,8 @@
 //!
 //! ### Your First Test
 //!
-//! The above is all you need to execute the dispatchables of your pezpallet. The last thing you need
-//! to learn is that all of your pezpallet testing code should be wrapped in
+//! The above is all you need to execute the dispatchables of your pezpallet. The last thing you
+//! need to learn is that all of your pezpallet testing code should be wrapped in
 //! [`frame::testing_prelude::TestState`]. This is a type that provides access to an in-memory state
 //! to be used in our tests.
 #![doc = docify::embed!("./packages/guides/first-pezpallet/src/lib.rs", first_test)]
@@ -191,8 +194,8 @@
 //! This is why for example you see `Balances::<Runtime>::get(..)`. Finally, notice that the
 //! dispatchables are simply functions that can be called on top of the `Pezpallet` struct.
 //!
-//! Congratulations! You have written your first pezpallet and tested it! Next, we learn a few optional
-//! steps to improve our pezpallet.
+//! Congratulations! You have written your first pezpallet and tested it! Next, we learn a few
+//! optional steps to improve our pezpallet.
 //!
 //! ## Improving the Currency Pezpallet
 //!
@@ -270,20 +273,20 @@
 //!   needing to re-execute the whole state transition function.
 //!
 //! With the explanation out of the way, let's see how these components can be added. Both follow a
-//! fairly familiar syntax: normal Rust enums, with extra [`pezpallet::event`] and [`pezpallet::error`]
-//! attributes attached.
+//! fairly familiar syntax: normal Rust enums, with extra [`pezpallet::event`] and
+//! [`pezpallet::error`] attributes attached.
 #![doc = docify::embed!("./packages/guides/first-pezpallet/src/lib.rs", Event)]
 #![doc = docify::embed!("./packages/guides/first-pezpallet/src/lib.rs", Error)]
 //!
 //! One slightly custom part of this is the [`pezpallet::generate_deposit`] part. Without going into
-//! too much detail, in order for a pezpallet to emit events to the rest of the system, it needs to do
-//! two things:
+//! too much detail, in order for a pezpallet to emit events to the rest of the system, it needs to
+//! do two things:
 //!
 //! 1. Declare a type in its `Config` that refers to the overarching event type of the runtime. In
 //! short, by doing this, the pezpallet is expressing an important bound: `type RuntimeEvent:
 //! From<Event<Self>>`. Read: a `RuntimeEvent` exists, and it can be created from the local `enum
-//! Event` of this pezpallet. This enables the pezpallet to convert its `Event` into `RuntimeEvent`, and
-//! store it where needed.
+//! Event` of this pezpallet. This enables the pezpallet to convert its `Event` into `RuntimeEvent`,
+//! and store it where needed.
 //!
 //! 2. But, doing this conversion and storing is too much to expect each pezpallet to define. FRAME
 //! provides a default way of storing events, and this is what [`pezpallet::generate_deposit`] is
@@ -315,7 +318,8 @@
 //! - [`crate::reference_docs::defensive_programming`].
 //! - [`crate::reference_docs::frame_origin`].
 //! - [`crate::reference_docs::frame_runtime_types`].
-//! - The pezpallet we wrote in this guide was using `dev_mode`, learn more in [`pezpallet::config`].
+//! - The pezpallet we wrote in this guide was using `dev_mode`, learn more in
+//!   [`pezpallet::config`].
 //! - Learn more about the individual pezpallet items/macros, such as event and errors and call, in
 //!   [`frame::pezpallet_macros`].
 //!
@@ -603,7 +607,11 @@ pub mod pezpallet {
 		fn mint_works() {
 			StateBuilder::default().build_and_execute(|| {
 				// given the initial state, when:
-				assert_ok!(Pezpallet::<Runtime>::mint_unsafe(RuntimeOrigin::signed(ALICE), BOB, 100));
+				assert_ok!(Pezpallet::<Runtime>::mint_unsafe(
+					RuntimeOrigin::signed(ALICE),
+					BOB,
+					100
+				));
 
 				// then:
 				assert_eq!(Balances::<Runtime>::get(&BOB), Some(200));

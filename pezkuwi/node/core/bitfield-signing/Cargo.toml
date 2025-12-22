@@ -28,10 +28,10 @@ pezkuwi-primitives-test-helpers = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-  "gum/runtime-benchmarks",
-  "pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
-  "pezkuwi-node-subsystem-util/runtime-benchmarks",
-  "pezkuwi-node-subsystem/runtime-benchmarks",
-  "pezkuwi-primitives-test-helpers/runtime-benchmarks",
-  "pezkuwi-primitives/runtime-benchmarks",
+	"gum/runtime-benchmarks",
+	"pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
+	"pezkuwi-node-subsystem-util/runtime-benchmarks",
+	"pezkuwi-node-subsystem/runtime-benchmarks",
+	"pezkuwi-primitives-test-helpers/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
 ]

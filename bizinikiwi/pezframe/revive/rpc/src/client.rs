@@ -26,6 +26,18 @@ use crate::{
 	TracerType, TransactionInfo,
 };
 use jsonrpsee::types::{error::CALL_EXECUTION_FAILED_CODE, ErrorObjectOwned};
+use pezkuwi_subxt::{
+	backend::{
+		legacy::{rpc_methods::SystemHealth, LegacyRpcMethods},
+		rpc::{
+			reconnecting_rpc_client::{ExponentialBackoff, RpcClient as ReconnectingRpcClient},
+			RpcClient,
+		},
+	},
+	config::{HashFor, Header},
+	ext::pezkuwi_subxt_rpcs::rpc_params,
+	Config, OnlineClient,
+};
 use pezpallet_revive::{
 	evm::{
 		decode_revert_reason, Block, BlockNumberOrTag, BlockNumberOrTagOrHash, FeeHistoryResult,
@@ -39,23 +51,12 @@ use pezsp_weights::Weight;
 use runtime_api::RuntimeApi;
 use std::{ops::Range, sync::Arc, time::Duration};
 use storage_api::StorageApi;
-use pezkuwi_subxt::{
-	backend::{
-		legacy::{rpc_methods::SystemHealth, LegacyRpcMethods},
-		rpc::{
-			reconnecting_rpc_client::{ExponentialBackoff, RpcClient as ReconnectingRpcClient},
-			RpcClient,
-		},
-	},
-	config::{HashFor, Header},
-	ext::pezkuwi_subxt_rpcs::rpc_params,
-	Config, OnlineClient,
-};
 use thiserror::Error;
 use tokio::sync::Mutex;
 
 /// The bizinikiwi block type.
-pub type BizinikiwiBlock = pezkuwi_subxt::blocks::Block<SrcChainConfig, OnlineClient<SrcChainConfig>>;
+pub type BizinikiwiBlock =
+	pezkuwi_subxt::blocks::Block<SrcChainConfig, OnlineClient<SrcChainConfig>>;
 
 /// The bizinikiwi block header.
 pub type BizinikiwiBlockHeader = <SrcChainConfig as Config>::Header;

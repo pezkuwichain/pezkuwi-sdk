@@ -19,12 +19,12 @@ targets = ["x86_64-unknown-linux-gnu"]
 codec = { workspace = true }
 log = { workspace = true }
 mmr-lib = { workspace = true, default-features = false }
-scale-info = { features = ["derive"], workspace = true }
-serde = { features = ["alloc", "derive"], optional = true, workspace = true }
 pezsp-api = { workspace = true }
 pezsp-core = { workspace = true }
 pezsp-debug-derive = { workspace = true }
 pezsp-runtime = { workspace = true }
+scale-info = { features = ["derive"], workspace = true }
+serde = { features = ["alloc", "derive"], optional = true, workspace = true }
 thiserror = { optional = true, workspace = true }
 
 [dev-dependencies]
@@ -33,26 +33,26 @@ array-bytes = { workspace = true, default-features = true }
 [features]
 default = ["std"]
 std = [
-  "codec/std",
-  "dep:thiserror",
-  "log/std",
-  "mmr-lib/std",
-  "scale-info/std",
-  "serde/std",
-  "pezsp-api/std",
-  "pezsp-core/std",
-  "pezsp-debug-derive/std",
-  "pezsp-runtime/std",
+	"codec/std",
+	"dep:thiserror",
+	"log/std",
+	"mmr-lib/std",
+	"pezsp-api/std",
+	"pezsp-core/std",
+	"pezsp-debug-derive/std",
+	"pezsp-runtime/std",
+	"scale-info/std",
+	"serde/std",
 ]
 
 # Serde support without relying on std features.
 serde = [
-  "dep:serde",
-  "scale-info/serde",
-  "pezsp-core/serde",
-  "pezsp-runtime/serde",
+	"dep:serde",
+	"pezsp-core/serde",
+	"pezsp-runtime/serde",
+	"scale-info/serde",
 ]
 runtime-benchmarks = [
-  "pezsp-api/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]

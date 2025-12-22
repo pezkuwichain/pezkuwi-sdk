@@ -31,10 +31,12 @@ mod imports {
 		coretime_pezkuwichain_emulated_chain::{
 			coretime_pezkuwichain_runtime::ExistentialDeposit as CoretimePezkuwichainExistentialDeposit,
 			genesis::ED as CORETIME_PEZKUWICHAIN_ED,
-			CoretimePezkuwichainParaPallet as CoretimePezkuwichainPallet,
+			CoretimePezkuwichainParaPezpallet,
+			CoretimePezkuwichainParaPezpallet as CoretimePezkuwichainPallet,
 		},
 		pezkuwichain_emulated_chain::{
-			genesis::ED as PEZKUWICHAIN_ED, PezkuwichainRelayPallet as PezkuwichainPallet,
+			genesis::ED as PEZKUWICHAIN_ED,
+			PezkuwichainRelayPezpallet,
 		},
 		AssetHubPezkuwichainPara as AssetHubPezkuwichain,
 		AssetHubPezkuwichainParaReceiver as AssetHubPezkuwichainReceiver,

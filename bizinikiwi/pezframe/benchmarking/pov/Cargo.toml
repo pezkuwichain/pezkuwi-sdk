@@ -20,30 +20,30 @@ codec = { workspace = true }
 pezframe-benchmarking = { workspace = true }
 pezframe-support = { workspace = true }
 pezframe-system = { workspace = true }
-scale-info = { features = ["derive"], workspace = true }
 pezsp-io = { workspace = true }
 pezsp-runtime = { workspace = true }
+scale-info = { features = ["derive"], workspace = true }
 
 [features]
 default = ["std"]
 std = [
-  "codec/std",
-  "pezframe-benchmarking/std",
-  "pezframe-support/std",
-  "pezframe-system/std",
-  "scale-info/std",
-  "pezsp-io/std",
-  "pezsp-runtime/std",
+	"codec/std",
+	"pezframe-benchmarking/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
+	"pezsp-io/std",
+	"pezsp-runtime/std",
+	"scale-info/std",
 ]
 runtime-benchmarks = [
-  "pezframe-benchmarking/runtime-benchmarks",
-  "pezframe-support/runtime-benchmarks",
-  "pezframe-system/runtime-benchmarks",
-  "pezsp-io/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
+	"pezframe-benchmarking/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]
 try-runtime = [
-  "pezframe-support/try-runtime",
-  "pezframe-system/try-runtime",
-  "pezsp-runtime/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezsp-runtime/try-runtime",
 ]

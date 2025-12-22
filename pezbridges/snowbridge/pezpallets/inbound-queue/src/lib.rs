@@ -49,7 +49,6 @@ use pezframe_support::{
 use pezframe_system::ensure_signed;
 use pezsp_core::H160;
 use pezsp_runtime::traits::Zero;
-use pezsp_std::vec;
 use scale_info::TypeInfo;
 use xcm::prelude::{
 	send_xcm, Junction::*, Location, SendError as XcmpSendError, SendXcm, Xcm, XcmContext, XcmHash,

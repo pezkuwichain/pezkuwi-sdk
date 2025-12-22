@@ -172,11 +172,11 @@ pub fn well_known_including_eth_accounts() -> Vec<AccountId> {
 	Sr25519Keyring::well_known()
 		.map(|k| k.to_account_id())
 		.chain([
-			// subxt_signer::eth::dev::alith()
+			// pezkuwi_subxt_signer::eth::dev::alith()
 			array_bytes::hex_n_into_unchecked(
 				"f24ff3a9cf04c71dbc94d0b566f7a27b94566caceeeeeeeeeeeeeeeeeeeeeeee",
 			),
-			// subxt_signer::eth::dev::baltathar()
+			// pezkuwi_subxt_signer::eth::dev::baltathar()
 			array_bytes::hex_n_into_unchecked(
 				"3cd0a705a2dc65e5b1e1205896baa2be8a07c6e0eeeeeeeeeeeeeeeeeeeeeeee",
 			),

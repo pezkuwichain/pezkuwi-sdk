@@ -16,7 +16,7 @@ workspace = true
 coarsetime = { workspace = true }
 gum-proc-macro = { workspace = true, default-features = true }
 pezkuwi-primitives = { features = [
-  "std",
+	"std",
 ], workspace = true, default-features = true }
 tracing = { workspace = true, default-features = true }
 

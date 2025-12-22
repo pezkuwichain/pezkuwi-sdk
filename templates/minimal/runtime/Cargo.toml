@@ -16,18 +16,18 @@ workspace = true
 [dependencies]
 codec = { workspace = true }
 pezkuwi-sdk = { workspace = true, features = [
-  "pezsp-api",
-  "pezsp-keyring",
-  "pezpallet-balances",
-  "pezpallet-sudo",
-  "pezpallet-timestamp",
-  "pezpallet-transaction-payment",
-  "pezpallet-transaction-payment-rpc-runtime-api",
-  "runtime",
+	"pezpallet-balances",
+	"pezpallet-sudo",
+	"pezpallet-timestamp",
+	"pezpallet-transaction-payment",
+	"pezpallet-transaction-payment-rpc-runtime-api",
+	"pezsp-api",
+	"pezsp-keyring",
+	"runtime",
 ] }
 scale-info = { workspace = true }
 serde_json = { workspace = true, default-features = false, features = [
-  "alloc",
+	"alloc",
 ] }
 
 # local pezpallet templates
@@ -35,19 +35,19 @@ pezpallet-minimal-template = { workspace = true }
 
 [build-dependencies]
 pezkuwi-sdk = { optional = true, workspace = true, features = [
-  "bizinikiwi-wasm-builder",
+	"bizinikiwi-wasm-builder",
 ] }
 
 [features]
 default = ["std"]
 std = [
-  "codec/std",
-  "pezpallet-minimal-template/std",
-  "pezkuwi-sdk/std",
-  "scale-info/std",
-  "serde_json/std",
+	"codec/std",
+	"pezkuwi-sdk/std",
+	"pezpallet-minimal-template/std",
+	"scale-info/std",
+	"serde_json/std",
 ]
 runtime-benchmarks = [
-  "pezpallet-minimal-template/runtime-benchmarks",
-  "pezkuwi-sdk/runtime-benchmarks",
+	"pezkuwi-sdk/runtime-benchmarks",
+	"pezpallet-minimal-template/runtime-benchmarks",
 ]

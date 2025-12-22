@@ -14,43 +14,43 @@ array-bytes = { workspace = true, default-features = true }
 codec = { features = ["derive"], workspace = true }
 const-hex = { workspace = true }
 docify = { workspace = true }
+log = { workspace = true }
 pezframe-support = { workspace = true }
 pezframe-system = { workspace = true }
-log = { workspace = true }
-scale-info = { features = ["derive", "serde"], workspace = true }
 pezsp-runtime = { features = ["serde"], workspace = true }
+scale-info = { features = ["derive", "serde"], workspace = true }
 
 [dev-dependencies]
+bizinikiwi-test-runtime-client = { workspace = true }
+bizinikiwi-wasm-builder = { features = [
+	"metadata-hash",
+], workspace = true, default-features = true }
 frame-metadata = { features = [
-  "current",
-  "unstable",
+	"current",
+	"unstable",
 ], workspace = true, default-features = true }
 merkleized-metadata = { workspace = true }
 pezsp-api = { workspace = true, default-features = true }
 pezsp-tracing = { workspace = true, default-features = true }
 pezsp-transaction-pool = { workspace = true, default-features = true }
-bizinikiwi-test-runtime-client = { workspace = true }
-bizinikiwi-wasm-builder = { features = [
-  "metadata-hash",
-], workspace = true, default-features = true }
 
 [features]
 default = ["std"]
 std = [
-  "codec/std",
-  "const-hex/std",
-  "pezframe-support/std",
-  "pezframe-system/std",
-  "log/std",
-  "scale-info/std",
-  "pezsp-runtime/std",
+	"codec/std",
+	"const-hex/std",
+	"log/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
+	"pezsp-runtime/std",
+	"scale-info/std",
 ]
 runtime-benchmarks = [
-  "pezframe-support/runtime-benchmarks",
-  "pezframe-system/runtime-benchmarks",
-  "pezsp-api/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "pezsp-transaction-pool/runtime-benchmarks",
-  "bizinikiwi-test-runtime-client/runtime-benchmarks",
-  "bizinikiwi-wasm-builder/runtime-benchmarks",
+	"bizinikiwi-test-runtime-client/runtime-benchmarks",
+	"bizinikiwi-wasm-builder/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-transaction-pool/runtime-benchmarks",
 ]

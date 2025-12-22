@@ -35,17 +35,17 @@ pezsp-keyring = { workspace = true, default-features = true }
 pezsp-runtime = { workspace = true, default-features = true }
 
 # Pezkuwi
-pezpallet-xcm = { features = [
-  "test-utils",
-], workspace = true, default-features = true }
 pezkuwi-primitives = { workspace = true, default-features = true }
 pezkuwi-runtime-teyrchains = { workspace = true, default-features = true }
 pezkuwi-teyrchain-primitives = { workspace = true, default-features = true }
+pezpallet-xcm = { features = [
+	"test-utils",
+], workspace = true, default-features = true }
 xcm = { workspace = true, default-features = true }
 xcm-builder = { workspace = true, default-features = true }
 xcm-executor = { workspace = true, default-features = true }
-xcm-runtime-pezapis = { workspace = true, default-features = true }
 xcm-pez-simulator = { workspace = true, default-features = true }
+xcm-runtime-pezapis = { workspace = true, default-features = true }
 
 # Pezcumulus
 asset-test-pezutils = { workspace = true, default-features = true }
@@ -63,36 +63,36 @@ pezpallet-xcm-bridge-hub = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-  "asset-test-pezutils/runtime-benchmarks",
-  "bp-messages/runtime-benchmarks",
-  "bp-xcm-bridge-hub/runtime-benchmarks",
-  "pezcumulus-pezpallet-teyrchain-system/runtime-benchmarks",
-  "pezcumulus-pezpallet-xcmp-queue/runtime-benchmarks",
-  "pezcumulus-primitives-core/runtime-benchmarks",
-  "pezframe-support/runtime-benchmarks",
-  "pezframe-system/runtime-benchmarks",
-  "pezpallet-asset-conversion/runtime-benchmarks",
-  "pezpallet-assets/runtime-benchmarks",
-  "pezpallet-balances/runtime-benchmarks",
-  "pezpallet-bridge-messages/runtime-benchmarks",
-  "pezpallet-message-queue/runtime-benchmarks",
-  "pezpallet-whitelist/runtime-benchmarks",
-  "pezpallet-xcm-bridge-hub/runtime-benchmarks",
-  "pezpallet-xcm/runtime-benchmarks",
-  "pezkuwi-primitives/runtime-benchmarks",
-  "pezkuwi-runtime-teyrchains/runtime-benchmarks",
-  "pezkuwi-teyrchain-primitives/runtime-benchmarks",
-  "pezsc-consensus-grandpa/runtime-benchmarks",
-  "pezsp-authority-discovery/runtime-benchmarks",
-  "pezsp-consensus-babe/runtime-benchmarks",
-  "pezsp-consensus-beefy/runtime-benchmarks",
-  "pezsp-keyring/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "teyrchains-common/runtime-benchmarks",
-  "xcm-builder/runtime-benchmarks",
-  "xcm-pez-emulator/runtime-benchmarks",
-  "xcm-executor/runtime-benchmarks",
-  "xcm-runtime-pezapis/runtime-benchmarks",
-  "xcm-pez-simulator/runtime-benchmarks",
-  "xcm/runtime-benchmarks",
+	"asset-test-pezutils/runtime-benchmarks",
+	"bp-messages/runtime-benchmarks",
+	"bp-xcm-bridge-hub/runtime-benchmarks",
+	"pezcumulus-pezpallet-teyrchain-system/runtime-benchmarks",
+	"pezcumulus-pezpallet-xcmp-queue/runtime-benchmarks",
+	"pezcumulus-primitives-core/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"pezkuwi-runtime-teyrchains/runtime-benchmarks",
+	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
+	"pezpallet-asset-conversion/runtime-benchmarks",
+	"pezpallet-assets/runtime-benchmarks",
+	"pezpallet-balances/runtime-benchmarks",
+	"pezpallet-bridge-messages/runtime-benchmarks",
+	"pezpallet-message-queue/runtime-benchmarks",
+	"pezpallet-whitelist/runtime-benchmarks",
+	"pezpallet-xcm-bridge-hub/runtime-benchmarks",
+	"pezpallet-xcm/runtime-benchmarks",
+	"pezsc-consensus-grandpa/runtime-benchmarks",
+	"pezsp-authority-discovery/runtime-benchmarks",
+	"pezsp-consensus-babe/runtime-benchmarks",
+	"pezsp-consensus-beefy/runtime-benchmarks",
+	"pezsp-keyring/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"teyrchains-common/runtime-benchmarks",
+	"xcm-builder/runtime-benchmarks",
+	"xcm-executor/runtime-benchmarks",
+	"xcm-pez-emulator/runtime-benchmarks",
+	"xcm-pez-simulator/runtime-benchmarks",
+	"xcm-runtime-pezapis/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
 ]

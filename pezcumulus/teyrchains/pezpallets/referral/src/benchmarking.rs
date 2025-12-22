@@ -1,9 +1,6 @@
 //! Benchmarking setup for pezpallet-referral
 
-#![cfg(feature = "runtime-benchmarks")]
-
 use super::*;
-use crate::Pezpallet as Referral;
 use pezframe_benchmarking::v2::*;
 use pezframe_system::RawOrigin;
 
@@ -43,5 +40,5 @@ mod benchmarks {
 		assert_eq!(ReferralCount::<T>::get(&referrer), 1);
 	}
 
-	impl_benchmark_test_suite!(Referral, crate::mock::new_test_ext(), crate::mock::Test);
+	impl_benchmark_test_suite!(Pezpallet, crate::mock::new_test_ext(), crate::mock::Test);
 }

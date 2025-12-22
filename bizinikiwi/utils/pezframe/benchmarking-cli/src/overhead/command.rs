@@ -70,7 +70,7 @@ use std::{
 	path::PathBuf,
 	sync::Arc,
 };
-use subxt::{client::RuntimeVersion, ext::futures, Metadata};
+use pezkuwi_subxt::{client::RuntimeVersion, ext::futures, Metadata};
 
 const DEFAULT_PARA_ID: u32 = 100;
 const LOG_TARGET: &'static str = "pezkuwi_sdk_frame::benchmark::overhead";
@@ -366,7 +366,7 @@ impl OverheadCmd {
 	{
 		self.run_with_extrinsic_builder_and_spec::<Block, ExtraHF>(
 			Box::new(|metadata, hash, version| {
-				let genesis = subxt::utils::H256::from(hash.to_fixed_bytes());
+				let genesis = pezkuwi_subxt::utils::H256::from(hash.to_fixed_bytes());
 				Box::new(BizinikiwiRemarkBuilder::new(metadata, genesis, version)) as Box<_>
 			}),
 			chain_spec,
@@ -406,7 +406,7 @@ impl OverheadCmd {
 				.map_err(|_| {
 					<&str as Into<pezsc_cli::Error>>::into("Unable to fetch latest stable metadata")
 				})?;
-		let metadata = subxt::Metadata::decode(&mut (*opaque_metadata).as_slice())?;
+		let metadata = pezkuwi_subxt::Metadata::decode(&mut (*opaque_metadata).as_slice())?;
 
 		// At this point we know what kind of chain we are dealing with.
 		let chain_type = identify_chain(&metadata, para_id);
@@ -699,7 +699,7 @@ mod tests {
 			.to_vec();
 		let opaque_metadata =
 			super::fetch_latest_metadata_from_code_blob(&executor, code_bytes.into()).unwrap();
-		let metadata = subxt::Metadata::decode(&mut (*opaque_metadata).as_slice()).unwrap();
+		let metadata = pezkuwi_subxt::Metadata::decode(&mut (*opaque_metadata).as_slice()).unwrap();
 		let chain_type = identify_chain(&metadata, None);
 		assert_eq!(chain_type, ChainType::Relaychain);
 		assert_eq!(chain_type.requires_proof_recording(), false);
@@ -713,7 +713,7 @@ mod tests {
 			.to_vec();
 		let opaque_metadata =
 			super::fetch_latest_metadata_from_code_blob(&executor, code_bytes.into()).unwrap();
-		let metadata = subxt::Metadata::decode(&mut (*opaque_metadata).as_slice()).unwrap();
+		let metadata = pezkuwi_subxt::Metadata::decode(&mut (*opaque_metadata).as_slice()).unwrap();
 		let chain_type = identify_chain(&metadata, Some(100));
 		assert_eq!(chain_type, ChainType::Teyrchain(100));
 		assert!(chain_type.requires_proof_recording());
@@ -728,7 +728,7 @@ mod tests {
 			.to_vec();
 		let opaque_metadata =
 			super::fetch_latest_metadata_from_code_blob(&executor, code_bytes.into()).unwrap();
-		let metadata = subxt::Metadata::decode(&mut (*opaque_metadata).as_slice()).unwrap();
+		let metadata = pezkuwi_subxt::Metadata::decode(&mut (*opaque_metadata).as_slice()).unwrap();
 		let chain_type = identify_chain(&metadata, None);
 		assert_eq!(chain_type, ChainType::Unknown);
 		assert_eq!(chain_type.requires_proof_recording(), false);

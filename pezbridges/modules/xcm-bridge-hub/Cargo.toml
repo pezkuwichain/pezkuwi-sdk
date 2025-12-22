@@ -19,8 +19,8 @@ tracing = { workspace = true }
 
 # Bridge Dependencies
 bp-messages = { workspace = true }
-pezbp-runtime = { workspace = true }
 bp-xcm-bridge-hub = { workspace = true }
+pezbp-runtime = { workspace = true }
 pezpallet-bridge-messages = { workspace = true }
 
 # Bizinikiwi Dependencies
@@ -38,59 +38,59 @@ xcm-executor = { workspace = true }
 [dev-dependencies]
 bp-header-pez-chain = { workspace = true }
 bp-xcm-bridge-hub-router = { workspace = true }
+pezkuwi-teyrchain-primitives = { workspace = true }
 pezpallet-balances = { workspace = true }
 pezpallet-xcm-bridge-hub-router = { workspace = true }
-pezkuwi-teyrchain-primitives = { workspace = true }
 pezsp-io = { workspace = true }
 
 [features]
 default = ["std"]
 std = [
-  "bp-header-pez-chain/std",
-  "bp-messages/std",
-  "pezbp-runtime/std",
-  "bp-xcm-bridge-hub-router/std",
-  "bp-xcm-bridge-hub/std",
-  "codec/std",
-  "pezframe-support/std",
-  "pezframe-system/std",
-  "pezpallet-balances/std",
-  "pezpallet-bridge-messages/std",
-  "pezpallet-xcm-bridge-hub-router/std",
-  "pezkuwi-teyrchain-primitives/std",
-  "scale-info/std",
-  "pezsp-core/std",
-  "pezsp-io/std",
-  "pezsp-runtime/std",
-  "pezsp-std/std",
-  "tracing/std",
-  "xcm-builder/std",
-  "xcm-executor/std",
-  "xcm/std",
+	"bp-header-pez-chain/std",
+	"bp-messages/std",
+	"bp-xcm-bridge-hub-router/std",
+	"bp-xcm-bridge-hub/std",
+	"codec/std",
+	"pezbp-runtime/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
+	"pezkuwi-teyrchain-primitives/std",
+	"pezpallet-balances/std",
+	"pezpallet-bridge-messages/std",
+	"pezpallet-xcm-bridge-hub-router/std",
+	"pezsp-core/std",
+	"pezsp-io/std",
+	"pezsp-runtime/std",
+	"pezsp-std/std",
+	"scale-info/std",
+	"tracing/std",
+	"xcm-builder/std",
+	"xcm-executor/std",
+	"xcm/std",
 ]
 runtime-benchmarks = [
-  "bp-header-pez-chain/runtime-benchmarks",
-  "bp-messages/runtime-benchmarks",
-  "pezbp-runtime/runtime-benchmarks",
-  "bp-xcm-bridge-hub-router/runtime-benchmarks",
-  "bp-xcm-bridge-hub/runtime-benchmarks",
-  "pezframe-support/runtime-benchmarks",
-  "pezframe-system/runtime-benchmarks",
-  "pezpallet-balances/runtime-benchmarks",
-  "pezpallet-bridge-messages/runtime-benchmarks",
-  "pezpallet-xcm-bridge-hub-router/runtime-benchmarks",
-  "pezkuwi-teyrchain-primitives/runtime-benchmarks",
-  "pezsp-io/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "xcm-builder/runtime-benchmarks",
-  "xcm-executor/runtime-benchmarks",
-  "xcm/runtime-benchmarks",
+	"bp-header-pez-chain/runtime-benchmarks",
+	"bp-messages/runtime-benchmarks",
+	"bp-xcm-bridge-hub-router/runtime-benchmarks",
+	"bp-xcm-bridge-hub/runtime-benchmarks",
+	"pezbp-runtime/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
+	"pezpallet-balances/runtime-benchmarks",
+	"pezpallet-bridge-messages/runtime-benchmarks",
+	"pezpallet-xcm-bridge-hub-router/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"xcm-builder/runtime-benchmarks",
+	"xcm-executor/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
 ]
 try-runtime = [
-  "pezframe-support/try-runtime",
-  "pezframe-system/try-runtime",
-  "pezpallet-balances/try-runtime",
-  "pezpallet-bridge-messages/try-runtime",
-  "pezpallet-xcm-bridge-hub-router/try-runtime",
-  "pezsp-runtime/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezpallet-balances/try-runtime",
+	"pezpallet-bridge-messages/try-runtime",
+	"pezpallet-xcm-bridge-hub-router/try-runtime",
+	"pezsp-runtime/try-runtime",
 ]

@@ -1,7 +1,5 @@
 //! Benchmarking setup for pezpallet-token-wrapper
 
-#![cfg(feature = "runtime-benchmarks")]
-
 use super::*;
 #[allow(unused)]
 use crate::Pezpallet as TokenWrapper;

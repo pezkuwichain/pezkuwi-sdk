@@ -113,9 +113,7 @@ pub mod pezpallet {
 	pub struct Pezpallet<T>(_);
 
 	#[pezpallet::config]
-	pub trait Config: pezframe_system::Config {
-		type RuntimeEvent: From<Event<Self>>
-			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+	pub trait Config: pezframe_system::Config<RuntimeEvent: From<Event<Self>>> {
 		type AdminOrigin: EnsureOrigin<Self::RuntimeOrigin, Success = Self::AccountId>;
 		type WeightInfo: WeightInfo;
 

@@ -1,9 +1,6 @@
 //! Benchmarking setup for pezpallet-identity-kyc
 
-#![cfg(feature = "runtime-benchmarks")]
-
 use super::*;
-use crate::Pezpallet as IdentityKyc;
 use pezframe_benchmarking::v2::*;
 use pezframe_support::traits::Currency;
 use pezframe_system::RawOrigin;
@@ -132,5 +129,5 @@ mod benchmarks {
 		assert_eq!(KycStatuses::<T>::get(&applicant), KycLevel::NotStarted);
 	}
 
-	impl_benchmark_test_suite!(IdentityKyc, crate::mock::new_test_ext(), crate::mock::Test);
+	impl_benchmark_test_suite!(Pezpallet, crate::mock::new_test_ext(), crate::mock::Test);
 }

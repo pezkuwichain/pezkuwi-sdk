@@ -18,15 +18,15 @@ targets = ["x86_64-unknown-linux-gnu"]
 
 [dependencies]
 codec = { workspace = true }
+log = { workspace = true }
 pezframe-benchmarking = { optional = true, workspace = true }
 pezframe-support = { workspace = true }
 pezframe-system = { workspace = true }
-log = { workspace = true }
-scale-info = { features = ["derive"], workspace = true }
 pezsp-core = { workspace = true }
 pezsp-io = { workspace = true }
 pezsp-runtime = { workspace = true }
 pezsp-std = { workspace = true }
+scale-info = { features = ["derive"], workspace = true }
 
 xcm = { workspace = true }
 xcm-builder = { workspace = true }
@@ -38,34 +38,34 @@ pezpallet-balances = { workspace = true, default-features = true }
 [features]
 default = ["std"]
 std = [
-  "codec/std",
-  "pezframe-benchmarking?/std",
-  "pezframe-support/std",
-  "pezframe-system/std",
-  "log/std",
-  "scale-info/std",
-  "pezsp-core/std",
-  "pezsp-io/std",
-  "pezsp-runtime/std",
-  "pezsp-std/std",
-  "xcm-builder/std",
-  "xcm-executor/std",
-  "xcm/std",
+	"codec/std",
+	"log/std",
+	"pezframe-benchmarking?/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
+	"pezsp-core/std",
+	"pezsp-io/std",
+	"pezsp-runtime/std",
+	"pezsp-std/std",
+	"scale-info/std",
+	"xcm-builder/std",
+	"xcm-executor/std",
+	"xcm/std",
 ]
 runtime-benchmarks = [
-  "pezframe-benchmarking/runtime-benchmarks",
-  "pezframe-support/runtime-benchmarks",
-  "pezframe-system/runtime-benchmarks",
-  "pezpallet-balances/runtime-benchmarks",
-  "pezsp-io/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "xcm-builder/runtime-benchmarks",
-  "xcm-executor/runtime-benchmarks",
-  "xcm/runtime-benchmarks",
+	"pezframe-benchmarking/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezpallet-balances/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"xcm-builder/runtime-benchmarks",
+	"xcm-executor/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
 ]
 try-runtime = [
-  "pezframe-support/try-runtime",
-  "pezframe-system/try-runtime",
-  "pezpallet-balances/try-runtime",
-  "pezsp-runtime/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezpallet-balances/try-runtime",
+	"pezsp-runtime/try-runtime",
 ]

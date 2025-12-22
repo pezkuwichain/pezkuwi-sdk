@@ -183,7 +183,7 @@ fn student_can_enroll_multiple_courses() {
 		for i in 0..3 {
 			assert_ok!(PerwerdePallet::create_course(
 				RuntimeOrigin::signed(admin),
-				create_bounded_vec(format!("Course {}", i).as_bytes()),
+				create_bounded_vec(format!("Course {i}").as_bytes()),
 				create_bounded_vec(b"Description"),
 				create_bounded_vec(b"http://example.com")
 			));
@@ -213,7 +213,7 @@ fn enroll_fails_when_too_many_courses() {
 		for i in 0..50 {
 			assert_ok!(PerwerdePallet::create_course(
 				RuntimeOrigin::signed(admin),
-				create_bounded_vec(format!("Course {}", i).as_bytes()),
+				create_bounded_vec(format!("Course {i}").as_bytes()),
 				create_bounded_vec(b"Desc"),
 				create_bounded_vec(b"http://example.com")
 			));
@@ -431,7 +431,7 @@ fn student_completes_multiple_courses() {
 		for i in 0..3 {
 			assert_ok!(PerwerdePallet::create_course(
 				RuntimeOrigin::signed(admin),
-				create_bounded_vec(format!("Course {}", i).as_bytes()),
+				create_bounded_vec(format!("Course {i}").as_bytes()),
 				create_bounded_vec(b"Desc"),
 				create_bounded_vec(b"http://example.com")
 			));
@@ -605,7 +605,7 @@ fn next_course_id_increments_correctly() {
 		for i in 0..5 {
 			assert_ok!(PerwerdePallet::create_course(
 				RuntimeOrigin::signed(admin),
-				create_bounded_vec(format!("Course {}", i).as_bytes()),
+				create_bounded_vec(format!("Course {i}").as_bytes()),
 				create_bounded_vec(b"Desc"),
 				create_bounded_vec(b"http://example.com")
 			));

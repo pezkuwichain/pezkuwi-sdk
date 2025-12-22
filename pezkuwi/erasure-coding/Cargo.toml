@@ -31,7 +31,7 @@ harness = false
 
 [features]
 runtime-benchmarks = [
-  "pezkuwi-pez-node-primitives/runtime-benchmarks",
-  "pezkuwi-primitives/runtime-benchmarks",
-  "pezsp-trie/runtime-benchmarks",
+	"pezkuwi-pez-node-primitives/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"pezsp-trie/runtime-benchmarks",
 ]

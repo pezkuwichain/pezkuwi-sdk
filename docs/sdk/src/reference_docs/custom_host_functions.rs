@@ -7,8 +7,8 @@
 //!
 //! To declare a set of functions as host functions, you need to use the `#[runtime_interface]`
 //! ([`pezsp_runtime_interface`]) attribute macro. The most notable set of host functions are those
-//! that allow the runtime to access the chain state, namely [`pezsp_io::storage`]. Some other notable
-//! host functions are also defined in [`pezsp_io`].
+//! that allow the runtime to access the chain state, namely [`pezsp_io::storage`]. Some other
+//! notable host functions are also defined in [`pezsp_io`].
 //!
 //! ## Adding New Host Functions
 //!
@@ -22,6 +22,6 @@
 //! A group of host functions can always be grouped to gether as a tuple:
 #![doc = docify::embed!("../../bizinikiwi/primitives/io/src/lib.rs", BizinikiwiHostFunctions)]
 //!
-//! The host functions are attached to the node side's [`pezsc_executor::WasmExecutor`]. For example in
-//! the minimal template, the setup looks as follows:
+//! The host functions are attached to the node side's [`pezsc_executor::WasmExecutor`]. For example
+//! in the minimal template, the setup looks as follows:
 #![doc = docify::embed!("../../templates/minimal/node/src/service.rs", FullClient)]

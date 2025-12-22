@@ -18,47 +18,47 @@ targets = ["x86_64-unknown-linux-gnu"]
 [dependencies]
 bitvec = { workspace = true }
 codec = { features = ["derive"], workspace = true }
+log = { workspace = true }
 pezframe-benchmarking = { optional = true, workspace = true }
 pezframe-support = { workspace = true }
 pezframe-system = { workspace = true }
-log = { workspace = true }
-scale-info = { features = ["derive"], workspace = true }
 pezsp-api = { workspace = true }
 pezsp-arithmetic = { workspace = true }
 pezsp-core = { workspace = true }
 pezsp-runtime = { workspace = true }
+scale-info = { features = ["derive"], workspace = true }
 
 [dev-dependencies]
-pretty_assertions = { workspace = true }
 pezsp-io = { workspace = true, default-features = true }
 pezsp-tracing = { workspace = true, default-features = true }
+pretty_assertions = { workspace = true }
 
 [features]
 default = ["std"]
 std = [
-  "bitvec/std",
-  "codec/std",
-  "pezframe-benchmarking?/std",
-  "pezframe-support/std",
-  "pezframe-system/std",
-  "log/std",
-  "scale-info/std",
-  "pezsp-api/std",
-  "pezsp-arithmetic/std",
-  "pezsp-core/std",
-  "pezsp-io/std",
-  "pezsp-runtime/std",
+	"bitvec/std",
+	"codec/std",
+	"log/std",
+	"pezframe-benchmarking?/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
+	"pezsp-api/std",
+	"pezsp-arithmetic/std",
+	"pezsp-core/std",
+	"pezsp-io/std",
+	"pezsp-runtime/std",
+	"scale-info/std",
 ]
 runtime-benchmarks = [
-  "pezframe-benchmarking/runtime-benchmarks",
-  "pezframe-support/runtime-benchmarks",
-  "pezframe-system/runtime-benchmarks",
-  "pezsp-api/runtime-benchmarks",
-  "pezsp-io/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
+	"pezframe-benchmarking/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]
 try-runtime = [
-  "pezframe-support/try-runtime",
-  "pezframe-system/try-runtime",
-  "pezsp-runtime/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezsp-runtime/try-runtime",
 ]

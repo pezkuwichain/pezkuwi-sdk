@@ -2,13 +2,9 @@
 //!
 //! These benchmarks measure the performance of trust score operations.
 
-#![cfg(feature = "runtime-benchmarks")]
-
 use super::*;
-use crate::Pezpallet as TrustPallet;
 
 use pezframe_benchmarking::{v2::*, whitelisted_caller};
-use pezframe_support::pezpallet_prelude::*;
 use pezframe_system::RawOrigin;
 use pezsp_runtime::traits::Zero;
 
@@ -68,5 +64,5 @@ mod benchmarks {
 		// Verify - The function completed successfully
 	}
 
-	impl_benchmark_test_suite!(TrustPallet, crate::mock::new_test_ext(), crate::mock::Test);
+	impl_benchmark_test_suite!(Pezpallet, crate::mock::new_test_ext(), crate::mock::Test);
 }

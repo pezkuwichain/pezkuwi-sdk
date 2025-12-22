@@ -33,10 +33,8 @@ linked-hash-map = { workspace = true }
 log = { workspace = true, default-features = true }
 parity-db = { workspace = true }
 parking_lot = { workspace = true, default-features = true }
-prometheus-endpoint = { workspace = true, default-features = true }
 pezsc-client-api = { workspace = true, default-features = true }
 pezsc-state-db = { workspace = true, default-features = true }
-schnellru = { workspace = true }
 pezsp-arithmetic = { workspace = true, default-features = true }
 pezsp-blockchain = { workspace = true, default-features = true }
 pezsp-core = { workspace = true, default-features = true }
@@ -44,28 +42,30 @@ pezsp-database = { workspace = true, default-features = true }
 pezsp-runtime = { workspace = true, default-features = true }
 pezsp-state-machine = { workspace = true, default-features = true }
 pezsp-trie = { workspace = true, default-features = true }
+prometheus-endpoint = { workspace = true, default-features = true }
+schnellru = { workspace = true }
 sysinfo = { workspace = true }
 
 [dev-dependencies]
 array-bytes = { workspace = true, default-features = true }
-criterion = { workspace = true, default-features = true }
-pez-kitchensink-runtime = { workspace = true }
-kvdb-rocksdb = { workspace = true }
-rand = { workspace = true, default-features = true }
-pezsp-tracing = { workspace = true, default-features = true }
 bizinikiwi-test-runtime-client = { workspace = true }
+criterion = { workspace = true, default-features = true }
+kvdb-rocksdb = { workspace = true }
+pez-kitchensink-runtime = { workspace = true }
+pezsp-tracing = { workspace = true, default-features = true }
+rand = { workspace = true, default-features = true }
 tempfile = { workspace = true }
 
 [features]
 default = []
 test-helpers = []
 runtime-benchmarks = [
-  "pez-kitchensink-runtime/runtime-benchmarks",
-  "pezsc-client-api/runtime-benchmarks",
-  "pezsp-blockchain/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "pezsp-state-machine/runtime-benchmarks",
-  "pezsp-trie/runtime-benchmarks",
-  "bizinikiwi-test-runtime-client/runtime-benchmarks",
+	"bizinikiwi-test-runtime-client/runtime-benchmarks",
+	"pez-kitchensink-runtime/runtime-benchmarks",
+	"pezsc-client-api/runtime-benchmarks",
+	"pezsp-blockchain/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-state-machine/runtime-benchmarks",
+	"pezsp-trie/runtime-benchmarks",
 ]
 rocksdb = ["kvdb-rocksdb"]

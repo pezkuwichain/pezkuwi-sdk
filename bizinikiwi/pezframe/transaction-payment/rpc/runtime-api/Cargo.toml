@@ -26,14 +26,14 @@ pezsp-weights = { workspace = true }
 [features]
 default = ["std"]
 std = [
-  "codec/std",
-  "pezpallet-transaction-payment/std",
-  "pezsp-api/std",
-  "pezsp-runtime/std",
-  "pezsp-weights/std",
+	"codec/std",
+	"pezpallet-transaction-payment/std",
+	"pezsp-api/std",
+	"pezsp-runtime/std",
+	"pezsp-weights/std",
 ]
 runtime-benchmarks = [
-  "pezpallet-transaction-payment/runtime-benchmarks",
-  "pezsp-api/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
+	"pezpallet-transaction-payment/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]

@@ -1226,10 +1226,21 @@ parameter_types! {
 	pub FastUnstakeName: &'static str = "FastUnstake";
 }
 
+/// Multi-block migrations for runtime upgrades.
+#[cfg(feature = "runtime-benchmarks")]
+type MultiBlockMigrationsType = pezpallet_migrations::mock_helpers::MockedMigrations;
+#[cfg(not(feature = "runtime-benchmarks"))]
+type MultiBlockMigrationsType = (
+	assets_common::migrations::foreign_assets_reserves::ForeignAssetsReservesMigration<
+		Runtime,
+		ForeignAssetsInstance,
+		migrations::AssetHubZagrosForeignAssetsReservesProvider,
+	>,
+);
+
 impl pezpallet_migrations::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
-	// Always use mocked migrations for test runtimes to ensure benchmarks succeed
-	type Migrations = pezpallet_migrations::mock_helpers::MockedMigrations;
+	type Migrations = MultiBlockMigrationsType;
 	type CursorMaxLen = ConstU32<65_536>;
 	type IdentifierMaxLen = ConstU32<256>;
 	type MigrationStatusHandler = ();

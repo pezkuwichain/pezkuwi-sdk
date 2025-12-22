@@ -29,8 +29,8 @@ pezsp-io = { workspace = true, default-features = true }
 default = ["std"]
 std = ["codec/std", "frame/std", "scale-info/std"]
 runtime-benchmarks = [
-  "frame/runtime-benchmarks",
-  "pezpallet-balances/runtime-benchmarks",
-  "pezsp-io/runtime-benchmarks",
+	"frame/runtime-benchmarks",
+	"pezpallet-balances/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
 ]
 try-runtime = ["frame/try-runtime", "pezpallet-balances/try-runtime"]

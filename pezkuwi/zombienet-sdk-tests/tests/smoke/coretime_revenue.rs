@@ -11,12 +11,12 @@
 
 use anyhow::anyhow;
 
-#[zombienet_sdk::subxt::subxt(
+#[pezkuwi_subxt::subxt(
 	runtime_metadata_path = "metadata-files/coretime-pezkuwichain-local.scale"
 )]
 mod coretime_pezkuwichain {}
 
-#[zombienet_sdk::subxt::subxt(runtime_metadata_path = "metadata-files/pezkuwichain-local.scale")]
+#[pezkuwi_subxt::subxt(runtime_metadata_path = "metadata-files/pezkuwichain-local.scale")]
 mod pezkuwichain {}
 
 use pezkuwichain::runtime_types::{
@@ -30,14 +30,11 @@ use pezkuwichain::runtime_types::{
 	xcm::{VersionedAssetId, VersionedAssets, VersionedLocation},
 };
 
+use pezkuwi_subxt::{events::StaticEvent, utils::AccountId32, OnlineClient, PezkuwiConfig};
 use serde_json::json;
 use std::{fmt::Display, sync::Arc};
 use tokio::sync::RwLock;
-use zombienet_sdk::{
-	subxt::{events::StaticEvent, utils::AccountId32, OnlineClient, PezkuwiConfig},
-	subxt_signer::sr25519::dev,
-	NetworkConfigBuilder,
-};
+use zombienet_sdk::{subxt_signer::sr25519::dev, NetworkConfigBuilder};
 
 use coretime_pezkuwichain::{
 	self as coretime_api,
@@ -66,18 +63,20 @@ async fn get_total_issuance(
 			.at_latest()
 			.await
 			.unwrap()
-			.fetch(&pezkuwichain::storage().balances().total_issuance())
+			.fetch(&pezkuwichain::storage().balances().total_issuance(), ())
 			.await
 			.unwrap()
+			.decode()
 			.unwrap(),
 		coretime
 			.storage()
 			.at_latest()
 			.await
 			.unwrap()
-			.fetch(&coretime_api::storage().balances().total_issuance())
+			.fetch(&coretime_api::storage().balances().total_issuance(), ())
 			.await
 			.unwrap()
+			.decode()
 			.unwrap(),
 	)
 }
@@ -92,7 +91,7 @@ async fn assert_total_issuance(
 	assert_eq!(ti, actual_ti);
 }
 
-type EventOf<C> = Arc<RwLock<Vec<(u64, zombienet_sdk::subxt::events::EventDetails<C>)>>>;
+type EventOf<C> = Arc<RwLock<Vec<(u64, pezkuwi_subxt::events::EventDetails<C>)>>>;
 
 macro_rules! trace_event {
 	($event:ident : $mod:ident => $($ev:ident),*) => {
@@ -106,11 +105,11 @@ macro_rules! trace_event {
 	};
 }
 
-async fn para_watcher<C: zombienet_sdk::subxt::Config + Clone>(
+async fn para_watcher<C: pezkuwi_subxt::Config + Clone>(
 	api: OnlineClient<C>,
 	events: EventOf<C>,
 ) where
-	<C::Header as zombienet_sdk::subxt::config::Header>::Number: Display,
+	<C::Header as pezkuwi_subxt::config::Header>::Number: Display,
 {
 	let mut blocks_sub = api.blocks().subscribe_finalized().await.unwrap();
 
@@ -136,11 +135,11 @@ async fn para_watcher<C: zombienet_sdk::subxt::Config + Clone>(
 	}
 }
 
-async fn relay_watcher<C: zombienet_sdk::subxt::Config + Clone>(
+async fn relay_watcher<C: pezkuwi_subxt::Config + Clone>(
 	api: OnlineClient<C>,
 	events: EventOf<C>,
 ) where
-	<C::Header as zombienet_sdk::subxt::config::Header>::Number: Display,
+	<C::Header as pezkuwi_subxt::config::Header>::Number: Display,
 {
 	let mut blocks_sub = api.blocks().subscribe_finalized().await.unwrap();
 
@@ -166,7 +165,7 @@ async fn relay_watcher<C: zombienet_sdk::subxt::Config + Clone>(
 }
 
 async fn wait_for_event<
-	C: zombienet_sdk::subxt::Config + Clone,
+	C: pezkuwi_subxt::Config + Clone,
 	E: StaticEvent,
 	P: Fn(&E) -> bool + Copy,
 >(
@@ -191,11 +190,11 @@ async fn wait_for_event<
 	}
 }
 
-async fn ti_watcher<C: zombienet_sdk::subxt::Config + Clone>(
+async fn ti_watcher<C: pezkuwi_subxt::Config + Clone>(
 	api: OnlineClient<C>,
 	prefix: &'static str,
 ) where
-	<C::Header as zombienet_sdk::subxt::config::Header>::Number: Display,
+	<C::Header as pezkuwi_subxt::config::Header>::Number: Display,
 {
 	let mut blocks_sub = api.blocks().subscribe_finalized().await.unwrap();
 
@@ -205,13 +204,15 @@ async fn ti_watcher<C: zombienet_sdk::subxt::Config + Clone>(
 	while let Some(block) = blocks_sub.next().await {
 		let block = block.unwrap();
 
-		let ti = api
+		let ti: u128 = api
 			.storage()
 			.at(block.reference())
-			.fetch(&pezkuwichain::storage().balances().total_issuance())
+			.fetch(&pezkuwichain::storage().balances().total_issuance(), ())
 			.await
 			.unwrap()
-			.unwrap() as i128;
+			.decode()
+			.unwrap();
+		let ti = ti as i128;
 
 		let diff = ti - issuance;
 		if diff != 0 {
@@ -232,18 +233,18 @@ async fn coretime_revenue_test() -> Result<(), anyhow::Error> {
 		.with_relaychain(|r| {
 			r.with_chain("pezkuwichain-local")
 				.with_default_command("pezkuwi")
-				.with_default_image(images.pezkuwi.as_str())
+				.with_default_image(images.pezkuwi())
 				.with_genesis_overrides(
 					json!({ "configuration": { "config": { "scheduler_params": { "on_demand_base_fee": ON_DEMAND_BASE_FEE }}}}),
 				)
-				.with_node(|node| node.with_name("alice"))
-				.with_node(|node| node.with_name("bob"))
-				.with_node(|node| node.with_name("charlie"))
+				.with_validator(|node| node.with_name("alice"))
+				.with_validator(|node| node.with_name("bob"))
+				.with_validator(|node| node.with_name("charlie"))
 		})
 		.with_teyrchain(|p| {
 			p.with_id(1005)
 				.with_default_command("pezkuwi-teyrchain")
-				.with_default_image(images.pezcumulus.as_str())
+				.with_default_image(images.pezcumulus())
 				.with_chain("coretime-pezkuwichain-local")
 				.with_collator(|n| n.with_name("coretime"))
 		})
@@ -388,7 +389,7 @@ async fn coretime_revenue_test() -> Result<(), anyhow::Error> {
 
 	let sale: coretime_api::broker::events::SaleInitialized =
 		wait_for_event(para_events.clone(), "Broker", "SaleInitialized", |_| true).await;
-	log::info!("{:?}", sale);
+	log::info!("{sale:?}");
 
 	// Alice buys a region
 

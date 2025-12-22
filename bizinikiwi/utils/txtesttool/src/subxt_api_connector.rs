@@ -3,7 +3,7 @@
 // see LICENSE for license details.
 
 use std::{error::Error, sync::Arc, time::Duration};
-use subxt::OnlineClient;
+use pezkuwi_subxt::OnlineClient;
 use tracing::info;
 
 use crate::helpers;
@@ -13,23 +13,23 @@ const MAX_ATTEMPTS: usize = 10;
 const RETRY_DELAY: Duration = Duration::from_secs(1);
 
 /// Connect to a RPC node.
-pub(crate) async fn connect<C: subxt::Config>(
+pub(crate) async fn connect<C: pezkuwi_subxt::Config>(
 	url: &str,
 	use_legacy_backend: bool,
 ) -> Result<OnlineClient<C>, Box<dyn Error>> {
 	for i in 0..MAX_ATTEMPTS {
 		info!("Attempt #{}: Connecting to {}", i, url);
 		let maybe_client = if use_legacy_backend {
-			let backend = subxt::backend::legacy::LegacyBackend::builder()
-				.build(subxt::backend::rpc::RpcClient::new(helpers::client(url).await?));
+			let backend = pezkuwi_subxt::backend::legacy::LegacyBackend::builder()
+				.build(pezkuwi_subxt::backend::rpc::RpcClient::new(helpers::client(url).await?));
 			OnlineClient::from_backend(Arc::new(backend)).await
 		} else {
-			let backend = subxt::backend::chain_head::ChainHeadBackend::builder()
+			let backend = pezkuwi_subxt::backend::chain_head::ChainHeadBackend::builder()
 				.transaction_timeout(6 * 3600)
 				//note: This required new subxt release
 				// subxt 0.42.1:
 				// .submit_transactions_ignoring_follow_events()
-				.build_with_background_driver(subxt::backend::rpc::RpcClient::new(
+				.build_with_background_driver(pezkuwi_subxt::backend::rpc::RpcClient::new(
 					helpers::client(url).await?,
 				));
 

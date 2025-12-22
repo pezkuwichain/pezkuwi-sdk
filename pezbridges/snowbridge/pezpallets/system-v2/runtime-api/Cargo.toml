@@ -29,14 +29,14 @@ xcm = { workspace = true }
 [features]
 default = ["std"]
 std = [
-  "codec/std",
-  "pezsnowbridge-core/std",
-  "pezsp-api/std",
-  "pezsp-std/std",
-  "xcm/std",
+	"codec/std",
+	"pezsnowbridge-core/std",
+	"pezsp-api/std",
+	"pezsp-std/std",
+	"xcm/std",
 ]
 runtime-benchmarks = [
-  "pezsnowbridge-core/runtime-benchmarks",
-  "pezsp-api/runtime-benchmarks",
-  "xcm/runtime-benchmarks",
+	"pezsnowbridge-core/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
 ]

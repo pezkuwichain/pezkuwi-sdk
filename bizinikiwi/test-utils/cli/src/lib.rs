@@ -17,7 +17,6 @@
 
 #![cfg(unix)]
 
-use assert_cmd::cargo::cargo_bin;
 use nix::{
 	sys::signal::{kill, Signal, Signal::SIGINT},
 	unistd::Pid,
@@ -33,6 +32,23 @@ use std::{
 	time::Duration,
 };
 use tokio::io::{AsyncBufReadExt, AsyncRead};
+
+/// Get the path to the bizinikiwi-node binary.
+///
+/// This function first checks for the CARGO_BIN_EXE environment variable (set by cargo during
+/// tests), then falls back to looking in the target directory.
+fn bizinikiwi_node_path() -> PathBuf {
+	// Try to get from CARGO_BIN_EXE environment variable first (set during tests)
+	if let Ok(path) = std::env::var("CARGO_BIN_EXE_bizinikiwi-node") {
+		return PathBuf::from(path);
+	}
+
+	// Fall back to finding in target directory
+	let target_dir =
+		std::env::var("CARGO_TARGET_DIR").unwrap_or_else(|_| "target".to_string());
+	let profile = if cfg!(debug_assertions) { "debug" } else { "release" };
+	PathBuf::from(target_dir).join(profile).join("bizinikiwi-node")
+}
 
 /// Similar to [`crate::start_node`] spawns a node, but works in environments where the bizinikiwi
 /// binary is not accessible with `cargo_bin("bizinikiwi-node")`, and allows customising the args
@@ -92,7 +108,7 @@ pub fn start_node_inline(args: Vec<&str>) -> Result<(), pezsc_service::error::Er
 ///
 /// [`Child`]: std::process::Child
 pub fn start_node() -> Child {
-	Command::new(cargo_bin("bizinikiwi-node"))
+	Command::new(bizinikiwi_node_path())
 		.stdout(process::Stdio::piped())
 		.stderr(process::Stdio::piped())
 		.args(&["--dev", "--tmp", "--rpc-port=45789", "--no-hardware-benchmarks"])
@@ -230,7 +246,7 @@ pub async fn wait_n_finalized_blocks(n: usize, url: &str) {
 /// Run the node for a while (3 blocks)
 pub async fn run_node_for_a_while(base_path: &Path, args: &[&str]) {
 	run_with_timeout(Duration::from_secs(60 * 10), async move {
-		let mut cmd = Command::new(cargo_bin("bizinikiwi-node"))
+		let mut cmd = Command::new(bizinikiwi_node_path())
 			.stdout(process::Stdio::piped())
 			.stderr(process::Stdio::piped())
 			.args(args)

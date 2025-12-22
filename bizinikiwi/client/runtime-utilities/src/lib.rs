@@ -137,7 +137,7 @@ mod tests {
 		let code_bytes = pezcumulus_test_runtime::WASM_BINARY
 			.expect("To run this test, build the wasm binary of pezcumulus-test-runtime")
 			.to_vec();
-		let metadata = subxt::Metadata::decode(
+		let metadata = pezkuwi_subxt::Metadata::decode(
 			&mut (*super::fetch_latest_metadata_from_code_blob(&executor, code_bytes.into())
 				.unwrap())
 			.as_slice(),

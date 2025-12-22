@@ -17,7 +17,7 @@
 //! The generated subxt client.
 //! Generated against a bizinikiwi chain configured with [`pezpallet_revive`] using:
 //! subxt metadata  --url ws://localhost:9944 -o rpc/revive_chain.scale
-pub use pezkuwi_subxt::config::PolkadotConfig as SrcChainConfig;
+pub use pezkuwi_subxt::PezkuwiConfig as SrcChainConfig;
 
 #[pezkuwi_subxt::subxt(
 	runtime_metadata_path = "revive_chain.scale",

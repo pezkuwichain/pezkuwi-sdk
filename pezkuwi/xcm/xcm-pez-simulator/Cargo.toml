@@ -32,15 +32,15 @@ xcm-executor = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-  "pezframe-support/runtime-benchmarks",
-  "pezframe-system/runtime-benchmarks",
-  "pezkuwi-core-primitives/runtime-benchmarks",
-  "pezkuwi-primitives/runtime-benchmarks",
-  "pezkuwi-runtime-teyrchains/runtime-benchmarks",
-  "pezkuwi-teyrchain-primitives/runtime-benchmarks",
-  "pezsp-io/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "xcm-builder/runtime-benchmarks",
-  "xcm-executor/runtime-benchmarks",
-  "xcm/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezkuwi-core-primitives/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"pezkuwi-runtime-teyrchains/runtime-benchmarks",
+	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"xcm-builder/runtime-benchmarks",
+	"xcm-executor/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
 ]

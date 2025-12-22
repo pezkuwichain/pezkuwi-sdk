@@ -4,8 +4,8 @@ name = "pezsp-mixnet"
 version = "0.4.0"
 license = "Apache-2.0"
 authors = [
-  "Kurdistan Tech Institute <info@pezkuwichain.io>",
-  "Parity Technologies <admin@parity.io>",
+	"Kurdistan Tech Institute <info@pezkuwichain.io>",
+	"Parity Technologies <admin@parity.io>",
 ]
 edition.workspace = true
 homepage.workspace = true
@@ -21,16 +21,16 @@ targets = ["x86_64-unknown-linux-gnu"]
 
 [dependencies]
 codec = { features = ["derive"], workspace = true }
-scale-info = { features = ["derive"], workspace = true }
 pezsp-api = { workspace = true }
 pezsp-application-crypto = { workspace = true }
+scale-info = { features = ["derive"], workspace = true }
 
 [features]
 default = ["std"]
 std = [
-  "codec/std",
-  "scale-info/std",
-  "pezsp-api/std",
-  "pezsp-application-crypto/std",
+	"codec/std",
+	"pezsp-api/std",
+	"pezsp-application-crypto/std",
+	"scale-info/std",
 ]
 runtime-benchmarks = ["pezsp-api/runtime-benchmarks"]

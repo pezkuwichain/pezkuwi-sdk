@@ -42,31 +42,31 @@ bizinikiwi-wasm-builder = { workspace = true, optional = true }
 [features]
 default = ["std"]
 std = [
-  "codec/std",
-  "scale-info/std",
-  "serde_json/std",
+	"codec/std",
+	"scale-info/std",
+	"serde_json/std",
 
-  "frame/std",
+	"frame/std",
 
-  "pezpallet-balances/std",
-  "pezpallet-sudo/std",
-  "pezpallet-timestamp/std",
-  "pezpallet-transaction-payment-rpc-runtime-api/std",
-  "pezpallet-transaction-payment/std",
+	"pezpallet-balances/std",
+	"pezpallet-sudo/std",
+	"pezpallet-timestamp/std",
+	"pezpallet-transaction-payment-rpc-runtime-api/std",
+	"pezpallet-transaction-payment/std",
 
-  "first-pezpallet/std",
-  "pezsp-keyring/std",
+	"first-pezpallet/std",
+	"pezsp-keyring/std",
 
-  "bizinikiwi-wasm-builder",
+	"bizinikiwi-wasm-builder",
 ]
 runtime-benchmarks = [
-  "first-pezpallet/runtime-benchmarks",
-  "frame/runtime-benchmarks",
-  "pezpallet-balances/runtime-benchmarks",
-  "pezpallet-sudo/runtime-benchmarks",
-  "pezpallet-timestamp/runtime-benchmarks",
-  "pezpallet-transaction-payment-rpc-runtime-api/runtime-benchmarks",
-  "pezpallet-transaction-payment/runtime-benchmarks",
-  "pezsp-keyring/runtime-benchmarks",
-  "bizinikiwi-wasm-builder?/runtime-benchmarks",
+	"bizinikiwi-wasm-builder?/runtime-benchmarks",
+	"first-pezpallet/runtime-benchmarks",
+	"frame/runtime-benchmarks",
+	"pezpallet-balances/runtime-benchmarks",
+	"pezpallet-sudo/runtime-benchmarks",
+	"pezpallet-timestamp/runtime-benchmarks",
+	"pezpallet-transaction-payment-rpc-runtime-api/runtime-benchmarks",
+	"pezpallet-transaction-payment/runtime-benchmarks",
+	"pezsp-keyring/runtime-benchmarks",
 ]

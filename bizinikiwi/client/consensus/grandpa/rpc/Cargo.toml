@@ -16,43 +16,43 @@ workspace = true
 [dependencies]
 codec = { features = ["derive"], workspace = true, default-features = true }
 finality-grandpa = { features = [
-  "derive-codec",
+	"derive-codec",
 ], workspace = true, default-features = true }
 futures = { workspace = true }
 jsonrpsee = { features = [
-  "client-core",
-  "macros",
-  "server-core",
+	"client-core",
+	"macros",
+	"server-core",
 ], workspace = true }
 log = { workspace = true, default-features = true }
 pezsc-client-api = { workspace = true, default-features = true }
 pezsc-consensus-grandpa = { workspace = true, default-features = true }
 pezsc-rpc = { workspace = true, default-features = true }
-serde = { features = ["derive"], workspace = true, default-features = true }
 pezsp-blockchain = { workspace = true, default-features = true }
 pezsp-core = { workspace = true, default-features = true }
 pezsp-runtime = { workspace = true, default-features = true }
+serde = { features = ["derive"], workspace = true, default-features = true }
 thiserror = { workspace = true }
 
 [dev-dependencies]
+bizinikiwi-test-runtime-client = { workspace = true }
 pezsc-block-builder = { workspace = true, default-features = true }
 pezsc-rpc = { features = [
-  "test-helpers",
+	"test-helpers",
 ], workspace = true, default-features = true }
 pezsp-consensus-grandpa = { workspace = true, default-features = true }
 pezsp-keyring = { workspace = true, default-features = true }
-bizinikiwi-test-runtime-client = { workspace = true }
 tokio = { features = ["macros"], workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-  "pezsc-block-builder/runtime-benchmarks",
-  "pezsc-client-api/runtime-benchmarks",
-  "pezsc-consensus-grandpa/runtime-benchmarks",
-  "pezsc-rpc/runtime-benchmarks",
-  "pezsp-blockchain/runtime-benchmarks",
-  "pezsp-consensus-grandpa/runtime-benchmarks",
-  "pezsp-keyring/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "bizinikiwi-test-runtime-client/runtime-benchmarks",
+	"bizinikiwi-test-runtime-client/runtime-benchmarks",
+	"pezsc-block-builder/runtime-benchmarks",
+	"pezsc-client-api/runtime-benchmarks",
+	"pezsc-consensus-grandpa/runtime-benchmarks",
+	"pezsc-rpc/runtime-benchmarks",
+	"pezsp-blockchain/runtime-benchmarks",
+	"pezsp-consensus-grandpa/runtime-benchmarks",
+	"pezsp-keyring/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]

@@ -31,7 +31,7 @@ async fn approved_peer_mixed_validators_test() -> Result<(), anyhow::Error> {
 			let r = r
 				.with_chain("pezkuwichain-local")
 				.with_default_command("pezkuwi")
-				.with_default_image(images.pezkuwi.as_str())
+				.with_default_image(images.pezkuwi())
 				.with_default_args(vec![("-lteyrchain=debug").into()])
 				.with_genesis_overrides(json!({
 					"configuration": {
@@ -44,13 +44,13 @@ async fn approved_peer_mixed_validators_test() -> Result<(), anyhow::Error> {
 						}
 					}
 				}))
-				.with_node(|node| node.with_name("validator-0"));
+				.with_validator(|node| node.with_name("validator-0"));
 
 			let r = (1..7)
-				.fold(r, |acc, i| acc.with_node(|node| node.with_name(&format!("validator-{i}"))));
+				.fold(r, |acc, i| acc.with_validator(|node| node.with_name(&format!("validator-{i}"))));
 
 			(7..10).fold(r, |acc, i| {
-				acc.with_node(|node| {
+				acc.with_validator(|node| {
 					node.with_name(&format!("old-validator-{i}"))
 						.with_image(
 							std::env::var("OLD_PEZKUWI_IMAGE")

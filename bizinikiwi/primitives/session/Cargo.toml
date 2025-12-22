@@ -18,26 +18,26 @@ targets = ["x86_64-unknown-linux-gnu"]
 
 [dependencies]
 codec = { features = ["derive"], workspace = true }
-scale-info = { features = ["derive"], workspace = true }
 pezsp-api = { workspace = true }
 pezsp-core = { workspace = true }
 pezsp-keystore = { optional = true, workspace = true }
 pezsp-runtime = { optional = true, workspace = true }
 pezsp-staking = { workspace = true }
+scale-info = { features = ["derive"], workspace = true }
 
 [features]
 default = ["std"]
 std = [
-  "codec/std",
-  "scale-info/std",
-  "pezsp-api/std",
-  "pezsp-core/std",
-  "pezsp-keystore/std",
-  "pezsp-runtime/std",
-  "pezsp-staking/std",
+	"codec/std",
+	"pezsp-api/std",
+	"pezsp-core/std",
+	"pezsp-keystore/std",
+	"pezsp-runtime/std",
+	"pezsp-staking/std",
+	"scale-info/std",
 ]
 runtime-benchmarks = [
-  "pezsp-api/runtime-benchmarks",
-  "pezsp-runtime?/runtime-benchmarks",
-  "pezsp-staking/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
+	"pezsp-runtime?/runtime-benchmarks",
+	"pezsp-staking/runtime-benchmarks",
 ]

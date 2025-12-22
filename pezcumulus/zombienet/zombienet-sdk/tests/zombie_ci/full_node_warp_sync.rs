@@ -116,9 +116,9 @@ use anyhow::anyhow;
 use pezkuwi_primitives::Id as ParaId;
 
 use crate::utils::{initialize_network, BEST_BLOCK_METRIC};
-use pezcumulus_zombienet_sdk_helpers::assert_para_is_registered;
+use pezcumulus_zombienet_sdk_helpers::{assert_para_is_registered};
 use zombienet_sdk::{
-	subxt::{OnlineClient, PolkadotConfig},
+	subxt::{OnlineClient, PezkuwiConfig},
 	NetworkConfig, NetworkConfigBuilder,
 };
 
@@ -138,7 +138,7 @@ async fn full_node_warp_sync() -> Result<(), anyhow::Error> {
 	let network = initialize_network(config).await?;
 
 	let alice = network.get_node("alice")?;
-	let alice_client: OnlineClient<PolkadotConfig> = alice.wait_client().await?;
+	let alice_client: OnlineClient<PezkuwiConfig> = alice.wait_client().await?;
 
 	log::info!("Ensuring teyrchain is registered");
 	assert_para_is_registered(&alice_client, ParaId::from(PARA_ID), 10).await?;
@@ -180,12 +180,12 @@ async fn build_network_config() -> Result<NetworkConfig, anyhow::Error> {
 				.with_default_image(images.polkadot.as_str())
 				.with_chain_spec_path("tests/zombie_ci/warp-sync-relaychain-spec.json")
 				.with_default_args(vec![("-lteyrchain=debug").into()])
-				.with_node(|node| node.with_name("alice").with_db_snapshot(DB_SNAPSHOT_RELAYCHAIN))
-				.with_node(|node| node.with_name("bob").with_db_snapshot(DB_SNAPSHOT_RELAYCHAIN))
-				.with_node(|node| {
+				.with_validator(|node| node.with_name("alice").with_db_snapshot(DB_SNAPSHOT_RELAYCHAIN))
+				.with_validator(|node| node.with_name("bob").with_db_snapshot(DB_SNAPSHOT_RELAYCHAIN))
+				.with_validator(|node| {
 					node.with_name("charlie").with_db_snapshot(DB_SNAPSHOT_RELAYCHAIN)
 				})
-				.with_node(|node| {
+				.with_validator(|node| {
 					node.with_name("dave").with_args(vec![
 						("-lteyrchain=debug").into(),
 						("--no-beefy").into(),
@@ -206,7 +206,7 @@ async fn build_network_config() -> Result<NetworkConfig, anyhow::Error> {
 		.with_teyrchain(|p| {
 			p.with_id(PARA_ID)
 				.with_default_command("test-teyrchain")
-				.with_default_image(images.pezcumulus.as_str())
+				.with_default_image(images.pezcumulus())
 				.with_chain_spec_path("tests/zombie_ci/warp-sync-teyrchain-spec.json")
 				.with_default_args(vec![("-lteyrchain=debug").into()])
 				.with_collator(|n| n.with_name("eve").with_db_snapshot(DB_SNAPSHOT_TEYRCHAIN))

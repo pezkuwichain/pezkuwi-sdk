@@ -366,7 +366,7 @@ impl<T: Config> WasmBlob<T> {
 		self,
 		ext: &mut E,
 		input_data: Vec<u8>,
-	) -> (Func, Store<Runtime<E>>) {
+	) -> (Func, Store<Runtime<'_, E>>) {
 		use InstanceOrExecReturn::*;
 		match Self::prepare_execute(
 			self,

@@ -21,13 +21,13 @@ async-channel = { workspace = true }
 codec = { features = ["derive"], workspace = true, default-features = true }
 futures = { workspace = true }
 log = { workspace = true, default-features = true }
-prost = { workspace = true }
 pezsc-client-api = { workspace = true, default-features = true }
 pezsc-network = { workspace = true, default-features = true }
 pezsc-network-types = { workspace = true, default-features = true }
 pezsp-blockchain = { workspace = true, default-features = true }
 pezsp-core = { workspace = true, default-features = true }
 pezsp-runtime = { workspace = true, default-features = true }
+prost = { workspace = true }
 thiserror = { workspace = true }
 
 [build-dependencies]
@@ -35,8 +35,8 @@ prost-build = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-  "pezsc-client-api/runtime-benchmarks",
-  "pezsc-network/runtime-benchmarks",
-  "pezsp-blockchain/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
+	"pezsc-client-api/runtime-benchmarks",
+	"pezsc-network/runtime-benchmarks",
+	"pezsp-blockchain/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
 ]

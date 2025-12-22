@@ -20,8 +20,8 @@ gum = { workspace = true, default-features = true }
 orchestra = { features = ["futures_channel"], workspace = true }
 pezkuwi-node-metrics = { workspace = true, default-features = true }
 pezkuwi-node-network-protocol = { workspace = true, default-features = true }
-pezkuwi-pez-node-primitives = { workspace = true, default-features = true }
 pezkuwi-node-subsystem-types = { workspace = true, default-features = true }
+pezkuwi-pez-node-primitives = { workspace = true, default-features = true }
 pezkuwi-primitives = { workspace = true, default-features = true }
 pezsc-client-api = { workspace = true, default-features = true }
 pezsp-core = { workspace = true, default-features = true }
@@ -44,13 +44,13 @@ expand = ["orchestra/expand"]
 futures_channel = ["metered/futures_channel", "orchestra/futures_channel"]
 jemalloc-allocator = ["dep:tikv-jemalloc-ctl"]
 runtime-benchmarks = [
-  "gum/runtime-benchmarks",
-  "pezkuwi-node-metrics/runtime-benchmarks",
-  "pezkuwi-node-network-protocol/runtime-benchmarks",
-  "pezkuwi-pez-node-primitives/runtime-benchmarks",
-  "pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
-  "pezkuwi-node-subsystem-types/runtime-benchmarks",
-  "pezkuwi-primitives-test-helpers/runtime-benchmarks",
-  "pezkuwi-primitives/runtime-benchmarks",
-  "pezsc-client-api/runtime-benchmarks",
+	"gum/runtime-benchmarks",
+	"pezkuwi-node-metrics/runtime-benchmarks",
+	"pezkuwi-node-network-protocol/runtime-benchmarks",
+	"pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
+	"pezkuwi-node-subsystem-types/runtime-benchmarks",
+	"pezkuwi-pez-node-primitives/runtime-benchmarks",
+	"pezkuwi-primitives-test-helpers/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"pezsc-client-api/runtime-benchmarks",
 ]

@@ -27,21 +27,21 @@ xcm-executor = { workspace = true }
 zagros-runtime-constants = { workspace = true, default-features = true }
 
 # Pezcumulus
-pezcumulus-pezpallet-teyrchain-system = { workspace = true, default-features = true }
 emulated-integration-tests-common = { workspace = true }
+pezcumulus-pezpallet-teyrchain-system = { workspace = true, default-features = true }
 zagros-system-emulated-network = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-  "pezcumulus-pezpallet-teyrchain-system/runtime-benchmarks",
-  "emulated-integration-tests-common/runtime-benchmarks",
-  "pezframe-support/runtime-benchmarks",
-  "pezpallet-broker/runtime-benchmarks",
-  "pezpallet-message-queue/runtime-benchmarks",
-  "pezkuwi-runtime-teyrchains/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "xcm-executor/runtime-benchmarks",
-  "xcm/runtime-benchmarks",
-  "zagros-runtime-constants/runtime-benchmarks",
-  "zagros-system-emulated-network/runtime-benchmarks",
+	"emulated-integration-tests-common/runtime-benchmarks",
+	"pezcumulus-pezpallet-teyrchain-system/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezkuwi-runtime-teyrchains/runtime-benchmarks",
+	"pezpallet-broker/runtime-benchmarks",
+	"pezpallet-message-queue/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"xcm-executor/runtime-benchmarks",
+	"xcm/runtime-benchmarks",
+	"zagros-runtime-constants/runtime-benchmarks",
+	"zagros-system-emulated-network/runtime-benchmarks",
 ]

@@ -115,7 +115,7 @@ use core::convert::TryFrom;
 use pezframe_system::pezpallet_prelude::BlockNumberFor;
 
 use pezframe_support::pezpallet_prelude::{
-	Get, IsType, MaxEncodedLen, Member, OptionQuery, Parameter, ValueQuery,
+	Get, MaxEncodedLen, Member, OptionQuery, Parameter, ValueQuery,
 };
 
 pub trait ReferralScoreProvider<AccountId> {
@@ -152,9 +152,7 @@ pub mod pezpallet {
 	pub struct Pezpallet<T>(_);
 
 	#[pezpallet::config]
-	pub trait Config: pezframe_system::Config + pezpallet_identity_kyc::Config {
-		type RuntimeEvent: From<Event<Self>>
-			+ IsType<<Self as pezframe_system::Config>::RuntimeEvent>;
+	pub trait Config: pezframe_system::Config<RuntimeEvent: From<Event<Self>>> + pezpallet_identity_kyc::Config {
 		type WeightInfo: WeightInfo;
 
 		type Score: Member
@@ -417,7 +415,7 @@ pub mod pezpallet {
 	impl<T: Config> TrustScoreUpdater<T::AccountId> for Pezpallet<T> {
 		fn on_score_component_changed(who: &T::AccountId) {
 			if let Err(e) = Self::update_score_for_account(who) {
-				log::error!("Failed to update trust score for {:?}: {:?}", who, e);
+				log::error!("Failed to update trust score for {who:?}: {e:?}");
 			}
 		}
 	}

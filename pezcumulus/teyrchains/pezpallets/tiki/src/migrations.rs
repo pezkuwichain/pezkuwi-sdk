@@ -22,9 +22,7 @@ pub mod v1 {
 			let current = Pezpallet::<T>::on_chain_storage_version();
 
 			log::info!(
-				"🔄 Running migration for pezpallet-tiki from {:?} to {:?}",
-				current,
-				STORAGE_VERSION
+				"🔄 Running migration for pezpallet-tiki from {current:?} to {STORAGE_VERSION:?}"
 			);
 
 			if current == StorageVersion::new(0) {
@@ -43,7 +41,7 @@ pub mod v1 {
 				// Update storage version
 				STORAGE_VERSION.put::<Pezpallet<T>>();
 
-				log::info!("✅ Migrated {} entries in pezpallet-tiki", migrated);
+				log::info!("✅ Migrated {migrated} entries in pezpallet-tiki");
 
 				// Return weight used
 				// Reads: migrated items + version read
@@ -54,8 +52,7 @@ pub mod v1 {
 				weight
 			} else {
 				log::info!(
-					"👌 pezpallet-tiki migration not needed, current version is {:?}",
-					current
+					"👌 pezpallet-tiki migration not needed, current version is {current:?}"
 				);
 				T::DbWeight::get().reads(1)
 			}
@@ -68,16 +65,16 @@ pub mod v1 {
 			let current = Pezpallet::<T>::on_chain_storage_version();
 
 			log::info!("🔍 Pre-upgrade check for pezpallet-tiki");
-			log::info!("   Current version: {:?}", current);
+			log::info!("   Current version: {current:?}");
 
 			// Encode current storage counts for verification
 			let citizen_count = CitizenNft::<T>::iter().count() as u32;
 			let user_tikis_count = UserTikis::<T>::iter().count() as u32;
 			let tiki_holder_count = TikiHolder::<T>::iter().count() as u32;
 
-			log::info!("   CitizenNft entries: {}", citizen_count);
-			log::info!("   UserTikis entries: {}", user_tikis_count);
-			log::info!("   TikiHolder entries: {}", tiki_holder_count);
+			log::info!("   CitizenNft entries: {citizen_count}");
+			log::info!("   UserTikis entries: {user_tikis_count}");
+			log::info!("   TikiHolder entries: {tiki_holder_count}");
 
 			Ok((citizen_count, user_tikis_count, tiki_holder_count).encode())
 		}
@@ -96,23 +93,19 @@ pub mod v1 {
 			// Verify storage version was updated
 			let current_version = Pezpallet::<T>::on_chain_storage_version();
 			assert_eq!(current_version, STORAGE_VERSION, "Storage version not updated correctly");
-			log::info!("✅ Storage version updated to {:?}", current_version);
+			log::info!("✅ Storage version updated to {current_version:?}");
 
 			// Verify storage counts (should be same or more, never less)
 			let post_citizen_count = CitizenNft::<T>::iter().count() as u32;
 			let post_user_tikis_count = UserTikis::<T>::iter().count() as u32;
 			let post_tiki_holder_count = TikiHolder::<T>::iter().count() as u32;
 
-			log::info!("   CitizenNft entries: {} -> {}", pre_citizen_count, post_citizen_count);
+			log::info!("   CitizenNft entries: {pre_citizen_count} -> {post_citizen_count}");
 			log::info!(
-				"   UserTikis entries: {} -> {}",
-				pre_user_tikis_count,
-				post_user_tikis_count
+				"   UserTikis entries: {pre_user_tikis_count} -> {post_user_tikis_count}"
 			);
 			log::info!(
-				"   TikiHolder entries: {} -> {}",
-				pre_tiki_holder_count,
-				post_tiki_holder_count
+				"   TikiHolder entries: {pre_tiki_holder_count} -> {post_tiki_holder_count}"
 			);
 
 			assert!(

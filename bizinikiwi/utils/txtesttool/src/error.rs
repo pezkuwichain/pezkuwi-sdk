@@ -9,7 +9,7 @@ pub enum Error {
 	/// Subxt error.
 	#[serde(skip)]
 	#[error("subxt error: {0}")]
-	Subxt(#[from] subxt::Error),
+	Subxt(#[from] Box<pezkuwi_subxt::Error>),
 	/// Other error.
 	#[error("Other error: {0}")]
 	Other(String),
@@ -18,8 +18,14 @@ pub enum Error {
 	MortalLifetimeSurpassed(u64),
 }
 
-impl From<subxt::error::ExtrinsicError> for Error {
-	fn from(err: subxt::error::ExtrinsicError) -> Self {
-		Error::Subxt(subxt::Error::from(err))
+impl From<pezkuwi_subxt::Error> for Error {
+	fn from(err: pezkuwi_subxt::Error) -> Self {
+		Error::Subxt(Box::new(err))
+	}
+}
+
+impl From<pezkuwi_subxt::error::ExtrinsicError> for Error {
+	fn from(err: pezkuwi_subxt::error::ExtrinsicError) -> Self {
+		Error::Subxt(Box::new(pezkuwi_subxt::Error::from(err)))
 	}
 }

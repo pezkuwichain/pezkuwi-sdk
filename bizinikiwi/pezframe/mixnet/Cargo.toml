@@ -4,8 +4,8 @@ name = "pezpallet-mixnet"
 version = "0.4.0"
 license = "Apache-2.0"
 authors = [
-  "Kurdistan Tech Institute <info@pezkuwichain.io>",
-  "Parity Technologies <admin@parity.io>",
+	"Kurdistan Tech Institute <info@pezkuwichain.io>",
+	"Parity Technologies <admin@parity.io>",
 ]
 edition.workspace = true
 homepage.workspace = true
@@ -23,24 +23,24 @@ targets = ["x86_64-unknown-linux-gnu"]
 codec = { features = ["derive", "max-encoded-len"], workspace = true }
 frame = { workspace = true, features = ["runtime"] }
 log = { workspace = true }
-scale-info = { features = ["derive"], workspace = true }
-serde = { features = ["derive"], workspace = true }
 pezsp-application-crypto = { workspace = true }
 pezsp-mixnet = { workspace = true }
+scale-info = { features = ["derive"], workspace = true }
+serde = { features = ["derive"], workspace = true }
 
 [features]
 default = ["std"]
 std = [
-  "codec/std",
-  "frame/std",
-  "log/std",
-  "scale-info/std",
-  "serde/std",
-  "pezsp-application-crypto/std",
-  "pezsp-mixnet/std",
+	"codec/std",
+	"frame/std",
+	"log/std",
+	"pezsp-application-crypto/std",
+	"pezsp-mixnet/std",
+	"scale-info/std",
+	"serde/std",
 ]
 try-runtime = ["frame/try-runtime"]
 runtime-benchmarks = [
-  "frame/runtime-benchmarks",
-  "pezsp-mixnet/runtime-benchmarks",
+	"frame/runtime-benchmarks",
+	"pezsp-mixnet/runtime-benchmarks",
 ]

@@ -8,8 +8,8 @@ use std::{collections::HashMap, ops::Range, sync::Arc, time::Duration};
 
 use clap::{Subcommand, ValueEnum};
 use futures::executor::block_on;
-use subxt::utils::H256;
-use subxt_core::config::Hash as BlockHash;
+use pezkuwi_subxt::utils::H256;
+use pezkuwi_subxt_core::config::Hash as BlockHash;
 use tokio::sync::mpsc::Sender;
 
 use crate::{
@@ -20,14 +20,14 @@ use crate::{
 		eth_transfer_payload_builder, generate_ecdsa_keypair, generate_sr25519_keypair,
 		remark_payload_builder, sub_transfer_payload_builder, EthPayloadBuilderFn, EthTransaction,
 		EthTransactionsSink, EthTxBuildContext, SubPayloadBuilderFn, SubTxBuildContext,
-		SubstrateTransaction, SubstrateTransactionsSink,
+		BizinikiwTransaction, BizinikiwTransactionsSink,
 	},
 	transaction::{
-		BuildTransactionParams, EthTransactionBuilder, SubstrateTransactionBuilder, Transaction,
+		BuildTransactionParams, EthTransactionBuilder, BizinikiwTransactionBuilder, Transaction,
 		TransactionBuilder, TransactionCall, TransactionRecipe, TransactionsSink,
 	},
 };
-use subxt::tx::DynamicPayload;
+use pezkuwi_subxt::tx::DynamicPayload;
 
 #[derive(Clone, Debug)]
 /// Holds information relevant for transaction generation.
@@ -107,16 +107,16 @@ pub struct EthScenarioExecutor {
 	runner: EthScenarioRunner,
 }
 
-pub type SubstrateScenarioRunner =
-	Runner<DefaultTxTask<SubstrateTransaction>, SubstrateTransactionsSink>;
-pub struct SubstrateScenarioExecutor {
+pub type BizinikiwScenarioRunner =
+	Runner<DefaultTxTask<BizinikiwTransaction>, BizinikiwTransactionsSink>;
+pub struct BizinikiwScenarioExecutor {
 	stop_sender: Sender<()>,
-	runner: SubstrateScenarioRunner,
+	runner: BizinikiwScenarioRunner,
 }
 
-impl SubstrateScenarioExecutor {
-	pub(crate) fn new(stop_sender: Sender<()>, runner: SubstrateScenarioRunner) -> Self {
-		SubstrateScenarioExecutor { stop_sender, runner }
+impl BizinikiwScenarioExecutor {
+	pub(crate) fn new(stop_sender: Sender<()>, runner: BizinikiwScenarioRunner) -> Self {
+		BizinikiwScenarioExecutor { stop_sender, runner }
 	}
 }
 
@@ -129,7 +129,7 @@ impl EthScenarioExecutor {
 /// Multi-chain scenario executor.
 pub enum ScenarioExecutor {
 	Eth(EthScenarioExecutor),
-	Substrate(SubstrateScenarioExecutor),
+	Substrate(BizinikiwScenarioExecutor),
 }
 
 impl ScenarioExecutor {
@@ -616,8 +616,8 @@ impl ScenarioBuilder {
 					.expect("No payload source configured")
 					.into_sub_builder();
 
-				let builder = SubstrateTransactionBuilder::default();
-				let sink = SubstrateTransactionsSink::new_with_uri_with_accounts_description(
+				let builder = BizinikiwTransactionBuilder::default();
+				let sink = BizinikiwTransactionsSink::new_with_uri_with_accounts_description(
 					rpc_uri.as_str(),
 					accounts_description,
 					generate_sr25519_keypair,
@@ -632,7 +632,7 @@ impl ScenarioBuilder {
 				let txs =
 					self.build_transactions(builder, sink.clone(), tip, payload_builder).await;
 				let (stop_sender, runner) =
-					Runner::<DefaultTxTask<SubstrateTransaction>, SubstrateTransactionsSink>::new(
+					Runner::<DefaultTxTask<BizinikiwTransaction>, BizinikiwTransactionsSink>::new(
 						send_threshold,
 						sink,
 						txs.into_iter().rev().collect(),
@@ -642,7 +642,7 @@ impl ScenarioBuilder {
 						self.timeout,
 					);
 
-				let executor = ScenarioExecutor::Substrate(SubstrateScenarioExecutor::new(
+				let executor = ScenarioExecutor::Substrate(BizinikiwScenarioExecutor::new(
 					stop_sender,
 					runner,
 				));

@@ -35,12 +35,12 @@ fn is_valid_rust_identifier(id: &str) -> Result<(), String> {
 		if ch.is_xid_start() {
 			for ch in id.chars().skip(1) {
 				if !ch.is_xid_continue() {
-					return Err(format!("Invalid char `{}` in `{}`", ch, id))
+					return Err(format!("Invalid char `{ch}` in `{id}`"))
 				}
 			}
 			Ok(())
 		} else {
-			Err(format!("`{}` starts with `{}` which is not valid at the start", id, ch))
+			Err(format!("`{id}` starts with `{ch}` which is not valid at the start"))
 		}
 	} else {
 		Err("empty identifier".into())
@@ -56,16 +56,12 @@ impl Registry {
 			if let Some(clash) = used_prefixes.insert(account_type.prefix, (*account_type).clone())
 			{
 				return Err(format!(
-                    "prefixes must be unique but this account's prefix:\n{:#?}\nclashed with\n{:#?}",
-                    account_type,
-                    clash
+                    "prefixes must be unique but this account's prefix:\n{account_type:#?}\nclashed with\n{clash:#?}"
                 ));
 			}
 			if let Some(clash) = used_networks.insert(account_type.name(), account_type.clone()) {
 				return Err(format!(
-                    "networks must be unique but this account's network:\n{:#?}\nclashed with\n:{:#?}",
-                    account_type,
-                    clash
+                    "networks must be unique but this account's network:\n{account_type:#?}\nclashed with\n:{clash:#?}"
                 ));
 			}
 			if account_type.network.is_empty() {
@@ -73,12 +69,11 @@ impl Registry {
 			}
 
 			if let Err(err) = is_valid_rust_identifier(&account_type.name()) {
-				return Err(format!("network not valid: {} for {:#?}", err, account_type))
+				return Err(format!("network not valid: {err} for {account_type:#?}"))
 			}
 			if account_type.decimals.len() != account_type.symbols.len() {
 				return Err(format!(
-					"decimals must be specified for each symbol: {:?}",
-					account_type
+					"decimals must be specified for each symbol: {account_type:?}"
 				))
 			}
 			for (name, decimals) in account_type.symbols.iter().zip(&account_type.decimals) {
@@ -186,7 +181,7 @@ fn consecutive_runs(data: &[u16]) -> (Vec<u16>, Vec<u16>) {
 
 fn create_ss58_registry(json: &str) -> Result<proc_macro2::TokenStream, String> {
 	let registry: Registry =
-		serde_json::from_str(json).map_err(|e| format!("json parsing error: {}", e))?;
+		serde_json::from_str(json).map_err(|e| format!("json parsing error: {e}"))?;
 
 	let (mut accounts, tokens) = registry.validate()?;
 
@@ -306,14 +301,14 @@ fn main() {
 	let code = match create_ss58_registry(include_str!("ss58-registry.json")) {
 		Ok(result) => result.to_string(),
 		Err(msg) => {
-			eprintln!("failed to generate code from json: {}", &msg);
+			eprintln!("failed to generate code from json: {msg}");
 			std::process::exit(-1);
 		},
 	};
 
 	let dest_path = Path::new(&out_dir).join("registry_gen.rs");
 	if let Err(err) = fs::write(&dest_path, code) {
-		eprintln!("failed to write generated code to {}: {}", &dest_path.display(), err);
+		eprintln!("failed to write generated code to {}: {err}", &dest_path.display());
 		std::process::exit(-1);
 	}
 }

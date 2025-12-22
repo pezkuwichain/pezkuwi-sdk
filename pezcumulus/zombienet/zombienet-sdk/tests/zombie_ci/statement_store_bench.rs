@@ -12,7 +12,7 @@ use pezsp_statement_store::{Channel, Statement, Topic};
 use std::{cell::Cell, collections::HashMap, time::Duration};
 use tokio::time::timeout;
 use zombienet_sdk::{
-	subxt::{backend::rpc::RpcClient, ext::subxt_rpcs::rpc_params},
+	subxt::{backend::rpc::RpcClient, ext::pezkuwi_subxt_rpcs::rpc_params},
 	LocalFileSystem, Network, NetworkConfigBuilder,
 };
 
@@ -46,12 +46,12 @@ async fn statement_store_one_pez_node_bench() -> Result<(), anyhow::Error> {
 	let collator_names = ["alice", "bob"];
 	let network = spawn_network(&collator_names).await?;
 
-	info!("Starting statement store benchmark with {} participants", PARTICIPANT_SIZE);
+	info!("Starting statement store benchmark with {PARTICIPANT_SIZE} participants");
 
 	let target_node = collator_names[0];
 	let node = network.get_node(target_node)?;
 	let rpc_client = node.rpc().await?;
-	info!("Created single RPC client for target node: {}", target_node);
+	info!("Created single RPC client for target node: {target_node}");
 
 	let mut participants = Vec::with_capacity(PARTICIPANT_SIZE as usize);
 	for i in 0..(PARTICIPANT_SIZE) as usize {
@@ -96,7 +96,7 @@ async fn statement_store_many_nodes_bench() -> Result<(), anyhow::Error> {
 	let collator_names = ["alice", "bob", "charlie", "dave", "eve", "ferdie"];
 	let network = spawn_network(&collator_names).await?;
 
-	info!("Starting statement store benchmark with {} participants", PARTICIPANT_SIZE);
+	info!("Starting statement store benchmark with {PARTICIPANT_SIZE} participants");
 
 	let mut rpc_clients = Vec::new();
 	for &name in &collator_names {
@@ -104,19 +104,17 @@ async fn statement_store_many_nodes_bench() -> Result<(), anyhow::Error> {
 		let rpc_client = node.rpc().await?;
 		rpc_clients.push(rpc_client);
 	}
-	info!("Created RPC clients for {} collator nodes", rpc_clients.len());
+	let rpc_clients_len = rpc_clients.len();
+	info!("Created RPC clients for {rpc_clients_len} collator nodes");
 
 	let mut participants = Vec::with_capacity(PARTICIPANT_SIZE as usize);
 	for i in 0..(PARTICIPANT_SIZE) as usize {
 		let client_idx = i % collator_names.len();
 		participants.push(Participant::new(i as u32, rpc_clients[client_idx].clone()));
 	}
-	info!(
-		"{} participants were distributed across {} nodes: {} participants per node",
-		PARTICIPANT_SIZE,
-		collator_names.len(),
-		PARTICIPANT_SIZE as usize / collator_names.len()
-	);
+	let collator_count = collator_names.len();
+	let participants_per_node = PARTICIPANT_SIZE as usize / collator_names.len();
+	info!("{PARTICIPANT_SIZE} participants were distributed across {collator_count} nodes: {participants_per_node} participants per node");
 
 	let handles: Vec<_> = participants
 		.into_iter()
@@ -159,7 +157,7 @@ async fn statement_store_memory_stress_bench() -> Result<(), anyhow::Error> {
 	let target_node = collator_names[0];
 	let node = network.get_node(target_node)?;
 	let rpc_client = node.rpc().await?;
-	info!("Created single RPC client for target node: {}", target_node);
+	info!("Created single RPC client for target node: {target_node}");
 
 	let total_tasks = 64 * 1024;
 	let payload_size = 1024;
@@ -170,8 +168,7 @@ async fn statement_store_memory_stress_bench() -> Result<(), anyhow::Error> {
 	let propogation_capacity = submit_capacity * (num_collators - 1); // 5x per node
 	let start_time = std::time::Instant::now();
 
-	info!("Starting memory stress benchmark with {} tasks, each submitting {} statements of {}B payload, total submit capacity per node: {}, total propagation capacity: {}",
-		total_tasks, statements_per_task, payload_size, submit_capacity, propogation_capacity);
+	info!("Starting memory stress benchmark with {total_tasks} tasks, each submitting {statements_per_task} statements of {payload_size}B payload, total submit capacity per node: {submit_capacity}, total propagation capacity: {propogation_capacity}");
 
 	for _ in 0..total_tasks {
 		let rpc_client = rpc_client.clone();
@@ -200,13 +197,12 @@ async fn statement_store_memory_stress_bench() -> Result<(), anyhow::Error> {
 					};
 
 					if err.to_string().contains("Statement store error: Store is full") {
-						info!("Statement store is full, {}/{} statements submitted, `statements_per_task` overestimated", statement_count, statements_per_task);
+						info!("Statement store is full, {statement_count}/{statements_per_task} statements submitted, `statements_per_task` overestimated");
 						break;
 					}
 
 					info!(
-						"Failed to submit statement, retrying in {}ms: {:?}",
-						RETRY_DELAY_MS, err
+						"Failed to submit statement, retrying in {RETRY_DELAY_MS}ms: {err:?}"
 					);
 					tokio::time::sleep(Duration::from_millis(RETRY_DELAY_MS)).await;
 				}
@@ -214,7 +210,8 @@ async fn statement_store_memory_stress_bench() -> Result<(), anyhow::Error> {
 		});
 	}
 
-	info!("All {} tasks spawned in {:.2}s", total_tasks, start_time.elapsed().as_secs_f64());
+	let spawn_elapsed = start_time.elapsed().as_secs_f64();
+	info!("All {total_tasks} tasks spawned in {spawn_elapsed:.2}s");
 
 	let mut prev_submitted: HashMap<&str, u64> = HashMap::new();
 	let mut prev_propagated: HashMap<&str, u64> = HashMap::new();
@@ -276,7 +273,7 @@ async fn statement_store_memory_stress_bench() -> Result<(), anyhow::Error> {
 			prev_propagated.insert(name, count);
 		}
 
-		info!("[{:>3}s]  Statements  submitted                 propagated", elapsed);
+		info!("[{elapsed:>3}s]  Statements  submitted                 propagated");
 		for i in 0..collator_names.len() {
 			let (sub_name, sub_count, sub_rate) = submitted_metrics[i];
 			let (prop_name, prop_count, prop_rate) = propagated_metrics[i];
@@ -286,20 +283,13 @@ async fn statement_store_memory_stress_bench() -> Result<(), anyhow::Error> {
 			let prop_percentage = prop_count * 100 / propogation_capacity;
 
 			info!(
-				"         {:<8}  {:>8} {:>3}% {:>8}/s   {:>8} {:>3}% {:>8}/s",
-				sub_name,
-				sub_count,
-				sub_percentage,
-				sub_rate,
-				prop_count,
-				prop_percentage,
-				prop_rate
+				"         {sub_name:<8}  {sub_count:>8} {sub_percentage:>3}% {sub_rate:>8}/s   {prop_count:>8} {prop_percentage:>3}% {prop_rate:>8}/s"
 			);
 		}
 
 		let total_submitted: u64 = submitted_metrics.iter().map(|(_, count, _)| *count).sum();
 		if total_submitted == submit_capacity * num_collators {
-			info!("Reached total submit capacity of {} statements per node in {}s, benchmark completed successfully", submit_capacity, elapsed);
+			info!("Reached total submit capacity of {submit_capacity} statements per node in {elapsed}s, benchmark completed successfully");
 			break;
 		}
 	}
@@ -318,14 +308,14 @@ async fn spawn_network(collators: &[&str]) -> Result<Network<LocalFileSystem>, a
 				.with_default_command("pezkuwi")
 				.with_default_image(images.polkadot.as_str())
 				.with_default_args(vec!["-lteyrchain=debug".into()])
-				.with_node(|node| node.with_name("validator-0"))
-				.with_node(|node| node.with_name("validator-1"))
+				.with_validator(|node| node.with_name("validator-0"))
+				.with_validator(|node| node.with_name("validator-1"))
 		})
 		.with_teyrchain(|p| {
 			let p = p
 				.with_id(2400)
 				.with_default_command("pezkuwi-teyrchain")
-				.with_default_image(images.pezcumulus.as_str())
+				.with_default_image(images.pezcumulus())
 				.with_chain_spec_path("tests/zombie_ci/people-pezkuwichain-spec.json")
 				.with_default_args(vec![
 					"--force-authoring".into(),
@@ -457,7 +447,7 @@ impl Participant {
 	}
 
 	fn new(idx: u32, rpc_client: RpcClient) -> Self {
-		debug!(target: &format!("participant_{idx}"), "Initializing participant {}", idx);
+		debug!(target: &format!("participant_{idx}"), "Initializing participant {idx}");
 		let (keyring, _) = sr25519::Pair::generate();
 		let (session_key, _) = sr25519::Pair::generate();
 
@@ -483,12 +473,14 @@ impl Participant {
 
 	async fn wait_for_retry(&mut self) -> Result<(), anyhow::Error> {
 		if self.retry_count >= MAX_RETRIES {
-			return Err(anyhow!("No more retry attempts for participant {}", self.idx));
+			let idx = self.idx;
+			return Err(anyhow!("No more retry attempts for participant {idx}"));
 		}
 
 		self.retry_count += 1;
-		if self.retry_count % 10 == 0 {
-			debug!(target: &self.log_target(), "Retry attempt {}", self.retry_count);
+		if self.retry_count.is_multiple_of(10) {
+			let retry_count = self.retry_count;
+			debug!(target: &self.log_target(), "Retry attempt {retry_count}");
 		}
 		tokio::time::sleep(tokio::time::Duration::from_millis(RETRY_DELAY_MS)).await;
 
@@ -496,7 +488,7 @@ impl Participant {
 	}
 
 	async fn wait_for_propagation(&mut self) {
-		trace!(target: &self.log_target(), "Waiting {}ms for propagation", PROPAGATION_DELAY_MS);
+		trace!(target: &self.log_target(), "Waiting {PROPAGATION_DELAY_MS}ms for propagation");
 		tokio::time::sleep(tokio::time::Duration::from_millis(PROPAGATION_DELAY_MS)).await;
 	}
 
@@ -508,7 +500,8 @@ impl Participant {
 			.await?;
 
 		self.sent_count += 1;
-		trace!(target: &self.log_target(), "Submitted statement (counter: {})", self.sent_count);
+		let sent_count = self.sent_count;
+		trace!(target: &self.log_target(), "Submitted statement (counter: {sent_count})");
 
 		Ok(())
 	}
@@ -600,7 +593,7 @@ impl Participant {
 						}
 					},
 					res => {
-						debug!(target: &self.log_target(), "No statements received for idx {:?}: {:?}", idx, res);
+						debug!(target: &self.log_target(), "No statements received for idx {idx:?}: {res:?}");
 					},
 				}
 			}
@@ -609,7 +602,8 @@ impl Participant {
 			if pending.is_empty() {
 				break;
 			}
-			trace!(target: &self.log_target(), "Session keys left to receive: {:?}, waiting {}ms for retry", pending.len(), RETRY_DELAY_MS);
+			let pending_len = pending.len();
+			trace!(target: &self.log_target(), "Session keys left to receive: {pending_len:?}, waiting {RETRY_DELAY_MS}ms for retry");
 			self.wait_for_retry().await?;
 		}
 
@@ -673,7 +667,7 @@ impl Participant {
 						}
 					},
 					res => {
-						debug!(target: &self.log_target(), "No statements received for sender {:?}: {:?}", sender_idx, res);
+						debug!(target: &self.log_target(), "No statements received for sender {sender_idx:?}: {res:?}");
 					},
 				}
 			}
@@ -682,7 +676,8 @@ impl Participant {
 			if pending.is_empty() {
 				break;
 			}
-			trace!(target: &self.log_target(), "Messages left to receive: {:?}, waiting {}ms for retry", pending.len(), RETRY_DELAY_MS);
+			let pending_len = pending.len();
+			trace!(target: &self.log_target(), "Messages left to receive: {pending_len:?}, waiting {RETRY_DELAY_MS}ms for retry");
 			self.wait_for_retry().await?;
 		}
 

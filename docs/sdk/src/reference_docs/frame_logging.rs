@@ -18,8 +18,8 @@
 //! ```
 //!
 //! within the pezpallet, if you want to use the standard `println!`, it needs to be wrapped in
-//! [`pezsp_std::if_std`]. Of course, this means that this print code is only available to you in the
-//! `std` compiler flag, and never present in a wasm build.
+//! [`pezsp_std::if_std`]. Of course, this means that this print code is only available to you in
+//! the `std` compiler flag, and never present in a wasm build.
 //!
 //! ```
 //! // somewhere in your pezpallet. This is not a real pezpallet code.
@@ -59,8 +59,8 @@
 //!
 //! More conveniently, the `frame` umbrella crate re-exports the log crate as [`frame::log`].
 //!
-//! Then, the pezpallet can use this crate to emit log statements. In this statement, we use the info
-//! level, and the target is `pezpallet-example`.
+//! Then, the pezpallet can use this crate to emit log statements. In this statement, we use the
+//! info level, and the target is `pezpallet-example`.
 //!
 //! ```
 //! mod pezpallet {
@@ -115,8 +115,8 @@
 //!
 //! Under the hood, logging is another instance of host functions under the hood (as defined in
 //! [`crate::reference_docs::wasm_meta_protocol`]). The runtime uses a set of host functions under
-//! [`pezsp_io::logging`] and [`pezsp_io::misc`] to emit all logs and prints. You typically do not need to
-//! use these APIs directly.
+//! [`pezsp_io::logging`] and [`pezsp_io::misc`] to emit all logs and prints. You typically do not
+//! need to use these APIs directly.
 //!
 //! ## Using Logging in Production
 //!

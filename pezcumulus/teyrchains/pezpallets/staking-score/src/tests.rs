@@ -6,7 +6,6 @@ use pezpallet_staking::RewardDestination;
 
 // Testlerde kullanacağımız sabitler
 const USER_STASH: AccountId = 10;
-const USER_CONTROLLER: AccountId = 10;
 
 #[test]
 fn zero_stake_should_return_zero_score() {
@@ -181,7 +180,7 @@ fn duration_multiplier_1_month() {
 		assert_ok!(StakingScore::start_score_tracking(RuntimeOrigin::signed(USER_STASH)));
 
 		// Advance 1 month
-		System::set_block_number((1 * MONTH_IN_BLOCKS + 1) as u64);
+		System::set_block_number((MONTH_IN_BLOCKS + 1) as u64);
 
 		// 40 * 1.2 = 48
 		let (score, _) = StakingScore::get_staking_score(&USER_STASH);

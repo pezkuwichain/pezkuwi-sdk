@@ -10,6 +10,46 @@ use pezsp_runtime::{
 	BuildStorage,
 };
 
+#[cfg(feature = "runtime-benchmarks")]
+use pezsp_runtime::testing::{TestSignature, UintAuthorityId};
+#[cfg(feature = "runtime-benchmarks")]
+use pezsp_runtime::RuntimeAppPublic;
+
+// Custom BenchmarkHelper for pezpallet_identity (uses TestSignature in mock)
+#[cfg(feature = "runtime-benchmarks")]
+pub struct IdentityBenchmarkHelper;
+
+#[cfg(feature = "runtime-benchmarks")]
+impl pezpallet_identity::BenchmarkHelper<UintAuthorityId, TestSignature> for IdentityBenchmarkHelper {
+	fn sign_message(message: &[u8]) -> (UintAuthorityId, TestSignature) {
+		let signer = UintAuthorityId(0);
+		let signature = <UintAuthorityId as RuntimeAppPublic>::sign(&signer, &message.to_vec()).unwrap();
+		(signer, signature)
+	}
+}
+
+// Custom BenchmarkHelper for pezpallet_nfts (uses u64 AccountId in mock)
+#[cfg(feature = "runtime-benchmarks")]
+pub struct NftsBenchmarkHelper;
+
+#[cfg(feature = "runtime-benchmarks")]
+impl pezpallet_nfts::BenchmarkHelper<u32, u32, UintAuthorityId, AccountId, TestSignature> for NftsBenchmarkHelper {
+	fn collection(i: u16) -> u32 {
+		i.into()
+	}
+	fn item(i: u16) -> u32 {
+		i.into()
+	}
+	fn signer() -> (UintAuthorityId, AccountId) {
+		let signer = UintAuthorityId(0);
+		let account: AccountId = 1u64;
+		(signer, account)
+	}
+	fn sign(signer: &UintAuthorityId, data: &[u8]) -> TestSignature {
+		<UintAuthorityId as RuntimeAppPublic>::sign(signer, &data).unwrap()
+	}
+}
+
 type Block = pezframe_system::mocking::MockBlock<Test>;
 pub type AccountId = u64;
 pub type Balance = u128;
@@ -113,6 +153,8 @@ impl pezpallet_identity::Config for Test {
 	type UsernameGracePeriod = UsernameGracePeriod;
 	type MaxSuffixLength = MaxSuffixLength;
 	type MaxUsernameLength = MaxUsernameLength;
+	#[cfg(feature = "runtime-benchmarks")]
+	type BenchmarkHelper = IdentityBenchmarkHelper;
 }
 
 parameter_types! {
@@ -158,7 +200,6 @@ impl pezpallet_identity_kyc::types::CitizenNftProvider<AccountId> for MockCitize
 }
 
 impl pezpallet_identity_kyc::Config for Test {
-	type RuntimeEvent = RuntimeEvent;
 	type Currency = Balances;
 	type WeightInfo = ();
 	type GovernanceOrigin = pezframe_system::EnsureRoot<AccountId>;
@@ -197,11 +238,11 @@ impl pezpallet_nfts::Config for Test {
 	type MaxAttributesPerCall = ConstU32<10>;
 	type Features = Features;
 	type OffchainSignature = pezsp_runtime::testing::TestSignature;
-	type OffchainPublic = <Self::OffchainSignature as pezsp_runtime::traits::Verify>::Signer;
+	type OffchainPublic = pezsp_runtime::testing::UintAuthorityId;
 	type WeightInfo = ();
 	type BlockNumberProvider = System;
 	#[cfg(feature = "runtime-benchmarks")]
-	type Helper = ();
+	type Helper = NftsBenchmarkHelper;
 }
 
 parameter_types! {
@@ -210,49 +251,11 @@ parameter_types! {
 }
 
 impl crate::Config for Test {
-	type RuntimeEvent = RuntimeEvent;
 	type AdminOrigin = pezframe_system::EnsureRoot<AccountId>;
 	type WeightInfo = ();
 	type TikiCollectionId = TikiCollectionId;
 	type MaxTikisPerUser = MaxTikisPerUser;
 	type Tiki = TikiEnum;
-}
-
-// Helper functions for tests
-// Updated for trustless model - directly sets KYC status and hash
-pub fn setup_kyc_for_user(account: AccountId) {
-	// Give balance to user
-	let _ = Balances::force_set_balance(RuntimeOrigin::root(), account, 10000);
-
-	// Directly set KYC status to Approved (for test purposes)
-	// In real runtime this would go through apply_for_citizenship -> approve_referral ->
-	// confirm_citizenship
-	pezpallet_identity_kyc::KycStatuses::<Test>::insert(
-		account,
-		pezpallet_identity_kyc::types::KycLevel::Approved,
-	);
-
-	// Set identity hash
-	pezpallet_identity_kyc::IdentityHashes::<Test>::insert(
-		account,
-		pezsp_core::H256::from_low_u64_be(account),
-	);
-}
-
-// Legacy function - kept for backwards compatibility
-pub fn setup_identity_for_user(account: AccountId) {
-	setup_kyc_for_user(account);
-}
-
-pub fn advance_blocks(blocks: u64) {
-	for _i in 0..blocks {
-		let current_block = System::block_number();
-		System::set_block_number(current_block + 1);
-		// Trigger hooks for the new block
-		<pezpallet_tiki::Pezpallet<Test> as pezframe_support::traits::Hooks<u64>>::on_initialize(
-			current_block + 1,
-		);
-	}
 }
 
 pub fn new_test_ext() -> pezsp_io::TestExternalities {

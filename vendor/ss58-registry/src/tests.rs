@@ -56,18 +56,18 @@ fn enum_to_name_and_back() {
 
 #[test]
 fn prefix() {
-	let dot: Ss58AddressFormat = Ss58AddressFormatRegistry::PolkadotAccount.into();
-	assert_eq!(dot.prefix(), 0);
-	let ksm: Ss58AddressFormat = Ss58AddressFormatRegistry::KusamaAccount.into();
-	assert_eq!(ksm.prefix(), 2);
+	let hez: Ss58AddressFormat = Ss58AddressFormatRegistry::PezkuwiAccount.into();
+	assert_eq!(hez.prefix(), 0);
+	let zgr: Ss58AddressFormat = Ss58AddressFormatRegistry::ZagrosAccount.into();
+	assert_eq!(zgr.prefix(), 2);
 }
 
 #[test]
 fn tokens() {
-	let polka = Ss58AddressFormatRegistry::PolkadotAccount;
-	assert_eq!(polka.tokens(), &[TokenRegistry::Dot]);
-	let kusama = Ss58AddressFormatRegistry::KusamaAccount;
-	assert_eq!(kusama.tokens(), &[TokenRegistry::Ksm]);
+	let pezkuwi = Ss58AddressFormatRegistry::PezkuwiAccount;
+	assert_eq!(pezkuwi.tokens(), &[TokenRegistry::Hez]);
+	let zagros = Ss58AddressFormatRegistry::ZagrosAccount;
+	assert_eq!(zagros.tokens(), &[TokenRegistry::Zgr]);
 	let n46 = Ss58AddressFormatRegistry::Reserved46Account;
 	assert_eq!(n46.tokens(), &[]);
 }

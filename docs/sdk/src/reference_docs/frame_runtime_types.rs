@@ -38,15 +38,15 @@
 //! Let's explore how each of these affect the [`RuntimeCall`], [`RuntimeOrigin`] and
 //! [`RuntimeGenesisConfig`] generated in [`runtime`] respectively.
 //!
-//! As observed, [`RuntimeCall`] has 3 variants, one for each pezpallet and one for `pezframe_system`. If
-//! you explore further, you will soon realize that each variant is merely a pointer to the `Call`
-//! type in each pezpallet, for example [`pezpallet_foo::Call`].
+//! As observed, [`RuntimeCall`] has 3 variants, one for each pezpallet and one for
+//! `pezframe_system`. If you explore further, you will soon realize that each variant is merely a
+//! pointer to the `Call` type in each pezpallet, for example [`pezpallet_foo::Call`].
 //!
-//! [`RuntimeOrigin`]'s [`OriginCaller`] has two variants, one for system, and one for `pezpallet_foo`
-//! which utilized [`frame::pezpallet_macros::origin`].
+//! [`RuntimeOrigin`]'s [`OriginCaller`] has two variants, one for system, and one for
+//! `pezpallet_foo` which utilized [`frame::pezpallet_macros::origin`].
 //!
-//! Finally, [`RuntimeGenesisConfig`] is composed of `pezframe_system` and a variant for `pezpallet_bar`'s
-//! [`pezpallet_bar::GenesisConfig`].
+//! Finally, [`RuntimeGenesisConfig`] is composed of `pezframe_system` and a variant for
+//! `pezpallet_bar`'s [`pezpallet_bar::GenesisConfig`].
 //!
 //! You can find other composite enums by scanning [`runtime`] for other types who's name starts
 //! with `Runtime`. Some of the more noteworthy ones are:
@@ -62,23 +62,23 @@
 //!
 //! Let's take the example of `RuntimeCall`. This is an associated type in
 //! [`pezframe_system::Config::RuntimeCall`], and all pallets have access to this type, because they
-//! have access to [`pezframe_system::Config`]. Finally, this type is meant to be set to outer call of
-//! the entire runtime.
+//! have access to [`pezframe_system::Config`]. Finally, this type is meant to be set to outer call
+//! of the entire runtime.
 //!
 //! But, let's not forget that this is information that *we know*, and the Rust compiler does not.
 //! All that the rust compiler knows about this type is *ONLY* what the trait bounds of
 //! [`pezframe_system::Config::RuntimeCall`] are specifying:
 #![doc = docify::embed!("../../bizinikiwi/pezframe/system/src/lib.rs", system_runtime_call)]
 //!
-//! So, when at a given pezpallet, one accesses `<T as pezframe_system::Config>::RuntimeCall`, the type is
-//! extremely opaque from the perspective of the Rust compiler.
+//! So, when at a given pezpallet, one accesses `<T as pezframe_system::Config>::RuntimeCall`, the
+//! type is extremely opaque from the perspective of the Rust compiler.
 //!
 //! How can a pezpallet access the `RuntimeCall` type with further constraints? For example, each
 //! pezpallet has its own `enum Call`, and knows that its local `Call` is a part of `RuntimeCall`,
 //! therefore there should be a `impl From<Call<_>> for RuntimeCall`.
 //!
-//! The only way to express this using Rust's associated types is for the pezpallet to **define its own
-//! associated type `RuntimeCall`, and further specify what it thinks `RuntimeCall` should be**.
+//! The only way to express this using Rust's associated types is for the pezpallet to **define its
+//! own associated type `RuntimeCall`, and further specify what it thinks `RuntimeCall` should be**.
 //!
 //! In this case, we will want to assert the existence of [`frame::traits::IsSubType`], which is
 //! very similar to [`TryFrom`].
@@ -89,14 +89,15 @@
 #![doc = docify::embed!("./src/reference_docs/frame_runtime_types.rs", pezpallet_with_specific_runtime_call_impl)]
 //!
 //! > In other words, the degree of specificity that [`pezframe_system::Config::RuntimeCall`] has is
-//! > not enough for the pezpallet to work with. Therefore, the pezpallet has to define its own associated
+//! > not enough for the pezpallet to work with. Therefore, the pezpallet has to define its own
+//! > associated
 //! > type representing `RuntimeCall`.
 //!
 //! Another way to look at this is:
 //!
-//! `pezpallet_with_specific_runtime_call::Config::RuntimeCall` and `pezframe_system::Config::RuntimeCall`
-//! are two different representations of the same concrete type that is only known when the runtime
-//! is being constructed.
+//! `pezpallet_with_specific_runtime_call::Config::RuntimeCall` and
+//! `pezframe_system::Config::RuntimeCall` are two different representations of the same concrete
+//! type that is only known when the runtime is being constructed.
 //!
 //! Now, within this pezpallet, this new `RuntimeCall` can be used, and it can use its new trait
 //! bounds, such as being [`frame::traits::IsSubType`]:
@@ -109,10 +110,10 @@
 //! ### Asserting Equality of Multiple Runtime Composite Enums
 //!
 //! Recall that in the above example, `<T as Config>::RuntimeCall` and `<T as
-//! pezframe_system::Config>::RuntimeCall` are expected to be equal types, but at the compile-time we
-//! have to represent them with two different associated types with different bounds. Would it not
-//! be cool if we had a test to make sure they actually resolve to the same concrete type once the
-//! runtime is constructed? The following snippet exactly does that:
+//! pezframe_system::Config>::RuntimeCall` are expected to be equal types, but at the compile-time
+//! we have to represent them with two different associated types with different bounds. Would it
+//! not be cool if we had a test to make sure they actually resolve to the same concrete type once
+//! the runtime is constructed? The following snippet exactly does that:
 #![doc = docify::embed!("./src/reference_docs/frame_runtime_types.rs", assert_equality)]
 //!
 //! We leave it to the reader to further explore what [`frame::traits::Hooks::integrity_test`] is,

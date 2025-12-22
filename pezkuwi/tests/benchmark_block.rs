@@ -14,9 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
+#![allow(deprecated)]
+
 // Unix only since it uses signals.
 #![cfg(unix)]
 
+#[allow(deprecated)]
 use assert_cmd::cargo::cargo_bin;
 use common::run_with_timeout;
 use nix::{

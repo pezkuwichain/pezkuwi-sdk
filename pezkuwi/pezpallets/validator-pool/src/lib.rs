@@ -1034,8 +1034,7 @@ pub mod pezpallet {
 					// Log shadow mode activity
 					log::info!(
 						target: "validator_pool",
-						"Shadow mode: TNPoS selection calculated for session {}",
-						new_index
+						"Shadow mode: TNPoS selection calculated for session {new_index}"
 					);
 
 					// Return None - let pezpallet-staking/NPoS provide validators
@@ -1048,8 +1047,7 @@ pub mod pezpallet {
 
 					log::info!(
 						target: "validator_pool",
-						"Active mode: TNPoS providing validators for session {}",
-						new_index
+						"Active mode: TNPoS providing validators for session {new_index}"
 					);
 
 					Self::current_validator_set().map(|set| set.all_validators())
@@ -1082,8 +1080,7 @@ pub mod pezpallet {
 			if Self::operation_mode() == OperationMode::Shadow {
 				log::debug!(
 					target: "validator_pool",
-					"Session {} started in shadow mode, comparison data available",
-					start_index
+					"Session {start_index} started in shadow mode, comparison data available"
 				);
 			}
 		}

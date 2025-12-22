@@ -523,8 +523,10 @@ pub fn new_test_ext_with_balances_and_assets(
 }
 
 #[derive(Clone)]
+#[allow(dead_code)]
 pub(crate) struct TestClient;
 
+#[allow(dead_code)]
 pub(crate) struct RuntimeApi {
 	_inner: TestClient,
 }

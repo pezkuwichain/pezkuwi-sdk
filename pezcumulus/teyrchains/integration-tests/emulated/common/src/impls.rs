@@ -180,10 +180,10 @@ macro_rules! impl_accounts_helpers_for_relay_chain {
 					<Self as $crate::impls::TestExt>::execute_with(|| {
 						for account in accounts {
 							let who = account.0;
-							let actual = <Self as [<$chain RelayPallet>]>::Balances::free_balance(&who);
-							let actual = actual.saturating_add(<Self as [<$chain RelayPallet>]>::Balances::reserved_balance(&who));
+							let actual = <Self as [<$chain RelayPezpallet>]>::Balances::free_balance(&who);
+							let actual = actual.saturating_add(<Self as [<$chain RelayPezpallet>]>::Balances::reserved_balance(&who));
 
-							$crate::impls::assert_ok!(<Self as [<$chain RelayPallet>]>::Balances::force_set_balance(
+							$crate::impls::assert_ok!(<Self as [<$chain RelayPezpallet>]>::Balances::force_set_balance(
 								<Self as $crate::impls::Chain>::RuntimeOrigin::root(),
 								who.into(),
 								actual.saturating_add(account.1),
@@ -337,7 +337,7 @@ macro_rules! impl_hrmp_channels_helpers_for_relay_chain {
 						let relay_root_origin = <Self as Chain>::RuntimeOrigin::root();
 
 						// Force process HRMP open channel requests without waiting for the next session
-						$crate::impls::assert_ok!(<Self as [<$chain RelayPallet>]>::Hrmp::force_process_hrmp_open(
+						$crate::impls::assert_ok!(<Self as [<$chain RelayPezpallet>]>::Hrmp::force_process_hrmp_open(
 							relay_root_origin,
 							0
 						));
@@ -377,7 +377,7 @@ macro_rules! impl_send_transact_helpers_for_relay_chain {
 						$crate::impls::dmp::Pezpallet::<<Self as $crate::impls::Chain>::Runtime>::make_teyrchain_reachable(recipient);
 
 						// Send XCM `Transact`
-						$crate::impls::assert_ok!(<Self as [<$chain RelayPallet>]>::XcmPallet::send(
+						$crate::impls::assert_ok!(<Self as [<$chain RelayPezpallet>]>::XcmPallet::send(
 							root_origin,
 							bx!(destination.into()),
 							bx!(xcm),
@@ -400,10 +400,10 @@ macro_rules! impl_accounts_helpers_for_teyrchain {
 					<Self as $crate::impls::TestExt>::execute_with(|| {
 						for account in accounts {
 							let who = account.0;
-							let actual = <Self as [<$chain ParaPallet>]>::Balances::free_balance(&who);
-							let actual = actual.saturating_add(<Self as [<$chain ParaPallet>]>::Balances::reserved_balance(&who));
+							let actual = <Self as [<$chain ParaPezpallet>]>::Balances::free_balance(&who);
+							let actual = actual.saturating_add(<Self as [<$chain ParaPezpallet>]>::Balances::reserved_balance(&who));
 
-							$crate::impls::assert_ok!(<Self as [<$chain ParaPallet>]>::Balances::force_set_balance(
+							$crate::impls::assert_ok!(<Self as [<$chain ParaPezpallet>]>::Balances::force_set_balance(
 								<Self as $crate::impls::Chain>::RuntimeOrigin::root(),
 								who.into(),
 								actual.saturating_add(account.1),
@@ -693,7 +693,7 @@ macro_rules! impl_assets_helpers_for_system_teyrchain {
 							]
 						);
 
-						assert!(<Self as [<$chain ParaPallet>]>::Assets::asset_exists(id.clone().into()));
+						assert!(<Self as [<$chain ParaPezpallet>]>::Assets::asset_exists(id.clone().into()));
 					});
 				}
 			}
@@ -718,7 +718,7 @@ macro_rules! impl_assets_helpers_for_teyrchain {
 					let sudo_origin = <$chain<N> as $crate::impls::Chain>::RuntimeOrigin::root();
 					<Self as $crate::impls::TestExt>::execute_with(|| {
 						$crate::impls::assert_ok!(
-							<Self as [<$chain ParaPallet>]>::Assets::force_create(
+							<Self as [<$chain ParaPezpallet>]>::Assets::force_create(
 								sudo_origin,
 								id.clone().into(),
 								owner.clone().into(),
@@ -726,7 +726,7 @@ macro_rules! impl_assets_helpers_for_teyrchain {
 								min_balance,
 							)
 						);
-						assert!(<Self as [<$chain ParaPallet>]>::Assets::asset_exists(id.clone()));
+						assert!(<Self as [<$chain ParaPezpallet>]>::Assets::asset_exists(id.clone()));
 						type RuntimeEvent<N> = <$chain<N> as $crate::impls::Chain>::RuntimeEvent;
 						$crate::impls::assert_expected_events!(
 							Self,
@@ -755,7 +755,7 @@ macro_rules! impl_assets_helpers_for_teyrchain {
 					amount_to_mint: u128,
 				) {
 					<Self as $crate::impls::TestExt>::execute_with(|| {
-						$crate::impls::assert_ok!(<Self as [<$chain ParaPallet>]>::Assets::mint(
+						$crate::impls::assert_ok!(<Self as [<$chain ParaPezpallet>]>::Assets::mint(
 							signed_origin,
 							id.clone().into(),
 							beneficiary.clone().into(),
@@ -820,7 +820,7 @@ macro_rules! impl_foreign_assets_helpers_for_teyrchain {
 					let sudo_origin = <$chain<N> as $crate::impls::Chain>::RuntimeOrigin::root();
 					<Self as $crate::impls::TestExt>::execute_with(|| {
 						$crate::impls::assert_ok!(
-							<Self as [<$chain ParaPallet>]>::ForeignAssets::force_create(
+							<Self as [<$chain ParaPezpallet>]>::ForeignAssets::force_create(
 								sudo_origin,
 								id.clone(),
 								owner.clone().into(),
@@ -828,7 +828,7 @@ macro_rules! impl_foreign_assets_helpers_for_teyrchain {
 								min_balance,
 							)
 						);
-						assert!(<Self as [<$chain ParaPallet>]>::ForeignAssets::asset_exists(id.clone()));
+						assert!(<Self as [<$chain ParaPezpallet>]>::ForeignAssets::asset_exists(id.clone()));
 						type RuntimeEvent<N> = <$chain<N> as $crate::impls::Chain>::RuntimeEvent;
 						$crate::impls::assert_expected_events!(
 							Self,
@@ -860,7 +860,7 @@ macro_rules! impl_foreign_assets_helpers_for_teyrchain {
 						<$chain<N> as $crate::impls::Chain>::RuntimeOrigin::signed(owner.clone());
 					<Self as $crate::impls::TestExt>::execute_with(|| {
 						$crate::impls::assert_ok!(
-							<Self as [<$chain ParaPallet>]>::ForeignAssets::set_reserves(
+							<Self as [<$chain ParaPezpallet>]>::ForeignAssets::set_reserves(
 								owner_origin,
 								id.clone(),
 								reserves,
@@ -877,7 +877,7 @@ macro_rules! impl_foreign_assets_helpers_for_teyrchain {
 					amount_to_mint: u128,
 				) {
 					<Self as $crate::impls::TestExt>::execute_with(|| {
-						$crate::impls::assert_ok!(<Self as [<$chain ParaPallet>]>::ForeignAssets::mint(
+						$crate::impls::assert_ok!(<Self as [<$chain ParaPezpallet>]>::ForeignAssets::mint(
 							signed_origin,
 							id.clone().into(),
 							beneficiary.clone().into(),
@@ -933,7 +933,7 @@ macro_rules! impl_xcm_helpers_for_teyrchain {
 				/// Set XCM version for destination.
 				pub fn force_xcm_version(dest: $crate::impls::Location, version: $crate::impls::XcmVersion) {
 					<Self as $crate::impls::TestExt>::execute_with(|| {
-						$crate::impls::assert_ok!(<Self as [<$chain ParaPallet>]>::PezkuwiXcm::force_xcm_version(
+						$crate::impls::assert_ok!(<Self as [<$chain ParaPezpallet>]>::PezkuwiXcm::force_xcm_version(
 							<Self as $crate::impls::Chain>::RuntimeOrigin::root(),
 							$crate::impls::bx!(dest),
 							version,
@@ -944,7 +944,7 @@ macro_rules! impl_xcm_helpers_for_teyrchain {
 				/// Set default/safe XCM version for runtime.
 				pub fn force_default_xcm_version(version: Option<$crate::impls::XcmVersion>) {
 					<Self as $crate::impls::TestExt>::execute_with(|| {
-						$crate::impls::assert_ok!(<Self as [<$chain ParaPallet>]>::PezkuwiXcm::force_default_xcm_version(
+						$crate::impls::assert_ok!(<Self as [<$chain ParaPezpallet>]>::PezkuwiXcm::force_default_xcm_version(
 							<Self as $crate::impls::Chain>::RuntimeOrigin::root(),
 							version,
 						));

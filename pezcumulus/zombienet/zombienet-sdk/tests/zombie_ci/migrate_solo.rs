@@ -7,11 +7,11 @@ use std::{path::Path, str::FromStr};
 
 use crate::utils::{initialize_network, BEST_BLOCK_METRIC};
 
-use pezcumulus_zombienet_sdk_helpers::assert_para_throughput;
+use pezcumulus_zombienet_sdk_helpers::{assert_para_throughput};
 use pezkuwi_primitives::Id as ParaId;
 use pezsp_core::{hexdisplay::AsBytesRef, Bytes};
 use zombienet_sdk::{
-	subxt::{self, dynamic::Value, tx::DynamicPayload, OnlineClient, PolkadotConfig},
+	subxt::{self, dynamic::Value, tx::DynamicPayload, OnlineClient, PezkuwiConfig},
 	subxt_signer::sr25519::dev,
 	NetworkConfig, NetworkConfigBuilder, RegistrationStrategy,
 };
@@ -44,7 +44,7 @@ async fn migrate_solo_to_para() -> Result<(), anyhow::Error> {
 	let network = initialize_network(config).await?;
 
 	let alice = network.get_node("alice")?;
-	let alice_client: OnlineClient<PolkadotConfig> = alice.wait_client().await?;
+	let alice_client: OnlineClient<PezkuwiConfig> = alice.wait_client().await?;
 
 	log::info!("Ensuring teyrchain making progress");
 	assert_para_throughput(
@@ -74,7 +74,7 @@ async fn migrate_solo_to_para() -> Result<(), anyhow::Error> {
 	log::info!("Migrating solo to para");
 	let base_dir = network.base_dir().ok_or(anyhow!("failed to get base dir"))?;
 	let call = create_migrate_solo_to_para_call(base_dir, "2000-1").await?;
-	let dave_client: OnlineClient<PolkadotConfig> = dave.wait_client().await?;
+	let dave_client: OnlineClient<PezkuwiConfig> = dave.wait_client().await?;
 
 	// Don't wait for finalization. dave will be disconnected after transaction success and it won't
 	// be able to get its status
@@ -124,14 +124,14 @@ async fn build_network_config() -> Result<NetworkConfig, anyhow::Error> {
 				.with_default_command("pezkuwi")
 				.with_default_image(images.polkadot.as_str())
 				.with_default_args(vec![("-lteyrchain=debug").into()])
-				.with_node(|node| node.with_name("alice"))
-				.with_node(|node| node.with_name("bob"))
+				.with_validator(|node| node.with_name("alice"))
+				.with_validator(|node| node.with_name("bob"))
 		})
 		.with_teyrchain(|p| {
 			// teyrchain A
 			p.with_id(PARA_ID)
 				.with_default_command("test-teyrchain")
-				.with_default_image(images.pezcumulus.as_str())
+				.with_default_image(images.pezcumulus())
 				.with_collator(|n| {
 					n.with_name("dave").with_args(vec![("-lteyrchain=debug").into()])
 				})
@@ -141,7 +141,7 @@ async fn build_network_config() -> Result<NetworkConfig, anyhow::Error> {
 			p.with_id(PARA_ID)
 				.with_registration_strategy(RegistrationStrategy::Manual)
 				.with_default_command("test-teyrchain")
-				.with_default_image(images.pezcumulus.as_str())
+				.with_default_image(images.pezcumulus())
 				// modify genesis to produce different teyrchain header than for teyrchain A
 				.with_genesis_overrides(json!({
 					"sudo": {

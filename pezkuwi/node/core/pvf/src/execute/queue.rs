@@ -37,7 +37,7 @@ use pezkuwi_node_core_pvf_common::{
 use pezkuwi_node_subsystem::{messages::PvfExecKind, ActiveLeavesUpdate};
 use pezkuwi_pez_node_primitives::PoV;
 use pezkuwi_primitives::{ExecutorParams, ExecutorParamsHash, Hash, PersistedValidationData};
-use slotmap::HopSlotMap;
+use slotmap::SlotMap;
 use std::{
 	collections::{HashMap, VecDeque},
 	fmt,
@@ -105,7 +105,7 @@ impl fmt::Debug for WorkerData {
 
 struct Workers {
 	/// The registry of running workers.
-	running: HopSlotMap<Worker, WorkerData>,
+	running: SlotMap<Worker, WorkerData>,
 
 	/// The number of spawning but not yet spawned workers.
 	spawn_inflight: usize,
@@ -203,7 +203,7 @@ impl Queue {
 			unscheduled: Unscheduled::new(),
 			mux: Mux::new(),
 			workers: Workers {
-				running: HopSlotMap::with_capacity_and_key(10),
+				running: SlotMap::with_capacity_and_key(10),
 				spawn_inflight: 0,
 				capacity: worker_capacity,
 			},

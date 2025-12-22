@@ -4,13 +4,15 @@ authors = [
 	"Parity Technologies <admin@parity.io>",
 ]
 edition = "2021"
+version = "0.44.0"
+rust-version = "1.81"
 homepage = "https://pezkuwichain.io/"
 license = "GPL-3.0-only"
 repository = "https://github.com/pezkuwichain/pezkuwi-sdk.git"
+documentation = "https://docs.pezkuwichain.io/"
 
 [workspace]
 resolver = "2"
-exclude = ["vendor/pezkuwi-subxt"]
 
 members = [
 	"bizinikiwi/bin/node/bench",
@@ -680,7 +682,7 @@ ark-scale = { version = "0.0.13", default-features = false }
 ark-vrf = { version = "0.1.0", default-features = false }
 array-bytes = { version = "6.2.2", default-features = false }
 arrayvec = { version = "0.7.4" }
-assert_cmd = { version = "2.0.14" }
+assert_cmd = { version = "2.1" }
 assert_matches = { version = "1.5.0" }
 asset-hub-pezkuwichain-emulated-chain = { path = "pezcumulus/teyrchains/integration-tests/emulated/chains/teyrchains/assets/asset-hub-pezkuwichain" }
 asset-hub-pezkuwichain-runtime = { path = "pezcumulus/teyrchains/runtimes/assets/asset-hub-pezkuwichain", default-features = false }
@@ -1415,7 +1417,7 @@ rustversion = { version = "1.0.17" }
 rusty-fork = { version = "0.3.0", default-features = false }
 safe-mix = { version = "1.0", default-features = false }
 scale-info = { version = "2.11.6", default-features = false }
-schemars = { version = "0.8.13", default-features = false }
+schemars = { version = "1.1.0", default-features = false }
 schnellru = { version = "0.2.3" }
 schnorrkel = { version = "0.11.4", default-features = false }
 seccompiler = { version = "0.4.0" }
@@ -1447,23 +1449,17 @@ ssz_rs_derive = { version = "0.9.0", default-features = false }
 static_assertions = { version = "1.1.0", default-features = false }
 static_init = { version = "1.0.3" }
 strum = { version = "0.26.3", default-features = false }
-# Pezkuwi-subxt (forked from subxt with pezsp_runtime support) - using path dependencies
-subxt = { path = "vendor/pezkuwi-subxt/subxt", package = "pezkuwi-subxt", default-features = false }
-subxt-core = { path = "vendor/pezkuwi-subxt/core", package = "pezkuwi-subxt-core", default-features = false }
-subxt-metadata = { path = "vendor/pezkuwi-subxt/metadata", package = "pezkuwi-subxt-metadata", default-features = false }
-subxt-rpcs = { path = "vendor/pezkuwi-subxt/rpcs", package = "pezkuwi-subxt-rpcs", default-features = false }
-subxt-signer = { path = "vendor/pezkuwi-subxt/signer", package = "pezkuwi-subxt-signer" }
-# Internal pezkuwi-subxt dependencies (same crates with pezkuwi- prefixed keys)
-pezkuwi-subxt = { path = "vendor/pezkuwi-subxt/subxt", default-features = false }
-pezkuwi-subxt-core = { path = "vendor/pezkuwi-subxt/core", default-features = false }
-pezkuwi-subxt-codegen = { path = "vendor/pezkuwi-subxt/codegen" }
-pezkuwi-subxt-metadata = { path = "vendor/pezkuwi-subxt/metadata", default-features = false }
-pezkuwi-subxt-macro = { path = "vendor/pezkuwi-subxt/macro" }
-pezkuwi-subxt-rpcs = { path = "vendor/pezkuwi-subxt/rpcs", default-features = false }
-pezkuwi-subxt-signer = { path = "vendor/pezkuwi-subxt/signer", default-features = false }
-pezkuwi-subxt-lightclient = { path = "vendor/pezkuwi-subxt/lightclient", default-features = false }
-pezkuwi-subxt-utils-fetchmetadata = { path = "vendor/pezkuwi-subxt/utils/fetch-metadata", default-features = false }
-pezkuwi-subxt-utils-stripmetadata = { path = "vendor/pezkuwi-subxt/utils/strip-metadata" }
+# Pezkuwi-subxt (forked from subxt with pezsp_runtime support) - using git dependencies
+pezkuwi-subxt = { git = "https://github.com/pezkuwichain/pezkuwi-subxt", branch = "main", package = "pezkuwi-subxt", default-features = false }
+pezkuwi-subxt-codegen = { git = "https://github.com/pezkuwichain/pezkuwi-subxt", branch = "main", package = "pezkuwi-subxt-codegen" }
+pezkuwi-subxt-core = { git = "https://github.com/pezkuwichain/pezkuwi-subxt", branch = "main", package = "pezkuwi-subxt-core", default-features = false }
+pezkuwi-subxt-lightclient = { git = "https://github.com/pezkuwichain/pezkuwi-subxt", branch = "main", package = "pezkuwi-subxt-lightclient", default-features = false }
+pezkuwi-subxt-macro = { git = "https://github.com/pezkuwichain/pezkuwi-subxt", branch = "main", package = "pezkuwi-subxt-macro" }
+pezkuwi-subxt-metadata = { git = "https://github.com/pezkuwichain/pezkuwi-subxt", branch = "main", package = "pezkuwi-subxt-metadata", default-features = false }
+pezkuwi-subxt-rpcs = { git = "https://github.com/pezkuwichain/pezkuwi-subxt", branch = "main", package = "pezkuwi-subxt-rpcs", default-features = false }
+pezkuwi-subxt-signer = { git = "https://github.com/pezkuwichain/pezkuwi-subxt", branch = "main", package = "pezkuwi-subxt-signer", default-features = false }
+pezkuwi-subxt-utils-fetchmetadata = { git = "https://github.com/pezkuwichain/pezkuwi-subxt", branch = "main", package = "pezkuwi-subxt-utils-fetchmetadata", default-features = false }
+pezkuwi-subxt-utils-stripmetadata = { git = "https://github.com/pezkuwichain/pezkuwi-subxt", branch = "main", package = "pezkuwi-subxt-utils-stripmetadata" }
 syn = { version = "2.0.87" }
 sysinfo = { version = "0.30" }
 tar = { version = "0.4" }
@@ -1505,7 +1501,7 @@ tracing-futures = { version = "0.2.4" }
 tracing-log = { version = "0.2.0" }
 tracing-subscriber = { version = "0.3.18" }
 tracking-allocator = { path = "pezkuwi/node/tracking-allocator", default-features = false, package = "pezstaging-tracking-allocator" }
-trie-bench = { version = "0.42.0" }
+trie-bench = { version = "=0.42.0" }
 trie-db = { version = "0.30.0", default-features = false }
 trie-root = { version = "0.18.0", default-features = false }
 trie-standardmap = { version = "0.16.0" }
@@ -1542,9 +1538,9 @@ zagros-runtime = { path = "pezkuwi/runtime/zagros", default-features = false }
 zagros-runtime-constants = { path = "pezkuwi/runtime/zagros/constants", default-features = false }
 zagros-system-emulated-network = { path = "pezcumulus/teyrchains/integration-tests/emulated/networks/zagros-system" }
 zeroize = { version = "1.7.0", default-features = false }
-zombienet-configuration = { version = "0.3.13" }
-zombienet-orchestrator = { version = "0.3.13" }
-zombienet-sdk = { version = "0.3.13" }
+zombienet-configuration = { git = "https://github.com/pezkuwichain/pezkuwi-zombienet-sdk", branch = "main" }
+zombienet-orchestrator = { git = "https://github.com/pezkuwichain/pezkuwi-zombienet-sdk", branch = "main" }
+zombienet-sdk = { git = "https://github.com/pezkuwichain/pezkuwi-zombienet-sdk", branch = "main" }
 zstd = { version = "0.12.4", default-features = false }
 
 [profile.release]
@@ -1609,7 +1605,3 @@ wasmi = { opt-level = 3 }
 x25519-dalek = { opt-level = 3 }
 yamux = { opt-level = 3 }
 zeroize = { opt-level = 3 }
-
-# Pezkuwi SDK: Patch zombienet-configuration to support [[teyrchains]] alias
-[patch.crates-io]
-zombienet-configuration = { path = "vendor/zombienet-configuration" }

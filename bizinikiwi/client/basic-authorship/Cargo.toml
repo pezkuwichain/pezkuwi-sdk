@@ -20,7 +20,6 @@ targets = ["x86_64-unknown-linux-gnu"]
 codec = { workspace = true, default-features = true }
 futures = { workspace = true }
 log = { workspace = true, default-features = true }
-prometheus-endpoint = { workspace = true, default-features = true }
 pezsc-block-builder = { workspace = true, default-features = true }
 pezsc-proposer-metrics = { workspace = true, default-features = true }
 pezsc-telemetry = { workspace = true, default-features = true }
@@ -32,24 +31,25 @@ pezsp-core = { workspace = true, default-features = true }
 pezsp-inherents = { workspace = true, default-features = true }
 pezsp-runtime = { workspace = true, default-features = true }
 pezsp-trie = { workspace = true, default-features = true }
+prometheus-endpoint = { workspace = true, default-features = true }
 
 [dev-dependencies]
+bizinikiwi-test-runtime-client = { workspace = true }
 parking_lot = { workspace = true, default-features = true }
 pezsc-client-api = { workspace = true, default-features = true }
 pezsc-transaction-pool = { workspace = true, default-features = true }
-bizinikiwi-test-runtime-client = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-  "pezsc-block-builder/runtime-benchmarks",
-  "pezsc-client-api/runtime-benchmarks",
-  "pezsc-transaction-pool-api/runtime-benchmarks",
-  "pezsc-transaction-pool/runtime-benchmarks",
-  "pezsp-api/runtime-benchmarks",
-  "pezsp-blockchain/runtime-benchmarks",
-  "pezsp-consensus/runtime-benchmarks",
-  "pezsp-inherents/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "pezsp-trie/runtime-benchmarks",
-  "bizinikiwi-test-runtime-client/runtime-benchmarks",
+	"bizinikiwi-test-runtime-client/runtime-benchmarks",
+	"pezsc-block-builder/runtime-benchmarks",
+	"pezsc-client-api/runtime-benchmarks",
+	"pezsc-transaction-pool-api/runtime-benchmarks",
+	"pezsc-transaction-pool/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
+	"pezsp-blockchain/runtime-benchmarks",
+	"pezsp-consensus/runtime-benchmarks",
+	"pezsp-inherents/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-trie/runtime-benchmarks",
 ]

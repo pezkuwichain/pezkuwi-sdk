@@ -79,23 +79,23 @@ pub mod genesis_config_presets {
 		Sr25519Keyring::well_known()
 			.map(|k| k.to_account_id())
 			.chain([
-				// subxt_signer::eth::dev::alith()
+				// pezkuwi_subxt_signer::eth::dev::alith()
 				array_bytes::hex_n_into_unchecked(
 					"f24ff3a9cf04c71dbc94d0b566f7a27b94566caceeeeeeeeeeeeeeeeeeeeeeee",
 				),
-				// subxt_signer::eth::dev::baltathar()
+				// pezkuwi_subxt_signer::eth::dev::baltathar()
 				array_bytes::hex_n_into_unchecked(
 					"3cd0a705a2dc65e5b1e1205896baa2be8a07c6e0eeeeeeeeeeeeeeeeeeeeeeee",
 				),
-				// subxt_signer::eth::dev::charleth()
+				// pezkuwi_subxt_signer::eth::dev::charleth()
 				array_bytes::hex_n_into_unchecked(
 					"798d4ba9baf0064ec19eb4f0a1a45785ae9d6dfceeeeeeeeeeeeeeeeeeeeeeee",
 				),
-				// subxt_signer::eth::dev::dorothy()
+				// pezkuwi_subxt_signer::eth::dev::dorothy()
 				array_bytes::hex_n_into_unchecked(
 					"773539d4ac0e786233d90a233654ccee26a613d9eeeeeeeeeeeeeeeeeeeeeeee",
 				),
-				// subxt_signer::eth::dev::ethan()
+				// pezkuwi_subxt_signer::eth::dev::ethan()
 				array_bytes::hex_n_into_unchecked(
 					"ff64d3f6efe2317ee2807d223a0bdc4c0c49dfdbeeeeeeeeeeeeeeeeeeeeeeee",
 				),
