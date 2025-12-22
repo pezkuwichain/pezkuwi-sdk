@@ -494,8 +494,8 @@ impl<T: Config> Pezpallet<T> {
 			let mut outgoing_winner = Some((bidder.clone(), para, amount));
 			swap(&mut current_winning[range_index], &mut outgoing_winner);
 			if let Some((who, para, _amount)) = outgoing_winner {
-				if auction_status.is_starting() &&
-					current_winning
+				if auction_status.is_starting()
+					&& current_winning
 						.iter()
 						.filter_map(Option::as_ref)
 						.all(|&(ref other, other_para, _)| other != &who || other_para != para)
@@ -545,8 +545,8 @@ impl<T: Config> Pezpallet<T> {
 						&mut raw_offset.as_ref(),
 					)
 					.expect("secure hashes should always be bigger than the block number; qed");
-					let offset = (raw_offset_block_number % ending_period) /
-						T::SampleLength::get().max(One::one());
+					let offset = (raw_offset_block_number % ending_period)
+						/ T::SampleLength::get().max(One::one());
 
 					let auction_counter = AuctionCounter::<T>::get();
 					Self::deposit_event(Event::<T>::WinningOffset {
@@ -594,9 +594,9 @@ impl<T: Config> Pezpallet<T> {
 			let period_count = LeasePeriodOf::<T>::from(range.len() as u32);
 
 			match T::Leaser::lease_out(para, &leaser, amount, period_begin, period_count) {
-				Err(LeaseError::ReserveFailed) |
-				Err(LeaseError::AlreadyEnded) |
-				Err(LeaseError::NoLeasePeriod) => {
+				Err(LeaseError::ReserveFailed)
+				| Err(LeaseError::AlreadyEnded)
+				| Err(LeaseError::NoLeasePeriod) => {
 					// Should never happen since we just unreserved this amount (and our offset is
 					// from the present period). But if it does, there's not much we can do.
 				},

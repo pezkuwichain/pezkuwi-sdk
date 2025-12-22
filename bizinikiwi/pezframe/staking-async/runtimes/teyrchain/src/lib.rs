@@ -674,99 +674,99 @@ impl InstanceFilter<RuntimeCall> for ProxyType {
 			ProxyType::Any => true,
 			ProxyType::NonTransfer => !matches!(
 				c,
-				RuntimeCall::Balances { .. } |
-					RuntimeCall::Assets { .. } |
-					RuntimeCall::NftFractionalization { .. } |
-					RuntimeCall::Nfts { .. } |
-					RuntimeCall::Uniques { .. }
+				RuntimeCall::Balances { .. }
+					| RuntimeCall::Assets { .. }
+					| RuntimeCall::NftFractionalization { .. }
+					| RuntimeCall::Nfts { .. }
+					| RuntimeCall::Uniques { .. }
 			),
 			ProxyType::CancelProxy => matches!(
 				c,
-				RuntimeCall::Proxy(pezpallet_proxy::Call::reject_announcement { .. }) |
-					RuntimeCall::Utility { .. } |
-					RuntimeCall::Multisig { .. }
+				RuntimeCall::Proxy(pezpallet_proxy::Call::reject_announcement { .. })
+					| RuntimeCall::Utility { .. }
+					| RuntimeCall::Multisig { .. }
 			),
 			ProxyType::Assets => {
 				matches!(
 					c,
-					RuntimeCall::Assets { .. } |
-						RuntimeCall::Utility { .. } |
-						RuntimeCall::Multisig { .. } |
-						RuntimeCall::NftFractionalization { .. } |
-						RuntimeCall::Nfts { .. } |
-						RuntimeCall::Uniques { .. }
+					RuntimeCall::Assets { .. }
+						| RuntimeCall::Utility { .. }
+						| RuntimeCall::Multisig { .. }
+						| RuntimeCall::NftFractionalization { .. }
+						| RuntimeCall::Nfts { .. }
+						| RuntimeCall::Uniques { .. }
 				)
 			},
 			ProxyType::AssetOwner => matches!(
 				c,
-				RuntimeCall::Assets(TrustBackedAssetsCall::create { .. }) |
-					RuntimeCall::Assets(TrustBackedAssetsCall::start_destroy { .. }) |
-					RuntimeCall::Assets(TrustBackedAssetsCall::destroy_accounts { .. }) |
-					RuntimeCall::Assets(TrustBackedAssetsCall::destroy_approvals { .. }) |
-					RuntimeCall::Assets(TrustBackedAssetsCall::finish_destroy { .. }) |
-					RuntimeCall::Assets(TrustBackedAssetsCall::transfer_ownership { .. }) |
-					RuntimeCall::Assets(TrustBackedAssetsCall::set_team { .. }) |
-					RuntimeCall::Assets(TrustBackedAssetsCall::set_metadata { .. }) |
-					RuntimeCall::Assets(TrustBackedAssetsCall::clear_metadata { .. }) |
-					RuntimeCall::Assets(TrustBackedAssetsCall::set_min_balance { .. }) |
-					RuntimeCall::Nfts(pezpallet_nfts::Call::create { .. }) |
-					RuntimeCall::Nfts(pezpallet_nfts::Call::destroy { .. }) |
-					RuntimeCall::Nfts(pezpallet_nfts::Call::redeposit { .. }) |
-					RuntimeCall::Nfts(pezpallet_nfts::Call::transfer_ownership { .. }) |
-					RuntimeCall::Nfts(pezpallet_nfts::Call::set_team { .. }) |
-					RuntimeCall::Nfts(pezpallet_nfts::Call::set_collection_max_supply { .. }) |
-					RuntimeCall::Nfts(pezpallet_nfts::Call::lock_collection { .. }) |
-					RuntimeCall::Uniques(pezpallet_uniques::Call::create { .. }) |
-					RuntimeCall::Uniques(pezpallet_uniques::Call::destroy { .. }) |
-					RuntimeCall::Uniques(pezpallet_uniques::Call::transfer_ownership { .. }) |
-					RuntimeCall::Uniques(pezpallet_uniques::Call::set_team { .. }) |
-					RuntimeCall::Uniques(pezpallet_uniques::Call::set_metadata { .. }) |
-					RuntimeCall::Uniques(pezpallet_uniques::Call::set_attribute { .. }) |
-					RuntimeCall::Uniques(pezpallet_uniques::Call::set_collection_metadata { .. }) |
-					RuntimeCall::Uniques(pezpallet_uniques::Call::clear_metadata { .. }) |
-					RuntimeCall::Uniques(pezpallet_uniques::Call::clear_attribute { .. }) |
-					RuntimeCall::Uniques(
+				RuntimeCall::Assets(TrustBackedAssetsCall::create { .. })
+					| RuntimeCall::Assets(TrustBackedAssetsCall::start_destroy { .. })
+					| RuntimeCall::Assets(TrustBackedAssetsCall::destroy_accounts { .. })
+					| RuntimeCall::Assets(TrustBackedAssetsCall::destroy_approvals { .. })
+					| RuntimeCall::Assets(TrustBackedAssetsCall::finish_destroy { .. })
+					| RuntimeCall::Assets(TrustBackedAssetsCall::transfer_ownership { .. })
+					| RuntimeCall::Assets(TrustBackedAssetsCall::set_team { .. })
+					| RuntimeCall::Assets(TrustBackedAssetsCall::set_metadata { .. })
+					| RuntimeCall::Assets(TrustBackedAssetsCall::clear_metadata { .. })
+					| RuntimeCall::Assets(TrustBackedAssetsCall::set_min_balance { .. })
+					| RuntimeCall::Nfts(pezpallet_nfts::Call::create { .. })
+					| RuntimeCall::Nfts(pezpallet_nfts::Call::destroy { .. })
+					| RuntimeCall::Nfts(pezpallet_nfts::Call::redeposit { .. })
+					| RuntimeCall::Nfts(pezpallet_nfts::Call::transfer_ownership { .. })
+					| RuntimeCall::Nfts(pezpallet_nfts::Call::set_team { .. })
+					| RuntimeCall::Nfts(pezpallet_nfts::Call::set_collection_max_supply { .. })
+					| RuntimeCall::Nfts(pezpallet_nfts::Call::lock_collection { .. })
+					| RuntimeCall::Uniques(pezpallet_uniques::Call::create { .. })
+					| RuntimeCall::Uniques(pezpallet_uniques::Call::destroy { .. })
+					| RuntimeCall::Uniques(pezpallet_uniques::Call::transfer_ownership { .. })
+					| RuntimeCall::Uniques(pezpallet_uniques::Call::set_team { .. })
+					| RuntimeCall::Uniques(pezpallet_uniques::Call::set_metadata { .. })
+					| RuntimeCall::Uniques(pezpallet_uniques::Call::set_attribute { .. })
+					| RuntimeCall::Uniques(pezpallet_uniques::Call::set_collection_metadata { .. })
+					| RuntimeCall::Uniques(pezpallet_uniques::Call::clear_metadata { .. })
+					| RuntimeCall::Uniques(pezpallet_uniques::Call::clear_attribute { .. })
+					| RuntimeCall::Uniques(
 						pezpallet_uniques::Call::clear_collection_metadata { .. }
-					) | RuntimeCall::Uniques(pezpallet_uniques::Call::set_collection_max_supply { .. }) |
-					RuntimeCall::Utility { .. } |
-					RuntimeCall::Multisig { .. }
+					) | RuntimeCall::Uniques(pezpallet_uniques::Call::set_collection_max_supply { .. })
+					| RuntimeCall::Utility { .. }
+					| RuntimeCall::Multisig { .. }
 			),
 			ProxyType::AssetManager => matches!(
 				c,
-				RuntimeCall::Assets(TrustBackedAssetsCall::mint { .. }) |
-					RuntimeCall::Assets(TrustBackedAssetsCall::burn { .. }) |
-					RuntimeCall::Assets(TrustBackedAssetsCall::freeze { .. }) |
-					RuntimeCall::Assets(TrustBackedAssetsCall::block { .. }) |
-					RuntimeCall::Assets(TrustBackedAssetsCall::thaw { .. }) |
-					RuntimeCall::Assets(TrustBackedAssetsCall::freeze_asset { .. }) |
-					RuntimeCall::Assets(TrustBackedAssetsCall::thaw_asset { .. }) |
-					RuntimeCall::Assets(TrustBackedAssetsCall::touch_other { .. }) |
-					RuntimeCall::Assets(TrustBackedAssetsCall::refund_other { .. }) |
-					RuntimeCall::Nfts(pezpallet_nfts::Call::force_mint { .. }) |
-					RuntimeCall::Nfts(pezpallet_nfts::Call::update_mint_settings { .. }) |
-					RuntimeCall::Nfts(pezpallet_nfts::Call::mint_pre_signed { .. }) |
-					RuntimeCall::Nfts(pezpallet_nfts::Call::set_attributes_pre_signed { .. }) |
-					RuntimeCall::Nfts(pezpallet_nfts::Call::lock_item_transfer { .. }) |
-					RuntimeCall::Nfts(pezpallet_nfts::Call::unlock_item_transfer { .. }) |
-					RuntimeCall::Nfts(pezpallet_nfts::Call::lock_item_properties { .. }) |
-					RuntimeCall::Nfts(pezpallet_nfts::Call::set_metadata { .. }) |
-					RuntimeCall::Nfts(pezpallet_nfts::Call::clear_metadata { .. }) |
-					RuntimeCall::Nfts(pezpallet_nfts::Call::set_collection_metadata { .. }) |
-					RuntimeCall::Nfts(pezpallet_nfts::Call::clear_collection_metadata { .. }) |
-					RuntimeCall::Uniques(pezpallet_uniques::Call::mint { .. }) |
-					RuntimeCall::Uniques(pezpallet_uniques::Call::burn { .. }) |
-					RuntimeCall::Uniques(pezpallet_uniques::Call::freeze { .. }) |
-					RuntimeCall::Uniques(pezpallet_uniques::Call::thaw { .. }) |
-					RuntimeCall::Uniques(pezpallet_uniques::Call::freeze_collection { .. }) |
-					RuntimeCall::Uniques(pezpallet_uniques::Call::thaw_collection { .. }) |
-					RuntimeCall::Utility { .. } |
-					RuntimeCall::Multisig { .. }
+				RuntimeCall::Assets(TrustBackedAssetsCall::mint { .. })
+					| RuntimeCall::Assets(TrustBackedAssetsCall::burn { .. })
+					| RuntimeCall::Assets(TrustBackedAssetsCall::freeze { .. })
+					| RuntimeCall::Assets(TrustBackedAssetsCall::block { .. })
+					| RuntimeCall::Assets(TrustBackedAssetsCall::thaw { .. })
+					| RuntimeCall::Assets(TrustBackedAssetsCall::freeze_asset { .. })
+					| RuntimeCall::Assets(TrustBackedAssetsCall::thaw_asset { .. })
+					| RuntimeCall::Assets(TrustBackedAssetsCall::touch_other { .. })
+					| RuntimeCall::Assets(TrustBackedAssetsCall::refund_other { .. })
+					| RuntimeCall::Nfts(pezpallet_nfts::Call::force_mint { .. })
+					| RuntimeCall::Nfts(pezpallet_nfts::Call::update_mint_settings { .. })
+					| RuntimeCall::Nfts(pezpallet_nfts::Call::mint_pre_signed { .. })
+					| RuntimeCall::Nfts(pezpallet_nfts::Call::set_attributes_pre_signed { .. })
+					| RuntimeCall::Nfts(pezpallet_nfts::Call::lock_item_transfer { .. })
+					| RuntimeCall::Nfts(pezpallet_nfts::Call::unlock_item_transfer { .. })
+					| RuntimeCall::Nfts(pezpallet_nfts::Call::lock_item_properties { .. })
+					| RuntimeCall::Nfts(pezpallet_nfts::Call::set_metadata { .. })
+					| RuntimeCall::Nfts(pezpallet_nfts::Call::clear_metadata { .. })
+					| RuntimeCall::Nfts(pezpallet_nfts::Call::set_collection_metadata { .. })
+					| RuntimeCall::Nfts(pezpallet_nfts::Call::clear_collection_metadata { .. })
+					| RuntimeCall::Uniques(pezpallet_uniques::Call::mint { .. })
+					| RuntimeCall::Uniques(pezpallet_uniques::Call::burn { .. })
+					| RuntimeCall::Uniques(pezpallet_uniques::Call::freeze { .. })
+					| RuntimeCall::Uniques(pezpallet_uniques::Call::thaw { .. })
+					| RuntimeCall::Uniques(pezpallet_uniques::Call::freeze_collection { .. })
+					| RuntimeCall::Uniques(pezpallet_uniques::Call::thaw_collection { .. })
+					| RuntimeCall::Utility { .. }
+					| RuntimeCall::Multisig { .. }
 			),
 			ProxyType::Collator => matches!(
 				c,
-				RuntimeCall::CollatorSelection { .. } |
-					RuntimeCall::Utility { .. } |
-					RuntimeCall::Multisig { .. }
+				RuntimeCall::CollatorSelection { .. }
+					| RuntimeCall::Utility { .. }
+					| RuntimeCall::Multisig { .. }
 			),
 		}
 	}

@@ -677,15 +677,16 @@ pub mod pezpallet {
 				Tiki::Welati => RoleAssignmentType::Automatic,
 
 				// Elected roles
-				Tiki::Parlementer | Tiki::SerokiMeclise | Tiki::Serok =>
-					RoleAssignmentType::Elected,
+				Tiki::Parlementer | Tiki::SerokiMeclise | Tiki::Serok => {
+					RoleAssignmentType::Elected
+				},
 
 				// Earned roles (automatically given by pezpallet-referral)
-				Tiki::Axa |
-				Tiki::Mamoste |
-				Tiki::Rewsenbîr |
-				Tiki::SerokêKomele |
-				Tiki::ModeratorêCivakê => RoleAssignmentType::Earned,
+				Tiki::Axa
+				| Tiki::Mamoste
+				| Tiki::Rewsenbîr
+				| Tiki::SerokêKomele
+				| Tiki::ModeratorêCivakê => RoleAssignmentType::Earned,
 
 				// Appointed roles (default)
 				_ => RoleAssignmentType::Appointed,

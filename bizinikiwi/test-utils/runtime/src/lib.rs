@@ -331,8 +331,9 @@ impl pezsp_runtime::traits::TransactionExtension<RuntimeCall> for CheckBizinikiw
 	> {
 		log::trace!(target: LOG_TARGET, "validate");
 		let v = match call {
-			RuntimeCall::BizinikiwiTest(ref bizinikiwi_test_call) =>
-				bizinikiwi_test_pallet::validate_runtime_call(bizinikiwi_test_call)?,
+			RuntimeCall::BizinikiwiTest(ref bizinikiwi_test_call) => {
+				bizinikiwi_test_pallet::validate_runtime_call(bizinikiwi_test_call)?
+			},
 			_ => Default::default(),
 		};
 		Ok((v, (), origin))

@@ -240,8 +240,8 @@ impl MessageDispatch for DummyMessageDispatch {
 	type LaneId = TestLaneIdType;
 
 	fn is_active(lane: Self::LaneId) -> bool {
-		pezframe_support::storage::unhashed::take::<bool>(&(b"inactive", lane).encode()[..]) !=
-			Some(false)
+		pezframe_support::storage::unhashed::take::<bool>(&(b"inactive", lane).encode()[..])
+			!= Some(false)
 	}
 
 	fn dispatch_weight(

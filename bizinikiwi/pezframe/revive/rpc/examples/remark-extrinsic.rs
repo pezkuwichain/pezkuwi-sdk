@@ -14,9 +14,9 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-use pezpallet_revive_eth_rpc::subxt_client::{self, system::calls::types::Remark, SrcChainConfig};
 use pezkuwi_subxt::OnlineClient;
 use pezkuwi_subxt_signer::sr25519::dev;
+use pezpallet_revive_eth_rpc::subxt_client::{self, system::calls::types::Remark, SrcChainConfig};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {

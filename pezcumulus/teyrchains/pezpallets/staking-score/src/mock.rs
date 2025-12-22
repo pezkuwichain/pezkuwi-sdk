@@ -261,13 +261,15 @@ impl ExtBuilder {
 			invulnerables: self
 				.stakers
 				.iter()
-				.filter_map(|(stash, _, _, status)| {
-					if let StakerStatus::Validator = status {
-						Some(*stash)
-					} else {
-						None
-					}
-				})
+				.filter_map(
+					|(stash, _, _, status)| {
+						if let StakerStatus::Validator = status {
+							Some(*stash)
+						} else {
+							None
+						}
+					},
+				)
 				.collect(),
 			force_era: pezpallet_staking::Forcing::ForceNew, // Yeni era başlatmaya zorla
 			min_nominator_bond: MinNominatorBond::get(),     // Tanımlanan minimum değerleri kullan

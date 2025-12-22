@@ -9,6 +9,7 @@ use crate::{
 };
 use average::{Estimate, Max, Mean, Min, Quantile};
 use parking_lot::RwLock;
+use pezkuwi_subxt_core::config::Hash as BlockHash;
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
 use std::{
 	collections::HashMap,
@@ -22,7 +23,6 @@ use std::{
 	},
 	time::{Duration, SystemTime},
 };
-use pezkuwi_subxt_core::config::Hash as BlockHash;
 use tracing::{debug, info, trace};
 
 pub const STAT_TARGET: &str = "stat";
@@ -115,11 +115,11 @@ impl Counters {
 	}
 
 	pub fn buffered(&self) -> usize {
-		self.popped.load(Ordering::Relaxed) -
-			(self.submit_and_watch_success.load(Ordering::Relaxed) +
-				self.submit_and_watch_error.load(Ordering::Relaxed)) -
-			(self.submit_success.load(Ordering::Relaxed) +
-				self.submit_error.load(Ordering::Relaxed))
+		self.popped.load(Ordering::Relaxed)
+			- (self.submit_and_watch_success.load(Ordering::Relaxed)
+				+ self.submit_and_watch_error.load(Ordering::Relaxed))
+			- (self.submit_success.load(Ordering::Relaxed)
+				+ self.submit_error.load(Ordering::Relaxed))
 	}
 
 	fn count_event<H: BlockHash>(&self, event: &ExecutionEvent<H>) {
@@ -128,10 +128,12 @@ impl Counters {
 			ExecutionEvent::Sent(_) => Self::inc(&self.sent),
 			ExecutionEvent::SubmitResult(_, Ok(_)) => Self::inc(&self.submit_success),
 			ExecutionEvent::SubmitResult(_, Err(_)) => Self::inc(&self.submit_error),
-			ExecutionEvent::SubmitAndWatchResult(_, Ok(_)) =>
-				Self::inc(&self.submit_and_watch_success),
-			ExecutionEvent::SubmitAndWatchResult(_, Err(_)) =>
-				Self::inc(&self.submit_and_watch_error),
+			ExecutionEvent::SubmitAndWatchResult(_, Ok(_)) => {
+				Self::inc(&self.submit_and_watch_success)
+			},
+			ExecutionEvent::SubmitAndWatchResult(_, Err(_)) => {
+				Self::inc(&self.submit_and_watch_error)
+			},
 			ExecutionEvent::FinalizedMonitor(_, _) => Self::inc(&self.finalized_monitor),
 			ExecutionEvent::TxPoolEvent(_, status) => match status {
 				TransactionStatus::Validated => Self::inc(&self.ts_validated),
@@ -314,8 +316,9 @@ impl<H: BlockHash + 'static> ExecutionLog for TransactionExecutionLog<H> {
 		if match event {
 			// note: dedup in block events - on the stats line we want to see transactions included,
 			// not events count
-			ExecutionEvent::TxPoolEvent(_, TransactionStatus::InBlock(_)) =>
-				self.in_blocks().is_empty(),
+			ExecutionEvent::TxPoolEvent(_, TransactionStatus::InBlock(_)) => {
+				self.in_blocks().is_empty()
+			},
 			_ => true,
 		} {
 			self.total_counters.count_event(&event);
@@ -437,8 +440,9 @@ impl<H: BlockHash + 'static> ExecutionLog for TransactionExecutionLog<H> {
 
 	fn time_to_result(&self) -> Option<Duration> {
 		let ets = self.events.read().iter().find_map(|e| match e {
-			ExecutionEvent::SubmitAndWatchResult(i, _) | ExecutionEvent::SubmitResult(i, _) =>
-				Some(*i),
+			ExecutionEvent::SubmitAndWatchResult(i, _) | ExecutionEvent::SubmitResult(i, _) => {
+				Some(*i)
+			},
 			_ => None,
 		});
 		Self::duration_since_timestamp(self.get_sent_time_stamp(), ets)
@@ -449,8 +453,9 @@ impl<H: BlockHash + 'static> ExecutionLog for TransactionExecutionLog<H> {
 			.read()
 			.iter()
 			.filter_map(|e| match e {
-				ExecutionEvent::TxPoolEvent(_, TransactionStatus::Invalid(reason)) =>
-					Some(reason.clone()),
+				ExecutionEvent::TxPoolEvent(_, TransactionStatus::Invalid(reason)) => {
+					Some(reason.clone())
+				},
 				_ => None,
 			})
 			.collect()
@@ -461,8 +466,9 @@ impl<H: BlockHash + 'static> ExecutionLog for TransactionExecutionLog<H> {
 			.read()
 			.iter()
 			.filter_map(|e| match e {
-				ExecutionEvent::TxPoolEvent(_, TransactionStatus::Error(reason)) =>
-					Some(reason.clone()),
+				ExecutionEvent::TxPoolEvent(_, TransactionStatus::Error(reason)) => {
+					Some(reason.clone())
+				},
 				_ => None,
 			})
 			.collect()
@@ -473,8 +479,9 @@ impl<H: BlockHash + 'static> ExecutionLog for TransactionExecutionLog<H> {
 			.read()
 			.iter()
 			.filter_map(|e| match e {
-				ExecutionEvent::TxPoolEvent(_, TransactionStatus::Dropped(reason)) =>
-					Some(reason.clone()),
+				ExecutionEvent::TxPoolEvent(_, TransactionStatus::Dropped(reason)) => {
+					Some(reason.clone())
+				},
 				_ => None,
 			})
 			.collect()

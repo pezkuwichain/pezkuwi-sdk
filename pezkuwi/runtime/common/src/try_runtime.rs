@@ -83,12 +83,13 @@ where
 				maybe_fast_unstake_event
 			})
 			.for_each(|e: pezpallet_fast_unstake::Event<T>| match e {
-				pezpallet_fast_unstake::Event::<T>::Unstaked { result, .. } =>
+				pezpallet_fast_unstake::Event::<T>::Unstaked { result, .. } => {
 					if result.is_ok() {
 						unstaked_ok += 1;
 					} else {
 						unstaked_err += 1
-					},
+					}
+				},
 				pezpallet_fast_unstake::Event::<T>::Slashed { .. } => unstaked_slashed += 1,
 				pezpallet_fast_unstake::Event::<T>::InternalError => unreachable!(),
 				_ => {},

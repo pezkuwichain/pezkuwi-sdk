@@ -214,8 +214,8 @@ mod check_upward_messages {
 				5
 			);
 			assert!(
-				configuration::ActiveConfig::<Test>::get().max_upward_queue_size <
-					crate::inclusion::MaxUmpMessageLenOf::<Test>::get(),
+				configuration::ActiveConfig::<Test>::get().max_upward_queue_size
+					< crate::inclusion::MaxUmpMessageLenOf::<Test>::get(),
 				"Test will not work"
 			);
 

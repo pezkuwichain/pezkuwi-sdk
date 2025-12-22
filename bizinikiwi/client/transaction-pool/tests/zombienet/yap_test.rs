@@ -22,7 +22,7 @@
 // https://github.com/pezkuwichain/pezkuwi-sdk/issues/124#issuecomment-2808830472
 
 use crate::zombienet::{BlockSubscriptionType, NetworkSpawner, ScenarioBuilderSharedParams};
-use pezcumulus_zombienet_sdk_helpers::{create_assign_core_call};
+use pezcumulus_zombienet_sdk_helpers::create_assign_core_call;
 use serde_json::json;
 use txtesttool::{execution_log::ExecutionLog, scenario::ScenarioBuilder};
 use zombienet_sdk::{

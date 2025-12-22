@@ -131,7 +131,7 @@ impl<T: Config> Pezpallet<T> {
 		})?;
 
 		match Ledger::<T>::get(controller) {
-			Some(ledger) =>
+			Some(ledger) => {
 				if ledger.stash != *stash {
 					Ok(LedgerIntegrityState::Corrupted)
 				} else {
@@ -140,7 +140,8 @@ impl<T: Config> Pezpallet<T> {
 					} else {
 						Ok(LedgerIntegrityState::Ok)
 					}
-				},
+				}
+			},
 			None => Ok(LedgerIntegrityState::CorruptedKilled),
 		}
 	}
@@ -275,8 +276,8 @@ impl<T: Config> Pezpallet<T> {
 			"consolidate_unlocked should never increase the total balance of the ledger"
 		);
 
-		let used_weight = if ledger.unlocking.is_empty() &&
-			(ledger.active < Self::min_chilled_bond() || ledger.active.is_zero())
+		let used_weight = if ledger.unlocking.is_empty()
+			&& (ledger.active < Self::min_chilled_bond() || ledger.active.is_zero())
 		{
 			// This account must have called `unbond()` with some value that caused the active
 			// portion to fall below existential deposit + will have no more unlocking chunks
@@ -370,7 +371,7 @@ impl<T: Config> Pezpallet<T> {
 
 		if Eras::<T>::is_rewards_claimed(era, &stash, page) {
 			return Err(Error::<T>::AlreadyClaimed
-				.with_weight(T::WeightInfo::payout_stakers_alive_staked(0)))
+				.with_weight(T::WeightInfo::payout_stakers_alive_staked(0)));
 		}
 
 		Eras::<T>::set_rewards_as_claimed(era, &stash, page);
@@ -396,7 +397,7 @@ impl<T: Config> Pezpallet<T> {
 
 		// Nothing to do if they have no reward points.
 		if validator_reward_points.is_zero() {
-			return Ok(Some(T::WeightInfo::payout_stakers_alive_staked(0)).into())
+			return Ok(Some(T::WeightInfo::payout_stakers_alive_staked(0)).into());
 		}
 
 		// This is the fraction of the total reward that the validator and the
@@ -485,7 +486,7 @@ impl<T: Config> Pezpallet<T> {
 	) -> Option<(PositiveImbalanceOf<T>, RewardDestination<T::AccountId>)> {
 		// noop if amount is zero
 		if amount.is_zero() {
-			return None
+			return None;
 		}
 		let dest = Self::payee(StakingAccount::Stash(stash.clone()))?;
 
@@ -603,8 +604,8 @@ impl<T: Config> Pezpallet<T> {
 			SnapshotStatus::Consumed => Box::new(vec![].into_iter()),
 		};
 
-		while all_voters.len() < page_len_prediction as usize &&
-			voters_seen < (NPOS_MAX_ITERATIONS_COEFFICIENT * page_len_prediction as u32)
+		while all_voters.len() < page_len_prediction as usize
+			&& voters_seen < (NPOS_MAX_ITERATIONS_COEFFICIENT * page_len_prediction as u32)
 		{
 			let voter = match sorted_voters.next() {
 				Some(voter) => {
@@ -618,7 +619,7 @@ impl<T: Config> Pezpallet<T> {
 			// if voter weight is zero, do not consider this voter for the snapshot.
 			if voter_weight.is_zero() {
 				log!(debug, "voter's active balance is 0. skip this voter.");
-				continue
+				continue;
 			}
 
 			if let Some(Nominations { targets, .. }) = <Nominators<T>>::get(&voter) {
@@ -633,7 +634,7 @@ impl<T: Config> Pezpallet<T> {
 						Self::deposit_event(Event::<T>::SnapshotVotersSizeExceeded {
 							size: voters_size_tracker.size as u32,
 						});
-						break
+						break;
 					}
 
 					all_voters.push(voter);
@@ -659,7 +660,7 @@ impl<T: Config> Pezpallet<T> {
 					Self::deposit_event(Event::<T>::SnapshotVotersSizeExceeded {
 						size: voters_size_tracker.size as u32,
 					});
-					break
+					break;
 				}
 				all_voters.push(self_vote);
 				validators_taken.saturating_inc();
@@ -704,8 +705,8 @@ impl<T: Config> Pezpallet<T> {
 		let mut targets_seen = 0;
 
 		let mut targets_iter = T::TargetList::iter();
-		while all_targets.len() < final_predicted_len as usize &&
-			targets_seen < (NPOS_MAX_ITERATIONS_COEFFICIENT * final_predicted_len as u32)
+		while all_targets.len() < final_predicted_len as usize
+			&& targets_seen < (NPOS_MAX_ITERATIONS_COEFFICIENT * final_predicted_len as u32)
 		{
 			let target = match targets_iter.next() {
 				Some(target) => {
@@ -721,7 +722,7 @@ impl<T: Config> Pezpallet<T> {
 				Self::deposit_event(Event::<T>::SnapshotTargetsSizeExceeded {
 					size: targets_size_tracker.size as u32,
 				});
-				break
+				break;
 			}
 
 			if Validators::<T>::contains_key(&target) {
@@ -900,7 +901,7 @@ impl<T: Config> Pezpallet<T> {
 		// dec provider
 		let _ = pezframe_system::Pezpallet::<T>::dec_providers(&stash)?;
 
-		return Ok(())
+		return Ok(());
 	}
 }
 
@@ -1007,7 +1008,7 @@ impl<T: Config> ElectionDataProvider for Pezpallet<T> {
 
 		let targets = Self::get_npos_targets(bounds);
 		if bounds.exhausted(None, CountBound(targets.len() as u32).into()) {
-			return Err("Target snapshot too big")
+			return Err("Target snapshot too big");
 		}
 
 		debug_assert!(!bounds.slice_exhausted(&targets));
@@ -1201,7 +1202,7 @@ impl<T: Config> rc_client::AHStakingInterface for Pezpallet<T> {
 			// Skip if the validator is invulnerable.
 			if invulnerables.contains(&validator) {
 				log!(debug, "🦹 on_offence: {:?} is invulnerable; ignoring offence", validator);
-				continue
+				continue;
 			}
 
 			// ignore offence if too old to report.
@@ -1345,8 +1346,8 @@ impl<T: Config> ScoreProvider<T::AccountId> for Pezpallet<T> {
 		Self::ledger(Stash(who.clone()))
 			.ok()
 			.and_then(|l| {
-				if Nominators::<T>::contains_key(&l.stash) ||
-					Validators::<T>::contains_key(&l.stash)
+				if Nominators::<T>::contains_key(&l.stash)
+					|| Validators::<T>::contains_key(&l.stash)
 				{
 					Some(l.active)
 				} else {
@@ -1655,7 +1656,7 @@ impl<T: Config> StakingInterface for Pezpallet<T> {
 		who: &Self::AccountId,
 	) -> Result<pezsp_staking::StakerStatus<Self::AccountId>, DispatchError> {
 		if !StakingLedger::<T>::is_bonded(StakingAccount::Stash(who.clone())) {
-			return Err(Error::<T>::NotStash.into())
+			return Err(Error::<T>::NotStash.into());
 		}
 
 		let is_validator = Validators::<T>::contains_key(&who);
@@ -1680,8 +1681,8 @@ impl<T: Config> StakingInterface for Pezpallet<T> {
 	/// There is an assumption that, this account is keyless and managed by another pezpallet in the
 	/// runtime. Hence, it can never sign its own transactions.
 	fn is_virtual_staker(who: &T::AccountId) -> bool {
-		pezframe_system::Pezpallet::<T>::account_nonce(who).is_zero() &&
-			VirtualStakers::<T>::contains_key(who)
+		pezframe_system::Pezpallet::<T>::account_nonce(who).is_zero()
+			&& VirtualStakers::<T>::contains_key(who)
 	}
 
 	fn slash_reward_fraction() -> Perbill {
@@ -1732,7 +1733,7 @@ impl<T: Config> pezsp_staking::StakingUnchecked for Pezpallet<T> {
 		payee: &Self::AccountId,
 	) -> DispatchResult {
 		if StakingLedger::<T>::is_bonded(StakingAccount::Stash(keyless_who.clone())) {
-			return Err(Error::<T>::AlreadyBonded.into())
+			return Err(Error::<T>::AlreadyBonded.into());
 		}
 
 		// check if payee not same as who.
@@ -1816,9 +1817,11 @@ impl<T: Config> Pezpallet<T> {
 				// if stash == controller, it means that the ledger has migrated to
 				// post-controller. If no migration happened, we expect that the (stash,
 				// controller) pair has only one associated ledger.
+				{
 					if stash != controller {
 						count_double += 1;
-					},
+					}
+				},
 				(None, None) => {
 					count_none += 1;
 				},
@@ -1855,8 +1858,8 @@ impl<T: Config> Pezpallet<T> {
 		}
 
 		ensure!(
-			(Ledger::<T>::iter().count() == Payee::<T>::iter().count()) &&
-				(Ledger::<T>::iter().count() == Bonded::<T>::iter().count()),
+			(Ledger::<T>::iter().count() == Payee::<T>::iter().count())
+				&& (Ledger::<T>::iter().count() == Bonded::<T>::iter().count()),
 			"number of entries in payee storage items does not match the number of bonded ledgers",
 		);
 
@@ -1870,8 +1873,8 @@ impl<T: Config> Pezpallet<T> {
 	/// * Current validator count is bounded by the election provider's max winners.
 	fn check_count() -> Result<(), TryRuntimeError> {
 		ensure!(
-			<T as Config>::VoterList::count() ==
-				Nominators::<T>::count() + Validators::<T>::count(),
+			<T as Config>::VoterList::count()
+				== Nominators::<T>::count() + Validators::<T>::count(),
 			"wrong external count"
 		);
 		ensure!(
@@ -1982,11 +1985,11 @@ impl<T: Config> Pezpallet<T> {
 		ensure!(
 			overview_and_pages.iter().all(|(metadata, pages)| {
 				let page_count_good = metadata.page_count == pages.len() as u32;
-				let nominator_count_good = metadata.nominator_count ==
-					pages.iter().map(|p| p.others.len() as u32).fold(0u32, |acc, x| acc + x);
-				let total_good = metadata.total ==
-					metadata.own +
-						pages
+				let nominator_count_good = metadata.nominator_count
+					== pages.iter().map(|p| p.others.len() as u32).fold(0u32, |acc, x| acc + x);
+				let total_good = metadata.total
+					== metadata.own
+						+ pages
 							.iter()
 							.fold(BalanceOf::<T>::zero(), |acc, page| acc + page.page_total);
 
@@ -1999,8 +2002,8 @@ impl<T: Config> Pezpallet<T> {
 			overview_and_pages
 				.iter()
 				.map(|(metadata, _pages)| metadata.total)
-				.fold(BalanceOf::<T>::zero(), |acc, x| acc + x) ==
-				ErasTotalStake::<T>::get(era),
+				.fold(BalanceOf::<T>::zero(), |acc, x| acc + x)
+				== ErasTotalStake::<T>::get(era),
 			"found bad eras total stake"
 		);
 

@@ -190,7 +190,13 @@ impl pezpallet_nomination_pools::adapter::StakeStrategy for MockAdapter {
 		bond_type: BondType,
 	) -> DispatchResult {
 		if LegacyAdapter::get() {
-			return TransferStake::pledge_bond(who, pool_account, reward_account, amount, bond_type);
+			return TransferStake::pledge_bond(
+				who,
+				pool_account,
+				reward_account,
+				amount,
+				bond_type,
+			);
 		}
 		DelegateStake::pledge_bond(who, pool_account, reward_account, amount, bond_type)
 	}

@@ -35,7 +35,7 @@ fn is_valid_rust_identifier(id: &str) -> Result<(), String> {
 		if ch.is_xid_start() {
 			for ch in id.chars().skip(1) {
 				if !ch.is_xid_continue() {
-					return Err(format!("Invalid char `{ch}` in `{id}`"))
+					return Err(format!("Invalid char `{ch}` in `{id}`"));
 				}
 			}
 			Ok(())
@@ -65,16 +65,16 @@ impl Registry {
                 ));
 			}
 			if account_type.network.is_empty() {
-				return Err("network is mandatory.".into())
+				return Err("network is mandatory.".into());
 			}
 
 			if let Err(err) = is_valid_rust_identifier(&account_type.name()) {
-				return Err(format!("network not valid: {err} for {account_type:#?}"))
+				return Err(format!("network not valid: {err} for {account_type:#?}"));
 			}
 			if account_type.decimals.len() != account_type.symbols.len() {
 				return Err(format!(
 					"decimals must be specified for each symbol: {account_type:?}"
-				))
+				));
 			}
 			for (name, decimals) in account_type.symbols.iter().zip(&account_type.decimals) {
 				use Entry::*;
@@ -87,7 +87,7 @@ impl Registry {
 								name,
 								e.get().networks.join(", "),
 								network,
-							))
+							));
 						}
 						e.get_mut().networks.push(network);
 					},

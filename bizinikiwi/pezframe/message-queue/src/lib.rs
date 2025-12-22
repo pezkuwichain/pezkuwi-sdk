@@ -989,9 +989,9 @@ impl<T: Config> Pezpallet<T> {
 		if let (Some(service_weight), Some(on_idle)) =
 			(T::ServiceWeight::get(), T::IdleMaxServiceWeight::get())
 		{
-			if !(service_weight.all_gt(on_idle) ||
-				on_idle.all_gt(service_weight) ||
-				service_weight == on_idle)
+			if !(service_weight.all_gt(on_idle)
+				|| on_idle.all_gt(service_weight)
+				|| service_weight == on_idle)
 			{
 				return Err("One of `ServiceWeight` or `IdleMaxServiceWeight` needs to be `all_gt` or both need to be equal.".into());
 			}
@@ -1096,8 +1096,8 @@ impl<T: Config> Pezpallet<T> {
 			page.peek_index(index.into() as usize).ok_or(Error::<T>::NoMessage)?;
 		let payload_len = payload.len() as u64;
 		ensure!(
-			page_index < book_state.begin ||
-				(page_index == book_state.begin && pos < page.first.into() as usize),
+			page_index < book_state.begin
+				|| (page_index == book_state.begin && pos < page.first.into() as usize),
 			Error::<T>::Queued
 		);
 		ensure!(!is_processed, Error::<T>::AlreadyProcessed);
@@ -1114,8 +1114,9 @@ impl<T: Config> Pezpallet<T> {
 			// additional overweight event being deposited.
 		) {
 			Overweight | InsufficientWeight => Err(Error::<T>::InsufficientWeight),
-			StackLimitReached | Unprocessable { permanent: false } =>
-				Err(Error::<T>::TemporarilyUnprocessable),
+			StackLimitReached | Unprocessable { permanent: false } => {
+				Err(Error::<T>::TemporarilyUnprocessable)
+			},
 			Unprocessable { permanent: true } | Processed => {
 				page.note_processed_at_pos(pos);
 				book_state.message_count.saturating_dec();
@@ -1657,7 +1658,7 @@ impl<T: Config> Pezpallet<T> {
 				let (progressed, n) =
 					Self::service_queue(next.clone(), &mut weight, overweight_limit);
 				next = match n {
-					Some(n) =>
+					Some(n) => {
 						if !progressed {
 							if last_no_progress == Some(n.clone()) {
 								break;
@@ -1669,7 +1670,8 @@ impl<T: Config> Pezpallet<T> {
 						} else {
 							last_no_progress = None;
 							n
-						},
+						}
+					},
 					None => break,
 				}
 			}
@@ -1780,8 +1782,9 @@ impl<T: Config> ServiceQueues for Pezpallet<T> {
 				Error::<T>::InsufficientWeight => ExecuteOverweightError::InsufficientWeight,
 				Error::<T>::AlreadyProcessed => ExecuteOverweightError::AlreadyProcessed,
 				Error::<T>::QueuePaused => ExecuteOverweightError::QueuePaused,
-				Error::<T>::NoPage | Error::<T>::NoMessage | Error::<T>::Queued =>
-					ExecuteOverweightError::NotFound,
+				Error::<T>::NoPage | Error::<T>::NoMessage | Error::<T>::Queued => {
+					ExecuteOverweightError::NotFound
+				},
 				Error::<T>::RecursiveDisallowed => ExecuteOverweightError::RecursiveDisallowed,
 				_ => ExecuteOverweightError::Other,
 			})

@@ -108,10 +108,12 @@ pub mod pezpallet {
 						max_weight,
 						Weight::zero(),
 					) {
-						Outcome::Error(InstructionError { error, .. }) =>
-							(Err(error), Event::Fail { message_id: Some(hash), error }),
-						Outcome::Complete { used } =>
-							(Ok(used), Event::Success { message_id: Some(hash) }),
+						Outcome::Error(InstructionError { error, .. }) => {
+							(Err(error), Event::Fail { message_id: Some(hash), error })
+						},
+						Outcome::Complete { used } => {
+							(Ok(used), Event::Success { message_id: Some(hash) })
+						},
 						// As far as the caller is concerned, this was dispatched without error, so
 						// we just report the weight used.
 						Outcome::Incomplete {
@@ -167,8 +169,9 @@ pub mod pezpallet {
 						Self::deposit_event(Event::InvalidFormat { message_id: id });
 					},
 					Ok(versioned) => match Xcm::try_from(versioned) {
-						Err(()) =>
-							Self::deposit_event(Event::UnsupportedVersion { message_id: id }),
+						Err(()) => {
+							Self::deposit_event(Event::UnsupportedVersion { message_id: id })
+						},
 						Ok(x) => {
 							let outcome = T::XcmExecutor::prepare_and_execute(
 								Parent,

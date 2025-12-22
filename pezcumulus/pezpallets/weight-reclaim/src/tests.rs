@@ -584,8 +584,8 @@ fn test_series() {
 			block_weight_pre_dispatch: Weight::from_parts(1000, 1000),
 			mock_ext_refund: Weight::from_parts(0, 0),
 			assert_post_info_weight: None,
-			assert_block_weight_post_dispatch: base_extrinsic +
-				Weight::from_parts(1100, 1300 + LEN as u64),
+			assert_block_weight_post_dispatch: base_extrinsic
+				+ Weight::from_parts(1100, 1300 + LEN as u64),
 		},
 		// some tx ext refund is ignored, because post info is None.
 		TestCfg {
@@ -597,8 +597,8 @@ fn test_series() {
 			block_weight_pre_dispatch: Weight::from_parts(1000, 1000),
 			mock_ext_refund: Weight::from_parts(20, 20),
 			assert_post_info_weight: None,
-			assert_block_weight_post_dispatch: base_extrinsic +
-				Weight::from_parts(1100, 1300 + LEN as u64),
+			assert_block_weight_post_dispatch: base_extrinsic
+				+ Weight::from_parts(1100, 1300 + LEN as u64),
 		},
 		// some tx ext refund is ignored on proof size because lower than actual measure.
 		TestCfg {
@@ -610,8 +610,8 @@ fn test_series() {
 			block_weight_pre_dispatch: Weight::from_parts(1000, 1000),
 			mock_ext_refund: Weight::from_parts(20, 20),
 			assert_post_info_weight: Some(Weight::from_parts(80, 300)),
-			assert_block_weight_post_dispatch: base_extrinsic +
-				Weight::from_parts(1080, 1300 + LEN as u64),
+			assert_block_weight_post_dispatch: base_extrinsic
+				+ Weight::from_parts(1080, 1300 + LEN as u64),
 		},
 		// post info doesn't double refund the call and is missing some.
 		TestCfg {
@@ -624,8 +624,8 @@ fn test_series() {
 			mock_ext_refund: Weight::from_parts(20, 20),
 			// 50 are missed in pov because 100 is unspent in post info but it should be only 50.
 			assert_post_info_weight: Some(Weight::from_parts(40, 200)),
-			assert_block_weight_post_dispatch: base_extrinsic +
-				Weight::from_parts(1040, 1250 + LEN as u64),
+			assert_block_weight_post_dispatch: base_extrinsic
+				+ Weight::from_parts(1040, 1250 + LEN as u64),
 		},
 		// post info doesn't double refund the call and is accurate.
 		TestCfg {
@@ -637,8 +637,8 @@ fn test_series() {
 			block_weight_pre_dispatch: Weight::from_parts(1000, 1000),
 			mock_ext_refund: Weight::from_parts(20, 20),
 			assert_post_info_weight: Some(Weight::from_parts(40, 150)),
-			assert_block_weight_post_dispatch: base_extrinsic +
-				Weight::from_parts(1040, 1150 + LEN as u64),
+			assert_block_weight_post_dispatch: base_extrinsic
+				+ Weight::from_parts(1040, 1150 + LEN as u64),
 		},
 		// post info doesn't double refund the call and is accurate. Even if mock ext is refunding
 		// too much.
@@ -651,8 +651,8 @@ fn test_series() {
 			block_weight_pre_dispatch: Weight::from_parts(1000, 1000),
 			mock_ext_refund: Weight::from_parts(20, 300),
 			assert_post_info_weight: Some(Weight::from_parts(40, 150)),
-			assert_block_weight_post_dispatch: base_extrinsic +
-				Weight::from_parts(1040, 1150 + LEN as u64),
+			assert_block_weight_post_dispatch: base_extrinsic
+				+ Weight::from_parts(1040, 1150 + LEN as u64),
 		},
 	];
 
@@ -1034,11 +1034,11 @@ fn test_ref_time_weight_reclaim() {
 			pezframe_system::BlockWeight::<Test>::get()
 				.get(DispatchClass::Normal)
 				.ref_time(),
-			block_pre_dispatch +
-				base_extrinsic.ref_time() +
-				bench_post_dispatch_actual +
-				bench_mock_ext_weight -
-				bench_mock_ext_refund,
+			block_pre_dispatch
+				+ base_extrinsic.ref_time()
+				+ bench_post_dispatch_actual
+				+ bench_mock_ext_weight
+				- bench_mock_ext_refund,
 		);
 		assert_eq!(
 			pezframe_system::ExtrinsicWeightReclaimed::<Test>::get().ref_time(),

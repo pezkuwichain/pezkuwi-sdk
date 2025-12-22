@@ -47,7 +47,9 @@ async fn doesnt_break_teyrchains_test() -> Result<(), anyhow::Error> {
 				// type.
 				.with_validator(|node| node.with_name("validator-0"));
 
-			(1..4).fold(r, |acc, i| acc.with_validator(|node| node.with_name(&format!("validator-{i}"))))
+			(1..4).fold(r, |acc, i| {
+				acc.with_validator(|node| node.with_name(&format!("validator-{i}")))
+			})
 		})
 		.with_teyrchain(|p| {
 			// Use pezkuwichain-teyrchain default, which has 6 second slot time. Also, don't use

@@ -9,6 +9,7 @@ use crate::{
 };
 use futures::stream::{self};
 use futures_util::StreamExt;
+use pezkuwi_subxt::ext::codec::{Decode, Encode};
 use serde::{Deserialize, Serialize};
 use std::{
 	any::Any,
@@ -17,7 +18,6 @@ use std::{
 	sync::atomic::{AtomicUsize, Ordering},
 	time::Duration,
 };
-use pezkuwi_subxt::ext::codec::{Decode, Encode};
 use tokio::task::yield_now;
 use tracing::trace;
 
@@ -319,16 +319,19 @@ impl FakeTransaction {
 		trace!(target:LOG_TARGET, "submit_result: delayed: {:?}", self.hash);
 		match event {
 			TransactionStatus::Finalized(_) => Ok(self.hash),
-			TransactionStatus::Dropped(message) =>
-				Err(Error::Other(format!("submit-error:dropped:{message}").to_string())),
-			TransactionStatus::Invalid(message) =>
-				Err(Error::Other(format!("submit-error:invalid:{message}").to_string())),
-			TransactionStatus::Error(message) =>
-				Err(Error::Other(format!("submit-error:error:{message}").to_string())),
-			TransactionStatus::Validated |
-			TransactionStatus::NoLongerInBestBlock |
-			TransactionStatus::Broadcasted |
-			TransactionStatus::InBlock(_) => todo!(),
+			TransactionStatus::Dropped(message) => {
+				Err(Error::Other(format!("submit-error:dropped:{message}").to_string()))
+			},
+			TransactionStatus::Invalid(message) => {
+				Err(Error::Other(format!("submit-error:invalid:{message}").to_string()))
+			},
+			TransactionStatus::Error(message) => {
+				Err(Error::Other(format!("submit-error:error:{message}").to_string()))
+			},
+			TransactionStatus::Validated
+			| TransactionStatus::NoLongerInBestBlock
+			| TransactionStatus::Broadcasted
+			| TransactionStatus::InBlock(_) => todo!(),
 		}
 	}
 }

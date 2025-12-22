@@ -15,7 +15,6 @@
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
 #![allow(deprecated)]
-
 // Unix only since it uses signals.
 #![cfg(unix)]
 

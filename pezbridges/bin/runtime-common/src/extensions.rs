@@ -174,8 +174,8 @@ where
 		// we are only interested in associated pezpallet submissions
 		let Some(update) = maybe_update else { return };
 		// we are only interested in failed or unneeded transactions
-		let has_failed = has_failed ||
-			!SubmitTeyrchainHeadsHelper::<T, TeyrchainsInstance>::was_successful(&update);
+		let has_failed = has_failed
+			|| !SubmitTeyrchainHeadsHelper::<T, TeyrchainsInstance>::was_successful(&update);
 
 		if !has_failed {
 			return;

@@ -8,7 +8,7 @@ use std::time::Duration;
 use crate::utils::initialize_network;
 
 use pezcumulus_zombienet_sdk_helpers::{
-	assert_para_throughput, assign_cores, runtime_upgrade, wait_for_upgrade, 
+	assert_para_throughput, assign_cores, runtime_upgrade, wait_for_upgrade,
 };
 use pezkuwi_primitives::Id as ParaId;
 use rstest::rstest;

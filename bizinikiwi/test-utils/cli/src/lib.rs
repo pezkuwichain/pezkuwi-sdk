@@ -44,8 +44,7 @@ fn bizinikiwi_node_path() -> PathBuf {
 	}
 
 	// Fall back to finding in target directory
-	let target_dir =
-		std::env::var("CARGO_TARGET_DIR").unwrap_or_else(|_| "target".to_string());
+	let target_dir = std::env::var("CARGO_TARGET_DIR").unwrap_or_else(|_| "target".to_string());
 	let profile = if cfg!(debug_assertions) { "debug" } else { "release" };
 	PathBuf::from(target_dir).join(profile).join("bizinikiwi-node")
 }
@@ -285,8 +284,9 @@ pub async fn block_hash(block_number: u64, url: &str) -> Result<Hash, String> {
 	.map_err(|_| "Couldn't get block hash".to_string())?;
 
 	match result {
-		ListOrValue::Value(maybe_block_hash) if maybe_block_hash.is_some() =>
-			Ok(maybe_block_hash.unwrap()),
+		ListOrValue::Value(maybe_block_hash) if maybe_block_hash.is_some() => {
+			Ok(maybe_block_hash.unwrap())
+		},
 		_ => Err("Couldn't get block hash".to_string()),
 	}
 }

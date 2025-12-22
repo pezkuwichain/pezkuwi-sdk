@@ -450,10 +450,12 @@ pub fn build_full<OverseerGenerator: OverseerGen>(
 		});
 
 	match config.network.network_backend {
-		pezsc_network::config::NetworkBackendType::Libp2p =>
-			new_full::<_, pezsc_network::NetworkWorker<Block, Hash>>(config, params),
-		pezsc_network::config::NetworkBackendType::Litep2p =>
-			new_full::<_, pezsc_network::Litep2pNetworkBackend>(config, params),
+		pezsc_network::config::NetworkBackendType::Libp2p => {
+			new_full::<_, pezsc_network::NetworkWorker<Block, Hash>>(config, params)
+		},
+		pezsc_network::config::NetworkBackendType::Litep2p => {
+			new_full::<_, pezsc_network::Litep2pNetworkBackend>(config, params)
+		},
 	}
 }
 

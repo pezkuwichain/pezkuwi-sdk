@@ -303,7 +303,7 @@ where
 	}
 
 	match wasm_method {
-		WasmExecutionMethod::Compiled { instantiation_strategy } =>
+		WasmExecutionMethod::Compiled { instantiation_strategy } => {
 			pezsc_executor_wasmtime::create_runtime::<H>(
 				blob,
 				pezsc_executor_wasmtime::Config {
@@ -322,7 +322,8 @@ where
 					},
 				},
 			)
-			.map(|runtime| -> Box<dyn WasmModule> { Box::new(runtime) }),
+			.map(|runtime| -> Box<dyn WasmModule> { Box::new(runtime) })
+		},
 	}
 }
 

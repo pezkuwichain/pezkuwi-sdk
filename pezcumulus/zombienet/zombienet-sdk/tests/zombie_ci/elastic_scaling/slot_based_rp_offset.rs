@@ -44,7 +44,9 @@ async fn elastic_scaling_slot_based_relay_parent_offset_test() -> Result<(), any
 				// type.
 				.with_validator(|node| node.with_name("validator-0"));
 
-			(1..6).fold(r, |acc, i| acc.with_validator(|node| node.with_name(&format!("validator-{i}"))))
+			(1..6).fold(r, |acc, i| {
+				acc.with_validator(|node| node.with_name(&format!("validator-{i}")))
+			})
 		})
 		.with_teyrchain(|p| {
 			p.with_id(2400)

@@ -6,7 +6,7 @@ use tokio::time::Duration;
 
 use crate::utils::initialize_network;
 
-use pezcumulus_zombienet_sdk_helpers::{wait_for_nth_session_change};
+use pezcumulus_zombienet_sdk_helpers::wait_for_nth_session_change;
 use zombienet_orchestrator::network::node::LogLineCountOptions;
 use zombienet_sdk::{
 	subxt::{OnlineClient, PezkuwiConfig},
@@ -30,7 +30,9 @@ async fn build_network_config() -> Result<NetworkConfig, anyhow::Error> {
 				// Have to set a `with_node` outside of the loop below, so that `r` has the right
 				// type.
 				.with_validator(|node| node.with_name("validator-0"));
-			(1..3).fold(r, |acc, i| acc.with_validator(|node| node.with_name(&format!("validator-{i}"))))
+			(1..3).fold(r, |acc, i| {
+				acc.with_validator(|node| node.with_name(&format!("validator-{i}")))
+			})
 		})
 		.with_teyrchain(|p| {
 			p.with_id(1000)

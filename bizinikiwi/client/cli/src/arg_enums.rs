@@ -79,14 +79,18 @@ pub fn execution_method_from_cli(
 
 	pezsc_service::config::WasmExecutionMethod::Compiled {
 		instantiation_strategy: match instantiation_strategy {
-			WasmtimeInstantiationStrategy::PoolingCopyOnWrite =>
-				pezsc_service::config::WasmtimeInstantiationStrategy::PoolingCopyOnWrite,
-			WasmtimeInstantiationStrategy::RecreateInstanceCopyOnWrite =>
-				pezsc_service::config::WasmtimeInstantiationStrategy::RecreateInstanceCopyOnWrite,
-			WasmtimeInstantiationStrategy::Pooling =>
-				pezsc_service::config::WasmtimeInstantiationStrategy::Pooling,
-			WasmtimeInstantiationStrategy::RecreateInstance =>
-				pezsc_service::config::WasmtimeInstantiationStrategy::RecreateInstance,
+			WasmtimeInstantiationStrategy::PoolingCopyOnWrite => {
+				pezsc_service::config::WasmtimeInstantiationStrategy::PoolingCopyOnWrite
+			},
+			WasmtimeInstantiationStrategy::RecreateInstanceCopyOnWrite => {
+				pezsc_service::config::WasmtimeInstantiationStrategy::RecreateInstanceCopyOnWrite
+			},
+			WasmtimeInstantiationStrategy::Pooling => {
+				pezsc_service::config::WasmtimeInstantiationStrategy::Pooling
+			},
+			WasmtimeInstantiationStrategy::RecreateInstance => {
+				pezsc_service::config::WasmtimeInstantiationStrategy::RecreateInstance
+			},
 		},
 	}
 }

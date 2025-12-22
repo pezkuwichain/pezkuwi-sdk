@@ -259,7 +259,10 @@ impl CallDef {
 		let item_impl = if let syn::Item::Impl(item) = item {
 			item
 		} else {
-			return Err(syn::Error::new(item.span(), "Invalid pezpallet::call, expected item impl"));
+			return Err(syn::Error::new(
+				item.span(),
+				"Invalid pezpallet::call, expected item impl",
+			));
 		};
 
 		crate::deprecation::prevent_deprecation_attr_on_outer_enum(&item_impl.attrs)?;
@@ -406,11 +409,12 @@ impl CallDef {
 
 				let final_index = match call_index {
 					Some(i) => i,
-					None =>
+					None => {
 						last_index.map_or(Some(0), |idx| idx.checked_add(1)).ok_or_else(|| {
 							let msg = "Call index doesn't fit into u8, index is 256";
 							syn::Error::new(method.sig.span(), msg)
-						})?,
+						})?
+					},
 				};
 				last_index = Some(final_index);
 
