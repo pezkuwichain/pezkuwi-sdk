@@ -31,6 +31,7 @@ log = { workspace = true }
 pezkuwi-subxt = { workspace = true, default-features = true, features = [
 	"reconnecting-rpc-client",
 ] }
+pezkuwi-subxt-signer = { workspace = true, features = ["unstable-eth"] }
 pezpallet-revive = { workspace = true, default-features = true }
 pezsc-cli = { workspace = true, default-features = true }
 pezsc-rpc = { workspace = true, default-features = true }
@@ -51,7 +52,6 @@ serde = { workspace = true, default-features = true, features = [
 ] }
 serde_json = { workspace = true }
 sqlx = { workspace = true, features = ["macros", "runtime-tokio", "sqlite"] }
-pezkuwi-subxt-signer = { workspace = true, features = ["unstable-eth"] }
 thiserror = { workspace = true }
 tokio = { workspace = true, features = ["full"] }
 

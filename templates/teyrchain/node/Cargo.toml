@@ -48,8 +48,10 @@ std = [
 runtime-benchmarks = [
 	"pezkuwi-sdk/runtime-benchmarks",
 	"teyrchain-template-runtime/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks"
 ]
 try-runtime = [
 	"pezkuwi-sdk/try-runtime",
 	"teyrchain-template-runtime/try-runtime",
+	"pezsp-runtime/try-runtime"
 ]

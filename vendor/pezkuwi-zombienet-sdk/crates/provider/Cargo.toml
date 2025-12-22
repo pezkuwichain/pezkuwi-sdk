@@ -1,0 +1,47 @@
+[package]
+name = "zombienet-provider"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish = true
+license.workspace = true
+repository.workspace = true
+description = "Zombienet provider, implement the logic to run the nodes in the native provider"
+keywords = ["zombienet", "provider", "native"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+async-trait = { workspace = true }
+futures = { workspace = true }
+serde = { workspace = true, features = ["derive", "rc"] }
+serde_json = { workspace = true }
+serde_yaml = { workspace = true }
+tokio = { workspace = true, features = [
+    "process",
+    "macros",
+    "fs",
+    "time",
+    "rt",
+] }
+tokio-util = { workspace = true, features = ["compat"] }
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+uuid = { workspace = true, features = ["v4"] }
+nix = { workspace = true, features = ["signal"] }
+kube = { workspace = true, features = ["ws", "runtime"] }
+k8s-openapi = { workspace = true, features = ["v1_27"] }
+tar = { workspace = true }
+sha2 = { workspace = true }
+hex = { workspace = true }
+tracing = { workspace = true }
+reqwest = { workspace = true }
+regex = { workspace = true }
+url = { workspace = true }
+flate2 = { workspace = true }
+erased-serde = { workspace = true }
+
+# Zomebienet deps
+support = { workspace = true }
+configuration = { workspace = true }

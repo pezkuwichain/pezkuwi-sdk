@@ -685,6 +685,7 @@ try-runtime = [
 	"pezpallet-xcm?/try-runtime",
 	"pezstaging-teyrchain-info?/try-runtime",
 	"teyrchains-common?/try-runtime",
+	"pezsp-runtime?/try-runtime"
 ]
 serde = [
 	"bp-pezkuwi-core?/serde",
@@ -723,6 +724,7 @@ serde = [
 	"pezsp-storage?/serde",
 	"pezsp-version?/serde",
 	"pezsp-weights?/serde",
+	"pezsp-runtime?/serde"
 ]
 experimental = [
 	"pezframe-support-procedural?/experimental",

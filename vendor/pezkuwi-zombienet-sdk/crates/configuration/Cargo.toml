@@ -1,0 +1,29 @@
+[package]
+name = "zombienet-configuration"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish = true
+license.workspace = true
+repository.workspace = true
+description = "Zombienet sdk config builder, allow to build a network configuration"
+keywords = ["zombienet", "configuration", "sdk"]
+
+[dependencies]
+regex = { workspace = true }
+lazy_static = { workspace = true }
+multiaddr = { workspace = true }
+url = { workspace = true, features = ["serde"] }
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+serde = { workspace = true, features = ["derive"] }
+toml = { workspace = true }
+serde_json = { workspace = true }
+reqwest = { workspace = true }
+tokio = { workspace = true, features = ["fs"] }
+tracing = { workspace = true }
+
+# zombienet deps
+support = { workspace = true }
+

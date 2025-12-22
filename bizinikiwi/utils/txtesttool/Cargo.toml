@@ -30,13 +30,13 @@ jsonrpsee = { workspace = true, features = [
 	"jsonrpsee-types",
 ] }
 parking_lot = { workspace = true, default-features = true }
-rand = { workspace = true, default-features = true }
-serde = { workspace = true, default-features = true }
-serde_json = { workspace = true, features = ["arbitrary_precision"] }
 pezkuwi-subxt = { workspace = true, default-features = true }
 pezkuwi-subxt-core = { workspace = true, default-features = true }
 pezkuwi-subxt-rpcs = { workspace = true, default-features = true }
-pezkuwi-subxt-signer = { workspace = true, features = ["unstable-eth", "sr25519", "subxt"] }
+pezkuwi-subxt-signer = { workspace = true, features = ["sr25519", "subxt", "unstable-eth"] }
+rand = { workspace = true, default-features = true }
+serde = { workspace = true, default-features = true }
+serde_json = { workspace = true, features = ["arbitrary_precision"] }
 termplot = "0.1.1"
 thiserror = { workspace = true }
 time = { version = "0.3.36", features = [
