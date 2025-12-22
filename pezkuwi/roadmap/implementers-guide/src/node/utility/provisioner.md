@@ -43,7 +43,7 @@ action by several validators. The canonical example of a dispute inherent involv
 a set of validators has improperly approved an invalid teyrchain block: resolving this requires the entire validator set
 to re-validate the block, so that the minority can be slashed.
 
-Dispute resolution is complex and is explained in substantially more detail [here](../../runtime/disputes.md).
+Dispute resolution is complex and is explained in substantially more detail [the disputes documentation](../../runtime/disputes.md).
 
 ## Protocol
 

@@ -129,7 +129,7 @@ Chain syncing will utilize all available memory and CPU power your server has to
 
 If running on a low resource VPS, use `--memory` and `--cpus` to limit the resources used. E.g. To allow a maximum of
 512MB memory and 50% of 1 CPU, use `--cpus=".5" --memory="512m"`. Read more about limiting a container's resources
-[here](https://docs.docker.com/config/containers/resource_constraints).
+[Docker resource constraints documentation](https://docs.docker.com/config/containers/resource_constraints).
 
 
 ## Build your own image

@@ -8,7 +8,7 @@ machine. It can also be setup as [pre-commit hook](https://github.com/igorshubov
 to ensure that your markdown is passing all the tests.
 
 The rules in place are defined
-[here](https://github.com/pezkuwichain/pezkuwi-sdk/blob/master/.github/.markdownlint.yaml).
+[the markdownlint configuration](https://github.com/pezkuwichain/pezkuwi-sdk/blob/master/.github/.markdownlint.yaml).
 
 You may run `markdownlint` locally using:
 ```

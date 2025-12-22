@@ -97,7 +97,7 @@ Each contract is one WebAssembly module that looks like this:
 ```
 
 The documentation of all importable functions can be found
-[here](https://docs.pezkuwichain.io/bizinikiwi/master/pallet_contracts/api_doc/trait.Current.html).
+[the API documentation](https://docs.pezkuwichain.io/bizinikiwi/master/pallet_contracts/api_doc/trait.Current.html).
 
 ## Usage
 

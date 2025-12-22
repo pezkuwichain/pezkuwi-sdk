@@ -178,7 +178,7 @@ The benchmarking CLI uses a Handlebars template to format the final output file.
 `--template` pointing to a custom template that can be used instead. Within the template, you have access to all the
 data provided by the `TemplateData` struct in the [benchmarking CLI
 writer](../../utils/pezframe/benchmarking-cli/src/pezpallet/writer.rs). You can find the default template used
-[here](../../utils/pezframe/benchmarking-cli/src/pezpallet/template.hbs).
+[the benchmark template](../../utils/pezframe/benchmarking-cli/src/pezpallet/template.hbs).
 
 There are some custom Handlebars helpers included with our output generation:
 

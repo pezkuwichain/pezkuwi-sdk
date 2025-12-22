@@ -8,7 +8,7 @@
 ⚙️ It acts as a remote procedure call (RPC) server, allowing interaction with the blockchain.
 
 👉 Learn more about the architecture, and the difference between a node and a runtime
-[here](https://docs.pezkuwichain.io/sdk/master/polkadot_sdk_docs/reference_docs/wasm_meta_protocol/index.html).
+[the Wasm meta protocol documentation](https://docs.pezkuwichain.io/sdk/master/polkadot_sdk_docs/reference_docs/wasm_meta_protocol/index.html).
 
 👇 Here are the most important files in this node template:
 

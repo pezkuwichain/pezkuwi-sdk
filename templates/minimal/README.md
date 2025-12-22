@@ -140,8 +140,7 @@ Previously minimal template's development chains:
 
 - 🧑‍🏫 To learn about PezkuwiChain in general, [docs.PezkuwiChain.com](https://docs.pezkuwichain.app/) website is a good starting point.
 
-- 🧑‍🔧 For technical introduction, [here](https://github.com/pezkuwichain/pezkuwi-sdk#-documentation) are
-the Pezkuwi SDK documentation resources.
+- 🧑‍🔧 For technical introduction, see the [Pezkuwi SDK documentation](https://github.com/pezkuwichain/pezkuwi-sdk#-documentation).
 
 - 👥 Additionally, there are [GitHub issues](https://github.com/pezkuwichain/pezkuwi-sdk/issues) and
 [Bizinikiwi StackExchange](https://pezkuwichain.app/community/).
