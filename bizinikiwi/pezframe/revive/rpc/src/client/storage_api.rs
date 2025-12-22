@@ -28,7 +28,10 @@ use pezsp_core::H256;
 
 /// A wrapper around the Bizinikiwi Storage API.
 #[derive(Clone)]
-pub struct StorageApi(StorageClientAt<SrcChainConfig, OnlineClient<SrcChainConfig>>, #[expect(dead_code)] H256);
+pub struct StorageApi(
+	StorageClientAt<SrcChainConfig, OnlineClient<SrcChainConfig>>,
+	#[expect(dead_code)] H256,
+);
 
 impl StorageApi {
 	/// Create a new instance of the StorageApi.

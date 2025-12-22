@@ -116,7 +116,7 @@ use anyhow::anyhow;
 use pezkuwi_primitives::Id as ParaId;
 
 use crate::utils::{initialize_network, BEST_BLOCK_METRIC};
-use pezcumulus_zombienet_sdk_helpers::{assert_para_is_registered};
+use pezcumulus_zombienet_sdk_helpers::assert_para_is_registered;
 use zombienet_sdk::{
 	subxt::{OnlineClient, PezkuwiConfig},
 	NetworkConfig, NetworkConfigBuilder,
@@ -180,8 +180,12 @@ async fn build_network_config() -> Result<NetworkConfig, anyhow::Error> {
 				.with_default_image(images.polkadot.as_str())
 				.with_chain_spec_path("tests/zombie_ci/warp-sync-relaychain-spec.json")
 				.with_default_args(vec![("-lteyrchain=debug").into()])
-				.with_validator(|node| node.with_name("alice").with_db_snapshot(DB_SNAPSHOT_RELAYCHAIN))
-				.with_validator(|node| node.with_name("bob").with_db_snapshot(DB_SNAPSHOT_RELAYCHAIN))
+				.with_validator(|node| {
+					node.with_name("alice").with_db_snapshot(DB_SNAPSHOT_RELAYCHAIN)
+				})
+				.with_validator(|node| {
+					node.with_name("bob").with_db_snapshot(DB_SNAPSHOT_RELAYCHAIN)
+				})
 				.with_validator(|node| {
 					node.with_name("charlie").with_db_snapshot(DB_SNAPSHOT_RELAYCHAIN)
 				})

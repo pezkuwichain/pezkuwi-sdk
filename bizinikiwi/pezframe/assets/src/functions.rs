@@ -160,8 +160,8 @@ impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 			if amount < details.min_balance {
 				return DepositConsequence::BelowMinimum;
 			}
-			if !details.is_sufficient &&
-				!pezframe_system::Pezpallet::<T>::can_accrue_consumers(who, 2)
+			if !details.is_sufficient
+				&& !pezframe_system::Pezpallet::<T>::can_accrue_consumers(who, 2)
 			{
 				return DepositConsequence::CannotCreate;
 			}
@@ -209,7 +209,7 @@ impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 				T::Holder::balance_on_hold(id.clone(), who),
 				T::Freezer::frozen_balance(id.clone(), who),
 			) {
-				(None, None) =>
+				(None, None) => {
 					if rest < details.min_balance {
 						if keep_alive {
 							WouldDie
@@ -218,7 +218,8 @@ impl<T: Config<I>, I: 'static> Pezpallet<T, I> {
 						}
 					} else {
 						Success
-					},
+					}
+				},
 				(maybe_held, maybe_frozen) => {
 					let frozen = maybe_frozen.unwrap_or_default();
 					let held = maybe_held.unwrap_or_default();

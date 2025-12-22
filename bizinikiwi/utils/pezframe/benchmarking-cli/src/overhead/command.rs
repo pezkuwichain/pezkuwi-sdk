@@ -42,6 +42,7 @@ use genesis_state::WARN_SPEC_GENESIS_CTOR;
 use log::info;
 use pezcumulus_client_teyrchain_inherent::MockValidationDataInherentDataProvider;
 use pezframe_support::Deserialize;
+use pezkuwi_subxt::{client::RuntimeVersion, ext::futures, Metadata};
 use pezkuwi_teyrchain_primitives::primitives::Id as ParaId;
 use pezsc_block_builder::BlockBuilderApi;
 use pezsc_chain_spec::{ChainSpec, ChainSpecExtension, GenesisBlockBuilder};
@@ -70,7 +71,6 @@ use std::{
 	path::PathBuf,
 	sync::Arc,
 };
-use pezkuwi_subxt::{client::RuntimeVersion, ext::futures, Metadata};
 
 const DEFAULT_PARA_ID: u32 = 100;
 const LOG_TARGET: &'static str = "pezkuwi_sdk_frame::benchmark::overhead";
@@ -273,8 +273,9 @@ impl OverheadCmd {
 		chain_spec_from_api: Option<Box<dyn ChainSpec>>,
 	) -> Result<(GenesisStateHandler, Option<u32>)> {
 		let genesis_builder_to_source = || match self.params.genesis_builder {
-			Some(GenesisBuilderPolicy::Runtime) | Some(GenesisBuilderPolicy::SpecRuntime) =>
-				SpecGenesisSource::Runtime(self.params.genesis_builder_preset.clone()),
+			Some(GenesisBuilderPolicy::Runtime) | Some(GenesisBuilderPolicy::SpecRuntime) => {
+				SpecGenesisSource::Runtime(self.params.genesis_builder_preset.clone())
+			},
 			Some(GenesisBuilderPolicy::SpecGenesis) | None => {
 				log::warn!(target: LOG_TARGET, "{WARN_SPEC_GENESIS_CTOR}");
 				SpecGenesisSource::SpecJson
@@ -328,9 +329,9 @@ impl OverheadCmd {
 		&self,
 		chain_spec: &Option<Box<dyn ChainSpec>>,
 	) -> std::result::Result<(), (ErrorKind, String)> {
-		if chain_spec.is_none() &&
-			self.params.runtime.is_none() &&
-			self.shared_params.chain.is_none()
+		if chain_spec.is_none()
+			&& self.params.runtime.is_none()
+			&& self.shared_params.chain.is_none()
 		{
 			return Err((
 				ErrorKind::MissingRequiredArgument,
@@ -340,13 +341,14 @@ impl OverheadCmd {
 		}
 
 		match self.params.genesis_builder {
-			Some(GenesisBuilderPolicy::SpecGenesis | GenesisBuilderPolicy::SpecRuntime) =>
+			Some(GenesisBuilderPolicy::SpecGenesis | GenesisBuilderPolicy::SpecRuntime) => {
 				if chain_spec.is_none() && self.shared_params.chain.is_none() {
 					return Err((
 						ErrorKind::MissingRequiredArgument,
 						"Provide a chain spec via `--chain`.".to_string(),
 					));
-				},
+				}
+			},
 			_ => {},
 		};
 		Ok(())
@@ -414,8 +416,9 @@ impl OverheadCmd {
 		// If we are dealing  with a teyrchain, make sure that the para id in genesis will
 		// match what we expect.
 		let genesis_patcher = match chain_type {
-			Teyrchain(para_id) =>
-				Some(Box::new(move |value| patch_genesis(value, Some(para_id))) as Box<_>),
+			Teyrchain(para_id) => {
+				Some(Box::new(move |value| patch_genesis(value, Some(para_id))) as Box<_>)
+			},
 			_ => None,
 		};
 

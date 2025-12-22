@@ -1321,12 +1321,12 @@ impl InstanceFilter<RuntimeCall> for ProxyType {
 			ProxyType::Staking => {
 				matches!(
 					c,
-					RuntimeCall::Staking(..) |
-						RuntimeCall::Session(..) |
-						RuntimeCall::Utility(..) |
-						RuntimeCall::FastUnstake(..) |
-						RuntimeCall::VoterList(..) |
-						RuntimeCall::NominationPools(..)
+					RuntimeCall::Staking(..)
+						| RuntimeCall::Session(..)
+						| RuntimeCall::Utility(..)
+						| RuntimeCall::FastUnstake(..)
+						| RuntimeCall::VoterList(..)
+						| RuntimeCall::NominationPools(..)
 				)
 			},
 			ProxyType::NominationPools => {
@@ -1342,33 +1342,33 @@ impl InstanceFilter<RuntimeCall> for ProxyType {
 			ProxyType::Governance => matches!(
 				c,
 				// OpenGov calls
-				RuntimeCall::ConvictionVoting(..) |
-					RuntimeCall::Referenda(..) |
-					RuntimeCall::Whitelist(..)
+				RuntimeCall::ConvictionVoting(..)
+					| RuntimeCall::Referenda(..)
+					| RuntimeCall::Whitelist(..)
 			),
 			ProxyType::IdentityJudgement => matches!(
 				c,
-				RuntimeCall::Identity(pezpallet_identity::Call::provide_judgement { .. }) |
-					RuntimeCall::Utility(..)
+				RuntimeCall::Identity(pezpallet_identity::Call::provide_judgement { .. })
+					| RuntimeCall::Utility(..)
 			),
 			ProxyType::CancelProxy => {
 				matches!(c, RuntimeCall::Proxy(pezpallet_proxy::Call::reject_announcement { .. }))
 			},
 			ProxyType::Auction => matches!(
 				c,
-				RuntimeCall::Auctions(..) |
-					RuntimeCall::Crowdloan(..) |
-					RuntimeCall::Registrar(..) |
-					RuntimeCall::Slots(..)
+				RuntimeCall::Auctions(..)
+					| RuntimeCall::Crowdloan(..)
+					| RuntimeCall::Registrar(..)
+					| RuntimeCall::Slots(..)
 			),
 			ProxyType::ParaRegistration => matches!(
 				c,
-				RuntimeCall::Registrar(paras_registrar::Call::reserve { .. }) |
-					RuntimeCall::Registrar(paras_registrar::Call::register { .. }) |
-					RuntimeCall::Utility(pezpallet_utility::Call::batch { .. }) |
-					RuntimeCall::Utility(pezpallet_utility::Call::batch_all { .. }) |
-					RuntimeCall::Utility(pezpallet_utility::Call::force_batch { .. }) |
-					RuntimeCall::Proxy(pezpallet_proxy::Call::remove_proxy { .. })
+				RuntimeCall::Registrar(paras_registrar::Call::reserve { .. })
+					| RuntimeCall::Registrar(paras_registrar::Call::register { .. })
+					| RuntimeCall::Utility(pezpallet_utility::Call::batch { .. })
+					| RuntimeCall::Utility(pezpallet_utility::Call::batch_all { .. })
+					| RuntimeCall::Utility(pezpallet_utility::Call::force_batch { .. })
+					| RuntimeCall::Proxy(pezpallet_proxy::Call::remove_proxy { .. })
 			),
 		}
 	}

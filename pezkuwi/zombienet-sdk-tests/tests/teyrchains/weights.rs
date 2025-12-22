@@ -1,9 +1,7 @@
 // Copyright (C) Parity Technologies (UK) Ltd.
 // SPDX-License-Identifier: Apache-2.0
 
-#[pezkuwi_subxt::subxt(
-	runtime_metadata_path = "metadata-files/asset-hub-zagros-local.scale"
-)]
+#[pezkuwi_subxt::subxt(runtime_metadata_path = "metadata-files/asset-hub-zagros-local.scale")]
 mod ahw {}
 
 use ahw::runtime_types::{
@@ -14,14 +12,14 @@ use anyhow::anyhow;
 use asset_hub_zagros_runtime::Runtime as AHWRuntime;
 use ethabi::Token;
 use futures::{stream::FuturesUnordered, StreamExt};
-use pezpallet_revive::AddressMapper;
-use pezsp_core::{H160, H256};
-use rand::Rng;
-use std::str::FromStr;
 use pezkuwi_subxt::{
 	config::pezkuwi::PezkuwiExtrinsicParamsBuilder, tx::SubmittableTransaction, OnlineClient,
 	PezkuwiConfig,
 };
+use pezpallet_revive::AddressMapper;
+use pezsp_core::{H160, H256};
+use rand::Rng;
+use std::str::FromStr;
 use zombienet_sdk::{
 	subxt_signer::{
 		sr25519::{dev, Keypair},
@@ -29,7 +27,6 @@ use zombienet_sdk::{
 	},
 	LocalFileSystem, Network, NetworkConfigBuilder, NetworkNode,
 };
-
 
 const KEYS_COUNT: usize = 6000;
 const CHUNK_SIZE: usize = 3000;
@@ -214,7 +211,7 @@ fn create_keys(n: usize) -> Vec<Keypair> {
 
 fn tx_params<T: pezkuwi_subxt::Config>(
 	nonce: u64,
-) -> <pezkuwi_subxt::config::DefaultExtrinsicParams<T> as pezkuwi_subxt::config::ExtrinsicParams<T>>::Params {
+) -> <pezkuwi_subxt::config::DefaultExtrinsicParams<T> as pezkuwi_subxt::config::ExtrinsicParams<T>>::Params{
 	PezkuwiExtrinsicParamsBuilder::<T>::new().nonce(nonce).build()
 }
 
@@ -356,9 +353,7 @@ async fn call_contract(
 	let finalized_blocks = submit_txs(txs).await?;
 	for block in finalized_blocks {
 		let storage_at = client.storage().at(block);
-		let weight = storage_at
-			.fetch(&ahw::storage().system().block_weight(), ())
-			.await?;
+		let weight = storage_at.fetch(&ahw::storage().system().block_weight(), ()).await?;
 		log::info!("Weight of block {block:?}: {weight:?}");
 	}
 
@@ -379,15 +374,21 @@ async fn submit_txs(
 			Ok(st) => match st {
 				pezkuwi_subxt::tx::TxStatus::Validated => log::trace!("VALIDATED"),
 				pezkuwi_subxt::tx::TxStatus::Broadcasted => log::trace!("BROADCASTED"),
-				pezkuwi_subxt::tx::TxStatus::NoLongerInBestBlock => log::warn!("NO LONGER IN BEST BLOCK"),
+				pezkuwi_subxt::tx::TxStatus::NoLongerInBestBlock => {
+					log::warn!("NO LONGER IN BEST BLOCK")
+				},
 				pezkuwi_subxt::tx::TxStatus::InBestBlock(_) => log::trace!("IN BEST BLOCK"),
 				pezkuwi_subxt::tx::TxStatus::InFinalizedBlock(block) => {
 					log::trace!("IN FINALIZED BLOCK");
 					finalized_blocks.insert(block.block_hash());
 				},
 				pezkuwi_subxt::tx::TxStatus::Error { message } => log::warn!("ERROR: {message}"),
-				pezkuwi_subxt::tx::TxStatus::Invalid { message } => log::trace!("INVALID: {message}"),
-				pezkuwi_subxt::tx::TxStatus::Dropped { message } => log::trace!("DROPPED: {message}"),
+				pezkuwi_subxt::tx::TxStatus::Invalid { message } => {
+					log::trace!("INVALID: {message}")
+				},
+				pezkuwi_subxt::tx::TxStatus::Dropped { message } => {
+					log::trace!("DROPPED: {message}")
+				},
 			},
 			Err(e) => {
 				println!("Error status {e:?}");

@@ -157,8 +157,9 @@ pub mod pezpallet {
 			let config = configuration::ActiveConfig::<T>::get();
 			dmp::Pezpallet::<T>::queue_downward_message(&config, id, xcm.encode()).map_err(|e| {
 				match e {
-					dmp::QueueDownwardMessageError::ExceedsMaxMessageSize =>
-						Error::<T>::ExceedsMaxMessageSize.into(),
+					dmp::QueueDownwardMessageError::ExceedsMaxMessageSize => {
+						Error::<T>::ExceedsMaxMessageSize.into()
+					},
 					dmp::QueueDownwardMessageError::Unroutable => Error::<T>::Unroutable.into(),
 				}
 			})

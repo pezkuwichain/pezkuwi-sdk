@@ -30,14 +30,10 @@ mod imports {
 		asset_hub_pezkuwichain_emulated_chain::genesis::ED as ASSET_HUB_PEZKUWICHAIN_ED,
 		coretime_pezkuwichain_emulated_chain::{
 			coretime_pezkuwichain_runtime::ExistentialDeposit as CoretimePezkuwichainExistentialDeposit,
-			genesis::ED as CORETIME_PEZKUWICHAIN_ED,
-			CoretimePezkuwichainParaPezpallet,
+			genesis::ED as CORETIME_PEZKUWICHAIN_ED, CoretimePezkuwichainParaPezpallet,
 			CoretimePezkuwichainParaPezpallet as CoretimePezkuwichainPallet,
 		},
-		pezkuwichain_emulated_chain::{
-			genesis::ED as PEZKUWICHAIN_ED,
-			PezkuwichainRelayPezpallet,
-		},
+		pezkuwichain_emulated_chain::{genesis::ED as PEZKUWICHAIN_ED, PezkuwichainRelayPezpallet},
 		AssetHubPezkuwichainPara as AssetHubPezkuwichain,
 		AssetHubPezkuwichainParaReceiver as AssetHubPezkuwichainReceiver,
 		AssetHubPezkuwichainParaSender as AssetHubPezkuwichainSender,

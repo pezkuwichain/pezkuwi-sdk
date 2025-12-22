@@ -18,12 +18,12 @@
 
 use codec::Decode;
 use pezcumulus_client_service::TeyrchainHostFunctions;
+use pezkuwi_subxt_metadata::Metadata;
 use pezsc_chain_spec::ChainSpec;
 use pezsc_executor::WasmExecutor;
 use pezsc_runtime_utilities::fetch_latest_metadata_from_code_blob;
 use scale_info::{form::PortableForm, TypeDef, TypeDefPrimitive};
 use std::fmt::Display;
-use pezkuwi_subxt_metadata::Metadata;
 
 /// Expected teyrchain system pezpallet runtime type name.
 pub const DEFAULT_TEYRCHAIN_SYSTEM_PALLET_NAME: &str = "TeyrchainSystem";

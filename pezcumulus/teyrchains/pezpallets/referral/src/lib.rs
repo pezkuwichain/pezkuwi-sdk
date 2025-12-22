@@ -266,8 +266,8 @@ pub mod pezpallet {
 		fn on_kyc_approved(who: &T::AccountId, referrer: &T::AccountId) {
 			// Security check: Verify on-chain that the user's KYC status is actually
 			// "Approved" before confirming the referral.
-			if pezpallet_identity_kyc::Pezpallet::<T>::get_kyc_status(who) ==
-				pezpallet_identity_kyc::types::KycLevel::Approved
+			if pezpallet_identity_kyc::Pezpallet::<T>::get_kyc_status(who)
+				== pezpallet_identity_kyc::types::KycLevel::Approved
 			{
 				// Check if this referral already exists (prevent double-counting)
 				if Referrals::<T>::contains_key(who) {

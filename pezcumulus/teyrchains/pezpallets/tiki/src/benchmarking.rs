@@ -49,7 +49,9 @@ mod benchmarks {
 	}
 
 	// Helper to ensure user has a citizen NFT
-	fn ensure_citizen_nft<T: Config + pezpallet_balances::Config>(who: T::AccountId) -> Result<(), DispatchError>
+	fn ensure_citizen_nft<T: Config + pezpallet_balances::Config>(
+		who: T::AccountId,
+	) -> Result<(), DispatchError>
 	where
 		T::CollectionId: Default + PartialOrd,
 	{

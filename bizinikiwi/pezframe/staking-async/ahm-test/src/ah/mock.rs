@@ -90,8 +90,8 @@ pub(crate) fn roll_until_next_active(mut end_index: SessionIndex) -> Vec<Account
 	let planned_era = pezpallet_staking_async::session_rotation::Rotator::<Runtime>::planned_era();
 	let active_era = pezpallet_staking_async::session_rotation::Rotator::<Runtime>::active_era();
 
-	while pezpallet_staking_async::session_rotation::Rotator::<Runtime>::planned_era() ==
-		planned_era
+	while pezpallet_staking_async::session_rotation::Rotator::<Runtime>::planned_era()
+		== planned_era
 	{
 		let report = SessionReport {
 			end_index,

@@ -598,10 +598,11 @@ impl<Block: BlockT> BlockchainDb<Block> {
 		)? {
 			Some(justifications) => match Decode::decode(&mut &justifications[..]) {
 				Ok(justifications) => Ok(Some(justifications)),
-				Err(err) =>
+				Err(err) => {
 					return Err(pezsp_blockchain::Error::Backend(format!(
 						"Error decoding justifications: {err}"
-					))),
+					)))
+				},
 			},
 			None => Ok(None),
 		}
@@ -614,10 +615,11 @@ impl<Block: BlockT> BlockchainDb<Block> {
 			// Plain body
 			match Decode::decode(&mut &body[..]) {
 				Ok(body) => return Ok(Some(body)),
-				Err(err) =>
+				Err(err) => {
 					return Err(pezsp_blockchain::Error::Backend(format!(
 						"Error decoding body: {err}"
-					))),
+					)))
+				},
 			}
 		}
 
@@ -646,10 +648,11 @@ impl<Block: BlockT> BlockchainDb<Block> {
 										)?;
 										body.push(ex);
 									},
-									None =>
+									None => {
 										return Err(pezsp_blockchain::Error::Backend(format!(
 											"Missing indexed transaction {hash:?}"
-										))),
+										)))
+									},
 								};
 							},
 							DbExtrinsic::Full(ex) => {
@@ -659,10 +662,11 @@ impl<Block: BlockT> BlockchainDb<Block> {
 					}
 					return Ok(Some(body));
 				},
-				Err(err) =>
+				Err(err) => {
 					return Err(pezsp_blockchain::Error::Backend(format!(
 						"Error decoding body list: {err}",
-					))),
+					)))
+				},
 			}
 		}
 		Ok(None)
@@ -777,17 +781,19 @@ impl<Block: BlockT> pezsc_client_api::blockchain::Backend<Block> for BlockchainD
 					if let DbExtrinsic::Indexed { hash, .. } = ex {
 						match self.db.get(columns::TRANSACTION, hash.as_ref()) {
 							Some(t) => transactions.push(t),
-							None =>
+							None => {
 								return Err(pezsp_blockchain::Error::Backend(format!(
 									"Missing indexed transaction {hash:?}",
-								))),
+								)))
+							},
 						}
 					}
 				}
 				Ok(Some(transactions))
 			},
-			Err(err) =>
-				Err(pezsp_blockchain::Error::Backend(format!("Error decoding body list: {err}"))),
+			Err(err) => {
+				Err(pezsp_blockchain::Error::Backend(format!("Error decoding body list: {err}")))
+			},
 		}
 	}
 }
@@ -851,8 +857,9 @@ impl<Block: BlockT> BlockImportOperation<Block> {
 			count += 1;
 			let key = crate::offchain::concatenate_prefix_and_key(&prefix, &key);
 			match value_operation {
-				OffchainOverlayedChange::SetValue(val) =>
-					transaction.set_from_vec(columns::OFFCHAIN, &key, val),
+				OffchainOverlayedChange::SetValue(val) => {
+					transaction.set_from_vec(columns::OFFCHAIN, &key, val)
+				},
 				OffchainOverlayedChange::Remove => transaction.remove(columns::OFFCHAIN, &key),
 			}
 		}
@@ -1275,9 +1282,9 @@ impl<Block: BlockT> Backend<Block> {
 
 		// Older DB versions have no last state key. Check if the state is available and set it.
 		let info = backend.blockchain.info();
-		if info.finalized_state.is_none() &&
-			info.finalized_hash != Default::default() &&
-			pezsc_client_api::Backend::have_state_at(
+		if info.finalized_state.is_none()
+			&& info.finalized_hash != Default::default()
+			&& pezsc_client_api::Backend::have_state_at(
 				&backend,
 				info.finalized_hash,
 				info.finalized_number,
@@ -1316,8 +1323,8 @@ impl<Block: BlockT> Backend<Block> {
 
 		let meta = self.blockchain.meta.read();
 
-		if meta.best_number.saturating_sub(best_number).saturated_into::<u64>() >
-			self.canonicalization_delay
+		if meta.best_number.saturating_sub(best_number).saturated_into::<u64>()
+			> self.canonicalization_delay
 		{
 			return Err(pezsp_blockchain::Error::SetHeadTooOld);
 		}
@@ -1377,8 +1384,8 @@ impl<Block: BlockT> Backend<Block> {
 	) -> ClientResult<()> {
 		let last_finalized =
 			last_finalized.unwrap_or_else(|| self.blockchain.meta.read().finalized_hash);
-		if last_finalized != self.blockchain.meta.read().genesis_hash &&
-			*header.parent_hash() != last_finalized
+		if last_finalized != self.blockchain.meta.read().genesis_hash
+			&& *header.parent_hash() != last_finalized
 		{
 			return Err(pezsp_blockchain::Error::NonSequentialFinalization(format!(
 				"Last finalized {last_finalized:?} not parent of {:?}",
@@ -1649,8 +1656,8 @@ impl<Block: BlockT> Backend<Block> {
 				let finalized = number_u64 == 0 || pending_block.leaf_state.is_final();
 				finalized
 			} else {
-				(number.is_zero() && last_finalized_num.is_zero()) ||
-					pending_block.leaf_state.is_final()
+				(number.is_zero() && last_finalized_num.is_zero())
+					|| pending_block.leaf_state.is_final()
 			};
 
 			let header = &pending_block.header;
@@ -1732,7 +1739,7 @@ impl<Block: BlockT> Backend<Block> {
 
 				if let Some(mut gap) = block_gap {
 					match gap.gap_type {
-						BlockGapType::MissingHeaderAndBody =>
+						BlockGapType::MissingHeaderAndBody => {
 							if number == gap.start {
 								gap.start += One::one();
 								utils::insert_number_to_key_mapping(
@@ -1751,7 +1758,8 @@ impl<Block: BlockT> Backend<Block> {
 									debug!(target: "db", "Update block gap. {block_gap:?}");
 								}
 								block_gap_updated = true;
-							},
+							}
+						},
 						BlockGapType::MissingBody => {
 							// Gap increased when syncing the header chain during fast sync.
 							if number == gap.end + One::one() && !existing_body {
@@ -1782,8 +1790,8 @@ impl<Block: BlockT> Backend<Block> {
 						},
 					}
 				} else if operation.create_gap {
-					if number > best_num + One::one() &&
-						self.blockchain.header(parent_hash)?.is_none()
+					if number > best_num + One::one()
+						&& self.blockchain.header(parent_hash)?.is_none()
 					{
 						let gap = BlockGap {
 							start: best_num + One::one(),
@@ -1793,9 +1801,9 @@ impl<Block: BlockT> Backend<Block> {
 						insert_new_gap(&mut transaction, gap, &mut block_gap);
 						block_gap_updated = true;
 						debug!(target: "db", "Detected block gap (warp sync) {block_gap:?}");
-					} else if number == best_num + One::one() &&
-						self.blockchain.header(parent_hash)?.is_some() &&
-						!existing_body
+					} else if number == best_num + One::one()
+						&& self.blockchain.header(parent_hash)?.is_some()
+						&& !existing_body
 					{
 						let gap = BlockGap {
 							start: number,
@@ -1893,8 +1901,8 @@ impl<Block: BlockT> Backend<Block> {
 			LastCanonicalized::NotCanonicalizing => false,
 		};
 
-		if requires_canonicalization &&
-			pezsc_client_api::Backend::have_state_at(self, f_hash, f_num)
+		if requires_canonicalization
+			&& pezsc_client_api::Backend::have_state_at(self, f_hash, f_num)
 		{
 			let commit = self.storage.state_db.canonicalize_block(&f_hash).map_err(
 				pezsp_blockchain::Error::from_state_db::<
@@ -2000,16 +2008,18 @@ impl<Block: BlockT> Backend<Block> {
 				id,
 			)?;
 			match Vec::<DbExtrinsic<Block>>::decode(&mut &index[..]) {
-				Ok(index) =>
+				Ok(index) => {
 					for ex in index {
 						if let DbExtrinsic::Indexed { hash, .. } = ex {
 							transaction.release(columns::TRANSACTION, hash);
 						}
-					},
-				Err(err) =>
+					}
+				},
+				Err(err) => {
 					return Err(pezsp_blockchain::Error::Backend(format!(
 						"Error decoding body list: {err}",
-					))),
+					)))
+				},
 			}
 		}
 		Ok(())
@@ -2234,8 +2244,8 @@ impl<Block: BlockT> pezsc_client_api::backend::Backend<Block> for Backend<Block>
 		let last_finalized = self.blockchain.last_finalized()?;
 
 		// We can do a quick check first, before doing a proper but more expensive check
-		if number > self.blockchain.info().finalized_number ||
-			(hash != last_finalized && !is_descendent_of(&hash, &last_finalized)?)
+		if number > self.blockchain.info().finalized_number
+			|| (hash != last_finalized && !is_descendent_of(&hash, &last_finalized)?)
 		{
 			return Err(ClientError::NotInFinalizedChain);
 		}
@@ -2370,8 +2380,8 @@ impl<Block: BlockT> pezsc_client_api::backend::Backend<Block> for Backend<Block>
 							reverted_finalized.insert(removed_hash);
 							if let Some((hash, _)) = self.blockchain.info().finalized_state {
 								if hash == hash_to_revert {
-									if !number_to_revert.is_zero() &&
-										self.have_state_at(prev_hash, prev_number)
+									if !number_to_revert.is_zero()
+										&& self.have_state_at(prev_hash, prev_number)
 									{
 										let lookup_key = utils::number_and_hash_to_lookup_key(
 											prev_number,

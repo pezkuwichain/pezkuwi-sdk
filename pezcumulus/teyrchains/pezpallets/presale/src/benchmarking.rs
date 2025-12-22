@@ -52,16 +52,8 @@ mod benchmarks {
 		let _ = T::Assets::mint_into(payment_asset, caller, payment_amount);
 
 		// Mint payment tokens to platform accounts for fee distribution
-		let _ = T::Assets::mint_into(
-			payment_asset,
-			&T::PlatformTreasury::get(),
-			payment_amount,
-		);
-		let _ = T::Assets::mint_into(
-			payment_asset,
-			&T::StakingRewardPool::get(),
-			payment_amount,
-		);
+		let _ = T::Assets::mint_into(payment_asset, &T::PlatformTreasury::get(), payment_amount);
+		let _ = T::Assets::mint_into(payment_asset, &T::StakingRewardPool::get(), payment_amount);
 
 		// Mint reward tokens to presale treasury for distribution
 		let reward_amount: T::Balance = 10_000_000_000u128.into();
@@ -289,8 +281,7 @@ mod benchmarks {
 		let (payment_asset, reward_asset) = setup_benchmark_assets::<T>(&caller, &presale_treasury);
 
 		// Create presale (will get the presale_id we calculated)
-		let _ =
-			create_test_presale::<T>(&caller, payment_asset, reward_asset, false, false);
+		let _ = create_test_presale::<T>(&caller, payment_asset, reward_asset, false, false);
 
 		// Make a contribution
 		let amount: u128 = 10_000u128;
@@ -325,13 +316,7 @@ mod benchmarks {
 		let (payment_asset, reward_asset) = setup_benchmark_assets::<T>(&caller, &presale_treasury);
 
 		// Create presale (will get the presale_id we calculated)
-		let _ = create_test_presale::<T>(
-			&caller,
-			payment_asset,
-			reward_asset,
-			false,
-			false,
-		);
+		let _ = create_test_presale::<T>(&caller, payment_asset, reward_asset, false, false);
 
 		// Add n contributors
 		for i in 0..n {
@@ -382,7 +367,7 @@ mod benchmarks {
 			limits: crate::ContributionLimits {
 				min_contribution: 100u128,
 				max_contribution: 10_000_000u128,
-				soft_cap: 1_000_000_000_000u128,   // very high - will fail
+				soft_cap: 1_000_000_000_000u128, // very high - will fail
 				hard_cap: 2_000_000_000_000u128,
 			},
 			vesting: None,

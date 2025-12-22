@@ -328,10 +328,11 @@ impl BizinikiwiCli for TestCollatorCli {
 					2500,
 				)))) as Box<_>
 			},
-			"relay-parent-offset" =>
+			"relay-parent-offset" => {
 				Box::new(pezcumulus_test_service::get_relay_parent_offset_chain_spec(Some(
 					ParaId::from(2600),
-				))) as Box<_>,
+				))) as Box<_>
+			},
 			path => {
 				let chain_spec: pezsc_chain_spec::GenericChainSpec =
 					pezsc_chain_spec::GenericChainSpec::from_json_file(path.into())?;

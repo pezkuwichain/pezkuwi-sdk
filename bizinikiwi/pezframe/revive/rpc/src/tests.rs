@@ -209,8 +209,8 @@ async fn submit_bizinikiwi_transactions(
 					log::trace!(target: LOG_TARGET, "Bizinikiwi tx {i} submitted");
 					while let Some(status) = progress.next().await {
 						match status {
-							Ok(TxStatus::InFinalizedBlock(block)) |
-							Ok(TxStatus::InBestBlock(block)) => {
+							Ok(TxStatus::InFinalizedBlock(block))
+							| Ok(TxStatus::InBestBlock(block)) => {
 								log::trace!(target: LOG_TARGET,
 									"Bizinikiwi tx {i} included in block {:?}",
 									block.block_hash()
@@ -250,8 +250,9 @@ async fn verify_transactions_in_single_block(
 
 	let block_tx_hashes = match &block.transactions {
 		HashesOrTransactionInfos::Hashes(hashes) => hashes.clone(),
-		HashesOrTransactionInfos::TransactionInfos(infos) =>
-			infos.iter().map(|info| info.hash).collect(),
+		HashesOrTransactionInfos::TransactionInfos(infos) => {
+			infos.iter().map(|info| info.hash).collect()
+		},
 	};
 
 	if let Some(missing_hash) =
@@ -780,7 +781,11 @@ async fn test_runtime_pallets_address_upload_code(client: Arc<WsClient>) -> anyh
 	let code_hash = H256(pezsp_io::hashing::keccak_256(&bytecode));
 	let query = subxt_client::storage().revive().pristine_code();
 	let block_hash: pezsp_core::H256 = get_bizinikiwi_block_hash(receipt.block_number).await?;
-	let stored_code: Vec<u8> = node_client.storage().at(block_hash).fetch(&query, (code_hash,)).await
+	let stored_code: Vec<u8> = node_client
+		.storage()
+		.at(block_hash)
+		.fetch(&query, (code_hash,))
+		.await
 		.expect("Code with hash should exist in storage")
 		.decode()?;
 	assert_eq!(stored_code, bytecode, "Stored code should match the uploaded bytecode");

@@ -5,7 +5,7 @@ use anyhow::anyhow;
 
 use crate::utils::{initialize_network, BEST_BLOCK_METRIC};
 
-use pezcumulus_zombienet_sdk_helpers::{assert_para_throughput};
+use pezcumulus_zombienet_sdk_helpers::assert_para_throughput;
 use pezkuwi_primitives::Id as ParaId;
 use zombienet_sdk::{
 	subxt::{OnlineClient, PezkuwiConfig},

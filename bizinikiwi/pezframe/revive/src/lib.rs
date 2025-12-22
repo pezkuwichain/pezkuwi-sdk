@@ -1628,7 +1628,7 @@ impl<T: Config> Pezpallet<T> {
 					storage_deposit_limit.saturating_reduce(upload_deposit);
 					(executable, upload_deposit)
 				},
-				Code::Upload(code) =>
+				Code::Upload(code) => {
 					if T::AllowEVMBytecode::get() {
 						ensure!(data.is_empty(), <Error<T>>::EvmConstructorNonEmptyData);
 						let origin = T::UploadOrigin::ensure_origin(origin)?;
@@ -1636,7 +1636,8 @@ impl<T: Config> Pezpallet<T> {
 						(executable, Default::default())
 					} else {
 						return Err(<Error<T>>::CodeRejected.into());
-					},
+					}
+				},
 				Code::Existing(code_hash) => {
 					let executable = ContractBlob::from_storage(code_hash, &mut gas_meter)?;
 					ensure!(executable.code_info().is_pvm(), <Error<T>>::EvmConstructedFromHash);
@@ -2044,8 +2045,9 @@ impl<T: Config> Pezpallet<T> {
 				Self::evm_gas_from_weight as fn(Weight) -> U256,
 			)
 			.into(),
-			TracerType::PrestateTracer(config) =>
-				PrestateTracer::new(config.unwrap_or_default()).into(),
+			TracerType::PrestateTracer(config) => {
+				PrestateTracer::new(config.unwrap_or_default()).into()
+			},
 		}
 	}
 
@@ -2420,8 +2422,8 @@ impl<T: Config> Pezpallet<T> {
 		else {
 			return Ok(());
 		};
-		if exec::is_precompile::<T, ContractBlob<T>>(&address) ||
-			<AccountInfo<T>>::is_contract(&address)
+		if exec::is_precompile::<T, ContractBlob<T>>(&address)
+			|| <AccountInfo<T>>::is_contract(&address)
 		{
 			log::debug!(
 				target: crate::LOG_TARGET,

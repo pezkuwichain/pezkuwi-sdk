@@ -568,10 +568,10 @@ mod benchmarks {
 		// value and value transferred via call should be removed from the caller
 		assert_eq!(
 			T::Currency::balance(&instance.caller),
-			caller_funding::<T>() -
-				instance.value -
-				value - deposit -
-				Pezpallet::<T>::min_balance(),
+			caller_funding::<T>()
+				- instance.value
+				- value - deposit
+				- Pezpallet::<T>::min_balance(),
 		);
 		// contract should have received the value
 		assert_eq!(T::Currency::balance(&instance.account_id), before + value);

@@ -121,7 +121,8 @@ fn tasks_work() {
 		pezframe_support::assert_ok!(System::do_task(RuntimeOrigin::signed(1), task.clone(),));
 		assert_eq!(my_pezpallet::SomeStorage::<Runtime>::get(), (0, 2));
 
-		let task = RuntimeTask::MyPallet2(my_pezpallet::Task::<Runtime, _>::Foo { _i: 0u32, _j: 2u64 });
+		let task =
+			RuntimeTask::MyPallet2(my_pezpallet::Task::<Runtime, _>::Foo { _i: 0u32, _j: 2u64 });
 
 		pezframe_support::assert_ok!(System::do_task(RuntimeOrigin::signed(1), task.clone(),));
 		assert_eq!(my_pezpallet::SomeStorage::<Runtime, Instance2>::get(), (0, 2));

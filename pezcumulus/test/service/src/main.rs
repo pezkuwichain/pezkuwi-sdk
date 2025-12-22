@@ -100,7 +100,7 @@ fn main() -> Result<(), pezsc_cli::Error> {
 			let (mut task_manager, _, _, _, _, _) = tokio_runtime
 				.block_on(async move {
 					match relay_chain_config.network.network_backend {
-						pezsc_network::config::NetworkBackendType::Libp2p =>
+						pezsc_network::config::NetworkBackendType::Libp2p => {
 							pezcumulus_test_service::start_node_impl::<
 								_,
 								pezsc_network::NetworkWorker<_, _>,
@@ -115,8 +115,9 @@ fn main() -> Result<(), pezsc_cli::Error> {
 								true,
 								use_slot_based_collator,
 							)
-							.await,
-						pezsc_network::config::NetworkBackendType::Litep2p =>
+							.await
+						},
+						pezsc_network::config::NetworkBackendType::Litep2p => {
 							pezcumulus_test_service::start_node_impl::<
 								_,
 								pezsc_network::Litep2pNetworkBackend,
@@ -131,7 +132,8 @@ fn main() -> Result<(), pezsc_cli::Error> {
 								true,
 								use_slot_based_collator,
 							)
-							.await,
+							.await
+						},
 					}
 				})
 				.expect("could not create Pezcumulus test service");

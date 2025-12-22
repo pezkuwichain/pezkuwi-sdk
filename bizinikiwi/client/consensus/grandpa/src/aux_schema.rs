@@ -382,8 +382,12 @@ where
 				});
 			}
 		},
-		Some(other) =>
-			return Err(ClientError::Backend(format!("Unsupported GRANDPA DB version: {:?}", other))),
+		Some(other) => {
+			return Err(ClientError::Backend(format!(
+				"Unsupported GRANDPA DB version: {:?}",
+				other
+			)))
+		},
 	}
 
 	// genesis.

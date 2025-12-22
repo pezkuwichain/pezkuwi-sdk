@@ -41,7 +41,8 @@ pub mod v1 {
 				let elections_count = ActiveElections::<T>::iter().count() as u64;
 				let proposals_count = ActiveProposals::<T>::iter().count() as u64;
 
-				let migrated = officials_count + ministers_count + elections_count + proposals_count;
+				let migrated =
+					officials_count + ministers_count + elections_count + proposals_count;
 
 				// Update storage version
 				STORAGE_VERSION.put::<Pezpallet<T>>();
@@ -143,9 +144,8 @@ pub mod v1 {
 				pre_appointments_count,
 				pre_proposals_count,
 				pre_collective_votes_count,
-			): PreUpgradeState =
-				Decode::decode(&mut &state[..])
-					.map_err(|_| "Failed to decode pre-upgrade state")?;
+			): PreUpgradeState = Decode::decode(&mut &state[..])
+				.map_err(|_| "Failed to decode pre-upgrade state")?;
 
 			log::info!("🔍 Post-upgrade check for pezpallet-welati");
 
@@ -170,19 +170,33 @@ pub mod v1 {
 			let post_proposals_count = ActiveProposals::<T>::iter().count() as u32;
 			let post_collective_votes_count = CollectiveVotes::<T>::iter().count() as u32;
 
-			log::info!("   CurrentOfficials entries: {pre_officials_count} -> {post_officials_count}");
-			log::info!("   CurrentMinisters entries: {pre_ministers_count} -> {post_ministers_count}");
-			log::info!("   ParliamentMembers entries: {pre_parliament_count} -> {post_parliament_count}");
+			log::info!(
+				"   CurrentOfficials entries: {pre_officials_count} -> {post_officials_count}"
+			);
+			log::info!(
+				"   CurrentMinisters entries: {pre_ministers_count} -> {post_ministers_count}"
+			);
+			log::info!(
+				"   ParliamentMembers entries: {pre_parliament_count} -> {post_parliament_count}"
+			);
 			log::info!("   DiwanMembers entries: {pre_diwan_count} -> {post_diwan_count}");
-			log::info!("   AppointedOfficials entries: {pre_appointed_count} -> {post_appointed_count}");
-			log::info!("   ActiveElections entries: {pre_elections_count} -> {post_elections_count}");
-			log::info!("   ElectionCandidates entries: {pre_candidates_count} -> {post_candidates_count}");
+			log::info!(
+				"   AppointedOfficials entries: {pre_appointed_count} -> {post_appointed_count}"
+			);
+			log::info!(
+				"   ActiveElections entries: {pre_elections_count} -> {post_elections_count}"
+			);
+			log::info!(
+				"   ElectionCandidates entries: {pre_candidates_count} -> {post_candidates_count}"
+			);
 			log::info!("   ElectionVotes entries: {pre_votes_count} -> {post_votes_count}");
 			log::info!("   ElectionResults entries: {pre_results_count} -> {post_results_count}");
 			log::info!("   ElectoralDistrictConfig entries: {pre_districts_count} -> {post_districts_count}");
 			log::info!("   PendingNominations entries: {pre_nominations_count} -> {post_nominations_count}");
 			log::info!("   AppointmentProcesses entries: {pre_appointments_count} -> {post_appointments_count}");
-			log::info!("   ActiveProposals entries: {pre_proposals_count} -> {post_proposals_count}");
+			log::info!(
+				"   ActiveProposals entries: {pre_proposals_count} -> {post_proposals_count}"
+			);
 			log::info!("   CollectiveVotes entries: {pre_collective_votes_count} -> {post_collective_votes_count}");
 
 			// Verify no data was lost

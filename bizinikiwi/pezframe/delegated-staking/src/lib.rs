@@ -326,9 +326,9 @@ pub mod pezpallet {
 			let ledger = AgentLedger::<T>::get(&who).ok_or(Error::<T>::NotAgent)?;
 
 			ensure!(
-				ledger.total_delegated == Zero::zero() &&
-					ledger.pending_slash == Zero::zero() &&
-					ledger.unclaimed_withdrawals == Zero::zero(),
+				ledger.total_delegated == Zero::zero()
+					&& ledger.pending_slash == Zero::zero()
+					&& ledger.unclaimed_withdrawals == Zero::zero(),
 				Error::<T>::NotAllowed
 			);
 
@@ -788,16 +788,16 @@ impl<T: Config> Pezpallet<T> {
 				ensure!(
 					matches!(
 						T::CoreStaking::status(&agent).expect("agent should be bonded"),
-						pezsp_staking::StakerStatus::Nominator(_) |
-							pezsp_staking::StakerStatus::Idle
+						pezsp_staking::StakerStatus::Nominator(_)
+							| pezsp_staking::StakerStatus::Idle
 					),
 					"agent should be bonded and not validator"
 				);
 			}
 
 			ensure!(
-				ledger.stakeable_balance() >=
-					T::CoreStaking::total_stake(&agent).unwrap_or_default(),
+				ledger.stakeable_balance()
+					>= T::CoreStaking::total_stake(&agent).unwrap_or_default(),
 				"Cannot stake more than balance"
 			);
 		}

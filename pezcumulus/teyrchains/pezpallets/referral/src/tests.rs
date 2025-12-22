@@ -1,6 +1,5 @@
 use crate::{
-	mock::*, Error, Event, PendingReferrals, ReferralCount, Referrals,
-	ReferrerStatsStorage,
+	mock::*, Error, Event, PendingReferrals, ReferralCount, Referrals, ReferrerStatsStorage,
 };
 use pezframe_support::{assert_noop, assert_ok};
 use pezpallet_identity_kyc::types::{OnCitizenshipRevoked, OnKycApproved};

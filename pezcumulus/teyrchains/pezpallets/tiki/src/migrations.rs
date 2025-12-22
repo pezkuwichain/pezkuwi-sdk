@@ -101,9 +101,7 @@ pub mod v1 {
 			let post_tiki_holder_count = TikiHolder::<T>::iter().count() as u32;
 
 			log::info!("   CitizenNft entries: {pre_citizen_count} -> {post_citizen_count}");
-			log::info!(
-				"   UserTikis entries: {pre_user_tikis_count} -> {post_user_tikis_count}"
-			);
+			log::info!("   UserTikis entries: {pre_user_tikis_count} -> {post_user_tikis_count}");
 			log::info!(
 				"   TikiHolder entries: {pre_tiki_holder_count} -> {post_tiki_holder_count}"
 			);

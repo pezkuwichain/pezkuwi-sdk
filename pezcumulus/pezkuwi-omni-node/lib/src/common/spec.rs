@@ -613,22 +613,24 @@ where
 		node_extra_args: NodeExtraArgs,
 	) -> Pin<Box<dyn Future<Output = pezsc_service::error::Result<TaskManager>>>> {
 		match teyrchain_config.network.network_backend {
-			pezsc_network::config::NetworkBackendType::Libp2p =>
+			pezsc_network::config::NetworkBackendType::Libp2p => {
 				<Self as NodeSpec>::start_node::<pezsc_network::NetworkWorker<_, _>>(
 					teyrchain_config,
 					pezkuwi_config,
 					collator_options,
 					hwbench,
 					node_extra_args,
-				),
-			pezsc_network::config::NetworkBackendType::Litep2p =>
+				)
+			},
+			pezsc_network::config::NetworkBackendType::Litep2p => {
 				<Self as NodeSpec>::start_node::<pezsc_network::Litep2pNetworkBackend>(
 					teyrchain_config,
 					pezkuwi_config,
 					collator_options,
 					hwbench,
 					node_extra_args,
-				),
+				)
+			},
 		}
 	}
 }

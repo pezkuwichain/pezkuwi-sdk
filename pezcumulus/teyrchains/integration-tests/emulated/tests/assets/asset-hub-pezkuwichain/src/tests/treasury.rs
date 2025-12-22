@@ -16,9 +16,7 @@
 use crate::imports::*;
 use emulated_integration_tests_common::accounts::{ALICE, BOB};
 use pezframe_support::{
-	dispatch::RawOrigin,
-	pezsp_runtime::traits::Dispatchable,
-	traits::fungible::Inspect,
+	dispatch::RawOrigin, pezsp_runtime::traits::Dispatchable, traits::fungible::Inspect,
 };
 use pezkuwi_runtime_common::impls::VersionedLocatableAsset;
 use pezkuwichain_runtime_constants::currency::GRAND;
@@ -171,98 +169,105 @@ mod disabled_usdt_treasury_test {
 
 	#[test]
 	fn create_and_claim_treasury_spend_in_usdt() {
-	const SPEND_AMOUNT: u128 = 10_000_000;
-	// treasury location from a sibling teyrchain.
-	let treasury_location: Location = Location::new(1, PalletInstance(18));
-	// treasury account on a sibling teyrchain.
-	let treasury_account =
-		ahr_xcm_config::LocationToAccountId::convert_location(&treasury_location).unwrap();
-	let asset_hub_location = Location::new(0, Teyrchain(AssetHubPezkuwichain::para_id().into()));
-	let root = <Pezkuwichain as Chain>::RuntimeOrigin::root();
-	// asset kind to be spent from the treasury.
-	let asset_kind: VersionedLocatableAsset =
-		(asset_hub_location, AssetId((PalletInstance(50), GeneralIndex(USDT_ID.into())).into()))
+		const SPEND_AMOUNT: u128 = 10_000_000;
+		// treasury location from a sibling teyrchain.
+		let treasury_location: Location = Location::new(1, PalletInstance(18));
+		// treasury account on a sibling teyrchain.
+		let treasury_account =
+			ahr_xcm_config::LocationToAccountId::convert_location(&treasury_location).unwrap();
+		let asset_hub_location =
+			Location::new(0, Teyrchain(AssetHubPezkuwichain::para_id().into()));
+		let root = <Pezkuwichain as Chain>::RuntimeOrigin::root();
+		// asset kind to be spent from the treasury.
+		let asset_kind: VersionedLocatableAsset = (
+			asset_hub_location,
+			AssetId((PalletInstance(50), GeneralIndex(USDT_ID.into())).into()),
+		)
 			.into();
-	// treasury spend beneficiary.
-	let alice: AccountId = Pezkuwichain::account_id_of(ALICE);
-	let bob: AccountId = Pezkuwichain::account_id_of(BOB);
-	let bob_signed = <Pezkuwichain as Chain>::RuntimeOrigin::signed(bob.clone());
+		// treasury spend beneficiary.
+		let alice: AccountId = Pezkuwichain::account_id_of(ALICE);
+		let bob: AccountId = Pezkuwichain::account_id_of(BOB);
+		let bob_signed = <Pezkuwichain as Chain>::RuntimeOrigin::signed(bob.clone());
 
-	AssetHubPezkuwichain::execute_with(|| {
-		type Assets = <AssetHubPezkuwichain as AssetHubPezkuwichainPallet>::Assets;
+		AssetHubPezkuwichain::execute_with(|| {
+			type Assets = <AssetHubPezkuwichain as AssetHubPezkuwichainPallet>::Assets;
 
-		// USDT created at genesis, mint some assets to the treasury account.
-		assert_ok!(<Assets as Mutate<_>>::mint_into(USDT_ID, &treasury_account, SPEND_AMOUNT * 4));
-		// beneficiary has zero balance.
-		assert_eq!(<Assets as FungiblesInspect<_>>::balance(USDT_ID, &alice,), 0u128,);
-	});
+			// USDT created at genesis, mint some assets to the treasury account.
+			assert_ok!(<Assets as Mutate<_>>::mint_into(
+				USDT_ID,
+				&treasury_account,
+				SPEND_AMOUNT * 4
+			));
+			// beneficiary has zero balance.
+			assert_eq!(<Assets as FungiblesInspect<_>>::balance(USDT_ID, &alice,), 0u128,);
+		});
 
-	Pezkuwichain::execute_with(|| {
-		type RuntimeEvent = <Pezkuwichain as Chain>::RuntimeEvent;
-		type Treasury = <Pezkuwichain as PezkuwichainPallet>::Treasury;
-		type AssetRate = <Pezkuwichain as PezkuwichainPallet>::AssetRate;
+		Pezkuwichain::execute_with(|| {
+			type RuntimeEvent = <Pezkuwichain as Chain>::RuntimeEvent;
+			type Treasury = <Pezkuwichain as PezkuwichainPallet>::Treasury;
+			type AssetRate = <Pezkuwichain as PezkuwichainPallet>::AssetRate;
 
-		// create a conversion rate from `asset_kind` to the native currency.
-		assert_ok!(AssetRate::create(root.clone(), Box::new(asset_kind.clone()), 2.into()));
+			// create a conversion rate from `asset_kind` to the native currency.
+			assert_ok!(AssetRate::create(root.clone(), Box::new(asset_kind.clone()), 2.into()));
 
-		Dmp::make_teyrchain_reachable(1000);
+			Dmp::make_teyrchain_reachable(1000);
 
-		// create and approve a treasury spend.
-		assert_ok!(Treasury::spend(
-			root,
-			Box::new(asset_kind),
-			SPEND_AMOUNT,
-			Box::new(Location::new(0, Into::<[u8; 32]>::into(alice.clone())).into()),
-			None,
-		));
-		// claim the spend.
-		assert_ok!(Treasury::payout(bob_signed.clone(), 0));
+			// create and approve a treasury spend.
+			assert_ok!(Treasury::spend(
+				root,
+				Box::new(asset_kind),
+				SPEND_AMOUNT,
+				Box::new(Location::new(0, Into::<[u8; 32]>::into(alice.clone())).into()),
+				None,
+			));
+			// claim the spend.
+			assert_ok!(Treasury::payout(bob_signed.clone(), 0));
 
-		assert_expected_events!(
-			Pezkuwichain,
-			vec![
-				RuntimeEvent::Treasury(pezpallet_treasury::Event::Paid { .. }) => {},
-			]
-		);
-	});
+			assert_expected_events!(
+				Pezkuwichain,
+				vec![
+					RuntimeEvent::Treasury(pezpallet_treasury::Event::Paid { .. }) => {},
+				]
+			);
+		});
 
-	AssetHubPezkuwichain::execute_with(|| {
-		type RuntimeEvent = <AssetHubPezkuwichain as Chain>::RuntimeEvent;
-		type Assets = <AssetHubPezkuwichain as AssetHubPezkuwichainPallet>::Assets;
+		AssetHubPezkuwichain::execute_with(|| {
+			type RuntimeEvent = <AssetHubPezkuwichain as Chain>::RuntimeEvent;
+			type Assets = <AssetHubPezkuwichain as AssetHubPezkuwichainPallet>::Assets;
 
-		// assert events triggered by xcm pay program
-		// 1. treasury asset transferred to spend beneficiary
-		// 2. response to Relay Chain treasury pezpallet instance sent back
-		// 3. XCM program completed
-		assert_expected_events!(
-			AssetHubPezkuwichain,
-			vec![
-				RuntimeEvent::Assets(pezpallet_assets::Event::Transferred { asset_id: id, from, to, amount }) => {
-					id: id == &USDT_ID,
-					from: from == &treasury_account,
-					to: to == &alice,
-					amount: amount == &SPEND_AMOUNT,
-				},
-				RuntimeEvent::TeyrchainSystem(pezcumulus_pezpallet_teyrchain_system::Event::UpwardMessageSent { .. }) => {},
-				RuntimeEvent::MessageQueue(pezpallet_message_queue::Event::Processed { success: true ,.. }) => {},
-			]
-		);
-		// beneficiary received the assets from the treasury.
-		assert_eq!(<Assets as FungiblesInspect<_>>::balance(USDT_ID, &alice,), SPEND_AMOUNT,);
-	});
+			// assert events triggered by xcm pay program
+			// 1. treasury asset transferred to spend beneficiary
+			// 2. response to Relay Chain treasury pezpallet instance sent back
+			// 3. XCM program completed
+			assert_expected_events!(
+				AssetHubPezkuwichain,
+				vec![
+					RuntimeEvent::Assets(pezpallet_assets::Event::Transferred { asset_id: id, from, to, amount }) => {
+						id: id == &USDT_ID,
+						from: from == &treasury_account,
+						to: to == &alice,
+						amount: amount == &SPEND_AMOUNT,
+					},
+					RuntimeEvent::TeyrchainSystem(pezcumulus_pezpallet_teyrchain_system::Event::UpwardMessageSent { .. }) => {},
+					RuntimeEvent::MessageQueue(pezpallet_message_queue::Event::Processed { success: true ,.. }) => {},
+				]
+			);
+			// beneficiary received the assets from the treasury.
+			assert_eq!(<Assets as FungiblesInspect<_>>::balance(USDT_ID, &alice,), SPEND_AMOUNT,);
+		});
 
-	Pezkuwichain::execute_with(|| {
-		type RuntimeEvent = <Pezkuwichain as Chain>::RuntimeEvent;
-		type Treasury = <Pezkuwichain as PezkuwichainPallet>::Treasury;
+		Pezkuwichain::execute_with(|| {
+			type RuntimeEvent = <Pezkuwichain as Chain>::RuntimeEvent;
+			type Treasury = <Pezkuwichain as PezkuwichainPallet>::Treasury;
 
-		// check the payment status to ensure the response from the AssetHub was received.
-		assert_ok!(Treasury::check_status(bob_signed, 0));
-		assert_expected_events!(
-			Pezkuwichain,
-			vec![
-				RuntimeEvent::Treasury(pezpallet_treasury::Event::SpendProcessed { .. }) => {},
-			]
-		);
-	});
+			// check the payment status to ensure the response from the AssetHub was received.
+			assert_ok!(Treasury::check_status(bob_signed, 0));
+			assert_expected_events!(
+				Pezkuwichain,
+				vec![
+					RuntimeEvent::Treasury(pezpallet_treasury::Event::SpendProcessed { .. }) => {},
+				]
+			);
+		});
 	}
 }

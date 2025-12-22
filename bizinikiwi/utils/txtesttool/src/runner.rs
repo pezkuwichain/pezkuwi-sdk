@@ -12,13 +12,13 @@ use crate::{
 };
 use async_trait::async_trait;
 use futures::{stream::FuturesUnordered, Future, StreamExt};
+use pezkuwi_subxt_core::config::Hash as BlockHash;
 use std::{
 	path::Path,
 	pin::Pin,
 	sync::Arc,
 	time::{Duration, Instant, SystemTime},
 };
-use pezkuwi_subxt_core::config::Hash as BlockHash;
 use tokio::{
 	select,
 	sync::mpsc::{channel, Receiver, Sender},

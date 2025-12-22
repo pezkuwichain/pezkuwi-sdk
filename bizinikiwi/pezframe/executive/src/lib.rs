@@ -687,8 +687,8 @@ where
 		// Check that `parent_hash` is correct.
 		let n = *header.number();
 		assert!(
-			n > BlockNumberFor::<System>::zero() &&
-				<pezframe_system::Pezpallet<System>>::block_hash(
+			n > BlockNumberFor::<System>::zero()
+				&& <pezframe_system::Pezpallet<System>>::block_hash(
 					n - BlockNumberFor::<System>::one()
 				) == *header.parent_hash(),
 			"Parent hash should be valid.",

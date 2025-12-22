@@ -106,6 +106,7 @@ impl<B: BlockT> InformantDisplay<B> {
 				// Handle all phases besides the two phases we already handle above.
 				(_, _, Some(warp))
 					if !matches!(warp.phase, WarpSyncPhase::DownloadingBlocks(_)) =>
+				{
 					(
 						"⏩",
 						"Warping".into(),
@@ -114,7 +115,8 @@ impl<B: BlockT> InformantDisplay<B> {
 							warp.phase,
 							(warp.total_bytes as f32) / (1024f32 * 1024f32)
 						),
-					),
+					)
+				},
 				(_, Some(state), _) => (
 					"⚙️ ",
 					"State sync".into(),
@@ -126,10 +128,12 @@ impl<B: BlockT> InformantDisplay<B> {
 					),
 				),
 				(SyncState::Idle, _, _) => ("💤", "Idle".into(), "".into()),
-				(SyncState::Downloading { target }, _, _) =>
-					("⚙️ ", format!("Syncing{}", speed), format!(", target=#{target}")),
-				(SyncState::Importing { target }, _, _) =>
-					("⚙️ ", format!("Preparing{}", speed), format!(", target=#{target}")),
+				(SyncState::Downloading { target }, _, _) => {
+					("⚙️ ", format!("Syncing{}", speed), format!(", target=#{target}"))
+				},
+				(SyncState::Importing { target }, _, _) => {
+					("⚙️ ", format!("Preparing{}", speed), format!(", target=#{target}"))
+				},
 			};
 
 		info!(
@@ -176,8 +180,8 @@ fn speed<B: BlockT>(
 		let speed = diff
 			.saturating_mul(10_000)
 			.checked_div(u128::from(elapsed_ms))
-			.map_or(0.0, |s| s as f64) /
-			10.0;
+			.map_or(0.0, |s| s as f64)
+			/ 10.0;
 		format!(" {:4.1} bps", speed)
 	} else {
 		// If the number of blocks can't be converted to a regular integer, then we need a more

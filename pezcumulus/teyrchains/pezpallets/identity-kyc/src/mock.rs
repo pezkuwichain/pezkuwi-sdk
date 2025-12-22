@@ -1,8 +1,5 @@
 use crate as pezpallet_identity_kyc;
-use pezframe_support::{
-	construct_runtime, derive_impl, parameter_types,
-	traits::ConstU128,
-};
+use pezframe_support::{construct_runtime, derive_impl, parameter_types, traits::ConstU128};
 use pezframe_system::EnsureRoot;
 use pezsp_core::H256;
 use pezsp_runtime::BuildStorage;

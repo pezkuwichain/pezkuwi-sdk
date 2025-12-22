@@ -35,10 +35,7 @@ mod imports {
 			PeoplePezkuwichainParaPezpallet,
 			PeoplePezkuwichainParaPezpallet as PeoplePezkuwichainPallet,
 		},
-		pezkuwichain_emulated_chain::{
-			genesis::ED as PEZKUWICHAIN_ED,
-			PezkuwichainRelayPezpallet,
-		},
+		pezkuwichain_emulated_chain::{genesis::ED as PEZKUWICHAIN_ED, PezkuwichainRelayPezpallet},
 		AssetHubPezkuwichainPara as AssetHubPezkuwichain,
 		AssetHubPezkuwichainParaReceiver as AssetHubPezkuwichainReceiver,
 		PeoplePezkuwichainPara as PeoplePezkuwichain,

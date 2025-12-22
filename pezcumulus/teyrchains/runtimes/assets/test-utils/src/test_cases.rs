@@ -615,9 +615,9 @@ pub fn teleports_for_foreign_assets_works<
 					);
 				let asset_to_teleport_away = asset_minimum_asset_balance * 3;
 				assert!(
-					asset_to_teleport_away <
-						(target_account_balance_before_teleport -
-							asset_minimum_asset_balance.into())
+					asset_to_teleport_away
+						< (target_account_balance_before_teleport
+							- asset_minimum_asset_balance.into())
 						.into()
 				);
 
@@ -1190,12 +1190,12 @@ pub fn create_and_manage_foreign_assets_for_local_consensus_teyrchain_assets_wor
 		.with_session_keys(collator_session_keys.session_keys())
 		.with_balances(vec![(
 			foreign_creator_as_account_id.clone(),
-			existential_deposit +
-				asset_deposit +
-				metadata_deposit_base +
-				metadata_deposit_per_byte_eta +
-				buy_execution_fee_amount.into() +
-				buy_execution_fee_amount.into(),
+			existential_deposit
+				+ asset_deposit
+				+ metadata_deposit_base
+				+ metadata_deposit_per_byte_eta
+				+ buy_execution_fee_amount.into()
+				+ buy_execution_fee_amount.into(),
 		)])
 		.with_tracing()
 		.build()
@@ -1209,11 +1209,11 @@ pub fn create_and_manage_foreign_assets_for_local_consensus_teyrchain_assets_wor
 				<pezpallet_balances::Pezpallet<Runtime>>::free_balance(
 					&foreign_creator_as_account_id
 				),
-				existential_deposit +
-					asset_deposit + metadata_deposit_base +
-					metadata_deposit_per_byte_eta +
-					buy_execution_fee_amount.into() +
-					buy_execution_fee_amount.into()
+				existential_deposit
+					+ asset_deposit + metadata_deposit_base
+					+ metadata_deposit_per_byte_eta
+					+ buy_execution_fee_amount.into()
+					+ buy_execution_fee_amount.into()
 			);
 			additional_checks_before();
 
@@ -1549,9 +1549,9 @@ pub fn reserve_transfer_native_asset_to_non_teleport_para_works<
 			// then verify the arithmetics check out on final balance.
 			let delivery_fees_buffer = 40_000_000_000u128;
 			// drip 2xED + transfer_amount + delivery_fees_buffer to Alice account
-			let alice_account_init_balance = existential_deposit.saturating_mul(2.into()) +
-				balance_to_transfer.into() +
-				delivery_fees_buffer.into();
+			let alice_account_init_balance = existential_deposit.saturating_mul(2.into())
+				+ balance_to_transfer.into()
+				+ delivery_fees_buffer.into();
 			let _ = <pezpallet_balances::Pezpallet<Runtime>>::deposit_creating(
 				&alice_account,
 				alice_account_init_balance,
@@ -1565,9 +1565,9 @@ pub fn reserve_transfer_native_asset_to_non_teleport_para_works<
 			// we just check here, that user retains enough balance after withdrawal
 			// and also we check if `balance_to_transfer` is more than `existential_deposit`,
 			assert!(
-				(<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&alice_account) -
-					balance_to_transfer.into()) >=
-					existential_deposit
+				(<pezpallet_balances::Pezpallet<Runtime>>::free_balance(&alice_account)
+					- balance_to_transfer.into())
+					>= existential_deposit
 			);
 			// SA has just ED
 			assert_eq!(
@@ -1609,8 +1609,9 @@ pub fn reserve_transfer_native_asset_to_non_teleport_para_works<
 				.into_iter()
 				.filter_map(|e| unwrap_xcmp_queue_event(e.event.encode()))
 				.find_map(|e| match e {
-					pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { message_hash } =>
-						Some(message_hash),
+					pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { message_hash } => {
+						Some(message_hash)
+					},
 					_ => None,
 				});
 
