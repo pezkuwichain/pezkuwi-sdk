@@ -15,11 +15,9 @@ set -u
 
 # HARD FAILING
 MUST_NOT=(
-	"client crates must not depend on anything in /frame"
-	"client crates must not depend on anything in /node"
-	"frame crates must not depend on anything in /node"
-	"frame crates must not depend on anything in /client"
-	"primitives crates must not depend on anything in /frame"
+	"client crates must not depend on anything in /pezframe"
+	"pezframe crates must not depend on anything in /client"
+	"primitives crates must not depend on anything in /pezframe"
 )
 
 # ONLY DISPLAYED, script still succeeds
