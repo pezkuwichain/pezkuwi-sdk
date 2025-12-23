@@ -1,4 +1,4 @@
-use sp_core::{crypto::SecretStringError, ecdsa, ed25519, keccak_256, sr25519, Pair, H160, H256};
+use pezsp_core::{crypto::SecretStringError, ecdsa, ed25519, keccak_256, sr25519, Pair, H160, H256};
 
 use super::errors::GeneratorError;
 use crate::shared::types::{Accounts, NodeAccount};
@@ -59,7 +59,7 @@ mod tests {
     use super::*;
     #[test]
     fn generate_for_alice() {
-        use sp_core::crypto::Ss58Codec;
+        use pezsp_core::crypto::Ss58Codec;
         let s = "Alice";
         let seed = format!("//{s}");
 
@@ -84,7 +84,7 @@ mod tests {
 
     #[test]
     fn generate_for_zombie() {
-        use sp_core::crypto::Ss58Codec;
+        use pezsp_core::crypto::Ss58Codec;
         let s = "Zombie";
         let seed = format!("//{s}");
 

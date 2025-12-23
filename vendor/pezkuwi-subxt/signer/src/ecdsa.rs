@@ -68,7 +68,7 @@ impl Keypair {
 			Self::from_secret_key(seed)?
 		} else {
 			let phrase = bip39::Mnemonic::from_str(phrase.expose_secret())?;
-			let pass_str = password.as_ref().map(|p| p.expose_secret());
+			let pass_str = password.as_ref().map(|p| p.expose_secret().as_str());
 			Self::from_phrase(&phrase, pass_str)?
 		};
 
@@ -197,7 +197,7 @@ pub(crate) mod internal {
 		let (recid, sig): (_, [u8; 64]) = recsig.serialize_compact();
 		let mut signature_bytes: [u8; 65] = [0; 65];
 		signature_bytes[..64].copy_from_slice(&sig);
-		signature_bytes[64] = (i32::from(recid) & 0xFF) as u8;
+		signature_bytes[64] = (recid.to_i32() & 0xFF) as u8;
 		signature_bytes
 	}
 

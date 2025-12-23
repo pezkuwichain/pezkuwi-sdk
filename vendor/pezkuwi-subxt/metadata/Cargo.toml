@@ -43,7 +43,7 @@ pezsp-crypto-hashing = { workspace = true }
 scale-info = { workspace = true, default-features = false }
 scale-info-legacy = { workspace = true, optional = true }
 scale-type-resolver = { workspace = true, optional = true }
-thiserror = { workspace = true, default-features = false }
+thiserror = { workspace = true }
 
 [dev-dependencies]
 bitvec = { workspace = true, features = ["alloc"] }
