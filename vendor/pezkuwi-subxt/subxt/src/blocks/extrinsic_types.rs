@@ -302,7 +302,9 @@ impl<T: Config> ExtrinsicEvents<T> {
 	///
 	/// This works in the same way that [`events::Events::find()`] does, with the
 	/// exception that it filters out events not related to the submitted extrinsic.
-	pub fn find<'a, Ev: events::StaticEvent + 'a>(&'a self) -> impl Iterator<Item = Result<Ev, EventsError>> + 'a {
+	pub fn find<'a, Ev: events::StaticEvent + 'a>(
+		&'a self,
+	) -> impl Iterator<Item = Result<Ev, EventsError>> + 'a {
 		self.iter().filter_map(|ev| ev.and_then(|ev| ev.as_event::<Ev>()).transpose())
 	}
 

@@ -2,8 +2,8 @@
 use std::{env, future::Future, path::PathBuf, pin::Pin};
 
 use crate::{
-    AttachToLive, AttachToLiveNetwork, LocalFileSystem, Network, NetworkConfig, NetworkConfigExt,
-    OrchestratorError,
+	AttachToLive, AttachToLiveNetwork, LocalFileSystem, Network, NetworkConfig, NetworkConfigExt,
+	OrchestratorError,
 };
 
 const DEFAULT_POLKADOT_IMAGE: &str = "docker.io/parity/polkadot:latest";
@@ -11,80 +11,80 @@ const DEFAULT_CUMULUS_IMAGE: &str = "docker.io/parity/polkadot-parachain:latest"
 
 #[derive(Debug, Default)]
 pub struct Images {
-    pub polkadot: String,
-    pub cumulus: String,
+	pub polkadot: String,
+	pub cumulus: String,
 }
 
 impl Images {
-    /// Alias for polkadot field - returns reference to pezkuwi/polkadot image
-    pub fn pezkuwi(&self) -> &str {
-        &self.polkadot
-    }
+	/// Alias for polkadot field - returns reference to pezkuwi/polkadot image
+	pub fn pezkuwi(&self) -> &str {
+		&self.polkadot
+	}
 
-    /// Alias for cumulus field - returns reference to pezcumulus/cumulus image
-    pub fn pezcumulus(&self) -> &str {
-        &self.cumulus
-    }
+	/// Alias for cumulus field - returns reference to pezcumulus/cumulus image
+	pub fn pezcumulus(&self) -> &str {
+		&self.cumulus
+	}
 }
 
 pub enum Provider {
-    Native,
-    K8s,
-    Docker,
+	Native,
+	K8s,
+	Docker,
 }
 
 impl Provider {
-    pub fn get_spawn_fn(
-        &self,
-    ) -> fn(NetworkConfig) -> Pin<Box<dyn Future<Output = SpawnResult> + Send>> {
-        match self {
-            Provider::Native => NetworkConfigExt::spawn_native,
-            Provider::K8s => NetworkConfigExt::spawn_k8s,
-            Provider::Docker => NetworkConfigExt::spawn_docker,
-        }
-    }
+	pub fn get_spawn_fn(
+		&self,
+	) -> fn(NetworkConfig) -> Pin<Box<dyn Future<Output = SpawnResult> + Send>> {
+		match self {
+			Provider::Native => NetworkConfigExt::spawn_native,
+			Provider::K8s => NetworkConfigExt::spawn_k8s,
+			Provider::Docker => NetworkConfigExt::spawn_docker,
+		}
+	}
 }
 
 // Use `docker` as default provider
 impl From<String> for Provider {
-    fn from(value: String) -> Self {
-        match value.to_ascii_lowercase().as_ref() {
-            "native" => Provider::Native,
-            "k8s" => Provider::K8s,
-            _ => Provider::Docker, // default provider
-        }
-    }
+	fn from(value: String) -> Self {
+		match value.to_ascii_lowercase().as_ref() {
+			"native" => Provider::Native,
+			"k8s" => Provider::K8s,
+			_ => Provider::Docker, // default provider
+		}
+	}
 }
 
 pub fn get_images_from_env() -> Images {
-    let polkadot = env::var("POLKADOT_IMAGE").unwrap_or(DEFAULT_POLKADOT_IMAGE.into());
-    let cumulus = env::var("CUMULUS_IMAGE").unwrap_or(DEFAULT_CUMULUS_IMAGE.into());
-    Images { polkadot, cumulus }
+	let polkadot = env::var("POLKADOT_IMAGE").unwrap_or(DEFAULT_POLKADOT_IMAGE.into());
+	let cumulus = env::var("CUMULUS_IMAGE").unwrap_or(DEFAULT_CUMULUS_IMAGE.into());
+	Images { polkadot, cumulus }
 }
 
 pub fn get_provider_from_env() -> Provider {
-    env::var("ZOMBIE_PROVIDER").unwrap_or_default().into()
+	env::var("ZOMBIE_PROVIDER").unwrap_or_default().into()
 }
 
 pub type SpawnResult = Result<Network<LocalFileSystem>, OrchestratorError>;
 pub fn get_spawn_fn() -> fn(NetworkConfig) -> Pin<Box<dyn Future<Output = SpawnResult> + Send>> {
-    let provider = get_provider_from_env();
+	let provider = get_provider_from_env();
 
-    match provider {
-        Provider::Native => NetworkConfigExt::spawn_native,
-        Provider::K8s => NetworkConfigExt::spawn_k8s,
-        Provider::Docker => NetworkConfigExt::spawn_docker,
-    }
+	match provider {
+		Provider::Native => NetworkConfigExt::spawn_native,
+		Provider::K8s => NetworkConfigExt::spawn_k8s,
+		Provider::Docker => NetworkConfigExt::spawn_docker,
+	}
 }
 
 pub type AttachResult = Result<Network<LocalFileSystem>, OrchestratorError>;
 
 pub fn get_attach_fn() -> fn(PathBuf) -> Pin<Box<dyn Future<Output = AttachResult> + Send>> {
-    let provider = get_provider_from_env();
+	let provider = get_provider_from_env();
 
-    match provider {
-        Provider::Native => AttachToLiveNetwork::attach_native,
-        Provider::K8s => AttachToLiveNetwork::attach_k8s,
-        Provider::Docker => AttachToLiveNetwork::attach_docker,
-    }
+	match provider {
+		Provider::Native => AttachToLiveNetwork::attach_native,
+		Provider::K8s => AttachToLiveNetwork::attach_k8s,
+		Provider::Docker => AttachToLiveNetwork::attach_docker,
+	}
 }
