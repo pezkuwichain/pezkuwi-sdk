@@ -202,7 +202,7 @@ parameter_types! {
 #[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
 impl pezframe_system::Config for TestRuntime {
 	type Block = ThisChainBlock;
-	// TODO: remove when https://github.com/pezkuwichain/pezkuwi-sdk/issues/120 merged
+	// TODO: remove when https://github.com/pezkuwichain/pezkuwi-sdk/issues/265 merged
 	type BlockHashCount = ConstU32<10>;
 	type AccountData = pezpallet_balances::AccountData<ThisChainBalance>;
 	type DbWeight = DbWeight;

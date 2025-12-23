@@ -483,7 +483,7 @@ pub(crate) async fn handle_network_update<Context>(
 				state.unused_topologies.insert(*new_session_index, topology);
 			}
 
-			// TODO [https://github.com/pezkuwichain/pezkuwi-sdk/issues/165]
+			// TODO [https://github.com/pezkuwichain/pezkuwi-sdk/issues/308]
 			// technically, we should account for the fact that the session topology might
 			// come late, and for all relay-parents with this session, send all grid peers
 			// any `BackedCandidateInv` messages they might need.

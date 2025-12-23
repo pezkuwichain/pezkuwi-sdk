@@ -46,7 +46,7 @@
 
 // Most of the business logic in this pezpallet has been
 // originally contributed by "https://github.com/shamb0",
-// as part of the PR - https://github.com/pezkuwichain/pezkuwi-sdk/issues/74.
+// as part of the PR - https://github.com/pezkuwichain/pezkuwi-sdk/issues/223.
 // The code has been moved here and then refactored in order to
 // extract child bounties as a separate pezpallet.
 

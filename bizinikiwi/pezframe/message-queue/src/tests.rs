@@ -285,7 +285,7 @@ fn service_queues_low_weight_defensive() {
 	});
 }
 
-/// Regression test for <https://github.com/pezkuwichain/pezkuwi-sdk/issues/109>.
+/// Regression test for <https://github.com/pezkuwichain/pezkuwi-sdk/issues/255>.
 #[test]
 fn service_queues_regression_1873() {
 	use MessageOrigin::*;
@@ -1675,7 +1675,7 @@ fn integrity_test_checks_service_weight() {
 	});
 }
 
-/// Test for <https://github.com/pezkuwichain/pezkuwi-sdk/issues/121>.
+/// Test for <https://github.com/pezkuwichain/pezkuwi-sdk/issues/266>.
 #[test]
 fn regression_issue_2319() {
 	build_and_execute::<Test>(|| {

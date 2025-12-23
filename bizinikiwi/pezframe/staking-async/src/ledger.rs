@@ -67,7 +67,7 @@ pub struct UnlockChunk<Balance: HasCompact + MaxEncodedLen> {
 ///
 /// TODO: move struct definition and full implementation into `/src/ledger.rs`. Currently
 /// leaving here to enforce a clean PR diff, given how critical this logic is. Tracking issue
-/// <https://github.com/pezkuwichain/pezkuwi-sdk/issues/21>.
+/// <https://github.com/pezkuwichain/pezkuwi-sdk/issues/191>.
 #[derive(
 	PartialEqNoBound,
 	EqNoBound,
@@ -194,7 +194,7 @@ impl<T: Config> StakingLedger<T> {
 		// further spoil the ledger's state. A bond is in bad state when the bonded controller is
 		// associated with a different ledger (i.e. a ledger with a different stash).
 		//
-		// See <https://github.com/pezkuwichain/pezkuwi-sdk/issues/128> for more details.
+		// See <https://github.com/pezkuwichain/pezkuwi-sdk/issues/273> for more details.
 		ensure!(
 			Bonded::<T>::get(&stash) == Some(controller) && ledger.stash == stash,
 			Error::<T>::BadState
@@ -303,7 +303,7 @@ impl<T: Config> StakingLedger<T> {
 		if let Some(bonded_ledger) = Ledger::<T>::get(&self.stash) {
 			// there is a ledger bonded by the stash. In this case, the stash of the bonded ledger
 			// should be the same as the ledger's stash. Otherwise fail to prevent data
-			// inconsistencies. See <https://github.com/pezkuwichain/pezkuwi-sdk/issues/117> for more
+			// inconsistencies. See <https://github.com/pezkuwichain/pezkuwi-sdk/issues/262> for more
 			// details.
 			ensure!(bonded_ledger.stash == self.stash, Error::<T>::BadState);
 		}

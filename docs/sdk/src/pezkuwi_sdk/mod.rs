@@ -41,7 +41,7 @@
 //!
 //! [![Bizinikiwi-license](https://img.shields.io/badge/License-Apache2.0-blue)](https://github.com/pezkuwichain/pezkuwi-sdk/blob/master/bizinikiwi/LICENSE-APACHE2)
 //! [![GitHub
-//! Repo](https://img.shields.io/badge/github-frame-2324CC85)](https://github.com/pezkuwichain/pezkuwi-sdk/blob/master/bizinikiwi/frame)
+//! Repo](https://img.shields.io/badge/github-frame-2324CC85)](https://github.com/pezkuwichain/pezkuwi-sdk/blob/master/bizinikiwi/pezframe)
 //!
 //! [`frame`] is the framework used to create Bizinikiwi-based application logic, aka. runtimes.
 //! Learn more about the distinction of a runtime and node in
@@ -118,8 +118,8 @@
 //!
 //! - [`parity-scale-codec`](https://github.com/pezkuwichain/parity-scale-codec)
 //! - [`parity-db`](https://github.com/pezkuwichain/parity-db)
-//! - [`trie`](https://github.com/pezkuwichain/trie)
-//! - [`parity-common`](https://github.com/pezkuwichain/parity-common)
+//! - [`trie`](https://github.com/paritytech/trie)
+//! - [`parity-common`](https://github.com/paritytech/parity-common)
 //!
 //! ## Trophy Section: Notable Downstream Projects
 //!

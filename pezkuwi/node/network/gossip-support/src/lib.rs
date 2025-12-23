@@ -797,7 +797,7 @@ async fn update_gossip_topology(
 	let random_seed = {
 		let (tx, rx) = oneshot::channel();
 
-		// TODO https://github.com/pezkuwichain/pezkuwi-sdk/issues/156:
+		// TODO https://github.com/pezkuwichain/pezkuwi-sdk/issues/299:
 		// get the random seed from the `SessionInfo` instead.
 		sender
 			.send_message(RuntimeApiMessage::Request(

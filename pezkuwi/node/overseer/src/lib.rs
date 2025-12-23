@@ -624,7 +624,7 @@ pub struct Overseer<SupportsTeyrchains> {
 	approval_voting_parallel: ApprovalVotingParallel,
 	#[subsystem(GossipSupportMessage, sends: [
 		NetworkBridgeTxMessage,
-		NetworkBridgeRxMessage, // TODO <https://github.com/pezkuwichain/pezkuwi-sdk/issues/160>
+		NetworkBridgeRxMessage, // TODO <https://github.com/pezkuwichain/pezkuwi-sdk/issues/303>
 		RuntimeApiMessage,
 		ChainSelectionMessage,
 		ChainApiMessage,

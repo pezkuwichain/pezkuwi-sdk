@@ -108,7 +108,7 @@ fn subxt_inner(args: TokenStream, item_mod: syn::ItemMod) -> Result<TokenStream,
 
 		// Run this first to ensure type paths are unique (which may result in 1,2,3 suffixes being
 		// added to type paths), so that when we validate derives/substitutions below, they are
-		// allowed for such types. See <https://github.com/pezkuwichain/subxt/issues/2011>.
+		// allowed for such types. See <https://github.com/paritytech/subxt/issues/2011>.
 		scale_typegen::utils::ensure_unique_type_paths(metadata.types_mut())
 			.expect("ensure_unique_type_paths should not fail; please report an issue.");
 

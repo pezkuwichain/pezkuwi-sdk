@@ -89,7 +89,7 @@
 //! build their WASM files as a part of normal build command (e.g. `cargo build`). Once built, the
 //! wasm file is placed in `./target/{debug|release}/wbuild/{runtime_name}/{runtime_name}.wasm`.
 //!
-//! In order to ensure that the WASM build is **deterministic**, the [Bizinikiwi Runtime Toolbox (srtool)](https://github.com/pezkuwichain/srtool) can be used.
+//! In order to ensure that the WASM build is **deterministic**, the [Bizinikiwi Runtime Toolbox (srtool)](https://github.com/paritytech/srtool) can be used.
 //!
 //! ### Anatomy of a Binary Crate
 //!
@@ -108,7 +108,7 @@
 //!
 //! > The above two are conventions, not rules.
 //!
-//! > See <https://github.com/pezkuwichain/pezkuwi-sdk/issues/94> for an update on how the node side
+//! > See <https://github.com/pezkuwichain/pezkuwi-sdk/issues/241> for an update on how the node side
 //! > components are being amalgamated.
 //!
 //! ## Teyrchain?
@@ -130,7 +130,7 @@
 //!     - [`pezsc_consensus_aura`]
 //!     - [`pezsc_consensus_babe`]
 //!     - [`pezsc_consensus_grandpa`]
-//!     - [`pezsc_consensus_beefy`] (TODO: @adrian, add some high level docs <https://github.com/pezkuwichain/pezkuwi-sdk/issues/162>)
+//!     - [`pezsc_consensus_beefy`] (TODO: @adrian, add some high level docs <https://github.com/pezkuwichain/pezkuwi-sdk/issues/305>)
 //!     - [`pezsc_consensus_manual_seal`]
 //!     - [`pezsc_consensus_pow`]
 

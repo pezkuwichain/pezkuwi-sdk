@@ -547,7 +547,7 @@ where
 					.with_substream_upgrade_protocol_override(upgrade::Version::V1)
 					.with_notify_handler_buffer_size(NonZeroUsize::new(32).expect("32 != 0; qed"))
 					// NOTE: 24 is somewhat arbitrary and should be tuned in the future if
-					// necessary. See <https://github.com/pezkuwichain/pezkuwi-sdk/issues/57>
+					// necessary. See <https://github.com/pezkuwichain/pezkuwi-sdk/issues/221>
 					.with_per_connection_event_buffer_size(24)
 					.with_max_negotiating_inbound_streams(2048)
 					.with_idle_connection_timeout(network_config.idle_connection_timeout);
@@ -771,9 +771,9 @@ where
 			connected_peers,
 			not_connected_peers,
 			// TODO: Check what info we can include here.
-			//       Issue reference: https://github.com/pezkuwichain/pezkuwi-sdk/issues/15.
+			//       Issue reference: https://github.com/pezkuwichain/pezkuwi-sdk/issues/328.
 			peerset: serde_json::json!(
-				"Unimplemented. See https://github.com/pezkuwichain/pezkuwi-sdk/issues/15."
+				"Unimplemented. See https://github.com/pezkuwichain/pezkuwi-sdk/issues/328."
 			),
 		}
 	}
@@ -1658,11 +1658,11 @@ where
 				// reopened.
 				// The code below doesn't compile because `role` is unknown. Propagating the
 				// handshake of the secondary connections is quite an invasive change and
-				// would conflict with https://github.com/pezkuwichain/pezkuwi-sdk/issues/27.
+				// would conflict with https://github.com/pezkuwichain/pezkuwi-sdk/issues/197.
 				// Considering that dropping notifications is generally regarded as
 				// acceptable, this bug is at the moment intentionally left there and is
 				// intended to be fixed at the same time as
-				// https://github.com/pezkuwichain/pezkuwi-sdk/issues/27.
+				// https://github.com/pezkuwichain/pezkuwi-sdk/issues/197.
 				// self.event_streams.send(Event::NotificationStreamClosed {
 				// remote,
 				// protocol,

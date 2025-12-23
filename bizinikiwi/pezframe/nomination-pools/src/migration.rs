@@ -840,7 +840,7 @@ pub mod v2 {
 	}
 
 	/// Migrate the pool reward scheme to the new version, as per
-	/// <https://github.com/pezkuwichain/pezkuwi-sdk/issues/37.>.
+	/// <https://github.com/pezkuwichain/pezkuwi-sdk/issues/206.>.
 	pub struct MigrateToV2<T>(core::marker::PhantomData<T>);
 	impl<T: Config> MigrateToV2<T> {
 		fn run(current: StorageVersion) -> Weight {
