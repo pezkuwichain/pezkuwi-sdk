@@ -1,26 +1,19 @@
-# https://rust-lang.github.io/rustfmt/?version=v1.7.0
+# Pezkuwi ZombieNet SDK - Stable Rustfmt Configuration
+# Only stable features for compatibility with CI
 
-# general
-indent_style = "Block"
+# Basic (stable)
+hard_tabs = true
+max_width = 100
+use_small_heuristics = "Max"
 
-# rewriting
-condense_wildcard_suffixes = true
+# Imports (stable)
+reorder_imports = true
+reorder_modules = true
+
+# Consistency (stable)
+newline_style = "Unix"
+
+# Misc (stable)
 match_block_trailing_comma = true
 use_field_init_shorthand = true
 use_try_shorthand = true
-
-# normalization
-normalize_comments = true
-normalize_doc_attributes = true
-
-# reordering
-reorder_impl_items = true
-reorder_imports = true
-reorder_modules = true
-imports_granularity = "Crate"
-group_imports = "StdExternalCrate"
-
-# additional formating
-format_code_in_doc_comments = true
-format_macro_matchers = true
-format_macro_bodies = true

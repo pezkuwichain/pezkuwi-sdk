@@ -93,7 +93,7 @@ pub use relaychain::{RelaychainConfig, RelaychainConfigBuilder};
 // re-export shared
 pub use shared::{node::NodeConfig, types};
 pub use teyrchain::{
-    states as para_states, RegistrationStrategy, TeyrchainConfig, TeyrchainConfigBuilder,
+	states as para_states, RegistrationStrategy, TeyrchainConfig, TeyrchainConfigBuilder,
 };
 
 // Backward compatibility aliases for external crates that use Polkadot SDK terminology

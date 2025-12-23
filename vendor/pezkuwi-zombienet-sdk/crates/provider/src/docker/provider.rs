@@ -1,7 +1,7 @@
 use std::{
-    collections::HashMap,
-    path::{Path, PathBuf},
-    sync::{Arc, Weak},
+	collections::HashMap,
+	path::{Path, PathBuf},
+	sync::{Arc, Weak},
 };
 
 use async_trait::async_trait;
@@ -10,152 +10,143 @@ use tokio::sync::RwLock;
 
 use super::{client::DockerClient, namespace::DockerNamespace};
 use crate::{
-    shared::helpers::extract_namespace_info, types::ProviderCapabilities, DynNamespace, Provider,
-    ProviderError, ProviderNamespace,
+	shared::helpers::extract_namespace_info, types::ProviderCapabilities, DynNamespace, Provider,
+	ProviderError, ProviderNamespace,
 };
 
 pub const PROVIDER_NAME: &str = "docker";
 
 pub struct DockerProvider<FS>
 where
-    FS: FileSystem + Send + Sync + Clone,
+	FS: FileSystem + Send + Sync + Clone,
 {
-    weak: Weak<DockerProvider<FS>>,
-    capabilities: ProviderCapabilities,
-    tmp_dir: PathBuf,
-    docker_client: DockerClient,
-    filesystem: FS,
-    pub(super) namespaces: RwLock<HashMap<String, Arc<DockerNamespace<FS>>>>,
+	weak: Weak<DockerProvider<FS>>,
+	capabilities: ProviderCapabilities,
+	tmp_dir: PathBuf,
+	docker_client: DockerClient,
+	filesystem: FS,
+	pub(super) namespaces: RwLock<HashMap<String, Arc<DockerNamespace<FS>>>>,
 }
 
 impl<FS> DockerProvider<FS>
 where
-    FS: FileSystem + Send + Sync + Clone + 'static,
+	FS: FileSystem + Send + Sync + Clone + 'static,
 {
-    pub async fn new(filesystem: FS) -> Arc<Self> {
-        let docker_client = DockerClient::new().await.unwrap();
+	pub async fn new(filesystem: FS) -> Arc<Self> {
+		let docker_client = DockerClient::new().await.unwrap();
 
-        let provider = Arc::new_cyclic(|weak| DockerProvider {
-            weak: weak.clone(),
-            capabilities: ProviderCapabilities {
-                requires_image: true,
-                has_resources: false,
-                prefix_with_full_path: false,
-                use_default_ports_in_cmd: true,
-            },
-            tmp_dir: std::env::temp_dir(),
-            docker_client,
-            filesystem,
-            namespaces: RwLock::new(HashMap::new()),
-        });
+		let provider = Arc::new_cyclic(|weak| DockerProvider {
+			weak: weak.clone(),
+			capabilities: ProviderCapabilities {
+				requires_image: true,
+				has_resources: false,
+				prefix_with_full_path: false,
+				use_default_ports_in_cmd: true,
+			},
+			tmp_dir: std::env::temp_dir(),
+			docker_client,
+			filesystem,
+			namespaces: RwLock::new(HashMap::new()),
+		});
 
-        let cloned_provider = provider.clone();
-        tokio::spawn(async move {
-            tokio::signal::ctrl_c().await.unwrap();
-            for (_, ns) in cloned_provider.namespaces().await {
-                if ns.is_detached().await {
-                    // best effort
-                    let _ = ns.destroy().await;
-                }
-            }
+		let cloned_provider = provider.clone();
+		tokio::spawn(async move {
+			tokio::signal::ctrl_c().await.unwrap();
+			for (_, ns) in cloned_provider.namespaces().await {
+				if ns.is_detached().await {
+					// best effort
+					let _ = ns.destroy().await;
+				}
+			}
 
-            // exit the process (130, SIGINT)
-            std::process::exit(130)
-        });
+			// exit the process (130, SIGINT)
+			std::process::exit(130)
+		});
 
-        provider
-    }
+		provider
+	}
 
-    pub fn tmp_dir(mut self, tmp_dir: impl Into<PathBuf>) -> Self {
-        self.tmp_dir = tmp_dir.into();
-        self
-    }
+	pub fn tmp_dir(mut self, tmp_dir: impl Into<PathBuf>) -> Self {
+		self.tmp_dir = tmp_dir.into();
+		self
+	}
 }
 
 #[async_trait]
 impl<FS> Provider for DockerProvider<FS>
 where
-    FS: FileSystem + Send + Sync + Clone + 'static,
+	FS: FileSystem + Send + Sync + Clone + 'static,
 {
-    fn name(&self) -> &str {
-        PROVIDER_NAME
-    }
+	fn name(&self) -> &str {
+		PROVIDER_NAME
+	}
 
-    fn capabilities(&self) -> &ProviderCapabilities {
-        &self.capabilities
-    }
+	fn capabilities(&self) -> &ProviderCapabilities {
+		&self.capabilities
+	}
 
-    async fn namespaces(&self) -> HashMap<String, DynNamespace> {
-        self.namespaces
-            .read()
-            .await
-            .iter()
-            .map(|(name, namespace)| (name.clone(), namespace.clone() as DynNamespace))
-            .collect()
-    }
+	async fn namespaces(&self) -> HashMap<String, DynNamespace> {
+		self.namespaces
+			.read()
+			.await
+			.iter()
+			.map(|(name, namespace)| (name.clone(), namespace.clone() as DynNamespace))
+			.collect()
+	}
 
-    async fn create_namespace(&self) -> Result<DynNamespace, ProviderError> {
-        let namespace = DockerNamespace::new(
-            &self.weak,
-            &self.tmp_dir,
-            &self.capabilities,
-            &self.docker_client,
-            &self.filesystem,
-            None,
-        )
-        .await?;
+	async fn create_namespace(&self) -> Result<DynNamespace, ProviderError> {
+		let namespace = DockerNamespace::new(
+			&self.weak,
+			&self.tmp_dir,
+			&self.capabilities,
+			&self.docker_client,
+			&self.filesystem,
+			None,
+		)
+		.await?;
 
-        self.namespaces
-            .write()
-            .await
-            .insert(namespace.name().to_string(), namespace.clone());
+		self.namespaces.write().await.insert(namespace.name().to_string(), namespace.clone());
 
-        Ok(namespace)
-    }
+		Ok(namespace)
+	}
 
-    async fn create_namespace_with_base_dir(
-        &self,
-        base_dir: &Path,
-    ) -> Result<DynNamespace, ProviderError> {
-        let namespace = DockerNamespace::new(
-            &self.weak,
-            &self.tmp_dir,
-            &self.capabilities,
-            &self.docker_client,
-            &self.filesystem,
-            Some(base_dir),
-        )
-        .await?;
+	async fn create_namespace_with_base_dir(
+		&self,
+		base_dir: &Path,
+	) -> Result<DynNamespace, ProviderError> {
+		let namespace = DockerNamespace::new(
+			&self.weak,
+			&self.tmp_dir,
+			&self.capabilities,
+			&self.docker_client,
+			&self.filesystem,
+			Some(base_dir),
+		)
+		.await?;
 
-        self.namespaces
-            .write()
-            .await
-            .insert(namespace.name().to_string(), namespace.clone());
+		self.namespaces.write().await.insert(namespace.name().to_string(), namespace.clone());
 
-        Ok(namespace)
-    }
+		Ok(namespace)
+	}
 
-    async fn create_namespace_from_json(
-        &self,
-        json_value: &serde_json::Value,
-    ) -> Result<DynNamespace, ProviderError> {
-        let (base_dir, name) = extract_namespace_info(json_value)?;
+	async fn create_namespace_from_json(
+		&self,
+		json_value: &serde_json::Value,
+	) -> Result<DynNamespace, ProviderError> {
+		let (base_dir, name) = extract_namespace_info(json_value)?;
 
-        let namespace = DockerNamespace::attach_to_live(
-            &self.weak,
-            &self.capabilities,
-            &self.docker_client,
-            &self.filesystem,
-            &base_dir,
-            &name,
-        )
-        .await?;
+		let namespace = DockerNamespace::attach_to_live(
+			&self.weak,
+			&self.capabilities,
+			&self.docker_client,
+			&self.filesystem,
+			&base_dir,
+			&name,
+		)
+		.await?;
 
-        self.namespaces
-            .write()
-            .await
-            .insert(namespace.name().to_string(), namespace.clone());
+		self.namespaces.write().await.insert(namespace.name().to_string(), namespace.clone());
 
-        Ok(namespace)
-    }
+		Ok(namespace)
+	}
 }
