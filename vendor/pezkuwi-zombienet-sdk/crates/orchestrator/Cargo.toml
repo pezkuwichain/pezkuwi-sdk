@@ -30,16 +30,13 @@ reqwest = { workspace = true }
 serde = { workspace = true, features = ["derive"] }
 serde_json = { workspace = true, features = ["arbitrary_precision"] }
 sha2 = { workspace = true, default-features = false }
-sp-core = { workspace = true }
+pezsp-core = { workspace = true }
 thiserror = { workspace = true }
 tokio = { workspace = true, features = ["time"] }
 tracing = { workspace = true }
 uuid = { workspace = true }
-# staging-chain-spec-builder = { workspace = true }
-# parity-scale-codec = { version = "3.7.5", features = ["derive"] }
-# sc-chain-spec = {workspace = true, default-features = false}
 erased-serde = { workspace = true }
-sc-chain-spec = { workspace = true }
+pezsc-chain-spec = { workspace = true }
 
 # Zombienet deps
 configuration = { workspace = true }

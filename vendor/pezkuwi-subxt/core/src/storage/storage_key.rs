@@ -50,7 +50,7 @@ impl<'info, KeyParts: IntoDecodableValues> StorageKey<'info, KeyParts> {
 
 	/// Iterate over the parts of this storage key. Each part of a storage key corresponds to a
 	/// single value that has been hashed.
-	pub fn parts(&self) -> impl ExactSizeIterator<Item = StorageKeyPart<'info>> {
+	pub fn parts(&self) -> impl ExactSizeIterator<Item = StorageKeyPart<'info>> + '_ {
 		let parts_len = self.info.parts().len();
 		(0..parts_len).map(move |index| StorageKeyPart {
 			index,

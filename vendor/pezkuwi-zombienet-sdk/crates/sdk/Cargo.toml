@@ -27,7 +27,7 @@ provider = { workspace = true }
 support = { workspace = true }
 
 [dev-dependencies]
-k8s-openapi = { workspace = true, features = ["v1_27"] }
+k8s-openapi = { workspace = true, features = ["v1_28"] }
 kube = { workspace = true, features = ["runtime", "ws"] }
 serde_json = { workspace = true }
 tracing-subscriber = { workspace = true }

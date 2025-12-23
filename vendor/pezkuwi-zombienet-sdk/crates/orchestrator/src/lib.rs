@@ -1053,7 +1053,7 @@ pub enum ZombieRole {
 // re-exports
 pub use network::{AddCollatorOptions, AddNodeOptions};
 pub use network_helper::metrics;
-pub use sc_chain_spec;
+pub use pezsc_chain_spec;
 
 #[cfg(test)]
 mod tests {

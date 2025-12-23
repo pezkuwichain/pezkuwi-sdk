@@ -13,7 +13,7 @@ use provider::{
     types::{GenerateFileCommand, GenerateFilesOptions, TransferedFile},
     DynNamespace, ProviderError,
 };
-use sc_chain_spec::{GenericChainSpec, GenesisConfigBuilderRuntimeCaller};
+use pezsc_chain_spec::{GenericChainSpec, GenesisConfigBuilderRuntimeCaller};
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 use support::{constants::THIS_IS_A_BUG, fs::FileSystem, replacer::apply_replacements};
