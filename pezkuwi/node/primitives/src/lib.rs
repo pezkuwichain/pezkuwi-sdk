@@ -567,12 +567,12 @@ impl Proof {
 /// Possible errors when converting from `Vec<Vec<u8>>` into [`Proof`].
 #[derive(thiserror::Error, Debug)]
 pub enum MerkleProofError {
-	#[error("Merkle max proof depth exceeded {0} > {} .", MERKLE_PROOF_MAX_DEPTH)]
 	/// This error signifies that the Proof length exceeds the trie's max depth
+	#[error("Merkle max proof depth exceeded {0} > {MERKLE_PROOF_MAX_DEPTH}.")]
 	MerkleProofDepthExceeded(usize),
 
-	#[error("Merkle node max size exceeded {0} > {} .", MERKLE_NODE_MAX_SIZE)]
 	/// This error signifies that a Proof node exceeds the 16-ary max node size
+	#[error("Merkle node max size exceeded {0} > {MERKLE_NODE_MAX_SIZE}.")]
 	MerkleProofNodeSizeExceeded(usize),
 }
 

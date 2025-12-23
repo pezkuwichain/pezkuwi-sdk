@@ -8,7 +8,7 @@ pub use configuration::{
 pub use orchestrator::{
     errors::OrchestratorError,
     network::{node::NetworkNode, Network},
-    sc_chain_spec, AddCollatorOptions, AddNodeOptions, Orchestrator,
+    pezsc_chain_spec, AddCollatorOptions, AddNodeOptions, Orchestrator,
 };
 
 // Helpers used for interact with the network
