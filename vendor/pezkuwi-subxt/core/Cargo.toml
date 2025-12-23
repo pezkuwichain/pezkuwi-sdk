@@ -71,7 +71,6 @@ keccak-hash = { workspace = true }
 assert_matches = { workspace = true }
 bitvec = { workspace = true }
 codec = { workspace = true, features = ["bit-vec", "derive"] }
-hex = { workspace = true }
 pezkuwi-subxt-macro = { workspace = true }
 pezkuwi-subxt-signer = { workspace = true, features = ["sr25519", "subxt"] }
 pezsp-core = { workspace = true }
