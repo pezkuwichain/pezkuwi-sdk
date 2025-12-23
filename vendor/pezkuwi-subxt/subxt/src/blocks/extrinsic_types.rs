@@ -74,9 +74,9 @@ where
 	/// Iterate through the extrinsics using metadata to dynamically decode and skip
 	/// them, and return only those which should decode to the provided `E` type.
 	/// If an error occurs, all subsequent iterations return `None`.
-	pub fn find<E: StaticExtrinsic>(
-		&self,
-	) -> impl Iterator<Item = Result<FoundExtrinsic<T, C, E>, ExtrinsicError>> {
+	pub fn find<'a, E: StaticExtrinsic + 'a>(
+		&'a self,
+	) -> impl Iterator<Item = Result<FoundExtrinsic<T, C, E>, ExtrinsicError>> + 'a {
 		self.inner.find::<E>().map(|res| {
 			match res {
 				Err(e) => Err(ExtrinsicError::from(e)),
@@ -290,7 +290,7 @@ impl<T: Config> ExtrinsicEvents<T> {
 	///
 	/// This works in the same way that [`events::Events::iter()`] does, with the
 	/// exception that it filters out events not related to the submitted extrinsic.
-	pub fn iter(&self) -> impl Iterator<Item = Result<events::EventDetails<T>, EventsError>> {
+	pub fn iter(&self) -> impl Iterator<Item = Result<events::EventDetails<T>, EventsError>> + '_ {
 		self.events.iter().filter(|ev| {
 			ev.as_ref()
 				.map(|ev| ev.phase() == events::Phase::ApplyExtrinsic(self.idx))
@@ -302,7 +302,7 @@ impl<T: Config> ExtrinsicEvents<T> {
 	///
 	/// This works in the same way that [`events::Events::find()`] does, with the
 	/// exception that it filters out events not related to the submitted extrinsic.
-	pub fn find<Ev: events::StaticEvent>(&self) -> impl Iterator<Item = Result<Ev, EventsError>> {
+	pub fn find<'a, Ev: events::StaticEvent + 'a>(&'a self) -> impl Iterator<Item = Result<Ev, EventsError>> + 'a {
 		self.iter().filter_map(|ev| ev.and_then(|ev| ev.as_event::<Ev>()).transpose())
 	}
 

@@ -1508,15 +1508,15 @@ static_assertions = { version = "1.1.0", default-features = false }
 static_init = { version = "1.0.3" }
 strum = { version = "0.26.3", default-features = false }
 # Pezkuwi-subxt (vendored from subxt with pezsp_runtime support)
-pezkuwi-subxt = { path = "vendor/pezkuwi-subxt/subxt", default-features = false }
+pezkuwi-subxt = { path = "vendor/pezkuwi-subxt/subxt" }
 pezkuwi-subxt-codegen = { path = "vendor/pezkuwi-subxt/codegen" }
-pezkuwi-subxt-core = { path = "vendor/pezkuwi-subxt/core", default-features = false }
-pezkuwi-subxt-lightclient = { path = "vendor/pezkuwi-subxt/lightclient", default-features = false }
+pezkuwi-subxt-core = { path = "vendor/pezkuwi-subxt/core" }
+pezkuwi-subxt-lightclient = { path = "vendor/pezkuwi-subxt/lightclient" }
 pezkuwi-subxt-macro = { path = "vendor/pezkuwi-subxt/macro" }
-pezkuwi-subxt-metadata = { path = "vendor/pezkuwi-subxt/metadata", default-features = false }
-pezkuwi-subxt-rpcs = { path = "vendor/pezkuwi-subxt/rpcs", default-features = false }
-pezkuwi-subxt-signer = { path = "vendor/pezkuwi-subxt/signer", default-features = false }
-pezkuwi-subxt-utils-fetchmetadata = { path = "vendor/pezkuwi-subxt/utils/fetch-metadata", default-features = false }
+pezkuwi-subxt-metadata = { path = "vendor/pezkuwi-subxt/metadata" }
+pezkuwi-subxt-rpcs = { path = "vendor/pezkuwi-subxt/rpcs" }
+pezkuwi-subxt-signer = { path = "vendor/pezkuwi-subxt/signer" }
+pezkuwi-subxt-utils-fetchmetadata = { path = "vendor/pezkuwi-subxt/utils/fetch-metadata" }
 pezkuwi-subxt-utils-stripmetadata = { path = "vendor/pezkuwi-subxt/utils/strip-metadata" }
 support = { package = "zombienet-support", path = "vendor/pezkuwi-zombienet-sdk/crates/support" }
 syn = { version = "2.0.87" }
@@ -1537,7 +1537,7 @@ test-teyrchain-adder = { path = "pezkuwi/teyrchain/test-teyrchains/adder" }
 test-teyrchain-halt = { path = "pezkuwi/teyrchain/test-teyrchains/halt" }
 test-teyrchain-undying = { path = "pezkuwi/teyrchain/test-teyrchains/undying" }
 testnet-teyrchains-constants = { path = "pezcumulus/teyrchains/runtimes/constants", default-features = false }
-thiserror = { version = "1.0.64" }
+thiserror = { version = "2.0.17", default-features = true }
 thousands = { version = "0.2.0" }
 threadpool = { version = "1.7" }
 tikv-jemalloc-ctl = { version = "0.6.0", features = ["stats"] }
