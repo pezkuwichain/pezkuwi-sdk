@@ -7,9 +7,9 @@ use std::{borrow::Cow, path::Path};
 use codec::{Decode, Encode};
 use pezkuwi_subxt_codegen::{CodegenError, Metadata};
 use pezkuwi_subxt_metadata::SUPPORTED_METADATA_VERSIONS;
-use sc_executor::{WasmExecutionMethod, WasmExecutor};
-use sc_executor_common::runtime_blob::RuntimeBlob;
-use sp_maybe_compressed_blob::{self, CODE_BLOB_BOMB_LIMIT};
+use pezsc_executor::{WasmExecutionMethod, WasmExecutor};
+use pezsc_executor_common::runtime_blob::RuntimeBlob;
+use pezsp_maybe_compressed_blob::{self, CODE_BLOB_BOMB_LIMIT};
 
 /// Result type shorthand
 pub type WasmMetadataResult<A> = Result<A, CodegenError>;
@@ -39,24 +39,24 @@ fn decode(encoded_metadata: Vec<u8>) -> WasmMetadataResult<Metadata> {
 }
 
 fn maybe_decompress(file_contents: Vec<u8>) -> WasmMetadataResult<Vec<u8>> {
-	sp_maybe_compressed_blob::decompress(file_contents.as_ref(), CODE_BLOB_BOMB_LIMIT)
+	pezsp_maybe_compressed_blob::decompress(file_contents.as_ref(), CODE_BLOB_BOMB_LIMIT)
 		.map_err(|e| CodegenError::Wasm(e.to_string()))
 		.map(Cow::into_owned)
 }
 
 struct Executor {
 	runtime_blob: RuntimeBlob,
-	executor: WasmExecutor<sp_io::BizinikiwiHostFunctions>,
-	externalities: sp_state_machine::BasicExternalities,
+	executor: WasmExecutor<pezsp_io::BizinikiwiHostFunctions>,
+	externalities: pezsp_state_machine::BasicExternalities,
 }
 
 impl Executor {
 	fn new(wasm_file: &[u8]) -> WasmMetadataResult<Self> {
-		let externalities: sp_state_machine::BasicExternalities = Default::default();
+		let externalities: pezsp_state_machine::BasicExternalities = Default::default();
 
-		let executor: WasmExecutor<sp_io::BizinikiwiHostFunctions> = WasmExecutor::builder()
+		let executor: WasmExecutor<pezsp_io::BizinikiwiHostFunctions> = WasmExecutor::builder()
 			.with_execution_method(WasmExecutionMethod::default())
-			.with_offchain_heap_alloc_strategy(sc_executor::HeapAllocStrategy::Dynamic {
+			.with_offchain_heap_alloc_strategy(pezsc_executor::HeapAllocStrategy::Dynamic {
 				maximum_pages: Some(64),
 			})
 			.with_max_runtime_instances(1)

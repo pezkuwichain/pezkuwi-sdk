@@ -19,11 +19,10 @@
 
 #![cfg_attr(docsrs, feature(doc_cfg))]
 
-#[cfg(any(
-	all(feature = "web", feature = "native"),
-	not(any(feature = "web", feature = "native"))
-))]
-compile_error!("subxt-rpcs: exactly one of the 'web' and 'native' features should be used.");
+// Note: When both 'web' and 'native' features are enabled (e.g., --all-features),
+// 'native' takes priority. This allows CI to run with --all-features.
+#[cfg(not(any(feature = "web", feature = "native")))]
+compile_error!("subxt-rpcs: at least one of the 'web' or 'native' features must be enabled.");
 
 mod macros;
 
