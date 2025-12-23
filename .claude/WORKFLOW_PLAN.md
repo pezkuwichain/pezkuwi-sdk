@@ -5,7 +5,7 @@
 
 ## Son Güncelleme
 - **Tarih:** 2024-12-23
-- **Son Tamamlanan:** check-links.yml (0 error), wasm32 target ekleme, polkatool kurulumu
+- **Son Tamamlanan:** check-core-crypto-features, check-getting-started.yml template URL düzeltmesi
 - **Aktif Görev:** FAZ 1 - CI Yeşil Işık (try-runtime beklemede)
 
 ---
@@ -17,7 +17,7 @@
 |-----|-------|-------|--------|
 | cargo-clippy | ✅ TAMAMLANDI | `RUSTFLAGS="-D warnings" SKIP_WASM_BUILD=1 cargo clippy --all-targets --all-features --locked --workspace --quiet` | 36 dosya düzeltildi |
 | check-try-runtime | ⚠️ BLOKLU | `cargo check --locked --all --features try-runtime` | WASM duplicate lang item sorunu - CI'da test edilmeli |
-| check-core-crypto-features | ✅ TAMAMLANDI | `check-features-variants.sh` | wasm32 target 1.88.0 toolchain'e eklendi |
+| check-core-crypto-features | ✅ TAMAMLANDI | `check-features-variants.sh` | 3 script geçti (pezsp-core, application-crypto, keyring) |
 
 ### checks-quick.yml (10 job)
 | Job | Durum | Komut | Notlar |
@@ -37,6 +37,19 @@
 | Job | Durum | Komut | Notlar |
 |-----|-------|-------|--------|
 | link-checker | ✅ TAMAMLANDI | `lychee --config .config/lychee.toml './**/*.rs'` | 0 hata - 6747 OK, 2834 exclude |
+
+### check-getting-started.yml (7 job)
+| Job | Durum | Notlar |
+|-----|-------|--------|
+| ubuntu/minimal | ✅ DÜZELTİLDİ | Template URL: pezkuwi-sdk-minimal-template |
+| debian/teyrchain | ✅ DÜZELTİLDİ | Template URL: pezkuwi-sdk-teyrchain-template |
+| arch/solochain | ✅ DÜZELTİLDİ | Template URL: pezkuwi-sdk-solochain-template |
+| fedora/teyrchain | ✅ DÜZELTİLDİ | Template URL düzeltildi |
+| opensuse/solochain | ✅ DÜZELTİLDİ | Template URL düzeltildi |
+| macos/teyrchain | ✅ DÜZELTİLDİ | Template URL düzeltildi |
+| macos/solochain | ✅ DÜZELTİLDİ | Template URL düzeltildi |
+
+**Düzeltme:** `getting-started.sh` → Template URL'leri `pezkuwichain/pezkuwi-sdk-{template}-template` olarak güncellendi.
 
 ### tests-misc.yml (11 job)
 | Job | Durum | Notlar |
@@ -143,6 +156,22 @@
 - wasm32-unknown-unknown target 1.88.0'a eklendi
 - polkatool v0.30.0 kuruldu
 
+### 2024-12-23: Oturum 4 - Core Crypto ve Getting-Started
+
+**check-core-crypto-features ✅ TAMAMLANDI:**
+- `bizinikiwi/primitives/core/check-features-variants.sh` geçti
+- `bizinikiwi/primitives/application-crypto/check-features-variants.sh` geçti
+- `bizinikiwi/primitives/keyring/check-features-variants.sh` geçti
+- wasm32-unknown-unknown target testi başarılı
+
+**check-getting-started.yml Düzeltmesi:**
+- **Sorun:** Template URL'leri 404 döndürüyordu
+  - `pezkuwichain/minimal-template` → 404
+  - `pezkuwichain/teyrchain-template` → 404
+  - `pezkuwichain/solochain-template` → 404
+- **Çözüm:** `getting-started.sh` → `pezkuwichain/pezkuwi-sdk-{template}-template`
+- **Doğrulama:** Tüm template repoları mevcut ve clone edilebilir
+
 ### 2024-12-22: Oturum 2 - Format ve Vendor Entegrasyonu
 
 **rustfmt.toml Stable Migration:**
@@ -177,9 +206,11 @@
 1. ✅ ~~check-links.yml düzelt~~ - TAMAMLANDI
 2. ✅ ~~wasm32 target ekle~~ - TAMAMLANDI
 3. ✅ ~~polkatool kur~~ - TAMAMLANDI
-4. ⏳ **try-runtime** - CI'da test et (lokal WASM build sorunu var)
-5. ⏳ **tests-misc.yml** - CI'da test et
-6. ⏳ **build-misc.yml** - CI'da test et
+4. ✅ ~~check-core-crypto-features~~ - TAMAMLANDI (3 script geçti)
+5. ✅ ~~check-getting-started.yml~~ - Template URL düzeltildi
+6. ⏳ **try-runtime** - CI'da test et (lokal WASM build sorunu var)
+7. ⏳ **tests-misc.yml** - CI'da test et
+8. ⏳ **build-misc.yml** - CI'da test et
 
 ---
 
@@ -253,13 +284,14 @@ target: riscv64emac-unknown-none-polkavm.json
 
 | Metrik | Değer |
 |--------|-------|
-| Toplam workflow job | 28 |
-| Tamamlanan (lokal OK) | 18 |
+| Toplam workflow job | 35 |
+| Tamamlanan (lokal OK) | 26 |
 | Beklemede (CI testi gerekli) | 8 |
-| Bloklu (sistem gereksinimi) | 2 |
+| Bloklu (sistem gereksinimi) | 1 |
 | Kırık link düzeltilen | 78 |
 | Tracking issue oluşturulan | 160 |
 | Güvenlik açığı kapatılan | 4 |
+| Template URL düzeltilen | 1 |
 
 ---
 
