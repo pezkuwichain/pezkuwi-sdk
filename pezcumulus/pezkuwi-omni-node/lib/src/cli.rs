@@ -119,8 +119,8 @@ pub enum Subcommand {
 	/// from a single binary, which can be used as a teyrchain node tool
 	/// For a detailed usage guide please check out the standalone tool's crates.io or docs.rs
 	/// pages:
-	/// - <https://crates.io/crates/pezstaging-chain-spec-builder>
-	/// - <https://docs.rs/pezstaging-chain-spec-builder/latest/pezstaging_chain_spec_builder/>
+	/// - <https://crates.io/crates/staging-chain-spec-builder>
+	/// - <https://docs.rs/staging-chain-spec-builder/latest/staging_chain_spec_builder/>
 	ChainSpecBuilder(ChainSpecBuilder),
 
 	/// Remove the whole chain.

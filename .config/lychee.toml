@@ -72,4 +72,51 @@ exclude = [
 	# Exclude strings which contain templates like {} and {:?}
 	"%7B%7D",
 	"%7B:\\?}",
+	# ============================================
+	# Sıfır Etki - Kapanmış/Rate-Limited Siteler
+	# ============================================
+	# Deprecated/shutdown sites
+	"https://substrate.io/",
+	"https://invarch.network/",
+	# Rate limited (403)
+	"https://aventus.io/",
+	"https://efinity.io/",
+	"https://fragnova.com/",
+	"https://gmordie.com/",
+	"https://parachain.capitaldex.exchange/",
+	"https://stackoverflow.com/.*",
+	# Server errors (5xx)
+	"https://impactprotocol.network/",
+	"http://laminar.network/",
+	"https://neatcoin.org/",
+	# Network/DNS errors (defunct chains)
+	"https://allfeat.network/",
+	"https://clover.finance/",
+	"https://composable.finance/",
+	"https://edgewa.re/",
+	"https://geek.gl/",
+	"https://ggxchain.io/",
+	"https://goro.network/",
+	"https://icenetwork.io/",
+	"https://jupiter.patract.io/",
+	"https://kabocha.network/",
+	"https://karmaco.in/",
+	"https://krigan.network/",
+	"https://luhn.network/",
+	"https://parachain.origintrail.io/",
+	"https://picasso.composable.finance/",
+	"https://polkadex.trade/",
+	"https://synesthesia.network/",
+	"https://uniarts.me/",
+	"https://www.sctl.xyz/",
+	# ============================================
+	# GitHub commit-specific URLs (cannot migrate)
+	# ============================================
+	"https://github.com/pezkuwichain/pezkuwi-sdk/issues/.*/commits/.*",
+	"https://github.com/pezkuwichain/pezkuwi-sdk/issues/.*/files.*",
+	"https://github.com/pezkuwichain/pezkuwi-sdk/blob/[a-f0-9]+/.*",
+	"https://github.com/pezkuwichain/pezkuwi-sdk/tree/[a-f0-9]+/.*",
+	"https://github.com/paritytech/polkadot-sdk/blob/.*/bizinikiwi/.*",
+	# Migrated bizinikiwi references
+	"https://github.com/pezkuwichain/bizinikiwi.*",
 ]

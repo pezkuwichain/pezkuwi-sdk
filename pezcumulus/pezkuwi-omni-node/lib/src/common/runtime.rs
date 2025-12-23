@@ -113,7 +113,7 @@ impl RuntimeResolver for DefaultRuntimeResolver {
 			None => {
 				log::warn!(
 					r#"⚠️  There isn't a runtime type named `System`, corresponding to the `pezframe-system`
-                pezpallet (https://docs.rs/pezframe-system/latest/pezframe_system/). Please check Omni Node docs for runtime conventions:
+                pezpallet (https://docs.rs/frame-system/latest/frame_system/). Please check Omni Node docs for runtime conventions:
                 https://docs.pezkuwichain.io/sdk/master/polkadot_sdk_docs/reference_docs/omni_node/index.html#runtime-conventions.
                 Note: We'll assume a block number size of `u32`."#
 				);
@@ -123,7 +123,7 @@ impl RuntimeResolver for DefaultRuntimeResolver {
 
 		if !metadata_inspector.pezpallet_exists(DEFAULT_TEYRCHAIN_SYSTEM_PALLET_NAME) {
 			log::warn!(
-				r#"⚠️  The teyrchain system pezpallet (https://docs.rs/crate/pezcumulus-pezpallet-parachain-system/latest) is
+				r#"⚠️  The teyrchain system pezpallet (https://docs.rs/crate/cumulus-pallet-parachain-system/latest) is
 			   missing from the runtime’s metadata. Please check Omni Node docs for runtime conventions:
 			   https://docs.pezkuwichain.io/sdk/master/polkadot_sdk_docs/reference_docs/omni_node/index.html#runtime-conventions."#
 			);

@@ -84,7 +84,7 @@
 //!
 //! Consider the fact that in principle, an offchain worker code written using the above API is no
 //! different than an equivalent written with an _actual offchain interaction library_, such as
-//! [Pezkuwi-JS](https://polkadot.js.org/docs/), or any of the other ones listed [here](https://github.com/bizinikiwi-developer-hub/awesome-bizinikiwi?tab=readme-ov-file#client-libraries).
+//! [Pezkuwi-JS](https://polkadot.js.org/docs/), or any of the other ones listed [here](https://github.com/substrate-developer-hub/awesome-substrate?tab=readme-ov-file#client-libraries).
 //!
 //! They can both read from the state, and have no means of updating the state, other than the route
 //! of submitting an extrinsic to the chain. Therefore, it is worth thinking twice before embedding

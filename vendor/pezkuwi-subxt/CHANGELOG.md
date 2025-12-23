@@ -1002,7 +1002,7 @@ This is a big release that adds quite a lot, and also introduces some slightly l
 
 See [#1126](https://github.com/pezkuwichain/subxt/pull/1126), [#1137](https://github.com/pezkuwichain/subxt/pull/1137) and [#1161](https://github.com/pezkuwichain/subxt/pull/1161) for more information.
 
-The overarching idea here is that we want Subxt to be able to continue to support talking to nodes/light-clients using the "legacy" RPC APIs that are currently available, but we _also_ want to be able to support using only [the new RPC APIs](https://pezkuwichain.github.io/json-rpc-interface-spec/) once they are stabilized.
+The overarching idea here is that we want Subxt to be able to continue to support talking to nodes/light-clients using the "legacy" RPC APIs that are currently available, but we _also_ want to be able to support using only [the new RPC APIs](https://paritytech.github.io/json-rpc-interface-spec/) once they are stabilized.
 
 Until now, the higher level APIs in Subxt all had access to the RPCs and could call whatever they needed. Now, we've abstracted away which RPCs are called (or even that RPCs are used at all) behind a `subxt::backend::Backend` trait. Higher level APIs no longer have access to RPC methods and instead have access to the current `Backend` implementation. We then added two `Backend` implementations:
 
@@ -1627,7 +1627,7 @@ This release adds a number of improvements, most notably:
 
 - We make Bizinikiwi dependencies optional ([#760](https://github.com/pezkuwichain/subxt/pull/760)), which makes WASM builds both smaller and more reliable. To do this, we re-implement some core types like `AccountId32`, `MultiAddress` and `MultiSignature` internally.
 - Allow access to storage entries ([#774](https://github.com/pezkuwichain/subxt/pull/774)) and runtime API's ([#777](https://github.com/pezkuwichain/subxt/pull/777)) from some block. This is part of a move towards a more "block centric" interface, which will better align with the newly available `chainHead` style RPC interface.
-- Add RPC methods for the new `chainHead` style interface (see https://pezkuwichain.github.io/json-rpc-interface-spec/). These are currently unstable, but will allow users to start experimenting with this new API if their nodes support it.
+- Add RPC methods for the new `chainHead` style interface (see https://paritytech.github.io/json-rpc-interface-spec/). These are currently unstable, but will allow users to start experimenting with this new API if their nodes support it.
 - More advanced type substitution is now possible in the codegen interface ([#735](https://github.com/pezkuwichain/subxt/pull/735)).
 
 This release introduces a number of breaking changes that can be generally be fixed with mechanical tweaks to your code. The notable changes are described below.

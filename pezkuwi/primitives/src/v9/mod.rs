@@ -169,7 +169,7 @@ impl From<u32> for ChunkIndex {
 	}
 }
 
-// We should really get https://github.com/pezkuwichain/pezkuwi-sdk/issues/133 going ..
+// We should really get https://github.com/pezkuwichain/pezkuwi-sdk/issues/278 going ..
 impl From<u32> for ValidatorIndex {
 	fn from(n: u32) -> Self {
 		ValidatorIndex(n)
@@ -838,7 +838,7 @@ impl<N: Saturating + BaseArithmetic + Copy> GroupRotationInfo<N> {
 pub struct ScheduledCore {
 	/// The ID of a para scheduled.
 	pub para_id: Id,
-	/// DEPRECATED: see: <https://github.com/pezkuwichain/pezkuwi-sdk/issues/171>
+	/// DEPRECATED: see: <https://github.com/pezkuwichain/pezkuwi-sdk/issues/314>
 	///
 	/// Will be removed in a future version.
 	pub collator: Option<CollatorId>,
@@ -1544,7 +1544,7 @@ pub fn effective_minimum_backing_votes(
 /// Information about validator sets of a session.
 ///
 /// NOTE: `SessionInfo` is frozen. Do not include new fields, consider creating a separate runtime
-/// API. Reasoning and further outlook [here](https://github.com/pezkuwichain/pezkuwi-sdk/issues/167).
+/// API. Reasoning and further outlook [here](https://github.com/pezkuwichain/pezkuwi-sdk/issues/310).
 #[derive(Clone, Encode, Decode, RuntimeDebug, TypeInfo)]
 #[cfg_attr(feature = "std", derive(PartialEq))]
 pub struct SessionInfo {
@@ -1715,7 +1715,7 @@ pub mod node_features {
 	#[derive(Clone, Copy)]
 	pub enum FeatureIndex {
 		/// Tells if tranch0 assignments could be sent in a single certificate.
-		/// Reserved for: `<https://github.com/pezkuwichain/pezkuwi-sdk/issues/105>`
+		/// Reserved for: `<https://github.com/pezkuwichain/pezkuwi-sdk/issues/251>`
 		EnableAssignmentsV2 = 0,
 		/// This feature enables the extension of `BackedCandidate::validator_indices` by 8 bits.
 		/// The value stored there represents the assumed core index where the candidates
@@ -1780,7 +1780,7 @@ pub struct SchedulerParams<BlockNumber> {
 	/// How many cores are managed by the coretime chain.
 	pub num_cores: u32,
 	/// Deprecated and no longer used by the runtime.
-	/// Removal is tracked by <https://github.com/pezkuwichain/pezkuwi-sdk/issues/145>.
+	/// Removal is tracked by <https://github.com/pezkuwichain/pezkuwi-sdk/issues/288>.
 	#[deprecated]
 	pub max_availability_timeouts: u32,
 	/// The maximum queue size of the pay as you go module.
@@ -1793,7 +1793,7 @@ pub struct SchedulerParams<BlockNumber> {
 	/// The minimum amount needed to claim a slot in the spot pricing queue.
 	pub on_demand_base_fee: Balance,
 	/// Deprecated and no longer used by the runtime.
-	/// Removal is tracked by <https://github.com/pezkuwichain/pezkuwi-sdk/issues/145>.
+	/// Removal is tracked by <https://github.com/pezkuwichain/pezkuwi-sdk/issues/288>.
 	#[deprecated]
 	pub ttl: BlockNumber,
 }

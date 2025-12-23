@@ -381,7 +381,7 @@ impl DatabaseSource {
 	/// Return path for databases that are stored on disk.
 	pub fn path(&self) -> Option<&Path> {
 		match self {
-			// as per https://github.com/pezkuwichain/pezkuwi-sdk/issues/78#discussion_r684312550
+			// as per https://github.com/pezkuwichain/pezkuwi-sdk/issues/226#discussion_r684312550
 			//
 			// IIUC this is needed for pezkuwi to create its own dbs, so until it can use parity db
 			// I would think rocksdb, but later parity-db.

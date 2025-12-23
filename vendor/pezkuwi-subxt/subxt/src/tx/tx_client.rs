@@ -592,7 +592,7 @@ where
 			.await
 			.map_err(ExtrinsicError::CannotGetLatestFinalizedBlock)?;
 
-		// destructuring RuntimeDispatchInfo, see type information <https://pezkuwichain.github.io/bizinikiwi/master/pallet_transaction_payment_rpc_runtime_api/struct.RuntimeDispatchInfo.html>
+		// destructuring RuntimeDispatchInfo, see type information <https://paritytech.github.io/substrate/master/pallet_transaction_payment_rpc_runtime_api/struct.RuntimeDispatchInfo.html>
 		// data layout: {weight_ref_time: Compact<u64>, weight_proof_size: Compact<u64>, class: u8,
 		// partial_fee: u128}
 		let (_, _, _, partial_fee) = self

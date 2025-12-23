@@ -224,7 +224,7 @@ where
 			// produce multiple blocks per slot which very likely would fail on chain. Thus, we have
 			// this "hack" to only produce one block per slot per relay chain fork.
 			//
-			// With https://github.com/pezkuwichain/pezkuwi-sdk/issues/127 this implementation will be
+			// With https://github.com/pezkuwichain/pezkuwi-sdk/issues/272 this implementation will be
 			// obsolete and also the underlying issue will be fixed.
 			if last_processed_slot >= *claim.slot()
 				&& last_relay_chain_block < *relay_parent_header.number()

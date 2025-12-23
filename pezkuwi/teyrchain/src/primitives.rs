@@ -427,7 +427,7 @@ impl XcmpMessageHandler for () {
 }
 
 /// Validation parameters for evaluating the teyrchain validity function.
-// TODO: balance downloads (https://github.com/pezkuwichain/pezkuwi-sdk/issues/131)
+// TODO: balance downloads (https://github.com/pezkuwichain/pezkuwi-sdk/issues/276)
 #[derive(PartialEq, Eq, Decode, Clone)]
 #[cfg_attr(feature = "std", derive(Debug, Encode))]
 pub struct ValidationParams {
@@ -458,7 +458,7 @@ pub type HorizontalMessages =
 	BoundedVec<OutboundHrmpMessage<Id>, ConstU32<MAX_HORIZONTAL_MESSAGE_NUM>>;
 
 /// The result of teyrchain validation.
-// TODO: balance uploads (https://github.com/pezkuwichain/pezkuwi-sdk/issues/131)
+// TODO: balance uploads (https://github.com/pezkuwichain/pezkuwi-sdk/issues/276)
 #[derive(PartialEq, Eq, Clone, Encode)]
 #[cfg_attr(feature = "std", derive(Debug, Decode))]
 pub struct ValidationResult {

@@ -647,7 +647,7 @@ async fn run_iteration<Context>(
 
 // Start prune-all on a separate thread, so that in the case when the operation takes
 // longer than expected we don't keep the whole subsystem blocked.
-// See: https://github.com/pezkuwichain/pezkuwi-sdk/issues/170 for more details.
+// See: https://github.com/pezkuwichain/pezkuwi-sdk/issues/313 for more details.
 #[overseer::contextbounds(AvailabilityStore, prefix = self::overseer)]
 async fn start_prune_all<Context>(
 	ctx: &mut Context,

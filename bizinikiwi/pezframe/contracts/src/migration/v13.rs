@@ -16,7 +16,7 @@
 // limitations under the License.
 
 //! Add `delegate_dependencies` to `ContractInfo`.
-//! See <https://github.com/pezkuwichain/pezkuwi-sdk/issues/49>.
+//! See <https://github.com/pezkuwichain/pezkuwi-sdk/issues/216>.
 
 use crate::{
 	migration::{IsFinished, MigrationStep},

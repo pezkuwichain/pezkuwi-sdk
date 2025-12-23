@@ -187,8 +187,8 @@ pub trait StateApi<Hash> {
 	/// [Source.][3]
 	///
 	/// [1]: https://crates.io/crates/diener
-	/// [2]: https://github.com/paritytech/bizinikiwi-archive/tree/master/wasm-tracing
-	/// [3]: https://github.com/paritytech/bizinikiwi-archive/wiki
+	/// [2]: https://github.com/paritytech/substrate-archive/tree/master/wasm-tracing
+	/// [3]: https://github.com/paritytech/substrate-archive/wiki
 	///
 	/// ## RPC Usage
 	///
@@ -281,8 +281,8 @@ pub trait StateApi<Hash> {
 	/// [querying bizinikiwi storage via rpc][3].
 	///
 	/// [1]: https://docs.pezkuwichain.io/main-docs/fundamentals/state-transitions-and-storage/
-	/// [2]: https://www.shawntabrizi.com/blog/bizinikiwi/transparent-keys-in-bizinikiwi/
-	/// [3]: https://www.shawntabrizi.com/blog/bizinikiwi/querying-bizinikiwi-storage-via-rpc/
+	/// [2]: https://www.shawntabrizi.com/blog/substrate/transparent-keys-in-substrate/
+	/// [3]: https://www.shawntabrizi.com/blog/substrate/querying-substrate-storage-via-rpc/
 	///
 	/// ### Maximum payload size
 	///

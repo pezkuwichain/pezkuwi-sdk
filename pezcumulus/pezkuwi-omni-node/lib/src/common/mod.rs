@@ -121,7 +121,7 @@ pub struct NodeExtraArgs {
 	pub export_pov: Option<PathBuf>,
 
 	/// The maximum percentage of the maximum PoV size that the collator can use.
-	/// It will be removed once <https://github.com/pezkuwichain/pezkuwi-sdk/issues/23> is fixed.
+	/// It will be removed once <https://github.com/pezkuwichain/pezkuwi-sdk/issues/193> is fixed.
 	pub max_pov_percentage: Option<u32>,
 
 	/// If true then the statement store will be enabled.

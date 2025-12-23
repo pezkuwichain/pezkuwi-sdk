@@ -1926,7 +1926,7 @@ pub mod pezpallet_macros {
 	///
 	/// ## Former Usage
 	///
-	/// Prior to <https://github.com/pezkuwichain/pezkuwi-sdk/issues/50>, the following syntax was used.
+	/// Prior to <https://github.com/pezkuwichain/pezkuwi-sdk/issues/217>, the following syntax was used.
 	/// This is deprecated and will soon be removed.
 	///
 	/// ```

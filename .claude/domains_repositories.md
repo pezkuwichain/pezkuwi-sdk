@@ -1,194 +1,158 @@
-# PezkuwiChain Domains
+# PezkuwiChain Infrastructure
 
-## Ana Domain
-- **Ana Site**: pezkuwichain.io
-- **IP**: 37.60.230.9
-- **TTL**: 3600
+## Domains
 
-## Subdomains
+### Primary Domain
+| Property | Value |
+|----------|-------|
+| Domain | pezkuwichain.io |
+| IP | 37.60.230.9 |
+| TTL | 3600 |
 
-| Subdomain | Tam URL | Açıklama |
-|-----------|---------|----------|
-| www | www.pezkuwichain.io | Ana web sitesi |
+### Service Subdomains
+| Subdomain | Full URL | Description |
+|-----------|----------|-------------|
+| www | www.pezkuwichain.io | Main website |
 | network | network.pezkuwichain.io | Network portal |
 | api | api.pezkuwichain.io | API endpoint |
 | rpc | rpc.pezkuwichain.io | RPC endpoint |
 | ws | ws.pezkuwichain.io | WebSocket endpoint |
 | explorer | explorer.pezkuwichain.io | Block explorer |
-| docs | docs.pezkuwichain.io | Dokümantasyon |
+| docs | docs.pezkuwichain.io | Documentation |
 | wiki | wiki.pezkuwichain.io | Wiki |
 | wiki.network | wiki.network.pezkuwichain.io | Network wiki |
 | faucet | faucet.pezkuwichain.io | Test token faucet |
 | telemetry | telemetry.pezkuwichain.io | Telemetry dashboard |
-| forum | forum.pezkuwichain.io | Topluluk forumu |
-| grants | grants.pezkuwichain.io | Grant programı |
+| forum | forum.pezkuwichain.io | Community forum |
+| grants | grants.pezkuwichain.io | Grant program |
 | developers | developers.pezkuwichain.io | Developer portal |
-| mail | mail.pezkuwichain.io | E-posta servisi |
+| mail | mail.pezkuwichain.io | Email service |
 
-## Network Subdomains
+### Network RPC Endpoints
+| Network | Subdomain | Full URL |
+|---------|-----------|----------|
+| Mainnet | mainnet | mainnet.pezkuwichain.io |
+| Mainnet | pezkuwichain-rpc | pezkuwichain-rpc.pezkuwichain.io |
+| Zagros | zagros | zagros.pezkuwichain.io |
+| Zagros | zagros-rpc | zagros-rpc.pezkuwichain.io |
+| Zagros Asset Hub | zagros-asset-hub-rpc | zagros-asset-hub-rpc.pezkuwichain.io |
+| Zagros Bridge Hub | zagros-bridge-hub-rpc | zagros-bridge-hub-rpc.pezkuwichain.io |
+| Zagros Collectives | zagros-collectives-rpc | zagros-collectives-rpc.pezkuwichain.io |
+| Zagros Coretime | zagros-coretime-rpc | zagros-coretime-rpc.pezkuwichain.io |
+| Testnet | testnet | testnet.pezkuwichain.io |
+| Staging | staging | staging.pezkuwichain.io |
+| Beta | beta | beta.pezkuwichain.io |
+| Beta RPC | beta-rpc | beta-rpc.pezkuwichain.io |
+| Try Runtime | try-runtime | try-runtime.pezkuwichain.io |
+| Try Runtime Zagros | try-runtime-zagros | try-runtime-zagros.pezkuwichain.io |
 
-### Mainnet
-| Subdomain | Tam URL |
-|-----------|---------|
-| mainnet | mainnet.pezkuwichain.io |
-| pezkuwichain-rpc | pezkuwichain-rpc.pezkuwichain.io |
+---
 
-### Zagros (Canary Network)
-| Subdomain | Tam URL |
-|-----------|---------|
-| zagros | zagros.pezkuwichain.io |
-| zagros-rpc | zagros-rpc.pezkuwichain.io |
-| zagros-asset-hub-rpc | zagros-asset-hub-rpc.pezkuwichain.io |
-| zagros-bridge-hub-rpc | zagros-bridge-hub-rpc.pezkuwichain.io |
-| zagros-collectives-rpc | zagros-collectives-rpc.pezkuwichain.io |
-| zagros-coretime-rpc | zagros-coretime-rpc.pezkuwichain.io |
+## GitHub Repositories
 
-### Test Networks
-| Subdomain | Tam URL |
-|-----------|---------|
-| testnet | testnet.pezkuwichain.io |
-| staging | staging.pezkuwichain.io |
-| beta | beta.pezkuwichain.io |
-| beta-rpc | beta-rpc.pezkuwichain.io |
-| try-runtime | try-runtime.pezkuwichain.io |
-| try-runtime-zagros | try-runtime-zagros.pezkuwichain.io |
+**Organization:** https://github.com/pezkuwichain
 
-## Kod İçinde Kullanım
+### Core SDK Repositories
+| Repository | Description | Language | Upstream |
+|------------|-------------|----------|----------|
+| pezkuwi-sdk | Digital state for Kurdish nation on blockchain | Rust | paritytech/polkadot-sdk |
+| polkadot-sdk | The Parity Polkadot Blockchain SDK (fork) | Rust | paritytech/polkadot-sdk |
+| pezkuwi-subxt | Interact with Substrate based nodes | Rust | paritytech/subxt |
+| pezkuwi-zombienet-sdk | ZombieNet SDK | Rust | paritytech/zombienet-sdk |
+
+### Template Repositories
+| Repository | Description | Language | Upstream |
+|------------|-------------|----------|----------|
+| pezkuwi-sdk-minimal-template | Minimal Testing/Learning Template | Rust | paritytech/polkadot-sdk-minimal-template |
+| pezkuwi-sdk-solochain-template | Solochain-Ready Template | Rust | paritytech/polkadot-sdk-solochain-template |
+| pezkuwi-sdk-teyrchain-template | Teyrchain template for Pezkuwi SDK | Rust | paritytech/polkadot-sdk-parachain-template |
+| polkadot-runtime-templates | Runtime Templates for Pezkuwi Teyrchains | Rust | - |
+
+### Library Forks
+| Repository | Description | Language | Upstream |
+|------------|-------------|----------|----------|
+| parity-db | Experimental blockchain database | Rust | paritytech/parity-db |
+| parity-scale-codec | Binary serialization codec | Rust | paritytech/parity-scale-codec |
+| pezframe-metadata | FRAME metadata parser tools | Rust | paritytech/frame-metadata |
+| merkle-mountain-range | MMR implementation | Rust | nervosnetwork/merkle-mountain-range |
+| wasm-instrument | WASM module instrumentation | Rust | parity/wasm-instrument |
+| consensus | Consensus for Web3 | TeX | parity/consensus |
+
+### Community & Documentation
+| Repository | Description | Language | Upstream |
+|------------|-------------|----------|----------|
+| awesome-hez | Awesome resources in Polkadot ecosystem | - | parity/awesome-substrate |
+| pezkuwi-fellows | Fellowship proposals | Handlebars | polkadot-fellows/rfc |
+| kurdistan_blockchain-akademy | Blockchain Academy Rust Qualifier | Rust | polkadot-blockchain-academy |
+| docs | PezkuwiChain documentation | Rust | - |
+| labels | Label rules for repositories | Shell | paritytech/labels |
+
+### Applications
+| Repository | Description | Language |
+|------------|-------------|----------|
+| DKSweb | Sovereign Blockchain for Kurdish Nation | TypeScript |
+| pezkuwi-mobile-app | Official Mobile App | TypeScript |
+| pwap | Web and mobile applications monorepo | TypeScript |
+| pezkuwi-validator-v1.0.0 | Validator installer scripts | Shell |
+| testnet | Testnet configuration | Shell |
+| workflow-stopper | CI/CD workflow management | - |
+
+---
+
+## URL Mapping Reference
+
+### Repositories We Own (use pezkuwichain URLs)
+```
+github.com/pezkuwichain/pezkuwi-sdk
+github.com/pezkuwichain/pezkuwi-subxt
+github.com/pezkuwichain/pezkuwi-zombienet-sdk
+github.com/pezkuwichain/pezkuwi-fellows
+github.com/pezkuwichain/awesome-hez
+github.com/pezkuwichain/parity-db
+github.com/pezkuwichain/parity-scale-codec
+github.com/pezkuwichain/pezframe-metadata
+github.com/pezkuwichain/merkle-mountain-range
+github.com/pezkuwichain/wasm-instrument
+github.com/pezkuwichain/kurdistan_blockchain-akademy
+```
+
+### External Repositories (use original URLs)
+| Our Reference | Original URL |
+|---------------|--------------|
+| xcm-format | github.com/polkadot-fellows/xcm-format |
+| try-runtime-cli | github.com/paritytech/try-runtime-cli |
+| trie | github.com/paritytech/trie |
+| srtool | github.com/paritytech/srtool |
+| parity-common | github.com/paritytech/parity-common |
+| arkworks-extensions | github.com/paritytech/arkworks-extensions |
+| chainextension-registry | github.com/parity/chainextension-registry |
+| substrate-developer-hub | github.com/substrate-developer-hub |
+
+### External Websites (use original URLs)
+| Our Reference | Original URL |
+|---------------|--------------|
+| shawntabrizi.com/bizinikiwi-* | shawntabrizi.com/substrate-* |
+| pezkuwichain.github.io | paritytech.github.io |
+
+---
+
+## Code Usage Examples
 
 ```rust
-// Website URL'leri
-"https://pezkuwichain.io"           // Ana site
-"https://network.pezkuwichain.io"   // Network portal
-"https://docs.pezkuwichain.io"      // Dokümantasyon
+// Website URLs
+"https://pezkuwichain.io"
+"https://network.pezkuwichain.io"
+"https://docs.pezkuwichain.io"
 
 // RPC Endpoints
 "wss://rpc.pezkuwichain.io"         // Mainnet WS
 "wss://zagros-rpc.pezkuwichain.io"  // Zagros WS
+
+// GitHub Repositories
+"https://github.com/pezkuwichain/pezkuwi-sdk"
+"https://github.com/pezkuwichain/awesome-hez"
 ```
 
 ---
-*Son güncelleme: 2025-12-20*
 
-25 repositories
-
-https://github.com/pezkuwichain/
-awesome-hez
-An opinionated list of awesome resources in the Polkadot ecosystem.
-11
-0
-consensus
-Consensus for Web3
-TeX
-27
-0
-DKSweb
-A Sovereign Blockchain for the Kurdish Nation
-TypeScript
-0
-0
-docs
-A sovereign blockchain parachain built for the Kurdish Nation and Culturel Nations of the world, on blockchain
-Rust
-0
-0
-kurdistan_blockchain-akademy
-Open to everyone 👪 - The Polkadot Blockchain Academy's Rust Qualifier Exam.
-Rust
-70
-0
-labels
-Label rules and specifications for Pezkuwi SDK repositories
-Shell
-0
-0
-merkle-mountain-range
-A generalized merkle mountain range implementation (forked from nervosnetwork)
-Rust
-0
-0
-parity-db
-Experimental blockchain database
-Rust
-65
-0
-parity-scale-codec
-Lightweight, efficient, binary serialization and deserialization codec
-Rust
-98
-0
-pezframe-metadata
-A set of tools to parse FRAME metadata retrieved from Substrate-based nodes.
-Rust
-12
-0
-pezkuwi-fellows
-Proposals for change to standards administered by the Fellowship.
-Handlebars
-69
-0
-pezkuwi-mobile-app
-Official PezkuwiChain Mobile App - Kurdish Digital Citizenship Platform
-TypeScript
-0
-0
-pezkuwi-sdk
-dijital state for kurdish nation on blockchain
-Rust
-0
-0
-pezkuwi-sdk-minimal-template
-The Minimal (Testing/Learning-Only) Template From Polkadot SDK
-Rust
-56
-0
-pezkuwi-sdk-solochain-template
-The Solochain-Ready Template From Polkadot SDK
-Rust
-65
-0
-pezkuwi-sdk-teyrchain-template
-Teyrchain template for Pezkuwi SDK
-Rust
-0
-0
-pezkuwi-subxt
-Interact with Substrate based nodes in Rust or WebAssembly
-Rust
-281
-0
-pezkuwi-validator-v1.0.0
-One-click validator installer for Pezkuwi testnet. Cross-platform scripts (Linux/Mac/Windows) for automated node deployment.
-Shell
-0
-0
-pezkuwi-zombienet-sdk
-ZombieNet SDK
-Rust
-15
-0
-polkadot-runtime-templates
-Runtime Templates for Pezkuwi Teyrchains
-Rust
-33
-0
-polkadot-sdk
-The Parity Polkadot Blockchain SDK
-Rust
-1.1k
-0
-pwap
-Monorepo for PezkuwiChain web and mobile applications with unified backend
-TypeScript
-0
-0
-testnet
-Shell
-0
-0
-wasm-instrument
-Instrument and transform wasm modules.
-Rust
-22
-0
-workflow-stopper
-Workflow stopper for Pezkuwi SDK CI/CD - stops all running workflows on PR failure to save compute resources
+*Last updated: 2025-12-23*
