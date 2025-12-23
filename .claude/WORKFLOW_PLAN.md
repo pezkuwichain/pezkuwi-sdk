@@ -5,8 +5,8 @@
 
 ## Son Güncelleme
 - **Tarih:** 2024-12-23
-- **Son Tamamlanan:** check-core-crypto-features, check-getting-started.yml template URL düzeltmesi
-- **Aktif Görev:** FAZ 1 - CI Yeşil Işık (try-runtime beklemede)
+- **Son Tamamlanan:** pez-kitchensink-runtime compilation fix (umbrella eksik crate'ler)
+- **Aktif Görev:** FAZ 1 - CI Yeşil Işık
 
 ---
 
@@ -49,8 +49,6 @@
 | macos/teyrchain | ✅ DÜZELTİLDİ | Template URL düzeltildi |
 | macos/solochain | ✅ DÜZELTİLDİ | Template URL düzeltildi |
 
-**Düzeltme:** `getting-started.sh` → Template URL'leri `pezkuwichain/pezkuwi-sdk-{template}-template` olarak güncellendi.
-
 ### tests-misc.yml (11 job)
 | Job | Durum | Notlar |
 |-----|-------|--------|
@@ -74,6 +72,59 @@
 
 ---
 
+## BUGÜN YAPILAN DÜZELTMELER (2024-12-23)
+
+### pez-kitchensink-runtime Derleme Hatası Çözümü
+
+**Problem:** 679 derleme hatası - `Runtime`, `RuntimeCall`, `Balances`, `pezpallet_root_testing` bulunamıyor
+
+**Teşhis:**
+- `use pezkuwi_sdk::*;` ile umbrella'dan import yapılıyor
+- Umbrella'da `pezpallet-root-testing` ve `pezpallet-xcm-benchmarks` eksikti
+- Macro chain kırılmış, Runtime type'ları generate edilmiyordu
+
+**Çözüm - Umbrella Cargo.toml'a eklendi:**
+
+1. **pezpallet-root-testing:**
+   - `std` feature eklendi
+   - `try-runtime` feature eklendi
+   - `runtime-full` feature eklendi
+   - `[dependencies.pezpallet-root-testing]` section eklendi
+
+2. **pezpallet-xcm-benchmarks:**
+   - `std` feature eklendi
+   - `runtime-benchmarks` feature eklendi
+   - `runtime-full` feature eklendi
+   - `[dependencies.pezpallet-xcm-benchmarks]` section eklendi
+
+3. **Umbrella src/lib.rs'e re-export eklendi:**
+```rust
+#[cfg(feature = "pezpallet-root-testing")]
+pub use pezpallet_root_testing;
+
+#[cfg(feature = "pezpallet-xcm-benchmarks")]
+pub use pezpallet_xcm_benchmarks;
+```
+
+**Sonuç:**
+- ✅ `SKIP_WASM_BUILD=1 cargo check -p pez-kitchensink-runtime` - BAŞARILI
+- ✅ `SKIP_WASM_BUILD=1 cargo clippy -p pez-kitchensink-runtime` - BAŞARILI
+- ✅ `SKIP_WASM_BUILD=1 cargo clippy -p pez-kitchensink-runtime -- -D warnings` - BAŞARILI
+
+### Önceki Düzeltme: getrandom WASM Hatası
+
+**Problem:** `error: the wasm*-unknown-unknown targets are not supported by default`
+
+**Sebep:**
+- `frame-decode v0.15.0` → `sp-crypto-hashing/std` → `twox-hash/std` → `rand` → `getrandom`
+- subxt crate'leri runtime-full feature'ında getrandom'u çekiyordu
+
+**Çözüm:**
+- Umbrella Cargo.toml'da subxt crate'leri `runtime-full`'dan çıkarıldı
+- `node` feature'ına taşındı
+
+---
+
 ## GÜVENLİK DÜZELTMELERİ (Dependabot)
 
 | Vulnerability | Severity | Eski Versiyon | Yeni Versiyon | Durum |
@@ -82,13 +133,6 @@
 | tracing-subscriber (ANSI escape) | Low | 0.3.18 | 0.3.20 | ✅ |
 | ring (AES overflow) | Medium | 0.16.20 | 0.17.14 | ✅ |
 | ring (duplicate) | Medium | 0.16.20 | 0.17.14 | ✅ |
-
-**Ek Değişiklikler (ring fix için):**
-- libp2p: 0.54.1 → 0.56.0
-- libp2p-kad: 0.46.2 → 0.48.0
-- transport.rs: bandwidth logging kaldırıldı
-- service.rs: NoBandwidthSink stub eklendi
-- behaviour.rs: From<Infallible> eklendi
 
 ---
 
@@ -104,113 +148,17 @@
 
 ---
 
-## ÇALIŞMA SİSTEMİ
-
-### Her Workflow Job İçin:
-1. **Test Et:** Komutu local'de çalıştır
-2. **Hata Analizi:** Çıktıyı analiz et
-3. **Düzelt:** Hataları rebrand kurallarına uygun düzelt
-4. **Tekrar Test:** Düzeltme sonrası tekrar çalıştır
-5. **İşaretle:** Bu dosyada durumu güncelle
-
-### Düzeltme Kuralları (CLAUDE_RULES.md'den):
-- ASLA rebrand'i geri alma
-- Terminoloji koruması:
-  - polkadot → pezkuwi
-  - substrate → bizinikiwi
-  - cumulus → pezcumulus
-  - westend → zagros
-  - rococo → pezkuwichain
-  - parachain → teyrchain
-
----
-
-## TAMAMLANAN DÜZELTMELER
-
-### 2024-12-23: Oturum 3 - Link Düzeltmeleri ve Toolchain
-
-**check-links.yml Düzeltmeleri:**
-- 78 kırık link tespit edildi
-- 160 upstream tracking issue oluşturuldu (GitHub CLI ile)
-- Issue mapping dosyası: `.claude/issue_mapping.txt`
-
-**Yüksek Etkili Düzeltmeler (RED):**
-1. `wasm_project.rs`: radium git URL düzeltildi (`https://https://` → `github.com/paritytech/radium-0.7-fork`)
-2. `prerequisites.rs`: rustc-rv32e-toolchain URL düzeltildi
-3. `chain_extension.rs`: chainextension-registry URL düzeltildi (2 yer)
-
-**Orta Etkili Düzeltmeler (YELLOW):**
-1. `config.rs`: ChargeAssetTxPayment docs.rs link düzeltildi
-2. `methods/mod.rs`: json-rpc-interface-spec URL düzeltildi
-3. `tx_client.rs`: substrate github.io URL düzeltildi
-4. `CHANGELOG.md`: json-rpc-interface-spec URLs (2 yer)
-5. `umbrella/README.md`: try-runtime URL düzeltildi
-6. `macro/src/lib.rs`: subxt issue URL düzeltildi
-
-**lychee.toml Exclude Eklemeleri:**
-- 40+ defunct chain website (laminar, clover, polkadex, vb.)
-- Commit-specific GitHub URL pattern'leri
-- Rate-limited siteler (stackoverflow, aventus, efinity)
-
-**Toolchain Düzeltmeleri:**
-- wasm32-unknown-unknown target 1.88.0'a eklendi
-- polkatool v0.30.0 kuruldu
-
-### 2024-12-23: Oturum 4 - Core Crypto ve Getting-Started
-
-**check-core-crypto-features ✅ TAMAMLANDI:**
-- `bizinikiwi/primitives/core/check-features-variants.sh` geçti
-- `bizinikiwi/primitives/application-crypto/check-features-variants.sh` geçti
-- `bizinikiwi/primitives/keyring/check-features-variants.sh` geçti
-- wasm32-unknown-unknown target testi başarılı
-
-**check-getting-started.yml Düzeltmesi:**
-- **Sorun:** Template URL'leri 404 döndürüyordu
-  - `pezkuwichain/minimal-template` → 404
-  - `pezkuwichain/teyrchain-template` → 404
-  - `pezkuwichain/solochain-template` → 404
-- **Çözüm:** `getting-started.sh` → `pezkuwichain/pezkuwi-sdk-{template}-template`
-- **Doğrulama:** Tüm template repoları mevcut ve clone edilebilir
-
-### 2024-12-22: Oturum 2 - Format ve Vendor Entegrasyonu
-
-**rustfmt.toml Stable Migration:**
-- Sorun: rustfmt.toml nightly-only özellikler kullanıyordu
-- Çözüm: 9 nightly özellik kaldırıldı (imports_granularity, wrap_comments, vb.)
-- Etki: 898 dosya yeniden formatlandı
-
-**Vendor Entegrasyonu:**
-- `pezkuwi-subxt` → `vendor/pezkuwi-subxt/` (monorepo'ya dahil)
-- `pezkuwi-zombienet-sdk` → `vendor/pezkuwi-zombienet-sdk/` (monorepo'ya dahil)
-- Git bağımlılıkları path bağımlılıklarına çevrildi
-- 606 crate workspace'e dahil edildi
-
-**Zepter Düzeltmeleri (18 adet):**
-- runtime-benchmarks feature propagation (8 düzeltme)
-- std feature propagation (4 düzeltme)
-- try-runtime feature propagation (5 düzeltme)
-- serde feature propagation (1 düzeltme)
-
-### 2024-12-22: Oturum 1 - Clippy Düzeltmeleri
-
-**36 dosya düzeltildi:**
-- deprecated `cargo_bin` function (27 dosya)
-- `uninlined_format_args` (4 yer)
-- Subxt API değişiklikleri
-- unused function warnings
-
----
-
 ## SONRAKİ ADIMLAR
 
 1. ✅ ~~check-links.yml düzelt~~ - TAMAMLANDI
 2. ✅ ~~wasm32 target ekle~~ - TAMAMLANDI
 3. ✅ ~~polkatool kur~~ - TAMAMLANDI
-4. ✅ ~~check-core-crypto-features~~ - TAMAMLANDI (3 script geçti)
-5. ✅ ~~check-getting-started.yml~~ - Template URL düzeltildi
-6. ⏳ **try-runtime** - CI'da test et (lokal WASM build sorunu var)
-7. ⏳ **tests-misc.yml** - CI'da test et
-8. ⏳ **build-misc.yml** - CI'da test et
+4. ✅ ~~check-core-crypto-features~~ - TAMAMLANDI
+5. ✅ ~~check-getting-started.yml~~ - TAMAMLANDI
+6. ✅ ~~pez-kitchensink-runtime derleme hatası~~ - TAMAMLANDI
+7. ⏳ **try-runtime** - CI'da test et (lokal WASM build sorunu var)
+8. ⏳ **tests-misc.yml** - CI'da test et
+9. ⏳ **build-misc.yml** - CI'da test et
 
 ---
 
@@ -220,7 +168,6 @@
 ```
 error[E0152]: duplicate lang item in crate `core`
 error[E0152]: duplicate lang item in crate `alloc`
-error: getrandom wasm*-unknown-unknown not supported
 ```
 - **Sebep:** WASM builder farklı std/core versiyonu kullanıyor
 - **Çözüm:** CI Docker image'ında muhtemelen çözümlü
@@ -242,24 +189,19 @@ target: riscv64emac-unknown-none-polkavm.json
 ```
 /home/mamostehp/pezkuwi-sdk/
 ├── .github/workflows/          # Workflow dosyaları
-│   ├── checks.yml
-│   ├── checks-quick.yml
-│   ├── check-links.yml
-│   ├── tests-misc.yml
-│   └── build-misc.yml
 ├── .config/
-│   ├── lychee.toml            # Link checker config (güncel)
+│   ├── lychee.toml            # Link checker config
 │   └── taplo.toml             # TOML formatter config
 ├── .claude/
 │   ├── CLAUDE_RULES.md        # Rebrand kuralları
 │   ├── TERMINOLOGY.md         # Terminoloji mapping
 │   ├── WORKFLOW_PLAN.md       # Bu dosya
+│   ├── REBRAND_PROGRESS.md    # Rebrand ilerleme listesi
 │   ├── domains_repositories.md # Domain ve repo listesi
-│   └── issue_mapping.txt      # Upstream issue mapping
-├── scripts/
-│   ├── generate-umbrella.py   # Umbrella crate generator
-│   ├── create_tracking_issues.sh # Issue oluşturma scripti
-│   └── update_issue_links.sh  # Link güncelleme scripti
+│   └── issue_mapping.txt      # Upstream issue mapping (160 issue)
+├── umbrella/
+│   ├── Cargo.toml             # Umbrella crate dependencies
+│   └── src/lib.rs             # Umbrella re-exports
 ├── vendor/
 │   ├── pezkuwi-subxt/         # Vendored subxt (10 crate)
 │   ├── pezkuwi-zombienet-sdk/ # Vendored zombienet (6 crate)
@@ -269,29 +211,18 @@ target: riscv64emac-unknown-none-polkavm.json
 
 ---
 
-## GIT COMMIT GEÇMİŞİ
-
-1. `fix: resolve all broken links for check-links.yml CI` - 174 dosya
-2. `fix: address multiple compilation issues` - Son derlemeler
-3. `fix(security): upgrade libp2p 0.54.1 → 0.56.0` - ring güvenlik düzeltmesi
-4. `refactor: zombienet-sdk rebrand and subxt compatibility` - Vendor uyumu
-5. `security: fix wasmtime and tracing-subscriber vulnerabilities` - Güvenlik
-6. `fix: CI checks-quick.yml fixes` - Quick checks
-
----
-
 ## ÖZET İSTATİSTİKLERİ
 
 | Metrik | Değer |
 |--------|-------|
 | Toplam workflow job | 35 |
-| Tamamlanan (lokal OK) | 26 |
-| Beklemede (CI testi gerekli) | 8 |
+| Tamamlanan (lokal OK) | 28 |
+| Beklemede (CI testi gerekli) | 6 |
 | Bloklu (sistem gereksinimi) | 1 |
 | Kırık link düzeltilen | 78 |
 | Tracking issue oluşturulan | 160 |
 | Güvenlik açığı kapatılan | 4 |
-| Template URL düzeltilen | 1 |
+| Umbrella eksik crate düzeltilen | 2 |
 
 ---
 

@@ -923,6 +923,10 @@ pub use pezpallet_revive_uapi;
 #[cfg(feature = "pezpallet-root-offences")]
 pub use pezpallet_root_offences;
 
+/// FRAME root testing pezpallet.
+#[cfg(feature = "pezpallet-root-testing")]
+pub use pezpallet_root_testing;
+
 /// FRAME safe-mode pezpallet.
 #[cfg(feature = "pezpallet-safe-mode")]
 pub use pezpallet_safe_mode;
@@ -1058,6 +1062,10 @@ pub use pezpallet_whitelist;
 /// A pezpallet for handling XCM programs.
 #[cfg(feature = "pezpallet-xcm")]
 pub use pezpallet_xcm;
+
+/// XCM benchmarking pallet.
+#[cfg(feature = "pezpallet-xcm-benchmarks")]
+pub use pezpallet_xcm_benchmarks;
 
 /// Module that adds dynamic bridges/lanes support to XCM infrastructure at the bridge hub.
 #[cfg(feature = "pezpallet-xcm-bridge-hub")]

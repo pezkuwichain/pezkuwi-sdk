@@ -58,9 +58,6 @@ std = [
 	"pezkuwi-runtime-teyrchains?/std",
 	"pezkuwi-sdk-frame?/std",
 	"pezkuwi-ss58-registry?/std",
-	"pezkuwi-subxt-core?/std",
-	"pezkuwi-subxt-metadata?/std",
-	"pezkuwi-subxt-signer?/std",
 	"pezkuwi-teyrchain-primitives?/std",
 	"pezpallet-alliance?/std",
 	"pezpallet-asset-conversion-ops?/std",
@@ -144,6 +141,7 @@ std = [
 	"pezpallet-remark?/std",
 	"pezpallet-revive?/std",
 	"pezpallet-root-offences?/std",
+	"pezpallet-root-testing?/std",
 	"pezpallet-safe-mode?/std",
 	"pezpallet-salary?/std",
 	"pezpallet-scheduler?/std",
@@ -179,6 +177,7 @@ std = [
 	"pezpallet-xcm-bridge-hub?/std",
 	"pezpallet-xcm-precompiles?/std",
 	"pezpallet-xcm?/std",
+	"pezpallet-xcm-benchmarks?/std",
 	"pezsc-executor?/std",
 	"pezsp-api-proc-macro?/std",
 	"pezsp-api?/std",
@@ -470,6 +469,7 @@ runtime-benchmarks = [
 	"pezpallet-xcm-bridge-hub?/runtime-benchmarks",
 	"pezpallet-xcm-precompiles?/runtime-benchmarks",
 	"pezpallet-xcm?/runtime-benchmarks",
+	"pezpallet-xcm-benchmarks?/runtime-benchmarks",
 	"pezsc-authority-discovery?/runtime-benchmarks",
 	"pezsc-basic-authorship?/runtime-benchmarks",
 	"pezsc-block-builder?/runtime-benchmarks",
@@ -654,6 +654,7 @@ try-runtime = [
 	"pezpallet-remark?/try-runtime",
 	"pezpallet-revive?/try-runtime",
 	"pezpallet-root-offences?/try-runtime",
+	"pezpallet-root-testing?/try-runtime",
 	"pezpallet-safe-mode?/try-runtime",
 	"pezpallet-salary?/try-runtime",
 	"pezpallet-scheduler?/try-runtime",
@@ -690,7 +691,6 @@ serde = [
 	"bp-pezkuwi-core?/serde",
 	"pezframe-benchmarking?/serde",
 	"pezframe-metadata?/serde",
-	"pezkuwi-subxt-signer?/serde",
 	"pezpallet-asset-tx-payment?/serde",
 	"pezpallet-beefy-mmr?/serde",
 	"pezpallet-beefy?/serde",
@@ -792,10 +792,6 @@ runtime-full = [
 	"pezkuwi-runtime-teyrchains",
 	"pezkuwi-sdk-frame",
 	"pezkuwi-ss58-registry",
-	"pezkuwi-subxt-core",
-	"pezkuwi-subxt-macro",
-	"pezkuwi-subxt-metadata",
-	"pezkuwi-subxt-signer",
 	"pezkuwi-teyrchain-primitives",
 	"pezpallet-alliance",
 	"pezpallet-asset-conversion",
@@ -882,6 +878,7 @@ runtime-full = [
 	"pezpallet-revive-proc-macro",
 	"pezpallet-revive-uapi",
 	"pezpallet-root-offences",
+	"pezpallet-root-testing",
 	"pezpallet-safe-mode",
 	"pezpallet-salary",
 	"pezpallet-scheduler",
@@ -915,6 +912,7 @@ runtime-full = [
 	"pezpallet-vesting",
 	"pezpallet-whitelist",
 	"pezpallet-xcm",
+	"pezpallet-xcm-benchmarks",
 	"pezpallet-xcm-bridge-hub",
 	"pezpallet-xcm-bridge-hub-router",
 	"pezpallet-xcm-precompiles",
@@ -1070,8 +1068,12 @@ node = [
 	"pezkuwi-statement-table",
 	"pezkuwi-subxt",
 	"pezkuwi-subxt-codegen",
+	"pezkuwi-subxt-core",
 	"pezkuwi-subxt-lightclient",
+	"pezkuwi-subxt-macro",
+	"pezkuwi-subxt-metadata",
 	"pezkuwi-subxt-rpcs",
+	"pezkuwi-subxt-signer",
 	"pezkuwi-subxt-utils-fetchmetadata",
 	"pezkuwi-subxt-utils-stripmetadata",
 	"pezmmr-gadget",
@@ -1890,6 +1892,11 @@ default-features = false
 optional = true
 path = "../bizinikiwi/pezframe/root-offences"
 
+[dependencies.pezpallet-root-testing]
+default-features = false
+optional = true
+path = "../bizinikiwi/pezframe/root-testing"
+
 [dependencies.pezpallet-safe-mode]
 default-features = false
 optional = true
@@ -2054,6 +2061,11 @@ path = "../bizinikiwi/pezframe/whitelist"
 default-features = false
 optional = true
 path = "../pezkuwi/xcm/pezpallet-xcm"
+
+[dependencies.pezpallet-xcm-benchmarks]
+default-features = false
+optional = true
+path = "../pezkuwi/xcm/pezpallet-xcm-benchmarks"
 
 [dependencies.pezpallet-xcm-bridge-hub]
 default-features = false

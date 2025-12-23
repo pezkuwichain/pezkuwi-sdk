@@ -1,8 +1,9 @@
 # Rebrand İlerleme Listesi
 
-**Son Güncelleme:** 2025-12-19
+**Son Güncelleme:** 2024-12-23
 **Toplam Crate:** 76 (REBRAND_MAP'ten)
 **Rebrand Durumu:** 75/76 tamamlandı (98.7%)
+**Derleme Durumu:** ✅ WORKSPACE TAM DERLENİYOR
 
 ## Durum Açıklamaları
 - ⏳ Bekliyor
@@ -158,6 +159,14 @@
 ---
 
 ## Log
+
+### 2024-12-23
+- **Umbrella eksik crate düzeltmeleri:**
+  - `pezpallet-root-testing` umbrella'ya eklendi (std, try-runtime, runtime-full features)
+  - `pezpallet-xcm-benchmarks` umbrella'ya eklendi (std, runtime-benchmarks, runtime-full features)
+  - Her iki crate için lib.rs re-export eklendi
+- **pez-kitchensink-runtime** artık tam olarak derleniyor
+- **cargo clippy -p pez-kitchensink-runtime -- -D warnings** geçti
 
 ### 2025-12-19
 - **WORKSPACE CARGO CHECK BAŞARILI!** ✅
