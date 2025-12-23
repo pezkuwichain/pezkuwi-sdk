@@ -350,7 +350,7 @@ pub struct DiscoveryBehaviour {
 	/// The chain based kademlia protocol name (including genesis hash and fork id).
 	///
 	/// Remove when all nodes are upgraded to genesis hash and fork ID-based Kademlia:
-	/// <https://github.com/pezkuwichain/pezkuwi-sdk/issues/104>.
+	/// <https://github.com/pezkuwichain/pezkuwi-sdk/issues/250>.
 	kademlia_protocol: Option<StreamProtocol>,
 	/// Provider keys requested with `GET_PROVIDERS` queries.
 	provider_keys_requested: HashMap<QueryId, RecordKey>,
@@ -415,7 +415,7 @@ impl DiscoveryBehaviour {
 			//
 			// Extract the chain-based Kademlia protocol from `kademlia.protocol_name()`
 			// when all nodes are upgraded to genesis hash and fork ID-based Kademlia:
-			// https://github.com/pezkuwichain/pezkuwi-sdk/issues/104.
+			// https://github.com/pezkuwichain/pezkuwi-sdk/issues/250.
 			if !supported_protocols.iter().any(|p| {
 				p == self
 					.kademlia_protocol

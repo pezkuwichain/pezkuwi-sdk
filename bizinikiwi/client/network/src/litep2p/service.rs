@@ -360,9 +360,9 @@ impl NetworkStatusProvider for Litep2pNetworkService {
 			connected_peers: HashMap::new(),
 			not_connected_peers: HashMap::new(),
 			// TODO: Check what info we can include here.
-			//       Issue reference: https://github.com/pezkuwichain/pezkuwi-sdk/issues/15.
+			//       Issue reference: https://github.com/pezkuwichain/pezkuwi-sdk/issues/328.
 			peerset: serde_json::json!(
-				"Unimplemented. See https://github.com/pezkuwichain/pezkuwi-sdk/issues/15."
+				"Unimplemented. See https://github.com/pezkuwichain/pezkuwi-sdk/issues/328."
 			),
 		})
 	}

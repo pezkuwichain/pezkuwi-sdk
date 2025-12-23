@@ -524,7 +524,7 @@ pub struct OuterEnumsIR<T: Form = MetaForm> {
 	/// The type of the outer `RuntimeEvent` enum.
 	pub event_enum_ty: T::Type,
 	/// The module error type of the
-	/// [`DispatchError::Module`](https://docs.rs/sp-runtime/24.0.0/pezsp_runtime/enum.DispatchError.html#variant.Module) variant.
+	/// [`DispatchError::Module`](https://docs.rs/sp-runtime/24.0.0/sp_runtime/enum.DispatchError.html#variant.Module) variant.
 	///
 	/// The `Module` variant will be 5 scale encoded bytes which are normally decoded into
 	/// an `{ index: u8, error: [u8; 4] }` struct. This type ID points to an enum type which

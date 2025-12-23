@@ -772,7 +772,7 @@ impl Initialized {
 				.handle_import_statements(
 					ctx,
 					overlay_db,
-					// TODO <https://github.com/pezkuwichain/pezkuwi-sdk/issues/147>
+					// TODO <https://github.com/pezkuwichain/pezkuwi-sdk/issues/290>
 					MaybeCandidateReceipt::AssumeBackingVotePresent(candidate_hash),
 					session,
 					statements,

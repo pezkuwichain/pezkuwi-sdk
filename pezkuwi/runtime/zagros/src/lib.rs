@@ -2827,7 +2827,7 @@ pezsp_api::impl_runtime_apis! {
 	impl pezframe_try_runtime::TryRuntime<Block> for Runtime {
 		fn on_runtime_upgrade(checks: pezframe_try_runtime::UpgradeCheckSelect) -> (Weight, Weight) {
 			log::info!("try-runtime::on_runtime_upgrade zagros.");
-		  // TODO:: remove once https://github.com/pezkuwichain/pezkuwi-sdk/issues/159 is resolved.
+		  // TODO:: remove once https://github.com/pezkuwichain/pezkuwi-sdk/issues/302 is resolved.
 			let excluded_pallets = vec![
 				b"Staking".to_vec(),          // replaced by staking-async
 				b"NominationPools".to_vec(),  // moved to AH

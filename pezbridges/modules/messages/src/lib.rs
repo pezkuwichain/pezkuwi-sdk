@@ -516,7 +516,7 @@ pub mod pezpallet {
 	pub type PalletOperatingMode<T: Config<I>, I: 'static = ()> =
 		StorageValue<_, MessagesOperatingMode, ValueQuery>;
 
-	// TODO: https://github.com/pezkuwichain/pezkuwi-sdk/issues/89: let's limit number of
+	// TODO: https://github.com/pezkuwichain/pezkuwi-sdk/issues/236: let's limit number of
 	// possible opened lanes && use it to constraint maps below
 
 	/// Map of lane id => inbound lane data.

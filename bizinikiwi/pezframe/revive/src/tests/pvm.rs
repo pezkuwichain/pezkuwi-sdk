@@ -4043,7 +4043,7 @@ fn call_tracing_works() {
 		];
 
 		// Verify that the first trace report the same weight reported by bare_call
-		// TODO: fix tracing ( https://github.com/pezkuwichain/pezkuwi-sdk/issues/153 )
+		// TODO: fix tracing ( https://github.com/pezkuwichain/pezkuwi-sdk/issues/296 )
 		/*
 		let mut tracer = CallTracer::new(false, |w| w);
 		let gas_used = trace(&mut tracer, || {

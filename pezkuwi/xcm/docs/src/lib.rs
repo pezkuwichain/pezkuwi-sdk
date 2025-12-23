@@ -40,7 +40,7 @@
 //!
 //! ## Contribute
 //!
-//! To contribute to the format, check out the [RFC process](https://github.com/pezkuwichain/xcm-format/blob/master/proposals/0032-process.md).
+//! To contribute to the format, check out the [RFC process](https://github.com/polkadot-fellows/xcm-format/blob/master/proposals/0032-process.md).
 //! To contribute to these docs, [make a PR](https://github.com/pezkuwichain/pezkuwi-sdk).
 //!
 //! ## Why Rust Docs?

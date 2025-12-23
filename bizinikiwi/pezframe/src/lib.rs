@@ -273,7 +273,7 @@ pub mod benchmarking {
 	}
 
 	#[deprecated(
-		note = "'The V1 benchmarking syntax is deprecated. Please use the V2 syntax. This warning may become a hard error any time after April 2025. For more info, see: https://github.com/pezkuwichain/pezkuwi-sdk/issues/123"
+		note = "'The V1 benchmarking syntax is deprecated. Please use the V2 syntax. This warning may become a hard error any time after April 2025. For more info, see: https://github.com/pezkuwichain/pezkuwi-sdk/issues/268"
 	)]
 	pub mod v1 {
 		pub use super::shared::*;

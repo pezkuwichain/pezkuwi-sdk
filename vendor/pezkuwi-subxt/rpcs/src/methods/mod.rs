@@ -5,7 +5,7 @@
 //! RPC methods are defined in this module. At the moment we have:
 //!
 //! - [`ChainHeadRpcMethods`] (and the types in [`chain_head`]): these methods
-//!   implement the RPC spec at <https://pezkuwichain.github.io/json-rpc-interface-spec/api/chainHead.html>
+//!   implement the RPC spec at <https://paritytech.github.io/json-rpc-interface-spec/api/chainHead.html>
 //!
 //! We also have (although their use is not advised):
 //!

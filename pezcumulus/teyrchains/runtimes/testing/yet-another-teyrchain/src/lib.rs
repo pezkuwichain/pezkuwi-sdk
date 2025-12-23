@@ -175,7 +175,7 @@ parameter_types! {
 		.build_or_panic();
 	pub const SS58Prefix: u8 = 42;
 	// We assume the whole teyrchain state fits into the trie cache
-	// Numbers are from <https://github.com/pezkuwichain/pezkuwi-sdk/issues/127>
+	// Numbers are from <https://github.com/pezkuwichain/pezkuwi-sdk/issues/272>
 	pub const InMemoryDbWeight: RuntimeDbWeight = RuntimeDbWeight {
 		read: 9_000 * constants::WEIGHT_REF_TIME_PER_NANOS,
 		write: 28_000 * constants::WEIGHT_REF_TIME_PER_NANOS,

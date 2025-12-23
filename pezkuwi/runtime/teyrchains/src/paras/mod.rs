@@ -398,7 +398,7 @@ pub(crate) enum PvfCheckCause<BlockNumber> {
 		/// instead of its relay parent -- in order to keep PVF available in case of chain
 		/// reversions.
 		///
-		/// See https://github.com/pezkuwichain/pezkuwi-sdk/issues/151 for detailed explanation.
+		/// See https://github.com/pezkuwichain/pezkuwi-sdk/issues/294 for detailed explanation.
 		included_at: BlockNumber,
 		/// Whether or not the upgrade should be enacted directly.
 		///
@@ -1464,7 +1464,7 @@ const INVALID_TX_DOUBLE_VOTE: u8 = 3;
 const INVALID_TX_UNAUTHORIZED_CODE: u8 = 4;
 
 /// This is intermediate "fix" for this issue:
-/// <https://github.com/pezkuwichain/pezkuwi-sdk/issues/136>
+/// <https://github.com/pezkuwichain/pezkuwi-sdk/issues/281>
 ///
 /// It does not actually fix it, but makes the worst case better. Without that limit someone
 /// could completely DoS the relay chain by registering a ridiculously high amount of paras.
