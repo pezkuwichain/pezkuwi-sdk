@@ -111,7 +111,7 @@ fn setup_libp2p(
 			.with_max_negotiating_inbound_streams(2048)
 			.with_idle_connection_timeout(Duration::from_secs(5));
 
-		Swarm::new(transport.0, behaviour, local_peer_id, config)
+		Swarm::new(transport, behaviour, local_peer_id, config)
 	};
 
 	swarm.listen_on("/ip6/::1/tcp/0".parse().unwrap()).unwrap();

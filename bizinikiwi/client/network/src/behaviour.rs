@@ -464,3 +464,9 @@ impl From<void::Void> for BehaviourOut {
 		void::unreachable(e)
 	}
 }
+
+impl From<std::convert::Infallible> for BehaviourOut {
+	fn from(value: std::convert::Infallible) -> Self {
+		match value {}
+	}
+}
