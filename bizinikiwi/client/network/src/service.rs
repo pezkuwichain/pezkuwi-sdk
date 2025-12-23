@@ -113,18 +113,18 @@ pub mod traits;
 /// Logging target for the file.
 const LOG_TARGET: &str = "sub-libp2p";
 
-struct Libp2pBandwidthSink {
-	#[allow(deprecated)]
-	sink: Arc<transport::BandwidthSinks>,
-}
+/// Stub bandwidth sink that returns 0 for all metrics.
+/// Bandwidth logging was removed in libp2p 0.56.0.
+/// TODO: Implement custom bandwidth tracking if needed.
+struct NoBandwidthSink;
 
-impl BandwidthSink for Libp2pBandwidthSink {
+impl BandwidthSink for NoBandwidthSink {
 	fn total_inbound(&self) -> u64 {
-		self.sink.total_inbound()
+		0
 	}
 
 	fn total_outbound(&self) -> u64 {
-		self.sink.total_outbound()
+		0
 	}
 }
 
@@ -338,7 +338,7 @@ where
 		);
 		info!(target: LOG_TARGET, "Running libp2p network backend");
 
-		let (transport, bandwidth) = {
+		let transport = {
 			let config_mem = match network_config.transport {
 				TransportConfig::MemoryOnly => true,
 				TransportConfig::Normal { .. } => false,
@@ -467,7 +467,7 @@ where
 		)?;
 
 		// Build the swarm.
-		let (mut swarm, bandwidth): (Swarm<Behaviour<B>>, _) = {
+		let mut swarm = {
 			let user_agent =
 				format!("{} ({})", network_config.client_version, network_config.node_name);
 
@@ -554,9 +554,11 @@ where
 
 				Swarm::new(transport, behaviour, local_peer_id, config)
 			};
-
-			(swarm, Arc::new(Libp2pBandwidthSink { sink: bandwidth }))
+			swarm
 		};
+
+		// Stub bandwidth sink (bandwidth logging removed in libp2p 0.56.0)
+		let bandwidth: Arc<dyn BandwidthSink> = Arc::new(NoBandwidthSink);
 
 		// Initialize the metrics.
 		let metrics = match &params.metrics_registry {
@@ -1790,12 +1792,7 @@ where
 					if let Some(addresses) =
 						not_reported.then(|| self.boot_node_ids.get(&peer_id)).flatten()
 					{
-						if let DialError::WrongPeerId { obtained, endpoint } = &error {
-							if let ConnectedPoint::Dialer {
-								address,
-								role_override: _,
-								port_use: _,
-							} = endpoint
+						if let DialError::WrongPeerId { obtained, address } = &error {
 							{
 								let address_without_peer_id = parse_addr(address.clone().into())
 									.map_or_else(|_| address.clone(), |r| r.1.into());
@@ -1851,6 +1848,7 @@ where
 				local_addr,
 				send_back_addr,
 				error,
+				..
 			} => {
 				debug!(
 					target: LOG_TARGET,
