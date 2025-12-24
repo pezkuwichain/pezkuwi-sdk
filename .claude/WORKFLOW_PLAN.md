@@ -78,7 +78,7 @@ cargo check --locked --all --features try-runtime,experimental --quiet
 
 | Job | Durum | Lokal Test Komutu |
 |-----|-------|-------------------|
-| `cargo-check-all-benches` | ❌ | `cargo check --all --benches --locked` |
+| `cargo-check-all-benches` | ✅ | `SKIP_WASM_BUILD=1 cargo check --workspace --benches --features runtime-benchmarks --quiet` |
 | `test-syscalls` | ❌ | CI-specific (syscall binary testi) |
 | `quick-benchmarks` | ❌ | `cargo run --release -p pez-frame-benchmarking-cli` |
 
@@ -127,10 +127,10 @@ cargo check --locked --all --features try-runtime,experimental --quiet
 
 | Job | Durum | Lokal Test Komutu |
 |-----|-------|-------------------|
-| `build-linux-stable` | ❌ | `cargo build --locked --release -p pez-pezkuwi` |
-| `build-linux-stable-pezcumulus` | ❌ | `cargo build --locked --release -p pezkuwi-teyrchain` |
-| `build-linux-bizinikiwi` | ❌ | `cargo build --locked --release -p pez-node` |
-| `build-templates-node` | ❌ | `cargo build --locked --release -p teyrchain-template-node` |
+| `build-linux-stable` | ✅ | `cargo build --locked --release -p pezkuwi` |
+| `build-linux-stable-pezcumulus` | ✅ | `cargo build --locked --release -p pezkuwi-teyrchain-bin` |
+| `build-linux-bizinikiwi` | ✅ | `cargo build --locked --release -p pezstaging-node-cli` |
+| `build-templates-node` | ✅ | `cargo build --locked --release -p teyrchain-template-node` |
 | `build-malus` | ❌ | `cargo build --locked --release -p pez-test-malus` |
 | `build-test-collators` | ❌ | `cargo build --locked --release -p test-parachain` |
 | `prepare-bridges-zombienet-artifacts` | ❌ | Bridge binary'leri |
@@ -142,7 +142,13 @@ cargo check --locked --all --features try-runtime,experimental --quiet
 
 | Job | Durum | Lokal Test Komutu |
 |-----|-------|-------------------|
-| Tüm distro testleri | ✅ DÜZELTILDI | Template URL'leri düzeltildi |
+| Tüm distro testleri | ✅ | Template repo'ları mevcut, script doğru |
+
+**Template Repo'ları (GitHub'da mevcut):**
+- ✅ `github.com/pezkuwichain/pezkuwi-sdk-minimal-template`
+- ✅ `github.com/pezkuwichain/pezkuwi-sdk-solochain-template`
+- ✅ `github.com/pezkuwichain/pezkuwi-sdk-teyrchain-template`
+- ✅ `github.com/pezkuwichain/pezkuwi-runtime-templates`
 
 ---
 
@@ -178,6 +184,10 @@ AŞAMA 4 - EVM/PolkaVM:
 
 | Tarih | Düzeltme | Etki |
 |-------|----------|------|
+| 2025-12-25 | pezpallet-welati EnsureOrigin try_successful_origin düzeltmeleri (3 fix) | pezkuwi-teyrchain-bin build |
+| 2025-12-25 | asset-hub-zagros governance origins macro düzeltmeleri (2 macro) | pezkuwi-teyrchain-bin build |
+| 2025-12-25 | Binary build'ler test edildi: pezkuwi, pezkuwi-teyrchain-bin, pezstaging-node-cli, teyrchain-template-node | build-publish-images |
+| 2025-12-24 | Bench check'e --features runtime-benchmarks eklendi, yanlış exclusion'lar kaldırıldı | cargo-check-all-benches |
 | 2024-12-24 | Workflow'larda pezstaging-node-cli paket adı düzeltildi | build-publish-images, tests |
 | 2024-12-24 | Umbrella node feature'ına subxt native propagation eklendi | check-try-runtime |
 | 2024-12-24 | Vendor crate rebrand düzeltmeleri (sp_* -> pezsp_*) | cargo-clippy |
@@ -199,10 +209,17 @@ AŞAMA 4 - EVM/PolkaVM:
 1. ✅ `taplo format --config .config/taplo.toml` - TAMAMLANDI
 2. ✅ `cargo clippy` düzeltmeleri - TAMAMLANDI
 3. ✅ `check-try-runtime` komutları - TAMAMLANDI (subxt native feature propagation eklendi)
-4. Build-publish-images ve diğer build job'larını test et
-5. Commit ve push yap
-6. CI'da test et
+4. ✅ `cargo-check-all-benches` - TAMAMLANDI (--features runtime-benchmarks eklendi)
+5. ✅ Build-publish-images temel binary'ler - TAMAMLANDI
+   - ✅ pezkuwi
+   - ✅ pezkuwi-teyrchain-bin
+   - ✅ pezstaging-node-cli
+   - ✅ teyrchain-template-node
+6. ✅ Template repo'ları - MEVCUT (GitHub'da kontrol edildi)
+7. Kalan binary build'leri test et (pez-test-malus, test-parachain)
+8. Commit ve push yap
+9. CI'da test et
 
 ---
 
-*Son Güncelleme: 2024-12-24*
+*Son Güncelleme: 2025-12-25*

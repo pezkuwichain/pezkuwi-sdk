@@ -369,31 +369,31 @@ members = [
 	"pezbridges/relays/messages",
 	"pezbridges/relays/teyrchains",
 	"pezbridges/relays/utils",
-	"pezbridges/snowbridge/pezpallets/ethereum-client",
-	"pezbridges/snowbridge/pezpallets/ethereum-client/fixtures",
-	"pezbridges/snowbridge/pezpallets/inbound-queue",
-	"pezbridges/snowbridge/pezpallets/inbound-queue-v2",
-	"pezbridges/snowbridge/pezpallets/inbound-queue-v2/fixtures",
-	"pezbridges/snowbridge/pezpallets/inbound-queue/fixtures",
-	"pezbridges/snowbridge/pezpallets/outbound-queue",
-	"pezbridges/snowbridge/pezpallets/outbound-queue-v2",
-	"pezbridges/snowbridge/pezpallets/outbound-queue-v2/runtime-api",
-	"pezbridges/snowbridge/pezpallets/outbound-queue/runtime-api",
-	"pezbridges/snowbridge/pezpallets/system",
-	"pezbridges/snowbridge/pezpallets/system-frontend",
-	"pezbridges/snowbridge/pezpallets/system-v2",
-	"pezbridges/snowbridge/pezpallets/system-v2/runtime-api",
-	"pezbridges/snowbridge/pezpallets/system/runtime-api",
-	"pezbridges/snowbridge/primitives/beacon",
-	"pezbridges/snowbridge/primitives/core",
-	"pezbridges/snowbridge/primitives/ethereum",
-	"pezbridges/snowbridge/primitives/inbound-queue",
-	"pezbridges/snowbridge/primitives/merkle-tree",
-	"pezbridges/snowbridge/primitives/outbound-queue",
-	"pezbridges/snowbridge/primitives/verification",
-	"pezbridges/snowbridge/runtime/runtime-common",
-	"pezbridges/snowbridge/runtime/test-common",
-	"pezbridges/snowbridge/test-utils",
+	"pezbridges/pezsnowbridge/pezpallets/ethereum-client",
+	"pezbridges/pezsnowbridge/pezpallets/ethereum-client/fixtures",
+	"pezbridges/pezsnowbridge/pezpallets/inbound-queue",
+	"pezbridges/pezsnowbridge/pezpallets/inbound-queue-v2",
+	"pezbridges/pezsnowbridge/pezpallets/inbound-queue-v2/fixtures",
+	"pezbridges/pezsnowbridge/pezpallets/inbound-queue/fixtures",
+	"pezbridges/pezsnowbridge/pezpallets/outbound-queue",
+	"pezbridges/pezsnowbridge/pezpallets/outbound-queue-v2",
+	"pezbridges/pezsnowbridge/pezpallets/outbound-queue-v2/runtime-api",
+	"pezbridges/pezsnowbridge/pezpallets/outbound-queue/runtime-api",
+	"pezbridges/pezsnowbridge/pezpallets/system",
+	"pezbridges/pezsnowbridge/pezpallets/system-frontend",
+	"pezbridges/pezsnowbridge/pezpallets/system-v2",
+	"pezbridges/pezsnowbridge/pezpallets/system-v2/runtime-api",
+	"pezbridges/pezsnowbridge/pezpallets/system/runtime-api",
+	"pezbridges/pezsnowbridge/primitives/beacon",
+	"pezbridges/pezsnowbridge/primitives/core",
+	"pezbridges/pezsnowbridge/primitives/ethereum",
+	"pezbridges/pezsnowbridge/primitives/inbound-queue",
+	"pezbridges/pezsnowbridge/primitives/merkle-tree",
+	"pezbridges/pezsnowbridge/primitives/outbound-queue",
+	"pezbridges/pezsnowbridge/primitives/verification",
+	"pezbridges/pezsnowbridge/runtime/runtime-common",
+	"pezbridges/pezsnowbridge/runtime/test-common",
+	"pezbridges/pezsnowbridge/test-utils",
 	"pezcumulus/bin/pov-validator",
 	"pezcumulus/client/bootnodes",
 	"pezcumulus/client/cli",
@@ -1323,30 +1323,30 @@ pezsc-tracing-proc-macro = { path = "bizinikiwi/client/tracing/proc-macro", defa
 pezsc-transaction-pool = { path = "bizinikiwi/client/transaction-pool", default-features = false }
 pezsc-transaction-pool-api = { path = "bizinikiwi/client/transaction-pool/api", default-features = false }
 pezsc-utils = { path = "bizinikiwi/client/utils", default-features = false }
-pezsnowbridge-beacon-primitives = { path = "pezbridges/snowbridge/primitives/beacon", default-features = false }
-pezsnowbridge-core = { path = "pezbridges/snowbridge/primitives/core", default-features = false }
-pezsnowbridge-ethereum = { path = "pezbridges/snowbridge/primitives/ethereum", default-features = false }
-pezsnowbridge-inbound-queue-primitives = { path = "pezbridges/snowbridge/primitives/inbound-queue", default-features = false }
-pezsnowbridge-merkle-tree = { path = "pezbridges/snowbridge/primitives/merkle-tree", default-features = false }
-pezsnowbridge-outbound-queue-primitives = { path = "pezbridges/snowbridge/primitives/outbound-queue", default-features = false }
-pezsnowbridge-outbound-queue-runtime-api = { path = "pezbridges/snowbridge/pezpallets/outbound-queue/runtime-api", default-features = false }
-pezsnowbridge-outbound-queue-v2-runtime-api = { path = "pezbridges/snowbridge/pezpallets/outbound-queue-v2/runtime-api", default-features = false }
-pezsnowbridge-pezpallet-ethereum-client = { path = "pezbridges/snowbridge/pezpallets/ethereum-client", default-features = false }
-pezsnowbridge-pezpallet-ethereum-client-fixtures = { path = "pezbridges/snowbridge/pezpallets/ethereum-client/fixtures", default-features = false }
-pezsnowbridge-pezpallet-inbound-queue = { path = "pezbridges/snowbridge/pezpallets/inbound-queue", default-features = false }
-pezsnowbridge-pezpallet-inbound-queue-fixtures = { path = "pezbridges/snowbridge/pezpallets/inbound-queue/fixtures", default-features = false }
-pezsnowbridge-pezpallet-inbound-queue-v2 = { path = "pezbridges/snowbridge/pezpallets/inbound-queue-v2", default-features = false }
-pezsnowbridge-pezpallet-inbound-queue-v2-fixtures = { path = "pezbridges/snowbridge/pezpallets/inbound-queue-v2/fixtures", default-features = false }
-pezsnowbridge-pezpallet-outbound-queue = { path = "pezbridges/snowbridge/pezpallets/outbound-queue", default-features = false }
-pezsnowbridge-pezpallet-outbound-queue-v2 = { path = "pezbridges/snowbridge/pezpallets/outbound-queue-v2", default-features = false }
-pezsnowbridge-pezpallet-system = { path = "pezbridges/snowbridge/pezpallets/system", default-features = false }
-pezsnowbridge-pezpallet-system-frontend = { path = "pezbridges/snowbridge/pezpallets/system-frontend", default-features = false }
-pezsnowbridge-pezpallet-system-v2 = { path = "pezbridges/snowbridge/pezpallets/system-v2", default-features = false }
-pezsnowbridge-runtime-test-common = { path = "pezbridges/snowbridge/runtime/test-common", default-features = false }
-pezsnowbridge-system-runtime-api = { path = "pezbridges/snowbridge/pezpallets/system/runtime-api", default-features = false }
-pezsnowbridge-system-v2-runtime-api = { path = "pezbridges/snowbridge/pezpallets/system-v2/runtime-api", default-features = false }
-pezsnowbridge-test-utils = { path = "pezbridges/snowbridge/test-utils" }
-pezsnowbridge-verification-primitives = { path = "pezbridges/snowbridge/primitives/verification", default-features = false }
+pezsnowbridge-beacon-primitives = { path = "pezbridges/pezsnowbridge/primitives/beacon", default-features = false }
+pezsnowbridge-core = { path = "pezbridges/pezsnowbridge/primitives/core", default-features = false }
+pezsnowbridge-ethereum = { path = "pezbridges/pezsnowbridge/primitives/ethereum", default-features = false }
+pezsnowbridge-inbound-queue-primitives = { path = "pezbridges/pezsnowbridge/primitives/inbound-queue", default-features = false }
+pezsnowbridge-merkle-tree = { path = "pezbridges/pezsnowbridge/primitives/merkle-tree", default-features = false }
+pezsnowbridge-outbound-queue-primitives = { path = "pezbridges/pezsnowbridge/primitives/outbound-queue", default-features = false }
+pezsnowbridge-outbound-queue-runtime-api = { path = "pezbridges/pezsnowbridge/pezpallets/outbound-queue/runtime-api", default-features = false }
+pezsnowbridge-outbound-queue-v2-runtime-api = { path = "pezbridges/pezsnowbridge/pezpallets/outbound-queue-v2/runtime-api", default-features = false }
+pezsnowbridge-pezpallet-ethereum-client = { path = "pezbridges/pezsnowbridge/pezpallets/ethereum-client", default-features = false }
+pezsnowbridge-pezpallet-ethereum-client-fixtures = { path = "pezbridges/pezsnowbridge/pezpallets/ethereum-client/fixtures", default-features = false }
+pezsnowbridge-pezpallet-inbound-queue = { path = "pezbridges/pezsnowbridge/pezpallets/inbound-queue", default-features = false }
+pezsnowbridge-pezpallet-inbound-queue-fixtures = { path = "pezbridges/pezsnowbridge/pezpallets/inbound-queue/fixtures", default-features = false }
+pezsnowbridge-pezpallet-inbound-queue-v2 = { path = "pezbridges/pezsnowbridge/pezpallets/inbound-queue-v2", default-features = false }
+pezsnowbridge-pezpallet-inbound-queue-v2-fixtures = { path = "pezbridges/pezsnowbridge/pezpallets/inbound-queue-v2/fixtures", default-features = false }
+pezsnowbridge-pezpallet-outbound-queue = { path = "pezbridges/pezsnowbridge/pezpallets/outbound-queue", default-features = false }
+pezsnowbridge-pezpallet-outbound-queue-v2 = { path = "pezbridges/pezsnowbridge/pezpallets/outbound-queue-v2", default-features = false }
+pezsnowbridge-pezpallet-system = { path = "pezbridges/pezsnowbridge/pezpallets/system", default-features = false }
+pezsnowbridge-pezpallet-system-frontend = { path = "pezbridges/pezsnowbridge/pezpallets/system-frontend", default-features = false }
+pezsnowbridge-pezpallet-system-v2 = { path = "pezbridges/pezsnowbridge/pezpallets/system-v2", default-features = false }
+pezsnowbridge-runtime-test-common = { path = "pezbridges/pezsnowbridge/runtime/test-common", default-features = false }
+pezsnowbridge-system-runtime-api = { path = "pezbridges/pezsnowbridge/pezpallets/system/runtime-api", default-features = false }
+pezsnowbridge-system-v2-runtime-api = { path = "pezbridges/pezsnowbridge/pezpallets/system-v2/runtime-api", default-features = false }
+pezsnowbridge-test-utils = { path = "pezbridges/pezsnowbridge/test-utils" }
+pezsnowbridge-verification-primitives = { path = "pezbridges/pezsnowbridge/primitives/verification", default-features = false }
 pezsp-api = { path = "bizinikiwi/primitives/api", default-features = false }
 pezsp-api-proc-macro = { path = "bizinikiwi/primitives/api/proc-macro", default-features = false }
 pezsp-application-crypto = { path = "bizinikiwi/primitives/application-crypto", default-features = false }
@@ -1496,7 +1496,7 @@ slotmap = { version = "1.0" }
 smallvec = { version = "1.11.0", default-features = false }
 smoldot = { version = "0.20.0", default-features = false }
 smoldot-light = { version = "0.18.0", default-features = false }
-snowpezbridge-runtime-common = { path = "pezbridges/snowbridge/runtime/runtime-common", default-features = false }
+pezsnowbridge-runtime-common = { path = "pezbridges/pezsnowbridge/runtime/runtime-common", default-features = false }
 soketto = { version = "0.8.0" }
 sp-core = { version = "38.1.0" }
 spinners = { version = "4.1.1" }
