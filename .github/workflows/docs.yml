@@ -32,10 +32,11 @@ jobs:
           cargo clean 2>/dev/null || true
           rm -rf ~/.cargo/registry/cache 2>/dev/null || true
           rm -rf ~/.cargo/git/db 2>/dev/null || true
-      - run: cargo test --doc --workspace --locked
+      - run: cargo test --doc --workspace --locked --all-features
         id: required
         env:
           RUSTFLAGS: "-Cdebug-assertions=y -Dwarnings"
+          SKIP_WASM_BUILD: 1
 
   build-rustdoc:
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
