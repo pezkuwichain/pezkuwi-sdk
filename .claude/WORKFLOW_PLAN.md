@@ -178,6 +178,7 @@ AŞAMA 4 - EVM/PolkaVM:
 
 | Tarih | Düzeltme | Etki |
 |-------|----------|------|
+| 2024-12-24 | Workflow'larda pezstaging-node-cli paket adı düzeltildi | build-publish-images, tests |
 | 2024-12-24 | Umbrella node feature'ına subxt native propagation eklendi | check-try-runtime |
 | 2024-12-24 | Vendor crate rebrand düzeltmeleri (sp_* -> pezsp_*) | cargo-clippy |
 | 2024-12-24 | Subxt examples artifact paths düzeltildi | cargo-clippy |
