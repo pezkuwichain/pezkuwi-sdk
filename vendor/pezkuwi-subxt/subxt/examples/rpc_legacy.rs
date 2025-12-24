@@ -6,7 +6,7 @@ use pezkuwi_subxt::{
 };
 use pezkuwi_subxt_signer::sr25519::dev;
 
-#[pezkuwi_subxt::subxt(runtime_metadata_path = "../artifacts/pezkuwi_metadata_small.scale")]
+#[pezkuwi_subxt::subxt(runtime_metadata_path = "../artifacts/polkadot_metadata_small.scale")]
 pub mod pezkuwi {}
 
 #[tokio::main]
@@ -37,13 +37,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	let bob = dev::bob();
 
 	loop {
-		let current_nonce = rpc.system_account_next_index(&alice.public_key().into()).await?;
+		let alice_account_id = pezkuwi_subxt::config::bizinikiwi::AccountId32(alice.public_key().0);
+		let current_nonce = rpc.system_account_next_index(&alice_account_id).await?;
 
 		let ext_params = Params::new().mortal(8).nonce(current_nonce).build();
 
+		let dest = pezkuwi::runtime_types::sp_runtime::multiaddress::MultiAddress::Id(
+			pezkuwi::runtime_types::sp_core::crypto::AccountId32(bob.public_key().0),
+		);
 		let balance_transfer = pezkuwi::tx()
 			.balances()
-			.transfer_allow_death(bob.public_key().into(), 1_000_000);
+			.transfer_allow_death(dest, 1_000_000);
 
 		let ext_hash = api
 			.tx()

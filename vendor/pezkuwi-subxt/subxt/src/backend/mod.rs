@@ -468,7 +468,7 @@ mod test {
 					// Decode the storage key as first item from sequence of params:
 					let params = params.map(|p| p.get().to_string());
 					let rpc_params = jsonrpsee::types::Params::new(params.as_deref());
-					let key: sp_core::Bytes = rpc_params.sequence().next().unwrap();
+					let key: pezsp_core::Bytes = rpc_params.sequence().next().unwrap();
 					let key = std::str::from_utf8(&key.0).unwrap();
 					// Fetch the response to use from our map, popping it from the front.
 					let values = values.get_mut(key).unwrap();

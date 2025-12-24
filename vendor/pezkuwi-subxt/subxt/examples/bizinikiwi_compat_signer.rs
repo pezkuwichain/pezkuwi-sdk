@@ -6,10 +6,10 @@
 
 #![allow(missing_docs, unused)]
 
-use pezkuwi_subxt::{config::bizinikiwi::MultiAddress, Config, OnlineClient, PezkuwiConfig};
-use sp_core::{sr25519, Pair as _};
+use pezkuwi_subxt::{Config, OnlineClient, PezkuwiConfig};
+use pezsp_core::{sr25519, Pair as _};
 
-#[pezkuwi_subxt::subxt(runtime_metadata_path = "../artifacts/pezkuwi_metadata_small.scale")]
+#[pezkuwi_subxt::subxt(runtime_metadata_path = "../artifacts/polkadot_metadata_small.scale")]
 pub mod pezkuwi {}
 
 /// A concrete PairSigner implementation which relies on `sr25519::Pair` for signing
@@ -20,7 +20,7 @@ mod pair_signer {
 		config::bizinikiwi::{AccountId32, MultiSignature},
 		tx::Signer,
 	};
-	use sp_runtime::{
+	use pezsp_runtime::{
 		traits::{IdentifyAccount, Verify},
 		MultiSignature as SpMultiSignature,
 	};
@@ -90,7 +90,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 	let dest = {
 		let acc = sr25519::Pair::from_string("//Bob", None)?;
-		MultiAddress::Address32(acc.public().0)
+		pezkuwi::runtime_types::sp_runtime::multiaddress::MultiAddress::Address32(acc.public().0)
 	};
 
 	// Build a balance transfer extrinsic.

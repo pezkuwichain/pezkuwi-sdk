@@ -1,15 +1,17 @@
 #![allow(missing_docs)]
 use pezkuwi_subxt::{
-	utils::{AccountId32, MultiAddress},
+	utils::{AccountId32 as UtilAccountId32, MultiAddress as UtilMultiAddress},
 	OnlineClient, PezkuwiConfig,
 };
 
 use codec::Decode;
 
-#[pezkuwi_subxt::subxt(runtime_metadata_path = "../artifacts/pezkuwi_metadata_small.scale")]
+#[pezkuwi_subxt::subxt(runtime_metadata_path = "../artifacts/polkadot_metadata_small.scale")]
 pub mod pezkuwi {}
 
 use pezkuwi::balances::calls::types::TransferKeepAlive;
+use pezkuwi::runtime_types::sp_runtime::multiaddress::MultiAddress;
+use pezkuwi::runtime_types::sp_core::crypto::AccountId32;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -37,9 +39,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 			let addr_bytes =
 				transfer.details.address_bytes().expect("TransferKeepAlive should be signed");
-			let sender = MultiAddress::<AccountId32, ()>::decode(&mut &addr_bytes[..])
+			// Use utility types for decoding as they implement the Decode trait
+			let sender = UtilMultiAddress::<UtilAccountId32, ()>::decode(&mut &addr_bytes[..])
 				.expect("Decoding should work");
-			let sender = display_address(&sender);
+			let sender = display_util_address(&sender);
 			let receiver = display_address(&transfer.value.dest);
 			let value = transfer.value.value;
 			let tip = extensions.tip().expect("Should have tip");
@@ -56,6 +59,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 fn display_address(addr: &MultiAddress<AccountId32, ()>) -> String {
 	if let MultiAddress::Id(id32) = addr {
+		format!("{id32:?}")
+	} else {
+		"MultiAddress::...".into()
+	}
+}
+
+fn display_util_address(addr: &UtilMultiAddress<UtilAccountId32, ()>) -> String {
+	if let UtilMultiAddress::Id(id32) = addr {
 		format!("{id32}")
 	} else {
 		"MultiAddress::...".into()

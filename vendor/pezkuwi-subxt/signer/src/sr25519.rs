@@ -341,7 +341,7 @@ mod test {
 
 	use super::*;
 
-	use sp_core::{self, crypto::Pair as _, sr25519::Pair as SpPair};
+	use pezsp_core::{self, crypto::Pair as _, sr25519::Pair as SpPair};
 
 	#[test]
 	fn check_from_phrase_matches() {
@@ -399,7 +399,7 @@ mod test {
 
 	#[test]
 	fn check_dev_accounts_match() {
-		use sp_keyring::sr25519::Keyring::*;
+		use pezsp_keyring::sr25519::Keyring::*;
 
 		assert_eq!(dev::alice().public_key().0, Alice.public().0);
 		assert_eq!(dev::bob().public_key().0, Bob.public().0);
@@ -413,7 +413,7 @@ mod test {
 
 	#[test]
 	fn check_signing_and_verifying_matches() {
-		use sp_core::sr25519::Signature as SpSignature;
+		use pezsp_core::sr25519::Signature as SpSignature;
 
 		for _ in 0..20 {
 			let (sp_pair, phrase, _seed) = SpPair::generate_with_phrase(Some("Testing"));
