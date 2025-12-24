@@ -41,7 +41,7 @@ async fn polkadot_local_with_chain_spec_runtime() {
 
 	// asset-hub-collator-1
 	let collator = network.get_node("asset-hub-collator-1").unwrap();
-	let client = collator.wait_client::<subxt::PolkadotConfig>().await.unwrap();
+	let client = collator.wait_client::<pezkuwi_subxt::PezkuwiConfig>().await.unwrap();
 
 	// wait 1 blocks
 	let mut blocks = client.blocks().subscribe_finalized().await.unwrap().take(1);
@@ -51,7 +51,7 @@ async fn polkadot_local_with_chain_spec_runtime() {
 
 	// asset-hub-collator-2
 	let collator = network.get_node("asset-hub-collator-2").unwrap();
-	let client = collator.wait_client::<subxt::PolkadotConfig>().await.unwrap();
+	let client = collator.wait_client::<pezkuwi_subxt::PezkuwiConfig>().await.unwrap();
 
 	// wait 1 blocks
 	let mut blocks = client.blocks().subscribe_finalized().await.unwrap().take(1);

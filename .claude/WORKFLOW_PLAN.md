@@ -1,234 +1,201 @@
-# Pezkuwi SDK - CI Workflow Düzeltme Planı
+# Pezkuwi SDK - CI Workflow Mühendislik Planı
 
-> Bu dosya Claude oturumları arasında sürekliliği sağlamak için oluşturulmuştur.
-> Her oturum başında bu dosyayı oku ve kaldığın yerden devam et.
+> **KURAL:** Bu dosyadaki komutları birebir çalıştır. Kendi komutunu uydurma.
 
-## Son Güncelleme
-- **Tarih:** 2024-12-23
-- **Son Tamamlanan:** pez-kitchensink-runtime compilation fix (umbrella eksik crate'ler)
-- **Aktif Görev:** FAZ 1 - CI Yeşil Işık
+## Son CI Durumu (main branch)
 
----
-
-## DURUM TABLOSU
-
-### checks.yml (3 job)
-| Job | Durum | Komut | Notlar |
-|-----|-------|-------|--------|
-| cargo-clippy | ✅ TAMAMLANDI | `RUSTFLAGS="-D warnings" SKIP_WASM_BUILD=1 cargo clippy --all-targets --all-features --locked --workspace --quiet` | 36 dosya düzeltildi |
-| check-try-runtime | ⚠️ BLOKLU | `cargo check --locked --all --features try-runtime` | WASM duplicate lang item sorunu - CI'da test edilmeli |
-| check-core-crypto-features | ✅ TAMAMLANDI | `check-features-variants.sh` | 3 script geçti (pezsp-core, application-crypto, keyring) |
-
-### checks-quick.yml (10 job)
-| Job | Durum | Komut | Notlar |
-|-----|-------|-------|--------|
-| fmt | ✅ TAMAMLANDI | `cargo fmt --all -- --check` | rustfmt.toml stable-only yapıldı, 898 dosya formatlandı |
-| check-toml-format | ✅ TAMAMLANDI | `taplo format --check --config .config/taplo.toml` | 10 dosya düzeltildi |
-| check-zepter | ✅ TAMAMLANDI | `zepter run check` | 18 feature propagation düzeltildi |
-| check-workspace | ✅ TAMAMLANDI | `python3 .github/scripts/check-workspace.py .` | 606 crate, 6919 link doğrulandı |
-| check-dependency-rules | ✅ TAMAMLANDI | `python3 .github/scripts/deny-git-deps.py .` | Git deps path'e çevrildi |
-| check-umbrella | ✅ TAMAMLANDI | `python3 scripts/generate-umbrella.py` | Umbrella crate oluşturuldu |
-| test-rust-features | ✅ TAMAMLANDI | `.gitlab/rust-features.sh .` | Feature kontrolleri geçti |
-| check-markdown | ✅ TAMAMLANDI | `markdownlint --config .github/.markdownlint.yaml --ignore target .` | Markdown formatı OK |
-| check-fail-ci | ✅ TAMAMLANDI | `rg "FAIL-CI" --type rust` | FAIL-CI markerı yok |
-| check-readme | ✅ TAMAMLANDI | `.github/scripts/check-missing-readme-generation.sh` | README'ler güncel |
-
-### check-links.yml (1 job)
-| Job | Durum | Komut | Notlar |
-|-----|-------|-------|--------|
-| link-checker | ✅ TAMAMLANDI | `lychee --config .config/lychee.toml './**/*.rs'` | 0 hata - 6747 OK, 2834 exclude |
-
-### check-getting-started.yml (7 job)
-| Job | Durum | Notlar |
-|-----|-------|--------|
-| ubuntu/minimal | ✅ DÜZELTİLDİ | Template URL: pezkuwi-sdk-minimal-template |
-| debian/teyrchain | ✅ DÜZELTİLDİ | Template URL: pezkuwi-sdk-teyrchain-template |
-| arch/solochain | ✅ DÜZELTİLDİ | Template URL: pezkuwi-sdk-solochain-template |
-| fedora/teyrchain | ✅ DÜZELTİLDİ | Template URL düzeltildi |
-| opensuse/solochain | ✅ DÜZELTİLDİ | Template URL düzeltildi |
-| macos/teyrchain | ✅ DÜZELTİLDİ | Template URL düzeltildi |
-| macos/solochain | ✅ DÜZELTİLDİ | Template URL düzeltildi |
-
-### tests-misc.yml (11 job)
-| Job | Durum | Notlar |
-|-----|-------|--------|
-| test-full-crypto-feature | ✅ LOKAL OK | `cargo build --no-default-features --features full_crypto -p pezsp-core` geçti |
-| test-pezframe-examples-compile-to-wasm | ⏳ BEKLEMEDE | CI'da test edilmeli |
-| test-pezframe-ui | ⏳ BEKLEMEDE | CI'da test edilmeli |
-| test-deterministic-wasm | ⏳ BEKLEMEDE | CI'da test edilmeli |
-| cargo-check-benches | ⚠️ BLOKLU | pezpallet-revive-fixtures PolkaVM toolchain gerektiriyor |
-| test-node-metrics | ⏳ BEKLEMEDE | CI'da test edilmeli |
-| check-tracing | ✅ LOKAL OK | Tracing testleri geçti |
-| check-metadata-hash | ⏳ BEKLEMEDE | CI'da test edilmeli |
-| cargo-check-each-crate | ⏳ BEKLEMEDE | CI'da test edilmeli |
-| cargo-check-all-crate-macos | ⏳ BEKLEMEDE | macOS gerekli |
-
-### build-misc.yml (3 job)
-| Job | Durum | Notlar |
-|-----|-------|--------|
-| build-runtimes-polkavm | ⏳ BEKLEMEDE | RISC-V target gerekli - CI'da test edilmeli |
-| check-revive-stable-uapi-polkavm | ⏳ BEKLEMEDE | CI'da test edilmeli |
-| build-pez-subkey | ✅ LOKAL OK | 7m 49s'de release build tamamlandı |
+| Durum | Sayı |
+|-------|------|
+| Skipped | 25 |
+| Successful | 58 |
+| **Failing** | **42** |
+| Cancelled | 10 |
 
 ---
 
-## BUGÜN YAPILAN DÜZELTMELER (2024-12-23)
+## FAZ 1: Başarısız Workflow'lar (10 workflow, ~30 job)
 
-### pez-kitchensink-runtime Derleme Hatası Çözümü
+### 1.1 quick-checks.yml
 
-**Problem:** 679 derleme hatası - `Runtime`, `RuntimeCall`, `Balances`, `pezpallet_root_testing` bulunamıyor
+| Job | Durum | Lokal Test Komutu |
+|-----|-------|-------------------|
+| `check-toml-format` | ❌ | `taplo format --check --config .config/taplo.toml` |
+| `check-markdown` | ❌ | `markdownlint --config .github/.markdownlint.yaml --ignore target --ignore vendor .` |
+| `fmt` | ✅ | `cargo fmt --all -- --check` |
+| `check-zepter` | ✅ | `zepter run check` |
+| `check-workspace` | ✅ | `python3 .github/scripts/check-workspace.py .` |
+| `check-dependency-rules` | ✅ | `python3 .github/scripts/deny-git-deps.py .` |
+| `check-umbrella` | ✅ | `python3 scripts/generate-umbrella.py --check` |
+| `test-rust-features` | ✅ | `.gitlab/rust-features.sh .` |
+| `check-fail-ci` | ✅ | `! grep -r "FAIL-CI" --include="*.rs" . --exclude-dir=target` |
+| `check-readme` | ✅ | `.github/scripts/check-missing-readme-generation.sh` |
 
-**Teşhis:**
-- `use pezkuwi_sdk::*;` ile umbrella'dan import yapılıyor
-- Umbrella'da `pezpallet-root-testing` ve `pezpallet-xcm-benchmarks` eksikti
-- Macro chain kırılmış, Runtime type'ları generate edilmiyordu
+**Düzeltme:**
+```bash
+# TOML format düzelt
+taplo format --config .config/taplo.toml
 
-**Çözüm - Umbrella Cargo.toml'a eklendi:**
-
-1. **pezpallet-root-testing:**
-   - `std` feature eklendi
-   - `try-runtime` feature eklendi
-   - `runtime-full` feature eklendi
-   - `[dependencies.pezpallet-root-testing]` section eklendi
-
-2. **pezpallet-xcm-benchmarks:**
-   - `std` feature eklendi
-   - `runtime-benchmarks` feature eklendi
-   - `runtime-full` feature eklendi
-   - `[dependencies.pezpallet-xcm-benchmarks]` section eklendi
-
-3. **Umbrella src/lib.rs'e re-export eklendi:**
-```rust
-#[cfg(feature = "pezpallet-root-testing")]
-pub use pezpallet_root_testing;
-
-#[cfg(feature = "pezpallet-xcm-benchmarks")]
-pub use pezpallet_xcm_benchmarks;
-```
-
-**Sonuç:**
-- ✅ `SKIP_WASM_BUILD=1 cargo check -p pez-kitchensink-runtime` - BAŞARILI
-- ✅ `SKIP_WASM_BUILD=1 cargo clippy -p pez-kitchensink-runtime` - BAŞARILI
-- ✅ `SKIP_WASM_BUILD=1 cargo clippy -p pez-kitchensink-runtime -- -D warnings` - BAŞARILI
-
-### Önceki Düzeltme: getrandom WASM Hatası
-
-**Problem:** `error: the wasm*-unknown-unknown targets are not supported by default`
-
-**Sebep:**
-- `frame-decode v0.15.0` → `sp-crypto-hashing/std` → `twox-hash/std` → `rand` → `getrandom`
-- subxt crate'leri runtime-full feature'ında getrandom'u çekiyordu
-
-**Çözüm:**
-- Umbrella Cargo.toml'da subxt crate'leri `runtime-full`'dan çıkarıldı
-- `node` feature'ına taşındı
-
----
-
-## GÜVENLİK DÜZELTMELERİ (Dependabot)
-
-| Vulnerability | Severity | Eski Versiyon | Yeni Versiyon | Durum |
-|--------------|----------|---------------|---------------|-------|
-| wasmtime (unsound API) | Low | 35.0.0 | 37.0.0 | ✅ |
-| tracing-subscriber (ANSI escape) | Low | 0.3.18 | 0.3.20 | ✅ |
-| ring (AES overflow) | Medium | 0.16.20 | 0.17.14 | ✅ |
-| ring (duplicate) | Medium | 0.16.20 | 0.17.14 | ✅ |
-
----
-
-## TOOLCHAIN DURUMU
-
-| Tool | Durum | Versiyon | Notlar |
-|------|-------|----------|--------|
-| Rust | ✅ | 1.88.0 | rust-toolchain.toml'dan |
-| wasm32-unknown-unknown | ✅ | installed | 1.88.0 toolchain'e eklendi |
-| polkatool | ✅ | 0.30.0 | crates.io'dan kuruldu |
-| resolc | ✅ | mevcut | ~/.local/bin/resolc |
-| polkavm-linker | ✅ | 0.30.0 | ~/.cache/.polkavm-linker/ |
-
----
-
-## SONRAKİ ADIMLAR
-
-1. ✅ ~~check-links.yml düzelt~~ - TAMAMLANDI
-2. ✅ ~~wasm32 target ekle~~ - TAMAMLANDI
-3. ✅ ~~polkatool kur~~ - TAMAMLANDI
-4. ✅ ~~check-core-crypto-features~~ - TAMAMLANDI
-5. ✅ ~~check-getting-started.yml~~ - TAMAMLANDI
-6. ✅ ~~pez-kitchensink-runtime derleme hatası~~ - TAMAMLANDI
-7. ⏳ **try-runtime** - CI'da test et (lokal WASM build sorunu var)
-8. ⏳ **tests-misc.yml** - CI'da test et
-9. ⏳ **build-misc.yml** - CI'da test et
-
----
-
-## BİLİNEN SORUNLAR
-
-### try-runtime WASM Build Sorunu
-```
-error[E0152]: duplicate lang item in crate `core`
-error[E0152]: duplicate lang item in crate `alloc`
-```
-- **Sebep:** WASM builder farklı std/core versiyonu kullanıyor
-- **Çözüm:** CI Docker image'ında muhtemelen çözümlü
-- **Aksiyon:** CI'da test et, lokal test'i atla
-
-### pezpallet-revive-fixtures PolkaVM Sorunu
-```
-error: failed to run `rustc` to learn about target-specific information
-target: riscv64emac-unknown-none-polkavm.json
-```
-- **Sebep:** Custom RISC-V target CI'da tanımlı
-- **Çözüm:** CI Docker image gerekli
-- **Aksiyon:** CI'da test et
-
----
-
-## KRİTİK DOSYA YOLLARI
-
-```
-/home/mamostehp/pezkuwi-sdk/
-├── .github/workflows/          # Workflow dosyaları
-├── .config/
-│   ├── lychee.toml            # Link checker config
-│   └── taplo.toml             # TOML formatter config
-├── .claude/
-│   ├── CLAUDE_RULES.md        # Rebrand kuralları
-│   ├── TERMINOLOGY.md         # Terminoloji mapping
-│   ├── WORKFLOW_PLAN.md       # Bu dosya
-│   ├── REBRAND_PROGRESS.md    # Rebrand ilerleme listesi
-│   ├── domains_repositories.md # Domain ve repo listesi
-│   └── issue_mapping.txt      # Upstream issue mapping (160 issue)
-├── umbrella/
-│   ├── Cargo.toml             # Umbrella crate dependencies
-│   └── src/lib.rs             # Umbrella re-exports
-├── vendor/
-│   ├── pezkuwi-subxt/         # Vendored subxt (10 crate)
-│   ├── pezkuwi-zombienet-sdk/ # Vendored zombienet (6 crate)
-│   └── ss58-registry/         # SS58 registry
-└── crate_placeholders/        # 150 placeholder crate
+# Markdown düzelt
+markdownlint --config .github/.markdownlint.yaml --ignore target --ignore vendor . --fix
 ```
 
 ---
 
-## ÖZET İSTATİSTİKLERİ
+### 1.2 checks.yml
 
-| Metrik | Değer |
-|--------|-------|
-| Toplam workflow job | 35 |
-| Tamamlanan (lokal OK) | 28 |
-| Beklemede (CI testi gerekli) | 6 |
-| Bloklu (sistem gereksinimi) | 1 |
-| Kırık link düzeltilen | 78 |
-| Tracking issue oluşturulan | 160 |
-| Güvenlik açığı kapatılan | 4 |
-| Umbrella eksik crate düzeltilen | 2 |
+| Job | Durum | Lokal Test Komutu |
+|-----|-------|-------------------|
+| `cargo-clippy` | ❌ | `RUSTFLAGS="-D warnings" SKIP_WASM_BUILD=1 cargo clippy --all-targets --all-features --locked --workspace --quiet` |
+| `check-try-runtime` | ❌ | Aşağıdaki 3 komut sırayla çalıştırılmalı |
+| `check-core-crypto-features` | ✅ | Aşağıdaki 3 script çalıştırılmalı |
+
+**check-try-runtime komutları:**
+```bash
+cargo check --locked --all --features try-runtime --quiet
+cargo check --locked -p teyrchain-template-node --features try-runtime
+cargo check --locked --all --features try-runtime,experimental --quiet
+```
+
+**check-core-crypto-features komutları:**
+```bash
+./bizinikiwi/primitives/core/check-features-variants.sh
+./bizinikiwi/primitives/application-crypto/check-features-variants.sh
+./bizinikiwi/primitives/keyring/check-features-variants.sh
+```
 
 ---
 
-## NOTLAR
+### 1.3 docs.yml
 
-- Her büyük değişiklikten önce git commit yap
-- Hata düzeltirken rebrand'i bozma
-- CI'da test edilmesi gereken job'lar için PR aç
-- Lokal test geçenleri güvenle commit et
+| Job | Durum | Lokal Test Komutu |
+|-----|-------|-------------------|
+| `test-doc` | ❌ | `time cargo test --doc --workspace --locked --release --no-fail-fast --features=runtime-benchmarks,try-runtime` |
+| `build-rustdoc` | ❌ | `time cargo doc --workspace --all-features --no-deps` |
+
+---
+
+### 1.4 tests.yml
+
+| Job | Durum | Lokal Test Komutu |
+|-----|-------|-------------------|
+| `cargo-check-all-benches` | ❌ | `cargo check --all --benches --locked` |
+| `test-syscalls` | ❌ | CI-specific (syscall binary testi) |
+| `quick-benchmarks` | ❌ | `cargo run --release -p pez-frame-benchmarking-cli` |
+
+---
+
+### 1.5 tests-linux-stable.yml
+
+| Job | Durum | Lokal Test Komutu |
+|-----|-------|-------------------|
+| `test-linux-stable` | ❌ | `cargo nextest run --workspace --locked --release --no-fail-fast` |
+| `test-linux-stable-int` | ❌ | `cargo nextest run -p "*-integration-tests*" -j1 --locked --release --no-fail-fast` |
+| `test-linux-stable-no-try-runtime` | ❌ | `cargo check --workspace --locked --no-default-features` |
+| `test-linux-stable-runtime-benchmarks` | ❌ | `cargo check --workspace --locked --features runtime-benchmarks` |
+
+---
+
+### 1.6 tests-misc.yml
+
+| Job | Durum | Lokal Test Komutu |
+|-----|-------|-------------------|
+| `test-node-metrics` | ❌ | `cargo test -p pezsc-network --features "substrate-prometheus"` |
+| `cargo-check-all-crate-macos` | ❌ | macOS runner gerekli |
+| `test-pezframe-ui` | ❌ | `cargo test -p pezframe-ui-tests --locked` |
+| `cargo-check-each-crate` | ❌ | `cargo check -p <crate-name> --locked` (her crate için ayrı) |
+
+---
+
+### 1.7 tests-evm.yml
+
+| Job | Durum | Lokal Test Komutu |
+|-----|-------|-------------------|
+| `evm-test-suite (test:pvm)` | ❌ | PolkaVM toolchain gerekli |
+| `differential-tests` | ❌ | `resolc` compiler gerekli |
+
+---
+
+### 1.8 build-misc.yml
+
+| Job | Durum | Lokal Test Komutu |
+|-----|-------|-------------------|
+| `build-runtimes-polkavm` | ❌ | RISC-V target gerekli (`riscv64emac-unknown-none-polkavm`) |
+
+---
+
+### 1.9 build-publish-images.yml
+
+| Job | Durum | Lokal Test Komutu |
+|-----|-------|-------------------|
+| `build-linux-stable` | ❌ | `cargo build --locked --release -p pez-pezkuwi` |
+| `build-linux-stable-pezcumulus` | ❌ | `cargo build --locked --release -p pezkuwi-teyrchain` |
+| `build-linux-bizinikiwi` | ❌ | `cargo build --locked --release -p pez-node` |
+| `build-templates-node` | ❌ | `cargo build --locked --release -p teyrchain-template-node` |
+| `build-malus` | ❌ | `cargo build --locked --release -p pez-test-malus` |
+| `build-test-collators` | ❌ | `cargo build --locked --release -p test-parachain` |
+| `prepare-bridges-zombienet-artifacts` | ❌ | Bridge binary'leri |
+| `build-push-image-test-teyrchain` | ❌ | Docker image build |
+
+---
+
+### 1.10 check-getting-started.yml
+
+| Job | Durum | Lokal Test Komutu |
+|-----|-------|-------------------|
+| Tüm distro testleri | ✅ DÜZELTILDI | Template URL'leri düzeltildi |
+
+---
+
+## FAZ 2: Düzeltme Sırası
+
+```
+AŞAMA 1 - Kritik (PR merge için ZORUNLU):
+├── quick-checks.yml
+│   ├── taplo format --config .config/taplo.toml
+│   └── markdownlint --fix
+└── checks.yml
+    ├── cargo clippy düzeltmeleri
+    └── try-runtime feature düzeltmeleri
+
+AŞAMA 2 - Derleme Hataları:
+├── build-publish-images.yml binary build'ler
+├── build-misc.yml PolkaVM build
+└── tests.yml benchmark compile
+
+AŞAMA 3 - Test Hataları:
+├── tests-linux-stable.yml unit/integration tests
+├── tests-misc.yml çeşitli testler
+└── docs.yml doc tests
+
+AŞAMA 4 - EVM/PolkaVM:
+├── tests-evm.yml PolkaVM toolchain
+└── resolc compiler kurulumu
+```
+
+---
+
+## Tamamlanan Düzeltmeler
+
+| Tarih | Düzeltme | Etki |
+|-------|----------|------|
+| 2024-12-23 | Umbrella'ya pezpallet-root-testing eklendi | check-try-runtime |
+| 2024-12-23 | Umbrella'ya pezpallet-xcm-benchmarks eklendi | Runtime build |
+| 2024-12-23 | Subxt runtime-full'dan çıkarıldı | getrandom WASM fix |
+| 2024-12-23 | Template URL'leri düzeltildi | check-getting-started |
+| 2024-12-22 | rustfmt.toml stable-only | fmt job |
+| 2024-12-22 | Zepter feature propagation | check-zepter |
+
+---
+
+## Şu An Yapılması Gereken
+
+1. `taplo format --config .config/taplo.toml` çalıştır
+2. Değişiklikleri commit et
+3. `RUSTFLAGS="-D warnings" SKIP_WASM_BUILD=1 cargo clippy --all-targets --all-features --locked --workspace --quiet` çalıştır
+4. Hataları düzelt
+5. Commit ve push yap
+6. CI'da test et
+
+---
+
+*Son Güncelleme: 2024-12-23*

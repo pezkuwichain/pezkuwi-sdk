@@ -352,7 +352,7 @@ mod test {
 
 	use super::*;
 
-	use sp_core::{self, crypto::Pair as _, ecdsa::Pair as SpPair};
+	use pezsp_core::{self, crypto::Pair as _, ecdsa::Pair as SpPair};
 
 	#[test]
 	fn check_from_phrase_matches() {
@@ -413,7 +413,7 @@ mod test {
 
 	#[test]
 	fn check_signing_and_verifying_matches() {
-		use sp_core::ecdsa::Signature as SpSignature;
+		use pezsp_core::ecdsa::Signature as SpSignature;
 
 		for _ in 0..20 {
 			let (sp_pair, phrase, _seed) = SpPair::generate_with_phrase(Some("Testing"));

@@ -12,7 +12,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	// `scale_value::Value` type as output, and a vec of those as inputs,
 	// but since we know the input + return types we can pass them directly.
 	// There is one input argument, so the inputs are a tuple of one element.
-	let account: AccountId32 = dev::alice().public_key().into();
+	let account = AccountId32(dev::alice().public_key().0);
 	let runtime_api_call = pezkuwi_subxt::dynamic::runtime_api_call::<_, u64>(
 		"AccountNonceApi",
 		"account_nonce",

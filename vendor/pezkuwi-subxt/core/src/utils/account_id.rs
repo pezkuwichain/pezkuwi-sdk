@@ -162,8 +162,8 @@ impl core::str::FromStr for AccountId32 {
 #[cfg(test)]
 mod test {
 	use super::*;
-	use sp_core::{self, crypto::Ss58Codec};
-	use sp_keyring::sr25519::Keyring;
+	use pezsp_core::{self, crypto::Ss58Codec};
+	use pezsp_keyring::sr25519::Keyring;
 
 	#[test]
 	fn ss58_is_compatible_with_bizinikiwi_impl() {
@@ -179,7 +179,7 @@ mod test {
 
 			// Both should decode from ss58 back to the same:
 			assert_eq!(
-				sp_core::crypto::AccountId32::from_ss58check(&bizinikiwi_ss58).unwrap(),
+				pezsp_core::crypto::AccountId32::from_ss58check(&bizinikiwi_ss58).unwrap(),
 				bizinikiwi_account
 			);
 			assert_eq!(AccountId32::from_ss58check(&bizinikiwi_ss58).unwrap(), local_account);

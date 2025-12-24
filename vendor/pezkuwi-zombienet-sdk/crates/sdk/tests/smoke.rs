@@ -62,7 +62,7 @@ async fn ci_k8s_basic_functionalities_should_works() {
 
 	let (_best_block_pass, client) = try_join!(
 		alice.wait_metric(BEST_BLOCK_METRIC, |x| x > 5_f64),
-		alice.wait_client::<subxt::PolkadotConfig>()
+		alice.wait_client::<pezkuwi_subxt::PezkuwiConfig>()
 	)
 	.unwrap();
 
@@ -104,7 +104,7 @@ async fn ci_k8s_basic_functionalities_should_works() {
 
 	// collator
 	let collator = network.get_node("collator").unwrap();
-	let client = collator.wait_client::<subxt::PolkadotConfig>().await.unwrap();
+	let client = collator.wait_client::<pezkuwi_subxt::PezkuwiConfig>().await.unwrap();
 
 	// wait 3 blocks
 	let mut blocks = client.blocks().subscribe_finalized().await.unwrap().take(3);
@@ -143,7 +143,7 @@ async fn ci_k8s_basic_functionalities_should_works() {
 	collator.pause().await.unwrap();
 	tokio::time::sleep(tokio::time::Duration::from_millis(100)).await;
 
-	let r = collator.wait_client_with_timeout::<subxt::PolkadotConfig>(1_u32).await;
+	let r = collator.wait_client_with_timeout::<pezkuwi_subxt::PezkuwiConfig>(1_u32).await;
 	assert!(r.is_err());
 
 	// tear down (optional if you don't detach the network)

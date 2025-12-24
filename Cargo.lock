@@ -14553,6 +14553,7 @@ dependencies = [
  "hashbrown 0.15.5",
  "parity-scale-codec",
  "pezkuwi-subxt-codegen",
+ "pezkuwi-subxt-utils-stripmetadata",
  "pezsp-crypto-hashing",
  "scale-info",
  "scale-info-legacy",

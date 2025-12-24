@@ -40,7 +40,7 @@ async fn rococo_local_with_omni_node_and_wasm_runtime() {
 
 	// omni-collator-1
 	let collator = network.get_node("omni-collator-1").unwrap();
-	let client = collator.wait_client::<subxt::PolkadotConfig>().await.unwrap();
+	let client = collator.wait_client::<pezkuwi_subxt::PezkuwiConfig>().await.unwrap();
 
 	// wait 1 blocks
 	let mut blocks = client.blocks().subscribe_finalized().await.unwrap().take(1);
@@ -50,7 +50,7 @@ async fn rococo_local_with_omni_node_and_wasm_runtime() {
 
 	// omni-collator-2
 	let collator = network.get_node("omni-collator-2").unwrap();
-	let client = collator.wait_client::<subxt::PolkadotConfig>().await.unwrap();
+	let client = collator.wait_client::<pezkuwi_subxt::PezkuwiConfig>().await.unwrap();
 
 	// wait 1 blocks
 	let mut blocks = client.blocks().subscribe_finalized().await.unwrap().take(1);

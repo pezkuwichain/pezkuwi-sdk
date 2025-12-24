@@ -864,7 +864,7 @@ mod test {
 
 	#[test]
 	fn transaction_validity_decoding_is_ok() {
-		use sp_runtime::{
+		use pezsp_runtime::{
 			transaction_validity as sp, transaction_validity::TransactionValidity as T,
 		};
 

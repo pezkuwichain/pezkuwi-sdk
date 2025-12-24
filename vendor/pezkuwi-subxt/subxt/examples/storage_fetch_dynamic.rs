@@ -15,7 +15,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	// here, we assume that there is one value to provide at this entry
 	// to access a value; an AccountId32. In this example we don't know the
 	// return type and so we set it to `Value`, which anything can decode into.
-	let account: AccountId32 = dev::alice().public_key().into();
+	let account = AccountId32(dev::alice().public_key().0);
 	let storage_query =
 		pezkuwi_subxt::dynamic::storage::<(AccountId32,), Value>("System", "Account");
 
