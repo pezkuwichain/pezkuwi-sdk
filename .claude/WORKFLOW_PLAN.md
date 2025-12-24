@@ -19,8 +19,8 @@
 
 | Job | Durum | Lokal Test Komutu |
 |-----|-------|-------------------|
-| `check-toml-format` | ❌ | `taplo format --check --config .config/taplo.toml` |
-| `check-markdown` | ❌ | `markdownlint --config .github/.markdownlint.yaml --ignore target --ignore vendor .` |
+| `check-toml-format` | ✅ | `taplo format --check --config .config/taplo.toml` |
+| `check-markdown` | ✅ | `markdownlint --config .github/.markdownlint.yaml --ignore target --ignore vendor .` |
 | `fmt` | ✅ | `cargo fmt --all -- --check` |
 | `check-zepter` | ✅ | `zepter run check` |
 | `check-workspace` | ✅ | `python3 .github/scripts/check-workspace.py .` |
@@ -45,8 +45,8 @@ markdownlint --config .github/.markdownlint.yaml --ignore target --ignore vendor
 
 | Job | Durum | Lokal Test Komutu |
 |-----|-------|-------------------|
-| `cargo-clippy` | ❌ | `RUSTFLAGS="-D warnings" SKIP_WASM_BUILD=1 cargo clippy --all-targets --all-features --locked --workspace --quiet` |
-| `check-try-runtime` | ❌ | Aşağıdaki 3 komut sırayla çalıştırılmalı |
+| `cargo-clippy` | ✅ | `RUSTFLAGS="-D warnings" SKIP_WASM_BUILD=1 cargo clippy --all-targets --all-features --locked --workspace --quiet` |
+| `check-try-runtime` | ✅ | Aşağıdaki 3 komut sırayla çalıştırılmalı |
 | `check-core-crypto-features` | ✅ | Aşağıdaki 3 script çalıştırılmalı |
 
 **check-try-runtime komutları:**
@@ -178,6 +178,12 @@ AŞAMA 4 - EVM/PolkaVM:
 
 | Tarih | Düzeltme | Etki |
 |-------|----------|------|
+| 2024-12-24 | Umbrella node feature'ına subxt native propagation eklendi | check-try-runtime |
+| 2024-12-24 | Vendor crate rebrand düzeltmeleri (sp_* -> pezsp_*) | cargo-clippy |
+| 2024-12-24 | Subxt examples artifact paths düzeltildi | cargo-clippy |
+| 2024-12-24 | Subxt examples type conversion düzeltmeleri | cargo-clippy |
+| 2024-12-24 | Zombienet-sdk test type düzeltmeleri | cargo-clippy |
+| 2024-12-24 | TOML format düzeltildi (umbrella/Cargo.toml) | check-toml-format |
 | 2024-12-23 | Umbrella'ya pezpallet-root-testing eklendi | check-try-runtime |
 | 2024-12-23 | Umbrella'ya pezpallet-xcm-benchmarks eklendi | Runtime build |
 | 2024-12-23 | Subxt runtime-full'dan çıkarıldı | getrandom WASM fix |
@@ -189,13 +195,13 @@ AŞAMA 4 - EVM/PolkaVM:
 
 ## Şu An Yapılması Gereken
 
-1. `taplo format --config .config/taplo.toml` çalıştır
-2. Değişiklikleri commit et
-3. `RUSTFLAGS="-D warnings" SKIP_WASM_BUILD=1 cargo clippy --all-targets --all-features --locked --workspace --quiet` çalıştır
-4. Hataları düzelt
+1. ✅ `taplo format --config .config/taplo.toml` - TAMAMLANDI
+2. ✅ `cargo clippy` düzeltmeleri - TAMAMLANDI
+3. ✅ `check-try-runtime` komutları - TAMAMLANDI (subxt native feature propagation eklendi)
+4. Build-publish-images ve diğer build job'larını test et
 5. Commit ve push yap
 6. CI'da test et
 
 ---
 
-*Son Güncelleme: 2024-12-23*
+*Son Güncelleme: 2024-12-24*
