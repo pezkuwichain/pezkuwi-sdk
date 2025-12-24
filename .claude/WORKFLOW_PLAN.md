@@ -131,8 +131,8 @@ cargo check --locked --all --features try-runtime,experimental --quiet
 | `build-linux-stable-pezcumulus` | ✅ | `cargo build --locked --release -p pezkuwi-teyrchain-bin` |
 | `build-linux-bizinikiwi` | ✅ | `cargo build --locked --release -p pezstaging-node-cli` |
 | `build-templates-node` | ✅ | `cargo build --locked --release -p teyrchain-template-node` |
-| `build-malus` | ❌ | `cargo build --locked --release -p pez-test-malus` |
-| `build-test-collators` | ❌ | `cargo build --locked --release -p test-parachain` |
+| `build-malus` | ✅ | `cargo build --locked --release -p pezkuwi-test-malus` |
+| `build-test-collators` | ✅ | `cargo build --locked --release -p test-teyrchain-adder-collator -p test-teyrchain-undying-collator` |
 | `prepare-bridges-zombienet-artifacts` | ❌ | Bridge binary'leri |
 | `build-push-image-test-teyrchain` | ❌ | Docker image build |
 
@@ -215,8 +215,11 @@ AŞAMA 4 - EVM/PolkaVM:
    - ✅ pezkuwi-teyrchain-bin
    - ✅ pezstaging-node-cli
    - ✅ teyrchain-template-node
+   - ✅ pezkuwi-test-malus
+   - ✅ test-teyrchain-adder-collator
+   - ✅ test-teyrchain-undying-collator
 6. ✅ Template repo'ları - MEVCUT (GitHub'da kontrol edildi)
-7. Kalan binary build'leri test et (pez-test-malus, test-parachain)
+7. ✅ Kalan binary build'leri - TAMAMLANDI
 8. Commit ve push yap
 9. CI'da test et
 
