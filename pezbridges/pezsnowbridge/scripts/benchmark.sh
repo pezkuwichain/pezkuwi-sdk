@@ -5,9 +5,9 @@ pushd ../pezcumulus
 cargo run --release --bin pezkuwi-teyrchain \
 --features runtime-benchmarks \
 -- \
-benchmark pallet \
+benchmark pezpallet \
 --chain=bridge-hub-pezkuwichain-dev \
---pallet=snowbridge_pallet_ethereum_client \
+--pezpallet=snowbridge_pallet_ethereum_client \
 --extrinsic="*" \
 --execution=wasm --wasm-execution=compiled \
 --steps 50 --repeat 20 \

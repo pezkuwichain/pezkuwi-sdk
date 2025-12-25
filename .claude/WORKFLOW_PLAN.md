@@ -80,7 +80,7 @@ cargo check --locked --all --features try-runtime,experimental --quiet
 |-----|-------|-------------------|
 | `cargo-check-all-benches` | ✅ | `SKIP_WASM_BUILD=1 cargo check --workspace --benches --features runtime-benchmarks --quiet` |
 | `test-syscalls` | ❌ | CI-specific (syscall binary testi) |
-| `quick-benchmarks` | ❌ | `cargo run --release -p pez-frame-benchmarking-cli` |
+| `quick-benchmarks` | ✅ | `cargo run --release -p pezstaging-node-cli --bin bizinikiwi-node --features runtime-benchmarks -- benchmark pezpallet --chain dev --pezpallet "*" --extrinsic "*" --steps 2 --repeat 1` |
 
 ---
 
@@ -184,6 +184,7 @@ AŞAMA 4 - EVM/PolkaVM:
 
 | Tarih | Düzeltme | Etki |
 |-------|----------|------|
+| 2025-12-25 | CLI argüman rebrand: --pallet → --pezpallet, benchmark pallet → benchmark pezpallet | quick-benchmarks, scripts |
 | 2025-12-25 | pezpallet-welati EnsureOrigin try_successful_origin düzeltmeleri (3 fix) | pezkuwi-teyrchain-bin build |
 | 2025-12-25 | asset-hub-zagros governance origins macro düzeltmeleri (2 macro) | pezkuwi-teyrchain-bin build |
 | 2025-12-25 | Binary build'ler test edildi: pezkuwi, pezkuwi-teyrchain-bin, pezstaging-node-cli, teyrchain-template-node | build-publish-images |
