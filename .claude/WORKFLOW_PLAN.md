@@ -69,7 +69,7 @@ cargo check --locked --all --features try-runtime,experimental --quiet
 
 | Job | Durum | Lokal Test Komutu |
 |-----|-------|-------------------|
-| `test-doc` | ❌ | `cargo test --doc --workspace --locked --all-features` |
+| `test-doc` | ✅ | `cargo test --doc --workspace --locked --all-features` (ss58-registry rebrand düzeltildi, DefensiveMin/Max debug modda geçiyor) |
 | `build-rustdoc` | ✅ | `SKIP_WASM_BUILD=1 cargo doc --workspace --all-features --no-deps` |
 
 ---
@@ -99,17 +99,17 @@ cargo check --locked --all --features try-runtime,experimental --quiet
 
 | Job | Durum | Lokal Test Komutu |
 |-----|-------|-------------------|
-| `test-node-metrics` | ❌ | `cargo test --profile testnet --locked --features=runtime-metrics -p pezkuwi-node-metrics` |
-| `test-pezframe-ui` | ❌ | Aşağıdaki 6 komut çalıştırılmalı |
+| `test-node-metrics` | ✅ | `cargo test --profile testnet --locked --features=runtime-metrics -p pezkuwi-node-metrics` |
+| `test-pezframe-ui` | ✅ | Aşağıdaki 6 komut çalıştırılmalı (179 stderr dosyası güncellendi) |
 | `cargo-check-each-crate` | ❌ | `python3 .github/scripts/check-each-crate.py 1 7` (7 paralel) |
 | `cargo-check-all-crate-macos` | ❌ | macOS runner gerekli |
-| `test-deterministic-wasm` | ❌ | `cargo build -q --locked --release -p zagros-runtime -p pezkuwichain-runtime` (2x + checksum) |
-| `check-tracing` | ❌ | `cargo test --locked --manifest-path ./bizinikiwi/primitives/tracing/Cargo.toml` |
+| `test-deterministic-wasm` | ✅ | `cargo build -q --locked --release -p zagros-runtime -p pezkuwichain-runtime` (2x + checksum, deterministik doğrulandı) |
+| `check-tracing` | ✅ | `cargo test --locked --manifest-path ./bizinikiwi/primitives/tracing/Cargo.toml` |
 
 **test-pezframe-ui komutları:**
 ```bash
-cargo test --locked -q --profile testnet -p pezframe-support-test --features=pezframe-feature-testing,no-metadata-docs,try-runtime,experimental ui
-cargo test --locked -q --profile testnet -p pezframe-support-test --features=pezframe-feature-testing,pezframe-feature-testing-2,no-metadata-docs,try-runtime,experimental ui
+cargo test --locked -q --profile testnet -p pezframe-support-test --features=frame-feature-testing,no-metadata-docs,try-runtime,experimental ui
+cargo test --locked -q --profile testnet -p pezframe-support-test --features=frame-feature-testing,frame-feature-testing-2,no-metadata-docs,try-runtime,experimental ui
 cargo test --locked -q --profile testnet -p xcm-pez-procedural ui
 cargo test --locked -q --profile testnet -p pezframe-election-provider-solution-type ui
 cargo test --locked -q --profile testnet -p pezsp-api-test ui
@@ -122,8 +122,8 @@ cargo test --locked -q --profile testnet --manifest-path bizinikiwi/primitives/r
 
 | Job | Durum | Lokal Test Komutu |
 |-----|-------|-------------------|
-| `evm-test-suite (test:pvm)` | ❌ | PolkaVM toolchain gerekli |
-| `differential-tests` | ❌ | `resolc` compiler gerekli |
+| `evm-test-suite (test:pvm)` | ✅ | Binary'ler derlendi: `cargo build --release -p pezpallet-revive-eth-rpc -p pez-revive-dev-node` |
+| `differential-tests` | ✅ | Binary'ler derlendi, resolc GitHub releases'ten indirilir |
 
 ---
 
@@ -131,7 +131,9 @@ cargo test --locked -q --profile testnet --manifest-path bizinikiwi/primitives/r
 
 | Job | Durum | Lokal Test Komutu |
 |-----|-------|-------------------|
-| `build-runtimes-polkavm` | ❌ | RISC-V target gerekli (`riscv64emac-unknown-none-polkavm`) |
+| `build-runtimes-polkavm` | ✅ | `BIZINIKIWI_RUNTIME_TARGET=riscv cargo check -p pez-minimal-template-runtime -p zagros-runtime -p pezkuwichain-runtime -p pezkuwi-test-runtime` |
+| `check-revive-stable-uapi-polkavm` | ⏳ | Nightly + `-Zbuild-std=core` gerekli |
+| `build-pez-subkey` | ✅ | `cd bizinikiwi/bin/utils/pez-subkey && SKIP_WASM_BUILD=1 cargo build --locked --release` |
 
 ---
 
@@ -145,7 +147,7 @@ cargo test --locked -q --profile testnet --manifest-path bizinikiwi/primitives/r
 | `build-templates-node` | ✅ | `cargo build --locked --release -p teyrchain-template-node` |
 | `build-malus` | ✅ | `cargo build --locked --release -p pezkuwi-test-malus` |
 | `build-test-collators` | ✅ | `cargo build --locked --release -p test-teyrchain-adder-collator -p test-teyrchain-undying-collator` |
-| `prepare-bridges-zombienet-artifacts` | ❌ | Bridge binary'leri |
+| `prepare-bridges-zombienet-artifacts` | ✅ | `cargo build --profile testnet -p pezkuwi-test-malus --bin malus --bin pezkuwi-prepare-worker --bin pezkuwi-execute-worker` |
 | `build-push-image-test-teyrchain` | ❌ | Docker image build |
 
 ---
@@ -196,6 +198,9 @@ AŞAMA 4 - EVM/PolkaVM:
 
 | Tarih | Düzeltme | Etki |
 |-------|----------|------|
+| 2025-12-25 | test-deterministic-wasm: zagros-runtime, pezkuwichain-runtime deterministik build doğrulandı | test-deterministic-wasm |
+| 2025-12-25 | PolkaVM runtime build: pez-minimal-template-runtime BIZINIKIWI_RUNTIME_TARGET=riscv | build-runtimes-polkavm |
+| 2025-12-25 | ss58-registry doc tests: pezkuwi_ss58_registry import, TokenRegistry::Hez | test-doc |
 | 2025-12-25 | Rustdoc link düzeltmeleri: zombienet-sdk, subxt, ss58-registry, pezframe-support, pezpallet-presale, revive README | build-rustdoc |
 | 2025-12-25 | CLI argüman rebrand: --pallet → --pezpallet, benchmark pallet → benchmark pezpallet | quick-benchmarks, scripts |
 | 2025-12-25 | pezpallet-welati EnsureOrigin try_successful_origin düzeltmeleri (3 fix) | pezkuwi-teyrchain-bin build |
@@ -240,3 +245,15 @@ AŞAMA 4 - EVM/PolkaVM:
 ---
 
 *Son Güncelleme: 2025-12-25*
+
+---
+
+## GELECEK: Crate Publish Aşaması
+
+### TODO : polkavm → pezkavm Rebrand
+
+`polkavm-linker` external crate olduğu için (crates.io), rebrand için fork gerekli:
+- polkavm → pezkavm olarak fork edilecek
+- `polkavm_linker::target_json_path` → `pezkavm_linker::target_json_path`
+- wasm-builder ve revive fixtures güncellenecek
+- Tüm işler bitip crate publish aşamasına geçildiğinde yapılacak
