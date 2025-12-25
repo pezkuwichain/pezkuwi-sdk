@@ -1,5 +1,5 @@
 error: expected integer literal
-  --> tests/pallet_ui/task_invalid_index.rs:31:24
+  --> tests/pezpallet_ui/task_invalid_index.rs:31:27
    |
-31 |         #[pallet::task_index("0")]
-   |                              ^^^
+31 |         #[pezpallet::task_index("0")]
+   |                                 ^^^

@@ -1,19 +1,19 @@
-error: use of deprecated constant `pallet::warnings::ConstantWeight_0::_w`:
+error: use of deprecated constant `pezpallet::warnings::ConstantWeight_0::_w`:
                It is deprecated to use hard-coded constant as call weight.
-               Please instead benchmark all calls or put the pallet into `dev` mode.
+               Please instead benchmark all calls or put the pezpallet into `dev` mode.
 
                For more info see:
-                   <https://github.com/paritytech/bizinikiwi/pull/13798>
-  --> tests/pallet_ui/call_argument_invalid_bound_3.rs:38:20
+                   <https://github.com/pezkuwichain/pezkuwi-sdk/issues/215>
+  --> tests/pezpallet_ui/call_argument_invalid_bound_3.rs:38:23
    |
-38 |         #[pallet::weight(0)]
-   |                          ^
+38 |         #[pezpallet::weight(0)]
+   |                             ^
    |
    = note: `-D deprecated` implied by `-D warnings`
    = help: to override `-D warnings` add `#[allow(deprecated)]`
 
 error[E0277]: `Bar` doesn't implement `std::fmt::Debug`
-  --> tests/pallet_ui/call_argument_invalid_bound_3.rs:40:36
+  --> tests/pezpallet_ui/call_argument_invalid_bound_3.rs:40:36
    |
 40 |         pub fn foo(origin: OriginFor<T>, _bar: Bar) -> DispatchResultWithPostInfo {
    |                                          ^^^^ `Bar` cannot be formatted using `{:?}`
@@ -29,7 +29,7 @@ help: consider annotating `Bar` with `#[derive(Debug)]`
    |
 
 error: unused variable: `origin`
-  --> tests/pallet_ui/call_argument_invalid_bound_3.rs:40:14
+  --> tests/pezpallet_ui/call_argument_invalid_bound_3.rs:40:14
    |
 40 |         pub fn foo(origin: OriginFor<T>, _bar: Bar) -> DispatchResultWithPostInfo {
    |                    ^^^^^^ help: if this is intentional, prefix it with an underscore: `_origin`

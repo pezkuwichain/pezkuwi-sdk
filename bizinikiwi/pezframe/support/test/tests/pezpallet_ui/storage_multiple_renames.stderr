@@ -1,5 +1,5 @@
 error: Invalid attribute: Duplicate attribute
-  --> tests/pallet_ui/storage_multiple_renames.rs:37:3
+  --> tests/pezpallet_ui/storage_multiple_renames.rs:37:3
    |
-37 |     #[pallet::storage_prefix = "Baz"]
-   |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+37 |     #[pezpallet::storage_prefix = "Baz"]
+   |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

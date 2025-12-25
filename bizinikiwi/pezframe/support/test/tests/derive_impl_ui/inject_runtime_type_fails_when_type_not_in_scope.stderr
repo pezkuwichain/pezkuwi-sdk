@@ -4,10 +4,10 @@ error[E0412]: cannot find type `RuntimeCall` in this scope
 30 |     type RuntimeCall = ();
    |          ^^^^^^^^^^^
 ...
-35 | #[derive_impl(Pallet)] // Injects type RuntimeCall = RuntimeCall;
-   | ---------------------- in this macro invocation
+35 | #[derive_impl(Pezpallet)] // Injects type RuntimeCall = RuntimeCall;
+   | ------------------------- in this macro invocation
    |
-   = note: this error originates in the macro `Pallet` which comes from the expansion of the macro `frame_support::macro_magic::forward_tokens_verbatim` (in Nightly builds, run with -Z macro-backtrace for more info)
+   = note: this error originates in the macro `Pezpallet` which comes from the expansion of the macro `pezframe_support::macro_magic::forward_tokens_verbatim` (in Nightly builds, run with -Z macro-backtrace for more info)
 help: you might have meant to use the associated type
    |
 30 |     type Self::RuntimeCall = ();

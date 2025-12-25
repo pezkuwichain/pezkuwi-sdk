@@ -1,10 +1,10 @@
-error: use of deprecated constant `pallet::warnings::UncheckedWeightWitness_0::_w`:
+error: use of deprecated constant `pezpallet::warnings::UncheckedWeightWitness_0::_w`:
                It is deprecated to not check weight witness data.
                Please instead ensure that all witness data for weight calculation is checked before usage.
 
                For more info see:
-                   <https://github.com/pezkuwichain/pezkuwichain-sdk/pull/1818>
-  --> tests/pallet_ui/call_weight_unchecked_warning.rs:33:31
+                   <https://github.com/pezkuwichain/pezkuwi-sdk/issues/254>
+  --> tests/pezpallet_ui/call_weight_unchecked_warning.rs:33:31
    |
 33 |         pub fn foo(_: OriginFor<T>, _unused: u64) -> DispatchResult { Ok(()) }
    |                                     ^^^^^^^
@@ -13,19 +13,19 @@ error: use of deprecated constant `pallet::warnings::UncheckedWeightWitness_0::_
    = help: to override `-D warnings` add `#[allow(deprecated)]`
 
 error: associated function `error_metadata` is never used
-  --> tests/pallet_ui/call_weight_unchecked_warning.rs:26:12
+  --> tests/pezpallet_ui/call_weight_unchecked_warning.rs:26:15
    |
-26 |     #[pallet::pallet]
-   |               ^^^^^^ associated function in this implementation
+26 |     #[pezpallet::pezpallet]
+   |                  ^^^^^^^^^ associated function in this implementation
    |
    = note: `-D dead-code` implied by `-D warnings`
    = help: to override `-D warnings` add `#[allow(dead_code)]`
 
 error: associated function `new_call_variant_foo` is never used
-  --> tests/pallet_ui/call_weight_unchecked_warning.rs:33:10
+  --> tests/pezpallet_ui/call_weight_unchecked_warning.rs:33:10
    |
-29 |     #[pallet::call]
-   |               ---- associated function in this implementation
+29 |     #[pezpallet::call]
+   |                  ---- associated function in this implementation
 ...
 33 |         pub fn foo(_: OriginFor<T>, _unused: u64) -> DispatchResult { Ok(()) }
    |                ^^^
