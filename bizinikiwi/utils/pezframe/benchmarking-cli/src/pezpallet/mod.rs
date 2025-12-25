@@ -50,18 +50,18 @@ pub enum ListOutput {
 /// Benchmark the extrinsic weight of FRAME Pallets.
 #[derive(Debug, clap::Parser)]
 pub struct PalletCmd {
-	/// Select a FRAME Pallets to benchmark, or `*` for all (in which case `extrinsic` must be
+	/// Select a FRAME Pezpallets to benchmark, or `*` for all (in which case `extrinsic` must be
 	/// `*`).
-	#[arg(short, long, alias = "pezpallet", num_args = 1.., value_delimiter = ',', value_parser = parse_pallet_name, required_unless_present_any = ["list", "json_input", "all"], default_value_if("all", "true", Some("*".into())))]
-	pub pallets: Vec<String>,
+	#[arg(short, long, alias = "pallet", num_args = 1.., value_delimiter = ',', value_parser = parse_pallet_name, required_unless_present_any = ["list", "json_input", "all"], default_value_if("all", "true", Some("*".into())))]
+	pub pezpallet: Vec<String>,
 
 	/// Select an extrinsic inside the pezpallet to benchmark, or `*` or 'all' for all.
 	#[arg(short, long, required_unless_present_any = ["list", "json_input", "all"], default_value_if("all", "true", Some("*".into())))]
 	pub extrinsic: Option<String>,
 
-	/// Comma separated list of pallets that should be excluded from the benchmark.
+	/// Comma separated list of pezpallets that should be excluded from the benchmark.
 	#[arg(long, value_parser, num_args = 1.., value_delimiter = ',')]
-	pub exclude_pallets: Vec<String>,
+	pub exclude_pezpallets: Vec<String>,
 
 	/// Comma separated list of `pezpallet::extrinsic` combinations that should not be run.
 	///

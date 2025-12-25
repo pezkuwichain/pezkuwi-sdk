@@ -133,11 +133,11 @@ for PALLET in "${PALLETS[@]}"; do
   echo "[+] Benchmarking $PALLET with weight file $WEIGHT_FILE";
 
   OUTPUT=$(
-    $BIZINIKIWI benchmark pallet \
+    $BIZINIKIWI benchmark pezpallet \
     --chain=dev \
     --steps=50 \
     --repeat=20 \
-    --pallet="$PALLET" \
+    --pezpallet="$PALLET" \
     --extrinsic="*" \
     --wasm-execution=compiled \
     --heap-pages=4096 \

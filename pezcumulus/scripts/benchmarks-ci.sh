@@ -38,11 +38,11 @@ do
 		output_dir="xcm/"
 		extra_args="--template=./templates/xcm-bench-template.hbs"
 	fi
-	$artifactsDir/pezkuwi-teyrchain benchmark pallet \
+	$artifactsDir/pezkuwi-teyrchain benchmark pezpallet \
 		$extra_args \
 		--chain=$benchmarkRuntimeName \
 		--wasm-execution=compiled \
-		--pallet=$pallet  \
+		--pezpallet=$pallet  \
 		--extrinsic='*' \
 		--steps=$steps  \
 		--repeat=$repeat \

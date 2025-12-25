@@ -189,22 +189,22 @@ bench_example = '''**Examples**:
  %(prog)s
 
  Runs benchmarks for pallet_balances and pallet_multisig for all runtimes which have these pallets. **--quiet** makes it to output nothing to PR but reactions
- %(prog)s --pallet pallet_balances pallet_xcm_benchmarks::generic --quiet
+ %(prog)s --pezpallet pallet_balances pallet_xcm_benchmarks::generic --quiet
 
  Runs bench for all pallets for zagros runtime and fails fast on first failed benchmark
  %(prog)s --runtime zagros --fail-fast
 
  Does not output anything and cleans up the previous bot's & author command triggering comments in PR
- %(prog)s --runtime zagros pezkuwichain --pallet pallet_balances pallet_multisig --quiet --clean
+ %(prog)s --runtime zagros pezkuwichain --pezpallet pallet_balances pallet_multisig --quiet --clean
 '''
 
-parser_bench = subparsers.add_parser('bench', aliases=['bench-omni'], help='Runs benchmarks (frame omni bencher)', epilog=bench_example, formatter_class=argparse.RawDescriptionHelpFormatter)
+parser_bench = subparsers.add_parser('bench', aliases=['bench-omni'], help='Runs benchmarks (pezframe omni bencher)', epilog=bench_example, formatter_class=argparse.RawDescriptionHelpFormatter)
 
 for arg, config in common_args.items():
     parser_bench.add_argument(arg, **config)
 
 parser_bench.add_argument('--runtime', help='Runtime(s) space separated', choices=runtimeNames, nargs='*', default=runtimeNames)
-parser_bench.add_argument('--pallet', help='Pallet(s) space separated', nargs='*', default=[])
+parser_bench.add_argument('--pezpallet', help='Pezpallet(s) space separated', nargs='*', default=[])
 parser_bench.add_argument('--fail-fast', help='Fail fast on first failed benchmark', action='store_true')
 
 
@@ -382,26 +382,26 @@ def main():
 
         print(f'\n')
 
-        # filter out only the specified pallets from collected runtimes/pallets
-        if args.pallet:
-            print(f'Pallets: {args.pallet}')
+        # filter out only the specified pezpallets from collected runtimes/pezpallets
+        if args.pezpallet:
+            print(f'Pezpallets: {args.pezpallet}')
             new_pallets_map = {}
-            # keep only specified pallets if they exist in the runtime
+            # keep only specified pezpallets if they exist in the runtime
             for runtime in runtime_pallets_map:
-                if set(args.pallet).issubset(set(runtime_pallets_map[runtime])):
-                    new_pallets_map[runtime] = args.pallet
+                if set(args.pezpallet).issubset(set(runtime_pallets_map[runtime])):
+                    new_pallets_map[runtime] = args.pezpallet
 
             runtime_pallets_map = new_pallets_map
 
-        print(f'Filtered out runtimes & pallets: {runtime_pallets_map}\n')
+        print(f'Filtered out runtimes & pezpallets: {runtime_pallets_map}\n')
 
         if not runtime_pallets_map:
-            if args.pallet and not args.runtime:
-                print(f"No pallets {args.pallet} found in any runtime")
-            elif args.runtime and not args.pallet:
-                print(f"{args.runtime} runtime does not have any pallets")
-            elif args.runtime and args.pallet:
-                print(f"No pallets {args.pallet} found in {args.runtime}")
+            if args.pezpallet and not args.runtime:
+                print(f"No pezpallets {args.pezpallet} found in any runtime")
+            elif args.runtime and not args.pezpallet:
+                print(f"{args.runtime} runtime does not have any pezpallets")
+            elif args.runtime and args.pezpallet:
+                print(f"No pezpallets {args.pezpallet} found in {args.runtime}")
             else:
                 print('No runtimes found')
             sys.exit(1)
@@ -448,10 +448,10 @@ def main():
                         output_path = xcm_path
 
                 print(f'-- benchmarking {pallet} in {runtime} into {output_path}')
-                cmd = f"frame-omni-bencher v1 benchmark pallet " \
+                cmd = f"pezframe-omni-bencher v1 benchmark pezpallet " \
                     f"--extrinsic=* " \
                     f"--runtime=target/{profile}/wbuild/{config['package']}/{config['package'].replace('-', '_')}.wasm " \
-                    f"--pallet={pallet} " \
+                    f"--pezpallet={pallet} " \
                     f"--header={header_path} " \
                     f"--output={output_path} " \
                     f"--wasm-execution=compiled " \
