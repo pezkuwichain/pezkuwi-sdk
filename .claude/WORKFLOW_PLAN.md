@@ -2,14 +2,13 @@
 
 > **KURAL:** Bu dosyadaki komutları birebir çalıştır. Kendi komutunu uydurma.
 
-## Son CI Durumu (main branch)
+## Lokal Test Durumu (development branch)
 
 | Durum | Sayı |
 |-------|------|
-| Skipped | 25 |
-| Successful | 58 |
-| **Failing** | **42** |
-| Cancelled | 10 |
+| ✅ Lokal Geçti | 34 |
+| ⏳ CI'da Test Edilecek | 8 |
+| ❌ Başarısız | 0 |
 
 ---
 
@@ -79,7 +78,7 @@ cargo check --locked --all --features try-runtime,experimental --quiet
 | Job | Durum | Lokal Test Komutu |
 |-----|-------|-------------------|
 | `cargo-check-all-benches` | ✅ | `SKIP_WASM_BUILD=1 cargo check --workspace --benches --features runtime-benchmarks --quiet` |
-| `test-syscalls` | ❌ | CI-specific (syscall binary testi) |
+| `test-syscalls` | ⏳ | CI-specific (syscall binary testi, lokal test edilemez) |
 | `quick-benchmarks` | ✅ | `cargo run --release -p pezstaging-node-cli --bin bizinikiwi-node --features runtime-benchmarks -- benchmark pezpallet --chain dev --pezpallet "*" --extrinsic "*" --steps 2 --repeat 1` |
 
 ---
@@ -88,10 +87,10 @@ cargo check --locked --all --features try-runtime,experimental --quiet
 
 | Job | Durum | Lokal Test Komutu |
 |-----|-------|-------------------|
-| `test-linux-stable` | ❌ | `cargo nextest run --workspace --locked --release --features try-runtime,experimental,ci-only-tests` |
-| `test-linux-stable-int` | ❌ | `cargo test -p pezstaging-node-cli --release --locked -- --ignored` |
-| `test-linux-stable-no-try-runtime` | ❌ | `cargo nextest run --workspace --locked --release --features experimental,ci-only-tests` (try-runtime OLMADAN) |
-| `test-linux-stable-runtime-benchmarks` | ❌ | `cargo nextest run --workspace --features runtime-benchmarks benchmark --locked --cargo-profile testnet` |
+| `test-linux-stable` | ⏳ | `cargo nextest run --workspace --locked --release --features try-runtime,experimental,ci-only-tests` (CI'da çalışacak) |
+| `test-linux-stable-int` | ⏳ | `cargo test -p pezstaging-node-cli --release --locked -- --ignored` (CI'da çalışacak) |
+| `test-linux-stable-no-try-runtime` | ⏳ | `cargo nextest run --workspace --locked --release --features experimental,ci-only-tests` (CI'da çalışacak) |
+| `test-linux-stable-runtime-benchmarks` | ⏳ | `cargo nextest run --workspace --features runtime-benchmarks benchmark --locked --cargo-profile testnet` (CI'da çalışacak) |
 
 ---
 
@@ -102,7 +101,7 @@ cargo check --locked --all --features try-runtime,experimental --quiet
 | `test-node-metrics` | ✅ | `cargo test --profile testnet --locked --features=runtime-metrics -p pezkuwi-node-metrics` |
 | `test-pezframe-ui` | ✅ | Aşağıdaki 6 komut çalıştırılmalı (179 stderr dosyası güncellendi) |
 | `cargo-check-each-crate` | ⏳ | `python3 .github/scripts/check-each-crate.py 1 7` (606 crate, 7 paralel grup, CI'da çalışacak) |
-| `cargo-check-all-crate-macos` | ❌ | macOS runner gerekli |
+| `cargo-check-all-crate-macos` | ⏳ | macOS runner gerekli (CI'da çalışacak) |
 | `test-deterministic-wasm` | ✅ | `cargo build -q --locked --release -p zagros-runtime -p pezkuwichain-runtime` (2x + checksum, deterministik doğrulandı) |
 | `check-tracing` | ✅ | `cargo test --locked --manifest-path ./bizinikiwi/primitives/tracing/Cargo.toml` |
 
@@ -148,7 +147,7 @@ cargo test --locked -q --profile testnet --manifest-path bizinikiwi/primitives/r
 | `build-malus` | ✅ | `cargo build --locked --release -p pezkuwi-test-malus` |
 | `build-test-collators` | ✅ | `cargo build --locked --release -p test-teyrchain-adder-collator -p test-teyrchain-undying-collator` |
 | `prepare-bridges-zombienet-artifacts` | ✅ | `cargo build --profile testnet -p pezkuwi-test-malus --bin malus --bin pezkuwi-prepare-worker --bin pezkuwi-execute-worker` |
-| `build-push-image-test-teyrchain` | ❌ | Docker image build |
+| `build-push-image-test-teyrchain` | ⏳ | Docker image build (CI'da çalışacak) |
 
 ---
 
