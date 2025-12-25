@@ -1614,6 +1614,13 @@ zstd = { version = "0.12.4", default-features = false }
 opt-level = 3
 panic = "unwind"
 
+# Testnet profile for CI tests with debug assertions
+[profile.testnet]
+debug = 1               # debug symbols are useful for profilers
+debug-assertions = true
+inherits = "release"
+overflow-checks = true
+
 # Production profile for optimized builds (used by Docker images)
 [profile.production]
 inherits = "release"

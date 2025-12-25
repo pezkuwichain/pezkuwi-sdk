@@ -69,7 +69,7 @@ cargo check --locked --all --features try-runtime,experimental --quiet
 
 | Job | Durum | Lokal Test Komutu |
 |-----|-------|-------------------|
-| `test-doc` | ❌ | `time cargo test --doc --workspace --locked --release --no-fail-fast --features=runtime-benchmarks,try-runtime` |
+| `test-doc` | ❌ | `cargo test --doc --workspace --locked --all-features` |
 | `build-rustdoc` | ✅ | `SKIP_WASM_BUILD=1 cargo doc --workspace --all-features --no-deps` |
 
 ---
@@ -88,10 +88,10 @@ cargo check --locked --all --features try-runtime,experimental --quiet
 
 | Job | Durum | Lokal Test Komutu |
 |-----|-------|-------------------|
-| `test-linux-stable` | ❌ | `cargo nextest run --workspace --locked --release --no-fail-fast` |
-| `test-linux-stable-int` | ❌ | `cargo nextest run -p "*-integration-tests*" -j1 --locked --release --no-fail-fast` |
-| `test-linux-stable-no-try-runtime` | ❌ | `cargo check --workspace --locked --no-default-features` |
-| `test-linux-stable-runtime-benchmarks` | ❌ | `cargo check --workspace --locked --features runtime-benchmarks` |
+| `test-linux-stable` | ❌ | `cargo nextest run --workspace --locked --release --features try-runtime,experimental,ci-only-tests` |
+| `test-linux-stable-int` | ❌ | `cargo test -p pezstaging-node-cli --release --locked -- --ignored` |
+| `test-linux-stable-no-try-runtime` | ❌ | `cargo nextest run --workspace --locked --release --features experimental,ci-only-tests` (try-runtime OLMADAN) |
+| `test-linux-stable-runtime-benchmarks` | ❌ | `cargo nextest run --workspace --features runtime-benchmarks benchmark --locked --cargo-profile testnet` |
 
 ---
 
@@ -99,10 +99,22 @@ cargo check --locked --all --features try-runtime,experimental --quiet
 
 | Job | Durum | Lokal Test Komutu |
 |-----|-------|-------------------|
-| `test-node-metrics` | ❌ | `cargo test -p pezsc-network --features "substrate-prometheus"` |
+| `test-node-metrics` | ❌ | `cargo test --profile testnet --locked --features=runtime-metrics -p pezkuwi-node-metrics` |
+| `test-pezframe-ui` | ❌ | Aşağıdaki 6 komut çalıştırılmalı |
+| `cargo-check-each-crate` | ❌ | `python3 .github/scripts/check-each-crate.py 1 7` (7 paralel) |
 | `cargo-check-all-crate-macos` | ❌ | macOS runner gerekli |
-| `test-pezframe-ui` | ❌ | `cargo test -p pezframe-ui-tests --locked` |
-| `cargo-check-each-crate` | ❌ | `cargo check -p <crate-name> --locked` (her crate için ayrı) |
+| `test-deterministic-wasm` | ❌ | `cargo build -q --locked --release -p zagros-runtime -p pezkuwichain-runtime` (2x + checksum) |
+| `check-tracing` | ❌ | `cargo test --locked --manifest-path ./bizinikiwi/primitives/tracing/Cargo.toml` |
+
+**test-pezframe-ui komutları:**
+```bash
+cargo test --locked -q --profile testnet -p pezframe-support-test --features=pezframe-feature-testing,no-metadata-docs,try-runtime,experimental ui
+cargo test --locked -q --profile testnet -p pezframe-support-test --features=pezframe-feature-testing,pezframe-feature-testing-2,no-metadata-docs,try-runtime,experimental ui
+cargo test --locked -q --profile testnet -p xcm-pez-procedural ui
+cargo test --locked -q --profile testnet -p pezframe-election-provider-solution-type ui
+cargo test --locked -q --profile testnet -p pezsp-api-test ui
+cargo test --locked -q --profile testnet --manifest-path bizinikiwi/primitives/runtime-interface/Cargo.toml ui
+```
 
 ---
 

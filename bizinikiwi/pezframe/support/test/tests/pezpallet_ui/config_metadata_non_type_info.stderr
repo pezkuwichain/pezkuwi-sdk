@@ -1,5 +1,5 @@
-error: Invalid #[pallet::include_metadata] in #[pallet::config], collected type `MyNonScaleTypeInfo` does not implement `TypeInfo` or `Parameter`
-  --> tests/pallet_ui/config_metadata_non_type_info.rs:28:4
+error: Invalid #[pezpallet::include_metadata] in #[pezpallet::config], collected type `MyNonScaleTypeInfo` does not implement `TypeInfo` or `Parameter`
+  --> tests/pezpallet_ui/config_metadata_non_type_info.rs:28:4
    |
-28 |         #[pallet::include_metadata]
-   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+28 |         #[pezpallet::include_metadata]
+   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

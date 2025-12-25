@@ -1,5 +1,5 @@
-error: Invalid pallet::call, feeless_if closure must have same number of arguments as the dispatchable function
-  --> tests/pallet_ui/call_feeless_invalid_closure_arg1.rs:31:24
+error: Invalid pezpallet::call, feeless_if closure must have same number of arguments as the dispatchable function
+  --> tests/pezpallet_ui/call_feeless_invalid_closure_arg1.rs:31:27
    |
-31 |         #[pallet::feeless_if(|| -> bool { true })]
-   |                              ^
+31 |         #[pezpallet::feeless_if(|| -> bool { true })]
+   |                                 ^

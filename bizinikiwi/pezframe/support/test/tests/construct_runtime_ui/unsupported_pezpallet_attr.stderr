@@ -1,5 +1,5 @@
-error: Unsupported attribute, only #[cfg] is supported on pallet declarations in `construct_runtime`
-  --> tests/construct_runtime_ui/unsupported_pallet_attr.rs:24:3
+error: Unsupported attribute, only #[cfg] is supported on pezpallet declarations in `construct_runtime`
+  --> tests/construct_runtime_ui/unsupported_pezpallet_attr.rs:24:3
    |
 24 |         #[attr]
    |         ^
