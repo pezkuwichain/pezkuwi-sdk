@@ -90,8 +90,8 @@ const DEFAULT_PRESETS_TO_CHECK: [&str; 3] = ["local_testnet", "development", "de
 /// Chain-spec builder representation
 ///
 /// Multiple options are supported, and the current order is:
-/// IF [`asset_location`] is _some_ -> Use this chain_spec by copying the file from [`AssetLocation`]
-/// ELSE IF [`runtime_location`] is _some_ -> generate the chain-spec using the sc-chain-spec builder.
+/// IF `asset_location` is _some_ -> Use this chain_spec by copying the file from [`AssetLocation`]
+/// ELSE IF `runtime_location` is _some_ -> generate the chain-spec using the sc-chain-spec builder.
 /// ELSE -> Fallback to use the `default` or customized cmd.
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

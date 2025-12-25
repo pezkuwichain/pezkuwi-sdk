@@ -1,12 +1,12 @@
 # Revive Pezpallet
 
 This is an **experimental** module that provides functionality for the runtime to deploy and execute PolkaVM
-smart-contracts. It is a heavily modified `pallet_contracts` fork.
+smart-contracts. It is a heavily modified `pezpallet_contracts` fork.
 
 ## Overview
 
-This module extends accounts based on the [`frame_support::traits::fungible`] traits to have smart-contract
-functionality. It can be used with other modules that implement accounts based on [`frame_support::traits::fungible`].
+This module extends accounts based on the [`pezframe_support::traits::fungible`] traits to have smart-contract
+functionality. It can be used with other modules that implement accounts based on [`pezframe_support::traits::fungible`].
 These "smart-contract accounts" have the ability to instantiate smart-contracts and make calls to other contract and
 non-contract accounts.
 
@@ -20,7 +20,7 @@ Finally, when an account is reaped, its associated code and storage of the smart
 
 ### Weight
 
-Senders must specify a [`Weight`](https://docs.pezkuwichain.io/bizinikiwi/master/sp_weights/struct.Weight.html) limit
+Senders must specify a [`Weight`](https://docs.pezkuwichain.io/bizinikiwi/master/pezsp_weights/struct.Weight.html) limit
 with every call, as all instructions invoked by the smart-contract require weight. Unused weight is refunded after the
 call, regardless of the execution outcome.
 
@@ -79,7 +79,7 @@ to handle that failure, either proceeding or reverting A's changes.
 ### Dispatchable functions
 
 Those are documented in the [reference
-documentation](https://docs.pezkuwichain.io/sdk/master/pallet_revive/pezpallet/dispatchables/index.html).
+documentation](https://docs.pezkuwichain.io/sdk/master/pezpallet_revive/pezpallet/dispatchables/index.html).
 
 ## Usage
 
@@ -108,7 +108,7 @@ concept of an unstable interface. Akin to the rust nightly compiler it allows us
 unstable so that contract languages can experiment with them and give feedback before we stabilize those.
 
 In order to access interfaces which don't have a stable `#[stable]` in [`runtime.rs`](src/vm/runtime.rs)
-one need to set `pallet_revive::Config::UnsafeUnstableInterface` to `ConstU32<true>`.
+one need to set `pezpallet_revive::Config::UnsafeUnstableInterface` to `ConstU32<true>`.
 **It should be obvious that any production runtime should never be compiled with this feature: In addition to be
 subject to change or removal those interfaces might not have proper weights associated with them and are therefore
 considered unsafe**.
