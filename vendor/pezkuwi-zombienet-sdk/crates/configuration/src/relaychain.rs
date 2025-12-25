@@ -499,7 +499,7 @@ impl RelaychainConfigBuilder<WithChain> {
 
 	/// Add a new node using a nested [`NodeConfigBuilder`].
 	///
-	/// **Deprecated**: Use [`with_validator`] for validator nodes or [`with_fullnode`] for full nodes instead.
+	/// **Deprecated**: Use `with_validator` for validator nodes or `with_fullnode` for full nodes instead.
 	#[deprecated(
 		since = "0.4.0",
 		note = "Use `with_validator()` for validator nodes or `with_fullnode()` for full nodes instead"
@@ -623,7 +623,7 @@ impl RelaychainConfigBuilder<WithAtLeastOneNode> {
 
 	/// Add a new node using a nested [`NodeConfigBuilder`].
 	///
-	/// **Deprecated**: Use [`with_validator`] for validator nodes or [`with_fullnode`] for full nodes instead.
+	/// **Deprecated**: Use `with_validator` for validator nodes or `with_fullnode` for full nodes instead.
 	#[deprecated(
 		since = "0.4.0",
 		note = "Use `with_validator()` for validator nodes or `with_fullnode()` for full nodes instead"

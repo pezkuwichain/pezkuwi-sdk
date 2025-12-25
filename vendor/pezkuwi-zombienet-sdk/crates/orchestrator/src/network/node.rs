@@ -185,7 +185,7 @@ impl NetworkNode {
 		get_client_from_url(&self.ws_uri).await
 	}
 
-	/// Get the [online client](subxt::client::OnlineClient) for the node
+	/// Get the online client for the node
 	#[deprecated = "Use `wait_client` instead."]
 	pub async fn client<Config: pezkuwi_subxt::Config>(
 		&self,
@@ -207,7 +207,7 @@ impl NetworkNode {
 		get_client_from_url(&self.ws_uri).await
 	}
 
-	/// Wait until get the [online client](subxt::client::OnlineClient) for the node
+	/// Wait until get the online client for the node
 	pub async fn wait_client<Config: pezkuwi_subxt::Config>(
 		&self,
 	) -> Result<OnlineClient<Config>, anyhow::Error> {
@@ -219,7 +219,7 @@ impl NetworkNode {
 		self.try_client().await.map_err(|e| anyhow!("Can't create a subxt client, err: {e}"))
 	}
 
-	/// Wait until get the [online client](subxt::client::OnlineClient) for the node with a defined timeout
+	/// Wait until get the online client for the node with a defined timeout
 	pub async fn wait_client_with_timeout<Config: pezkuwi_subxt::Config>(
 		&self,
 		timeout_secs: impl Into<u64>,

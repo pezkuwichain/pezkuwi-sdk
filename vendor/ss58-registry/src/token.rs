@@ -36,7 +36,7 @@ impl core::fmt::Debug for Token {
 
 impl Token {
 	/// Creates the specified amount of [`Token`] with its name and decimals filled from the
-	/// [`TokenRegistry`] variant.
+	/// `TokenRegistry` variant.
 	///
 	/// ```
 	/// # use ss58_registry::{Token, TokenRegistry};
