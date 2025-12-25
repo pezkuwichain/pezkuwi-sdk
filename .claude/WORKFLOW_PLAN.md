@@ -70,7 +70,7 @@ cargo check --locked --all --features try-runtime,experimental --quiet
 | Job | Durum | Lokal Test Komutu |
 |-----|-------|-------------------|
 | `test-doc` | ❌ | `time cargo test --doc --workspace --locked --release --no-fail-fast --features=runtime-benchmarks,try-runtime` |
-| `build-rustdoc` | ❌ | `time cargo doc --workspace --all-features --no-deps` |
+| `build-rustdoc` | ✅ | `SKIP_WASM_BUILD=1 cargo doc --workspace --all-features --no-deps` |
 
 ---
 
@@ -184,6 +184,7 @@ AŞAMA 4 - EVM/PolkaVM:
 
 | Tarih | Düzeltme | Etki |
 |-------|----------|------|
+| 2025-12-25 | Rustdoc link düzeltmeleri: zombienet-sdk, subxt, ss58-registry, pezframe-support, pezpallet-presale, revive README | build-rustdoc |
 | 2025-12-25 | CLI argüman rebrand: --pallet → --pezpallet, benchmark pallet → benchmark pezpallet | quick-benchmarks, scripts |
 | 2025-12-25 | pezpallet-welati EnsureOrigin try_successful_origin düzeltmeleri (3 fix) | pezkuwi-teyrchain-bin build |
 | 2025-12-25 | asset-hub-zagros governance origins macro düzeltmeleri (2 macro) | pezkuwi-teyrchain-bin build |
