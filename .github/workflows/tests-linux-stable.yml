@@ -38,7 +38,7 @@ jobs:
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       - name: script
         id: required
-        run: WASM_BUILD_NO_COLOR=1 cargo test -p pez-staging-node-cli --release --locked -- --ignored
+        run: WASM_BUILD_NO_COLOR=1 cargo test -p pezstaging-node-cli --release --locked -- --ignored
 
   # https://github.com/pezkuwichain/ci_cd/issues/864
   test-linux-stable-runtime-benchmarks:

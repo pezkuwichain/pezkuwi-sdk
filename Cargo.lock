@@ -109,9 +109,9 @@ checksum = "683d7910e743518b0e34f1186f92494becacb047c7b6bf616c96772180fef923"
 
 [[package]]
 name = "alloy-consensus"
-version = "1.1.3"
+version = "1.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2e318e25fb719e747a7e8db1654170fc185024f3ed5b10f86c08d448a912f6e2"
+checksum = "f3dcd2b4e208ce5477de90ccdcbd4bde2c8fb06af49a443974e92bb8f2c5e93f"
 dependencies = [
  "alloy-eips",
  "alloy-primitives",
@@ -204,9 +204,9 @@ dependencies = [
 
 [[package]]
 name = "alloy-eips"
-version = "1.1.3"
+version = "1.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a4c4d7c5839d9f3a467900c625416b24328450c65702eb3d8caff8813e4d1d33"
+checksum = "6847d641141b92a1557094aa6c236cbe49c06fb24144d4a21fe6acb970c15888"
 dependencies = [
  "alloy-eip2124",
  "alloy-eip2930",
@@ -289,9 +289,9 @@ dependencies = [
 
 [[package]]
 name = "alloy-serde"
-version = "1.1.3"
+version = "1.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c0df1987ed0ff2d0159d76b52e7ddfc4e4fbddacc54d2fbee765e0d14d7c01b5"
+checksum = "067b718d2e6ac1bb889341fcc7a250cfa49bcd3ba4f23923f1c1eb1f2b10cb7c"
 dependencies = [
  "alloy-primitives",
  "serde",
@@ -386,9 +386,9 @@ dependencies = [
 
 [[package]]
 name = "alloy-tx-macros"
-version = "1.1.3"
+version = "1.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "333544408503f42d7d3792bfc0f7218b643d968a03d2c0ed383ae558fb4a76d0"
+checksum = "04950a13cc4209d8e9b78f306e87782466bad8538c94324702d061ff03e211c9"
 dependencies = [
  "darling 0.21.3",
  "proc-macro2 1.0.103",
@@ -1431,6 +1431,7 @@ dependencies = [
  "pezpallet-xcm-precompiles",
  "pezsnowbridge-outbound-queue-primitives",
  "pezsnowbridge-pezpallet-system-frontend",
+ "pezsnowbridge-runtime-common",
  "pezsp-api",
  "pezsp-arithmetic",
  "pezsp-block-builder",
@@ -1457,7 +1458,6 @@ dependencies = [
  "primitive-types 0.13.1",
  "scale-info",
  "serde_json",
- "snowpezbridge-runtime-common",
  "testnet-teyrchains-constants",
  "teyrchains-common",
  "teyrchains-runtimes-test-utils",
@@ -1609,7 +1609,7 @@ dependencies = [
  "futures-lite 2.6.1",
  "parking",
  "polling 3.11.0",
- "rustix 1.1.2",
+ "rustix 1.1.3",
  "slab",
  "windows-sys 0.61.2",
 ]
@@ -1651,7 +1651,7 @@ dependencies = [
  "cfg-if",
  "event-listener 5.4.1",
  "futures-lite 2.6.1",
- "rustix 1.1.2",
+ "rustix 1.1.3",
 ]
 
 [[package]]
@@ -1666,7 +1666,7 @@ dependencies = [
  "cfg-if",
  "futures-core",
  "futures-io",
- "rustix 1.1.2",
+ "rustix 1.1.3",
  "signal-hook-registry",
  "slab",
  "windows-sys 0.61.2",
@@ -8610,7 +8610,7 @@ version = "0.6.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ad38eb12aea514a0466ea40a80fd8cc83637065948eb4a426e4aa46261175227"
 dependencies = [
- "rustix 1.1.2",
+ "rustix 1.1.3",
 ]
 
 [[package]]
@@ -13606,7 +13606,7 @@ dependencies = [
 
 [[package]]
 name = "pezkuwi-sdk"
-version = "0.1.0"
+version = "0.0.0"
 dependencies = [
  "asset-test-pezutils",
  "assets-common",
@@ -13836,6 +13836,7 @@ dependencies = [
  "pezpallet-revive-proc-macro",
  "pezpallet-revive-uapi",
  "pezpallet-root-offences",
+ "pezpallet-root-testing",
  "pezpallet-safe-mode",
  "pezpallet-salary",
  "pezpallet-scheduler",
@@ -13870,6 +13871,7 @@ dependencies = [
  "pezpallet-vesting",
  "pezpallet-whitelist",
  "pezpallet-xcm",
+ "pezpallet-xcm-benchmarks",
  "pezpallet-xcm-bridge-hub",
  "pezpallet-xcm-bridge-hub-router",
  "pezpallet-xcm-precompiles",
@@ -14551,6 +14553,7 @@ dependencies = [
  "hashbrown 0.15.5",
  "parity-scale-codec",
  "pezkuwi-subxt-codegen",
+ "pezkuwi-subxt-utils-stripmetadata",
  "pezsp-crypto-hashing",
  "scale-info",
  "scale-info-legacy",
@@ -19046,7 +19049,7 @@ dependencies = [
  "pezsp-io",
  "pezsp-runtime-interface",
  "pezsp-wasm-interface",
- "rustix 1.1.2",
+ "rustix 1.1.3",
  "tempfile",
  "wasmtime",
  "wat",
@@ -20275,6 +20278,22 @@ dependencies = [
  "pezstaging-xcm",
  "pezstaging-xcm-executor",
  "scale-info",
+ "tracing",
+]
+
+[[package]]
+name = "pezsnowbridge-runtime-common"
+version = "0.2.0"
+dependencies = [
+ "parity-scale-codec",
+ "pezframe-support",
+ "pezframe-system",
+ "pezpallet-xcm",
+ "pezsp-arithmetic",
+ "pezsp-std",
+ "pezstaging-xcm",
+ "pezstaging-xcm-builder",
+ "pezstaging-xcm-executor",
  "tracing",
 ]
 
@@ -21782,7 +21801,7 @@ dependencies = [
  "concurrent-queue",
  "hermit-abi",
  "pin-project-lite",
- "rustix 1.1.2",
+ "rustix 1.1.3",
  "windows-sys 0.61.2",
 ]
 
@@ -23417,9 +23436,9 @@ dependencies = [
 
 [[package]]
 name = "rustix"
-version = "1.1.2"
+version = "1.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cd15f8a2c5551a84d56efdc1cd049089e409ac19a3072d5037a17fd70719ff3e"
+checksum = "146c9e247ccc180c1f61615433868c99f3de3ae256a30a43b49f67c2d9171f34"
 dependencies = [
  "bitflags 2.10.0",
  "errno",
@@ -24192,16 +24211,16 @@ dependencies = [
 
 [[package]]
 name = "serde_json"
-version = "1.0.146"
+version = "1.0.147"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "217ca874ae0207aac254aa02c957ded05585a90892cc8d87f9e5fa49669dadd8"
+checksum = "6af14725505314343e673e9ecb7cd7e8a36aa9791eb936235a3567cc31447ae4"
 dependencies = [
  "indexmap 2.12.1",
  "itoa",
  "memchr",
- "ryu",
  "serde",
  "serde_core",
+ "zmij",
 ]
 
 [[package]]
@@ -24632,22 +24651,6 @@ dependencies = [
  "scale-info",
  "snowbridge-amcl",
  "zeroize",
-]
-
-[[package]]
-name = "snowpezbridge-runtime-common"
-version = "0.2.0"
-dependencies = [
- "parity-scale-codec",
- "pezframe-support",
- "pezframe-system",
- "pezpallet-xcm",
- "pezsp-arithmetic",
- "pezsp-std",
- "pezstaging-xcm",
- "pezstaging-xcm-builder",
- "pezstaging-xcm-executor",
- "tracing",
 ]
 
 [[package]]
@@ -25331,14 +25334,14 @@ checksum = "591ef38edfb78ca4771ee32cf494cb8771944bee237a9b91fc9c1424ac4b777b"
 
 [[package]]
 name = "tempfile"
-version = "3.23.0"
+version = "3.24.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2d31c77bdf42a745371d260a26ca7163f1e0924b64afa0b688e61b5a9fa02f16"
+checksum = "655da9c7eb6305c55742045d5a8d2037996d61d8de95806335c7c86ce0f82e9c"
 dependencies = [
  "fastrand 2.3.0",
  "getrandom 0.3.4",
  "once_cell",
- "rustix 1.1.2",
+ "rustix 1.1.3",
  "windows-sys 0.61.2",
 ]
 
@@ -25357,7 +25360,7 @@ version = "0.4.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "60b8cb979cb11c32ce1603f8137b22262a9d131aaa5c37b5678025f22b8becd0"
 dependencies = [
- "rustix 1.1.2",
+ "rustix 1.1.3",
  "windows-sys 0.60.2",
 ]
 
@@ -27133,7 +27136,7 @@ dependencies = [
  "postcard",
  "pulley-interpreter",
  "rayon",
- "rustix 1.1.2",
+ "rustix 1.1.3",
  "serde",
  "serde_derive",
  "serde_json",
@@ -27200,7 +27203,7 @@ dependencies = [
  "directories-next",
  "log",
  "postcard",
- "rustix 1.1.2",
+ "rustix 1.1.3",
  "serde",
  "serde_derive",
  "sha2 0.10.9",
@@ -27247,7 +27250,7 @@ dependencies = [
  "cc",
  "cfg-if",
  "libc",
- "rustix 1.1.2",
+ "rustix 1.1.3",
  "wasmtime-internal-asm-macros",
  "wasmtime-internal-versioned-export-macros",
  "windows-sys 0.60.2",
@@ -27261,7 +27264,7 @@ checksum = "9f189b670fe4e668015cace8a1df1faae03ed9f6b2b638a504204336b4b34de2"
 dependencies = [
  "cc",
  "object 0.37.3",
- "rustix 1.1.2",
+ "rustix 1.1.3",
  "wasmtime-internal-versioned-export-macros",
 ]
 
@@ -27989,7 +27992,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "32e45ad4206f6d2479085147f02bc2ef834ac85886624a23575ae137c8aa8156"
 dependencies = [
  "libc",
- "rustix 1.1.2",
+ "rustix 1.1.3",
 ]
 
 [[package]]
@@ -28535,6 +28538,12 @@ dependencies = [
  "quote 1.0.42",
  "syn 2.0.111",
 ]
+
+[[package]]
+name = "zmij"
+version = "0.1.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9e404bcd8afdaf006e529269d3e85a743f9480c3cef60034d77860d02964f3ba"
 
 [[package]]
 name = "zombienet-backchannel"

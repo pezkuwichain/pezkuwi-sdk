@@ -89,8 +89,8 @@ jobs:
       - name: script
         run: |
           cargo version
-          cargo test --locked -q --profile testnet -p pezframe-support-test --features=pezframe-feature-testing,no-metadata-docs,try-runtime,experimental ui
-          cargo test --locked -q --profile testnet -p pezframe-support-test --features=pezframe-feature-testing,pezframe-feature-testing-2,no-metadata-docs,try-runtime,experimental ui
+          cargo test --locked -q --profile testnet -p pezframe-support-test --features=frame-feature-testing,no-metadata-docs,try-runtime,experimental ui
+          cargo test --locked -q --profile testnet -p pezframe-support-test --features=frame-feature-testing,frame-feature-testing-2,no-metadata-docs,try-runtime,experimental ui
           cargo test --locked -q --profile testnet -p xcm-pez-procedural ui
           cargo test --locked -q --profile testnet -p pezframe-election-provider-solution-type ui
           cargo test --locked -q --profile testnet -p pezsp-api-test ui

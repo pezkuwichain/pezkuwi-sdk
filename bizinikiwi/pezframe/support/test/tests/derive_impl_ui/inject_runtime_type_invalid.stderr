@@ -10,5 +10,5 @@ error[E0046]: not all trait items implemented, missing: `RuntimeInfo`
 22 |     type RuntimeInfo;
    |     ---------------- `RuntimeInfo` from trait
 ...
-30 | impl Config for Pallet {
-   | ^^^^^^^^^^^^^^^^^^^^^^ missing `RuntimeInfo` in implementation
+30 | impl Config for Pezpallet {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^ missing `RuntimeInfo` in implementation

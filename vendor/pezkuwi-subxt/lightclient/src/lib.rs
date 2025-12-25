@@ -8,11 +8,10 @@
 #![deny(missing_docs)]
 #![cfg_attr(docsrs, feature(doc_cfg))]
 
-#[cfg(any(
-	all(feature = "web", feature = "native"),
-	not(any(feature = "web", feature = "native"))
-))]
-compile_error!("subxt-lightclient: exactly one of the 'web' and 'native' features should be used.");
+// Note: When both 'web' and 'native' features are enabled (e.g., --all-features),
+// 'native' takes priority. This allows CI to run with --all-features.
+#[cfg(not(any(feature = "web", feature = "native")))]
+compile_error!("subxt-lightclient: at least one of the 'web' or 'native' features must be enabled.");
 
 mod platform;
 mod shared_client;
@@ -246,12 +245,13 @@ impl Stream for LightClientRpcSubscription {
 }
 
 /// A quick helper to spawn a task that works for WASM.
+/// When both 'native' and 'web' are enabled, 'native' takes priority.
 fn spawn<F: Future + Send + 'static>(future: F) {
 	#[cfg(feature = "native")]
 	tokio::spawn(async move {
 		future.await;
 	});
-	#[cfg(feature = "web")]
+	#[cfg(all(feature = "web", not(feature = "native")))]
 	wasm_bindgen_futures::spawn_local(async move {
 		future.await;
 	});

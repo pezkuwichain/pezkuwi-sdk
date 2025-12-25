@@ -4,7 +4,7 @@ use pezkuwi_subxt_signer::sr25519::dev;
 
 type BoxedError = Box<dyn std::error::Error + Send + Sync + 'static>;
 
-#[pezkuwi_subxt::subxt(runtime_metadata_path = "../artifacts/pezkuwi_metadata_small.scale")]
+#[pezkuwi_subxt::subxt(runtime_metadata_path = "../artifacts/polkadot_metadata_small.scale")]
 pub mod pezkuwi {}
 
 #[tokio::main]
@@ -19,7 +19,9 @@ async fn signing_example() -> Result<(), BoxedError> {
 	let api = OnlineClient::<PezkuwiConfig>::new().await?;
 
 	// Build a balance transfer extrinsic.
-	let dest = dev::bob().public_key().into();
+	let dest = pezkuwi::runtime_types::sp_runtime::multiaddress::MultiAddress::Id(
+		pezkuwi::runtime_types::sp_core::crypto::AccountId32(dev::bob().public_key().0),
+	);
 	let balance_transfer_tx = pezkuwi::tx().balances().transfer_allow_death(dest, 10_000);
 
 	let alice = dev::alice();

@@ -1,5 +1,5 @@
-error: Invalid pallet::call, weight_of_authorize attribute must be used with authorize attribute
-  --> tests/pallet_ui/authorize_weight_but_no_closure.rs:36:33
+error: Invalid pezpallet::call, weight_of_authorize attribute must be used with authorize attribute
+  --> tests/pezpallet_ui/authorize_weight_but_no_closure.rs:36:36
    |
-36 |         #[pallet::weight_of_authorize(Weight::zero())]
-   |                                       ^^^^^^
+36 |         #[pezpallet::weight_of_authorize(Weight::zero())]
+   |                                          ^^^^^^

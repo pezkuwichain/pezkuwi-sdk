@@ -1,8 +1,8 @@
 error: Unexpected tokens, expected one of `=`, `,`
-  --> tests/construct_runtime_ui/both_use_and_excluded_parts.rs:43:43
+  --> tests/construct_runtime_ui/both_use_and_excluded_parts.rs:43:52
    |
-43 |         Pallet: pallet exclude_parts { Pallet } use_parts { Pallet },
-   |                                                 ^^^^^^^^^
+43 |         Pezpallet: pezpallet exclude_parts { Pezpallet } use_parts { Pezpallet },
+   |                                                          ^^^^^^^^^
 
 error[E0412]: cannot find type `RuntimeCall` in this scope
   --> tests/construct_runtime_ui/both_use_and_excluded_parts.rs:35:64
@@ -16,13 +16,13 @@ help: you might be missing a type parameter
    |                            +++++++++++++
 
 error[E0412]: cannot find type `Runtime` in this scope
-  --> tests/construct_runtime_ui/both_use_and_excluded_parts.rs:37:25
+  --> tests/construct_runtime_ui/both_use_and_excluded_parts.rs:37:28
    |
-37 | impl pallet::Config for Runtime {}
-   |                         ^^^^^^^ not found in this scope
+37 | impl pezpallet::Config for Runtime {}
+   |                            ^^^^^^^ not found in this scope
    |
-help: there is an enum variant `sp_api::__private::TransactionType::Runtime`; try using the variant's enum
+help: there is an enum variant `pezsp_api::__private::TransactionType::Runtime`; try using the variant's enum
    |
-37 - impl pallet::Config for Runtime {}
-37 + impl pallet::Config for sp_api::__private::TransactionType {}
+37 - impl pezpallet::Config for Runtime {}
+37 + impl pezpallet::Config for pezsp_api::__private::TransactionType {}
    |

@@ -11,7 +11,7 @@ use pezkuwi_subxt_signer::sr25519::dev;
 use scale_encode::EncodeAsType;
 use scale_info::PortableRegistry;
 
-#[pezkuwi_subxt::subxt(runtime_metadata_path = "../artifacts/pezkuwi_metadata_small.scale")]
+#[pezkuwi_subxt::subxt(runtime_metadata_path = "../artifacts/polkadot_metadata_small.scale")]
 pub mod runtime {}
 
 // We don't need to construct this at runtime,

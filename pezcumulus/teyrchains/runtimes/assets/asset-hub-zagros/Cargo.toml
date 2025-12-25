@@ -138,7 +138,7 @@ bp-bridge-hub-zagros = { workspace = true }
 pezpallet-xcm-bridge-hub-router = { workspace = true }
 pezsnowbridge-outbound-queue-primitives = { workspace = true }
 pezsnowbridge-pezpallet-system-frontend = { workspace = true }
-snowpezbridge-runtime-common = { workspace = true }
+pezsnowbridge-runtime-common = { workspace = true }
 
 [dev-dependencies]
 alloy-core = { workspace = true, features = ["sol-types"] }
@@ -247,7 +247,7 @@ runtime-benchmarks = [
 	"pezsp-staking/runtime-benchmarks",
 	"pezsp-transaction-pool/runtime-benchmarks",
 	"pezsp-version/runtime-benchmarks",
-	"snowpezbridge-runtime-common/runtime-benchmarks",
+	"pezsnowbridge-runtime-common/runtime-benchmarks",
 	"testnet-teyrchains-constants/runtime-benchmarks",
 	"teyrchain-info/runtime-benchmarks",
 	"teyrchains-common/runtime-benchmarks",
@@ -320,7 +320,7 @@ try-runtime = [
 	"pezpallet-xcm/try-runtime",
 	"pezsnowbridge-pezpallet-system-frontend/try-runtime",
 	"pezsp-runtime/try-runtime",
-	"snowpezbridge-runtime-common/try-runtime",
+	"pezsnowbridge-runtime-common/try-runtime",
 	"teyrchain-info/try-runtime",
 	"teyrchains-common/try-runtime",
 ]
@@ -428,7 +428,7 @@ std = [
 	"primitive-types/std",
 	"scale-info/std",
 	"serde_json/std",
-	"snowpezbridge-runtime-common/std",
+	"pezsnowbridge-runtime-common/std",
 	"testnet-teyrchains-constants/std",
 	"teyrchain-info/std",
 	"teyrchains-common/std",

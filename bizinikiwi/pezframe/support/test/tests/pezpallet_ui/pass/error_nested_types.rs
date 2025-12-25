@@ -16,7 +16,7 @@
 // limitations under the License.
 
 use codec::{Decode, DecodeWithMemTracking, Encode};
-use pezframe_support::PezpalletError;
+use pezframe_support::PalletError;
 
 #[pezframe_support::pezpallet]
 #[allow(unused_imports)]
@@ -33,7 +33,7 @@ pub mod pezpallet {
 	}
 }
 
-#[derive(Encode, Decode, DecodeWithMemTracking, PezpalletError, scale_info::TypeInfo)]
+#[derive(Encode, Decode, DecodeWithMemTracking, PalletError, scale_info::TypeInfo)]
 pub enum MyError {
 	Foo,
 	Bar,
@@ -42,17 +42,17 @@ pub enum MyError {
 	Wrapper(Wrapper),
 }
 
-#[derive(Encode, Decode, DecodeWithMemTracking, PezpalletError, scale_info::TypeInfo)]
+#[derive(Encode, Decode, DecodeWithMemTracking, PalletError, scale_info::TypeInfo)]
 pub enum NestedError {
 	Quux,
 }
 
-#[derive(Encode, Decode, DecodeWithMemTracking, PezpalletError, scale_info::TypeInfo)]
+#[derive(Encode, Decode, DecodeWithMemTracking, PalletError, scale_info::TypeInfo)]
 pub struct MyStruct {
 	field: u8,
 }
 
-#[derive(Encode, Decode, DecodeWithMemTracking, PezpalletError, scale_info::TypeInfo)]
+#[derive(Encode, Decode, DecodeWithMemTracking, PalletError, scale_info::TypeInfo)]
 pub struct Wrapper(bool);
 
 fn main() {}

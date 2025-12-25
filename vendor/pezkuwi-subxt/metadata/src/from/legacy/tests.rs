@@ -35,7 +35,8 @@ fn legacy_kusama_metadata(version: u8) -> (u64, RuntimeMetadata) {
 /// Load our kusama types.
 /// TODO: This is WRONG at the moment; change to point to kusama types when they exist:
 fn kusama_types() -> scale_info_legacy::ChainTypeRegistry {
-	frame_decode::legacy_types::pezkuwi::relay_chain()
+	// frame-decode is an external crate (v0.15.0) that uses original naming
+	frame_decode::legacy_types::polkadot::relay_chain()
 }
 
 /// Sanitizing paths changes things between old and new, so disable this in tests by default

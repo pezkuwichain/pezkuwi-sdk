@@ -21,7 +21,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	// 3. Metadata (I'll load it from the downloaded metadata, but you can use `subxt metadata >
 	//    file.scale` to download it):
 	let metadata = {
-		let bytes = std::fs::read("./artifacts/pezkuwi_metadata_small.scale").unwrap();
+		let bytes = std::fs::read("./artifacts/polkadot_metadata_small.scale").unwrap();
 		Metadata::decode(&mut &*bytes).unwrap()
 	};
 

@@ -30,6 +30,7 @@ macro_rules! cfg_jsonrpsee {
 	};
 }
 
+// When both 'native' and 'web' features are enabled, 'native' takes priority.
 #[allow(unused)]
 macro_rules! cfg_jsonrpsee_native {
 	($($item:item)*) => {
@@ -45,7 +46,7 @@ macro_rules! cfg_jsonrpsee_native {
 macro_rules! cfg_jsonrpsee_web {
 	($($item:item)*) => {
 		$(
-			#[cfg(all(feature = "jsonrpsee", feature = "web"))]
+			#[cfg(all(feature = "jsonrpsee", feature = "web", not(feature = "native")))]
 			#[cfg_attr(docsrs, doc(cfg(all(feature = "jsonrpsee", feature = "web"))))]
 			$item
 		)*

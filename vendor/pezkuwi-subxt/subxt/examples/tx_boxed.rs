@@ -2,7 +2,7 @@
 use pezkuwi_subxt::{OnlineClient, PezkuwiConfig};
 use pezkuwi_subxt_signer::sr25519::dev;
 
-#[pezkuwi_subxt::subxt(runtime_metadata_path = "../artifacts/pezkuwi_metadata_small.scale")]
+#[pezkuwi_subxt::subxt(runtime_metadata_path = "../artifacts/polkadot_metadata_small.scale")]
 pub mod pezkuwi {}
 
 #[tokio::main]
@@ -27,7 +27,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 fn balance_transfer() -> Box<dyn pezkuwi_subxt::tx::Payload> {
-	let dest = dev::bob().public_key().into();
+	let dest = pezkuwi::runtime_types::sp_runtime::multiaddress::MultiAddress::Id(
+		pezkuwi::runtime_types::sp_core::crypto::AccountId32(dev::bob().public_key().0),
+	);
 	Box::new(pezkuwi::tx().balances().transfer_allow_death(dest, 10_000))
 }
 

@@ -3,12 +3,12 @@ use futures::StreamExt;
 use pezkuwi_subxt::{client::OnlineClient, lightclient::LightClient, PezkuwiConfig};
 
 // Generate an interface that we can use from the node's metadata.
-#[pezkuwi_subxt::subxt(runtime_metadata_path = "../artifacts/pezkuwi_metadata_small.scale")]
+#[pezkuwi_subxt::subxt(runtime_metadata_path = "../artifacts/polkadot_metadata_small.scale")]
 pub mod pezkuwi {}
 
-const POLKADOT_SPEC: &str = include_str!("../../artifacts/demo_chain_specs/pezkuwi.json");
+const POLKADOT_SPEC: &str = include_str!("../../artifacts/demo_chain_specs/polkadot.json");
 const ASSET_HUB_SPEC: &str =
-	include_str!("../../artifacts/demo_chain_specs/pezkuwi_asset_hub.json");
+	include_str!("../../artifacts/demo_chain_specs/polkadot_asset_hub.json");
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {

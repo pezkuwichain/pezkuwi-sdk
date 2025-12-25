@@ -1,13 +1,13 @@
 error[E0277]: the trait bound `Bar: WrapperTypeDecode` is not satisfied
-  --> tests/pallet_ui/storage_ensure_span_are_ok_on_wrong_gen_unnamed.rs:27:12
+  --> tests/pezpallet_ui/storage_ensure_span_are_ok_on_wrong_gen_unnamed.rs:27:15
    |
-27 |       #[pallet::without_storage_info]
-   |  _______________^
-28 | |     pub struct Pallet<T>(core::marker::PhantomData<T>);
+27 |       #[pezpallet::without_storage_info]
+   |  __________________^
+28 | |     pub struct Pezpallet<T>(core::marker::PhantomData<T>);
 29 | |
-30 | |     #[pallet::hooks]
+30 | |     #[pezpallet::hooks]
 ...  |
-38 | |     #[pallet::storage]
+38 | |     #[pezpallet::storage]
 39 | |     type Foo<T> = StorageValue<_, Bar>;
    | |____________^ the trait `WrapperTypeDecode` is not implemented for `Bar`
    |
@@ -15,21 +15,21 @@ error[E0277]: the trait bound `Bar: WrapperTypeDecode` is not satisfied
              Arc<T>
              Box<T>
              Rc<T>
-             frame_support::sp_runtime::sp_application_crypto::sp_core::Bytes
+             pezframe_support::pezsp_runtime::pezsp_application_crypto::pezsp_core::Bytes
    = note: required for `Bar` to implement `Decode`
    = note: required for `Bar` to implement `FullCodec`
-   = note: required for `frame_support::pallet_prelude::StorageValue<_GeneratedPrefixForStorageFoo<T>, Bar>` to implement `PartialStorageInfoTrait`
+   = note: required for `pezframe_support::pezpallet_prelude::StorageValue<_GeneratedPrefixForStorageFoo<T>, Bar>` to implement `PartialStorageInfoTrait`
 
 error[E0277]: the trait bound `Bar: EncodeLike` is not satisfied
-  --> tests/pallet_ui/storage_ensure_span_are_ok_on_wrong_gen_unnamed.rs:27:12
+  --> tests/pezpallet_ui/storage_ensure_span_are_ok_on_wrong_gen_unnamed.rs:27:15
    |
-27 |       #[pallet::without_storage_info]
-   |  _______________^
-28 | |     pub struct Pallet<T>(core::marker::PhantomData<T>);
+27 |       #[pezpallet::without_storage_info]
+   |  __________________^
+28 | |     pub struct Pezpallet<T>(core::marker::PhantomData<T>);
 29 | |
-30 | |     #[pallet::hooks]
+30 | |     #[pezpallet::hooks]
 ...  |
-38 | |     #[pallet::storage]
+38 | |     #[pezpallet::storage]
 39 | |     type Foo<T> = StorageValue<_, Bar>;
    | |____________^ the trait `EncodeLike` is not implemented for `Bar`
    |
@@ -45,18 +45,18 @@ error[E0277]: the trait bound `Bar: EncodeLike` is not satisfied
            and $N others
    = note: required for `Bar` to implement `FullEncode`
    = note: required for `Bar` to implement `FullCodec`
-   = note: required for `frame_support::pallet_prelude::StorageValue<_GeneratedPrefixForStorageFoo<T>, Bar>` to implement `PartialStorageInfoTrait`
+   = note: required for `pezframe_support::pezpallet_prelude::StorageValue<_GeneratedPrefixForStorageFoo<T>, Bar>` to implement `PartialStorageInfoTrait`
 
 error[E0277]: the trait bound `Bar: WrapperTypeEncode` is not satisfied
-  --> tests/pallet_ui/storage_ensure_span_are_ok_on_wrong_gen_unnamed.rs:27:12
+  --> tests/pezpallet_ui/storage_ensure_span_are_ok_on_wrong_gen_unnamed.rs:27:15
    |
-27 |       #[pallet::without_storage_info]
-   |  _______________^
-28 | |     pub struct Pallet<T>(core::marker::PhantomData<T>);
+27 |       #[pezpallet::without_storage_info]
+   |  __________________^
+28 | |     pub struct Pezpallet<T>(core::marker::PhantomData<T>);
 29 | |
-30 | |     #[pallet::hooks]
+30 | |     #[pezpallet::hooks]
 ...  |
-38 | |     #[pallet::storage]
+38 | |     #[pezpallet::storage]
 39 | |     type Foo<T> = StorageValue<_, Bar>;
    | |____________^ the trait `WrapperTypeEncode` is not implemented for `Bar`
    |
@@ -73,13 +73,13 @@ error[E0277]: the trait bound `Bar: WrapperTypeEncode` is not satisfied
    = note: required for `Bar` to implement `Encode`
    = note: required for `Bar` to implement `FullEncode`
    = note: required for `Bar` to implement `FullCodec`
-   = note: required for `frame_support::pallet_prelude::StorageValue<_GeneratedPrefixForStorageFoo<T>, Bar>` to implement `PartialStorageInfoTrait`
+   = note: required for `pezframe_support::pezpallet_prelude::StorageValue<_GeneratedPrefixForStorageFoo<T>, Bar>` to implement `PartialStorageInfoTrait`
 
 error[E0277]: the trait bound `Bar: TypeInfo` is not satisfied
-  --> tests/pallet_ui/storage_ensure_span_are_ok_on_wrong_gen_unnamed.rs:38:12
+  --> tests/pezpallet_ui/storage_ensure_span_are_ok_on_wrong_gen_unnamed.rs:38:15
    |
-38 |       #[pallet::storage]
-   |  _______________^
+38 |       #[pezpallet::storage]
+   |  __________________^
 39 | |     type Foo<T> = StorageValue<_, Bar>;
    | |____________^ the trait `TypeInfo` is not implemented for `Bar`
    |
@@ -94,13 +94,13 @@ error[E0277]: the trait bound `Bar: TypeInfo` is not satisfied
              (A, B, C, D, E, F)
            and $N others
    = note: required for `Bar` to implement `StaticTypeInfo`
-   = note: required for `frame_support::pallet_prelude::StorageValue<_GeneratedPrefixForStorageFoo<T>, Bar>` to implement `StorageEntryMetadataBuilder`
+   = note: required for `pezframe_support::pezpallet_prelude::StorageValue<_GeneratedPrefixForStorageFoo<T>, Bar>` to implement `StorageEntryMetadataBuilder`
 
 error[E0277]: the trait bound `Bar: WrapperTypeDecode` is not satisfied
-  --> tests/pallet_ui/storage_ensure_span_are_ok_on_wrong_gen_unnamed.rs:38:12
+  --> tests/pezpallet_ui/storage_ensure_span_are_ok_on_wrong_gen_unnamed.rs:38:15
    |
-38 |       #[pallet::storage]
-   |  _______________^
+38 |       #[pezpallet::storage]
+   |  __________________^
 39 | |     type Foo<T> = StorageValue<_, Bar>;
    | |____________^ the trait `WrapperTypeDecode` is not implemented for `Bar`
    |
@@ -108,16 +108,16 @@ error[E0277]: the trait bound `Bar: WrapperTypeDecode` is not satisfied
              Arc<T>
              Box<T>
              Rc<T>
-             frame_support::sp_runtime::sp_application_crypto::sp_core::Bytes
+             pezframe_support::pezsp_runtime::pezsp_application_crypto::pezsp_core::Bytes
    = note: required for `Bar` to implement `Decode`
    = note: required for `Bar` to implement `FullCodec`
-   = note: required for `frame_support::pallet_prelude::StorageValue<_GeneratedPrefixForStorageFoo<T>, Bar>` to implement `StorageEntryMetadataBuilder`
+   = note: required for `pezframe_support::pezpallet_prelude::StorageValue<_GeneratedPrefixForStorageFoo<T>, Bar>` to implement `StorageEntryMetadataBuilder`
 
 error[E0277]: the trait bound `Bar: EncodeLike` is not satisfied
-  --> tests/pallet_ui/storage_ensure_span_are_ok_on_wrong_gen_unnamed.rs:38:12
+  --> tests/pezpallet_ui/storage_ensure_span_are_ok_on_wrong_gen_unnamed.rs:38:15
    |
-38 |       #[pallet::storage]
-   |  _______________^
+38 |       #[pezpallet::storage]
+   |  __________________^
 39 | |     type Foo<T> = StorageValue<_, Bar>;
    | |____________^ the trait `EncodeLike` is not implemented for `Bar`
    |
@@ -133,13 +133,13 @@ error[E0277]: the trait bound `Bar: EncodeLike` is not satisfied
            and $N others
    = note: required for `Bar` to implement `FullEncode`
    = note: required for `Bar` to implement `FullCodec`
-   = note: required for `frame_support::pallet_prelude::StorageValue<_GeneratedPrefixForStorageFoo<T>, Bar>` to implement `StorageEntryMetadataBuilder`
+   = note: required for `pezframe_support::pezpallet_prelude::StorageValue<_GeneratedPrefixForStorageFoo<T>, Bar>` to implement `StorageEntryMetadataBuilder`
 
 error[E0277]: the trait bound `Bar: WrapperTypeEncode` is not satisfied
-  --> tests/pallet_ui/storage_ensure_span_are_ok_on_wrong_gen_unnamed.rs:38:12
+  --> tests/pezpallet_ui/storage_ensure_span_are_ok_on_wrong_gen_unnamed.rs:38:15
    |
-38 |       #[pallet::storage]
-   |  _______________^
+38 |       #[pezpallet::storage]
+   |  __________________^
 39 | |     type Foo<T> = StorageValue<_, Bar>;
    | |____________^ the trait `WrapperTypeEncode` is not implemented for `Bar`
    |
@@ -156,13 +156,13 @@ error[E0277]: the trait bound `Bar: WrapperTypeEncode` is not satisfied
    = note: required for `Bar` to implement `Encode`
    = note: required for `Bar` to implement `FullEncode`
    = note: required for `Bar` to implement `FullCodec`
-   = note: required for `frame_support::pallet_prelude::StorageValue<_GeneratedPrefixForStorageFoo<T>, Bar>` to implement `StorageEntryMetadataBuilder`
+   = note: required for `pezframe_support::pezpallet_prelude::StorageValue<_GeneratedPrefixForStorageFoo<T>, Bar>` to implement `StorageEntryMetadataBuilder`
 
 error[E0277]: the trait bound `Bar: WrapperTypeDecode` is not satisfied
-  --> tests/pallet_ui/storage_ensure_span_are_ok_on_wrong_gen_unnamed.rs:38:12
+  --> tests/pezpallet_ui/storage_ensure_span_are_ok_on_wrong_gen_unnamed.rs:38:15
    |
-38 |       #[pallet::storage]
-   |  _______________^
+38 |       #[pezpallet::storage]
+   |  __________________^
 39 | |     type Foo<T> = StorageValue<_, Bar>;
    | |____________^ the trait `WrapperTypeDecode` is not implemented for `Bar`
    |
@@ -170,16 +170,16 @@ error[E0277]: the trait bound `Bar: WrapperTypeDecode` is not satisfied
              Arc<T>
              Box<T>
              Rc<T>
-             frame_support::sp_runtime::sp_application_crypto::sp_core::Bytes
+             pezframe_support::pezsp_runtime::pezsp_application_crypto::pezsp_core::Bytes
    = note: required for `Bar` to implement `Decode`
    = note: required for `Bar` to implement `FullCodec`
-   = note: required for `frame_support::pallet_prelude::StorageValue<_GeneratedPrefixForStorageFoo<T>, Bar>` to implement `TryDecodeEntireStorage`
+   = note: required for `pezframe_support::pezpallet_prelude::StorageValue<_GeneratedPrefixForStorageFoo<T>, Bar>` to implement `TryDecodeEntireStorage`
 
 error[E0277]: the trait bound `Bar: EncodeLike` is not satisfied
-  --> tests/pallet_ui/storage_ensure_span_are_ok_on_wrong_gen_unnamed.rs:38:12
+  --> tests/pezpallet_ui/storage_ensure_span_are_ok_on_wrong_gen_unnamed.rs:38:15
    |
-38 |       #[pallet::storage]
-   |  _______________^
+38 |       #[pezpallet::storage]
+   |  __________________^
 39 | |     type Foo<T> = StorageValue<_, Bar>;
    | |____________^ the trait `EncodeLike` is not implemented for `Bar`
    |
@@ -195,13 +195,13 @@ error[E0277]: the trait bound `Bar: EncodeLike` is not satisfied
            and $N others
    = note: required for `Bar` to implement `FullEncode`
    = note: required for `Bar` to implement `FullCodec`
-   = note: required for `frame_support::pallet_prelude::StorageValue<_GeneratedPrefixForStorageFoo<T>, Bar>` to implement `TryDecodeEntireStorage`
+   = note: required for `pezframe_support::pezpallet_prelude::StorageValue<_GeneratedPrefixForStorageFoo<T>, Bar>` to implement `TryDecodeEntireStorage`
 
 error[E0277]: the trait bound `Bar: WrapperTypeEncode` is not satisfied
-  --> tests/pallet_ui/storage_ensure_span_are_ok_on_wrong_gen_unnamed.rs:38:12
+  --> tests/pezpallet_ui/storage_ensure_span_are_ok_on_wrong_gen_unnamed.rs:38:15
    |
-38 |       #[pallet::storage]
-   |  _______________^
+38 |       #[pezpallet::storage]
+   |  __________________^
 39 | |     type Foo<T> = StorageValue<_, Bar>;
    | |____________^ the trait `WrapperTypeEncode` is not implemented for `Bar`
    |
@@ -218,4 +218,4 @@ error[E0277]: the trait bound `Bar: WrapperTypeEncode` is not satisfied
    = note: required for `Bar` to implement `Encode`
    = note: required for `Bar` to implement `FullEncode`
    = note: required for `Bar` to implement `FullCodec`
-   = note: required for `frame_support::pallet_prelude::StorageValue<_GeneratedPrefixForStorageFoo<T>, Bar>` to implement `TryDecodeEntireStorage`
+   = note: required for `pezframe_support::pezpallet_prelude::StorageValue<_GeneratedPrefixForStorageFoo<T>, Bar>` to implement `TryDecodeEntireStorage`

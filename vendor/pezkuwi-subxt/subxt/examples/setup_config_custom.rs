@@ -9,7 +9,7 @@ use pezkuwi_subxt::{
 };
 use pezkuwi_subxt_signer::sr25519::dev;
 
-#[pezkuwi_subxt::subxt(runtime_metadata_path = "../artifacts/pezkuwi_metadata_full.scale")]
+#[pezkuwi_subxt::subxt(runtime_metadata_path = "../artifacts/polkadot_metadata_full.scale")]
 pub mod runtime {}
 
 // We don't need to construct this at runtime,

@@ -3,12 +3,13 @@
 // see LICENSE for license details.
 
 //! Default platform for WASM environments.
+//! When both 'native' and 'web' features are enabled, 'native' takes priority.
 
-#[cfg(feature = "web")]
+#[cfg(all(feature = "web", not(feature = "native")))]
 mod wasm_helpers;
-#[cfg(feature = "web")]
+#[cfg(all(feature = "web", not(feature = "native")))]
 mod wasm_platform;
-#[cfg(feature = "web")]
+#[cfg(all(feature = "web", not(feature = "native")))]
 mod wasm_socket;
 
 pub use helpers::{build_platform, DefaultPlatform};
@@ -25,7 +26,7 @@ mod helpers {
 	}
 }
 
-#[cfg(feature = "web")]
+#[cfg(all(feature = "web", not(feature = "native")))]
 mod helpers {
 	use super::wasm_platform::SubxtPlatform as Platform;
 

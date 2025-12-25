@@ -2,6 +2,9 @@
 // This file is dual-licensed as Apache-2.0 or GPL-3.0.
 // see LICENSE for license details.
 
+//! Platform-specific implementations.
+//! When both 'native' and 'web' features are enabled, 'native' takes priority.
+
 use super::{RpcClientBuilder, RpcError};
 use jsonrpsee::core::client::Client;
 use std::sync::Arc;
@@ -10,7 +13,7 @@ use url::Url;
 #[cfg(feature = "native")]
 pub use tokio::spawn;
 
-#[cfg(feature = "web")]
+#[cfg(all(feature = "web", not(feature = "native")))]
 pub use wasm_bindgen_futures::spawn_local as spawn;
 
 #[cfg(feature = "native")]
@@ -56,7 +59,7 @@ pub async fn ws_client<P>(
     Ok(Arc::new(client))
 }
 
-#[cfg(feature = "web")]
+#[cfg(all(feature = "web", not(feature = "native")))]
 pub async fn ws_client<P>(
     url: &Url,
     builder: &RpcClientBuilder<P>,

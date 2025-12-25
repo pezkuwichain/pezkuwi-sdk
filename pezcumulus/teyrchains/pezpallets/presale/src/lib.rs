@@ -453,7 +453,7 @@ pub mod pezpallet {
 		Distributed { presale_id: PresaleId, who: T::AccountId, amount: u128 },
 		/// Refund processed [presale_id, who, amount, fee]
 		Refunded { presale_id: PresaleId, who: T::AccountId, amount: u128, fee: u128 },
-		/// Presale cancelled [presale_id]
+		/// Presale cancelled
 		PresaleCancelled { presale_id: PresaleId },
 		/// Platform fee distributed [treasury_share, burn_share, staker_share]
 		PlatformFeeDistributed { treasury_share: u128, burn_share: u128, staker_share: u128 },

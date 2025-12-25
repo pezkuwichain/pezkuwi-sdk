@@ -139,7 +139,7 @@ jobs:
     uses: "./.github/workflows/release-reusable-rc-build.yml"
     with:
       binary: '["bizinikiwi-node"]'
-      package: pez-staging-node-cli
+      package: pezstaging-node-cli
       release_tag: ${{ needs.validate-inputs.outputs.release_tag }}
       target: x86_64-unknown-linux-gnu
     secrets: inherit
@@ -260,7 +260,7 @@ jobs:
     uses: "./.github/workflows/release-reusable-rc-build.yml"
     with:
       binary: '["bizinikiwi-node"]'
-      package: pez-staging-node-cli
+      package: pezstaging-node-cli
       release_tag: ${{ needs.validate-inputs.outputs.release_tag }}
       target: aarch64-apple-darwin
     secrets: inherit

@@ -403,7 +403,7 @@ jobs:
     secrets: inherit
 
   upload-bizinikiwi-node-artifacts-to-s3:
-    if: ${{ inputs.package == 'pez-staging-node-cli' && inputs.target == 'x86_64-unknown-linux-gnu' }}
+    if: ${{ inputs.package == 'pezstaging-node-cli' && inputs.target == 'x86_64-unknown-linux-gnu' }}
     needs: [build-rc]
     uses: ./.github/workflows/release-reusable-s3-upload.yml
     with:
@@ -505,7 +505,7 @@ jobs:
      secrets: inherit
 
   upload-bizinikiwi-node-macos-artifacts-to-s3:
-     if: ${{ inputs.package == 'pez-staging-node-cli' && inputs.target == 'aarch64-apple-darwin' }}
+     if: ${{ inputs.package == 'pezstaging-node-cli' && inputs.target == 'aarch64-apple-darwin' }}
      needs: [build-macos-rc]
      uses: ./.github/workflows/release-reusable-s3-upload.yml
      with:

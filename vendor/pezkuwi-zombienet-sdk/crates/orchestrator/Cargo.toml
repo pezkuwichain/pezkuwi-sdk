@@ -15,6 +15,7 @@ keywords = ["orchestrator", "sdk", "zombienet"]
 [dependencies]
 anyhow = { workspace = true }
 async-trait = { workspace = true }
+erased-serde = { workspace = true }
 fancy-regex = { workspace = true }
 futures = { workspace = true }
 glob-match = { workspace = true }
@@ -24,19 +25,18 @@ libsecp256k1 = { workspace = true }
 multiaddr = { workspace = true }
 pezkuwi-subxt = { workspace = true }
 pezkuwi-subxt-signer = { workspace = true }
+pezsc-chain-spec = { workspace = true }
+pezsp-core = { workspace = true }
 rand = { workspace = true }
 regex = { workspace = true }
 reqwest = { workspace = true }
 serde = { workspace = true, features = ["derive"] }
 serde_json = { workspace = true, features = ["arbitrary_precision"] }
 sha2 = { workspace = true, default-features = false }
-pezsp-core = { workspace = true }
 thiserror = { workspace = true }
 tokio = { workspace = true, features = ["time"] }
 tracing = { workspace = true }
 uuid = { workspace = true }
-erased-serde = { workspace = true }
-pezsc-chain-spec = { workspace = true }
 
 # Zombienet deps
 configuration = { workspace = true }
