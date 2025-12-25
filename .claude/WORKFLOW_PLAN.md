@@ -101,7 +101,7 @@ cargo check --locked --all --features try-runtime,experimental --quiet
 |-----|-------|-------------------|
 | `test-node-metrics` | ✅ | `cargo test --profile testnet --locked --features=runtime-metrics -p pezkuwi-node-metrics` |
 | `test-pezframe-ui` | ✅ | Aşağıdaki 6 komut çalıştırılmalı (179 stderr dosyası güncellendi) |
-| `cargo-check-each-crate` | ❌ | `python3 .github/scripts/check-each-crate.py 1 7` (7 paralel) |
+| `cargo-check-each-crate` | ⏳ | `python3 .github/scripts/check-each-crate.py 1 7` (606 crate, 7 paralel grup, CI'da çalışacak) |
 | `cargo-check-all-crate-macos` | ❌ | macOS runner gerekli |
 | `test-deterministic-wasm` | ✅ | `cargo build -q --locked --release -p zagros-runtime -p pezkuwichain-runtime` (2x + checksum, deterministik doğrulandı) |
 | `check-tracing` | ✅ | `cargo test --locked --manifest-path ./bizinikiwi/primitives/tracing/Cargo.toml` |
@@ -132,7 +132,7 @@ cargo test --locked -q --profile testnet --manifest-path bizinikiwi/primitives/r
 | Job | Durum | Lokal Test Komutu |
 |-----|-------|-------------------|
 | `build-runtimes-polkavm` | ✅ | `BIZINIKIWI_RUNTIME_TARGET=riscv cargo check -p pez-minimal-template-runtime -p zagros-runtime -p pezkuwichain-runtime -p pezkuwi-test-runtime` |
-| `check-revive-stable-uapi-polkavm` | ⏳ | Nightly + `-Zbuild-std=core` gerekli |
+| `check-revive-stable-uapi-polkavm` | ✅ | `cargo +nightly check -p pezpallet-revive-uapi --no-default-features --target riscv64imac-unknown-none-elf -Zbuild-std=core` |
 | `build-pez-subkey` | ✅ | `cd bizinikiwi/bin/utils/pez-subkey && SKIP_WASM_BUILD=1 cargo build --locked --release` |
 
 ---
@@ -198,6 +198,7 @@ AŞAMA 4 - EVM/PolkaVM:
 
 | Tarih | Düzeltme | Etki |
 |-------|----------|------|
+| 2025-12-25 | check-revive-stable-uapi-polkavm: nightly + -Zbuild-std=core ile geçti | check-revive-stable-uapi-polkavm |
 | 2025-12-25 | test-deterministic-wasm: zagros-runtime, pezkuwichain-runtime deterministik build doğrulandı | test-deterministic-wasm |
 | 2025-12-25 | PolkaVM runtime build: pez-minimal-template-runtime BIZINIKIWI_RUNTIME_TARGET=riscv | build-runtimes-polkavm |
 | 2025-12-25 | ss58-registry doc tests: pezkuwi_ss58_registry import, TokenRegistry::Hez | test-doc |
