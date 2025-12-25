@@ -99,7 +99,7 @@ pub type BlockId = generic::BlockId<Block>;
 
 /// The TransactionExtension to the basic transaction logic.
 /// Includes SkipCheckIfFeeless to exempt governance members from fees
-/// when using #[pezpallet::feeless_if] marked extrinsics.
+/// when using `#[pezpallet::feeless_if]` marked extrinsics.
 pub type TxExtension = pezcumulus_pezpallet_weight_reclaim::StorageWeightReclaim<
 	Runtime,
 	(
