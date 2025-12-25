@@ -46,9 +46,9 @@ mock_runtimes_matrix = [
 ]
 
 def get_mock_bench_output(runtime, pallets, output_path, header, bench_flags, template = None):
-    return f"frame-omni-bencher v1 benchmark pallet --extrinsic=* " \
+    return f"pezframe-omni-bencher v1 benchmark pezpallet --extrinsic=* " \
            f"--runtime=target/production/wbuild/{runtime}-runtime/{runtime.replace('-', '_')}_runtime.wasm " \
-           f"--pallet={pallets} --header={header} " \
+           f"--pezpallet={pallets} --header={header} " \
            f"--output={output_path} " \
            f"--wasm-execution=compiled " \
            f"--steps=50 --repeat=20 --heap-pages=4096 " \
@@ -95,7 +95,7 @@ class TestCmd(unittest.TestCase):
         self.mock_parse_args.return_value = (argparse.Namespace(
             command='bench-omni',
             runtime=list(map(lambda x: x['name'], mock_runtimes_matrix)),
-            pallet=['pallet_balances'],
+            pezpallet=['pallet_balances'],
             fail_fast=True,
             quiet=False,
             clean=False,
@@ -152,7 +152,7 @@ class TestCmd(unittest.TestCase):
         self.mock_parse_args.return_value = (argparse.Namespace(
             command='bench-omni',
             runtime=['zagros'],
-            pallet=['pallet_balances', 'pallet_staking'],
+            pezpallet=['pallet_balances', 'pallet_staking'],
             fail_fast=True,
             quiet=False,
             clean=False,
@@ -195,7 +195,7 @@ class TestCmd(unittest.TestCase):
         self.mock_parse_args.return_value = (argparse.Namespace(
             command='bench-omni',
             runtime=['zagros'],
-            pallet=['pallet_xcm_benchmarks::generic'],
+            pezpallet=['pallet_xcm_benchmarks::generic'],
             fail_fast=True,
             quiet=False,
             clean=False,
@@ -231,7 +231,7 @@ class TestCmd(unittest.TestCase):
         self.mock_parse_args.return_value = (argparse.Namespace(
             command='bench-omni',
             runtime=['zagros', 'pezkuwichain'],
-            pallet=['pallet_balances', 'pallet_staking'],
+            pezpallet=['pallet_balances', 'pallet_staking'],
             fail_fast=True,
             quiet=False,
             clean=False,
@@ -289,7 +289,7 @@ class TestCmd(unittest.TestCase):
         self.mock_parse_args.return_value = (argparse.Namespace(
             command='bench-omni',
             runtime=['dev'],
-            pallet=['pallet_balances'],
+            pezpallet=['pallet_balances'],
             fail_fast=True,
             quiet=False,
             clean=False,
@@ -326,7 +326,7 @@ class TestCmd(unittest.TestCase):
         self.mock_parse_args.return_value = (argparse.Namespace(
             command='bench-omni',
             runtime=['asset-hub-zagros'],
-            pallet=['pallet_assets'],
+            pezpallet=['pallet_assets'],
             fail_fast=True,
             quiet=False,
             clean=False,
@@ -361,7 +361,7 @@ class TestCmd(unittest.TestCase):
         self.mock_parse_args.return_value = (argparse.Namespace(
             command='bench-omni',
             runtime=['asset-hub-zagros'],
-            pallet=['pallet_xcm_benchmarks::generic', 'pallet_assets'],
+            pezpallet=['pallet_xcm_benchmarks::generic', 'pallet_assets'],
             fail_fast=True,
             quiet=False,
             clean=False,
