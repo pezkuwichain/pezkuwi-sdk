@@ -76,8 +76,8 @@ exclude = [
 	# Sıfır Etki - Kapanmış/Rate-Limited Siteler
 	# ============================================
 	# Deprecated/shutdown sites
-	"https://substrate.io/",
 	"https://invarch.network/",
+	"https://substrate.io/",
 	# Rate limited (403)
 	"https://aventus.io/",
 	"https://efinity.io/",
@@ -86,8 +86,8 @@ exclude = [
 	"https://parachain.capitaldex.exchange/",
 	"https://stackoverflow.com/.*",
 	# Server errors (5xx)
-	"https://impactprotocol.network/",
 	"http://laminar.network/",
+	"https://impactprotocol.network/",
 	"https://neatcoin.org/",
 	# Network/DNS errors (defunct chains)
 	"https://allfeat.network/",
@@ -112,11 +112,11 @@ exclude = [
 	# ============================================
 	# GitHub commit-specific URLs (cannot migrate)
 	# ============================================
+	"https://github.com/paritytech/polkadot-sdk/blob/.*/bizinikiwi/.*",
+	"https://github.com/pezkuwichain/pezkuwi-sdk/blob/[a-f0-9]+/.*",
 	"https://github.com/pezkuwichain/pezkuwi-sdk/issues/.*/commits/.*",
 	"https://github.com/pezkuwichain/pezkuwi-sdk/issues/.*/files.*",
-	"https://github.com/pezkuwichain/pezkuwi-sdk/blob/[a-f0-9]+/.*",
 	"https://github.com/pezkuwichain/pezkuwi-sdk/tree/[a-f0-9]+/.*",
-	"https://github.com/paritytech/polkadot-sdk/blob/.*/bizinikiwi/.*",
 	# Migrated bizinikiwi references
 	"https://github.com/pezkuwichain/bizinikiwi.*",
 ]

@@ -43,3 +43,6 @@ serde_full = ["codec/serde", "scale-info/serde", "serde", "serde/alloc"]
 decode = ["scale-info/decode"]
 
 std = ["codec/std", "decode", "scale-info/std", "serde/std", "serde_full"]
+
+[lints]
+workspace = true

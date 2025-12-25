@@ -36,16 +36,16 @@ impl core::fmt::Debug for Token {
 
 impl Token {
 	/// Creates the specified amount of [`Token`] with its name and decimals filled from the
-	/// [`TokenRegistry`] variant.
+	/// `TokenRegistry` variant.
 	///
 	/// ```
-	/// # use ss58_registry::{Token, TokenRegistry};
+	/// # use pezkuwi_ss58_registry::{Token, TokenRegistry};
 	/// # #[cfg(feature = "std")]
 	/// # fn x() {
-	/// let token: Token = TokenRegistry::Dot.into();
+	/// let token: Token = TokenRegistry::Hez.into();
 	/// let my_amount = token.amount(100_000_000);
-	/// assert_eq!(format!("{}", my_amount), "0.010 DOT");
-	/// assert_eq!(format!("{:?}", my_amount), "0.010 DOT (100,000,000)");
+	/// assert_eq!(format!("{}", my_amount), "0.010 HEZ");
+	/// assert_eq!(format!("{:?}", my_amount), "0.010 HEZ (100,000,000)");
 	/// # }
 	/// # #[cfg(not(feature = "std"))]
 	/// # fn x() {}
@@ -60,7 +60,7 @@ impl Token {
 /// different amounts.
 ///
 /// ```
-/// # use ss58_registry::{Token, TokenAmount};
+/// # use pezkuwi_ss58_registry::{Token, TokenAmount};
 /// # #[cfg(feature = "std")]
 /// # fn x() {
 /// let token = Token { name: "I❤U", decimals: 8 };

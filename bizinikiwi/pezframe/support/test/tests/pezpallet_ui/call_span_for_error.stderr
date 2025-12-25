@@ -1,5 +1,5 @@
 error[E0308]: mismatched types
-  --> tests/pallet_ui/call_span_for_error.rs:32:15
+  --> tests/pezpallet_ui/call_span_for_error.rs:32:15
    |
 32 |             return Err(DispatchError::BadOrigin);
    |                    --- ^^^^^^^^^^^^^^^^^^^^^^^^ expected `DispatchErrorWithPostInfo<...>`, found `DispatchError`
@@ -7,9 +7,9 @@ error[E0308]: mismatched types
    |                    arguments to this enum variant are incorrect
    |
    = note: expected struct `DispatchErrorWithPostInfo<PostDispatchInfo>`
-                found enum `frame_support::pallet_prelude::DispatchError`
-help: the type constructed contains `frame_support::pallet_prelude::DispatchError` due to the type of the argument passed
-  --> tests/pallet_ui/call_span_for_error.rs:32:11
+                found enum `pezframe_support::pezpallet_prelude::DispatchError`
+help: the type constructed contains `pezframe_support::pezpallet_prelude::DispatchError` due to the type of the argument passed
+  --> tests/pezpallet_ui/call_span_for_error.rs:32:11
    |
 32 |             return Err(DispatchError::BadOrigin);
    |                    ^^^^------------------------^
@@ -20,7 +20,7 @@ note: tuple variant defined here
    |
    |     Err(#[stable(feature = "rust1", since = "1.0.0")] E),
    |     ^^^
-help: call `Into::into` on this expression to convert `frame_support::pallet_prelude::DispatchError` into `DispatchErrorWithPostInfo<PostDispatchInfo>`
+help: call `Into::into` on this expression to convert `pezframe_support::pezpallet_prelude::DispatchError` into `DispatchErrorWithPostInfo<PostDispatchInfo>`
    |
 32 |             return Err(DispatchError::BadOrigin.into());
    |                                                +++++++

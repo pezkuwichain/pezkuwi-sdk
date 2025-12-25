@@ -1041,8 +1041,7 @@ pub mod pezpallet_macros {
 	/// ```
 	///
 	/// I.e. a regular trait definition named `Config`, with the supertrait
-	/// [`pezframe_system::pezpallet::Config`](../../pezframe_system/pezpallet/trait.Config.
-	/// html), and optionally other supertraits and a where clause. (Specifying other
+	/// `pezframe_system::pezpallet::Config`, and optionally other supertraits and a where clause. (Specifying other
 	/// supertraits here is known as [tight coupling](https://docs.pezkuwichain.io/reference/how-to-guides/pezpallet-design/use-tight-coupling/))
 	///
 	/// ## Optional: `with_default`

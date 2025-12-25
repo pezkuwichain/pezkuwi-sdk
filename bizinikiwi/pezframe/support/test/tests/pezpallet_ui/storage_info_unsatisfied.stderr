@@ -1,13 +1,13 @@
 error[E0277]: the trait bound `Bar: MaxEncodedLen` is not satisfied
-  --> tests/pallet_ui/storage_info_unsatisfied.rs:26:12
+  --> tests/pezpallet_ui/storage_info_unsatisfied.rs:26:15
    |
-26 |       #[pallet::pallet]
-   |  _______________^
-27 | |     pub struct Pallet<T>(core::marker::PhantomData<T>);
+26 |       #[pezpallet::pezpallet]
+   |  __________________^
+27 | |     pub struct Pezpallet<T>(core::marker::PhantomData<T>);
 28 | |
-29 | |     #[pallet::hooks]
+29 | |     #[pezpallet::hooks]
 ...  |
-38 | |     #[pallet::storage]
+38 | |     #[pezpallet::storage]
 39 | |     type Foo<T> = StorageValue<_, Bar>;
    | |____________^ the trait `MaxEncodedLen` is not implemented for `Bar`
    |
@@ -21,4 +21,4 @@ error[E0277]: the trait bound `Bar: MaxEncodedLen` is not satisfied
              (TupleElement0, TupleElement1, TupleElement2, TupleElement3, TupleElement4, TupleElement5, TupleElement6)
              (TupleElement0, TupleElement1, TupleElement2, TupleElement3, TupleElement4, TupleElement5, TupleElement6, TupleElement7)
            and $N others
-   = note: required for `frame_support::pallet_prelude::StorageValue<_GeneratedPrefixForStorageFoo<T>, Bar>` to implement `StorageInfoTrait`
+   = note: required for `pezframe_support::pezpallet_prelude::StorageValue<_GeneratedPrefixForStorageFoo<T>, Bar>` to implement `StorageInfoTrait`

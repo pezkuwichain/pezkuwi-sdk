@@ -44,7 +44,7 @@ jobs:
         id: required
         run: |
           cargo build --locked --quiet --release -p asset-hub-zagros-runtime --features runtime-benchmarks
-          cargo run --locked --release -p pezframe-omni-bencher --quiet -- v1 benchmark pallet --runtime target/release/wbuild/asset-hub-zagros-runtime/asset_hub_zagros_runtime.compact.compressed.wasm --all --steps 2 --repeat 1 --quiet
+          cargo run --locked --release -p pezframe-omni-bencher --quiet -- v1 benchmark pezpallet --runtime target/release/wbuild/asset-hub-zagros-runtime/asset_hub_zagros_runtime.compact.compressed.wasm --all --steps 2 --repeat 1 --quiet
 
   runtime-matrix:
     runs-on: ubuntu-latest
@@ -98,7 +98,7 @@ jobs:
           ls -lrt $RUNTIME_BLOB_PATH
           
           if [[ "$BENCH_CMD" == "pallet" ]]; then
-            cmd="./target/release/pezframe-omni-bencher v1 benchmark pallet --runtime $RUNTIME_BLOB_PATH --all --steps 2 --repeat 1 $FLAGS"
+            cmd="./target/release/pezframe-omni-bencher v1 benchmark pezpallet --runtime $RUNTIME_BLOB_PATH --all --steps 2 --repeat 1 $FLAGS"
           elif [[ "$BENCH_CMD" == "overhead" ]]; then
             cmd="./target/release/pezframe-omni-bencher v1 benchmark overhead --runtime $RUNTIME_BLOB_PATH"
           else

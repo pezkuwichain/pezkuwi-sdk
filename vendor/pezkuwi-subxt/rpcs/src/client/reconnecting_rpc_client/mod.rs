@@ -159,7 +159,7 @@ pub struct RpcClient {
     tx: mpsc::UnboundedSender<Op>,
 }
 
-/// Builder for [`Client`].
+/// Builder for [`RpcClient`].
 #[derive(Clone, Debug)]
 pub struct RpcClientBuilder<P> {
     max_request_size: u32,

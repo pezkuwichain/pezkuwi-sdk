@@ -1,5 +1,5 @@
 error: expected `without_storage_info` or `storage_version`
-  --> tests/pallet_ui/pallet_struct_invalid_attr.rs:24:12
+  --> tests/pezpallet_ui/pezpallet_struct_invalid_attr.rs:24:15
    |
-24 |     #[pallet::generate_storage_info] // invalid
-   |               ^^^^^^^^^^^^^^^^^^^^^
+24 |     #[pezpallet::generate_storage_info] // invalid
+   |                  ^^^^^^^^^^^^^^^^^^^^^

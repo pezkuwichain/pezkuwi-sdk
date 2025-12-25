@@ -633,13 +633,13 @@ impl PalletCmd {
 
 	/// Whether this pezpallet should be run.
 	fn pezpallet_selected(&self, pezpallet: &Vec<u8>) -> bool {
-		let include = self.pallets.clone();
+		let include = self.pezpallet.clone();
 
 		let included = include.is_empty()
 			|| include.iter().any(|p| p.as_bytes() == pezpallet)
 			|| include.iter().any(|p| p == "*")
 			|| include.iter().any(|p| p == "all");
-		let excluded = self.exclude_pallets.iter().any(|p| p.as_bytes() == pezpallet);
+		let excluded = self.exclude_pezpallets.iter().any(|p| p.as_bytes() == pezpallet);
 
 		included && !excluded
 	}

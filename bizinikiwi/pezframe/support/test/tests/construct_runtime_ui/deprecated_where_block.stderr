@@ -1,10 +1,10 @@
 error: use of deprecated constant `WhereSection::_w`:
                It is deprecated to use a `where` clause in `construct_runtime`.
-               Please instead use `frame_system::Config` to set the `Block` type and delete this clause.
+               Please instead use `pezframe_system::Config` to set the `Block` type and delete this clause.
                It is planned to be removed in December 2023.
 
                For more info see:
-                   <https://github.com/paritytech/bizinikiwi/pull/14437>
+                   <https://github.com/pezkuwichain/pezkuwi-sdk/issues/218>
   --> tests/construct_runtime_ui/deprecated_where_block.rs:20:1
    |
 20 | / construct_runtime! {
@@ -17,7 +17,7 @@ error: use of deprecated constant `WhereSection::_w`:
    |
    = note: `-D deprecated` implied by `-D warnings`
    = help: to override `-D warnings` add `#[allow(deprecated)]`
-   = note: this error originates in the macro `frame_support::match_and_insert` which comes from the expansion of the macro `construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
+   = note: this error originates in the macro `pezframe_support::match_and_insert` which comes from the expansion of the macro `construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
 
 error[E0277]: the trait bound `Runtime: Config` is not satisfied
   --> tests/construct_runtime_ui/deprecated_where_block.rs:20:1
@@ -30,7 +30,7 @@ error[E0277]: the trait bound `Runtime: Config` is not satisfied
 28 | | }
    | |_^ the trait `Config` is not implemented for `Runtime`
    |
-   = note: this error originates in the macro `frame_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
+   = note: this error originates in the macro `pezframe_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
 
 error[E0277]: the trait bound `Runtime: Config` is not satisfied
   --> tests/construct_runtime_ui/deprecated_where_block.rs:20:1
@@ -43,12 +43,12 @@ error[E0277]: the trait bound `Runtime: Config` is not satisfied
 28 | | }
    | |_^ the trait `Config` is not implemented for `Runtime`
    |
-note: required by a bound in `frame_system::Event`
-  --> $WORKSPACE/bizinikiwi/frame/system/src/lib.rs
+note: required by a bound in `pezframe_system::Event`
+  --> $WORKSPACE/bizinikiwi/pezframe/system/src/lib.rs
    |
    |     pub enum Event<T: Config> {
    |                       ^^^^^^ required by this bound in `Event`
-   = note: this error originates in the macro `frame_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
+   = note: this error originates in the macro `pezframe_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
 
 error[E0277]: the trait bound `Runtime: Config` is not satisfied
   --> tests/construct_runtime_ui/deprecated_where_block.rs:20:1
@@ -56,7 +56,7 @@ error[E0277]: the trait bound `Runtime: Config` is not satisfied
 20 | construct_runtime! {
    | ^ the trait `Config` is not implemented for `Runtime`
    |
-   = note: this error originates in the macro `frame_support::construct_runtime` which comes from the expansion of the macro `construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
+   = note: this error originates in the macro `pezframe_support::construct_runtime` which comes from the expansion of the macro `construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
 
 error[E0277]: the trait bound `RawOrigin<_>: TryFrom<OriginCaller>` is not satisfied
   --> tests/construct_runtime_ui/deprecated_where_block.rs:20:1
@@ -70,7 +70,7 @@ error[E0277]: the trait bound `RawOrigin<_>: TryFrom<OriginCaller>` is not satis
    | |_^ the trait `TryFrom<OriginCaller>` is not implemented for `RawOrigin<_>`
    |
    = help: the trait `TryFrom<OriginCaller>` is implemented for `RawOrigin<<Runtime as Config>::AccountId>`
-   = note: this error originates in the macro `frame_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
+   = note: this error originates in the macro `pezframe_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
 
 error[E0277]: the trait bound `Runtime: Config` is not satisfied
   --> tests/construct_runtime_ui/deprecated_where_block.rs:20:1
@@ -83,18 +83,18 @@ error[E0277]: the trait bound `Runtime: Config` is not satisfied
 28 | | }
    | |_^ the trait `Config` is not implemented for `Runtime`
    |
-   = help: the trait `Callable<T>` is implemented for `Pallet<T>`
-   = note: required for `Pallet<Runtime>` to implement `Callable<Runtime>`
-   = note: this error originates in the macro `frame_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
+   = help: the trait `Callable<T>` is implemented for `Pezpallet<T>`
+   = note: required for `Pezpallet<Runtime>` to implement `Callable<Runtime>`
+   = note: this error originates in the macro `pezframe_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
 
 error[E0277]: the trait bound `Runtime: Config` is not satisfied
   --> tests/construct_runtime_ui/deprecated_where_block.rs:26:3
    |
-26 |         System: frame_system::{Pallet, Call, Storage, Config<T>, Event<T>},
+26 |         System: pezframe_system::{Pezpallet, Call, Storage, Config<T>, Event<T>},
    |         ^^^^^^ the trait `Config` is not implemented for `Runtime`
    |
 note: required by a bound in `GenesisConfig`
-  --> $WORKSPACE/bizinikiwi/frame/system/src/lib.rs
+  --> $WORKSPACE/bizinikiwi/pezframe/system/src/lib.rs
    |
    |     pub struct GenesisConfig<T: Config> {
    |                                 ^^^^^^ required by this bound in `GenesisConfig`
@@ -110,13 +110,13 @@ error[E0277]: the trait bound `Runtime: Config` is not satisfied
 28 | | }
    | |_^ the trait `Config` is not implemented for `Runtime`
    |
-note: required by a bound in `frame_system::Event`
-  --> $WORKSPACE/bizinikiwi/frame/system/src/lib.rs
+note: required by a bound in `pezframe_system::Event`
+  --> $WORKSPACE/bizinikiwi/pezframe/system/src/lib.rs
    |
    |     pub enum Event<T: Config> {
    |                       ^^^^^^ required by this bound in `Event`
 
-error[E0369]: binary operation `==` cannot be applied to type `&frame_system::Event<Runtime>`
+error[E0369]: binary operation `==` cannot be applied to type `&pezframe_system::Event<Runtime>`
   --> tests/construct_runtime_ui/deprecated_where_block.rs:20:1
    |
 20 | / construct_runtime! {
@@ -134,7 +134,7 @@ note: an implementation of `Config` might be missing for `Runtime`
 21 | |     pub struct Runtime where
    | |______________________^ must implement `Config`
 note: the trait `Config` must be implemented
-  --> $WORKSPACE/bizinikiwi/frame/system/src/lib.rs
+  --> $WORKSPACE/bizinikiwi/pezframe/system/src/lib.rs
    |
    |     pub trait Config: 'static + Eq + Clone {
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -151,13 +151,13 @@ error[E0277]: the trait bound `Runtime: Config` is not satisfied
 28 | | }
    | |_^ the trait `Config` is not implemented for `Runtime`
    |
-note: required by a bound in `frame_system::Event`
-  --> $WORKSPACE/bizinikiwi/frame/system/src/lib.rs
+note: required by a bound in `pezframe_system::Event`
+  --> $WORKSPACE/bizinikiwi/pezframe/system/src/lib.rs
    |
    |     pub enum Event<T: Config> {
    |                       ^^^^^^ required by this bound in `Event`
 
-error[E0277]: the trait bound `frame_system::Event<Runtime>: Encode` is not satisfied
+error[E0277]: the trait bound `pezframe_system::Event<Runtime>: Encode` is not satisfied
   --> tests/construct_runtime_ui/deprecated_where_block.rs:20:1
    |
 20 | / construct_runtime! {
@@ -166,10 +166,10 @@ error[E0277]: the trait bound `frame_system::Event<Runtime>: Encode` is not sati
 23 | |         NodeBlock = Block,
 ...  |
 28 | | }
-   | |_^ the trait `Encode` is not implemented for `frame_system::Event<Runtime>`
+   | |_^ the trait `Encode` is not implemented for `pezframe_system::Event<Runtime>`
    |
-   = help: the trait `Encode` is implemented for `frame_system::Event<T>`
-   = note: this error originates in the derive macro `self::sp_api_hidden_includes_construct_runtime::hidden_include::__private::codec::Encode` (in Nightly builds, run with -Z macro-backtrace for more info)
+   = help: the trait `Encode` is implemented for `pezframe_system::Event<T>`
+   = note: this error originates in the derive macro `self::pezsp_api_hidden_includes_construct_runtime::hidden_include::__private::codec::Encode` (in Nightly builds, run with -Z macro-backtrace for more info)
 
 error[E0277]: the trait bound `Runtime: Config` is not satisfied
   --> tests/construct_runtime_ui/deprecated_where_block.rs:20:1
@@ -182,14 +182,14 @@ error[E0277]: the trait bound `Runtime: Config` is not satisfied
 28 | | }
    | |_^ the trait `Config` is not implemented for `Runtime`
    |
-note: required by a bound in `frame_system::Event`
-  --> $WORKSPACE/bizinikiwi/frame/system/src/lib.rs
+note: required by a bound in `pezframe_system::Event`
+  --> $WORKSPACE/bizinikiwi/pezframe/system/src/lib.rs
    |
    |     pub enum Event<T: Config> {
    |                       ^^^^^^ required by this bound in `Event`
-   = note: this error originates in the derive macro `self::sp_api_hidden_includes_construct_runtime::hidden_include::__private::codec::Encode` (in Nightly builds, run with -Z macro-backtrace for more info)
+   = note: this error originates in the derive macro `self::pezsp_api_hidden_includes_construct_runtime::hidden_include::__private::codec::Encode` (in Nightly builds, run with -Z macro-backtrace for more info)
 
-error[E0277]: the trait bound `frame_system::Event<Runtime>: Decode` is not satisfied
+error[E0277]: the trait bound `pezframe_system::Event<Runtime>: Decode` is not satisfied
   --> tests/construct_runtime_ui/deprecated_where_block.rs:20:1
    |
 20 | / construct_runtime! {
@@ -198,18 +198,18 @@ error[E0277]: the trait bound `frame_system::Event<Runtime>: Decode` is not sati
 23 | |         NodeBlock = Block,
 ...  |
 28 | | }
-   | |_^ the trait `Decode` is not implemented for `frame_system::Event<Runtime>`
+   | |_^ the trait `Decode` is not implemented for `pezframe_system::Event<Runtime>`
    |
-   = help: the trait `Decode` is implemented for `frame_system::Event<T>`
+   = help: the trait `Decode` is implemented for `pezframe_system::Event<T>`
 
 error[E0277]: the trait bound `Runtime: Config` is not satisfied
   --> tests/construct_runtime_ui/deprecated_where_block.rs:26:11
    |
-26 |         System: frame_system::{Pallet, Call, Storage, Config<T>, Event<T>},
-   |                 ^^^^^^^^^^^^ the trait `Config` is not implemented for `Runtime`
+26 |         System: pezframe_system::{Pezpallet, Call, Storage, Config<T>, Event<T>},
+   |                 ^^^^^^^^^^^^^^^ the trait `Config` is not implemented for `Runtime`
    |
-note: required by a bound in `frame_system::Event`
-  --> $WORKSPACE/bizinikiwi/frame/system/src/lib.rs
+note: required by a bound in `pezframe_system::Event`
+  --> $WORKSPACE/bizinikiwi/pezframe/system/src/lib.rs
    |
    |     pub enum Event<T: Config> {
    |                       ^^^^^^ required by this bound in `Event`
@@ -225,11 +225,11 @@ error[E0277]: the trait bound `Runtime: Config` is not satisfied
 28 | | }
    | |_^ the trait `Config` is not implemented for `Runtime`
    |
-   = help: the trait `std::fmt::Debug` is implemented for `frame_system::Event<T>`
-   = note: required for `frame_system::Event<Runtime>` to implement `std::fmt::Debug`
+   = help: the trait `std::fmt::Debug` is implemented for `pezframe_system::Event<T>`
+   = note: required for `pezframe_system::Event<Runtime>` to implement `std::fmt::Debug`
    = note: 1 redundant requirement hidden
-   = note: required for `&frame_system::Event<Runtime>` to implement `std::fmt::Debug`
-   = note: required for the cast from `&&frame_system::Event<Runtime>` to `&dyn std::fmt::Debug`
+   = note: required for `&pezframe_system::Event<Runtime>` to implement `std::fmt::Debug`
+   = note: required for the cast from `&&pezframe_system::Event<Runtime>` to `&dyn std::fmt::Debug`
 
 error[E0277]: the trait bound `Runtime: Config` is not satisfied
   --> tests/construct_runtime_ui/deprecated_where_block.rs:20:1
@@ -242,11 +242,11 @@ error[E0277]: the trait bound `Runtime: Config` is not satisfied
 28 | | }
    | |_^ the trait `Config` is not implemented for `Runtime`
    |
-   = help: the trait `std::fmt::Debug` is implemented for `frame_system::Error<T>`
-   = note: required for `frame_system::Error<Runtime>` to implement `std::fmt::Debug`
+   = help: the trait `std::fmt::Debug` is implemented for `pezframe_system::Error<T>`
+   = note: required for `pezframe_system::Error<Runtime>` to implement `std::fmt::Debug`
    = note: 1 redundant requirement hidden
-   = note: required for `&frame_system::Error<Runtime>` to implement `std::fmt::Debug`
-   = note: required for the cast from `&&frame_system::Error<Runtime>` to `&dyn std::fmt::Debug`
+   = note: required for `&pezframe_system::Error<Runtime>` to implement `std::fmt::Debug`
+   = note: required for the cast from `&&pezframe_system::Error<Runtime>` to `&dyn std::fmt::Debug`
 
 error[E0277]: the trait bound `Runtime: Config` is not satisfied
   --> tests/construct_runtime_ui/deprecated_where_block.rs:20:1
@@ -277,7 +277,7 @@ error[E0277]: the trait bound `Runtime: Config` is not satisfied
    | |_^ the trait `Config` is not implemented for `Runtime`
    |
    = note: required for `RawOrigin<_>` to implement `Into<RuntimeOrigin>`
-   = note: this error originates in the macro `frame_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
+   = note: this error originates in the macro `pezframe_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
 
 error[E0277]: the trait bound `Runtime: Config` is not satisfied
   --> tests/construct_runtime_ui/deprecated_where_block.rs:20:1
@@ -304,8 +304,8 @@ error[E0277]: the trait bound `Runtime: Config` is not satisfied
 error[E0277]: the trait bound `Runtime: Config` is not satisfied
   --> tests/construct_runtime_ui/deprecated_where_block.rs:26:11
    |
-26 |         System: frame_system::{Pallet, Call, Storage, Config<T>, Event<T>},
-   |                 ^^^^^^^^^^^^ the trait `Config` is not implemented for `Runtime`
+26 |         System: pezframe_system::{Pezpallet, Call, Storage, Config<T>, Event<T>},
+   |                 ^^^^^^^^^^^^^^^ the trait `Config` is not implemented for `Runtime`
 
 error[E0277]: the trait bound `Runtime: Config` is not satisfied
   --> tests/construct_runtime_ui/deprecated_where_block.rs:20:1
@@ -318,9 +318,9 @@ error[E0277]: the trait bound `Runtime: Config` is not satisfied
 28 | | }
    | |_^ the trait `Config` is not implemented for `Runtime`
    |
-   = help: the trait `PalletInfoAccess` is implemented for `Pallet<T>`
-   = note: required for `Pallet<Runtime>` to implement `PalletInfoAccess`
-   = note: this error originates in the macro `frame_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
+   = help: the trait `PalletInfoAccess` is implemented for `Pezpallet<T>`
+   = note: required for `Pezpallet<Runtime>` to implement `PalletInfoAccess`
+   = note: this error originates in the macro `pezframe_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
 
 error[E0277]: the trait bound `Runtime: Config` is not satisfied
   --> tests/construct_runtime_ui/deprecated_where_block.rs:20:1
@@ -333,8 +333,8 @@ error[E0277]: the trait bound `Runtime: Config` is not satisfied
 28 | | }
    | |_^ the trait `Config` is not implemented for `Runtime`
    |
-   = help: the trait `Callable<T>` is implemented for `Pallet<T>`
-   = note: required for `Pallet<Runtime>` to implement `Callable<Runtime>`
+   = help: the trait `Callable<T>` is implemented for `Pezpallet<T>`
+   = note: required for `Pezpallet<Runtime>` to implement `Callable<Runtime>`
 
 error[E0277]: the trait bound `Runtime: Config` is not satisfied
   --> tests/construct_runtime_ui/deprecated_where_block.rs:20:1
@@ -347,10 +347,10 @@ error[E0277]: the trait bound `Runtime: Config` is not satisfied
 28 | | }
    | |_^ the trait `Config` is not implemented for `Runtime`
    |
-   = help: the trait `Callable<T>` is implemented for `Pallet<T>`
-   = note: required for `Pallet<Runtime>` to implement `Callable<Runtime>`
+   = help: the trait `Callable<T>` is implemented for `Pezpallet<T>`
+   = note: required for `Pezpallet<Runtime>` to implement `Callable<Runtime>`
 
-error[E0369]: binary operation `==` cannot be applied to type `&frame_system::Call<Runtime>`
+error[E0369]: binary operation `==` cannot be applied to type `&pezframe_system::Call<Runtime>`
   --> tests/construct_runtime_ui/deprecated_where_block.rs:20:1
    |
 20 | / construct_runtime! {
@@ -368,13 +368,13 @@ note: an implementation of `Config` might be missing for `Runtime`
 21 | |     pub struct Runtime where
    | |______________________^ must implement `Config`
 note: the trait `Config` must be implemented
-  --> $WORKSPACE/bizinikiwi/frame/system/src/lib.rs
+  --> $WORKSPACE/bizinikiwi/pezframe/system/src/lib.rs
    |
    |     pub trait Config: 'static + Eq + Clone {
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
    = note: this error originates in the derive macro `PartialEq` which comes from the expansion of the macro `construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
 
-error[E0277]: the trait bound `frame_system::Call<Runtime>: Encode` is not satisfied
+error[E0277]: the trait bound `pezframe_system::Call<Runtime>: Encode` is not satisfied
   --> tests/construct_runtime_ui/deprecated_where_block.rs:20:1
    |
 20 | / construct_runtime! {
@@ -383,10 +383,10 @@ error[E0277]: the trait bound `frame_system::Call<Runtime>: Encode` is not satis
 23 | |         NodeBlock = Block,
 ...  |
 28 | | }
-   | |_^ the trait `Encode` is not implemented for `frame_system::Call<Runtime>`
+   | |_^ the trait `Encode` is not implemented for `pezframe_system::Call<Runtime>`
    |
-   = help: the trait `Encode` is implemented for `frame_system::Call<T>`
-   = note: this error originates in the derive macro `self::sp_api_hidden_includes_construct_runtime::hidden_include::__private::codec::Encode` (in Nightly builds, run with -Z macro-backtrace for more info)
+   = help: the trait `Encode` is implemented for `pezframe_system::Call<T>`
+   = note: this error originates in the derive macro `self::pezsp_api_hidden_includes_construct_runtime::hidden_include::__private::codec::Encode` (in Nightly builds, run with -Z macro-backtrace for more info)
 
 error[E0277]: the trait bound `Runtime: Config` is not satisfied
   --> tests/construct_runtime_ui/deprecated_where_block.rs:20:1
@@ -399,14 +399,14 @@ error[E0277]: the trait bound `Runtime: Config` is not satisfied
 28 | | }
    | |_^ the trait `Config` is not implemented for `Runtime`
    |
-note: required by a bound in `frame_system::Call`
-  --> $WORKSPACE/bizinikiwi/frame/system/src/lib.rs
+note: required by a bound in `pezframe_system::Call`
+  --> $WORKSPACE/bizinikiwi/pezframe/system/src/lib.rs
    |
-   |     #[pallet::call(weight = <T as Config>::SystemWeightInfo)]
-   |               ^^^^ required by this bound in `Call`
-   = note: this error originates in the derive macro `self::sp_api_hidden_includes_construct_runtime::hidden_include::__private::codec::Encode` (in Nightly builds, run with -Z macro-backtrace for more info)
+   |     #[pezpallet::call(weight = <T as Config>::SystemWeightInfo)]
+   |                  ^^^^ required by this bound in `Call`
+   = note: this error originates in the derive macro `self::pezsp_api_hidden_includes_construct_runtime::hidden_include::__private::codec::Encode` (in Nightly builds, run with -Z macro-backtrace for more info)
 
-error[E0277]: the trait bound `frame_system::Call<Runtime>: Decode` is not satisfied
+error[E0277]: the trait bound `pezframe_system::Call<Runtime>: Decode` is not satisfied
   --> tests/construct_runtime_ui/deprecated_where_block.rs:20:1
    |
 20 | / construct_runtime! {
@@ -415,10 +415,10 @@ error[E0277]: the trait bound `frame_system::Call<Runtime>: Decode` is not satis
 23 | |         NodeBlock = Block,
 ...  |
 28 | | }
-   | |_^ the trait `Decode` is not implemented for `frame_system::Call<Runtime>`
+   | |_^ the trait `Decode` is not implemented for `pezframe_system::Call<Runtime>`
    |
-   = help: the trait `Decode` is implemented for `frame_system::Call<T>`
-   = note: this error originates in the macro `frame_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
+   = help: the trait `Decode` is implemented for `pezframe_system::Call<T>`
+   = note: this error originates in the macro `pezframe_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
 
 error[E0277]: the trait bound `Runtime: Config` is not satisfied
   --> tests/construct_runtime_ui/deprecated_where_block.rs:20:1
@@ -431,9 +431,9 @@ error[E0277]: the trait bound `Runtime: Config` is not satisfied
 28 | | }
    | |_^ the trait `Config` is not implemented for `Runtime`
    |
-   = help: the trait `Callable<T>` is implemented for `Pallet<T>`
-   = note: required for `Pallet<Runtime>` to implement `Callable<Runtime>`
-   = note: this error originates in the derive macro `self::sp_api_hidden_includes_construct_runtime::hidden_include::__private::RuntimeDebug` (in Nightly builds, run with -Z macro-backtrace for more info)
+   = help: the trait `Callable<T>` is implemented for `Pezpallet<T>`
+   = note: required for `Pezpallet<Runtime>` to implement `Callable<Runtime>`
+   = note: this error originates in the derive macro `self::pezsp_api_hidden_includes_construct_runtime::hidden_include::__private::RuntimeDebug` (in Nightly builds, run with -Z macro-backtrace for more info)
 
 error[E0599]: the method `get_dispatch_info` exists for reference `&Call<Runtime>`, but its trait bounds were not satisfied
   --> tests/construct_runtime_ui/deprecated_where_block.rs:20:1
@@ -450,20 +450,20 @@ error[E0599]: the method `get_dispatch_info` exists for reference `&Call<Runtime
 28 | |  }
    | |__^ method cannot be called on `&Call<Runtime>` due to unsatisfied trait bounds
    |
-  ::: $WORKSPACE/bizinikiwi/frame/system/src/lib.rs
+  ::: $WORKSPACE/bizinikiwi/pezframe/system/src/lib.rs
    |
-   |        #[pallet::call(weight = <T as Config>::SystemWeightInfo)]
-   |                  ---- doesn't satisfy `frame_system::Call<Runtime>: GetDispatchInfo`
+   |        #[pezpallet::call(weight = <T as Config>::SystemWeightInfo)]
+   |                     ---- doesn't satisfy `pezframe_system::Call<Runtime>: GetDispatchInfo`
    |
    = note: the following trait bounds were not satisfied:
            `Runtime: Config`
-           which is required by `frame_system::Call<Runtime>: GetDispatchInfo`
+           which is required by `pezframe_system::Call<Runtime>: GetDispatchInfo`
 note: the trait `Config` must be implemented
-  --> $WORKSPACE/bizinikiwi/frame/system/src/lib.rs
+  --> $WORKSPACE/bizinikiwi/pezframe/system/src/lib.rs
    |
    |     pub trait Config: 'static + Eq + Clone {
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-   = note: this error originates in the macro `frame_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
+   = note: this error originates in the macro `pezframe_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
 
 error[E0599]: the method `is_feeless` exists for reference `&Call<Runtime>`, but its trait bounds were not satisfied
   --> tests/construct_runtime_ui/deprecated_where_block.rs:20:1
@@ -480,20 +480,20 @@ error[E0599]: the method `is_feeless` exists for reference `&Call<Runtime>`, but
 28 | |  }
    | |__^ method cannot be called on `&Call<Runtime>` due to unsatisfied trait bounds
    |
-  ::: $WORKSPACE/bizinikiwi/frame/system/src/lib.rs
+  ::: $WORKSPACE/bizinikiwi/pezframe/system/src/lib.rs
    |
-   |        #[pallet::call(weight = <T as Config>::SystemWeightInfo)]
-   |                  ---- doesn't satisfy `frame_system::Call<Runtime>: CheckIfFeeless`
+   |        #[pezpallet::call(weight = <T as Config>::SystemWeightInfo)]
+   |                     ---- doesn't satisfy `pezframe_system::Call<Runtime>: CheckIfFeeless`
    |
    = note: the following trait bounds were not satisfied:
            `Runtime: Config`
-           which is required by `frame_system::Call<Runtime>: CheckIfFeeless`
+           which is required by `pezframe_system::Call<Runtime>: CheckIfFeeless`
 note: the trait `Config` must be implemented
-  --> $WORKSPACE/bizinikiwi/frame/system/src/lib.rs
+  --> $WORKSPACE/bizinikiwi/pezframe/system/src/lib.rs
    |
    |     pub trait Config: 'static + Eq + Clone {
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-   = note: this error originates in the macro `frame_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
+   = note: this error originates in the macro `pezframe_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
 
 error[E0599]: the method `get_call_name` exists for reference `&Call<Runtime>`, but its trait bounds were not satisfied
   --> tests/construct_runtime_ui/deprecated_where_block.rs:20:1
@@ -510,31 +510,31 @@ error[E0599]: the method `get_call_name` exists for reference `&Call<Runtime>`, 
 28 | |  }
    | |__^ method cannot be called on `&Call<Runtime>` due to unsatisfied trait bounds
    |
-  ::: $WORKSPACE/bizinikiwi/frame/system/src/lib.rs
+  ::: $WORKSPACE/bizinikiwi/pezframe/system/src/lib.rs
    |
-   |        #[pallet::call(weight = <T as Config>::SystemWeightInfo)]
-   |                  ---- doesn't satisfy `frame_system::Call<Runtime>: GetCallName`
+   |        #[pezpallet::call(weight = <T as Config>::SystemWeightInfo)]
+   |                     ---- doesn't satisfy `pezframe_system::Call<Runtime>: GetCallName`
    |
    = note: the following trait bounds were not satisfied:
            `Runtime: Config`
-           which is required by `frame_system::Call<Runtime>: GetCallName`
+           which is required by `pezframe_system::Call<Runtime>: GetCallName`
 note: the trait `Config` must be implemented
-  --> $WORKSPACE/bizinikiwi/frame/system/src/lib.rs
+  --> $WORKSPACE/bizinikiwi/pezframe/system/src/lib.rs
    |
    |     pub trait Config: 'static + Eq + Clone {
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-   = note: this error originates in the macro `frame_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
+   = note: this error originates in the macro `pezframe_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
 
 error[E0277]: the trait bound `Runtime: Config` is not satisfied
   --> tests/construct_runtime_ui/deprecated_where_block.rs:26:3
    |
-26 |         System: frame_system::{Pallet, Call, Storage, Config<T>, Event<T>},
+26 |         System: pezframe_system::{Pezpallet, Call, Storage, Config<T>, Event<T>},
    |         ^^^^^^ the trait `Config` is not implemented for `Runtime`
    |
-   = help: the trait `ViewFunctionIdPrefix` is implemented for `Pallet<T>`
-   = note: required for `Pallet<Runtime>` to implement `ViewFunctionIdPrefix`
+   = help: the trait `ViewFunctionIdPrefix` is implemented for `Pezpallet<T>`
+   = note: required for `Pezpallet<Runtime>` to implement `ViewFunctionIdPrefix`
 
-error[E0599]: the function or associated item `storage_metadata` exists for struct `Pallet<Runtime>`, but its trait bounds were not satisfied
+error[E0599]: the function or associated item `storage_metadata` exists for struct `Pezpallet<Runtime>`, but its trait bounds were not satisfied
   --> tests/construct_runtime_ui/deprecated_where_block.rs:20:1
    |
 20 |    construct_runtime! {
@@ -547,18 +547,18 @@ error[E0599]: the function or associated item `storage_metadata` exists for stru
 23 | |          NodeBlock = Block,
 ...  |
 28 | |  }
-   | |__^ function or associated item cannot be called on `Pallet<Runtime>` due to unsatisfied trait bounds
+   | |__^ function or associated item cannot be called on `Pezpallet<Runtime>` due to unsatisfied trait bounds
    |
    = note: the following trait bounds were not satisfied:
            `Runtime: Config`
 note: the trait `Config` must be implemented
-  --> $WORKSPACE/bizinikiwi/frame/system/src/lib.rs
+  --> $WORKSPACE/bizinikiwi/pezframe/system/src/lib.rs
    |
    |     pub trait Config: 'static + Eq + Clone {
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-   = note: this error originates in the macro `frame_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
+   = note: this error originates in the macro `pezframe_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
 
-error[E0599]: the function or associated item `call_functions` exists for struct `Pallet<Runtime>`, but its trait bounds were not satisfied
+error[E0599]: the function or associated item `call_functions` exists for struct `Pezpallet<Runtime>`, but its trait bounds were not satisfied
   --> tests/construct_runtime_ui/deprecated_where_block.rs:20:1
    |
 20 |    construct_runtime! {
@@ -571,18 +571,18 @@ error[E0599]: the function or associated item `call_functions` exists for struct
 23 | |          NodeBlock = Block,
 ...  |
 28 | |  }
-   | |__^ function or associated item cannot be called on `Pallet<Runtime>` due to unsatisfied trait bounds
+   | |__^ function or associated item cannot be called on `Pezpallet<Runtime>` due to unsatisfied trait bounds
    |
    = note: the following trait bounds were not satisfied:
            `Runtime: Config`
 note: the trait `Config` must be implemented
-  --> $WORKSPACE/bizinikiwi/frame/system/src/lib.rs
+  --> $WORKSPACE/bizinikiwi/pezframe/system/src/lib.rs
    |
    |     pub trait Config: 'static + Eq + Clone {
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-   = note: this error originates in the macro `frame_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
+   = note: this error originates in the macro `pezframe_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
 
-error[E0599]: the function or associated item `pallet_view_functions_metadata` exists for struct `Pallet<Runtime>`, but its trait bounds were not satisfied
+error[E0599]: the function or associated item `pezpallet_view_functions_metadata` exists for struct `Pezpallet<Runtime>`, but its trait bounds were not satisfied
   --> tests/construct_runtime_ui/deprecated_where_block.rs:20:1
    |
 20 |    construct_runtime! {
@@ -595,16 +595,16 @@ error[E0599]: the function or associated item `pallet_view_functions_metadata` e
 23 | |          NodeBlock = Block,
 ...  |
 28 | |  }
-   | |__^ function or associated item cannot be called on `Pallet<Runtime>` due to unsatisfied trait bounds
+   | |__^ function or associated item cannot be called on `Pezpallet<Runtime>` due to unsatisfied trait bounds
    |
    = note: the following trait bounds were not satisfied:
            `Runtime: Config`
 note: the trait `Config` must be implemented
-  --> $WORKSPACE/bizinikiwi/frame/system/src/lib.rs
+  --> $WORKSPACE/bizinikiwi/pezframe/system/src/lib.rs
    |
    |     pub trait Config: 'static + Eq + Clone {
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-   = note: this error originates in the macro `frame_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
+   = note: this error originates in the macro `pezframe_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
 
 error[E0599]: the variant or associated item `event_metadata` exists for enum `Event<Runtime>`, but its trait bounds were not satisfied
   --> tests/construct_runtime_ui/deprecated_where_block.rs:20:1
@@ -624,13 +624,13 @@ error[E0599]: the variant or associated item `event_metadata` exists for enum `E
    = note: the following trait bounds were not satisfied:
            `Runtime: Config`
 note: the trait `Config` must be implemented
-  --> $WORKSPACE/bizinikiwi/frame/system/src/lib.rs
+  --> $WORKSPACE/bizinikiwi/pezframe/system/src/lib.rs
    |
    |     pub trait Config: 'static + Eq + Clone {
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-   = note: this error originates in the macro `frame_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
+   = note: this error originates in the macro `pezframe_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
 
-error[E0599]: the function or associated item `pallet_constants_metadata` exists for struct `Pallet<Runtime>`, but its trait bounds were not satisfied
+error[E0599]: the function or associated item `pezpallet_constants_metadata` exists for struct `Pezpallet<Runtime>`, but its trait bounds were not satisfied
   --> tests/construct_runtime_ui/deprecated_where_block.rs:20:1
    |
 20 |    construct_runtime! {
@@ -643,18 +643,18 @@ error[E0599]: the function or associated item `pallet_constants_metadata` exists
 23 | |          NodeBlock = Block,
 ...  |
 28 | |  }
-   | |__^ function or associated item cannot be called on `Pallet<Runtime>` due to unsatisfied trait bounds
+   | |__^ function or associated item cannot be called on `Pezpallet<Runtime>` due to unsatisfied trait bounds
    |
    = note: the following trait bounds were not satisfied:
            `Runtime: Config`
 note: the trait `Config` must be implemented
-  --> $WORKSPACE/bizinikiwi/frame/system/src/lib.rs
+  --> $WORKSPACE/bizinikiwi/pezframe/system/src/lib.rs
    |
    |     pub trait Config: 'static + Eq + Clone {
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-   = note: this error originates in the macro `frame_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
+   = note: this error originates in the macro `pezframe_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
 
-error[E0599]: the function or associated item `error_metadata` exists for struct `Pallet<Runtime>`, but its trait bounds were not satisfied
+error[E0599]: the function or associated item `error_metadata` exists for struct `Pezpallet<Runtime>`, but its trait bounds were not satisfied
   --> tests/construct_runtime_ui/deprecated_where_block.rs:20:1
    |
 20 |    construct_runtime! {
@@ -667,18 +667,18 @@ error[E0599]: the function or associated item `error_metadata` exists for struct
 23 | |          NodeBlock = Block,
 ...  |
 28 | |  }
-   | |__^ function or associated item cannot be called on `Pallet<Runtime>` due to unsatisfied trait bounds
+   | |__^ function or associated item cannot be called on `Pezpallet<Runtime>` due to unsatisfied trait bounds
    |
    = note: the following trait bounds were not satisfied:
            `Runtime: Config`
 note: the trait `Config` must be implemented
-  --> $WORKSPACE/bizinikiwi/frame/system/src/lib.rs
+  --> $WORKSPACE/bizinikiwi/pezframe/system/src/lib.rs
    |
    |     pub trait Config: 'static + Eq + Clone {
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-   = note: this error originates in the macro `frame_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
+   = note: this error originates in the macro `pezframe_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
 
-error[E0599]: the function or associated item `pallet_documentation_metadata` exists for struct `Pallet<Runtime>`, but its trait bounds were not satisfied
+error[E0599]: the function or associated item `pezpallet_documentation_metadata` exists for struct `Pezpallet<Runtime>`, but its trait bounds were not satisfied
   --> tests/construct_runtime_ui/deprecated_where_block.rs:20:1
    |
 20 |    construct_runtime! {
@@ -691,18 +691,18 @@ error[E0599]: the function or associated item `pallet_documentation_metadata` ex
 23 | |          NodeBlock = Block,
 ...  |
 28 | |  }
-   | |__^ function or associated item cannot be called on `Pallet<Runtime>` due to unsatisfied trait bounds
+   | |__^ function or associated item cannot be called on `Pezpallet<Runtime>` due to unsatisfied trait bounds
    |
    = note: the following trait bounds were not satisfied:
            `Runtime: Config`
 note: the trait `Config` must be implemented
-  --> $WORKSPACE/bizinikiwi/frame/system/src/lib.rs
+  --> $WORKSPACE/bizinikiwi/pezframe/system/src/lib.rs
    |
    |     pub trait Config: 'static + Eq + Clone {
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-   = note: this error originates in the macro `frame_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
+   = note: this error originates in the macro `pezframe_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
 
-error[E0599]: the function or associated item `pallet_associated_types_metadata` exists for struct `Pallet<Runtime>`, but its trait bounds were not satisfied
+error[E0599]: the function or associated item `pezpallet_associated_types_metadata` exists for struct `Pezpallet<Runtime>`, but its trait bounds were not satisfied
   --> tests/construct_runtime_ui/deprecated_where_block.rs:20:1
    |
 20 |    construct_runtime! {
@@ -715,16 +715,16 @@ error[E0599]: the function or associated item `pallet_associated_types_metadata`
 23 | |          NodeBlock = Block,
 ...  |
 28 | |  }
-   | |__^ function or associated item cannot be called on `Pallet<Runtime>` due to unsatisfied trait bounds
+   | |__^ function or associated item cannot be called on `Pezpallet<Runtime>` due to unsatisfied trait bounds
    |
    = note: the following trait bounds were not satisfied:
            `Runtime: Config`
 note: the trait `Config` must be implemented
-  --> $WORKSPACE/bizinikiwi/frame/system/src/lib.rs
+  --> $WORKSPACE/bizinikiwi/pezframe/system/src/lib.rs
    |
    |     pub trait Config: 'static + Eq + Clone {
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-   = note: this error originates in the macro `frame_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
+   = note: this error originates in the macro `pezframe_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
 
 error[E0277]: the trait bound `Runtime: Config` is not satisfied
   --> tests/construct_runtime_ui/deprecated_where_block.rs:20:1
@@ -739,15 +739,15 @@ error[E0277]: the trait bound `Runtime: Config` is not satisfied
    |
    = help: the trait `Serialize` is implemented for `GenesisConfig<T>`
    = note: required for `GenesisConfig<Runtime>` to implement `Serialize`
-note: required by a bound in `frame_support::sp_runtime::serde::ser::SerializeStruct::serialize_field`
-  --> $CARGO/serde_core-1.0.228/src/ser/mod.rs
+note: required by a bound in `pezframe_support::pezsp_runtime::serde::ser::SerializeStruct::serialize_field`
+  --> $CARGO/serde_core-$VERSION/src/ser/mod.rs
    |
    |     fn serialize_field<T>(&mut self, key: &'static str, value: &T) -> Result<(), Self::Error>
    |        --------------- required by a bound in this associated function
    |     where
    |         T: ?Sized + Serialize;
    |                     ^^^^^^^^^ required by this bound in `SerializeStruct::serialize_field`
-   = note: this error originates in the macro `frame_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
+   = note: this error originates in the macro `pezframe_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
 
 error[E0277]: the trait bound `Runtime: Config` is not satisfied
   --> tests/construct_runtime_ui/deprecated_where_block.rs:20:1
@@ -761,11 +761,11 @@ error[E0277]: the trait bound `Runtime: Config` is not satisfied
    | |_^ the trait `Config` is not implemented for `Runtime`
    |
 note: required by a bound in `GenesisConfig`
-  --> $WORKSPACE/bizinikiwi/frame/system/src/lib.rs
+  --> $WORKSPACE/bizinikiwi/pezframe/system/src/lib.rs
    |
    |     pub struct GenesisConfig<T: Config> {
    |                                 ^^^^^^ required by this bound in `GenesisConfig`
-   = note: this error originates in the macro `frame_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
+   = note: this error originates in the macro `pezframe_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
 
 error[E0277]: the trait bound `Runtime: Config` is not satisfied
   --> tests/construct_runtime_ui/deprecated_where_block.rs:20:1
@@ -779,11 +779,11 @@ error[E0277]: the trait bound `Runtime: Config` is not satisfied
    | |_^ the trait `Config` is not implemented for `Runtime`
    |
 note: required by a bound in `GenesisConfig`
-  --> $WORKSPACE/bizinikiwi/frame/system/src/lib.rs
+  --> $WORKSPACE/bizinikiwi/pezframe/system/src/lib.rs
    |
    |     pub struct GenesisConfig<T: Config> {
    |                                 ^^^^^^ required by this bound in `GenesisConfig`
-   = note: this error originates in the derive macro `self::sp_api_hidden_includes_construct_runtime::hidden_include::__private::serde::Deserialize` (in Nightly builds, run with -Z macro-backtrace for more info)
+   = note: this error originates in the derive macro `self::pezsp_api_hidden_includes_construct_runtime::hidden_include::__private::serde::Deserialize` (in Nightly builds, run with -Z macro-backtrace for more info)
 
 error[E0277]: the trait bound `Runtime: Config` is not satisfied
   --> tests/construct_runtime_ui/deprecated_where_block.rs:20:1
@@ -797,7 +797,7 @@ error[E0277]: the trait bound `Runtime: Config` is not satisfied
    | |_^ the trait `Config` is not implemented for `Runtime`
    |
 note: required by a bound in `GenesisConfig`
-  --> $WORKSPACE/bizinikiwi/frame/system/src/lib.rs
+  --> $WORKSPACE/bizinikiwi/pezframe/system/src/lib.rs
    |
    |     pub struct GenesisConfig<T: Config> {
    |                                 ^^^^^^ required by this bound in `GenesisConfig`
@@ -823,10 +823,10 @@ error[E0277]: the trait bound `Runtime: Config` is not satisfied
              (TupleElement0, TupleElement1, TupleElement2, TupleElement3, TupleElement4, TupleElement5, TupleElement6)
              (TupleElement0, TupleElement1, TupleElement2, TupleElement3, TupleElement4, TupleElement5, TupleElement6, TupleElement7)
            and $N others
-   = note: required for `Pallet<Runtime>` to implement `OnGenesis`
+   = note: required for `Pezpallet<Runtime>` to implement `OnGenesis`
    = note: 1 redundant requirement hidden
-   = note: required for `(Pallet<Runtime>,)` to implement `OnGenesis`
-   = note: this error originates in the macro `frame_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
+   = note: required for `(Pezpallet<Runtime>,)` to implement `OnGenesis`
+   = note: this error originates in the macro `pezframe_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
 
 error[E0282]: type annotations needed
   --> tests/construct_runtime_ui/deprecated_where_block.rs:20:1
@@ -839,4 +839,4 @@ error[E0282]: type annotations needed
 28 | | }
    | |_^ cannot infer type
    |
-   = note: this error originates in the macro `frame_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)
+   = note: this error originates in the macro `pezframe_support::construct_runtime` (in Nightly builds, run with -Z macro-backtrace for more info)

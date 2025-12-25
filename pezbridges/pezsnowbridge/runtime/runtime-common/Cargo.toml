@@ -1,5 +1,5 @@
 [package]
-name = "snowpezbridge-runtime-common"
+name = "pezsnowbridge-runtime-common"
 description = "Snowbridge Runtime Common"
 version = "0.2.0"
 authors = ["Snowfork <contact@snowfork.com>"]
@@ -7,7 +7,7 @@ edition.workspace = true
 repository.workspace = true
 license = "Apache-2.0"
 categories = ["cryptography::cryptocurrencies"]
-documentation = "https://docs.rs/snowpezbridge-runtime-common"
+documentation = "https://docs.pezkuwichain.io/pezsnowbridge-runtime-common"
 homepage = { workspace = true }
 
 [lints]

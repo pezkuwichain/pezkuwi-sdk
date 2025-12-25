@@ -86,7 +86,7 @@ impl pezframe_system::Config for Runtime {
 	type BlockLength = ();
 	type DbWeight = ();
 	type Version = ();
-	type PezpalletInfo = PezpalletInfo;
+	type PalletInfo = PalletInfo;
 	type AccountData = ();
 	type OnNewAccount = ();
 	type OnKilledAccount = ();

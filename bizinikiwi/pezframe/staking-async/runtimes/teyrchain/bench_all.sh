@@ -29,8 +29,8 @@ run_benchmark() {
   echo "Outputting to '$output_file'"
 
   WASMTIME_BACKTRACE_DETAILS=1 RUST_LOG=${LOG} \
-    ../../../../../target/release/pezframe-omni-bencher v1 benchmark pallet \
-    --pallet "$pallet_name" \
+    ../../../../../target/release/pezframe-omni-bencher v1 benchmark pezpallet \
+    --pezpallet "$pallet_name" \
     --extrinsic "*" \
     --runtime "$WASM_BLOB_PATH" \
     --steps "$STEPS" \

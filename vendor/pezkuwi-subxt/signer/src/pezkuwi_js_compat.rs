@@ -19,7 +19,7 @@ use crate::sr25519;
 /// Given a JSON keypair as exported from Pezkuwi-JS, this returns an [`sr25519::Keypair`]
 pub fn decrypt_json(json: &str, password: &str) -> Result<sr25519::Keypair, Error> {
 	let pair_json: KeyringPairJson = serde_json::from_str(json)?;
-	Ok(pair_json.decrypt(password)?)
+	pair_json.decrypt(password)
 }
 
 /// Error

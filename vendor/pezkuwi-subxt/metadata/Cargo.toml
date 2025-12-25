@@ -50,6 +50,7 @@ bitvec = { workspace = true, features = ["alloc"] }
 criterion = { workspace = true }
 frame-decode = { workspace = true, features = ["legacy-types"] }
 pezkuwi-subxt-codegen = { workspace = true }
+pezkuwi-subxt-utils-stripmetadata = { workspace = true }
 scale-info = { workspace = true, features = ["bit-vec"] }
 
 [lib]

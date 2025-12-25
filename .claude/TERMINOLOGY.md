@@ -2,15 +2,20 @@
 
 This file helps Claude understand the project terminology after rebrand from Polkadot SDK.
 
-## Brand Mapping (Polkadot → PezkuwiChain)
+## Brand Mapping (Polkadot → Pezkuwi)
 
-| Original (Polkadot) | Rebranded (PezkuwiChain) | Description |
+| Original (Polkadot) | Rebranded (Pezkuwi) | Description |
 |---------------------|--------------------------|-------------|
 | Polkadot | Pezkuwi | Main ecosystem brand |
 | Polkadot SDK | Pezkuwi SDK | This repository |
 | Rococo | PezkuwiChain | Test relay chain runtime |
 | Westend | Zagros | Canary relay chain runtime |
 | Parachain | TeyrChain | Parachain runtime |
+| Pallet | Pezpallet | Pallets name |
+| Frame | Pezframe | Our repos frame name |
+| Substrate | Bizinikiwi | Our repos substrate name |
+| sp- | pezsp- | ...... |
+| sc- | pezsc- | ...... |
 | DOT | HEZ | Native gas token (main) |
 | WND | ZGR | Zagros native token (canary) |
 | ROC | TYR | TeyrChain native token (parachain) |

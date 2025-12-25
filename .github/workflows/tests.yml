@@ -35,7 +35,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       - name: script
-        run: cargo run --locked --release -p pez-staging-node-cli --bin bizinikiwi-node --features runtime-benchmarks --quiet -- benchmark pallet --chain dev --pallet "*" --extrinsic "*" --steps 2 --repeat 1 --quiet
+        run: cargo run --locked --release -p pezstaging-node-cli --bin bizinikiwi-node --features runtime-benchmarks --quiet -- benchmark pezpallet --chain dev --pezpallet "*" --extrinsic "*" --steps 2 --repeat 1 --quiet
 
   # cf https://github.com/pezkuwichain/pezkuwi-sdk/issues/1652
   test-syscalls:
@@ -76,14 +76,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       - name: script
-        # Exclude packages with feature unification issues with --benches flag
-        # (pezframe-support/runtime-benchmarks gets enabled but the package's runtime-benchmarks doesn't)
-        # pezpallet-tiki and all its dependents need to be excluded due to EnsureOrigin trait issues.
-        # FIXED: pezpallet-pez-rewards, collectives-zagros-runtime, asset-hub-* are now included!
+        # Use --features runtime-benchmarks to ensure all crates have the feature enabled,
+        # avoiding feature unification issues where pezframe-support has the feature but
+        # implementing crates don't.
         run: |
-          cargo check --workspace --benches --quiet \
-            --exclude pezpallet-tiki \
-            --exclude pezpallet-trust \
-            --exclude pezpallet-welati \
-            --exclude people-pezkuwichain-runtime \
-            --exclude pezkuwi-teyrchain-bin
+          cargo check --workspace --benches --features runtime-benchmarks --quiet

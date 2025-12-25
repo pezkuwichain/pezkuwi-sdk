@@ -882,7 +882,7 @@ impl<C: Context> TeyrchainConfigBuilder<WithId, C> {
 
 	/// Add a new node using a nested [`NodeConfigBuilder`].
 	///
-	/// **Deprecated**: Use [`with_collator`] for collator nodes or [`with_fullnode`] for full nodes instead.
+	/// **Deprecated**: Use `with_collator` for collator nodes or `with_fullnode` for full nodes instead.
 	#[deprecated(
 		since = "0.4.0",
 		note = "Use `with_collator()` for collator nodes or `with_fullnode()` for full nodes instead"
@@ -1014,7 +1014,7 @@ impl<C: Context> TeyrchainConfigBuilder<WithAtLeastOneCollator, C> {
 
 	/// Add a new node using a nested [`NodeConfigBuilder`].
 	///
-	/// **Deprecated**: Use [`with_collator`] for collator nodes or [`with_fullnode`] for full nodes instead.
+	/// **Deprecated**: Use `with_collator` for collator nodes or `with_fullnode` for full nodes instead.
 	#[deprecated(
 		since = "0.4.0",
 		note = "Use `with_collator()` for collator nodes or `with_fullnode()` for full nodes instead"
