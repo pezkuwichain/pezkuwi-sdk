@@ -1063,7 +1063,7 @@ pub use pezpallet_whitelist;
 #[cfg(feature = "pezpallet-xcm")]
 pub use pezpallet_xcm;
 
-/// XCM benchmarking pallet.
+/// Benchmarks for the XCM pezpallet.
 #[cfg(feature = "pezpallet-xcm-benchmarks")]
 pub use pezpallet_xcm_benchmarks;
 

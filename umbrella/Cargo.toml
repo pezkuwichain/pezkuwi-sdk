@@ -1,5 +1,6 @@
 [package]
 name = "pezkuwi-sdk"
+version = "0.1.0"
 description = "Pezkuwi SDK umbrella crate."
 license = "Apache-2.0"
 
@@ -797,6 +798,10 @@ runtime-full = [
 	"pezkuwi-runtime-teyrchains",
 	"pezkuwi-sdk-frame",
 	"pezkuwi-ss58-registry",
+	"pezkuwi-subxt-core",
+	"pezkuwi-subxt-macro",
+	"pezkuwi-subxt-metadata",
+	"pezkuwi-subxt-signer",
 	"pezkuwi-teyrchain-primitives",
 	"pezpallet-alliance",
 	"pezpallet-asset-conversion",
@@ -1073,17 +1078,10 @@ node = [
 	"pezkuwi-statement-table",
 	"pezkuwi-subxt",
 	"pezkuwi-subxt-codegen",
-	"pezkuwi-subxt-core",
 	"pezkuwi-subxt-lightclient",
-	"pezkuwi-subxt-lightclient?/native",
-	"pezkuwi-subxt-macro",
-	"pezkuwi-subxt-metadata",
 	"pezkuwi-subxt-rpcs",
-	"pezkuwi-subxt-rpcs?/native",
-	"pezkuwi-subxt-signer",
 	"pezkuwi-subxt-utils-fetchmetadata",
 	"pezkuwi-subxt-utils-stripmetadata",
-	"pezkuwi-subxt?/native",
 	"pezmmr-gadget",
 	"pezmmr-rpc",
 	"pezpallet-contracts-mock-network",
