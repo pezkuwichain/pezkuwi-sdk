@@ -192,7 +192,12 @@ fn invoke_build(current_dir: &Path) -> Result<()> {
 		.env("RUSTUP_HOME", env::var("RUSTUP_HOME").unwrap_or_default())
 		// Support compilation on stable rust
 		.env("RUSTC_BOOTSTRAP", "1")
-		.args(["build", "--release", "-Zbuild-std=core", "-Zbuild-std-features=panic_immediate_abort"])
+		.args([
+			"build",
+			"--release",
+			"-Zbuild-std=core",
+			"-Zbuild-std-features=panic_immediate_abort",
+		])
 		.arg("--target")
 		.arg(polkavm_linker::target_json_path(args).unwrap());
 
