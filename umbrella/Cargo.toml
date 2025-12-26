@@ -230,6 +230,9 @@ std = [
 	"teyrchains-common?/std",
 	"teyrchains-runtimes-test-utils?/std",
 	"xcm-runtime-pezapis?/std",
+	"pezkuwi-subxt-core?/std",
+	"pezkuwi-subxt-metadata?/std",
+	"pezkuwi-subxt-signer?/std"
 ]
 runtime-benchmarks = [
 	"asset-test-pezutils?/runtime-benchmarks",
@@ -556,6 +559,7 @@ runtime-benchmarks = [
 	"xcm-pez-procedural?/runtime-benchmarks",
 	"xcm-pez-simulator?/runtime-benchmarks",
 	"xcm-runtime-pezapis?/runtime-benchmarks",
+	"pezpallet-root-testing?/runtime-benchmarks"
 ]
 try-runtime = [
 	"asset-test-pezutils?/try-runtime",
@@ -725,6 +729,7 @@ serde = [
 	"pezsp-storage?/serde",
 	"pezsp-version?/serde",
 	"pezsp-weights?/serde",
+	"pezkuwi-subxt-signer?/serde"
 ]
 experimental = [
 	"pezframe-support-procedural?/experimental",
