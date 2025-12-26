@@ -11,7 +11,9 @@
 // Note: When both 'web' and 'native' features are enabled (e.g., --all-features),
 // 'native' takes priority. This allows CI to run with --all-features.
 #[cfg(not(any(feature = "web", feature = "native")))]
-compile_error!("subxt-lightclient: at least one of the 'web' or 'native' features must be enabled.");
+compile_error!(
+	"subxt-lightclient: at least one of the 'web' or 'native' features must be enabled."
+);
 
 mod platform;
 mod shared_client;
