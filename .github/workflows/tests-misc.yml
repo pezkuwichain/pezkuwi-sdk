@@ -408,7 +408,8 @@ jobs:
       - name: install solc
         run: |
           # Install solc-select to manage solc versions
-          pip3 install solc-select
+          # Use --break-system-packages for macOS externally-managed Python
+          pip3 install --break-system-packages solc-select
           # Install and use solc 0.8.30 (revive only supports up to 0.8.30)
           solc-select install 0.8.30
           solc-select use 0.8.30
