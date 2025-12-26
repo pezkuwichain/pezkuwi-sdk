@@ -157,18 +157,17 @@ jobs:
         id: set_runner
         shell: bash
         run: |
-          # Use self-hosted runners (ubuntu-large or ubuntu-xlarge) for resource-intensive tasks
-          # Using common labels so any available runner can pick up jobs
-          RUNNER_LABEL='["self-hosted", "Linux", "X64"]'
-          echo "RUNNER_DEFAULT=$RUNNER_LABEL" >> $GITHUB_OUTPUT
-          echo "RUNNER_WEIGHTS=$RUNNER_LABEL" >> $GITHUB_OUTPUT
-          echo "RUNNER_BENCHMARK=$RUNNER_LABEL" >> $GITHUB_OUTPUT
+          # Use self-hosted runners with ubuntu-large label
+          # Both ubuntu-large and ubuntu-xlarge runners have this label
+          echo "RUNNER_DEFAULT=ubuntu-large" >> $GITHUB_OUTPUT
+          echo "RUNNER_WEIGHTS=ubuntu-large" >> $GITHUB_OUTPUT
+          echo "RUNNER_BENCHMARK=ubuntu-large" >> $GITHUB_OUTPUT
           echo "RUNNER_MACOS=macos-latest" >> $GITHUB_OUTPUT
-          # All runners use self-hosted runners for Pezkuwi SDK
-          echo "RUNNER=$RUNNER_LABEL" >> $GITHUB_OUTPUT
-          echo "RUNNER_OLDLINUX=$RUNNER_LABEL" >> $GITHUB_OUTPUT
-          echo "RUNNER_NEW=$RUNNER_LABEL" >> $GITHUB_OUTPUT
-          echo "RUNNER_OLDLINUX_NEW=$RUNNER_LABEL" >> $GITHUB_OUTPUT
+          # All runners use ubuntu-large label for Pezkuwi SDK
+          echo "RUNNER=ubuntu-large" >> $GITHUB_OUTPUT
+          echo "RUNNER_OLDLINUX=ubuntu-large" >> $GITHUB_OUTPUT
+          echo "RUNNER_NEW=ubuntu-large" >> $GITHUB_OUTPUT
+          echo "RUNNER_OLDLINUX_NEW=ubuntu-large" >> $GITHUB_OUTPUT
 
       #
       # Set vars
