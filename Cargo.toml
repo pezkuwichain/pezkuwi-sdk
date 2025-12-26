@@ -352,23 +352,6 @@ members = [
 	"pezbridges/modules/teyrchains",
 	"pezbridges/modules/xcm-bridge-hub",
 	"pezbridges/modules/xcm-bridge-hub-router",
-	"pezbridges/primitives/beefy",
-	"pezbridges/primitives/header-chain",
-	"pezbridges/primitives/messages",
-	"pezbridges/primitives/pezkuwi-core",
-	"pezbridges/primitives/relayers",
-	"pezbridges/primitives/runtime",
-	"pezbridges/primitives/test-utils",
-	"pezbridges/primitives/teyrchains",
-	"pezbridges/primitives/xcm-bridge-hub",
-	"pezbridges/primitives/xcm-bridge-hub-router",
-	"pezbridges/relays/client-bizinikiwi",
-	"pezbridges/relays/equivocation",
-	"pezbridges/relays/finality",
-	"pezbridges/relays/lib-bizinikiwi-relay",
-	"pezbridges/relays/messages",
-	"pezbridges/relays/teyrchains",
-	"pezbridges/relays/utils",
 	"pezbridges/pezsnowbridge/pezpallets/ethereum-client",
 	"pezbridges/pezsnowbridge/pezpallets/ethereum-client/fixtures",
 	"pezbridges/pezsnowbridge/pezpallets/inbound-queue",
@@ -394,6 +377,23 @@ members = [
 	"pezbridges/pezsnowbridge/runtime/runtime-common",
 	"pezbridges/pezsnowbridge/runtime/test-common",
 	"pezbridges/pezsnowbridge/test-utils",
+	"pezbridges/primitives/beefy",
+	"pezbridges/primitives/header-chain",
+	"pezbridges/primitives/messages",
+	"pezbridges/primitives/pezkuwi-core",
+	"pezbridges/primitives/relayers",
+	"pezbridges/primitives/runtime",
+	"pezbridges/primitives/test-utils",
+	"pezbridges/primitives/teyrchains",
+	"pezbridges/primitives/xcm-bridge-hub",
+	"pezbridges/primitives/xcm-bridge-hub-router",
+	"pezbridges/relays/client-bizinikiwi",
+	"pezbridges/relays/equivocation",
+	"pezbridges/relays/finality",
+	"pezbridges/relays/lib-bizinikiwi-relay",
+	"pezbridges/relays/messages",
+	"pezbridges/relays/teyrchains",
+	"pezbridges/relays/utils",
 	"pezcumulus/bin/pov-validator",
 	"pezcumulus/client/bootnodes",
 	"pezcumulus/client/cli",
@@ -1342,6 +1342,7 @@ pezsnowbridge-pezpallet-outbound-queue-v2 = { path = "pezbridges/pezsnowbridge/p
 pezsnowbridge-pezpallet-system = { path = "pezbridges/pezsnowbridge/pezpallets/system", default-features = false }
 pezsnowbridge-pezpallet-system-frontend = { path = "pezbridges/pezsnowbridge/pezpallets/system-frontend", default-features = false }
 pezsnowbridge-pezpallet-system-v2 = { path = "pezbridges/pezsnowbridge/pezpallets/system-v2", default-features = false }
+pezsnowbridge-runtime-common = { path = "pezbridges/pezsnowbridge/runtime/runtime-common", default-features = false }
 pezsnowbridge-runtime-test-common = { path = "pezbridges/pezsnowbridge/runtime/test-common", default-features = false }
 pezsnowbridge-system-runtime-api = { path = "pezbridges/pezsnowbridge/pezpallets/system/runtime-api", default-features = false }
 pezsnowbridge-system-v2-runtime-api = { path = "pezbridges/pezsnowbridge/pezpallets/system-v2/runtime-api", default-features = false }
@@ -1496,7 +1497,6 @@ slotmap = { version = "1.0" }
 smallvec = { version = "1.11.0", default-features = false }
 smoldot = { version = "0.20.0", default-features = false }
 smoldot-light = { version = "0.18.0", default-features = false }
-pezsnowbridge-runtime-common = { path = "pezbridges/pezsnowbridge/runtime/runtime-common", default-features = false }
 soketto = { version = "0.8.0" }
 sp-core = { version = "38.1.0" }
 spinners = { version = "4.1.1" }

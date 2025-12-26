@@ -45,9 +45,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 		let dest = pezkuwi::runtime_types::sp_runtime::multiaddress::MultiAddress::Id(
 			pezkuwi::runtime_types::sp_core::crypto::AccountId32(bob.public_key().0),
 		);
-		let balance_transfer = pezkuwi::tx()
-			.balances()
-			.transfer_allow_death(dest, 1_000_000);
+		let balance_transfer = pezkuwi::tx().balances().transfer_allow_death(dest, 1_000_000);
 
 		let ext_hash = api
 			.tx()
