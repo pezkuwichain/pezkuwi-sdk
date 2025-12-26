@@ -10,8 +10,8 @@ use codec::Decode;
 pub mod pezkuwi {}
 
 use pezkuwi::balances::calls::types::TransferKeepAlive;
-use pezkuwi::runtime_types::sp_runtime::multiaddress::MultiAddress;
 use pezkuwi::runtime_types::sp_core::crypto::AccountId32;
+use pezkuwi::runtime_types::sp_runtime::multiaddress::MultiAddress;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {

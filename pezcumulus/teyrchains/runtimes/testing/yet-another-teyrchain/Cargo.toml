@@ -23,12 +23,12 @@ pezsp-runtime = { workspace = true }
 pezkuwi-sdk = { workspace = true, default-features = false, features = [
 	# Primitives needed for runtime
 	"pezsp-api",
-	"pezsp-io",
 	"pezsp-block-builder",
 	"pezsp-consensus-aura",
 	"pezsp-core",
 	"pezsp-genesis-builder",
 	"pezsp-inherents",
+	"pezsp-io",
 	"pezsp-keyring",
 	"pezsp-offchain",
 	"pezsp-session",
