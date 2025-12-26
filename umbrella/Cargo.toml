@@ -58,6 +58,9 @@ std = [
 	"pezkuwi-runtime-teyrchains?/std",
 	"pezkuwi-sdk-frame?/std",
 	"pezkuwi-ss58-registry?/std",
+	"pezkuwi-subxt-core?/std",
+	"pezkuwi-subxt-metadata?/std",
+	"pezkuwi-subxt-signer?/std",
 	"pezkuwi-teyrchain-primitives?/std",
 	"pezpallet-alliance?/std",
 	"pezpallet-asset-conversion-ops?/std",
@@ -230,9 +233,6 @@ std = [
 	"teyrchains-common?/std",
 	"teyrchains-runtimes-test-utils?/std",
 	"xcm-runtime-pezapis?/std",
-	"pezkuwi-subxt-core?/std",
-	"pezkuwi-subxt-metadata?/std",
-	"pezkuwi-subxt-signer?/std"
 ]
 runtime-benchmarks = [
 	"asset-test-pezutils?/runtime-benchmarks",
@@ -437,6 +437,7 @@ runtime-benchmarks = [
 	"pezpallet-remark?/runtime-benchmarks",
 	"pezpallet-revive?/runtime-benchmarks",
 	"pezpallet-root-offences?/runtime-benchmarks",
+	"pezpallet-root-testing?/runtime-benchmarks",
 	"pezpallet-safe-mode?/runtime-benchmarks",
 	"pezpallet-salary?/runtime-benchmarks",
 	"pezpallet-scheduler?/runtime-benchmarks",
@@ -559,7 +560,6 @@ runtime-benchmarks = [
 	"xcm-pez-procedural?/runtime-benchmarks",
 	"xcm-pez-simulator?/runtime-benchmarks",
 	"xcm-runtime-pezapis?/runtime-benchmarks",
-	"pezpallet-root-testing?/runtime-benchmarks"
 ]
 try-runtime = [
 	"asset-test-pezutils?/try-runtime",
@@ -695,6 +695,7 @@ serde = [
 	"bp-pezkuwi-core?/serde",
 	"pezframe-benchmarking?/serde",
 	"pezframe-metadata?/serde",
+	"pezkuwi-subxt-signer?/serde",
 	"pezpallet-asset-tx-payment?/serde",
 	"pezpallet-beefy-mmr?/serde",
 	"pezpallet-beefy?/serde",
@@ -729,7 +730,6 @@ serde = [
 	"pezsp-storage?/serde",
 	"pezsp-version?/serde",
 	"pezsp-weights?/serde",
-	"pezkuwi-subxt-signer?/serde"
 ]
 experimental = [
 	"pezframe-support-procedural?/experimental",
