@@ -1,6 +1,6 @@
 # Rebrand İlerleme Listesi
 
-**Son Güncelleme:** 2024-12-23
+**Son Güncelleme:** 2025-12-27
 **Toplam Crate:** 76 (REBRAND_MAP'ten)
 **Rebrand Durumu:** 75/76 tamamlandı (98.7%)
 **Derleme Durumu:** ✅ WORKSPACE TAM DERLENİYOR
@@ -153,12 +153,24 @@
 1. [x] Derleme hatalarını düzelt (pez-kitchensink-runtime) ✅ (derleniyor)
 2. [x] pezpallet-revive-eth-rpc derlenmesi ✅ (2025-12-19)
 3. [x] **Workspace-wide cargo check** ✅ (2025-12-19) - BAŞARILI!
-4. [ ] **Crates.io publish planına geç** ← SIRADAKİ
-5. [ ] CI/CD workflow'larını güncelle
+4. [x] **CI/CD workflow'larını güncelle** ✅ (2025-12-27)
+5. [ ] **Crates.io publish planına geç** ← SIRADAKİ (CI geçtikten sonra)
 
 ---
 
 ## Log
+
+### 2025-12-27
+- **CI/CD Workflow Fixes Tamamlandı:**
+  - `wasm32v1-none` target installation kaldırıldı (serde_core 1.0.228 uyumsuzluğu)
+  - Sassafras benchmark data file (25_tickets_100_auths.bin) gitignore exception eklendi ve commit edildi
+  - 590 Cargo.toml dosyasında documentation URL'leri `documentation.workspace = true` olarak güncellendi
+  - workflow-stopper GitHub App credentials güncellendi (App ID: 2423876)
+  - Upstream issue oluşturuldu: https://github.com/serde-rs/serde/issues/3021
+- **VPS Runner Infrastructure:**
+  - VPS1 (37.60.230.9) - ubuntu-large runner aktif
+  - VPS2 (62.146.235.186) - ubuntu-xlarge runner aktif
+  - Her iki runner paralel çalışıyor
 
 ### 2024-12-23
 - **Umbrella eksik crate düzeltmeleri:**
