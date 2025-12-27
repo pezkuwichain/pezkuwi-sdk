@@ -12,6 +12,25 @@
 
 ---
 
+## SON CI DÜZELTMELERİ (2025-12-26)
+
+### PR #344 - solc version fix (MERGED)
+- solc 0.8.30 pinlendi (revive uyumluluğu için)
+
+### PR #345 - WASM build + macOS pip fix (MERGED)
+**Düzeltilen hatalar:**
+1. **macOS pip externally-managed-environment**: `--break-system-packages` flag eklendi
+2. **WASM getrandom/duplicate lang item**: `rustup target add wasm32v1-none` eklendi
+
+**Güncellenen workflow dosyaları:**
+- tests-misc.yml (macOS pip + wasm32v1-none)
+- tests.yml (wasm32v1-none)
+- tests-linux-stable.yml (wasm32v1-none)
+- build-publish-images.yml (wasm32v1-none)
+- check-pezframe-omni-bencher.yml (wasm32v1-none)
+
+---
+
 ## FAZ 1: Başarısız Workflow'lar (10 workflow, ~30 job)
 
 ### 1.1 quick-checks.yml
@@ -220,6 +239,9 @@ AŞAMA 4 - EVM/PolkaVM:
 | 2024-12-23 | Template URL'leri düzeltildi | check-getting-started |
 | 2024-12-22 | rustfmt.toml stable-only | fmt job |
 | 2024-12-22 | Zepter feature propagation | check-zepter |
+| 2025-12-26 | solc 0.8.30 pinlendi (PR #344) | tests-evm, tests-misc |
+| 2025-12-26 | macOS pip --break-system-packages (PR #345) | cargo-check-all-crate-macos |
+| 2025-12-26 | wasm32v1-none target kurulumu (PR #345) | quick-benchmarks, test-linux-stable-int, test-linux-stable-runtime-benchmarks, test-deterministic-wasm, build-linux-stable, build-linux-bizinikiwi |
 
 ---
 
@@ -239,12 +261,13 @@ AŞAMA 4 - EVM/PolkaVM:
    - ✅ test-teyrchain-undying-collator
 6. ✅ Template repo'ları - MEVCUT (GitHub'da kontrol edildi)
 7. ✅ Kalan binary build'leri - TAMAMLANDI
-8. Commit ve push yap
-9. CI'da test et
+8. ✅ Commit ve push yap - TAMAMLANDI (PR #344, PR #345)
+9. ⏳ CI'da test et - PR #345 merge edildi, CI çalışıyor
+10. ⏳ Tüm workflow'lar yeşil olduktan sonra → crates.io publish
 
 ---
 
-*Son Güncelleme: 2025-12-25*
+*Son Güncelleme: 2025-12-26*
 
 ---
 
