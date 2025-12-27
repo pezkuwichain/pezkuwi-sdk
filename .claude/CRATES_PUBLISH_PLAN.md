@@ -1,8 +1,23 @@
 # Crates.io Publish Plan - Pezkuwi SDK
 
 **Tarih:** 2025-12-27
-**Toplam Publishable Crate:** 453
+**Toplam Workspace Crate:** 606
+**Publishable Crate:** 453
+**Not Publishable (internal/test):** 153
 **Registry:** https://crates.io
+**Owner:** https://crates.io/users/SatoshiQaziMuhammed
+
+---
+
+## Mevcut Durum
+
+| Durum | Sayı | Version |
+|-------|------|---------|
+| Placeholder (crates.io'da mevcut) | 130 | 0.1.0 |
+| Yeni publish edilecek | 323 | 0.44.0 |
+| **Toplam publish edilecek** | **453** | |
+
+**Not:** 130 placeholder crate gerçek içerikle değiştirilecek (0.1.0 → 0.44.0 version bump)
 
 ---
 
