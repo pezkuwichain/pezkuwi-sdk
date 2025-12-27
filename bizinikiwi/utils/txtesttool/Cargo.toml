@@ -2,7 +2,7 @@
 name = "bizinikiwi-txtesttool"
 version = "0.7.0"
 description = "Bizinikiwi utility: A library and CLI tool for sending transactions to Pezkuwi blockchain, enabling developers to test and monitor transaction scenarios."
-documentation = "https://docs.rs/bizinikiwi-txtesttool"
+documentation.workspace = true
 license = "Apache-2.0 OR GPL-3.0"
 authors.workspace = true
 edition.workspace = true

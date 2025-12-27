@@ -7,7 +7,7 @@ license = "Apache-2.0"
 description = "Core primitives for Aura in Pezcumulus"
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezcumulus-primitives-aura"
+documentation.workspace = true
 
 [lints]
 workspace = true

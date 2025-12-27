@@ -7,7 +7,7 @@ license.workspace = true
 description = "The Candidate Backing Subsystem. Tracks teyrchain candidates that can be backed, as well as the issuance of statements about candidates."
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezkuwi-node-core-backing"
+documentation.workspace = true
 
 [lints]
 workspace = true

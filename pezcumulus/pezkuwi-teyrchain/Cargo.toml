@@ -8,7 +8,7 @@ description = "Runs a pezkuwi teyrchain node"
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezkuwi-teyrchain-bin"
+documentation.workspace = true
 
 [lints]
 workspace = true

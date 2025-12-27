@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Bizinikiwi RPC servers."
 readme = "README.md"
-documentation = "https://docs.rs/pezsc-rpc-server"
+documentation.workspace = true
 
 [lints]
 workspace = true

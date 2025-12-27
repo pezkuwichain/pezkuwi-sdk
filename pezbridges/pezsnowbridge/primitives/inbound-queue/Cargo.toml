@@ -7,7 +7,7 @@ edition.workspace = true
 repository.workspace = true
 license = "Apache-2.0"
 categories = ["cryptography::cryptocurrencies"]
-documentation = "https://docs.rs/pezsnowbridge-inbound-queue-primitives"
+documentation.workspace = true
 homepage = { workspace = true }
 
 [lints]

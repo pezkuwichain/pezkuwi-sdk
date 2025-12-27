@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "NPoS election algorithm primitives"
 readme = "README.md"
-documentation = "https://docs.rs/pezsp-npos-elections"
+documentation.workspace = true
 
 [lints]
 workspace = true

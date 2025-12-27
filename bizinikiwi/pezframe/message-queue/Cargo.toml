@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "FRAME pezpallet to queue and process messages"
-documentation = "https://docs.rs/pezpallet-message-queue"
+documentation.workspace = true
 
 [lints]
 workspace = true

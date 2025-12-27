@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "Reward Curve for FRAME staking pezpallet"
-documentation = "https://docs.rs/pezpallet-staking-reward-curve"
+documentation.workspace = true
 
 [lints]
 workspace = true

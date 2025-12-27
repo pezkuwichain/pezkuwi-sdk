@@ -7,7 +7,7 @@ description = "AURA consensus extension pezpallet for teyrchains"
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezcumulus-pezpallet-aura-ext"
+documentation.workspace = true
 
 [lints]
 workspace = true

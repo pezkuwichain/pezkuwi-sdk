@@ -7,7 +7,7 @@ license = "Apache-2.0"
 description = "Helper datatypes for Pezcumulus"
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezcumulus-primitives-utility"
+documentation.workspace = true
 
 [lints]
 workspace = true

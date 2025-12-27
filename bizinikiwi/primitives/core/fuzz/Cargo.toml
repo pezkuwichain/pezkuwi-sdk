@@ -4,7 +4,7 @@ version = "0.0.0"
 publish = false
 edition.workspace = true
 description = "Pezkuwi SDK primitive: core fuzz"
-documentation = "https://docs.rs/pezsp-core-fuzz"
+documentation.workspace = true
 repository = { workspace = true }
 homepage = { workspace = true }
 authors = { workspace = true }

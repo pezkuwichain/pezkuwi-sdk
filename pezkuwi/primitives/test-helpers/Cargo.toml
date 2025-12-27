@@ -7,7 +7,7 @@ license.workspace = true
 description = "Test helpers for Pezkuwi runtime primitives"
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezkuwi-primitives-test-helpers"
+documentation.workspace = true
 
 [lints]
 workspace = true

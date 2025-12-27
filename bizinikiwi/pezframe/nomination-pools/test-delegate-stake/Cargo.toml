@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "FRAME nomination pools pezpallet tests with the staking pezpallet"
 publish = false
-documentation = "https://docs.rs/pezpallet-nomination-pools-test-delegate-stake"
+documentation.workspace = true
 
 [lints]
 workspace = true

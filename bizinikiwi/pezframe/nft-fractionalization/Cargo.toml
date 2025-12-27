@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "FRAME pezpallet to convert non-fungible to fungible tokens."
 readme = "README.md"
-documentation = "https://docs.rs/pezpallet-nft-fractionalization"
+documentation.workspace = true
 
 [lints]
 workspace = true

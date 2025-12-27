@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "Lowest-abstraction level for the Bizinikiwi runtime: just exports useful primitives from std or client/alloc to be used with any code that depends on the runtime."
-documentation = "https://docs.rs/pezsp-std"
+documentation.workspace = true
 readme = "README.md"
 
 [lints]

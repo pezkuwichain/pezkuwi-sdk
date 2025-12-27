@@ -6,7 +6,7 @@ authors.workspace = true
 edition.workspace = true
 license = "Apache-2.0"
 repository.workspace = true
-documentation = "https://docs.rs/bp-pezkuwichain"
+documentation.workspace = true
 homepage = { workspace = true }
 
 [package.metadata.pezkuwi-sdk]

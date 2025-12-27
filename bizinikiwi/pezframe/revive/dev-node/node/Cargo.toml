@@ -8,7 +8,7 @@ repository.workspace = true
 edition.workspace = true
 publish = false
 build = "build.rs"
-documentation = "https://docs.rs/pez-revive-dev-node"
+documentation.workspace = true
 license = { workspace = true }
 
 [package.metadata.docs.rs]

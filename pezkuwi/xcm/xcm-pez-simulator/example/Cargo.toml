@@ -7,7 +7,7 @@ license.workspace = true
 version = "7.0.0"
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/xcm-pez-simulator-example"
+documentation.workspace = true
 publish = false
 
 [lints]

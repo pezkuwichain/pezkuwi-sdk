@@ -7,7 +7,7 @@ license.workspace = true
 description = "Approval Voting Subsystem running approval work in parallel"
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezkuwi-node-core-approval-voting-parallel"
+documentation.workspace = true
 
 [lints]
 workspace = true

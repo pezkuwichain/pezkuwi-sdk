@@ -7,7 +7,7 @@ description = "Minimal node implementation to be used in tandem with RPC or ligh
 license = "GPL-3.0-or-later WITH Classpath-exception-2.0"
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezcumulus-relay-chain-minimal-node"
+documentation.workspace = true
 
 [lints]
 workspace = true

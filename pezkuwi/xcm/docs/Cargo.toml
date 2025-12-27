@@ -7,7 +7,7 @@ repository.workspace = true
 authors.workspace = true
 edition.workspace = true
 publish = false
-documentation = "https://docs.rs/xcm-pez-docs"
+documentation.workspace = true
 homepage = { workspace = true }
 
 [dependencies]

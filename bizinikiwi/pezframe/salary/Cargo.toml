@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Paymaster"
 readme = "README.md"
-documentation = "https://docs.rs/pezpallet-salary"
+documentation.workspace = true
 
 [lints]
 workspace = true

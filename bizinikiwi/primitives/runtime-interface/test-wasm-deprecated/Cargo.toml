@@ -9,7 +9,7 @@ homepage.workspace = true
 repository.workspace = true
 publish = false
 description = "Pezkuwi SDK primitive: runtime interface test wasm deprecated"
-documentation = "https://docs.rs/pezsp-runtime-interface-test-wasm-deprecated"
+documentation.workspace = true
 
 [lints]
 workspace = true

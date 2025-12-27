@@ -10,7 +10,7 @@ authors = [
 	"Parity Technologies <admin@parity.io>",
 ]
 edition.workspace = true
-documentation = "https://docs.rs/pezpallet-parameters"
+documentation.workspace = true
 homepage = { workspace = true }
 
 [dependencies]

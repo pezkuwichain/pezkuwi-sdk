@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "Runtime Modules shared primitive types."
-documentation = "https://docs.rs/pezsp-runtime"
+documentation.workspace = true
 readme = "README.md"
 
 [lints]

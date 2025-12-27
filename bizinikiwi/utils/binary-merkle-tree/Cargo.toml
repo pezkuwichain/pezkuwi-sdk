@@ -7,7 +7,7 @@ license = "Apache-2.0"
 repository.workspace = true
 description = "A no-std/Bizinikiwi compatible library to construct binary merkle tree."
 homepage.workspace = true
-documentation = "https://docs.rs/binary-merkle-tree"
+documentation.workspace = true
 
 [lints]
 workspace = true

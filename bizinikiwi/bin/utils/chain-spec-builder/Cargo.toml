@@ -9,7 +9,7 @@ homepage.workspace = true
 repository.workspace = true
 publish = true
 description = "Utility for building chain-specification files for Bizinikiwi-based runtimes based on `pezsp-genesis-builder`"
-documentation = "https://docs.rs/pezstaging-chain-spec-builder"
+documentation.workspace = true
 
 [lints]
 workspace = true

@@ -7,7 +7,7 @@ description = "Logic which is common to all teyrchain runtimes"
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/teyrchains-common"
+documentation.workspace = true
 
 [lints]
 workspace = true

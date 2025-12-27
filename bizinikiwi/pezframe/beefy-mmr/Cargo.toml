@@ -7,7 +7,7 @@ license = "Apache-2.0"
 description = "BEEFY + MMR runtime utilities"
 repository.workspace = true
 homepage.workspace = true
-documentation = "https://docs.rs/pezpallet-beefy-mmr"
+documentation.workspace = true
 
 [lints]
 workspace = true

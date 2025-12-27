@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "e2e unit tests for staking in AHM"
 publish = false
-documentation = "https://docs.rs/pezpallet-ahm-test"
+documentation.workspace = true
 
 [lints]
 workspace = true

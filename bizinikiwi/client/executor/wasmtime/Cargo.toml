@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Defines a `WasmRuntime` that uses the Wasmtime JIT to execute."
 readme = "README.md"
-documentation = "https://docs.rs/pezsc-executor-wasmtime"
+documentation.workspace = true
 
 [lints]
 workspace = true

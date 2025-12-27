@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "Version module for the Bizinikiwi runtime; Provides a function that returns the runtime version."
-documentation = "https://docs.rs/pezsp-version"
+documentation.workspace = true
 readme = "README.md"
 
 [lints]

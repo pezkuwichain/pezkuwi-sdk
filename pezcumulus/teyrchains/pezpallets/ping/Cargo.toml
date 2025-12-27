@@ -7,7 +7,7 @@ license = "Apache-2.0"
 description = "Ping Pallet for Pezcumulus XCM/UMP testing."
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezcumulus-ping"
+documentation.workspace = true
 
 [lints]
 workspace = true

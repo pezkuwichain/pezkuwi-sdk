@@ -7,7 +7,7 @@ license.workspace = true
 description = "Stick logs together with the TraceID as provided by tempo"
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pez-tracing-gum"
+documentation.workspace = true
 
 [lints]
 workspace = true

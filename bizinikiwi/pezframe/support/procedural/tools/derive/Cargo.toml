@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "Use to derive parsing for parsing struct."
-documentation = "https://docs.rs/pezframe-support-procedural-tools-derive"
+documentation.workspace = true
 
 [lints]
 workspace = true

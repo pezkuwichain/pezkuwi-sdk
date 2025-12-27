@@ -9,7 +9,7 @@ edition.workspace = true
 # This crate is not publish-able to crates.io for now because of docify.
 publish = false
 version = "0.0.1"
-documentation = "https://docs.rs/pezkuwi-sdk-docs"
+documentation.workspace = true
 
 [lints]
 workspace = true

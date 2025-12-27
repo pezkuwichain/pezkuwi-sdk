@@ -9,7 +9,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 publish = true
-documentation = "https://docs.rs/frame-storage-access-test-runtime"
+documentation.workspace = true
 
 [lints]
 workspace = true

@@ -7,7 +7,7 @@ license = "Unlicense"
 homepage.workspace = true
 repository.workspace = true
 edition.workspace = true
-documentation = "https://docs.rs/pez-penpal-runtime"
+documentation.workspace = true
 publish = false
 
 [lints]

@@ -8,7 +8,7 @@ description = "Generic binary that can run a teyrchain node with u32 block numbe
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezkuwi-omni-node"
+documentation.workspace = true
 
 [lints]
 workspace = true

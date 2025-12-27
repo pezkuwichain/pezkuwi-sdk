@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Fuzz storage types of pezpallet-paged-list"
 publish = false
-documentation = "https://docs.rs/pezpallet-paged-list-fuzzer"
+documentation.workspace = true
 
 [lints]
 workspace = true

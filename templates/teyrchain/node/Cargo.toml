@@ -9,7 +9,7 @@ repository.workspace = true
 edition.workspace = true
 publish = false
 build = "build.rs"
-documentation = "https://docs.rs/teyrchain-template-node"
+documentation.workspace = true
 
 [lints]
 workspace = true

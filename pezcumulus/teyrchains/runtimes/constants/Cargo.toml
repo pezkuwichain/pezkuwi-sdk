@@ -7,7 +7,7 @@ description = "Common constants for Testnet Teyrchains runtimes"
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/testnet-teyrchains-constants"
+documentation.workspace = true
 
 [lints]
 workspace = true

@@ -7,7 +7,7 @@ license = "Apache-2.0"
 description = "Zagros Collectives Teyrchain Runtime"
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/collectives-zagros-runtime"
+documentation.workspace = true
 
 [lints]
 workspace = true

@@ -8,7 +8,7 @@ description = "Fixtures for testing and benchmarking"
 homepage.workspace = true
 repository.workspace = true
 rust-version = "1.84"
-documentation = "https://docs.rs/pezpallet-revive-fixtures"
+documentation.workspace = true
 publish = false
 
 [package.metadata.pezkuwi-sdk]

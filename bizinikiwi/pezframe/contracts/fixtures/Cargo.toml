@@ -6,7 +6,7 @@ authors.workspace = true
 edition.workspace = true
 license.workspace = true
 description = "Fixtures for testing contracts pezpallet."
-documentation = "https://docs.rs/pezpallet-contracts-fixtures"
+documentation.workspace = true
 repository = { workspace = true }
 homepage = { workspace = true }
 

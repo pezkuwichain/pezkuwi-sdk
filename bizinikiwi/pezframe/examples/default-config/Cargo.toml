@@ -9,7 +9,7 @@ repository.workspace = true
 description = "FRAME example pezpallet demonstrating derive_impl / default_config in action"
 readme = "README.md"
 publish = false
-documentation = "https://docs.rs/pezpallet-default-config-example"
+documentation.workspace = true
 
 [lints]
 workspace = true

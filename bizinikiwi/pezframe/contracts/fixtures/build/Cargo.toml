@@ -6,7 +6,7 @@ edition = "2021"
 # Binary targets are injected dynamically by the build script.
 # Note: workspace = true fields removed because this is compiled in a temp directory
 description = "Pezkuwi SDK component: contracts"
-documentation = "https://docs.rs/contracts"
+documentation.workspace = true
 repository = "https://github.com/pezkuwichain/pezkuwi-sdk"
 homepage = "https://pezkuwi.io"
 authors = ["Pezkuwi Chain <admin@pezkuwi.io>"]

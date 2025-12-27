@@ -6,7 +6,7 @@ authors.workspace = true
 edition.workspace = true
 repository.workspace = true
 license = "GPL-3.0-or-later WITH Classpath-exception-2.0"
-documentation = "https://docs.rs/pezbridge-runtime-common"
+documentation.workspace = true
 homepage = { workspace = true }
 
 [lints]

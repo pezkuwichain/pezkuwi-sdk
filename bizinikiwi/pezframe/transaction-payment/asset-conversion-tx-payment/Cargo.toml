@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Pallet to manage transaction payments in assets by converting them to native assets."
 readme = "README.md"
-documentation = "https://docs.rs/pezpallet-asset-conversion-tx-payment"
+documentation.workspace = true
 
 [lints]
 workspace = true

@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "FRAME pezpallet for inclusive on-chain decisions"
 readme = "README.md"
-documentation = "https://docs.rs/pezpallet-referenda"
+documentation.workspace = true
 
 [lints]
 workspace = true
