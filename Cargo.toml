@@ -1501,7 +1501,7 @@ soketto = { version = "0.8.0" }
 sp-core = { version = "38.1.0" }
 spinners = { version = "4.1.1" }
 sqlx = { version = "0.8.2" }
-ss58-registry = { path = "vendor/ss58-registry", package = "pezkuwi-ss58-registry", default-features = false }
+ss58-registry = { path = "vendor/ss58-registry", package = "pezkuwi-ss58-registry", version = "1.51.0", default-features = false }
 ssz_rs = { version = "0.9.0", default-features = false }
 ssz_rs_derive = { version = "0.9.0", default-features = false }
 static_assertions = { version = "1.1.0", default-features = false }
