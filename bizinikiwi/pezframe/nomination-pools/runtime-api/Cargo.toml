@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Runtime API for nomination-pools FRAME pezpallet"
 readme = "README.md"
-documentation = "https://docs.rs/pezpallet-nomination-pools-runtime-api"
+documentation.workspace = true
 
 [lints]
 workspace = true

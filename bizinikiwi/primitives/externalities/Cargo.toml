@@ -7,7 +7,7 @@ edition.workspace = true
 homepage.workspace = true
 repository.workspace = true
 description = "Bizinikiwi externalities abstraction"
-documentation = "https://docs.rs/pezsp-externalities"
+documentation.workspace = true
 readme = "README.md"
 
 [lints]

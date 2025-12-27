@@ -10,7 +10,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "The single package to get you started with building frame pallets and runtimes"
-documentation = "https://docs.rs/pezkuwi-sdk-frame"
+documentation.workspace = true
 
 [lints]
 workspace = true

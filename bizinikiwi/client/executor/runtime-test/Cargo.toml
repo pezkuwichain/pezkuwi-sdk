@@ -9,7 +9,7 @@ publish = false
 homepage.workspace = true
 repository.workspace = true
 description = "Pezkuwi SDK client component: runtime test"
-documentation = "https://docs.rs/pezsc-runtime-test"
+documentation.workspace = true
 
 [lints]
 workspace = true

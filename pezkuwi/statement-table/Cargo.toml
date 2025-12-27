@@ -7,7 +7,7 @@ license.workspace = true
 description = "Stores messages other authorities issue about candidates in Pezkuwi."
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezkuwi-statement-table"
+documentation.workspace = true
 
 [lints]
 workspace = true

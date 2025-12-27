@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "FRAME pezpallet for storing preimages of hashes"
-documentation = "https://docs.rs/pezpallet-preimage"
+documentation.workspace = true
 
 [lints]
 workspace = true

@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "Handling of blobs, usually Wasm code, which may be compressed"
-documentation = "https://docs.rs/pezsp-maybe-compressed-blob"
+documentation.workspace = true
 readme = "README.md"
 
 [lints]

@@ -6,7 +6,7 @@ version = "0.1.0"
 edition.workspace = true
 authors.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezpallet-ah-ops"
+documentation.workspace = true
 homepage = { workspace = true }
 
 [package.metadata.pezkuwi-sdk]

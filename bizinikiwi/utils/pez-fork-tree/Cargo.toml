@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "Utility library for managing tree-like ordered data with logic for pruning the tree while finalizing nodes."
-documentation = "https://docs.rs/pez-fork-tree"
+documentation.workspace = true
 readme = "README.md"
 
 [lints]

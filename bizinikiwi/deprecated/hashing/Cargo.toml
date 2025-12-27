@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "Hashing primitives (deprecated: use pezsp-crypto-hashing for new applications)"
-documentation = "https://docs.rs/pezsp-crypto-hashing"
+documentation.workspace = true
 
 [badges]
 maintenance = { status = "deprecated" }

@@ -7,7 +7,7 @@ homepage.workspace = true
 edition.workspace = true
 license = "Apache-2.0"
 repository.workspace = true
-documentation = "https://docs.rs/pezpallet-broker"
+documentation.workspace = true
 
 [lints]
 workspace = true

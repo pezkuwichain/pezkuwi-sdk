@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "FRAME account recovery pezpallet"
 readme = "README.md"
-documentation = "https://docs.rs/pezpallet-recovery"
+documentation.workspace = true
 
 [lints]
 workspace = true

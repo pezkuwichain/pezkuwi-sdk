@@ -7,7 +7,7 @@ description = "Storage related primitives"
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezsp-storage/"
+documentation.workspace = true
 readme = "README.md"
 
 [lints]

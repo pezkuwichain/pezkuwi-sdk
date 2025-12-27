@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "FRAME NFTs pezpallet"
 readme = "README.md"
-documentation = "https://docs.rs/pezpallet-nfts"
+documentation.workspace = true
 
 [lints]
 workspace = true

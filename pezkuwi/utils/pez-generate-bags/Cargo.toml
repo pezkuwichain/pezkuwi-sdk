@@ -7,7 +7,7 @@ license.workspace = true
 description = "CLI to generate voter bags for Pezkuwi runtimes"
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezkuwi-voter-bags"
+documentation.workspace = true
 
 [lints]
 workspace = true

@@ -8,7 +8,7 @@ publish = false
 homepage.workspace = true
 repository.workspace = true
 description = "Pezkuwi SDK FRAME support: support test compile pass"
-documentation = "https://docs.rs/pezframe-support-test-compile-pass"
+documentation.workspace = true
 
 [lints]
 workspace = true

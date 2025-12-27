@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "FRAME pezpallet for statement store"
-documentation = "https://docs.rs/pezpallet-statement"
+documentation.workspace = true
 
 [lints]
 workspace = true

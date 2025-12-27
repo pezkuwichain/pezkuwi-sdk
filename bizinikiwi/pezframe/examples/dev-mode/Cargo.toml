@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "FRAME example pezpallet"
 readme = "README.md"
-documentation = "https://docs.rs/pezpallet-dev-mode"
+documentation.workspace = true
 publish = false
 
 [lints]

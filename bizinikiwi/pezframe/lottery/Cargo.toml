@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "FRAME Participation Lottery Pallet"
-documentation = "https://docs.rs/pezpallet-lottery"
+documentation.workspace = true
 
 [lints]
 workspace = true

@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "Merkle Mountain Range primitives."
-documentation = "https://docs.rs/pezsp-mmr-primitives"
+documentation.workspace = true
 
 [lints]
 workspace = true

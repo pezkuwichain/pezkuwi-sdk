@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "FRAME pezpallet bags list remote test"
 publish = false
-documentation = "https://docs.rs/pezpallet-bags-list-remote-tests"
+documentation.workspace = true
 
 [lints]
 workspace = true

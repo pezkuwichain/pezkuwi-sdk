@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Primitives for sessions"
 readme = "README.md"
-documentation = "https://docs.rs/pezsp-session"
+documentation.workspace = true
 
 [lints]
 workspace = true

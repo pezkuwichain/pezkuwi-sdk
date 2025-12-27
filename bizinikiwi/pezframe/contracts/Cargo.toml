@@ -10,7 +10,7 @@ repository.workspace = true
 description = "FRAME pezpallet for WASM contracts"
 readme = "README.md"
 include = ["CHANGELOG.md", "README.md", "benchmarks/**", "build.rs", "src/**/*"]
-documentation = "https://docs.rs/pezpallet-contracts"
+documentation.workspace = true
 
 [lints]
 workspace = true

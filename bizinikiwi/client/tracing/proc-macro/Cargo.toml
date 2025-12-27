@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "Helper macros for Bizinikiwi's client CLI"
-documentation = "https://docs.rs/pezsc-tracing-proc-macro"
+documentation.workspace = true
 
 [lints]
 workspace = true

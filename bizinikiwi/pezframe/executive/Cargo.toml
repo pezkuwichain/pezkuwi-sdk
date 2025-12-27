@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "FRAME executives engine"
 readme = "README.md"
-documentation = "https://docs.rs/pezframe-executive"
+documentation.workspace = true
 
 [lints]
 workspace = true

@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "Minimal fixed point arithmetic primitives and types for runtime."
-documentation = "https://docs.rs/pezsp-arithmetic"
+documentation.workspace = true
 readme = "README.md"
 
 [lints]

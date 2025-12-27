@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "Bizinikiwi database trait."
-documentation = "https://docs.rs/pezsp-database"
+documentation.workspace = true
 readme = "README.md"
 
 [lints]

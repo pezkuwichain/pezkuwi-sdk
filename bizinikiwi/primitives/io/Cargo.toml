@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "I/O for Bizinikiwi runtimes"
-documentation = "https://docs.rs/pezsp-io"
+documentation.workspace = true
 readme = "README.md"
 build = "build.rs"
 

@@ -7,7 +7,7 @@ license.workspace = true
 description = "Bitfield signing subsystem for the Pezkuwi node"
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezkuwi-node-core-bitfield-signing"
+documentation.workspace = true
 
 [lints]
 workspace = true

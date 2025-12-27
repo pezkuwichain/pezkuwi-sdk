@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Bizinikiwi chain configurations."
 readme = "README.md"
-documentation = "https://docs.rs/pezsc-chain-spec"
+documentation.workspace = true
 
 [lints]
 workspace = true

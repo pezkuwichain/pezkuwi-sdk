@@ -8,7 +8,7 @@ license.workspace = true
 description = "Utils to tie different Pezkuwi components together and allow instantiation of a node."
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezkuwi-service"
+documentation.workspace = true
 
 [lints]
 workspace = true

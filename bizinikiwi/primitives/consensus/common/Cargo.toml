@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "Common utilities for building and using consensus engines in bizinikiwi."
-documentation = "https://docs.rs/pezsp-consensus/"
+documentation.workspace = true
 readme = "README.md"
 
 [lints]

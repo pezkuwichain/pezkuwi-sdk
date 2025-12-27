@@ -7,7 +7,7 @@ license = "GPL-3.0-or-later WITH Classpath-exception-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "Bizinikiwi client interfaces."
-documentation = "https://docs.rs/pezsc-client-api"
+documentation.workspace = true
 readme = "README.md"
 
 [lints]

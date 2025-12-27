@@ -7,7 +7,7 @@ license = "Apache-2.0"
 description = "Pallet to store the teyrchain ID"
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezstaging-teyrchain-info"
+documentation.workspace = true
 
 [lints]
 workspace = true

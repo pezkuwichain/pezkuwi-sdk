@@ -7,7 +7,7 @@ license.workspace = true
 version = "6.0.0"
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezkuwi-teyrchain-primitives"
+documentation.workspace = true
 
 [lints]
 workspace = true

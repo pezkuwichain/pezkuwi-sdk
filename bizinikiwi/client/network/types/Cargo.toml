@@ -7,7 +7,7 @@ authors.workspace = true
 edition.workspace = true
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezsc-network-types"
+documentation.workspace = true
 
 [dependencies]
 bs58 = { workspace = true, default-features = true }

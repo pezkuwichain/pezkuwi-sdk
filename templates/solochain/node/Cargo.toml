@@ -10,7 +10,7 @@ edition.workspace = true
 publish = false
 
 build = "build.rs"
-documentation = "https://docs.rs/pez-solochain-template-node"
+documentation.workspace = true
 
 [package.metadata.docs.rs]
 targets = ["x86_64-unknown-linux-gnu"]

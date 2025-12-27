@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "NPoS Solution Type"
-documentation = "https://docs.rs/pezframe-election-provider-solution-type"
+documentation.workspace = true
 
 [lints]
 workspace = true

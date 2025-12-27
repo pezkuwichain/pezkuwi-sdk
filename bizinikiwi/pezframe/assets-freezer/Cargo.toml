@@ -7,7 +7,7 @@ license = "MIT-0"
 homepage.workspace = true
 repository.workspace = true
 description = "Provides freezing features to `pezpallet-assets`"
-documentation = "https://docs.rs/pezpallet-assets-freezer"
+documentation.workspace = true
 
 [lints]
 workspace = true

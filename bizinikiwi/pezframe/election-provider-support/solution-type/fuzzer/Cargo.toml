@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Fuzzer for phragmén solution type implementation."
 publish = false
-documentation = "https://docs.rs/frame-election-solution-type-fuzzer"
+documentation.workspace = true
 
 [lints]
 workspace = true

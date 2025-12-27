@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "Shared JSON-RPC client"
-documentation = "https://docs.rs/bizinikiwi-rpc-client"
+documentation.workspace = true
 
 [lints]
 workspace = true

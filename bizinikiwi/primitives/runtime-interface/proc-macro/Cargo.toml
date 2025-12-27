@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "This crate provides procedural macros for usage within the context of the Bizinikiwi runtime interface."
-documentation = "https://docs.rs/pezsp-runtime-interface-proc-macro"
+documentation.workspace = true
 
 [lints]
 workspace = true

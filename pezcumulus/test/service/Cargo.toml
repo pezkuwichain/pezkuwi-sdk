@@ -5,7 +5,7 @@ authors.workspace = true
 edition.workspace = true
 publish = false
 description = "Pezkuwi SDK cumulus/teyrchain component: test service"
-documentation = "https://docs.rs/pezcumulus-test-service"
+documentation.workspace = true
 repository = { workspace = true }
 homepage = { workspace = true }
 license = { workspace = true }
