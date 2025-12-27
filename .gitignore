@@ -11,6 +11,8 @@
 .wasm-binaries
 *.adoc
 *.bin
+# Exception: sassafras benchmark data (required for CI)
+!bizinikiwi/pezframe/sassafras/src/data/*.bin
 *.iml
 *.orig
 *.rej
