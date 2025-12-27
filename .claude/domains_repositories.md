@@ -155,4 +155,32 @@ github.com/pezkuwichain/kurdistan_blockchain-akademy
 
 ---
 
-*Last updated: 2025-12-23*
+---
+
+## VPS Runner Infrastructure
+
+**GitHub Actions Self-Hosted Runners:**
+
+| VPS | IP Address | SSH | Runner Label | Status |
+|-----|------------|-----|--------------|--------|
+| VPS1 | 37.60.230.9 | `ssh root@37.60.230.9` | ubuntu-large | Active |
+| VPS2 | 62.146.235.186 | `ssh root@62.146.235.186` | ubuntu-xlarge | Active |
+
+**Runner Configuration:**
+- Both runners work in parallel for CI workloads
+- VPS1: Primary domain server + runner
+- VPS2: Dedicated runner for larger jobs
+
+**Monitoring:**
+```bash
+# Check runner status
+gh run list --limit 10
+
+# SSH to runners
+ssh root@37.60.230.9
+ssh root@62.146.235.186
+```
+
+---
+
+*Last updated: 2025-12-27*
