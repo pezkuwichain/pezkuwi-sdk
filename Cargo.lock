@@ -12019,8 +12019,6 @@ name = "pezframe-election-provider-solution-type"
 version = "13.0.0"
 dependencies = [
  "parity-scale-codec",
- "pezframe-election-provider-support",
- "pezframe-support",
  "pezsp-arithmetic",
  "proc-macro-crate 3.4.0",
  "proc-macro2 1.0.103",
