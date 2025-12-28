@@ -26,10 +26,10 @@ pezsp-io = { workspace = true }
 pezsp-runtime = { workspace = true }
 scale-info = { features = ["derive"], workspace = true }
 
+# pezpallet-root-testing moved to integration tests to break circular dependency
 [dev-dependencies]
 pezpallet-balances = { workspace = true, default-features = true }
 pezpallet-collective = { workspace = true, default-features = true }
-pezpallet-root-testing = { workspace = true, default-features = true }
 pezpallet-timestamp = { workspace = true, default-features = true }
 
 [features]
@@ -50,7 +50,6 @@ runtime-benchmarks = [
 	"pezframe-system/runtime-benchmarks",
 	"pezpallet-balances/runtime-benchmarks",
 	"pezpallet-collective/runtime-benchmarks",
-	"pezpallet-root-testing/runtime-benchmarks",
 	"pezpallet-timestamp/runtime-benchmarks",
 	"pezsp-io/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
@@ -60,7 +59,6 @@ try-runtime = [
 	"pezframe-system/try-runtime",
 	"pezpallet-balances/try-runtime",
 	"pezpallet-collective/try-runtime",
-	"pezpallet-root-testing/try-runtime",
 	"pezpallet-timestamp/try-runtime",
 	"pezsp-runtime/try-runtime",
 ]

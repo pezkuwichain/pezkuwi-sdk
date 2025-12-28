@@ -120,41 +120,45 @@ Level 1'e bağımlı primitives.
 [ ] pezsp-crypto-ec-utils
 ```
 
-### LEVEL 3: FRAME Support
+### LEVEL 3: FRAME Support (DEVAM EDİYOR)
 pezsp-* primitive'lere bağımlı.
 
 ```
-pezframe-support-procedural-tools
-pezframe-support-procedural-tools-derive
-pezframe-support-procedural
-pezframe-support
-pezframe-system
-pezframe-system-rpc-runtime-api
-pezframe-metadata
-pezframe-metadata-hash-extension
-pezframe-executive
-pezframe-election-provider-solution-type
-pezframe-election-provider-support
-pezframe-try-runtime
-pezframe-benchmarking
-pezframe-benchmarking-pezpallet-pov
-pezframe-system-benchmarking
-pezframe-benchmarking-cli
-pezframe-omni-bencher
+[x] pezframe-support-procedural-tools-derive v11.0.0
+[x] pezframe-support-procedural-tools v10.0.0
+[x] pezframe-support-procedural v23.0.0
+[x] pezframe-support v28.0.0
+[x] pezframe-system v28.0.0
+[x] pezframe-system-rpc-runtime-api v26.0.0
+[x] pezframe-metadata v23.0.1
+[x] pezframe-metadata-hash-extension v0.1.0
+[x] pezframe-executive v28.0.0
+[x] pezframe-election-provider-solution-type v13.0.0
+[x] pezframe-election-provider-support v28.0.0
+[x] pezframe-try-runtime v0.34.0
+[x] pezframe-benchmarking v28.0.0
+[x] pezframe-benchmarking-pezpallet-pov v18.0.0
+[x] pezframe-system-benchmarking v28.0.0
+[ ] pezframe-benchmarking-cli (SKIPPED - depends on unpublished crates)
+[ ] pezframe-omni-bencher (SKIPPED - depends on unpublished crates)
 ```
 
 ### LEVEL 4: Basic Pallets (No Cross-Pallet Deps)
 pezframe-*'a bağımlı, diğer pallet'lere bağımlı olmayan.
 
 ```
-pezpallet-aura
-pezpallet-authorship
-pezpallet-authority-discovery
-pezpallet-babe
-pezpallet-balances
-pezpallet-collective
-pezpallet-democracy
-pezpallet-elections-phragmen
+[x] pezpallet-timestamp v27.0.0
+[x] pezpallet-aura v27.0.0
+[x] pezpallet-authorship v28.0.0
+[x] pezpallet-balances v28.0.0
+[x] pezpallet-transaction-payment v28.0.0
+[x] pezpallet-session v28.0.0
+[x] pezpallet-collective v28.0.0
+[x] pezpallet-utility v28.0.0
+[ ] pezpallet-authority-discovery
+[ ] pezpallet-babe
+[ ] pezpallet-democracy
+[ ] pezpallet-elections-phragmen
 pezpallet-grandpa
 pezpallet-identity
 pezpallet-im-online
@@ -684,39 +688,50 @@ done
 
 ---
 
-## Özet (Son güncelleme: 2025-12-28 06:20 UTC)
+## Özet (Son güncelleme: 2025-12-28 09:00 UTC)
 
 | Kategori | Yayınlanan | Kalan |
 |----------|------------|-------|
 | LEVEL 0 | 11/11 | 0 ✅ |
 | LEVEL 1 | 16/17 | 1 (pezsp-maybe-compressed-blob) |
 | LEVEL 2 | 27/27 | 0 ✅ |
-| LEVEL 3+ | 0 | ~400+ |
-| **Toplam** | ~54 | ~399 |
+| LEVEL 3 | 11/17 | 6 |
+| LEVEL 4+ | 0 | ~380+ |
+| **Toplam** | ~65 | ~388 |
 
-**Bu oturumda yayınlanan (16 crate):**
-- pezsp-database v10.0.0
-- pezsp-session v27.0.0
-- pezsp-genesis-builder v0.8.0
-- pezsp-transaction-pool v26.0.0
-- pezsp-authority-discovery v26.0.0
-- pezsp-mmr-primitives v26.0.0
-- pezsp-mixnet v0.4.0
-- pezsp-rpc v26.0.0
-- pezsp-consensus v0.32.0
-- pezsp-consensus-slots v0.32.0
-- pezsp-consensus-aura v0.32.0
-- pezsp-consensus-babe v0.32.0
-- pezsp-consensus-grandpa v13.0.0
-- pezsp-consensus-beefy v13.0.0
-- pezsp-consensus-pow v0.32.0
-- pezsp-blockchain v28.0.0
+**Bu oturumda yayınlanan Level 3 crate'ler (11):**
+- pezframe-support-procedural-tools-derive v11.0.0
+- pezframe-support-procedural-tools v10.0.0
+- pezframe-support-procedural v23.0.0
+- pezframe-support v28.0.0
+- pezframe-system v28.0.0
+- pezframe-benchmarking v28.0.0
+- pezframe-try-runtime v0.34.0
+- pezframe-executive v28.0.0
+- pezframe-metadata-hash-extension v0.1.0
+- pezframe-election-provider-solution-type v13.0.0
+- pezframe-election-provider-support v28.0.0
 
-**LEVEL 2 TAMAMLANDI!** ✅
+**Circular dev-dependency düzeltmeleri:**
+- pezframe-support-procedural: pezframe-benchmarking, pezframe-support, pezframe-system kaldırıldı
+- pezframe-support: pezframe-system, pezsp-timestamp kaldırıldı
+- pezframe-system: bizinikiwi-test-runtime-client kaldırıldı
+- pezframe-benchmarking: pezsc-client-db kaldırıldı
+- pezframe-executive: bizinikiwi-test-runtime-client, pezpallet-balances, pezpallet-transaction-payment kaldırıldı
+- pezframe-metadata-hash-extension: bizinikiwi-test-runtime-client, bizinikiwi-wasm-builder kaldırıldı
+- pezframe-election-provider-solution-type: pezframe-election-provider-support kaldırıldı
 
-**Sonraki Oturumda Yapılacaklar:**
-1. Level 3 (FRAME Support) crate'lerine geç
-2. pezframe-support, pezframe-system ve diğer FRAME crate'leri
-3. Pallet crate'leri
+**Kalan Level 3 crate'ler:**
+- pezframe-system-rpc-runtime-api
+- pezframe-metadata
+- pezframe-benchmarking-pezpallet-pov
+- pezframe-system-benchmarking
+- pezframe-benchmarking-cli
+- pezframe-omni-bencher
 
-*Son güncelleme: 2025-12-28 06:20 UTC*
+**Sonraki Adımlar:**
+1. Kalan Level 3 crate'lerini yayınla
+2. Level 4 (Basic Pallets) crate'lerine geç
+3. Level 5+ crate'leri
+
+*Son güncelleme: 2025-12-28 09:00 UTC*
