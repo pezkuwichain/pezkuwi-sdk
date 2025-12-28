@@ -416,8 +416,7 @@ where
 #[cfg(test)]
 mod tests {
 	use super::*;
-	use pezsp_core::H256;
-	use pezsp_runtime::traits::Keccak256;
+	use pezsp_core::{H256, KeccakHasher};
 
 	#[test]
 	fn should_generate_empty_root() {
@@ -425,7 +424,7 @@ mod tests {
 		let data: Vec<[u8; 1]> = Default::default();
 
 		// when
-		let out = merkle_root::<Keccak256, _>(data);
+		let out = merkle_root::<KeccakHasher, _>(data);
 
 		// then
 		assert_eq!(
@@ -442,7 +441,7 @@ mod tests {
 		)];
 
 		// when
-		let out = merkle_root::<Keccak256, _>(data);
+		let out = merkle_root::<KeccakHasher, _>(data);
 
 		// then
 		assert_eq!(
@@ -460,7 +459,7 @@ mod tests {
 		];
 
 		// when
-		let out = merkle_root::<Keccak256, _>(data);
+		let out = merkle_root::<KeccakHasher, _>(data);
 
 		// then
 		assert_eq!(
@@ -472,7 +471,7 @@ mod tests {
 	#[test]
 	fn should_generate_root_complex() {
 		let test = |root, data| {
-			assert_eq!(array_bytes::bytes2hex("", &merkle_root::<Keccak256, _>(data)), root);
+			assert_eq!(array_bytes::bytes2hex("", &merkle_root::<KeccakHasher, _>(data)), root);
 		};
 
 		test(
@@ -502,8 +501,8 @@ mod tests {
 		let data = vec!["a", "b", "c"];
 
 		// when
-		let proof0 = merkle_proof::<Keccak256, _, _>(data.clone(), 0);
-		assert!(verify_proof::<Keccak256, _, _>(
+		let proof0 = merkle_proof::<KeccakHasher, _, _>(data.clone(), 0);
+		assert!(verify_proof::<KeccakHasher, _, _>(
 			&proof0.root,
 			proof0.proof.clone(),
 			data.len() as _,
@@ -511,8 +510,8 @@ mod tests {
 			&proof0.leaf,
 		));
 
-		let proof1 = merkle_proof::<Keccak256, _, _>(data.clone(), 1);
-		assert!(verify_proof::<Keccak256, _, _>(
+		let proof1 = merkle_proof::<KeccakHasher, _, _>(data.clone(), 1);
+		assert!(verify_proof::<KeccakHasher, _, _>(
 			&proof1.root,
 			proof1.proof,
 			data.len() as _,
@@ -520,8 +519,8 @@ mod tests {
 			&proof1.leaf,
 		));
 
-		let proof2 = merkle_proof::<Keccak256, _, _>(data.clone(), 2);
-		assert!(verify_proof::<Keccak256, _, _>(
+		let proof2 = merkle_proof::<KeccakHasher, _, _>(data.clone(), 2);
+		assert!(verify_proof::<KeccakHasher, _, _>(
 			&proof2.root,
 			proof2.proof,
 			data.len() as _,
@@ -539,7 +538,7 @@ mod tests {
 			array_bytes::bytes2hex("", &proof1.root)
 		);
 
-		assert!(!verify_proof::<Keccak256, _, _>(
+		assert!(!verify_proof::<KeccakHasher, _, _>(
 			&array_bytes::hex2array_unchecked(
 				"fb3b3be94be9e983ba5e094c9c51a7d96a4fa2e5d8e891df00ca89ba05bb1239"
 			)
@@ -550,7 +549,7 @@ mod tests {
 			&proof0.leaf
 		));
 
-		assert!(!verify_proof::<Keccak256, _, _>(
+		assert!(!verify_proof::<KeccakHasher, _, _>(
 			&proof0.root.into(),
 			vec![],
 			data.len() as _,
@@ -566,9 +565,9 @@ mod tests {
 
 		for l in 0..data.len() as u32 {
 			// when
-			let proof = merkle_proof::<Keccak256, _, _>(data.clone(), l);
+			let proof = merkle_proof::<KeccakHasher, _, _>(data.clone(), l);
 			// then
-			assert!(verify_proof::<Keccak256, _, _>(
+			assert!(verify_proof::<KeccakHasher, _, _>(
 				&proof.root,
 				proof.proof,
 				data.len() as _,
@@ -591,9 +590,9 @@ mod tests {
 
 			for l in 0..data.len() as u32 {
 				// when
-				let proof = merkle_proof::<Keccak256, _, _>(data.clone(), l);
+				let proof = merkle_proof::<KeccakHasher, _, _>(data.clone(), l);
 				// then
-				assert!(verify_proof::<Keccak256, _, _>(
+				assert!(verify_proof::<KeccakHasher, _, _>(
 					&proof.root,
 					proof.proof,
 					data.len() as _,
@@ -614,9 +613,9 @@ mod tests {
 
 		for l in (0..data.len() as u32).step_by(13) {
 			// when
-			let proof = merkle_proof::<Keccak256, _, _>(data.clone(), l);
+			let proof = merkle_proof::<KeccakHasher, _, _>(data.clone(), l);
 			// then
-			assert!(verify_proof::<Keccak256, _, _>(
+			assert!(verify_proof::<KeccakHasher, _, _>(
 				&proof.root,
 				proof.proof,
 				data.len() as _,
@@ -629,7 +628,7 @@ mod tests {
 	#[test]
 	#[should_panic]
 	fn should_panic_on_invalid_leaf_index() {
-		merkle_proof::<Keccak256, _, _>(vec!["a"], 5);
+		merkle_proof::<KeccakHasher, _, _>(vec!["a"], 5);
 	}
 
 	#[test]
@@ -815,13 +814,13 @@ mod tests {
 
 		for l in 0..data.len() as u32 {
 			// when
-			let proof = merkle_proof::<Keccak256, _, _>(data.clone(), l);
+			let proof = merkle_proof::<KeccakHasher, _, _>(data.clone(), l);
 			assert_eq!(array_bytes::bytes2hex("", &proof.root), array_bytes::bytes2hex("", &root));
 			assert_eq!(proof.leaf_index, l);
 			assert_eq!(&proof.leaf, &data[l as usize]);
 
 			// then
-			assert!(verify_proof::<Keccak256, _, _>(
+			assert!(verify_proof::<KeccakHasher, _, _>(
 				&proof.root,
 				proof.proof,
 				data.len() as _,
@@ -830,7 +829,7 @@ mod tests {
 			));
 		}
 
-		let proof = merkle_proof::<Keccak256, _, _>(data.clone(), data.len() as u32 - 1);
+		let proof = merkle_proof::<KeccakHasher, _, _>(data.clone(), data.len() as u32 - 1);
 
 		assert_eq!(
 			proof,

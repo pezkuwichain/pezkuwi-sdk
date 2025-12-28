@@ -1,6 +1,6 @@
 [package]
-name = "pezkuwi-ss58-registry"
-version = "1.51.0"
+name = "pezsp-ss58-registry"
+version = "1.52.0"
 description = "Registry of known SS58 address types - PezkuwiChain fork"
 documentation.workspace = true
 license = "Apache-2.0"

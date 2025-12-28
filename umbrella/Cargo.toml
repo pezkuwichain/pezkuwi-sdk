@@ -9,7 +9,7 @@ default = ["std"]
 std = [
 	"asset-test-pezutils?/std",
 	"assets-common?/std",
-	"binary-merkle-tree?/std",
+	"pez-binary-merkle-tree?/std",
 	"bizinikiwi-bip39?/std",
 	"bp-header-pez-chain?/std",
 	"bp-messages?/std",
@@ -58,7 +58,7 @@ std = [
 	"pezkuwi-runtime-metrics?/std",
 	"pezkuwi-runtime-teyrchains?/std",
 	"pezkuwi-sdk-frame?/std",
-	"pezkuwi-ss58-registry?/std",
+	"pezsp-ss58-registry?/std",
 	"pezkuwi-subxt-core?/std",
 	"pezkuwi-subxt-metadata?/std",
 	"pezkuwi-subxt-signer?/std",
@@ -238,7 +238,7 @@ std = [
 runtime-benchmarks = [
 	"asset-test-pezutils?/runtime-benchmarks",
 	"assets-common?/runtime-benchmarks",
-	"binary-merkle-tree?/runtime-benchmarks",
+	"pez-binary-merkle-tree?/runtime-benchmarks",
 	"bizinikiwi-frame-rpc-support?/runtime-benchmarks",
 	"bizinikiwi-frame-rpc-system?/runtime-benchmarks",
 	"bizinikiwi-rpc-client?/runtime-benchmarks",
@@ -745,7 +745,7 @@ with-tracing = [
 ]
 runtime-full = [
 	"assets-common",
-	"binary-merkle-tree",
+	"pez-binary-merkle-tree",
 	"bizinikiwi-bip39",
 	"bp-header-pez-chain",
 	"bp-messages",
@@ -797,7 +797,7 @@ runtime-full = [
 	"pezkuwi-runtime-metrics",
 	"pezkuwi-runtime-teyrchains",
 	"pezkuwi-sdk-frame",
-	"pezkuwi-ss58-registry",
+	"pezsp-ss58-registry",
 	"pezkuwi-subxt-core",
 	"pezkuwi-subxt-macro",
 	"pezkuwi-subxt-metadata",
@@ -1183,7 +1183,7 @@ default-features = false
 optional = true
 path = "../pezcumulus/teyrchains/runtimes/assets/common"
 
-[dependencies.binary-merkle-tree]
+[dependencies.pez-binary-merkle-tree]
 default-features = false
 optional = true
 path = "../bizinikiwi/utils/binary-merkle-tree"
@@ -1443,7 +1443,7 @@ default-features = false
 optional = true
 path = "../bizinikiwi/pezframe"
 
-[dependencies.pezkuwi-ss58-registry]
+[dependencies.pezsp-ss58-registry]
 default-features = false
 optional = true
 path = "../vendor/ss58-registry"

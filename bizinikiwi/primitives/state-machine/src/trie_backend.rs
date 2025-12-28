@@ -578,7 +578,7 @@ pub mod tests {
 	use super::*;
 	use codec::Encode;
 	use pezsp_core::H256;
-	use pezsp_runtime::traits::BlakeTwo256;
+	use pezsp_core::Blake2Hasher as BlakeTwo256;
 	use pezsp_trie::{
 		cache::{CacheSize, SharedTrieCache},
 		trie_types::{TrieDBBuilder, TrieDBMutBuilderV0, TrieDBMutBuilderV1},

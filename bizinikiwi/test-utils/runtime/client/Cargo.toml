@@ -29,6 +29,9 @@ pezsp-consensus = { workspace = true, default-features = true }
 pezsp-core = { workspace = true, default-features = true }
 pezsp-runtime = { workspace = true, default-features = true }
 
+[dev-dependencies]
+pezsp-tracing = { workspace = true, default-features = true }
+
 [features]
 bls-experimental = ["bizinikiwi-test-runtime/bls-experimental"]
 runtime-benchmarks = [
