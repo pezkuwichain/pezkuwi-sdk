@@ -8,7 +8,7 @@ edition.workspace = true
 license.workspace = true
 publish = false
 repository.workspace = true
-documentation = "https://docs.rs/pezpallet-staking-score"
+documentation.workspace = true
 
 [dependencies]
 codec = { workspace = true, default-features = false, features = ["derive"] }

@@ -1,4 +1,4 @@
-// Copyright (C) Parity Technologies (UK) Ltd.
+// Copyright (C) Parity Technologies (UK) Ltd. and Dijital Kurdistan Tech Institute
 // This file is part of Pezcumulus.
 // SPDX-License-Identifier: GPL-3.0-or-later WITH Classpath-exception-2.0
 

@@ -7,7 +7,7 @@ license = "Apache-2.0"
 description = "Common resources for integration testing with xcm-pez-emulator"
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/emulated-integration-tests-common"
+documentation.workspace = true
 publish = false
 
 [lints]

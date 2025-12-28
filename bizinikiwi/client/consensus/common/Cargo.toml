@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Collection of common consensus specific implementations for Bizinikiwi (client)"
 readme = "README.md"
-documentation = "https://docs.rs/pezsc-consensus"
+documentation.workspace = true
 
 [lints]
 workspace = true

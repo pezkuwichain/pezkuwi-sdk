@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "FRAME system module"
 readme = "README.md"
-documentation = "https://docs.rs/pezframe-system"
+documentation.workspace = true
 
 [lints]
 workspace = true

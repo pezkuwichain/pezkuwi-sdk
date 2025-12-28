@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Client backend that uses RocksDB database as storage."
 readme = "README.md"
-documentation = "https://docs.rs/pezsc-client-db"
+documentation.workspace = true
 
 [lints]
 workspace = true

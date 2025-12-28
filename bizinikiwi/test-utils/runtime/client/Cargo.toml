@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 publish = false
 description = "Bizinikiwi utility: test runtime client"
-documentation = "https://docs.rs/bizinikiwi-test-runtime-client"
+documentation.workspace = true
 
 [lints]
 workspace = true
@@ -28,6 +28,9 @@ pezsp-blockchain = { workspace = true, default-features = true }
 pezsp-consensus = { workspace = true, default-features = true }
 pezsp-core = { workspace = true, default-features = true }
 pezsp-runtime = { workspace = true, default-features = true }
+
+[dev-dependencies]
+pezsp-tracing = { workspace = true, default-features = true }
 
 [features]
 bls-experimental = ["bizinikiwi-test-runtime/bls-experimental"]

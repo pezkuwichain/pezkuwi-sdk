@@ -8,7 +8,7 @@ publish = false
 homepage.workspace = true
 repository.workspace = true
 description = "Pezkuwi SDK primitive: runtime interface test"
-documentation = "https://docs.rs/pezsp-runtime-interface-test"
+documentation.workspace = true
 
 [lints]
 workspace = true

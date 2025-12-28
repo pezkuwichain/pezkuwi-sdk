@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Dummy DIM Pallet"
 readme = "README.md"
-documentation = "https://docs.rs/pezpallet-dummy-dim"
+documentation.workspace = true
 
 [package.metadata.docs.rs]
 targets = ["x86_64-unknown-linux-gnu"]

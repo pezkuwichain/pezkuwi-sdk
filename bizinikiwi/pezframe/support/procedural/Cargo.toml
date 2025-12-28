@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "Proc macro of Support code for the runtime."
-documentation = "https://docs.rs/pezframe-support-procedural"
+documentation.workspace = true
 
 [lints]
 workspace = true

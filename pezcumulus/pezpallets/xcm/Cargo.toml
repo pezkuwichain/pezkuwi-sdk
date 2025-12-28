@@ -7,7 +7,7 @@ license = "Apache-2.0"
 description = "Pallet for stuff specific to teyrchains' usage of XCM"
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezcumulus-pezpallet-xcm"
+documentation.workspace = true
 
 [lints]
 workspace = true

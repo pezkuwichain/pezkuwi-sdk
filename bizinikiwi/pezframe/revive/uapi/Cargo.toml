@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "Exposes all the host functions that a contract can import."
-documentation = "https://docs.rs/pezpallet-revive-uapi"
+documentation.workspace = true
 
 [lints]
 workspace = true

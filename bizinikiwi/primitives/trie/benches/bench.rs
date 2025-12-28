@@ -1,6 +1,6 @@
 // This file is part of Bizinikiwi.
 
-// Copyright (C) Parity Technologies (UK) Ltd.
+// Copyright (C) Parity Technologies (UK) Ltd. and Dijital Kurdistan Tech Institute
 // SPDX-License-Identifier: Apache-2.0
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,11 +21,11 @@ criterion_main!(benches);
 
 fn benchmark(c: &mut Criterion) {
 	trie_bench::standard_benchmark::<
-		pezsp_trie::LayoutV1<pezsp_runtime::traits::BlakeTwo256>,
+		pezsp_trie::LayoutV1<pezsp_core::Blake2Hasher>,
 		pezsp_trie::TrieStream,
 	>(c, "bizinikiwi-blake2");
 	trie_bench::standard_benchmark::<
-		pezsp_trie::LayoutV1<pezsp_runtime::traits::BlakeTwo256>,
+		pezsp_trie::LayoutV1<pezsp_core::KeccakHasher>,
 		pezsp_trie::TrieStream,
 	>(c, "bizinikiwi-keccak");
 }

@@ -8,7 +8,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 readme = "README.md"
-documentation = "https://docs.rs/pezpallet-authorship"
+documentation.workspace = true
 
 [lints]
 workspace = true

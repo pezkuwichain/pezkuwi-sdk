@@ -7,7 +7,7 @@ description = "Inherent that needs to be present in every teyrchain block. Conta
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezcumulus-client-teyrchain-inherent"
+documentation.workspace = true
 
 [dependencies]
 async-trait = { workspace = true }

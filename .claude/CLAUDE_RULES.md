@@ -631,6 +631,44 @@ Düzeltme 2-3 denemede işe yaramazsa → ROLLBACK
 
 ---
 
+## 🖥️ VPS RUNNER INFRASTRUCTURE
+
+**Son güncelleme:** 2025-12-27
+
+### Self-Hosted Runners
+
+| VPS | IP Address | SSH | Runner Label |
+|-----|------------|-----|--------------|
+| VPS1 | 37.60.230.9 | `ssh root@37.60.230.9` | ubuntu-large |
+| VPS2 | 62.146.235.186 | `ssh root@62.146.235.186` | ubuntu-xlarge |
+
+Her iki runner paralel çalışır. Workflow'lar kuyrukta uzun bekliyorsa her iki VPS'in de aktif olduğunu kontrol et.
+
+---
+
+## ⚠️ ÖĞRENILEN DERSLER
+
+### serde_core + wasm32v1-none Uyumsuzluğu (2025-12-27)
+
+**Problem:** serde_core 1.0.228 + Rust 1.88.0 + wasm32v1-none target kombinasyonu derleme hatası veriyor.
+
+**Hata:**
+```
+error: relaxing a default bound only does something for ?Sized
+```
+
+**Çözüm:** CI'da `rustup target add wasm32v1-none` adımını kaldır. wasm-builder otomatik olarak wasm32v1-none'dan wasm32-unknown-unknown'a fallback yapar.
+
+**Upstream Issue:** https://github.com/serde-rs/serde/issues/3021
+
+**Kural:** Eğer bir dependency'de bug varsa:
+1. Geçici workaround uygula (wasm32v1-none kaldır)
+2. Upstream'e issue aç
+3. Tracking issue oluştur (`.claude/issue_mapping.txt`)
+4. Kalıcı fix için upstream'i takip et
+
+---
+
 ## 🔧 DEVAM EDEN GÖREV: pezpallet-revive-eth-rpc DERLEME
 
 **Son güncelleme:** 2025-12-19 14:50 UTC

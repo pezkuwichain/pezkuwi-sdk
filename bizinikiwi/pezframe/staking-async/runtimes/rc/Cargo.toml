@@ -9,7 +9,7 @@ license.workspace = true
 homepage.workspace = true
 repository.workspace = true
 publish = false
-documentation = "https://docs.rs/pezpallet-staking-async-rc-runtime"
+documentation.workspace = true
 
 [lints]
 workspace = true
@@ -24,7 +24,7 @@ serde_derive = { optional = true, workspace = true }
 serde_json = { features = ["alloc"], workspace = true }
 smallvec = { workspace = true, default-features = true }
 
-binary-merkle-tree = { workspace = true }
+pez-binary-merkle-tree = { workspace = true }
 pezsp-api = { workspace = true }
 pezsp-application-crypto = { workspace = true }
 pezsp-arithmetic = { workspace = true }
@@ -135,7 +135,7 @@ bizinikiwi-wasm-builder = { workspace = true, default-features = true }
 default = ["std"]
 no_std = []
 std = [
-	"binary-merkle-tree/std",
+	"pez-binary-merkle-tree/std",
 	"bitvec/std",
 	"codec/std",
 	"log/std",
@@ -230,7 +230,7 @@ std = [
 	"xcm/std",
 ]
 runtime-benchmarks = [
-	"binary-merkle-tree/runtime-benchmarks",
+	"pez-binary-merkle-tree/runtime-benchmarks",
 	"bizinikiwi-wasm-builder/runtime-benchmarks",
 	"pezframe-benchmarking/runtime-benchmarks",
 	"pezframe-election-provider-support/runtime-benchmarks",

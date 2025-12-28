@@ -1914,18 +1914,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0e050f626429857a27ddccb31e0aca21356bfa709c04041aefddac081a8f068a"
 
 [[package]]
-name = "binary-merkle-tree"
-version = "13.0.0"
-dependencies = [
- "array-bytes 6.2.3",
- "hash-db",
- "log",
- "parity-scale-codec",
- "pezsp-core",
- "pezsp-runtime",
-]
-
-[[package]]
 name = "bincode"
 version = "1.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2308,6 +2296,7 @@ dependencies = [
  "pezsp-consensus",
  "pezsp-core",
  "pezsp-runtime",
+ "pezsp-tracing",
 ]
 
 [[package]]
@@ -2606,8 +2595,8 @@ dependencies = [
 name = "bp-beefy"
 version = "0.1.0"
 dependencies = [
- "binary-merkle-tree",
  "parity-scale-codec",
+ "pez-binary-merkle-tree",
  "pezbp-runtime",
  "pezframe-support",
  "pezpallet-beefy-mmr",
@@ -9967,6 +9956,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "pez-binary-merkle-tree"
+version = "14.0.1"
+dependencies = [
+ "array-bytes 6.2.3",
+ "hash-db",
+ "log",
+ "parity-scale-codec",
+ "pezsp-core",
+]
+
+[[package]]
 name = "pez-chain-spec-guide-runtime"
 version = "0.0.0"
 dependencies = [
@@ -12129,7 +12129,6 @@ dependencies = [
  "Inflector",
  "aquamarine",
  "array-bytes 6.2.3",
- "binary-merkle-tree",
  "bitflags 1.3.2",
  "docify",
  "environmental",
@@ -12140,6 +12139,7 @@ dependencies = [
  "macro_magic",
  "parity-scale-codec",
  "paste",
+ "pez-binary-merkle-tree",
  "pezframe-support-procedural",
  "pezframe-system",
  "pezsp-api",
@@ -13610,7 +13610,6 @@ version = "0.1.0"
 dependencies = [
  "asset-test-pezutils",
  "assets-common",
- "binary-merkle-tree",
  "bizinikiwi-bip39",
  "bizinikiwi-build-script-utils",
  "bizinikiwi-frame-rpc-support",
@@ -13630,6 +13629,7 @@ dependencies = [
  "bp-xcm-bridge-hub-router",
  "bridge-hub-common",
  "frame-remote-externalities",
+ "pez-binary-merkle-tree",
  "pez-ethereum-standards",
  "pez-fork-tree",
  "pez-generate-bags",
@@ -13734,7 +13734,6 @@ dependencies = [
  "pezkuwi-runtime-teyrchains",
  "pezkuwi-sdk-frame",
  "pezkuwi-service",
- "pezkuwi-ss58-registry",
  "pezkuwi-statement-distribution",
  "pezkuwi-statement-table",
  "pezkuwi-subxt",
@@ -13969,6 +13968,7 @@ dependencies = [
  "pezsp-runtime-interface",
  "pezsp-runtime-interface-proc-macro",
  "pezsp-session",
+ "pezsp-ss58-registry 1.52.0",
  "pezsp-staking",
  "pezsp-state-machine",
  "pezsp-statement-store",
@@ -14277,19 +14277,6 @@ dependencies = [
  "xcm-runtime-pezapis",
  "zagros-runtime",
  "zagros-runtime-constants",
-]
-
-[[package]]
-name = "pezkuwi-ss58-registry"
-version = "1.51.0"
-dependencies = [
- "Inflector",
- "num-format",
- "proc-macro2 1.0.103",
- "quote 1.0.42",
- "serde",
- "serde_json",
- "unicode-xid 0.2.6",
 ]
 
 [[package]]
@@ -14909,13 +14896,13 @@ dependencies = [
 name = "pezkuwichain-runtime"
 version = "7.0.0"
 dependencies = [
- "binary-merkle-tree",
  "bitvec",
  "bizinikiwi-wasm-builder",
  "frame-remote-externalities",
  "hex-literal",
  "log",
  "parity-scale-codec",
+ "pez-binary-merkle-tree",
  "pezframe-benchmarking",
  "pezframe-election-provider-support",
  "pezframe-executive",
@@ -15562,9 +15549,9 @@ name = "pezpallet-beefy-mmr"
 version = "28.0.0"
 dependencies = [
  "array-bytes 6.2.3",
- "binary-merkle-tree",
  "log",
  "parity-scale-codec",
+ "pez-binary-merkle-tree",
  "pezframe-benchmarking",
  "pezframe-support",
  "pezframe-system",
@@ -17566,13 +17553,13 @@ name = "pezpallet-staking-async-rc-runtime"
 version = "7.0.0"
 dependencies = [
  "approx",
- "binary-merkle-tree",
  "bitvec",
  "bizinikiwi-wasm-builder",
  "frame-remote-externalities",
  "hex-literal",
  "log",
  "parity-scale-codec",
+ "pez-binary-merkle-tree",
  "pezframe-benchmarking",
  "pezframe-election-provider-support",
  "pezframe-executive",
@@ -20395,7 +20382,6 @@ dependencies = [
  "pezsp-runtime",
  "pezsp-runtime-interface",
  "pezsp-state-machine",
- "pezsp-test-primitives",
  "pezsp-trie",
  "pezsp-version",
  "scale-info",
@@ -20673,10 +20659,10 @@ dependencies = [
  "parity-scale-codec",
  "parking_lot 0.12.5",
  "paste",
- "pezkuwi-ss58-registry",
  "pezsp-crypto-hashing",
  "pezsp-debug-derive",
  "pezsp-externalities",
+ "pezsp-ss58-registry 1.52.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "pezsp-std",
  "pezsp-storage",
  "primitive-types 0.13.1",
@@ -20745,7 +20731,6 @@ dependencies = [
  "byteorder",
  "criterion",
  "digest 0.10.7",
- "pezsp-crypto-hashing-proc-macro",
  "sha2 0.10.9",
  "sha3",
  "twox-hash 1.6.3",
@@ -20902,7 +20887,6 @@ dependencies = [
 name = "pezsp-npos-elections"
 version = "26.0.0"
 dependencies = [
- "bizinikiwi-test-utils",
  "parity-scale-codec",
  "pezsp-arithmetic",
  "pezsp-core",
@@ -20953,8 +20937,6 @@ dependencies = [
 name = "pezsp-runtime"
 version = "31.0.1"
 dependencies = [
- "binary-merkle-tree",
- "bizinikiwi-test-runtime-client",
  "bytes",
  "docify",
  "either",
@@ -20964,7 +20946,7 @@ dependencies = [
  "num-traits",
  "parity-scale-codec",
  "paste",
- "pezsp-api",
+ "pez-binary-merkle-tree",
  "pezsp-application-crypto",
  "pezsp-arithmetic",
  "pezsp-core",
@@ -20992,10 +20974,7 @@ dependencies = [
  "impl-trait-for-tuples",
  "parity-scale-codec",
  "pezsp-externalities",
- "pezsp-io",
  "pezsp-runtime-interface-proc-macro",
- "pezsp-runtime-interface-test-wasm",
- "pezsp-state-machine",
  "pezsp-std",
  "pezsp-storage",
  "pezsp-tracing",
@@ -21069,6 +21048,34 @@ dependencies = [
 ]
 
 [[package]]
+name = "pezsp-ss58-registry"
+version = "1.52.0"
+dependencies = [
+ "Inflector",
+ "num-format",
+ "proc-macro2 1.0.103",
+ "quote 1.0.42",
+ "serde",
+ "serde_json",
+ "unicode-xid 0.2.6",
+]
+
+[[package]]
+name = "pezsp-ss58-registry"
+version = "1.52.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1bf18f939625b28ef71ad9eb5bcfe34aaa30ab6fd38740c49b9ea1a9f36b4671"
+dependencies = [
+ "Inflector",
+ "num-format",
+ "proc-macro2 1.0.103",
+ "quote 1.0.42",
+ "serde",
+ "serde_json",
+ "unicode-xid 0.2.6",
+]
+
+[[package]]
 name = "pezsp-staking"
 version = "26.0.0"
 dependencies = [
@@ -21094,7 +21101,6 @@ dependencies = [
  "pezsp-core",
  "pezsp-externalities",
  "pezsp-panic-handler",
- "pezsp-runtime",
  "pezsp-trie",
  "pretty_assertions",
  "rand 0.8.5",
@@ -21203,7 +21209,6 @@ version = "29.0.0"
 dependencies = [
  "ahash 0.8.12",
  "array-bytes 6.2.3",
- "bizinikiwi-prometheus-endpoint",
  "criterion",
  "foldhash 0.1.5",
  "hash-db",
@@ -21214,7 +21219,6 @@ dependencies = [
  "parking_lot 0.12.5",
  "pezsp-core",
  "pezsp-externalities",
- "pezsp-runtime",
  "rand 0.8.5",
  "scale-info",
  "schnellru",
@@ -28310,13 +28314,13 @@ name = "zagros-runtime"
 version = "7.0.0"
 dependencies = [
  "approx",
- "binary-merkle-tree",
  "bitvec",
  "bizinikiwi-wasm-builder",
  "frame-remote-externalities",
  "hex-literal",
  "log",
  "parity-scale-codec",
+ "pez-binary-merkle-tree",
  "pezframe-benchmarking",
  "pezframe-election-provider-support",
  "pezframe-executive",

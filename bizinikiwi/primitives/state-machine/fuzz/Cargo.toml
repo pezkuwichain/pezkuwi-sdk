@@ -5,7 +5,7 @@ publish = false
 license = "Apache-2.0"
 edition = "2021"
 description = "Pezkuwi SDK primitive: state machine fuzz"
-documentation = "https://docs.rs/pezsp-state-machine-fuzz"
+documentation.workspace = true
 repository = { workspace = true }
 homepage = { workspace = true }
 authors = { workspace = true }

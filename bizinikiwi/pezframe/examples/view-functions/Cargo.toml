@@ -7,7 +7,7 @@ license.workspace = true
 homepage.workspace = true
 repository.workspace = true
 description = "Pallet to demonstrate the usage of view functions to query pezpallet state"
-documentation = "https://docs.rs/pezpallet-example-view-functions"
+documentation.workspace = true
 publish = false
 
 [lints]

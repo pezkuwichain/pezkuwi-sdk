@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "Primitives for GRANDPA integration, suitable for WASM compilation."
-documentation = "https://docs.rs/pezsp-consensus-grandpa"
+documentation.workspace = true
 readme = "README.md"
 
 [lints]

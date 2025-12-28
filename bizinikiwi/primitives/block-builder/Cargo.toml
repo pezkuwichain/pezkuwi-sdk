@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "The block builder runtime api."
 readme = "README.md"
-documentation = "https://docs.rs/pezsp-block-builder"
+documentation.workspace = true
 
 [lints]
 workspace = true

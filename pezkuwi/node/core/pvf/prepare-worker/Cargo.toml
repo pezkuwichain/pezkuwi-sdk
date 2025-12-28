@@ -7,7 +7,7 @@ edition.workspace = true
 license.workspace = true
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezkuwi-node-core-pvf-prepare-worker"
+documentation.workspace = true
 
 [lints]
 workspace = true

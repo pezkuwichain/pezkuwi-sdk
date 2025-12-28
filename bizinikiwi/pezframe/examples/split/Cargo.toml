@@ -9,7 +9,7 @@ repository.workspace = true
 description = "FRAME example split pezpallet"
 readme = "README.md"
 publish = false
-documentation = "https://docs.rs/pezpallet-example-split"
+documentation.workspace = true
 
 [lints]
 workspace = true

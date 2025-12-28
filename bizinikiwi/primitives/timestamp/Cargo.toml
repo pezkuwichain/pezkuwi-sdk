@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Bizinikiwi core types and inherents for timestamps."
 readme = "README.md"
-documentation = "https://docs.rs/pezsp-timestamp"
+documentation.workspace = true
 
 [lints]
 workspace = true

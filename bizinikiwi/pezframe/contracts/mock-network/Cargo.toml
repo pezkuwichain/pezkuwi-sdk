@@ -7,7 +7,7 @@ license.workspace = true
 homepage.workspace = true
 repository.workspace = true
 description = "A mock network for testing pezpallet-contracts"
-documentation = "https://docs.rs/pezpallet-contracts-mock-network"
+documentation.workspace = true
 
 [lints]
 workspace = true

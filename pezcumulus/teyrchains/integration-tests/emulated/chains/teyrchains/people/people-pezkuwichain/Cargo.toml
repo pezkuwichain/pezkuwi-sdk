@@ -6,7 +6,7 @@ edition.workspace = true
 license = "Apache-2.0"
 description = "People Pezkuwichain emulated chain"
 publish = false
-documentation = "https://docs.rs/people-pezkuwichain-emulated-chain"
+documentation.workspace = true
 repository = { workspace = true }
 homepage = { workspace = true }
 

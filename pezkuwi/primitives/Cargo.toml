@@ -7,7 +7,7 @@ license.workspace = true
 description = "Shared primitives used by Pezkuwi runtime"
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezkuwi-primitives"
+documentation.workspace = true
 
 [lints]
 workspace = true

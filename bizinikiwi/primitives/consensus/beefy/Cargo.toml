@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "Primitives for BEEFY protocol."
-documentation = "https://docs.rs/pezsp-consensus-beefy"
+documentation.workspace = true
 
 [lints]
 workspace = true

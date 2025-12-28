@@ -10,7 +10,7 @@ default-run = "bizinikiwi-node"
 homepage.workspace = true
 repository.workspace = true
 publish = false
-documentation = "https://docs.rs/pezstaging-node-cli"
+documentation.workspace = true
 
 [lints]
 workspace = true

@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "FRAME pezpallet based on seq-Phragmén election method."
 readme = "README.md"
-documentation = "https://docs.rs/pezpallet-elections-phragmen"
+documentation.workspace = true
 
 [lints]
 workspace = true

@@ -1,4 +1,4 @@
-// Copyright (C) Parity Technologies (UK) Ltd.
+// Copyright (C) Parity Technologies (UK) Ltd. and Dijital Kurdistan Tech Institute
 // This file is part of Pezkuwi.
 
 // SPDX-License-Identifier: Apache-2.0

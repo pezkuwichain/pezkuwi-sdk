@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "FRAME multi-signature dispatch pezpallet"
 readme = "README.md"
-documentation = "https://docs.rs/pezpallet-multisig"
+documentation.workspace = true
 
 [lints]
 workspace = true

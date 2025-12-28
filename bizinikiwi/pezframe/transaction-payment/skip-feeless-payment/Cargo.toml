@@ -6,7 +6,7 @@ edition.workspace = true
 license.workspace = true
 repository.workspace = true
 description = "Pallet to skip payments for calls annotated with `feeless_if` if the respective conditions are satisfied."
-documentation = "https://docs.rs/pezpallet-skip-feeless-payment"
+documentation.workspace = true
 homepage = { workspace = true }
 
 [lints]

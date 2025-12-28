@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "PALLET multi phase+block election providers"
-documentation = "https://docs.rs/pezpallet-election-provider-multi-block"
+documentation.workspace = true
 
 [lints]
 workspace = true

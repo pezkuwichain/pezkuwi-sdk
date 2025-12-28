@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Bizinikiwi service. Starts a thread that spins up the network, client, and extrinsic pool. Manages communication between them."
 readme = "README.md"
-documentation = "https://docs.rs/pezsc-service"
+documentation.workspace = true
 
 [lints]
 workspace = true

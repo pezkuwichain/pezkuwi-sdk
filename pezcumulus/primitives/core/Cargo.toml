@@ -7,7 +7,7 @@ license = "Apache-2.0"
 description = "Pezcumulus related core primitive types and traits"
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezcumulus-primitives-core"
+documentation.workspace = true
 
 [lints]
 workspace = true

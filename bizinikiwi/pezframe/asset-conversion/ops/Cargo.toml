@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "FRAME asset conversion pezpallet's operations suite"
-documentation = "https://docs.rs/pezpallet-asset-conversion-ops"
+documentation.workspace = true
 
 [lints]
 workspace = true

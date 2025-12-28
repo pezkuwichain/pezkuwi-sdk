@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "FRAME pezpallet for conviction voting in referenda"
 readme = "README.md"
-documentation = "https://docs.rs/pezpallet-conviction-voting"
+documentation.workspace = true
 
 [lints]
 workspace = true

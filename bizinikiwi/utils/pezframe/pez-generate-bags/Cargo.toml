@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "Bag threshold generation script for pezpallet-bag-list"
-documentation = "https://docs.rs/pez-generate-bags"
+documentation.workspace = true
 
 [lints]
 workspace = true

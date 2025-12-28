@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "Pallet for testing FRAME PoV benchmarking"
-documentation = "https://docs.rs/pezframe-benchmarking-pezpallet-pov"
+documentation.workspace = true
 
 [lints]
 workspace = true

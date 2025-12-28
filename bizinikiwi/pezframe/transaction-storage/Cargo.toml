@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Storage chain pezpallet"
 readme = "README.md"
-documentation = "https://docs.rs/pezpallet-transaction-storage"
+documentation.workspace = true
 
 [lints]
 workspace = true

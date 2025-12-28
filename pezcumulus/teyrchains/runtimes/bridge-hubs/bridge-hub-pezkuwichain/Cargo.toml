@@ -7,7 +7,7 @@ description = "Pezkuwichain's BridgeHub teyrchain runtime"
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezbridge-hub-pezkuwichain-runtime"
+documentation.workspace = true
 
 [lints]
 workspace = true

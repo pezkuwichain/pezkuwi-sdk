@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "Provides precompiles for `pezpallet-xcm`"
-documentation = "https://docs.rs/pezpallet-xcm-precompiles"
+documentation.workspace = true
 
 [lints]
 workspace = true

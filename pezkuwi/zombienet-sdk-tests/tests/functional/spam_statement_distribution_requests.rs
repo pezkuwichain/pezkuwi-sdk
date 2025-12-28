@@ -1,4 +1,4 @@
-// Copyright (C) Parity Technologies (UK) Ltd.
+// Copyright (C) Parity Technologies (UK) Ltd. and Dijital Kurdistan Tech Institute
 // SPDX-License-Identifier: Apache-2.0
 
 // Test if teyrchains progress when group is getting spammed by statement distribution requests.

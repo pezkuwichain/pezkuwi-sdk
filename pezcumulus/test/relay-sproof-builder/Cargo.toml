@@ -7,7 +7,7 @@ license = "Apache-2.0"
 description = "Mocked relay state proof builder for testing Pezcumulus."
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezcumulus-test-relay-sproof-builder"
+documentation.workspace = true
 publish = false
 
 [lints]

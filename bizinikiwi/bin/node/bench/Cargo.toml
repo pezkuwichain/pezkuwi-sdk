@@ -8,7 +8,7 @@ license = "GPL-3.0-or-later WITH Classpath-exception-2.0"
 homepage.workspace = true
 repository.workspace = true
 publish = false
-documentation = "https://docs.rs/pez-node-bench"
+documentation.workspace = true
 
 [lints]
 workspace = true

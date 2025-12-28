@@ -6,7 +6,7 @@ authors.workspace = true
 edition.workspace = true
 license.workspace = true
 description = "Pezkuwi SDK component: test runtime constants"
-documentation = "https://docs.rs/peztest-runtime-constants"
+documentation.workspace = true
 repository = { workspace = true }
 homepage = { workspace = true }
 

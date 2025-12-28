@@ -7,7 +7,7 @@ edition.workspace = true
 authors.workspace = true
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezpallet-meta-tx"
+documentation.workspace = true
 
 [lints]
 workspace = true

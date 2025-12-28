@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "FRAME offences pezpallet benchmarking"
 readme = "README.md"
-documentation = "https://docs.rs/pezpallet-offences-benchmarking"
+documentation.workspace = true
 
 [lints]
 workspace = true

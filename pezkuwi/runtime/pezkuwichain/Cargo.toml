@@ -8,7 +8,7 @@ edition.workspace = true
 license.workspace = true
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezkuwichain-runtime"
+documentation.workspace = true
 
 [lints]
 workspace = true
@@ -22,7 +22,7 @@ serde = { workspace = true }
 serde_derive = { optional = true, workspace = true }
 serde_json = { features = ["alloc"], workspace = true }
 
-binary-merkle-tree = { workspace = true }
+pez-binary-merkle-tree = { workspace = true }
 pezkuwichain-runtime-constants = { workspace = true }
 pezsp-api = { workspace = true }
 pezsp-arithmetic = { workspace = true }
@@ -132,7 +132,7 @@ bizinikiwi-wasm-builder = { optional = true, workspace = true, default-features 
 default = ["std"]
 no_std = []
 std = [
-	"binary-merkle-tree/std",
+	"pez-binary-merkle-tree/std",
 	"bitvec/std",
 	"bizinikiwi-wasm-builder",
 	"codec/std",
@@ -226,7 +226,7 @@ std = [
 	"xcm/std",
 ]
 runtime-benchmarks = [
-	"binary-merkle-tree/runtime-benchmarks",
+	"pez-binary-merkle-tree/runtime-benchmarks",
 	"bizinikiwi-wasm-builder?/runtime-benchmarks",
 	"pezframe-benchmarking/runtime-benchmarks",
 	"pezframe-election-provider-support/runtime-benchmarks",

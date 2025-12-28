@@ -7,7 +7,7 @@ description = "Proc macros provided by the teyrchain-system pezpallet"
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezcumulus-pezpallet-teyrchain-system-proc-macro"
+documentation.workspace = true
 
 [lints]
 workspace = true

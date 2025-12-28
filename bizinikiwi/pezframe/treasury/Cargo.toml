@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "FRAME pezpallet to manage treasury"
 readme = "README.md"
-documentation = "https://docs.rs/pezpallet-treasury"
+documentation.workspace = true
 
 [lints]
 workspace = true

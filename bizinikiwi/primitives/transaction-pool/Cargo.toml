@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "Transaction pool runtime facing API."
-documentation = "https://docs.rs/pezsp-transaction-pool"
+documentation.workspace = true
 readme = "README.md"
 
 [lints]

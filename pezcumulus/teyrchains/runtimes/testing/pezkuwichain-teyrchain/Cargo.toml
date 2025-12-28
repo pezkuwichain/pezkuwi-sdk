@@ -7,7 +7,7 @@ description = "Simple runtime used by the pezkuwichain teyrchain(s)"
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezkuwichain-teyrchain-runtime"
+documentation.workspace = true
 
 [lints]
 workspace = true

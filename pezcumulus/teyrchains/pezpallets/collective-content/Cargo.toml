@@ -10,7 +10,7 @@ description = "Managed content"
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezpallet-collective-content"
+documentation.workspace = true
 
 [lints]
 workspace = true

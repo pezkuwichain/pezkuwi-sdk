@@ -1,13 +1,13 @@
 [package]
-name = "binary-merkle-tree"
-version = "13.0.0"
+name = "pez-binary-merkle-tree"
+version = "14.0.1"
 authors.workspace = true
 edition.workspace = true
 license = "Apache-2.0"
 repository.workspace = true
 description = "A no-std/Bizinikiwi compatible library to construct binary merkle tree."
 homepage.workspace = true
-documentation = "https://docs.rs/binary-merkle-tree"
+documentation.workspace = true
 
 [lints]
 workspace = true
@@ -21,16 +21,13 @@ log = { optional = true, workspace = true }
 [dev-dependencies]
 array-bytes = { workspace = true, default-features = true }
 pezsp-core = { workspace = true, default-features = true }
-pezsp-runtime = { workspace = true, default-features = true }
 
 [features]
 debug = ["array-bytes", "log"]
 default = ["debug", "std"]
-runtime-benchmarks = ["pezsp-runtime/runtime-benchmarks"]
 std = [
 	"codec/std",
 	"hash-db/std",
 	"log/std",
-	"pezsp-core/std",
-	"pezsp-runtime/std",
 ]
+runtime-benchmarks = []

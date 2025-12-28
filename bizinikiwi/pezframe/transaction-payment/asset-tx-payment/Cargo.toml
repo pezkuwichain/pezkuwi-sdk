@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "pezpallet to manage transaction payments in assets"
 readme = "README.md"
-documentation = "https://docs.rs/pezpallet-asset-tx-payment"
+documentation.workspace = true
 
 [lints]
 workspace = true

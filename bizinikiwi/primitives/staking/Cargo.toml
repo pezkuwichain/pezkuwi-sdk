@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "A crate which contains primitives that are useful for implementation that uses staking approaches in general. Definitions related to sessions, slashing, etc go here."
 readme = "README.md"
-documentation = "https://docs.rs/pezsp-staking"
+documentation.workspace = true
 
 [lints]
 workspace = true

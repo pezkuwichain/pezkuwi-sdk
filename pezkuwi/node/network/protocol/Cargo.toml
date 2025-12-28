@@ -7,7 +7,7 @@ license.workspace = true
 description = "Primitives types for the Node-side"
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezkuwi-node-network-protocol"
+documentation.workspace = true
 
 [lints]
 workspace = true
