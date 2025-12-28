@@ -33,9 +33,6 @@ pezsp-version = { workspace = true }
 scale-info = { features = ["derive"], workspace = true }
 thiserror = { optional = true, workspace = true }
 
-[dev-dependencies]
-pezsp-test-primitives = { workspace = true }
-
 [features]
 default = ["std"]
 std = [
@@ -50,7 +47,6 @@ std = [
 	"pezsp-runtime-interface/std",
 	"pezsp-runtime/std",
 	"pezsp-state-machine/std",
-	"pezsp-test-primitives/std",
 	"pezsp-trie/std",
 	"pezsp-version/std",
 	"scale-info/std",
@@ -71,7 +67,6 @@ runtime-benchmarks = [
 	"pezsp-runtime-interface/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 	"pezsp-state-machine?/runtime-benchmarks",
-	"pezsp-test-primitives/runtime-benchmarks",
 	"pezsp-trie?/runtime-benchmarks",
 	"pezsp-version/runtime-benchmarks",
 ]

@@ -9,6 +9,13 @@ repository.workspace = true
 description = "Runtime Modules shared primitive types."
 documentation.workspace = true
 readme = "README.md"
+exclude = [
+	"docs/images/*.png",
+	"docs/images/*.jpg",
+	"docs/whitepaper/*.png",
+	"!docs/images/Pezkuwi_Logo_Horizontal_Pink_White.png",
+	"!docs/images/Pezkuwi_Logo_Horizontal_Pink_Black.png",
+]
 
 [lints]
 workspace = true
@@ -17,7 +24,7 @@ workspace = true
 targets = ["x86_64-unknown-linux-gnu"]
 
 [dependencies]
-binary-merkle-tree = { workspace = true }
+pez-binary-merkle-tree = { workspace = true }
 bytes = { workspace = true }
 codec = { features = ["derive", "max-encoded-len"], workspace = true }
 docify = { workspace = true }
@@ -43,8 +50,6 @@ simple-mermaid = { workspace = true, optional = true }
 tuplex = { workspace = true, default-features = false }
 
 [dev-dependencies]
-bizinikiwi-test-runtime-client = { workspace = true }
-pezsp-api = { workspace = true, default-features = true }
 pezsp-state-machine = { workspace = true, default-features = true }
 pezsp-tracing = { workspace = true, default-features = true }
 rand = { workspace = true, default-features = true }
@@ -53,9 +58,6 @@ zstd = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-	"binary-merkle-tree/runtime-benchmarks",
-	"bizinikiwi-test-runtime-client/runtime-benchmarks",
-	"pezsp-api/runtime-benchmarks",
 	"pezsp-io/runtime-benchmarks",
 	"pezsp-state-machine/runtime-benchmarks",
 	"pezsp-trie/runtime-benchmarks",
@@ -63,7 +65,7 @@ runtime-benchmarks = [
 try-runtime = []
 default = ["std"]
 std = [
-	"binary-merkle-tree/std",
+	"pez-binary-merkle-tree/std",
 	"bytes/std",
 	"codec/std",
 	"either/std",
@@ -71,7 +73,6 @@ std = [
 	"hash256-std-hasher/std",
 	"log/std",
 	"num-traits/std",
-	"pezsp-api/std",
 	"pezsp-application-crypto/std",
 	"pezsp-arithmetic/std",
 	"pezsp-core/std",

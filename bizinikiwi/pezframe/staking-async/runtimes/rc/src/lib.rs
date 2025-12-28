@@ -1,4 +1,4 @@
-// Copyright (C) Parity Technologies (UK) Ltd.
+// Copyright (C) Parity Technologies (UK) Ltd. and Dijital Kurdistan Tech Institute
 // This file is part of Bizinikiwi.
 
 // Bizinikiwi is free software: you can redistribute it and/or modify
@@ -504,7 +504,7 @@ impl BeefyDataProvider<H256> for ParaHeadsRootProvider {
 	fn extra_data() -> H256 {
 		let para_heads: Vec<(u32, Vec<u8>)> =
 			teyrchains_paras::Pezpallet::<Runtime>::sorted_para_heads();
-		binary_merkle_tree::merkle_root::<mmr::Hashing, _>(
+		pez_binary_merkle_tree::merkle_root::<mmr::Hashing, _>(
 			para_heads.into_iter().map(|pair| pair.encode()),
 		)
 		.into()
