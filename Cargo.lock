@@ -12083,8 +12083,6 @@ name = "pezframe-metadata-hash-extension"
 version = "0.1.0"
 dependencies = [
  "array-bytes 6.2.3",
- "bizinikiwi-test-runtime-client",
- "bizinikiwi-wasm-builder",
  "const-hex",
  "docify",
  "frame-metadata",
@@ -12096,7 +12094,6 @@ dependencies = [
  "pezsp-api",
  "pezsp-runtime",
  "pezsp-tracing",
- "pezsp-transaction-pool",
  "scale-info",
 ]
 
