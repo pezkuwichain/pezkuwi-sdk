@@ -15,14 +15,5 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-fn main() {
-	#[cfg(feature = "std")]
-	{
-		bizinikiwi_wasm_builder::WasmBuilder::new()
-			.with_current_project()
-			.export_heap_base()
-			.import_memory()
-			.disable_runtime_version_section_check()
-			.build();
-	}
-}
+// bizinikiwi-wasm-builder moved to integration tests to break circular dependency
+fn main() {}

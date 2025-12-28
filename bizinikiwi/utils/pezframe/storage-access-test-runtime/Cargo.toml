@@ -16,30 +16,26 @@ workspace = true
 
 [dependencies]
 codec = { features = ["derive"], workspace = true }
-pezcumulus-pezpallet-teyrchain-system = { workspace = true, optional = true }
+# pezcumulus-pezpallet-teyrchain-system moved to integration tests to break circular dependency
 pezsp-core = { workspace = true }
 pezsp-runtime = { workspace = true }
 pezsp-state-machine = { workspace = true }
 pezsp-trie = { workspace = true }
 
+# bizinikiwi-wasm-builder moved to integration tests to break circular dependency
 [build-dependencies]
-bizinikiwi-wasm-builder = { optional = true, workspace = true, default-features = true }
 
 [features]
 default = ["std"]
 no_std = []
 std = [
-	"bizinikiwi-wasm-builder",
 	"codec/std",
-	"pezcumulus-pezpallet-teyrchain-system/std",
 	"pezsp-core/std",
 	"pezsp-runtime/std",
 	"pezsp-state-machine/std",
 	"pezsp-trie/std",
 ]
 runtime-benchmarks = [
-	"bizinikiwi-wasm-builder?/runtime-benchmarks",
-	"pezcumulus-pezpallet-teyrchain-system/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 	"pezsp-state-machine/runtime-benchmarks",
 	"pezsp-trie/runtime-benchmarks",

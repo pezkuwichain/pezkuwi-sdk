@@ -5658,9 +5658,7 @@ dependencies = [
 name = "frame-storage-access-test-runtime"
 version = "0.1.0"
 dependencies = [
- "bizinikiwi-wasm-builder",
  "parity-scale-codec",
- "pezcumulus-pezpallet-teyrchain-system",
  "pezsp-core",
  "pezsp-runtime",
  "pezsp-state-machine",
@@ -11945,7 +11943,6 @@ dependencies = [
  "clap",
  "comfy-table",
  "env_filter",
- "frame-storage-access-test-runtime",
  "gethostname",
  "handlebars",
  "itertools 0.11.0",
@@ -15489,7 +15486,6 @@ dependencies = [
  "pezframe-benchmarking",
  "pezframe-support",
  "pezframe-system",
- "pezpallet-transaction-payment",
  "pezsp-core",
  "pezsp-io",
  "pezsp-runtime",
@@ -18132,7 +18128,6 @@ dependencies = [
  "pezframe-system",
  "pezpallet-balances",
  "pezpallet-collective",
- "pezpallet-root-testing",
  "pezpallet-timestamp",
  "pezsp-core",
  "pezsp-io",
