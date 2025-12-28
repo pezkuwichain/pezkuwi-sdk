@@ -35,9 +35,9 @@ scale-info = { features = ["derive"], workspace = true }
 serde = { optional = true, workspace = true, default-features = true }
 static_assertions = { workspace = true, default-features = true }
 
+# Dev-dependencies with pezsc-client-db moved to integration tests to break circular dependency
 [dev-dependencies]
 array-bytes = { workspace = true, default-features = true }
-pezsc-client-db = { workspace = true }
 pezsp-externalities = { workspace = true }
 pezsp-keystore = { workspace = true, default-features = true }
 pezsp-state-machine = { workspace = true }
@@ -69,7 +69,6 @@ runtime-benchmarks = [
 	"pezframe-support-procedural/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
 	"pezframe-system/runtime-benchmarks",
-	"pezsc-client-db/runtime-benchmarks",
 	"pezsp-api/runtime-benchmarks",
 	"pezsp-io/runtime-benchmarks",
 	"pezsp-runtime-interface/runtime-benchmarks",
