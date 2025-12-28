@@ -53,11 +53,10 @@ tt-call = { workspace = true }
 
 aquamarine = { workspace = true }
 
+# Dev-dependencies with pezframe-system moved to pezframe-support-test to break circular dependency
 [dev-dependencies]
 Inflector = { workspace = true }
-pezframe-system = { workspace = true, default-features = true }
 pezsp-crypto-hashing = { workspace = true, default-features = true }
-pezsp-timestamp = { workspace = true, default-features = true }
 pretty_assertions = { workspace = true }
 
 [features]
@@ -70,7 +69,6 @@ std = [
 	"k256/std",
 	"log/std",
 	"pezframe-support-procedural/std",
-	"pezframe-system/std",
 	"pezsp-api/std",
 	"pezsp-arithmetic/std",
 	"pezsp-core/std",
@@ -93,7 +91,6 @@ std = [
 runtime-benchmarks = [
 	"pez-binary-merkle-tree/runtime-benchmarks",
 	"pezframe-support-procedural/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
 	"pezsp-api/runtime-benchmarks",
 	"pezsp-genesis-builder/runtime-benchmarks",
 	"pezsp-inherents/runtime-benchmarks",
@@ -101,11 +98,9 @@ runtime-benchmarks = [
 	"pezsp-runtime/runtime-benchmarks",
 	"pezsp-staking/runtime-benchmarks",
 	"pezsp-state-machine?/runtime-benchmarks",
-	"pezsp-timestamp/runtime-benchmarks",
 	"pezsp-trie/runtime-benchmarks",
 ]
 try-runtime = [
-	"pezframe-system/try-runtime",
 	"pezsp-debug-derive/force-debug",
 	"pezsp-runtime/try-runtime",
 ]

@@ -11918,7 +11918,6 @@ dependencies = [
  "pezframe-support",
  "pezframe-support-procedural",
  "pezframe-system",
- "pezsc-client-db",
  "pezsp-api",
  "pezsp-application-crypto",
  "pezsp-core",
@@ -12141,7 +12140,6 @@ dependencies = [
  "paste",
  "pez-binary-merkle-tree",
  "pezframe-support-procedural",
- "pezframe-system",
  "pezsp-api",
  "pezsp-arithmetic",
  "pezsp-core",
@@ -12156,7 +12154,6 @@ dependencies = [
  "pezsp-staking",
  "pezsp-state-machine",
  "pezsp-std",
- "pezsp-timestamp",
  "pezsp-tracing",
  "pezsp-trie",
  "pezsp-weights",
@@ -12178,21 +12175,13 @@ dependencies = [
  "expander",
  "itertools 0.11.0",
  "macro_magic",
- "parity-scale-codec",
- "pezframe-benchmarking",
- "pezframe-support",
  "pezframe-support-procedural-tools",
- "pezframe-system",
  "pezsp-crypto-hashing",
- "pezsp-io",
- "pezsp-metadata-ir",
- "pezsp-runtime",
  "pretty_assertions",
  "proc-macro-warning",
  "proc-macro2 1.0.103",
  "quote 1.0.42",
  "regex",
- "scale-info",
  "syn 2.0.111",
 ]
 
@@ -12281,7 +12270,6 @@ dependencies = [
 name = "pezframe-system"
 version = "28.0.0"
 dependencies = [
- "bizinikiwi-test-runtime-client",
  "cfg-if",
  "criterion",
  "docify",
