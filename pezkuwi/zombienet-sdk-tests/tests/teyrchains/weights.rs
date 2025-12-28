@@ -1,4 +1,4 @@
-// Copyright (C) Parity Technologies (UK) Ltd.
+// Copyright (C) Parity Technologies (UK) Ltd. and Dijital Kurdistan Tech Institute
 // SPDX-License-Identifier: Apache-2.0
 
 #[pezkuwi_subxt::subxt(runtime_metadata_path = "metadata-files/asset-hub-zagros-local.scale")]

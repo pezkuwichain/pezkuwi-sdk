@@ -1,6 +1,6 @@
 // This file is part of Bizinikiwi.
 
-// Copyright (C) Parity Technologies (UK) Ltd.
+// Copyright (C) Parity Technologies (UK) Ltd. and Dijital Kurdistan Tech Institute
 // SPDX-License-Identifier: Apache-2.0
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +23,7 @@
 use super::{ProofToHashes, ProvingTrie, TrieError};
 use crate::{Decode, DispatchError, Encode};
 use alloc::{collections::BTreeMap, vec::Vec};
-use binary_merkle_tree::{merkle_proof, merkle_root, MerkleProof};
+use pez_binary_merkle_tree::{merkle_proof, merkle_root, MerkleProof};
 use codec::MaxEncodedLen;
 
 /// A helper structure for building a basic base-2 merkle trie and creating compact proofs for that
@@ -143,7 +143,7 @@ where
 		return Err(TrieError::ValueMismatch.into());
 	}
 
-	if binary_merkle_tree::verify_proof::<Hashing, _, _>(
+	if pez_binary_merkle_tree::verify_proof::<Hashing, _, _>(
 		&decoded_proof.root,
 		decoded_proof.proof,
 		decoded_proof.number_of_leaves,
