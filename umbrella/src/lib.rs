@@ -21,7 +21,7 @@ pub use assets_common;
 
 /// A no-std/Bizinikiwi compatible library to construct binary merkle tree.
 #[cfg(feature = "binary-merkle-tree")]
-pub use binary_merkle_tree;
+pub use pez_binary_merkle_tree;
 
 /// Converting BIP39 entropy to valid Bizinikiwi (sr25519) SecretKeys.
 #[cfg(feature = "bizinikiwi-bip39")]
@@ -516,8 +516,8 @@ pub use pezkuwi_sdk_frame;
 pub use pezkuwi_service;
 
 /// Registry of known SS58 address types - PezkuwiChain fork.
-#[cfg(feature = "pezkuwi-ss58-registry")]
-pub use pezkuwi_ss58_registry;
+#[cfg(feature = "pezsp-ss58-registry")]
+pub use pezsp_ss58_registry;
 
 /// Statement Distribution Subsystem.
 #[cfg(feature = "pezkuwi-statement-distribution")]

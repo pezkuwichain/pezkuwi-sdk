@@ -26,7 +26,7 @@ use core::{hash::Hash, time::Duration};
 use hash_db::Hasher;
 use nohash_hasher::BuildNoHashHasher;
 use parking_lot::{Mutex, RwLock, RwLockWriteGuard};
-use prometheus_endpoint::Registry;
+use super::metrics::Registry;
 use schnellru::LruMap;
 use std::{
 	collections::{hash_map::Entry as SetEntry, HashMap},

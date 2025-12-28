@@ -23,6 +23,9 @@ pub mod trait_tests;
 
 mod block_builder_ext;
 
+#[cfg(test)]
+mod runtime_logger_tests;
+
 pub use bizinikiwi_test_client::*;
 pub use bizinikiwi_test_runtime as runtime;
 pub use pezsc_consensus::LongestChain;

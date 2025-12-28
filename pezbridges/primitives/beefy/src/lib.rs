@@ -19,7 +19,7 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 #![warn(missing_docs)]
 
-pub use binary_merkle_tree::merkle_root;
+pub use pez_binary_merkle_tree::merkle_root;
 pub use pezpallet_beefy_mmr::BeefyEcdsaToEthereum;
 pub use pezpallet_mmr::{
 	primitives::{DataOrHash as MmrDataOrHash, LeafProof as MmrProof},

@@ -356,7 +356,7 @@ impl<T: Config> Pezpallet<T> {
 				len,
 			);
 		}
-		let keyset_commitment = binary_merkle_tree::merkle_root::<
+		let keyset_commitment = pez_binary_merkle_tree::merkle_root::<
 			<T as pezpallet_mmr::Config>::Hashing,
 			_,
 		>(beefy_addresses)

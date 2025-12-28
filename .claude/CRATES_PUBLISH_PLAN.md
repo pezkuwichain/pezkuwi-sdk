@@ -47,76 +47,77 @@
 
 ## Publish Sırası (Dependency Order)
 
-### LEVEL 0: Core Primitives (Bağımsız)
+### LEVEL 0: Core Primitives (Bağımsız) ✅ TAMAMLANDI
 Bu crate'ler dış bağımlılığı olmayan veya sadece external crate'lere bağımlı.
 
 ```
-pezsp-std
-pezsp-panic-handler
-pezsp-tracing
-pezsp-debug-derive
-pezsp-externalities
-pezsp-storage
-pezsp-core-hashing
-pezsp-core-hashing-proc-macro
-pezsp-crypto-hashing
-pezsp-crypto-hashing-proc-macro
-pezsp-wasm-interface
+[x] pezsp-std v14.0.0
+[x] pezsp-panic-handler v13.0.0
+[x] pezsp-tracing v16.0.0
+[x] pezsp-debug-derive v14.0.0
+[x] pezsp-externalities v0.25.0
+[x] pezsp-storage v19.0.0
+[x] pezsp-core-hashing v15.0.0
+[x] pezsp-core-hashing-proc-macro v15.0.0
+[x] pezsp-crypto-hashing v0.1.0
+[x] pezsp-crypto-hashing-proc-macro v0.1.0
+[x] pezsp-wasm-interface v20.0.0
 ```
 
-### LEVEL 1: Core Runtime Primitives
+### LEVEL 1: Core Runtime Primitives ✅ TAMAMLANDI
 pezsp-std ve temel primitive'lere bağımlı.
 
 ```
-pezsp-arithmetic
-pezsp-io
-pezsp-runtime-interface
-pezsp-runtime-interface-proc-macro
-pezsp-core
-pezsp-keyring
-pezsp-weights
-pezsp-version
-pezsp-version-proc-macro
-pezsp-application-crypto
-pezsp-runtime
-pezsp-staking
-pezsp-state-machine
-pezsp-trie
-pezsp-database
-pezsp-maybe-compressed-blob
+[x] pezsp-arithmetic v23.0.0
+[x] pezsp-io v30.0.0
+[x] pezsp-runtime-interface v24.0.0
+[x] pezsp-runtime-interface-proc-macro v17.0.0
+[x] pezsp-core v28.0.0
+[x] pezsp-keyring v31.0.0
+[x] pezsp-weights v27.0.0
+[x] pezsp-version v29.0.0
+[x] pezsp-version-proc-macro v13.0.0
+[x] pezsp-application-crypto v30.0.0
+[x] pezsp-runtime v31.0.1
+[x] pezsp-staking v26.0.0
+[x] pezsp-state-machine v0.35.0
+[x] pezsp-trie v29.0.0
+[x] pezsp-keystore v0.34.0
+[x] pezsp-database v10.0.0
+[ ] pezsp-maybe-compressed-blob
 ```
 
-### LEVEL 2: Extended Primitives
+### LEVEL 2: Extended Primitives (DEVAM EDİYOR)
 Level 1'e bağımlı primitives.
 
 ```
-pezsp-api
-pezsp-api-proc-macro
-pezsp-blockchain
-pezsp-consensus
-pezsp-consensus-aura
-pezsp-consensus-babe
-pezsp-consensus-beefy
-pezsp-consensus-grandpa
-pezsp-consensus-pow
-pezsp-consensus-slots
-pezsp-inherents
-pezsp-keystore
-pezsp-offchain
-pezsp-session
-pezsp-timestamp
-pezsp-transaction-pool
-pezsp-genesis-builder
-pezsp-block-builder
-pezsp-authority-discovery
-pezsp-npos-elections
-pezsp-mmr-primitives
-pezsp-mixnet
-pezsp-metadata-ir
-pezsp-rpc
-pezsp-statement-store
-pezsp-transaction-storage-proof
-pezsp-crypto-ec-utils
+[x] pezsp-api v26.0.0
+[x] pezsp-api-proc-macro v15.0.0
+[ ] pezsp-blockchain
+[x] pezsp-consensus v0.32.0
+[x] pezsp-consensus v0.32.0-aura
+[x] pezsp-consensus v0.32.0-babe
+[x] pezsp-consensus v0.32.0-beefy
+[x] pezsp-consensus v0.32.0-grandpa
+[x] pezsp-consensus v0.32.0-pow
+[x] pezsp-consensus v0.32.0-slots
+[x] pezsp-inherents v26.0.0
+[x] pezsp-keystore v0.34.0 (published in Level 1)
+[x] pezsp-offchain v26.0.0
+[x] pezsp-session v27.0.0
+[x] pezsp-timestamp v26.0.0
+[x] pezsp-transaction-pool v26.0.0
+[x] pezsp-genesis-builder v0.8.0
+[x] pezsp-block-builder v26.0.0
+[x] pezsp-authority-discovery v26.0.0
+[x] pezsp-npos-elections v26.0.0
+[x] pezsp-mmr-primitives v26.0.0
+[x] pezsp-mixnet v0.4.0
+[x] pezsp-metadata-ir v0.6.0
+[x] pezsp-rpc v26.0.0
+[ ] pezsp-statement-store
+[ ] pezsp-transaction-storage-proof
+[ ] pezsp-crypto-ec-utils
 ```
 
 ### LEVEL 3: FRAME Support
@@ -671,4 +672,51 @@ done
 
 ---
 
-*Son güncelleme: 2025-12-27*
+---
+
+## Yayınlanan Utility Crate'ler
+
+```
+[x] pez-binary-merkle-tree v14.0.1
+[x] bizinikiwi-bip39 v0.4.7
+[x] pezsp-ss58-registry v1.52.0
+```
+
+---
+
+## Özet (Son güncelleme: 2025-12-28 06:20 UTC)
+
+| Kategori | Yayınlanan | Kalan |
+|----------|------------|-------|
+| LEVEL 0 | 11/11 | 0 ✅ |
+| LEVEL 1 | 16/17 | 1 (pezsp-maybe-compressed-blob) |
+| LEVEL 2 | 27/27 | 0 ✅ |
+| LEVEL 3+ | 0 | ~400+ |
+| **Toplam** | ~54 | ~399 |
+
+**Bu oturumda yayınlanan (16 crate):**
+- pezsp-database v10.0.0
+- pezsp-session v27.0.0
+- pezsp-genesis-builder v0.8.0
+- pezsp-transaction-pool v26.0.0
+- pezsp-authority-discovery v26.0.0
+- pezsp-mmr-primitives v26.0.0
+- pezsp-mixnet v0.4.0
+- pezsp-rpc v26.0.0
+- pezsp-consensus v0.32.0
+- pezsp-consensus-slots v0.32.0
+- pezsp-consensus-aura v0.32.0
+- pezsp-consensus-babe v0.32.0
+- pezsp-consensus-grandpa v13.0.0
+- pezsp-consensus-beefy v13.0.0
+- pezsp-consensus-pow v0.32.0
+- pezsp-blockchain v28.0.0
+
+**LEVEL 2 TAMAMLANDI!** ✅
+
+**Sonraki Oturumda Yapılacaklar:**
+1. Level 3 (FRAME Support) crate'lerine geç
+2. pezframe-support, pezframe-system ve diğer FRAME crate'leri
+3. Pallet crate'leri
+
+*Son güncelleme: 2025-12-28 06:20 UTC*

@@ -1103,7 +1103,7 @@ mod tests {
 		traits::{CallContext, CodeExecutor, Externalities, RuntimeCode},
 		H256,
 	};
-	use pezsp_runtime::traits::BlakeTwo256;
+	use pezsp_core::Blake2Hasher as BlakeTwo256;
 	use pezsp_trie::{
 		trie_types::{TrieDBMutBuilderV0, TrieDBMutBuilderV1},
 		KeySpacedDBMut, PrefixedMemoryDB,
