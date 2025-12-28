@@ -7,7 +7,7 @@ description = "Base pezpallet for pezcumulus-based teyrchains"
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezcumulus-pezpallet-teyrchain-system"
+documentation.workspace = true
 
 [lints]
 workspace = true

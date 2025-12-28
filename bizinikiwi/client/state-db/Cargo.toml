@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "State database maintenance. Handles canonicalization and pruning in the database."
 readme = "README.md"
-documentation = "https://docs.rs/pezsc-state-db"
+documentation.workspace = true
 
 [lints]
 workspace = true

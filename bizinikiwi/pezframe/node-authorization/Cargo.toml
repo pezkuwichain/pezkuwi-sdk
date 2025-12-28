@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "FRAME pezpallet for node authorization"
-documentation = "https://docs.rs/pezpallet-node-authorization"
+documentation.workspace = true
 
 [lints]
 workspace = true

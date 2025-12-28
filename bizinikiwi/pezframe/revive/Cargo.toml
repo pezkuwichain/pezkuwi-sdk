@@ -9,7 +9,7 @@ repository.workspace = true
 description = "FRAME pezpallet for PolkaVM contracts."
 readme = "README.md"
 include = ["CHANGELOG.md", "README.md", "build.rs", "src/**/*"]
-documentation = "https://docs.rs/pezpallet-revive"
+documentation.workspace = true
 
 [lints]
 workspace = true

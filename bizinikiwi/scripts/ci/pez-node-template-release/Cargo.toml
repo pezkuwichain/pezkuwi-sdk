@@ -7,7 +7,7 @@ license = "GPL-3.0-or-later WITH Classpath-exception-2.0"
 homepage.workspace = true
 publish = false
 description = "Pezkuwi SDK component: node template release"
-documentation = "https://docs.rs/pez-node-template-release"
+documentation.workspace = true
 repository = { workspace = true }
 
 [lints]

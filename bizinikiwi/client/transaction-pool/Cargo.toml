@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Bizinikiwi transaction pool implementation."
 readme = "README.md"
-documentation = "https://docs.rs/pezsc-transaction-pool"
+documentation.workspace = true
 
 [lints]
 workspace = true

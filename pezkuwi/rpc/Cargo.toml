@@ -7,7 +7,7 @@ license.workspace = true
 description = "Pezkuwi specific RPC functionality."
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezkuwi-rpc"
+documentation.workspace = true
 
 [lints]
 workspace = true

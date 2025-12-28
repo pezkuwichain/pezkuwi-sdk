@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Basic implementation of block-authoring logic."
 readme = "README.md"
-documentation = "https://docs.rs/pezsc-basic-authorship"
+documentation.workspace = true
 
 [lints]
 workspace = true

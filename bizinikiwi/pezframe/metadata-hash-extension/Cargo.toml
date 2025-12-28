@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "FRAME signed extension for verifying the metadata hash"
-documentation = "https://docs.rs/pezframe-metadata-hash-extension"
+documentation.workspace = true
 
 [dependencies]
 array-bytes = { workspace = true, default-features = true }

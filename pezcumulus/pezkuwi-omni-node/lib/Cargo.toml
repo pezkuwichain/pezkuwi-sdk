@@ -7,7 +7,7 @@ description = "Helper library that can be used to build a teyrchain node"
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezkuwi-omni-node-lib"
+documentation.workspace = true
 
 [lints]
 workspace = true

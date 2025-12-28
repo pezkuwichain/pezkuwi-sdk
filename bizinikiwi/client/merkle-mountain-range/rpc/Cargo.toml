@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "Node-specific RPC methods for interaction with Merkle Mountain Range pezpallet."
-documentation = "https://docs.rs/pezmmr-rpc"
+documentation.workspace = true
 
 [lints]
 workspace = true

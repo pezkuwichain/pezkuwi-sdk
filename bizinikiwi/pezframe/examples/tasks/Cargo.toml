@@ -7,7 +7,7 @@ license.workspace = true
 repository.workspace = true
 description = "Pallet to demonstrate the usage of Tasks to recognize and execute service work"
 publish = false
-documentation = "https://docs.rs/pezpallet-example-tasks"
+documentation.workspace = true
 homepage = { workspace = true }
 
 [lints]

@@ -7,7 +7,7 @@ license.workspace = true
 description = "Generate an overseer including builder pattern and message wrapper from a single annotated struct definition."
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pez-tracing-gum-proc-macro"
+documentation.workspace = true
 
 [lints]
 workspace = true

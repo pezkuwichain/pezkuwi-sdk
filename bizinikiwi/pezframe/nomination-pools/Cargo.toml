@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "FRAME nomination pools pezpallet"
-documentation = "https://docs.rs/pezpallet-nomination-pools"
+documentation.workspace = true
 
 [lints]
 workspace = true

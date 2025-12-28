@@ -7,7 +7,7 @@ rust-version.workspace = true
 publish = true
 license.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezkuwi-subxt-codegen"
+documentation.workspace = true
 homepage.workspace = true
 description = "Generate an API for interacting with a Pezkuwi/Bizinikiwi node from FRAME metadata"
 

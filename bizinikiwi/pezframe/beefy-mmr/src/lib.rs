@@ -1,6 +1,6 @@
 // This file is part of Bizinikiwi.
 
-// Copyright (C) Parity Technologies (UK) Ltd.
+// Copyright (C) Parity Technologies (UK) Ltd. and Dijital Kurdistan Tech Institute
 // SPDX-License-Identifier: Apache-2.0
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -356,7 +356,7 @@ impl<T: Config> Pezpallet<T> {
 				len,
 			);
 		}
-		let keyset_commitment = binary_merkle_tree::merkle_root::<
+		let keyset_commitment = pez_binary_merkle_tree::merkle_root::<
 			<T as pezpallet_mmr::Config>::Hashing,
 			_,
 		>(beefy_addresses)

@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "Benchmarking for election provider support onchain config trait"
-documentation = "https://docs.rs/pezpallet-election-provider-support-benchmarking"
+documentation.workspace = true
 
 [lints]
 workspace = true

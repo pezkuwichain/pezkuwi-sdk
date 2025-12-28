@@ -1,6 +1,6 @@
 // This file is part of Bizinikiwi.
 
-// Copyright (C) Parity Technologies (UK) Ltd.
+// Copyright (C) Parity Technologies (UK) Ltd. and Dijital Kurdistan Tech Institute
 // SPDX-License-Identifier: Apache-2.0
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,6 +22,9 @@
 pub mod trait_tests;
 
 mod block_builder_ext;
+
+#[cfg(test)]
+mod runtime_logger_tests;
 
 pub use bizinikiwi_test_client::*;
 pub use bizinikiwi_test_runtime as runtime;

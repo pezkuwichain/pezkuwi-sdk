@@ -1,6 +1,6 @@
 // This file is part of Bizinikiwi.
 
-// Copyright (C) Parity Technologies (UK) Ltd.
+// Copyright (C) Parity Technologies (UK) Ltd. and Dijital Kurdistan Tech Institute
 // SPDX-License-Identifier: Apache-2.0
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,7 +25,7 @@ use codec::Encode;
 use hash_db::Hasher;
 use pezsp_core::{storage::StateVersion, traits::Externalities};
 #[cfg(test)]
-use pezsp_runtime::traits::BlakeTwo256;
+use pezsp_core::Blake2Hasher as BlakeTwo256;
 use pezsp_trie::PrefixedMemoryDB;
 use std::collections::BTreeMap;
 

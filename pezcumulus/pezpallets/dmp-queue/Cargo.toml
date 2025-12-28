@@ -6,7 +6,7 @@ edition.workspace = true
 repository.workspace = true
 description = "Migrates messages from the old DMP queue pezpallet."
 license = "Apache-2.0"
-documentation = "https://docs.rs/pezcumulus-pezpallet-dmp-queue"
+documentation.workspace = true
 homepage = { workspace = true }
 
 [lints]

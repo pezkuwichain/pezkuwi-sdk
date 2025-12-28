@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Bizinikiwi RuntimeGenesisConfig builder API"
 readme = "README.md"
-documentation = "https://docs.rs/pezsp-genesis-builder"
+documentation.workspace = true
 
 [lints]
 workspace = true

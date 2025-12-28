@@ -7,7 +7,7 @@ version = "7.0.0"
 description = "Benchmarks for the XCM pezpallet"
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezpallet-xcm-benchmarks"
+documentation.workspace = true
 
 [lints]
 workspace = true

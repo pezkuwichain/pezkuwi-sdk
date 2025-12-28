@@ -8,7 +8,7 @@ edition.workspace = true
 publish = false
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezsc-network-test"
+documentation.workspace = true
 
 [lints]
 workspace = true

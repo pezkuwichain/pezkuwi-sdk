@@ -7,7 +7,7 @@ edition.workspace = true
 license = "GPL-3.0-or-later WITH Classpath-exception-2.0"
 repository.workspace = true
 publish = false
-documentation = "https://docs.rs/bp-beefy"
+documentation.workspace = true
 homepage = { workspace = true }
 
 [lints]
@@ -22,7 +22,7 @@ serde = { features = ["alloc", "derive"], workspace = true }
 pezbp-runtime = { workspace = true }
 
 # Bizinikiwi Dependencies
-binary-merkle-tree = { workspace = true }
+pez-binary-merkle-tree = { workspace = true }
 pezframe-support = { workspace = true }
 pezpallet-beefy-mmr = { workspace = true }
 pezpallet-mmr = { workspace = true }
@@ -33,7 +33,7 @@ pezsp-std = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"binary-merkle-tree/std",
+	"pez-binary-merkle-tree/std",
 	"codec/std",
 	"pezbp-runtime/std",
 	"pezframe-support/std",
@@ -46,7 +46,7 @@ std = [
 	"serde/std",
 ]
 runtime-benchmarks = [
-	"binary-merkle-tree/runtime-benchmarks",
+	"pez-binary-merkle-tree/runtime-benchmarks",
 	"pezbp-runtime/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
 	"pezpallet-beefy-mmr/runtime-benchmarks",

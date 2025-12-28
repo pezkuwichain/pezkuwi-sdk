@@ -6,7 +6,7 @@ edition.workspace = true
 license = "Apache-2.0"
 description = "Zagros emulated chain"
 publish = false
-documentation = "https://docs.rs/zagros-emulated-chain"
+documentation.workspace = true
 repository = { workspace = true }
 homepage = { workspace = true }
 

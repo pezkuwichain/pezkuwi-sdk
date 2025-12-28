@@ -7,7 +7,7 @@ description = "Hostfunction exposing storage proof size to the runtime."
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezcumulus-primitives-proof-size-hostfunction"
+documentation.workspace = true
 
 [lints]
 workspace = true

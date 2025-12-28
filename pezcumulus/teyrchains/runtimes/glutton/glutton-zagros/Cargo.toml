@@ -7,7 +7,7 @@ license = "Apache-2.0"
 description = "Glutton teyrchain runtime."
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/glutton-zagros-runtime"
+documentation.workspace = true
 
 [lints]
 workspace = true

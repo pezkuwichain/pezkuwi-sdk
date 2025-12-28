@@ -7,7 +7,7 @@ description = "Utilities to reclaim storage weight."
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezcumulus-primitives-storage-weight-reclaim"
+documentation.workspace = true
 
 [lints]
 workspace = true

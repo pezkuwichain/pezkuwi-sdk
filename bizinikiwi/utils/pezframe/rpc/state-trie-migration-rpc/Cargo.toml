@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Node-specific RPC methods for interaction with state trie migration."
 readme = "README.md"
-documentation = "https://docs.rs/bizinikiwi-state-trie-migration-rpc"
+documentation.workspace = true
 
 [lints]
 workspace = true

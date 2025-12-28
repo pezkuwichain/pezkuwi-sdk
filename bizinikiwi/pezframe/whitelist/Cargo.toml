@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "FRAME pezpallet for whitelisting calls, and dispatching from a specific origin"
-documentation = "https://docs.rs/pezpallet-whitelist"
+documentation.workspace = true
 
 [lints]
 workspace = true

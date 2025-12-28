@@ -7,7 +7,7 @@ edition.workspace = true
 repository.workspace = true
 license = "Apache-2.0"
 homepage.workspace = true
-documentation = "https://docs.rs/bizinikiwi-wasm-builder"
+documentation.workspace = true
 
 [lints]
 workspace = true

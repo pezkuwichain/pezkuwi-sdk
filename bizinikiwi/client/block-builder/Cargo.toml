@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Bizinikiwi block builder"
 readme = "README.md"
-documentation = "https://docs.rs/pezsc-block-builder"
+documentation.workspace = true
 
 [lints]
 workspace = true

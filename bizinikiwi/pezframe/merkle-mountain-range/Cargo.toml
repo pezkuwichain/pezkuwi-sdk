@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "FRAME Merkle Mountain Range pezpallet."
-documentation = "https://docs.rs/pezpallet-mmr"
+documentation.workspace = true
 
 [lints]
 workspace = true

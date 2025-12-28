@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "FRAME proxying pezpallet"
 readme = "README.md"
-documentation = "https://docs.rs/pezpallet-proxy"
+documentation.workspace = true
 
 [lints]
 workspace = true

@@ -8,7 +8,7 @@ publish = false
 homepage.workspace = true
 repository.workspace = true
 description = "Pezkuwi SDK FRAME support: support test stg pezframe crate"
-documentation = "https://docs.rs/pezframe-support-test-stg-pezframe-crate"
+documentation.workspace = true
 
 [lints]
 workspace = true

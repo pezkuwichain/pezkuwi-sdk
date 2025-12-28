@@ -12,7 +12,7 @@ repository.workspace = true
 description = "Consensus extension module for Sassafras consensus."
 readme = "README.md"
 publish = false
-documentation = "https://docs.rs/pezpallet-sassafras"
+documentation.workspace = true
 
 [package.metadata.pezkuwi-sdk]
 exclude-from-umbrella = true

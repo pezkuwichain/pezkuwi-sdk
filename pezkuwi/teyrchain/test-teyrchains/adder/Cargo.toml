@@ -7,7 +7,7 @@ license.workspace = true
 version = "1.0.0"
 authors.workspace = true
 publish = false
-documentation = "https://docs.rs/test-teyrchain-adder"
+documentation.workspace = true
 repository = { workspace = true }
 homepage = { workspace = true }
 

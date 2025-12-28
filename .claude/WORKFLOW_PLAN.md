@@ -12,22 +12,51 @@
 
 ---
 
-## SON CI DÜZELTMELERİ (2025-12-26)
+## SON CI DÜZELTMELERİ (2025-12-27)
 
-### PR #344 - solc version fix (MERGED)
-- solc 0.8.30 pinlendi (revive uyumluluğu için)
+### PR #346 - wasm32v1-none target kaldırıldı (MERGED)
+**Problem:** serde_core 1.0.228 + Rust 1.88.0 + wasm32v1-none target kombinasyonu derleme hatası veriyordu:
+```
+error: relaxing a default bound only does something for `?Sized`
+```
 
-### PR #345 - WASM build + macOS pip fix (MERGED)
-**Düzeltilen hatalar:**
-1. **macOS pip externally-managed-environment**: `--break-system-packages` flag eklendi
-2. **WASM getrandom/duplicate lang item**: `rustup target add wasm32v1-none` eklendi
+**Çözüm:** wasm32v1-none target kurulumu kaldırıldı, wasm-builder otomatik olarak wasm32-unknown-unknown'a fallback ediyor.
+
+**Upstream Issue:** https://github.com/serde-rs/serde/issues/3021
 
 **Güncellenen workflow dosyaları:**
-- tests-misc.yml (macOS pip + wasm32v1-none)
-- tests.yml (wasm32v1-none)
-- tests-linux-stable.yml (wasm32v1-none)
-- build-publish-images.yml (wasm32v1-none)
-- check-pezframe-omni-bencher.yml (wasm32v1-none)
+- tests.yml
+- tests-linux-stable.yml
+- tests-misc.yml
+- build-publish-images.yml
+- check-pezframe-omni-bencher.yml
+
+### Sassafras Benchmark Data File Fix
+**Problem:** `25_tickets_100_auths.bin` dosyası gitignore'da `*.bin` kuralı nedeniyle repo'ya eklenmemişti.
+
+**Çözüm:** `.gitignore`'a exception eklendi ve dosya repo'ya dahil edildi.
+
+### Documentation URLs Update (590 dosya)
+**Problem:** Birçok Cargo.toml dosyasında `documentation = "https://docs.rs/..."` kullanılıyordu.
+
+**Çözüm:** Tüm docs.rs URL'leri `documentation.workspace = true` olarak güncellendi (workspace'ten `https://docs.pezkuwichain.io/` alınıyor).
+
+### Workflow-Stopper Credentials Update
+**Problem:** GitHub App JWT token hatası veriyordu.
+
+**Çözüm:** Repository secrets güncellendi:
+- `WORKFLOW_STOPPER_RUNNER_APP_ID` = 2423876
+- `WORKFLOW_STOPPER_RUNNER_APP_KEY` = Yeni private key
+
+---
+
+### ÖNCEKİ: PR #344 - solc version fix (MERGED)
+- solc 0.8.30 pinlendi (revive uyumluluğu için)
+
+### ÖNCEKİ: PR #345 - WASM build + macOS pip fix (MERGED)
+**Düzeltilen hatalar:**
+1. **macOS pip externally-managed-environment**: `--break-system-packages` flag eklendi
+2. **WASM getrandom/duplicate lang item**: `rustup target add wasm32v1-none` eklendi (sonra PR #346 ile kaldırıldı)
 
 ---
 

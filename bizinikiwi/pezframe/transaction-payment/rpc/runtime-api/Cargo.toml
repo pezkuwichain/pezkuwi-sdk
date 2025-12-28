@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "RPC runtime API for transaction payment FRAME pezpallet"
 readme = "README.md"
-documentation = "https://docs.rs/pezpallet-transaction-payment-rpc-runtime-api"
+documentation.workspace = true
 
 [lints]
 workspace = true

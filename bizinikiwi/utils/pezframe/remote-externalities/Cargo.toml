@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "An externalities provided environment that can load itself from remote nodes or cached files"
-documentation = "https://docs.rs/frame-remote-externalities"
+documentation.workspace = true
 
 [lints]
 workspace = true

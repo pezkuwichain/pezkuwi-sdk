@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "Example FRAME pezpallet for multi-block migrations"
 publish = false
-documentation = "https://docs.rs/pezpallet-example-mbm"
+documentation.workspace = true
 
 [package.metadata.docs.rs]
 targets = ["x86_64-unknown-linux-gnu"]

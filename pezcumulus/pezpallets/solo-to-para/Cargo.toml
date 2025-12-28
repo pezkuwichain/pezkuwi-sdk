@@ -7,7 +7,7 @@ description = "Adds functionality to migrate from a Solo to a Teyrchain"
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezcumulus-pezpallet-solo-to-para"
+documentation.workspace = true
 
 [lints]
 workspace = true

@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "Keyring support code for the runtime. A set of test accounts."
-documentation = "https://docs.rs/pezsp-keyring"
+documentation.workspace = true
 readme = "README.md"
 
 [lints]

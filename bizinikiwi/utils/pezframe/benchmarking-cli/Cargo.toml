@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "CLI for benchmarking FRAME"
 readme = "README.md"
-documentation = "https://docs.rs/pezframe-benchmarking-cli"
+documentation.workspace = true
 
 [lints]
 workspace = true

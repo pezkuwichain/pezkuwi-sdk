@@ -8,7 +8,7 @@ homepage.workspace = true
 repository.workspace = true
 description = "FRAME pezpallet to manage child bounties"
 readme = "README.md"
-documentation = "https://docs.rs/pezpallet-child-bounties"
+documentation.workspace = true
 
 [lints]
 workspace = true

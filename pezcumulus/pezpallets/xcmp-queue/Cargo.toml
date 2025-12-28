@@ -7,7 +7,7 @@ description = "Pallet to queue outbound and inbound XCMP messages."
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezcumulus-pezpallet-xcmp-queue"
+documentation.workspace = true
 
 [lints]
 workspace = true

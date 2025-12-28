@@ -7,7 +7,7 @@ license.workspace = true
 description = "The Prospective Teyrchains subsystem. Tracks and handles prospective teyrchain fragments."
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/pezkuwi-node-core-prospective-teyrchains"
+documentation.workspace = true
 
 [lints]
 workspace = true

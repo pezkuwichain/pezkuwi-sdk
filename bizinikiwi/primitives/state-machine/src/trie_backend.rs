@@ -1,6 +1,6 @@
 // This file is part of Bizinikiwi.
 
-// Copyright (C) Parity Technologies (UK) Ltd.
+// Copyright (C) Parity Technologies (UK) Ltd. and Dijital Kurdistan Tech Institute
 // SPDX-License-Identifier: Apache-2.0
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -578,7 +578,7 @@ pub mod tests {
 	use super::*;
 	use codec::Encode;
 	use pezsp_core::H256;
-	use pezsp_runtime::traits::BlakeTwo256;
+	use pezsp_core::Blake2Hasher as BlakeTwo256;
 	use pezsp_trie::{
 		cache::{CacheSize, SharedTrieCache},
 		trie_types::{TrieDBBuilder, TrieDBMutBuilderV0, TrieDBMutBuilderV1},

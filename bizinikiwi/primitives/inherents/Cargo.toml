@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "Provides types and traits for creating and checking inherents."
-documentation = "https://docs.rs/pezsp-inherents"
+documentation.workspace = true
 readme = "README.md"
 
 [lints]

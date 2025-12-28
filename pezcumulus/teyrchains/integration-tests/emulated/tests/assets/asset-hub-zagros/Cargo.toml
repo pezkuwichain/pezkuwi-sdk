@@ -6,7 +6,7 @@ edition.workspace = true
 license = "Apache-2.0"
 description = "Asset Hub Zagros runtime integration tests with xcm-pez-emulator"
 publish = false
-documentation = "https://docs.rs/asset-hub-zagros-integration-tests"
+documentation.workspace = true
 repository = { workspace = true }
 homepage = { workspace = true }
 

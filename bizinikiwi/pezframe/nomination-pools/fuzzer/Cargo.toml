@@ -7,7 +7,7 @@ license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
 description = "Fuzzer for fixed point arithmetic primitives."
-documentation = "https://docs.rs/pezsp-arithmetic-fuzzer"
+documentation.workspace = true
 publish = false
 
 [lints]

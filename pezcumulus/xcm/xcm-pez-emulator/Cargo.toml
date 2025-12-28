@@ -7,7 +7,7 @@ edition.workspace = true
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
-documentation = "https://docs.rs/xcm-pez-emulator"
+documentation.workspace = true
 
 [lints]
 workspace = true

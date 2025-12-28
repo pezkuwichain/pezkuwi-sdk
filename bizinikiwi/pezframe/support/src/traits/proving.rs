@@ -1,6 +1,6 @@
 // This file is part of Bizinikiwi.
 
-// Copyright (C) Parity Technologies (UK) Ltd.
+// Copyright (C) Parity Technologies (UK) Ltd. and Dijital Kurdistan Tech Institute
 // SPDX-License-Identifier: Apache-2.0
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -45,7 +45,7 @@ impl<H: Hasher> VerifyExistenceProof for BinaryMerkleTreeProver<H>
 where
 	H::Out: Decode + Encode,
 {
-	type Proof = binary_merkle_tree::MerkleProof<H::Out, Vec<u8>>;
+	type Proof = pez_binary_merkle_tree::MerkleProof<H::Out, Vec<u8>>;
 	type Hash = H::Out;
 
 	fn verify_proof(proof: Self::Proof, root: &Self::Hash) -> Result<Vec<u8>, DispatchError> {
@@ -53,7 +53,7 @@ where
 			return Err(TrieError::RootMismatch.into());
 		}
 
-		if binary_merkle_tree::verify_proof::<H, _, _>(
+		if pez_binary_merkle_tree::verify_proof::<H, _, _>(
 			&proof.root,
 			proof.proof,
 			proof.number_of_leaves,
@@ -68,7 +68,7 @@ where
 }
 
 impl<H: Hasher> ProofToHashes for BinaryMerkleTreeProver<H> {
-	type Proof = binary_merkle_tree::MerkleProof<H::Out, Vec<u8>>;
+	type Proof = pez_binary_merkle_tree::MerkleProof<H::Out, Vec<u8>>;
 
 	// This base 2 merkle trie includes a `proof` field which is a `Vec<Hash>`.
 	// The length of this vector tells us the depth of the proof, and how many
@@ -128,8 +128,8 @@ mod tests {
 	};
 
 	#[test]
-	fn verify_binary_merkle_tree_prover_works() {
-		let proof = binary_merkle_tree::merkle_proof::<BlakeTwo256, _, _>(
+	fn verify_pez_binary_merkle_tree_prover_works() {
+		let proof = pez_binary_merkle_tree::merkle_proof::<BlakeTwo256, _, _>(
 			vec![b"hey".encode(), b"yes".encode()],
 			1,
 		);
@@ -208,7 +208,7 @@ mod tests {
 	fn proof_to_hashes_binary() {
 		let mut i: u32 = 1;
 		while i < 10_000_000 {
-			let proof = binary_merkle_tree::merkle_proof::<BlakeTwo256, _, _>(
+			let proof = pez_binary_merkle_tree::merkle_proof::<BlakeTwo256, _, _>(
 				(0..i).map(|i| u128::from(i).encode()),
 				0,
 			);

@@ -6,7 +6,7 @@ edition.workspace = true
 license = "Apache-2.0"
 repository.workspace = true
 description = "XCM runtime APIs"
-documentation = "https://docs.rs/xcm-runtime-pezapis"
+documentation.workspace = true
 homepage = { workspace = true }
 
 [package.metadata.docs.rs]
