@@ -36,9 +36,9 @@ serde = { features = ["alloc", "derive"], workspace = true }
 # Optional imports for benchmarking
 pezframe-benchmarking = { optional = true, workspace = true }
 
+# bizinikiwi-test-utils moved to integration tests to break circular dependency
 [dev-dependencies]
 anyhow = { workspace = true }
-bizinikiwi-test-utils = { workspace = true }
 env_logger = { workspace = true }
 pezframe-benchmarking = { workspace = true, default-features = true }
 pezframe-support = { features = [
