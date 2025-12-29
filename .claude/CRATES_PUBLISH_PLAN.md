@@ -120,7 +120,7 @@ Level 1'e bağımlı primitives.
 [ ] pezsp-crypto-ec-utils
 ```
 
-### LEVEL 3: FRAME Support (DEVAM EDİYOR)
+### LEVEL 3: FRAME Support ✅ TAMAMLANDI (15/17)
 pezsp-* primitive'lere bağımlı.
 
 ```
@@ -143,7 +143,7 @@ pezsp-* primitive'lere bağımlı.
 [ ] pezframe-omni-bencher (SKIPPED - depends on unpublished crates)
 ```
 
-### LEVEL 4: Basic Pallets (No Cross-Pallet Deps)
+### LEVEL 4: Basic Pallets (DEVAM EDİYOR - 31+ yayınlandı)
 pezframe-*'a bağımlı, diğer pallet'lere bağımlı olmayan.
 
 ```
@@ -155,50 +155,55 @@ pezframe-*'a bağımlı, diğer pallet'lere bağımlı olmayan.
 [x] pezpallet-session v28.0.0
 [x] pezpallet-collective v28.0.0
 [x] pezpallet-utility v28.0.0
+[x] pezpallet-sudo v28.0.0
+[x] pezpallet-multisig v28.0.0
+[x] pezpallet-proxy v28.0.0
+[x] pezpallet-preimage v28.0.0
+[x] pezpallet-treasury v27.0.0
+[x] pezpallet-offences v27.0.0
+[x] pezpallet-vesting v28.0.0
+[x] pezpallet-membership v28.0.0
+[x] pezpallet-bags-list v27.0.0
+[x] pezpallet-staking-reward-curve v11.0.0
+[x] pezpallet-staking v28.0.0
+[x] pezpallet-scheduler v29.0.0
+[x] pezpallet-elections-phragmen v29.0.0
+[x] pezpallet-grandpa v28.0.0
+[x] pezpallet-democracy v28.0.0
+[x] pezpallet-im-online v27.0.0
+[x] pezpallet-indices v28.0.0
+[x] pezpallet-identity v29.0.0
+[x] pezpallet-assets v29.1.0
+[x] pezpallet-referenda v28.0.0
+[x] pezpallet-conviction-voting v28.0.0
+[x] pezpallet-bounties v27.0.0
+[x] pezkuwi-sdk-frame v0.1.0
 [ ] pezpallet-authority-discovery
 [ ] pezpallet-babe
-[ ] pezpallet-democracy
-[ ] pezpallet-elections-phragmen
-pezpallet-grandpa
-pezpallet-identity
-pezpallet-im-online
-pezpallet-indices
-pezpallet-lottery
-pezpallet-membership
-pezpallet-multisig
-pezpallet-nfts
-pezpallet-nfts-runtime-api
-pezpallet-offences
-pezpallet-preimage
-pezpallet-proxy
-pezpallet-recovery
-pezpallet-remark
-pezpallet-scheduler
-pezpallet-session
-pezpallet-session-benchmarking
-pezpallet-society
-pezpallet-sudo
-pezpallet-timestamp
-pezpallet-tips
-pezpallet-transaction-payment
-pezpallet-transaction-payment-rpc
-pezpallet-transaction-payment-rpc-runtime-api
-pezpallet-treasury
-pezpallet-uniques
-pezpallet-utility
-pezpallet-vesting
-pezpallet-whitelist
-pezpallet-insecure-randomness-collective-flip
-pezpallet-message-queue
-pezpallet-migrations
-pezpallet-paged-list
-pezpallet-parameters
-pezpallet-safe-mode
-pezpallet-scored-pool
-pezpallet-state-trie-migration
-pezpallet-statement
-pezpallet-tx-pause
-pezpallet-verify-signature
+[ ] pezpallet-child-bounties
+[ ] pezpallet-lottery
+[ ] pezpallet-nfts
+[ ] pezpallet-nfts-runtime-api
+[ ] pezpallet-recovery
+[ ] pezpallet-remark
+[ ] pezpallet-session-benchmarking
+[ ] pezpallet-society
+[ ] pezpallet-tips
+[ ] pezpallet-transaction-payment-rpc
+[ ] pezpallet-transaction-payment-rpc-runtime-api
+[ ] pezpallet-uniques
+[ ] pezpallet-whitelist
+[ ] pezpallet-insecure-randomness-collective-flip
+[ ] pezpallet-message-queue
+[ ] pezpallet-migrations
+[ ] pezpallet-paged-list
+[ ] pezpallet-parameters
+[ ] pezpallet-safe-mode
+[ ] pezpallet-scored-pool
+[ ] pezpallet-state-trie-migration
+[ ] pezpallet-statement
+[ ] pezpallet-tx-pause
+[ ] pezpallet-verify-signature
 ```
 
 ### LEVEL 5: Advanced Pallets (Cross-Pallet Deps)
@@ -688,50 +693,73 @@ done
 
 ---
 
-## Özet (Son güncelleme: 2025-12-28 09:00 UTC)
+## Özet (Son güncelleme: 2025-12-29 05:10 UTC)
 
 | Kategori | Yayınlanan | Kalan |
 |----------|------------|-------|
 | LEVEL 0 | 11/11 | 0 ✅ |
 | LEVEL 1 | 16/17 | 1 (pezsp-maybe-compressed-blob) |
 | LEVEL 2 | 27/27 | 0 ✅ |
-| LEVEL 3 | 11/17 | 6 |
-| LEVEL 4+ | 0 | ~380+ |
-| **Toplam** | ~65 | ~388 |
+| LEVEL 3 | 15/17 | 2 (benchmarking-cli, omni-bencher - SKIPPED) ✅ |
+| LEVEL 4 | 31/56 | 25 |
+| LEVEL 5+ | 0 | ~350+ |
+| **Toplam** | ~100 | ~353 |
 
-**Bu oturumda yayınlanan Level 3 crate'ler (11):**
-- pezframe-support-procedural-tools-derive v11.0.0
-- pezframe-support-procedural-tools v10.0.0
-- pezframe-support-procedural v23.0.0
-- pezframe-support v28.0.0
-- pezframe-system v28.0.0
-- pezframe-benchmarking v28.0.0
-- pezframe-try-runtime v0.34.0
-- pezframe-executive v28.0.0
-- pezframe-metadata-hash-extension v0.1.0
-- pezframe-election-provider-solution-type v13.0.0
-- pezframe-election-provider-support v28.0.0
+**Bu oturumda (2025-12-29) yayınlanan crate'ler (31):**
 
-**Circular dev-dependency düzeltmeleri:**
-- pezframe-support-procedural: pezframe-benchmarking, pezframe-support, pezframe-system kaldırıldı
-- pezframe-support: pezframe-system, pezsp-timestamp kaldırıldı
-- pezframe-system: bizinikiwi-test-runtime-client kaldırıldı
-- pezframe-benchmarking: pezsc-client-db kaldırıldı
-- pezframe-executive: bizinikiwi-test-runtime-client, pezpallet-balances, pezpallet-transaction-payment kaldırıldı
-- pezframe-metadata-hash-extension: bizinikiwi-test-runtime-client, bizinikiwi-wasm-builder kaldırıldı
-- pezframe-election-provider-solution-type: pezframe-election-provider-support kaldırıldı
+Level 3 tamamlama:
+- pezframe-system-rpc-runtime-api v26.0.0
+- pezframe-metadata v23.0.1
+- pezframe-benchmarking-pezpallet-pov v18.0.0
+- pezframe-system-benchmarking v28.0.0
 
-**Kalan Level 3 crate'ler:**
-- pezframe-system-rpc-runtime-api
-- pezframe-metadata
-- pezframe-benchmarking-pezpallet-pov
-- pezframe-system-benchmarking
-- pezframe-benchmarking-cli
-- pezframe-omni-bencher
+Level 4 pallets:
+- pezkuwi-sdk-frame v0.1.0
+- pezpallet-timestamp v27.0.0
+- pezpallet-aura v27.0.0
+- pezpallet-authorship v28.0.0
+- pezpallet-balances v28.0.0
+- pezpallet-transaction-payment v28.0.0
+- pezpallet-session v28.0.0
+- pezpallet-collective v28.0.0
+- pezpallet-utility v28.0.0
+- pezpallet-sudo v28.0.0
+- pezpallet-multisig v28.0.0
+- pezpallet-proxy v28.0.0
+- pezpallet-preimage v28.0.0
+- pezpallet-treasury v27.0.0
+- pezpallet-offences v27.0.0
+- pezpallet-vesting v28.0.0
+- pezpallet-membership v28.0.0
+- pezpallet-bags-list v27.0.0
+- pezpallet-staking-reward-curve v11.0.0
+- pezpallet-staking v28.0.0
+- pezpallet-scheduler v29.0.0
+- pezpallet-elections-phragmen v29.0.0
+- pezpallet-grandpa v28.0.0
+- pezpallet-democracy v28.0.0
+- pezpallet-im-online v27.0.0
+- pezpallet-indices v28.0.0
+- pezpallet-identity v29.0.0
+- pezpallet-assets v29.1.0
+- pezpallet-referenda v28.0.0
+- pezpallet-conviction-voting v28.0.0
+- pezpallet-bounties v27.0.0
+
+**Bu oturumda yapılan circular dev-dependency düzeltmeleri:**
+- pezpallet-balances: pezpallet-transaction-payment kaldırıldı
+- pezpallet-utility: pezpallet-root-testing kaldırıldı
+- pezpallet-staking: bizinikiwi-test-utils kaldırıldı
+- pezpallet-scheduler: bizinikiwi-test-utils kaldırıldı
+- pezpallet-elections-phragmen: bizinikiwi-test-utils kaldırıldı
+- pezpallet-bags-list: bizinikiwi-test-utils kaldırıldı
+- pezpallet-staking-async: bizinikiwi-test-utils kaldırıldı
+- pezframe-benchmarking-cli: frame-storage-access-test-runtime kaldırıldı
+- Cargo.toml: pezkuwi-sdk-frame version = "0.1.0" eklendi
 
 **Sonraki Adımlar:**
-1. Kalan Level 3 crate'lerini yayınla
-2. Level 4 (Basic Pallets) crate'lerine geç
-3. Level 5+ crate'leri
+1. Rate limit sonrası kalan Level 4 pallet'lerini yayınla (pezpallet-child-bounties, vb.)
+2. Level 5 (Advanced Pallets) crate'lerine geç
+3. Level 6+ crate'leri
 
-*Son güncelleme: 2025-12-28 09:00 UTC*
+*Son güncelleme: 2025-12-29 05:10 UTC*
