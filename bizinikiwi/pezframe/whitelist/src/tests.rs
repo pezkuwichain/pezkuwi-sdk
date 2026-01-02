@@ -19,7 +19,7 @@
 
 use crate::mock::*;
 use codec::Encode;
-use frame::{
+use pezframe::{
 	testing_prelude::*,
 	traits::{QueryPreimage, StorePreimage},
 };

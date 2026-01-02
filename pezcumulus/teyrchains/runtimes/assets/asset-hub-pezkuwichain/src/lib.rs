@@ -36,13 +36,13 @@ pub use staking::*;
 extern crate alloc;
 
 use alloc::{vec, vec::Vec};
-use assets_common::{
+use pez_assets_common::{
 	foreign_creators::ForeignCreators,
 	local_and_foreign_assets::{LocalFromLeft, TargetFromLeft},
 	matching::{FromNetwork, FromSiblingTeyrchain},
 	AssetIdForPoolAssets, AssetIdForPoolAssetsConvert, AssetIdForTrustBackedAssetsConvert,
 };
-use bp_asset_hub_pezkuwichain::CreateForeignAssetDeposit;
+use pezbp_asset_hub_pezkuwichain::CreateForeignAssetDeposit;
 use pezcumulus_pezpallet_teyrchain_system::{
 	RelayNumberMonotonicallyIncreases, RelaychainDataProvider,
 };
@@ -61,7 +61,7 @@ use testnet_teyrchains_constants::pezkuwichain::snowbridge::EthereumNetwork;
 use pezsp_version::NativeVersion;
 use pezsp_version::RuntimeVersion;
 
-pub use assets_common::local_and_foreign_assets::ForeignAssetReserveData;
+pub use pez_assets_common::local_and_foreign_assets::ForeignAssetReserveData;
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
 use pezcumulus_primitives_core::ParaId;
 use pezframe_support::{
@@ -453,7 +453,7 @@ impl pezpallet_asset_conversion::Config for Runtime {
 	type MintMinLiquidity = ConstU128<100>;
 	type WeightInfo = weights::pezpallet_asset_conversion::WeightInfo<Runtime>;
 	#[cfg(feature = "runtime-benchmarks")]
-	type BenchmarkHelper = assets_common::benchmarks::AssetPairFactory<
+	type BenchmarkHelper = pez_assets_common::benchmarks::AssetPairFactory<
 		TokenLocation,
 		teyrchain_info::Pezpallet<Runtime>,
 		xcm_config::TrustBackedAssetsPalletIndex,
@@ -518,7 +518,7 @@ impl pezpallet_assets::Config<ForeignAssetsInstance> for Runtime {
 	type AssetAccountDeposit = ForeignAssetsAssetAccountDeposit;
 	type RemoveItemsLimit = pezframe_support::traits::ConstU32<1000>;
 	#[cfg(feature = "runtime-benchmarks")]
-	type BenchmarkHelper = assets_common::benchmarks::LocationAssetsBenchmarkHelper;
+	type BenchmarkHelper = pez_assets_common::benchmarks::LocationAssetsBenchmarkHelper;
 }
 
 // Allow Freezes for the `ForeignAssets` pezpallet
@@ -1771,13 +1771,13 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl assets_common::runtime_api::FungiblesApi<
+	impl pez_assets_common::runtime_api::FungiblesApi<
 		Block,
 		AccountId,
 	> for Runtime
 	{
-		fn query_account_balances(account: AccountId) -> Result<xcm::VersionedAssets, assets_common::runtime_api::FungiblesAccessError> {
-			use assets_common::fungible_conversion::{convert, convert_balance};
+		fn query_account_balances(account: AccountId) -> Result<xcm::VersionedAssets, pez_assets_common::runtime_api::FungiblesAccessError> {
+			use pez_assets_common::fungible_conversion::{convert, convert_balance};
 			Ok([
 				// collect pezpallet_balance
 				{
@@ -1818,7 +1818,7 @@ impl_runtime_apis! {
 			let mut acceptable_assets = vec![AssetId(native_token.clone())];
 			// We also accept all assets in a pool with the native token.
 			acceptable_assets.extend(
-				assets_common::PoolAdapter::<Runtime>::get_assets_in_pool_with(native_token)
+				pez_assets_common::PoolAdapter::<Runtime>::get_assets_in_pool_with(native_token)
 				.map_err(|()| XcmPaymentApiError::VersionedConversionFailed)?
 			);
 			PezkuwiXcm::query_acceptable_payment_assets(xcm_version, acceptable_assets)

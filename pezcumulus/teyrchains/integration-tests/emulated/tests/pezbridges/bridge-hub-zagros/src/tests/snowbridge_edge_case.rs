@@ -289,7 +289,7 @@ fn export_from_non_system_teyrchain_will_fail() {
 		assert_expected_events!(
 			BridgeHubZagros,
 			vec![RuntimeEvent::MessageQueue(pezpallet_message_queue::Event::Processed{ success:false, origin, .. }) => {
-				origin: *origin == bridge_hub_common::AggregateMessageOrigin::Sibling(PenpalB::para_id()),
+				origin: *origin == pezbridge_hub_common::AggregateMessageOrigin::Sibling(PenpalB::para_id()),
 			},]
 		);
 	});

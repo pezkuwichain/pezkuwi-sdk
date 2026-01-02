@@ -17,7 +17,7 @@
 
 use crate::shared;
 use ah_client::OperatingMode;
-use frame::{
+use pezframe::{
 	deps::pezsp_runtime::testing::UintAuthorityId, testing_prelude::*, traits::fungible::Mutate,
 };
 use pezframe_election_provider_support::{
@@ -157,7 +157,7 @@ impl BoundToRuntimeAppPublic for OtherSessionHandler {
 	type Public = UintAuthorityId;
 }
 
-frame::deps::pezsp_runtime::impl_opaque_keys! {
+pezframe::deps::pezsp_runtime::impl_opaque_keys! {
 	pub struct SessionKeys {
 		pub other: OtherSessionHandler,
 	}
@@ -183,7 +183,7 @@ impl pezpallet_session::Config for Runtime {
 	type DisablingStrategy = pezpallet_session::disabling::UpToLimitDisablingStrategy<1>;
 
 	type Keys = SessionKeys;
-	type SessionHandler = <SessionKeys as frame::traits::OpaqueKeys>::KeyTypeIdProviders;
+	type SessionHandler = <SessionKeys as pezframe::traits::OpaqueKeys>::KeyTypeIdProviders;
 
 	type NextSessionRotation = Self::ShouldEndSession;
 	type ShouldEndSession = pezpallet_session::PeriodicSessions<Period, Offset>;

@@ -20,7 +20,7 @@
 use super::*;
 
 use crate as recovery;
-use frame::{deps::pezsp_io, testing_prelude::*};
+use pezframe::{deps::pezsp_io, testing_prelude::*};
 
 type Block = pezframe_system::mocking::MockBlock<Test>;
 

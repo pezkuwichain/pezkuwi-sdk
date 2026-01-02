@@ -21,7 +21,7 @@
 
 use super::*;
 use crate as pezpallet_multisig;
-use frame::{prelude::*, runtime::prelude::*, testing_prelude::*};
+use pezframe::{prelude::*, runtime::prelude::*, testing_prelude::*};
 
 type Block = pezframe_system::mocking::MockBlockU32<Test>;
 

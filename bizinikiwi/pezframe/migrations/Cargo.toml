@@ -19,7 +19,7 @@ impl-trait-for-tuples = { workspace = true }
 log = { workspace = true, default-features = true }
 scale-info = { features = ["derive"], workspace = true }
 
-frame = { workspace = true, features = ["runtime"] }
+pezframe = { workspace = true, features = ["runtime"] }
 pezframe-benchmarking = { optional = true, workspace = true }
 pezframe-support = { workspace = true }
 pezframe-system = { workspace = true }
@@ -39,7 +39,7 @@ pretty_assertions = { workspace = true }
 default = ["std"]
 std = [
 	"codec/std",
-	"frame/std",
+	"pezframe/std",
 	"log/std",
 	"pezframe-benchmarking?/std",
 	"pezframe-support/std",
@@ -51,7 +51,7 @@ std = [
 ]
 
 runtime-benchmarks = [
-	"frame/runtime-benchmarks",
+	"pezframe/runtime-benchmarks",
 	"pezframe-benchmarking/runtime-benchmarks",
 	"pezframe-executive/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
@@ -61,7 +61,7 @@ runtime-benchmarks = [
 ]
 
 try-runtime = [
-	"frame/try-runtime",
+	"pezframe/try-runtime",
 	"pezframe-executive/try-runtime",
 	"pezframe-support/try-runtime",
 	"pezframe-system/try-runtime",

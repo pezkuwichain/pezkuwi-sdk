@@ -25,7 +25,7 @@ use crate::{
 	BridgePezkuwichainBulletinMessages, Runtime, RuntimeEvent, RuntimeHoldReason,
 	XcmOverPezkuwichainBulletin, XcmRouter,
 };
-use bp_messages::{
+use pezbp_messages::{
 	source_chain::FromBridgedChainMessagesDeliveryProof,
 	target_chain::FromBridgedChainMessagesProof, LegacyLaneId,
 };
@@ -80,10 +80,10 @@ parameter_types! {
 
 /// Proof of messages, coming from Pezkuwichain Bulletin chain.
 pub type FromPezkuwichainBulletinMessagesProof<MI> =
-	FromBridgedChainMessagesProof<bp_pezkuwi_bulletin::Hash, LaneIdOf<Runtime, MI>>;
+	FromBridgedChainMessagesProof<pezbp_pezkuwi_bulletin::Hash, LaneIdOf<Runtime, MI>>;
 /// Messages delivery proof for Pezkuwichain Bridge Hub -> Pezkuwichain Bulletin messages.
 pub type ToPezkuwichainBulletinMessagesDeliveryProof<MI> =
-	FromBridgedChainMessagesDeliveryProof<bp_pezkuwi_bulletin::Hash, LaneIdOf<Runtime, MI>>;
+	FromBridgedChainMessagesDeliveryProof<pezbp_pezkuwi_bulletin::Hash, LaneIdOf<Runtime, MI>>;
 
 /// Dispatches received XCM messages from other bridge.
 type FromPezkuwichainBulletinMessageBlobDispatcher = BridgeBlobDispatcher<
@@ -119,8 +119,8 @@ impl pezpallet_bridge_messages::Config<WithPezkuwichainBulletinMessagesInstance>
 			Runtime,
 		>;
 
-	type ThisChain = bp_bridge_hub_pezkuwichain::BridgeHubPezkuwichain;
-	type BridgedChain = bp_pezkuwi_bulletin::PezkuwiBulletin;
+	type ThisChain = pezbp_bridge_hub_pezkuwichain::BridgeHubPezkuwichain;
+	type BridgedChain = pezbp_pezkuwi_bulletin::PezkuwiBulletin;
 	type BridgedHeaderChain = BridgePezkuwichainBulletinGrandpa;
 
 	type OutboundPayload = XcmAsPlainPayload;
@@ -190,13 +190,13 @@ mod tests {
 	#[test]
 	fn ensure_bridge_hub_pezkuwichain_message_lane_weights_are_correct() {
 		check_message_lane_weights::<
-			bp_bridge_hub_pezkuwichain::BridgeHubPezkuwichain,
+			pezbp_bridge_hub_pezkuwichain::BridgeHubPezkuwichain,
 			Runtime,
 			WithPezkuwichainBulletinMessagesInstance,
 		>(
-			bp_pezkuwi_bulletin::EXTRA_STORAGE_PROOF_SIZE,
-			bp_bridge_hub_pezkuwichain::MAX_UNREWARDED_RELAYERS_IN_CONFIRMATION_TX,
-			bp_bridge_hub_pezkuwichain::MAX_UNCONFIRMED_MESSAGES_IN_CONFIRMATION_TX,
+			pezbp_pezkuwi_bulletin::EXTRA_STORAGE_PROOF_SIZE,
+			pezbp_bridge_hub_pezkuwichain::MAX_UNREWARDED_RELAYERS_IN_CONFIRMATION_TX,
+			pezbp_bridge_hub_pezkuwichain::MAX_UNCONFIRMED_MESSAGES_IN_CONFIRMATION_TX,
 			true,
 		);
 	}
@@ -206,8 +206,8 @@ mod tests {
 		assert_complete_bridge_types!(
 			runtime: Runtime,
 			with_bridged_chain_messages_instance: WithPezkuwichainBulletinMessagesInstance,
-			this_chain: bp_bridge_hub_pezkuwichain::BridgeHubPezkuwichain,
-			bridged_chain: bp_pezkuwi_bulletin::PezkuwiBulletin,
+			this_chain: pezbp_bridge_hub_pezkuwichain::BridgeHubPezkuwichain,
+			bridged_chain: pezbp_pezkuwi_bulletin::PezkuwiBulletin,
 			expected_payload_type: XcmAsPlainPayload,
 		);
 
@@ -228,7 +228,7 @@ mod tests {
 		>(FEE_BOOST_PER_MESSAGE);
 
 		let expected: InteriorLocation = PalletInstance(
-			bp_bridge_hub_pezkuwichain::WITH_BRIDGE_PEZKUWICHAIN_TO_BULLETIN_MESSAGES_PALLET_INDEX,
+			pezbp_bridge_hub_pezkuwichain::WITH_BRIDGE_PEZKUWICHAIN_TO_BULLETIN_MESSAGES_PALLET_INDEX,
 		)
 		.into();
 

@@ -38,7 +38,7 @@ use asset_test_pezutils::{
 	test_cases_over_bridge::TestBridgingConfig, CollatorSessionKey, CollatorSessionKeys,
 	ExtBuilder, GovernanceOrigin, SlotDurations,
 };
-use assets_common::local_and_foreign_assets::ForeignAssetReserveData;
+use pez_assets_common::local_and_foreign_assets::ForeignAssetReserveData;
 use codec::{Decode, Encode};
 use hex_literal::hex;
 use pezframe_support::{
@@ -102,7 +102,7 @@ parameter_types! {
 }
 
 type AssetIdForTrustBackedAssetsConvert =
-	assets_common::AssetIdForTrustBackedAssetsConvert<TrustBackedAssetsPalletLocation>;
+	pez_assets_common::AssetIdForTrustBackedAssetsConvert<TrustBackedAssetsPalletLocation>;
 
 type RuntimeHelper = asset_test_pezutils::RuntimeHelper<Runtime, AllPalletsWithoutSystem>;
 
@@ -686,7 +686,7 @@ fn test_new_nft_config_works_as_the_old_one() {
 
 #[test]
 fn test_assets_balances_api_works() {
-	use assets_common::runtime_api::runtime_decl_for_fungibles_api::FungiblesApi;
+	use pez_assets_common::runtime_api::runtime_decl_for_fungibles_api::FungiblesApi;
 
 	ExtBuilder::<Runtime>::default()
 		.with_tracing()
@@ -781,7 +781,7 @@ fn test_assets_balances_api_works() {
 
 			// check currency
 			assert!(result.inner().iter().any(|asset| asset.eq(
-				&assets_common::fungible_conversion::convert_balance::<ZagrosLocation, Balance>(
+				&pez_assets_common::fungible_conversion::convert_balance::<ZagrosLocation, Balance>(
 					some_currency
 				)
 				.unwrap()
@@ -1113,7 +1113,7 @@ fn receive_reserve_asset_deposited_roc_from_asset_hub_pezkuwichain_fees_paid_by_
 				bridging_to_asset_hub_pezkuwichain()
 			},
 			(
-				[PalletInstance(bp_bridge_hub_zagros::WITH_BRIDGE_ZAGROS_TO_PEZKUWICHAIN_MESSAGES_PALLET_INDEX)].into(),
+				[PalletInstance(pezbp_bridge_hub_zagros::WITH_BRIDGE_ZAGROS_TO_PEZKUWICHAIN_MESSAGES_PALLET_INDEX)].into(),
 				GlobalConsensus(ByGenesis(PEZKUWICHAIN_GENESIS_HASH)),
 				[Teyrchain(1000)].into()
 			),
@@ -1189,7 +1189,7 @@ fn receive_reserve_asset_deposited_roc_from_asset_hub_pezkuwichain_fees_paid_by_
 			bridging_to_asset_hub_pezkuwichain()
 		},
 		(
-			[PalletInstance(bp_bridge_hub_zagros::WITH_BRIDGE_ZAGROS_TO_PEZKUWICHAIN_MESSAGES_PALLET_INDEX)].into(),
+			[PalletInstance(pezbp_bridge_hub_zagros::WITH_BRIDGE_ZAGROS_TO_PEZKUWICHAIN_MESSAGES_PALLET_INDEX)].into(),
 			GlobalConsensus(ByGenesis(PEZKUWICHAIN_GENESIS_HASH)),
 			[Teyrchain(1000)].into()
 		),
@@ -1229,14 +1229,14 @@ fn report_bridge_status_from_xcm_bridge_router_for_pezkuwichain_works() {
 	>(
 		collator_session_keys(),
 		bridging_to_asset_hub_pezkuwichain,
-		|| bp_asset_hub_zagros::build_congestion_message(Default::default(), true).into(),
-		|| bp_asset_hub_zagros::build_congestion_message(Default::default(), false).into(),
+		|| pezbp_asset_hub_zagros::build_congestion_message(Default::default(), true).into(),
+		|| pezbp_asset_hub_zagros::build_congestion_message(Default::default(), false).into(),
 	)
 }
 
 #[test]
 fn test_report_bridge_status_call_compatibility() {
-	// if this test fails, make sure `bp_asset_hub_pezkuwichain` has valid encoding
+	// if this test fails, make sure `pezbp_asset_hub_pezkuwichain` has valid encoding
 	assert_eq!(
 		RuntimeCall::ToPezkuwichainXcmRouter(
 			pezpallet_xcm_bridge_hub_router::Call::report_bridge_status {
@@ -1245,8 +1245,8 @@ fn test_report_bridge_status_call_compatibility() {
 			}
 		)
 		.encode(),
-		bp_asset_hub_zagros::Call::ToPezkuwichainXcmRouter(
-			bp_asset_hub_zagros::XcmBridgeHubRouterCall::report_bridge_status {
+		pezbp_asset_hub_zagros::Call::ToPezkuwichainXcmRouter(
+			pezbp_asset_hub_zagros::XcmBridgeHubRouterCall::report_bridge_status {
 				bridge_id: Default::default(),
 				is_congested: true,
 			}
@@ -1261,7 +1261,7 @@ fn check_sane_weight_report_bridge_status() {
 	let actual = <Runtime as pezpallet_xcm_bridge_hub_router::Config<
 		ToPezkuwichainXcmRouterInstance,
 	>>::WeightInfo::report_bridge_status();
-	let max_weight = bp_asset_hub_zagros::XcmBridgeHubRouterTransactCallMaxWeight::get();
+	let max_weight = pezbp_asset_hub_zagros::XcmBridgeHubRouterTransactCallMaxWeight::get();
 	assert!(
 		actual.all_lte(max_weight),
 		"max_weight: {:?} should be adjusted to actual {:?}",

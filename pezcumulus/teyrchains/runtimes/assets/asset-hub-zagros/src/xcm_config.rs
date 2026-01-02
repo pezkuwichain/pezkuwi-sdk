@@ -21,7 +21,7 @@ use super::{
 	ToPezkuwichainXcmRouter, TransactionByteFee, Treasurer, Uniques, WeightToFee, XcmpQueue,
 };
 use alloc::{collections::BTreeSet, vec, vec::Vec};
-use assets_common::{
+use pez_assets_common::{
 	matching::{
 		IsForeignConcreteAsset, NonTeleportableAssetFromTrustedReserve, ParentLocation,
 		TeleportableAssetWithTrustedReserve,
@@ -124,7 +124,7 @@ pub type FungibleTransactor = FungibleAdapter<
 
 /// `AssetId`/`Balance` converter for `TrustBackedAssets`.
 pub type TrustBackedAssetsConvertedConcreteId =
-	assets_common::TrustBackedAssetsConvertedConcreteId<TrustBackedAssetsPalletLocation, Balance>;
+	pez_assets_common::TrustBackedAssetsConvertedConcreteId<TrustBackedAssetsPalletLocation, Balance>;
 
 /// Means for transacting assets besides the native currency on this chain.
 pub type FungiblesTransactor = FungiblesAdapter<
@@ -145,7 +145,7 @@ pub type FungiblesTransactor = FungiblesAdapter<
 
 /// Matcher for converting `ClassId`/`InstanceId` into a uniques asset.
 pub type UniquesConvertedConcreteId =
-	assets_common::UniquesConvertedConcreteId<UniquesPalletLocation>;
+	pez_assets_common::UniquesConvertedConcreteId<UniquesPalletLocation>;
 
 /// Means for transacting unique assets.
 pub type UniquesTransactor = UniqueInstancesAdapter<
@@ -156,7 +156,7 @@ pub type UniquesTransactor = UniqueInstancesAdapter<
 >;
 
 /// `AssetId`/`Balance` converter for `ForeignAssets`.
-pub type ForeignAssetsConvertedConcreteId = assets_common::ForeignAssetsConvertedConcreteId<
+pub type ForeignAssetsConvertedConcreteId = pez_assets_common::ForeignAssetsConvertedConcreteId<
 	(
 		// Ignore `TrustBackedAssets` explicitly
 		StartsWith<TrustBackedAssetsPalletLocation>,
@@ -189,7 +189,7 @@ pub type ForeignFungiblesTransactor = FungiblesAdapter<
 
 /// `AssetId`/`Balance` converter for `PoolAssets`.
 pub type PoolAssetsConvertedConcreteId =
-	assets_common::PoolAssetsConvertedConcreteId<PoolAssetsPalletLocation, Balance>;
+	pez_assets_common::PoolAssetsConvertedConcreteId<PoolAssetsPalletLocation, Balance>;
 
 /// Means for transacting asset conversion pool assets on this chain.
 pub type PoolFungiblesTransactor = FungiblesAdapter<
@@ -216,11 +216,11 @@ parameter_types! {
 }
 
 /// Transactor for ERC20 tokens.
-pub type ERC20Transactor = assets_common::ERC20Transactor<
+pub type ERC20Transactor = pez_assets_common::ERC20Transactor<
 	// We need this for accessing pezpallet-revive.
 	Runtime,
 	// The matcher for smart contracts.
-	assets_common::ERC20Matcher,
+	pez_assets_common::ERC20Matcher,
 	// How to convert from a location to an account id.
 	LocationToAccountId,
 	// The maximum gas that can be used by a standard ERC20 transfer.
@@ -602,7 +602,7 @@ impl pezcumulus_pezpallet_xcm::Config for Runtime {
 /// All configuration related to bridging
 pub mod bridging {
 	use super::*;
-	use assets_common::matching;
+	use pez_assets_common::matching;
 
 	parameter_types! {
 		/// Base price of every byte of the Zagros -> Pezkuwichain message. Can be adjusted via
@@ -617,14 +617,14 @@ pub mod bridging {
 		///
 		/// 3) the approximate cost of Zagros -> Pezkuwichain message confirmation transaction on Zagros Bridge Hub.
 		pub storage XcmBridgeHubRouterBaseFee: Balance =
-			bp_bridge_hub_zagros::BridgeHubZagrosBaseXcmFeeInWnds::get()
-				.saturating_add(bp_bridge_hub_pezkuwichain::BridgeHubPezkuwichainBaseDeliveryFeeInRocs::get())
-				.saturating_add(bp_bridge_hub_zagros::BridgeHubZagrosBaseConfirmationFeeInWnds::get());
+			pezbp_bridge_hub_zagros::BridgeHubZagrosBaseXcmFeeInWnds::get()
+				.saturating_add(pezbp_bridge_hub_pezkuwichain::BridgeHubPezkuwichainBaseDeliveryFeeInRocs::get())
+				.saturating_add(pezbp_bridge_hub_zagros::BridgeHubZagrosBaseConfirmationFeeInWnds::get());
 		/// Price of every byte of the Zagros -> Pezkuwichain message. Can be adjusted via
 		/// governance `set_storage` call.
 		pub storage XcmBridgeHubRouterByteFee: Balance = TransactionByteFee::get();
 
-		pub SiblingBridgeHubParaId: u32 = bp_bridge_hub_zagros::BRIDGE_HUB_ZAGROS_TEYRCHAIN_ID;
+		pub SiblingBridgeHubParaId: u32 = pezbp_bridge_hub_zagros::BRIDGE_HUB_ZAGROS_TEYRCHAIN_ID;
 		pub SiblingBridgeHub: Location = Location::new(1, [Teyrchain(SiblingBridgeHubParaId::get())]);
 		/// Router expects payment with this `AssetId`.
 		/// (`AssetId` has to be aligned with `BridgeTable`)
@@ -646,7 +646,7 @@ pub mod bridging {
 				1,
 				[
 					Teyrchain(SiblingBridgeHubParaId::get()),
-					PalletInstance(bp_bridge_hub_zagros::WITH_BRIDGE_ZAGROS_TO_PEZKUWICHAIN_MESSAGES_PALLET_INDEX)
+					PalletInstance(pezbp_bridge_hub_zagros::WITH_BRIDGE_ZAGROS_TO_PEZKUWICHAIN_MESSAGES_PALLET_INDEX)
 				]
 			);
 
@@ -655,7 +655,7 @@ pub mod bridging {
 			pub RocLocation: Location = Location::new(2, [GlobalConsensus(PezkuwichainNetwork::get())]);
 			pub AssetHubPezkuwichain: Location = Location::new(2, [
 				GlobalConsensus(PezkuwichainNetwork::get()),
-				Teyrchain(bp_asset_hub_pezkuwichain::ASSET_HUB_PEZKUWICHAIN_TEYRCHAIN_ID)
+				Teyrchain(pezbp_asset_hub_pezkuwichain::ASSET_HUB_PEZKUWICHAIN_TEYRCHAIN_ID)
 			]);
 
 			/// Set up exporters configuration.
@@ -699,7 +699,7 @@ pub mod bridging {
 
 	pub mod to_ethereum {
 		use super::*;
-		use assets_common::matching::FromNetwork;
+		use pez_assets_common::matching::FromNetwork;
 		use testnet_teyrchains_constants::zagros::snowbridge::{
 			EthereumNetwork, INBOUND_QUEUE_PALLET_INDEX_V1, INBOUND_QUEUE_PALLET_INDEX_V2,
 		};

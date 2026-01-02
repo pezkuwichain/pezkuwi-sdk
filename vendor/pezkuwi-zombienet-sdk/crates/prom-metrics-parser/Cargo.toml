@@ -1,5 +1,5 @@
 [package]
-name = "zombienet-prom-metrics-parser"
+name = "pezkuwi-zombienet-prom-metrics-parser"
 version.workspace = true
 authors.workspace = true
 edition.workspace = true
@@ -7,8 +7,8 @@ rust-version.workspace = true
 publish = true
 license.workspace = true
 repository.workspace = true
-description = "Prometheus metric parser, parse metrics provided by internal prometheus server"
-keywords = ["prometheus", "zombienet"]
+description = "Pezkuwi Zombienet Prometheus metrics parser"
+keywords = ["prometheus", "zombienet", "pezkuwi", "metrics"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

@@ -33,7 +33,7 @@ pezsp-io = { workspace = true }
 pezsp-runtime = { workspace = true }
 pezsp-std = { workspace = true }
 
-bridge-hub-common = { workspace = true }
+pezbridge-hub-common = { workspace = true }
 
 ethabi = { workspace = true }
 pezsnowbridge-core = { workspace = true }
@@ -46,7 +46,7 @@ pezpallet-message-queue = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"bridge-hub-common/std",
+	"pezbridge-hub-common/std",
 	"codec/std",
 	"ethabi/std",
 	"pezframe-benchmarking/std",
@@ -65,7 +65,7 @@ std = [
 	"serde/std",
 ]
 runtime-benchmarks = [
-	"bridge-hub-common/runtime-benchmarks",
+	"pezbridge-hub-common/runtime-benchmarks",
 	"pezframe-benchmarking",
 	"pezframe-benchmarking/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",

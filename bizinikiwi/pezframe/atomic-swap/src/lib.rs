@@ -50,7 +50,7 @@ use core::{
 	marker::PhantomData,
 	ops::{Deref, DerefMut},
 };
-use frame::{
+use pezframe::{
 	prelude::*,
 	traits::{BalanceStatus, Currency, ReservableCurrency},
 };
@@ -173,7 +173,7 @@ where
 
 pub use pezpallet::*;
 
-#[frame::pezpallet]
+#[pezframe::pezpallet]
 pub mod pezpallet {
 	use super::*;
 

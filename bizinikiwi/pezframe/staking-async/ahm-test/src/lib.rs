@@ -32,7 +32,7 @@ mod tests {
 		rc::RootOffences,
 	};
 	use ah_client::OperatingMode;
-	use frame::testing_prelude::*;
+	use pezframe::testing_prelude::*;
 	use pezframe_support::traits::Get;
 	use pezpallet_election_provider_multi_block as multi_block;
 	use pezpallet_staking as staking_classic;

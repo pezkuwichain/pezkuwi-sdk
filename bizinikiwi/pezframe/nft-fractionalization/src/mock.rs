@@ -20,7 +20,7 @@
 use super::*;
 use crate as pezpallet_nft_fractionalization;
 
-use frame::{deps::pezsp_runtime::MultiSignature, testing_prelude::*, traits::Verify};
+use pezframe::{deps::pezsp_runtime::MultiSignature, testing_prelude::*, traits::Verify};
 use pezpallet_nfts::PalletFeatures;
 
 type Block = MockBlock<Test>;

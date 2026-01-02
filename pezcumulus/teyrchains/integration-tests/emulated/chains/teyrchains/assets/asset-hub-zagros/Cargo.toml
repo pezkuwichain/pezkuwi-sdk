@@ -34,12 +34,12 @@ xcm = { workspace = true }
 xcm-builder = { workspace = true, default-features = true }
 
 # Bridges
-bp-bridge-hub-zagros = { workspace = true }
+pezbp-bridge-hub-zagros = { workspace = true }
 
 [features]
 runtime-benchmarks = [
 	"asset-hub-zagros-runtime/runtime-benchmarks",
-	"bp-bridge-hub-zagros/runtime-benchmarks",
+	"pezbp-bridge-hub-zagros/runtime-benchmarks",
 	"emulated-integration-tests-common/runtime-benchmarks",
 	"pezcumulus-primitives-core/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",

@@ -1,5 +1,5 @@
 [package]
-name = "zombienet-support"
+name = "pezkuwi-zombienet-support"
 version.workspace = true
 authors.workspace = true
 edition.workspace = true
@@ -7,8 +7,8 @@ rust-version.workspace = true
 publish = true
 license.workspace = true
 repository.workspace = true
-description = "Support crates with common traits/structs and helpers"
-keywords = ["zombienet"]
+description = "Pezkuwi Zombienet support - Common traits, structs and helpers"
+keywords = ["zombienet", "pezkuwi", "support"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -21,7 +21,7 @@ nix = { workspace = true, features = ["signal"] }
 rand = { workspace = true }
 regex = { workspace = true }
 reqwest = { workspace = true }
-serde_json = { workspace = true }
+serde_json = { workspace = true, default-features = true }
 thiserror = { workspace = true }
 tokio = { workspace = true, features = ["full"] }
 tracing = { workspace = true }

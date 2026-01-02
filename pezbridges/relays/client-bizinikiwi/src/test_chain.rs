@@ -25,7 +25,7 @@ use crate::{
 	Chain, ChainWithBalances, ChainWithMessages, ChainWithRewards, ChainWithTransactions,
 	Error as BizinikiwiError, SignParam, UnsignedTransaction,
 };
-use bp_messages::{ChainWithMessages as ChainWithMessagesBase, MessageNonce};
+use pezbp_messages::{ChainWithMessages as ChainWithMessagesBase, MessageNonce};
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
 use pezbp_runtime::ChainId;
 use pezframe_support::{pezsp_runtime::StateVersion, weights::Weight};
@@ -122,9 +122,9 @@ impl ChainWithMessages for TestChain {
 
 impl ChainWithTransactions for TestChain {
 	type AccountKeyPair = pezsp_core::sr25519::Pair;
-	type SignedTransaction = bp_pezkuwi_core::UncheckedExtrinsic<
+	type SignedTransaction = pezbp_pezkuwi_core::UncheckedExtrinsic<
 		TestRuntimeCall,
-		bp_pezkuwi_core::SuffixedCommonTransactionExtension<(
+		pezbp_pezkuwi_core::SuffixedCommonTransactionExtension<(
 			pezbp_runtime::extensions::BridgeRejectObsoleteHeadersAndMessages,
 			pezbp_runtime::extensions::RefundBridgedTeyrchainMessagesSchema,
 		)>,

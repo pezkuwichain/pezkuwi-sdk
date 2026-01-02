@@ -44,7 +44,7 @@ extern crate alloc;
 
 use alloc::boxed::Box;
 use codec::{DecodeLimit, Encode, FullCodec};
-use frame::{
+use pezframe::{
 	prelude::*,
 	traits::{QueryPreimage, StorePreimage},
 };
@@ -52,7 +52,7 @@ use scale_info::TypeInfo;
 
 pub use pezpallet::*;
 
-#[frame::pezpallet]
+#[pezframe::pezpallet]
 pub mod pezpallet {
 	use super::*;
 
@@ -169,7 +169,7 @@ pub mod pezpallet {
 				.map_err(|_| Error::<T>::UnavailablePreImage)?;
 
 			let call = <T as Config>::RuntimeCall::decode_all_with_depth_limit(
-				frame::deps::pezframe_support::MAX_EXTRINSIC_DEPTH,
+				pezframe::deps::pezframe_support::MAX_EXTRINSIC_DEPTH,
 				&mut &call[..],
 			)
 			.map_err(|_| Error::<T>::UndecodableCall)?;

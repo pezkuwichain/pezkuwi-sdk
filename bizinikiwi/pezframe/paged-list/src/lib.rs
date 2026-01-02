@@ -32,7 +32,7 @@
 //!
 //! The pezpallet is quite unique since it does not expose any `Call`s, `Error`s or `Event`s. All
 //! interaction goes through the implemented
-//! [`StorageList`][frame::deps::pezframe_support::storage::StorageList] trait.
+//! [`StorageList`][pezframe::deps::pezframe_support::storage::StorageList] trait.
 //!
 //! A fuzzer for testing is provided in crate `pezpallet-paged-list-fuzzer`.
 //!
@@ -72,10 +72,10 @@ mod tests;
 extern crate alloc;
 
 use codec::FullCodec;
-use frame::{prelude::*, traits::StorageInstance};
+use pezframe::{prelude::*, traits::StorageInstance};
 pub use paged_list::StoragePagedList;
 
-#[frame::pezpallet]
+#[pezframe::pezpallet]
 pub mod pezpallet {
 	use super::*;
 

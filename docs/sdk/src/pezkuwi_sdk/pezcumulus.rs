@@ -17,7 +17,7 @@
 //! A teyrchain runtime should use a number of pallets that are provided by Pezcumulus and
 //! Bizinikiwi. Notably:
 //!
-//! - [`pezframe-system`](frame::prelude::pezframe_system), like all FRAME-based runtimes.
+//! - [`pezframe-system`](pezframe::prelude::pezframe_system), like all FRAME-based runtimes.
 //! - [`pezcumulus_pezpallet_teyrchain_system`]
 //! - [`teyrchain_info`]
 #![doc = docify::embed!("./src/pezkuwi_sdk/pezcumulus.rs", system_pallets)]
@@ -32,7 +32,7 @@
 //!
 //!
 //! Finally, a separate macro, similar to
-//! [`impl_runtime_api`](frame::runtime::prelude::impl_runtime_apis), which creates the default set
+//! [`impl_runtime_api`](pezframe::runtime::prelude::impl_runtime_apis), which creates the default set
 //! of runtime APIs, will generate the teyrchain runtime's validation runtime API, also known as
 //! teyrchain validation function (PVF). Without this API, the relay chain is unable to validate
 //! blocks produced by our teyrchain.
@@ -48,7 +48,7 @@
 #[cfg(test)]
 mod tests {
 	mod runtime {
-		pub use frame::{
+		pub use pezframe::{
 			deps::pezsp_consensus_aura::sr25519::AuthorityId as AuraId, prelude::*,
 			runtime::prelude::*, testing_prelude::*,
 		};
@@ -95,7 +95,7 @@ mod tests {
 					1,
 				>;
 				type WeightInfo = ();
-				type DmpQueue = frame::traits::EnqueueWithOrigin<(), pezsp_core::ConstU8<0>>;
+				type DmpQueue = pezframe::traits::EnqueueWithOrigin<(), pezsp_core::ConstU8<0>>;
 				type RelayParentOffset = ConstU32<0>;
 			}
 

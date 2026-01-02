@@ -67,9 +67,9 @@ mod benchmarking;
 // To see a full list of `pezpallet` macros and their use cases, see:
 // <https://docs.pezkuwichain.io/sdk/master/pezpallet_example_kitchensink/index.html>
 // <https://docs.pezkuwichain.io/sdk/master/pezframe_support/pezpallet_macros/index.html>
-#[frame::pezpallet]
+#[pezframe::pezpallet]
 pub mod pezpallet {
-	use frame::prelude::*;
+	use pezframe::prelude::*;
 
 	/// Configure the pezpallet by specifying the parameters and types on which it depends.
 	#[pezpallet::config]

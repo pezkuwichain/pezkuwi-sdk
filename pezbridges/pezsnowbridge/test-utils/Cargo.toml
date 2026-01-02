@@ -17,7 +17,7 @@ workspace = true
 exclude-from-umbrella = true
 
 [dependencies]
-bp-relayers = { workspace = true, default-features = true }
+pezbp-relayers = { workspace = true, default-features = true }
 codec = { workspace = true, default-features = true }
 pezframe-benchmarking = { optional = true, workspace = true, default-features = true }
 pezframe-support = { workspace = true, default-features = true }
@@ -35,7 +35,7 @@ xcm-executor = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-	"bp-relayers/runtime-benchmarks",
+	"pezbp-relayers/runtime-benchmarks",
 	"pezframe-benchmarking/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
 	"pezframe-system/runtime-benchmarks",

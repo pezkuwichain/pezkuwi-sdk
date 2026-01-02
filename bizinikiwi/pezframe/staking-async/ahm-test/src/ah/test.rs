@@ -16,7 +16,7 @@
 // limitations under the License.
 
 use crate::ah::mock::*;
-use frame::prelude::Perbill;
+use pezframe::prelude::Perbill;
 use pezframe_support::assert_ok;
 use pezpallet_election_provider_multi_block::{Event as ElectionEvent, Phase};
 use pezpallet_staking_async::{

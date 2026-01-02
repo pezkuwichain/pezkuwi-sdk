@@ -120,7 +120,29 @@ fn create_cargo_toml<'a>(
 	output_dir: &Path,
 ) -> Result<()> {
 	let root_toml: toml::Value = toml::from_str(&fs::read_to_string(root_cargo_toml)?)?;
-	let mut cargo_toml: toml::Value = toml::from_str(include_str!("./build/Cargo.toml"))?;
+	// Template embedded to avoid include_str! path issues during crates.io publish
+	const CARGO_TOML_TEMPLATE: &str = r#"[package]
+name = "contracts"
+version = "0.6.3"
+edition = "2021"
+description = "Pezkuwi SDK component: contracts"
+repository = "https://github.com/pezkuwichain/pezkuwi-sdk"
+homepage = "https://pezkuwi.io"
+authors = ["Pezkuwi Chain <admin@pezkuwi.io>"]
+license = "Apache-2.0"
+[[bin]]
+
+[dependencies]
+common = { package = 'pezpallet-contracts-fixtures-common', path = "" }
+polkavm-derive = { version = "" }
+uapi = { package = 'pezpallet-contracts-uapi', path = "", default-features = false }
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+"#;
+	let mut cargo_toml: toml::Value = toml::from_str(CARGO_TOML_TEMPLATE)?;
 	let mut set_dep = |name, path| -> Result<()> {
 		cargo_toml["dependencies"][name]["path"] = toml::Value::String(
 			fixtures_dir.join(path).canonicalize()?.to_str().unwrap().to_string(),
@@ -270,7 +292,13 @@ fn main() -> Result<()> {
 	let fixtures_dir: PathBuf = env::var("CARGO_MANIFEST_DIR")?.into();
 	let contracts_dir = fixtures_dir.join("contracts");
 	let out_dir: PathBuf = env::var("OUT_DIR")?.into();
-	let workspace_root = find_workspace_root(&fixtures_dir).expect("workspace root exists; qed");
+
+	// During crates.io package verification, workspace root may not exist.
+	// In that case, skip contract compilation (contracts are pre-compiled in src/).
+	let Some(workspace_root) = find_workspace_root(&fixtures_dir) else {
+		eprintln!("Note: Workspace root not found, skipping contract compilation (expected during crates.io verification)");
+		return Ok(());
+	};
 	let root_cargo_toml = workspace_root.join("Cargo.toml");
 
 	let entries = collect_entries(&contracts_dir, &out_dir);

@@ -23,7 +23,7 @@ use crate::{
 	primitives::{Compact, LeafDataProvider},
 };
 use codec::{Decode, Encode};
-use frame::{
+use pezframe::{
 	deps::pezframe_support::derive_impl,
 	prelude::{pezframe_system, pezframe_system::config_preludes::TestDefaultConfig},
 	testing_prelude::*,

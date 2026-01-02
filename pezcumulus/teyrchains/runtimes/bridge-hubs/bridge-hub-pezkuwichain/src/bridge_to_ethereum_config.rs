@@ -37,7 +37,7 @@ use testnet_teyrchains_constants::pezkuwichain::{
 use crate::xcm_config::RelayNetwork;
 #[cfg(feature = "runtime-benchmarks")]
 use benchmark_helpers::DoNothingRouter;
-use bp_asset_hub_pezkuwichain::CreateForeignAssetDeposit;
+use pezbp_asset_hub_pezkuwichain::CreateForeignAssetDeposit;
 use hex_literal::hex;
 use pezframe_support::{parameter_types, weights::ConstantMultiplier};
 use pezpallet_xcm::EnsureXcm;

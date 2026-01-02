@@ -16,11 +16,11 @@
 
 //! Tests for Grandpa strict justification verifier code.
 
-use bp_header_pez_chain::justification::{
+use pezbp_header_pez_chain::justification::{
 	required_justification_precommits, verify_justification, JustificationVerificationContext,
 	JustificationVerificationError, PrecommitError,
 };
-use bp_test_utils::*;
+use pezbp_test_utils::*;
 
 type TestHeader = pezsp_runtime::testing::Header;
 

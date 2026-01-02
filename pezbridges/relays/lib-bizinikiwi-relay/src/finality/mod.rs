@@ -24,7 +24,7 @@ use crate::{
 };
 
 use async_trait::async_trait;
-use bp_header_pez_chain::justification::{GrandpaJustification, JustificationVerificationContext};
+use pezbp_header_pez_chain::justification::{GrandpaJustification, JustificationVerificationContext};
 use pez_finality_relay::{
 	FinalityPipeline, FinalitySyncPipeline, HeadersToRelay, SourceClient, TargetClient,
 };
@@ -175,13 +175,13 @@ macro_rules! generate_submit_finality_proof_call_builder {
 						<$pipeline as $crate::finality_base::BizinikiwiFinalityPipeline>::SourceChain
 					>
 				>,
-				proof: bp_header_pez_chain::justification::GrandpaJustification<
+				proof: pezbp_header_pez_chain::justification::GrandpaJustification<
 					relay_bizinikiwi_client::HeaderOf<
 						<$pipeline as $crate::finality_base::BizinikiwiFinalityPipeline>::SourceChain
 					>
 				>,
 				_is_free_execution_expected: bool,
-				_context: bp_header_pez_chain::justification::JustificationVerificationContext,
+				_context: pezbp_header_pez_chain::justification::JustificationVerificationContext,
 			) -> relay_bizinikiwi_client::CallOf<
 				<$pipeline as $crate::finality_base::BizinikiwiFinalityPipeline>::TargetChain
 			> {
@@ -215,13 +215,13 @@ macro_rules! generate_submit_finality_proof_ex_call_builder {
 						<$pipeline as $crate::finality_base::BizinikiwiFinalityPipeline>::SourceChain
 					>
 				>,
-				proof: bp_header_pez_chain::justification::GrandpaJustification<
+				proof: pezbp_header_pez_chain::justification::GrandpaJustification<
 					relay_bizinikiwi_client::HeaderOf<
 						<$pipeline as $crate::finality_base::BizinikiwiFinalityPipeline>::SourceChain
 					>
 				>,
 				is_free_execution_expected: bool,
-				context: bp_header_pez_chain::justification::JustificationVerificationContext,
+				context: pezbp_header_pez_chain::justification::JustificationVerificationContext,
 			) -> relay_bizinikiwi_client::CallOf<
 				<$pipeline as $crate::finality_base::BizinikiwiFinalityPipeline>::TargetChain
 			> {

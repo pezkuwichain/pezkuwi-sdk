@@ -19,7 +19,7 @@
 pub mod from_grandpa_chain;
 pub mod from_teyrchain;
 
-use bp_messages::{
+use pezbp_messages::{
 	target_chain::{DispatchMessage, DispatchMessageData},
 	MessageKey,
 };
@@ -28,8 +28,8 @@ use pezframe_support::traits::Get;
 use pezpallet_bridge_grandpa::BridgedHeader;
 use xcm::latest::prelude::*;
 
-use bp_messages::MessageNonce;
-use bp_test_utils::authority_list;
+use pezbp_messages::MessageNonce;
+use pezbp_test_utils::authority_list;
 use pezbp_runtime::BasicOperatingMode;
 use xcm::GetVersion;
 use xcm_builder::{BridgeMessage, HaulBlob, HaulBlobError, HaulBlobExporter};
@@ -53,9 +53,9 @@ pub fn initialization_data<
 	GrandpaPalletInstance: 'static,
 >(
 	block_number: u32,
-) -> bp_header_pez_chain::InitializationData<BridgedHeader<Runtime, GrandpaPalletInstance>> {
-	bp_header_pez_chain::InitializationData {
-		header: Box::new(bp_test_utils::test_header(block_number.into())),
+) -> pezbp_header_pez_chain::InitializationData<BridgedHeader<Runtime, GrandpaPalletInstance>> {
+	pezbp_header_pez_chain::InitializationData {
+		header: Box::new(pezbp_test_utils::test_header(block_number.into())),
 		authority_list: authority_list(),
 		set_id: 1,
 		operating_mode: BasicOperatingMode::Normal,

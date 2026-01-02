@@ -57,7 +57,7 @@
 //! ]
 //! ```
 //!
-//! More conveniently, the `frame` umbrella crate re-exports the log crate as [`frame::log`].
+//! More conveniently, the `frame` umbrella crate re-exports the log crate as [`pezframe::log`].
 //!
 //! Then, the pezpallet can use this crate to emit log statements. In this statement, we use the
 //! info level, and the target is `pezpallet-example`.
@@ -68,7 +68,7 @@
 //!
 //! 	impl Pezpallet {
 //! 		fn logs() {
-//! 			frame::log::info!(target: "pezpallet-example", "Hello, world!");
+//! 			pezframe::log::info!(target: "pezpallet-example", "Hello, world!");
 //! 		}
 //! 	}
 //! }

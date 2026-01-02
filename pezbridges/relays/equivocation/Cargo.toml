@@ -16,7 +16,7 @@ workspace = true
 [dependencies]
 async-std = { features = ["attributes"], workspace = true }
 async-trait = { workspace = true }
-bp-header-pez-chain = { workspace = true, default-features = true }
+pezbp-header-pez-chain = { workspace = true, default-features = true }
 futures = { workspace = true }
 num-traits = { workspace = true, default-features = true }
 pez-finality-relay = { workspace = true }
@@ -25,7 +25,7 @@ tracing = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-	"bp-header-pez-chain/runtime-benchmarks",
+	"pezbp-header-pez-chain/runtime-benchmarks",
 	"pez-finality-relay/runtime-benchmarks",
 	"relay-utils/runtime-benchmarks",
 ]

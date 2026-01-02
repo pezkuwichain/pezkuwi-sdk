@@ -44,7 +44,7 @@ pezsnowbridge-core = { workspace = true }
 pezsnowbridge-inbound-queue-primitives = { workspace = true }
 pezsnowbridge-pezpallet-inbound-queue-v2-fixtures = { optional = true, workspace = true }
 
-bp-relayers = { workspace = true }
+pezbp-relayers = { workspace = true }
 
 [dev-dependencies]
 hex-literal = { workspace = true, default-features = true }
@@ -56,7 +56,7 @@ pezsp-keyring = { workspace = true, default-features = true }
 default = ["std"]
 std = [
 	"alloy-core/std",
-	"bp-relayers/std",
+	"pezbp-relayers/std",
 	"codec/std",
 	"pezframe-benchmarking/std",
 	"pezframe-support/std",
@@ -78,7 +78,7 @@ std = [
 	"xcm/std",
 ]
 runtime-benchmarks = [
-	"bp-relayers/runtime-benchmarks",
+	"pezbp-relayers/runtime-benchmarks",
 	"pezframe-benchmarking",
 	"pezframe-benchmarking/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",

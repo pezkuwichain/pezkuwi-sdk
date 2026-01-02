@@ -20,7 +20,7 @@
 use crate as pezpallet_salary;
 use crate::*;
 use core::cell::RefCell;
-use frame::{
+use pezframe::{
 	deps::pezsp_runtime::traits::Identity, testing_prelude::*, traits::tokens::ConvertRank,
 };
 use std::collections::BTreeMap;

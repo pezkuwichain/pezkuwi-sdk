@@ -21,7 +21,7 @@ use crate::{
 	BridgedMmrHash, BridgedMmrHashing, BridgedMmrProof,
 };
 
-use bp_beefy::{BeefyValidatorSignatureOf, ChainWithBeefy, Commitment, MmrDataOrHash};
+use pezbp_beefy::{BeefyValidatorSignatureOf, ChainWithBeefy, Commitment, MmrDataOrHash};
 use codec::Encode;
 use pezbp_runtime::{BasicOperatingMode, Chain, ChainId};
 use pezframe_support::{construct_runtime, derive_impl, weights::Weight};
@@ -126,7 +126,7 @@ pub fn run_test_with_initialize<T>(initial_validators_count: u32, test: impl FnO
 
 		crate::Pezpallet::<TestRuntime>::initialize(
 			RuntimeOrigin::root(),
-			bp_beefy::InitializationData {
+			pezbp_beefy::InitializationData {
 				operating_mode: BasicOperatingMode::Normal,
 				best_block_number: 0,
 				authority_set,

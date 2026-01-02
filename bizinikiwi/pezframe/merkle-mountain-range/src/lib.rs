@@ -61,7 +61,7 @@ extern crate alloc;
 use alloc::vec::Vec;
 use log;
 
-use frame::prelude::*;
+use pezframe::prelude::*;
 
 pub use pezsp_mmr_primitives::{
 	self as primitives, utils, utils::NodesUtils, AncestryProof, Error, FullLeaf, LeafDataProvider,
@@ -144,7 +144,7 @@ pub(crate) type HashingOf<T, I> = <T as Config<I>>::Hashing;
 /// Hash type used for the pezpallet.
 pub(crate) type HashOf<T, I> = <<T as Config<I>>::Hashing as Hash>::Output;
 
-#[frame::pezpallet]
+#[pezframe::pezpallet]
 pub mod pezpallet {
 	use super::*;
 

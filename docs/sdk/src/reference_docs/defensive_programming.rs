@@ -70,18 +70,18 @@
 //!
 //! ### Defensive Traits
 //!
-//! The [`Defensive`](frame::traits::Defensive) trait provides a number of functions, all of which
+//! The [`Defensive`](pezframe::traits::Defensive) trait provides a number of functions, all of which
 //! provide an alternative to 'vanilla' Rust functions, e.g.:
 //!
-//! - [`defensive_unwrap_or()`](frame::traits::Defensive::defensive_unwrap_or) instead of
+//! - [`defensive_unwrap_or()`](pezframe::traits::Defensive::defensive_unwrap_or) instead of
 //!   `unwrap_or()`
-//! - [`defensive_ok_or()`](frame::traits::DefensiveOption::defensive_ok_or) instead of `ok_or()`
+//! - [`defensive_ok_or()`](pezframe::traits::DefensiveOption::defensive_ok_or) instead of `ok_or()`
 //!
 //! Defensive methods use [`debug_assertions`](https://doc.rust-lang.org/reference/conditional-compilation.html#debug_assertions), which panic in development, but in
 //! production/release, they will merely log an error (i.e., `log::error`).
 //!
-//! The [`Defensive`](frame::traits::Defensive) trait and its various implementations can be found
-//! [here](frame::traits::Defensive).
+//! The [`Defensive`](pezframe::traits::Defensive) trait and its various implementations can be found
+//! [here](pezframe::traits::Defensive).
 //!
 //! ## Integer Overflow
 //!
@@ -188,8 +188,8 @@
 //! to avoid introducing the notion of any potential-panic or wrapping behavior.
 //!
 //! There is also a series of defensive alternatives via
-//! [`DefensiveSaturating`](frame::traits::DefensiveSaturating), which introduces the same behavior
-//! of the [`Defensive`](frame::traits::Defensive) trait, only with saturating, mathematical
+//! [`DefensiveSaturating`](pezframe::traits::DefensiveSaturating), which introduces the same behavior
+//! of the [`Defensive`](pezframe::traits::Defensive) trait, only with saturating, mathematical
 //! operations:
 #![doc = docify::embed!(
     "./src/reference_docs/defensive_programming.rs",
@@ -278,7 +278,7 @@
 //! actually cause harm to the network, and thus stalling would be the better option.
 //!
 //! Take the example of the BABE pezpallet ([`pezpallet_babe`]), which doesn't allow for a validator
-//! to participate if it is disabled (see: [`frame::traits::DisabledValidators`]):
+//! to participate if it is disabled (see: [`pezframe::traits::DisabledValidators`]):
 //!
 //! ```ignore
 //! if T::DisabledValidators::is_disabled(authority_index) {
@@ -359,7 +359,7 @@ mod fake_runtime_types {
 
 #[cfg(test)]
 mod tests {
-	use frame::traits::DefensiveSaturating;
+	use pezframe::traits::DefensiveSaturating;
 	#[docify::export]
 	#[test]
 	fn checked_add_example() {

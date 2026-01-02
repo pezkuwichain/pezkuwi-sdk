@@ -29,7 +29,7 @@ mod smoke {
 	use std::path::PathBuf;
 
 	use anyhow::anyhow;
-	use zombienet_sdk::{NetworkConfig, NetworkConfigBuilder, NetworkConfigExt};
+	use pezkuwi_zombienet_sdk::{NetworkConfig, NetworkConfigBuilder, NetworkConfigExt};
 
 	const CHAIN_SPECS_DIR_PATH: &str = "CHAIN_SPECS_DIR";
 	const TEYRCHAIN_ID: u32 = 1000;

@@ -3,7 +3,7 @@ name = "pezpallet-parameters"
 description = "Pallet to store and configure parameters."
 repository.workspace = true
 license = "Apache-2.0"
-version = "0.1.0"
+version = "0.44.0"
 authors = [
 	"Acala Developers",
 	"Kurdistan Tech Institute <info@pezkuwichain.io>",
@@ -28,9 +28,9 @@ pezframe-system = { workspace = true }
 pezsp-core = { workspace = true }
 pezsp-runtime = { workspace = true }
 
+# pezpallet-example-basic moved to integration tests to break circular dependency
 [dev-dependencies]
 pezpallet-balances = { workspace = true, default-features = true }
-pezpallet-example-basic = { workspace = true, default-features = true }
 pezsp-io = { workspace = true, default-features = true }
 
 [features]
@@ -50,7 +50,6 @@ runtime-benchmarks = [
 	"pezframe-support/runtime-benchmarks",
 	"pezframe-system/runtime-benchmarks",
 	"pezpallet-balances/runtime-benchmarks",
-	"pezpallet-example-basic/runtime-benchmarks",
 	"pezsp-io/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
@@ -58,6 +57,5 @@ try-runtime = [
 	"pezframe-support/try-runtime",
 	"pezframe-system/try-runtime",
 	"pezpallet-balances/try-runtime",
-	"pezpallet-example-basic/try-runtime",
 	"pezsp-runtime/try-runtime",
 ]

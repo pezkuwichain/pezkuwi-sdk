@@ -8,9 +8,9 @@
 //! Let's begin by starting to store a `NewType` in a storage item:
 //!
 //! ```compile_fail
-//! #[frame::pezpallet]
+//! #[pezframe::pezpallet]
 //! pub mod pezpallet {
-//! 	# use frame::prelude::*;
+//! 	# use pezframe::prelude::*;
 //! 	# #[pezpallet::config]
 //! 	# pub trait Config: pezframe_system::Config {}
 //! 	# #[pezpallet::pezpallet]
@@ -25,16 +25,16 @@
 //! This raises a number of compiler errors, like:
 //! ```text
 //! the trait `MaxEncodedLen` is not implemented for `NewType`, which is required by
-//! `frame::prelude::StorageValue<_GeneratedPrefixForStorageSomething<T>, NewType>:
+//! `pezframe::prelude::StorageValue<_GeneratedPrefixForStorageSomething<T>, NewType>:
 //! StorageInfoTrait`
 //! ```
 //!
 //! This implies the following set of traits that need to be derived for a type to be stored in
 //! `frame` storage:
 //! ```rust
-//! #[frame::pezpallet]
+//! #[pezframe::pezpallet]
 //! pub mod pezpallet {
-//! 	# use frame::prelude::*;
+//! 	# use pezframe::prelude::*;
 //! 	# #[pezpallet::config]
 //! 	# pub trait Config: pezframe_system::Config {}
 //! 	# #[pezpallet::pezpallet]
@@ -48,11 +48,11 @@
 //! ```
 //!
 //! Next, let's look at how this will differ if we are to store a type that is derived from `T` in
-//! storage, such as [`frame::prelude::BlockNumberFor`]:
+//! storage, such as [`pezframe::prelude::BlockNumberFor`]:
 //! ```compile_fail
-//! #[frame::pezpallet]
+//! #[pezframe::pezpallet]
 //! pub mod pezpallet {
-//! 	# use frame::prelude::*;
+//! 	# use pezframe::prelude::*;
 //! 	# #[pezpallet::config]
 //! 	# pub trait Config: pezframe_system::Config {}
 //! 	# #[pezpallet::pezpallet]
@@ -84,9 +84,9 @@
 //! attribute to `NewType`. This additional macro will instruct the `derive` to skip the bound on
 //! `T`.
 //! ```rust
-//! #[frame::pezpallet]
+//! #[pezframe::pezpallet]
 //! pub mod pezpallet {
-//! 	# use frame::prelude::*;
+//! 	# use pezframe::prelude::*;
 //! 	# #[pezpallet::config]
 //! 	# pub trait Config: pezframe_system::Config {}
 //! 	# #[pezpallet::pezpallet]
@@ -100,13 +100,13 @@
 //! }
 //! ```
 //!
-//! Next, let's say we wish to store `NewType` as [`frame::prelude::ValueQuery`], which means it
+//! Next, let's say we wish to store `NewType` as [`pezframe::prelude::ValueQuery`], which means it
 //! must also implement `Default`. This should be as simple as adding `derive(Default)` to it,
 //! right?
 //! ```compile_fail
-//! #[frame::pezpallet]
+//! #[pezframe::pezpallet]
 //! pub mod pezpallet {
-//! 	# use frame::prelude::*;
+//! 	# use pezframe::prelude::*;
 //! 	# #[pezpallet::config]
 //! 	# pub trait Config: pezframe_system::Config {}
 //! 	# #[pezpallet::pezpallet]
@@ -129,22 +129,22 @@
 //! To fix this, frame provides a set of macros that are analogous to normal rust derive macros, but
 //! work nicely on top of structs that are generic over `T: Config`. These macros are:
 //!
-//! - [`frame::prelude::DefaultNoBound`]
-//! - [`frame::prelude::DebugNoBound`]
-//! - [`frame::prelude::PartialEqNoBound`]
-//! - [`frame::prelude::EqNoBound`]
-//! - [`frame::prelude::CloneNoBound`]
-//! - [`frame::prelude::PartialOrdNoBound`]
-//! - [`frame::prelude::OrdNoBound`]
+//! - [`pezframe::prelude::DefaultNoBound`]
+//! - [`pezframe::prelude::DebugNoBound`]
+//! - [`pezframe::prelude::PartialEqNoBound`]
+//! - [`pezframe::prelude::EqNoBound`]
+//! - [`pezframe::prelude::CloneNoBound`]
+//! - [`pezframe::prelude::PartialOrdNoBound`]
+//! - [`pezframe::prelude::OrdNoBound`]
 //!
 //! The above traits are almost certainly needed for your tests - to print your type, assert equality
 //! or clone it.
 //!
-//! We can fix the following example by using [`frame::prelude::DefaultNoBound`].
+//! We can fix the following example by using [`pezframe::prelude::DefaultNoBound`].
 //! ```rust
-//! #[frame::pezpallet]
+//! #[pezframe::pezpallet]
 //! pub mod pezpallet {
-//! 	# use frame::prelude::*;
+//! 	# use pezframe::prelude::*;
 //! 	# #[pezpallet::config]
 //! 	# pub trait Config: pezframe_system::Config {}
 //! 	# #[pezpallet::pezpallet]
@@ -167,9 +167,9 @@
 //! Finally, if a custom type that is provided through `Config` is to be stored in the storage, it
 //! is subject to the same trait requirements. The following does not work:
 //! ```compile_fail
-//! #[frame::pezpallet]
+//! #[pezframe::pezpallet]
 //! pub mod pezpallet {
-//! 	use frame::prelude::*;
+//! 	use pezframe::prelude::*;
 //! 	#[pezpallet::config]
 //! 	pub trait Config: pezframe_system::Config {
 //! 		type CustomType;
@@ -183,9 +183,9 @@
 //!
 //! But adding the right trait bounds will fix it.
 //! ```rust
-//! #[frame::pezpallet]
+//! #[pezframe::pezpallet]
 //! pub mod pezpallet {
-//! 	use frame::prelude::*;
+//! 	use pezframe::prelude::*;
 //! 	#[pezpallet::config]
 //! 	pub trait Config: pezframe_system::Config {
 //! 		type CustomType: codec::FullCodec

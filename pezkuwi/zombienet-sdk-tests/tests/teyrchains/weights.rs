@@ -20,7 +20,7 @@ use pezpallet_revive::AddressMapper;
 use pezsp_core::{H160, H256};
 use rand::Rng;
 use std::str::FromStr;
-use zombienet_sdk::{
+use pezkuwi_zombienet_sdk::{
 	subxt_signer::{
 		sr25519::{dev, Keypair},
 		SecretUri,
@@ -152,7 +152,7 @@ async fn wait_warmup_finish(collator: &NetworkNode) -> Result<(), anyhow::Error>
 }
 
 async fn setup_network() -> Result<Network<LocalFileSystem>, anyhow::Error> {
-	let images = zombienet_sdk::environment::get_images_from_env();
+	let images = pezkuwi_zombienet_sdk::environment::get_images_from_env();
 	let config = NetworkConfigBuilder::new()
 		.with_relaychain(|r| {
 			r.with_chain("zagros-local")
@@ -192,7 +192,7 @@ async fn setup_network() -> Result<Network<LocalFileSystem>, anyhow::Error> {
 			let errs = e.into_iter().map(|e| e.to_string()).collect::<Vec<_>>().join(" ");
 			anyhow!("config errs: {errs}")
 		})?;
-	let spawn_fn = zombienet_sdk::environment::get_spawn_fn();
+	let spawn_fn = pezkuwi_zombienet_sdk::environment::get_spawn_fn();
 	let network = spawn_fn(config).await?;
 
 	Ok(network)

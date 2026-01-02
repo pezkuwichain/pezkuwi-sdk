@@ -90,7 +90,7 @@ pub use pezpallet::*;
 pub use weights::WeightInfo;
 
 use alloc::{vec, vec::Vec};
-use frame::prelude::*;
+use pezframe::prelude::*;
 use fungible::{
 	Balanced as FunBalanced, Inspect as FunInspect, Mutate as FunMutate,
 	MutateHold as FunMutateHold,
@@ -173,7 +173,7 @@ impl BenchmarkSetup for () {
 	fn create_counterpart_asset() {}
 }
 
-#[frame::pezpallet]
+#[pezframe::pezpallet]
 pub mod pezpallet {
 	use super::*;
 

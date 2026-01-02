@@ -18,7 +18,7 @@
 // ! A basic pezpallet to test it compiles along with a runtime using it when `pezframe_system` and
 // `pezframe_support` are reexported by a `frame` crate.
 
-use frame::deps::{pezframe_support, pezframe_system};
+use pezframe::deps::{pezframe_support, pezframe_system};
 
 #[pezframe_support::pezpallet]
 pub mod pezpallet {
@@ -31,7 +31,7 @@ pub mod pezpallet {
 	#[pezpallet::config]
 	// The only valid syntax here is the following or
 	// ```
-	// pub trait Config: frame::deps::pezframe_system::Config {}
+	// pub trait Config: pezframe::deps::pezframe_system::Config {}
 	// ```
 	pub trait Config: pezframe_system::Config {}
 

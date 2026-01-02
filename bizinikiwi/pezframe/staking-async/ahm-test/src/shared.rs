@@ -16,7 +16,7 @@
 // limitations under the License.
 
 use crate::*;
-use frame::testing_prelude::*;
+use pezframe::testing_prelude::*;
 use std::cell::UnsafeCell;
 
 thread_local! {

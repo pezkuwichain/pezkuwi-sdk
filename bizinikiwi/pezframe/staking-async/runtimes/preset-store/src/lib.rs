@@ -22,10 +22,10 @@
 
 pub use pezpallet::*;
 
-#[frame::pezpallet]
+#[pezframe::pezpallet]
 pub mod pezpallet {
 	extern crate alloc;
-	use frame::prelude::*;
+	use pezframe::prelude::*;
 
 	#[pezpallet::storage]
 	#[pezpallet::getter(fn preset)]

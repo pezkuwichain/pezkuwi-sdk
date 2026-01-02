@@ -1,5 +1,5 @@
 [package]
-name = "pezkuwi-sdk-frame"
+name = "pezframe"
 version = "0.1.0"
 authors = [
 	"Kurdistan Tech Institute <info@pezkuwichain.io>",

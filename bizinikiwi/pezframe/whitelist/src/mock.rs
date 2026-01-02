@@ -21,7 +21,7 @@
 
 use crate as pezpallet_whitelist;
 
-use frame::testing_prelude::*;
+use pezframe::testing_prelude::*;
 type Block = MockBlock<Test>;
 
 construct_runtime!(

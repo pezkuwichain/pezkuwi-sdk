@@ -48,8 +48,8 @@ pub mod xcm_config;
 extern crate alloc;
 
 use alloc::{vec, vec::Vec};
-pub use assets_common::local_and_foreign_assets::ForeignAssetReserveData;
-use assets_common::{
+pub use pez_assets_common::local_and_foreign_assets::ForeignAssetReserveData;
+use pez_assets_common::{
 	foreign_creators::ForeignCreators,
 	local_and_foreign_assets::{LocalFromLeft, TargetFromLeft},
 	AssetIdForTrustBackedAssetsConvert,
@@ -526,7 +526,7 @@ impl pezpallet_assets::Config<ForeignAssetsInstance> for Runtime {
 	type AssetAccountDeposit = ForeignAssetsAssetAccountDeposit;
 	type RemoveItemsLimit = pezframe_support::traits::ConstU32<1000>;
 	#[cfg(feature = "runtime-benchmarks")]
-	type BenchmarkHelper = assets_common::benchmarks::LocationAssetsBenchmarkHelper;
+	type BenchmarkHelper = pez_assets_common::benchmarks::LocationAssetsBenchmarkHelper;
 }
 
 parameter_types! {
@@ -623,7 +623,7 @@ impl pezpallet_asset_conversion::Config for Runtime {
 	type MintMinLiquidity = ConstU128<100>;
 	type WeightInfo = ();
 	#[cfg(feature = "runtime-benchmarks")]
-	type BenchmarkHelper = assets_common::benchmarks::AssetPairFactory<
+	type BenchmarkHelper = pez_assets_common::benchmarks::AssetPairFactory<
 		xcm_config::RelayLocation,
 		teyrchain_info::Pezpallet<Runtime>,
 		xcm_config::TrustBackedAssetsPalletIndex,

@@ -27,9 +27,9 @@
 pub use weights::WeightInfo;
 pub use weights_ext::WeightInfoExt;
 
-use bp_header_pez_chain::{HeaderChain, HeaderChainError};
-use bp_pezkuwi_core::teyrchains::{ParaHash, ParaHead, ParaHeadsProof, ParaId};
-use bp_teyrchains::{
+use pezbp_header_pez_chain::{HeaderChain, HeaderChainError};
+use pezbp_pezkuwi_core::teyrchains::{ParaHash, ParaHead, ParaHeadsProof, ParaId};
+use pezbp_teyrchains::{
 	ParaInfo, ParaStoredHeaderData, RelayBlockHash, RelayBlockHasher, RelayBlockNumber,
 	SubmitTeyrchainHeadsInfo,
 };
@@ -40,7 +40,7 @@ use pezsp_std::{marker::PhantomData, vec::Vec};
 use proofs::{StorageProofAdapter, TeyrchainsStorageProofAdapter};
 
 #[cfg(feature = "runtime-benchmarks")]
-use bp_teyrchains::ParaStoredHeaderDataBuilder;
+use pezbp_teyrchains::ParaStoredHeaderDataBuilder;
 #[cfg(feature = "runtime-benchmarks")]
 use codec::Encode;
 #[cfg(feature = "runtime-benchmarks")]
@@ -75,7 +75,7 @@ struct UpdateTeyrchainHeadArtifacts {
 #[pezframe_support::pezpallet]
 pub mod pezpallet {
 	use super::*;
-	use bp_teyrchains::{
+	use pezbp_teyrchains::{
 		BestParaHeadHash, ImportedParaHeadsKeyProvider, OnNewHead, ParaStoredHeaderDataBuilder,
 		ParasInfoKeyProvider,
 	};
@@ -225,13 +225,13 @@ pub mod pezpallet {
 		///
 		/// We never store teyrchain heads here, since they may be too big (e.g. because of large
 		/// digest items). Instead we're using the same approach as `pezpallet-bridge-grandpa`
-		/// pezpallet - we are only storing `bp_messages::StoredHeaderData` (number and state root),
+		/// pezpallet - we are only storing `pezbp_messages::StoredHeaderData` (number and state root),
 		/// which is enough for our applications. However, we work with different teyrchains here
 		/// and they can use different primitives (for block numbers and hash). So we can't store
-		/// it directly. Instead, we're storing `bp_messages::StoredHeaderData` in SCALE-encoded
-		/// form, wrapping it into `bp_teyrchains::ParaStoredHeaderData`.
+		/// it directly. Instead, we're storing `pezbp_messages::StoredHeaderData` in SCALE-encoded
+		/// form, wrapping it into `pezbp_teyrchains::ParaStoredHeaderData`.
 		///
-		/// This builder helps to convert from `HeadData` to `bp_teyrchains::ParaStoredHeaderData`.
+		/// This builder helps to convert from `HeadData` to `pezbp_teyrchains::ParaStoredHeaderData`.
 		type ParaStoredHeaderDataBuilder: ParaStoredHeaderDataBuilder;
 
 		/// Maximal number of single teyrchain heads to keep in the storage.
@@ -245,7 +245,7 @@ pub mod pezpallet {
 		type HeadsToKeep: Get<u32>;
 
 		/// Maximal size (in bytes) of the SCALE-encoded teyrchain head data
-		/// (`bp_teyrchains::ParaStoredHeaderData`).
+		/// (`pezbp_teyrchains::ParaStoredHeaderData`).
 		///
 		/// Keep in mind that the size of any tracked teyrchain header data must not exceed this
 		/// value. So if you're going to track multiple teyrchains, one of which is using large
@@ -804,7 +804,7 @@ impl<T: Config<I>, I: 'static, C: Teyrchain<Hash = ParaHash>> HeaderChain<C>
 pub fn initialize_for_benchmarks<T: Config<I>, I: 'static, PC: Teyrchain<Hash = ParaHash>>(
 	header: HeaderOf<PC>,
 ) {
-	use bp_pezkuwi_core::teyrchains::ParaHead;
+	use pezbp_pezkuwi_core::teyrchains::ParaHead;
 	use pezbp_runtime::HeaderIdProvider;
 	use pezsp_runtime::traits::Header;
 
@@ -842,16 +842,16 @@ pub(crate) mod tests {
 		RegularTeyrchainHasher, RegularTeyrchainHeader, RelayBlockHeader,
 		RuntimeEvent as TestEvent, RuntimeOrigin, TestRuntime, UNTRACKED_TEYRCHAIN_ID,
 	};
-	use bp_test_utils::prepare_teyrchain_heads_proof;
+	use pezbp_test_utils::prepare_teyrchain_heads_proof;
 	use codec::Encode;
 
-	use bp_header_pez_chain::{justification::GrandpaJustification, StoredHeaderGrandpaInfo};
-	use bp_pezkuwi_core::teyrchains::ParaHead;
-	use bp_test_utils::{
+	use pezbp_header_pez_chain::{justification::GrandpaJustification, StoredHeaderGrandpaInfo};
+	use pezbp_pezkuwi_core::teyrchains::ParaHead;
+	use pezbp_test_utils::{
 		authority_list, generate_owned_bridge_module_tests, make_default_justification,
 		TEST_GRANDPA_SET_ID,
 	};
-	use bp_teyrchains::{
+	use pezbp_teyrchains::{
 		BestParaHeadHash, BridgeTeyrchainCall, ImportedParaHeadsKeyProvider, ParasInfoKeyProvider,
 	};
 	use pezbp_runtime::{
@@ -878,7 +878,7 @@ pub(crate) mod tests {
 		pezpallet_bridge_grandpa::FreeHeadersRemaining::<TestRuntime, BridgesGrandpaPalletInstance>::set(Some(100));
 		pezpallet_bridge_grandpa::Pezpallet::<TestRuntime, BridgesGrandpaPalletInstance>::initialize(
 			RuntimeOrigin::root(),
-			bp_header_pez_chain::InitializationData {
+			pezbp_header_pez_chain::InitializationData {
 				header: Box::new(test_relay_header(0, state_root)),
 				authority_list: authority_list(),
 				set_id: 1,

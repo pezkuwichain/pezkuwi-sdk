@@ -18,7 +18,9 @@ targets = ["x86_64-unknown-linux-gnu"]
 
 [dependencies]
 codec = { features = ["derive"], workspace = true }
-frame = { workspace = true, features = ["runtime"] }
+pezframe = { workspace = true, features = ["runtime"] }
+pezframe-system = { workspace = true }
+pezframe-support = { workspace = true }
 log = { workspace = true }
 pezpallet-ranked-collective = { optional = true, workspace = true }
 scale-info = { features = ["derive"], workspace = true }
@@ -27,13 +29,15 @@ scale-info = { features = ["derive"], workspace = true }
 default = ["std"]
 std = [
 	"codec/std",
-	"frame/std",
+	"pezframe/std",
+	"pezframe-system/std",
+	"pezframe-support/std",
 	"log/std",
 	"pezpallet-ranked-collective/std",
 	"scale-info/std",
 ]
 runtime-benchmarks = [
-	"frame/runtime-benchmarks",
+	"pezframe/runtime-benchmarks",
 	"pezpallet-ranked-collective/runtime-benchmarks",
 ]
-try-runtime = ["frame/try-runtime", "pezpallet-ranked-collective?/try-runtime"]
+try-runtime = ["pezframe/try-runtime", "pezpallet-ranked-collective?/try-runtime"]

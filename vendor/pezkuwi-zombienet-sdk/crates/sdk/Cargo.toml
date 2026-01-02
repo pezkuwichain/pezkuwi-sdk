@@ -1,5 +1,5 @@
 [package]
-name = "zombienet-sdk"
+name = "pezkuwi-zombienet-sdk"
 version.workspace = true
 authors.workspace = true
 edition.workspace = true
@@ -7,8 +7,8 @@ rust-version.workspace = true
 publish = true
 license.workspace = true
 repository.workspace = true
-description = "Zombienet SDK, entrypoint for using zombienet"
-keywords = ["sdk", "zombienet"]
+description = "Pezkuwi Zombienet SDK - Network orchestration for Pezkuwi blockchain testing"
+keywords = ["sdk", "zombienet", "pezkuwi", "blockchain"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -29,5 +29,5 @@ support = { workspace = true }
 [dev-dependencies]
 k8s-openapi = { workspace = true, features = ["v1_28"] }
 kube = { workspace = true, features = ["runtime", "ws"] }
-serde_json = { workspace = true }
+serde_json = { workspace = true, default-features = true }
 tracing-subscriber = { workspace = true }

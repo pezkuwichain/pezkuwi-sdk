@@ -36,7 +36,7 @@ mod mock;
 mod test;
 
 pub use crate::weights::WeightInfo;
-use bp_relayers::RewardLedger;
+use pezbp_relayers::RewardLedger;
 use pezframe_system::ensure_signed;
 use pezsnowbridge_core::{
 	reward::{AddTip, AddTipError},

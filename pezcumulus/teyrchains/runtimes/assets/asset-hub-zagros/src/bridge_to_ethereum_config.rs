@@ -23,7 +23,7 @@ use crate::{
 	},
 	AccountId, AssetConversion, Assets, ForeignAssets, Runtime, RuntimeEvent,
 };
-use assets_common::{matching::FromSiblingTeyrchain, AssetIdForTrustBackedAssetsConvert};
+use pez_assets_common::{matching::FromSiblingTeyrchain, AssetIdForTrustBackedAssetsConvert};
 use pezframe_support::{parameter_types, traits::EitherOf};
 use pezframe_system::EnsureRootWithSuccess;
 use pezsnowbridge_runtime_common::{ForeignAssetOwner, LocalAssetOwner};

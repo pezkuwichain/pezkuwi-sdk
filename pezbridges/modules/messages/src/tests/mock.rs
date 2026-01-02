@@ -25,8 +25,8 @@ use crate::{
 	Config, StoredMessagePayload,
 };
 
-use bp_header_pez_chain::{ChainWithGrandpa, StoredHeaderData};
-use bp_messages::{
+use pezbp_header_pez_chain::{ChainWithGrandpa, StoredHeaderData};
+use pezbp_messages::{
 	calc_relayers_rewards,
 	source_chain::{
 		DeliveryConfirmationPayments, FromBridgedChainMessagesDeliveryProof, OnMessagesDelivered,

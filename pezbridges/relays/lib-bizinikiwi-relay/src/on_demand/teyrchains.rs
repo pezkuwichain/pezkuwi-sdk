@@ -31,8 +31,8 @@ use async_std::{
 	sync::{Arc, Mutex},
 };
 use async_trait::async_trait;
-use bp_pezkuwi_core::teyrchains::{ParaHash, ParaId};
-use bp_teyrchains::{RelayBlockHash, RelayBlockHasher, RelayBlockNumber};
+use pezbp_pezkuwi_core::teyrchains::{ParaHash, ParaId};
+use pezbp_teyrchains::{RelayBlockHash, RelayBlockHasher, RelayBlockNumber};
 use futures::{select, FutureExt};
 use num_traits::Zero;
 use pezbp_runtime::HeaderIdProvider;

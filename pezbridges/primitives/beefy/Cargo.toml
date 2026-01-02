@@ -1,5 +1,5 @@
 [package]
-name = "bp-beefy"
+name = "pezbp-beefy"
 description = "Primitives of pezpallet-bridge-beefy module."
 version = "0.1.0"
 authors.workspace = true

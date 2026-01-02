@@ -16,4 +16,30 @@
 // limitations under the License.
 
 // bizinikiwi-wasm-builder moved to integration tests to break circular dependency
-fn main() {}
+// This build script creates a dummy wasm_binary.rs for std builds
+
+fn main() {
+	#[cfg(feature = "std")]
+	{
+		use std::io::Write;
+		let out_dir = std::env::var("OUT_DIR").expect("OUT_DIR not set");
+		let wasm_binary_path = std::path::Path::new(&out_dir).join("wasm_binary.rs");
+
+		let content = r#"
+/// Wasm binary unwrap bloat.
+#[cfg(all(feature = "std", not(feature = "runtime-benchmarks")))]
+pub const WASM_BINARY: Option<&[u8]> = None;
+
+/// Wasm binary unwrap bloat (for runtime-benchmarks feature).
+#[cfg(all(feature = "std", feature = "runtime-benchmarks"))]
+pub const WASM_BINARY: Option<&[u8]> = None;
+
+/// Wasm binary unwrap bloat.
+#[allow(dead_code)]
+pub const WASM_BINARY_BLOATY: Option<&[u8]> = None;
+"#;
+
+		let mut file = std::fs::File::create(&wasm_binary_path).expect("Failed to create wasm_binary.rs");
+		file.write_all(content.as_bytes()).expect("Failed to write wasm_binary.rs");
+	}
+}

@@ -34,7 +34,7 @@ xcm-builder = { workspace = true }
 xcm-executor = { workspace = true }
 
 # Bridges
-bp-asset-hub-pezkuwichain = { workspace = true }
+pezbp-asset-hub-pezkuwichain = { workspace = true }
 pezpallet-bridge-messages = { workspace = true }
 
 # Pezcumulus
@@ -59,7 +59,7 @@ pezsnowbridge-pezpallet-system = { workspace = true }
 [features]
 runtime-benchmarks = [
 	"asset-hub-pezkuwichain-runtime/runtime-benchmarks",
-	"bp-asset-hub-pezkuwichain/runtime-benchmarks",
+	"pezbp-asset-hub-pezkuwichain/runtime-benchmarks",
 	"emulated-integration-tests-common/runtime-benchmarks",
 	"pezcumulus-pezpallet-xcmp-queue/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",

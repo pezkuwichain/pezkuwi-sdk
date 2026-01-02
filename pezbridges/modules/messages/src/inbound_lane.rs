@@ -18,7 +18,7 @@
 
 use crate::{BridgedChainOf, Config};
 
-use bp_messages::{
+use pezbp_messages::{
 	target_chain::{DispatchMessage, DispatchMessageData, MessageDispatch},
 	ChainWithMessages, DeliveredMessages, InboundLaneData, LaneState, MessageKey, MessageNonce,
 	OutboundLaneData, ReceptionResult, UnrewardedRelayer,
@@ -238,7 +238,7 @@ impl<S: InboundLaneStorage> InboundLane<S> {
 mod tests {
 	use super::*;
 	use crate::{active_inbound_lane, lanes_manager::RuntimeInboundLaneStorage, tests::mock::*};
-	use bp_messages::UnrewardedRelayersState;
+	use pezbp_messages::UnrewardedRelayersState;
 
 	fn receive_regular_message(
 		lane: &mut InboundLane<RuntimeInboundLaneStorage<TestRuntime, ()>>,

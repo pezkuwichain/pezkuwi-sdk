@@ -19,9 +19,9 @@
 #![warn(missing_docs)]
 #![cfg_attr(not(feature = "std"), no_std)]
 
-use bp_header_pez_chain::justification::{required_justification_precommits, GrandpaJustification};
-use bp_pezkuwi_core::teyrchains::{ParaHash, ParaHead, ParaHeadsProof, ParaId};
-use bp_teyrchains::teyrchain_head_storage_key_at_source;
+use pezbp_header_pez_chain::justification::{required_justification_precommits, GrandpaJustification};
+use pezbp_pezkuwi_core::teyrchains::{ParaHash, ParaHead, ParaHeadsProof, ParaId};
+use pezbp_teyrchains::teyrchain_head_storage_key_at_source;
 use codec::Encode;
 use pezbp_runtime::record_all_trie_keys;
 use pezsp_consensus_grandpa::{AuthorityId, AuthoritySignature, AuthorityWeight, SetId};

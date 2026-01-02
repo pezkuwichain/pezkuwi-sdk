@@ -51,8 +51,8 @@ pezsp-core = { features = ["std"], workspace = true, default-features = true }
 pezsp-keyring = { workspace = true, default-features = true }
 
 itertools = { workspace = true }
-pezkuwi-node-subsystem-test-helpers = { workspace = true }
-pezkuwi-primitives-test-helpers = { workspace = true }
+# pezkuwi-node-subsystem-test-helpers = { workspace = true }
+# pezkuwi-primitives-test-helpers = { workspace = true }
 
 [features]
 default = []
@@ -60,11 +60,11 @@ experimental-collator-protocol = ["async-trait", "tokio"]
 runtime-benchmarks = [
 	"gum/runtime-benchmarks",
 	"pezkuwi-node-network-protocol/runtime-benchmarks",
-	"pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
+	# "pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
 	"pezkuwi-node-subsystem-util/runtime-benchmarks",
 	"pezkuwi-node-subsystem/runtime-benchmarks",
 	"pezkuwi-pez-node-primitives/runtime-benchmarks",
-	"pezkuwi-primitives-test-helpers/runtime-benchmarks",
+	# "pezkuwi-primitives-test-helpers/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
 	"pezsc-network/runtime-benchmarks",
 	"pezsp-keyring/runtime-benchmarks",

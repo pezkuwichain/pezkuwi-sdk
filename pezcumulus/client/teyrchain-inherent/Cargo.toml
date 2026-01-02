@@ -1,6 +1,6 @@
 [package]
 name = "pezcumulus-client-teyrchain-inherent"
-version = "0.1.0"
+version = "0.1.1"
 authors.workspace = true
 edition.workspace = true
 description = "Inherent that needs to be present in every teyrchain block. Contains messages and a relay chain storage-proof."
@@ -28,14 +28,16 @@ pezsp-storage = { workspace = true, default-features = true }
 pezcumulus-primitives-core = { workspace = true, default-features = true }
 pezcumulus-primitives-teyrchain-inherent = { workspace = true, default-features = true }
 pezcumulus-relay-chain-interface = { workspace = true, default-features = true }
-pezcumulus-test-relay-sproof-builder = { workspace = true, default-features = true }
+pezcumulus-test-relay-sproof-builder = { optional = true, workspace = true, default-features = true }
 
 [features]
+default = []
+mock = ["pezcumulus-test-relay-sproof-builder"]
 runtime-benchmarks = [
 	"pezcumulus-primitives-core/runtime-benchmarks",
 	"pezcumulus-primitives-teyrchain-inherent/runtime-benchmarks",
 	"pezcumulus-relay-chain-interface/runtime-benchmarks",
-	"pezcumulus-test-relay-sproof-builder/runtime-benchmarks",
+	"pezcumulus-test-relay-sproof-builder?/runtime-benchmarks",
 	"pezsc-client-api/runtime-benchmarks",
 	"pezsc-consensus-babe/runtime-benchmarks",
 	"pezsp-inherents/runtime-benchmarks",

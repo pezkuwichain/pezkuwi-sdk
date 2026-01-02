@@ -16,11 +16,11 @@
 pub use asset_test_pezutils;
 
 /// Assets common utilities.
-#[cfg(feature = "assets-common")]
-pub use assets_common;
+#[cfg(feature = "pez-assets-common")]
+pub use pez_assets_common;
 
 /// A no-std/Bizinikiwi compatible library to construct binary merkle tree.
-#[cfg(feature = "binary-merkle-tree")]
+#[cfg(feature = "pez-binary-merkle-tree")]
 pub use pez_binary_merkle_tree;
 
 /// Converting BIP39 entropy to valid Bizinikiwi (sr25519) SecretKeys.
@@ -40,8 +40,8 @@ pub use bizinikiwi_frame_rpc_support;
 pub use bizinikiwi_frame_rpc_system;
 
 /// Endpoint to expose Prometheus metrics.
-#[cfg(feature = "bizinikiwi-prometheus-endpoint")]
-pub use bizinikiwi_prometheus_endpoint;
+#[cfg(feature = "prometheus-endpoint")]
+pub use prometheus_endpoint;
 
 /// Shared JSON-RPC client.
 #[cfg(feature = "bizinikiwi-rpc-client")]
@@ -52,52 +52,52 @@ pub use bizinikiwi_rpc_client;
 pub use bizinikiwi_state_trie_migration_rpc;
 
 /// Bizinikiwi utility: A library and CLI tool for sending transactions to Pezkuwi blockchain, enabling developers to test and monitor transaction scenarios.
-#[cfg(feature = "bizinikiwi-txtesttool")]
-pub use bizinikiwi_txtesttool;
+#[cfg(feature = "txtesttool")]
+pub use txtesttool;
 
 /// Utility for building WASM binaries.
 #[cfg(feature = "bizinikiwi-wasm-builder")]
 pub use bizinikiwi_wasm_builder;
 
 /// A common interface for describing what a bridge pezpallet should be able to do.
-#[cfg(feature = "bp-header-pez-chain")]
-pub use bp_header_pez_chain;
+#[cfg(feature = "pezbp-header-pez-chain")]
+pub use pezbp_header_pez_chain;
 
 /// Primitives of messages module.
-#[cfg(feature = "bp-messages")]
-pub use bp_messages;
+#[cfg(feature = "pezbp-messages")]
+pub use pezbp_messages;
 
 /// Primitives of Pezkuwi-like runtime.
-#[cfg(feature = "bp-pezkuwi-core")]
-pub use bp_pezkuwi_core;
+#[cfg(feature = "pezbp-pezkuwi-core")]
+pub use pezbp_pezkuwi_core;
 
 /// Primitives of relayers module.
-#[cfg(feature = "bp-relayers")]
-pub use bp_relayers;
+#[cfg(feature = "pezbp-relayers")]
+pub use pezbp_relayers;
 
 /// Utilities for testing bizinikiwi-based runtime bridge code.
-#[cfg(feature = "bp-test-utils")]
-pub use bp_test_utils;
+#[cfg(feature = "pezbp-test-utils")]
+pub use pezbp_test_utils;
 
 /// Primitives of teyrchains module.
-#[cfg(feature = "bp-teyrchains")]
-pub use bp_teyrchains;
+#[cfg(feature = "pezbp-teyrchains")]
+pub use pezbp_teyrchains;
 
 /// Primitives of the xcm-bridge-hub pezpallet.
-#[cfg(feature = "bp-xcm-bridge-hub")]
-pub use bp_xcm_bridge_hub;
+#[cfg(feature = "pezbp-xcm-bridge-hub")]
+pub use pezbp_xcm_bridge_hub;
 
 /// Primitives of the xcm-bridge-hub fee pezpallet.
-#[cfg(feature = "bp-xcm-bridge-hub-router")]
-pub use bp_xcm_bridge_hub_router;
+#[cfg(feature = "pezbp-xcm-bridge-hub-router")]
+pub use pezbp_xcm_bridge_hub_router;
 
 /// Bridge hub common utilities.
-#[cfg(feature = "bridge-hub-common")]
-pub use bridge_hub_common;
+#[cfg(feature = "pezbridge-hub-common")]
+pub use pezbridge_hub_common;
 
 /// An externalities provided environment that can load itself from remote nodes or cached files.
-#[cfg(feature = "frame-remote-externalities")]
-pub use frame_remote_externalities;
+#[cfg(feature = "remote-externalities")]
+pub use remote_externalities;
 
 /// Interfaces for Ethereum standards.
 #[cfg(feature = "pez-ethereum-standards")]
@@ -120,12 +120,12 @@ pub use pez_slot_range_helper;
 pub use pez_subkey;
 
 /// Stick logs together with the TraceID as provided by tempo.
-#[cfg(feature = "pez-tracing-gum")]
-pub use pez_tracing_gum;
+#[cfg(feature = "gum")]
+pub use gum;
 
 /// Generate an overseer including builder pattern and message wrapper from a single annotated struct definition.
-#[cfg(feature = "pez-tracing-gum-proc-macro")]
-pub use pez_tracing_gum_proc_macro;
+#[cfg(feature = "gum-proc-macro")]
+pub use gum_proc_macro;
 
 /// Primitives that may be used at (bridges) runtime level.
 #[cfg(feature = "pezbp-runtime")]
@@ -508,16 +508,16 @@ pub use pezkuwi_runtime_metrics;
 pub use pezkuwi_runtime_teyrchains;
 
 /// The single package to get you started with building frame pallets and runtimes.
-#[cfg(feature = "pezkuwi-sdk-frame")]
-pub use pezkuwi_sdk_frame;
+#[cfg(feature = "pezframe")]
+pub use pezframe;
 
 /// Utils to tie different Pezkuwi components together and allow instantiation of a node.
 #[cfg(feature = "pezkuwi-service")]
 pub use pezkuwi_service;
 
 /// Registry of known SS58 address types - PezkuwiChain fork.
-#[cfg(feature = "pezsp-ss58-registry")]
-pub use pezsp_ss58_registry;
+#[cfg(feature = "ss58-registry")]
+pub use ss58_registry;
 
 /// Statement Distribution Subsystem.
 #[cfg(feature = "pezkuwi-statement-distribution")]
@@ -703,9 +703,9 @@ pub use pezpallet_collective_content;
 #[cfg(feature = "pezpallet-contracts")]
 pub use pezpallet_contracts;
 
-/// A mock network for testing pezpallet-contracts.
-#[cfg(feature = "pezpallet-contracts-mock-network")]
-pub use pezpallet_contracts_mock_network;
+// A mock network for testing pezpallet-contracts.
+// #[cfg(feature = "pezpallet-contracts-mock-network")]
+// pub use pezpallet_contracts_mock_network;  // Test-only crate, not published
 
 /// Procedural macros used in pallet_contracts.
 #[cfg(feature = "pezpallet-contracts-proc-macro")]
@@ -1512,32 +1512,32 @@ pub use pezsp_wasm_interface;
 pub use pezsp_weights;
 
 /// Utility for building chain-specification files for Bizinikiwi-based runtimes based on `pezsp-genesis-builder`.
-#[cfg(feature = "pezstaging-chain-spec-builder")]
-pub use pezstaging_chain_spec_builder;
+#[cfg(feature = "chain-spec-builder")]
+pub use chain_spec_builder;
 
 /// Bizinikiwi node block inspection tool.
-#[cfg(feature = "pezstaging-node-inspect")]
-pub use pezstaging_node_inspect;
+#[cfg(feature = "node-inspect")]
+pub use node_inspect;
 
 /// Pallet to store the teyrchain ID.
-#[cfg(feature = "pezstaging-teyrchain-info")]
-pub use pezstaging_teyrchain_info;
+#[cfg(feature = "teyrchain-info")]
+pub use teyrchain_info;
 
 /// Tracking allocator to control the amount of memory consumed by the process.
-#[cfg(feature = "pezstaging-tracking-allocator")]
-pub use pezstaging_tracking_allocator;
+#[cfg(feature = "tracking-allocator")]
+pub use tracking_allocator;
 
 /// The basic XCM datastructures.
-#[cfg(feature = "pezstaging-xcm")]
-pub use pezstaging_xcm;
+#[cfg(feature = "xcm")]
+pub use xcm;
 
 /// Tools & types for building with XCM and its executor.
-#[cfg(feature = "pezstaging-xcm-builder")]
-pub use pezstaging_xcm_builder;
+#[cfg(feature = "xcm-builder")]
+pub use xcm_builder;
 
 /// An abstract and configurable XCM message executor.
-#[cfg(feature = "pezstaging-xcm-executor")]
-pub use pezstaging_xcm_executor;
+#[cfg(feature = "xcm-executor")]
+pub use xcm_executor;
 
 /// Common constants for Testnet Teyrchains runtimes.
 #[cfg(feature = "testnet-teyrchains-constants")]
@@ -1567,26 +1567,26 @@ pub use xcm_pez_simulator;
 #[cfg(feature = "xcm-runtime-pezapis")]
 pub use xcm_runtime_pezapis;
 
-/// Zombienet sdk config builder, allow to build a network configuration.
-#[cfg(feature = "zombienet-configuration")]
-pub use zombienet_configuration;
+/// Pezkuwi Zombienet configuration builder for network testing.
+#[cfg(feature = "pezkuwi-zombienet-configuration")]
+pub use pezkuwi_zombienet_configuration;
 
-/// Zombienet Orchestrator, drive network spwan through providers.
-#[cfg(feature = "zombienet-orchestrator")]
-pub use zombienet_orchestrator;
+/// Pezkuwi Zombienet orchestrator - Network spawn through providers.
+#[cfg(feature = "pezkuwi-zombienet-orchestrator")]
+pub use pezkuwi_zombienet_orchestrator;
 
-/// Prometheus metric parser, parse metrics provided by internal prometheus server.
-#[cfg(feature = "zombienet-prom-metrics-parser")]
-pub use zombienet_prom_metrics_parser;
+/// Pezkuwi Zombienet Prometheus metrics parser.
+#[cfg(feature = "pezkuwi-zombienet-prom-metrics-parser")]
+pub use pezkuwi_zombienet_prom_metrics_parser;
 
-/// Zombienet provider, implement the logic to run the nodes in the native provider.
-#[cfg(feature = "zombienet-provider")]
-pub use zombienet_provider;
+/// Pezkuwi Zombienet provider - Node execution through native provider.
+#[cfg(feature = "pezkuwi-zombienet-provider")]
+pub use pezkuwi_zombienet_provider;
 
-/// Zombienet SDK, entrypoint for using zombienet.
-#[cfg(feature = "zombienet-sdk")]
-pub use zombienet_sdk;
+/// Pezkuwi Zombienet SDK - Network orchestration for Pezkuwi blockchain testing.
+#[cfg(feature = "pezkuwi-zombienet-sdk")]
+pub use pezkuwi_zombienet_sdk;
 
-/// Support crates with common traits/structs and helpers.
-#[cfg(feature = "zombienet-support")]
-pub use zombienet_support;
+/// Pezkuwi Zombienet support - Common traits, structs and helpers.
+#[cfg(feature = "pezkuwi-zombienet-support")]
+pub use pezkuwi_zombienet_support;

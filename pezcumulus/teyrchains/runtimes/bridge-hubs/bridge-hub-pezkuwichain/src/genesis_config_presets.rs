@@ -33,7 +33,7 @@ fn bridge_hub_pezkuwichain_genesis(
 	id: ParaId,
 	bridges_pallet_owner: Option<AccountId>,
 	asset_hub_para_id: ParaId,
-	opened_bridges: Vec<(Location, InteriorLocation, Option<bp_messages::LegacyLaneId>)>,
+	opened_bridges: Vec<(Location, InteriorLocation, Option<pezbp_messages::LegacyLaneId>)>,
 ) -> serde_json::Value {
 	build_struct_json_patch!(RuntimeGenesisConfig {
 		balances: BalancesConfig {
@@ -70,7 +70,7 @@ fn bridge_hub_pezkuwichain_genesis(
 			opened_bridges: vec![(
 				Location::new(1, [Teyrchain(1004)]),
 				Junctions::from([GlobalConsensus(NetworkId::PezkuwiBulletin).into()]),
-				Some(bp_messages::LegacyLaneId([0, 0, 0, 0])),
+				Some(pezbp_messages::LegacyLaneId([0, 0, 0, 0])),
 			)],
 		},
 		xcm_over_bridge_hub_zagros: XcmOverBridgeHubZagrosConfig { opened_bridges },
@@ -94,7 +94,7 @@ pub fn get_preset(id: &pezsp_genesis_builder::PresetId) -> Option<pezsp_std::vec
 			vec![(
 				Location::new(1, [Teyrchain(1000)]),
 				Junctions::from([ByGenesis(ZAGROS_GENESIS_HASH).into(), Teyrchain(1000)]),
-				Some(bp_messages::LegacyLaneId([0, 0, 0, 2])),
+				Some(pezbp_messages::LegacyLaneId([0, 0, 0, 2])),
 			)],
 		),
 		pezsp_genesis_builder::DEV_RUNTIME_PRESET => bridge_hub_pezkuwichain_genesis(

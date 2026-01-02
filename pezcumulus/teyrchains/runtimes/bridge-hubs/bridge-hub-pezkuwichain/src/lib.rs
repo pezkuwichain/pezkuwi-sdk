@@ -75,7 +75,7 @@ use testnet_teyrchains_constants::pezkuwichain::{
 	consensus::*, currency::*, fee::WeightToFee, time::*,
 };
 
-use bridge_hub_common::{
+use pezbridge_hub_common::{
 	message_queue::{NarrowOriginToSibling, ParaIdToSibling},
 	AggregateMessageOrigin,
 };
@@ -188,7 +188,7 @@ pub type Migrations = (
 	pezpallet_bridge_relayers::migration::v1::MigrationToV1<
 		Runtime,
 		bridge_common_config::RelayersForLegacyLaneIdsMessagesInstance,
-		bp_messages::LegacyLaneId,
+		pezbp_messages::LegacyLaneId,
 	>,
 	pezpallet_session::migrations::v1::MigrateV0ToV1<
 		Runtime,
@@ -432,7 +432,7 @@ impl pezpallet_message_queue::Config for Runtime {
 	type MessageProcessor =
 		pezpallet_message_queue::mock_helpers::NoopMessageProcessor<AggregateMessageOrigin>;
 	#[cfg(not(all(not(feature = "std"), feature = "runtime-benchmarks")))]
-	type MessageProcessor = bridge_hub_common::BridgeHubMessageRouter<
+	type MessageProcessor = pezbridge_hub_common::BridgeHubMessageRouter<
 		xcm_builder::ProcessXcmMessage<
 			AggregateMessageOrigin,
 			xcm_executor::XcmExecutor<xcm_config::XcmConfig>,
@@ -667,7 +667,7 @@ pezbridge_runtime_common::generate_bridge_reject_obsolete_headers_and_messages! 
 	CheckAndBoostBridgeTeyrchainsTransactions<
 		Runtime,
 		bridge_common_config::BridgeTeyrchainZagrosInstance,
-		bp_bridge_hub_zagros::BridgeHubZagros,
+		pezbp_bridge_hub_zagros::BridgeHubZagros,
 		bridge_to_zagros_config::PriorityBoostPerTeyrchainHeader,
 		xcm_config::TreasuryAccount,
 	>,
@@ -919,39 +919,39 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl bp_zagros::ZagrosFinalityApi<Block> for Runtime {
-		fn best_finalized() -> Option<HeaderId<bp_zagros::Hash, bp_zagros::BlockNumber>> {
+	impl pezbp_zagros::ZagrosFinalityApi<Block> for Runtime {
+		fn best_finalized() -> Option<HeaderId<pezbp_zagros::Hash, pezbp_zagros::BlockNumber>> {
 			BridgeZagrosGrandpa::best_finalized()
 		}
-		fn free_headers_interval() -> Option<bp_zagros::BlockNumber> {
+		fn free_headers_interval() -> Option<pezbp_zagros::BlockNumber> {
 			<Runtime as pezpallet_bridge_grandpa::Config<
 				bridge_common_config::BridgeGrandpaZagrosInstance
 			>>::FreeHeadersInterval::get()
 		}
 		fn synced_headers_grandpa_info(
-		) -> Vec<bp_header_pez_chain::StoredHeaderGrandpaInfo<bp_zagros::Header>> {
+		) -> Vec<pezbp_header_pez_chain::StoredHeaderGrandpaInfo<pezbp_zagros::Header>> {
 			BridgeZagrosGrandpa::synced_headers_grandpa_info()
 		}
 	}
 
-	impl bp_bridge_hub_zagros::BridgeHubZagrosFinalityApi<Block> for Runtime {
+	impl pezbp_bridge_hub_zagros::BridgeHubZagrosFinalityApi<Block> for Runtime {
 		fn best_finalized() -> Option<HeaderId<Hash, BlockNumber>> {
 			BridgeZagrosTeyrchains::best_teyrchain_head_id::<
-				bp_bridge_hub_zagros::BridgeHubZagros
+				pezbp_bridge_hub_zagros::BridgeHubZagros
 			>().unwrap_or(None)
 		}
-		fn free_headers_interval() -> Option<bp_bridge_hub_zagros::BlockNumber> {
+		fn free_headers_interval() -> Option<pezbp_bridge_hub_zagros::BlockNumber> {
 			// "free interval" is not currently used for teyrchains
 			None
 		}
 	}
 
 	// This is exposed by BridgeHubPezkuwichain
-	impl bp_bridge_hub_zagros::FromBridgeHubZagrosInboundLaneApi<Block> for Runtime {
+	impl pezbp_bridge_hub_zagros::FromBridgeHubZagrosInboundLaneApi<Block> for Runtime {
 		fn message_details(
 			lane: LaneIdOf<Runtime, bridge_to_zagros_config::WithBridgeHubZagrosMessagesInstance>,
-			messages: Vec<(bp_messages::MessagePayload, bp_messages::OutboundMessageDetails)>,
-		) -> Vec<bp_messages::InboundMessageDetails> {
+			messages: Vec<(pezbp_messages::MessagePayload, pezbp_messages::OutboundMessageDetails)>,
+		) -> Vec<pezbp_messages::InboundMessageDetails> {
 			pezbridge_runtime_common::messages_api::inbound_message_details::<
 				Runtime,
 				bridge_to_zagros_config::WithBridgeHubZagrosMessagesInstance,
@@ -960,12 +960,12 @@ impl_runtime_apis! {
 	}
 
 	// This is exposed by BridgeHubPezkuwichain
-	impl bp_bridge_hub_zagros::ToBridgeHubZagrosOutboundLaneApi<Block> for Runtime {
+	impl pezbp_bridge_hub_zagros::ToBridgeHubZagrosOutboundLaneApi<Block> for Runtime {
 		fn message_details(
 			lane: LaneIdOf<Runtime, bridge_to_zagros_config::WithBridgeHubZagrosMessagesInstance>,
-			begin: bp_messages::MessageNonce,
-			end: bp_messages::MessageNonce,
-		) -> Vec<bp_messages::OutboundMessageDetails> {
+			begin: pezbp_messages::MessageNonce,
+			end: pezbp_messages::MessageNonce,
+		) -> Vec<pezbp_messages::OutboundMessageDetails> {
 			pezbridge_runtime_common::messages_api::outbound_message_details::<
 				Runtime,
 				bridge_to_zagros_config::WithBridgeHubZagrosMessagesInstance,
@@ -973,28 +973,28 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl bp_pezkuwi_bulletin::PezkuwiBulletinFinalityApi<Block> for Runtime {
-		fn best_finalized() -> Option<pezbp_runtime::HeaderId<bp_pezkuwi_bulletin::Hash, bp_pezkuwi_bulletin::BlockNumber>> {
+	impl pezbp_pezkuwi_bulletin::PezkuwiBulletinFinalityApi<Block> for Runtime {
+		fn best_finalized() -> Option<pezbp_runtime::HeaderId<pezbp_pezkuwi_bulletin::Hash, pezbp_pezkuwi_bulletin::BlockNumber>> {
 			BridgePezkuwiBulletinGrandpa::best_finalized()
 		}
 
-		fn free_headers_interval() -> Option<bp_pezkuwi_bulletin::BlockNumber> {
+		fn free_headers_interval() -> Option<pezbp_pezkuwi_bulletin::BlockNumber> {
 			<Runtime as pezpallet_bridge_grandpa::Config<
 				bridge_common_config::BridgeGrandpaPezkuwichainBulletinInstance
 			>>::FreeHeadersInterval::get()
 		}
 
 		fn synced_headers_grandpa_info(
-		) -> Vec<bp_header_pez_chain::StoredHeaderGrandpaInfo<bp_pezkuwi_bulletin::Header>> {
+		) -> Vec<pezbp_header_pez_chain::StoredHeaderGrandpaInfo<pezbp_pezkuwi_bulletin::Header>> {
 			BridgePezkuwiBulletinGrandpa::synced_headers_grandpa_info()
 		}
 	}
 
-	impl bp_pezkuwi_bulletin::FromPezkuwiBulletinInboundLaneApi<Block> for Runtime {
+	impl pezbp_pezkuwi_bulletin::FromPezkuwiBulletinInboundLaneApi<Block> for Runtime {
 		fn message_details(
 			lane: LaneIdOf<Runtime, bridge_to_bulletin_config::WithPezkuwichainBulletinMessagesInstance>,
-			messages: Vec<(bp_messages::MessagePayload, bp_messages::OutboundMessageDetails)>,
-		) -> Vec<bp_messages::InboundMessageDetails> {
+			messages: Vec<(pezbp_messages::MessagePayload, pezbp_messages::OutboundMessageDetails)>,
+		) -> Vec<pezbp_messages::InboundMessageDetails> {
 			pezbridge_runtime_common::messages_api::inbound_message_details::<
 				Runtime,
 				bridge_to_bulletin_config::WithPezkuwichainBulletinMessagesInstance,
@@ -1002,12 +1002,12 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl bp_pezkuwi_bulletin::ToPezkuwiBulletinOutboundLaneApi<Block> for Runtime {
+	impl pezbp_pezkuwi_bulletin::ToPezkuwiBulletinOutboundLaneApi<Block> for Runtime {
 		fn message_details(
 			lane: LaneIdOf<Runtime, bridge_to_bulletin_config::WithPezkuwichainBulletinMessagesInstance>,
-			begin: bp_messages::MessageNonce,
-			end: bp_messages::MessageNonce,
-		) -> Vec<bp_messages::OutboundMessageDetails> {
+			begin: pezbp_messages::MessageNonce,
+			end: pezbp_messages::MessageNonce,
+		) -> Vec<pezbp_messages::OutboundMessageDetails> {
 			pezbridge_runtime_common::messages_api::outbound_message_details::<
 				Runtime,
 				bridge_to_bulletin_config::WithPezkuwichainBulletinMessagesInstance,
@@ -1300,7 +1300,7 @@ impl_runtime_apis! {
 					)?;
 					XcmOverBridgeHubZagros::do_open_bridge(
 						locations,
-						bp_messages::LegacyLaneId([1, 2, 3, 4]),
+						pezbp_messages::LegacyLaneId([1, 2, 3, 4]),
 						true,
 					).map_err(|e| {
 						tracing::error!(
@@ -1357,10 +1357,10 @@ impl_runtime_apis! {
 					let bridged_chain_id =<Self as pezpallet_bridge_messages::Config<bridge_to_zagros_config::WithBridgeHubZagrosMessagesInstance>>::BridgedChain::ID;
 					pezpallet_bridge_relayers::Pezpallet::<Runtime, bridge_common_config::RelayersForLegacyLaneIdsMessagesInstance>::relayer_reward(
 						relayer,
-						bp_relayers::RewardsAccountParams::new(
+						pezbp_relayers::RewardsAccountParams::new(
 							bench_lane_id,
 							bridged_chain_id,
-							bp_relayers::RewardsAccountOwner::BridgedChain
+							pezbp_relayers::RewardsAccountOwner::BridgedChain
 						)
 					).is_some()
 				}
@@ -1398,7 +1398,7 @@ impl_runtime_apis! {
 					>(params)
 				}
 
-				fn is_message_successfully_dispatched(_nonce: bp_messages::MessageNonce) -> bool {
+				fn is_message_successfully_dispatched(_nonce: pezbp_messages::MessageNonce) -> bool {
 					use pezcumulus_primitives_core::XcmpMessageSource;
 					!XcmpQueue::take_outbound_messages(usize::MAX).is_empty()
 				}
@@ -1443,7 +1443,7 @@ impl_runtime_apis! {
 					>(params)
 				}
 
-				fn is_message_successfully_dispatched(_nonce: bp_messages::MessageNonce) -> bool {
+				fn is_message_successfully_dispatched(_nonce: pezbp_messages::MessageNonce) -> bool {
 					use pezcumulus_primitives_core::XcmpMessageSource;
 					!XcmpQueue::take_outbound_messages(usize::MAX).is_empty()
 				}
@@ -1457,20 +1457,20 @@ impl_runtime_apis! {
 			};
 
 			impl BridgeTeyrchainsConfig<bridge_common_config::BridgeTeyrchainZagrosInstance> for Runtime {
-				fn teyrchains() -> Vec<bp_pezkuwi_core::teyrchains::ParaId> {
+				fn teyrchains() -> Vec<pezbp_pezkuwi_core::teyrchains::ParaId> {
 					use pezbp_runtime::Teyrchain;
-					vec![bp_pezkuwi_core::teyrchains::ParaId(bp_bridge_hub_zagros::BridgeHubZagros::TEYRCHAIN_ID)]
+					vec![pezbp_pezkuwi_core::teyrchains::ParaId(pezbp_bridge_hub_zagros::BridgeHubZagros::TEYRCHAIN_ID)]
 				}
 
 				fn prepare_teyrchain_heads_proof(
-					teyrchains: &[bp_pezkuwi_core::teyrchains::ParaId],
+					teyrchains: &[pezbp_pezkuwi_core::teyrchains::ParaId],
 					teyrchain_head_size: u32,
 					proof_params: pezbp_runtime::UnverifiedStorageProofParams,
 				) -> (
-					bp_teyrchains::RelayBlockNumber,
-					bp_teyrchains::RelayBlockHash,
-					bp_pezkuwi_core::teyrchains::ParaHeadsProof,
-					Vec<(bp_pezkuwi_core::teyrchains::ParaId, bp_pezkuwi_core::teyrchains::ParaHash)>,
+					pezbp_teyrchains::RelayBlockNumber,
+					pezbp_teyrchains::RelayBlockHash,
+					pezbp_pezkuwi_core::teyrchains::ParaHeadsProof,
+					Vec<(pezbp_pezkuwi_core::teyrchains::ParaId, pezbp_pezkuwi_core::teyrchains::ParaHash)>,
 				) {
 					prepare_teyrchain_heads_proof::<Runtime, bridge_common_config::BridgeTeyrchainZagrosInstance>(
 						teyrchains,
@@ -1482,10 +1482,10 @@ impl_runtime_apis! {
 
 			impl BridgeRelayersConfig<bridge_common_config::RelayersForLegacyLaneIdsMessagesInstance> for Runtime {
 				fn bench_reward() -> Self::Reward {
-					bp_relayers::RewardsAccountParams::new(
-						bp_messages::LegacyLaneId::default(),
+					pezbp_relayers::RewardsAccountParams::new(
+						pezbp_messages::LegacyLaneId::default(),
 						*b"test",
-						bp_relayers::RewardsAccountOwner::ThisChain
+						pezbp_relayers::RewardsAccountOwner::ThisChain
 					)
 				}
 
@@ -1493,10 +1493,10 @@ impl_runtime_apis! {
 					reward_kind: Self::Reward,
 					reward: Balance,
 				) -> Option<AccountId> {
-					let rewards_account = bp_relayers::PayRewardFromAccount::<
+					let rewards_account = pezbp_relayers::PayRewardFromAccount::<
 						Balances,
 						AccountId,
-						bp_messages::LegacyLaneId,
+						pezbp_messages::LegacyLaneId,
 						Balance,
 					>::rewards_account(reward_kind);
 					<Runtime as BridgeRelayersConfig<bridge_common_config::RelayersForLegacyLaneIdsMessagesInstance>>::deposit_account(rewards_account, reward);
@@ -1512,10 +1512,10 @@ impl_runtime_apis! {
 
 			impl BridgeRelayersConfig<bridge_common_config::RelayersForPermissionlessLanesInstance> for Runtime {
 				fn bench_reward() -> Self::Reward {
-					bp_relayers::RewardsAccountParams::new(
-						bp_messages::HashedLaneId::default(),
+					pezbp_relayers::RewardsAccountParams::new(
+						pezbp_messages::HashedLaneId::default(),
 						*b"test",
-						bp_relayers::RewardsAccountOwner::ThisChain
+						pezbp_relayers::RewardsAccountOwner::ThisChain
 					)
 				}
 
@@ -1523,10 +1523,10 @@ impl_runtime_apis! {
 					reward_kind: Self::Reward,
 					reward: Balance,
 				) -> Option<AccountId> {
-					let rewards_account = bp_relayers::PayRewardFromAccount::<
+					let rewards_account = pezbp_relayers::PayRewardFromAccount::<
 						Balances,
 						AccountId,
-						bp_messages::HashedLaneId,
+						pezbp_messages::HashedLaneId,
 						Balance,
 					>::rewards_account(reward_kind);
 					<Runtime as BridgeRelayersConfig<bridge_common_config::RelayersForPermissionlessLanesInstance>>::deposit_account(rewards_account, reward);
@@ -1598,7 +1598,7 @@ mod tests {
 
 	#[test]
 	fn ensure_transaction_extension_definition_is_compatible_with_relay() {
-		use bp_pezkuwi_core::SuffixedCommonTransactionExtensionExt;
+		use pezbp_pezkuwi_core::SuffixedCommonTransactionExtensionExt;
 
 		pezsp_io::TestExternalities::default().execute_with(|| {
 			pezframe_system::BlockHash::<Runtime>::insert(BlockNumber::zero(), Hash::default());
@@ -1624,7 +1624,7 @@ mod tests {
 			// for BridgeHubPezkuwichain
 			{
 				let bhr_indirect_payload =
-					bp_bridge_hub_pezkuwichain::TransactionExtension::from_params(
+					pezbp_bridge_hub_pezkuwichain::TransactionExtension::from_params(
 						VERSION.spec_version,
 						VERSION.transaction_version,
 						pezbp_runtime::TransactionEra::Immortal,

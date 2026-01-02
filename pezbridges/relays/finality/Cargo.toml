@@ -17,7 +17,7 @@ workspace = true
 async-std = { workspace = true }
 async-trait = { workspace = true }
 backoff = { workspace = true }
-bp-header-pez-chain = { workspace = true, default-features = true }
+pezbp-header-pez-chain = { workspace = true, default-features = true }
 futures = { workspace = true }
 num-traits = { workspace = true, default-features = true }
 relay-utils = { workspace = true }
@@ -28,6 +28,6 @@ parking_lot = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-	"bp-header-pez-chain/runtime-benchmarks",
+	"pezbp-header-pez-chain/runtime-benchmarks",
 	"relay-utils/runtime-benchmarks",
 ]

@@ -21,7 +21,7 @@ use crate::{
 	message_lane_loop::{SourceClientState, TargetClientState},
 };
 
-use bp_messages::{HashedLaneId, LegacyLaneId, MessageNonce};
+use pezbp_messages::{HashedLaneId, LegacyLaneId, MessageNonce};
 use pez_finality_relay::SyncLoopMetrics;
 use relay_utils::metrics::{
 	metric_name, register, GaugeVec, Metric, Opts, PrometheusError, Registry, U64,

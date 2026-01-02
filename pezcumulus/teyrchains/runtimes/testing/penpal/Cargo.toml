@@ -71,7 +71,7 @@ xcm-executor = { workspace = true }
 xcm-runtime-pezapis = { workspace = true }
 
 # Pezcumulus
-assets-common = { workspace = true }
+pez-assets-common = { workspace = true }
 pezcumulus-pezpallet-aura-ext = { workspace = true }
 pezcumulus-pezpallet-session-benchmarking = { workspace = true }
 pezcumulus-pezpallet-teyrchain-system = { workspace = true }
@@ -98,7 +98,7 @@ bizinikiwi-wasm-builder = { optional = true, workspace = true, default-features 
 [features]
 default = ["std"]
 std = [
-	"assets-common/std",
+	"pez-assets-common/std",
 	"bizinikiwi-wasm-builder",
 	"codec/std",
 	"pezcumulus-pezpallet-aura-ext/std",
@@ -163,7 +163,7 @@ std = [
 ]
 
 runtime-benchmarks = [
-	"assets-common/runtime-benchmarks",
+	"pez-assets-common/runtime-benchmarks",
 	"bizinikiwi-wasm-builder?/runtime-benchmarks",
 	"hex-literal",
 	"pezcumulus-pezpallet-aura-ext/runtime-benchmarks",
@@ -222,7 +222,7 @@ runtime-benchmarks = [
 ]
 
 try-runtime = [
-	"assets-common/try-runtime",
+	"pez-assets-common/try-runtime",
 	"pezcumulus-pezpallet-aura-ext/try-runtime",
 	"pezcumulus-pezpallet-teyrchain-system/try-runtime",
 	"pezcumulus-pezpallet-xcm/try-runtime",

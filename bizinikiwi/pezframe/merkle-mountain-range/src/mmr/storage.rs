@@ -25,7 +25,7 @@ use crate::{
 use alloc::{vec, vec::Vec};
 use codec::Encode;
 use core::iter::Peekable;
-use frame::{
+use pezframe::{
 	deps::{
 		pezsp_core::offchain::StorageKind,
 		pezsp_io::{offchain, offchain_index},

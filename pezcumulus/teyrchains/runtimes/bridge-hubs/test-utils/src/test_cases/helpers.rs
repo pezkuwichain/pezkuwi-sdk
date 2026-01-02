@@ -19,8 +19,8 @@
 use crate::test_cases::{bridges_prelude::*, run_test, RuntimeHelper};
 
 use asset_test_pezutils::BasicTeyrchainRuntime;
-use bp_messages::MessageNonce;
-use bp_pezkuwi_core::teyrchains::{ParaHash, ParaId};
+use pezbp_messages::MessageNonce;
+use pezbp_pezkuwi_core::teyrchains::{ParaHash, ParaId};
 use codec::Decode;
 use core::marker::PhantomData;
 use pezbp_runtime::Chain;
@@ -234,7 +234,7 @@ where
 
 /// Initialize bridge GRANDPA pezpallet.
 pub(crate) fn initialize_bridge_grandpa_pallet<Runtime, GPI>(
-	init_data: bp_header_pez_chain::InitializationData<BridgedHeader<Runtime, GPI>>,
+	init_data: pezbp_header_pez_chain::InitializationData<BridgedHeader<Runtime, GPI>>,
 ) where
 	Runtime: BridgeGrandpaConfig<GPI>
 		+ pezcumulus_pezpallet_teyrchain_system::Config

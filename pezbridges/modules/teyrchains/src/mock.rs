@@ -14,8 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with Parity Bridges Common.  If not, see <http://www.gnu.org/licenses/>.
 
-use bp_header_pez_chain::ChainWithGrandpa;
-use bp_pezkuwi_core::teyrchains::ParaId;
+use pezbp_header_pez_chain::ChainWithGrandpa;
+use pezbp_pezkuwi_core::teyrchains::ParaId;
 use pezbp_runtime::{Chain, ChainId, Teyrchain};
 use pezframe_support::{
 	construct_runtime, derive_impl, parameter_types, traits::ConstU32, weights::Weight,
@@ -235,13 +235,13 @@ impl pezpallet_bridge_teyrchains::benchmarking::Config<()> for TestRuntime {
 	) -> (
 		crate::RelayBlockNumber,
 		crate::RelayBlockHash,
-		bp_pezkuwi_core::teyrchains::ParaHeadsProof,
-		Vec<(ParaId, bp_pezkuwi_core::teyrchains::ParaHash)>,
+		pezbp_pezkuwi_core::teyrchains::ParaHeadsProof,
+		Vec<(ParaId, pezbp_pezkuwi_core::teyrchains::ParaHash)>,
 	) {
 		// in mock run we only care about benchmarks correctness, not the benchmark results
 		// => ignore size related arguments
 		let (state_root, proof, teyrchains) =
-			bp_test_utils::prepare_teyrchain_heads_proof::<RegularTeyrchainHeader>(
+			pezbp_test_utils::prepare_teyrchain_heads_proof::<RegularTeyrchainHeader>(
 				teyrchains.iter().map(|p| (p.0, crate::tests::head_data(p.0, 1))).collect(),
 			);
 		let relay_genesis_hash = crate::tests::initialize(state_root);

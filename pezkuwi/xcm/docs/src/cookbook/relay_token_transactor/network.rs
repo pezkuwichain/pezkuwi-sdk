@@ -17,7 +17,7 @@
 
 //! Mock network
 
-use frame::deps::{
+use pezframe::deps::{
 	pezframe_system,
 	pezsp_io::TestExternalities,
 	pezsp_runtime::{AccountId32, BuildStorage},
@@ -66,7 +66,7 @@ pub fn para_ext() -> TestExternalities {
 	use teyrchain::{MessageQueue, Runtime, System};
 
 	let t = pezframe_system::GenesisConfig::<Runtime>::default().build_storage().unwrap();
-	let mut ext = frame::deps::pezsp_io::TestExternalities::new(t);
+	let mut ext = pezframe::deps::pezsp_io::TestExternalities::new(t);
 	ext.execute_with(|| {
 		System::set_block_number(1);
 		MessageQueue::set_para_id(2222.into());

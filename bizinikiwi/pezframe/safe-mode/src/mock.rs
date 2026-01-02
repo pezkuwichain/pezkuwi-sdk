@@ -22,7 +22,7 @@
 use super::*;
 use crate as pezpallet_safe_mode;
 
-use frame::{
+use pezframe::{
 	testing_prelude::*,
 	traits::{InsideBoth, InstanceFilter, IsInVec},
 };

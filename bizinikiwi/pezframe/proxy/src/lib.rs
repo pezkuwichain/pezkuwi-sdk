@@ -35,7 +35,7 @@ pub mod weights;
 
 extern crate alloc;
 use alloc::{boxed::Box, vec};
-use frame::{
+use pezframe::{
 	prelude::*,
 	traits::{Currency, InstanceFilter, ReservableCurrency},
 };
@@ -120,7 +120,7 @@ pub enum DepositKind {
 	Announcements,
 }
 
-#[frame::pezpallet]
+#[pezframe::pezpallet]
 pub mod pezpallet {
 	use super::*;
 
@@ -154,7 +154,7 @@ pub mod pezpallet {
 			+ Member
 			+ Ord
 			+ PartialOrd
-			+ frame::traits::InstanceFilter<<Self as Config>::RuntimeCall>
+			+ pezframe::traits::InstanceFilter<<Self as Config>::RuntimeCall>
 			+ Default
 			+ MaxEncodedLen;
 
@@ -998,7 +998,7 @@ impl<T: Config> Pezpallet<T> {
 		real: T::AccountId,
 		call: <T as Config>::RuntimeCall,
 	) {
-		use frame::traits::{InstanceFilter as _, OriginTrait as _};
+		use pezframe::traits::{InstanceFilter as _, OriginTrait as _};
 		// This is a freshly authenticated new account, the origin restrictions doesn't apply.
 		let mut origin: T::RuntimeOrigin = pezframe_system::RawOrigin::Signed(real).into();
 		origin.add_filter(move |c: &<T as pezframe_system::Config>::RuntimeCall| {

@@ -20,7 +20,7 @@
 #![cfg(feature = "runtime-benchmarks")]
 
 use crate::*;
-use frame::{
+use pezframe::{
 	benchmarking::prelude::v1::benchmarks_instance_pallet,
 	deps::pezframe_support::traits::OnInitialize,
 };

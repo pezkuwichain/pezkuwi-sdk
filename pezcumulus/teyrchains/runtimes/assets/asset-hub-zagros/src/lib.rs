@@ -43,12 +43,12 @@ use governance::{
 extern crate alloc;
 
 use alloc::{vec, vec::Vec};
-pub use assets_common::local_and_foreign_assets::ForeignAssetReserveData;
-use assets_common::{
+pub use pez_assets_common::local_and_foreign_assets::ForeignAssetReserveData;
+use pez_assets_common::{
 	local_and_foreign_assets::{LocalFromLeft, TargetFromLeft},
 	AssetIdForPoolAssets, AssetIdForPoolAssetsConvert, AssetIdForTrustBackedAssetsConvert,
 };
-use bp_asset_hub_zagros::CreateForeignAssetDeposit;
+use pezbp_asset_hub_zagros::CreateForeignAssetDeposit;
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
 use pezcumulus_pezpallet_teyrchain_system::{
 	RelayNumberMonotonicallyIncreases, RelaychainDataProvider,
@@ -110,7 +110,7 @@ use zagros_runtime_constants::time::DAYS as RC_DAYS;
 #[cfg(any(feature = "std", test))]
 pub use pezsp_runtime::BuildStorage;
 
-use assets_common::{
+use pez_assets_common::{
 	foreign_creators::ForeignCreators,
 	matching::{FromNetwork, FromSiblingTeyrchain},
 };
@@ -477,7 +477,7 @@ impl pezpallet_asset_conversion::Config for Runtime {
 	type MintMinLiquidity = ConstU128<100>;
 	type WeightInfo = weights::pezpallet_asset_conversion::WeightInfo<Runtime>;
 	#[cfg(feature = "runtime-benchmarks")]
-	type BenchmarkHelper = assets_common::benchmarks::AssetPairFactory<
+	type BenchmarkHelper = pez_assets_common::benchmarks::AssetPairFactory<
 		ZagrosLocation,
 		teyrchain_info::Pezpallet<Runtime>,
 		xcm_config::TrustBackedAssetsPalletIndex,
@@ -609,7 +609,7 @@ impl pezpallet_assets::Config<ForeignAssetsInstance> for Runtime {
 	type AssetAccountDeposit = ForeignAssetsAssetAccountDeposit;
 	type RemoveItemsLimit = pezframe_support::traits::ConstU32<1000>;
 	#[cfg(feature = "runtime-benchmarks")]
-	type BenchmarkHelper = assets_common::benchmarks::LocationAssetsBenchmarkHelper;
+	type BenchmarkHelper = pez_assets_common::benchmarks::LocationAssetsBenchmarkHelper;
 }
 
 // Allow Freezes for the `ForeignAssets` pezpallet
@@ -1231,7 +1231,7 @@ parameter_types! {
 type MultiBlockMigrationsType = pezpallet_migrations::mock_helpers::MockedMigrations;
 #[cfg(not(feature = "runtime-benchmarks"))]
 type MultiBlockMigrationsType = (
-	assets_common::migrations::foreign_assets_reserves::ForeignAssetsReservesMigration<
+	pez_assets_common::migrations::foreign_assets_reserves::ForeignAssetsReservesMigration<
 		Runtime,
 		ForeignAssetsInstance,
 		migrations::AssetHubZagrosForeignAssetsReservesProvider,
@@ -1954,7 +1954,7 @@ pezpallet_revive::impl_runtime_apis_plus_revive_traits!(
 			let mut acceptable_assets = vec![AssetId(native_token.clone())];
 			// We also accept all assets in a pool with the native token.
 			acceptable_assets.extend(
-				assets_common::PoolAdapter::<Runtime>::get_assets_in_pool_with(native_token)
+				pez_assets_common::PoolAdapter::<Runtime>::get_assets_in_pool_with(native_token)
 				.map_err(|()| XcmPaymentApiError::VersionedConversionFailed)?
 			);
 			PezkuwiXcm::query_acceptable_payment_assets(xcm_version, acceptable_assets)
@@ -2044,13 +2044,13 @@ pezpallet_revive::impl_runtime_apis_plus_revive_traits!(
 		}
 	}
 
-	impl assets_common::runtime_api::FungiblesApi<
+	impl pez_assets_common::runtime_api::FungiblesApi<
 		Block,
 		AccountId,
 	> for Runtime
 	{
-		fn query_account_balances(account: AccountId) -> Result<xcm::VersionedAssets, assets_common::runtime_api::FungiblesAccessError> {
-			use assets_common::fungible_conversion::{convert, convert_balance};
+		fn query_account_balances(account: AccountId) -> Result<xcm::VersionedAssets, pez_assets_common::runtime_api::FungiblesAccessError> {
+			use pez_assets_common::fungible_conversion::{convert, convert_balance};
 			Ok([
 				// collect pezpallet_balance
 				{
