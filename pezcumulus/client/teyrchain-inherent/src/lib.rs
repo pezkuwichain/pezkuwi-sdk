@@ -16,9 +16,11 @@
 
 //! Client side code for generating the teyrchain inherent.
 
+#[cfg(feature = "mock")]
 mod mock;
 
 use codec::Decode;
+#[cfg(feature = "mock")]
 pub use mock::{MockValidationDataInherentDataProvider, MockXcmConfig};
 use pezcumulus_primitives_core::{
 	relay_chain::{

@@ -9,9 +9,9 @@ use pezcumulus_zombienet_sdk_helpers::{assert_para_is_registered, assert_para_th
 use pezkuwi_primitives::Id as ParaId;
 use serde_json::json;
 use std::{sync::Arc, time::Duration};
-use zombienet_configuration::types::Arg;
-use zombienet_orchestrator::network::node::LogLineCountOptions;
-use zombienet_sdk::{
+use pezkuwi_zombienet_configuration::types::Arg;
+use pezkuwi_zombienet_orchestrator::network::node::LogLineCountOptions;
+use pezkuwi_zombienet_sdk::{
 	environment::Provider,
 	subxt::{OnlineClient, PezkuwiConfig},
 	NetworkConfig, NetworkConfigBuilder, RegistrationStrategy,
@@ -101,13 +101,13 @@ async fn pov_recovery() -> Result<(), anyhow::Error> {
 
 async fn build_network_config() -> Result<NetworkConfig, anyhow::Error> {
 	// images are not relevant for `native`, but we leave it here in case we use `k8s` some day
-	let images = zombienet_sdk::environment::get_images_from_env();
+	let images = pezkuwi_zombienet_sdk::environment::get_images_from_env();
 	log::info!("Using images: {images:?}");
 
 	// If all nodes running on one machine and there are too much of them,
 	// then they don't get enough CPU time and others might fail trying to connect to them.
 	// eg. 'one' and 'two' trying to connect to validators rpc but it is still initializing.
-	let validator_cnt = match zombienet_sdk::environment::get_provider_from_env() {
+	let validator_cnt = match pezkuwi_zombienet_sdk::environment::get_provider_from_env() {
 		Provider::K8s => 13,
 		_ => 5,
 	};

@@ -19,7 +19,7 @@
 
 use super::{Pezpallet as TxPause, *};
 use alloc::vec;
-use frame::benchmarking::prelude::*;
+use pezframe::benchmarking::prelude::*;
 
 #[benchmarks]
 mod benchmarks {

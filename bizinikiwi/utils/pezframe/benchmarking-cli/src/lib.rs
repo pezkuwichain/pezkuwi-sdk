@@ -23,6 +23,7 @@ mod machine;
 mod overhead;
 mod pezpallet;
 mod shared;
+#[cfg(feature = "storage-benchmark")]
 mod storage;
 
 pub use block::BlockCmd;
@@ -34,6 +35,7 @@ pub use overhead::{
 };
 pub use pezpallet::PalletCmd;
 pub use pezsc_service::BasePath;
+#[cfg(feature = "storage-benchmark")]
 pub use storage::StorageCmd;
 
 use pezsc_cli::{
@@ -46,6 +48,7 @@ use pezsc_cli::{
 #[derive(Debug, clap::Subcommand)]
 pub enum BenchmarkCmd {
 	Pezpallet(PalletCmd),
+	#[cfg(feature = "storage-benchmark")]
 	Storage(StorageCmd),
 	Overhead(OverheadCmd),
 	Block(BlockCmd),
@@ -62,6 +65,7 @@ macro_rules! unwrap_cmd {
 	} => {
 		match $self {
 			BenchmarkCmd::Pezpallet($cmd) => $code,
+			#[cfg(feature = "storage-benchmark")]
 			BenchmarkCmd::Storage($cmd) => $code,
 			BenchmarkCmd::Overhead($cmd) => $code,
 			BenchmarkCmd::Block($cmd) => $code,

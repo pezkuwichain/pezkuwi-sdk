@@ -50,7 +50,7 @@ pub mod weights;
 
 extern crate alloc;
 use alloc::{boxed::Box, vec, vec::Vec};
-use frame::{
+use pezframe::{
 	prelude::*,
 	traits::{Currency, ReservableCurrency},
 };
@@ -138,7 +138,7 @@ enum CallOrHash<T: Config> {
 	Hash([u8; 32]),
 }
 
-#[frame::pezpallet]
+#[pezframe::pezpallet]
 pub mod pezpallet {
 	use super::*;
 

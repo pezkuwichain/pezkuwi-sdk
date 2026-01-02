@@ -4,10 +4,7 @@ use crate::{
 	RuntimeOrigin, TeyrchainInfo, TeyrchainSystem, WeightToFee, XcmpQueue,
 };
 
-use pezkuwi_sdk::{
-	pezstaging_xcm as xcm, pezstaging_xcm_builder as xcm_builder,
-	pezstaging_xcm_executor as xcm_executor, *,
-};
+use pezkuwi_sdk::{xcm, xcm_builder, xcm_executor, *};
 
 use pezframe_support::{
 	parameter_types,
@@ -16,18 +13,15 @@ use pezframe_support::{
 };
 use pezframe_system::EnsureRoot;
 use pezkuwi_runtime_common::impls::ToAuthor;
-use pezkuwi_sdk::{
-	pezkuwi_sdk_frame::traits::Disabled,
-	pezstaging_xcm_builder::{DenyRecursively, DenyThenTry},
-};
+use pezframe_support::traits::Disabled;
 use pezkuwi_teyrchain_primitives::primitives::Sibling;
 use pezpallet_xcm::XcmPassthrough;
 use xcm::latest::prelude::*;
 use xcm_builder::{
 	AccountId32Aliases, AllowExplicitUnpaidExecutionFrom, AllowTopLevelPaidExecutionFrom,
-	DenyReserveTransferToRelayChain, EnsureXcmOrigin, FixedWeightBounds,
-	FrameTransactionalProcessor, FungibleAdapter, IsConcrete, NativeAsset, ParentIsPreset,
-	RelayChainAsNative, SiblingTeyrchainAsNative, SiblingTeyrchainConvertsVia,
+	DenyRecursively, DenyReserveTransferToRelayChain, DenyThenTry, EnsureXcmOrigin,
+	FixedWeightBounds, FrameTransactionalProcessor, FungibleAdapter, IsConcrete, NativeAsset,
+	ParentIsPreset, RelayChainAsNative, SiblingTeyrchainAsNative, SiblingTeyrchainConvertsVia,
 	SignedAccountId32AsNative, SignedToAccountId32, SovereignSignedViaLocation, TakeWeightCredit,
 	TrailingSetTopicAsId, UsingComponents, WithComputedOrigin, WithUniqueTopic,
 };

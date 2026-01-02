@@ -20,7 +20,7 @@
 #![cfg(feature = "runtime-benchmarks")]
 
 use super::*;
-use frame::benchmarking::prelude::*;
+use pezframe::benchmarking::prelude::*;
 
 use crate::Pezpallet as Multisig;
 

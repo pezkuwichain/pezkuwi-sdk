@@ -67,7 +67,7 @@
 #![allow(missing_docs)]
 #![allow(dead_code)]
 
-use frame::weights_prelude::*;
+use pezframe::weights_prelude::*;
 
 /// Weight functions needed for `pezpallet_mmr`.
 pub trait WeightInfo {

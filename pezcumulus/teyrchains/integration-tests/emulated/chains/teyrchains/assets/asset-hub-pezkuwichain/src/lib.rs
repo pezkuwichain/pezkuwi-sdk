@@ -73,5 +73,5 @@ impl_bridge_helpers_for_chain!(
 	AssetHubPezkuwichain,
 	ParaPezpallet,
 	PezkuwiXcm,
-	bp_bridge_hub_pezkuwichain::RuntimeCall::XcmOverBridgeHubZagros
+	pezbp_bridge_hub_pezkuwichain::RuntimeCall::XcmOverBridgeHubZagros
 );

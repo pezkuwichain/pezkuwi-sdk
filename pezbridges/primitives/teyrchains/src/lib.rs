@@ -19,10 +19,10 @@
 #![warn(missing_docs)]
 #![cfg_attr(not(feature = "std"), no_std)]
 
-pub use bp_header_pez_chain::StoredHeaderData;
+pub use pezbp_header_pez_chain::StoredHeaderData;
 pub use call_info::{BridgeTeyrchainCall, SubmitTeyrchainHeadsInfo};
 
-use bp_pezkuwi_core::teyrchains::{ParaHash, ParaHead, ParaId};
+use pezbp_pezkuwi_core::teyrchains::{ParaHash, ParaHead, ParaId};
 use codec::{Decode, Encode, MaxEncodedLen};
 use pezbp_runtime::{
 	BlockNumberOf, Chain, HashOf, HeaderOf, StorageDoubleMapKeyProvider, StorageMapKeyProvider,
@@ -35,11 +35,11 @@ use pezsp_std::{marker::PhantomData, prelude::*};
 use scale_info::TypeInfo;
 
 /// Block hash of the bridged relay chain.
-pub type RelayBlockHash = bp_pezkuwi_core::Hash;
+pub type RelayBlockHash = pezbp_pezkuwi_core::Hash;
 /// Block number of the bridged relay chain.
-pub type RelayBlockNumber = bp_pezkuwi_core::BlockNumber;
+pub type RelayBlockNumber = pezbp_pezkuwi_core::BlockNumber;
 /// Hasher of the bridged relay chain.
-pub type RelayBlockHasher = bp_pezkuwi_core::Hasher;
+pub type RelayBlockHasher = pezbp_pezkuwi_core::Hasher;
 
 mod call_info;
 

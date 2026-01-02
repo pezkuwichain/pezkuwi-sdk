@@ -37,7 +37,7 @@ mod staking;
 extern crate alloc;
 
 use alloc::{vec, vec::Vec};
-use assets_common::{
+use pez_assets_common::{
 	foreign_creators::ForeignCreators,
 	local_and_foreign_assets::{ForeignAssetReserveData, LocalFromLeft, TargetFromLeft},
 	matching::{FromNetwork, FromSiblingTeyrchain},
@@ -449,7 +449,7 @@ impl pezpallet_asset_conversion::Config for Runtime {
 	type MintMinLiquidity = ConstU128<100>;
 	type WeightInfo = weights::pezpallet_asset_conversion::WeightInfo<Runtime>;
 	#[cfg(feature = "runtime-benchmarks")]
-	type BenchmarkHelper = assets_common::benchmarks::AssetPairFactory<
+	type BenchmarkHelper = pez_assets_common::benchmarks::AssetPairFactory<
 		ZagrosLocation,
 		teyrchain_info::Pezpallet<Runtime>,
 		xcm_config::TrustBackedAssetsPalletIndex,
@@ -582,7 +582,7 @@ impl pezpallet_assets::Config<ForeignAssetsInstance> for Runtime {
 	type AssetAccountDeposit = ForeignAssetsAssetAccountDeposit;
 	type RemoveItemsLimit = pezframe_support::traits::ConstU32<1000>;
 	#[cfg(feature = "runtime-benchmarks")]
-	type BenchmarkHelper = assets_common::benchmarks::LocationAssetsBenchmarkHelper;
+	type BenchmarkHelper = pez_assets_common::benchmarks::LocationAssetsBenchmarkHelper;
 }
 
 // Allow Freezes for the `ForeignAssets` pezpallet
@@ -1577,7 +1577,7 @@ impl_runtime_apis! {
 			let mut acceptable_assets = vec![AssetId(native_token.clone())];
 			// We also accept all assets in a pool with the native token.
 			acceptable_assets.extend(
-				assets_common::PoolAdapter::<Runtime>::get_assets_in_pool_with(native_token)
+				pez_assets_common::PoolAdapter::<Runtime>::get_assets_in_pool_with(native_token)
 				.map_err(|()| XcmPaymentApiError::VersionedConversionFailed)?
 			);
 			PezkuwiXcm::query_acceptable_payment_assets(xcm_version, acceptable_assets)
@@ -1594,7 +1594,7 @@ impl_runtime_apis! {
 				},
 				Ok(asset_id) => {
 					// Try to get current price of `asset_id` in `native_asset`.
-					if let Ok(Some(swapped_in_native)) = assets_common::PoolAdapter::<Runtime>::quote_price_tokens_for_exact_tokens(
+					if let Ok(Some(swapped_in_native)) = pez_assets_common::PoolAdapter::<Runtime>::quote_price_tokens_for_exact_tokens(
 							asset_id.0.clone(),
 							native_asset,
 							fee_in_native,
@@ -1668,13 +1668,13 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl assets_common::runtime_api::FungiblesApi<
+	impl pez_assets_common::runtime_api::FungiblesApi<
 		Block,
 		AccountId,
 	> for Runtime
 	{
-		fn query_account_balances(account: AccountId) -> Result<xcm::VersionedAssets, assets_common::runtime_api::FungiblesAccessError> {
-			use assets_common::fungible_conversion::{convert, convert_balance};
+		fn query_account_balances(account: AccountId) -> Result<xcm::VersionedAssets, pez_assets_common::runtime_api::FungiblesAccessError> {
+			use pez_assets_common::fungible_conversion::{convert, convert_balance};
 			Ok([
 				// collect pezpallet_balance
 				{

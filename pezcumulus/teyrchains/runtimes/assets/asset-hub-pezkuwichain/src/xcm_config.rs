@@ -19,7 +19,7 @@ use super::{
 	RuntimeHoldReason, RuntimeOrigin, TeyrchainInfo, TeyrchainSystem, ToZagrosXcmRouter,
 	TransactionByteFee, Uniques, WeightToFee, XcmpQueue,
 };
-use assets_common::{
+use pez_assets_common::{
 	matching::{
 		FromNetwork, IsForeignConcreteAsset, NonTeleportableAssetFromTrustedReserve,
 		ParentLocation, TeleportableAssetWithTrustedReserve,
@@ -129,7 +129,7 @@ pub type FungibleTransactor = FungibleAdapter<
 
 /// `AssetId`/`Balance` converter for `TrustBackedAssets`.
 pub type TrustBackedAssetsConvertedConcreteId =
-	assets_common::TrustBackedAssetsConvertedConcreteId<TrustBackedAssetsPalletLocation, Balance>;
+	pez_assets_common::TrustBackedAssetsConvertedConcreteId<TrustBackedAssetsPalletLocation, Balance>;
 
 /// Means for transacting assets besides the native currency on this chain.
 pub type FungiblesTransactor = FungiblesAdapter<
@@ -150,7 +150,7 @@ pub type FungiblesTransactor = FungiblesAdapter<
 
 /// Matcher for converting `ClassId`/`InstanceId` into a uniques asset.
 pub type UniquesConvertedConcreteId =
-	assets_common::UniquesConvertedConcreteId<UniquesPalletLocation>;
+	pez_assets_common::UniquesConvertedConcreteId<UniquesPalletLocation>;
 
 /// Means for transacting unique assets.
 pub type UniquesTransactor = UniqueInstancesAdapter<
@@ -161,7 +161,7 @@ pub type UniquesTransactor = UniqueInstancesAdapter<
 >;
 
 /// `AssetId`/`Balance` converter for `ForeignAssets`.
-pub type ForeignAssetsConvertedConcreteId = assets_common::ForeignAssetsConvertedConcreteId<
+pub type ForeignAssetsConvertedConcreteId = pez_assets_common::ForeignAssetsConvertedConcreteId<
 	(
 		// Ignore `TrustBackedAssets` explicitly
 		StartsWith<TrustBackedAssetsPalletLocation>,
@@ -194,7 +194,7 @@ pub type ForeignFungiblesTransactor = FungiblesAdapter<
 
 /// `AssetId`/`Balance` converter for `PoolAssets`.
 pub type PoolAssetsConvertedConcreteId =
-	assets_common::PoolAssetsConvertedConcreteId<PoolAssetsPalletLocation, Balance>;
+	pez_assets_common::PoolAssetsConvertedConcreteId<PoolAssetsPalletLocation, Balance>;
 
 /// Means for transacting asset conversion pool assets on this chain.
 pub type PoolFungiblesTransactor = FungiblesAdapter<
@@ -499,7 +499,7 @@ impl pezcumulus_pezpallet_xcm::Config for Runtime {
 pub mod bridging {
 	use super::*;
 	use alloc::collections::btree_set::BTreeSet;
-	use assets_common::matching;
+	use pez_assets_common::matching;
 
 	// common/shared parameters
 	parameter_types! {
@@ -515,14 +515,14 @@ pub mod bridging {
 		///
 		/// 3) the approximate cost of Pezkuwichain -> Zagros message confirmation transaction on Pezkuwichain Bridge Hub.
 		pub storage XcmBridgeHubRouterBaseFee: Balance =
-			bp_bridge_hub_pezkuwichain::BridgeHubPezkuwichainBaseXcmFeeInRocs::get()
-				.saturating_add(bp_bridge_hub_zagros::BridgeHubZagrosBaseDeliveryFeeInWnds::get())
-				.saturating_add(bp_bridge_hub_pezkuwichain::BridgeHubPezkuwichainBaseConfirmationFeeInRocs::get());
+			pezbp_bridge_hub_pezkuwichain::BridgeHubPezkuwichainBaseXcmFeeInRocs::get()
+				.saturating_add(pezbp_bridge_hub_zagros::BridgeHubZagrosBaseDeliveryFeeInWnds::get())
+				.saturating_add(pezbp_bridge_hub_pezkuwichain::BridgeHubPezkuwichainBaseConfirmationFeeInRocs::get());
 		/// Price of every byte of the Pezkuwichain -> Zagros message. Can be adjusted via
 		/// governance `set_storage` call.
 		pub storage XcmBridgeHubRouterByteFee: Balance = TransactionByteFee::get();
 
-		pub SiblingBridgeHubParaId: u32 = bp_bridge_hub_pezkuwichain::BRIDGE_HUB_PEZKUWICHAIN_TEYRCHAIN_ID;
+		pub SiblingBridgeHubParaId: u32 = pezbp_bridge_hub_pezkuwichain::BRIDGE_HUB_PEZKUWICHAIN_TEYRCHAIN_ID;
 		pub SiblingBridgeHub: Location = Location::new(1, [Teyrchain(SiblingBridgeHubParaId::get())]);
 		/// Router expects payment with this `AssetId`.
 		/// (`AssetId` has to be aligned with `BridgeTable`)
@@ -551,7 +551,7 @@ pub mod bridging {
 				1,
 				[
 					Teyrchain(SiblingBridgeHubParaId::get()),
-					PalletInstance(bp_bridge_hub_pezkuwichain::WITH_BRIDGE_PEZKUWICHAIN_TO_ZAGROS_MESSAGES_PALLET_INDEX)
+					PalletInstance(pezbp_bridge_hub_pezkuwichain::WITH_BRIDGE_PEZKUWICHAIN_TO_ZAGROS_MESSAGES_PALLET_INDEX)
 				]
 			);
 
@@ -562,7 +562,7 @@ pub mod bridging {
 			pub WndLocation: Location = Location::new(2, [GlobalConsensus(ZagrosNetwork::get())]);
 			pub AssetHubZagros: Location = Location::new(2, [
 				GlobalConsensus(ZagrosNetwork::get()),
-				Teyrchain(bp_asset_hub_zagros::ASSET_HUB_ZAGROS_TEYRCHAIN_ID)
+				Teyrchain(pezbp_asset_hub_zagros::ASSET_HUB_ZAGROS_TEYRCHAIN_ID)
 			]);
 
 			/// Set up exporters configuration.

@@ -25,7 +25,7 @@ use crate::{
 
 use async_std::sync::{Arc, Mutex};
 use async_trait::async_trait;
-use bp_header_pez_chain::FinalityProof;
+use pezbp_header_pez_chain::FinalityProof;
 use codec::Decode;
 use futures::{
 	select,

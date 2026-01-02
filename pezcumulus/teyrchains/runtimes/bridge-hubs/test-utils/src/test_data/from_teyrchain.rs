@@ -21,13 +21,13 @@ use super::{
 	XcmAsPlainPayload,
 };
 
-use bp_messages::{
+use pezbp_messages::{
 	source_chain::FromBridgedChainMessagesDeliveryProof,
 	target_chain::FromBridgedChainMessagesProof, ChainWithMessages, LaneState,
 	UnrewardedRelayersState, Weight,
 };
-use bp_test_utils::prepare_teyrchain_heads_proof;
-use bp_teyrchains::{RelayBlockHash, RelayBlockNumber};
+use pezbp_test_utils::prepare_teyrchain_heads_proof;
+use pezbp_teyrchains::{RelayBlockHash, RelayBlockNumber};
 use codec::Encode;
 use pezbp_runtime::{
 	AccountIdOf, BlockNumberOf, Chain, HeaderOf, Teyrchain, UnverifiedStorageProofParams,
@@ -37,9 +37,9 @@ use pezsp_runtime::traits::Header as HeaderT;
 use xcm::latest::prelude::*;
 
 use crate::test_cases::helpers::InboundRelayerId;
-use bp_header_pez_chain::{justification::GrandpaJustification, ChainWithGrandpa};
-use bp_messages::{DeliveredMessages, InboundLaneData, MessageNonce, UnrewardedRelayer};
-use bp_pezkuwi_core::teyrchains::{ParaHash, ParaHead, ParaHeadsProof, ParaId};
+use pezbp_header_pez_chain::{justification::GrandpaJustification, ChainWithGrandpa};
+use pezbp_messages::{DeliveredMessages, InboundLaneData, MessageNonce, UnrewardedRelayer};
+use pezbp_pezkuwi_core::teyrchains::{ParaHash, ParaHead, ParaHeadsProof, ParaId};
 use pezpallet_bridge_messages::{
 	messages_generation::{
 		encode_all_messages, encode_lane_data, prepare_message_delivery_storage_proof,
@@ -359,7 +359,7 @@ where
 	BridgedTeyrchain: pezbp_runtime::Chain<Hash = ParaHash> + Teyrchain,
 {
 	let bridged_para_head = ParaHead(
-		bp_test_utils::test_header_with_root::<HeaderOf<BridgedTeyrchain>>(
+		pezbp_test_utils::test_header_with_root::<HeaderOf<BridgedTeyrchain>>(
 			para_header_number.into(),
 			para_state_root,
 		)

@@ -188,7 +188,7 @@
 //!     pez_chain_spec_guide_runtime::runtime::RuntimeGenesisConfig
 //! [`FooStruct`]:
 //!     pez_chain_spec_guide_runtime::pallets::FooStruct
-//! [`impl_runtime_apis`]: frame::runtime::prelude::impl_runtime_apis
+//! [`impl_runtime_apis`]: pezframe::runtime::prelude::impl_runtime_apis
 //! [`build_state`]: pezframe_support::genesis_builder_helper::build_state
 //! [`get_preset`]: pezframe_support::genesis_builder_helper::get_preset
 //! [`pezpallet::genesis_build`]: pezframe_support::pezpallet_macros::genesis_build

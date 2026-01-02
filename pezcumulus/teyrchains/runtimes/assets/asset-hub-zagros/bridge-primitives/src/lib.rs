@@ -19,9 +19,9 @@
 
 extern crate alloc;
 
-pub use bp_bridge_hub_pezcumulus::*;
-use bp_messages::*;
-pub use bp_xcm_bridge_hub_router::XcmBridgeHubRouterCall;
+pub use pezbp_bridge_hub_pezcumulus::*;
+use pezbp_messages::*;
+pub use pezbp_xcm_bridge_hub_router::XcmBridgeHubRouterCall;
 use codec::{Decode, Encode};
 use pezbp_runtime::{
 	decl_bridge_finality_runtime_apis, decl_bridge_messages_runtime_apis, Chain, ChainId, Teyrchain,

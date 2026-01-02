@@ -8,8 +8,8 @@ use crate::utils::{initialize_network, BEST_BLOCK_METRIC};
 
 use pezcumulus_zombienet_sdk_helpers::assign_cores;
 use serde_json::json;
-use zombienet_orchestrator::network::node::LogLineCountOptions;
-use zombienet_sdk::{NetworkConfig, NetworkConfigBuilder};
+use pezkuwi_zombienet_orchestrator::network::node::LogLineCountOptions;
+use pezkuwi_zombienet_sdk::{NetworkConfig, NetworkConfigBuilder};
 
 const PARA_ID_1: u32 = 2100;
 const PARA_ID_2: u32 = 2000;
@@ -68,7 +68,7 @@ async fn elastic_scaling_slot_based_authoring() -> Result<(), anyhow::Error> {
 
 async fn build_network_config() -> Result<NetworkConfig, anyhow::Error> {
 	// images are not relevant for `native`, but we leave it here in case we use `k8s` some day
-	let images = zombienet_sdk::environment::get_images_from_env();
+	let images = pezkuwi_zombienet_sdk::environment::get_images_from_env();
 	log::info!("Using images: {images:?}");
 
 	// Network setup:

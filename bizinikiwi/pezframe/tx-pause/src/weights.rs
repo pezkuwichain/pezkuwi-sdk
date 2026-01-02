@@ -67,7 +67,7 @@
 #![allow(missing_docs)]
 #![allow(dead_code)]
 
-use frame::weights_prelude::*;
+use pezframe::weights_prelude::*;
 use core::marker::PhantomData;
 
 /// Weight functions needed for `pezpallet_tx_pause`.

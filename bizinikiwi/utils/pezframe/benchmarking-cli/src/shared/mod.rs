@@ -22,12 +22,14 @@ pub mod record;
 pub mod stats;
 pub mod weight_params;
 
+#[cfg(feature = "storage-benchmark")]
 pub use record::BenchRecord;
 pub use stats::{StatSelect, Stats};
 pub use weight_params::WeightParams;
 
 use clap::Args;
 use pezsc_sysinfo::gather_sysinfo;
+#[cfg(feature = "storage-benchmark")]
 use rand::prelude::*;
 use serde::Serialize;
 
@@ -73,6 +75,7 @@ where
 /// Returns an rng and the seed that was used to create it.
 ///
 /// Uses a random seed if none is provided.
+#[cfg(feature = "storage-benchmark")]
 pub fn new_rng(seed: Option<u64>) -> (impl rand::Rng, u64) {
 	let seed = seed.unwrap_or(rand::thread_rng().gen::<u64>());
 	(rand_pcg::Pcg64::seed_from_u64(seed), seed)

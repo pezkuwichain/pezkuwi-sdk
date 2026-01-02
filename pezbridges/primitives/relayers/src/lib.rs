@@ -222,7 +222,7 @@ pub trait RewardLedger<Relayer, Reward, RewardBalance> {
 #[cfg(test)]
 mod tests {
 	use super::*;
-	use bp_messages::{HashedLaneId, LaneIdType, LegacyLaneId};
+	use pezbp_messages::{HashedLaneId, LaneIdType, LegacyLaneId};
 	use pezsp_runtime::{app_crypto::Ss58Codec, testing::H256};
 
 	#[test]

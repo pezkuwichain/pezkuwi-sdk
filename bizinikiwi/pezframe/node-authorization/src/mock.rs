@@ -20,7 +20,7 @@
 use super::*;
 use crate as pezpallet_node_authorization;
 
-use frame::testing_prelude::*;
+use pezframe::testing_prelude::*;
 
 type Block = pezframe_system::mocking::MockBlock<Test>;
 

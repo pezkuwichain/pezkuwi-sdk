@@ -43,7 +43,7 @@
 //! pointer to the `Call` type in each pezpallet, for example [`pezpallet_foo::Call`].
 //!
 //! [`RuntimeOrigin`]'s [`OriginCaller`] has two variants, one for system, and one for
-//! `pezpallet_foo` which utilized [`frame::pezpallet_macros::origin`].
+//! `pezpallet_foo` which utilized [`pezframe::pezpallet_macros::origin`].
 //!
 //! Finally, [`RuntimeGenesisConfig`] is composed of `pezframe_system` and a variant for
 //! `pezpallet_bar`'s [`pezpallet_bar::GenesisConfig`].
@@ -80,7 +80,7 @@
 //! The only way to express this using Rust's associated types is for the pezpallet to **define its
 //! own associated type `RuntimeCall`, and further specify what it thinks `RuntimeCall` should be**.
 //!
-//! In this case, we will want to assert the existence of [`frame::traits::IsSubType`], which is
+//! In this case, we will want to assert the existence of [`pezframe::traits::IsSubType`], which is
 //! very similar to [`TryFrom`].
 #![doc = docify::embed!("./src/reference_docs/frame_runtime_types.rs", custom_runtime_call)]
 //!
@@ -100,7 +100,7 @@
 //! type that is only known when the runtime is being constructed.
 //!
 //! Now, within this pezpallet, this new `RuntimeCall` can be used, and it can use its new trait
-//! bounds, such as being [`frame::traits::IsSubType`]:
+//! bounds, such as being [`pezframe::traits::IsSubType`]:
 #![doc = docify::embed!("./src/reference_docs/frame_runtime_types.rs", custom_runtime_call_usages)]
 //!
 //! > Once Rust's "_Associated Type Bounds RFC_" is usable, this syntax can be used to
@@ -116,9 +116,9 @@
 //! the runtime is constructed? The following snippet exactly does that:
 #![doc = docify::embed!("./src/reference_docs/frame_runtime_types.rs", assert_equality)]
 //!
-//! We leave it to the reader to further explore what [`frame::traits::Hooks::integrity_test`] is,
+//! We leave it to the reader to further explore what [`pezframe::traits::Hooks::integrity_test`] is,
 //! and what [`core::any::TypeId`] is. Another way to assert this is using
-//! [`frame::traits::IsType`].
+//! [`pezframe::traits::IsType`].
 //!
 //! ## Type Aliases
 //!
@@ -128,7 +128,7 @@
 //!   `System`
 //! * [`runtime::AllPalletsWithSystem`] is an alias for a tuple of all of the above. This type is
 //!   important to FRAME internals such as `executive`, as it implements traits such as
-//!   [`frame::traits::Hooks`].
+//!   [`pezframe::traits::Hooks`].
 //!
 //! ## Further Details
 //!
@@ -140,7 +140,7 @@
 //! * See the corresponding lecture in the [PBA Lectures](https://www.youtube.com/watch?v=OCBC1pMYPoc&list=PL-w_i5kwVqbni1Ch2j_RwTIXiB-bwnYqq&index=11).
 //!
 //!
-//! [`construct_runtime`]: frame::runtime::prelude::construct_runtime
+//! [`construct_runtime`]: pezframe::runtime::prelude::construct_runtime
 //! [`runtime::PalletFoo`]: crate::reference_docs::frame_runtime_types::runtime::PalletFoo
 //! [`runtime::AllPalletsWithSystem`]: crate::reference_docs::frame_runtime_types::runtime::AllPalletsWithSystem
 //! [`runtime`]: crate::reference_docs::frame_runtime_types::runtime
@@ -158,10 +158,10 @@
 //! [`RuntimeCall`]: crate::reference_docs::frame_runtime_types::runtime::RuntimeCall
 //! [`RuntimeHoldReason`]: crate::reference_docs::frame_runtime_types::runtime::RuntimeHoldReason
 
-use frame::prelude::*;
+use pezframe::prelude::*;
 
 #[docify::export]
-#[frame::pezpallet(dev_mode)]
+#[pezframe::pezpallet(dev_mode)]
 pub mod pezpallet_foo {
 	use super::*;
 
@@ -201,7 +201,7 @@ pub mod pezpallet_foo {
 }
 
 #[docify::export]
-#[frame::pezpallet(dev_mode)]
+#[pezframe::pezpallet(dev_mode)]
 pub mod pezpallet_bar {
 	use super::*;
 
@@ -232,7 +232,7 @@ pub mod pezpallet_bar {
 
 pub mod runtime {
 	use super::{pezpallet_bar, pezpallet_foo};
-	use frame::{runtime::prelude::*, testing_prelude::*};
+	use pezframe::{runtime::prelude::*, testing_prelude::*};
 
 	#[docify::export(runtime_exp)]
 	construct_runtime!(
@@ -252,10 +252,10 @@ pub mod runtime {
 	impl pezpallet_bar::Config for Runtime {}
 }
 
-#[frame::pezpallet(dev_mode)]
+#[pezframe::pezpallet(dev_mode)]
 pub mod pezpallet_with_specific_runtime_call {
 	use super::*;
-	use frame::traits::IsSubType;
+	use pezframe::traits::IsSubType;
 
 	#[docify::export(custom_runtime_call)]
 	/// A pezpallet that wants to further narrow down what `RuntimeCall` is.
@@ -299,7 +299,7 @@ pub mod pezpallet_with_specific_runtime_call {
 
 pub mod runtime_with_specific_runtime_call {
 	use super::pezpallet_with_specific_runtime_call;
-	use frame::{runtime::prelude::*, testing_prelude::*};
+	use pezframe::{runtime::prelude::*, testing_prelude::*};
 
 	construct_runtime!(
 		pub struct Runtime {

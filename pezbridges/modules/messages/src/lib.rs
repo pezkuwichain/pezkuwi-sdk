@@ -50,8 +50,8 @@ pub use weights_ext::{
 	EXPECTED_DEFAULT_MESSAGE_LENGTH, EXTRA_STORAGE_PROOF_SIZE,
 };
 
-use bp_header_pez_chain::HeaderChain;
-use bp_messages::{
+use pezbp_header_pez_chain::HeaderChain;
+use pezbp_messages::{
 	source_chain::{
 		DeliveryConfirmationPayments, FromBridgedChainMessagesDeliveryProof, OnMessagesDelivered,
 		SendMessageArtifacts,
@@ -97,7 +97,7 @@ pub const LOG_TARGET: &str = "runtime::bridge-messages";
 #[pezframe_support::pezpallet]
 pub mod pezpallet {
 	use super::*;
-	use bp_messages::{LaneIdType, ReceivedMessages, ReceptionResult};
+	use pezbp_messages::{LaneIdType, ReceivedMessages, ReceptionResult};
 	use pezbp_runtime::RangeInclusiveExt;
 	use pezframe_support::pezpallet_prelude::*;
 	use pezframe_system::pezpallet_prelude::*;
@@ -677,7 +677,7 @@ pub struct SendMessageArgs<T: Config<I>, I: 'static> {
 	payload: StoredMessagePayload<T, I>,
 }
 
-impl<T, I> bp_messages::source_chain::MessagesBridge<T::OutboundPayload, T::LaneId>
+impl<T, I> pezbp_messages::source_chain::MessagesBridge<T::OutboundPayload, T::LaneId>
 	for Pezpallet<T, I>
 where
 	T: Config<I>,

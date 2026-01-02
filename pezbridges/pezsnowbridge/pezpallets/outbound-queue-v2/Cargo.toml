@@ -36,7 +36,7 @@ pezsp-io = { workspace = true }
 pezsp-runtime = { workspace = true }
 pezsp-std = { workspace = true }
 
-bp-relayers = { workspace = true }
+pezbp-relayers = { workspace = true }
 
 pezsnowbridge-beacon-primitives = { workspace = true }
 pezsnowbridge-core = { workspace = true }
@@ -56,7 +56,7 @@ pezsnowbridge-test-utils = { workspace = true }
 default = ["std"]
 std = [
 	"alloy-core/std",
-	"bp-relayers/std",
+	"pezbp-relayers/std",
 	"codec/std",
 	"ethabi/std",
 	"pezframe-benchmarking/std",
@@ -80,7 +80,7 @@ std = [
 	"xcm/std",
 ]
 runtime-benchmarks = [
-	"bp-relayers/runtime-benchmarks",
+	"pezbp-relayers/runtime-benchmarks",
 	"pezframe-benchmarking",
 	"pezframe-benchmarking/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",

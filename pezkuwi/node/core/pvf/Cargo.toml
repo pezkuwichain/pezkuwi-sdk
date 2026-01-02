@@ -59,15 +59,15 @@ criterion = { features = [
 pezkuwi-node-core-pvf-common = { features = [
 	"test-utils",
 ], workspace = true, default-features = true }
-pezkuwi-node-subsystem-test-helpers = { workspace = true }
+# pezkuwi-node-subsystem-test-helpers = { workspace = true }
 # For benches and integration tests, depend on ourselves with the test-utils feature.
-pezkuwi-node-core-pvf = { features = [
-	"test-utils",
-], workspace = true, default-features = true }
-pezkuwichain-runtime = { workspace = true }
+# pezkuwi-node-core-pvf = { features = [
+# 	"test-utils",
+# ], workspace = true, default-features = true }
+# pezkuwichain-runtime = { workspace = true }
 
-test-teyrchain-adder = { workspace = true }
-test-teyrchain-halt = { workspace = true }
+# test-teyrchain-adder = { workspace = true }
+# test-teyrchain-halt = { workspace = true }
 
 [target.'cfg(target_os = "linux")'.dev-dependencies]
 libc = { workspace = true }
@@ -90,15 +90,15 @@ runtime-benchmarks = [
 	"pezkuwi-node-core-pvf-common/runtime-benchmarks",
 	"pezkuwi-node-core-pvf-execute-worker?/runtime-benchmarks",
 	"pezkuwi-node-core-pvf-prepare-worker?/runtime-benchmarks",
-	"pezkuwi-node-core-pvf/runtime-benchmarks",
+	# "pezkuwi-node-core-pvf/runtime-benchmarks",
 	"pezkuwi-node-metrics/runtime-benchmarks",
-	"pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
+	# "pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
 	"pezkuwi-node-subsystem/runtime-benchmarks",
 	"pezkuwi-pez-node-primitives/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
 	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
-	"pezkuwichain-runtime/runtime-benchmarks",
+	# "pezkuwichain-runtime/runtime-benchmarks",
 	"pezsc-sysinfo/runtime-benchmarks",
 	"pezsc-tracing/runtime-benchmarks",
-	"test-teyrchain-adder/runtime-benchmarks",
+	# "test-teyrchain-adder/runtime-benchmarks",
 ]

@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-use frame::testing_prelude::*;
+use pezframe::testing_prelude::*;
 use test_log::test;
 use xcm::prelude::*;
 use xcm_executor::traits::{ConvertLocation, TransferType};

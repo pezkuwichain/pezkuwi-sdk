@@ -20,9 +20,9 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 #[docify::export]
-#[frame::pezpallet(dev_mode)]
+#[pezframe::pezpallet(dev_mode)]
 pub mod shell_pallet {
-	use frame::prelude::*;
+	use pezframe::prelude::*;
 
 	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
@@ -31,9 +31,9 @@ pub mod shell_pallet {
 	pub struct Pezpallet<T>(_);
 }
 
-#[frame::pezpallet(dev_mode)]
+#[pezframe::pezpallet(dev_mode)]
 pub mod pezpallet {
-	use frame::prelude::*;
+	use pezframe::prelude::*;
 
 	#[docify::export]
 	pub type Balance = u128;
@@ -137,7 +137,7 @@ pub mod pezpallet {
 		use crate::pezpallet::*;
 
 		#[docify::export(testing_prelude)]
-		use frame::testing_prelude::*;
+		use pezframe::testing_prelude::*;
 
 		pub(crate) const ALICE: u64 = 1;
 		pub(crate) const BOB: u64 = 2;
@@ -360,10 +360,10 @@ pub mod pezpallet {
 	}
 }
 
-#[frame::pezpallet(dev_mode)]
+#[pezframe::pezpallet(dev_mode)]
 pub mod pezpallet_v2 {
 	use super::pezpallet::Balance;
-	use frame::prelude::*;
+	use pezframe::prelude::*;
 
 	#[docify::export(config_v2)]
 	#[pezpallet::config]
@@ -429,7 +429,7 @@ pub mod pezpallet_v2 {
 	#[cfg(any(test, doc))]
 	pub mod tests {
 		use super::{super::pezpallet::tests::StateBuilder, *};
-		use frame::testing_prelude::*;
+		use pezframe::testing_prelude::*;
 		const ALICE: u64 = 1;
 		const BOB: u64 = 2;
 

@@ -20,13 +20,15 @@ targets = ["x86_64-unknown-linux-gnu"]
 codec = { features = ["derive"], workspace = true }
 scale-info = { features = ["derive"], workspace = true }
 
-frame = { workspace = true, default-features = false, features = [
+pezframe = { workspace = true, default-features = false, features = [
 	"experimental",
 	"runtime",
 ] }
+pezframe-support = { workspace = true, default-features = false }
+pezframe-system = { workspace = true, default-features = false }
 
 [features]
 default = ["std"]
-runtime-benchmarks = ["frame/runtime-benchmarks"]
-std = ["codec/std", "frame/std", "scale-info/std"]
-try-runtime = ["frame/try-runtime"]
+runtime-benchmarks = ["pezframe/runtime-benchmarks"]
+std = ["codec/std", "pezframe/std", "pezframe-support/std", "pezframe-system/std", "scale-info/std"]
+try-runtime = ["pezframe/try-runtime"]

@@ -7,15 +7,15 @@ use tokio::time::Duration;
 use crate::utils::initialize_network;
 
 use pezcumulus_zombienet_sdk_helpers::wait_for_nth_session_change;
-use zombienet_orchestrator::network::node::LogLineCountOptions;
-use zombienet_sdk::{
+use pezkuwi_zombienet_orchestrator::network::node::LogLineCountOptions;
+use pezkuwi_zombienet_sdk::{
 	subxt::{OnlineClient, PezkuwiConfig},
 	NetworkConfig, NetworkConfigBuilder,
 };
 
 async fn build_network_config() -> Result<NetworkConfig, anyhow::Error> {
 	// images are not relevant for `native`, but we leave it here in case we use `k8s` some day
-	let images = zombienet_sdk::environment::get_images_from_env();
+	let images = pezkuwi_zombienet_sdk::environment::get_images_from_env();
 	log::info!("Using images: {images:?}");
 
 	NetworkConfigBuilder::new()

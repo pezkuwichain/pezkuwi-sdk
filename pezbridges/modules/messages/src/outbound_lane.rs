@@ -18,7 +18,7 @@
 
 use crate::{Config, LOG_TARGET};
 
-use bp_messages::{
+use pezbp_messages::{
 	ChainWithMessages, DeliveredMessages, LaneState, MessageNonce, OutboundLaneData,
 	UnrewardedRelayer,
 };

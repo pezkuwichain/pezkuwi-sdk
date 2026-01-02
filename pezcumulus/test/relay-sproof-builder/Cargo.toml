@@ -8,7 +8,7 @@ description = "Mocked relay state proof builder for testing Pezcumulus."
 homepage.workspace = true
 repository.workspace = true
 documentation.workspace = true
-publish = false
+publish = true
 
 [lints]
 workspace = true

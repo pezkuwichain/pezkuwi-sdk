@@ -154,7 +154,7 @@ extern crate alloc;
 
 use alloc::{boxed::Box, vec::Vec};
 
-use frame::{
+use pezframe::{
 	prelude::*,
 	traits::{Currency, ReservableCurrency},
 };
@@ -225,7 +225,7 @@ pub enum DepositKind<T: Config> {
 	ActiveRecoveryFor(<T as pezframe_system::Config>::AccountId),
 }
 
-#[frame::pezpallet]
+#[pezframe::pezpallet]
 pub mod pezpallet {
 	use super::*;
 

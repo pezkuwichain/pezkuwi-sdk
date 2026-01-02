@@ -15,7 +15,7 @@
 // limitations under the License.
 
 #![cfg(test)]
-use bridge_hub_common::DenyExportMessageFrom;
+use pezbridge_hub_common::DenyExportMessageFrom;
 use pezframe_support::{
 	parameter_types,
 	traits::{Equals, EverythingBut, ProcessMessageError::Unsupported},

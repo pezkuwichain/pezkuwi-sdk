@@ -17,7 +17,7 @@
 
 //! Relay chain runtime mock.
 
-use frame::{
+use pezframe::{
 	deps::{pezframe_support::weights::WeightMeter, pezsp_runtime::AccountId32},
 	prelude::*,
 	runtime::prelude::*,

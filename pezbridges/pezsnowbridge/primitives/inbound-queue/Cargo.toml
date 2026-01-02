@@ -37,7 +37,7 @@ pezsnowbridge-beacon-primitives = { workspace = true }
 pezsnowbridge-core = { workspace = true }
 pezsnowbridge-verification-primitives = { workspace = true }
 
-assets-common = { workspace = true }
+pez-assets-common = { workspace = true }
 
 hex-literal = { workspace = true, default-features = true }
 
@@ -48,7 +48,7 @@ pezsnowbridge-test-utils = { workspace = true }
 default = ["std"]
 std = [
 	"alloy-core/std",
-	"assets-common/std",
+	"pez-assets-common/std",
 	"codec/std",
 	"pezframe-support/std",
 	"pezframe-system/std",
@@ -66,7 +66,7 @@ std = [
 	"xcm/std",
 ]
 runtime-benchmarks = [
-	"assets-common/runtime-benchmarks",
+	"pez-assets-common/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
 	"pezframe-system/runtime-benchmarks",
 	"pezsnowbridge-beacon-primitives/runtime-benchmarks",
@@ -80,7 +80,6 @@ runtime-benchmarks = [
 	"xcm/runtime-benchmarks",
 ]
 try-runtime = [
-	"assets-common/try-runtime",
 	"pezframe-support/try-runtime",
 	"pezframe-system/try-runtime",
 	"pezsp-runtime/try-runtime",

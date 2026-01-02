@@ -40,8 +40,8 @@ pezpallet-bridge-relayers = { workspace = true }
 
 # Pezcumulus
 asset-hub-zagros-runtime = { workspace = true }
-bp-asset-hub-zagros = { workspace = true }
-bridge-hub-common = { workspace = true }
+pezbp-asset-hub-zagros = { workspace = true }
+pezbridge-hub-common = { workspace = true }
 emulated-integration-tests-common = { workspace = true }
 pezbridge-hub-zagros-runtime = { workspace = true }
 pezcumulus-pezpallet-teyrchain-system = { workspace = true }
@@ -68,8 +68,8 @@ pezsnowbridge-pezpallet-system-v2 = { workspace = true }
 [features]
 runtime-benchmarks = [
 	"asset-hub-zagros-runtime/runtime-benchmarks",
-	"bp-asset-hub-zagros/runtime-benchmarks",
-	"bridge-hub-common/runtime-benchmarks",
+	"pezbp-asset-hub-zagros/runtime-benchmarks",
+	"pezbridge-hub-common/runtime-benchmarks",
 	"emulated-integration-tests-common/runtime-benchmarks",
 	"pezbridge-hub-zagros-runtime/runtime-benchmarks",
 	"pezcumulus-pezpallet-teyrchain-system/runtime-benchmarks",

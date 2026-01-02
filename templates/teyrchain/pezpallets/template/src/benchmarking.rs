@@ -1,7 +1,7 @@
 //! Benchmarking setup for pezpallet-template
 
 use super::*;
-use frame::{deps::pezframe_benchmarking::v2::*, prelude::*};
+use pezframe::{deps::pezframe_benchmarking::v2::*, prelude::*};
 
 #[benchmarks]
 mod benchmarks {

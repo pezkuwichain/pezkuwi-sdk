@@ -398,7 +398,7 @@ fn register_and_send_token_in_one_transaction_fails() {
 
 	let dot_asset = Location::new(1, Here);
 	let dot_fee: xcm::prelude::Asset =
-		(dot_asset, bp_asset_hub_zagros::CreateForeignAssetDeposit::get()).into();
+		(dot_asset, pezbp_asset_hub_zagros::CreateForeignAssetDeposit::get()).into();
 
 	// Used to pay the asset creation deposit.
 	let eth_asset_value = 9_000_000_000_000u128;
@@ -1022,7 +1022,7 @@ fn invalid_claimer_does_not_fail_the_message() {
 #[test]
 fn create_foreign_asset_deposit_is_equal_to_asset_hub_foreign_asset_pallet_deposit() {
 	let asset_hub_deposit = asset_hub_zagros_runtime::ForeignAssetsAssetDeposit::get();
-	let bridge_hub_deposit = bp_asset_hub_zagros::CreateForeignAssetDeposit::get();
+	let bridge_hub_deposit = pezbp_asset_hub_zagros::CreateForeignAssetDeposit::get();
 	assert!(
 		bridge_hub_deposit >=
 		asset_hub_deposit,

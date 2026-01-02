@@ -18,8 +18,8 @@
 
 use crate::{BridgedChainOf, BridgedHeaderChainOf, Config};
 
-use bp_header_pez_chain::{HeaderChain, HeaderChainError};
-use bp_messages::{
+use pezbp_header_pez_chain::{HeaderChain, HeaderChainError};
+use pezbp_messages::{
 	source_chain::FromBridgedChainMessagesDeliveryProof,
 	target_chain::{FromBridgedChainMessagesProof, ProvedLaneMessages, ProvedMessages},
 	ChainWithMessages, InboundLaneData, Message, MessageKey, MessageNonce, MessagePayload,
@@ -114,7 +114,7 @@ pub fn verify_messages_delivery_proof<T: Config<I>, I: 'static>(
 		.map_err(VerificationError::HeaderChain)?;
 	// Messages delivery proof is just proof of single storage key read => any error
 	// is fatal.
-	let storage_inbound_lane_data_key = bp_messages::storage_keys::inbound_lane_data_key(
+	let storage_inbound_lane_data_key = pezbp_messages::storage_keys::inbound_lane_data_key(
 		T::ThisChain::WITH_CHAIN_MESSAGES_PALLET_NAME,
 		&lane,
 	);
@@ -145,7 +145,7 @@ trait StorageProofAdapter<T: Config<I>, I: 'static> {
 		&mut self,
 		lane_id: &T::LaneId,
 	) -> Result<Option<OutboundLaneData>, StorageProofError> {
-		let storage_outbound_lane_data_key = bp_messages::storage_keys::outbound_lane_data_key(
+		let storage_outbound_lane_data_key = pezbp_messages::storage_keys::outbound_lane_data_key(
 			T::ThisChain::WITH_CHAIN_MESSAGES_PALLET_NAME,
 			lane_id,
 		);
@@ -156,7 +156,7 @@ trait StorageProofAdapter<T: Config<I>, I: 'static> {
 		&mut self,
 		message_key: &MessageKey<T::LaneId>,
 	) -> Result<MessagePayload, StorageProofError> {
-		let storage_message_key = bp_messages::storage_keys::message_key(
+		let storage_message_key = pezbp_messages::storage_keys::message_key(
 			T::ThisChain::WITH_CHAIN_MESSAGES_PALLET_NAME,
 			&message_key.lane_id,
 			message_key.nonce,
@@ -216,8 +216,8 @@ mod tests {
 		mock::*,
 	};
 
-	use bp_header_pez_chain::{HeaderChainError, StoredHeaderDataBuilder};
-	use bp_messages::LaneState;
+	use pezbp_header_pez_chain::{HeaderChainError, StoredHeaderDataBuilder};
+	use pezbp_messages::LaneState;
 	use codec::Encode;
 	use pezbp_runtime::{HeaderId, StorageProofError};
 	use pezsp_runtime::traits::Header;

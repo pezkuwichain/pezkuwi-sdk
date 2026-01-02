@@ -21,7 +21,7 @@ use crate::{
 	Runtime,
 };
 use alloc::vec::Vec;
-use assets_common::IsLocalAccountKey20;
+use pez_assets_common::IsLocalAccountKey20;
 use pezframe_support::{traits::Contains, weights::Weight};
 use pezpallet_xcm_benchmarks_fungible::WeightInfo as XcmFungibleWeight;
 use pezpallet_xcm_benchmarks_generic::WeightInfo as XcmGeneric;

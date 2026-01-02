@@ -3,7 +3,7 @@ name = "pezcumulus-test-runtime"
 version = "0.1.0"
 authors.workspace = true
 edition.workspace = true
-publish = false
+publish = true
 description = "Pezkuwi SDK cumulus/teyrchain component: test runtime"
 documentation.workspace = true
 repository = { workspace = true }

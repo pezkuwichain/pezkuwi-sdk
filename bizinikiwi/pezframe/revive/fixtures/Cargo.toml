@@ -9,7 +9,7 @@ homepage.workspace = true
 repository.workspace = true
 rust-version = "1.84"
 documentation.workspace = true
-publish = false
+publish = true
 
 [package.metadata.pezkuwi-sdk]
 exclude-from-umbrella = true

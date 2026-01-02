@@ -34,23 +34,23 @@
 //! about its own responsibilities and make as few assumptions about the general runtime as
 //! possible. A pezpallet is analogous to a _module_ in the runtime.
 //!
-//! A pezpallet is defined as a `mod pezpallet` wrapped by the [`frame::pezpallet`] macro. Within
+//! A pezpallet is defined as a `mod pezpallet` wrapped by the [`pezframe::pezpallet`] macro. Within
 //! this macro, pezpallet components/parts can be defined. Most notable of these parts are:
 //!
-//! - [Config](frame::pezpallet_macros::config), allowing a pezpallet to make itself configurable
+//! - [Config](pezframe::pezpallet_macros::config), allowing a pezpallet to make itself configurable
 //!   and generic over types, values and such.
-//! - [Storage](frame::pezpallet_macros::storage), allowing a pezpallet to define onchain storage.
-//! - [Dispatchable function](frame::pezpallet_macros::call), allowing a pezpallet to define
+//! - [Storage](pezframe::pezpallet_macros::storage), allowing a pezpallet to define onchain storage.
+//! - [Dispatchable function](pezframe::pezpallet_macros::call), allowing a pezpallet to define
 //!   extrinsics that are callable by end users, from the outer world.
-//! - [Events](frame::pezpallet_macros::event), allowing a pezpallet to emit events.
-//! - [Errors](frame::pezpallet_macros::error), allowing a pezpallet to emit well-formed errors.
+//! - [Events](pezframe::pezpallet_macros::event), allowing a pezpallet to emit events.
+//! - [Errors](pezframe::pezpallet_macros::error), allowing a pezpallet to emit well-formed errors.
 //!
 //! Some of these pezpallet components resemble the building blocks of a smart contract. While both
 //! models are programming state transition functions of blockchains, there are crucial differences
 //! between the two. See [`crate::reference_docs::runtime_vs_smart_contract`] for more.
 //!
 //! Most of these components are defined using macros, the full list of which can be found in
-//! [`frame::pezpallet_macros`].
+//! [`pezframe::pezpallet_macros`].
 //!
 //! ### Example
 //!
@@ -61,16 +61,16 @@
 //!
 //! A runtime is a collection of pallets that are amalgamated together. Each pezpallet typically has
 //! some configurations (exposed as a `trait Config`) that needs to be *specified* in the runtime.
-//! This is done with [`frame::runtime::prelude::construct_runtime`].
+//! This is done with [`pezframe::runtime::prelude::construct_runtime`].
 //!
 //! A (real) runtime that actually wishes to compile to WASM needs to also implement a set of
 //! runtime-apis. These implementation can be specified using the
-//! [`frame::runtime::prelude::impl_runtime_apis`] macro.
+//! [`pezframe::runtime::prelude::impl_runtime_apis`] macro.
 //!
 //! ### Example
 //!
 //! The following example shows a (test) runtime that is composing the pezpallet demonstrated above,
-//! next to the [`frame::prelude::pezframe_system`] pezpallet, into a runtime.
+//! next to the [`pezframe::prelude::pezframe_system`] pezpallet, into a runtime.
 #![doc = docify::embed!("src/pezkuwi_sdk/frame_runtime.rs", runtime)]
 //!
 //! ## More Examples
@@ -94,9 +94,9 @@
 /// experimental feature to break these parts into different `mod`s. See [`pezpallet_examples`] for
 /// more.
 #[docify::export]
-#[frame::pezpallet(dev_mode)]
+#[pezframe::pezpallet(dev_mode)]
 pub mod pezpallet {
-	use frame::prelude::*;
+	use pezframe::prelude::*;
 
 	/// The configuration trait of a pezpallet. Mandatory. Allows a pezpallet to receive types at a
 	/// later point from the runtime that wishes to contain it. It allows the pezpallet to be
@@ -118,7 +118,7 @@ pub mod pezpallet {
 	}
 
 	/// A mandatory struct in each pezpallet. All functions callable by external users (aka.
-	/// transactions) must be attached to this type (see [`frame::pezpallet_macros::call`]). For
+	/// transactions) must be attached to this type (see [`pezframe::pezpallet_macros::call`]). For
 	/// convenience, internal (private) functions can also be attached to this type.
 	#[pezpallet::pezpallet]
 	pub struct Pezpallet<T>(PhantomData<T>);
@@ -153,7 +153,7 @@ pub mod pezpallet {
 #[docify::export]
 pub mod runtime {
 	use super::pezpallet as pezpallet_example;
-	use frame::{prelude::*, testing_prelude::*};
+	use pezframe::{prelude::*, testing_prelude::*};
 
 	// The major macro that amalgamates pallets into `enum Runtime`
 	construct_runtime!(

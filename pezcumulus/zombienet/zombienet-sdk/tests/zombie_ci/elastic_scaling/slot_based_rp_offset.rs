@@ -7,7 +7,7 @@
 use anyhow::anyhow;
 use pezcumulus_zombienet_sdk_helpers::{assert_relay_parent_offset, assign_cores};
 use serde_json::json;
-use zombienet_sdk::{
+use pezkuwi_zombienet_sdk::{
 	subxt::{OnlineClient, PezkuwiConfig},
 	NetworkConfigBuilder,
 };
@@ -19,7 +19,7 @@ async fn elastic_scaling_slot_based_relay_parent_offset_test() -> Result<(), any
 	);
 
 	// images are not relevant for `native`, but we leave it here in case we use `k8s` some day
-	let images = zombienet_sdk::environment::get_images_from_env();
+	let images = pezkuwi_zombienet_sdk::environment::get_images_from_env();
 
 	let config = NetworkConfigBuilder::new()
 		.with_relaychain(|r| {
@@ -69,7 +69,7 @@ async fn elastic_scaling_slot_based_relay_parent_offset_test() -> Result<(), any
 			anyhow!("config errs: {errs}")
 		})?;
 
-	let spawn_fn = zombienet_sdk::environment::get_spawn_fn();
+	let spawn_fn = pezkuwi_zombienet_sdk::environment::get_spawn_fn();
 	let network = spawn_fn(config).await?;
 
 	let relay_node = network.get_node("validator-0")?;

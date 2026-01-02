@@ -18,7 +18,7 @@ use crate::{
 	weights::WeightInfo, BestFinalized, BridgedBlockNumber, BridgedHeader, Config,
 	CurrentAuthoritySet, Error, FreeHeadersRemaining, Pezpallet,
 };
-use bp_header_pez_chain::{
+use pezbp_header_pez_chain::{
 	justification::GrandpaJustification, submit_finality_proof_limits_extras,
 	SubmitFinalityProofInfo,
 };
@@ -308,8 +308,8 @@ mod tests {
 		BestFinalized, Config, CurrentAuthoritySet, FreeHeadersRemaining, PalletOperatingMode,
 		StoredAuthoritySet, WeightInfo,
 	};
-	use bp_header_pez_chain::{ChainWithGrandpa, SubmitFinalityProofInfo};
-	use bp_test_utils::{
+	use pezbp_header_pez_chain::{ChainWithGrandpa, SubmitFinalityProofInfo};
+	use pezbp_test_utils::{
 		make_default_justification, make_justification_for_header, JustificationGeneratorParams,
 		TEST_GRANDPA_SET_ID,
 	};
@@ -522,7 +522,7 @@ mod tests {
 			let consensus_log =
 				pezsp_consensus_grandpa::ConsensusLog::<TestNumber>::ScheduledChange(
 					pezsp_consensus_grandpa::ScheduledChange {
-						next_authorities: bp_test_utils::authority_list(),
+						next_authorities: pezbp_test_utils::authority_list(),
 						delay: 0,
 					},
 				);

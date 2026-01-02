@@ -21,7 +21,7 @@
 #![allow(unused_parens)]
 #![allow(unused_imports)]
 
-use frame::weights_prelude::*;
+use pezframe::weights_prelude::*;
 
 pub trait WeightInfo {
 	fn add_well_known_node() -> Weight;

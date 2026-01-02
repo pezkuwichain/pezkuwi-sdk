@@ -20,9 +20,9 @@
 #![cfg(feature = "runtime-benchmarks")]
 
 use super::*;
-use frame::benchmarking::prelude::*;
+use pezframe::benchmarking::prelude::*;
 
-use frame::deps::pezframe_support::assert_ok;
+use pezframe::deps::pezframe_support::assert_ok;
 use fungible::{Inspect as InspectFungible, Mutate as MutateFungible};
 use nonfungibles_v2::{Create, Mutate};
 

@@ -26,11 +26,11 @@ use crate::{
 	AccountId, Balance, Balances, BridgeZagrosMessages, PezkuwiXcm, Runtime, RuntimeEvent,
 	RuntimeHoldReason, XcmOverBridgeHubZagros, XcmRouter, XcmpQueue,
 };
-use bp_messages::{
+use pezbp_messages::{
 	source_chain::FromBridgedChainMessagesDeliveryProof,
 	target_chain::FromBridgedChainMessagesProof, LegacyLaneId,
 };
-use bridge_hub_common::xcm_version::XcmVersionOfDestAndRemoteBridge;
+use pezbridge_hub_common::xcm_version::XcmVersionOfDestAndRemoteBridge;
 use pezpallet_xcm_bridge_hub::{BridgeId, XcmAsPlainPayload};
 
 use pezframe_support::{parameter_types, traits::PalletInfoAccess};
@@ -66,7 +66,7 @@ parameter_types! {
 		2,
 		[
 			GlobalConsensus(ZagrosGlobalConsensusNetwork::get()),
-			Teyrchain(<bp_bridge_hub_zagros::BridgeHubZagros as pezbp_runtime::Teyrchain>::TEYRCHAIN_ID)
+			Teyrchain(<pezbp_bridge_hub_zagros::BridgeHubZagros as pezbp_runtime::Teyrchain>::TEYRCHAIN_ID)
 		]
 	);
 
@@ -75,10 +75,10 @@ parameter_types! {
 
 /// Proof of messages, coming from Zagros.
 pub type FromZagrosBridgeHubMessagesProof<MI> =
-	FromBridgedChainMessagesProof<bp_bridge_hub_zagros::Hash, LaneIdOf<Runtime, MI>>;
+	FromBridgedChainMessagesProof<pezbp_bridge_hub_zagros::Hash, LaneIdOf<Runtime, MI>>;
 /// Messages delivery proof for Pezkuwichain Bridge Hub -> Zagros Bridge Hub messages.
 pub type ToZagrosBridgeHubMessagesDeliveryProof<MI> =
-	FromBridgedChainMessagesDeliveryProof<bp_bridge_hub_zagros::Hash, LaneIdOf<Runtime, MI>>;
+	FromBridgedChainMessagesDeliveryProof<pezbp_bridge_hub_zagros::Hash, LaneIdOf<Runtime, MI>>;
 
 /// Dispatches received XCM messages from other bridge
 type FromZagrosMessageBlobDispatcher = BridgeBlobDispatcher<
@@ -108,12 +108,12 @@ impl pezpallet_bridge_messages::Config<WithBridgeHubZagrosMessagesInstance> for 
 	type WeightInfo =
 		weights::pezpallet_bridge_messages_pezkuwichain_to_zagros::WeightInfo<Runtime>;
 
-	type ThisChain = bp_bridge_hub_pezkuwichain::BridgeHubPezkuwichain;
-	type BridgedChain = bp_bridge_hub_zagros::BridgeHubZagros;
+	type ThisChain = pezbp_bridge_hub_pezkuwichain::BridgeHubPezkuwichain;
+	type BridgedChain = pezbp_bridge_hub_zagros::BridgeHubZagros;
 	type BridgedHeaderChain = pezpallet_bridge_teyrchains::TeyrchainHeaders<
 		Runtime,
 		BridgeTeyrchainZagrosInstance,
-		bp_bridge_hub_zagros::BridgeHubZagros,
+		pezbp_bridge_hub_zagros::BridgeHubZagros,
 	>;
 
 	type OutboundPayload = XcmAsPlainPayload;
@@ -164,7 +164,7 @@ impl pezpallet_xcm_bridge_hub::Config<XcmOverBridgeHubZagrosInstance> for Runtim
 	type BlobDispatcher = FromZagrosMessageBlobDispatcher;
 }
 
-/// Implementation of `bp_xcm_bridge_hub::LocalXcmChannelManager` for congestion management.
+/// Implementation of `pezbp_xcm_bridge_hub::LocalXcmChannelManager` for congestion management.
 pub struct CongestionManager;
 impl pezpallet_xcm_bridge_hub::LocalXcmChannelManager for CongestionManager {
 	type Error = SendError;
@@ -173,7 +173,7 @@ impl pezpallet_xcm_bridge_hub::LocalXcmChannelManager for CongestionManager {
 		// This is used to check the inbound bridge queue/messages to determine if they can be
 		// dispatched and sent to the sibling teyrchain. Therefore, checking outbound `XcmpQueue`
 		// is sufficient here.
-		use bp_xcm_bridge_hub_router::XcmChannelStatusProvider;
+		use pezbp_xcm_bridge_hub_router::XcmChannelStatusProvider;
 		pezcumulus_pezpallet_xcmp_queue::bridging::OutXcmpChannelStatusProvider::<Runtime>::is_congested(
 			with,
 		)
@@ -184,7 +184,7 @@ impl pezpallet_xcm_bridge_hub::LocalXcmChannelManager for CongestionManager {
 		// so `local_origin` is expected to represent only the local AH.
 		send_xcm::<XcmpQueue>(
 			local_origin.clone(),
-			bp_asset_hub_pezkuwichain::build_congestion_message(bridge.inner(), true).into(),
+			pezbp_asset_hub_pezkuwichain::build_congestion_message(bridge.inner(), true).into(),
 		)
 		.map(|_| ())
 	}
@@ -194,7 +194,7 @@ impl pezpallet_xcm_bridge_hub::LocalXcmChannelManager for CongestionManager {
 		// so `local_origin` is expected to represent only the local AH.
 		send_xcm::<XcmpQueue>(
 			local_origin.clone(),
-			bp_asset_hub_pezkuwichain::build_congestion_message(bridge.inner(), false).into(),
+			pezbp_asset_hub_pezkuwichain::build_congestion_message(bridge.inner(), false).into(),
 		)
 		.map(|_| ())
 	}
@@ -280,13 +280,13 @@ mod tests {
 	#[test]
 	fn ensure_bridge_hub_pezkuwichain_message_lane_weights_are_correct() {
 		check_message_lane_weights::<
-			bp_bridge_hub_pezkuwichain::BridgeHubPezkuwichain,
+			pezbp_bridge_hub_pezkuwichain::BridgeHubPezkuwichain,
 			Runtime,
 			WithBridgeHubZagrosMessagesInstance,
 		>(
-			bp_bridge_hub_zagros::EXTRA_STORAGE_PROOF_SIZE,
-			bp_bridge_hub_pezkuwichain::MAX_UNREWARDED_RELAYERS_IN_CONFIRMATION_TX,
-			bp_bridge_hub_pezkuwichain::MAX_UNCONFIRMED_MESSAGES_IN_CONFIRMATION_TX,
+			pezbp_bridge_hub_zagros::EXTRA_STORAGE_PROOF_SIZE,
+			pezbp_bridge_hub_pezkuwichain::MAX_UNREWARDED_RELAYERS_IN_CONFIRMATION_TX,
+			pezbp_bridge_hub_pezkuwichain::MAX_UNCONFIRMED_MESSAGES_IN_CONFIRMATION_TX,
 			true,
 		);
 	}
@@ -296,8 +296,8 @@ mod tests {
 		assert_complete_bridge_types!(
 			runtime: Runtime,
 			with_bridged_chain_messages_instance: WithBridgeHubZagrosMessagesInstance,
-			this_chain: bp_bridge_hub_pezkuwichain::BridgeHubPezkuwichain,
-			bridged_chain: bp_bridge_hub_zagros::BridgeHubZagros,
+			this_chain: pezbp_bridge_hub_pezkuwichain::BridgeHubPezkuwichain,
+			bridged_chain: pezbp_bridge_hub_zagros::BridgeHubZagros,
 			expected_payload_type: XcmAsPlainPayload,
 		);
 
@@ -307,8 +307,8 @@ mod tests {
 			WithBridgeHubZagrosMessagesInstance,
 		>(AssertCompleteBridgeConstants {
 			this_chain_constants: AssertChainConstants {
-				block_length: bp_bridge_hub_pezkuwichain::BlockLength::get(),
-				block_weights: bp_bridge_hub_pezkuwichain::BlockWeightsForAsyncBacking::get(),
+				block_length: pezbp_bridge_hub_pezkuwichain::BlockLength::get(),
+				block_weights: pezbp_bridge_hub_pezkuwichain::BlockWeightsForAsyncBacking::get(),
 			},
 		});
 
@@ -321,7 +321,7 @@ mod tests {
 		pezpallet_bridge_relayers::extension::per_teyrchain_header::ensure_priority_boost_is_sane::<
 			Runtime,
 			WithBridgeHubZagrosMessagesInstance,
-			bp_bridge_hub_zagros::BridgeHubZagros,
+			pezbp_bridge_hub_zagros::BridgeHubZagros,
 			PriorityBoostPerTeyrchainHeader,
 		>(FEE_BOOST_PER_TEYRCHAIN_HEADER);
 
@@ -332,7 +332,7 @@ mod tests {
 		>(FEE_BOOST_PER_MESSAGE);
 
 		let expected: InteriorLocation = [PalletInstance(
-			bp_bridge_hub_pezkuwichain::WITH_BRIDGE_PEZKUWICHAIN_TO_ZAGROS_MESSAGES_PALLET_INDEX,
+			pezbp_bridge_hub_pezkuwichain::WITH_BRIDGE_PEZKUWICHAIN_TO_ZAGROS_MESSAGES_PALLET_INDEX,
 		)]
 		.into();
 
@@ -347,8 +347,8 @@ pub mod migration {
 
 	parameter_types! {
 		pub AssetHubPezkuwichainToAssetHubZagrosMessagesLane: LegacyLaneId = LegacyLaneId([0, 0, 0, 2]);
-		pub AssetHubPezkuwichainLocation: Location = Location::new(1, [Teyrchain(bp_asset_hub_pezkuwichain::ASSET_HUB_PEZKUWICHAIN_TEYRCHAIN_ID)]);
-		pub AssetHubZagrosUniversalLocation: InteriorLocation = [GlobalConsensus(ZagrosGlobalConsensusNetwork::get()), Teyrchain(bp_asset_hub_zagros::ASSET_HUB_ZAGROS_TEYRCHAIN_ID)].into();
+		pub AssetHubPezkuwichainLocation: Location = Location::new(1, [Teyrchain(pezbp_asset_hub_pezkuwichain::ASSET_HUB_PEZKUWICHAIN_TEYRCHAIN_ID)]);
+		pub AssetHubZagrosUniversalLocation: InteriorLocation = [GlobalConsensus(ZagrosGlobalConsensusNetwork::get()), Teyrchain(pezbp_asset_hub_zagros::ASSET_HUB_ZAGROS_TEYRCHAIN_ID)].into();
 	}
 
 	/// Ensure that the existing lanes for the AHR<>AHW bridge are correctly configured.
@@ -364,7 +364,7 @@ pub mod migration {
 	>;
 
 	mod v1_wrong {
-		use bp_messages::{LaneState, MessageNonce, UnrewardedRelayer};
+		use pezbp_messages::{LaneState, MessageNonce, UnrewardedRelayer};
 		use codec::{Decode, Encode};
 		use pezbp_runtime::AccountIdOf;
 		use pezpallet_bridge_messages::BridgedChainOf;
@@ -390,7 +390,7 @@ pub mod migration {
 	}
 
 	mod v1 {
-		pub use bp_messages::{InboundLaneData, LaneState, OutboundLaneData};
+		pub use pezbp_messages::{InboundLaneData, LaneState, OutboundLaneData};
 		pub use pezpallet_bridge_messages::{InboundLanes, OutboundLanes, StoredInboundLaneData};
 	}
 

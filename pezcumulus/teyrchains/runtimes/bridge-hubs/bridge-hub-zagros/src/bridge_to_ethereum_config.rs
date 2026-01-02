@@ -22,8 +22,8 @@ use crate::{
 	EthereumOutboundQueue, EthereumOutboundQueueV2, EthereumSystem, EthereumSystemV2, MessageQueue,
 	Runtime, RuntimeEvent, TransactionByteFee,
 };
-use bp_asset_hub_zagros::CreateForeignAssetDeposit;
-use bridge_hub_common::AggregateMessageOrigin;
+use pezbp_asset_hub_zagros::CreateForeignAssetDeposit;
+use pezbridge_hub_common::AggregateMessageOrigin;
 use hex_literal::hex;
 use pezframe_support::{parameter_types, traits::Contains, weights::ConstantMultiplier};
 use pezframe_system::EnsureRootWithSuccess;

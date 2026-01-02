@@ -21,7 +21,7 @@ relay-utils = { workspace = true }
 tracing = { workspace = true }
 
 # Bridge dependencies
-bp-pezkuwi-core = { workspace = true, default-features = true }
+pezbp-pezkuwi-core = { workspace = true, default-features = true }
 relay-bizinikiwi-client = { workspace = true }
 
 [dev-dependencies]
@@ -30,7 +30,7 @@ relay-bizinikiwi-client = { features = ["test-helpers"], workspace = true }
 
 [features]
 runtime-benchmarks = [
-	"bp-pezkuwi-core/runtime-benchmarks",
+	"pezbp-pezkuwi-core/runtime-benchmarks",
 	"relay-bizinikiwi-client/runtime-benchmarks",
 	"relay-utils/runtime-benchmarks",
 ]

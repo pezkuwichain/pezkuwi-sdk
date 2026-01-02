@@ -19,11 +19,11 @@
 
 #![cfg(feature = "runtime-benchmarks")]
 
-use bp_messages::{
+use pezbp_messages::{
 	source_chain::FromBridgedChainMessagesDeliveryProof,
 	target_chain::FromBridgedChainMessagesProof, MessagePayload,
 };
-use bp_pezkuwi_core::teyrchains::ParaHash;
+use pezbp_pezkuwi_core::teyrchains::ParaHash;
 use codec::Encode;
 use pezbp_runtime::{AccountIdOf, Chain, HashOf, Teyrchain};
 use pezframe_support::weights::Weight;

@@ -10,7 +10,7 @@ use crate::utils::{initialize_network, BEST_BLOCK_METRIC};
 use pezcumulus_zombienet_sdk_helpers::assert_para_throughput;
 use pezkuwi_primitives::Id as ParaId;
 use pezsp_core::{hexdisplay::AsBytesRef, Bytes};
-use zombienet_sdk::{
+use pezkuwi_zombienet_sdk::{
 	subxt::{self, dynamic::Value, tx::DynamicPayload, OnlineClient, PezkuwiConfig},
 	subxt_signer::sr25519::dev,
 	NetworkConfig, NetworkConfigBuilder, RegistrationStrategy,
@@ -104,7 +104,7 @@ async fn migrate_solo_to_para() -> Result<(), anyhow::Error> {
 
 async fn build_network_config() -> Result<NetworkConfig, anyhow::Error> {
 	// images are not relevant for `native`, but we leave it here in case we use `k8s` some day
-	let images = zombienet_sdk::environment::get_images_from_env();
+	let images = pezkuwi_zombienet_sdk::environment::get_images_from_env();
 	log::info!("Using images: {images:?}");
 
 	// Network setup:

@@ -1263,7 +1263,7 @@ impl<Block: BlockT> Backend<Block> {
 				);
 			}
 
-			SharedTrieCache::new(pezsp_trie::cache::CacheSize::new(maximum_size), config.metrics_registry.as_ref())
+			SharedTrieCache::new(pezsp_trie::cache::CacheSize::new(maximum_size), None)
 		});
 
 		let backend = Backend {

@@ -19,7 +19,7 @@ targets = ["x86_64-unknown-linux-gnu"]
 
 [[bin]]
 path = "bin/main.rs"
-name = "chain-spec-builder"
+name = "pezstaging-chain-spec-builder"
 
 [lib]
 # Docs tests are not needed since the code samples that would be executed
@@ -39,7 +39,7 @@ serde = { workspace = true, default-features = true }
 serde_json = { workspace = true, default-features = true }
 
 [dev-dependencies]
-bizinikiwi-test-runtime = { workspace = true }
+# bizinikiwi-test-runtime = { workspace = true }  # publish=false
 cmd_lib = { workspace = true }
 pretty_assertions = { workspace = true }
 
@@ -47,6 +47,6 @@ pretty_assertions = { workspace = true }
 # `cargo build --feature=generate-readme` updates the `README.md` file.
 generate-readme = []
 runtime-benchmarks = [
-	"bizinikiwi-test-runtime/runtime-benchmarks",
+	# "bizinikiwi-test-runtime/runtime-benchmarks",
 	"pezsc-chain-spec/runtime-benchmarks",
 ]

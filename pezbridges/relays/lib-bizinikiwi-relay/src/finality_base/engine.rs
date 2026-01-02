@@ -18,7 +18,7 @@
 
 use crate::error::Error;
 use async_trait::async_trait;
-use bp_header_pez_chain::{
+use pezbp_header_pez_chain::{
 	justification::{
 		verify_and_optimize_justification, GrandpaEquivocationsFinder, GrandpaJustification,
 		JustificationVerificationContext,
@@ -189,15 +189,15 @@ impl<C: ChainWithGrandpa> Engine<C> for Grandpa<C> {
 		pezsp_consensus_grandpa::EquivocationProof<HashOf<C>, BlockNumberOf<C>>;
 	type EquivocationsFinder = GrandpaEquivocationsFinder<C>;
 	type KeyOwnerProof = C::KeyOwnerProof;
-	type InitializationData = bp_header_pez_chain::InitializationData<C::Header>;
+	type InitializationData = pezbp_header_pez_chain::InitializationData<C::Header>;
 	type OperatingMode = BasicOperatingMode;
 
 	fn is_initialized_key() -> StorageKey {
-		bp_header_pez_chain::storage_keys::best_finalized_key(C::WITH_CHAIN_GRANDPA_PALLET_NAME)
+		pezbp_header_pez_chain::storage_keys::best_finalized_key(C::WITH_CHAIN_GRANDPA_PALLET_NAME)
 	}
 
 	fn pezpallet_operating_mode_key() -> StorageKey {
-		bp_header_pez_chain::storage_keys::pezpallet_operating_mode_key(
+		pezbp_header_pez_chain::storage_keys::pezpallet_operating_mode_key(
 			C::WITH_CHAIN_GRANDPA_PALLET_NAME,
 		)
 	}
@@ -242,7 +242,7 @@ impl<C: ChainWithGrandpa> Engine<C> for Grandpa<C> {
 		header: &C::Header,
 		proof: &Self::FinalityProof,
 	) -> SubmitFinalityProofCallExtras {
-		bp_header_pez_chain::submit_finality_proof_limits_extras::<C>(header, proof)
+		pezbp_header_pez_chain::submit_finality_proof_limits_extras::<C>(header, proof)
 	}
 
 	/// Prepare initialization data for the GRANDPA verifier pezpallet.
@@ -356,7 +356,7 @@ impl<C: ChainWithGrandpa> Engine<C> for Grandpa<C> {
 			}
 		}
 
-		Ok(bp_header_pez_chain::InitializationData {
+		Ok(pezbp_header_pez_chain::InitializationData {
 			header: Box::new(initial_header),
 			authority_list: initial_authorities_set,
 			set_id: if schedules_change {
@@ -373,7 +373,7 @@ impl<C: ChainWithGrandpa> Engine<C> for Grandpa<C> {
 		at: HashOf<TargetChain>,
 	) -> Result<Self::FinalityVerificationContext, BizinikiwiError> {
 		let current_authority_set_key =
-			bp_header_pez_chain::storage_keys::current_authority_set_key(
+			pezbp_header_pez_chain::storage_keys::current_authority_set_key(
 				C::WITH_CHAIN_GRANDPA_PALLET_NAME,
 			);
 		let authority_set: AuthoritySet = target_client

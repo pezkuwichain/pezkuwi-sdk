@@ -21,7 +21,7 @@
 
 use super::*;
 use crate as pezpallet_tx_pause;
-use frame::testing_prelude::*;
+use pezframe::testing_prelude::*;
 
 #[derive_impl(pezframe_system::config_preludes::TestDefaultConfig)]
 impl pezframe_system::Config for Test {

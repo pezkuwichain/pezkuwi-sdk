@@ -19,7 +19,7 @@
 #![warn(missing_docs)]
 #![cfg_attr(not(feature = "std"), no_std)]
 
-pub use bp_pezkuwi_core::{
+pub use pezbp_pezkuwi_core::{
 	AccountId, AccountInfoStorageMapKeyProvider, AccountPublic, Balance, BlockNumber, Hash, Hasher,
 	Hashing, Header, Nonce, Perbill, Signature, SignedBlock, UncheckedExtrinsic,
 	EXTRA_STORAGE_PROOF_SIZE, TX_EXTRA_BYTES,
@@ -30,8 +30,8 @@ pub use teyrchains_common::{
 	NORMAL_DISPATCH_RATIO, SLOT_DURATION,
 };
 
-use bp_messages::*;
-use bp_pezkuwi_core::SuffixedCommonTransactionExtension;
+use pezbp_messages::*;
+use pezbp_pezkuwi_core::SuffixedCommonTransactionExtension;
 use pezbp_runtime::extensions::{
 	BridgeRejectObsoleteHeadersAndMessages, RefundBridgedTeyrchainMessagesSchema,
 };

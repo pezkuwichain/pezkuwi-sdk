@@ -34,7 +34,7 @@ use crate::{
 
 use async_std::sync::Arc;
 use async_trait::async_trait;
-use bp_messages::{
+use pezbp_messages::{
 	source_chain::FromBridgedChainMessagesDeliveryProof, storage_keys::inbound_lane_data_key,
 	ChainWithMessages as _, LaneState, MessageNonce, UnrewardedRelayer, UnrewardedRelayersState,
 };
@@ -55,7 +55,7 @@ use std::{collections::VecDeque, convert::TryFrom, ops::RangeInclusive};
 pub type BizinikiwiMessagesDeliveryProof<C, L> =
 	(UnrewardedRelayersState, FromBridgedChainMessagesDeliveryProof<HashOf<C>, L>);
 
-/// Inbound lane data - for backwards compatibility with `bp_messages::InboundLaneData` which has
+/// Inbound lane data - for backwards compatibility with `pezbp_messages::InboundLaneData` which has
 /// additional `lane_state` attribute.
 ///
 /// TODO: remove - https://github.com/pezkuwichain/pezkuwi-sdk/issues/22
@@ -66,14 +66,14 @@ struct LegacyInboundLaneData<RelayerId> {
 }
 impl<RelayerId> Default for LegacyInboundLaneData<RelayerId> {
 	fn default() -> Self {
-		let full = bp_messages::InboundLaneData::default();
+		let full = pezbp_messages::InboundLaneData::default();
 		Self { relayers: full.relayers, last_confirmed_nonce: full.last_confirmed_nonce }
 	}
 }
 
 impl<RelayerId> LegacyInboundLaneData<RelayerId> {
 	pub fn last_delivered_nonce(self) -> MessageNonce {
-		bp_messages::InboundLaneData {
+		pezbp_messages::InboundLaneData {
 			relayers: self.relayers,
 			last_confirmed_nonce: self.last_confirmed_nonce,
 			// we don't care about the state here
@@ -85,7 +85,7 @@ impl<RelayerId> LegacyInboundLaneData<RelayerId> {
 
 impl<RelayerId> From<LegacyInboundLaneData<RelayerId>> for UnrewardedRelayersState {
 	fn from(value: LegacyInboundLaneData<RelayerId>) -> Self {
-		(&bp_messages::InboundLaneData {
+		(&pezbp_messages::InboundLaneData {
 			relayers: value.relayers,
 			last_confirmed_nonce: value.last_confirmed_nonce,
 			// we don't care about the state here
@@ -366,7 +366,7 @@ fn make_messages_delivery_call<P: BizinikiwiMessageLane>(
 #[cfg(test)]
 mod tests {
 	use super::*;
-	use bp_messages::{DeliveredMessages, UnrewardedRelayer};
+	use pezbp_messages::{DeliveredMessages, UnrewardedRelayer};
 	use codec::Encode;
 
 	#[test]
@@ -374,13 +374,13 @@ mod tests {
 		let bytes_without_state =
 			vec![4, 0, 2, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0];
 		let bytes_with_state = {
-			// add state byte `bp_messages::LaneState::Opened`
+			// add state byte `pezbp_messages::LaneState::Opened`
 			let mut b = bytes_without_state.clone();
 			b.push(0);
 			b
 		};
 
-		let full = bp_messages::InboundLaneData::<u8> {
+		let full = pezbp_messages::InboundLaneData::<u8> {
 			relayers: vec![UnrewardedRelayer {
 				relayer: Default::default(),
 				messages: DeliveredMessages { begin: 2, end: 5 },
@@ -388,7 +388,7 @@ mod tests {
 			.into_iter()
 			.collect(),
 			last_confirmed_nonce: 6,
-			state: bp_messages::LaneState::Opened,
+			state: pezbp_messages::LaneState::Opened,
 		};
 		assert_eq!(full.encode(), bytes_with_state);
 		assert_ne!(full.encode(), bytes_without_state);

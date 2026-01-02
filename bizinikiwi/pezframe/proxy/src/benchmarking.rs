@@ -22,7 +22,7 @@
 use super::*;
 use crate::Pezpallet as Proxy;
 use alloc::{boxed::Box, vec};
-use frame::benchmarking::prelude::{
+use pezframe::benchmarking::prelude::{
 	account, benchmarks, impl_test_function, whitelisted_caller, BenchmarkError, RawOrigin,
 };
 

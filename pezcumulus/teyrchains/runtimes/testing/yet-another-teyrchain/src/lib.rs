@@ -28,10 +28,8 @@ mod xcm_config;
 
 use crate::xcm_config::{RelayLocation, XcmOriginToTransactDispatchOrigin};
 
-pub use pezkuwi_sdk::{pezstaging_teyrchain_info as teyrchain_info, *};
+pub use pezkuwi_sdk::{teyrchain_info, *};
 use pezpallet_xcm::{EnsureXcm, IsVoiceOfBody};
-use pezstaging_xcm_builder as xcm_builder;
-use pezstaging_xcm_executor as xcm_executor;
 
 use pezcumulus_primitives_core::ParaId;
 use pezkuwi_runtime_common::{prod_or_fast, xcm_sender::NoPriceForMessageDelivery};
@@ -81,7 +79,7 @@ pub use pezsp_runtime::BuildStorage;
 pub use pezsp_runtime::{Perbill, Permill};
 
 use pezcumulus_primitives_core::AggregateMessageOrigin; //, ClaimQueueOffset, CoreSelector};
-use pezstaging_xcm::latest::prelude::BodyId;
+use xcm::latest::prelude::BodyId;
 use teyrchains_common::{AccountId, Signature};
 
 pub type SessionHandlers = ();

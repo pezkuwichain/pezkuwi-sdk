@@ -42,9 +42,9 @@
 //! ### Example - Get random seed for the current block
 //!
 //! ```
-//! use frame::{prelude::*, traits::Randomness};
+//! use pezframe::{prelude::*, traits::Randomness};
 //!
-//! #[frame::pezpallet]
+//! #[pezframe::pezpallet]
 //! pub mod pezpallet {
 //!     use super::*;
 //!
@@ -71,7 +71,7 @@
 use safe_mix::TripletMix;
 
 use codec::Encode;
-use frame::{prelude::*, traits::Randomness};
+use pezframe::{prelude::*, traits::Randomness};
 
 const RANDOM_MATERIAL_LEN: u32 = 81;
 
@@ -83,7 +83,7 @@ fn block_number_to_index<T: Config>(block_number: BlockNumberFor<T>) -> usize {
 
 pub use pezpallet::*;
 
-#[frame::pezpallet]
+#[pezframe::pezpallet]
 pub mod pezpallet {
 	use super::*;
 
@@ -162,7 +162,7 @@ impl<T: Config> Randomness<T::Hash, BlockNumberFor<T>> for Pezpallet<T> {
 mod tests {
 	use super::*;
 	use crate as pezpallet_insecure_randomness_collective_flip;
-	use frame::{
+	use pezframe::{
 		testing_prelude::{pezframe_system::limits, *},
 		traits::Header as _,
 	};

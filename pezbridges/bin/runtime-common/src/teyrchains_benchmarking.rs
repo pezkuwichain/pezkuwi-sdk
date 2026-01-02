@@ -20,8 +20,8 @@
 
 use crate::messages_benchmarking::insert_header_to_grandpa_pallet;
 
-use bp_pezkuwi_core::teyrchains::{ParaHash, ParaHead, ParaHeadsProof, ParaId};
-use bp_teyrchains::{
+use pezbp_pezkuwi_core::teyrchains::{ParaHash, ParaHead, ParaHeadsProof, ParaId};
+use pezbp_teyrchains::{
 	teyrchain_head_storage_key_at_source, RelayBlockHash, RelayBlockHasher, RelayBlockNumber,
 };
 use codec::Encode;

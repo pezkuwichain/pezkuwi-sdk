@@ -36,12 +36,12 @@ pezsp-runtime = { workspace = true }
 pezsp-std = { workspace = true }
 xcm-executor = { workspace = true }
 
-bp-relayers = { workspace = true }
+pezbp-relayers = { workspace = true }
 
 [features]
 default = ["std"]
 std = [
-	"bp-relayers/std",
+	"pezbp-relayers/std",
 	"codec/std",
 	"pezframe-support/std",
 	"pezframe-system/std",
@@ -60,7 +60,7 @@ std = [
 ]
 serde = ["dep:serde", "scale-info/serde"]
 runtime-benchmarks = [
-	"bp-relayers/runtime-benchmarks",
+	"pezbp-relayers/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
 	"pezframe-system/runtime-benchmarks",
 	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
