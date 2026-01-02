@@ -81,7 +81,7 @@ pub fn genesis() -> Storage {
 							NetworkId::ByGenesis(PEZKUWICHAIN_GENESIS_HASH).into(),
 							Teyrchain(1000),
 						]),
-						Some(bp_messages::LegacyLaneId([0, 0, 0, 2])),
+						Some(pezbp_messages::LegacyLaneId([0, 0, 0, 2])),
 					),
 				],
 				..Default::default()

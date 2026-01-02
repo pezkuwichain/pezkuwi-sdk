@@ -19,7 +19,9 @@ scale-info = { workspace = true }
 serde_json = { workspace = true }
 
 # this is a frame-based runtime, thus importing `frame` with runtime feature enabled.
-frame = { workspace = true, features = ["runtime"] }
+pezframe = { workspace = true, features = ["runtime"] }
+pezframe-system = { workspace = true }
+pezframe-support = { workspace = true }
 
 # pallets that we want to use
 pezpallet-balances = { workspace = true }
@@ -29,7 +31,16 @@ pezpallet-transaction-payment = { workspace = true }
 pezpallet-transaction-payment-rpc-runtime-api = { workspace = true }
 
 # other pezkuwi-sdk-deps
+pezsp-api = { workspace = true }
+pezsp-block-builder = { workspace = true }
+pezsp-core = { workspace = true }
+pezsp-genesis-builder = { workspace = true }
 pezsp-keyring = { workspace = true }
+pezsp-offchain = { workspace = true }
+pezsp-runtime = { workspace = true }
+pezsp-session = { workspace = true }
+pezsp-transaction-pool = { workspace = true }
+pezframe-system-rpc-runtime-api = { workspace = true }
 
 # local pezpallet templates
 first-pezpallet = { workspace = true }
@@ -46,7 +57,9 @@ std = [
 	"scale-info/std",
 	"serde_json/std",
 
-	"frame/std",
+	"pezframe/std",
+	"pezframe-system/std",
+	"pezframe-support/std",
 
 	"pezpallet-balances/std",
 	"pezpallet-sudo/std",
@@ -55,14 +68,23 @@ std = [
 	"pezpallet-transaction-payment/std",
 
 	"first-pezpallet/std",
+	"pezsp-api/std",
+	"pezsp-block-builder/std",
+	"pezsp-core/std",
+	"pezsp-genesis-builder/std",
 	"pezsp-keyring/std",
+	"pezsp-offchain/std",
+	"pezsp-runtime/std",
+	"pezsp-session/std",
+	"pezsp-transaction-pool/std",
+	"pezframe-system-rpc-runtime-api/std",
 
 	"bizinikiwi-wasm-builder",
 ]
 runtime-benchmarks = [
 	"bizinikiwi-wasm-builder?/runtime-benchmarks",
 	"first-pezpallet/runtime-benchmarks",
-	"frame/runtime-benchmarks",
+	"pezframe/runtime-benchmarks",
 	"pezpallet-balances/runtime-benchmarks",
 	"pezpallet-sudo/runtime-benchmarks",
 	"pezpallet-timestamp/runtime-benchmarks",

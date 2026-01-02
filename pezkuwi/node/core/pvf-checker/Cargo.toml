@@ -24,8 +24,8 @@ pezsp-keystore = { workspace = true, default-features = true }
 
 [dev-dependencies]
 futures-timer = { workspace = true }
-pezkuwi-node-subsystem-test-helpers = { workspace = true }
-pezkuwi-primitives-test-helpers = { workspace = true }
+# pezkuwi-node-subsystem-test-helpers = { workspace = true }
+# pezkuwi-primitives-test-helpers = { workspace = true }
 pezsc-keystore = { workspace = true, default-features = true }
 pezsp-application-crypto = { workspace = true, default-features = true }
 pezsp-core = { workspace = true, default-features = true }
@@ -35,10 +35,10 @@ pezsp-runtime = { workspace = true, default-features = true }
 [features]
 runtime-benchmarks = [
 	"gum/runtime-benchmarks",
-	"pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
+	# "pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
 	"pezkuwi-node-subsystem-util/runtime-benchmarks",
 	"pezkuwi-node-subsystem/runtime-benchmarks",
-	"pezkuwi-primitives-test-helpers/runtime-benchmarks",
+	# "pezkuwi-primitives-test-helpers/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
 	"pezsp-keyring/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",

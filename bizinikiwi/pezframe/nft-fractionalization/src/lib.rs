@@ -47,13 +47,13 @@ mod tests;
 
 pub mod weights;
 
-use frame::prelude::*;
+use pezframe::prelude::*;
 use pezframe_system::Config as SystemConfig;
 pub use pezpallet::*;
 pub use types::*;
 pub use weights::WeightInfo;
 
-#[frame::pezpallet]
+#[pezframe::pezpallet]
 pub mod pezpallet {
 	use super::*;
 	use core::fmt::Display;

@@ -16,7 +16,7 @@
 
 #![cfg(test)]
 
-use bp_pezkuwi_core::Signature;
+use pezbp_pezkuwi_core::Signature;
 use codec::{Decode, Encode};
 use pezbridge_hub_pezkuwichain_runtime::{
 	bridge_to_zagros_config::OnBridgeHubPezkuwichainRefundBridgeHubZagrosMessages,

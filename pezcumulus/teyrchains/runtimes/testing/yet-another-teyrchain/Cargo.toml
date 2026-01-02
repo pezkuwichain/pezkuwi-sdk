@@ -1,6 +1,6 @@
 [package]
 name = "yet-another-teyrchain-runtime"
-version = "0.6.0"
+version = "0.6.1"
 authors.workspace = true
 edition.workspace = true
 description = "Simple runtime used by the testing teyrchain(s)"
@@ -54,9 +54,9 @@ pezkuwi-sdk = { workspace = true, default-features = false, features = [
 	"pezkuwi-runtime-common",
 	"pezkuwi-teyrchain-primitives",
 	"pezpallet-xcm",
-	"pezstaging-xcm",
-	"pezstaging-xcm-builder",
-	"pezstaging-xcm-executor",
+	"xcm",
+	"xcm-builder",
+	"xcm-executor",
 
 	"pezcumulus-pezpallet-aura-ext",
 	"pezcumulus-pezpallet-weight-reclaim",
@@ -66,7 +66,7 @@ pezkuwi-sdk = { workspace = true, default-features = false, features = [
 	"pezcumulus-primitives-core",
 	"pezcumulus-primitives-utility",
 	"pezpallet-collator-selection",
-	"pezstaging-teyrchain-info",
+	"teyrchain-info",
 	"teyrchains-common",
 
 	"runtime",

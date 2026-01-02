@@ -1,6 +1,6 @@
 [package]
 name = "pezframe-benchmarking-cli"
-version = "32.0.0"
+version = "32.0.1"
 authors.workspace = true
 edition.workspace = true
 license = "Apache-2.0"
@@ -24,7 +24,7 @@ clap = { features = ["derive"], workspace = true }
 codec = { workspace = true, default-features = true }
 comfy-table = { workspace = true }
 env_filter = { workspace = true }
-frame-storage-access-test-runtime = { workspace = true, default-features = true }
+# frame-storage-access-test-runtime moved to integration tests to break circular dependency
 gethostname = { workspace = true }
 handlebars = { workspace = true }
 itertools = { workspace = true }
@@ -81,18 +81,22 @@ thiserror = { workspace = true }
 thousands = { workspace = true }
 
 [dev-dependencies]
-bizinikiwi-test-runtime = { workspace = true, default-features = true }
-pezcumulus-test-runtime = { workspace = true, default-features = true }
-zagros-runtime = { workspace = true, default-features = true }
+# bizinikiwi-test-runtime = { workspace = true, default-features = true }
+# pezcumulus-test-runtime = { workspace = true, default-features = true }
+# zagros-runtime = { workspace = true, default-features = true }
 
 [features]
 default = []
+# Enable storage benchmark command (requires frame-storage-access-test-runtime)
+storage-benchmark = []
+# Enable teyrchain/parachain benchmark inherent data
+# Note: requires pezcumulus-client-teyrchain-inherent with mock feature (needs pezcumulus-test-relay-sproof-builder)
+teyrchain-benchmarks = []
 runtime-benchmarks = [
-	"bizinikiwi-test-runtime/runtime-benchmarks",
-	"frame-storage-access-test-runtime/runtime-benchmarks",
+	# "bizinikiwi-test-runtime/runtime-benchmarks",
 	"pezcumulus-client-teyrchain-inherent/runtime-benchmarks",
 	"pezcumulus-primitives-proof-size-hostfunction/runtime-benchmarks",
-	"pezcumulus-test-runtime/runtime-benchmarks",
+	# "pezcumulus-test-runtime/runtime-benchmarks",
 	"pezframe-benchmarking/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
 	"pezframe-system/runtime-benchmarks",
@@ -121,6 +125,6 @@ runtime-benchmarks = [
 	"pezsp-transaction-pool/runtime-benchmarks",
 	"pezsp-trie/runtime-benchmarks",
 	"pezsp-version/runtime-benchmarks",
-	"zagros-runtime/runtime-benchmarks",
+	# "zagros-runtime/runtime-benchmarks",
 ]
 rocksdb = ["pezsc-cli/rocksdb", "pezsc-client-db/rocksdb"]

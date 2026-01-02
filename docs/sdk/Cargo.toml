@@ -8,7 +8,7 @@ authors.workspace = true
 edition.workspace = true
 # This crate is not publish-able to crates.io for now because of docify.
 publish = false
-version = "0.0.1"
+version = "0.0.2"
 documentation.workspace = true
 
 [lints]
@@ -17,7 +17,7 @@ workspace = true
 [dependencies]
 # Needed for all FRAME-based code
 codec = { workspace = true }
-frame = { features = [
+pezframe = { features = [
 	"experimental",
 	"runtime",
 ], workspace = true, default-features = true }
@@ -141,7 +141,7 @@ runtime-benchmarks = [
 	"bizinikiwi-wasm-builder/runtime-benchmarks",
 	"chain-spec-builder/runtime-benchmarks",
 	"first-runtime/runtime-benchmarks",
-	"frame/runtime-benchmarks",
+	"pezframe/runtime-benchmarks",
 	"node-cli/runtime-benchmarks",
 	"pez-chain-spec-guide-runtime/runtime-benchmarks",
 	"pez-kitchensink-runtime/runtime-benchmarks",

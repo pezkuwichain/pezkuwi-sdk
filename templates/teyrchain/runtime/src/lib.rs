@@ -17,7 +17,7 @@ extern crate alloc;
 use alloc::vec::Vec;
 use smallvec::smallvec;
 
-use pezkuwi_sdk::{pezstaging_teyrchain_info as teyrchain_info, *};
+use pezkuwi_sdk::{teyrchain_info, *};
 
 use pezsp_runtime::{
 	generic, impl_opaque_keys,

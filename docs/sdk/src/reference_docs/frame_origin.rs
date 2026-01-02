@@ -93,13 +93,13 @@
 //! Then, within the pezpallet, we can simply use this "unknown" origin check type:
 #![doc = docify::embed!("./src/reference_docs/frame_origin.rs", external_origin_usage)]
 //!
-//! Finally, at the runtime, any implementation of [`frame::traits::EnsureOrigin`] can be passed.
+//! Finally, at the runtime, any implementation of [`pezframe::traits::EnsureOrigin`] can be passed.
 #![doc = docify::embed!("./src/reference_docs/frame_origin.rs", external_origin_provide)]
 //!
-//! Indeed, some of these implementations of [`frame::traits::EnsureOrigin`] are similar to the ones
-//! that we know about: [`frame::runtime::prelude::EnsureSigned`],
-//! [`frame::runtime::prelude::EnsureSignedBy`], [`frame::runtime::prelude::EnsureRoot`],
-//! [`frame::runtime::prelude::EnsureNone`], etc. But, there are also many more that are not known
+//! Indeed, some of these implementations of [`pezframe::traits::EnsureOrigin`] are similar to the ones
+//! that we know about: [`pezframe::runtime::prelude::EnsureSigned`],
+//! [`pezframe::runtime::prelude::EnsureSignedBy`], [`pezframe::runtime::prelude::EnsureRoot`],
+//! [`pezframe::runtime::prelude::EnsureNone`], etc. But, there are also many more that are not known
 //! to us, and are defined in other pallets.
 //!
 //! For example, [`pezpallet_collective`] defines [`pezpallet_collective::EnsureMember`] and
@@ -107,7 +107,7 @@
 //! alluded to earlier in this document.
 //!
 //! Make sure to check the full list of [implementors of
-//! `EnsureOrigin`](frame::traits::EnsureOrigin#implementors) for more inspiration.
+//! `EnsureOrigin`](pezframe::traits::EnsureOrigin#implementors) for more inspiration.
 //!
 //! ## Obtaining Abstract Origins
 //!
@@ -129,9 +129,9 @@
 //! [^1]: Inherents are essentially unsigned extrinsics that need an [`pezframe_system::ensure_none`]
 //! origin check, and through the virtue of being an inherent, are agreed upon by all validators.
 
-use frame::prelude::*;
+use pezframe::prelude::*;
 
-#[frame::pezpallet(dev_mode)]
+#[pezframe::pezpallet(dev_mode)]
 pub mod pezpallet_for_origin {
 	use super::*;
 
@@ -151,7 +151,7 @@ pub mod pezpallet_for_origin {
 	}
 }
 
-#[frame::pezpallet(dev_mode)]
+#[pezframe::pezpallet(dev_mode)]
 pub mod pezpallet_with_custom_origin {
 	use super::*;
 
@@ -206,7 +206,7 @@ pub mod pezpallet_with_custom_origin {
 
 pub mod runtime_for_origin {
 	use super::pezpallet_with_custom_origin;
-	use frame::{runtime::prelude::*, testing_prelude::*};
+	use pezframe::{runtime::prelude::*, testing_prelude::*};
 
 	#[docify::export(runtime_exp)]
 	construct_runtime!(
@@ -226,7 +226,7 @@ pub mod runtime_for_origin {
 	}
 }
 
-#[frame::pezpallet(dev_mode)]
+#[pezframe::pezpallet(dev_mode)]
 pub mod pezpallet_with_external_origin {
 	use super::*;
 	#[docify::export(external_origin_def)]
@@ -250,7 +250,7 @@ pub mod pezpallet_with_external_origin {
 
 pub mod runtime_for_external_origin {
 	use super::*;
-	use frame::{runtime::prelude::*, testing_prelude::*};
+	use pezframe::{runtime::prelude::*, testing_prelude::*};
 
 	construct_runtime!(
 		pub struct Runtime {

@@ -27,7 +27,7 @@ pub(crate) mod helpers;
 use crate::{test_cases::bridges_prelude::*, test_data};
 
 use asset_test_pezutils::BasicTeyrchainRuntime;
-use bp_messages::{
+use pezbp_messages::{
 	target_chain::{DispatchMessage, DispatchMessageData, MessageDispatch},
 	LaneState, MessageKey, MessagesOperatingMode, OutboundLaneData,
 };
@@ -54,7 +54,7 @@ use xcm_executor::{
 
 /// Common bridges exports.
 pub(crate) mod bridges_prelude {
-	pub use bp_teyrchains::{RelayBlockHash, RelayBlockNumber};
+	pub use pezbp_teyrchains::{RelayBlockHash, RelayBlockNumber};
 	pub use pezpallet_bridge_grandpa::{Call as BridgeGrandpaCall, Config as BridgeGrandpaConfig};
 	pub use pezpallet_bridge_messages::{
 		Call as BridgeMessagesCall, Config as BridgeMessagesConfig, LanesManagerError,

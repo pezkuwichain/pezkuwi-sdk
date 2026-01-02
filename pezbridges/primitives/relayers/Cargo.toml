@@ -1,5 +1,5 @@
 [package]
-name = "bp-relayers"
+name = "pezbp-relayers"
 description = "Primitives of relayers module."
 version = "0.7.0"
 authors.workspace = true
@@ -17,9 +17,9 @@ codec = { features = ["bit-vec", "derive"], workspace = true }
 scale-info = { features = ["bit-vec", "derive"], workspace = true }
 
 # Bridge Dependencies
-bp-header-pez-chain = { workspace = true }
-bp-messages = { workspace = true }
-bp-teyrchains = { workspace = true }
+pezbp-header-pez-chain = { workspace = true }
+pezbp-messages = { workspace = true }
+pezbp-teyrchains = { workspace = true }
 pezbp-runtime = { workspace = true }
 
 # Bizinikiwi Dependencies
@@ -35,9 +35,9 @@ hex-literal = { workspace = true, default-features = true }
 [features]
 default = ["std"]
 std = [
-	"bp-header-pez-chain/std",
-	"bp-messages/std",
-	"bp-teyrchains/std",
+	"pezbp-header-pez-chain/std",
+	"pezbp-messages/std",
+	"pezbp-teyrchains/std",
 	"codec/std",
 	"pezbp-runtime/std",
 	"pezframe-support/std",
@@ -48,9 +48,9 @@ std = [
 	"scale-info/std",
 ]
 runtime-benchmarks = [
-	"bp-header-pez-chain/runtime-benchmarks",
-	"bp-messages/runtime-benchmarks",
-	"bp-teyrchains/runtime-benchmarks",
+	"pezbp-header-pez-chain/runtime-benchmarks",
+	"pezbp-messages/runtime-benchmarks",
+	"pezbp-teyrchains/runtime-benchmarks",
 	"pezbp-runtime/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
 	"pezframe-system/runtime-benchmarks",

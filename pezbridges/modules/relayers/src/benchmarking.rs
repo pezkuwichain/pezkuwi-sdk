@@ -171,7 +171,7 @@ mod benchmarks {
 		{
 			crate::Pezpallet::<T, I>::slash_and_deregister(
 				&relayer,
-				bp_relayers::ExplicitOrAccountParams::Explicit::<_, ()>(slash_destination),
+				pezbp_relayers::ExplicitOrAccountParams::Explicit::<_, ()>(slash_destination),
 			);
 		}
 

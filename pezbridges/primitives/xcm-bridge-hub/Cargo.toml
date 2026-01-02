@@ -1,5 +1,5 @@
 [package]
-name = "bp-xcm-bridge-hub"
+name = "pezbp-xcm-bridge-hub"
 description = "Primitives of the xcm-bridge-hub pezpallet."
 version = "0.2.0"
 authors.workspace = true
@@ -18,7 +18,7 @@ scale-info = { features = ["derive"], workspace = true }
 serde = { features = ["alloc", "derive"], workspace = true }
 
 # Bridge Dependencies
-bp-messages = { workspace = true }
+pezbp-messages = { workspace = true }
 pezbp-runtime = { workspace = true }
 
 # Bizinikiwi Dependencies
@@ -33,7 +33,7 @@ xcm = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"bp-messages/std",
+	"pezbp-messages/std",
 	"codec/std",
 	"pezbp-runtime/std",
 	"pezframe-support/std",
@@ -45,7 +45,7 @@ std = [
 	"xcm/std",
 ]
 runtime-benchmarks = [
-	"bp-messages/runtime-benchmarks",
+	"pezbp-messages/runtime-benchmarks",
 	"pezbp-runtime/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
 	"pezsp-io/runtime-benchmarks",

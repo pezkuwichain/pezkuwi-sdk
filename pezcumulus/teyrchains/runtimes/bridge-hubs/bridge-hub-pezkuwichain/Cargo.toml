@@ -87,18 +87,18 @@ teyrchain-info = { workspace = true }
 teyrchains-common = { workspace = true }
 
 # Bridges
-bp-asset-hub-pezkuwichain = { workspace = true }
-bp-asset-hub-zagros = { workspace = true }
-bp-bridge-hub-pezkuwichain = { workspace = true }
-bp-bridge-hub-zagros = { workspace = true }
-bp-header-pez-chain = { workspace = true }
-bp-messages = { workspace = true }
-bp-pezkuwi-bulletin = { workspace = true }
-bp-pezkuwi-core = { workspace = true }
-bp-relayers = { workspace = true }
-bp-teyrchains = { workspace = true }
-bp-xcm-bridge-hub-router = { workspace = true }
-bp-zagros = { workspace = true }
+pezbp-asset-hub-pezkuwichain = { workspace = true }
+pezbp-asset-hub-zagros = { workspace = true }
+pezbp-bridge-hub-pezkuwichain = { workspace = true }
+pezbp-bridge-hub-zagros = { workspace = true }
+pezbp-header-pez-chain = { workspace = true }
+pezbp-messages = { workspace = true }
+pezbp-pezkuwi-bulletin = { workspace = true }
+pezbp-pezkuwi-core = { workspace = true }
+pezbp-relayers = { workspace = true }
+pezbp-teyrchains = { workspace = true }
+pezbp-xcm-bridge-hub-router = { workspace = true }
+pezbp-zagros = { workspace = true }
 pezbp-runtime = { workspace = true }
 pezbridge-runtime-common = { workspace = true }
 pezpallet-bridge-grandpa = { workspace = true }
@@ -121,7 +121,7 @@ pezsnowbridge-pezpallet-outbound-queue = { workspace = true }
 pezsnowbridge-pezpallet-system = { workspace = true }
 pezsnowbridge-system-runtime-api = { workspace = true }
 
-bridge-hub-common = { workspace = true }
+pezbridge-hub-common = { workspace = true }
 
 [dev-dependencies]
 pezbridge-hub-test-utils = { workspace = true, default-features = true }
@@ -136,19 +136,19 @@ teyrchains-runtimes-test-utils = { workspace = true, default-features = true }
 default = ["std"]
 std = [
 	"bizinikiwi-wasm-builder",
-	"bp-asset-hub-pezkuwichain/std",
-	"bp-asset-hub-zagros/std",
-	"bp-bridge-hub-pezkuwichain/std",
-	"bp-bridge-hub-zagros/std",
-	"bp-header-pez-chain/std",
-	"bp-messages/std",
-	"bp-pezkuwi-bulletin/std",
-	"bp-pezkuwi-core/std",
-	"bp-relayers/std",
-	"bp-teyrchains/std",
-	"bp-xcm-bridge-hub-router/std",
-	"bp-zagros/std",
-	"bridge-hub-common/std",
+	"pezbp-asset-hub-pezkuwichain/std",
+	"pezbp-asset-hub-zagros/std",
+	"pezbp-bridge-hub-pezkuwichain/std",
+	"pezbp-bridge-hub-zagros/std",
+	"pezbp-header-pez-chain/std",
+	"pezbp-messages/std",
+	"pezbp-pezkuwi-bulletin/std",
+	"pezbp-pezkuwi-core/std",
+	"pezbp-relayers/std",
+	"pezbp-teyrchains/std",
+	"pezbp-xcm-bridge-hub-router/std",
+	"pezbp-zagros/std",
+	"pezbridge-hub-common/std",
 	"codec/std",
 	"pezbp-runtime/std",
 	"pezbridge-runtime-common/std",
@@ -231,19 +231,19 @@ std = [
 ]
 runtime-benchmarks = [
 	"bizinikiwi-wasm-builder?/runtime-benchmarks",
-	"bp-asset-hub-pezkuwichain/runtime-benchmarks",
-	"bp-asset-hub-zagros/runtime-benchmarks",
-	"bp-bridge-hub-pezkuwichain/runtime-benchmarks",
-	"bp-bridge-hub-zagros/runtime-benchmarks",
-	"bp-header-pez-chain/runtime-benchmarks",
-	"bp-messages/runtime-benchmarks",
-	"bp-pezkuwi-bulletin/runtime-benchmarks",
-	"bp-pezkuwi-core/runtime-benchmarks",
-	"bp-relayers/runtime-benchmarks",
-	"bp-teyrchains/runtime-benchmarks",
-	"bp-xcm-bridge-hub-router/runtime-benchmarks",
-	"bp-zagros/runtime-benchmarks",
-	"bridge-hub-common/runtime-benchmarks",
+	"pezbp-asset-hub-pezkuwichain/runtime-benchmarks",
+	"pezbp-asset-hub-zagros/runtime-benchmarks",
+	"pezbp-bridge-hub-pezkuwichain/runtime-benchmarks",
+	"pezbp-bridge-hub-zagros/runtime-benchmarks",
+	"pezbp-header-pez-chain/runtime-benchmarks",
+	"pezbp-messages/runtime-benchmarks",
+	"pezbp-pezkuwi-bulletin/runtime-benchmarks",
+	"pezbp-pezkuwi-core/runtime-benchmarks",
+	"pezbp-relayers/runtime-benchmarks",
+	"pezbp-teyrchains/runtime-benchmarks",
+	"pezbp-xcm-bridge-hub-router/runtime-benchmarks",
+	"pezbp-zagros/runtime-benchmarks",
+	"pezbridge-hub-common/runtime-benchmarks",
 	"pezbp-runtime/runtime-benchmarks",
 	"pezbridge-hub-test-utils/runtime-benchmarks",
 	"pezbridge-runtime-common/runtime-benchmarks",

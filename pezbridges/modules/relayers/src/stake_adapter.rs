@@ -17,7 +17,7 @@
 //! Code that allows `NamedReservableCurrency` to be used as a `StakeAndSlash`
 //! mechanism of the relayers pezpallet.
 
-use bp_relayers::StakeAndSlash;
+use pezbp_relayers::StakeAndSlash;
 use codec::Codec;
 use core::{fmt::Debug, marker::PhantomData};
 use pezframe_support::traits::{tokens::BalanceStatus, NamedReservableCurrency};
@@ -27,7 +27,7 @@ use pezsp_runtime::{traits::Get, DispatchError, DispatchResult};
 /// reservations.
 ///
 /// **WARNING**: this implementation assumes that the relayers pezpallet is configured to
-/// use the [`bp_relayers::PayRewardFromAccount`] as its relayers payment scheme.
+/// use the [`pezbp_relayers::PayRewardFromAccount`] as its relayers payment scheme.
 pub struct StakeAndSlashNamed<AccountId, BlockNumber, Currency, ReserveId, Stake, Lease>(
 	PhantomData<(AccountId, BlockNumber, Currency, ReserveId, Stake, Lease)>,
 );
@@ -72,7 +72,7 @@ where
 mod tests {
 	use super::*;
 	use crate::mock::*;
-	use bp_relayers::ExplicitOrAccountParams;
+	use pezbp_relayers::ExplicitOrAccountParams;
 
 	use pezframe_support::traits::fungible::Mutate;
 	use pezsp_runtime::traits::IdentifyAccount;

@@ -98,8 +98,8 @@
 //! Bizinikiwi-based project typically contains the following:
 //!
 //! * Under `./runtime`, a `./runtime/src/lib.rs` which is the top level runtime amalgamator file.
-//!   This file typically contains the [`frame::runtime::prelude::construct_runtime`] and
-//!   [`frame::runtime::prelude::impl_runtime_apis`] macro calls, which is the final definition of a
+//!   This file typically contains the [`pezframe::runtime::prelude::construct_runtime`] and
+//!   [`pezframe::runtime::prelude::impl_runtime_apis`] macro calls, which is the final definition of a
 //!   runtime.
 //!
 //! * Under `./node`, a `main.rs`, which is the starting point, and a `./service.rs`, which contains

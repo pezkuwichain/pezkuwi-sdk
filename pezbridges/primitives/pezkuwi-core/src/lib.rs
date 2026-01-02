@@ -19,7 +19,7 @@
 #![warn(missing_docs)]
 #![cfg_attr(not(feature = "std"), no_std)]
 
-use bp_messages::MessageNonce;
+use pezbp_messages::MessageNonce;
 use pezbp_runtime::{
 	self,
 	extensions::{

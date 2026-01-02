@@ -19,8 +19,8 @@
 #![warn(missing_docs)]
 #![cfg_attr(not(feature = "std"), no_std)]
 
-use bp_header_pez_chain::ChainWithGrandpa;
-use bp_messages::{ChainWithMessages, MessageNonce};
+use pezbp_header_pez_chain::ChainWithGrandpa;
+use pezbp_messages::{ChainWithMessages, MessageNonce};
 use codec::{Decode, DecodeWithMemTracking, Encode};
 use pezbp_runtime::{
 	decl_bridge_finality_runtime_apis, decl_bridge_messages_runtime_apis,
@@ -43,7 +43,7 @@ use pezsp_runtime::{
 use scale_info::TypeInfo;
 
 // This chain reuses most of Pezkuwi primitives.
-pub use bp_pezkuwi_core::{
+pub use pezbp_pezkuwi_core::{
 	AccountAddress, AccountId, Balance, Block, BlockNumber, Hash, Hasher, Header, Nonce, Signature,
 	SignedBlock, UncheckedExtrinsic, AVERAGE_HEADER_SIZE, EXTRA_STORAGE_PROOF_SIZE,
 	MAX_MANDATORY_HEADER_SIZE, REASONABLE_HEADERS_IN_JUSTIFICATION_ANCESTRY,
@@ -225,4 +225,4 @@ impl ChainWithMessages for PezkuwiBulletin {
 }
 
 decl_bridge_finality_runtime_apis!(pezkuwi_bulletin, grandpa);
-decl_bridge_messages_runtime_apis!(pezkuwi_bulletin, bp_messages::LegacyLaneId);
+decl_bridge_messages_runtime_apis!(pezkuwi_bulletin, pezbp_messages::LegacyLaneId);

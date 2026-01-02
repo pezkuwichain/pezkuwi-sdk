@@ -317,7 +317,7 @@ pub use v1::*;
 /// To migrate your code from benchmarking v1 to benchmarking v2, you may follow these
 /// steps:
 /// 1. Change the import from `pezframe_benchmarking::v1::` to `pezframe_benchmarking::v2::*`, or
-///    `frame::benchmarking::prelude::*` under the umbrella crate;
+///    `pezframe::benchmarking::prelude::*` under the umbrella crate;
 /// 2. Move the code inside the v1 `benchmarks! { ... }` block to the v2 benchmarks module `mod
 ///    benchmarks { ... }` under the benchmarks macro (`#[benchmarks]` for a regular module, or
 ///    `#[instance_benchmarks]` to set up the module in instance benchmarking mode);

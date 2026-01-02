@@ -363,7 +363,7 @@ macro_rules! decl_bridge_finality_runtime_apis {
 		}
 	};
 	($chain: ident, grandpa) => {
-		decl_bridge_finality_runtime_apis!($chain, grandpa => bp_header_pez_chain::StoredHeaderGrandpaInfo<Header>);
+		decl_bridge_finality_runtime_apis!($chain, grandpa => pezbp_header_pez_chain::StoredHeaderGrandpaInfo<Header>);
 	};
 }
 
@@ -409,9 +409,9 @@ macro_rules! decl_bridge_messages_runtime_apis {
 						/// be missing from the resulting vector. The vector is ordered by the nonce.
 						fn message_details(
 							lane: $lane_id_type,
-							begin: bp_messages::MessageNonce,
-							end: bp_messages::MessageNonce,
-						) -> $crate::private::Vec<bp_messages::OutboundMessageDetails>;
+							begin: pezbp_messages::MessageNonce,
+							end: pezbp_messages::MessageNonce,
+						) -> $crate::private::Vec<pezbp_messages::OutboundMessageDetails>;
 					}
 
 					/// Inbound message lane API for messages sent by this chain.
@@ -425,8 +425,8 @@ macro_rules! decl_bridge_messages_runtime_apis {
 						/// Return details of given inbound messages.
 						fn message_details(
 							lane: $lane_id_type,
-							messages: $crate::private::Vec<(bp_messages::MessagePayload, bp_messages::OutboundMessageDetails)>,
-						) -> $crate::private::Vec<bp_messages::InboundMessageDetails>;
+							messages: $crate::private::Vec<(pezbp_messages::MessagePayload, pezbp_messages::OutboundMessageDetails)>,
+						) -> $crate::private::Vec<pezbp_messages::InboundMessageDetails>;
 					}
 				}
 			}

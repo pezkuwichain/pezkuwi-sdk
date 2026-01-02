@@ -54,13 +54,13 @@
 //! ## FRAME's API
 //!
 //! [`frame`] provides a simple API through which pallets can define offchain worker functions. This
-//! is part of [`frame::traits::Hooks`], which is implemented as a part of
-//! [`frame::pezpallet_macros::hooks`].
+//! is part of [`pezframe::traits::Hooks`], which is implemented as a part of
+//! [`pezframe::pezpallet_macros::hooks`].
 //!
 //! ```
-//! #[frame::pezpallet]
+//! #[pezframe::pezpallet]
 //! pub mod pezpallet {
-//! 	use frame::prelude::*;
+//! 	use pezframe::prelude::*;
 //!
 //! 	#[pezpallet::config]
 //! 	pub trait Config: pezframe_system::Config {}
@@ -95,7 +95,7 @@
 //! API into the WASM blob are:
 //!
 //! * Accessing the state is easier within the `offchain_worker` function, as it is already a part
-//!   of the runtime, and [`frame::pezpallet_macros::storage`] provides all the tools needed to read
+//!   of the runtime, and [`pezframe::pezpallet_macros::storage`] provides all the tools needed to read
 //!   the state. Other client libraries might provide varying degrees of capability here.
 //! * It will be updated in synchrony with the runtime. A Bizinikiwi's offchain application is part
 //!   of the same WASM blob, and is therefore guaranteed to be up to date.

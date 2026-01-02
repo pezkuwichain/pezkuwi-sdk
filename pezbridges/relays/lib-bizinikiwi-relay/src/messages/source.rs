@@ -31,7 +31,7 @@ use crate::{
 
 use async_std::sync::Arc;
 use async_trait::async_trait;
-use bp_messages::{
+use pezbp_messages::{
 	storage_keys::{operating_mode_key, outbound_lane_data_key},
 	target_chain::FromBridgedChainMessagesProof,
 	ChainWithMessages as _, InboundMessageDetails, MessageNonce, MessagePayload,
@@ -63,7 +63,7 @@ use std::ops::RangeInclusive;
 pub type BizinikiwiMessagesProof<C, L> = (Weight, FromBridgedChainMessagesProof<HashOf<C>, L>);
 type MessagesToRefine<'a> = Vec<(MessagePayload, &'a mut OutboundMessageDetails)>;
 
-/// Outbound lane data - for backwards compatibility with `bp_messages::OutboundLaneData` which has
+/// Outbound lane data - for backwards compatibility with `pezbp_messages::OutboundLaneData` which has
 /// additional `lane_state` attribute.
 ///
 /// TODO: remove - https://github.com/pezkuwichain/pezkuwi-sdk/issues/22
@@ -247,7 +247,7 @@ where
 
 			// for pay-at-target messages we may want to ask target chain for
 			// refined dispatch weight
-			let msg_key = bp_messages::storage_keys::message_key(
+			let msg_key = pezbp_messages::storage_keys::message_key(
 				P::TargetChain::WITH_CHAIN_MESSAGES_PALLET_NAME,
 				&self.lane_id,
 				out_msg_details.nonce,
@@ -338,7 +338,7 @@ where
 	> {
 		let mut storage_keys = Vec::with_capacity(nonces.saturating_len() as usize);
 		for message_nonce in nonces.clone() {
-			let message_key = bp_messages::storage_keys::message_key(
+			let message_key = pezbp_messages::storage_keys::message_key(
 				P::TargetChain::WITH_CHAIN_MESSAGES_PALLET_NAME,
 				&self.lane_id,
 				message_nonce,
@@ -593,7 +593,7 @@ fn split_msgs_to_refine<Source: Chain + ChainWithMessages, Target: Chain, LaneId
 #[cfg(test)]
 mod tests {
 	use super::*;
-	use bp_messages::{HashedLaneId, LaneIdType};
+	use pezbp_messages::{HashedLaneId, LaneIdType};
 	use relay_bizinikiwi_client::test_chain::TestChain;
 
 	/// Lane identifier type used for tests.
@@ -604,7 +604,7 @@ mod tests {
 	) -> Vec<OutboundMessageDetails> {
 		nonces
 			.into_iter()
-			.map(|nonce| bp_messages::OutboundMessageDetails {
+			.map(|nonce| pezbp_messages::OutboundMessageDetails {
 				nonce,
 				dispatch_weight: Weight::zero(),
 				size: 0,
@@ -761,17 +761,17 @@ mod tests {
 		let bytes_without_state =
 			vec![1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0];
 		let bytes_with_state = {
-			// add state byte `bp_messages::LaneState::Opened`
+			// add state byte `pezbp_messages::LaneState::Opened`
 			let mut b = bytes_without_state.clone();
 			b.push(0);
 			b
 		};
 
-		let full = bp_messages::OutboundLaneData {
+		let full = pezbp_messages::OutboundLaneData {
 			oldest_unpruned_nonce: 1,
 			latest_received_nonce: 2,
 			latest_generated_nonce: 3,
-			state: bp_messages::LaneState::Opened,
+			state: pezbp_messages::LaneState::Opened,
 		};
 		assert_eq!(full.encode(), bytes_with_state);
 		assert_ne!(full.encode(), bytes_without_state);

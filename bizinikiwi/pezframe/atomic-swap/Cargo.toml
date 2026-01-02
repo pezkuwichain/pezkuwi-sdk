@@ -18,7 +18,9 @@ targets = ["x86_64-unknown-linux-gnu"]
 
 [dependencies]
 codec = { workspace = true }
-frame = { workspace = true, features = ["runtime"] }
+pezframe = { workspace = true, features = ["runtime"] }
+pezframe-system = { workspace = true }
+pezframe-support = { workspace = true }
 scale-info = { features = ["derive"], workspace = true }
 
 [dev-dependencies]
@@ -26,9 +28,9 @@ pezpallet-balances = { workspace = true, default-features = true }
 
 [features]
 default = ["std"]
-std = ["codec/std", "frame/std", "pezpallet-balances/std", "scale-info/std"]
-try-runtime = ["frame/try-runtime", "pezpallet-balances/try-runtime"]
+std = ["codec/std", "pezframe/std", "pezpallet-balances/std", "scale-info/std"]
+try-runtime = ["pezframe/try-runtime", "pezpallet-balances/try-runtime"]
 runtime-benchmarks = [
-	"frame/runtime-benchmarks",
+	"pezframe/runtime-benchmarks",
 	"pezpallet-balances/runtime-benchmarks",
 ]

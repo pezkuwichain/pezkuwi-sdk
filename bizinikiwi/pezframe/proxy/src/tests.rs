@@ -22,7 +22,7 @@
 use super::*;
 use crate as proxy;
 use alloc::{vec, vec::Vec};
-use frame::testing_prelude::*;
+use pezframe::testing_prelude::*;
 
 type Block = pezframe_system::mocking::MockBlock<Test>;
 
@@ -79,7 +79,7 @@ impl Default for ProxyType {
 		Self::Any
 	}
 }
-impl frame::traits::InstanceFilter<RuntimeCall> for ProxyType {
+impl pezframe::traits::InstanceFilter<RuntimeCall> for ProxyType {
 	fn filter(&self, c: &RuntimeCall) -> bool {
 		match self {
 			ProxyType::Any => true,

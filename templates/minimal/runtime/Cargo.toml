@@ -1,7 +1,7 @@
 [package]
 name = "pez-minimal-template-runtime"
 description = "A solochain runtime template built with Bizinikiwi, part of Pezkuwi Sdk."
-version = "0.0.0"
+version = "0.0.1"
 license = "Unlicense"
 authors.workspace = true
 homepage.workspace = true

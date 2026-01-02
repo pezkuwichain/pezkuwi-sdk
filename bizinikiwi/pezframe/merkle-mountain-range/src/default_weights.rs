@@ -18,7 +18,7 @@
 //! Default weights for the MMR Pezpallet
 //! This file was not auto-generated.
 
-use frame::{deps::pezframe_support::weights::constants::*, weights_prelude::*};
+use pezframe::{deps::pezframe_support::weights::constants::*, weights_prelude::*};
 
 impl crate::WeightInfo for () {
 	fn on_initialize(peaks: u32) -> Weight {

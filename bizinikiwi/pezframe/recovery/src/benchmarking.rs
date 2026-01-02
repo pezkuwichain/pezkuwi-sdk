@@ -21,7 +21,7 @@ use super::*;
 
 use crate::Pezpallet;
 use alloc::{boxed::Box, vec, vec::Vec};
-use frame::benchmarking::prelude::*;
+use pezframe::benchmarking::prelude::*;
 
 const SEED: u32 = 0;
 const DEFAULT_DELAY: u32 = 0;

@@ -20,7 +20,7 @@ use super::{
 	TeyrchainSystem, TransactionByteFee, WeightToFee, XcmOverBridgeHubPezkuwichain, XcmpQueue,
 };
 use crate::bridge_to_ethereum_config::SnowbridgeFrontendLocation;
-use bridge_hub_common::DenyExportMessageFrom;
+use pezbridge_hub_common::DenyExportMessageFrom;
 use pezframe_support::{
 	parameter_types,
 	traits::{

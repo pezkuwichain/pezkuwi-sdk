@@ -19,7 +19,7 @@
 
 use crate::{mock::*, *};
 
-use frame::{deps::pezsp_runtime::ModuleError, testing_prelude::*};
+use pezframe::{deps::pezsp_runtime::ModuleError, testing_prelude::*};
 use fungible::{hold::Inspect as InspectHold, Mutate as MutateFungible};
 use fungibles::{metadata::Inspect, InspectEnumerable};
 use TokenError::FundsUnavailable;

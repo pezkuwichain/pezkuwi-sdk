@@ -13,7 +13,9 @@ documentation.workspace = true
 
 [dependencies]
 codec = { workspace = true }
-frame = { workspace = true, features = ["runtime"] }
+pezframe = { workspace = true, features = ["runtime"] }
+pezframe-system = { workspace = true }
+pezframe-support = { workspace = true }
 pezpallet-staking-async-ah-client = { workspace = true }
 scale-info = { workspace = true }
 
@@ -21,11 +23,13 @@ scale-info = { workspace = true }
 default = ["std"]
 std = [
 	"codec/std",
-	"frame/std",
+	"pezframe/std",
+	"pezframe-system/std",
+	"pezframe-support/std",
 	"pezpallet-staking-async-ah-client/std",
 	"scale-info/std",
 ]
 runtime-benchmarks = [
-	"frame/runtime-benchmarks",
+	"pezframe/runtime-benchmarks",
 	"pezpallet-staking-async-ah-client/runtime-benchmarks",
 ]

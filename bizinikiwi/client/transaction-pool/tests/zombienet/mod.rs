@@ -23,7 +23,7 @@ use anyhow::anyhow;
 use std::time::SystemTime;
 use tracing_subscriber::EnvFilter;
 use txtesttool::scenario::{ChainType, ScenarioBuilder};
-use zombienet_sdk::{
+use pezkuwi_zombienet_sdk::{
 	pezkuwi_subxt::BizinikiwConfig, GlobalSettingsBuilder, LocalFileSystem, Network, NetworkConfig,
 	NetworkConfigBuilder, NetworkConfigExt, WithRelaychain,
 };

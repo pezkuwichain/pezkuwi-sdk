@@ -26,7 +26,7 @@
 use crate::mock::{self, *};
 
 use codec::Compact;
-use frame::testing_prelude::*;
+use pezframe::testing_prelude::*;
 use pezpallet_assets::FrozenBalance;
 
 const WHO: AccountId = 1;

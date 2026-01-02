@@ -29,7 +29,7 @@
 #![allow(unused_parens)]
 #![allow(unused_imports)]
 
-use frame::{deps::pezframe_support::weights::constants::RocksDbWeight, prelude::*};
+use pezframe::{deps::pezframe_support::weights::constants::RocksDbWeight, prelude::*};
 use core::marker::PhantomData;
 
 /// Weight functions needed for pezpallet_template.

@@ -18,7 +18,8 @@ targets = ["x86_64-unknown-linux-gnu"]
 
 [dev-dependencies]
 codec = { features = ["derive"], workspace = true, default-features = true }
-frame = { workspace = true, default-features = true }
+pezframe = { workspace = true, default-features = true }
+pezframe-system = { workspace = true }
 log = { workspace = true }
 pezframe-support = { workspace = true, default-features = true }
 pezsp-core = { workspace = true, default-features = true }
@@ -58,7 +59,7 @@ try-runtime = [
 	"pezpallet-staking-async-rc-client/try-runtime",
 	"pezpallet-staking-async/try-runtime",
 
-	"frame/try-runtime",
+	"pezframe/try-runtime",
 	"pezframe-election-provider-support/try-runtime",
 	"pezframe-support/try-runtime",
 	"pezpallet-authorship/try-runtime",
@@ -70,7 +71,7 @@ try-runtime = [
 	"pezpallet-timestamp/try-runtime",
 ]
 runtime-benchmarks = [
-	"frame/runtime-benchmarks",
+	"pezframe/runtime-benchmarks",
 	"pezframe-election-provider-support/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
 	"pezpallet-authorship/runtime-benchmarks",

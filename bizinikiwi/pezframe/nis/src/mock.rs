@@ -17,7 +17,7 @@
 
 //! Test environment for NIS pezpallet.
 
-use frame::{runtime::prelude::*, testing_prelude::*, traits::StorageMapShim};
+use pezframe::{runtime::prelude::*, testing_prelude::*, traits::StorageMapShim};
 
 use crate::{self as pezpallet_nis, *};
 

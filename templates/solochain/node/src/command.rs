@@ -131,12 +131,12 @@ pub fn run() -> pezsc_cli::Result<()> {
 						let PartialComponents { client, .. } = service::new_partial(&config)?;
 						cmd.run(client)
 					},
-					#[cfg(not(feature = "runtime-benchmarks"))]
+					#[cfg(all(feature = "storage-benchmark", not(feature = "runtime-benchmarks")))]
 					BenchmarkCmd::Storage(_) => Err(
 						"Storage benchmarking can be enabled with `--features runtime-benchmarks`."
 							.into(),
 					),
-					#[cfg(feature = "runtime-benchmarks")]
+					#[cfg(all(feature = "storage-benchmark", feature = "runtime-benchmarks"))]
 					BenchmarkCmd::Storage(cmd) => {
 						let PartialComponents { client, backend, .. } =
 							service::new_partial(&config)?;

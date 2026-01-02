@@ -26,7 +26,7 @@
 use crate as pezpallet_assets_freezer;
 pub use crate::*;
 use codec::{Compact, Decode, Encode, MaxEncodedLen};
-use frame::testing_prelude::*;
+use pezframe::testing_prelude::*;
 use scale_info::TypeInfo;
 
 pub type AccountId = u64;

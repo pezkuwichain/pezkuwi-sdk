@@ -16,8 +16,8 @@
 
 //! Tests for Grandpa Justification optimizer code.
 
-use bp_header_pez_chain::justification::verify_and_optimize_justification;
-use bp_test_utils::*;
+use pezbp_header_pez_chain::justification::verify_and_optimize_justification;
+use pezbp_test_utils::*;
 use finality_grandpa::SignedPrecommit;
 use pezsp_consensus_grandpa::AuthoritySignature;
 
@@ -43,7 +43,7 @@ fn optimizer_does_noting_with_minimal_justification() {
 fn unknown_authority_votes_are_removed_by_optimizer() {
 	let mut justification = make_default_justification::<TestHeader>(&test_header(1));
 	justification.commit.precommits.push(signed_precommit::<TestHeader>(
-		&bp_test_utils::Account(42),
+		&pezbp_test_utils::Account(42),
 		header_id::<TestHeader>(1),
 		justification.round,
 		TEST_GRANDPA_SET_ID,

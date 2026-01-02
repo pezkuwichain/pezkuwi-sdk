@@ -81,7 +81,7 @@
 #![doc = docify::embed!("src/reference_docs/pezframe_benchmarking_weight.rs", WeightInfo)]
 //!
 //! Then, individual functions of this trait are the final values that we assigned to the
-//! [`frame::pezpallet_macros::weight`] attribute:
+//! [`pezframe::pezpallet_macros::weight`] attribute:
 #![doc = docify::embed!("./src/reference_docs/pezframe_benchmarking_weight.rs", simple_transfer_2)]
 //!
 //! ## Manual Refund
@@ -130,10 +130,10 @@
 //! [PolkaVM]: https://github.com/koute/polkavm
 //! [JAM]: https://graypaper.com
 
-#[frame::pezpallet(dev_mode)]
+#[pezframe::pezpallet(dev_mode)]
 #[allow(unused_variables, unreachable_code, unused, clippy::diverging_sub_expression)]
 pub mod pezpallet {
-	use frame::prelude::*;
+	use pezframe::prelude::*;
 
 	#[docify::export]
 	pub trait WeightInfo {
@@ -202,7 +202,7 @@ pub mod pezpallet {
 				let actual_weight =
 					todo!("this can likely come from another benchmark that is NOT the worst case");
 				let pays_fee = todo!("You can set this to `Pays::Yes` or `Pays::No` to change if this transaction should pay fees");
-				Ok(frame::deps::pezframe_support::dispatch::PostDispatchInfo {
+				Ok(pezframe::deps::pezframe_support::dispatch::PostDispatchInfo {
 					actual_weight: Some(actual_weight),
 					pays_fee,
 				})

@@ -26,15 +26,14 @@ use crate::{
 	presets::*,
 };
 use alloc::{vec, vec::Vec};
-use frame::{
-	deps::pezframe_support::{
-		genesis_builder_helper::{build_state, get_preset},
-		runtime,
-	},
+use pezframe::{
+	deps::pezframe_support::genesis_builder_helper::{build_state, get_preset},
 	prelude::*,
-	runtime::{apis, prelude::*},
+	runtime::prelude::*,
 };
+use pezsp_api::impl_runtime_apis;
 use pezsp_genesis_builder::PresetId;
+use pezsp_runtime::traits::Block as BlockT;
 
 /// The runtime version.
 #[runtime_version]
@@ -53,7 +52,7 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
 type SignedExtra = ();
 
 // Composes the runtime by adding all the used pallets and deriving necessary types.
-#[runtime]
+#[frame_construct_runtime]
 mod runtime {
 	/// The main runtime type.
 	#[runtime::runtime]
@@ -69,15 +68,15 @@ mod runtime {
 
 	/// Mandatory system pezpallet that should always be included in a FRAME runtime.
 	#[runtime::pezpallet_index(0)]
-	pub type System = pezframe_system;
+	pub type System = pezframe_system::Pezpallet<Runtime>;
 
 	/// Sample pezpallet 1
 	#[runtime::pezpallet_index(1)]
-	pub type Bar = pezpallet_bar;
+	pub type Bar = pezpallet_bar::Pezpallet<Runtime>;
 
 	/// Sample pezpallet 2
 	#[runtime::pezpallet_index(2)]
-	pub type Foo = pezpallet_foo;
+	pub type Foo = pezpallet_foo::Pezpallet<Runtime>;
 }
 
 parameter_types! {
@@ -94,8 +93,8 @@ impl pezframe_system::Config for Runtime {
 impl pezpallet_bar::Config for Runtime {}
 impl pezpallet_foo::Config for Runtime {}
 
-type Block = frame::runtime::types_common::BlockOf<Runtime, SignedExtra>;
-type Header = HeaderFor<Runtime>;
+type Block = pezframe::runtime::types_common::BlockOf<Runtime, SignedExtra>;
+type _Header = HeaderFor<Runtime>;
 
 #[docify::export(runtime_impl)]
 impl_runtime_apis! {
@@ -119,9 +118,9 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl apis::Core<Block> for Runtime {
+	impl pezsp_api::Core<Block> for Runtime {
 		fn version() -> RuntimeVersion { VERSION }
-		fn execute_block(_: <Block as frame::traits::Block>::LazyBlock) { }
-		fn initialize_block(_: &Header) -> ExtrinsicInclusionMode { ExtrinsicInclusionMode::default() }
+		fn execute_block(_: <Block as BlockT>::LazyBlock) { }
+		fn initialize_block(_: &<Block as BlockT>::Header) -> ExtrinsicInclusionMode { ExtrinsicInclusionMode::default() }
 	}
 }

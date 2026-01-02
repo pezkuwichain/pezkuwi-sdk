@@ -23,7 +23,7 @@ parking_lot = { workspace = true, default-features = true }
 tracing = { workspace = true }
 
 # Bridge Dependencies
-bp-messages = { workspace = true, default-features = true }
+pezbp-messages = { workspace = true, default-features = true }
 pez-finality-relay = { workspace = true }
 relay-utils = { workspace = true }
 
@@ -34,7 +34,7 @@ pezsp-core = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-	"bp-messages/runtime-benchmarks",
+	"pezbp-messages/runtime-benchmarks",
 	"pez-finality-relay/runtime-benchmarks",
 	"relay-utils/runtime-benchmarks",
 ]

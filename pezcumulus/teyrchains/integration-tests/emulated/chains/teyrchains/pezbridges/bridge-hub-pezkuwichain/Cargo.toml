@@ -23,10 +23,10 @@ pezsp-keyring = { workspace = true }
 xcm = { workspace = true }
 
 # Bridge dependencies
-bp-messages = { workspace = true }
+pezbp-messages = { workspace = true }
 
 # Pezcumulus
-bridge-hub-common = { workspace = true }
+pezbridge-hub-common = { workspace = true }
 emulated-integration-tests-common = { workspace = true }
 pezbridge-hub-pezkuwichain-runtime = { workspace = true, default-features = true }
 testnet-teyrchains-constants = { features = [
@@ -36,8 +36,8 @@ teyrchains-common = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-	"bp-messages/runtime-benchmarks",
-	"bridge-hub-common/runtime-benchmarks",
+	"pezbp-messages/runtime-benchmarks",
+	"pezbridge-hub-common/runtime-benchmarks",
 	"emulated-integration-tests-common/runtime-benchmarks",
 	"pezbridge-hub-pezkuwichain-runtime/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",

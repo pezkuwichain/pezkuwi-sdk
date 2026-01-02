@@ -1,5 +1,5 @@
 [package]
-name = "bp-teyrchains"
+name = "pezbp-teyrchains"
 description = "Primitives of teyrchains module."
 version = "0.7.0"
 authors.workspace = true
@@ -18,8 +18,8 @@ impl-trait-for-tuples = { workspace = true }
 scale-info = { features = ["derive"], workspace = true }
 
 # Bridge dependencies
-bp-header-pez-chain = { workspace = true }
-bp-pezkuwi-core = { workspace = true }
+pezbp-header-pez-chain = { workspace = true }
+pezbp-pezkuwi-core = { workspace = true }
 pezbp-runtime = { workspace = true }
 
 # Bizinikiwi dependencies
@@ -31,8 +31,8 @@ pezsp-std = { workspace = true }
 [features]
 default = ["std"]
 std = [
-	"bp-header-pez-chain/std",
-	"bp-pezkuwi-core/std",
+	"pezbp-header-pez-chain/std",
+	"pezbp-pezkuwi-core/std",
 	"codec/std",
 	"pezbp-runtime/std",
 	"pezframe-support/std",
@@ -42,8 +42,8 @@ std = [
 	"scale-info/std",
 ]
 runtime-benchmarks = [
-	"bp-header-pez-chain/runtime-benchmarks",
-	"bp-pezkuwi-core/runtime-benchmarks",
+	"pezbp-header-pez-chain/runtime-benchmarks",
+	"pezbp-pezkuwi-core/runtime-benchmarks",
 	"pezbp-runtime/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",

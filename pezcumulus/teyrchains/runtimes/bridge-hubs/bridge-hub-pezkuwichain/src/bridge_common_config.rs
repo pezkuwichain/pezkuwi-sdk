@@ -22,16 +22,16 @@
 //! GRANDPA tracking pezpallet only needs to be aware of one chain.
 
 use super::{weights, AccountId, Balance, Balances, BlockNumber, Runtime, RuntimeEvent};
-use bp_relayers::RewardsAccountParams;
-use bp_teyrchains::SingleParaStoredHeaderDataBuilder;
+use pezbp_relayers::RewardsAccountParams;
+use pezbp_teyrchains::SingleParaStoredHeaderDataBuilder;
 use pezframe_support::{parameter_types, traits::ConstU32};
 
 parameter_types! {
 	pub const RelayChainHeadersToKeep: u32 = 1024;
 	pub const TeyrchainHeadsToKeep: u32 = 64;
 
-	pub const ZagrosBridgeTeyrchainPalletName: &'static str = bp_zagros::PARAS_PALLET_NAME;
-	pub const MaxZagrosParaHeadDataSize: u32 = bp_zagros::MAX_NESTED_TEYRCHAIN_HEAD_DATA_SIZE;
+	pub const ZagrosBridgeTeyrchainPalletName: &'static str = pezbp_zagros::PARAS_PALLET_NAME;
+	pub const MaxZagrosParaHeadDataSize: u32 = pezbp_zagros::MAX_NESTED_TEYRCHAIN_HEAD_DATA_SIZE;
 
 	pub storage RequiredStakeForStakeAndSlash: Balance = 1_000_000;
 	pub const RelayerStakeLease: u32 = 8;
@@ -44,7 +44,7 @@ parameter_types! {
 pub type BridgeGrandpaZagrosInstance = pezpallet_bridge_grandpa::Instance3;
 impl pezpallet_bridge_grandpa::Config<BridgeGrandpaZagrosInstance> for Runtime {
 	type RuntimeEvent = RuntimeEvent;
-	type BridgedChain = bp_zagros::Zagros;
+	type BridgedChain = pezbp_zagros::Zagros;
 	type MaxFreeHeadersPerBlock = ConstU32<4>;
 	type FreeHeadersInterval = ConstU32<5>;
 	type HeadersToKeep = RelayChainHeadersToKeep;
@@ -59,7 +59,7 @@ impl pezpallet_bridge_teyrchains::Config<BridgeTeyrchainZagrosInstance> for Runt
 	type BridgesGrandpaPalletInstance = BridgeGrandpaZagrosInstance;
 	type ParasPalletName = ZagrosBridgeTeyrchainPalletName;
 	type ParaStoredHeaderDataBuilder =
-		SingleParaStoredHeaderDataBuilder<bp_bridge_hub_zagros::BridgeHubZagros>;
+		SingleParaStoredHeaderDataBuilder<pezbp_bridge_hub_zagros::BridgeHubZagros>;
 	type HeadsToKeep = TeyrchainHeadsToKeep;
 	type MaxParaHeadDataSize = MaxZagrosParaHeadDataSize;
 	type OnNewHead = ();
@@ -70,11 +70,11 @@ pub type RelayersForLegacyLaneIdsMessagesInstance = ();
 impl pezpallet_bridge_relayers::Config<RelayersForLegacyLaneIdsMessagesInstance> for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type RewardBalance = Balance;
-	type Reward = RewardsAccountParams<bp_messages::LegacyLaneId>;
-	type PaymentProcedure = bp_relayers::PayRewardFromAccount<
+	type Reward = RewardsAccountParams<pezbp_messages::LegacyLaneId>;
+	type PaymentProcedure = pezbp_relayers::PayRewardFromAccount<
 		pezpallet_balances::Pezpallet<Runtime>,
 		AccountId,
-		bp_messages::LegacyLaneId,
+		pezbp_messages::LegacyLaneId,
 		Self::RewardBalance,
 	>;
 	type StakeAndSlash = pezpallet_bridge_relayers::StakeAndSlashNamed<
@@ -94,11 +94,11 @@ pub type RelayersForPermissionlessLanesInstance = pezpallet_bridge_relayers::Ins
 impl pezpallet_bridge_relayers::Config<RelayersForPermissionlessLanesInstance> for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type RewardBalance = Balance;
-	type Reward = RewardsAccountParams<bp_messages::HashedLaneId>;
-	type PaymentProcedure = bp_relayers::PayRewardFromAccount<
+	type Reward = RewardsAccountParams<pezbp_messages::HashedLaneId>;
+	type PaymentProcedure = pezbp_relayers::PayRewardFromAccount<
 		pezpallet_balances::Pezpallet<Runtime>,
 		AccountId,
-		bp_messages::HashedLaneId,
+		pezbp_messages::HashedLaneId,
 		Self::RewardBalance,
 	>;
 	type StakeAndSlash = pezpallet_bridge_relayers::StakeAndSlashNamed<
@@ -117,7 +117,7 @@ impl pezpallet_bridge_relayers::Config<RelayersForPermissionlessLanesInstance> f
 pub type BridgeGrandpaPezkuwichainBulletinInstance = pezpallet_bridge_grandpa::Instance4;
 impl pezpallet_bridge_grandpa::Config<BridgeGrandpaPezkuwichainBulletinInstance> for Runtime {
 	type RuntimeEvent = RuntimeEvent;
-	type BridgedChain = bp_pezkuwi_bulletin::PezkuwiBulletin;
+	type BridgedChain = pezbp_pezkuwi_bulletin::PezkuwiBulletin;
 	type MaxFreeHeadersPerBlock = ConstU32<4>;
 	type FreeHeadersInterval = ConstU32<5>;
 	type HeadersToKeep = RelayChainHeadersToKeep;

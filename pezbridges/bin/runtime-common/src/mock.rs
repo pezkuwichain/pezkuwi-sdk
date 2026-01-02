@@ -20,13 +20,13 @@
 #![cfg(test)]
 #![allow(dead_code)]
 
-use bp_header_pez_chain::ChainWithGrandpa;
-use bp_messages::{
+use pezbp_header_pez_chain::ChainWithGrandpa;
+use pezbp_messages::{
 	target_chain::{DispatchMessage, MessageDispatch},
 	ChainWithMessages, HashedLaneId, LaneIdType, MessageNonce,
 };
-use bp_relayers::{PayRewardFromAccount, RewardsAccountParams};
-use bp_teyrchains::SingleParaStoredHeaderDataBuilder;
+use pezbp_relayers::{PayRewardFromAccount, RewardsAccountParams};
+use pezbp_teyrchains::SingleParaStoredHeaderDataBuilder;
 use codec::Encode;
 use pezbp_runtime::{messages::MessageDispatchResult, Chain, ChainId, Teyrchain};
 use pezframe_support::{

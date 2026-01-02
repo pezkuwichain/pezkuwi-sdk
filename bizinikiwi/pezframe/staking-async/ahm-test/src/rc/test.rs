@@ -16,7 +16,7 @@
 // limitations under the License.
 
 use crate::rc::mock::*;
-use frame::testing_prelude::*;
+use pezframe::testing_prelude::*;
 use pezpallet_staking_async_ah_client::{
 	self as ah_client, Mode, OffenceSendQueue, OperatingMode, OutgoingSessionReport, UnexpectedKind,
 };
@@ -1402,7 +1402,7 @@ mod splitting {
 
 #[cfg(test)]
 mod key_proofs {
-	use frame::traits::KeyOwnerProofSystem;
+	use pezframe::traits::KeyOwnerProofSystem;
 	use pezframe_support::pezsp_runtime;
 
 	use super::*;

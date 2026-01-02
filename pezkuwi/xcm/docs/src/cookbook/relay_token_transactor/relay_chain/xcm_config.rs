@@ -17,7 +17,7 @@
 
 //! Relay chain XCM configuration
 
-use frame::{
+use pezframe::{
 	deps::pezframe_system,
 	runtime::prelude::*,
 	traits::{Disabled, Everything, Nothing},
@@ -108,7 +108,7 @@ impl xcm_executor::Config for XcmConfig {
 	type SubscriptionService = ();
 	type PalletInstancesInfo = ();
 	type FeeManager = ();
-	type MaxAssetsIntoHolding = frame::traits::ConstU32<1>;
+	type MaxAssetsIntoHolding = pezframe::traits::ConstU32<1>;
 	type MessageExporter = ();
 	type UniversalAliases = Nothing;
 	type CallDispatcher = RuntimeCall;
@@ -150,8 +150,8 @@ impl pezpallet_xcm::Config for Runtime {
 	type AdminOrigin = pezframe_system::EnsureRoot<AccountId>;
 	// No locking
 	type TrustedLockers = ();
-	type MaxLockers = frame::traits::ConstU32<0>;
-	type MaxRemoteLockConsumers = frame::traits::ConstU32<0>;
+	type MaxLockers = pezframe::traits::ConstU32<0>;
+	type MaxRemoteLockConsumers = pezframe::traits::ConstU32<0>;
 	type RemoteLockConsumerIdentifier = ();
 	// How to turn locations into accounts
 	type SovereignAccountOf = LocationToAccountId;

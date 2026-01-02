@@ -16,7 +16,7 @@
 
 //! Helpers for generating message storage proofs, that are used by tests and by benchmarks.
 
-use bp_messages::{
+use pezbp_messages::{
 	storage_keys, ChainWithMessages, InboundLaneData, MessageKey, MessageNonce, MessagePayload,
 	OutboundLaneData,
 };

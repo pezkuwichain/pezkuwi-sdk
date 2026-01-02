@@ -27,7 +27,7 @@ pub use pezpallet::*;
 
 use alloc::vec::Vec;
 use core::cmp::Ordering;
-use frame::{
+use pezframe::{
 	deps::{
 		pezsp_io::{self, MultiRemovalResults},
 		pezsp_runtime,
@@ -172,7 +172,7 @@ fn twox<BlockNumber: UniqueSaturatedInto<u64>>(
 // The pezpallet
 ////////////////////////////////////////////////////////////////////////////////
 
-#[frame::pezpallet(dev_mode)]
+#[pezframe::pezpallet(dev_mode)]
 pub mod pezpallet {
 	use super::*;
 	#[pezpallet::pezpallet]

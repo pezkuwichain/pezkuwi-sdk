@@ -14,8 +14,8 @@ use pezkuwi_primitives::{BlockNumber, CandidateHash, DisputeState, Id as ParaId,
 use serde_json::json;
 use tokio::time::Duration;
 use tokio_util::time::FutureExt;
-use zombienet_orchestrator::network::node::LogLineCountOptions;
-use zombienet_sdk::{
+use pezkuwi_zombienet_orchestrator::network::node::LogLineCountOptions;
+use pezkuwi_zombienet_sdk::{
 	subxt::{OnlineClient, PezkuwiConfig},
 	NetworkConfigBuilder,
 };
@@ -26,7 +26,7 @@ async fn dispute_past_session_slashing() -> Result<(), anyhow::Error> {
 		env_logger::Env::default().filter_or(env_logger::DEFAULT_FILTER_ENV, "info"),
 	);
 
-	let images = zombienet_sdk::environment::get_images_from_env();
+	let images = pezkuwi_zombienet_sdk::environment::get_images_from_env();
 
 	let config = NetworkConfigBuilder::new()
 		.with_relaychain(|r| {
@@ -82,7 +82,7 @@ async fn dispute_past_session_slashing() -> Result<(), anyhow::Error> {
 			anyhow!("config errs: {errs}")
 		})?;
 
-	let spawn_fn = zombienet_sdk::environment::get_spawn_fn();
+	let spawn_fn = pezkuwi_zombienet_sdk::environment::get_spawn_fn();
 	let network = spawn_fn(config).await?;
 
 	let malus = network.get_node("malicious-backer")?;

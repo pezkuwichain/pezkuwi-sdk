@@ -19,8 +19,8 @@
 //! Most of the tests in this module assume that the bridge is using standard (see `crate::messages`
 //! module for details) configuration.
 
-use bp_header_pez_chain::ChainWithGrandpa;
-use bp_messages::{ChainWithMessages, InboundLaneData, MessageNonce};
+use pezbp_header_pez_chain::ChainWithGrandpa;
+use pezbp_messages::{ChainWithMessages, InboundLaneData, MessageNonce};
 use codec::Encode;
 use pezbp_runtime::{AccountIdOf, Chain};
 use pezframe_support::{storage::generator::StorageValue, traits::Get, weights::Weight};
@@ -69,7 +69,7 @@ macro_rules! assert_bridge_messages_pallet_types(
 	) => {
 		{
 			use $crate::integrity::__private::static_assertions::assert_type_eq_all;
-			use bp_messages::ChainWithMessages;
+			use pezbp_messages::ChainWithMessages;
 			use pezbp_runtime::Chain;
 			use pezpallet_bridge_messages::Config as BridgeMessagesConfig;
 

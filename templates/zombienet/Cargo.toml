@@ -14,7 +14,7 @@ documentation.workspace = true
 anyhow = { workspace = true }
 env_logger = { workspace = true }
 tokio = { workspace = true, features = ["rt-multi-thread"] }
-zombienet-sdk = { workspace = true }
+pezkuwi-zombienet-sdk = { workspace = true }
 
 [features]
 zombienet = []

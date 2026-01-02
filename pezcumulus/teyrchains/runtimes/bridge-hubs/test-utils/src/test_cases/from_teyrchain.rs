@@ -24,10 +24,10 @@ use crate::{
 };
 
 use alloc::{boxed::Box, vec};
-use bp_header_pez_chain::ChainWithGrandpa;
-use bp_messages::UnrewardedRelayersState;
-use bp_pezkuwi_core::teyrchains::ParaHash;
-use bp_relayers::{RewardsAccountOwner, RewardsAccountParams};
+use pezbp_header_pez_chain::ChainWithGrandpa;
+use pezbp_messages::UnrewardedRelayersState;
+use pezbp_pezkuwi_core::teyrchains::ParaHash;
+use pezbp_relayers::{RewardsAccountOwner, RewardsAccountParams};
 use pezbp_runtime::{Chain, Teyrchain};
 use pezframe_support::traits::{OnFinalize, OnInitialize};
 use pezframe_system::pezpallet_prelude::BlockNumberFor;

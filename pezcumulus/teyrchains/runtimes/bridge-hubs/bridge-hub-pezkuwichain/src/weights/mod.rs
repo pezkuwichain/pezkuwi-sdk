@@ -76,7 +76,7 @@ impl MessagesWeightInfoExt
 	for pezpallet_bridge_messages_pezkuwichain_to_pezkuwichain_bulletin::WeightInfo<crate::Runtime>
 {
 	fn expected_extra_storage_proof_size() -> u32 {
-		bp_pezkuwi_bulletin::EXTRA_STORAGE_PROOF_SIZE
+		pezbp_pezkuwi_bulletin::EXTRA_STORAGE_PROOF_SIZE
 	}
 
 	fn receive_messages_proof_overhead_from_runtime() -> Weight {
@@ -93,7 +93,7 @@ impl MessagesWeightInfoExt
 	for pezpallet_bridge_messages_pezkuwichain_to_zagros::WeightInfo<crate::Runtime>
 {
 	fn expected_extra_storage_proof_size() -> u32 {
-		bp_bridge_hub_zagros::EXTRA_STORAGE_PROOF_SIZE
+		pezbp_bridge_hub_zagros::EXTRA_STORAGE_PROOF_SIZE
 	}
 
 	fn receive_messages_proof_overhead_from_runtime() -> Weight {
@@ -108,7 +108,7 @@ impl MessagesWeightInfoExt
 
 impl TeyrchainsWeightInfoExt for pezpallet_bridge_teyrchains::WeightInfo<crate::Runtime> {
 	fn expected_extra_storage_proof_size() -> u32 {
-		bp_bridge_hub_zagros::EXTRA_STORAGE_PROOF_SIZE
+		pezbp_bridge_hub_zagros::EXTRA_STORAGE_PROOF_SIZE
 	}
 
 	fn submit_teyrchain_heads_overhead_from_runtime() -> Weight {

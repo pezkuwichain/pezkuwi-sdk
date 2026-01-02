@@ -6,7 +6,7 @@
 
 use anyhow::anyhow;
 use pezsp_core::{Bytes, Encode};
-use zombienet_sdk::{subxt::ext::pezkuwi_subxt_rpcs::rpc_params, NetworkConfigBuilder};
+use pezkuwi_zombienet_sdk::{subxt::ext::pezkuwi_subxt_rpcs::rpc_params, NetworkConfigBuilder};
 
 #[tokio::test(flavor = "multi_thread")]
 async fn statement_store() -> Result<(), anyhow::Error> {
@@ -14,7 +14,7 @@ async fn statement_store() -> Result<(), anyhow::Error> {
 		env_logger::Env::default().filter_or(env_logger::DEFAULT_FILTER_ENV, "info"),
 	);
 	// images are not relevant for `native`, but we leave it here in case we use `k8s` some day
-	let images = zombienet_sdk::environment::get_images_from_env();
+	let images = pezkuwi_zombienet_sdk::environment::get_images_from_env();
 
 	let config = NetworkConfigBuilder::new()
 		.with_relaychain(|r| {
@@ -54,7 +54,7 @@ async fn statement_store() -> Result<(), anyhow::Error> {
 			anyhow!("config errs: {errs}")
 		})?;
 
-	let spawn_fn = zombienet_sdk::environment::get_spawn_fn();
+	let spawn_fn = pezkuwi_zombienet_sdk::environment::get_spawn_fn();
 	let network = spawn_fn(config).await?;
 	assert!(network.wait_until_is_up(60).await.is_ok());
 

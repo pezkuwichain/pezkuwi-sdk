@@ -75,7 +75,7 @@ pub mod mock;
 mod tests;
 pub mod weights;
 
-use frame::{
+use pezframe::{
 	prelude::{
 		fungible::hold::{Inspect, Mutate},
 		*,
@@ -90,7 +90,7 @@ type BalanceOf<T> = <<T as Config>::Currency as fungible::Inspect<
 	<T as pezframe_system::Config>::AccountId,
 >>::Balance;
 
-#[frame::pezpallet]
+#[pezframe::pezpallet]
 pub mod pezpallet {
 	use super::*;
 
@@ -613,7 +613,7 @@ where
 	}
 }
 
-impl<T: Config> frame::traits::SafeMode for Pezpallet<T> {
+impl<T: Config> pezframe::traits::SafeMode for Pezpallet<T> {
 	type BlockNumber = BlockNumberFor<T>;
 
 	fn is_entered() -> bool {
@@ -627,20 +627,20 @@ impl<T: Config> frame::traits::SafeMode for Pezpallet<T> {
 		})
 	}
 
-	fn enter(duration: BlockNumberFor<T>) -> Result<(), frame::traits::SafeModeError> {
+	fn enter(duration: BlockNumberFor<T>) -> Result<(), pezframe::traits::SafeModeError> {
 		Self::do_enter(None, duration).map_err(Into::into)
 	}
 
-	fn extend(duration: BlockNumberFor<T>) -> Result<(), frame::traits::SafeModeError> {
+	fn extend(duration: BlockNumberFor<T>) -> Result<(), pezframe::traits::SafeModeError> {
 		Self::do_extend(None, duration).map_err(Into::into)
 	}
 
-	fn exit() -> Result<(), frame::traits::SafeModeError> {
+	fn exit() -> Result<(), pezframe::traits::SafeModeError> {
 		Self::do_exit(ExitReason::Force).map_err(Into::into)
 	}
 }
 
-impl<T: Config> From<Error<T>> for frame::traits::SafeModeError {
+impl<T: Config> From<Error<T>> for pezframe::traits::SafeModeError {
 	fn from(err: Error<T>) -> Self {
 		match err {
 			Error::<T>::Entered => Self::AlreadyEntered,

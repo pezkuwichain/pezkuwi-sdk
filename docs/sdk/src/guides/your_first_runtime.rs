@@ -30,7 +30,7 @@
 //! ## Your First Runtime
 //!
 //! The first new property of a real runtime that it must define its
-//! [`frame::runtime::prelude::RuntimeVersion`]:
+//! [`pezframe::runtime::prelude::RuntimeVersion`]:
 #![doc = docify::embed!("./packages/guides/first-runtime/src/lib.rs", VERSION)]
 //!
 //! The version contains a number of very important fields, such as `spec_version` and `spec_name`
@@ -39,7 +39,7 @@
 //! [`crate::reference_docs::frame_runtime_upgrades_and_migrations`].
 //!
 //! Then, a real runtime also contains the `impl` of all individual pallets' `trait Config` for
-//! `struct Runtime`, and a [`frame::runtime::prelude::construct_runtime`] macro that amalgamates
+//! `struct Runtime`, and a [`pezframe::runtime::prelude::construct_runtime`] macro that amalgamates
 //! them all.
 //!
 //! In the case of our example:
@@ -49,9 +49,9 @@
 //! their `Config` need to be implemented for `struct Runtime`:
 #![doc = docify::embed!("./packages/guides/first-runtime/src/lib.rs", config_impls)]
 //!
-//! Notice how we use [`frame::pezpallet_macros::derive_impl`] to provide "default" configuration
+//! Notice how we use [`pezframe::pezpallet_macros::derive_impl`] to provide "default" configuration
 //! items for each pezpallet. Feel free to dive into the definition of each default prelude (eg.
-//! [`frame::prelude::pezframe_system::pezpallet::config_preludes`]) to learn more which types are
+//! [`pezframe::prelude::pezframe_system::pezpallet::config_preludes`]) to learn more which types are
 //! exactly used.
 //!
 //! Recall that in test runtime in [`crate::guides::your_first_pallet`], we provided `type AccountId
@@ -66,12 +66,12 @@
 //! steps of crafting a runtime are related to achieving exactly this.
 //!
 //! First, we define a number of types that eventually lead to the creation of an instance of
-//! [`frame::runtime::prelude::Executive`]. The executive is a handy FRAME utility that, through
+//! [`pezframe::runtime::prelude::Executive`]. The executive is a handy FRAME utility that, through
 //! amalgamating all pallets and further types, implements some of the very very core pieces of the
 //! runtime logic, such as how blocks are executed and other runtime-api implementations.
 #![doc = docify::embed!("./packages/guides/first-runtime/src/lib.rs", runtime_types)]
 //!
-//! Finally, we use [`frame::runtime::prelude::impl_runtime_apis`] to implement all of the runtime
+//! Finally, we use [`pezframe::runtime::prelude::impl_runtime_apis`] to implement all of the runtime
 //! APIs that the runtime wishes to expose. As you will see in the code, most of these runtime API
 //! implementations are merely forwarding calls to `RuntimeExecutive` which handles the actual
 //! logic. Given that the implementation block is somewhat large, we won't repeat it here. You can
@@ -111,7 +111,7 @@
 //! primary way to run a new chain.
 //!
 //! These APIs are defined in [`pezsp_genesis_builder`], and are re-exposed as a part of
-//! [`frame::runtime::apis`]. Therefore, the implementation blocks can be found inside of
+//! [`pezframe::runtime::apis`]. Therefore, the implementation blocks can be found inside of
 //! `impl_runtime_apis!` similar to:
 //!
 //! ```ignore
@@ -143,7 +143,7 @@
 //!
 //! For `build_state` and `get_preset`, we use the helper functions provide by frame:
 //!
-//! * [`frame::runtime::prelude::build_state`] and [`frame::runtime::prelude::get_preset`].
+//! * [`pezframe::runtime::prelude::build_state`] and [`pezframe::runtime::prelude::get_preset`].
 //!
 //! Indeed, our runtime needs to specify what its `DEV_RUNTIME_PRESET` genesis state should be like:
 #![doc = docify::embed!("./packages/guides/first-runtime/src/lib.rs", development_config_genesis)]

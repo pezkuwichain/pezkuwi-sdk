@@ -29,7 +29,7 @@ pub const STORAGE_VERSION: StorageVersion = StorageVersion::new(2);
 /// (used with v1 migration).
 pub mod v0 {
 	use crate::{Config, Pezpallet};
-	use bp_relayers::RewardsAccountOwner;
+	use pezbp_relayers::RewardsAccountOwner;
 	use codec::{Codec, Decode, Encode, EncodeLike, MaxEncodedLen};
 	use core::marker::PhantomData;
 	use pezbp_runtime::{ChainId, StorageDoubleMapKeyProvider};
@@ -120,8 +120,8 @@ pub mod v0 {
 pub mod v1 {
 	use super::*;
 	use crate::{Config, Pezpallet};
-	use bp_messages::LaneIdType;
-	use bp_relayers::RewardsAccountParams;
+	use pezbp_messages::LaneIdType;
+	use pezbp_relayers::RewardsAccountParams;
 	use codec::{Codec, EncodeLike};
 	use core::marker::PhantomData;
 	use pezbp_runtime::StorageDoubleMapKeyProvider;
@@ -329,8 +329,8 @@ pub mod v2 {
 	#[cfg(feature = "try-runtime")]
 	use crate::RelayerRewards;
 	use crate::{Config, Pezpallet};
-	use bp_messages::LaneIdType;
-	use bp_relayers::RewardsAccountParams;
+	use pezbp_messages::LaneIdType;
+	use pezbp_relayers::RewardsAccountParams;
 	use core::marker::PhantomData;
 	use pezframe_support::traits::UncheckedOnRuntimeUpgrade;
 

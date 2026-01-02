@@ -19,14 +19,16 @@ path = "src/paged_list.rs"
 
 [dependencies]
 arbitrary = { workspace = true }
-frame = { workspace = true, features = ["runtime"] }
+pezframe = { workspace = true, features = ["runtime"] }
+pezframe-system = { workspace = true }
+pezframe-support = { workspace = true }
 honggfuzz = { workspace = true }
 pezpallet-paged-list = { features = ["std"], workspace = true }
 
 [features]
 default = ["std"]
-std = ["frame/std", "pezpallet-paged-list/std"]
+std = ["pezframe/std", "pezpallet-paged-list/std"]
 runtime-benchmarks = [
-	"frame/runtime-benchmarks",
+	"pezframe/runtime-benchmarks",
 	"pezpallet-paged-list/runtime-benchmarks",
 ]
