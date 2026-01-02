@@ -66,7 +66,7 @@ parameter_types! {
 }
 
 type AssetIdForTrustBackedAssetsConvert =
-	assets_common::AssetIdForTrustBackedAssetsConvert<TrustBackedAssetsPalletLocation>;
+	pez_assets_common::AssetIdForTrustBackedAssetsConvert<TrustBackedAssetsPalletLocation>;
 
 type RuntimeHelper = asset_test_pezutils::RuntimeHelper<Runtime, AllPalletsWithoutSystem>;
 
@@ -465,7 +465,7 @@ fn test_asset_xcm_trader_not_possible_for_non_sufficient_assets() {
 
 #[test]
 fn test_assets_balances_api_works() {
-	use assets_common::runtime_api::runtime_decl_for_fungibles_api::FungiblesApi;
+	use pez_assets_common::runtime_api::runtime_decl_for_fungibles_api::FungiblesApi;
 
 	ExtBuilder::<Runtime>::default()
 		.with_collators(vec![AccountId::from(ALICE)])
@@ -553,7 +553,7 @@ fn test_assets_balances_api_works() {
 
 			// check currency
 			assert!(result.inner().iter().any(|asset| asset.eq(
-				&assets_common::fungible_conversion::convert_balance::<TokenLocation, Balance>(
+				&pez_assets_common::fungible_conversion::convert_balance::<TokenLocation, Balance>(
 					some_currency
 				)
 				.unwrap()
@@ -812,7 +812,7 @@ mod asset_hub_pezkuwichain_tests {
 				bridging_to_asset_hub_zagros()
 			},
 			(
-				[PalletInstance(bp_bridge_hub_pezkuwichain::WITH_BRIDGE_PEZKUWICHAIN_TO_ZAGROS_MESSAGES_PALLET_INDEX)].into(),
+				[PalletInstance(pezbp_bridge_hub_pezkuwichain::WITH_BRIDGE_PEZKUWICHAIN_TO_ZAGROS_MESSAGES_PALLET_INDEX)].into(),
 				GlobalConsensus(ByGenesis(ZAGROS_GENESIS_HASH)),
 				[Teyrchain(1000)].into()
 			),
@@ -892,7 +892,7 @@ mod asset_hub_pezkuwichain_tests {
 				bridging_to_asset_hub_zagros()
 			},
 			(
-				[PalletInstance(bp_bridge_hub_pezkuwichain::WITH_BRIDGE_PEZKUWICHAIN_TO_ZAGROS_MESSAGES_PALLET_INDEX)].into(),
+				[PalletInstance(pezbp_bridge_hub_pezkuwichain::WITH_BRIDGE_PEZKUWICHAIN_TO_ZAGROS_MESSAGES_PALLET_INDEX)].into(),
 				GlobalConsensus(ByGenesis(ZAGROS_GENESIS_HASH)),
 				[Teyrchain(1000)].into()
 			),
@@ -932,9 +932,9 @@ mod asset_hub_pezkuwichain_tests {
 		>(
 			collator_session_keys(),
 			bridging_to_asset_hub_zagros,
-			|| bp_asset_hub_pezkuwichain::build_congestion_message(Default::default(), true).into(),
+			|| pezbp_asset_hub_pezkuwichain::build_congestion_message(Default::default(), true).into(),
 			|| {
-				bp_asset_hub_pezkuwichain::build_congestion_message(Default::default(), false)
+				pezbp_asset_hub_pezkuwichain::build_congestion_message(Default::default(), false)
 					.into()
 			},
 		)
@@ -942,7 +942,7 @@ mod asset_hub_pezkuwichain_tests {
 
 	#[test]
 	fn test_report_bridge_status_call_compatibility() {
-		// if this test fails, make sure `bp_asset_hub_pezkuwichain` has valid encoding
+		// if this test fails, make sure `pezbp_asset_hub_pezkuwichain` has valid encoding
 		assert_eq!(
 			RuntimeCall::ToZagrosXcmRouter(
 				pezpallet_xcm_bridge_hub_router::Call::report_bridge_status {
@@ -951,8 +951,8 @@ mod asset_hub_pezkuwichain_tests {
 				}
 			)
 			.encode(),
-			bp_asset_hub_pezkuwichain::Call::ToZagrosXcmRouter(
-				bp_asset_hub_pezkuwichain::XcmBridgeHubRouterCall::report_bridge_status {
+			pezbp_asset_hub_pezkuwichain::Call::ToZagrosXcmRouter(
+				pezbp_asset_hub_pezkuwichain::XcmBridgeHubRouterCall::report_bridge_status {
 					bridge_id: Default::default(),
 					is_congested: true,
 				}
@@ -967,7 +967,7 @@ mod asset_hub_pezkuwichain_tests {
 		let actual = <Runtime as pezpallet_xcm_bridge_hub_router::Config<
 			ToZagrosXcmRouterInstance,
 		>>::WeightInfo::report_bridge_status();
-		let max_weight = bp_asset_hub_pezkuwichain::XcmBridgeHubRouterTransactCallMaxWeight::get();
+		let max_weight = pezbp_asset_hub_pezkuwichain::XcmBridgeHubRouterTransactCallMaxWeight::get();
 		assert!(
 			actual.all_lte(max_weight),
 			"max_weight: {:?} should be adjusted to actual {:?}",

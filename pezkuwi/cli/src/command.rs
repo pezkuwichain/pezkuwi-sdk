@@ -439,23 +439,25 @@ pub fn run() -> Result<()> {
 			let chain_spec = &runner.config().chain_spec;
 
 			match cmd {
-				#[cfg(not(feature = "runtime-benchmarks"))]
-				BenchmarkCmd::Storage(_) =>
-					return Err(pezsc_cli::Error::Input(
-						"Compile with --features=runtime-benchmarks \
-						to enable storage benchmarks."
-							.into(),
-					)
-					.into()),
-				#[cfg(feature = "runtime-benchmarks")]
-				BenchmarkCmd::Storage(cmd) => runner.sync_run(|mut config| {
-					let (client, backend, _, _) = pezkuwi_service::new_chain_ops(&mut config)?;
-					let db = backend.expose_db();
-					let storage = backend.expose_storage();
-					let shared_trie_cache = backend.expose_shared_trie_cache();
-
-					cmd.run(config, client.clone(), db, storage, shared_trie_cache).map_err(Error::BizinikiwiCli)
-				}),
+				// Storage benchmarks are only available with pezframe-benchmarking-cli's
+				// `storage-benchmark` feature enabled, which requires test runtime crate.
+				// #[cfg(not(feature = "runtime-benchmarks"))]
+				// BenchmarkCmd::Storage(_) =>
+				// 	return Err(pezsc_cli::Error::Input(
+				// 		"Compile with --features=runtime-benchmarks \
+				// 		to enable storage benchmarks."
+				// 			.into(),
+				// 	)
+				// 	.into()),
+				// #[cfg(feature = "runtime-benchmarks")]
+				// BenchmarkCmd::Storage(cmd) => runner.sync_run(|mut config| {
+				// 	let (client, backend, _, _) = pezkuwi_service::new_chain_ops(&mut config)?;
+				// 	let db = backend.expose_db();
+				// 	let storage = backend.expose_storage();
+				// 	let shared_trie_cache = backend.expose_shared_trie_cache();
+				//
+				// 	cmd.run(config, client.clone(), db, storage, shared_trie_cache).map_err(Error::BizinikiwiCli)
+				// }),
 				BenchmarkCmd::Block(cmd) => runner.sync_run(|mut config| {
 					let (client, _, _, _) = pezkuwi_service::new_chain_ops(&mut config)?;
 

@@ -49,7 +49,7 @@ pub mod weights;
 extern crate alloc;
 
 use alloc::{collections::btree_set::BTreeSet, vec::Vec};
-use frame::{
+use pezframe::{
 	deps::{pezsp_core::OpaquePeerId as PeerId, pezsp_io},
 	prelude::*,
 };
@@ -58,7 +58,7 @@ pub use weights::WeightInfo;
 
 type AccountIdLookupOf<T> = <<T as pezframe_system::Config>::Lookup as StaticLookup>::Source;
 
-#[frame::pezpallet]
+#[pezframe::pezpallet]
 pub mod pezpallet {
 	use super::*;
 

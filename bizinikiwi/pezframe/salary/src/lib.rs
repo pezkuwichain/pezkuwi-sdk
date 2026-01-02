@@ -20,7 +20,7 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 use core::marker::PhantomData;
-use frame::{
+use pezframe::{
 	prelude::*,
 	traits::tokens::{GetSalary, Pay, PaymentStatus},
 };
@@ -75,7 +75,7 @@ pub struct ClaimantStatus<CycleIndex, Balance, Id> {
 	status: ClaimState<Balance, Id>,
 }
 
-#[frame::pezpallet]
+#[pezframe::pezpallet]
 pub mod pezpallet {
 	use super::*;
 	#[pezpallet::pezpallet]

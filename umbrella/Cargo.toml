@@ -1,25 +1,25 @@
 [package]
 name = "pezkuwi-sdk"
-version = "0.1.0"
-description = "Pezkuwi SDK umbrella crate."
+version = "0.1.2"
+description = "Pezkuwi SDK umbrella crate - Kurdish blockchain SDK."
 license = "Apache-2.0"
 
 [features]
 default = ["std"]
 std = [
 	"asset-test-pezutils?/std",
-	"assets-common?/std",
+	"pez-assets-common?/std",
 	"pez-binary-merkle-tree?/std",
 	"bizinikiwi-bip39?/std",
-	"bp-header-pez-chain?/std",
-	"bp-messages?/std",
-	"bp-pezkuwi-core?/std",
-	"bp-relayers?/std",
-	"bp-test-utils?/std",
-	"bp-teyrchains?/std",
-	"bp-xcm-bridge-hub-router?/std",
-	"bp-xcm-bridge-hub?/std",
-	"bridge-hub-common?/std",
+	"pezbp-header-pez-chain?/std",
+	"pezbp-messages?/std",
+	"pezbp-pezkuwi-core?/std",
+	"pezbp-relayers?/std",
+	"pezbp-test-utils?/std",
+	"pezbp-teyrchains?/std",
+	"pezbp-xcm-bridge-hub-router?/std",
+	"pezbp-xcm-bridge-hub?/std",
+	"pezbridge-hub-common?/std",
 	"pez-slot-range-helper?/std",
 	"pezbp-runtime?/std",
 	"pezbridge-hub-test-utils?/std",
@@ -57,8 +57,8 @@ std = [
 	"pezkuwi-runtime-common?/std",
 	"pezkuwi-runtime-metrics?/std",
 	"pezkuwi-runtime-teyrchains?/std",
-	"pezkuwi-sdk-frame?/std",
-	"pezsp-ss58-registry?/std",
+	"pezframe?/std",
+	"ss58-registry?/std",
 	"pezkuwi-subxt-core?/std",
 	"pezkuwi-subxt-metadata?/std",
 	"pezkuwi-subxt-signer?/std",
@@ -93,7 +93,7 @@ std = [
 	"pezpallet-collator-selection?/std",
 	"pezpallet-collective-content?/std",
 	"pezpallet-collective?/std",
-	"pezpallet-contracts-mock-network?/std",
+	# "pezpallet-contracts-mock-network?/std",  # Test-only crate
 	"pezpallet-contracts?/std",
 	"pezpallet-conviction-voting?/std",
 	"pezpallet-core-fellowship?/std",
@@ -226,10 +226,10 @@ std = [
 	"pezsp-version?/std",
 	"pezsp-wasm-interface?/std",
 	"pezsp-weights?/std",
-	"pezstaging-teyrchain-info?/std",
-	"pezstaging-xcm-builder?/std",
-	"pezstaging-xcm-executor?/std",
-	"pezstaging-xcm?/std",
+	"teyrchain-info?/std",
+	"xcm-builder?/std",
+	"xcm-executor?/std",
+	"xcm?/std",
 	"testnet-teyrchains-constants?/std",
 	"teyrchains-common?/std",
 	"teyrchains-runtimes-test-utils?/std",
@@ -237,41 +237,30 @@ std = [
 ]
 runtime-benchmarks = [
 	"asset-test-pezutils?/runtime-benchmarks",
-	"assets-common?/runtime-benchmarks",
+	"pez-assets-common?/runtime-benchmarks",
 	"pez-binary-merkle-tree?/runtime-benchmarks",
 	"bizinikiwi-frame-rpc-support?/runtime-benchmarks",
 	"bizinikiwi-frame-rpc-system?/runtime-benchmarks",
 	"bizinikiwi-rpc-client?/runtime-benchmarks",
 	"bizinikiwi-state-trie-migration-rpc?/runtime-benchmarks",
 	"bizinikiwi-wasm-builder?/runtime-benchmarks",
-	"bp-header-pez-chain?/runtime-benchmarks",
-	"bp-messages?/runtime-benchmarks",
-	"bp-pezkuwi-core?/runtime-benchmarks",
-	"bp-relayers?/runtime-benchmarks",
-	"bp-test-utils?/runtime-benchmarks",
-	"bp-teyrchains?/runtime-benchmarks",
-	"bp-xcm-bridge-hub-router?/runtime-benchmarks",
-	"bp-xcm-bridge-hub?/runtime-benchmarks",
-	"bridge-hub-common?/runtime-benchmarks",
-	"frame-remote-externalities?/runtime-benchmarks",
+	"pezbp-header-pez-chain?/runtime-benchmarks",
+	"pezbp-messages?/runtime-benchmarks",
+	"pezbp-pezkuwi-core?/runtime-benchmarks",
+	"pezbp-relayers?/runtime-benchmarks",
+	"pezbp-test-utils?/runtime-benchmarks",
+	"pezbp-teyrchains?/runtime-benchmarks",
+	"pezbp-xcm-bridge-hub-router?/runtime-benchmarks",
+	"pezbp-xcm-bridge-hub?/runtime-benchmarks",
+	"pezbridge-hub-common?/runtime-benchmarks",
+	"remote-externalities?/runtime-benchmarks",
 	"pez-generate-bags?/runtime-benchmarks",
 	"pez-slot-range-helper?/runtime-benchmarks",
 	"pez-subkey?/runtime-benchmarks",
-	"pez-tracing-gum?/runtime-benchmarks",
+	"gum?/runtime-benchmarks",
 	"pezbp-runtime?/runtime-benchmarks",
 	"pezbridge-hub-test-utils?/runtime-benchmarks",
 	"pezbridge-runtime-common?/runtime-benchmarks",
-	"pezcumulus-client-bootnodes?/runtime-benchmarks",
-	"pezcumulus-client-cli?/runtime-benchmarks",
-	"pezcumulus-client-collator?/runtime-benchmarks",
-	"pezcumulus-client-consensus-aura?/runtime-benchmarks",
-	"pezcumulus-client-consensus-common?/runtime-benchmarks",
-	"pezcumulus-client-consensus-proposer?/runtime-benchmarks",
-	"pezcumulus-client-consensus-relay-chain?/runtime-benchmarks",
-	"pezcumulus-client-network?/runtime-benchmarks",
-	"pezcumulus-client-pov-recovery?/runtime-benchmarks",
-	"pezcumulus-client-service?/runtime-benchmarks",
-	"pezcumulus-client-teyrchain-inherent?/runtime-benchmarks",
 	"pezcumulus-pezpallet-aura-ext?/runtime-benchmarks",
 	"pezcumulus-pezpallet-dmp-queue?/runtime-benchmarks",
 	"pezcumulus-pezpallet-session-benchmarking?/runtime-benchmarks",
@@ -288,11 +277,6 @@ runtime-benchmarks = [
 	"pezcumulus-primitives-teyrchain-inherent?/runtime-benchmarks",
 	"pezcumulus-primitives-timestamp?/runtime-benchmarks",
 	"pezcumulus-primitives-utility?/runtime-benchmarks",
-	"pezcumulus-relay-chain-inprocess-interface?/runtime-benchmarks",
-	"pezcumulus-relay-chain-interface?/runtime-benchmarks",
-	"pezcumulus-relay-chain-minimal-node?/runtime-benchmarks",
-	"pezcumulus-relay-chain-rpc-interface?/runtime-benchmarks",
-	"pezcumulus-relay-chain-streams?/runtime-benchmarks",
 	"pezframe-benchmarking-cli?/runtime-benchmarks",
 	"pezframe-benchmarking-pezpallet-pov?/runtime-benchmarks",
 	"pezframe-benchmarking?/runtime-benchmarks",
@@ -309,48 +293,20 @@ runtime-benchmarks = [
 	"pezkuwi-availability-bitfield-distribution?/runtime-benchmarks",
 	"pezkuwi-availability-distribution?/runtime-benchmarks",
 	"pezkuwi-availability-recovery?/runtime-benchmarks",
-	"pezkuwi-cli?/runtime-benchmarks",
 	"pezkuwi-collator-protocol?/runtime-benchmarks",
 	"pezkuwi-core-primitives?/runtime-benchmarks",
 	"pezkuwi-dispute-distribution?/runtime-benchmarks",
 	"pezkuwi-erasure-coding?/runtime-benchmarks",
 	"pezkuwi-gossip-support?/runtime-benchmarks",
 	"pezkuwi-network-bridge?/runtime-benchmarks",
-	"pezkuwi-node-collation-generation?/runtime-benchmarks",
-	"pezkuwi-node-core-approval-voting-parallel?/runtime-benchmarks",
-	"pezkuwi-node-core-approval-voting?/runtime-benchmarks",
-	"pezkuwi-node-core-av-store?/runtime-benchmarks",
-	"pezkuwi-node-core-backing?/runtime-benchmarks",
-	"pezkuwi-node-core-bitfield-signing?/runtime-benchmarks",
-	"pezkuwi-node-core-candidate-validation?/runtime-benchmarks",
-	"pezkuwi-node-core-chain-api?/runtime-benchmarks",
-	"pezkuwi-node-core-chain-selection?/runtime-benchmarks",
-	"pezkuwi-node-core-dispute-coordinator?/runtime-benchmarks",
-	"pezkuwi-node-core-prospective-teyrchains?/runtime-benchmarks",
-	"pezkuwi-node-core-provisioner?/runtime-benchmarks",
-	"pezkuwi-node-core-pvf-checker?/runtime-benchmarks",
-	"pezkuwi-node-core-pvf-common?/runtime-benchmarks",
-	"pezkuwi-node-core-pvf-execute-worker?/runtime-benchmarks",
-	"pezkuwi-node-core-pvf-prepare-worker?/runtime-benchmarks",
-	"pezkuwi-node-core-pvf?/runtime-benchmarks",
-	"pezkuwi-node-core-runtime-api?/runtime-benchmarks",
-	"pezkuwi-node-core-teyrchains-inherent?/runtime-benchmarks",
-	"pezkuwi-node-metrics?/runtime-benchmarks",
-	"pezkuwi-node-network-protocol?/runtime-benchmarks",
-	"pezkuwi-node-subsystem-types?/runtime-benchmarks",
-	"pezkuwi-node-subsystem-util?/runtime-benchmarks",
-	"pezkuwi-node-subsystem?/runtime-benchmarks",
 	"pezkuwi-omni-node-lib?/runtime-benchmarks",
-	"pezkuwi-overseer?/runtime-benchmarks",
 	"pezkuwi-pez-node-primitives?/runtime-benchmarks",
 	"pezkuwi-primitives-test-helpers?/runtime-benchmarks",
 	"pezkuwi-primitives?/runtime-benchmarks",
-	"pezkuwi-rpc?/runtime-benchmarks",
 	"pezkuwi-runtime-common?/runtime-benchmarks",
 	"pezkuwi-runtime-metrics?/runtime-benchmarks",
 	"pezkuwi-runtime-teyrchains?/runtime-benchmarks",
-	"pezkuwi-sdk-frame?/runtime-benchmarks",
-	"pezkuwi-service?/runtime-benchmarks",
+	"pezframe?/runtime-benchmarks",
 	"pezkuwi-statement-distribution?/runtime-benchmarks",
 	"pezkuwi-statement-table?/runtime-benchmarks",
 	"pezkuwi-teyrchain-primitives?/runtime-benchmarks",
@@ -386,7 +342,7 @@ runtime-benchmarks = [
 	"pezpallet-collator-selection?/runtime-benchmarks",
 	"pezpallet-collective-content?/runtime-benchmarks",
 	"pezpallet-collective?/runtime-benchmarks",
-	"pezpallet-contracts-mock-network?/runtime-benchmarks",
+	# "pezpallet-contracts-mock-network?/runtime-benchmarks",  # Test-only crate
 	"pezpallet-contracts?/runtime-benchmarks",
 	"pezpallet-conviction-voting?/runtime-benchmarks",
 	"pezpallet-core-fellowship?/runtime-benchmarks",
@@ -475,49 +431,6 @@ runtime-benchmarks = [
 	"pezpallet-xcm-bridge-hub?/runtime-benchmarks",
 	"pezpallet-xcm-precompiles?/runtime-benchmarks",
 	"pezpallet-xcm?/runtime-benchmarks",
-	"pezsc-authority-discovery?/runtime-benchmarks",
-	"pezsc-basic-authorship?/runtime-benchmarks",
-	"pezsc-block-builder?/runtime-benchmarks",
-	"pezsc-chain-spec?/runtime-benchmarks",
-	"pezsc-cli?/runtime-benchmarks",
-	"pezsc-client-api?/runtime-benchmarks",
-	"pezsc-client-db?/runtime-benchmarks",
-	"pezsc-consensus-aura?/runtime-benchmarks",
-	"pezsc-consensus-babe-rpc?/runtime-benchmarks",
-	"pezsc-consensus-babe?/runtime-benchmarks",
-	"pezsc-consensus-beefy-rpc?/runtime-benchmarks",
-	"pezsc-consensus-beefy?/runtime-benchmarks",
-	"pezsc-consensus-epochs?/runtime-benchmarks",
-	"pezsc-consensus-grandpa-rpc?/runtime-benchmarks",
-	"pezsc-consensus-grandpa?/runtime-benchmarks",
-	"pezsc-consensus-manual-seal?/runtime-benchmarks",
-	"pezsc-consensus-pow?/runtime-benchmarks",
-	"pezsc-consensus-slots?/runtime-benchmarks",
-	"pezsc-consensus?/runtime-benchmarks",
-	"pezsc-executor-wasmtime?/runtime-benchmarks",
-	"pezsc-executor?/runtime-benchmarks",
-	"pezsc-informant?/runtime-benchmarks",
-	"pezsc-mixnet?/runtime-benchmarks",
-	"pezsc-network-common?/runtime-benchmarks",
-	"pezsc-network-gossip?/runtime-benchmarks",
-	"pezsc-network-light?/runtime-benchmarks",
-	"pezsc-network-statement?/runtime-benchmarks",
-	"pezsc-network-sync?/runtime-benchmarks",
-	"pezsc-network-transactions?/runtime-benchmarks",
-	"pezsc-network?/runtime-benchmarks",
-	"pezsc-offchain?/runtime-benchmarks",
-	"pezsc-rpc-api?/runtime-benchmarks",
-	"pezsc-rpc-server?/runtime-benchmarks",
-	"pezsc-rpc-spec-v2?/runtime-benchmarks",
-	"pezsc-rpc?/runtime-benchmarks",
-	"pezsc-runtime-utilities?/runtime-benchmarks",
-	"pezsc-service?/runtime-benchmarks",
-	"pezsc-statement-store?/runtime-benchmarks",
-	"pezsc-sync-state-rpc?/runtime-benchmarks",
-	"pezsc-sysinfo?/runtime-benchmarks",
-	"pezsc-tracing?/runtime-benchmarks",
-	"pezsc-transaction-pool-api?/runtime-benchmarks",
-	"pezsc-transaction-pool?/runtime-benchmarks",
 	"pezsp-api?/runtime-benchmarks",
 	"pezsp-authority-discovery?/runtime-benchmarks",
 	"pezsp-block-builder?/runtime-benchmarks",
@@ -548,12 +461,10 @@ runtime-benchmarks = [
 	"pezsp-trie?/runtime-benchmarks",
 	"pezsp-version-proc-macro?/runtime-benchmarks",
 	"pezsp-version?/runtime-benchmarks",
-	"pezstaging-chain-spec-builder?/runtime-benchmarks",
-	"pezstaging-node-inspect?/runtime-benchmarks",
-	"pezstaging-teyrchain-info?/runtime-benchmarks",
-	"pezstaging-xcm-builder?/runtime-benchmarks",
-	"pezstaging-xcm-executor?/runtime-benchmarks",
-	"pezstaging-xcm?/runtime-benchmarks",
+	"teyrchain-info?/runtime-benchmarks",
+	"xcm-builder?/runtime-benchmarks",
+	"xcm-executor?/runtime-benchmarks",
+	"xcm?/runtime-benchmarks",
 	"testnet-teyrchains-constants?/runtime-benchmarks",
 	"teyrchains-common?/runtime-benchmarks",
 	"teyrchains-runtimes-test-utils?/runtime-benchmarks",
@@ -564,7 +475,7 @@ runtime-benchmarks = [
 ]
 try-runtime = [
 	"asset-test-pezutils?/try-runtime",
-	"assets-common?/try-runtime",
+	"pez-assets-common?/try-runtime",
 	"pezcumulus-pezpallet-aura-ext?/try-runtime",
 	"pezcumulus-pezpallet-dmp-queue?/try-runtime",
 	"pezcumulus-pezpallet-solo-to-para?/try-runtime",
@@ -582,7 +493,7 @@ try-runtime = [
 	"pezkuwi-omni-node-lib?/try-runtime",
 	"pezkuwi-runtime-common?/try-runtime",
 	"pezkuwi-runtime-teyrchains?/try-runtime",
-	"pezkuwi-sdk-frame?/try-runtime",
+	"pezframe?/try-runtime",
 	"pezkuwi-service?/try-runtime",
 	"pezpallet-alliance?/try-runtime",
 	"pezpallet-asset-conversion-ops?/try-runtime",
@@ -689,11 +600,11 @@ try-runtime = [
 	"pezpallet-xcm-bridge-hub?/try-runtime",
 	"pezpallet-xcm-precompiles?/try-runtime",
 	"pezpallet-xcm?/try-runtime",
-	"pezstaging-teyrchain-info?/try-runtime",
+	"teyrchain-info?/try-runtime",
 	"teyrchains-common?/try-runtime",
 ]
 serde = [
-	"bp-pezkuwi-core?/serde",
+	"pezbp-pezkuwi-core?/serde",
 	"pezframe-benchmarking?/serde",
 	"pezframe-metadata?/serde",
 	"pezkuwi-subxt-signer?/serde",
@@ -736,7 +647,7 @@ experimental = [
 	"pezframe-support-procedural?/experimental",
 	"pezframe-support?/experimental",
 	"pezframe-system?/experimental",
-	"pezkuwi-sdk-frame?/experimental",
+	"pezframe?/experimental",
 ]
 with-tracing = [
 	"pezframe-executive?/with-tracing",
@@ -744,21 +655,21 @@ with-tracing = [
 	"pezsp-tracing?/with-tracing",
 ]
 runtime-full = [
-	"assets-common",
+	"pez-assets-common",
 	"pez-binary-merkle-tree",
 	"bizinikiwi-bip39",
-	"bp-header-pez-chain",
-	"bp-messages",
-	"bp-pezkuwi-core",
-	"bp-relayers",
-	"bp-test-utils",
-	"bp-teyrchains",
-	"bp-xcm-bridge-hub",
-	"bp-xcm-bridge-hub-router",
-	"bridge-hub-common",
+	"pezbp-header-pez-chain",
+	"pezbp-messages",
+	"pezbp-pezkuwi-core",
+	"pezbp-relayers",
+	"pezbp-test-utils",
+	"pezbp-teyrchains",
+	"pezbp-xcm-bridge-hub",
+	"pezbp-xcm-bridge-hub-router",
+	"pezbridge-hub-common",
 	"pez-ethereum-standards",
 	"pez-slot-range-helper",
-	"pez-tracing-gum-proc-macro",
+	"gum-proc-macro",
 	"pezbp-runtime",
 	"pezbridge-runtime-common",
 	"pezcumulus-pezpallet-aura-ext",
@@ -796,8 +707,8 @@ runtime-full = [
 	"pezkuwi-runtime-common",
 	"pezkuwi-runtime-metrics",
 	"pezkuwi-runtime-teyrchains",
-	"pezkuwi-sdk-frame",
-	"pezsp-ss58-registry",
+	"pezframe",
+	"ss58-registry",
 	"pezkuwi-subxt-core",
 	"pezkuwi-subxt-macro",
 	"pezkuwi-subxt-metadata",
@@ -973,10 +884,10 @@ runtime-full = [
 	"pezsp-version-proc-macro",
 	"pezsp-wasm-interface",
 	"pezsp-weights",
-	"pezstaging-teyrchain-info",
-	"pezstaging-xcm",
-	"pezstaging-xcm-builder",
-	"pezstaging-xcm-executor",
+	"teyrchain-info",
+	"xcm",
+	"xcm-builder",
+	"xcm-executor",
 	"testnet-teyrchains-constants",
 	"teyrchains-common",
 	"xcm-pez-procedural",
@@ -996,8 +907,8 @@ runtime = [
 	"pezframe-system",
 	"pezframe-system-benchmarking",
 	"pezframe-system-rpc-runtime-api",
-	"pezkuwi-sdk-frame",
-	"pezkuwi-sdk-frame?/runtime",
+	"pezframe",
+	"pezframe?/runtime",
 	"pezkuwi-subxt?/runtime",
 ]
 node = [
@@ -1005,16 +916,16 @@ node = [
 	"bizinikiwi-build-script-utils",
 	"bizinikiwi-frame-rpc-support",
 	"bizinikiwi-frame-rpc-system",
-	"bizinikiwi-prometheus-endpoint",
+	"prometheus-endpoint",
 	"bizinikiwi-rpc-client",
 	"bizinikiwi-state-trie-migration-rpc",
-	"bizinikiwi-txtesttool",
+	"txtesttool",
 	"bizinikiwi-wasm-builder",
-	"frame-remote-externalities",
+	"remote-externalities",
 	"pez-fork-tree",
 	"pez-generate-bags",
 	"pez-subkey",
-	"pez-tracing-gum",
+	"gum",
 	"pezbridge-hub-test-utils",
 	"pezcumulus-client-bootnodes",
 	"pezcumulus-client-cli",
@@ -1084,7 +995,7 @@ node = [
 	"pezkuwi-subxt-utils-stripmetadata",
 	"pezmmr-gadget",
 	"pezmmr-rpc",
-	"pezpallet-contracts-mock-network",
+	# "pezpallet-contracts-mock-network",  # Test-only crate
 	"pezpallet-transaction-payment-rpc",
 	"pezsc-allocator",
 	"pezsc-authority-discovery",
@@ -1147,19 +1058,19 @@ node = [
 	"pezsp-maybe-compressed-blob",
 	"pezsp-panic-handler",
 	"pezsp-rpc",
-	"pezstaging-chain-spec-builder",
-	"pezstaging-node-inspect",
-	"pezstaging-tracking-allocator",
+	"chain-spec-builder",
+	"node-inspect",
+	"tracking-allocator",
 	"std",
 	"teyrchains-runtimes-test-utils",
 	"xcm-pez-emulator",
 	"xcm-pez-simulator",
-	"zombienet-configuration",
-	"zombienet-orchestrator",
-	"zombienet-prom-metrics-parser",
-	"zombienet-provider",
-	"zombienet-sdk",
-	"zombienet-support",
+	"pezkuwi-zombienet-configuration",
+	"pezkuwi-zombienet-orchestrator",
+	"pezkuwi-zombienet-prom-metrics-parser",
+	"pezkuwi-zombienet-provider",
+	"pezkuwi-zombienet-sdk",
+	"pezkuwi-zombienet-support",
 ]
 tuples-96 = [
 	"pezframe-support-procedural?/tuples-96",
@@ -1178,1980 +1089,1982 @@ workspace = true
 [package.repository]
 workspace = true
 
-[dependencies.assets-common]
+[dependencies.pez-assets-common]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/teyrchains/runtimes/assets/common"
 
 [dependencies.pez-binary-merkle-tree]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/utils/binary-merkle-tree"
 
 [dependencies.bizinikiwi-bip39]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/utils/bizinikiwi-bip39"
 
-[dependencies.bp-header-pez-chain]
+[dependencies.pezbp-header-pez-chain]
+workspace = true
 default-features = false
 optional = true
-path = "../pezbridges/primitives/header-chain"
 
-[dependencies.bp-messages]
+[dependencies.pezbp-messages]
+workspace = true
 default-features = false
 optional = true
-path = "../pezbridges/primitives/messages"
 
-[dependencies.bp-pezkuwi-core]
+[dependencies.pezbp-pezkuwi-core]
+workspace = true
 default-features = false
 optional = true
-path = "../pezbridges/primitives/pezkuwi-core"
 
-[dependencies.bp-relayers]
+[dependencies.pezbp-relayers]
+workspace = true
 default-features = false
 optional = true
-path = "../pezbridges/primitives/relayers"
 
-[dependencies.bp-test-utils]
+[dependencies.pezbp-test-utils]
+workspace = true
 default-features = false
 optional = true
-path = "../pezbridges/primitives/test-utils"
 
-[dependencies.bp-teyrchains]
+[dependencies.pezbp-teyrchains]
+workspace = true
 default-features = false
 optional = true
-path = "../pezbridges/primitives/teyrchains"
 
-[dependencies.bp-xcm-bridge-hub]
+[dependencies.pezbp-xcm-bridge-hub]
+workspace = true
 default-features = false
 optional = true
-path = "../pezbridges/primitives/xcm-bridge-hub"
 
-[dependencies.bp-xcm-bridge-hub-router]
+[dependencies.pezbp-xcm-bridge-hub-router]
+workspace = true
 default-features = false
 optional = true
-path = "../pezbridges/primitives/xcm-bridge-hub-router"
+package = "pezbp-xcm-bridge-hub-router"
 
-[dependencies.bridge-hub-common]
+[dependencies.pezbridge-hub-common]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/teyrchains/runtimes/bridge-hubs/common"
 
 [dependencies.pez-ethereum-standards]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/pez-ethereum-standards"
 
 [dependencies.pez-slot-range-helper]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/runtime/common/pez-slot-range-helper"
 
-[dependencies.pez-tracing-gum-proc-macro]
+[dependencies.gum-proc-macro]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/gum/proc-macro"
 
 [dependencies.pezbp-runtime]
+workspace = true
 default-features = false
 optional = true
-path = "../pezbridges/primitives/runtime"
 
 [dependencies.pezbridge-runtime-common]
+workspace = true
 default-features = false
 optional = true
-path = "../pezbridges/bin/runtime-common"
 
 [dependencies.pezcumulus-pezpallet-aura-ext]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/pezpallets/aura-ext"
 
 [dependencies.pezcumulus-pezpallet-dmp-queue]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/pezpallets/dmp-queue"
 
 [dependencies.pezcumulus-pezpallet-session-benchmarking]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/pezpallets/session-benchmarking"
 
 [dependencies.pezcumulus-pezpallet-solo-to-para]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/pezpallets/solo-to-para"
 
 [dependencies.pezcumulus-pezpallet-teyrchain-system]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/pezpallets/teyrchain-system"
 
 [dependencies.pezcumulus-pezpallet-teyrchain-system-proc-macro]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/pezpallets/teyrchain-system/proc-macro"
 
 [dependencies.pezcumulus-pezpallet-weight-reclaim]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/pezpallets/weight-reclaim"
 
 [dependencies.pezcumulus-pezpallet-xcm]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/pezpallets/xcm"
 
 [dependencies.pezcumulus-pezpallet-xcmp-queue]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/pezpallets/xcmp-queue"
 
 [dependencies.pezcumulus-ping]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/teyrchains/pezpallets/ping"
 
 [dependencies.pezcumulus-primitives-aura]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/primitives/aura"
 
 [dependencies.pezcumulus-primitives-core]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/primitives/core"
 
 [dependencies.pezcumulus-primitives-proof-size-hostfunction]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/primitives/proof-size-hostfunction"
 
 [dependencies.pezcumulus-primitives-storage-weight-reclaim]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/primitives/storage-weight-reclaim"
 
 [dependencies.pezcumulus-primitives-teyrchain-inherent]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/primitives/teyrchain-inherent"
 
 [dependencies.pezcumulus-primitives-timestamp]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/primitives/timestamp"
 
 [dependencies.pezcumulus-primitives-utility]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/primitives/utility"
 
 [dependencies.pezframe-benchmarking]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/benchmarking"
 
 [dependencies.pezframe-benchmarking-pezpallet-pov]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/benchmarking/pov"
 
 [dependencies.pezframe-election-provider-solution-type]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/election-provider-support/solution-type"
 
 [dependencies.pezframe-election-provider-support]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/election-provider-support"
 
 [dependencies.pezframe-executive]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/executive"
 
 [dependencies.pezframe-metadata]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/pezframe-metadata"
 
 [dependencies.pezframe-metadata-hash-extension]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/metadata-hash-extension"
 
 [dependencies.pezframe-support]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/support"
 
 [dependencies.pezframe-support-procedural]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/support/procedural"
 
 [dependencies.pezframe-support-procedural-tools-derive]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/support/procedural/tools/derive"
 
 [dependencies.pezframe-system]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/system"
 
 [dependencies.pezframe-system-benchmarking]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/system/benchmarking"
 
 [dependencies.pezframe-system-rpc-runtime-api]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/system/rpc/runtime-api"
 
 [dependencies.pezkuwi-core-primitives]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/core-primitives"
 
 [dependencies.pezkuwi-primitives]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/primitives"
 
 [dependencies.pezkuwi-runtime-common]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/runtime/common"
 
 [dependencies.pezkuwi-runtime-metrics]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/runtime/metrics"
 
 [dependencies.pezkuwi-runtime-teyrchains]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/runtime/teyrchains"
 
-[dependencies.pezkuwi-sdk-frame]
+[dependencies.pezframe]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe"
 
-[dependencies.pezsp-ss58-registry]
+[dependencies.ss58-registry]
+workspace = true
 default-features = false
 optional = true
-path = "../vendor/ss58-registry"
 
 [dependencies.pezkuwi-subxt-core]
+workspace = true
 default-features = false
 optional = true
-path = "../vendor/pezkuwi-subxt/core"
 
 [dependencies.pezkuwi-subxt-macro]
+workspace = true
 default-features = false
 optional = true
-path = "../vendor/pezkuwi-subxt/macro"
 
 [dependencies.pezkuwi-subxt-metadata]
+workspace = true
 default-features = false
 optional = true
-path = "../vendor/pezkuwi-subxt/metadata"
 
 [dependencies.pezkuwi-subxt-signer]
+workspace = true
 default-features = false
 optional = true
-path = "../vendor/pezkuwi-subxt/signer"
 
 [dependencies.pezkuwi-teyrchain-primitives]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/teyrchain"
 
 [dependencies.pezpallet-alliance]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/alliance"
 
 [dependencies.pezpallet-asset-conversion]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/asset-conversion"
 
 [dependencies.pezpallet-asset-conversion-ops]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/asset-conversion/ops"
 
 [dependencies.pezpallet-asset-conversion-tx-payment]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/transaction-payment/asset-conversion-tx-payment"
 
 [dependencies.pezpallet-asset-rate]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/asset-rate"
 
 [dependencies.pezpallet-asset-rewards]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/asset-rewards"
 
 [dependencies.pezpallet-asset-tx-payment]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/transaction-payment/asset-tx-payment"
 
 [dependencies.pezpallet-assets]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/assets"
 
 [dependencies.pezpallet-assets-freezer]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/assets-freezer"
 
 [dependencies.pezpallet-assets-holder]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/assets-holder"
 
 [dependencies.pezpallet-assets-precompiles]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/assets/precompiles"
 
 [dependencies.pezpallet-atomic-swap]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/atomic-swap"
 
 [dependencies.pezpallet-aura]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/aura"
 
 [dependencies.pezpallet-authority-discovery]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/authority-discovery"
 
 [dependencies.pezpallet-authorship]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/authorship"
 
 [dependencies.pezpallet-babe]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/babe"
 
 [dependencies.pezpallet-bags-list]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/bags-list"
 
 [dependencies.pezpallet-balances]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/balances"
 
 [dependencies.pezpallet-beefy]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/beefy"
 
 [dependencies.pezpallet-beefy-mmr]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/beefy-mmr"
 
 [dependencies.pezpallet-bounties]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/bounties"
 
 [dependencies.pezpallet-bridge-grandpa]
+workspace = true
 default-features = false
 optional = true
-path = "../pezbridges/modules/grandpa"
 
 [dependencies.pezpallet-bridge-messages]
+workspace = true
 default-features = false
 optional = true
-path = "../pezbridges/modules/messages"
 
 [dependencies.pezpallet-bridge-relayers]
+workspace = true
 default-features = false
 optional = true
-path = "../pezbridges/modules/relayers"
 
 [dependencies.pezpallet-bridge-teyrchains]
+workspace = true
 default-features = false
 optional = true
-path = "../pezbridges/modules/teyrchains"
 
 [dependencies.pezpallet-broker]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/broker"
 
 [dependencies.pezpallet-child-bounties]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/child-bounties"
 
 [dependencies.pezpallet-collator-selection]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/pezpallets/collator-selection"
 
 [dependencies.pezpallet-collective]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/collective"
 
 [dependencies.pezpallet-collective-content]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/teyrchains/pezpallets/collective-content"
 
 [dependencies.pezpallet-contracts]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/contracts"
 
 [dependencies.pezpallet-contracts-proc-macro]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/contracts/proc-macro"
 
 [dependencies.pezpallet-contracts-uapi]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/contracts/uapi"
 
 [dependencies.pezpallet-conviction-voting]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/conviction-voting"
 
 [dependencies.pezpallet-core-fellowship]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/core-fellowship"
 
 [dependencies.pezpallet-delegated-staking]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/delegated-staking"
 
 [dependencies.pezpallet-democracy]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/democracy"
 
 [dependencies.pezpallet-derivatives]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/derivatives"
 
 [dependencies.pezpallet-dummy-dim]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/dummy-dim"
 
 [dependencies.pezpallet-election-provider-multi-block]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/election-provider-multi-block"
 
 [dependencies.pezpallet-election-provider-multi-phase]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/election-provider-multi-phase"
 
 [dependencies.pezpallet-election-provider-support-benchmarking]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/election-provider-support/benchmarking"
 
 [dependencies.pezpallet-elections-phragmen]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/elections-phragmen"
 
 [dependencies.pezpallet-fast-unstake]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/fast-unstake"
 
 [dependencies.pezpallet-glutton]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/glutton"
 
 [dependencies.pezpallet-grandpa]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/grandpa"
 
 [dependencies.pezpallet-identity]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/identity"
 
 [dependencies.pezpallet-im-online]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/im-online"
 
 [dependencies.pezpallet-indices]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/indices"
 
 [dependencies.pezpallet-insecure-randomness-collective-flip]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/insecure-randomness-collective-flip"
 
 [dependencies.pezpallet-lottery]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/lottery"
 
 [dependencies.pezpallet-membership]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/membership"
 
 [dependencies.pezpallet-message-queue]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/message-queue"
 
 [dependencies.pezpallet-meta-tx]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/meta-tx"
 
 [dependencies.pezpallet-migrations]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/migrations"
 
 [dependencies.pezpallet-mixnet]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/mixnet"
 
 [dependencies.pezpallet-mmr]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/merkle-mountain-range"
 
 [dependencies.pezpallet-multi-asset-bounties]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/multi-asset-bounties"
 
 [dependencies.pezpallet-multisig]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/multisig"
 
 [dependencies.pezpallet-nft-fractionalization]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/nft-fractionalization"
 
 [dependencies.pezpallet-nfts]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/nfts"
 
 [dependencies.pezpallet-nfts-runtime-api]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/nfts/runtime-api"
 
 [dependencies.pezpallet-nis]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/nis"
 
 [dependencies.pezpallet-node-authorization]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/node-authorization"
 
 [dependencies.pezpallet-nomination-pools]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/nomination-pools"
 
 [dependencies.pezpallet-nomination-pools-benchmarking]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/nomination-pools/benchmarking"
 
 [dependencies.pezpallet-nomination-pools-runtime-api]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/nomination-pools/runtime-api"
 
 [dependencies.pezpallet-offences]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/offences"
 
 [dependencies.pezpallet-offences-benchmarking]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/offences/benchmarking"
 
 [dependencies.pezpallet-oracle]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/honzon/oracle"
 
 [dependencies.pezpallet-oracle-runtime-api]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/honzon/oracle/runtime-api"
 
 [dependencies.pezpallet-origin-restriction]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/origin-restriction"
 
 [dependencies.pezpallet-paged-list]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/paged-list"
 
 [dependencies.pezpallet-parameters]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/parameters"
 
 [dependencies.pezpallet-people]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/people"
 
 [dependencies.pezpallet-preimage]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/preimage"
 
 [dependencies.pezpallet-proxy]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/proxy"
 
 [dependencies.pezpallet-ranked-collective]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/ranked-collective"
 
 [dependencies.pezpallet-recovery]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/recovery"
 
 [dependencies.pezpallet-referenda]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/referenda"
 
 [dependencies.pezpallet-remark]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/remark"
 
 [dependencies.pezpallet-revive]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/revive"
 
 [dependencies.pezpallet-revive-proc-macro]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/revive/proc-macro"
 
 [dependencies.pezpallet-revive-uapi]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/revive/uapi"
 
 [dependencies.pezpallet-root-offences]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/root-offences"
 
 [dependencies.pezpallet-root-testing]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/root-testing"
 
 [dependencies.pezpallet-safe-mode]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/safe-mode"
 
 [dependencies.pezpallet-salary]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/salary"
 
 [dependencies.pezpallet-scheduler]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/scheduler"
 
 [dependencies.pezpallet-scored-pool]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/scored-pool"
 
 [dependencies.pezpallet-session]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/session"
 
 [dependencies.pezpallet-session-benchmarking]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/session/benchmarking"
 
 [dependencies.pezpallet-skip-feeless-payment]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/transaction-payment/skip-feeless-payment"
 
 [dependencies.pezpallet-society]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/society"
 
 [dependencies.pezpallet-staking]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/staking"
 
 [dependencies.pezpallet-staking-async]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/staking-async"
 
 [dependencies.pezpallet-staking-async-ah-client]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/staking-async/ah-client"
 
 [dependencies.pezpallet-staking-async-rc-client]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/staking-async/rc-client"
 
 [dependencies.pezpallet-staking-async-reward-fn]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/staking-async/reward-fn"
 
 [dependencies.pezpallet-staking-async-runtime-api]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/staking-async/runtime-api"
 
 [dependencies.pezpallet-staking-reward-curve]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/staking/reward-curve"
 
 [dependencies.pezpallet-staking-reward-fn]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/staking/reward-fn"
 
 [dependencies.pezpallet-staking-runtime-api]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/staking/runtime-api"
 
 [dependencies.pezpallet-state-trie-migration]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/state-trie-migration"
 
 [dependencies.pezpallet-statement]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/statement"
 
 [dependencies.pezpallet-sudo]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/sudo"
 
 [dependencies.pezpallet-timestamp]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/timestamp"
 
 [dependencies.pezpallet-tips]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/tips"
 
 [dependencies.pezpallet-transaction-payment]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/transaction-payment"
 
 [dependencies.pezpallet-transaction-payment-rpc-runtime-api]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/transaction-payment/rpc/runtime-api"
 
 [dependencies.pezpallet-transaction-storage]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/transaction-storage"
 
 [dependencies.pezpallet-treasury]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/treasury"
 
 [dependencies.pezpallet-tx-pause]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/tx-pause"
 
 [dependencies.pezpallet-uniques]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/uniques"
 
 [dependencies.pezpallet-utility]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/utility"
 
 [dependencies.pezpallet-verify-signature]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/verify-signature"
 
 [dependencies.pezpallet-vesting]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/vesting"
 
 [dependencies.pezpallet-whitelist]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/whitelist"
 
 [dependencies.pezpallet-xcm]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/xcm/pezpallet-xcm"
 
 [dependencies.pezpallet-xcm-benchmarks]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/xcm/pezpallet-xcm-benchmarks"
 
 [dependencies.pezpallet-xcm-bridge-hub]
+workspace = true
 default-features = false
 optional = true
-path = "../pezbridges/modules/xcm-bridge-hub"
 
 [dependencies.pezpallet-xcm-bridge-hub-router]
+workspace = true
 default-features = false
 optional = true
-path = "../pezbridges/modules/xcm-bridge-hub-router"
 
 [dependencies.pezpallet-xcm-precompiles]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/xcm/pezpallet-xcm/precompiles"
 
 [dependencies.pezsc-chain-spec-derive]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/chain-spec/derive"
 
 [dependencies.pezsc-tracing-proc-macro]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/tracing/proc-macro"
 
 [dependencies.pezsp-api]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/api"
 
 [dependencies.pezsp-api-proc-macro]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/api/proc-macro"
 
 [dependencies.pezsp-application-crypto]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/application-crypto"
 
 [dependencies.pezsp-arithmetic]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/arithmetic"
 
 [dependencies.pezsp-authority-discovery]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/authority-discovery"
 
 [dependencies.pezsp-block-builder]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/block-builder"
 
 [dependencies.pezsp-consensus-aura]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/consensus/aura"
 
 [dependencies.pezsp-consensus-babe]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/consensus/babe"
 
 [dependencies.pezsp-consensus-beefy]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/consensus/beefy"
 
 [dependencies.pezsp-consensus-grandpa]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/consensus/grandpa"
 
 [dependencies.pezsp-consensus-pow]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/consensus/pow"
 
 [dependencies.pezsp-consensus-slots]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/consensus/slots"
 
 [dependencies.pezsp-core]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/core"
 
 [dependencies.pezsp-crypto-ec-utils]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/crypto/ec-utils"
 
 [dependencies.pezsp-crypto-hashing]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/crypto/hashing"
 
 [dependencies.pezsp-crypto-hashing-proc-macro]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/crypto/hashing/proc-macro"
 
 [dependencies.pezsp-debug-derive]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/debug-derive"
 
 [dependencies.pezsp-externalities]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/externalities"
 
 [dependencies.pezsp-genesis-builder]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/genesis-builder"
 
 [dependencies.pezsp-inherents]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/inherents"
 
 [dependencies.pezsp-io]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/io"
 
 [dependencies.pezsp-keyring]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/keyring"
 
 [dependencies.pezsp-keystore]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/keystore"
 
 [dependencies.pezsp-metadata-ir]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/metadata-ir"
 
 [dependencies.pezsp-mixnet]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/mixnet"
 
 [dependencies.pezsp-mmr-primitives]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/merkle-mountain-range"
 
 [dependencies.pezsp-npos-elections]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/npos-elections"
 
 [dependencies.pezsp-offchain]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/offchain"
 
 [dependencies.pezsp-runtime-interface]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/runtime-interface"
 
 [dependencies.pezsp-runtime-interface-proc-macro]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/runtime-interface/proc-macro"
 
 [dependencies.pezsp-session]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/session"
 
 [dependencies.pezsp-staking]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/staking"
 
 [dependencies.pezsp-state-machine]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/state-machine"
 
 [dependencies.pezsp-statement-store]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/statement-store"
 
 [dependencies.pezsp-std]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/std"
 
 [dependencies.pezsp-storage]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/storage"
 
 [dependencies.pezsp-timestamp]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/timestamp"
 
 [dependencies.pezsp-tracing]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/tracing"
 
 [dependencies.pezsp-transaction-pool]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/transaction-pool"
 
 [dependencies.pezsp-transaction-storage-proof]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/transaction-storage-proof"
 
 [dependencies.pezsp-trie]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/trie"
 
 [dependencies.pezsp-version]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/version"
 
 [dependencies.pezsp-version-proc-macro]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/version/proc-macro"
 
 [dependencies.pezsp-wasm-interface]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/wasm-interface"
 
 [dependencies.pezsp-weights]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/weights"
 
-[dependencies.pezstaging-teyrchain-info]
+[dependencies.teyrchain-info]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/teyrchains/pezpallets/teyrchain-info"
 
-[dependencies.pezstaging-xcm]
+[dependencies.xcm]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/xcm"
 
-[dependencies.pezstaging-xcm-builder]
+[dependencies.xcm-builder]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/xcm/xcm-builder"
 
-[dependencies.pezstaging-xcm-executor]
+[dependencies.xcm-executor]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/xcm/xcm-executor"
 
 [dependencies.testnet-teyrchains-constants]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/teyrchains/runtimes/constants"
 
 [dependencies.teyrchains-common]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/teyrchains/common"
 
 [dependencies.xcm-pez-procedural]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/xcm/procedural"
 
 [dependencies.xcm-runtime-pezapis]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/xcm/xcm-runtime-pezapis"
 
 [dependencies.asset-test-pezutils]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/teyrchains/runtimes/assets/test-utils"
 
 [dependencies.bizinikiwi-build-script-utils]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/utils/build-script-utils"
 
 [dependencies.bizinikiwi-frame-rpc-support]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/utils/pezframe/rpc/support"
 
 [dependencies.bizinikiwi-frame-rpc-system]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/utils/pezframe/rpc/system"
 
-[dependencies.bizinikiwi-prometheus-endpoint]
+[dependencies.prometheus-endpoint]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/utils/prometheus"
 
 [dependencies.bizinikiwi-rpc-client]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/utils/pezframe/rpc/client"
 
 [dependencies.bizinikiwi-state-trie-migration-rpc]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/utils/pezframe/rpc/state-trie-migration-rpc"
 
-[dependencies.bizinikiwi-txtesttool]
+[dependencies.txtesttool]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/utils/txtesttool"
 
 [dependencies.bizinikiwi-wasm-builder]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/utils/wasm-builder"
 
-[dependencies.frame-remote-externalities]
+[dependencies.remote-externalities]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/utils/pezframe/remote-externalities"
 
 [dependencies.pez-fork-tree]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/utils/pez-fork-tree"
 
 [dependencies.pez-generate-bags]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/utils/pezframe/pez-generate-bags"
 
 [dependencies.pez-subkey]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/bin/utils/pez-subkey"
 
-[dependencies.pez-tracing-gum]
+[dependencies.gum]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/gum"
 
 [dependencies.pezbridge-hub-test-utils]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/teyrchains/runtimes/bridge-hubs/test-utils"
 
 [dependencies.pezcumulus-client-bootnodes]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/client/bootnodes"
 
 [dependencies.pezcumulus-client-cli]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/client/cli"
 
 [dependencies.pezcumulus-client-collator]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/client/collator"
 
 [dependencies.pezcumulus-client-consensus-aura]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/client/consensus/aura"
 
 [dependencies.pezcumulus-client-consensus-common]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/client/consensus/common"
 
 [dependencies.pezcumulus-client-consensus-proposer]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/client/consensus/proposer"
 
 [dependencies.pezcumulus-client-consensus-relay-chain]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/client/consensus/relay-chain"
 
 [dependencies.pezcumulus-client-network]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/client/network"
 
 [dependencies.pezcumulus-client-pov-recovery]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/client/pov-recovery"
 
 [dependencies.pezcumulus-client-service]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/client/service"
 
 [dependencies.pezcumulus-client-teyrchain-inherent]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/client/teyrchain-inherent"
 
 [dependencies.pezcumulus-relay-chain-inprocess-interface]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/client/relay-chain-inprocess-interface"
 
 [dependencies.pezcumulus-relay-chain-interface]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/client/relay-chain-interface"
 
 [dependencies.pezcumulus-relay-chain-minimal-node]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/client/relay-chain-minimal-node"
 
 [dependencies.pezcumulus-relay-chain-rpc-interface]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/client/relay-chain-rpc-interface"
 
 [dependencies.pezcumulus-relay-chain-streams]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/client/relay-chain-streams"
 
 [dependencies.pezframe-benchmarking-cli]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/utils/pezframe/benchmarking-cli"
 
 [dependencies.pezframe-support-procedural-tools]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/support/procedural/tools"
 
 [dependencies.pezkuwi-approval-distribution]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/network/approval-distribution"
 
 [dependencies.pezkuwi-availability-bitfield-distribution]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/network/bitfield-distribution"
 
 [dependencies.pezkuwi-availability-distribution]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/network/availability-distribution"
 
 [dependencies.pezkuwi-availability-recovery]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/network/availability-recovery"
 
 [dependencies.pezkuwi-cli]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/cli"
 
 [dependencies.pezkuwi-collator-protocol]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/network/collator-protocol"
 
 [dependencies.pezkuwi-dispute-distribution]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/network/dispute-distribution"
 
 [dependencies.pezkuwi-erasure-coding]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/erasure-coding"
 
 [dependencies.pezkuwi-gossip-support]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/network/gossip-support"
 
 [dependencies.pezkuwi-network-bridge]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/network/bridge"
 
 [dependencies.pezkuwi-node-collation-generation]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/collation-generation"
 
 [dependencies.pezkuwi-node-core-approval-voting]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/core/approval-voting"
 
 [dependencies.pezkuwi-node-core-approval-voting-parallel]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/core/approval-voting-parallel"
 
 [dependencies.pezkuwi-node-core-av-store]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/core/av-store"
 
 [dependencies.pezkuwi-node-core-backing]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/core/backing"
 
 [dependencies.pezkuwi-node-core-bitfield-signing]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/core/bitfield-signing"
 
 [dependencies.pezkuwi-node-core-candidate-validation]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/core/candidate-validation"
 
 [dependencies.pezkuwi-node-core-chain-api]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/core/chain-api"
 
 [dependencies.pezkuwi-node-core-chain-selection]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/core/chain-selection"
 
 [dependencies.pezkuwi-node-core-dispute-coordinator]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/core/dispute-coordinator"
 
 [dependencies.pezkuwi-node-core-prospective-teyrchains]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/core/prospective-teyrchains"
 
 [dependencies.pezkuwi-node-core-provisioner]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/core/provisioner"
 
 [dependencies.pezkuwi-node-core-pvf]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/core/pvf"
 
 [dependencies.pezkuwi-node-core-pvf-checker]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/core/pvf-checker"
 
 [dependencies.pezkuwi-node-core-pvf-common]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/core/pvf/common"
 
 [dependencies.pezkuwi-node-core-pvf-execute-worker]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/core/pvf/execute-worker"
 
 [dependencies.pezkuwi-node-core-pvf-prepare-worker]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/core/pvf/prepare-worker"
 
 [dependencies.pezkuwi-node-core-runtime-api]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/core/runtime-api"
 
 [dependencies.pezkuwi-node-core-teyrchains-inherent]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/core/teyrchains-inherent"
 
 [dependencies.pezkuwi-node-metrics]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/metrics"
 
 [dependencies.pezkuwi-node-network-protocol]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/network/protocol"
 
 [dependencies.pezkuwi-node-subsystem]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/subsystem"
 
 [dependencies.pezkuwi-node-subsystem-types]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/subsystem-types"
 
 [dependencies.pezkuwi-node-subsystem-util]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/subsystem-util"
 
 [dependencies.pezkuwi-omni-node-lib]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/pezkuwi-omni-node/lib"
 
 [dependencies.pezkuwi-overseer]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/overseer"
 
 [dependencies.pezkuwi-pez-node-primitives]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/primitives"
 
 [dependencies.pezkuwi-primitives-test-helpers]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/primitives/test-helpers"
 
 [dependencies.pezkuwi-rpc]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/rpc"
 
 [dependencies.pezkuwi-service]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/service"
 
 [dependencies.pezkuwi-statement-distribution]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/network/statement-distribution"
 
 [dependencies.pezkuwi-statement-table]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/statement-table"
 
 [dependencies.pezkuwi-subxt]
+workspace = true
 default-features = false
 optional = true
-path = "../vendor/pezkuwi-subxt/subxt"
 
 [dependencies.pezkuwi-subxt-codegen]
+workspace = true
 default-features = false
 optional = true
-path = "../vendor/pezkuwi-subxt/codegen"
 
 [dependencies.pezkuwi-subxt-lightclient]
+workspace = true
 default-features = false
 optional = true
-path = "../vendor/pezkuwi-subxt/lightclient"
 
 [dependencies.pezkuwi-subxt-rpcs]
+workspace = true
 default-features = false
 optional = true
-path = "../vendor/pezkuwi-subxt/rpcs"
 
 [dependencies.pezkuwi-subxt-utils-fetchmetadata]
+workspace = true
 default-features = false
 optional = true
-path = "../vendor/pezkuwi-subxt/utils/fetch-metadata"
 
 [dependencies.pezkuwi-subxt-utils-stripmetadata]
+workspace = true
 default-features = false
 optional = true
-path = "../vendor/pezkuwi-subxt/utils/strip-metadata"
 
 [dependencies.pezmmr-gadget]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/merkle-mountain-range"
 
 [dependencies.pezmmr-rpc]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/merkle-mountain-range/rpc"
 
-[dependencies.pezpallet-contracts-mock-network]
-default-features = false
-optional = true
-path = "../bizinikiwi/pezframe/contracts/mock-network"
+# [dependencies.pezpallet-contracts-mock-network]  # Test-only crate, not published
+# workspace = true
+# default-features = false
+# optional = true
 
 [dependencies.pezpallet-transaction-payment-rpc]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/pezframe/transaction-payment/rpc"
 
 [dependencies.pezsc-allocator]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/allocator"
 
 [dependencies.pezsc-authority-discovery]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/authority-discovery"
 
 [dependencies.pezsc-basic-authorship]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/basic-authorship"
 
 [dependencies.pezsc-block-builder]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/block-builder"
 
 [dependencies.pezsc-chain-spec]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/chain-spec"
 
 [dependencies.pezsc-cli]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/cli"
 
 [dependencies.pezsc-client-api]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/api"
 
 [dependencies.pezsc-client-db]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/db"
 
 [dependencies.pezsc-consensus]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/consensus/common"
 
 [dependencies.pezsc-consensus-aura]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/consensus/aura"
 
 [dependencies.pezsc-consensus-babe]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/consensus/babe"
 
 [dependencies.pezsc-consensus-babe-rpc]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/consensus/babe/rpc"
 
 [dependencies.pezsc-consensus-beefy]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/consensus/beefy"
 
 [dependencies.pezsc-consensus-beefy-rpc]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/consensus/beefy/rpc"
 
 [dependencies.pezsc-consensus-epochs]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/consensus/epochs"
 
 [dependencies.pezsc-consensus-grandpa]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/consensus/grandpa"
 
 [dependencies.pezsc-consensus-grandpa-rpc]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/consensus/grandpa/rpc"
 
 [dependencies.pezsc-consensus-manual-seal]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/consensus/manual-seal"
 
 [dependencies.pezsc-consensus-pow]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/consensus/pow"
 
 [dependencies.pezsc-consensus-slots]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/consensus/slots"
 
 [dependencies.pezsc-executor]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/executor"
 
 [dependencies.pezsc-executor-common]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/executor/common"
 
 [dependencies.pezsc-executor-polkavm]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/executor/polkavm"
 
 [dependencies.pezsc-executor-wasmtime]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/executor/wasmtime"
 
 [dependencies.pezsc-informant]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/informant"
 
 [dependencies.pezsc-keystore]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/keystore"
 
 [dependencies.pezsc-mixnet]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/mixnet"
 
 [dependencies.pezsc-network]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/network"
 
 [dependencies.pezsc-network-common]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/network/common"
 
 [dependencies.pezsc-network-gossip]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/network-gossip"
 
 [dependencies.pezsc-network-light]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/network/light"
 
 [dependencies.pezsc-network-statement]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/network/statement"
 
 [dependencies.pezsc-network-sync]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/network/sync"
 
 [dependencies.pezsc-network-transactions]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/network/transactions"
 
 [dependencies.pezsc-network-types]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/network/types"
 
 [dependencies.pezsc-offchain]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/offchain"
 
 [dependencies.pezsc-proposer-metrics]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/proposer-metrics"
 
 [dependencies.pezsc-rpc]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/rpc"
 
 [dependencies.pezsc-rpc-api]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/rpc-api"
 
 [dependencies.pezsc-rpc-server]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/rpc-servers"
 
 [dependencies.pezsc-rpc-spec-v2]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/rpc-spec-v2"
 
 [dependencies.pezsc-runtime-utilities]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/runtime-utilities"
 
 [dependencies.pezsc-service]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/service"
 
 [dependencies.pezsc-state-db]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/state-db"
 
 [dependencies.pezsc-statement-store]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/statement-store"
 
 [dependencies.pezsc-storage-monitor]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/storage-monitor"
 
 [dependencies.pezsc-sync-state-rpc]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/sync-state-rpc"
 
 [dependencies.pezsc-sysinfo]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/sysinfo"
 
 [dependencies.pezsc-telemetry]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/telemetry"
 
 [dependencies.pezsc-tracing]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/tracing"
 
 [dependencies.pezsc-transaction-pool]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/transaction-pool"
 
 [dependencies.pezsc-transaction-pool-api]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/transaction-pool/api"
 
 [dependencies.pezsc-utils]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/client/utils"
 
 [dependencies.pezsp-blockchain]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/blockchain"
 
 [dependencies.pezsp-consensus]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/consensus/common"
 
 [dependencies.pezsp-core-hashing]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/deprecated/hashing"
 
 [dependencies.pezsp-core-hashing-proc-macro]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/deprecated/hashing/proc-macro"
 
 [dependencies.pezsp-database]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/database"
 
 [dependencies.pezsp-maybe-compressed-blob]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/maybe-compressed-blob"
 
 [dependencies.pezsp-panic-handler]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/panic-handler"
 
 [dependencies.pezsp-rpc]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/primitives/rpc"
 
-[dependencies.pezstaging-chain-spec-builder]
+[dependencies.chain-spec-builder]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/bin/utils/chain-spec-builder"
 
-[dependencies.pezstaging-node-inspect]
+[dependencies.node-inspect]
+workspace = true
 default-features = false
 optional = true
-path = "../bizinikiwi/bin/node/inspect"
 
-[dependencies.pezstaging-tracking-allocator]
+[dependencies.tracking-allocator]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/node/tracking-allocator"
 
 [dependencies.teyrchains-runtimes-test-utils]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/teyrchains/runtimes/test-utils"
 
 [dependencies.xcm-pez-emulator]
+workspace = true
 default-features = false
 optional = true
-path = "../pezcumulus/xcm/xcm-pez-emulator"
 
 [dependencies.xcm-pez-simulator]
+workspace = true
 default-features = false
 optional = true
-path = "../pezkuwi/xcm/xcm-pez-simulator"
 
-[dependencies.zombienet-configuration]
+# Pezkuwi Zombienet SDK crates
+[dependencies.pezkuwi-zombienet-configuration]
+workspace = true
 default-features = false
 optional = true
-path = "../vendor/pezkuwi-zombienet-sdk/crates/configuration"
 
-[dependencies.zombienet-orchestrator]
+[dependencies.pezkuwi-zombienet-orchestrator]
+workspace = true
 default-features = false
 optional = true
-path = "../vendor/pezkuwi-zombienet-sdk/crates/orchestrator"
 
-[dependencies.zombienet-prom-metrics-parser]
+[dependencies.pezkuwi-zombienet-prom-metrics-parser]
+workspace = true
 default-features = false
 optional = true
-path = "../vendor/pezkuwi-zombienet-sdk/crates/prom-metrics-parser"
 
-[dependencies.zombienet-provider]
+[dependencies.pezkuwi-zombienet-provider]
+workspace = true
 default-features = false
 optional = true
-path = "../vendor/pezkuwi-zombienet-sdk/crates/provider"
 
-[dependencies.zombienet-sdk]
+[dependencies.pezkuwi-zombienet-sdk]
+workspace = true
 default-features = false
 optional = true
-path = "../vendor/pezkuwi-zombienet-sdk/crates/sdk"
 
-[dependencies.zombienet-support]
+[dependencies.pezkuwi-zombienet-support]
+workspace = true
 default-features = false
 optional = true
-path = "../vendor/pezkuwi-zombienet-sdk/crates/support"
 
 [package.metadata.docs.rs]
 features = ["node", "runtime-full"]

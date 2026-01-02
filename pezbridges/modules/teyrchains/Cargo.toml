@@ -18,9 +18,9 @@ scale-info = { features = ["derive"], workspace = true }
 tracing = { workspace = true }
 
 # Bridge Dependencies
-bp-header-pez-chain = { workspace = true }
-bp-pezkuwi-core = { workspace = true }
-bp-teyrchains = { workspace = true }
+pezbp-header-pez-chain = { workspace = true }
+pezbp-pezkuwi-core = { workspace = true }
+pezbp-teyrchains = { workspace = true }
 pezbp-runtime = { workspace = true }
 pezpallet-bridge-grandpa = { workspace = true }
 
@@ -32,17 +32,17 @@ pezsp-runtime = { workspace = true }
 pezsp-std = { workspace = true }
 
 [dev-dependencies]
-bp-header-pez-chain = { workspace = true, default-features = true }
-bp-test-utils = { workspace = true, default-features = true }
+pezbp-header-pez-chain = { workspace = true, default-features = true }
+pezbp-test-utils = { workspace = true, default-features = true }
 pezsp-core = { workspace = true, default-features = true }
 pezsp-io = { workspace = true, default-features = true }
 
 [features]
 default = ["std"]
 std = [
-	"bp-header-pez-chain/std",
-	"bp-pezkuwi-core/std",
-	"bp-teyrchains/std",
+	"pezbp-header-pez-chain/std",
+	"pezbp-pezkuwi-core/std",
+	"pezbp-teyrchains/std",
 	"codec/std",
 	"pezbp-runtime/std",
 	"pezframe-benchmarking/std",
@@ -55,10 +55,10 @@ std = [
 	"tracing/std",
 ]
 runtime-benchmarks = [
-	"bp-header-pez-chain/runtime-benchmarks",
-	"bp-pezkuwi-core/runtime-benchmarks",
-	"bp-test-utils/runtime-benchmarks",
-	"bp-teyrchains/runtime-benchmarks",
+	"pezbp-header-pez-chain/runtime-benchmarks",
+	"pezbp-pezkuwi-core/runtime-benchmarks",
+	"pezbp-test-utils/runtime-benchmarks",
+	"pezbp-teyrchains/runtime-benchmarks",
 	"pezbp-runtime/runtime-benchmarks",
 	"pezframe-benchmarking/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",

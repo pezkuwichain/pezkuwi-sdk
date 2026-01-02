@@ -23,8 +23,8 @@
 
 use crate::{Config, Pezpallet, LOG_TARGET};
 
-use bp_messages::target_chain::{DispatchMessage, MessageDispatch};
-use bp_xcm_bridge_hub::{LocalXcmChannelManager, XcmAsPlainPayload};
+use pezbp_messages::target_chain::{DispatchMessage, MessageDispatch};
+use pezbp_xcm_bridge_hub::{LocalXcmChannelManager, XcmAsPlainPayload};
 use codec::{Decode, DecodeWithMemTracking, Encode};
 use pezbp_runtime::messages::MessageDispatchResult;
 use pezframe_support::{weights::Weight, CloneNoBound, EqNoBound, PartialEqNoBound};
@@ -134,8 +134,8 @@ mod tests {
 	use super::*;
 	use crate::{mock::*, Bridges, LaneToBridge, LanesManagerOf};
 
-	use bp_messages::{target_chain::DispatchMessageData, LaneIdType, MessageKey};
-	use bp_xcm_bridge_hub::{Bridge, BridgeLocations, BridgeState};
+	use pezbp_messages::{target_chain::DispatchMessageData, LaneIdType, MessageKey};
+	use pezbp_xcm_bridge_hub::{Bridge, BridgeLocations, BridgeState};
 	use pezframe_support::assert_ok;
 	use pezpallet_bridge_messages::InboundLaneStorage;
 	use xcm_executor::traits::ConvertLocation;

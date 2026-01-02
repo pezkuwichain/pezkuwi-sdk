@@ -24,8 +24,8 @@
 
 use crate::{Config as RelayersConfig, Pezpallet as RelayersPallet, WeightInfoExt, LOG_TARGET};
 
-use bp_messages::{ChainWithMessages, MessageNonce};
-use bp_relayers::{
+use pezbp_messages::{ChainWithMessages, MessageNonce};
+use pezbp_relayers::{
 	ExplicitOrAccountParams, ExtensionCallData, ExtensionCallInfo, ExtensionConfig,
 	RewardsAccountOwner, RewardsAccountParams,
 };
@@ -86,7 +86,7 @@ impl<AccountId, RemoteGrandpaChainBlockNumber: Debug, LaneId: Clone + Copy + Deb
 	#[cfg(test)]
 	pub fn submit_finality_proof_info_mut(
 		&mut self,
-	) -> Option<&mut bp_header_pez_chain::SubmitFinalityProofInfo<RemoteGrandpaChainBlockNumber>> {
+	) -> Option<&mut pezbp_header_pez_chain::SubmitFinalityProofInfo<RemoteGrandpaChainBlockNumber>> {
 		match self.call_info {
 			ExtensionCallInfo::AllFinalityAndMsgs(ref mut info, _, _) => Some(info),
 			ExtensionCallInfo::RelayFinalityAndMsgs(ref mut info, _) => Some(info),
@@ -455,18 +455,18 @@ mod tests {
 	use super::*;
 	use crate::mock::*;
 
-	use bp_header_pez_chain::{StoredHeaderDataBuilder, SubmitFinalityProofInfo};
-	use bp_messages::{
+	use pezbp_header_pez_chain::{StoredHeaderDataBuilder, SubmitFinalityProofInfo};
+	use pezbp_messages::{
 		source_chain::FromBridgedChainMessagesDeliveryProof,
 		target_chain::FromBridgedChainMessagesProof, BaseMessagesProofInfo, DeliveredMessages,
 		InboundLaneData, MessageNonce, MessagesCallInfo, MessagesOperatingMode, OutboundLaneData,
 		ReceiveMessagesDeliveryProofInfo, ReceiveMessagesProofInfo, UnrewardedRelayer,
 		UnrewardedRelayerOccupation, UnrewardedRelayersState,
 	};
-	use bp_pezkuwi_core::teyrchains::{ParaHeadsProof, ParaId};
-	use bp_relayers::RuntimeWithUtilityPallet;
-	use bp_test_utils::{make_default_justification, test_keyring, TEST_GRANDPA_SET_ID};
-	use bp_teyrchains::{BestParaHeadHash, ParaInfo, SubmitTeyrchainHeadsInfo};
+	use pezbp_pezkuwi_core::teyrchains::{ParaHeadsProof, ParaId};
+	use pezbp_relayers::RuntimeWithUtilityPallet;
+	use pezbp_test_utils::{make_default_justification, test_keyring, TEST_GRANDPA_SET_ID};
+	use pezbp_teyrchains::{BestParaHeadHash, ParaInfo, SubmitTeyrchainHeadsInfo};
 	use pezbp_runtime::{BasicOperatingMode, HeaderId, Teyrchain};
 	use pezframe_support::{
 		__private::pezsp_tracing,
@@ -574,7 +574,7 @@ mod tests {
 		pezpallet_bridge_grandpa::BestFinalized::<TestRuntime>::put(best_relay_header);
 		pezpallet_bridge_grandpa::ImportedHeaders::<TestRuntime>::insert(
 			best_relay_header.hash(),
-			bp_test_utils::test_header::<BridgedChainHeader>(0).build(),
+			pezbp_test_utils::test_header::<BridgedChainHeader>(0).build(),
 		);
 
 		let para_id = ParaId(TestTeyrchain::get());

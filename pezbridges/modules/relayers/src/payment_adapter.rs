@@ -20,12 +20,12 @@
 use crate::{Config, Pezpallet};
 
 use alloc::collections::vec_deque::VecDeque;
-use bp_messages::{
+use pezbp_messages::{
 	source_chain::{DeliveryConfirmationPayments, RelayersRewards},
 	MessageNonce,
 };
-pub use bp_relayers::PayRewardFromAccount;
-use bp_relayers::{RewardsAccountOwner, RewardsAccountParams};
+pub use pezbp_relayers::PayRewardFromAccount;
+use pezbp_relayers::{RewardsAccountOwner, RewardsAccountParams};
 use core::{marker::PhantomData, ops::RangeInclusive};
 use pezbp_runtime::Chain;
 use pezframe_support::{pezsp_runtime::SaturatedConversion, traits::Get};
@@ -51,11 +51,11 @@ where
 
 	fn pay_reward(
 		lane_id: LaneIdOf<T, MI>,
-		pez_messages_relayers: VecDeque<bp_messages::UnrewardedRelayer<T::AccountId>>,
+		pez_messages_relayers: VecDeque<pezbp_messages::UnrewardedRelayer<T::AccountId>>,
 		confirmation_relayer: &T::AccountId,
-		received_range: &RangeInclusive<bp_messages::MessageNonce>,
+		received_range: &RangeInclusive<pezbp_messages::MessageNonce>,
 	) -> MessageNonce {
-		let relayers_rewards = bp_messages::calc_relayers_rewards::<T::AccountId>(
+		let relayers_rewards = pezbp_messages::calc_relayers_rewards::<T::AccountId>(
 			pez_messages_relayers,
 			received_range,
 		);
@@ -117,8 +117,8 @@ fn register_relayers_rewards<
 mod tests {
 	use super::*;
 	use crate::{mock::*, RelayerRewards};
-	use bp_messages::LaneIdType;
-	use bp_relayers::PaymentProcedure;
+	use pezbp_messages::LaneIdType;
+	use pezbp_relayers::PaymentProcedure;
 	use pezframe_support::{
 		assert_ok,
 		traits::fungible::{Inspect, Mutate},

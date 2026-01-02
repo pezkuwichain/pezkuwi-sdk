@@ -47,7 +47,7 @@
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
-use frame::{
+use pezframe::{
 	prelude::*,
 	traits::{
 		fungibles::{Inspect, InspectFreeze, MutateFreeze},
@@ -60,7 +60,7 @@ use frame::{
 pub use pezpallet::*;
 
 #[cfg(feature = "try-runtime")]
-use frame::try_runtime::TryRuntimeError;
+use pezframe::try_runtime::TryRuntimeError;
 
 #[cfg(test)]
 mod mock;
@@ -69,7 +69,7 @@ mod tests;
 
 mod impls;
 
-#[frame::pezpallet]
+#[pezframe::pezpallet]
 pub mod pezpallet {
 	use super::*;
 

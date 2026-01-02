@@ -44,8 +44,8 @@ parity-db = { workspace = true }
 assert_matches = { workspace = true }
 futures = { features = ["thread-pool"], workspace = true }
 kvdb-shared-tests = { workspace = true }
-pezkuwi-node-subsystem-test-helpers = { workspace = true }
-pezkuwi-primitives-test-helpers = { workspace = true }
+# pezkuwi-node-subsystem-test-helpers = { workspace = true }
+# pezkuwi-primitives-test-helpers = { workspace = true }
 tempfile = { workspace = true }
 
 [features]
@@ -54,11 +54,11 @@ runtime-benchmarks = [
 	"pezkuwi-erasure-coding/runtime-benchmarks",
 	"pezkuwi-node-metrics/runtime-benchmarks",
 	"pezkuwi-node-network-protocol/runtime-benchmarks",
-	"pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
+	# "pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
 	"pezkuwi-node-subsystem-types/runtime-benchmarks",
 	"pezkuwi-node-subsystem/runtime-benchmarks",
 	"pezkuwi-overseer/runtime-benchmarks",
 	"pezkuwi-pez-node-primitives/runtime-benchmarks",
-	"pezkuwi-primitives-test-helpers/runtime-benchmarks",
+	# "pezkuwi-primitives-test-helpers/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
 ]

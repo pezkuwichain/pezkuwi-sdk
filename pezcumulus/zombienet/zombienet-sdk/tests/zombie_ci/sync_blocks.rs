@@ -7,7 +7,7 @@ use crate::utils::{initialize_network, BEST_BLOCK_METRIC};
 
 use pezcumulus_zombienet_sdk_helpers::assert_para_throughput;
 use pezkuwi_primitives::Id as ParaId;
-use zombienet_sdk::{
+use pezkuwi_zombienet_sdk::{
 	subxt::{OnlineClient, PezkuwiConfig},
 	NetworkConfig, NetworkConfigBuilder,
 };
@@ -60,7 +60,7 @@ async fn sync_blocks_from_tip_without_connected_collator() -> Result<(), anyhow:
 
 async fn build_network_config() -> Result<NetworkConfig, anyhow::Error> {
 	// images are not relevant for `native`, but we leave it here in case we use `k8s` some day
-	let images = zombienet_sdk::environment::get_images_from_env();
+	let images = pezkuwi_zombienet_sdk::environment::get_images_from_env();
 	log::info!("Using images: {images:?}");
 
 	// Network setup:

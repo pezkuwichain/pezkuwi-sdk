@@ -19,7 +19,7 @@
 
 #![cfg(feature = "runtime-benchmarks")]
 
-use frame::benchmarking::prelude::*;
+use pezframe::benchmarking::prelude::*;
 
 use crate::*;
 

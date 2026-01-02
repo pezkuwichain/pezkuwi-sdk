@@ -78,7 +78,7 @@ pub mod weights;
 extern crate alloc;
 
 use alloc::vec::Vec;
-use frame::{
+use pezframe::{
 	prelude::*,
 	traits::{TransactionPause, TransactionPauseError},
 };
@@ -96,7 +96,7 @@ pub type PalletCallNameOf<T> = BoundedVec<u8, <T as Config>::MaxNameLen>;
 /// to partially or fully specify an item a variant of a  [`Config::RuntimeCall`].
 pub type RuntimeCallNameOf<T> = (PalletNameOf<T>, PalletCallNameOf<T>);
 
-#[frame::pezpallet]
+#[pezframe::pezpallet]
 pub mod pezpallet {
 	use super::*;
 

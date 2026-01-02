@@ -16,7 +16,7 @@
 
 //! Defines structures related to calls of the `pezpallet-xcm-bridge-hub` pezpallet.
 
-use bp_messages::MessageNonce;
+use pezbp_messages::MessageNonce;
 use codec::{Decode, Encode};
 use pezsp_std::boxed::Box;
 use scale_info::TypeInfo;

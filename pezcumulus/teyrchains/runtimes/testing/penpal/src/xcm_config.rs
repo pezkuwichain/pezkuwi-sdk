@@ -41,7 +41,7 @@ use super::{
 	TeyrchainSystem, WeightToFee, XcmpQueue,
 };
 use crate::{BaseDeliveryFee, FeeAssetId, TransactionByteFee};
-use assets_common::TrustBackedAssetsAsLocation;
+use pez_assets_common::TrustBackedAssetsAsLocation;
 use core::marker::PhantomData;
 use pezframe_support::{
 	parameter_types,
@@ -173,7 +173,7 @@ pub type ForeignAssetsConvertedConcreteId = xcm_builder::MatchedConvertedConcret
 		// assert!(Location::new(1,
 		// [Teyrchain(100)]).starts_with(&Location::parent()));
 		// assert!([Teyrchain(100)].into().starts_with(&Here));
-		StartsWith<assets_common::matching::LocalLocationPattern>,
+		StartsWith<pez_assets_common::matching::LocalLocationPattern>,
 	)>,
 	Identity,
 	TryConvertInto,
@@ -364,7 +364,7 @@ pub type TrustedAliasers = (
 pub type WaivedLocations = Equals<RootLocation>;
 /// `AssetId`/`Balance` converter for `TrustBackedAssets`.
 pub type TrustBackedAssetsConvertedConcreteId =
-	assets_common::TrustBackedAssetsConvertedConcreteId<AssetsPalletLocation, Balance>;
+	pez_assets_common::TrustBackedAssetsConvertedConcreteId<AssetsPalletLocation, Balance>;
 
 /// Asset converter for pool assets.
 /// Used to convert assets in pools to the asset required for fee payment.

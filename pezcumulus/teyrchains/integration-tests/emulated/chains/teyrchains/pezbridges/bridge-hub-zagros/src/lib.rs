@@ -43,7 +43,7 @@ decl_test_teyrchains! {
 			XcmpMessageHandler: pezbridge_hub_zagros_runtime::XcmpQueue,
 			LocationToAccountId: pezbridge_hub_zagros_runtime::xcm_config::LocationToAccountId,
 			TeyrchainInfo: pezbridge_hub_zagros_runtime::TeyrchainInfo,
-			MessageOrigin: bridge_hub_common::AggregateMessageOrigin,
+			MessageOrigin: pezbridge_hub_common::AggregateMessageOrigin,
 			DigestProvider: AuraDigestProvider,
 		},
 		pallets = {

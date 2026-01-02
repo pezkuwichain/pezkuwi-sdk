@@ -56,16 +56,16 @@ teyrchains-common = { workspace = true, default-features = true }
 xcm-pez-emulator = { workspace = true, default-features = true }
 
 # Bridges
-bp-messages = { workspace = true, default-features = true }
-bp-xcm-bridge-hub = { workspace = true, default-features = true }
+pezbp-messages = { workspace = true, default-features = true }
+pezbp-xcm-bridge-hub = { workspace = true, default-features = true }
 pezpallet-bridge-messages = { workspace = true, default-features = true }
 pezpallet-xcm-bridge-hub = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
 	"asset-test-pezutils/runtime-benchmarks",
-	"bp-messages/runtime-benchmarks",
-	"bp-xcm-bridge-hub/runtime-benchmarks",
+	"pezbp-messages/runtime-benchmarks",
+	"pezbp-xcm-bridge-hub/runtime-benchmarks",
 	"pezcumulus-pezpallet-teyrchain-system/runtime-benchmarks",
 	"pezcumulus-pezpallet-xcmp-queue/runtime-benchmarks",
 	"pezcumulus-primitives-core/runtime-benchmarks",

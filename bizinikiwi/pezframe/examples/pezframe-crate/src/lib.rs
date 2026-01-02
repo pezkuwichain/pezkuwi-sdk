@@ -21,9 +21,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-use frame::prelude::*;
+use pezframe::prelude::*;
 
-#[frame::pezpallet(dev_mode)]
+#[pezframe::pezpallet(dev_mode)]
 pub mod pezpallet {
 	use super::*;
 
@@ -50,7 +50,7 @@ pub mod pezpallet {
 #[cfg(test)]
 mod tests {
 	use crate::pezpallet as my_pallet;
-	use frame::testing_prelude::*;
+	use pezframe::testing_prelude::*;
 
 	construct_runtime!(
 		pub enum Runtime {

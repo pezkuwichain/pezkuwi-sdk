@@ -18,9 +18,9 @@
 #![warn(missing_docs)]
 #![cfg_attr(not(feature = "std"), no_std)]
 
-pub use bp_pezkuwi_core::*;
+pub use pezbp_pezkuwi_core::*;
 
-use bp_header_pez_chain::ChainWithGrandpa;
+use pezbp_header_pez_chain::ChainWithGrandpa;
 use pezbp_runtime::{decl_bridge_finality_runtime_apis, Chain, ChainId};
 use pezframe_support::{pezsp_runtime::StateVersion, weights::Weight};
 
@@ -61,7 +61,7 @@ impl ChainWithGrandpa for Zagros {
 }
 
 // The TransactionExtension used by Zagros.
-pub use bp_pezkuwi_core::CommonTransactionExtension as TransactionExtension;
+pub use pezbp_pezkuwi_core::CommonTransactionExtension as TransactionExtension;
 
 /// Name of the teyrchains pezpallet in the Pezkuwichain runtime.
 pub const PARAS_PALLET_NAME: &str = "Paras";
@@ -71,7 +71,7 @@ pub const WITH_ZAGROS_GRANDPA_PALLET_NAME: &str = "BridgeZagrosGrandpa";
 /// Name of the With-Zagros teyrchains pezpallet instance that is deployed at bridged chains.
 pub const WITH_ZAGROS_BRIDGE_TEYRCHAINS_PALLET_NAME: &str = "BridgeZagrosTeyrchains";
 
-/// Maximal size of encoded `bp_teyrchains::ParaStoredHeaderData` structure among all Zagros
+/// Maximal size of encoded `pezbp_teyrchains::ParaStoredHeaderData` structure among all Zagros
 /// teyrchains.
 ///
 /// It includes the block number and state root, so it shall be near 40 bytes, but let's have some

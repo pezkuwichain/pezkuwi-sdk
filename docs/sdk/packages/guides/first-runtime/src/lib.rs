@@ -22,13 +22,18 @@
 extern crate alloc;
 use alloc::{vec, vec::Vec};
 use first_pezpallet::pezpallet_v2 as our_first_pallet;
-use frame::{
+use pezframe::{
 	deps::pezsp_genesis_builder::DEV_RUNTIME_PRESET,
 	prelude::*,
-	runtime::{apis, prelude::*},
+	runtime::prelude::*,
 };
 use pezpallet_transaction_payment_rpc_runtime_api::{FeeDetails, RuntimeDispatchInfo};
 use pezsp_keyring::Sr25519Keyring;
+use pezsp_runtime::{
+	traits::Block as BlockT,
+	transaction_validity::{TransactionSource, TransactionValidity},
+	ApplyExtrinsicResult,
+};
 
 #[docify::export]
 #[runtime_version]
@@ -66,12 +71,12 @@ mod runtime_types {
 	pub(super) type SignedExtra = (
 		// `frame` already provides all the signed extensions from `pezframe-system`. We just add
 		// the one related to tx-payment here.
-		frame::runtime::types_common::SystemTransactionExtensionsOf<Runtime>,
+		pezframe::runtime::types_common::SystemTransactionExtensionsOf<Runtime>,
 		pezpallet_transaction_payment::ChargeTransactionPayment<Runtime>,
 	);
 
-	pub(super) type Block = frame::runtime::types_common::BlockOf<Runtime, SignedExtra>;
-	pub(super) type Header = HeaderFor<Runtime>;
+	pub(super) type Block = pezframe::runtime::types_common::BlockOf<Runtime, SignedExtra>;
+	pub(super) type _Header = HeaderFor<Runtime>;
 
 	pub(super) type RuntimeExecutive = Executive<
 		Runtime,
@@ -132,7 +137,7 @@ pub mod genesis_config_presets {
 		interface::{Balance, MinimumBalance},
 		BalancesConfig, RuntimeGenesisConfig, SudoConfig,
 	};
-	use frame::deps::pezframe_support::build_struct_json_patch;
+	use pezframe::deps::pezframe_support::build_struct_json_patch;
 	use serde_json::Value;
 
 	/// Returns a development genesis config preset.
@@ -171,21 +176,21 @@ pub mod genesis_config_presets {
 }
 
 impl_runtime_apis! {
-	impl apis::Core<Block> for Runtime {
+	impl pezsp_api::Core<Block> for Runtime {
 		fn version() -> RuntimeVersion {
 			VERSION
 		}
 
-		fn execute_block(block: <Block as frame::traits::Block>::LazyBlock) {
+		fn execute_block(block: <Block as BlockT>::LazyBlock) {
 			RuntimeExecutive::execute_block(block)
 		}
 
-		fn initialize_block(header: &Header) -> ExtrinsicInclusionMode {
+		fn initialize_block(header: &<Block as BlockT>::Header) -> ExtrinsicInclusionMode {
 			RuntimeExecutive::initialize_block(header)
 		}
 	}
 
-	impl apis::Metadata<Block> for Runtime {
+	impl pezsp_api::Metadata<Block> for Runtime {
 		fn metadata() -> OpaqueMetadata {
 			OpaqueMetadata::new(Runtime::metadata().into())
 		}
@@ -199,62 +204,62 @@ impl_runtime_apis! {
 		}
 	}
 
-	impl apis::BlockBuilder<Block> for Runtime {
-		fn apply_extrinsic(extrinsic: ExtrinsicFor<Runtime>) -> ApplyExtrinsicResult {
+	impl pezsp_block_builder::BlockBuilder<Block> for Runtime {
+		fn apply_extrinsic(extrinsic: <Block as BlockT>::Extrinsic) -> ApplyExtrinsicResult {
 			RuntimeExecutive::apply_extrinsic(extrinsic)
 		}
 
-		fn finalize_block() -> HeaderFor<Runtime> {
+		fn finalize_block() -> <Block as BlockT>::Header {
 			RuntimeExecutive::finalize_block()
 		}
 
-		fn inherent_extrinsics(data: InherentData) -> Vec<ExtrinsicFor<Runtime>> {
+		fn inherent_extrinsics(data: InherentData) -> Vec<<Block as BlockT>::Extrinsic> {
 			data.create_extrinsics()
 		}
 
 		fn check_inherents(
-			block: <Block as frame::traits::Block>::LazyBlock,
+			block: <Block as BlockT>::LazyBlock,
 			data: InherentData,
 		) -> CheckInherentsResult {
 			data.check_extrinsics(&block)
 		}
 	}
 
-	impl apis::TaggedTransactionQueue<Block> for Runtime {
+	impl pezsp_transaction_pool::runtime_api::TaggedTransactionQueue<Block> for Runtime {
 		fn validate_transaction(
 			source: TransactionSource,
-			tx: ExtrinsicFor<Runtime>,
-			block_hash: <Runtime as pezframe_system::Config>::Hash,
+			tx: <Block as BlockT>::Extrinsic,
+			block_hash: <Block as BlockT>::Hash,
 		) -> TransactionValidity {
 			RuntimeExecutive::validate_transaction(source, tx, block_hash)
 		}
 	}
 
-	impl apis::OffchainWorkerApi<Block> for Runtime {
-		fn offchain_worker(header: &HeaderFor<Runtime>) {
+	impl pezsp_offchain::OffchainWorkerApi<Block> for Runtime {
+		fn offchain_worker(header: &<Block as BlockT>::Header) {
 			RuntimeExecutive::offchain_worker(header)
 		}
 	}
 
-	impl apis::SessionKeys<Block> for Runtime {
+	impl pezsp_session::SessionKeys<Block> for Runtime {
 		fn generate_session_keys(_seed: Option<Vec<u8>>) -> Vec<u8> {
 			Default::default()
 		}
 
 		fn decode_session_keys(
 			_encoded: Vec<u8>,
-		) -> Option<Vec<(Vec<u8>, apis::KeyTypeId)>> {
+		) -> Option<Vec<(Vec<u8>, pezsp_core::crypto::KeyTypeId)>> {
 			Default::default()
 		}
 	}
 
-	impl apis::AccountNonceApi<Block, interface::AccountId, interface::Nonce> for Runtime {
+	impl pezframe_system_rpc_runtime_api::AccountNonceApi<Block, interface::AccountId, interface::Nonce> for Runtime {
 		fn account_nonce(account: interface::AccountId) -> interface::Nonce {
 			System::account_nonce(account)
 		}
 	}
 
-	impl apis::GenesisBuilder<Block> for Runtime {
+	impl pezsp_genesis_builder::GenesisBuilder<Block> for Runtime {
 		fn build_state(config: Vec<u8>) -> GenesisBuilderResult {
 			build_state::<RuntimeGenesisConfig>(config)
 		}
@@ -272,10 +277,10 @@ impl_runtime_apis! {
 		Block,
 		interface::Balance,
 	> for Runtime {
-		fn query_info(uxt: ExtrinsicFor<Runtime>, len: u32) -> RuntimeDispatchInfo<interface::Balance> {
+		fn query_info(uxt: <Block as BlockT>::Extrinsic, len: u32) -> RuntimeDispatchInfo<interface::Balance> {
 			TransactionPayment::query_info(uxt, len)
 		}
-		fn query_fee_details(uxt: ExtrinsicFor<Runtime>, len: u32) -> FeeDetails<interface::Balance> {
+		fn query_fee_details(uxt: <Block as BlockT>::Extrinsic, len: u32) -> FeeDetails<interface::Balance> {
 			TransactionPayment::query_fee_details(uxt, len)
 		}
 		fn query_weight_to_fee(weight: Weight) -> interface::Balance {
@@ -291,7 +296,7 @@ impl_runtime_apis! {
 /// configs.
 pub mod interface {
 	use super::Runtime;
-	use frame::prelude::pezframe_system;
+	use pezframe::prelude::pezframe_system;
 
 	pub type AccountId = <Runtime as pezframe_system::Config>::AccountId;
 	pub type Nonce = <Runtime as pezframe_system::Config>::Nonce;

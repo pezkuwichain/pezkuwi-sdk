@@ -30,7 +30,7 @@
 use arbitrary::Arbitrary;
 use honggfuzz::fuzz;
 
-use frame::{
+use pezframe::{
 	prelude::*, runtime::prelude::storage::storage_noop_guard::StorageNoopGuard,
 	testing_prelude::TestExternalities,
 };

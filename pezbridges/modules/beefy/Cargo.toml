@@ -20,7 +20,7 @@ serde = { optional = true, workspace = true }
 tracing = { workspace = true }
 
 # Bridge Dependencies
-bp-beefy = { workspace = true }
+pezbp-beefy = { workspace = true }
 pezbp-runtime = { workspace = true }
 
 # Bizinikiwi Dependencies
@@ -31,7 +31,7 @@ pezsp-runtime = { workspace = true }
 pezsp-std = { workspace = true }
 
 [dev-dependencies]
-bp-test-utils = { workspace = true, default-features = true }
+pezbp-test-utils = { workspace = true, default-features = true }
 mmr-lib = { workspace = true, default-features = true }
 pezpallet-beefy-mmr = { workspace = true, default-features = true }
 pezpallet-mmr = { workspace = true, default-features = true }
@@ -42,7 +42,7 @@ rand = { workspace = true, default-features = true }
 [features]
 default = ["std"]
 std = [
-	"bp-beefy/std",
+	"pezbp-beefy/std",
 	"codec/std",
 	"pezbp-runtime/std",
 	"pezframe-support/std",
@@ -62,8 +62,8 @@ try-runtime = [
 	"pezsp-runtime/try-runtime",
 ]
 runtime-benchmarks = [
-	"bp-beefy/runtime-benchmarks",
-	"bp-test-utils/runtime-benchmarks",
+	"pezbp-beefy/runtime-benchmarks",
+	"pezbp-test-utils/runtime-benchmarks",
 	"pezbp-runtime/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
 	"pezframe-system/runtime-benchmarks",

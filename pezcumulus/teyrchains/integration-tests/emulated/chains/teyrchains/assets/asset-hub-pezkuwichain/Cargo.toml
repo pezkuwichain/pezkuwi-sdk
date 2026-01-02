@@ -34,12 +34,12 @@ xcm = { workspace = true }
 xcm-builder = { workspace = true, default-features = true }
 
 # Bridges
-bp-bridge-hub-pezkuwichain = { workspace = true }
+pezbp-bridge-hub-pezkuwichain = { workspace = true }
 
 [features]
 runtime-benchmarks = [
 	"asset-hub-pezkuwichain-runtime/runtime-benchmarks",
-	"bp-bridge-hub-pezkuwichain/runtime-benchmarks",
+	"pezbp-bridge-hub-pezkuwichain/runtime-benchmarks",
 	"emulated-integration-tests-common/runtime-benchmarks",
 	"pezcumulus-primitives-core/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",

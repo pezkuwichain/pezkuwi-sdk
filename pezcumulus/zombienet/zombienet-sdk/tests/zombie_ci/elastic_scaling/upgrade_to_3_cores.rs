@@ -12,7 +12,7 @@ use pezcumulus_zombienet_sdk_helpers::{
 };
 use pezkuwi_primitives::Id as ParaId;
 use rstest::rstest;
-use zombienet_sdk::{
+use pezkuwi_zombienet_sdk::{
 	subxt::{OnlineClient, PezkuwiConfig},
 	NetworkConfig, NetworkConfigBuilder,
 };
@@ -112,7 +112,7 @@ async fn elastic_scaling_upgrade_to_3_cores(
 
 async fn build_network_config(async_backing: bool) -> Result<NetworkConfig, anyhow::Error> {
 	// images are not relevant for `native`, but we leave it here in case we use `k8s` some day
-	let images = zombienet_sdk::environment::get_images_from_env();
+	let images = pezkuwi_zombienet_sdk::environment::get_images_from_env();
 	log::info!("Using images: {images:?}");
 
 	let chain = if async_backing { "async-backing" } else { "sync-backing" };

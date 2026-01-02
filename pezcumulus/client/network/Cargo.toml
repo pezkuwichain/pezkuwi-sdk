@@ -35,7 +35,7 @@ pezsp-version = { workspace = true, default-features = true }
 pezkuwi-node-subsystem = { workspace = true, default-features = true }
 pezkuwi-pez-node-primitives = { workspace = true, default-features = true }
 pezkuwi-primitives = { workspace = true, default-features = true }
-pezkuwi-primitives-test-helpers = { workspace = true, default-features = true }
+# pezkuwi-primitives-test-helpers = { workspace = true, default-features = true }
 pezkuwi-teyrchain-primitives = { workspace = true, default-features = true }
 
 # Pezcumulus
@@ -50,24 +50,24 @@ pezsp-keyring = { workspace = true, default-features = true }
 pezsp-keystore = { workspace = true, default-features = true }
 
 # Pezkuwi
-pezkuwi-test-client = { workspace = true }
+# pezkuwi-test-client = { workspace = true }
 
 # Pezcumulus
 pezcumulus-primitives-core = { workspace = true, default-features = true }
-pezcumulus-relay-chain-inprocess-interface = { workspace = true, default-features = true }
-pezcumulus-test-service = { workspace = true }
+# pezcumulus-relay-chain-inprocess-interface = { workspace = true, default-features = true }
+# pezcumulus-test-service = { workspace = true }
 
 [features]
 runtime-benchmarks = [
 	"pezcumulus-primitives-core/runtime-benchmarks",
-	"pezcumulus-relay-chain-inprocess-interface/runtime-benchmarks",
+	# "pezcumulus-relay-chain-inprocess-interface/runtime-benchmarks",
 	"pezcumulus-relay-chain-interface/runtime-benchmarks",
-	"pezcumulus-test-service/runtime-benchmarks",
+	# "pezcumulus-test-service/runtime-benchmarks",
 	"pezkuwi-node-subsystem/runtime-benchmarks",
 	"pezkuwi-pez-node-primitives/runtime-benchmarks",
-	"pezkuwi-primitives-test-helpers/runtime-benchmarks",
+	# "pezkuwi-primitives-test-helpers/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
-	"pezkuwi-test-client/runtime-benchmarks",
+	# "pezkuwi-test-client/runtime-benchmarks",
 	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
 	"pezsc-client-api/runtime-benchmarks",
 	"pezsc-network/runtime-benchmarks",

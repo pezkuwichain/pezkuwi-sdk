@@ -15,7 +15,7 @@
 
 use crate::xcm_config::bridging::to_pezkuwichain::{AssetHubPezkuwichain, PezkuwichainEcosystem};
 use alloc::{vec, vec::Vec};
-use assets_common::{
+use pez_assets_common::{
 	local_and_foreign_assets::ForeignAssetReserveData,
 	migrations::foreign_assets_reserves::ForeignAssetsReservesProvider,
 };

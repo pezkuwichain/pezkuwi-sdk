@@ -24,11 +24,11 @@ use crate::{
 };
 
 use async_trait::async_trait;
-use bp_pezkuwi_core::{
+use pezbp_pezkuwi_core::{
 	teyrchains::{ParaHash, ParaHeadsProof, ParaId},
 	BlockNumber as RelayBlockNumber,
 };
-use bp_teyrchains::{
+use pezbp_teyrchains::{
 	ImportedParaHeadsKeyProvider, ParaInfo, ParaStoredHeaderData, ParasInfoKeyProvider,
 };
 use pezbp_runtime::{

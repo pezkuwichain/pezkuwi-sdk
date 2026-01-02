@@ -18,7 +18,7 @@
 
 use crate::weights::WeightInfo;
 
-use bp_messages::{MessageNonce, UnrewardedRelayersState};
+use pezbp_messages::{MessageNonce, UnrewardedRelayersState};
 use pezbp_runtime::{PreComputedSize, Size};
 use pezframe_support::weights::Weight;
 

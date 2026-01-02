@@ -25,7 +25,7 @@ use crate::zombienet::{BlockSubscriptionType, NetworkSpawner, ScenarioBuilderSha
 use pezcumulus_zombienet_sdk_helpers::create_assign_core_call;
 use serde_json::json;
 use txtesttool::{execution_log::ExecutionLog, scenario::ScenarioBuilder};
-use zombienet_sdk::{
+use pezkuwi_zombienet_sdk::{
 	pezkuwi_subxt::{OnlineClient, PezkuwiConfig},
 	pezkuwi_subxt_signer::sr25519::dev,
 	NetworkConfigBuilder,
@@ -35,7 +35,7 @@ use zombienet_sdk::{
 #[ignore]
 async fn slot_based_3cores_test() -> Result<(), anyhow::Error> {
 	let spawner = NetworkSpawner::with_closure(|| {
-		let images = zombienet_sdk::environment::get_images_from_env();
+		let images = pezkuwi_zombienet_sdk::environment::get_images_from_env();
 		let names = ["alice", "bob", "charlie"];
 		NetworkConfigBuilder::new()
 			.with_relaychain(|r| {

@@ -30,7 +30,7 @@ use pezsc_cli::{
 use std::{fmt::Debug, path::PathBuf};
 
 /// Logging target
-const LOG_TARGET: &'static str = "frame::benchmark::pezpallet";
+const LOG_TARGET: &'static str = "pezframe::benchmark::pezpallet";
 
 // Add a more relaxed parsing for pezpallet names by allowing pezpallet directory names with `-` to
 // be used like crate names with `_`

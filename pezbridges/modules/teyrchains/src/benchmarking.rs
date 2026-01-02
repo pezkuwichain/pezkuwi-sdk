@@ -21,7 +21,7 @@ use crate::{
 	RelayBlockNumber,
 };
 
-use bp_pezkuwi_core::teyrchains::{ParaHash, ParaHeadsProof, ParaId};
+use pezbp_pezkuwi_core::teyrchains::{ParaHash, ParaHeadsProof, ParaId};
 use pezbp_runtime::UnverifiedStorageProofParams;
 use pezframe_benchmarking::{account, benchmarks_instance_pallet};
 use pezframe_system::RawOrigin;

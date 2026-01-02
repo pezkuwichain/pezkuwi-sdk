@@ -19,7 +19,7 @@ use crate::{mock::*, *};
 
 use crate::primitives::{mmr_lib::helper, utils, Compact, LeafProof};
 
-use frame::{
+use pezframe::{
 	deps::pezsp_core::{
 		offchain::{testing::TestOffchainExt, OffchainDbExt, OffchainWorkerExt},
 		H256,

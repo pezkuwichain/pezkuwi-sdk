@@ -38,7 +38,7 @@
 
 pub use storage_types::StoredAuthoritySet;
 
-use bp_header_pez_chain::{
+use pezbp_header_pez_chain::{
 	justification::GrandpaJustification, AuthoritySet, ChainWithGrandpa, GrandpaConsensusLogReader,
 	HeaderChain, InitializationData, StoredHeaderData, StoredHeaderDataBuilder,
 	StoredHeaderGrandpaInfo,
@@ -680,9 +680,9 @@ pub mod pezpallet {
 		justification: &GrandpaJustification<BridgedHeader<T, I>>,
 		hash: BridgedBlockHash<T, I>,
 		number: BridgedBlockNumber<T, I>,
-		authority_set: bp_header_pez_chain::AuthoritySet,
+		authority_set: pezbp_header_pez_chain::AuthoritySet,
 	) -> Result<(), pezsp_runtime::DispatchError> {
-		use bp_header_pez_chain::justification::verify_justification;
+		use pezbp_header_pez_chain::justification::verify_justification;
 
 		Ok(verify_justification::<BridgedHeader<T, I>>(
 			(hash, number),
@@ -838,8 +838,8 @@ mod tests {
 		run_test, test_header, FreeHeadersInterval, RuntimeEvent as TestEvent, RuntimeOrigin,
 		System, TestBridgedChain, TestHeader, TestNumber, TestRuntime, MAX_BRIDGED_AUTHORITIES,
 	};
-	use bp_header_pez_chain::BridgeGrandpaCall;
-	use bp_test_utils::{
+	use pezbp_header_pez_chain::BridgeGrandpaCall;
+	use pezbp_test_utils::{
 		authority_list, generate_owned_bridge_module_tests, make_default_justification,
 		make_justification_for_header, JustificationGeneratorParams, ALICE, BOB,
 		TEST_GRANDPA_SET_ID,
@@ -1456,7 +1456,7 @@ mod tests {
 					Default::default(),
 				)
 				.map(|_| ()),
-				bp_header_pez_chain::HeaderChainError::UnknownHeader,
+				pezbp_header_pez_chain::HeaderChainError::UnknownHeader,
 			);
 		});
 	}
@@ -1671,17 +1671,17 @@ mod tests {
 	fn storage_keys_computed_properly() {
 		assert_eq!(
 			PalletOperatingMode::<TestRuntime>::storage_value_final_key().to_vec(),
-			bp_header_pez_chain::storage_keys::pezpallet_operating_mode_key("Grandpa").0,
+			pezbp_header_pez_chain::storage_keys::pezpallet_operating_mode_key("Grandpa").0,
 		);
 
 		assert_eq!(
 			CurrentAuthoritySet::<TestRuntime>::storage_value_final_key().to_vec(),
-			bp_header_pez_chain::storage_keys::current_authority_set_key("Grandpa").0,
+			pezbp_header_pez_chain::storage_keys::current_authority_set_key("Grandpa").0,
 		);
 
 		assert_eq!(
 			BestFinalized::<TestRuntime>::storage_value_final_key().to_vec(),
-			bp_header_pez_chain::storage_keys::best_finalized_key("Grandpa").0,
+			pezbp_header_pez_chain::storage_keys::best_finalized_key("Grandpa").0,
 		);
 	}
 

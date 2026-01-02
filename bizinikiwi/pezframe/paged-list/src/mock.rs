@@ -20,7 +20,7 @@
 #![cfg(feature = "std")]
 
 use crate::{paged_list::StoragePagedListMeta, Config, ListPrefix};
-use frame::testing_prelude::*;
+use pezframe::testing_prelude::*;
 
 type Block = pezframe_system::mocking::MockBlock<Test>;
 

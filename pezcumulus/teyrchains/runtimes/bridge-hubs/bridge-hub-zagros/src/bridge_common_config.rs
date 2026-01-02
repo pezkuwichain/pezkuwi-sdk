@@ -26,8 +26,8 @@ use crate::{
 	bridge_to_ethereum_config::InboundQueueV2Location, xcm_config::XcmConfig, RuntimeCall,
 	XcmRouter,
 };
-use bp_messages::LegacyLaneId;
-use bp_relayers::RewardsAccountParams;
+use pezbp_messages::LegacyLaneId;
+use pezbp_relayers::RewardsAccountParams;
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
 use pezframe_support::parameter_types;
 use scale_info::TypeInfo;
@@ -86,9 +86,9 @@ impl From<pezsp_runtime::AccountId32> for BridgeRewardBeneficiaries {
 	}
 }
 
-/// Implementation of `bp_relayers::PaymentProcedure` as a pay/claim rewards scheme.
+/// Implementation of `pezbp_relayers::PaymentProcedure` as a pay/claim rewards scheme.
 pub struct BridgeRewardPayer;
-impl bp_relayers::PaymentProcedure<AccountId, BridgeReward, u128> for BridgeRewardPayer {
+impl pezbp_relayers::PaymentProcedure<AccountId, BridgeReward, u128> for BridgeRewardPayer {
 	type Error = pezsp_runtime::DispatchError;
 	type Beneficiary = BridgeRewardBeneficiaries;
 
@@ -102,7 +102,7 @@ impl bp_relayers::PaymentProcedure<AccountId, BridgeReward, u128> for BridgeRewa
 			BridgeReward::PezkuwichainZagros(lane_params) => {
 				match beneficiary {
 					BridgeRewardBeneficiaries::LocalAccount(account) => {
-						bp_relayers::PayRewardFromAccount::<
+						pezbp_relayers::PayRewardFromAccount::<
 							Balances,
 							AccountId,
 							LegacyLaneId,

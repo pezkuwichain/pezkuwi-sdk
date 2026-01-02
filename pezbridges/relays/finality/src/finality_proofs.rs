@@ -16,7 +16,7 @@
 
 use crate::{base::SourceClientBase, FinalityPipeline};
 
-use bp_header_pez_chain::FinalityProof;
+use pezbp_header_pez_chain::FinalityProof;
 use futures::{FutureExt, Stream, StreamExt};
 use std::pin::Pin;
 

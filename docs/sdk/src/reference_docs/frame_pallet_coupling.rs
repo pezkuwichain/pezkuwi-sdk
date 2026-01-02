@@ -3,7 +3,7 @@
 //! This reference document explains how FRAME pallets can be combined to interact together.
 //!
 //! It is suggested to re-read [`crate::pezkuwi_sdk::frame_runtime`], notably the information
-//! around [`frame::pezpallet_macros::config`]. Recall that:
+//! around [`pezframe::pezpallet_macros::config`]. Recall that:
 //!
 //! > Configuration trait of a pezpallet: It allows a pezpallet to receive types at a later
 //! > point from the runtime that wishes to contain it. It allows the pezpallet to be parameterized
@@ -124,8 +124,8 @@
 //! With the above information in context, we can conclude that **`pezframe_system` is a special
 //! pezpallet that is tightly coupled with every other pezpallet**. This is because it provides the
 //! fundamental system functionality that every pezpallet needs, such as some types like
-//! [`frame::prelude::pezframe_system::Config::AccountId`],
-//! [`frame::prelude::pezframe_system::Config::Hash`], and some functionality such as block number,
+//! [`pezframe::prelude::pezframe_system::Config::AccountId`],
+//! [`pezframe::prelude::pezframe_system::Config::Hash`], and some functionality such as block number,
 //! etc.
 //!
 //! ## Recap
@@ -157,10 +157,10 @@
 
 #![allow(unused)]
 
-use frame::prelude::*;
+use pezframe::prelude::*;
 
 #[docify::export]
-#[frame::pezpallet]
+#[pezframe::pezpallet]
 pub mod pezpallet_foo {
 	use super::*;
 
@@ -178,7 +178,7 @@ pub mod pezpallet_foo {
 }
 
 #[docify::export]
-#[frame::pezpallet]
+#[pezframe::pezpallet]
 pub mod pezpallet_author {
 	use super::*;
 
@@ -195,7 +195,7 @@ pub mod pezpallet_author {
 	}
 }
 
-#[frame::pezpallet]
+#[pezframe::pezpallet]
 pub mod pezpallet_foo_tight {
 	use super::*;
 
@@ -224,7 +224,7 @@ pub trait AuthorProvider<AccountId> {
 	fn author() -> AccountId;
 }
 
-#[frame::pezpallet]
+#[pezframe::pezpallet]
 pub mod pezpallet_foo_loose {
 	use super::*;
 
@@ -272,7 +272,7 @@ impl<AccountId> AuthorProvider<AccountId> for () {
 
 pub mod runtime {
 	use super::*;
-	use frame::{runtime::prelude::*, testing_prelude::*};
+	use pezframe::{runtime::prelude::*, testing_prelude::*};
 	use pezcumulus_pezpallet_aura_ext::pezpallet;
 
 	construct_runtime!(

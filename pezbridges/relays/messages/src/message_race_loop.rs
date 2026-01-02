@@ -23,7 +23,7 @@
 use crate::message_lane_loop::{BatchTransaction, ClientState, NoncesSubmitArtifacts};
 
 use async_trait::async_trait;
-use bp_messages::MessageNonce;
+use pezbp_messages::MessageNonce;
 use futures::{
 	future::{FutureExt, TryFutureExt},
 	stream::{FusedStream, StreamExt},

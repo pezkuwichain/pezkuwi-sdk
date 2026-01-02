@@ -39,9 +39,9 @@ thiserror = { workspace = true }
 [dev-dependencies]
 assert_matches = { workspace = true }
 futures-timer = { workspace = true }
-pezkuwi-node-subsystem-test-helpers = { workspace = true }
-pezkuwi-primitives-test-helpers = { workspace = true }
-pezkuwi-subsystem-bench = { workspace = true }
+# pezkuwi-node-subsystem-test-helpers = { workspace = true }
+# pezkuwi-primitives-test-helpers = { workspace = true }
+# pezkuwi-subsystem-bench = { workspace = true }
 pezsp-keyring = { workspace = true, default-features = true }
 pezsp-tracing = { workspace = true, default-features = true }
 rstest = { workspace = true }
@@ -52,13 +52,13 @@ runtime-benchmarks = [
 	"gum/runtime-benchmarks",
 	"pezkuwi-erasure-coding/runtime-benchmarks",
 	"pezkuwi-node-network-protocol/runtime-benchmarks",
-	"pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
+	# "pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
 	"pezkuwi-node-subsystem-util/runtime-benchmarks",
 	"pezkuwi-node-subsystem/runtime-benchmarks",
 	"pezkuwi-pez-node-primitives/runtime-benchmarks",
-	"pezkuwi-primitives-test-helpers/runtime-benchmarks",
+	# "pezkuwi-primitives-test-helpers/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
-	"pezkuwi-subsystem-bench/runtime-benchmarks",
+	# "pezkuwi-subsystem-bench/runtime-benchmarks",
 	"pezsc-network/runtime-benchmarks",
 	"pezsp-keyring/runtime-benchmarks",
 ]

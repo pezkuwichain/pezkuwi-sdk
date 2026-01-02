@@ -26,7 +26,7 @@ use crate::{
 };
 
 use async_std::sync::Arc;
-use bp_messages::{
+use pezbp_messages::{
 	target_chain::FromBridgedChainMessagesProof, ChainWithMessages as _, MessageNonce,
 };
 use codec::{Codec, Encode, EncodeLike};
@@ -459,7 +459,7 @@ macro_rules! generate_receive_message_proof_call_builder {
 					<$pipeline as $crate::messages::BizinikiwiMessageLane>::LaneId
 				>,
 				messages_count: u32,
-				dispatch_weight: bp_messages::Weight,
+				dispatch_weight: pezbp_messages::Weight,
 				_trace_call: bool,
 			) -> relay_bizinikiwi_client::CallOf<
 				<$pipeline as $crate::messages::BizinikiwiMessageLane>::TargetChain
@@ -686,7 +686,7 @@ where
 #[cfg(test)]
 mod tests {
 	use super::*;
-	use bp_messages::{
+	use pezbp_messages::{
 		source_chain::FromBridgedChainMessagesDeliveryProof, LaneIdType, UnrewardedRelayersState,
 	};
 	use relay_bizinikiwi_client::calls::{UtilityCall as MockUtilityCall, UtilityCall};
@@ -698,7 +698,7 @@ mod tests {
 		#[codec(index = 123)]
 		Utility(UtilityCall<RuntimeCall>),
 	}
-	pub type CodegenBridgeMessagesCall = bp_messages::BridgeMessagesCall<
+	pub type CodegenBridgeMessagesCall = pezbp_messages::BridgeMessagesCall<
 		u64,
 		Box<FromBridgedChainMessagesProof<mock::BridgedHeaderHash, mock::TestLaneIdType>>,
 		FromBridgedChainMessagesDeliveryProof<mock::BridgedHeaderHash, mock::TestLaneIdType>,
@@ -825,7 +825,7 @@ mod tests {
 	#[allow(unexpected_cfgs)]
 	mod mock {
 		use super::super::*;
-		use bp_messages::{target_chain::ForbidInboundMessages, HashedLaneId};
+		use pezbp_messages::{target_chain::ForbidInboundMessages, HashedLaneId};
 		use pezbp_runtime::ChainId;
 		use pezframe_support::derive_impl;
 		use pezsp_core::H256;
@@ -888,7 +888,7 @@ mod tests {
 			}
 		}
 
-		impl bp_messages::ChainWithMessages for ThisUnderlyingChain {
+		impl pezbp_messages::ChainWithMessages for ThisUnderlyingChain {
 			const WITH_CHAIN_MESSAGES_PALLET_NAME: &'static str = "";
 			const MAX_UNREWARDED_RELAYERS_IN_CONFIRMATION_TX: MessageNonce = 16;
 			const MAX_UNCONFIRMED_MESSAGES_IN_CONFIRMATION_TX: MessageNonce = 1000;
@@ -918,7 +918,7 @@ mod tests {
 			}
 		}
 
-		impl bp_messages::ChainWithMessages for BridgedUnderlyingChain {
+		impl pezbp_messages::ChainWithMessages for BridgedUnderlyingChain {
 			const WITH_CHAIN_MESSAGES_PALLET_NAME: &'static str = "";
 			const MAX_UNREWARDED_RELAYERS_IN_CONFIRMATION_TX: MessageNonce = 16;
 			const MAX_UNCONFIRMED_MESSAGES_IN_CONFIRMATION_TX: MessageNonce = 1000;
@@ -926,7 +926,7 @@ mod tests {
 
 		pub struct BridgedHeaderChain;
 
-		impl bp_header_pez_chain::HeaderChain<BridgedUnderlyingChain> for BridgedHeaderChain {
+		impl pezbp_header_pez_chain::HeaderChain<BridgedUnderlyingChain> for BridgedHeaderChain {
 			fn finalized_header_state_root(
 				_hash: HashOf<BridgedUnderlyingChain>,
 			) -> Option<HashOf<BridgedUnderlyingChain>> {

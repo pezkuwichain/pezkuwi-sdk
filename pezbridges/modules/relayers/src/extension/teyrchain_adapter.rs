@@ -24,7 +24,7 @@ use crate::{
 	Config as BridgeRelayersConfig, LOG_TARGET,
 };
 
-use bp_relayers::{BatchCallUnpacker, ExtensionCallData, ExtensionCallInfo, ExtensionConfig};
+use pezbp_relayers::{BatchCallUnpacker, ExtensionCallData, ExtensionCallInfo, ExtensionConfig};
 use core::marker::PhantomData;
 use pezbp_runtime::{StaticStrProvider, Teyrchain};
 use pezframe_support::dispatch::{DispatchInfo, PostDispatchInfo};

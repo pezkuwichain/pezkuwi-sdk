@@ -24,9 +24,9 @@ use crate::{
 };
 
 use alloc::{boxed::Box, vec};
-use bp_header_pez_chain::ChainWithGrandpa;
-use bp_messages::UnrewardedRelayersState;
-use bp_relayers::{RewardsAccountOwner, RewardsAccountParams};
+use pezbp_header_pez_chain::ChainWithGrandpa;
+use pezbp_messages::UnrewardedRelayersState;
+use pezbp_relayers::{RewardsAccountOwner, RewardsAccountParams};
 use pezframe_support::traits::{OnFinalize, OnInitialize};
 use pezframe_system::pezpallet_prelude::BlockNumberFor;
 use pezpallet_bridge_messages::{BridgedChainOf, LaneIdOf, ThisChainOf};

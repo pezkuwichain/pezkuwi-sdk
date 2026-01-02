@@ -26,7 +26,7 @@ rand = { workspace = true, default-features = true }
 assert_matches = { workspace = true }
 bitvec = { features = ["alloc"], workspace = true }
 maplit = { workspace = true }
-pezkuwi-node-subsystem-test-helpers = { workspace = true }
+# pezkuwi-node-subsystem-test-helpers = { workspace = true }
 pezsp-application-crypto = { workspace = true, default-features = true }
 pezsp-authority-discovery = { workspace = true, default-features = true }
 pezsp-core = { workspace = true, default-features = true }
@@ -39,7 +39,7 @@ rand_chacha = { workspace = true, default-features = true }
 runtime-benchmarks = [
 	"gum/runtime-benchmarks",
 	"pezkuwi-node-network-protocol/runtime-benchmarks",
-	"pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
+	# "pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
 	"pezkuwi-node-subsystem-util/runtime-benchmarks",
 	"pezkuwi-node-subsystem/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",

@@ -20,7 +20,7 @@ use crate::{
 	StoredMessagePayload,
 };
 
-use bp_messages::{
+use pezbp_messages::{
 	target_chain::MessageDispatch, ChainWithMessages, InboundLaneData, LaneState, MessageKey,
 	MessageNonce, OutboundLaneData,
 };

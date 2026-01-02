@@ -17,7 +17,7 @@
 
 //! Tests for NIS pezpallet.
 
-use frame::testing_prelude::*;
+use pezframe::testing_prelude::*;
 
 use crate::{
 	mock::{Balance, *},

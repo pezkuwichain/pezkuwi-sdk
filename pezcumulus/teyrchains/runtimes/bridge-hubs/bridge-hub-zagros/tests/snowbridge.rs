@@ -16,9 +16,9 @@
 
 #![cfg(test)]
 
-use bp_asset_hub_zagros::ASSET_HUB_ZAGROS_TEYRCHAIN_ID;
-use bp_bridge_hub_zagros::BRIDGE_HUB_ZAGROS_TEYRCHAIN_ID;
-use bp_pezkuwi_core::Signature;
+use pezbp_asset_hub_zagros::ASSET_HUB_ZAGROS_TEYRCHAIN_ID;
+use pezbp_bridge_hub_zagros::BRIDGE_HUB_ZAGROS_TEYRCHAIN_ID;
+use pezbp_pezkuwi_core::Signature;
 use codec::{Decode, Encode};
 use pezbridge_hub_zagros_runtime::{
 	bridge_to_pezkuwichain_config, xcm_config::XcmConfig, AllPalletsWithoutSystem,

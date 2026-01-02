@@ -1144,8 +1144,8 @@ name = "asset-hub-pezkuwichain-emulated-chain"
 version = "0.0.0"
 dependencies = [
  "asset-hub-pezkuwichain-runtime",
- "bp-bridge-hub-pezkuwichain",
  "emulated-integration-tests-common",
+ "pezbp-bridge-hub-pezkuwichain",
  "pezcumulus-primitives-core",
  "pezframe-support",
  "pezkuwichain-emulated-chain",
@@ -1192,15 +1192,15 @@ name = "asset-hub-pezkuwichain-runtime"
 version = "0.11.0"
 dependencies = [
  "asset-test-pezutils",
- "assets-common",
  "bizinikiwi-wasm-builder",
- "bp-asset-hub-pezkuwichain",
- "bp-asset-hub-zagros",
- "bp-bridge-hub-pezkuwichain",
- "bp-bridge-hub-zagros",
  "hex-literal",
  "log",
  "parity-scale-codec",
+ "pez-assets-common",
+ "pezbp-asset-hub-pezkuwichain",
+ "pezbp-asset-hub-zagros",
+ "pezbp-bridge-hub-pezkuwichain",
+ "pezbp-bridge-hub-zagros",
  "pezcumulus-pezpallet-aura-ext",
  "pezcumulus-pezpallet-session-benchmarking",
  "pezcumulus-pezpallet-teyrchain-system",
@@ -1298,8 +1298,8 @@ name = "asset-hub-zagros-emulated-chain"
 version = "0.0.0"
 dependencies = [
  "asset-hub-zagros-runtime",
- "bp-bridge-hub-zagros",
  "emulated-integration-tests-common",
+ "pezbp-bridge-hub-zagros",
  "pezcumulus-primitives-core",
  "pezframe-support",
  "pezsp-core",
@@ -1348,15 +1348,15 @@ version = "0.15.0"
 dependencies = [
  "alloy-core",
  "asset-test-pezutils",
- "assets-common",
  "bizinikiwi-wasm-builder",
- "bp-asset-hub-pezkuwichain",
- "bp-asset-hub-zagros",
- "bp-bridge-hub-pezkuwichain",
- "bp-bridge-hub-zagros",
  "hex-literal",
  "log",
  "parity-scale-codec",
+ "pez-assets-common",
+ "pezbp-asset-hub-pezkuwichain",
+ "pezbp-asset-hub-zagros",
+ "pezbp-bridge-hub-pezkuwichain",
+ "pezbp-bridge-hub-zagros",
  "pezcumulus-pezpallet-aura-ext",
  "pezcumulus-pezpallet-session-benchmarking",
  "pezcumulus-pezpallet-teyrchain-system",
@@ -1470,8 +1470,8 @@ dependencies = [
 name = "asset-test-pezutils"
 version = "7.0.0"
 dependencies = [
- "assets-common",
  "parity-scale-codec",
+ "pez-assets-common",
  "pezcumulus-pezpallet-teyrchain-system",
  "pezcumulus-pezpallet-xcmp-queue",
  "pezcumulus-primitives-core",
@@ -1494,33 +1494,6 @@ dependencies = [
  "teyrchains-common",
  "teyrchains-runtimes-test-utils",
  "xcm-runtime-pezapis",
-]
-
-[[package]]
-name = "assets-common"
-version = "0.7.0"
-dependencies = [
- "impl-trait-for-tuples",
- "parity-scale-codec",
- "pez-ethereum-standards",
- "pezcumulus-primitives-core",
- "pezframe-support",
- "pezframe-system",
- "pezpallet-asset-conversion",
- "pezpallet-assets",
- "pezpallet-revive",
- "pezpallet-revive-uapi",
- "pezpallet-xcm",
- "pezsp-api",
- "pezsp-core",
- "pezsp-runtime",
- "pezstaging-xcm",
- "pezstaging-xcm-builder",
- "pezstaging-xcm-executor",
- "scale-info",
- "serde",
- "teyrchains-common",
- "tracing",
 ]
 
 [[package]]
@@ -2044,9 +2017,9 @@ dependencies = [
 
 [[package]]
 name = "bizinikiwi-bn"
-version = "0.6.0"
+version = "0.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8cefde413ae13ad3feac77cedffecb4ea0d957d1b519706f801e672bc1e24554"
+checksum = "e2db2e548eb69564b147e3e42301cf63d2375eb9b05f50cc99db14fc2dde6cdf"
 dependencies = [
  "byteorder",
  "crunchy",
@@ -2098,7 +2071,6 @@ name = "bizinikiwi-frame-rpc-system"
 version = "28.0.0"
 dependencies = [
  "assert_matches",
- "bizinikiwi-test-runtime-client",
  "docify",
  "futures",
  "jsonrpsee",
@@ -2137,11 +2109,6 @@ dependencies = [
  "anyhow",
  "async-std",
  "async-trait",
- "bp-header-pez-chain",
- "bp-messages",
- "bp-pezkuwi-core",
- "bp-relayers",
- "bp-teyrchains",
  "clap",
  "futures",
  "hex",
@@ -2150,7 +2117,12 @@ dependencies = [
  "pez-equivocation-detector",
  "pez-finality-relay",
  "pez-messages-relay",
+ "pezbp-header-pez-chain",
+ "pezbp-messages",
+ "pezbp-pezkuwi-core",
+ "pezbp-relayers",
  "pezbp-runtime",
+ "pezbp-teyrchains",
  "pezframe-support",
  "pezframe-system",
  "pezpallet-balances",
@@ -2555,294 +2527,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "68534a48cbf63a4b1323c433cf21238c9ec23711e0df13b08c33e5c2082663ce"
 dependencies = [
  "thiserror 1.0.69",
-]
-
-[[package]]
-name = "bp-asset-hub-pezkuwichain"
-version = "0.4.0"
-dependencies = [
- "bp-bridge-hub-pezcumulus",
- "bp-messages",
- "bp-xcm-bridge-hub-router",
- "parity-scale-codec",
- "pezbp-runtime",
- "pezframe-support",
- "pezsp-api",
- "pezsp-core",
- "pezstaging-xcm",
- "scale-info",
- "testnet-teyrchains-constants",
-]
-
-[[package]]
-name = "bp-asset-hub-zagros"
-version = "0.3.0"
-dependencies = [
- "bp-bridge-hub-pezcumulus",
- "bp-messages",
- "bp-xcm-bridge-hub-router",
- "parity-scale-codec",
- "pezbp-runtime",
- "pezframe-support",
- "pezsp-api",
- "pezsp-core",
- "pezstaging-xcm",
- "scale-info",
- "testnet-teyrchains-constants",
-]
-
-[[package]]
-name = "bp-beefy"
-version = "0.1.0"
-dependencies = [
- "parity-scale-codec",
- "pez-binary-merkle-tree",
- "pezbp-runtime",
- "pezframe-support",
- "pezpallet-beefy-mmr",
- "pezpallet-mmr",
- "pezsp-consensus-beefy",
- "pezsp-runtime",
- "pezsp-std",
- "scale-info",
- "serde",
-]
-
-[[package]]
-name = "bp-bridge-hub-pezcumulus"
-version = "0.7.0"
-dependencies = [
- "bp-messages",
- "bp-pezkuwi-core",
- "pezbp-runtime",
- "pezframe-support",
- "pezframe-system",
- "pezkuwi-primitives",
- "pezsp-api",
- "pezsp-std",
- "teyrchains-common",
-]
-
-[[package]]
-name = "bp-bridge-hub-pezkuwichain"
-version = "0.7.0"
-dependencies = [
- "bp-bridge-hub-pezcumulus",
- "bp-messages",
- "bp-xcm-bridge-hub",
- "parity-scale-codec",
- "pezbp-runtime",
- "pezframe-support",
- "pezsp-api",
- "pezsp-runtime",
- "pezsp-std",
-]
-
-[[package]]
-name = "bp-bridge-hub-zagros"
-version = "0.3.0"
-dependencies = [
- "bp-bridge-hub-pezcumulus",
- "bp-messages",
- "bp-xcm-bridge-hub",
- "parity-scale-codec",
- "pezbp-runtime",
- "pezframe-support",
- "pezsp-api",
- "pezsp-runtime",
- "pezsp-std",
-]
-
-[[package]]
-name = "bp-header-pez-chain"
-version = "0.7.0"
-dependencies = [
- "bp-test-utils",
- "finality-grandpa",
- "hex",
- "hex-literal",
- "parity-scale-codec",
- "pezbp-runtime",
- "pezframe-support",
- "pezsp-consensus-grandpa",
- "pezsp-core",
- "pezsp-runtime",
- "pezsp-std",
- "scale-info",
- "serde",
-]
-
-[[package]]
-name = "bp-messages"
-version = "0.7.0"
-dependencies = [
- "bp-header-pez-chain",
- "hex",
- "hex-literal",
- "parity-scale-codec",
- "pezbp-runtime",
- "pezframe-support",
- "pezsp-core",
- "pezsp-io",
- "pezsp-std",
- "scale-info",
- "serde",
-]
-
-[[package]]
-name = "bp-pezkuwi-bulletin"
-version = "0.4.0"
-dependencies = [
- "bp-header-pez-chain",
- "bp-messages",
- "bp-pezkuwi-core",
- "parity-scale-codec",
- "pezbp-runtime",
- "pezframe-support",
- "pezframe-system",
- "pezsp-api",
- "pezsp-runtime",
- "pezsp-std",
- "scale-info",
-]
-
-[[package]]
-name = "bp-pezkuwi-core"
-version = "0.7.0"
-dependencies = [
- "bp-messages",
- "hex",
- "parity-scale-codec",
- "pezbp-runtime",
- "pezframe-support",
- "pezframe-system",
- "pezsp-core",
- "pezsp-runtime",
- "pezsp-std",
- "scale-info",
- "serde",
-]
-
-[[package]]
-name = "bp-pezkuwichain"
-version = "0.6.0"
-dependencies = [
- "bp-header-pez-chain",
- "bp-pezkuwi-core",
- "pezbp-runtime",
- "pezframe-support",
- "pezsp-api",
- "pezsp-std",
-]
-
-[[package]]
-name = "bp-relayers"
-version = "0.7.0"
-dependencies = [
- "bp-header-pez-chain",
- "bp-messages",
- "bp-teyrchains",
- "hex-literal",
- "parity-scale-codec",
- "pezbp-runtime",
- "pezframe-support",
- "pezframe-system",
- "pezpallet-utility",
- "pezsp-runtime",
- "pezsp-std",
- "scale-info",
-]
-
-[[package]]
-name = "bp-test-utils"
-version = "0.7.0"
-dependencies = [
- "bp-header-pez-chain",
- "bp-pezkuwi-core",
- "bp-teyrchains",
- "ed25519-dalek",
- "finality-grandpa",
- "parity-scale-codec",
- "pezbp-runtime",
- "pezsp-application-crypto",
- "pezsp-consensus-grandpa",
- "pezsp-core",
- "pezsp-runtime",
- "pezsp-std",
- "pezsp-trie",
-]
-
-[[package]]
-name = "bp-teyrchains"
-version = "0.7.0"
-dependencies = [
- "bp-header-pez-chain",
- "bp-pezkuwi-core",
- "impl-trait-for-tuples",
- "parity-scale-codec",
- "pezbp-runtime",
- "pezframe-support",
- "pezsp-core",
- "pezsp-runtime",
- "pezsp-std",
- "scale-info",
-]
-
-[[package]]
-name = "bp-xcm-bridge-hub"
-version = "0.2.0"
-dependencies = [
- "bp-messages",
- "parity-scale-codec",
- "pezbp-runtime",
- "pezframe-support",
- "pezsp-core",
- "pezsp-io",
- "pezsp-std",
- "pezstaging-xcm",
- "scale-info",
- "serde",
-]
-
-[[package]]
-name = "bp-xcm-bridge-hub-router"
-version = "0.6.0"
-dependencies = [
- "parity-scale-codec",
- "pezsp-core",
- "pezsp-runtime",
- "pezstaging-xcm",
- "scale-info",
-]
-
-[[package]]
-name = "bp-zagros"
-version = "0.3.0"
-dependencies = [
- "bp-header-pez-chain",
- "bp-pezkuwi-core",
- "pezbp-runtime",
- "pezframe-support",
- "pezsp-api",
- "pezsp-std",
-]
-
-[[package]]
-name = "bridge-hub-common"
-version = "0.1.0"
-dependencies = [
- "parity-scale-codec",
- "pezcumulus-primitives-core",
- "pezframe-support",
- "pezpallet-message-queue",
- "pezsnowbridge-core",
- "pezsp-core",
- "pezsp-runtime",
- "pezsp-std",
- "pezstaging-xcm",
- "pezstaging-xcm-builder",
- "pezstaging-xcm-executor",
- "scale-info",
 ]
 
 [[package]]
@@ -4945,11 +4629,11 @@ name = "emulated-integration-tests-common"
 version = "3.0.0"
 dependencies = [
  "asset-test-pezutils",
- "bp-messages",
- "bp-xcm-bridge-hub",
  "hex-literal",
  "parity-scale-codec",
  "paste",
+ "pezbp-messages",
+ "pezbp-xcm-bridge-hub",
  "pezcumulus-pezpallet-teyrchain-system",
  "pezcumulus-pezpallet-xcmp-queue",
  "pezcumulus-primitives-core",
@@ -5630,28 +5314,6 @@ dependencies = [
  "parity-scale-codec",
  "scale-info",
  "serde",
-]
-
-[[package]]
-name = "frame-remote-externalities"
-version = "0.35.0"
-dependencies = [
- "bizinikiwi-rpc-client",
- "futures",
- "indicatif",
- "jsonrpsee",
- "log",
- "parity-scale-codec",
- "pezsp-core",
- "pezsp-crypto-hashing",
- "pezsp-io",
- "pezsp-runtime",
- "pezsp-state-machine",
- "pezsp-tracing",
- "serde",
- "spinners",
- "tokio",
- "tokio-retry",
 ]
 
 [[package]]
@@ -9954,6 +9616,33 @@ dependencies = [
 ]
 
 [[package]]
+name = "pez-assets-common"
+version = "0.7.1"
+dependencies = [
+ "impl-trait-for-tuples",
+ "parity-scale-codec",
+ "pez-ethereum-standards",
+ "pezcumulus-primitives-core",
+ "pezframe-support",
+ "pezframe-system",
+ "pezpallet-asset-conversion",
+ "pezpallet-assets",
+ "pezpallet-revive",
+ "pezpallet-revive-uapi",
+ "pezpallet-xcm",
+ "pezsp-api",
+ "pezsp-core",
+ "pezsp-runtime",
+ "pezstaging-xcm",
+ "pezstaging-xcm-builder",
+ "pezstaging-xcm-executor",
+ "scale-info",
+ "serde",
+ "teyrchains-common",
+ "tracing",
+]
+
+[[package]]
 name = "pez-binary-merkle-tree"
 version = "14.0.1"
 dependencies = [
@@ -9972,9 +9661,11 @@ dependencies = [
  "cmd_lib",
  "docify",
  "parity-scale-codec",
+ "pezframe",
  "pezframe-support",
- "pezkuwi-sdk-frame",
+ "pezframe-system",
  "pezsc-chain-spec",
+ "pezsp-api",
  "pezsp-application-crypto",
  "pezsp-core",
  "pezsp-genesis-builder",
@@ -9991,10 +9682,10 @@ version = "0.1.0"
 dependencies = [
  "async-std",
  "async-trait",
- "bp-header-pez-chain",
  "futures",
  "num-traits",
  "pez-finality-relay",
+ "pezbp-header-pez-chain",
  "relay-utils",
  "tracing",
 ]
@@ -10011,7 +9702,7 @@ dependencies = [
 
 [[package]]
 name = "pez-ethereum-standards"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "alloy-core",
 ]
@@ -10023,10 +9714,10 @@ dependencies = [
  "async-std",
  "async-trait",
  "backoff",
- "bp-header-pez-chain",
  "futures",
  "num-traits",
  "parking_lot 0.12.5",
+ "pezbp-header-pez-chain",
  "relay-utils",
  "tracing",
 ]
@@ -10080,12 +9771,12 @@ version = "0.1.0"
 dependencies = [
  "async-std",
  "async-trait",
- "bp-messages",
  "futures",
  "hex",
  "num-traits",
  "parking_lot 0.12.5",
  "pez-finality-relay",
+ "pezbp-messages",
  "pezsp-arithmetic",
  "pezsp-core",
  "relay-utils",
@@ -10264,10 +9955,10 @@ dependencies = [
 name = "pez-penpal-runtime"
 version = "0.14.0"
 dependencies = [
- "assets-common",
  "bizinikiwi-wasm-builder",
  "hex-literal",
  "parity-scale-codec",
+ "pez-assets-common",
  "pezcumulus-pezpallet-aura-ext",
  "pezcumulus-pezpallet-session-benchmarking",
  "pezcumulus-pezpallet-teyrchain-system",
@@ -10477,8 +10168,8 @@ version = "0.0.0"
 dependencies = [
  "anyhow",
  "env_logger 0.11.8",
+ "pezkuwi-zombienet-sdk",
  "tokio",
- "zombienet-sdk",
 ]
 
 [[package]]
@@ -10501,6 +10192,201 @@ dependencies = [
  "proc-macro2 1.0.103",
  "quote 1.0.42",
  "syn 2.0.111",
+]
+
+[[package]]
+name = "pezbp-asset-hub-pezkuwichain"
+version = "0.4.0"
+dependencies = [
+ "parity-scale-codec",
+ "pezbp-bridge-hub-pezcumulus",
+ "pezbp-messages",
+ "pezbp-runtime",
+ "pezbp-xcm-bridge-hub-router",
+ "pezframe-support",
+ "pezsp-api",
+ "pezsp-core",
+ "pezstaging-xcm",
+ "scale-info",
+ "testnet-teyrchains-constants",
+]
+
+[[package]]
+name = "pezbp-asset-hub-zagros"
+version = "0.3.0"
+dependencies = [
+ "parity-scale-codec",
+ "pezbp-bridge-hub-pezcumulus",
+ "pezbp-messages",
+ "pezbp-runtime",
+ "pezbp-xcm-bridge-hub-router",
+ "pezframe-support",
+ "pezsp-api",
+ "pezsp-core",
+ "pezstaging-xcm",
+ "scale-info",
+ "testnet-teyrchains-constants",
+]
+
+[[package]]
+name = "pezbp-beefy"
+version = "0.1.0"
+dependencies = [
+ "parity-scale-codec",
+ "pez-binary-merkle-tree",
+ "pezbp-runtime",
+ "pezframe-support",
+ "pezpallet-beefy-mmr",
+ "pezpallet-mmr",
+ "pezsp-consensus-beefy",
+ "pezsp-runtime",
+ "pezsp-std",
+ "scale-info",
+ "serde",
+]
+
+[[package]]
+name = "pezbp-bridge-hub-pezcumulus"
+version = "0.7.0"
+dependencies = [
+ "pezbp-messages",
+ "pezbp-pezkuwi-core",
+ "pezbp-runtime",
+ "pezframe-support",
+ "pezframe-system",
+ "pezkuwi-primitives",
+ "pezsp-api",
+ "pezsp-std",
+ "teyrchains-common",
+]
+
+[[package]]
+name = "pezbp-bridge-hub-pezkuwichain"
+version = "0.7.0"
+dependencies = [
+ "parity-scale-codec",
+ "pezbp-bridge-hub-pezcumulus",
+ "pezbp-messages",
+ "pezbp-runtime",
+ "pezbp-xcm-bridge-hub",
+ "pezframe-support",
+ "pezsp-api",
+ "pezsp-runtime",
+ "pezsp-std",
+]
+
+[[package]]
+name = "pezbp-bridge-hub-zagros"
+version = "0.3.0"
+dependencies = [
+ "parity-scale-codec",
+ "pezbp-bridge-hub-pezcumulus",
+ "pezbp-messages",
+ "pezbp-runtime",
+ "pezbp-xcm-bridge-hub",
+ "pezframe-support",
+ "pezsp-api",
+ "pezsp-runtime",
+ "pezsp-std",
+]
+
+[[package]]
+name = "pezbp-header-pez-chain"
+version = "0.7.0"
+dependencies = [
+ "finality-grandpa",
+ "hex",
+ "hex-literal",
+ "parity-scale-codec",
+ "pezbp-runtime",
+ "pezframe-support",
+ "pezsp-consensus-grandpa",
+ "pezsp-core",
+ "pezsp-runtime",
+ "pezsp-std",
+ "scale-info",
+ "serde",
+]
+
+[[package]]
+name = "pezbp-messages"
+version = "0.7.0"
+dependencies = [
+ "hex",
+ "hex-literal",
+ "parity-scale-codec",
+ "pezbp-header-pez-chain",
+ "pezbp-runtime",
+ "pezframe-support",
+ "pezsp-core",
+ "pezsp-io",
+ "pezsp-std",
+ "scale-info",
+ "serde",
+]
+
+[[package]]
+name = "pezbp-pezkuwi-bulletin"
+version = "0.4.0"
+dependencies = [
+ "parity-scale-codec",
+ "pezbp-header-pez-chain",
+ "pezbp-messages",
+ "pezbp-pezkuwi-core",
+ "pezbp-runtime",
+ "pezframe-support",
+ "pezframe-system",
+ "pezsp-api",
+ "pezsp-runtime",
+ "pezsp-std",
+ "scale-info",
+]
+
+[[package]]
+name = "pezbp-pezkuwi-core"
+version = "0.7.0"
+dependencies = [
+ "hex",
+ "parity-scale-codec",
+ "pezbp-messages",
+ "pezbp-runtime",
+ "pezframe-support",
+ "pezframe-system",
+ "pezsp-core",
+ "pezsp-runtime",
+ "pezsp-std",
+ "scale-info",
+ "serde",
+]
+
+[[package]]
+name = "pezbp-pezkuwichain"
+version = "0.6.0"
+dependencies = [
+ "pezbp-header-pez-chain",
+ "pezbp-pezkuwi-core",
+ "pezbp-runtime",
+ "pezframe-support",
+ "pezsp-api",
+ "pezsp-std",
+]
+
+[[package]]
+name = "pezbp-relayers"
+version = "0.7.0"
+dependencies = [
+ "hex-literal",
+ "parity-scale-codec",
+ "pezbp-header-pez-chain",
+ "pezbp-messages",
+ "pezbp-runtime",
+ "pezbp-teyrchains",
+ "pezframe-support",
+ "pezframe-system",
+ "pezpallet-utility",
+ "pezsp-runtime",
+ "pezsp-std",
+ "scale-info",
 ]
 
 [[package]]
@@ -10527,12 +10413,104 @@ dependencies = [
 ]
 
 [[package]]
+name = "pezbp-test-utils"
+version = "0.7.0"
+dependencies = [
+ "ed25519-dalek",
+ "finality-grandpa",
+ "parity-scale-codec",
+ "pezbp-header-pez-chain",
+ "pezbp-pezkuwi-core",
+ "pezbp-runtime",
+ "pezbp-teyrchains",
+ "pezsp-application-crypto",
+ "pezsp-consensus-grandpa",
+ "pezsp-core",
+ "pezsp-runtime",
+ "pezsp-std",
+ "pezsp-trie",
+]
+
+[[package]]
+name = "pezbp-teyrchains"
+version = "0.7.0"
+dependencies = [
+ "impl-trait-for-tuples",
+ "parity-scale-codec",
+ "pezbp-header-pez-chain",
+ "pezbp-pezkuwi-core",
+ "pezbp-runtime",
+ "pezframe-support",
+ "pezsp-core",
+ "pezsp-runtime",
+ "pezsp-std",
+ "scale-info",
+]
+
+[[package]]
+name = "pezbp-xcm-bridge-hub"
+version = "0.2.0"
+dependencies = [
+ "parity-scale-codec",
+ "pezbp-messages",
+ "pezbp-runtime",
+ "pezframe-support",
+ "pezsp-core",
+ "pezsp-io",
+ "pezsp-std",
+ "pezstaging-xcm",
+ "scale-info",
+ "serde",
+]
+
+[[package]]
+name = "pezbp-xcm-bridge-hub-router"
+version = "0.7.0"
+dependencies = [
+ "parity-scale-codec",
+ "pezsp-core",
+ "pezsp-runtime",
+ "pezstaging-xcm",
+ "scale-info",
+]
+
+[[package]]
+name = "pezbp-zagros"
+version = "0.3.0"
+dependencies = [
+ "pezbp-header-pez-chain",
+ "pezbp-pezkuwi-core",
+ "pezbp-runtime",
+ "pezframe-support",
+ "pezsp-api",
+ "pezsp-std",
+]
+
+[[package]]
+name = "pezbridge-hub-common"
+version = "0.1.1"
+dependencies = [
+ "parity-scale-codec",
+ "pezcumulus-primitives-core",
+ "pezframe-support",
+ "pezpallet-message-queue",
+ "pezsnowbridge-core",
+ "pezsp-core",
+ "pezsp-runtime",
+ "pezsp-std",
+ "pezstaging-xcm",
+ "pezstaging-xcm-builder",
+ "pezstaging-xcm-executor",
+ "scale-info",
+]
+
+[[package]]
 name = "pezbridge-hub-pezkuwichain-emulated-chain"
 version = "0.0.0"
 dependencies = [
- "bp-messages",
- "bridge-hub-common",
  "emulated-integration-tests-common",
+ "pezbp-messages",
+ "pezbridge-hub-common",
  "pezbridge-hub-pezkuwichain-runtime",
  "pezframe-support",
  "pezsp-core",
@@ -10547,10 +10525,10 @@ name = "pezbridge-hub-pezkuwichain-integration-tests"
 version = "1.0.0"
 dependencies = [
  "asset-hub-pezkuwichain-runtime",
- "bp-asset-hub-pezkuwichain",
  "emulated-integration-tests-common",
  "hex-literal",
  "parity-scale-codec",
+ "pezbp-asset-hub-pezkuwichain",
  "pezcumulus-pezpallet-xcmp-queue",
  "pezframe-support",
  "pezkuwichain-system-emulated-network",
@@ -10581,22 +10559,22 @@ name = "pezbridge-hub-pezkuwichain-runtime"
 version = "0.5.0"
 dependencies = [
  "bizinikiwi-wasm-builder",
- "bp-asset-hub-pezkuwichain",
- "bp-asset-hub-zagros",
- "bp-bridge-hub-pezkuwichain",
- "bp-bridge-hub-zagros",
- "bp-header-pez-chain",
- "bp-messages",
- "bp-pezkuwi-bulletin",
- "bp-pezkuwi-core",
- "bp-relayers",
- "bp-teyrchains",
- "bp-xcm-bridge-hub-router",
- "bp-zagros",
- "bridge-hub-common",
  "hex-literal",
  "parity-scale-codec",
+ "pezbp-asset-hub-pezkuwichain",
+ "pezbp-asset-hub-zagros",
+ "pezbp-bridge-hub-pezkuwichain",
+ "pezbp-bridge-hub-zagros",
+ "pezbp-header-pez-chain",
+ "pezbp-messages",
+ "pezbp-pezkuwi-bulletin",
+ "pezbp-pezkuwi-core",
+ "pezbp-relayers",
  "pezbp-runtime",
+ "pezbp-teyrchains",
+ "pezbp-xcm-bridge-hub-router",
+ "pezbp-zagros",
+ "pezbridge-hub-common",
  "pezbridge-hub-test-utils",
  "pezbridge-runtime-common",
  "pezcumulus-pezpallet-aura-ext",
@@ -10684,15 +10662,15 @@ name = "pezbridge-hub-test-utils"
 version = "0.7.0"
 dependencies = [
  "asset-test-pezutils",
- "bp-header-pez-chain",
- "bp-messages",
- "bp-pezkuwi-core",
- "bp-relayers",
- "bp-test-utils",
- "bp-teyrchains",
  "impl-trait-for-tuples",
  "parity-scale-codec",
+ "pezbp-header-pez-chain",
+ "pezbp-messages",
+ "pezbp-pezkuwi-core",
+ "pezbp-relayers",
  "pezbp-runtime",
+ "pezbp-test-utils",
+ "pezbp-teyrchains",
  "pezcumulus-pezpallet-teyrchain-system",
  "pezcumulus-pezpallet-xcmp-queue",
  "pezframe-support",
@@ -10724,9 +10702,9 @@ dependencies = [
 name = "pezbridge-hub-zagros-emulated-chain"
 version = "0.0.0"
 dependencies = [
- "bp-messages",
- "bridge-hub-common",
  "emulated-integration-tests-common",
+ "pezbp-messages",
+ "pezbridge-hub-common",
  "pezbridge-hub-zagros-runtime",
  "pezframe-support",
  "pezsp-core",
@@ -10741,11 +10719,11 @@ name = "pezbridge-hub-zagros-integration-tests"
 version = "1.0.0"
 dependencies = [
  "asset-hub-zagros-runtime",
- "bp-asset-hub-zagros",
- "bridge-hub-common",
  "emulated-integration-tests-common",
  "hex-literal",
  "parity-scale-codec",
+ "pezbp-asset-hub-zagros",
+ "pezbridge-hub-common",
  "pezbridge-hub-zagros-runtime",
  "pezcumulus-pezpallet-teyrchain-system",
  "pezcumulus-pezpallet-xcmp-queue",
@@ -10784,21 +10762,21 @@ name = "pezbridge-hub-zagros-runtime"
 version = "0.3.0"
 dependencies = [
  "bizinikiwi-wasm-builder",
- "bp-asset-hub-pezkuwichain",
- "bp-asset-hub-zagros",
- "bp-bridge-hub-pezkuwichain",
- "bp-bridge-hub-zagros",
- "bp-header-pez-chain",
- "bp-messages",
- "bp-pezkuwi-core",
- "bp-pezkuwichain",
- "bp-relayers",
- "bp-teyrchains",
- "bp-xcm-bridge-hub-router",
- "bridge-hub-common",
  "hex-literal",
  "parity-scale-codec",
+ "pezbp-asset-hub-pezkuwichain",
+ "pezbp-asset-hub-zagros",
+ "pezbp-bridge-hub-pezkuwichain",
+ "pezbp-bridge-hub-zagros",
+ "pezbp-header-pez-chain",
+ "pezbp-messages",
+ "pezbp-pezkuwi-core",
+ "pezbp-pezkuwichain",
+ "pezbp-relayers",
  "pezbp-runtime",
+ "pezbp-teyrchains",
+ "pezbp-xcm-bridge-hub-router",
+ "pezbridge-hub-common",
  "pezbridge-hub-test-utils",
  "pezbridge-runtime-common",
  "pezcumulus-pezpallet-aura-ext",
@@ -10891,14 +10869,14 @@ dependencies = [
 name = "pezbridge-runtime-common"
 version = "0.7.0"
 dependencies = [
- "bp-header-pez-chain",
- "bp-messages",
- "bp-pezkuwi-core",
- "bp-relayers",
- "bp-test-utils",
- "bp-teyrchains",
  "parity-scale-codec",
+ "pezbp-header-pez-chain",
+ "pezbp-messages",
+ "pezbp-pezkuwi-core",
+ "pezbp-relayers",
  "pezbp-runtime",
+ "pezbp-test-utils",
+ "pezbp-teyrchains",
  "pezframe-support",
  "pezframe-system",
  "pezpallet-balances",
@@ -10971,11 +10949,7 @@ dependencies = [
  "pezcumulus-client-consensus-common",
  "pezcumulus-client-network",
  "pezcumulus-primitives-core",
- "pezcumulus-test-client",
- "pezcumulus-test-relay-sproof-builder",
- "pezcumulus-test-runtime",
  "pezkuwi-node-subsystem",
- "pezkuwi-node-subsystem-test-helpers",
  "pezkuwi-overseer",
  "pezkuwi-pez-node-primitives",
  "pezkuwi-primitives",
@@ -11006,8 +10980,6 @@ dependencies = [
  "pezcumulus-primitives-aura",
  "pezcumulus-primitives-core",
  "pezcumulus-relay-chain-interface",
- "pezcumulus-test-client",
- "pezcumulus-test-relay-sproof-builder",
  "pezkuwi-node-subsystem",
  "pezkuwi-node-subsystem-util",
  "pezkuwi-overseer",
@@ -11130,14 +11102,10 @@ dependencies = [
  "parity-scale-codec",
  "parking_lot 0.12.5",
  "pezcumulus-primitives-core",
- "pezcumulus-relay-chain-inprocess-interface",
  "pezcumulus-relay-chain-interface",
- "pezcumulus-test-service",
  "pezkuwi-node-subsystem",
  "pezkuwi-pez-node-primitives",
  "pezkuwi-primitives",
- "pezkuwi-primitives-test-helpers",
- "pezkuwi-test-client",
  "pezkuwi-teyrchain-primitives",
  "pezsc-client-api",
  "pezsc-network",
@@ -11233,7 +11201,7 @@ dependencies = [
 
 [[package]]
 name = "pezcumulus-client-teyrchain-inherent"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "async-trait",
  "parity-scale-codec",
@@ -11422,8 +11390,8 @@ version = "0.7.1"
 dependencies = [
  "approx",
  "bounded-collections 0.3.2",
- "bp-xcm-bridge-hub-router",
  "parity-scale-codec",
+ "pezbp-xcm-bridge-hub-router",
  "pezcumulus-pezpallet-teyrchain-system",
  "pezcumulus-primitives-core",
  "pezframe-benchmarking",
@@ -11582,7 +11550,6 @@ dependencies = [
  "pezkuwi-cli",
  "pezkuwi-primitives",
  "pezkuwi-service",
- "pezkuwi-test-client",
  "pezsc-cli",
  "pezsc-client-api",
  "pezsc-network",
@@ -11875,9 +11842,9 @@ dependencies = [
  "parity-scale-codec",
  "pezcumulus-primitives-core",
  "pezkuwi-primitives",
+ "pezkuwi-zombienet-configuration",
+ "pezkuwi-zombienet-sdk",
  "tokio",
- "zombienet-configuration",
- "zombienet-sdk",
 ]
 
 [[package]]
@@ -11891,6 +11858,9 @@ dependencies = [
  "parity-scale-codec",
  "pezcumulus-zombienet-sdk-helpers",
  "pezkuwi-primitives",
+ "pezkuwi-zombienet-configuration",
+ "pezkuwi-zombienet-orchestrator",
+ "pezkuwi-zombienet-sdk",
  "pezsc-statement-store",
  "pezsp-core",
  "pezsp-keyring",
@@ -11899,9 +11869,40 @@ dependencies = [
  "serde",
  "serde_json",
  "tokio",
- "zombienet-configuration",
- "zombienet-orchestrator",
- "zombienet-sdk",
+]
+
+[[package]]
+name = "pezframe"
+version = "0.1.0"
+dependencies = [
+ "docify",
+ "log",
+ "parity-scale-codec",
+ "pezframe-benchmarking",
+ "pezframe-executive",
+ "pezframe-support",
+ "pezframe-system",
+ "pezframe-system-benchmarking",
+ "pezframe-system-rpc-runtime-api",
+ "pezframe-try-runtime",
+ "pezsp-api",
+ "pezsp-arithmetic",
+ "pezsp-block-builder",
+ "pezsp-consensus-aura",
+ "pezsp-consensus-grandpa",
+ "pezsp-core",
+ "pezsp-genesis-builder",
+ "pezsp-inherents",
+ "pezsp-io",
+ "pezsp-keyring",
+ "pezsp-offchain",
+ "pezsp-runtime",
+ "pezsp-session",
+ "pezsp-storage",
+ "pezsp-transaction-pool",
+ "pezsp-version",
+ "scale-info",
+ "serde",
 ]
 
 [[package]]
@@ -11938,7 +11939,6 @@ version = "32.0.0"
 dependencies = [
  "Inflector",
  "array-bytes 6.2.3",
- "bizinikiwi-test-runtime",
  "chrono",
  "clap",
  "comfy-table",
@@ -11951,7 +11951,6 @@ dependencies = [
  "parity-scale-codec",
  "pezcumulus-client-teyrchain-inherent",
  "pezcumulus-primitives-proof-size-hostfunction",
- "pezcumulus-test-runtime",
  "pezframe-benchmarking",
  "pezframe-support",
  "pezframe-system",
@@ -11995,7 +11994,6 @@ dependencies = [
  "serde_json",
  "thiserror 1.0.69",
  "thousands",
- "zagros-runtime",
 ]
 
 [[package]]
@@ -12108,6 +12106,28 @@ dependencies = [
  "pezsp-statement-store",
  "tempfile",
  "tracing-subscriber 0.3.22",
+]
+
+[[package]]
+name = "pezframe-remote-externalities"
+version = "0.35.0"
+dependencies = [
+ "bizinikiwi-rpc-client",
+ "futures",
+ "indicatif",
+ "jsonrpsee",
+ "log",
+ "parity-scale-codec",
+ "pezsp-core",
+ "pezsp-crypto-hashing",
+ "pezsp-io",
+ "pezsp-runtime",
+ "pezsp-state-machine",
+ "pezsp-tracing",
+ "serde",
+ "spinners",
+ "tokio",
+ "tokio-retry",
 ]
 
 [[package]]
@@ -12251,7 +12271,9 @@ name = "pezframe-support-test-stg-pezframe-crate"
 version = "0.1.0"
 dependencies = [
  "parity-scale-codec",
- "pezkuwi-sdk-frame",
+ "pezframe",
+ "pezframe-support",
+ "pezframe-system",
  "scale-info",
 ]
 
@@ -12344,11 +12366,9 @@ dependencies = [
  "pezkuwi-node-metrics",
  "pezkuwi-node-network-protocol",
  "pezkuwi-node-subsystem",
- "pezkuwi-node-subsystem-test-helpers",
  "pezkuwi-node-subsystem-util",
  "pezkuwi-pez-node-primitives",
  "pezkuwi-primitives",
- "pezkuwi-primitives-test-helpers",
  "pezsc-keystore",
  "pezsp-application-crypto",
  "pezsp-authority-discovery",
@@ -12372,7 +12392,6 @@ dependencies = [
  "pez-tracing-gum",
  "pezkuwi-node-network-protocol",
  "pezkuwi-node-subsystem",
- "pezkuwi-node-subsystem-test-helpers",
  "pezkuwi-node-subsystem-util",
  "pezkuwi-primitives",
  "pezsp-application-crypto",
@@ -12398,12 +12417,9 @@ dependencies = [
  "pezkuwi-erasure-coding",
  "pezkuwi-node-network-protocol",
  "pezkuwi-node-subsystem",
- "pezkuwi-node-subsystem-test-helpers",
  "pezkuwi-node-subsystem-util",
  "pezkuwi-pez-node-primitives",
  "pezkuwi-primitives",
- "pezkuwi-primitives-test-helpers",
- "pezkuwi-subsystem-bench",
  "pezsc-network",
  "pezsp-core",
  "pezsp-keyring",
@@ -12429,12 +12445,9 @@ dependencies = [
  "pezkuwi-erasure-coding",
  "pezkuwi-node-network-protocol",
  "pezkuwi-node-subsystem",
- "pezkuwi-node-subsystem-test-helpers",
  "pezkuwi-node-subsystem-util",
  "pezkuwi-pez-node-primitives",
  "pezkuwi-primitives",
- "pezkuwi-primitives-test-helpers",
- "pezkuwi-subsystem-bench",
  "pezsc-network",
  "pezsp-core",
  "pezsp-keyring",
@@ -12497,11 +12510,9 @@ dependencies = [
  "pez-tracing-gum",
  "pezkuwi-node-network-protocol",
  "pezkuwi-node-subsystem",
- "pezkuwi-node-subsystem-test-helpers",
  "pezkuwi-node-subsystem-util",
  "pezkuwi-pez-node-primitives",
  "pezkuwi-primitives",
- "pezkuwi-primitives-test-helpers",
  "pezsc-keystore",
  "pezsc-network",
  "pezsp-core",
@@ -12541,11 +12552,9 @@ dependencies = [
  "pez-tracing-gum",
  "pezkuwi-node-network-protocol",
  "pezkuwi-node-subsystem",
- "pezkuwi-node-subsystem-test-helpers",
  "pezkuwi-node-subsystem-util",
  "pezkuwi-pez-node-primitives",
  "pezkuwi-primitives",
- "pezkuwi-primitives-test-helpers",
  "pezsc-keystore",
  "pezsc-network",
  "pezsp-application-crypto",
@@ -12582,7 +12591,6 @@ dependencies = [
  "pez-tracing-gum",
  "pezkuwi-node-network-protocol",
  "pezkuwi-node-subsystem",
- "pezkuwi-node-subsystem-test-helpers",
  "pezkuwi-node-subsystem-util",
  "pezkuwi-primitives",
  "pezsc-network",
@@ -12616,11 +12624,9 @@ dependencies = [
  "pezkuwi-node-metrics",
  "pezkuwi-node-network-protocol",
  "pezkuwi-node-subsystem",
- "pezkuwi-node-subsystem-test-helpers",
  "pezkuwi-node-subsystem-util",
  "pezkuwi-overseer",
  "pezkuwi-primitives",
- "pezkuwi-primitives-test-helpers",
  "pezsc-network",
  "pezsp-consensus",
  "pezsp-core",
@@ -12638,11 +12644,9 @@ dependencies = [
  "pez-tracing-gum",
  "pezkuwi-erasure-coding",
  "pezkuwi-node-subsystem",
- "pezkuwi-node-subsystem-test-helpers",
  "pezkuwi-node-subsystem-util",
  "pezkuwi-pez-node-primitives",
  "pezkuwi-primitives",
- "pezkuwi-primitives-test-helpers",
  "pezsp-core",
  "pezsp-keyring",
  "rstest",
@@ -12667,13 +12671,10 @@ dependencies = [
  "parking_lot 0.12.5",
  "pez-tracing-gum",
  "pezkuwi-node-subsystem",
- "pezkuwi-node-subsystem-test-helpers",
  "pezkuwi-node-subsystem-util",
  "pezkuwi-overseer",
  "pezkuwi-pez-node-primitives",
  "pezkuwi-primitives",
- "pezkuwi-primitives-test-helpers",
- "pezkuwi-subsystem-bench",
  "pezsc-keystore",
  "pezsp-application-crypto",
  "pezsp-consensus",
@@ -12707,7 +12708,6 @@ dependencies = [
  "pezkuwi-node-metrics",
  "pezkuwi-node-network-protocol",
  "pezkuwi-node-subsystem",
- "pezkuwi-node-subsystem-test-helpers",
  "pezkuwi-node-subsystem-util",
  "pezkuwi-overseer",
  "pezkuwi-pez-node-primitives",
@@ -12737,11 +12737,9 @@ dependencies = [
  "pez-tracing-gum",
  "pezkuwi-erasure-coding",
  "pezkuwi-node-subsystem",
- "pezkuwi-node-subsystem-test-helpers",
  "pezkuwi-node-subsystem-util",
  "pezkuwi-pez-node-primitives",
  "pezkuwi-primitives",
- "pezkuwi-primitives-test-helpers",
  "pezsp-consensus",
  "pezsp-core",
  "pezsp-keyring",
@@ -12760,11 +12758,9 @@ dependencies = [
  "pez-tracing-gum",
  "pezkuwi-erasure-coding",
  "pezkuwi-node-subsystem",
- "pezkuwi-node-subsystem-test-helpers",
  "pezkuwi-node-subsystem-util",
  "pezkuwi-pez-node-primitives",
  "pezkuwi-primitives",
- "pezkuwi-primitives-test-helpers",
  "pezkuwi-statement-table",
  "pezkuwi-teyrchain-primitives",
  "pezsc-keystore",
@@ -12784,10 +12780,8 @@ dependencies = [
  "futures",
  "pez-tracing-gum",
  "pezkuwi-node-subsystem",
- "pezkuwi-node-subsystem-test-helpers",
  "pezkuwi-node-subsystem-util",
  "pezkuwi-primitives",
- "pezkuwi-primitives-test-helpers",
  "pezsp-keystore",
  "thiserror 1.0.69",
  "wasm-timer",
@@ -12806,12 +12800,10 @@ dependencies = [
  "pezkuwi-node-core-pvf",
  "pezkuwi-node-metrics",
  "pezkuwi-node-subsystem",
- "pezkuwi-node-subsystem-test-helpers",
  "pezkuwi-node-subsystem-util",
  "pezkuwi-overseer",
  "pezkuwi-pez-node-primitives",
  "pezkuwi-primitives",
- "pezkuwi-primitives-test-helpers",
  "pezkuwi-teyrchain-primitives",
  "pezsp-application-crypto",
  "pezsp-core",
@@ -12831,7 +12823,6 @@ dependencies = [
  "pez-tracing-gum",
  "pezkuwi-node-metrics",
  "pezkuwi-node-subsystem",
- "pezkuwi-node-subsystem-test-helpers",
  "pezkuwi-node-subsystem-types",
  "pezkuwi-pez-node-primitives",
  "pezkuwi-primitives",
@@ -12853,7 +12844,6 @@ dependencies = [
  "parking_lot 0.12.5",
  "pez-tracing-gum",
  "pezkuwi-node-subsystem",
- "pezkuwi-node-subsystem-test-helpers",
  "pezkuwi-node-subsystem-util",
  "pezkuwi-pez-node-primitives",
  "pezkuwi-primitives",
@@ -12873,12 +12863,9 @@ dependencies = [
  "parity-scale-codec",
  "pez-tracing-gum",
  "pezkuwi-node-subsystem",
- "pezkuwi-node-subsystem-test-helpers",
  "pezkuwi-node-subsystem-util",
  "pezkuwi-pez-node-primitives",
  "pezkuwi-primitives",
- "pezkuwi-primitives-test-helpers",
- "pezkuwi-subsystem-bench",
  "pezsc-keystore",
  "pezsp-application-crypto",
  "pezsp-core",
@@ -12898,10 +12885,8 @@ dependencies = [
  "futures",
  "pez-tracing-gum",
  "pezkuwi-node-subsystem",
- "pezkuwi-node-subsystem-test-helpers",
  "pezkuwi-node-subsystem-util",
  "pezkuwi-primitives",
- "pezkuwi-primitives-test-helpers",
  "pezsp-core",
  "pezsp-tracing",
  "rand 0.8.5",
@@ -12919,11 +12904,9 @@ dependencies = [
  "futures-timer",
  "pez-tracing-gum",
  "pezkuwi-node-subsystem",
- "pezkuwi-node-subsystem-test-helpers",
  "pezkuwi-node-subsystem-util",
  "pezkuwi-pez-node-primitives",
  "pezkuwi-primitives",
- "pezkuwi-primitives-test-helpers",
  "pezsc-consensus-slots",
  "pezsp-application-crypto",
  "pezsp-keystore",
@@ -12945,17 +12928,14 @@ dependencies = [
  "libc",
  "parity-scale-codec",
  "pez-tracing-gum",
- "pezkuwi-node-core-pvf",
  "pezkuwi-node-core-pvf-common",
  "pezkuwi-node-core-pvf-execute-worker",
  "pezkuwi-node-core-pvf-prepare-worker",
  "pezkuwi-node-metrics",
  "pezkuwi-node-subsystem",
- "pezkuwi-node-subsystem-test-helpers",
  "pezkuwi-pez-node-primitives",
  "pezkuwi-primitives",
  "pezkuwi-teyrchain-primitives",
- "pezkuwichain-runtime",
  "pezsc-sysinfo",
  "pezsc-tracing",
  "pezsp-core",
@@ -12967,8 +12947,6 @@ dependencies = [
  "slotmap",
  "strum 0.26.3",
  "tempfile",
- "test-teyrchain-adder",
- "test-teyrchain-halt",
  "thiserror 1.0.69",
  "tokio",
 ]
@@ -12981,10 +12959,8 @@ dependencies = [
  "futures-timer",
  "pez-tracing-gum",
  "pezkuwi-node-subsystem",
- "pezkuwi-node-subsystem-test-helpers",
  "pezkuwi-node-subsystem-util",
  "pezkuwi-primitives",
- "pezkuwi-primitives-test-helpers",
  "pezsc-keystore",
  "pezsp-application-crypto",
  "pezsp-core",
@@ -13051,7 +13027,6 @@ dependencies = [
  "pez-tracing-gum",
  "pezkuwi-node-core-pvf-common",
  "pezkuwi-primitives",
- "pezkuwichain-runtime",
  "pezsp-maybe-compressed-blob",
  "pezstaging-tracking-allocator",
  "tikv-jemalloc-ctl",
@@ -13067,11 +13042,9 @@ dependencies = [
  "pez-tracing-gum",
  "pezkuwi-node-metrics",
  "pezkuwi-node-subsystem",
- "pezkuwi-node-subsystem-test-helpers",
  "pezkuwi-node-subsystem-types",
  "pezkuwi-pez-node-primitives",
  "pezkuwi-primitives",
- "pezkuwi-primitives-test-helpers",
  "pezsp-api",
  "pezsp-consensus-babe",
  "pezsp-core",
@@ -13217,12 +13190,10 @@ dependencies = [
  "pezkuwi-node-metrics",
  "pezkuwi-node-network-protocol",
  "pezkuwi-node-subsystem",
- "pezkuwi-node-subsystem-test-helpers",
  "pezkuwi-node-subsystem-types",
  "pezkuwi-overseer",
  "pezkuwi-pez-node-primitives",
  "pezkuwi-primitives",
- "pezkuwi-primitives-test-helpers",
  "pezsp-application-crypto",
  "pezsp-core",
  "pezsp-keystore",
@@ -13583,10 +13554,9 @@ dependencies = [
 
 [[package]]
 name = "pezkuwi-sdk"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "asset-test-pezutils",
- "assets-common",
  "bizinikiwi-bip39",
  "bizinikiwi-build-script-utils",
  "bizinikiwi-frame-rpc-support",
@@ -13596,16 +13566,7 @@ dependencies = [
  "bizinikiwi-state-trie-migration-rpc",
  "bizinikiwi-txtesttool",
  "bizinikiwi-wasm-builder",
- "bp-header-pez-chain",
- "bp-messages",
- "bp-pezkuwi-core",
- "bp-relayers",
- "bp-test-utils",
- "bp-teyrchains",
- "bp-xcm-bridge-hub",
- "bp-xcm-bridge-hub-router",
- "bridge-hub-common",
- "frame-remote-externalities",
+ "pez-assets-common",
  "pez-binary-merkle-tree",
  "pez-ethereum-standards",
  "pez-fork-tree",
@@ -13614,7 +13575,16 @@ dependencies = [
  "pez-subkey",
  "pez-tracing-gum",
  "pez-tracing-gum-proc-macro",
+ "pezbp-header-pez-chain",
+ "pezbp-messages",
+ "pezbp-pezkuwi-core",
+ "pezbp-relayers",
  "pezbp-runtime",
+ "pezbp-test-utils",
+ "pezbp-teyrchains",
+ "pezbp-xcm-bridge-hub",
+ "pezbp-xcm-bridge-hub-router",
+ "pezbridge-hub-common",
  "pezbridge-hub-test-utils",
  "pezbridge-runtime-common",
  "pezcumulus-client-bootnodes",
@@ -13650,6 +13620,7 @@ dependencies = [
  "pezcumulus-relay-chain-minimal-node",
  "pezcumulus-relay-chain-rpc-interface",
  "pezcumulus-relay-chain-streams",
+ "pezframe",
  "pezframe-benchmarking",
  "pezframe-benchmarking-cli",
  "pezframe-benchmarking-pezpallet-pov",
@@ -13658,6 +13629,7 @@ dependencies = [
  "pezframe-executive",
  "pezframe-metadata",
  "pezframe-metadata-hash-extension",
+ "pezframe-remote-externalities",
  "pezframe-support",
  "pezframe-support-procedural",
  "pezframe-support-procedural-tools",
@@ -13709,7 +13681,6 @@ dependencies = [
  "pezkuwi-runtime-common",
  "pezkuwi-runtime-metrics",
  "pezkuwi-runtime-teyrchains",
- "pezkuwi-sdk-frame",
  "pezkuwi-service",
  "pezkuwi-statement-distribution",
  "pezkuwi-statement-table",
@@ -13724,6 +13695,12 @@ dependencies = [
  "pezkuwi-subxt-utils-fetchmetadata",
  "pezkuwi-subxt-utils-stripmetadata",
  "pezkuwi-teyrchain-primitives",
+ "pezkuwi-zombienet-configuration",
+ "pezkuwi-zombienet-orchestrator",
+ "pezkuwi-zombienet-prom-metrics-parser",
+ "pezkuwi-zombienet-provider",
+ "pezkuwi-zombienet-sdk",
+ "pezkuwi-zombienet-support",
  "pezmmr-gadget",
  "pezmmr-rpc",
  "pezpallet-alliance",
@@ -13757,7 +13734,6 @@ dependencies = [
  "pezpallet-collective",
  "pezpallet-collective-content",
  "pezpallet-contracts",
- "pezpallet-contracts-mock-network",
  "pezpallet-contracts-proc-macro",
  "pezpallet-contracts-uapi",
  "pezpallet-conviction-voting",
@@ -13945,7 +13921,7 @@ dependencies = [
  "pezsp-runtime-interface",
  "pezsp-runtime-interface-proc-macro",
  "pezsp-session",
- "pezsp-ss58-registry 1.52.0",
+ "pezsp-ss58-registry 1.52.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "pezsp-staking",
  "pezsp-state-machine",
  "pezsp-statement-store",
@@ -13974,12 +13950,6 @@ dependencies = [
  "xcm-pez-procedural",
  "xcm-pez-simulator",
  "xcm-runtime-pezapis",
- "zombienet-configuration",
- "zombienet-orchestrator",
- "zombienet-prom-metrics-parser",
- "zombienet-provider",
- "zombienet-sdk",
- "zombienet-support",
 ]
 
 [[package]]
@@ -14002,6 +13972,7 @@ dependencies = [
  "pezcumulus-pezpallet-teyrchain-system",
  "pezcumulus-pezpallet-weight-reclaim",
  "pezcumulus-primitives-proof-size-hostfunction",
+ "pezframe",
  "pezframe-benchmarking",
  "pezframe-executive",
  "pezframe-metadata-hash-extension",
@@ -14010,7 +13981,6 @@ dependencies = [
  "pezkuwi-omni-node-lib",
  "pezkuwi-sdk",
  "pezkuwi-sdk-docs-first-runtime",
- "pezkuwi-sdk-frame",
  "pezpallet-asset-conversion-tx-payment",
  "pezpallet-asset-tx-payment",
  "pezpallet-assets",
@@ -14083,7 +14053,9 @@ version = "0.0.0"
 dependencies = [
  "docify",
  "parity-scale-codec",
- "pezkuwi-sdk-frame",
+ "pezframe",
+ "pezframe-support",
+ "pezframe-system",
  "scale-info",
 ]
 
@@ -14094,50 +14066,27 @@ dependencies = [
  "bizinikiwi-wasm-builder",
  "docify",
  "parity-scale-codec",
+ "pezframe",
+ "pezframe-support",
+ "pezframe-system",
+ "pezframe-system-rpc-runtime-api",
  "pezkuwi-sdk-docs-first-pezpallet",
- "pezkuwi-sdk-frame",
  "pezpallet-balances",
  "pezpallet-sudo",
  "pezpallet-timestamp",
  "pezpallet-transaction-payment",
  "pezpallet-transaction-payment-rpc-runtime-api",
- "pezsp-keyring",
- "scale-info",
- "serde_json",
-]
-
-[[package]]
-name = "pezkuwi-sdk-frame"
-version = "0.1.0"
-dependencies = [
- "docify",
- "log",
- "parity-scale-codec",
- "pezframe-benchmarking",
- "pezframe-executive",
- "pezframe-support",
- "pezframe-system",
- "pezframe-system-benchmarking",
- "pezframe-system-rpc-runtime-api",
- "pezframe-try-runtime",
  "pezsp-api",
- "pezsp-arithmetic",
  "pezsp-block-builder",
- "pezsp-consensus-aura",
- "pezsp-consensus-grandpa",
  "pezsp-core",
  "pezsp-genesis-builder",
- "pezsp-inherents",
- "pezsp-io",
  "pezsp-keyring",
  "pezsp-offchain",
  "pezsp-runtime",
  "pezsp-session",
- "pezsp-storage",
  "pezsp-transaction-pool",
- "pezsp-version",
  "scale-info",
- "serde",
+ "serde_json",
 ]
 
 [[package]]
@@ -14188,17 +14137,14 @@ dependencies = [
  "pezkuwi-node-core-teyrchains-inherent",
  "pezkuwi-node-network-protocol",
  "pezkuwi-node-subsystem",
- "pezkuwi-node-subsystem-test-helpers",
  "pezkuwi-node-subsystem-types",
  "pezkuwi-node-subsystem-util",
  "pezkuwi-overseer",
  "pezkuwi-pez-node-primitives",
  "pezkuwi-primitives",
- "pezkuwi-primitives-test-helpers",
  "pezkuwi-rpc",
  "pezkuwi-runtime-teyrchains",
  "pezkuwi-statement-distribution",
- "pezkuwi-test-client",
  "pezkuwichain-runtime",
  "pezkuwichain-runtime-constants",
  "pezmmr-gadget",
@@ -14270,12 +14216,9 @@ dependencies = [
  "pez-tracing-gum",
  "pezkuwi-node-network-protocol",
  "pezkuwi-node-subsystem",
- "pezkuwi-node-subsystem-test-helpers",
  "pezkuwi-node-subsystem-util",
  "pezkuwi-pez-node-primitives",
  "pezkuwi-primitives",
- "pezkuwi-primitives-test-helpers",
- "pezkuwi-subsystem-bench",
  "pezsc-keystore",
  "pezsc-network",
  "pezsp-application-crypto",
@@ -14823,6 +14766,120 @@ dependencies = [
 ]
 
 [[package]]
+name = "pezkuwi-zombienet-configuration"
+version = "0.44.0"
+dependencies = [
+ "anyhow",
+ "lazy_static",
+ "multiaddr 0.18.2",
+ "pezkuwi-zombienet-support",
+ "regex",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "thiserror 1.0.69",
+ "tokio",
+ "toml 0.8.23",
+ "tracing",
+ "url",
+]
+
+[[package]]
+name = "pezkuwi-zombienet-orchestrator"
+version = "0.44.0"
+dependencies = [
+ "anyhow",
+ "async-trait",
+ "erased-serde",
+ "fancy-regex",
+ "futures",
+ "glob-match",
+ "hex",
+ "lazy_static",
+ "libp2p",
+ "libsecp256k1",
+ "multiaddr 0.18.2",
+ "pezkuwi-subxt",
+ "pezkuwi-subxt-signer",
+ "pezkuwi-zombienet-configuration",
+ "pezkuwi-zombienet-prom-metrics-parser",
+ "pezkuwi-zombienet-provider",
+ "pezkuwi-zombienet-support",
+ "pezsc-chain-spec",
+ "pezsp-core",
+ "rand 0.8.5",
+ "regex",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "sha2 0.10.9",
+ "thiserror 1.0.69",
+ "tokio",
+ "toml 0.8.23",
+ "tracing",
+ "uuid",
+]
+
+[[package]]
+name = "pezkuwi-zombienet-prom-metrics-parser"
+version = "0.44.0"
+dependencies = [
+ "pest",
+ "pest_derive",
+ "thiserror 1.0.69",
+]
+
+[[package]]
+name = "pezkuwi-zombienet-provider"
+version = "0.44.0"
+dependencies = [
+ "anyhow",
+ "async-trait",
+ "erased-serde",
+ "flate2",
+ "futures",
+ "hex",
+ "k8s-openapi",
+ "kube",
+ "nix 0.29.0",
+ "pezkuwi-zombienet-configuration",
+ "pezkuwi-zombienet-support",
+ "regex",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "sha2 0.10.9",
+ "tar",
+ "thiserror 1.0.69",
+ "tokio",
+ "tokio-util",
+ "tracing",
+ "url",
+ "uuid",
+]
+
+[[package]]
+name = "pezkuwi-zombienet-sdk"
+version = "0.44.0"
+dependencies = [
+ "async-trait",
+ "futures",
+ "k8s-openapi",
+ "kube",
+ "lazy_static",
+ "pezkuwi-subxt",
+ "pezkuwi-subxt-signer",
+ "pezkuwi-zombienet-configuration",
+ "pezkuwi-zombienet-orchestrator",
+ "pezkuwi-zombienet-provider",
+ "pezkuwi-zombienet-support",
+ "serde_json",
+ "tokio",
+ "tracing-subscriber 0.3.22",
+]
+
+[[package]]
 name = "pezkuwi-zombienet-sdk-tests"
 version = "0.1.0"
 dependencies = [
@@ -14837,6 +14894,8 @@ dependencies = [
  "pezcumulus-zombienet-sdk-helpers",
  "pezkuwi-primitives",
  "pezkuwi-subxt",
+ "pezkuwi-zombienet-orchestrator",
+ "pezkuwi-zombienet-sdk",
  "pezpallet-revive",
  "pezsc-executor",
  "pezsc-runtime-utilities",
@@ -14848,8 +14907,25 @@ dependencies = [
  "serde_json",
  "tokio",
  "tokio-util",
- "zombienet-orchestrator",
- "zombienet-sdk",
+]
+
+[[package]]
+name = "pezkuwi-zombienet-support"
+version = "0.44.0"
+dependencies = [
+ "anyhow",
+ "async-trait",
+ "futures",
+ "lazy_static",
+ "nix 0.29.0",
+ "rand 0.8.5",
+ "regex",
+ "reqwest",
+ "serde_json",
+ "thiserror 1.0.69",
+ "tokio",
+ "tracing",
+ "uuid",
 ]
 
 [[package]]
@@ -14875,7 +14951,6 @@ version = "7.0.0"
 dependencies = [
  "bitvec",
  "bizinikiwi-wasm-builder",
- "frame-remote-externalities",
  "hex-literal",
  "log",
  "parity-scale-codec",
@@ -14884,6 +14959,7 @@ dependencies = [
  "pezframe-election-provider-support",
  "pezframe-executive",
  "pezframe-metadata-hash-extension",
+ "pezframe-remote-externalities",
  "pezframe-support",
  "pezframe-system",
  "pezframe-system-benchmarking",
@@ -15069,7 +15145,6 @@ dependencies = [
 name = "pezmmr-gadget"
 version = "29.0.0"
 dependencies = [
- "bizinikiwi-test-runtime-client",
  "futures",
  "log",
  "parity-scale-codec",
@@ -15129,9 +15204,10 @@ version = "1.0.0"
 dependencies = [
  "log",
  "parity-scale-codec",
+ "pezframe",
  "pezframe-election-provider-support",
  "pezframe-support",
- "pezkuwi-sdk-frame",
+ "pezframe-system",
  "pezpallet-authorship",
  "pezpallet-balances",
  "pezpallet-election-provider-multi-block",
@@ -15300,11 +15376,13 @@ dependencies = [
 
 [[package]]
 name = "pezpallet-assets-freezer"
-version = "0.1.0"
+version = "0.44.0"
 dependencies = [
  "log",
  "parity-scale-codec",
- "pezkuwi-sdk-frame",
+ "pezframe",
+ "pezframe-support",
+ "pezframe-system",
  "pezpallet-assets",
  "pezpallet-balances",
  "scale-info",
@@ -15349,7 +15427,9 @@ name = "pezpallet-atomic-swap"
 version = "28.0.0"
 dependencies = [
  "parity-scale-codec",
- "pezkuwi-sdk-frame",
+ "pezframe",
+ "pezframe-support",
+ "pezframe-system",
  "pezpallet-balances",
  "scale-info",
 ]
@@ -15463,9 +15543,9 @@ dependencies = [
 name = "pezpallet-bags-list-remote-tests"
 version = "4.0.0-dev"
 dependencies = [
- "frame-remote-externalities",
  "log",
  "pezframe-election-provider-support",
+ "pezframe-remote-externalities",
  "pezframe-support",
  "pezframe-system",
  "pezpallet-bags-list",
@@ -15566,10 +15646,10 @@ dependencies = [
 name = "pezpallet-bridge-beefy"
 version = "0.1.0"
 dependencies = [
- "bp-beefy",
- "bp-test-utils",
  "parity-scale-codec",
+ "pezbp-beefy",
  "pezbp-runtime",
+ "pezbp-test-utils",
  "pezframe-support",
  "pezframe-system",
  "pezkuwi-ckb-merkle-mountain-range",
@@ -15590,10 +15670,10 @@ dependencies = [
 name = "pezpallet-bridge-grandpa"
 version = "0.7.0"
 dependencies = [
- "bp-header-pez-chain",
- "bp-test-utils",
  "parity-scale-codec",
+ "pezbp-header-pez-chain",
  "pezbp-runtime",
+ "pezbp-test-utils",
  "pezframe-benchmarking",
  "pezframe-support",
  "pezframe-system",
@@ -15610,11 +15690,11 @@ dependencies = [
 name = "pezpallet-bridge-messages"
 version = "0.7.0"
 dependencies = [
- "bp-header-pez-chain",
- "bp-messages",
- "bp-test-utils",
  "parity-scale-codec",
+ "pezbp-header-pez-chain",
+ "pezbp-messages",
  "pezbp-runtime",
+ "pezbp-test-utils",
  "pezframe-benchmarking",
  "pezframe-support",
  "pezframe-system",
@@ -15633,14 +15713,14 @@ dependencies = [
 name = "pezpallet-bridge-relayers"
 version = "0.7.0"
 dependencies = [
- "bp-header-pez-chain",
- "bp-messages",
- "bp-pezkuwi-core",
- "bp-relayers",
- "bp-test-utils",
- "bp-teyrchains",
  "parity-scale-codec",
+ "pezbp-header-pez-chain",
+ "pezbp-messages",
+ "pezbp-pezkuwi-core",
+ "pezbp-relayers",
  "pezbp-runtime",
+ "pezbp-test-utils",
+ "pezbp-teyrchains",
  "pezframe-benchmarking",
  "pezframe-support",
  "pezframe-system",
@@ -15662,12 +15742,12 @@ dependencies = [
 name = "pezpallet-bridge-teyrchains"
 version = "0.7.0"
 dependencies = [
- "bp-header-pez-chain",
- "bp-pezkuwi-core",
- "bp-test-utils",
- "bp-teyrchains",
  "parity-scale-codec",
+ "pezbp-header-pez-chain",
+ "pezbp-pezkuwi-core",
  "pezbp-runtime",
+ "pezbp-test-utils",
+ "pezbp-teyrchains",
  "pezframe-benchmarking",
  "pezframe-support",
  "pezframe-system",
@@ -15787,7 +15867,6 @@ dependencies = [
  "pezframe-support",
  "pezframe-system",
  "pezpallet-balances",
- "pezpallet-contracts-fixtures",
  "pezpallet-contracts-proc-macro",
  "pezpallet-contracts-uapi",
  "pezpallet-insecure-randomness-collective-flip",
@@ -16072,13 +16151,13 @@ dependencies = [
 name = "pezpallet-election-provider-multi-phase"
 version = "27.0.0"
 dependencies = [
- "frame-remote-externalities",
  "hex",
  "log",
  "parity-scale-codec",
  "parking_lot 0.12.5",
  "pezframe-benchmarking",
  "pezframe-election-provider-support",
+ "pezframe-remote-externalities",
  "pezframe-support",
  "pezframe-system",
  "pezpallet-balances",
@@ -16210,7 +16289,9 @@ name = "pezpallet-example-pezframe-crate"
 version = "0.0.1"
 dependencies = [
  "parity-scale-codec",
- "pezkuwi-sdk-frame",
+ "pezframe",
+ "pezframe-support",
+ "pezframe-system",
  "scale-info",
 ]
 
@@ -16440,7 +16521,9 @@ name = "pezpallet-insecure-randomness-collective-flip"
 version = "16.0.0"
 dependencies = [
  "parity-scale-codec",
- "pezkuwi-sdk-frame",
+ "pezframe",
+ "pezframe-support",
+ "pezframe-system",
  "safe-mix",
  "scale-info",
 ]
@@ -16452,7 +16535,6 @@ dependencies = [
  "parity-scale-codec",
  "pezframe-benchmarking",
  "pezframe-support",
- "pezframe-support-test",
  "pezframe-system",
  "pezpallet-balances",
  "pezsp-core",
@@ -16501,7 +16583,7 @@ dependencies = [
 
 [[package]]
 name = "pezpallet-meta-tx"
-version = "0.1.0"
+version = "0.44.0"
 dependencies = [
  "docify",
  "parity-scale-codec",
@@ -16529,11 +16611,11 @@ dependencies = [
  "impl-trait-for-tuples",
  "log",
  "parity-scale-codec",
+ "pezframe",
  "pezframe-benchmarking",
  "pezframe-executive",
  "pezframe-support",
  "pezframe-system",
- "pezkuwi-sdk-frame",
  "pezsp-core",
  "pezsp-io",
  "pezsp-runtime",
@@ -16547,7 +16629,9 @@ name = "pezpallet-minimal-template"
 version = "0.0.0"
 dependencies = [
  "parity-scale-codec",
- "pezkuwi-sdk",
+ "pezframe-benchmarking",
+ "pezframe-support",
+ "pezframe-system",
  "scale-info",
 ]
 
@@ -16557,7 +16641,9 @@ version = "0.4.0"
 dependencies = [
  "log",
  "parity-scale-codec",
- "pezkuwi-sdk-frame",
+ "pezframe",
+ "pezframe-support",
+ "pezframe-system",
  "pezsp-application-crypto",
  "pezsp-mixnet",
  "scale-info",
@@ -16571,7 +16657,9 @@ dependencies = [
  "itertools 0.11.0",
  "log",
  "parity-scale-codec",
- "pezkuwi-sdk-frame",
+ "pezframe",
+ "pezframe-support",
+ "pezframe-system",
  "pezsp-mmr-primitives",
  "pezsp-tracing",
  "scale-info",
@@ -16602,7 +16690,9 @@ version = "28.0.0"
 dependencies = [
  "log",
  "parity-scale-codec",
- "pezkuwi-sdk-frame",
+ "pezframe",
+ "pezframe-support",
+ "pezframe-system",
  "pezpallet-balances",
  "scale-info",
 ]
@@ -16613,7 +16703,9 @@ version = "10.0.0"
 dependencies = [
  "log",
  "parity-scale-codec",
- "pezkuwi-sdk-frame",
+ "pezframe",
+ "pezframe-support",
+ "pezframe-system",
  "pezpallet-assets",
  "pezpallet-balances",
  "pezpallet-nfts",
@@ -16651,7 +16743,9 @@ name = "pezpallet-nis"
 version = "28.0.0"
 dependencies = [
  "parity-scale-codec",
- "pezkuwi-sdk-frame",
+ "pezframe",
+ "pezframe-support",
+ "pezframe-system",
  "pezpallet-balances",
  "pezsp-io",
  "scale-info",
@@ -16663,7 +16757,9 @@ version = "28.0.0"
 dependencies = [
  "log",
  "parity-scale-codec",
- "pezkuwi-sdk-frame",
+ "pezframe",
+ "pezframe-support",
+ "pezframe-system",
  "scale-info",
 ]
 
@@ -16849,7 +16945,9 @@ version = "0.6.0"
 dependencies = [
  "docify",
  "parity-scale-codec",
- "pezkuwi-sdk-frame",
+ "pezframe",
+ "pezframe-support",
+ "pezframe-system",
  "pezsp-metadata-ir",
  "scale-info",
 ]
@@ -16860,13 +16958,15 @@ version = "0.1.0"
 dependencies = [
  "arbitrary",
  "honggfuzz",
- "pezkuwi-sdk-frame",
+ "pezframe",
+ "pezframe-support",
+ "pezframe-system",
  "pezpallet-paged-list",
 ]
 
 [[package]]
 name = "pezpallet-parameters"
-version = "0.1.0"
+version = "0.44.0"
 dependencies = [
  "docify",
  "parity-scale-codec",
@@ -16875,7 +16975,6 @@ dependencies = [
  "pezframe-support",
  "pezframe-system",
  "pezpallet-balances",
- "pezpallet-example-basic",
  "pezsp-core",
  "pezsp-io",
  "pezsp-runtime",
@@ -17006,7 +17105,9 @@ name = "pezpallet-proxy"
 version = "28.0.0"
 dependencies = [
  "parity-scale-codec",
- "pezkuwi-sdk-frame",
+ "pezframe",
+ "pezframe-support",
+ "pezframe-system",
  "pezpallet-balances",
  "pezpallet-utility",
  "scale-info",
@@ -17034,7 +17135,9 @@ name = "pezpallet-recovery"
 version = "28.0.0"
 dependencies = [
  "parity-scale-codec",
- "pezkuwi-sdk-frame",
+ "pezframe",
+ "pezframe-support",
+ "pezframe-system",
  "pezpallet-balances",
  "scale-info",
 ]
@@ -17218,7 +17321,7 @@ dependencies = [
 
 [[package]]
 name = "pezpallet-revive-proc-macro"
-version = "0.1.0"
+version = "0.44.0"
 dependencies = [
  "proc-macro2 1.0.103",
  "quote 1.0.42",
@@ -17227,7 +17330,7 @@ dependencies = [
 
 [[package]]
 name = "pezpallet-revive-uapi"
-version = "0.1.0"
+version = "0.44.0"
 dependencies = [
  "alloy-core",
  "bitflags 1.3.2",
@@ -17277,7 +17380,9 @@ version = "9.0.0"
 dependencies = [
  "docify",
  "parity-scale-codec",
- "pezkuwi-sdk-frame",
+ "pezframe",
+ "pezframe-support",
+ "pezframe-system",
  "pezpallet-balances",
  "pezpallet-proxy",
  "pezpallet-utility",
@@ -17290,7 +17395,9 @@ version = "13.0.0"
 dependencies = [
  "log",
  "parity-scale-codec",
- "pezkuwi-sdk-frame",
+ "pezframe",
+ "pezframe-support",
+ "pezframe-system",
  "pezpallet-ranked-collective",
  "scale-info",
 ]
@@ -17406,7 +17513,6 @@ dependencies = [
  "parity-scale-codec",
  "pezframe-benchmarking",
  "pezframe-support",
- "pezframe-support-test",
  "pezframe-system",
  "pezpallet-balances",
  "pezsp-arithmetic",
@@ -17498,7 +17604,9 @@ name = "pezpallet-staking-async-preset-store"
 version = "0.1.0"
 dependencies = [
  "parity-scale-codec",
- "pezkuwi-sdk-frame",
+ "pezframe",
+ "pezframe-support",
+ "pezframe-system",
  "pezpallet-staking-async-ah-client",
  "scale-info",
 ]
@@ -17526,7 +17634,6 @@ dependencies = [
  "approx",
  "bitvec",
  "bizinikiwi-wasm-builder",
- "frame-remote-externalities",
  "hex-literal",
  "log",
  "parity-scale-codec",
@@ -17535,6 +17642,7 @@ dependencies = [
  "pezframe-election-provider-support",
  "pezframe-executive",
  "pezframe-metadata-hash-extension",
+ "pezframe-remote-externalities",
  "pezframe-support",
  "pezframe-system",
  "pezframe-system-benchmarking",
@@ -17663,15 +17771,14 @@ name = "pezpallet-staking-async-teyrchain-runtime"
 version = "0.15.0"
 dependencies = [
  "asset-test-pezutils",
- "assets-common",
  "bizinikiwi-wasm-builder",
- "bp-asset-hub-pezkuwichain",
- "bp-bridge-hub-pezkuwichain",
- "bp-bridge-hub-zagros",
- "frame-remote-externalities",
  "hex-literal",
  "log",
  "parity-scale-codec",
+ "pez-assets-common",
+ "pezbp-asset-hub-pezkuwichain",
+ "pezbp-bridge-hub-pezkuwichain",
+ "pezbp-bridge-hub-zagros",
  "pezcumulus-pezpallet-aura-ext",
  "pezcumulus-pezpallet-session-benchmarking",
  "pezcumulus-pezpallet-teyrchain-system",
@@ -17685,6 +17792,7 @@ dependencies = [
  "pezframe-election-provider-support",
  "pezframe-executive",
  "pezframe-metadata-hash-extension",
+ "pezframe-remote-externalities",
  "pezframe-support",
  "pezframe-system",
  "pezframe-system-benchmarking",
@@ -17831,10 +17939,10 @@ name = "pezpallet-state-trie-migration"
 version = "29.0.0"
 dependencies = [
  "bizinikiwi-state-trie-migration-rpc",
- "frame-remote-externalities",
  "log",
  "parity-scale-codec",
  "pezframe-benchmarking",
+ "pezframe-remote-externalities",
  "pezframe-support",
  "pezframe-system",
  "pezpallet-balances",
@@ -17899,7 +18007,9 @@ name = "pezpallet-teyrchain-template"
 version = "0.0.0"
 dependencies = [
  "parity-scale-codec",
- "pezkuwi-sdk-frame",
+ "pezframe",
+ "pezframe-support",
+ "pezframe-system",
  "scale-info",
 ]
 
@@ -18091,7 +18201,9 @@ version = "9.0.0"
 dependencies = [
  "docify",
  "parity-scale-codec",
- "pezkuwi-sdk-frame",
+ "pezframe",
+ "pezframe-support",
+ "pezframe-system",
  "pezpallet-balances",
  "pezpallet-proxy",
  "pezpallet-utility",
@@ -18215,7 +18327,9 @@ name = "pezpallet-whitelist"
 version = "27.0.0"
 dependencies = [
  "parity-scale-codec",
- "pezkuwi-sdk-frame",
+ "pezframe",
+ "pezframe-support",
+ "pezframe-system",
  "pezpallet-balances",
  "pezpallet-preimage",
  "scale-info",
@@ -18245,7 +18359,6 @@ dependencies = [
  "scale-info",
  "serde",
  "tracing",
- "xcm-pez-simulator",
  "xcm-runtime-pezapis",
 ]
 
@@ -18271,12 +18384,12 @@ dependencies = [
 name = "pezpallet-xcm-bridge-hub"
 version = "0.2.0"
 dependencies = [
- "bp-header-pez-chain",
- "bp-messages",
- "bp-xcm-bridge-hub",
- "bp-xcm-bridge-hub-router",
  "parity-scale-codec",
+ "pezbp-header-pez-chain",
+ "pezbp-messages",
  "pezbp-runtime",
+ "pezbp-xcm-bridge-hub",
+ "pezbp-xcm-bridge-hub-router",
  "pezframe-support",
  "pezframe-system",
  "pezkuwi-teyrchain-primitives",
@@ -18298,8 +18411,8 @@ dependencies = [
 name = "pezpallet-xcm-bridge-hub-router"
 version = "0.5.0"
 dependencies = [
- "bp-xcm-bridge-hub-router",
  "parity-scale-codec",
+ "pezbp-xcm-bridge-hub-router",
  "pezframe-benchmarking",
  "pezframe-support",
  "pezframe-system",
@@ -19778,6 +19891,8 @@ dependencies = [
  "parity-scale-codec",
  "parking_lot 0.12.5",
  "pezcumulus-zombienet-sdk-helpers",
+ "pezkuwi-zombienet-configuration",
+ "pezkuwi-zombienet-sdk",
  "pezsc-block-builder",
  "pezsc-client-api",
  "pezsc-transaction-pool-api",
@@ -19798,8 +19913,6 @@ dependencies = [
  "tokio-stream",
  "tracing",
  "tracing-subscriber 0.3.22",
- "zombienet-configuration",
- "zombienet-sdk",
 ]
 
 [[package]]
@@ -19859,9 +19972,9 @@ dependencies = [
 name = "pezsnowbridge-core"
 version = "0.2.0"
 dependencies = [
- "bp-relayers",
  "hex-literal",
  "parity-scale-codec",
+ "pezbp-relayers",
  "pezframe-support",
  "pezframe-system",
  "pezkuwi-teyrchain-primitives",
@@ -19906,9 +20019,9 @@ name = "pezsnowbridge-inbound-queue-primitives"
 version = "0.9.0"
 dependencies = [
  "alloy-core",
- "assets-common",
  "hex-literal",
  "parity-scale-codec",
+ "pez-assets-common",
  "pezframe-support",
  "pezframe-system",
  "pezsnowbridge-beacon-primitives",
@@ -20073,9 +20186,9 @@ name = "pezsnowbridge-pezpallet-inbound-queue-v2"
 version = "0.2.0"
 dependencies = [
  "alloy-core",
- "bp-relayers",
  "hex-literal",
  "parity-scale-codec",
+ "pezbp-relayers",
  "pezframe-benchmarking",
  "pezframe-support",
  "pezframe-system",
@@ -20114,9 +20227,9 @@ dependencies = [
 name = "pezsnowbridge-pezpallet-outbound-queue"
 version = "0.2.0"
 dependencies = [
- "bridge-hub-common",
  "ethabi-decode",
  "parity-scale-codec",
+ "pezbridge-hub-common",
  "pezframe-benchmarking",
  "pezframe-support",
  "pezframe-system",
@@ -20138,10 +20251,10 @@ name = "pezsnowbridge-pezpallet-outbound-queue-v2"
 version = "0.2.0"
 dependencies = [
  "alloy-core",
- "bp-relayers",
  "ethabi-decode",
  "hex-literal",
  "parity-scale-codec",
+ "pezbp-relayers",
  "pezframe-benchmarking",
  "pezframe-support",
  "pezframe-system",
@@ -20310,8 +20423,8 @@ dependencies = [
 name = "pezsnowbridge-test-utils"
 version = "0.1.0"
 dependencies = [
- "bp-relayers",
  "parity-scale-codec",
+ "pezbp-relayers",
  "pezframe-benchmarking",
  "pezframe-support",
  "pezframe-system",
@@ -21257,7 +21370,6 @@ dependencies = [
 name = "pezstaging-chain-spec-builder"
 version = "1.6.1"
 dependencies = [
- "bizinikiwi-test-runtime",
  "clap",
  "cmd_lib",
  "docify",
@@ -21287,6 +21399,7 @@ dependencies = [
  "pez-node-primitives",
  "pez-node-rpc",
  "pez-node-testing",
+ "pezframe-benchmarking-cli",
  "pezkuwi-sdk",
  "pezkuwi-subxt-signer",
  "pezsc-service-test",
@@ -22826,14 +22939,14 @@ version = "0.1.0"
 dependencies = [
  "async-std",
  "async-trait",
- "bp-header-pez-chain",
- "bp-messages",
- "bp-pezkuwi-core",
  "futures",
  "jsonrpsee",
  "num-traits",
  "parity-scale-codec",
  "pez-finality-relay",
+ "pezbp-header-pez-chain",
+ "pezbp-messages",
+ "pezbp-pezkuwi-core",
  "pezbp-runtime",
  "pezframe-support",
  "pezpallet-transaction-payment",
@@ -25527,6 +25640,7 @@ dependencies = [
  "jsonrpsee",
  "log",
  "parity-scale-codec",
+ "pezframe-benchmarking-cli",
  "pezkuwi-sdk",
  "pezsp-runtime",
  "serde",
@@ -25588,8 +25702,8 @@ version = "0.1.0"
 dependencies = [
  "async-std",
  "async-trait",
- "bp-pezkuwi-core",
  "futures",
+ "pezbp-pezkuwi-core",
  "pezsp-core",
  "relay-bizinikiwi-client",
  "relay-utils",
@@ -27975,8 +28089,10 @@ version = "0.1.0"
 dependencies = [
  "docify",
  "parity-scale-codec",
+ "pezframe",
+ "pezframe-support",
+ "pezframe-system",
  "pezkuwi-runtime-teyrchains",
- "pezkuwi-sdk-frame",
  "pezpallet-balances",
  "pezpallet-message-queue",
  "pezpallet-xcm",
@@ -28145,7 +28261,6 @@ dependencies = [
  "pezframe-system",
  "pezpallet-assets",
  "pezpallet-balances",
- "pezpallet-xcm",
  "pezsp-api",
  "pezsp-io",
  "pezsp-tracing",
@@ -28155,7 +28270,6 @@ dependencies = [
  "pezstaging-xcm-executor",
  "scale-info",
  "tracing",
- "xcm-pez-simulator",
 ]
 
 [[package]]
@@ -28286,7 +28400,6 @@ dependencies = [
  "approx",
  "bitvec",
  "bizinikiwi-wasm-builder",
- "frame-remote-externalities",
  "hex-literal",
  "log",
  "parity-scale-codec",
@@ -28295,6 +28408,7 @@ dependencies = [
  "pezframe-election-provider-support",
  "pezframe-executive",
  "pezframe-metadata-hash-extension",
+ "pezframe-remote-externalities",
  "pezframe-support",
  "pezframe-system",
  "pezframe-system-benchmarking",
@@ -28531,139 +28645,6 @@ dependencies = [
  "thiserror 1.0.69",
  "tokio",
  "tokio-tungstenite 0.26.2",
-]
-
-[[package]]
-name = "zombienet-configuration"
-version = "0.44.0"
-dependencies = [
- "anyhow",
- "lazy_static",
- "multiaddr 0.18.2",
- "regex",
- "reqwest",
- "serde",
- "serde_json",
- "thiserror 1.0.69",
- "tokio",
- "toml 0.8.23",
- "tracing",
- "url",
- "zombienet-support",
-]
-
-[[package]]
-name = "zombienet-orchestrator"
-version = "0.44.0"
-dependencies = [
- "anyhow",
- "async-trait",
- "erased-serde",
- "fancy-regex",
- "futures",
- "glob-match",
- "hex",
- "lazy_static",
- "libp2p",
- "libsecp256k1",
- "multiaddr 0.18.2",
- "pezkuwi-subxt",
- "pezkuwi-subxt-signer",
- "pezsc-chain-spec",
- "pezsp-core",
- "rand 0.8.5",
- "regex",
- "reqwest",
- "serde",
- "serde_json",
- "sha2 0.10.9",
- "thiserror 1.0.69",
- "tokio",
- "toml 0.8.23",
- "tracing",
- "uuid",
- "zombienet-configuration",
- "zombienet-prom-metrics-parser",
- "zombienet-provider",
- "zombienet-support",
-]
-
-[[package]]
-name = "zombienet-prom-metrics-parser"
-version = "0.44.0"
-dependencies = [
- "pest",
- "pest_derive",
- "thiserror 1.0.69",
-]
-
-[[package]]
-name = "zombienet-provider"
-version = "0.44.0"
-dependencies = [
- "anyhow",
- "async-trait",
- "erased-serde",
- "flate2",
- "futures",
- "hex",
- "k8s-openapi",
- "kube",
- "nix 0.29.0",
- "regex",
- "reqwest",
- "serde",
- "serde_json",
- "serde_yaml",
- "sha2 0.10.9",
- "tar",
- "thiserror 1.0.69",
- "tokio",
- "tokio-util",
- "tracing",
- "url",
- "uuid",
- "zombienet-configuration",
- "zombienet-support",
-]
-
-[[package]]
-name = "zombienet-sdk"
-version = "0.44.0"
-dependencies = [
- "async-trait",
- "futures",
- "k8s-openapi",
- "kube",
- "lazy_static",
- "pezkuwi-subxt",
- "pezkuwi-subxt-signer",
- "serde_json",
- "tokio",
- "tracing-subscriber 0.3.22",
- "zombienet-configuration",
- "zombienet-orchestrator",
- "zombienet-provider",
- "zombienet-support",
-]
-
-[[package]]
-name = "zombienet-support"
-version = "0.44.0"
-dependencies = [
- "anyhow",
- "async-trait",
- "futures",
- "lazy_static",
- "nix 0.29.0",
- "rand 0.8.5",
- "regex",
- "reqwest",
- "serde_json",
- "thiserror 1.0.69",
- "tokio",
- "tracing",
- "uuid",
 ]
 
 [[package]]

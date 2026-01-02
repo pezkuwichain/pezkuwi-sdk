@@ -18,7 +18,7 @@
 #![cfg(feature = "runtime-benchmarks")]
 
 use super::{Pezpallet as SafeMode, *};
-use frame::benchmarking::prelude::*;
+use pezframe::benchmarking::prelude::*;
 
 #[benchmarks(where T::Currency: fungible::Mutate<T::AccountId>)]
 mod benchmarks {

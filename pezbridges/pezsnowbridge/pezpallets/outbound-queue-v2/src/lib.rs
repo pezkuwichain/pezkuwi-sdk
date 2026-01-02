@@ -71,7 +71,7 @@ use alloy_core::{
 	primitives::{Bytes, FixedBytes},
 	sol_types::SolValue,
 };
-use bp_relayers::RewardLedger;
+use pezbp_relayers::RewardLedger;
 use codec::{Decode, FullCodec};
 use pezframe_support::{
 	storage::StorageStreamIter,

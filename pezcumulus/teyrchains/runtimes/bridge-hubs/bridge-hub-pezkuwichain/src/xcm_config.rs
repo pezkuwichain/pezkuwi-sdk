@@ -73,7 +73,7 @@ parameter_types! {
 	pub TreasuryAccount: AccountId = TREASURY_PALLET_ID.into_account_truncating();
 	pub RelayTreasuryLocation: Location = (Parent, PalletInstance(pezkuwichain_runtime_constants::TREASURY_PALLET_ID)).into();
 	pub SiblingPeople: Location = (Parent, Teyrchain(pezkuwichain_runtime_constants::system_teyrchain::PEOPLE_ID)).into();
-	pub AssetHubPezkuwichainLocation: Location = Location::new(1, [Teyrchain(bp_asset_hub_pezkuwichain::ASSET_HUB_PEZKUWICHAIN_TEYRCHAIN_ID)]);
+	pub AssetHubPezkuwichainLocation: Location = Location::new(1, [Teyrchain(pezbp_asset_hub_pezkuwichain::ASSET_HUB_PEZKUWICHAIN_TEYRCHAIN_ID)]);
 }
 
 /// Type for specifying how a `Location` can be converted into an `AccountId`. This is used

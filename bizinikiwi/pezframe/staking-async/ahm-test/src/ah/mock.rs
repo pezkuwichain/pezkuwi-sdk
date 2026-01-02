@@ -16,7 +16,7 @@
 // limitations under the License.
 
 use crate::shared;
-use frame::testing_prelude::*;
+use pezframe::testing_prelude::*;
 use pezframe_election_provider_support::{
 	bounds::{ElectionBounds, ElectionBoundsBuilder},
 	SequentialPhragmen,

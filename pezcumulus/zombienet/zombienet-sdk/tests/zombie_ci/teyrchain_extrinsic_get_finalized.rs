@@ -6,8 +6,8 @@ use tokio::time::Duration;
 
 use crate::utils::{initialize_network, BEST_BLOCK_METRIC};
 use pezcumulus_zombienet_sdk_helpers::submit_extrinsic_and_wait_for_finalization_success_with_timeout;
-use zombienet_orchestrator::network::node::{LogLineCount, LogLineCountOptions};
-use zombienet_sdk::{
+use pezkuwi_zombienet_orchestrator::network::node::{LogLineCount, LogLineCountOptions};
+use pezkuwi_zombienet_sdk::{
 	subxt::{self, dynamic::Value, OnlineClient, PezkuwiConfig},
 	subxt_signer::sr25519::dev,
 	NetworkConfig, NetworkConfigBuilder,
@@ -126,7 +126,7 @@ async fn build_network_config() -> Result<NetworkConfig, anyhow::Error> {
 	log::info!("Spawning network");
 
 	// images are not relevant for `native`, but we leave it here in case we use `k8s` some day
-	let images = zombienet_sdk::environment::get_images_from_env();
+	let images = pezkuwi_zombienet_sdk::environment::get_images_from_env();
 	log::info!("Using images: {images:?}");
 
 	// Network setup:

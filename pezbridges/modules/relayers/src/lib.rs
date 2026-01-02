@@ -21,8 +21,8 @@
 
 extern crate alloc;
 
-pub use bp_relayers::RewardLedger;
-use bp_relayers::{PaymentProcedure, Registration, RelayerRewardsKeyProvider, StakeAndSlash};
+pub use pezbp_relayers::RewardLedger;
+use pezbp_relayers::{PaymentProcedure, Registration, RelayerRewardsKeyProvider, StakeAndSlash};
 use core::marker::PhantomData;
 use pezbp_runtime::StorageDoubleMapKeyProvider;
 use pezframe_support::{fail, traits::tokens::Balance};
@@ -578,8 +578,8 @@ mod tests {
 	use super::*;
 	use mock::{RuntimeEvent as TestEvent, *};
 
-	use bp_messages::{HashedLaneId, LaneIdType};
-	use bp_relayers::{RewardsAccountOwner, RewardsAccountParams};
+	use pezbp_messages::{HashedLaneId, LaneIdType};
+	use pezbp_relayers::{RewardsAccountOwner, RewardsAccountParams};
 	use pezframe_support::{assert_noop, assert_ok, traits::fungible::Mutate};
 	use pezframe_system::{EventRecord, Pezpallet as System, Phase};
 	use pezsp_runtime::DispatchError;
@@ -637,7 +637,7 @@ mod tests {
 				*b"test",
 				RewardsAccountOwner::ThisChain,
 			);
-			let slash_destination = bp_relayers::ExplicitOrAccountParams::Params(slash_destination);
+			let slash_destination = pezbp_relayers::ExplicitOrAccountParams::Params(slash_destination);
 			Pezpallet::<TestRuntime>::slash_and_deregister(&REGISTER_RELAYER, slash_destination);
 			// check if event emitted
 			assert_eq!(

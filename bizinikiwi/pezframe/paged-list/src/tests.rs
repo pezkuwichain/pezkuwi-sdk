@@ -21,7 +21,7 @@
 #![cfg(test)]
 
 use crate::{mock::*, *};
-use frame::{
+use pezframe::{
 	prelude::storage::{StorageAppender, StoragePrefixedContainer},
 	testing_prelude::*,
 };

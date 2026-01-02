@@ -15,8 +15,8 @@
 // along with Parity Bridges Common.  If not, see <http://www.gnu.org/licenses/>.
 
 use crate::{Config, GrandpaPalletOf, Pezpallet, RelayBlockNumber};
-use bp_header_pez_chain::HeaderChain;
-use bp_teyrchains::{BestParaHeadHash, SubmitTeyrchainHeadsInfo};
+use pezbp_header_pez_chain::HeaderChain;
+use pezbp_teyrchains::{BestParaHeadHash, SubmitTeyrchainHeadsInfo};
 use pezbp_runtime::{HeaderId, OwnedBridgeModule};
 use pezframe_support::{
 	dispatch::CallableCallFor,
@@ -259,9 +259,9 @@ mod tests {
 		mock::{run_test, FreeHeadersInterval, RuntimeCall, TestRuntime},
 		CallSubType, PalletOperatingMode, ParaInfo, ParasInfo, RelayBlockHash, RelayBlockNumber,
 	};
-	use bp_header_pez_chain::StoredHeaderData;
-	use bp_pezkuwi_core::teyrchains::{ParaHash, ParaHeadsProof, ParaId};
-	use bp_teyrchains::BestParaHeadHash;
+	use pezbp_header_pez_chain::StoredHeaderData;
+	use pezbp_pezkuwi_core::teyrchains::{ParaHash, ParaHeadsProof, ParaId};
+	use pezbp_teyrchains::BestParaHeadHash;
 	use pezbp_runtime::BasicOperatingMode;
 
 	fn validate_submit_teyrchain_heads(

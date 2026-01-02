@@ -27,8 +27,7 @@ extern crate alloc;
 
 use alloc::vec::Vec;
 use pezkuwi_sdk::{
-	pezkuwi_sdk_frame::{
-		self as frame,
+	pezframe::{
 		deps::pezsp_genesis_builder,
 		runtime::{apis, prelude::*},
 	},
@@ -211,7 +210,7 @@ impl pezpallet_transaction_payment::Config for Runtime {
 // Implements the types required for the template pezpallet.
 impl pezpallet_minimal_template::Config for Runtime {}
 
-type Block = frame::runtime::types_common::BlockOf<Runtime, TxExtension>;
+type Block = pezframe::runtime::types_common::BlockOf<Runtime, TxExtension>;
 type Header = HeaderFor<Runtime>;
 
 type RuntimeExecutive = Executive<
@@ -228,7 +227,7 @@ impl_runtime_apis! {
 			VERSION
 		}
 
-		fn execute_block(block: <Block as frame::traits::Block>::LazyBlock) {
+		fn execute_block(block: <Block as pezframe::traits::Block>::LazyBlock) {
 			RuntimeExecutive::execute_block(block)
 		}
 
@@ -264,7 +263,7 @@ impl_runtime_apis! {
 		}
 
 		fn check_inherents(
-			block: <Block as frame::traits::Block>::LazyBlock,
+			block: <Block as pezframe::traits::Block>::LazyBlock,
 			data: InherentData,
 		) -> CheckInherentsResult {
 			data.check_extrinsics(&block)
@@ -345,10 +344,10 @@ impl_runtime_apis! {
 // https://github.com/pezkuwichain/pezkuwi-sdk/issues/3
 pub mod interface {
 	use super::Runtime;
-	use pezkuwi_sdk::{pezkuwi_sdk_frame as frame, *};
+	use pezkuwi_sdk::*;
 
 	pub type Block = super::Block;
-	pub use frame::runtime::types_common::OpaqueBlock;
+	pub use pezframe::runtime::types_common::OpaqueBlock;
 	pub type AccountId = <Runtime as pezframe_system::Config>::AccountId;
 	pub type Nonce = <Runtime as pezframe_system::Config>::Nonce;
 	pub type Hash = <Runtime as pezframe_system::Config>::Hash;

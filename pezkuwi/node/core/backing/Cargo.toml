@@ -31,9 +31,9 @@ thiserror = { workspace = true }
 [dev-dependencies]
 assert_matches = { workspace = true }
 futures = { features = ["thread-pool"], workspace = true }
-pezkuwi-node-subsystem-test-helpers = { workspace = true }
+# pezkuwi-node-subsystem-test-helpers = { workspace = true }
 pezkuwi-primitives = { workspace = true, features = ["test"] }
-pezkuwi-primitives-test-helpers = { workspace = true }
+# pezkuwi-primitives-test-helpers = { workspace = true }
 pezsc-keystore = { workspace = true, default-features = true }
 pezsp-application-crypto = { workspace = true, default-features = true }
 pezsp-core = { workspace = true, default-features = true }
@@ -44,11 +44,11 @@ pezsp-tracing = { workspace = true, default-features = true }
 runtime-benchmarks = [
 	"gum/runtime-benchmarks",
 	"pezkuwi-erasure-coding/runtime-benchmarks",
-	"pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
+	# "pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
 	"pezkuwi-node-subsystem-util/runtime-benchmarks",
 	"pezkuwi-node-subsystem/runtime-benchmarks",
 	"pezkuwi-pez-node-primitives/runtime-benchmarks",
-	"pezkuwi-primitives-test-helpers/runtime-benchmarks",
+	# "pezkuwi-primitives-test-helpers/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
 	"pezkuwi-statement-table/runtime-benchmarks",
 	"pezkuwi-teyrchain-primitives/runtime-benchmarks",

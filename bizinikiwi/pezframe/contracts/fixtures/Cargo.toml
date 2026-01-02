@@ -1,6 +1,6 @@
 [package]
 name = "pezpallet-contracts-fixtures"
-publish = false
+publish = true
 version = "1.0.0"
 authors.workspace = true
 edition.workspace = true
@@ -9,6 +9,7 @@ description = "Fixtures for testing contracts pezpallet."
 documentation.workspace = true
 repository = { workspace = true }
 homepage = { workspace = true }
+include = ["build.rs", "contracts/**", "src/**", "Cargo.toml"]
 
 [lints]
 workspace = true

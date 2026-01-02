@@ -34,6 +34,9 @@ teyrchain-template-runtime = { workspace = true }
 # Bizinikiwi
 prometheus-endpoint = { workspace = true, default-features = true }
 
+# For storage benchmarks
+pezframe-benchmarking-cli = { workspace = true, optional = true }
+
 [build-dependencies]
 pezkuwi-sdk = { workspace = true, features = ["bizinikiwi-build-script-utils"] }
 
@@ -50,6 +53,7 @@ runtime-benchmarks = [
 	"pezsp-runtime/runtime-benchmarks",
 	"teyrchain-template-runtime/runtime-benchmarks",
 ]
+storage-benchmark = ["pezframe-benchmarking-cli/storage-benchmark"]
 try-runtime = [
 	"pezkuwi-sdk/try-runtime",
 	"pezsp-runtime/try-runtime",

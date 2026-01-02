@@ -61,20 +61,23 @@ rand = { workspace = true, default-features = true }
 serde = { features = ["derive"], workspace = true, default-features = true }
 serde_json = { workspace = true, default-features = true }
 
+# For storage benchmarks
+pezframe-benchmarking-cli = { workspace = true, optional = true }
+
 # The Pezkuwi-SDK:
 pezkuwi-sdk = { features = [
 	"bizinikiwi-build-script-utils",
 	"bizinikiwi-frame-rpc-support",
 	"bizinikiwi-frame-rpc-system",
-	"bizinikiwi-prometheus-endpoint",
+	"prometheus-endpoint",
 	"bizinikiwi-rpc-client",
 	"bizinikiwi-state-trie-migration-rpc",
 	"bizinikiwi-wasm-builder",
-	"frame-remote-externalities",
+	"remote-externalities",
 	"pez-fork-tree",
 	"pez-generate-bags",
 	"pez-subkey",
-	"pez-tracing-gum",
+	"gum",
 	"pezframe-benchmarking-cli",
 	"pezframe-support-procedural-tools",
 	"pezmmr-gadget",
@@ -150,9 +153,9 @@ pezkuwi-sdk = { features = [
 	"pezsp-timestamp",
 	"pezsp-tracing",
 	"pezsp-transaction-storage-proof",
-	"pezstaging-chain-spec-builder",
-	"pezstaging-node-inspect",
-	"pezstaging-tracking-allocator",
+	"chain-spec-builder",
+	"node-inspect",
+	"tracking-allocator",
 	"std",
 ], workspace = true, default-features = true }
 
@@ -221,6 +224,7 @@ runtime-benchmarks = [
 	"pezsp-keyring/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
+storage-benchmark = ["pezframe-benchmarking-cli/storage-benchmark"]
 try-runtime = [
 	"bizinikiwi-cli-test-utils/try-runtime",
 	"pez-kitchensink-runtime/try-runtime",

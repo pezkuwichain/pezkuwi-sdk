@@ -114,7 +114,7 @@ xcm-runtime-pezapis = { workspace = true }
 zagros-runtime-constants = { workspace = true }
 
 # Pezcumulus
-assets-common = { workspace = true }
+pez-assets-common = { workspace = true }
 pezcumulus-pezpallet-aura-ext = { workspace = true }
 pezcumulus-pezpallet-session-benchmarking = { workspace = true }
 pezcumulus-pezpallet-teyrchain-system = { workspace = true }
@@ -131,10 +131,10 @@ teyrchain-info = { workspace = true }
 teyrchains-common = { workspace = true }
 
 # Bridges
-bp-asset-hub-pezkuwichain = { workspace = true }
-bp-asset-hub-zagros = { workspace = true }
-bp-bridge-hub-pezkuwichain = { workspace = true }
-bp-bridge-hub-zagros = { workspace = true }
+pezbp-asset-hub-pezkuwichain = { workspace = true }
+pezbp-asset-hub-zagros = { workspace = true }
+pezbp-bridge-hub-pezkuwichain = { workspace = true }
+pezbp-bridge-hub-zagros = { workspace = true }
 pezpallet-xcm-bridge-hub-router = { workspace = true }
 pezsnowbridge-outbound-queue-primitives = { workspace = true }
 pezsnowbridge-pezpallet-system-frontend = { workspace = true }
@@ -154,12 +154,12 @@ bizinikiwi-wasm-builder = { optional = true, workspace = true, default-features 
 default = ["std"]
 runtime-benchmarks = [
 	"asset-test-pezutils/runtime-benchmarks",
-	"assets-common/runtime-benchmarks",
+	"pez-assets-common/runtime-benchmarks",
 	"bizinikiwi-wasm-builder?/runtime-benchmarks",
-	"bp-asset-hub-pezkuwichain/runtime-benchmarks",
-	"bp-asset-hub-zagros/runtime-benchmarks",
-	"bp-bridge-hub-pezkuwichain/runtime-benchmarks",
-	"bp-bridge-hub-zagros/runtime-benchmarks",
+	"pezbp-asset-hub-pezkuwichain/runtime-benchmarks",
+	"pezbp-asset-hub-zagros/runtime-benchmarks",
+	"pezbp-bridge-hub-pezkuwichain/runtime-benchmarks",
+	"pezbp-bridge-hub-zagros/runtime-benchmarks",
 	"pezcumulus-pezpallet-aura-ext/runtime-benchmarks",
 	"pezcumulus-pezpallet-session-benchmarking/runtime-benchmarks",
 	"pezcumulus-pezpallet-teyrchain-system/runtime-benchmarks",
@@ -260,7 +260,7 @@ runtime-benchmarks = [
 ]
 try-runtime = [
 	"asset-test-pezutils/try-runtime",
-	"assets-common/try-runtime",
+	"pez-assets-common/try-runtime",
 	"pezcumulus-pezpallet-aura-ext/try-runtime",
 	"pezcumulus-pezpallet-teyrchain-system/try-runtime",
 	"pezcumulus-pezpallet-weight-reclaim/try-runtime",
@@ -326,12 +326,12 @@ try-runtime = [
 ]
 std = [
 	"alloy-core/std",
-	"assets-common/std",
+	"pez-assets-common/std",
 	"bizinikiwi-wasm-builder",
-	"bp-asset-hub-pezkuwichain/std",
-	"bp-asset-hub-zagros/std",
-	"bp-bridge-hub-pezkuwichain/std",
-	"bp-bridge-hub-zagros/std",
+	"pezbp-asset-hub-pezkuwichain/std",
+	"pezbp-asset-hub-zagros/std",
+	"pezbp-bridge-hub-pezkuwichain/std",
+	"pezbp-bridge-hub-zagros/std",
 	"codec/std",
 	"log/std",
 	"pezcumulus-pezpallet-aura-ext/std",

@@ -62,8 +62,8 @@ pezkuwi-pez-node-primitives = { workspace = true, default-features = true }
 pezkuwi-primitives = { workspace = true, default-features = true }
 
 [dev-dependencies]
-pezcumulus-test-client = { workspace = true }
-pezcumulus-test-relay-sproof-builder = { workspace = true }
+# pezcumulus-test-client = { workspace = true }
+# pezcumulus-test-relay-sproof-builder = { workspace = true }
 pezsp-keyring = { workspace = true }
 pezsp-tracing = { workspace = true }
 pezsp-version = { workspace = true }
@@ -78,8 +78,8 @@ runtime-benchmarks = [
 	"pezcumulus-primitives-aura/runtime-benchmarks",
 	"pezcumulus-primitives-core/runtime-benchmarks",
 	"pezcumulus-relay-chain-interface/runtime-benchmarks",
-	"pezcumulus-test-client/runtime-benchmarks",
-	"pezcumulus-test-relay-sproof-builder/runtime-benchmarks",
+	# "pezcumulus-test-client/runtime-benchmarks",
+	# "pezcumulus-test-relay-sproof-builder/runtime-benchmarks",
 	"pezkuwi-node-subsystem-util/runtime-benchmarks",
 	"pezkuwi-node-subsystem/runtime-benchmarks",
 	"pezkuwi-overseer/runtime-benchmarks",

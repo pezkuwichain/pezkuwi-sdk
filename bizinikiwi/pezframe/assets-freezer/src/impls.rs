@@ -22,7 +22,7 @@
 // SOFTWARE.
 
 use super::*;
-use frame::prelude::storage::StorageDoubleMap;
+use pezframe::prelude::storage::StorageDoubleMap;
 use pezpallet_assets::FrozenBalance;
 
 // Implements [`FrozenBalance`] from [`pezpallet-assets`], so it can understand how much of an

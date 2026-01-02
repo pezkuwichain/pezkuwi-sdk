@@ -19,7 +19,7 @@
 
 use crate as pezpallet_salary;
 use crate::*;
-use frame::{deps::pezsp_io, testing_prelude::*};
+use pezframe::{deps::pezsp_io, testing_prelude::*};
 use pezpallet_ranked_collective::{EnsureRanked, Geometric};
 
 type Rank = u16;

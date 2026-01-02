@@ -23,7 +23,7 @@ use crate::{
 	InboundLanes, OutboundLanes,
 };
 
-use bp_messages::{
+use pezbp_messages::{
 	source_chain::FromBridgedChainMessagesDeliveryProof,
 	target_chain::FromBridgedChainMessagesProof, ChainWithMessages, DeliveredMessages,
 	InboundLaneData, LaneState, MessageNonce, OutboundLaneData, UnrewardedRelayer,

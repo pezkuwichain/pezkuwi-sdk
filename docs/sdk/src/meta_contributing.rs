@@ -82,9 +82,9 @@
 //!
 //!
 //! ```
-//! #[frame::pezpallet(dev_mode)]
+//! #[pezframe::pezpallet(dev_mode)]
 //! pub mod pezpallet {
-//! #   use frame::prelude::*;
+//! #   use pezframe::prelude::*;
 //! #   #[pezpallet::config]
 //! #   pub trait Config: pezframe_system::Config {}
 //! #   #[pezpallet::pezpallet]
@@ -105,9 +105,9 @@
 //! explained in [`crate::reference_docs::frame_runtime_types`]. Build on top of this!
 //! * Then, what is `origin`? Just an account id? [`crate::reference_docs::frame_origin`].
 //! * Then, what is `DispatchResult`? Why is this called *dispatch*? Probably something that can be
-//! explained in the documentation of [`frame::prelude::DispatchResult`].
+//! explained in the documentation of [`pezframe::prelude::DispatchResult`].
 //! * Why is `"SomeStaticString"` a valid error? Because there is implementation for it that you can
-//!   see [here](frame::prelude::DispatchError#impl-From<%26'static+str>-for-DispatchError).
+//!   see [here](pezframe::prelude::DispatchError#impl-From<%26'static+str>-for-DispatchError).
 //!
 //!
 //! All of these are examples of underlying information that a contributor should:

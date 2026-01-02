@@ -1,4 +1,4 @@
-use frame::{
+use pezframe::{
 	deps::{pezframe_support::weights::constants::RocksDbWeight, pezframe_system::GenesisConfig},
 	prelude::*,
 	runtime::prelude::*,

@@ -18,7 +18,7 @@
 
 use crate as pezpallet_xcm_bridge_hub_router;
 
-use bp_xcm_bridge_hub_router::XcmChannelStatusProvider;
+use pezbp_xcm_bridge_hub_router::XcmChannelStatusProvider;
 use codec::Encode;
 use pezframe_support::{
 	construct_runtime, derive_impl, parameter_types,

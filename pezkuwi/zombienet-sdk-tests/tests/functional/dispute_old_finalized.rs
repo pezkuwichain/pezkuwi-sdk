@@ -22,15 +22,15 @@ use anyhow::anyhow;
 use pezcumulus_zombienet_sdk_helpers::assert_para_throughput;
 use serde_json::json;
 use tokio::time::Duration;
-use zombienet_orchestrator::network::node::LogLineCountOptions;
+use pezkuwi_zombienet_orchestrator::network::node::LogLineCountOptions;
 
 #[tokio::test(flavor = "multi_thread")]
 async fn dispute_old_finalized() -> Result<(), anyhow::Error> {
 	let _ = env_logger::try_init_from_env(
 		env_logger::Env::default().filter_or(env_logger::DEFAULT_FILTER_ENV, "info"),
 	);
-	let images = zombienet_sdk::environment::get_images_from_env();
-	let config = zombienet_sdk::NetworkConfigBuilder::new()
+	let images = pezkuwi_zombienet_sdk::environment::get_images_from_env();
+	let config = pezkuwi_zombienet_sdk::NetworkConfigBuilder::new()
 		.with_relaychain(|r| {
 			let r = r
 				.with_chain("pezkuwichain-local")
@@ -100,7 +100,7 @@ async fn dispute_old_finalized() -> Result<(), anyhow::Error> {
 			anyhow!("config errors: {errors}")
 		})?;
 
-	let spawn_fn = zombienet_sdk::environment::get_spawn_fn();
+	let spawn_fn = pezkuwi_zombienet_sdk::environment::get_spawn_fn();
 	let network = spawn_fn(config).await?;
 
 	let honest = network.get_node("honest-0")?;

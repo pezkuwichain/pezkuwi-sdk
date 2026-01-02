@@ -38,7 +38,7 @@
 //! - [`pezpallet::event`]
 //! - [`pezpallet::error`]
 //! - Basics of testing a pezpallet
-//! - [Constructing a runtime](frame::runtime::prelude::construct_runtime)
+//! - [Constructing a runtime](pezframe::runtime::prelude::construct_runtime)
 //!
 //! ### Shell Pezpallet
 //!
@@ -79,7 +79,7 @@
 //! details:
 //!
 //! - Where do `T::AccountId` and `T::RuntimeOrigin` come from? These are both defined in
-//!  [`frame::prelude::pezframe_system::Config`], therefore we can access them in `T`.
+//!  [`pezframe::prelude::pezframe_system::Config`], therefore we can access them in `T`.
 //! - What is `ensure_signed`, and what does it do with the aforementioned `T::RuntimeOrigin`? This
 //!   is outside the scope of this guide, and you can learn more about it in the origin reference
 //!   document ([`crate::reference_docs::frame_origin`]). For now, you should only know the
@@ -90,31 +90,31 @@
 //!
 //! - Where does `mutate`, `get` and `insert` and other storage APIs come from? All of them are
 //! explained in the corresponding `type`, for example, for `Balances::<T>::insert`, you can look
-//! into [`frame::prelude::StorageMap::insert`].
+//! into [`pezframe::prelude::StorageMap::insert`].
 //!
-//! - The return type of all dispatchable functions is [`frame::prelude::DispatchResult`]:
+//! - The return type of all dispatchable functions is [`pezframe::prelude::DispatchResult`]:
 #![doc = docify::embed!("../../bizinikiwi/pezframe/support/src/dispatch.rs", DispatchResult)]
 //!
-//! Which is more or less a normal Rust `Result`, with a custom [`frame::prelude::DispatchError`] as
+//! Which is more or less a normal Rust `Result`, with a custom [`pezframe::prelude::DispatchError`] as
 //! the `Err` variant. We won't cover this error in detail here, but importantly you should know
 //! that there is an `impl From<&'static string> for DispatchError` provided (see
-//! [here](`frame::prelude::DispatchError#impl-From<%26str>-for-DispatchError`)). Therefore,
+//! [here](`pezframe::prelude::DispatchError#impl-From<%26str>-for-DispatchError`)). Therefore,
 //! we can use basic string literals as our error type and `.into()` them into `DispatchError`.
 //!
 //! - Why are all `get` and `mutate` functions returning an `Option`? This is the default behavior
 //!   of FRAME storage APIs. You can learn more about how to override this by looking into
-//!   [`pezpallet::storage`], and [`frame::prelude::ValueQuery`]/[`frame::prelude::OptionQuery`]
+//!   [`pezpallet::storage`], and [`pezframe::prelude::ValueQuery`]/[`pezframe::prelude::OptionQuery`]
 //!
 //! ### Improving Errors
 //!
 //! How we handle error in the above snippets is fairly rudimentary. Let's look at how this can be
-//! improved. First, we can use [`frame::prelude::ensure`] to express the error slightly better.
+//! improved. First, we can use [`pezframe::prelude::ensure`] to express the error slightly better.
 //! This macro will call `.into()` under the hood.
 #![doc = docify::embed!("./packages/guides/first-pezpallet/src/lib.rs", transfer_better)]
 //!
 //! Moreover, you will learn in the [Defensive Programming
 //! section](crate::reference_docs::defensive_programming) that it is always recommended to use
-//! safe arithmetic operations in your runtime. By using [`frame::traits::CheckedSub`], we can not
+//! safe arithmetic operations in your runtime. By using [`pezframe::traits::CheckedSub`], we can not
 //! only take a step in that direction, but also improve the error handing and make it slightly more
 //! ergonomic.
 #![doc = docify::embed!("./packages/guides/first-pezpallet/src/lib.rs", transfer_better_checked)]
@@ -134,7 +134,7 @@
 //! #[cfg(test)]
 //! mod tests {
 //! 	// bring in the testing prelude of frame
-//! 	use frame::testing_prelude::*;
+//! 	use pezframe::testing_prelude::*;
 //! 	// bring in all pezpallet items
 //! 	use super::pezpallet::*;
 //!
@@ -144,12 +144,12 @@
 //!
 //! Next, we create a "test runtime" in order to test our pezpallet. Recall from
 //! [`crate::pezkuwi_sdk::frame_runtime`] that a runtime is a collection of pallets, expressed
-//! through [`frame::runtime::prelude::construct_runtime`]. All runtimes also have to include
-//! [`frame::prelude::pezframe_system`]. So we expect to see a runtime with two pezpallet,
+//! through [`pezframe::runtime::prelude::construct_runtime`]. All runtimes also have to include
+//! [`pezframe::prelude::pezframe_system`]. So we expect to see a runtime with two pezpallet,
 //! `pezframe_system` and the one we just wrote.
 #![doc = docify::embed!("./packages/guides/first-pezpallet/src/lib.rs", runtime)]
 //!
-//! > [`frame::pezpallet_macros::derive_impl`] is a FRAME feature that enables developers to have
+//! > [`pezframe::pezpallet_macros::derive_impl`] is a FRAME feature that enables developers to have
 //! > defaults for associated types.
 //!
 //! Recall that within our pezpallet, (almost) all blocks of code are generic over `<T: Config>`.
@@ -183,7 +183,7 @@
 //!
 //! The above is all you need to execute the dispatchables of your pezpallet. The last thing you
 //! need to learn is that all of your pezpallet testing code should be wrapped in
-//! [`frame::testing_prelude::TestState`]. This is a type that provides access to an in-memory state
+//! [`pezframe::testing_prelude::TestState`]. This is a type that provides access to an in-memory state
 //! to be used in our tests.
 #![doc = docify::embed!("./packages/guides/first-pezpallet/src/lib.rs", first_test)]
 //!
@@ -305,7 +305,7 @@
 //!
 //! In this snippet, the actual `RuntimeEvent` type (right hand side of `type RuntimeEvent =
 //! RuntimeEvent`) is generated by
-//! [`construct_runtime`](frame::runtime::prelude::construct_runtime). An interesting way to inspect
+//! [`construct_runtime`](pezframe::runtime::prelude::construct_runtime). An interesting way to inspect
 //! this type is to see its definition in rust-docs:
 //! [`crate::guides::your_first_pallet::pezpallet_v2::tests::runtime_v2::RuntimeEvent`].
 //!
@@ -321,7 +321,7 @@
 //! - The pezpallet we wrote in this guide was using `dev_mode`, learn more in
 //!   [`pezpallet::config`].
 //! - Learn more about the individual pezpallet items/macros, such as event and errors and call, in
-//!   [`frame::pezpallet_macros`].
+//!   [`pezframe::pezpallet_macros`].
 //!
 //! [`pezpallet::storage`]: pezframe_support::pezpallet_macros::storage
 //! [`pezpallet::call`]: pezframe_support::pezpallet_macros::call
@@ -332,9 +332,9 @@
 //! [`pezpallet::generate_deposit`]: pezframe_support::pezpallet_macros::generate_deposit
 
 #[docify::export]
-#[frame::pezpallet(dev_mode)]
+#[pezframe::pezpallet(dev_mode)]
 pub mod shell_pallet {
-	use frame::prelude::*;
+	use pezframe::prelude::*;
 
 	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
@@ -343,9 +343,9 @@ pub mod shell_pallet {
 	pub struct Pezpallet<T>(_);
 }
 
-#[frame::pezpallet(dev_mode)]
+#[pezframe::pezpallet(dev_mode)]
 pub mod pezpallet {
-	use frame::prelude::*;
+	use pezframe::prelude::*;
 
 	#[docify::export]
 	pub type Balance = u128;
@@ -449,7 +449,7 @@ pub mod pezpallet {
 		use crate::guides::your_first_pallet::pezpallet::*;
 
 		#[docify::export(testing_prelude)]
-		use frame::testing_prelude::*;
+		use pezframe::testing_prelude::*;
 
 		pub(crate) const ALICE: u64 = 1;
 		pub(crate) const BOB: u64 = 2;
@@ -672,10 +672,10 @@ pub mod pezpallet {
 	}
 }
 
-#[frame::pezpallet(dev_mode)]
+#[pezframe::pezpallet(dev_mode)]
 pub mod pezpallet_v2 {
 	use super::pezpallet::Balance;
-	use frame::prelude::*;
+	use pezframe::prelude::*;
 
 	#[docify::export(config_v2)]
 	#[pezpallet::config]
@@ -741,7 +741,7 @@ pub mod pezpallet_v2 {
 	#[cfg(any(test, doc))]
 	pub mod tests {
 		use super::{super::pezpallet::tests::StateBuilder, *};
-		use frame::testing_prelude::*;
+		use pezframe::testing_prelude::*;
 		const ALICE: u64 = 1;
 		const BOB: u64 = 2;
 

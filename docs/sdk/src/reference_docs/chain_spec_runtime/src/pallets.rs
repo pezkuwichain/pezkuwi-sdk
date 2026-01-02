@@ -18,10 +18,10 @@
 //! Pallets for the chain-spec demo runtime.
 
 use alloc::vec::Vec;
-use frame::prelude::*;
+use pezframe::prelude::*;
 
 #[docify::export]
-#[frame::pezpallet(dev_mode)]
+#[pezframe::pezpallet(dev_mode)]
 pub mod pezpallet_bar {
 	use super::*;
 
@@ -94,7 +94,7 @@ pub enum FooEnum {
 }
 
 #[docify::export]
-#[frame::pezpallet(dev_mode)]
+#[pezframe::pezpallet(dev_mode)]
 pub mod pezpallet_foo {
 	use super::*;
 

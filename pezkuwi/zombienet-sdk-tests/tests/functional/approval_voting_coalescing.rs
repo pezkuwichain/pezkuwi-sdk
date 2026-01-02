@@ -8,7 +8,7 @@ use anyhow::anyhow;
 use pezcumulus_zombienet_sdk_helpers::{assert_finality_lag, assert_para_throughput};
 use pezkuwi_primitives::Id as ParaId;
 use serde_json::json;
-use zombienet_sdk::{
+use pezkuwi_zombienet_sdk::{
 	subxt::{OnlineClient, PezkuwiConfig},
 	NetworkConfigBuilder,
 };
@@ -19,7 +19,7 @@ async fn approval_voting_coalescing_test() -> Result<(), anyhow::Error> {
 		env_logger::Env::default().filter_or(env_logger::DEFAULT_FILTER_ENV, "info"),
 	);
 
-	let images = zombienet_sdk::environment::get_images_from_env();
+	let images = pezkuwi_zombienet_sdk::environment::get_images_from_env();
 	let no_show_slots = 4;
 	let mut config_builder = NetworkConfigBuilder::new().with_relaychain(|r| {
 		let r = r
@@ -66,7 +66,7 @@ async fn approval_voting_coalescing_test() -> Result<(), anyhow::Error> {
 		anyhow!("config errs: {errs}")
 	})?;
 
-	let spawn_fn = zombienet_sdk::environment::get_spawn_fn();
+	let spawn_fn = pezkuwi_zombienet_sdk::environment::get_spawn_fn();
 
 	log::info!("Spawning network");
 	let network = spawn_fn(config).await?;

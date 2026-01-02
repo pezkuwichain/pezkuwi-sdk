@@ -22,7 +22,7 @@
 use super::*;
 #[cfg(test)]
 use crate::Pezpallet as Whitelist;
-use frame::benchmarking::prelude::*;
+use pezframe::benchmarking::prelude::*;
 
 #[benchmarks]
 mod benchmarks {

@@ -29,8 +29,8 @@ pezsp-arithmetic = { workspace = true }
 pezsp-io = { workspace = true }
 pezsp-runtime = { workspace = true }
 
+# pezframe-support-test moved to integration tests to break circular dependency
 [dev-dependencies]
-pezframe-support-test = { workspace = true }
 pezpallet-balances = { workspace = true, default-features = true }
 pezsp-crypto-hashing = { workspace = true, default-features = true }
 
@@ -40,7 +40,6 @@ std = [
 	"codec/std",
 	"log/std",
 	"pezframe-benchmarking?/std",
-	"pezframe-support-test/std",
 	"pezframe-support/std",
 	"pezframe-system/std",
 	"pezpallet-balances/std",
@@ -53,7 +52,6 @@ std = [
 runtime-benchmarks = [
 	"pezframe-benchmarking",
 	"pezframe-benchmarking/runtime-benchmarks",
-	"pezframe-support-test/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
 	"pezframe-system/runtime-benchmarks",
 	"pezpallet-balances/runtime-benchmarks",
@@ -61,7 +59,6 @@ runtime-benchmarks = [
 	"pezsp-runtime/runtime-benchmarks",
 ]
 try-runtime = [
-	"pezframe-support-test/try-runtime",
 	"pezframe-support/try-runtime",
 	"pezframe-system/try-runtime",
 	"pezpallet-balances/try-runtime",

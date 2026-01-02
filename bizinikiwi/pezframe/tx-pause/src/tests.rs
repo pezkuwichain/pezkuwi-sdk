@@ -19,7 +19,7 @@
 
 use super::*;
 use crate::mock::{RuntimeCall, *};
-use frame::testing_prelude::*;
+use pezframe::testing_prelude::*;
 // GENERAL SUCCESS/POSITIVE TESTS ---------------------
 
 #[docify::export]

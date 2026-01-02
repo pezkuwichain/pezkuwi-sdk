@@ -1,5 +1,5 @@
 use crate::{mock::*, Error, Something};
-use frame::testing_prelude::*;
+use pezframe::testing_prelude::*;
 
 #[test]
 fn it_works_for_default_value() {

@@ -17,7 +17,7 @@
 
 //! # Runtime
 
-use frame::{deps::pezframe_system, runtime::prelude::*, traits::IdentityLookup};
+use pezframe::{deps::pezframe_system, runtime::prelude::*, traits::IdentityLookup};
 use xcm_executor::XcmExecutor;
 use xcm_pez_simulator::mock_message_queue;
 
@@ -25,7 +25,7 @@ mod xcm_config;
 use xcm_config::XcmConfig;
 
 pub type Block = pezframe_system::mocking::MockBlock<Runtime>;
-pub type AccountId = frame::deps::pezsp_runtime::AccountId32;
+pub type AccountId = pezframe::deps::pezsp_runtime::AccountId32;
 pub type Balance = u64;
 
 construct_runtime! {
