@@ -937,7 +937,7 @@ pez-generate-bags = { path = "bizinikiwi/utils/pezframe/pez-generate-bags", vers
 pez-kitchensink-runtime = { path = "bizinikiwi/bin/node/runtime", version = "3.0.0-dev" }
 pez-messages-relay = { path = "pezbridges/relays/messages", version = "0.1.0" }
 pez-minimal-template-node = { path = "templates/minimal/node", version = "0.0.0" }
-pez-minimal-template-runtime = { path = "templates/minimal/runtime", version = "0.0.0" }
+pez-minimal-template-runtime = { path = "templates/minimal/runtime", version = "0.1.1" }
 pez-node-primitives = { path = "bizinikiwi/bin/node/primitives", version = "2.0.0", default-features = false }
 pez-node-rpc = { path = "bizinikiwi/bin/node/rpc", version = "3.0.0-dev" }
 pez-node-testing = { path = "bizinikiwi/bin/node/testing", version = "3.0.0-dev" }
@@ -987,7 +987,7 @@ pezcumulus-test-runtime = { path = "pezcumulus/test/runtime", version = "0.1.0" 
 pezcumulus-test-service = { path = "pezcumulus/test/service", version = "0.1.0" }
 pezcumulus-zombienet-sdk-helpers = { path = "pezcumulus/zombienet/zombienet-sdk-helpers", version = "0.1.0", default-features = false }
 pezframe-benchmarking = { path = "bizinikiwi/pezframe/benchmarking", version = "28.0.0", default-features = false }
-pezframe-benchmarking-cli = { path = "bizinikiwi/utils/pezframe/benchmarking-cli", version = "32.0.0", default-features = false }
+pezframe-benchmarking-cli = { path = "bizinikiwi/utils/pezframe/benchmarking-cli", version = "32.0.1", default-features = false }
 pezframe-benchmarking-pezpallet-pov = { default-features = false, version = "18.0.0", path = "bizinikiwi/pezframe/benchmarking/pov" }
 pezframe-election-provider-solution-type = { path = "bizinikiwi/pezframe/election-provider-support/solution-type", version = "13.0.0", default-features = false }
 pezframe-election-provider-support = { path = "bizinikiwi/pezframe/election-provider-support", version = "28.0.0", default-features = false }
@@ -996,7 +996,7 @@ pezframe-metadata = { path = "bizinikiwi/pezframe/pezframe-metadata", version = 
 pezframe-metadata-hash-extension = { path = "bizinikiwi/pezframe/metadata-hash-extension", version = "0.1.0", default-features = false }
 pezframe-support = { path = "bizinikiwi/pezframe/support", version = "28.0.0", default-features = false }
 pezframe-support-procedural = { path = "bizinikiwi/pezframe/support/procedural", version = "23.0.0", default-features = false }
-pezframe-support-procedural-tools = { path = "bizinikiwi/pezframe/support/procedural/tools", version = "10.0.0", default-features = false }
+pezframe-support-procedural-tools = { path = "bizinikiwi/pezframe/support/procedural/tools", version = "10.0.1", default-features = false }
 pezframe-support-procedural-tools-derive = { path = "bizinikiwi/pezframe/support/procedural/tools/derive", version = "11.0.0", default-features = false }
 pezframe-support-test = { path = "bizinikiwi/pezframe/support/test", version = "3.0.0" }
 pezframe-system = { path = "bizinikiwi/pezframe/system", version = "28.0.0", default-features = false }
@@ -1077,7 +1077,7 @@ pezpallet-membership = { path = "bizinikiwi/pezframe/membership", version = "28.
 pezpallet-message-queue = { path = "bizinikiwi/pezframe/message-queue", version = "31.0.0", default-features = false }
 pezpallet-meta-tx = { path = "bizinikiwi/pezframe/meta-tx", version = "0.44.0", default-features = false }
 pezpallet-migrations = { path = "bizinikiwi/pezframe/migrations", version = "1.0.0", default-features = false }
-pezpallet-minimal-template = { path = "templates/minimal/pezpallets/template", version = "0.0.0", default-features = false }
+pezpallet-minimal-template = { path = "templates/minimal/pezpallets/template", version = "0.1.0", default-features = false }
 pezpallet-mixnet = { default-features = false, version = "0.4.0", path = "bizinikiwi/pezframe/mixnet" }
 pezpallet-mmr = { path = "bizinikiwi/pezframe/merkle-mountain-range", version = "27.0.0", default-features = false }
 pezpallet-multi-asset-bounties = { path = "bizinikiwi/pezframe/multi-asset-bounties", version = "1.0.0", default-features = false }
@@ -1219,8 +1219,8 @@ pezkuwi-rpc = { path = "pezkuwi/rpc", version = "7.0.0", default-features = fals
 pezkuwi-runtime-common = { path = "pezkuwi/runtime/common", version = "7.0.0", default-features = false }
 pezkuwi-runtime-metrics = { path = "pezkuwi/runtime/metrics", version = "7.0.0", default-features = false }
 pezkuwi-runtime-teyrchains = { path = "pezkuwi/runtime/teyrchains", version = "7.0.0", default-features = false }
-pezkuwi-sdk = { path = "umbrella", version = "0.1.0", default-features = false }
-pezkuwi-sdk-docs = { path = "docs/sdk", version = "0.0.1" }
+pezkuwi-sdk = { path = "umbrella", version = "0.1.2", default-features = false }
+pezkuwi-sdk-docs = { path = "docs/sdk", version = "0.0.2" }
 pezkuwi-service = { path = "pezkuwi/node/service", version = "7.0.1", default-features = false }
 pezkuwi-statement-distribution = { path = "pezkuwi/node/network/statement-distribution", version = "7.0.0", default-features = false }
 pezkuwi-statement-table = { path = "pezkuwi/statement-table", version = "7.0.0", default-features = false }
@@ -1599,7 +1599,7 @@ xcm-pez-emulator = { path = "pezcumulus/xcm/xcm-pez-emulator", version = "0.5.0"
 xcm-pez-procedural = { path = "pezkuwi/xcm/procedural", version = "7.0.0", default-features = false }
 xcm-pez-simulator = { path = "pezkuwi/xcm/xcm-pez-simulator", version = "7.0.0", default-features = false }
 xcm-runtime-pezapis = { path = "pezkuwi/xcm/xcm-runtime-pezapis", version = "0.1.1", default-features = false }
-yet-another-teyrchain-runtime = { version = "0.6.0", path = "pezcumulus/teyrchains/runtimes/testing/yet-another-teyrchain" }
+yet-another-teyrchain-runtime = { version = "0.6.1", path = "pezcumulus/teyrchains/runtimes/testing/yet-another-teyrchain" }
 zagros-emulated-chain = { version = "0.0.0", path = "pezcumulus/teyrchains/integration-tests/emulated/chains/relays/zagros", default-features = false }
 zagros-runtime = { path = "pezkuwi/runtime/zagros", default-features = false, version = "7.0.0" }
 zagros-runtime-constants = { path = "pezkuwi/runtime/zagros/constants", default-features = false, version = "7.0.0" }

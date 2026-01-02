@@ -9799,7 +9799,7 @@ dependencies = [
 
 [[package]]
 name = "pez-minimal-template-runtime"
-version = "0.0.0"
+version = "0.1.1"
 dependencies = [
  "parity-scale-codec",
  "pezkuwi-sdk",
@@ -11935,7 +11935,7 @@ dependencies = [
 
 [[package]]
 name = "pezframe-benchmarking-cli"
-version = "32.0.0"
+version = "32.0.1"
 dependencies = [
  "Inflector",
  "array-bytes 6.2.3",
@@ -12196,7 +12196,7 @@ dependencies = [
 
 [[package]]
 name = "pezframe-support-procedural-tools"
-version = "10.0.0"
+version = "10.0.1"
 dependencies = [
  "pezframe-support-procedural-tools-derive",
  "proc-macro-crate 3.4.0",
@@ -13554,7 +13554,7 @@ dependencies = [
 
 [[package]]
 name = "pezkuwi-sdk"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "asset-test-pezutils",
  "bizinikiwi-bip39",
@@ -13954,7 +13954,7 @@ dependencies = [
 
 [[package]]
 name = "pezkuwi-sdk-docs"
-version = "0.0.1"
+version = "0.0.2"
 dependencies = [
  "assert_cmd",
  "bizinikiwi-wasm-builder",
@@ -16626,7 +16626,7 @@ dependencies = [
 
 [[package]]
 name = "pezpallet-minimal-template"
-version = "0.0.0"
+version = "0.1.0"
 dependencies = [
  "parity-scale-codec",
  "pezframe-benchmarking",
@@ -28341,7 +28341,7 @@ dependencies = [
 
 [[package]]
 name = "yet-another-teyrchain-runtime"
-version = "0.6.0"
+version = "0.6.1"
 dependencies = [
  "bizinikiwi-wasm-builder",
  "parity-scale-codec",
