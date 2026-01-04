@@ -64,100 +64,95 @@ serde_json = { workspace = true, default-features = true }
 # For storage benchmarks
 pezframe-benchmarking-cli = { workspace = true, optional = true }
 
-# The Pezkuwi-SDK:
-pezkuwi-sdk = { features = [
-	"bizinikiwi-build-script-utils",
-	"bizinikiwi-frame-rpc-support",
-	"bizinikiwi-frame-rpc-system",
-	"bizinikiwi-rpc-client",
-	"bizinikiwi-state-trie-migration-rpc",
-	"bizinikiwi-wasm-builder",
-	"pezstaging-chain-spec-builder",
-	"gum",
-	"node-inspect",
-	"pez-fork-tree",
-	"pez-generate-bags",
-	"pez-subkey",
-	"pezframe-benchmarking-cli",
-	"pezframe-support-procedural-tools",
-	"pezmmr-gadget",
-	"pezmmr-rpc",
-	"pezpallet-transaction-payment-rpc",
-	"pezsc-allocator",
-	"pezsc-authority-discovery",
-	"pezsc-basic-authorship",
-	"pezsc-block-builder",
-	"pezsc-chain-spec",
-	"pezsc-cli",
-	"pezsc-client-api",
-	"pezsc-client-db",
-	"pezsc-consensus",
-	"pezsc-consensus-aura",
-	"pezsc-consensus-babe",
-	"pezsc-consensus-babe-rpc",
-	"pezsc-consensus-beefy",
-	"pezsc-consensus-beefy-rpc",
-	"pezsc-consensus-epochs",
-	"pezsc-consensus-grandpa",
-	"pezsc-consensus-grandpa-rpc",
-	"pezsc-consensus-manual-seal",
-	"pezsc-consensus-pow",
-	"pezsc-consensus-slots",
-	"pezsc-executor",
-	"pezsc-executor-common",
-	"pezsc-executor-polkavm",
-	"pezsc-executor-wasmtime",
-	"pezsc-informant",
-	"pezsc-keystore",
-	"pezsc-mixnet",
-	"pezsc-network",
-	"pezsc-network-common",
-	"pezsc-network-gossip",
-	"pezsc-network-light",
-	"pezsc-network-statement",
-	"pezsc-network-sync",
-	"pezsc-network-transactions",
-	"pezsc-network-types",
-	"pezsc-offchain",
-	"pezsc-proposer-metrics",
-	"pezsc-rpc",
-	"pezsc-rpc-api",
-	"pezsc-rpc-server",
-	"pezsc-rpc-spec-v2",
-	"pezsc-service",
-	"pezsc-state-db",
-	"pezsc-statement-store",
-	"pezsc-storage-monitor",
-	"pezsc-sync-state-rpc",
-	"pezsc-sysinfo",
-	"pezsc-telemetry",
-	"pezsc-tracing",
-	"pezsc-transaction-pool",
-	"pezsc-transaction-pool-api",
-	"pezsc-utils",
-	"pezsp-api",
-	"pezsp-blockchain",
-	"pezsp-consensus",
-	"pezsp-core",
-	"pezsp-core-hashing",
-	"pezsp-core-hashing-proc-macro",
-	"pezsp-database",
-	"pezsp-inherents",
-	"pezsp-io",
-	"pezsp-keystore",
-	"pezsp-maybe-compressed-blob",
-	"pezsp-mmr-primitives",
-	"pezsp-panic-handler",
-	"pezsp-rpc",
-	"pezsp-statement-store",
-	"pezsp-timestamp",
-	"pezsp-tracing",
-	"pezsp-transaction-storage-proof",
-	"prometheus-endpoint",
-	"remote-externalities",
-	"std",
-	"tracking-allocator",
-], workspace = true, default-features = true }
+# Core dependencies (not through umbrella for internal crate):
+bizinikiwi-build-script-utils = { workspace = true, default-features = true }
+bizinikiwi-frame-rpc-support = { workspace = true, default-features = true }
+bizinikiwi-frame-rpc-system = { workspace = true, default-features = true }
+bizinikiwi-rpc-client = { workspace = true, default-features = true }
+bizinikiwi-state-trie-migration-rpc = { workspace = true, default-features = true }
+bizinikiwi-wasm-builder = { workspace = true, default-features = true }
+chain-spec-builder = { workspace = true, default-features = true }
+gum = { workspace = true, default-features = true }
+pez-fork-tree = { workspace = true, default-features = true }
+pez-generate-bags = { workspace = true, default-features = true }
+pez-subkey = { workspace = true, default-features = true }
+pezframe-support-procedural-tools = { workspace = true, default-features = true }
+pezmmr-gadget = { workspace = true, default-features = true }
+pezmmr-rpc = { workspace = true, default-features = true }
+pezpallet-transaction-payment-rpc = { workspace = true, default-features = true }
+pezsc-allocator = { workspace = true, default-features = true }
+pezsc-authority-discovery = { workspace = true, default-features = true }
+pezsc-basic-authorship = { workspace = true, default-features = true }
+pezsc-block-builder = { workspace = true, default-features = true }
+pezsc-chain-spec = { workspace = true, default-features = true }
+pezsc-cli = { workspace = true, default-features = true }
+pezsc-client-api = { workspace = true, default-features = true }
+pezsc-client-db = { workspace = true, default-features = true }
+pezsc-consensus = { workspace = true, default-features = true }
+pezsc-consensus-aura = { workspace = true, default-features = true }
+pezsc-consensus-babe = { workspace = true, default-features = true }
+pezsc-consensus-babe-rpc = { workspace = true, default-features = true }
+pezsc-consensus-beefy = { workspace = true, default-features = true }
+pezsc-consensus-beefy-rpc = { workspace = true, default-features = true }
+pezsc-consensus-epochs = { workspace = true, default-features = true }
+pezsc-consensus-grandpa = { workspace = true, default-features = true }
+pezsc-consensus-grandpa-rpc = { workspace = true, default-features = true }
+pezsc-consensus-manual-seal = { workspace = true, default-features = true }
+pezsc-consensus-pow = { workspace = true, default-features = true }
+pezsc-consensus-slots = { workspace = true, default-features = true }
+pezsc-executor = { workspace = true, default-features = true }
+pezsc-executor-common = { workspace = true, default-features = true }
+pezsc-executor-polkavm = { workspace = true, default-features = true }
+pezsc-executor-wasmtime = { workspace = true, default-features = true }
+pezsc-informant = { workspace = true, default-features = true }
+pezsc-keystore = { workspace = true, default-features = true }
+pezsc-mixnet = { workspace = true, default-features = true }
+pezsc-network = { workspace = true, default-features = true }
+pezsc-network-common = { workspace = true, default-features = true }
+pezsc-network-gossip = { workspace = true, default-features = true }
+pezsc-network-light = { workspace = true, default-features = true }
+pezsc-network-statement = { workspace = true, default-features = true }
+pezsc-network-sync = { workspace = true, default-features = true }
+pezsc-network-transactions = { workspace = true, default-features = true }
+pezsc-network-types = { workspace = true, default-features = true }
+pezsc-offchain = { workspace = true, default-features = true }
+pezsc-proposer-metrics = { workspace = true, default-features = true }
+pezsc-rpc = { workspace = true, default-features = true }
+pezsc-rpc-api = { workspace = true, default-features = true }
+pezsc-rpc-server = { workspace = true, default-features = true }
+pezsc-rpc-spec-v2 = { workspace = true, default-features = true }
+pezsc-service = { workspace = true, default-features = true }
+pezsc-state-db = { workspace = true, default-features = true }
+pezsc-statement-store = { workspace = true, default-features = true }
+pezsc-storage-monitor = { workspace = true, default-features = true }
+pezsc-sync-state-rpc = { workspace = true, default-features = true }
+pezsc-sysinfo = { workspace = true, default-features = true }
+pezsc-telemetry = { workspace = true, default-features = true }
+pezsc-tracing = { workspace = true, default-features = true }
+pezsc-transaction-pool = { workspace = true, default-features = true }
+pezsc-transaction-pool-api = { workspace = true, default-features = true }
+pezsc-utils = { workspace = true, default-features = true }
+pezsp-api = { workspace = true, default-features = true }
+pezsp-blockchain = { workspace = true, default-features = true }
+pezsp-consensus = { workspace = true, default-features = true }
+pezsp-core = { workspace = true, default-features = true }
+pezsp-core-hashing = { workspace = true, default-features = true }
+pezsp-core-hashing-proc-macro = { workspace = true, default-features = true }
+pezsp-database = { workspace = true, default-features = true }
+pezsp-inherents = { workspace = true, default-features = true }
+pezsp-io = { workspace = true, default-features = true }
+pezsp-keystore = { workspace = true, default-features = true }
+pezsp-maybe-compressed-blob = { workspace = true, default-features = true }
+pezsp-mmr-primitives = { workspace = true, default-features = true }
+pezsp-panic-handler = { workspace = true, default-features = true }
+pezsp-rpc = { workspace = true, default-features = true }
+pezsp-statement-store = { workspace = true, default-features = true }
+pezsp-timestamp = { workspace = true, default-features = true }
+pezsp-tracing = { workspace = true, default-features = true }
+pezsp-transaction-storage-proof = { workspace = true, default-features = true }
+prometheus-endpoint = { workspace = true, default-features = true }
+remote-externalities = { workspace = true, default-features = true }
+tracking-allocator = { workspace = true, default-features = true }
 
 # Direct dependency needed (not through umbrella due to macro visibility issues)
 pezsp-runtime = { workspace = true }
@@ -202,16 +197,10 @@ clap_complete = { optional = true, workspace = true }
 
 node-inspect = { optional = true, workspace = true, default-features = true }
 
-pezkuwi-sdk = { features = [
-	"bizinikiwi-build-script-utils",
-	"pezframe-benchmarking-cli",
-	"pezsc-cli",
-	"pezsc-storage-monitor",
-], optional = true, workspace = true, default-features = true }
-
+# Build dependencies use dep: syntax for optional dependencies
 [features]
 default = ["cli"]
-cli = ["clap", "clap_complete", "node-inspect", "pezkuwi-sdk"]
+cli = ["clap", "clap_complete", "dep:node-inspect"]
 runtime-benchmarks = [
 	"bizinikiwi-cli-test-utils/runtime-benchmarks",
 	"node-inspect?/runtime-benchmarks",
@@ -220,7 +209,6 @@ runtime-benchmarks = [
 	"pez-node-rpc/runtime-benchmarks",
 	"pez-node-testing/runtime-benchmarks",
 	"pezframe-benchmarking-cli?/runtime-benchmarks",
-	"pezkuwi-sdk/runtime-benchmarks",
 	"pezsc-service-test/runtime-benchmarks",
 	"pezsp-keyring/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
@@ -229,6 +217,5 @@ storage-benchmark = ["pezframe-benchmarking-cli/storage-benchmark"]
 try-runtime = [
 	"bizinikiwi-cli-test-utils/try-runtime",
 	"pez-kitchensink-runtime/try-runtime",
-	"pezkuwi-sdk/try-runtime",
 	"pezsp-runtime/try-runtime",
 ]

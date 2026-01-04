@@ -63,9 +63,9 @@ pezkuwi-sdk = { workspace = true, default-features = false, features = [
 	"pezkuwi-runtime-common",
 	"pezkuwi-teyrchain-primitives",
 	"pezpallet-xcm",
-	"xcm",
-	"xcm-builder",
-	"xcm-executor",
+	"pezstaging-xcm",
+	"pezstaging-xcm-builder",
+	"pezstaging-xcm-executor",
 
 	"pezcumulus-pezpallet-aura-ext",
 	"pezcumulus-pezpallet-session-benchmarking",
@@ -76,7 +76,7 @@ pezkuwi-sdk = { workspace = true, default-features = false, features = [
 	"pezcumulus-primitives-core",
 	"pezcumulus-primitives-utility",
 	"pezpallet-collator-selection",
-	"teyrchain-info",
+	"pezstaging-teyrchain-info",
 	"teyrchains-common",
 
 	"runtime",
