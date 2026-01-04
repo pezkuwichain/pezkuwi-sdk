@@ -1349,16 +1349,16 @@ fn add_authorities(
 	nodes: &[&NodeSpec],
 	session_key: SessionKeyType,
 ) {
-	let asset_hub_polkadot = chain_spec_json
+	let is_asset_hub_pezkuwi = chain_spec_json
 		.get("id")
 		.and_then(|v| v.as_str())
-		.map(|id| id.starts_with("asset-hub-polkadot"))
+		.map(|id| id.starts_with("asset-hub-pezkuwi"))
 		.unwrap_or_default();
 	if let Some(val) = chain_spec_json.pointer_mut(runtime_config_ptr) {
 		if let Some(session_keys) = val.pointer_mut("/session/keys") {
 			let keys: Vec<GenesisNodeKey> = nodes
 				.iter()
-				.map(|node| get_node_keys(node, session_key, asset_hub_polkadot))
+				.map(|node| get_node_keys(node, session_key, is_asset_hub_pezkuwi))
 				.collect();
 			*session_keys = json!(keys);
 		} else {
@@ -1891,7 +1891,7 @@ mod tests {
 	}
 
 	#[test]
-	fn get_node_keys_supports_asset_hub_polkadot() {
+	fn get_node_keys_supports_asset_hub_pezkuwi() {
 		let mut name = String::from("luca");
 		let seed = format!("//{}{name}", name.remove(0).to_uppercase());
 		let accounts =

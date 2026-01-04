@@ -63,12 +63,12 @@ impl KeystoreKeyType {
 }
 
 /// Returns the default predefined key schemes for known key types.
-/// Special handling for `aura` when `is_asset_hub_polkadot` is true.
-fn get_predefined_schemes(is_asset_hub_polkadot: bool) -> HashMap<&'static str, KeyScheme> {
+/// Special handling for `aura` when `is_asset_hub_pezkuwi` is true.
+fn get_predefined_schemes(is_asset_hub_pezkuwi: bool) -> HashMap<&'static str, KeyScheme> {
 	let mut schemes = HashMap::new();
 
-	// aura has special handling for asset-hub-polkadot
-	if is_asset_hub_polkadot {
+	// aura has special handling for asset-hub-pezkuwi
+	if is_asset_hub_pezkuwi {
 		schemes.insert("aura", KeyScheme::Ed);
 	} else {
 		schemes.insert("aura", KeyScheme::Sr);
@@ -130,9 +130,9 @@ fn parse_key_spec(spec: &str, predefined: &HashMap<&str, KeyScheme>) -> Option<K
 /// If the resulting list is empty, returns the default keystore key types.
 pub fn parse_keystore_key_types<T: AsRef<str>>(
 	specs: &[T],
-	is_asset_hub_polkadot: bool,
+	is_asset_hub_pezkuwi: bool,
 ) -> Vec<KeystoreKeyType> {
-	let predefined_schemes = get_predefined_schemes(is_asset_hub_polkadot);
+	let predefined_schemes = get_predefined_schemes(is_asset_hub_pezkuwi);
 
 	let parsed: Vec<KeystoreKeyType> = specs
 		.iter()
@@ -140,15 +140,15 @@ pub fn parse_keystore_key_types<T: AsRef<str>>(
 		.collect();
 
 	if parsed.is_empty() {
-		get_default_keystore_key_types(is_asset_hub_polkadot)
+		get_default_keystore_key_types(is_asset_hub_pezkuwi)
 	} else {
 		parsed
 	}
 }
 
 /// Returns the default keystore key types when none are specified.
-pub fn get_default_keystore_key_types(is_asset_hub_polkadot: bool) -> Vec<KeystoreKeyType> {
-	let predefined_schemes = get_predefined_schemes(is_asset_hub_polkadot);
+pub fn get_default_keystore_key_types(is_asset_hub_pezkuwi: bool) -> Vec<KeystoreKeyType> {
+	let predefined_schemes = get_predefined_schemes(is_asset_hub_pezkuwi);
 	let default_keys = [
 		"aura", "babe", "imon", "gran", "audi", "asgn", "para", "beef", "nmbs", "rand", "rate",
 		"mixn", "bcsv", "ftsv",
@@ -236,15 +236,15 @@ mod tests {
 	}
 
 	#[test]
-	fn full_workflow_asset_hub_polkadot() {
-		// For asset-hub-polkadot, aura should default to ed
+	fn full_workflow_asset_hub_pezkuwi() {
+		// For asset-hub-pezkuwi, aura should default to ed
 		let specs = vec!["aura".to_string(), "babe".to_string()];
 
 		let res = parse_keystore_key_types(&specs, true);
 
 		assert_eq!(res.len(), 2);
 		assert_eq!(res[0].key_type, "aura");
-		assert_eq!(res[0].scheme, KeyScheme::Ed); // ed for asset-hub-polkadot
+		assert_eq!(res[0].scheme, KeyScheme::Ed); // ed for asset-hub-pezkuwi
 
 		assert_eq!(res[1].key_type, "babe");
 		assert_eq!(res[1].scheme, KeyScheme::Sr);
