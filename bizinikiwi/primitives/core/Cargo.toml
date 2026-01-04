@@ -152,7 +152,6 @@ serde = [
 	"log/serde",
 	"parking_lot?/serde",
 	"pezsp-storage/serde",
-	"primitive-types/serde",
 	"primitive-types/serde_no_std",
 	"rand?/serde",
 	"scale-info/serde",
