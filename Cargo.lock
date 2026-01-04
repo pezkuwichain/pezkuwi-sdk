@@ -14781,6 +14781,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "pezkuwi-zombienet-cli"
+version = "0.44.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "pezkuwi-zombienet-sdk",
+ "tokio",
+ "tracing-subscriber 0.3.22",
+]
+
+[[package]]
 name = "pezkuwi-zombienet-configuration"
 version = "0.44.0"
 dependencies = [
