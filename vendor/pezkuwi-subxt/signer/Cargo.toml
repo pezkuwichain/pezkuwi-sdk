@@ -69,6 +69,7 @@ subxt = ["dep:pezkuwi-subxt-core"]
 # feature on it if compiling for the web.
 web = ["getrandom/js"]
 serde = [
+	"dep:serde",
 	"bip39/serde",
 	"codec/serde",
 	"hex/serde",
