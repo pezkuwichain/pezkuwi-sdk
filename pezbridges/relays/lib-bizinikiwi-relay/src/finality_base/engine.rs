@@ -18,6 +18,9 @@
 
 use crate::error::Error;
 use async_trait::async_trait;
+use codec::{Decode, Encode};
+use futures::stream::StreamExt;
+use num_traits::{One, Zero};
 use pezbp_header_pez_chain::{
 	justification::{
 		verify_and_optimize_justification, GrandpaEquivocationsFinder, GrandpaJustification,
@@ -26,9 +29,6 @@ use pezbp_header_pez_chain::{
 	AuthoritySet, ConsensusLogReader, FinalityProof, FindEquivocations, GrandpaConsensusLogReader,
 	HeaderFinalityInfo, HeaderGrandpaInfo, StoredHeaderGrandpaInfo, SubmitFinalityProofCallExtras,
 };
-use codec::{Decode, Encode};
-use futures::stream::StreamExt;
-use num_traits::{One, Zero};
 use pezbp_runtime::{BasicOperatingMode, HeaderIdProvider, OperatingMode};
 use pezsp_consensus_grandpa::{AuthorityList as GrandpaAuthoritiesSet, GRANDPA_ENGINE_ID};
 use pezsp_core::{storage::StorageKey, Bytes};

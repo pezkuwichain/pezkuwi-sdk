@@ -68,9 +68,9 @@ pezsnowbridge-pezpallet-system-v2 = { workspace = true }
 [features]
 runtime-benchmarks = [
 	"asset-hub-zagros-runtime/runtime-benchmarks",
+	"emulated-integration-tests-common/runtime-benchmarks",
 	"pezbp-asset-hub-zagros/runtime-benchmarks",
 	"pezbridge-hub-common/runtime-benchmarks",
-	"emulated-integration-tests-common/runtime-benchmarks",
 	"pezbridge-hub-zagros-runtime/runtime-benchmarks",
 	"pezcumulus-pezpallet-teyrchain-system/runtime-benchmarks",
 	"pezcumulus-pezpallet-xcmp-queue/runtime-benchmarks",

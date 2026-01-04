@@ -47,7 +47,7 @@ pezpallet-message-queue = { workspace = true, default-features = true }
 pezsnowbridge-pezpallet-outbound-queue = { workspace = true, default-features = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"codec/std",
 	"pezframe-benchmarking?/std",

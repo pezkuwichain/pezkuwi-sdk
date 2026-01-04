@@ -8,12 +8,12 @@ use anyhow::anyhow;
 
 use pezcumulus_zombienet_sdk_helpers::{assert_finality_lag, assert_para_throughput};
 use pezkuwi_primitives::Id as ParaId;
-use serde_json::json;
 use pezkuwi_zombienet_sdk::{
 	subxt::{self, ext::scale_value::value, OnlineClient, PezkuwiConfig},
 	subxt_signer::sr25519::dev,
 	NetworkConfigBuilder,
 };
+use serde_json::json;
 
 #[tokio::test(flavor = "multi_thread")]
 async fn shared_core_idle_teyrchain_test() -> Result<(), anyhow::Error> {

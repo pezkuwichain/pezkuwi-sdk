@@ -646,8 +646,7 @@ mod tests {
 		let path = syn::parse2::<syn::Path>(quote::quote!(pezframe_system::Config)).unwrap();
 
 		let pezframe_system =
-			syn::parse2::<syn::Path>(quote::quote!(pezframe::deps::pezframe_system))
-				.unwrap();
+			syn::parse2::<syn::Path>(quote::quote!(pezframe::deps::pezframe_system)).unwrap();
 		assert!(has_expected_system_config(path.clone(), &pezframe_system));
 
 		let pezframe_system =
@@ -658,70 +657,56 @@ mod tests {
 	#[test]
 	fn has_expected_system_config_works_with_frame_full_path() {
 		let pezframe_system =
-			syn::parse2::<syn::Path>(quote::quote!(pezframe::deps::pezframe_system))
-				.unwrap();
-		let path = syn::parse2::<syn::Path>(quote::quote!(
-			pezframe::deps::pezframe_system::Config
-		))
-		.unwrap();
+			syn::parse2::<syn::Path>(quote::quote!(pezframe::deps::pezframe_system)).unwrap();
+		let path = syn::parse2::<syn::Path>(quote::quote!(pezframe::deps::pezframe_system::Config))
+			.unwrap();
 		assert!(has_expected_system_config(path, &pezframe_system));
 
 		let pezframe_system =
 			syn::parse2::<syn::Path>(quote::quote!(pezframe::deps::pezframe_system)).unwrap();
-		let path =
-			syn::parse2::<syn::Path>(quote::quote!(pezframe::deps::pezframe_system::Config)).unwrap();
+		let path = syn::parse2::<syn::Path>(quote::quote!(pezframe::deps::pezframe_system::Config))
+			.unwrap();
 		assert!(has_expected_system_config(path, &pezframe_system));
 	}
 
 	#[test]
 	fn has_expected_system_config_works_with_other_frame_full_path() {
 		let pezframe_system =
-			syn::parse2::<syn::Path>(quote::quote!(pezframe::xyz::pezframe_system))
-				.unwrap();
-		let path = syn::parse2::<syn::Path>(quote::quote!(
-			pezframe::xyz::pezframe_system::Config
-		))
-		.unwrap();
+			syn::parse2::<syn::Path>(quote::quote!(pezframe::xyz::pezframe_system)).unwrap();
+		let path = syn::parse2::<syn::Path>(quote::quote!(pezframe::xyz::pezframe_system::Config))
+			.unwrap();
 		assert!(has_expected_system_config(path, &pezframe_system));
 
 		let pezframe_system =
 			syn::parse2::<syn::Path>(quote::quote!(pezframe::xyz::pezframe_system)).unwrap();
-		let path =
-			syn::parse2::<syn::Path>(quote::quote!(pezframe::xyz::pezframe_system::Config)).unwrap();
+		let path = syn::parse2::<syn::Path>(quote::quote!(pezframe::xyz::pezframe_system::Config))
+			.unwrap();
 		assert!(has_expected_system_config(path, &pezframe_system));
 	}
 
 	#[test]
 	fn has_expected_system_config_does_not_works_with_mixed_frame_full_path() {
 		let pezframe_system =
-			syn::parse2::<syn::Path>(quote::quote!(pezframe::xyz::pezframe_system))
-				.unwrap();
-		let path = syn::parse2::<syn::Path>(quote::quote!(
-			pezframe::deps::pezframe_system::Config
-		))
-		.unwrap();
+			syn::parse2::<syn::Path>(quote::quote!(pezframe::xyz::pezframe_system)).unwrap();
+		let path = syn::parse2::<syn::Path>(quote::quote!(pezframe::deps::pezframe_system::Config))
+			.unwrap();
 		assert!(!has_expected_system_config(path, &pezframe_system));
 	}
 
 	#[test]
 	fn has_expected_system_config_does_not_works_with_other_mixed_frame_full_path() {
 		let pezframe_system =
-			syn::parse2::<syn::Path>(quote::quote!(pezframe::deps::pezframe_system))
-				.unwrap();
-		let path = syn::parse2::<syn::Path>(quote::quote!(
-			pezframe::xyz::pezframe_system::Config
-		))
-		.unwrap();
+			syn::parse2::<syn::Path>(quote::quote!(pezframe::deps::pezframe_system)).unwrap();
+		let path = syn::parse2::<syn::Path>(quote::quote!(pezframe::xyz::pezframe_system::Config))
+			.unwrap();
 		assert!(!has_expected_system_config(path, &pezframe_system));
 	}
 
 	#[test]
 	fn has_expected_system_config_does_not_work_with_frame_full_path_if_not_frame_crate() {
 		let pezframe_system = syn::parse2::<syn::Path>(quote::quote!(pezframe_system)).unwrap();
-		let path = syn::parse2::<syn::Path>(quote::quote!(
-			pezframe::deps::pezframe_system::Config
-		))
-		.unwrap();
+		let path = syn::parse2::<syn::Path>(quote::quote!(pezframe::deps::pezframe_system::Config))
+			.unwrap();
 		assert!(!has_expected_system_config(path, &pezframe_system));
 	}
 

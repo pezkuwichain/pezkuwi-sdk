@@ -27,7 +27,7 @@ xcm-builder = { workspace = true }
 xcm-executor = { workspace = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"codec/std",
 	"pezcumulus-primitives-core/std",

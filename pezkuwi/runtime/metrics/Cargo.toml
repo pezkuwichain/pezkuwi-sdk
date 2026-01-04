@@ -21,7 +21,7 @@ pezsp-tracing = { workspace = true }
 bs58 = { features = ["alloc"], workspace = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"bs58/std",
 	"codec/std",
@@ -29,7 +29,7 @@ std = [
 	"pezkuwi-primitives/std",
 	"pezsp-tracing/std",
 ]
-runtime-metrics = ["pezframe-benchmarking", "pezsp-tracing/with-tracing"]
+runtime-metrics = [ "pezframe-benchmarking", "pezsp-tracing/with-tracing" ]
 runtime-benchmarks = [
 	"pezframe-benchmarking?/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",

@@ -29,7 +29,7 @@ serde = { features = ["alloc", "derive"], optional = true, workspace = true }
 thiserror = { optional = true, workspace = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"codec/std",
 	"impl-serde/std",
@@ -42,7 +42,7 @@ std = [
 ]
 
 # Serde support without relying on std features.
-serde = ["dep:serde", "impl-serde", "pezsp-runtime/serde"]
+serde = [ "dep:serde", "impl-serde", "pezsp-runtime/serde" ]
 runtime-benchmarks = [
 	"pezsp-runtime/runtime-benchmarks",
 	"pezsp-version-proc-macro/runtime-benchmarks",

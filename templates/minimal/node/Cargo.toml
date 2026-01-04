@@ -42,7 +42,7 @@ pezkuwi-sdk = { workspace = true, features = [
 pezkuwi-sdk = { workspace = true, features = ["bizinikiwi-build-script-utils"] }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"pez-minimal-template-runtime/std",
 	"pezkuwi-sdk/std",

@@ -28,12 +28,12 @@ use pezbp_pezkuwi_core::{
 	teyrchains::{ParaHash, ParaHeadsProof, ParaId},
 	BlockNumber as RelayBlockNumber,
 };
-use pezbp_teyrchains::{
-	ImportedParaHeadsKeyProvider, ParaInfo, ParaStoredHeaderData, ParasInfoKeyProvider,
-};
 use pezbp_runtime::{
 	Chain as ChainBase, HeaderId, HeaderIdProvider, StorageDoubleMapKeyProvider,
 	StorageMapKeyProvider,
+};
+use pezbp_teyrchains::{
+	ImportedParaHeadsKeyProvider, ParaInfo, ParaStoredHeaderData, ParasInfoKeyProvider,
 };
 use pezsp_core::Pair;
 use pezsp_runtime::traits::Header;

@@ -30,7 +30,7 @@ scale-info = { features = ["derive"], workspace = true }
 serde = { features = ["alloc", "derive"], optional = true, workspace = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"async-trait",
 	"codec/std",

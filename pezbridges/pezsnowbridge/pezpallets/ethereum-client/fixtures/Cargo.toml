@@ -28,7 +28,7 @@ pezsp-core = { workspace = true }
 pezsp-std = { workspace = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"pezsnowbridge-beacon-primitives/std",
 	"pezsnowbridge-verification-primitives/std",

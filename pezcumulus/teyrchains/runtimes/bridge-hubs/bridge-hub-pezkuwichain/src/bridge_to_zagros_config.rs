@@ -364,8 +364,8 @@ pub mod migration {
 	>;
 
 	mod v1_wrong {
-		use pezbp_messages::{LaneState, MessageNonce, UnrewardedRelayer};
 		use codec::{Decode, Encode};
+		use pezbp_messages::{LaneState, MessageNonce, UnrewardedRelayer};
 		use pezbp_runtime::AccountIdOf;
 		use pezpallet_bridge_messages::BridgedChainOf;
 		use pezsp_std::collections::vec_deque::VecDeque;

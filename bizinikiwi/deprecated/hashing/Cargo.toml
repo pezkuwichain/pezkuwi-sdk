@@ -19,5 +19,5 @@ targets = ["x86_64-unknown-linux-gnu"]
 pezsp-crypto-hashing = { workspace = true, default-features = true }
 
 [features]
-default = ["std"]
-std = ["pezsp-crypto-hashing/std"]
+default = [ "std" ]
+std = [ "pezsp-crypto-hashing/std" ]

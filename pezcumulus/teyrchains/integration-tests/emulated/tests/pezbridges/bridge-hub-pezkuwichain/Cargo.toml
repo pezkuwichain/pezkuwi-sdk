@@ -59,8 +59,8 @@ pezsnowbridge-pezpallet-system = { workspace = true }
 [features]
 runtime-benchmarks = [
 	"asset-hub-pezkuwichain-runtime/runtime-benchmarks",
-	"pezbp-asset-hub-pezkuwichain/runtime-benchmarks",
 	"emulated-integration-tests-common/runtime-benchmarks",
+	"pezbp-asset-hub-pezkuwichain/runtime-benchmarks",
 	"pezcumulus-pezpallet-xcmp-queue/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
 	"pezkuwichain-system-emulated-network/runtime-benchmarks",

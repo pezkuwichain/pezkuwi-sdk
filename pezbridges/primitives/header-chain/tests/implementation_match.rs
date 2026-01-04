@@ -21,6 +21,7 @@
 //! Some of tests in this module may partially duplicate tests from `justification.rs`,
 //! but their purpose is different.
 
+use finality_grandpa::voter_set::VoterSet;
 use pezbp_header_pez_chain::justification::{
 	verify_justification, GrandpaJustification, JustificationVerificationContext,
 	JustificationVerificationError, PrecommitError,
@@ -29,7 +30,6 @@ use pezbp_test_utils::{
 	header_id, make_justification_for_header, signed_precommit, test_header, Account,
 	JustificationGeneratorParams, ALICE, BOB, CHARLIE, DAVE, EVE, FERDIE, TEST_GRANDPA_SET_ID,
 };
-use finality_grandpa::voter_set::VoterSet;
 use pezsp_consensus_grandpa::{AuthorityId, AuthorityWeight, SetId};
 use pezsp_runtime::traits::Header as HeaderT;
 

@@ -18,8 +18,8 @@
 
 use async_std::sync::Mutex;
 use async_trait::async_trait;
-use pezbp_pezkuwi_core::BlockNumber as RelayBlockNumber;
 use clap::Parser;
+use pezbp_pezkuwi_core::BlockNumber as RelayBlockNumber;
 use pezbp_runtime::HeaderIdProvider;
 use relay_bizinikiwi_client::{Client, Teyrchain};
 use relay_utils::metrics::{GlobalMetrics, StandaloneMetric};

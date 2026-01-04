@@ -22,9 +22,9 @@
 use super::*;
 use pezframe::benchmarking::prelude::*;
 
-use pezframe::deps::pezframe_support::assert_ok;
 use fungible::{Inspect as InspectFungible, Mutate as MutateFungible};
 use nonfungibles_v2::{Create, Mutate};
+use pezframe::deps::pezframe_support::assert_ok;
 
 use pezframe_system::RawOrigin as SystemOrigin;
 use pezpallet_nfts::{CollectionConfig, CollectionSettings, ItemConfig, MintSettings};

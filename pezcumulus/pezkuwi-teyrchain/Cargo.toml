@@ -68,11 +68,6 @@ bizinikiwi-build-script-utils = { workspace = true, default-features = true }
 [features]
 default = []
 runtime-benchmarks = [
-	"pezcumulus-primitives-core/runtime-benchmarks",
-	"pezkuwi-omni-node-lib/runtime-benchmarks",
-	"pezsc-service/runtime-benchmarks",
-	"teyrchains-common/runtime-benchmarks",
-
 	"asset-hub-pezkuwichain-runtime/runtime-benchmarks",
 	"asset-hub-zagros-runtime/runtime-benchmarks",
 	"collectives-zagros-runtime/runtime-benchmarks",
@@ -85,17 +80,19 @@ runtime-benchmarks = [
 	"pezbridge-hub-pezkuwichain-runtime/runtime-benchmarks",
 	"pezbridge-hub-zagros-runtime/runtime-benchmarks",
 	"pezcumulus-client-consensus-aura/runtime-benchmarks",
+	"pezcumulus-primitives-core/runtime-benchmarks",
+	"pezkuwi-omni-node-lib/runtime-benchmarks",
 	"pezkuwichain-teyrchain-runtime/runtime-benchmarks",
 	"pezsc-chain-spec/runtime-benchmarks",
 	"pezsc-cli/runtime-benchmarks",
+	"pezsc-service/runtime-benchmarks",
 	"pezsp-genesis-builder/runtime-benchmarks",
 	"pezsp-keyring/runtime-benchmarks",
+	"teyrchains-common/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
 	"yet-another-teyrchain-runtime/runtime-benchmarks",
 ]
 try-runtime = [
-	"pezkuwi-omni-node-lib/try-runtime",
-
 	"asset-hub-pezkuwichain-runtime/try-runtime",
 	"asset-hub-zagros-runtime/try-runtime",
 	"collectives-zagros-runtime/try-runtime",
@@ -107,6 +104,7 @@ try-runtime = [
 	"pez-penpal-runtime/try-runtime",
 	"pezbridge-hub-pezkuwichain-runtime/try-runtime",
 	"pezbridge-hub-zagros-runtime/try-runtime",
+	"pezkuwi-omni-node-lib/try-runtime",
 	"teyrchains-common/try-runtime",
 ]
 fast-runtime = [

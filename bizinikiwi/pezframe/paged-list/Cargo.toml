@@ -25,12 +25,27 @@ pezsp-metadata-ir = { optional = true, workspace = true }
 scale-info = { features = ["derive"], workspace = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 
-std = ["codec/std", "pezframe/std", "pezsp-metadata-ir/std", "scale-info/std"]
+std = [
+	"codec/std",
+	"pezframe/std",
+	"pezsp-metadata-ir/std",
+	"scale-info/std",
+	"pezframe-support/std",
+	"pezframe-system/std"
+]
 
-runtime-benchmarks = ["pezframe/runtime-benchmarks"]
+runtime-benchmarks = [
+	"pezframe/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks"
+]
 
-try-runtime = ["pezframe/try-runtime"]
+try-runtime = [
+	"pezframe/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime"
+]
 
-frame-metadata = ["pezsp-metadata-ir"]
+frame-metadata = [ "pezsp-metadata-ir" ]

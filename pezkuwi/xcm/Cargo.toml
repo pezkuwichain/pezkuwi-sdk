@@ -33,7 +33,7 @@ xcm-pez-procedural = { workspace = true, default-features = true }
 pezsp-io = { workspace = true, default-features = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 wasm-api = []
 std = [
 	"bounded-collections/std",

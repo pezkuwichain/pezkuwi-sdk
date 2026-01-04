@@ -31,10 +31,10 @@ pezsp-std = { workspace = true }
 xcm = { workspace = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
-	"pezbp-messages/std",
 	"codec/std",
+	"pezbp-messages/std",
 	"pezbp-runtime/std",
 	"pezframe-support/std",
 	"pezsp-core/std",

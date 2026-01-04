@@ -47,10 +47,10 @@ xcm-runtime-pezapis = { workspace = true }
 pezpallet-xcm-bridge-hub-router = { workspace = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
-	"pez-assets-common/std",
 	"codec/std",
+	"pez-assets-common/std",
 	"pezcumulus-pezpallet-teyrchain-system/std",
 	"pezcumulus-pezpallet-xcmp-queue/std",
 	"pezcumulus-primitives-core/std",

@@ -53,12 +53,12 @@ pezpallet-message-queue = { workspace = true }
 pezsnowbridge-test-utils = { workspace = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"alloy-core/std",
-	"pezbp-relayers/std",
 	"codec/std",
 	"ethabi/std",
+	"pezbp-relayers/std",
 	"pezframe-benchmarking/std",
 	"pezframe-support/std",
 	"pezframe-system/std",

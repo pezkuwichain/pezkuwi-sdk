@@ -20,7 +20,7 @@ workspace = true
 [features]
 # For dev and documentation reasons we enable more features than are often desired.
 # it's recommended to use `--no-default-features` and then select what you need.
-default = ["jsonrpsee", "native"]
+default = [ "jsonrpsee", "native" ]
 
 # Enable this for native (ie non web/wasm builds).
 # Exactly 1 of "web" and "native" is expected.
@@ -47,18 +47,14 @@ web = [
 #
 # For instance `wasm-bindgen-futures` panics if the platform isn't wasm32 and
 # similar for tokio that requires a tokio runtime to be initialized.
-runtime = ["tokio/rt", "wasm-bindgen-futures"]
+runtime = [ "tokio/rt", "wasm-bindgen-futures" ]
 
 # Enable this to use the reconnecting rpc client
-reconnecting-rpc-client = ["pezkuwi-subxt-rpcs/reconnecting-rpc-client"]
+reconnecting-rpc-client = [ "pezkuwi-subxt-rpcs/reconnecting-rpc-client" ]
 
 # Enable this to use jsonrpsee, which enables the jsonrpsee RPC client, and
 # a couple of util functions which rely on jsonrpsee.
-jsonrpsee = [
-	"dep:jsonrpsee",
-	"pezkuwi-subxt-rpcs/jsonrpsee",
-	"runtime",
-]
+jsonrpsee = [ "dep:jsonrpsee", "pezkuwi-subxt-rpcs/jsonrpsee", "runtime" ]
 
 # Enable this to fetch and utilize the latest unstable metadata from a node.
 # The unstable metadata is subject to breaking changes and the subxt might
@@ -74,7 +70,7 @@ unstable-light-client = [
 ]
 
 # Activate this to expose the ability to generate metadata from Wasm runtime files.
-runtime-wasm-path = ["pezkuwi-subxt-macro/runtime-wasm-path"]
+runtime-wasm-path = [ "pezkuwi-subxt-macro/runtime-wasm-path" ]
 
 [dependencies]
 async-trait = { workspace = true }

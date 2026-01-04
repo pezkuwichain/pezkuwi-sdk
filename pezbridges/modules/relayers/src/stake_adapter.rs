@@ -17,9 +17,9 @@
 //! Code that allows `NamedReservableCurrency` to be used as a `StakeAndSlash`
 //! mechanism of the relayers pezpallet.
 
-use pezbp_relayers::StakeAndSlash;
 use codec::Codec;
 use core::{fmt::Debug, marker::PhantomData};
+use pezbp_relayers::StakeAndSlash;
 use pezframe_support::traits::{tokens::BalanceStatus, NamedReservableCurrency};
 use pezsp_runtime::{traits::Get, DispatchError, DispatchResult};
 

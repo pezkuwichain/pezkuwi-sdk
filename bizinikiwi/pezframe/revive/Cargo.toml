@@ -95,7 +95,7 @@ pezsp-tracing = { workspace = true, default-features = true }
 proptest = { workspace = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"alloy-consensus/serde",
 	"alloy-consensus/std",

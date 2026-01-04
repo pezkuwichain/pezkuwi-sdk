@@ -18,32 +18,27 @@ keywords = ["bizinikiwi", "blockchain", "parity"]
 workspace = true
 
 [features]
-default = ["native"]
+default = [ "native" ]
 
 # Enable this for native (ie non web/wasm builds).
 # Exactly 1 of "web" and "native" is expected.
-native = [
-	"smoldot-light/std",
-	"tokio/rt",
-]
+native = [ "smoldot-light/std", "tokio/rt" ]
 
 # Enable this for web/wasm builds.
 # Exactly 1 of "web" and "native" is expected.
 web = [
-	"getrandom/js",
-	"smoldot/std",
-
 	# For the light-client platform.
 	"futures-timer/wasm-bindgen",
-	"pin-project",
-	"wasm-bindgen-futures",
-	"web-time",
-
+	"getrandom/js",
 	# For websocket.
 	"js-sys",
+	"pin-project",
 	"send_wrapper",
+	"smoldot/std",
 	"wasm-bindgen",
+	"wasm-bindgen-futures",
 	"web-sys",
+	"web-time",
 ]
 
 [dependencies]

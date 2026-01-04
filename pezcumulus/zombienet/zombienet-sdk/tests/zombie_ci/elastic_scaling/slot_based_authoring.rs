@@ -7,9 +7,9 @@ use std::time::Duration;
 use crate::utils::{initialize_network, BEST_BLOCK_METRIC};
 
 use pezcumulus_zombienet_sdk_helpers::assign_cores;
-use serde_json::json;
 use pezkuwi_zombienet_orchestrator::network::node::LogLineCountOptions;
 use pezkuwi_zombienet_sdk::{NetworkConfig, NetworkConfigBuilder};
+use serde_json::json;
 
 const PARA_ID_1: u32 = 2100;
 const PARA_ID_2: u32 = 2000;

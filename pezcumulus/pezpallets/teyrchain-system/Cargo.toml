@@ -73,7 +73,7 @@ pezcumulus-test-client = { workspace = true }
 pezcumulus-test-relay-sproof-builder = { workspace = true, default-features = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"bytes/std",
 	"codec/std",

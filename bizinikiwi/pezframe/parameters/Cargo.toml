@@ -34,7 +34,7 @@ pezpallet-balances = { workspace = true, default-features = true }
 pezsp-io = { workspace = true, default-features = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"codec/std",
 	"pezframe-benchmarking?/std",

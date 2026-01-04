@@ -18,6 +18,7 @@
 
 use crate::{BridgedChainOf, BridgedHeaderChainOf, Config};
 
+use codec::Decode;
 use pezbp_header_pez_chain::{HeaderChain, HeaderChainError};
 use pezbp_messages::{
 	source_chain::FromBridgedChainMessagesDeliveryProof,
@@ -25,7 +26,6 @@ use pezbp_messages::{
 	ChainWithMessages, InboundLaneData, Message, MessageKey, MessageNonce, MessagePayload,
 	OutboundLaneData, VerificationError,
 };
-use codec::Decode;
 use pezbp_runtime::{
 	HashOf, HasherOf, RangeInclusiveExt, RawStorageProof, StorageProofChecker, StorageProofError,
 };
@@ -216,9 +216,9 @@ mod tests {
 		mock::*,
 	};
 
+	use codec::Encode;
 	use pezbp_header_pez_chain::{HeaderChainError, StoredHeaderDataBuilder};
 	use pezbp_messages::LaneState;
-	use codec::Encode;
 	use pezbp_runtime::{HeaderId, StorageProofError};
 	use pezsp_runtime::traits::Header;
 

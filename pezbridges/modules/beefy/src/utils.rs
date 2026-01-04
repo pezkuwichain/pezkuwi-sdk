@@ -3,8 +3,8 @@ use crate::{
 	BridgedBeefyMmrLeaf, BridgedBeefySignedCommitment, BridgedChain, BridgedMmrHash,
 	BridgedMmrHashing, BridgedMmrProof, Config, Error, LOG_TARGET,
 };
-use pezbp_beefy::{merkle_root, verify_mmr_leaves_proof, BeefyAuthorityId, MmrDataOrHash};
 use codec::Encode;
+use pezbp_beefy::{merkle_root, verify_mmr_leaves_proof, BeefyAuthorityId, MmrDataOrHash};
 use pezframe_support::ensure;
 use pezsp_runtime::traits::{Convert, Hash};
 use pezsp_std::{vec, vec::Vec};

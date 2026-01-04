@@ -33,9 +33,9 @@ rstest = { workspace = true }
 [features]
 zombie-ci = []
 runtime-benchmarks = [
-  "pezcumulus-zombienet-sdk-helpers/runtime-benchmarks",
-  "pezkuwi-primitives/runtime-benchmarks",
-  "pezsc-statement-store/runtime-benchmarks",
-  "pezsp-keyring/runtime-benchmarks",
-  "pezsp-statement-store/runtime-benchmarks",
+	"pezcumulus-zombienet-sdk-helpers/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
+	"pezsc-statement-store/runtime-benchmarks",
+	"pezsp-keyring/runtime-benchmarks",
+	"pezsp-statement-store/runtime-benchmarks",
 ]

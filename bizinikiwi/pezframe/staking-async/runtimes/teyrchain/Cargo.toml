@@ -145,11 +145,11 @@ tokio = { features = ["macros"], workspace = true, default-features = true }
 bizinikiwi-wasm-builder = { optional = true, workspace = true, default-features = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 runtime-benchmarks = [
 	"asset-test-pezutils/runtime-benchmarks",
-	"pez-assets-common/runtime-benchmarks",
 	"bizinikiwi-wasm-builder?/runtime-benchmarks",
+	"pez-assets-common/runtime-benchmarks",
 	"pezbp-asset-hub-pezkuwichain/runtime-benchmarks",
 	"pezbp-bridge-hub-pezkuwichain/runtime-benchmarks",
 	"pezbp-bridge-hub-zagros/runtime-benchmarks",
@@ -304,14 +304,14 @@ try-runtime = [
 	"teyrchains-common/try-runtime",
 ]
 std = [
-	"pez-assets-common/std",
-	"pezbp-asset-hub-pezkuwichain/std",
 	# "bp-asset-hub-next-zagros/std",
 	"bizinikiwi-wasm-builder",
-	"pezbp-bridge-hub-pezkuwichain/std",
-	"pezbp-bridge-hub-zagros/std",
 	"codec/std",
 	"log/std",
+	"pez-assets-common/std",
+	"pezbp-asset-hub-pezkuwichain/std",
+	"pezbp-bridge-hub-pezkuwichain/std",
+	"pezbp-bridge-hub-zagros/std",
 	"pezcumulus-pezpallet-aura-ext/std",
 	"pezcumulus-pezpallet-session-benchmarking/std",
 	"pezcumulus-pezpallet-teyrchain-system/std",
@@ -411,9 +411,9 @@ std = [
 fast-runtime = []
 
 # Enable the metadata hash generation in the wasm builder.
-metadata-hash = ["bizinikiwi-wasm-builder/metadata-hash"]
+metadata-hash = [ "bizinikiwi-wasm-builder/metadata-hash" ]
 
 # A feature that should be enabled when the runtime should be built for on-chain
 # deployment. This will disable stuff that shouldn't be part of the on-chain wasm
 # to make it smaller, like logging for example.
-on-chain-release-build = ["metadata-hash"]
+on-chain-release-build = [ "metadata-hash" ]

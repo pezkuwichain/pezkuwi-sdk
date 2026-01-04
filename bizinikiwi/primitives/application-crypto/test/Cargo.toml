@@ -25,7 +25,7 @@ pezsp-keystore = { workspace = true }
 pezsp-tracing = { workspace = true, default-features = true }
 
 [features]
-bls-experimental = ["bizinikiwi-test-runtime-client/bls-experimental"]
+bls-experimental = [ "bizinikiwi-test-runtime-client/bls-experimental" ]
 runtime-benchmarks = [
 	"bizinikiwi-test-runtime-client/runtime-benchmarks",
 	"pezsp-api/runtime-benchmarks",

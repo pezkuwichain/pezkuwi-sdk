@@ -26,9 +26,9 @@ use crate::{
 	bridge_to_ethereum_config::InboundQueueV2Location, xcm_config::XcmConfig, RuntimeCall,
 	XcmRouter,
 };
+use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
 use pezbp_messages::LegacyLaneId;
 use pezbp_relayers::RewardsAccountParams;
-use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
 use pezframe_support::parameter_types;
 use scale_info::TypeInfo;
 use testnet_teyrchains_constants::zagros::{

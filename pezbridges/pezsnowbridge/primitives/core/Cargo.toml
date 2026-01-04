@@ -39,10 +39,10 @@ xcm-executor = { workspace = true }
 pezbp-relayers = { workspace = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
-	"pezbp-relayers/std",
 	"codec/std",
+	"pezbp-relayers/std",
 	"pezframe-support/std",
 	"pezframe-system/std",
 	"pezkuwi-teyrchain-primitives/std",
@@ -58,7 +58,7 @@ std = [
 	"xcm-executor/std",
 	"xcm/std",
 ]
-serde = ["dep:serde", "scale-info/serde"]
+serde = [ "dep:serde", "scale-info/serde" ]
 runtime-benchmarks = [
 	"pezbp-relayers/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",

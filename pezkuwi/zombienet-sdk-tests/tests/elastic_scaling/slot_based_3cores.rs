@@ -10,12 +10,12 @@ use pezcumulus_zombienet_sdk_helpers::{
 	assert_finality_lag, assert_para_throughput, create_assign_core_call,
 };
 use pezkuwi_primitives::Id as ParaId;
-use serde_json::json;
 use pezkuwi_zombienet_sdk::{
 	subxt::{OnlineClient, PezkuwiConfig},
 	subxt_signer::sr25519::dev,
 	NetworkConfigBuilder,
 };
+use serde_json::json;
 
 #[tokio::test(flavor = "multi_thread")]
 async fn slot_based_3cores_test() -> Result<(), anyhow::Error> {

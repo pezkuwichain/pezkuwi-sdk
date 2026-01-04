@@ -1487,15 +1487,16 @@ mod tests {
 			).into();
 
 			{
-				let bh_indirect_payload = pezbp_bridge_hub_zagros::TransactionExtension::from_params(
-					VERSION.spec_version,
-					VERSION.transaction_version,
-					pezbp_runtime::TransactionEra::Immortal,
-					System::block_hash(BlockNumber::zero()),
-					10,
-					10,
-					(((), ()), ((), ())),
-				);
+				let bh_indirect_payload =
+					pezbp_bridge_hub_zagros::TransactionExtension::from_params(
+						VERSION.spec_version,
+						VERSION.transaction_version,
+						pezbp_runtime::TransactionEra::Immortal,
+						System::block_hash(BlockNumber::zero()),
+						10,
+						10,
+						(((), ()), ((), ())),
+					);
 				assert_eq!(payload.encode().split_last().unwrap().1, bh_indirect_payload.encode());
 				assert_eq!(
 					TxExtension::implicit(&payload).unwrap().encode().split_last().unwrap().1,

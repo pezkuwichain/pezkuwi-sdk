@@ -22,6 +22,6 @@ docify = { workspace = true }
 pezsp-api = { workspace = true }
 
 [features]
-default = ["std"]
-std = ["codec/std", "pezsp-api/std"]
-runtime-benchmarks = ["pezsp-api/runtime-benchmarks"]
+default = [ "std" ]
+std = [ "codec/std", "pezsp-api/std" ]
+runtime-benchmarks = [ "pezsp-api/runtime-benchmarks" ]

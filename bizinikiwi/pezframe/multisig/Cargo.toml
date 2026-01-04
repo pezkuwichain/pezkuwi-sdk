@@ -30,10 +30,24 @@ log = { workspace = true }
 pezpallet-balances = { workspace = true, default-features = true }
 
 [features]
-default = ["std"]
-std = ["codec/std", "pezframe/std", "log/std", "scale-info/std"]
+default = [ "std" ]
+std = [
+	"codec/std",
+	"log/std",
+	"pezframe/std",
+	"scale-info/std",
+	"pezframe-support/std",
+	"pezframe-system/std"
+]
 runtime-benchmarks = [
 	"pezframe/runtime-benchmarks",
 	"pezpallet-balances/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks"
 ]
-try-runtime = ["pezframe/try-runtime", "pezpallet-balances/try-runtime"]
+try-runtime = [
+	"pezframe/try-runtime",
+	"pezpallet-balances/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime"
+]

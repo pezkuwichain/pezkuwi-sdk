@@ -33,7 +33,7 @@ pezsp-tracing = { workspace = true, default-features = true }
 xcm = { workspace = true, default-features = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"codec/std",
 	"pezframe-benchmarking/std",

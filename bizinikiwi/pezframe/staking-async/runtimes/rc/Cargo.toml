@@ -132,13 +132,13 @@ tokio = { features = ["macros"], workspace = true, default-features = true }
 bizinikiwi-wasm-builder = { workspace = true, default-features = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 no_std = []
 std = [
-	"pez-binary-merkle-tree/std",
 	"bitvec/std",
 	"codec/std",
 	"log/std",
+	"pez-binary-merkle-tree/std",
 	"pezframe-benchmarking?/std",
 	"pezframe-election-provider-support/std",
 	"pezframe-executive/std",
@@ -230,8 +230,8 @@ std = [
 	"xcm/std",
 ]
 runtime-benchmarks = [
-	"pez-binary-merkle-tree/runtime-benchmarks",
 	"bizinikiwi-wasm-builder/runtime-benchmarks",
+	"pez-binary-merkle-tree/runtime-benchmarks",
 	"pezframe-benchmarking/runtime-benchmarks",
 	"pezframe-election-provider-support/runtime-benchmarks",
 	"pezframe-executive/runtime-benchmarks",
@@ -367,7 +367,7 @@ try-runtime = [
 ]
 
 # Enable the metadata hash generation in the wasm builder.
-metadata-hash = ["bizinikiwi-wasm-builder/metadata-hash"]
+metadata-hash = [ "bizinikiwi-wasm-builder/metadata-hash" ]
 
 # Set timing constants (e.g. session period) to faster versions to speed up testing.
 fast-runtime = []
@@ -380,4 +380,4 @@ runtime-metrics = [
 # A feature that should be enabled when the runtime should be built for on-chain
 # deployment. This will disable stuff that shouldn't be part of the on-chain wasm
 # to make it smaller, like logging for example.
-on-chain-release-build = ["metadata-hash"]
+on-chain-release-build = [ "metadata-hash" ]

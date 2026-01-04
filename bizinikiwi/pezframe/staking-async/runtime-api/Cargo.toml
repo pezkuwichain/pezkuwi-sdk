@@ -22,8 +22,8 @@ pezsp-api = { workspace = true }
 pezsp-staking = { workspace = true }
 
 [features]
-default = ["std"]
-std = ["codec/std", "pezsp-api/std", "pezsp-staking/std"]
+default = [ "std" ]
+std = [ "codec/std", "pezsp-api/std", "pezsp-staking/std" ]
 runtime-benchmarks = [
 	"pezsp-api/runtime-benchmarks",
 	"pezsp-staking/runtime-benchmarks",

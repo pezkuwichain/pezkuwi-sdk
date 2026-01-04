@@ -32,12 +32,12 @@ pezpallet-proxy = { workspace = true, default-features = true }
 pezpallet-utility = { workspace = true, default-features = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"codec/std",
-	"pezframe/std",
-	"pezframe-system/std",
 	"pezframe-support/std",
+	"pezframe-system/std",
+	"pezframe/std",
 	"pezpallet-balances?/std",
 	"pezpallet-proxy?/std",
 	"pezpallet-utility?/std",
@@ -48,10 +48,14 @@ runtime-benchmarks = [
 	"pezpallet-balances/runtime-benchmarks",
 	"pezpallet-proxy/runtime-benchmarks",
 	"pezpallet-utility/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks"
 ]
 try-runtime = [
 	"pezframe/try-runtime",
 	"pezpallet-balances?/try-runtime",
 	"pezpallet-proxy?/try-runtime",
 	"pezpallet-utility?/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime"
 ]

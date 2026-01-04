@@ -19,9 +19,9 @@
 #![warn(missing_docs)]
 #![cfg_attr(not(feature = "std"), no_std)]
 
+use codec::{Decode, DecodeWithMemTracking, Encode};
 use pezbp_header_pez_chain::ChainWithGrandpa;
 use pezbp_messages::{ChainWithMessages, MessageNonce};
-use codec::{Decode, DecodeWithMemTracking, Encode};
 use pezbp_runtime::{
 	decl_bridge_finality_runtime_apis, decl_bridge_messages_runtime_apis,
 	extensions::{

@@ -50,6 +50,7 @@ pub use weights_ext::{
 	EXPECTED_DEFAULT_MESSAGE_LENGTH, EXTRA_STORAGE_PROOF_SIZE,
 };
 
+use codec::{Decode, Encode};
 use pezbp_header_pez_chain::HeaderChain;
 use pezbp_messages::{
 	source_chain::{
@@ -64,7 +65,6 @@ use pezbp_messages::{
 	MessageNonce, MessagePayload, MessagesOperatingMode, OutboundLaneData, OutboundMessageDetails,
 	UnrewardedRelayersState, VerificationError,
 };
-use codec::{Decode, Encode};
 use pezbp_runtime::{
 	AccountIdOf, BasicOperatingMode, HashOf, OwnedBridgeModule, PreComputedSize, RangeInclusiveExt,
 	Size,

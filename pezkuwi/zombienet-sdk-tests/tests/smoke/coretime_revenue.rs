@@ -29,10 +29,10 @@ use pezkuwichain::runtime_types::{
 };
 
 use pezkuwi_subxt::{events::StaticEvent, utils::AccountId32, OnlineClient, PezkuwiConfig};
+use pezkuwi_zombienet_sdk::{subxt_signer::sr25519::dev, NetworkConfigBuilder};
 use serde_json::json;
 use std::{fmt::Display, sync::Arc};
 use tokio::sync::RwLock;
-use pezkuwi_zombienet_sdk::{subxt_signer::sr25519::dev, NetworkConfigBuilder};
 
 use coretime_pezkuwichain::{
 	self as coretime_api,

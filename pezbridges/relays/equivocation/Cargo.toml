@@ -25,7 +25,7 @@ tracing = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-	"pezbp-header-pez-chain/runtime-benchmarks",
 	"pez-finality-relay/runtime-benchmarks",
+	"pezbp-header-pez-chain/runtime-benchmarks",
 	"relay-utils/runtime-benchmarks",
 ]

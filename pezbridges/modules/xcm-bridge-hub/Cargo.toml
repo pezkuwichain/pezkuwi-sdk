@@ -44,14 +44,14 @@ pezpallet-xcm-bridge-hub-router = { workspace = true }
 pezsp-io = { workspace = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
+	"codec/std",
 	"pezbp-header-pez-chain/std",
 	"pezbp-messages/std",
+	"pezbp-runtime/std",
 	"pezbp-xcm-bridge-hub-router/std",
 	"pezbp-xcm-bridge-hub/std",
-	"codec/std",
-	"pezbp-runtime/std",
 	"pezframe-support/std",
 	"pezframe-system/std",
 	"pezkuwi-teyrchain-primitives/std",
@@ -71,9 +71,9 @@ std = [
 runtime-benchmarks = [
 	"pezbp-header-pez-chain/runtime-benchmarks",
 	"pezbp-messages/runtime-benchmarks",
+	"pezbp-runtime/runtime-benchmarks",
 	"pezbp-xcm-bridge-hub-router/runtime-benchmarks",
 	"pezbp-xcm-bridge-hub/runtime-benchmarks",
-	"pezbp-runtime/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
 	"pezframe-system/runtime-benchmarks",
 	"pezkuwi-teyrchain-primitives/runtime-benchmarks",

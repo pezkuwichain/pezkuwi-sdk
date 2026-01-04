@@ -96,11 +96,11 @@ primitive-types = { workspace = true, default-features = false, features = [
 bizinikiwi-wasm-builder = { optional = true, workspace = true, default-features = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
-	"pez-assets-common/std",
 	"bizinikiwi-wasm-builder",
 	"codec/std",
+	"pez-assets-common/std",
 	"pezcumulus-pezpallet-aura-ext/std",
 	"pezcumulus-pezpallet-session-benchmarking/std",
 	"pezcumulus-pezpallet-teyrchain-system/std",
@@ -163,9 +163,9 @@ std = [
 ]
 
 runtime-benchmarks = [
-	"pez-assets-common/runtime-benchmarks",
 	"bizinikiwi-wasm-builder?/runtime-benchmarks",
 	"hex-literal",
+	"pez-assets-common/runtime-benchmarks",
 	"pezcumulus-pezpallet-aura-ext/runtime-benchmarks",
 	"pezcumulus-pezpallet-session-benchmarking/runtime-benchmarks",
 	"pezcumulus-pezpallet-teyrchain-system/runtime-benchmarks",

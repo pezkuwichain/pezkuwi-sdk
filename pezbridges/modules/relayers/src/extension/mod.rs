@@ -24,13 +24,13 @@
 
 use crate::{Config as RelayersConfig, Pezpallet as RelayersPallet, WeightInfoExt, LOG_TARGET};
 
+use codec::{Decode, DecodeWithMemTracking, Encode};
+use core::{fmt::Debug, marker::PhantomData};
 use pezbp_messages::{ChainWithMessages, MessageNonce};
 use pezbp_relayers::{
 	ExplicitOrAccountParams, ExtensionCallData, ExtensionCallInfo, ExtensionConfig,
 	RewardsAccountOwner, RewardsAccountParams,
 };
-use codec::{Decode, DecodeWithMemTracking, Encode};
-use core::{fmt::Debug, marker::PhantomData};
 use pezbp_runtime::{Chain, RangeInclusiveExt, StaticStrProvider};
 use pezframe_support::{
 	dispatch::{DispatchInfo, PostDispatchInfo},
@@ -86,7 +86,8 @@ impl<AccountId, RemoteGrandpaChainBlockNumber: Debug, LaneId: Clone + Copy + Deb
 	#[cfg(test)]
 	pub fn submit_finality_proof_info_mut(
 		&mut self,
-	) -> Option<&mut pezbp_header_pez_chain::SubmitFinalityProofInfo<RemoteGrandpaChainBlockNumber>> {
+	) -> Option<&mut pezbp_header_pez_chain::SubmitFinalityProofInfo<RemoteGrandpaChainBlockNumber>>
+	{
 		match self.call_info {
 			ExtensionCallInfo::AllFinalityAndMsgs(ref mut info, _, _) => Some(info),
 			ExtensionCallInfo::RelayFinalityAndMsgs(ref mut info, _) => Some(info),
@@ -465,9 +466,9 @@ mod tests {
 	};
 	use pezbp_pezkuwi_core::teyrchains::{ParaHeadsProof, ParaId};
 	use pezbp_relayers::RuntimeWithUtilityPallet;
+	use pezbp_runtime::{BasicOperatingMode, HeaderId, Teyrchain};
 	use pezbp_test_utils::{make_default_justification, test_keyring, TEST_GRANDPA_SET_ID};
 	use pezbp_teyrchains::{BestParaHeadHash, ParaInfo, SubmitTeyrchainHeadsInfo};
-	use pezbp_runtime::{BasicOperatingMode, HeaderId, Teyrchain};
 	use pezframe_support::{
 		__private::pezsp_tracing,
 		assert_storage_noop, parameter_types,

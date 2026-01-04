@@ -25,8 +25,8 @@ use crate::{
 };
 
 use async_trait::async_trait;
-use pezbp_header_pez_chain::HeaderFinalityInfo;
 use pez_equivocation_detector::TargetClient;
+use pezbp_header_pez_chain::HeaderFinalityInfo;
 use pezbp_runtime::{BlockNumberOf, HashOf};
 use pezsp_runtime::traits::Header;
 use relay_bizinikiwi_client::{Client, Error};

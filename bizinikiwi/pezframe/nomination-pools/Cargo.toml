@@ -38,8 +38,8 @@ pezpallet-balances = { workspace = true, default-features = true }
 pezsp-tracing = { workspace = true, default-features = true }
 
 [features]
-default = ["std"]
-fuzzing = ["pezpallet-balances", "pezsp-tracing"]
+default = [ "std" ]
+fuzzing = [ "pezpallet-balances", "pezsp-tracing" ]
 std = [
 	"codec/std",
 	"log/std",

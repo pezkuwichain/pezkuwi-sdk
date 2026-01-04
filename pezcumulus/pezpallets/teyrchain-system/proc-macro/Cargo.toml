@@ -22,5 +22,5 @@ quote = { workspace = true }
 syn = { workspace = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = []

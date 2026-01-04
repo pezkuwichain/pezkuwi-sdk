@@ -53,11 +53,11 @@ pezsnowbridge-test-utils = { workspace = true }
 pezsp-keyring = { workspace = true, default-features = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"alloy-core/std",
-	"pezbp-relayers/std",
 	"codec/std",
+	"pezbp-relayers/std",
 	"pezframe-benchmarking/std",
 	"pezframe-support/std",
 	"pezframe-system/std",

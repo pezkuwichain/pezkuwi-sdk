@@ -26,6 +26,7 @@ use crate::{
 	PalletOperatingMode, PalletOwner, Pezpallet, StoredInboundLaneData,
 };
 
+use codec::Encode;
 use pezbp_messages::{
 	source_chain::{FromBridgedChainMessagesDeliveryProof, MessagesBridge},
 	target_chain::{FromBridgedChainMessagesProof, MessageDispatch},
@@ -34,9 +35,8 @@ use pezbp_messages::{
 	OutboundLaneData, OutboundMessageDetails, UnrewardedRelayer, UnrewardedRelayersState,
 	VerificationError,
 };
-use pezbp_test_utils::generate_owned_bridge_module_tests;
-use codec::Encode;
 use pezbp_runtime::{BasicOperatingMode, PreComputedSize, RangeInclusiveExt, Size};
+use pezbp_test_utils::generate_owned_bridge_module_tests;
 use pezframe_support::{
 	assert_err, assert_noop, assert_ok,
 	dispatch::Pays,

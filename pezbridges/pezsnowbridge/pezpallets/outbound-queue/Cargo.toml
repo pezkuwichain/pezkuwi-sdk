@@ -44,11 +44,11 @@ pezsnowbridge-outbound-queue-primitives = { workspace = true }
 pezpallet-message-queue = { workspace = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
-	"pezbridge-hub-common/std",
 	"codec/std",
 	"ethabi/std",
+	"pezbridge-hub-common/std",
 	"pezframe-benchmarking/std",
 	"pezframe-support/std",
 	"pezframe-system/std",

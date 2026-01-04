@@ -16,10 +16,6 @@ use pezkuwi_subxt::{
 	config::pezkuwi::PezkuwiExtrinsicParamsBuilder, tx::SubmittableTransaction, OnlineClient,
 	PezkuwiConfig,
 };
-use pezpallet_revive::AddressMapper;
-use pezsp_core::{H160, H256};
-use rand::Rng;
-use std::str::FromStr;
 use pezkuwi_zombienet_sdk::{
 	subxt_signer::{
 		sr25519::{dev, Keypair},
@@ -27,6 +23,10 @@ use pezkuwi_zombienet_sdk::{
 	},
 	LocalFileSystem, Network, NetworkConfigBuilder, NetworkNode,
 };
+use pezpallet_revive::AddressMapper;
+use pezsp_core::{H160, H256};
+use rand::Rng;
+use std::str::FromStr;
 
 const KEYS_COUNT: usize = 6000;
 const CHUNK_SIZE: usize = 3000;

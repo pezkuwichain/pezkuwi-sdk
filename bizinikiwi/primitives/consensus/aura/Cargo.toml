@@ -28,7 +28,7 @@ pezsp-timestamp = { workspace = true }
 scale-info = { features = ["derive"], workspace = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"async-trait",
 	"codec/std",

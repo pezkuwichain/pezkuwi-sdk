@@ -308,13 +308,13 @@ mod tests {
 		BestFinalized, Config, CurrentAuthoritySet, FreeHeadersRemaining, PalletOperatingMode,
 		StoredAuthoritySet, WeightInfo,
 	};
+	use codec::Encode;
 	use pezbp_header_pez_chain::{ChainWithGrandpa, SubmitFinalityProofInfo};
+	use pezbp_runtime::{BasicOperatingMode, HeaderId};
 	use pezbp_test_utils::{
 		make_default_justification, make_justification_for_header, JustificationGeneratorParams,
 		TEST_GRANDPA_SET_ID,
 	};
-	use codec::Encode;
-	use pezbp_runtime::{BasicOperatingMode, HeaderId};
 	use pezframe_support::weights::Weight;
 	use pezsp_runtime::{testing::DigestItem, traits::Header as _, SaturatedConversion};
 

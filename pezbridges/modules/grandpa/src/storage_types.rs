@@ -18,8 +18,8 @@
 
 use crate::{Config, Error};
 
-use pezbp_header_pez_chain::{AuthoritySet, ChainWithGrandpa};
 use codec::{Decode, Encode, MaxEncodedLen};
+use pezbp_header_pez_chain::{AuthoritySet, ChainWithGrandpa};
 use pezframe_support::{traits::Get, BoundedVec, CloneNoBound, RuntimeDebugNoBound};
 use pezsp_consensus_grandpa::{AuthorityId, AuthorityList, AuthorityWeight, SetId};
 use pezsp_std::marker::PhantomData;

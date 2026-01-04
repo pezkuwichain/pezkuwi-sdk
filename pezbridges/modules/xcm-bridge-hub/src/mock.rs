@@ -18,13 +18,13 @@
 
 use crate as pezpallet_xcm_bridge_hub;
 
+use codec::{Decode, Encode};
 use pezbp_messages::{
 	target_chain::{DispatchMessage, MessageDispatch},
 	ChainWithMessages, HashedLaneId, MessageNonce,
 };
-use pezbp_xcm_bridge_hub::{BridgeId, LocalXcmChannelManager};
-use codec::{Decode, Encode};
 use pezbp_runtime::{messages::MessageDispatchResult, Chain, ChainId, HashOf};
+use pezbp_xcm_bridge_hub::{BridgeId, LocalXcmChannelManager};
 use pezframe_support::{
 	assert_ok, derive_impl, parameter_types,
 	traits::{EnsureOrigin, Equals, Everything, Get, OriginTrait},

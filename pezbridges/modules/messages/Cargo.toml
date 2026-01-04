@@ -39,13 +39,13 @@ pezsp-core = { workspace = true }
 pezsp-io = { workspace = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
+	"codec/std",
 	"pezbp-header-pez-chain/std",
 	"pezbp-messages/std",
-	"pezbp-test-utils/std",
-	"codec/std",
 	"pezbp-runtime/std",
+	"pezbp-test-utils/std",
 	"pezframe-benchmarking/std",
 	"pezframe-support/std",
 	"pezframe-system/std",
@@ -62,9 +62,9 @@ std = [
 runtime-benchmarks = [
 	"pezbp-header-pez-chain/runtime-benchmarks",
 	"pezbp-messages/runtime-benchmarks",
-	"pezbp-test-utils/runtime-benchmarks",
 	"pezbp-runtime/runtime-benchmarks",
 	"pezbp-runtime/test-helpers",
+	"pezbp-test-utils/runtime-benchmarks",
 	"pezframe-benchmarking/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
 	"pezframe-system/runtime-benchmarks",
@@ -81,4 +81,4 @@ try-runtime = [
 	"pezpallet-bridge-grandpa/try-runtime",
 	"pezsp-runtime/try-runtime",
 ]
-test-helpers = ["pezbp-runtime/test-helpers", "pezsp-trie"]
+test-helpers = [ "pezbp-runtime/test-helpers", "pezsp-trie" ]

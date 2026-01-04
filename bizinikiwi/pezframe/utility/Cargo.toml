@@ -33,7 +33,7 @@ pezpallet-collective = { workspace = true, default-features = true }
 pezpallet-timestamp = { workspace = true, default-features = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"codec/std",
 	"pezframe-benchmarking?/std",

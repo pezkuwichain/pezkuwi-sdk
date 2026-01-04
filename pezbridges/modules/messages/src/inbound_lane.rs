@@ -18,12 +18,12 @@
 
 use crate::{BridgedChainOf, Config};
 
+use codec::{Decode, Encode, EncodeLike, MaxEncodedLen};
 use pezbp_messages::{
 	target_chain::{DispatchMessage, DispatchMessageData, MessageDispatch},
 	ChainWithMessages, DeliveredMessages, InboundLaneData, LaneState, MessageKey, MessageNonce,
 	OutboundLaneData, ReceptionResult, UnrewardedRelayer,
 };
-use codec::{Decode, Encode, EncodeLike, MaxEncodedLen};
 use pezbp_runtime::AccountIdOf;
 use pezsp_runtime::RuntimeDebug;
 use pezsp_std::prelude::PartialEq;

@@ -838,14 +838,14 @@ mod tests {
 		run_test, test_header, FreeHeadersInterval, RuntimeEvent as TestEvent, RuntimeOrigin,
 		System, TestBridgedChain, TestHeader, TestNumber, TestRuntime, MAX_BRIDGED_AUTHORITIES,
 	};
+	use codec::Encode;
 	use pezbp_header_pez_chain::BridgeGrandpaCall;
+	use pezbp_runtime::BasicOperatingMode;
 	use pezbp_test_utils::{
 		authority_list, generate_owned_bridge_module_tests, make_default_justification,
 		make_justification_for_header, JustificationGeneratorParams, ALICE, BOB,
 		TEST_GRANDPA_SET_ID,
 	};
-	use codec::Encode;
-	use pezbp_runtime::BasicOperatingMode;
 	use pezframe_support::{
 		assert_err, assert_noop, assert_ok,
 		dispatch::{Pays, PostDispatchInfo},

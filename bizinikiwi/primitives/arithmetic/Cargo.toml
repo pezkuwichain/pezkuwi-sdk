@@ -36,7 +36,7 @@ primitive-types = { workspace = true, default-features = true }
 rand = { workspace = true, default-features = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"codec/std",
 	"num-traits/std",
@@ -45,4 +45,4 @@ std = [
 	"serde/std",
 ]
 # Serde support without relying on std features.
-serde = ["dep:serde", "scale-info/serde"]
+serde = [ "dep:serde", "scale-info/serde" ]

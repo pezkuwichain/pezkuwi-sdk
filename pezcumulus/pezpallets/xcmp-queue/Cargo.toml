@@ -56,12 +56,12 @@ pezsp-core = { workspace = true, default-features = true }
 pezcumulus-pezpallet-teyrchain-system = { workspace = true, default-features = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"approx/std",
 	"bounded-collections/std",
-	"pezbp-xcm-bridge-hub-router?/std",
 	"codec/std",
+	"pezbp-xcm-bridge-hub-router?/std",
 	"pezcumulus-primitives-core/std",
 	"pezframe-benchmarking?/std",
 	"pezframe-support/std",
@@ -105,4 +105,4 @@ try-runtime = [
 	"pezpallet-message-queue/try-runtime",
 	"pezsp-runtime/try-runtime",
 ]
-bridging = ["pezbp-xcm-bridge-hub-router"]
+bridging = [ "pezbp-xcm-bridge-hub-router" ]

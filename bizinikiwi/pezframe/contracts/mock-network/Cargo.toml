@@ -43,7 +43,7 @@ xcm-pez-simulator = { workspace = true, default-features = true }
 pezpallet-contracts-fixtures = { workspace = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"codec/std",
 	"pezframe-support/std",

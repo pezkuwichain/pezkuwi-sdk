@@ -50,7 +50,7 @@ primitive-types = { features = [
 xcm-pez-simulator = { workspace = true, default-features = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 runtime-benchmarks = [
 	"pezframe-support/runtime-benchmarks",
 	"pezframe-system/runtime-benchmarks",

@@ -59,15 +59,18 @@ pub type BridgedBlockHash<T, I> = pezbp_runtime::HashOf<BridgedChain<T, I>>;
 pub type InitializationDataOf<T, I> =
 	InitializationData<BridgedBlockNumber<T, I>, pezbp_beefy::MmrHashOf<BridgedChain<T, I>>>;
 /// BEEFY commitment hasher, used by configured bridged chain.
-pub type BridgedBeefyCommitmentHasher<T, I> = pezbp_beefy::BeefyCommitmentHasher<BridgedChain<T, I>>;
+pub type BridgedBeefyCommitmentHasher<T, I> =
+	pezbp_beefy::BeefyCommitmentHasher<BridgedChain<T, I>>;
 /// BEEFY validator id, used by configured bridged chain.
 pub type BridgedBeefyAuthorityId<T, I> = pezbp_beefy::BeefyAuthorityIdOf<BridgedChain<T, I>>;
 /// BEEFY validator set, used by configured bridged chain.
 pub type BridgedBeefyAuthoritySet<T, I> = pezbp_beefy::BeefyAuthoritySetOf<BridgedChain<T, I>>;
 /// BEEFY authority set, used by configured bridged chain.
-pub type BridgedBeefyAuthoritySetInfo<T, I> = pezbp_beefy::BeefyAuthoritySetInfoOf<BridgedChain<T, I>>;
+pub type BridgedBeefyAuthoritySetInfo<T, I> =
+	pezbp_beefy::BeefyAuthoritySetInfoOf<BridgedChain<T, I>>;
 /// BEEFY signed commitment, used by configured bridged chain.
-pub type BridgedBeefySignedCommitment<T, I> = pezbp_beefy::BeefySignedCommitmentOf<BridgedChain<T, I>>;
+pub type BridgedBeefySignedCommitment<T, I> =
+	pezbp_beefy::BeefySignedCommitmentOf<BridgedChain<T, I>>;
 /// MMR hashing algorithm, used by configured bridged chain.
 pub type BridgedMmrHashing<T, I> = pezbp_beefy::MmrHashingOf<BridgedChain<T, I>>;
 /// MMR hashing output type of `BridgedMmrHashing<T, I>`.
@@ -415,10 +418,10 @@ pub mod pezpallet {
 #[cfg(test)]
 mod tests {
 	use super::*;
-	use pezbp_test_utils::generate_owned_bridge_module_tests;
 	use mock::*;
 	use mock_chain::*;
 	use pezbp_runtime::{BasicOperatingMode, OwnedBridgeModuleError};
+	use pezbp_test_utils::generate_owned_bridge_module_tests;
 	use pezframe_support::{assert_noop, assert_ok, traits::Get};
 	use pezsp_consensus_beefy::mmr::BeefyAuthoritySet;
 	use pezsp_runtime::DispatchError;

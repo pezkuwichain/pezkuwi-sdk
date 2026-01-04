@@ -34,8 +34,8 @@ pezsp-npos-elections = { workspace = true, default-features = true }
 rand = { features = ["small_rng"], workspace = true, default-features = true }
 
 [features]
-default = ["std"]
-fuzz = ["default"]
+default = [ "std" ]
+fuzz = [ "default" ]
 std = [
 	"codec/std",
 	"pezframe-support/std",

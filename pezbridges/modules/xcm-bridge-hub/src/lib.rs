@@ -144,11 +144,11 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 use pezbp_messages::{LaneState, MessageNonce};
+use pezbp_runtime::{AccountIdOf, BalanceOf, RangeInclusiveExt};
 use pezbp_xcm_bridge_hub::BridgeLocationsError;
 pub use pezbp_xcm_bridge_hub::{
 	Bridge, BridgeId, BridgeLocations, BridgeState, LocalXcmChannelManager,
 };
-use pezbp_runtime::{AccountIdOf, BalanceOf, RangeInclusiveExt};
 use pezframe_support::{traits::fungible::MutateHold, DefaultNoBound};
 use pezframe_system::Config as SystemConfig;
 use pezpallet_bridge_messages::{Config as BridgeMessagesConfig, LanesManagerError};
@@ -158,9 +158,9 @@ use xcm::prelude::*;
 use xcm_builder::DispatchBlob;
 use xcm_executor::traits::ConvertLocation;
 
-pub use pezbp_xcm_bridge_hub::XcmAsPlainPayload;
 pub use dispatcher::XcmBlobMessageDispatchResult;
 pub use exporter::PalletAsHaulBlobExporter;
+pub use pezbp_xcm_bridge_hub::XcmAsPlainPayload;
 pub use pezpallet::*;
 
 mod dispatcher;
@@ -846,8 +846,8 @@ pub mod pezpallet {
 #[cfg(test)]
 mod tests {
 	use super::*;
-	use pezbp_messages::LaneIdType;
 	use mock::*;
+	use pezbp_messages::LaneIdType;
 
 	use pezframe_support::{
 		assert_err, assert_noop, assert_ok, traits::fungible::Mutate, BoundedVec,

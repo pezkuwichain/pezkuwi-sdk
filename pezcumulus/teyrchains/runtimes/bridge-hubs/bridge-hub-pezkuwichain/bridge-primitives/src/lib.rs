@@ -19,9 +19,9 @@
 #![warn(missing_docs)]
 #![cfg_attr(not(feature = "std"), no_std)]
 
+use codec::{Decode, Encode};
 pub use pezbp_bridge_hub_pezcumulus::*;
 use pezbp_messages::*;
-use codec::{Decode, Encode};
 use pezbp_runtime::{
 	decl_bridge_finality_runtime_apis, decl_bridge_messages_runtime_apis, Chain, ChainId, Teyrchain,
 };

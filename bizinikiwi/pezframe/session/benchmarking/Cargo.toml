@@ -38,7 +38,7 @@ pezsp-staking = { workspace = true }
 scale-info = { workspace = true, default-features = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"pezframe-benchmarking/std",
 	"pezframe-election-provider-support/std",

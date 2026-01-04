@@ -210,8 +210,8 @@ pezkuwi-sdk = { features = [
 ], optional = true, workspace = true, default-features = true }
 
 [features]
-default = ["cli"]
-cli = ["clap", "clap_complete", "node-inspect", "pezkuwi-sdk"]
+default = [ "cli" ]
+cli = [ "clap", "clap_complete", "node-inspect", "pezkuwi-sdk" ]
 runtime-benchmarks = [
 	"bizinikiwi-cli-test-utils/runtime-benchmarks",
 	"node-inspect?/runtime-benchmarks",
@@ -223,8 +223,9 @@ runtime-benchmarks = [
 	"pezsc-service-test/runtime-benchmarks",
 	"pezsp-keyring/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
+	"pezframe-benchmarking-cli?/runtime-benchmarks"
 ]
-storage-benchmark = ["pezframe-benchmarking-cli/storage-benchmark"]
+storage-benchmark = [ "pezframe-benchmarking-cli/storage-benchmark" ]
 try-runtime = [
 	"bizinikiwi-cli-test-utils/try-runtime",
 	"pez-kitchensink-runtime/try-runtime",

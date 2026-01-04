@@ -967,7 +967,8 @@ mod asset_hub_pezkuwichain_tests {
 		let actual = <Runtime as pezpallet_xcm_bridge_hub_router::Config<
 			ToZagrosXcmRouterInstance,
 		>>::WeightInfo::report_bridge_status();
-		let max_weight = pezbp_asset_hub_pezkuwichain::XcmBridgeHubRouterTransactCallMaxWeight::get();
+		let max_weight =
+			pezbp_asset_hub_pezkuwichain::XcmBridgeHubRouterTransactCallMaxWeight::get();
 		assert!(
 			actual.all_lte(max_weight),
 			"max_weight: {:?} should be adjusted to actual {:?}",

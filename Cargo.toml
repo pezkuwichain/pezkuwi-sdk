@@ -623,7 +623,6 @@ members = [
 	"vendor/pezkuwi-zombienet-sdk/crates/provider",
 	"vendor/pezkuwi-zombienet-sdk/crates/sdk",
 	"vendor/pezkuwi-zombienet-sdk/crates/support",
-	"vendor/pezkuwi-zombienet-sdk/crates/cli",
 ]
 
 default-members = [
