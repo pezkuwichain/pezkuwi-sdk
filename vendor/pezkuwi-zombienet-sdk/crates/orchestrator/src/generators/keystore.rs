@@ -19,7 +19,7 @@ use crate::{
 /// * `acc` - The node accounts containing the seed and public keys
 /// * `node_files_path` - The path where keystore files will be created
 /// * `scoped_fs` - The scoped filesystem for file operations
-/// * `asset_hub_polkadot` - Whether this is for asset-hub-polkadot (affects aura key scheme)
+/// * `is_asset_hub_pezkuwi` - Whether this is for asset-hub-pezkuwi (affects aura key scheme)
 /// * `keystore_key_types` - Optional list of key type specifications
 ///
 /// If `keystore_key_types` is empty, all default key types will be generated.
@@ -28,7 +28,7 @@ pub async fn generate<'a, T>(
 	acc: &NodeAccounts,
 	node_files_path: impl AsRef<Path>,
 	scoped_fs: &ScopedFilesystem<'a, T>,
-	asset_hub_polkadot: bool,
+	is_asset_hub_pezkuwi: bool,
 	keystore_key_types: Vec<&str>,
 ) -> Result<Vec<PathBuf>, GeneratorError>
 where
@@ -39,7 +39,7 @@ where
 	let mut filenames = vec![];
 
 	// Parse the key type specifications
-	let key_types = parse_keystore_key_types(&keystore_key_types, asset_hub_polkadot);
+	let key_types = parse_keystore_key_types(&keystore_key_types, is_asset_hub_pezkuwi);
 
 	let futures: Vec<_> = key_types
 		.iter()
@@ -163,7 +163,7 @@ mod tests {
 		struct TestCase {
 			name: &'static str,
 			key_types: Vec<&'static str>,
-			asset_hub_polkadot: bool,
+			is_asset_hub_pezkuwi: bool,
 			expected_prefix: &'static str,
 			expected_public_key: &'static str,
 		}
@@ -172,28 +172,28 @@ mod tests {
 			TestCase {
 				name: "explicit scheme override (gran_sr)",
 				key_types: vec!["gran_sr"],
-				asset_hub_polkadot: false,
+				is_asset_hub_pezkuwi: false,
 				expected_prefix: "6772616e", // "gran" in hex
 				expected_public_key: "sr_public_key",
 			},
 			TestCase {
-				name: "aura with asset_hub_polkadot uses ed",
+				name: "aura with is_asset_hub_pezkuwi uses ed",
 				key_types: vec!["aura"],
-				asset_hub_polkadot: true,
+				is_asset_hub_pezkuwi: true,
 				expected_prefix: "61757261", // "aura" in hex
 				expected_public_key: "ed_public_key",
 			},
 			TestCase {
-				name: "aura without asset_hub_polkadot uses sr",
+				name: "aura without is_asset_hub_pezkuwi uses sr",
 				key_types: vec!["aura"],
-				asset_hub_polkadot: false,
+				is_asset_hub_pezkuwi: false,
 				expected_prefix: "61757261", // "aura" in hex
 				expected_public_key: "sr_public_key",
 			},
 			TestCase {
 				name: "custom key type with explicit ec scheme",
 				key_types: vec!["cust_ec"],
-				asset_hub_polkadot: false,
+				is_asset_hub_pezkuwi: false,
 				expected_prefix: "63757374", // "cust" in hex
 				expected_public_key: "ec_public_key",
 			},
@@ -206,7 +206,7 @@ mod tests {
 
 			let key_types: Vec<&str> = tc.key_types.clone();
 			let res =
-				generate(&accounts, "node1", &scoped_fs, tc.asset_hub_polkadot, key_types).await;
+				generate(&accounts, "node1", &scoped_fs, tc.is_asset_hub_pezkuwi, key_types).await;
 
 			assert!(res.is_ok(), "[{}] Expected Ok but got: {:?}", tc.name, res.err());
 			let filenames = res.unwrap();

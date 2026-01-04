@@ -65,14 +65,14 @@ where
 		// Generate keystore for node
 		let node_files_path =
 			if let Some(para) = ctx.parachain { para.id.to_string() } else { node.name.clone() };
-		let asset_hub_polkadot =
-			ctx.parachain_id.map(|id| id.starts_with("asset-hub-polkadot")).unwrap_or_default();
+		let is_asset_hub_pezkuwi =
+			ctx.parachain_id.map(|id| id.starts_with("asset-hub-pezkuwi")).unwrap_or_default();
 		let keystore_key_types = node.keystore_key_types.iter().map(String::as_str).collect();
 		let key_filenames = generators::generate_node_keystore(
 			&node.accounts,
 			&node_files_path,
 			ctx.scoped_fs,
-			asset_hub_polkadot,
+			is_asset_hub_pezkuwi,
 			keystore_key_types,
 		)
 		.await
