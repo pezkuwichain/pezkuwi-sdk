@@ -134,8 +134,6 @@ Terminoloji kılavuzu için `.claude/TERMINOLOGY.md` dosyasına bak.
 
 *Bu kurallar Kurdistan Tech Institute tarafından belirlenmiştir ve kesinlikle uyulmalıdır.*
 
-
-
 *eskiden kalan ve baska bir dosyaya yazdigin kurallar
 # Claude Code Kuralları - Pezkuwi SDK
 
