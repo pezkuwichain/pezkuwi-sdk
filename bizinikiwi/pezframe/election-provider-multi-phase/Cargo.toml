@@ -51,8 +51,8 @@ rand = { workspace = true, default-features = true }
 
 
 [features]
-remote-mining = [ "hex", "remote-externalities", "tokio" ]
-default = [ "std" ]
+remote-mining = ["hex", "remote-externalities", "tokio"]
+default = ["std"]
 std = [
 	"codec/std",
 	"log/std",

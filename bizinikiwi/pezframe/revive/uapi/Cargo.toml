@@ -32,7 +32,7 @@ scale-info = { features = ["derive"], optional = true, workspace = true }
 polkavm-derive = { version = "0.29.0" }
 
 [features]
-default = [ "scale" ]
-scale = [ "dep:codec", "scale-info" ]
-precompiles-sol-interfaces = [ "alloy-core" ]
+default = ["scale"]
+scale = ["dep:codec", "scale-info"]
+precompiles-sol-interfaces = ["alloy-core"]
 unstable-hostfn = []

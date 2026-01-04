@@ -14,7 +14,7 @@ homepage.workspace = true
 description = "Generate types and helpers for interacting with Bizinikiwi runtimes."
 
 [features]
-web = [ "pezkuwi-subxt-codegen/web" ]
+web = ["pezkuwi-subxt-codegen/web"]
 runtime-wasm-path = [
 	"pezsc-executor",
 	"pezsc-executor-common",
@@ -22,7 +22,7 @@ runtime-wasm-path = [
 	"pezsp-maybe-compressed-blob",
 	"pezsp-state-machine",
 ]
-runtime-metadata-insecure-url = [ "pezkuwi-subxt-utils-fetchmetadata/url" ]
+runtime-metadata-insecure-url = ["pezkuwi-subxt-utils-fetchmetadata/url"]
 
 [lib]
 proc-macro = true

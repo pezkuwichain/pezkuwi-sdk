@@ -67,7 +67,7 @@ bizinikiwi-build-script-utils = { workspace = true, default-features = true }
 
 [features]
 default = []
-fast-runtime = [ "pezkuwi-cli/fast-runtime" ]
+fast-runtime = ["pezkuwi-cli/fast-runtime"]
 runtime-benchmarks = [
 	"gum/runtime-benchmarks",
 	"pezkuwi-cli/runtime-benchmarks",

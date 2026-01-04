@@ -30,7 +30,7 @@ pezsp-runtime = { workspace = true }
 pezsp-io = { workspace = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 runtime-benchmarks = [
 	"pezframe-benchmarking/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",

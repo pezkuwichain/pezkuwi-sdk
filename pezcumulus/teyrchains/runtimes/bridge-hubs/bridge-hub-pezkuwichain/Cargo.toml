@@ -96,10 +96,10 @@ pezbp-messages = { workspace = true }
 pezbp-pezkuwi-bulletin = { workspace = true }
 pezbp-pezkuwi-core = { workspace = true }
 pezbp-relayers = { workspace = true }
+pezbp-runtime = { workspace = true }
 pezbp-teyrchains = { workspace = true }
 pezbp-xcm-bridge-hub-router = { workspace = true }
 pezbp-zagros = { workspace = true }
-pezbp-runtime = { workspace = true }
 pezbridge-runtime-common = { workspace = true }
 pezpallet-bridge-grandpa = { workspace = true }
 pezpallet-bridge-messages = { workspace = true }
@@ -133,7 +133,7 @@ pezsnowbridge-runtime-test-common = { workspace = true, default-features = true 
 teyrchains-runtimes-test-utils = { workspace = true, default-features = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"bizinikiwi-wasm-builder",
 	"codec/std",

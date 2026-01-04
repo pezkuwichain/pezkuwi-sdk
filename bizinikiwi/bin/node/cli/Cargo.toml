@@ -69,15 +69,15 @@ pezkuwi-sdk = { features = [
 	"bizinikiwi-build-script-utils",
 	"bizinikiwi-frame-rpc-support",
 	"bizinikiwi-frame-rpc-system",
-	"prometheus-endpoint",
 	"bizinikiwi-rpc-client",
 	"bizinikiwi-state-trie-migration-rpc",
 	"bizinikiwi-wasm-builder",
-	"remote-externalities",
+	"chain-spec-builder",
+	"gum",
+	"node-inspect",
 	"pez-fork-tree",
 	"pez-generate-bags",
 	"pez-subkey",
-	"gum",
 	"pezframe-benchmarking-cli",
 	"pezframe-support-procedural-tools",
 	"pezmmr-gadget",
@@ -153,10 +153,10 @@ pezkuwi-sdk = { features = [
 	"pezsp-timestamp",
 	"pezsp-tracing",
 	"pezsp-transaction-storage-proof",
-	"chain-spec-builder",
-	"node-inspect",
-	"tracking-allocator",
+	"prometheus-endpoint",
+	"remote-externalities",
 	"std",
+	"tracking-allocator",
 ], workspace = true, default-features = true }
 
 # Direct dependency needed (not through umbrella due to macro visibility issues)
@@ -210,8 +210,8 @@ pezkuwi-sdk = { features = [
 ], optional = true, workspace = true, default-features = true }
 
 [features]
-default = [ "cli" ]
-cli = [ "clap", "clap_complete", "node-inspect", "pezkuwi-sdk" ]
+default = ["cli"]
+cli = ["clap", "clap_complete", "node-inspect", "pezkuwi-sdk"]
 runtime-benchmarks = [
 	"bizinikiwi-cli-test-utils/runtime-benchmarks",
 	"node-inspect?/runtime-benchmarks",
@@ -219,13 +219,13 @@ runtime-benchmarks = [
 	"pez-node-primitives/runtime-benchmarks",
 	"pez-node-rpc/runtime-benchmarks",
 	"pez-node-testing/runtime-benchmarks",
+	"pezframe-benchmarking-cli?/runtime-benchmarks",
 	"pezkuwi-sdk/runtime-benchmarks",
 	"pezsc-service-test/runtime-benchmarks",
 	"pezsp-keyring/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
-	"pezframe-benchmarking-cli?/runtime-benchmarks"
 ]
-storage-benchmark = [ "pezframe-benchmarking-cli/storage-benchmark" ]
+storage-benchmark = ["pezframe-benchmarking-cli/storage-benchmark"]
 try-runtime = [
 	"bizinikiwi-cli-test-utils/try-runtime",
 	"pez-kitchensink-runtime/try-runtime",

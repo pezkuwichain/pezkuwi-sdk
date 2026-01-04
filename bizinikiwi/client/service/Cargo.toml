@@ -84,10 +84,10 @@ bizinikiwi-test-runtime = { workspace = true }
 bizinikiwi-test-runtime-client = { workspace = true }
 
 [features]
-default = [ "rocksdb" ]
+default = ["rocksdb"]
 # The RocksDB feature activates the RocksDB database backend. If it is not activated, and you pass
 # a path to a database, an error will be produced at runtime.
-rocksdb = [ "pezsc-client-db/rocksdb" ]
+rocksdb = ["pezsc-client-db/rocksdb"]
 runtime-benchmarks = [
 	"bizinikiwi-test-runtime-client/runtime-benchmarks",
 	"bizinikiwi-test-runtime/runtime-benchmarks",

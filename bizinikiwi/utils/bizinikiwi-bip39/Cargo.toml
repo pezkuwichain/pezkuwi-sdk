@@ -21,7 +21,7 @@ bip39 = { workspace = true, default-features = true }
 rustc-hex = { workspace = true, default-features = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"hmac/std",
 	"pbkdf2/std",

@@ -33,10 +33,10 @@ tokio = { features = [
 tracing = { workspace = true }
 
 # Bridge dependencies
+pez-finality-relay = { workspace = true }
 pezbp-header-pez-chain = { workspace = true, default-features = true }
 pezbp-messages = { workspace = true, default-features = true }
 pezbp-pezkuwi-core = { workspace = true, default-features = true }
-pez-finality-relay = { workspace = true }
 pezbp-runtime = { workspace = true, default-features = true }
 relay-utils = { workspace = true }
 

@@ -19,8 +19,8 @@ tracing = { workspace = true }
 
 # Bridge Dependencies
 pezbp-messages = { workspace = true }
-pezbp-xcm-bridge-hub = { workspace = true }
 pezbp-runtime = { workspace = true }
+pezbp-xcm-bridge-hub = { workspace = true }
 pezpallet-bridge-messages = { workspace = true }
 
 # Bizinikiwi Dependencies
@@ -44,7 +44,7 @@ pezpallet-xcm-bridge-hub-router = { workspace = true }
 pezsp-io = { workspace = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"pezbp-header-pez-chain/std",

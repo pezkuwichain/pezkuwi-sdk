@@ -24,7 +24,7 @@ pezframe-system = { workspace = true }
 scale-info = { features = ["derive"], workspace = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"pezframe-support/std",
@@ -33,7 +33,7 @@ std = [
 	"scale-info/std",
 ]
 runtime-benchmarks = [
-	"pezframe/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks"
+	"pezframe-system/runtime-benchmarks",
+	"pezframe/runtime-benchmarks",
 ]

@@ -23,7 +23,7 @@ pezsp-io = { workspace = true, default-features = true }
 pezsp-state-machine = { workspace = true, default-features = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"pezsp-externalities/std",
 	"pezsp-runtime-interface/std",

@@ -16,10 +16,10 @@ workspace = true
 [dependencies]
 async-std = { features = ["attributes"], workspace = true }
 async-trait = { workspace = true }
-pezbp-header-pez-chain = { workspace = true, default-features = true }
 futures = { workspace = true }
 num-traits = { workspace = true, default-features = true }
 pez-finality-relay = { workspace = true }
+pezbp-header-pez-chain = { workspace = true, default-features = true }
 relay-utils = { workspace = true }
 tracing = { workspace = true }
 

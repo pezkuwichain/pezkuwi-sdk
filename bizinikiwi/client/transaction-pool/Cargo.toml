@@ -59,6 +59,8 @@ chrono = { workspace = true }
 criterion = { workspace = true, default-features = true }
 env_logger = { workspace = true }
 pezcumulus-zombienet-sdk-helpers = { workspace = true }
+pezkuwi-zombienet-configuration = { workspace = true }
+pezkuwi-zombienet-sdk = { workspace = true }
 pezsc-block-builder = { workspace = true, default-features = true }
 pezsp-consensus = { workspace = true, default-features = true }
 rstest = { workspace = true }
@@ -67,8 +69,6 @@ serde_json = { workspace = true }
 tokio = { workspace = true, features = ["rt-multi-thread"] }
 tracing-subscriber = { workspace = true }
 txtesttool = { workspace = true }
-pezkuwi-zombienet-configuration = { workspace = true }
-pezkuwi-zombienet-sdk = { workspace = true }
 
 [features]
 runtime-benchmarks = [

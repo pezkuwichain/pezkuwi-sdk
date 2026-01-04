@@ -62,7 +62,7 @@ docify = { workspace = true }
 log = { workspace = true }
 
 [features]
-default = [ "runtime", "std" ]
+default = ["runtime", "std"]
 std = [
 	"codec/std",
 	"log/std",
@@ -121,7 +121,7 @@ try-runtime = [
 	"pezframe-try-runtime/try-runtime",
 	"pezsp-runtime/try-runtime",
 ]
-experimental = [ "pezframe-support/experimental" ]
+experimental = ["pezframe-support/experimental"]
 runtime = [
 	"pezframe-executive",
 	"pezframe-system-rpc-runtime-api",

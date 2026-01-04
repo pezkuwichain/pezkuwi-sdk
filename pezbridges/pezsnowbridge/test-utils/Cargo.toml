@@ -17,8 +17,8 @@ workspace = true
 exclude-from-umbrella = true
 
 [dependencies]
-pezbp-relayers = { workspace = true, default-features = true }
 codec = { workspace = true, default-features = true }
+pezbp-relayers = { workspace = true, default-features = true }
 pezframe-benchmarking = { optional = true, workspace = true, default-features = true }
 pezframe-support = { workspace = true, default-features = true }
 pezframe-system = { workspace = true, default-features = true }

@@ -60,7 +60,7 @@ pezpallet-balances = { workspace = true }
 tokio = { features = ["macros"], workspace = true, default-features = true }
 
 [features]
-runtime-metrics = [ "pezkuwi-test-runtime/runtime-metrics" ]
+runtime-metrics = ["pezkuwi-test-runtime/runtime-metrics"]
 runtime-benchmarks = [
 	"bizinikiwi-test-client/runtime-benchmarks",
 	"pezframe-system/runtime-benchmarks",

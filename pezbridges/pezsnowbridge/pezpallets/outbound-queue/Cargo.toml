@@ -44,7 +44,7 @@ pezsnowbridge-outbound-queue-primitives = { workspace = true }
 pezpallet-message-queue = { workspace = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"ethabi/std",

@@ -129,7 +129,7 @@ tokio = { features = ["macros"], workspace = true, default-features = true }
 bizinikiwi-wasm-builder = { optional = true, workspace = true, default-features = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 no_std = []
 std = [
 	"bitvec/std",
@@ -359,10 +359,10 @@ try-runtime = [
 ]
 
 # Enable the metadata hash generation in the wasm builder.
-metadata-hash = [ "bizinikiwi-wasm-builder/metadata-hash" ]
+metadata-hash = ["bizinikiwi-wasm-builder/metadata-hash"]
 
 # Set timing constants (e.g. session period) to faster versions to speed up testing.
-fast-runtime = [ "pezkuwichain-runtime-constants/fast-runtime" ]
+fast-runtime = ["pezkuwichain-runtime-constants/fast-runtime"]
 
 runtime-metrics = [
 	"pezkuwi-runtime-teyrchains/runtime-metrics",
@@ -372,4 +372,4 @@ runtime-metrics = [
 # A feature that should be enabled when the runtime should be built for on-chain
 # deployment. This will disable stuff that shouldn't be part of the on-chain wasm
 # to make it smaller, like logging for example.
-on-chain-release-build = [ "metadata-hash" ]
+on-chain-release-build = ["metadata-hash"]

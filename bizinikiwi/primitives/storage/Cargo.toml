@@ -24,8 +24,8 @@ ref-cast = { workspace = true }
 serde = { features = ["alloc", "derive"], optional = true, workspace = true }
 
 [features]
-default = [ "std" ]
-std = [ "codec/std", "impl-serde/std", "pezsp-debug-derive/std", "serde/std" ]
+default = ["std"]
+std = ["codec/std", "impl-serde/std", "pezsp-debug-derive/std", "serde/std"]
 
 # Serde support without relying on std features.
-serde = [ "dep:serde", "impl-serde" ]
+serde = ["dep:serde", "impl-serde"]

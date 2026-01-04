@@ -45,8 +45,8 @@ pretty_assertions = { workspace = true }
 regex = { workspace = true }
 
 [features]
-default = [ "std" ]
-std = [ "pezsp-crypto-hashing/std" ]
+default = ["std"]
+std = ["pezsp-crypto-hashing/std"]
 no-metadata-docs = []
 experimental = []
 # Generate impl-trait for tuples with the given number of tuples. Will be needed as the number of

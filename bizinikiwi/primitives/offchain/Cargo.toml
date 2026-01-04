@@ -22,8 +22,8 @@ pezsp-core = { workspace = true }
 pezsp-runtime = { workspace = true }
 
 [features]
-default = [ "std" ]
-std = [ "pezsp-api/std", "pezsp-core/std", "pezsp-runtime/std" ]
+default = ["std"]
+std = ["pezsp-api/std", "pezsp-core/std", "pezsp-runtime/std"]
 runtime-benchmarks = [
 	"pezsp-api/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",

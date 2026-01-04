@@ -27,7 +27,7 @@ pezsp-api = { workspace = true }
 pezsp-std = { workspace = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"pezbp-header-pez-chain/std",
 	"pezbp-pezkuwi-core/std",

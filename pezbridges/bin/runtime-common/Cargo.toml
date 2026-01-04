@@ -24,8 +24,8 @@ pezbp-header-pez-chain = { workspace = true }
 pezbp-messages = { workspace = true }
 pezbp-pezkuwi-core = { workspace = true }
 pezbp-relayers = { workspace = true }
-pezbp-teyrchains = { workspace = true }
 pezbp-runtime = { workspace = true }
+pezbp-teyrchains = { workspace = true }
 pezpallet-bridge-grandpa = { workspace = true }
 pezpallet-bridge-messages = { workspace = true }
 pezpallet-bridge-relayers = { workspace = true }
@@ -55,7 +55,7 @@ pezpallet-bridge-messages = { features = [
 pezsp-core = { workspace = true, default-features = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"pezbp-header-pez-chain/std",
@@ -108,5 +108,5 @@ runtime-benchmarks = [
 	"pezsp-trie?/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
 ]
-integrity-test = [ "static_assertions" ]
-test-helpers = [ "pezbp-runtime/test-helpers", "pezsp-trie" ]
+integrity-test = ["static_assertions"]
+test-helpers = ["pezbp-runtime/test-helpers", "pezsp-trie"]

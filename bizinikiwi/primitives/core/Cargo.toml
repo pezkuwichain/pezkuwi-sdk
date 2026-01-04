@@ -90,7 +90,7 @@ regex = { workspace = true }
 serde_json = { workspace = true, default-features = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"ark-vrf?/std",
 	"bip39/rand",
@@ -153,14 +153,14 @@ serde = [
 # This feature enables all crypto primitives for `no_std` builds like microcontrollers
 # or Intel SGX.
 # For the regular wasm runtime builds this should not be used.
-full_crypto = [ "blake2" ]
+full_crypto = ["blake2"]
 
 # This feature adds BLS crypto primitives.
 # It should not be used in production since the implementation and interface may still
 # be subject to significant changes.
-bls-experimental = [ "sha2", "w3f-bls" ]
+bls-experimental = ["sha2", "w3f-bls"]
 
 # This feature adds Bandersnatch crypto primitives.
 # It should not be used in production since the implementation and interface may still
 # be subject to significant changes.
-bandersnatch-experimental = [ "ark-vrf" ]
+bandersnatch-experimental = ["ark-vrf"]

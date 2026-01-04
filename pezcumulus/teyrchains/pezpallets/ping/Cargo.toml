@@ -26,7 +26,7 @@ pezcumulus-pezpallet-xcm = { workspace = true }
 pezcumulus-primitives-core = { workspace = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"pezcumulus-pezpallet-xcm/std",

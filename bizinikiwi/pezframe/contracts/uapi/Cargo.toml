@@ -25,5 +25,5 @@ paste = { workspace = true }
 scale-info = { features = ["derive"], optional = true, workspace = true }
 
 [features]
-default = [ "scale" ]
-scale = [ "dep:codec", "scale-info" ]
+default = ["scale"]
+scale = ["dep:codec", "scale-info"]

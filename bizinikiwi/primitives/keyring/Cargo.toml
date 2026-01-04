@@ -22,11 +22,11 @@ pezsp-runtime = { workspace = true }
 strum = { features = ["derive"], workspace = true }
 
 [features]
-default = [ "std" ]
-std = [ "pezsp-core/std", "pezsp-runtime/std", "strum/std" ]
+default = ["std"]
+std = ["pezsp-core/std", "pezsp-runtime/std", "strum/std"]
 
 # This feature adds Bandersnatch crypto primitives.
 # It should not be used in production since the implementation and interface may still
 # be subject to significant changes.
-bandersnatch-experimental = [ "pezsp-core/bandersnatch-experimental" ]
-runtime-benchmarks = [ "pezsp-runtime/runtime-benchmarks" ]
+bandersnatch-experimental = ["pezsp-core/bandersnatch-experimental"]
+runtime-benchmarks = ["pezsp-runtime/runtime-benchmarks"]

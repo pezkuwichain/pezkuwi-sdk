@@ -36,7 +36,7 @@ criterion = { workspace = true, default-features = true }
 # The proc-macro tests are in its own crate
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"blake2b_simd/std",
 	"byteorder/std",

@@ -25,7 +25,7 @@ scale-info = { features = ["derive"], workspace = true }
 serde = { features = ["derive"], optional = true, workspace = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"pezsp-application-crypto/std",
@@ -42,4 +42,4 @@ serde = [
 	"pezsp-core/serde",
 	"pezsp-runtime/serde",
 ]
-runtime-benchmarks = [ "pezsp-runtime/runtime-benchmarks" ]
+runtime-benchmarks = ["pezsp-runtime/runtime-benchmarks"]

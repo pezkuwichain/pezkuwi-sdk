@@ -41,7 +41,7 @@ trybuild = { features = ["diff"], workspace = true }
 test-pezpallet = { workspace = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"frame-metadata/std",
@@ -90,4 +90,4 @@ frame-feature-testing = []
 frame-feature-testing-2 = []
 # Disable ui tests
 disable-ui-tests = []
-no-metadata-docs = [ "pezframe-support/no-metadata-docs" ]
+no-metadata-docs = ["pezframe-support/no-metadata-docs"]

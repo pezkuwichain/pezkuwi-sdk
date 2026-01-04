@@ -26,7 +26,7 @@ pezsp-core = { workspace = true }
 pezsp-runtime = { workspace = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"pezsp-core/std",
@@ -34,4 +34,4 @@ std = [
 	"scale-info/std",
 	"serde/std",
 ]
-runtime-benchmarks = [ "pezsp-runtime/runtime-benchmarks" ]
+runtime-benchmarks = ["pezsp-runtime/runtime-benchmarks"]

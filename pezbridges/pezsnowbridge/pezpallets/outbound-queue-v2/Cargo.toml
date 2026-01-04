@@ -53,7 +53,7 @@ pezpallet-message-queue = { workspace = true }
 pezsnowbridge-test-utils = { workspace = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"alloy-core/std",
 	"codec/std",

@@ -146,8 +146,8 @@ pezsp-tracing = { workspace = true }
 tempfile = { workspace = true }
 
 [features]
-default = [ "db", "full-node" ]
-db = [ "pezsc-service/rocksdb" ]
+default = ["db", "full-node"]
+db = ["pezsc-service/rocksdb"]
 full-node = [
 	"kvdb-rocksdb",
 	"parity-db",
@@ -301,7 +301,7 @@ fast-runtime = [
 	"zagros-runtime?/fast-runtime",
 ]
 
-malus = [ "full-node" ]
+malus = ["full-node"]
 runtime-metrics = [
 	"pezkuwi-runtime-teyrchains/runtime-metrics",
 	"pezkuwichain-runtime?/runtime-metrics",

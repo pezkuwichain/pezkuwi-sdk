@@ -48,7 +48,7 @@ pezsp-runtime = { workspace = true, features = ["std"] }
 pezsp-staking = { workspace = true, features = ["std"] }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"pezframe-benchmarking?/std",

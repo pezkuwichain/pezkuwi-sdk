@@ -30,7 +30,7 @@ pezpallet-example-tasks = { workspace = true }
 pezpallet-example-view-functions = { workspace = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"pezpallet-default-config-example/std",
 	"pezpallet-dev-mode/std",

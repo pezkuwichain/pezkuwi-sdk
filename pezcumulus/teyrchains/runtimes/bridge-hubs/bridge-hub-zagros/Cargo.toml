@@ -94,10 +94,10 @@ pezbp-messages = { workspace = true }
 pezbp-pezkuwi-core = { workspace = true }
 pezbp-pezkuwichain = { workspace = true }
 pezbp-relayers = { workspace = true }
+pezbp-runtime = { workspace = true }
 pezbp-teyrchains = { workspace = true }
 pezbp-xcm-bridge-hub-router = { workspace = true }
 pezbridge-hub-common = { workspace = true }
-pezbp-runtime = { workspace = true }
 pezbridge-runtime-common = { workspace = true }
 pezpallet-bridge-grandpa = { workspace = true }
 pezpallet-bridge-messages = { workspace = true }
@@ -238,7 +238,7 @@ std = [
 	"xcm/std",
 	"zagros-runtime-constants/std",
 ]
-default = [ "std" ]
+default = ["std"]
 
 runtime-benchmarks = [
 	"bizinikiwi-wasm-builder?/runtime-benchmarks",
@@ -377,11 +377,11 @@ try-runtime = [
 ]
 
 # Enable the metadata hash generation in the wasm builder.
-metadata-hash = [ "bizinikiwi-wasm-builder/metadata-hash" ]
+metadata-hash = ["bizinikiwi-wasm-builder/metadata-hash"]
 
 # A feature that should be enabled when the runtime should be built for on-chain
 # deployment. This will disable stuff that shouldn't be part of the on-chain wasm
 # to make it smaller, like logging for example.
-on-chain-release-build = [ "metadata-hash" ]
+on-chain-release-build = ["metadata-hash"]
 
 fast-runtime = []

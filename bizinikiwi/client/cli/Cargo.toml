@@ -63,8 +63,8 @@ pezsp-tracing = { workspace = true, default-features = true }
 tempfile = { workspace = true }
 
 [features]
-default = [ "rocksdb" ]
-rocksdb = [ "pezsc-client-db/rocksdb" ]
+default = ["rocksdb"]
+rocksdb = ["pezsc-client-db/rocksdb"]
 runtime-benchmarks = [
 	"pezsc-client-api/runtime-benchmarks",
 	"pezsc-client-db/runtime-benchmarks",

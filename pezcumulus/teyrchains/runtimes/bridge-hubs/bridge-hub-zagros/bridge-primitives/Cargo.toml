@@ -21,8 +21,8 @@ codec = { features = ["derive"], workspace = true }
 # Bridge Dependencies
 pezbp-bridge-hub-pezcumulus = { workspace = true }
 pezbp-messages = { workspace = true }
-pezbp-xcm-bridge-hub = { workspace = true }
 pezbp-runtime = { workspace = true }
+pezbp-xcm-bridge-hub = { workspace = true }
 
 # Bizinikiwi Based Dependencies
 pezframe-support = { workspace = true }
@@ -31,7 +31,7 @@ pezsp-runtime = { workspace = true }
 pezsp-std = { workspace = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"pezbp-bridge-hub-pezcumulus/std",

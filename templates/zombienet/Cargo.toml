@@ -13,8 +13,8 @@ documentation.workspace = true
 [dependencies]
 anyhow = { workspace = true }
 env_logger = { workspace = true }
-tokio = { workspace = true, features = ["rt-multi-thread"] }
 pezkuwi-zombienet-sdk = { workspace = true }
+tokio = { workspace = true, features = ["rt-multi-thread"] }
 
 [features]
 zombienet = []

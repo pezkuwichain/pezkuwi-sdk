@@ -18,10 +18,10 @@ targets = ["x86_64-unknown-linux-gnu"]
 
 [dependencies]
 codec = { workspace = true }
-pezframe = { workspace = true, features = ["runtime"] }
-pezframe-system = { workspace = true }
-pezframe-support = { workspace = true }
 log = { workspace = true }
+pezframe = { workspace = true, features = ["runtime"] }
+pezframe-support = { workspace = true }
+pezframe-system = { workspace = true }
 pezpallet-assets = { workspace = true }
 pezpallet-nfts = { workspace = true }
 scale-info = { features = ["derive"], workspace = true }
@@ -30,7 +30,7 @@ scale-info = { features = ["derive"], workspace = true }
 pezpallet-balances = { workspace = true, default-features = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"log/std",
@@ -43,18 +43,18 @@ std = [
 	"scale-info/std",
 ]
 runtime-benchmarks = [
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
 	"pezframe/runtime-benchmarks",
 	"pezpallet-assets/runtime-benchmarks",
 	"pezpallet-balances/runtime-benchmarks",
 	"pezpallet-nfts/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks"
 ]
 try-runtime = [
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
 	"pezframe/try-runtime",
 	"pezpallet-assets/try-runtime",
 	"pezpallet-balances/try-runtime",
 	"pezpallet-nfts/try-runtime",
-	"pezframe-support/try-runtime",
-	"pezframe-system/try-runtime"
 ]

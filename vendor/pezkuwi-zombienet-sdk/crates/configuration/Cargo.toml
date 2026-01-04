@@ -8,7 +8,7 @@ publish = true
 license.workspace = true
 repository.workspace = true
 description = "Pezkuwi Zombienet configuration builder for network testing"
-keywords = ["configuration", "sdk", "zombienet", "pezkuwi"]
+keywords = ["configuration", "pezkuwi", "sdk", "zombienet"]
 
 [dependencies]
 anyhow = { workspace = true }

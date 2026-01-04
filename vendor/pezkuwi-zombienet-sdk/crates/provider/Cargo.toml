@@ -8,7 +8,7 @@ publish = true
 license.workspace = true
 repository.workspace = true
 description = "Pezkuwi Zombienet provider - Node execution through native provider"
-keywords = ["native", "provider", "zombienet", "pezkuwi"]
+keywords = ["native", "pezkuwi", "provider", "zombienet"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

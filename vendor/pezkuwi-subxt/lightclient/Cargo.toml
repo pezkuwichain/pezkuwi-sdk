@@ -18,11 +18,11 @@ keywords = ["bizinikiwi", "blockchain", "parity"]
 workspace = true
 
 [features]
-default = [ "native" ]
+default = ["native"]
 
 # Enable this for native (ie non web/wasm builds).
 # Exactly 1 of "web" and "native" is expected.
-native = [ "smoldot-light/std", "tokio/rt" ]
+native = ["smoldot-light/std", "tokio/rt"]
 
 # Enable this for web/wasm builds.
 # Exactly 1 of "web" and "native" is expected.

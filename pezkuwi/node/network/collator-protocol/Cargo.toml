@@ -56,7 +56,7 @@ itertools = { workspace = true }
 
 [features]
 default = []
-experimental-collator-protocol = [ "async-trait", "tokio" ]
+experimental-collator-protocol = ["async-trait", "tokio"]
 runtime-benchmarks = [
 	"gum/runtime-benchmarks",
 	"pezkuwi-node-network-protocol/runtime-benchmarks",

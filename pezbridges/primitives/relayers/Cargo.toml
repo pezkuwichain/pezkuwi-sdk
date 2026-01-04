@@ -19,8 +19,8 @@ scale-info = { features = ["bit-vec", "derive"], workspace = true }
 # Bridge Dependencies
 pezbp-header-pez-chain = { workspace = true }
 pezbp-messages = { workspace = true }
-pezbp-teyrchains = { workspace = true }
 pezbp-runtime = { workspace = true }
+pezbp-teyrchains = { workspace = true }
 
 # Bizinikiwi Dependencies
 pezframe-support = { workspace = true }
@@ -33,7 +33,7 @@ pezsp-std = { workspace = true }
 hex-literal = { workspace = true, default-features = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"pezbp-header-pez-chain/std",

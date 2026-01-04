@@ -42,7 +42,7 @@ x25519-dalek = { optional = true, features = [
 ], workspace = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"aes-gcm",
 	"aes-gcm?/std",

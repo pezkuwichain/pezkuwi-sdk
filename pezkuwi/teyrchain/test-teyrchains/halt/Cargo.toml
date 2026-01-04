@@ -19,5 +19,5 @@ bizinikiwi-wasm-builder = { workspace = true, default-features = true }
 rustversion = { workspace = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = []

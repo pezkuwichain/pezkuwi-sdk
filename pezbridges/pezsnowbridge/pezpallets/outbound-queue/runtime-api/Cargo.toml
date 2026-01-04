@@ -29,7 +29,7 @@ pezsp-api = { workspace = true }
 pezsp-std = { workspace = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"pezframe-support/std",

@@ -28,7 +28,7 @@ pezpallet-session = { features = ["historical"], workspace = true }
 pezpallet-staking-async-rc-client = { workspace = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"log/std",

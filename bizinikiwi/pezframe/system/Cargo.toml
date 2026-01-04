@@ -41,7 +41,7 @@ pezsp-externalities = { workspace = true, default-features = true }
 pezsp-tracing = { workspace = true, default-features = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"log/std",
@@ -60,5 +60,5 @@ runtime-benchmarks = [
 	"pezsp-runtime/runtime-benchmarks",
 	"pezsp-version/runtime-benchmarks",
 ]
-try-runtime = [ "pezframe-support/try-runtime", "pezsp-runtime/try-runtime" ]
-experimental = [ "pezframe-support/experimental" ]
+try-runtime = ["pezframe-support/try-runtime", "pezsp-runtime/try-runtime"]
+experimental = ["pezframe-support/experimental"]

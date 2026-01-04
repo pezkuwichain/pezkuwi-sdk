@@ -20,12 +20,12 @@ targets = ["x86_64-unknown-linux-gnu"]
 codec = { workspace = true }
 docify = { workspace = true }
 pezframe = { workspace = true, features = ["runtime"] }
-pezframe-system = { workspace = true }
 pezframe-support = { workspace = true }
+pezframe-system = { workspace = true }
 scale-info = { workspace = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"pezframe-support/std",
@@ -34,7 +34,7 @@ std = [
 	"scale-info/std",
 ]
 runtime-benchmarks = [
-	"pezframe/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks"
+	"pezframe-system/runtime-benchmarks",
+	"pezframe/runtime-benchmarks",
 ]

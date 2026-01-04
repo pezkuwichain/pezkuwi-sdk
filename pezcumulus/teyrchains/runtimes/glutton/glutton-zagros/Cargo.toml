@@ -63,7 +63,7 @@ teyrchains-common = { workspace = true }
 bizinikiwi-wasm-builder = { workspace = true, default-features = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 runtime-benchmarks = [
 	"bizinikiwi-wasm-builder/runtime-benchmarks",
 	"pezcumulus-pezpallet-aura-ext/runtime-benchmarks",

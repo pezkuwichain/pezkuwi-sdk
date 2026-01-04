@@ -49,7 +49,7 @@ pezpallet-assets = { workspace = true, default-features = false, features = [
 ] } # <-- BU SATIRI EKLEYİN
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"log/std",

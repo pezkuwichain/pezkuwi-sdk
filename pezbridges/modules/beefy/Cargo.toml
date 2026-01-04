@@ -31,8 +31,8 @@ pezsp-runtime = { workspace = true }
 pezsp-std = { workspace = true }
 
 [dev-dependencies]
-pezbp-test-utils = { workspace = true, default-features = true }
 mmr-lib = { workspace = true, default-features = true }
+pezbp-test-utils = { workspace = true, default-features = true }
 pezpallet-beefy-mmr = { workspace = true, default-features = true }
 pezpallet-mmr = { workspace = true, default-features = true }
 pezsp-consensus-beefy = { workspace = true, default-features = true }
@@ -40,7 +40,7 @@ pezsp-io = { workspace = true, default-features = true }
 rand = { workspace = true, default-features = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"pezbp-beefy/std",

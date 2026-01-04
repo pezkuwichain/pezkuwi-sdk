@@ -31,7 +31,7 @@ xcm-executor = { workspace = true }
 [dev-dependencies]
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"pezframe-support/std",

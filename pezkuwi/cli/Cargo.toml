@@ -47,10 +47,10 @@ pezsp-runtime = { workspace = true, default-features = true }
 bizinikiwi-build-script-utils = { workspace = true, default-features = true }
 
 [features]
-default = [ "cli", "db", "full-node" ]
-db = [ "pezkuwi-service/db" ]
-metadata-hash = [ "pezkuwi-service/metadata-hash" ]
-service = [ "dep:pezkuwi-service" ]
+default = ["cli", "db", "full-node"]
+db = ["pezkuwi-service/db"]
+metadata-hash = ["pezkuwi-service/metadata-hash"]
+service = ["dep:pezkuwi-service"]
 cli = [
 	"clap",
 	"pezframe-benchmarking-cli",
@@ -71,16 +71,16 @@ runtime-benchmarks = [
 	"pezsp-keyring/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
-full-node = [ "pezkuwi-service/full-node" ]
-try-runtime = [ "pezkuwi-service?/try-runtime", "pezsp-runtime/try-runtime" ]
-fast-runtime = [ "pezkuwi-service/fast-runtime" ]
-pyroscope = [ "dep:pyroscope", "pyroscope_pprofrs" ]
+full-node = ["pezkuwi-service/full-node"]
+try-runtime = ["pezkuwi-service?/try-runtime", "pezsp-runtime/try-runtime"]
+fast-runtime = ["pezkuwi-service/fast-runtime"]
+pyroscope = ["dep:pyroscope", "pyroscope_pprofrs"]
 
 # Configure the native runtimes to use.
-zagros-native = [ "pezkuwi-service/zagros-native" ]
-pezkuwichain-native = [ "pezkuwi-service/pezkuwichain-native" ]
+zagros-native = ["pezkuwi-service/zagros-native"]
+pezkuwichain-native = ["pezkuwi-service/pezkuwichain-native"]
 
-malus = [ "full-node", "pezkuwi-service/malus" ]
+malus = ["full-node", "pezkuwi-service/malus"]
 runtime-metrics = [
 	"pezkuwi-node-metrics/runtime-metrics",
 	"pezkuwi-service/runtime-metrics",

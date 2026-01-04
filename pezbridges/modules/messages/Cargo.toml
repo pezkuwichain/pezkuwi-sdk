@@ -31,15 +31,15 @@ pezsp-std = { workspace = true }
 pezsp-trie = { optional = true, workspace = true }
 
 [dev-dependencies]
-pezbp-test-utils = { workspace = true }
 pezbp-runtime = { features = ["test-helpers"], workspace = true }
+pezbp-test-utils = { workspace = true }
 pezpallet-balances = { workspace = true }
 pezpallet-bridge-grandpa = { workspace = true }
 pezsp-core = { workspace = true }
 pezsp-io = { workspace = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"pezbp-header-pez-chain/std",
@@ -81,4 +81,4 @@ try-runtime = [
 	"pezpallet-bridge-grandpa/try-runtime",
 	"pezsp-runtime/try-runtime",
 ]
-test-helpers = [ "pezbp-runtime/test-helpers", "pezsp-trie" ]
+test-helpers = ["pezbp-runtime/test-helpers", "pezsp-trie"]

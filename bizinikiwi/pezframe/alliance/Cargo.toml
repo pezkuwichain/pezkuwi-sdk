@@ -42,7 +42,7 @@ pezpallet-collective = { workspace = true, default-features = true }
 pezsp-crypto-hashing = { workspace = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"log/std",

@@ -33,7 +33,7 @@ scale-info = { features = ["derive"], workspace = true }
 serde = { features = ["derive"], optional = true, workspace = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"pezsp-api/std",

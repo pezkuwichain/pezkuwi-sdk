@@ -39,7 +39,7 @@ pezkuwi-core-primitives = { workspace = true }
 pezkuwi-teyrchain-primitives = { workspace = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"bitvec/std",
 	"bounded-collections/std",

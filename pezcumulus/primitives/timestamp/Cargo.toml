@@ -21,7 +21,7 @@ pezsp-timestamp = { workspace = true }
 pezcumulus-primitives-core = { workspace = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"pezcumulus-primitives-core/std",
 	"pezsp-inherents/std",
