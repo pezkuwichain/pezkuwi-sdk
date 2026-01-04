@@ -49,3 +49,12 @@ runtime-benchmarks = [
 	"pezkuwi-sdk/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
+try-runtime = [
+	"pez-revive-dev-runtime/try-runtime",
+	"pezkuwi-sdk/try-runtime",
+	"pezsp-runtime/try-runtime",
+]
+serde = []
+experimental = []
+with-tracing = []
+tuples-96 = []

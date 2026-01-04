@@ -104,3 +104,29 @@ runtime-benchmarks = [
 	"xcm/runtime-benchmarks",
 ]
 fast-runtime = []
+try-runtime = [
+	"pezcumulus-pezpallet-teyrchain-system/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezpallet-balances/try-runtime",
+	"pezpallet-collator-selection/try-runtime",
+	"pezpallet-message-queue/try-runtime",
+	"pezpallet-session/try-runtime",
+	"pezpallet-timestamp/try-runtime",
+	"pezpallet-utility/try-runtime",
+	"pezpallet-xcm/try-runtime",
+	"pezsnowbridge-core/try-runtime",
+	"pezsnowbridge-pezpallet-ethereum-client/try-runtime",
+	"pezsnowbridge-pezpallet-outbound-queue/try-runtime",
+	"pezsnowbridge-pezpallet-system/try-runtime",
+	"pezsp-keyring/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"teyrchain-info/try-runtime",
+	"teyrchains-runtimes-test-utils/try-runtime",
+	"xcm-executor/try-runtime",
+	"xcm/try-runtime",
+]
+serde = []
+experimental = []
+with-tracing = []
+tuples-96 = []

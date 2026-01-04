@@ -56,3 +56,24 @@ runtime-benchmarks = [
 	"pezsp-keyring/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
+std = [
+	"bizinikiwi-test-runtime-client/std",
+	"log/std",
+	"pezsc-block-builder/std",
+	"pezsc-client-api/std",
+	"pezsc-consensus-grandpa/std",
+	"pezsc-rpc/std",
+	"pezsp-blockchain/std",
+]
+try-runtime = [
+	"bizinikiwi-test-runtime-client/try-runtime",
+	"pezsc-block-builder/try-runtime",
+	"pezsc-client-api/try-runtime",
+	"pezsc-consensus-grandpa/try-runtime",
+	"pezsc-rpc/try-runtime",
+	"pezsp-blockchain/try-runtime",
+	"pezsp-consensus-grandpa/try-runtime",
+	"pezsp-keyring/try-runtime",
+	"pezsp-runtime/try-runtime",
+]
+serde = []

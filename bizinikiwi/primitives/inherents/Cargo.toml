@@ -37,3 +37,7 @@ std = [
 	"thiserror",
 ]
 runtime-benchmarks = ["pezsp-runtime?/runtime-benchmarks"]
+try-runtime = [
+	"pezsp-runtime?/try-runtime",
+]
+serde = []

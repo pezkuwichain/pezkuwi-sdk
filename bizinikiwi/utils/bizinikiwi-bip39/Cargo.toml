@@ -30,3 +30,4 @@ std = [
 	"zeroize/alloc",
 	"zeroize/std",
 ]
+serde = []

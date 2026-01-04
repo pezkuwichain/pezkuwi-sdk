@@ -52,3 +52,21 @@ runtime-benchmarks = [
 	"pezsp-mixnet/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
+std = [
+	"codec/std",
+	"log/std",
+	"pezsc-client-api/std",
+	"pezsc-network-types/std",
+	"pezsc-network/std",
+	"pezsc-transaction-pool-api/std",
+	"pezsp-consensus/std",
+]
+try-runtime = [
+	"pezsc-client-api/try-runtime",
+	"pezsc-network/try-runtime",
+	"pezsc-transaction-pool-api/try-runtime",
+	"pezsp-api/try-runtime",
+	"pezsp-consensus/try-runtime",
+	"pezsp-runtime/try-runtime",
+]
+serde = []

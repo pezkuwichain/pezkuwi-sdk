@@ -53,3 +53,6 @@ try-runtime = [
 	"pezpallet-assets/try-runtime",
 	"pezpallet-balances/try-runtime",
 ]
+serde = []
+experimental = []
+tuples-96 = []

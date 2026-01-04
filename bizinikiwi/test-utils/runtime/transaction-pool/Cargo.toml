@@ -37,3 +37,18 @@ runtime-benchmarks = [
 	"pezsp-blockchain/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
+std = [
+	"bizinikiwi-test-runtime-client/std",
+	"log/std",
+	"pezsc-transaction-pool-api/std",
+	"pezsc-transaction-pool/std",
+	"pezsp-blockchain/std",
+]
+try-runtime = [
+	"bizinikiwi-test-runtime-client/try-runtime",
+	"pezsc-transaction-pool-api/try-runtime",
+	"pezsc-transaction-pool/try-runtime",
+	"pezsp-blockchain/try-runtime",
+	"pezsp-runtime/try-runtime",
+]
+serde = []

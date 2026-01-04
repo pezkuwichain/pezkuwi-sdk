@@ -68,7 +68,16 @@ runtime-benchmarks = [
 	"pezsp-runtime/runtime-benchmarks",
 ]
 try-runtime = [
+	"pezbp-header-pez-chain/try-runtime",
+	"pezbp-runtime/try-runtime",
+	"pezbp-test-utils?/try-runtime",
+	"pezframe-benchmarking?/try-runtime",
 	"pezframe-support/try-runtime",
 	"pezframe-system/try-runtime",
+	"pezsp-consensus-grandpa/try-runtime",
 	"pezsp-runtime/try-runtime",
 ]
+serde = []
+experimental = []
+with-tracing = []
+tuples-96 = []

@@ -47,3 +47,9 @@ runtime-benchmarks = [
 	"pezsp-npos-elections/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
+std = []
+try-runtime = [
+	"pezsp-npos-elections/try-runtime",
+	"pezsp-runtime/try-runtime",
+]
+serde = []

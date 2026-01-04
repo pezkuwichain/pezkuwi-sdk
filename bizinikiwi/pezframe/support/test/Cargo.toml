@@ -78,10 +78,14 @@ runtime-benchmarks = [
 	"test-pezpallet/runtime-benchmarks",
 ]
 try-runtime = [
+	"pezframe-benchmarking/try-runtime",
 	"pezframe-executive/try-runtime",
 	"pezframe-support/try-runtime",
 	"pezframe-system/try-runtime",
+	"pezsp-api/try-runtime",
 	"pezsp-runtime/try-runtime",
+	"pezsp-version/try-runtime",
+	"test-pezpallet/try-runtime",
 ]
 # WARNING:
 # Only CI runs with this feature enabled. This feature is for testing stuff related to the FRAME macros
@@ -91,3 +95,6 @@ frame-feature-testing-2 = []
 # Disable ui tests
 disable-ui-tests = []
 no-metadata-docs = ["pezframe-support/no-metadata-docs"]
+serde = []
+with-tracing = []
+tuples-96 = []

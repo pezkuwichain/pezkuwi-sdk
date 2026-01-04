@@ -68,6 +68,20 @@ subxt = ["dep:pezkuwi-subxt-core"]
 # The getrandom package is used via schnorrkel. We need to enable the JS
 # feature on it if compiling for the web.
 web = ["getrandom/js"]
+serde = [
+	"bip39/serde",
+	"codec/serde",
+	"hex/serde",
+	"pezsp-core/serde",
+	"schnorrkel?/serde",
+	"secp256k1?/serde",
+	"secrecy/serde",
+	"zeroize/serde",
+]
+runtime-benchmarks = [
+	"pezkuwi-subxt-core?/runtime-benchmarks",
+	"pezsp-keyring/runtime-benchmarks",
+]
 
 [dependencies]
 bip32 = { workspace = true, features = ["alloc", "secp256k1"], optional = true }

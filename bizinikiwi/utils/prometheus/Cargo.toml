@@ -41,3 +41,9 @@ tokio = { features = [
 	"macros",
 	"rt-multi-thread",
 ], workspace = true, default-features = true }
+
+[features]
+std = [
+	"log/std",
+]
+serde = []

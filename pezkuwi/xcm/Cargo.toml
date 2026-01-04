@@ -45,6 +45,7 @@ std = [
 	"scale-info/std",
 	"serde/std",
 	"tracing/std",
+	"xcm-pez-procedural/std",
 ]
 json-schema = [
 	"bounded-collections/json-schema",
@@ -57,3 +58,12 @@ runtime-benchmarks = [
 	"pezsp-runtime/runtime-benchmarks",
 	"xcm-pez-procedural/runtime-benchmarks",
 ]
+try-runtime = [
+	"pezframe-support/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"xcm-pez-procedural/try-runtime",
+]
+serde = []
+experimental = []
+with-tracing = []
+tuples-96 = []

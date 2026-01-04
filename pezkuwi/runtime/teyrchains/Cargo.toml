@@ -89,6 +89,7 @@ std = [
 	"pezframe-support/std",
 	"pezframe-system/std",
 	"pezkuwi-core-primitives/std",
+	"pezkuwi-primitives-test-helpers/std",
 	"pezkuwi-primitives/std",
 	"pezkuwi-runtime-metrics/std",
 	"pezkuwi-teyrchain-primitives/std",
@@ -102,6 +103,7 @@ std = [
 	"pezpallet-session/std",
 	"pezpallet-staking/std",
 	"pezpallet-timestamp/std",
+	"pezsc-keystore/std",
 	"pezsp-api/std",
 	"pezsp-application-crypto?/std",
 	"pezsp-arithmetic/std",
@@ -142,8 +144,10 @@ runtime-benchmarks = [
 	"pezpallet-session/runtime-benchmarks",
 	"pezpallet-staking/runtime-benchmarks",
 	"pezpallet-timestamp/runtime-benchmarks",
+	"pezsc-keystore/runtime-benchmarks",
 	"pezsp-api/runtime-benchmarks",
 	"pezsp-application-crypto",
+	"pezsp-application-crypto?/runtime-benchmarks",
 	"pezsp-inherents/runtime-benchmarks",
 	"pezsp-io/runtime-benchmarks",
 	"pezsp-keyring/runtime-benchmarks",
@@ -156,10 +160,15 @@ runtime-benchmarks = [
 	"xcm/runtime-benchmarks",
 ]
 try-runtime = [
+	"pezframe-benchmarking?/try-runtime",
 	"pezframe-election-provider-support?/try-runtime",
 	"pezframe-support-test/try-runtime",
 	"pezframe-support/try-runtime",
 	"pezframe-system/try-runtime",
+	"pezkuwi-core-primitives/try-runtime",
+	"pezkuwi-primitives-test-helpers/try-runtime",
+	"pezkuwi-primitives/try-runtime",
+	"pezkuwi-teyrchain-primitives/try-runtime",
 	"pezpallet-authority-discovery/try-runtime",
 	"pezpallet-authorship/try-runtime",
 	"pezpallet-babe/try-runtime",
@@ -170,9 +179,20 @@ try-runtime = [
 	"pezpallet-session/try-runtime",
 	"pezpallet-staking/try-runtime",
 	"pezpallet-timestamp/try-runtime",
+	"pezsp-api/try-runtime",
+	"pezsp-inherents/try-runtime",
+	"pezsp-keyring/try-runtime",
 	"pezsp-runtime/try-runtime",
+	"pezsp-session/try-runtime",
+	"pezsp-staking/try-runtime",
+	"xcm-executor/try-runtime",
+	"xcm/try-runtime",
 ]
 runtime-metrics = [
 	"pezkuwi-runtime-metrics/runtime-metrics",
 	"pezsp-tracing/with-tracing",
 ]
+serde = []
+experimental = []
+with-tracing = []
+tuples-96 = []

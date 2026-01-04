@@ -28,3 +28,8 @@ runtime-benchmarks = [
 	"pezpallet-nomination-pools/runtime-benchmarks",
 	"pezsp-api/runtime-benchmarks",
 ]
+try-runtime = [
+	"pezpallet-nomination-pools/try-runtime",
+	"pezsp-api/try-runtime",
+]
+serde = []

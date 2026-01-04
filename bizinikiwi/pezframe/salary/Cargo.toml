@@ -48,3 +48,6 @@ try-runtime = [
 	"pezframe/try-runtime",
 	"pezpallet-ranked-collective?/try-runtime",
 ]
+serde = []
+experimental = []
+tuples-96 = []

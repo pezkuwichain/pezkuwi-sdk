@@ -51,3 +51,11 @@ runtime-benchmarks = [
 	"pezkuwi-sdk/runtime-benchmarks",
 	"pezpallet-minimal-template/runtime-benchmarks",
 ]
+try-runtime = [
+	"pezkuwi-sdk/try-runtime",
+	"pezpallet-minimal-template/try-runtime",
+]
+serde = []
+experimental = []
+with-tracing = []
+tuples-96 = []

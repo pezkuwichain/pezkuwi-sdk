@@ -29,3 +29,10 @@ serde = { features = ["derive"], workspace = true, default-features = true }
 serde_json = { workspace = true, default-features = true }
 thiserror = { workspace = true }
 wasm-timer = { workspace = true }
+
+[features]
+std = [
+	"log/std",
+	"pezsc-utils/std",
+]
+serde = []

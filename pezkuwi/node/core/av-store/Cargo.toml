@@ -51,3 +51,14 @@ runtime-benchmarks = [
 	"pezsp-consensus/runtime-benchmarks",
 	"pezsp-keyring/runtime-benchmarks",
 ]
+std = [
+	"gum/std",
+	"pezkuwi-erasure-coding/std",
+	"pezkuwi-node-subsystem-util/std",
+	"pezkuwi-node-subsystem/std",
+	"pezkuwi-pez-node-primitives/std",
+	"pezsp-consensus/std",
+	"pezsp-tracing/std",
+]
+serde = []
+with-tracing = []

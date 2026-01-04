@@ -51,3 +51,14 @@ runtime-benchmarks = [
 	"xcm-builder/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
 ]
+try-runtime = [
+	"pezframe-support/try-runtime",
+	"pezkuwi-primitives/try-runtime",
+	"pezkuwi-runtime-common/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"xcm-builder/try-runtime",
+	"xcm/try-runtime",
+]
+serde = []
+experimental = []
+tuples-96 = []

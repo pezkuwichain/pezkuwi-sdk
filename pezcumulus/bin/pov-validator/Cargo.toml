@@ -34,3 +34,16 @@ runtime-benchmarks = [
 	"pezsc-executor/runtime-benchmarks",
 	"pezsp-io/runtime-benchmarks",
 ]
+std = [
+	"anyhow/std",
+	"codec/std",
+	"pezkuwi-pez-node-primitives/std",
+	"pezkuwi-primitives/std",
+	"pezkuwi-teyrchain-primitives/std",
+	"pezsc-executor/std",
+	"pezsp-core/std",
+	"pezsp-io/std",
+	"tracing/std",
+]
+serde = []
+with-tracing = []

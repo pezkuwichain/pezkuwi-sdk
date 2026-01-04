@@ -48,3 +48,24 @@ runtime-benchmarks = [
 	"pezsp-mmr-primitives/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
+std = [
+	"log/std",
+	"pezsc-block-builder/std",
+	"pezsc-client-api/std",
+	"pezsc-offchain/std",
+	"pezsp-blockchain/std",
+	"pezsp-consensus/std",
+]
+try-runtime = [
+	"pezsc-block-builder/try-runtime",
+	"pezsc-client-api/try-runtime",
+	"pezsc-offchain/try-runtime",
+	"pezsp-api/try-runtime",
+	"pezsp-blockchain/try-runtime",
+	"pezsp-consensus-beefy/try-runtime",
+	"pezsp-consensus/try-runtime",
+	"pezsp-mmr-primitives/try-runtime",
+	"pezsp-runtime/try-runtime",
+]
+serde = []
+with-tracing = []

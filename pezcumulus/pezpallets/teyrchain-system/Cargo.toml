@@ -83,12 +83,14 @@ std = [
 	"pezcumulus-primitives-core/std",
 	"pezcumulus-primitives-proof-size-hostfunction/std",
 	"pezcumulus-primitives-teyrchain-inherent/std",
+	"pezcumulus-test-client/std",
 	"pezframe-benchmarking/std",
 	"pezframe-support/std",
 	"pezframe-system/std",
 	"pezkuwi-runtime-teyrchains/std",
 	"pezkuwi-teyrchain-primitives/std",
 	"pezpallet-message-queue/std",
+	"pezsc-consensus/std",
 	"pezsp-consensus-babe/std",
 	"pezsp-core/std",
 	"pezsp-externalities/std",
@@ -133,9 +135,26 @@ runtime-benchmarks = [
 ]
 
 try-runtime = [
+	"pezcumulus-primitives-core/try-runtime",
+	"pezcumulus-test-client/try-runtime",
+	"pezcumulus-test-relay-sproof-builder/try-runtime",
+	"pezframe-benchmarking?/try-runtime",
 	"pezframe-support/try-runtime",
 	"pezframe-system/try-runtime",
 	"pezkuwi-runtime-teyrchains/try-runtime",
+	"pezkuwi-teyrchain-primitives/try-runtime",
 	"pezpallet-message-queue/try-runtime",
+	"pezsc-consensus/try-runtime",
+	"pezsp-api/try-runtime",
+	"pezsp-consensus-babe/try-runtime",
+	"pezsp-inherents/try-runtime",
+	"pezsp-keyring/try-runtime",
 	"pezsp-runtime/try-runtime",
+	"pezsp-version/try-runtime",
+	"xcm-builder/try-runtime",
+	"xcm/try-runtime",
 ]
+serde = []
+experimental = []
+with-tracing = []
+tuples-96 = []

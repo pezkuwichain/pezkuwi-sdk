@@ -56,6 +56,7 @@ std = [
 	"pezsnowbridge-core/std",
 	"pezsnowbridge-outbound-queue-primitives/std",
 	"pezsnowbridge-pezpallet-system/std",
+	"pezsnowbridge-test-utils/std",
 	"pezsp-core/std",
 	"pezsp-io/std",
 	"pezsp-runtime/std",
@@ -81,9 +82,20 @@ runtime-benchmarks = [
 	"xcm/runtime-benchmarks",
 ]
 try-runtime = [
+	"pezframe-benchmarking?/try-runtime",
 	"pezframe-support/try-runtime",
 	"pezframe-system/try-runtime",
 	"pezpallet-balances/try-runtime",
+	"pezsnowbridge-core/try-runtime",
+	"pezsnowbridge-outbound-queue-primitives/try-runtime",
 	"pezsnowbridge-pezpallet-system/try-runtime",
+	"pezsnowbridge-test-utils/try-runtime",
+	"pezsp-keyring/try-runtime",
 	"pezsp-runtime/try-runtime",
+	"xcm-executor/try-runtime",
+	"xcm/try-runtime",
 ]
+serde = []
+experimental = []
+with-tracing = []
+tuples-96 = []

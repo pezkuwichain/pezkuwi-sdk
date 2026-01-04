@@ -71,6 +71,39 @@ unstable-light-client = [
 
 # Activate this to expose the ability to generate metadata from Wasm runtime files.
 runtime-wasm-path = ["pezkuwi-subxt-macro/runtime-wasm-path"]
+std = [
+	"bitvec/std",
+	"codec/std",
+	"either/std",
+	"frame-metadata/std",
+	"hex/std",
+	"pezkuwi-subxt-lightclient?/std",
+	"pezkuwi-subxt-macro/std",
+	"pezkuwi-subxt-metadata/std",
+	"pezkuwi-subxt-rpcs/std",
+	"pezsp-core/std",
+	"pezsp-crypto-hashing/std",
+	"pezsp-keyring/std",
+	"pezsp-runtime/std",
+	"primitive-types/std",
+	"scale-info/std",
+	"serde/std",
+	"serde_json/std",
+	"tracing/std",
+]
+try-runtime = [
+	"pezsp-keyring/try-runtime",
+	"pezsp-runtime/try-runtime",
+]
+serde = []
+runtime-benchmarks = [
+	"pezkuwi-subxt-core/runtime-benchmarks",
+	"pezkuwi-subxt-macro/runtime-benchmarks",
+	"pezkuwi-subxt-rpcs/runtime-benchmarks",
+	"pezkuwi-subxt-signer/runtime-benchmarks",
+	"pezsp-keyring/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+]
 
 [dependencies]
 async-trait = { workspace = true }

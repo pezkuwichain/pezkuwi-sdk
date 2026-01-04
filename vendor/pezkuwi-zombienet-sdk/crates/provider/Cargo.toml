@@ -45,3 +45,15 @@ uuid = { workspace = true, features = ["v4"] }
 # Zomebienet deps
 configuration = { workspace = true }
 support = { workspace = true }
+
+[features]
+std = [
+	"anyhow/std",
+	"configuration/std",
+	"hex/std",
+	"serde/std",
+	"sha2/std",
+	"support/std",
+	"tracing/std",
+]
+serde = []

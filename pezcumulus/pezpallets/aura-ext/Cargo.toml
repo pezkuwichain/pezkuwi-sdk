@@ -61,11 +61,16 @@ std = [
 ]
 try-runtime = [
 	"pezcumulus-pezpallet-teyrchain-system/try-runtime",
+	"pezcumulus-primitives-core/try-runtime",
+	"pezcumulus-test-relay-sproof-builder/try-runtime",
 	"pezframe-support/try-runtime",
 	"pezframe-system/try-runtime",
 	"pezpallet-aura/try-runtime",
 	"pezpallet-timestamp/try-runtime",
+	"pezsp-consensus-aura/try-runtime",
+	"pezsp-keyring/try-runtime",
 	"pezsp-runtime/try-runtime",
+	"pezsp-version/try-runtime",
 ]
 runtime-benchmarks = [
 	"pezcumulus-pezpallet-teyrchain-system/runtime-benchmarks",
@@ -76,6 +81,7 @@ runtime-benchmarks = [
 	"pezframe-system/runtime-benchmarks",
 	"pezpallet-aura/runtime-benchmarks",
 	"pezpallet-timestamp/runtime-benchmarks",
+	"pezsp-application-crypto/runtime-benchmarks",
 	"pezsp-consensus-aura/runtime-benchmarks",
 	"pezsp-io/runtime-benchmarks",
 	"pezsp-keyring/runtime-benchmarks",
@@ -84,3 +90,7 @@ runtime-benchmarks = [
 	"pezsp-trie/runtime-benchmarks",
 	"pezsp-version/runtime-benchmarks",
 ]
+serde = []
+experimental = []
+with-tracing = []
+tuples-96 = []

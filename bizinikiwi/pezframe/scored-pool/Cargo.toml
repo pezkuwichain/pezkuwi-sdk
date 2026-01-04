@@ -51,3 +51,7 @@ runtime-benchmarks = [
 	"pezsp-io/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
+serde = []
+experimental = []
+with-tracing = []
+tuples-96 = []

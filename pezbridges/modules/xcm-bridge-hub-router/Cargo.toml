@@ -65,8 +65,16 @@ runtime-benchmarks = [
 	"xcm/runtime-benchmarks",
 ]
 try-runtime = [
+	"pezbp-xcm-bridge-hub-router/try-runtime",
+	"pezframe-benchmarking?/try-runtime",
 	"pezframe-support/try-runtime",
 	"pezframe-system/try-runtime",
 	"pezkuwi-runtime-teyrchains/try-runtime",
 	"pezsp-runtime/try-runtime",
+	"xcm-builder/try-runtime",
+	"xcm/try-runtime",
 ]
+serde = []
+experimental = []
+with-tracing = []
+tuples-96 = []

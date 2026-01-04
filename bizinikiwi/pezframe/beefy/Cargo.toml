@@ -51,6 +51,7 @@ std = [
 	"pezpallet-balances/std",
 	"pezpallet-offences/std",
 	"pezpallet-session/std",
+	"pezpallet-staking-reward-curve/std",
 	"pezpallet-staking/std",
 	"pezpallet-timestamp/std",
 	"pezsp-consensus-beefy/std",
@@ -71,9 +72,13 @@ try-runtime = [
 	"pezpallet-balances/try-runtime",
 	"pezpallet-offences/try-runtime",
 	"pezpallet-session/try-runtime",
+	"pezpallet-staking-reward-curve/try-runtime",
 	"pezpallet-staking/try-runtime",
 	"pezpallet-timestamp/try-runtime",
+	"pezsp-consensus-beefy/try-runtime",
 	"pezsp-runtime/try-runtime",
+	"pezsp-session/try-runtime",
+	"pezsp-staking/try-runtime",
 ]
 runtime-benchmarks = [
 	"pezframe-election-provider-support/runtime-benchmarks",
@@ -93,3 +98,16 @@ runtime-benchmarks = [
 	"pezsp-staking/runtime-benchmarks",
 	"pezsp-state-machine/runtime-benchmarks",
 ]
+serde = [
+	"codec/serde",
+	"dep:serde",
+	"log/serde",
+	"pezsp-consensus-beefy/serde",
+	"pezsp-core/serde",
+	"pezsp-runtime/serde",
+	"pezsp-staking/serde",
+	"scale-info/serde",
+]
+experimental = []
+with-tracing = []
+tuples-96 = []

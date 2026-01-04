@@ -46,3 +46,28 @@ runtime-benchmarks = [
 	"zagros-runtime-constants/runtime-benchmarks",
 	"zagros-runtime/runtime-benchmarks",
 ]
+std = [
+	"emulated-integration-tests-common/std",
+	"pezkuwi-primitives/std",
+	"pezpallet-staking/std",
+	"pezsc-consensus-grandpa/std",
+	"pezsp-authority-discovery/std",
+	"pezsp-consensus-babe/std",
+	"pezsp-core/std",
+	"pezsp-runtime/std",
+	"zagros-runtime-constants/std",
+]
+try-runtime = [
+	"emulated-integration-tests-common/try-runtime",
+	"pezkuwi-primitives/try-runtime",
+	"pezpallet-staking/try-runtime",
+	"pezsc-consensus-grandpa/try-runtime",
+	"pezsp-authority-discovery/try-runtime",
+	"pezsp-consensus-babe/try-runtime",
+	"pezsp-consensus-beefy/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"teyrchains-common/try-runtime",
+	"zagros-runtime-constants/try-runtime",
+	"zagros-runtime/try-runtime",
+]
+serde = []

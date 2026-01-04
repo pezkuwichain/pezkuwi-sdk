@@ -82,3 +82,34 @@ runtime-benchmarks = [
 	"relay-utils/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
 ]
+std = [
+	"pez-finality-relay/std",
+	"pezsc-chain-spec/std",
+	"pezsc-rpc-api/std",
+	"pezsc-transaction-pool-api/std",
+	"pezsp-rpc/std",
+	"relay-utils/std",
+	"serde_json/std",
+	"tracing/std",
+]
+try-runtime = [
+	"pezbp-header-pez-chain/try-runtime",
+	"pezbp-messages/try-runtime",
+	"pezbp-pezkuwi-core/try-runtime",
+	"pezbp-runtime/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezpallet-transaction-payment-rpc-runtime-api/try-runtime",
+	"pezpallet-transaction-payment/try-runtime",
+	"pezpallet-utility/try-runtime",
+	"pezsc-chain-spec/try-runtime",
+	"pezsc-rpc-api/try-runtime",
+	"pezsc-transaction-pool-api/try-runtime",
+	"pezsp-consensus-grandpa/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"pezsp-version/try-runtime",
+	"relay-utils/try-runtime",
+	"xcm/try-runtime",
+]
+serde = []
+experimental = []
+tuples-96 = []

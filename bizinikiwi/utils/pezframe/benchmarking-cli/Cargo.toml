@@ -101,6 +101,8 @@ runtime-benchmarks = [
 	"pezframe-support/runtime-benchmarks",
 	"pezframe-system/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
+	"pezkuwi-subxt-signer/runtime-benchmarks",
+	"pezkuwi-subxt/runtime-benchmarks",
 	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
 	"pezsc-block-builder/runtime-benchmarks",
 	"pezsc-chain-spec/runtime-benchmarks",
@@ -128,3 +130,49 @@ runtime-benchmarks = [
 	# "zagros-runtime/runtime-benchmarks",  # Not a dependency of this crate
 ]
 rocksdb = ["pezsc-cli/rocksdb", "pezsc-client-db/rocksdb"]
+std = [
+	"log/std",
+	"pezcumulus-client-teyrchain-inherent/std",
+	"pezkuwi-subxt/std",
+	"pezsc-block-builder/std",
+	"pezsc-chain-spec/std",
+	"pezsc-cli/std",
+	"pezsc-client-api/std",
+	"pezsc-client-db/std",
+	"pezsc-executor-common/std",
+	"pezsc-executor-wasmtime/std",
+	"pezsc-runtime-utilities/std",
+	"pezsc-service/std",
+	"pezsc-sysinfo/std",
+	"pezsp-blockchain/std",
+]
+try-runtime = [
+	"pezcumulus-client-teyrchain-inherent/try-runtime",
+	"pezframe-benchmarking/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezkuwi-primitives/try-runtime",
+	"pezkuwi-subxt/try-runtime",
+	"pezkuwi-teyrchain-primitives/try-runtime",
+	"pezsc-block-builder/try-runtime",
+	"pezsc-chain-spec/try-runtime",
+	"pezsc-cli/try-runtime",
+	"pezsc-client-api/try-runtime",
+	"pezsc-client-db/try-runtime",
+	"pezsc-executor/try-runtime",
+	"pezsc-service/try-runtime",
+	"pezsc-sysinfo/try-runtime",
+	"pezsp-api/try-runtime",
+	"pezsp-block-builder/try-runtime",
+	"pezsp-blockchain/try-runtime",
+	"pezsp-genesis-builder/try-runtime",
+	"pezsp-inherents/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"pezsp-timestamp/try-runtime",
+	"pezsp-transaction-pool/try-runtime",
+	"pezsp-version/try-runtime",
+]
+serde = []
+experimental = []
+with-tracing = []
+tuples-96 = []

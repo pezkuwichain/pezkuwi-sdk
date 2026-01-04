@@ -39,3 +39,10 @@ tower-http = { workspace = true, features = ["cors"] }
 
 [features]
 runtime-benchmarks = ["pezsc-rpc-api/runtime-benchmarks"]
+std = [
+	"log/std",
+	"pezsc-rpc-api/std",
+	"prometheus-endpoint/std",
+	"serde/std",
+]
+serde = []

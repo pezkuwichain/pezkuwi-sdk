@@ -14,6 +14,14 @@ description = "Generate an API for interacting with a Pezkuwi/Bizinikiwi node fr
 [features]
 default = []
 web = ["getrandom/js"]
+std = [
+	"codec/std",
+	"frame-metadata?/std",
+	"getrandom?/std",
+	"pezkuwi-subxt-metadata/std",
+	"scale-info/std",
+]
+serde = []
 
 [dependencies]
 codec = { package = "parity-scale-codec", workspace = true, features = ["derive"] }

@@ -41,3 +41,4 @@ runtime-benchmarks = [
 	"pezsp-inherents/runtime-benchmarks",
 	"pezsp-trie/runtime-benchmarks",
 ]
+serde = []

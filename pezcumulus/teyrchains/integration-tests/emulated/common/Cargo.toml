@@ -96,3 +96,46 @@ runtime-benchmarks = [
 	"xcm-runtime-pezapis/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
 ]
+std = [
+	"codec/std",
+	"pezsc-consensus-grandpa/std",
+	"xcm-pez-emulator/std",
+	"xcm-pez-simulator/std",
+]
+try-runtime = [
+	"asset-test-pezutils/try-runtime",
+	"pezbp-messages/try-runtime",
+	"pezbp-xcm-bridge-hub/try-runtime",
+	"pezcumulus-pezpallet-teyrchain-system/try-runtime",
+	"pezcumulus-pezpallet-xcmp-queue/try-runtime",
+	"pezcumulus-primitives-core/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezkuwi-primitives/try-runtime",
+	"pezkuwi-runtime-teyrchains/try-runtime",
+	"pezkuwi-teyrchain-primitives/try-runtime",
+	"pezpallet-asset-conversion/try-runtime",
+	"pezpallet-assets/try-runtime",
+	"pezpallet-balances/try-runtime",
+	"pezpallet-bridge-messages/try-runtime",
+	"pezpallet-message-queue/try-runtime",
+	"pezpallet-whitelist/try-runtime",
+	"pezpallet-xcm-bridge-hub/try-runtime",
+	"pezpallet-xcm/try-runtime",
+	"pezsc-consensus-grandpa/try-runtime",
+	"pezsp-authority-discovery/try-runtime",
+	"pezsp-consensus-babe/try-runtime",
+	"pezsp-consensus-beefy/try-runtime",
+	"pezsp-keyring/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"teyrchains-common/try-runtime",
+	"xcm-builder/try-runtime",
+	"xcm-executor/try-runtime",
+	"xcm-pez-emulator/try-runtime",
+	"xcm-pez-simulator/try-runtime",
+	"xcm-runtime-pezapis/try-runtime",
+	"xcm/try-runtime",
+]
+serde = []
+experimental = []
+tuples-96 = []

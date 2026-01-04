@@ -16,3 +16,6 @@ workspace = true
 [dependencies]
 thiserror = { workspace = true }
 zstd = { workspace = true }
+
+[features]
+experimental = []

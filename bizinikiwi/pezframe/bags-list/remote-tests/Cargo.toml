@@ -46,3 +46,19 @@ runtime-benchmarks = [
 	"pezsp-runtime/runtime-benchmarks",
 	"remote-externalities/runtime-benchmarks",
 ]
+std = [
+	"log/std",
+	"remote-externalities/std",
+]
+try-runtime = [
+	"pezframe-election-provider-support/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezpallet-bags-list/try-runtime",
+	"pezpallet-staking/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"remote-externalities/try-runtime",
+]
+serde = []
+experimental = []
+tuples-96 = []

@@ -51,6 +51,22 @@ web = [
 	"jsonrpsee?/wasm-client",
 	"pezkuwi-subxt-lightclient?/web",
 ]
+std = [
+	"codec/std",
+	"frame-metadata/std",
+	"getrandom?/std",
+	"hex/std",
+	"impl-serde/std",
+	"pezkuwi-subxt-lightclient?/std",
+	"primitive-types/std",
+	"serde/std",
+	"serde_json/std",
+	"tracing/std",
+]
+serde = []
+runtime-benchmarks = [
+	"pezkuwi-subxt-core?/runtime-benchmarks",
+]
 
 [dependencies]
 codec = { workspace = true }

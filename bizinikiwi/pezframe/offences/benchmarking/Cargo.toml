@@ -56,6 +56,7 @@ std = [
 	"pezpallet-im-online/std",
 	"pezpallet-offences/std",
 	"pezpallet-session/std",
+	"pezpallet-staking-reward-curve/std",
 	"pezpallet-staking/std",
 	"pezpallet-timestamp/std",
 	"pezsp-core/std",
@@ -82,3 +83,24 @@ runtime-benchmarks = [
 	"pezsp-runtime/runtime-benchmarks",
 	"pezsp-staking/runtime-benchmarks",
 ]
+try-runtime = [
+	"pezframe-benchmarking/try-runtime",
+	"pezframe-election-provider-support/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezpallet-babe/try-runtime",
+	"pezpallet-balances/try-runtime",
+	"pezpallet-grandpa/try-runtime",
+	"pezpallet-im-online/try-runtime",
+	"pezpallet-offences/try-runtime",
+	"pezpallet-session/try-runtime",
+	"pezpallet-staking-reward-curve/try-runtime",
+	"pezpallet-staking/try-runtime",
+	"pezpallet-timestamp/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"pezsp-staking/try-runtime",
+]
+serde = []
+experimental = []
+with-tracing = []
+tuples-96 = []

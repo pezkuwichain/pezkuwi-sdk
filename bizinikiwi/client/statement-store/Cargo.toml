@@ -44,9 +44,29 @@ required-features = []
 [features]
 runtime-benchmarks = [
 	"pezsc-client-api/runtime-benchmarks",
+	"pezsc-keystore/runtime-benchmarks",
 	"pezsc-network-statement/runtime-benchmarks",
 	"pezsp-api/runtime-benchmarks",
 	"pezsp-blockchain/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 	"pezsp-statement-store/runtime-benchmarks",
 ]
+std = [
+	"log/std",
+	"pezsc-client-api/std",
+	"pezsc-keystore/std",
+	"pezsc-network-statement/std",
+	"pezsp-blockchain/std",
+	"pezsp-tracing/std",
+	"prometheus-endpoint/std",
+]
+try-runtime = [
+	"pezsc-client-api/try-runtime",
+	"pezsc-network-statement/try-runtime",
+	"pezsp-api/try-runtime",
+	"pezsp-blockchain/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"pezsp-statement-store/try-runtime",
+]
+serde = []
+with-tracing = []

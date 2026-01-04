@@ -48,3 +48,11 @@ runtime-benchmarks = [
 	"pezsp-consensus-babe/runtime-benchmarks",
 	"pezsp-keyring/runtime-benchmarks",
 ]
+std = [
+	"gum/std",
+	"pezkuwi-node-metrics/std",
+	"pezkuwi-node-subsystem-types/std",
+	"pezkuwi-node-subsystem/std",
+	"pezkuwi-pez-node-primitives/std",
+]
+serde = []

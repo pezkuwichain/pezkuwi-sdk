@@ -44,3 +44,22 @@ runtime-benchmarks = [
 	"xcm-executor/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
 ]
+std = [
+	"scale-info/std",
+]
+try-runtime = [
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezkuwi-core-primitives/try-runtime",
+	"pezkuwi-primitives/try-runtime",
+	"pezkuwi-runtime-teyrchains/try-runtime",
+	"pezkuwi-teyrchain-primitives/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"xcm-builder/try-runtime",
+	"xcm-executor/try-runtime",
+	"xcm/try-runtime",
+]
+serde = []
+experimental = []
+with-tracing = []
+tuples-96 = []

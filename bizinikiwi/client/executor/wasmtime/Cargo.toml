@@ -71,3 +71,13 @@ runtime-benchmarks = [
 	"pezsp-io/runtime-benchmarks",
 	"pezsp-runtime-interface/runtime-benchmarks",
 ]
+std = [
+	"anyhow/std",
+	"log/std",
+	"pezsc-allocator/std",
+	"pezsc-executor-common/std",
+	"rustix/std",
+	"wasmtime/std",
+]
+serde = []
+with-tracing = []

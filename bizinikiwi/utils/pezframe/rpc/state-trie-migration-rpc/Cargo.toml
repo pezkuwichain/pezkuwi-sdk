@@ -44,3 +44,14 @@ runtime-benchmarks = [
 	"pezsp-state-machine/runtime-benchmarks",
 	"pezsp-trie/runtime-benchmarks",
 ]
+std = [
+	"codec/std",
+	"pezsc-client-api/std",
+	"pezsc-rpc-api/std",
+]
+try-runtime = [
+	"pezsc-client-api/try-runtime",
+	"pezsc-rpc-api/try-runtime",
+	"pezsp-runtime/try-runtime",
+]
+serde = []

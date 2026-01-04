@@ -59,3 +59,16 @@ runtime-benchmarks = [
 	"testnet-teyrchains-constants/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
 ]
+try-runtime = [
+	"pezbp-bridge-hub-pezcumulus/try-runtime",
+	"pezbp-messages/try-runtime",
+	"pezbp-runtime/try-runtime",
+	"pezbp-xcm-bridge-hub-router/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezsp-api/try-runtime",
+	"testnet-teyrchains-constants/try-runtime",
+	"xcm/try-runtime",
+]
+serde = []
+experimental = []
+tuples-96 = []

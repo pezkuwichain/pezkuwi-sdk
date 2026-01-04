@@ -77,3 +77,31 @@ runtime-benchmarks = [
 	"pezsp-offchain/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
+std = [
+	"bizinikiwi-test-runtime-client/std",
+	"pezsc-block-builder/std",
+	"pezsc-client-api/std",
+	"pezsc-client-db/std",
+	"pezsc-network-types/std",
+	"pezsc-network/std",
+	"pezsc-transaction-pool-api/std",
+	"pezsc-transaction-pool/std",
+	"pezsc-utils/std",
+	"pezsp-consensus/std",
+	"rustls/std",
+]
+try-runtime = [
+	"bizinikiwi-test-runtime-client/try-runtime",
+	"pezsc-block-builder/try-runtime",
+	"pezsc-client-api/try-runtime",
+	"pezsc-client-db/try-runtime",
+	"pezsc-network/try-runtime",
+	"pezsc-transaction-pool-api/try-runtime",
+	"pezsc-transaction-pool/try-runtime",
+	"pezsp-api/try-runtime",
+	"pezsp-consensus/try-runtime",
+	"pezsp-offchain/try-runtime",
+	"pezsp-runtime/try-runtime",
+]
+serde = []
+with-tracing = []

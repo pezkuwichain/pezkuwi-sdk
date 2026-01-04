@@ -34,6 +34,7 @@ scale-info = { workspace = true }
 default = ["std"]
 std = [
 	"codec/std",
+	"pez-ethereum-standards/std",
 	"pezframe-support/std",
 	"pezframe-system/std",
 	"pezpallet-assets/std",
@@ -61,3 +62,7 @@ try-runtime = [
 	"pezpallet-revive/try-runtime",
 	"pezsp-runtime/try-runtime",
 ]
+serde = []
+experimental = []
+with-tracing = []
+tuples-96 = []

@@ -31,3 +31,18 @@ k8s-openapi = { workspace = true, features = ["v1_28"] }
 kube = { workspace = true, features = ["runtime", "ws"] }
 serde_json = { workspace = true, default-features = true }
 tracing-subscriber = { workspace = true }
+
+[features]
+std = [
+	"configuration/std",
+	"orchestrator/std",
+	"pezkuwi-subxt/std",
+	"provider/std",
+	"support/std",
+]
+serde = []
+runtime-benchmarks = [
+	"orchestrator/runtime-benchmarks",
+	"pezkuwi-subxt-signer/runtime-benchmarks",
+	"pezkuwi-subxt/runtime-benchmarks",
+]

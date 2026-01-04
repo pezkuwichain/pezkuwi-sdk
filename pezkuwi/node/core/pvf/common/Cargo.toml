@@ -62,3 +62,12 @@ runtime-benchmarks = [
 	"pezsc-executor/runtime-benchmarks",
 	"pezsp-io/runtime-benchmarks",
 ]
+std = [
+	"codec/std",
+	"gum/std",
+	"pezkuwi-pez-node-primitives/std",
+	"pezsc-executor-common/std",
+	"pezsc-executor-wasmtime/std",
+]
+serde = []
+with-tracing = []

@@ -36,3 +36,12 @@ runtime-benchmarks = [
 	"pezsc-rpc-api/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
+std = [
+	"log/std",
+	"pezsc-rpc-api/std",
+]
+try-runtime = [
+	"pezsc-rpc-api/try-runtime",
+	"pezsp-runtime/try-runtime",
+]
+serde = []

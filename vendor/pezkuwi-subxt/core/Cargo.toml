@@ -25,6 +25,7 @@ std = [
 	"hex/std",
 	"impl-serde/std",
 	"keccak-hash/std",
+	"pezkuwi-subxt-macro/std",
 	"pezkuwi-subxt-metadata/std",
 	"pezkuwi-subxt-signer/std",
 	"pezsp-core/std",
@@ -35,6 +36,12 @@ std = [
 	"serde/std",
 	"serde_json/std",
 	"tracing/std",
+]
+serde = []
+runtime-benchmarks = [
+	"pezkuwi-subxt-macro/runtime-benchmarks",
+	"pezkuwi-subxt-signer/runtime-benchmarks",
+	"pezsp-keyring/runtime-benchmarks",
 ]
 
 [dependencies]

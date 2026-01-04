@@ -23,6 +23,23 @@ runtime-wasm-path = [
 	"pezsp-state-machine",
 ]
 runtime-metadata-insecure-url = ["pezkuwi-subxt-utils-fetchmetadata/url"]
+std = [
+	"codec/std",
+	"pezkuwi-subxt-codegen/std",
+	"pezkuwi-subxt-metadata/std",
+	"pezkuwi-subxt-utils-fetchmetadata/std",
+	"pezsc-executor-common?/std",
+	"pezsc-executor?/std",
+	"pezsp-io?/std",
+	"pezsp-state-machine?/std",
+]
+serde = []
+with-tracing = []
+runtime-benchmarks = [
+	"pezsc-executor?/runtime-benchmarks",
+	"pezsp-io?/runtime-benchmarks",
+	"pezsp-state-machine?/runtime-benchmarks",
+]
 
 [lib]
 proc-macro = true

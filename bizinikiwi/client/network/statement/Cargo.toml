@@ -43,3 +43,21 @@ runtime-benchmarks = [
 	"pezsp-runtime/runtime-benchmarks",
 	"pezsp-statement-store/runtime-benchmarks",
 ]
+std = [
+	"log/std",
+	"pezsc-network-common/std",
+	"pezsc-network-sync/std",
+	"pezsc-network-types/std",
+	"pezsc-network/std",
+	"pezsp-consensus/std",
+	"prometheus-endpoint/std",
+]
+try-runtime = [
+	"pezsc-network-common/try-runtime",
+	"pezsc-network-sync/try-runtime",
+	"pezsc-network/try-runtime",
+	"pezsp-consensus/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"pezsp-statement-store/try-runtime",
+]
+serde = []

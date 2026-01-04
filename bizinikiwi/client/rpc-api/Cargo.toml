@@ -43,3 +43,18 @@ runtime-benchmarks = [
 	"pezsp-runtime/runtime-benchmarks",
 	"pezsp-version/runtime-benchmarks",
 ]
+std = [
+	"pezsc-chain-spec/std",
+	"pezsc-mixnet/std",
+	"pezsc-transaction-pool-api/std",
+	"pezsp-rpc/std",
+	"scale-info/std",
+]
+try-runtime = [
+	"pezsc-chain-spec/try-runtime",
+	"pezsc-mixnet/try-runtime",
+	"pezsc-transaction-pool-api/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"pezsp-version/try-runtime",
+]
+serde = []

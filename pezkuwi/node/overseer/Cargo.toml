@@ -54,3 +54,14 @@ runtime-benchmarks = [
 	"pezkuwi-primitives/runtime-benchmarks",
 	"pezsc-client-api/runtime-benchmarks",
 ]
+std = [
+	"gum/std",
+	"pezkuwi-node-metrics/std",
+	"pezkuwi-node-network-protocol/std",
+	"pezkuwi-node-subsystem-test-helpers/std",
+	"pezkuwi-node-subsystem-types/std",
+	"pezkuwi-pez-node-primitives/std",
+	"pezkuwi-primitives-test-helpers/std",
+	"pezsc-client-api/std",
+]
+serde = []

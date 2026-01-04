@@ -45,3 +45,4 @@ std = [
 	"sha3/std",
 	"twox-hash/std",
 ]
+serde = []

@@ -96,6 +96,7 @@ docify = { workspace = true }
 default = ["std"]
 std = [
 	"bizinikiwi-wasm-builder",
+	"bizinikiwi-wasm-builder?/std",
 	"codec/std",
 	"log/std",
 	"pezcumulus-pezpallet-teyrchain-system/std",
@@ -136,3 +137,7 @@ metadata-hash = ["bizinikiwi-wasm-builder/metadata-hash"]
 # A convenience feature for enabling things when doing a build
 # for an on-chain release.
 on-chain-release-build = ["metadata-hash"]
+serde = []
+experimental = []
+with-tracing = []
+tuples-96 = []

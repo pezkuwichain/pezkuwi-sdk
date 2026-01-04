@@ -112,7 +112,11 @@ runtime-benchmarks = [
 	"pezkuwi-node-core-pvf/runtime-benchmarks",
 	"pezkuwi-overseer/runtime-benchmarks",
 ]
-try-runtime = ["pezkuwi-cli/try-runtime"]
+try-runtime = [
+	"bizinikiwi-rpc-client/try-runtime",
+	"pezkuwi-cli/try-runtime",
+	"pezkuwi-core-primitives/try-runtime",
+]
 fast-runtime = ["pezkuwi-cli/fast-runtime"]
 runtime-metrics = ["pezkuwi-cli/runtime-metrics"]
 pyroscope = ["pezkuwi-cli/pyroscope"]
@@ -130,3 +134,12 @@ metadata-hash = ["pezkuwi-cli/metadata-hash"]
 # Enables timeout-based tests supposed to be run only in CI environment as they may be flaky
 # when run locally depending on system load
 ci-only-tests = ["pezkuwi-node-core-pvf/ci-only-tests"]
+std = [
+	"bizinikiwi-rpc-client/std",
+	"pezkuwi-cli/std",
+	"pezkuwi-node-core-pvf-common/std",
+	"pezkuwi-node-core-pvf-execute-worker/std",
+	"pezkuwi-node-core-pvf-prepare-worker/std",
+	"pezkuwi-node-core-pvf/std",
+	"pezkuwi-overseer/std",
+]

@@ -38,3 +38,10 @@ runtime-benchmarks = [
 	"pezframe-support/runtime-benchmarks",
 	"pezsnowbridge-beacon-primitives/runtime-benchmarks",
 ]
+try-runtime = [
+	"pezframe-support/try-runtime",
+	"pezsnowbridge-beacon-primitives/try-runtime",
+]
+serde = []
+experimental = []
+tuples-96 = []

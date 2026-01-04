@@ -49,7 +49,17 @@ runtime-benchmarks = [
 	"pezbp-pezkuwi-core/runtime-benchmarks",
 	"pezbp-runtime/runtime-benchmarks",
 	"pezbp-teyrchains/runtime-benchmarks",
+	"pezsp-application-crypto/runtime-benchmarks",
 	"pezsp-consensus-grandpa/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 	"pezsp-trie/runtime-benchmarks",
 ]
+try-runtime = [
+	"pezbp-header-pez-chain/try-runtime",
+	"pezbp-pezkuwi-core/try-runtime",
+	"pezbp-runtime/try-runtime",
+	"pezbp-teyrchains/try-runtime",
+	"pezsp-consensus-grandpa/try-runtime",
+	"pezsp-runtime/try-runtime",
+]
+serde = []

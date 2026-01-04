@@ -50,3 +50,24 @@ runtime-benchmarks = [
 	"zagros-runtime/runtime-benchmarks",
 	"zagros-system-emulated-network/runtime-benchmarks",
 ]
+std = [
+	"emulated-integration-tests-common/std",
+	"zagros-runtime/std",
+	"zagros-system-emulated-network/std",
+]
+try-runtime = [
+	"asset-hub-zagros-runtime/try-runtime",
+	"collectives-zagros-runtime/try-runtime",
+	"emulated-integration-tests-common/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezpallet-utility/try-runtime",
+	"pezpallet-whitelist/try-runtime",
+	"pezpallet-xcm/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"xcm/try-runtime",
+	"zagros-runtime/try-runtime",
+]
+serde = []
+experimental = []
+tuples-96 = []

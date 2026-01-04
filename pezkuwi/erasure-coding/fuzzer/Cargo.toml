@@ -33,3 +33,7 @@ runtime-benchmarks = [
 	"pezkuwi-pez-node-primitives/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
 ]
+std = [
+	"pezkuwi-erasure-coding/std",
+	"pezkuwi-pez-node-primitives/std",
+]

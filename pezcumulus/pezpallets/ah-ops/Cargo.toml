@@ -53,10 +53,12 @@ runtime-benchmarks = [
 	"pezpallet-balances/runtime-benchmarks",
 	"pezpallet-timestamp/runtime-benchmarks",
 	"pezpallet-utility/runtime-benchmarks",
+	"pezsp-application-crypto/runtime-benchmarks",
 	"pezsp-io/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
 try-runtime = [
+	"pezframe-benchmarking?/try-runtime",
 	"pezframe-support/try-runtime",
 	"pezframe-system/try-runtime",
 	"pezpallet-balances/try-runtime",
@@ -64,3 +66,7 @@ try-runtime = [
 	"pezpallet-utility/try-runtime",
 	"pezsp-runtime/try-runtime",
 ]
+serde = []
+experimental = []
+with-tracing = []
+tuples-96 = []

@@ -69,3 +69,21 @@ runtime-benchmarks = [
 	"pezsp-trie/runtime-benchmarks",
 ]
 rocksdb = ["kvdb-rocksdb"]
+std = [
+	"bizinikiwi-test-runtime-client/std",
+	"log/std",
+	"pezsc-client-api/std",
+	"pezsc-state-db/std",
+	"pezsp-blockchain/std",
+	"prometheus-endpoint/std",
+]
+try-runtime = [
+	"bizinikiwi-test-runtime-client/try-runtime",
+	"pez-kitchensink-runtime/try-runtime",
+	"pezsc-client-api/try-runtime",
+	"pezsp-blockchain/try-runtime",
+	"pezsp-runtime/try-runtime",
+]
+serde = []
+experimental = []
+with-tracing = []

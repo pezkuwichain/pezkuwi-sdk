@@ -51,6 +51,7 @@ runtime-benchmarks = [
 	"pezsp-runtime/runtime-benchmarks",
 ]
 try-runtime = [
+	"pezframe-benchmarking?/try-runtime",
 	"pezframe-support/try-runtime",
 	"pezframe-system/try-runtime",
 	"pezsp-runtime/try-runtime",
@@ -59,3 +60,6 @@ experimental = [
 	"pezframe-support/experimental",
 	"pezframe-system/experimental",
 ]
+serde = []
+with-tracing = []
+tuples-96 = []

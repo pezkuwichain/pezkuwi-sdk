@@ -33,3 +33,8 @@ pezsp-tracing = { workspace = true, default-features = true }
 default = ["std"]
 std = ["codec/std", "pezsp-core/std", "pezsp-runtime/std", "scale-info/std"]
 runtime-benchmarks = ["pezsp-runtime/runtime-benchmarks"]
+try-runtime = [
+	"pezsp-runtime/try-runtime",
+]
+serde = []
+with-tracing = []

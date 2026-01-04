@@ -38,6 +38,7 @@ default = ["std"]
 fuzz = ["default"]
 std = [
 	"codec/std",
+	"pezframe-election-provider-solution-type/std",
 	"pezframe-support/std",
 	"pezframe-system/std",
 	"pezsp-arithmetic/std",
@@ -59,5 +60,10 @@ runtime-benchmarks = [
 try-runtime = [
 	"pezframe-support/try-runtime",
 	"pezframe-system/try-runtime",
+	"pezsp-npos-elections/try-runtime",
 	"pezsp-runtime/try-runtime",
 ]
+serde = []
+experimental = []
+with-tracing = []
+tuples-96 = []

@@ -44,3 +44,18 @@ runtime-benchmarks = [
 	"pezsc-network/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
+std = [
+	"codec/std",
+	"gum/std",
+	"pezkuwi-pez-node-primitives/std",
+	"pezsc-authority-discovery/std",
+	"pezsc-network-types/std",
+	"pezsc-network/std",
+]
+try-runtime = [
+	"pezkuwi-primitives/try-runtime",
+	"pezsc-authority-discovery/try-runtime",
+	"pezsc-network/try-runtime",
+	"pezsp-runtime/try-runtime",
+]
+serde = []

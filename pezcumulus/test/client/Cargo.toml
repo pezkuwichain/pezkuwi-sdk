@@ -73,6 +73,7 @@ runtime-benchmarks = [
 	"pezsc-executor/runtime-benchmarks",
 	"pezsc-service/runtime-benchmarks",
 	"pezsp-api/runtime-benchmarks",
+	"pezsp-application-crypto/runtime-benchmarks",
 	"pezsp-blockchain/runtime-benchmarks",
 	"pezsp-consensus-aura/runtime-benchmarks",
 	"pezsp-inherents/runtime-benchmarks",
@@ -81,3 +82,42 @@ runtime-benchmarks = [
 	"pezsp-runtime/runtime-benchmarks",
 	"pezsp-timestamp/runtime-benchmarks",
 ]
+std = [
+	"bizinikiwi-test-client/std",
+	"codec/std",
+	"pezcumulus-test-service/std",
+	"pezsc-block-builder/std",
+	"pezsc-consensus-aura/std",
+	"pezsc-consensus/std",
+	"pezsc-executor-common/std",
+	"pezsc-service/std",
+	"pezsp-blockchain/std",
+]
+try-runtime = [
+	"bizinikiwi-test-client/try-runtime",
+	"pezcumulus-pezpallet-weight-reclaim/try-runtime",
+	"pezcumulus-primitives-core/try-runtime",
+	"pezcumulus-test-relay-sproof-builder/try-runtime",
+	"pezcumulus-test-runtime/try-runtime",
+	"pezcumulus-test-service/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezkuwi-primitives/try-runtime",
+	"pezkuwi-teyrchain-primitives/try-runtime",
+	"pezpallet-balances/try-runtime",
+	"pezpallet-transaction-payment/try-runtime",
+	"pezsc-block-builder/try-runtime",
+	"pezsc-consensus-aura/try-runtime",
+	"pezsc-consensus/try-runtime",
+	"pezsc-executor/try-runtime",
+	"pezsc-service/try-runtime",
+	"pezsp-api/try-runtime",
+	"pezsp-blockchain/try-runtime",
+	"pezsp-consensus-aura/try-runtime",
+	"pezsp-inherents/try-runtime",
+	"pezsp-keyring/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"pezsp-timestamp/try-runtime",
+]
+serde = []
+experimental = []
+with-tracing = []

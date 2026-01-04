@@ -39,7 +39,10 @@ pezsp-version = { workspace = true, default-features = true }
 
 [features]
 default = ["std"]
-with-tracing = ["pezsp-tracing/with-tracing"]
+with-tracing = [
+	"pezsp-io/with-tracing",
+	"pezsp-tracing/with-tracing",
+]
 std = [
 	"codec/std",
 	"log/std",
@@ -59,7 +62,9 @@ try-runtime = [
 	"pezframe-support/try-runtime",
 	"pezframe-system/try-runtime",
 	"pezframe-try-runtime/try-runtime",
+	"pezsp-inherents/try-runtime",
 	"pezsp-runtime/try-runtime",
+	"pezsp-version/try-runtime",
 ]
 runtime-benchmarks = [
 	"pezframe-support/runtime-benchmarks",
@@ -70,3 +75,6 @@ runtime-benchmarks = [
 	"pezsp-runtime/runtime-benchmarks",
 	"pezsp-version/runtime-benchmarks",
 ]
+serde = []
+experimental = []
+tuples-96 = []

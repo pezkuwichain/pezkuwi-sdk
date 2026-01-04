@@ -115,13 +115,29 @@ runtime-benchmarks = [
 	"pezsp-version?/runtime-benchmarks",
 ]
 try-runtime = [
+	"pezframe-benchmarking?/try-runtime",
 	"pezframe-executive/try-runtime",
 	"pezframe-support/try-runtime",
+	"pezframe-system-benchmarking?/try-runtime",
 	"pezframe-system/try-runtime",
 	"pezframe-try-runtime/try-runtime",
+	"pezsp-api?/try-runtime",
+	"pezsp-block-builder?/try-runtime",
+	"pezsp-consensus-aura?/try-runtime",
+	"pezsp-consensus-grandpa?/try-runtime",
+	"pezsp-genesis-builder?/try-runtime",
+	"pezsp-inherents?/try-runtime",
+	"pezsp-keyring?/try-runtime",
+	"pezsp-offchain?/try-runtime",
 	"pezsp-runtime/try-runtime",
+	"pezsp-session?/try-runtime",
+	"pezsp-transaction-pool?/try-runtime",
+	"pezsp-version?/try-runtime",
 ]
-experimental = ["pezframe-support/experimental"]
+experimental = [
+	"pezframe-support/experimental",
+	"pezframe-system/experimental",
+]
 runtime = [
 	"pezframe-executive",
 	"pezframe-system-rpc-runtime-api",
@@ -138,3 +154,6 @@ runtime = [
 	"pezsp-transaction-pool",
 	"pezsp-version",
 ]
+serde = []
+with-tracing = []
+tuples-96 = []

@@ -22,3 +22,4 @@ pezsp-arithmetic = { workspace = true }
 [features]
 default = ["std"]
 std = ["log/std", "pezsp-arithmetic/std"]
+serde = []

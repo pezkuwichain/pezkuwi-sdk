@@ -30,6 +30,19 @@ bitvec = { features = ["alloc", "serde"], workspace = true }
 [features]
 runtime-benchmarks = [
 	"pezkuwi-primitives/runtime-benchmarks",
+	"pezsp-application-crypto/runtime-benchmarks",
 	"pezsp-keyring/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
+std = [
+	"bitvec/std",
+	"codec/std",
+	"pezsp-application-crypto/std",
+	"scale-info/std",
+]
+try-runtime = [
+	"pezkuwi-primitives/try-runtime",
+	"pezsp-keyring/try-runtime",
+	"pezsp-runtime/try-runtime",
+]
+serde = []

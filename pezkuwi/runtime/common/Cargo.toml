@@ -86,6 +86,7 @@ std = [
 	"pezframe-election-provider-support/std",
 	"pezframe-support/std",
 	"pezframe-system/std",
+	"pezkuwi-primitives-test-helpers/std",
 	"pezkuwi-primitives/std",
 	"pezkuwi-runtime-teyrchains/std",
 	"pezpallet-asset-rate?/std",
@@ -157,10 +158,14 @@ runtime-benchmarks = [
 	"xcm/runtime-benchmarks",
 ]
 try-runtime = [
+	"pez-slot-range-helper/try-runtime",
+	"pezframe-benchmarking?/try-runtime",
 	"pezframe-election-provider-support/try-runtime",
 	"pezframe-support-test/try-runtime",
 	"pezframe-support/try-runtime",
 	"pezframe-system/try-runtime",
+	"pezkuwi-primitives-test-helpers/try-runtime",
+	"pezkuwi-primitives/try-runtime",
 	"pezkuwi-runtime-teyrchains/try-runtime",
 	"pezpallet-asset-rate/try-runtime",
 	"pezpallet-authorship/try-runtime",
@@ -176,5 +181,18 @@ try-runtime = [
 	"pezpallet-transaction-payment/try-runtime",
 	"pezpallet-treasury/try-runtime",
 	"pezpallet-vesting/try-runtime",
+	"pezsp-api/try-runtime",
+	"pezsp-inherents/try-runtime",
+	"pezsp-keyring/try-runtime",
+	"pezsp-npos-elections/try-runtime",
 	"pezsp-runtime/try-runtime",
+	"pezsp-session/try-runtime",
+	"pezsp-staking/try-runtime",
+	"xcm-builder/try-runtime",
+	"xcm-executor?/try-runtime",
+	"xcm/try-runtime",
 ]
+serde = []
+experimental = []
+with-tracing = []
+tuples-96 = []

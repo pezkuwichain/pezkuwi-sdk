@@ -38,3 +38,19 @@ runtime-benchmarks = [
 	"pezsp-runtime/runtime-benchmarks",
 	"pezsp-statement-store/runtime-benchmarks",
 ]
+std = [
+	"pezsc-cli/std",
+	"pezsc-client-api/std",
+	"pezsc-service/std",
+	"pezsp-blockchain/std",
+]
+try-runtime = [
+	"pezsc-cli/try-runtime",
+	"pezsc-client-api/try-runtime",
+	"pezsc-service/try-runtime",
+	"pezsp-blockchain/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"pezsp-statement-store/try-runtime",
+]
+serde = []
+with-tracing = []

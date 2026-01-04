@@ -29,9 +29,16 @@ std = [
 	"pezsp-api/std",
 	"pezsp-runtime/std",
 ]
-try-runtime = ["pezframe-support/try-runtime", "pezsp-runtime/try-runtime"]
+try-runtime = [
+	"pezframe-support/try-runtime",
+	"pezsp-api/try-runtime",
+	"pezsp-runtime/try-runtime",
+]
 runtime-benchmarks = [
 	"pezframe-support/runtime-benchmarks",
 	"pezsp-api/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
+serde = []
+experimental = []
+tuples-96 = []

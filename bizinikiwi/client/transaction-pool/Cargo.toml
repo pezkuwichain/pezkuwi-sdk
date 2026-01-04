@@ -76,6 +76,7 @@ runtime-benchmarks = [
 	"bizinikiwi-test-runtime-transaction-pool/runtime-benchmarks",
 	"bizinikiwi-test-runtime/runtime-benchmarks",
 	"pezcumulus-zombienet-sdk-helpers/runtime-benchmarks",
+	"pezkuwi-zombienet-sdk/runtime-benchmarks",
 	"pezsc-block-builder/runtime-benchmarks",
 	"pezsc-client-api/runtime-benchmarks",
 	"pezsc-transaction-pool-api/runtime-benchmarks",
@@ -84,4 +85,37 @@ runtime-benchmarks = [
 	"pezsp-consensus/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 	"pezsp-transaction-pool/runtime-benchmarks",
+	"txtesttool/runtime-benchmarks",
 ]
+std = [
+	"anyhow/std",
+	"bizinikiwi-test-runtime-client/std",
+	"bizinikiwi-test-runtime-transaction-pool/std",
+	"pezcumulus-zombienet-sdk-helpers/std",
+	"pezkuwi-zombienet-configuration/std",
+	"pezkuwi-zombienet-sdk/std",
+	"pezsc-block-builder/std",
+	"pezsc-client-api/std",
+	"pezsc-transaction-pool-api/std",
+	"pezsc-utils/std",
+	"pezsp-blockchain/std",
+	"pezsp-consensus/std",
+	"prometheus-endpoint/std",
+	"serde_json/std",
+	"txtesttool/std",
+]
+try-runtime = [
+	"bizinikiwi-test-runtime-client/try-runtime",
+	"bizinikiwi-test-runtime-transaction-pool/try-runtime",
+	"bizinikiwi-test-runtime/try-runtime",
+	"pezsc-block-builder/try-runtime",
+	"pezsc-client-api/try-runtime",
+	"pezsc-transaction-pool-api/try-runtime",
+	"pezsp-api/try-runtime",
+	"pezsp-blockchain/try-runtime",
+	"pezsp-consensus/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"pezsp-transaction-pool/try-runtime",
+]
+serde = []
+with-tracing = []

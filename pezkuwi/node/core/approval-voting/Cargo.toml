@@ -75,9 +75,36 @@ runtime-benchmarks = [
 	# "pezkuwi-primitives-test-helpers/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
 	# "pezkuwi-subsystem-bench/runtime-benchmarks",
+	"pezsc-keystore/runtime-benchmarks",
+	"pezsp-application-crypto/runtime-benchmarks",
 	"pezsp-consensus-babe/runtime-benchmarks",
 	"pezsp-consensus-slots/runtime-benchmarks",
 	"pezsp-consensus/runtime-benchmarks",
 	"pezsp-keyring/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
+std = [
+	"bitvec/std",
+	"codec/std",
+	"gum/std",
+	"pezkuwi-node-subsystem-util/std",
+	"pezkuwi-node-subsystem/std",
+	"pezkuwi-overseer/std",
+	"pezkuwi-pez-node-primitives/std",
+	"pezsc-keystore/std",
+	"pezsp-application-crypto/std",
+	"pezsp-consensus-slots/std",
+	"pezsp-consensus/std",
+	"pezsp-runtime/std",
+	"pezsp-tracing/std",
+	"rand_core/std",
+]
+try-runtime = [
+	"pezkuwi-primitives/try-runtime",
+	"pezsp-consensus-babe/try-runtime",
+	"pezsp-consensus/try-runtime",
+	"pezsp-keyring/try-runtime",
+	"pezsp-runtime/try-runtime",
+]
+serde = []
+with-tracing = []

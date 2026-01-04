@@ -47,3 +47,11 @@ runtime-benchmarks = [
 	"pezsc-tracing/runtime-benchmarks",
 	"pezsp-keyring/runtime-benchmarks",
 ]
+std = [
+	"pezkuwi-test-service/std",
+	"pezsc-cli/std",
+	"pezsc-service/std",
+	"pezsc-tracing/std",
+	"prometheus-endpoint/std",
+]
+serde = []

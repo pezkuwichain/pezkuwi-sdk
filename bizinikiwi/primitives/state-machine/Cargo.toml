@@ -50,6 +50,7 @@ std = [
 	"pezsp-core/std",
 	"pezsp-externalities/std",
 	"pezsp-panic-handler",
+	"pezsp-panic-handler?/std",
 	"pezsp-trie/std",
 	"rand",
 	"thiserror",
@@ -57,3 +58,4 @@ std = [
 	"trie-db/std",
 ]
 runtime-benchmarks = ["pezsp-trie/runtime-benchmarks"]
+serde = []

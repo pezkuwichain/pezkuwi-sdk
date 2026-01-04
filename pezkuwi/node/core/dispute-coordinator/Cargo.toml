@@ -61,5 +61,16 @@ runtime-benchmarks = [
 	# "pezkuwi-primitives-test-helpers/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
 	# "pezkuwi-subsystem-bench/runtime-benchmarks",
+	"pezsc-keystore/runtime-benchmarks",
+	"pezsp-application-crypto/runtime-benchmarks",
 	"pezsp-keyring/runtime-benchmarks",
 ]
+std = [
+	"gum/std",
+	"pezkuwi-node-subsystem-util/std",
+	"pezkuwi-node-subsystem/std",
+	"pezkuwi-pez-node-primitives/std",
+	"pezsc-keystore/std",
+]
+serde = []
+with-tracing = []

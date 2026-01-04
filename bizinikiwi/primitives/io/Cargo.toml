@@ -130,3 +130,4 @@ runtime-benchmarks = [
 	"pezsp-state-machine?/runtime-benchmarks",
 	"pezsp-trie?/runtime-benchmarks",
 ]
+serde = []

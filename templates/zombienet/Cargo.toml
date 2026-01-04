@@ -18,3 +18,10 @@ tokio = { workspace = true, features = ["rt-multi-thread"] }
 
 [features]
 zombienet = []
+std = [
+	"anyhow/std",
+	"pezkuwi-zombienet-sdk/std",
+]
+runtime-benchmarks = [
+	"pezkuwi-zombienet-sdk/runtime-benchmarks",
+]

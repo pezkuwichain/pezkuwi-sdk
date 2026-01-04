@@ -56,6 +56,7 @@ std = [
 	"tracing/std",
 	"xcm-builder/std",
 	"xcm-executor/std",
+	"xcm-pez-simulator/std",
 	"xcm/std",
 ]
 runtime-benchmarks = [
@@ -77,10 +78,19 @@ runtime-benchmarks = [
 try-runtime = [
 	"pezframe-support/try-runtime",
 	"pezframe-system/try-runtime",
+	"pezkuwi-teyrchain-primitives/try-runtime",
 	"pezpallet-assets/try-runtime",
 	"pezpallet-balances/try-runtime",
 	"pezpallet-revive/try-runtime",
 	"pezpallet-timestamp/try-runtime",
 	"pezpallet-xcm/try-runtime",
 	"pezsp-runtime/try-runtime",
+	"xcm-builder/try-runtime",
+	"xcm-executor/try-runtime",
+	"xcm-pez-simulator/try-runtime",
+	"xcm/try-runtime",
 ]
+serde = []
+experimental = []
+with-tracing = []
+tuples-96 = []

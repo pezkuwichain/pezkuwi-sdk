@@ -87,5 +87,28 @@ std = [
 	"scale-info/std",
 	"tracing/std",
 	"xcm-executor/std",
+	"xcm-pez-simulator/std",
 	"xcm/std",
 ]
+try-runtime = [
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezkuwi-primitives/try-runtime",
+	"pezkuwi-runtime-teyrchains/try-runtime",
+	"pezkuwi-test-runtime/try-runtime",
+	"pezkuwi-teyrchain-primitives/try-runtime",
+	"pezpallet-asset-conversion/try-runtime",
+	"pezpallet-assets/try-runtime",
+	"pezpallet-balances/try-runtime",
+	"pezpallet-salary/try-runtime",
+	"pezpallet-transaction-payment/try-runtime",
+	"pezpallet-xcm/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"xcm-executor/try-runtime",
+	"xcm-pez-simulator/try-runtime",
+	"xcm/try-runtime",
+]
+serde = []
+experimental = []
+with-tracing = []
+tuples-96 = []

@@ -44,3 +44,6 @@ runtime-benchmarks = [
 	"pezframe-system/runtime-benchmarks",
 	"pezframe/runtime-benchmarks",
 ]
+serde = []
+experimental = []
+tuples-96 = []

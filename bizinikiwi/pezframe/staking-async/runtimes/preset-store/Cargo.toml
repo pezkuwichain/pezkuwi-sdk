@@ -35,3 +35,12 @@ runtime-benchmarks = [
 	"pezframe/runtime-benchmarks",
 	"pezpallet-staking-async-ah-client/runtime-benchmarks",
 ]
+try-runtime = [
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezframe/try-runtime",
+	"pezpallet-staking-async-ah-client/try-runtime",
+]
+serde = []
+experimental = []
+tuples-96 = []

@@ -40,3 +40,12 @@ runtime-benchmarks = [
 	"pezsp-npos-elections/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
+try-runtime = [
+	"pezframe-benchmarking?/try-runtime",
+	"pezframe-election-provider-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezsp-npos-elections/try-runtime",
+	"pezsp-runtime/try-runtime",
+]
+serde = []
+experimental = []

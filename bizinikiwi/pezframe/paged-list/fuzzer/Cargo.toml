@@ -39,3 +39,11 @@ runtime-benchmarks = [
 	"pezframe/runtime-benchmarks",
 	"pezpallet-paged-list/runtime-benchmarks",
 ]
+try-runtime = [
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezframe/try-runtime",
+	"pezpallet-paged-list/try-runtime",
+]
+experimental = []
+tuples-96 = []

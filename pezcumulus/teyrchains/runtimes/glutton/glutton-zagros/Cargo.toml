@@ -102,6 +102,7 @@ runtime-benchmarks = [
 	"xcm/runtime-benchmarks",
 ]
 std = [
+	"bizinikiwi-wasm-builder/std",
 	"codec/std",
 	"pezcumulus-pezpallet-aura-ext/std",
 	"pezcumulus-pezpallet-teyrchain-system/std",
@@ -146,8 +147,11 @@ try-runtime = [
 	"pezcumulus-pezpallet-aura-ext/try-runtime",
 	"pezcumulus-pezpallet-teyrchain-system/try-runtime",
 	"pezcumulus-pezpallet-xcm/try-runtime",
+	"pezcumulus-primitives-core/try-runtime",
+	"pezframe-benchmarking?/try-runtime",
 	"pezframe-executive/try-runtime",
 	"pezframe-support/try-runtime",
+	"pezframe-system-benchmarking?/try-runtime",
 	"pezframe-system/try-runtime",
 	"pezframe-try-runtime/try-runtime",
 	"pezpallet-aura/try-runtime",
@@ -155,12 +159,30 @@ try-runtime = [
 	"pezpallet-message-queue/try-runtime",
 	"pezpallet-sudo/try-runtime",
 	"pezpallet-timestamp/try-runtime",
+	"pezsp-api/try-runtime",
+	"pezsp-block-builder/try-runtime",
+	"pezsp-consensus-aura/try-runtime",
+	"pezsp-genesis-builder/try-runtime",
+	"pezsp-inherents/try-runtime",
+	"pezsp-keyring/try-runtime",
+	"pezsp-offchain/try-runtime",
 	"pezsp-runtime/try-runtime",
+	"pezsp-session/try-runtime",
+	"pezsp-transaction-pool/try-runtime",
+	"pezsp-version/try-runtime",
+	"testnet-teyrchains-constants/try-runtime",
 	"teyrchain-info/try-runtime",
 	"teyrchains-common/try-runtime",
+	"xcm-builder/try-runtime",
+	"xcm-executor/try-runtime",
+	"xcm/try-runtime",
 ]
 
 # A feature that should be enabled when the runtime should be built for on-chain
 # deployment. This will disable stuff that shouldn't be part of the on-chain wasm
 # to make it smaller, like logging for example.
 on-chain-release-build = []
+serde = []
+experimental = []
+with-tracing = []
+tuples-96 = []

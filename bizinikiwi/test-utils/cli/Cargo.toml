@@ -30,11 +30,24 @@ regex = { workspace = true }
 tokio = { features = ["full"], workspace = true, default-features = true }
 
 [features]
-try-runtime = ["node-cli/try-runtime"]
+try-runtime = [
+	"bizinikiwi-rpc-client/try-runtime",
+	"node-cli/try-runtime",
+	"pez-node-primitives/try-runtime",
+	"pezsc-cli/try-runtime",
+	"pezsc-service/try-runtime",
+]
 runtime-benchmarks = [
 	"bizinikiwi-rpc-client/runtime-benchmarks",
 	"node-cli/runtime-benchmarks",
 	"pez-node-primitives/runtime-benchmarks",
 	"pezsc-cli/runtime-benchmarks",
 	"pezsc-service/runtime-benchmarks",
+]
+std = [
+	"bizinikiwi-rpc-client/std",
+	"node-cli/std",
+	"pezsc-cli/std",
+	"pezsc-service/std",
+	"pezsp-rpc/std",
 ]

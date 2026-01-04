@@ -65,3 +65,17 @@ runtime-benchmarks = [
 	# "xcm-pez-simulator/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
 ]
+try-runtime = [
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezpallet-assets/try-runtime",
+	"pezpallet-balances/try-runtime",
+	"pezsp-api/try-runtime",
+	"xcm-builder/try-runtime",
+	"xcm-executor/try-runtime",
+	"xcm/try-runtime",
+]
+serde = []
+experimental = []
+with-tracing = []
+tuples-96 = []

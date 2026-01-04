@@ -50,3 +50,14 @@ runtime-benchmarks = [
 ]
 # Set timing constants (e.g. session period) to faster versions to speed up testing.
 fast-runtime = []
+try-runtime = [
+	"pezframe-support/try-runtime",
+	"pezkuwi-primitives/try-runtime",
+	"pezkuwi-runtime-common/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"xcm-builder/try-runtime",
+	"xcm/try-runtime",
+]
+serde = []
+experimental = []
+tuples-96 = []

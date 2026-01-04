@@ -50,3 +50,13 @@ std = [
 	"tracing/std",
 	"xcm/std",
 ]
+try-runtime = [
+	"pezframe-benchmarking?/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"xcm/try-runtime",
+]
+serde = []
+experimental = []
+with-tracing = []
+tuples-96 = []

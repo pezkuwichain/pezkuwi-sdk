@@ -31,3 +31,7 @@ tokio-tungstenite = { workspace = true }
 
 [features]
 runtime-benchmarks = ["gum/runtime-benchmarks"]
+std = [
+	"gum/std",
+]
+serde = []

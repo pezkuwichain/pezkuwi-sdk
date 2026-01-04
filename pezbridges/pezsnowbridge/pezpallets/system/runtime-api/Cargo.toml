@@ -40,3 +40,4 @@ runtime-benchmarks = [
 	"pezsp-api/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
 ]
+serde = []

@@ -52,6 +52,7 @@ runtime-benchmarks = [
 	"pezsc-client-api/runtime-benchmarks",
 	"pezsc-executor/runtime-benchmarks",
 	"pezsc-network/runtime-benchmarks",
+	"pezsp-application-crypto/runtime-benchmarks",
 	"pezsp-blockchain/runtime-benchmarks",
 	"pezsp-consensus-babe/runtime-benchmarks",
 	"pezsp-genesis-builder/runtime-benchmarks",
@@ -60,3 +61,26 @@ runtime-benchmarks = [
 	"pezsp-runtime/runtime-benchmarks",
 	"pezsp-state-machine/runtime-benchmarks",
 ]
+std = [
+	"codec/std",
+	"pezsc-client-api/std",
+	"pezsc-network/std",
+	"pezsc-telemetry/std",
+	"pezsp-application-crypto/std",
+	"pezsp-blockchain/std",
+	"pezsp-consensus-babe/std",
+	"pezsp-io/std",
+]
+try-runtime = [
+	"bizinikiwi-test-runtime/try-runtime",
+	"pezsc-client-api/try-runtime",
+	"pezsc-executor/try-runtime",
+	"pezsc-network/try-runtime",
+	"pezsp-blockchain/try-runtime",
+	"pezsp-consensus-babe/try-runtime",
+	"pezsp-genesis-builder/try-runtime",
+	"pezsp-keyring/try-runtime",
+	"pezsp-runtime/try-runtime",
+]
+serde = []
+with-tracing = []

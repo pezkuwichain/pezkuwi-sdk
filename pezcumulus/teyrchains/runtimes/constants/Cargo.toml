@@ -55,3 +55,15 @@ runtime-benchmarks = [
 	"xcm/runtime-benchmarks",
 	"zagros-runtime-constants?/runtime-benchmarks",
 ]
+try-runtime = [
+	"pezcumulus-primitives-core/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezkuwi-core-primitives/try-runtime",
+	"pezkuwichain-runtime-constants?/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"xcm/try-runtime",
+	"zagros-runtime-constants?/try-runtime",
+]
+serde = []
+experimental = []
+tuples-96 = []

@@ -44,3 +44,18 @@ runtime-benchmarks = [
 	"pezsp-runtime/runtime-benchmarks",
 	"pezsp-state-machine/runtime-benchmarks",
 ]
+std = [
+	"pezcumulus-relay-chain-interface/std",
+	"pezsc-client-api/std",
+	"pezsc-consensus-babe/std",
+	"pezsc-network-types/std",
+]
+try-runtime = [
+	"pezcumulus-primitives-core/try-runtime",
+	"pezcumulus-test-relay-sproof-builder?/try-runtime",
+	"pezsc-client-api/try-runtime",
+	"pezsc-consensus-babe/try-runtime",
+	"pezsp-inherents/try-runtime",
+	"pezsp-runtime/try-runtime",
+]
+serde = []

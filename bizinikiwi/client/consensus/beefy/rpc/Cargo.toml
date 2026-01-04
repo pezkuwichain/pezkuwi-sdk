@@ -43,6 +43,21 @@ runtime-benchmarks = [
 	"bizinikiwi-test-runtime-client/runtime-benchmarks",
 	"pezsc-consensus-beefy/runtime-benchmarks",
 	"pezsc-rpc/runtime-benchmarks",
+	"pezsp-application-crypto/runtime-benchmarks",
 	"pezsp-consensus-beefy/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
+std = [
+	"bizinikiwi-test-runtime-client/std",
+	"log/std",
+	"pezsc-consensus-beefy/std",
+	"pezsc-rpc/std",
+]
+try-runtime = [
+	"bizinikiwi-test-runtime-client/try-runtime",
+	"pezsc-consensus-beefy/try-runtime",
+	"pezsc-rpc/try-runtime",
+	"pezsp-consensus-beefy/try-runtime",
+	"pezsp-runtime/try-runtime",
+]
+serde = []

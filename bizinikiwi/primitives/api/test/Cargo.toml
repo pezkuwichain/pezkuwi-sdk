@@ -55,3 +55,20 @@ runtime-benchmarks = [
 	"pezsp-state-machine/runtime-benchmarks",
 	"pezsp-version/runtime-benchmarks",
 ]
+std = [
+	"bizinikiwi-test-runtime-client/std",
+	"log/std",
+	"pezsc-block-builder/std",
+	"pezsp-consensus/std",
+	"scale-info/std",
+]
+try-runtime = [
+	"bizinikiwi-test-runtime-client/try-runtime",
+	"pezsc-block-builder/try-runtime",
+	"pezsp-api/try-runtime",
+	"pezsp-consensus/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"pezsp-version/try-runtime",
+]
+serde = []
+with-tracing = []

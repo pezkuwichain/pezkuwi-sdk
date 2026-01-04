@@ -33,11 +33,17 @@ std = [
 	"scale-info/std",
 ]
 serde = [
+	"codec/serde",
 	"pezsp-application-crypto/serde",
 	"pezsp-runtime/serde",
 	"scale-info/serde",
 ]
 runtime-benchmarks = [
 	"pezsp-api/runtime-benchmarks",
+	"pezsp-application-crypto/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
+]
+try-runtime = [
+	"pezsp-api/try-runtime",
+	"pezsp-runtime/try-runtime",
 ]

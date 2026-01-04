@@ -20,6 +20,8 @@ std = [
 	"codec/std",
 	"frame-decode/std",
 	"frame-metadata/std",
+	"pezkuwi-subxt-codegen/std",
+	"pezkuwi-subxt-utils-stripmetadata/std",
 	"pezsp-crypto-hashing/std",
 	"scale-info/std",
 ]
@@ -33,6 +35,7 @@ legacy = [
 	"frame-metadata/legacy",
 	"std",
 ]
+serde = []
 
 [dependencies]
 codec = { package = "parity-scale-codec", workspace = true, default-features = false, features = ["derive"] }

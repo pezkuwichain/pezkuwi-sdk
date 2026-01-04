@@ -42,3 +42,9 @@ runtime-benchmarks = [
 	"pezsnowbridge-core/runtime-benchmarks",
 	"pezsnowbridge-inbound-queue-primitives/runtime-benchmarks",
 ]
+try-runtime = [
+	"pezsnowbridge-beacon-primitives/try-runtime",
+	"pezsnowbridge-core/try-runtime",
+	"pezsnowbridge-inbound-queue-primitives/try-runtime",
+]
+serde = []

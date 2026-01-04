@@ -46,3 +46,13 @@ runtime-benchmarks = [
 	"pezsnowbridge-outbound-queue-primitives/runtime-benchmarks",
 	"pezsp-api/runtime-benchmarks",
 ]
+try-runtime = [
+	"pezframe-support/try-runtime",
+	"pezsnowbridge-core/try-runtime",
+	"pezsnowbridge-merkle-tree/try-runtime",
+	"pezsnowbridge-outbound-queue-primitives/try-runtime",
+	"pezsp-api/try-runtime",
+]
+serde = []
+experimental = []
+tuples-96 = []

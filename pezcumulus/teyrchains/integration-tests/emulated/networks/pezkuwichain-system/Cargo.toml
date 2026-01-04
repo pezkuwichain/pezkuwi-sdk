@@ -33,3 +33,12 @@ runtime-benchmarks = [
 	"pezbridge-hub-pezkuwichain-emulated-chain/runtime-benchmarks",
 	"pezkuwichain-emulated-chain/runtime-benchmarks",
 ]
+std = [
+	"asset-hub-pezkuwichain-emulated-chain/std",
+	"coretime-pezkuwichain-emulated-chain/std",
+	"emulated-integration-tests-common/std",
+	"people-pezkuwichain-emulated-chain/std",
+	"pez-penpal-emulated-chain/std",
+	"pezbridge-hub-pezkuwichain-emulated-chain/std",
+	"pezkuwichain-emulated-chain/std",
+]

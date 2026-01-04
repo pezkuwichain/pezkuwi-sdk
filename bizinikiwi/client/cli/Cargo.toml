@@ -68,6 +68,7 @@ rocksdb = ["pezsc-client-db/rocksdb"]
 runtime-benchmarks = [
 	"pezsc-client-api/runtime-benchmarks",
 	"pezsc-client-db/runtime-benchmarks",
+	"pezsc-keystore/runtime-benchmarks",
 	"pezsc-mixnet/runtime-benchmarks",
 	"pezsc-network/runtime-benchmarks",
 	"pezsc-service/runtime-benchmarks",
@@ -78,3 +79,33 @@ runtime-benchmarks = [
 	"pezsp-runtime/runtime-benchmarks",
 	"pezsp-version/runtime-benchmarks",
 ]
+std = [
+	"log/std",
+	"pezsc-client-api/std",
+	"pezsc-client-db/std",
+	"pezsc-keystore/std",
+	"pezsc-mixnet/std",
+	"pezsc-network/std",
+	"pezsc-service/std",
+	"pezsc-telemetry/std",
+	"pezsc-tracing/std",
+	"pezsc-transaction-pool/std",
+	"pezsc-utils/std",
+	"pezsp-blockchain/std",
+	"pezsp-panic-handler/std",
+]
+try-runtime = [
+	"pezsc-client-api/try-runtime",
+	"pezsc-client-db/try-runtime",
+	"pezsc-mixnet/try-runtime",
+	"pezsc-network/try-runtime",
+	"pezsc-service/try-runtime",
+	"pezsc-tracing/try-runtime",
+	"pezsc-transaction-pool/try-runtime",
+	"pezsp-blockchain/try-runtime",
+	"pezsp-keyring/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"pezsp-version/try-runtime",
+]
+serde = []
+with-tracing = []
