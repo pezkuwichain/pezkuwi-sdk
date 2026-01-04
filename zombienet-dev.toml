@@ -4,7 +4,7 @@ timeout = 120
 [relaychain]
 default_command = "/home/mamostehp/pezkuwi-sdk/target/release/pezkuwi"
 chain = "pezkuwichain-dev"
-default_args = ["-lteyrchain=debug", "--unsafe-force-node-key-generation"]
+default_args = ["--unsafe-force-node-key-generation", "-lteyrchain=debug"]
 
 [[relaychain.nodes]]
 name = "alice"
@@ -21,4 +21,4 @@ add_to_genesis = true
 name = "collator-asset-hub"
 command = "/home/mamostehp/pezkuwi-sdk/target/release/pezkuwi-teyrchain"
 rpc_port = 9945
-args = ["-lteyrchain=debug", "--unsafe-force-node-key-generation"]
+args = ["--unsafe-force-node-key-generation", "-lteyrchain=debug"]
