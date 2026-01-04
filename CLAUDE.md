@@ -2,6 +2,12 @@
 
 Bu dosya her oturumda Claude tarafından okunmalı ve kurallara kesinlikle uyulmalıdır.
 
+## OTOMATİK YÜKLENEN DOSYALAR
+
+@.claude/PROJECT_STATE.md
+@.claude/SESSION_LOG.md
+@.claude/MAINNET_ROADMAP.md
+
 ---
 
 ## ANA HEDEF

@@ -1,0 +1,24 @@
+[settings]
+timeout = 120
+
+[relaychain]
+default_command = "/home/mamostehp/pezkuwi-sdk/target/release/pezkuwi"
+chain = "pezkuwichain-dev"
+default_args = ["--unsafe-force-node-key-generation", "-lteyrchain=debug"]
+
+[[relaychain.nodes]]
+name = "alice"
+validator = true
+rpc_port = 9944
+
+[[teyrchains]]
+id = 1000
+chain = "asset-hub-pezkuwichain-dev"
+cumulus_based = true
+add_to_genesis = true
+
+[[teyrchains.collators]]
+name = "collator-asset-hub"
+command = "/home/mamostehp/pezkuwi-sdk/target/release/pezkuwi-teyrchain"
+rpc_port = 9945
+args = ["--unsafe-force-node-key-generation", "-lteyrchain=debug"]

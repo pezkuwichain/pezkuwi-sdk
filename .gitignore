@@ -48,4 +48,19 @@ rustc-ice-*
 # AI coordination files (private)
 .ai-coordination/
 head.rs
+
+# Claude Code local files
+.claude/PROJECT_STATE.md
+.claude/SESSION_LOG.md
+.claude/hooks/
+.claude/settings.json
+
+# Zombienet binaries
 zombienet-linux
+zombienet-macos
+
+# Vendored lock files
+vendor/*/Cargo.lock
+
+# Generated chain specs
+chain-specs/
