@@ -31,7 +31,7 @@ scale-info = { features = ["derive"], workspace = true }
 pezpallet-balances = { workspace = true, default-features = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"log/std",

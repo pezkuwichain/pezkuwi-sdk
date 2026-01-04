@@ -51,8 +51,8 @@ pezpallet-example-tasks = { workspace = true }
 bizinikiwi-wasm-builder = { optional = true, workspace = true, default-features = true }
 
 [features]
-default = [ "std" ]
-with-tracing = [ "pezkuwi-sdk/with-tracing" ]
+default = ["std"]
+with-tracing = ["pezkuwi-sdk/with-tracing"]
 std = [
 	"bizinikiwi-wasm-builder",
 	"codec/std",
@@ -88,5 +88,5 @@ try-runtime = [
 	"pezpallet-example-tasks/try-runtime",
 	"pezsp-runtime/try-runtime",
 ]
-experimental = [ "pezpallet-example-tasks/experimental" ]
-metadata-hash = [ "bizinikiwi-wasm-builder/metadata-hash" ]
+experimental = ["pezpallet-example-tasks/experimental"]
+metadata-hash = ["bizinikiwi-wasm-builder/metadata-hash"]

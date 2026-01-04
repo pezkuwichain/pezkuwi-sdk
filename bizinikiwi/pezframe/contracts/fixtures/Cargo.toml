@@ -9,7 +9,7 @@ description = "Fixtures for testing contracts pezpallet."
 documentation.workspace = true
 repository = { workspace = true }
 homepage = { workspace = true }
-include = ["build.rs", "contracts/**", "src/**", "Cargo.toml"]
+include = ["Cargo.toml", "build.rs", "contracts/**", "src/**"]
 
 [lints]
 workspace = true

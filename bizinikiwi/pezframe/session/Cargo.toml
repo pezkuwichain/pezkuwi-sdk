@@ -34,8 +34,8 @@ pezsp-trie = { optional = true, workspace = true }
 scale-info = { features = ["derive", "serde"], workspace = true }
 
 [features]
-default = [ "historical", "std" ]
-historical = [ "pezsp-trie" ]
+default = ["historical", "std"]
+historical = ["pezsp-trie"]
 std = [
 	"codec/std",
 	"log/std",

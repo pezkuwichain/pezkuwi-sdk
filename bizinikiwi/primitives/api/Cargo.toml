@@ -34,7 +34,7 @@ scale-info = { features = ["derive"], workspace = true }
 thiserror = { optional = true, workspace = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"hash-db",
@@ -59,10 +59,10 @@ std = [
 # building a runtime for registering it on chain.
 #
 # This sets the max logging level to `off` for `log`.
-disable-logging = [ "log/max_level_off" ]
+disable-logging = ["log/max_level_off"]
 # Do not report the documentation in the metadata.
-no-metadata-docs = [ "pezsp-api-proc-macro/no-metadata-docs" ]
-frame-metadata = [ "pezsp-metadata-ir" ]
+no-metadata-docs = ["pezsp-api-proc-macro/no-metadata-docs"]
+frame-metadata = ["pezsp-metadata-ir"]
 runtime-benchmarks = [
 	"pezsp-runtime-interface/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",

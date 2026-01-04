@@ -21,4 +21,4 @@ codec = { features = ["derive"], workspace = true, default-features = true }
 pezsp-runtime = { workspace = true, default-features = true }
 
 [features]
-runtime-benchmarks = [ "pezsp-runtime/runtime-benchmarks" ]
+runtime-benchmarks = ["pezsp-runtime/runtime-benchmarks"]

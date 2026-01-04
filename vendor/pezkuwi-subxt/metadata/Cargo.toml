@@ -14,7 +14,7 @@ homepage.workspace = true
 description = "Command line utilities for checking metadata compatibility between nodes."
 
 [features]
-default = [ "legacy", "std" ]
+default = ["legacy", "std"]
 std = [
 	"bitvec/std",
 	"codec/std",

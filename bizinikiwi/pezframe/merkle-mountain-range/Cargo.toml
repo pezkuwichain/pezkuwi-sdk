@@ -17,10 +17,10 @@ targets = ["x86_64-unknown-linux-gnu"]
 
 [dependencies]
 codec = { workspace = true }
-pezframe = { workspace = true, features = ["runtime"] }
-pezframe-system = { workspace = true }
-pezframe-support = { workspace = true }
 log = { workspace = true }
+pezframe = { workspace = true, features = ["runtime"] }
+pezframe-support = { workspace = true }
+pezframe-system = { workspace = true }
 pezsp-mmr-primitives = { workspace = true }
 scale-info = { features = ["derive"], workspace = true }
 
@@ -29,7 +29,7 @@ itertools = { workspace = true }
 pezsp-tracing = { workspace = true, default-features = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"log/std",
@@ -40,13 +40,13 @@ std = [
 	"scale-info/std",
 ]
 runtime-benchmarks = [
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
 	"pezframe/runtime-benchmarks",
 	"pezsp-mmr-primitives/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks"
 ]
 try-runtime = [
-	"pezframe/try-runtime",
 	"pezframe-support/try-runtime",
-	"pezframe-system/try-runtime"
+	"pezframe-system/try-runtime",
+	"pezframe/try-runtime",
 ]

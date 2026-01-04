@@ -15,7 +15,7 @@ description = "Sign extrinsics to be submitted by Subxt"
 keywords = ["extrinsic", "parity", "signer", "subxt"]
 
 [features]
-default = [ "ecdsa", "sr25519", "std", "subxt" ]
+default = ["ecdsa", "sr25519", "std", "subxt"]
 std = [
 	"base64?/std",
 	"bip32?/std",
@@ -45,9 +45,9 @@ std = [
 # corresponding features. Note: I had more difficulties getting
 # ecdsa compiling to WASM on my mac; following this comment helped:
 # https://github.com/rust-bitcoin/rust-bitcoin/issues/930#issuecomment-1215538699
-sr25519 = [ "schnorrkel" ]
-ecdsa = [ "secp256k1" ]
-unstable-eth = [ "bip32", "ecdsa", "keccak-hash", "secp256k1" ]
+sr25519 = ["schnorrkel"]
+ecdsa = ["secp256k1"]
+unstable-eth = ["bip32", "ecdsa", "keccak-hash", "secp256k1"]
 
 # Enable support for loading key pairs from pezkuwi-js json.
 pezkuwi-js-compat = [
@@ -63,11 +63,11 @@ pezkuwi-js-compat = [
 
 # Make the keypair algorithms here compatible with Subxt's Signer trait,
 # so that they can be used to sign transactions for compatible chains.
-subxt = [ "dep:pezkuwi-subxt-core" ]
+subxt = ["dep:pezkuwi-subxt-core"]
 
 # The getrandom package is used via schnorrkel. We need to enable the JS
 # feature on it if compiling for the web.
-web = [ "getrandom/js" ]
+web = ["getrandom/js"]
 
 [dependencies]
 bip32 = { workspace = true, features = ["alloc", "secp256k1"], optional = true }

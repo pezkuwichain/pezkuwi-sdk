@@ -31,7 +31,7 @@ pezsp-runtime = { workspace = true }
 pezsp-std = { workspace = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"pez-binary-merkle-tree/std",

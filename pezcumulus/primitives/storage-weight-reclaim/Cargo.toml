@@ -33,7 +33,7 @@ pezsp-io = { workspace = true }
 pezsp-trie = { workspace = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"log/std",

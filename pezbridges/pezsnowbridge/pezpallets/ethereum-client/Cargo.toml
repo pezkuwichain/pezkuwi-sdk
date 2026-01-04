@@ -52,7 +52,7 @@ serde = { workspace = true, default-features = true }
 serde_json = { workspace = true, default-features = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 fuzzing = [
 	"hex-literal",
 	"pezpallet-timestamp",

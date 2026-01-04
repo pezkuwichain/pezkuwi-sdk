@@ -78,7 +78,7 @@ serde_json = { workspace = true, default-features = true }
 thousands = { workspace = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 no_std = []
 std = [
 	"bitvec/std",

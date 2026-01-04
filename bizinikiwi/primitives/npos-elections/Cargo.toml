@@ -25,7 +25,7 @@ scale-info = { features = ["derive"], workspace = true }
 serde = { features = ["alloc", "derive"], optional = true, workspace = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 bench = []
 std = [
 	"codec/std",
@@ -44,4 +44,4 @@ serde = [
 	"pezsp-runtime/serde",
 	"scale-info/serde",
 ]
-runtime-benchmarks = [ "pezsp-runtime/runtime-benchmarks" ]
+runtime-benchmarks = ["pezsp-runtime/runtime-benchmarks"]

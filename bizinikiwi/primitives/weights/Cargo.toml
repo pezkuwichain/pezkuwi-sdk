@@ -26,7 +26,7 @@ serde = { optional = true, features = ["alloc", "derive"], workspace = true }
 smallvec = { workspace = true, default-features = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"bounded-collections/std",
 	"codec/std",
@@ -38,7 +38,7 @@ std = [
 ]
 # By default some types have documentation, `full-metadata-docs` allows to add documentation to
 # more types in the metadata.
-full-metadata-docs = [ "scale-info/docs" ]
+full-metadata-docs = ["scale-info/docs"]
 
 # Serde support without relying on std features.
 serde = [
@@ -48,4 +48,4 @@ serde = [
 	"scale-info/serde",
 ]
 
-json-schema = [ "dep:schemars" ]
+json-schema = ["dep:schemars"]

@@ -48,3 +48,4 @@ rustc-ice-*
 # AI coordination files (private)
 .ai-coordination/
 head.rs
+zombienet-linux

@@ -18,10 +18,10 @@ targets = ["x86_64-unknown-linux-gnu"]
 
 [dev-dependencies]
 codec = { features = ["derive"], workspace = true, default-features = true }
-pezframe = { workspace = true, default-features = true }
-pezframe-system = { workspace = true }
 log = { workspace = true }
+pezframe = { workspace = true, default-features = true }
 pezframe-support = { workspace = true, default-features = true }
+pezframe-system = { workspace = true }
 pezsp-core = { workspace = true, default-features = true }
 pezsp-session = { workspace = true, default-features = true }
 pezsp-staking = { workspace = true, default-features = true }
@@ -51,12 +51,13 @@ pezpallet-staking = { workspace = true, default-features = true }
 
 [features]
 std = [
-	"log/std", 
-	"pezframe-system/std"
+	"log/std",
+	"pezframe-system/std",
 ]
 try-runtime = [
 	"pezframe-election-provider-support/try-runtime",
 	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
 	"pezframe/try-runtime",
 	"pezpallet-authorship/try-runtime",
 	"pezpallet-balances/try-runtime",
@@ -69,11 +70,11 @@ try-runtime = [
 	"pezpallet-staking-async/try-runtime",
 	"pezpallet-staking/try-runtime",
 	"pezpallet-timestamp/try-runtime",
-	"pezframe-system/try-runtime"
 ]
 runtime-benchmarks = [
 	"pezframe-election-provider-support/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
 	"pezframe/runtime-benchmarks",
 	"pezpallet-authorship/runtime-benchmarks",
 	"pezpallet-balances/runtime-benchmarks",
@@ -88,5 +89,4 @@ runtime-benchmarks = [
 	"pezpallet-timestamp/runtime-benchmarks",
 	"pezsp-session/runtime-benchmarks",
 	"pezsp-staking/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks"
 ]

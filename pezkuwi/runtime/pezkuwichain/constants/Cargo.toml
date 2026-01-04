@@ -29,7 +29,7 @@ xcm = { workspace = true }
 xcm-builder = { workspace = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"pezframe-support/std",
 	"pezkuwi-primitives/std",

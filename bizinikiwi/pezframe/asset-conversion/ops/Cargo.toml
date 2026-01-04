@@ -38,7 +38,7 @@ primitive-types = { features = [
 ], workspace = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"log/std",

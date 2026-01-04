@@ -23,8 +23,8 @@ parking_lot = { workspace = true, default-features = true }
 tracing = { workspace = true }
 
 # Bridge Dependencies
-pezbp-messages = { workspace = true, default-features = true }
 pez-finality-relay = { workspace = true }
+pezbp-messages = { workspace = true, default-features = true }
 relay-utils = { workspace = true }
 
 pezsp-arithmetic = { workspace = true, default-features = true }

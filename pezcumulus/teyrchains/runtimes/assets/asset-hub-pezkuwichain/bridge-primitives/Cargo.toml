@@ -27,15 +27,15 @@ pezsp-core = { workspace = true }
 # Bridge Dependencies
 pezbp-bridge-hub-pezcumulus = { workspace = true }
 pezbp-messages = { workspace = true }
-pezbp-xcm-bridge-hub-router = { workspace = true }
 pezbp-runtime = { workspace = true }
+pezbp-xcm-bridge-hub-router = { workspace = true }
 testnet-teyrchains-constants = { features = ["pezkuwichain"], workspace = true }
 
 # Pezkuwi dependencies
 xcm = { workspace = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"pezbp-bridge-hub-pezcumulus/std",

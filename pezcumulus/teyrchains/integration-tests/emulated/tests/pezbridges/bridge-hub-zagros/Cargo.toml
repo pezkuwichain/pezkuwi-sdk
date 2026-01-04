@@ -40,9 +40,9 @@ pezpallet-bridge-relayers = { workspace = true }
 
 # Pezcumulus
 asset-hub-zagros-runtime = { workspace = true }
+emulated-integration-tests-common = { workspace = true }
 pezbp-asset-hub-zagros = { workspace = true }
 pezbridge-hub-common = { workspace = true }
-emulated-integration-tests-common = { workspace = true }
 pezbridge-hub-zagros-runtime = { workspace = true }
 pezcumulus-pezpallet-teyrchain-system = { workspace = true }
 pezcumulus-pezpallet-xcmp-queue = { workspace = true }

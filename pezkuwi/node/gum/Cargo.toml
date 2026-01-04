@@ -21,4 +21,4 @@ pezkuwi-primitives = { features = [
 tracing = { workspace = true, default-features = true }
 
 [features]
-runtime-benchmarks = [ "pezkuwi-primitives/runtime-benchmarks" ]
+runtime-benchmarks = ["pezkuwi-primitives/runtime-benchmarks"]

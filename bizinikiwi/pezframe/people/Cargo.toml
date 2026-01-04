@@ -28,7 +28,7 @@ verifiable = { workspace = true, features = ["small-ring"] }
 
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"log/std",

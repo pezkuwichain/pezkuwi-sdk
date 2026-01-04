@@ -38,7 +38,7 @@ pezsc-chain-spec = { workspace = true, default-features = true }
 bizinikiwi-wasm-builder = { optional = true, workspace = true, default-features = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"bizinikiwi-wasm-builder",
 	"codec/std",
@@ -58,11 +58,11 @@ std = [
 runtime-benchmarks = [
 	"bizinikiwi-wasm-builder?/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
 	"pezframe/runtime-benchmarks",
 	"pezsc-chain-spec/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks",
 	"pezsp-genesis-builder/runtime-benchmarks",
 	"pezsp-keyring/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezsp-api/runtime-benchmarks"
 ]

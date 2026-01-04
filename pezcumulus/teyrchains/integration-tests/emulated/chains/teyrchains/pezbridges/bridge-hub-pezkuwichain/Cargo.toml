@@ -26,8 +26,8 @@ xcm = { workspace = true }
 pezbp-messages = { workspace = true }
 
 # Pezcumulus
-pezbridge-hub-common = { workspace = true }
 emulated-integration-tests-common = { workspace = true }
+pezbridge-hub-common = { workspace = true }
 pezbridge-hub-pezkuwichain-runtime = { workspace = true, default-features = true }
 testnet-teyrchains-constants = { features = [
 	"pezkuwichain",

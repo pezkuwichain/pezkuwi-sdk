@@ -19,33 +19,33 @@ targets = ["x86_64-unknown-linux-gnu"]
 codec = { features = ["derive"], workspace = true }
 docify = { workspace = true }
 pezframe = { workspace = true, features = ["runtime"] }
-pezframe-system = { workspace = true }
 pezframe-support = { workspace = true }
+pezframe-system = { workspace = true }
 pezsp-metadata-ir = { optional = true, workspace = true }
 scale-info = { features = ["derive"], workspace = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 
 std = [
 	"codec/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
 	"pezframe/std",
 	"pezsp-metadata-ir/std",
 	"scale-info/std",
-	"pezframe-support/std",
-	"pezframe-system/std"
 ]
 
 runtime-benchmarks = [
-	"pezframe/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks"
+	"pezframe-system/runtime-benchmarks",
+	"pezframe/runtime-benchmarks",
 ]
 
 try-runtime = [
-	"pezframe/try-runtime",
 	"pezframe-support/try-runtime",
-	"pezframe-system/try-runtime"
+	"pezframe-system/try-runtime",
+	"pezframe/try-runtime",
 ]
 
-frame-metadata = [ "pezsp-metadata-ir" ]
+frame-metadata = ["pezsp-metadata-ir"]

@@ -27,7 +27,7 @@ pezsp-std = { workspace = true }
 xcm = { workspace = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"pezsnowbridge-core/std",

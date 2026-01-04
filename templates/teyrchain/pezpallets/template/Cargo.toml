@@ -28,11 +28,11 @@ pezframe-support = { workspace = true, default-features = false }
 pezframe-system = { workspace = true, default-features = false }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 runtime-benchmarks = [
-	"pezframe/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks"
+	"pezframe-system/runtime-benchmarks",
+	"pezframe/runtime-benchmarks",
 ]
 std = [
 	"codec/std",
@@ -42,7 +42,7 @@ std = [
 	"scale-info/std",
 ]
 try-runtime = [
-	"pezframe/try-runtime",
 	"pezframe-support/try-runtime",
-	"pezframe-system/try-runtime"
+	"pezframe-system/try-runtime",
+	"pezframe/try-runtime",
 ]

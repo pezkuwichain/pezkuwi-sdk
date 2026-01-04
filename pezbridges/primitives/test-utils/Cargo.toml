@@ -13,13 +13,13 @@ homepage = { workspace = true }
 workspace = true
 
 [dependencies]
-pezbp-header-pez-chain = { workspace = true }
-pezbp-pezkuwi-core = { workspace = true }
-pezbp-teyrchains = { workspace = true }
 codec = { workspace = true }
 ed25519-dalek = { workspace = true }
 finality-grandpa = { workspace = true }
+pezbp-header-pez-chain = { workspace = true }
+pezbp-pezkuwi-core = { workspace = true }
 pezbp-runtime = { features = ["test-helpers"], workspace = true }
+pezbp-teyrchains = { workspace = true }
 pezsp-application-crypto = { workspace = true }
 pezsp-consensus-grandpa = { workspace = true }
 pezsp-core = { workspace = true }
@@ -28,7 +28,7 @@ pezsp-std = { workspace = true }
 pezsp-trie = { workspace = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"ed25519-dalek/std",

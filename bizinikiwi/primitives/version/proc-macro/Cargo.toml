@@ -29,4 +29,4 @@ syn = { features = ["extra-traits", "fold", "full", "visit"], workspace = true }
 pezsp-version = { workspace = true, default-features = true }
 
 [features]
-runtime-benchmarks = [ "pezsp-version/runtime-benchmarks" ]
+runtime-benchmarks = ["pezsp-version/runtime-benchmarks"]

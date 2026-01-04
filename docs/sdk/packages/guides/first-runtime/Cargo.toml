@@ -20,8 +20,8 @@ serde_json = { workspace = true }
 
 # this is a frame-based runtime, thus importing `frame` with runtime feature enabled.
 pezframe = { workspace = true, features = ["runtime"] }
-pezframe-system = { workspace = true }
 pezframe-support = { workspace = true }
+pezframe-system = { workspace = true }
 
 # pallets that we want to use
 pezpallet-balances = { workspace = true }
@@ -31,6 +31,7 @@ pezpallet-transaction-payment = { workspace = true }
 pezpallet-transaction-payment-rpc-runtime-api = { workspace = true }
 
 # other pezkuwi-sdk-deps
+pezframe-system-rpc-runtime-api = { workspace = true }
 pezsp-api = { workspace = true }
 pezsp-block-builder = { workspace = true }
 pezsp-core = { workspace = true }
@@ -40,7 +41,6 @@ pezsp-offchain = { workspace = true }
 pezsp-runtime = { workspace = true }
 pezsp-session = { workspace = true }
 pezsp-transaction-pool = { workspace = true }
-pezframe-system-rpc-runtime-api = { workspace = true }
 
 # local pezpallet templates
 first-pezpallet = { workspace = true }
@@ -51,7 +51,7 @@ docify = { workspace = true }
 bizinikiwi-wasm-builder = { workspace = true, optional = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"bizinikiwi-wasm-builder",
 	"codec/std",
@@ -80,21 +80,21 @@ std = [
 runtime-benchmarks = [
 	"bizinikiwi-wasm-builder?/runtime-benchmarks",
 	"first-pezpallet/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system-rpc-runtime-api/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
 	"pezframe/runtime-benchmarks",
 	"pezpallet-balances/runtime-benchmarks",
 	"pezpallet-sudo/runtime-benchmarks",
 	"pezpallet-timestamp/runtime-benchmarks",
 	"pezpallet-transaction-payment-rpc-runtime-api/runtime-benchmarks",
 	"pezpallet-transaction-payment/runtime-benchmarks",
-	"pezsp-keyring/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks",
-	"pezframe-system-rpc-runtime-api/runtime-benchmarks",
 	"pezsp-api/runtime-benchmarks",
 	"pezsp-block-builder/runtime-benchmarks",
 	"pezsp-genesis-builder/runtime-benchmarks",
+	"pezsp-keyring/runtime-benchmarks",
 	"pezsp-offchain/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 	"pezsp-session/runtime-benchmarks",
-	"pezsp-transaction-pool/runtime-benchmarks"
+	"pezsp-transaction-pool/runtime-benchmarks",
 ]

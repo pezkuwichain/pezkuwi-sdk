@@ -20,8 +20,8 @@ tracing = { workspace = true }
 # Bridge Dependencies
 pezbp-header-pez-chain = { workspace = true }
 pezbp-pezkuwi-core = { workspace = true }
-pezbp-teyrchains = { workspace = true }
 pezbp-runtime = { workspace = true }
+pezbp-teyrchains = { workspace = true }
 pezpallet-bridge-grandpa = { workspace = true }
 
 # Bizinikiwi Dependencies
@@ -38,7 +38,7 @@ pezsp-core = { workspace = true, default-features = true }
 pezsp-io = { workspace = true, default-features = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"pezbp-header-pez-chain/std",

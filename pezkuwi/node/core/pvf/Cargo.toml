@@ -77,7 +77,7 @@ pezsc-sysinfo = { workspace = true, default-features = true }
 
 [features]
 ci-only-tests = []
-jemalloc-allocator = [ "pezkuwi-node-core-pvf-common/jemalloc-allocator" ]
+jemalloc-allocator = ["pezkuwi-node-core-pvf-common/jemalloc-allocator"]
 # This feature is used to export test code to other crates without putting it in the production build.
 test-utils = [
 	"dep:is_executable",

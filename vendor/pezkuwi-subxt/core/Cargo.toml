@@ -15,7 +15,7 @@ description = "A no-std compatible subset of Subxt's functionality"
 keywords = ["extrinsic", "no-std", "parity", "subxt"]
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"bitvec/std",
 	"blake2/std",

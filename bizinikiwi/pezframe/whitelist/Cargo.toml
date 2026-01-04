@@ -18,8 +18,8 @@ targets = ["x86_64-unknown-linux-gnu"]
 [dependencies]
 codec = { features = ["derive", "max-encoded-len"], workspace = true }
 pezframe = { workspace = true, features = ["runtime"] }
-pezframe-system = { workspace = true }
 pezframe-support = { workspace = true }
+pezframe-system = { workspace = true }
 scale-info = { features = ["derive"], workspace = true }
 
 [dev-dependencies]
@@ -27,25 +27,25 @@ pezpallet-balances = { workspace = true, default-features = true }
 pezpallet-preimage = { workspace = true, default-features = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
 	"pezframe/std",
 	"scale-info/std",
-	"pezframe-support/std",
-	"pezframe-system/std"
 ]
 runtime-benchmarks = [
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
 	"pezframe/runtime-benchmarks",
 	"pezpallet-balances/runtime-benchmarks",
 	"pezpallet-preimage/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezframe-system/runtime-benchmarks"
 ]
 try-runtime = [
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
 	"pezframe/try-runtime",
 	"pezpallet-balances/try-runtime",
 	"pezpallet-preimage/try-runtime",
-	"pezframe-support/try-runtime",
-	"pezframe-system/try-runtime"
 ]

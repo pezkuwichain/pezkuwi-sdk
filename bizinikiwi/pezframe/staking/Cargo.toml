@@ -52,7 +52,7 @@ pezsp-tracing = { workspace = true, default-features = true }
 rand_chacha = { workspace = true, default-features = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"log/std",

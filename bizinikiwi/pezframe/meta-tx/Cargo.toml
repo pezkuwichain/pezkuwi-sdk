@@ -34,7 +34,7 @@ pezsp-keyring = { workspace = true, default-features = true }
 pezsp-keystore = { workspace = true, default-features = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"pezframe-benchmarking?/std",

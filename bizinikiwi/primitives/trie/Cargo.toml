@@ -47,7 +47,7 @@ trie-bench = { workspace = true }
 trie-standardmap = { workspace = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"ahash",
 	"codec/std",

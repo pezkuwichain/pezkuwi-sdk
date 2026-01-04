@@ -68,4 +68,4 @@ runtime-benchmarks = [
 	"pezsp-state-machine/runtime-benchmarks",
 	"pezsp-trie/runtime-benchmarks",
 ]
-rocksdb = [ "kvdb-rocksdb" ]
+rocksdb = ["kvdb-rocksdb"]

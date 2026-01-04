@@ -26,11 +26,11 @@ pezsp-application-crypto = { workspace = true }
 scale-info = { features = ["derive"], workspace = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"pezsp-api/std",
 	"pezsp-application-crypto/std",
 	"scale-info/std",
 ]
-runtime-benchmarks = [ "pezsp-api/runtime-benchmarks" ]
+runtime-benchmarks = ["pezsp-api/runtime-benchmarks"]

@@ -25,7 +25,7 @@ pezsp-runtime = { workspace = true }
 serde_json = { features = ["alloc", "arbitrary_precision"], workspace = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"pezsp-api/std",

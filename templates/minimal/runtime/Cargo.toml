@@ -39,7 +39,7 @@ pezkuwi-sdk = { optional = true, workspace = true, features = [
 ] }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"pezkuwi-sdk/std",

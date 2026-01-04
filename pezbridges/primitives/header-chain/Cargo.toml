@@ -34,7 +34,7 @@ hex = { workspace = true, default-features = true }
 hex-literal = { workspace = true, default-features = true }
 
 [features]
-default = [ "std" ]
+default = ["std"]
 std = [
 	"codec/std",
 	"finality-grandpa/std",

@@ -38,8 +38,8 @@ pezsp-io = { workspace = true, default-features = true }
 pezsp-version = { workspace = true, default-features = true }
 
 [features]
-default = [ "std" ]
-with-tracing = [ "pezsp-tracing/with-tracing" ]
+default = ["std"]
+with-tracing = ["pezsp-tracing/with-tracing"]
 std = [
 	"codec/std",
 	"log/std",

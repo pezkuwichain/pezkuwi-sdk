@@ -33,7 +33,7 @@ pezsp-runtime = { workspace = true, default-features = true }
 pezsp-tracing = { workspace = true, default-features = true }
 
 [features]
-bls-experimental = [ "bizinikiwi-test-runtime/bls-experimental" ]
+bls-experimental = ["bizinikiwi-test-runtime/bls-experimental"]
 runtime-benchmarks = [
 	"bizinikiwi-test-client/runtime-benchmarks",
 	"bizinikiwi-test-runtime/runtime-benchmarks",

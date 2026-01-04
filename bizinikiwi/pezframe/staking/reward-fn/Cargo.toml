@@ -20,5 +20,5 @@ log = { workspace = true }
 pezsp-arithmetic = { workspace = true }
 
 [features]
-default = [ "std" ]
-std = [ "log/std", "pezsp-arithmetic/std" ]
+default = ["std"]
+std = ["log/std", "pezsp-arithmetic/std"]

@@ -15,12 +15,12 @@ description = "Make RPC calls to Bizinikiwi based nodes"
 keywords = ["parity", "rpcs", "subxt"]
 
 [features]
-default = [ "jsonrpsee", "native" ]
+default = ["jsonrpsee", "native"]
 
-subxt = [ "dep:pezkuwi-subxt-core" ]
-jsonrpsee = [ "dep:jsonrpsee", "dep:tokio-util" ]
+subxt = ["dep:pezkuwi-subxt-core"]
+jsonrpsee = ["dep:jsonrpsee", "dep:tokio-util"]
 
-unstable-light-client = [ "dep:pezkuwi-subxt-lightclient" ]
+unstable-light-client = ["dep:pezkuwi-subxt-lightclient"]
 
 reconnecting-rpc-client = [
 	"dep:finito",
@@ -29,7 +29,7 @@ reconnecting-rpc-client = [
 	"tokio/sync",
 ]
 
-mock-rpc-client = [ "dep:tokio", "tokio/sync" ]
+mock-rpc-client = ["dep:tokio", "tokio/sync"]
 
 # Enable this for native (ie non web/wasm builds).
 # Exactly 1 of "web" and "native" is expected.

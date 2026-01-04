@@ -25,24 +25,24 @@ serde = { version = "1.0.101", default-features = false, optional = true, featur
 ] }
 
 [features]
-default = [ "current", "std" ]
+default = ["current", "std"]
 
 # Feature flag for pre-V14 versions.
 legacy = []
 
 # The current stable metadata versions.
-current = [ "scale-info" ]
+current = ["scale-info"]
 
 # Unstable next metadata version.
-unstable = [ "current" ]
+unstable = ["current"]
 
 # Serde support without relying on std features
-serde_full = [ "codec/serde", "scale-info/serde", "serde", "serde/alloc" ]
+serde_full = ["codec/serde", "scale-info/serde", "serde", "serde/alloc"]
 
 # Scale decode support without relying on std features
-decode = [ "scale-info/decode" ]
+decode = ["scale-info/decode"]
 
-std = [ "codec/std", "decode", "scale-info/std", "serde/std", "serde_full" ]
+std = ["codec/std", "decode", "scale-info/std", "serde/std", "serde_full"]
 
 [lints]
 workspace = true
