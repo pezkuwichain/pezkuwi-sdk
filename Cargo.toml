@@ -623,6 +623,7 @@ members = [
 	"vendor/pezkuwi-zombienet-sdk/crates/provider",
 	"vendor/pezkuwi-zombienet-sdk/crates/sdk",
 	"vendor/pezkuwi-zombienet-sdk/crates/support",
+	"vendor/pezkuwi-zombienet-sdk/crates/cli",
 ]
 
 default-members = [
@@ -1515,7 +1516,7 @@ pezkuwi-subxt-codegen = { path = "vendor/pezkuwi-subxt/codegen", version = "0.44
 pezkuwi-subxt-core = { path = "vendor/pezkuwi-subxt/core", version = "0.44.0" }
 pezkuwi-subxt-lightclient = { path = "vendor/pezkuwi-subxt/lightclient", version = "0.44.0" }
 pezkuwi-subxt-macro = { path = "vendor/pezkuwi-subxt/macro", version = "0.44.0" }
-pezkuwi-subxt-metadata = { path = "vendor/pezkuwi-subxt/metadata", version = "0.44.0" }
+pezkuwi-subxt-metadata = { path = "vendor/pezkuwi-subxt/metadata", version = "0.44.0", default-features = false }
 pezkuwi-subxt-rpcs = { path = "vendor/pezkuwi-subxt/rpcs", version = "0.44.0" }
 pezkuwi-subxt-signer = { path = "vendor/pezkuwi-subxt/signer", version = "0.44.0" }
 pezkuwi-subxt-utils-fetchmetadata = { path = "vendor/pezkuwi-subxt/utils/fetch-metadata", version = "0.44.0" }
