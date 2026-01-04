@@ -90,12 +90,12 @@ pub use pezpallet::*;
 pub use weights::WeightInfo;
 
 use alloc::{vec, vec::Vec};
-use pezframe::prelude::*;
 use fungible::{
 	Balanced as FunBalanced, Inspect as FunInspect, Mutate as FunMutate,
 	MutateHold as FunMutateHold,
 };
 use nonfungible::{Inspect as NftInspect, Transfer as NftTransfer};
+use pezframe::prelude::*;
 use tokens::{Balance, Restriction::*};
 use Fortitude::*;
 use Precision::*;

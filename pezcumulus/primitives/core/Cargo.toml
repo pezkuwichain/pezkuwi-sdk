@@ -29,7 +29,7 @@ pezkuwi-teyrchain-primitives = { workspace = true }
 xcm = { workspace = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"codec/std",
 	"pezkuwi-core-primitives/std",

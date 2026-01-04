@@ -41,8 +41,8 @@ use super::{
 	TeyrchainSystem, WeightToFee, XcmpQueue,
 };
 use crate::{BaseDeliveryFee, FeeAssetId, TransactionByteFee};
-use pez_assets_common::TrustBackedAssetsAsLocation;
 use core::marker::PhantomData;
+use pez_assets_common::TrustBackedAssetsAsLocation;
 use pezframe_support::{
 	parameter_types,
 	traits::{

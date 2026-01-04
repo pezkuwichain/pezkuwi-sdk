@@ -72,8 +72,8 @@ mod tests;
 extern crate alloc;
 
 use codec::FullCodec;
-use pezframe::{prelude::*, traits::StorageInstance};
 pub use paged_list::StoragePagedList;
+use pezframe::{prelude::*, traits::StorageInstance};
 
 #[pezframe::pezpallet]
 pub mod pezpallet {

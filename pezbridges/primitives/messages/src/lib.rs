@@ -19,8 +19,8 @@
 #![warn(missing_docs)]
 #![cfg_attr(not(feature = "std"), no_std)]
 
-use pezbp_header_pez_chain::HeaderChainError;
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
+use pezbp_header_pez_chain::HeaderChainError;
 use pezbp_runtime::{
 	messages::MessageDispatchResult, BasicOperatingMode, Chain, OperatingMode, RangeInclusiveExt,
 	StorageProofError, UnderlyingChainOf, UnderlyingChainProvider,

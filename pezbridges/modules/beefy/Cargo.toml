@@ -40,10 +40,10 @@ pezsp-io = { workspace = true, default-features = true }
 rand = { workspace = true, default-features = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
-	"pezbp-beefy/std",
 	"codec/std",
+	"pezbp-beefy/std",
 	"pezbp-runtime/std",
 	"pezframe-support/std",
 	"pezframe-system/std",
@@ -63,8 +63,8 @@ try-runtime = [
 ]
 runtime-benchmarks = [
 	"pezbp-beefy/runtime-benchmarks",
-	"pezbp-test-utils/runtime-benchmarks",
 	"pezbp-runtime/runtime-benchmarks",
+	"pezbp-test-utils/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
 	"pezframe-system/runtime-benchmarks",
 	"pezpallet-beefy-mmr/runtime-benchmarks",

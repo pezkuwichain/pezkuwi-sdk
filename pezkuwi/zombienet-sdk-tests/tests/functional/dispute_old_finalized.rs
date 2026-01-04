@@ -20,9 +20,9 @@
 use anyhow::anyhow;
 
 use pezcumulus_zombienet_sdk_helpers::assert_para_throughput;
+use pezkuwi_zombienet_orchestrator::network::node::LogLineCountOptions;
 use serde_json::json;
 use tokio::time::Duration;
-use pezkuwi_zombienet_orchestrator::network::node::LogLineCountOptions;
 
 #[tokio::test(flavor = "multi_thread")]
 async fn dispute_old_finalized() -> Result<(), anyhow::Error> {

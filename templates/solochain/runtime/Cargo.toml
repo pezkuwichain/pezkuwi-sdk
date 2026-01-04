@@ -69,7 +69,7 @@ pezpallet-template = { workspace = true }
 bizinikiwi-wasm-builder = { optional = true, workspace = true, default-features = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"bizinikiwi-wasm-builder",
 	"codec/std",
@@ -159,8 +159,8 @@ try-runtime = [
 # generate the metadata hash and then a second time with the
 # `RUNTIME_METADATA_HASH` environment variable set for the `CheckMetadataHash`
 # extension.
-metadata-hash = ["bizinikiwi-wasm-builder/metadata-hash"]
+metadata-hash = [ "bizinikiwi-wasm-builder/metadata-hash" ]
 
 # A convenience feature for enabling things when doing a build
 # for an on-chain release.
-on-chain-release-build = ["metadata-hash", "pezsp-api/disable-logging"]
+on-chain-release-build = [ "metadata-hash", "pezsp-api/disable-logging" ]

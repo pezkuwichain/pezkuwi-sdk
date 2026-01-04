@@ -17,13 +17,13 @@
 use crate::{teyrchains_loop_metrics::TeyrchainsLoopMetrics, TeyrchainsPipeline};
 
 use async_trait::async_trait;
-use pezbp_pezkuwi_core::{
-	teyrchains::{ParaHash, ParaHeadsProof, ParaId},
-	BlockNumber as RelayBlockNumber,
-};
 use futures::{
 	future::{FutureExt, Shared},
 	poll, select_biased,
+};
+use pezbp_pezkuwi_core::{
+	teyrchains::{ParaHash, ParaHeadsProof, ParaId},
+	BlockNumber as RelayBlockNumber,
 };
 use relay_bizinikiwi_client::{BlockNumberOf, Chain, HeaderIdOf, TeyrchainBase};
 use relay_utils::{

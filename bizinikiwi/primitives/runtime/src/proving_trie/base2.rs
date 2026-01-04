@@ -23,8 +23,8 @@
 use super::{ProofToHashes, ProvingTrie, TrieError};
 use crate::{Decode, DispatchError, Encode};
 use alloc::{collections::BTreeMap, vec::Vec};
-use pez_binary_merkle_tree::{merkle_proof, merkle_root, MerkleProof};
 use codec::MaxEncodedLen;
+use pez_binary_merkle_tree::{merkle_proof, merkle_root, MerkleProof};
 
 /// A helper structure for building a basic base-2 merkle trie and creating compact proofs for that
 /// trie.

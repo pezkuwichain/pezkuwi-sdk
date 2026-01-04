@@ -23,11 +23,7 @@ array-bytes = { workspace = true, default-features = true }
 pezsp-core = { workspace = true, default-features = true }
 
 [features]
-debug = ["array-bytes", "log"]
-default = ["debug", "std"]
-std = [
-	"codec/std",
-	"hash-db/std",
-	"log/std",
-]
+debug = [ "array-bytes", "log" ]
+default = [ "debug", "std" ]
+std = [ "codec/std", "hash-db/std", "log/std" ]
 runtime-benchmarks = []

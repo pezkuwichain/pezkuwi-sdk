@@ -112,7 +112,7 @@ teyrchains-runtimes-test-utils = { workspace = true, default-features = true }
 bizinikiwi-wasm-builder = { optional = true, workspace = true, default-features = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"bizinikiwi-wasm-builder",
 	"codec/std",

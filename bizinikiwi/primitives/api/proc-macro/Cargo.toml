@@ -38,6 +38,6 @@ assert_matches = { workspace = true }
 
 [features]
 # Required for the doc tests
-default = ["std"]
-std = ["blake2/std"]
+default = [ "std" ]
+std = [ "blake2/std" ]
 no-metadata-docs = []

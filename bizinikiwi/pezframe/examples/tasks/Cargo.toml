@@ -31,7 +31,7 @@ pezsp-runtime = { workspace = true }
 pezframe-benchmarking = { optional = true, workspace = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"codec/std",
 	"log/std",
@@ -55,4 +55,7 @@ try-runtime = [
 	"pezframe-system/try-runtime",
 	"pezsp-runtime/try-runtime",
 ]
-experimental = ["pezframe-support/experimental", "pezframe-system/experimental"]
+experimental = [
+	"pezframe-support/experimental",
+	"pezframe-system/experimental",
+]

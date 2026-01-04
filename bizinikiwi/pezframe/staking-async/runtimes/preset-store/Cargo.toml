@@ -20,16 +20,18 @@ pezpallet-staking-async-ah-client = { workspace = true }
 scale-info = { workspace = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"codec/std",
-	"pezframe/std",
-	"pezframe-system/std",
 	"pezframe-support/std",
+	"pezframe-system/std",
+	"pezframe/std",
 	"pezpallet-staking-async-ah-client/std",
 	"scale-info/std",
 ]
 runtime-benchmarks = [
 	"pezframe/runtime-benchmarks",
 	"pezpallet-staking-async-ah-client/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks"
 ]

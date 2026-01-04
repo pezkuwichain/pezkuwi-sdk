@@ -25,4 +25,4 @@ clap = { features = ["derive"], workspace = true }
 pezsc-cli = { workspace = true, default-features = true }
 
 [features]
-runtime-benchmarks = ["pezsc-cli/runtime-benchmarks"]
+runtime-benchmarks = [ "pezsc-cli/runtime-benchmarks" ]

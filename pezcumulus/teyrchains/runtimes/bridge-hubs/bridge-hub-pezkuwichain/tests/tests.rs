@@ -16,9 +16,9 @@
 
 #![cfg(test)]
 
-use pezbp_pezkuwi_core::Signature;
 use codec::{Decode, Encode};
 use hex_literal::hex;
+use pezbp_pezkuwi_core::Signature;
 use pezbridge_hub_pezkuwichain_runtime::{
 	bridge_common_config, bridge_to_bulletin_config, bridge_to_zagros_config,
 	xcm_config::{RelayNetwork, TokenLocation, XcmConfig},
@@ -126,7 +126,6 @@ pezbridge_hub_test_utils::test_cases::include_teleports_for_native_asset_works!(
 
 mod bridge_hub_zagros_tests {
 	use super::*;
-	use pezbp_messages::LegacyLaneId;
 	use bridge_common_config::{
 		BridgeGrandpaZagrosInstance, BridgeTeyrchainZagrosInstance, DeliveryRewardInBalance,
 		RelayersForLegacyLaneIdsMessagesInstance,
@@ -135,6 +134,7 @@ mod bridge_hub_zagros_tests {
 		BridgeHubZagrosLocation, WithBridgeHubZagrosMessagesInstance,
 		XcmOverBridgeHubZagrosInstance, ZagrosGlobalConsensusNetwork,
 	};
+	use pezbp_messages::LegacyLaneId;
 	use pezbridge_hub_pezkuwichain_runtime::{
 		bridge_to_ethereum_config::EthereumGatewayAddress, xcm_config::LocationToAccountId,
 	};
@@ -525,13 +525,13 @@ mod bridge_hub_zagros_tests {
 
 mod bridge_hub_bulletin_tests {
 	use super::*;
-	use pezbp_messages::LegacyLaneId;
 	use bridge_common_config::BridgeGrandpaPezkuwichainBulletinInstance;
 	use bridge_to_bulletin_config::{
 		PezkuwichainBulletinGlobalConsensusNetwork,
 		PezkuwichainBulletinGlobalConsensusNetworkLocation,
 		WithPezkuwichainBulletinMessagesInstance, XcmOverPezkuwiBulletinInstance,
 	};
+	use pezbp_messages::LegacyLaneId;
 	use pezbridge_hub_pezkuwichain_runtime::{
 		bridge_common_config::RelayersForLegacyLaneIdsMessagesInstance,
 		xcm_config::LocationToAccountId,

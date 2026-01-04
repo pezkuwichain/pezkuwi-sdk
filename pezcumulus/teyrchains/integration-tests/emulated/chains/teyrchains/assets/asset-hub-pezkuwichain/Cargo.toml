@@ -39,8 +39,8 @@ pezbp-bridge-hub-pezkuwichain = { workspace = true }
 [features]
 runtime-benchmarks = [
 	"asset-hub-pezkuwichain-runtime/runtime-benchmarks",
-	"pezbp-bridge-hub-pezkuwichain/runtime-benchmarks",
 	"emulated-integration-tests-common/runtime-benchmarks",
+	"pezbp-bridge-hub-pezkuwichain/runtime-benchmarks",
 	"pezcumulus-primitives-core/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
 	"pezkuwichain-emulated-chain/runtime-benchmarks",

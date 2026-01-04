@@ -123,7 +123,10 @@ pub type FungibleTransactor = FungibleAdapter<
 
 /// `AssetId`/`Balance` converter for `TrustBackedAssets`.
 pub type TrustBackedAssetsConvertedConcreteId =
-	pez_assets_common::TrustBackedAssetsConvertedConcreteId<TrustBackedAssetsPalletLocation, Balance>;
+	pez_assets_common::TrustBackedAssetsConvertedConcreteId<
+		TrustBackedAssetsPalletLocation,
+		Balance,
+	>;
 
 /// Means for transacting assets besides the native currency on this chain.
 pub type FungiblesTransactor = FungiblesAdapter<

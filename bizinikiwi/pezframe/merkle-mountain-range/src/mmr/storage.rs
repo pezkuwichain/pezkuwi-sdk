@@ -25,6 +25,7 @@ use crate::{
 use alloc::{vec, vec::Vec};
 use codec::Encode;
 use core::iter::Peekable;
+use log::{debug, trace};
 use pezframe::{
 	deps::{
 		pezsp_core::offchain::StorageKind,
@@ -32,7 +33,6 @@ use pezframe::{
 	},
 	prelude::*,
 };
-use log::{debug, trace};
 
 /// A marker type for runtime-specific storage implementation.
 ///

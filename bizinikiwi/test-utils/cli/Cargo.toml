@@ -30,7 +30,7 @@ regex = { workspace = true }
 tokio = { features = ["full"], workspace = true, default-features = true }
 
 [features]
-try-runtime = ["node-cli/try-runtime"]
+try-runtime = [ "node-cli/try-runtime" ]
 runtime-benchmarks = [
 	"bizinikiwi-rpc-client/runtime-benchmarks",
 	"node-cli/runtime-benchmarks",

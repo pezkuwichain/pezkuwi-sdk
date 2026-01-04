@@ -63,10 +63,10 @@ xcm = { workspace = true, default-features = true }
 default = []
 test-helpers = []
 runtime-benchmarks = [
+	"pez-finality-relay/runtime-benchmarks",
 	"pezbp-header-pez-chain/runtime-benchmarks",
 	"pezbp-messages/runtime-benchmarks",
 	"pezbp-pezkuwi-core/runtime-benchmarks",
-	"pez-finality-relay/runtime-benchmarks",
 	"pezbp-runtime/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
 	"pezpallet-transaction-payment-rpc-runtime-api/runtime-benchmarks",

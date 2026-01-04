@@ -6,6 +6,7 @@ use crate::{
 
 use pezkuwi_sdk::{xcm, xcm_builder, xcm_executor, *};
 
+use pezframe_support::traits::Disabled;
 use pezframe_support::{
 	parameter_types,
 	traits::{ConstU32, Contains, Everything, Nothing},
@@ -13,7 +14,6 @@ use pezframe_support::{
 };
 use pezframe_system::EnsureRoot;
 use pezkuwi_runtime_common::impls::ToAuthor;
-use pezframe_support::traits::Disabled;
 use pezkuwi_teyrchain_primitives::primitives::Sibling;
 use pezpallet_xcm::XcmPassthrough;
 use xcm::latest::prelude::*;

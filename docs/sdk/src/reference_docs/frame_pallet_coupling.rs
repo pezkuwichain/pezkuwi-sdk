@@ -272,8 +272,8 @@ impl<AccountId> AuthorProvider<AccountId> for () {
 
 pub mod runtime {
 	use super::*;
-	use pezframe::{runtime::prelude::*, testing_prelude::*};
 	use pezcumulus_pezpallet_aura_ext::pezpallet;
+	use pezframe::{runtime::prelude::*, testing_prelude::*};
 
 	construct_runtime!(
 		pub struct Runtime {

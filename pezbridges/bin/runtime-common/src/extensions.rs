@@ -19,8 +19,8 @@
 //! checks.
 
 use pezbp_relayers::ExplicitOrAccountParams;
-use pezbp_teyrchains::SubmitTeyrchainHeadsInfo;
 use pezbp_runtime::Teyrchain;
+use pezbp_teyrchains::SubmitTeyrchainHeadsInfo;
 use pezpallet_bridge_grandpa::{
 	BridgedBlockNumber, CallSubType as GrandpaCallSubType, SubmitFinalityProofHelper,
 };
@@ -377,14 +377,14 @@ macro_rules! generate_bridge_reject_obsolete_headers_and_messages {
 mod tests {
 	use super::*;
 	use crate::mock::*;
+	use codec::{Decode, Encode, MaxEncodedLen};
 	use pezbp_header_pez_chain::StoredHeaderDataBuilder;
 	use pezbp_messages::{InboundLaneData, MessageNonce, OutboundLaneData};
 	use pezbp_pezkuwi_core::teyrchains::{ParaHeadsProof, ParaId};
 	use pezbp_relayers::{RewardsAccountOwner, RewardsAccountParams};
+	use pezbp_runtime::HeaderId;
 	use pezbp_test_utils::{make_default_justification, test_keyring, TEST_GRANDPA_SET_ID};
 	use pezbp_teyrchains::{BestParaHeadHash, ParaInfo};
-	use codec::{Decode, Encode, MaxEncodedLen};
-	use pezbp_runtime::HeaderId;
 	use pezframe_support::{assert_err, assert_ok, traits::fungible::Mutate};
 	use pezpallet_bridge_grandpa::{Call as GrandpaCall, StoredAuthoritySet};
 	use pezpallet_bridge_teyrchains::Call as TeyrchainsCall;

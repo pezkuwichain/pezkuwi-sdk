@@ -60,14 +60,14 @@ pezsp-crypto-hashing = { workspace = true, default-features = true }
 pretty_assertions = { workspace = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
-	"pez-binary-merkle-tree/std",
 	"codec/std",
 	"environmental/std",
 	"frame-metadata/std",
 	"k256/std",
 	"log/std",
+	"pez-binary-merkle-tree/std",
 	"pezframe-support-procedural/std",
 	"pezsp-api/std",
 	"pezsp-arithmetic/std",
@@ -100,11 +100,8 @@ runtime-benchmarks = [
 	"pezsp-state-machine?/runtime-benchmarks",
 	"pezsp-trie/runtime-benchmarks",
 ]
-try-runtime = [
-	"pezsp-debug-derive/force-debug",
-	"pezsp-runtime/try-runtime",
-]
-experimental = ["pezframe-support-procedural/experimental"]
+try-runtime = [ "pezsp-debug-derive/force-debug", "pezsp-runtime/try-runtime" ]
+experimental = [ "pezframe-support-procedural/experimental" ]
 # By default some types have documentation, `no-metadata-docs` allows to reduce the documentation
 # in the metadata.
 no-metadata-docs = [
@@ -113,8 +110,8 @@ no-metadata-docs = [
 ]
 # By default some types have documentation, `full-metadata-docs` allows to add documentation to
 # more types in the metadata.
-full-metadata-docs = ["scale-info/docs"]
+full-metadata-docs = [ "scale-info/docs" ]
 # Generate impl-trait for tuples with the given number of tuples. Will be needed as the number of
 # pallets in a runtime grows. Does increase the compile time!
-tuples-96 = ["pezframe-support-procedural/tuples-96"]
-tuples-128 = ["pezframe-support-procedural/tuples-128"]
+tuples-96 = [ "pezframe-support-procedural/tuples-96" ]
+tuples-128 = [ "pezframe-support-procedural/tuples-128" ]

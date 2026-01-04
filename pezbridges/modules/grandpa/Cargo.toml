@@ -40,12 +40,12 @@ pezsp-core = { workspace = true, default-features = true }
 pezsp-io = { workspace = true, default-features = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
-	"pezbp-header-pez-chain/std",
-	"pezbp-test-utils/std",
 	"codec/std",
+	"pezbp-header-pez-chain/std",
 	"pezbp-runtime/std",
+	"pezbp-test-utils/std",
 	"pezframe-benchmarking/std",
 	"pezframe-support/std",
 	"pezframe-system/std",
@@ -57,9 +57,9 @@ std = [
 ]
 runtime-benchmarks = [
 	"pezbp-header-pez-chain/runtime-benchmarks",
+	"pezbp-runtime/runtime-benchmarks",
 	"pezbp-test-utils",
 	"pezbp-test-utils?/runtime-benchmarks",
-	"pezbp-runtime/runtime-benchmarks",
 	"pezframe-benchmarking/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
 	"pezframe-system/runtime-benchmarks",

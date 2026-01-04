@@ -41,9 +41,9 @@ test-log = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-	"pezframe/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
 	"pezframe-system/runtime-benchmarks",
+	"pezframe/runtime-benchmarks",
 	"pezkuwi-runtime-teyrchains/runtime-benchmarks",
 	"pezpallet-balances/runtime-benchmarks",
 	"pezpallet-message-queue/runtime-benchmarks",

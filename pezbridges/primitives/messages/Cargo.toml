@@ -32,10 +32,10 @@ hex = { workspace = true, default-features = true }
 hex-literal = { workspace = true, default-features = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
-	"pezbp-header-pez-chain/std",
 	"codec/std",
+	"pezbp-header-pez-chain/std",
 	"pezbp-runtime/std",
 	"pezframe-support/std",
 	"pezsp-core/std",

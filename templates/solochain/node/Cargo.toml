@@ -68,10 +68,10 @@ pez-solochain-template-runtime = { workspace = true }
 bizinikiwi-build-script-utils = { workspace = true, default-features = true }
 
 [features]
-default = ["std"]
-std = ["pez-solochain-template-runtime/std"]
+default = [ "std" ]
+std = [ "pez-solochain-template-runtime/std" ]
 # Storage benchmarking support (optional)
-storage-benchmark = ["pezframe-benchmarking-cli/storage-benchmark"]
+storage-benchmark = [ "pezframe-benchmarking-cli/storage-benchmark" ]
 # Dependencies that are only required if runtime benchmarking should be build.
 runtime-benchmarks = [
 	"bizinikiwi-frame-rpc-system/runtime-benchmarks",

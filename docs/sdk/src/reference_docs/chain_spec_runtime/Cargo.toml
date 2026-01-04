@@ -38,32 +38,31 @@ pezsc-chain-spec = { workspace = true, default-features = true }
 bizinikiwi-wasm-builder = { optional = true, workspace = true, default-features = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
+	"bizinikiwi-wasm-builder",
 	"codec/std",
-	"scale-info/std",
-
-	"pezframe/std",
 	"pezframe-support/std",
 	"pezframe-system/std",
-
+	"pezframe/std",
 	"pezsp-api/std",
 	"pezsp-application-crypto/std",
 	"pezsp-core/std",
 	"pezsp-genesis-builder/std",
 	"pezsp-keyring/std",
 	"pezsp-runtime/std",
-
-	"bizinikiwi-wasm-builder",
+	"scale-info/std",
 	"serde/std",
 	"serde_json/std",
 ]
 runtime-benchmarks = [
 	"bizinikiwi-wasm-builder?/runtime-benchmarks",
-	"pezframe/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
+	"pezframe/runtime-benchmarks",
 	"pezsc-chain-spec/runtime-benchmarks",
 	"pezsp-genesis-builder/runtime-benchmarks",
 	"pezsp-keyring/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
+	"pezsp-api/runtime-benchmarks"
 ]

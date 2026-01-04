@@ -35,13 +35,13 @@ testnet-teyrchains-constants = { features = ["zagros"], workspace = true }
 xcm = { workspace = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
+	"codec/std",
 	"pezbp-bridge-hub-pezcumulus/std",
 	"pezbp-messages/std",
-	"pezbp-xcm-bridge-hub-router/std",
-	"codec/std",
 	"pezbp-runtime/std",
+	"pezbp-xcm-bridge-hub-router/std",
 	"pezframe-support/std",
 	"pezsp-api/std",
 	"pezsp-core/std",
@@ -52,8 +52,8 @@ std = [
 runtime-benchmarks = [
 	"pezbp-bridge-hub-pezcumulus/runtime-benchmarks",
 	"pezbp-messages/runtime-benchmarks",
-	"pezbp-xcm-bridge-hub-router/runtime-benchmarks",
 	"pezbp-runtime/runtime-benchmarks",
+	"pezbp-xcm-bridge-hub-router/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
 	"pezsp-api/runtime-benchmarks",
 	"testnet-teyrchains-constants/runtime-benchmarks",

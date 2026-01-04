@@ -22,8 +22,8 @@ pezpallet-nomination-pools = { workspace = true }
 pezsp-api = { workspace = true }
 
 [features]
-default = ["std"]
-std = ["codec/std", "pezpallet-nomination-pools/std", "pezsp-api/std"]
+default = [ "std" ]
+std = [ "codec/std", "pezpallet-nomination-pools/std", "pezsp-api/std" ]
 runtime-benchmarks = [
 	"pezpallet-nomination-pools/runtime-benchmarks",
 	"pezsp-api/runtime-benchmarks",

@@ -26,9 +26,16 @@ honggfuzz = { workspace = true }
 pezpallet-paged-list = { features = ["std"], workspace = true }
 
 [features]
-default = ["std"]
-std = ["pezframe/std", "pezpallet-paged-list/std"]
+default = [ "std" ]
+std = [
+	"pezframe/std",
+	"pezpallet-paged-list/std",
+	"pezframe-support/std",
+	"pezframe-system/std"
+]
 runtime-benchmarks = [
 	"pezframe/runtime-benchmarks",
 	"pezpallet-paged-list/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks"
 ]

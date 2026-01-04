@@ -17,9 +17,6 @@
 #![cfg(test)]
 
 use crate::bridge_common_config::BridgeRewardBeneficiaries;
-use pezbp_messages::LegacyLaneId;
-use pezbp_pezkuwi_core::Signature;
-use pezbp_relayers::{PayRewardFromAccount, RewardsAccountOwner, RewardsAccountParams};
 use bridge_common_config::{BridgeRelayersInstance, BridgeReward, RequiredStakeForStakeAndSlash};
 use bridge_to_pezkuwichain_config::{
 	BridgeGrandpaPezkuwichainInstance, BridgeHubPezkuwichainLocation,
@@ -28,6 +25,9 @@ use bridge_to_pezkuwichain_config::{
 };
 use codec::{Decode, Encode};
 use hex_literal::hex;
+use pezbp_messages::LegacyLaneId;
+use pezbp_pezkuwi_core::Signature;
+use pezbp_relayers::{PayRewardFromAccount, RewardsAccountOwner, RewardsAccountParams};
 use pezbridge_hub_test_utils::{
 	test_cases::{from_teyrchain, run_test},
 	GovernanceOrigin, SlotDurations,

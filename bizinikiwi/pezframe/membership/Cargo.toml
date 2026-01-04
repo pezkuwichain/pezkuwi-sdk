@@ -28,7 +28,7 @@ pezsp-runtime = { features = ["serde"], workspace = true }
 scale-info = { features = ["derive", "serde"], workspace = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"codec/std",
 	"log/std",

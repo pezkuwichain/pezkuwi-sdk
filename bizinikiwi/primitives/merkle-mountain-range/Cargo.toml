@@ -31,7 +31,7 @@ thiserror = { optional = true, workspace = true }
 array-bytes = { workspace = true, default-features = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"codec/std",
 	"dep:thiserror",

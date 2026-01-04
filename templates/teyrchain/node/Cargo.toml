@@ -41,7 +41,7 @@ pezframe-benchmarking-cli = { workspace = true, optional = true }
 pezkuwi-sdk = { workspace = true, features = ["bizinikiwi-build-script-utils"] }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"log/std",
 	"pezkuwi-sdk/std",
@@ -52,8 +52,9 @@ runtime-benchmarks = [
 	"pezkuwi-sdk/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 	"teyrchain-template-runtime/runtime-benchmarks",
+	"pezframe-benchmarking-cli?/runtime-benchmarks"
 ]
-storage-benchmark = ["pezframe-benchmarking-cli/storage-benchmark"]
+storage-benchmark = [ "pezframe-benchmarking-cli/storage-benchmark" ]
 try-runtime = [
 	"pezkuwi-sdk/try-runtime",
 	"pezsp-runtime/try-runtime",

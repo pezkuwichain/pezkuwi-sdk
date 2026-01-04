@@ -16,11 +16,11 @@
 
 //! Helpers for generating message storage proofs, that are used by tests and by benchmarks.
 
+use codec::Encode;
 use pezbp_messages::{
 	storage_keys, ChainWithMessages, InboundLaneData, MessageKey, MessageNonce, MessagePayload,
 	OutboundLaneData,
 };
-use codec::Encode;
 use pezbp_runtime::{
 	grow_storage_value, record_all_trie_keys, AccountIdOf, Chain, HashOf, HasherOf,
 	RawStorageProof, UnverifiedStorageProofParams,

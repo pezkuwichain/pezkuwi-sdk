@@ -30,13 +30,13 @@ scale-info = { features = ["derive"], workspace = true }
 pezpallet-balances = { workspace = true, default-features = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"codec/std",
-	"pezframe/std",
-	"pezframe-system/std",
-	"pezframe-support/std",
 	"log/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
+	"pezframe/std",
 	"pezpallet-assets/std",
 	"pezpallet-balances/std",
 	"pezpallet-nfts/std",
@@ -47,10 +47,14 @@ runtime-benchmarks = [
 	"pezpallet-assets/runtime-benchmarks",
 	"pezpallet-balances/runtime-benchmarks",
 	"pezpallet-nfts/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks"
 ]
 try-runtime = [
 	"pezframe/try-runtime",
 	"pezpallet-assets/try-runtime",
 	"pezpallet-balances/try-runtime",
 	"pezpallet-nfts/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime"
 ]

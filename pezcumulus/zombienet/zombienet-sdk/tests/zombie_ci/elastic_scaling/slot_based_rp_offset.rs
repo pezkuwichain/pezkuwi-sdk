@@ -6,11 +6,11 @@
 
 use anyhow::anyhow;
 use pezcumulus_zombienet_sdk_helpers::{assert_relay_parent_offset, assign_cores};
-use serde_json::json;
 use pezkuwi_zombienet_sdk::{
 	subxt::{OnlineClient, PezkuwiConfig},
 	NetworkConfigBuilder,
 };
+use serde_json::json;
 
 #[tokio::test(flavor = "multi_thread")]
 async fn elastic_scaling_slot_based_relay_parent_offset_test() -> Result<(), anyhow::Error> {

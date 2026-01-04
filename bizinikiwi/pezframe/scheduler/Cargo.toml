@@ -31,7 +31,7 @@ pezpallet-preimage = { workspace = true, default-features = true }
 pezsp-core = { workspace = true, default-features = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 runtime-benchmarks = [
 	"pezframe-benchmarking",
 	"pezframe-benchmarking/runtime-benchmarks",

@@ -41,7 +41,7 @@ pezsnowbridge-test-utils = { workspace = true }
 pezsp-keyring = { workspace = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"codec/std",
 	"pezframe-benchmarking?/std",

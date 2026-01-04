@@ -19,8 +19,8 @@
 
 use crate::{extension::verify_messages_call_succeeded, Config as BridgeRelayersConfig};
 
-use pezbp_relayers::{ExtensionCallData, ExtensionCallInfo, ExtensionConfig};
 use core::marker::PhantomData;
+use pezbp_relayers::{ExtensionCallData, ExtensionCallInfo, ExtensionConfig};
 use pezbp_runtime::StaticStrProvider;
 use pezframe_support::dispatch::{DispatchInfo, PostDispatchInfo};
 use pezpallet_bridge_messages::{

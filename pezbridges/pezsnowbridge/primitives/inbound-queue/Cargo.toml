@@ -45,11 +45,11 @@ hex-literal = { workspace = true, default-features = true }
 pezsnowbridge-test-utils = { workspace = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"alloy-core/std",
-	"pez-assets-common/std",
 	"codec/std",
+	"pez-assets-common/std",
 	"pezframe-support/std",
 	"pezframe-system/std",
 	"pezsnowbridge-beacon-primitives/std",
@@ -83,4 +83,5 @@ try-runtime = [
 	"pezframe-support/try-runtime",
 	"pezframe-system/try-runtime",
 	"pezsp-runtime/try-runtime",
+	"pez-assets-common/try-runtime"
 ]

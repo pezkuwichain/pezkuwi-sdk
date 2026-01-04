@@ -471,9 +471,9 @@ async fn run_until_connection_lost<P: MessageLane, SC: SourceClient<P>, TC: Targ
 pub(crate) mod tests {
 	use std::sync::Arc;
 
-	use pezbp_messages::{HashedLaneId, LaneIdType, LegacyLaneId};
 	use futures::stream::StreamExt;
 	use parking_lot::Mutex;
+	use pezbp_messages::{HashedLaneId, LaneIdType, LegacyLaneId};
 	use relay_utils::{HeaderId, MaybeConnectionError, TrackedTransactionStatus};
 
 	use super::*;

@@ -36,14 +36,14 @@ pezsp-tracing = { features = [
 pretty_assertions = { workspace = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"codec/std",
-	"pezframe/std",
 	"log/std",
 	"pezframe-benchmarking?/std",
 	"pezframe-support/std",
 	"pezframe-system/std",
+	"pezframe/std",
 	"pezsp-core/std",
 	"pezsp-io/std",
 	"pezsp-runtime/std",
@@ -51,19 +51,19 @@ std = [
 ]
 
 runtime-benchmarks = [
-	"pezframe/runtime-benchmarks",
 	"pezframe-benchmarking/runtime-benchmarks",
 	"pezframe-executive/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
 	"pezframe-system/runtime-benchmarks",
+	"pezframe/runtime-benchmarks",
 	"pezsp-io/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
 
 try-runtime = [
-	"pezframe/try-runtime",
 	"pezframe-executive/try-runtime",
 	"pezframe-support/try-runtime",
 	"pezframe-system/try-runtime",
+	"pezframe/try-runtime",
 	"pezsp-runtime/try-runtime",
 ]

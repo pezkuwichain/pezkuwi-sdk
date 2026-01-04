@@ -27,8 +27,8 @@ pezsp-io = { features = ["disable_allocator"], workspace = true }
 bizinikiwi-wasm-builder = { workspace = true, default-features = true }
 
 [features]
-default = ["std"]
-std = ["codec/std", "pezkuwi-teyrchain-primitives/std", "pezsp-io/std"]
+default = [ "std" ]
+std = [ "codec/std", "pezkuwi-teyrchain-primitives/std", "pezsp-io/std" ]
 runtime-benchmarks = [
 	"bizinikiwi-wasm-builder/runtime-benchmarks",
 	"pezkuwi-teyrchain-primitives/runtime-benchmarks",

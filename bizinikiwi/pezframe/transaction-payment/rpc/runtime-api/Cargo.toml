@@ -24,7 +24,7 @@ pezsp-runtime = { workspace = true }
 pezsp-weights = { workspace = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"codec/std",
 	"pezpallet-transaction-payment/std",

@@ -31,10 +31,10 @@ pezsp-runtime = { workspace = true }
 pezsp-std = { workspace = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
-	"pez-binary-merkle-tree/std",
 	"codec/std",
+	"pez-binary-merkle-tree/std",
 	"pezbp-runtime/std",
 	"pezframe-support/std",
 	"pezpallet-beefy-mmr/std",

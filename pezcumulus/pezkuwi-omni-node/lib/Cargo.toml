@@ -117,8 +117,8 @@ wait-timeout = { workspace = true }
 
 [features]
 default = []
-pezkuwichain-native = ["pezkuwi-cli/pezkuwichain-native"]
-zagros-native = ["pezkuwi-cli/zagros-native"]
+pezkuwichain-native = [ "pezkuwi-cli/pezkuwichain-native" ]
+zagros-native = [ "pezkuwi-cli/zagros-native" ]
 runtime-benchmarks = [
 	"bizinikiwi-frame-rpc-system/runtime-benchmarks",
 	"bizinikiwi-state-trie-migration-rpc/runtime-benchmarks",

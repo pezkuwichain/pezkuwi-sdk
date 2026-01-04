@@ -26,18 +26,25 @@ pezpallet-ranked-collective = { optional = true, workspace = true }
 scale-info = { features = ["derive"], workspace = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"codec/std",
-	"pezframe/std",
-	"pezframe-system/std",
-	"pezframe-support/std",
 	"log/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
+	"pezframe/std",
 	"pezpallet-ranked-collective/std",
 	"scale-info/std",
 ]
 runtime-benchmarks = [
 	"pezframe/runtime-benchmarks",
 	"pezpallet-ranked-collective/runtime-benchmarks",
+	"pezframe-support/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks"
 ]
-try-runtime = ["pezframe/try-runtime", "pezpallet-ranked-collective?/try-runtime"]
+try-runtime = [
+	"pezframe/try-runtime",
+	"pezpallet-ranked-collective?/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime"
+]

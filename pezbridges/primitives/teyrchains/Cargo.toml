@@ -29,11 +29,11 @@ pezsp-runtime = { workspace = true }
 pezsp-std = { workspace = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
+	"codec/std",
 	"pezbp-header-pez-chain/std",
 	"pezbp-pezkuwi-core/std",
-	"codec/std",
 	"pezbp-runtime/std",
 	"pezframe-support/std",
 	"pezsp-core/std",

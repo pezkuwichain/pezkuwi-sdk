@@ -28,7 +28,7 @@ tracing = { workspace = true }
 xcm = { workspace = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 runtime-benchmarks = [
 	"pezframe-benchmarking/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",

@@ -33,7 +33,7 @@ pezpallet-preimage = { workspace = true, default-features = true }
 pezpallet-utility = { workspace = true, default-features = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"codec/std",
 	"log/std",

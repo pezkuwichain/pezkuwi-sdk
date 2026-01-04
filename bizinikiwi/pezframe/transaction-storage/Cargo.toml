@@ -35,7 +35,7 @@ serde = { optional = true, workspace = true, default-features = true }
 pezsp-transaction-storage-proof = { default-features = true, workspace = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"codec/std",
 	"log/std",

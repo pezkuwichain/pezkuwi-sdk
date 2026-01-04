@@ -43,7 +43,7 @@ pezsp-staking = { workspace = true, default-features = false }
 serde = { version = "1.0" }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"codec/std",
 	"log/std",

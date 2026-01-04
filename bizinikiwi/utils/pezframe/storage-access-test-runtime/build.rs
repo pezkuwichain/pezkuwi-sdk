@@ -39,7 +39,8 @@ pub const WASM_BINARY: Option<&[u8]> = None;
 pub const WASM_BINARY_BLOATY: Option<&[u8]> = None;
 "#;
 
-		let mut file = std::fs::File::create(&wasm_binary_path).expect("Failed to create wasm_binary.rs");
+		let mut file =
+			std::fs::File::create(&wasm_binary_path).expect("Failed to create wasm_binary.rs");
 		file.write_all(content.as_bytes()).expect("Failed to write wasm_binary.rs");
 	}
 }

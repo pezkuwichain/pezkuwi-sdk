@@ -10,13 +10,13 @@ use pezcumulus_zombienet_sdk_helpers::{
 	assert_finality_lag, assert_para_throughput, create_assign_core_call,
 };
 use pezkuwi_primitives::{CoreIndex, Id as ParaId};
-use serde_json::json;
-use std::collections::{BTreeMap, VecDeque};
 use pezkuwi_zombienet_sdk::{
 	subxt::{OnlineClient, PezkuwiConfig},
 	subxt_signer::sr25519::dev,
 	NetworkConfigBuilder,
 };
+use serde_json::json;
+use std::collections::{BTreeMap, VecDeque};
 
 #[tokio::test(flavor = "multi_thread")]
 async fn doesnt_break_teyrchains_test() -> Result<(), anyhow::Error> {

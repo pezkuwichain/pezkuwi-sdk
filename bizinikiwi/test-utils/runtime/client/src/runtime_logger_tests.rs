@@ -20,7 +20,9 @@
 //! These tests verify that logging from within the runtime works correctly
 //! with the test client infrastructure.
 
-use crate::{runtime::TestAPI, DefaultTestClientBuilderExt, TestClientBuilder, TestClientBuilderExt};
+use crate::{
+	runtime::TestAPI, DefaultTestClientBuilderExt, TestClientBuilder, TestClientBuilderExt,
+};
 use pezsp_api::ProvideRuntimeApi;
 use std::env;
 

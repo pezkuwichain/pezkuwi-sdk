@@ -61,11 +61,11 @@ runtime-benchmarks = [
 	"pezsp-io/runtime-benchmarks",
 	"pezsp-state-machine/runtime-benchmarks",
 	"pezsp-trie/runtime-benchmarks",
+	"pez-binary-merkle-tree/runtime-benchmarks"
 ]
 try-runtime = []
-default = ["std"]
+default = [ "std" ]
 std = [
-	"pez-binary-merkle-tree/std",
 	"bytes/std",
 	"codec/std",
 	"either/std",
@@ -73,6 +73,7 @@ std = [
 	"hash256-std-hasher/std",
 	"log/std",
 	"num-traits/std",
+	"pez-binary-merkle-tree/std",
 	"pezsp-application-crypto/std",
 	"pezsp-arithmetic/std",
 	"pezsp-core/std",

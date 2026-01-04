@@ -31,13 +31,13 @@ pezsp-runtime = { workspace = true }
 pezsp-std = { workspace = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
+	"codec/std",
 	"pezbp-bridge-hub-pezcumulus/std",
 	"pezbp-messages/std",
-	"pezbp-xcm-bridge-hub/std",
-	"codec/std",
 	"pezbp-runtime/std",
+	"pezbp-xcm-bridge-hub/std",
 	"pezframe-support/std",
 	"pezsp-api/std",
 	"pezsp-runtime/std",
@@ -46,8 +46,8 @@ std = [
 runtime-benchmarks = [
 	"pezbp-bridge-hub-pezcumulus/runtime-benchmarks",
 	"pezbp-messages/runtime-benchmarks",
-	"pezbp-xcm-bridge-hub/runtime-benchmarks",
 	"pezbp-runtime/runtime-benchmarks",
+	"pezbp-xcm-bridge-hub/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
 	"pezsp-api/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",

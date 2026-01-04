@@ -6,15 +6,15 @@
 use anyhow::anyhow;
 use codec::{Decode, Encode};
 use log::{debug, info, trace};
+use pezkuwi_zombienet_sdk::{
+	subxt::{backend::rpc::RpcClient, ext::pezkuwi_subxt_rpcs::rpc_params},
+	LocalFileSystem, Network, NetworkConfigBuilder,
+};
 use pezsc_statement_store::{DEFAULT_MAX_TOTAL_SIZE, DEFAULT_MAX_TOTAL_STATEMENTS};
 use pezsp_core::{blake2_256, sr25519, Bytes, Pair};
 use pezsp_statement_store::{Channel, Statement, Topic};
 use std::{cell::Cell, collections::HashMap, time::Duration};
 use tokio::time::timeout;
-use pezkuwi_zombienet_sdk::{
-	subxt::{backend::rpc::RpcClient, ext::pezkuwi_subxt_rpcs::rpc_params},
-	LocalFileSystem, Network, NetworkConfigBuilder,
-};
 
 const GROUP_SIZE: u32 = 6;
 const PARTICIPANT_SIZE: u32 = GROUP_SIZE * 8333; // Target ~50,000 total

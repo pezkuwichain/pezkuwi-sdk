@@ -30,7 +30,7 @@ scale-info = { features = ["derive", "serde"], workspace = true }
 serde = { features = ["alloc", "derive"], workspace = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 wasm-api = []
 std = [
 	"bounded-collections/std",

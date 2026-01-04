@@ -416,7 +416,7 @@ where
 #[cfg(test)]
 mod tests {
 	use super::*;
-	use pezsp_core::{H256, KeccakHasher};
+	use pezsp_core::{KeccakHasher, H256};
 
 	#[test]
 	fn should_generate_empty_root() {

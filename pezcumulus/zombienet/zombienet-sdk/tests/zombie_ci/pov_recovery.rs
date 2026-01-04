@@ -7,8 +7,6 @@ use crate::utils::{initialize_network, BEST_BLOCK_METRIC};
 
 use pezcumulus_zombienet_sdk_helpers::{assert_para_is_registered, assert_para_throughput};
 use pezkuwi_primitives::Id as ParaId;
-use serde_json::json;
-use std::{sync::Arc, time::Duration};
 use pezkuwi_zombienet_configuration::types::Arg;
 use pezkuwi_zombienet_orchestrator::network::node::LogLineCountOptions;
 use pezkuwi_zombienet_sdk::{
@@ -16,6 +14,8 @@ use pezkuwi_zombienet_sdk::{
 	subxt::{OnlineClient, PezkuwiConfig},
 	NetworkConfig, NetworkConfigBuilder, RegistrationStrategy,
 };
+use serde_json::json;
+use std::{sync::Arc, time::Duration};
 
 const PARA_ID: u32 = 2000;
 

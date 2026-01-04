@@ -50,7 +50,7 @@ pezsnowbridge-pezpallet-ethereum-client = { workspace = true, default-features =
 pezsp-keyring = { workspace = true, default-features = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"alloy-core/std",
 	"codec/std",

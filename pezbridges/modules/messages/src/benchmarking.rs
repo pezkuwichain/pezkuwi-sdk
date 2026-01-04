@@ -23,13 +23,13 @@ use crate::{
 	InboundLanes, OutboundLanes,
 };
 
+use codec::Decode;
 use pezbp_messages::{
 	source_chain::FromBridgedChainMessagesDeliveryProof,
 	target_chain::FromBridgedChainMessagesProof, ChainWithMessages, DeliveredMessages,
 	InboundLaneData, LaneState, MessageNonce, OutboundLaneData, UnrewardedRelayer,
 	UnrewardedRelayersState,
 };
-use codec::Decode;
 use pezbp_runtime::{AccountIdOf, HashOf, UnverifiedStorageProofParams};
 use pezframe_benchmarking::{account, v2::*};
 use pezframe_support::weights::Weight;

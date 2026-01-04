@@ -39,7 +39,7 @@ pezsp-io = { workspace = true, default-features = true }
 pezframe-election-provider-support = { workspace = true, default-features = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"codec/std",
 	"pezframe-election-provider-support/std",

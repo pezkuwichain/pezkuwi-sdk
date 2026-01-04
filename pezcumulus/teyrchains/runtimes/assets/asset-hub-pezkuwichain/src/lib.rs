@@ -61,8 +61,8 @@ use testnet_teyrchains_constants::pezkuwichain::snowbridge::EthereumNetwork;
 use pezsp_version::NativeVersion;
 use pezsp_version::RuntimeVersion;
 
-pub use pez_assets_common::local_and_foreign_assets::ForeignAssetReserveData;
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
+pub use pez_assets_common::local_and_foreign_assets::ForeignAssetReserveData;
 use pezcumulus_primitives_core::ParaId;
 use pezframe_support::{
 	construct_runtime, derive_impl,

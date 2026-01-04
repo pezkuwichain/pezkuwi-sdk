@@ -17,11 +17,11 @@
 //! All runtime calls, supported by `pezpallet-bridge-relayers` when it acts as a signed
 //! extension.
 
+use codec::{Decode, Encode};
 use pezbp_header_pez_chain::SubmitFinalityProofInfo;
 use pezbp_messages::MessagesCallInfo;
-use pezbp_teyrchains::SubmitTeyrchainHeadsInfo;
-use codec::{Decode, Encode};
 use pezbp_runtime::StaticStrProvider;
+use pezbp_teyrchains::SubmitTeyrchainHeadsInfo;
 use pezframe_support::{
 	dispatch::CallableCallFor, traits::IsSubType, weights::Weight, RuntimeDebugNoBound,
 };

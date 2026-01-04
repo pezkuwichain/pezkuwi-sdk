@@ -12,12 +12,8 @@ repository.workspace = true
 bench = false
 
 [features]
-default = ["std"]
-std = [
-	"num-format",
-	"serde/std",
-	"serde_json/std",
-]
+default = [ "std" ]
+std = [ "num-format", "serde/std", "serde_json/std" ]
 
 [dependencies]
 num-format = { version = "0.4.3", optional = true }

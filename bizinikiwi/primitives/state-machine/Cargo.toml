@@ -40,8 +40,8 @@ pretty_assertions = { workspace = true }
 rand = { workspace = true, default-features = true }
 
 [features]
-default = ["std"]
-fuzzing = ["arbitrary"]
+default = [ "std" ]
+fuzzing = [ "arbitrary" ]
 std = [
 	"codec/std",
 	"hash-db/std",
@@ -56,6 +56,4 @@ std = [
 	"tracing",
 	"trie-db/std",
 ]
-runtime-benchmarks = [
-	"pezsp-trie/runtime-benchmarks",
-]
+runtime-benchmarks = [ "pezsp-trie/runtime-benchmarks" ]

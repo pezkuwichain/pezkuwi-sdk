@@ -34,14 +34,14 @@ use crate::{
 
 use async_std::sync::Arc;
 use async_trait::async_trait;
-use pezbp_messages::{
-	source_chain::FromBridgedChainMessagesDeliveryProof, storage_keys::inbound_lane_data_key,
-	ChainWithMessages as _, LaneState, MessageNonce, UnrewardedRelayer, UnrewardedRelayersState,
-};
 use codec::Decode;
 use pez_messages_relay::{
 	message_lane::{MessageLane, SourceHeaderIdOf, TargetHeaderIdOf},
 	message_lane_loop::{NoncesSubmitArtifacts, TargetClient, TargetClientState},
+};
+use pezbp_messages::{
+	source_chain::FromBridgedChainMessagesDeliveryProof, storage_keys::inbound_lane_data_key,
+	ChainWithMessages as _, LaneState, MessageNonce, UnrewardedRelayer, UnrewardedRelayersState,
 };
 use pezsp_core::Pair;
 use relay_bizinikiwi_client::{
@@ -366,8 +366,8 @@ fn make_messages_delivery_call<P: BizinikiwiMessageLane>(
 #[cfg(test)]
 mod tests {
 	use super::*;
-	use pezbp_messages::{DeliveredMessages, UnrewardedRelayer};
 	use codec::Encode;
+	use pezbp_messages::{DeliveredMessages, UnrewardedRelayer};
 
 	#[test]
 	fn inbound_lane_data_wrapper_is_compatible() {

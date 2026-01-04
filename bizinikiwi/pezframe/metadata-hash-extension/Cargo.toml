@@ -31,7 +31,7 @@ pezsp-api = { workspace = true, default-features = true }
 pezsp-tracing = { workspace = true, default-features = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"codec/std",
 	"const-hex/std",

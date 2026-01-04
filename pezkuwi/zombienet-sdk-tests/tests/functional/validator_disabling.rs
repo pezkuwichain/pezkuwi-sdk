@@ -8,11 +8,11 @@ use pezcumulus_zombienet_sdk_helpers::assert_para_throughput;
 use pezkuwi_primitives::{
 	BlockNumber, CandidateHash, DisputeState, SessionIndex, ValidatorId, ValidatorIndex,
 };
-use serde_json::json;
 use pezkuwi_zombienet_sdk::{
 	subxt::{OnlineClient, PezkuwiConfig},
 	NetworkConfigBuilder,
 };
+use serde_json::json;
 
 #[tokio::test(flavor = "multi_thread")]
 async fn validator_disabling_test() -> Result<(), anyhow::Error> {

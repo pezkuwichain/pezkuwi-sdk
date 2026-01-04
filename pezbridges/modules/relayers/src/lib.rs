@@ -21,9 +21,9 @@
 
 extern crate alloc;
 
+use core::marker::PhantomData;
 pub use pezbp_relayers::RewardLedger;
 use pezbp_relayers::{PaymentProcedure, Registration, RelayerRewardsKeyProvider, StakeAndSlash};
-use core::marker::PhantomData;
 use pezbp_runtime::StorageDoubleMapKeyProvider;
 use pezframe_support::{fail, traits::tokens::Balance};
 use pezsp_arithmetic::traits::{AtLeast32BitUnsigned, Zero};
@@ -637,7 +637,8 @@ mod tests {
 				*b"test",
 				RewardsAccountOwner::ThisChain,
 			);
-			let slash_destination = pezbp_relayers::ExplicitOrAccountParams::Params(slash_destination);
+			let slash_destination =
+				pezbp_relayers::ExplicitOrAccountParams::Params(slash_destination);
 			Pezpallet::<TestRuntime>::slash_and_deregister(&REGISTER_RELAYER, slash_destination);
 			// check if event emitted
 			assert_eq!(

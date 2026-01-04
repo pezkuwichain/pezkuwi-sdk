@@ -19,9 +19,9 @@
 #![warn(missing_docs)]
 #![cfg_attr(not(feature = "std"), no_std)]
 
-use pezbp_messages::LaneIdType;
 pub use call_info::XcmBridgeHubCall;
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
+use pezbp_messages::LaneIdType;
 use pezbp_runtime::{AccountIdOf, BalanceOf, Chain};
 use pezframe_support::{
 	ensure, pezsp_runtime::RuntimeDebug, CloneNoBound, PalletError, PartialEqNoBound,

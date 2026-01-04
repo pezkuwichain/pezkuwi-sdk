@@ -16,9 +16,9 @@
 
 //! Tests for Grandpa equivocations collector code.
 
+use finality_grandpa::Precommit;
 use pezbp_header_pez_chain::justification::EquivocationsCollector;
 use pezbp_test_utils::*;
-use finality_grandpa::Precommit;
 use pezsp_consensus_grandpa::EquivocationProof;
 
 type TestHeader = pezsp_runtime::testing::Header;

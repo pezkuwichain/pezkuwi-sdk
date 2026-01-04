@@ -16,9 +16,9 @@
 
 //! Tests for Grandpa Justification optimizer code.
 
+use finality_grandpa::SignedPrecommit;
 use pezbp_header_pez_chain::justification::verify_and_optimize_justification;
 use pezbp_test_utils::*;
-use finality_grandpa::SignedPrecommit;
 use pezsp_consensus_grandpa::AuthoritySignature;
 
 type TestHeader = pezsp_runtime::testing::Header;

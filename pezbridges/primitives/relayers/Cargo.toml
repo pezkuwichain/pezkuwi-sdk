@@ -33,13 +33,13 @@ pezsp-std = { workspace = true }
 hex-literal = { workspace = true, default-features = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
+	"codec/std",
 	"pezbp-header-pez-chain/std",
 	"pezbp-messages/std",
-	"pezbp-teyrchains/std",
-	"codec/std",
 	"pezbp-runtime/std",
+	"pezbp-teyrchains/std",
 	"pezframe-support/std",
 	"pezframe-system/std",
 	"pezpallet-utility/std",
@@ -50,8 +50,8 @@ std = [
 runtime-benchmarks = [
 	"pezbp-header-pez-chain/runtime-benchmarks",
 	"pezbp-messages/runtime-benchmarks",
-	"pezbp-teyrchains/runtime-benchmarks",
 	"pezbp-runtime/runtime-benchmarks",
+	"pezbp-teyrchains/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
 	"pezframe-system/runtime-benchmarks",
 	"pezpallet-utility/runtime-benchmarks",

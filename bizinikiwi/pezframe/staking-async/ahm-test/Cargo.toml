@@ -50,30 +50,31 @@ pezpallet-root-offences = { workspace = true, default-features = true }
 pezpallet-staking = { workspace = true, default-features = true }
 
 [features]
-std = ["log/std"]
+std = [
+	"log/std", 
+	"pezframe-system/std"
+]
 try-runtime = [
-	"pezpallet-balances/try-runtime",
-
-	"pezpallet-staking/try-runtime",
-
-	"pezpallet-staking-async-rc-client/try-runtime",
-	"pezpallet-staking-async/try-runtime",
-
-	"pezframe/try-runtime",
 	"pezframe-election-provider-support/try-runtime",
 	"pezframe-support/try-runtime",
+	"pezframe/try-runtime",
 	"pezpallet-authorship/try-runtime",
+	"pezpallet-balances/try-runtime",
 	"pezpallet-election-provider-multi-block/try-runtime",
 	"pezpallet-offences/try-runtime",
 	"pezpallet-root-offences/try-runtime",
 	"pezpallet-session/try-runtime",
 	"pezpallet-staking-async-ah-client/try-runtime",
+	"pezpallet-staking-async-rc-client/try-runtime",
+	"pezpallet-staking-async/try-runtime",
+	"pezpallet-staking/try-runtime",
 	"pezpallet-timestamp/try-runtime",
+	"pezframe-system/try-runtime"
 ]
 runtime-benchmarks = [
-	"pezframe/runtime-benchmarks",
 	"pezframe-election-provider-support/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
+	"pezframe/runtime-benchmarks",
 	"pezpallet-authorship/runtime-benchmarks",
 	"pezpallet-balances/runtime-benchmarks",
 	"pezpallet-election-provider-multi-block/runtime-benchmarks",
@@ -87,4 +88,5 @@ runtime-benchmarks = [
 	"pezpallet-timestamp/runtime-benchmarks",
 	"pezsp-session/runtime-benchmarks",
 	"pezsp-staking/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks"
 ]

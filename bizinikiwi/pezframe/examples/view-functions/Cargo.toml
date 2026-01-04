@@ -36,7 +36,7 @@ pezsp-runtime = { default-features = false, workspace = true }
 pretty_assertions = { workspace = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"codec/std",
 	"frame-metadata/std",

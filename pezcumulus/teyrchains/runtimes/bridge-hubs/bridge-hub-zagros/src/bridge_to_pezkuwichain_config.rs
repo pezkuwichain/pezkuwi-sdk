@@ -83,8 +83,10 @@ parameter_types! {
 pub type FromPezkuwichainBridgeHubMessagesProof<MI> =
 	FromBridgedChainMessagesProof<pezbp_bridge_hub_pezkuwichain::Hash, LaneIdOf<Runtime, MI>>;
 /// Messages delivery proof for Pezkuwichain Bridge Hub -> Zagros Bridge Hub messages.
-pub type ToPezkuwichainBridgeHubMessagesDeliveryProof<MI> =
-	FromBridgedChainMessagesDeliveryProof<pezbp_bridge_hub_pezkuwichain::Hash, LaneIdOf<Runtime, MI>>;
+pub type ToPezkuwichainBridgeHubMessagesDeliveryProof<MI> = FromBridgedChainMessagesDeliveryProof<
+	pezbp_bridge_hub_pezkuwichain::Hash,
+	LaneIdOf<Runtime, MI>,
+>;
 
 /// Dispatches received XCM messages from other bridge
 type FromPezkuwichainMessageBlobDispatcher = BridgeBlobDispatcher<
@@ -381,8 +383,8 @@ pub mod migration {
 	}
 
 	mod v1_wrong {
-		use pezbp_messages::{LaneState, MessageNonce, UnrewardedRelayer};
 		use codec::{Decode, Encode};
+		use pezbp_messages::{LaneState, MessageNonce, UnrewardedRelayer};
 		use pezbp_runtime::AccountIdOf;
 		use pezpallet_bridge_messages::BridgedChainOf;
 		use pezsp_std::collections::vec_deque::VecDeque;

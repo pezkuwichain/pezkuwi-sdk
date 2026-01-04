@@ -11,11 +11,11 @@ use pezcumulus_zombienet_sdk_helpers::{
 	assert_para_throughput, assign_cores, runtime_upgrade, wait_for_upgrade,
 };
 use pezkuwi_primitives::Id as ParaId;
-use rstest::rstest;
 use pezkuwi_zombienet_sdk::{
 	subxt::{OnlineClient, PezkuwiConfig},
 	NetworkConfig, NetworkConfigBuilder,
 };
+use rstest::rstest;
 
 const PARA_ID: u32 = 2000;
 const WASM_WITH_ELASTIC_SCALING: &str =

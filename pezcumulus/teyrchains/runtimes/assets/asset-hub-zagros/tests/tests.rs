@@ -38,9 +38,9 @@ use asset_test_pezutils::{
 	test_cases_over_bridge::TestBridgingConfig, CollatorSessionKey, CollatorSessionKeys,
 	ExtBuilder, GovernanceOrigin, SlotDurations,
 };
-use pez_assets_common::local_and_foreign_assets::ForeignAssetReserveData;
 use codec::{Decode, Encode};
 use hex_literal::hex;
+use pez_assets_common::local_and_foreign_assets::ForeignAssetReserveData;
 use pezframe_support::{
 	assert_err, assert_noop, assert_ok, parameter_types,
 	traits::{
@@ -780,12 +780,13 @@ fn test_assets_balances_api_works() {
 			assert_eq!(result.len(), 3);
 
 			// check currency
-			assert!(result.inner().iter().any(|asset| asset.eq(
-				&pez_assets_common::fungible_conversion::convert_balance::<ZagrosLocation, Balance>(
-					some_currency
-				)
-				.unwrap()
-			)));
+			assert!(result.inner().iter().any(|asset| {
+				asset.eq(&pez_assets_common::fungible_conversion::convert_balance::<
+					ZagrosLocation,
+					Balance,
+				>(some_currency)
+				.unwrap())
+			}));
 			// check trusted asset
 			assert!(result.inner().iter().any(|asset| asset.eq(&(
 				AssetIdForTrustBackedAssetsConvert::convert_back(&local_asset_id).unwrap(),

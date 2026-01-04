@@ -5,8 +5,8 @@
 // propagated to peers.
 
 use anyhow::anyhow;
-use pezsp_core::{Bytes, Encode};
 use pezkuwi_zombienet_sdk::{subxt::ext::pezkuwi_subxt_rpcs::rpc_params, NetworkConfigBuilder};
+use pezsp_core::{Bytes, Encode};
 
 #[tokio::test(flavor = "multi_thread")]
 async fn statement_store() -> Result<(), anyhow::Error> {

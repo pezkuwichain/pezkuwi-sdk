@@ -24,7 +24,7 @@ scale-info = { features = ["derive"], workspace = true }
 serde = { optional = true, features = ["alloc", "derive"], workspace = true }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"codec/std",
 	"full_crypto",
@@ -35,7 +35,7 @@ std = [
 ]
 
 # Serde support without relying on std features.
-serde = ["dep:serde", "pezsp-core/serde", "scale-info/serde"]
+serde = [ "dep:serde", "pezsp-core/serde", "scale-info/serde" ]
 
 # This feature enables all crypto primitives for `no_std` builds like microcontrollers
 # or Intel SGX.
@@ -51,7 +51,10 @@ full_crypto = [
 # This feature adds BLS crypto primitives.
 # It should not be used in production since the implementation and interface may still
 # be subject to significant changes.
-bls-experimental = ["pezsp-core/bls-experimental", "pezsp-io/bls-experimental"]
+bls-experimental = [
+	"pezsp-core/bls-experimental",
+	"pezsp-io/bls-experimental",
+]
 
 # This feature adds Bandersnatch crypto primitives.
 # It should not be used in production since the implementation and interface may still

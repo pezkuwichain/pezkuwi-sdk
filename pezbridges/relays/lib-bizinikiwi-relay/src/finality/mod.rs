@@ -24,9 +24,11 @@ use crate::{
 };
 
 use async_trait::async_trait;
-use pezbp_header_pez_chain::justification::{GrandpaJustification, JustificationVerificationContext};
 use pez_finality_relay::{
 	FinalityPipeline, FinalitySyncPipeline, HeadersToRelay, SourceClient, TargetClient,
+};
+use pezbp_header_pez_chain::justification::{
+	GrandpaJustification, JustificationVerificationContext,
 };
 use pezpallet_bridge_grandpa::{Call as BridgeGrandpaCall, Config as BridgeGrandpaConfig};
 use pezsp_core::Pair;

@@ -53,7 +53,7 @@ pezsp-core = { workspace = true, default-features = false }
 pezsp-io = { workspace = true, default-features = false }
 
 [features]
-default = ["std"]
+default = [ "std" ]
 std = [
 	"codec/std",
 	"log/std",
@@ -73,7 +73,8 @@ std = [
 	"pezsp-runtime/std",
 	"pezsp-std/std",
 	"scale-info/std",
-	"serde",                       # serde'yi doğrudan feature olarak ekliyoruz
+	"serde",
+	# serde'yi doğrudan feature olarak ekliyoruz
 	"serde?/std",
 ]
 runtime-benchmarks = [

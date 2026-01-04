@@ -36,9 +36,9 @@ teyrchains-common = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
+	"emulated-integration-tests-common/runtime-benchmarks",
 	"pezbp-messages/runtime-benchmarks",
 	"pezbridge-hub-common/runtime-benchmarks",
-	"emulated-integration-tests-common/runtime-benchmarks",
 	"pezbridge-hub-pezkuwichain-runtime/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
 	"pezsp-keyring/runtime-benchmarks",
