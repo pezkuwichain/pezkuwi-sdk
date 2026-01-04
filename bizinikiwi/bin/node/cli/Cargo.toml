@@ -72,7 +72,7 @@ pezkuwi-sdk = { features = [
 	"bizinikiwi-rpc-client",
 	"bizinikiwi-state-trie-migration-rpc",
 	"bizinikiwi-wasm-builder",
-	"chain-spec-builder",
+	"pezstaging-chain-spec-builder",
 	"gum",
 	"node-inspect",
 	"pez-fork-tree",
