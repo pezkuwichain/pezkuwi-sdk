@@ -1,0 +1,51 @@
+[settings]
+timeout = 300
+provider = "native"
+
+[relaychain]
+default_command = "/home/mamostehp/pezkuwi-sdk/target/release/pezkuwi"
+chain = "pezkuwichain-local"
+default_args = ["--unsafe-force-node-key-generation", "-lteyrchain=debug"]
+
+# Validator 1: Alice
+[[relaychain.nodes]]
+name = "alice"
+validator = true
+rpc_port = 9944
+
+# Validator 2: Bob
+[[relaychain.nodes]]
+name = "bob"
+validator = true
+rpc_port = 9946
+
+# Validator 3: Charlie
+[[relaychain.nodes]]
+name = "charlie"
+validator = true
+rpc_port = 9947
+
+# Validator 4: Dave
+[[relaychain.nodes]]
+name = "dave"
+validator = true
+rpc_port = 9948
+
+# Asset Hub Teyrchain
+[[teyrchains]]
+id = 1000
+chain = "asset-hub-pezkuwichain-local"
+cumulus_based = true
+add_to_genesis = true
+
+[[teyrchains.collators]]
+name = "asset-hub-collator-1"
+command = "/home/mamostehp/pezkuwi-sdk/target/release/pezkuwi-teyrchain"
+rpc_port = 9945
+args = ["--unsafe-force-node-key-generation", "-lteyrchain=debug"]
+
+[[teyrchains.collators]]
+name = "asset-hub-collator-2"
+command = "/home/mamostehp/pezkuwi-sdk/target/release/pezkuwi-teyrchain"
+rpc_port = 9949
+args = ["--unsafe-force-node-key-generation", "-lteyrchain=debug"]
