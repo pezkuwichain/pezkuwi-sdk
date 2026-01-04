@@ -1,0 +1,27 @@
+[settings]
+timeout = 300
+provider = "native"
+
+[relaychain]
+default_command = "/home/mamostehp/pezkuwi-sdk/target/release/pezkuwi"
+chain = "pezkuwichain-local"
+default_args = ["-lteyrchain=debug"]
+
+[[relaychain.nodes]]
+name = "alice"
+validator = true
+
+[[relaychain.nodes]]
+name = "bob"
+validator = true
+
+[[teyrchains]]
+id = 1000
+chain = "asset-hub-pezkuwichain-local"
+default_command = "/home/mamostehp/pezkuwi-sdk/target/release/pezkuwi-teyrchain"
+cumulus_based = true
+default_args = ["-lteyrchain=debug"]
+
+[[teyrchains.collators]]
+name = "DRQasimlo"
+validator = true
