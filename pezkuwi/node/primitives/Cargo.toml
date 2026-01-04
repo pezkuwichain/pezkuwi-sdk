@@ -37,6 +37,17 @@ zstd = { workspace = true, default-features = false }
 runtime-benchmarks = [
 	"pezkuwi-primitives/runtime-benchmarks",
 	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
+	"pezsc-keystore/runtime-benchmarks",
+	"pezsp-application-crypto/runtime-benchmarks",
 	"pezsp-consensus-babe/runtime-benchmarks",
 	"pezsp-consensus-slots/runtime-benchmarks",
 ]
+std = [
+	"bitvec/std",
+	"codec/std",
+	"pezkuwi-teyrchain-primitives/std",
+	"pezsc-keystore/std",
+	"pezsp-consensus-slots/std",
+]
+serde = []
+experimental = []

@@ -61,3 +61,43 @@ runtime-benchmarks = [
 	"zagros-runtime-constants/runtime-benchmarks",
 	"zagros-system-emulated-network/runtime-benchmarks",
 ]
+std = [
+	"codec/std",
+	"emulated-integration-tests-common/std",
+	"pezcumulus-pezpallet-teyrchain-system/std",
+	"pezcumulus-pezpallet-xcmp-queue/std",
+	"pezframe-support/std",
+	"pezpallet-assets/std",
+	"pezpallet-balances/std",
+	"pezpallet-message-queue/std",
+	"pezpallet-treasury/std",
+	"pezpallet-utility/std",
+	"pezpallet-whitelist/std",
+	"pezpallet-xcm/std",
+	"pezsp-runtime/std",
+	"xcm-executor/std",
+	"xcm/std",
+	"zagros-system-emulated-network/std",
+]
+try-runtime = [
+	"collectives-zagros-runtime/try-runtime",
+	"emulated-integration-tests-common/try-runtime",
+	"pezcumulus-pezpallet-teyrchain-system/try-runtime",
+	"pezcumulus-pezpallet-xcmp-queue/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezkuwi-runtime-common/try-runtime",
+	"pezpallet-assets/try-runtime",
+	"pezpallet-balances/try-runtime",
+	"pezpallet-message-queue/try-runtime",
+	"pezpallet-treasury/try-runtime",
+	"pezpallet-utility/try-runtime",
+	"pezpallet-whitelist/try-runtime",
+	"pezpallet-xcm/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"xcm-executor/try-runtime",
+	"xcm/try-runtime",
+	"zagros-runtime-constants/try-runtime",
+]
+serde = []
+experimental = []
+tuples-96 = []

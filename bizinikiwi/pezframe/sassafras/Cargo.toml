@@ -61,10 +61,16 @@ runtime-benchmarks = [
 	"pezsp-runtime/runtime-benchmarks",
 ]
 try-runtime = [
+	"pezframe-benchmarking?/try-runtime",
 	"pezframe-support/try-runtime",
 	"pezframe-system/try-runtime",
+	"pezsp-consensus-sassafras/try-runtime",
 	"pezsp-runtime/try-runtime",
 ]
 # Construct dummy ring context on genesis.
 # Mostly used for testing and development.
 construct-dummy-ring-context = []
+serde = []
+experimental = []
+with-tracing = []
+tuples-96 = []

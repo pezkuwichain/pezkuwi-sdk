@@ -83,3 +83,24 @@ runtime-benchmarks = [
 	"pezkuwi-pez-node-primitives/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
 ]
+std = [
+	"gum/std",
+	"pezkuwi-cli/std",
+	"pezkuwi-erasure-coding/std",
+	"pezkuwi-node-core-pvf-common/std",
+	"pezkuwi-node-core-pvf-execute-worker/std",
+	"pezkuwi-node-core-pvf-prepare-worker/std",
+	"pezkuwi-node-network-protocol/std",
+	"pezkuwi-node-subsystem-test-helpers/std",
+	"pezkuwi-node-subsystem-types/std",
+	"pezkuwi-node-subsystem-util/std",
+	"pezkuwi-node-subsystem/std",
+	"pezkuwi-pez-node-primitives/std",
+]
+try-runtime = [
+	"pezkuwi-cli/try-runtime",
+	"pezkuwi-node-network-protocol/try-runtime",
+	"pezkuwi-node-subsystem-types/try-runtime",
+	"pezkuwi-primitives/try-runtime",
+]
+serde = []

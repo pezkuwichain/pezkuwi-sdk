@@ -67,3 +67,4 @@ std = [
 	"trie-root/std",
 ]
 runtime-benchmarks = []
+serde = []

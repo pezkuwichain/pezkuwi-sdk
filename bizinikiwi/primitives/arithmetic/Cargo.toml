@@ -45,4 +45,10 @@ std = [
 	"serde/std",
 ]
 # Serde support without relying on std features.
-serde = ["dep:serde", "scale-info/serde"]
+serde = [
+	"codec/serde",
+	"dep:serde",
+	"primitive-types/serde",
+	"rand/serde",
+	"scale-info/serde",
+]

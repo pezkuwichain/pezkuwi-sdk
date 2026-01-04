@@ -44,8 +44,10 @@ pezkuwi-sdk = { workspace = true, features = ["bizinikiwi-build-script-utils"] }
 default = ["std"]
 std = [
 	"log/std",
+	"pezframe-benchmarking-cli?/std",
 	"pezkuwi-sdk/std",
 	"pezsp-runtime/std",
+	"prometheus-endpoint/std",
 	"teyrchain-template-runtime/std",
 ]
 runtime-benchmarks = [
@@ -56,7 +58,12 @@ runtime-benchmarks = [
 ]
 storage-benchmark = ["pezframe-benchmarking-cli/storage-benchmark"]
 try-runtime = [
+	"pezframe-benchmarking-cli?/try-runtime",
 	"pezkuwi-sdk/try-runtime",
 	"pezsp-runtime/try-runtime",
 	"teyrchain-template-runtime/try-runtime",
 ]
+serde = []
+experimental = []
+with-tracing = []
+tuples-96 = []

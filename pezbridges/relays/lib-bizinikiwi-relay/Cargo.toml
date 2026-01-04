@@ -86,3 +86,37 @@ runtime-benchmarks = [
 	"relay-utils/runtime-benchmarks",
 	"teyrchains-relay/runtime-benchmarks",
 ]
+std = [
+	"anyhow/std",
+	"pez-equivocation-detector/std",
+	"pez-finality-relay/std",
+	"pez-messages-relay/std",
+	"pezsp-trie/std",
+	"relay-bizinikiwi-client/std",
+	"relay-utils/std",
+	"scale-info/std",
+	"teyrchains-relay/std",
+	"tracing/std",
+]
+try-runtime = [
+	"pezbp-header-pez-chain/try-runtime",
+	"pezbp-messages/try-runtime",
+	"pezbp-pezkuwi-core/try-runtime",
+	"pezbp-relayers/try-runtime",
+	"pezbp-runtime/try-runtime",
+	"pezbp-teyrchains/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezpallet-balances/try-runtime",
+	"pezpallet-bridge-grandpa/try-runtime",
+	"pezpallet-bridge-messages/try-runtime",
+	"pezpallet-bridge-teyrchains/try-runtime",
+	"pezpallet-grandpa/try-runtime",
+	"pezsp-consensus-grandpa/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"relay-bizinikiwi-client/try-runtime",
+	"relay-utils/try-runtime",
+]
+serde = []
+experimental = []
+tuples-96 = []

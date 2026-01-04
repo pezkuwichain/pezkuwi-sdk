@@ -72,7 +72,16 @@ runtime-benchmarks = [
 	"pezsp-runtime/runtime-benchmarks",
 ]
 full-node = ["pezkuwi-service/full-node"]
-try-runtime = ["pezkuwi-service?/try-runtime", "pezsp-runtime/try-runtime"]
+try-runtime = [
+	"pezframe-benchmarking-cli?/try-runtime",
+	"pezkuwi-service?/try-runtime",
+	"pezsc-cli?/try-runtime",
+	"pezsc-service?/try-runtime",
+	"pezsc-sysinfo/try-runtime",
+	"pezsc-tracing?/try-runtime",
+	"pezsp-keyring/try-runtime",
+	"pezsp-runtime/try-runtime",
+]
 fast-runtime = ["pezkuwi-service/fast-runtime"]
 pyroscope = ["dep:pyroscope", "pyroscope_pprofrs"]
 
@@ -85,3 +94,17 @@ runtime-metrics = [
 	"pezkuwi-node-metrics/runtime-metrics",
 	"pezkuwi-service/runtime-metrics",
 ]
+std = [
+	"log/std",
+	"pezframe-benchmarking-cli?/std",
+	"pezkuwi-node-metrics/std",
+	"pezkuwi-pez-node-primitives/std",
+	"pezkuwi-service?/std",
+	"pezsc-cli?/std",
+	"pezsc-network-types/std",
+	"pezsc-service?/std",
+	"pezsc-storage-monitor/std",
+	"pezsc-sysinfo/std",
+	"pezsc-tracing?/std",
+]
+serde = []

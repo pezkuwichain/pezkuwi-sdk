@@ -15,6 +15,12 @@ description = "subxt utility to fetch metadata"
 
 [features]
 url = ["dep:jsonrpsee", "dep:tokio", "dep:url", "frame-metadata"]
+std = [
+	"codec/std",
+	"frame-metadata?/std",
+	"hex/std",
+]
+serde = []
 
 [dependencies]
 codec = { package = "parity-scale-codec", workspace = true, features = ["derive", "std"] }

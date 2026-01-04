@@ -34,3 +34,9 @@ runtime-benchmarks = [
 	"relay-bizinikiwi-client/runtime-benchmarks",
 	"relay-utils/runtime-benchmarks",
 ]
+std = [
+	"relay-bizinikiwi-client/std",
+	"relay-utils/std",
+	"tracing/std",
+]
+serde = []

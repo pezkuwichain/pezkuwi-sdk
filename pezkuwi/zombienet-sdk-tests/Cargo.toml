@@ -41,12 +41,43 @@ runtime-benchmarks = [
 	"asset-hub-zagros-runtime/runtime-benchmarks",
 	"pezcumulus-zombienet-sdk-helpers/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
+	"pezkuwi-subxt/runtime-benchmarks",
+	"pezkuwi-zombienet-orchestrator/runtime-benchmarks",
+	"pezkuwi-zombienet-sdk/runtime-benchmarks",
 	"pezpallet-revive/runtime-benchmarks",
 	"pezsc-executor/runtime-benchmarks",
 	"pezsc-runtime-utilities/runtime-benchmarks",
 	"pezsp-io/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
+std = [
+	"anyhow/std",
+	"codec/std",
+	"ethabi/std",
+	"log/std",
+	"pezcumulus-zombienet-sdk-helpers/std",
+	"pezkuwi-subxt/std",
+	"pezkuwi-zombienet-orchestrator/std",
+	"pezkuwi-zombienet-sdk/std",
+	"pezpallet-revive/std",
+	"pezsc-runtime-utilities/std",
+	"pezsp-core/std",
+	"pezsp-io/std",
+	"pezsp-runtime/std",
+	"rand/std",
+	"serde/std",
+	"serde_json/std",
+]
+try-runtime = [
+	"asset-hub-zagros-runtime/try-runtime",
+	"pezkuwi-primitives/try-runtime",
+	"pezkuwi-subxt/try-runtime",
+	"pezpallet-revive/try-runtime",
+	"pezsc-executor/try-runtime",
+	"pezsp-runtime/try-runtime",
+]
+serde = []
+with-tracing = []
 
 [build-dependencies]
 bizinikiwi-build-script-utils = { workspace = true, default-features = true }

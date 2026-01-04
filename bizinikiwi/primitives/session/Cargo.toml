@@ -41,3 +41,9 @@ runtime-benchmarks = [
 	"pezsp-runtime?/runtime-benchmarks",
 	"pezsp-staking/runtime-benchmarks",
 ]
+try-runtime = [
+	"pezsp-api/try-runtime",
+	"pezsp-runtime?/try-runtime",
+	"pezsp-staking/try-runtime",
+]
+serde = []

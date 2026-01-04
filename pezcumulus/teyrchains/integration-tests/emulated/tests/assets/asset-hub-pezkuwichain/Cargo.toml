@@ -69,3 +69,48 @@ runtime-benchmarks = [
 	"xcm-runtime-pezapis/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
 ]
+std = [
+	"codec/std",
+	"emulated-integration-tests-common/std",
+	"pezcumulus-pezpallet-teyrchain-system/std",
+	"pezframe-support/std",
+	"pezframe-system/std",
+	"pezkuwichain-system-emulated-network/std",
+	"pezpallet-asset-conversion/std",
+	"pezpallet-asset-rewards/std",
+	"pezpallet-assets/std",
+	"pezpallet-balances/std",
+	"pezpallet-message-queue/std",
+	"pezpallet-treasury/std",
+	"pezpallet-utility/std",
+	"pezpallet-xcm/std",
+	"pezsp-core/std",
+	"pezsp-runtime/std",
+	"xcm-executor/std",
+	"xcm/std",
+]
+try-runtime = [
+	"asset-test-pezutils/try-runtime",
+	"emulated-integration-tests-common/try-runtime",
+	"pezcumulus-pezpallet-teyrchain-system/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezkuwi-runtime-common/try-runtime",
+	"pezkuwichain-runtime-constants/try-runtime",
+	"pezpallet-asset-conversion/try-runtime",
+	"pezpallet-asset-rewards/try-runtime",
+	"pezpallet-assets/try-runtime",
+	"pezpallet-balances/try-runtime",
+	"pezpallet-message-queue/try-runtime",
+	"pezpallet-treasury/try-runtime",
+	"pezpallet-utility/try-runtime",
+	"pezpallet-xcm/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"teyrchains-common/try-runtime",
+	"xcm-executor/try-runtime",
+	"xcm-runtime-pezapis/try-runtime",
+	"xcm/try-runtime",
+]
+serde = []
+experimental = []
+tuples-96 = []

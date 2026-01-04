@@ -39,5 +39,17 @@ runtime-benchmarks = [
 	"pezkuwi-pez-node-primitives/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
 	"pezsc-client-api/runtime-benchmarks",
+	"pezsc-keystore/runtime-benchmarks",
+	"pezsp-application-crypto/runtime-benchmarks",
 	"pezsp-keyring/runtime-benchmarks",
 ]
+std = [
+	"pezkuwi-erasure-coding/std",
+	"pezkuwi-node-subsystem-util/std",
+	"pezkuwi-node-subsystem/std",
+	"pezkuwi-pez-node-primitives/std",
+	"pezsc-client-api/std",
+	"pezsc-keystore/std",
+	"pezsc-utils/std",
+]
+serde = []

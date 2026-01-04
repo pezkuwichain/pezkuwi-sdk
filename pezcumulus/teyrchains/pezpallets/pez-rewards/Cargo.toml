@@ -107,8 +107,10 @@ runtime-benchmarks = [
 	"pezsp-runtime/runtime-benchmarks",
 ]
 try-runtime = [
+	"pezframe-benchmarking?/try-runtime",
 	"pezframe-support/try-runtime",
 	"pezframe-system/try-runtime",
+	"pezkuwi-primitives/try-runtime",
 	"pezpallet-assets/try-runtime",
 	"pezpallet-balances/try-runtime",
 	"pezpallet-identity-kyc/try-runtime",
@@ -118,3 +120,17 @@ try-runtime = [
 	"pezpallet-trust/try-runtime",
 	"pezsp-runtime/try-runtime",
 ]
+serde = [
+	"codec/serde",
+	"dep:serde",
+	"log/serde",
+	"pezframe-benchmarking?/serde",
+	"pezpallet-pez-treasury/serde",
+	"pezpallet-trust/serde",
+	"pezsp-core?/serde",
+	"pezsp-runtime/serde",
+	"scale-info/serde",
+]
+experimental = []
+with-tracing = []
+tuples-96 = []

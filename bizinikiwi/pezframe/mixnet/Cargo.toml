@@ -52,5 +52,9 @@ runtime-benchmarks = [
 	"pezframe-support/runtime-benchmarks",
 	"pezframe-system/runtime-benchmarks",
 	"pezframe/runtime-benchmarks",
+	"pezsp-application-crypto/runtime-benchmarks",
 	"pezsp-mixnet/runtime-benchmarks",
 ]
+serde = []
+experimental = []
+tuples-96 = []

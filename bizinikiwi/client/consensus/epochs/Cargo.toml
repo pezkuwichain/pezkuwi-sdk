@@ -31,3 +31,16 @@ runtime-benchmarks = [
 	"pezsp-blockchain/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
+std = [
+	"pez-fork-tree/std",
+	"pezsc-client-api/std",
+	"pezsc-consensus/std",
+	"pezsp-blockchain/std",
+]
+try-runtime = [
+	"pezsc-client-api/try-runtime",
+	"pezsc-consensus/try-runtime",
+	"pezsp-blockchain/try-runtime",
+	"pezsp-runtime/try-runtime",
+]
+serde = []

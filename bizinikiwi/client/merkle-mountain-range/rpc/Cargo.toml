@@ -39,3 +39,13 @@ runtime-benchmarks = [
 	"pezsp-mmr-primitives/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
+std = [
+	"pezsp-blockchain/std",
+]
+try-runtime = [
+	"pezsp-api/try-runtime",
+	"pezsp-blockchain/try-runtime",
+	"pezsp-mmr-primitives/try-runtime",
+	"pezsp-runtime/try-runtime",
+]
+serde = []

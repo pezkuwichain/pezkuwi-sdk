@@ -62,11 +62,16 @@ default = ["std"]
 # This crate does not have `no_std` support, we just require this for tests
 std = [
 	"bizinikiwi-test-runtime/std",
+	"pezsc-executor-common/std",
+	"pezsc-executor-polkavm/std",
+	"pezsc-executor-wasmtime/std",
 	"pezsc-runtime-test/std",
+	"pezsc-tracing/std",
 	"pezsp-api/std",
 	"pezsp-core/std",
 	"pezsp-externalities/std",
 	"pezsp-io/std",
+	"pezsp-panic-handler/std",
 	"pezsp-runtime-interface/std",
 	"pezsp-runtime/std",
 	"pezsp-state-machine/std",
@@ -89,3 +94,13 @@ runtime-benchmarks = [
 	"pezsp-trie/runtime-benchmarks",
 	"pezsp-version/runtime-benchmarks",
 ]
+try-runtime = [
+	"bizinikiwi-test-runtime/try-runtime",
+	"pezsc-runtime-test/try-runtime",
+	"pezsc-tracing/try-runtime",
+	"pezsp-api/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"pezsp-version/try-runtime",
+]
+serde = []
+with-tracing = []

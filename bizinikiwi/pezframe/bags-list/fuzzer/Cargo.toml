@@ -31,3 +31,8 @@ runtime-benchmarks = [
 	"pezframe-election-provider-support/runtime-benchmarks",
 	"pezpallet-bags-list/runtime-benchmarks",
 ]
+std = []
+try-runtime = [
+	"pezframe-election-provider-support/try-runtime",
+	"pezpallet-bags-list/try-runtime",
+]

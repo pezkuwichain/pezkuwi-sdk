@@ -36,3 +36,9 @@ default = ["scale"]
 scale = ["dep:codec", "scale-info"]
 precompiles-sol-interfaces = ["alloy-core"]
 unstable-hostfn = []
+std = [
+	"alloy-core?/std",
+	"codec?/std",
+	"scale-info?/std",
+]
+serde = []

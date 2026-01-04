@@ -24,3 +24,4 @@ scale-info = { workspace = true }
 default = ["std"]
 std = ["codec/std", "pezsp-api/std", "pezsp-std/std", "scale-info/std"]
 runtime-benchmarks = ["pezsp-api/runtime-benchmarks"]
+serde = []

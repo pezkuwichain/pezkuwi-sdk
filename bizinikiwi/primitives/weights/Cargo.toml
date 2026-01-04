@@ -43,9 +43,11 @@ full-metadata-docs = ["scale-info/docs"]
 # Serde support without relying on std features.
 serde = [
 	"bounded-collections/serde",
+	"codec/serde",
 	"dep:serde",
 	"pezsp-arithmetic/serde",
 	"scale-info/serde",
+	"smallvec/serde",
 ]
 
 json-schema = ["dep:schemars"]

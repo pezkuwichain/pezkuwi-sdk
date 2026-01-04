@@ -27,3 +27,4 @@ wasmtime = { optional = true, workspace = true }
 default = ["std"]
 std = ["anyhow?/std", "codec/std", "log/std", "wasmtime?/std"]
 wasmtime = ["anyhow", "dep:wasmtime"]
+serde = []

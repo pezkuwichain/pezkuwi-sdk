@@ -110,6 +110,7 @@ std = [
 	"num-bigint/std",
 	"num-integer/std",
 	"num-traits/std",
+	"pez-ethereum-standards/std",
 	"pezframe-benchmarking?/std",
 	"pezframe-support/std",
 	"pezframe-system/std",
@@ -117,6 +118,7 @@ std = [
 	"pezkuwi-subxt-signer?/std",
 	"pezpallet-proxy/std",
 	"pezpallet-revive-fixtures?/std",
+	"pezpallet-revive-uapi/std",
 	"pezpallet-timestamp/std",
 	"pezpallet-transaction-payment/std",
 	"pezpallet-utility/std",
@@ -147,9 +149,11 @@ runtime-benchmarks = [
 	"pezframe-benchmarking/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
 	"pezframe-system/runtime-benchmarks",
+	"pezkuwi-subxt-signer?/runtime-benchmarks",
 	"pezpallet-balances/runtime-benchmarks",
 	"pezpallet-proxy/runtime-benchmarks",
 	"pezpallet-revive-fixtures",
+	"pezpallet-revive-fixtures?/runtime-benchmarks",
 	"pezpallet-timestamp/runtime-benchmarks",
 	"pezpallet-transaction-payment/runtime-benchmarks",
 	"pezpallet-utility/runtime-benchmarks",
@@ -166,6 +170,7 @@ runtime-benchmarks = [
 	"pezsp-version/runtime-benchmarks",
 ]
 try-runtime = [
+	"pezframe-benchmarking?/try-runtime",
 	"pezframe-support/try-runtime",
 	"pezframe-system/try-runtime",
 	"pezpallet-balances/try-runtime",
@@ -173,5 +178,13 @@ try-runtime = [
 	"pezpallet-timestamp/try-runtime",
 	"pezpallet-transaction-payment/try-runtime",
 	"pezpallet-utility/try-runtime",
+	"pezsp-api/try-runtime",
+	"pezsp-consensus-aura?/try-runtime",
+	"pezsp-consensus-babe?/try-runtime",
 	"pezsp-runtime/try-runtime",
+	"pezsp-version/try-runtime",
 ]
+serde = []
+experimental = []
+with-tracing = []
+tuples-96 = []

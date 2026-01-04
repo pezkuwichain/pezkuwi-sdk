@@ -68,6 +68,7 @@ runtime-benchmarks = [
 	"pezkuwi-core-primitives/runtime-benchmarks",
 	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
 	"pezsp-api/runtime-benchmarks",
+	"pezsp-application-crypto/runtime-benchmarks",
 	"pezsp-authority-discovery/runtime-benchmarks",
 	"pezsp-consensus-slots/runtime-benchmarks",
 	"pezsp-inherents/runtime-benchmarks",
@@ -76,3 +77,14 @@ runtime-benchmarks = [
 	"pezsp-staking/runtime-benchmarks",
 ]
 test = []
+try-runtime = [
+	"pezkuwi-core-primitives/try-runtime",
+	"pezkuwi-teyrchain-primitives/try-runtime",
+	"pezsp-api/try-runtime",
+	"pezsp-authority-discovery/try-runtime",
+	"pezsp-inherents/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"pezsp-staking/try-runtime",
+]
+serde = []
+with-tracing = []

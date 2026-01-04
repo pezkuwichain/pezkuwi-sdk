@@ -55,6 +55,7 @@ default = ["std"]
 with-tracing = ["pezkuwi-sdk/with-tracing"]
 std = [
 	"bizinikiwi-wasm-builder",
+	"bizinikiwi-wasm-builder?/std",
 	"codec/std",
 	"log/std",
 	"pez-node-primitives/std",
@@ -81,6 +82,7 @@ runtime-benchmarks = [
 	"rand_pcg",
 ]
 try-runtime = [
+	"pez-node-primitives/try-runtime",
 	"pezframe-try-runtime",
 	"pezframe-try-runtime/try-runtime",
 	"pezkuwi-sdk/try-runtime",
@@ -88,5 +90,10 @@ try-runtime = [
 	"pezpallet-example-tasks/try-runtime",
 	"pezsp-runtime/try-runtime",
 ]
-experimental = ["pezpallet-example-tasks/experimental"]
+experimental = [
+	"pezkuwi-sdk/experimental",
+	"pezpallet-example-tasks/experimental",
+]
 metadata-hash = ["bizinikiwi-wasm-builder/metadata-hash"]
+serde = []
+tuples-96 = []

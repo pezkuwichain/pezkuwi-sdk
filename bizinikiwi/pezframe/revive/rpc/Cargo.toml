@@ -72,6 +72,9 @@ pezsp-runtime = { workspace = true, default-features = true }
 runtime-benchmarks = [
 	"pez-revive-dev-node/runtime-benchmarks",
 	"pez-revive-dev-runtime/runtime-benchmarks",
+	"pezkuwi-subxt-signer/runtime-benchmarks",
+	"pezkuwi-subxt/runtime-benchmarks",
+	"pezpallet-revive-fixtures/runtime-benchmarks",
 	"pezpallet-revive/runtime-benchmarks",
 	"pezsc-cli/runtime-benchmarks",
 	"pezsc-rpc-api/runtime-benchmarks",
@@ -81,3 +84,34 @@ runtime-benchmarks = [
 	"pezsp-runtime/runtime-benchmarks",
 	"pezsp-timestamp/runtime-benchmarks",
 ]
+std = [
+	"anyhow/std",
+	"codec/std",
+	"hex/std",
+	"log/std",
+	"pezkuwi-subxt/std",
+	"pezsc-cli/std",
+	"pezsc-rpc-api/std",
+	"pezsc-rpc/std",
+	"pezsc-service/std",
+	"pezsp-crypto-hashing/std",
+	"pezsp-rpc/std",
+	"pezsp-timestamp/std",
+	"prometheus-endpoint/std",
+	"rlp/std",
+	"serde_json/std",
+]
+try-runtime = [
+	"pez-revive-dev-node/try-runtime",
+	"pez-revive-dev-runtime/try-runtime",
+	"pezkuwi-subxt/try-runtime",
+	"pezpallet-revive/try-runtime",
+	"pezsc-cli/try-runtime",
+	"pezsc-rpc-api/try-runtime",
+	"pezsc-rpc/try-runtime",
+	"pezsc-service/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"pezsp-timestamp/try-runtime",
+]
+serde = []
+with-tracing = []

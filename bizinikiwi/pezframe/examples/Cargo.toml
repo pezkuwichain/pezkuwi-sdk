@@ -51,6 +51,7 @@ try-runtime = [
 	"pezpallet-example-basic/try-runtime",
 	"pezpallet-example-kitchensink/try-runtime",
 	"pezpallet-example-offchain-worker/try-runtime",
+	"pezpallet-example-pezframe-crate/try-runtime",
 	"pezpallet-example-single-block-migrations/try-runtime",
 	"pezpallet-example-split/try-runtime",
 	"pezpallet-example-tasks/try-runtime",
@@ -69,3 +70,4 @@ runtime-benchmarks = [
 	"pezpallet-example-tasks/runtime-benchmarks",
 	"pezpallet-example-view-functions/runtime-benchmarks",
 ]
+experimental = []

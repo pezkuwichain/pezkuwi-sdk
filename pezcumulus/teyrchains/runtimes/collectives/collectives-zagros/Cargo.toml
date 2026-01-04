@@ -174,15 +174,22 @@ runtime-benchmarks = [
 ]
 try-runtime = [
 	"pezcumulus-pezpallet-aura-ext/try-runtime",
+	"pezcumulus-pezpallet-session-benchmarking/try-runtime",
 	"pezcumulus-pezpallet-teyrchain-system/try-runtime",
 	"pezcumulus-pezpallet-weight-reclaim/try-runtime",
 	"pezcumulus-pezpallet-xcm/try-runtime",
 	"pezcumulus-pezpallet-xcmp-queue/try-runtime",
+	"pezcumulus-primitives-core/try-runtime",
+	"pezcumulus-primitives-utility/try-runtime",
+	"pezframe-benchmarking?/try-runtime",
 	"pezframe-executive/try-runtime",
+	"pezframe-metadata-hash-extension/try-runtime",
 	"pezframe-support/try-runtime",
+	"pezframe-system-benchmarking?/try-runtime",
 	"pezframe-system/try-runtime",
 	"pezframe-try-runtime/try-runtime",
 	"pezkuwi-runtime-common/try-runtime",
+	"pezkuwi-teyrchain-primitives/try-runtime",
 	"pezpallet-alliance/try-runtime",
 	"pezpallet-asset-rate/try-runtime",
 	"pezpallet-aura/try-runtime",
@@ -203,16 +210,36 @@ try-runtime = [
 	"pezpallet-session/try-runtime",
 	"pezpallet-state-trie-migration/try-runtime",
 	"pezpallet-timestamp/try-runtime",
+	"pezpallet-transaction-payment-rpc-runtime-api/try-runtime",
 	"pezpallet-transaction-payment/try-runtime",
 	"pezpallet-treasury/try-runtime",
 	"pezpallet-utility/try-runtime",
+	"pezpallet-xcm-benchmarks?/try-runtime",
 	"pezpallet-xcm/try-runtime",
+	"pezsp-api/try-runtime",
+	"pezsp-block-builder/try-runtime",
+	"pezsp-consensus-aura/try-runtime",
+	"pezsp-genesis-builder/try-runtime",
+	"pezsp-inherents/try-runtime",
+	"pezsp-keyring/try-runtime",
+	"pezsp-offchain/try-runtime",
 	"pezsp-runtime/try-runtime",
+	"pezsp-session/try-runtime",
+	"pezsp-transaction-pool/try-runtime",
+	"pezsp-version/try-runtime",
+	"testnet-teyrchains-constants/try-runtime",
 	"teyrchain-info/try-runtime",
 	"teyrchains-common/try-runtime",
+	"teyrchains-runtimes-test-utils/try-runtime",
+	"xcm-builder/try-runtime",
+	"xcm-executor/try-runtime",
+	"xcm-runtime-pezapis/try-runtime",
+	"xcm/try-runtime",
+	"zagros-runtime-constants/try-runtime",
 ]
 std = [
 	"bizinikiwi-wasm-builder",
+	"bizinikiwi-wasm-builder?/std",
 	"codec/std",
 	"pezcumulus-pezpallet-aura-ext/std",
 	"pezcumulus-pezpallet-session-benchmarking/std",
@@ -294,3 +321,7 @@ metadata-hash = ["bizinikiwi-wasm-builder/metadata-hash"]
 # deployment. This will disable stuff that shouldn't be part of the on-chain wasm
 # to make it smaller, like logging for example.
 on-chain-release-build = ["metadata-hash"]
+serde = []
+experimental = []
+with-tracing = []
+tuples-96 = []

@@ -30,3 +30,7 @@ std = ["pezsp-core/std", "pezsp-runtime/std", "strum/std"]
 # be subject to significant changes.
 bandersnatch-experimental = ["pezsp-core/bandersnatch-experimental"]
 runtime-benchmarks = ["pezsp-runtime/runtime-benchmarks"]
+try-runtime = [
+	"pezsp-runtime/try-runtime",
+]
+serde = []

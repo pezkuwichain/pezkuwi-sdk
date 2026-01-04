@@ -59,6 +59,7 @@ zstd = { workspace = true }
 [features]
 runtime-benchmarks = [
 	"pez-binary-merkle-tree/runtime-benchmarks",
+	"pezsp-application-crypto/runtime-benchmarks",
 	"pezsp-io/runtime-benchmarks",
 	"pezsp-state-machine/runtime-benchmarks",
 	"pezsp-trie/runtime-benchmarks",
@@ -93,10 +94,17 @@ std = [
 
 # Serde support without relying on std features.
 serde = [
+	"bytes/serde",
+	"codec/serde",
 	"dep:serde",
+	"either/serde",
+	"log/serde",
 	"pezsp-application-crypto/serde",
 	"pezsp-arithmetic/serde",
 	"pezsp-core/serde",
 	"pezsp-weights/serde",
+	"rand?/serde",
 	"scale-info/serde",
 ]
+experimental = []
+with-tracing = []

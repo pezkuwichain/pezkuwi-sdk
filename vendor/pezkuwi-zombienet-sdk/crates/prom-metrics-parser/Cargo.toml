@@ -16,3 +16,6 @@ keywords = ["metrics", "pezkuwi", "prometheus", "zombienet"]
 pest = { workspace = true }
 pest_derive = { workspace = true }
 thiserror = { workspace = true }
+
+[features]
+std = []

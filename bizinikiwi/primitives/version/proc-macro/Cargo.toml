@@ -30,3 +30,5 @@ pezsp-version = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = ["pezsp-version/runtime-benchmarks"]
+std = []
+serde = []

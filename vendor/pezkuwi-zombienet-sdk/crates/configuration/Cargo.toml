@@ -26,3 +26,12 @@ url = { workspace = true, features = ["serde"] }
 
 # zombienet deps
 support = { workspace = true }
+
+[features]
+std = [
+	"anyhow/std",
+	"serde/std",
+	"support/std",
+	"tracing/std",
+]
+serde = []

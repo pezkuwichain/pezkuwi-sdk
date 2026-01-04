@@ -34,16 +34,27 @@ std = [
 	"codec/std",
 	"impl-serde/std",
 	"parity-wasm",
+	"pezsp-crypto-hashing-proc-macro/std",
 	"pezsp-runtime/std",
 	"pezsp-std/std",
+	"pezsp-version-proc-macro/std",
 	"scale-info/std",
 	"serde/std",
 	"thiserror",
 ]
 
 # Serde support without relying on std features.
-serde = ["dep:serde", "impl-serde", "pezsp-runtime/serde"]
+serde = [
+	"codec/serde",
+	"dep:serde",
+	"impl-serde",
+	"pezsp-runtime/serde",
+	"scale-info/serde",
+]
 runtime-benchmarks = [
 	"pezsp-runtime/runtime-benchmarks",
 	"pezsp-version-proc-macro/runtime-benchmarks",
+]
+try-runtime = [
+	"pezsp-runtime/try-runtime",
 ]

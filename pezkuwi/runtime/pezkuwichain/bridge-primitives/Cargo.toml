@@ -43,3 +43,13 @@ runtime-benchmarks = [
 	"pezframe-support/runtime-benchmarks",
 	"pezsp-api/runtime-benchmarks",
 ]
+try-runtime = [
+	"pezbp-header-pez-chain/try-runtime",
+	"pezbp-pezkuwi-core/try-runtime",
+	"pezbp-runtime/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezsp-api/try-runtime",
+]
+serde = []
+experimental = []
+tuples-96 = []

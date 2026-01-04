@@ -82,6 +82,7 @@ bizinikiwi-wasm-builder = { optional = true, workspace = true, default-features 
 default = ["std"]
 std = [
 	"bizinikiwi-wasm-builder",
+	"bizinikiwi-wasm-builder?/std",
 	"codec/std",
 	"pezcumulus-pezpallet-teyrchain-system/std",
 	"pezkuwi-sdk/std",
@@ -102,3 +103,12 @@ runtime-benchmarks = [
 on-chain-release-build = []
 
 fast-runtime = []
+try-runtime = [
+	"pezcumulus-pezpallet-teyrchain-system/try-runtime",
+	"pezkuwi-sdk/try-runtime",
+	"pezsp-runtime/try-runtime",
+]
+serde = []
+experimental = []
+with-tracing = []
+tuples-96 = []

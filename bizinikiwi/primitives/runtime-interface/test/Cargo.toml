@@ -32,7 +32,18 @@ tracing-core = { workspace = true, default-features = true }
 runtime-benchmarks = [
 	"pezsc-executor/runtime-benchmarks",
 	"pezsp-io/runtime-benchmarks",
+	"pezsp-runtime-interface-test-wasm-deprecated/runtime-benchmarks",
+	"pezsp-runtime-interface-test-wasm/runtime-benchmarks",
 	"pezsp-runtime-interface/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 	"pezsp-state-machine/runtime-benchmarks",
 ]
+std = [
+	"pezsc-executor-common/std",
+]
+try-runtime = [
+	"pezsc-executor/try-runtime",
+	"pezsp-runtime/try-runtime",
+]
+serde = []
+with-tracing = []

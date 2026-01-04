@@ -87,10 +87,23 @@ runtime-benchmarks = [
 	"xcm/runtime-benchmarks",
 ]
 try-runtime = [
+	"pezbp-header-pez-chain/try-runtime",
+	"pezbp-messages/try-runtime",
+	"pezbp-runtime/try-runtime",
+	"pezbp-xcm-bridge-hub-router/try-runtime",
+	"pezbp-xcm-bridge-hub/try-runtime",
 	"pezframe-support/try-runtime",
 	"pezframe-system/try-runtime",
+	"pezkuwi-teyrchain-primitives/try-runtime",
 	"pezpallet-balances/try-runtime",
 	"pezpallet-bridge-messages/try-runtime",
 	"pezpallet-xcm-bridge-hub-router/try-runtime",
 	"pezsp-runtime/try-runtime",
+	"xcm-builder/try-runtime",
+	"xcm-executor/try-runtime",
+	"xcm/try-runtime",
 ]
+serde = []
+experimental = []
+with-tracing = []
+tuples-96 = []

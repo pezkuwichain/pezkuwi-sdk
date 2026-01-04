@@ -21,3 +21,9 @@ codec = { features = ["derive"], workspace = true, default-features = true }
 log = { workspace = true, default-features = true }
 parking_lot = { workspace = true, default-features = true }
 pezsp-core = { workspace = true, default-features = true }
+
+[features]
+std = [
+	"log/std",
+]
+serde = []

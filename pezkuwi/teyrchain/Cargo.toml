@@ -46,3 +46,8 @@ runtime-benchmarks = [
 	"pezkuwi-core-primitives/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
+try-runtime = [
+	"pezkuwi-core-primitives/try-runtime",
+	"pezsp-runtime/try-runtime",
+]
+serde = []

@@ -42,6 +42,7 @@ std = [
 	"pezframe-system/std",
 	"pezpallet-balances/std",
 	"pezpallet-nomination-pools/std",
+	"pezpallet-staking-reward-curve/std",
 	"pezpallet-staking/std",
 	"pezpallet-timestamp/std",
 	"pezsp-core/std",
@@ -69,7 +70,13 @@ try-runtime = [
 	"pezframe-system/try-runtime",
 	"pezpallet-balances/try-runtime",
 	"pezpallet-nomination-pools/try-runtime",
+	"pezpallet-staking-reward-curve/try-runtime",
 	"pezpallet-staking/try-runtime",
 	"pezpallet-timestamp/try-runtime",
 	"pezsp-runtime/try-runtime",
+	"pezsp-staking/try-runtime",
 ]
+serde = []
+experimental = []
+with-tracing = []
+tuples-96 = []

@@ -41,7 +41,13 @@ std = [
 	"alloy-core",
 	"anyhow",
 	"hex/std",
+	"pezpallet-revive-uapi/std",
 	"pezsp-core",
 	"pezsp-io",
 	"serde_json/std",
+]
+serde = []
+with-tracing = []
+runtime-benchmarks = [
+	"pezsp-io?/runtime-benchmarks",
 ]

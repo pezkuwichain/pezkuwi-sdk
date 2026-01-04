@@ -29,4 +29,12 @@ bls-experimental = ["bizinikiwi-test-runtime-client/bls-experimental"]
 runtime-benchmarks = [
 	"bizinikiwi-test-runtime-client/runtime-benchmarks",
 	"pezsp-api/runtime-benchmarks",
+	"pezsp-application-crypto/runtime-benchmarks",
 ]
+std = [
+	"bizinikiwi-test-runtime-client/std",
+	"pezsp-core/std",
+	"pezsp-keystore/std",
+]
+serde = []
+with-tracing = []

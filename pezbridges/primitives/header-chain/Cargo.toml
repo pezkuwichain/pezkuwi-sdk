@@ -54,3 +54,12 @@ runtime-benchmarks = [
 	"pezsp-consensus-grandpa/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
+try-runtime = [
+	"pezbp-runtime/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezsp-consensus-grandpa/try-runtime",
+	"pezsp-runtime/try-runtime",
+]
+serde = []
+experimental = []
+tuples-96 = []

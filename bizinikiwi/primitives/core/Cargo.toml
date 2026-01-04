@@ -139,15 +139,27 @@ std = [
 
 # Serde support without relying on std features.
 serde = [
+	"array-bytes/serde",
+	"bip39/serde",
 	"blake2",
 	"bounded-collections/serde",
 	"bs58/alloc",
+	"codec/serde",
 	"dep:serde",
+	"ed25519-zebra/serde",
 	"impl-serde",
 	"k256/serde",
+	"log/serde",
+	"parking_lot?/serde",
 	"pezsp-storage/serde",
+	"primitive-types/serde",
 	"primitive-types/serde_no_std",
+	"rand?/serde",
 	"scale-info/serde",
+	"schnorrkel/serde",
+	"secp256k1?/serde",
+	"secrecy/serde",
+	"zeroize/serde",
 ]
 
 # This feature enables all crypto primitives for `no_std` builds like microcontrollers
@@ -164,3 +176,4 @@ bls-experimental = ["sha2", "w3f-bls"]
 # It should not be used in production since the implementation and interface may still
 # be subject to significant changes.
 bandersnatch-experimental = ["ark-vrf"]
+experimental = []

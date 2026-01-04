@@ -28,3 +28,4 @@ runtime-benchmarks = [
 	"pezsp-api/runtime-benchmarks",
 	"pezsp-staking/runtime-benchmarks",
 ]
+serde = []

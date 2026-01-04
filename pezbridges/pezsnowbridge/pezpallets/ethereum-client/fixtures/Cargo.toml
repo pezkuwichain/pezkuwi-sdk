@@ -39,3 +39,4 @@ runtime-benchmarks = [
 	"pezsnowbridge-beacon-primitives/runtime-benchmarks",
 	"pezsnowbridge-verification-primitives/runtime-benchmarks",
 ]
+serde = []

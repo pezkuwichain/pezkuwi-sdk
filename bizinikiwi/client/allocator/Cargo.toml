@@ -21,3 +21,9 @@ log = { workspace = true, default-features = true }
 pezsp-core = { workspace = true, default-features = true }
 pezsp-wasm-interface = { workspace = true, default-features = true }
 thiserror = { workspace = true }
+
+[features]
+std = [
+	"log/std",
+]
+serde = []

@@ -22,3 +22,8 @@ proc-macro = true
 pezsp-crypto-hashing = { workspace = true }
 quote = { workspace = true }
 syn = { features = ["full", "parsing"], workspace = true }
+
+[features]
+std = [
+	"pezsp-crypto-hashing/std",
+]

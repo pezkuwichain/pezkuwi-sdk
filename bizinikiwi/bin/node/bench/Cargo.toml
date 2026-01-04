@@ -63,3 +63,29 @@ runtime-benchmarks = [
 	"pezsp-timestamp/runtime-benchmarks",
 	"pezsp-trie/runtime-benchmarks",
 ]
+std = [
+	"log/std",
+	"pez-node-testing/std",
+	"pezsc-basic-authorship/std",
+	"pezsc-client-api/std",
+	"pezsc-transaction-pool-api/std",
+	"pezsc-transaction-pool/std",
+	"pezsp-consensus/std",
+	"pezsp-timestamp/std",
+]
+try-runtime = [
+	"pez-kitchensink-runtime/try-runtime",
+	"pez-node-primitives/try-runtime",
+	"pez-node-testing/try-runtime",
+	"pezsc-basic-authorship/try-runtime",
+	"pezsc-client-api/try-runtime",
+	"pezsc-transaction-pool-api/try-runtime",
+	"pezsc-transaction-pool/try-runtime",
+	"pezsp-consensus/try-runtime",
+	"pezsp-inherents/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"pezsp-timestamp/try-runtime",
+]
+serde = []
+experimental = []
+with-tracing = []

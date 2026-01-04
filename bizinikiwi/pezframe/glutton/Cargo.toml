@@ -45,8 +45,10 @@ std = [
 	"scale-info/std",
 ]
 try-runtime = [
+	"pezframe-benchmarking?/try-runtime",
 	"pezframe-support/try-runtime",
 	"pezframe-system/try-runtime",
+	"pezsp-inherents/try-runtime",
 	"pezsp-runtime/try-runtime",
 ]
 
@@ -58,3 +60,7 @@ runtime-benchmarks = [
 	"pezsp-io/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
+serde = []
+experimental = []
+with-tracing = []
+tuples-96 = []

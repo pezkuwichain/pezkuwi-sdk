@@ -22,3 +22,8 @@ runtime-benchmarks = [
 	"gum/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
 ]
+std = [
+	"codec/std",
+	"gum/std",
+]
+serde = []

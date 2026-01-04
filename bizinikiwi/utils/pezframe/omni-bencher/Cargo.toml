@@ -40,3 +40,18 @@ runtime-benchmarks = [
 	"pezsp-runtime/runtime-benchmarks",
 	"pezsp-statement-store/runtime-benchmarks",
 ]
+std = [
+	"pezframe-benchmarking-cli/std",
+	"pezsc-chain-spec/std",
+	"pezsc-cli/std",
+]
+try-runtime = [
+	"pezcumulus-test-runtime/try-runtime",
+	"pezframe-benchmarking-cli/try-runtime",
+	"pezsc-chain-spec/try-runtime",
+	"pezsc-cli/try-runtime",
+	"pezsp-genesis-builder/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"pezsp-statement-store/try-runtime",
+]
+serde = []

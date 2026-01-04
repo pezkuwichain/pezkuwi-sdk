@@ -69,7 +69,25 @@ bizinikiwi-build-script-utils = { workspace = true, default-features = true }
 
 [features]
 default = ["std"]
-std = ["pez-solochain-template-runtime/std"]
+std = [
+	"bizinikiwi-frame-rpc-system/std",
+	"pez-solochain-template-runtime/std",
+	"pezframe-benchmarking-cli/std",
+	"pezpallet-transaction-payment-rpc/std",
+	"pezsc-basic-authorship/std",
+	"pezsc-cli/std",
+	"pezsc-client-api/std",
+	"pezsc-consensus-aura/std",
+	"pezsc-consensus-grandpa/std",
+	"pezsc-consensus/std",
+	"pezsc-network/std",
+	"pezsc-offchain/std",
+	"pezsc-service/std",
+	"pezsc-telemetry/std",
+	"pezsc-transaction-pool-api/std",
+	"pezsc-transaction-pool/std",
+	"pezsp-blockchain/std",
+]
 # Storage benchmarking support (optional)
 storage-benchmark = ["pezframe-benchmarking-cli/storage-benchmark"]
 # Dependencies that are only required if runtime benchmarking should be build.
@@ -107,8 +125,35 @@ runtime-benchmarks = [
 # Enable features that allow the runtime to be tried and debugged. Name might be subject to change
 # in the near future.
 try-runtime = [
+	"bizinikiwi-frame-rpc-system/try-runtime",
 	"pez-solochain-template-runtime/try-runtime",
+	"pezframe-benchmarking-cli/try-runtime",
+	"pezframe-metadata-hash-extension/try-runtime",
 	"pezframe-system/try-runtime",
+	"pezpallet-transaction-payment-rpc/try-runtime",
 	"pezpallet-transaction-payment/try-runtime",
+	"pezsc-basic-authorship/try-runtime",
+	"pezsc-cli/try-runtime",
+	"pezsc-client-api/try-runtime",
+	"pezsc-consensus-aura/try-runtime",
+	"pezsc-consensus-grandpa/try-runtime",
+	"pezsc-consensus/try-runtime",
+	"pezsc-executor/try-runtime",
+	"pezsc-network/try-runtime",
+	"pezsc-offchain/try-runtime",
+	"pezsc-service/try-runtime",
+	"pezsc-transaction-pool-api/try-runtime",
+	"pezsc-transaction-pool/try-runtime",
+	"pezsp-api/try-runtime",
+	"pezsp-block-builder/try-runtime",
+	"pezsp-blockchain/try-runtime",
+	"pezsp-consensus-aura/try-runtime",
+	"pezsp-genesis-builder/try-runtime",
+	"pezsp-inherents/try-runtime",
+	"pezsp-keyring/try-runtime",
 	"pezsp-runtime/try-runtime",
+	"pezsp-timestamp/try-runtime",
 ]
+serde = []
+experimental = []
+with-tracing = []

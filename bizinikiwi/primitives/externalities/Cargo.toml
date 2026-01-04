@@ -24,3 +24,4 @@ pezsp-storage = { workspace = true }
 [features]
 default = ["std"]
 std = ["codec/std", "environmental/std", "pezsp-storage/std"]
+serde = []

@@ -43,4 +43,14 @@ runtime-benchmarks = [
 	# "pezkuwi-primitives-test-helpers/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
 	"pezsc-consensus-slots/runtime-benchmarks",
+	"pezsp-application-crypto/runtime-benchmarks",
 ]
+std = [
+	"bitvec/std",
+	"gum/std",
+	"pezkuwi-node-subsystem-util/std",
+	"pezkuwi-node-subsystem/std",
+	"pezkuwi-pez-node-primitives/std",
+	"pezsc-consensus-slots/std",
+]
+serde = []

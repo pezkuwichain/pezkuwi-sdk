@@ -64,3 +64,29 @@ runtime-benchmarks = [
 	"pezsp-blockchain/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
+std = [
+	"bizinikiwi-test-runtime-client/std",
+	"codec/std",
+	"hex/std",
+	"log/std",
+	"pezsc-client-api/std",
+	"pezsc-network-types/std",
+	"pezsc-network/std",
+	"pezsc-service/std",
+	"pezsp-blockchain/std",
+	"prometheus-endpoint/std",
+	"serde/std",
+	"serde_json/std",
+]
+try-runtime = [
+	"bizinikiwi-test-runtime-client/try-runtime",
+	"pezsc-client-api/try-runtime",
+	"pezsc-network/try-runtime",
+	"pezsc-service/try-runtime",
+	"pezsp-api/try-runtime",
+	"pezsp-authority-discovery/try-runtime",
+	"pezsp-blockchain/try-runtime",
+	"pezsp-runtime/try-runtime",
+]
+serde = []
+with-tracing = []

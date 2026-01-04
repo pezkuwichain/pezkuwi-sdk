@@ -45,3 +45,8 @@ bandersnatch-experimental = [
 	"pezsp-core/bandersnatch-experimental",
 	"pezsp-keystore/bandersnatch-experimental",
 ]
+std = []
+serde = []
+runtime-benchmarks = [
+	"pezsp-application-crypto/runtime-benchmarks",
+]

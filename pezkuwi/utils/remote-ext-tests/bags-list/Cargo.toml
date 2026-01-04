@@ -33,3 +33,16 @@ runtime-benchmarks = [
 	"zagros-runtime-constants/runtime-benchmarks",
 	"zagros-runtime/runtime-benchmarks",
 ]
+std = [
+	"log/std",
+	"pezpallet-bags-list-remote-tests/std",
+]
+try-runtime = [
+	"pezframe-system/try-runtime",
+	"pezpallet-bags-list-remote-tests/try-runtime",
+	"zagros-runtime-constants/try-runtime",
+	"zagros-runtime/try-runtime",
+]
+serde = []
+experimental = []
+with-tracing = []

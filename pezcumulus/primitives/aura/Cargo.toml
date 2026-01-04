@@ -24,3 +24,4 @@ runtime-benchmarks = [
 	"pezsp-api/runtime-benchmarks",
 	"pezsp-consensus-aura/runtime-benchmarks",
 ]
+serde = []

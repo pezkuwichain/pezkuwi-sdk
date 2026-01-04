@@ -80,3 +80,45 @@ runtime-benchmarks = [
 	"pezsp-runtime/runtime-benchmarks",
 	"pezsp-timestamp/runtime-benchmarks",
 ]
+std = [
+	"bizinikiwi-test-client/std",
+	"log/std",
+	"node-cli/std",
+	"pezsc-block-builder/std",
+	"pezsc-client-api/std",
+	"pezsc-client-db/std",
+	"pezsc-consensus/std",
+	"pezsc-service/std",
+	"pezsp-blockchain/std",
+	"pezsp-consensus/std",
+	"pezsp-timestamp/std",
+]
+try-runtime = [
+	"bizinikiwi-test-client/try-runtime",
+	"node-cli/try-runtime",
+	"pez-kitchensink-runtime/try-runtime",
+	"pez-node-primitives/try-runtime",
+	"pezframe-metadata-hash-extension/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezpallet-asset-conversion-tx-payment/try-runtime",
+	"pezpallet-asset-conversion/try-runtime",
+	"pezpallet-revive/try-runtime",
+	"pezpallet-skip-feeless-payment/try-runtime",
+	"pezsc-block-builder/try-runtime",
+	"pezsc-client-api/try-runtime",
+	"pezsc-client-db/try-runtime",
+	"pezsc-consensus/try-runtime",
+	"pezsc-executor/try-runtime",
+	"pezsc-service/try-runtime",
+	"pezsp-api/try-runtime",
+	"pezsp-block-builder/try-runtime",
+	"pezsp-blockchain/try-runtime",
+	"pezsp-consensus/try-runtime",
+	"pezsp-inherents/try-runtime",
+	"pezsp-keyring/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"pezsp-timestamp/try-runtime",
+]
+serde = []
+experimental = []
+with-tracing = []

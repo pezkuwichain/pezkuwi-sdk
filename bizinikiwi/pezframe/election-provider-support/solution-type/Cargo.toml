@@ -33,3 +33,5 @@ trybuild = { workspace = true }
 
 [features]
 runtime-benchmarks = []
+std = []
+serde = []

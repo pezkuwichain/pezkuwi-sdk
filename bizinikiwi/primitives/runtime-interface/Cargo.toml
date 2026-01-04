@@ -55,3 +55,5 @@ std = [
 # check is changed into a runtime check.
 disable_target_static_assertions = []
 runtime-benchmarks = []
+serde = []
+with-tracing = []

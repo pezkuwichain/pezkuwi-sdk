@@ -61,3 +61,22 @@ runtime-benchmarks = [
 	"pezsp-state-machine/runtime-benchmarks",
 	"pezsp-version/runtime-benchmarks",
 ]
+std = [
+	"pezcumulus-relay-chain-interface/std",
+	"pezkuwi-overseer/std",
+	"pezsc-client-api/std",
+	"pezsc-rpc-api/std",
+	"pezsc-service/std",
+	"prometheus-endpoint/std",
+]
+try-runtime = [
+	"pezcumulus-primitives-core/try-runtime",
+	"pezsc-client-api/try-runtime",
+	"pezsc-rpc-api/try-runtime",
+	"pezsc-service/try-runtime",
+	"pezsp-authority-discovery/try-runtime",
+	"pezsp-consensus-babe/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"pezsp-version/try-runtime",
+]
+serde = []

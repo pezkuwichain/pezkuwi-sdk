@@ -57,7 +57,26 @@ runtime-benchmarks = [
 	"pezkuwi-overseer/runtime-benchmarks",
 	"pezkuwi-pez-node-primitives/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
+	"pezsc-keystore/runtime-benchmarks",
 	"pezsp-consensus-babe/runtime-benchmarks",
 	"pezsp-consensus/runtime-benchmarks",
 	"pezsp-keyring/runtime-benchmarks",
 ]
+std = [
+	"gum/std",
+	"pezkuwi-approval-distribution/std",
+	"pezkuwi-node-core-approval-voting/std",
+	"pezkuwi-node-metrics/std",
+	"pezkuwi-node-network-protocol/std",
+	"pezkuwi-node-subsystem-util/std",
+	"pezkuwi-node-subsystem/std",
+	"pezkuwi-overseer/std",
+	"pezkuwi-pez-node-primitives/std",
+	"pezsc-keystore/std",
+	"pezsp-consensus/std",
+	"pezsp-tracing/std",
+	"rand/std",
+	"rand_core/std",
+]
+serde = []
+with-tracing = []

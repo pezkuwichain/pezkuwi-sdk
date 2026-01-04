@@ -40,6 +40,16 @@ web = [
 	"web-sys",
 	"web-time",
 ]
+std = [
+	"futures-util/std",
+	"getrandom?/std",
+	"serde/std",
+	"serde_json/std",
+	"smoldot-light/std",
+	"smoldot?/std",
+	"tracing/std",
+]
+serde = []
 
 [dependencies]
 futures = { workspace = true, features = ["async-await"] }

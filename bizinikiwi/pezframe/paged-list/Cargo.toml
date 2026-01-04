@@ -49,3 +49,6 @@ try-runtime = [
 ]
 
 frame-metadata = ["pezsp-metadata-ir"]
+serde = []
+experimental = []
+tuples-96 = []

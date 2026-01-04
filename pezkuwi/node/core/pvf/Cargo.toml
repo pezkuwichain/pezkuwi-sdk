@@ -102,3 +102,16 @@ runtime-benchmarks = [
 	"pezsc-tracing/runtime-benchmarks",
 	# "test-teyrchain-adder/runtime-benchmarks",
 ]
+std = [
+	"codec/std",
+	"gum/std",
+	"pezkuwi-node-core-pvf-common/std",
+	"pezkuwi-node-core-pvf-execute-worker?/std",
+	"pezkuwi-node-core-pvf-prepare-worker?/std",
+	"pezkuwi-node-metrics/std",
+	"pezkuwi-node-subsystem/std",
+	"pezkuwi-pez-node-primitives/std",
+	"pezsc-sysinfo/std",
+	"pezsc-tracing/std",
+]
+serde = []

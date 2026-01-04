@@ -45,7 +45,9 @@ std = [
 
 # Serde support without relying on std features.
 serde = [
+	"codec/serde",
 	"dep:serde",
+	"log/serde",
 	"pezsp-application-crypto/serde",
 	"pezsp-core/serde",
 	"pezsp-runtime/serde",
@@ -53,5 +55,10 @@ serde = [
 ]
 runtime-benchmarks = [
 	"pezsp-api/runtime-benchmarks",
+	"pezsp-application-crypto/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
+]
+try-runtime = [
+	"pezsp-api/try-runtime",
+	"pezsp-runtime/try-runtime",
 ]

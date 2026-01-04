@@ -23,3 +23,7 @@ serde = { features = ["derive"], workspace = true, default-features = true }
 
 [dev-dependencies]
 serde_json = { workspace = true, default-features = true }
+
+[features]
+std = []
+serde = []

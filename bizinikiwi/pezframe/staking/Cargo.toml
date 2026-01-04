@@ -64,6 +64,7 @@ std = [
 	"pezpallet-bags-list/std",
 	"pezpallet-balances/std",
 	"pezpallet-session/std",
+	"pezpallet-staking-reward-curve/std",
 	"pezpallet-timestamp/std",
 	"pezsp-application-crypto/std",
 	"pezsp-io/std",
@@ -85,6 +86,7 @@ runtime-benchmarks = [
 	"pezpallet-session/runtime-benchmarks",
 	"pezpallet-staking-reward-curve/runtime-benchmarks",
 	"pezpallet-timestamp/runtime-benchmarks",
+	"pezsp-application-crypto/runtime-benchmarks",
 	"pezsp-io/runtime-benchmarks",
 	"pezsp-npos-elections/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
@@ -92,6 +94,7 @@ runtime-benchmarks = [
 	"rand_chacha",
 ]
 try-runtime = [
+	"pezframe-benchmarking?/try-runtime",
 	"pezframe-election-provider-support/try-runtime",
 	"pezframe-support/try-runtime",
 	"pezframe-system/try-runtime",
@@ -99,6 +102,13 @@ try-runtime = [
 	"pezpallet-bags-list/try-runtime",
 	"pezpallet-balances/try-runtime",
 	"pezpallet-session/try-runtime",
+	"pezpallet-staking-reward-curve/try-runtime",
 	"pezpallet-timestamp/try-runtime",
+	"pezsp-npos-elections/try-runtime",
 	"pezsp-runtime/try-runtime",
+	"pezsp-staking/try-runtime",
 ]
+serde = []
+experimental = []
+with-tracing = []
+tuples-96 = []

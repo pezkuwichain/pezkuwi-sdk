@@ -45,11 +45,13 @@ teyrchains-common = { workspace = true }
 default = ["std"]
 std = [
 	"codec/std",
+	"pez-ethereum-standards/std",
 	"pezcumulus-primitives-core/std",
 	"pezframe-support/std",
 	"pezframe-system/std",
 	"pezpallet-asset-conversion/std",
 	"pezpallet-assets/std",
+	"pezpallet-revive-uapi/std",
 	"pezpallet-revive/std",
 	"pezpallet-xcm/std",
 	"pezsp-api/std",
@@ -79,12 +81,20 @@ runtime-benchmarks = [
 	"xcm/runtime-benchmarks",
 ]
 try-runtime = [
+	"pezcumulus-primitives-core/try-runtime",
 	"pezframe-support/try-runtime",
 	"pezframe-system/try-runtime",
 	"pezpallet-asset-conversion/try-runtime",
 	"pezpallet-assets/try-runtime",
 	"pezpallet-revive/try-runtime",
 	"pezpallet-xcm/try-runtime",
+	"pezsp-api/try-runtime",
 	"pezsp-runtime/try-runtime",
 	"teyrchains-common/try-runtime",
+	"xcm-builder/try-runtime",
+	"xcm-executor/try-runtime",
+	"xcm/try-runtime",
 ]
+serde = []
+experimental = []
+tuples-96 = []

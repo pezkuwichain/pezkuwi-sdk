@@ -104,8 +104,18 @@ try-runtime = [
 	"pez-penpal-runtime/try-runtime",
 	"pezbridge-hub-pezkuwichain-runtime/try-runtime",
 	"pezbridge-hub-zagros-runtime/try-runtime",
+	"pezcumulus-client-consensus-aura/try-runtime",
+	"pezcumulus-primitives-core/try-runtime",
 	"pezkuwi-omni-node-lib/try-runtime",
+	"pezkuwichain-teyrchain-runtime/try-runtime",
+	"pezsc-chain-spec/try-runtime",
+	"pezsc-cli/try-runtime",
+	"pezsc-service/try-runtime",
+	"pezsp-genesis-builder/try-runtime",
+	"pezsp-keyring/try-runtime",
 	"teyrchains-common/try-runtime",
+	"xcm/try-runtime",
+	"yet-another-teyrchain-runtime/try-runtime",
 ]
 fast-runtime = [
 	"coretime-pezkuwichain-runtime/fast-runtime",
@@ -113,3 +123,12 @@ fast-runtime = [
 	"pezbridge-hub-pezkuwichain-runtime/fast-runtime",
 	"pezbridge-hub-zagros-runtime/fast-runtime",
 ]
+std = [
+	"log/std",
+	"pezcumulus-client-consensus-aura/std",
+	"pezkuwi-omni-node-lib/std",
+	"pezsc-chain-spec/std",
+	"pezsc-cli/std",
+	"pezsc-service/std",
+]
+serde = []

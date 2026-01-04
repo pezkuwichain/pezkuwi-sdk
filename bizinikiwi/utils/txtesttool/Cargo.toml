@@ -61,3 +61,20 @@ tracing-subscriber = { workspace = true, features = [
 	"fmt",
 	"time",
 ] }
+
+[features]
+std = [
+	"average/std",
+	"codec/std",
+	"futures-util/std",
+	"pezkuwi-subxt-rpcs/std",
+	"pezkuwi-subxt/std",
+	"serde_json/std",
+]
+serde = []
+runtime-benchmarks = [
+	"pezkuwi-subxt-core/runtime-benchmarks",
+	"pezkuwi-subxt-rpcs/runtime-benchmarks",
+	"pezkuwi-subxt-signer/runtime-benchmarks",
+	"pezkuwi-subxt/runtime-benchmarks",
+]

@@ -35,7 +35,12 @@ std = [
 ]
 
 # Serde support without relying on std features.
-serde = ["dep:serde", "pezsp-core/serde", "scale-info/serde"]
+serde = [
+	"codec/serde",
+	"dep:serde",
+	"pezsp-core/serde",
+	"scale-info/serde",
+]
 
 # This feature enables all crypto primitives for `no_std` builds like microcontrollers
 # or Intel SGX.
@@ -62,4 +67,8 @@ bls-experimental = [
 bandersnatch-experimental = [
 	"pezsp-core/bandersnatch-experimental",
 	"pezsp-io/bandersnatch-experimental",
+]
+with-tracing = []
+runtime-benchmarks = [
+	"pezsp-io/runtime-benchmarks",
 ]

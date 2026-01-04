@@ -39,7 +39,10 @@ std = [
 	"pezframe-support/std",
 	"pezframe-system/std",
 	"pezkuwi-runtime-teyrchains/std",
+	"pezkuwi-test-client/std",
+	"pezkuwi-test-service/std",
 	"pezpallet-sudo/std",
+	"pezsp-consensus/std",
 	"pezsp-runtime/std",
 	"xcm/std",
 ]
@@ -60,3 +63,23 @@ runtime-benchmarks = [
 	"xcm-executor/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
 ]
+try-runtime = [
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezkuwi-runtime-teyrchains/try-runtime",
+	"pezkuwi-test-client/try-runtime",
+	"pezkuwi-test-runtime/try-runtime",
+	"pezkuwi-test-service/try-runtime",
+	"pezpallet-sudo/try-runtime",
+	"pezpallet-transaction-payment/try-runtime",
+	"pezpallet-xcm/try-runtime",
+	"pezsp-consensus/try-runtime",
+	"pezsp-keyring/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"xcm-executor/try-runtime",
+	"xcm/try-runtime",
+]
+serde = []
+experimental = []
+with-tracing = []
+tuples-96 = []

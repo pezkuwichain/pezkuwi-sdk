@@ -16,3 +16,6 @@ workspace = true
 [dependencies]
 kvdb = { workspace = true }
 parking_lot = { workspace = true, default-features = true }
+
+[features]
+serde = []

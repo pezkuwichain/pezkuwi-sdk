@@ -35,3 +35,13 @@ runtime-benchmarks = [
 	"pezbridge-hub-zagros-emulated-chain/runtime-benchmarks",
 	"zagros-emulated-chain/runtime-benchmarks",
 ]
+std = [
+	"asset-hub-zagros-emulated-chain/std",
+	"collectives-zagros-emulated-chain/std",
+	"coretime-zagros-emulated-chain/std",
+	"emulated-integration-tests-common/std",
+	"people-zagros-emulated-chain/std",
+	"pez-penpal-emulated-chain/std",
+	"pezbridge-hub-zagros-emulated-chain/std",
+	"zagros-emulated-chain/std",
+]

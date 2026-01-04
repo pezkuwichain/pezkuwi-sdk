@@ -54,10 +54,14 @@ std = [
 
 # Serde support without relying on std features.
 serde = [
+	"array-bytes/serde",
+	"codec/serde",
 	"dep:serde",
 	"pezsp-application-crypto/serde",
 	"pezsp-core/serde",
+	"pezsp-mmr-primitives/serde",
 	"pezsp-runtime/serde",
+	"pezsp-weights/serde",
 	"scale-info/serde",
 ]
 
@@ -69,7 +73,15 @@ bls-experimental = [
 ]
 runtime-benchmarks = [
 	"pezsp-api/runtime-benchmarks",
+	"pezsp-application-crypto/runtime-benchmarks",
 	"pezsp-io/runtime-benchmarks",
 	"pezsp-mmr-primitives/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
+try-runtime = [
+	"pezsp-api/try-runtime",
+	"pezsp-mmr-primitives/try-runtime",
+	"pezsp-runtime/try-runtime",
+]
+experimental = []
+with-tracing = []

@@ -47,3 +47,23 @@ runtime-benchmarks = [
 	"pezsp-inherents/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
+std = [
+	"pezcumulus-client-consensus-common/std",
+	"pezcumulus-relay-chain-interface/std",
+	"pezsc-consensus/std",
+	"pezsp-blockchain/std",
+	"pezsp-consensus/std",
+	"prometheus-endpoint/std",
+]
+try-runtime = [
+	"pezcumulus-client-consensus-common/try-runtime",
+	"pezcumulus-primitives-core/try-runtime",
+	"pezsc-consensus/try-runtime",
+	"pezsp-api/try-runtime",
+	"pezsp-block-builder/try-runtime",
+	"pezsp-blockchain/try-runtime",
+	"pezsp-consensus/try-runtime",
+	"pezsp-inherents/try-runtime",
+	"pezsp-runtime/try-runtime",
+]
+serde = []

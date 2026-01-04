@@ -67,3 +67,29 @@ runtime-benchmarks = [
 	"pezsp-keyring/runtime-benchmarks",
 	"test-teyrchain-undying/runtime-benchmarks",
 ]
+std = [
+	"codec/std",
+	"log/std",
+	"pezkuwi-cli/std",
+	"pezkuwi-erasure-coding/std",
+	"pezkuwi-node-core-pvf/std",
+	"pezkuwi-node-subsystem/std",
+	"pezkuwi-pez-node-primitives/std",
+	"pezkuwi-service/std",
+	"pezkuwi-test-service/std",
+	"pezsc-cli/std",
+	"pezsc-client-api/std",
+	"pezsc-service/std",
+]
+try-runtime = [
+	"pezkuwi-cli/try-runtime",
+	"pezkuwi-primitives/try-runtime",
+	"pezkuwi-service/try-runtime",
+	"pezkuwi-test-service/try-runtime",
+	"pezkuwi-teyrchain-primitives/try-runtime",
+	"pezsc-cli/try-runtime",
+	"pezsc-client-api/try-runtime",
+	"pezsc-service/try-runtime",
+	"pezsp-keyring/try-runtime",
+]
+serde = []

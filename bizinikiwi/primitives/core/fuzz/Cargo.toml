@@ -27,3 +27,7 @@ libfuzzer-sys = { workspace = true }
 regex = { workspace = true }
 
 pezsp-core = { workspace = true, default-features = true }
+
+[features]
+std = []
+serde = []

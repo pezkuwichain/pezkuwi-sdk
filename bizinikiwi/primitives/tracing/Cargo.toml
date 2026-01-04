@@ -43,3 +43,4 @@ std = [
 	"tracing/std",
 	"with-tracing",
 ]
+serde = []

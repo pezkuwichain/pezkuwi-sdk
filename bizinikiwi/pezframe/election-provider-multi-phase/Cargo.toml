@@ -68,6 +68,7 @@ std = [
 	"pezsp-runtime/std",
 	"pezsp-tracing/std",
 	"rand/std",
+	"remote-externalities?/std",
 	"scale-info/std",
 	"strum/std",
 ]
@@ -85,9 +86,16 @@ runtime-benchmarks = [
 	"strum",
 ]
 try-runtime = [
+	"pezframe-benchmarking?/try-runtime",
 	"pezframe-election-provider-support/try-runtime",
 	"pezframe-support/try-runtime",
 	"pezframe-system/try-runtime",
 	"pezpallet-balances/try-runtime",
+	"pezsp-npos-elections/try-runtime",
 	"pezsp-runtime/try-runtime",
+	"remote-externalities?/try-runtime",
 ]
+serde = []
+experimental = []
+with-tracing = []
+tuples-96 = []

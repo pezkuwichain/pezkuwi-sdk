@@ -36,3 +36,20 @@ runtime-benchmarks = [
 	"testnet-teyrchains-constants/runtime-benchmarks",
 	"teyrchains-common/runtime-benchmarks",
 ]
+std = [
+	"emulated-integration-tests-common/std",
+	"pezcumulus-primitives-core/std",
+	"pezframe-support/std",
+	"pezsp-core/std",
+]
+try-runtime = [
+	"emulated-integration-tests-common/try-runtime",
+	"people-pezkuwichain-runtime/try-runtime",
+	"pezcumulus-primitives-core/try-runtime",
+	"pezframe-support/try-runtime",
+	"testnet-teyrchains-constants/try-runtime",
+	"teyrchains-common/try-runtime",
+]
+serde = []
+experimental = []
+tuples-96 = []

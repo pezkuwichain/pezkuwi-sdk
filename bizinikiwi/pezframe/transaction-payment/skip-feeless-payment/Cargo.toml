@@ -45,3 +45,6 @@ try-runtime = [
 	"pezframe-system/try-runtime",
 	"pezsp-runtime/try-runtime",
 ]
+serde = []
+experimental = []
+tuples-96 = []

@@ -43,6 +43,17 @@ runtime-benchmarks = [
 	"pezkuwi-node-subsystem-util/runtime-benchmarks",
 	"pezkuwi-node-subsystem/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
+	"pezsp-application-crypto/runtime-benchmarks",
 	"pezsp-authority-discovery/runtime-benchmarks",
 	"pezsp-keyring/runtime-benchmarks",
 ]
+std = [
+	"bitvec/std",
+	"gum/std",
+	"pezkuwi-node-network-protocol/std",
+	"pezkuwi-node-subsystem-util/std",
+	"pezkuwi-node-subsystem/std",
+	"pezsp-tracing/std",
+]
+serde = []
+with-tracing = []

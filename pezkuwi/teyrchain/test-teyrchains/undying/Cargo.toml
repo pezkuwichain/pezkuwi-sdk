@@ -31,6 +31,7 @@ bizinikiwi-wasm-builder = { workspace = true, default-features = true }
 [features]
 default = ["std"]
 std = [
+	"bizinikiwi-wasm-builder/std",
 	"codec/std",
 	"log/std",
 	"pezkuwi-primitives/std",
@@ -43,3 +44,5 @@ runtime-benchmarks = [
 	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
 	"pezsp-io/runtime-benchmarks",
 ]
+serde = []
+with-tracing = []

@@ -34,3 +34,5 @@ runtime-benchmarks = [
 	"pezframe-benchmarking?/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
 ]
+serde = []
+with-tracing = []

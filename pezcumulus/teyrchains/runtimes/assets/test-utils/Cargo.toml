@@ -78,6 +78,7 @@ try-runtime = [
 	"pez-assets-common/try-runtime",
 	"pezcumulus-pezpallet-teyrchain-system/try-runtime",
 	"pezcumulus-pezpallet-xcmp-queue/try-runtime",
+	"pezcumulus-primitives-core/try-runtime",
 	"pezframe-support/try-runtime",
 	"pezframe-system/try-runtime",
 	"pezpallet-asset-conversion/try-runtime",
@@ -91,6 +92,11 @@ try-runtime = [
 	"pezsp-runtime/try-runtime",
 	"teyrchain-info/try-runtime",
 	"teyrchains-common/try-runtime",
+	"teyrchains-runtimes-test-utils/try-runtime",
+	"xcm-builder/try-runtime",
+	"xcm-executor/try-runtime",
+	"xcm-runtime-pezapis/try-runtime",
+	"xcm/try-runtime",
 ]
 runtime-benchmarks = [
 	"pez-assets-common/runtime-benchmarks",
@@ -117,3 +123,7 @@ runtime-benchmarks = [
 	"xcm-runtime-pezapis/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
 ]
+serde = []
+experimental = []
+with-tracing = []
+tuples-96 = []

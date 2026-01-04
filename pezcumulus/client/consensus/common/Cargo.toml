@@ -77,3 +77,35 @@ runtime-benchmarks = [
 	"pezsp-trie/runtime-benchmarks",
 	"pezsp-version/runtime-benchmarks",
 ]
+std = [
+	"log/std",
+	"pezcumulus-client-pov-recovery/std",
+	"pezcumulus-relay-chain-interface/std",
+	"pezcumulus-relay-chain-streams/std",
+	"pezcumulus-test-client/std",
+	"pezsc-client-api/std",
+	"pezsc-consensus-babe/std",
+	"pezsc-consensus/std",
+	"pezsc-network/std",
+	"pezsp-blockchain/std",
+	"pezsp-consensus/std",
+	"prometheus-endpoint/std",
+]
+try-runtime = [
+	"pezcumulus-client-pov-recovery/try-runtime",
+	"pezcumulus-primitives-core/try-runtime",
+	"pezcumulus-test-client/try-runtime",
+	"pezcumulus-test-relay-sproof-builder/try-runtime",
+	"pezkuwi-primitives/try-runtime",
+	"pezsc-client-api/try-runtime",
+	"pezsc-consensus-babe/try-runtime",
+	"pezsc-consensus/try-runtime",
+	"pezsc-network/try-runtime",
+	"pezsp-blockchain/try-runtime",
+	"pezsp-consensus/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"pezsp-timestamp/try-runtime",
+	"pezsp-version/try-runtime",
+]
+serde = []
+with-tracing = []

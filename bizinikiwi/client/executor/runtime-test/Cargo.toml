@@ -30,6 +30,7 @@ bizinikiwi-wasm-builder = { optional = true, workspace = true, default-features 
 default = ["std"]
 std = [
 	"bizinikiwi-wasm-builder",
+	"bizinikiwi-wasm-builder?/std",
 	"pezsp-core/std",
 	"pezsp-io/std",
 	"pezsp-runtime-interface/std",
@@ -41,3 +42,8 @@ runtime-benchmarks = [
 	"pezsp-runtime-interface/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
+try-runtime = [
+	"pezsp-runtime/try-runtime",
+]
+serde = []
+with-tracing = []

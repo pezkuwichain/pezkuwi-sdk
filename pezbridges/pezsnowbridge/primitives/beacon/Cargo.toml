@@ -65,3 +65,21 @@ runtime-benchmarks = [
 	"pezsp-io/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
+try-runtime = [
+	"pezframe-support/try-runtime",
+	"pezsnowbridge-ethereum/try-runtime",
+	"pezsp-runtime/try-runtime",
+]
+serde = [
+	"codec/serde",
+	"dep:serde",
+	"hex/serde",
+	"pezsnowbridge-ethereum/serde",
+	"pezsp-core/serde",
+	"pezsp-runtime/serde",
+	"scale-info/serde",
+	"ssz_rs/serde",
+]
+experimental = []
+with-tracing = []
+tuples-96 = []

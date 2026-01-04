@@ -41,3 +41,25 @@ runtime-benchmarks = [
 	"xcm-executor/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
 ]
+std = [
+	"emulated-integration-tests-common/std",
+	"pezframe-support/std",
+	"pezkuwichain-system-emulated-network/std",
+	"pezpallet-balances/std",
+	"pezsp-runtime/std",
+	"xcm-executor/std",
+	"xcm/std",
+]
+try-runtime = [
+	"asset-test-pezutils/try-runtime",
+	"emulated-integration-tests-common/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezpallet-balances/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"teyrchains-common/try-runtime",
+	"xcm-executor/try-runtime",
+	"xcm/try-runtime",
+]
+serde = []
+experimental = []
+tuples-96 = []

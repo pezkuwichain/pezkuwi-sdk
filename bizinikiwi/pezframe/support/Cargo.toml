@@ -72,6 +72,7 @@ std = [
 	"pezsp-api/std",
 	"pezsp-arithmetic/std",
 	"pezsp-core/std",
+	"pezsp-crypto-hashing-proc-macro/std",
 	"pezsp-debug-derive/std",
 	"pezsp-genesis-builder/std",
 	"pezsp-inherents/std",
@@ -100,7 +101,14 @@ runtime-benchmarks = [
 	"pezsp-state-machine?/runtime-benchmarks",
 	"pezsp-trie/runtime-benchmarks",
 ]
-try-runtime = ["pezsp-debug-derive/force-debug", "pezsp-runtime/try-runtime"]
+try-runtime = [
+	"pezsp-api/try-runtime",
+	"pezsp-debug-derive/force-debug",
+	"pezsp-genesis-builder/try-runtime",
+	"pezsp-inherents/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"pezsp-staking/try-runtime",
+]
 experimental = ["pezframe-support-procedural/experimental"]
 # By default some types have documentation, `no-metadata-docs` allows to reduce the documentation
 # in the metadata.
@@ -115,3 +123,5 @@ full-metadata-docs = ["scale-info/docs"]
 # pallets in a runtime grows. Does increase the compile time!
 tuples-96 = ["pezframe-support-procedural/tuples-96"]
 tuples-128 = ["pezframe-support-procedural/tuples-128"]
+serde = []
+with-tracing = []

@@ -48,3 +48,6 @@ runtime-benchmarks = [
 	"pezframe/runtime-benchmarks",
 	"pezpallet-balances/runtime-benchmarks",
 ]
+serde = []
+experimental = []
+tuples-96 = []

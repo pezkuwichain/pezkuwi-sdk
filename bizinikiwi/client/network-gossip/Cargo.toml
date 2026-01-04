@@ -45,3 +45,20 @@ runtime-benchmarks = [
 	"pezsc-network/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
+std = [
+	"bizinikiwi-test-runtime-client/std",
+	"log/std",
+	"pezsc-network-common/std",
+	"pezsc-network-sync/std",
+	"pezsc-network-types/std",
+	"pezsc-network/std",
+	"prometheus-endpoint/std",
+]
+try-runtime = [
+	"bizinikiwi-test-runtime-client/try-runtime",
+	"pezsc-network-common/try-runtime",
+	"pezsc-network-sync/try-runtime",
+	"pezsc-network/try-runtime",
+	"pezsp-runtime/try-runtime",
+]
+serde = []

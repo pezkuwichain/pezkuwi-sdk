@@ -33,3 +33,9 @@ runtime-benchmarks = [
 	"pezsp-blockchain/runtime-benchmarks",
 	"pezsp-inherents/runtime-benchmarks",
 ]
+std = [
+	"gum/std",
+	"pezkuwi-node-subsystem/std",
+	"pezkuwi-overseer/std",
+	"pezsp-blockchain/std",
+]

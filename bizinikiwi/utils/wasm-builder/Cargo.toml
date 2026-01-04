@@ -69,3 +69,6 @@ runtime-benchmarks = [
 	"pezsp-io?/runtime-benchmarks",
 	"pezsp-version?/runtime-benchmarks",
 ]
+std = []
+serde = []
+with-tracing = []

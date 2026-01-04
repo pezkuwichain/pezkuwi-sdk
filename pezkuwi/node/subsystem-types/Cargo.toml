@@ -50,3 +50,27 @@ runtime-benchmarks = [
 	"pezsp-consensus-babe/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
+std = [
+	"pezkuwi-node-network-protocol/std",
+	"pezkuwi-pez-node-primitives/std",
+	"pezkuwi-statement-table/std",
+	"pezsc-client-api/std",
+	"pezsc-network-types/std",
+	"pezsc-network/std",
+	"pezsc-transaction-pool-api/std",
+	"pezsp-blockchain/std",
+	"prometheus-endpoint/std",
+]
+try-runtime = [
+	"pezkuwi-node-network-protocol/try-runtime",
+	"pezkuwi-primitives/try-runtime",
+	"pezsc-client-api/try-runtime",
+	"pezsc-network/try-runtime",
+	"pezsc-transaction-pool-api/try-runtime",
+	"pezsp-api/try-runtime",
+	"pezsp-authority-discovery/try-runtime",
+	"pezsp-blockchain/try-runtime",
+	"pezsp-consensus-babe/try-runtime",
+	"pezsp-runtime/try-runtime",
+]
+serde = []

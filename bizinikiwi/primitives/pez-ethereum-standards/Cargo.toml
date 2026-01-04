@@ -14,3 +14,9 @@ workspace = true
 
 [dependencies]
 alloy-core = { workspace = true, features = ["sol-types"] }
+
+[features]
+std = [
+	"alloy-core/std",
+]
+serde = []

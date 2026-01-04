@@ -43,3 +43,13 @@ runtime-benchmarks = [
 	"pezbp-runtime/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
+std = [
+	"prometheus-endpoint/std",
+	"tracing/std",
+]
+try-runtime = [
+	"pezbp-runtime/try-runtime",
+	"pezsp-runtime/try-runtime",
+]
+serde = []
+with-tracing = []

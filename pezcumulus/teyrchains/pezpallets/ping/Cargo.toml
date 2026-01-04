@@ -39,9 +39,11 @@ std = [
 ]
 try-runtime = [
 	"pezcumulus-pezpallet-xcm/try-runtime",
+	"pezcumulus-primitives-core/try-runtime",
 	"pezframe-support/try-runtime",
 	"pezframe-system/try-runtime",
 	"pezsp-runtime/try-runtime",
+	"xcm/try-runtime",
 ]
 runtime-benchmarks = [
 	"pezcumulus-pezpallet-xcm/runtime-benchmarks",
@@ -51,3 +53,6 @@ runtime-benchmarks = [
 	"pezsp-runtime/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
 ]
+serde = []
+experimental = []
+tuples-96 = []

@@ -44,3 +44,26 @@ runtime-benchmarks = [
 	"pezsp-keyring/runtime-benchmarks",
 	"teyrchains-common/runtime-benchmarks",
 ]
+std = [
+	"emulated-integration-tests-common/std",
+	"pezkuwi-primitives/std",
+	"pezkuwichain-runtime-constants/std",
+	"pezsc-consensus-grandpa/std",
+	"pezsp-authority-discovery/std",
+	"pezsp-consensus-babe/std",
+	"pezsp-core/std",
+	"pezsp-keyring/std",
+]
+try-runtime = [
+	"emulated-integration-tests-common/try-runtime",
+	"pezkuwi-primitives/try-runtime",
+	"pezkuwichain-runtime-constants/try-runtime",
+	"pezkuwichain-runtime/try-runtime",
+	"pezsc-consensus-grandpa/try-runtime",
+	"pezsp-authority-discovery/try-runtime",
+	"pezsp-consensus-babe/try-runtime",
+	"pezsp-consensus-beefy/try-runtime",
+	"pezsp-keyring/try-runtime",
+	"teyrchains-common/try-runtime",
+]
+serde = []

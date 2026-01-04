@@ -41,10 +41,12 @@ bizinikiwi-wasm-builder = { optional = true, workspace = true, default-features 
 default = ["std"]
 std = [
 	"bizinikiwi-wasm-builder",
+	"bizinikiwi-wasm-builder?/std",
 	"codec/std",
 	"pezframe-support/std",
 	"pezframe-system/std",
 	"pezframe/std",
+	"pezsc-chain-spec/std",
 	"pezsp-api/std",
 	"pezsp-application-crypto/std",
 	"pezsp-core/std",
@@ -62,7 +64,21 @@ runtime-benchmarks = [
 	"pezframe/runtime-benchmarks",
 	"pezsc-chain-spec/runtime-benchmarks",
 	"pezsp-api/runtime-benchmarks",
+	"pezsp-application-crypto/runtime-benchmarks",
 	"pezsp-genesis-builder/runtime-benchmarks",
 	"pezsp-keyring/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
+try-runtime = [
+	"pezframe-support/try-runtime",
+	"pezframe-system/try-runtime",
+	"pezframe/try-runtime",
+	"pezsc-chain-spec/try-runtime",
+	"pezsp-api/try-runtime",
+	"pezsp-genesis-builder/try-runtime",
+	"pezsp-keyring/try-runtime",
+	"pezsp-runtime/try-runtime",
+]
+serde = []
+experimental = []
+tuples-96 = []

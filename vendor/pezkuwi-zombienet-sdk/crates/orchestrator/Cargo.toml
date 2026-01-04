@@ -47,3 +47,27 @@ support = { workspace = true }
 [dev-dependencies]
 lazy_static = { workspace = true }
 toml = { workspace = true }
+
+[features]
+std = [
+	"anyhow/std",
+	"configuration/std",
+	"hex/std",
+	"libsecp256k1/std",
+	"pezkuwi-subxt/std",
+	"pezsc-chain-spec/std",
+	"pezsp-core/std",
+	"prom-metrics-parser/std",
+	"provider/std",
+	"rand/std",
+	"serde/std",
+	"sha2/std",
+	"support/std",
+	"tracing/std",
+]
+serde = []
+runtime-benchmarks = [
+	"pezkuwi-subxt-signer/runtime-benchmarks",
+	"pezkuwi-subxt/runtime-benchmarks",
+	"pezsc-chain-spec/runtime-benchmarks",
+]

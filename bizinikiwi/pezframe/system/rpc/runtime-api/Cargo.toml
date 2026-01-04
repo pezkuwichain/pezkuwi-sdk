@@ -25,3 +25,4 @@ pezsp-api = { workspace = true }
 default = ["std"]
 std = ["codec/std", "pezsp-api/std"]
 runtime-benchmarks = ["pezsp-api/runtime-benchmarks"]
+serde = []

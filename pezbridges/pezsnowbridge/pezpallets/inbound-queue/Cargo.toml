@@ -90,10 +90,30 @@ runtime-benchmarks = [
 	"xcm/runtime-benchmarks",
 ]
 try-runtime = [
+	"pezframe-benchmarking?/try-runtime",
 	"pezframe-support/try-runtime",
 	"pezframe-system/try-runtime",
 	"pezpallet-balances/try-runtime",
+	"pezsnowbridge-beacon-primitives/try-runtime",
+	"pezsnowbridge-core/try-runtime",
 	"pezsnowbridge-inbound-queue-primitives/try-runtime",
 	"pezsnowbridge-pezpallet-ethereum-client/try-runtime",
+	"pezsnowbridge-pezpallet-inbound-queue-fixtures?/try-runtime",
+	"pezsp-keyring/try-runtime",
 	"pezsp-runtime/try-runtime",
+	"xcm-executor/try-runtime",
+	"xcm/try-runtime",
 ]
+serde = [
+	"alloy-core/serde",
+	"codec/serde",
+	"dep:serde",
+	"pezsnowbridge-beacon-primitives/serde",
+	"pezsnowbridge-core/serde",
+	"pezsp-core/serde",
+	"pezsp-runtime/serde",
+	"scale-info/serde",
+]
+experimental = []
+with-tracing = []
+tuples-96 = []

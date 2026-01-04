@@ -46,3 +46,26 @@ runtime-benchmarks = [
 	"teyrchains-common/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
 ]
+std = [
+	"emulated-integration-tests-common/std",
+	"pezbp-messages/std",
+	"pezbridge-hub-common/std",
+	"pezframe-support/std",
+	"pezsp-core/std",
+	"pezsp-keyring/std",
+	"xcm/std",
+]
+try-runtime = [
+	"emulated-integration-tests-common/try-runtime",
+	"pezbp-messages/try-runtime",
+	"pezbridge-hub-common/try-runtime",
+	"pezbridge-hub-zagros-runtime/try-runtime",
+	"pezframe-support/try-runtime",
+	"pezsp-keyring/try-runtime",
+	"testnet-teyrchains-constants/try-runtime",
+	"teyrchains-common/try-runtime",
+	"xcm/try-runtime",
+]
+serde = []
+experimental = []
+tuples-96 = []
