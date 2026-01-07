@@ -110,6 +110,8 @@ std = [
 	"pezcumulus-client-consensus-proposer/std",
 	"pezcumulus-client-teyrchain-inherent/std",
 	"pezcumulus-relay-chain-interface/std",
+	"pezcumulus-test-client/std",
+	"pezcumulus-test-relay-sproof-builder/std",
 	"pezkuwi-node-subsystem-util/std",
 	"pezkuwi-node-subsystem/std",
 	"pezkuwi-overseer/std",
@@ -128,8 +130,6 @@ std = [
 	"pezsp-tracing/std",
 	"pezsp-version/std",
 	"prometheus-endpoint/std",
-	"pezcumulus-test-client/std",
-	"pezcumulus-test-relay-sproof-builder/std"
 ]
 try-runtime = [
 	"pezcumulus-client-collator/try-runtime",
@@ -137,6 +137,8 @@ try-runtime = [
 	"pezcumulus-client-consensus-proposer/try-runtime",
 	"pezcumulus-client-teyrchain-inherent/try-runtime",
 	"pezcumulus-primitives-core/try-runtime",
+	"pezcumulus-test-client/try-runtime",
+	"pezcumulus-test-relay-sproof-builder/try-runtime",
 	"pezkuwi-primitives/try-runtime",
 	"pezsc-client-api/try-runtime",
 	"pezsc-consensus-aura/try-runtime",
@@ -153,8 +155,6 @@ try-runtime = [
 	"pezsp-runtime/try-runtime",
 	"pezsp-timestamp/try-runtime",
 	"pezsp-version/try-runtime",
-	"pezcumulus-test-client/try-runtime",
-	"pezcumulus-test-relay-sproof-builder/try-runtime"
 ]
 serde = []
 with-tracing = []

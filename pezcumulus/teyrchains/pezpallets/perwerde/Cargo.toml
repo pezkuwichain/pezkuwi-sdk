@@ -52,6 +52,7 @@ std = [
 	"pezkuwi-primitives/std",
 	"pezpallet-balances/std",
 	"pezpallet-collective/std",
+	"pezpallet-sudo/std",
 	"pezsp-core/std",
 	"pezsp-io/std",
 	"pezsp-runtime/std",
@@ -59,7 +60,6 @@ std = [
 	"scale-info/std",
 	"serde",
 	"serde?/std",
-	"pezpallet-sudo/std"
 ]
 runtime-benchmarks = [
 	"pezframe-benchmarking/runtime-benchmarks",
@@ -70,11 +70,11 @@ runtime-benchmarks = [
 	"pezpallet-balances?/runtime-benchmarks",
 	"pezpallet-collective",
 	"pezpallet-collective?/runtime-benchmarks",
+	"pezpallet-sudo/runtime-benchmarks",
 	"pezsp-core",
 	"pezsp-io",
 	"pezsp-io?/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
-	"pezpallet-sudo/runtime-benchmarks"
 ]
 try-runtime = [
 	"pezframe-benchmarking?/try-runtime",
@@ -83,8 +83,8 @@ try-runtime = [
 	"pezkuwi-primitives/try-runtime",
 	"pezpallet-balances?/try-runtime",
 	"pezpallet-collective?/try-runtime",
+	"pezpallet-sudo/try-runtime",
 	"pezsp-runtime/try-runtime",
-	"pezpallet-sudo/try-runtime"
 ]
 serde = [
 	"codec/serde",

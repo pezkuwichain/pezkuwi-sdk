@@ -56,10 +56,10 @@ runtime-benchmarks = [
 ]
 try-runtime = [
 	"pezbp-runtime/try-runtime",
+	"pezbp-test-utils/try-runtime",
 	"pezframe-support/try-runtime",
 	"pezsp-consensus-grandpa/try-runtime",
 	"pezsp-runtime/try-runtime",
-	"pezbp-test-utils/try-runtime"
 ]
 serde = []
 experimental = []

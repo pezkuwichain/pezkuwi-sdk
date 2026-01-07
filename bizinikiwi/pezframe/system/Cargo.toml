@@ -43,6 +43,7 @@ pezsp-tracing = { workspace = true, default-features = true }
 [features]
 default = ["std"]
 std = [
+	"bizinikiwi-test-runtime-client/std",
 	"codec/std",
 	"log/std",
 	"pezframe-support/std",
@@ -53,7 +54,6 @@ std = [
 	"pezsp-weights/std",
 	"scale-info/std",
 	"serde/std",
-	"bizinikiwi-test-runtime-client/std"
 ]
 runtime-benchmarks = [
 	"bizinikiwi-test-runtime-client/runtime-benchmarks",
@@ -63,10 +63,10 @@ runtime-benchmarks = [
 	"pezsp-version/runtime-benchmarks",
 ]
 try-runtime = [
+	"bizinikiwi-test-runtime-client/try-runtime",
 	"pezframe-support/try-runtime",
 	"pezsp-runtime/try-runtime",
 	"pezsp-version/try-runtime",
-	"bizinikiwi-test-runtime-client/try-runtime"
 ]
 experimental = ["pezframe-support/experimental"]
 serde = []

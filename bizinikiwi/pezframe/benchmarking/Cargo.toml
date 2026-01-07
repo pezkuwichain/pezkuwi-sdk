@@ -53,6 +53,7 @@ std = [
 	"pezframe-support-procedural/std",
 	"pezframe-support/std",
 	"pezframe-system/std",
+	"pezsc-client-db/std",
 	"pezsp-api/std",
 	"pezsp-application-crypto/std",
 	"pezsp-core/std",
@@ -65,28 +66,27 @@ std = [
 	"pezsp-storage/std",
 	"scale-info/std",
 	"serde",
-	"pezsc-client-db/std"
 ]
 runtime-benchmarks = [
 	"pezframe-support-procedural/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
 	"pezframe-system/runtime-benchmarks",
 	"pezpallet-example-basic/runtime-benchmarks",
+	"pezsc-client-db/runtime-benchmarks",
 	"pezsp-api/runtime-benchmarks",
 	"pezsp-application-crypto/runtime-benchmarks",
 	"pezsp-io/runtime-benchmarks",
 	"pezsp-runtime-interface/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 	"pezsp-state-machine/runtime-benchmarks",
-	"pezsc-client-db/runtime-benchmarks"
 ]
 try-runtime = [
 	"pezframe-support/try-runtime",
 	"pezframe-system/try-runtime",
+	"pezpallet-example-basic/try-runtime",
+	"pezsc-client-db/try-runtime",
 	"pezsp-api/try-runtime",
 	"pezsp-runtime/try-runtime",
-	"pezpallet-example-basic/try-runtime",
-	"pezsc-client-db/try-runtime"
 ]
 serde = [
 	"array-bytes/serde",

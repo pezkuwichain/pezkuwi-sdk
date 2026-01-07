@@ -101,7 +101,7 @@ runtime-benchmarks = [
 	"pezsc-sysinfo/runtime-benchmarks",
 	"pezsc-tracing/runtime-benchmarks",
 	"test-teyrchain-adder/runtime-benchmarks",
-	"test-teyrchain-halt/runtime-benchmarks"
+	"test-teyrchain-halt/runtime-benchmarks",
 ]
 std = [
 	"codec/std",
@@ -109,12 +109,12 @@ std = [
 	"pezkuwi-node-core-pvf-common/std",
 	"pezkuwi-node-core-pvf-execute-worker?/std",
 	"pezkuwi-node-core-pvf-prepare-worker?/std",
+	"pezkuwi-node-core-pvf/std",
 	"pezkuwi-node-metrics/std",
+	"pezkuwi-node-subsystem-test-helpers/std",
 	"pezkuwi-node-subsystem/std",
 	"pezkuwi-pez-node-primitives/std",
 	"pezsc-sysinfo/std",
 	"pezsc-tracing/std",
-	"pezkuwi-node-core-pvf/std",
-	"pezkuwi-node-subsystem-test-helpers/std"
 ]
 serde = []

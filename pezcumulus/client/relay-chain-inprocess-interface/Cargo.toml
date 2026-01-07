@@ -74,6 +74,7 @@ std = [
 	"pezcumulus-relay-chain-interface/std",
 	"pezkuwi-cli/std",
 	"pezkuwi-service/std",
+	"pezkuwi-test-client/std",
 	"pezsc-cli/std",
 	"pezsc-client-api/std",
 	"pezsc-network/std",
@@ -81,7 +82,6 @@ std = [
 	"pezsc-telemetry/std",
 	"pezsc-tracing/std",
 	"pezsp-consensus/std",
-	"pezkuwi-test-client/std"
 ]
 try-runtime = [
 	"pezcumulus-client-bootnodes/try-runtime",
@@ -89,6 +89,7 @@ try-runtime = [
 	"pezkuwi-cli/try-runtime",
 	"pezkuwi-primitives/try-runtime",
 	"pezkuwi-service/try-runtime",
+	"pezkuwi-test-client/try-runtime",
 	"pezsc-cli/try-runtime",
 	"pezsc-client-api/try-runtime",
 	"pezsc-network/try-runtime",
@@ -98,6 +99,5 @@ try-runtime = [
 	"pezsp-consensus/try-runtime",
 	"pezsp-keyring/try-runtime",
 	"pezsp-runtime/try-runtime",
-	"pezkuwi-test-client/try-runtime"
 ]
 serde = []

@@ -75,22 +75,22 @@ std = [
 	"bitvec/std",
 	"gum/std",
 	"pezkuwi-node-network-protocol/std",
+	"pezkuwi-node-subsystem-test-helpers/std",
 	"pezkuwi-node-subsystem-util/std",
 	"pezkuwi-node-subsystem/std",
 	"pezkuwi-pez-node-primitives/std",
+	"pezkuwi-primitives-test-helpers/std",
 	"pezsc-keystore/std",
 	"pezsc-network/std",
 	"pezsp-tracing/std",
-	"pezkuwi-node-subsystem-test-helpers/std",
-	"pezkuwi-primitives-test-helpers/std"
 ]
 try-runtime = [
 	"pezkuwi-node-network-protocol/try-runtime",
+	"pezkuwi-primitives-test-helpers/try-runtime",
 	"pezkuwi-primitives/try-runtime",
 	"pezsc-network/try-runtime",
 	"pezsp-keyring/try-runtime",
 	"pezsp-runtime/try-runtime",
-	"pezkuwi-primitives-test-helpers/try-runtime"
 ]
 serde = []
 with-tracing = []

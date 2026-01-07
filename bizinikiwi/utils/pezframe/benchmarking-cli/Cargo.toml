@@ -97,6 +97,7 @@ runtime-benchmarks = [
 	"pezcumulus-primitives-proof-size-hostfunction/runtime-benchmarks",
 	"pezcumulus-test-runtime/runtime-benchmarks",
 	"pezframe-benchmarking/runtime-benchmarks",
+	"pezframe-storage-access-test-runtime?/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
 	"pezframe-system/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
@@ -127,7 +128,6 @@ runtime-benchmarks = [
 	"pezsp-trie/runtime-benchmarks",
 	"pezsp-version/runtime-benchmarks",
 	"zagros-runtime/runtime-benchmarks",
-	"pezframe-storage-access-test-runtime?/runtime-benchmarks"
 ]
 rocksdb = ["pezsc-cli/rocksdb", "pezsc-client-db/rocksdb"]
 std = [
@@ -147,8 +147,11 @@ std = [
 	"pezsp-blockchain/std",
 ]
 try-runtime = [
+	"bizinikiwi-test-runtime/try-runtime",
 	"pezcumulus-client-teyrchain-inherent/try-runtime",
+	"pezcumulus-test-runtime/try-runtime",
 	"pezframe-benchmarking/try-runtime",
+	"pezframe-storage-access-test-runtime?/try-runtime",
 	"pezframe-support/try-runtime",
 	"pezframe-system/try-runtime",
 	"pezkuwi-primitives/try-runtime",
@@ -171,10 +174,7 @@ try-runtime = [
 	"pezsp-timestamp/try-runtime",
 	"pezsp-transaction-pool/try-runtime",
 	"pezsp-version/try-runtime",
-	"bizinikiwi-test-runtime/try-runtime",
-	"pezcumulus-test-runtime/try-runtime",
-	"pezframe-storage-access-test-runtime?/try-runtime",
-	"zagros-runtime/try-runtime"
+	"zagros-runtime/try-runtime",
 ]
 serde = []
 experimental = []
