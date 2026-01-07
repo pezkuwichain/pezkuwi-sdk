@@ -111,7 +111,7 @@ pub struct Constraints<N = BlockNumber> {
 }
 
 impl<N> Constraints<N> {
-	/// Equal to Pezkuwi/Kusama config.
+	/// Equal to Pezkuwi/Dicle config.
 	pub const DEFAULT_MAX_HEAD_DATA_SIZE: u32 = 20480;
 }
 

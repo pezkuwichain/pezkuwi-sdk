@@ -16,8 +16,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-use pezkuwi_sdk::*;
-
 /// An overarching CLI command definition.
 #[derive(Debug, clap::Parser)]
 pub struct Cli {

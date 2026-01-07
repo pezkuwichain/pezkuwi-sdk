@@ -13,7 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Metadata Version 9. Networks like/as old as Kusama start here.
+//! Metadata Version 9. Networks like/as old as Dicle start here.
 //! Chains old enough to contain this metadata need a way to decode it.
 
 #![allow(missing_docs)]

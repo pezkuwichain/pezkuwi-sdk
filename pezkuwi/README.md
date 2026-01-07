@@ -108,7 +108,7 @@ If you want to reproduce other steps of CI process you can use the following
 
 ## Networks
 
-This repo supports runtimes for PezkuwiChain, Kusama, and Zagros.
+This repo supports runtimes for PezkuwiChain, Dicle, and Zagros.
 
 ### Connect to Pezkuwi Mainnet
 
@@ -121,15 +121,15 @@ Connect to the global Pezkuwi Mainnet network by running:
 You can see your node on [Pezkuwi telemetry](https://telemetry.pezkuwichain.app/#list/0x91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3)
 (set a custom name with `--name "my custom name"`).
 
-### Connect to the "Kusama" Canary Network
+### Connect to the "Dicle" Canary Network
 
-Connect to the global Kusama canary network by running:
+Connect to the global Dicle canary network by running:
 
 ```bash
-../target/release/pezkuwi --chain=kusama
+../target/release/pezkuwi --chain=dicle
 ```
 
-You can see your node on [Kusama telemetry](https://telemetry.polkadot.io/#list/0xb0a8d493285c2df73290dfb7e61f870f17b41801197a149ca93654499ea3dafe)
+You can see your node on [Dicle telemetry](https://telemetry.polkadot.io/#list/0xb0a8d493285c2df73290dfb7e61f870f17b41801197a149ca93654499ea3dafe)
 (set a custom name with `--name "my custom name"`).
 
 ### Connect to the Zagros Testnet
@@ -143,10 +143,10 @@ Connect to the global Zagros testnet by running:
 You can see your node on [Zagros telemetry](https://telemetry.pezkuwichain.app/#list/0xe143f23803ac50e8f6f8e62695d1ce9e4e1d68aa36c1cd2cfd15340213f3423e)
 (set a custom name with `--name "my custom name"`).
 
-### Obtaining HEZ, KSM, or TYR
+### Obtaining HEZ, DCL, or TYR
 
-If you want to do anything on PezkuwiChain, Kusama, or Zagros, then you'll need to get an account and
-some HEZ, KSM, or TYR tokens, respectively. Follow the
+If you want to do anything on PezkuwiChain, Dicle, or Zagros, then you'll need to get an account and
+some HEZ, DCL, or TYR tokens, respectively. Follow the
 [instructions](https://wiki.network.pezkuwichain.io/docs/learn-HEZ#obtaining-testnet-tokens) on the Wiki to obtain tokens for
 your testnet of choice.
 

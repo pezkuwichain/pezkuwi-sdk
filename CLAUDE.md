@@ -173,7 +173,7 @@ gh run list --limit 100 --json databaseId -q '.[].databaseId' | xargs -I{} gh ru
 | parachain | **teyrchain** |
 | rococo | **pezkuwichain** |
 | westend | **zagros** |
-| kusama | **zagros** |
+| dicle | **zagros** |
 | polkadot | **pezkuwichain** |
 | `[[parachains]]` | **`[[teyrchains]]`** |
 | `[[parachains.collators]]` | **`[[teyrchains.collators]]`** |

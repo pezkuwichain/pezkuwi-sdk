@@ -97,7 +97,7 @@
             "uid": "P5CA6DFE95AABF258"
           },
           "exemplar": false,
-          "expr": "sort_desc  (count by (version) (pezkuwi_build_info{chain=\"kusama\", instance=~\".*validator.*\"}))",
+          "expr": "sort_desc  (count by (version) (pezkuwi_build_info{chain=\"dicle\", instance=~\".*validator.*\"}))",
           "instant": true,
           "interval": "",
           "intervalFactor": 1,
@@ -163,7 +163,7 @@
             "type": "loki",
             "uid": "P367D1C7027A603FA"
           },
-          "expr": "sum(count_over_time({host=~\"kusama-validator.*\", level=\"WARN\"} [1h])) by (target)",
+          "expr": "sum(count_over_time({host=~\"dicle-validator.*\", level=\"WARN\"} [1h])) by (target)",
           "instant": false,
           "legendFormat": "{{ target }}",
           "range": true,
@@ -229,7 +229,7 @@
             "type": "loki",
             "uid": "P367D1C7027A603FA"
           },
-          "expr": "sum(count_over_time({host=~\"kusama-validator.*\", level=\"ERROR\"} [1h])) by (target)",
+          "expr": "sum(count_over_time({host=~\"dicle-validator.*\", level=\"ERROR\"} [1h])) by (target)",
           "instant": false,
           "legendFormat": "{{ target }}",
           "range": true,
@@ -312,7 +312,7 @@
             "uid": "P5CA6DFE95AABF258"
           },
           "exemplar": false,
-          "expr": "sort_desc  (count by (version) (pezkuwi_build_info{chain=\"kusama\", instance=~\".*validator.*\"}))",
+          "expr": "sort_desc  (count by (version) (pezkuwi_build_info{chain=\"dicle\", instance=~\".*validator.*\"}))",
           "instant": true,
           "interval": "",
           "intervalFactor": 1,
@@ -411,7 +411,7 @@
             "uid": "P5CA6DFE95AABF258"
           },
           "exemplar": false,
-          "expr": "pezkuwi_build_info{instance=~\".*validator.*\",chain=\"kusama\"}",
+          "expr": "pezkuwi_build_info{instance=~\".*validator.*\",chain=\"dicle\"}",
           "format": "table",
           "instant": false,
           "interval": "",
@@ -539,7 +539,7 @@
             "type": "loki",
             "uid": "P367D1C7027A603FA"
           },
-          "expr": "sum(count_over_time({host=~\"kusama-validator.*\", level=\"WARN\"} [1h])) by (target)",
+          "expr": "sum(count_over_time({host=~\"dicle-validator.*\", level=\"WARN\"} [1h])) by (target)",
           "instant": false,
           "legendFormat": "{{target}}",
           "range": true,
@@ -636,7 +636,7 @@
             "type": "loki",
             "uid": "P367D1C7027A603FA"
           },
-          "expr": "sum(count_over_time({host=~\"kusama-validator.*\", level=\"WARN\", target=\"teyrchain\"}[1h])) by (subtarget)",
+          "expr": "sum(count_over_time({host=~\"dicle-validator.*\", level=\"WARN\", target=\"teyrchain\"}[1h])) by (subtarget)",
           "hide": false,
           "instant": false,
           "legendFormat": "{{subtarget}}",
@@ -729,7 +729,7 @@
             "type": "loki",
             "uid": "P367D1C7027A603FA"
           },
-          "expr": "sum(count_over_time({host=~\"kusama-validator.*\", level=\"ERROR\"} [1h])) by (target)",
+          "expr": "sum(count_over_time({host=~\"dicle-validator.*\", level=\"ERROR\"} [1h])) by (target)",
           "instant": false,
           "legendFormat": "{{target}}",
           "range": true,
@@ -826,7 +826,7 @@
             "type": "loki",
             "uid": "P367D1C7027A603FA"
           },
-          "expr": "sum(count_over_time({host=~\"kusama-validator.*\", level=\"ERROR\", target=\"teyrchain\"}[1h])) by (subtarget)",
+          "expr": "sum(count_over_time({host=~\"dicle-validator.*\", level=\"ERROR\", target=\"teyrchain\"}[1h])) by (subtarget)",
           "hide": false,
           "instant": false,
           "legendFormat": "{{subtarget}}",
@@ -843,7 +843,7 @@
   "schemaVersion": 34,
   "style": "dark",
   "tags": [
-    "Kusama",
+    "Dicle",
     "Loki",
     "Logs"
   ],
@@ -921,7 +921,7 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Kusama Validators Overview",
+  "title": "Dicle Validators Overview",
   "uid": "0i-QjQ82j",
   "version": 29,
   "weekStart": ""

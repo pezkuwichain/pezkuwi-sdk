@@ -21412,6 +21412,7 @@ dependencies = [
  "pezframe-benchmarking-cli",
  "pezframe-remote-externalities",
  "pezframe-support-procedural-tools",
+ "pezkuwi-sdk",
  "pezkuwi-subxt-signer",
  "pezmmr-gadget",
  "pezmmr-rpc",

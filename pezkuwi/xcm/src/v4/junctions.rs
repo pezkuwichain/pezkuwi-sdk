@@ -622,20 +622,20 @@ mod tests {
 	fn relative_to_works() {
 		use NetworkId::*;
 		assert_eq!(
-			Junctions::from([Pezkuwi.into()]).relative_to(&Junctions::from([Kusama.into()])),
+			Junctions::from([Pezkuwi.into()]).relative_to(&Junctions::from([Dicle.into()])),
 			(Parent, Pezkuwi).into()
 		);
-		let base = Junctions::from([Kusama.into(), Teyrchain(1), PalletInstance(1)]);
+		let base = Junctions::from([Dicle.into(), Teyrchain(1), PalletInstance(1)]);
 
 		// Ancestors.
 		assert_eq!(Here.relative_to(&base), (Parent, Parent, Parent).into());
-		assert_eq!(Junctions::from([Kusama.into()]).relative_to(&base), (Parent, Parent).into());
+		assert_eq!(Junctions::from([Dicle.into()]).relative_to(&base), (Parent, Parent).into());
 		assert_eq!(
-			Junctions::from([Kusama.into(), Teyrchain(1)]).relative_to(&base),
+			Junctions::from([Dicle.into(), Teyrchain(1)]).relative_to(&base),
 			(Parent,).into()
 		);
 		assert_eq!(
-			Junctions::from([Kusama.into(), Teyrchain(1), PalletInstance(1)]).relative_to(&base),
+			Junctions::from([Dicle.into(), Teyrchain(1), PalletInstance(1)]).relative_to(&base),
 			Here.into()
 		);
 
@@ -645,15 +645,15 @@ mod tests {
 			(Parent, Parent, Parent, Pezkuwi).into()
 		);
 		assert_eq!(
-			Junctions::from([Kusama.into(), Teyrchain(2)]).relative_to(&base),
+			Junctions::from([Dicle.into(), Teyrchain(2)]).relative_to(&base),
 			(Parent, Parent, Teyrchain(2)).into()
 		);
 		assert_eq!(
-			Junctions::from([Kusama.into(), Teyrchain(1), PalletInstance(2)]).relative_to(&base),
+			Junctions::from([Dicle.into(), Teyrchain(1), PalletInstance(2)]).relative_to(&base),
 			(Parent, PalletInstance(2)).into()
 		);
 		assert_eq!(
-			Junctions::from([Kusama.into(), Teyrchain(1), PalletInstance(1), [1u8; 32].into()])
+			Junctions::from([Dicle.into(), Teyrchain(1), PalletInstance(1), [1u8; 32].into()])
 				.relative_to(&base),
 			([1u8; 32],).into()
 		);
@@ -664,17 +664,17 @@ mod tests {
 			(Parent, Parent, Parent, Pezkuwi, Teyrchain(1)).into()
 		);
 		assert_eq!(
-			Junctions::from([Kusama.into(), Teyrchain(2), PalletInstance(1)]).relative_to(&base),
+			Junctions::from([Dicle.into(), Teyrchain(2), PalletInstance(1)]).relative_to(&base),
 			(Parent, Parent, Teyrchain(2), PalletInstance(1)).into()
 		);
 		assert_eq!(
-			Junctions::from([Kusama.into(), Teyrchain(1), PalletInstance(2), [1u8; 32].into()])
+			Junctions::from([Dicle.into(), Teyrchain(1), PalletInstance(2), [1u8; 32].into()])
 				.relative_to(&base),
 			(Parent, PalletInstance(2), [1u8; 32]).into()
 		);
 		assert_eq!(
 			Junctions::from([
-				Kusama.into(),
+				Dicle.into(),
 				Teyrchain(1),
 				PalletInstance(1),
 				[1u8; 32].into(),
@@ -689,10 +689,10 @@ mod tests {
 	fn global_consensus_works() {
 		use NetworkId::*;
 		assert_eq!(Junctions::from([Pezkuwi.into()]).global_consensus(), Ok(Pezkuwi));
-		assert_eq!(Junctions::from([Kusama.into(), 1u64.into()]).global_consensus(), Ok(Kusama));
+		assert_eq!(Junctions::from([Dicle.into(), 1u64.into()]).global_consensus(), Ok(Dicle));
 		assert_eq!(Here.global_consensus(), Err(()));
 		assert_eq!(Junctions::from([1u64.into()]).global_consensus(), Err(()));
-		assert_eq!(Junctions::from([1u64.into(), Kusama.into()]).global_consensus(), Err(()));
+		assert_eq!(Junctions::from([1u64.into(), Dicle.into()]).global_consensus(), Err(()));
 	}
 
 	#[test]
@@ -702,15 +702,15 @@ mod tests {
 		assert_eq!(x, Junctions::from([GlobalConsensus(Pezkuwi)]));
 		let x: Junctions = Pezkuwi.into();
 		assert_eq!(x, Junctions::from([GlobalConsensus(Pezkuwi)]));
-		let x: Junctions = (Pezkuwi, Kusama).into();
-		assert_eq!(x, Junctions::from([GlobalConsensus(Pezkuwi), GlobalConsensus(Kusama)]));
+		let x: Junctions = (Pezkuwi, Dicle).into();
+		assert_eq!(x, Junctions::from([GlobalConsensus(Pezkuwi), GlobalConsensus(Dicle)]));
 	}
 
 	#[test]
 	fn encode_decode_junctions_works() {
 		let original = Junctions::from([
 			Pezkuwi.into(),
-			Kusama.into(),
+			Dicle.into(),
 			1u64.into(),
 			GlobalConsensus(Pezkuwi),
 			Teyrchain(123),

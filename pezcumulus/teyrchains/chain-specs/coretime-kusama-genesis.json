@@ -1,6 +1,6 @@
 {
-  "name": "Kusama Coretime",
-  "id": "coretime-kusama",
+  "name": "Dicle Coretime",
+  "id": "coretime-dicle",
   "chainType": "Live",
   "bootNodes": [
     "/dns/zagros-coretime-connect-0.pezkuwichain.io/tcp/30334/p2p/12D3KooWR7Biy6nPgQFhk2eYP62pAkcFA6he9RUFURTDh7ewTjpo",
@@ -13,9 +13,9 @@
   "properties": {
     "ss58Format": 2,
     "tokenDecimals": 12,
-    "tokenSymbol": "KSM"
+    "tokenSymbol": "DCL"
   },
-  "relay_chain": "kusama",
+  "relay_chain": "dicle",
   "para_id": 1005,
   "codeSubstitutes": {},
   "genesis": {

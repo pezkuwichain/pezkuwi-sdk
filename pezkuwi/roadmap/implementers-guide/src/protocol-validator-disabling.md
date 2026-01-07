@@ -10,7 +10,7 @@ As established in the [approval process](protocol-approval.md) dealing with bad 
 
 The main system responsible for dispensing **consequences** for malicious actors is the [dispute
 system](protocol-disputes.md) which eventually dispenses slash events. The slashes itself can be dispensed quickly (a
-matter of blocks) but for an extra layer of auditing all slashes are deferred for 27 days (in Pezkuwi/Kusama) which
+matter of blocks) but for an extra layer of auditing all slashes are deferred for 27 days (in Pezkuwi/Dicle) which
 gives time for Governance to investigate and potentially alter the punishment. Dispute concluding by itself does not
 immediately remove the validator from the active validator set.
 

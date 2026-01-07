@@ -17,7 +17,7 @@
 mod mock;
 
 use mock::{
-	kusama_like_with_balances, AccountId, Balance, Balances, BaseXcmWeight, System, XcmConfig,
+	dicle_like_with_balances, AccountId, Balance, Balances, BaseXcmWeight, System, XcmConfig,
 	CENTS,
 };
 use pezkuwi_teyrchain_primitives::primitives::Id as ParaId;
@@ -44,7 +44,7 @@ fn buy_execution<C>() -> Instruction<C> {
 fn withdraw_and_deposit_works() {
 	let para_acc: AccountId = ParaId::from(PARA_ID).into_account_truncating();
 	let balances = vec![(ALICE, INITIAL_BALANCE), (para_acc.clone(), INITIAL_BALANCE)];
-	kusama_like_with_balances(balances).execute_with(|| {
+	dicle_like_with_balances(balances).execute_with(|| {
 		let other_para_id = 3000;
 		let amount = REGISTER_AMOUNT;
 		let weight = BaseXcmWeight::get() * 3;
@@ -79,7 +79,7 @@ fn withdraw_and_deposit_works() {
 fn transfer_asset_works() {
 	let bob = AccountId::new([1u8; 32]);
 	let balances = vec![(ALICE, INITIAL_BALANCE), (bob.clone(), INITIAL_BALANCE)];
-	kusama_like_with_balances(balances).execute_with(|| {
+	dicle_like_with_balances(balances).execute_with(|| {
 		let amount = REGISTER_AMOUNT;
 		let weight = BaseXcmWeight::get();
 		let message = Xcm(vec![TransferAsset {
@@ -117,7 +117,7 @@ fn report_holding_works() {
 	use xcm::opaque::latest::prelude::*;
 	let para_acc: AccountId = ParaId::from(PARA_ID).into_account_truncating();
 	let balances = vec![(ALICE, INITIAL_BALANCE), (para_acc.clone(), INITIAL_BALANCE)];
-	kusama_like_with_balances(balances).execute_with(|| {
+	dicle_like_with_balances(balances).execute_with(|| {
 		let other_para_id = 3000;
 		let amount = REGISTER_AMOUNT;
 		let weight = BaseXcmWeight::get() * 4;
@@ -195,11 +195,11 @@ fn report_holding_works() {
 }
 
 /// Scenario:
-/// A teyrchain wants to move KSM from Kusama to Asset Hub.
+/// A teyrchain wants to move DCL from Dicle to Asset Hub.
 /// The teyrchain sends an XCM to withdraw funds combined with a teleport to the destination.
 ///
 /// This way of moving funds from a relay to a teyrchain will only work for trusted chains.
-/// Reserve based transfer should be used to move KSM to a community teyrchain.
+/// Reserve based transfer should be used to move DCL to a community teyrchain.
 ///
 /// Asserts that the balances are updated accordingly and the correct XCM is sent.
 #[test]
@@ -207,7 +207,7 @@ fn teleport_to_asset_hub_works() {
 	use xcm::opaque::latest::prelude::*;
 	let para_acc: AccountId = ParaId::from(PARA_ID).into_account_truncating();
 	let balances = vec![(ALICE, INITIAL_BALANCE), (para_acc.clone(), INITIAL_BALANCE)];
-	kusama_like_with_balances(balances).execute_with(|| {
+	dicle_like_with_balances(balances).execute_with(|| {
 		let asset_hub_id = 1000;
 		let other_para_id = 3000;
 		let amount = REGISTER_AMOUNT;
@@ -246,7 +246,7 @@ fn teleport_to_asset_hub_works() {
 			}
 		);
 
-		// teleports are allowed from asset hub to kusama.
+		// teleports are allowed from asset hub to dicle.
 		let message = Xcm(vec![
 			WithdrawAsset((Here, amount).into()),
 			buy_execution(),
@@ -277,7 +277,7 @@ fn teleport_to_asset_hub_works() {
 }
 
 /// Scenario:
-/// A teyrchain wants to move KSM from Kusama to the teyrchain.
+/// A teyrchain wants to move DCL from Dicle to the teyrchain.
 /// It withdraws funds and then deposits them into the reserve account of the destination chain.
 /// to the destination.
 ///
@@ -287,7 +287,7 @@ fn reserve_based_transfer_works() {
 	use xcm::opaque::latest::prelude::*;
 	let para_acc: AccountId = ParaId::from(PARA_ID).into_account_truncating();
 	let balances = vec![(ALICE, INITIAL_BALANCE), (para_acc.clone(), INITIAL_BALANCE)];
-	kusama_like_with_balances(balances).execute_with(|| {
+	dicle_like_with_balances(balances).execute_with(|| {
 		let other_para_id = 3000;
 		let amount = REGISTER_AMOUNT;
 		let transfer_effects = vec![
@@ -412,7 +412,7 @@ fn recursive_xcm_execution_fail() {
 	let mut hash = fake_message_hash(&message);
 	let weight = BaseXcmWeight::get() * 3;
 
-	kusama_like_with_balances(balances).execute_with(|| {
+	dicle_like_with_balances(balances).execute_with(|| {
 		let outcome = XcmExecutor::<XcmTestConfig>::prepare_and_execute(
 			origin,
 			message,

@@ -220,7 +220,7 @@ pub enum Error {
 	DatabasePathRequired,
 
 	#[cfg(feature = "full-node")]
-	#[error("Expected at least one of pezkuwi, kusama, zagros or pezkuwichain runtime feature")]
+	#[error("Expected at least one of pezkuwi, dicle, zagros or pezkuwichain runtime feature")]
 	NoRuntime,
 
 	#[cfg(feature = "full-node")]
@@ -249,8 +249,8 @@ pub enum Error {
 pub enum Chain {
 	/// Pezkuwi.
 	Pezkuwi,
-	/// Kusama.
-	Kusama,
+	/// Dicle.
+	Dicle,
 	/// Pezkuwichain or one of its derivations.
 	Pezkuwichain,
 	/// Zagros.
@@ -264,8 +264,8 @@ pub trait IdentifyVariant {
 	/// Returns if this is a configuration for the `Pezkuwi` network.
 	fn is_pezkuwi(&self) -> bool;
 
-	/// Returns if this is a configuration for the `Kusama` network.
-	fn is_kusama(&self) -> bool;
+	/// Returns if this is a configuration for the `Dicle` network.
+	fn is_dicle(&self) -> bool;
 
 	/// Returns if this is a configuration for the `Zagros` network.
 	fn is_zagros(&self) -> bool;
@@ -287,8 +287,8 @@ impl IdentifyVariant for Box<dyn ChainSpec> {
 	fn is_pezkuwi(&self) -> bool {
 		self.id().starts_with("pezkuwi") || self.id().starts_with("hez")
 	}
-	fn is_kusama(&self) -> bool {
-		self.id().starts_with("kusama") || self.id().starts_with("ksm")
+	fn is_dicle(&self) -> bool {
+		self.id().starts_with("dicle") || self.id().starts_with("dcl")
 	}
 	fn is_zagros(&self) -> bool {
 		self.id().starts_with("zagros") || self.id().starts_with("wnd")
@@ -305,8 +305,8 @@ impl IdentifyVariant for Box<dyn ChainSpec> {
 	fn identify_chain(&self) -> Chain {
 		if self.is_pezkuwi() {
 			Chain::Pezkuwi
-		} else if self.is_kusama() {
-			Chain::Kusama
+		} else if self.is_dicle() {
+			Chain::Dicle
 		} else if self.is_zagros() {
 			Chain::Zagros
 		} else if self.is_pezkuwichain() || self.is_versi() {
@@ -421,7 +421,7 @@ pub fn new_chain_ops(
 
 	if config.chain_spec.is_pezkuwichain() || config.chain_spec.is_versi() {
 		chain_ops!(config, None)
-	} else if config.chain_spec.is_kusama() {
+	} else if config.chain_spec.is_dicle() {
 		chain_ops!(config, None)
 	} else if config.chain_spec.is_zagros() {
 		return chain_ops!(config, None);
@@ -432,7 +432,7 @@ pub fn new_chain_ops(
 
 /// Build a full node.
 ///
-/// The actual "flavor", aka if it will use `Pezkuwi`, `Pezkuwichain` or `Kusama` is determined
+/// The actual "flavor", aka if it will use `Pezkuwi`, `Pezkuwichain` or `Dicle` is determined
 /// based on [`IdentifyVariant`] using the chain spec.
 #[cfg(feature = "full-node")]
 pub fn build_full<OverseerGenerator: OverseerGen>(

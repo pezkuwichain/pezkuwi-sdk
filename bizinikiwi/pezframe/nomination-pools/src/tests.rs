@@ -2374,7 +2374,7 @@ mod claim_payout {
 
 	#[test]
 	fn claim_payout_large_numbers() {
-		let unit = 10u128.pow(12); // akin to KSM
+		let unit = 10u128.pow(12); // akin to DCL
 		ExistentialDeposit::set(unit);
 		StakingMinBond::set(unit * 1000);
 

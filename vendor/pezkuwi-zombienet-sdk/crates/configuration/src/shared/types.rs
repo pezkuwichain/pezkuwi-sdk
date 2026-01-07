@@ -92,11 +92,11 @@ impl<'de> Deserialize<'de> for U128 {
 /// use zombienet_configuration::shared::types::Chain;
 ///
 /// let polkadot: Chain = "polkadot".try_into().unwrap();
-/// let kusama: Chain = "kusama".try_into().unwrap();
+/// let dicle: Chain = "dicle".try_into().unwrap();
 /// let myparachain: Chain = "myparachain".try_into().unwrap();
 ///
 /// assert_eq!(polkadot.as_str(), "polkadot");
-/// assert_eq!(kusama.as_str(), "kusama");
+/// assert_eq!(dicle.as_str(), "dicle");
 /// assert_eq!(myparachain.as_str(), "myparachain");
 /// ```
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]

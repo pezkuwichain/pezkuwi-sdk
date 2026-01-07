@@ -711,7 +711,7 @@ pub mod bridging {
 			/// User fee for ERC20 token transfer back to Ethereum.
 			/// (initially was calculated by test `OutboundQueue::calculate_fees` - ETH/ZGR 1/400 and fee_per_gas 20 GWEI = 2200698000000 + *25%)
 			/// Needs to be more than fee calculated from DefaultFeeConfig FeeConfigRecord in snowbridge:teyrchain/pallets/outbound-queue/src/lib.rs
-			/// Pezkuwi uses 10 decimals, Kusama,Pezkuwichain,Zagros 12 decimals.
+			/// Pezkuwi uses 10 decimals, Dicle,Pezkuwichain,Zagros 12 decimals.
 			pub const DefaultBridgeHubEthereumBaseFee: Balance = 3_833_568_200_000;
 			pub const DefaultBridgeHubEthereumBaseFeeV2: Balance = 100_000_000_000;
 			pub storage BridgeHubEthereumBaseFee: Balance = DefaultBridgeHubEthereumBaseFee::get();

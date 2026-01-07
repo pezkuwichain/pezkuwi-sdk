@@ -25,9 +25,9 @@
 
 mod xcm_config;
 
-use pezkuwi_sdk::{teyrchain_info, xcm, *};
+use pezkuwi_sdk::{pezstaging_teyrchain_info as teyrchain_info, pezstaging_xcm as xcm, *};
 #[cfg(not(feature = "runtime-benchmarks"))]
-use pezkuwi_sdk::{xcm_builder, xcm_executor};
+use pezkuwi_sdk::{pezstaging_xcm_builder as xcm_builder, pezstaging_xcm_executor as xcm_executor};
 
 // Bizinikiwi and Pezkuwi dependencies
 use pezcumulus_pezpallet_teyrchain_system::RelayNumberMonotonicallyIncreases;

@@ -78,8 +78,8 @@ pub fn pezkuwi_config() -> Result<GenericChainSpec, String> {
 	GenericChainSpec::from_json_bytes(&include_bytes!("../chain-specs/pezkuwi.json")[..])
 }
 
-pub fn kusama_config() -> Result<GenericChainSpec, String> {
-	GenericChainSpec::from_json_bytes(&include_bytes!("../chain-specs/kusama.json")[..])
+pub fn dicle_config() -> Result<GenericChainSpec, String> {
+	GenericChainSpec::from_json_bytes(&include_bytes!("../chain-specs/dicle.json")[..])
 }
 
 pub fn zagros_config() -> Result<ZagrosChainSpec, String> {

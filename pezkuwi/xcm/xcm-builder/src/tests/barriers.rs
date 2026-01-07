@@ -50,7 +50,7 @@ fn take_weight_credit_barrier_should_work() {
 #[test]
 fn computed_origin_should_work() {
 	let mut message = Xcm::<()>(vec![
-		UniversalOrigin(GlobalConsensus(Kusama)),
+		UniversalOrigin(GlobalConsensus(Dicle)),
 		DescendOrigin(Teyrchain(100).into()),
 		DescendOrigin(PalletInstance(69).into()),
 		WithdrawAsset((Parent, 100).into()),
@@ -64,7 +64,7 @@ fn computed_origin_should_work() {
 	AllowPaidFrom::set(vec![(
 		Parent,
 		Parent,
-		GlobalConsensus(Kusama),
+		GlobalConsensus(Dicle),
 		Teyrchain(100),
 		PalletInstance(69),
 	)

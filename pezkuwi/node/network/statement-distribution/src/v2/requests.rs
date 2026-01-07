@@ -325,7 +325,7 @@ impl RequestManager {
 		// found out that this requests take around 100ms to fulfill, so it
 		// would make sense to try to request things as early as we can, given
 		// we would need to request it for each candidate, around 25 right now
-		// on kusama.
+		// on dicle.
 		if response_manager.len() >= 2 * MAX_PARALLEL_ATTESTED_CANDIDATE_REQUESTS as usize {
 			return None;
 		}

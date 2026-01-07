@@ -36,11 +36,11 @@ enum Method {
 	Compiled { instantiation_strategy: InstantiationStrategy, precompile: bool },
 }
 
-// This is just a bog-standard Kusama runtime with an extra
+// This is just a bog-standard Dicle runtime with an extra
 // `test_empty_return` and `test_dirty_plenty_memory` functions
 // copy-pasted from the test runtime.
-fn kusama_runtime() -> &'static [u8] {
-	include_bytes!("kusama_runtime.wasm")
+fn dicle_runtime() -> &'static [u8] {
+	include_bytes!("dicle_runtime.wasm")
 }
 
 fn initialize(
@@ -204,7 +204,7 @@ fn bench_call_instance(c: &mut Criterion) {
 		),
 	];
 
-	let runtimes = [("kusama_runtime", kusama_runtime()), ("test_runtime", test_runtime())];
+	let runtimes = [("dicle_runtime", dicle_runtime()), ("test_runtime", test_runtime())];
 
 	let thread_counts = [1, 2, 4, 8, 16];
 

@@ -43,14 +43,14 @@
 // --repeat
 // 3
 // --genesis-builder-preset
-// fake-ksm
+// fake-dcl
 // --template
 // ../../../../../bizinikiwi/pezframe/election-provider-multi-block/src/template.hbs
 // --heap-pages
 // 65000
 // --extra
 // --output
-// ./pezpallet_election_provider_multi_block_unsigned_fake-ksm.rs
+// ./pezpallet_election_provider_multi_block_unsigned_fake-dcl.rs
 
 #![cfg_attr(rustfmt, rustfmt_skip)]
 #![allow(unused_parens)]

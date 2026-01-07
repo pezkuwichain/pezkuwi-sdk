@@ -38,12 +38,12 @@ pub struct PeerLatency {
 	pub std_dev: f64,
 }
 
-// Based on Kusama `max_validators`
+// Based on Dicle `max_validators`
 fn default_n_validators() -> usize {
 	300
 }
 
-// Based on Kusama cores
+// Based on Dicle cores
 fn default_n_cores() -> usize {
 	60
 }
@@ -53,7 +53,7 @@ fn default_pov_size() -> usize {
 	5 * 1024
 }
 
-// Default bandwidth in bytes, based stats from Kusama validators
+// Default bandwidth in bytes, based stats from Dicle validators
 fn default_bandwidth() -> usize {
 	42 * 1024 * 1024
 }

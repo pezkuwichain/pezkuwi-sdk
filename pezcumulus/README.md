@@ -178,7 +178,7 @@ cargo build --release --locked --bin pezkuwi-teyrchain
 Once the executable is built, launch the teyrchain node via:
 
 ```bash
-CHAIN=asset-hub-zagros # or asset-hub-kusama
+CHAIN=asset-hub-zagros # or asset-hub-dicle
 ./target/release/pezkuwi-teyrchain --chain $CHAIN
 ```
 

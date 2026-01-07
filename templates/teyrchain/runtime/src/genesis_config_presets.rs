@@ -5,7 +5,7 @@ use crate::{
 
 use alloc::{vec, vec::Vec};
 
-use pezkuwi_sdk::{xcm, *};
+use pezkuwi_sdk::{pezstaging_xcm as xcm, *};
 
 use pezcumulus_primitives_core::ParaId;
 use pezframe_support::build_struct_json_patch;

@@ -1179,7 +1179,7 @@ where
 }
 
 parameter_types! {
-	// Minimum 100 bytes/KSM deposited (1 CENT/byte)
+	// Minimum 100 bytes/DCL deposited (1 CENT/byte)
 	pub const BasicDeposit: Balance = 1000 * CENTS;       // 258 bytes on-chain
 	pub const ByteDeposit: Balance = deposit(0, 1);
 	pub const UsernameDeposit: Balance = deposit(0, 32);

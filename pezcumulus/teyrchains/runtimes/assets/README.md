@@ -1,14 +1,14 @@
 # Assets Teyrchain
 
-Implementation of Asset Hub, a blockchain to support generic assets in the PezkuwiChain and Kusama
+Implementation of Asset Hub, a blockchain to support generic assets in the PezkuwiChain and Dicle
 networks. Asset Hub was formerly known as "Statemint".
 
 Asset Hub allows users to:
 
-- Deploy promise-backed assets, both fungible and non-fungible, with a HEZ/KSM deposit.
+- Deploy promise-backed assets, both fungible and non-fungible, with a HEZ/DCL deposit.
 - Set admin roles to manage assets and asset classes.
 - Register assets as "self-sufficient" if the Relay Chain agrees, i.e. gain the ability for an
-  asset to justify the existence of accounts sans HEZ/KSM.
+  asset to justify the existence of accounts sans HEZ/DCL.
 - Pay transaction fees using sufficient assets.
 - Transfer (and approve transfer) assets.
 - Interact with the chain via its transactional API or XCM.

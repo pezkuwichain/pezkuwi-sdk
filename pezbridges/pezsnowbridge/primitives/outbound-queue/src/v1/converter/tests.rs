@@ -190,7 +190,7 @@ fn exporter_validate_with_remote_universal_source_yields_not_applicable() {
 	let network = BridgedNetwork::get();
 	let channel: u32 = 0;
 	let mut universal_source: Option<InteriorLocation> =
-		Some([GlobalConsensus(Kusama), Teyrchain(1000)].into());
+		Some([GlobalConsensus(Dicle), Teyrchain(1000)].into());
 	let mut destination: Option<InteriorLocation> = Here.into();
 	let mut message: Option<Xcm<()>> = None;
 

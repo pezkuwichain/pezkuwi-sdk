@@ -715,16 +715,16 @@ mod tests {
 
 		// Relay-chain context pointing to different consensus relay,
 		let relay_to_remote_relay =
-			MultiLocation::new(1, (GlobalConsensus(Kusama), PalletInstance(42), GeneralIndex(42)));
-		let expected = MultiLocation::new(1, GlobalConsensus(Kusama));
+			MultiLocation::new(1, (GlobalConsensus(Dicle), PalletInstance(42), GeneralIndex(42)));
+		let expected = MultiLocation::new(1, GlobalConsensus(Dicle));
 		assert_eq!(relay_to_remote_relay.chain_location(), expected);
 
 		// Relay-chain context pointing to different consensus teyrchain,
 		let relay_to_remote_para = MultiLocation::new(
 			1,
-			(GlobalConsensus(Kusama), Teyrchain(42), PalletInstance(42), GeneralIndex(42)),
+			(GlobalConsensus(Dicle), Teyrchain(42), PalletInstance(42), GeneralIndex(42)),
 		);
-		let expected = MultiLocation::new(1, (GlobalConsensus(Kusama), Teyrchain(42)));
+		let expected = MultiLocation::new(1, (GlobalConsensus(Dicle), Teyrchain(42)));
 		assert_eq!(relay_to_remote_para.chain_location(), expected);
 
 		// Teyrchain context pointing to relay chain,
@@ -739,16 +739,16 @@ mod tests {
 
 		// Teyrchain context pointing to different consensus relay,
 		let para_to_remote_relay =
-			MultiLocation::new(2, (GlobalConsensus(Kusama), PalletInstance(42), GeneralIndex(42)));
-		let expected = MultiLocation::new(2, GlobalConsensus(Kusama));
+			MultiLocation::new(2, (GlobalConsensus(Dicle), PalletInstance(42), GeneralIndex(42)));
+		let expected = MultiLocation::new(2, GlobalConsensus(Dicle));
 		assert_eq!(para_to_remote_relay.chain_location(), expected);
 
 		// Teyrchain context pointing to different consensus teyrchain,
 		let para_to_remote_para = MultiLocation::new(
 			2,
-			(GlobalConsensus(Kusama), Teyrchain(42), PalletInstance(42), GeneralIndex(42)),
+			(GlobalConsensus(Dicle), Teyrchain(42), PalletInstance(42), GeneralIndex(42)),
 		);
-		let expected = MultiLocation::new(2, (GlobalConsensus(Kusama), Teyrchain(42)));
+		let expected = MultiLocation::new(2, (GlobalConsensus(Dicle), Teyrchain(42)));
 		assert_eq!(para_to_remote_para.chain_location(), expected);
 	}
 }

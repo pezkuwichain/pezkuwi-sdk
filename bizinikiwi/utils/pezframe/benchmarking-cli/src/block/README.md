@@ -7,7 +7,7 @@ usage. It can be used to measure the accuracy of the pezpallet benchmarking.
 In the following it will be explained once for PezkuwiChain and once for Bizinikiwi.
 
 ## PezkuwiChain # 1
-<sup>(Also works for Kusama, zagros and pezkuwichain)</sup>
+<sup>(Also works for Dicle, zagros and pezkuwichain)</sup>
 
 
 Suppose you either have a synced PezkuwiChain node or downloaded a snapshot from [Polkachu]. This example uses a pruned

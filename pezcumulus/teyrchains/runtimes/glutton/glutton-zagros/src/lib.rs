@@ -15,9 +15,9 @@
 
 //! # Glutton Zagros Runtime
 //!
-//! The purpose of the Glutton teyrchain is to do stress testing on the Kusama
+//! The purpose of the Glutton teyrchain is to do stress testing on the Dicle
 //! network. This runtime targets the Zagros runtime to allow development
-//! separate to the Kusama runtime.
+//! separate to the Dicle runtime.
 //!
 //! There may be multiple instances of the Glutton teyrchain deployed and
 //! connected to its parent relay chain.
@@ -28,7 +28,7 @@
 //! ### Governance
 //!
 //! Glutton defers its governance (namely, its `Root` origin), to its Relay
-//! Chain parent, Kusama (or Zagros for development purposes).
+//! Chain parent, Dicle (or Zagros for development purposes).
 //!
 //! ### XCM
 //!
