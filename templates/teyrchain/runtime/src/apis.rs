@@ -26,7 +26,7 @@
 // External crates imports
 use alloc::vec::Vec;
 
-use pezkuwi_sdk::{teyrchain_info, *};
+use pezkuwi_sdk::{pezstaging_teyrchain_info as teyrchain_info, *};
 
 use pezcumulus_primitives_core::ParaId;
 use pezframe_support::{

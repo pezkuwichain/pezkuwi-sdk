@@ -125,23 +125,23 @@ mod tests {
 	#[test]
 	fn parse_service_response_works() {
 		assert_eq!(
-			parse_service_response("$.kusama.usd", r#"{"kusama":{"usd":433.05}}"#).map_err(drop),
+			parse_service_response("$.dicle.usd", r#"{"dicle":{"usd":433.05}}"#).map_err(drop),
 			Ok(433.05),
 		);
 	}
 
 	#[test]
 	fn parse_service_response_rejects_negative_numbers() {
-		assert!(parse_service_response("$.kusama.usd", r#"{"kusama":{"usd":-433.05}}"#).is_err());
+		assert!(parse_service_response("$.dicle.usd", r#"{"dicle":{"usd":-433.05}}"#).is_err());
 	}
 
 	#[test]
 	fn parse_service_response_rejects_zero_numbers() {
-		assert!(parse_service_response("$.kusama.usd", r#"{"kusama":{"usd":0.0}}"#).is_err());
+		assert!(parse_service_response("$.dicle.usd", r#"{"dicle":{"usd":0.0}}"#).is_err());
 	}
 
 	#[test]
 	fn parse_service_response_rejects_nan() {
-		assert!(parse_service_response("$.kusama.usd", r#"{"kusama":{"usd":NaN}}"#).is_err());
+		assert!(parse_service_response("$.dicle.usd", r#"{"dicle":{"usd":NaN}}"#).is_err());
 	}
 }

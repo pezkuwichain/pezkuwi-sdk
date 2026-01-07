@@ -238,17 +238,17 @@ fn register_all_tokens_succeeds() {
 			foreign: hex!("14b0579be12d7d7f9971f1d4b41f0e88384b9b74799b0150d4aa6cd01afb4444")
 				.into(),
 		},
-		// KSM
+		// DCL
 		RegisterTokenTestCase {
-			native: Location::new(2, [GlobalConsensus(Kusama)]),
-			reanchored: Location::new(1, [GlobalConsensus(Kusama)]),
+			native: Location::new(2, [GlobalConsensus(Dicle)]),
+			reanchored: Location::new(1, [GlobalConsensus(Dicle)]),
 			foreign: hex!("03b6054d0c576dd8391e34e1609cf398f68050c23009d19ce93c000922bcd852")
 				.into(),
 		},
-		// KAR (Some Kusama teyrchain currency)
+		// KAR (Some Dicle teyrchain currency)
 		RegisterTokenTestCase {
-			native: Location::new(2, [GlobalConsensus(Kusama), Teyrchain(2000)]),
-			reanchored: Location::new(1, [GlobalConsensus(Kusama), Teyrchain(2000)]),
+			native: Location::new(2, [GlobalConsensus(Dicle), Teyrchain(2000)]),
+			reanchored: Location::new(1, [GlobalConsensus(Dicle), Teyrchain(2000)]),
 			foreign: hex!("d3e39ad6ea4cee68c9741181e94098823b2ea34a467577d0875c036f0fce5be0")
 				.into(),
 		},
@@ -323,17 +323,17 @@ fn check_pna_token_id_compatibility() {
 			foreign: hex!("14b0579be12d7d7f9971f1d4b41f0e88384b9b74799b0150d4aa6cd01afb4444")
 				.into(),
 		},
-		// KSM
+		// DCL
 		RegisterTokenTestCase {
-			native: Location::new(2, [GlobalConsensus(Kusama)]),
-			reanchored: Location::new(1, [GlobalConsensus(Kusama)]),
+			native: Location::new(2, [GlobalConsensus(Dicle)]),
+			reanchored: Location::new(1, [GlobalConsensus(Dicle)]),
 			foreign: hex!("03b6054d0c576dd8391e34e1609cf398f68050c23009d19ce93c000922bcd852")
 				.into(),
 		},
-		// KAR (Some Kusama teyrchain currency)
+		// KAR (Some Dicle teyrchain currency)
 		RegisterTokenTestCase {
-			native: Location::new(2, [GlobalConsensus(Kusama), Teyrchain(2000)]),
-			reanchored: Location::new(1, [GlobalConsensus(Kusama), Teyrchain(2000)]),
+			native: Location::new(2, [GlobalConsensus(Dicle), Teyrchain(2000)]),
+			reanchored: Location::new(1, [GlobalConsensus(Dicle), Teyrchain(2000)]),
 			foreign: hex!("d3e39ad6ea4cee68c9741181e94098823b2ea34a467577d0875c036f0fce5be0")
 				.into(),
 		},

@@ -90,7 +90,7 @@ const COST_INVALID_REQUEST: Rep = Rep::CostMajor("Peer sent unparsable request")
 
 /// PoV size limit in bytes for which prefer fetching from backers. (conservative, Pezkuwi for now)
 pub(crate) const CONSERVATIVE_FETCH_CHUNKS_THRESHOLD: usize = 1 * 1024 * 1024;
-/// PoV size limit in bytes for which prefer fetching from backers. (Kusama and all testnets)
+/// PoV size limit in bytes for which prefer fetching from backers. (Dicle and all testnets)
 pub const FETCH_CHUNKS_THRESHOLD: usize = 4 * 1024 * 1024;
 
 #[derive(Clone, PartialEq)]

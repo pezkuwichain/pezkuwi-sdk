@@ -21,8 +21,8 @@ use std::{borrow::Cow, str::FromStr};
 /// Collects all supported Coretime configurations.
 #[derive(Debug, PartialEq, Clone, Copy)]
 pub enum CoretimeRuntimeType {
-	Kusama,
-	KusamaLocal,
+	Dicle,
+	DicleLocal,
 
 	Pezkuwi,
 	PezkuwiLocal,
@@ -47,8 +47,8 @@ impl FromStr for CoretimeRuntimeType {
 
 	fn from_str(value: &str) -> Result<Self, Self::Err> {
 		match value {
-			kusama::CORETIME_KUSAMA => Ok(CoretimeRuntimeType::Kusama),
-			kusama::CORETIME_KUSAMA_LOCAL => Ok(CoretimeRuntimeType::KusamaLocal),
+			dicle::CORETIME_DICLE => Ok(CoretimeRuntimeType::Dicle),
+			dicle::CORETIME_DICLE_LOCAL => Ok(CoretimeRuntimeType::DicleLocal),
 			pezkuwi::CORETIME_PEZKUWI => Ok(CoretimeRuntimeType::Pezkuwi),
 			pezkuwi::CORETIME_PEZKUWI_LOCAL => Ok(CoretimeRuntimeType::PezkuwiLocal),
 			pezkuwichain::CORETIME_PEZKUWICHAIN => Ok(CoretimeRuntimeType::Pezkuwichain),
@@ -67,8 +67,8 @@ impl FromStr for CoretimeRuntimeType {
 impl From<CoretimeRuntimeType> for &str {
 	fn from(runtime_type: CoretimeRuntimeType) -> Self {
 		match runtime_type {
-			CoretimeRuntimeType::Kusama => kusama::CORETIME_KUSAMA,
-			CoretimeRuntimeType::KusamaLocal => kusama::CORETIME_KUSAMA_LOCAL,
+			CoretimeRuntimeType::Dicle => dicle::CORETIME_DICLE,
+			CoretimeRuntimeType::DicleLocal => dicle::CORETIME_DICLE_LOCAL,
 			CoretimeRuntimeType::Pezkuwi => pezkuwi::CORETIME_PEZKUWI,
 			CoretimeRuntimeType::PezkuwiLocal => pezkuwi::CORETIME_PEZKUWI_LOCAL,
 			CoretimeRuntimeType::Pezkuwichain => pezkuwichain::CORETIME_PEZKUWICHAIN,
@@ -86,11 +86,11 @@ impl From<CoretimeRuntimeType> for &str {
 impl From<CoretimeRuntimeType> for ChainType {
 	fn from(runtime_type: CoretimeRuntimeType) -> Self {
 		match runtime_type {
-			CoretimeRuntimeType::Kusama
+			CoretimeRuntimeType::Dicle
 			| CoretimeRuntimeType::Pezkuwi
 			| CoretimeRuntimeType::Pezkuwichain
 			| CoretimeRuntimeType::Zagros => ChainType::Live,
-			CoretimeRuntimeType::KusamaLocal
+			CoretimeRuntimeType::DicleLocal
 			| CoretimeRuntimeType::PezkuwiLocal
 			| CoretimeRuntimeType::PezkuwichainLocal
 			| CoretimeRuntimeType::ZagrosLocal => ChainType::Local,
@@ -105,8 +105,8 @@ impl CoretimeRuntimeType {
 
 	pub fn load_config(&self) -> Result<Box<dyn ChainSpec>, String> {
 		match self {
-			CoretimeRuntimeType::Kusama => Ok(Box::new(GenericChainSpec::from_json_bytes(
-				&include_bytes!("../../chain-specs/coretime-kusama.json")[..],
+			CoretimeRuntimeType::Dicle => Ok(Box::new(GenericChainSpec::from_json_bytes(
+				&include_bytes!("../../chain-specs/coretime-dicle.json")[..],
 			)?)),
 			CoretimeRuntimeType::Pezkuwi => Ok(Box::new(GenericChainSpec::from_json_bytes(
 				&include_bytes!("../../chain-specs/coretime-pezkuwi.json")[..],
@@ -231,9 +231,9 @@ pub mod zagros {
 	}
 }
 
-pub mod kusama {
-	pub(crate) const CORETIME_KUSAMA: &str = "coretime-kusama";
-	pub(crate) const CORETIME_KUSAMA_LOCAL: &str = "coretime-kusama-local";
+pub mod dicle {
+	pub(crate) const CORETIME_DICLE: &str = "coretime-dicle";
+	pub(crate) const CORETIME_DICLE_LOCAL: &str = "coretime-dicle-local";
 }
 
 pub mod pezkuwi {

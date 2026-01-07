@@ -27,7 +27,7 @@ so don't do it unless you really need it), run the following command:
 To generate weights for all pallets in a particular runtime(s), run the following command:
 
 ```sh
-/cmd bench --runtime kusama pezkuwi
+/cmd bench --runtime dicle pezkuwi
 ```
 
 For Bizinikiwi pallets (supports sub-modules too):
@@ -64,7 +64,7 @@ If you want to run all specific pezpallet(s) for specific runtime(s), you can do
 > /cmd commands.
 
 ```sh
-/cmd bench --runtime kusama pezkuwi --pezpallet=pallet_balances --clean
+/cmd bench --runtime dicle pezkuwi --pezpallet=pallet_balances --clean
 ```
 
 > **💡Hint #2** : If you have questions or need help, feel free to tag @paritytech/opstooling (in github comments)

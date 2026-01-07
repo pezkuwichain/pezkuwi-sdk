@@ -530,7 +530,7 @@ where
 		.iter()
 		.any(|v| keystore.has_keys(&[(v.to_raw_vec(), AuthorityDiscoveryId::ID)]));
 
-	// We could've checked discovery_keys but on Kusama validators.len() < discovery_keys.len().
+	// We could've checked discovery_keys but on Dicle validators.len() < discovery_keys.len().
 	let is_present_validator = session_info
 		.validators
 		.iter()

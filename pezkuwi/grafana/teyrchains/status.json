@@ -1757,7 +1757,7 @@
   "schemaVersion": 34,
   "style": "dark",
   "tags": [
-    "Kusama",
+    "Dicle",
     "Pezkuwi",
     "Teyrchains",
     "On-call"
@@ -1786,8 +1786,8 @@
       {
         "current": {
           "selected": false,
-          "text": "kusama",
-          "value": "kusama"
+          "text": "dicle",
+          "value": "dicle"
         },
         "hide": 0,
         "includeAll": false,
@@ -1797,8 +1797,8 @@
         "options": [
           {
             "selected": true,
-            "text": "kusama",
-            "value": "kusama"
+            "text": "dicle",
+            "value": "dicle"
           },
           {
             "selected": false,
@@ -1806,7 +1806,7 @@
             "value": "pezkuwi"
           }
         ],
-        "query": "kusama,pezkuwi",
+        "query": "dicle,pezkuwi",
         "queryValue": "",
         "skipUrlSync": false,
         "type": "custom"

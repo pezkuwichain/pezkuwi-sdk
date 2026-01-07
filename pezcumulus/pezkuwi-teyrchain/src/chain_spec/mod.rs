@@ -36,7 +36,7 @@ pub mod yet_another_teyrchain;
 
 /// Extracts the normalized chain id and teyrchain id from the input chain id.
 /// (H/T to Phala for the idea)
-/// E.g. "penpal-kusama-2004" yields ("penpal-kusama", Some(2004))
+/// E.g. "penpal-dicle-2004" yields ("penpal-dicle", Some(2004))
 fn extract_teyrchain_id<'a>(
 	id: &'a str,
 	para_prefixes: &[&str],
@@ -76,9 +76,9 @@ impl LoadSpec for ChainSpecLoader {
 				&include_bytes!("../../chain-specs/asset-hub-pezkuwi.json")[..],
 			)?),
 
-			// -- Asset Hub Kusama
-			"asset-hub-kusama" | "statemine" => Box::new(GenericChainSpec::from_json_bytes(
-				&include_bytes!("../../chain-specs/asset-hub-kusama.json")[..],
+			// -- Asset Hub Dicle
+			"asset-hub-dicle" | "statemine" => Box::new(GenericChainSpec::from_json_bytes(
+				&include_bytes!("../../chain-specs/asset-hub-dicle.json")[..],
 			)?),
 
 			// -- Asset Hub Pezkuwichain
@@ -249,7 +249,7 @@ impl LegacyRuntime {
 
 		if id.starts_with("asset-hub-pezkuwi") | id.starts_with("statemint") {
 			LegacyRuntime::AssetHubPezkuwi
-		} else if id.starts_with("asset-hub-kusama")
+		} else if id.starts_with("asset-hub-dicle")
 			| id.starts_with("statemine")
 			| id.starts_with("asset-hub-pezkuwichain")
 			| id.starts_with("rockmine")

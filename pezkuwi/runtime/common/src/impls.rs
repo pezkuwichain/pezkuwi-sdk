@@ -93,7 +93,7 @@ pub struct EraPayoutParams {
 }
 
 /// A specialized function to compute the inflation of the staking system, tailored for pezkuwi
-/// relay chains, such as Pezkuwi, Kusama and Zagros.
+/// relay chains, such as Pezkuwi, Dicle and Zagros.
 pub fn relay_era_payout(params: EraPayoutParams) -> (Balance, Balance) {
 	use pezsp_runtime::traits::Saturating;
 

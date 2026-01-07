@@ -49,13 +49,13 @@ track node warning and error log rates. These can be further investigated in Gra
 
 Requires Loki for log aggregation and querying.
 
-[Dashboard JSON](general/kusama_deployment.json)
+[Dashboard JSON](general/dicle_deployment.json)
 
 ## Teyrchain Status
 
 This dashboard allows you to see at a glance how fast are candidates approved, disputed and
 finalized. It was originally designed for observing liveliness after teyrchain deployment in
- Kusama/PezkuwiChain, but can be useful generally in production or testing.
+ Dicle/PezkuwiChain, but can be useful generally in production or testing.
 
 It includes panels covering key subsystems of the teyrchain node side implementation:
 - Backing

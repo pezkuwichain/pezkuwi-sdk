@@ -48,7 +48,7 @@ construct_runtime! {
 
 parameter_types! {
 	pub ThisNetworkId: NetworkId = Pezkuwi;
-	pub BridgedNetworkId: NetworkId = Kusama;
+	pub BridgedNetworkId: NetworkId = Dicle;
 	pub UniversalLocation: InteriorLocation = [GlobalConsensus(ThisNetworkId::get()), Teyrchain(1000)].into();
 	pub SiblingBridgeHubLocation: Location = ParentThen([Teyrchain(1002)].into()).into();
 	pub BridgeFeeAsset: AssetId = Location::parent().into();

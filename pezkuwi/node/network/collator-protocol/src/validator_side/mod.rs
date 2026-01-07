@@ -72,7 +72,7 @@ use collation::{
 };
 use error::{Error, FetchError, HoldOffError, Result, SecondingError};
 
-const ASSET_HUB_PARA_ID: ParaId = ParaId::new(1000); // Asset Hub's para id is 1000 on both Kusama and Pezkuwi.
+const ASSET_HUB_PARA_ID: ParaId = ParaId::new(1000); // Asset Hub's para id is 1000 on both Dicle and Pezkuwi.
 
 #[cfg(test)]
 mod tests;
@@ -98,7 +98,7 @@ const BENEFIT_NOTIFY_GOOD: Rep =
 ///
 /// This is to protect from a single slow collator preventing collations from happening.
 ///
-/// With a collation size of 5MB and bandwidth of 500Mbit/s (requirement for Kusama validators),
+/// With a collation size of 5MB and bandwidth of 500Mbit/s (requirement for Dicle validators),
 /// the transfer should be possible within 0.1 seconds. 400 milliseconds should therefore be
 /// plenty, even with multiple heads and should be low enough for later collators to still be able
 /// to finish on time.

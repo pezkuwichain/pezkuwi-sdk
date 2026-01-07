@@ -49,6 +49,9 @@ name = "executor"
 harness = false
 
 [dependencies]
+# Umbrella crate for re-exports
+pezkuwi-sdk = { workspace = true, default-features = true, features = ["node", "runtime"] }
+
 # third-party dependencies
 array-bytes = { workspace = true, default-features = true }
 clap = { features = ["derive"], optional = true, workspace = true }
@@ -192,15 +195,25 @@ pez-node-testing = { workspace = true }
 pezsc-service-test = { workspace = true }
 
 [build-dependencies]
+bizinikiwi-build-script-utils = { workspace = true, default-features = true }
 clap = { optional = true, workspace = true }
 clap_complete = { optional = true, workspace = true }
-
 node-inspect = { optional = true, workspace = true, default-features = true }
+pezframe-benchmarking-cli = { optional = true, workspace = true }
+pezsc-cli = { optional = true, workspace = true, default-features = true }
+pezsc-storage-monitor = { optional = true, workspace = true, default-features = true }
 
 # Build dependencies use dep: syntax for optional dependencies
 [features]
 default = ["cli"]
-cli = ["clap", "clap_complete", "dep:node-inspect"]
+cli = [
+	"clap",
+	"clap_complete",
+	"dep:node-inspect",
+	"dep:pezframe-benchmarking-cli",
+	"dep:pezsc-cli",
+	"dep:pezsc-storage-monitor",
+]
 runtime-benchmarks = [
 	"bizinikiwi-cli-test-utils/runtime-benchmarks",
 	"bizinikiwi-frame-rpc-support/runtime-benchmarks",

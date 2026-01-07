@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! Common runtime code for the Relay Chain, e.g. Pezkuwichain, Zagros, Pezkuwi, Kusama ...
+//! Common runtime code for the Relay Chain, e.g. Pezkuwichain, Zagros, Pezkuwi, Dicle ...
 
 #![cfg_attr(not(feature = "std"), no_std)]
 

@@ -684,12 +684,12 @@ mod tests {
 
 	#[test]
 	fn ensure_is_remote_works() {
-		// A Kusama teyrchain is remote from the Pezkuwi Relay.
-		let x = ensure_is_remote(Pezkuwi, (Parent, Kusama, Teyrchain(1000)));
-		assert_eq!(x, Ok((Kusama, Teyrchain(1000).into())));
+		// A Dicle teyrchain is remote from the Pezkuwi Relay.
+		let x = ensure_is_remote(Pezkuwi, (Parent, Dicle, Teyrchain(1000)));
+		assert_eq!(x, Ok((Dicle, Teyrchain(1000).into())));
 
-		// Pezkuwi Relay is remote from a Kusama teyrchain.
-		let x = ensure_is_remote((Kusama, Teyrchain(1000)), (Parent, Parent, Pezkuwi));
+		// Pezkuwi Relay is remote from a Dicle teyrchain.
+		let x = ensure_is_remote((Dicle, Teyrchain(1000)), (Parent, Parent, Pezkuwi));
 		assert_eq!(x, Ok((Pezkuwi, Here)));
 
 		// Our own teyrchain is local.

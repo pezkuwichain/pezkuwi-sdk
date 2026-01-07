@@ -23,7 +23,7 @@ use pezsp_genesis_builder::PresetId;
 use pezsp_keyring::Sr25519Keyring;
 use teyrchains_common::{AccountId, AuraId};
 
-const SAFE_XCM_VERSION: u32 = xcm::prelude::XCM_VERSION;
+const SAFE_XCM_VERSION: u32 = pezstaging_xcm::prelude::XCM_VERSION;
 
 const DEFAULT_PARA_ID: ParaId = ParaId::new(1000);
 const ENDOWMENT: u128 = 1 << 60;

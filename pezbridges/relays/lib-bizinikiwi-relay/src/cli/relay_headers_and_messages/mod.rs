@@ -384,44 +384,44 @@ mod tests {
 	#[allow(dead_code)]
 	fn should_parse_teyrchain_to_teyrchain_options() {
 		// Chains.
-		declare_chain_cli_schema!(Kusama, kusama);
-		declare_chain_cli_schema!(BridgeHubKusama, bridge_hub_kusama);
+		declare_chain_cli_schema!(Dicle, dicle);
+		declare_chain_cli_schema!(BridgeHubDicle, bridge_hub_dicle);
 		declare_chain_cli_schema!(Pezkuwi, pezkuwi);
 		declare_chain_cli_schema!(BridgeHubPezkuwi, bridge_hub_pezkuwi);
 		// Means to override signers of different layer transactions.
 		declare_chain_cli_schema!(
-			KusamaHeadersToBridgeHubPezkuwi,
-			kusama_headers_to_bridge_hub_pezkuwi
+			DicleHeadersToBridgeHubPezkuwi,
+			dicle_headers_to_bridge_hub_pezkuwi
 		);
 		declare_chain_cli_schema!(
-			KusamaTeyrchainsToBridgeHubPezkuwi,
-			kusama_teyrchains_to_bridge_hub_pezkuwi
+			DicleTeyrchainsToBridgeHubPezkuwi,
+			dicle_teyrchains_to_bridge_hub_pezkuwi
 		);
 		declare_chain_cli_schema!(
-			PezkuwiHeadersToBridgeHubKusama,
-			pezkuwi_headers_to_bridge_hub_kusama
+			PezkuwiHeadersToBridgeHubDicle,
+			pezkuwi_headers_to_bridge_hub_dicle
 		);
 		declare_chain_cli_schema!(
-			PezkuwiTeyrchainsToBridgeHubKusama,
-			pezkuwi_teyrchains_to_bridge_hub_kusama
+			PezkuwiTeyrchainsToBridgeHubDicle,
+			pezkuwi_teyrchains_to_bridge_hub_dicle
 		);
 		// Bridges.
 		declare_teyrchain_to_teyrchain_bridge_schema!(
-			BridgeHubKusama,
-			Kusama,
+			BridgeHubDicle,
+			Dicle,
 			BridgeHubPezkuwi,
 			Pezkuwi
 		);
 
-		let res = BridgeHubKusamaBridgeHubPezkuwiHeadersAndMessages::parse_from(vec![
-			"bridge-hub-kusama-bridge-hub-pezkuwi-headers-and-messages",
-			"--bridge-hub-kusama-uri",
+		let res = BridgeHubDicleBridgeHubPezkuwiHeadersAndMessages::parse_from(vec![
+			"bridge-hub-dicle-bridge-hub-pezkuwi-headers-and-messages",
+			"--bridge-hub-dicle-uri",
 			"ws://bridge-hub-zagros-collator1:9944",
-			"--bridge-hub-kusama-signer",
+			"--bridge-hub-dicle-signer",
 			"//Iden",
-			"--bridge-hub-kusama-transactions-mortality",
+			"--bridge-hub-dicle-transactions-mortality",
 			"64",
-			"--kusama-uri",
+			"--dicle-uri",
 			"ws://zagros-alice:9944",
 			"--bridge-hub-pezkuwi-uri",
 			"ws://bridge-hub-pezkuwichain-collator1:9944",
@@ -440,7 +440,7 @@ mod tests {
 		// then
 		assert_eq!(
 			res,
-			BridgeHubKusamaBridgeHubPezkuwiHeadersAndMessages {
+			BridgeHubDicleBridgeHubPezkuwiHeadersAndMessages {
 				shared: HeadersAndMessagesSharedParams {
 					lane: vec![HexLaneId(vec![0x00u8; 32])],
 					only_mandatory_headers: false,
@@ -451,27 +451,27 @@ mod tests {
 						prometheus_port: 9616,
 					},
 				},
-				left: BridgeHubKusamaConnectionParams {
-					bridge_hub_kusama_uri: "ws://bridge-hub-zagros-collator1:9944".into(),
-					bridge_hub_kusama_runtime_version: BridgeHubKusamaRuntimeVersionParams {
-						bridge_hub_kusama_version_mode: RuntimeVersionType::Bundle,
-						bridge_hub_kusama_spec_version: None,
-						bridge_hub_kusama_transaction_version: None,
+				left: BridgeHubDicleConnectionParams {
+					bridge_hub_dicle_uri: "ws://bridge-hub-zagros-collator1:9944".into(),
+					bridge_hub_dicle_runtime_version: BridgeHubDicleRuntimeVersionParams {
+						bridge_hub_dicle_version_mode: RuntimeVersionType::Bundle,
+						bridge_hub_dicle_spec_version: None,
+						bridge_hub_dicle_transaction_version: None,
 					},
 				},
-				left_sign: BridgeHubKusamaSigningParams {
-					bridge_hub_kusama_signer: Some("//Iden".into()),
-					bridge_hub_kusama_signer_password: None,
-					bridge_hub_kusama_signer_file: None,
-					bridge_hub_kusama_signer_password_file: None,
-					bridge_hub_kusama_transactions_mortality: Some(64),
+				left_sign: BridgeHubDicleSigningParams {
+					bridge_hub_dicle_signer: Some("//Iden".into()),
+					bridge_hub_dicle_signer_password: None,
+					bridge_hub_dicle_signer_file: None,
+					bridge_hub_dicle_signer_password_file: None,
+					bridge_hub_dicle_transactions_mortality: Some(64),
 				},
-				left_relay: KusamaConnectionParams {
-					kusama_uri: "ws://zagros-alice:9944".into(),
-					kusama_runtime_version: KusamaRuntimeVersionParams {
-						kusama_version_mode: RuntimeVersionType::Bundle,
-						kusama_spec_version: None,
-						kusama_transaction_version: None,
+				left_relay: DicleConnectionParams {
+					dicle_uri: "ws://zagros-alice:9944".into(),
+					dicle_runtime_version: DicleRuntimeVersionParams {
+						dicle_version_mode: RuntimeVersionType::Bundle,
+						dicle_spec_version: None,
+						dicle_transaction_version: None,
 					},
 				},
 				right: BridgeHubPezkuwiConnectionParams {

@@ -117,7 +117,7 @@ impl From<NewNetworkId> for NetworkId {
 			ByGenesis(hash) => Self::ByGenesis(hash),
 			ByFork { block_number, block_hash } => Self::ByFork { block_number, block_hash },
 			Pezkuwi => Self::Pezkuwi,
-			Kusama => Self::Kusama,
+			Dicle => Self::Dicle,
 			Ethereum { chain_id } => Self::Ethereum { chain_id },
 			BitcoinCore => Self::BitcoinCore,
 			BitcoinCash => Self::BitcoinCash,
@@ -153,8 +153,8 @@ pub enum NetworkId {
 	ByFork { block_number: u64, block_hash: [u8; 32] },
 	/// The Pezkuwi mainnet Relay-chain.
 	Pezkuwi,
-	/// The Kusama canary-net Relay-chain.
-	Kusama,
+	/// The Dicle canary-net Relay-chain.
+	Dicle,
 	/// The Zagros testnet Relay-chain.
 	Zagros,
 	/// The Pezkuwichain testnet Relay-chain.
@@ -188,7 +188,7 @@ impl From<OldNetworkId> for NetworkId {
 			ByGenesis(hash) => Self::ByGenesis(hash),
 			ByFork { block_number, block_hash } => Self::ByFork { block_number, block_hash },
 			Pezkuwi => Self::Pezkuwi,
-			Kusama => Self::Kusama,
+			Dicle => Self::Dicle,
 			Zagros => Self::Zagros,
 			Pezkuwichain => Self::Pezkuwichain,
 			Wococo => Self::Wococo,

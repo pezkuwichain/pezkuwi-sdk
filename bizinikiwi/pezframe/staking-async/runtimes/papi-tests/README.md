@@ -78,7 +78,7 @@ This type looks into `parameter_types! { pub storage UsePreviousValidators: bool
   validators run by ZN (often alice and bob). If AH sends us back a validator set that contains a
   large new validator set, the setup will break. As seen in the next section, a number of runtime
   presets are designed to generate large validator/nominator sets to mimic the behavior of PezkuwiChain
-  and Kusama. We thereofre must use this hack in such cases.
+  and Dicle. We thereofre must use this hack in such cases.
 - If set to `false`, it will use the new validator set.
 
 #### Presets
@@ -99,7 +99,7 @@ More concretely, the presets are:
 - Teyrchain:
     - `fake-dev`: 4 page, small number of fake validators and nominators.
     - `fake-hez`: 32 pages, large number of fake validators and nominators.
-    - `fake-ksm`: 16 pages, large number of fake validators and nominators.
+    - `fake-dcl`: 16 pages, large number of fake validators and nominators.
     - `real-s`: 4 pages, alice and bob as validators, 500 fake nominators
     - `real-m`: 4 pages, alice, bob, dave, eve as validators, 2000 fake nominators.
 - Relay Chain

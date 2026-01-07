@@ -78,7 +78,7 @@ is built.
 
 The signed extension, however, is a bit limited - it only works with transactions that provide single
 teyrchain head. So it won't work with multiple teyrchain heads transactions. This fits our needs
-for [Kusama <> PezkuwiChain bridge](../../docs/pezkuwi-kusama-bridge-overview.md). If you need to deal
+for [Dicle <> PezkuwiChain bridge](../../docs/pezkuwi-dicle-bridge-overview.md). If you need to deal
 with other transaction formats, you may implement similar extension for your runtime.
 
 You may also take a look at the [`generate_bridge_reject_obsolete_headers_and_messages`](../../bin/runtime-common/src/lib.rs)

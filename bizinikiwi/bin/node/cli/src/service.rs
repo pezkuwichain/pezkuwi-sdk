@@ -33,7 +33,7 @@ use pez_kitchensink_runtime::RuntimeApi;
 use pez_node_primitives::Block;
 use pezframe_benchmarking_cli::BIZINIKIWI_REFERENCE_HARDWARE;
 use pezframe_system_rpc_runtime_api::AccountNonceApi;
-use pezkuwi_sdk::{pezsp_api::ProvideRuntimeApi, pezsp_core::crypto::Pair};
+use pezkuwi_sdk::{pezsp_api::ProvideRuntimeApi, pezsp_core::Pair};
 use pezsc_client_api::{Backend, BlockBackend};
 use pezsc_consensus_babe::{self, SlotProportion};
 use pezsc_network::{

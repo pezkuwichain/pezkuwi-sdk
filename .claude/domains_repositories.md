@@ -9,7 +9,7 @@
 | IP | 37.60.230.9 |
 | TTL | 3600 |
 
-### Service Subdomains
+### Service Subdomains (.io)
 | Subdomain | Full URL | Description |
 |-----------|----------|-------------|
 | www | www.pezkuwichain.io | Main website |
@@ -27,6 +27,16 @@
 | grants | grants.pezkuwichain.io | Grant program |
 | developers | developers.pezkuwichain.io | Developer portal |
 | mail | mail.pezkuwichain.io | Email service |
+
+### Application Domains (.app)
+| Subdomain | Full URL | Description |
+|-----------|----------|-------------|
+| - | pezkuwichain.app | Main application portal |
+| www | www.pezkuwichain.app | Web application |
+| docs | docs.pezkuwichain.app | Documentation site |
+| js | js.pezkuwichain.app | JavaScript API documentation |
+| releases | releases.pezkuwichain.app | Release downloads |
+| telemetry | telemetry.pezkuwichain.app | Telemetry dashboard |
 
 ### Network RPC Endpoints
 | Network | Subdomain | Full URL |
@@ -87,6 +97,13 @@
 | docs | PezkuwiChain documentation | Rust | - |
 | labels | Label rules for repositories | Shell | paritytech/labels |
 
+### JavaScript/TypeScript Libraries
+| Repository | Description | Language | Upstream | NPM Packages |
+|------------|-------------|----------|----------|--------------|
+| pezkuwi-api | Polkadot.js API fork for PezkuwiChain | TypeScript | polkadot-js/api | @pezkuwi/api, @pezkuwi/types, @pezkuwi/rpc-* (13 packages) |
+| pezkuwi-extension | Browser extension packages | TypeScript | polkadot-js/extension | @pezkuwi/extension-dapp, @pezkuwi/extension-inject |
+| pezkuwi-common | Common utilities and cryptography | TypeScript | polkadot-js/common | @pezkuwi/util, @pezkuwi/util-crypto, @pezkuwi/keyring (14 packages) |
+
 ### Applications
 | Repository | Description | Language |
 |------------|-------------|----------|
@@ -103,16 +120,26 @@
 
 ### Repositories We Own (use pezkuwichain URLs)
 ```
+# Core SDK (Rust)
 github.com/pezkuwichain/pezkuwi-sdk
 github.com/pezkuwichain/pezkuwi-subxt
 github.com/pezkuwichain/pezkuwi-zombienet-sdk
-github.com/pezkuwichain/pezkuwi-fellows
-github.com/pezkuwichain/awesome-hez
+
+# JavaScript/TypeScript Libraries
+github.com/pezkuwichain/pezkuwi-api
+github.com/pezkuwichain/pezkuwi-extension
+github.com/pezkuwichain/pezkuwi-common
+
+# Library Forks
 github.com/pezkuwichain/parity-db
 github.com/pezkuwichain/parity-scale-codec
 github.com/pezkuwichain/pezframe-metadata
 github.com/pezkuwichain/merkle-mountain-range
 github.com/pezkuwichain/wasm-instrument
+
+# Community
+github.com/pezkuwichain/pezkuwi-fellows
+github.com/pezkuwichain/awesome-hez
 github.com/pezkuwichain/kurdistan_blockchain-akademy
 ```
 
@@ -139,10 +166,18 @@ github.com/pezkuwichain/kurdistan_blockchain-akademy
 ## Code Usage Examples
 
 ```rust
-// Website URLs
+// Website URLs (.io)
 "https://pezkuwichain.io"
 "https://network.pezkuwichain.io"
 "https://docs.pezkuwichain.io"
+
+// Application URLs (.app)
+"https://pezkuwichain.app"
+"https://www.pezkuwichain.app"
+"https://docs.pezkuwichain.app"
+"https://js.pezkuwichain.app"
+"https://releases.pezkuwichain.app"
+"https://telemetry.pezkuwichain.app"
 
 // RPC Endpoints
 "wss://rpc.pezkuwichain.io"         // Mainnet WS
@@ -150,7 +185,18 @@ github.com/pezkuwichain/kurdistan_blockchain-akademy
 
 // GitHub Repositories
 "https://github.com/pezkuwichain/pezkuwi-sdk"
+"https://github.com/pezkuwichain/pezkuwi-api"
+"https://github.com/pezkuwichain/pezkuwi-extension"
 "https://github.com/pezkuwichain/awesome-hez"
+
+// NPM Packages
+"@pezkuwi/api"
+"@pezkuwi/types"
+"@pezkuwi/util"
+"@pezkuwi/util-crypto"
+"@pezkuwi/keyring"
+"@pezkuwi/extension-dapp"
+"@pezkuwi/extension-inject"
 ```
 
 ---
@@ -183,4 +229,4 @@ ssh root@62.146.235.186
 
 ---
 
-*Last updated: 2025-12-27*
+*Last updated: 2026-01-06*

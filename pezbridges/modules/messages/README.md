@@ -28,9 +28,9 @@ Single message lane may be seen as a transport channel for single application (o
 time the module itself never dictates any lane or message rules. In the end, it is the runtime developer who defines
 what message lane and message mean for this runtime.
 
-In our [Kusama<>PezkuwiChain bridge](../../docs/pezkuwi-kusama-bridge-overview.md) we are using lane
+In our [Dicle<>PezkuwiChain bridge](../../docs/pezkuwi-dicle-bridge-overview.md) we are using lane
 as a channel of communication between two teyrchains of different relay chains. For example, lane
-`[0, 0, 0, 0]` is used for PezkuwiChain <> Kusama Asset Hub communications. Other lanes may be used to
+`[0, 0, 0, 0]` is used for PezkuwiChain <> Dicle Asset Hub communications. Other lanes may be used to
 bridge other teyrchains.
 
 ## Message Workflow
@@ -94,8 +94,8 @@ here for detailed information.
 The messages module supports instances. Every module instance is supposed to bridge this chain and some bridged chain.
 To bridge with another chain, using another instance is suggested (this isn't forced anywhere in the code, though). Keep
 in mind, that the pezpallet may be used to build virtual channels between multiple chains, as we do in our [PezkuwiChain <>
-Kusama bridge](../../docs/pezkuwi-kusama-bridge-overview.md). There, the pezpallet actually bridges only two teyrchains -
-Kusama Bridge Hub and PezkuwiChain Bridge Hub. However, other Kusama and PezkuwiChain teyrchains are able to send (XCM) messages
+Dicle bridge](../../docs/pezkuwi-dicle-bridge-overview.md). There, the pezpallet actually bridges only two teyrchains -
+Dicle Bridge Hub and PezkuwiChain Bridge Hub. However, other Dicle and PezkuwiChain teyrchains are able to send (XCM) messages
 to their Bridge Hubs. The messages will be delivered to the other side of the bridge and routed to the proper
 destination teyrchain within the bridged chain consensus.
 

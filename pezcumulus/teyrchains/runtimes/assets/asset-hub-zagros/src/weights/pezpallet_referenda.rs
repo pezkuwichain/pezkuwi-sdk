@@ -20,13 +20,13 @@
 //! DATE: 2023-06-19, STEPS: `50`, REPEAT: `20`, LOW RANGE: `[]`, HIGH RANGE: `[]`
 //! WORST CASE MAP SIZE: `1000000`
 //! HOSTNAME: `runner-e8ezs4ez-project-163-concurrent-0`, CPU: `Intel(R) Xeon(R) CPU @ 2.60GHz`
-//! EXECUTION: Some(Wasm), WASM-EXECUTION: Compiled, CHAIN: Some("kusama-dev"), DB CACHE: 1024
+//! EXECUTION: Some(Wasm), WASM-EXECUTION: Compiled, CHAIN: Some("dicle-dev"), DB CACHE: 1024
 
 // Executed Command:
 // ./target/production/pezkuwi
 // benchmark
 // pezpallet
-// --chain=kusama-dev
+// --chain=dicle-dev
 // --steps=50
 // --repeat=20
 // --no-storage-info
@@ -37,7 +37,7 @@
 // --execution=wasm
 // --wasm-execution=compiled
 // --header=./file_header.txt
-// --output=./runtime/kusama/src/weights/
+// --output=./runtime/dicle/src/weights/
 
 #![cfg_attr(rustfmt, rustfmt_skip)]
 #![allow(unused_parens)]
