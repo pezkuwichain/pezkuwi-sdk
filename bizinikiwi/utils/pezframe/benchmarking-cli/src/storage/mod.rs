@@ -28,7 +28,7 @@ pub(crate) const MAX_BATCH_SIZE_FOR_BLOCK_VALIDATION: usize = 10_000;
 
 pub(crate) fn get_wasm_module() -> Box<dyn pezsc_executor_common::wasm_runtime::WasmModule> {
 	let blob = pezsc_executor_common::runtime_blob::RuntimeBlob::uncompress_if_needed(
-		frame_storage_access_test_runtime::WASM_BINARY
+		pezframe_storage_access_test_runtime::WASM_BINARY
 			.expect("You need to build the WASM binaries to run the benchmark!"),
 	)
 	.expect("Failed to create runtime blob");

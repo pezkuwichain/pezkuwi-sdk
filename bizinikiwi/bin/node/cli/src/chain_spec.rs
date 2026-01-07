@@ -20,7 +20,6 @@
 
 use pezkuwi_sdk::*;
 
-use pezsc_service::Properties;
 use pez_kitchensink_runtime::{
 	genesis_config_presets::{Staker, ENDOWMENT, STASH},
 	wasm_binary_unwrap, Block, MaxNominations, StakerStatus,
@@ -29,6 +28,7 @@ use pezpallet_im_online::sr25519::AuthorityId as ImOnlineId;
 use pezpallet_revive::is_eth_derived;
 use pezsc_chain_spec::ChainSpecExtension;
 use pezsc_service::ChainType;
+use pezsc_service::Properties;
 use pezsc_telemetry::TelemetryEndpoints;
 use pezsp_authority_discovery::AuthorityId as AuthorityDiscoveryId;
 use pezsp_consensus_babe::AuthorityId as BabeId;

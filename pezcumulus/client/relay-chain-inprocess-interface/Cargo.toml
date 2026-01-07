@@ -47,7 +47,7 @@ pezsp-keyring = { workspace = true, default-features = true }
 
 # Pezkuwi
 metered = { features = ["futures_channel"], workspace = true }
-# pezkuwi-test-client = { workspace = true }
+pezkuwi-test-client = { workspace = true }
 
 [features]
 runtime-benchmarks = [
@@ -57,7 +57,7 @@ runtime-benchmarks = [
 	"pezkuwi-cli/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
 	"pezkuwi-service/runtime-benchmarks",
-	# "pezkuwi-test-client/runtime-benchmarks",
+	"pezkuwi-test-client/runtime-benchmarks",
 	"pezsc-cli/runtime-benchmarks",
 	"pezsc-client-api/runtime-benchmarks",
 	"pezsc-network/runtime-benchmarks",

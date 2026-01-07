@@ -32,12 +32,18 @@ const DUMMY_PATH: &str = "fake-runtime-path";
 
 const OUTPUT_FILE: &str = "/tmp/chain_spec_builder.test_output_file.json";
 
+// Get the chain-spec-builder binary path from environment
+fn get_chain_spec_builder_bin() -> String {
+	std::env::var("CARGO_BIN_EXE_chain-spec-builder")
+		.expect("CARGO_BIN_EXE_chain-spec-builder must be set - run with `cargo test`")
+}
+
 // Used for running commands visually pleasing in doc tests.
 macro_rules! bash(
 	( chain-spec-builder $($a:tt)* ) => {{
-		let bin_path = env!("CARGO_BIN_EXE_chain-spec-builder");
+		let bin = get_chain_spec_builder_bin();
 		spawn_with_output!(
-			$bin_path $($a)*
+			$bin $($a)*
 		)
 		.expect("a process running. qed")
 		.wait_with_output()

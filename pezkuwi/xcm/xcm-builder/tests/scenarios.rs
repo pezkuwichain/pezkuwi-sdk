@@ -17,8 +17,7 @@
 mod mock;
 
 use mock::{
-	dicle_like_with_balances, AccountId, Balance, Balances, BaseXcmWeight, System, XcmConfig,
-	CENTS,
+	dicle_like_with_balances, AccountId, Balance, Balances, BaseXcmWeight, System, XcmConfig, CENTS,
 };
 use pezkuwi_teyrchain_primitives::primitives::Id as ParaId;
 use pezsp_runtime::traits::AccountIdConversion;
