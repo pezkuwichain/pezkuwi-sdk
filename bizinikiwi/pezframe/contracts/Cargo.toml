@@ -97,6 +97,7 @@ std = [
 	"wasmi/std",
 	"xcm-builder/std",
 	"xcm/std",
+	"pezpallet-contracts-fixtures/std"
 ]
 runtime-benchmarks = [
 	"pezframe-benchmarking/runtime-benchmarks",
@@ -127,6 +128,7 @@ try-runtime = [
 	"pezsp-runtime/try-runtime",
 	"xcm-builder/try-runtime",
 	"xcm/try-runtime",
+	"pezpallet-contracts-fixtures/try-runtime"
 ]
 serde = [
 	"array-bytes/serde",

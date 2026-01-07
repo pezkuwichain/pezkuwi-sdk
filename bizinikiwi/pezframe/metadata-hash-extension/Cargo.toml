@@ -42,6 +42,8 @@ std = [
 	"pezframe-system/std",
 	"pezsp-runtime/std",
 	"scale-info/std",
+	"bizinikiwi-test-runtime-client/std",
+	"bizinikiwi-wasm-builder/std"
 ]
 runtime-benchmarks = [
 	"bizinikiwi-test-runtime-client/runtime-benchmarks",
@@ -50,12 +52,15 @@ runtime-benchmarks = [
 	"pezsp-api/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 	"pezsp-transaction-pool/runtime-benchmarks",
+	"bizinikiwi-wasm-builder/runtime-benchmarks"
 ]
 try-runtime = [
 	"pezframe-support/try-runtime",
 	"pezframe-system/try-runtime",
 	"pezsp-api/try-runtime",
 	"pezsp-runtime/try-runtime",
+	"bizinikiwi-test-runtime-client/try-runtime",
+	"pezsp-transaction-pool/try-runtime"
 ]
 serde = []
 experimental = []

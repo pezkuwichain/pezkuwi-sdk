@@ -55,6 +55,7 @@ std = [
 	"pezsc-offchain/std",
 	"pezsp-blockchain/std",
 	"pezsp-consensus/std",
+	"bizinikiwi-test-runtime-client/std"
 ]
 try-runtime = [
 	"pezsc-block-builder/try-runtime",
@@ -66,6 +67,7 @@ try-runtime = [
 	"pezsp-consensus/try-runtime",
 	"pezsp-mmr-primitives/try-runtime",
 	"pezsp-runtime/try-runtime",
+	"bizinikiwi-test-runtime-client/try-runtime"
 ]
 serde = []
 with-tracing = []

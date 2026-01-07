@@ -65,6 +65,7 @@ std = [
 	"pezsc-network/std",
 	"rand/std",
 	"rand_chacha/std",
+	"pezkuwi-node-subsystem-test-helpers/std"
 ]
 serde = []
 with-tracing = []

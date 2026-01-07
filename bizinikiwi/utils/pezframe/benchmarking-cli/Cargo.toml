@@ -25,7 +25,6 @@ codec = { workspace = true, default-features = true }
 comfy-table = { workspace = true }
 env_filter = { workspace = true }
 gethostname = { workspace = true }
-pezframe-storage-access-test-runtime = { workspace = true, optional = true }
 handlebars = { workspace = true }
 itertools = { workspace = true }
 linked-hash-map = { workspace = true }
@@ -33,6 +32,7 @@ log = { workspace = true, default-features = true }
 pezcumulus-client-teyrchain-inherent = { workspace = true, default-features = true }
 pezcumulus-primitives-proof-size-hostfunction = { workspace = true, default-features = true }
 pezframe-benchmarking = { workspace = true, default-features = true }
+pezframe-storage-access-test-runtime = { workspace = true, optional = true }
 pezframe-support = { workspace = true, default-features = true }
 pezframe-system = { workspace = true, default-features = true }
 pezkuwi-primitives = { workspace = true, default-features = true }
@@ -127,6 +127,7 @@ runtime-benchmarks = [
 	"pezsp-trie/runtime-benchmarks",
 	"pezsp-version/runtime-benchmarks",
 	"zagros-runtime/runtime-benchmarks",
+	"pezframe-storage-access-test-runtime?/runtime-benchmarks"
 ]
 rocksdb = ["pezsc-cli/rocksdb", "pezsc-client-db/rocksdb"]
 std = [
@@ -170,6 +171,10 @@ try-runtime = [
 	"pezsp-timestamp/try-runtime",
 	"pezsp-transaction-pool/try-runtime",
 	"pezsp-version/try-runtime",
+	"bizinikiwi-test-runtime/try-runtime",
+	"pezcumulus-test-runtime/try-runtime",
+	"pezframe-storage-access-test-runtime?/try-runtime",
+	"zagros-runtime/try-runtime"
 ]
 serde = []
 experimental = []

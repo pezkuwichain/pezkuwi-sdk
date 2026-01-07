@@ -79,6 +79,8 @@ std = [
 	"pezkuwi-pez-node-primitives/std",
 	"pezsc-client-api/std",
 	"pezsp-consensus/std",
+	"pezcumulus-test-client/std",
+	"pezkuwi-node-subsystem-test-helpers/std"
 ]
 try-runtime = [
 	"pezcumulus-client-consensus-common/try-runtime",
@@ -89,6 +91,9 @@ try-runtime = [
 	"pezsp-api/try-runtime",
 	"pezsp-consensus/try-runtime",
 	"pezsp-runtime/try-runtime",
+	"pezcumulus-test-client/try-runtime",
+	"pezcumulus-test-relay-sproof-builder/try-runtime",
+	"pezcumulus-test-runtime/try-runtime"
 ]
 serde = []
 with-tracing = []

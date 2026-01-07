@@ -39,4 +39,6 @@ std = [
 	"gum/std",
 	"pezkuwi-node-subsystem-util/std",
 	"pezkuwi-node-subsystem/std",
+	"pezkuwi-node-subsystem-test-helpers/std",
+	"pezkuwi-primitives-test-helpers/std"
 ]

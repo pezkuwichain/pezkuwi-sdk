@@ -65,6 +65,7 @@ std = [
 	"pezsp-storage/std",
 	"scale-info/std",
 	"serde",
+	"pezsc-client-db/std"
 ]
 runtime-benchmarks = [
 	"pezframe-support-procedural/runtime-benchmarks",
@@ -77,12 +78,15 @@ runtime-benchmarks = [
 	"pezsp-runtime-interface/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 	"pezsp-state-machine/runtime-benchmarks",
+	"pezsc-client-db/runtime-benchmarks"
 ]
 try-runtime = [
 	"pezframe-support/try-runtime",
 	"pezframe-system/try-runtime",
 	"pezsp-api/try-runtime",
 	"pezsp-runtime/try-runtime",
+	"pezpallet-example-basic/try-runtime",
+	"pezsc-client-db/try-runtime"
 ]
 serde = [
 	"array-bytes/serde",

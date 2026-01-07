@@ -75,6 +75,9 @@ std = [
 	"pezkuwi-node-subsystem/std",
 	"pezkuwi-pez-node-primitives/std",
 	"pezsc-network/std",
+	"pezkuwi-node-subsystem-test-helpers/std",
+	"pezkuwi-primitives-test-helpers/std",
+	"pezkuwi-subsystem-bench/std"
 ]
 serde = []
 with-tracing = []

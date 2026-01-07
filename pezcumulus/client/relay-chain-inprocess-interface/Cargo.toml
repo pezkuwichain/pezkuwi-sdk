@@ -81,6 +81,7 @@ std = [
 	"pezsc-telemetry/std",
 	"pezsc-tracing/std",
 	"pezsp-consensus/std",
+	"pezkuwi-test-client/std"
 ]
 try-runtime = [
 	"pezcumulus-client-bootnodes/try-runtime",
@@ -97,5 +98,6 @@ try-runtime = [
 	"pezsp-consensus/try-runtime",
 	"pezsp-keyring/try-runtime",
 	"pezsp-runtime/try-runtime",
+	"pezkuwi-test-client/try-runtime"
 ]
 serde = []

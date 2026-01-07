@@ -109,6 +109,7 @@ try-runtime = [
 	"pezsp-inherents/try-runtime",
 	"pezsp-runtime/try-runtime",
 	"pezsp-staking/try-runtime",
+	"pezframe-system/try-runtime"
 ]
 experimental = ["pezframe-support-procedural/experimental"]
 # By default some types have documentation, `no-metadata-docs` allows to reduce the documentation

@@ -50,10 +50,13 @@ std = [
 	"pezkuwi-node-subsystem-util/std",
 	"pezkuwi-node-subsystem/std",
 	"pezsc-keystore/std",
+	"pezkuwi-node-subsystem-test-helpers/std",
+	"pezkuwi-primitives-test-helpers/std"
 ]
 try-runtime = [
 	"pezkuwi-primitives/try-runtime",
 	"pezsp-keyring/try-runtime",
 	"pezsp-runtime/try-runtime",
+	"pezkuwi-primitives-test-helpers/try-runtime"
 ]
 serde = []

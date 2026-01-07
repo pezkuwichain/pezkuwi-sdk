@@ -53,6 +53,7 @@ std = [
 	"pezsp-weights/std",
 	"scale-info/std",
 	"serde/std",
+	"bizinikiwi-test-runtime-client/std"
 ]
 runtime-benchmarks = [
 	"bizinikiwi-test-runtime-client/runtime-benchmarks",
@@ -65,6 +66,7 @@ try-runtime = [
 	"pezframe-support/try-runtime",
 	"pezsp-runtime/try-runtime",
 	"pezsp-version/try-runtime",
+	"bizinikiwi-test-runtime-client/try-runtime"
 ]
 experimental = ["pezframe-support/experimental"]
 serde = []

@@ -49,6 +49,7 @@ runtime-benchmarks = [
 	"pezpallet-balances/runtime-benchmarks",
 	"pezsp-io/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
+	"pezframe-support-test/runtime-benchmarks"
 ]
 try-runtime = [
 	"pezframe-benchmarking?/try-runtime",
@@ -56,6 +57,7 @@ try-runtime = [
 	"pezframe-system/try-runtime",
 	"pezpallet-balances/try-runtime",
 	"pezsp-runtime/try-runtime",
+	"pezframe-support-test/try-runtime"
 ]
 serde = []
 experimental = []

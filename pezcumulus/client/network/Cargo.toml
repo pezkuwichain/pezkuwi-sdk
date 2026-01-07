@@ -87,6 +87,10 @@ std = [
 	"pezsc-network/std",
 	"pezsp-blockchain/std",
 	"pezsp-consensus/std",
+	"pezcumulus-relay-chain-inprocess-interface/std",
+	"pezcumulus-test-service/std",
+	"pezkuwi-primitives-test-helpers/std",
+	"pezkuwi-test-client/std"
 ]
 try-runtime = [
 	"pezcumulus-primitives-core/try-runtime",
@@ -100,5 +104,9 @@ try-runtime = [
 	"pezsp-keyring/try-runtime",
 	"pezsp-runtime/try-runtime",
 	"pezsp-version/try-runtime",
+	"pezcumulus-relay-chain-inprocess-interface/try-runtime",
+	"pezcumulus-test-service/try-runtime",
+	"pezkuwi-primitives-test-helpers/try-runtime",
+	"pezkuwi-test-client/try-runtime"
 ]
 serde = []

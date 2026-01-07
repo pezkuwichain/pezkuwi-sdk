@@ -47,6 +47,8 @@ std = [
 	"pezkuwi-node-subsystem/std",
 	"pezsp-tracing/std",
 	"rand/std",
+	"pezkuwi-node-subsystem-test-helpers/std",
+	"pezkuwi-primitives-test-helpers/std"
 ]
 serde = []
 with-tracing = []
