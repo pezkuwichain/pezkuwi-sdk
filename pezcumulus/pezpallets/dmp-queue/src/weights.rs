@@ -19,7 +19,7 @@
 //! DATE: 2023-09-15, STEPS: `50`, REPEAT: `20`, LOW RANGE: `[]`, HIGH RANGE: `[]`
 //! WORST CASE MAP SIZE: `1000000`
 //! HOSTNAME: `Olivers-MacBook-Pro.local`, CPU: `<UNKNOWN>`
-//! WASM-EXECUTION: `Compiled`, CHAIN: `Some("asset-hub-kusama-dev")`, DB CACHE: `1024`
+//! WASM-EXECUTION: `Compiled`, CHAIN: `Some("asset-hub-dicle-dev")`, DB CACHE: `1024`
 
 // Executed Command:
 // ./target/release/pezkuwi-teyrchain
@@ -28,7 +28,7 @@
 // --pezpallet
 // pezcumulus-pezpallet-dmp-queue
 // --chain
-// asset-hub-kusama-dev
+// asset-hub-dicle-dev
 // --output
 // pezcumulus/pezpallets/dmp-queue/src/weights.rs
 // --template

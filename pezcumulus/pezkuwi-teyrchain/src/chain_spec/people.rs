@@ -21,8 +21,8 @@ use std::str::FromStr;
 /// Collects all supported People configurations.
 #[derive(Debug, PartialEq)]
 pub enum PeopleRuntimeType {
-	Kusama,
-	KusamaLocal,
+	Dicle,
+	DicleLocal,
 	Pezkuwi,
 	PezkuwiLocal,
 	Pezkuwichain,
@@ -38,8 +38,8 @@ impl FromStr for PeopleRuntimeType {
 
 	fn from_str(value: &str) -> Result<Self, Self::Err> {
 		match value {
-			kusama::PEOPLE_KUSAMA => Ok(PeopleRuntimeType::Kusama),
-			kusama::PEOPLE_KUSAMA_LOCAL => Ok(PeopleRuntimeType::KusamaLocal),
+			dicle::PEOPLE_DICLE => Ok(PeopleRuntimeType::Dicle),
+			dicle::PEOPLE_DICLE_LOCAL => Ok(PeopleRuntimeType::DicleLocal),
 			pezkuwi::PEOPLE_PEZKUWI => Ok(PeopleRuntimeType::Pezkuwi),
 			pezkuwi::PEOPLE_PEZKUWI_LOCAL => Ok(PeopleRuntimeType::PezkuwiLocal),
 			pezkuwichain::PEOPLE_PEZKUWICHAIN => Ok(PeopleRuntimeType::Pezkuwichain),
@@ -60,8 +60,8 @@ impl PeopleRuntimeType {
 
 	pub fn load_config(&self) -> Result<Box<dyn ChainSpec>, String> {
 		match self {
-			PeopleRuntimeType::Kusama => Ok(Box::new(GenericChainSpec::from_json_bytes(
-				&include_bytes!("../../chain-specs/people-kusama.json")[..],
+			PeopleRuntimeType::Dicle => Ok(Box::new(GenericChainSpec::from_json_bytes(
+				&include_bytes!("../../chain-specs/people-dicle.json")[..],
 			)?)),
 			PeopleRuntimeType::Pezkuwi => Ok(Box::new(GenericChainSpec::from_json_bytes(
 				&include_bytes!("../../chain-specs/people-pezkuwi.json")[..],
@@ -193,9 +193,9 @@ pub mod zagros {
 	}
 }
 
-pub mod kusama {
-	pub(crate) const PEOPLE_KUSAMA: &str = "people-kusama";
-	pub(crate) const PEOPLE_KUSAMA_LOCAL: &str = "people-kusama-local";
+pub mod dicle {
+	pub(crate) const PEOPLE_DICLE: &str = "people-dicle";
+	pub(crate) const PEOPLE_DICLE_LOCAL: &str = "people-dicle-local";
 }
 
 pub mod pezkuwi {

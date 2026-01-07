@@ -163,8 +163,8 @@ where
 		.build(),
 	);
 
-	let grandpa_hard_forks = if config.chain_spec.is_kusama() {
-		grandpa_support::kusama_hard_forks()
+	let grandpa_hard_forks = if config.chain_spec.is_dicle() {
+		grandpa_support::dicle_hard_forks()
 	} else {
 		Vec::new()
 	};

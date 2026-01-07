@@ -50,7 +50,7 @@ fn get_invulnerable_ah_collators(
 	chain_spec: &Box<dyn pezkuwi_service::ChainSpec>,
 ) -> HashSet<PeerId> {
 	// A default set of invulnerable asset hub collators
-	const KUSAMA: [&str; 11] = [
+	const DICLE: [&str; 11] = [
 		"12D3KooWHNEENyCc4R3iDLLFaJiynUp9eDZp7TtS1G6DCp459vVK",
 		"12D3KooWAVqLdQEjSezy7CPEgMLMSTuyfSBdbxPGkmik5x2aL8u4",
 		"12D3KooWBxMiVQdYa5MaQjSWAu3YsfKdrs7vgX9cPk4cCwFVAXEu",
@@ -74,8 +74,8 @@ fn get_invulnerable_ah_collators(
 		"12D3KooWMRyTLrCEPcAQD6c4EnudL3vVzg9zji3whvsMYPUYevpq",
 	];
 
-	let invulnerables = if chain_spec.is_kusama() {
-		KUSAMA.to_vec()
+	let invulnerables = if chain_spec.is_dicle() {
+		DICLE.to_vec()
 	} else if chain_spec.is_pezkuwi() {
 		PEZKUWI.to_vec()
 	} else {
@@ -131,7 +131,7 @@ impl BizinikiwiCli for Cli {
 	) -> std::result::Result<Box<dyn pezsc_service::ChainSpec>, String> {
 		let id = if id == "" {
 			let n = get_exec_name().unwrap_or_default();
-			["pezkuwi", "kusama", "zagros", "pezkuwichain", "versi"]
+			["pezkuwi", "dicle", "zagros", "pezkuwichain", "versi"]
 				.iter()
 				.cloned()
 				.find(|&chain| n.starts_with(chain))
@@ -140,9 +140,9 @@ impl BizinikiwiCli for Cli {
 			id
 		};
 		Ok(match id {
-			"kusama" => Box::new(pezkuwi_service::chain_spec::kusama_config()?),
-			name if name.starts_with("kusama-") && !name.ends_with(".json") =>
-				Err(format!("`{name}` is not supported anymore as the kusama native runtime no longer part of the node."))?,
+			"dicle" => Box::new(pezkuwi_service::chain_spec::dicle_config()?),
+			name if name.starts_with("dicle-") && !name.ends_with(".json") =>
+				Err(format!("`{name}` is not supported anymore as the dicle native runtime no longer part of the node."))?,
 			"pezkuwi" => Box::new(pezkuwi_service::chain_spec::pezkuwi_config()?),
 			name if name.starts_with("pezkuwi-") && !name.ends_with(".json") =>
 				Err(format!("`{name}` is not supported anymore as the pezkuwi native runtime no longer part of the node."))?,
@@ -186,7 +186,7 @@ impl BizinikiwiCli for Cli {
 					chain_spec.is_versi()
 				{
 					Box::new(pezkuwi_service::PezkuwichainChainSpec::from_json_file(path)?)
-				} else if self.run.force_kusama || chain_spec.is_kusama() {
+				} else if self.run.force_dicle || chain_spec.is_dicle() {
 					Box::new(pezkuwi_service::GenericChainSpec::from_json_file(path)?)
 				} else if self.run.force_zagros || chain_spec.is_zagros() {
 					Box::new(pezkuwi_service::ZagrosChainSpec::from_json_file(path)?)
@@ -242,11 +242,11 @@ where
 
 	set_default_ss58_version(chain_spec);
 
-	if chain_spec.is_kusama() {
+	if chain_spec.is_dicle() {
 		info!("----------------------------");
 		info!("This chain is not in any way");
 		info!("      endorsed by the       ");
-		info!("     KUSAMA FOUNDATION      ");
+		info!("     DICLE FOUNDATION      ");
 		info!("----------------------------");
 	}
 

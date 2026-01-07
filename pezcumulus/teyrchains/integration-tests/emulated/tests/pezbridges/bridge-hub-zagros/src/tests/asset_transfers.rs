@@ -637,7 +637,7 @@ fn send_wnds_from_zagros_relay_through_asset_hub_zagros_to_asset_hub_pezkuwichai
 		let beneficiary: Location =
 			AccountId32Junction { network: None, id: receiver.clone().into() }.into();
 		// executes on Zagros Relay
-		let kusama_xcm = Xcm::<()>(vec![
+		let dicle_xcm = Xcm::<()>(vec![
 			WithdrawAsset((Location::here(), amount).into()),
 			SetFeesMode { jit_withdraw: true },
 			InitiateTeleport {
@@ -685,7 +685,7 @@ fn send_wnds_from_zagros_relay_through_asset_hub_zagros_to_asset_hub_pezkuwichai
 				let signed_origin = <Zagros as Chain>::RuntimeOrigin::signed(ZagrosSender::get());
 				<Zagros as ZagrosPallet>::XcmPallet::execute(
 					signed_origin,
-					bx!(xcm::VersionedXcm::V5(kusama_xcm.into())),
+					bx!(xcm::VersionedXcm::V5(dicle_xcm.into())),
 					Weight::MAX,
 				)
 			}));

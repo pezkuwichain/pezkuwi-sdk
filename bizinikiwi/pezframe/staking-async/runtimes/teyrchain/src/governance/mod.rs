@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! New governance configurations for the Kusama runtime.
+//! New governance configurations for the Dicle runtime.
 
 use super::*;
 use crate::xcm_config::Collectives;

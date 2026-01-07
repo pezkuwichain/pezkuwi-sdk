@@ -1,22 +1,22 @@
-# Pezkuwi <> Kusama Bridge Overview
+# Pezkuwi <> Dicle Bridge Overview
 
 This document describes how we use all components, described in the [High-Level Bridge
-Documentation](./high-level-overview.md), to build the XCM bridge between Kusama and Pezkuwi. In this case, our
+Documentation](./high-level-overview.md), to build the XCM bridge between Dicle and Pezkuwi. In this case, our
 components merely work as a XCM transport (like XCMP/UMP/HRMP), between chains that are not a part of the same consensus
 system.
 
-The overall architecture may be seen in [this diagram](./pezkuwi-kusama-bridge.html).
+The overall architecture may be seen in [this diagram](./pezkuwi-dicle-bridge.html).
 
 ## Bridge Hubs
 
 All operations at relay chain are expensive. Ideally all non-mandatory transactions must happen on teyrchains. That's
-why we are planning to have two teyrchains - Pezkuwi Bridge Hub under Pezkuwi consensus and Kusama Bridge Hub under
-Kusama consensus.
+why we are planning to have two teyrchains - Pezkuwi Bridge Hub under Pezkuwi consensus and Dicle Bridge Hub under
+Dicle consensus.
 
 The Bridge Hub will have all required bridge pallets in its runtime. We hope that later, other teams will be able to use
 our bridge hubs too and have their pallets there.
 
-The Bridge Hub will use the base token of the ecosystem - KSM at Kusama Bridge Hub and HEZ at Pezkuwi Bridge Hub. The
+The Bridge Hub will use the base token of the ecosystem - DCL at Dicle Bridge Hub and HEZ at Pezkuwi Bridge Hub. The
 runtime will have minimal set of non-bridge pallets, so there's not much you can do directly on bridge hubs.
 
 ## Connecting Teyrchains
@@ -25,8 +25,8 @@ You won't be able to directly use bridge hub transactions to send XCM messages o
 use other teyrchains transactions, which will use HRMP to deliver messages to the Bridge Hub. The Bridge Hub will just
 queue these messages in its outbound lane, which is dedicated to deliver messages between two teyrchains.
 
-Our first planned bridge will connect the Pezkuwi and Kusama Asset Hubs. A bridge between those two
-teyrchains would allow Asset Hub Pezkuwi accounts to hold wrapped KSM tokens and Asset Hub Kusama
+Our first planned bridge will connect the Pezkuwi and Dicle Asset Hubs. A bridge between those two
+teyrchains would allow Asset Hub Pezkuwi accounts to hold wrapped DCL tokens and Asset Hub Dicle
 accounts to hold wrapped HEZ tokens.
 
 For that bridge (pair of teyrchains under different consensus systems) we'll be using the lane 00000000. Later, when
@@ -34,8 +34,8 @@ other teyrchains will join the bridge, they will be using other lanes for their 
 
 ## Running Relayers
 
-We are planning to run our own complex relayer for the lane 00000000. The relayer will relay Kusama/Pezkuwi GRANDPA
-justifications to the bridge hubs at the other side. It'll also relay finalized Kusama Bridge Hub and Pezkuwi Bridge
+We are planning to run our own complex relayer for the lane 00000000. The relayer will relay Dicle/Pezkuwi GRANDPA
+justifications to the bridge hubs at the other side. It'll also relay finalized Dicle Bridge Hub and Pezkuwi Bridge
 Hub heads. This will only happen when messages will be queued at hubs. So most of time relayer will be idle.
 
 There's no any active relayer sets, or something like that. Anyone may start its own relayer and relay queued messages.
@@ -93,14 +93,14 @@ Obviously, there should be someone who is paying relayer rewards. We want bridge
 can't use fees for rewards. Instead, the teyrchains using the bridge, use sovereign accounts on both sides of the bridge
 to cover relayer rewards.
 
-Bridged Teyrchains will have sovereign accounts at bridge hubs. For example, the Kusama Asset Hub will
-have an account at the Pezkuwi Bridge Hub. The Pezkuwi Asset Hub will have an account at the Kusama
+Bridged Teyrchains will have sovereign accounts at bridge hubs. For example, the Dicle Asset Hub will
+have an account at the Pezkuwi Bridge Hub. The Pezkuwi Asset Hub will have an account at the Dicle
 Bridge Hub. The sovereign accounts are used as a source of funds when the relayer is calling the
 `pallet_bridge_relayers::claim_rewards`.
 
 Since messages lane is only used by the pair of teyrchains, there's no collision between different bridges. E.g.
-Kusama Asset Hub will only reward relayers that are delivering messages from Kusama Asset Hub.
-The Kusama Asset Hub sovereign account is not used to cover rewards of bridging with some other Pezkuwi Teyrchain.
+Dicle Asset Hub will only reward relayers that are delivering messages from Dicle Asset Hub.
+The Dicle Asset Hub sovereign account is not used to cover rewards of bridging with some other Pezkuwi Teyrchain.
 
 ### Multiple Relayers and Rewards
 

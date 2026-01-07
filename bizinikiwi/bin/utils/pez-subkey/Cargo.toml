@@ -2,7 +2,7 @@
 name = "pez-subkey"
 version = "9.0.0"
 authors.workspace = true
-description = "Generate and restore keys for Bizinikiwi based chains such as Pezkuwi, Kusama and a growing number of teyrchains and Bizinikiwi based projects."
+description = "Generate and restore keys for Bizinikiwi based chains such as Pezkuwi, Dicle and a growing number of teyrchains and Bizinikiwi based projects."
 edition.workspace = true
 license = "GPL-3.0-or-later WITH Classpath-exception-2.0"
 homepage.workspace = true

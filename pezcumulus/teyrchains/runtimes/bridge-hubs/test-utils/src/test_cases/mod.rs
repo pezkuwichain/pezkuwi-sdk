@@ -605,13 +605,13 @@ where
 			destination: [Teyrchain(1000)].into(),
 			xcm: Xcm(vec![
 				ReserveAssetDeposited(Assets::from(vec![Asset {
-					id: AssetId(Location::new(2, [GlobalConsensus(Kusama)])),
+					id: AssetId(Location::new(2, [GlobalConsensus(Dicle)])),
 					fun: Fungible(1000000000000),
 				}])),
 				ClearOrigin,
 				BuyExecution {
 					fees: Asset {
-						id: AssetId(Location::new(2, [GlobalConsensus(Kusama)])),
+						id: AssetId(Location::new(2, [GlobalConsensus(Dicle)])),
 						fun: Fungible(1000000000000),
 					},
 					weight_limit: Unlimited,

@@ -124,9 +124,9 @@
 //!
 //! Asset Hub also has another type of assets called `ForeignAssets`.
 //! These assets are identified by the XCM Location to their origin.
-//! Two such assets are a Teyrchain asset, like Moonbeam's GLMR, and KSM, from the cousin Kusama
+//! Two such assets are a Teyrchain asset, like Moonbeam's GLMR, and DCL, from the cousin Dicle
 //! network. These are represented as `../Teyrchain(2004)/PalletInstance(10)` and
-//! `../../GlobalConsensus(Kusama)` respectively.
+//! `../../GlobalConsensus(Dicle)` respectively.
 //!
 //! The whole type can be seen in the [format](https://github.com/polkadot-fellows/xcm-format#6-universal-asset-identifiers)
 //! and [rust docs](xcm::v4::prelude::Asset).

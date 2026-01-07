@@ -23,7 +23,7 @@ use pezsp_runtime::{traits::Block as BlockT, DeserializeOwned};
 use remote_externalities::{Builder, Mode, OnlineConfig};
 
 /// Test voter bags migration. `currency_unit` is the number of planks per the the runtimes `UNITS`
-/// (i.e. number of decimal places per HEZ, KSM etc)
+/// (i.e. number of decimal places per HEZ, DCL etc)
 pub async fn execute<Runtime, Block>(
 	currency_unit: u64,
 	currency_name: &'static str,

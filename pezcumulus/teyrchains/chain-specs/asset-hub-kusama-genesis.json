@@ -1,6 +1,6 @@
 {
-  "name": "Kusama Asset Hub",
-  "id": "asset-hub-kusama",
+  "name": "Dicle Asset Hub",
+  "id": "asset-hub-dicle",
   "chainType": "Live",
   "bootNodes": [
     "/ip4/127.0.0.1/tcp/30333/p2p/12D3KooWHGksh2JFMaW8AkZvyhVpmiXUJnCQbngExTLMdq753ZQR"
@@ -10,9 +10,9 @@
   "properties": {
     "ss58Format": 2,
     "tokenDecimals": 12,
-    "tokenSymbol": "KSM"
+    "tokenSymbol": "DCL"
   },
-  "relay_chain": "kusama",
+  "relay_chain": "dicle",
   "para_id": 1000,
   "consensusEngine": null,
   "codeSubstitutes": {},

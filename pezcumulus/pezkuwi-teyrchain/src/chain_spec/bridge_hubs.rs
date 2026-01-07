@@ -21,8 +21,8 @@ use std::str::FromStr;
 /// Collects all supported BridgeHub configurations
 #[derive(Debug, PartialEq)]
 pub enum BridgeHubRuntimeType {
-	Kusama,
-	KusamaLocal,
+	Dicle,
+	DicleLocal,
 
 	Pezkuwi,
 	PezkuwiLocal,
@@ -45,8 +45,8 @@ impl FromStr for BridgeHubRuntimeType {
 		match value {
 			pezkuwi::BRIDGE_HUB_PEZKUWI => Ok(BridgeHubRuntimeType::Pezkuwi),
 			pezkuwi::BRIDGE_HUB_PEZKUWI_LOCAL => Ok(BridgeHubRuntimeType::PezkuwiLocal),
-			kusama::BRIDGE_HUB_KUSAMA => Ok(BridgeHubRuntimeType::Kusama),
-			kusama::BRIDGE_HUB_KUSAMA_LOCAL => Ok(BridgeHubRuntimeType::KusamaLocal),
+			dicle::BRIDGE_HUB_DICLE => Ok(BridgeHubRuntimeType::Dicle),
+			dicle::BRIDGE_HUB_DICLE_LOCAL => Ok(BridgeHubRuntimeType::DicleLocal),
 			zagros::BRIDGE_HUB_ZAGROS => Ok(BridgeHubRuntimeType::Zagros),
 			zagros::BRIDGE_HUB_ZAGROS_LOCAL => Ok(BridgeHubRuntimeType::ZagrosLocal),
 			zagros::BRIDGE_HUB_ZAGROS_DEVELOPMENT => Ok(BridgeHubRuntimeType::ZagrosDevelopment),
@@ -70,8 +70,8 @@ impl BridgeHubRuntimeType {
 			BridgeHubRuntimeType::Pezkuwi => Ok(Box::new(GenericChainSpec::from_json_bytes(
 				&include_bytes!("../../chain-specs/bridge-hub-pezkuwi.json")[..],
 			)?)),
-			BridgeHubRuntimeType::Kusama => Ok(Box::new(GenericChainSpec::from_json_bytes(
-				&include_bytes!("../../chain-specs/bridge-hub-kusama.json")[..],
+			BridgeHubRuntimeType::Dicle => Ok(Box::new(GenericChainSpec::from_json_bytes(
+				&include_bytes!("../../chain-specs/bridge-hub-dicle.json")[..],
 			)?)),
 			BridgeHubRuntimeType::Zagros => Ok(Box::new(GenericChainSpec::from_json_bytes(
 				&include_bytes!("../../chain-specs/bridge-hub-zagros.json")[..],
@@ -166,10 +166,10 @@ pub mod pezkuwichain {
 	}
 }
 
-/// Sub-module for Kusama setup
-pub mod kusama {
-	pub(crate) const BRIDGE_HUB_KUSAMA: &str = "bridge-hub-kusama";
-	pub(crate) const BRIDGE_HUB_KUSAMA_LOCAL: &str = "bridge-hub-kusama-local";
+/// Sub-module for Dicle setup
+pub mod dicle {
+	pub(crate) const BRIDGE_HUB_DICLE: &str = "bridge-hub-dicle";
+	pub(crate) const BRIDGE_HUB_DICLE_LOCAL: &str = "bridge-hub-dicle-local";
 }
 
 /// Sub-module for Zagros setup.

@@ -62,7 +62,7 @@ fn sovereign_account_translation() {
 			// derivation proof (para 2030, index 2)
 			Some(("13YMK2eeopZtUNpeHnJ1Ws2HqMQG6Ts9PGCZYGyFbSYoZfcm", 2u16)),
 		),
-		// Bifrost Kusama #1
+		// Bifrost Dicle #1
 		(
 			// para 2001
 			"5Ec4AhPV91i9yNuiWuNunPf6AQCYDhFTTA4G5QCbtqYApH9E",
@@ -70,7 +70,7 @@ fn sovereign_account_translation() {
 			"5Eg2fntJDju46yds4uKzu2zuQssqw7JZWohhLMj6mZZjg2pK",
 			None,
 		),
-		// Bifrost Kusama #2
+		// Bifrost Dicle #2
 		(
 			// para 2001 index 0
 			"5E78xTBiaN3nAGYtcNnqTJQJqYAkSDGggKqaDfpNsKyPpbcb",
@@ -79,7 +79,7 @@ fn sovereign_account_translation() {
 			// derivation proof (para 2001, index 0)
 			Some(("5Ec4AhPV91i9yNuiWuNunPf6AQCYDhFTTA4G5QCbtqYApH9E", 0u16)),
 		),
-		// Bifrost Kusama #3
+		// Bifrost Dicle #3
 		(
 			// para 2001 index 1
 			"5HXi9pzWnTQzk7VKzY6VQn92KfWCcA5NbSm53uKHrYU1VsjP",
@@ -88,7 +88,7 @@ fn sovereign_account_translation() {
 			// derivation proof (para 2001, index 1)
 			Some(("5Ec4AhPV91i9yNuiWuNunPf6AQCYDhFTTA4G5QCbtqYApH9E", 1u16)),
 		),
-		// Bifrost Kusama #4
+		// Bifrost Dicle #4
 		(
 			// para 2001 index 2
 			"5CkKS3YMx64TguUYrMERc5Bn6Mn2aKMUkcozUFREQDgHS3Tv",
@@ -97,7 +97,7 @@ fn sovereign_account_translation() {
 			// derivation proof (para 2001, index 2)
 			Some(("5Ec4AhPV91i9yNuiWuNunPf6AQCYDhFTTA4G5QCbtqYApH9E", 2u16)),
 		),
-		// Bifrost Kusama #5
+		// Bifrost Dicle #5
 		(
 			// para 2001 index 3
 			"5Crxhmiw5CQq3Mnfcu3dR3yJ3YpjbxjqaeDFtNNtqgmcnN4S",
@@ -106,7 +106,7 @@ fn sovereign_account_translation() {
 			// derivation proof (para 2001, index 3)
 			Some(("5Ec4AhPV91i9yNuiWuNunPf6AQCYDhFTTA4G5QCbtqYApH9E", 3u16)),
 		),
-		// Bifrost Kusama #5
+		// Bifrost Dicle #5
 		(
 			// para 2001 index 3
 			"5DAZP4gZKZafGv42uoWNTMau4tYuDd2XteJLGL4upermhQpn",

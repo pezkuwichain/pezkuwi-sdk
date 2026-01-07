@@ -26,6 +26,6 @@ parameter_types! {
 
 parameter_types! {
 	pub const KsmLocation: Location = Location::parent();
-	pub const RelayNetwork: NetworkId = NetworkId::Kusama;
+	pub const RelayNetwork: NetworkId = NetworkId::Dicle;
 	pub UniversalLocation: InteriorLocation = [GlobalConsensus(RelayNetwork::get()), Teyrchain(TeyrchainId::<Runtime>::get().into())].into();
 }

@@ -13,7 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Metadata Version 11. Networks like Kusama contain this version on-chain.
+//! Metadata Version 11. Networks like Dicle contain this version on-chain.
 //! Chains old enough to contain this metadata need a way to decode it.
 
 #![allow(missing_docs)]

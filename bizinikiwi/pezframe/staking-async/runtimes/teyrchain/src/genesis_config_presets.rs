@@ -146,7 +146,7 @@ pub fn get_preset(id: &PresetId) -> Option<Vec<u8>> {
 			params.dev_stakers = Some((2_500, 25_000));
 			staking_async_teyrchain_genesis(params, id.to_string())
 		},
-		"fake-ksm" => {
+		"fake-dcl" => {
 			params.validator_count = 1_000;
 			params.dev_stakers = Some((4_500, 15_000));
 			staking_async_teyrchain_genesis(params, id.to_string())
@@ -168,6 +168,6 @@ pub fn preset_names() -> Vec<PresetId> {
 		PresetId::from("real-m"),
 		PresetId::from("fake-dev"),
 		PresetId::from("fake-hez"),
-		PresetId::from("fake-ksm"),
+		PresetId::from("fake-dcl"),
 	]
 }

@@ -70,7 +70,7 @@ impl SendXcm for TestSendXcm {
 
 pub type TestXcmRouter = EnsureDecodableXcm<TestSendXcm>;
 
-// copied from kusama constants
+// copied from dicle constants
 pub const UNITS: Balance = 1_000_000_000_000;
 pub const CENTS: Balance = UNITS / 30_000;
 
@@ -120,16 +120,16 @@ impl configuration::Config for Runtime {
 	type WeightInfo = configuration::TestWeightInfo;
 }
 
-// aims to closely emulate the Kusama XcmConfig
+// aims to closely emulate the Dicle XcmConfig
 parameter_types! {
 	pub const KsmLocation: Location = Location::here();
-	pub const KusamaNetwork: NetworkId = NetworkId::Kusama;
-	pub UniversalLocation: InteriorLocation = KusamaNetwork::get().into();
+	pub const DicleNetwork: NetworkId = NetworkId::Dicle;
+	pub UniversalLocation: InteriorLocation = DicleNetwork::get().into();
 	pub CheckAccount: (AccountId, MintLocation) = (XcmPallet::check_account(), MintLocation::Local);
 }
 
 pub type SovereignAccountOf =
-	(ChildTeyrchainConvertsVia<ParaId, AccountId>, AccountId32Aliases<KusamaNetwork, AccountId>);
+	(ChildTeyrchainConvertsVia<ParaId, AccountId>, AccountId32Aliases<DicleNetwork, AccountId>);
 
 pub type LocalCurrencyAdapter =
 	FungibleAdapter<Balances, IsConcrete<KsmLocation>, SovereignAccountOf, AccountId, CheckAccount>;
@@ -139,7 +139,7 @@ pub type LocalAssetTransactor = (LocalCurrencyAdapter,);
 type LocalOriginConverter = (
 	SovereignSignedViaLocation<SovereignAccountOf, RuntimeOrigin>,
 	ChildTeyrchainAsNative<origin::Origin, RuntimeOrigin>,
-	SignedAccountId32AsNative<KusamaNetwork, RuntimeOrigin>,
+	SignedAccountId32AsNative<DicleNetwork, RuntimeOrigin>,
 	ChildSystemTeyrchainAsSuperuser<ParaId, RuntimeOrigin>,
 );
 
@@ -156,13 +156,13 @@ pub type Barrier = (
 );
 
 parameter_types! {
-	pub KusamaForAssetHub: (AssetFilter, Location) =
+	pub DicleForAssetHub: (AssetFilter, Location) =
 		(Wild(AllOf { id: AssetId(Here.into()), fun: WildFungible }), Teyrchain(1000).into());
 	pub const MaxInstructions: u32 = 100;
 	pub const MaxAssetsIntoHolding: u32 = 4;
 }
 
-pub type TrustedTeleporters = (xcm_builder::Case<KusamaForAssetHub>,);
+pub type TrustedTeleporters = (xcm_builder::Case<DicleForAssetHub>,);
 
 pub struct XcmConfig;
 impl xcm_executor::Config for XcmConfig {
@@ -200,7 +200,7 @@ impl xcm_executor::Config for XcmConfig {
 
 /// Converts a local signed origin into an XCM location. Forms the basis for local origins
 /// sending/executing XCMs.
-pub type LocalOriginToLocation = SignedToAccountId32<RuntimeOrigin, AccountId, KusamaNetwork>;
+pub type LocalOriginToLocation = SignedToAccountId32<RuntimeOrigin, AccountId, DicleNetwork>;
 
 impl pezpallet_xcm::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
@@ -245,7 +245,7 @@ construct_runtime!(
 	}
 );
 
-pub fn kusama_like_with_balances(
+pub fn dicle_like_with_balances(
 	balances: Vec<(AccountId, Balance)>,
 ) -> pezsp_io::TestExternalities {
 	let mut t = pezframe_system::GenesisConfig::<Runtime>::default().build_storage().unwrap();

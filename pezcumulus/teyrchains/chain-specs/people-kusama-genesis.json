@@ -1,21 +1,21 @@
 {
-  "name": "Kusama People",
-  "id": "people-kusama",
+  "name": "Dicle People",
+  "id": "people-dicle",
   "chainType": "Live",
   "bootNodes": [
-    "/dns/kusama-people-connect-0.kusama.io/tcp/30334/p2p/12D3KooWQaqG5TNmDfRWrtH7tMsN7YeqwVkSfoZT4GkemSzezNi1",
-    "/dns/kusama-people-connect-1.kusama.io/tcp/30334/p2p/12D3KooWKhYoQH9LdSyvY3SVZY9gFf6ZV1bFh6317TRehUP3r5fm",
-    "/dns/kusama-people-connect-0.kusama.io/tcp/443/wss/p2p/12D3KooWQaqG5TNmDfRWrtH7tMsN7YeqwVkSfoZT4GkemSzezNi1",
-    "/dns/kusama-people-connect-1.kusama.io/tcp/443/wss/p2p/12D3KooWKhYoQH9LdSyvY3SVZY9gFf6ZV1bFh6317TRehUP3r5fm"
+    "/dns/dicle-people-connect-0.dicle.io/tcp/30334/p2p/12D3KooWQaqG5TNmDfRWrtH7tMsN7YeqwVkSfoZT4GkemSzezNi1",
+    "/dns/dicle-people-connect-1.dicle.io/tcp/30334/p2p/12D3KooWKhYoQH9LdSyvY3SVZY9gFf6ZV1bFh6317TRehUP3r5fm",
+    "/dns/dicle-people-connect-0.dicle.io/tcp/443/wss/p2p/12D3KooWQaqG5TNmDfRWrtH7tMsN7YeqwVkSfoZT4GkemSzezNi1",
+    "/dns/dicle-people-connect-1.dicle.io/tcp/443/wss/p2p/12D3KooWKhYoQH9LdSyvY3SVZY9gFf6ZV1bFh6317TRehUP3r5fm"
   ],
   "telemetryEndpoints": null,
   "protocolId": null,
   "properties": {
     "ss58Format": 2,
     "tokenDecimals": 12,
-    "tokenSymbol": "KSM"
+    "tokenSymbol": "DCL"
   },
-  "relay_chain": "kusama",
+  "relay_chain": "dicle",
   "para_id": 1004,
   "codeSubstitutes": {},
   "genesis": {

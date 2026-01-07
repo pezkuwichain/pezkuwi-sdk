@@ -148,7 +148,7 @@ impl pezpallet_bridge_messages::WeightInfoExt for TestMessagesWeights {
 }
 
 parameter_types! {
-	pub const RelayNetwork: NetworkId = NetworkId::Kusama;
+	pub const RelayNetwork: NetworkId = NetworkId::Dicle;
 	pub UniversalLocation: InteriorLocation = [
 		GlobalConsensus(RelayNetwork::get()),
 		Teyrchain(THIS_BRIDGE_HUB_ID),

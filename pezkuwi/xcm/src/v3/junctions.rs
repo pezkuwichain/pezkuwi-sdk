@@ -667,30 +667,30 @@ mod tests {
 	fn relative_to_works() {
 		use Junctions::*;
 		use NetworkId::*;
-		assert_eq!(X1(Pezkuwi.into()).relative_to(&X1(Kusama.into())), (Parent, Pezkuwi).into());
-		let base = X3(Kusama.into(), Teyrchain(1), PalletInstance(1));
+		assert_eq!(X1(Pezkuwi.into()).relative_to(&X1(Dicle.into())), (Parent, Pezkuwi).into());
+		let base = X3(Dicle.into(), Teyrchain(1), PalletInstance(1));
 
 		// Ancestors.
 		assert_eq!(Here.relative_to(&base), (Parent, Parent, Parent).into());
-		assert_eq!(X1(Kusama.into()).relative_to(&base), (Parent, Parent).into());
-		assert_eq!(X2(Kusama.into(), Teyrchain(1)).relative_to(&base), (Parent,).into());
+		assert_eq!(X1(Dicle.into()).relative_to(&base), (Parent, Parent).into());
+		assert_eq!(X2(Dicle.into(), Teyrchain(1)).relative_to(&base), (Parent,).into());
 		assert_eq!(
-			X3(Kusama.into(), Teyrchain(1), PalletInstance(1)).relative_to(&base),
+			X3(Dicle.into(), Teyrchain(1), PalletInstance(1)).relative_to(&base),
 			Here.into()
 		);
 
 		// Ancestors with one child.
 		assert_eq!(X1(Pezkuwi.into()).relative_to(&base), (Parent, Parent, Parent, Pezkuwi).into());
 		assert_eq!(
-			X2(Kusama.into(), Teyrchain(2)).relative_to(&base),
+			X2(Dicle.into(), Teyrchain(2)).relative_to(&base),
 			(Parent, Parent, Teyrchain(2)).into()
 		);
 		assert_eq!(
-			X3(Kusama.into(), Teyrchain(1), PalletInstance(2)).relative_to(&base),
+			X3(Dicle.into(), Teyrchain(1), PalletInstance(2)).relative_to(&base),
 			(Parent, PalletInstance(2)).into()
 		);
 		assert_eq!(
-			X4(Kusama.into(), Teyrchain(1), PalletInstance(1), [1u8; 32].into()).relative_to(&base),
+			X4(Dicle.into(), Teyrchain(1), PalletInstance(1), [1u8; 32].into()).relative_to(&base),
 			([1u8; 32],).into()
 		);
 
@@ -700,15 +700,15 @@ mod tests {
 			(Parent, Parent, Parent, Pezkuwi, Teyrchain(1)).into()
 		);
 		assert_eq!(
-			X3(Kusama.into(), Teyrchain(2), PalletInstance(1)).relative_to(&base),
+			X3(Dicle.into(), Teyrchain(2), PalletInstance(1)).relative_to(&base),
 			(Parent, Parent, Teyrchain(2), PalletInstance(1)).into()
 		);
 		assert_eq!(
-			X4(Kusama.into(), Teyrchain(1), PalletInstance(2), [1u8; 32].into()).relative_to(&base),
+			X4(Dicle.into(), Teyrchain(1), PalletInstance(2), [1u8; 32].into()).relative_to(&base),
 			(Parent, PalletInstance(2), [1u8; 32]).into()
 		);
 		assert_eq!(
-			X5(Kusama.into(), Teyrchain(1), PalletInstance(1), [1u8; 32].into(), 1u128.into())
+			X5(Dicle.into(), Teyrchain(1), PalletInstance(1), [1u8; 32].into(), 1u128.into())
 				.relative_to(&base),
 			([1u8; 32], 1u128).into()
 		);
@@ -719,10 +719,10 @@ mod tests {
 		use Junctions::*;
 		use NetworkId::*;
 		assert_eq!(X1(Pezkuwi.into()).global_consensus(), Ok(Pezkuwi));
-		assert_eq!(X2(Kusama.into(), 1u64.into()).global_consensus(), Ok(Kusama));
+		assert_eq!(X2(Dicle.into(), 1u64.into()).global_consensus(), Ok(Dicle));
 		assert_eq!(Here.global_consensus(), Err(()));
 		assert_eq!(X1(1u64.into()).global_consensus(), Err(()));
-		assert_eq!(X2(1u64.into(), Kusama.into()).global_consensus(), Err(()));
+		assert_eq!(X2(1u64.into(), Dicle.into()).global_consensus(), Err(()));
 	}
 
 	#[test]
@@ -732,7 +732,7 @@ mod tests {
 		assert_eq!(x, X1(GlobalConsensus(Pezkuwi)));
 		let x: Junctions = Pezkuwi.into();
 		assert_eq!(x, X1(GlobalConsensus(Pezkuwi)));
-		let x: Junctions = (Pezkuwi, Kusama).into();
-		assert_eq!(x, X2(GlobalConsensus(Pezkuwi), GlobalConsensus(Kusama)));
+		let x: Junctions = (Pezkuwi, Dicle).into();
+		assert_eq!(x, X2(GlobalConsensus(Pezkuwi), GlobalConsensus(Dicle)));
 	}
 }

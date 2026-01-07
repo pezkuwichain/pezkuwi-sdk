@@ -232,7 +232,7 @@ where
 		let disable_grandpa = config.disable_grandpa;
 		let name = config.network.node_name.clone();
 		let backoff_authoring_blocks = if !force_authoring_backoff
-			&& (config.chain_spec.is_pezkuwi() || config.chain_spec.is_kusama())
+			&& (config.chain_spec.is_pezkuwi() || config.chain_spec.is_dicle())
 		{
 			// the block authoring backoff is disabled by default on production networks
 			None
@@ -359,8 +359,8 @@ where
 			IncomingRequest::get_config_receiver::<_, Network>(&req_protocol_names);
 		net_config.add_request_response_protocol(cfg);
 
-		let grandpa_hard_forks = if config.chain_spec.is_kusama() {
-			grandpa_support::kusama_hard_forks()
+		let grandpa_hard_forks = if config.chain_spec.is_dicle() {
+			grandpa_support::dicle_hard_forks()
 		} else {
 			Vec::new()
 		};
@@ -422,7 +422,7 @@ where
 				stagnant_check_mode: chain_selection_subsystem::StagnantCheckMode::PruneOnly,
 			};
 
-			// Kusama + testnets get a higher threshold, we are conservative on Pezkuwi for now.
+			// Dicle + testnets get a higher threshold, we are conservative on Pezkuwi for now.
 			let fetch_chunks_threshold =
 				if config.chain_spec.is_pezkuwi() { None } else { Some(FETCH_CHUNKS_THRESHOLD) };
 

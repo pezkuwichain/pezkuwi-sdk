@@ -140,7 +140,7 @@ The filtering is performed on the whole statement set which is about to be impor
 applied:
 1. Remove ancient disputes - if a dispute is concluded before the block number indicated in `OLDEST_ACCEPTED` parameter
    it is removed from the set. `OLDEST_ACCEPTED` is a runtime configuration option. *Implementation note*:
-   `dispute_post_conclusion_acceptance_period` from `HostConfiguration` is used in the current Pezkuwi/Kusama
+   `dispute_post_conclusion_acceptance_period` from `HostConfiguration` is used in the current Pezkuwi/Dicle
    implementation.
 2. Remove votes from unknown validators. If there is a vote from a validator which wasn't an authority in the session
    where the dispute was raised - they are removed. Please note that this step removes only single votes instead of

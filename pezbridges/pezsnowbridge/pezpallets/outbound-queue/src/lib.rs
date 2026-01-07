@@ -410,7 +410,7 @@ pub mod pezpallet {
 		}
 
 		// 1 HEZ has 10 digits of precision
-		// 1 KSM has 12 digits of precision
+		// 1 DCL has 12 digits of precision
 		// 1 ETH has 18 digits of precision
 		pub(crate) fn convert_from_ether_decimals(value: u128) -> T::Balance {
 			let decimals = ETHER_DECIMALS.saturating_sub(T::Decimals::get()) as u32;

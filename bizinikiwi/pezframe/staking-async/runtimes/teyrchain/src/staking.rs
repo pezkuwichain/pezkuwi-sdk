@@ -43,7 +43,7 @@ pub(crate) fn enable_hez_preset(fast: bool) {
 	}
 }
 
-pub(crate) fn enable_ksm_preset(fast: bool) {
+pub(crate) fn enable_dcl_preset(fast: bool) {
 	Pages::set(&16);
 	MinerPages::set(&4);
 	MaxElectingVoters::set(&12_500);
@@ -55,21 +55,21 @@ pub(crate) fn enable_ksm_preset(fast: bool) {
 }
 
 // This macro contains all of the variable parameters that we intend to use for Pezkuwi and
-// Kusama.
+// Dicle.
 //
 // Note that this runtime has 3 broad presets:
 //
 // 1. dev: fast development preset.
 // 2. dot-size: as close to Pezkuwi as possible.
-// 3. ksm-size: as close to Kusama as possible.
+// 3. dcl-size: as close to Dicle as possible.
 //
 // The default values here are related to `dev`. The above helper functions are used at launch (see
-// `build_state` runtime-api) to enable dot/ksm presets.
+// `build_state` runtime-api) to enable dot/dcl presets.
 parameter_types! {
 	/// Number of election pages that we operate upon.
 	///
 	/// * Pezkuwi: 32 (3.2m snapshot)
-	/// * Kusama: 16 (1.6m snapshot)
+	/// * Dicle: 16 (1.6m snapshot)
 	///
 	/// Reasoning: Both leads to around 700 nominators per-page, yielding the weights in
 	/// https://github.com/pezkuwichain/pezkuwi-sdk/issues/273, the maximum of which being around 1mb
@@ -82,22 +82,22 @@ parameter_types! {
 	pub storage Pages: u32 = 4;
 
 	/// * Pezkuwi: 16 * 32 (512 blocks, 51.2m).
-	/// * Kusama: 8 * 16 (12 blocks, 12.8m).
+	/// * Dicle: 8 * 16 (12 blocks, 12.8m).
 	///
 	/// (MaxSubmissions * Pages) for both, enough to verify all solutions.
 	///
-	/// Reasoning: Less security needed in Kusama, to compensate for the shorter session duration.
+	/// Reasoning: Less security needed in Dicle, to compensate for the shorter session duration.
 	pub storage SignedValidationPhase: u32 = Pages::get() * 2;
 
 	/// * Pezkuwi: 200 blocks, 20m.
-	/// * Kusama: 100 blocks, 10m.
+	/// * Dicle: 100 blocks, 10m.
 	///
 	/// Reasoning:
 	///
 	/// * Pezkuwi wishes at least 8 submitters to be able to submit. That is  8 * 32 = 256 pages
 	///   for all submitters. Weight of each submission page is roughly 0.0007 of block weight. 200
 	///   blocks is more than enough.
-	/// * Kusama wishes at least 4 submitters to be able to submit. That is 4 * 16 = 64 pages for
+	/// * Dicle wishes at least 4 submitters to be able to submit. That is 4 * 16 = 64 pages for
 	///   all submitters. Weight of each submission page is roughly 0.0007 of block weight. 100
 	///   blocks is more than enough.
 	///
@@ -105,16 +105,16 @@ parameter_types! {
 	pub storage SignedPhase: u32 = 4 * MINUTES;
 
 	/// * Pezkuwi: 4
-	/// * Kusama: 4
+	/// * Dicle: 4
 	///
-	/// Reasoning: with 4 pages, the `ElectionScore` computed in both Kusama and Pezkuwi is pretty
+	/// Reasoning: with 4 pages, the `ElectionScore` computed in both Dicle and Pezkuwi is pretty
 	/// good. See and run `run_election_with_pages` below to see. With 4 pages, roughly 2800
 	/// nominators will be elected. This is not great for staking reward, but is good enough for
 	/// chain's economic security.
 	pub storage MinerPages: u32 = 4;
 
 	/// * Pezkuwi: 300 blocks, 30m
-	/// * Kusama: 150 blocks, 15m
+	/// * Dicle: 150 blocks, 15m
 	///
 	/// Reasoning: The only criteria is for the phase to be long enough such that the OCW miner is
 	/// able to run the mining code at least twice. Note that `OffchainRepeat` limits execution of
@@ -123,13 +123,13 @@ parameter_types! {
 	/// Benchmarks logs from tests below are:
 	///
 	/// * exec_time of pezkuwi miner in WASM with 4 pages is 27369ms
-	/// * exec_time of kusama miner in WASM with 4 pages is 23848ms
+	/// * exec_time of dicle miner in WASM with 4 pages is 23848ms
 	///
 	/// See `max_ocw_miner_pages_as_per_weights` test below.
 	pub storage UnsignedPhase: u32 = MINUTES;
 
 	/// * Pezkuwi: 22_500
-	/// * Kusama: 12_500
+	/// * Dicle: 12_500
 	///
 	/// Reasoning: Yielding  703 nominators per page in both. See [`Pages`] for more info. Path to
 	/// Upgrade: We may wish to increase the number of "active nominators" in both networks by 1)
@@ -138,7 +138,7 @@ parameter_types! {
 	pub storage MaxElectingVoters: u32 = 1000;
 
 	/// * Pezkuwi: 2000 (always equal to `staking.maxValidatorCount`)
-	/// * Kusama: 4000 (always equal to `staking.maxValidatorCount`)
+	/// * Dicle: 4000 (always equal to `staking.maxValidatorCount`)
 	///
 	/// Reasoning: As of now, we don't have a way to sort validators, so we wish to select all of
 	/// them. In case this limit is reached, governance should introduce `minValidatorBond`, and
@@ -146,20 +146,20 @@ parameter_types! {
 	/// info: SRL-417
 	pub storage TargetSnapshotPerBlock: u32 = 4000;
 
-	// NOTE: rest of the parameters are computed identically in both Kusama and Pezkuwi.
+	// NOTE: rest of the parameters are computed identically in both Dicle and Pezkuwi.
 
 	/// Allow OCW miner to at most run 4 times in the entirety of the 10m Unsigned Phase.
 	pub OffchainRepeat: u32 = UnsignedPhase::get() / 4;
 
 	/// Upper bound of `Staking.ValidatorCount`, which translates to
-	/// `ElectionProvider::DesiredTargets`. 1000 is the end-game for both Kusama and Pezkuwi for
+	/// `ElectionProvider::DesiredTargets`. 1000 is the end-game for both Dicle and Pezkuwi for
 	/// the foreseeable future.
 	pub const MaxValidatorSet: u32 = 1000;
 
 	/// Number of nominators per page of the snapshot, and consequently number of backers in the
 	/// solution.
 	///
-	/// 703 in both Pezkuwi and Kusama.
+	/// 703 in both Pezkuwi and Dicle.
 	pub VoterSnapshotPerBlock: u32 = MaxElectingVoters::get() / Pages::get();
 
 	/// In each page, we may observe up to all of the validators.
@@ -185,7 +185,7 @@ parameter_types! {
 // Signed phase parameters.
 parameter_types! {
 	/// * Pezkuwi: 16
-	/// * Kusama: 8
+	/// * Dicle: 8
 	///
 	/// Reasoning: This is double the capacity of verification. There is no point for someone to be
 	/// a submitter if they cannot be verified, yet, it is beneficial to act as a "reserve", in case
@@ -195,26 +195,26 @@ parameter_types! {
 	/// * Pezkuwi: Geometric progression with starting value 4 HEZ, common factor 2. For 16
 	///   submissions, it will be [4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384,
 	///   32768, 65536, 131072]. Sum is `262140 HEZ` for all 16 submissions.
-	/// * Kusama: Geometric progression with with starting value 0.1 KSM, common factor 4. For 8
+	/// * Dicle: Geometric progression with with starting value 0.1 DCL, common factor 4. For 8
 	///   submissions, values will be: `[0.1, 0.4, 1.6, 6.4, 25.6, 102.4, 409.6, 1638.4]`. Sum is
-	///   `2184.5 KSM` for all 8 submissions.
+	///   `2184.5 DCL` for all 8 submissions.
 	pub DepositBase: Balance = 5 * UNITS;
 
 	/// * Pezkuwi: standard byte deposit configured in PAH.
-	/// * Kusama: standard byte deposit configured in KAH.
+	/// * Dicle: standard byte deposit configured in KAH.
 	///
 	/// TODO: need a maximum solution length for each runtime.
 	pub DepositPerPage: Balance = 1 * UNITS;
 
 	/// * Pezkuwi: 20 HEZ
-	/// * Kusama: 1 KSM
+	/// * Dicle: 1 DCL
 	///
 	///
 	/// Fixed deposit for invulnerable accounts.
 	pub InvulnerableDeposit: Balance = UNITS;
 
 	/// * Pezkuwi: 10% (more restrictive, don't bail!)
-	/// * Kusama: 25%
+	/// * Dicle: 25%
 	///
 	/// Reasoning: The weight/fee of the `bail` transaction is already assuming you delete all pages
 	/// of your solution while bailing, and charges you accordingly. So the chain is being
@@ -223,7 +223,7 @@ parameter_types! {
 	pub BailoutGraceRatio: Perbill = Perbill::from_percent(5);
 
 	/// * Pezkuwi: 100%
-	/// * Kusama: 100%
+	/// * Dicle: 100%
 	///
 	/// The transaction fee of `register` takes into account the cost of possibly ejecting another
 	/// submission into account. In the scenario that the honest submitter is being ejected by an
@@ -232,12 +232,12 @@ parameter_types! {
 	pub EjectGraceRatio: Perbill = Perbill::from_percent(50);
 
 	/// * Pezkuwi: 5 DOTs per era/day
-	/// * Kusama: 1 KSM per era/6h
+	/// * Dicle: 1 DCL per era/6h
 	pub RewardBase: Balance = 10 * UNITS;
 }
 
 // * Pezkuwi: as seen here.
-// * Kusama, we will use a similar type, but with 24 as the maximum filed length.
+// * Dicle, we will use a similar type, but with 24 as the maximum filed length.
 //
 // Reasoning: using u16, we can have up to 65,536 nominators and validators represented in the
 // snapshot. If we every go beyond this, we have to first adjust this type.
@@ -418,7 +418,7 @@ parameter_types! {
 	pub const MaxControllersInDeprecationBatch: u32 = 751;
 	pub const MaxNominations: u32 = <NposCompactSolution16 as pezframe_election_provider_support::NposSolution>::LIMIT as u32;
 	// Note: In WAH, this should be set closer to the ideal era duration to trigger capping more
-	// frequently. On Kusama and Pezkuwi, a higher value like 7 × ideal_era_duration is more
+	// frequently. On Dicle and Pezkuwi, a higher value like 7 × ideal_era_duration is more
 	// appropriate.
 	pub const MaxEraDuration: u64 = RelaySessionDuration::get() as u64 * RELAY_CHAIN_SLOT_DURATION_MILLIS as u64 * SessionsPerEra::get() as u64;
 	pub MaxPruningItems: u32 = 100;
@@ -692,13 +692,13 @@ mod tests {
 		let block_weight = <Runtime as pezframe_system::Config>::BlockWeights::get().max_block;
 		let pezkuwi_signed_submission =
 			mb::weights::pezkuwi::MultiBlockSignedWeightInfo::<Runtime>::submit_page();
-		let kusama_signed_submission =
-			mb::weights::kusama::MultiBlockSignedWeightInfo::<Runtime>::submit_page();
+		let dicle_signed_submission =
+			mb::weights::dicle::MultiBlockSignedWeightInfo::<Runtime>::submit_page();
 
 		log::info!(target: "runtime", "Pezkuwi:");
 		weight_diff(block_weight, pezkuwi_signed_submission);
-		log::info!(target: "runtime", "Kusama:");
-		weight_diff(block_weight, kusama_signed_submission);
+		log::info!(target: "runtime", "Dicle:");
+		weight_diff(block_weight, dicle_signed_submission);
 	}
 
 	#[test]
@@ -718,15 +718,15 @@ mod tests {
 		});
 
 		pezsp_io::TestExternalities::default().execute_with(|| {
-			super::enable_ksm_preset(false);
+			super::enable_dcl_preset(false);
 			let duration = mb::Pezpallet::<Runtime>::average_election_duration();
-			let kusama_session = 1 * HOURS;
+			let dicle_session = 1 * HOURS;
 			log::info!(
 				target: "runtime",
-				"Kusama election duration: {:?}, session: {:?} ({} sessions)",
+				"Dicle election duration: {:?}, session: {:?} ({} sessions)",
 				duration,
-				kusama_session,
-				duration / kusama_session
+				dicle_session,
+				duration / dicle_session
 			);
 		});
 	}
@@ -745,9 +745,9 @@ mod tests {
 		for p in 1..=16 {
 			log::info!(
 				target: "runtime",
-				"exec_time of kusama miner in WASM with {} pages is {:?}ms",
+				"exec_time of dicle miner in WASM with {} pages is {:?}ms",
 				p,
-				mb::weights::kusama::MultiBlockUnsignedWeightInfo::<Runtime>::mine_solution(p).ref_time() / WEIGHT_REF_TIME_PER_MILLIS
+				mb::weights::dicle::MultiBlockUnsignedWeightInfo::<Runtime>::mine_solution(p).ref_time() / WEIGHT_REF_TIME_PER_MILLIS
 			);
 		}
 	}

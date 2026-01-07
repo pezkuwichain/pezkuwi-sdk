@@ -64,7 +64,7 @@ where
 /// w3f validators and randomly selected validators from the latest session (at
 /// #1500988).
 #[cfg(feature = "full-node")]
-pub(crate) fn kusama_hard_forks() -> Vec<pezsc_consensus_grandpa::AuthoritySetHardFork<Block>> {
+pub(crate) fn dicle_hard_forks() -> Vec<pezsc_consensus_grandpa::AuthoritySetHardFork<Block>> {
 	use pezsp_core::crypto::Ss58Codec;
 	use std::str::FromStr;
 

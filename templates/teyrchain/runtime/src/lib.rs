@@ -17,7 +17,8 @@ extern crate alloc;
 use alloc::vec::Vec;
 use smallvec::smallvec;
 
-use pezkuwi_sdk::{teyrchain_info, *};
+use pezkuwi_sdk::{pezstaging_teyrchain_info as teyrchain_info, *};
+use pezframe_support::construct_runtime;
 
 use pezsp_runtime::{
 	generic, impl_opaque_keys,
@@ -245,70 +246,38 @@ pub fn native_version() -> NativeVersion {
 }
 
 // Create the runtime by composing the FRAME pallets that were previously configured.
-#[pezframe_support::runtime]
-mod runtime {
-	#[runtime::runtime]
-	#[runtime::derive(
-		RuntimeCall,
-		RuntimeEvent,
-		RuntimeError,
-		RuntimeOrigin,
-		RuntimeFreezeReason,
-		RuntimeHoldReason,
-		RuntimeSlashReason,
-		RuntimeLockId,
-		RuntimeTask,
-		RuntimeViewFunction
-	)]
-	pub struct Runtime;
+construct_runtime!(
+	pub struct Runtime {
+		System: pezframe_system = 0,
+		TeyrchainSystem: pezcumulus_pezpallet_teyrchain_system = 1,
+		Timestamp: pezpallet_timestamp = 2,
+		TeyrchainInfo: teyrchain_info = 3,
+		WeightReclaim: pezcumulus_pezpallet_weight_reclaim = 4,
 
-	#[runtime::pezpallet_index(0)]
-	pub type System = pezframe_system;
-	#[runtime::pezpallet_index(1)]
-	pub type TeyrchainSystem = pezcumulus_pezpallet_teyrchain_system;
-	#[runtime::pezpallet_index(2)]
-	pub type Timestamp = pezpallet_timestamp;
-	#[runtime::pezpallet_index(3)]
-	pub type TeyrchainInfo = teyrchain_info;
-	#[runtime::pezpallet_index(4)]
-	pub type WeightReclaim = pezcumulus_pezpallet_weight_reclaim;
+		// Monetary stuff.
+		Balances: pezpallet_balances = 10,
+		TransactionPayment: pezpallet_transaction_payment = 11,
 
-	// Monetary stuff.
-	#[runtime::pezpallet_index(10)]
-	pub type Balances = pezpallet_balances;
-	#[runtime::pezpallet_index(11)]
-	pub type TransactionPayment = pezpallet_transaction_payment;
+		// Governance
+		Sudo: pezpallet_sudo = 15,
 
-	// Governance
-	#[runtime::pezpallet_index(15)]
-	pub type Sudo = pezpallet_sudo;
+		// Collator support. The order of these 4 are important and shall not change.
+		Authorship: pezpallet_authorship = 20,
+		CollatorSelection: pezpallet_collator_selection = 21,
+		Session: pezpallet_session = 22,
+		Aura: pezpallet_aura = 23,
+		AuraExt: pezcumulus_pezpallet_aura_ext = 24,
 
-	// Collator support. The order of these 4 are important and shall not change.
-	#[runtime::pezpallet_index(20)]
-	pub type Authorship = pezpallet_authorship;
-	#[runtime::pezpallet_index(21)]
-	pub type CollatorSelection = pezpallet_collator_selection;
-	#[runtime::pezpallet_index(22)]
-	pub type Session = pezpallet_session;
-	#[runtime::pezpallet_index(23)]
-	pub type Aura = pezpallet_aura;
-	#[runtime::pezpallet_index(24)]
-	pub type AuraExt = pezcumulus_pezpallet_aura_ext;
+		// XCM helpers.
+		XcmpQueue: pezcumulus_pezpallet_xcmp_queue = 30,
+		PezkuwiXcm: pezpallet_xcm = 31,
+		CumulusXcm: pezcumulus_pezpallet_xcm = 32,
+		MessageQueue: pezpallet_message_queue = 33,
 
-	// XCM helpers.
-	#[runtime::pezpallet_index(30)]
-	pub type XcmpQueue = pezcumulus_pezpallet_xcmp_queue;
-	#[runtime::pezpallet_index(31)]
-	pub type PezkuwiXcm = pezpallet_xcm;
-	#[runtime::pezpallet_index(32)]
-	pub type CumulusXcm = pezcumulus_pezpallet_xcm;
-	#[runtime::pezpallet_index(33)]
-	pub type MessageQueue = pezpallet_message_queue;
-
-	// Template
-	#[runtime::pezpallet_index(50)]
-	pub type TemplatePallet = pezpallet_teyrchain_template;
-}
+		// Template
+		TemplatePallet: pezpallet_teyrchain_template = 50,
+	}
+);
 
 #[docify::export(register_validate_block)]
 pezcumulus_pezpallet_teyrchain_system::register_validate_block! {

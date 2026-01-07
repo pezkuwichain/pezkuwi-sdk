@@ -54,10 +54,10 @@ pub fn yet_another_teyrchain_config(
 	chain_type: ChainType,
 	para_id: u32,
 ) -> GenericChainSpec {
-	// 	> pez_subkey inspect --network kusama --public \
+	// 	> pez_subkey inspect --network dicle --public \
 	// 6205a2a2aecb71c13d8ad3197e12c10bcdcaa0c9f176997bc236c6b39143aa15
 	//
-	// Network ID/Version: kusama
+	// Network ID/Version: dicle
 	//   Public key (hex):   0x6205a2a2aecb71c13d8ad3197e12c10bcdcaa0c9f176997bc236c6b39143aa15
 	//   Account ID:         0x6205a2a2aecb71c13d8ad3197e12c10bcdcaa0c9f176997bc236c6b39143aa15
 	//   Public key (SS58):  EnqtFmsXcGdSnWk5JWUMXyPVamjiFQurXxcNgJEg1C3sw6W

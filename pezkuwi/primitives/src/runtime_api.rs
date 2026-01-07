@@ -89,7 +89,7 @@
 //! # How versioned methods are used for `TeyrchainHost`
 //!
 //! Let's introduce two types of `TeyrchainHost` API implementation:
-//! * stable - used on stable production networks like Pezkuwi and Kusama. There is only one stable
+//! * stable - used on stable production networks like Pezkuwi and Dicle. There is only one stable
 //!   API at a single point in time.
 //! * staging - methods that are ready for production, but will be released on Pezkuwichain first.
 //!   We can batch together multiple changes and then release all of them to production, by making

@@ -2182,9 +2182,9 @@ impl_runtime_apis! {
 					log::info!(target: "runtime", "detected a fake-dev preset");
 					// noop, default values are for dev.
 				},
-				"fake-ksm" => {
-					log::info!(target: "runtime", "detected fake-ksm preset");
-					crate::staking::enable_ksm_preset(true);
+				"fake-dcl" => {
+					log::info!(target: "runtime", "detected fake-dcl preset");
+					crate::staking::enable_dcl_preset(true);
 				},
 				"fake-hez" => {
 					log::info!(target: "runtime", "detected fake-hez preset");

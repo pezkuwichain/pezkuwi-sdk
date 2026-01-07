@@ -1,7 +1,7 @@
 # PEZKUWI MAINNET ROADMAP
 
 **Oluşturulma:** 2026-01-01
-**Son Güncelleme:** 2026-01-07
+**Son Güncelleme:** 2026-01-02
 **Hedef:** %100 Mainnet Hazırlık
 **Tahmini Süre:** Faz bazlı ilerleme
 
@@ -321,111 +321,6 @@ Senkronizasyon: Tüm node'lar aynı blok numarasında ✅
 
 ---
 
-## FAZ 5: ECOSYSTEM & NPM PACKAGES (IN PROGRESS - 2026-01-05)
-
-### 5.1 NPM Package Publishing
-
-**Hedef:** @pezkuwi/* namespace altında tüm JavaScript/TypeScript paketlerini yayınlamak
-
-#### Yayınlanan Paketler (pezkuwi-common - 20 paket) ✅
-- [x] @pezkuwi/util@14.0.5
-- [x] @pezkuwi/util-crypto@14.0.5
-- [x] @pezkuwi/keyring@14.0.5
-- [x] @pezkuwi/networks@14.0.5
-- [x] @pezkuwi/hw-ledger@14.0.5
-- [x] @pezkuwi/hw-ledger-transports@14.0.5
-- [x] @pezkuwi/x-* packages (10 paket)
-- [x] @pezkuwi/wasm-* packages (6 paket)
-- [x] @pezkuwi/dev packages (3 paket)
-
-#### Bekleyen Paketler (pezkuwi-api - 13 paket) ⏳
-**Durum:** NPM rate limit nedeniyle bekleniyor (2026-01-06'da yayınlanacak)
-
-- [ ] @pezkuwi/types-create@16.5.5
-- [ ] @pezkuwi/types-known@16.5.5
-- [ ] @pezkuwi/types@16.5.5
-- [ ] @pezkuwi/types-augment@16.5.5
-- [ ] @pezkuwi/rpc-provider@16.5.5
-- [ ] @pezkuwi/rpc-core@16.5.5
-- [ ] @pezkuwi/rpc-augment@16.5.5
-- [ ] @pezkuwi/api-base@16.5.5
-- [ ] @pezkuwi/api-augment@16.5.5
-- [ ] @pezkuwi/api-derive@16.5.5
-- [ ] @pezkuwi/api-contract@16.5.5
-- [ ] @pezkuwi/api@16.5.5
-- [ ] @pezkuwi/typegen@16.5.5
-
-**NPM Rate Limit Sorunu (2026-01-05):**
-```
-Error: E429 Too Many Requests
-Sebep: NPM free tier günlük publish limiti
-Çözüm: Ücretli hesaba geçildi, 24 saat sonra rate limit sıfırlanacak
-Token: [REDACTED] (bypass authentication)
-```
-
-**Başarıyla Yayınlanan API Paketleri (2 paket):**
-- [x] @pezkuwi/types-support@16.5.5
-- [x] @pezkuwi/types-codec@16.5.5
-
-### 5.2 pwap Application Migration ✅
-
-**pwap:** P2P Wallet Application Platform
-**Dizinler:** /home/mamostehp/pwap/
-**Ürünler:** pezkuwi-sdk-ui (React), web (Vite+React), mobile (React Native+Expo)
-
-#### Migration Tamamlandı (2026-01-05):
-- [x] 59 package.json dosyasında @polkadot → @pezkuwi değişiklikleri
-- [x] 1510 kaynak dosyada import değişiklikleri:
-  - `from '@polkadot/` → `from '@pezkuwi/`
-  - `import('@polkadot/` → `import('@pezkuwi/`
-  - `require('@polkadot` → `require('@pezkuwi`
-- [x] TypeScript reference comments güncellendi
-- [x] jest.mock() statements güncellendi
-- [x] packageInfo.ts dosyaları güncellendi
-- [x] vite.config.ts optimizasyon ayarları güncellendi
-
-**Geçici Durum:**
-- web/supabase Deno edge functions → @polkadot/api kullanıyor (esm.sh CDN)
-- @pezkuwi/extension-dapp henüz yayınlanmadı → @polkadot/extension-dapp kullanılıyor
-
-**Build Test:** API paketleri yayınlandıktan sonra yapılacak
-
-### 5.3 Rebrand Repo'lar
-
-| Repo | Paket Sayısı | Durum | NPM Status |
-|------|-------------|-------|------------|
-| pezkuwi-common | 20 | ✅ Tamamlandı | ✅ Yayınlandı |
-| pezkuwi-api | 15 | ✅ Tamamlandı | ⏳ 13 paket bekliyor |
-| pezkuwi-dev | 3 | ✅ Tamamlandı | ✅ Yayınlandı |
-| **TOPLAM** | **38** | **%100** | **%66** |
-
-### Hedef:
-- [x] Rebrand tamamlandı (3 repo, 38 paket)
-- [ ] Tüm NPM paketleri yayınlandı (2026-01-06'da tamamlanacak)
-- [ ] pwap build test başarılı
-- [ ] Production deployment
-
----
-
-## FAZ 6: VPS TESTNET DEPLOYMENT
-
-### 6.1 VPS Infrastructure
-**Hedef:** ALPHA fazı için 4 validator node deployment
-
-- [ ] VPS sunucular hazır (4 adet)
-- [ ] Monitoring kurulumu (Prometheus + Grafana)
-- [ ] Backup stratejisi
-- [ ] Node deployment scripts
-
-### 6.2 ALPHA Network (4 Validator)
-**Başarı Kriterleri:**
-- [ ] Uzak node'lar bağlanır
-- [ ] Telemetry çalışır
-- [ ] RPC endpoints aktif
-- [ ] Public testnet erişilebilir
-
----
-
 ## FAZ 4: MAINNET HAZIRLIK & LANÇ
 
 ### 4.1 Final Checklist
@@ -461,9 +356,9 @@ Token: [REDACTED] (bypass authentication)
 | FAZ 5 | ✅ TAMAMLANDI | %100 (NPM paketleri ✅, pwap migration ✅) |
 | FAZ 6 | PENDING | %0 (VPS testnet) |
 | FAZ 7 | ✅ TAMAMLANDI | %100 (JS/TS ecosystem rebrand ✅) |
-| FAZ 8 | 🔄 IN PROGRESS | %0 (Kusama → Dicle rebrand) |
+| FAZ 8 | ✅ TAMAMLANDI | %100 (Kusama → Dicle rebrand + cargo check ✅) |
 | FAZ 4 | PENDING | %0 (Mainnet lansman) |
-| **TOPLAM** | - | **%78** |
+| **TOPLAM** | - | **~%83** |
 
 ---
 
@@ -505,6 +400,8 @@ Token: [REDACTED] (bypass authentication)
 | 2026-01-07 | pwap/web: @pezkuwi paketleriyle build başarılı |
 | 2026-01-07 | GitHub Actions düzeltildi (Lock Threads + Build workflows) |
 | 2026-01-07 | README'ler güncellendi (Dijital Kurdistan Tech Institute branding) |
+| 2026-01-07 | **FAZ 8 TAMAMLANDI** - Kusama → Dicle rebrand yapıldı |
+| 2026-01-07 | `cargo check --workspace` başarılı - Finished çıktısı alındı ✅ |
 
 ---
 
@@ -578,7 +475,7 @@ Token: [REDACTED] (bypass authentication)
 
 ---
 
-## FAZ 8: KUSAMA → DICLE REBRAND (BEKLEMEDE)
+## FAZ 8: KUSAMA → DICLE REBRAND ✅ TAMAMLANDI (2026-01-07)
 
 ### 8.1 Kapsam
 
@@ -588,7 +485,7 @@ pezkuwi-sdk içindeki tüm "kusama/Kusama" referanslarının "dicle/Dicle" olara
 - kusama → dicle
 - Kusama → Dicle
 
-### 8.2 Etkilenen Alanlar (Tahmini)
+### 8.2 Etkilenen Alanlar
 - vendor/pezkuwi-subxt/ (metadata, tests)
 - vendor/pezkuwi-zombienet-sdk/ (configuration)
 - bizinikiwi/ (client, pezframe, primitives)
@@ -596,62 +493,13 @@ pezkuwi-sdk içindeki tüm "kusama/Kusama" referanslarının "dicle/Dicle" olara
 - Test dosyaları ve benchmark'lar
 
 ### 8.3 Durum
-⏳ **BEKLEMEDE** - JS/TS ecosystem rebrand tamamlandıktan sonra başlanacak
+✅ **TAMAMLANDI** (2026-01-07)
+- Tüm kusama → dicle rebrand'i yapıldı
+- `cargo check --workspace` başarılı ✅ (Finished çıktısı alındı)
 
 ---
 
 ## ÖNEMLİ BİLGİLER - SONRAKİ CLAUDE İÇİN
-
-### NPM Package Publishing Durumu (2026-01-05)
-
-**Yayınlanan Paketler (23/38):**
-- pezkuwi-common: 20 paket @ 14.0.5 ✅
-- pezkuwi-dev: 3 paket @ 0.84.3 ✅
-- pezkuwi-api: 2/15 paket @ 16.5.5 ⏳
-
-**Bekleyen Paketler (13 paket - 2026-01-06 sabah):**
-```bash
-cd /home/mamostehp/pezkuwi-api
-
-# Yayınlanacak paketler (sırayla dependency order'a göre):
-types-create, types-known, types, types-augment,
-rpc-provider, rpc-core, rpc-augment,
-api-base, api-augment, api-derive, api-contract,
-api, typegen
-
-# NPM Token (bypass authentication):
-export NPM_TOKEN="[REDACTED]"
-echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
-
-# Publish script:
-/tmp/publish-with-retry.sh
-```
-
-**Rate Limit Sorunu:**
-- NPM free tier: Günlük publish limiti var
-- Çözüm: Pro hesaba geçildi, 24 saat sonra (yarın sabah) sıfırlanacak
-- Her paket için 60 saniye bekle, rate limit hatası alırsa exponential backoff uygula
-
-### pwap Migration Durumu (2026-01-05)
-
-**Tamamlanan:**
-- 59 package.json dosyası: @polkadot → @pezkuwi ✅
-- 1510 kaynak dosya: import statements güncellendi ✅
-- TypeScript references, jest mocks, packageInfo güncellendi ✅
-
-**Beklenen:**
-- API paketleri yayınlanınca: `yarn install` ve `yarn build` test et
-- @pezkuwi/extension-dapp paketi henüz yok (geçici olarak @polkadot/extension-dapp kullanılıyor)
-
-**pwap Dizin Yapısı:**
-```
-/home/mamostehp/pwap/
-├── web/              # Vite + React (wallet web app)
-├── mobile/           # React Native + Expo (wallet mobile app)
-├── pezkuwi-sdk-ui/   # React UI components (fork of polkadot-js/apps)
-├── backend/          # Backend services
-└── shared/           # Shared utilities
-```
 
 ### Mevcut Network Durumu (2026-01-02)
 **DEV ve LOCAL fazları tamamlandı:**

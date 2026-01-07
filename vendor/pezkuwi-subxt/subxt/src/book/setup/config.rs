@@ -17,7 +17,7 @@
 //!
 //! We now walk through creating a custom [`crate::config::Config`] for a parachain, using the
 //! ["Statemint"](https://parachains.info/details/statemint) parachain, also known as "Asset Hub", as an example. It
-//! is currently (as of 2023-06-26) deployed on Pezkuwi and [Kusama (as "Statemine")](https://parachains.info/details/statemine).
+//! is currently (as of 2023-06-26) deployed on Pezkuwi and [Dicle (as "Statemine")](https://parachains.info/details/statemine).
 //!
 //! To construct a valid [`crate::config::Config`] implementation, we need to find out which types
 //! to use for `AccountId`, `Hasher`, etc. For this, we need to take a look at the source code of Statemint, which is currently a part of the [Pezpezcumulus Github repository](https://github.com/pezkuwichain/pezcumulus).
