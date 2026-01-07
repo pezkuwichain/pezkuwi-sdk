@@ -29,7 +29,7 @@ pezsp-runtime = { features = ["serde"], workspace = true }
 pezsp-std = { workspace = true }
 
 [dev-dependencies]
-# bp-test-utils = { workspace = true, default-features = true }
+pezbp-test-utils = { workspace = true, default-features = true }
 hex = { workspace = true, default-features = true }
 hex-literal = { workspace = true, default-features = true }
 
@@ -48,7 +48,7 @@ std = [
 	"serde/std",
 ]
 runtime-benchmarks = [
-	# "pezbp-test-utils/runtime-benchmarks",
+	"pezbp-test-utils/runtime-benchmarks",
 	"pezbp-runtime/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
 	"pezsp-consensus-grandpa/runtime-benchmarks",

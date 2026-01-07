@@ -39,7 +39,7 @@ pezsp-core = { workspace = true, default-features = false, optional = true }
 pezsp-io = { workspace = true, default-features = false, optional = true }
 
 [dev-dependencies]
-# pezpallet-sudo = { workspace = true, default-features = false } 
+pezpallet-sudo = { workspace = true, default-features = false } 
 
 [features]
 default = ["std"]

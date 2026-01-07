@@ -34,8 +34,8 @@ pezsp-weights = { features = ["serde"], workspace = true }
 scale-info = { features = ["derive", "serde"], workspace = true }
 serde = { features = ["alloc", "derive"], workspace = true }
 
-# Dev-dependencies with test-runtime-client moved to integration tests to break circular dependency
 [dev-dependencies]
+bizinikiwi-test-runtime-client = { workspace = true }
 criterion = { workspace = true, default-features = true }
 pezsp-externalities = { workspace = true, default-features = true }
 pezsp-tracing = { workspace = true, default-features = true }
@@ -55,6 +55,7 @@ std = [
 	"serde/std",
 ]
 runtime-benchmarks = [
+	"bizinikiwi-test-runtime-client/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
 	"pezsp-io/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",

@@ -37,14 +37,14 @@ pezsp-runtime = { workspace = true, default-features = true }
 
 [dev-dependencies]
 assert_matches = { workspace = true }
-# bizinikiwi-test-runtime-client = { workspace = true }
+bizinikiwi-test-runtime-client = { workspace = true }
 pezsc-transaction-pool = { workspace = true, default-features = true }
 pezsp-tracing = { workspace = true, default-features = true }
 tokio = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-	# "bizinikiwi-test-runtime-client/runtime-benchmarks",
+	"bizinikiwi-test-runtime-client/runtime-benchmarks",
 	"pezframe-system-rpc-runtime-api/runtime-benchmarks",
 	"pezsc-rpc-api/runtime-benchmarks",
 	"pezsc-transaction-pool-api/runtime-benchmarks",

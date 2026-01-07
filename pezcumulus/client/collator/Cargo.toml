@@ -45,22 +45,22 @@ pezsp-state-machine = { workspace = true, default-features = true }
 pezsp-tracing = { workspace = true, default-features = true }
 
 # Pezkuwi
-# pezkuwi-node-subsystem-test-helpers = { workspace = true }
+pezkuwi-node-subsystem-test-helpers = { workspace = true }
 
 # Pezcumulus
-# pezcumulus-test-client = { workspace = true }
-# pezcumulus-test-relay-sproof-builder = { workspace = true, default-features = true }
-# pezcumulus-test-runtime = { workspace = true }
+pezcumulus-test-client = { workspace = true }
+pezcumulus-test-relay-sproof-builder = { workspace = true, default-features = true }
+pezcumulus-test-runtime = { workspace = true }
 
 [features]
 runtime-benchmarks = [
 	"pezcumulus-client-consensus-common/runtime-benchmarks",
 	"pezcumulus-client-network/runtime-benchmarks",
 	"pezcumulus-primitives-core/runtime-benchmarks",
-	# "pezcumulus-test-client/runtime-benchmarks",
-	# "pezcumulus-test-relay-sproof-builder/runtime-benchmarks",
-	# "pezcumulus-test-runtime/runtime-benchmarks",
-	# "pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
+	"pezcumulus-test-client/runtime-benchmarks",
+	"pezcumulus-test-relay-sproof-builder/runtime-benchmarks",
+	"pezcumulus-test-runtime/runtime-benchmarks",
+	"pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
 	"pezkuwi-node-subsystem/runtime-benchmarks",
 	"pezkuwi-overseer/runtime-benchmarks",
 	"pezkuwi-pez-node-primitives/runtime-benchmarks",

@@ -3,7 +3,7 @@ use std::{path::PathBuf, time::Instant};
 use configuration::{NetworkConfig, NetworkConfigBuilder};
 use futures::{stream::StreamExt, try_join};
 use orchestrator::{AddCollatorOptions, AddNodeOptions};
-use zombienet_sdk::environment::{get_attach_fn, get_spawn_fn};
+use pezkuwi_zombienet_sdk::environment::{get_attach_fn, get_spawn_fn};
 
 fn small_network() -> NetworkConfig {
 	NetworkConfigBuilder::new()

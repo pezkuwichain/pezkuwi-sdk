@@ -23,8 +23,8 @@ pezframe-system = { workspace = true }
 pezsp-runtime = { workspace = true }
 scale-info = { features = ["derive"], workspace = true }
 
-# pezframe-support-test moved to integration tests to break circular dependency
 [dev-dependencies]
+pezframe-support-test = { workspace = true }
 pezpallet-balances = { workspace = true, default-features = true }
 pezsp-core = { workspace = true, default-features = true }
 pezsp-io = { workspace = true, default-features = true }

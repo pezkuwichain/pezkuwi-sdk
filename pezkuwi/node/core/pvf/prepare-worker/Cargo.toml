@@ -38,7 +38,7 @@ tikv-jemalloc-ctl = { workspace = true }
 
 [dev-dependencies]
 criterion = { features = ["cargo_bench_support"], workspace = true }
-# pezkuwichain-runtime = { workspace = true }
+pezkuwichain-runtime = { workspace = true }
 
 [features]
 builder = []
@@ -51,7 +51,7 @@ runtime-benchmarks = [
 	"gum/runtime-benchmarks",
 	"pezkuwi-node-core-pvf-common/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
-	# "pezkuwichain-runtime/runtime-benchmarks",
+	"pezkuwichain-runtime/runtime-benchmarks",
 ]
 std = [
 	"codec/std",

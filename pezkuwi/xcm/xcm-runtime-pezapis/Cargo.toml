@@ -27,12 +27,12 @@ hex-literal = { workspace = true }
 pezframe-system = { workspace = true }
 pezpallet-assets = { workspace = true }
 pezpallet-balances = { workspace = true }
-# pezpallet-xcm = { workspace = true }
+pezpallet-xcm = { workspace = true }
 pezsp-io = { workspace = true }
 pezsp-tracing = { workspace = true, default-features = true }
 tracing = { workspace = true }
 xcm-builder = { workspace = true }
-# xcm-pez-simulator = { workspace = true, default-features = true }
+xcm-pez-simulator = { workspace = true, default-features = true }
 
 [features]
 default = ["std"]
@@ -42,7 +42,7 @@ std = [
 	"pezframe-system/std",
 	"pezpallet-assets/std",
 	"pezpallet-balances/std",
-	# "pezpallet-xcm/std",
+	"pezpallet-xcm/std",
 	"pezsp-api/std",
 	"pezsp-io/std",
 	"pezsp-weights/std",
@@ -50,6 +50,7 @@ std = [
 	"tracing/std",
 	"xcm-builder/std",
 	"xcm-executor/std",
+	"xcm-pez-simulator/std",
 	"xcm/std",
 ]
 runtime-benchmarks = [
@@ -57,12 +58,12 @@ runtime-benchmarks = [
 	"pezframe-system/runtime-benchmarks",
 	"pezpallet-assets/runtime-benchmarks",
 	"pezpallet-balances/runtime-benchmarks",
-	# "pezpallet-xcm/runtime-benchmarks",
+	"pezpallet-xcm/runtime-benchmarks",
 	"pezsp-api/runtime-benchmarks",
 	"pezsp-io/runtime-benchmarks",
 	"xcm-builder/runtime-benchmarks",
 	"xcm-executor/runtime-benchmarks",
-	# "xcm-pez-simulator/runtime-benchmarks",
+	"xcm-pez-simulator/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
 ]
 try-runtime = [

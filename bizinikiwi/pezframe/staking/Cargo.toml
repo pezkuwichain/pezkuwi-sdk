@@ -35,8 +35,8 @@ serde = { features = ["alloc", "derive"], workspace = true }
 pezframe-benchmarking = { optional = true, workspace = true }
 rand_chacha = { optional = true, workspace = true }
 
-# bizinikiwi-test-utils moved to integration tests to break circular dependency
 [dev-dependencies]
+bizinikiwi-test-utils = { workspace = true }
 pezframe-benchmarking = { workspace = true, default-features = true }
 pezframe-election-provider-support = { workspace = true, default-features = true }
 pezframe-support = { features = [

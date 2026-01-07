@@ -24,9 +24,9 @@ pezkuwi-primitives = { workspace = true, default-features = true }
 
 [dev-dependencies]
 assert_matches = { workspace = true }
-# pezkuwi-node-subsystem-test-helpers = { workspace = true }
+pezkuwi-node-subsystem-test-helpers = { workspace = true }
 pezkuwi-primitives = { workspace = true, features = ["test"] }
-# pezkuwi-primitives-test-helpers = { workspace = true }
+pezkuwi-primitives-test-helpers = { workspace = true }
 pezsp-core = { workspace = true, default-features = true }
 pezsp-tracing = { workspace = true }
 rand = { workspace = true }
@@ -35,10 +35,10 @@ rstest = { workspace = true }
 [features]
 runtime-benchmarks = [
 	"gum/runtime-benchmarks",
-	# "pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
+	"pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
 	"pezkuwi-node-subsystem-util/runtime-benchmarks",
 	"pezkuwi-node-subsystem/runtime-benchmarks",
-	# "pezkuwi-primitives-test-helpers/runtime-benchmarks",
+	"pezkuwi-primitives-test-helpers/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
 ]
 std = [

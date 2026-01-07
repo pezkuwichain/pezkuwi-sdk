@@ -53,9 +53,9 @@ tt-call = { workspace = true }
 
 aquamarine = { workspace = true }
 
-# Dev-dependencies with pezframe-system moved to pezframe-support-test to break circular dependency
 [dev-dependencies]
 Inflector = { workspace = true }
+pezframe-system = { workspace = true, default-features = true }
 pezsp-crypto-hashing = { workspace = true, default-features = true }
 pretty_assertions = { workspace = true }
 
@@ -92,6 +92,7 @@ std = [
 runtime-benchmarks = [
 	"pez-binary-merkle-tree/runtime-benchmarks",
 	"pezframe-support-procedural/runtime-benchmarks",
+	"pezframe-system/runtime-benchmarks",
 	"pezsp-api/runtime-benchmarks",
 	"pezsp-genesis-builder/runtime-benchmarks",
 	"pezsp-inherents/runtime-benchmarks",

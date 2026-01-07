@@ -40,8 +40,8 @@ pezsp-core = { optional = true, workspace = true }
 pezsp-io = { optional = true, workspace = true }
 pezsp-tracing = { optional = true, workspace = true }
 
-# bizinikiwi-test-utils moved to integration tests to break circular dependency
 [dev-dependencies]
+bizinikiwi-test-utils = { workspace = true }
 pezframe-benchmarking = { workspace = true, default-features = true }
 pezframe-election-provider-support = { workspace = true, default-features = true }
 pezpallet-balances = { workspace = true, default-features = true }

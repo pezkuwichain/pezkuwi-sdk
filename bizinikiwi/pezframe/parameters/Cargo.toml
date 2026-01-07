@@ -28,9 +28,9 @@ pezframe-system = { workspace = true }
 pezsp-core = { workspace = true }
 pezsp-runtime = { workspace = true }
 
-# pezpallet-example-basic moved to integration tests to break circular dependency
 [dev-dependencies]
 pezpallet-balances = { workspace = true, default-features = true }
+pezpallet-example-basic = { workspace = true, default-features = true }
 pezsp-io = { workspace = true, default-features = true }
 
 [features]
@@ -50,6 +50,7 @@ runtime-benchmarks = [
 	"pezframe-support/runtime-benchmarks",
 	"pezframe-system/runtime-benchmarks",
 	"pezpallet-balances/runtime-benchmarks",
+	"pezpallet-example-basic/runtime-benchmarks",
 	"pezsp-io/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]

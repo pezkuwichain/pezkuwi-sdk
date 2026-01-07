@@ -1,7 +1,7 @@
 use std::time::Instant;
 
 use configuration::{NetworkConfig, NetworkConfigBuilder};
-use zombienet_sdk::environment::get_spawn_fn;
+use pezkuwi_zombienet_sdk::environment::get_spawn_fn;
 
 fn small_network() -> NetworkConfig {
 	NetworkConfigBuilder::new()

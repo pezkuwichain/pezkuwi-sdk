@@ -25,8 +25,8 @@ pezsp-runtime = { workspace = true }
 pezsp-weights = { workspace = true }
 scale-info = { features = ["derive"], workspace = true }
 
-# bizinikiwi-test-utils moved to integration tests to break circular dependency
 [dev-dependencies]
+bizinikiwi-test-utils = { workspace = true }
 pezpallet-preimage = { workspace = true, default-features = true }
 pezsp-core = { workspace = true, default-features = true }
 
