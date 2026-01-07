@@ -61,9 +61,9 @@ std = [
 	"tracing/std",
 	"xcm-builder/std",
 	"xcm-executor/std",
+	"xcm-pez-simulator/std",
 	"xcm-runtime-pezapis/std",
 	"xcm/std",
-	"xcm-pez-simulator/std"
 ]
 runtime-benchmarks = [
 	"pezframe-benchmarking/runtime-benchmarks",
@@ -93,9 +93,9 @@ try-runtime = [
 	"pezsp-runtime/try-runtime",
 	"xcm-builder/try-runtime",
 	"xcm-executor/try-runtime",
+	"xcm-pez-simulator/try-runtime",
 	"xcm-runtime-pezapis/try-runtime",
 	"xcm/try-runtime",
-	"xcm-pez-simulator/try-runtime"
 ]
 serde = [
 	"bounded-collections/serde",

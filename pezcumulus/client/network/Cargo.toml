@@ -80,21 +80,25 @@ runtime-benchmarks = [
 	"pezsp-version/runtime-benchmarks",
 ]
 std = [
+	"pezcumulus-relay-chain-inprocess-interface/std",
 	"pezcumulus-relay-chain-interface/std",
+	"pezcumulus-test-service/std",
 	"pezkuwi-node-subsystem/std",
 	"pezkuwi-pez-node-primitives/std",
+	"pezkuwi-primitives-test-helpers/std",
+	"pezkuwi-test-client/std",
 	"pezsc-client-api/std",
 	"pezsc-network/std",
 	"pezsp-blockchain/std",
 	"pezsp-consensus/std",
-	"pezcumulus-relay-chain-inprocess-interface/std",
-	"pezcumulus-test-service/std",
-	"pezkuwi-primitives-test-helpers/std",
-	"pezkuwi-test-client/std"
 ]
 try-runtime = [
 	"pezcumulus-primitives-core/try-runtime",
+	"pezcumulus-relay-chain-inprocess-interface/try-runtime",
+	"pezcumulus-test-service/try-runtime",
+	"pezkuwi-primitives-test-helpers/try-runtime",
 	"pezkuwi-primitives/try-runtime",
+	"pezkuwi-test-client/try-runtime",
 	"pezkuwi-teyrchain-primitives/try-runtime",
 	"pezsc-client-api/try-runtime",
 	"pezsc-network/try-runtime",
@@ -104,9 +108,5 @@ try-runtime = [
 	"pezsp-keyring/try-runtime",
 	"pezsp-runtime/try-runtime",
 	"pezsp-version/try-runtime",
-	"pezcumulus-relay-chain-inprocess-interface/try-runtime",
-	"pezcumulus-test-service/try-runtime",
-	"pezkuwi-primitives-test-helpers/try-runtime",
-	"pezkuwi-test-client/try-runtime"
 ]
 serde = []

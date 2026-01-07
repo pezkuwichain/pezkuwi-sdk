@@ -231,6 +231,7 @@ runtime-benchmarks = [
 	"pez-node-testing/runtime-benchmarks",
 	"pez-subkey/runtime-benchmarks",
 	"pezframe-benchmarking-cli?/runtime-benchmarks",
+	"pezkuwi-sdk/runtime-benchmarks",
 	"pezkuwi-subxt-signer/runtime-benchmarks",
 	"pezmmr-gadget/runtime-benchmarks",
 	"pezmmr-rpc/runtime-benchmarks",
@@ -291,7 +292,6 @@ runtime-benchmarks = [
 	"pezsp-timestamp/runtime-benchmarks",
 	"pezsp-transaction-storage-proof/runtime-benchmarks",
 	"remote-externalities/runtime-benchmarks",
-	"pezkuwi-sdk/runtime-benchmarks"
 ]
 storage-benchmark = ["pezframe-benchmarking-cli/storage-benchmark"]
 try-runtime = [
@@ -307,6 +307,7 @@ try-runtime = [
 	"pez-node-rpc/try-runtime",
 	"pez-node-testing/try-runtime",
 	"pezframe-benchmarking-cli?/try-runtime",
+	"pezkuwi-sdk/try-runtime",
 	"pezmmr-gadget/try-runtime",
 	"pezmmr-rpc/try-runtime",
 	"pezpallet-transaction-payment-rpc/try-runtime",
@@ -362,7 +363,6 @@ try-runtime = [
 	"pezsp-timestamp/try-runtime",
 	"pezsp-transaction-storage-proof/try-runtime",
 	"remote-externalities/try-runtime",
-	"pezkuwi-sdk/try-runtime"
 ]
 std = [
 	"bizinikiwi-cli-test-utils/std",

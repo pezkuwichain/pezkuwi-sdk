@@ -51,10 +51,10 @@ runtime-benchmarks = [
 std = [
 	"gum/std",
 	"pezkuwi-node-metrics/std",
+	"pezkuwi-node-subsystem-test-helpers/std",
 	"pezkuwi-node-subsystem-types/std",
 	"pezkuwi-node-subsystem/std",
 	"pezkuwi-pez-node-primitives/std",
-	"pezkuwi-node-subsystem-test-helpers/std",
-	"pezkuwi-primitives-test-helpers/std"
+	"pezkuwi-primitives-test-helpers/std",
 ]
 serde = []

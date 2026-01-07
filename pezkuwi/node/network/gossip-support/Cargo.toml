@@ -60,12 +60,12 @@ runtime-benchmarks = [
 std = [
 	"gum/std",
 	"pezkuwi-node-network-protocol/std",
+	"pezkuwi-node-subsystem-test-helpers/std",
 	"pezkuwi-node-subsystem-util/std",
 	"pezkuwi-node-subsystem/std",
 	"pezsc-network/std",
 	"rand/std",
 	"rand_chacha/std",
-	"pezkuwi-node-subsystem-test-helpers/std"
 ]
 serde = []
 with-tracing = []

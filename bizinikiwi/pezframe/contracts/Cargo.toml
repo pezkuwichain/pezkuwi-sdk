@@ -80,6 +80,7 @@ std = [
 	"pezframe-support/std",
 	"pezframe-system/std",
 	"pezpallet-balances?/std",
+	"pezpallet-contracts-fixtures/std",
 	"pezpallet-contracts-uapi/std",
 	"pezpallet-insecure-randomness-collective-flip/std",
 	"pezpallet-proxy/std",
@@ -97,7 +98,6 @@ std = [
 	"wasmi/std",
 	"xcm-builder/std",
 	"xcm/std",
-	"pezpallet-contracts-fixtures/std"
 ]
 runtime-benchmarks = [
 	"pezframe-benchmarking/runtime-benchmarks",
@@ -120,6 +120,7 @@ try-runtime = [
 	"pezframe-support/try-runtime",
 	"pezframe-system/try-runtime",
 	"pezpallet-balances/try-runtime",
+	"pezpallet-contracts-fixtures/try-runtime",
 	"pezpallet-insecure-randomness-collective-flip/try-runtime",
 	"pezpallet-proxy/try-runtime",
 	"pezpallet-timestamp/try-runtime",
@@ -128,7 +129,6 @@ try-runtime = [
 	"pezsp-runtime/try-runtime",
 	"xcm-builder/try-runtime",
 	"xcm/try-runtime",
-	"pezpallet-contracts-fixtures/try-runtime"
 ]
 serde = [
 	"array-bytes/serde",

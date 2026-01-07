@@ -48,11 +48,11 @@ runtime-benchmarks = [
 std = [
 	"bitvec/std",
 	"gum/std",
+	"pezkuwi-node-subsystem-test-helpers/std",
 	"pezkuwi-node-subsystem-util/std",
 	"pezkuwi-node-subsystem/std",
 	"pezkuwi-pez-node-primitives/std",
+	"pezkuwi-primitives-test-helpers/std",
 	"pezsc-consensus-slots/std",
-	"pezkuwi-node-subsystem-test-helpers/std",
-	"pezkuwi-primitives-test-helpers/std"
 ]
 serde = []

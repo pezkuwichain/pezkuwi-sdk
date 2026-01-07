@@ -59,12 +59,12 @@ std = [
 	"gum/std",
 	"pezkuwi-node-metrics/std",
 	"pezkuwi-node-network-protocol/std",
+	"pezkuwi-node-subsystem-test-helpers/std",
 	"pezkuwi-node-subsystem-util/std",
 	"pezkuwi-node-subsystem/std",
 	"pezkuwi-overseer/std",
+	"pezkuwi-primitives-test-helpers/std",
 	"pezsc-network/std",
 	"pezsp-consensus/std",
-	"pezkuwi-node-subsystem-test-helpers/std",
-	"pezkuwi-primitives-test-helpers/std"
 ]
 serde = []

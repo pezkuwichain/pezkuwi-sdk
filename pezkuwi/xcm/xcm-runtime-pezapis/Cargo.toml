@@ -71,12 +71,12 @@ try-runtime = [
 	"pezframe-system/try-runtime",
 	"pezpallet-assets/try-runtime",
 	"pezpallet-balances/try-runtime",
+	"pezpallet-xcm/try-runtime",
 	"pezsp-api/try-runtime",
 	"xcm-builder/try-runtime",
 	"xcm-executor/try-runtime",
+	"xcm-pez-simulator/try-runtime",
 	"xcm/try-runtime",
-	"pezpallet-xcm/try-runtime",
-	"xcm-pez-simulator/try-runtime"
 ]
 serde = []
 experimental = []

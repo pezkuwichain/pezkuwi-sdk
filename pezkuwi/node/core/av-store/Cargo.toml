@@ -54,13 +54,13 @@ runtime-benchmarks = [
 std = [
 	"gum/std",
 	"pezkuwi-erasure-coding/std",
+	"pezkuwi-node-subsystem-test-helpers/std",
 	"pezkuwi-node-subsystem-util/std",
 	"pezkuwi-node-subsystem/std",
 	"pezkuwi-pez-node-primitives/std",
+	"pezkuwi-primitives-test-helpers/std",
 	"pezsp-consensus/std",
 	"pezsp-tracing/std",
-	"pezkuwi-node-subsystem-test-helpers/std",
-	"pezkuwi-primitives-test-helpers/std"
 ]
 serde = []
 with-tracing = []

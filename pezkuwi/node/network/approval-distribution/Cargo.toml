@@ -61,15 +61,15 @@ std = [
 	"gum/std",
 	"pezkuwi-node-metrics/std",
 	"pezkuwi-node-network-protocol/std",
+	"pezkuwi-node-subsystem-test-helpers/std",
 	"pezkuwi-node-subsystem-util/std",
 	"pezkuwi-node-subsystem/std",
 	"pezkuwi-pez-node-primitives/std",
+	"pezkuwi-primitives-test-helpers/std",
 	"pezsc-keystore/std",
 	"pezsp-tracing/std",
 	"rand_core/std",
 	"schnorrkel/std",
-	"pezkuwi-node-subsystem-test-helpers/std",
-	"pezkuwi-primitives-test-helpers/std"
 ]
 serde = []
 with-tracing = []

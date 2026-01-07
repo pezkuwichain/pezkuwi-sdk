@@ -49,10 +49,10 @@ std = [
 	"codec/std",
 	"gum/std",
 	"pezkuwi-erasure-coding/std",
+	"pezkuwi-node-subsystem-test-helpers/std",
 	"pezkuwi-node-subsystem-util/std",
 	"pezkuwi-node-subsystem/std",
 	"pezkuwi-pez-node-primitives/std",
-	"pezkuwi-node-subsystem-test-helpers/std",
-	"pezkuwi-primitives-test-helpers/std"
+	"pezkuwi-primitives-test-helpers/std",
 ]
 serde = []
