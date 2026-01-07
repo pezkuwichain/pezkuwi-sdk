@@ -139,9 +139,9 @@ xcm-runtime-pezapis = { workspace = true, default-features = true }
 
 [dev-dependencies]
 assert_matches = { workspace = true }
-# pezkuwi-node-subsystem-test-helpers = { workspace = true }
-# pezkuwi-primitives-test-helpers = { workspace = true }
-# pezkuwi-test-client = { workspace = true }
+pezkuwi-node-subsystem-test-helpers = { workspace = true }
+pezkuwi-primitives-test-helpers = { workspace = true }
+pezkuwi-test-client = { workspace = true }
 pezsp-tracing = { workspace = true }
 tempfile = { workspace = true }
 
@@ -229,18 +229,18 @@ runtime-benchmarks = [
 	"pezkuwi-node-core-runtime-api?/runtime-benchmarks",
 	"pezkuwi-node-core-teyrchains-inherent/runtime-benchmarks",
 	"pezkuwi-node-network-protocol/runtime-benchmarks",
-	# "pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
+	"pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
 	"pezkuwi-node-subsystem-types/runtime-benchmarks",
 	"pezkuwi-node-subsystem-util/runtime-benchmarks",
 	"pezkuwi-node-subsystem/runtime-benchmarks",
 	"pezkuwi-overseer/runtime-benchmarks",
 	"pezkuwi-pez-node-primitives/runtime-benchmarks",
-	# "pezkuwi-primitives-test-helpers/runtime-benchmarks",
+	"pezkuwi-primitives-test-helpers/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
 	"pezkuwi-rpc/runtime-benchmarks",
 	"pezkuwi-runtime-teyrchains/runtime-benchmarks",
 	"pezkuwi-statement-distribution?/runtime-benchmarks",
-	# "pezkuwi-test-client/runtime-benchmarks",
+	"pezkuwi-test-client/runtime-benchmarks",
 	"pezkuwichain-runtime-constants?/runtime-benchmarks",
 	"pezkuwichain-runtime?/runtime-benchmarks",
 	"pezmmr-gadget/runtime-benchmarks",

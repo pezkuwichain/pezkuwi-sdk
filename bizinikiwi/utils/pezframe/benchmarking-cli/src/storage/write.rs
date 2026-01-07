@@ -16,8 +16,8 @@
 // limitations under the License.
 
 use codec::Encode;
-use frame_storage_access_test_runtime::StorageAccessParams;
 use log::{debug, info, trace, warn};
+use pezframe_storage_access_test_runtime::StorageAccessParams;
 use pezsc_cli::Result;
 use pezsc_client_api::{Backend as ClientBackend, StorageProvider, UsageProvider};
 use pezsc_client_db::{DbHash, DbState, DbStateBuilder};
