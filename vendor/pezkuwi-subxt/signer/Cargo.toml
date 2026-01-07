@@ -71,6 +71,7 @@ web = ["getrandom/js"]
 serde = [
 	"bip39/serde",
 	"codec/serde",
+	"dep:serde",
 	"hex/serde",
 	"pezsp-core/serde",
 	"schnorrkel?/serde",

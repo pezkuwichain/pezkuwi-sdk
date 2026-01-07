@@ -11,7 +11,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 RUN cargo fetch
-RUN cargo build --locked --profile production -p pezpallet-revive-eth-rpc --bin eth-rpc
+# SKIP_WASM_BUILD=1 avoids serde_core + build-std conflict (upstream issue: serde-rs/serde#3021)
+RUN SKIP_WASM_BUILD=1 cargo build --locked --profile production -p pezpallet-revive-eth-rpc --bin eth-rpc
 
 FROM docker.io/parity/base-bin:latest
 COPY --from=builder /pezkuwi/target/production/eth-rpc /usr/local/bin
