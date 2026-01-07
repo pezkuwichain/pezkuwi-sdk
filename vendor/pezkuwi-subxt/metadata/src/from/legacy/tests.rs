@@ -7,8 +7,8 @@ use frame_metadata::RuntimeMetadata;
 use scale_info_legacy::LookupName;
 use scale_type_resolver::TypeResolver;
 
-/// Load some legacy kusama metadata from our artifacts.
-fn legacy_kusama_metadata(version: u8) -> (u64, RuntimeMetadata) {
+/// Load some legacy dicle metadata from our artifacts.
+fn legacy_dicle_metadata(version: u8) -> (u64, RuntimeMetadata) {
 	const VERSIONS: [(u8, u64, &str); 5] = [
 		(9, 1021, "metadata_v9_1021.scale"),
 		(10, 1038, "metadata_v10_1038.scale"),
@@ -23,7 +23,7 @@ fn legacy_kusama_metadata(version: u8) -> (u64, RuntimeMetadata) {
 		.map(|(_, spec_version, name)| (*spec_version, *name))
 		.unwrap_or_else(|| panic!("v{version} metadata artifact does not exist"));
 
-	let mut path = std::path::PathBuf::from_str("../artifacts/kusama/").unwrap();
+	let mut path = std::path::PathBuf::from_str("../artifacts/dicle/").unwrap();
 	path.push(filename);
 
 	let bytes = std::fs::read(path).expect("Could not read file");
@@ -32,9 +32,9 @@ fn legacy_kusama_metadata(version: u8) -> (u64, RuntimeMetadata) {
 	(spec_version, metadata)
 }
 
-/// Load our kusama types.
-/// TODO: This is WRONG at the moment; change to point to kusama types when they exist:
-fn kusama_types() -> scale_info_legacy::ChainTypeRegistry {
+/// Load our dicle types.
+/// TODO: This is WRONG at the moment; change to point to dicle types when they exist:
+fn dicle_types() -> scale_info_legacy::ChainTypeRegistry {
 	// frame-decode is an external crate (v0.15.0) that uses original naming
 	frame_decode::legacy_types::polkadot::relay_chain()
 }
@@ -52,8 +52,8 @@ fn metadata_pair(
 	version: u8,
 	opts: super::Opts,
 ) -> (TypeRegistrySet<'static>, RuntimeMetadata, crate::Metadata) {
-	let (spec_version, metadata) = legacy_kusama_metadata(version);
-	let types = kusama_types();
+	let (spec_version, metadata) = legacy_dicle_metadata(version);
+	let types = dicle_types();
 
 	// Extend the types with builtins.
 	let types_for_spec = {
@@ -421,8 +421,8 @@ fn codegen_works() {
 		// test functions for it. This is because the compiler sees some difference between
 		// `subxct_codegen::Metadata` and `crate::Metadata` even though they should be identical.
 		let new_md = {
-			let (spec_version, metadata) = legacy_kusama_metadata(version);
-			let types = kusama_types();
+			let (spec_version, metadata) = legacy_dicle_metadata(version);
+			let types = dicle_types();
 
 			let types_for_spec = {
 				let mut types_for_spec = types.for_spec_version(spec_version).to_owned();

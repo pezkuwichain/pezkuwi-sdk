@@ -545,10 +545,10 @@ mod tests {
 			Location::new(1, [Teyrchain(2004)]),
 			// AH asset
 			Location::new(0, [PalletInstance(50), GeneralIndex(42)]),
-			// KSM
-			Location::new(2, [GlobalConsensus(Kusama)]),
-			// KAR (Some Kusama teyrchain currency)
-			Location::new(2, [GlobalConsensus(Kusama), Teyrchain(2000)]),
+			// DCL
+			Location::new(2, [GlobalConsensus(Dicle)]),
+			// KAR (Some Dicle teyrchain currency)
+			Location::new(2, [GlobalConsensus(Dicle), Teyrchain(2000)]),
 		];
 		for asset in assets.iter() {
 			// reanchor logic in pezpallet_xcm on AH

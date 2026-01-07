@@ -793,7 +793,7 @@ pub fn asset_transactor_transfer_with_local_consensus_currency_works<Runtime, Xc
 					interior: [AccountId32 { network: None, id: target_account.clone().into() }]
 						.into(),
 				},
-				// local_consensus_currency_asset, e.g.: relaychain token (KSM, HEZ, ...)
+				// local_consensus_currency_asset, e.g.: relaychain token (DCL, HEZ, ...)
 				(
 					Location { parents: 1, interior: Here },
 					(BalanceOf::<Runtime>::from(1_u128) * unit).into(),

@@ -887,7 +887,7 @@ mod tests {
 			assert_eq!(encoded_size, 74);
 		}
 
-		// Kusama has the same configurations as of now.
+		// Dicle has the same configurations as of now.
 		const PEZKUWI_MAX_DOWNWARD_MESSAGE_SIZE: u32 = 51200; // 50 Kib
 		const PEZKUWI_MAX_UPWARD_MESSAGE_SIZE: u32 = 65531; // 64 Kib
 

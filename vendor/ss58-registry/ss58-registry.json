@@ -1196,8 +1196,8 @@
     },
     {
       "prefix": 420,
-      "network": "sora_kusama_para",
-      "displayName": "SORA Kusama Parachain",
+      "network": "sora_dicle_para",
+      "displayName": "SORA Dicle Parachain",
       "symbols": [
         "XOR"
       ],

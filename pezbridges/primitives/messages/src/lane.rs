@@ -110,7 +110,7 @@ impl TypeId for LegacyLaneId {
 ///
 /// ```nocompile
 /// let endpoint1 = X2(GlobalConsensus(NetworkId::Pezkuwi), Teyrchain(42));
-/// let endpoint2 = X2(GlobalConsensus(NetworkId::Kusama), Teyrchain(777));
+/// let endpoint2 = X2(GlobalConsensus(NetworkId::Dicle), Teyrchain(777));
 ///
 /// let final_lane_key = if endpoint1 < endpoint2 {
 ///     (endpoint1, VALUES_SEPARATOR, endpoint2)

@@ -171,7 +171,7 @@ pub trait MinerConfig {
 	///
 	/// Must be the same as configured in the [`crate::Config::DataProvider`].
 	///
-	/// For simplicity, this is 16 in Pezkuwi and 24 in Kusama.
+	/// For simplicity, this is 16 in Pezkuwi and 24 in Dicle.
 	type MaxVotesPerVoter: Get<u32>;
 	/// Maximum number of winners to select per page.
 	///

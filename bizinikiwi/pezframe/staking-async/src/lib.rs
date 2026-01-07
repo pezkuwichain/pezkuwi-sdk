@@ -27,7 +27,7 @@
 //!   `pezpallet-election-provider-multi-block`.
 //!
 //! While `pezpallet-staking` was somewhat general-purpose, this pezpallet is absolutely NOT right
-//! from the get-go: It is designed to be used ONLY in Pezkuwi/Kusama AssetHub system teyrchains.
+//! from the get-go: It is designed to be used ONLY in Pezkuwi/Dicle AssetHub system teyrchains.
 //!
 //! The workings of this pezpallet can be divided into a number of subsystems, as follows.
 //!

@@ -302,7 +302,7 @@ pub fn to_account(l: impl Into<Location>) -> Result<u64, Location> {
 				return Err(l);
 			}
 			match l.first_interior() {
-				Some(GlobalConsensus(Kusama)) => 4000,
+				Some(GlobalConsensus(Dicle)) => 4000,
 				Some(GlobalConsensus(Pezkuwi)) => 4001,
 				_ => return Err(l),
 			}

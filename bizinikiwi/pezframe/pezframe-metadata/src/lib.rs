@@ -228,7 +228,7 @@ mod test {
 	use std::fs;
 
 	fn load_metadata(version: u32) -> Vec<u8> {
-		fs::read(format!("./test_data/ksm_metadata_v{}.bin", version)).unwrap()
+		fs::read(format!("./test_data/dcl_metadata_v{}.bin", version)).unwrap()
 	}
 
 	#[test]

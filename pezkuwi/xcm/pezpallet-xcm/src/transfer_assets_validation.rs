@@ -106,7 +106,7 @@ impl<T: Config> Pezpallet<T> {
 	/// Check if the given asset ID represents a network native asset based on our
 	/// UniversalLocation.
 	///
-	/// Returns true if the asset is a native network asset (HEZ, KSM, ZGR, PAS) that should be
+	/// Returns true if the asset is a native network asset (HEZ, DCL, ZGR, PAS) that should be
 	/// blocked during Asset Hub Migration.
 	fn is_network_native_asset(asset_id: &AssetId) -> bool {
 		let universal_location = T::UniversalLocation::get();
@@ -119,7 +119,7 @@ impl<T: Config> Pezpallet<T> {
 			1 => {
 				if let Some(Junction::GlobalConsensus(network)) = universal_location.first() {
 					let is_target_network = match network {
-						NetworkId::Pezkuwi | NetworkId::Kusama => true,
+						NetworkId::Pezkuwi | NetworkId::Dicle => true,
 						NetworkId::ByGenesis(genesis_hash) => {
 							// Check if this is Zagros by genesis hash
 							*genesis_hash == xcm::v5::ZAGROS_GENESIS_HASH
@@ -141,7 +141,7 @@ impl<T: Config> Pezpallet<T> {
 					(universal_location.first(), universal_location.last())
 				{
 					let is_target_network = match network {
-						NetworkId::Pezkuwi | NetworkId::Kusama => true,
+						NetworkId::Pezkuwi | NetworkId::Dicle => true,
 						NetworkId::ByGenesis(genesis_hash) => {
 							// Check if this is Zagros by genesis hash
 							*genesis_hash == xcm::v5::ZAGROS_GENESIS_HASH

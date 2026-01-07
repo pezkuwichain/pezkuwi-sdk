@@ -35,7 +35,7 @@ macro_rules! identify_chain {
 	) => {
 		match $chain {
 			Chain::Pezkuwi => Err("Pezkuwi runtimes are currently not supported"),
-			Chain::Kusama => Err("Kusama runtimes are currently not supported"),
+			Chain::Dicle => Err("Dicle runtimes are currently not supported"),
 			Chain::Pezkuwichain => {
 				#[cfg(feature = "pezkuwichain-native")]
 				{
@@ -252,7 +252,7 @@ fn pezkuwichain_sign_call(
 	.into()
 }
 
-/// Generates inherent data for benchmarking Pezkuwi, Kusama, Zagros and Pezkuwichain.
+/// Generates inherent data for benchmarking Pezkuwi, Dicle, Zagros and Pezkuwichain.
 ///
 /// Not to be used outside of benchmarking since it returns mocked values.
 pub fn benchmark_inherent_data(

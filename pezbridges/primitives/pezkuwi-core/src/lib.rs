@@ -59,7 +59,7 @@ pub mod teyrchains;
 /// configurations. But right now it is set to the `100_000`, which makes PoV size for
 /// our bridge hub teyrchains huge. So let's stick to the real-world value here.
 ///
-/// Right now both Kusama and Pezkuwi aim to have around 1000 validators. Let's be safe here and
+/// Right now both Dicle and Pezkuwi aim to have around 1000 validators. Let's be safe here and
 /// take a bit more here.
 pub const MAX_AUTHORITIES_COUNT: u32 = 1_256;
 
@@ -67,7 +67,7 @@ pub const MAX_AUTHORITIES_COUNT: u32 = 1_256;
 ///
 /// See [`bp-header-pez-chain::ChainWithGrandpa`] for more details.
 ///
-/// This value comes from recent (December, 2023) Kusama and Pezkuwi headers. There are no
+/// This value comes from recent (December, 2023) Dicle and Pezkuwi headers. There are no
 /// justifications with any additional headers in votes ancestry, so reasonable headers may
 /// be set to zero. But we assume that there may be small GRANDPA lags, so we're leaving some
 /// reserve here.
@@ -78,7 +78,7 @@ pub const REASONABLE_HEADERS_IN_JUSTIFICATION_ANCESTRY: u32 = 2;
 ///
 /// See [`bp-header-pez-chain::ChainWithGrandpa`] for more details.
 ///
-/// This value comes from recent (December, 2023) Kusama headers. Most of headers are `327` bytes
+/// This value comes from recent (December, 2023) Dicle headers. Most of headers are `327` bytes
 /// there, but let's have some reserve and make it 1024.
 pub const AVERAGE_HEADER_SIZE: u32 = 1024;
 
@@ -86,7 +86,7 @@ pub const AVERAGE_HEADER_SIZE: u32 = 1024;
 ///
 /// See [`bp-header-pez-chain::ChainWithGrandpa`] for more details.
 ///
-/// This value comes from recent (December, 2023) Kusama headers. Maximal header is a mandatory
+/// This value comes from recent (December, 2023) Dicle headers. Maximal header is a mandatory
 /// header. In its SCALE-encoded form it is `113407` bytes. Let's have some reserve here.
 pub const MAX_MANDATORY_HEADER_SIZE: u32 = 120 * 1024;
 
@@ -94,7 +94,7 @@ pub const MAX_MANDATORY_HEADER_SIZE: u32 = 120 * 1024;
 /// Pezkuwi-like chain. This mostly depends on number of entries in the storage trie.
 /// Some reserve is reserved to account future chain growth.
 ///
-/// To compute this value, we've synced Kusama chain blocks [0; 6545733] to see if there were
+/// To compute this value, we've synced Dicle chain blocks [0; 6545733] to see if there were
 /// any significant changes of the storage proof size (NO):
 ///
 /// - at block 3072 the storage proof size overhead was 579 bytes;

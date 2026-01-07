@@ -16,7 +16,7 @@
 
 //! statement-distribution regression tests
 //!
-//! Statement distribution benchmark based on Kusama parameters and scale.
+//! Statement distribution benchmark based on Dicle parameters and scale.
 
 use pezkuwi_subsystem_bench::{
 	configuration::TestConfiguration,

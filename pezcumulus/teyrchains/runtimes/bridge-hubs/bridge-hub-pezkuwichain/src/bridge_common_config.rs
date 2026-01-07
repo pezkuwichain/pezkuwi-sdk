@@ -123,9 +123,9 @@ impl pezpallet_bridge_grandpa::Config<BridgeGrandpaPezkuwichainBulletinInstance>
 	type HeadersToKeep = RelayChainHeadersToKeep;
 	// Technically this is incorrect - we have two pezpallet instances and ideally we shall
 	// benchmark every instance separately. But the benchmarking engine has a flaw - it
-	// messes with components. E.g. in Kusama maximal validators count is 1024 and in
+	// messes with components. E.g. in Dicle maximal validators count is 1024 and in
 	// Bulletin chain it is 100. But benchmarking engine runs Bulletin benchmarks using
-	// components range, computed for Kusama => it causes an error.
+	// components range, computed for Dicle => it causes an error.
 	//
 	// In practice, however, GRANDPA pezpallet works the same way for all bridged chains, so
 	// weights are also the same for both bridges.

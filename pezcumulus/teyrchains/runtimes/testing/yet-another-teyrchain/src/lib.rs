@@ -28,7 +28,7 @@ mod xcm_config;
 
 use crate::xcm_config::{RelayLocation, XcmOriginToTransactDispatchOrigin};
 
-pub use pezkuwi_sdk::{teyrchain_info, *};
+pub use pezkuwi_sdk::{pezstaging_teyrchain_info as teyrchain_info, *};
 use pezpallet_xcm::{EnsureXcm, IsVoiceOfBody};
 
 use pezcumulus_primitives_core::ParaId;
@@ -80,7 +80,7 @@ pub use pezsp_runtime::{Perbill, Permill};
 
 use pezcumulus_primitives_core::AggregateMessageOrigin; //, ClaimQueueOffset, CoreSelector};
 use teyrchains_common::{AccountId, Signature};
-use xcm::latest::prelude::BodyId;
+use pezstaging_xcm::latest::prelude::BodyId;
 
 pub type SessionHandlers = ();
 
@@ -369,9 +369,9 @@ impl pezcumulus_pezpallet_teyrchain_system::Config for Runtime {
 impl pezpallet_message_queue::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo = ();
-	type MessageProcessor = xcm_builder::ProcessXcmMessage<
+	type MessageProcessor = pezstaging_xcm_builder::ProcessXcmMessage<
 		AggregateMessageOrigin,
-		xcm_executor::XcmExecutor<xcm_config::XcmConfig>,
+		pezstaging_xcm_executor::XcmExecutor<xcm_config::XcmConfig>,
 		RuntimeCall,
 	>;
 	type Size = u32;
@@ -471,68 +471,35 @@ impl pezpallet_verify_signature::Config for Runtime {
 	type BenchmarkHelper = VerifySignatureBenchmarkHelper;
 }
 
-#[pezframe_support::runtime]
-mod runtime {
-	#[runtime::runtime]
-	#[runtime::derive(
-		RuntimeCall,
-		RuntimeEvent,
-		RuntimeError,
-		RuntimeOrigin,
-		RuntimeFreezeReason,
-		RuntimeHoldReason,
-		RuntimeSlashReason,
-		RuntimeLockId,
-		RuntimeTask,
-		RuntimeViewFunction
-	)]
-	pub struct Runtime;
+construct_runtime!(
+	pub struct Runtime {
+		System: pezframe_system = 0,
+		Timestamp: pezpallet_timestamp = 1,
+		Sudo: pezpallet_sudo = 2,
+		TransactionPayment: pezpallet_transaction_payment = 3,
+		WeightReclaim: pezcumulus_pezpallet_weight_reclaim = 4,
 
-	#[runtime::pezpallet_index(0)]
-	pub type System = pezframe_system;
-	#[runtime::pezpallet_index(1)]
-	pub type Timestamp = pezpallet_timestamp;
-	#[runtime::pezpallet_index(2)]
-	pub type Sudo = pezpallet_sudo;
-	#[runtime::pezpallet_index(3)]
-	pub type TransactionPayment = pezpallet_transaction_payment;
-	#[runtime::pezpallet_index(4)]
-	pub type WeightReclaim = pezcumulus_pezpallet_weight_reclaim;
+		TeyrchainSystem: pezcumulus_pezpallet_teyrchain_system = 20,
+		TeyrchainInfo: teyrchain_info = 21,
 
-	#[runtime::pezpallet_index(20)]
-	pub type TeyrchainSystem = pezcumulus_pezpallet_teyrchain_system;
-	#[runtime::pezpallet_index(21)]
-	pub type TeyrchainInfo = teyrchain_info;
+		Authorship: pezpallet_authorship = 25,
+		CollatorSelection: pezpallet_collator_selection = 26,
+		Session: pezpallet_session = 27,
 
-	#[runtime::pezpallet_index(25)]
-	pub type Authorship = pezpallet_authorship;
-	#[runtime::pezpallet_index(26)]
-	pub type CollatorSelection = pezpallet_collator_selection;
-	#[runtime::pezpallet_index(27)]
-	pub type Session = pezpallet_session;
+		Balances: pezpallet_balances = 30,
 
-	#[runtime::pezpallet_index(30)]
-	pub type Balances = pezpallet_balances;
+		Aura: pezpallet_aura = 31,
+		AuraExt: pezcumulus_pezpallet_aura_ext = 32,
 
-	#[runtime::pezpallet_index(31)]
-	pub type Aura = pezpallet_aura;
-	#[runtime::pezpallet_index(32)]
-	pub type AuraExt = pezcumulus_pezpallet_aura_ext;
+		Utility: pezpallet_utility = 40,
+		VerifySignature: pezpallet_verify_signature = 41,
 
-	#[runtime::pezpallet_index(40)]
-	pub type Utility = pezpallet_utility;
-	#[runtime::pezpallet_index(41)]
-	pub type VerifySignature = pezpallet_verify_signature;
-
-	#[runtime::pezpallet_index(51)]
-	pub type XcmpQueue = pezcumulus_pezpallet_xcmp_queue;
-	#[runtime::pezpallet_index(52)]
-	pub type PezkuwiXcm = pezpallet_xcm;
-	#[runtime::pezpallet_index(53)]
-	pub type CumulusXcm = pezcumulus_pezpallet_xcm;
-	#[runtime::pezpallet_index(54)]
-	pub type MessageQueue = pezpallet_message_queue;
-}
+		XcmpQueue: pezcumulus_pezpallet_xcmp_queue = 51,
+		PezkuwiXcm: pezpallet_xcm = 52,
+		CumulusXcm: pezcumulus_pezpallet_xcm = 53,
+		MessageQueue: pezpallet_message_queue = 54,
+	}
+);
 
 /// Balance of an account.
 pub type Balance = u128;

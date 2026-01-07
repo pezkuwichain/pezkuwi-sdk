@@ -19,7 +19,7 @@
 //! # Subkey
 //!
 //! Subkey is a commandline utility included with Bizinikiwi. It allows generating and restoring
-//! keys for Bizinikiwi based chains such as Pezkuwi, Kusama and a growing number of teyrchains and
+//! keys for Bizinikiwi based chains such as Pezkuwi, Dicle and a growing number of teyrchains and
 //! Bizinikiwi based projects.
 
 //! `pez_subkey` provides a few sub-commands to generate keys, check keys, sign messages, verify
@@ -98,7 +98,7 @@
 //! from the network where you will use the key.
 //!
 //! The **SS58 address** (or **Public Address**) of a new account is a representation of the public
-//! keys of an account for a given network (for instance Kusama or Pezkuwi).
+//! keys of an account for a given network (for instance Dicle or Pezkuwi).
 //!
 //! You can read more about the [SS58 format in the Bizinikiwi Docs](https://docs.pezkuwichain.io/reference/address-formats/) and see the list of reserved prefixes in the [SS58 Registry](https://docs.pezkuwichain.io/ss58-registry).
 //!
@@ -106,7 +106,7 @@
 //! `0xa05c75731970cc7868a2fb7cb577353cd5b31f62dccced92c441acd8fee0c92d` the SS58 addresses are:
 //!
 //! - Pezkuwi: `16m4J167Mptt8UXL8aGSAi7U2FnPpPxZHPrCgMG9KJzVoFqM`
-//! - Kusama: `JLNozAv8QeLSbLFwe2UvWeKKE4yvmDbfGxTuiYkF2BUMx4M`
+//! - Dicle: `JLNozAv8QeLSbLFwe2UvWeKKE4yvmDbfGxTuiYkF2BUMx4M`
 //!
 //! ### Json output
 //!

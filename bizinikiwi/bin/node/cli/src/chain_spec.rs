@@ -20,7 +20,7 @@
 
 use pezkuwi_sdk::*;
 
-use crate::chain_spec::pezsc_service::Properties;
+use pezsc_service::Properties;
 use pez_kitchensink_runtime::{
 	genesis_config_presets::{Staker, ENDOWMENT, STASH},
 	wasm_binary_unwrap, Block, MaxNominations, StakerStatus,

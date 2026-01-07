@@ -16,7 +16,7 @@
 
 //! dispute-coordinator throughput test
 //!
-//! Dispute Coordinator benchmark based on Kusama parameters and scale.
+//! Dispute Coordinator benchmark based on Dicle parameters and scale.
 //!
 //! Subsystems involved:
 //! - dispute-coordinator

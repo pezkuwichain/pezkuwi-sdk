@@ -16,7 +16,7 @@
 
 //! approval-voting throughput test
 //!
-//! Approval Voting benchmark based on Kusama parameters and scale.
+//! Approval Voting benchmark based on Dicle parameters and scale.
 //!
 //! Subsystems involved:
 //! - approval-distribution

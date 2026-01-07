@@ -4,7 +4,7 @@ use crate::{
 	RuntimeOrigin, TeyrchainInfo, TeyrchainSystem, WeightToFee, XcmpQueue,
 };
 
-use pezkuwi_sdk::{xcm, xcm_builder, xcm_executor, *};
+use pezkuwi_sdk::{pezstaging_xcm as xcm, pezstaging_xcm_builder as xcm_builder, pezstaging_xcm_executor as xcm_executor, *};
 
 use pezframe_support::traits::Disabled;
 use pezframe_support::{

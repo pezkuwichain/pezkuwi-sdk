@@ -315,7 +315,7 @@ where
 				// deleting one path) the information that they want to use as their DB.
 				let old_name = match config.chain_spec.id() {
 					"asset-hub-pezkuwi" => Some("statemint"),
-					"asset-hub-kusama" => Some("statemine"),
+					"asset-hub-dicle" => Some("statemine"),
 					"asset-hub-zagros" => Some("westmint"),
 					"asset-hub-pezkuwichain" => Some("rockmine"),
 					_ => None,

@@ -16,7 +16,7 @@
 
 //! availability-read regression tests
 //!
-//! Availability read benchmark based on Kusama parameters and scale.
+//! Availability read benchmark based on Dicle parameters and scale.
 //!
 //! Subsystems involved:
 //! - availability-distribution

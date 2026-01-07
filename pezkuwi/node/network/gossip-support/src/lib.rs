@@ -83,7 +83,7 @@ const TRY_RERESOLVE_AUTHORITIES: Duration = Duration::from_secs(2);
 /// Duration after which we consider low connectivity a problem.
 ///
 /// Especially at startup low connectivity is expected (authority discovery cache needs to be
-/// populated). Authority discovery on Kusama takes around 8 minutes, so warning after 10 minutes
+/// populated). Authority discovery on Dicle takes around 8 minutes, so warning after 10 minutes
 /// should be fine:
 ///
 /// https://github.com/pezkuwichain/pezkuwi-sdk/blob/main/bizinikiwi/client/authority-discovery/src/lib.rs#L88

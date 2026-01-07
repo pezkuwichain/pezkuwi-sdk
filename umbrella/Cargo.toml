@@ -3907,6 +3907,7 @@ path = "../vendor/pezkuwi-subxt/codegen"
 
 [dependencies.pezkuwi-subxt-lightclient]
 default-features = false
+features = ["native"]
 optional = true
 path = "../vendor/pezkuwi-subxt/lightclient"
 

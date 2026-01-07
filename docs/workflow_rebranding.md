@@ -20,7 +20,7 @@ Bu belge, Pezkuwi SDK'daki 74 workflow dosyasının kapsamlı analizini ve rebra
 | `parachain` | `teyrchain` | Alt zincir terminolojisi |
 | `rococo` | `pezkuwichain` | Test ağı |
 | `westend` | `zagros` | Test ağı |
-| `kusama` | `zagros` | Canary ağı |
+| `dicle` | `zagros` | Canary ağı |
 
 ---
 
@@ -180,7 +180,7 @@ dockerfile: "docker/dockerfiles/polkadot/polkadot_injected_debug.Dockerfile"
 # Satır 26-32: Matrix odaları - PEZKUWI ODALARINA DEĞİŞTİRİLMELİ
 - name: '#polkadotvalidatorlounge:web3.foundation'  # KALDIR
 - name: '#polkadot-announcements:parity.io'         # KALDIR
-- name: '#kusama-announce:parity.io'                # KALDIR
+- name: '#dicle-announce:parity.io'                # KALDIR
 
 # YENİ: Pezkuwi Discord/Matrix odaları eklenecek
 - name: '#pezkuwi-announcements:pezkuwichain.io'

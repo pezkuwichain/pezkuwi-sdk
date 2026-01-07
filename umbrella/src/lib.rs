@@ -75,7 +75,7 @@ pub use pez_generate_bags;
 #[cfg(feature = "pez-slot-range-helper")]
 pub use pez_slot_range_helper;
 
-/// Generate and restore keys for Bizinikiwi based chains such as Pezkuwi, Kusama and a growing number of teyrchains and Bizinikiwi based projects.
+/// Generate and restore keys for Bizinikiwi based chains such as Pezkuwi, Dicle and a growing number of teyrchains and Bizinikiwi based projects.
 #[cfg(feature = "pez-subkey")]
 pub use pez_subkey;
 

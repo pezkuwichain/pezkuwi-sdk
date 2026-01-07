@@ -1,8 +1,8 @@
 # High-Level Bridge Documentation
 
 This document gives a brief, abstract description of main components that may be found in this repository. If you want
-to see how we're using them to build Pezkuwichain <> Zagros (Kusama <> Pezkuwi) bridge, please refer to the [Pezkuwi <>
-Kusama Bridge](./pezkuwi-kusama-bridge-overview.md).
+to see how we're using them to build Pezkuwichain <> Zagros (Dicle <> Pezkuwi) bridge, please refer to the [Pezkuwi <>
+Dicle Bridge](./pezkuwi-dicle-bridge-overview.md).
 
 ## Purpose
 
@@ -11,7 +11,7 @@ using GRANDPA finality, their teyrchains or any combination of those. On top of 
 pezpallet that provides means to organize messages exchange.
 
 On top of that layered infrastructure, anyone may build their own bridge applications - e.g. [XCM
-messaging](./pezkuwi-kusama-bridge-overview.md), [encoded calls
+messaging](./pezkuwi-dicle-bridge-overview.md), [encoded calls
 messaging](https://github.com/paritytech/parity-bridges-common/releases/tag/encoded-calls-messaging) and so on.
 
 ## Terminology
@@ -90,7 +90,7 @@ Many things are abstracted by the pezpallet:
 Outside of the messaging pezpallet, we have a set of adapters, where messages and delivery proofs are regular storage
 proofs. The proofs are generated at the bridged chain and require bridged chain finality. So messages pezpallet, in this
 case, depends on one of the finality pallets. The messages are XCM messages and we are using XCM executor to dispatch
-them on receival. You may find more info in [Pezkuwi <> Kusama Bridge](./pezkuwi-kusama-bridge-overview.md) document.
+them on receival. You may find more info in [Pezkuwi <> Dicle Bridge](./pezkuwi-dicle-bridge-overview.md) document.
 
 More: [pezpallet level documentation and code](../modules/messages/).
 

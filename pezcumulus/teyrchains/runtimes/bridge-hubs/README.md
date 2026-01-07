@@ -9,18 +9,18 @@
 	  - [Send messages - transfer asset over bridge (TYRs/WNDs)](#send-messages---transfer-asset-over-bridge-rocswnds)
 	  - [Claim relayer's rewards on BridgeHubpezkuwichain and
 		BridgeHubzagros](#claim-relayers-rewards-on-bridgehubpezkuwichain-and-bridgehubzagros)
-  - [How to test local BridgeHubKusama/BridgeHubPezkuwiChain](#how-to-test-local-bridgehubkusamabridgehubpezkuwi)
+  - [How to test local BridgeHubDicle/BridgeHubPezkuwiChain](#how-to-test-local-bridgehubdiclebridgehubpezkuwi)
 
 # Bridge-hub Teyrchains
 
 _BridgeHub(s)_ are **_system teyrchains_** that will house trustless bridges from the local ecosystem to others. The
 current trustless bridges planned for the BridgeHub(s) are:
 - `BridgeHubPezkuwiChain` system teyrchain:
-	1. PezkuwiChain <-> Kusama bridge
+	1. PezkuwiChain <-> Dicle bridge
 	2. PezkuwiChain <-> Ethereum bridge (Snowbridge)
-- `BridgeHubKusama` system teyrchain:
-	1. Kusama <-> PezkuwiChain bridge
-	2. Kusama <-> Ethereum bridge The high-level
+- `BridgeHubDicle` system teyrchain:
+	1. Dicle <-> PezkuwiChain bridge
+	2. Dicle <-> Ethereum bridge The high-level
 	responsibilities of each bridge living on BridgeHub:
 - sync finality proofs between relay chains (or equivalent)
 - sync finality proofs between BridgeHub teyrchains
@@ -88,7 +88,7 @@ cp target/release/pezkuwi-teyrchain ~/local_bridge_testing/bin/pezkuwi-teyrchain
 ```
 cd <pezkuwi-sdk-git-repo-dir>
 
-# pezkuwichain + BridgeHubpezkuwichain + AssetHub for pezkuwichain (mirroring Kusama)
+# pezkuwichain + BridgeHubpezkuwichain + AssetHub for pezkuwichain (mirroring Dicle)
 PEZKUWI_BINARY=~/local_bridge_testing/bin/pezkuwi \
 PEZKUWI_TEYRCHAIN_BINARY=~/local_bridge_testing/bin/pezkuwi-teyrchain \
 	~/local_bridge_testing/bin/zombienet-linux --provider native spawn ./bridges/testing/environments/pezkuwichain-zagros/bridge_hub_pezkuwichain_local_network.toml
@@ -198,6 +198,6 @@ cd <pezkuwi-sdk-git-repo-dir>
 	- BridgeHubpezkuwichain (see 2x `bridgeRelayers.RewardPaid`) https://pezkuwichain.io/?rpc=ws://127.0.0.1:8943#/explorer
 	- BridgeHubzagros (see 2x `bridgeRelayers.RewardPaid`) https://pezkuwichain.io/?rpc=ws://127.0.0.1:8945#/explorer
 
-## How to test local BridgeHubKusama/BridgeHubPezkuwiChain
+## How to test local BridgeHubDicle/BridgeHubPezkuwiChain
 
 TODO: see `# !!! READ HERE` above
