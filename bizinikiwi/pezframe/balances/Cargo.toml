@@ -63,6 +63,7 @@ try-runtime = [
 	"pezframe-support/try-runtime",
 	"pezframe-system/try-runtime",
 	"pezsp-runtime/try-runtime",
+	"pezpallet-transaction-payment/try-runtime"
 ]
 serde = []
 experimental = []

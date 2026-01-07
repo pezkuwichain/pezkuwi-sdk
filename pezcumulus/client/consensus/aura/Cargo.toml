@@ -128,6 +128,8 @@ std = [
 	"pezsp-tracing/std",
 	"pezsp-version/std",
 	"prometheus-endpoint/std",
+	"pezcumulus-test-client/std",
+	"pezcumulus-test-relay-sproof-builder/std"
 ]
 try-runtime = [
 	"pezcumulus-client-collator/try-runtime",
@@ -151,6 +153,8 @@ try-runtime = [
 	"pezsp-runtime/try-runtime",
 	"pezsp-timestamp/try-runtime",
 	"pezsp-version/try-runtime",
+	"pezcumulus-test-client/try-runtime",
+	"pezcumulus-test-relay-sproof-builder/try-runtime"
 ]
 serde = []
 with-tracing = []

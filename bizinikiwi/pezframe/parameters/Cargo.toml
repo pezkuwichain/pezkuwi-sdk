@@ -60,6 +60,7 @@ try-runtime = [
 	"pezframe-system/try-runtime",
 	"pezpallet-balances/try-runtime",
 	"pezsp-runtime/try-runtime",
+	"pezpallet-example-basic/try-runtime"
 ]
 serde = [
 	"codec/serde",

@@ -71,5 +71,7 @@ std = [
 	"pezkuwi-pez-node-primitives/std",
 	"pezsp-application-crypto/std",
 	"pezsp-keystore/std",
+	"pezkuwi-node-subsystem-test-helpers/std",
+	"pezkuwi-primitives-test-helpers/std"
 ]
 serde = []

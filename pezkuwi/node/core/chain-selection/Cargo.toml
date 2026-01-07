@@ -44,5 +44,6 @@ std = [
 	"pezkuwi-node-subsystem-util/std",
 	"pezkuwi-node-subsystem/std",
 	"pezkuwi-pez-node-primitives/std",
+	"pezkuwi-node-subsystem-test-helpers/std"
 ]
 serde = []

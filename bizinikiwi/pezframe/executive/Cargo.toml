@@ -59,6 +59,7 @@ std = [
 	"pezsp-tracing/std",
 	"pezsp-version/std",
 	"scale-info/std",
+	"bizinikiwi-test-runtime-client/std"
 ]
 try-runtime = [
 	"pezframe-support/try-runtime",
@@ -67,6 +68,9 @@ try-runtime = [
 	"pezsp-inherents/try-runtime",
 	"pezsp-runtime/try-runtime",
 	"pezsp-version/try-runtime",
+	"bizinikiwi-test-runtime-client/try-runtime",
+	"pezpallet-balances/try-runtime",
+	"pezpallet-transaction-payment/try-runtime"
 ]
 runtime-benchmarks = [
 	"bizinikiwi-test-runtime-client/runtime-benchmarks",

@@ -348,6 +348,8 @@ try-runtime = [
 	"xcm/try-runtime",
 	"zagros-runtime-constants?/try-runtime",
 	"zagros-runtime?/try-runtime",
+	"pezkuwi-primitives-test-helpers/try-runtime",
+	"pezkuwi-test-client/try-runtime"
 ]
 fast-runtime = [
 	"pezkuwichain-runtime?/fast-runtime",
@@ -420,6 +422,9 @@ std = [
 	"pezsp-consensus/std",
 	"pezsp-tracing/std",
 	"prometheus-endpoint/std",
+	"pezkuwi-node-subsystem-test-helpers/std",
+	"pezkuwi-primitives-test-helpers/std",
+	"pezkuwi-test-client/std"
 ]
 serde = []
 experimental = []

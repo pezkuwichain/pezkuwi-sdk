@@ -68,6 +68,8 @@ std = [
 	"pezsp-tracing/std",
 	"rand_core/std",
 	"schnorrkel/std",
+	"pezkuwi-node-subsystem-test-helpers/std",
+	"pezkuwi-primitives-test-helpers/std"
 ]
 serde = []
 with-tracing = []

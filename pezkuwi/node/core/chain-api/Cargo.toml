@@ -53,5 +53,6 @@ std = [
 	"pezsc-client-api/std",
 	"pezsc-consensus-babe/std",
 	"pezsp-blockchain/std",
+	"pezkuwi-node-subsystem-test-helpers/std"
 ]
 serde = []

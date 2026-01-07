@@ -291,6 +291,7 @@ runtime-benchmarks = [
 	"pezsp-timestamp/runtime-benchmarks",
 	"pezsp-transaction-storage-proof/runtime-benchmarks",
 	"remote-externalities/runtime-benchmarks",
+	"pezkuwi-sdk/runtime-benchmarks"
 ]
 storage-benchmark = ["pezframe-benchmarking-cli/storage-benchmark"]
 try-runtime = [
@@ -361,6 +362,7 @@ try-runtime = [
 	"pezsp-timestamp/try-runtime",
 	"pezsp-transaction-storage-proof/try-runtime",
 	"remote-externalities/try-runtime",
+	"pezkuwi-sdk/try-runtime"
 ]
 std = [
 	"bizinikiwi-cli-test-utils/std",

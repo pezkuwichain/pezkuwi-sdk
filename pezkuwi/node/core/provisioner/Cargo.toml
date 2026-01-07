@@ -52,5 +52,7 @@ std = [
 	"pezkuwi-node-subsystem/std",
 	"pezkuwi-pez-node-primitives/std",
 	"pezsc-consensus-slots/std",
+	"pezkuwi-node-subsystem-test-helpers/std",
+	"pezkuwi-primitives-test-helpers/std"
 ]
 serde = []
