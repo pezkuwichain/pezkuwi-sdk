@@ -1,5 +1,5 @@
 use futures::StreamExt;
-use zombienet_sdk::{environment::get_spawn_fn, NetworkConfigBuilder};
+use pezkuwi_zombienet_sdk::{environment::get_spawn_fn, NetworkConfigBuilder};
 
 const BEST_BLOCK_METRIC: &str = "block_height{status=\"best\"}";
 

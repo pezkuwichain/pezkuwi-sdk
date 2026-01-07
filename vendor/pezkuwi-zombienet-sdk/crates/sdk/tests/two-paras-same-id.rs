@@ -1,4 +1,4 @@
-use zombienet_sdk::{environment::get_spawn_fn, NetworkConfigBuilder};
+use pezkuwi_zombienet_sdk::{environment::get_spawn_fn, NetworkConfigBuilder};
 
 #[tokio::test(flavor = "multi_thread")]
 async fn two_paras_same_id() {
@@ -22,7 +22,7 @@ async fn two_paras_same_id() {
 			p.with_id(2000)
 				.with_default_command("polkadot-parachain")
 				.with_default_image("docker.io/parity/polkadot-parachain:1.7.0")
-				.with_registration_strategy(zombienet_sdk::RegistrationStrategy::Manual)
+				.with_registration_strategy(pezkuwi_zombienet_sdk::RegistrationStrategy::Manual)
 				.with_collator(|n| n.with_name("collator1"))
 		})
 		.build()

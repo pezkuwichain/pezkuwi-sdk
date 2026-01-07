@@ -20,8 +20,9 @@ pezframe-system = { workspace = true }
 pezsp-runtime = { features = ["serde"], workspace = true }
 scale-info = { features = ["derive", "serde"], workspace = true }
 
-# Dev-dependencies with test-runtime-client and wasm-builder moved to integration tests
 [dev-dependencies]
+bizinikiwi-test-runtime-client = { workspace = true }
+bizinikiwi-wasm-builder = { workspace = true, default-features = true }
 frame-metadata = { features = [
 	"current",
 	"unstable",
@@ -29,6 +30,7 @@ frame-metadata = { features = [
 merkleized-metadata = { workspace = true }
 pezsp-api = { workspace = true, default-features = true }
 pezsp-tracing = { workspace = true, default-features = true }
+pezsp-transaction-pool = { workspace = true, default-features = true }
 
 [features]
 default = ["std"]
@@ -42,10 +44,12 @@ std = [
 	"scale-info/std",
 ]
 runtime-benchmarks = [
+	"bizinikiwi-test-runtime-client/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
 	"pezframe-system/runtime-benchmarks",
 	"pezsp-api/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-transaction-pool/runtime-benchmarks",
 ]
 try-runtime = [
 	"pezframe-support/try-runtime",

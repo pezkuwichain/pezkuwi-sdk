@@ -29,9 +29,11 @@ pezsp-runtime = { workspace = true }
 pezsp-tracing = { workspace = true }
 scale-info = { features = ["derive"], workspace = true }
 
-# Dev-dependencies with test-runtime-client and pallets moved to integration tests
 [dev-dependencies]
 array-bytes = { workspace = true, default-features = true }
+bizinikiwi-test-runtime-client = { workspace = true }
+pezpallet-balances = { workspace = true, default-features = true }
+pezpallet-transaction-payment = { workspace = true, default-features = true }
 pezsp-core = { workspace = true, default-features = true }
 pezsp-inherents = { workspace = true, default-features = true }
 pezsp-io = { workspace = true, default-features = true }
@@ -67,9 +69,12 @@ try-runtime = [
 	"pezsp-version/try-runtime",
 ]
 runtime-benchmarks = [
+	"bizinikiwi-test-runtime-client/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
 	"pezframe-system/runtime-benchmarks",
 	"pezframe-try-runtime?/runtime-benchmarks",
+	"pezpallet-balances/runtime-benchmarks",
+	"pezpallet-transaction-payment/runtime-benchmarks",
 	"pezsp-inherents/runtime-benchmarks",
 	"pezsp-io/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",

@@ -36,9 +36,9 @@ pezkuwi-node-core-pvf = { workspace = true, default-features = true }
 [dev-dependencies]
 assert_matches = { workspace = true }
 futures = { features = ["thread-pool"], workspace = true }
-# pezkuwi-node-subsystem-test-helpers = { workspace = true }
+pezkuwi-node-subsystem-test-helpers = { workspace = true }
 pezkuwi-primitives = { workspace = true, features = ["test"] }
-# pezkuwi-primitives-test-helpers = { workspace = true }
+pezkuwi-primitives-test-helpers = { workspace = true }
 pezsp-core = { workspace = true, default-features = true }
 pezsp-keyring = { workspace = true, default-features = true }
 pezsp-maybe-compressed-blob = { workspace = true, default-features = true }
@@ -49,12 +49,12 @@ runtime-benchmarks = [
 	"gum/runtime-benchmarks",
 	"pezkuwi-node-core-pvf/runtime-benchmarks",
 	"pezkuwi-node-metrics/runtime-benchmarks",
-	# "pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
+	"pezkuwi-node-subsystem-test-helpers/runtime-benchmarks",
 	"pezkuwi-node-subsystem-util/runtime-benchmarks",
 	"pezkuwi-node-subsystem/runtime-benchmarks",
 	"pezkuwi-overseer/runtime-benchmarks",
 	"pezkuwi-pez-node-primitives/runtime-benchmarks",
-	# "pezkuwi-primitives-test-helpers/runtime-benchmarks",
+	"pezkuwi-primitives-test-helpers/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
 	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
 	"pezsp-application-crypto/runtime-benchmarks",

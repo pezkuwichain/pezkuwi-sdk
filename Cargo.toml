@@ -994,6 +994,7 @@ pezframe-election-provider-support = { path = "bizinikiwi/pezframe/election-prov
 pezframe-executive = { path = "bizinikiwi/pezframe/executive", version = "28.0.0", default-features = false }
 pezframe-metadata = { path = "bizinikiwi/pezframe/pezframe-metadata", version = "23.0.1", default-features = false }
 pezframe-metadata-hash-extension = { path = "bizinikiwi/pezframe/metadata-hash-extension", version = "0.1.0", default-features = false }
+pezframe-storage-access-test-runtime = { path = "bizinikiwi/utils/pezframe/storage-access-test-runtime", version = "0.1.0", default-features = true }
 pezframe-support = { path = "bizinikiwi/pezframe/support", version = "28.0.0", default-features = false }
 pezframe-support-procedural = { path = "bizinikiwi/pezframe/support/procedural", version = "23.0.0", default-features = false }
 pezframe-support-procedural-tools = { path = "bizinikiwi/pezframe/support/procedural/tools", version = "10.0.1", default-features = false }
