@@ -1,7 +1,7 @@
 # PEZKUWI MAINNET ROADMAP
 
 **Oluşturulma:** 2026-01-01
-**Son Güncelleme:** 2026-01-02
+**Son Güncelleme:** 2026-01-08
 **Hedef:** %100 Mainnet Hazırlık
 **Tahmini Süre:** Faz bazlı ilerleme
 
@@ -402,6 +402,13 @@ Senkronizasyon: Tüm node'lar aynı blok numarasında ✅
 | 2026-01-07 | README'ler güncellendi (Dijital Kurdistan Tech Institute branding) |
 | 2026-01-07 | **FAZ 8 TAMAMLANDI** - Kusama → Dicle rebrand yapıldı |
 | 2026-01-07 | `cargo check --workspace` başarılı - Finished çıktısı alındı ✅ |
+| 2026-01-08 | **CI WORKFLOW DÜZELTMELERİ** |
+| 2026-01-08 | checks.yml: check-try-runtime job'una SKIP_WASM_BUILD=1 eklendi |
+| 2026-01-08 | checks.yml: check-core-crypto-features geçici disable (serde wasm32 issue #355) |
+| 2026-01-08 | lightclient/Cargo.toml: std feature'ına native eklendi |
+| 2026-01-08 | getting-started.sh: PEZKUWI_TEMPLATE_SOURCE env var desteği eklendi |
+| 2026-01-08 | check-getting-started.yml: Lokal template + workspace build kullanımı |
+| 2026-01-08 | Tüm CI komutları lokal test edildi ve geçti ✅ |
 
 ---
 
