@@ -33,8 +33,15 @@ clone_and_enter_template() {
     if [ -d "${template}-template" ]; then
         printf "\n✅︎ ${template}-template directory already exists. -> Entering.\n"
     else
-        printf "\n↓ Let's grab the ${template} template from github.\n"
-        git clone --quiet https://github.com/pezkuwichain/pezkuwi-sdk-${template}-template.git ${template}-template
+        # PEZKUWI_TEMPLATE_SOURCE can be set to a local path for CI testing
+        # e.g., PEZKUWI_TEMPLATE_SOURCE="/path/to/pezkuwi-sdk/templates"
+        if [ -n "$PEZKUWI_TEMPLATE_SOURCE" ] && [ -d "$PEZKUWI_TEMPLATE_SOURCE/${template}" ]; then
+            printf "\n↓ Copying ${template} template from local source.\n"
+            cp -r "$PEZKUWI_TEMPLATE_SOURCE/${template}" "${template}-template"
+        else
+            printf "\n↓ Let's grab the ${template} template from github.\n"
+            git clone --quiet https://github.com/pezkuwichain/pezkuwi-sdk-${template}-template.git ${template}-template
+        fi
     fi
     cd ${template}-template
 }
