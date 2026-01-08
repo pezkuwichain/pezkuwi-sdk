@@ -18,6 +18,11 @@
 | rpc | rpc.pezkuwichain.io | RPC endpoint |
 | ws | ws.pezkuwichain.io | WebSocket endpoint |
 | explorer | explorer.pezkuwichain.io | Block explorer |
+| scan | scan.pezkuwichain.io | Blockchain scanner |
+| statescan | statescan.pezkuwichain.io | State explorer |
+| stats | stats.pezkuwichain.io | Validator stats |
+| treasury | treasury.pezkuwichain.io | Treasury dashboard |
+| governance | governance.pezkuwichain.io | Governance portal |
 | docs | docs.pezkuwichain.io | Documentation |
 | wiki | wiki.pezkuwichain.io | Wiki |
 | wiki.network | wiki.network.pezkuwichain.io | Network wiki |
