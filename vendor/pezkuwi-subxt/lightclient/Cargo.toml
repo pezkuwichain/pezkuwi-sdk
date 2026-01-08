@@ -41,6 +41,7 @@ web = [
 	"web-time",
 ]
 std = [
+	"native",
 	"futures-util/std",
 	"getrandom?/std",
 	"serde/std",

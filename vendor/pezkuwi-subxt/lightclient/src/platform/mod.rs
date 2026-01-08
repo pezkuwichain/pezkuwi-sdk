@@ -12,6 +12,7 @@ mod wasm_platform;
 #[cfg(all(feature = "web", not(feature = "native")))]
 mod wasm_socket;
 
+#[cfg(any(feature = "native", feature = "web"))]
 pub use helpers::{build_platform, DefaultPlatform};
 
 #[cfg(feature = "native")]
