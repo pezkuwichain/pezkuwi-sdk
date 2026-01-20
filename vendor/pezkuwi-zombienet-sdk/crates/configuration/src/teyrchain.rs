@@ -114,7 +114,11 @@ pub struct TeyrchainConfig {
 	chain: Option<Chain>,
 	#[serde(flatten)]
 	registration_strategy: Option<RegistrationStrategy>,
-	#[serde(skip_serializing_if = "super::utils::is_true", default = "default_as_true", alias = "onboard_as_parachain")]
+	#[serde(
+		skip_serializing_if = "super::utils::is_true",
+		default = "default_as_true",
+		alias = "onboard_as_parachain"
+	)]
 	onboard_as_teyrchain: bool,
 	#[serde(rename = "balance", default = "default_initial_balance")]
 	initial_balance: U128,
