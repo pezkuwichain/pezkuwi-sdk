@@ -30,3 +30,4 @@ support = { workspace = true }
 
 [features]
 default = []
+std = []
