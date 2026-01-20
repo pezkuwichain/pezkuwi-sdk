@@ -617,6 +617,7 @@ members = [
 	"vendor/pezkuwi-subxt/utils/fetch-metadata",
 	"vendor/pezkuwi-subxt/utils/strip-metadata",
 	# Vendored pezkuwi-zombienet-sdk crates
+	"vendor/pezkuwi-zombienet-sdk/crates/cli",
 	"vendor/pezkuwi-zombienet-sdk/crates/configuration",
 	"vendor/pezkuwi-zombienet-sdk/crates/orchestrator",
 	"vendor/pezkuwi-zombienet-sdk/crates/prom-metrics-parser",
@@ -1607,6 +1608,7 @@ zagros-runtime-constants = { path = "pezkuwi/runtime/zagros/constants", default-
 zagros-system-emulated-network = { version = "0.0.0", path = "pezcumulus/teyrchains/integration-tests/emulated/networks/zagros-system" }
 zeroize = { version = "1.7.0", default-features = false }
 # Pezkuwi-zombienet-sdk (vendored)
+pezkuwi-zombienet-cli = { path = "vendor/pezkuwi-zombienet-sdk/crates/cli", version = "0.44.0" }
 pezkuwi-zombienet-configuration = { path = "vendor/pezkuwi-zombienet-sdk/crates/configuration", version = "0.44.0" }
 pezkuwi-zombienet-orchestrator = { path = "vendor/pezkuwi-zombienet-sdk/crates/orchestrator", version = "0.44.0" }
 pezkuwi-zombienet-prom-metrics-parser = { path = "vendor/pezkuwi-zombienet-sdk/crates/prom-metrics-parser", version = "0.44.0" }
