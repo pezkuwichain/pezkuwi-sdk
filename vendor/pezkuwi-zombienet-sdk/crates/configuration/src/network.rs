@@ -33,7 +33,7 @@ pub struct NetworkConfig {
 	#[serde(rename = "settings", default = "GlobalSettings::default")]
 	global_settings: GlobalSettings,
 	relaychain: Option<RelaychainConfig>,
-	#[serde(skip_serializing_if = "std::vec::Vec::is_empty", default)]
+	#[serde(skip_serializing_if = "std::vec::Vec::is_empty", default, alias = "parachains")]
 	teyrchains: Vec<TeyrchainConfig>,
 	#[serde(skip_serializing_if = "std::vec::Vec::is_empty", default)]
 	hrmp_channels: Vec<HrmpChannelConfig>,
