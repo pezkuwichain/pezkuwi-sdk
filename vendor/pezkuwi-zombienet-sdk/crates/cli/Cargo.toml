@@ -34,8 +34,8 @@ std = [
 	"anyhow/std",
 	"configuration/std",
 	"orchestrator/std",
-	"provider/std",
 	"pezkuwi-zombienet-sdk/std",
+	"provider/std",
 	"support/std",
-	"tracing/std"
+	"tracing/std",
 ]
