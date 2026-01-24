@@ -69,7 +69,9 @@ where
 		// "asset-hub-pezkuwichain" starts with "asset-hub-pezkuwi", so we must exclude it.
 		let is_asset_hub_pezkuwi = ctx
 			.parachain_id
-			.map(|id| id.starts_with("asset-hub-pezkuwi") && !id.starts_with("asset-hub-pezkuwichain"))
+			.map(|id| {
+				id.starts_with("asset-hub-pezkuwi") && !id.starts_with("asset-hub-pezkuwichain")
+			})
 			.unwrap_or_default();
 		let keystore_key_types = node.keystore_key_types.iter().map(String::as_str).collect();
 		let key_filenames = generators::generate_node_keystore(
