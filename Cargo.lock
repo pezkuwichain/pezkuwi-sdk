@@ -24391,7 +24391,7 @@ checksum = "cd0b0ec5f1c1ca621c432a25813d8d60c88abe6d3e08a3eb9cf37d97a0fe3d73"
 [[package]]
 name = "serde"
 version = "1.0.228"
-source = "git+https://github.com/pezkuwichain/serde.git?branch=fix-wasm32v1-none#c03215db8d6a3894badae73f46ebd1ef8c74261c"
+source = "git+https://github.com/pezkuwichain/serde.git?branch=fix-wasm32v1-none#0a75fdd839b9c8278ed01f91ad05cff31125e73d"
 dependencies = [
  "serde_core",
  "serde_derive 1.0.228 (git+https://github.com/pezkuwichain/serde.git?branch=fix-wasm32v1-none)",
@@ -24429,7 +24429,7 @@ dependencies = [
 [[package]]
 name = "serde_core"
 version = "1.0.228"
-source = "git+https://github.com/pezkuwichain/serde.git?branch=fix-wasm32v1-none#c03215db8d6a3894badae73f46ebd1ef8c74261c"
+source = "git+https://github.com/pezkuwichain/serde.git?branch=fix-wasm32v1-none#0a75fdd839b9c8278ed01f91ad05cff31125e73d"
 dependencies = [
  "serde_derive 1.0.228 (git+https://github.com/pezkuwichain/serde.git?branch=fix-wasm32v1-none)",
 ]
@@ -24448,7 +24448,7 @@ dependencies = [
 [[package]]
 name = "serde_derive"
 version = "1.0.228"
-source = "git+https://github.com/pezkuwichain/serde.git?branch=fix-wasm32v1-none#c03215db8d6a3894badae73f46ebd1ef8c74261c"
+source = "git+https://github.com/pezkuwichain/serde.git?branch=fix-wasm32v1-none#0a75fdd839b9c8278ed01f91ad05cff31125e73d"
 dependencies = [
  "proc-macro2 1.0.105",
  "quote 1.0.43",
