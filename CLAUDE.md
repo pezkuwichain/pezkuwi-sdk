@@ -7,6 +7,7 @@ Bu dosya her oturumda Claude tarafından okunmalı ve kurallara kesinlikle uyulm
 @.claude/PROJECT_STATE.md
 @.claude/SESSION_LOG.md
 @.claude/MAINNET_ROADMAP.md
+@.claude/PUBLIC_TESTNET_ROADMAP.md
 
 ---
 
