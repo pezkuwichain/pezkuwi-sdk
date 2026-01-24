@@ -64,3 +64,12 @@ vendor/*/Cargo.lock
 
 # Generated chain specs
 chain-specs/
+
+# Sensitive wallet data - NEVER commit
+/res/
+tools/usdt-bridge/secrets/
+*.seed
+*wallet*.json
+founder_validators.json
+founder_governance.json
+mainnet/

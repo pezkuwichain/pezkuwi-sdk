@@ -1349,10 +1349,12 @@ fn add_authorities(
 	nodes: &[&NodeSpec],
 	session_key: SessionKeyType,
 ) {
+	// NOTE: Check that it's "asset-hub-pezkuwi" (mainnet) but NOT "asset-hub-pezkuwichain" (testnet).
+	// "asset-hub-pezkuwichain" starts with "asset-hub-pezkuwi", so we must exclude it.
 	let is_asset_hub_pezkuwi = chain_spec_json
 		.get("id")
 		.and_then(|v| v.as_str())
-		.map(|id| id.starts_with("asset-hub-pezkuwi"))
+		.map(|id| id.starts_with("asset-hub-pezkuwi") && !id.starts_with("asset-hub-pezkuwichain"))
 		.unwrap_or_default();
 	if let Some(val) = chain_spec_json.pointer_mut(runtime_config_ptr) {
 		if let Some(session_keys) = val.pointer_mut("/session/keys") {
