@@ -1,91 +1,94 @@
 # SON OTURUM ÖZETİ
 
-**Tarih:** 2026-01-02
-**Oturum:** XCM Teleport Test + Asset Hub RPC Sorunu
+**Tarih:** 2026-01-24
+**Oturum:** Ed25519/Sr25519 Fix + Public Testnet Planlama
 
 ---
 
 ## BU OTURUMDA YAPILAN
 
-1. **XCM Teleport Testi (Kısmi Başarı)**
-   - `xcm_reserve_transfer.rs` örneği oluşturuldu
-   - Relay Chain → Asset Hub teleport işlemi başarılı
-   - XCM Sent event alındı, Teyrchain(1000)'e gönderildi
-   - Fees ödendi: 132,333,009 planck
+### 1. Ed25519/Sr25519 Key Scheme Fix (TAMAMLANDI ✅)
 
-2. **Asset Hub RPC Sorunu Tespit Edildi**
-   - Port 9945 relay chain verisi döndürüyor (teyrchain verisi değil)
-   - Her iki port aynı finalized block hash döndürüyor
-   - Collator RPC yapılandırması yanlış olabilir
+**Problem Tespit Edildi:**
+- `asset-hub-pezkuwichain-local` yanlışlıkla Ed25519 kullanıyordu
+- Sebep: `"asset-hub-pezkuwichain".starts_with("asset-hub-pezkuwi")` = TRUE
+- Prefix matching sırası yanlıştı
 
-3. **LOCAL network hala çalışıyor**
-   - Alice + Bob (2 validator) senkronize
-   - Asset Hub collator blok üretiyor (RPC sorunu var)
+**Çözüm Uygulandı:**
+- RuntimeResolver'da uzun prefix ÖNCE kontrol ediliyor
+- Zombienet SDK'da aynı fix uygulandı
+- 3 dosya düzeltildi:
+  - `pezcumulus/pezkuwi-teyrchain/src/chain_spec/mod.rs`
+  - `vendor/pezkuwi-zombienet-sdk/.../chain_spec.rs`
+  - `vendor/pezkuwi-zombienet-sdk/.../spawner.rs`
 
----
+**Commit:** `f52eb30abb`
 
-## XCM TEST SONUCU
+### 2. VPS2'de 21 Validator Test (BAŞARILI ✅)
 
-```
-═══ STEP 4: Execute XCM Teleport ═══
-  Transfer amount: 100000000000 TYR (0.1 HEZ)
-  ✓ Transaction finalized on Relay Chain!
+- Network spawn edildi
+- 21 validator + 4 collator çalıştı
+- Relay Chain: Block #21
+- Asset Hub: Block #7
+- **CannotSign hatası: YOK**
+- Kapanma: Metric timeout (fix ile alakasız)
 
-═══ STEP 5: Analyze XCM events ═══
-  ✓ XCM Attempted: Complete { used: Weight { ref_time: 159870000, proof_size: 3593 } }
-  ✓ XCM Sent: Origin: Alice, Destination: Teyrchain(1000)
-  ✓ XCM FeesPaid: 132333009 planck
+### 3. VPS Kapasite Analizi (TAMAMLANDI ✅)
 
-═══ TEST RESULTS ═══
-  RELAY CHAIN (Alice):
-    Before: 0.9999 HEZ
-    After:  0.8997 HEZ
-    Spent:  0.1002 HEZ
+| VPS | CPU | RAM | Disk | Max Validator |
+|-----|-----|-----|------|---------------|
+| VPS1 (37.60.230.9) | 8 | 23GB | 115GB boş | ~8 |
+| VPS2 (62.146.235.186) | 16 | 62GB | 520GB boş | ~18 |
 
-  ⚠ Asset Hub bakiyesi doğrulanamıyor - RPC sorunu
-```
+**Sonuç:** 2 VPS toplam 21 validator + 4 collator kaldırabilir.
 
-**Çalıştırma komutu:**
-```bash
-cd /home/mamostehp/pezkuwi-sdk
-cargo run --release -p pezkuwi-subxt --example xcm_reserve_transfer
-```
+### 4. Public Testnet Roadmap (OLUŞTURULDU ✅)
+
+Staged Approach belirlendi:
+- **STAGE 1:** Internal Testnet (bizim VPS'ler)
+- **STAGE 2:** Public RPC
+- **STAGE 3:** Community Validators
+
+Detaylı checklist: `.claude/PUBLIC_TESTNET_ROADMAP.md`
 
 ---
 
 ## NEREDE KALDIK
 
-**Mevcut Durum:** FAZ 3 - Network Test Aşamaları
-- DEV: ✅ TAMAMLANDI
-- LOCAL: ✅ TAMAMLANDI
-- Token Transfer: ✅ BAŞARILI
-- XCM Teleport (Relay tarafı): ✅ BAŞARILI
-- XCM Teleport (Asset Hub doğrulama): ⚠️ RPC SORUNU
-- ALPHA: BEKLEMEDE
+**Mevcut Durum:** STAGE 1 - Internal Testnet (BAŞLAMADI)
 
-**Kritik Sorun: Asset Hub RPC**
-- Port 9945'e bağlanıldığında relay chain verisi geliyor
-- `system_chain` → "Pezkuwichain Local Testnet" (Asset Hub olmalı)
-- `state_getRuntimeVersion` → specName: "pezkuwichain" (asset-hub-pezkuwichain olmalı)
-- Tüm portlar aynı finalized block hash döndürüyor
+**Sonraki Adım:** STAGE 1.1 - Validator Key Oluşturma
 
-**Sonraki Görevler:**
-1. ⚠️ Asset Hub RPC sorununu çöz (pezkuwi-teyrchain collator)
-2. XCM testini tamamla (Asset Hub bakiye doğrulama)
-3. ALPHA network (4 validator) hazırlığı
+**Checklist (STAGE 1):**
+- [x] Ed25519/Sr25519 fix
+- [x] 21 validator test (local/VPS2)
+- [x] VPS kapasite kontrolü
+- [ ] Validator key'leri oluştur
+- [ ] Chain spec oluştur
+- [ ] Systemd service dosyaları
+- [ ] VPS deployment
+- [ ] Bootnode yapılandırması
+- [ ] 24 saat stability test
 
 ---
 
 ## KRİTİK NOTLAR SONRAKİ CLAUDE İÇİN
 
-1. **pezkuwi-subxt ÇALIŞIYOR** - XCM işlemleri test edilebilir
-2. **XCM Teleport ÇALIŞIYOR** - Relay chain tarafında başarılı
-3. **Asset Hub RPC SORUNU VAR** - Collator relay chain verisi döndürüyor
-4. **Polkadot.js KULLANMA** - Çalışmıyor, pezkuwi-subxt kullan
-5. **Network aktif** - zombienet-local.toml ile spawn edilmiş
-6. **Metadata dosyaları:**
-   - `vendor/pezkuwi-subxt/artifacts/pezkuwichain_metadata.scale`
-   - `vendor/pezkuwi-subxt/artifacts/asset_hub_metadata.scale`
+1. **Ed25519/Sr25519 FIX YAPILDI** - Commit f52eb30abb
+2. **Zombienet timeout sorunu VAR** - Ama network çalışıyor, sadece monitoring
+3. **VPS2'de wasm build sorunu VAR** - Binary kopyalayarak çöz
+4. **Config path'leri DİKKAT** - VPS'te `/root/pezkuwi-sdk/...` olmalı
+5. **PUBLIC_TESTNET_ROADMAP.md OKU** - Tüm detaylar orada
+
+---
+
+## ÖNEMLİ DOSYALAR
+
+| Dosya | Açıklama |
+|-------|----------|
+| `.claude/PUBLIC_TESTNET_ROADMAP.md` | Testnet checklist ve plan |
+| `zombienet-local-21.toml` | 21 validator config |
+| `zombienet-mainnet-21.toml` | Mainnet config template |
 
 ---
 
