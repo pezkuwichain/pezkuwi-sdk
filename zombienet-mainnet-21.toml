@@ -11,7 +11,10 @@ bootnode_spawn_timeout = 300
 default_command = "/home/mamostehp/pezkuwi-sdk/target/release/pezkuwi"
 # Use "genesis" preset which has 21 real validators and real account addresses
 chain = "pezkuwichain"
-default_args = ["-lbabe=debug,grandpa=debug,teyrchain=debug", "--unsafe-force-node-key-generation"]
+default_args = [
+	"--unsafe-force-node-key-generation",
+	"-lbabe=debug,grandpa=debug,teyrchain=debug",
+]
 
 # Validator 1: Satoshi-Qazi-Mohammed
 [[relaychain.nodes]]
