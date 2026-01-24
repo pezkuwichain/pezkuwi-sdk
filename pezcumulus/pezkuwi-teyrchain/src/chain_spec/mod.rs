@@ -247,16 +247,19 @@ impl LegacyRuntime {
 	fn from_id(id: &str) -> LegacyRuntime {
 		let id = id.replace('_', "-");
 
-		if id.starts_with("asset-hub-pezkuwi") | id.starts_with("statemint") {
-			LegacyRuntime::AssetHubPezkuwi
-		} else if id.starts_with("asset-hub-dicle")
+		// NOTE: Check longer prefixes FIRST to avoid false matches.
+		// "asset-hub-pezkuwichain" starts with "asset-hub-pezkuwi", so we must check
+		// pezkuwichain before pezkuwi.
+		if id.starts_with("asset-hub-pezkuwichain")
+			| id.starts_with("asset-hub-dicle")
 			| id.starts_with("statemine")
-			| id.starts_with("asset-hub-pezkuwichain")
 			| id.starts_with("rockmine")
 			| id.starts_with("asset-hub-zagros")
 			| id.starts_with("westmint")
 		{
 			LegacyRuntime::AssetHub
+		} else if id.starts_with("asset-hub-pezkuwi") | id.starts_with("statemint") {
+			LegacyRuntime::AssetHubPezkuwi
 		} else if id.starts_with("penpal") {
 			LegacyRuntime::Penpal
 		} else if id.starts_with("collectives-pezkuwi") || id.starts_with("collectives-zagros") {

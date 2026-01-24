@@ -65,8 +65,12 @@ where
 		// Generate keystore for node
 		let node_files_path =
 			if let Some(para) = ctx.parachain { para.id.to_string() } else { node.name.clone() };
-		let is_asset_hub_pezkuwi =
-			ctx.parachain_id.map(|id| id.starts_with("asset-hub-pezkuwi")).unwrap_or_default();
+		// NOTE: Check that it's "asset-hub-pezkuwi" (mainnet) but NOT "asset-hub-pezkuwichain" (testnet).
+		// "asset-hub-pezkuwichain" starts with "asset-hub-pezkuwi", so we must exclude it.
+		let is_asset_hub_pezkuwi = ctx
+			.parachain_id
+			.map(|id| id.starts_with("asset-hub-pezkuwi") && !id.starts_with("asset-hub-pezkuwichain"))
+			.unwrap_or_default();
 		let keystore_key_types = node.keystore_key_types.iter().map(String::as_str).collect();
 		let key_filenames = generators::generate_node_keystore(
 			&node.accounts,
@@ -245,13 +249,13 @@ where
 	let prometheus_uri = format!("http://{ip_to_use}:{prometheus_port_external}/metrics");
 	info!("🚀 {}, should be running now", node.name);
 	info!(
-		"💻 {}: direct link (pjs) https://polkadot.js.org/apps/?rpc={ws_uri}#/explorer",
+		"💻 {}: direct link (apps) https://apps.pezkuwichain.io/?rpc={ws_uri}#/explorer",
 		node.name
 	);
 	info!(
-        "💻 {}: direct link (papi) https://dev.papi.how/explorer#networkId=custom&endpoint={ws_uri}",
-        node.name
-    );
+		"💻 {}: direct link (explorer) https://explorer.pezkuwichain.io/?rpc={ws_uri}#/explorer",
+		node.name
+	);
 
 	info!("📊 {}: metrics link {prometheus_uri}", node.name);
 
