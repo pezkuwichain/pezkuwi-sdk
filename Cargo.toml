@@ -1221,7 +1221,7 @@ pezkuwi-rpc = { path = "pezkuwi/rpc", version = "7.0.0", default-features = fals
 pezkuwi-runtime-common = { path = "pezkuwi/runtime/common", version = "7.0.0", default-features = false }
 pezkuwi-runtime-metrics = { path = "pezkuwi/runtime/metrics", version = "7.0.0", default-features = false }
 pezkuwi-runtime-teyrchains = { path = "pezkuwi/runtime/teyrchains", version = "7.0.0", default-features = false }
-pezkuwi-sdk = { path = "umbrella", version = "2.0.0", default-features = false }
+pezkuwi-sdk = { path = "umbrella", version = "0.1.2", default-features = false }
 pezkuwi-sdk-docs = { path = "docs/sdk", version = "0.0.2" }
 pezkuwi-service = { path = "pezkuwi/node/service", version = "7.0.1", default-features = false }
 pezkuwi-statement-distribution = { path = "pezkuwi/node/network/statement-distribution", version = "7.0.0", default-features = false }
