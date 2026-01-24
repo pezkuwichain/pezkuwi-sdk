@@ -1,6 +1,6 @@
 [package]
 name = "pezkuwi-sdk"
-version.workspace = true
+version = "0.44.0"
 description = "Pezkuwi SDK umbrella crate."
 license = "Apache-2.0"
 
