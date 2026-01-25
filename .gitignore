@@ -73,3 +73,6 @@ tools/usdt-bridge/secrets/
 founder_validators.json
 founder_governance.json
 mainnet/
+relay-mainnet.json
+tools/usdt-bridge/bridge_db.json
+.claude/domains-repositories
