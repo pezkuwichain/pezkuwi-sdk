@@ -238,7 +238,7 @@ async fn mine_for_pezkuwi() {
 async fn mine_for_dicle() {
 	pezsp_tracing::try_init_simple();
 
-	// good way to find good block hashes: https://dicle.subscan.io/event?page=1&time_dimension=date&module=electionprovidermultiphase&event_id=solutionstored
+	// good way to find good block hashes: https://explorer.pezkuwichain.io/event?module=electionprovidermultiphase&event_id=solutionstored
 	// we are just looking for blocks with snapshot present, that's all.
 	let block_hash_str = std::option_env!("BLOCK_HASH")
 		// known good dicle hash
