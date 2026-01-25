@@ -97,6 +97,18 @@ cargo test --doc -p pezframe -p pezframe-support -p pezkuwi-subxt
 # Workspace Check
 SKIP_WASM_BUILD=1 cargo check --workspace
 # Sonuç: Finished ✅
+
+# check-try-runtime (CI komutu ile aynı)
+SKIP_WASM_BUILD=1 cargo check --locked --all --features try-runtime --quiet
+# Sonuç: EXIT CODE 0 ✅
+
+# cargo-check-all-benches (CI komutu ile aynı)
+SKIP_WASM_BUILD=1 cargo check --workspace --benches --features runtime-benchmarks --quiet
+# Sonuç: EXIT CODE 0 ✅
+# Düzeltmeler:
+#   - StorageCmd cfg: runtime-benchmarks → storage-benchmark
+#   - enable_metadata_hash_in_wasm_builder: cfg(feature = "metadata-hash") eklendi
+#   - Cargo.toml: storage-benchmark ve metadata-hash feature'ları eklendi
 ```
 
 ---
