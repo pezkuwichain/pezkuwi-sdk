@@ -198,7 +198,7 @@ pub mod ext {
 ///
 /// ```rust,ignore
 /// #[pezkuwi_subxt::subxt(
-///     runtime_metadata_insecure_url = "wss://rpc.pezkuwi.io:443"
+///     runtime_metadata_insecure_url = "wss://rpc.pezkuwichain.io:443"
 /// )]
 /// mod pezkuwi {}
 /// ```
@@ -374,7 +374,7 @@ pub mod ext {
 ///
 /// ```rust,ignore
 /// #[pezkuwi_subxt::subxt(
-///     runtime_metadata_insecure_url = "wss://rpc.pezkuwi.io:443",
+///     runtime_metadata_insecure_url = "wss://rpc.pezkuwichain.io:443",
 ///     unstable_metadata
 /// )]
 /// mod pezkuwi {}

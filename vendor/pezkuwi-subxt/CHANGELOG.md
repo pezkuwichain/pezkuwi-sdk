@@ -723,11 +723,11 @@ Our CLI tool now allows you to explore runtime APIs and events ([#1290](https://
 
 ```sh
 # Show details about a runtime API call:
-subxt explore --url wss://zagros-rpc.pezkuwi.io api StakingAPI nominations_quota
+subxt explore --url wss://zagros-rpc.pezkuwichain.io api StakingAPI nominations_quota
 # Execute a runtime API call from the CLI:
-subxt explore --url wss://zagros-rpc.pezkuwi.io api core version -e
+subxt explore --url wss://zagros-rpc.pezkuwichain.io api core version -e
 # Discover what events a pallet can emit:
-subxt explore --url wss://zagros-rpc.pezkuwi.io pallet Balances events
+subxt explore --url wss://zagros-rpc.pezkuwichain.io pallet Balances events
 ```
 
 All CLI commands that take some metadata via `--file` or `--url`, can now also read the metadata directly from `stdin` with `--file -` ([#1336](https://github.com/pezkuwichain/subxt/pull/1336)).

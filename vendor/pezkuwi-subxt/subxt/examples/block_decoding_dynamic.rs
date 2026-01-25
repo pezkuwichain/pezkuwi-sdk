@@ -4,7 +4,7 @@ use pezkuwi_subxt::{OnlineClient, PezkuwiConfig};
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	// Create a client that subscribes to blocks of the Pezkuwi network.
-	let api = OnlineClient::<PezkuwiConfig>::from_url("wss://rpc.pezkuwi.io:443").await?;
+	let api = OnlineClient::<PezkuwiConfig>::from_url("wss://rpc.pezkuwichain.io:443").await?;
 
 	// Subscribe to all finalized blocks:
 	let mut blocks_sub = api.blocks().subscribe_finalized().await?;
