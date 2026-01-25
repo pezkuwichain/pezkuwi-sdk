@@ -12013,6 +12013,7 @@ dependencies = [
  "pezsp-staking",
  "pezsp-state-machine",
  "pezsp-std",
+ "pezsp-timestamp",
  "pezsp-tracing",
  "pezsp-trie",
  "pezsp-weights",

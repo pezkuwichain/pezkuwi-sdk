@@ -26,6 +26,7 @@ pub enum PeopleRuntimeType {
 	Pezkuwi,
 	PezkuwiLocal,
 	Pezkuwichain,
+	PezkuwichainGenesis,
 	PezkuwichainLocal,
 	PezkuwichainDevelopment,
 	Zagros,
@@ -43,6 +44,7 @@ impl FromStr for PeopleRuntimeType {
 			pezkuwi::PEOPLE_PEZKUWI => Ok(PeopleRuntimeType::Pezkuwi),
 			pezkuwi::PEOPLE_PEZKUWI_LOCAL => Ok(PeopleRuntimeType::PezkuwiLocal),
 			pezkuwichain::PEOPLE_PEZKUWICHAIN => Ok(PeopleRuntimeType::Pezkuwichain),
+			pezkuwichain::PEOPLE_PEZKUWICHAIN_GENESIS => Ok(PeopleRuntimeType::PezkuwichainGenesis),
 			pezkuwichain::PEOPLE_PEZKUWICHAIN_LOCAL => Ok(PeopleRuntimeType::PezkuwichainLocal),
 			pezkuwichain::PEOPLE_PEZKUWICHAIN_DEVELOPMENT => {
 				Ok(PeopleRuntimeType::PezkuwichainDevelopment)
@@ -69,6 +71,7 @@ impl PeopleRuntimeType {
 			PeopleRuntimeType::Pezkuwichain => Ok(Box::new(GenericChainSpec::from_json_bytes(
 				&include_bytes!("../../chain-specs/people-pezkuwichain.json")[..],
 			)?)),
+			PeopleRuntimeType::PezkuwichainGenesis => Ok(Box::new(pezkuwichain::genesis_config())),
 			PeopleRuntimeType::PezkuwichainLocal => Ok(Box::new(pezkuwichain::local_config(
 				pezkuwichain::PEOPLE_PEZKUWICHAIN_LOCAL,
 				"Pezkuwichain People Local",
@@ -123,8 +126,29 @@ pub mod pezkuwichain {
 	use pezsc_chain_spec::ChainType;
 
 	pub(crate) const PEOPLE_PEZKUWICHAIN: &str = "people-pezkuwichain";
+	pub(crate) const PEOPLE_PEZKUWICHAIN_GENESIS: &str = "people-pezkuwichain-genesis";
 	pub(crate) const PEOPLE_PEZKUWICHAIN_LOCAL: &str = "people-pezkuwichain-local";
 	pub(crate) const PEOPLE_PEZKUWICHAIN_DEVELOPMENT: &str = "people-pezkuwichain-dev";
+
+	/// Genesis config for People Pezkuwichain mainnet
+	pub fn genesis_config() -> GenericChainSpec {
+		let mut properties = pezsc_chain_spec::Properties::new();
+		properties.insert("ss58Format".into(), 42.into());
+		properties.insert("tokenSymbol".into(), "TYR".into());
+		properties.insert("tokenDecimals".into(), 12.into());
+
+		GenericChainSpec::builder(
+			people_pezkuwichain_runtime::WASM_BINARY
+				.expect("WASM binary was not built, please build it!"),
+			Extensions::new_with_relay_chain("pezkuwichain-mainnet".to_string()),
+		)
+		.with_name("Pezkuwichain People")
+		.with_id(super::ensure_id(PEOPLE_PEZKUWICHAIN_GENESIS).expect("invalid id"))
+		.with_chain_type(ChainType::Live)
+		.with_genesis_config_preset_name("genesis")
+		.with_properties(properties)
+		.build()
+	}
 
 	pub fn local_config(
 		spec_id: &str,
