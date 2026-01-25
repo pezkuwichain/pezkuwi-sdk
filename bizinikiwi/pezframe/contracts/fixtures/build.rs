@@ -127,8 +127,8 @@ version = "0.6.3"
 edition = "2021"
 description = "Pezkuwi SDK component: contracts"
 repository = "https://github.com/pezkuwichain/pezkuwi-sdk"
-homepage = "https://pezkuwi.io"
-authors = ["Pezkuwi Chain <admin@pezkuwi.io>"]
+homepage = "https://pezkuwichain.io"
+authors = ["Pezkuwi Chain <admin@pezkuwichain.io>"]
 license = "Apache-2.0"
 [[bin]]
 
