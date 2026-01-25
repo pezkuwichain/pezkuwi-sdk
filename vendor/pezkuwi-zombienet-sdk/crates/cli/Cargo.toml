@@ -39,4 +39,7 @@ std = [
 	"support/std",
 	"tracing/std",
 ]
-runtime-benchmarks = []
+runtime-benchmarks = [
+	"orchestrator/runtime-benchmarks",
+	"pezkuwi-zombienet-sdk/runtime-benchmarks",
+]
