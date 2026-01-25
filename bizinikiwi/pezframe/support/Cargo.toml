@@ -102,6 +102,7 @@ runtime-benchmarks = [
 	"pezsp-staking/runtime-benchmarks",
 	"pezsp-state-machine?/runtime-benchmarks",
 	"pezsp-trie/runtime-benchmarks",
+	"pezsp-timestamp/runtime-benchmarks"
 ]
 try-runtime = [
 	"pezframe-system/try-runtime",
