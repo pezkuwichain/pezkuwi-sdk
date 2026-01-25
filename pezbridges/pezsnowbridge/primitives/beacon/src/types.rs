@@ -640,7 +640,7 @@ pub mod deneb {
 	use serde::{Deserialize, Serialize};
 
 	/// ExecutionPayloadHeader
-	/// <https://github.com/ethereum/consensus-specs/blob/dev/specs/deneb/beacon-chain.md#executionpayloadheader>
+	/// <https://github.com/ethereum/consensus-specs/blob/master/specs/deneb/beacon-chain.md#executionpayloadheader>
 	#[derive(
 		Default,
 		Encode,
