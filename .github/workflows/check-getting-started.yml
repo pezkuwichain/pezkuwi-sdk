@@ -76,6 +76,8 @@ jobs:
       PEZKUWI_TEMPLATE_SOURCE: ${{ github.workspace }}/templates
       # Skip WASM build due to serde_core compatibility issues
       SKIP_WASM_BUILD: 1
+      # Fix HOME directory mismatch in containers (rustup requires this)
+      HOME: /root
     steps:
       # A minimal amount of prerequisites required before we can run the actual getting-started script,
       # which will install the rest of requirements.
