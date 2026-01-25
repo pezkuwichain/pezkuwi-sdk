@@ -39,3 +39,4 @@ std = [
 	"support/std",
 	"tracing/std",
 ]
+runtime-benchmarks = []
