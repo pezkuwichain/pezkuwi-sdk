@@ -23,6 +23,11 @@ num-format = { version = "0.4.3", optional = true }
 Inflector = { version = "0.11.4", default-features = false }
 proc-macro2 = "1.0.36"
 quote = { version = "1.0.15", default-features = false }
-serde = { version = "1.0.136", default-features = false, features = ["derive", "std"] }
-serde_json = { version = "1.0.79", default-features = false, features = ["std"] }
+serde = { version = "1.0.136", default-features = false, features = [
+	"derive",
+	"std",
+] }
+serde_json = { version = "1.0.79", default-features = false, features = [
+	"std",
+] }
 unicode-xid = "0.2.2"

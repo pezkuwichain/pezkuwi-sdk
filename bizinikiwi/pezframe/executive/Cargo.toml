@@ -41,10 +41,7 @@ pezsp-version = { workspace = true, default-features = true }
 
 [features]
 default = ["std"]
-with-tracing = [
-	"pezsp-io/with-tracing",
-	"pezsp-tracing/with-tracing",
-]
+with-tracing = ["pezsp-io/with-tracing", "pezsp-tracing/with-tracing"]
 std = [
 	"bizinikiwi-test-runtime-client/std",
 	"codec/std",

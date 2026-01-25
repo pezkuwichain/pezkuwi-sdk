@@ -72,9 +72,7 @@ runtime-benchmarks = [
 	"xcm-pez-simulator/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
 ]
-std = [
-	"xcm-pez-simulator/std",
-]
+std = ["xcm-pez-simulator/std"]
 try-runtime = [
 	"pezcumulus-pezpallet-teyrchain-system/try-runtime",
 	"pezcumulus-primitives-core/try-runtime",

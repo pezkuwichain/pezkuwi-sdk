@@ -31,8 +31,5 @@ thiserror = { workspace = true }
 wasm-timer = { workspace = true }
 
 [features]
-std = [
-	"log/std",
-	"pezsc-utils/std",
-]
+std = ["log/std", "pezsc-utils/std"]
 serde = []

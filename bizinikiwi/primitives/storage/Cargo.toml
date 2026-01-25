@@ -28,8 +28,4 @@ default = ["std"]
 std = ["codec/std", "impl-serde/std", "pezsp-debug-derive/std", "serde/std"]
 
 # Serde support without relying on std features.
-serde = [
-	"codec/serde",
-	"dep:serde",
-	"impl-serde",
-]
+serde = ["codec/serde", "dep:serde", "impl-serde"]

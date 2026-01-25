@@ -24,6 +24,4 @@ quote = { workspace = true }
 syn = { features = ["full", "parsing"], workspace = true }
 
 [features]
-std = [
-	"pezsp-crypto-hashing/std",
-]
+std = ["pezsp-crypto-hashing/std"]

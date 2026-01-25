@@ -48,7 +48,5 @@ num-bigint = { workspace = true }
 pezsp-arithmetic = { workspace = true, default-features = true }
 
 [features]
-std = [
-	"num-bigint/std",
-]
+std = ["num-bigint/std"]
 serde = []

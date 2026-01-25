@@ -39,12 +39,7 @@ runtime-benchmarks = [
 	"pezsp-io/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
-std = [
-	"log/std",
-	"pezsc-telemetry/std",
-]
-try-runtime = [
-	"pezsp-runtime/try-runtime",
-]
+std = ["log/std", "pezsc-telemetry/std"]
+try-runtime = ["pezsp-runtime/try-runtime"]
 serde = []
 with-tracing = []

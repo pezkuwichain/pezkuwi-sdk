@@ -55,10 +55,7 @@ runtime-benchmarks = [
 	"xcm-pez-simulator/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
 ]
-std = [
-	"scale-info/std",
-	"xcm-pez-simulator/std",
-]
+std = ["scale-info/std", "xcm-pez-simulator/std"]
 try-runtime = [
 	"pezframe-support/try-runtime",
 	"pezframe-system/try-runtime",

@@ -60,10 +60,7 @@ runtime-benchmarks = [
 	"pezsp-runtime/runtime-benchmarks",
 	"pezsp-staking/runtime-benchmarks",
 ]
-std = [
-	"log/std",
-	"pezpallet-staking-reward-curve/std",
-]
+std = ["log/std", "pezpallet-staking-reward-curve/std"]
 try-runtime = [
 	"pezframe-election-provider-support/try-runtime",
 	"pezframe-support/try-runtime",

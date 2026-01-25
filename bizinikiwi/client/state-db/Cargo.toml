@@ -23,7 +23,5 @@ parking_lot = { workspace = true, default-features = true }
 pezsp-core = { workspace = true, default-features = true }
 
 [features]
-std = [
-	"log/std",
-]
+std = ["log/std"]
 serde = []

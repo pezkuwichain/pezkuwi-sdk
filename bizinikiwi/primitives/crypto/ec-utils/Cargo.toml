@@ -65,6 +65,4 @@ all-curves = [
 	"ed-on-bls12-377",
 	"ed-on-bls12-381-bandersnatch",
 ]
-runtime-benchmarks = [
-	"pezsp-runtime-interface?/runtime-benchmarks",
-]
+runtime-benchmarks = ["pezsp-runtime-interface?/runtime-benchmarks"]

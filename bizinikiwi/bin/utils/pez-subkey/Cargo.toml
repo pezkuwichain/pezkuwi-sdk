@@ -26,6 +26,4 @@ pezsc-cli = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = ["pezsc-cli/runtime-benchmarks"]
-std = [
-	"pezsc-cli/std",
-]
+std = ["pezsc-cli/std"]

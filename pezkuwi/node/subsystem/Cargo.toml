@@ -21,7 +21,4 @@ runtime-benchmarks = [
 	"pezkuwi-node-subsystem-types/runtime-benchmarks",
 	"pezkuwi-overseer/runtime-benchmarks",
 ]
-std = [
-	"pezkuwi-node-subsystem-types/std",
-	"pezkuwi-overseer/std",
-]
+std = ["pezkuwi-node-subsystem-types/std", "pezkuwi-overseer/std"]

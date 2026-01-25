@@ -32,14 +32,6 @@ runtime-benchmarks = [
 	"pezsp-blockchain/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
-std = [
-	"log/std",
-	"pezsp-blockchain/std",
-	"pezsp-core/std",
-	"pezsp-runtime/std",
-]
-try-runtime = [
-	"pezsp-blockchain/try-runtime",
-	"pezsp-runtime/try-runtime",
-]
+std = ["log/std", "pezsp-blockchain/std", "pezsp-core/std", "pezsp-runtime/std"]
+try-runtime = ["pezsp-blockchain/try-runtime", "pezsp-runtime/try-runtime"]
 serde = []

@@ -43,7 +43,5 @@ tokio = { features = [
 ], workspace = true, default-features = true }
 
 [features]
-std = [
-	"log/std",
-]
+std = ["log/std"]
 serde = []

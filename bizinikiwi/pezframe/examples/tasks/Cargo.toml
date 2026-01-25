@@ -56,10 +56,7 @@ try-runtime = [
 	"pezframe-system/try-runtime",
 	"pezsp-runtime/try-runtime",
 ]
-experimental = [
-	"pezframe-support/experimental",
-	"pezframe-system/experimental",
-]
+experimental = ["pezframe-support/experimental", "pezframe-system/experimental"]
 serde = []
 with-tracing = []
 tuples-96 = []

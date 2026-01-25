@@ -110,7 +110,10 @@ zeroize = { workspace = true }
 
 # These are used if the pezkuwi-js-compat feature is enabled
 base64 = { workspace = true, optional = true, features = ["alloc"] }
-crypto_secretbox = { workspace = true, optional = true, features = ["alloc", "salsa20"] }
+crypto_secretbox = { workspace = true, optional = true, features = [
+	"alloc",
+	"salsa20",
+] }
 scrypt = { workspace = true, default-features = false, optional = true }
 serde = { workspace = true, optional = true }
 serde_json = { workspace = true, optional = true }

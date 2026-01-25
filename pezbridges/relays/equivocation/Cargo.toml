@@ -29,8 +29,4 @@ runtime-benchmarks = [
 	"pezbp-header-pez-chain/runtime-benchmarks",
 	"relay-utils/runtime-benchmarks",
 ]
-std = [
-	"pez-finality-relay/std",
-	"relay-utils/std",
-	"tracing/std",
-]
+std = ["pez-finality-relay/std", "relay-utils/std", "tracing/std"]

@@ -35,8 +35,5 @@ runtime-benchmarks = [
 	"pezkuwi-primitives/runtime-benchmarks",
 	"pezsp-trie/runtime-benchmarks",
 ]
-std = [
-	"codec/std",
-	"pezkuwi-pez-node-primitives/std",
-]
+std = ["codec/std", "pezkuwi-pez-node-primitives/std"]
 serde = []

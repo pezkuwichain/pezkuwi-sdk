@@ -27,9 +27,5 @@ default = ["std"]
 std = ["codec/std", "pezsp-timestamp/std", "scale-info/std", "serde/std"]
 
 # Serde support without relying on std features.
-serde = [
-	"codec/serde",
-	"dep:serde",
-	"scale-info/serde",
-]
+serde = ["codec/serde", "dep:serde", "scale-info/serde"]
 runtime-benchmarks = ["pezsp-timestamp/runtime-benchmarks"]

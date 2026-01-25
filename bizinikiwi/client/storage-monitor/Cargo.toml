@@ -21,7 +21,5 @@ thiserror = { workspace = true }
 tokio = { features = ["time"], workspace = true, default-features = true }
 
 [features]
-std = [
-	"log/std",
-]
+std = ["log/std"]
 serde = []

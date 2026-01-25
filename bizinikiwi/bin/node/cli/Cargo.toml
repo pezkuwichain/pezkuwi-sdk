@@ -50,7 +50,10 @@ harness = false
 
 [dependencies]
 # Umbrella crate for re-exports
-pezkuwi-sdk = { workspace = true, default-features = true, features = ["node", "runtime"] }
+pezkuwi-sdk = { workspace = true, default-features = true, features = [
+	"node",
+	"runtime",
+] }
 
 # third-party dependencies
 array-bytes = { workspace = true, default-features = true }

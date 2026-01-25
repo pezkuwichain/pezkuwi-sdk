@@ -46,13 +46,7 @@ runtime-benchmarks = [
 	"pezsp-runtime/runtime-benchmarks",
 	"pezsp-state-machine/runtime-benchmarks",
 ]
-std = [
-	"bizinikiwi-rpc-client/std",
-	"log/std",
-]
-try-runtime = [
-	"bizinikiwi-rpc-client/try-runtime",
-	"pezsp-runtime/try-runtime",
-]
+std = ["bizinikiwi-rpc-client/std", "log/std"]
+try-runtime = ["bizinikiwi-rpc-client/try-runtime", "pezsp-runtime/try-runtime"]
 serde = []
 with-tracing = []

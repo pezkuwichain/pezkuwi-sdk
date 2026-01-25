@@ -24,9 +24,5 @@ pezsc-executor-common = { workspace = true, default-features = true }
 pezsp-wasm-interface = { workspace = true, default-features = true }
 
 [features]
-std = [
-	"log/std",
-	"pezsc-executor-common/std",
-	"polkavm/std",
-]
+std = ["log/std", "pezsc-executor-common/std", "polkavm/std"]
 serde = []

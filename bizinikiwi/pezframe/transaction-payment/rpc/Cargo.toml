@@ -38,10 +38,7 @@ runtime-benchmarks = [
 	"pezsp-blockchain/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
-std = [
-	"pezsp-blockchain/std",
-	"pezsp-rpc/std",
-]
+std = ["pezsp-blockchain/std", "pezsp-rpc/std"]
 try-runtime = [
 	"pezpallet-transaction-payment-rpc-runtime-api/try-runtime",
 	"pezsp-api/try-runtime",

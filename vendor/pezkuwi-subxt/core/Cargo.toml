@@ -45,7 +45,9 @@ runtime-benchmarks = [
 ]
 
 [dependencies]
-codec = { package = "parity-scale-codec", workspace = true, default-features = false, features = ["derive"] }
+codec = { package = "parity-scale-codec", workspace = true, default-features = false, features = [
+	"derive",
+] }
 derive-where = { workspace = true }
 frame-decode = { workspace = true }
 frame-metadata = { workspace = true, default-features = false }
@@ -54,12 +56,24 @@ hex = { workspace = true }
 pezkuwi-subxt-metadata = { workspace = true, default-features = false }
 pezsp-crypto-hashing = { workspace = true }
 scale-bits = { workspace = true, default-features = false }
-scale-decode = { workspace = true, default-features = false, features = ["derive", "primitive-types"] }
-scale-encode = { workspace = true, default-features = false, features = ["bits", "derive", "primitive-types"] }
-scale-info = { workspace = true, default-features = false, features = ["bit-vec"] }
+scale-decode = { workspace = true, default-features = false, features = [
+	"derive",
+	"primitive-types",
+] }
+scale-encode = { workspace = true, default-features = false, features = [
+	"bits",
+	"derive",
+	"primitive-types",
+] }
+scale-info = { workspace = true, default-features = false, features = [
+	"bit-vec",
+] }
 scale-value = { workspace = true, default-features = false }
 serde = { workspace = true, default-features = false, features = ["derive"] }
-serde_json = { workspace = true, default-features = false, features = ["alloc", "raw_value"] }
+serde_json = { workspace = true, default-features = false, features = [
+	"alloc",
+	"raw_value",
+] }
 thiserror = { workspace = true }
 tracing = { workspace = true, default-features = false }
 
@@ -69,7 +83,11 @@ blake2 = { workspace = true }
 
 # Provides some deserialization, types like U256/H256 and hashing impls like twox/blake256:
 impl-serde = { workspace = true, default-features = false }
-primitive-types = { workspace = true, default-features = false, features = ["codec", "scale-info", "serde_no_std"] }
+primitive-types = { workspace = true, default-features = false, features = [
+	"codec",
+	"scale-info",
+	"serde_no_std",
+] }
 
 # AccountId20
 keccak-hash = { workspace = true }

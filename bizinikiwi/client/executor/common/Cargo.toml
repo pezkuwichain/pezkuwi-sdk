@@ -26,7 +26,4 @@ wasm-instrument = { workspace = true, default-features = true }
 
 [features]
 default = []
-std = [
-	"pezsc-allocator/std",
-	"polkavm/std",
-]
+std = ["pezsc-allocator/std", "polkavm/std"]

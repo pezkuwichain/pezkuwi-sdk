@@ -28,10 +28,5 @@ url = { workspace = true, features = ["serde"] }
 support = { workspace = true }
 
 [features]
-std = [
-	"anyhow/std",
-	"serde/std",
-	"support/std",
-	"tracing/std",
-]
+std = ["anyhow/std", "serde/std", "support/std", "tracing/std"]
 serde = []

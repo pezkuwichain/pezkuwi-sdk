@@ -21,8 +21,5 @@ log = { workspace = true, default-features = true }
 prometheus-endpoint = { workspace = true, default-features = true }
 
 [features]
-std = [
-	"log/std",
-	"prometheus-endpoint/std",
-]
+std = ["log/std", "prometheus-endpoint/std"]
 serde = []

@@ -101,8 +101,8 @@ runtime-benchmarks = [
 	"pezsp-runtime/runtime-benchmarks",
 	"pezsp-staking/runtime-benchmarks",
 	"pezsp-state-machine?/runtime-benchmarks",
+	"pezsp-timestamp/runtime-benchmarks",
 	"pezsp-trie/runtime-benchmarks",
-	"pezsp-timestamp/runtime-benchmarks"
 ]
 try-runtime = [
 	"pezframe-system/try-runtime",
@@ -112,6 +112,7 @@ try-runtime = [
 	"pezsp-inherents/try-runtime",
 	"pezsp-runtime/try-runtime",
 	"pezsp-staking/try-runtime",
+	"pezsp-timestamp/try-runtime",
 ]
 experimental = ["pezframe-support-procedural/experimental"]
 # By default some types have documentation, `no-metadata-docs` allows to reduce the documentation

@@ -27,8 +27,5 @@ scale-info = { features = ["derive"], optional = true, workspace = true }
 [features]
 default = ["scale"]
 scale = ["dep:codec", "scale-info"]
-std = [
-	"codec?/std",
-	"scale-info?/std",
-]
+std = ["codec?/std", "scale-info?/std"]
 serde = []

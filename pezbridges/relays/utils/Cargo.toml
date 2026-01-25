@@ -20,11 +20,11 @@ async-trait = { workspace = true }
 backoff = { workspace = true }
 futures = { workspace = true }
 # Using reqwest with rustls-tls for pure Rust TLS (no OpenSSL dependency)
-reqwest = { workspace = true }
 jsonpath_lib = { workspace = true }
 num-traits = { workspace = true, default-features = true }
 parking_lot = { workspace = true, default-features = true }
 pezsp-tracing = { workspace = true, default-features = true }
+reqwest = { workspace = true }
 serde_json = { workspace = true, default-features = true }
 sysinfo = { workspace = true }
 thiserror = { workspace = true }
@@ -44,13 +44,7 @@ runtime-benchmarks = [
 	"pezbp-runtime/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
-std = [
-	"prometheus-endpoint/std",
-	"tracing/std",
-]
-try-runtime = [
-	"pezbp-runtime/try-runtime",
-	"pezsp-runtime/try-runtime",
-]
+std = ["prometheus-endpoint/std", "tracing/std"]
+try-runtime = ["pezbp-runtime/try-runtime", "pezsp-runtime/try-runtime"]
 serde = []
 with-tracing = []

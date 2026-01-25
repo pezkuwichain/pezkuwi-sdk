@@ -201,8 +201,12 @@ def delete_umbrella(path):
 	umbrella_dir = os.path.join(path, "umbrella")
 	if os.path.exists(umbrella_dir):
 		print(f"Deleting {umbrella_dir}")
-		os.remove(os.path.join(umbrella_dir, "Cargo.toml"))
-		shutil.rmtree(os.path.join(umbrella_dir, "src"))
+		cargo_toml = os.path.join(umbrella_dir, "Cargo.toml")
+		if os.path.exists(cargo_toml):
+			os.remove(cargo_toml)
+		src_dir = os.path.join(umbrella_dir, "src")
+		if os.path.exists(src_dir):
+			shutil.rmtree(src_dir)
 
 """
 Create the umbrella crate and add it to the workspace.

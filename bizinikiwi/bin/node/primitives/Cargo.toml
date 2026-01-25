@@ -24,7 +24,5 @@ pezsp-runtime = { workspace = true }
 default = ["std"]
 std = ["pezsp-core/std", "pezsp-runtime/std"]
 runtime-benchmarks = ["pezsp-runtime/runtime-benchmarks"]
-try-runtime = [
-	"pezsp-runtime/try-runtime",
-]
+try-runtime = ["pezsp-runtime/try-runtime"]
 serde = []

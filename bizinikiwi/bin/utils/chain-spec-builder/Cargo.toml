@@ -50,7 +50,5 @@ runtime-benchmarks = [
 	"bizinikiwi-test-runtime/runtime-benchmarks",
 	"pezsc-chain-spec/runtime-benchmarks",
 ]
-std = [
-	"pezsc-chain-spec/std",
-]
+std = ["pezsc-chain-spec/std"]
 with-tracing = []
