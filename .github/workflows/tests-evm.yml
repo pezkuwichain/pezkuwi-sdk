@@ -45,6 +45,8 @@ jobs:
           curl -Lsf --show-error -o resolc "$ASSET_URL"
           chmod +x resolc
           ./resolc --version
+      - name: Add wasm32v1-none target
+        run: rustup target add wasm32v1-none
       - name: Building the dependencies from the Pezkuwi SDK
         run: cargo build --locked --profile release -p pezpallet-revive-eth-rpc -p pez-revive-dev-node
       - name: Checkout the Differential Tests Repository
@@ -117,6 +119,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
+      - name: Add wasm32v1-none target
+        run: rustup target add wasm32v1-none
       - name: script
         run: |
           cargo build --locked --release -p pezpallet-revive-eth-rpc --bin eth-rpc
