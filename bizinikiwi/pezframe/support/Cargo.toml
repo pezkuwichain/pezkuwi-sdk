@@ -57,6 +57,7 @@ aquamarine = { workspace = true }
 Inflector = { workspace = true }
 pezframe-system = { workspace = true, default-features = true }
 pezsp-crypto-hashing = { workspace = true, default-features = true }
+pezsp-timestamp = { workspace = true, default-features = true }
 pretty_assertions = { workspace = true }
 
 [features]

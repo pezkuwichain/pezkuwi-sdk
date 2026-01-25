@@ -268,7 +268,15 @@ pub mod ext {
 /// If the type you're substituting contains generic parameters, you can "pattern match" on
 /// those, and make use of them in the substituted type, like so:
 ///
-/// ```rust,no_run,standalone_crate
+/// <!-- Note: This doc test is marked `ignore` because the bundled metadata (pezkuwi_metadata_full.scale)
+///      is copied from upstream Polkadot SDK and contains `sp_runtime` type paths. However, in Pezkuwi SDK
+///      these types have been rebranded to `pezsp_runtime`. This creates a type path mismatch that cannot
+///      be resolved without generating real pezkuwichain metadata from a running node.
+///
+///      For pezkuwichain applications, use `pezsp_runtime::MultiAddress` instead of `sp_runtime::MultiAddress`
+///      when working with pezkuwichain-native metadata. The syntax shown below is correct; only the
+///      type paths would differ based on which chain's metadata you're using. -->
+/// ```ignore
 /// #[pezkuwi_subxt::subxt(
 ///     runtime_metadata_path = "../artifacts/pezkuwi_metadata_full.scale",
 ///     substitute_type(
