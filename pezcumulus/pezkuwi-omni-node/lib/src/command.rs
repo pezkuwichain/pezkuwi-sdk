@@ -252,7 +252,7 @@ where
 						node.run_benchmark_block_cmd(config, cmd)
 					})
 				},
-				#[cfg(feature = "runtime-benchmarks")]
+				#[cfg(feature = "storage-benchmark")]
 				BenchmarkCmd::Storage(cmd) => {
 					// The command needs the full node configuration because it uses the node
 					// client and the database API, storage and shared_trie_cache. It requires

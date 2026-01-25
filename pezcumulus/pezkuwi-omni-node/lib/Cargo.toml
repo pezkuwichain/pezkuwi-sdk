@@ -241,6 +241,7 @@ try-runtime = [
 	"pezsp-version/try-runtime",
 	"teyrchains-common/try-runtime",
 ]
+storage-benchmark = ["pezframe-benchmarking-cli/storage-benchmark"]
 std = [
 	"bizinikiwi-frame-rpc-system/std",
 	"bizinikiwi-state-trie-migration-rpc/std",
