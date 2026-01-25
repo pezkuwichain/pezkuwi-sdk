@@ -1385,7 +1385,11 @@ pub fn dynamic_aggregated_params_internal(attrs: TokenStream, input: TokenStream
 ///
 /// ## Example/Overview:
 ///
-/// ```
+/// <!-- Note: This doc test is marked `ignore` because this is a proc-macro crate and cannot
+///      depend on pezframe-support, pezframe-system, or pezframe-benchmarking as dev-dependencies
+///      without creating circular dependencies. The macro functionality is tested in the
+///      pezframe-support integration tests and benchmark tests. -->
+/// ```ignore
 /// # #[allow(unused)]
 /// #[pezframe_support::pezpallet]
 /// pub mod pezpallet {

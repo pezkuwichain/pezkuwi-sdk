@@ -62,7 +62,11 @@ pub(crate) fn syn_err(message: &'static str) -> syn::Error {
 /// For example, the following generates a public struct with name `TestSolution` with `u16` voter
 /// type, `u8` target type and `Perbill` accuracy with maximum of 4 edges per voter.
 ///
-/// ```
+/// <!-- Note: This doc test is marked `ignore` due to circular dependency constraint.
+///      This crate cannot depend on pezframe-support as a dev-dependency because
+///      pezframe-election-provider-support already depends on this proc-macro crate.
+///      The macro is fully tested in pezframe-election-provider-support/src/tests.rs -->
+/// ```ignore
 /// # use pezframe_election_provider_solution_type::generate_solution_type;
 /// # use pezsp_arithmetic::per_things::Perbill;
 /// # use pezframe_support::traits::ConstU32;
@@ -107,7 +111,11 @@ pub(crate) fn syn_err(message: &'static str) -> syn::Error {
 /// lead to many `0`s in the solution. If prefixed with `#[compact]`, then a custom compact encoding
 /// for numbers will be used, similar to how `parity-scale-codec`'s `Compact` works.
 ///
-/// ```
+/// <!-- Note: This doc test is marked `ignore` due to circular dependency constraint.
+///      pezframe-election-provider-support cannot be added as dev-dependency here because
+///      it already depends on this proc-macro crate, which would create a circular dependency.
+///      The macro is fully tested in pezframe-election-provider-support/src/tests.rs -->
+/// ```ignore
 /// # use pezframe_election_provider_solution_type::generate_solution_type;
 /// # use pezframe_election_provider_support::NposSolution;
 /// # use pezsp_arithmetic::per_things::Perbill;
