@@ -27,7 +27,12 @@ serde = { features = ["derive"], workspace = true, default-features = true }
 # Direct dependency needed (not through umbrella due to macro visibility issues)
 pezsp-runtime = { workspace = true }
 
-pezkuwi-sdk = { workspace = true, features = ["node", "pezkuwi-primitives", "pezsp-keystore", "pezsp-timestamp"] }
+pezkuwi-sdk = { workspace = true, features = [
+	"node",
+	"pezkuwi-primitives",
+	"pezsp-keystore",
+	"pezsp-timestamp",
+] }
 
 teyrchain-template-runtime = { workspace = true }
 

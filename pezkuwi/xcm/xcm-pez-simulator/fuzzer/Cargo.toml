@@ -80,9 +80,7 @@ runtime-benchmarks = [
 	"xcm-pez-simulator/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
 ]
-std = [
-	"xcm-pez-simulator/std",
-]
+std = ["xcm-pez-simulator/std"]
 serde = []
 experimental = []
 with-tracing = []

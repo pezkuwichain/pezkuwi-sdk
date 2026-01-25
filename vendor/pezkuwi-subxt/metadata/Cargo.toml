@@ -38,9 +38,14 @@ legacy = [
 serde = []
 
 [dependencies]
-codec = { package = "parity-scale-codec", workspace = true, default-features = false, features = ["derive"] }
+codec = { package = "parity-scale-codec", workspace = true, default-features = false, features = [
+	"derive",
+] }
 frame-decode = { workspace = true }
-frame-metadata = { workspace = true, default-features = false, features = ["current", "decode"] }
+frame-metadata = { workspace = true, default-features = false, features = [
+	"current",
+	"decode",
+] }
 hashbrown = { workspace = true }
 pezsp-crypto-hashing = { workspace = true }
 scale-info = { workspace = true, default-features = false }

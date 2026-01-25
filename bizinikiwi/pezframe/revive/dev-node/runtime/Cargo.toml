@@ -53,10 +53,7 @@ runtime-benchmarks = [
 	"pezkuwi-sdk/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
-try-runtime = [
-	"pezkuwi-sdk/try-runtime",
-	"pezsp-runtime/try-runtime",
-]
+try-runtime = ["pezkuwi-sdk/try-runtime", "pezsp-runtime/try-runtime"]
 serde = []
 experimental = []
 with-tracing = []

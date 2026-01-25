@@ -16,7 +16,5 @@ workspace = true
 alloy-core = { workspace = true, features = ["sol-types"] }
 
 [features]
-std = [
-	"alloy-core/std",
-]
+std = ["alloy-core/std"]
 serde = []

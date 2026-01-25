@@ -134,10 +134,7 @@ try-runtime = [
 	"pezsp-transaction-pool?/try-runtime",
 	"pezsp-version?/try-runtime",
 ]
-experimental = [
-	"pezframe-support/experimental",
-	"pezframe-system/experimental",
-]
+experimental = ["pezframe-support/experimental", "pezframe-system/experimental"]
 runtime = [
 	"pezframe-executive",
 	"pezframe-system-rpc-runtime-api",

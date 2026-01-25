@@ -61,10 +61,7 @@ std = [
 	"serde/std",
 	"test-pezpallet/std",
 ]
-experimental = [
-	"pezframe-support/experimental",
-	"pezframe-system/experimental",
-]
+experimental = ["pezframe-support/experimental", "pezframe-system/experimental"]
 runtime-benchmarks = [
 	"pezframe-benchmarking/runtime-benchmarks",
 	"pezframe-executive/runtime-benchmarks",

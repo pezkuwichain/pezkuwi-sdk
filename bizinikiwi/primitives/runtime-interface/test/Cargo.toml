@@ -38,12 +38,7 @@ runtime-benchmarks = [
 	"pezsp-runtime/runtime-benchmarks",
 	"pezsp-state-machine/runtime-benchmarks",
 ]
-std = [
-	"pezsc-executor-common/std",
-]
-try-runtime = [
-	"pezsc-executor/try-runtime",
-	"pezsp-runtime/try-runtime",
-]
+std = ["pezsc-executor-common/std"]
+try-runtime = ["pezsc-executor/try-runtime", "pezsp-runtime/try-runtime"]
 serde = []
 with-tracing = []

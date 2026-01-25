@@ -48,6 +48,4 @@ std = [
 ]
 serde = []
 with-tracing = []
-runtime-benchmarks = [
-	"pezsp-io?/runtime-benchmarks",
-]
+runtime-benchmarks = ["pezsp-io?/runtime-benchmarks"]

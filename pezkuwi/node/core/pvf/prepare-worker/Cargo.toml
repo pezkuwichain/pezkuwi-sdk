@@ -53,9 +53,5 @@ runtime-benchmarks = [
 	"pezkuwi-primitives/runtime-benchmarks",
 	"pezkuwichain-runtime/runtime-benchmarks",
 ]
-std = [
-	"codec/std",
-	"gum/std",
-	"pezkuwi-node-core-pvf-common/std",
-]
+std = ["codec/std", "gum/std", "pezkuwi-node-core-pvf-common/std"]
 serde = []

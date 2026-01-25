@@ -31,7 +31,9 @@ rand = { workspace = true }
 regex = { workspace = true }
 reqwest = { workspace = true }
 serde = { workspace = true, features = ["derive"] }
-serde_json = { workspace = true, default-features = true, features = ["arbitrary_precision"] }
+serde_json = { workspace = true, default-features = true, features = [
+	"arbitrary_precision",
+] }
 sha2 = { workspace = true, default-features = false }
 thiserror = { workspace = true }
 tokio = { workspace = true, features = ["time"] }

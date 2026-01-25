@@ -23,7 +23,5 @@ pezsp-runtime = { workspace = true, default-features = true }
 [features]
 runtime-benchmarks = ["pezsp-runtime/runtime-benchmarks"]
 std = []
-try-runtime = [
-	"pezsp-runtime/try-runtime",
-]
+try-runtime = ["pezsp-runtime/try-runtime"]
 serde = []

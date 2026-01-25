@@ -38,10 +38,7 @@ runtime-benchmarks = [
 	"pezframe-support/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
-std = [
-	"codec/std",
-	"pezframe-election-provider-solution-type/std",
-]
+std = ["codec/std", "pezframe-election-provider-solution-type/std"]
 try-runtime = [
 	"pezframe-election-provider-support/try-runtime",
 	"pezframe-support/try-runtime",

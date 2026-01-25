@@ -23,14 +23,14 @@ pezkuwi-zombienet-configuration = { workspace = true }
 
 [features]
 runtime-benchmarks = [
-	"pezcumulus-primitives-core/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks",
-	"pezkuwi-zombienet-sdk/runtime-benchmarks"
+  "pezcumulus-primitives-core/runtime-benchmarks",
+  "pezkuwi-primitives/runtime-benchmarks",
+  "pezkuwi-zombienet-sdk/runtime-benchmarks",
 ]
 std = [
-	"log/std",
-	"codec/std",
-	"pezkuwi-zombienet-configuration/std",
-	"pezkuwi-zombienet-sdk/std"
+  "log/std",
+  "codec/std",
+  "pezkuwi-zombienet-configuration/std",
+  "pezkuwi-zombienet-sdk/std",
 ]
 serde = []

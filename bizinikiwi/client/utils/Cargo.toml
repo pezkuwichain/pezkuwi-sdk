@@ -28,8 +28,5 @@ tokio-test = { workspace = true }
 [features]
 default = ["metered"]
 metered = []
-std = [
-	"log/std",
-	"pezsp-arithmetic/std",
-]
+std = ["log/std", "pezsp-arithmetic/std"]
 serde = []

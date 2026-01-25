@@ -22,12 +22,7 @@ jsonrpsee = ["dep:jsonrpsee", "dep:tokio-util"]
 
 unstable-light-client = ["dep:pezkuwi-subxt-lightclient"]
 
-reconnecting-rpc-client = [
-	"dep:finito",
-	"dep:tokio",
-	"jsonrpsee",
-	"tokio/sync",
-]
+reconnecting-rpc-client = ["dep:finito", "dep:tokio", "jsonrpsee", "tokio/sync"]
 
 mock-rpc-client = ["dep:tokio", "tokio/sync"]
 
@@ -64,9 +59,7 @@ std = [
 	"tracing/std",
 ]
 serde = []
-runtime-benchmarks = [
-	"pezkuwi-subxt-core?/runtime-benchmarks",
-]
+runtime-benchmarks = ["pezkuwi-subxt-core?/runtime-benchmarks"]
 
 [dependencies]
 codec = { workspace = true }

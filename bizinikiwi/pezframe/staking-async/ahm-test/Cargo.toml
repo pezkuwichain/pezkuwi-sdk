@@ -50,10 +50,7 @@ pezpallet-root-offences = { workspace = true, default-features = true }
 pezpallet-staking = { workspace = true, default-features = true }
 
 [features]
-std = [
-	"log/std",
-	"pezframe-system/std",
-]
+std = ["log/std", "pezframe-system/std"]
 try-runtime = [
 	"pezframe-election-provider-support/try-runtime",
 	"pezframe-support/try-runtime",

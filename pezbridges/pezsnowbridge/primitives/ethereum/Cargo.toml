@@ -67,9 +67,7 @@ runtime-benchmarks = [
 	"pezsp-io/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
-try-runtime = [
-	"pezsp-runtime/try-runtime",
-]
+try-runtime = ["pezsp-runtime/try-runtime"]
 serde = [
 	"alloy-consensus/serde",
 	"alloy-core/serde",

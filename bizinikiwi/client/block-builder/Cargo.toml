@@ -41,10 +41,7 @@ runtime-benchmarks = [
 	"pezsp-state-machine/runtime-benchmarks",
 	"pezsp-trie/runtime-benchmarks",
 ]
-std = [
-	"bizinikiwi-test-runtime-client/std",
-	"pezsp-blockchain/std",
-]
+std = ["bizinikiwi-test-runtime-client/std", "pezsp-blockchain/std"]
 try-runtime = [
 	"bizinikiwi-test-runtime-client/try-runtime",
 	"pezsp-api/try-runtime",

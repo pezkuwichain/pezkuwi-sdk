@@ -25,9 +25,7 @@ runtime-benchmarks = [
 	"pez-generate-bags/runtime-benchmarks",
 	"pez-kitchensink-runtime/runtime-benchmarks",
 ]
-std = [
-	"pez-generate-bags/std",
-]
+std = ["pez-generate-bags/std"]
 try-runtime = [
 	"pez-generate-bags/try-runtime",
 	"pez-kitchensink-runtime/try-runtime",

@@ -36,8 +36,5 @@ runtime-benchmarks = [
 	"pezsp-inherents/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
-try-runtime = [
-	"pezsp-inherents/try-runtime",
-	"pezsp-runtime/try-runtime",
-]
+try-runtime = ["pezsp-inherents/try-runtime", "pezsp-runtime/try-runtime"]
 serde = []

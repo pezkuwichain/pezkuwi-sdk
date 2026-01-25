@@ -35,9 +35,7 @@ std = [
 	"serde/std",
 ]
 runtime-benchmarks = ["pezsp-runtime/runtime-benchmarks"]
-try-runtime = [
-	"pezsp-runtime/try-runtime",
-]
+try-runtime = ["pezsp-runtime/try-runtime"]
 serde = [
 	"codec/serde",
 	"dep:serde",

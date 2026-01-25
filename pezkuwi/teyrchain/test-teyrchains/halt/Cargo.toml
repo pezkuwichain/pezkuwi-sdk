@@ -20,9 +20,5 @@ rustversion = { workspace = true }
 
 [features]
 default = ["std"]
-std = [
-	"bizinikiwi-wasm-builder/std",
-]
-runtime-benchmarks = [
-	"bizinikiwi-wasm-builder/runtime-benchmarks",
-]
+std = ["bizinikiwi-wasm-builder/std"]
+runtime-benchmarks = ["bizinikiwi-wasm-builder/runtime-benchmarks"]

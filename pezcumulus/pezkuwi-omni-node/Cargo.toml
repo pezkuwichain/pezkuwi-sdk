@@ -32,6 +32,4 @@ bizinikiwi-build-script-utils = { workspace = true, default-features = true }
 default = []
 runtime-benchmarks = ["pezkuwi-omni-node-lib/runtime-benchmarks"]
 try-runtime = ["pezkuwi-omni-node-lib/try-runtime"]
-std = [
-	"pezkuwi-omni-node-lib/std",
-]
+std = ["pezkuwi-omni-node-lib/std"]

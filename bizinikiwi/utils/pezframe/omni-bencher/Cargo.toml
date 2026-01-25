@@ -40,11 +40,7 @@ runtime-benchmarks = [
 	"pezsp-runtime/runtime-benchmarks",
 	"pezsp-statement-store/runtime-benchmarks",
 ]
-std = [
-	"pezframe-benchmarking-cli/std",
-	"pezsc-chain-spec/std",
-	"pezsc-cli/std",
-]
+std = ["pezframe-benchmarking-cli/std", "pezsc-chain-spec/std", "pezsc-cli/std"]
 try-runtime = [
 	"pezcumulus-test-runtime/try-runtime",
 	"pezframe-benchmarking-cli/try-runtime",

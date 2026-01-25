@@ -91,10 +91,7 @@ std = [
 	"serde_json/std",
 	"tracing/std",
 ]
-try-runtime = [
-	"pezsp-keyring/try-runtime",
-	"pezsp-runtime/try-runtime",
-]
+try-runtime = ["pezsp-keyring/try-runtime", "pezsp-runtime/try-runtime"]
 serde = []
 runtime-benchmarks = [
 	"pezkuwi-subxt-core/runtime-benchmarks",
@@ -107,7 +104,9 @@ runtime-benchmarks = [
 
 [dependencies]
 async-trait = { workspace = true }
-codec = { package = "parity-scale-codec", workspace = true, features = ["derive"] }
+codec = { package = "parity-scale-codec", workspace = true, features = [
+	"derive",
+] }
 derive-where = { workspace = true }
 either = { workspace = true }
 frame-metadata = { workspace = true }
@@ -126,10 +125,16 @@ tracing = { workspace = true }
 web-time = { workspace = true }
 
 # Provides some deserialization, types like U256/H256 and hashing impls like twox/blake256:
-primitive-types = { workspace = true, features = ["codec", "scale-info", "serde"] }
+primitive-types = { workspace = true, features = [
+	"codec",
+	"scale-info",
+	"serde",
+] }
 
 # Included if the "jsonrpsee" feature is enabled.
-jsonrpsee = { workspace = true, optional = true, features = ["jsonrpsee-types"] }
+jsonrpsee = { workspace = true, optional = true, features = [
+	"jsonrpsee-types",
+] }
 
 # Other pezkuwi-subxt crates we depend on.
 pezkuwi-subxt-core = { workspace = true, features = ["std"] }
@@ -154,13 +159,21 @@ wasm-bindgen-futures = { workspace = true, optional = true }
 assert_matches = { workspace = true }
 bitvec = { workspace = true }
 codec = { workspace = true, features = ["bit-vec", "derive"] }
-pezkuwi-subxt-rpcs = { workspace = true, features = ["mock-rpc-client", "subxt"] }
+pezkuwi-subxt-rpcs = { workspace = true, features = [
+	"mock-rpc-client",
+	"subxt",
+] }
 pezkuwi-subxt-signer = { workspace = true, features = ["unstable-eth"] }
 pezsp-core = { workspace = true, features = ["std"] }
 pezsp-keyring = { workspace = true, features = ["std"] }
 pezsp-runtime = { workspace = true, features = ["std"] }
 scale-info = { workspace = true, features = ["bit-vec"] }
-tokio = { workspace = true, features = ["macros", "rt-multi-thread", "sync", "time"] }
+tokio = { workspace = true, features = [
+	"macros",
+	"rt-multi-thread",
+	"sync",
+	"time",
+] }
 # Tracing subscriber is useful for light-client examples to ensure that
 # the `bootNodes` and chain spec are configured correctly. If all is fine, then
 # the light-client will emit INFO logs with

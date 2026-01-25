@@ -47,6 +47,4 @@ bandersnatch-experimental = [
 ]
 std = []
 serde = []
-runtime-benchmarks = [
-	"pezsp-application-crypto/runtime-benchmarks",
-]
+runtime-benchmarks = ["pezsp-application-crypto/runtime-benchmarks"]

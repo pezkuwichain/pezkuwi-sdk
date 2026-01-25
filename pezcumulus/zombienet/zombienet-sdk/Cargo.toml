@@ -33,24 +33,24 @@ rstest = { workspace = true }
 [features]
 zombie-ci = []
 runtime-benchmarks = [
-	"pezcumulus-zombienet-sdk-helpers/runtime-benchmarks",
-	"pezkuwi-primitives/runtime-benchmarks",
-	"pezsc-statement-store/runtime-benchmarks",
-	"pezsp-keyring/runtime-benchmarks",
-	"pezsp-statement-store/runtime-benchmarks",
-	"pezkuwi-zombienet-orchestrator/runtime-benchmarks",
-	"pezkuwi-zombienet-sdk/runtime-benchmarks"
+  "pezcumulus-zombienet-sdk-helpers/runtime-benchmarks",
+  "pezkuwi-primitives/runtime-benchmarks",
+  "pezsc-statement-store/runtime-benchmarks",
+  "pezsp-keyring/runtime-benchmarks",
+  "pezsp-statement-store/runtime-benchmarks",
+  "pezkuwi-zombienet-orchestrator/runtime-benchmarks",
+  "pezkuwi-zombienet-sdk/runtime-benchmarks",
 ]
 std = [
-	"anyhow/std",
-	"log/std",
-	"codec/std",
-	"pezcumulus-zombienet-sdk-helpers/std",
-	"pezkuwi-zombienet-configuration/std",
-	"pezkuwi-zombienet-orchestrator/std",
-	"pezkuwi-zombienet-sdk/std",
-	"pezsc-statement-store/std",
-	"serde/std",
-	"serde_json/std"
+  "anyhow/std",
+  "log/std",
+  "codec/std",
+  "pezcumulus-zombienet-sdk-helpers/std",
+  "pezkuwi-zombienet-configuration/std",
+  "pezkuwi-zombienet-orchestrator/std",
+  "pezkuwi-zombienet-sdk/std",
+  "pezsc-statement-store/std",
+  "serde/std",
+  "serde_json/std",
 ]
 serde = []

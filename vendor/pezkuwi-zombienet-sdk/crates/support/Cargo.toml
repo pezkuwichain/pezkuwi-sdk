@@ -28,9 +28,5 @@ tracing = { workspace = true }
 uuid = { workspace = true, features = ["v4"] }
 
 [features]
-std = [
-	"anyhow/std",
-	"rand/std",
-	"tracing/std",
-]
+std = ["anyhow/std", "rand/std", "tracing/std"]
 serde = []

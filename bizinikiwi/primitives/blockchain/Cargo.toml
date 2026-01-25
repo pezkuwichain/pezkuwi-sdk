@@ -37,10 +37,7 @@ runtime-benchmarks = [
 	"pezsp-runtime/runtime-benchmarks",
 	"pezsp-state-machine/runtime-benchmarks",
 ]
-std = [
-	"codec/std",
-	"pezsp-consensus/std",
-]
+std = ["codec/std", "pezsp-consensus/std"]
 try-runtime = [
 	"pezsp-api/try-runtime",
 	"pezsp-consensus/try-runtime",

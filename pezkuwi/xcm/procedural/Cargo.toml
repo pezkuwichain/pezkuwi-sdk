@@ -34,12 +34,7 @@ runtime-benchmarks = [
 	"pezframe-support/runtime-benchmarks",
 	"xcm/runtime-benchmarks",
 ]
-std = [
-	"pezframe-support/std",
-]
-try-runtime = [
-	"pezframe-support/try-runtime",
-	"xcm/try-runtime",
-]
+std = ["pezframe-support/std"]
+try-runtime = ["pezframe-support/try-runtime", "xcm/try-runtime"]
 experimental = []
 tuples-96 = []

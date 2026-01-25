@@ -44,9 +44,6 @@ runtime-benchmarks = [
 	"pezsp-state-machine/runtime-benchmarks",
 	"pezsp-version/runtime-benchmarks",
 ]
-std = [
-	"pezkuwi-subxt/std",
-	"pezsc-executor-common/std",
-]
+std = ["pezkuwi-subxt/std", "pezsc-executor-common/std"]
 serde = []
 with-tracing = []

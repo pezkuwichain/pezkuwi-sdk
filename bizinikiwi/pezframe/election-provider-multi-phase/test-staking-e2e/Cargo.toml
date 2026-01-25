@@ -78,10 +78,7 @@ runtime-benchmarks = [
 	"pezsp-runtime/runtime-benchmarks",
 	"pezsp-staking/runtime-benchmarks",
 ]
-std = [
-	"log/std",
-	"pezsp-npos-elections/std",
-]
+std = ["log/std", "pezsp-npos-elections/std"]
 serde = []
 experimental = []
 with-tracing = []

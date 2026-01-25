@@ -30,10 +30,5 @@ default-features = true
 workspace = true
 
 [features]
-std = [
-	"codec/std",
-	"either/std",
-	"frame-metadata/std",
-	"scale-info/std",
-]
+std = ["codec/std", "either/std", "frame-metadata/std", "scale-info/std"]
 serde = []
