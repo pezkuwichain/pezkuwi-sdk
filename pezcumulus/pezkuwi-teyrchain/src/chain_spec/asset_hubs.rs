@@ -135,7 +135,7 @@ pub fn asset_hub_pezkuwichain_genesis_config() -> GenericChainSpec {
 	GenericChainSpec::builder(
 		asset_hub_pezkuwichain_runtime::WASM_BINARY
 			.expect("WASM binary was not built, please build it!"),
-		Extensions::new_with_relay_chain("pezkuwichain".into()),
+		Extensions::new_with_relay_chain("pezkuwichain-mainnet".into()),
 	)
 	.with_name("Pezkuwichain Asset Hub")
 	.with_id("asset-hub-pezkuwichain")

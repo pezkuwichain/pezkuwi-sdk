@@ -110,40 +110,40 @@ pub fn get_preset(id: &PresetId) -> Option<Vec<u8>> {
 		// Founder account is the founding citizen
 		// ====================================================================
 		PRESET_GENESIS => {
-			// Founder account - MUST be replaced with real address from
-			// Founder_treasury_presale_wallets.json before mainnet launch
+			// MAINNET FOUNDER ACCOUNT - NEW SECURE WALLET (2026-01-21)
+			// Founder: 5HN6sFM7TbPQazmfhJP1kU8itw7Tb2A9UML8TwSYRwiN9q5Z
 			let founder_account: AccountId =
-				hex!("44cb62d1d6cdd2fff2a5ef3bb7ef827be5b3e117a394ecaa634d8dd9809d5608").into();
+				hex!("ea71cc341e6790988692d8adcd08a26c75d8c813e45e0a25b24b707dc7846677").into();
 
 			people_pezkuwichain_genesis(
-				// initial collators.
+				// initial collators - 4 People Chain collators from mainnet_collators
 				vec![
-					// E8XC6rTJRsioKCp6KMy6zd24ykj4gWsusZ3AkSeyavpVBAG
+					// Erin (5GsXLpqXCsffdiEvsgRGBUnErpEotJt6GYou4fk1KfitqmJA)
 					(
-						hex!("44cb62d1d6cdd2fff2a5ef3bb7ef827be5b3e117a394ecaa634d8dd9809d5608")
+						hex!("d4a6129e5e8e5c148fec5e4fd542adc556a64f4693797383d8c709b7a9e26f55")
 							.into(),
-						hex!("44cb62d1d6cdd2fff2a5ef3bb7ef827be5b3e117a394ecaa634d8dd9809d5608")
+						hex!("d4a6129e5e8e5c148fec5e4fd542adc556a64f4693797383d8c709b7a9e26f55")
 							.unchecked_into(),
 					),
-					// G28iWEybndgGRbhfx83t7Q42YhMPByHpyqWDUgeyoGF94ri
+					// Firaz (5FppJpr63gyHZ6RkgcZ4T39jpu9gepCdvQTDok1sUFDY24h6)
 					(
-						hex!("9864b85e23aa4506643db9879c3dbbeabaa94d269693a4447f537dd6b5893944")
+						hex!("a65936cee8f0a310728475960e506e44a53436a7332f0bd40d965517aa435041")
 							.into(),
-						hex!("9864b85e23aa4506643db9879c3dbbeabaa94d269693a4447f537dd6b5893944")
+						hex!("a65936cee8f0a310728475960e506e44a53436a7332f0bd40d965517aa435041")
 							.unchecked_into(),
 					),
-					// G839e2eMiq7UXbConsY6DS1XDAYG2XnQxAmLuRLGGQ3Px9c
+					// Goran (5HKjdsQN1RmrmXCr72kR5cTBJVatvm56DxBhjJGGxFFiYptd)
 					(
-						hex!("9ce5741ee2f1ac3bdedbde9f3339048f4da2cb88ddf33a0977fa0b4cf86e2948")
+						hex!("e8a3d68cc51621451aec7f978601f1a200084bebc82ca1cb3abc021c311d5b7c")
 							.into(),
-						hex!("9ce5741ee2f1ac3bdedbde9f3339048f4da2cb88ddf33a0977fa0b4cf86e2948")
+						hex!("e8a3d68cc51621451aec7f978601f1a200084bebc82ca1cb3abc021c311d5b7c")
 							.unchecked_into(),
 					),
-					// GLao4ukFUW6qhexuZowdFrKa2NLCfnEjZMftSXXfvGv1vvt
+					// Hevi (5CcYFisDG1jmwFRJSVYNSHKHxFWS69D4sfhebPNWc7kXvQhw)
 					(
-						hex!("a676ed15f5a325eab49ed8d5f8c00f3f814b19bb58cda14ad10894c078dd337f")
+						hex!("1847872999ff97fb137e09143bc2dbd2e8c1c3c93bc240cd25ef10dc26ba9b62")
 							.into(),
-						hex!("a676ed15f5a325eab49ed8d5f8c00f3f814b19bb58cda14ad10894c078dd337f")
+						hex!("1847872999ff97fb137e09143bc2dbd2e8c1c3c93bc240cd25ef10dc26ba9b62")
 							.unchecked_into(),
 					),
 				],

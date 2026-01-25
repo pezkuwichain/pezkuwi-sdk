@@ -94,6 +94,26 @@ pub fn pezkuwichain_config() -> Result<PezkuwichainChainSpec, String> {
 	PezkuwichainChainSpec::from_json_bytes(&include_bytes!("../chain-specs/pezkuwichain.json")[..])
 }
 
+/// PezkuwiChain Mainnet config with real validators and HEZ token distribution
+#[cfg(feature = "pezkuwichain-native")]
+pub fn pezkuwichain_mainnet_config() -> Result<PezkuwichainChainSpec, String> {
+	Ok(PezkuwichainChainSpec::builder(
+		pezkuwichain::WASM_BINARY.ok_or("Pezkuwichain WASM not available")?,
+		Default::default(),
+	)
+	.with_name("PezkuwiChain Mainnet")
+	.with_id("pezkuwichain_mainnet")
+	.with_chain_type(ChainType::Live)
+	.with_genesis_config_preset_name("genesis")
+	.with_telemetry_endpoints(
+		TelemetryEndpoints::new(vec![(PEZKUWICHAIN_STAGING_TELEMETRY_URL.to_string(), 0)])
+			.expect("Pezkuwichain Mainnet telemetry url is valid; qed"),
+	)
+	.with_protocol_id(DEFAULT_PROTOCOL_ID)
+	.with_properties(pezkuwichain_chain_spec_properties())
+	.build())
+}
+
 /// Zagros staging testnet config.
 #[cfg(feature = "zagros-native")]
 pub fn zagros_staging_testnet_config() -> Result<ZagrosChainSpec, String> {
@@ -137,6 +157,18 @@ pub fn versi_chain_spec_properties() -> serde_json::map::Map<String, serde_json:
 		"ss58Format": 42,
 		"tokenDecimals": 12,
 		"tokenSymbol": "VRS",
+	})
+	.as_object()
+	.expect("Map given; qed")
+	.clone()
+}
+
+/// PezkuwiChain mainnet chain spec properties (HEZ token)
+pub fn pezkuwichain_chain_spec_properties() -> serde_json::map::Map<String, serde_json::Value> {
+	serde_json::json!({
+		"ss58Format": 42,
+		"tokenDecimals": 18,
+		"tokenSymbol": "HEZ",
 	})
 	.as_object()
 	.expect("Map given; qed")

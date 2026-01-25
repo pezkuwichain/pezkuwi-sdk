@@ -149,6 +149,8 @@ impl BizinikiwiCli for Cli {
 			"paseo" => Box::new(pezkuwi_service::chain_spec::paseo_config()?),
 			"pezkuwichain" => Box::new(pezkuwi_service::chain_spec::pezkuwichain_config()?),
 			#[cfg(feature = "pezkuwichain-native")]
+			"pezkuwichain-mainnet" => Box::new(pezkuwi_service::chain_spec::pezkuwichain_mainnet_config()?),
+			#[cfg(feature = "pezkuwichain-native")]
 			"dev" | "pezkuwichain-dev" => Box::new(pezkuwi_service::chain_spec::pezkuwichain_development_config()?),
 			#[cfg(feature = "pezkuwichain-native")]
 			"pezkuwichain-local" => Box::new(pezkuwi_service::chain_spec::pezkuwichain_local_testnet_config()?),

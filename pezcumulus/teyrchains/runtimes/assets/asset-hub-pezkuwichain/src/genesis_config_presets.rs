@@ -51,8 +51,15 @@ pub const PEZ_ASSET_ID: AssetIdForTrustBackedAssets = 1;
 /// Wrapped HEZ (wHEZ) Asset ID - Used by TokenWrapper pezpallet
 pub const WHEZ_ASSET_ID: AssetIdForTrustBackedAssets = 2;
 
+/// wUSDT Asset ID - Wrapped USDT (1:1 backed by Polkadot USDT or TRC20 USDT)
+/// Using 1000 to match chains.json configuration in pezWallet
+pub const WUSDT_ASSET_ID: AssetIdForTrustBackedAssets = 1000;
+
 /// PEZ Token decimals (same as HEZ)
 pub const PEZ_DECIMALS: u8 = 12;
+
+/// wUSDT decimals (USDT standard: 6 decimals)
+pub const WUSDT_DECIMALS: u8 = 6;
 
 /// Treasury allocation: 20.25% = 1,012,500,000 PEZ
 pub const PEZ_TREASURY_ALLOCATION: Balance = 1_012_500_000 * TYR;
@@ -133,7 +140,7 @@ fn asset_hub_pezkuwichain_genesis(
 		pezkuwi_xcm: PezkuwiXcmConfig { safe_xcm_version: Some(SAFE_XCM_VERSION) },
 
 		// ====================================================================
-		// TrustBackedAssets (Instance1) - PEZ and wHEZ tokens
+		// TrustBackedAssets (Instance1) - PEZ, wHEZ, and wUSDT tokens
 		// ====================================================================
 		assets: AssetsConfig {
 			// Asset definitions: (id, owner, is_sufficient, min_balance)
@@ -142,11 +149,15 @@ fn asset_hub_pezkuwichain_genesis(
 				(PEZ_ASSET_ID, treasury_account.clone(), true, 1),
 				// wHEZ Token - Wrapped HEZ for DeFi operations
 				(WHEZ_ASSET_ID, treasury_account.clone(), true, 1),
+				// wUSDT - Wrapped USDT (1:1 backed by Polkadot USDT or TRC20 USDT)
+				// Min balance: 10_000 (0.01 USDT with 6 decimals)
+				(WUSDT_ASSET_ID, treasury_account.clone(), true, 10_000),
 			],
 			// Asset metadata: (id, name, symbol, decimals)
 			metadata: vec![
 				(PEZ_ASSET_ID, b"Pez Token".to_vec(), b"PEZ".to_vec(), PEZ_DECIMALS),
 				(WHEZ_ASSET_ID, b"Wrapped HEZ".to_vec(), b"wHEZ".to_vec(), PEZ_DECIMALS),
+				(WUSDT_ASSET_ID, b"Wrapped USDT".to_vec(), b"wUSDT".to_vec(), WUSDT_DECIMALS),
 			],
 			// Initial balances: (asset_id, account, balance)
 			accounts: vec![
@@ -162,9 +173,10 @@ fn asset_hub_pezkuwichain_genesis(
 				// Presale allocation: 1.875% = 93,750,000 PEZ
 				(PEZ_ASSET_ID, presale_account.clone(), PEZ_PRESALE_ALLOCATION),
 				// wHEZ starts with 0 balance - only created via TokenWrapper
+				// wUSDT starts with 0 balance - minted via Custodial Bridge
 			],
-			// Next asset ID after PEZ and wHEZ
-			next_asset_id: Some(3),
+			// Next asset ID after PEZ (1), wHEZ (2), and wUSDT (1000)
+			next_asset_id: Some(1001),
 			..Default::default()
 		},
 
@@ -200,44 +212,46 @@ pub fn get_preset(id: &PresetId) -> Option<Vec<u8>> {
 		// Treasury, Founder, Presale accounts should be replaced with real addresses
 		// ====================================================================
 		PRESET_GENESIS => {
-			// Placeholder accounts - MUST be replaced with real addresses from
-			// Founder_treasury_presale_wallets.json before mainnet launch
+			// MAINNET ACCOUNTS - NEW SECURE WALLETS (2026-01-21)
+			// Treasury: 5D7guUmrk2xap2xuCwDJgJB5JDtxy439Dx2vaQ5JkvgtNjb4
 			let treasury_account: AccountId =
-				hex!("44cb62d1d6cdd2fff2a5ef3bb7ef827be5b3e117a394ecaa634d8dd9809d5608").into();
+				hex!("2e82c43a0a7edc05a179901d18bdfac86d52953c1b7ca5e8e3ceeb3a83044b4f").into();
+			// Founder: 5HN6sFM7TbPQazmfhJP1kU8itw7Tb2A9UML8TwSYRwiN9q5Z
 			let founder_account: AccountId =
-				hex!("44cb62d1d6cdd2fff2a5ef3bb7ef827be5b3e117a394ecaa634d8dd9809d5608").into();
+				hex!("ea71cc341e6790988692d8adcd08a26c75d8c813e45e0a25b24b707dc7846677").into();
+			// Presale: 5GsFKogGuxr9ToPuZ2XPxksZWTWdCGUnd8hmqSyssfsvprtA
 			let presale_account: AccountId =
-				hex!("44cb62d1d6cdd2fff2a5ef3bb7ef827be5b3e117a394ecaa634d8dd9809d5608").into();
+				hex!("d47027192dd48b2c48606012a8bb7410cd92fed091e4896e4dc4c67772974606").into();
 
 			asset_hub_pezkuwichain_genesis(
-				// initial collators.
+				// initial collators - 4 Asset Hub collators from mainnet_collators
 				vec![
-					// E8XC6rTJRsioKCp6KMy6zd24ykj4gWsusZ3AkSeyavpVBAG
+					// Azad (5F4ErvW2gvD2jgtfSfypcDirgF78PQWTsz8GmhArZ8Jvg4c5)
 					(
-						hex!("44cb62d1d6cdd2fff2a5ef3bb7ef827be5b3e117a394ecaa634d8dd9809d5608")
+						hex!("8459d334fcb5432ccd6820b2677080c9dbefa127734eaa15551b62aaffb5ff57")
 							.into(),
-						hex!("44cb62d1d6cdd2fff2a5ef3bb7ef827be5b3e117a394ecaa634d8dd9809d5608")
+						hex!("8459d334fcb5432ccd6820b2677080c9dbefa127734eaa15551b62aaffb5ff57")
 							.unchecked_into(),
 					),
-					// G28iWEybndgGRbhfx83t7Q42YhMPByHpyqWDUgeyoGF94ri
+					// Beritan (5DvQHQBDvYsigbdxdkhQfRb6cTXeDAEDvqeQHrcPfEE1z2yZ)
 					(
-						hex!("9864b85e23aa4506643db9879c3dbbeabaa94d269693a4447f537dd6b5893944")
+						hex!("5223587ee928ed8cc5e9fcff9f9d04ac5fca83a46d602193b265e4642a3a344d")
 							.into(),
-						hex!("9864b85e23aa4506643db9879c3dbbeabaa94d269693a4447f537dd6b5893944")
+						hex!("5223587ee928ed8cc5e9fcff9f9d04ac5fca83a46d602193b265e4642a3a344d")
 							.unchecked_into(),
 					),
-					// G839e2eMiq7UXbConsY6DS1XDAYG2XnQxAmLuRLGGQ3Px9c
+					// Cuwan (5HB4o1Qmb883n7spYVnt5dcWXrY18SFD8iwH2ySg2nSGjyyT)
 					(
-						hex!("9ce5741ee2f1ac3bdedbde9f3339048f4da2cb88ddf33a0977fa0b4cf86e2948")
+						hex!("e2071e98ab4273169bf6a4cd9ade1f3f5d7e077ee849c06ff138faeb89f8187b")
 							.into(),
-						hex!("9ce5741ee2f1ac3bdedbde9f3339048f4da2cb88ddf33a0977fa0b4cf86e2948")
+						hex!("e2071e98ab4273169bf6a4cd9ade1f3f5d7e077ee849c06ff138faeb89f8187b")
 							.unchecked_into(),
 					),
-					// GLao4ukFUW6qhexuZowdFrKa2NLCfnEjZMftSXXfvGv1vvt
+					// Delil (5Fk4FPr6BS3CiPyV38cYL5SnhgKdAGbzgVCL5K7eyvHp1g3z)
 					(
-						hex!("a676ed15f5a325eab49ed8d5f8c00f3f814b19bb58cda14ad10894c078dd337f")
+						hex!("a2b7ea8803b44586258d718123286558aa0a3da2971316c83b46e3962b95af18")
 							.into(),
-						hex!("a676ed15f5a325eab49ed8d5f8c00f3f814b19bb58cda14ad10894c078dd337f")
+						hex!("a2b7ea8803b44586258d718123286558aa0a3da2971316c83b46e3962b95af18")
 							.unchecked_into(),
 					),
 				],
