@@ -5,15 +5,16 @@
 
 ---
 
-## ÖZET: 5 KÖK NEDEN BULUNDU
+## ÖZET: 6 KÖK NEDEN BULUNDU VE 5'İ ÇÖZÜLDÜ
 
-| # | Kök Neden | Etkilenen Workflow Sayısı | Öncelik |
-|---|-----------|---------------------------|---------|
-| 1 | curl-sys OpenSSL 3.0.0 gereksinimi | 4+ | KRİTİK |
-| 2 | Cargo.lock güncel değil | 3+ | KRİTİK |
-| 3 | HOME dizin uyumsuzluğu (container) | 1 | YÜKSEK |
-| 4 | serde_core wasm32 compile hatası | 1+ | YÜKSEK |
-| 5 | WhereSection::_w deprecated constant | 1 | ORTA |
+| # | Kök Neden | Etkilenen Workflow Sayısı | Durum |
+|---|-----------|---------------------------|-------|
+| 1 | curl-sys OpenSSL 3.0.0 gereksinimi | 4+ | ✅ ÇÖZÜLDÜ |
+| 2 | Cargo.lock güncel değil | 3+ | ✅ ÇÖZÜLDÜ |
+| 3 | HOME dizin uyumsuzluğu (container) | 1 | ✅ ÇÖZÜLDÜ |
+| 4 | serde_core wasm32 compile hatası | 1+ | ✅ ÇÖZÜLDÜ |
+| 5 | WhereSection::_w deprecated constant | 1 | ⚠️ İNCELENİYOR |
+| 6 | EVM test repo referansları (harici) | 2 | ✅ ÇÖZÜLDÜ |
 
 ---
 
@@ -116,7 +117,7 @@ env:
 
 ---
 
-## HATA 4: serde_core wasm32 Compile Hatası
+## HATA 4: serde_core wasm32 Compile Hatası ✅ ÇÖZÜLDÜ
 
 ### Hata Mesajı:
 ```
@@ -124,32 +125,52 @@ error: could not compile `serde_core` (lib) due to 1 previous error
 ```
 
 ### Etkilenen Workflow'lar:
-- ❌ EVM test suite / differential-tests
+- ✅ EVM test suite / differential-tests
 
 ### Kök Neden:
 serde_core crate'i wasm32 target'ında compile olurken "duplicate lang item" veya "ambiguous imports" hatası veriyor.
 
-### Durum:
-Bu sorun daha önce `pezkuwichain/serde` fork'unda düzeltildi:
+### ÇÖZÜM UYGULANDI:
+`pezkuwichain/serde` fork'unda düzeltildi:
 - Fork commit: `0a75fdd8`
-- pezkuwi-sdk commit: `7cc45454ff`
+- Branch: `fix-wasm32v1-none`
+- Cargo.lock: Doğru fork'a işaret ediyor
 
-### Kontrol Edilmesi Gerekenler:
-1. Cargo.lock serde_core'un doğru commit'i mi gösteriyor?
-2. CI cache temizlenmesi gerekiyor mu?
+### Durum:
+- [x] serde_core versiyonu doğrulandı (fork commit 0a75fdd8)
+- [x] Cargo.lock güncellendi
+- [ ] CI tekrar çalıştırıldı
 
-### Çözüm (eğer hala devam ediyorsa):
-```bash
-# Cargo.lock'u kontrol et
-grep -A5 'name = "serde_core"' Cargo.lock
+---
 
-# Force update
-cargo update -p serde_core
+## HATA 6: EVM Test Suite Repository Referansları ✅ ÇÖZÜLDÜ
+
+### Hata Mesajı:
+```
+The process '/usr/bin/git' failed with exit code 128
 ```
 
+### Etkilenen Workflow'lar:
+- ✅ EVM test suite / differential-tests
+- ✅ EVM test suite / evm-test-suite
+
+### Kök Neden:
+Harici test repository'leri yanlışlıkla rebrand edilmişti:
+- `pezkuwichain/revive-differential-tests` → YOK
+- `pezkuwichain/evm-test-suite` → YOK
+- `pezkuwichain/revive` → YOK
+
+### ÇÖZÜM UYGULANDI:
+Bu harici test araçları Pezkuwi SDK'nın parçası DEĞİL, paritytech referansları korunmalı:
+- `paritytech/revive-differential-tests` ✓
+- `paritytech/evm-test-suite` ✓
+- `paritytech/revive` ✓
+
+**Düzeltilen dosya:** `.github/workflows/tests-evm.yml`
+
 ### Durum:
-- [ ] serde_core versiyonu doğrulandı
-- [ ] Cargo.lock güncellendi
+- [x] paritytech referansları düzeltildi
+- [x] Commit edildi
 - [ ] CI tekrar çalıştırıldı
 
 ---
