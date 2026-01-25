@@ -65,10 +65,14 @@ impl FloatJsonValueMetric {
 
 	/// Request value from HTTP service.
 	async fn request_value(&self) -> anyhow::Result<String> {
-		use isahc::{AsyncReadResponseExt, HttpClient, Request};
-
-		let request = Request::get(&self.url).header("Accept", "application/json").body(())?;
-		let raw_response = HttpClient::new()?.send_async(request).await?.text().await?;
+		let client = reqwest::Client::new();
+		let raw_response = client
+			.get(&self.url)
+			.header("Accept", "application/json")
+			.send()
+			.await?
+			.text()
+			.await?;
 		Ok(raw_response)
 	}
 
