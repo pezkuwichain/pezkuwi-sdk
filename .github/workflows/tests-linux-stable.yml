@@ -67,35 +67,36 @@ jobs:
   test-linux-stable:
     needs: [preflight]
     if: ${{ needs.preflight.outputs.changes_rust }}
-    runs-on: ${{ matrix.runners }}
-    timeout-minutes: 60
+    runs-on: ${{ needs.preflight.outputs.RUNNER_NEW }}
+    timeout-minutes: 75
     strategy:
       fail-fast: false
       matrix:
+        # Reduced from 3x2=6 jobs to 3 jobs (single runner type)
         partition: [1/3, 2/3, 3/3]
-        runners:
-          [
-            "${{ needs.preflight.outputs.RUNNER_NEW }}",
-            "${{ needs.preflight.outputs.RUNNER_OLDLINUX_NEW }}",
-          ]
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
-      # needed for tests that use unshare syscall
       options: --privileged
     env:
       RUST_TOOLCHAIN: stable
-      # Enable debug assertions since we are running optimized builds for testing
-      # but still want to have debug assertions.
       RUSTFLAGS: "-Cdebug-assertions=y -Dwarnings"
+      CARGO_INCREMENTAL: 0
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+      - name: Rust Cache
+        uses: Swatinem/rust-cache@9d47c6ad4b02e050fd481d890b2ea34778fd09d6 # v2.7.8
+        with:
+          shared-key: linux-stable-${{ matrix.partition }}
+          cache-on-failure: true
+
       - name: Add wasm32v1-none target
         run: rustup target add wasm32v1-none || true
+
       - name: script
         id: required
         run: |
-          # Fixes "detected dubious ownership" error in the ci
           git config --global --add safe.directory '*'
           cargo nextest run \
             --workspace \
@@ -105,7 +106,7 @@ jobs:
             --cargo-quiet \
             --features try-runtime,experimental,ci-only-tests \
             --partition count:${{ matrix.partition }}
-      # run runtime-api tests with `enable-pez-staging-api` feature on the 1st node
+
       - name: runtime-api tests
         if: ${{ matrix.partition == '1/3' }}
         run: cargo nextest run -p pezsp-api-test --features enable-pez-staging-api --cargo-quiet

@@ -21,42 +21,48 @@ jobs:
 
   test-doc:
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
-    timeout-minutes: 60
+    timeout-minutes: 45
     needs: [preflight]
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
+    env:
+      RUSTFLAGS: "-Cdebug-assertions=y -Dwarnings"
+      SKIP_WASM_BUILD: 1
+      CARGO_INCREMENTAL: 0
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-      - name: Clean cargo cache to free disk space
-        run: |
-          cargo clean 2>/dev/null || true
-          rm -rf ~/.cargo/registry/cache 2>/dev/null || true
-          rm -rf ~/.cargo/git/db 2>/dev/null || true
+
+      - name: Rust Cache
+        uses: Swatinem/rust-cache@9d47c6ad4b02e050fd481d890b2ea34778fd09d6 # v2.7.8
+        with:
+          shared-key: test-doc
+          cache-on-failure: true
+
       - run: cargo test --doc --workspace --locked --all-features
         id: required
-        env:
-          RUSTFLAGS: "-Cdebug-assertions=y -Dwarnings"
-          SKIP_WASM_BUILD: 1
 
   build-rustdoc:
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
-    timeout-minutes: 60
+    timeout-minutes: 45
     if: ${{ needs.preflight.outputs.changes_rust }}
     needs: [preflight]
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
+    env:
+      SKIP_WASM_BUILD: 1
+      CARGO_INCREMENTAL: 0
+      RUSTDOCFLAGS: "-Dwarnings --default-theme=ayu --html-in-header ./docs/sdk/assets/header.html --extend-css ./docs/sdk/assets/theme.css --html-after-content ./docs/sdk/assets/after-content.html"
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-      - name: Clean cargo cache to free disk space
-        run: |
-          cargo clean 2>/dev/null || true
-          rm -rf ~/.cargo/registry/cache 2>/dev/null || true
-          rm -rf ~/.cargo/git/db 2>/dev/null || true
+
+      - name: Rust Cache
+        uses: Swatinem/rust-cache@9d47c6ad4b02e050fd481d890b2ea34778fd09d6 # v2.7.8
+        with:
+          shared-key: build-rustdoc
+          cache-on-failure: true
+
       - run: cargo doc --all-features --workspace --no-deps --locked
         id: required
-        env:
-          SKIP_WASM_BUILD: 1
-          RUSTDOCFLAGS: "-Dwarnings --default-theme=ayu --html-in-header ./docs/sdk/assets/header.html --extend-css ./docs/sdk/assets/theme.css --html-after-content ./docs/sdk/assets/after-content.html"
       - run: rm -f ./target/doc/.lock
       - run: mv ./target/doc ./crate-docs
       - name: Inject Simple Analytics script

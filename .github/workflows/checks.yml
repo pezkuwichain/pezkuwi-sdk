@@ -25,27 +25,21 @@ jobs:
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
     needs: [preflight]
     if: ${{ needs.preflight.outputs.changes_rust }}
-    timeout-minutes: 60
+    timeout-minutes: 45
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
     env:
       RUSTFLAGS: "-D warnings"
       SKIP_WASM_BUILD: 1
+      CARGO_INCREMENTAL: 0
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v4.1.7
 
-      - name: Free disk space
-        run: |
-          df -h
-          # Remove unnecessary files to free disk space
-          sudo rm -rf /usr/share/dotnet 2>/dev/null || true
-          sudo rm -rf /usr/local/lib/android 2>/dev/null || true
-          sudo rm -rf /opt/ghc 2>/dev/null || true
-          sudo rm -rf /opt/hostedtoolcache 2>/dev/null || true
-          cargo clean 2>/dev/null || true
-          rm -rf ~/.cargo/registry/cache 2>/dev/null || true
-          rm -rf ~/.cargo/git/db 2>/dev/null || true
-          df -h
+      - name: Rust Cache
+        uses: Swatinem/rust-cache@9d47c6ad4b02e050fd481d890b2ea34778fd09d6 # v2.7.8
+        with:
+          shared-key: clippy
+          cache-on-failure: true
 
       - name: Add wasm32v1-none target
         run: rustup target add wasm32v1-none
@@ -59,35 +53,27 @@ jobs:
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
     needs: [preflight]
     if: ${{ needs.preflight.outputs.changes_rust }}
-    timeout-minutes: 60
+    timeout-minutes: 45
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
     env:
       SKIP_WASM_BUILD: 1
+      CARGO_INCREMENTAL: 0
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v4.1.7
 
-      - name: Free disk space
-        run: |
-          df -h
-          # Remove unnecessary files to free disk space
-          sudo rm -rf /usr/share/dotnet 2>/dev/null || true
-          sudo rm -rf /usr/local/lib/android 2>/dev/null || true
-          sudo rm -rf /opt/ghc 2>/dev/null || true
-          sudo rm -rf /opt/hostedtoolcache 2>/dev/null || true
-          cargo clean 2>/dev/null || true
-          rm -rf ~/.cargo/registry/cache 2>/dev/null || true
-          rm -rf ~/.cargo/git/db 2>/dev/null || true
-          df -h
+      - name: Rust Cache
+        uses: Swatinem/rust-cache@9d47c6ad4b02e050fd481d890b2ea34778fd09d6 # v2.7.8
+        with:
+          shared-key: try-runtime
+          cache-on-failure: true
 
       - name: script
         id: required
         run: |
           cargo check --locked --all --features try-runtime --quiet
-          # this is taken from pezcumulus
           # Check that teyrchain-template will compile with `try-runtime` feature flag.
           cargo check --locked -p teyrchain-template-node --features try-runtime
-          # add after https://github.com/pezkuwichain/bizinikiwi/pull/14502 is merged
           # experimental code may rely on try-runtime and vice-versa
           cargo check --locked --all --features try-runtime,experimental --quiet
 
