@@ -157,18 +157,16 @@ jobs:
         id: set_runner
         shell: bash
         run: |
-          # Use GitHub-hosted larger runners (16-core) for faster CI
-          # Cost: $0.042/min = $2.52/hour
-          # Fallback to self-hosted for specific jobs if needed
-          echo "RUNNER_DEFAULT=ubuntu-latest-16-cores" >> $GITHUB_OUTPUT
-          echo "RUNNER_WEIGHTS=ubuntu-latest-16-cores" >> $GITHUB_OUTPUT
-          echo "RUNNER_BENCHMARK=ubuntu-latest-16-cores" >> $GITHUB_OUTPUT
+          # Self-hosted runners (reduced to 3 total for lower load)
+          # VPS1: 1 runner, VPS2: 1 runner, VPS3: 1 runner
+          echo "RUNNER_DEFAULT=ubuntu-large" >> $GITHUB_OUTPUT
+          echo "RUNNER_WEIGHTS=ubuntu-large" >> $GITHUB_OUTPUT
+          echo "RUNNER_BENCHMARK=ubuntu-large" >> $GITHUB_OUTPUT
           echo "RUNNER_MACOS=macos-latest" >> $GITHUB_OUTPUT
-          # Main runners - GitHub hosted 16-core
-          echo "RUNNER=ubuntu-latest-16-cores" >> $GITHUB_OUTPUT
-          echo "RUNNER_OLDLINUX=ubuntu-latest-16-cores" >> $GITHUB_OUTPUT
-          echo "RUNNER_NEW=ubuntu-latest-16-cores" >> $GITHUB_OUTPUT
-          echo "RUNNER_OLDLINUX_NEW=ubuntu-latest-16-cores" >> $GITHUB_OUTPUT
+          echo "RUNNER=ubuntu-large" >> $GITHUB_OUTPUT
+          echo "RUNNER_OLDLINUX=ubuntu-large" >> $GITHUB_OUTPUT
+          echo "RUNNER_NEW=ubuntu-large" >> $GITHUB_OUTPUT
+          echo "RUNNER_OLDLINUX_NEW=ubuntu-large" >> $GITHUB_OUTPUT
 
       #
       # Set vars
