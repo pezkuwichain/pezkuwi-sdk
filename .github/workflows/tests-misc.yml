@@ -61,6 +61,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Add wasm32v1-none target
+        run: rustup target add wasm32v1-none || true
       - name: script
         run: |
           cd bizinikiwi/pezframe/examples/offchain-worker/
@@ -149,11 +151,14 @@ jobs:
           # either PR (including forks) or merge group (main repo)
           ref: ${{ matrix.branch == 'master' && matrix.branch || '' }}
 
+      - name: Add wasm32v1-none target
+        run: rustup target add wasm32v1-none || true
+
       - name: script
         shell: bash
         run: |
           # Fail the step if any command in a pipeline errors out.
-          set -euo pipefail 
+          set -euo pipefail
           ARTIFACTS_DIR=./artifacts
           BENCH_TRIE_READ=::trie::read::small
           BENCH_NODE_IMPORT=::node::import::sr25519::transfer_keep_alive::paritydb::small
@@ -308,6 +313,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
+      - name: Add wasm32v1-none target
+        run: rustup target add wasm32v1-none || true
+
       - name: script
         run: |
           cargo build --locked -p zagros-runtime --features metadata-hash
@@ -374,6 +382,9 @@ jobs:
         run: |
           rustup show
           rustup +nightly show
+
+      - name: Add wasm32v1-none target
+        run: rustup target add wasm32v1-none || true
 
       - name: script
         run: |
