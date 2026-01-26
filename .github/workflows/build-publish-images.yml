@@ -46,6 +46,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Add wasm32v1-none target
+        run: rustup target add wasm32v1-none
       - name: build
         id: required
         run: |
@@ -99,6 +101,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Add wasm32v1-none target
+        run: rustup target add wasm32v1-none
       - name: build
         id: required
         run: |
@@ -133,6 +137,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Add wasm32v1-none target
+        run: rustup target add wasm32v1-none
       - name: build
         id: required
         run: |
@@ -169,6 +175,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Add wasm32v1-none target
+        run: rustup target add wasm32v1-none
       - name: build
         id: required
         run: |
@@ -206,6 +214,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Add wasm32v1-none target
+        run: rustup target add wasm32v1-none
       - name: build
         id: required
         run: |
@@ -242,6 +252,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Add wasm32v1-none target
+        run: rustup target add wasm32v1-none
       - name: build
         id: required
         run: |
@@ -283,6 +295,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Add wasm32v1-none target
+        run: rustup target add wasm32v1-none
       - name: build
         id: required
         run: |
@@ -324,6 +338,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Add wasm32v1-none target
+        run: rustup target add wasm32v1-none
       - name: build
         run: |
           cargo build --locked --profile testnet -p pezkuwi-test-malus --bin malus --bin pezkuwi-prepare-worker --bin pezkuwi-execute-worker
@@ -354,6 +370,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Add wasm32v1-none target
+        run: rustup target add wasm32v1-none
       - name: build
         run: |
           cargo nextest --manifest-path pezkuwi/zombienet-sdk-tests/Cargo.toml archive --locked --features zombie-metadata,zombie-ci --archive-file pezkuwi-zombienet-tests.tar.zst
@@ -384,6 +402,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Add wasm32v1-none target
+        run: rustup target add wasm32v1-none
       - name: build
         run: |
           cargo nextest --manifest-path pezcumulus/zombienet/zombienet-sdk/Cargo.toml archive --locked --features zombie-ci --archive-file pezcumulus-zombienet-tests.tar.zst
@@ -411,6 +431,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Add wasm32v1-none target
+        run: rustup target add wasm32v1-none
       - name: build
         run: |
           cargo nextest --manifest-path templates/zombienet/Cargo.toml archive --locked --features zombienet --archive-file teyrchain-templates-zombienet-tests.tar.zst
