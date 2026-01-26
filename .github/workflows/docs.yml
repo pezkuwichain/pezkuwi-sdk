@@ -38,7 +38,10 @@ jobs:
           shared-key: test-doc
           cache-on-failure: true
 
-      - run: cargo test --doc --workspace --locked --all-features
+      # Exclude pezkuwi-zombienet-sdk-tests: its build.rs runs nested cargo build
+      # which doesn't inherit workspace [patch.crates-io] settings, causing
+      # serde_core duplicate lang item error. See: https://github.com/pezkuwichain/pezkuwi-sdk/issues/357
+      - run: cargo test --doc --workspace --locked --all-features --exclude pezkuwi-zombienet-sdk-tests
         id: required
 
   build-rustdoc:
@@ -61,7 +64,9 @@ jobs:
           shared-key: build-rustdoc
           cache-on-failure: true
 
-      - run: cargo doc --all-features --workspace --no-deps --locked
+      # Exclude pezkuwi-zombienet-sdk-tests: nested cargo build in build.rs
+      # doesn't inherit workspace patches. See test-doc job comment.
+      - run: cargo doc --all-features --workspace --no-deps --locked --exclude pezkuwi-zombienet-sdk-tests
         id: required
       - run: rm -f ./target/doc/.lock
       - run: mv ./target/doc ./crate-docs
