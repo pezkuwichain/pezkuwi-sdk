@@ -34,6 +34,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Add wasm32v1-none target
+        run: rustup target add wasm32v1-none || true
       - name: script
         run: cargo run --locked --release -p pezstaging-node-cli --bin bizinikiwi-node --features runtime-benchmarks --quiet -- benchmark pezpallet --chain dev --pezpallet "*" --extrinsic "*" --steps 2 --repeat 1 --quiet
 
