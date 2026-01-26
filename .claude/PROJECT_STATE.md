@@ -54,6 +54,29 @@ Durum: TAMAMLANDI - Build edildi
 
 ---
 
+## CI/CD ALTYAPISI (GitHub Actions Self-Hosted Runners)
+
+| VPS | IP | CPU | RAM | Runner Sayısı |
+|-----|-----|-----|-----|---------------|
+| VPS1 | 37.60.230.9 | 8 | 23GB | 3 |
+| VPS2 | 62.146.235.186 | 16 | 62GB | 7 |
+| VPS3 | 217.77.6.126 | 18 | 94GB | 10 |
+| **TOPLAM** | - | **42** | **179GB** | **20** |
+
+### SSH Erişimi
+```bash
+ssh root@37.60.230.9      # VPS1
+ssh root@62.146.235.186   # VPS2
+ssh root@217.77.6.126     # VPS3
+```
+
+### Notlar
+- VPS1'de production servisleri de çalışıyor (ai-lawyer, safechild, naturel-bot)
+- Runner versiyon: v2.331.0
+- Docker network pool dolunca VPS reboot gerekebilir
+
+---
+
 ## TERMİNOLOJİ (ASLA ESKİ TERİMLERİ KULLANMA)
 
 | ESKİ (KULLANMA) | YENİ (KULLAN) |

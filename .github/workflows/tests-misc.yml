@@ -78,23 +78,28 @@ jobs:
   #         RUSTFLAGS="--cfg bizinikiwi_runtime" cargo build --locked --target=wasm32-unknown-unknown --no-default-features
 
   test-pezframe-ui:
-    timeout-minutes: 60
+    timeout-minutes: 45
     needs: [preflight]
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
     if: ${{ needs.preflight.outputs.changes_rust }}
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
     env:
-      # Enable debug assertions since we are running optimized builds for testing
-      # but still want to have debug assertions.
       RUSTFLAGS: "-C debug-assertions -D warnings"
       RUST_BACKTRACE: 1
       SKIP_WASM_BUILD: 1
-      # Ensure we run the UI tests.
       RUN_UI_TESTS: 1
+      CARGO_INCREMENTAL: 0
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+      - name: Rust Cache
+        uses: Swatinem/rust-cache@9d47c6ad4b02e050fd481d890b2ea34778fd09d6 # v2.7.8
+        with:
+          shared-key: pezframe-ui
+          cache-on-failure: true
+
       - name: script
         run: |
           cargo version
@@ -103,7 +108,6 @@ jobs:
           cargo test --locked -q --profile testnet -p xcm-pez-procedural ui
           cargo test --locked -q --profile testnet -p pezframe-election-provider-solution-type ui
           cargo test --locked -q --profile testnet -p pezsp-api-test ui
-          # There is multiple version of pezsp-runtime-interface in the repo. So we point to the manifest.
           cargo test --locked -q --profile testnet --manifest-path bizinikiwi/primitives/runtime-interface/Cargo.toml ui
 
   test-deterministic-wasm:
@@ -370,7 +374,7 @@ jobs:
   #         name: hfuzz-${{ github.sha }}
 
   cargo-check-each-crate:
-    timeout-minutes: 70
+    timeout-minutes: 90
     needs: [preflight]
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
     if: ${{ needs.preflight.outputs.changes_rust }}
@@ -381,17 +385,19 @@ jobs:
       CI_JOB_NAME: cargo-check-each-crate
       # Skip WASM build to avoid serde_core duplicate lang item error
       SKIP_WASM_BUILD: 1
+      CARGO_INCREMENTAL: 0
     strategy:
       matrix:
-        index: [1, 2, 3, 4, 5, 6, 7] # 7 parallel jobs
+        index: [1, 2, 3, 4] # Reduced from 7 to 4 parallel jobs to lower system load
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
-      - name: Check Rust
-        run: |
-          rustup show
-          rustup +nightly show
+      - name: Rust Cache
+        uses: Swatinem/rust-cache@9d47c6ad4b02e050fd481d890b2ea34778fd09d6 # v2.7.8
+        with:
+          shared-key: check-each-crate-${{ matrix.index }}
+          cache-on-failure: true
 
       - name: Add wasm32v1-none target
         run: rustup target add wasm32v1-none || true

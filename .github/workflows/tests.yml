@@ -23,7 +23,7 @@ jobs:
     needs: [preflight]
     if: ${{ needs.preflight.outputs.changes_rust }}
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
-    timeout-minutes: 60
+    timeout-minutes: 45
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
     env:
@@ -31,11 +31,20 @@ jobs:
       RUST_BACKTRACE: "full"
       WASM_BUILD_NO_COLOR: 1
       WASM_BUILD_RUSTFLAGS: "-C debug-assertions -D warnings"
+      CARGO_INCREMENTAL: 0
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+      - name: Rust Cache
+        uses: Swatinem/rust-cache@9d47c6ad4b02e050fd481d890b2ea34778fd09d6 # v2.7.8
+        with:
+          shared-key: quick-benchmarks
+          cache-on-failure: true
+
       - name: Add wasm32v1-none target
         run: rustup target add wasm32v1-none || true
+
       - name: script
         run: cargo run --locked --release -p pezstaging-node-cli --bin bizinikiwi-node --features runtime-benchmarks --quiet -- benchmark pezpallet --chain dev --pezpallet "*" --extrinsic "*" --steps 2 --repeat 1 --quiet
 
@@ -69,17 +78,22 @@ jobs:
     needs: [preflight]
     if: ${{ needs.preflight.outputs.changes_rust }}
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
-    timeout-minutes: 60
+    timeout-minutes: 45
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
     env:
       SKIP_WASM_BUILD: 1
+      CARGO_INCREMENTAL: 0
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+      - name: Rust Cache
+        uses: Swatinem/rust-cache@9d47c6ad4b02e050fd481d890b2ea34778fd09d6 # v2.7.8
+        with:
+          shared-key: check-all-benches
+          cache-on-failure: true
+
       - name: script
-        # Use --features runtime-benchmarks to ensure all crates have the feature enabled,
-        # avoiding feature unification issues where pezframe-support has the feature but
-        # implementing crates don't.
         run: |
           cargo check --workspace --benches --features runtime-benchmarks --quiet

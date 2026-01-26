@@ -1,0 +1,23 @@
+name: "Rust Cache"
+description: "Setup Rust caching for CI jobs"
+
+inputs:
+  cache-key:
+    description: "Additional cache key"
+    required: false
+    default: ""
+  workspaces:
+    description: "Workspace paths to cache"
+    required: false
+    default: ". -> target"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Rust cache
+      uses: Swatinem/rust-cache@9d47c6ad4b02e050fd481d890b2ea34778fd09d6 # v2.7.8
+      with:
+        shared-key: pezkuwi-${{ inputs.cache-key }}
+        workspaces: ${{ inputs.workspaces }}
+        cache-on-failure: true
+        cache-all-crates: true
