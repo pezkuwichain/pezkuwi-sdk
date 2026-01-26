@@ -43,6 +43,9 @@ jobs:
           rustup show
           rustup +nightly show
 
+      - name: Add wasm32v1-none target
+        run: rustup target add wasm32v1-none || true
+
       - name: Build
         env:
           BIZINIKIWI_RUNTIME_TARGET: riscv

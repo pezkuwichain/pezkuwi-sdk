@@ -36,6 +36,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Add wasm32v1-none target
+        run: rustup target add wasm32v1-none || true
       - name: script
         id: required
         run: WASM_BUILD_NO_COLOR=1 cargo test -p pezstaging-node-cli --release --locked -- --ignored
@@ -56,6 +58,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Add wasm32v1-none target
+        run: rustup target add wasm32v1-none || true
       - name: script
         id: required
         run: cargo nextest run --workspace --features runtime-benchmarks benchmark --locked --cargo-profile testnet --cargo-quiet
@@ -86,6 +90,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Add wasm32v1-none target
+        run: rustup target add wasm32v1-none || true
       - name: script
         id: required
         run: |
@@ -126,6 +132,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Add wasm32v1-none target
+        run: rustup target add wasm32v1-none || true
       - name: script
         id: required
         run: |
