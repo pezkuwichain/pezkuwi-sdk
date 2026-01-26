@@ -116,6 +116,9 @@ jobs:
           rm -rf ~/.cargo/registry/cache 2>/dev/null || true
           rm -rf ~/.cargo/git/db 2>/dev/null || true
 
+      - name: Add wasm32v1-none target
+        run: rustup target add wasm32v1-none
+
       - name: script
         run: |
           # build runtime
@@ -252,6 +255,9 @@ jobs:
           cargo clean 2>/dev/null || true
           rm -rf ~/.cargo/registry/cache 2>/dev/null || true
           rm -rf ~/.cargo/git/db 2>/dev/null || true
+
+      - name: Add wasm32v1-none target
+        run: rustup target add wasm32v1-none
 
       - name: Run tests
         id: tests
