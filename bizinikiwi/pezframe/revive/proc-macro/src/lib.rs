@@ -407,7 +407,7 @@ fn expand_functions(def: &EnvDef) -> TokenStream2 {
 		let output = &f.item.sig.output;
 
 		// wrapped host function body call with host function traces
-		// see https://github.com/pezkuwichain/pezkuwi-sdk/tree/master/bizinikiwi/pezframe/contracts#host-function-tracing
+		// see https://github.com/pezkuwichain/pezkuwi-sdk/tree/main/bizinikiwi/pezframe/contracts#host-function-tracing
 		let wrapped_body_with_trace = {
 			let trace_fmt_args = params.clone().filter_map(|arg| match arg {
 				syn::FnArg::Receiver(_) => None,

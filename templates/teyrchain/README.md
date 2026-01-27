@@ -251,7 +251,7 @@ relay chain network (see [Teyrchain Template node](#teyrchain-template-node) set
 
 - 🔄 This template is automatically updated after releases in the main [Pezkuwi SDK monorepo](https://github.com/pezkuwichain/pezkuwi-sdk).
 
-- ➡️ Any pull requests should be directed to this [source](https://github.com/pezkuwichain/pezkuwi-sdk/tree/master/templates/teyrchain).
+- ➡️ Any pull requests should be directed to this [source](https://github.com/pezkuwichain/pezkuwi-sdk/tree/main/templates/teyrchain).
 
 - 😇 Please refer to the monorepo's
   [contribution guidelines](https://github.com/pezkuwichain/pezkuwi-sdk/blob/master/docs/contributor/CONTRIBUTING.md) and
