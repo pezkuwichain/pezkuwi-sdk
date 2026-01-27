@@ -119,10 +119,8 @@ jobs:
 
           expect "*Rust is not installed. Install it?*" {
             send "y\r"
-            expect "Proceed with standard installation (default - just press enter)" {
-              send "\r"
-              expect "Rust is installed now"
-            }
+            # rustup runs with -y flag (non-interactive), so no "Proceed" prompt
+            expect "Rust is installed now"
           }
 
           expect "*Setup the Rust environment*" {
