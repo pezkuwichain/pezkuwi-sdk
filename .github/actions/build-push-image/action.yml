@@ -6,10 +6,15 @@ inputs:
   image-name:
     description: "image name (without registry)"
     required: true
+  ghcr-token:
+    description: "GitHub token for GHCR authentication"
+    required: true
   username:
+    description: "DockerHub username"
     required: false
     default: ""
   password:
+    description: "DockerHub password"
     required: false
     default: ""
 outputs:
@@ -20,13 +25,13 @@ outputs:
 runs:
   using: "composite"
   steps:
-    # GHCR login (using GITHUB_TOKEN - automatically available)
+    # GHCR login
     - name: Login to GHCR
       uses: docker/login-action@184bdaa0721073962dff0199f1fb9940f07167d1 # v3.5.0
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
-        password: ${{ github.token }}
+        password: ${{ inputs.ghcr-token }}
 
     - name: Set image version
       id: version
