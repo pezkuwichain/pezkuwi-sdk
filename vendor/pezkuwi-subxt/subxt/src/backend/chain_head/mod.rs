@@ -3,7 +3,7 @@
 // see LICENSE for license details.
 
 //! This module will expose a backend implementation based on the new APIs
-//! described at <https://github.com/pezkuwichain/json-rpc-interface-spec/>. See
+//! described at <https://github.com/paritytech/json-rpc-interface-spec/>. See
 //! [`rpc_methods`] for the raw API calls.
 //!
 //! # Warning
@@ -540,7 +540,7 @@ impl<T: Config + Send + Sync + 'static> Backend<T> for ChainHeadBackend<T> {
 		&self,
 		_hasher: T::Hasher,
 	) -> Result<StreamOfResults<(T::Header, BlockRef<HashFor<T>>)>, BackendError> {
-		// TODO: https://github.com/pezkuwichain/subxt/issues/1568
+		// TODO: https://github.com/paritytech/subxt/issues/1568
 		//
 		// It's possible that blocks may be silently missed if
 		// a reconnection occurs because it's restarted by the unstable backend.
@@ -558,7 +558,7 @@ impl<T: Config + Send + Sync + 'static> Backend<T> for ChainHeadBackend<T> {
 		&self,
 		_hasher: T::Hasher,
 	) -> Result<StreamOfResults<(T::Header, BlockRef<HashFor<T>>)>, BackendError> {
-		// TODO: https://github.com/pezkuwichain/subxt/issues/1568
+		// TODO: https://github.com/paritytech/subxt/issues/1568
 		//
 		// It's possible that blocks may be silently missed if
 		// a reconnection occurs because it's restarted by the unstable backend.

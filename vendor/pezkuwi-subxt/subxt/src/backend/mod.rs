@@ -965,7 +965,7 @@ mod test {
 		}
 
 		// Check that the backend will resubscribe on Stop, and handle a change in subscription ID.
-		// see https://github.com/pezkuwichain/subxt/issues/1567
+		// see https://github.com/paritytech/subxt/issues/1567
 		#[tokio::test]
 		async fn stale_subscription_id_failure() {
 			let (tx, rx) = tokio::sync::mpsc::unbounded_channel();
