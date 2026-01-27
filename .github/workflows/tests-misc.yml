@@ -110,43 +110,44 @@ jobs:
           cargo test --locked -q --profile testnet -p pezsp-api-test ui
           cargo test --locked -q --profile testnet --manifest-path bizinikiwi/primitives/runtime-interface/Cargo.toml ui
 
-  test-deterministic-wasm:
-    timeout-minutes: 40
-    # NOTE: test-pezframe-examples-compile-to-wasm removed from needs - it's disabled due to serde_core wasm32 issue
-    needs: [preflight, test-full-crypto-feature]
-    runs-on: ${{ needs.preflight.outputs.RUNNER }}
-    if: ${{ needs.preflight.outputs.changes_rust }}
-    container:
-      image: ${{ needs.preflight.outputs.IMAGE }}
-    env:
-      WASM_BUILD_NO_COLOR: 1
-      # Temporary: Skip WASM build due to serde_core + Rust 1.88 + WASM bug
-      # This effectively disables this test until upstream fix
-      # Tracking: https://github.com/pezkuwichain/pezkuwi-sdk/issues/358
-      SKIP_WASM_BUILD: 1
-    steps:
-      - name: Checkout
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-
-      - name: Clean cargo cache to free disk space
-        run: |
-          cargo clean 2>/dev/null || true
-          rm -rf ~/.cargo/registry/cache 2>/dev/null || true
-          rm -rf ~/.cargo/git/db 2>/dev/null || true
-
-      # Note: wasm32v1-none target removed - serde_core incompatibility causes silent build failures
-      # wasm-builder will automatically use wasm32-unknown-unknown
-      - name: script
-        run: |
-          # build runtime
-          cargo build -q --locked --release -p zagros-runtime -p pezkuwichain-runtime
-          # make checksum
-          sha256sum target/release/wbuild/*-runtime/target/wasm32-unknown-unknown/release/*.wasm > checksum.sha256
-          cargo clean
-          # build again
-          cargo build -q --locked --release -p zagros-runtime -p pezkuwichain-runtime
-          # confirm checksum
-          sha256sum -c checksum.sha256
+  # TEMPORARILY DISABLED: test-deterministic-wasm
+  # Reason: This test REQUIRES WASM builds to verify deterministic compilation.
+  # serde_core 1.0.228+ causes duplicate lang item error when building WASM targets.
+  # Error: "duplicate lang item in crate alloc: exchange_malloc"
+  # SKIP_WASM_BUILD=1 makes this test meaningless as there are no WASM files to checksum.
+  # Tracking issue: https://github.com/pezkuwichain/pezkuwi-sdk/issues/358
+  # TODO: Re-enable when serde upstream fixes the wasm32 + no_std combination
+  #
+  # test-deterministic-wasm:
+  #   timeout-minutes: 40
+  #   needs: [preflight, test-full-crypto-feature]
+  #   runs-on: ${{ needs.preflight.outputs.RUNNER }}
+  #   if: ${{ needs.preflight.outputs.changes_rust }}
+  #   container:
+  #     image: ${{ needs.preflight.outputs.IMAGE }}
+  #   env:
+  #     WASM_BUILD_NO_COLOR: 1
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+  #
+  #     - name: Clean cargo cache to free disk space
+  #       run: |
+  #         cargo clean 2>/dev/null || true
+  #         rm -rf ~/.cargo/registry/cache 2>/dev/null || true
+  #         rm -rf ~/.cargo/git/db 2>/dev/null || true
+  #
+  #     - name: script
+  #       run: |
+  #         # build runtime
+  #         cargo build -q --locked --release -p zagros-runtime -p pezkuwichain-runtime
+  #         # make checksum
+  #         sha256sum target/release/wbuild/*-runtime/target/wasm32-unknown-unknown/release/*.wasm > checksum.sha256
+  #         cargo clean
+  #         # build again
+  #         cargo build -q --locked --release -p zagros-runtime -p pezkuwichain-runtime
+  #         # confirm checksum
+  #         sha256sum -c checksum.sha256
 
   cargo-check-benches:
     needs: [preflight]
@@ -480,11 +481,12 @@ jobs:
           source $HOME/.cargo/env
           cargo check --workspace --locked
 
-  confirm-required-test-mipezsc-jobs-passed:
+  confirm-required-test-misc-jobs-passed:
     runs-on: ubuntu-latest
     name: All test misc tests passed
     # If any new job gets added, be sure to add it to this array
     # NOTE: test-pezframe-examples-compile-to-wasm removed - disabled due to serde_core wasm32 issue
+    # NOTE: test-deterministic-wasm removed - disabled due to serde_core wasm32 issue (requires WASM builds)
     needs:
       - test-full-crypto-feature
       # - test-pezframe-examples-compile-to-wasm  # disabled - serde_core wasm32 issue
@@ -494,7 +496,7 @@ jobs:
       - test-node-metrics
       - check-tracing
       - cargo-check-each-crate
-      - test-deterministic-wasm
+      # - test-deterministic-wasm  # disabled - serde_core wasm32 issue (requires WASM builds)
       # - cargo-hfuzz remove from required for now, as it's flaky
     if: always() && !cancelled()
     steps:
