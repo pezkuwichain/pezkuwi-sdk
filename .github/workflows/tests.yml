@@ -32,6 +32,9 @@ jobs:
       WASM_BUILD_NO_COLOR: 1
       WASM_BUILD_RUSTFLAGS: "-C debug-assertions -D warnings"
       CARGO_INCREMENTAL: 0
+      # Temporary: Skip WASM build due to serde_core + Rust 1.88 + WASM bug
+      # Tracking: https://github.com/pezkuwichain/pezkuwi-sdk/issues/358
+      SKIP_WASM_BUILD: 1
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
@@ -42,8 +45,6 @@ jobs:
           shared-key: quick-benchmarks
           cache-on-failure: true
 
-      # Note: wasm32v1-none target removed - getrandom crate doesn't support it
-      # wasm-builder will automatically fallback to wasm32-unknown-unknown
       - name: script
         run: cargo run --locked --release -p pezstaging-node-cli --bin bizinikiwi-node --features runtime-benchmarks --quiet -- benchmark pezpallet --chain dev --pezpallet "*" --extrinsic "*" --steps 2 --repeat 1 --quiet
 
