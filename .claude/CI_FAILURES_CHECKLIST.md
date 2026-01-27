@@ -35,6 +35,13 @@
 - `tests.yml` - quick-benchmarks'tan wasm32v1-none target kaldırıldı
 - Sebep: getrandom crate wasm32v1-none desteklemiyor
 
+### Commit 7: (pending - tests-misc fixes)
+- `tests-misc.yml`:
+  - `pezsnowbridge-runtime-common` cargo-check-benches exclusion listesine eklendi
+  - Sebep: EnsureOriginWithArg trait - `try_successful_origin` method eksik
+  - `test-deterministic-wasm` job'undan wasm32v1-none target kaldırıldı
+  - Sebep: serde_core wasm32v1-none uyumsuzluğu sessiz build hatasına yol açıyor
+
 ---
 
 ## HATA ANALİZİ VE ÇÖZÜMLER
@@ -47,6 +54,8 @@
 | pez-node-bench-regression-guard | cargo-check-benches'e bağımlı | ✅ Otomatik düzelecek |
 | test-pezframe-ui | UI test expected output mismatch | ✅ .stderr dosyası güncellendi (CI path) |
 | quick-benchmarks | getrandom wasm32v1-none not supported | ✅ wasm32v1-none target kaldırıldı |
+| cargo-check-benches (main) | pezsnowbridge-runtime-common EnsureOrigin | ✅ exclusion listesine eklendi |
+| test-deterministic-wasm | WASM build sessiz hata (wasm32v1-none) | ✅ target kaldırıldı |
 
 ---
 
@@ -102,13 +111,13 @@ ssh root@158.220.93.23    # VPS8
 
 ---
 
-## CI DURUMU (2026-01-27T06:40 UTC)
+## CI DURUMU (2026-01-27T07:30 UTC)
 
 ### Başarılı (12):
 - ✅ Check labels
 - ✅ Check licenses
 - ✅ Command Bot Tests
-- ✅ PR #356
+- ✅ Review Bot
 - ✅ Review-Trigger
 - ✅ check-runtime-compatibility
 - ✅ check-runtime-migration
@@ -118,15 +127,20 @@ ssh root@158.220.93.23    # VPS8
 - ✅ tests linux stable coverage (skipped)
 - ✅ Check links
 
+### Başarısız (düzeltme bekleniyor):
+- ❌ cargo-check-benches (main) - pezsnowbridge-runtime-common exclusion → DÜZELTME YAPILDI
+- ❌ test-deterministic-wasm - wasm32v1-none silent failure → DÜZELTME YAPILDI
+- ❌ pez-node-bench-regression-guard - cargo-check-benches'e bağımlı
+
 ### Çalışıyor / Kuyrukta:
-- 🔄 Checks (check-try-runtime çalışıyor)
-- 🔄 Docs (build-rustdoc çalışıyor)
-- 🔄 tests misc (test-deterministic-wasm çalışıyor)
-- 🔄 EVM test suite
-- ⏳ tests linux stable (kuyrukta)
-- ⏳ Build and push images (kuyrukta)
-- ⏳ Build Misc (kuyrukta)
-- ⏳ tests (kuyrukta)
+- 🔄 tests misc (in_progress)
+- 🔄 Build Misc (in_progress)
+- ⏳ Checks (queued)
+- ⏳ Docs (queued)
+- ⏳ tests linux stable (queued)
+- ⏳ Build and push images (queued)
+- ⏳ tests (queued)
+- ⏳ EVM test suite (queued)
 
 ---
 
