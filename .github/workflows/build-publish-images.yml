@@ -12,7 +12,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
-permissions: read-all
+permissions:
+  contents: read
+  packages: write
 
 env:
   COMMIT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
