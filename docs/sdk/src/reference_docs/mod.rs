@@ -19,6 +19,8 @@
 //!
 //! We call this class of documents "reference documents". Our goal should be to minimize the number
 //! of "reference" docs, as they incur maintenance burden.
+//!
+//! [`frame`]: crate::pezkuwi_sdk::frame_runtime
 
 /// Learn how Bizinikiwi and FRAME use traits and associated types to make modules generic in a
 /// type-safe manner.
