@@ -17,11 +17,6 @@ inputs:
     description: "DockerHub password"
     required: false
     default: ""
-outputs:
-  branch:
-    description: "Branch name for the PR"
-    value: ${{ steps.branch.outputs.branch }}
-
 runs:
   using: "composite"
   steps:
