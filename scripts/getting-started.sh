@@ -102,18 +102,18 @@ elif [ "$os_name" = "Linux" ]; then
     if [ "$distro" = "ubuntu" ]; then
         printf "\n🐧 Detected Ubuntu. Using apt to install dependencies.\n"
         sudo apt -qq update
-        sudo apt -qq install --assume-yes git clang curl libssl-dev protobuf-compiler make
+        sudo apt -qq install --assume-yes git clang libclang-dev curl libssl-dev protobuf-compiler make
     elif [ "$distro" = "debian" ]; then
         printf "\n🐧 Detected Debian. Using apt to install dependencies.\n"
         sudo apt -qq update
-        sudo apt -qq install --assume-yes git clang curl libssl-dev llvm libudev-dev make protobuf-compiler
+        sudo apt -qq install --assume-yes git clang libclang-dev curl libssl-dev llvm libudev-dev make protobuf-compiler
     elif [ "$distro" = "arch" ]; then
         printf "\n🐧 Detected Arch Linux. Using pacman to install dependencies.\n"
-        pacman -Syu --needed --noconfirm curl git clang make protobuf
+        pacman -Syu --needed --noconfirm curl git clang llvm-libs make protobuf
     elif [ "$distro" = "fedora" ]; then
         printf "\n🐧 Detected Fedora. Using dnf to install dependencies.\n"
         sudo dnf update --assumeyes
-        sudo dnf install --assumeyes clang curl git openssl-devel make protobuf-compiler perl
+        sudo dnf install --assumeyes clang clang-devel curl git openssl-devel make protobuf-compiler perl
     elif [ "$distro" = "opensuse" ]; then
         printf "\n🐧 Detected openSUSE. Using zypper to install dependencies.\n"
         sudo zypper install --no-confirm clang clang-devel gcc gcc-c++ curl git openssl-devel llvm-devel libudev-devel make awk protobuf-devel
