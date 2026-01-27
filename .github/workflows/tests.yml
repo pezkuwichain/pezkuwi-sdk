@@ -42,9 +42,8 @@ jobs:
           shared-key: quick-benchmarks
           cache-on-failure: true
 
-      - name: Add wasm32v1-none target
-        run: rustup target add wasm32v1-none || true
-
+      # Note: wasm32v1-none target removed - getrandom crate doesn't support it
+      # wasm-builder will automatically fallback to wasm32-unknown-unknown
       - name: script
         run: cargo run --locked --release -p pezstaging-node-cli --bin bizinikiwi-node --features runtime-benchmarks --quiet -- benchmark pezpallet --chain dev --pezpallet "*" --extrinsic "*" --steps 2 --repeat 1 --quiet
 
