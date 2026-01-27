@@ -11,7 +11,7 @@ use pezkuwi_subxt_metadata::Metadata;
 use std::{fs, path::Path};
 
 fn load_metadata() -> Metadata {
-	let bytes = fs::read(Path::new("../artifacts/polkadot_metadata_full.scale"))
+	let bytes = fs::read(Path::new("../artifacts/pezkuwi_metadata_full.scale"))
 		.expect("Cannot read metadata blob");
 	let meta: RuntimeMetadataPrefixed =
 		Decode::decode(&mut &*bytes).expect("Cannot decode scale metadata");

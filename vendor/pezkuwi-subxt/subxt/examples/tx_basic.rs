@@ -3,7 +3,7 @@ use pezkuwi_subxt::{OnlineClient, PezkuwiConfig};
 use pezkuwi_subxt_signer::sr25519::dev;
 
 // Generate an interface that we can use from the node's metadata.
-#[pezkuwi_subxt::subxt(runtime_metadata_path = "../artifacts/polkadot_metadata_small.scale")]
+#[pezkuwi_subxt::subxt(runtime_metadata_path = "../artifacts/pezkuwi_metadata_small.scale")]
 pub mod pezkuwi {}
 
 #[tokio::main]
