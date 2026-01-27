@@ -6,7 +6,7 @@ use pezkuwi_subxt::{
 
 use codec::Decode;
 
-#[pezkuwi_subxt::subxt(runtime_metadata_path = "../artifacts/polkadot_metadata_small.scale")]
+#[pezkuwi_subxt::subxt(runtime_metadata_path = "../artifacts/pezkuwi_metadata_small.scale")]
 pub mod pezkuwi {}
 
 use pezkuwi::balances::calls::types::TransferKeepAlive;

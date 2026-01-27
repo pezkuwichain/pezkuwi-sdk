@@ -222,7 +222,7 @@ mod tests {
 	use scale_value::Composite;
 
 	fn test_metadata() -> Metadata {
-		let metadata_bytes = include_bytes!("../../../artifacts/polkadot_metadata_small.scale");
+		let metadata_bytes = include_bytes!("../../../artifacts/pezkuwi_metadata_small.scale");
 		Metadata::decode(&mut &metadata_bytes[..]).expect("Valid metadata")
 	}
 

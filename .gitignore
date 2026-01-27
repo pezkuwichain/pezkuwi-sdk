@@ -30,6 +30,7 @@
 /.cargo/config
 /.envrc
 artifacts
+!vendor/pezkuwi-subxt/artifacts/
 bin/node-template/Cargo.lock
 nohup.out
 pezkuwi_argument_parsing

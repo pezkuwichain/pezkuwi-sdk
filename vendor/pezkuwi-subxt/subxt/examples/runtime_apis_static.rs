@@ -2,7 +2,7 @@
 use pezkuwi_subxt::{config::PezkuwiConfig, OnlineClient};
 use pezkuwi_subxt_signer::sr25519::dev;
 
-#[pezkuwi_subxt::subxt(runtime_metadata_path = "../artifacts/polkadot_metadata_small.scale")]
+#[pezkuwi_subxt::subxt(runtime_metadata_path = "../artifacts/pezkuwi_metadata_small.scale")]
 pub mod pezkuwi {}
 
 #[tokio::main]

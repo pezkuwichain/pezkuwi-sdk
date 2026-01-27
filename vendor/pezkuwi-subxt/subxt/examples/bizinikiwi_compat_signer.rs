@@ -9,7 +9,7 @@
 use pezkuwi_subxt::{Config, OnlineClient, PezkuwiConfig};
 use pezsp_core::{sr25519, Pair as _};
 
-#[pezkuwi_subxt::subxt(runtime_metadata_path = "../artifacts/polkadot_metadata_small.scale")]
+#[pezkuwi_subxt::subxt(runtime_metadata_path = "../artifacts/pezkuwi_metadata_small.scale")]
 pub mod pezkuwi {}
 
 /// A concrete PairSigner implementation which relies on `sr25519::Pair` for signing
