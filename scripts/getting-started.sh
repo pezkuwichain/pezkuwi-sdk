@@ -116,7 +116,7 @@ elif [ "$os_name" = "Linux" ]; then
         sudo dnf install --assumeyes clang curl git openssl-devel make protobuf-compiler perl
     elif [ "$distro" = "opensuse" ]; then
         printf "\n🐧 Detected openSUSE. Using zypper to install dependencies.\n"
-        sudo zypper install --no-confirm clang gcc gcc-c++ curl git openssl-devel llvm-devel libudev-devel make awk protobuf-devel
+        sudo zypper install --no-confirm clang clang-devel gcc gcc-c++ curl git openssl-devel llvm-devel libudev-devel make awk protobuf-devel
     else
         if prompt "\n🐧 Unknown Linux distribution. Unable to install dependencies. Continue anyway?\n"; then
             printf "\n🐧 Proceeding with unknown linux distribution...\n"
