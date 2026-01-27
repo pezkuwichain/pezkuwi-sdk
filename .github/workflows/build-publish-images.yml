@@ -48,8 +48,9 @@ jobs:
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       - name: Configure git safe.directory
         run: git config --global --add safe.directory '*'
-      - name: Add wasm32v1-none target
-        run: rustup target add wasm32v1-none
+      # NOTE: wasm32v1-none target removed - serde_core + Rust 1.88 bug
+      # wasm-builder will fallback to wasm32-unknown-unknown automatically
+      # Tracking: https://github.com/pezkuwichain/pezkuwi-sdk/issues/358
       - name: build
         id: required
         run: |
@@ -103,8 +104,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-      - name: Add wasm32v1-none target
-        run: rustup target add wasm32v1-none
+      # NOTE: wasm32v1-none target removed - serde_core + Rust 1.88 bug
+      # wasm-builder will fallback to wasm32-unknown-unknown automatically
       - name: build
         id: required
         run: |
@@ -139,8 +140,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-      - name: Add wasm32v1-none target
-        run: rustup target add wasm32v1-none
+      # NOTE: wasm32v1-none target removed - serde_core + Rust 1.88 bug
+      # wasm-builder will fallback to wasm32-unknown-unknown automatically
       - name: build
         id: required
         run: |
@@ -177,8 +178,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-      - name: Add wasm32v1-none target
-        run: rustup target add wasm32v1-none
+      # NOTE: wasm32v1-none target removed - serde_core + Rust 1.88 bug
+      # wasm-builder will fallback to wasm32-unknown-unknown automatically
       - name: build
         id: required
         run: |
@@ -216,8 +217,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-      - name: Add wasm32v1-none target
-        run: rustup target add wasm32v1-none
+      # NOTE: wasm32v1-none target removed - serde_core + Rust 1.88 bug
+      # wasm-builder will fallback to wasm32-unknown-unknown automatically
       - name: build
         id: required
         run: |
@@ -256,8 +257,8 @@ jobs:
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       - name: Configure git safe.directory
         run: git config --global --add safe.directory '*'
-      - name: Add wasm32v1-none target
-        run: rustup target add wasm32v1-none
+      # NOTE: wasm32v1-none target removed - serde_core + Rust 1.88 bug
+      # wasm-builder will fallback to wasm32-unknown-unknown automatically
       - name: build
         id: required
         run: |
@@ -299,8 +300,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-      - name: Add wasm32v1-none target
-        run: rustup target add wasm32v1-none
+      # NOTE: wasm32v1-none target removed - serde_core + Rust 1.88 bug
+      # wasm-builder will fallback to wasm32-unknown-unknown automatically
       - name: build
         id: required
         run: |
