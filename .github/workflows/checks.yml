@@ -42,7 +42,7 @@ jobs:
           cache-on-failure: true
 
       - name: Add wasm32v1-none target
-        run: rustup target add wasm32v1-none
+        run: rustup target add wasm32v1-none || true
 
       - name: script
         id: required
