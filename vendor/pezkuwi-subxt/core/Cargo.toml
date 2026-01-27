@@ -100,6 +100,7 @@ pezkuwi-subxt-macro = { workspace = true }
 pezkuwi-subxt-signer = { workspace = true, features = ["sr25519", "subxt"] }
 pezsp-core = { workspace = true }
 pezsp-keyring = { workspace = true }
+pezsp-runtime = { workspace = true }
 
 [package.metadata.docs.rs]
 default-features = true
