@@ -26,6 +26,8 @@ jobs:
     timeout-minutes: 60
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
+      volumes:
+        - /cache/cargo-target/pezkuwi-sdk:/cache/target
     env:
       RUSTFLAGS: "-C debug-assertions -D warnings"
       RUST_BACKTRACE: 1
@@ -36,6 +38,7 @@ jobs:
       # Temporary: Skip WASM build due to serde_core + Rust 1.88 + WASM bug
       # Tracking: https://github.com/pezkuwichain/pezkuwi-sdk/issues/358
       SKIP_WASM_BUILD: 1
+      CARGO_TARGET_DIR: /cache/target
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
@@ -53,6 +56,8 @@ jobs:
     timeout-minutes: 60
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
+      volumes:
+        - /cache/cargo-target/pezkuwi-sdk:/cache/target
     env:
       RUST_TOOLCHAIN: stable
       # Enable debug assertions since we are running optimized builds for testing
@@ -61,6 +66,7 @@ jobs:
       # Temporary: Skip WASM build due to serde_core + Rust 1.88 + WASM bug
       # Tracking: https://github.com/pezkuwichain/pezkuwi-sdk/issues/358
       SKIP_WASM_BUILD: 1
+      CARGO_TARGET_DIR: /cache/target
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
@@ -81,6 +87,8 @@ jobs:
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
       options: --privileged
+      volumes:
+        - /cache/cargo-target/pezkuwi-sdk:/cache/target
     env:
       RUST_TOOLCHAIN: stable
       RUSTFLAGS: "-Cdebug-assertions=y -Dwarnings"
@@ -88,15 +96,10 @@ jobs:
       # Temporary: Skip WASM build due to serde_core + Rust 1.88 + WASM bug
       # Tracking: https://github.com/pezkuwichain/pezkuwi-sdk/issues/358
       SKIP_WASM_BUILD: 1
+      CARGO_TARGET_DIR: /cache/target
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-
-      - name: Rust Cache
-        uses: Swatinem/rust-cache@9d47c6ad4b02e050fd481d890b2ea34778fd09d6 # v2.7.8
-        with:
-          shared-key: linux-stable-${{ matrix.partition }}
-          cache-on-failure: true
 
       - name: Add wasm32v1-none target
         run: rustup target add wasm32v1-none || true
@@ -128,6 +131,8 @@ jobs:
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
       options: --privileged
+      volumes:
+        - /cache/cargo-target/pezkuwi-sdk:/cache/target
     strategy:
       fail-fast: false
       matrix:
@@ -140,6 +145,7 @@ jobs:
       # Temporary: Skip WASM build due to serde_core + Rust 1.88 + WASM bug
       # Tracking: https://github.com/pezkuwichain/pezkuwi-sdk/issues/358
       SKIP_WASM_BUILD: 1
+      CARGO_TARGET_DIR: /cache/target
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0

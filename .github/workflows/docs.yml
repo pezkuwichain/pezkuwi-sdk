@@ -25,18 +25,15 @@ jobs:
     needs: [preflight]
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
+      volumes:
+        - /cache/cargo-target/pezkuwi-sdk:/cache/target
     env:
       RUSTFLAGS: "-Cdebug-assertions=y -Dwarnings"
       SKIP_WASM_BUILD: 1
       CARGO_INCREMENTAL: 0
+      CARGO_TARGET_DIR: /cache/target
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-
-      - name: Rust Cache
-        uses: Swatinem/rust-cache@9d47c6ad4b02e050fd481d890b2ea34778fd09d6 # v2.7.8
-        with:
-          shared-key: test-doc
-          cache-on-failure: true
 
       # Exclude pezkuwi-zombienet-sdk-tests: its build.rs runs nested cargo build
       # which doesn't inherit workspace [patch.crates-io] settings, causing
@@ -51,18 +48,15 @@ jobs:
     needs: [preflight]
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
+      volumes:
+        - /cache/cargo-target/pezkuwi-sdk:/cache/target
     env:
       SKIP_WASM_BUILD: 1
       CARGO_INCREMENTAL: 0
+      CARGO_TARGET_DIR: /cache/target
       RUSTDOCFLAGS: "-Dwarnings --default-theme=ayu --html-in-header ./docs/sdk/assets/header.html --extend-css ./docs/sdk/assets/theme.css --html-after-content ./docs/sdk/assets/after-content.html"
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-
-      - name: Rust Cache
-        uses: Swatinem/rust-cache@9d47c6ad4b02e050fd481d890b2ea34778fd09d6 # v2.7.8
-        with:
-          shared-key: build-rustdoc
-          cache-on-failure: true
 
       # Exclude pezkuwi-zombienet-sdk-tests: nested cargo build in build.rs
       # doesn't inherit workspace patches. See test-doc job comment.
