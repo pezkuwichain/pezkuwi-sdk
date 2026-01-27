@@ -3,7 +3,7 @@
 // see LICENSE for license details.
 
 //! An interface to call the  API methods. See
-//! <https://github.com/pezkuwichain/json-rpc-interface-spec/> for details of the API
+//! <https://github.com/paritytech/json-rpc-interface-spec/> for details of the API
 //! methods exposed here.
 
 use crate::{
@@ -1117,7 +1117,7 @@ fn to_hex(bytes: impl AsRef<[u8]>) -> String {
 }
 
 /// Attempt to deserialize either a string or integer into an integer.
-/// See <https://github.com/pezkuwichain/json-rpc-interface-spec/issues/83>
+/// See <https://github.com/paritytech/json-rpc-interface-spec/issues/83>
 pub(crate) mod unsigned_number_as_string {
 	use serde::de::{Deserializer, Visitor};
 	use std::fmt;

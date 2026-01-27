@@ -14,33 +14,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 This small release primarily fixes a few issues, but also adds the code for a prelease of `subxt-historic`, a new crate (at the moment) for working with historic blocks and state. Future releases will aim to stabilize this crate to the level of other `subxt` crates or otherwise merge the logic into `subxt` itself.
 
-This is a minor version bump because, in theory at least, adding the `Clone` bound to block headers in ([#2047](https://github.com/pezkuwichain/subxt/pull/2047)) is a breaking change, although I think it is unlikely that this will impact any users.
+This is a minor version bump because, in theory at least, adding the `Clone` bound to block headers in ([#2047](https://github.com/paritytech/subxt/pull/2047)) is a breaking change, although I think it is unlikely that this will impact any users.
 
 ### Added
 
-- Add prerelease `subxt-historic` crate for accessing historic (non head-of-chain) blocks ([#2040](https://github.com/pezkuwichain/subxt/pull/2040))
+- Add prerelease `subxt-historic` crate for accessing historic (non head-of-chain) blocks ([#2040](https://github.com/paritytech/subxt/pull/2040))
 
 ### Changed
 
-- Block: Implement clone ([#2047](https://github.com/pezkuwichain/subxt/pull/2047))
-- Increase number of dev accounts ([#2068](https://github.com/pezkuwichain/subxt/pull/2068))
+- Block: Implement clone ([#2047](https://github.com/paritytech/subxt/pull/2047))
+- Increase number of dev accounts ([#2068](https://github.com/paritytech/subxt/pull/2068))
 
 ### Fixed
 
-- Do not panic when encoding call data with invalid fields ([#2070](https://github.com/pezkuwichain/subxt/pull/2070))
-- Tweak test to reduce chance of failure, and need jsonrpsee/server for tests ([#2057](https://github.com/pezkuwichain/subxt/pull/2057))
-- Fix 1.89 clippy warnings ([#2055](https://github.com/pezkuwichain/subxt/pull/2055))
-- Increase reconnecting client request/response size ([#2046](https://github.com/pezkuwichain/subxt/pull/2046))
+- Do not panic when encoding call data with invalid fields ([#2070](https://github.com/paritytech/subxt/pull/2070))
+- Tweak test to reduce chance of failure, and need jsonrpsee/server for tests ([#2057](https://github.com/paritytech/subxt/pull/2057))
+- Fix 1.89 clippy warnings ([#2055](https://github.com/paritytech/subxt/pull/2055))
+- Increase reconnecting client request/response size ([#2046](https://github.com/paritytech/subxt/pull/2046))
 
 ## [0.43.0] - 2025-07-17
 
 This is a reasonably small release which is mainly bug fixing, but has a couple of changes I'd like to elaborate on:
 
-### Remove `codec::Encode` and `codec::Decode` derives from generated APIs by default ([#2008](https://github.com/pezkuwichain/subxt/pull/2008))
+### Remove `codec::Encode` and `codec::Decode` derives from generated APIs by default ([#2008](https://github.com/paritytech/subxt/pull/2008))
 
 When generating an API using the `#[subxt::subxt(...)]` macro (or programatically via `subxt-codegen`), we had always previously added `parity_scale_codec::Encode` and `parity_scale_codec::Decode` derives to all of the generated types. Most places in Subxt have not made use of these for a long time (relying instead on `scale_encode::EncodeAsType` and `scale_decode::DecodeAsType`, since they allow encoding and encoding which takes the type information into account and can more gracefully handle incompatibilities).
 
-We eventually [hit an issue](https://github.com/pezkuwichain/subxt/issues/2006) to which the most appropriate fix was just to remove these derives.
+We eventually [hit an issue](https://github.com/paritytech/subxt/issues/2006) to which the most appropriate fix was just to remove these derives.
 
 If you still need the `parity_scale_codec::Encode` or `parity_scale_codec::Decode` derives on certain types, you have two options:
 
@@ -63,7 +63,7 @@ If you still need the `parity_scale_codec::Encode` or `parity_scale_codec::Decod
    )]
    ```
 
-Prefer (1) where possible to reduce the amount of generated code, and reduce the likelihood of running into [issues](https://github.com/pezkuwichain/subxt/issues/2006) around those derives in certain edge cases.
+Prefer (1) where possible to reduce the amount of generated code, and reduce the likelihood of running into [issues](https://github.com/paritytech/subxt/issues/2006) around those derives in certain edge cases.
 
 This PR changes some things around storage keys to remove one last requirement for `Encode` and `Decode` derives, and also as a side effect changes `api.storage().call_raw()` slightly to no longer also try to decode the resulting type via `Decode`, leaving this to the user (and also meaning it's much easier now for the user to obtain the raw bytes for some storage entry).
 
@@ -86,7 +86,7 @@ let (compact_len, metadata): (Compact<u32>, frame_metadata::RuntimeMetadataPrefi
     Decode::decode(&mut &*meta_bytes)?;
 ```
 
-### Address some issues around tx mortality ([#2025](https://github.com/pezkuwichain/subxt/pull/2025))
+### Address some issues around tx mortality ([#2025](https://github.com/paritytech/subxt/pull/2025))
 
 Prior to this change, the intended behavior was that any transaction submitted via an `OnlineClient` would have a mortality of 32 blocks by default, and any transaction submitted via an `OfflineClient` would be immortal by default. A couple of issues were present or cropped up however:
 - If you explicitly configure the mortality via setting params like `PezkuwiExtrinsicParamsBuilder::new().mortal(32).build()`, the `OfflineClient` transaction would _still_ be immortal, because it didn't have enough information to properly configure the mortality as asked for (by virtue of being offline and unable to fetch it).
@@ -101,7 +101,7 @@ With this PR, transactions _are_ now mortal by default using the `OnlineClient`,
 
 In this PR, we also discovered an issue decoding `Eras` and fixed this, so that decoding the mortality of a transaction when it is mortal should now work. 
 
-### Add FFI example ([#2037](https://github.com/pezkuwichain/subxt/pull/2037))
+### Add FFI example ([#2037](https://github.com/paritytech/subxt/pull/2037))
 
 I'd like to do a quick shoutout to @wassimans, who submitted an excellent example for how to interact with Subxt via the C FFI in Python and Node.JS. This is something I've wanted to add for a while, so it's lovely to see this new example which highlights one of the strengths of Subxt over Javascript based compatitors in the space.
 
@@ -109,25 +109,25 @@ All of the non-trivial changes in this release are listed below:
 
 ### Added
 
-- Add FFI example ([#2037](https://github.com/pezkuwichain/subxt/pull/2037))
+- Add FFI example ([#2037](https://github.com/paritytech/subxt/pull/2037))
 
 ### Changed
 
-- Remove `codec::Encode` and `codec::Decode` derives from generated APIs by default ([#2008](https://github.com/pezkuwichain/subxt/pull/2008))
-- Address some issues around tx mortality ([#2025](https://github.com/pezkuwichain/subxt/pull/2025))
+- Remove `codec::Encode` and `codec::Decode` derives from generated APIs by default ([#2008](https://github.com/paritytech/subxt/pull/2008))
+- Address some issues around tx mortality ([#2025](https://github.com/paritytech/subxt/pull/2025))
 
 ### Fixed
 
-- Fix 'subxt explore storage': don't turn keys to bytes ([#2038](https://github.com/pezkuwichain/subxt/pull/2038))
-- Refactor: improve nonce and block injection in extrinsic params ([#2032](https://github.com/pezkuwichain/subxt/pull/2032))
-- Improve docs for `at_latest` ([#2035](https://github.com/pezkuwichain/subxt/pull/2035))
-- Clippy fixes for latest Rustc ([#2033](https://github.com/pezkuwichain/subxt/pull/2033))
-- docs: fix minor comment typos ([#2027](https://github.com/pezkuwichain/subxt/pull/2027))
-- chore: remove redundant backtick in comment ([#2020](https://github.com/pezkuwichain/subxt/pull/2020))
-- Keep codec attrs even when Encode/Decode not used ([#2023](https://github.com/pezkuwichain/subxt/pull/2023))
-- Run CI on v0.N.x branches or PRs to them for ease of backporting ([#2017](https://github.com/pezkuwichain/subxt/pull/2017))
-- De-dup types early in CLI/macro so that derives/substitutes work for de-duped types ([#2015](https://github.com/pezkuwichain/subxt/pull/2015))
-- If only one hasher, always treat any key as a single and not NMap key, even if it's a tuple. ([#2010](https://github.com/pezkuwichain/subxt/pull/2010))
+- Fix 'subxt explore storage': don't turn keys to bytes ([#2038](https://github.com/paritytech/subxt/pull/2038))
+- Refactor: improve nonce and block injection in extrinsic params ([#2032](https://github.com/paritytech/subxt/pull/2032))
+- Improve docs for `at_latest` ([#2035](https://github.com/paritytech/subxt/pull/2035))
+- Clippy fixes for latest Rustc ([#2033](https://github.com/paritytech/subxt/pull/2033))
+- docs: fix minor comment typos ([#2027](https://github.com/paritytech/subxt/pull/2027))
+- chore: remove redundant backtick in comment ([#2020](https://github.com/paritytech/subxt/pull/2020))
+- Keep codec attrs even when Encode/Decode not used ([#2023](https://github.com/paritytech/subxt/pull/2023))
+- Run CI on v0.N.x branches or PRs to them for ease of backporting ([#2017](https://github.com/paritytech/subxt/pull/2017))
+- De-dup types early in CLI/macro so that derives/substitutes work for de-duped types ([#2015](https://github.com/paritytech/subxt/pull/2015))
+- If only one hasher, always treat any key as a single and not NMap key, even if it's a tuple. ([#2010](https://github.com/paritytech/subxt/pull/2010))
 
 ## [0.42.1] - 2025-05-12
 
@@ -196,36 +196,36 @@ let _is_call_allowed = api
 
 ### Updated `Config` trait
 
-Another change to be aware of is that [our `Config` trait has been tweaked](https://github.com/pezkuwichain/subxt/pull/1974). The `Hash` associated type is no longer needed, as it can be obtained via the `Hasher` associated type already, and `PezkuwiConfig`/`BizinikiwConfig` now set the hasher by default to be `DynamicHasher256`, which will (when V16 metadata is available for a runtime) automatically select between Keccak256 and BlakeTwo256 hashers depending on what the chain requires.
+Another change to be aware of is that [our `Config` trait has been tweaked](https://github.com/paritytech/subxt/pull/1974). The `Hash` associated type is no longer needed, as it can be obtained via the `Hasher` associated type already, and `PezkuwiConfig`/`BizinikiwConfig` now set the hasher by default to be `DynamicHasher256`, which will (when V16 metadata is available for a runtime) automatically select between Keccak256 and BlakeTwo256 hashers depending on what the chain requires.
 
 ### Other changes
 
-We also [solidify our support for V1 archive RPCs](https://github.com/pezkuwichain/subxt/pull/1977), [upgrade the codebase to Rust 2024 edition](https://github.com/pezkuwichain/subxt/pull/2001), and a bunch of other changes, the full list of which is here:
+We also [solidify our support for V1 archive RPCs](https://github.com/paritytech/subxt/pull/1977), [upgrade the codebase to Rust 2024 edition](https://github.com/paritytech/subxt/pull/2001), and a bunch of other changes, the full list of which is here:
 
 ### Added
 
-- Support v16 metadata and use it by default if it's available ([#1999](https://github.com/pezkuwichain/subxt/pull/1999))
-- Metadata V16: Implement support for Pallet View Functions ([#1981](https://github.com/pezkuwichain/subxt/pull/1981))
-- Metadata V16: Be more dynamic over which hasher is used. ([#1974](https://github.com/pezkuwichain/subxt/pull/1974))
+- Support v16 metadata and use it by default if it's available ([#1999](https://github.com/paritytech/subxt/pull/1999))
+- Metadata V16: Implement support for Pallet View Functions ([#1981](https://github.com/paritytech/subxt/pull/1981))
+- Metadata V16: Be more dynamic over which hasher is used. ([#1974](https://github.com/paritytech/subxt/pull/1974))
 
 ### Changed
 
-- Update to 2024 edition ([#2001](https://github.com/pezkuwichain/subxt/pull/2001))
-- Update Smoldot to latest version ([#1991](https://github.com/pezkuwichain/subxt/pull/1991))
-- Update native test timeout to 45 mins ([#2002](https://github.com/pezkuwichain/subxt/pull/2002))
-- chore(deps): tokio ^1.44.2 ([#1989](https://github.com/pezkuwichain/subxt/pull/1989))
-- Add DefaultParams to allow more transaction extensions to be used when calling _default() methods ([#1979](https://github.com/pezkuwichain/subxt/pull/1979))
-- Use wat instead of wabt to avoid CI cmake error (and use supported dep) ([#1980](https://github.com/pezkuwichain/subxt/pull/1980))
-- Support v1 archive RPCs ([#1977](https://github.com/pezkuwichain/subxt/pull/1977))
-- Support V16 metadata and refactor metadata code ([#1967](https://github.com/pezkuwichain/subxt/pull/1967))
-- Allow submitting transactions ignoring follow events ([#1962](https://github.com/pezkuwichain/subxt/pull/1962))
-- Improve error message regarding failure to extract metadata from WASM runtime ([#1961](https://github.com/pezkuwichain/subxt/pull/1961))
-- Add docs for subxt-rpcs and fix example ([#1954](https://github.com/pezkuwichain/subxt/pull/1954))
+- Update to 2024 edition ([#2001](https://github.com/paritytech/subxt/pull/2001))
+- Update Smoldot to latest version ([#1991](https://github.com/paritytech/subxt/pull/1991))
+- Update native test timeout to 45 mins ([#2002](https://github.com/paritytech/subxt/pull/2002))
+- chore(deps): tokio ^1.44.2 ([#1989](https://github.com/paritytech/subxt/pull/1989))
+- Add DefaultParams to allow more transaction extensions to be used when calling _default() methods ([#1979](https://github.com/paritytech/subxt/pull/1979))
+- Use wat instead of wabt to avoid CI cmake error (and use supported dep) ([#1980](https://github.com/paritytech/subxt/pull/1980))
+- Support v1 archive RPCs ([#1977](https://github.com/paritytech/subxt/pull/1977))
+- Support V16 metadata and refactor metadata code ([#1967](https://github.com/paritytech/subxt/pull/1967))
+- Allow submitting transactions ignoring follow events ([#1962](https://github.com/paritytech/subxt/pull/1962))
+- Improve error message regarding failure to extract metadata from WASM runtime ([#1961](https://github.com/paritytech/subxt/pull/1961))
+- Add docs for subxt-rpcs and fix example ([#1954](https://github.com/paritytech/subxt/pull/1954))
 
 ### Fixed
 
-- Fix CLI storage diff ([#1958](https://github.com/pezkuwichain/subxt/pull/1958))
-- chore: fix some typos ([#1997](https://github.com/pezkuwichain/subxt/pull/1997))
+- Fix CLI storage diff ([#1958](https://github.com/paritytech/subxt/pull/1958))
+- chore: fix some typos ([#1997](https://github.com/paritytech/subxt/pull/1997))
 
 ## [0.41.0] - 2025-03-10
 
@@ -263,7 +263,7 @@ while let Some(follow_event) = follow_subscription.next().await {
 
 ### Support creating V5 transactions.
 
-Subxt has supported decoding V5 transactions from blocks since 0.38.0, but now it also supports constructing V5 transactions where allowed. Some naming changes have also taken place to align with the Bizinikiwi terminology now around transactions (see [#1931](https://github.com/pezkuwichain/subxt/pull/1931) for more!).
+Subxt has supported decoding V5 transactions from blocks since 0.38.0, but now it also supports constructing V5 transactions where allowed. Some naming changes have also taken place to align with the Bizinikiwi terminology now around transactions (see [#1931](https://github.com/paritytech/subxt/pull/1931) for more!).
 
 The main changes here are:
 
@@ -277,47 +277,47 @@ A full list of the relevant changes is as follows:
 
 ### Added
 
-- Support constructing and submitting V5 transactions ([#1931](https://github.com/pezkuwichain/subxt/pull/1931))
-- Add archive RPCs to subxt-rpcs ([#1940](https://github.com/pezkuwichain/subxt/pull/1940))
-- Document generating interface from Runtime WASM and change feature to `runtime-wasm-path` ([#1936](https://github.com/pezkuwichain/subxt/pull/1936))
-- Split RPCs into a separate crate ([#1910](https://github.com/pezkuwichain/subxt/pull/1910))
+- Support constructing and submitting V5 transactions ([#1931](https://github.com/paritytech/subxt/pull/1931))
+- Add archive RPCs to subxt-rpcs ([#1940](https://github.com/paritytech/subxt/pull/1940))
+- Document generating interface from Runtime WASM and change feature to `runtime-wasm-path` ([#1936](https://github.com/paritytech/subxt/pull/1936))
+- Split RPCs into a separate crate ([#1910](https://github.com/paritytech/subxt/pull/1910))
 
 ### Changed
 
-- Wrap the subxt::events::Events type to avoid exposing subxt_core errors and types unnecessarily ([#1948](https://github.com/pezkuwichain/subxt/pull/1948))
-- Allow transaction timeout in ChainheadBackend to be configured ([#1943](https://github.com/pezkuwichain/subxt/pull/1943))
-- refactor: make ExtrinsicEvents::new public for external access ([#1933](https://github.com/pezkuwichain/subxt/pull/1933))
+- Wrap the subxt::events::Events type to avoid exposing subxt_core errors and types unnecessarily ([#1948](https://github.com/paritytech/subxt/pull/1948))
+- Allow transaction timeout in ChainheadBackend to be configured ([#1943](https://github.com/paritytech/subxt/pull/1943))
+- refactor: make ExtrinsicEvents::new public for external access ([#1933](https://github.com/paritytech/subxt/pull/1933))
 
 ## [0.40.0] - 2025-03-06
 
-This release reverts the usage of the `pezkuwi-sdk` umbrella crate, which was causing issues such as an increased number of dependencies in Cargo.lock. For more details, see [#1925](https://github.com/pezkuwichain/subxt/issues/1925).
+This release reverts the usage of the `pezkuwi-sdk` umbrella crate, which was causing issues such as an increased number of dependencies in Cargo.lock. For more details, see [#1925](https://github.com/paritytech/subxt/issues/1925).
 
 Additionally, this update bumps the Pezkuwi SDK-related dependencies to their latest versions, ensuring compatibility and stability.
 
 ### Fixed
 
-- Remove usage of pezkuwi-sdk umbrella crate ([#1926](https://github.com/pezkuwichain/subxt/pull/1926))
+- Remove usage of pezkuwi-sdk umbrella crate ([#1926](https://github.com/paritytech/subxt/pull/1926))
 
-**Full Changelog**: https://github.com/pezkuwichain/subxt/compare/v0.39.0...v0.40.0
+**Full Changelog**: https://github.com/paritytech/subxt/compare/v0.39.0...v0.40.0
 
 ## [0.39.0] - 2025-02-04
 
-This release is mostly bug fixes and changes. The only change that should be a breaking change is removing the `bizinikiwi-compat` feature flag (see [#1850](https://github.com/pezkuwichain/subxt/pull/1850)), which we'll go into more detail about.
+This release is mostly bug fixes and changes. The only change that should be a breaking change is removing the `bizinikiwi-compat` feature flag (see [#1850](https://github.com/paritytech/subxt/pull/1850)), which we'll go into more detail about.
 
 ### The `bizinikiwi-compat` feature flag has been removed.
 
 The `bizinikiwi-compat` feature flag essentially provided:
-1. An implementation of the `subxt::config::Header` trait for anything implementing `sp_runtime::traits::Header` ([here](https://github.com/pezkuwichain/subxt/pull/1850/files#diff-26ab583bc154fdb10c63d7cc90045a6026ad6497efe790fe257b60ceb1a15ea7L137)).
-2. Same for `subxt::config::Hasher` and anything implementing `sp_runtime::traits::Hasher` ([here](https://github.com/pezkuwichain/subxt/pull/1850/files#diff-26ab583bc154fdb10c63d7cc90045a6026ad6497efe790fe257b60ceb1a15ea7L149)).
-3. A `subxt_core::tx::PairSigner` type which could be given something implementing `sp_core::Pair` and then be used to sign transactions ([here](https://github.com/pezkuwichain/subxt/pull/1850/files#diff-fe5469ea5a4788ffac7607c8d25f9d17c232c703f2d38ffe593cb6e87662a0afL46)).
-4. From impls for `sp_runtime::AccountId32` and related for `subxt::utils::AccountId32` ([here](https://github.com/pezkuwichain/subxt/pull/1850/files#diff-61f12204f1b6828f829ea82da72826674e8f6c35943795258860b25ce59fc692L169)).
-5. Likewise for `sp_runtime::MultiAddress` and `subxt::utils::MultiAddress` ([here](https://github.com/pezkuwichain/subxt/pull/1850/files#diff-956118f361c3e5fbdd6974d6f23f40fd0050714cd6bfdfe0f6624d883a2d0c7cL53)).
-6. Likewise for `sp_runtime::MultiSignature` and `subxt::utils::MultiSignature` ([here](https://github.com/pezkuwichain/subxt/pull/1850/files#diff-590233f1bae2f8031dfb010e9c35ba04bb700539d8b067daa7477a0a3f14e38dL29)).
+1. An implementation of the `subxt::config::Header` trait for anything implementing `sp_runtime::traits::Header` ([here](https://github.com/paritytech/subxt/pull/1850/files#diff-26ab583bc154fdb10c63d7cc90045a6026ad6497efe790fe257b60ceb1a15ea7L137)).
+2. Same for `subxt::config::Hasher` and anything implementing `sp_runtime::traits::Hasher` ([here](https://github.com/paritytech/subxt/pull/1850/files#diff-26ab583bc154fdb10c63d7cc90045a6026ad6497efe790fe257b60ceb1a15ea7L149)).
+3. A `subxt_core::tx::PairSigner` type which could be given something implementing `sp_core::Pair` and then be used to sign transactions ([here](https://github.com/paritytech/subxt/pull/1850/files#diff-fe5469ea5a4788ffac7607c8d25f9d17c232c703f2d38ffe593cb6e87662a0afL46)).
+4. From impls for `sp_runtime::AccountId32` and related for `subxt::utils::AccountId32` ([here](https://github.com/paritytech/subxt/pull/1850/files#diff-61f12204f1b6828f829ea82da72826674e8f6c35943795258860b25ce59fc692L169)).
+5. Likewise for `sp_runtime::MultiAddress` and `subxt::utils::MultiAddress` ([here](https://github.com/paritytech/subxt/pull/1850/files#diff-956118f361c3e5fbdd6974d6f23f40fd0050714cd6bfdfe0f6624d883a2d0c7cL53)).
+6. Likewise for `sp_runtime::MultiSignature` and `subxt::utils::MultiSignature` ([here](https://github.com/paritytech/subxt/pull/1850/files#diff-590233f1bae2f8031dfb010e9c35ba04bb700539d8b067daa7477a0a3f14e38dL29)).
 
-While useful, providing these features in Subxt is almost impossible to maintain: we can only support a single version of `sp_runtime`/`sp_core` at a time, but many versions are in use in the wild. This led to various issues regarding the mismatch between `sp_*` crates in use and a given version of Subxt. More generally, the goal of Subxt is to be independent from any specific version of Bizinikiwi, and communicate via the exposed RPC APIs in order to work across any compatible Bizinikiwi version (or indeed, alternative implementations that follow things like [the RPC spec](https://github.com/pezkuwichain/json-rpc-interface-spec)).  
+While useful, providing these features in Subxt is almost impossible to maintain: we can only support a single version of `sp_runtime`/`sp_core` at a time, but many versions are in use in the wild. This led to various issues regarding the mismatch between `sp_*` crates in use and a given version of Subxt. More generally, the goal of Subxt is to be independent from any specific version of Bizinikiwi, and communicate via the exposed RPC APIs in order to work across any compatible Bizinikiwi version (or indeed, alternative implementations that follow things like [the RPC spec](https://github.com/paritytech/json-rpc-interface-spec)).  
 
 As a result, we've taken the decision to remove this compatibility layer from Subxt itself. To migrate away from this feature, we suggest:
-1. Using the example [here](https://github.com/pezkuwichain/subxt/blob/d924ece39a5cb369ba5ccde3dc160b5ee006271b/subxt/examples/bizinikiwi_compat_signer.rs) to see how to use a Bizinikiwi signer to sign Subxt transactions.
+1. Using the example [here](https://github.com/paritytech/subxt/blob/d924ece39a5cb369ba5ccde3dc160b5ee006271b/subxt/examples/bizinikiwi_compat_signer.rs) to see how to use a Bizinikiwi signer to sign Subxt transactions.
 2. Looking at `subxt_signer` instead, if it's a viable alternative in your case.
 3. Following the "here" links above to see what impls were removed. Impls can generally be recreated as needed using wrapper types which allow converting between Bizinikiwi and Subxt types/traits, for instance:
 
@@ -348,77 +348,77 @@ A full list of relevant changes and fixes (nothing was added in this release) is
 
 ### Changed
 
-- remove bizinikiwi compat ([#1850](https://github.com/pezkuwichain/subxt/pull/1850))
-- migrate custom error trait impls to `thiserror` ([#1856](https://github.com/pezkuwichain/subxt/pull/1856))
-- re-export `jsonrpsee` in `subxt::ext` ([#1843](https://github.com/pezkuwichain/subxt/pull/1843))
+- remove bizinikiwi compat ([#1850](https://github.com/paritytech/subxt/pull/1850))
+- migrate custom error trait impls to `thiserror` ([#1856](https://github.com/paritytech/subxt/pull/1856))
+- re-export `jsonrpsee` in `subxt::ext` ([#1843](https://github.com/paritytech/subxt/pull/1843))
 
 ### Fixed
 
-- don't double hash: use the same hash in ExtrinsicDetails and ExtrinsicDetails ([#1917](https://github.com/pezkuwichain/subxt/pull/1917))
-- fix and test sr25519 signing in nostd ([#1872](https://github.com/pezkuwichain/subxt/pull/1872))
-- preserve custom metadata when converting between Subxt metadata and frame_metadata ([#1914](https://github.com/pezkuwichain/subxt/pull/1914))
-- fix: don't wrap rpc error in DisconnectedWillReconnect in reconnecting rpc client ([#1904](https://github.com/pezkuwichain/subxt/pull/1904))
-- fix: bizinikiwi runner, support new libp2p addr log ([#1892](https://github.com/pezkuwichain/subxt/pull/1892))
-- update Artifacts (auto-generated) ([#1874](https://github.com/pezkuwichain/subxt/pull/1874))
-- bump frame-decode and frame-metadata to latest ([#1870](https://github.com/pezkuwichain/subxt/pull/1870))
-- fix unstable-light-client + ChainHeadBackend tx events ([#1865](https://github.com/pezkuwichain/subxt/pull/1865))
-- when native feature is enabled, we need pezkuwi-sdk/std for eg examples to work ([#1864](https://github.com/pezkuwichain/subxt/pull/1864))
-- load latest metadata version from Wasm blobs. ([#1859](https://github.com/pezkuwichain/subxt/pull/1859))
-- minor fix - Yew example ([#1852](https://github.com/pezkuwichain/subxt/pull/1852))
-- update the release notes to work for current releases ([#1842](https://github.com/pezkuwichain/subxt/pull/1842))
+- don't double hash: use the same hash in ExtrinsicDetails and ExtrinsicDetails ([#1917](https://github.com/paritytech/subxt/pull/1917))
+- fix and test sr25519 signing in nostd ([#1872](https://github.com/paritytech/subxt/pull/1872))
+- preserve custom metadata when converting between Subxt metadata and frame_metadata ([#1914](https://github.com/paritytech/subxt/pull/1914))
+- fix: don't wrap rpc error in DisconnectedWillReconnect in reconnecting rpc client ([#1904](https://github.com/paritytech/subxt/pull/1904))
+- fix: bizinikiwi runner, support new libp2p addr log ([#1892](https://github.com/paritytech/subxt/pull/1892))
+- update Artifacts (auto-generated) ([#1874](https://github.com/paritytech/subxt/pull/1874))
+- bump frame-decode and frame-metadata to latest ([#1870](https://github.com/paritytech/subxt/pull/1870))
+- fix unstable-light-client + ChainHeadBackend tx events ([#1865](https://github.com/paritytech/subxt/pull/1865))
+- when native feature is enabled, we need pezkuwi-sdk/std for eg examples to work ([#1864](https://github.com/paritytech/subxt/pull/1864))
+- load latest metadata version from Wasm blobs. ([#1859](https://github.com/paritytech/subxt/pull/1859))
+- minor fix - Yew example ([#1852](https://github.com/paritytech/subxt/pull/1852))
+- update the release notes to work for current releases ([#1842](https://github.com/paritytech/subxt/pull/1842))
 
 ## [0.38.0] - 2024-10-24
 
 This release doesn't introduce any substantial breaking changes and focuses primarily on incremental improvements, testing and bug fixes. A few of the highlights include:
 
-- [#1785](https://github.com/pezkuwichain/subxt/pull/1785): Support decoding V5 extrinsics in blocks (currently Subxt will still submit V4 extrinsics). This also unifies our extrinsic decoding logic into one place.
-- [#1802](https://github.com/pezkuwichain/subxt/pull/1802): Stabilizing the `subxt::backend::unstable::UnstableBackend` (it's now called `subxt::backend::chain_head::ChainHeadBackend`). This backend can be used to interact with the modern `chainHead` RPC methods exposed by Smoldot and compliant RPC nodes. See [this example](https://github.com/pezkuwichain/subxt/blob/master/subxt/examples/setup_rpc_chainhead_backend.rs).
-- [#1803](https://github.com/pezkuwichain/subxt/pull/1803): Stabilizing the `reconnecting-rpc-client`. See [this example](https://github.com/pezkuwichain/subxt/blob/master/subxt/examples/setup_reconnecting_rpc_client.rs).
-- [#1720](https://github.com/pezkuwichain/subxt/pull/1720): A nice little QoL improvement if you have the raw runtime WASM and would like to generate an interface directly from that (ie with `#[subx(runtime_path = "path/to/runtime.wasm")]`).
-- [#1661](https://github.com/pezkuwichain/subxt/pull/1661): Support loading keys directly from the PezkuwiJS JSON to be used in Subxt.
-- [#1638](https://github.com/pezkuwichain/subxt/pull/1638): Improve support for Eth style chains by defining a 20-byte account ID type directly in `subxt-core`. See [this example](https://github.com/pezkuwichain/subxt/blob/master/subxt/examples/tx_basic_frontier.rs).
+- [#1785](https://github.com/paritytech/subxt/pull/1785): Support decoding V5 extrinsics in blocks (currently Subxt will still submit V4 extrinsics). This also unifies our extrinsic decoding logic into one place.
+- [#1802](https://github.com/paritytech/subxt/pull/1802): Stabilizing the `subxt::backend::unstable::UnstableBackend` (it's now called `subxt::backend::chain_head::ChainHeadBackend`). This backend can be used to interact with the modern `chainHead` RPC methods exposed by Smoldot and compliant RPC nodes. See [this example](https://github.com/paritytech/subxt/blob/master/subxt/examples/setup_rpc_chainhead_backend.rs).
+- [#1803](https://github.com/paritytech/subxt/pull/1803): Stabilizing the `reconnecting-rpc-client`. See [this example](https://github.com/paritytech/subxt/blob/master/subxt/examples/setup_reconnecting_rpc_client.rs).
+- [#1720](https://github.com/paritytech/subxt/pull/1720): A nice little QoL improvement if you have the raw runtime WASM and would like to generate an interface directly from that (ie with `#[subx(runtime_path = "path/to/runtime.wasm")]`).
+- [#1661](https://github.com/paritytech/subxt/pull/1661): Support loading keys directly from the PezkuwiJS JSON to be used in Subxt.
+- [#1638](https://github.com/paritytech/subxt/pull/1638): Improve support for Eth style chains by defining a 20-byte account ID type directly in `subxt-core`. See [this example](https://github.com/paritytech/subxt/blob/master/subxt/examples/tx_basic_frontier.rs).
 
 The notable changes in this release are as follows:
 
 ### Added
-- add reconnecting tests for unstable_backend ([#1765](https://github.com/pezkuwichain/subxt/pull/1765))
-- add support for generating metadata from runtime wasm files ([#1720](https://github.com/pezkuwichain/subxt/pull/1720))
-- support loading keys from Pezkuwi-JS accounts ([#1661](https://github.com/pezkuwichain/subxt/pull/1661))
-- allow tx payloads to be boxed ([#1690](https://github.com/pezkuwichain/subxt/pull/1690))
-- add hash method to ExtrinsicDetails ([#1676](https://github.com/pezkuwichain/subxt/pull/1676))
-- expose `secret_key` method for `ecdsa::Keypair` and `eth::Keypair` ([#1628](https://github.com/pezkuwichain/subxt/pull/1628))
-- add 20-byte account id to subxt_core ([#1638](https://github.com/pezkuwichain/subxt/pull/1638))
+- add reconnecting tests for unstable_backend ([#1765](https://github.com/paritytech/subxt/pull/1765))
+- add support for generating metadata from runtime wasm files ([#1720](https://github.com/paritytech/subxt/pull/1720))
+- support loading keys from Pezkuwi-JS accounts ([#1661](https://github.com/paritytech/subxt/pull/1661))
+- allow tx payloads to be boxed ([#1690](https://github.com/paritytech/subxt/pull/1690))
+- add hash method to ExtrinsicDetails ([#1676](https://github.com/paritytech/subxt/pull/1676))
+- expose `secret_key` method for `ecdsa::Keypair` and `eth::Keypair` ([#1628](https://github.com/paritytech/subxt/pull/1628))
+- add 20-byte account id to subxt_core ([#1638](https://github.com/paritytech/subxt/pull/1638))
 
 ### Changed
-- make it clearer which extrinsic failed to decode ([#1835](https://github.com/pezkuwichain/subxt/pull/1835))
-- chore(deps): bump frame-metadata from 16 to 17 ([#1836](https://github.com/pezkuwichain/subxt/pull/1836))
-- chore(deps): bump `scale family crates`, `primitive-types` and `impl-serde` ([#1832](https://github.com/pezkuwichain/subxt/pull/1832))
-- chore(deps): replace `instant` with `web-time` ([#1830](https://github.com/pezkuwichain/subxt/pull/1830))
-- deps: use pezkuwi-sdk umbrella crate ([#1786](https://github.com/pezkuwichain/subxt/pull/1786))
-- stabilize reconnecting-rpc-client ([#1803](https://github.com/pezkuwichain/subxt/pull/1803))
-- stabilize chainhead backend ([#1802](https://github.com/pezkuwichain/subxt/pull/1802))
-- derive serialize on more types ([#1797](https://github.com/pezkuwichain/subxt/pull/1797))
-- use frame-decode for core extrinsic decode logic (including v5 support) ([#1785](https://github.com/pezkuwichain/subxt/pull/1785))
-- reconn-rpc-client: parse URL before connecting ([#1789](https://github.com/pezkuwichain/subxt/pull/1789))
-- update proc_macro_error to proc_macro_error2 ([#1767](https://github.com/pezkuwichain/subxt/pull/1767))
-- chore(deps): update Smoldot to the latest version ([#1400](https://github.com/pezkuwichain/subxt/pull/1400))
-- remove unneeded `?Sized` bound and replace never type with `()` ([#1758](https://github.com/pezkuwichain/subxt/pull/1758))
-- improve test coverage for legacy `Backend` impl ([#1751](https://github.com/pezkuwichain/subxt/pull/1751))
-- add integration tests for `unstable-reconnecting-rpc-client` ([#1711](https://github.com/pezkuwichain/subxt/pull/1711))
-- replace `reconnecting-jsonrpsee-ws-client` with `subxt-reconnecting-rpc-client` ([#1705](https://github.com/pezkuwichain/subxt/pull/1705))
-- allow PartialExtrinsic to be held across await points ([#1658](https://github.com/pezkuwichain/subxt/pull/1658))
-- chore(deps): bump jsonrpsee from 0.22.5 to 0.23.1 ([#1656](https://github.com/pezkuwichain/subxt/pull/1656))
+- make it clearer which extrinsic failed to decode ([#1835](https://github.com/paritytech/subxt/pull/1835))
+- chore(deps): bump frame-metadata from 16 to 17 ([#1836](https://github.com/paritytech/subxt/pull/1836))
+- chore(deps): bump `scale family crates`, `primitive-types` and `impl-serde` ([#1832](https://github.com/paritytech/subxt/pull/1832))
+- chore(deps): replace `instant` with `web-time` ([#1830](https://github.com/paritytech/subxt/pull/1830))
+- deps: use pezkuwi-sdk umbrella crate ([#1786](https://github.com/paritytech/subxt/pull/1786))
+- stabilize reconnecting-rpc-client ([#1803](https://github.com/paritytech/subxt/pull/1803))
+- stabilize chainhead backend ([#1802](https://github.com/paritytech/subxt/pull/1802))
+- derive serialize on more types ([#1797](https://github.com/paritytech/subxt/pull/1797))
+- use frame-decode for core extrinsic decode logic (including v5 support) ([#1785](https://github.com/paritytech/subxt/pull/1785))
+- reconn-rpc-client: parse URL before connecting ([#1789](https://github.com/paritytech/subxt/pull/1789))
+- update proc_macro_error to proc_macro_error2 ([#1767](https://github.com/paritytech/subxt/pull/1767))
+- chore(deps): update Smoldot to the latest version ([#1400](https://github.com/paritytech/subxt/pull/1400))
+- remove unneeded `?Sized` bound and replace never type with `()` ([#1758](https://github.com/paritytech/subxt/pull/1758))
+- improve test coverage for legacy `Backend` impl ([#1751](https://github.com/paritytech/subxt/pull/1751))
+- add integration tests for `unstable-reconnecting-rpc-client` ([#1711](https://github.com/paritytech/subxt/pull/1711))
+- replace `reconnecting-jsonrpsee-ws-client` with `subxt-reconnecting-rpc-client` ([#1705](https://github.com/paritytech/subxt/pull/1705))
+- allow PartialExtrinsic to be held across await points ([#1658](https://github.com/paritytech/subxt/pull/1658))
+- chore(deps): bump jsonrpsee from 0.22.5 to 0.23.1 ([#1656](https://github.com/paritytech/subxt/pull/1656))
 
 ### Fixed
-- fix stripping metadata in the case where enums like RuntimeCall are handed back ([#1774](https://github.com/pezkuwichain/subxt/pull/1774))
-- fix: `defalt-feature` -> `default-features` Cargo.toml ([#1828](https://github.com/pezkuwichain/subxt/pull/1828))
-- avoid hang by notifying subscribers when the backend is closed ([#1817](https://github.com/pezkuwichain/subxt/pull/1817))
-- fix: error message on rpc errors ([#1804](https://github.com/pezkuwichain/subxt/pull/1804))
-- docs: fix typos ([#1776](https://github.com/pezkuwichain/subxt/pull/1776))
-- examples: fix reconnecting logging target ([#1733](https://github.com/pezkuwichain/subxt/pull/1733))
-- docs: fix spelling issues ([#1699](https://github.com/pezkuwichain/subxt/pull/1699))
-- chore: fix some comments ([#1697](https://github.com/pezkuwichain/subxt/pull/1697))
-- codegen: Fix decode error by adding `#[codec(dumb_trait_bound)]` ([#1630](https://github.com/pezkuwichain/subxt/pull/1630))
+- fix stripping metadata in the case where enums like RuntimeCall are handed back ([#1774](https://github.com/paritytech/subxt/pull/1774))
+- fix: `defalt-feature` -> `default-features` Cargo.toml ([#1828](https://github.com/paritytech/subxt/pull/1828))
+- avoid hang by notifying subscribers when the backend is closed ([#1817](https://github.com/paritytech/subxt/pull/1817))
+- fix: error message on rpc errors ([#1804](https://github.com/paritytech/subxt/pull/1804))
+- docs: fix typos ([#1776](https://github.com/paritytech/subxt/pull/1776))
+- examples: fix reconnecting logging target ([#1733](https://github.com/paritytech/subxt/pull/1733))
+- docs: fix spelling issues ([#1699](https://github.com/paritytech/subxt/pull/1699))
+- chore: fix some comments ([#1697](https://github.com/paritytech/subxt/pull/1697))
+- codegen: Fix decode error by adding `#[codec(dumb_trait_bound)]` ([#1630](https://github.com/paritytech/subxt/pull/1630))
 
 ## [0.37.0] - 2024-05-28
 
@@ -427,12 +427,12 @@ where the type de-duplication was too aggressive and lots of the same type such 
 plenty of different types such as BoundedVec1, BoundedVec2, .. BoundedVec<N>.
 
 ### Added
-- Implemented `sign_prehashed` for `ecdsa::Keypair` and `eth::Keypair` ([#1598](https://github.com/pezkuwichain/subxt/pull/1598))
-- Add a basic version of the CheckMetadataHash signed extension ([#1590](https://github.com/pezkuwichain/subxt/pull/1590))
+- Implemented `sign_prehashed` for `ecdsa::Keypair` and `eth::Keypair` ([#1598](https://github.com/paritytech/subxt/pull/1598))
+- Add a basic version of the CheckMetadataHash signed extension ([#1590](https://github.com/paritytech/subxt/pull/1590))
 
 ## Changed
-- Remove `derive_more` ([#1600](https://github.com/pezkuwichain/subxt/pull/1600))
-- chore(deps): bump scale-typegen v0.8.0 ([#1615](https://github.com/pezkuwichain/subxt/pull/1615))
+- Remove `derive_more` ([#1600](https://github.com/paritytech/subxt/pull/1600))
+- chore(deps): bump scale-typegen v0.8.0 ([#1615](https://github.com/paritytech/subxt/pull/1615))
 
 ## [0.36.1] - 2024-05-28 [YANKED]
 
@@ -442,7 +442,7 @@ Yanked because the typegen changed, it's a breaking change.
 
 This release adds a few new features, which I'll go over below in more detail.
 
-### [`subxt-core`](https://github.com/pezkuwichain/subxt/pull/1508)
+### [`subxt-core`](https://github.com/paritytech/subxt/pull/1508)
 
 We now have a brand new `subxt-core` crate, which is `#[no-std]` compatible, and contains a lot of the core logic that is needed in Subxt. Using this crate, you can do things in a no-std environment like:
 
@@ -459,7 +459,7 @@ Check out [the docs](https://docs.rs/subxt-core/latest/subxt_core/) for more, in
 
 A breaking change that comes from migrating a bunch of logic to this new crate is that the `ExtrinsicParams` trait is now handed `&ClientState<T>` rather than a `Client`. `ClientState` is just a concrete struct containing the state that one needs for things like signed extensions.
 
-### [Support for reconnecting](https://github.com/pezkuwichain/subxt/pull/1505)
+### [Support for reconnecting](https://github.com/paritytech/subxt/pull/1505)
 
 We've baked in a bunch of support for automatically reconnecting after a connection loss into Subxt. This comes in three parts:
 1. An RPC client that is capable of reconnecting. This is gated behind the `unstable-reconnecting-rpc-client` feature flag at the moment, and
@@ -497,17 +497,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let api: OnlineClient<PezkuwiConfig> = OnlineClient::from_rpc_client(rpc.clone()).await?;
 ```
 
-Check out the full example [here](https://github.com/pezkuwichain/subxt/blob/64d3aae521112c8bc7366385c54a9340185d81ac/subxt/examples/setup_reconnecting_rpc_client.rs).
+Check out the full example [here](https://github.com/paritytech/subxt/blob/64d3aae521112c8bc7366385c54a9340185d81ac/subxt/examples/setup_reconnecting_rpc_client.rs).
 
-### [Better Ethereum support](https://github.com/pezkuwichain/subxt/pull/1501)
+### [Better Ethereum support](https://github.com/paritytech/subxt/pull/1501)
 
 We've added built-in support for Ethereum style chains (eg Frontier and Moonbeam) in `subxt-signer`, making it easier to sign transactions for these chains now.
 
-Check out a full example [here](https://github.com/pezkuwichain/subxt/blob/327b70ac94c4d925c8529a1e301d596d7db181ea/subxt/examples/tx_basic_frontier.rs).
+Check out a full example [here](https://github.com/paritytech/subxt/blob/327b70ac94c4d925c8529a1e301d596d7db181ea/subxt/examples/tx_basic_frontier.rs).
 
 We plan to improve on this in the future, baking in better Ethereum support if possible so that it's as seamless to use `AccountId20` as it is `AccountId32`.
 
-### Stabilizing the new V2 RPCs ([#1540](https://github.com/pezkuwichain/subxt/pull/1540), [#1539](https://github.com/pezkuwichain/subxt/pull/1539), [#1538](https://github.com/pezkuwichain/subxt/pull/1538))
+### Stabilizing the new V2 RPCs ([#1540](https://github.com/paritytech/subxt/pull/1540), [#1539](https://github.com/paritytech/subxt/pull/1539), [#1538](https://github.com/paritytech/subxt/pull/1538))
 
 A bunch of the new RPCs are now stable in the spec, and have consequently been stabilized here, bringing the `unstable-backend` a step closer to being stabilized itself! We'll probably first remove the feature flag and next make it the default backend, in upcoming releases.
 
@@ -515,40 +515,40 @@ All of the notable changes in this release are as follows:
 
 ### Added
 
-- Add `frontier/ethereum` example ([#1557](https://github.com/pezkuwichain/subxt/pull/1557))
-- Rpc: add full support reconnecting rpc client ([#1505](https://github.com/pezkuwichain/subxt/pull/1505))
-- Signer: ethereum implementation ([#1501](https://github.com/pezkuwichain/subxt/pull/1501))
-- `subxt-core` crate ([#1466](https://github.com/pezkuwichain/subxt/pull/1466))
+- Add `frontier/ethereum` example ([#1557](https://github.com/paritytech/subxt/pull/1557))
+- Rpc: add full support reconnecting rpc client ([#1505](https://github.com/paritytech/subxt/pull/1505))
+- Signer: ethereum implementation ([#1501](https://github.com/paritytech/subxt/pull/1501))
+- `subxt-core` crate ([#1466](https://github.com/paritytech/subxt/pull/1466))
 
 ### Changed
 
-- Bump scale-decode and related deps to latest ([#1583](https://github.com/pezkuwichain/subxt/pull/1583))
-- Update Artifacts (auto-generated) ([#1577](https://github.com/pezkuwichain/subxt/pull/1577))
-- Update deps to use `scale-type-resolver` 0.2 ([#1565](https://github.com/pezkuwichain/subxt/pull/1565))
-- Stabilize transactionBroadcast methods ([#1540](https://github.com/pezkuwichain/subxt/pull/1540))
-- Stabilize transactionWatch methods ([#1539](https://github.com/pezkuwichain/subxt/pull/1539))
-- Stabilize chainHead methods ([#1538](https://github.com/pezkuwichain/subxt/pull/1538))
-- Rename traits to remove T suffix ([#1535](https://github.com/pezkuwichain/subxt/pull/1535))
-- Add Debug/Clone/etc for common Configs for convenience ([#1542](https://github.com/pezkuwichain/subxt/pull/1542))
-- Unstable_rpc: Add transactionBroadcast and transactionStop ([#1497](https://github.com/pezkuwichain/subxt/pull/1497))
+- Bump scale-decode and related deps to latest ([#1583](https://github.com/paritytech/subxt/pull/1583))
+- Update Artifacts (auto-generated) ([#1577](https://github.com/paritytech/subxt/pull/1577))
+- Update deps to use `scale-type-resolver` 0.2 ([#1565](https://github.com/paritytech/subxt/pull/1565))
+- Stabilize transactionBroadcast methods ([#1540](https://github.com/paritytech/subxt/pull/1540))
+- Stabilize transactionWatch methods ([#1539](https://github.com/paritytech/subxt/pull/1539))
+- Stabilize chainHead methods ([#1538](https://github.com/paritytech/subxt/pull/1538))
+- Rename traits to remove T suffix ([#1535](https://github.com/paritytech/subxt/pull/1535))
+- Add Debug/Clone/etc for common Configs for convenience ([#1542](https://github.com/paritytech/subxt/pull/1542))
+- Unstable_rpc: Add transactionBroadcast and transactionStop ([#1497](https://github.com/paritytech/subxt/pull/1497))
 
 ### Fixed
 
-- metadata: Fix cargo clippy ([#1574](https://github.com/pezkuwichain/subxt/pull/1574))
-- Fixed import in `subxt-signer::eth` ([#1553](https://github.com/pezkuwichain/subxt/pull/1553))
-- chore: fix typos and link broken ([#1541](https://github.com/pezkuwichain/subxt/pull/1541))
-- Make subxt-core ready for publishing ([#1508](https://github.com/pezkuwichain/subxt/pull/1508))
-- Remove dupe storage item if we get one back, to be compatible with Smoldot + legacy RPCs ([#1534](https://github.com/pezkuwichain/subxt/pull/1534))
-- fix: bizinikiwi runner libp2p port ([#1533](https://github.com/pezkuwichain/subxt/pull/1533))
-- Swap BinaryHeap for Vec to avoid Ord constraint issue ([#1523](https://github.com/pezkuwichain/subxt/pull/1523))
-- storage_type: Strip key proper hash and entry bytes (32 instead of 16) ([#1522](https://github.com/pezkuwichain/subxt/pull/1522))
-- testing: Prepare light client testing with bizinikiwi binary and add subxt-test macro ([#1507](https://github.com/pezkuwichain/subxt/pull/1507))
+- metadata: Fix cargo clippy ([#1574](https://github.com/paritytech/subxt/pull/1574))
+- Fixed import in `subxt-signer::eth` ([#1553](https://github.com/paritytech/subxt/pull/1553))
+- chore: fix typos and link broken ([#1541](https://github.com/paritytech/subxt/pull/1541))
+- Make subxt-core ready for publishing ([#1508](https://github.com/paritytech/subxt/pull/1508))
+- Remove dupe storage item if we get one back, to be compatible with Smoldot + legacy RPCs ([#1534](https://github.com/paritytech/subxt/pull/1534))
+- fix: bizinikiwi runner libp2p port ([#1533](https://github.com/paritytech/subxt/pull/1533))
+- Swap BinaryHeap for Vec to avoid Ord constraint issue ([#1523](https://github.com/paritytech/subxt/pull/1523))
+- storage_type: Strip key proper hash and entry bytes (32 instead of 16) ([#1522](https://github.com/paritytech/subxt/pull/1522))
+- testing: Prepare light client testing with bizinikiwi binary and add subxt-test macro ([#1507](https://github.com/paritytech/subxt/pull/1507))
 
 ## [0.35.0] - 2024-03-21
 
 This release contains several fixes, adds `no_std` support to a couple of crates (`subxt-signer` and `subxt-metadata`) and introduces a few quality of life improvements, which I'll quickly cover:
 
-### Reworked light client ([#1475](https://github.com/pezkuwichain/subxt/pull/1475))
+### Reworked light client ([#1475](https://github.com/paritytech/subxt/pull/1475))
 
 This PR reworks the light client interface. The "basic" usage of connecting to a parachain now looks like this:
 
@@ -570,7 +570,7 @@ let asset_hub_api = OnlineClient::<PezkuwiConfig>::from_rpc_client(asset_hub_rpc
 
 This interface mirrors the requirement that we must connect to a relay chain before we can connect to a parachain. It also moves the light client specific logic into an `RpcClientT` implementation, rather than exposing it as a `subxt::client::LightClient`.
 
-### Typed Storage Keys ([#1419](https://github.com/pezkuwichain/subxt/pull/1419))
+### Typed Storage Keys ([#1419](https://github.com/paritytech/subxt/pull/1419))
 
 This PR changes the storage interface so that, where possible, we now also decode the storage keys as well as the values when iterating over storage entries:
 
@@ -600,7 +600,7 @@ while let Some(Ok(kv)) = results.next().await {
 
 When using the static interface, keys come back as a tuple of values corresponding to the different hashers used in constructing the key. When using a dynamic interface, keys will be encoded/decoded from the type given so long as it implements `subxt::storage::StorageKey`, eg `Vec<scale_value::Value>`.
 
-### Extrinsic Params Refinement ([#1439](https://github.com/pezkuwichain/subxt/pull/1439))
+### Extrinsic Params Refinement ([#1439](https://github.com/paritytech/subxt/pull/1439))
 
 Prior to this PR, one could configure extrinsic signed extensions by providing some params like so:
 
@@ -627,42 +627,42 @@ For a full list of changes, please see the following:
 
 ### Added
 
-- Reworked light client ([#1475](https://github.com/pezkuwichain/subxt/pull/1475))
-- `no_std` compatibility for `subxt-signer` ([#1477](https://github.com/pezkuwichain/subxt/pull/1477))
-- Typed Storage Keys ([#1419](https://github.com/pezkuwichain/subxt/pull/1419))
-- Extrinsic Params Refinement ([#1439](https://github.com/pezkuwichain/subxt/pull/1439))
-- Make storage_page_size for the LegacyBackend configurable ([#1458](https://github.com/pezkuwichain/subxt/pull/1458))
-- `no_std` compatibility for `subxt-metadata` ([#1401](https://github.com/pezkuwichain/subxt/pull/1401))
-- Experimental `reconnecting-rpc-client` ([#1396](https://github.com/pezkuwichain/subxt/pull/1396))
+- Reworked light client ([#1475](https://github.com/paritytech/subxt/pull/1475))
+- `no_std` compatibility for `subxt-signer` ([#1477](https://github.com/paritytech/subxt/pull/1477))
+- Typed Storage Keys ([#1419](https://github.com/paritytech/subxt/pull/1419))
+- Extrinsic Params Refinement ([#1439](https://github.com/paritytech/subxt/pull/1439))
+- Make storage_page_size for the LegacyBackend configurable ([#1458](https://github.com/paritytech/subxt/pull/1458))
+- `no_std` compatibility for `subxt-metadata` ([#1401](https://github.com/paritytech/subxt/pull/1401))
+- Experimental `reconnecting-rpc-client` ([#1396](https://github.com/paritytech/subxt/pull/1396))
 
 ### Changed
 
-- `scale-type-resolver` integration ([#1460](https://github.com/pezkuwichain/subxt/pull/1460))
-- subxt: Derive `std::cmp` traits for subxt payloads and addresses ([#1429](https://github.com/pezkuwichain/subxt/pull/1429))
-- CLI: Return error on wrongly specified type paths ([#1397](https://github.com/pezkuwichain/subxt/pull/1397))
-- rpc v2: chainhead support multiple finalized block hashes in `FollowEvent::Initialized` ([#1476](https://github.com/pezkuwichain/subxt/pull/1476))
-- rpc v2: rename transaction to transactionWatch ([#1399](https://github.com/pezkuwichain/subxt/pull/1399))
+- `scale-type-resolver` integration ([#1460](https://github.com/paritytech/subxt/pull/1460))
+- subxt: Derive `std::cmp` traits for subxt payloads and addresses ([#1429](https://github.com/paritytech/subxt/pull/1429))
+- CLI: Return error on wrongly specified type paths ([#1397](https://github.com/paritytech/subxt/pull/1397))
+- rpc v2: chainhead support multiple finalized block hashes in `FollowEvent::Initialized` ([#1476](https://github.com/paritytech/subxt/pull/1476))
+- rpc v2: rename transaction to transactionWatch ([#1399](https://github.com/paritytech/subxt/pull/1399))
 
 ### Fixed
 
-- Avoid a panic in case we try decoding naff bytes ([#1444](https://github.com/pezkuwichain/subxt/pull/1444))
-- Fix error mapping to wrong transaction status ([#1445](https://github.com/pezkuwichain/subxt/pull/1445))
-- Update DispatchError to match latest in pezkuwi-sdk ([#1442](https://github.com/pezkuwichain/subxt/pull/1442))
-- Handle errors when fetching storage keys from Unstablebackend ([#1440](https://github.com/pezkuwichain/subxt/pull/1440))
-- Swap type aliases around to be semantically correct ([#1441](https://github.com/pezkuwichain/subxt/pull/1441))
+- Avoid a panic in case we try decoding naff bytes ([#1444](https://github.com/paritytech/subxt/pull/1444))
+- Fix error mapping to wrong transaction status ([#1445](https://github.com/paritytech/subxt/pull/1445))
+- Update DispatchError to match latest in pezkuwi-sdk ([#1442](https://github.com/paritytech/subxt/pull/1442))
+- Handle errors when fetching storage keys from Unstablebackend ([#1440](https://github.com/paritytech/subxt/pull/1440))
+- Swap type aliases around to be semantically correct ([#1441](https://github.com/paritytech/subxt/pull/1441))
 
 ## [0.34.0] - 2024-01-23
 
 This release introduces a bunch of features that make subxt easier to use. Let's look at a few of them.
 
-### Codegen - Integrating [`scale-typegen`](https://github.com/pezkuwichain/scale-typegen) and adding type aliases ([#1249](https://github.com/pezkuwichain/subxt/pull/1249))
+### Codegen - Integrating [`scale-typegen`](https://github.com/pezkuwichain/scale-typegen) and adding type aliases ([#1249](https://github.com/paritytech/subxt/pull/1249))
 
 We rewrote the code generation functionality of subxt and outsourced it to the new [`scale-typegen`](https://github.com/pezkuwichain/scale-typegen) crate, which serves a more general purpose.
 
 Since a lot of types used in bizinikiwi are rich with generics, this release introduces type aliases into the generated code.
-A type alias is generated for the arguments/keys or each call, storage entry, and runtime API method ([#1249](https://github.com/pezkuwichain/subxt/pull/1249)).
+A type alias is generated for the arguments/keys or each call, storage entry, and runtime API method ([#1249](https://github.com/paritytech/subxt/pull/1249)).
 
-### Macro - Errors for misspecified type paths ([#1339](https://github.com/pezkuwichain/subxt/pull/1339))
+### Macro - Errors for misspecified type paths ([#1339](https://github.com/paritytech/subxt/pull/1339))
 
 The subxt macro provides attributes to specify custom derives, attributes, and type substitutions on a per-type basis.
 Previously we did not verify that the provided type paths are part of the metadata. This is now fixed:
@@ -686,7 +686,7 @@ xcm::v3::junctions::Junctions
 xcm::v2::multilocation::Junctions
 ```
 
-### Macro - Recursive derives and attributes ([#1379](https://github.com/pezkuwichain/subxt/pull/1379))
+### Macro - Recursive derives and attributes ([#1379](https://github.com/paritytech/subxt/pull/1379))
 
 Previously adding derives on a type containing other types was also cumbersome, see this example:
 
@@ -717,9 +717,9 @@ We introduced a `recursive` flag for custom derives and attributes that automati
 pub mod pezkuwi {}
 ```
 
-### Subxt CLI - New features and usability improvements ([#1290](https://github.com/pezkuwichain/subxt/pull/1290), [#1336](https://github.com/pezkuwichain/subxt/pull/1336), and [#1379](https://github.com/pezkuwichain/subxt/pull/1379))
+### Subxt CLI - New features and usability improvements ([#1290](https://github.com/paritytech/subxt/pull/1290), [#1336](https://github.com/paritytech/subxt/pull/1336), and [#1379](https://github.com/paritytech/subxt/pull/1379))
 
-Our CLI tool now allows you to explore runtime APIs and events ([#1290](https://github.com/pezkuwichain/subxt/pull/1290)). We also fully integrated with [`scale-typegen-description`](https://github.com/pezkuwichain/scale-typegen/tree/master/description), a crate that can describe types in a friendly way and provide type examples. The output is also color-coded to be easier on the eyes. Get started with these commands:
+Our CLI tool now allows you to explore runtime APIs and events ([#1290](https://github.com/paritytech/subxt/pull/1290)). We also fully integrated with [`scale-typegen-description`](https://github.com/pezkuwichain/scale-typegen/tree/master/description), a crate that can describe types in a friendly way and provide type examples. The output is also color-coded to be easier on the eyes. Get started with these commands:
 
 ```sh
 # Show details about a runtime API call:
@@ -730,7 +730,7 @@ subxt explore --url wss://zagros-rpc.pezkuwichain.io api core version -e
 subxt explore --url wss://zagros-rpc.pezkuwichain.io pallet Balances events
 ```
 
-All CLI commands that take some metadata via `--file` or `--url`, can now also read the metadata directly from `stdin` with `--file -` ([#1336](https://github.com/pezkuwichain/subxt/pull/1336)).
+All CLI commands that take some metadata via `--file` or `--url`, can now also read the metadata directly from `stdin` with `--file -` ([#1336](https://github.com/paritytech/subxt/pull/1336)).
 This allows you to pipe in metadata from other processes like in this command chain:
 ```sh
 parachain-node export-metadata | subxt codegen --file - | rustfmt > main.rs
@@ -744,52 +744,52 @@ subxt codegen --attributes-for-type "xcm::v2::multilocation::MultiLocation=#[mye
 
 ### Minor changes and things to be aware of
 
-- Using insecure connections is now an explicit opt-in in many places ([#1309](https://github.com/pezkuwichain/subxt/pull/1309))
-- When decoding extrinsics from a block into a static type, we now return it's details (e.g. signature, signed extensions, raw bytes) alongside the statically decoded extrinsic itself ([#1376](https://github.com/pezkuwichain/subxt/pull/1376))
+- Using insecure connections is now an explicit opt-in in many places ([#1309](https://github.com/paritytech/subxt/pull/1309))
+- When decoding extrinsics from a block into a static type, we now return it's details (e.g. signature, signed extensions, raw bytes) alongside the statically decoded extrinsic itself ([#1376](https://github.com/paritytech/subxt/pull/1376))
 
 We also made a few fixes and improvements around the unstable backend and the lightclient, preparing them for more stable usage in the future.
 
 ### Added
 
-- Errors for misspecified type paths + suggestions ([#1339](https://github.com/pezkuwichain/subxt/pull/1339))
-- CLI: Recursive derives and attributes ([#1379](https://github.com/pezkuwichain/subxt/pull/1379))
-- CLI: Explore runtime APIs and events, colorized outputs, scale-typegen integration for examples ([#1290](https://github.com/pezkuwichain/subxt/pull/1290))
-- Add chainflip to real world usage section of README  ([#1351](https://github.com/pezkuwichain/subxt/pull/1351))
-- CLI: Allow using `--file -` to read metadata from stdin ([#1336](https://github.com/pezkuwichain/subxt/pull/1336))
-- Codegen: Generate type aliases for better API ergonomics ([#1249](https://github.com/pezkuwichain/subxt/pull/1249))
+- Errors for misspecified type paths + suggestions ([#1339](https://github.com/paritytech/subxt/pull/1339))
+- CLI: Recursive derives and attributes ([#1379](https://github.com/paritytech/subxt/pull/1379))
+- CLI: Explore runtime APIs and events, colorized outputs, scale-typegen integration for examples ([#1290](https://github.com/paritytech/subxt/pull/1290))
+- Add chainflip to real world usage section of README  ([#1351](https://github.com/paritytech/subxt/pull/1351))
+- CLI: Allow using `--file -` to read metadata from stdin ([#1336](https://github.com/paritytech/subxt/pull/1336))
+- Codegen: Generate type aliases for better API ergonomics ([#1249](https://github.com/paritytech/subxt/pull/1249))
 
 ### Changed
 
-- Return Pending rather than loop around if no new finalized hash in submit_transaction ([#1378](https://github.com/pezkuwichain/subxt/pull/1378))
-- Return `ExtrinsicDetails` alongside decoded static extrinsics ([#1376](https://github.com/pezkuwichain/subxt/pull/1376))
-- Improve Signed Extension and Block Decoding Examples/Book ([#1357](https://github.com/pezkuwichain/subxt/pull/1357))
-- Use `scale-typegen` as a backend for the codegen ([#1260](https://github.com/pezkuwichain/subxt/pull/1260))
-- Using insecure connections is now opt-in ([#1309](https://github.com/pezkuwichain/subxt/pull/1309))
+- Return Pending rather than loop around if no new finalized hash in submit_transaction ([#1378](https://github.com/paritytech/subxt/pull/1378))
+- Return `ExtrinsicDetails` alongside decoded static extrinsics ([#1376](https://github.com/paritytech/subxt/pull/1376))
+- Improve Signed Extension and Block Decoding Examples/Book ([#1357](https://github.com/paritytech/subxt/pull/1357))
+- Use `scale-typegen` as a backend for the codegen ([#1260](https://github.com/paritytech/subxt/pull/1260))
+- Using insecure connections is now opt-in ([#1309](https://github.com/paritytech/subxt/pull/1309))
 
 ### Fixed
 
-- Ensure lightclient chainSpec is at least one block old ([#1372](https://github.com/pezkuwichain/subxt/pull/1372))
-- Typo fix in docs ([#1370](https://github.com/pezkuwichain/subxt/pull/1370))
-- Don't unpin blocks that may show up again ([#1368](https://github.com/pezkuwichain/subxt/pull/1368))
-- Runtime upgrades in unstable backend ([#1348](https://github.com/pezkuwichain/subxt/pull/1348))
-- Generate docs for feature gated items ([#1332](https://github.com/pezkuwichain/subxt/pull/1332))
-- Backend: Remove only finalized blocks from the event window ([#1356](https://github.com/pezkuwichain/subxt/pull/1356))
-- Runtime updates: wait until upgrade on chain ([#1321](https://github.com/pezkuwichain/subxt/pull/1321))
-- Cache extrinsic events ([#1327](https://github.com/pezkuwichain/subxt/pull/1327))
+- Ensure lightclient chainSpec is at least one block old ([#1372](https://github.com/paritytech/subxt/pull/1372))
+- Typo fix in docs ([#1370](https://github.com/paritytech/subxt/pull/1370))
+- Don't unpin blocks that may show up again ([#1368](https://github.com/paritytech/subxt/pull/1368))
+- Runtime upgrades in unstable backend ([#1348](https://github.com/paritytech/subxt/pull/1348))
+- Generate docs for feature gated items ([#1332](https://github.com/paritytech/subxt/pull/1332))
+- Backend: Remove only finalized blocks from the event window ([#1356](https://github.com/paritytech/subxt/pull/1356))
+- Runtime updates: wait until upgrade on chain ([#1321](https://github.com/paritytech/subxt/pull/1321))
+- Cache extrinsic events ([#1327](https://github.com/paritytech/subxt/pull/1327))
 
 ## [0.33.0] - 2023-12-06
 
 This release makes a bunch of small QoL improvements and changes. Let's look at the main ones.
 
-### Add support for configuring multiple chains ([#1238](https://github.com/pezkuwichain/subxt/pull/1238))
+### Add support for configuring multiple chains ([#1238](https://github.com/paritytech/subxt/pull/1238))
 
 The light client support previously provided a high level interface for connecting to single chains (ie relay chains). This PR exposes a "low level" interface which allows smoldot (the light client implementation we use) to be configured somewhat more arbitrarily, and then converted into a valid subxt `OnlineClient` to be used.
 
-See [this example](https://github.com/pezkuwichain/subxt/blob/418c3afc923cacd17501f374fdee0d8f588e14fd/subxt/examples/light_client_parachains.rs) for more on how to do this.
+See [this example](https://github.com/paritytech/subxt/blob/418c3afc923cacd17501f374fdee0d8f588e14fd/subxt/examples/light_client_parachains.rs) for more on how to do this.
 
 We'll likely refine this over time and add a slightly higher level interface to make common operations much easier to do.
 
-### Support decoding signed extensions ([#1209](https://github.com/pezkuwichain/subxt/pull/1209) and [#1235](https://github.com/pezkuwichain/subxt/pull/1235))
+### Support decoding signed extensions ([#1209](https://github.com/paritytech/subxt/pull/1209) and [#1235](https://github.com/paritytech/subxt/pull/1235))
 
 This PR makes it possible to decode the signed extensions in extrinsics. This looks something like:
 
@@ -847,7 +847,7 @@ See the API docs for more.
 
 Still on the topic of signed extensions, the `ChargeAssetTxPayment` extension was previously not able to be used with a generic AssetId, which prohibited it from being used on the Asset Hub (which uses a `MultiLocation` instead). To address this, we added an `AssetId` type to our `subxt::Config`, which can now be configured.
 
-One example of doing that [can be found here](https://github.com/pezkuwichain/subxt/blob/master/subxt/examples/setup_config_custom.rs).
+One example of doing that [can be found here](https://github.com/paritytech/subxt/blob/master/subxt/examples/setup_config_custom.rs).
 
 This example uses a generated `MultiLocation` type to be used as the `AssetId`. Currently it requires a rather hideous set of manual clones like so:
 
@@ -869,7 +869,7 @@ This example uses a generated `MultiLocation` type to be used as the `AssetId`. 
 
 This is something we plan to address in the next version of Subxt.
 
-### Change SignedExtension matching logic ([#1283](https://github.com/pezkuwichain/subxt/pull/1283))
+### Change SignedExtension matching logic ([#1283](https://github.com/paritytech/subxt/pull/1283))
 
 Before this release, each signed extension had a unique name (`SignedExtension::NAME`). We'd use this name to figure out which signed extensions to apply for a given chain inside the `signed_extensions::AnyOf` type.
 
@@ -897,7 +897,7 @@ impl<T: Config> SignedExtension<T> for ChargeAssetTxPayment<T> {
 
 On the whole, we continue matching by name, as in the example above, but this allows an author to inspect the type of the signed extension (and subtypes of it) too if they want the signed extension to match (and thus be used) only in certain cases.
 
-### Remove `wait_for_in_block` helper method ([#1237](https://github.com/pezkuwichain/subxt/pull/1237))
+### Remove `wait_for_in_block` helper method ([#1237](https://github.com/paritytech/subxt/pull/1237))
 
 One can no longer use `tx.wait_for_in_block` to wait for a transaction to enter a block. The reason for this removal is that, especially when we migrate to the new `chainHead` APIs, we will no longer be able to reliably obtain any details about the block that the transaction made it into.
 
@@ -931,9 +931,9 @@ while let Some(status) = tx.next().await {
 }
 ```
 
-### Subxt-codegen: Tidy crate interface ([#1225](https://github.com/pezkuwichain/subxt/pull/1225))
+### Subxt-codegen: Tidy crate interface ([#1225](https://github.com/paritytech/subxt/pull/1225))
 
-The `subxt-codegen` crate has always been a bit of a mess because it wasn't really supposed to be used outside of the subxt crates, which had led to issues like https://github.com/pezkuwichain/subxt/issues/1211.
+The `subxt-codegen` crate has always been a bit of a mess because it wasn't really supposed to be used outside of the subxt crates, which had led to issues like https://github.com/paritytech/subxt/issues/1211.
 
 This PR tidies up the interface to that crate so that it's much easier now to programmatically generate the Subxt interface. Now, we have three properly supported ways to do this, depending on your needs:
 
@@ -949,50 +949,50 @@ That sums up the most significant changes. A summary of all of the relevant chan
 
 ### Added
 
-- CLI: Add command to fetch chainSpec and optimize its size ([#1278](https://github.com/pezkuwichain/subxt/pull/1278))
-- Add legacy RPC usage example ([#1279](https://github.com/pezkuwichain/subxt/pull/1279))
-- impl RpcClientT for `Arc<T>` and `Box<T>` ([#1277](https://github.com/pezkuwichain/subxt/pull/1277))
-- RPC: Implement legacy RPC system_account_next_index ([#1250](https://github.com/pezkuwichain/subxt/pull/1250))
-- Lightclient: Add support for configuring multiple chains ([#1238](https://github.com/pezkuwichain/subxt/pull/1238))
-- Extrinsics: Allow static decoding of signed extensions ([#1235](https://github.com/pezkuwichain/subxt/pull/1235))
-- Extrinsics: Support decoding signed extensions ([#1209](https://github.com/pezkuwichain/subxt/pull/1209))
-- ChargeAssetTxPayment: Add support for generic AssetId (eg `u32` or `MultiLocation`) ([#1227](https://github.com/pezkuwichain/subxt/pull/1227))
-- Add Clone + Debug on Payloads/Addresses, and compare child storage results ([#1203](https://github.com/pezkuwichain/subxt/pull/1203))
+- CLI: Add command to fetch chainSpec and optimize its size ([#1278](https://github.com/paritytech/subxt/pull/1278))
+- Add legacy RPC usage example ([#1279](https://github.com/paritytech/subxt/pull/1279))
+- impl RpcClientT for `Arc<T>` and `Box<T>` ([#1277](https://github.com/paritytech/subxt/pull/1277))
+- RPC: Implement legacy RPC system_account_next_index ([#1250](https://github.com/paritytech/subxt/pull/1250))
+- Lightclient: Add support for configuring multiple chains ([#1238](https://github.com/paritytech/subxt/pull/1238))
+- Extrinsics: Allow static decoding of signed extensions ([#1235](https://github.com/paritytech/subxt/pull/1235))
+- Extrinsics: Support decoding signed extensions ([#1209](https://github.com/paritytech/subxt/pull/1209))
+- ChargeAssetTxPayment: Add support for generic AssetId (eg `u32` or `MultiLocation`) ([#1227](https://github.com/paritytech/subxt/pull/1227))
+- Add Clone + Debug on Payloads/Addresses, and compare child storage results ([#1203](https://github.com/paritytech/subxt/pull/1203))
 
 ### Changed
 
-- Lightclient: Update smoldot to `0.14.0` and smoldot-light to `0.12.0` ([#1307](https://github.com/pezkuwichain/subxt/pull/1307))
-- Cargo: Switch to workspace lints ([#1299](https://github.com/pezkuwichain/subxt/pull/1299))
-- Update bizinikiwi-* and signer-related dependencies ([#1297](https://github.com/pezkuwichain/subxt/pull/1297))
-- Change SignedExtension matching logic and remove SkipCheckIfFeeless bits ([#1283](https://github.com/pezkuwichain/subxt/pull/1283))
-- Update the README with the new location of node-cli ([#1282](https://github.com/pezkuwichain/subxt/pull/1282))
-- Generalize `bizinikiwi-compat` impls to accept any valid hasher/header impl ([#1265](https://github.com/pezkuwichain/subxt/pull/1265))
-- Extrinsics: Remove `wait_for_in_block` helper method ([#1237](https://github.com/pezkuwichain/subxt/pull/1237))
-- Subxt-codegen: Tidy crate interface ([#1225](https://github.com/pezkuwichain/subxt/pull/1225))
-- Lightclient: Update usage docs ([#1223](https://github.com/pezkuwichain/subxt/pull/1223))
-- Wee tidy to subxt-signer flags ([#1200](https://github.com/pezkuwichain/subxt/pull/1200))
-- Batch fetching storage values again to improve performance ([#1199](https://github.com/pezkuwichain/subxt/pull/1199))
-- Add `subxt` feature in `subxt-signer` crate to default features ([#1193](https://github.com/pezkuwichain/subxt/pull/1193))
+- Lightclient: Update smoldot to `0.14.0` and smoldot-light to `0.12.0` ([#1307](https://github.com/paritytech/subxt/pull/1307))
+- Cargo: Switch to workspace lints ([#1299](https://github.com/paritytech/subxt/pull/1299))
+- Update bizinikiwi-* and signer-related dependencies ([#1297](https://github.com/paritytech/subxt/pull/1297))
+- Change SignedExtension matching logic and remove SkipCheckIfFeeless bits ([#1283](https://github.com/paritytech/subxt/pull/1283))
+- Update the README with the new location of node-cli ([#1282](https://github.com/paritytech/subxt/pull/1282))
+- Generalize `bizinikiwi-compat` impls to accept any valid hasher/header impl ([#1265](https://github.com/paritytech/subxt/pull/1265))
+- Extrinsics: Remove `wait_for_in_block` helper method ([#1237](https://github.com/paritytech/subxt/pull/1237))
+- Subxt-codegen: Tidy crate interface ([#1225](https://github.com/paritytech/subxt/pull/1225))
+- Lightclient: Update usage docs ([#1223](https://github.com/paritytech/subxt/pull/1223))
+- Wee tidy to subxt-signer flags ([#1200](https://github.com/paritytech/subxt/pull/1200))
+- Batch fetching storage values again to improve performance ([#1199](https://github.com/paritytech/subxt/pull/1199))
+- Add `subxt` feature in `subxt-signer` crate to default features ([#1193](https://github.com/paritytech/subxt/pull/1193))
 
 ### Fixed
 
-- Trimmed metadata hash comparison fails in `is_codegen_valid_for`  ([#1306](https://github.com/pezkuwichain/subxt/pull/1306))
-- Sync tx submission with chainHead_follow ([#1305](https://github.com/pezkuwichain/subxt/pull/1305))
-- Storage: Fix partial key storage iteration ([#1298](https://github.com/pezkuwichain/subxt/pull/1298))
-- Lightclient: Fix wasm socket closure called after being dropped ([#1289](https://github.com/pezkuwichain/subxt/pull/1289))
-- Fix parachain example ([#1228](https://github.com/pezkuwichain/subxt/pull/1228))
+- Trimmed metadata hash comparison fails in `is_codegen_valid_for`  ([#1306](https://github.com/paritytech/subxt/pull/1306))
+- Sync tx submission with chainHead_follow ([#1305](https://github.com/paritytech/subxt/pull/1305))
+- Storage: Fix partial key storage iteration ([#1298](https://github.com/paritytech/subxt/pull/1298))
+- Lightclient: Fix wasm socket closure called after being dropped ([#1289](https://github.com/paritytech/subxt/pull/1289))
+- Fix parachain example ([#1228](https://github.com/paritytech/subxt/pull/1228))
 
 ## [0.32.1] - 2023-10-05
 
-This is a patch release, mainly to deploy the fix [#1191](https://github.com/pezkuwichain/subxt/pull/1191), which resolves an issue around codegen when runtime API definitions have an argument name "_".
+This is a patch release, mainly to deploy the fix [#1191](https://github.com/paritytech/subxt/pull/1191), which resolves an issue around codegen when runtime API definitions have an argument name "_".
 
 We also expose an API, `api.blocks().at(block_hash).account_nonce(account_id)`, which allows one to obtain the account nonce for some account at any block hash, and not just at the latest finalized block hash as is possible via `api.tx().account_nonce(..)`.
 
 The main changes are:
 
-- fix for when runtime API field name is _  ([#1191](https://github.com/pezkuwichain/subxt/pull/1191))
-- allow getting account nonce at arbitrary blocks, too  ([#1182](https://github.com/pezkuwichain/subxt/pull/1182))
-- chore: improve some error messages  ([#1183](https://github.com/pezkuwichain/subxt/pull/1183))
+- fix for when runtime API field name is _  ([#1191](https://github.com/paritytech/subxt/pull/1191))
+- allow getting account nonce at arbitrary blocks, too  ([#1182](https://github.com/paritytech/subxt/pull/1182))
+- chore: improve some error messages  ([#1183](https://github.com/paritytech/subxt/pull/1183))
 
 ## [0.32.0] - 2023-09-27
 
@@ -1000,7 +1000,7 @@ This is a big release that adds quite a lot, and also introduces some slightly l
 
 ### The `Backend` trait and the `UnstableBackend` and `LegacyBackend` impls.
 
-See [#1126](https://github.com/pezkuwichain/subxt/pull/1126), [#1137](https://github.com/pezkuwichain/subxt/pull/1137) and [#1161](https://github.com/pezkuwichain/subxt/pull/1161) for more information.
+See [#1126](https://github.com/paritytech/subxt/pull/1126), [#1137](https://github.com/paritytech/subxt/pull/1137) and [#1161](https://github.com/paritytech/subxt/pull/1161) for more information.
 
 The overarching idea here is that we want Subxt to be able to continue to support talking to nodes/light-clients using the "legacy" RPC APIs that are currently available, but we _also_ want to be able to support using only [the new RPC APIs](https://paritytech.github.io/json-rpc-interface-spec/) once they are stabilized.
 
@@ -1045,25 +1045,25 @@ Another side effect of this change is that RPC related things have moved from `s
 A number of smaller breaking changes have also been made in order to expose details that are compatible with both sets of RPCs, and to generally move Subxt towards working well with the new APIs and exposing things in a consistent way:
 
 - The storage methods `fetch_keys` is renamed to `fetch_raw_keys` (this just for consistency with `fetch_raw`).
-- The storage method `iter` no longer accepts a `page_size` argument, and each item returned is now an `Option<Result<(key, val)>>` instead of a `Result<Option<(key, val)>>` (we now return a valid `Stream` implementation for storage entry iteration). See [this example](https://github.com/pezkuwichain/subxt/blob/cd5060a5a08c9bd73477477cd2cadc16015e77bf/subxt/examples/storage_iterating.rs#L18).
-- The events returned when you manually watch a transaction have changed in order to be consistent with the new RPC APIs (the new events [can be seen here](https://github.com/pezkuwichain/subxt/blob/cd5060a5a08c9bd73477477cd2cadc16015e77bf/subxt/src/tx/tx_progress.rs#L203)), and `next_item` => `next`. If you rely on higher level calls like `sign_and_submit_then_watch`, nothing has changed.
+- The storage method `iter` no longer accepts a `page_size` argument, and each item returned is now an `Option<Result<(key, val)>>` instead of a `Result<Option<(key, val)>>` (we now return a valid `Stream` implementation for storage entry iteration). See [this example](https://github.com/paritytech/subxt/blob/cd5060a5a08c9bd73477477cd2cadc16015e77bf/subxt/examples/storage_iterating.rs#L18).
+- The events returned when you manually watch a transaction have changed in order to be consistent with the new RPC APIs (the new events [can be seen here](https://github.com/paritytech/subxt/blob/cd5060a5a08c9bd73477477cd2cadc16015e77bf/subxt/src/tx/tx_progress.rs#L203)), and `next_item` => `next`. If you rely on higher level calls like `sign_and_submit_then_watch`, nothing has changed.
 - Previously, using `.at_latest()` in various places would mean that calls would run against the latest _best_ block. Now, all such calls will run against the latest _finalized_ block. The latest best block is subject to changing or being pruned entirely, and can differ between nodes.
 - `.at(block_hash)` should continue to work as-is, but can now also accept a `BlockRef`, to keep the relevant block around while you're using the associated APIs.
 - To fetch the extrinsics in a block, you used to call `block.body().await?.extrinsics()`. This has now been simplified to `block.extrinsics().await?`.
 
 ### Making `ExtrinsicParams` more flexible with `SignedExtension`s.
 
-See [#1107](https://github.com/pezkuwichain/subxt/pull/1107) for more information.
+See [#1107](https://github.com/paritytech/subxt/pull/1107) for more information.
 
 When configuring Subxt to work against a given chain, you needed to configure the `ExtrinsicParams` associated type to encode exactly what was required by the chain when submitting transactions. This could be difficult to get right.
 
-Now, we have "upgraded" the `ExtrinsicParams` trait to give it access to metadata, so that it can be smarter about how to encode the correct values. We've also added a `subxt::config::SignedExtension` trait, and provided implementations of it for all of the "standard" signed extensions (though [we have a little work to do still](https://github.com/pezkuwichain/subxt/issues/1162)).
+Now, we have "upgraded" the `ExtrinsicParams` trait to give it access to metadata, so that it can be smarter about how to encode the correct values. We've also added a `subxt::config::SignedExtension` trait, and provided implementations of it for all of the "standard" signed extensions (though [we have a little work to do still](https://github.com/paritytech/subxt/issues/1162)).
 
 How can you use `SignedExtension`s? Well, `subxt::config::signed_extensions::AnyOf<T, Params>` is a type which can accept any tuple of `SignedExtension`s, and itself implements `ExtrinsicParams`. It's smart, and will use the metadata to know which of the signed extensions that you provided to actually use on a given chain. So, `AnyOf` makes it easy to compose whichever `SignedExtension`s you need to work with a chain.
 
 Finally, we expose `subxt::config::{ DefaultExtrinsicParams, DefaultExtrinsicParamsBuilder }`; the former just uses `AnyOf` to automatically use any of the "standard" signed extensions as needed, and the latter provided a nice builder interface to configure any parameters for them. This is now the default type used in `BizinikiwConfig` and `PezkuwiConfig`, so long story short: those configurations (and particularly their `ExtrinsicParams`) are more likely to _Just Work_ now across default chains.
 
-[See this example](https://github.com/pezkuwichain/subxt/blob/cd5060a5a08c9bd73477477cd2cadc16015e77bf/subxt/examples/setup_config_signed_extension.rs) for how to create and use custom signed extensions, or [this example](https://github.com/pezkuwichain/subxt/blob/cd5060a5a08c9bd73477477cd2cadc16015e77bf/subxt/examples/setup_config_custom.rs) for how to implement custom `ExtrinsicParams` if you'd prefer to ignore `SignedExtension`s entirely.
+[See this example](https://github.com/paritytech/subxt/blob/cd5060a5a08c9bd73477477cd2cadc16015e77bf/subxt/examples/setup_config_signed_extension.rs) for how to create and use custom signed extensions, or [this example](https://github.com/paritytech/subxt/blob/cd5060a5a08c9bd73477477cd2cadc16015e77bf/subxt/examples/setup_config_custom.rs) for how to implement custom `ExtrinsicParams` if you'd prefer to ignore `SignedExtension`s entirely.
 
 As a result of using the new `DefaultExtrinsicParams` in `BizinikiwConfig` and `PezkuwiConfig`, the interface to configure transactions has changed (and in fact been generally simplified). Configuring a mortal transaction with a small tip ƒor instance used to look like:
 
@@ -1094,7 +1094,7 @@ Check the docs for `PezkuwiExtrinsicParamsBuilder` and the `ExtrinsicParams` tra
 
 ### Storage: Allow iterating storage entries at different depths
 
-See ([#1079](https://github.com/pezkuwichain/subxt/pull/1079)) for more information.
+See ([#1079](https://github.com/paritytech/subxt/pull/1079)) for more information.
 
 Previously, we could statically iterate over the root of some storage map using something like:
 
@@ -1121,7 +1121,7 @@ Note also that the pagination size no longer needs to be provided; that's handle
 
 ### Custom values
 
-This is not a breaking change, but just a noteworthy addition; see [#1106](https://github.com/pezkuwichain/subxt/pull/1106), [#1117](https://github.com/pezkuwichain/subxt/pull/1117) and [#1147](https://github.com/pezkuwichain/subxt/pull/1147) for more information.
+This is not a breaking change, but just a noteworthy addition; see [#1106](https://github.com/paritytech/subxt/pull/1106), [#1117](https://github.com/paritytech/subxt/pull/1117) and [#1147](https://github.com/paritytech/subxt/pull/1147) for more information.
 
 V15 metadata allows chains to insert arbitrary information into a new "custom values" hashmap ([see this](https://github.com/pezkuwichain/frame-metadata/blob/0e90489c8588d48b55779f1c6b93216346ecc8a9/frame-metadata/src/v15.rs#L306)). Subxt has now added APIs to allow accessing these custom values a little like how constants can be accessed.
 
@@ -1159,56 +1159,56 @@ That sums up the most significant changes. All of the key commits in this releas
 
 ### Added
 
-- `UnstableBackend`: Add a chainHead based backend implementation ([#1161](https://github.com/pezkuwichain/subxt/pull/1161))
-- `UnstableBackend`: Expose the chainHead RPCs ([#1137](https://github.com/pezkuwichain/subxt/pull/1137))
-- Introduce Backend trait to allow different RPC (or other) backends to be implemented ([#1126](https://github.com/pezkuwichain/subxt/pull/1126))
-- Custom Values: Fixes and tests for "custom values" ([#1147](https://github.com/pezkuwichain/subxt/pull/1147))
-- Custom Values: Add generated APIs to statically access custom values in metadata ([#1117](https://github.com/pezkuwichain/subxt/pull/1117))
-- Custom Values: Support dynamically accessing custom values in metadata ([#1106](https://github.com/pezkuwichain/subxt/pull/1106))
-- Add `storage_version()` and `runtime_wasm_code()` to storage ([#1111](https://github.com/pezkuwichain/subxt/pull/1111))
-- Make ExtrinsicParams more flexible, and introduce signed extensions ([#1107](https://github.com/pezkuwichain/subxt/pull/1107))
+- `UnstableBackend`: Add a chainHead based backend implementation ([#1161](https://github.com/paritytech/subxt/pull/1161))
+- `UnstableBackend`: Expose the chainHead RPCs ([#1137](https://github.com/paritytech/subxt/pull/1137))
+- Introduce Backend trait to allow different RPC (or other) backends to be implemented ([#1126](https://github.com/paritytech/subxt/pull/1126))
+- Custom Values: Fixes and tests for "custom values" ([#1147](https://github.com/paritytech/subxt/pull/1147))
+- Custom Values: Add generated APIs to statically access custom values in metadata ([#1117](https://github.com/paritytech/subxt/pull/1117))
+- Custom Values: Support dynamically accessing custom values in metadata ([#1106](https://github.com/paritytech/subxt/pull/1106))
+- Add `storage_version()` and `runtime_wasm_code()` to storage ([#1111](https://github.com/paritytech/subxt/pull/1111))
+- Make ExtrinsicParams more flexible, and introduce signed extensions ([#1107](https://github.com/paritytech/subxt/pull/1107))
 
 ### Changed
 
-- `subxt-codegen`: Add "web" feature for WASM compilation that works with `jsonrpsee` ([#1175](https://github.com/pezkuwichain/subxt/pull/1175))
-- `subxt-codegen`: support compiling to WASM ([#1154](https://github.com/pezkuwichain/subxt/pull/1154))
-- CI: Use composite action to avoid dupe use-bizinikiwi code ([#1177](https://github.com/pezkuwichain/subxt/pull/1177))
-- Add custom `Debug` impl for `DispatchError` to avoid huge metadata output ([#1153](https://github.com/pezkuwichain/subxt/pull/1153))
-- Remove unused start_key that new RPC API may not be able to support ([#1148](https://github.com/pezkuwichain/subxt/pull/1148))
-- refactor(rpc): Use the default port if one isn't provided ([#1122](https://github.com/pezkuwichain/subxt/pull/1122))
-- Storage: Support iterating over NMaps with partial keys ([#1079](https://github.com/pezkuwichain/subxt/pull/1079))
+- `subxt-codegen`: Add "web" feature for WASM compilation that works with `jsonrpsee` ([#1175](https://github.com/paritytech/subxt/pull/1175))
+- `subxt-codegen`: support compiling to WASM ([#1154](https://github.com/paritytech/subxt/pull/1154))
+- CI: Use composite action to avoid dupe use-bizinikiwi code ([#1177](https://github.com/paritytech/subxt/pull/1177))
+- Add custom `Debug` impl for `DispatchError` to avoid huge metadata output ([#1153](https://github.com/paritytech/subxt/pull/1153))
+- Remove unused start_key that new RPC API may not be able to support ([#1148](https://github.com/paritytech/subxt/pull/1148))
+- refactor(rpc): Use the default port if one isn't provided ([#1122](https://github.com/paritytech/subxt/pull/1122))
+- Storage: Support iterating over NMaps with partial keys ([#1079](https://github.com/paritytech/subxt/pull/1079))
 
 ### Fixed
 
-- metadata: Generate runtime outer enums if not present in V14 ([#1174](https://github.com/pezkuwichain/subxt/pull/1174))
-- Remove "std" feature from `sp-arithmetic` to help bizinikiwi compat. ([#1155](https://github.com/pezkuwichain/subxt/pull/1155))
-- integration-tests: Increase the number of events we'll wait for ([#1152](https://github.com/pezkuwichain/subxt/pull/1152))
-- allow 'latest' metadata to be returned from the fallback code ([#1127](https://github.com/pezkuwichain/subxt/pull/1127))
-- chainHead: Propagate results on the `chainHead_follow` ([#1116](https://github.com/pezkuwichain/subxt/pull/1116))
+- metadata: Generate runtime outer enums if not present in V14 ([#1174](https://github.com/paritytech/subxt/pull/1174))
+- Remove "std" feature from `sp-arithmetic` to help bizinikiwi compat. ([#1155](https://github.com/paritytech/subxt/pull/1155))
+- integration-tests: Increase the number of events we'll wait for ([#1152](https://github.com/paritytech/subxt/pull/1152))
+- allow 'latest' metadata to be returned from the fallback code ([#1127](https://github.com/paritytech/subxt/pull/1127))
+- chainHead: Propagate results on the `chainHead_follow` ([#1116](https://github.com/paritytech/subxt/pull/1116))
 
 
 ## [0.31.0] - 2023-08-02
 
 This is a small release whose primary goal is to bump the versions of `scale-encode`, `scale-decode` and `scale-value` being used, to benefit from recent changes in those crates.
 
-`scale-decode` changes how compact values are decoded as part of [#1103](https://github.com/pezkuwichain/subxt/pull/1103). A compact encoded struct should now be properly decoded into a struct of matching shape (which implements `DecodeAsType`). This will hopefully resolve issues around structs like `Perbill`. When decoding the SCALE bytes for such types into `scale_value::Value`, the `Value` will now be a composite type wrapping a value, and not just the value.
+`scale-decode` changes how compact values are decoded as part of [#1103](https://github.com/paritytech/subxt/pull/1103). A compact encoded struct should now be properly decoded into a struct of matching shape (which implements `DecodeAsType`). This will hopefully resolve issues around structs like `Perbill`. When decoding the SCALE bytes for such types into `scale_value::Value`, the `Value` will now be a composite type wrapping a value, and not just the value.
 
-We've also figured out how to sign extrinsics using browser wallets when a Subxt app is compiled to WASM; see [#1067](https://github.com/pezkuwichain/subxt/pull/1067) for more on that!
+We've also figured out how to sign extrinsics using browser wallets when a Subxt app is compiled to WASM; see [#1067](https://github.com/paritytech/subxt/pull/1067) for more on that!
 
 The key commits:
 
 ### Added
 
-- Add browser extension signing example ([#1067](https://github.com/pezkuwichain/subxt/pull/1067))
+- Add browser extension signing example ([#1067](https://github.com/paritytech/subxt/pull/1067))
 
 ### Changed
 
-- Bump to latest scale-encode/decode/value and fix test running ([#1103](https://github.com/pezkuwichain/subxt/pull/1103))
-- Set minimum supported `rust-version` to `1.70` ([#1097](https://github.com/pezkuwichain/subxt/pull/1097))
+- Bump to latest scale-encode/decode/value and fix test running ([#1103](https://github.com/paritytech/subxt/pull/1103))
+- Set minimum supported `rust-version` to `1.70` ([#1097](https://github.com/paritytech/subxt/pull/1097))
 
 ### Fixed
 
-- Tests: support 'bizinikiwi-node' too and allow multiple binary paths ([#1102](https://github.com/pezkuwichain/subxt/pull/1102))
+- Tests: support 'bizinikiwi-node' too and allow multiple binary paths ([#1102](https://github.com/paritytech/subxt/pull/1102))
 
 
 ## [0.30.1] - 2023-07-25
@@ -1217,7 +1217,7 @@ This patch release fixes a small issue whereby using `runtime_metadata_url` in t
 
 ### Fixes
 
-- codegen: Fetch and decode metadata version then fallback ([#1092](https://github.com/pezkuwichain/subxt/pull/1092))
+- codegen: Fetch and decode metadata version then fallback ([#1092](https://github.com/paritytech/subxt/pull/1092))
 
 
 ## [0.30.0] - 2023-07-24
@@ -1340,36 +1340,36 @@ For a full list of changes, see below:
 
 ### Added
 
-- Example: How to connect to parachain ([#1043](https://github.com/pezkuwichain/subxt/pull/1043))
-- ECDSA Support in signer ([#1064](https://github.com/pezkuwichain/subxt/pull/1064))
-- Add `subxt_signer` crate for native & WASM compatible signing ([#1016](https://github.com/pezkuwichain/subxt/pull/1016))
-- Add light client platform WASM compatible ([#1026](https://github.com/pezkuwichain/subxt/pull/1026))
-- light-client: Add experimental light-client support ([#965](https://github.com/pezkuwichain/subxt/pull/965))
-- Add `diff` command to CLI tool to visualize metadata changes ([#1015](https://github.com/pezkuwichain/subxt/pull/1015))
-- CLI: Allow output to be written to file ([#1018](https://github.com/pezkuwichain/subxt/pull/1018))
+- Example: How to connect to parachain ([#1043](https://github.com/paritytech/subxt/pull/1043))
+- ECDSA Support in signer ([#1064](https://github.com/paritytech/subxt/pull/1064))
+- Add `subxt_signer` crate for native & WASM compatible signing ([#1016](https://github.com/paritytech/subxt/pull/1016))
+- Add light client platform WASM compatible ([#1026](https://github.com/paritytech/subxt/pull/1026))
+- light-client: Add experimental light-client support ([#965](https://github.com/paritytech/subxt/pull/965))
+- Add `diff` command to CLI tool to visualize metadata changes ([#1015](https://github.com/paritytech/subxt/pull/1015))
+- CLI: Allow output to be written to file ([#1018](https://github.com/paritytech/subxt/pull/1018))
 
 ### Changed
 
-- Remove `bizinikiwi-compat` default feature flag ([#1078](https://github.com/pezkuwichain/subxt/pull/1078))
-- runtime API: Substitute `UncheckedExtrinsic` with custom encoding ([#1076](https://github.com/pezkuwichain/subxt/pull/1076))
-- Remove `Index` type from Config trait ([#1074](https://github.com/pezkuwichain/subxt/pull/1074))
-- Utilize Metadata V15 ([#1041](https://github.com/pezkuwichain/subxt/pull/1041))
-- chain_getBlock extrinsics encoding ([#1024](https://github.com/pezkuwichain/subxt/pull/1024))
-- Make tx payload details public ([#1014](https://github.com/pezkuwichain/subxt/pull/1014))
-- CLI tool tests ([#977](https://github.com/pezkuwichain/subxt/pull/977))
-- Support NonZero numbers ([#1012](https://github.com/pezkuwichain/subxt/pull/1012))
-- Get account nonce via state_call ([#1002](https://github.com/pezkuwichain/subxt/pull/1002))
-- add `#[allow(rustdoc::broken_intra_doc_links)]` to subxt-codegen ([#998](https://github.com/pezkuwichain/subxt/pull/998))
+- Remove `bizinikiwi-compat` default feature flag ([#1078](https://github.com/paritytech/subxt/pull/1078))
+- runtime API: Substitute `UncheckedExtrinsic` with custom encoding ([#1076](https://github.com/paritytech/subxt/pull/1076))
+- Remove `Index` type from Config trait ([#1074](https://github.com/paritytech/subxt/pull/1074))
+- Utilize Metadata V15 ([#1041](https://github.com/paritytech/subxt/pull/1041))
+- chain_getBlock extrinsics encoding ([#1024](https://github.com/paritytech/subxt/pull/1024))
+- Make tx payload details public ([#1014](https://github.com/paritytech/subxt/pull/1014))
+- CLI tool tests ([#977](https://github.com/paritytech/subxt/pull/977))
+- Support NonZero numbers ([#1012](https://github.com/paritytech/subxt/pull/1012))
+- Get account nonce via state_call ([#1002](https://github.com/paritytech/subxt/pull/1002))
+- add `#[allow(rustdoc::broken_intra_doc_links)]` to subxt-codegen ([#998](https://github.com/paritytech/subxt/pull/998))
 
 ### Fixed
 
-- remove parens in hex output for CLI tool ([#1017](https://github.com/pezkuwichain/subxt/pull/1017))
-- Prevent bugs when reusing type ids in hashing ([#1075](https://github.com/pezkuwichain/subxt/pull/1075))
-- Fix invalid generation of types with >1 generic parameters ([#1023](https://github.com/pezkuwichain/subxt/pull/1023))
-- Fix jsonrpsee web features ([#1025](https://github.com/pezkuwichain/subxt/pull/1025))
-- Fix codegen validation when Runtime APIs are stripped ([#1000](https://github.com/pezkuwichain/subxt/pull/1000))
-- Fix hyperlink ([#994](https://github.com/pezkuwichain/subxt/pull/994))
-- Remove invalid redundant clone warning ([#996](https://github.com/pezkuwichain/subxt/pull/996))
+- remove parens in hex output for CLI tool ([#1017](https://github.com/paritytech/subxt/pull/1017))
+- Prevent bugs when reusing type ids in hashing ([#1075](https://github.com/paritytech/subxt/pull/1075))
+- Fix invalid generation of types with >1 generic parameters ([#1023](https://github.com/paritytech/subxt/pull/1023))
+- Fix jsonrpsee web features ([#1025](https://github.com/paritytech/subxt/pull/1025))
+- Fix codegen validation when Runtime APIs are stripped ([#1000](https://github.com/paritytech/subxt/pull/1000))
+- Fix hyperlink ([#994](https://github.com/paritytech/subxt/pull/994))
+- Remove invalid redundant clone warning ([#996](https://github.com/paritytech/subxt/pull/996))
 
 ## [0.29.0] - 2023-06-01
 
@@ -1379,7 +1379,7 @@ This is another big release for Subxt with a bunch of awesome changes. Let's tal
 
 This release will come with overhauled documentation and examples which is much more comprehensive than before, and goes into much more detail on each of the main areas that Subxt can work in.
 
-Check out [the documentation](https://docs.rs/subxt/latest/subxt/) for more. We'll continue to build on this with some larger examples, too, going forwards. ([#968](https://github.com/pezkuwichain/subxt/pull/968)) is particularly cool as it's our first example showcasing Subxt working with Yew and WASM; it'll be extended with more documentation and things in the next release.
+Check out [the documentation](https://docs.rs/subxt/latest/subxt/) for more. We'll continue to build on this with some larger examples, too, going forwards. ([#968](https://github.com/paritytech/subxt/pull/968)) is particularly cool as it's our first example showcasing Subxt working with Yew and WASM; it'll be extended with more documentation and things in the next release.
 
 ### A more powerful CLI tool: an `explore` command.
 
@@ -1414,7 +1414,7 @@ for ext in block.iter() {
 }
 ```
 
-### New Metadata Type ([#974](https://github.com/pezkuwichain/subxt/pull/974))
+### New Metadata Type ([#974](https://github.com/paritytech/subxt/pull/974))
 
 Previously, the `subxt_metadata` crate was simply a collection of functions that worked directly on `frame_metadata` types. Then, in `subxt`, we had a custom metadata type which wrapped this to provide the interface needed by various Subxt internals and traits.
 
@@ -1440,7 +1440,7 @@ let metadata = Metadata::decode(&mut &*bytes).unwrap();
 
 Otherwise, if you implement traits like `TxPayload` directly, you'll need to tweak the implementations to use the new `Metadata` type, which exposes everything you used to be able to get hold of but behind a slightly different interface.
 
-### Removing `as_pallet_event` method ([#953](https://github.com/pezkuwichain/subxt/pull/953))
+### Removing `as_pallet_event` method ([#953](https://github.com/paritytech/subxt/pull/953))
 
 In an effort to simplify the number of ways we have to decode events, `as_pallet_event` was removed. You can achieve a similar thing by calling `as_root_event`, which will decode _any_ event that the static interface knows about into an outer enum of pallet names to event names. if you only care about a specific event, you can match on this enum to look for events from a specific pallet.
 
@@ -1454,53 +1454,53 @@ Beyond these, there's a bunch more that's been added, fixed and changes. A full 
 
 ### Added
 
-- Add topics to `EventDetails` ([#989](https://github.com/pezkuwichain/subxt/pull/989))
-- Yew Subxt WASM examples ([#968](https://github.com/pezkuwichain/subxt/pull/968))
-- CLI subxt explore commands ([#950](https://github.com/pezkuwichain/subxt/pull/950))
-- Retain specific runtime APIs ([#961](https://github.com/pezkuwichain/subxt/pull/961))
-- Subxt Guide ([#890](https://github.com/pezkuwichain/subxt/pull/890))
-- Partial fee estimates for SubmittableExtrinsic ([#910](https://github.com/pezkuwichain/subxt/pull/910))
-- Add ability to opt out from default derives and attributes ([#925](https://github.com/pezkuwichain/subxt/pull/925))
-- add no_default_substitutions to the macro and cli ([#936](https://github.com/pezkuwichain/subxt/pull/936))
-- extrinsics: Decode extrinsics from blocks ([#929](https://github.com/pezkuwichain/subxt/pull/929))
-- Metadata V15: Generate Runtime APIs ([#918](https://github.com/pezkuwichain/subxt/pull/918)) and ([#947](https://github.com/pezkuwichain/subxt/pull/947))
-- impl Header and Hasher for some bizinikiwi types behind the "bizinikiwi-compat" feature flag ([#934](https://github.com/pezkuwichain/subxt/pull/934))
-- add `as_root_error` for helping to decode ModuleErrors ([#930](https://github.com/pezkuwichain/subxt/pull/930))
+- Add topics to `EventDetails` ([#989](https://github.com/paritytech/subxt/pull/989))
+- Yew Subxt WASM examples ([#968](https://github.com/paritytech/subxt/pull/968))
+- CLI subxt explore commands ([#950](https://github.com/paritytech/subxt/pull/950))
+- Retain specific runtime APIs ([#961](https://github.com/paritytech/subxt/pull/961))
+- Subxt Guide ([#890](https://github.com/paritytech/subxt/pull/890))
+- Partial fee estimates for SubmittableExtrinsic ([#910](https://github.com/paritytech/subxt/pull/910))
+- Add ability to opt out from default derives and attributes ([#925](https://github.com/paritytech/subxt/pull/925))
+- add no_default_substitutions to the macro and cli ([#936](https://github.com/paritytech/subxt/pull/936))
+- extrinsics: Decode extrinsics from blocks ([#929](https://github.com/paritytech/subxt/pull/929))
+- Metadata V15: Generate Runtime APIs ([#918](https://github.com/paritytech/subxt/pull/918)) and ([#947](https://github.com/paritytech/subxt/pull/947))
+- impl Header and Hasher for some bizinikiwi types behind the "bizinikiwi-compat" feature flag ([#934](https://github.com/paritytech/subxt/pull/934))
+- add `as_root_error` for helping to decode ModuleErrors ([#930](https://github.com/paritytech/subxt/pull/930))
 
 ### Changed
 
-- Update scale-encode, scale-decode and scale-value to latest ([#991](https://github.com/pezkuwichain/subxt/pull/991))
-- restrict sign_with_address_and_signature interface ([#988](https://github.com/pezkuwichain/subxt/pull/988))
-- Introduce Metadata type ([#974](https://github.com/pezkuwichain/subxt/pull/974)) and ([#978](https://github.com/pezkuwichain/subxt/pull/978))
-- Have a pass over metadata validation ([#959](https://github.com/pezkuwichain/subxt/pull/959))
-- remove as_pallet_extrinsic and as_pallet_event ([#953](https://github.com/pezkuwichain/subxt/pull/953))
-- speed up ui tests. ([#944](https://github.com/pezkuwichain/subxt/pull/944))
-- cli: Use WS by default instead of HTTP ([#954](https://github.com/pezkuwichain/subxt/pull/954))
-- Upgrade to `syn 2.0` ([#875](https://github.com/pezkuwichain/subxt/pull/875))
-- Move all deps to workspace toml ([#932](https://github.com/pezkuwichain/subxt/pull/932))
-- Speed up CI ([#928](https://github.com/pezkuwichain/subxt/pull/928)) and ([#926](https://github.com/pezkuwichain/subxt/pull/926))
-- metadata: Use v15 internally ([#912](https://github.com/pezkuwichain/subxt/pull/912))
-- Factor bizinikiwi node runner into separate crate ([#913](https://github.com/pezkuwichain/subxt/pull/913))
-- Remove need to import parity-scale-codec to use subxt macro ([#907](https://github.com/pezkuwichain/subxt/pull/907))
+- Update scale-encode, scale-decode and scale-value to latest ([#991](https://github.com/paritytech/subxt/pull/991))
+- restrict sign_with_address_and_signature interface ([#988](https://github.com/paritytech/subxt/pull/988))
+- Introduce Metadata type ([#974](https://github.com/paritytech/subxt/pull/974)) and ([#978](https://github.com/paritytech/subxt/pull/978))
+- Have a pass over metadata validation ([#959](https://github.com/paritytech/subxt/pull/959))
+- remove as_pallet_extrinsic and as_pallet_event ([#953](https://github.com/paritytech/subxt/pull/953))
+- speed up ui tests. ([#944](https://github.com/paritytech/subxt/pull/944))
+- cli: Use WS by default instead of HTTP ([#954](https://github.com/paritytech/subxt/pull/954))
+- Upgrade to `syn 2.0` ([#875](https://github.com/paritytech/subxt/pull/875))
+- Move all deps to workspace toml ([#932](https://github.com/paritytech/subxt/pull/932))
+- Speed up CI ([#928](https://github.com/paritytech/subxt/pull/928)) and ([#926](https://github.com/paritytech/subxt/pull/926))
+- metadata: Use v15 internally ([#912](https://github.com/paritytech/subxt/pull/912))
+- Factor bizinikiwi node runner into separate crate ([#913](https://github.com/paritytech/subxt/pull/913))
+- Remove need to import parity-scale-codec to use subxt macro ([#907](https://github.com/paritytech/subxt/pull/907))
 
 ### Fixed
 
-- use blake2 for extrinsic hashing ([#921](https://github.com/pezkuwichain/subxt/pull/921))
-- Ensure unique types in codegen ([#967](https://github.com/pezkuwichain/subxt/pull/967))
-- use unit type in pezkuwi config ([#943](https://github.com/pezkuwichain/subxt/pull/943))
+- use blake2 for extrinsic hashing ([#921](https://github.com/paritytech/subxt/pull/921))
+- Ensure unique types in codegen ([#967](https://github.com/paritytech/subxt/pull/967))
+- use unit type in pezkuwi config ([#943](https://github.com/paritytech/subxt/pull/943))
 
 
 ## [0.28.0] - 2023-04-11
 
 This is a fairly significant change; what follows is a description of the main changes to be aware of:
 
-### Unify how we encode and decode static and dynamic types ([#842](https://github.com/pezkuwichain/subxt/pull/842))
+### Unify how we encode and decode static and dynamic types ([#842](https://github.com/paritytech/subxt/pull/842))
 
 Prior to this, static types generated by codegen (ie subxt macro) would implement `Encode` and `Decode` from the `parity-scale-codec` library. This meant that they woule be encoded-to and decoded-from based on their shape. Dynamic types (eg the `subxt::dynamic::Value` type) would be encoded and decoded based on the node metadata instead.
 
-This change makes use of the new `scale-encode` and `scale-decode` crates to auto-implement `EncodeAsType` and `DecodeAsType` on all of our static types. These traits allow types to take the node metadata into account when working out how best to encode and decode into them. By using metadata, we can be much more flexible/robust about how to encode/decode various types (as an example, nested transactions will now be portable across runtimes). Additionally, we can merge our codepaths for static and dynamic encoding/decoding, since both static and dynamic types can implement these traits. Read [the PR description](https://github.com/pezkuwichain/subxt/pull/842) for more info.
+This change makes use of the new `scale-encode` and `scale-decode` crates to auto-implement `EncodeAsType` and `DecodeAsType` on all of our static types. These traits allow types to take the node metadata into account when working out how best to encode and decode into them. By using metadata, we can be much more flexible/robust about how to encode/decode various types (as an example, nested transactions will now be portable across runtimes). Additionally, we can merge our codepaths for static and dynamic encoding/decoding, since both static and dynamic types can implement these traits. Read [the PR description](https://github.com/paritytech/subxt/pull/842) for more info.
 
-A notable impact of this is that any types you wish to substitute when performing codegen (via the CLI tool or `#[subxt]` macro) must also implement `EncodeAsType` and `DecodeAsType` too. Bizinikiwi types, for instance, generally do not. To work around this, [#886](https://github.com/pezkuwichain/subxt/pull/886) introduces a `Static` type and enhances the type substitution logic so that you're able to wrap any types which only implement `Encode` and `Decode` to work (note that you lose out on the improvements from `EncodeAsType` and `DecodeAsType` when you do this):
+A notable impact of this is that any types you wish to substitute when performing codegen (via the CLI tool or `#[subxt]` macro) must also implement `EncodeAsType` and `DecodeAsType` too. Bizinikiwi types, for instance, generally do not. To work around this, [#886](https://github.com/paritytech/subxt/pull/886) introduces a `Static` type and enhances the type substitution logic so that you're able to wrap any types which only implement `Encode` and `Decode` to work (note that you lose out on the improvements from `EncodeAsType` and `DecodeAsType` when you do this):
 
 ```rust
 #[subxt::subxt(
@@ -1513,7 +1513,7 @@ A notable impact of this is that any types you wish to substitute when performin
 pub mod node_runtime {}
 ```
 
-So, if you want to substitute in Bizinikiwi types, wrap them in `::subxt::utils::Static` in the type substitution, as above. [#886](https://github.com/pezkuwichain/subxt/pull/886) also generally improves type substitution so that you can substitute the generic params in nested types, since it's required in the above.
+So, if you want to substitute in Bizinikiwi types, wrap them in `::subxt::utils::Static` in the type substitution, as above. [#886](https://github.com/paritytech/subxt/pull/886) also generally improves type substitution so that you can substitute the generic params in nested types, since it's required in the above.
 
 Several types have been renamed as a result of this unification (though they aren't commonly made explicit use of). Additionally, to obtain the bytes from a storage address, instead of doing:
 
@@ -1529,7 +1529,7 @@ let addr_bytes = cxt.client().storage().address_bytes(&storage_address).unwrap()
 
 This is because the address on it's own no longer requires as much static information, and relies more heavily now on the node metadata to encode it to bytes.
 
-### Expose Signer payload ([#861](https://github.com/pezkuwichain/subxt/pull/861))
+### Expose Signer payload ([#861](https://github.com/paritytech/subxt/pull/861))
 
 This is not a breaking change, but notable in that is adds `create_partial_signed_with_nonce` and `create_partial_signed` to the `TxClient` to allow you to break extrinsic creation into two steps:
 
@@ -1538,13 +1538,13 @@ This is not a breaking change, but notable in that is adds `create_partial_signe
 
 This allows a signer payload to be obtained from Subxt, handed off to some external application, and then once a signature has been obtained, that can be passed back to Subxt to complete the creation of an extrinsic. This opens the door to using browser wallet extensions, for instance, to sign Subxt payloads.
 
-### Stripping unneeded pallets from metadata ([#879](https://github.com/pezkuwichain/subxt/pull/879))
+### Stripping unneeded pallets from metadata ([#879](https://github.com/paritytech/subxt/pull/879))
 
 This is not a breaking change, but adds the ability to use the Subxt CLI tool to strip out all but some named list of pallets from a metadata bundle. Aside from allowing you to store a significantly smaller metadata bundle with only the APIs you need in it, it will also lead to faster codegen, since there's much less of it to do.
 
 Use a command like `subxt metadata --pallets Balances,System` to select specific pallets. You can provide an existing metadata file to take that and strip it, outputting a smaller bundle. Alternately it will grab the metadata from a local node and strip that before outputting.
 
-### Dispatch error changes ([#878](https://github.com/pezkuwichain/subxt/pull/878))
+### Dispatch error changes ([#878](https://github.com/paritytech/subxt/pull/878))
 
 The `DispatchError` returned from either attempting to submit an extrinsic, or from calling `.dry_run()` has changed. It's now far more complete with respect to the information it returns in each case, and the interface has been tidied up. Changes include:
 
@@ -1553,7 +1553,7 @@ The `DispatchError` returned from either attempting to submit an extrinsic, or f
 - Errors in general have been marked `#[non_exahustive]` since they could grow and change at any time. (Owing to our use of `scale-decode` internally, we are not so contrained when it comes to having precise variant indexes or anything now, and can potentially deprecate rather than remove old variants as needed).
 - On a lower level, the `rpc.dry_run()` RPC call now returns the raw dry run bytes which can then be decoded with the help of metadata into our `DryRunResult`.
 
-### Extrinsic submission changes ([#897](https://github.com/pezkuwichain/subxt/pull/897))
+### Extrinsic submission changes ([#897](https://github.com/paritytech/subxt/pull/897))
 
 It was found by [@furoxr](https://github.com/furoxr) that Bizinikiwi nodes will stop sending transaction progress events under more circumstances than we originally expected. Thus, now calls like `wait_for_finalized()` and `wait_for_in_block()` will stop waiting for events when any of the following is sent from the node:
 
@@ -1565,7 +1565,7 @@ It was found by [@furoxr](https://github.com/furoxr) that Bizinikiwi nodes will 
 
 Previously we'd only close the subscription and stop waiting when we saw a `Finalized` or `FinalityTimeout` event. Thanks for digging into this [@furoxr](https://github.com/furoxr)!
 
-### Add `at_latest()` method ([#900](https://github.com/pezkuwichain/subxt/pull/900) and [#904](https://github.com/pezkuwichain/subxt/pull/904))
+### Add `at_latest()` method ([#900](https://github.com/paritytech/subxt/pull/900) and [#904](https://github.com/paritytech/subxt/pull/904))
 
 A small breaking change; previously we had `.at(None)` or `.at(Some(block_hash))` methods in a few places to obtain things at either the latest block or some specific block hash.
 
@@ -1575,66 +1575,66 @@ That covers the larger changes in this release. For more details, have a look at
 
 ### Added
 
-- added at_latest ([#900](https://github.com/pezkuwichain/subxt/pull/900) and [#904](https://github.com/pezkuwichain/subxt/pull/904))
-- Metadata: Retain a subset of metadata pallets ([#879](https://github.com/pezkuwichain/subxt/pull/879))
-- Expose signer payload to allow external signing ([#861](https://github.com/pezkuwichain/subxt/pull/861))
-- Add ink! as a user of `subxt` ([#837](https://github.com/pezkuwichain/subxt/pull/837))
-- codegen: Add codegen error ([#841](https://github.com/pezkuwichain/subxt/pull/841))
-- codegen: allow documentation to be opted out of ([#843](https://github.com/pezkuwichain/subxt/pull/843))
-- re-export `sp_core` and `sp_runtime` ([#853](https://github.com/pezkuwichain/subxt/pull/853))
-- Allow generating only runtime types in subxt macro ([#845](https://github.com/pezkuwichain/subxt/pull/845))
-- Add 'Static' type and improve type substitution codegen to accept it ([#886](https://github.com/pezkuwichain/subxt/pull/886))
+- added at_latest ([#900](https://github.com/paritytech/subxt/pull/900) and [#904](https://github.com/paritytech/subxt/pull/904))
+- Metadata: Retain a subset of metadata pallets ([#879](https://github.com/paritytech/subxt/pull/879))
+- Expose signer payload to allow external signing ([#861](https://github.com/paritytech/subxt/pull/861))
+- Add ink! as a user of `subxt` ([#837](https://github.com/paritytech/subxt/pull/837))
+- codegen: Add codegen error ([#841](https://github.com/paritytech/subxt/pull/841))
+- codegen: allow documentation to be opted out of ([#843](https://github.com/paritytech/subxt/pull/843))
+- re-export `sp_core` and `sp_runtime` ([#853](https://github.com/paritytech/subxt/pull/853))
+- Allow generating only runtime types in subxt macro ([#845](https://github.com/paritytech/subxt/pull/845))
+- Add 'Static' type and improve type substitution codegen to accept it ([#886](https://github.com/paritytech/subxt/pull/886))
 
 ### Changed
 
-- Improve Dispatch Errors ([#878](https://github.com/pezkuwichain/subxt/pull/878))
-- Use scale-encode and scale-decode to encode and decode based on metadata ([#842](https://github.com/pezkuwichain/subxt/pull/842))
-- For smoldot: support deserializing block number in header from hex or number ([#863](https://github.com/pezkuwichain/subxt/pull/863))
-- Bump Bizinikiwi dependencies to latest ([#905](https://github.com/pezkuwichain/subxt/pull/905))
+- Improve Dispatch Errors ([#878](https://github.com/paritytech/subxt/pull/878))
+- Use scale-encode and scale-decode to encode and decode based on metadata ([#842](https://github.com/paritytech/subxt/pull/842))
+- For smoldot: support deserializing block number in header from hex or number ([#863](https://github.com/paritytech/subxt/pull/863))
+- Bump Bizinikiwi dependencies to latest ([#905](https://github.com/paritytech/subxt/pull/905))
 
 ### Fixed
 
-- wait_for_finalized behavior if the tx dropped, usurped or invalid ([#897](https://github.com/pezkuwichain/subxt/pull/897))
+- wait_for_finalized behavior if the tx dropped, usurped or invalid ([#897](https://github.com/paritytech/subxt/pull/897))
 
 
 ## [0.27.1] - 2023-02-15
 
 ### Added
 
-- Add `find_last` for block types ([#825](https://github.com/pezkuwichain/subxt/pull/825))
+- Add `find_last` for block types ([#825](https://github.com/paritytech/subxt/pull/825))
 
 ## [0.27.0] - 2023-02-13
 
 This is a fairly small release, primarily to bump bizinikiwi dependencies to their latest versions.
 
-The main breaking change is fairly small: [#804](https://github.com/pezkuwichain/subxt/pull/804). Here, the `BlockNumber` associated type has been removed from `Config` entirely, since it wasn't actually needed anywhere in Subxt. Additionally, the constraints on each of those associated types in `Config` were made more precise, primarily to tidy things up (but this should result in types more easily being able to meet the requirements here). If you use custom `Config`, the fix is simply to remove the `BlockNumber` type. If you also use the `Config` trait in your own functions and depend on those constraints, you may be able to define a custom `MyConfig` type which builds off `Config` and adds back any additional bounds that you want.
+The main breaking change is fairly small: [#804](https://github.com/paritytech/subxt/pull/804). Here, the `BlockNumber` associated type has been removed from `Config` entirely, since it wasn't actually needed anywhere in Subxt. Additionally, the constraints on each of those associated types in `Config` were made more precise, primarily to tidy things up (but this should result in types more easily being able to meet the requirements here). If you use custom `Config`, the fix is simply to remove the `BlockNumber` type. If you also use the `Config` trait in your own functions and depend on those constraints, you may be able to define a custom `MyConfig` type which builds off `Config` and adds back any additional bounds that you want.
 
 Note worthy PRs merged since the last release:
 
 ### Added
 
-- Add find last function ([#821](https://github.com/pezkuwichain/subxt/pull/821))
-- Doc: first item is current version comment ([#817](https://github.com/pezkuwichain/subxt/pull/817))
+- Add find last function ([#821](https://github.com/paritytech/subxt/pull/821))
+- Doc: first item is current version comment ([#817](https://github.com/paritytech/subxt/pull/817))
 
 ### Changed
 
-- Remove unneeded Config bounds and BlockNumber associated type ([#804](https://github.com/pezkuwichain/subxt/pull/804))
+- Remove unneeded Config bounds and BlockNumber associated type ([#804](https://github.com/paritytech/subxt/pull/804))
 
 
 ## [0.26.0] - 2023-01-24
 
 This release adds a number of improvements, most notably:
 
-- We make Bizinikiwi dependencies optional ([#760](https://github.com/pezkuwichain/subxt/pull/760)), which makes WASM builds both smaller and more reliable. To do this, we re-implement some core types like `AccountId32`, `MultiAddress` and `MultiSignature` internally.
-- Allow access to storage entries ([#774](https://github.com/pezkuwichain/subxt/pull/774)) and runtime API's ([#777](https://github.com/pezkuwichain/subxt/pull/777)) from some block. This is part of a move towards a more "block centric" interface, which will better align with the newly available `chainHead` style RPC interface.
+- We make Bizinikiwi dependencies optional ([#760](https://github.com/paritytech/subxt/pull/760)), which makes WASM builds both smaller and more reliable. To do this, we re-implement some core types like `AccountId32`, `MultiAddress` and `MultiSignature` internally.
+- Allow access to storage entries ([#774](https://github.com/paritytech/subxt/pull/774)) and runtime API's ([#777](https://github.com/paritytech/subxt/pull/777)) from some block. This is part of a move towards a more "block centric" interface, which will better align with the newly available `chainHead` style RPC interface.
 - Add RPC methods for the new `chainHead` style interface (see https://paritytech.github.io/json-rpc-interface-spec/). These are currently unstable, but will allow users to start experimenting with this new API if their nodes support it.
-- More advanced type substitution is now possible in the codegen interface ([#735](https://github.com/pezkuwichain/subxt/pull/735)).
+- More advanced type substitution is now possible in the codegen interface ([#735](https://github.com/paritytech/subxt/pull/735)).
 
 This release introduces a number of breaking changes that can be generally be fixed with mechanical tweaks to your code. The notable changes are described below.
 
 ### Make Storage API more Block-centric
 
-See [#774](https://github.com/pezkuwichain/subxt/pull/774). This PR makes the Storage API more consistent with the Events API, and allows access to it from a given block as part of a push to provide a more block centric API that will hopefully be easier to understand, and will align with the new RPC `chainHead` style RPC interface.
+See [#774](https://github.com/paritytech/subxt/pull/774). This PR makes the Storage API more consistent with the Events API, and allows access to it from a given block as part of a push to provide a more block centric API that will hopefully be easier to understand, and will align with the new RPC `chainHead` style RPC interface.
 
 Before, your code will look like:
 
@@ -1659,7 +1659,7 @@ let a = block.storage().fetch(&staking_bonded, None).await?;
 
 ### More advanced type substitution in codegen
 
-See [#735](https://github.com/pezkuwichain/subxt/pull/735). Previously, you could perform basic type substitution like this:
+See [#735](https://github.com/paritytech/subxt/pull/735). Previously, you could perform basic type substitution like this:
 
 ```rust
 #[subxt::subxt(runtime_metadata_path = "../pezkuwi_metadata.scale")]
@@ -1688,7 +1688,7 @@ In this example, we can (optionally) specify the generic parameters we expect to
 
 ### Optional Bizinikiwi dependencies
 
-See [#760](https://github.com/pezkuwichain/subxt/pull/760). Subxt now has a "bizinikiwi-compat" feature (enabled by default, and disabled for WASM builds). At present, enabling this feature simply exposes the `PairSigner` (which was always available before), allowing transactions to be signed via Bizinikiwi signer logic (as before). When disabled, you (currently) must bring your own signer implementation, but in return we can avoid bringing in a substantial number of Bizinikiwi dependencies in the process.
+See [#760](https://github.com/paritytech/subxt/pull/760). Subxt now has a "bizinikiwi-compat" feature (enabled by default, and disabled for WASM builds). At present, enabling this feature simply exposes the `PairSigner` (which was always available before), allowing transactions to be signed via Bizinikiwi signer logic (as before). When disabled, you (currently) must bring your own signer implementation, but in return we can avoid bringing in a substantial number of Bizinikiwi dependencies in the process.
 
 Regardless, this change also tidied up and moved various bits and pieces around to be consistent with this goal. To address some common moves, previously we'd have:
 
@@ -1734,32 +1734,32 @@ Some other note worthy PRs that were merged since the last release:
 
 ### Added
 
-- Add block-centric Storage API ([#774](https://github.com/pezkuwichain/subxt/pull/774))
-- Add `chainHead` RPC methods ([#766](https://github.com/pezkuwichain/subxt/pull/766))
-- Allow for remapping type parameters in type substitutions ([#735](https://github.com/pezkuwichain/subxt/pull/735))
-- Add ability to set custom metadata etc on OnlineClient ([#794](https://github.com/pezkuwichain/subxt/pull/794))
-- Add `Cargo.lock` for deterministic builds ([#795](https://github.com/pezkuwichain/subxt/pull/795))
-- Add API to execute runtime calls ([#777](https://github.com/pezkuwichain/subxt/pull/777))
-- Add bitvec-like generic support to the scale-bits type for use in codegen ([#718](https://github.com/pezkuwichain/subxt/pull/718))
-- Add `--derive-for-type` to cli ([#708](https://github.com/pezkuwichain/subxt/pull/708))
+- Add block-centric Storage API ([#774](https://github.com/paritytech/subxt/pull/774))
+- Add `chainHead` RPC methods ([#766](https://github.com/paritytech/subxt/pull/766))
+- Allow for remapping type parameters in type substitutions ([#735](https://github.com/paritytech/subxt/pull/735))
+- Add ability to set custom metadata etc on OnlineClient ([#794](https://github.com/paritytech/subxt/pull/794))
+- Add `Cargo.lock` for deterministic builds ([#795](https://github.com/paritytech/subxt/pull/795))
+- Add API to execute runtime calls ([#777](https://github.com/paritytech/subxt/pull/777))
+- Add bitvec-like generic support to the scale-bits type for use in codegen ([#718](https://github.com/paritytech/subxt/pull/718))
+- Add `--derive-for-type` to cli ([#708](https://github.com/paritytech/subxt/pull/708))
 
 ### Changed
 
-- rename subscribe_to_updates() to updater() ([#792](https://github.com/pezkuwichain/subxt/pull/792))
-- Expose `Update` ([#791](https://github.com/pezkuwichain/subxt/pull/791))
-- Expose version info in CLI tool with build-time obtained git hash ([#787](https://github.com/pezkuwichain/subxt/pull/787))
-- Implement deserialize on AccountId32 ([#773](https://github.com/pezkuwichain/subxt/pull/773))
-- Codegen: Preserve attrs and add #[allow(clippy::all)] ([#784](https://github.com/pezkuwichain/subxt/pull/784))
-- make ChainBlockExtrinsic cloneable ([#778](https://github.com/pezkuwichain/subxt/pull/778))
-- Make sp_core and sp_runtime dependencies optional, and bump to latest ([#760](https://github.com/pezkuwichain/subxt/pull/760))
-- Make verbose rpc error display ([#758](https://github.com/pezkuwichain/subxt/pull/758))
-- rpc: Expose the `subscription ID` for `RpcClientT` ([#733](https://github.com/pezkuwichain/subxt/pull/733))
-- events: Fetch metadata at arbitrary blocks ([#727](https://github.com/pezkuwichain/subxt/pull/727))
+- rename subscribe_to_updates() to updater() ([#792](https://github.com/paritytech/subxt/pull/792))
+- Expose `Update` ([#791](https://github.com/paritytech/subxt/pull/791))
+- Expose version info in CLI tool with build-time obtained git hash ([#787](https://github.com/paritytech/subxt/pull/787))
+- Implement deserialize on AccountId32 ([#773](https://github.com/paritytech/subxt/pull/773))
+- Codegen: Preserve attrs and add #[allow(clippy::all)] ([#784](https://github.com/paritytech/subxt/pull/784))
+- make ChainBlockExtrinsic cloneable ([#778](https://github.com/paritytech/subxt/pull/778))
+- Make sp_core and sp_runtime dependencies optional, and bump to latest ([#760](https://github.com/paritytech/subxt/pull/760))
+- Make verbose rpc error display ([#758](https://github.com/paritytech/subxt/pull/758))
+- rpc: Expose the `subscription ID` for `RpcClientT` ([#733](https://github.com/paritytech/subxt/pull/733))
+- events: Fetch metadata at arbitrary blocks ([#727](https://github.com/paritytech/subxt/pull/727))
 
 ### Fixed
 
-- Fix decoding events via `.as_root_event()` and add test ([#767](https://github.com/pezkuwichain/subxt/pull/767))
-- Retain Rust code items from `mod` decorated with `subxt` attribute ([#721](https://github.com/pezkuwichain/subxt/pull/721))
+- Fix decoding events via `.as_root_event()` and add test ([#767](https://github.com/paritytech/subxt/pull/767))
+- Retain Rust code items from `mod` decorated with `subxt` attribute ([#721](https://github.com/paritytech/subxt/pull/721))
 
 
 ## [0.25.0] - 2022-11-16
@@ -1773,33 +1773,33 @@ Notable PRs merged:
 
 ### Added
 
-- Add getters for `Module` ([#697](https://github.com/pezkuwichain/subxt/pull/697))
-- add wasm support ([#700](https://github.com/pezkuwichain/subxt/pull/700))
-- Extend the new `api.blocks()` to be the primary way to subscribe and fetch blocks/extrinsics/events ([#691](https://github.com/pezkuwichain/subxt/pull/691))
-- Add runtime_metadata_url to pull metadata directly from a node ([#689](https://github.com/pezkuwichain/subxt/pull/689))
-- Implement `BlocksClient` for working with blocks ([#671](https://github.com/pezkuwichain/subxt/pull/671))
-- Allow specifying the `subxt` crate path for generated code ([#664](https://github.com/pezkuwichain/subxt/pull/664))
-- Allow taking out raw bytes from a SubmittableExtrinsic ([#683](https://github.com/pezkuwichain/subxt/pull/683))
-- Add DecodedValueThunk to allow getting bytes back from dynamic queries ([#680](https://github.com/pezkuwichain/subxt/pull/680))
+- Add getters for `Module` ([#697](https://github.com/paritytech/subxt/pull/697))
+- add wasm support ([#700](https://github.com/paritytech/subxt/pull/700))
+- Extend the new `api.blocks()` to be the primary way to subscribe and fetch blocks/extrinsics/events ([#691](https://github.com/paritytech/subxt/pull/691))
+- Add runtime_metadata_url to pull metadata directly from a node ([#689](https://github.com/paritytech/subxt/pull/689))
+- Implement `BlocksClient` for working with blocks ([#671](https://github.com/paritytech/subxt/pull/671))
+- Allow specifying the `subxt` crate path for generated code ([#664](https://github.com/paritytech/subxt/pull/664))
+- Allow taking out raw bytes from a SubmittableExtrinsic ([#683](https://github.com/paritytech/subxt/pull/683))
+- Add DecodedValueThunk to allow getting bytes back from dynamic queries ([#680](https://github.com/paritytech/subxt/pull/680))
 
 ### Changed
 
-- Update bizinikiwi crates ([#709](https://github.com/pezkuwichain/subxt/pull/709))
-- Make working with nested queries a touch easier ([#714](https://github.com/pezkuwichain/subxt/pull/714))
-- Upgrade to scale-info 2.3 and fix errors ([#704](https://github.com/pezkuwichain/subxt/pull/704))
-- No need to entangle Signer and nonce now ([#702](https://github.com/pezkuwichain/subxt/pull/702))
-- error: `RpcError` with custom client error ([#694](https://github.com/pezkuwichain/subxt/pull/694))
-- into_encoded() for consistency ([#685](https://github.com/pezkuwichain/subxt/pull/685))
-- make subxt::Config::Extrinsic Send ([#681](https://github.com/pezkuwichain/subxt/pull/681))
-- Refactor CLI tool to give room for growth ([#667](https://github.com/pezkuwichain/subxt/pull/667))
-- expose jsonrpc-core client ([#672](https://github.com/pezkuwichain/subxt/pull/672))
-- Upgrade clap to v4 ([#678](https://github.com/pezkuwichain/subxt/pull/678))
+- Update bizinikiwi crates ([#709](https://github.com/paritytech/subxt/pull/709))
+- Make working with nested queries a touch easier ([#714](https://github.com/paritytech/subxt/pull/714))
+- Upgrade to scale-info 2.3 and fix errors ([#704](https://github.com/paritytech/subxt/pull/704))
+- No need to entangle Signer and nonce now ([#702](https://github.com/paritytech/subxt/pull/702))
+- error: `RpcError` with custom client error ([#694](https://github.com/paritytech/subxt/pull/694))
+- into_encoded() for consistency ([#685](https://github.com/paritytech/subxt/pull/685))
+- make subxt::Config::Extrinsic Send ([#681](https://github.com/paritytech/subxt/pull/681))
+- Refactor CLI tool to give room for growth ([#667](https://github.com/paritytech/subxt/pull/667))
+- expose jsonrpc-core client ([#672](https://github.com/paritytech/subxt/pull/672))
+- Upgrade clap to v4 ([#678](https://github.com/paritytech/subxt/pull/678))
 
 
 ## [0.24.0] - 2022-09-22
 
 This release has a bunch of smaller changes and fixes. The breaking changes are fairly minor and should be easy to address if encountered. Notable additions are:
-- Allowing the underlying RPC implementation to be swapped out ([#634](https://github.com/pezkuwichain/subxt/pull/634)). This makes `jsonrpsee` an optional dependency, and opens the door for Subxt to be integrated into things like light clients, since we can decide how to handle RPC calls.
+- Allowing the underlying RPC implementation to be swapped out ([#634](https://github.com/paritytech/subxt/pull/634)). This makes `jsonrpsee` an optional dependency, and opens the door for Subxt to be integrated into things like light clients, since we can decide how to handle RPC calls.
 - A low level "runtime upgrade" API is exposed, giving more visibility into when node updates happen in case your application needs to handle them.
 - `scale-value` and `scale-decode` dependencies are bumped. The main effect of this is that `bitvec` is no longer used under the hood in the core of Subxt, which helps to remove one hurdle on the way to being able to compile it to WASM.
 
@@ -1807,33 +1807,33 @@ Notable PRs merged:
 
 ### Added
 
-- feat: add low-level `runtime upgrade API` ([#657](https://github.com/pezkuwichain/subxt/pull/657))
-- Add accessor for `StaticTxPayload::call_data` ([#660](https://github.com/pezkuwichain/subxt/pull/660))
-- Store type name of a field in event metadata, and export EventFieldMetadata ([#656](https://github.com/pezkuwichain/subxt/pull/656) and [#654](https://github.com/pezkuwichain/subxt/pull/654))
-- Allow generalising over RPC implementation ([#634](https://github.com/pezkuwichain/subxt/pull/634))
-- Add conversion and default functions for `NumberOrHex` ([#636](https://github.com/pezkuwichain/subxt/pull/636))
-- Allow creating/submitting unsigned transactions, too. ([#625](https://github.com/pezkuwichain/subxt/pull/625))
-- Add Staking Miner and Introspector to usage list ([#647](https://github.com/pezkuwichain/subxt/pull/647))
+- feat: add low-level `runtime upgrade API` ([#657](https://github.com/paritytech/subxt/pull/657))
+- Add accessor for `StaticTxPayload::call_data` ([#660](https://github.com/paritytech/subxt/pull/660))
+- Store type name of a field in event metadata, and export EventFieldMetadata ([#656](https://github.com/paritytech/subxt/pull/656) and [#654](https://github.com/paritytech/subxt/pull/654))
+- Allow generalising over RPC implementation ([#634](https://github.com/paritytech/subxt/pull/634))
+- Add conversion and default functions for `NumberOrHex` ([#636](https://github.com/paritytech/subxt/pull/636))
+- Allow creating/submitting unsigned transactions, too. ([#625](https://github.com/paritytech/subxt/pull/625))
+- Add Staking Miner and Introspector to usage list ([#647](https://github.com/paritytech/subxt/pull/647))
 
 ### Changed
 
-- Bump scale-value and scale-decode ([#659](https://github.com/pezkuwichain/subxt/pull/659))
-- Tweak 0.23 notes and add another test for events ([#618](https://github.com/pezkuwichain/subxt/pull/618))
-- Specialize metadata errors ([#633](https://github.com/pezkuwichain/subxt/pull/633))
-- Simplify the TxPayload trait a little ([#638](https://github.com/pezkuwichain/subxt/pull/638))
-- Remove unnecessary `async` ([#645](https://github.com/pezkuwichain/subxt/pull/645))
-- Use 'sp_core::Hxxx' for all hash types ([#623](https://github.com/pezkuwichain/subxt/pull/623))
+- Bump scale-value and scale-decode ([#659](https://github.com/paritytech/subxt/pull/659))
+- Tweak 0.23 notes and add another test for events ([#618](https://github.com/paritytech/subxt/pull/618))
+- Specialize metadata errors ([#633](https://github.com/paritytech/subxt/pull/633))
+- Simplify the TxPayload trait a little ([#638](https://github.com/paritytech/subxt/pull/638))
+- Remove unnecessary `async` ([#645](https://github.com/paritytech/subxt/pull/645))
+- Use 'sp_core::Hxxx' for all hash types ([#623](https://github.com/paritytech/subxt/pull/623))
 
 ### Fixed
 
-- Fix `history_depth` testing ([#662](https://github.com/pezkuwichain/subxt/pull/662))
-- Fix codegen for `codec::Compact` as type parameters ([#651](https://github.com/pezkuwichain/subxt/pull/651))
-- Support latest bizinikiwi release ([#653](https://github.com/pezkuwichain/subxt/pull/653))
+- Fix `history_depth` testing ([#662](https://github.com/paritytech/subxt/pull/662))
+- Fix codegen for `codec::Compact` as type parameters ([#651](https://github.com/paritytech/subxt/pull/651))
+- Support latest bizinikiwi release ([#653](https://github.com/paritytech/subxt/pull/653))
 
 
 ## [0.23.0] - 2022-08-11
 
-This is one of the most significant releases to date in Subxt, and carries with it a number of significant breaking changes, but in exchange, a number of significant improvements. The most significant PR is [#593](https://github.com/pezkuwichain/subxt/pull/593); the fundamental change that this makes is to separate creating a query/transaction/address from submitting it. This gives us flexibility when creating queries; they can be either dynamically or statically generated, but also flexibility in our client, enabling methods to be exposed for online or offline use.
+This is one of the most significant releases to date in Subxt, and carries with it a number of significant breaking changes, but in exchange, a number of significant improvements. The most significant PR is [#593](https://github.com/paritytech/subxt/pull/593); the fundamental change that this makes is to separate creating a query/transaction/address from submitting it. This gives us flexibility when creating queries; they can be either dynamically or statically generated, but also flexibility in our client, enabling methods to be exposed for online or offline use.
 
 The best place to look to get a feel for what's changed, aside from the documentation itself, is the `examples` folder. What follows are some examples of the changes you'll need to make, which all follow a similar pattern:
 
@@ -2022,21 +2022,21 @@ For more details about all of the changes, the full commit history since the las
 
 ### Added
 
-- Expose the extrinsic hash from TxProgress ([#614](https://github.com/pezkuwichain/subxt/pull/614))
-- Add support for `ws` in `subxt-cli` ([#579](https://github.com/pezkuwichain/subxt/pull/579))
-- Expose the SCALE encoded call data of an extrinsic ([#573](https://github.com/pezkuwichain/subxt/pull/573))
-- Validate absolute path for `substitute_type` ([#577](https://github.com/pezkuwichain/subxt/pull/577))
+- Expose the extrinsic hash from TxProgress ([#614](https://github.com/paritytech/subxt/pull/614))
+- Add support for `ws` in `subxt-cli` ([#579](https://github.com/paritytech/subxt/pull/579))
+- Expose the SCALE encoded call data of an extrinsic ([#573](https://github.com/paritytech/subxt/pull/573))
+- Validate absolute path for `substitute_type` ([#577](https://github.com/paritytech/subxt/pull/577))
 
 ### Changed
 
-- Rework Subxt API to support offline and dynamic transactions ([#593](https://github.com/pezkuwichain/subxt/pull/593))
-- Use scale-decode to help optimise event decoding ([#607](https://github.com/pezkuwichain/subxt/pull/607))
-- Decode raw events using scale_value and return the decoded Values, too ([#576](https://github.com/pezkuwichain/subxt/pull/576))
-- dual license ([#590](https://github.com/pezkuwichain/subxt/pull/590))
-- Don't hash constant values; only their types ([#587](https://github.com/pezkuwichain/subxt/pull/587))
-- metadata: Exclude `field::type_name` from metadata validation ([#595](https://github.com/pezkuwichain/subxt/pull/595))
-- Bump Swatinem/rust-cache from 1.4.0 to 2.0.0 ([#597](https://github.com/pezkuwichain/subxt/pull/597))
-- Update jsonrpsee requirement from 0.14.0 to 0.15.1 ([#603](https://github.com/pezkuwichain/subxt/pull/603))
+- Rework Subxt API to support offline and dynamic transactions ([#593](https://github.com/paritytech/subxt/pull/593))
+- Use scale-decode to help optimise event decoding ([#607](https://github.com/paritytech/subxt/pull/607))
+- Decode raw events using scale_value and return the decoded Values, too ([#576](https://github.com/paritytech/subxt/pull/576))
+- dual license ([#590](https://github.com/paritytech/subxt/pull/590))
+- Don't hash constant values; only their types ([#587](https://github.com/paritytech/subxt/pull/587))
+- metadata: Exclude `field::type_name` from metadata validation ([#595](https://github.com/paritytech/subxt/pull/595))
+- Bump Swatinem/rust-cache from 1.4.0 to 2.0.0 ([#597](https://github.com/paritytech/subxt/pull/597))
+- Update jsonrpsee requirement from 0.14.0 to 0.15.1 ([#603](https://github.com/paritytech/subxt/pull/603))
 
 
 ## [0.22.0] - 2022-06-20
@@ -2051,31 +2051,31 @@ bytes instead of the JSON format.
 
 ### Fixed
 
-- Handle `StorageEntry` empty keys ([#565](https://github.com/pezkuwichain/subxt/pull/565))
-- Fix documentation examples ([#568](https://github.com/pezkuwichain/subxt/pull/568))
-- Fix cargo clippy ([#548](https://github.com/pezkuwichain/subxt/pull/548))
-- fix: Find bizinikiwi port on different log lines ([#536](https://github.com/pezkuwichain/subxt/pull/536))
+- Handle `StorageEntry` empty keys ([#565](https://github.com/paritytech/subxt/pull/565))
+- Fix documentation examples ([#568](https://github.com/paritytech/subxt/pull/568))
+- Fix cargo clippy ([#548](https://github.com/paritytech/subxt/pull/548))
+- fix: Find bizinikiwi port on different log lines ([#536](https://github.com/paritytech/subxt/pull/536))
 
 ### Added
 
-- Followup test for checking propagated documentation ([#514](https://github.com/pezkuwichain/subxt/pull/514))
-- feat: refactor signing in order to more easily be able to dryrun ([#547](https://github.com/pezkuwichain/subxt/pull/547))
-- Add subxt documentation ([#546](https://github.com/pezkuwichain/subxt/pull/546))
-- Add ability to iterate over N map storage keys ([#537](https://github.com/pezkuwichain/subxt/pull/537))
-- Subscribe to Runtime upgrades for proper extrinsic construction ([#513](https://github.com/pezkuwichain/subxt/pull/513))
+- Followup test for checking propagated documentation ([#514](https://github.com/paritytech/subxt/pull/514))
+- feat: refactor signing in order to more easily be able to dryrun ([#547](https://github.com/paritytech/subxt/pull/547))
+- Add subxt documentation ([#546](https://github.com/paritytech/subxt/pull/546))
+- Add ability to iterate over N map storage keys ([#537](https://github.com/paritytech/subxt/pull/537))
+- Subscribe to Runtime upgrades for proper extrinsic construction ([#513](https://github.com/paritytech/subxt/pull/513))
 
 ### Changed
-- Move test crates into a "testing" folder and add a ui (trybuild) test and ui-test helpers ([#567](https://github.com/pezkuwichain/subxt/pull/567))
-- Update jsonrpsee requirement from 0.13.0 to 0.14.0 ([#566](https://github.com/pezkuwichain/subxt/pull/566))
-- Make storage futures only borrow client, not self, for better ergonomics ([#561](https://github.com/pezkuwichain/subxt/pull/561))
-- Bump actions/checkout from 2 to 3 ([#557](https://github.com/pezkuwichain/subxt/pull/557))
-- Deny unused crate dependencies ([#549](https://github.com/pezkuwichain/subxt/pull/549))
-- Implement `Clone` for the generated `RuntimeApi` ([#544](https://github.com/pezkuwichain/subxt/pull/544))
-- Update color-eyre requirement from 0.5.11 to 0.6.1 ([#540](https://github.com/pezkuwichain/subxt/pull/540))
-- Update jsonrpsee requirement from 0.12.0 to 0.13.0 ([#541](https://github.com/pezkuwichain/subxt/pull/541))
-- Update artifacts and pezkuwi.rs and change CLI to default bytes ([#533](https://github.com/pezkuwichain/subxt/pull/533))
-- Replace `log` with `tracing` and record extrinsic info ([#535](https://github.com/pezkuwichain/subxt/pull/535))
-- Bump jsonrpsee ([#528](https://github.com/pezkuwichain/subxt/pull/528))
+- Move test crates into a "testing" folder and add a ui (trybuild) test and ui-test helpers ([#567](https://github.com/paritytech/subxt/pull/567))
+- Update jsonrpsee requirement from 0.13.0 to 0.14.0 ([#566](https://github.com/paritytech/subxt/pull/566))
+- Make storage futures only borrow client, not self, for better ergonomics ([#561](https://github.com/paritytech/subxt/pull/561))
+- Bump actions/checkout from 2 to 3 ([#557](https://github.com/paritytech/subxt/pull/557))
+- Deny unused crate dependencies ([#549](https://github.com/paritytech/subxt/pull/549))
+- Implement `Clone` for the generated `RuntimeApi` ([#544](https://github.com/paritytech/subxt/pull/544))
+- Update color-eyre requirement from 0.5.11 to 0.6.1 ([#540](https://github.com/paritytech/subxt/pull/540))
+- Update jsonrpsee requirement from 0.12.0 to 0.13.0 ([#541](https://github.com/paritytech/subxt/pull/541))
+- Update artifacts and pezkuwi.rs and change CLI to default bytes ([#533](https://github.com/paritytech/subxt/pull/533))
+- Replace `log` with `tracing` and record extrinsic info ([#535](https://github.com/paritytech/subxt/pull/535))
+- Bump jsonrpsee ([#528](https://github.com/paritytech/subxt/pull/528))
 
 
 ## [0.21.0] - 2022-05-02
@@ -2098,28 +2098,28 @@ environment. This restriction is removed via moving the integration tests to a d
 The number of dependencies is reduced for individual subxt crates.
 
 ### Fixed
-- test-runtime: Add exponential backoff ([#518](https://github.com/pezkuwichain/subxt/pull/518))
+- test-runtime: Add exponential backoff ([#518](https://github.com/paritytech/subxt/pull/518))
 
 ### Added
 
-- Add custom derives for specific generated types ([#520](https://github.com/pezkuwichain/subxt/pull/520))
-- Static Metadata Validation ([#478](https://github.com/pezkuwichain/subxt/pull/478))
-- Propagate documentation to runtime API ([#511](https://github.com/pezkuwichain/subxt/pull/511))
-- Add `tidext` in real world usage ([#508](https://github.com/pezkuwichain/subxt/pull/508))
-- Add system health rpc ([#510](https://github.com/pezkuwichain/subxt/pull/510))
+- Add custom derives for specific generated types ([#520](https://github.com/paritytech/subxt/pull/520))
+- Static Metadata Validation ([#478](https://github.com/paritytech/subxt/pull/478))
+- Propagate documentation to runtime API ([#511](https://github.com/paritytech/subxt/pull/511))
+- Add `tidext` in real world usage ([#508](https://github.com/paritytech/subxt/pull/508))
+- Add system health rpc ([#510](https://github.com/paritytech/subxt/pull/510))
 
 ### Changed
-- Put integration tests behind feature flag ([#515](https://github.com/pezkuwichain/subxt/pull/515))
-- Use minimum amount of dependencies for crates ([#524](https://github.com/pezkuwichain/subxt/pull/524))
-- Export `BaseExtrinsicParams` ([#516](https://github.com/pezkuwichain/subxt/pull/516))
-- bump jsonrpsee to v0.10.1 ([#504](https://github.com/pezkuwichain/subxt/pull/504))
+- Put integration tests behind feature flag ([#515](https://github.com/paritytech/subxt/pull/515))
+- Use minimum amount of dependencies for crates ([#524](https://github.com/paritytech/subxt/pull/524))
+- Export `BaseExtrinsicParams` ([#516](https://github.com/paritytech/subxt/pull/516))
+- bump jsonrpsee to v0.10.1 ([#504](https://github.com/paritytech/subxt/pull/504))
 
 
 ## [0.20.0] - 2022-04-06
 
 The most significant change in this release is how we create and sign extrinsics, and how we manage the
-"additional" and "extra" data that is attached to them. See https://github.com/pezkuwichain/subxt/issues/477, and the
-associated PR https://github.com/pezkuwichain/subxt/pull/490 for a more detailed look at the code changes.
+"additional" and "extra" data that is attached to them. See https://github.com/paritytech/subxt/issues/477, and the
+associated PR https://github.com/paritytech/subxt/pull/490 for a more detailed look at the code changes.
 
 If you're targeting a node with compatible additional and extra transaction data to Bizinikiwi or Pezkuwi, the main
 change you'll have to make is to import and use `subxt::PezkuwiExtrinsicParams` or `subxt::BizinikiwiExtrinsicParams`
@@ -2136,78 +2136,78 @@ is to make it easier to customise this for your own chains, and provide a simple
 
 ### Fixed
 
-- Test utils: parse port from bizinikiwi binary output to avoid races ([#501](https://github.com/pezkuwichain/subxt/pull/501))
-- Rely on the kernel for port allocation ([#498](https://github.com/pezkuwichain/subxt/pull/498))
+- Test utils: parse port from bizinikiwi binary output to avoid races ([#501](https://github.com/paritytech/subxt/pull/501))
+- Rely on the kernel for port allocation ([#498](https://github.com/paritytech/subxt/pull/498))
 
 ### Changed
 
-- Export ModuleError for downstream matching ([#499](https://github.com/pezkuwichain/subxt/pull/499))
-- Bump jsonrpsee to v0.9.0 ([#496](https://github.com/pezkuwichain/subxt/pull/496))
-- Use tokio instead of async-std in tests/examples ([#495](https://github.com/pezkuwichain/subxt/pull/495))
-- Read constants from metadata at runtime ([#494](https://github.com/pezkuwichain/subxt/pull/494))
-- Handle `sp_runtime::ModuleError` bizinikiwi updates ([#492](https://github.com/pezkuwichain/subxt/pull/492))
-- Simplify creating and signing extrinsics ([#490](https://github.com/pezkuwichain/subxt/pull/490))
-- Add `dev_getBlockStats` RPC ([#489](https://github.com/pezkuwichain/subxt/pull/489))
-- scripts: Hardcode github subxt pull link for changelog consistency ([#482](https://github.com/pezkuwichain/subxt/pull/482))
+- Export ModuleError for downstream matching ([#499](https://github.com/paritytech/subxt/pull/499))
+- Bump jsonrpsee to v0.9.0 ([#496](https://github.com/paritytech/subxt/pull/496))
+- Use tokio instead of async-std in tests/examples ([#495](https://github.com/paritytech/subxt/pull/495))
+- Read constants from metadata at runtime ([#494](https://github.com/paritytech/subxt/pull/494))
+- Handle `sp_runtime::ModuleError` bizinikiwi updates ([#492](https://github.com/paritytech/subxt/pull/492))
+- Simplify creating and signing extrinsics ([#490](https://github.com/paritytech/subxt/pull/490))
+- Add `dev_getBlockStats` RPC ([#489](https://github.com/paritytech/subxt/pull/489))
+- scripts: Hardcode github subxt pull link for changelog consistency ([#482](https://github.com/paritytech/subxt/pull/482))
 
 
 ## [0.19.0] - 2022-03-21
 
 ### Changed
 
-- Return events from blocks skipped over during Finalization, too ([#473](https://github.com/pezkuwichain/subxt/pull/473))
-- Use RPC call to get account nonce ([#476](https://github.com/pezkuwichain/subxt/pull/476))
-- Add script to generate release changelog based on commits ([#465](https://github.com/pezkuwichain/subxt/pull/465))
-- README updates ([#472](https://github.com/pezkuwichain/subxt/pull/472))
-- Make EventSubscription and FilterEvents Send-able ([#471](https://github.com/pezkuwichain/subxt/pull/471))
+- Return events from blocks skipped over during Finalization, too ([#473](https://github.com/paritytech/subxt/pull/473))
+- Use RPC call to get account nonce ([#476](https://github.com/paritytech/subxt/pull/476))
+- Add script to generate release changelog based on commits ([#465](https://github.com/paritytech/subxt/pull/465))
+- README updates ([#472](https://github.com/paritytech/subxt/pull/472))
+- Make EventSubscription and FilterEvents Send-able ([#471](https://github.com/paritytech/subxt/pull/471))
 
 
 ## [0.18.1] - 2022-03-04
 
 # Fixed
 
-- Remove unused `sp_version` dependency to fix duplicate `parity-scale-codec` deps ([#466](https://github.com/pezkuwichain/subxt/pull/466))
+- Remove unused `sp_version` dependency to fix duplicate `parity-scale-codec` deps ([#466](https://github.com/paritytech/subxt/pull/466))
 
 
 ## [0.18.0] - 2022-03-02
 
 ### Added
 
-- Expose method to fetch nonce via `Client` ([#451](https://github.com/pezkuwichain/subxt/pull/451))
+- Expose method to fetch nonce via `Client` ([#451](https://github.com/paritytech/subxt/pull/451))
 
 ### Changed
 
-- Reference key storage api ([#447](https://github.com/pezkuwichain/subxt/pull/447))
-- Filter one or multiple events by type from an EventSubscription ([#461](https://github.com/pezkuwichain/subxt/pull/461))
-- New Event Subscription API ([#442](https://github.com/pezkuwichain/subxt/pull/442))
-- Distinct handling for N fields + 1 hasher vs N fields + N hashers ([#458](https://github.com/pezkuwichain/subxt/pull/458))
-- Update scale-info and parity-scale-codec requirements ([#462](https://github.com/pezkuwichain/subxt/pull/462))
-- Substitute BTreeMap/BTreeSet generated types for Vec ([#459](https://github.com/pezkuwichain/subxt/pull/459))
-- Obtain DispatchError::Module info dynamically ([#453](https://github.com/pezkuwichain/subxt/pull/453))
-- Add hardcoded override to ElectionScore ([#455](https://github.com/pezkuwichain/subxt/pull/455))
-- DispatchError::Module is now a tuple variant in latest Bizinikiwi ([#439](https://github.com/pezkuwichain/subxt/pull/439))
-- Fix flaky event subscription test ([#450](https://github.com/pezkuwichain/subxt/pull/450))
-- Improve documentation ([#449](https://github.com/pezkuwichain/subxt/pull/449))
-- Export `codegen::TypeGenerator` ([#444](https://github.com/pezkuwichain/subxt/pull/444))
-- Fix conversion of `Call` struct names to UpperCamelCase ([#441](https://github.com/pezkuwichain/subxt/pull/441))
-- Update release documentation with dry-run ([#435](https://github.com/pezkuwichain/subxt/pull/435))
+- Reference key storage api ([#447](https://github.com/paritytech/subxt/pull/447))
+- Filter one or multiple events by type from an EventSubscription ([#461](https://github.com/paritytech/subxt/pull/461))
+- New Event Subscription API ([#442](https://github.com/paritytech/subxt/pull/442))
+- Distinct handling for N fields + 1 hasher vs N fields + N hashers ([#458](https://github.com/paritytech/subxt/pull/458))
+- Update scale-info and parity-scale-codec requirements ([#462](https://github.com/paritytech/subxt/pull/462))
+- Substitute BTreeMap/BTreeSet generated types for Vec ([#459](https://github.com/paritytech/subxt/pull/459))
+- Obtain DispatchError::Module info dynamically ([#453](https://github.com/paritytech/subxt/pull/453))
+- Add hardcoded override to ElectionScore ([#455](https://github.com/paritytech/subxt/pull/455))
+- DispatchError::Module is now a tuple variant in latest Bizinikiwi ([#439](https://github.com/paritytech/subxt/pull/439))
+- Fix flaky event subscription test ([#450](https://github.com/paritytech/subxt/pull/450))
+- Improve documentation ([#449](https://github.com/paritytech/subxt/pull/449))
+- Export `codegen::TypeGenerator` ([#444](https://github.com/paritytech/subxt/pull/444))
+- Fix conversion of `Call` struct names to UpperCamelCase ([#441](https://github.com/paritytech/subxt/pull/441))
+- Update release documentation with dry-run ([#435](https://github.com/paritytech/subxt/pull/435))
 
 
 ## [0.17.0] - 2022-02-04
 
 ### Added
 
-- introduce jsonrpsee client abstraction + kill HTTP support. ([#341](https://github.com/pezkuwichain/subxt/pull/341))
-- Get event context on EventSubscription ([#423](https://github.com/pezkuwichain/subxt/pull/423))
+- introduce jsonrpsee client abstraction + kill HTTP support. ([#341](https://github.com/paritytech/subxt/pull/341))
+- Get event context on EventSubscription ([#423](https://github.com/paritytech/subxt/pull/423))
 
 ### Changed
 
-- Add more tests for events.rs/decode_and_consume_type ([#430](https://github.com/pezkuwichain/subxt/pull/430))
-- Update bizinikiwi dependencies ([#429](https://github.com/pezkuwichain/subxt/pull/429))
-- export RuntimeError struct ([#427](https://github.com/pezkuwichain/subxt/pull/427))
-- remove unused PalletError struct ([#425](https://github.com/pezkuwichain/subxt/pull/425))
-- Move Subxt crate into a subfolder ([#424](https://github.com/pezkuwichain/subxt/pull/424))
-- Add release checklist ([#418](https://github.com/pezkuwichain/subxt/pull/418))
+- Add more tests for events.rs/decode_and_consume_type ([#430](https://github.com/paritytech/subxt/pull/430))
+- Update bizinikiwi dependencies ([#429](https://github.com/paritytech/subxt/pull/429))
+- export RuntimeError struct ([#427](https://github.com/paritytech/subxt/pull/427))
+- remove unused PalletError struct ([#425](https://github.com/paritytech/subxt/pull/425))
+- Move Subxt crate into a subfolder ([#424](https://github.com/paritytech/subxt/pull/424))
+- Add release checklist ([#418](https://github.com/paritytech/subxt/pull/418))
 
 
 ## [0.16.0] - 2022-02-01
@@ -2216,182 +2216,182 @@ is to make it easier to customise this for your own chains, and provide a simple
 
 ### Changed
 
-- Log debug message for JSON-RPC response ([#415](https://github.com/pezkuwichain/subxt/pull/415))
-- Only convert struct names to camel case for Call variant structs ([#412](https://github.com/pezkuwichain/subxt/pull/412))
-- Parameterize AccountData ([#409](https://github.com/pezkuwichain/subxt/pull/409))
-- Allow decoding Events containing BitVecs ([#408](https://github.com/pezkuwichain/subxt/pull/408))
-- Custom derive for cli ([#407](https://github.com/pezkuwichain/subxt/pull/407))
-- make storage-n-map fields public too ([#404](https://github.com/pezkuwichain/subxt/pull/404))
-- add constants api to codegen ([#402](https://github.com/pezkuwichain/subxt/pull/402))
-- Expose transaction::TransactionProgress as public ([#401](https://github.com/pezkuwichain/subxt/pull/401))
-- add interbtc-clients to real world usage section ([#397](https://github.com/pezkuwichain/subxt/pull/397))
-- Make own version of RuntimeVersion to avoid mismatches ([#395](https://github.com/pezkuwichain/subxt/pull/395))
-- Use the generated DispatchError instead of the hardcoded Bizinikiwi one ([#394](https://github.com/pezkuwichain/subxt/pull/394))
-- Remove bounds on Config trait that aren't strictly necessary ([#389](https://github.com/pezkuwichain/subxt/pull/389))
-- add crunch to readme ([#388](https://github.com/pezkuwichain/subxt/pull/388))
-- fix remote example ([#386](https://github.com/pezkuwichain/subxt/pull/386))
-- fetch system chain, name and version ([#385](https://github.com/pezkuwichain/subxt/pull/385))
-- Fix compact event field decoding ([#384](https://github.com/pezkuwichain/subxt/pull/384))
-- fix: use index override when decoding enums in events ([#382](https://github.com/pezkuwichain/subxt/pull/382))
-- Update to jsonrpsee 0.7 and impl Stream on TransactionProgress ([#380](https://github.com/pezkuwichain/subxt/pull/380))
-- Add links to projects using subxt ([#376](https://github.com/pezkuwichain/subxt/pull/376))
-- Use released bizinikiwi dependencies ([#375](https://github.com/pezkuwichain/subxt/pull/375))
-- Configurable Config and Extra types ([#373](https://github.com/pezkuwichain/subxt/pull/373))
-- Implement pre_dispatch for SignedExtensions ([#370](https://github.com/pezkuwichain/subxt/pull/370))
-- Export TransactionEvents ([#363](https://github.com/pezkuwichain/subxt/pull/363))
-- Rebuild test-runtime if bizinikiwi binary is updated ([#362](https://github.com/pezkuwichain/subxt/pull/362))
-- Expand the subscribe_and_watch example ([#361](https://github.com/pezkuwichain/subxt/pull/361))
-- Add TooManyConsumers variant to track latest sp-runtime addition ([#360](https://github.com/pezkuwichain/subxt/pull/360))
-- Implement new API for sign_and_submit_then_watch ([#354](https://github.com/pezkuwichain/subxt/pull/354))
-- Simpler dependencies ([#353](https://github.com/pezkuwichain/subxt/pull/353))
-- Refactor type generation, remove code duplication ([#352](https://github.com/pezkuwichain/subxt/pull/352))
-- Make system properties an arbitrary JSON object, plus CI fixes ([#349](https://github.com/pezkuwichain/subxt/pull/349))
-- Fix a couple of CI niggles ([#344](https://github.com/pezkuwichain/subxt/pull/344))
-- Add timestamp pallet test ([#340](https://github.com/pezkuwichain/subxt/pull/340))
-- Add nightly CI check against latest bizinikiwi. ([#335](https://github.com/pezkuwichain/subxt/pull/335))
-- Ensure metadata is in sync with running node during tests ([#333](https://github.com/pezkuwichain/subxt/pull/333))
-- Update to jsonrpsee 0.5.1 ([#332](https://github.com/pezkuwichain/subxt/pull/332))
-- Update bizinikiwi and hardcoded default ChargeAssetTxPayment extension ([#330](https://github.com/pezkuwichain/subxt/pull/330))
-- codegen: fix compact unnamed fields ([#327](https://github.com/pezkuwichain/subxt/pull/327))
-- Check docs and run clippy on PRs ([#326](https://github.com/pezkuwichain/subxt/pull/326))
-- Additional parameters for SignedExtra ([#322](https://github.com/pezkuwichain/subxt/pull/322))
-- fix: also processess initialize and finalize events in event subscription ([#321](https://github.com/pezkuwichain/subxt/pull/321))
-- Release initial versions of subxt-codegen and subxt-cli ([#320](https://github.com/pezkuwichain/subxt/pull/320))
-- Add some basic usage docs to README. ([#319](https://github.com/pezkuwichain/subxt/pull/319))
-- Update jsonrpsee ([#317](https://github.com/pezkuwichain/subxt/pull/317))
-- Add missing cargo metadata fields for new crates ([#311](https://github.com/pezkuwichain/subxt/pull/311))
-- fix: keep processing a block's events after encountering a dispatch error ([#310](https://github.com/pezkuwichain/subxt/pull/310))
-- Codegen: enum variant indices ([#308](https://github.com/pezkuwichain/subxt/pull/308))
-- fix extrinsics retracted ([#307](https://github.com/pezkuwichain/subxt/pull/307))
-- Add utility pallet tests ([#300](https://github.com/pezkuwichain/subxt/pull/300))
-- fix metadata constants ([#299](https://github.com/pezkuwichain/subxt/pull/299))
-- Generate runtime API from metadata ([#294](https://github.com/pezkuwichain/subxt/pull/294))
-- Add NextKeys and QueuedKeys for session module ([#291](https://github.com/pezkuwichain/subxt/pull/291))
-- deps: update jsonrpsee 0.3.0 ([#289](https://github.com/pezkuwichain/subxt/pull/289))
-- deps: update jsonrpsee 0.2.0 ([#285](https://github.com/pezkuwichain/subxt/pull/285))
-- deps: Reorg the order of deps ([#284](https://github.com/pezkuwichain/subxt/pull/284))
-- Expose the rpc client in Client ([#267](https://github.com/pezkuwichain/subxt/pull/267))
-- update jsonrpsee to 0.2.0-alpha.6 ([#266](https://github.com/pezkuwichain/subxt/pull/266))
-- Remove funty pin, upgrade codec ([#265](https://github.com/pezkuwichain/subxt/pull/265))
-- Use async-trait ([#264](https://github.com/pezkuwichain/subxt/pull/264))
-- [jsonrpsee http client]: support tokio1 & tokio02. ([#263](https://github.com/pezkuwichain/subxt/pull/263))
-- impl `From<Arc<WsClient>>` and `From<Arc<HttpClient>>` ([#257](https://github.com/pezkuwichain/subxt/pull/257))
-- update jsonrpsee ([#251](https://github.com/pezkuwichain/subxt/pull/251))
-- return none if subscription returns early ([#250](https://github.com/pezkuwichain/subxt/pull/250))
+- Log debug message for JSON-RPC response ([#415](https://github.com/paritytech/subxt/pull/415))
+- Only convert struct names to camel case for Call variant structs ([#412](https://github.com/paritytech/subxt/pull/412))
+- Parameterize AccountData ([#409](https://github.com/paritytech/subxt/pull/409))
+- Allow decoding Events containing BitVecs ([#408](https://github.com/paritytech/subxt/pull/408))
+- Custom derive for cli ([#407](https://github.com/paritytech/subxt/pull/407))
+- make storage-n-map fields public too ([#404](https://github.com/paritytech/subxt/pull/404))
+- add constants api to codegen ([#402](https://github.com/paritytech/subxt/pull/402))
+- Expose transaction::TransactionProgress as public ([#401](https://github.com/paritytech/subxt/pull/401))
+- add interbtc-clients to real world usage section ([#397](https://github.com/paritytech/subxt/pull/397))
+- Make own version of RuntimeVersion to avoid mismatches ([#395](https://github.com/paritytech/subxt/pull/395))
+- Use the generated DispatchError instead of the hardcoded Bizinikiwi one ([#394](https://github.com/paritytech/subxt/pull/394))
+- Remove bounds on Config trait that aren't strictly necessary ([#389](https://github.com/paritytech/subxt/pull/389))
+- add crunch to readme ([#388](https://github.com/paritytech/subxt/pull/388))
+- fix remote example ([#386](https://github.com/paritytech/subxt/pull/386))
+- fetch system chain, name and version ([#385](https://github.com/paritytech/subxt/pull/385))
+- Fix compact event field decoding ([#384](https://github.com/paritytech/subxt/pull/384))
+- fix: use index override when decoding enums in events ([#382](https://github.com/paritytech/subxt/pull/382))
+- Update to jsonrpsee 0.7 and impl Stream on TransactionProgress ([#380](https://github.com/paritytech/subxt/pull/380))
+- Add links to projects using subxt ([#376](https://github.com/paritytech/subxt/pull/376))
+- Use released bizinikiwi dependencies ([#375](https://github.com/paritytech/subxt/pull/375))
+- Configurable Config and Extra types ([#373](https://github.com/paritytech/subxt/pull/373))
+- Implement pre_dispatch for SignedExtensions ([#370](https://github.com/paritytech/subxt/pull/370))
+- Export TransactionEvents ([#363](https://github.com/paritytech/subxt/pull/363))
+- Rebuild test-runtime if bizinikiwi binary is updated ([#362](https://github.com/paritytech/subxt/pull/362))
+- Expand the subscribe_and_watch example ([#361](https://github.com/paritytech/subxt/pull/361))
+- Add TooManyConsumers variant to track latest sp-runtime addition ([#360](https://github.com/paritytech/subxt/pull/360))
+- Implement new API for sign_and_submit_then_watch ([#354](https://github.com/paritytech/subxt/pull/354))
+- Simpler dependencies ([#353](https://github.com/paritytech/subxt/pull/353))
+- Refactor type generation, remove code duplication ([#352](https://github.com/paritytech/subxt/pull/352))
+- Make system properties an arbitrary JSON object, plus CI fixes ([#349](https://github.com/paritytech/subxt/pull/349))
+- Fix a couple of CI niggles ([#344](https://github.com/paritytech/subxt/pull/344))
+- Add timestamp pallet test ([#340](https://github.com/paritytech/subxt/pull/340))
+- Add nightly CI check against latest bizinikiwi. ([#335](https://github.com/paritytech/subxt/pull/335))
+- Ensure metadata is in sync with running node during tests ([#333](https://github.com/paritytech/subxt/pull/333))
+- Update to jsonrpsee 0.5.1 ([#332](https://github.com/paritytech/subxt/pull/332))
+- Update bizinikiwi and hardcoded default ChargeAssetTxPayment extension ([#330](https://github.com/paritytech/subxt/pull/330))
+- codegen: fix compact unnamed fields ([#327](https://github.com/paritytech/subxt/pull/327))
+- Check docs and run clippy on PRs ([#326](https://github.com/paritytech/subxt/pull/326))
+- Additional parameters for SignedExtra ([#322](https://github.com/paritytech/subxt/pull/322))
+- fix: also processess initialize and finalize events in event subscription ([#321](https://github.com/paritytech/subxt/pull/321))
+- Release initial versions of subxt-codegen and subxt-cli ([#320](https://github.com/paritytech/subxt/pull/320))
+- Add some basic usage docs to README. ([#319](https://github.com/paritytech/subxt/pull/319))
+- Update jsonrpsee ([#317](https://github.com/paritytech/subxt/pull/317))
+- Add missing cargo metadata fields for new crates ([#311](https://github.com/paritytech/subxt/pull/311))
+- fix: keep processing a block's events after encountering a dispatch error ([#310](https://github.com/paritytech/subxt/pull/310))
+- Codegen: enum variant indices ([#308](https://github.com/paritytech/subxt/pull/308))
+- fix extrinsics retracted ([#307](https://github.com/paritytech/subxt/pull/307))
+- Add utility pallet tests ([#300](https://github.com/paritytech/subxt/pull/300))
+- fix metadata constants ([#299](https://github.com/paritytech/subxt/pull/299))
+- Generate runtime API from metadata ([#294](https://github.com/paritytech/subxt/pull/294))
+- Add NextKeys and QueuedKeys for session module ([#291](https://github.com/paritytech/subxt/pull/291))
+- deps: update jsonrpsee 0.3.0 ([#289](https://github.com/paritytech/subxt/pull/289))
+- deps: update jsonrpsee 0.2.0 ([#285](https://github.com/paritytech/subxt/pull/285))
+- deps: Reorg the order of deps ([#284](https://github.com/paritytech/subxt/pull/284))
+- Expose the rpc client in Client ([#267](https://github.com/paritytech/subxt/pull/267))
+- update jsonrpsee to 0.2.0-alpha.6 ([#266](https://github.com/paritytech/subxt/pull/266))
+- Remove funty pin, upgrade codec ([#265](https://github.com/paritytech/subxt/pull/265))
+- Use async-trait ([#264](https://github.com/paritytech/subxt/pull/264))
+- [jsonrpsee http client]: support tokio1 & tokio02. ([#263](https://github.com/paritytech/subxt/pull/263))
+- impl `From<Arc<WsClient>>` and `From<Arc<HttpClient>>` ([#257](https://github.com/paritytech/subxt/pull/257))
+- update jsonrpsee ([#251](https://github.com/paritytech/subxt/pull/251))
+- return none if subscription returns early ([#250](https://github.com/paritytech/subxt/pull/250))
 
 
 ## [0.15.0] - 2021-03-15
 
 ### Added
-- implement variant of subscription that returns finalized storage changes - [#237](https://github.com/pezkuwichain/subxt/pull/237)
-- implement session handling for unsubscribe in subxt-client - [#242](https://github.com/pezkuwichain/subxt/pull/242)
+- implement variant of subscription that returns finalized storage changes - [#237](https://github.com/paritytech/subxt/pull/237)
+- implement session handling for unsubscribe in subxt-client - [#242](https://github.com/paritytech/subxt/pull/242)
 
 ### Changed
-- update jsonrpsee [#251](https://github.com/pezkuwichain/subxt/pull/251)
-- return none if subscription returns early [#250](https://github.com/pezkuwichain/subxt/pull/250)
-- export ModuleError and RuntimeError for downstream usage - [#246](https://github.com/pezkuwichain/subxt/pull/246)
-- rpc client methods should be public for downstream usage - [#240](https://github.com/pezkuwichain/subxt/pull/240)
-- re-export WasmExecutionMethod for downstream usage - [#239](https://github.com/pezkuwichain/subxt/pull/239)
-- integration with jsonrpsee v2 - [#214](https://github.com/pezkuwichain/subxt/pull/214)
-- expose wasm execution method on subxt client config - [#230](https://github.com/pezkuwichain/subxt/pull/230)
-- Add hooks to register event types for decoding - [#227](https://github.com/pezkuwichain/subxt/pull/227)
-- Bizinikiwi 3.0 - [#232](https://github.com/pezkuwichain/subxt/pull/232)
+- update jsonrpsee [#251](https://github.com/paritytech/subxt/pull/251)
+- return none if subscription returns early [#250](https://github.com/paritytech/subxt/pull/250)
+- export ModuleError and RuntimeError for downstream usage - [#246](https://github.com/paritytech/subxt/pull/246)
+- rpc client methods should be public for downstream usage - [#240](https://github.com/paritytech/subxt/pull/240)
+- re-export WasmExecutionMethod for downstream usage - [#239](https://github.com/paritytech/subxt/pull/239)
+- integration with jsonrpsee v2 - [#214](https://github.com/paritytech/subxt/pull/214)
+- expose wasm execution method on subxt client config - [#230](https://github.com/paritytech/subxt/pull/230)
+- Add hooks to register event types for decoding - [#227](https://github.com/paritytech/subxt/pull/227)
+- Bizinikiwi 3.0 - [#232](https://github.com/paritytech/subxt/pull/232)
 
 
 ## [0.14.0] - 2021-02-05
 
-- Refactor event type decoding and declaration [#221](https://github.com/pezkuwichain/subxt/pull/221)
-- Add Balances Locks [#197](https://github.com/pezkuwichain/subxt/pull/197)
-- Add event Phase::Initialization [#215](https://github.com/pezkuwichain/subxt/pull/215)
-- Make type explicit [#217](https://github.com/pezkuwichain/subxt/pull/217)
-- Upgrade dependencies, bumps bizinikiwi to 2.0.1 [#219](https://github.com/pezkuwichain/subxt/pull/219)
-- Export extra types [#212](https://github.com/pezkuwichain/subxt/pull/212)
-- Enable retrieval of constants from rutnime metadata [#207](https://github.com/pezkuwichain/subxt/pull/207)
-- register type sizes for u64 and u128 [#200](https://github.com/pezkuwichain/subxt/pull/200)
-- Remove some bizinikiwi dependencies to improve compile time [#194](https://github.com/pezkuwichain/subxt/pull/194)
-- propagate 'RuntimeError's to 'decode_raw_bytes' caller [#189](https://github.com/pezkuwichain/subxt/pull/189)
-- Derive `Clone` for `PairSigner` [#184](https://github.com/pezkuwichain/subxt/pull/184)
+- Refactor event type decoding and declaration [#221](https://github.com/paritytech/subxt/pull/221)
+- Add Balances Locks [#197](https://github.com/paritytech/subxt/pull/197)
+- Add event Phase::Initialization [#215](https://github.com/paritytech/subxt/pull/215)
+- Make type explicit [#217](https://github.com/paritytech/subxt/pull/217)
+- Upgrade dependencies, bumps bizinikiwi to 2.0.1 [#219](https://github.com/paritytech/subxt/pull/219)
+- Export extra types [#212](https://github.com/paritytech/subxt/pull/212)
+- Enable retrieval of constants from rutnime metadata [#207](https://github.com/paritytech/subxt/pull/207)
+- register type sizes for u64 and u128 [#200](https://github.com/paritytech/subxt/pull/200)
+- Remove some bizinikiwi dependencies to improve compile time [#194](https://github.com/paritytech/subxt/pull/194)
+- propagate 'RuntimeError's to 'decode_raw_bytes' caller [#189](https://github.com/paritytech/subxt/pull/189)
+- Derive `Clone` for `PairSigner` [#184](https://github.com/paritytech/subxt/pull/184)
 
 
 ## [0.13.0]
 
-- Make the contract call extrinsic work [#165](https://github.com/pezkuwichain/subxt/pull/165)
-- Update to Bizinikiwi 2.0.0 [#173](https://github.com/pezkuwichain/subxt/pull/173)
-- Display RawEvent data in hex [#168](https://github.com/pezkuwichain/subxt/pull/168)
-- Add SudoUncheckedWeightCall [#167](https://github.com/pezkuwichain/subxt/pull/167)
-- Add Add SetCodeWithoutChecksCall [#166](https://github.com/pezkuwichain/subxt/pull/166)
-- Improve contracts pallet tests [#163](https://github.com/pezkuwichain/subxt/pull/163)
-- Make Metadata types public [#162](https://github.com/pezkuwichain/subxt/pull/162)
-- Fix option decoding and add basic sanity test [#161](https://github.com/pezkuwichain/subxt/pull/161)
-- Add staking support [#160](https://github.com/pezkuwichain/subxt/pull/161)
-- Decode option event arg [#158](https://github.com/pezkuwichain/subxt/pull/158)
-- Remove unnecessary Sync bound [#172](https://github.com/pezkuwichain/subxt/pull/172)
+- Make the contract call extrinsic work [#165](https://github.com/paritytech/subxt/pull/165)
+- Update to Bizinikiwi 2.0.0 [#173](https://github.com/paritytech/subxt/pull/173)
+- Display RawEvent data in hex [#168](https://github.com/paritytech/subxt/pull/168)
+- Add SudoUncheckedWeightCall [#167](https://github.com/paritytech/subxt/pull/167)
+- Add Add SetCodeWithoutChecksCall [#166](https://github.com/paritytech/subxt/pull/166)
+- Improve contracts pallet tests [#163](https://github.com/paritytech/subxt/pull/163)
+- Make Metadata types public [#162](https://github.com/paritytech/subxt/pull/162)
+- Fix option decoding and add basic sanity test [#161](https://github.com/paritytech/subxt/pull/161)
+- Add staking support [#160](https://github.com/paritytech/subxt/pull/161)
+- Decode option event arg [#158](https://github.com/paritytech/subxt/pull/158)
+- Remove unnecessary Sync bound [#172](https://github.com/paritytech/subxt/pull/172)
 
 
 ## [0.12.0]
 
-- Only return an error if the extrinsic failed. [#156](https://github.com/pezkuwichain/subxt/pull/156)
-- Update to rc6. [#155](https://github.com/pezkuwichain/subxt/pull/155)
-- Different assert. [#153](https://github.com/pezkuwichain/subxt/pull/153)
-- Add a method to fetch an unhashed key, close #100 [#152](https://github.com/pezkuwichain/subxt/pull/152)
-- Fix port number. [#151](https://github.com/pezkuwichain/subxt/pull/151)
-- Implement the `concat` in `twox_64_concat` [#150](https://github.com/pezkuwichain/subxt/pull/150)
-- Storage map iter [#148](https://github.com/pezkuwichain/subxt/pull/148)
+- Only return an error if the extrinsic failed. [#156](https://github.com/paritytech/subxt/pull/156)
+- Update to rc6. [#155](https://github.com/paritytech/subxt/pull/155)
+- Different assert. [#153](https://github.com/paritytech/subxt/pull/153)
+- Add a method to fetch an unhashed key, close #100 [#152](https://github.com/paritytech/subxt/pull/152)
+- Fix port number. [#151](https://github.com/paritytech/subxt/pull/151)
+- Implement the `concat` in `twox_64_concat` [#150](https://github.com/paritytech/subxt/pull/150)
+- Storage map iter [#148](https://github.com/paritytech/subxt/pull/148)
 
 
 ## [0.11.0]
 
-- Fix build error, wabt 0.9.2 is yanked [#146](https://github.com/pezkuwichain/subxt/pull/146)
-- Rc5 [#143](https://github.com/pezkuwichain/subxt/pull/143)
-- Refactor: extract functions and types for creating extrinsics [#138](https://github.com/pezkuwichain/subxt/pull/138)
-- event subscription example [#140](https://github.com/pezkuwichain/subxt/pull/140)
-- Document the `Call` derive macro [#137](https://github.com/pezkuwichain/subxt/pull/137)
-- Document the #[module] macro [#135](https://github.com/pezkuwichain/subxt/pull/135)
-- Support authors api. [#134](https://github.com/pezkuwichain/subxt/pull/134)
+- Fix build error, wabt 0.9.2 is yanked [#146](https://github.com/paritytech/subxt/pull/146)
+- Rc5 [#143](https://github.com/paritytech/subxt/pull/143)
+- Refactor: extract functions and types for creating extrinsics [#138](https://github.com/paritytech/subxt/pull/138)
+- event subscription example [#140](https://github.com/paritytech/subxt/pull/140)
+- Document the `Call` derive macro [#137](https://github.com/paritytech/subxt/pull/137)
+- Document the #[module] macro [#135](https://github.com/paritytech/subxt/pull/135)
+- Support authors api. [#134](https://github.com/paritytech/subxt/pull/134)
 
 
 ## [0.10.1] - 2020-06-19
 
-- Release client v0.2.0 [#133](https://github.com/pezkuwichain/subxt/pull/133)
+- Release client v0.2.0 [#133](https://github.com/paritytech/subxt/pull/133)
 
 
 ## [0.10.0] - 2020-06-19
 
-- Upgrade to bizinikiwi rc4 release [#131](https://github.com/pezkuwichain/subxt/pull/131)
-- Support unsigned extrinsics. [#130](https://github.com/pezkuwichain/subxt/pull/130)
+- Upgrade to bizinikiwi rc4 release [#131](https://github.com/paritytech/subxt/pull/131)
+- Support unsigned extrinsics. [#130](https://github.com/paritytech/subxt/pull/130)
 
 
 ## [0.9.0] - 2020-06-25
 
-- Events sub [#126](https://github.com/pezkuwichain/subxt/pull/126)
-- Improve error handling in proc-macros, handle DispatchError etc. [#123](https://github.com/pezkuwichain/subxt/pull/123)
-- Support embedded full/light node clients. [#91](https://github.com/pezkuwichain/subxt/pull/91)
-- Zero sized types [#121](https://github.com/pezkuwichain/subxt/pull/121)
-- Fix optional store items. [#120](https://github.com/pezkuwichain/subxt/pull/120)
-- Make signing fallable and asynchronous [#119](https://github.com/pezkuwichain/subxt/pull/119)
+- Events sub [#126](https://github.com/paritytech/subxt/pull/126)
+- Improve error handling in proc-macros, handle DispatchError etc. [#123](https://github.com/paritytech/subxt/pull/123)
+- Support embedded full/light node clients. [#91](https://github.com/paritytech/subxt/pull/91)
+- Zero sized types [#121](https://github.com/paritytech/subxt/pull/121)
+- Fix optional store items. [#120](https://github.com/paritytech/subxt/pull/120)
+- Make signing fallable and asynchronous [#119](https://github.com/paritytech/subxt/pull/119)
 
 
 ## [0.8.0] - 2020-05-26
 
-- Update to Bizinikiwi release candidate [#116](https://github.com/pezkuwichain/subxt/pull/116)
-- Update to alpha.8 [#114](https://github.com/pezkuwichain/subxt/pull/114)
-- Refactors the api [#113](https://github.com/pezkuwichain/subxt/pull/113)
+- Update to Bizinikiwi release candidate [#116](https://github.com/paritytech/subxt/pull/116)
+- Update to alpha.8 [#114](https://github.com/paritytech/subxt/pull/114)
+- Refactors the api [#113](https://github.com/paritytech/subxt/pull/113)
 
 
 ## [0.7.0] - 2020-05-13
 
-- Split subxt [#102](https://github.com/pezkuwichain/subxt/pull/102)
-- Add support for RPC `state_getReadProof` [#106](https://github.com/pezkuwichain/subxt/pull/106)
-- Update to bizinikiwi alpha.7 release [#105](https://github.com/pezkuwichain/subxt/pull/105)
-- Double map and plain storage support, introduce macros [#93](https://github.com/pezkuwichain/subxt/pull/93)
-- Raw payload return SignedPayload struct [#92](https://github.com/pezkuwichain/subxt/pull/92)
+- Split subxt [#102](https://github.com/paritytech/subxt/pull/102)
+- Add support for RPC `state_getReadProof` [#106](https://github.com/paritytech/subxt/pull/106)
+- Update to bizinikiwi alpha.7 release [#105](https://github.com/paritytech/subxt/pull/105)
+- Double map and plain storage support, introduce macros [#93](https://github.com/paritytech/subxt/pull/93)
+- Raw payload return SignedPayload struct [#92](https://github.com/paritytech/subxt/pull/92)
 
 
 ## [0.6.0] - 2020-04-15
 
-- Raw extrinsic payloads in Client [#83](https://github.com/pezkuwichain/subxt/pull/83)
-- Custom extras [#89](https://github.com/pezkuwichain/subxt/pull/89)
-- Wrap and export BlockNumber [#87](https://github.com/pezkuwichain/subxt/pull/87)
+- Raw extrinsic payloads in Client [#83](https://github.com/paritytech/subxt/pull/83)
+- Custom extras [#89](https://github.com/paritytech/subxt/pull/89)
+- Wrap and export BlockNumber [#87](https://github.com/paritytech/subxt/pull/87)
 - All bizinikiwi dependencies upgraded to `alpha.6`
 
 
