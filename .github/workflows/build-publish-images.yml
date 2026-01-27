@@ -479,7 +479,6 @@ jobs:
         with:
           image-name: "test-teyrchain"
           dockerfile: "docker/dockerfiles/test-teyrchain_injected.Dockerfile"
-          ghcr-token: ${{ secrets.GITHUB_TOKEN }}
           username: ${{ secrets.PEZKUWI_DOCKERHUB_USERNAME }}
           password: ${{ secrets.PEZKUWI_DOCKERHUB_PASSWORD }}
 
@@ -506,7 +505,6 @@ jobs:
         with:
           image-name: "pezkuwi-debug"
           dockerfile: "docker/dockerfiles/pezkuwi/pezkuwi_injected_debug.Dockerfile"
-          ghcr-token: ${{ secrets.GITHUB_TOKEN }}
           username: ${{ secrets.PEZKUWI_DOCKERHUB_USERNAME }}
           password: ${{ secrets.PEZKUWI_DOCKERHUB_PASSWORD }}
 
@@ -533,7 +531,6 @@ jobs:
         with:
           image-name: "colander"
           dockerfile: "docker/dockerfiles/collator_injected.Dockerfile"
-          ghcr-token: ${{ secrets.GITHUB_TOKEN }}
           username: ${{ secrets.PEZKUWI_DOCKERHUB_USERNAME }}
           password: ${{ secrets.PEZKUWI_DOCKERHUB_PASSWORD }}
 
@@ -560,7 +557,6 @@ jobs:
         with:
           image-name: "malus"
           dockerfile: "docker/dockerfiles/malus_injected.Dockerfile"
-          ghcr-token: ${{ secrets.GITHUB_TOKEN }}
           username: ${{ secrets.PEZKUWI_DOCKERHUB_USERNAME }}
           password: ${{ secrets.PEZKUWI_DOCKERHUB_PASSWORD }}
 
@@ -587,7 +583,6 @@ jobs:
         with:
           image-name: "bizinikiwi"
           dockerfile: "docker/dockerfiles/bizinikiwi_injected.Dockerfile"
-          ghcr-token: ${{ secrets.GITHUB_TOKEN }}
           username: ${{ secrets.PEZKUWI_DOCKERHUB_USERNAME }}
           password: ${{ secrets.PEZKUWI_DOCKERHUB_PASSWORD }}
 
@@ -639,7 +634,6 @@ jobs:
         with:
           image-name: "bridges-zombienet-tests"
           dockerfile: "docker/dockerfiles/bridges_zombienet_tests_injected.Dockerfile"
-          ghcr-token: ${{ secrets.GITHUB_TOKEN }}
           username: ${{ secrets.PEZKUWI_DOCKERHUB_USERNAME }}
           password: ${{ secrets.PEZKUWI_DOCKERHUB_PASSWORD }}
 
@@ -666,7 +660,6 @@ jobs:
         with:
           image-name: "pezkuwi-teyrchain-debug"
           dockerfile: "docker/dockerfiles/pezkuwi-teyrchain/pezkuwi-teyrchain-debug_unsigned_injected.Dockerfile"
-          ghcr-token: ${{ secrets.GITHUB_TOKEN }}
           username: ${{ secrets.PEZKUWI_DOCKERHUB_USERNAME }}
           password: ${{ secrets.PEZKUWI_DOCKERHUB_PASSWORD }}
 
