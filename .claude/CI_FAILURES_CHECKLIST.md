@@ -1,8 +1,8 @@
 # CI WORKFLOW CHECKLIST
 
-**Tarih:** 2026-01-26
+**Tarih:** 2026-01-27
 **Branch:** fix/ci-wasm-target
-**Son Commit:** 2b4af0d91b
+**Son Commit:** (pending)
 
 ---
 
@@ -31,6 +31,10 @@
 - `deprecated_where_block.stderr` - CI-uyumlu CARGO_HOME path kullanıldı
 - `/home/mamostehp/.cargo/` → `/usr/local/cargo/` değiştirildi
 
+### Commit 6: (pending - quick-benchmarks getrandom fix)
+- `tests.yml` - quick-benchmarks'tan wasm32v1-none target kaldırıldı
+- Sebep: getrandom crate wasm32v1-none desteklemiyor
+
 ---
 
 ## HATA ANALİZİ VE ÇÖZÜMLER
@@ -42,33 +46,40 @@
 | cargo-check-each-crate | serde_core wasm32 duplicate lang item | ✅ SKIP_WASM_BUILD=1 eklendi |
 | pez-node-bench-regression-guard | cargo-check-benches'e bağımlı | ✅ Otomatik düzelecek |
 | test-pezframe-ui | UI test expected output mismatch | ✅ .stderr dosyası güncellendi (CI path) |
+| quick-benchmarks | getrandom wasm32v1-none not supported | ✅ wasm32v1-none target kaldırıldı |
 
 ---
 
-## RUNNER DURUMU
+## RUNNER DURUMU (2026-01-27T06:30 UTC)
 
-| VPS | IP | CPU | RAM | Runner | Versiyon |
-|-----|-----|-----|-----|--------|----------|
-| VPS1 | 37.60.230.9 | 8 | 23GB | 3 | v2.331.0 |
-| VPS2 | 62.146.235.186 | 16 | 62GB | 7 | v2.331.0 |
-| VPS3 | 217.77.6.126 | 18 | 94GB | 10 | v2.331.0 |
-| **TOPLAM** | - | **42** | **179GB** | **20** | - |
+| VPS | IP | CPU | RAM | Runner | Versiyon | Docker | PATH |
+|-----|-----|-----|-----|--------|----------|--------|------|
+| VPS1 | 37.60.230.9 | 8 | 23GB | 1 | v2.331.0 | ✅ 29.1.1 | ✅ |
+| VPS2 | 62.146.235.186 | 16 | 62GB | 2 | v2.331.0 | ✅ 29.1.3 | ✅ |
+| VPS3 | 217.77.6.126 | 18 | 94GB | 3 | v2.331.0 | ✅ 28.2.2 | ✅ |
+| VPS4 | 109.123.229.159 | 4 | 8GB | 1 | v2.331.0 | ✅ 28.2.2 | ✅ |
+| VPS5 | 161.97.116.241 | 4 | 8GB | 1 | v2.331.0 | ✅ 28.2.2 | ✅ |
+| VPS6 | 46.250.241.121 | 4 | 8GB | 1 | v2.331.0 | ✅ 28.2.2 | ✅ |
+| VPS7 | 164.68.121.181 | 4 | 8GB | 1 | v2.331.0 | ✅ 28.2.2 | ✅ |
+| VPS8 | 158.220.93.23 | 4 | 8GB | 1 | v2.331.0 | ✅ 28.2.2 | ✅ |
+| **TOPLAM** | - | **62** | **227GB** | **11** | - | - | - |
+
+### Runner PATH Fix (2026-01-27T06:23 UTC)
+- Tüm runner'ların `.env` dosyasına PATH eklendi
+- `PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin`
+- Tüm runner servisler restart edildi
 
 ### SSH Erişimi
 ```bash
 ssh root@37.60.230.9      # VPS1
 ssh root@62.146.235.186   # VPS2
 ssh root@217.77.6.126     # VPS3
+ssh root@109.123.229.159  # VPS4
+ssh root@161.97.116.241   # VPS5
+ssh root@46.250.241.121   # VPS6
+ssh root@164.68.121.181   # VPS7
+ssh root@158.220.93.23    # VPS8
 ```
-
-### Yük Durumu (2026-01-26T21:35 UTC)
-| VPS | Load Avg | CPU Ratio | Durum |
-|-----|----------|-----------|-------|
-| VPS1 | 30.86 | 3.9x | ⚠️ Yüksek |
-| VPS2 | 114.95 | 7.2x | ❌ Kritik |
-| VPS3 | 175.00 | 9.7x | ❌ Çok Kritik |
-
-**Not:** VPS1'de production servisleri de çalışıyor (ai-lawyer, safechild, naturel-bot)
 
 ---
 
@@ -84,24 +95,16 @@ ssh root@217.77.6.126     # VPS3
 - **Etkilenen:** `deprecated_where_block.stderr` gibi external crate referansları olan UI testler
 - **Çözüm:** .stderr dosyalarında CI-uyumlu path kullanıldı (`/usr/local/cargo/`)
 
----
-
-## ALTYAPI SORUNU (2026-01-26T20:05 UTC)
-
-### VPS2 Docker Network Tükenmesi
-- **Hata:** `all predefined address pools have been fully subnetted`
-- **Sebep:** Önceki cancelled job'lardan kalan zombie container/network'ler
-- **Etkilenen Job'lar:** cargo-clippy, check-try-runtime, test-pezframe-ui ve diğerleri
-- **Çözüm:** VPS2 (62.146.235.186) REBOOT edildi - Docker temizlendi
-- **Durum:** ✅ ÇÖZÜLDÜ (20:05 UTC)
+### getrandom wasm32v1-none
+- **Sorun:** getrandom crate wasm32v1-none target'ı desteklemiyor
+- **Etkilenen:** quick-benchmarks job
+- **Çözüm:** Target ekleme adımı kaldırıldı, wasm-builder otomatik fallback yapar
 
 ---
 
-## CI DURUMU (2026-01-26T20:45 UTC)
+## CI DURUMU (2026-01-27T06:40 UTC)
 
-**VPS2 reboot sonrası tüm failed/cancelled workflow'lar rerun edildi.**
-
-### Tamamlanan (BAŞARILI - 12):
+### Başarılı (12):
 - ✅ Check labels
 - ✅ Check licenses
 - ✅ Command Bot Tests
@@ -113,32 +116,25 @@ ssh root@217.77.6.126     # VPS3
 - ✅ tests linux stable experimental
 - ✅ Build and push ETH-RPC image
 - ✅ tests linux stable coverage (skipped)
-- ✅ Build Misc
+- ✅ Check links
 
-### Çalışıyor / Kuyrukta (7):
-- 🔄 Checks (cargo-clippy, check-try-runtime) - RERUN
-- 🔄 Docs (build-rustdoc) - RERUN
-- 🔄 tests misc (test-pezframe-ui ÇALIŞIYOR - vps2-runner-7)
-- 🔄 tests (quick-benchmarks, test-syscalls)
-- ⏳ tests linux stable - RERUN (kuyrukta)
-- ⏳ Build and push images - RERUN (kuyrukta)
-- ⏳ EVM test suite - RERUN
-
-**Düzeltilen Toplam Issue:** 7
-1. wasm32v1-none target eksikliği (9 job)
-2. master → main branch referansı
-3. test-pezframe-examples-compile-to-wasm disable
-4. cargo-check-each-crate SKIP_WASM_BUILD
-5. UI test expected output güncelleme
-6. UI test CARGO_HOME path düzeltmesi
-7. VPS2 Docker network pool tükenmesi (REBOOT)
+### Çalışıyor / Kuyrukta:
+- 🔄 Checks (check-try-runtime çalışıyor)
+- 🔄 Docs (build-rustdoc çalışıyor)
+- 🔄 tests misc (test-deterministic-wasm çalışıyor)
+- 🔄 EVM test suite
+- ⏳ tests linux stable (kuyrukta)
+- ⏳ Build and push images (kuyrukta)
+- ⏳ Build Misc (kuyrukta)
+- ⏳ tests (kuyrukta)
 
 ---
 
 ## SONRAKİ ADIMLAR
 
-1. 🔄 Workflow'ların tamamlanmasını bekle
-2. ⏳ test-pezframe-ui sonucunu doğrula (CARGO_HOME fix)
-3. ⏳ cargo-clippy ve check-try-runtime sonuçlarını doğrula
-4. ⏳ PR #356'yı merge et
-5. ⏳ Mainnet hazırlıklarına devam et
+1. ✅ Runner PATH fix uygulandı (tüm VPS)
+2. ✅ Runner'lar restart edildi
+3. 🔄 Mevcut workflow'ların tamamlanmasını bekle
+4. ⏳ PATH fix sonrası yeni workflow tetikle
+5. ⏳ PR #356'yı merge et
+6. ⏳ Mainnet hazırlıklarına devam et
