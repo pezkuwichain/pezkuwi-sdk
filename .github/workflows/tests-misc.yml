@@ -294,6 +294,9 @@ jobs:
           # Enable debug assertions since we are running optimized builds for testing
           # but still want to have debug assertions.
           RUSTFLAGS: "-Cdebug-assertions=y -Dwarnings"
+          # Temporary: Skip WASM build due to serde_core + Rust 1.88 + WASM bug
+          # Tracking: https://github.com/pezkuwichain/pezkuwi-sdk/issues/358
+          SKIP_WASM_BUILD: 1
         run: |
           cargo build --bin pezkuwi-execute-worker --bin pezkuwi-prepare-worker --profile testnet --verbose --locked
           mkdir -p ./artifacts
