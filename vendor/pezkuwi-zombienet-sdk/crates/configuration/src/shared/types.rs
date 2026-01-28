@@ -89,7 +89,7 @@ impl<'de> Deserialize<'de> for U128 {
 ///
 /// # Examples:
 /// ```
-/// use zombienet_configuration::shared::types::Chain;
+/// use pezkuwi_zombienet_configuration::shared::types::Chain;
 ///
 /// let polkadot: Chain = "polkadot".try_into().unwrap();
 /// let dicle: Chain = "dicle".try_into().unwrap();
@@ -129,7 +129,7 @@ impl Chain {
 ///
 /// # Examples:
 /// ```
-/// use zombienet_configuration::shared::types::Image;
+/// use pezkuwi_zombienet_configuration::shared::types::Image;
 ///
 /// let image1: Image = "name".try_into().unwrap();
 /// let image2: Image = "name:version".try_into().unwrap();
@@ -181,7 +181,7 @@ impl Image {
 ///
 /// # Examples:
 /// ```
-/// use zombienet_configuration::shared::types::Command;
+/// use pezkuwi_zombienet_configuration::shared::types::Command;
 ///
 /// let command1: Command = "mycommand".try_into().unwrap();
 /// let command2: Command = "myothercommand".try_into().unwrap();
@@ -220,7 +220,7 @@ impl Command {
 ///
 /// # Examples:
 /// ```
-/// use zombienet_configuration::shared::types::CommandWithCustomArgs;
+/// use pezkuwi_zombienet_configuration::shared::types::CommandWithCustomArgs;
 ///
 /// let command1: CommandWithCustomArgs = "mycommand --demo=2 --other-flag".try_into().unwrap();
 /// let command2: CommandWithCustomArgs = "my_other_cmd_without_args".try_into().unwrap();
@@ -276,7 +276,7 @@ impl CommandWithCustomArgs {
 /// ```
 /// use url::Url;
 /// use std::{path::PathBuf, str::FromStr};
-/// use zombienet_configuration::shared::types::AssetLocation;
+/// use pezkuwi_zombienet_configuration::shared::types::AssetLocation;
 ///
 /// let url_location: AssetLocation = Url::from_str("https://mycloudstorage.com/path/to/my/file.tgz").unwrap().into();
 /// let url_location2: AssetLocation = "https://mycloudstorage.com/path/to/my/file.tgz".into();
@@ -398,7 +398,7 @@ impl<'de> Deserialize<'de> for AssetLocation {
 ///
 /// # Examples:
 /// ```
-/// use zombienet_configuration::shared::types::Arg;
+/// use pezkuwi_zombienet_configuration::shared::types::Arg;
 ///
 /// let flag_arg: Arg = "myflag".into();
 /// let option_arg: Arg = ("name", "value").into();

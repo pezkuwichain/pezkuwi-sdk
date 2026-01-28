@@ -119,10 +119,8 @@ jobs:
 
           expect "*Rust is not installed. Install it?*" {
             send "y\r"
-            expect "Proceed with standard installation (default - just press enter)" {
-              send "\r"
-              expect "Rust is installed now"
-            }
+            # rustup runs with -y flag (non-interactive), so no "Proceed" prompt
+            expect "Rust is installed now"
           }
 
           expect "*Setup the Rust environment*" {
@@ -182,17 +180,19 @@ jobs:
 
       # Build the template from within the SDK workspace context
       # Templates use workspace inheritance and can't be built standalone
+      # Note: Use $GITHUB_WORKSPACE env var, not ${{ github.workspace }} template
+      # because inside containers the template expands to host path which doesn't exist
       - name: Compile the template node
         run: |
           . "$HOME/.cargo/env"
-          cd ${{ github.workspace }}
+          cd "$GITHUB_WORKSPACE"
           cargo build --release -p ${{ matrix.package }}
         timeout-minutes: 120
 
       - name: Check that the binary is executable
         run: |
           . "$HOME/.cargo/env"
-          cd ${{ github.workspace }}
+          cd "$GITHUB_WORKSPACE"
           cargo run --release -p ${{ matrix.package }} -- --help
         timeout-minutes: 5
 
@@ -314,16 +314,18 @@ jobs:
 
       # Build the template from within the SDK workspace context
       # Templates use workspace inheritance and can't be built standalone
+      # Note: Use $GITHUB_WORKSPACE env var, not ${{ github.workspace }} template
+      # because inside containers the template expands to host path which doesn't exist
       - name: Compile the template node
         run: |
           . "$HOME/.cargo/env"
-          cd ${{ github.workspace }}
+          cd "$GITHUB_WORKSPACE"
           cargo build --release -p ${{ matrix.package }}
         timeout-minutes: 120
 
       - name: Check that the binary is executable
         run: |
           . "$HOME/.cargo/env"
-          cd ${{ github.workspace }}
+          cd "$GITHUB_WORKSPACE"
           cargo run --release -p ${{ matrix.package }} -- --help
         timeout-minutes: 5

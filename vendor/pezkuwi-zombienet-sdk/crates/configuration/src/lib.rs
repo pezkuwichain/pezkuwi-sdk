@@ -9,7 +9,7 @@
 //!
 //! # Example
 //! ```
-//! use zombienet_configuration::NetworkConfigBuilder;
+//! use pezkuwi_zombienet_configuration::NetworkConfigBuilder;
 //!
 //! let simple_configuration = NetworkConfigBuilder::new()
 //!     .with_relaychain(|relaychain| {

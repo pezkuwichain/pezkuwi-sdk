@@ -14305,6 +14305,7 @@ dependencies = [
  "pezsp-core",
  "pezsp-crypto-hashing",
  "pezsp-keyring",
+ "pezsp-runtime",
  "primitive-types 0.13.1",
  "scale-bits",
  "scale-decode",

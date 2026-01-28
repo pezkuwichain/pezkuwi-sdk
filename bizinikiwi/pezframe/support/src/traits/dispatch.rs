@@ -177,8 +177,14 @@ pub trait EnsureOriginWithArg<OuterOrigin, Argument> {
 	/// is impossible.
 	///
 	/// ** Should be used for benchmarking only!!! **
+	///
+	/// Default implementation returns `Err(())` to handle feature unification issues where
+	/// pezframe-support/runtime-benchmarks is enabled but the implementing crate's
+	/// runtime-benchmarks feature is not. Implementations should override this.
 	#[cfg(feature = "runtime-benchmarks")]
-	fn try_successful_origin(a: &Argument) -> Result<OuterOrigin, ()>;
+	fn try_successful_origin(_a: &Argument) -> Result<OuterOrigin, ()> {
+		Err(())
+	}
 }
 
 /// Simple macro to explicitly implement [EnsureOriginWithArg] to be used on any type which

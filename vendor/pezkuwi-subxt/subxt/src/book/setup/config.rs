@@ -20,14 +20,14 @@
 //! is currently (as of 2023-06-26) deployed on Pezkuwi and [Dicle (as "Statemine")](https://parachains.info/details/statemine).
 //!
 //! To construct a valid [`crate::config::Config`] implementation, we need to find out which types
-//! to use for `AccountId`, `Hasher`, etc. For this, we need to take a look at the source code of Statemint, which is currently a part of the [Pezpezcumulus Github repository](https://github.com/pezkuwichain/pezcumulus).
-//! The crate defining the asset hub runtime can be found [here](https://github.com/pezkuwichain/pezcumulus/tree/master/parachains/runtimes/assets/asset-hub-pezkuwi).
+//! to use for `AccountId`, `Hasher`, etc. For this, we need to take a look at the source code of Statemint, which is currently a part of the [Pezcumulus directory in pezkuwi-sdk](https://github.com/pezkuwichain/pezkuwi-sdk/tree/main/pezcumulus).
+//! The crate defining the asset hub runtime can be found [here](https://github.com/pezkuwichain/pezkuwi-sdk/tree/main/pezcumulus/teyrchains/runtimes/assets/asset-hub-pezkuwichain).
 //!
 //! ## `AccountId`, `Hash`, `Hasher` and `Header`
 //!
 //! For these config types, we need to find out where the parachain runtime implements the
 //! `frame_system::Config` trait. Look for a code fragment like `impl frame_system::Config for
-//! Runtime { ... }` In the source code. For Statemint it looks like [this](https://github.com/pezkuwichain/pezcumulus/blob/e2b7ad2061824f490c08df27a922c64f50accd6b/parachains/runtimes/assets/asset-hub-pezkuwi/src/lib.rs#L179)
+//! Runtime { ... }` In the source code. For Statemint it looks like [this](https://github.com/paritytech/cumulus/blob/e2b7ad2061824f490c08df27a922c64f50accd6b/parachains/runtimes/assets/asset-hub-polkadot/src/lib.rs#L179)
 //! at the time of writing. The `AccountId`, `Hash` and `Header` types of the [frame_system::pallet::Config](https://docs.rs/frame-system/latest/frame_system/pallet/trait.Config.html)
 //! correspond to the ones we want to use in our Subxt [crate::Config]. In the Case of Statemint
 //! (Asset Hub) they are:
@@ -111,7 +111,7 @@
 //! metadata (see [`frame_metadata::v15::SignedExtensionMetadata`]).
 //!
 //! For statemint, the transaction extensions look like
-//! [this](https://github.com/pezkuwichain/pezcumulus/blob/d4bb2215bb28ee05159c4c7df1b3435177b5bf4e/parachains/runtimes/assets/asset-hub-pezkuwi/src/lib.rs#L786):
+//! [this](https://github.com/paritytech/cumulus/blob/d4bb2215bb28ee05159c4c7df1b3435177b5bf4e/parachains/runtimes/assets/asset-hub-polkadot/src/lib.rs#L786):
 //!
 //! ```rust,ignore
 //! pub type SignedExtra = (

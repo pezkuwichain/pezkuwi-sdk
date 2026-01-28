@@ -30,6 +30,26 @@ for line in output.splitlines():
 crates = list(set(crates))
 crates.sort()
 
+# Skip crates that have their own workspace and can't be checked standalone
+# These vendor crates have workspace.dependencies that aren't in the main workspace
+SKIP_CRATES = [
+	"pezkuwi-subxt",
+	"pezkuwi-subxt-core",
+	"pezkuwi-subxt-lightclient",
+	"pezkuwi-subxt-macro",
+	"pezkuwi-subxt-metadata",
+	"pezkuwi-subxt-rpcs",
+	"pezkuwi-subxt-signer",
+	"pezkuwi-zombienet-sdk",
+	"pezkuwi-zombienet-configuration",
+	"pezkuwi-zombienet-orchestrator",
+	"pezkuwi-zombienet-provider",
+	"pezkuwi-zombienet-support",
+	"pezkuwi-zombienet-pjs-helper",
+]
+crates = [(name, path) for name, path in crates if name not in SKIP_CRATES]
+print(f"Crates after skipping vendor workspaces: {len(crates)}", file=sys.stderr)
+
 target_group = int(sys.argv[1]) - 1
 groups_total = int(sys.argv[2])
 # Forklift is disabled by default since Pezkuwi doesn't have access to Parity's GCP infrastructure

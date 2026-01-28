@@ -113,4 +113,4 @@ messages between chains.
 
 Apart from live pezkuwichain <> zagros bridge, you may spin up local networks and test see how it works locally. More
 details may be found in
-[this document](https://github.com/pezkuwichain/pezkuwi-sdk/tree/master//pezcumulus/parachains/runtimes/bridge-hubs/README.md).
+[this document](https://github.com/pezkuwichain/pezkuwi-sdk/tree/main//pezcumulus/parachains/runtimes/bridge-hubs/README.md).

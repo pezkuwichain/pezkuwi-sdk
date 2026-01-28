@@ -1,4 +1,4 @@
-// Copyright 2019-2024 Parity Technologies (UK) Ltd.
+// Copyright 2019-2026 Dijital Kurdistan Tech Institute
 // This file is dual-licensed as Apache-2.0 or GPL-3.0.
 // see LICENSE for license details.
 
@@ -442,7 +442,7 @@ mod test {
 
 		#[test]
 		fn check_account_id(keypair in keypair()) {
-			// https://github.com/ethereumbook/ethereumbook/blob/develop/04keys-addresses.asciidoc#ethereum-addresses
+			// https://github.com/ethereumbook/ethereumbook/blob/develop/src/chapter_4.md
 			let account_id = {
 				let uncompressed = keypair.0.0.public_key().serialize_uncompressed();
 				let hash = keccak(&uncompressed[1..]).0;

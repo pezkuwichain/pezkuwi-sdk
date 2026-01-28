@@ -1,4 +1,4 @@
-// Copyright 2019-2024 Parity Technologies (UK) Ltd.
+// Copyright 2019-2026 Dijital Kurdistan Tech Institute
 // This file is dual-licensed as Apache-2.0 or GPL-3.0.
 // see LICENSE for license details.
 
@@ -222,7 +222,7 @@ mod tests {
 	use scale_value::Composite;
 
 	fn test_metadata() -> Metadata {
-		let metadata_bytes = include_bytes!("../../../artifacts/polkadot_metadata_small.scale");
+		let metadata_bytes = include_bytes!("../../../artifacts/pezkuwi_metadata_small.scale");
 		Metadata::decode(&mut &metadata_bytes[..]).expect("Valid metadata")
 	}
 
