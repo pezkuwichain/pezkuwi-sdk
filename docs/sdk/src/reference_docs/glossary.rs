@@ -118,3 +118,5 @@
 //! network.
 //!
 //! **Synonyms**: Teyrchain Validation Function
+//!
+//! [frame]: crate::pezkuwi_sdk::frame_runtime
