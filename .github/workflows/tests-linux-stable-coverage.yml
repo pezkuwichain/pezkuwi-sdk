@@ -34,6 +34,9 @@ jobs:
       # -Cinstrument-coverage slows everything down but it is necessary for code coverage
       # https://doc.rust-lang.org/rustc/instrument-coverage.html
       RUSTFLAGS: "-Cdebug-assertions=y -Dwarnings -Cinstrument-coverage"
+      # Temporary: Skip WASM build due to serde_core + Rust 1.88 + WASM bug
+      # Tracking: https://github.com/pezkuwichain/pezkuwi-sdk/issues/358
+      SKIP_WASM_BUILD: 1
       LLVM_PROFILE_FILE: "/__w/pezkuwi-sdk/pezkuwi-sdk/target/coverage/cargo-test-${{ matrix.ci_node_index }}-%p-%m.profraw"
     strategy:
       fail-fast: false
