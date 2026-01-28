@@ -35,7 +35,7 @@ jobs:
     strategy:
       matrix:
         platform:
-          ["pez-revive-dev-node-revm-solc", "pez-revive-dev-node-polkavm-resolc"]
+          ["revive-dev-node-revm-solc", "revive-dev-node-polkavm-resolc"]
     steps:
       - name: Checkout the Pezkuwi SDK
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
@@ -79,8 +79,8 @@ jobs:
             --concurrency.number-of-threads 10 \
             --concurrency.number-of-concurrent-tasks 1000 \
             --working-directory ./workdir \
-            --pez-revive-dev-node.consensus manual-seal-200 \
-            --pez-revive-dev-node.path ./target/release/pez-revive-dev-node \
+            --revive-dev-node.consensus manual-seal-200 \
+            --revive-dev-node.path ./target/release/pez-revive-dev-node \
             --eth-rpc.path ./target/release/eth-rpc \
             --resolc.path ./resolc
       - name: Creating a markdown report of the test execution
