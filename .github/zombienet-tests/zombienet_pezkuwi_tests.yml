@@ -235,7 +235,7 @@
     export PATH=$BIN_DIR:$PATH
     echo "PATH=$PATH" >> $GITHUB_ENV
   additional-env:
-    OLD_POLKADOT_IMAGE: "docker.io/paritypr/pezkuwi-debug:master-187cddde"
+    OLD_POLKADOT_IMAGE: "ghcr.io/pezkuwichain/pezkuwi-debug:latest"
     OLD_POLKADOT_COMMAND: "pezkuwi-old"
 
 - job-name: "zombienet-pezkuwi-functional-validator-disabling"

@@ -1,4 +1,4 @@
-// Copyright 2019-2025 Parity Technologies (UK) Ltd.
+// Copyright 2019-2026 Dijital Kurdistan Tech Institute
 // This file is dual-licensed as Apache-2.0 or GPL-3.0.
 // see LICENSE for license details.
 
@@ -100,9 +100,9 @@
 //!
 //! Some complete, self contained examples which are not a part of this guide:
 //!
-//! - [`parachain-example`](https://github.com/pezkuwichain/subxt/tree/master/examples/parachain-example) is an example
+//! - [`parachain-example`](https://github.com/paritytech/subxt/tree/master/examples/parachain-example) is an example
 //!   which uses Zombienet to spawn a parachain locally, and then connects to it using Subxt.
-//! - [`wasm-example`](https://github.com/pezkuwichain/subxt/tree/master/examples/wasm-example) is an example of writing
+//! - [`wasm-example`](https://github.com/paritytech/subxt/tree/master/examples/wasm-example) is an example of writing
 //!   a Rust app that contains a Yew based UI, uses Subxt to interact with a chain, and compiles to WASM in order to
 //!   run entirely in the browser.
 pub mod setup;

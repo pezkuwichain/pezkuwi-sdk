@@ -7,12 +7,12 @@ in the [Bizinikiwi Developer Hub Teyrchain
 Template](https://github.com/bizinikiwi-developer-hub/bizinikiwi-node-template/)
 repository. The teyrchain template is generated directly at each PezkuwiChain
 release branch from the [Solochain Template in
-Bizinikiwi](https://github.com/pezkuwichain/pezkuwi-sdk/tree/master/templates/solochain)
+Bizinikiwi](https://github.com/pezkuwichain/pezkuwi-sdk/tree/main/templates/solochain)
 upstream
 
 It is usually best to use the stand-alone version to start a new project. All
 bugs, suggestions, and feature requests should be made upstream in the
-[Bizinikiwi](https://github.com/pezkuwichain/pezkuwi-sdk/tree/master/bizinikiwi)
+[Bizinikiwi](https://github.com/pezkuwichain/pezkuwi-sdk/tree/main/bizinikiwi)
 repository.
 
 ## Getting Started
@@ -193,7 +193,7 @@ template and note the following:
 
 The runtime in this project is constructed using many FRAME pallets that ship
 with [the Bizinikiwi
-repository](https://github.com/pezkuwichain/pezkuwi-sdk/tree/master/bizinikiwi/frame) and a
+repository](https://github.com/pezkuwichain/pezkuwi-sdk/tree/main/bizinikiwi/frame) and a
 template pezpallet that is [defined in the
 `pallets`](./pallets/template/src/lib.rs) directory.
 

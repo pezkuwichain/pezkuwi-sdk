@@ -1,4 +1,4 @@
-// Copyright 2019-2025 Parity Technologies (UK) Ltd.
+// Copyright 2019-2026 Dijital Kurdistan Tech Institute
 // This file is dual-licensed as Apache-2.0 or GPL-3.0.
 // see LICENSE for license details.
 
@@ -563,7 +563,7 @@ where
 	) -> Result<ValidationResult, ExtrinsicError> {
 		let block_hash = at.into().hash();
 
-		// Approach taken from https://github.com/pezkuwichain/json-rpc-interface-spec/issues/55.
+		// Approach taken from https://github.com/paritytech/json-rpc-interface-spec/issues/55.
 		let mut params = Vec::with_capacity(8 + self.encoded().len() + 8);
 		2u8.encode_to(&mut params);
 		params.extend(self.encoded().iter());

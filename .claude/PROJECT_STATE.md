@@ -54,6 +54,36 @@ Durum: TAMAMLANDI - Build edildi
 
 ---
 
+## CI/CD ALTYAPISI (GitHub Actions Self-Hosted Runners)
+
+| VPS | IP | CPU | RAM | Runner Sayısı |
+|-----|-----|-----|-----|---------------|
+| VPS1 | 37.60.230.9 | 8 | 23GB | 3 |
+| VPS2 | 62.146.235.186 | 16 | 62GB | 7 |
+| VPS3 | 217.77.6.126 | 18 | 94GB | 10 |
+| VPS-NEW-1 | 217.77.15.51 | 4 | 8GB | 1 |
+| VPS-NEW-2 | 161.97.183.44 | 4 | 8GB | 1 |
+| VPS-NEW-3 | 161.97.185.100 | 4 | 8GB | 1 |
+| **TOPLAM** | - | **54** | **203GB** | **23** |
+
+### SSH Erişimi
+```bash
+ssh root@37.60.230.9      # VPS1
+ssh root@62.146.235.186   # VPS2
+ssh root@217.77.6.126     # VPS3
+ssh root@217.77.15.51     # VPS-NEW-1 (şifre: SqM210305yBkBnm90)
+ssh root@161.97.183.44    # VPS-NEW-2 (şifre: SqM210305yBkBnm90)
+ssh root@161.97.185.100   # VPS-NEW-3 (şifre: SqM210305yBkBnm90)
+```
+
+### Notlar
+- VPS1'de production servisleri de çalışıyor (ai-lawyer, safechild, naturel-bot)
+- Runner versiyon: v2.321.0 (yeni VPS'ler)
+- Docker network pool dolunca VPS reboot gerekebilir
+- Yeni VPS'ler 2026-01-27 tarihinde eklendi
+
+---
+
 ## TERMİNOLOJİ (ASLA ESKİ TERİMLERİ KULLANMA)
 
 | ESKİ (KULLANMA) | YENİ (KULLAN) |

@@ -103,6 +103,6 @@ We also assume that ongoing work done is being merged directly to the `master` b
     git push --tags
     ```
 
-    Once this is pushed, go along to [the releases page on GitHub](https://github.com/pezkuwichain/subxt/releases)
+    Once this is pushed, go along to [the releases page on GitHub](https://github.com/paritytech/subxt/releases)
     and draft a new release which points to the tag you just pushed to `master` above. Copy the changelog comments
     for the current release into the release description.

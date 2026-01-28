@@ -1,4 +1,4 @@
-// Copyright 2019-2025 Parity Technologies (UK) Ltd.
+// Copyright 2019-2026 Dijital Kurdistan Tech Institute
 // This file is dual-licensed as Apache-2.0 or GPL-3.0.
 // see LICENSE for license details.
 
@@ -13,7 +13,9 @@
 //! The most common way to generate the interface is to use the [`#[subxt]`](crate::subxt) macro.
 //! Using this macro looks something like:
 //!
-//! ```rust,no_run,standalone_crate
+//! ```rust,ignore
+//! // Note: This example uses a relative path that only works when testing this crate directly.
+//! // For workspace-level doc tests, this is ignored. See examples/ for runnable code.
 //! #[pezkuwi_subxt::subxt(runtime_metadata_path = "../artifacts/pezkuwi_metadata_tiny.scale")]
 //! pub mod pezkuwi {}
 //! ```

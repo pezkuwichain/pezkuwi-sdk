@@ -21,7 +21,7 @@ use super::{
 /// # Examples
 ///
 /// ```
-/// use zombienet_configuration::shared::resources::ResourceQuantity;
+/// use pezkuwi_zombienet_configuration::shared::resources::ResourceQuantity;
 ///
 /// let quantity1: ResourceQuantity = "100000".try_into().unwrap();
 /// let quantity2: ResourceQuantity = "1000m".try_into().unwrap();

@@ -18,6 +18,8 @@ accept = [
 	"200",
 	# Rate limited - GitHub likes to throw this.
 	"429",
+	# Service temporarily unavailable
+	"503",
 ]
 
 exclude_path = ["./prdoc", "./target"]
@@ -119,4 +121,6 @@ exclude = [
 	"https://github.com/pezkuwichain/pezkuwi-sdk/tree/[a-f0-9]+/.*",
 	# Migrated bizinikiwi references
 	"https://github.com/pezkuwichain/bizinikiwi.*",
+	# External site temporarily down (503)
+	"https://use.ink/migrate-ink-contracts-to-polkadot-frame-parachain/",
 ]

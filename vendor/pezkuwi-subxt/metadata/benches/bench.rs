@@ -1,4 +1,4 @@
-// Copyright 2019-2025 Parity Technologies (UK) Ltd.
+// Copyright 2019-2026 Dijital Kurdistan Tech Institute
 // This file is dual-licensed as Apache-2.0 or GPL-3.0.
 // see LICENSE for license details.
 
@@ -11,7 +11,7 @@ use pezkuwi_subxt_metadata::Metadata;
 use std::{fs, path::Path};
 
 fn load_metadata() -> Metadata {
-	let bytes = fs::read(Path::new("../artifacts/polkadot_metadata_full.scale"))
+	let bytes = fs::read(Path::new("../artifacts/pezkuwi_metadata_full.scale"))
 		.expect("Cannot read metadata blob");
 	let meta: RuntimeMetadataPrefixed =
 		Decode::decode(&mut &*bytes).expect("Cannot decode scale metadata");

@@ -117,7 +117,7 @@ where
 					continue;
 				}
 
-				// TODO: https://github.com/pezkuwichain/subxt/issues/1567
+				// TODO: https://github.com/paritytech/subxt/issues/1567
 				// This is a hack because, in the event of a disconnection,
 				// we may not get the correct subscription ID back on reconnecting.
 				//
