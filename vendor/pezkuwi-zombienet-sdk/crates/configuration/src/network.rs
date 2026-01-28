@@ -288,7 +288,7 @@ states! {
 /// # Example:
 ///
 /// ```
-/// use zombienet_configuration::NetworkConfigBuilder;
+/// use pezkuwi_zombienet_configuration::NetworkConfigBuilder;
 ///
 /// let network_config = NetworkConfigBuilder::new()
 ///     .with_relaychain(|relaychain| {
