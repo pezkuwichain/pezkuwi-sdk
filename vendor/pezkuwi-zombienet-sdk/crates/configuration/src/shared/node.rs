@@ -32,7 +32,7 @@ states! {
 /// # Examples:
 ///
 /// ```
-/// use zombienet_configuration::shared::node::EnvVar;
+/// use pezkuwi_zombienet_configuration::shared::node::EnvVar;
 ///
 /// let simple_var: EnvVar = ("FOO", "BAR").into();
 ///
@@ -737,7 +737,7 @@ impl NodeConfigBuilder<Buildable> {
 	/// # Examples
 	///
 	/// ```
-	/// use zombienet_configuration::shared::{node::NodeConfigBuilder, types::ChainDefaultContext};
+	/// use pezkuwi_zombienet_configuration::shared::{node::NodeConfigBuilder, types::ChainDefaultContext};
 	///
 	/// let config = NodeConfigBuilder::new(ChainDefaultContext::default(), Default::default())
 	///     .with_name("node")
