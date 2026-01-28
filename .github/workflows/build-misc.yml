@@ -49,6 +49,9 @@ jobs:
       - name: Build
         env:
           BIZINIKIWI_RUNTIME_TARGET: riscv
+          # Skip WASM build - this job tests PolkaVM (RISC-V) target only
+          # Tracking: https://github.com/pezkuwichain/pezkuwi-sdk/issues/358
+          SKIP_WASM_BUILD: 1
         id: required
         run: cargo check -p pez-minimal-template-runtime -p zagros-runtime -p pezkuwichain-runtime -p pezkuwi-test-runtime
       - name: Stop all workflows if failed
