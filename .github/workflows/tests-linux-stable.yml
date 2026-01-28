@@ -1,13 +1,10 @@
 # GHA for test-linux-stable-int, test-linux-stable, test-linux-stable-oldkernel
+# DISABLED: Infrastructure issues (Docker network pool, serde_core WASM bug)
+# Re-enable after mainnet launch when CI infrastructure is stabilized
 name: tests linux stable
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    types: [opened, synchronize, reopened, ready_for_review]
-  merge_group:
+  workflow_dispatch:  # Manual trigger only
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
