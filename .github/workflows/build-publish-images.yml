@@ -28,12 +28,15 @@ jobs:
     uses: ./.github/workflows/reusable-preflight.yml
 
   ### Build ########################
+  # TEMPORARILY DISABLED: All build jobs require WASM but serde_core + Rust 1.88 + wasm32 bug prevents WASM build
+  # Tracking: https://github.com/pezkuwichain/pezkuwi-sdk/issues/358
 
   #
   #
   #
   build-linux-stable:
     needs: [preflight]
+    if: false  # Disabled until serde_core upstream fix
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
     timeout-minutes: 60
     container:
@@ -95,6 +98,7 @@ jobs:
   #
   build-linux-stable-pezcumulus:
     needs: [preflight]
+    if: false  # Disabled until serde_core upstream fix
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
     timeout-minutes: 60
     container:
@@ -131,6 +135,7 @@ jobs:
   #
   build-test-teyrchain:
     needs: [preflight]
+    if: false  # Disabled until serde_core upstream fix
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
     timeout-minutes: 60
     container:
@@ -171,6 +176,7 @@ jobs:
   #
   build-test-collators:
     needs: [preflight]
+    if: false  # Disabled until serde_core upstream fix
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
     timeout-minutes: 60
     container:
@@ -210,6 +216,7 @@ jobs:
   #
   build-malus:
     needs: [preflight]
+    if: false  # Disabled until serde_core upstream fix
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
     timeout-minutes: 60
     container:
@@ -248,6 +255,7 @@ jobs:
   #
   build-linux-bizinikiwi:
     needs: [preflight]
+    if: false  # Disabled until serde_core upstream fix
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
     timeout-minutes: 60
     container:
@@ -293,6 +301,7 @@ jobs:
   #
   build-templates-node:
     needs: [preflight]
+    if: false  # Disabled until serde_core upstream fix
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
     timeout-minutes: 60
     container:
@@ -677,7 +686,7 @@ jobs:
       - build-malus
       - build-linux-bizinikiwi
       - build-templates-node
-    if: always() && !cancelled()
+    if: false  # Disabled until serde_core upstream fix - all build jobs are disabled
     outputs:
       build_success: ${{ steps.check_success.outputs.build_success }}
     steps:
@@ -697,7 +706,7 @@ jobs:
 
   trigger-zombienet-pezkuwi:
     needs: [preflight, confirm-required-build-jobs-passed]
-    if: ${{ needs.confirm-required-build-jobs-passed.outputs.build_success == 'true' }}
+    if: false  # Disabled until serde_core upstream fix
     uses: ./.github/workflows/zombienet_pezkuwi.yml
     with:
       build_run_id: ${{ github.run_id }}
@@ -705,7 +714,7 @@ jobs:
 
   trigger-zombienet-pezcumulus:
     needs: [preflight, confirm-required-build-jobs-passed]
-    if: ${{ needs.confirm-required-build-jobs-passed.outputs.build_success == 'true' }}
+    if: false  # Disabled until serde_core upstream fix
     uses: ./.github/workflows/zombienet_pezcumulus.yml
     with:
       build_run_id: ${{ github.run_id }}
@@ -713,7 +722,7 @@ jobs:
 
   trigger-zombienet-bizinikiwi:
     needs: [preflight, confirm-required-build-jobs-passed]
-    if: ${{ needs.confirm-required-build-jobs-passed.outputs.build_success == 'true' }}
+    if: false  # Disabled until serde_core upstream fix
     uses: ./.github/workflows/zombienet_bizinikiwi.yml
     with:
       build_run_id: ${{ github.run_id }}
@@ -721,7 +730,7 @@ jobs:
 
   trigger-zombienet-teyrchain-template:
     needs: [preflight, confirm-required-build-jobs-passed]
-    if: ${{ needs.confirm-required-build-jobs-passed.outputs.build_success == 'true' }}
+    if: false  # Disabled until serde_core upstream fix
     uses: ./.github/workflows/zombienet_teyrchain-template.yml
     with:
       build_run_id: ${{ github.run_id }}
@@ -735,7 +744,7 @@ jobs:
       - trigger-zombienet-pezcumulus
       - trigger-zombienet-bizinikiwi
       - trigger-zombienet-teyrchain-template
-    if: always() && !cancelled()
+    if: false  # Disabled until serde_core upstream fix
     steps:
       - name: Check zombienet success
         id: check_success
