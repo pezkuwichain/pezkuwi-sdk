@@ -340,11 +340,15 @@ jobs:
 
   ### Build zombienet test artifacts ########################
 
+  # TEMPORARILY DISABLED: wasm32v1-none target causes serde_core + Rust 1.88 bug
+  # Also bridges/testing directory doesn't exist in the repo
+  # Tracking: https://github.com/pezkuwichain/pezkuwi-sdk/issues/358
   #
   #
   #
   prepare-bridges-zombienet-artifacts:
     needs: [preflight]
+    if: false  # Disabled until serde_core upstream fix
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
     timeout-minutes: 60
     container:
@@ -372,11 +376,14 @@ jobs:
           path: artifacts.tar
           retention-days: 1
 
+  # TEMPORARILY DISABLED: wasm32v1-none target causes serde_core + Rust 1.88 bug
+  # Tracking: https://github.com/pezkuwichain/pezkuwi-sdk/issues/358
   #
   #
   #
   prepare-pezkuwi-zombienet-artifacts:
     needs: [preflight]
+    if: false  # Disabled until serde_core upstream fix
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
     timeout-minutes: 60
     container:
@@ -404,11 +411,14 @@ jobs:
           path: artifacts.tar
           retention-days: 1
 
+  # TEMPORARILY DISABLED: wasm32v1-none target causes serde_core + Rust 1.88 bug
+  # Tracking: https://github.com/pezkuwichain/pezkuwi-sdk/issues/358
   #
   #
   #
   prepare-pezcumulus-zombienet-artifacts:
     needs: [preflight]
+    if: false  # Disabled until serde_core upstream fix
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
     timeout-minutes: 60
     container:
@@ -436,8 +446,11 @@ jobs:
           path: artifacts.tar
           retention-days: 1
 
+  # TEMPORARILY DISABLED: wasm32v1-none target causes serde_core + Rust 1.88 bug
+  # Tracking: https://github.com/pezkuwichain/pezkuwi-sdk/issues/358
   prepare-teyrchain-templates-zombienet-artifacts:
     needs: [preflight]
+    if: false  # Disabled until serde_core upstream fix
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
     timeout-minutes: 60
     container:
