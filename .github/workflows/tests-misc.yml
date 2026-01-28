@@ -34,6 +34,9 @@ jobs:
       # but still want to have debug assertions.
       RUSTFLAGS: "-C debug-assertions"
       RUST_BACKTRACE: 1
+      # Temporary: Skip WASM build due to serde_core + Rust 1.88 + WASM bug
+      # Tracking: https://github.com/pezkuwichain/pezkuwi-sdk/issues/358
+      SKIP_WASM_BUILD: 1
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
