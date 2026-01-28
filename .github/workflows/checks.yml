@@ -50,6 +50,7 @@ jobs:
       - name: script
         id: required
         run: |
+          git config --global --add safe.directory '*'
           cargo clippy --all-targets --all-features --locked --workspace --quiet
 
   check-try-runtime:
@@ -77,6 +78,7 @@ jobs:
       - name: script
         id: required
         run: |
+          git config --global --add safe.directory '*'
           cargo check --locked --all --features try-runtime --quiet
           # Check that teyrchain-template will compile with `try-runtime` feature flag.
           cargo check --locked -p teyrchain-template-node --features try-runtime
