@@ -212,46 +212,32 @@ pub fn get_preset(id: &PresetId) -> Option<Vec<u8>> {
 		// Treasury, Founder, Presale accounts should be replaced with real addresses
 		// ====================================================================
 		PRESET_GENESIS => {
-			// MAINNET ACCOUNTS - NEW SECURE WALLETS (2026-01-21)
-			// Treasury: 5D7guUmrk2xap2xuCwDJgJB5JDtxy439Dx2vaQ5JkvgtNjb4
+			// MAINNET ACCOUNTS - NEW SECURE WALLETS (2026-01-29)
+			// Treasury_1: 5EhCpn82QtdU53MF6PoNFrKHgSrsfcAxFTMwrn3JYf9dioQw
 			let treasury_account: AccountId =
-				hex!("2e82c43a0a7edc05a179901d18bdfac86d52953c1b7ca5e8e3ceeb3a83044b4f").into();
-			// Founder: 5HN6sFM7TbPQazmfhJP1kU8itw7Tb2A9UML8TwSYRwiN9q5Z
+				hex!("744ed0812d6096827376b4625fe4f840d4950d5aef0ab12902e64c444c8e9d29").into();
+			// Founder_Satoshi_Qazi_Muhammed: 5CyuFfbF95rzBxru7c9yEsX4XmQXUxpLUcbj9RLg9K1cGiiF
 			let founder_account: AccountId =
-				hex!("ea71cc341e6790988692d8adcd08a26c75d8c813e45e0a25b24b707dc7846677").into();
-			// Presale: 5GsFKogGuxr9ToPuZ2XPxksZWTWdCGUnd8hmqSyssfsvprtA
+				hex!("28925ed8b4c0c95402b31563251fd318414351114b1c7797ee788666d27d6305").into();
+			// Presale_1: 5Fs1VXbPVvmHAaQ8a7bKcdJ8h8c1mgJKLJ6Pwce69fSqhLJ5
 			let presale_account: AccountId =
-				hex!("d47027192dd48b2c48606012a8bb7410cd92fed091e4896e4dc4c67772974606").into();
+				hex!("a8055af9df1db60bea4277f7e91157246a6245123564bff10435f461f284bf55").into();
 
 			asset_hub_pezkuwichain_genesis(
-				// initial collators - 4 Asset Hub collators from mainnet_collators
+				// initial collators - 2 Asset Hub collators - Generated 2026-01-29
 				vec![
-					// Azad (5F4ErvW2gvD2jgtfSfypcDirgF78PQWTsz8GmhArZ8Jvg4c5)
+					// Azad (5Et1WgtNjUdMxyvHjAKGN8Nq1ivhUyANYjwKpCL8a46D8mCp)
 					(
-						hex!("8459d334fcb5432ccd6820b2677080c9dbefa127734eaa15551b62aaffb5ff57")
+						hex!("7c8c6f463d124a601fbc7d425daad82651193f35730957982519dbcff6d55f71")
 							.into(),
-						hex!("8459d334fcb5432ccd6820b2677080c9dbefa127734eaa15551b62aaffb5ff57")
+						hex!("7c8c6f463d124a601fbc7d425daad82651193f35730957982519dbcff6d55f71")
 							.unchecked_into(),
 					),
-					// Beritan (5DvQHQBDvYsigbdxdkhQfRb6cTXeDAEDvqeQHrcPfEE1z2yZ)
+					// Beritan (5F4GeiJE2oBcPdxfeYfWL4bu4iJfduzJk4aHhttemwhpscpQ)
 					(
-						hex!("5223587ee928ed8cc5e9fcff9f9d04ac5fca83a46d602193b265e4642a3a344d")
+						hex!("845fd9541c46c3dc4325ddcbae06596382771d943f49d9659bdbbed4abd4eb09")
 							.into(),
-						hex!("5223587ee928ed8cc5e9fcff9f9d04ac5fca83a46d602193b265e4642a3a344d")
-							.unchecked_into(),
-					),
-					// Cuwan (5HB4o1Qmb883n7spYVnt5dcWXrY18SFD8iwH2ySg2nSGjyyT)
-					(
-						hex!("e2071e98ab4273169bf6a4cd9ade1f3f5d7e077ee849c06ff138faeb89f8187b")
-							.into(),
-						hex!("e2071e98ab4273169bf6a4cd9ade1f3f5d7e077ee849c06ff138faeb89f8187b")
-							.unchecked_into(),
-					),
-					// Delil (5Fk4FPr6BS3CiPyV38cYL5SnhgKdAGbzgVCL5K7eyvHp1g3z)
-					(
-						hex!("a2b7ea8803b44586258d718123286558aa0a3da2971316c83b46e3962b95af18")
-							.into(),
-						hex!("a2b7ea8803b44586258d718123286558aa0a3da2971316c83b46e3962b95af18")
+						hex!("845fd9541c46c3dc4325ddcbae06596382771d943f49d9659bdbbed4abd4eb09")
 							.unchecked_into(),
 					),
 				],
