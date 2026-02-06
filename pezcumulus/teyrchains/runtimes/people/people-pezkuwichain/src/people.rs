@@ -298,6 +298,7 @@ impl pezpallet_identity_kyc::Config for Runtime {
 	type KycApplicationDeposit = KycApplicationDeposit;
 	type MaxStringLength = MaxStringLength;
 	type MaxCidLength = MaxCidLength;
+	type DefaultReferrer = DefaultReferrer;
 }
 
 // =============================================================================
@@ -371,8 +372,14 @@ impl pezpallet_perwerde::Config for Runtime {
 // =============================================================================
 
 parameter_types! {
-	/// Default referrer account (genesis/system account)
-	pub DefaultReferrer: AccountId = pezsp_keyring::Sr25519Keyring::Alice.to_account_id();
+	/// Default referrer account - Founder address
+	/// SS58: 5CyuFfbF95rzBxru7c9yEsX4XmQXUxpLUcbj9RLg9K1cGiiF
+	pub DefaultReferrer: AccountId = AccountId::from([
+		0x28, 0x92, 0x5e, 0xd8, 0xb4, 0xc0, 0xc9, 0x54,
+		0x02, 0xb3, 0x15, 0x63, 0x25, 0x1f, 0xd3, 0x18,
+		0x41, 0x43, 0x51, 0x11, 0x4b, 0x1c, 0x77, 0x97,
+		0xee, 0x78, 0x86, 0x66, 0xd2, 0x7d, 0x63, 0x05,
+	]);
 	/// Penalty per revocation (trust score reduction)
 	pub const PenaltyPerRevocation: u32 = 10;
 }

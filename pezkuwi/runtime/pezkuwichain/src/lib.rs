@@ -566,6 +566,42 @@ impl pezpallet_staking::Config for Runtime {
 }
 
 // =====================================================
+// STAKING SCORE CONFIGURATION
+// =====================================================
+
+/// Relay Chain StakingInfoProvider - reads directly from pezpallet_staking
+/// This is the REAL implementation that accesses actual staking data
+pub struct RelayStakingInfoProvider;
+
+impl pezpallet_staking_score::StakingInfoProvider<AccountId, Balance>
+	for RelayStakingInfoProvider
+{
+	fn get_staking_details(
+		who: &AccountId,
+	) -> Option<pezpallet_staking_score::StakingDetails<Balance>> {
+		// Get staking ledger from pezpallet_staking
+		let ledger = pezpallet_staking::Ledger::<Runtime>::get(who)?;
+
+		// Get nominations if any
+		let nominations_count = pezpallet_staking::Nominators::<Runtime>::get(who)
+			.map(|n| n.targets.len() as u32)
+			.unwrap_or(0);
+
+		Some(pezpallet_staking_score::StakingDetails {
+			staked_amount: ledger.active,
+			nominations_count,
+			unlocking_chunks_count: ledger.unlocking.len() as u32,
+		})
+	}
+}
+
+impl pezpallet_staking_score::Config for Runtime {
+	type Balance = Balance;
+	type StakingInfo = RelayStakingInfoProvider;
+	type WeightInfo = pezpallet_staking_score::weights::BizinikiwiWeight<Runtime>;
+}
+
+// =====================================================
 // FAST UNSTAKE CONFIGURATION
 // =====================================================
 
@@ -1570,6 +1606,9 @@ construct_runtime! {
 		// TNPoS Validator Pool - Shadow Mode (runs parallel to NPoS)
 		ValidatorPool: pezpallet_validator_pool = 91,
 
+		// Staking Score - Time-weighted staking reputation score
+		StakingScore: pezpallet_staking_score = 92,
+
 		// Root testing pezpallet.
 		RootTesting: pezpallet_root_testing = 249,
 
@@ -1821,6 +1860,7 @@ mod benches {
 		[pezpallet_whitelist, Whitelist]
 		// Pezkuwichain Custom Pallets
 		[pezpallet_validator_pool, ValidatorPool]
+		[pezpallet_staking_score, StakingScore]
 		// XCM
 		[pezpallet_xcm, PalletXcmExtrinsicsBenchmark::<Runtime>]
 		[pezpallet_xcm_benchmarks::fungible, pezpallet_xcm_benchmarks::fungible::Pezpallet::<Runtime>]
