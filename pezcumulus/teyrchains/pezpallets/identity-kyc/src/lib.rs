@@ -131,6 +131,9 @@ pub mod pezpallet {
 
 		type WeightInfo: WeightInfo;
 
+		/// Default referrer account (founder) - used when no valid referrer is provided
+		type DefaultReferrer: Get<Self::AccountId>;
+
 		/// Hook called when citizenship is approved - used by referral pezpallet
 		type OnKycApproved: crate::types::OnKycApproved<Self::AccountId>;
 
@@ -284,24 +287,23 @@ pub mod pezpallet {
 		///
 		/// # Arguments
 		/// - `identity_hash`: H256 hash of identity documents (calculated off-chain)
-		/// - `referrer`: Account of existing citizen who will vouch for you
+		/// - `referrer`: Optional account of existing citizen who will vouch for you.
+		///               If None or invalid, DefaultReferrer (founder) is used.
 		///
 		/// # Workflow
-		/// 1. Applicant submits hash + referrer
-		/// 2. Deposit is reserved (spam prevention)
-		/// 3. Status becomes PendingReferral
-		/// 4. Referrer must call approve_referral
+		/// 1. Applicant submits hash + optional referrer
+		/// 2. If referrer is None/invalid, DefaultReferrer is used
+		/// 3. Deposit is reserved (spam prevention)
+		/// 4. Status becomes PendingReferral
+		/// 5. Referrer must call approve_referral
 		#[pezpallet::call_index(0)]
 		#[pezpallet::weight(T::WeightInfo::apply_for_citizenship())]
 		pub fn apply_for_citizenship(
 			origin: OriginFor<T>,
 			identity_hash: H256,
-			referrer: T::AccountId,
+			referrer: Option<T::AccountId>,
 		) -> DispatchResult {
 			let applicant = ensure_signed(origin)?;
-
-			// Cannot refer yourself
-			ensure!(applicant != referrer, Error::<T>::SelfReferral);
 
 			// Must not have existing application
 			ensure!(
@@ -309,24 +311,35 @@ pub mod pezpallet {
 				Error::<T>::ApplicationAlreadyExists
 			);
 
-			// Referrer must be an approved citizen
+			// Determine the actual referrer:
+			// 1. Use provided referrer if valid (approved citizen and not self)
+			// 2. Fall back to DefaultReferrer otherwise
+			let actual_referrer = referrer
+				.filter(|r| *r != applicant) // Not self-referral
+				.filter(|r| KycStatuses::<T>::get(r) == KycLevel::Approved) // Must be citizen
+				.unwrap_or_else(|| T::DefaultReferrer::get());
+
+			// Verify the actual referrer is valid (including DefaultReferrer)
 			ensure!(
-				KycStatuses::<T>::get(&referrer) == KycLevel::Approved,
+				KycStatuses::<T>::get(&actual_referrer) == KycLevel::Approved,
 				Error::<T>::ReferrerNotCitizen
 			);
+
+			// Cannot refer yourself (even with DefaultReferrer)
+			ensure!(applicant != actual_referrer, Error::<T>::SelfReferral);
 
 			// Reserve deposit (spam prevention, returned on approval)
 			let deposit = T::KycApplicationDeposit::get();
 			T::Currency::reserve(&applicant, deposit)?;
 
 			// Store application (only hash, no personal data)
-			let application = CitizenshipApplication { identity_hash, referrer: referrer.clone() };
+			let application = CitizenshipApplication { identity_hash, referrer: actual_referrer.clone() };
 			Applications::<T>::insert(&applicant, application);
 
 			// Update status
 			KycStatuses::<T>::insert(&applicant, KycLevel::PendingReferral);
 
-			Self::deposit_event(Event::CitizenshipApplied { applicant, referrer, identity_hash });
+			Self::deposit_event(Event::CitizenshipApplied { applicant, referrer: actual_referrer, identity_hash });
 			Ok(())
 		}
 
