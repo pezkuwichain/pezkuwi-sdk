@@ -112,7 +112,7 @@ jobs:
 
     steps:
       - name: Checkout sources
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Validate inputs
         id: validate_inputs
@@ -132,7 +132,7 @@ jobs:
     steps:
       - name: Checkout sources
         if: ${{ inputs.binary == 'pezkuwi-omni-node' || inputs.binary == 'pezkuwi-teyrchain' || inputs.binary == 'chain-spec-builder' || inputs.image_type == 'rc' }}
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Fetch rc artifacts or release artifacts from s3 based on version
         if: ${{ inputs.binary == 'pezkuwi-omni-node' || inputs.binary == 'pezkuwi-teyrchain' || inputs.binary == 'chain-spec-builder' || inputs.image_type == 'rc' }}
@@ -151,7 +151,7 @@ jobs:
 
       - name: Upload artifacts
         if: ${{ inputs.binary == 'pezkuwi-omni-node' || inputs.binary == 'pezkuwi-teyrchain' || inputs.binary == 'chain-spec-builder' || inputs.image_type == 'rc' }}
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: release-artifacts-${{ env.BINARY }}
           path: release-artifacts/x86_64-unknown-linux-gnu/${{ env.BINARY }}/**/*
@@ -163,11 +163,11 @@ jobs:
 
     steps:
       - name: Checkout sources
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Download artifacts
         if: ${{ inputs.binary == 'pezkuwi-omni-node' || inputs.binary == 'pezkuwi-teyrchain' || inputs.binary == 'chain-spec-builder' || inputs.image_type == 'rc' }}
-        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
         with:
           name: release-artifacts-${{ env.BINARY }}
           path: release-artifacts
@@ -274,14 +274,14 @@ jobs:
 
       - name: Login to Dockerhub to publish pezkuwi
         if: ${{ env.BINARY == 'pezkuwi' }}
-        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
+        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3.7.0
         with:
           username: ${{ secrets.PEZKUWI_DOCKERHUB_USERNAME }}
           password: ${{ secrets.PEZKUWI_DOCKERHUB_TOKEN }}
 
       - name: Login to Dockerhub to publish pezkuwi-omni-node/pezkuwi-teyrchain/chain-spec-builder
         if: ${{ env.BINARY == 'pezkuwi-omni-node' || env.BINARY == 'pezkuwi-teyrchain' || env.BINARY == 'chain-spec-builder' }}
-        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
+        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3.7.0
         with:
           username: ${{ secrets.CUMULUS_DOCKERHUB_USERNAME }}
           password: ${{ secrets.CUMULUS_DOCKERHUB_TOKEN }}

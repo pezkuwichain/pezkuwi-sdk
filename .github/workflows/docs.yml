@@ -33,7 +33,7 @@ jobs:
       CARGO_INCREMENTAL: 0
       CARGO_TARGET_DIR: /cache/target
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       # Exclude pezkuwi-zombienet-sdk-tests: its build.rs runs nested cargo build
       # which doesn't inherit workspace [patch.crates-io] settings, causing
@@ -59,7 +59,7 @@ jobs:
       CARGO_TARGET_DIR: /cache/target
       RUSTDOCFLAGS: "-Dwarnings --default-theme=ayu --html-in-header ./docs/sdk/assets/header.html --extend-css ./docs/sdk/assets/theme.css --html-after-content ./docs/sdk/assets/after-content.html"
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       # Exclude pezkuwi-zombienet-sdk-tests: nested cargo build in build.rs
       # doesn't inherit workspace patches. See test-doc job comment.
@@ -81,7 +81,7 @@ jobs:
 
           inject_simple_analytics "$docs_dir" "$script_content"
       - run: echo "<meta http-equiv=refresh content=0;url=pezkuwi_sdk_docs/index.html>" > ./crate-docs/index.html
-      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: ${{ github.sha }}-doc
           path: ./crate-docs/
@@ -92,14 +92,14 @@ jobs:
     runs-on: ubuntu-latest
     needs: isdraft
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Install mdbook
         run: |
           cargo install mdbook --version 0.4.35 --locked
       - run: mdbook build ./pezkuwi/roadmap/implementers-guide
       - run: mkdir -p artifacts
       - run: mv pezkuwi/roadmap/implementers-guide/book artifacts/
-      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: ${{ github.sha }}-guide
           path: ./artifacts/
@@ -129,10 +129,10 @@ jobs:
     environment: subsystem-benchmarks
     needs: [build-rustdoc, build-implementers-guide]
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           ref: gh-pages
-      - uses: actions/create-github-app-token@67018539274d69449ef7c02e8e71183d1719ab42 # v2.1.4
+      - uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2.2.1
         id: app-token
         with:
           app-id: ${{ secrets.PEZKUWI_GHPAGES_APP_ID }}
@@ -144,12 +144,12 @@ jobs:
         env:
           REF_NAME: ${{ github.head_ref || github.ref_name }}
       - name: Download rustdocs
-        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
         with:
           name: ${{ github.sha }}-doc
           path: ${{ github.head_ref || github.ref_name }}
       - name: Download guide
-        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
         with:
           name: ${{ github.sha }}-guide
           path: /tmp
