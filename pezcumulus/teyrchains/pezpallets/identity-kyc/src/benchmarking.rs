@@ -59,7 +59,7 @@ mod benchmarks {
 		apply_for_citizenship(
 			RawOrigin::Signed(applicant.clone()),
 			identity_hash,
-			referrer.clone(),
+			Some(referrer.clone()),
 		);
 
 		assert_eq!(KycStatuses::<T>::get(&applicant), KycLevel::PendingReferral);

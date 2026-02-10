@@ -29,7 +29,7 @@
 
 use crate::{
 	BabeConfig, BalancesConfig, ConfigurationConfig, RegistrarConfig, RuntimeGenesisConfig,
-	SessionConfig, SessionKeys, SudoConfig, BABE_GENESIS_EPOCH_CONFIG,
+	SessionConfig, SessionKeys, StakingConfig, SudoConfig, BABE_GENESIS_EPOCH_CONFIG,
 };
 #[cfg(not(feature = "std"))]
 use alloc::format;
@@ -37,6 +37,7 @@ use alloc::{vec, vec::Vec};
 use pezframe_support::build_struct_json_patch;
 use pezkuwi_primitives::{AccountId, AssignmentId, SchedulerParams, ValidatorId};
 use pezkuwichain_runtime_constants::currency::UNITS as TYR;
+use pezpallet_staking::{Forcing, StakerStatus};
 use pezsp_authority_discovery::AuthorityId as AuthorityDiscoveryId;
 use pezsp_consensus_babe::AuthorityId as BabeId;
 use pezsp_consensus_beefy::ecdsa_crypto::AuthorityId as BeefyId;
@@ -44,6 +45,7 @@ use pezsp_consensus_grandpa::AuthorityId as GrandpaId;
 use pezsp_core::{crypto::get_public_from_string_or_panic, sr25519};
 use pezsp_genesis_builder::PresetId;
 use pezsp_keyring::Sr25519Keyring;
+use pezsp_runtime::Perbill;
 
 // ============================================================================
 // HEZ TOKEN GENESIS CONSTANTS (Total Supply: 200 Million HEZ)
@@ -175,9 +177,8 @@ fn default_teyrchains_host_configuration(
 			lookahead: 3,
 			group_rotation_frequency: 20,
 			paras_availability_period: 4,
-			// num_cores: 0 olmalı çünkü assign_coretime() genesis'te
-			// her teyrchain için otomatik olarak artırır
-			num_cores: 0,
+			// System teyrchains için 2 core gerekli (Asset Hub + People Chain)
+			num_cores: 2,
 			..Default::default()
 		},
 		..Default::default()
@@ -962,13 +963,31 @@ fn pezkuwichain_genesis_config() -> serde_json::Value {
 		},
 		session: SessionConfig {
 			keys: initial_authorities
-				.into_iter()
+				.iter()
 				.map(|x| (
 					x.0.clone(),
-					x.0,
-					pezkuwichain_session_keys(x.2, x.3, x.4, x.5, x.6, x.7)
+					x.0.clone(),
+					pezkuwichain_session_keys(
+						x.2.clone(),
+						x.3.clone(),
+						x.4.clone(),
+						x.5.clone(),
+						x.6.clone(),
+						x.7.clone(),
+					)
 				))
 				.collect::<Vec<_>>(),
+		},
+		staking: StakingConfig {
+			minimum_validator_count: 1,
+			validator_count: initial_authorities.len() as u32,
+			stakers: initial_authorities
+				.iter()
+				.map(|x| (x.0.clone(), x.0.clone(), STASH, StakerStatus::<AccountId>::Validator))
+				.collect::<Vec<_>>(),
+			invulnerables: initial_authorities.iter().map(|x| x.0.clone()).collect::<Vec<_>>(),
+			force_era: Forcing::ForceAlways,
+			slash_reward_fraction: Perbill::from_percent(10),
 		},
 		babe: BabeConfig { epoch_config: BABE_GENESIS_EPOCH_CONFIG },
 		sudo: SudoConfig { key: Some(founder_account) },

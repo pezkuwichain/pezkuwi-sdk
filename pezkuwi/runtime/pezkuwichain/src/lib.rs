@@ -573,9 +573,7 @@ impl pezpallet_staking::Config for Runtime {
 /// This is the REAL implementation that accesses actual staking data
 pub struct RelayStakingInfoProvider;
 
-impl pezpallet_staking_score::StakingInfoProvider<AccountId, Balance>
-	for RelayStakingInfoProvider
-{
+impl pezpallet_staking_score::StakingInfoProvider<AccountId, Balance> for RelayStakingInfoProvider {
 	fn get_staking_details(
 		who: &AccountId,
 	) -> Option<pezpallet_staking_score::StakingDetails<Balance>> {

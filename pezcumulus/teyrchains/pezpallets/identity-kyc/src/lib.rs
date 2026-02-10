@@ -317,7 +317,7 @@ pub mod pezpallet {
 			let actual_referrer = referrer
 				.filter(|r| *r != applicant) // Not self-referral
 				.filter(|r| KycStatuses::<T>::get(r) == KycLevel::Approved) // Must be citizen
-				.unwrap_or_else(|| T::DefaultReferrer::get());
+				.unwrap_or_else(T::DefaultReferrer::get);
 
 			// Verify the actual referrer is valid (including DefaultReferrer)
 			ensure!(
@@ -333,13 +333,18 @@ pub mod pezpallet {
 			T::Currency::reserve(&applicant, deposit)?;
 
 			// Store application (only hash, no personal data)
-			let application = CitizenshipApplication { identity_hash, referrer: actual_referrer.clone() };
+			let application =
+				CitizenshipApplication { identity_hash, referrer: actual_referrer.clone() };
 			Applications::<T>::insert(&applicant, application);
 
 			// Update status
 			KycStatuses::<T>::insert(&applicant, KycLevel::PendingReferral);
 
-			Self::deposit_event(Event::CitizenshipApplied { applicant, referrer: actual_referrer, identity_hash });
+			Self::deposit_event(Event::CitizenshipApplied {
+				applicant,
+				referrer: actual_referrer,
+				identity_hash,
+			});
 			Ok(())
 		}
 

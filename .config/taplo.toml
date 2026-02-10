@@ -2,12 +2,10 @@
 
 # ignore zombienet as they do some deliberate custom toml stuff
 exclude = [
-	"bizinikiwi/client/transaction-pool/tests/zombienet/**",
-	"bizinikiwi/zombienet/**",
-	"pezbridges/testing/**",
-	"pezcumulus/zombienet/**",
-	"pezkuwi/node/malus/integrationtests/**",
-	"pezkuwi/zombienet_tests/**",
+	"**/integrationtests/**",
+	"**/testing/**",
+	"**/zombienet/**",
+	"**/zombienet_tests/**",
 	"target/**",
 ]
 
