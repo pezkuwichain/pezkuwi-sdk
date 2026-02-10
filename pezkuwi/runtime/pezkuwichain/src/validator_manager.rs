@@ -43,6 +43,9 @@ pub mod pezpallet {
 
 		/// Privileged origin that can add or remove validators.
 		type PrivilegedOrigin: EnsureOrigin<<Self as pezframe_system::Config>::RuntimeOrigin>;
+
+		/// Staking pallet for forwarding session events
+		type Staking: pezpallet_session::SessionManager<Self::ValidatorId>;
 	}
 
 	#[pezpallet::event]
@@ -103,6 +106,9 @@ pub mod pezpallet {
 
 impl<T: Config> pezpallet_session::SessionManager<T::ValidatorId> for Pezpallet<T> {
 	fn new_session(new_index: SessionIndex) -> Option<Vec<T::ValidatorId>> {
+		// Forward to Staking pallet for era management
+		let _ = T::Staking::new_session(new_index);
+
 		if new_index <= 1 {
 			return None;
 		}
@@ -124,9 +130,15 @@ impl<T: Config> pezpallet_session::SessionManager<T::ValidatorId> for Pezpallet<
 		Some(validators)
 	}
 
-	fn end_session(_: SessionIndex) {}
+	fn end_session(end_index: SessionIndex) {
+		// Forward to Staking pallet
+		T::Staking::end_session(end_index);
+	}
 
-	fn start_session(_start_index: SessionIndex) {}
+	fn start_session(start_index: SessionIndex) {
+		// Forward to Staking pallet
+		T::Staking::start_session(start_index);
+	}
 }
 
 impl<T: Config> pezpallet_session::historical::SessionManager<T::ValidatorId, ()> for Pezpallet<T> {

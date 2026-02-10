@@ -1457,6 +1457,7 @@ impl assigned_slots::Config for Runtime {
 impl validator_manager::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type PrivilegedOrigin = EnsureRoot<AccountId>;
+	type Staking = Staking;
 }
 
 parameter_types! {
