@@ -5,15 +5,15 @@ pub mod teyrchain;
 
 use std::{cell::RefCell, collections::HashMap, path::PathBuf, rc::Rc, sync::Arc, time::Duration};
 
-use configuration::{
+use pezkuwi_zombienet_configuration::{
 	para_states::{Initial, Running},
 	shared::{helpers::generate_unique_node_name_from_names, node::EnvVar},
 	types::{Arg, Command, Image, Port, ValidationContext},
 	ParachainConfig, ParachainConfigBuilder, RegistrationStrategy,
 };
-use provider::{types::TransferedFile, DynNamespace, ProviderError};
+use pezkuwi_zombienet_provider::{types::TransferedFile, DynNamespace, ProviderError};
 use serde::Serialize;
-use support::fs::FileSystem;
+use pezkuwi_zombienet_support::fs::FileSystem;
 use tokio::sync::RwLock;
 use tracing::{error, warn};
 
@@ -108,10 +108,10 @@ impl<T: FileSystem> Network<T> {
 	// The new node is added to the running network instance.
 	/// # Example:
 	/// ```rust
-	/// # use provider::NativeProvider;
-	/// # use support::{fs::local::LocalFileSystem};
-	/// # use zombienet_orchestrator::{errors, AddNodeOptions, Orchestrator};
-	/// # use configuration::NetworkConfig;
+	/// # use pezkuwi_zombienet_provider::NativeProvider;
+	/// # use pezkuwi_zombienet_support::{fs::local::LocalFileSystem};
+	/// # use pezkuwi_zombienet_orchestrator::{errors, AddNodeOptions, Orchestrator};
+	/// # use pezkuwi_zombienet_configuration::NetworkConfig;
 	/// # async fn example() -> Result<(), errors::OrchestratorError> {
 	/// #   let provider = NativeProvider::new(LocalFileSystem {});
 	/// #   let orchestrator = Orchestrator::new(LocalFileSystem {}, provider);
@@ -220,10 +220,10 @@ impl<T: FileSystem> Network<T> {
 	///
 	/// # Example:
 	/// ```rust
-	/// # use provider::NativeProvider;
-	/// # use support::{fs::local::LocalFileSystem};
-	/// # use zombienet_orchestrator::{errors, AddCollatorOptions, Orchestrator};
-	/// # use configuration::NetworkConfig;
+	/// # use pezkuwi_zombienet_provider::NativeProvider;
+	/// # use pezkuwi_zombienet_support::{fs::local::LocalFileSystem};
+	/// # use pezkuwi_zombienet_orchestrator::{errors, AddCollatorOptions, Orchestrator};
+	/// # use pezkuwi_zombienet_configuration::NetworkConfig;
 	/// # async fn example() -> Result<(), anyhow::Error> {
 	/// #   let provider = NativeProvider::new(LocalFileSystem {});
 	/// #   let orchestrator = Orchestrator::new(LocalFileSystem {}, provider);
@@ -385,10 +385,10 @@ impl<T: FileSystem> Network<T> {
 	/// # Example:
 	/// ```rust
 	/// # use anyhow::anyhow;
-	/// # use provider::NativeProvider;
-	/// # use support::{fs::local::LocalFileSystem};
-	/// # use zombienet_orchestrator::{errors, AddCollatorOptions, Orchestrator};
-	/// # use configuration::NetworkConfig;
+	/// # use pezkuwi_zombienet_provider::NativeProvider;
+	/// # use pezkuwi_zombienet_support::{fs::local::LocalFileSystem};
+	/// # use pezkuwi_zombienet_orchestrator::{errors, AddCollatorOptions, Orchestrator};
+	/// # use pezkuwi_zombienet_configuration::NetworkConfig;
 	/// # async fn example() -> Result<(), anyhow::Error> {
 	/// #   let provider = NativeProvider::new(LocalFileSystem {});
 	/// #   let orchestrator = Orchestrator::new(LocalFileSystem {}, provider);
@@ -569,10 +569,10 @@ impl<T: FileSystem> Network<T> {
 	/// # Example:
 	/// ```rust
 	/// # use anyhow::anyhow;
-	/// # use provider::NativeProvider;
-	/// # use support::{fs::local::LocalFileSystem};
-	/// # use zombienet_orchestrator::Orchestrator;
-	/// # use configuration::{NetworkConfig, NetworkConfigBuilder, RegistrationStrategy};
+	/// # use pezkuwi_zombienet_provider::NativeProvider;
+	/// # use pezkuwi_zombienet_support::{fs::local::LocalFileSystem};
+	/// # use pezkuwi_zombienet_orchestrator::Orchestrator;
+	/// # use pezkuwi_zombienet_configuration::{NetworkConfig, NetworkConfigBuilder, RegistrationStrategy};
 	/// # async fn example() -> Result<(), anyhow::Error> {
 	/// #   let provider = NativeProvider::new(LocalFileSystem {});
 	/// #   let orchestrator = Orchestrator::new(LocalFileSystem {}, provider);

@@ -36,8 +36,8 @@ pub trait NetworkConfigExt {
 	///
 	/// # Example:
 	/// ```rust
-	/// # use zombienet_sdk::{NetworkConfig, NetworkConfigExt};
-	/// # async fn example() -> Result<(), zombienet_sdk::OrchestratorError> {
+	/// # use pezkuwi_zombienet_sdk::{NetworkConfig, NetworkConfigExt};
+	/// # async fn example() -> Result<(), pezkuwi_zombienet_sdk::OrchestratorError> {
 	/// let network = NetworkConfig::load_from_toml("config.toml")?
 	///     .spawn_native()
 	///     .await?;
@@ -55,9 +55,9 @@ pub trait AttachToLive {
 	///
 	/// # Example:
 	/// ```rust
-	/// # use zombienet_sdk::{AttachToLive, AttachToLiveNetwork};
+	/// # use pezkuwi_zombienet_sdk::{AttachToLive, AttachToLiveNetwork};
 	/// # use std::path::PathBuf;
-	/// # async fn example() -> Result<(), zombienet_sdk::OrchestratorError> {
+	/// # async fn example() -> Result<(), pezkuwi_zombienet_sdk::OrchestratorError> {
 	/// let zombie_json_path = PathBuf::from("some/path/zombie.json");
 	/// let network = AttachToLiveNetwork::attach_native(zombie_json_path).await?;
 	/// # Ok(())

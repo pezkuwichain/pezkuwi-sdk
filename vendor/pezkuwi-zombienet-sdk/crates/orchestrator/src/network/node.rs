@@ -11,9 +11,9 @@ use fancy_regex::Regex;
 use glob_match::glob_match;
 use pezkuwi_subxt::{backend::rpc::RpcClient, OnlineClient};
 use prom_metrics_parser::MetricMap;
-use provider::DynNode;
+use pezkuwi_zombienet_provider::DynNode;
 use serde::{Deserialize, Serialize, Serializer};
-use support::net::{skip_err_while_waiting, wait_ws_ready};
+use pezkuwi_zombienet_support::net::{skip_err_while_waiting, wait_ws_ready};
 use thiserror::Error;
 use tokio::sync::RwLock;
 use tracing::{debug, trace};
@@ -445,10 +445,10 @@ impl NetworkNode {
 	/// # Example
 	/// ```rust
 	/// # use std::{sync::Arc, time::Duration};
-	/// # use provider::NativeProvider;
-	/// # use support::{fs::local::LocalFileSystem};
-	/// # use zombienet_orchestrator::{Orchestrator, network::node::{NetworkNode, LogLineCountOptions}};
-	/// # use configuration::NetworkConfig;
+	/// # use pezkuwi_zombienet_provider::NativeProvider;
+	/// # use pezkuwi_zombienet_support::{fs::local::LocalFileSystem};
+	/// # use pezkuwi_zombienet_orchestrator::{Orchestrator, network::node::{NetworkNode, LogLineCountOptions}};
+	/// # use pezkuwi_zombienet_configuration::NetworkConfig;
 	/// # async fn example() -> Result<(), anyhow::Error> {
 	/// #   let provider = NativeProvider::new(LocalFileSystem {});
 	/// #   let orchestrator = Orchestrator::new(LocalFileSystem {}, provider);
@@ -601,7 +601,7 @@ mod tests {
 	};
 
 	use async_trait::async_trait;
-	use provider::{types::*, ProviderError, ProviderNode};
+	use pezkuwi_zombienet_provider::{types::*, ProviderError, ProviderNode};
 
 	use super::*;
 
