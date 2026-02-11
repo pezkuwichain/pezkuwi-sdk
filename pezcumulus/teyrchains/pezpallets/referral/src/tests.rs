@@ -317,28 +317,31 @@ fn referral_score_with_balanced_penalty() {
 		ReferrerStatsStorage::<Test>::mutate(REFERRER, |stats| {
 			stats.total_referrals = 10;
 			stats.revoked_referrals = 0;
+			stats.penalty_score = 0;
 		});
 		assert_eq!(ReferralPallet::get_referral_score(&REFERRER), 100);
 
 		// 10 total, 4 revoked = 6 good
-		// Penalty: (4 * 10) / 4 = 10 points deducted
+		// penalty_score: 4 * PenaltyPerRevocation(3) = 12
 		// Base score: 6 * 10 = 60
-		// Final: 60 - 10 = 50
+		// Final: 60 - 12 = 48
 		ReferrerStatsStorage::<Test>::mutate(REFERRER, |stats| {
 			stats.total_referrals = 10;
 			stats.revoked_referrals = 4;
+			stats.penalty_score = 4 * PenaltyPerRevocationAmount::get();
 		});
-		assert_eq!(ReferralPallet::get_referral_score(&REFERRER), 50);
+		assert_eq!(ReferralPallet::get_referral_score(&REFERRER), 48);
 
 		// 20 total, 8 revoked = 12 good (tier 2)
-		// Penalty: (8 * 10) / 4 = 20 points deducted
+		// penalty_score: 8 * PenaltyPerRevocation(3) = 24
 		// Base score: 100 + (2 * 5) = 110
-		// Final: 110 - 20 = 90
+		// Final: 110 - 24 = 86
 		ReferrerStatsStorage::<Test>::mutate(REFERRER, |stats| {
 			stats.total_referrals = 20;
 			stats.revoked_referrals = 8;
+			stats.penalty_score = 8 * PenaltyPerRevocationAmount::get();
 		});
-		assert_eq!(ReferralPallet::get_referral_score(&REFERRER), 90);
+		assert_eq!(ReferralPallet::get_referral_score(&REFERRER), 86);
 	});
 }
 
@@ -349,12 +352,13 @@ fn referral_score_cannot_go_negative() {
 	new_test_ext().execute_with(|| {
 		// Extreme case: All referrals revoked
 		// 5 total, 5 revoked = 0 good
-		// Penalty: (5 * 10) / 4 = 12 points
+		// penalty_score: 5 * PenaltyPerRevocation(3) = 15
 		// Base score: 0
-		// Final: 0 - 12 = 0 (saturating_sub)
+		// Final: 0 - 15 = 0 (saturating_sub)
 		ReferrerStatsStorage::<Test>::mutate(REFERRER, |stats| {
 			stats.total_referrals = 5;
 			stats.revoked_referrals = 5;
+			stats.penalty_score = 5 * PenaltyPerRevocationAmount::get();
 		});
 		assert_eq!(ReferralPallet::get_referral_score(&REFERRER), 0);
 	});
@@ -411,6 +415,12 @@ fn force_confirm_referral_works() {
 		assert_eq!(ReferralCount::<Test>::get(REFERRER), 1);
 		assert!(Referrals::<Test>::contains_key(REFERRED));
 		assert_eq!(Referrals::<Test>::get(REFERRED).unwrap().referrer, REFERRER);
+
+		// Verify ReferrerStats is updated (was missing before fix)
+		let stats = ReferrerStatsStorage::<Test>::get(REFERRER);
+		assert_eq!(stats.total_referrals, 1);
+		assert_eq!(stats.revoked_referrals, 0);
+		assert_eq!(stats.penalty_score, 0);
 
 		// Verify trait implementations
 		assert_eq!(ReferralPallet::get_inviter(&REFERRED), Some(REFERRER));

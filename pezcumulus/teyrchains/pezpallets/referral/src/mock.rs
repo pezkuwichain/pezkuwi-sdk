@@ -69,6 +69,7 @@ impl pezpallet_identity_kyc::Config for Test {
 	type OnKycApproved = Referral; // Referral pezpallet handles KYC approval hook
 	type OnCitizenshipRevoked = Referral; // Referral pezpallet handles revocation penalty
 	type CitizenNftProvider = MockCitizenNftProvider;
+	type DefaultReferrer = DefaultReferrerAccount;
 	type KycApplicationDeposit = KycApplicationDepositAmount;
 	type MaxStringLength = MaxStringLen;
 	type MaxCidLength = MaxCidLen;

@@ -239,6 +239,11 @@ pub mod pezpallet {
 			let new_count = ReferralCount::<T>::get(&referrer).saturating_add(1);
 			ReferralCount::<T>::insert(&referrer, new_count);
 
+			// Update referrer stats for direct responsibility tracking
+			ReferrerStatsStorage::<T>::mutate(&referrer, |stats| {
+				stats.total_referrals = stats.total_referrals.saturating_add(1);
+			});
+
 			// Create and store referral info
 			let referral_info = ReferralInfo {
 				referrer: referrer.clone(),
@@ -343,21 +348,12 @@ pub mod pezpallet {
 		fn get_referral_score(who: &T::AccountId) -> RawScore {
 			let stats = ReferrerStatsStorage::<T>::get(who);
 
-			// Calculate good referrals (total minus revoked)
+			// Step 1: "Haksız olanı geri alma" - Remove revoked referrals from count
+			// This is NOT a penalty, it's correcting the record to reflect reality
 			let good_referrals = stats.total_referrals.saturating_sub(stats.revoked_referrals);
 
-			// BALANCED PENALTY SYSTEM (Gemini's suggestion):
-			// "Every 4 bad referrals = -10 points"
-			// This is equivalent to "1 bad = -2.5 points"
-			// Much fairer than "1 bad = 3 good deleted"
-			//
-			// Formula: penalty_points = (revoked_referrals / 4) * 10
-			// Simplified: penalty_points = revoked_referrals * 10 / 4 = revoked_referrals * 2.5
-			// Using integer math: penalty_points = (revoked_referrals * 10) / 4
-			let penalty_points = (stats.revoked_referrals.saturating_mul(10)) / 4;
-
-			// Calculate base score from good referrals
-			// Scoring system with max 500 points:
+			// Step 2: Calculate base score from good referrals
+			// Tiered scoring system with max 500 points:
 			// 0 referrals = 0 points
 			// 1-10 referrals = count * 10 points (10, 20, 30, ..., 100)
 			// 11-50 referrals = 100 + ((count - 10) * 5) = 105, 110, ..., 300
@@ -371,8 +367,10 @@ pub mod pezpallet {
 				_ => 500,
 			};
 
-			// Apply penalty (cannot go below 0)
-			base_score.saturating_sub(penalty_points)
+			// Step 3: "Cezalandırma" - Apply stored penalty from PenaltyPerRevocation
+			// Uses the pre-calculated penalty_score accumulated in on_citizenship_revoked()
+			// This is the actual punishment: "you should have been more careful"
+			base_score.saturating_sub(stats.penalty_score)
 		}
 	}
 
