@@ -601,7 +601,7 @@ mod tests {
 	};
 
 	use async_trait::async_trait;
-	use pezkuwi_zombienet_provider::{types::*, ProviderError, ProviderNode};
+	use provider::{types::*, ProviderError, ProviderNode};
 
 	use super::*;
 
