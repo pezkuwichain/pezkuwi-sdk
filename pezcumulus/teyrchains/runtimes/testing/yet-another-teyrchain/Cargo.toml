@@ -21,55 +21,55 @@ serde_json = { features = ["alloc"], workspace = true }
 pezsp-runtime = { workspace = true }
 
 pezkuwi-sdk = { workspace = true, default-features = false, features = [
-	# Primitives needed for runtime
-	"pezsp-api",
-	"pezsp-block-builder",
-	"pezsp-consensus-aura",
-	"pezsp-core",
-	"pezsp-genesis-builder",
-	"pezsp-inherents",
-	"pezsp-io",
-	"pezsp-keyring",
-	"pezsp-offchain",
-	"pezsp-session",
-	"pezsp-transaction-pool",
-	"pezsp-version",
+  # Primitives needed for runtime
+  "pezsp-api",
+  "pezsp-block-builder",
+  "pezsp-consensus-aura",
+  "pezsp-core",
+  "pezsp-genesis-builder",
+  "pezsp-inherents",
+  "pezsp-io",
+  "pezsp-keyring",
+  "pezsp-offchain",
+  "pezsp-session",
+  "pezsp-transaction-pool",
+  "pezsp-version",
 
-	"pezframe-executive",
-	"pezframe-support",
-	"pezframe-system",
+  "pezframe-executive",
+  "pezframe-support",
+  "pezframe-system",
 
-	"pezpallet-aura",
-	"pezpallet-authorship",
-	"pezpallet-balances",
-	"pezpallet-message-queue",
-	"pezpallet-session",
-	"pezpallet-sudo",
-	"pezpallet-timestamp",
-	"pezpallet-transaction-payment",
-	"pezpallet-transaction-payment-rpc-runtime-api",
-	"pezpallet-utility",
-	"pezpallet-verify-signature",
+  "pezpallet-aura",
+  "pezpallet-authorship",
+  "pezpallet-balances",
+  "pezpallet-message-queue",
+  "pezpallet-session",
+  "pezpallet-sudo",
+  "pezpallet-timestamp",
+  "pezpallet-transaction-payment",
+  "pezpallet-transaction-payment-rpc-runtime-api",
+  "pezpallet-utility",
+  "pezpallet-verify-signature",
 
-	"pezkuwi-runtime-common",
-	"pezkuwi-teyrchain-primitives",
-	"pezpallet-xcm",
-	"pezstaging-xcm",
-	"pezstaging-xcm-builder",
-	"pezstaging-xcm-executor",
+  "pezkuwi-runtime-common",
+  "pezkuwi-teyrchain-primitives",
+  "pezpallet-xcm",
+  "pezstaging-xcm",
+  "pezstaging-xcm-builder",
+  "pezstaging-xcm-executor",
 
-	"pezcumulus-pezpallet-aura-ext",
-	"pezcumulus-pezpallet-weight-reclaim",
-	"pezcumulus-pezpallet-xcm",
-	"pezcumulus-pezpallet-xcmp-queue",
-	"pezcumulus-primitives-aura",
-	"pezcumulus-primitives-core",
-	"pezcumulus-primitives-utility",
-	"pezpallet-collator-selection",
-	"pezstaging-teyrchain-info",
-	"teyrchains-common",
+  "pezcumulus-pezpallet-aura-ext",
+  "pezcumulus-pezpallet-weight-reclaim",
+  "pezcumulus-pezpallet-xcm",
+  "pezcumulus-pezpallet-xcmp-queue",
+  "pezcumulus-primitives-aura",
+  "pezcumulus-primitives-core",
+  "pezcumulus-primitives-utility",
+  "pezpallet-collator-selection",
+  "pezstaging-teyrchain-info",
+  "teyrchains-common",
 
-	"runtime",
+  "runtime",
 ] }
 
 # Pezcumulus
@@ -81,20 +81,20 @@ bizinikiwi-wasm-builder = { optional = true, workspace = true, default-features 
 [features]
 default = ["std"]
 std = [
-	"bizinikiwi-wasm-builder",
-	"bizinikiwi-wasm-builder?/std",
-	"codec/std",
-	"pezcumulus-pezpallet-teyrchain-system/std",
-	"pezkuwi-sdk/std",
-	"pezsp-runtime/std",
-	"scale-info/std",
-	"serde_json/std",
+  "bizinikiwi-wasm-builder",
+  "bizinikiwi-wasm-builder?/std",
+  "codec/std",
+  "pezcumulus-pezpallet-teyrchain-system/std",
+  "pezkuwi-sdk/std",
+  "pezsp-runtime/std",
+  "scale-info/std",
+  "serde_json/std",
 ]
 runtime-benchmarks = [
-	"bizinikiwi-wasm-builder?/runtime-benchmarks",
-	"pezcumulus-pezpallet-teyrchain-system/runtime-benchmarks",
-	"pezkuwi-sdk/runtime-benchmarks",
-	"pezsp-runtime/runtime-benchmarks",
+  "bizinikiwi-wasm-builder?/runtime-benchmarks",
+  "pezcumulus-pezpallet-teyrchain-system/runtime-benchmarks",
+  "pezkuwi-sdk/runtime-benchmarks",
+  "pezsp-runtime/runtime-benchmarks",
 ]
 
 # A feature that should be enabled when the runtime should be built for on-chain
@@ -104,9 +104,9 @@ on-chain-release-build = []
 
 fast-runtime = []
 try-runtime = [
-	"pezcumulus-pezpallet-teyrchain-system/try-runtime",
-	"pezkuwi-sdk/try-runtime",
-	"pezsp-runtime/try-runtime",
+  "pezcumulus-pezpallet-teyrchain-system/try-runtime",
+  "pezkuwi-sdk/try-runtime",
+  "pezsp-runtime/try-runtime",
 ]
 serde = []
 experimental = []

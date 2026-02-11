@@ -30,30 +30,30 @@ teyrchains-common = { workspace = true, default-features = true }
 
 [features]
 runtime-benchmarks = [
-	"emulated-integration-tests-common/runtime-benchmarks",
-	"pez-penpal-runtime/runtime-benchmarks",
-	"pezcumulus-primitives-core/runtime-benchmarks",
-	"pezframe-support/runtime-benchmarks",
-	"pezsp-keyring/runtime-benchmarks",
-	"teyrchains-common/runtime-benchmarks",
-	"xcm/runtime-benchmarks",
+  "emulated-integration-tests-common/runtime-benchmarks",
+  "pez-penpal-runtime/runtime-benchmarks",
+  "pezcumulus-primitives-core/runtime-benchmarks",
+  "pezframe-support/runtime-benchmarks",
+  "pezsp-keyring/runtime-benchmarks",
+  "teyrchains-common/runtime-benchmarks",
+  "xcm/runtime-benchmarks",
 ]
 std = [
-	"emulated-integration-tests-common/std",
-	"pezcumulus-primitives-core/std",
-	"pezframe-support/std",
-	"pezsp-core/std",
-	"pezsp-keyring/std",
-	"xcm/std",
+  "emulated-integration-tests-common/std",
+  "pezcumulus-primitives-core/std",
+  "pezframe-support/std",
+  "pezsp-core/std",
+  "pezsp-keyring/std",
+  "xcm/std",
 ]
 try-runtime = [
-	"emulated-integration-tests-common/try-runtime",
-	"pez-penpal-runtime/try-runtime",
-	"pezcumulus-primitives-core/try-runtime",
-	"pezframe-support/try-runtime",
-	"pezsp-keyring/try-runtime",
-	"teyrchains-common/try-runtime",
-	"xcm/try-runtime",
+  "emulated-integration-tests-common/try-runtime",
+  "pez-penpal-runtime/try-runtime",
+  "pezcumulus-primitives-core/try-runtime",
+  "pezframe-support/try-runtime",
+  "pezsp-keyring/try-runtime",
+  "teyrchains-common/try-runtime",
+  "xcm/try-runtime",
 ]
 serde = []
 experimental = []
