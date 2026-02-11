@@ -82,7 +82,7 @@
 //!     type RuntimeEvent = RuntimeEvent;
 //!     type WeightInfo = pezpallet_trust::weights::BizinikiwiWeight<Runtime>;
 //!     type Score = u128;
-//!     type ScoreMultiplierBase = ConstU128<100>;
+//!     type ScoreMultiplierBase = ConstU128<10_000>;
 //!     type UpdateInterval = ConstU32<14400>; // ~1 day in blocks
 //!     type StakingScoreSource = StakingScore;
 //!     type ReferralScoreSource = Referral;

@@ -552,7 +552,7 @@ impl pezpallet_collective::Config<CouncilCollective> for Runtime {
 
 parameter_types! {
 	/// Base multiplier for trust score calculation
-	pub const ScoreMultiplierBase: u128 = 100;
+	pub const ScoreMultiplierBase: u128 = 10_000;
 	/// Update interval for trust scores (roughly 1 day in blocks)
 	pub const TrustUpdateInterval: BlockNumber = DAYS;
 	/// Maximum batch size for trust score updates
