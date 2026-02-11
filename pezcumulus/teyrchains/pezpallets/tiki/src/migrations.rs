@@ -180,17 +180,14 @@ pub mod v2 {
 		) -> Result<(), pezsp_runtime::TryRuntimeError> {
 			use codec::Decode;
 
-			let pre_count: u32 =
-				Decode::decode(&mut &state[..]).map_err(|_| "Failed to decode pre-upgrade state")?;
+			let pre_count: u32 = Decode::decode(&mut &state[..])
+				.map_err(|_| "Failed to decode pre-upgrade state")?;
 			let post_count = TikiHolder::<T>::iter().count() as u32;
 
 			log::info!("Post-upgrade: TikiHolder {pre_count} -> {post_count}");
 
 			// Should have at least as many entries as before
-			assert!(
-				post_count >= pre_count,
-				"TikiHolder entries decreased during migration"
-			);
+			assert!(post_count >= pre_count, "TikiHolder entries decreased during migration");
 
 			// Verify consistency: every unique role in UserTikis has a TikiHolder entry
 			for (account, tikis) in UserTikis::<T>::iter() {
@@ -201,11 +198,7 @@ pub mod v2 {
 							holder.is_some(),
 							"Unique role missing from TikiHolder after migration"
 						);
-						assert_eq!(
-							holder.unwrap(),
-							account,
-							"TikiHolder mismatch for unique role"
-						);
+						assert_eq!(holder.unwrap(), account, "TikiHolder mismatch for unique role");
 					}
 				}
 			}
