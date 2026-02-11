@@ -130,6 +130,8 @@ pub type Migrations = (
 		Runtime,
 		pezpallet_session::migrations::v1::InitOffenceSeverity<Runtime>,
 	>,
+	// Populate TikiHolder from UserTikis for unique roles (Serok, etc.)
+	pezpallet_tiki::migrations::v2::MigrateToV2<Runtime>,
 	// permanent
 	pezpallet_xcm::migration::MigrateToLatestXcmVersion<Runtime>,
 	pezcumulus_pezpallet_aura_ext::migration::MigrateV0ToV1<Runtime>,
@@ -155,7 +157,7 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
 	spec_name: alloc::borrow::Cow::Borrowed("people-pezkuwichain"),
 	impl_name: alloc::borrow::Cow::Borrowed("people-pezkuwichain"),
 	authoring_version: 1,
-	spec_version: 1_020_001,
+	spec_version: 1_020_002,
 	impl_version: 0,
 	apis: RUNTIME_API_VERSIONS,
 	transaction_version: 1,
