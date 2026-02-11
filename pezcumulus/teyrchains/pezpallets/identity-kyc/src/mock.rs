@@ -75,6 +75,13 @@ impl crate::types::CitizenNftProvider<AccountId> for MockCitizenNftProvider {
 	}
 }
 
+pub struct DefaultReferrerAccount;
+impl pezframe_support::traits::Get<AccountId> for DefaultReferrerAccount {
+	fn get() -> AccountId {
+		FOUNDER
+	}
+}
+
 impl crate::Config for Test {
 	type Currency = Balances;
 	type GovernanceOrigin = EnsureRoot<Self::AccountId>;
@@ -82,6 +89,7 @@ impl crate::Config for Test {
 	type OnKycApproved = MockOnKycApproved;
 	type OnCitizenshipRevoked = MockOnCitizenshipRevoked;
 	type CitizenNftProvider = MockCitizenNftProvider;
+	type DefaultReferrer = DefaultReferrerAccount;
 	type KycApplicationDeposit = KycApplicationDepositAmount;
 	type MaxStringLength = MaxStringLen;
 	type MaxCidLength = MaxCidLen;

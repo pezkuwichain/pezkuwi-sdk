@@ -91,6 +91,13 @@ impl pezpallet_identity_kyc::types::CitizenNftProvider<u64> for NoOpCitizenNftPr
 	}
 }
 
+pub struct DefaultReferrerAccount;
+impl pezframe_support::traits::Get<u64> for DefaultReferrerAccount {
+	fn get() -> u64 {
+		100 // Founder account for tests
+	}
+}
+
 impl pezpallet_identity_kyc::Config for Test {
 	type Currency = Balances;
 	type GovernanceOrigin = pezframe_system::EnsureRoot<u64>;
@@ -98,6 +105,7 @@ impl pezpallet_identity_kyc::Config for Test {
 	type OnKycApproved = NoOpOnKycApproved;
 	type OnCitizenshipRevoked = NoOpOnCitizenshipRevoked;
 	type CitizenNftProvider = NoOpCitizenNftProvider;
+	type DefaultReferrer = DefaultReferrerAccount;
 	type KycApplicationDeposit = pezframe_support::traits::ConstU128<100>;
 	type MaxStringLength = pezframe_support::traits::ConstU32<128>;
 	type MaxCidLength = pezframe_support::traits::ConstU32<64>;

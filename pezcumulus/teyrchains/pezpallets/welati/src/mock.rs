@@ -262,6 +262,13 @@ impl pezpallet_identity_kyc::types::CitizenNftProvider<AccountId> for NoOpCitize
 	}
 }
 
+pub struct DefaultReferrerKyc;
+impl pezframe_support::traits::Get<AccountId> for DefaultReferrerKyc {
+	fn get() -> AccountId {
+		1
+	}
+}
+
 impl pezpallet_identity_kyc::Config for Test {
 	type Currency = Balances;
 	type GovernanceOrigin = pezframe_system::EnsureRoot<AccountId>;
@@ -272,6 +279,7 @@ impl pezpallet_identity_kyc::Config for Test {
 	type KycApplicationDeposit = KycApplicationDeposit;
 	type MaxStringLength = MaxStringLength;
 	type MaxCidLength = MaxCidLength;
+	type DefaultReferrer = DefaultReferrerKyc;
 }
 
 // Mock StakingInfo provider - SADECE BİR KEZ TANIMLA

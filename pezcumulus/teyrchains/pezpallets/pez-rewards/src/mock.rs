@@ -193,6 +193,13 @@ parameter_types! {
 	pub const MaxCidLength: u32 = 128;
 }
 
+pub struct DefaultReferrerAccount;
+impl pezframe_support::traits::Get<H256> for DefaultReferrerAccount {
+	fn get() -> H256 {
+		H256::from_low_u64_be(100)
+	}
+}
+
 impl pezpallet_identity_kyc::Config for Test {
 	type Currency = Balances;
 	type GovernanceOrigin = EnsureRoot<H256>;
@@ -200,6 +207,7 @@ impl pezpallet_identity_kyc::Config for Test {
 	type OnKycApproved = NoOpOnKycApproved;
 	type OnCitizenshipRevoked = NoOpOnCitizenshipRevoked;
 	type CitizenNftProvider = NoOpCitizenNftProvider;
+	type DefaultReferrer = DefaultReferrerAccount;
 	type KycApplicationDeposit = KycApplicationDeposit;
 	type MaxStringLength = MaxStringLength;
 	type MaxCidLength = MaxCidLength;

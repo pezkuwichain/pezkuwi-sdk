@@ -39,7 +39,7 @@ fn apply_for_citizenship_works() {
 		assert_ok!(IdentityKycPallet::apply_for_citizenship(
 			RuntimeOrigin::signed(APPLICANT),
 			identity_hash,
-			CITIZEN_1
+			Some(CITIZEN_1)
 		));
 
 		// Check status changed to PendingReferral
@@ -62,29 +62,32 @@ fn apply_for_citizenship_works() {
 }
 
 #[test]
-fn apply_for_citizenship_fails_if_self_referral() {
+fn apply_for_citizenship_falls_back_on_self_referral() {
 	new_test_ext().execute_with(|| {
-		// Cannot refer yourself
-		assert_noop!(
-			IdentityKycPallet::apply_for_citizenship(
-				RuntimeOrigin::signed(CITIZEN_1),
-				H256::from_low_u64_be(999),
-				CITIZEN_1 // Same as caller
-			),
-			Error::<Test>::SelfReferral
-		);
+		// Self-referral with Some(self) is silently filtered,
+		// falls back to DefaultReferrer (FOUNDER)
+		assert_ok!(IdentityKycPallet::apply_for_citizenship(
+			RuntimeOrigin::signed(CITIZEN_2),
+			H256::from_low_u64_be(999),
+			Some(CITIZEN_2) // Same as caller → filtered → DefaultReferrer
+		));
+
+		// Should use FOUNDER as referrer
+		let app = IdentityKycPallet::applications(CITIZEN_2).unwrap();
+		assert_eq!(app.referrer, FOUNDER);
 	});
 }
 
 #[test]
 fn apply_for_citizenship_fails_if_referrer_not_citizen() {
-	new_test_ext().execute_with(|| {
-		// APPLICANT is not a citizen, so cannot be a referrer
+	new_test_ext_empty().execute_with(|| {
+		// In empty setup, no founding citizens exist
+		// Any referrer is invalid, and DefaultReferrer (FOUNDER) is also not a citizen
 		assert_noop!(
 			IdentityKycPallet::apply_for_citizenship(
-				RuntimeOrigin::signed(CITIZEN_2),
+				RuntimeOrigin::signed(APPLICANT),
 				H256::from_low_u64_be(999),
-				APPLICANT // Not a citizen
+				Some(CITIZEN_1) // Not a citizen, falls back to FOUNDER who is also not citizen
 			),
 			Error::<Test>::ReferrerNotCitizen
 		);
@@ -100,7 +103,7 @@ fn apply_for_citizenship_fails_if_already_applied() {
 		assert_ok!(IdentityKycPallet::apply_for_citizenship(
 			RuntimeOrigin::signed(APPLICANT),
 			identity_hash,
-			CITIZEN_1
+			Some(CITIZEN_1)
 		));
 
 		// Second application fails
@@ -108,7 +111,7 @@ fn apply_for_citizenship_fails_if_already_applied() {
 			IdentityKycPallet::apply_for_citizenship(
 				RuntimeOrigin::signed(APPLICANT),
 				H256::from_low_u64_be(99999),
-				CITIZEN_1
+				Some(CITIZEN_1)
 			),
 			Error::<Test>::ApplicationAlreadyExists
 		);
@@ -124,7 +127,7 @@ fn apply_for_citizenship_fails_insufficient_balance() {
 			IdentityKycPallet::apply_for_citizenship(
 				RuntimeOrigin::signed(poor_user),
 				H256::from_low_u64_be(12345),
-				CITIZEN_1
+				Some(CITIZEN_1)
 			),
 			pezpallet_balances::Error::<Test>::InsufficientBalance
 		);
@@ -144,7 +147,7 @@ fn approve_referral_works() {
 		assert_ok!(IdentityKycPallet::apply_for_citizenship(
 			RuntimeOrigin::signed(APPLICANT),
 			identity_hash,
-			CITIZEN_1
+			Some(CITIZEN_1)
 		));
 
 		// CITIZEN_1 approves the referral
@@ -170,7 +173,7 @@ fn approve_referral_fails_if_not_referrer() {
 		assert_ok!(IdentityKycPallet::apply_for_citizenship(
 			RuntimeOrigin::signed(APPLICANT),
 			H256::from_low_u64_be(12345),
-			CITIZEN_1
+			Some(CITIZEN_1)
 		));
 
 		// FOUNDER (different citizen) cannot approve
@@ -206,7 +209,7 @@ fn confirm_citizenship_works() {
 		assert_ok!(IdentityKycPallet::apply_for_citizenship(
 			RuntimeOrigin::signed(APPLICANT),
 			identity_hash,
-			CITIZEN_1
+			Some(CITIZEN_1)
 		));
 
 		// Referrer approves
@@ -246,7 +249,7 @@ fn confirm_citizenship_fails_if_not_referrer_approved() {
 		assert_ok!(IdentityKycPallet::apply_for_citizenship(
 			RuntimeOrigin::signed(APPLICANT),
 			H256::from_low_u64_be(12345),
-			CITIZEN_1
+			Some(CITIZEN_1)
 		));
 
 		// Try to self-confirm without referrer approval
@@ -281,7 +284,7 @@ fn cancel_application_works() {
 		assert_ok!(IdentityKycPallet::apply_for_citizenship(
 			RuntimeOrigin::signed(APPLICANT),
 			H256::from_low_u64_be(12345),
-			CITIZEN_1
+			Some(CITIZEN_1)
 		));
 
 		// Deposit should be reserved
@@ -312,7 +315,7 @@ fn cancel_application_fails_if_not_pending_referral() {
 		assert_ok!(IdentityKycPallet::apply_for_citizenship(
 			RuntimeOrigin::signed(APPLICANT),
 			H256::from_low_u64_be(12345),
-			CITIZEN_1
+			Some(CITIZEN_1)
 		));
 		assert_ok!(IdentityKycPallet::approve_referral(
 			RuntimeOrigin::signed(CITIZEN_1),
@@ -334,7 +337,7 @@ fn cancel_application_allows_reapplication() {
 		assert_ok!(IdentityKycPallet::apply_for_citizenship(
 			RuntimeOrigin::signed(APPLICANT),
 			H256::from_low_u64_be(12345),
-			CITIZEN_1
+			Some(CITIZEN_1)
 		));
 
 		// Cancel
@@ -344,7 +347,7 @@ fn cancel_application_allows_reapplication() {
 		assert_ok!(IdentityKycPallet::apply_for_citizenship(
 			RuntimeOrigin::signed(APPLICANT),
 			H256::from_low_u64_be(99999),
-			FOUNDER // Different referrer this time
+			Some(FOUNDER) // Different referrer this time
 		));
 
 		assert_eq!(IdentityKycPallet::kyc_status_of(APPLICANT), KycLevel::PendingReferral);
@@ -362,7 +365,7 @@ fn revoke_citizenship_works() {
 		assert_ok!(IdentityKycPallet::apply_for_citizenship(
 			RuntimeOrigin::signed(APPLICANT),
 			H256::from_low_u64_be(12345),
-			CITIZEN_1
+			Some(CITIZEN_1)
 		));
 		assert_ok!(IdentityKycPallet::approve_referral(
 			RuntimeOrigin::signed(CITIZEN_1),
@@ -452,7 +455,7 @@ fn full_citizenship_workflow() {
 		assert_ok!(IdentityKycPallet::apply_for_citizenship(
 			RuntimeOrigin::signed(APPLICANT),
 			identity_hash,
-			CITIZEN_1
+			Some(CITIZEN_1)
 		));
 		assert_eq!(IdentityKycPallet::kyc_status_of(APPLICANT), KycLevel::PendingReferral);
 
@@ -475,7 +478,7 @@ fn full_citizenship_workflow() {
 		assert_ok!(IdentityKycPallet::apply_for_citizenship(
 			RuntimeOrigin::signed(new_user),
 			H256::from_low_u64_be(99999),
-			APPLICANT // APPLICANT is now the referrer
+			Some(APPLICANT) // APPLICANT is now the referrer
 		));
 		assert_eq!(IdentityKycPallet::kyc_status_of(new_user), KycLevel::PendingReferral);
 	});
@@ -488,7 +491,7 @@ fn renounce_and_reapply_workflow() {
 		assert_ok!(IdentityKycPallet::apply_for_citizenship(
 			RuntimeOrigin::signed(APPLICANT),
 			H256::from_low_u64_be(12345),
-			CITIZEN_1
+			Some(CITIZEN_1)
 		));
 		assert_ok!(IdentityKycPallet::approve_referral(
 			RuntimeOrigin::signed(CITIZEN_1),
@@ -505,7 +508,7 @@ fn renounce_and_reapply_workflow() {
 		assert_ok!(IdentityKycPallet::apply_for_citizenship(
 			RuntimeOrigin::signed(APPLICANT),
 			H256::from_low_u64_be(99999), // Different hash
-			FOUNDER                       // Different referrer
+			Some(FOUNDER)                 // Different referrer
 		));
 		assert_eq!(IdentityKycPallet::kyc_status_of(APPLICANT), KycLevel::PendingReferral);
 	});
@@ -534,7 +537,7 @@ fn get_referrer_works() {
 		assert_ok!(IdentityKycPallet::apply_for_citizenship(
 			RuntimeOrigin::signed(APPLICANT),
 			H256::from_low_u64_be(12345),
-			CITIZEN_1
+			Some(CITIZEN_1)
 		));
 		assert_ok!(IdentityKycPallet::approve_referral(
 			RuntimeOrigin::signed(CITIZEN_1),
