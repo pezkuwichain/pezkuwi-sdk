@@ -243,8 +243,8 @@ mod tests {
 
 			// Simulate on-chain state: account 1 has Serok in UserTikis but TikiHolder is empty
 			let account: u64 = 1;
-			CitizenNft::<Test>::insert(&account, 0u32);
-			UserTikis::<Test>::mutate(&account, |tikis| {
+			CitizenNft::<Test>::insert(account, 0u32);
+			UserTikis::<Test>::mutate(account, |tikis| {
 				let _ = tikis.try_push(Tiki::Welati);
 				let _ = tikis.try_push(Tiki::Serok);
 			});
@@ -280,22 +280,22 @@ mod tests {
 			StorageVersion::new(1).put::<Pezpallet<Test>>();
 
 			// Account 1: Serok
-			CitizenNft::<Test>::insert(&1u64, 0u32);
-			UserTikis::<Test>::mutate(&1u64, |tikis| {
+			CitizenNft::<Test>::insert(1u64, 0u32);
+			UserTikis::<Test>::mutate(1u64, |tikis| {
 				let _ = tikis.try_push(Tiki::Welati);
 				let _ = tikis.try_push(Tiki::Serok);
 			});
 
 			// Account 2: SerokiMeclise
-			CitizenNft::<Test>::insert(&2u64, 1u32);
-			UserTikis::<Test>::mutate(&2u64, |tikis| {
+			CitizenNft::<Test>::insert(2u64, 1u32);
+			UserTikis::<Test>::mutate(2u64, |tikis| {
 				let _ = tikis.try_push(Tiki::Welati);
 				let _ = tikis.try_push(Tiki::SerokiMeclise);
 			});
 
 			// Account 3: just Welati (no unique role)
-			CitizenNft::<Test>::insert(&3u64, 2u32);
-			UserTikis::<Test>::mutate(&3u64, |tikis| {
+			CitizenNft::<Test>::insert(3u64, 2u32);
+			UserTikis::<Test>::mutate(3u64, |tikis| {
 				let _ = tikis.try_push(Tiki::Welati);
 			});
 
