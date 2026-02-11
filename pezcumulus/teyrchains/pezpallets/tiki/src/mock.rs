@@ -204,6 +204,13 @@ impl pezpallet_identity_kyc::types::CitizenNftProvider<AccountId> for MockCitize
 	}
 }
 
+pub struct DefaultReferrerAccount;
+impl pezframe_support::traits::Get<AccountId> for DefaultReferrerAccount {
+	fn get() -> AccountId {
+		100
+	}
+}
+
 impl pezpallet_identity_kyc::Config for Test {
 	type Currency = Balances;
 	type WeightInfo = ();
@@ -214,6 +221,7 @@ impl pezpallet_identity_kyc::Config for Test {
 	type OnKycApproved = MockOnKycApproved;
 	type OnCitizenshipRevoked = MockOnCitizenshipRevoked;
 	type CitizenNftProvider = MockCitizenNftProvider;
+	type DefaultReferrer = DefaultReferrerAccount;
 }
 
 parameter_types! {

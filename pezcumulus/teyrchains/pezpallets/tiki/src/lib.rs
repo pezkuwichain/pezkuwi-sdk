@@ -325,14 +325,9 @@ pub mod pezpallet {
 	}
 
 	#[pezpallet::hooks]
-	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
-		fn on_initialize(_block_number: BlockNumberFor<T>) -> Weight {
-			// Check newly KYC-approved users and mint citizenship NFT
-			Self::check_and_mint_citizen_nfts();
-
-			T::DbWeight::get().reads_writes(10, 5)
-		}
-	}
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {}
+	// Citizenship NFT minting is handled by CitizenNftProvider hooks,
+	// no per-block scanning needed.
 
 	#[pezpallet::call]
 	impl<T: Config> Pezpallet<T> {
@@ -468,23 +463,6 @@ pub mod pezpallet {
 
 	// Pezpallet's helper functions
 	impl<T: Config> Pezpallet<T> {
-		/// Checks newly KYC-completed users and mints citizenship NFT
-		fn check_and_mint_citizen_nfts() {
-			// Check all approved users in KYC pezpallet
-			for (account, kyc_status) in pezpallet_identity_kyc::KycStatuses::<T>::iter() {
-				// Check if KYC is approved
-				if kyc_status == pezpallet_identity_kyc::types::KycLevel::Approved {
-					// Check if citizenship NFT exists
-					if Self::citizen_nft(&account).is_none() {
-						// Mint NFT (log error but continue on failure)
-						if Self::mint_citizen_nft_for_user(&account).is_err() {
-							log::warn!("Failed to mint citizen NFT for account: {account:?}");
-						}
-					}
-				}
-			}
-		}
-
 		/// Mints citizenship NFT for specific user
 		pub fn mint_citizen_nft_for_user(user: &T::AccountId) -> DispatchResult {
 			// Check if NFT already exists
@@ -493,17 +471,7 @@ pub mod pezpallet {
 			let collection_id = T::TikiCollectionId::get();
 			let next_id_u32 = Self::next_item_id();
 
-			// Mint the NFT - use force_mint in benchmarks to bypass balance/origin requirements
-			#[cfg(feature = "runtime-benchmarks")]
-			pezpallet_nfts::Pezpallet::<T>::force_mint(
-				T::RuntimeOrigin::from(pezframe_system::RawOrigin::Root),
-				collection_id,
-				next_id_u32,
-				T::Lookup::unlookup(user.clone()),
-				Default::default(),
-			)?;
-
-			#[cfg(not(feature = "runtime-benchmarks"))]
+			// Mint the NFT via force_mint (root origin, no deposit needed)
 			pezpallet_nfts::Pezpallet::<T>::force_mint(
 				T::RuntimeOrigin::from(pezframe_system::RawOrigin::Root),
 				collection_id,
@@ -825,12 +793,11 @@ impl<T: Config> Pezpallet<T> {
 			Tiki::Qeydkar => 25,
 			Tiki::ParêzvaneÇandî => 25,
 			Tiki::Sêwirmend => 20,
-			Tiki::Bazargan => 60, // Yeni eklenen ekonomik rol
+			Tiki::Bazargan => 60,
+			Tiki::Pêseng => 80,
 
-			// Temel Vatandaşlık ve Diğerleri
+			// Temel Vatandaşlık
 			Tiki::Welati => 10,
-			// Yukarıdaki listede olmayan diğer tüm roller 5 puan alır.
-			_ => 5,
 		}
 	}
 }
@@ -858,7 +825,16 @@ impl<T: Config> pezpallet_identity_kyc::types::CitizenNftProvider<T::AccountId> 
 			item_id,
 		)?;
 
-		// Remove from our storage
+		// Clear unique role mappings before removing roles
+		let user_tikis = UserTikis::<T>::get(who);
+		for tiki in user_tikis.iter() {
+			if Self::is_unique_role(tiki) {
+				TikiHolder::<T>::remove(tiki);
+			}
+		}
+
+		// Remove all roles and citizen NFT mapping
+		UserTikis::<T>::remove(who);
 		CitizenNft::<T>::remove(who);
 
 		Ok(())

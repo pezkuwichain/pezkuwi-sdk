@@ -373,8 +373,7 @@ fn scoring_system_comprehensive() {
 		assert_eq!(TikiPallet::get_bonus_for_tiki(&TikiEnum::Feqî), 50);
 		assert_eq!(TikiPallet::get_bonus_for_tiki(&TikiEnum::Welati), 10);
 
-		// Test default score for unspecified roles
-		assert_eq!(TikiPallet::get_bonus_for_tiki(&TikiEnum::Pêseng), 5);
+		assert_eq!(TikiPallet::get_bonus_for_tiki(&TikiEnum::Pêseng), 80);
 	});
 }
 
