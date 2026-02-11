@@ -29,7 +29,7 @@ jobs:
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
       volumes:
-        - /cache/cargo-target/pezkuwi-sdk-clippy:/cache/target
+        - /cache/cargo-target/pezkuwi-sdk:/cache/target
     env:
       RUSTFLAGS: "-D warnings"
       SKIP_WASM_BUILD: 1
@@ -55,13 +55,13 @@ jobs:
 
   check-try-runtime:
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
-    needs: [preflight]
-    if: ${{ needs.preflight.outputs.changes_rust }}
+    needs: [preflight, cargo-clippy]
+    if: ${{ always() && !cancelled() && needs.preflight.outputs.changes_rust }}
     timeout-minutes: 45
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
       volumes:
-        - /cache/cargo-target/pezkuwi-sdk-try-runtime:/cache/target
+        - /cache/cargo-target/pezkuwi-sdk:/cache/target
     env:
       SKIP_WASM_BUILD: 1
       CARGO_INCREMENTAL: 0
