@@ -4,10 +4,7 @@ Bu dosya her oturumda Claude tarafından okunmalı ve kurallara kesinlikle uyulm
 
 ## OTOMATİK YÜKLENEN DOSYALAR
 
-@.claude/PROJECT_STATE.md
-@.claude/SESSION_LOG.md
-@.claude/MAINNET_ROADMAP.md
-@.claude/PUBLIC_TESTNET_ROADMAP.md
+@.claude/CRITICAL_STATE.md - **TEK KAYNAK DOSYA** (VPS bilgileri, key'ler, mevcut durum, sonraki adımlar)
 
 ---
 
