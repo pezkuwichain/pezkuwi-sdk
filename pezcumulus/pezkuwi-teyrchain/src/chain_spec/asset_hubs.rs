@@ -132,10 +132,11 @@ pub fn asset_hub_pezkuwichain_genesis_config() -> GenericChainSpec {
 	let mut properties = pezsc_chain_spec::Properties::new();
 	properties.insert("tokenSymbol".into(), "TYR".into());
 	properties.insert("tokenDecimals".into(), 12.into());
+	properties.insert("ss58Format".into(), 42.into());
 	GenericChainSpec::builder(
 		asset_hub_pezkuwichain_runtime::WASM_BINARY
 			.expect("WASM binary was not built, please build it!"),
-		Extensions::new_with_relay_chain("pezkuwichain-mainnet".into()),
+		Extensions::new("pezkuwichain-mainnet".into(), 1000),
 	)
 	.with_name("Pezkuwichain Asset Hub")
 	.with_id("asset-hub-pezkuwichain")

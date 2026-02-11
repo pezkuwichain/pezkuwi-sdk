@@ -140,7 +140,7 @@ pub mod pezkuwichain {
 		GenericChainSpec::builder(
 			people_pezkuwichain_runtime::WASM_BINARY
 				.expect("WASM binary was not built, please build it!"),
-			Extensions::new_with_relay_chain("pezkuwichain-mainnet".to_string()),
+			Extensions::new("pezkuwichain-mainnet".to_string(), 1004),
 		)
 		.with_name("Pezkuwichain People")
 		.with_id(super::ensure_id(PEOPLE_PEZKUWICHAIN_GENESIS).expect("invalid id"))

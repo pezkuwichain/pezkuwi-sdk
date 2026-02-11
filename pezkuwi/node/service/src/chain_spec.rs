@@ -164,10 +164,11 @@ pub fn versi_chain_spec_properties() -> serde_json::map::Map<String, serde_json:
 }
 
 /// PezkuwiChain mainnet chain spec properties (HEZ token)
+/// Note: tokenDecimals must be 12 to match UNITS = 10^12 in runtime constants
 pub fn pezkuwichain_chain_spec_properties() -> serde_json::map::Map<String, serde_json::Value> {
 	serde_json::json!({
 		"ss58Format": 42,
-		"tokenDecimals": 18,
+		"tokenDecimals": 12,
 		"tokenSymbol": "HEZ",
 	})
 	.as_object()
