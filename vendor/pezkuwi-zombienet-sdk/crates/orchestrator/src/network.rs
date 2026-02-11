@@ -5,15 +5,15 @@ pub mod teyrchain;
 
 use std::{cell::RefCell, collections::HashMap, path::PathBuf, rc::Rc, sync::Arc, time::Duration};
 
-use pezkuwi_zombienet_configuration::{
+use configuration::{
 	para_states::{Initial, Running},
 	shared::{helpers::generate_unique_node_name_from_names, node::EnvVar},
 	types::{Arg, Command, Image, Port, ValidationContext},
 	ParachainConfig, ParachainConfigBuilder, RegistrationStrategy,
 };
-use pezkuwi_zombienet_provider::{types::TransferedFile, DynNamespace, ProviderError};
+use provider::{types::TransferedFile, DynNamespace, ProviderError};
 use serde::Serialize;
-use pezkuwi_zombienet_support::fs::FileSystem;
+use support::fs::FileSystem;
 use tokio::sync::RwLock;
 use tracing::{error, warn};
 
