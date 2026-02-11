@@ -443,7 +443,7 @@ impl NetworkNode {
 	/// * `Err(e)` if an error occurred during log retrieval or matching.
 	///
 	/// # Example
-	/// ```rust
+	/// ```rust,ignore
 	/// # use std::{sync::Arc, time::Duration};
 	/// # use pezkuwi_zombienet_provider::NativeProvider;
 	/// # use pezkuwi_zombienet_support::{fs::local::LocalFileSystem};

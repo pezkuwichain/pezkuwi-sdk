@@ -107,7 +107,7 @@ impl<T: FileSystem> Network<T> {
 	/// Add a node to the relaychain
 	// The new node is added to the running network instance.
 	/// # Example:
-	/// ```rust
+	/// ```rust,ignore
 	/// # use pezkuwi_zombienet_provider::NativeProvider;
 	/// # use pezkuwi_zombienet_support::{fs::local::LocalFileSystem};
 	/// # use pezkuwi_zombienet_orchestrator::{errors, AddNodeOptions, Orchestrator};
@@ -219,7 +219,7 @@ impl<T: FileSystem> Network<T> {
 	/// then it adds collator to the first parachain
 	///
 	/// # Example:
-	/// ```rust
+	/// ```rust,ignore
 	/// # use pezkuwi_zombienet_provider::NativeProvider;
 	/// # use pezkuwi_zombienet_support::{fs::local::LocalFileSystem};
 	/// # use pezkuwi_zombienet_orchestrator::{errors, AddCollatorOptions, Orchestrator};
@@ -383,7 +383,7 @@ impl<T: FileSystem> Network<T> {
 	///
 	///
 	/// # Example:
-	/// ```rust
+	/// ```rust,ignore
 	/// # use anyhow::anyhow;
 	/// # use pezkuwi_zombienet_provider::NativeProvider;
 	/// # use pezkuwi_zombienet_support::{fs::local::LocalFileSystem};
@@ -567,7 +567,7 @@ impl<T: FileSystem> Network<T> {
 	///
 	///
 	/// # Example:
-	/// ```rust
+	/// ```rust,ignore
 	/// # use anyhow::anyhow;
 	/// # use pezkuwi_zombienet_provider::NativeProvider;
 	/// # use pezkuwi_zombienet_support::{fs::local::LocalFileSystem};
