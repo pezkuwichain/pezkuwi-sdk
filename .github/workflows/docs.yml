@@ -26,7 +26,7 @@ jobs:
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
       volumes:
-        - /cache/cargo-target/pezkuwi-sdk:/cache/target
+        - /cache/cargo-target/pezkuwi-sdk-test-doc:/cache/target
     env:
       RUSTFLAGS: "-Cdebug-assertions=y -Dwarnings"
       SKIP_WASM_BUILD: 1
@@ -52,7 +52,7 @@ jobs:
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
       volumes:
-        - /cache/cargo-target/pezkuwi-sdk:/cache/target
+        - /cache/cargo-target/pezkuwi-sdk-rustdoc:/cache/target
     env:
       SKIP_WASM_BUILD: 1
       CARGO_INCREMENTAL: 0
