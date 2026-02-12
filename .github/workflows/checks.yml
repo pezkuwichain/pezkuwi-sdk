@@ -25,7 +25,7 @@ jobs:
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
     needs: [preflight]
     if: ${{ needs.preflight.outputs.changes_rust }}
-    timeout-minutes: 45
+    timeout-minutes: 90
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
       volumes:
@@ -57,7 +57,7 @@ jobs:
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
     needs: [preflight, cargo-clippy]
     if: ${{ always() && !cancelled() && needs.preflight.outputs.changes_rust }}
-    timeout-minutes: 45
+    timeout-minutes: 90
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
       volumes:
