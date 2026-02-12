@@ -138,7 +138,7 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
 	spec_name: alloc::borrow::Cow::Borrowed("asset-hub-pezkuwichain"),
 	impl_name: alloc::borrow::Cow::Borrowed("asset-hub-pezkuwichain"),
 	authoring_version: 1,
-	spec_version: 1_020_001,
+	spec_version: 1_020_002,
 	impl_version: 0,
 	apis: RUNTIME_API_VERSIONS,
 	transaction_version: 16,
@@ -844,7 +844,7 @@ impl pezpallet_session::Config for Runtime {
 	type ValidatorIdOf = pezpallet_collator_selection::IdentityCollator;
 	type ShouldEndSession = pezpallet_session::PeriodicSessions<Period, Offset>;
 	type NextSessionRotation = pezpallet_session::PeriodicSessions<Period, Offset>;
-	type SessionManager = CollatorSelection;
+	type SessionManager = StakingSessionManager;
 	// Essentially just Aura, but let's be pedantic.
 	type SessionHandler = <SessionKeys as pezsp_runtime::traits::OpaqueKeys>::KeyTypeIdProviders;
 	type Keys = SessionKeys;
@@ -1408,8 +1408,33 @@ pub type TxExtension = pezcumulus_pezpallet_weight_reclaim::StorageWeightReclaim
 /// Unchecked extrinsic type as expected by this runtime.
 pub type UncheckedExtrinsic =
 	generic::UncheckedExtrinsic<Address, RuntimeCall, Signature, TxExtension>;
+/// One-time migration to fix ActiveEra.start which was set to 0 at genesis.
+/// Without this, the first era's duration would be calculated as (now - 0) = ~56 years,
+/// though MaxEraDuration caps it to 6 hours. This migration sets it to the current timestamp
+/// so the first era duration is calculated correctly from the upgrade moment.
+pub struct FixActiveEraStart;
+impl pezframe_support::traits::OnRuntimeUpgrade for FixActiveEraStart {
+	fn on_runtime_upgrade() -> Weight {
+		let now_ms = pezpallet_timestamp::Now::<Runtime>::get();
+		if now_ms > 0 {
+			pezpallet_staking_async::ActiveEra::<Runtime>::mutate(|era| {
+				if let Some(ref mut info) = era {
+					info.start = Some(now_ms);
+					log::info!(
+						target: "runtime::staking",
+						"FixActiveEraStart: Set ActiveEra.start to {}",
+						now_ms,
+					);
+				}
+			});
+		}
+		<Runtime as pezframe_system::Config>::DbWeight::get().reads_writes(2, 1)
+	}
+}
+
 /// Migrations to apply on runtime upgrade.
 pub type Migrations = (
+	FixActiveEraStart,
 	InitStorageVersions,
 	// unreleased
 	pezcumulus_pezpallet_xcmp_queue::migration::v4::MigrationToV4<Runtime>,

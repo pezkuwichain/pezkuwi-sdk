@@ -312,6 +312,60 @@ impl pezpallet_staking_async_rc_client::Config for Runtime {
 	type MaxValidatorSetRetries = ConstU32<64>;
 }
 
+/// Forwards session events to both CollatorSelection (collator management) and
+/// Staking pallet (era management) via local SessionReport generation.
+///
+/// This is needed because `pallet_staking_async` expects `SessionReport` messages from
+/// the relay chain's `ah_client` pallet, which is not yet active. This wrapper generates
+/// local session reports from AH's own session rotation events.
+pub struct StakingSessionManager;
+
+impl pezpallet_session::SessionManager<AccountId> for StakingSessionManager {
+	fn new_session(new_index: u32) -> Option<Vec<AccountId>> {
+		<CollatorSelection as pezpallet_session::SessionManager<AccountId>>::new_session(new_index)
+	}
+
+	fn end_session(end_index: u32) {
+		// Forward to CollatorSelection first
+		<CollatorSelection as pezpallet_session::SessionManager<AccountId>>::end_session(end_index);
+
+		// Build local SessionReport for staking era progression
+		let current_era =
+			pezpallet_staking_async::CurrentEra::<Runtime>::get().unwrap_or(0);
+		let active_era_idx = pezpallet_staking_async::ActiveEra::<Runtime>::get()
+			.map(|e| e.index)
+			.unwrap_or(0);
+
+		// Provide activation_timestamp when a planned era exists (CurrentEra > ActiveEra)
+		let activation_timestamp = if current_era > active_era_idx {
+			let now_ms = pezpallet_timestamp::Now::<Runtime>::get();
+			Some((now_ms, current_era))
+		} else {
+			None
+		};
+
+		// Equal reward points for all validators
+		let validator_points: Vec<(AccountId, u32)> =
+			pezpallet_staking_async::Validators::<Runtime>::iter_keys()
+				.map(|v| (v, 20u32))
+				.collect();
+
+		let report = rc_client::SessionReport::new_terminal(
+			end_index,
+			validator_points,
+			activation_timestamp,
+		);
+
+		let _ = <Staking as rc_client::AHStakingInterface>::on_relay_session_report(report);
+	}
+
+	fn start_session(start_index: u32) {
+		<CollatorSelection as pezpallet_session::SessionManager<AccountId>>::start_session(
+			start_index,
+		);
+	}
+}
+
 #[derive(Encode, Decode)]
 // Call indices taken from zagros-next runtime.
 pub enum RelayChainRuntimePallets {
