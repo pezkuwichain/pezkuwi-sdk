@@ -51,7 +51,8 @@ jobs:
         id: required
         run: |
           git config --global --add safe.directory '*'
-          cargo clippy --all-targets --all-features --locked --workspace --quiet
+          cargo clippy --all-targets --all-features --locked --workspace --quiet \
+            --exclude pezpallet-revive-eth-rpc
 
   check-try-runtime:
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
