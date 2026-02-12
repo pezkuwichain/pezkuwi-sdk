@@ -35,6 +35,20 @@ jobs:
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
+      # Clean stale caches from other workflows that ran on this VPS runner.
+      # Each VPS has limited disk; leftover caches from tests/checks can fill it.
+      - name: Clean stale caches
+        run: |
+          echo "Disk before cleanup:"
+          df -h /cache 2>/dev/null || df -h /
+          for dir in /cache/cargo-target/*/; do
+            [ "$dir" = "/cache/cargo-target/pezkuwi-sdk-docs/" ] && continue
+            echo "Removing stale cache: $dir"
+            rm -rf "$dir"
+          done
+          echo "Disk after cleanup:"
+          df -h /cache 2>/dev/null || df -h /
+
       # Exclude pezkuwi-zombienet-sdk-tests: its build.rs runs nested cargo build
       # which doesn't inherit workspace [patch.crates-io] settings, causing
       # serde_core duplicate lang item error. See: https://github.com/pezkuwichain/pezkuwi-sdk/issues/357
