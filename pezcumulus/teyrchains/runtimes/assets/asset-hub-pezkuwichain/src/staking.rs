@@ -330,8 +330,7 @@ impl pezpallet_session::SessionManager<AccountId> for StakingSessionManager {
 		<CollatorSelection as pezpallet_session::SessionManager<AccountId>>::end_session(end_index);
 
 		// Build local SessionReport for staking era progression
-		let current_era =
-			pezpallet_staking_async::CurrentEra::<Runtime>::get().unwrap_or(0);
+		let current_era = pezpallet_staking_async::CurrentEra::<Runtime>::get().unwrap_or(0);
 		let active_era_idx = pezpallet_staking_async::ActiveEra::<Runtime>::get()
 			.map(|e| e.index)
 			.unwrap_or(0);
