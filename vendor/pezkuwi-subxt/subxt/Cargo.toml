@@ -90,6 +90,7 @@ std = [
 	"serde/std",
 	"serde_json/std",
 	"tracing/std",
+	"pezkuwi-subxt-core/std",
 ]
 try-runtime = ["pezsp-keyring/try-runtime", "pezsp-runtime/try-runtime"]
 serde = []
