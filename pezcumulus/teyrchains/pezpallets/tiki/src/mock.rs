@@ -269,6 +269,7 @@ impl crate::Config for Test {
 	type TikiCollectionId = TikiCollectionId;
 	type MaxTikisPerUser = MaxTikisPerUser;
 	type Tiki = TikiEnum;
+	type TrustScoreUpdater = ();
 }
 
 pub fn new_test_ext() -> pezsp_io::TestExternalities {

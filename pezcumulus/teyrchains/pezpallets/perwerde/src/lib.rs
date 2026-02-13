@@ -86,6 +86,17 @@
 
 pub use pezpallet::*;
 
+/// Trait for notifying trust score system when perwerde score changes.
+/// Defined locally to avoid cyclic dependency with pezpallet-trust.
+pub trait TrustScoreUpdater<AccountId> {
+	fn on_score_component_changed(who: &AccountId);
+}
+
+/// Noop implementation for mock environments.
+impl<AccountId> TrustScoreUpdater<AccountId> for () {
+	fn on_score_component_changed(_who: &AccountId) {}
+}
+
 #[cfg(feature = "runtime-benchmarks")]
 mod benchmarking;
 pub mod weights;
@@ -130,6 +141,9 @@ pub mod pezpallet {
 		/// Used for StudentCourses storage bound
 		#[pezpallet::constant]
 		type MaxCoursesPerStudent: Get<u32>;
+
+		/// Trust score updater - notifies trust pallet when perwerde score changes
+		type TrustScoreUpdater: TrustScoreUpdater<Self::AccountId>;
 	}
 
 	#[derive(Encode, Decode, Clone, Eq, PartialEq, RuntimeDebug, TypeInfo, MaxEncodedLen)]
@@ -292,7 +306,15 @@ pub mod pezpallet {
 
 			Enrollments::<T>::insert((&student, course_id), enrollment);
 
-			Self::deposit_event(Event::CourseCompleted { student, course_id, points });
+			Self::deposit_event(Event::CourseCompleted {
+				student: student.clone(),
+				course_id,
+				points,
+			});
+
+			// Notify trust pallet that student's perwerde score component changed
+			T::TrustScoreUpdater::on_score_component_changed(&student);
+
 			Ok(())
 		}
 

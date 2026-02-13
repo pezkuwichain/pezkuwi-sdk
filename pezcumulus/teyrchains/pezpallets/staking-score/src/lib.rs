@@ -173,11 +173,20 @@ pub mod pezpallet {
 	pub type StakingStartBlock<T: Config> =
 		StorageMap<_, Blake2_128Concat, T::AccountId, BlockNumberFor<T>, OptionQuery>;
 
+	/// Cached staking details received from Asset Hub via XCM.
+	/// This allows People Chain to access staking data without direct access to staking pallet.
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn cached_staking_details)]
+	pub type CachedStakingDetails<T: Config> =
+		StorageMap<_, Blake2_128Concat, T::AccountId, StakingDetails<T::Balance>, OptionQuery>;
+
 	#[pezpallet::event]
 	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A user started time-based scoring.
 		ScoreTrackingStarted { who: T::AccountId, start_block: BlockNumberFor<T> },
+		/// Staking details received from Asset Hub via XCM.
+		StakingDetailsReceived { who: T::AccountId, staked_amount: T::Balance },
 	}
 
 	#[pezpallet::error]
@@ -186,6 +195,8 @@ pub mod pezpallet {
 		NoStakeFound,
 		/// Puan takibi zaten daha önce başlatılmış.
 		TrackingAlreadyStarted,
+		/// Origin is not authorized to send staking details (must be Asset Hub via XCM).
+		UnauthorizedOrigin,
 	}
 
 	#[pezpallet::call]
@@ -217,6 +228,31 @@ pub mod pezpallet {
 			Self::deposit_event(Event::ScoreTrackingStarted { who, start_block: current_block });
 			Ok(())
 		}
+
+		/// Receive staking details from Asset Hub via XCM Transact.
+		/// This extrinsic is called by Asset Hub's staking pallet to push staking data
+		/// to the People Chain so trust scores can be calculated.
+		///
+		/// Only root origin is accepted (XCM Transact from sibling chain arrives as root).
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::start_score_tracking())]
+		pub fn receive_staking_details(
+			origin: OriginFor<T>,
+			who: T::AccountId,
+			staked_amount: T::Balance,
+			nominations_count: u32,
+			unlocking_chunks_count: u32,
+		) -> DispatchResult {
+			ensure_root(origin)?;
+
+			let details =
+				StakingDetails { staked_amount, nominations_count, unlocking_chunks_count };
+
+			CachedStakingDetails::<T>::insert(&who, details);
+
+			Self::deposit_event(Event::StakingDetailsReceived { who, staked_amount });
+			Ok(())
+		}
 	}
 
 	// --- Arayüz (Trait) ve Tip Tanımları ---
@@ -226,7 +262,7 @@ pub mod pezpallet {
 
 	/// Staking ile ilgili detayları bir arada tutan ve dışarıdan alınacak veri yapısı.
 	/// `Default` ekledik çünkü testlerde ve mock'larda işimizi kolaylaştıracak.
-	#[derive(Default, Encode, Decode, Clone, PartialEq, Eq, TypeInfo, Debug)]
+	#[derive(Default, Encode, Decode, Clone, PartialEq, Eq, TypeInfo, Debug, MaxEncodedLen)]
 	pub struct StakingDetails<Balance> {
 		pub staked_amount: Balance,
 		pub nominations_count: u32,
@@ -250,10 +286,14 @@ pub mod pezpallet {
 
 	impl<T: Config> StakingScoreProvider<T::AccountId, BlockNumberFor<T>> for Pezpallet<T> {
 		fn get_staking_score(who: &T::AccountId) -> (RawScore, BlockNumberFor<T>) {
-			// 1. Staking detaylarını al. Eğer stake yoksa (None) 0 puan döndür.
+			// 1. Staking detaylarını al. Önce StakingInfo provider'ı dene,
+			//    bulunamazsa CachedStakingDetails'e (XCM ile gelen veri) bak.
 			let staking_details = match T::StakingInfo::get_staking_details(who) {
 				Some(details) => details,
-				None => return (0, Zero::zero()),
+				None => match CachedStakingDetails::<T>::get(who) {
+					Some(cached) => cached,
+					None => return (0, Zero::zero()),
+				},
 			};
 
 			// Staked miktarı ana birime (HEZ) çevir.

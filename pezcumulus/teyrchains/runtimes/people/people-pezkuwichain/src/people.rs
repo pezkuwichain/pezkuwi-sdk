@@ -254,35 +254,35 @@ parameter_types! {
 	pub const MaxCidLength: u32 = 64;
 }
 
-/// Noop implementation for OnKycApproved hook
-pub struct OnKycApprovedHook;
-impl pezpallet_identity_kyc::types::OnKycApproved<AccountId> for OnKycApprovedHook {
-	fn on_kyc_approved(_who: &AccountId, _referrer: &AccountId) {
-		// Hook implementation - referral pezpallet integration
+// OnKycApproved hook → Delegates to Referral pallet for referral confirmation
+// Referral pallet implements OnKycApproved trait directly and also triggers TrustScoreUpdater
+// OnCitizenshipRevoked hook → Delegates to Referral pallet for penalty tracking
+// Referral pallet implements OnCitizenshipRevoked trait directly and also triggers TrustScoreUpdater
+// CitizenNftProvider → Delegates to Tiki pallet for citizenship NFT minting/burning
+
+/// Adapter struct that bridges each pallet's local TrustScoreUpdater trait
+/// to the Trust pallet's on_score_component_changed implementation.
+/// This avoids cyclic dependencies between component pallets and pezpallet-trust.
+pub struct TrustScoreNotifier;
+
+impl pezpallet_referral::TrustScoreUpdater<AccountId> for TrustScoreNotifier {
+	fn on_score_component_changed(who: &AccountId) {
+		use pezpallet_trust::TrustScoreUpdater;
+		<Trust as TrustScoreUpdater<AccountId>>::on_score_component_changed(who);
 	}
 }
 
-/// Noop implementation for OnCitizenshipRevoked hook
-pub struct OnCitizenshipRevokedHook;
-impl pezpallet_identity_kyc::types::OnCitizenshipRevoked<AccountId> for OnCitizenshipRevokedHook {
-	fn on_citizenship_revoked(_who: &AccountId) {
-		// Penalty logic can be added here
+impl pezpallet_tiki::TrustScoreUpdater<AccountId> for TrustScoreNotifier {
+	fn on_score_component_changed(who: &AccountId) {
+		use pezpallet_trust::TrustScoreUpdater;
+		<Trust as TrustScoreUpdater<AccountId>>::on_score_component_changed(who);
 	}
 }
 
-/// Citizen NFT provider - noop implementation for now
-pub struct CitizenNftProviderImpl;
-impl pezpallet_identity_kyc::types::CitizenNftProvider<AccountId> for CitizenNftProviderImpl {
-	fn mint_citizen_nft(_who: &AccountId) -> Result<(), pezsp_runtime::DispatchError> {
-		Ok(())
-	}
-
-	fn mint_citizen_nft_confirmed(_who: &AccountId) -> Result<(), pezsp_runtime::DispatchError> {
-		Ok(())
-	}
-
-	fn burn_citizen_nft(_who: &AccountId) -> Result<(), pezsp_runtime::DispatchError> {
-		Ok(())
+impl pezpallet_perwerde::TrustScoreUpdater<AccountId> for TrustScoreNotifier {
+	fn on_score_component_changed(who: &AccountId) {
+		use pezpallet_trust::TrustScoreUpdater;
+		<Trust as TrustScoreUpdater<AccountId>>::on_score_component_changed(who);
 	}
 }
 
@@ -292,9 +292,9 @@ impl pezpallet_identity_kyc::Config for Runtime {
 	// Vatandaşlık kararları için Divan (Anayasa Mahkemesi) yetkili
 	type GovernanceOrigin = crate::RootOrDiwanOrTechnical;
 	type WeightInfo = pezpallet_identity_kyc::weights::BizinikiwiWeight<Runtime>;
-	type OnKycApproved = OnKycApprovedHook;
-	type OnCitizenshipRevoked = OnCitizenshipRevokedHook;
-	type CitizenNftProvider = CitizenNftProviderImpl;
+	type OnKycApproved = Referral;
+	type OnCitizenshipRevoked = Referral;
+	type CitizenNftProvider = Tiki;
 	type KycApplicationDeposit = KycApplicationDeposit;
 	type MaxStringLength = MaxStringLength;
 	type MaxCidLength = MaxCidLength;
@@ -365,6 +365,7 @@ impl pezpallet_perwerde::Config for Runtime {
 	type MaxCourseLinkLength = MaxCourseLinkLength;
 	type MaxStudentsPerCourse = MaxStudentsPerCourse;
 	type MaxCoursesPerStudent = MaxCoursesPerStudent;
+	type TrustScoreUpdater = TrustScoreNotifier;
 }
 
 // =============================================================================
@@ -388,6 +389,7 @@ impl pezpallet_referral::Config for Runtime {
 	type WeightInfo = pezpallet_referral::weights::BizinikiwiWeight<Runtime>;
 	type DefaultReferrer = DefaultReferrer;
 	type PenaltyPerRevocation = PenaltyPerRevocation;
+	type TrustScoreUpdater = TrustScoreNotifier;
 }
 
 // =============================================================================
@@ -455,6 +457,7 @@ impl pezpallet_tiki::Config for Runtime {
 	type TikiCollectionId = TikiCollectionId;
 	type MaxTikisPerUser = MaxTikisPerUser;
 	type Tiki = pezpallet_tiki::Tiki;
+	type TrustScoreUpdater = TrustScoreNotifier;
 }
 
 // =============================================================================
@@ -570,18 +573,20 @@ impl pezpallet_trust::StakingScoreProvider<AccountId, BlockNumber> for StakingSc
 }
 
 /// Referral score source for Trust pezpallet
+/// Uses the referral pallet's tiered scoring with penalty system
 pub struct ReferralScoreSource;
 impl pezpallet_trust::ReferralScoreProvider<AccountId> for ReferralScoreSource {
 	fn get_referral_score(who: &AccountId) -> u32 {
-		Referral::referral_count(who)
+		<Referral as pezpallet_referral::types::ReferralScoreProvider<AccountId>>::get_referral_score(who)
 	}
 }
 
 /// Perwerde (education) score source for Trust pezpallet
+/// Sums completed course points from the Perwerde pallet
 pub struct PerwerdeScoreSource;
 impl pezpallet_trust::PerwerdeScoreProvider<AccountId> for PerwerdeScoreSource {
-	fn get_perwerde_score(_who: &AccountId) -> u32 {
-		0 // Placeholder - Perwerde pezpallet integration needed
+	fn get_perwerde_score(who: &AccountId) -> u32 {
+		pezpallet_perwerde::Pezpallet::<Runtime>::get_perwerde_score(who)
 	}
 }
 

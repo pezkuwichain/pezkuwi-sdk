@@ -108,6 +108,17 @@ mod benchmarking;
 extern crate alloc;
 use crate::weights::WeightInfo;
 
+/// Trait for notifying trust score system when referral score changes.
+/// Defined locally to avoid cyclic dependency with pezpallet-trust.
+pub trait TrustScoreUpdater<AccountId> {
+	fn on_score_component_changed(who: &AccountId);
+}
+
+/// Noop implementation for mock environments and pallets that don't need trust updates.
+impl<AccountId> TrustScoreUpdater<AccountId> for () {
+	fn on_score_component_changed(_who: &AccountId) {}
+}
+
 #[pezframe_support::pezpallet]
 pub mod pezpallet {
 	use super::*;
@@ -136,6 +147,9 @@ pub mod pezpallet {
 		/// Default: 3 (each bad referral costs 3x a good referral)
 		#[pezpallet::constant]
 		type PenaltyPerRevocation: Get<u32>;
+
+		/// Trust score updater - notifies trust pallet when referral score changes
+		type TrustScoreUpdater: TrustScoreUpdater<Self::AccountId>;
 	}
 
 	// --- Storage Items ---
@@ -256,10 +270,13 @@ pub mod pezpallet {
 
 			// Emit event
 			Self::deposit_event(Event::ReferralConfirmed {
-				referrer,
+				referrer: referrer.clone(),
 				referred,
 				new_referrer_count: new_count,
 			});
+
+			// Notify trust pallet that referrer's score component changed
+			T::TrustScoreUpdater::on_score_component_changed(&referrer);
 
 			Ok(())
 		}
@@ -308,6 +325,9 @@ pub mod pezpallet {
 					referred: who.clone(),
 					new_referrer_count: new_count,
 				});
+
+				// Notify trust pallet that referrer's score component changed
+				T::TrustScoreUpdater::on_score_component_changed(referrer);
 			}
 		}
 	}
@@ -333,11 +353,14 @@ pub mod pezpallet {
 
 				// Emit penalty event
 				Self::deposit_event(Event::ReferralPenalized {
-					referrer,
+					referrer: referrer.clone(),
 					revoked_citizen: who.clone(),
 					new_penalty_score: updated_stats.penalty_score,
 					total_revoked: updated_stats.revoked_referrals,
 				});
+
+				// Notify trust pallet that referrer's score component changed
+				T::TrustScoreUpdater::on_score_component_changed(&referrer);
 			}
 		}
 	}

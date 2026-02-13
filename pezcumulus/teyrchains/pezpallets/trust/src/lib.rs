@@ -129,6 +129,12 @@ pub trait TrustScoreUpdater<AccountId> {
 	fn on_score_component_changed(who: &AccountId);
 }
 
+/// Noop implementation of TrustScoreUpdater for use in mock environments
+/// and pallets that don't need to trigger trust score updates.
+impl<AccountId> TrustScoreUpdater<AccountId> for () {
+	fn on_score_component_changed(_who: &AccountId) {}
+}
+
 pub trait PerwerdeScoreProvider<AccountId> {
 	fn get_perwerde_score(who: &AccountId) -> u32;
 }

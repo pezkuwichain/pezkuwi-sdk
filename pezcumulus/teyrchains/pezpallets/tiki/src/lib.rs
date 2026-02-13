@@ -106,6 +106,17 @@ pub use pezpallet::*;
 use alloc::{format, vec::Vec};
 use pezframe_support::pezpallet_prelude::{MaybeSerializeDeserialize, Parameter, RuntimeDebug};
 use pezsp_runtime::DispatchError;
+
+/// Trait for notifying trust score system when tiki score changes.
+/// Defined locally to avoid cyclic dependency with pezpallet-trust.
+pub trait TrustScoreUpdater<AccountId> {
+	fn on_score_component_changed(who: &AccountId);
+}
+
+/// Noop implementation for mock environments.
+impl<AccountId> TrustScoreUpdater<AccountId> for () {
+	fn on_score_component_changed(_who: &AccountId) {}
+}
 use scale_info::TypeInfo;
 use serde::{Deserialize, Serialize};
 
@@ -157,6 +168,9 @@ pub mod pezpallet {
 			+ Copy
 			+ MaybeSerializeDeserialize
 			+ 'static;
+
+		/// Trust score updater - notifies trust pallet when tiki score changes
+		type TrustScoreUpdater: TrustScoreUpdater<Self::AccountId>;
 	}
 
 	#[derive(
@@ -527,6 +541,10 @@ pub mod pezpallet {
 			Self::update_nft_metadata(dest_account)?;
 
 			Self::deposit_event(Event::TikiGranted { who: dest_account.clone(), tiki });
+
+			// Notify trust pallet that user's tiki score component changed
+			T::TrustScoreUpdater::on_score_component_changed(dest_account);
+
 			Ok(())
 		}
 
@@ -556,6 +574,10 @@ pub mod pezpallet {
 			Self::update_nft_metadata(target_account)?;
 
 			Self::deposit_event(Event::TikiRevoked { who: target_account.clone(), tiki });
+
+			// Notify trust pallet that user's tiki score component changed
+			T::TrustScoreUpdater::on_score_component_changed(target_account);
+
 			Ok(())
 		}
 

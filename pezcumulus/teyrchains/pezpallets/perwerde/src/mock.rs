@@ -111,6 +111,7 @@ impl pezpallet_perwerde::Config for Test {
 	type MaxCourseLinkLength = MaxCourseLinkLength;
 	type MaxStudentsPerCourse = MaxStudentsPerCourse;
 	type MaxCoursesPerStudent = MaxCoursesPerStudent;
+	type TrustScoreUpdater = ();
 }
 
 // Council Paletinin Mock Kurulumu (construct_runtime'da gerekli olduğu için kalıyor)

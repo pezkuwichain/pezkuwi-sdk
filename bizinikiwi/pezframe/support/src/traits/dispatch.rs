@@ -72,8 +72,14 @@ pub trait EnsureOrigin<OuterOrigin> {
 	/// is impossible.
 	///
 	/// ** Should be used for benchmarking only!!! **
-	#[cfg(feature = "runtime-benchmarks")]
-	fn try_successful_origin() -> Result<OuterOrigin, ()>;
+	///
+	/// Default implementation returns `Err(())` to handle feature unification issues where
+	/// pezframe-support/runtime-benchmarks is enabled but the implementing crate's
+	/// runtime-benchmarks feature is not. Implementations should override this when
+	/// runtime-benchmarks feature is enabled.
+	fn try_successful_origin() -> Result<OuterOrigin, ()> {
+		Err(())
+	}
 }
 
 /// [`EnsureOrigin`] implementation that checks that an origin has equal or higher privilege
@@ -180,8 +186,8 @@ pub trait EnsureOriginWithArg<OuterOrigin, Argument> {
 	///
 	/// Default implementation returns `Err(())` to handle feature unification issues where
 	/// pezframe-support/runtime-benchmarks is enabled but the implementing crate's
-	/// runtime-benchmarks feature is not. Implementations should override this.
-	#[cfg(feature = "runtime-benchmarks")]
+	/// runtime-benchmarks feature is not. Implementations should override this when
+	/// runtime-benchmarks feature is enabled.
 	fn try_successful_origin(_a: &Argument) -> Result<OuterOrigin, ()> {
 		Err(())
 	}

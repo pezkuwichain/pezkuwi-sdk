@@ -87,6 +87,7 @@ impl pezpallet_referral::Config for Test {
 	type WeightInfo = ();
 	type DefaultReferrer = DefaultReferrerAccount;
 	type PenaltyPerRevocation = PenaltyPerRevocationAmount;
+	type TrustScoreUpdater = ();
 }
 
 /// Build test externalities with founding citizens
