@@ -52,12 +52,12 @@ std = [
 	"getrandom?/std",
 	"hex/std",
 	"impl-serde/std",
+	"pezkuwi-subxt-core?/std",
 	"pezkuwi-subxt-lightclient?/std",
 	"primitive-types/std",
 	"serde/std",
 	"serde_json/std",
 	"tracing/std",
-	"pezkuwi-subxt-core?/std",
 ]
 serde = []
 runtime-benchmarks = ["pezkuwi-subxt-core?/runtime-benchmarks"]
