@@ -313,6 +313,7 @@ impl pezpallet_referral::Config for Test {
 	type WeightInfo = ();
 	type DefaultReferrer = DefaultReferrerAccount;
 	type PenaltyPerRevocation = PenaltyPerRevocation;
+	type TrustScoreUpdater = ();
 }
 
 // Tiki Configuration
@@ -327,6 +328,7 @@ impl pezpallet_tiki::Config for Test {
 	type MaxTikisPerUser = MaxTikisPerUser;
 	type Tiki = pezpallet_tiki::Tiki;
 	type TikiCollectionId = TikiCollectionId;
+	type TrustScoreUpdater = ();
 }
 
 // Mock implementations for required traits - YÜKSEK SKORLAR VER
