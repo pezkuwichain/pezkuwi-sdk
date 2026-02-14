@@ -20410,6 +20410,7 @@ dependencies = [
  "pezsp-runtime",
  "pezsp-runtime-interface",
  "pezsp-state-machine",
+ "pezsp-test-primitives",
  "pezsp-trie",
  "pezsp-version",
  "scale-info",

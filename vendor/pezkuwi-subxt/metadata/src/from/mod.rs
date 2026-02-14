@@ -3,7 +3,7 @@
 // see LICENSE for license details.
 
 use alloc::string::String;
-use thiserror::Error as DeriveError;
+use core::fmt;
 mod v14;
 mod v15;
 mod v16;
@@ -19,33 +19,74 @@ pub const SUPPORTED_METADATA_VERSIONS: [u32; 3] = [16, 15, 14];
 
 /// An error emitted if something goes wrong converting [`frame_metadata`]
 /// types into [`crate::Metadata`].
-#[derive(Debug, PartialEq, Eq, DeriveError)]
+#[derive(Debug, PartialEq, Eq)]
 #[non_exhaustive]
 pub enum TryFromError {
 	/// Type missing from type registry
-	#[error("Type id {0} is expected but not found in the type registry")]
 	TypeNotFound(u32),
 	/// Type was not a variant/enum type
-	#[error("Type {0} was not a variant/enum type, but is expected to be one")]
 	VariantExpected(u32),
 	/// An unsupported metadata version was provided.
-	#[error("Cannot convert v{0} metadata into Metadata type")]
 	UnsupportedMetadataVersion(u32),
 	/// Type name missing from type registry
-	#[error("Type name {0} is expected but not found in the type registry")]
 	TypeNameNotFound(String),
 	/// Invalid type path.
-	#[error("Type has an invalid path {0}")]
 	InvalidTypePath(String),
 	/// Cannot decode storage entry information.
-	#[error("Error decoding storage entry information: {0}")]
-	StorageInfoError(#[from] frame_decode::storage::StorageInfoError<'static>),
+	StorageInfoError(frame_decode::storage::StorageInfoError<'static>),
 	/// Cannot decode Runtime API information.
-	#[error("Error decoding Runtime API information: {0}")]
-	RuntimeInfoError(#[from] frame_decode::runtime_apis::RuntimeApiInfoError<'static>),
+	RuntimeInfoError(frame_decode::runtime_apis::RuntimeApiInfoError<'static>),
 	/// Cannot decode View Function information.
-	#[error("Error decoding View Function information: {0}")]
-	ViewFunctionInfoError(#[from] frame_decode::view_functions::ViewFunctionInfoError<'static>),
+	ViewFunctionInfoError(frame_decode::view_functions::ViewFunctionInfoError<'static>),
+}
+
+impl fmt::Display for TryFromError {
+	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+		match self {
+			Self::TypeNotFound(id) => {
+				write!(f, "Type id {id} is expected but not found in the type registry")
+			},
+			Self::VariantExpected(id) => {
+				write!(f, "Type {id} was not a variant/enum type, but is expected to be one")
+			},
+			Self::UnsupportedMetadataVersion(v) => {
+				write!(f, "Cannot convert v{v} metadata into Metadata type")
+			},
+			Self::TypeNameNotFound(name) => {
+				write!(f, "Type name {name} is expected but not found in the type registry")
+			},
+			Self::InvalidTypePath(path) => write!(f, "Type has an invalid path {path}"),
+			Self::StorageInfoError(e) => {
+				write!(f, "Error decoding storage entry information: {e}")
+			},
+			Self::RuntimeInfoError(e) => {
+				write!(f, "Error decoding Runtime API information: {e}")
+			},
+			Self::ViewFunctionInfoError(e) => {
+				write!(f, "Error decoding View Function information: {e}")
+			},
+		}
+	}
+}
+
+impl core::error::Error for TryFromError {}
+
+impl From<frame_decode::storage::StorageInfoError<'static>> for TryFromError {
+	fn from(e: frame_decode::storage::StorageInfoError<'static>) -> Self {
+		Self::StorageInfoError(e)
+	}
+}
+
+impl From<frame_decode::runtime_apis::RuntimeApiInfoError<'static>> for TryFromError {
+	fn from(e: frame_decode::runtime_apis::RuntimeApiInfoError<'static>) -> Self {
+		Self::RuntimeInfoError(e)
+	}
+}
+
+impl From<frame_decode::view_functions::ViewFunctionInfoError<'static>> for TryFromError {
+	fn from(e: frame_decode::view_functions::ViewFunctionInfoError<'static>) -> Self {
+		Self::ViewFunctionInfoError(e)
+	}
 }
 
 impl TryFrom<frame_metadata::RuntimeMetadataPrefixed> for crate::Metadata {
