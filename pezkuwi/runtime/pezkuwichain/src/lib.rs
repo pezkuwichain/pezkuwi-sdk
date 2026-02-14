@@ -413,7 +413,7 @@ impl pezpallet_timestamp::Config for Runtime {
 
 impl pezpallet_authorship::Config for Runtime {
 	type FindAuthor = pezpallet_session::FindAccountFromAuthorIndex<Self, Babe>;
-	type EventHandler = ();
+	type EventHandler = Staking;
 }
 
 impl_opaque_keys! {
