@@ -343,6 +343,78 @@ pub mod pezpallet {
 	// Citizenship NFT minting is handled by CitizenNftProvider hooks,
 	// no per-block scanning needed.
 
+	// ============= GENESIS CONFIG =============
+
+	/// Genesis configuration for bootstrapping Collection 0 and founding citizen NFT.
+	///
+	/// When `founding_citizen` is `Some(account)`, genesis will:
+	/// 1. Create NFT Collection 0 in pezpallet_nfts (with DepositRequired disabled)
+	/// 2. Mint NFT Item #0 for the founding citizen
+	/// 3. Populate CitizenNft, NextItemId, and UserTikis storage
+	#[pezpallet::genesis_config]
+	#[derive(pezframe_support::DefaultNoBound)]
+	pub struct GenesisConfig<T: Config> {
+		/// Optional founding citizen who receives NFT #0 at genesis.
+		/// If None, Collection 0 is NOT created (must be created via sudo later).
+		pub founding_citizen: Option<T::AccountId>,
+	}
+
+	#[pezpallet::genesis_build]
+	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
+		fn build(&self) {
+			use pezsp_runtime::traits::Zero;
+
+			let collection_id = T::TikiCollectionId::get();
+
+			if let Some(ref founder) = self.founding_citizen {
+				// Step 1: Create Collection 0 in pezpallet_nfts
+				// Disable DepositRequired so genesis minting doesn't need balance
+				let collection_config = pezpallet_nfts::CollectionConfig {
+					settings: pezpallet_nfts::CollectionSettings(
+						pezpallet_nfts::CollectionSetting::DepositRequired.into(),
+					),
+					max_supply: None,
+					mint_settings: Default::default(),
+				};
+
+				pezpallet_nfts::Pezpallet::<T>::do_create_collection(
+					collection_id,
+					founder.clone(),
+					founder.clone(),
+					collection_config,
+					Zero::zero(),
+					pezpallet_nfts::Event::ForceCreated {
+						collection: collection_id,
+						owner: founder.clone(),
+					},
+				)
+				.expect("Tiki genesis: failed to create Collection 0");
+
+				// Step 2: Mint NFT #0 for the founding citizen
+				let item_config = pezpallet_nfts::ItemConfig {
+					settings: pezpallet_nfts::ItemSettings::all_enabled(),
+				};
+
+				pezpallet_nfts::Pezpallet::<T>::do_mint(
+					collection_id,
+					0u32,
+					None,
+					founder.clone(),
+					item_config,
+					|_, _| Ok(()),
+				)
+				.expect("Tiki genesis: failed to mint NFT #0");
+
+				// Step 3: Update Tiki storage
+				CitizenNft::<T>::insert(founder, 0u32);
+				NextItemId::<T>::put(1u32);
+				UserTikis::<T>::mutate(founder, |tikis| {
+					let _ = tikis.try_push(Tiki::Welati);
+				});
+			}
+		}
+	}
+
 	#[pezpallet::call]
 	impl<T: Config> Pezpallet<T> {
 		/// Admin tarafından belirli bir kullanıcıya Tiki (rol) verme

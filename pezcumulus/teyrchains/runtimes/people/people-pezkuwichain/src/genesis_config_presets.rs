@@ -56,12 +56,14 @@ fn default_founding_citizen_identity_hash() -> H256 {
 /// - `endowment`: HEZ amount for each endowed account
 /// - `id`: Parachain ID
 /// - `founding_citizens`: Accounts that start as Approved citizens (can accept referrals)
+/// - `founding_citizen`: The account that receives NFT #0 and Collection 0 ownership
 fn people_pezkuwichain_genesis(
 	invulnerables: Vec<(AccountId, AuraId)>,
 	endowed_accounts: Vec<AccountId>,
 	endowment: Balance,
 	id: ParaId,
 	founding_citizens: Vec<(AccountId, H256)>,
+	founding_citizen: Option<AccountId>,
 ) -> serde_json::Value {
 	build_struct_json_patch!(RuntimeGenesisConfig {
 		balances: BalancesConfig {
@@ -92,6 +94,13 @@ fn people_pezkuwichain_genesis(
 		// These accounts start with Approved status and can accept referrals immediately
 		// This solves the chicken-egg problem: first citizens need to exist for others to join
 		identity_kyc: IdentityKycConfig { founding_citizens, _phantom: Default::default() },
+
+		// ====================================================================
+		// Tiki - NFT Collection 0 + Founding Citizen NFT #0
+		// ====================================================================
+		// Creates Collection 0 in pezpallet_nfts and mints NFT #0 for the founder
+		// This is required before any citizenship NFTs can be minted
+		tiki: TikiConfig { founding_citizen },
 	})
 }
 
@@ -137,7 +146,9 @@ pub fn get_preset(id: &PresetId) -> Option<Vec<u8>> {
 				PEOPLE_PEZKUWICHAIN_ED * 524_288,
 				PEOPLE_PARA_ID,
 				// Founding citizens: Founder starts as Approved citizen
-				vec![(founder_account, default_founding_citizen_identity_hash())],
+				vec![(founder_account.clone(), default_founding_citizen_identity_hash())],
+				// Founding citizen gets NFT #0 and Collection 0 ownership
+				Some(founder_account),
 			)
 		},
 
@@ -158,6 +169,8 @@ pub fn get_preset(id: &PresetId) -> Option<Vec<u8>> {
 				(Sr25519Keyring::Alice.to_account_id(), default_founding_citizen_identity_hash()),
 				(Sr25519Keyring::Bob.to_account_id(), default_founding_citizen_identity_hash()),
 			],
+			// Alice gets NFT #0 for testing
+			Some(Sr25519Keyring::Alice.to_account_id()),
 		),
 
 		// ====================================================================
@@ -176,6 +189,8 @@ pub fn get_preset(id: &PresetId) -> Option<Vec<u8>> {
 			PEOPLE_PARA_ID,
 			// Founding citizen: Alice is the founding citizen for dev
 			vec![(Sr25519Keyring::Alice.to_account_id(), default_founding_citizen_identity_hash())],
+			// Alice gets NFT #0 for dev
+			Some(Sr25519Keyring::Alice.to_account_id()),
 		),
 
 		_ => return None,

@@ -68,7 +68,7 @@ construct_runtime!(
 		Identity: pezpallet_identity::{Pezpallet, Call, Storage, Event<T>},
 		IdentityKyc: pezpallet_identity_kyc::{Pezpallet, Call, Storage, Event<T>},
 		Nfts: pezpallet_nfts::{Pezpallet, Call, Storage, Event<T>},
-		Tiki: pezpallet_tiki::{Pezpallet, Call, Storage, Event<T>},
+		Tiki: pezpallet_tiki::{Pezpallet, Call, Config<T>, Storage, Event<T>},
 	}
 );
 
