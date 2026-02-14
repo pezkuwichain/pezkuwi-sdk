@@ -538,6 +538,27 @@ mod preset_names {
 	pub const PRESET_GENESIS: &str = "genesis";
 }
 
+// ============================================================================
+// PEZKUWICHAIN GENESIS MESSAGE
+// ============================================================================
+//
+// Satoshi Qazi Muhammed:
+// {
+//   "block_height": 0,
+//   "timestamp": "1947-03-31T00:00:00Z",
+//   "message": "Heger hûn min darve bikin, an jî parçe parçe bikin, Kurdistan yek e û nabe çar!",
+//   "philosophy": "Collective Sovereignty through Proof of Unity",
+//   "encoded_vow": "0xdfdfbaff585a988e269606bf7595b6899b521192a628cef55b1ef54044571efd"
+// }
+//
+// In memory of Qazi Muhammad (1893-1947), President of the Republic of Mahabad,
+// executed on March 31, 1947. His final words before the gallows:
+// "Even if you hang me or tear me to pieces, Kurdistan is one and will not become four!"
+//
+// This blockchain is built on the principle that no force can divide a people
+// who choose unity through technology, trust, and collective sovereignty.
+// ============================================================================
+
 /// Genesis configuration for mainnet with HEZ distribution
 /// Accounts from Founder_treasury_presale_wallets.json
 fn pezkuwichain_genesis_config() -> serde_json::Value {
@@ -957,8 +978,8 @@ fn pezkuwichain_genesis_config() -> serde_json::Value {
 				(airdrop_account.clone(), HEZ_AIRDROP_ALLOCATION), // 20% = 40M HEZ
 			]
 			.into_iter()
-			// Add validator stash balances
-			.chain(initial_authorities.iter().map(|x| (x.0.clone(), STASH)))
+			// Add validator stash balances (STASH * 2 to cover bond + existential deposit)
+			.chain(initial_authorities.iter().map(|x| (x.0.clone(), STASH * 2)))
 			.collect::<Vec<_>>(),
 		},
 		session: SessionConfig {
