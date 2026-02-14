@@ -36,21 +36,21 @@ thiserror = { optional = true, workspace = true }
 [features]
 default = ["std"]
 std = [
-  "codec/std",
-  "hash-db",
-  "log/std",
-  "pezsp-api-proc-macro/std",
-  "pezsp-core/std",
-  "pezsp-externalities",
-  "pezsp-externalities?/std",
-  "pezsp-metadata-ir?/std",
-  "pezsp-runtime-interface/std",
-  "pezsp-runtime/std",
-  "pezsp-state-machine/std",
-  "pezsp-trie/std",
-  "pezsp-version/std",
-  "scale-info/std",
-  "thiserror",
+	"codec/std",
+	"hash-db",
+	"log/std",
+	"pezsp-api-proc-macro/std",
+	"pezsp-core/std",
+	"pezsp-externalities",
+	"pezsp-externalities?/std",
+	"pezsp-metadata-ir?/std",
+	"pezsp-runtime-interface/std",
+	"pezsp-runtime/std",
+	"pezsp-state-machine/std",
+	"pezsp-trie/std",
+	"pezsp-version/std",
+	"scale-info/std",
+	"thiserror",
 ]
 # Special feature to disable logging completely.
 #
@@ -64,17 +64,17 @@ disable-logging = ["log/max_level_off"]
 no-metadata-docs = ["pezsp-api-proc-macro/no-metadata-docs"]
 frame-metadata = ["pezsp-metadata-ir"]
 runtime-benchmarks = [
-  "pezsp-runtime-interface/runtime-benchmarks",
-  "pezsp-runtime/runtime-benchmarks",
-  "pezsp-state-machine?/runtime-benchmarks",
-  "pezsp-trie?/runtime-benchmarks",
-  "pezsp-version/runtime-benchmarks",
-  "pezsp-test-primitives/runtime-benchmarks",
+	"pezsp-runtime-interface/runtime-benchmarks",
+	"pezsp-runtime/runtime-benchmarks",
+	"pezsp-state-machine?/runtime-benchmarks",
+	"pezsp-test-primitives/runtime-benchmarks",
+	"pezsp-trie?/runtime-benchmarks",
+	"pezsp-version/runtime-benchmarks",
 ]
 try-runtime = [
-  "pezsp-runtime/try-runtime",
-  "pezsp-version/try-runtime",
-  "pezsp-test-primitives/try-runtime",
+	"pezsp-runtime/try-runtime",
+	"pezsp-test-primitives/try-runtime",
+	"pezsp-version/try-runtime",
 ]
 serde = []
 

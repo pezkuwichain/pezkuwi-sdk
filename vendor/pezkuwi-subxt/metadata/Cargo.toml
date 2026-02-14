@@ -16,35 +16,35 @@ description = "Command line utilities for checking metadata compatibility betwee
 [features]
 default = ["legacy", "std"]
 std = [
-  "bitvec/std",
-  "codec/std",
-  "frame-decode/std",
-  "frame-metadata/std",
-  "pezkuwi-subxt-codegen/std",
-  "pezkuwi-subxt-utils-stripmetadata/std",
-  "pezsp-crypto-hashing/std",
-  "scale-info/std",
+	"bitvec/std",
+	"codec/std",
+	"frame-decode/std",
+	"frame-metadata/std",
+	"pezkuwi-subxt-codegen/std",
+	"pezkuwi-subxt-utils-stripmetadata/std",
+	"pezsp-crypto-hashing/std",
+	"scale-info/std",
 ]
 
 # Enable decoding of legacy metadata, too.
 # std required by frame-metadata to decode <V14.
 legacy = [
-  "dep:scale-info-legacy",
-  "dep:scale-type-resolver",
-  "frame-decode/legacy",
-  "frame-metadata/legacy",
-  "std",
+	"dep:scale-info-legacy",
+	"dep:scale-type-resolver",
+	"frame-decode/legacy",
+	"frame-metadata/legacy",
+	"std",
 ]
 serde = []
 
 [dependencies]
 codec = { package = "parity-scale-codec", workspace = true, default-features = false, features = [
-  "derive",
+	"derive",
 ] }
 frame-decode = { workspace = true }
 frame-metadata = { workspace = true, default-features = false, features = [
-  "current",
-  "decode",
+	"current",
+	"decode",
 ] }
 hashbrown = { workspace = true }
 pezsp-crypto-hashing = { workspace = true }
