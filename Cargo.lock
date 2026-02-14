@@ -13457,7 +13457,7 @@ dependencies = [
 
 [[package]]
 name = "pezkuwi-sdk"
-version = "0.44.0"
+version = "0.0.0"
 dependencies = [
  "asset-test-pezutils",
  "bizinikiwi-bip39",

@@ -69,8 +69,13 @@ runtime-benchmarks = [
   "pezsp-state-machine?/runtime-benchmarks",
   "pezsp-trie?/runtime-benchmarks",
   "pezsp-version/runtime-benchmarks",
+  "pezsp-test-primitives/runtime-benchmarks",
 ]
-try-runtime = ["pezsp-runtime/try-runtime", "pezsp-version/try-runtime"]
+try-runtime = [
+  "pezsp-runtime/try-runtime",
+  "pezsp-version/try-runtime",
+  "pezsp-test-primitives/try-runtime",
+]
 serde = []
 
 [dev-dependencies]
