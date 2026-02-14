@@ -39,7 +39,7 @@ impl Token {
 	/// `TokenRegistry` variant.
 	///
 	/// ```
-	/// # use pezkuwi_ss58_registry::{Token, TokenRegistry};
+	/// # use pezsp_ss58_registry::{Token, TokenRegistry};
 	/// # #[cfg(feature = "std")]
 	/// # fn x() {
 	/// let token: Token = TokenRegistry::Hez.into();
@@ -60,7 +60,7 @@ impl Token {
 /// different amounts.
 ///
 /// ```
-/// # use pezkuwi_ss58_registry::{Token, TokenAmount};
+/// # use pezsp_ss58_registry::{Token, TokenAmount};
 /// # #[cfg(feature = "std")]
 /// # fn x() {
 /// let token = Token { name: "I❤U", decimals: 8 };
