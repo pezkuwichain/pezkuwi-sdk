@@ -75,5 +75,24 @@ founder_validators.json
 founder_governance.json
 mainnet/
 relay-mainnet.json
+relay-mainnet-raw.json
+asset-hub-plain.json
+asset-hub-raw.json
+people-chain.json
+people-chain-raw.json
+
+# Mainnet operation scripts (may contain sensitive data)
+vendor/pezkuwi-subxt/subxt/examples/check_staking.rs
+vendor/pezkuwi-subxt/subxt/examples/comprehensive_test.rs
+vendor/pezkuwi-subxt/subxt/examples/create_nft_collection.rs
+vendor/pezkuwi-subxt/subxt/examples/debug_transfer.rs
+vendor/pezkuwi-subxt/subxt/examples/register_teyrchain.rs
+vendor/pezkuwi-subxt/subxt/examples/transfer_mainnet.rs
+
+# Local tools (not part of SDK)
+tools/asset-creator/
+tools/build-mainnet-chainspec.sh
+tools/runtime-upgrade/
+tools/wasm-crypto/
 tools/usdt-bridge/bridge_db.json
 .claude/domains-repositories
