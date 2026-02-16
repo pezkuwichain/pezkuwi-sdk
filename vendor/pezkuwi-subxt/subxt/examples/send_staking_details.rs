@@ -11,7 +11,7 @@
 //! Run with:
 //!   SUDO_MNEMONIC="..." cargo run --release -p pezkuwi-subxt --example send_staking_details
 
-#![allow(missing_docs)]
+#![allow(missing_docs, dead_code)]
 use pezkuwi_subxt::dynamic::Value;
 use pezkuwi_subxt::utils::AccountId32;
 use pezkuwi_subxt::{OnlineClient, PezkuwiConfig};

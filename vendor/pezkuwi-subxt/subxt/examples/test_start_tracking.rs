@@ -57,11 +57,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	println!("TX: 0x{}", hex::encode(progress.extrinsic_hash().as_ref()));
 	let events = progress.wait_for_finalized_success().await?;
 	println!("Transfer finalized!");
-	for ev in events.iter() {
-		if let Ok(ev) = ev {
-			if ev.pallet_name() == "Balances" {
-				println!("  {}::{}", ev.pallet_name(), ev.variant_name());
-			}
+	for ev in events.iter().flatten() {
+		if ev.pallet_name() == "Balances" {
+			println!("  {}::{}", ev.pallet_name(), ev.variant_name());
 		}
 	}
 
@@ -80,12 +78,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	match progress.wait_for_finalized_success().await {
 		Ok(events) => {
 			println!("start_score_tracking SUCCESS!");
-			for ev in events.iter() {
-				if let Ok(ev) = ev {
-					let p = ev.pallet_name();
-					if p == "StakingScore" || p == "Trust" || p == "System" {
-						println!("  {}::{}", p, ev.variant_name());
-					}
+			for ev in events.iter().flatten() {
+				let p = ev.pallet_name();
+				if p == "StakingScore" || p == "Trust" || p == "System" {
+					println!("  {}::{}", p, ev.variant_name());
 				}
 			}
 		},

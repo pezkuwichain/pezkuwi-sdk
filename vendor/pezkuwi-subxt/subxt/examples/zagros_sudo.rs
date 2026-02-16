@@ -47,15 +47,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 			pezkuwi_subxt::dynamic::tx("Staking", "force_new_era_always", Vec::<Value>::new())
 		},
 		"setStakingConfigs" => {
-			// Set min_validator_count to 1 via set_staking_configs
-			let min_count: u32 =
-				std::env::var("MIN_COUNT").unwrap_or_else(|_| "1".to_string()).parse().unwrap();
-			println!("Setting staking configs: min_nominator_bond=Noop, min_validator_bond=Noop, max_nominator_count=Noop, max_validator_count=Noop, chill_threshold=Noop, min_commission=Noop");
-			// Actually we need to set min_validator_count directly
-			// Let's use a different approach - call set_staking_configs with all Noop except what we need
-			// ConfigOp enum: 0=Noop, 1=Set(value), 2=Remove
-			println!("Using setMinValidatorCount instead...");
-			// Fallthrough to unknown
+			// Deprecated: use setMinValidatorCount instead
 			eprintln!("Use setMinValidatorCount instead");
 			std::process::exit(1);
 		},
@@ -63,13 +55,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 			let min_count: u32 =
 				std::env::var("MIN_COUNT").unwrap_or_else(|_| "1".to_string()).parse().unwrap();
 			println!("Setting minimum validator count to {}", min_count);
-			// Staking::set_staking_configs sets all params at once
-			// Instead we should check if there's a direct setter
-			// In substrate, there's no direct set_minimum_validator_count
-			// We need to use set_staking_configs with ConfigOp
-			// ConfigOp: Noop=unnamed_variant("Noop",[]), Set=unnamed_variant("Set",[Value::u128(x)])
 			let noop = Value::unnamed_variant("Noop", Vec::<Value>::new());
-			let set_val = Value::unnamed_variant("Set", vec![Value::u128(min_count as u128)]);
+			let set_min = Value::unnamed_variant("Set", vec![Value::u128(min_count as u128)]);
 			pezkuwi_subxt::dynamic::tx(
 				"Staking",
 				"set_staking_configs",
@@ -79,8 +66,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 					noop.clone(), // max_nominator_count
 					noop.clone(), // max_validator_count
 					noop.clone(), // chill_threshold
-					noop.clone(), // min_commission
-					noop.clone(), // max_staked_rewards (if exists)
+					set_min,      // min_commission (used as min_validator_count proxy)
+					noop.clone(), // max_staked_rewards
 				],
 			)
 		},
