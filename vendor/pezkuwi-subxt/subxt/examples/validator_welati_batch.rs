@@ -14,7 +14,7 @@
 //!   SUDO_MNEMONIC="..." cargo run --release -p pezkuwi-subxt --example validator_welati_batch
 //!   SUDO_MNEMONIC="..." SKIP=5 cargo run --release -p pezkuwi-subxt --example validator_welati_batch
 
-#![allow(missing_docs)]
+#![allow(missing_docs, dead_code)]
 use pezkuwi_subxt::dynamic::Value;
 use pezkuwi_subxt::utils::AccountId32;
 use pezkuwi_subxt::{OnlineClient, PezkuwiConfig};
@@ -372,16 +372,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 						Ok(events) => {
 							let mut has_sudid = false;
 							let mut has_sent = false;
-							for event in events.iter() {
-								if let Ok(ev) = event {
-									if ev.pallet_name() == "Sudo" && ev.variant_name() == "Sudid" {
-										has_sudid = true;
-									}
-									if ev.pallet_name() == "XcmPallet"
-										&& ev.variant_name() == "Sent"
-									{
-										has_sent = true;
-									}
+							for ev in events.iter().flatten() {
+								if ev.pallet_name() == "Sudo" && ev.variant_name() == "Sudid" {
+									has_sudid = true;
+								}
+								if ev.pallet_name() == "XcmPallet" && ev.variant_name() == "Sent" {
+									has_sent = true;
 								}
 							}
 							if has_sudid && has_sent {
@@ -389,10 +385,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 								tx_ok = true;
 							} else {
 								println!("  WARNING: Events:");
-								for event in events.iter() {
-									if let Ok(ev) = event {
-										println!("    {}::{}", ev.pallet_name(), ev.variant_name());
-									}
+								for ev in events.iter().flatten() {
+									println!("    {}::{}", ev.pallet_name(), ev.variant_name());
 								}
 							}
 						},

@@ -64,12 +64,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 				match details.wait_for_success().await {
 					Ok(events) => {
 						let mut sudid = false;
-						for event in events.iter() {
-							if let Ok(ev) = event {
-								println!("  Event: {}::{}", ev.pallet_name(), ev.variant_name());
-								if ev.pallet_name() == "Sudo" && ev.variant_name() == "Sudid" {
-									sudid = true;
-								}
+						for ev in events.iter().flatten() {
+							println!("  Event: {}::{}", ev.pallet_name(), ev.variant_name());
+							if ev.pallet_name() == "Sudo" && ev.variant_name() == "Sudid" {
+								sudid = true;
 							}
 						}
 						if sudid {

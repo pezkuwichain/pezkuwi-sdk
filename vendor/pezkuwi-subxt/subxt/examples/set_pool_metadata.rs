@@ -110,10 +110,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 						match details.wait_for_success().await {
 							Ok(events) => {
 								println!("  SUCCESS!");
-								for event in events.iter() {
-									if let Ok(ev) = event {
-										println!("    {}::{}", ev.pallet_name(), ev.variant_name());
-									}
+								for ev in events.iter().flatten() {
+									println!("    {}::{}", ev.pallet_name(), ev.variant_name());
 								}
 								ok = true;
 							},

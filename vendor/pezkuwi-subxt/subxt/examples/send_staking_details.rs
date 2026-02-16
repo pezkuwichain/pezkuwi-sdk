@@ -332,16 +332,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 						Ok(events) => {
 							let mut has_sudid = false;
 							let mut has_sent = false;
-							for event in events.iter() {
-								if let Ok(ev) = event {
-									if ev.pallet_name() == "Sudo" && ev.variant_name() == "Sudid" {
-										has_sudid = true;
-									}
-									if ev.pallet_name() == "XcmPallet"
-										&& ev.variant_name() == "Sent"
-									{
-										has_sent = true;
-									}
+							for ev in events.iter().flatten() {
+								if ev.pallet_name() == "Sudo" && ev.variant_name() == "Sudid" {
+									has_sudid = true;
+								}
+								if ev.pallet_name() == "XcmPallet" && ev.variant_name() == "Sent" {
+									has_sent = true;
 								}
 							}
 							if has_sudid && has_sent {
@@ -349,10 +345,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 								tx_ok = true;
 							} else {
 								println!("  WARNING: Events:");
-								for event in events.iter() {
-									if let Ok(ev) = event {
-										println!("    {}::{}", ev.pallet_name(), ev.variant_name());
-									}
+								for ev in events.iter().flatten() {
+									println!("    {}::{}", ev.pallet_name(), ev.variant_name());
 								}
 							}
 						},

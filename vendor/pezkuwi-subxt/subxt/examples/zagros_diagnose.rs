@@ -114,24 +114,22 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 				match details.wait_for_success().await {
 					Ok(events) => {
 						println!("  In best block! Events:");
-						for event in events.iter() {
-							if let Ok(ev) = event {
-								println!("    {}::{}", ev.pallet_name(), ev.variant_name());
-								if ev.pallet_name() == "Sudo" && ev.variant_name() == "Sudid" {
-									success = true;
-								}
-								if ev.pallet_name() == "ValidatorManager"
-									&& ev.variant_name() == "ValidatorsDeregistered"
-								{
-									// Try to decode the event data
-									println!("    >>> ValidatorsDeregistered event!");
-									let bytes = ev.field_bytes();
-									println!(
-										"    >>> Event field bytes ({} bytes): 0x{}",
-										bytes.len(),
-										hex::encode(&bytes[..std::cmp::min(bytes.len(), 128)])
-									);
-								}
+						for ev in events.iter().flatten() {
+							println!("    {}::{}", ev.pallet_name(), ev.variant_name());
+							if ev.pallet_name() == "Sudo" && ev.variant_name() == "Sudid" {
+								success = true;
+							}
+							if ev.pallet_name() == "ValidatorManager"
+								&& ev.variant_name() == "ValidatorsDeregistered"
+							{
+								// Try to decode the event data
+								println!("    >>> ValidatorsDeregistered event!");
+								let bytes = ev.field_bytes();
+								println!(
+									"    >>> Event field bytes ({} bytes): 0x{}",
+									bytes.len(),
+									hex::encode(&bytes[..std::cmp::min(bytes.len(), 128)])
+								);
 							}
 						}
 					},

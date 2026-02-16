@@ -116,26 +116,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 					Some(Ok(TxStatus::InBestBlock(details))) => {
 						match details.wait_for_success().await {
 							Ok(events) => {
-								for event in events.iter() {
-									if let Ok(ev) = event {
-										if ev.pallet_name() == "Balances"
-											&& ev.variant_name() == "Transfer"
-										{
-											println!("  SUCCESS: {} HEZ transferred", amount_hez);
-											tx_ok = true;
-										}
+								for ev in events.iter().flatten() {
+									if ev.pallet_name() == "Balances"
+										&& ev.variant_name() == "Transfer"
+									{
+										println!("  SUCCESS: {} HEZ transferred", amount_hez);
+										tx_ok = true;
 									}
 								}
 								if !tx_ok {
 									println!("  WARNING: No Transfer event found");
-									for event in events.iter() {
-										if let Ok(ev) = event {
-											println!(
-												"    {}::{}",
-												ev.pallet_name(),
-												ev.variant_name()
-											);
-										}
+									for ev in events.iter().flatten() {
+										println!("    {}::{}", ev.pallet_name(), ev.variant_name());
 									}
 								}
 							},

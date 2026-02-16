@@ -101,10 +101,8 @@ async fn wait_for_success(
 			Some(Ok(TxStatus::InBestBlock(details))) => match details.wait_for_success().await {
 				Ok(events) => {
 					println!("  {} SUCCESS!", label);
-					for event in events.iter() {
-						if let Ok(ev) = event {
-							println!("    {}::{}", ev.pallet_name(), ev.variant_name());
-						}
+					for ev in events.iter().flatten() {
+						println!("    {}::{}", ev.pallet_name(), ev.variant_name());
 					}
 					return Ok(true);
 				},
