@@ -469,10 +469,20 @@ parameter_types! {
 	pub const StakingScoreUpdateInterval: BlockNumber = HOURS;
 }
 
+/// Noter authority checker backed by the Tiki pallet.
+/// Accounts holding the `Noter` tiki role can submit staking details.
+pub struct TikiNoterChecker;
+impl pezpallet_staking_score::NoterCheck<AccountId> for TikiNoterChecker {
+	fn is_noter(who: &AccountId) -> bool {
+		pezpallet_tiki::Pezpallet::<Runtime>::has_tiki(who, &pezpallet_tiki::Tiki::Noter)
+	}
+}
+
 impl pezpallet_staking_score::Config for Runtime {
 	type WeightInfo = pezpallet_staking_score::weights::BizinikiwiWeight<Runtime>;
 	type Balance = Balance;
 	type OnStakingUpdate = Trust;
+	type NoterChecker = TikiNoterChecker;
 }
 
 // =============================================================================

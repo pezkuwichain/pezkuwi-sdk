@@ -52,7 +52,7 @@
 | Para ID | Isim | Durum | spec_version | Block | Peers |
 |---------|------|-------|-------------|-------|-------|
 | 1000 | Asset Hub | CALISIYOR | 1_020_004 | ~11,009 | 1 |
-| 1004 | People Chain | CALISIYOR | 1_020_004 | ~11,029 | 1 |
+| 1004 | People Chain | CALISIYOR | 1_020_006 | ~17,200 | 1 |
 
 #### Mainnet Servis Isimleri (VPS3)
 - `pez-mainnet-validator-1` ... `pez-mainnet-validator-4`

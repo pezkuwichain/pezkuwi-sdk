@@ -1,7 +1,9 @@
 //! Send receive_staking_details to People Chain for all 21 validators via XCM Transact
 //!
 //! People Chain StakingScore pallet (index 80) has:
-//!   receive_staking_details(who, staked_amount, nominations_count, unlocking_chunks_count)
+//!   receive_staking_details(who, source, staked_amount, nominations_count, unlocking_chunks_count)
+//!
+//! source: StakingSource enum (0=RelayChain, 1=AssetHub)
 //!
 //! This populates CachedStakingDetails on People Chain so validators can
 //! call start_score_tracking() and have their staking scores calculated.
@@ -57,22 +59,29 @@ fn validators() -> Vec<ValidatorInfo> {
 
 const PLANCK_PER_HEZ: u128 = 1_000_000_000_000;
 
-/// Encode StakingScore.receive_staking_details(who, staked_amount, nominations_count, unlocking_chunks_count)
+/// StakingSource enum (SCALE-encoded as single byte)
+const STAKING_SOURCE_RELAY_CHAIN: u8 = 0;
+const STAKING_SOURCE_ASSET_HUB: u8 = 1;
+
+/// Encode StakingScore.receive_staking_details(who, source, staked_amount, nominations_count, unlocking_chunks_count)
 /// Pallet 80 (0x50), call_index 1
 /// who: AccountId32 (32 bytes raw)
+/// source: StakingSource (1 byte enum: 0=RelayChain, 1=AssetHub)
 /// staked_amount: u128 LE (16 bytes)  - this is T::Balance which is u128
 /// nominations_count: u32 LE (4 bytes)
 /// unlocking_chunks_count: u32 LE (4 bytes)
 fn encode_receive_staking_details(
 	account_id: &[u8; 32],
+	source: u8,
 	staked_amount: u128,
 	nominations_count: u32,
 	unlocking_chunks_count: u32,
 ) -> Vec<u8> {
-	let mut encoded = Vec::with_capacity(58);
+	let mut encoded = Vec::with_capacity(59);
 	encoded.push(STAKING_SCORE_PALLET); // 0x50
 	encoded.push(RECEIVE_STAKING_DETAILS_CALL); // 0x01
 	encoded.extend_from_slice(account_id); // 32 bytes
+	encoded.push(source); // 1 byte (StakingSource enum)
 	encoded.extend_from_slice(&staked_amount.to_le_bytes()); // 16 bytes
 	encoded.extend_from_slice(&nominations_count.to_le_bytes()); // 4 bytes
 	encoded.extend_from_slice(&unlocking_chunks_count.to_le_bytes()); // 4 bytes
@@ -177,9 +186,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 		};
 
 		// Encode receive_staking_details call
+		// source = RelayChain (validators stake on Relay Chain)
 		// nominations_count = 0 (validators don't nominate, they validate)
 		// unlocking_chunks_count = 0 (no pending unstakes)
-		let call = encode_receive_staking_details(&account.0, staked_planck, 0, 0);
+		let call = encode_receive_staking_details(
+			&account.0,
+			STAKING_SOURCE_RELAY_CHAIN,
+			staked_planck,
+			0,
+			0,
+		);
 		println!(
 			"  Call: {} bytes (0x{}...)",
 			call.len(),

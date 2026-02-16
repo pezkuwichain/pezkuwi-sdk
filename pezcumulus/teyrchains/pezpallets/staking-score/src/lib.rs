@@ -6,10 +6,16 @@
 //!
 //! ## Overview
 //!
-//! People Chain does not have direct access to staking data. Instead, staking details
-//! are pushed from Relay Chain and Asset Hub via XCM Transact into `CachedStakingDetails`.
-//! This pallet aggregates stake from all sources and calculates a score based on amount
-//! and duration.
+//! People Chain does not have direct access to staking data. Staking details are
+//! submitted by noter-authorized accounts (or root via XCM Transact) into
+//! `CachedStakingDetails`. This pallet aggregates stake from all sources and
+//! calculates a score based on amount and duration.
+//!
+//! ## Noter Delegation
+//!
+//! The sudo account delegates `receive_staking_details` authority to accounts that
+//! hold the `Noter` tiki (role NFT). A bot collects staking data from Relay Chain
+//! and Asset Hub, then a noter signs and submits the data to People Chain.
 //!
 //! ## Dual-Chain Staking
 //!
@@ -19,10 +25,11 @@
 //!
 //! ## Workflow
 //!
-//! 1. Relay Chain / Asset Hub pushes staking data via XCM → `receive_staking_details()`
-//! 2. User calls `start_score_tracking()` to begin time-based score accumulation
-//! 3. `pezpallet-trust` queries staking score via `StakingScoreProvider` trait
-//! 4. Score = base_score(amount_tier) * duration_multiplier, capped at 100
+//! 1. User calls `start_score_tracking()` to opt-in to time-based scoring
+//! 2. Bot detects the event, collects staking data from Relay Chain / Asset Hub
+//! 3. Noter submits `receive_staking_details()` with the staking data
+//! 4. `pezpallet-trust` queries staking score via `StakingScoreProvider` trait
+//! 5. Score = base_score(amount_tier) * duration_multiplier, capped at 100
 
 pub use pezpallet::*;
 
@@ -71,6 +78,19 @@ pub mod pezpallet {
 	#[pezpallet::pezpallet]
 	pub struct Pezpallet<T>(_);
 
+	/// Trait for checking if an account has noter authority.
+	/// Noter-authorized accounts can submit staking details on behalf of users.
+	pub trait NoterCheck<AccountId> {
+		fn is_noter(who: &AccountId) -> bool;
+	}
+
+	/// Default implementation: nobody is noter (safe default for tests).
+	impl<AccountId> NoterCheck<AccountId> for () {
+		fn is_noter(_who: &AccountId) -> bool {
+			false
+		}
+	}
+
 	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config<RuntimeEvent: From<Event<Self>>>
 	where
@@ -94,6 +114,10 @@ pub mod pezpallet {
 
 		/// Weight information for extrinsics.
 		type WeightInfo: WeightInfo;
+
+		/// Checker for noter authority. Accounts with the Noter tiki can submit
+		/// staking details without requiring root origin.
+		type NoterChecker: NoterCheck<Self::AccountId>;
 	}
 
 	// --- Storage ---
@@ -136,12 +160,20 @@ pub mod pezpallet {
 		NoStakeFound,
 		/// Score tracking has already been started for this account.
 		TrackingAlreadyStarted,
+		/// Caller does not have noter authority.
+		NotAuthorized,
 	}
 
 	#[pezpallet::call]
 	impl<T: Config> Pezpallet<T> {
-		/// Start time-based score accumulation. One-time call per user.
-		/// Requires the user to have cached staking data from at least one source.
+		/// Start time-based score accumulation. One-time opt-in call per user.
+		///
+		/// The user does not need to have cached staking data yet. A bot will
+		/// detect the `ScoreTrackingStarted` event and a noter will submit the
+		/// staking data via `receive_staking_details`.
+		///
+		/// Duration tracking begins at the block this is called, regardless of
+		/// when the staking data arrives.
 		#[pezpallet::call_index(0)]
 		#[pezpallet::weight(T::WeightInfo::start_score_tracking())]
 		pub fn start_score_tracking(origin: OriginFor<T>) -> DispatchResult {
@@ -152,21 +184,25 @@ pub mod pezpallet {
 				Error::<T>::TrackingAlreadyStarted
 			);
 
-			// Check if user has any stake from any source.
-			let total_stake = Self::total_cached_stake(&who);
-			ensure!(!total_stake.is_zero(), Error::<T>::NoStakeFound);
-
 			let current_block = pezframe_system::Pezpallet::<T>::block_number();
 			StakingStartBlock::<T>::insert(&who, current_block);
 
+			// Notify trust pallet. Score may be 0 if CachedStakingDetails is empty.
 			T::OnStakingUpdate::on_staking_data_changed(&who);
 
 			Self::deposit_event(Event::ScoreTrackingStarted { who, start_block: current_block });
 			Ok(())
 		}
 
-		/// Receive staking details from a chain via XCM Transact.
-		/// Only root origin is accepted (XCM Transact from sibling/parent arrives as root).
+		/// Receive staking details for an account.
+		///
+		/// Accepts root origin (XCM Transact) or a signed origin from an account
+		/// that holds the Noter tiki. This allows a noter-authorized bot to submit
+		/// staking data collected from Relay Chain and Asset Hub.
+		///
+		/// If `staked_amount` is zero, the cached entry for the given source is
+		/// removed. If no stake remains from any source, `StakingStartBlock` is
+		/// also cleaned up, effectively resetting the user's staking score to zero.
 		#[pezpallet::call_index(1)]
 		#[pezpallet::weight(T::WeightInfo::receive_staking_details())]
 		pub fn receive_staking_details(
@@ -177,12 +213,27 @@ pub mod pezpallet {
 			nominations_count: u32,
 			unlocking_chunks_count: u32,
 		) -> DispatchResult {
-			ensure_root(origin)?;
+			// Root (XCM Transact) OR noter-authorized signed origin.
+			if ensure_root(origin.clone()).is_err() {
+				let caller = ensure_signed(origin)?;
+				ensure!(T::NoterChecker::is_noter(&caller), Error::<T>::NotAuthorized);
+			}
 
-			let details =
-				StakingDetails { staked_amount, nominations_count, unlocking_chunks_count };
+			if staked_amount.is_zero() {
+				// Zero stake: remove the cached entry for this source.
+				CachedStakingDetails::<T>::remove(&who, source);
 
-			CachedStakingDetails::<T>::insert(&who, source, details);
+				// Check if any stake remains from other sources.
+				let remaining = Self::total_cached_stake(&who);
+				if remaining.is_zero() {
+					// No stake from any source — clean up tracking.
+					StakingStartBlock::<T>::remove(&who);
+				}
+			} else {
+				let details =
+					StakingDetails { staked_amount, nominations_count, unlocking_chunks_count };
+				CachedStakingDetails::<T>::insert(&who, source, details);
+			}
 
 			T::OnStakingUpdate::on_staking_data_changed(&who);
 

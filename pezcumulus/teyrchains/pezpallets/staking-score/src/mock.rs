@@ -47,10 +47,20 @@ impl pezpallet_balances::Config for Test {
 	type AccountStore = System;
 }
 
+/// Mock noter checker for tests.
+/// Account 99 is noter, everyone else is not.
+pub struct MockNoterChecker;
+impl crate::NoterCheck<AccountId> for MockNoterChecker {
+	fn is_noter(who: &AccountId) -> bool {
+		*who == 99
+	}
+}
+
 impl crate::Config for Test {
 	type Balance = Balance;
 	type WeightInfo = ();
 	type OnStakingUpdate = ();
+	type NoterChecker = MockNoterChecker;
 }
 
 // --- ExtBuilder ---
@@ -73,6 +83,8 @@ impl ExtBuilder {
 				(2, 1_000_000 * UNITS),
 				(10, 1_000_000 * UNITS),
 				(20, 100_000 * UNITS),
+				(30, 100_000 * UNITS), // Charlie
+				(99, 100_000 * UNITS), // NOTER
 			],
 			..Default::default()
 		}
