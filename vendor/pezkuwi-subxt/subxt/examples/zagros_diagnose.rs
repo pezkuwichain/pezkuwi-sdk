@@ -26,11 +26,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 	// Storage keys
 	let queued_keys_key =
-		hex::decode("cec5070d609dd3497f72bde07fc96ba088dcde934c658227ee1dfafcd6e16903")
-			.unwrap();
+		hex::decode("cec5070d609dd3497f72bde07fc96ba088dcde934c658227ee1dfafcd6e16903").unwrap();
 	let validators_to_retire_key =
-		hex::decode("084e7f70a295a190e2e33fd3f8cdfcc2b664fa73499821e43a617aa0e82b17b1")
-			.unwrap();
+		hex::decode("084e7f70a295a190e2e33fd3f8cdfcc2b664fa73499821e43a617aa0e82b17b1").unwrap();
 
 	// Step 1: Check ValidatorsToRetire BEFORE
 	println!("=== STEP 1: Check ValidatorsToRetire BEFORE deregister ===");
@@ -43,20 +41,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	if retire_before.is_empty() {
 		println!("  ValidatorsToRetire: EMPTY (as expected)\n");
 	} else {
-		println!(
-			"  ValidatorsToRetire: {} bytes (already has data!)\n",
-			retire_before.len()
-		);
+		println!("  ValidatorsToRetire: {} bytes (already has data!)\n", retire_before.len());
 	}
 
 	// Step 2: Get validator #5 from QueuedKeys
 	println!("=== STEP 2: Get test validator from QueuedKeys ===");
-	let raw_data = api
-		.storage()
-		.at_latest()
-		.await?
-		.fetch_raw(queued_keys_key)
-		.await?;
+	let raw_data = api.storage().at_latest().await?.fetch_raw(queued_keys_key).await?;
 	let count = (raw_data[0] >> 2) as usize;
 	let remaining = raw_data.len() - 1;
 	let entry_size = remaining / count;
@@ -70,10 +60,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	// Get validator #5 (index 4, the first one to remove)
 	let test_offset = 1 + 4 * entry_size;
 	let test_validator = raw_data[test_offset..test_offset + 32].to_vec();
-	println!(
-		"  Test validator (index 5): 0x{}\n",
-		hex::encode(&test_validator)
-	);
+	println!("  Test validator (index 5): 0x{}\n", hex::encode(&test_validator));
 
 	// Step 3: Load sudo key and submit deregister for ONE validator
 	println!("=== STEP 3: Submit deregister for ONE validator ===");
@@ -81,10 +68,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 		std::env::var("SUDO_MNEMONIC").expect("SUDO_MNEMONIC environment variable required");
 	let mnemonic = Mnemonic::from_str(&mnemonic_str)?;
 	let sudo_keypair = Keypair::from_phrase(&mnemonic, None)?;
-	println!(
-		"  Sudo account: {}",
-		sudo_keypair.public_key().to_account_id()
-	);
+	println!("  Sudo account: {}", sudo_keypair.public_key().to_account_id());
 
 	// Try TWO different encoding approaches
 
@@ -110,22 +94,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	// Print the encoded call data to debug
 	println!("\n  Deregister call value: {:?}", deregister_call.call_data());
 
-	let sudo_call =
-		pezkuwi_subxt::dynamic::tx("Sudo", "sudo", vec![deregister_call.into_value()]);
+	let sudo_call = pezkuwi_subxt::dynamic::tx("Sudo", "sudo", vec![deregister_call.into_value()]);
 
 	println!("\n  Submitting sudo(validatorManager.deregister_validators([1 validator]))...");
 
 	use pezkuwi_subxt::tx::TxStatus;
 
-	let tx_progress = api
-		.tx()
-		.sign_and_submit_then_watch_default(&sudo_call, &sudo_keypair)
-		.await?;
+	let tx_progress =
+		api.tx().sign_and_submit_then_watch_default(&sudo_call, &sudo_keypair).await?;
 
-	println!(
-		"  TX: 0x{}",
-		hex::encode(tx_progress.extrinsic_hash().as_ref())
-	);
+	println!("  TX: 0x{}", hex::encode(tx_progress.extrinsic_hash().as_ref()));
 
 	let mut progress = tx_progress;
 	let mut success = false;
@@ -146,11 +124,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 									&& ev.variant_name() == "ValidatorsDeregistered"
 								{
 									// Try to decode the event data
-									println!(
-										"    >>> ValidatorsDeregistered event!"
-									);
+									println!("    >>> ValidatorsDeregistered event!");
 									let bytes = ev.field_bytes();
-									println!("    >>> Event field bytes ({} bytes): 0x{}", bytes.len(), hex::encode(&bytes[..std::cmp::min(bytes.len(), 128)]));
+									println!(
+										"    >>> Event field bytes ({} bytes): 0x{}",
+										bytes.len(),
+										hex::encode(&bytes[..std::cmp::min(bytes.len(), 128)])
+									);
 								}
 							}
 						}
@@ -204,10 +184,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 		println!("  ValidatorsToRetire: EMPTY !!! (deregister didn't populate storage!)");
 		println!("  THIS IS THE BUG!");
 	} else {
-		println!(
-			"  ValidatorsToRetire: {} bytes",
-			retire_after.len()
-		);
+		println!("  ValidatorsToRetire: {} bytes", retire_after.len());
 		println!("  Raw hex: 0x{}", hex::encode(&retire_after));
 
 		// Decode it

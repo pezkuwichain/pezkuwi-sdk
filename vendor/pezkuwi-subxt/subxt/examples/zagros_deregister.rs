@@ -45,9 +45,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	println!("=== ZAGROS: VALIDATOR DEREGISTRATION ===\n");
 
 	let url = std::env::var("RPC_URL").unwrap_or_else(|_| "ws://217.77.6.126:9948".to_string());
-	let keep: usize = std::env::var("KEEP")
-		.unwrap_or_else(|_| "2".to_string())
-		.parse()?;
+	let keep: usize = std::env::var("KEEP").unwrap_or_else(|_| "2".to_string()).parse()?;
 	let execute = std::env::var("EXECUTE").unwrap_or_default() == "1";
 
 	println!("RPC: {}", url);
@@ -61,15 +59,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	// QueuedKeys = Vec<(ValidatorId, Keys)>
 	// Storage key: twox128("Session") + twox128("QueuedKeys")
 	let queued_keys_key =
-		hex::decode("cec5070d609dd3497f72bde07fc96ba088dcde934c658227ee1dfafcd6e16903")
-			.unwrap();
+		hex::decode("cec5070d609dd3497f72bde07fc96ba088dcde934c658227ee1dfafcd6e16903").unwrap();
 
-	let raw_data = api
-		.storage()
-		.at_latest()
-		.await?
-		.fetch_raw(queued_keys_key)
-		.await?;
+	let raw_data = api.storage().at_latest().await?.fetch_raw(queued_keys_key).await?;
 
 	if raw_data.is_empty() {
 		println!("ERROR: QueuedKeys storage is empty!");
@@ -95,33 +87,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	// But we need to verify this. Let's compute expected total size:
 	let expected_entry_size = 32 + (32 * 6 + 33); // 257
 	let expected_total = 1 + (count * expected_entry_size); // 1 byte compact + entries
-	println!(
-		"Expected data size: {} bytes, actual: {} bytes",
-		expected_total,
-		raw_data.len()
-	);
+	println!("Expected data size: {} bytes, actual: {} bytes", expected_total, raw_data.len());
 
 	if raw_data.len() < offset + count * expected_entry_size {
 		// Try without beefy (older runtime might not have it)
 		let entry_no_beefy = 32 + (32 * 6); // 224
 		let expected_no_beefy = 1 + (count * entry_no_beefy);
-		println!(
-			"Without beefy: expected {} bytes",
-			expected_no_beefy
-		);
+		println!("Without beefy: expected {} bytes", expected_no_beefy);
 
 		if raw_data.len() >= offset + count * entry_no_beefy {
 			println!("Using SessionKeys without Beefy (6 keys x 32 bytes)");
-			extract_and_process(
-				&raw_data,
-				offset,
-				count,
-				entry_no_beefy,
-				keep,
-				execute,
-				&api,
-			)
-			.await?;
+			extract_and_process(&raw_data, offset, count, entry_no_beefy, keep, execute, &api)
+				.await?;
 		} else {
 			// Auto-detect entry size
 			let remaining = raw_data.len() - offset;
@@ -130,21 +107,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 				"Auto-detected entry size: {} bytes (remaining={}, count={})",
 				entry_size, remaining, count
 			);
-			extract_and_process(&raw_data, offset, count, entry_size, keep, execute, &api)
-				.await?;
+			extract_and_process(&raw_data, offset, count, entry_size, keep, execute, &api).await?;
 		}
 	} else {
 		println!("Using SessionKeys with Beefy (6 keys x 32 + 33 beefy)");
-		extract_and_process(
-			&raw_data,
-			offset,
-			count,
-			expected_entry_size,
-			keep,
-			execute,
-			&api,
-		)
-		.await?;
+		extract_and_process(&raw_data, offset, count, expected_entry_size, keep, execute, &api)
+			.await?;
 	}
 
 	Ok(())
@@ -202,22 +170,16 @@ async fn extract_and_process(
 		vec![Value::unnamed_composite(validators_value)],
 	);
 
-	let sudo_call =
-		pezkuwi_subxt::dynamic::tx("Sudo", "sudo", vec![deregister_call.into_value()]);
+	let sudo_call = pezkuwi_subxt::dynamic::tx("Sudo", "sudo", vec![deregister_call.into_value()]);
 
 	println!("Submitting sudo(validatorManager.deregister_validators)...\n");
 
 	use pezkuwi_subxt::tx::TxStatus;
 
-	let tx_progress = api
-		.tx()
-		.sign_and_submit_then_watch_default(&sudo_call, &sudo_keypair)
-		.await?;
+	let tx_progress =
+		api.tx().sign_and_submit_then_watch_default(&sudo_call, &sudo_keypair).await?;
 
-	println!(
-		"  TX: 0x{}",
-		hex::encode(tx_progress.extrinsic_hash().as_ref())
-	);
+	println!("  TX: 0x{}", hex::encode(tx_progress.extrinsic_hash().as_ref()));
 
 	let mut progress = tx_progress;
 	let mut success = false;
@@ -237,9 +199,7 @@ async fn extract_and_process(
 								if ev.pallet_name() == "ValidatorManager"
 									&& ev.variant_name() == "ValidatorsDeregistered"
 								{
-									println!(
-										"    >>> ValidatorsDeregistered event confirmed!"
-									);
+									println!("    >>> ValidatorsDeregistered event confirmed!");
 								}
 							}
 						}
@@ -273,10 +233,7 @@ async fn extract_and_process(
 	}
 
 	if success {
-		println!(
-			"\nSUCCESS! {} validators queued for deregistration.",
-			to_remove.len()
-		);
+		println!("\nSUCCESS! {} validators queued for deregistration.", to_remove.len());
 		println!("The change will take effect at current_session + 2.");
 		println!("Monitor GRANDPA authorities to confirm.");
 	} else {

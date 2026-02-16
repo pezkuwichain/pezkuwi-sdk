@@ -20,7 +20,7 @@ const PEOPLE_CHAIN_PARA_ID: u32 = 1004;
 
 // Tiki pallet index on People Chain
 const TIKI_PALLET_INDEX: u8 = 61; // 0x3d
-// force_mint_citizen_nft call index
+								  // force_mint_citizen_nft call index
 const FORCE_MINT_CALL_INDEX: u8 = 2; // 0x02
 
 /// Encode Tiki::force_mint_citizen_nft(dest) for People Chain
@@ -61,23 +61,14 @@ fn build_xcm_sudo_transact(encoded_call: &[u8]) -> (Value, Value) {
 			Value::named_variant(
 				"UnpaidExecution",
 				[
-					(
-						"weight_limit",
-						Value::unnamed_variant("Unlimited", vec![]),
-					),
-					(
-						"check_origin",
-						Value::unnamed_variant("None", vec![]),
-					),
+					("weight_limit", Value::unnamed_variant("Unlimited", vec![])),
+					("check_origin", Value::unnamed_variant("None", vec![])),
 				],
 			),
 			Value::named_variant(
 				"Transact",
 				[
-					(
-						"origin_kind",
-						Value::unnamed_variant("Superuser", vec![]),
-					),
+					("origin_kind", Value::unnamed_variant("Superuser", vec![])),
 					(
 						"require_weight_at_most",
 						Value::named_composite([
@@ -127,10 +118,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 		std::env::var("RPC_URL").unwrap_or_else(|_| "ws://217.77.6.126:9944".to_string());
 
 	// Skip first N validators (already minted)
-	let skip: usize = std::env::var("SKIP")
-		.unwrap_or_else(|_| "0".to_string())
-		.parse()
-		.unwrap_or(0);
+	let skip: usize =
+		std::env::var("SKIP").unwrap_or_else(|_| "0".to_string()).parse().unwrap_or(0);
 
 	println!("Relay RPC: {}", relay_url);
 	println!("People Chain Para ID: {}", PEOPLE_CHAIN_PARA_ID);
@@ -175,8 +164,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 		let (dest, message) = build_xcm_sudo_transact(&encoded_call);
 
 		// Wrap in xcmPallet.send then sudo
-		let xcm_send =
-			pezkuwi_subxt::dynamic::tx("XcmPallet", "send", vec![dest, message]);
+		let xcm_send = pezkuwi_subxt::dynamic::tx("XcmPallet", "send", vec![dest, message]);
 
 		let sudo_call = pezkuwi_subxt::dynamic::tx(
 			"Sudo",
@@ -196,11 +184,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 		// Retry up to 3 times on submit error
 		let mut tx_progress_opt = None;
 		for attempt in 0..3 {
-			match api
-				.tx()
-				.sign_and_submit_then_watch_default(&sudo_call, &sudo_keypair)
-				.await
-			{
+			match api.tx().sign_and_submit_then_watch_default(&sudo_call, &sudo_keypair).await {
 				Ok(p) => {
 					tx_progress_opt = Some(p);
 					break;
@@ -220,10 +204,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 			},
 		};
 
-		println!(
-			"  TX: 0x{}",
-			hex::encode(tx_progress.extrinsic_hash().as_ref())
-		);
+		println!("  TX: 0x{}", hex::encode(tx_progress.extrinsic_hash().as_ref()));
 
 		let mut progress = tx_progress;
 		let mut tx_ok = false;
@@ -237,9 +218,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 							let mut has_sent = false;
 							for event in events.iter() {
 								if let Ok(ev) = event {
-									if ev.pallet_name() == "Sudo"
-										&& ev.variant_name() == "Sudid"
-									{
+									if ev.pallet_name() == "Sudo" && ev.variant_name() == "Sudid" {
 										has_sudid = true;
 									}
 									if ev.pallet_name() == "XcmPallet"
@@ -256,11 +235,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 								println!("  WARNING: Missing expected events");
 								for event in events.iter() {
 									if let Ok(ev) = event {
-										println!(
-											"    {}::{}",
-											ev.pallet_name(),
-											ev.variant_name()
-										);
+										println!("    {}::{}", ev.pallet_name(), ev.variant_name());
 									}
 								}
 							}

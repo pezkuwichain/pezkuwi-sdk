@@ -22,9 +22,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 	let url = std::env::var("RPC_URL").unwrap_or_else(|_| "ws://217.77.6.126:9948".to_string());
 	let wasm_path = std::env::var("WASM_FILE").expect("WASM_FILE environment variable required");
-	let new_validator_count: u32 = std::env::var("VALIDATOR_COUNT")
-		.unwrap_or_else(|_| "2".to_string())
-		.parse()?;
+	let new_validator_count: u32 =
+		std::env::var("VALIDATOR_COUNT").unwrap_or_else(|_| "2".to_string()).parse()?;
 
 	println!("RPC: {}", url);
 	println!("WASM: {}", wasm_path);
@@ -32,7 +31,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 	// Load WASM
 	let wasm_data = std::fs::read(&wasm_path)?;
-	println!("WASM size: {} bytes ({:.2} MB)", wasm_data.len(), wasm_data.len() as f64 / 1_048_576.0);
+	println!(
+		"WASM size: {} bytes ({:.2} MB)",
+		wasm_data.len(),
+		wasm_data.len() as f64 / 1_048_576.0
+	);
 
 	// Connect
 	let api = OnlineClient::<PezkuwiConfig>::from_insecure_url(&url).await?;
@@ -58,13 +61,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 		vec![Value::from_bytes(&wasm_data)],
 	);
 
-	let sudo_upgrade = pezkuwi_subxt::dynamic::tx("Sudo", "sudo_unchecked_weight", vec![
-		set_code.into_value(),
-		Value::named_composite([
-			("ref_time", Value::u128(1u128)),
-			("proof_size", Value::u128(1u128)),
-		]),
-	]);
+	let sudo_upgrade = pezkuwi_subxt::dynamic::tx(
+		"Sudo",
+		"sudo_unchecked_weight",
+		vec![
+			set_code.into_value(),
+			Value::named_composite([
+				("ref_time", Value::u128(1u128)),
+				("proof_size", Value::u128(1u128)),
+			]),
+		],
+	);
 
 	use pezkuwi_subxt::tx::TxStatus;
 
@@ -73,10 +80,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 		.sign_and_submit_then_watch_default(&sudo_upgrade, &sudo_keypair)
 		.await?;
 
-	println!(
-		"  TX submitted: 0x{}",
-		hex::encode(tx_progress.extrinsic_hash().as_ref())
-	);
+	println!("  TX submitted: 0x{}", hex::encode(tx_progress.extrinsic_hash().as_ref()));
 
 	let mut progress = tx_progress;
 	let mut upgrade_ok = false;
@@ -152,11 +156,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	// Staking::ForceEra:       0x5f3e4907f716ac89b6347d15ececedcaf7dad0317324aecae8744b87fc95f2f3
 
 	let validator_count_key =
-		hex::decode("5f3e4907f716ac89b6347d15ececedca138e71612491192d68deab7e6f563fe1")
-			.unwrap();
+		hex::decode("5f3e4907f716ac89b6347d15ececedca138e71612491192d68deab7e6f563fe1").unwrap();
 	let force_era_key =
-		hex::decode("5f3e4907f716ac89b6347d15ececedcaf7dad0317324aecae8744b87fc95f2f3")
-			.unwrap();
+		hex::decode("5f3e4907f716ac89b6347d15ececedcaf7dad0317324aecae8744b87fc95f2f3").unwrap();
 
 	// ValidatorCount is u32 LE
 	let validator_count_value = new_validator_count.to_le_bytes().to_vec();
@@ -166,8 +168,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	println!("Setting ValidatorCount = {}", new_validator_count);
 	println!("Setting ForceEra = ForceNew (0x01)");
 
-	let set_storage_tx = pezkuwi_subxt::dynamic::tx("System", "set_storage", vec![
-		Value::unnamed_composite(vec![
+	let set_storage_tx = pezkuwi_subxt::dynamic::tx(
+		"System",
+		"set_storage",
+		vec![Value::unnamed_composite(vec![
 			Value::unnamed_composite(vec![
 				Value::from_bytes(&validator_count_key),
 				Value::from_bytes(&validator_count_value),
@@ -176,22 +180,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 				Value::from_bytes(&force_era_key),
 				Value::from_bytes(&force_era_value),
 			]),
-		]),
-	]);
+		])],
+	);
 
-	let sudo_storage = pezkuwi_subxt::dynamic::tx("Sudo", "sudo", vec![
-		set_storage_tx.into_value(),
-	]);
+	let sudo_storage =
+		pezkuwi_subxt::dynamic::tx("Sudo", "sudo", vec![set_storage_tx.into_value()]);
 
 	let tx_progress2 = api2
 		.tx()
 		.sign_and_submit_then_watch_default(&sudo_storage, &sudo_keypair)
 		.await?;
 
-	println!(
-		"  TX submitted: 0x{}",
-		hex::encode(tx_progress2.extrinsic_hash().as_ref())
-	);
+	println!("  TX submitted: 0x{}", hex::encode(tx_progress2.extrinsic_hash().as_ref()));
 
 	let mut progress2 = tx_progress2;
 	let mut storage_ok = false;
@@ -256,23 +256,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	println!("specVersion: {}", rv3.spec_version);
 
 	// Read back storage to verify
-	let vc_bytes = api3
-		.storage()
-		.at_latest()
-		.await?
-		.fetch_raw(validator_count_key)
-		.await?;
+	let vc_bytes = api3.storage().at_latest().await?.fetch_raw(validator_count_key).await?;
 	if vc_bytes.len() >= 4 {
 		let vc = u32::from_le_bytes([vc_bytes[0], vc_bytes[1], vc_bytes[2], vc_bytes[3]]);
 		println!("ValidatorCount: {}", vc);
 	}
 
-	let fe_bytes = api3
-		.storage()
-		.at_latest()
-		.await?
-		.fetch_raw(force_era_key)
-		.await?;
+	let fe_bytes = api3.storage().at_latest().await?.fetch_raw(force_era_key).await?;
 	if !fe_bytes.is_empty() {
 		let fe_name = match fe_bytes[0] {
 			0x00 => "NotForcing",

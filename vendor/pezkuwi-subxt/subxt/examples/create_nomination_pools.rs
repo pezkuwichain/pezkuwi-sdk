@@ -85,13 +85,7 @@ fn build_pool_configs(wallets: Vec<WalletInfo>) -> Vec<PoolConfig> {
 		.enumerate()
 		.map(|(i, w)| {
 			let stake_hez = base_stake.saturating_sub(i as u128 * 10_000);
-			PoolConfig {
-				name: w.name,
-				mnemonic: w.mnemonic,
-				ss58: w.ss58,
-				transfer_hez,
-				stake_hez,
-			}
+			PoolConfig { name: w.name, mnemonic: w.mnemonic, ss58: w.ss58, transfer_hez, stake_hez }
 		})
 		.collect()
 }
@@ -104,26 +98,20 @@ async fn wait_for_success(
 	loop {
 		let status = progress.next().await;
 		match status {
-			Some(Ok(TxStatus::InBestBlock(details))) => {
-				match details.wait_for_success().await {
-					Ok(events) => {
-						println!("  {} SUCCESS!", label);
-						for event in events.iter() {
-							if let Ok(ev) = event {
-								println!(
-									"    {}::{}",
-									ev.pallet_name(),
-									ev.variant_name()
-								);
-							}
+			Some(Ok(TxStatus::InBestBlock(details))) => match details.wait_for_success().await {
+				Ok(events) => {
+					println!("  {} SUCCESS!", label);
+					for event in events.iter() {
+						if let Ok(ev) = event {
+							println!("    {}::{}", ev.pallet_name(), ev.variant_name());
 						}
-						return Ok(true);
-					},
-					Err(e) => {
-						println!("  {} DISPATCH ERROR: {}", label, e);
-						return Ok(false);
-					},
-				}
+					}
+					return Ok(true);
+				},
+				Err(e) => {
+					println!("  {} DISPATCH ERROR: {}", label, e);
+					return Ok(false);
+				},
 			},
 			Some(Ok(TxStatus::Error { message })) => {
 				println!("  {} TX ERROR: {}", label, message);
@@ -158,13 +146,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	// Parse CLI args
 	let args: Vec<String> = std::env::args().collect();
 	let phase = args.get(1).map(|s| s.as_str()).unwrap_or("all");
-	let skip: usize = std::env::var("SKIP")
-		.unwrap_or_else(|_| "0".to_string())
-		.parse()
-		.unwrap_or(0);
+	let skip: usize =
+		std::env::var("SKIP").unwrap_or_else(|_| "0".to_string()).parse().unwrap_or(0);
 
-	let rpc =
-		std::env::var("ASSET_HUB_RPC").unwrap_or_else(|_| DEFAULT_ASSET_HUB_RPC.to_string());
+	let rpc = std::env::var("ASSET_HUB_RPC").unwrap_or_else(|_| DEFAULT_ASSET_HUB_RPC.to_string());
 
 	println!("=== NOMINATION POOL CREATOR ===");
 	println!("Asset Hub RPC: {}", rpc);
@@ -182,10 +167,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 		let founder_mn = Mnemonic::from_str(&founder_mnemonic())?;
 		let founder_keypair = Keypair::from_phrase(&founder_mn, None)?;
-		println!(
-			"Founder: {}\n",
-			founder_keypair.public_key().to_account_id()
-		);
+		println!("Founder: {}\n", founder_keypair.public_key().to_account_id());
 
 		for (i, pool) in pool_configs.iter().enumerate().skip(skip) {
 			println!(
@@ -228,10 +210,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 					},
 				};
 
-				println!(
-					"  TX: 0x{}",
-					hex::encode(tx_progress.extrinsic_hash().as_ref())
-				);
+				println!("  TX: 0x{}", hex::encode(tx_progress.extrinsic_hash().as_ref()));
 
 				tx_ok = wait_for_success(tx_progress, "TRANSFER").await?;
 				if tx_ok {
@@ -314,10 +293,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 					},
 				};
 
-				println!(
-					"  TX: 0x{}",
-					hex::encode(tx_progress.extrinsic_hash().as_ref())
-				);
+				println!("  TX: 0x{}", hex::encode(tx_progress.extrinsic_hash().as_ref()));
 
 				create_ok = wait_for_success(tx_progress, "CREATE_POOL").await?;
 				if create_ok {
@@ -335,15 +311,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 			tokio::time::sleep(std::time::Duration::from_secs(12)).await;
 
 			// Query LastPoolId to get the pool_id
-			let last_pool_query = pezkuwi_subxt::dynamic::storage::<(), Value>(
-				"NominationPools",
-				"LastPoolId",
-			);
+			let last_pool_query =
+				pezkuwi_subxt::dynamic::storage::<(), Value>("NominationPools", "LastPoolId");
 			let storage_client = api.storage().at_latest().await?;
-			let last_pool = storage_client
-				.entry(last_pool_query)?
-				.try_fetch(())
-				.await?;
+			let last_pool = storage_client.entry(last_pool_query)?.try_fetch(()).await?;
 
 			let pool_id = match last_pool {
 				Some(val) => {
@@ -369,10 +340,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 				let metadata_tx = pezkuwi_subxt::dynamic::tx(
 					"NominationPools",
 					"set_metadata",
-					vec![
-						Value::u128(pool_id as u128),
-						Value::from_bytes(&name_bytes),
-					],
+					vec![Value::u128(pool_id as u128), Value::from_bytes(&name_bytes)],
 				);
 
 				let tx_progress = match api
@@ -387,10 +355,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 					},
 				};
 
-				println!(
-					"  METADATA TX: 0x{}",
-					hex::encode(tx_progress.extrinsic_hash().as_ref())
-				);
+				println!("  METADATA TX: 0x{}", hex::encode(tx_progress.extrinsic_hash().as_ref()));
 
 				let ok = wait_for_success(tx_progress, "SET_METADATA").await?;
 				if ok {
@@ -401,7 +366,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 				}
 			}
 
-			println!("  Pool '{}' (ID: {}) created with {} HEZ\n", pool.name, pool_id, pool.stake_hez);
+			println!(
+				"  Pool '{}' (ID: {}) created with {} HEZ\n",
+				pool.name, pool_id, pool.stake_hez
+			);
 
 			// Wait between pools
 			if i + 1 < pool_configs.len() {

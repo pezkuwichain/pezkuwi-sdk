@@ -28,20 +28,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	println!("Sudo account: {}\n", keypair.public_key().to_account_id());
 
 	// Staking::ForceEra storage key (verified twox128)
-	let force_era_key = hex::decode(
-		"5f3e4907f716ac89b6347d15ececedcaf7dad0317324aecae8744b87fc95f2f3",
-	)?;
+	let force_era_key =
+		hex::decode("5f3e4907f716ac89b6347d15ececedcaf7dad0317324aecae8744b87fc95f2f3")?;
 	// NotForcing = enum variant 0 = 0x00
 	let not_forcing_value = vec![0x00u8];
 
-	println!(
-		"Storage key: 0x{}",
-		hex::encode(&force_era_key)
-	);
-	println!(
-		"New value:   0x{} (NotForcing)",
-		hex::encode(&not_forcing_value)
-	);
+	println!("Storage key: 0x{}", hex::encode(&force_era_key));
+	println!("New value:   0x{} (NotForcing)", hex::encode(&not_forcing_value));
 
 	// Build: system.setStorage(items: Vec<(Key, Value)>)
 	let set_storage_call = pezkuwi_subxt::dynamic::tx(
@@ -54,24 +47,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	);
 
 	// Wrap in sudo
-	let sudo_call = pezkuwi_subxt::dynamic::tx(
-		"Sudo",
-		"sudo",
-		vec![set_storage_call.into_value()],
-	);
+	let sudo_call = pezkuwi_subxt::dynamic::tx("Sudo", "sudo", vec![set_storage_call.into_value()]);
 
 	println!("\nSubmitting sudo(system.setStorage)...");
 
 	use pezkuwi_subxt::tx::TxStatus;
-	let tx_progress = api
-		.tx()
-		.sign_and_submit_then_watch_default(&sudo_call, &keypair)
-		.await?;
+	let tx_progress = api.tx().sign_and_submit_then_watch_default(&sudo_call, &keypair).await?;
 
-	println!(
-		"TX: 0x{}",
-		hex::encode(tx_progress.extrinsic_hash().as_ref())
-	);
+	println!("TX: 0x{}", hex::encode(tx_progress.extrinsic_hash().as_ref()));
 
 	let mut progress = tx_progress;
 	loop {
@@ -83,11 +66,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 						let mut sudid = false;
 						for event in events.iter() {
 							if let Ok(ev) = event {
-								println!(
-									"  Event: {}::{}",
-									ev.pallet_name(),
-									ev.variant_name()
-								);
+								println!("  Event: {}::{}", ev.pallet_name(), ev.variant_name());
 								if ev.pallet_name() == "Sudo" && ev.variant_name() == "Sudid" {
 									sudid = true;
 								}

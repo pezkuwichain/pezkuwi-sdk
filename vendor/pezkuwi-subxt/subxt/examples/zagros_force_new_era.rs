@@ -32,8 +32,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	let force_era_call =
 		pezkuwi_subxt::dynamic::tx("Staking", "force_new_era", Vec::<Value>::new());
 
-	let sudo_tx =
-		pezkuwi_subxt::dynamic::tx("Sudo", "sudo", vec![force_era_call.into_value()]);
+	let sudo_tx = pezkuwi_subxt::dynamic::tx("Sudo", "sudo", vec![force_era_call.into_value()]);
 
 	let tx_hash = api.tx().sign_and_submit_default(&sudo_tx, &sudo_keypair).await?;
 	println!("Submitted! TX hash: 0x{}", hex::encode(tx_hash.as_ref()));

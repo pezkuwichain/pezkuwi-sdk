@@ -14932,7 +14932,6 @@ dependencies = [
  "pezpallet-session-benchmarking",
  "pezpallet-staking",
  "pezpallet-staking-runtime-api",
- "pezpallet-staking-score",
  "pezpallet-state-trie-migration",
  "pezpallet-sudo",
  "pezpallet-timestamp",

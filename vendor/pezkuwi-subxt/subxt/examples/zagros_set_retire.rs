@@ -30,24 +30,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	println!("=== ZAGROS: SET ValidatorsToRetire via setStorage ===\n");
 
 	let url = std::env::var("RPC_URL").unwrap_or_else(|_| "ws://217.77.6.126:9948".to_string());
-	let keep: usize = std::env::var("KEEP")
-		.unwrap_or_else(|_| "4".to_string())
-		.parse()?;
+	let keep: usize = std::env::var("KEEP").unwrap_or_else(|_| "4".to_string()).parse()?;
 
 	println!("RPC: {}", url);
 	println!("Keep: {} validators\n", keep);
 
 	let api = OnlineClient::<PezkuwiConfig>::from_insecure_url(&url).await?;
-	println!(
-		"Connected! specVersion: {}\n",
-		api.runtime_version().spec_version
-	);
+	println!("Connected! specVersion: {}\n", api.runtime_version().spec_version);
 
 	// Verify genesis hash (Zagros = 0xbb4a61ab...)
-	let genesis = format!(
-		"0x{}",
-		hex::encode(api.genesis_hash().as_ref())
-	);
+	let genesis = format!("0x{}", hex::encode(api.genesis_hash().as_ref()));
 	println!("Genesis: {}", genesis);
 	if !genesis.starts_with("0xbb4a61ab") {
 		println!("ERROR: This is NOT Zagros! Aborting.");
@@ -57,15 +49,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 	// Read QueuedKeys to get all validator AccountIds
 	let queued_keys_key =
-		hex::decode("cec5070d609dd3497f72bde07fc96ba088dcde934c658227ee1dfafcd6e16903")
-			.unwrap();
+		hex::decode("cec5070d609dd3497f72bde07fc96ba088dcde934c658227ee1dfafcd6e16903").unwrap();
 
-	let raw_data = api
-		.storage()
-		.at_latest()
-		.await?
-		.fetch_raw(queued_keys_key)
-		.await?;
+	let raw_data = api.storage().at_latest().await?.fetch_raw(queued_keys_key).await?;
 
 	let count = (raw_data[0] >> 2) as usize;
 	let remaining = raw_data.len() - 1;
@@ -101,10 +87,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	for v in to_remove {
 		encoded_retire.extend_from_slice(v);
 	}
-	println!(
-		"\nSCALE-encoded ValidatorsToRetire: {} bytes",
-		encoded_retire.len()
-	);
+	println!("\nSCALE-encoded ValidatorsToRetire: {} bytes", encoded_retire.len());
 	println!(
 		"  compact_length: 0x{} (count={})",
 		hex::encode(&encode_compact(to_remove.len())),
@@ -113,13 +96,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 	// Storage key for ValidatorsToRetire
 	let validators_to_retire_key =
-		hex::decode("084e7f70a295a190e2e33fd3f8cdfcc2b664fa73499821e43a617aa0e82b17b1")
-			.unwrap();
+		hex::decode("084e7f70a295a190e2e33fd3f8cdfcc2b664fa73499821e43a617aa0e82b17b1").unwrap();
 
-	println!(
-		"\nStorage key: 0x{}",
-		hex::encode(&validators_to_retire_key)
-	);
+	println!("\nStorage key: 0x{}", hex::encode(&validators_to_retire_key));
 	println!(
 		"Storage value: 0x{}...({} bytes)",
 		hex::encode(&encoded_retire[..std::cmp::min(encoded_retire.len(), 40)]),
@@ -131,10 +110,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 		std::env::var("SUDO_MNEMONIC").expect("SUDO_MNEMONIC environment variable required");
 	let mnemonic = Mnemonic::from_str(&mnemonic_str)?;
 	let sudo_keypair = Keypair::from_phrase(&mnemonic, None)?;
-	println!(
-		"\nSudo account: {}",
-		sudo_keypair.public_key().to_account_id()
-	);
+	println!("\nSudo account: {}", sudo_keypair.public_key().to_account_id());
 
 	// Build sudo(system.setStorage(items))
 	let set_storage_tx = pezkuwi_subxt::dynamic::tx(
@@ -152,15 +128,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 	use pezkuwi_subxt::tx::TxStatus;
 
-	let tx_progress = api
-		.tx()
-		.sign_and_submit_then_watch_default(&sudo_call, &sudo_keypair)
-		.await?;
+	let tx_progress =
+		api.tx().sign_and_submit_then_watch_default(&sudo_call, &sudo_keypair).await?;
 
-	println!(
-		"  TX: 0x{}",
-		hex::encode(tx_progress.extrinsic_hash().as_ref())
-	);
+	println!("  TX: 0x{}", hex::encode(tx_progress.extrinsic_hash().as_ref()));
 
 	let mut progress = tx_progress;
 	let mut success = false;
@@ -230,19 +201,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	{
 		Ok(data) => {
 			let stored_count = (data[0] >> 2) as usize;
-			println!(
-				"ValidatorsToRetire: {} entries ({} bytes)",
-				stored_count,
-				data.len()
-			);
+			println!("ValidatorsToRetire: {} entries ({} bytes)", stored_count, data.len());
 			if stored_count == to_remove.len() {
 				println!("COUNT MATCHES! Storage write successful.");
 			} else {
-				println!(
-					"COUNT MISMATCH! Expected {}, got {}",
-					to_remove.len(),
-					stored_count
-				);
+				println!("COUNT MISMATCH! Expected {}, got {}", to_remove.len(), stored_count);
 			}
 			// Show first few
 			let mut off = 1;

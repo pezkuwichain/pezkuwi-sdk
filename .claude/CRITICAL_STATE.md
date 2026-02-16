@@ -1,6 +1,6 @@
 # PEZKUWI MAİNNET KRİTİK DURUM
 
-**Son Guncelleme:** 2026-02-15 UTC
+**Son Guncelleme:** 2026-02-16 UTC
 **Bu dosyayi her oturum basinda OKU!**
 
 ---
@@ -149,11 +149,22 @@ Note: Mnemonic stored locally, NOT in repo. Check /home/mamostehp/res/
 - [x] Zagros gereksiz validator servisleri temizlendi (~68GB kazanildi)
 - [x] Zagros collator'lara --rpc-cors all eklendi
 - [x] Zagros nginx Host header duzeltildi
+- [x] Noter delegasyonu ile staking score sistemi (People Chain spec 1_020_007)
 
 ### Bekleyen Isler
 1. [ ] Nova Wallet uyumluluk testi (NominationPoolsApi eklenince)
 2. [ ] Zagros teyrchain'leri 1_020_004'e upgrade et (relay zaten 1_020_004)
 3. [ ] Public RPC endpointlerini test et ve dokumanla
+4. [ ] People Chain runtime upgrade 1_020_006 → 1_020_007 (noter delegasyonu deploy)
+5. [ ] Relay Chain: pezpallet_staking_score'u runtime'dan cikar (sonraki relay upgrade'de)
+
+### Onemli Not: Relay Chain pezpallet_staking_score Uyumsuzlugu
+Relay Chain runtime'inda (`pezkuwi/runtime/pezkuwichain/src/lib.rs:596`) eski bir
+`pezpallet_staking_score::Config` implementasyonu var (`type StakingInfo`). Bu trait
+palet kaynaginda artik mevcut degil — noter delegasyonu modeline gecildi.
+**Mainnet:** Halihazirda calisan runtime (spec 1_020_004) eski binary ile derlendi,
+sorun yok. Bir sonraki Relay Chain runtime upgrade'inde bu palet cikarilir.
+Ayrica `welati/src/mock.rs` da ayni sekilde guncellenmeli.
 
 ---
 

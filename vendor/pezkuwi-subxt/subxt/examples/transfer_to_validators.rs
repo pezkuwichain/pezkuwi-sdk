@@ -44,14 +44,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	];
 
 	let url = std::env::var("RPC_URL").unwrap_or_else(|_| "ws://217.77.6.126:9944".to_string());
-	let amount_hez: u128 = std::env::var("AMOUNT_HEZ")
-		.unwrap_or_else(|_| "500000".to_string())
-		.parse()?;
+	let amount_hez: u128 =
+		std::env::var("AMOUNT_HEZ").unwrap_or_else(|_| "500000".to_string()).parse()?;
 	let amount_planck = amount_hez * PLANCKS_PER_HEZ;
-	let skip: usize = std::env::var("SKIP")
-		.unwrap_or_else(|_| "0".to_string())
-		.parse()
-		.unwrap_or(0);
+	let skip: usize =
+		std::env::var("SKIP").unwrap_or_else(|_| "0".to_string()).parse().unwrap_or(0);
 
 	println!("RPC: {}", url);
 	println!("Amount per validator: {} HEZ ({} TYR)", amount_hez, amount_planck);
@@ -100,23 +97,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 		let mut tx_ok = false;
 
 		for attempt in 0..3 {
-			let tx_progress = match api
-				.tx()
-				.sign_and_submit_then_watch_default(&transfer_tx, &keypair)
-				.await
-			{
-				Ok(p) => p,
-				Err(e) => {
-					println!("  SUBMIT ERROR (attempt {}): {}", attempt + 1, e);
-					tokio::time::sleep(std::time::Duration::from_secs(12)).await;
-					continue;
-				},
-			};
+			let tx_progress =
+				match api.tx().sign_and_submit_then_watch_default(&transfer_tx, &keypair).await {
+					Ok(p) => p,
+					Err(e) => {
+						println!("  SUBMIT ERROR (attempt {}): {}", attempt + 1, e);
+						tokio::time::sleep(std::time::Duration::from_secs(12)).await;
+						continue;
+					},
+				};
 
-			println!(
-				"  TX: 0x{}",
-				hex::encode(tx_progress.extrinsic_hash().as_ref())
-			);
+			println!("  TX: 0x{}", hex::encode(tx_progress.extrinsic_hash().as_ref()));
 
 			let mut progress = tx_progress;
 			loop {
@@ -130,10 +121,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 										if ev.pallet_name() == "Balances"
 											&& ev.variant_name() == "Transfer"
 										{
-											println!(
-												"  SUCCESS: {} HEZ transferred",
-												amount_hez
-											);
+											println!("  SUCCESS: {} HEZ transferred", amount_hez);
 											tx_ok = true;
 										}
 									}
@@ -200,10 +188,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	println!("\n=== RESULTS ===");
 	println!("Success: {}/{}", success_count, validators.len() - skip);
 	println!("Failed:  {}/{}", fail_count, validators.len() - skip);
-	println!(
-		"Total transferred: {} HEZ",
-		amount_hez * success_count as u128
-	);
+	println!("Total transferred: {} HEZ", amount_hez * success_count as u128);
 
 	Ok(())
 }

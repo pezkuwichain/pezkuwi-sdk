@@ -30,13 +30,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 	let inner_call = match call_name.as_str() {
 		"setValidatorCount" => {
-			let count: u32 = std::env::var("COUNT")
-				.unwrap_or_else(|_| "4".to_string())
-				.parse()?;
+			let count: u32 = std::env::var("COUNT").unwrap_or_else(|_| "4".to_string()).parse()?;
 			println!("Setting validator count to {}", count);
-			pezkuwi_subxt::dynamic::tx("Staking", "set_validator_count", vec![Value::u128(
-				count as u128,
-			)])
+			pezkuwi_subxt::dynamic::tx(
+				"Staking",
+				"set_validator_count",
+				vec![Value::u128(count as u128)],
+			)
 		},
 		"forceNewEra" => {
 			println!("Forcing new era");
@@ -48,9 +48,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 		},
 		"setStakingConfigs" => {
 			// Set min_validator_count to 1 via set_staking_configs
-			let min_count: u32 = std::env::var("MIN_COUNT")
-				.unwrap_or_else(|_| "1".to_string())
-				.parse().unwrap();
+			let min_count: u32 =
+				std::env::var("MIN_COUNT").unwrap_or_else(|_| "1".to_string()).parse().unwrap();
 			println!("Setting staking configs: min_nominator_bond=Noop, min_validator_bond=Noop, max_nominator_count=Noop, max_validator_count=Noop, chill_threshold=Noop, min_commission=Noop");
 			// Actually we need to set min_validator_count directly
 			// Let's use a different approach - call set_staking_configs with all Noop except what we need
@@ -61,9 +60,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 			std::process::exit(1);
 		},
 		"setMinValidatorCount" => {
-			let min_count: u32 = std::env::var("MIN_COUNT")
-				.unwrap_or_else(|_| "1".to_string())
-				.parse().unwrap();
+			let min_count: u32 =
+				std::env::var("MIN_COUNT").unwrap_or_else(|_| "1".to_string()).parse().unwrap();
 			println!("Setting minimum validator count to {}", min_count);
 			// Staking::set_staking_configs sets all params at once
 			// Instead we should check if there's a direct setter
@@ -72,22 +70,24 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 			// ConfigOp: Noop=unnamed_variant("Noop",[]), Set=unnamed_variant("Set",[Value::u128(x)])
 			let noop = Value::unnamed_variant("Noop", Vec::<Value>::new());
 			let set_val = Value::unnamed_variant("Set", vec![Value::u128(min_count as u128)]);
-			pezkuwi_subxt::dynamic::tx("Staking", "set_staking_configs", vec![
-				noop.clone(),  // min_nominator_bond
-				noop.clone(),  // min_validator_bond
-				noop.clone(),  // max_nominator_count
-				noop.clone(),  // max_validator_count
-				noop.clone(),  // chill_threshold
-				noop.clone(),  // min_commission
-				noop.clone(),  // max_staked_rewards (if exists)
-			])
+			pezkuwi_subxt::dynamic::tx(
+				"Staking",
+				"set_staking_configs",
+				vec![
+					noop.clone(), // min_nominator_bond
+					noop.clone(), // min_validator_bond
+					noop.clone(), // max_nominator_count
+					noop.clone(), // max_validator_count
+					noop.clone(), // chill_threshold
+					noop.clone(), // min_commission
+					noop.clone(), // max_staked_rewards (if exists)
+				],
+			)
 		},
 		"setStorage" => {
 			// Set arbitrary storage via sudo(system.setStorage)
-			let key_hex =
-				std::env::var("STORAGE_KEY").expect("STORAGE_KEY env var required");
-			let value_hex =
-				std::env::var("STORAGE_VALUE").expect("STORAGE_VALUE env var required");
+			let key_hex = std::env::var("STORAGE_KEY").expect("STORAGE_KEY env var required");
+			let value_hex = std::env::var("STORAGE_VALUE").expect("STORAGE_VALUE env var required");
 			println!("Setting storage key={} value={}", key_hex, value_hex);
 
 			let key_bytes = hex::decode(key_hex.trim_start_matches("0x")).unwrap();
@@ -98,9 +98,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 				Value::from_bytes(&key_bytes),
 				Value::from_bytes(&value_bytes),
 			]);
-			pezkuwi_subxt::dynamic::tx("System", "set_storage", vec![
-				Value::unnamed_composite([item]),
-			])
+			pezkuwi_subxt::dynamic::tx(
+				"System",
+				"set_storage",
+				vec![Value::unnamed_composite([item])],
+			)
 		},
 		_ => {
 			eprintln!("Unknown call: {}", call_name);
@@ -113,10 +115,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	println!("\nSubmitting...");
 
 	// Use sign_and_submit_then_watch to see TX lifecycle
-	let tx_progress = api
-		.tx()
-		.sign_and_submit_then_watch_default(&sudo_tx, &sudo_keypair)
-		.await?;
+	let tx_progress = api.tx().sign_and_submit_then_watch_default(&sudo_tx, &sudo_keypair).await?;
 
 	println!("TX hash: 0x{}", hex::encode(tx_progress.extrinsic_hash().as_ref()));
 	println!("Watching TX status (Ctrl+C to abort)...");
@@ -137,11 +136,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 						println!("  TX SUCCESS!");
 						for event in events.iter() {
 							if let Ok(ev) = event {
-								println!(
-									"    Event: {}::{}",
-									ev.pallet_name(),
-									ev.variant_name()
-								);
+								println!("    Event: {}::{}", ev.pallet_name(), ev.variant_name());
 							}
 						}
 					},

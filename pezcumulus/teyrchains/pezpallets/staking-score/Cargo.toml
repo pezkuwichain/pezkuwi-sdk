@@ -27,12 +27,13 @@ serde = { version = "1.0.197", default-features = false, features = [
 # PezkuwiChain primitives
 pezkuwi-primitives = { workspace = true, default-features = false }
 
+# dev / test dependencies (also used as optional for feature propagation)
+pezpallet-balances = { workspace = true, default-features = false, optional = true }
+pezsp-io = { workspace = true, default-features = false, optional = true }
+
 [dev-dependencies]
-pezframe-support = { workspace = true, features = ["std"] }
-pezframe-system = { workspace = true, features = ["std"] }
 pezpallet-balances = { workspace = true, features = ["std"] }
 pezsp-io = { workspace = true, features = ["std"] }
-pezsp-runtime = { workspace = true, features = ["std"] }
 
 [features]
 default = ["std"]
@@ -41,7 +42,9 @@ std = [
 	"pezframe-benchmarking?/std",
 	"pezframe-support/std",
 	"pezframe-system/std",
+	"pezpallet-balances?/std",
 	"pezkuwi-primitives/std",
+	"pezsp-io?/std",
 	"pezsp-runtime/std",
 	"pezsp-std/std",
 	"scale-info/std",
@@ -53,6 +56,8 @@ runtime-benchmarks = [
 	"pezframe-system/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
+	"pezpallet-balances/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
 ]
 try-runtime = [
 	"pezframe-benchmarking?/try-runtime",
@@ -60,6 +65,7 @@ try-runtime = [
 	"pezframe-system/try-runtime",
 	"pezkuwi-primitives/try-runtime",
 	"pezsp-runtime/try-runtime",
+	"pezpallet-balances?/try-runtime"
 ]
 serde = [
 	"codec/serde",

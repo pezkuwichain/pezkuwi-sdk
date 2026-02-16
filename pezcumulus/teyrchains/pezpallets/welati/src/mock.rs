@@ -282,25 +282,12 @@ impl pezpallet_identity_kyc::Config for Test {
 	type DefaultReferrer = DefaultReferrerKyc;
 }
 
-// Mock StakingInfo provider - SADECE BİR KEZ TANIMLA
-pub struct MockStakingInfo;
-impl pezpallet_staking_score::StakingInfoProvider<AccountId, Balance> for MockStakingInfo {
-	fn get_staking_details(
-		_account: &AccountId,
-	) -> Option<pezpallet_staking_score::StakingDetails<Balance>> {
-		Some(pezpallet_staking_score::StakingDetails {
-			staked_amount: 1000u128,
-			nominations_count: 0,
-			unlocking_chunks_count: 0,
-		})
-	}
-}
-
 // Staking Score Configuration
 impl pezpallet_staking_score::Config for Test {
-	type WeightInfo = ();
 	type Balance = Balance;
-	type StakingInfo = MockStakingInfo;
+	type OnStakingUpdate = ();
+	type WeightInfo = ();
+	type NoterChecker = ();
 }
 
 // Referral Configuration

@@ -44,27 +44,90 @@ struct ValidatorInfo {
 
 fn validators() -> Vec<ValidatorInfo> {
 	vec![
-		ValidatorInfo { name: "Çiyager (Cihat Türkan)", ss58: "5GipBJs2uNWTCazyZQ2vG3DEqLz4tXNmNZtBAT1Mtm1orZ5i" },
-		ValidatorInfo { name: "Mehmet Tunç", ss58: "5HWFZbhkZuTUySXu6ZXYKrTHBnWXHvWRKLozE22zhnwXGGxk" },
-		ValidatorInfo { name: "Nagihan Akarsel", ss58: "5CrB5BWJfLNWEZAsAXDKXdJUGzFMXKvYnwRX4DVMcgBwxSdx" },
-		ValidatorInfo { name: "Sait Çürükkaya (Doktor Süleyman)", ss58: "5ELgySrX5ZyK7EWXjj6bAedyTCcTNWDANbiiipsT5gnpoCEp" },
-		ValidatorInfo { name: "Evdile Koçer", ss58: "5GCZQNjRdHofEHPvVq4ePrfDYcjRzQ1HQ2awHMX6AawpRYuM" },
-		ValidatorInfo { name: "Mam Zeki", ss58: "5H8jTzi4Gm4rbFtXw6h5enhLhgsuhNAqR5K2itmPiz83ymWy" },
-		ValidatorInfo { name: "Kakaî Falah", ss58: "5Fs3P5tHuL9cvwPQojsheViRRAjFkMMFa32jAkDSwW9mbTfU" },
-		ValidatorInfo { name: "Feryad Fazil Ömer", ss58: "5DXgq7uDXog6zcubT3wgtaYosoibjudz4w5ScPW2phLuAy3V" },
-		ValidatorInfo { name: "Mevlud Afand", ss58: "5FyFwbGLgPXun3azh6Gx83wCuUt5FTavb2WAVDYrjziVB9rN" },
-		ValidatorInfo { name: "Şêrko Fatih Şivandî", ss58: "5HEcuuypLDeJaSj6ZgH57aXhuviyeLNdw9QrCDJ8u6gsnjnL" },
-		ValidatorInfo { name: "Ramin Hüseyin Penahi", ss58: "5EpmpTXbMXpz6ixy3WhutdzcexzPbvybNKv4eiiN1kvTnQH5" },
-		ValidatorInfo { name: "Zanyar Moradi", ss58: "5DFsm3BBEgHmSEZkvwGKB7c7tiH2avhfuQE1SEjfMDGuczsW" },
-		ValidatorInfo { name: "Heidar Ghorbani", ss58: "5HePVUXjGSM2hVZ1YMz2V3KoX6EdQNEmmzUnUvpfGV95ofUR" },
-		ValidatorInfo { name: "Farhad Salimi", ss58: "5GP4nAcwtETTg1oAHQNvevmmhG8GEstGQeCirKEhaDTwpFgx" },
-		ValidatorInfo { name: "Vafa Azarbar", ss58: "5FYoCM3oeEGeoFY94EgXBhmABkRCabvPp72ur5bJNG3cK619" },
-		ValidatorInfo { name: "Dr. Aziz Mihemed", ss58: "5GspwkKF6aYzFkmAyBBQg7coSCSgDCore79fbW8uxJNAH347" },
-		ValidatorInfo { name: "Arîn Mîrkan", ss58: "5GmuX11pN2fC4Fyq1V7MuiYt3aevZcVQs3HZWKyzmap9bKfe" },
-		ValidatorInfo { name: "Ebu Leyla", ss58: "5FQptVCtM1qsxkLbQkATkw4Kio4M9LxWvM6TwgEo3QjmTXF3" },
-		ValidatorInfo { name: "Rêvan Kobanê", ss58: "5E7VD2qmso1yRfyq3t9u2qhauAgtmjZTybVsCARF5Zz9bXy6" },
-		ValidatorInfo { name: "Amanj Babani", ss58: "5Ccz5W7Q21g4UPCytzHxD3VSMLJ1BbbWSkJKFwsNtYRk3HkX" },
-		ValidatorInfo { name: "Xosrow Gulan", ss58: "5D7WPmK1SAJyYDdCtgqEzGJpWXQe3Lj9FqWL8z9waLTkUNv3" },
+		ValidatorInfo {
+			name: "Çiyager (Cihat Türkan)",
+			ss58: "5GipBJs2uNWTCazyZQ2vG3DEqLz4tXNmNZtBAT1Mtm1orZ5i",
+		},
+		ValidatorInfo {
+			name: "Mehmet Tunç",
+			ss58: "5HWFZbhkZuTUySXu6ZXYKrTHBnWXHvWRKLozE22zhnwXGGxk",
+		},
+		ValidatorInfo {
+			name: "Nagihan Akarsel",
+			ss58: "5CrB5BWJfLNWEZAsAXDKXdJUGzFMXKvYnwRX4DVMcgBwxSdx",
+		},
+		ValidatorInfo {
+			name: "Sait Çürükkaya (Doktor Süleyman)",
+			ss58: "5ELgySrX5ZyK7EWXjj6bAedyTCcTNWDANbiiipsT5gnpoCEp",
+		},
+		ValidatorInfo {
+			name: "Evdile Koçer",
+			ss58: "5GCZQNjRdHofEHPvVq4ePrfDYcjRzQ1HQ2awHMX6AawpRYuM",
+		},
+		ValidatorInfo {
+			name: "Mam Zeki",
+			ss58: "5H8jTzi4Gm4rbFtXw6h5enhLhgsuhNAqR5K2itmPiz83ymWy",
+		},
+		ValidatorInfo {
+			name: "Kakaî Falah",
+			ss58: "5Fs3P5tHuL9cvwPQojsheViRRAjFkMMFa32jAkDSwW9mbTfU",
+		},
+		ValidatorInfo {
+			name: "Feryad Fazil Ömer",
+			ss58: "5DXgq7uDXog6zcubT3wgtaYosoibjudz4w5ScPW2phLuAy3V",
+		},
+		ValidatorInfo {
+			name: "Mevlud Afand",
+			ss58: "5FyFwbGLgPXun3azh6Gx83wCuUt5FTavb2WAVDYrjziVB9rN",
+		},
+		ValidatorInfo {
+			name: "Şêrko Fatih Şivandî",
+			ss58: "5HEcuuypLDeJaSj6ZgH57aXhuviyeLNdw9QrCDJ8u6gsnjnL",
+		},
+		ValidatorInfo {
+			name: "Ramin Hüseyin Penahi",
+			ss58: "5EpmpTXbMXpz6ixy3WhutdzcexzPbvybNKv4eiiN1kvTnQH5",
+		},
+		ValidatorInfo {
+			name: "Zanyar Moradi",
+			ss58: "5DFsm3BBEgHmSEZkvwGKB7c7tiH2avhfuQE1SEjfMDGuczsW",
+		},
+		ValidatorInfo {
+			name: "Heidar Ghorbani",
+			ss58: "5HePVUXjGSM2hVZ1YMz2V3KoX6EdQNEmmzUnUvpfGV95ofUR",
+		},
+		ValidatorInfo {
+			name: "Farhad Salimi",
+			ss58: "5GP4nAcwtETTg1oAHQNvevmmhG8GEstGQeCirKEhaDTwpFgx",
+		},
+		ValidatorInfo {
+			name: "Vafa Azarbar",
+			ss58: "5FYoCM3oeEGeoFY94EgXBhmABkRCabvPp72ur5bJNG3cK619",
+		},
+		ValidatorInfo {
+			name: "Dr. Aziz Mihemed",
+			ss58: "5GspwkKF6aYzFkmAyBBQg7coSCSgDCore79fbW8uxJNAH347",
+		},
+		ValidatorInfo {
+			name: "Arîn Mîrkan",
+			ss58: "5GmuX11pN2fC4Fyq1V7MuiYt3aevZcVQs3HZWKyzmap9bKfe",
+		},
+		ValidatorInfo {
+			name: "Ebu Leyla",
+			ss58: "5FQptVCtM1qsxkLbQkATkw4Kio4M9LxWvM6TwgEo3QjmTXF3",
+		},
+		ValidatorInfo {
+			name: "Rêvan Kobanê",
+			ss58: "5E7VD2qmso1yRfyq3t9u2qhauAgtmjZTybVsCARF5Zz9bXy6",
+		},
+		ValidatorInfo {
+			name: "Amanj Babani",
+			ss58: "5Ccz5W7Q21g4UPCytzHxD3VSMLJ1BbbWSkJKFwsNtYRk3HkX",
+		},
+		ValidatorInfo {
+			name: "Xosrow Gulan",
+			ss58: "5D7WPmK1SAJyYDdCtgqEzGJpWXQe3Lj9FqWL8z9waLTkUNv3",
+		},
 	]
 }
 
@@ -207,10 +270,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 	let relay_url =
 		std::env::var("RPC_URL").unwrap_or_else(|_| "ws://217.77.6.126:9944".to_string());
-	let skip: usize = std::env::var("SKIP")
-		.unwrap_or_else(|_| "0".to_string())
-		.parse()
-		.unwrap_or(0);
+	let skip: usize =
+		std::env::var("SKIP").unwrap_or_else(|_| "0".to_string()).parse().unwrap_or(0);
 
 	let vals = validators();
 	println!("Relay RPC: {}", relay_url);
@@ -223,10 +284,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 	// Connect to relay chain
 	let api = OnlineClient::<PezkuwiConfig>::from_insecure_url(&relay_url).await?;
-	println!(
-		"Connected! specVersion: {}\n",
-		api.runtime_version().spec_version
-	);
+	println!("Connected! specVersion: {}\n", api.runtime_version().spec_version);
 
 	// Load sudo keypair
 	let mnemonic_str =
@@ -281,11 +339,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 		use pezkuwi_subxt::tx::TxStatus;
 		let mut tx_progress_opt = None;
 		for attempt in 0..3 {
-			match api
-				.tx()
-				.sign_and_submit_then_watch_default(&sudo_call, &sudo_keypair)
-				.await
-			{
+			match api.tx().sign_and_submit_then_watch_default(&sudo_call, &sudo_keypair).await {
 				Ok(p) => {
 					tx_progress_opt = Some(p);
 					break;
@@ -306,10 +360,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 			},
 		};
 
-		println!(
-			"  TX: 0x{}",
-			hex::encode(tx_progress.extrinsic_hash().as_ref())
-		);
+		println!("  TX: 0x{}", hex::encode(tx_progress.extrinsic_hash().as_ref()));
 
 		let mut progress = tx_progress;
 		let mut tx_ok = false;
@@ -340,11 +391,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 								println!("  WARNING: Events:");
 								for event in events.iter() {
 									if let Ok(ev) = event {
-										println!(
-											"    {}::{}",
-											ev.pallet_name(),
-											ev.variant_name()
-										);
+										println!("    {}::{}", ev.pallet_name(), ev.variant_name());
 									}
 								}
 							}

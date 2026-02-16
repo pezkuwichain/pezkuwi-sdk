@@ -48,12 +48,9 @@ fn load_wallets() -> Vec<WalletInfo> {
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	println!("=== SET POOL METADATA ===\n");
 
-	let start_id: u32 = std::env::var("START_ID")
-		.unwrap_or_else(|_| "1".to_string())
-		.parse()?;
+	let start_id: u32 = std::env::var("START_ID").unwrap_or_else(|_| "1".to_string()).parse()?;
 
-	let rpc =
-		std::env::var("ASSET_HUB_RPC").unwrap_or_else(|_| DEFAULT_ASSET_HUB_RPC.to_string());
+	let rpc = std::env::var("ASSET_HUB_RPC").unwrap_or_else(|_| DEFAULT_ASSET_HUB_RPC.to_string());
 
 	let api = OnlineClient::<PezkuwiConfig>::from_insecure_url(&rpc).await?;
 	println!("Connected to Asset Hub!\n");
@@ -66,23 +63,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	if let Some(val) = last_pool {
 		let decoded = val.decode()?;
 		println!("LastPoolId raw value: {:?}", decoded);
-		println!(
-			"LastPoolId as_u128: {:?}",
-			decoded.as_u128()
-		);
+		println!("LastPoolId as_u128: {:?}", decoded.as_u128());
 	}
 
 	let wallets = load_wallets();
 
 	for (i, wallet) in wallets.iter().enumerate() {
 		let pool_id = start_id + i as u32;
-		println!(
-			"--- [{}/{}] Pool {} -> '{}' ---",
-			i + 1,
-			wallets.len(),
-			pool_id,
-			wallet.name
-		);
+		println!("--- [{}/{}] Pool {} -> '{}' ---", i + 1, wallets.len(), pool_id, wallet.name);
 
 		let mnemonic = Mnemonic::from_str(&wallet.mnemonic)?;
 		let keypair = Keypair::from_phrase(&mnemonic, None)?;
@@ -102,22 +90,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 				tokio::time::sleep(std::time::Duration::from_secs(18)).await;
 			}
 
-			let tx_progress = match api
-				.tx()
-				.sign_and_submit_then_watch_default(&metadata_tx, &keypair)
-				.await
-			{
-				Ok(p) => p,
-				Err(e) => {
-					println!("  SUBMIT ERROR (attempt {}): {}", attempt + 1, e);
-					continue;
-				},
-			};
+			let tx_progress =
+				match api.tx().sign_and_submit_then_watch_default(&metadata_tx, &keypair).await {
+					Ok(p) => p,
+					Err(e) => {
+						println!("  SUBMIT ERROR (attempt {}): {}", attempt + 1, e);
+						continue;
+					},
+				};
 
-			println!(
-				"  TX: 0x{}",
-				hex::encode(tx_progress.extrinsic_hash().as_ref())
-			);
+			println!("  TX: 0x{}", hex::encode(tx_progress.extrinsic_hash().as_ref()));
 
 			use pezkuwi_subxt::tx::TxStatus;
 			let mut progress = tx_progress;
@@ -130,11 +112,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 								println!("  SUCCESS!");
 								for event in events.iter() {
 									if let Ok(ev) = event {
-										println!(
-											"    {}::{}",
-											ev.pallet_name(),
-											ev.variant_name()
-										);
+										println!("    {}::{}", ev.pallet_name(), ev.variant_name());
 									}
 								}
 								ok = true;

@@ -28,10 +28,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 		.unwrap_or_else(|_| "499000".to_string())
 		.parse()?;
 	let bond_planck = bond_hez * PLANCKS_PER_HEZ;
-	let skip: usize = std::env::var("SKIP")
-		.unwrap_or_else(|_| "0".to_string())
-		.parse()
-		.unwrap_or(0);
+	let skip: usize =
+		std::env::var("SKIP").unwrap_or_else(|_| "0".to_string()).parse().unwrap_or(0);
 
 	println!("RPC: {}", url);
 	println!("Wallets file: {}", wallets_file);
@@ -90,33 +88,24 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 		println!("  Account: {}", account);
 
 		// staking.bond_extra(max_additional: Balance)
-		let bond_extra_tx = pezkuwi_subxt::dynamic::tx(
-			"Staking",
-			"bond_extra",
-			vec![Value::u128(bond_planck)],
-		);
+		let bond_extra_tx =
+			pezkuwi_subxt::dynamic::tx("Staking", "bond_extra", vec![Value::u128(bond_planck)]);
 
 		use pezkuwi_subxt::tx::TxStatus;
 		let mut tx_ok = false;
 
 		for attempt in 0..3 {
-			let tx_progress = match api
-				.tx()
-				.sign_and_submit_then_watch_default(&bond_extra_tx, &keypair)
-				.await
-			{
-				Ok(p) => p,
-				Err(e) => {
-					println!("  SUBMIT ERROR (attempt {}): {}", attempt + 1, e);
-					tokio::time::sleep(std::time::Duration::from_secs(12)).await;
-					continue;
-				},
-			};
+			let tx_progress =
+				match api.tx().sign_and_submit_then_watch_default(&bond_extra_tx, &keypair).await {
+					Ok(p) => p,
+					Err(e) => {
+						println!("  SUBMIT ERROR (attempt {}): {}", attempt + 1, e);
+						tokio::time::sleep(std::time::Duration::from_secs(12)).await;
+						continue;
+					},
+				};
 
-			println!(
-				"  TX: 0x{}",
-				hex::encode(tx_progress.extrinsic_hash().as_ref())
-			);
+			println!("  TX: 0x{}", hex::encode(tx_progress.extrinsic_hash().as_ref()));
 
 			let mut progress = tx_progress;
 			loop {
@@ -198,10 +187,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	println!("\n=== RESULTS ===");
 	println!("Success: {}/{}", success_count, stash_wallets.len() - skip);
 	println!("Failed:  {}/{}", fail_count, stash_wallets.len() - skip);
-	println!(
-		"Total bonded: {} HEZ",
-		bond_hez * success_count as u128
-	);
+	println!("Total bonded: {} HEZ", bond_hez * success_count as u128);
 
 	Ok(())
 }

@@ -23,7 +23,7 @@ const ASSET_HUB_PARA_ID: u32 = 1000;
 
 // NominationPools pallet index on Asset Hub
 const NOM_POOLS_PALLET_INDEX: u8 = 81; // 0x51
-// set_configs call index
+									   // set_configs call index
 const SET_CONFIGS_CALL_INDEX: u8 = 11; // 0x0b
 
 /// SCALE encode ConfigOp::Noop
@@ -74,9 +74,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	let relay_url =
 		std::env::var("RPC_URL").unwrap_or_else(|_| "ws://217.77.6.126:9944".to_string());
 
-	let min_join_hez: u128 = std::env::var("MIN_JOIN_BOND")
-		.unwrap_or_else(|_| "10".to_string())
-		.parse()?;
+	let min_join_hez: u128 =
+		std::env::var("MIN_JOIN_BOND").unwrap_or_else(|_| "10".to_string()).parse()?;
 	let min_create_hez: u128 = std::env::var("MIN_CREATE_BOND")
 		.unwrap_or_else(|_| "10000".to_string())
 		.parse()?;
@@ -87,10 +86,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	println!("Relay RPC: {}", relay_url);
 	println!("Asset Hub Para ID: {}", ASSET_HUB_PARA_ID);
 	println!("MinJoinBond: {} HEZ ({} TYR)", min_join_hez, min_join_bond);
-	println!(
-		"MinCreateBond: {} HEZ ({} TYR)",
-		min_create_hez, min_create_bond
-	);
+	println!("MinCreateBond: {} HEZ ({} TYR)", min_create_hez, min_create_bond);
 
 	// Connect to relay chain
 	let api = OnlineClient::<PezkuwiConfig>::from_insecure_url(&relay_url).await?;
@@ -105,11 +101,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 	// Encode the NominationPools::set_configs call for Asset Hub
 	let encoded_call = encode_set_configs_call(min_join_bond, min_create_bond);
-	println!(
-		"Encoded call: {} bytes (0x{})",
-		encoded_call.len(),
-		hex::encode(&encoded_call)
-	);
+	println!("Encoded call: {} bytes (0x{})", encoded_call.len(), hex::encode(&encoded_call));
 
 	// Build XCM destination: V3 MultiLocation { parents: 0, interior: X1(Teyrchain(1000)) }
 	let dest = Value::unnamed_variant(
@@ -136,23 +128,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 			Value::named_variant(
 				"UnpaidExecution",
 				[
-					(
-						"weight_limit",
-						Value::unnamed_variant("Unlimited", vec![]),
-					),
-					(
-						"check_origin",
-						Value::unnamed_variant("None", vec![]),
-					),
+					("weight_limit", Value::unnamed_variant("Unlimited", vec![])),
+					("check_origin", Value::unnamed_variant("None", vec![])),
 				],
 			),
 			Value::named_variant(
 				"Transact",
 				[
-					(
-						"origin_kind",
-						Value::unnamed_variant("Superuser", vec![]),
-					),
+					("origin_kind", Value::unnamed_variant("Superuser", vec![])),
 					(
 						"require_weight_at_most",
 						Value::named_composite([
@@ -167,8 +150,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	);
 
 	// Wrap in XcmPallet.send
-	let xcm_send =
-		pezkuwi_subxt::dynamic::tx("XcmPallet", "send", vec![dest, message]);
+	let xcm_send = pezkuwi_subxt::dynamic::tx("XcmPallet", "send", vec![dest, message]);
 
 	// Wrap in sudo_unchecked_weight (no weight limit for sudo)
 	let sudo_call = pezkuwi_subxt::dynamic::tx(
@@ -188,15 +170,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	// Submit and watch
 	use pezkuwi_subxt::tx::TxStatus;
 
-	let tx_progress = api
-		.tx()
-		.sign_and_submit_then_watch_default(&sudo_call, &sudo_keypair)
-		.await?;
+	let tx_progress =
+		api.tx().sign_and_submit_then_watch_default(&sudo_call, &sudo_keypair).await?;
 
-	println!(
-		"TX hash: 0x{}",
-		hex::encode(tx_progress.extrinsic_hash().as_ref())
-	);
+	println!("TX hash: 0x{}", hex::encode(tx_progress.extrinsic_hash().as_ref()));
 	println!("Watching TX status...");
 
 	let mut progress = tx_progress;
@@ -212,11 +189,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 						println!("  TX SUCCESS!");
 						for event in events.iter() {
 							if let Ok(ev) = event {
-								println!(
-									"    Event: {}::{}",
-									ev.pallet_name(),
-									ev.variant_name()
-								);
+								println!("    Event: {}::{}", ev.pallet_name(), ev.variant_name());
 							}
 						}
 					},

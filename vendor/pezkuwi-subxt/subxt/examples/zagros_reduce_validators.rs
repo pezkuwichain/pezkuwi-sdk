@@ -21,9 +21,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	println!("=== ZAGROS VALIDATOR COUNT REDUCTION ===\n");
 
 	let url = std::env::var("RPC_URL").unwrap_or_else(|_| "ws://217.77.6.126:9948".to_string());
-	let new_count: u32 = std::env::var("VALIDATOR_COUNT")
-		.unwrap_or_else(|_| "4".to_string())
-		.parse()?;
+	let new_count: u32 =
+		std::env::var("VALIDATOR_COUNT").unwrap_or_else(|_| "4".to_string()).parse()?;
 
 	println!("RPC: {}", url);
 	println!("Target validator count: {}", new_count);
@@ -43,12 +42,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	// Step 1: sudo(staking.setValidatorCount(new_count))
 	println!("[1/2] Setting validator count to {}...", new_count);
 
-	let set_count_call = pezkuwi_subxt::dynamic::tx("Staking", "set_validator_count", vec![
-		Value::u128(new_count as u128),
-	]);
+	let set_count_call = pezkuwi_subxt::dynamic::tx(
+		"Staking",
+		"set_validator_count",
+		vec![Value::u128(new_count as u128)],
+	);
 
-	let sudo_tx_1 =
-		pezkuwi_subxt::dynamic::tx("Sudo", "sudo", vec![set_count_call.into_value()]);
+	let sudo_tx_1 = pezkuwi_subxt::dynamic::tx("Sudo", "sudo", vec![set_count_call.into_value()]);
 
 	// Use sign_and_submit_default (does NOT wait for finalization)
 	let tx_hash_1 = api.tx().sign_and_submit_default(&sudo_tx_1, &sudo_keypair).await?;
@@ -64,8 +64,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	let force_era_call =
 		pezkuwi_subxt::dynamic::tx("Staking", "force_new_era", Vec::<Value>::new());
 
-	let sudo_tx_2 =
-		pezkuwi_subxt::dynamic::tx("Sudo", "sudo", vec![force_era_call.into_value()]);
+	let sudo_tx_2 = pezkuwi_subxt::dynamic::tx("Sudo", "sudo", vec![force_era_call.into_value()]);
 
 	let tx_hash_2 = api.tx().sign_and_submit_default(&sudo_tx_2, &sudo_keypair).await?;
 	println!("  Submitted! TX hash: 0x{}", hex::encode(tx_hash_2.as_ref()));

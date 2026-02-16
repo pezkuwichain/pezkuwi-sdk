@@ -74,11 +74,7 @@ async fn submit_and_watch(
 			tokio::time::sleep(std::time::Duration::from_secs(18)).await;
 		}
 
-		let tx_progress = match api
-			.tx()
-			.sign_and_submit_then_watch_default(&tx, signer)
-			.await
-		{
+		let tx_progress = match api.tx().sign_and_submit_then_watch_default(&tx, signer).await {
 			Ok(p) => p,
 			Err(e) => {
 				println!("  SUBMIT ERROR (attempt {}): {}", attempt + 1, e);
@@ -86,10 +82,7 @@ async fn submit_and_watch(
 			},
 		};
 
-		println!(
-			"  TX: 0x{}",
-			hex::encode(tx_progress.extrinsic_hash().as_ref())
-		);
+		println!("  TX: 0x{}", hex::encode(tx_progress.extrinsic_hash().as_ref()));
 
 		let mut progress = tx_progress;
 		loop {
@@ -101,11 +94,7 @@ async fn submit_and_watch(
 							println!("  {} SUCCESS!", label);
 							for event in events.iter() {
 								if let Ok(ev) = event {
-									println!(
-										"    {}::{}",
-										ev.pallet_name(),
-										ev.variant_name()
-									);
+									println!("    {}::{}", ev.pallet_name(), ev.variant_name());
 								}
 							}
 							return Ok(true);
@@ -148,10 +137,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	let ws = load_wallets();
 	let args: Vec<String> = std::env::args().collect();
 	let phase = args.get(1).map(|s| s.as_str()).unwrap_or("all");
-	let skip: usize = std::env::var("SKIP")
-		.unwrap_or_else(|_| "0".to_string())
-		.parse()
-		.unwrap_or(0);
+	let skip: usize =
+		std::env::var("SKIP").unwrap_or_else(|_| "0".to_string()).parse().unwrap_or(0);
 	let rpc = std::env::var("PEOPLE_RPC").unwrap_or_else(|_| DEFAULT_PEOPLE_RPC.to_string());
 
 	println!("=== WELATI CITIZENSHIP WORKFLOW ===");
@@ -222,10 +209,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 			let tx = pezkuwi_subxt::dynamic::tx(
 				"IdentityKyc",
 				"apply_for_citizenship",
-				vec![
-					Value::from_bytes(&identity_hash),
-					Value::unnamed_variant("None", vec![]),
-				],
+				vec![Value::from_bytes(&identity_hash), Value::unnamed_variant("None", vec![])],
 			);
 
 			let ok = submit_and_watch(&api, tx, &keypair, "APPLY").await?;
