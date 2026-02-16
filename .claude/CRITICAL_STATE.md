@@ -52,7 +52,7 @@
 | Para ID | Isim | Durum | spec_version | Block | Peers |
 |---------|------|-------|-------------|-------|-------|
 | 1000 | Asset Hub | CALISIYOR | 1_020_004 | ~11,009 | 1 |
-| 1004 | People Chain | CALISIYOR | 1_020_006 | ~17,200 | 1 |
+| 1004 | People Chain | CALISIYOR | 1_020_007 | ~17,200 | 1 |
 
 #### Mainnet Servis Isimleri (VPS3)
 - `pez-mainnet-validator-1` ... `pez-mainnet-validator-4`
@@ -150,21 +150,16 @@ Note: Mnemonic stored locally, NOT in repo. Check /home/mamostehp/res/
 - [x] Zagros collator'lara --rpc-cors all eklendi
 - [x] Zagros nginx Host header duzeltildi
 - [x] Noter delegasyonu ile staking score sistemi (People Chain spec 1_020_007)
+- [x] 21 validatore Noter tikisi verildi (XCM batch_all ile, 2026-02-16)
+- [x] Relay Chain'den pezpallet_staking_score kaldirildi (sonraki relay upgrade icin hazir)
 
 ### Bekleyen Isler
 1. [ ] Nova Wallet uyumluluk testi (NominationPoolsApi eklenince)
 2. [ ] Zagros teyrchain'leri 1_020_004'e upgrade et (relay zaten 1_020_004)
 3. [ ] Public RPC endpointlerini test et ve dokumanla
-4. [ ] People Chain runtime upgrade 1_020_006 → 1_020_007 (noter delegasyonu deploy)
-5. [ ] Relay Chain: pezpallet_staking_score'u runtime'dan cikar (sonraki relay upgrade'de)
-
-### Onemli Not: Relay Chain pezpallet_staking_score Uyumsuzlugu
-Relay Chain runtime'inda (`pezkuwi/runtime/pezkuwichain/src/lib.rs:596`) eski bir
-`pezpallet_staking_score::Config` implementasyonu var (`type StakingInfo`). Bu trait
-palet kaynaginda artik mevcut degil — noter delegasyonu modeline gecildi.
-**Mainnet:** Halihazirda calisan runtime (spec 1_020_004) eski binary ile derlendi,
-sorun yok. Bir sonraki Relay Chain runtime upgrade'inde bu palet cikarilir.
-Ayrica `welati/src/mock.rs` da ayni sekilde guncellenmeli.
+4. [x] People Chain runtime upgrade 1_020_006 → 1_020_007 (noter delegasyonu deploy)
+5. [x] Relay Chain: pezpallet_staking_score runtime'dan cikarildi (kod temizlendi, sonraki build'de aktif)
+6. [ ] Bot + noter workflow gelistir (staking verisi toplama ve People Chain'e gonderme)
 
 ---
 
