@@ -15,8 +15,6 @@ codec = { workspace = true, default-features = false, features = ["derive"] }
 pezframe-benchmarking = { workspace = true, optional = true }
 pezframe-support = { default-features = false, workspace = true }
 pezframe-system = { default-features = false, workspace = true }
-pezpallet-balances = { workspace = true, default-features = false, optional = true }
-pezpallet-staking = { workspace = true, default-features = false, optional = true }
 pezsp-runtime = { default-features = false, workspace = true }
 pezsp-std = { default-features = false, workspace = true }
 scale-info = { default-features = false, features = [
@@ -26,89 +24,47 @@ serde = { version = "1.0.197", default-features = false, features = [
 	"derive",
 ], optional = true }
 
-# PezkuwiChain'in özel tiplerini ve trait'lerini içeren kütüphane
+# PezkuwiChain primitives
 pezkuwi-primitives = { workspace = true, default-features = false }
 
 [dev-dependencies]
-pezframe-election-provider-support = { workspace = true, features = ["std"] }
 pezframe-support = { workspace = true, features = ["std"] }
 pezframe-system = { workspace = true, features = ["std"] }
-pezpallet-bags-list = { workspace = true, features = ["std"] }
 pezpallet-balances = { workspace = true, features = ["std"] }
-pezpallet-session = { workspace = true, features = ["std"] }
-pezpallet-staking = { workspace = true, features = [
-	"runtime-benchmarks",
-	"std",
-] }
-pezpallet-timestamp = { workspace = true, features = ["std"] }
-pezsp-core = { workspace = true, features = ["std"] }
 pezsp-io = { workspace = true, features = ["std"] }
-pezsp-npos-elections = { workspace = true, features = ["std"] }
 pezsp-runtime = { workspace = true, features = ["std"] }
-pezsp-staking = { workspace = true, features = ["std"] }
 
 [features]
 default = ["std"]
 std = [
 	"codec/std",
 	"pezframe-benchmarking?/std",
-	"pezframe-election-provider-support/std",
 	"pezframe-support/std",
 	"pezframe-system/std",
 	"pezkuwi-primitives/std",
-	"pezpallet-bags-list/std",
-	"pezpallet-balances?/std",
-	"pezpallet-session/std",
-	"pezpallet-staking?/std",
-	"pezpallet-timestamp/std",
-	"pezsp-core/std",
-	"pezsp-io/std",
-	"pezsp-npos-elections/std",
 	"pezsp-runtime/std",
-	"pezsp-staking/std",
 	"pezsp-std/std",
 	"scale-info/std",
 	"serde?/std",
 ]
 runtime-benchmarks = [
 	"pezframe-benchmarking/runtime-benchmarks",
-	"pezframe-election-provider-support/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
 	"pezframe-system/runtime-benchmarks",
 	"pezkuwi-primitives/runtime-benchmarks",
-	"pezpallet-bags-list/runtime-benchmarks",
-	"pezpallet-balances/runtime-benchmarks",
-	"pezpallet-session/runtime-benchmarks",
-	"pezpallet-staking/runtime-benchmarks",
-	"pezpallet-timestamp/runtime-benchmarks",
-	"pezsp-io/runtime-benchmarks",
-	"pezsp-npos-elections/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
-	"pezsp-staking/runtime-benchmarks",
 ]
 try-runtime = [
 	"pezframe-benchmarking?/try-runtime",
-	"pezframe-election-provider-support/try-runtime",
 	"pezframe-support/try-runtime",
 	"pezframe-system/try-runtime",
 	"pezkuwi-primitives/try-runtime",
-	"pezpallet-bags-list/try-runtime",
-	"pezpallet-balances?/try-runtime",
-	"pezpallet-session/try-runtime",
-	"pezpallet-staking?/try-runtime",
-	"pezpallet-timestamp/try-runtime",
-	"pezsp-npos-elections/try-runtime",
 	"pezsp-runtime/try-runtime",
-	"pezsp-staking/try-runtime",
 ]
 serde = [
 	"codec/serde",
 	"dep:serde",
-	"pezframe-benchmarking?/serde",
-	"pezsp-core/serde",
-	"pezsp-npos-elections/serde",
 	"pezsp-runtime/serde",
-	"pezsp-staking/serde",
 	"scale-info/serde",
 ]
 experimental = []

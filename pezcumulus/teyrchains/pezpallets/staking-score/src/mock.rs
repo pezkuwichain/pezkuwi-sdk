@@ -1,58 +1,33 @@
-//! pezpallet-staking-score için mock runtime.
+//! Simplified mock runtime for pezpallet-staking-score.
+//! No real staking pallet - all data comes via CachedStakingDetails.
 
 use crate as pezpallet_staking_score;
 use pezframe_support::{
-	construct_runtime, derive_impl, parameter_types,
-	traits::{ConstU128, ConstU32, ConstU64},
+	construct_runtime, derive_impl, parameter_types, traits::ConstU32,
 	weights::constants::RocksDbWeight,
 };
-use pezframe_system::EnsureRoot;
 use pezsp_runtime::BuildStorage;
-use pezsp_staking::{StakerStatus, StakingAccount};
 
-// Paletimizdeki sabitleri import ediyoruz.
 use crate::UNITS;
 
-// --- Tip Takma Adları ---
+// --- Type Aliases ---
 type Block = pezframe_system::mocking::MockBlock<Test>;
 pub type AccountId = u64;
 pub type Balance = u128;
 pub type BlockNumber = u64;
-pub type SessionIndex = u32;
-pub type EraIndex = u32;
 
-// --- Paletler için Sabitler ---
-pub const MAX_NOMINATIONS_CONST: u32 = 16;
+// --- Constants ---
 parameter_types! {
 	pub const BlockHashCount: BlockNumber = 250;
 	pub const ExistentialDeposit: Balance = 1;
-	pub static SessionsPerEra: SessionIndex = 3;
-	pub const BondingDuration: u32 = 3;
-	pub const SlashDeferDuration: EraIndex = 0;
-	pub static HistoryDepth: u32 = 80;
-	pub const MaxUnlockingChunks: u32 = 32;
-	pub static MaxNominations: u32 = 16;
-	pub const MinimumPeriod: u64 = 5000;
-	pub static BagThresholds: &'static [u64] = &[10, 20, 30, 40, 50, 60, 1_000, 2_000, 10_000];
-	pub static MaxWinners: u32 = 100;
-	pub static MaxBackersPerWinner: u32 = 64;
-	// Yeni eklenenler: pezpallet_staking::Config için gerekli minimum bond miktarları.
-	pub const MinNominatorBond: Balance = UNITS; // Testler için yeterince küçük bir değer.
-	pub const MinValidatorBond: Balance = UNITS; // Testler için yeterince küçük bir değer.
 }
 
-// --- construct_runtime! Makrosu ---
+// --- Runtime ---
 construct_runtime!(
 	pub enum Test
 	{
 		System: pezframe_system,
 		Balances: pezpallet_balances,
-		Staking: pezpallet_staking,
-		Session: pezpallet_session,
-		Timestamp: pezpallet_timestamp,
-		Historical: pezpallet_session::historical,
-		BagsList: pezpallet_bags_list::<Instance1>,
-		// Kendi paletimiz:
 		StakingScore: pezpallet_staking_score,
 	}
 );
@@ -72,158 +47,18 @@ impl pezpallet_balances::Config for Test {
 	type AccountStore = System;
 }
 
-pezsp_runtime::impl_opaque_keys! {
-	pub struct MockSessionKeys {
-		pub dummy: pezsp_runtime::testing::UintAuthorityId,
-	}
-}
-
-impl From<pezsp_runtime::testing::UintAuthorityId> for MockSessionKeys {
-	fn from(dummy: pezsp_runtime::testing::UintAuthorityId) -> Self {
-		Self { dummy }
-	}
-}
-
-pub struct TestSessionHandler;
-impl pezpallet_session::SessionHandler<AccountId> for TestSessionHandler {
-	const KEY_TYPE_IDS: &'static [pezsp_runtime::KeyTypeId] = &[pezsp_runtime::key_types::DUMMY];
-	fn on_genesis_session<T: pezsp_runtime::traits::OpaqueKeys>(_validators: &[(AccountId, T)]) {}
-	fn on_new_session<T: pezsp_runtime::traits::OpaqueKeys>(
-		_changed: bool,
-		_validators: &[(AccountId, T)],
-		_queued_validators: &[(AccountId, T)],
-	) {
-	}
-	fn on_before_session_ending() {}
-	fn on_disabled(_validator_index: u32) {}
-}
-
-impl pezpallet_session::Config for Test {
-	type SessionManager = pezpallet_session::historical::NoteHistoricalRoot<Test, Staking>;
-	type Keys = MockSessionKeys;
-	type ShouldEndSession = pezpallet_session::PeriodicSessions<SessionsPerEra, ConstU64<0>>;
-	type SessionHandler = TestSessionHandler;
-	type RuntimeEvent = RuntimeEvent;
-	type ValidatorId = AccountId;
-	type ValidatorIdOf = pezsp_runtime::traits::ConvertInto;
-	type NextSessionRotation = pezpallet_session::PeriodicSessions<SessionsPerEra, ConstU64<0>>;
-	type DisablingStrategy = ();
-	type WeightInfo = ();
-	type Currency = Balances;
-	type KeyDeposit = ConstU128<0>;
-}
-
-impl pezpallet_session::historical::Config for Test {
-	type RuntimeEvent = RuntimeEvent;
-	type FullIdentification = pezpallet_staking::Exposure<AccountId, Balance>;
-	type FullIdentificationOf = pezpallet_staking::DefaultExposureOf<Test>;
-}
-
-impl pezpallet_timestamp::Config for Test {
-	type Moment = u64;
-	type OnTimestampSet = ();
-	type MinimumPeriod = ConstU64<5>;
-	type WeightInfo = ();
-}
-
-type VoterBagsListInstance = pezpallet_bags_list::Instance1;
-impl pezpallet_bags_list::Config<VoterBagsListInstance> for Test {
-	type RuntimeEvent = RuntimeEvent;
-	type WeightInfo = ();
-	type ScoreProvider = Staking;
-	type BagThresholds = BagThresholds;
-	type Score = pezsp_npos_elections::VoteWeight;
-	type MaxAutoRebagPerBlock = ();
-}
-
-pub struct TestBenchmarkingConfig;
-impl pezpallet_staking::BenchmarkingConfig for TestBenchmarkingConfig {
-	type MaxValidators = ConstU32<1000>;
-	type MaxNominators = ConstU32<1000>;
-}
-
-#[derive_impl(pezpallet_staking::config_preludes::TestDefaultConfig)]
-impl pezpallet_staking::Config for Test {
-	type Currency = Balances;
-	type UnixTime = Timestamp;
-	type SessionsPerEra = SessionsPerEra;
-	type BondingDuration = BondingDuration;
-	type SlashDeferDuration = SlashDeferDuration;
-	type SessionInterface = Self;
-	type EraPayout = ();
-	type NextNewSession = Session;
-	type MaxExposurePageSize = ConstU32<64>;
-	type ElectionProvider = pezframe_election_provider_support::NoElection<(
-		AccountId,
-		BlockNumber,
-		Staking,
-		MaxWinners,
-		MaxBackersPerWinner,
-	)>;
-	type GenesisElectionProvider = Self::ElectionProvider;
-	type VoterList = BagsList;
-	type TargetList = pezpallet_staking::UseValidatorsMap<Self>;
-	type MaxControllersInDeprecationBatch = ConstU32<100>;
-	type AdminOrigin = EnsureRoot<AccountId>;
-	type EventListeners = ();
-	type HistoryDepth = HistoryDepth;
-	type NominationsQuota = pezpallet_staking::FixedNominationsQuota<MAX_NOMINATIONS_CONST>;
-	type MaxUnlockingChunks = MaxUnlockingChunks;
-	type BenchmarkingConfig = TestBenchmarkingConfig;
-	type OldCurrency = Balances;
-}
-
-// --- Bizim Paletimiz ve Adaptörü ---
-pub struct StakingDataProvider;
-impl crate::StakingInfoProvider<AccountId, Balance> for StakingDataProvider {
-	fn get_staking_details(who: &AccountId) -> Option<crate::StakingDetails<Balance>> {
-		if let Ok(ledger) = Staking::ledger(StakingAccount::Stash(*who)) {
-			let nominations_count = Staking::nominators(who).map_or(0, |n| n.targets.len() as u32);
-			let unlocking_chunks_count = ledger.unlocking.len() as u32;
-
-			Some(crate::StakingDetails {
-				staked_amount: ledger.total,
-				nominations_count,
-				unlocking_chunks_count,
-			})
-		} else {
-			None
-		}
-	}
-}
-
 impl crate::Config for Test {
 	type Balance = Balance;
 	type WeightInfo = ();
-	type StakingInfo = StakingDataProvider;
+	type OnStakingUpdate = ();
 }
 
-// --- ExtBuilder ve Yardımcı Fonksiyonlar ---
-pub struct ExtBuilder {
-	stakers: Vec<(AccountId, AccountId, Balance, StakerStatus<AccountId>)>,
-}
+// --- ExtBuilder ---
+pub struct ExtBuilder;
 
 impl Default for ExtBuilder {
 	fn default() -> Self {
-		Self {
-			// Benchmarking ve testlerin düzgün çalışması için başlangıç staker'larını
-			// testlerde kullanılacak USER_STASH (10) hesabını içermeyecek şekilde ayarlıyoruz.
-			// USER_STASH testlerde manuel olarak bond edilecek.
-			stakers: vec![
-				// Sadece benchmarking için yeterli sayıda validator ve nominator
-				(1, 1, 1_000 * UNITS, StakerStatus::Validator),
-				(2, 2, 1_000 * UNITS, StakerStatus::Validator),
-				(3, 3, 1_000 * UNITS, StakerStatus::Validator),
-				(4, 4, 1_000 * UNITS, StakerStatus::Validator),
-				(5, 5, 1_000 * UNITS, StakerStatus::Validator),
-				(6, 6, 1_000 * UNITS, StakerStatus::Validator),
-				(7, 7, 1_000 * UNITS, StakerStatus::Validator),
-				(8, 8, 1_000 * UNITS, StakerStatus::Validator),
-				(9, 9, 1_000 * UNITS, StakerStatus::Validator),
-				(11, 11, 100 * UNITS, StakerStatus::Nominator(vec![1, 2])),
-				(12, 12, 100 * UNITS, StakerStatus::Nominator(vec![3, 4])),
-			],
-		}
+		Self
 	}
 }
 
@@ -232,65 +67,13 @@ impl ExtBuilder {
 		let mut storage =
 			pezframe_system::GenesisConfig::<Test>::default().build_storage().unwrap();
 
-		let mut balances: Vec<(AccountId, Balance)> = vec![
-			(1, 1_000_000 * UNITS),
-			(2, 1_000_000 * UNITS),
-			// USER_STASH (10) için de başlangıçta yeterli bakiye atıyoruz,
-			// çünkü testlerde bond etmesi beklenecek.
-			(10, 1_000_000 * UNITS),
-			(20, 100_000 * UNITS),
-			(101, 2_000 * UNITS),
-		];
-		// ExtBuilder'daki tüm staker'ların ve diğer test hesaplarının (eğer varsa)
-		// yeterli bakiyeye sahip olduğundan emin olun.
-		// Her staker'a veya test hesabına minimum bond miktarının çok üzerinde bakiye ekle.
-		for (stash, _, _, _) in &self.stakers {
-			if !balances.iter().any(|(acc, _)| acc == stash) {
-				balances.push((*stash, 1_000_000 * UNITS)); // Staker'lara bol miktarda bakiye
-			}
-		}
-
-		pezpallet_balances::GenesisConfig::<Test> { balances, ..Default::default() }
-			.assimilate_storage(&mut storage)
-			.unwrap();
-
-		pezpallet_staking::GenesisConfig::<Test> {
-			stakers: self.stakers.clone(),
-			validator_count: self.stakers.len() as u32, // Staker sayısını dinamik yap
-			minimum_validator_count: 0,                 // En az 0 validator olmasına izin ver
-			invulnerables: self
-				.stakers
-				.iter()
-				.filter_map(
-					|(stash, _, _, status)| {
-						if let StakerStatus::Validator = status {
-							Some(*stash)
-						} else {
-							None
-						}
-					},
-				)
-				.collect(),
-			force_era: pezpallet_staking::Forcing::ForceNew, // Yeni era başlatmaya zorla
-			min_nominator_bond: MinNominatorBond::get(),     // Tanımlanan minimum değerleri kullan
-			min_validator_bond: MinValidatorBond::get(),     // Tanımlanan minimum değerleri kullan
-			..Default::default()
-		}
-		.assimilate_storage(&mut storage)
-		.unwrap();
-
-		pezpallet_session::GenesisConfig::<Test> {
-			keys: self
-				.stakers
-				.iter()
-				.filter_map(|(stash, ctrl, _, status)| {
-					if let StakerStatus::Validator = status {
-						Some((*stash, *ctrl, MockSessionKeys { dummy: (*stash).into() }))
-					} else {
-						None
-					}
-				})
-				.collect(),
+		pezpallet_balances::GenesisConfig::<Test> {
+			balances: vec![
+				(1, 1_000_000 * UNITS),
+				(2, 1_000_000 * UNITS),
+				(10, 1_000_000 * UNITS),
+				(20, 100_000 * UNITS),
+			],
 			..Default::default()
 		}
 		.assimilate_storage(&mut storage)

@@ -1,17 +1,19 @@
-//! pezpallet-staking-score için testler.
+//! Tests for pezpallet-staking-score.
+//! All tests use receive_staking_details to populate CachedStakingDetails,
+//! mirroring the real People Chain architecture.
 
-use crate::{mock::*, Error, Event, StakingScoreProvider, MONTH_IN_BLOCKS, UNITS};
+use crate::{mock::*, Error, Event, StakingScoreProvider, StakingSource, MONTH_IN_BLOCKS, UNITS};
 use pezframe_support::{assert_noop, assert_ok};
-use pezpallet_staking::RewardDestination;
 
-// Testlerde kullanacağımız sabitler
 const USER_STASH: AccountId = 10;
+
+// ============================================================================
+// Basic Score Calculation
+// ============================================================================
 
 #[test]
 fn zero_stake_should_return_zero_score() {
 	ExtBuilder::default().build_and_execute(|| {
-		// ExtBuilder'da 10 numaralı hesap için bir staker oluşturmadık.
-		// Bu nedenle, palet 0 puan vermelidir.
 		assert_eq!(StakingScore::get_staking_score(&USER_STASH).0, 0);
 	});
 }
@@ -19,14 +21,15 @@ fn zero_stake_should_return_zero_score() {
 #[test]
 fn score_is_calculated_correctly_without_time_tracking() {
 	ExtBuilder::default().build_and_execute(|| {
-		// 50 HEZ stake edelim. Staking::bond çağrısı ile stake işlemini başlat.
-		assert_ok!(Staking::bond(
-			RuntimeOrigin::signed(USER_STASH),
+		assert_ok!(StakingScore::receive_staking_details(
+			RuntimeOrigin::root(),
+			USER_STASH,
+			StakingSource::RelayChain,
 			50 * UNITS,
-			RewardDestination::Staked
+			0,
+			0
 		));
 
-		// Süre takibi yokken, puan sadece miktara göre hesaplanmalı (20 puan).
 		assert_eq!(StakingScore::get_staking_score(&USER_STASH).0, 20);
 	});
 }
@@ -34,81 +37,74 @@ fn score_is_calculated_correctly_without_time_tracking() {
 #[test]
 fn start_score_tracking_works_and_enables_duration_multiplier() {
 	ExtBuilder::default().build_and_execute(|| {
-		// --- 1. Kurulum ve Başlangıç ---
-		let initial_block = 10;
+		let initial_block = 10u64;
 		System::set_block_number(initial_block);
 
-		// 500 HEZ stake edelim. Bu, 40 temel puan demektir.
-		assert_ok!(Staking::bond(
-			RuntimeOrigin::signed(USER_STASH),
+		assert_ok!(StakingScore::receive_staking_details(
+			RuntimeOrigin::root(),
+			USER_STASH,
+			StakingSource::RelayChain,
 			500 * UNITS,
-			RewardDestination::Staked
+			0,
+			0
 		));
 
-		// Eylem: Süre takibini başlat. Depolamaya `10` yazılacak.
 		assert_ok!(StakingScore::start_score_tracking(RuntimeOrigin::signed(USER_STASH)));
 
-		// Doğrulama: Başlangıç puanı doğru mu?
-		assert_eq!(
-			StakingScore::get_staking_score(&USER_STASH).0,
-			40,
-			"Initial score should be 40"
-		);
+		assert_eq!(StakingScore::get_staking_score(&USER_STASH).0, 40);
 
-		// --- 2. Dört Ay Sonrası ---
+		// After 4 months: 40 * 1.4 = 56
 		let target_block_4m = initial_block + (4 * MONTH_IN_BLOCKS) as u64;
-		let expected_duration_4m = target_block_4m - initial_block;
-		// Eylem: Zamanı 4 ay ileri "yaşat".
 		System::set_block_number(target_block_4m);
 
 		let (score_4m, duration_4m) = StakingScore::get_staking_score(&USER_STASH);
-		assert_eq!(duration_4m, expected_duration_4m, "Duration after 4 months is wrong");
-		assert_eq!(score_4m, 56, "Score after 4 months should be 56");
+		assert_eq!(duration_4m, target_block_4m - initial_block);
+		assert_eq!(score_4m, 56);
 
-		// --- 3. On Üç Ay Sonrası ---
+		// After 13 months: 40 * 2.0 = 80
 		let target_block_13m = initial_block + (13 * MONTH_IN_BLOCKS) as u64;
-		let expected_duration_13m = target_block_13m - initial_block;
-		// Eylem: Zamanı başlangıçtan 13 ay sonrasına "yaşat".
 		System::set_block_number(target_block_13m);
 
 		let (score_13m, duration_13m) = StakingScore::get_staking_score(&USER_STASH);
-		assert_eq!(duration_13m, expected_duration_13m, "Duration after 13 months is wrong");
-		assert_eq!(score_13m, 80, "Score after 13 months should be 80");
+		assert_eq!(duration_13m, target_block_13m - initial_block);
+		assert_eq!(score_13m, 80);
 	});
 }
 
 #[test]
 fn get_staking_score_works_without_explicit_tracking() {
 	ExtBuilder::default().build_and_execute(|| {
-		// 751 HEZ stake edelim. Bu, 50 temel puan demektir.
-		assert_ok!(Staking::bond(
-			RuntimeOrigin::signed(USER_STASH),
+		assert_ok!(StakingScore::receive_staking_details(
+			RuntimeOrigin::root(),
+			USER_STASH,
+			StakingSource::RelayChain,
 			751 * UNITS,
-			RewardDestination::Staked
+			0,
+			0
 		));
 
-		// Puanın 50 olmasını bekliyoruz.
 		assert_eq!(StakingScore::get_staking_score(&USER_STASH).0, 50);
 
-		// Zamanı ne kadar ileri alırsak alalım, `start_score_tracking` çağrılmadığı
-		// için puan değişmemeli.
+		// Even after time passes, score stays the same without tracking
 		System::set_block_number(1_000_000_000);
 		assert_eq!(StakingScore::get_staking_score(&USER_STASH).0, 50);
 	});
 }
 
 // ============================================================================
-// Amount-Based Scoring Edge Cases (4 tests)
+// Amount-Based Scoring Tiers
 // ============================================================================
 
 #[test]
 fn amount_score_boundary_100_hez() {
 	ExtBuilder::default().build_and_execute(|| {
-		// Exactly 100 HEZ should give 20 points
-		assert_ok!(Staking::bond(
-			RuntimeOrigin::signed(USER_STASH),
+		assert_ok!(StakingScore::receive_staking_details(
+			RuntimeOrigin::root(),
+			USER_STASH,
+			StakingSource::RelayChain,
 			100 * UNITS,
-			RewardDestination::Staked
+			0,
+			0
 		));
 
 		assert_eq!(StakingScore::get_staking_score(&USER_STASH).0, 20);
@@ -118,11 +114,13 @@ fn amount_score_boundary_100_hez() {
 #[test]
 fn amount_score_boundary_250_hez() {
 	ExtBuilder::default().build_and_execute(|| {
-		// Exactly 250 HEZ should give 30 points
-		assert_ok!(Staking::bond(
-			RuntimeOrigin::signed(USER_STASH),
+		assert_ok!(StakingScore::receive_staking_details(
+			RuntimeOrigin::root(),
+			USER_STASH,
+			StakingSource::RelayChain,
 			250 * UNITS,
-			RewardDestination::Staked
+			0,
+			0
 		));
 
 		assert_eq!(StakingScore::get_staking_score(&USER_STASH).0, 30);
@@ -132,11 +130,13 @@ fn amount_score_boundary_250_hez() {
 #[test]
 fn amount_score_boundary_750_hez() {
 	ExtBuilder::default().build_and_execute(|| {
-		// Exactly 750 HEZ should give 40 points
-		assert_ok!(Staking::bond(
-			RuntimeOrigin::signed(USER_STASH),
+		assert_ok!(StakingScore::receive_staking_details(
+			RuntimeOrigin::root(),
+			USER_STASH,
+			StakingSource::RelayChain,
 			750 * UNITS,
-			RewardDestination::Staked
+			0,
+			0
 		));
 
 		assert_eq!(StakingScore::get_staking_score(&USER_STASH).0, 40);
@@ -146,40 +146,43 @@ fn amount_score_boundary_750_hez() {
 #[test]
 fn score_capped_at_100() {
 	ExtBuilder::default().build_and_execute(|| {
-		// Stake maximum amount and advance time to get maximum multiplier
-		assert_ok!(Staking::bond(
-			RuntimeOrigin::signed(USER_STASH),
-			1000 * UNITS, // 50 base points
-			RewardDestination::Staked
+		assert_ok!(StakingScore::receive_staking_details(
+			RuntimeOrigin::root(),
+			USER_STASH,
+			StakingSource::RelayChain,
+			1000 * UNITS,
+			0,
+			0
 		));
 
 		assert_ok!(StakingScore::start_score_tracking(RuntimeOrigin::signed(USER_STASH)));
 
-		// Advance 12+ months to get 2.0x multiplier
+		// After 12+ months: 50 * 2.0 = 100 (capped)
 		System::set_block_number((12 * MONTH_IN_BLOCKS + 1) as u64);
 
-		// 50 * 2.0 = 100, should be capped at 100
 		let (score, _) = StakingScore::get_staking_score(&USER_STASH);
 		assert_eq!(score, 100);
 	});
 }
 
 // ============================================================================
-// Duration Multiplier Tests (3 tests)
+// Duration Multiplier Tests
 // ============================================================================
 
 #[test]
 fn duration_multiplier_1_month() {
 	ExtBuilder::default().build_and_execute(|| {
-		assert_ok!(Staking::bond(
-			RuntimeOrigin::signed(USER_STASH),
-			500 * UNITS, // 40 base points
-			RewardDestination::Staked
+		assert_ok!(StakingScore::receive_staking_details(
+			RuntimeOrigin::root(),
+			USER_STASH,
+			StakingSource::RelayChain,
+			500 * UNITS,
+			0,
+			0
 		));
 
 		assert_ok!(StakingScore::start_score_tracking(RuntimeOrigin::signed(USER_STASH)));
 
-		// Advance 1 month
 		System::set_block_number((MONTH_IN_BLOCKS + 1) as u64);
 
 		// 40 * 1.2 = 48
@@ -191,15 +194,17 @@ fn duration_multiplier_1_month() {
 #[test]
 fn duration_multiplier_6_months() {
 	ExtBuilder::default().build_and_execute(|| {
-		assert_ok!(Staking::bond(
-			RuntimeOrigin::signed(USER_STASH),
-			500 * UNITS, // 40 base points
-			RewardDestination::Staked
+		assert_ok!(StakingScore::receive_staking_details(
+			RuntimeOrigin::root(),
+			USER_STASH,
+			StakingSource::RelayChain,
+			500 * UNITS,
+			0,
+			0
 		));
 
 		assert_ok!(StakingScore::start_score_tracking(RuntimeOrigin::signed(USER_STASH)));
 
-		// Advance 6 months
 		System::set_block_number((6 * MONTH_IN_BLOCKS + 1) as u64);
 
 		// 40 * 1.7 = 68
@@ -211,13 +216,16 @@ fn duration_multiplier_6_months() {
 #[test]
 fn duration_multiplier_progression() {
 	ExtBuilder::default().build_and_execute(|| {
-		let base_block = 100;
+		let base_block = 100u64;
 		System::set_block_number(base_block);
 
-		assert_ok!(Staking::bond(
-			RuntimeOrigin::signed(USER_STASH),
-			100 * UNITS, // 20 base points
-			RewardDestination::Staked
+		assert_ok!(StakingScore::receive_staking_details(
+			RuntimeOrigin::root(),
+			USER_STASH,
+			StakingSource::RelayChain,
+			100 * UNITS,
+			0,
+			0
 		));
 
 		assert_ok!(StakingScore::start_score_tracking(RuntimeOrigin::signed(USER_STASH)));
@@ -236,13 +244,12 @@ fn duration_multiplier_progression() {
 }
 
 // ============================================================================
-// start_score_tracking Extrinsic Tests (3 tests)
+// start_score_tracking Extrinsic Tests
 // ============================================================================
 
 #[test]
 fn start_tracking_fails_without_stake() {
 	ExtBuilder::default().build_and_execute(|| {
-		// Try to start tracking without any stake
 		assert_noop!(
 			StakingScore::start_score_tracking(RuntimeOrigin::signed(USER_STASH)),
 			Error::<Test>::NoStakeFound
@@ -253,16 +260,17 @@ fn start_tracking_fails_without_stake() {
 #[test]
 fn start_tracking_fails_if_already_started() {
 	ExtBuilder::default().build_and_execute(|| {
-		assert_ok!(Staking::bond(
-			RuntimeOrigin::signed(USER_STASH),
+		assert_ok!(StakingScore::receive_staking_details(
+			RuntimeOrigin::root(),
+			USER_STASH,
+			StakingSource::RelayChain,
 			100 * UNITS,
-			RewardDestination::Staked
+			0,
+			0
 		));
 
-		// First call succeeds
 		assert_ok!(StakingScore::start_score_tracking(RuntimeOrigin::signed(USER_STASH)));
 
-		// Second call fails
 		assert_noop!(
 			StakingScore::start_score_tracking(RuntimeOrigin::signed(USER_STASH)),
 			Error::<Test>::TrackingAlreadyStarted
@@ -275,15 +283,17 @@ fn start_tracking_emits_event() {
 	ExtBuilder::default().build_and_execute(|| {
 		System::set_block_number(1);
 
-		assert_ok!(Staking::bond(
-			RuntimeOrigin::signed(USER_STASH),
+		assert_ok!(StakingScore::receive_staking_details(
+			RuntimeOrigin::root(),
+			USER_STASH,
+			StakingSource::RelayChain,
 			100 * UNITS,
-			RewardDestination::Staked
+			0,
+			0
 		));
 
 		assert_ok!(StakingScore::start_score_tracking(RuntimeOrigin::signed(USER_STASH)));
 
-		// Check event was emitted
 		let events = System::events();
 		assert!(events.iter().any(|event| {
 			matches!(event.event, RuntimeEvent::StakingScore(Event::ScoreTrackingStarted { .. }))
@@ -291,55 +301,247 @@ fn start_tracking_emits_event() {
 	});
 }
 
+#[test]
+fn start_tracking_works_with_only_asset_hub_stake() {
+	ExtBuilder::default().build_and_execute(|| {
+		System::set_block_number(1);
+
+		// Only Asset Hub stake, no Relay Chain stake
+		assert_ok!(StakingScore::receive_staking_details(
+			RuntimeOrigin::root(),
+			USER_STASH,
+			StakingSource::AssetHub,
+			500 * UNITS,
+			3,
+			0
+		));
+
+		assert_ok!(StakingScore::start_score_tracking(RuntimeOrigin::signed(USER_STASH)));
+		assert_eq!(StakingScore::get_staking_score(&USER_STASH).0, 40);
+	});
+}
+
 // ============================================================================
-// Edge Cases and Integration (2 tests)
+// receive_staking_details Tests
+// ============================================================================
+
+#[test]
+fn receive_staking_details_requires_root() {
+	ExtBuilder::default().build_and_execute(|| {
+		assert_noop!(
+			StakingScore::receive_staking_details(
+				RuntimeOrigin::signed(USER_STASH),
+				USER_STASH,
+				StakingSource::RelayChain,
+				100 * UNITS,
+				0,
+				0
+			),
+			pezsp_runtime::DispatchError::BadOrigin
+		);
+	});
+}
+
+#[test]
+fn receive_staking_details_emits_event() {
+	ExtBuilder::default().build_and_execute(|| {
+		System::set_block_number(1);
+
+		assert_ok!(StakingScore::receive_staking_details(
+			RuntimeOrigin::root(),
+			USER_STASH,
+			StakingSource::AssetHub,
+			500 * UNITS,
+			2,
+			1
+		));
+
+		let events = System::events();
+		assert!(events.iter().any(|event| {
+			matches!(event.event, RuntimeEvent::StakingScore(Event::StakingDetailsReceived { .. }))
+		}));
+	});
+}
+
+#[test]
+fn receive_staking_details_overwrites_same_source() {
+	ExtBuilder::default().build_and_execute(|| {
+		// First: 100 HEZ from Relay
+		assert_ok!(StakingScore::receive_staking_details(
+			RuntimeOrigin::root(),
+			USER_STASH,
+			StakingSource::RelayChain,
+			100 * UNITS,
+			0,
+			0
+		));
+		assert_eq!(StakingScore::get_staking_score(&USER_STASH).0, 20);
+
+		// Update same source to 300 HEZ
+		assert_ok!(StakingScore::receive_staking_details(
+			RuntimeOrigin::root(),
+			USER_STASH,
+			StakingSource::RelayChain,
+			300 * UNITS,
+			0,
+			0
+		));
+		// 300 HEZ is in 250-750 tier = 40 points
+		assert_eq!(StakingScore::get_staking_score(&USER_STASH).0, 40);
+	});
+}
+
+// ============================================================================
+// Dual-Source Aggregation Tests (NEW)
+// ============================================================================
+
+#[test]
+fn relay_and_asset_hub_stake_aggregated() {
+	ExtBuilder::default().build_and_execute(|| {
+		// Relay Chain: 200 HEZ
+		assert_ok!(StakingScore::receive_staking_details(
+			RuntimeOrigin::root(),
+			USER_STASH,
+			StakingSource::RelayChain,
+			200 * UNITS,
+			0,
+			0
+		));
+
+		// Asset Hub: 300 HEZ
+		assert_ok!(StakingScore::receive_staking_details(
+			RuntimeOrigin::root(),
+			USER_STASH,
+			StakingSource::AssetHub,
+			300 * UNITS,
+			1,
+			0
+		));
+
+		// Total: 500 HEZ -> 250-750 tier -> 40 points
+		let (score, _) = StakingScore::get_staking_score(&USER_STASH);
+		assert_eq!(score, 40);
+	});
+}
+
+#[test]
+fn single_source_update_changes_aggregate() {
+	ExtBuilder::default().build_and_execute(|| {
+		// Relay: 100 HEZ -> <=100 tier -> 20 points
+		assert_ok!(StakingScore::receive_staking_details(
+			RuntimeOrigin::root(),
+			USER_STASH,
+			StakingSource::RelayChain,
+			100 * UNITS,
+			0,
+			0
+		));
+		assert_eq!(StakingScore::get_staking_score(&USER_STASH).0, 20);
+
+		// Add Asset Hub: 60 HEZ -> total 160 HEZ -> 101-250 tier -> 30 points
+		assert_ok!(StakingScore::receive_staking_details(
+			RuntimeOrigin::root(),
+			USER_STASH,
+			StakingSource::AssetHub,
+			60 * UNITS,
+			0,
+			0
+		));
+		assert_eq!(StakingScore::get_staking_score(&USER_STASH).0, 30);
+	});
+}
+
+#[test]
+fn dual_source_with_duration_multiplier() {
+	ExtBuilder::default().build_and_execute(|| {
+		let base_block = 100u64;
+		System::set_block_number(base_block);
+
+		// Relay: 200 HEZ + Asset Hub: 300 HEZ = 500 HEZ -> 40 base
+		assert_ok!(StakingScore::receive_staking_details(
+			RuntimeOrigin::root(),
+			USER_STASH,
+			StakingSource::RelayChain,
+			200 * UNITS,
+			0,
+			0
+		));
+		assert_ok!(StakingScore::receive_staking_details(
+			RuntimeOrigin::root(),
+			USER_STASH,
+			StakingSource::AssetHub,
+			300 * UNITS,
+			1,
+			0
+		));
+
+		assert_ok!(StakingScore::start_score_tracking(RuntimeOrigin::signed(USER_STASH)));
+		assert_eq!(StakingScore::get_staking_score(&USER_STASH).0, 40);
+
+		// After 6 months: 40 * 1.7 = 68
+		System::set_block_number(base_block + (6 * MONTH_IN_BLOCKS) as u64);
+		assert_eq!(StakingScore::get_staking_score(&USER_STASH).0, 68);
+	});
+}
+
+// ============================================================================
+// Multiple Users and Edge Cases
 // ============================================================================
 
 #[test]
 fn multiple_users_independent_scores() {
 	ExtBuilder::default().build_and_execute(|| {
-		// Use USER_STASH (10) and account 11 which have pre-allocated balances
-		let user1 = USER_STASH; // Account 10
-		let user2 = 11; // Account 11 (already has stake in mock)
+		let user1 = USER_STASH;
+		let user2 = 20;
 
-		// User1: Add new stake, no tracking
-		assert_ok!(Staking::bond(
-			RuntimeOrigin::signed(user1),
+		assert_ok!(StakingScore::receive_staking_details(
+			RuntimeOrigin::root(),
+			user1,
+			StakingSource::RelayChain,
 			100 * UNITS,
-			RewardDestination::Staked
+			0,
+			0
 		));
 
-		// User2 already has stake from mock (100 HEZ)
-		// Start tracking for user2
+		assert_ok!(StakingScore::receive_staking_details(
+			RuntimeOrigin::root(),
+			user2,
+			StakingSource::AssetHub,
+			500 * UNITS,
+			2,
+			0
+		));
+
+		// User2 starts tracking
 		assert_ok!(StakingScore::start_score_tracking(RuntimeOrigin::signed(user2)));
 
-		// User1 should have base score of 20 (100 HEZ)
 		assert_eq!(StakingScore::get_staking_score(&user1).0, 20);
-
-		// User2 should have base score of 20 (100 HEZ from mock)
-		assert_eq!(StakingScore::get_staking_score(&user2).0, 20);
+		assert_eq!(StakingScore::get_staking_score(&user2).0, 40);
 
 		// Advance time
 		System::set_block_number((3 * MONTH_IN_BLOCKS) as u64);
 
-		// User1 score unchanged (no tracking)
+		// User1 unchanged (no tracking)
 		assert_eq!(StakingScore::get_staking_score(&user1).0, 20);
 
-		// User2 score increased (20 * 1.4 = 28)
-		assert_eq!(StakingScore::get_staking_score(&user2).0, 28);
+		// User2 increased (40 * 1.4 = 56)
+		assert_eq!(StakingScore::get_staking_score(&user2).0, 56);
 	});
 }
 
 #[test]
 fn duration_returned_correctly() {
 	ExtBuilder::default().build_and_execute(|| {
-		let start_block = 100;
+		let start_block = 100u64;
 		System::set_block_number(start_block);
 
-		assert_ok!(Staking::bond(
-			RuntimeOrigin::signed(USER_STASH),
+		assert_ok!(StakingScore::receive_staking_details(
+			RuntimeOrigin::root(),
+			USER_STASH,
+			StakingSource::RelayChain,
 			100 * UNITS,
-			RewardDestination::Staked
+			0,
+			0
 		));
 
 		// Without tracking, duration should be 0

@@ -469,42 +469,10 @@ parameter_types! {
 	pub const StakingScoreUpdateInterval: BlockNumber = HOURS;
 }
 
-/// Staking info provider - noop implementation for People parachain
-/// On People chain, we don't have direct access to staking info from relay chain.
-/// This is a placeholder that returns None, meaning users won't get staking-based scores here.
-#[cfg(not(feature = "runtime-benchmarks"))]
-pub struct StakingInfoProvider;
-#[cfg(not(feature = "runtime-benchmarks"))]
-impl pezpallet_staking_score::StakingInfoProvider<AccountId, Balance> for StakingInfoProvider {
-	fn get_staking_details(
-		_who: &AccountId,
-	) -> Option<pezpallet_staking_score::StakingDetails<Balance>> {
-		// People parachain doesn't have direct staking - return None
-		None
-	}
-}
-
-/// Mock staking info provider for benchmarking - always returns valid stake
-#[cfg(feature = "runtime-benchmarks")]
-pub struct StakingInfoProvider;
-#[cfg(feature = "runtime-benchmarks")]
-impl pezpallet_staking_score::StakingInfoProvider<AccountId, Balance> for StakingInfoProvider {
-	fn get_staking_details(
-		_who: &AccountId,
-	) -> Option<pezpallet_staking_score::StakingDetails<Balance>> {
-		// Return mock staking data for benchmarks
-		Some(pezpallet_staking_score::StakingDetails {
-			staked_amount: 1_000_000_000_000_000u128, // 1000 units
-			nominations_count: 5,
-			unlocking_chunks_count: 2,
-		})
-	}
-}
-
 impl pezpallet_staking_score::Config for Runtime {
 	type WeightInfo = pezpallet_staking_score::weights::BizinikiwiWeight<Runtime>;
 	type Balance = Balance;
-	type StakingInfo = StakingInfoProvider;
+	type OnStakingUpdate = Trust;
 }
 
 // =============================================================================

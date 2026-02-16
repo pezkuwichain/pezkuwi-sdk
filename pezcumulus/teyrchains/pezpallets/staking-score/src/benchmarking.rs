@@ -1,6 +1,9 @@
 //! Benchmarking setup for pezpallet-staking-score
 
-use crate::{Call, Config, Pezpallet, StakingStartBlock};
+use crate::{
+	CachedStakingDetails, Call, Config, Pezpallet, StakingDetails, StakingSource,
+	StakingStartBlock, UNITS,
+};
 use pezframe_benchmarking::v2::*;
 use pezframe_system::RawOrigin;
 
@@ -12,19 +15,39 @@ mod benchmarks {
 	fn start_score_tracking() {
 		let caller: T::AccountId = whitelisted_caller();
 
-		// Mock staking provider kullanıyoruz, gerçek staking setup'ı yapmıyoruz
-		// Runtime'da conditional olarak MockStakingInfoProvider kullanılacak
+		// Populate CachedStakingDetails with test data
+		CachedStakingDetails::<T>::insert(
+			&caller,
+			StakingSource::RelayChain,
+			StakingDetails {
+				staked_amount: (1000u128 * UNITS).into(),
+				nominations_count: 5,
+				unlocking_chunks_count: 2,
+			},
+		);
 
-		// Ölçümden önce, bu kullanıcının daha önce takibi başlatmadığından emin olalım.
 		StakingStartBlock::<T>::remove(&caller);
 
-		// EYLEM: Bu bloğun içindeki extrinsic çağrısının ne kadar sürdüğünü ölçüyoruz.
 		#[extrinsic_call]
 		_(RawOrigin::Signed(caller.clone()));
 
-		// DOĞRULAMA: Mock provider kullanıldığında bu başarılı olmalı
 		assert!(StakingStartBlock::<T>::get(&caller).is_some());
 	}
 
-	// Benchmark test suite is in tests.rs with mock runtime
+	#[benchmark]
+	fn receive_staking_details() {
+		let target: T::AccountId = whitelisted_caller();
+
+		#[extrinsic_call]
+		_(
+			RawOrigin::Root,
+			target.clone(),
+			StakingSource::RelayChain,
+			(500u128 * UNITS).into(),
+			3u32,
+			0u32,
+		);
+
+		assert!(CachedStakingDetails::<T>::get(&target, StakingSource::RelayChain).is_some());
+	}
 }

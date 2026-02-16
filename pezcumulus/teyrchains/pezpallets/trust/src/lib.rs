@@ -105,7 +105,9 @@ mod tests;
 #[cfg(feature = "runtime-benchmarks")]
 mod benchmarking;
 
-pub use pezpallet_staking_score::{RawScore as StakingRawScore, StakingScoreProvider};
+pub use pezpallet_staking_score::{
+	OnStakingDataUpdate, RawScore as StakingRawScore, StakingScoreProvider,
+};
 /* use pezkuwi_primitives::traits::{
 	CitizenshipStatusProvider, PerwerdeScoreProvider, ReferralScoreProvider, RawScore,
 	StakingDetails, StakingScoreProvider, TikiScoreProvider, TrustScoreUpdater, TrustScoreProvider
@@ -252,6 +254,27 @@ pub mod pezpallet {
 				// In this case, manual start required or scheduled in runtime
 				// For now, we are just marking the flag
 			}
+		}
+	}
+
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
+		fn on_initialize(n: BlockNumberFor<T>) -> Weight {
+			let batch_in_progress = BatchUpdateInProgress::<T>::get();
+			let interval = T::UpdateInterval::get();
+
+			// Continue in-progress batch update
+			if batch_in_progress {
+				return Self::do_batch_update();
+			}
+
+			// Start new batch at periodic interval
+			if !interval.is_zero() && !n.is_zero() && (n % interval).is_zero() {
+				return Self::do_batch_update();
+			}
+
+			// Fast path: just reading BatchUpdateInProgress
+			T::DbWeight::get().reads(1)
 		}
 	}
 
@@ -412,6 +435,54 @@ pub mod pezpallet {
 		fn calculate_optimal_batch_size() -> u32 {
 			T::MaxBatchSize::get()
 		}
+
+		/// Internal batch update logic used by both on_initialize and extrinsics.
+		/// Returns consumed weight.
+		fn do_batch_update() -> Weight {
+			let batch_size = Self::calculate_optimal_batch_size();
+			let mut updated_count = 0u32;
+			let mut all_processed = true;
+			let mut last_account: Option<T::AccountId> = None;
+
+			let iterator = match LastProcessedAccount::<T>::get() {
+				Some(start_key) => pezpallet_identity_kyc::KycStatuses::<T>::iter_from(
+					pezpallet_identity_kyc::KycStatuses::<T>::hashed_key_for(&start_key),
+				),
+				None => pezpallet_identity_kyc::KycStatuses::<T>::iter(),
+			};
+
+			for (account, kyc_level) in iterator {
+				if updated_count >= batch_size {
+					last_account = Some(account);
+					all_processed = false;
+					break;
+				}
+
+				if kyc_level == pezpallet_identity_kyc::types::KycLevel::Approved {
+					let _ = Self::update_score_for_account(&account);
+					updated_count += 1;
+				}
+
+				last_account = Some(account);
+			}
+
+			if all_processed {
+				LastProcessedAccount::<T>::kill();
+				BatchUpdateInProgress::<T>::put(false);
+				Self::deposit_event(Event::AllTrustScoresUpdated { total_updated: updated_count });
+			} else {
+				if let Some(ref account) = last_account {
+					LastProcessedAccount::<T>::put(account.clone());
+				}
+				BatchUpdateInProgress::<T>::put(true);
+				Self::deposit_event(Event::BulkTrustScoreUpdate { count: updated_count });
+			}
+
+			// Approximate weight
+			let base_weight = T::DbWeight::get().reads_writes(2, 2);
+			let per_account = T::DbWeight::get().reads_writes(3, 2);
+			base_weight.saturating_add(per_account.saturating_mul(updated_count as u64))
+		}
 	}
 
 	impl<T: Config> TrustScoreProvider<T::AccountId> for Pezpallet<T> {
@@ -424,6 +495,14 @@ pub mod pezpallet {
 		fn on_score_component_changed(who: &T::AccountId) {
 			if let Err(e) = Self::update_score_for_account(who) {
 				log::error!("Failed to update trust score for {who:?}: {e:?}");
+			}
+		}
+	}
+
+	impl<T: Config> OnStakingDataUpdate<T::AccountId> for Pezpallet<T> {
+		fn on_staking_data_changed(who: &T::AccountId) {
+			if let Err(e) = Self::update_score_for_account(who) {
+				log::error!("Failed to update trust score on staking change for {who:?}: {e:?}");
 			}
 		}
 	}
