@@ -143,7 +143,7 @@ pub mod pezkuwichain {
 			Extensions::new("pezkuwichain-mainnet".to_string(), 1004),
 		)
 		.with_name("Pezkuwichain People")
-		.with_id(super::ensure_id(PEOPLE_PEZKUWICHAIN_GENESIS).expect("invalid id"))
+		.with_id("people-pezkuwichain")
 		.with_chain_type(ChainType::Live)
 		.with_genesis_config_preset_name("genesis")
 		.with_properties(properties)

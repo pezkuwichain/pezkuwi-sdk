@@ -63,7 +63,7 @@ echo -e "${GREEN}  -> relay-plain.json created${NC}"
 # =============================================================================
 echo -e "${YELLOW}[2/6] Generating Asset Hub chain spec...${NC}"
 $TEYRCHAIN_BIN build-spec \
-    --chain asset-hub-pezkuwichain \
+    --chain asset-hub-pezkuwichain-genesis \
     --disable-default-bootnode \
     2>/dev/null > "$OUTPUT_DIR/asset-hub-plain.json"
 echo -e "${GREEN}  -> asset-hub-plain.json created${NC}"
@@ -73,7 +73,7 @@ echo -e "${GREEN}  -> asset-hub-plain.json created${NC}"
 # =============================================================================
 echo -e "${YELLOW}[3/6] Generating People Chain chain spec...${NC}"
 $TEYRCHAIN_BIN build-spec \
-    --chain people-pezkuwichain \
+    --chain people-pezkuwichain-genesis \
     --disable-default-bootnode \
     2>/dev/null > "$OUTPUT_DIR/people-plain.json"
 echo -e "${GREEN}  -> people-plain.json created${NC}"
@@ -221,7 +221,7 @@ def verify_spec(path, name, expected_id):
 ok = True
 ok = verify_spec("$OUTPUT_DIR/relay-raw.json", "Relay Chain", "pezkuwichain_mainnet") and ok
 ok = verify_spec("$OUTPUT_DIR/asset-hub-raw.json", "Asset Hub", "asset-hub-pezkuwichain") and ok
-ok = verify_spec("$OUTPUT_DIR/people-raw.json", "People Chain", "people-pezkuwichain") and ok
+ok = verify_spec("$OUTPUT_DIR/people-raw.json", "People Chain", "people-pezkuwichain-genesis") and ok
 
 if not ok:
     sys.exit(1)
