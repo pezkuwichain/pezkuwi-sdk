@@ -160,6 +160,12 @@ Note: Mnemonic stored locally, NOT in repo. Check /home/mamostehp/res/
 4. [x] People Chain runtime upgrade 1_020_006 → 1_020_007 (noter delegasyonu deploy)
 5. [x] Relay Chain: pezpallet_staking_score runtime'dan cikarildi (kod temizlendi, sonraki build'de aktif)
 6. [ ] Bot + noter workflow gelistir (staking verisi toplama ve People Chain'e gonderme)
+7. [ ] People Chain runtime upgrade 1_020_007 → 1_020_008 (MinTrust degerleri duzeltildi, deploy bekliyor)
+   - Welati secim MinTrust: Serok 600→250, Parlementer 300→100, SerokiMeclise 400→200, EndameDiwane 750→275
+   - OfficialRole MinTrust: 250→75
+   - Endorser MinTrust: 100→40
+   - Degisiklik: `pezpallet-welati/src/lib.rs`, `types.rs`, `tests.rs` (kod hazir, runtime upgrade gerekli)
+8. [ ] Relay Chain runtime upgrade: `pezpallet_staking_async_ah_client` index 67'ye ekle (AH async staking XCM loop duzeltmesi)
 
 ---
 

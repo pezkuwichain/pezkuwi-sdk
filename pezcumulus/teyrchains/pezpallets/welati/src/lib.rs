@@ -692,7 +692,7 @@ pub mod pezpallet {
 					);
 
 					let endorser_trust = T::TrustScoreSource::trust_score_of(endorser);
-					ensure!(endorser_trust >= 100u128, Error::<T>::InsufficientTrustScore);
+					ensure!(endorser_trust >= 40u128, Error::<T>::InsufficientTrustScore);
 				}
 			}
 
@@ -1219,10 +1219,10 @@ pub mod pezpallet {
 		/// Minimum Trust Score by election type
 		pub fn get_required_trust_score(election_type: &ElectionType) -> u128 {
 			match election_type {
-				ElectionType::Presidential => 600,
-				ElectionType::Parliamentary => 300,
-				ElectionType::SpeakerElection => 400,
-				ElectionType::ConstitutionalCourt => 750,
+				ElectionType::Presidential => 250,
+				ElectionType::Parliamentary => 100,
+				ElectionType::SpeakerElection => 200,
+				ElectionType::ConstitutionalCourt => 275,
 			}
 		}
 

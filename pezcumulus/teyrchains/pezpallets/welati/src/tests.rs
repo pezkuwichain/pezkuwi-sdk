@@ -365,11 +365,11 @@ fn vote_on_proposal_works() {
 #[test]
 fn get_required_trust_score_works() {
 	ExtBuilder::default().build().execute_with(|| {
-		assert_eq!(Welati::get_required_trust_score(&ElectionType::Presidential), 600);
+		assert_eq!(Welati::get_required_trust_score(&ElectionType::Presidential), 250);
 
-		assert_eq!(Welati::get_required_trust_score(&ElectionType::Parliamentary), 300);
+		assert_eq!(Welati::get_required_trust_score(&ElectionType::Parliamentary), 100);
 
-		assert_eq!(Welati::get_required_trust_score(&ElectionType::ConstitutionalCourt), 750);
+		assert_eq!(Welati::get_required_trust_score(&ElectionType::ConstitutionalCourt), 275);
 	});
 }
 

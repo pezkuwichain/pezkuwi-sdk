@@ -1334,7 +1334,7 @@ pub trait OfficialRoleInfo {
 
 impl OfficialRoleInfo for OfficialRole {
 	fn required_trust_score(&self) -> u128 {
-		250 // Anayasada belirtilen genel şart
+		75 // Anayasada belirtilen genel şart
 	}
 
 	fn nominating_minister(&self) -> MinisterRole {

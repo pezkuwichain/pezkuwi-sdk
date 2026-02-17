@@ -161,11 +161,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 	// Batch all 21 calls
 	let batch_call = encode_batch_all(grant_calls);
-	println!(
-		"\nBatch call: {} bytes (0x{}...)",
-		batch_call.len(),
-		hex::encode(&batch_call[..8])
-	);
+	println!("\nBatch call: {} bytes (0x{}...)", batch_call.len(), hex::encode(&batch_call[..8]));
 
 	// Connect to relay chain
 	let api = OnlineClient::<PezkuwiConfig>::from_insecure_url(&relay_url).await?;
@@ -199,7 +195,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	println!("Submitting sudo(xcm.send(batch_all(grant_tiki × 21)))...");
 
 	use pezkuwi_subxt::tx::TxStatus;
-	let tx_progress = api.tx().sign_and_submit_then_watch_default(&sudo_call, &sudo_keypair).await?;
+	let tx_progress =
+		api.tx().sign_and_submit_then_watch_default(&sudo_call, &sudo_keypair).await?;
 
 	println!("TX: 0x{}", hex::encode(tx_progress.extrinsic_hash().as_ref()));
 
