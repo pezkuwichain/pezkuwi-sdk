@@ -138,6 +138,12 @@ fn asset_hub_pezkuwichain_genesis(
 				.collect(),
 		},
 		pezkuwi_xcm: PezkuwiXcmConfig { safe_xcm_version: Some(SAFE_XCM_VERSION) },
+		// Prevent automatic election before validators are staked.
+		// After staking setup, trigger manually with force_new_era().
+		staking: StakingConfig {
+			force_era: pezpallet_staking_async::Forcing::ForceNone,
+			..Default::default()
+		},
 
 		// ====================================================================
 		// TrustBackedAssets (Instance1) - PEZ, wHEZ, and wUSDT tokens
