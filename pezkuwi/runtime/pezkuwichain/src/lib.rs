@@ -73,9 +73,11 @@ use pezkuwi_runtime_teyrchains::{
 		v13 as teyrchains_runtime_api_impl, vstaging as teyrchains_staging_runtime_api_impl,
 	},
 	scheduler as teyrchains_scheduler, session_info as teyrchains_session_info,
-	shared as teyrchains_shared,
+	reward_points as teyrchains_reward_points, shared as teyrchains_shared,
 };
-use pezkuwichain_runtime_constants::system_teyrchain::{coretime::TIMESLICE_PERIOD, BROKER_ID};
+use pezkuwichain_runtime_constants::system_teyrchain::{
+	coretime::TIMESLICE_PERIOD, ASSET_HUB_ID, BROKER_ID,
+};
 use pezpallet_balances::WeightInfo;
 use pezsp_authority_discovery::AuthorityId as AuthorityDiscoveryId;
 use pezsp_consensus_beefy::{
@@ -100,6 +102,8 @@ use pezframe_support::{
 use pezframe_system::EnsureRoot;
 use pezpallet_grandpa::{fg_primitives, AuthorityId as GrandpaId};
 use pezpallet_session::historical as session_historical;
+use pezpallet_staking_async_ah_client as ah_client;
+use pezpallet_staking_async_rc_client as rc_client;
 use pezpallet_transaction_payment::{FeeDetails, FungibleAdapter, RuntimeDispatchInfo};
 use pezsp_core::{ConstBool, ConstU128, ConstUint, Get, OpaqueMetadata, H256};
 use pezsp_runtime::{
@@ -170,7 +174,7 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
 	spec_name: alloc::borrow::Cow::Borrowed("pezkuwichain"),
 	impl_name: alloc::borrow::Cow::Borrowed("parity-pezkuwichain"),
 	authoring_version: 0,
-	spec_version: 1_020_004,
+	spec_version: 1_020_007,
 	impl_version: 0,
 	apis: RUNTIME_API_VERSIONS,
 	transaction_version: 26,
@@ -413,7 +417,7 @@ impl pezpallet_timestamp::Config for Runtime {
 
 impl pezpallet_authorship::Config for Runtime {
 	type FindAuthor = pezpallet_session::FindAccountFromAuthorIndex<Self, Babe>;
-	type EventHandler = Staking;
+	type EventHandler = StakingAhClient;
 }
 
 impl_opaque_keys! {
@@ -441,7 +445,7 @@ impl pezpallet_session::Config for Runtime {
 	type ValidatorIdOf = ValidatorIdOf;
 	type ShouldEndSession = Babe;
 	type NextSessionRotation = Babe;
-	type SessionManager = pezpallet_session::historical::NoteHistoricalRoot<Self, ValidatorManager>;
+	type SessionManager = pezpallet_session::historical::NoteHistoricalRoot<Self, StakingAhClient>;
 	type SessionHandler = <SessionKeys as OpaqueKeys>::KeyTypeIdProviders;
 	type Keys = SessionKeys;
 	type DisablingStrategy = ();
@@ -450,17 +454,27 @@ impl pezpallet_session::Config for Runtime {
 	type KeyDeposit = ();
 }
 
-pub struct FullIdentificationOf;
-impl pezsp_runtime::traits::Convert<AccountId, Option<()>> for FullIdentificationOf {
-	fn convert(_: AccountId) -> Option<()> {
-		Some(Default::default())
+/// Returns staking exposure for historical session tracking.
+/// Falls back to a default empty exposure when none exists yet (e.g. at genesis),
+/// preventing validators from being filtered out of the authority set.
+pub struct ExposureOfOrDefault;
+impl pezsp_runtime::traits::Convert<AccountId, Option<pezsp_staking::Exposure<AccountId, Balance>>>
+	for ExposureOfOrDefault
+{
+	fn convert(
+		validator: AccountId,
+	) -> Option<pezsp_staking::Exposure<AccountId, Balance>> {
+		Some(
+			<pezpallet_staking::DefaultExposureOf<Runtime>>::convert(validator)
+				.unwrap_or_default(),
+		)
 	}
 }
 
 impl pezpallet_session::historical::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
-	type FullIdentification = ();
-	type FullIdentificationOf = FullIdentificationOf;
+	type FullIdentification = pezsp_staking::Exposure<AccountId, Balance>;
+	type FullIdentificationOf = ExposureOfOrDefault;
 }
 
 // =====================================================
@@ -506,15 +520,16 @@ pub struct EraPayout;
 impl pezpallet_staking::EraPayout<Balance> for EraPayout {
 	fn era_payout(
 		_total_staked: Balance,
-		total_issuance: Balance,
+		_total_issuance: Balance,
 		era_duration_millis: u64,
 	) -> (Balance, Balance) {
-		// 8% annual inflation rate
 		const MILLISECONDS_PER_YEAR: u64 = (1000 * 3600 * 24 * 36525) / 100;
 		let relative_era_len =
 			FixedU128::from_rational(era_duration_millis.into(), MILLISECONDS_PER_YEAR.into());
-		let inflation_rate = FixedU128::from_rational(8, 100);
-		let yearly_emission = inflation_rate.saturating_mul_int(total_issuance as i128);
+		// Fixed baseline: 200M HEZ (12 decimals) — prevents compound inflation
+		let fixed_total_issuance: i128 = 200_000_000_000_000_000_000;
+		let fixed_inflation_rate = FixedU128::from_rational(8, 100);
+		let yearly_emission = fixed_inflation_rate.saturating_mul_int(fixed_total_issuance);
 		let era_emission = relative_era_len.saturating_mul_int(yearly_emission);
 		// 15% to treasury, 85% to stakers
 		let to_treasury = FixedU128::from_rational(15, 100).saturating_mul_int(era_emission);
@@ -544,7 +559,7 @@ impl pezpallet_staking::Config for Runtime {
 	type SessionInterface = ();
 	type EraPayout = EraPayout;
 	type NextNewSession = Session;
-	type MaxExposurePageSize = ConstU32<64>;
+	type MaxExposurePageSize = ConstU32<512>;
 	type MaxValidatorSet = MaxActiveValidators;
 	type ElectionProvider =
 		pezframe_election_provider_support::onchain::OnChainExecution<OnChainSeqPhragmen>;
@@ -563,6 +578,137 @@ impl pezpallet_staking::Config for Runtime {
 	type Filter = Nothing;
 	type OldCurrency = Balances;
 	type BenchmarkingConfig = PezkuwiStakingBenchmarkingConfig;
+}
+
+// =====================================================
+// STAKING AH CLIENT CONFIGURATION (XCM Session Reports)
+// =====================================================
+
+#[derive(Encode, Decode)]
+enum AssetHubRuntimePallets<AccountId> {
+	// Audit: `StakingRcClient` in asset-hub-pezkuwichain (pallet index 89)
+	#[codec(index = 89)]
+	RcClient(RcClientCalls<AccountId>),
+}
+
+#[derive(Encode, Decode)]
+enum RcClientCalls<AccountId> {
+	#[codec(index = 0)]
+	RelaySessionReport(rc_client::SessionReport<AccountId>),
+	#[codec(index = 1)]
+	RelayNewOffencePaged(Vec<(SessionIndex, rc_client::Offence<AccountId>)>),
+}
+
+pub struct AssetHubLocation;
+impl Get<Location> for AssetHubLocation {
+	fn get() -> Location {
+		Location::new(0, [Junction::Teyrchain(ASSET_HUB_ID)])
+	}
+}
+
+pub struct EnsureAssetHub;
+impl pezframe_support::traits::EnsureOrigin<RuntimeOrigin> for EnsureAssetHub {
+	type Success = ();
+	fn try_origin(o: RuntimeOrigin) -> Result<Self::Success, RuntimeOrigin> {
+		match <RuntimeOrigin as Into<Result<teyrchains_origin::Origin, RuntimeOrigin>>>::into(
+			o.clone(),
+		) {
+			Ok(teyrchains_origin::Origin::Teyrchain(id)) if id == ASSET_HUB_ID.into() => Ok(()),
+			_ => Err(o),
+		}
+	}
+
+	#[cfg(feature = "runtime-benchmarks")]
+	fn try_successful_origin() -> Result<RuntimeOrigin, ()> {
+		Ok(RuntimeOrigin::root())
+	}
+}
+
+pub struct SessionReportToXcm;
+impl pezsp_runtime::traits::Convert<rc_client::SessionReport<AccountId>, Xcm<()>>
+	for SessionReportToXcm
+{
+	fn convert(a: rc_client::SessionReport<AccountId>) -> Xcm<()> {
+		Xcm(vec![
+			Instruction::UnpaidExecution {
+				weight_limit: WeightLimit::Unlimited,
+				check_origin: None,
+			},
+			Instruction::Transact {
+				origin_kind: OriginKind::Superuser,
+				fallback_max_weight: None,
+				call: AssetHubRuntimePallets::RcClient(RcClientCalls::RelaySessionReport(a))
+					.encode()
+					.into(),
+			},
+		])
+	}
+}
+
+pub struct QueuedOffenceToXcm;
+impl pezsp_runtime::traits::Convert<Vec<ah_client::QueuedOffenceOf<Runtime>>, Xcm<()>>
+	for QueuedOffenceToXcm
+{
+	fn convert(offences: Vec<ah_client::QueuedOffenceOf<Runtime>>) -> Xcm<()> {
+		Xcm(vec![
+			Instruction::UnpaidExecution {
+				weight_limit: WeightLimit::Unlimited,
+				check_origin: None,
+			},
+			Instruction::Transact {
+				origin_kind: OriginKind::Superuser,
+				fallback_max_weight: None,
+				call: AssetHubRuntimePallets::RcClient(RcClientCalls::RelayNewOffencePaged(
+					offences,
+				))
+				.encode()
+				.into(),
+			},
+		])
+	}
+}
+
+pub struct StakingXcmToAssetHub;
+impl ah_client::SendToAssetHub for StakingXcmToAssetHub {
+	type AccountId = AccountId;
+
+	fn relay_session_report(
+		session_report: rc_client::SessionReport<Self::AccountId>,
+	) -> Result<(), ()> {
+		rc_client::XCMSender::<
+			xcm_config::XcmRouter,
+			AssetHubLocation,
+			rc_client::SessionReport<AccountId>,
+			SessionReportToXcm,
+		>::send(session_report)
+	}
+
+	fn relay_new_offence_paged(
+		offences: Vec<ah_client::QueuedOffenceOf<Runtime>>,
+	) -> Result<(), ()> {
+		rc_client::XCMSender::<
+			xcm_config::XcmRouter,
+			AssetHubLocation,
+			Vec<ah_client::QueuedOffenceOf<Runtime>>,
+			QueuedOffenceToXcm,
+		>::send(offences)
+	}
+}
+
+impl ah_client::Config for Runtime {
+	type CurrencyBalance = Balance;
+	type AssetHubOrigin =
+		pezframe_support::traits::EitherOfDiverse<EnsureRoot<AccountId>, EnsureAssetHub>;
+	type AdminOrigin = EnsureRoot<AccountId>;
+	type SessionInterface = Self;
+	type SendToAssetHub = StakingXcmToAssetHub;
+	type MinimumValidatorSetSize = ConstU32<1>;
+	type UnixTime = Timestamp;
+	type PointsPerBlock = ConstU32<20>;
+	type MaxOffenceBatchSize = ConstU32<50>;
+	type Fallback = Staking;
+	type MaximumValidatorsWithPoints = ConstU32<{ MaxActiveValidators::get() * 4 }>;
+	type MaxSessionReportRetries = ConstU32<64>;
 }
 
 // =====================================================
@@ -1075,17 +1221,11 @@ impl teyrchains_session_info::Config for Runtime {
 	type ValidatorSet = Historical;
 }
 
-/// Special `RewardValidators` that does nothing ;)
-pub struct RewardValidators;
-impl pezkuwi_runtime_teyrchains::inclusion::RewardValidators for RewardValidators {
-	fn reward_backing(_: impl IntoIterator<Item = ValidatorIndex>) {}
-	fn reward_bitfields(_: impl IntoIterator<Item = ValidatorIndex>) {}
-}
-
 impl teyrchains_inclusion::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type DisputesHandler = ParasDisputes;
-	type RewardValidators = RewardValidators;
+	type RewardValidators =
+		teyrchains_reward_points::RewardValidatorsWithEraPoints<Runtime, StakingAhClient>;
 	type MessageQueue = MessageQueue;
 	type WeightInfo = weights::pezkuwi_runtime_teyrchains_inclusion::WeightInfo<Runtime>;
 }
@@ -1243,7 +1383,8 @@ impl teyrchains_initializer::Config for Runtime {
 
 impl teyrchains_disputes::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
-	type RewardValidators = ();
+	type RewardValidators =
+		teyrchains_reward_points::RewardValidatorsWithEraPoints<Runtime, StakingAhClient>;
 	type SlashingHandler = teyrchains_slashing::SlashValidatorsForDisputes<ParasSlashing>;
 	type WeightInfo = weights::pezkuwi_runtime_teyrchains_disputes::WeightInfo<Runtime>;
 }
@@ -1536,6 +1677,7 @@ construct_runtime! {
 		ParasSlashing: teyrchains_slashing = 63,
 		MessageQueue: pezpallet_message_queue = 64,
 		OnDemandAssignmentProvider: teyrchains_on_demand = 66,
+		StakingAhClient: pezpallet_staking_async_ah_client = 67,
 		CoretimeAssignmentProvider: teyrchains_assigner_coretime = 68,
 
 		// Teyrchain Onboarding Pallets. Start indices at 70 to leave room.

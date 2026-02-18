@@ -14931,6 +14931,8 @@ dependencies = [
  "pezpallet-session",
  "pezpallet-session-benchmarking",
  "pezpallet-staking",
+ "pezpallet-staking-async-ah-client",
+ "pezpallet-staking-async-rc-client",
  "pezpallet-staking-runtime-api",
  "pezpallet-state-trie-migration",
  "pezpallet-sudo",

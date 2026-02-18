@@ -17,6 +17,7 @@
 //! A pezpallet for managing validators on Pezkuwichain.
 
 use alloc::vec::Vec;
+use pezsp_runtime::traits::Convert;
 use pezsp_staking::SessionIndex;
 
 pub use pezpallet::*;
@@ -141,10 +142,19 @@ impl<T: Config> pezpallet_session::SessionManager<T::ValidatorId> for Pezpallet<
 	}
 }
 
-impl<T: Config> pezpallet_session::historical::SessionManager<T::ValidatorId, ()> for Pezpallet<T> {
-	fn new_session(new_index: SessionIndex) -> Option<Vec<(T::ValidatorId, ())>> {
-		<Self as pezpallet_session::SessionManager<_>>::new_session(new_index)
-			.map(|r| r.into_iter().map(|v| (v, Default::default())).collect())
+impl<T: Config + pezpallet_session::historical::Config>
+	pezpallet_session::historical::SessionManager<T::ValidatorId, T::FullIdentification>
+	for Pezpallet<T>
+{
+	fn new_session(new_index: SessionIndex) -> Option<Vec<(T::ValidatorId, T::FullIdentification)>> {
+		<Self as pezpallet_session::SessionManager<_>>::new_session(new_index).map(|r| {
+			r.into_iter()
+				.filter_map(|v| {
+					let full_id = T::FullIdentificationOf::convert(v.clone());
+					full_id.map(|id| (v, id))
+				})
+				.collect()
+		})
 	}
 
 	fn start_session(start_index: SessionIndex) {
