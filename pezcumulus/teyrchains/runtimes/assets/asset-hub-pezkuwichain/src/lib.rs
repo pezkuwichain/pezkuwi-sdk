@@ -106,7 +106,7 @@ mod tests;
 pub use pezsp_runtime::BuildStorage;
 
 // Pezkuwi imports
-use pezkuwi_runtime_common::{BlockHashCount, SlowAdjustingFeeUpdate};
+use pezkuwi_runtime_common::{prod_or_fast, BlockHashCount, SlowAdjustingFeeUpdate};
 use pezpallet_xcm::{EnsureXcm, IsVoiceOfBody};
 #[cfg(feature = "runtime-benchmarks")]
 use xcm::latest::prelude::{
@@ -138,7 +138,7 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
 	spec_name: alloc::borrow::Cow::Borrowed("asset-hub-pezkuwichain"),
 	impl_name: alloc::borrow::Cow::Borrowed("asset-hub-pezkuwichain"),
 	authoring_version: 1,
-	spec_version: 1_020_004,
+	spec_version: 1_020_006,
 	impl_version: 0,
 	apis: RUNTIME_API_VERSIONS,
 	transaction_version: 16,
@@ -833,7 +833,7 @@ parameter_types! {
 }
 
 parameter_types! {
-	pub const Period: u32 = 6 * HOURS;
+	pub const Period: u32 = prod_or_fast!(6 * HOURS, 20);
 	pub const Offset: u32 = 0;
 }
 
@@ -864,7 +864,7 @@ impl pezpallet_aura::Config for Runtime {
 
 parameter_types! {
 	pub const PotId: PalletId = PalletId(*b"PotStake");
-	pub const SessionLength: BlockNumber = 6 * HOURS;
+	pub const SessionLength: BlockNumber = prod_or_fast!(6 * HOURS, 20);
 	// StakingAdmin pluralistic body.
 	pub const StakingAdminBodyId: BodyId = BodyId::Defense;
 }

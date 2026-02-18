@@ -17,6 +17,7 @@
 use super::*;
 use pezcumulus_primitives_core::relay_chain::SessionIndex;
 use pezframe_election_provider_support::{ElectionDataProvider, SequentialPhragmen};
+use pezframe_support::traits::tokens::imbalance::ResolveTo;
 use pezkuwi_runtime_common::{prod_or_fast, BalanceToU256, U256ToBalance};
 use pezpallet_election_provider_multi_block::{self as multi_block, SolutionAccuracyOf};
 use pezpallet_staking_async::UseValidatorsMap;
@@ -65,7 +66,7 @@ parameter_types! {
 	pub MaxBackersPerWinnerFinal: u32 = MaxElectingVoters::get();
 
 	/// Size of the exposures. This should be small enough to make the reward payouts feasible.
-	pub MaxExposurePageSize: u32 = 64;
+	pub MaxExposurePageSize: u32 = 512;
 }
 
 pezframe_election_provider_support::generate_solution_type!(
@@ -278,8 +279,8 @@ impl pezpallet_staking_async::Config for Runtime {
 	type CurrencyBalance = Balance;
 	type RuntimeHoldReason = RuntimeHoldReason;
 	type CurrencyToVote = pezsp_staking::currency_to_vote::SaturatingCurrencyToVote;
-	type RewardRemainder = ();
-	type Slash = ();
+	type RewardRemainder = ResolveTo<xcm_config::TreasuryAccount, Balances>;
+	type Slash = ResolveTo<xcm_config::TreasuryAccount, Balances>;
 	type Reward = ();
 	type SessionsPerEra = SessionsPerEra;
 	type BondingDuration = BondingDuration;
@@ -455,7 +456,7 @@ impl pezpallet_delegated_staking::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type PalletId = DelegatedStakingPalletId;
 	type Currency = Balances;
-	type OnSlash = ();
+	type OnSlash = ResolveTo<xcm_config::TreasuryAccount, Balances>;
 	type SlashRewardFraction = SlashRewardFraction;
 	type RuntimeHoldReason = RuntimeHoldReason;
 	type CoreStaking = Staking;
