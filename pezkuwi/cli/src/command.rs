@@ -156,6 +156,8 @@ impl BizinikiwiCli for Cli {
 			"pezkuwichain-local" => Box::new(pezkuwi_service::chain_spec::pezkuwichain_local_testnet_config()?),
 			#[cfg(feature = "pezkuwichain-native")]
 			"pezkuwichain-staging" => Box::new(pezkuwi_service::chain_spec::pezkuwichain_staging_testnet_config()?),
+			#[cfg(feature = "pezkuwichain-native")]
+			"mainnet-sim" | "mainnet-simulation" => Box::new(pezkuwi_service::chain_spec::pezkuwichain_mainnet_simulation_config()?),
 			#[cfg(not(feature = "pezkuwichain-native"))]
 			name if name.starts_with("pezkuwichain-") && !name.ends_with(".json") || name == "dev" =>
 				Err(format!("`{}` only supported with `pezkuwichain-native` feature enabled.", name))?,

@@ -620,7 +620,8 @@ fn pezkuwichain_genesis_config() -> serde_json::Value {
 				.unchecked_into(),
 			hex!("4859a231daa597501f616c189699afa576ec79b704f633267c5b940dc76a895d")
 				.unchecked_into(),
-			hex!("03cf4b97675c467775591cd0ab06fc16970008261ae640e0f06ff7ec0940aa17d6")
+			// BEEFY: from mainnet keystore (substrate ECDSA derivation)
+			hex!("02b97d26cb0553d662c52006fd6215736d0138d5dda92661422951a41dfa9d8f3a")
 				.unchecked_into(),
 		),
 		(
@@ -637,7 +638,8 @@ fn pezkuwichain_genesis_config() -> serde_json::Value {
 				.unchecked_into(),
 			hex!("5eea9bf553a04467d3dafe9a5ed196410cffb96248519ab5a491c09fb5b68c2b")
 				.unchecked_into(),
-			hex!("02577f6ac63431abf6f0a49207c88b25b71ddaf3355ee5682d74eb71c6272f14b6")
+			// BEEFY: from mainnet keystore (substrate ECDSA derivation)
+			hex!("031a58225fbca7430f406dfa8917517f81284cc991f7b9e9f8f7d37f24a85869f7")
 				.unchecked_into(),
 		),
 		(
@@ -654,7 +656,8 @@ fn pezkuwichain_genesis_config() -> serde_json::Value {
 				.unchecked_into(),
 			hex!("3c6035a77aa676b10959ba408bf4ad6cd37966fca825a8c5c444627f40b61b10")
 				.unchecked_into(),
-			hex!("03741f5f270154335155ba203c1808549cbb01eab88e26cfc0a729f950a5cd066b")
+			// BEEFY: from mainnet keystore (substrate ECDSA derivation)
+			hex!("03d5503ae0eb6fc5c7f368e2e43a1189ff0129de6c1cdd5d5090c8283df0dd43e6")
 				.unchecked_into(),
 		),
 		(
@@ -671,7 +674,8 @@ fn pezkuwichain_genesis_config() -> serde_json::Value {
 				.unchecked_into(),
 			hex!("f2bae1ba3625520d9eee4c3c3e35415dae8bf818c1cd218cde37d24477152748")
 				.unchecked_into(),
-			hex!("02fe70c51f11fbc5535d5edf14074c22f4e90930da5c0f76eb064dd5baefdfbd08")
+			// BEEFY: from mainnet keystore (substrate ECDSA derivation)
+			hex!("031350bb37bb741b06b0b966168a0b8c75e1787886bcae1abb0d22ed947b7937c6")
 				.unchecked_into(),
 		),
 		(
@@ -688,7 +692,8 @@ fn pezkuwichain_genesis_config() -> serde_json::Value {
 				.unchecked_into(),
 			hex!("eaf152cfc6d9c2ade7951c8d009f70942c85c1df734cc6769b162e5c0ff6bc5f")
 				.unchecked_into(),
-			hex!("028c437a13fa7953f0ff39916551dcec42dfb3ac5656b42a0172951ebc25cc73b2")
+			// BEEFY: from mainnet keystore (substrate ECDSA derivation)
+			hex!("02a306f71752509dce6386f04b914cc957949f627a90c4ef4e1773febef96c2f0c")
 				.unchecked_into(),
 		),
 		(
@@ -705,7 +710,8 @@ fn pezkuwichain_genesis_config() -> serde_json::Value {
 				.unchecked_into(),
 			hex!("566dc53c011abee57f7085c4938f22a5a488e8f633391f353669390f9b659137")
 				.unchecked_into(),
-			hex!("03d3a7013b009cd3775e03afa1ccd184891afa452247fde0344125e77e9d83c1d2")
+			// BEEFY: from mainnet keystore (substrate ECDSA derivation)
+			hex!("03b08173722e8bd87ee7a5d362ff4bc5d98d17fe1acfb4181e224085e71b3d89c1")
 				.unchecked_into(),
 		),
 		(
@@ -722,7 +728,8 @@ fn pezkuwichain_genesis_config() -> serde_json::Value {
 				.unchecked_into(),
 			hex!("2ef9481ba1e76727b2a479860ef1fdc6ab3ab701712b6c258e73dc21f6b50367")
 				.unchecked_into(),
-			hex!("0368b01efdc97c83032e63473b562bb3d6bbe2ff8c2a73f0361fddac6e5f982c8c")
+			// BEEFY: from mainnet keystore (substrate ECDSA derivation)
+			hex!("028d8719a1a5147db239bacfe9cf0fabf239dc5639da038fe63d466c46f2aab5fe")
 				.unchecked_into(),
 		),
 		(
@@ -739,7 +746,8 @@ fn pezkuwichain_genesis_config() -> serde_json::Value {
 				.unchecked_into(),
 			hex!("6e7fdf190030d2f5a1a7af0e03f774c2f038e89a548d5ff44590d76d2b7a8402")
 				.unchecked_into(),
-			hex!("0378ae4b5ba2903cdd9028567c14395756670b16a69d05066893796956a567aeb0")
+			// BEEFY: from mainnet keystore (substrate ECDSA derivation)
+			hex!("02c0c80f02c56a9a67c5dbf443b7c53136d30f477356f99ef64e026997286bd4e5")
 				.unchecked_into(),
 		),
 		(
@@ -756,7 +764,8 @@ fn pezkuwichain_genesis_config() -> serde_json::Value {
 				.unchecked_into(),
 			hex!("bc5acf1e3df528b64d680227f560e104301727083b4586d7706cd52a77c69317")
 				.unchecked_into(),
-			hex!("03c86ee281e73e3c05029a2b984c55430c28eef843f05a169835f4d4b4166a975f")
+			// BEEFY: from mainnet keystore (substrate ECDSA derivation)
+			hex!("02cb75ef6f6d501de0bd3222a6c619fbf6ca14733839f0470dbc2a66823f75a729")
 				.unchecked_into(),
 		),
 		(
@@ -773,7 +782,8 @@ fn pezkuwichain_genesis_config() -> serde_json::Value {
 				.unchecked_into(),
 			hex!("e0e09485ba5823ac1752952f6f6506f409c0d0d2facdfc064a1956e13d5e0778")
 				.unchecked_into(),
-			hex!("02959b961edaa44101f58a7c1f3f7d02ebbe63e8a94193b9cdcd40fc03370955b6")
+			// BEEFY: from mainnet keystore (substrate ECDSA derivation)
+			hex!("03d1256d431fdb43b5f10a3367334241d964fa24f75cbf617c4daca092d2807268")
 				.unchecked_into(),
 		),
 		(
@@ -790,7 +800,8 @@ fn pezkuwichain_genesis_config() -> serde_json::Value {
 				.unchecked_into(),
 			hex!("ba2e8b94884e5537c30a4e20e98b5b7fe12fee836859006d96d37aff76484a69")
 				.unchecked_into(),
-			hex!("037b343fb96b21a9a2e8330ad5a3bcab3a49356377679c44d74d6d61489d312cb7")
+			// BEEFY: from mainnet keystore (substrate ECDSA derivation)
+			hex!("02b1e027acb11655b805365858ee9ca98fadc29622a44e0682ea681731e6069db6")
 				.unchecked_into(),
 		),
 		(
@@ -807,7 +818,8 @@ fn pezkuwichain_genesis_config() -> serde_json::Value {
 				.unchecked_into(),
 			hex!("da614c956a74ff0e791a5ce6e5b2acfcf6de251279034d58e40d47817e3eeb1c")
 				.unchecked_into(),
-			hex!("0331e8768eb6025fbc92d104262c5483cb6f4d50439896fdb5b74a03448829b308")
+			// BEEFY: from mainnet keystore (substrate ECDSA derivation)
+			hex!("0268ec971d851bc687b7792d8818e833b4f86296117de1e2bae220d8a54cb98668")
 				.unchecked_into(),
 		),
 		(
@@ -824,7 +836,8 @@ fn pezkuwichain_genesis_config() -> serde_json::Value {
 				.unchecked_into(),
 			hex!("de45dfac7a51d17898bb238dca449bf1c8f6fb95de547b2c788392e51e971f04")
 				.unchecked_into(),
-			hex!("0248d1d7723cd84a8d7e8f2c04d0eb9efda50a8d26dd23ab7f7ef2799469d08b02")
+			// BEEFY: from mainnet keystore (substrate ECDSA derivation)
+			hex!("03a03589b0023447c56d789e6074430bb08498ee132dae418be9ec0f753c196acb")
 				.unchecked_into(),
 		),
 		(
@@ -841,7 +854,8 @@ fn pezkuwichain_genesis_config() -> serde_json::Value {
 				.unchecked_into(),
 			hex!("d06475ed615fec5b4b3c900f7779903d6e95173ab944840ce4acf8c30b5f3b32")
 				.unchecked_into(),
-			hex!("0308fcbc255bccbc6370d1e9934118fe629d94ec21cc7ee7a53215d1eec8132a64")
+			// BEEFY: from mainnet keystore (substrate ECDSA derivation)
+			hex!("035f1efad44a7de67474b9425bc3000e4cab8363e498e8f9804b9e3d8401a9b144")
 				.unchecked_into(),
 		),
 		(
@@ -858,7 +872,8 @@ fn pezkuwichain_genesis_config() -> serde_json::Value {
 				.unchecked_into(),
 			hex!("509fc3e6d9edc45539fae863e9a81be33e5f0ee370c78533a0eb0a975786af39")
 				.unchecked_into(),
-			hex!("028277c86263687deea286ab65b98d13a82133706f8f7f70105d2514388d5983d4")
+			// BEEFY: from mainnet keystore (substrate ECDSA derivation)
+			hex!("033ac8624837a0ed5fb7f1ab9c08d58469c42e2598c49e12947b97f5cceabab930")
 				.unchecked_into(),
 		),
 		(
@@ -875,7 +890,8 @@ fn pezkuwichain_genesis_config() -> serde_json::Value {
 				.unchecked_into(),
 			hex!("7875d43192c57dc8028a9468d7b18e66ae46b065731e28b6691b5614fa505740")
 				.unchecked_into(),
-			hex!("03f177ba2d543c9fad9ac44a549995e13a7c32b9bcdaaaa480d749fa871a74c8da")
+			// BEEFY: from mainnet keystore (substrate ECDSA derivation)
+			hex!("0392e5b4d2653b0409fcc25649536516d16c89587e44ddccfd4edda779358418ad")
 				.unchecked_into(),
 		),
 		(
@@ -892,7 +908,8 @@ fn pezkuwichain_genesis_config() -> serde_json::Value {
 				.unchecked_into(),
 			hex!("5e28fa8dea95c520ed42509a7c5050617688148805c211ff634553b8b734db38")
 				.unchecked_into(),
-			hex!("03df15db8024dedfdaa9487dbf08cc754503fa195b11441463387f003ff581979d")
+			// BEEFY: from mainnet keystore (substrate ECDSA derivation)
+			hex!("03d1d118b8a51a1cb72f3f0ebcf11cae21963c6dd1418e010d17e5c52996c302cb")
 				.unchecked_into(),
 		),
 		(
@@ -909,7 +926,8 @@ fn pezkuwichain_genesis_config() -> serde_json::Value {
 				.unchecked_into(),
 			hex!("0ecdca8ea4479ea078041778a72ba70a591c19b380620ef8ec22eb3e883be36e")
 				.unchecked_into(),
-			hex!("0299b6da9da3494c912aad01c47e99f85b54e9764fc9c064095963dae7895e3bb0")
+			// BEEFY: from mainnet keystore (substrate ECDSA derivation)
+			hex!("03cab73da1d53c5fa60ea2a52ca5f9c11998c07fbd9cec89707ee1db87051e3e65")
 				.unchecked_into(),
 		),
 		(
@@ -926,7 +944,8 @@ fn pezkuwichain_genesis_config() -> serde_json::Value {
 				.unchecked_into(),
 			hex!("0a823f91ad2e5cf332a41777ee62c8f29c727ef4b24bb3c739dcc17ea5a32725")
 				.unchecked_into(),
-			hex!("03b0584d8a5729b8d0f4959af7fe116f00ab8624ff5556ef4407ea170de6f5cae7")
+			// BEEFY: from mainnet keystore (substrate ECDSA derivation)
+			hex!("03821bf29d19ce075bc045f245c4e10e06bce58695ba0f1e6a31e94e4a435cfeb2")
 				.unchecked_into(),
 		),
 		(
@@ -943,7 +962,8 @@ fn pezkuwichain_genesis_config() -> serde_json::Value {
 				.unchecked_into(),
 			hex!("c2821fde10d149743cf7f6cf3249c8e2e5bc17d9364b8a6af0119fbc8cbf8469")
 				.unchecked_into(),
-			hex!("034b7171fa3f9b2571d859209e708e9062e2c78fe84850b4215e05ef7ed45f3a89")
+			// BEEFY: from mainnet keystore (substrate ECDSA derivation)
+			hex!("020ba75ce3c26fab250a4abe8fdd5b45c2b9feec308ff6b8bab98e8f25b5e8f686")
 				.unchecked_into(),
 		),
 		(
@@ -960,7 +980,8 @@ fn pezkuwichain_genesis_config() -> serde_json::Value {
 				.unchecked_into(),
 			hex!("a6f0d33a810d2023f0b05bb1aeda000307c66e608a2ec096df2075a2d8d3204e")
 				.unchecked_into(),
-			hex!("02ccec3d15286e111b4707161fed6bcab6daed8b47993a6c9fd3ae51de69b420f4")
+			// BEEFY: from mainnet keystore (substrate ECDSA derivation)
+			hex!("027820252d089e6e9e95e8a328ffef1f1e03173d04be4f2957aeb54fa36a94303b")
 				.unchecked_into(),
 		),
 	]);
@@ -1017,6 +1038,121 @@ fn pezkuwichain_genesis_config() -> serde_json::Value {
 	})
 }
 
+// ============================================================================
+// MAINNET SIMULATION PRESET - For local upgrade testing with real sudo key
+// ============================================================================
+//
+// 2 validators with derivable seeds (for local keystore insertion)
+// Sudo = real founder account (requires SUDO_MNEMONIC at runtime)
+// NO Alice/Bob — tests the exact upgrade path used on mainnet
+//
+fn pezkuwichain_mainnet_simulation_genesis() -> serde_json::Value {
+	use hex_literal::hex;
+	use pezsp_core::crypto::UncheckedInto;
+
+	// Real founder account (sudo) — 5CyuFfbF95rzBxru7c9yEsX4XmQXUxpLUcbj9RLg9K1cGiiF
+	let founder_account: AccountId =
+		hex!("28925ed8b4c0c95402b31563251fd318414351114b1c7797ee788666d27d6305").into();
+
+	// 2 validators — real mainnet Validator_01 and Validator_02 keys
+	// Seed phrases stored in /home/mamostehp/res/MAINNET_WALLETS_*.json
+	let initial_authorities: Vec<(
+		AccountId,
+		AccountId,
+		BabeId,
+		GrandpaId,
+		ValidatorId,
+		AssignmentId,
+		AuthorityDiscoveryId,
+		BeefyId,
+	)> = Vec::from([
+		(
+			// Validator 01 (5GipBJs2uNWTCazyZQ2vG3DEqLz4tXNmNZtBAT1Mtm1orZ5i)
+			hex!("ce0189f16649560a8e250ee51233b97f20b528d9f534c54b40da5e1b785fb422").into(),
+			hex!("781f2da4ec1f954ddbd96365b93d5b991427980475e10dd9f823979665399137").into(),
+			hex!("e63ad8e22976bc2bdbc9776b3d104472ff70cfcd6a5247a2f62efdb09f66520f")
+				.unchecked_into(),
+			hex!("9497e1dabb5b7688da148813629076596c77eb47f0a18c971777c70bb38cd30d")
+				.unchecked_into(),
+			hex!("5e365f9c23e9fd65f28b63bd118f46faca2f82d286d00ac23ddb69fdd61b342f")
+				.unchecked_into(),
+			hex!("a854fce593b83d3a97ac4b0dc3ef220f69134753894cb16f28c67ae12db00419")
+				.unchecked_into(),
+			hex!("4859a231daa597501f616c189699afa576ec79b704f633267c5b940dc76a895d")
+				.unchecked_into(),
+			// BEEFY: from mainnet keystore (substrate ECDSA derivation)
+			hex!("02b97d26cb0553d662c52006fd6215736d0138d5dda92661422951a41dfa9d8f3a")
+				.unchecked_into(),
+		),
+		(
+			// Validator 02 (5HWFZbhkZuTUySXu6ZXYKrTHBnWXHvWRKLozE22zhnwXGGxk)
+			hex!("f0a90883d86793bce27217a0070f61d66efe56033c876624ffa3468698175058").into(),
+			hex!("86384da0a3d7dc41b1d2837c824f022dd34196d0e3ba40075934d4c216b5ea0f").into(),
+			hex!("bc79edcffd121970d471b6811b167b21bb8aa158d5ce9143fd0d45f71aa4ba1a")
+				.unchecked_into(),
+			hex!("1b453491a1ad16feb2e4cc5b4bf85f21a54fbfaa9321e9dbd9b668b83355146c")
+				.unchecked_into(),
+			hex!("2ad0684fe19374a4c1ed49f92226cb1af5bb9977d6395de879c556ada080e759")
+				.unchecked_into(),
+			hex!("ee3de83cc3deaadb3e1159e1de5a677a47bd828d3899bf7579753293389d0655")
+				.unchecked_into(),
+			hex!("5eea9bf553a04467d3dafe9a5ed196410cffb96248519ab5a491c09fb5b68c2b")
+				.unchecked_into(),
+			// BEEFY: from mainnet keystore (substrate ECDSA derivation)
+			hex!("031a58225fbca7430f406dfa8917517f81284cc991f7b9e9f8f7d37f24a85869f7")
+				.unchecked_into(),
+		),
+	]);
+
+	const STASH: u128 = 100 * TYR;
+
+	build_struct_json_patch!(RuntimeGenesisConfig {
+		balances: BalancesConfig {
+			balances: vec![
+				// Founder gets enough balance to pay for upgrades + testing
+				(founder_account.clone(), 1_000_000 * TYR),
+			]
+			.into_iter()
+			.chain(initial_authorities.iter().map(|x| (x.0.clone(), STASH * 2)))
+			.collect::<Vec<_>>(),
+		},
+		session: SessionConfig {
+			keys: initial_authorities
+				.iter()
+				.map(|x| {
+					(
+						x.0.clone(),
+						x.0.clone(),
+						pezkuwichain_session_keys(
+							x.2.clone(),
+							x.3.clone(),
+							x.4.clone(),
+							x.5.clone(),
+							x.6.clone(),
+							x.7.clone(),
+						),
+					)
+				})
+				.collect::<Vec<_>>(),
+		},
+		staking: StakingConfig {
+			minimum_validator_count: 1,
+			validator_count: initial_authorities.len() as u32,
+			stakers: initial_authorities
+				.iter()
+				.map(|x| (x.0.clone(), x.0.clone(), STASH, StakerStatus::<AccountId>::Validator))
+				.collect::<Vec<_>>(),
+			invulnerables: initial_authorities.iter().map(|x| x.0.clone()).collect::<Vec<_>>(),
+			force_era: Forcing::ForceAlways,
+			slash_reward_fraction: Perbill::from_percent(10),
+		},
+		babe: BabeConfig { epoch_config: BABE_GENESIS_EPOCH_CONFIG },
+		sudo: SudoConfig { key: Some(founder_account) },
+		configuration: ConfigurationConfig { config: default_teyrchains_host_configuration() },
+		registrar: RegistrarConfig { next_free_para_id: pezkuwi_primitives::LOWEST_PUBLIC_ID },
+	})
+}
+
 /// Provides the JSON representation of predefined genesis config for given `id`.
 pub fn get_preset(id: &PresetId) -> Option<Vec<u8>> {
 	use preset_names::*;
@@ -1046,6 +1182,11 @@ pub fn get_preset(id: &PresetId) -> Option<Vec<u8>> {
 		// ====================================================================
 		"versi_local_testnet" => versi_local_testnet_genesis(),
 
+		// ====================================================================
+		// MAINNET SIMULATION - Local upgrade testing with real sudo key
+		// ====================================================================
+		"mainnet_simulation" => pezkuwichain_mainnet_simulation_genesis(),
+
 		_ => return None,
 	};
 	Some(
@@ -1064,5 +1205,6 @@ pub fn preset_names() -> Vec<PresetId> {
 		PresetId::from(pezsp_genesis_builder::DEV_RUNTIME_PRESET),
 		PresetId::from("pezstaging_testnet"),
 		PresetId::from("versi_local_testnet"),
+		PresetId::from("mainnet_simulation"),
 	]
 }

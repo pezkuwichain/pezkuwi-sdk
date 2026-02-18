@@ -196,6 +196,22 @@ pub fn versi_staging_testnet_config() -> Result<PezkuwichainChainSpec, String> {
 	.build())
 }
 
+/// Mainnet simulation config (2 validators + real sudo key, for local upgrade testing)
+#[cfg(feature = "pezkuwichain-native")]
+pub fn pezkuwichain_mainnet_simulation_config() -> Result<PezkuwichainChainSpec, String> {
+	Ok(PezkuwichainChainSpec::builder(
+		pezkuwichain::WASM_BINARY.ok_or("Pezkuwichain WASM not available")?,
+		Default::default(),
+	)
+	.with_name("PezkuwiChain Mainnet Simulation")
+	.with_id("pezkuwichain_mainnet_simulation")
+	.with_chain_type(ChainType::Local)
+	.with_genesis_config_preset_name("mainnet_simulation")
+	.with_protocol_id(DEFAULT_PROTOCOL_ID)
+	.with_properties(pezkuwichain_chain_spec_properties())
+	.build())
+}
+
 /// Zagros development config (single validator Alice)
 #[cfg(feature = "zagros-native")]
 pub fn zagros_development_config() -> Result<ZagrosChainSpec, String> {
