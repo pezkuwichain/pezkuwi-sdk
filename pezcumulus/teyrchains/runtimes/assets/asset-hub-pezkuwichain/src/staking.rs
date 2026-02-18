@@ -241,7 +241,8 @@ impl pezpallet_staking_async::EraPayout<Balance> for EraPayout {
 			FixedU128::from_rational(era_duration_millis.into(), MILLISECONDS_PER_YEAR.into());
 
 		// Fixed total TI that we use as baseline for the issuance.
-		let fixed_total_issuance: i128 = 5_216_342_402_773_185_773;
+		// 200M HEZ (12 decimals) = 200_000_000 * 10^12
+		let fixed_total_issuance: i128 = 200_000_000_000_000_000_000;
 		let fixed_inflation_rate = FixedU128::from_rational(8, 100);
 		let yearly_emission = fixed_inflation_rate.saturating_mul_int(fixed_total_issuance);
 
