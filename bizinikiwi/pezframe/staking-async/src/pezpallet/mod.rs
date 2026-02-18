@@ -1226,6 +1226,9 @@ pub mod pezpallet {
 		EraDurationBoundExceeded,
 		/// Received a validator activation event that is not recognized.
 		UnknownValidatorActivation,
+		/// A pending era's election completed but produced no viable result. The planned
+		/// era was reverted and a new election was initiated to break the deadlock.
+		StalledEraRecovery,
 	}
 
 	#[pezpallet::error]

@@ -673,13 +673,36 @@ impl<T: Config> Rotator<T> {
 				Self::plan_new_era();
 			},
 			(true, true) => {
-				// we are waiting for to start the previously planned era, we cannot plan a new era
-				// now.
-				crate::log!(
-					debug,
-					"time to plan a new era {:?}, but waiting for the activation of the previous.",
-					current_planned_era
-				);
+				// We have a pending era but also want to plan a new one.
+				// Detect zombie pending era: election completed but produced 0 winners,
+				// RC never sent activation_timestamp. Break the deadlock by reverting
+				// the planned era and re-planning with a fresh election.
+				let election_idle = T::ElectionProvider::status().is_err();
+				let not_fetching = NextElectionPage::<T>::get().is_none();
+				if election_idle && not_fetching {
+					crate::log!(
+						warn,
+						"Detected stalled pending era {:?}: election finished but era was \
+						 never activated. Reverting planned era and re-planning.",
+						current_planned_era
+					);
+					let active = Self::active_era();
+					CurrentEra::<T>::put(active);
+					EraElectionPlanner::<T>::cleanup();
+					Pezpallet::<T>::deposit_event(Event::Unexpected(
+						UnexpectedKind::StalledEraRecovery,
+					));
+					Self::plan_new_era();
+				} else {
+					crate::log!(
+						debug,
+						"time to plan a new era {:?}, but waiting for the activation of \
+						 the previous (election_idle: {}, fetching: {}).",
+						current_planned_era,
+						election_idle,
+						!not_fetching
+					);
+				}
 			},
 		}
 
