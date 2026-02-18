@@ -247,7 +247,7 @@ snowbridge-pezpallet-* → pezsnowbridge-pezpallet-*
 ### Token'lar:
 - **HEZ**: Relay chain native token (200M genesis, inflationary)
 - **PEZ**: Asset Hub governance token (5B sabit supply)
-- **TYR**: Base unit (1 HEZ = 10^18 TYR)
+- **TYR**: Base unit (1 HEZ = 10^12 TYR, UNITS = 1_000_000_000_000)
 
 ### System Teyrchains:
 - **Asset Hub Teyrchain**: ID 1000

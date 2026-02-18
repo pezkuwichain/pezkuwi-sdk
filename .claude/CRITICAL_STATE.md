@@ -51,7 +51,7 @@
 #### Teyrchains
 | Para ID | Isim | Durum | spec_version | Block | Peers |
 |---------|------|-------|-------------|-------|-------|
-| 1000 | Asset Hub | CALISIYOR | 1_020_004 | ~11,009 | 1 |
+| 1000 | Asset Hub | CALISIYOR | 1_020_004 | ~28,800+ (ActiveEra=2) | 1 |
 | 1004 | People Chain | CALISIYOR | 1_020_007 | ~17,200 | 1 |
 
 #### Mainnet Servis Isimleri (VPS3)
@@ -152,6 +152,7 @@ Note: Mnemonic stored locally, NOT in repo. Check /home/mamostehp/res/
 - [x] Noter delegasyonu ile staking score sistemi (People Chain spec 1_020_007)
 - [x] 21 validatore Noter tikisi verildi (XCM batch_all ile, 2026-02-16)
 - [x] Relay Chain'den pezpallet_staking_score kaldirildi (sonraki relay upgrade icin hazir)
+- [x] AH staking-async era rotation dogrulandi: ActiveEra 1→2 gecisi basarili (block 28805, session 8, 2026-02-17)
 
 ### Bekleyen Isler
 1. [ ] Nova Wallet uyumluluk testi (NominationPoolsApi eklenince)
