@@ -4,6 +4,12 @@
 .DS_Store
 .env*
 chainspecs/
+
+# Simulation scripts and data (local mainnet sim)
+vendor/pezkuwi-subxt/subxt/examples/sim_*
+vendor/pezkuwi-subxt/subxt/examples/local_sim_*
+vendor/pezkuwi-subxt/subxt/examples/fix_*
+vendor/pezkuwi-subxt/subxt/examples/init_ah_staking.rs
 .idea
 .local
 .lycheecache
