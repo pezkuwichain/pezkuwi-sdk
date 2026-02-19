@@ -88,6 +88,15 @@ use pezsp_staking::{
 	currency_to_vote::CurrencyToVote, Exposure, Page, PagedExposureMetadata, SessionIndex,
 };
 
+/// Number of consecutive sessions to wait before triggering stall recovery.
+///
+/// After an election completes and the validator set is sent to the relay chain,
+/// the RC needs time for the XCM round-trip (receive validator set → process at
+/// session boundary → send activation_timestamp back). This grace period prevents
+/// premature era reverts. 3 sessions is sufficient for both production (3 hours)
+/// and fast-runtime simulation (12 minutes).
+pub(crate) const STALL_GRACE_SESSIONS: u32 = 3;
+
 /// A handler for all era-based storage items.
 ///
 /// All of the following storage items must be controlled by this type:
@@ -677,22 +686,42 @@ impl<T: Config> Rotator<T> {
 				// Detect zombie pending era: election completed but produced 0 winners,
 				// RC never sent activation_timestamp. Break the deadlock by reverting
 				// the planned era and re-planning with a fresh election.
+				//
+				// IMPORTANT: After the election completes and the validator set is sent
+				// to the relay chain via XCM, there is a round-trip delay before the RC
+				// responds with the activation_timestamp. We use a grace period
+				// (STALL_GRACE_SESSIONS) to avoid prematurely reverting the era.
 				let election_idle = T::ElectionProvider::status().is_err();
 				let not_fetching = NextElectionPage::<T>::get().is_none();
 				if election_idle && not_fetching {
-					crate::log!(
-						warn,
-						"Detected stalled pending era {:?}: election finished but era was \
-						 never activated. Reverting planned era and re-planning.",
-						current_planned_era
-					);
-					let active = Self::active_era();
-					CurrentEra::<T>::put(active);
-					EraElectionPlanner::<T>::cleanup();
-					Pezpallet::<T>::deposit_event(Event::Unexpected(
-						UnexpectedKind::StalledEraRecovery,
-					));
-					Self::plan_new_era();
+					let count = StallDetectionCount::<T>::get();
+					if count >= STALL_GRACE_SESSIONS {
+						crate::log!(
+							warn,
+							"Detected stalled pending era {:?}: election finished \
+							 but era was never activated after {} sessions. \
+							 Reverting planned era and re-planning.",
+							current_planned_era,
+							count
+						);
+						let active = Self::active_era();
+						CurrentEra::<T>::put(active);
+						EraElectionPlanner::<T>::cleanup();
+						Pezpallet::<T>::deposit_event(Event::Unexpected(
+							UnexpectedKind::StalledEraRecovery,
+						));
+						Self::plan_new_era();
+					} else {
+						StallDetectionCount::<T>::put(count + 1);
+						crate::log!(
+							info,
+							"Waiting for RC activation of pending era {:?} \
+							 (grace {}/{}).",
+							current_planned_era,
+							count + 1,
+							STALL_GRACE_SESSIONS
+						);
+					}
 				} else {
 					crate::log!(
 						debug,
@@ -854,13 +883,16 @@ impl<T: Config> Rotator<T> {
 	/// Plans a new era by kicking off the election process.
 	///
 	/// The newly planned era is targeted to activate in the next session.
+	///
+	/// If the election provider is already running (e.g., `Err(Ongoing)`), we still
+	/// increment `CurrentEra` to mark the era as "planning". The ongoing election's
+	/// results will be attributed to this planned era when fetched by
+	/// [`EraElectionPlanner::maybe_fetch_election_results`].
 	fn plan_new_era() {
-		let _ = CurrentEra::<T>::try_mutate(|x| {
-			log!(info, "Planning new era: {:?}, sending election start signal", x.unwrap_or(0));
-			let could_start_election = EraElectionPlanner::<T>::plan_new_election();
-			*x = Some(x.unwrap_or(0) + 1);
-			could_start_election
-		});
+		let current = CurrentEra::<T>::get().unwrap_or(0);
+		log!(info, "Planning new era: {:?}, sending election start signal", current);
+		let _ = EraElectionPlanner::<T>::plan_new_election();
+		CurrentEra::<T>::put(current + 1);
 	}
 
 	/// Returns whether we are at the session where we should plan the new era.
@@ -914,7 +946,8 @@ impl<T: Config> EraElectionPlanner<T> {
 		VoterSnapshotStatus::<T>::kill();
 		NextElectionPage::<T>::kill();
 		ElectableStashes::<T>::kill();
-		Pezpallet::<T>::register_weight(T::DbWeight::get().writes(3));
+		StallDetectionCount::<T>::kill();
+		Pezpallet::<T>::register_weight(T::DbWeight::get().writes(4));
 	}
 
 	/// Fetches the number of pages configured by the election provider.

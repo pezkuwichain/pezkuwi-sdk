@@ -3,6 +3,7 @@
 .direnv/
 .DS_Store
 .env*
+chainspecs/bootnode-key
 .idea
 .local
 .lycheecache

@@ -171,7 +171,7 @@ parameter_types! {
 	pub MinerTxPriority: TransactionPriority = TransactionPriority::max_value() / 2;
 	/// Try and run the OCW miner 4 times during the unsigned phase.
 	pub OffchainRepeat: BlockNumber = UnsignedPhase::get() / 4;
-	pub storage MinerPages: u32 = 2;
+	pub storage MinerPages: u32 = 32;
 }
 
 impl multi_block::unsigned::Config for Runtime {

@@ -847,6 +847,17 @@ pub mod pezpallet {
 	pub type ElectableStashes<T: Config> =
 		StorageValue<_, BoundedBTreeSet<T::AccountId, T::MaxValidatorSet>, ValueQuery>;
 
+	/// Counts consecutive sessions where a stall condition was detected but recovery
+	/// was deferred to allow the relay chain time to respond.
+	///
+	/// After an election completes and the validator set is sent to the relay chain,
+	/// there is an XCM round-trip delay before the relay chain sends back the
+	/// `activation_timestamp`. This counter prevents the stall detection from
+	/// prematurely reverting the planned era. Stall recovery only triggers after the
+	/// counter reaches [`session_rotation::STALL_GRACE_SESSIONS`].
+	#[pezpallet::storage]
+	pub type StallDetectionCount<T: Config> = StorageValue<_, u32, ValueQuery>;
+
 	/// Tracks the current step of era pruning process for each era being lazily pruned.
 	#[pezpallet::storage]
 	pub type EraPruningState<T: Config> = StorageMap<_, Twox64Concat, EraIndex, PruningStep>;
