@@ -65,11 +65,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 	// Load WASM
 	let wasm_data = std::fs::read(&wasm_path)?;
-	println!(
-		"  WASM: {} ({:.2} MB)",
-		wasm_path,
-		wasm_data.len() as f64 / 1_048_576.0
-	);
+	println!("  WASM: {} ({:.2} MB)", wasm_path, wasm_data.len() as f64 / 1_048_576.0);
 
 	// Blake2-256 hash of WASM
 	let code_hash = pezsp_crypto_hashing::blake2_256(&wasm_data);
@@ -77,11 +73,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 	// Connect to RC
 	let rc_api = OnlineClient::<PezkuwiConfig>::from_insecure_url(&rc_url).await?;
-	println!(
-		"  RC connected: {} (spec {})",
-		rc_url,
-		rc_api.runtime_version().spec_version
-	);
+	println!("  RC connected: {} (spec {})", rc_url, rc_api.runtime_version().spec_version);
 
 	// Connect to AH
 	let ah_api = OnlineClient::<PezkuwiConfig>::from_insecure_url(&ah_url).await?;
@@ -109,10 +101,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 				"interior",
 				Value::unnamed_variant(
 					"X1",
-					vec![Value::unnamed_variant(
-						"Teyrchain",
-						vec![Value::u128(AH_PARA_ID)],
-					)],
+					vec![Value::unnamed_variant("Teyrchain", vec![Value::u128(AH_PARA_ID)])],
 				),
 			),
 		])],
@@ -158,10 +147,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 		],
 	);
 
-	let progress = rc_api
-		.tx()
-		.sign_and_submit_then_watch_default(&sudo_tx, &sudo_keypair)
-		.await?;
+	let progress = rc_api.tx().sign_and_submit_then_watch_default(&sudo_tx, &sudo_keypair).await?;
 	let events = progress.wait_for_finalized_success().await?;
 
 	let mut sent = false;
@@ -256,11 +242,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 		// 10,000 HEZ = 10_000 * 10^12 (12 decimals, NOT 18)
 		let amount: u128 = 10_000_000_000_000_000u128; // 10,000 HEZ
 		let amount_bytes = amount.to_le_bytes();
-		let significant = amount_bytes
-			.iter()
-			.rposition(|&b| b != 0)
-			.map(|i| i + 1)
-			.unwrap_or(1);
+		let significant = amount_bytes.iter().rposition(|&b| b != 0).map(|i| i + 1).unwrap_or(1);
 		let byte_len = significant.max(4);
 		fund_call.push(((byte_len as u8 - 4) << 2) | 0b11);
 		fund_call.extend_from_slice(&amount_bytes[..byte_len]);
@@ -273,10 +255,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 					"interior",
 					Value::unnamed_variant(
 						"X1",
-						vec![Value::unnamed_variant(
-							"Teyrchain",
-							vec![Value::u128(AH_PARA_ID)],
-						)],
+						vec![Value::unnamed_variant("Teyrchain", vec![Value::u128(AH_PARA_ID)])],
 					),
 				),
 			])],
@@ -309,10 +288,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 			])],
 		);
 
-		let fund_xcm =
-			pezkuwi_subxt::dynamic::tx("XcmPallet", "send", vec![fund_dest, fund_msg]);
-		let fund_sudo =
-			pezkuwi_subxt::dynamic::tx("Sudo", "sudo", vec![fund_xcm.into_value()]);
+		let fund_xcm = pezkuwi_subxt::dynamic::tx("XcmPallet", "send", vec![fund_dest, fund_msg]);
+		let fund_sudo = pezkuwi_subxt::dynamic::tx("Sudo", "sudo", vec![fund_xcm.into_value()]);
 
 		let progress = rc_api
 			.tx()
@@ -383,10 +360,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 			verified = true;
 			break;
 		}
-		println!(
-			"  Attempt {}/10: spec still {} — waiting...",
-			attempt, new_spec
-		);
+		println!("  Attempt {}/10: spec still {} — waiting...", attempt, new_spec);
 	}
 
 	if !verified {

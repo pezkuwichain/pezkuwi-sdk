@@ -55,11 +55,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 	// Load WASM
 	let wasm_data = std::fs::read(&wasm_path)?;
-	println!(
-		"  WASM: {} ({:.2} MB)",
-		wasm_path,
-		wasm_data.len() as f64 / 1_048_576.0
-	);
+	println!("  WASM: {} ({:.2} MB)", wasm_path, wasm_data.len() as f64 / 1_048_576.0);
 	let code_hash = pezsp_crypto_hashing::blake2_256(&wasm_data);
 	println!("  Code hash: 0x{}", hex::encode(code_hash));
 
@@ -91,8 +87,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 		],
 	);
 
-	let tx_progress =
-		api.tx().sign_and_submit_then_watch_default(&sudo_tx, &sudo_keypair).await?;
+	let tx_progress = api.tx().sign_and_submit_then_watch_default(&sudo_tx, &sudo_keypair).await?;
 	println!("  TX: 0x{}", hex::encode(tx_progress.extrinsic_hash().as_ref()));
 
 	let mut progress = tx_progress;

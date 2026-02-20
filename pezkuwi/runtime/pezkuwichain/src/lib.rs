@@ -93,8 +93,8 @@ use pezframe_support::{
 	parameter_types,
 	traits::{
 		fungible::HoldConsideration, EitherOf, EitherOfDiverse, EnsureOriginWithArg,
-		InstanceFilter, KeyOwnerProofSystem, LinearStoragePrice, PrivilegeCmp,
-		ProcessMessage, ProcessMessageError, WithdrawReasons,
+		InstanceFilter, KeyOwnerProofSystem, LinearStoragePrice, PrivilegeCmp, ProcessMessage,
+		ProcessMessageError, WithdrawReasons,
 	},
 	weights::{ConstantMultiplier, WeightMeter},
 	PalletId,
@@ -477,11 +477,12 @@ impl pezpallet_session::SessionManager<AccountId> for NoopFallback {
 	fn end_session(_: SessionIndex) {}
 }
 
-impl pezsp_staking::offence::OnOffenceHandler<
-	AccountId,
-	(AccountId, pezsp_staking::Exposure<AccountId, Balance>),
-	Weight,
-> for NoopFallback
+impl
+	pezsp_staking::offence::OnOffenceHandler<
+		AccountId,
+		(AccountId, pezsp_staking::Exposure<AccountId, Balance>),
+		Weight,
+	> for NoopFallback
 {
 	fn on_offence(
 		_offenders: &[pezsp_staking::offence::OffenceDetails<
@@ -647,7 +648,6 @@ impl ah_client::Config for Runtime {
 	type MaximumValidatorsWithPoints = ConstU32<{ MaxActiveValidators::get() * 4 }>;
 	type MaxSessionReportRetries = ConstU32<64>;
 }
-
 
 // =====================================================
 // VALIDATOR POOL CONFIGURATION (TNPoS Shadow Mode)

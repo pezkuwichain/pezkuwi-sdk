@@ -75,11 +75,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 	// Connect to RC
 	let rc_api = OnlineClient::<PezkuwiConfig>::from_insecure_url(&rc_url).await?;
-	println!(
-		"  RC connected: {} (spec {})",
-		rc_url,
-		rc_api.runtime_version().spec_version
-	);
+	println!("  RC connected: {} (spec {})", rc_url, rc_api.runtime_version().spec_version);
 
 	// Connect to People Chain
 	let people_api = OnlineClient::<PezkuwiConfig>::from_insecure_url(&people_url).await?;
@@ -107,10 +103,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 				"interior",
 				Value::unnamed_variant(
 					"X1",
-					vec![Value::unnamed_variant(
-						"Teyrchain",
-						vec![Value::u128(PEOPLE_PARA_ID)],
-					)],
+					vec![Value::unnamed_variant("Teyrchain", vec![Value::u128(PEOPLE_PARA_ID)])],
 				),
 			),
 		])],
@@ -156,10 +149,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 		],
 	);
 
-	let progress = rc_api
-		.tx()
-		.sign_and_submit_then_watch_default(&sudo_tx, &sudo_keypair)
-		.await?;
+	let progress = rc_api.tx().sign_and_submit_then_watch_default(&sudo_tx, &sudo_keypair).await?;
 	let events = progress.wait_for_finalized_success().await?;
 
 	let mut sent = false;
@@ -257,11 +247,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 		// Generous amount to cover apply_authorized_upgrade fee (1.5MB extrinsic)
 		let amount: u128 = 10_000_000_000_000_000u128; // 10,000 HEZ
 		let amount_bytes = amount.to_le_bytes();
-		let significant = amount_bytes
-			.iter()
-			.rposition(|&b| b != 0)
-			.map(|i| i + 1)
-			.unwrap_or(1);
+		let significant = amount_bytes.iter().rposition(|&b| b != 0).map(|i| i + 1).unwrap_or(1);
 		let byte_len = significant.max(4);
 		fund_call.push(((byte_len as u8 - 4) << 2) | 0b11);
 		fund_call.extend_from_slice(&amount_bytes[..byte_len]);
@@ -310,10 +296,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 			])],
 		);
 
-		let fund_xcm =
-			pezkuwi_subxt::dynamic::tx("XcmPallet", "send", vec![fund_dest, fund_msg]);
-		let fund_sudo =
-			pezkuwi_subxt::dynamic::tx("Sudo", "sudo", vec![fund_xcm.into_value()]);
+		let fund_xcm = pezkuwi_subxt::dynamic::tx("XcmPallet", "send", vec![fund_dest, fund_msg]);
+		let fund_sudo = pezkuwi_subxt::dynamic::tx("Sudo", "sudo", vec![fund_xcm.into_value()]);
 
 		let progress = rc_api
 			.tx()
@@ -375,10 +359,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 	let people_api2 = OnlineClient::<PezkuwiConfig>::from_insecure_url(&people_url).await?;
 	let new_spec = people_api2.runtime_version().spec_version;
-	println!(
-		"\n  People Chain spec_version: {} → {}",
-		old_spec, new_spec
-	);
+	println!("\n  People Chain spec_version: {} → {}", old_spec, new_spec);
 
 	if new_spec > old_spec {
 		println!("  UPGRADE VERIFIED!");
