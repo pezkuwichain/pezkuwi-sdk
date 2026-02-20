@@ -1,15 +1,11 @@
-//! Relay Chain Runtime Upgrade
+//! Relay Chain Runtime Upgrade (Mainnet)
 //!
 //! Deploys new WASM via sudo(sudoUncheckedWeight(system.setCodeWithoutChecks)).
-//! Does NOTHING else — no storage changes, no validator count, no ForceEra.
 //!
 //! Run:
-//!   SUDO_MNEMONIC="..." \
+//!   RC_RPC="ws://217.77.6.126:9944" \
 //!   WASM_FILE="target/release/wbuild/pezkuwichain-runtime/pezkuwichain_runtime.compact.compressed.wasm" \
 //!   cargo run --release -p pezkuwi-subxt --example rc_upgrade
-//!
-//! Optional:
-//!   RC_RPC="ws://127.0.0.1:9944"  (default: ws://127.0.0.1:9944)
 
 #![allow(missing_docs)]
 use pezkuwi_subxt::dynamic::Value;
@@ -19,33 +15,65 @@ use pezkuwi_subxt_signer::bip39::Mnemonic;
 use pezkuwi_subxt_signer::sr25519::Keypair;
 use std::str::FromStr;
 
+fn load_sudo_keypair() -> Keypair {
+	if let Ok(mnemonic_str) = std::env::var("SUDO_MNEMONIC") {
+		if !mnemonic_str.is_empty() {
+			if let Ok(mnemonic) = Mnemonic::from_str(&mnemonic_str) {
+				if let Ok(kp) = Keypair::from_phrase(&mnemonic, None) {
+					println!("  [sudo] Loaded from SUDO_MNEMONIC env var");
+					return kp;
+				}
+			}
+		}
+	}
+
+	let seeds_path = "/home/mamostehp/res/test_seeds.json";
+	if let Ok(content) = std::fs::read_to_string(seeds_path) {
+		if let Ok(json) = serde_json::from_str::<serde_json::Value>(&content) {
+			if let Some(mnemonic_str) = json["sudo_mnemonic"].as_str() {
+				if let Ok(mnemonic) = Mnemonic::from_str(mnemonic_str) {
+					if let Ok(kp) = Keypair::from_phrase(&mnemonic, None) {
+						println!("  [sudo] Loaded from {}", seeds_path);
+						return kp;
+					}
+				}
+			}
+		}
+	}
+
+	panic!("SUDO_MNEMONIC required! Set env var or create /home/mamostehp/res/test_seeds.json");
+}
+
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-	println!("=== RELAY CHAIN RUNTIME UPGRADE ===\n");
+	println!("╔══════════════════════════════════════════╗");
+	println!("║  RELAY CHAIN RUNTIME UPGRADE             ║");
+	println!("╚══════════════════════════════════════════╝\n");
 
 	let rc_url = std::env::var("RC_RPC").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string());
 	let wasm_path = std::env::var("WASM_FILE").expect("WASM_FILE environment variable required");
 
 	// Load WASM
 	let wasm_data = std::fs::read(&wasm_path)?;
-	println!("WASM: {} ({:.2} MB)", wasm_path, wasm_data.len() as f64 / 1_048_576.0);
+	println!(
+		"  WASM: {} ({:.2} MB)",
+		wasm_path,
+		wasm_data.len() as f64 / 1_048_576.0
+	);
 	let code_hash = pezsp_crypto_hashing::blake2_256(&wasm_data);
-	println!("Code hash: 0x{}", hex::encode(code_hash));
+	println!("  Code hash: 0x{}", hex::encode(code_hash));
 
 	// Connect
-	let api = OnlineClient::<PezkuwiConfig>::from_url(&rc_url).await?;
+	let api = OnlineClient::<PezkuwiConfig>::from_insecure_url(&rc_url).await?;
 	let old_spec = api.runtime_version().spec_version;
-	println!("RC connected: {} (spec {})", rc_url, old_spec);
+	println!("  RC connected: {} (spec {})", rc_url, old_spec);
 
 	// Load sudo key
-	let mnemonic_str =
-		std::env::var("SUDO_MNEMONIC").expect("SUDO_MNEMONIC environment variable required");
-	let mnemonic = Mnemonic::from_str(&mnemonic_str)?;
-	let sudo_keypair = Keypair::from_phrase(&mnemonic, None)?;
-	println!("Sudo: {}\n", sudo_keypair.public_key().to_account_id());
+	let sudo_keypair = load_sudo_keypair();
+	println!("  Sudo: {}\n", sudo_keypair.public_key().to_account_id());
 
 	// Deploy WASM via sudo(sudoUncheckedWeight(system.setCodeWithoutChecks))
-	println!("Deploying WASM...");
+	println!("=== Deploying WASM... ===");
 	let set_code = pezkuwi_subxt::dynamic::tx(
 		"System",
 		"set_code_without_checks",
@@ -63,7 +91,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 		],
 	);
 
-	let tx_progress = api.tx().sign_and_submit_then_watch_default(&sudo_tx, &sudo_keypair).await?;
+	let tx_progress =
+		api.tx().sign_and_submit_then_watch_default(&sudo_tx, &sudo_keypair).await?;
 	println!("  TX: 0x{}", hex::encode(tx_progress.extrinsic_hash().as_ref()));
 
 	let mut progress = tx_progress;
@@ -115,18 +144,30 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	}
 
 	// Verify
-	println!("\nWaiting 12 seconds for new runtime...");
-	tokio::time::sleep(std::time::Duration::from_secs(12)).await;
-
-	let api2 = OnlineClient::<PezkuwiConfig>::from_url(&rc_url).await?;
-	let new_spec = api2.runtime_version().spec_version;
-	println!("spec_version: {} → {}", old_spec, new_spec);
-
-	if new_spec > old_spec {
-		println!("\n=== UPGRADE SUCCESS ===");
-	} else {
-		println!("\n=== WARNING: spec_version did not increase ===");
+	println!("\nVerifying upgrade...");
+	let mut verified = false;
+	for attempt in 1..=5 {
+		tokio::time::sleep(std::time::Duration::from_secs(12)).await;
+		let api2 = OnlineClient::<PezkuwiConfig>::from_insecure_url(&rc_url).await?;
+		let new_spec = api2.runtime_version().spec_version;
+		if new_spec > old_spec {
+			println!(
+				"  spec_version: {} → {} — UPGRADE VERIFIED! (attempt {})",
+				old_spec, new_spec, attempt
+			);
+			verified = true;
+			break;
+		}
+		println!("  Attempt {}/5: spec still {} — waiting...", attempt, new_spec);
 	}
+
+	if !verified {
+		println!("  WARNING: spec_version did not increase after 1 minute!");
+	}
+
+	println!("\n╔══════════════════════════════════════════╗");
+	println!("║  RELAY CHAIN UPGRADE COMPLETE            ║");
+	println!("╚══════════════════════════════════════════╝");
 
 	Ok(())
 }

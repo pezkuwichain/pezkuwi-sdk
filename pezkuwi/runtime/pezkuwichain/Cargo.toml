@@ -54,7 +54,6 @@ pezframe-system-rpc-runtime-api = { workspace = true }
 pezpallet-authority-discovery = { workspace = true }
 pezpallet-authorship = { workspace = true }
 pezpallet-babe = { workspace = true }
-pezpallet-bags-list = { workspace = true }
 pezpallet-balances = { workspace = true }
 pezpallet-beefy = { workspace = true }
 pezpallet-beefy-mmr = { workspace = true }
@@ -63,7 +62,6 @@ pezpallet-conviction-voting = { workspace = true }
 # pezpallet-democracy removed - pezpallet-welati implements custom governance
 # pezpallet-election-provider-multi-phase removed - using OnChain election
 # pezpallet-elections-phragmen removed - pezpallet-welati implements custom elections
-pezpallet-fast-unstake = { workspace = true }
 pezpallet-grandpa = { workspace = true }
 pezpallet-indices = { workspace = true }
 pezpallet-message-queue = { workspace = true }
@@ -80,7 +78,6 @@ pezpallet-referenda = { workspace = true }
 pezpallet-root-testing = { workspace = true }
 pezpallet-scheduler = { workspace = true }
 pezpallet-session = { workspace = true }
-pezpallet-staking = { workspace = true }
 pezpallet-staking-async-ah-client = { workspace = true }
 pezpallet-staking-async-rc-client = { workspace = true }
 pezpallet-staking-runtime-api = { workspace = true }
@@ -157,14 +154,12 @@ std = [
 	"pezpallet-authority-discovery/std",
 	"pezpallet-authorship/std",
 	"pezpallet-babe/std",
-	"pezpallet-bags-list/std",
 	"pezpallet-balances/std",
 	"pezpallet-beefy-mmr/std",
 	"pezpallet-beefy/std",
 	"pezpallet-collective/std",
 	"pezpallet-conviction-voting/std",
 	"pezpallet-election-provider-support-benchmarking?/std",
-	"pezpallet-fast-unstake/std",
 	"pezpallet-grandpa/std",
 	"pezpallet-indices/std",
 	"pezpallet-message-queue/std",
@@ -187,7 +182,6 @@ std = [
 	"pezpallet-staking-async-ah-client/std",
 	"pezpallet-staking-async-rc-client/std",
 	"pezpallet-staking-runtime-api/std",
-	"pezpallet-staking/std",
 	"pezpallet-state-trie-migration/std",
 	"pezpallet-sudo/std",
 	"pezpallet-timestamp/std",
@@ -251,14 +245,12 @@ runtime-benchmarks = [
 	"pezpallet-authority-discovery/runtime-benchmarks",
 	"pezpallet-authorship/runtime-benchmarks",
 	"pezpallet-babe/runtime-benchmarks",
-	"pezpallet-bags-list/runtime-benchmarks",
 	"pezpallet-balances/runtime-benchmarks",
 	"pezpallet-beefy-mmr/runtime-benchmarks",
 	"pezpallet-beefy/runtime-benchmarks",
 	"pezpallet-collective/runtime-benchmarks",
 	"pezpallet-conviction-voting/runtime-benchmarks",
 	"pezpallet-election-provider-support-benchmarking/runtime-benchmarks",
-	"pezpallet-fast-unstake/runtime-benchmarks",
 	"pezpallet-grandpa/runtime-benchmarks",
 	"pezpallet-indices/runtime-benchmarks",
 	"pezpallet-message-queue/runtime-benchmarks",
@@ -281,7 +273,6 @@ runtime-benchmarks = [
 	"pezpallet-staking-async-ah-client/runtime-benchmarks",
 	"pezpallet-staking-async-rc-client/runtime-benchmarks",
 	"pezpallet-staking-runtime-api/runtime-benchmarks",
-	"pezpallet-staking/runtime-benchmarks",
 	"pezpallet-state-trie-migration/runtime-benchmarks",
 	"pezpallet-sudo/runtime-benchmarks",
 	"pezpallet-timestamp/runtime-benchmarks",
@@ -336,14 +327,12 @@ try-runtime = [
 	"pezpallet-authority-discovery/try-runtime",
 	"pezpallet-authorship/try-runtime",
 	"pezpallet-babe/try-runtime",
-	"pezpallet-bags-list/try-runtime",
 	"pezpallet-balances/try-runtime",
 	"pezpallet-beefy-mmr/try-runtime",
 	"pezpallet-beefy/try-runtime",
 	"pezpallet-collective/try-runtime",
 	"pezpallet-conviction-voting/try-runtime",
 	"pezpallet-election-provider-support-benchmarking?/try-runtime",
-	"pezpallet-fast-unstake/try-runtime",
 	"pezpallet-grandpa/try-runtime",
 	"pezpallet-indices/try-runtime",
 	"pezpallet-message-queue/try-runtime",
@@ -365,7 +354,6 @@ try-runtime = [
 	"pezpallet-session/try-runtime",
 	"pezpallet-staking-async-ah-client/try-runtime",
 	"pezpallet-staking-async-rc-client/try-runtime",
-	"pezpallet-staking/try-runtime",
 	"pezpallet-state-trie-migration/try-runtime",
 	"pezpallet-sudo/try-runtime",
 	"pezpallet-timestamp/try-runtime",

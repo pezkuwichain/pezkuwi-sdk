@@ -10,18 +10,42 @@ use pezkuwi_subxt_signer::bip39::Mnemonic;
 use pezkuwi_subxt_signer::sr25519::Keypair;
 use std::str::FromStr;
 
+fn load_sudo_keypair() -> Keypair {
+	if let Ok(mnemonic_str) = std::env::var("SUDO_MNEMONIC") {
+		if !mnemonic_str.is_empty() {
+			if let Ok(mnemonic) = Mnemonic::from_str(&mnemonic_str) {
+				if let Ok(kp) = Keypair::from_phrase(&mnemonic, None) {
+					println!("  [sudo] Loaded from SUDO_MNEMONIC env var");
+					return kp;
+				}
+			}
+		}
+	}
+	let seeds_path = "/home/mamostehp/res/test_seeds.json";
+	if let Ok(content) = std::fs::read_to_string(seeds_path) {
+		if let Ok(json) = serde_json::from_str::<serde_json::Value>(&content) {
+			if let Some(mnemonic_str) = json["sudo_mnemonic"].as_str() {
+				if let Ok(mnemonic) = Mnemonic::from_str(mnemonic_str) {
+					if let Ok(kp) = Keypair::from_phrase(&mnemonic, None) {
+						println!("  [sudo] Loaded from {}", seeds_path);
+						return kp;
+					}
+				}
+			}
+		}
+	}
+	panic!("SUDO_MNEMONIC required!");
+}
+
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	println!("=== SET StakingAhClient MODE → Active ===\n");
 
 	let rc_url = std::env::var("RC_RPC").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string());
-	let api = OnlineClient::<PezkuwiConfig>::from_url(&rc_url).await?;
+	let api = OnlineClient::<PezkuwiConfig>::from_insecure_url(&rc_url).await?;
 	println!("RC connected: spec {}", api.runtime_version().spec_version);
 
-	let mnemonic_str =
-		std::env::var("SUDO_MNEMONIC").expect("SUDO_MNEMONIC environment variable required");
-	let mnemonic = Mnemonic::from_str(&mnemonic_str)?;
-	let sudo_keypair = Keypair::from_phrase(&mnemonic, None)?;
+	let sudo_keypair = load_sudo_keypair();
 	println!("Sudo: {}\n", sudo_keypair.public_key().to_account_id());
 
 	// Check current mode first

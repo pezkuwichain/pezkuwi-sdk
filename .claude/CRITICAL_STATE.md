@@ -1,6 +1,6 @@
 # PEZKUWI MAİNNET KRİTİK DURUM
 
-**Son Guncelleme:** 2026-02-16 UTC
+**Son Guncelleme:** 2026-02-20 UTC
 **Bu dosyayi her oturum basinda OKU!**
 
 ---
@@ -41,18 +41,19 @@
 
 #### Relay Chain
 - **Durum:** CALISIYOR
-- **spec_version:** 1_020_004
-- **Block:** ~11,553 (15 Subat 2026)
+- **spec_version:** 1_020_005
+- **Block:** ~81,500+ (20 Subat 2026)
 - **Peers:** 24
 - **Validator Sayisi:** 21
+- **StakingAhClient:** Active (Mode=2)
 - **Bootnode:** `/ip4/217.77.6.126/tcp/30333/p2p/12D3KooWHY3k8ksTjT7izsUTbns1QLs8TraFVMcANtYhYKB4N69P`
 - **RPC:** VPS3 port 9944
 
 #### Teyrchains
 | Para ID | Isim | Durum | spec_version | Block | Peers |
 |---------|------|-------|-------------|-------|-------|
-| 1000 | Asset Hub | CALISIYOR | 1_020_004 | ~28,800+ (ActiveEra=2) | 1 |
-| 1004 | People Chain | CALISIYOR | 1_020_007 | ~17,200 | 1 |
+| 1000 | Asset Hub | CALISIYOR | 1_020_005 | ~80,400+ (ActiveEra=4) | 1 |
+| 1004 | People Chain | CALISIYOR | 1_020_008 | ~80,400+ | 1 |
 
 #### Mainnet Servis Isimleri (VPS3)
 - `pez-mainnet-validator-1` ... `pez-mainnet-validator-4`
@@ -153,6 +154,11 @@ Note: Mnemonic stored locally, NOT in repo. Check /home/mamostehp/res/
 - [x] 21 validatore Noter tikisi verildi (XCM batch_all ile, 2026-02-16)
 - [x] Relay Chain'den pezpallet_staking_score kaldirildi (sonraki relay upgrade icin hazir)
 - [x] AH staking-async era rotation dogrulandi: ActiveEra 1→2 gecisi basarili (block 28805, session 8, 2026-02-17)
+- [x] Runtime upgrade RC 1_020_004 → 1_020_005 (StakingAhClient index 67, pezpallet_staking_score kaldirildi, 2026-02-20)
+- [x] Runtime upgrade AH 1_020_004 → 1_020_005 (2026-02-20)
+- [x] Runtime upgrade People 1_020_007 → 1_020_008 (MinTrust degerleri duzeltildi, 2026-02-20)
+- [x] StakingAhClient Mode → Active ayarlandi (sudo ile, 2026-02-20)
+- [x] Post-upgrade dogrulama: Nfts Collection 0, Noter tikileri, StakingAhClient hepsi OK (2026-02-20)
 
 ### Bekleyen Isler
 1. [ ] Nova Wallet uyumluluk testi (NominationPoolsApi eklenince)
@@ -161,12 +167,9 @@ Note: Mnemonic stored locally, NOT in repo. Check /home/mamostehp/res/
 4. [x] People Chain runtime upgrade 1_020_006 → 1_020_007 (noter delegasyonu deploy)
 5. [x] Relay Chain: pezpallet_staking_score runtime'dan cikarildi (kod temizlendi, sonraki build'de aktif)
 6. [ ] Bot + noter workflow gelistir (staking verisi toplama ve People Chain'e gonderme)
-7. [ ] People Chain runtime upgrade 1_020_007 → 1_020_008 (MinTrust degerleri duzeltildi, deploy bekliyor)
-   - Welati secim MinTrust: Serok 600→250, Parlementer 300→100, SerokiMeclise 400→200, EndameDiwane 750→275
-   - OfficialRole MinTrust: 250→75
-   - Endorser MinTrust: 100→40
-   - Degisiklik: `pezpallet-welati/src/lib.rs`, `types.rs`, `tests.rs` (kod hazir, runtime upgrade gerekli)
-8. [ ] Relay Chain runtime upgrade: `pezpallet_staking_async_ah_client` index 67'ye ekle (AH async staking XCM loop duzeltmesi)
+7. [x] People Chain runtime upgrade 1_020_007 → 1_020_008 (MinTrust degerleri duzeltildi, deploy edildi 2026-02-20)
+8. [x] Relay Chain runtime upgrade: `pezpallet_staking_async_ah_client` index 67'ye eklendi (RC 1_020_005 ile, 2026-02-20)
+9. [ ] RC 1_020_006 upgrade: `RemovePallet<pezpallet_staking>` migration (eski staking pallet'i RC'den cikar)
 
 ---
 

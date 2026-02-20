@@ -93,7 +93,7 @@ use pezframe_support::{
 	parameter_types,
 	traits::{
 		fungible::HoldConsideration, EitherOf, EitherOfDiverse, EnsureOriginWithArg,
-		InstanceFilter, KeyOwnerProofSystem, LinearStoragePrice, Nothing, PrivilegeCmp,
+		InstanceFilter, KeyOwnerProofSystem, LinearStoragePrice, PrivilegeCmp,
 		ProcessMessage, ProcessMessageError, WithdrawReasons,
 	},
 	weights::{ConstantMultiplier, WeightMeter},
@@ -105,7 +105,7 @@ use pezpallet_session::historical as session_historical;
 use pezpallet_staking_async_ah_client as ah_client;
 use pezpallet_staking_async_rc_client as rc_client;
 use pezpallet_transaction_payment::{FeeDetails, FungibleAdapter, RuntimeDispatchInfo};
-use pezsp_core::{ConstBool, ConstU128, ConstUint, Get, OpaqueMetadata, H256};
+use pezsp_core::{ConstUint, Get, OpaqueMetadata, H256};
 use pezsp_runtime::{
 	generic, impl_opaque_keys,
 	traits::{
@@ -174,7 +174,7 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
 	spec_name: alloc::borrow::Cow::Borrowed("pezkuwichain"),
 	impl_name: alloc::borrow::Cow::Borrowed("parity-pezkuwichain"),
 	authoring_version: 0,
-	spec_version: 1_020_005,
+	spec_version: 1_020_006,
 	impl_version: 0,
 	apis: RUNTIME_API_VERSIONS,
 	transaction_version: 26,
@@ -454,18 +454,53 @@ impl pezpallet_session::Config for Runtime {
 	type KeyDeposit = ();
 }
 
-/// Returns staking exposure for historical session tracking.
-/// Falls back to a default empty exposure when none exists yet (e.g. at genesis),
-/// preventing validators from being filtered out of the authority set.
+/// Returns a default empty exposure for historical session tracking.
+/// Exposure data is now on Asset Hub — RC returns default to keep validators in authority set.
 pub struct ExposureOfOrDefault;
 impl pezsp_runtime::traits::Convert<AccountId, Option<pezsp_staking::Exposure<AccountId, Balance>>>
 	for ExposureOfOrDefault
 {
-	fn convert(validator: AccountId) -> Option<pezsp_staking::Exposure<AccountId, Balance>> {
-		Some(
-			<pezpallet_staking::DefaultExposureOf<Runtime>>::convert(validator).unwrap_or_default(),
-		)
+	fn convert(_validator: AccountId) -> Option<pezsp_staking::Exposure<AccountId, Balance>> {
+		Some(Default::default())
 	}
+}
+
+/// No-op fallback for StakingAhClient. Required at compile time but never called
+/// since Mode is Active — all session/offence/reward logic goes through StakingAhClient.
+pub struct NoopFallback;
+
+impl pezpallet_session::SessionManager<AccountId> for NoopFallback {
+	fn new_session(_: SessionIndex) -> Option<Vec<AccountId>> {
+		None
+	}
+	fn start_session(_: SessionIndex) {}
+	fn end_session(_: SessionIndex) {}
+}
+
+impl pezsp_staking::offence::OnOffenceHandler<
+	AccountId,
+	(AccountId, pezsp_staking::Exposure<AccountId, Balance>),
+	Weight,
+> for NoopFallback
+{
+	fn on_offence(
+		_offenders: &[pezsp_staking::offence::OffenceDetails<
+			AccountId,
+			(AccountId, pezsp_staking::Exposure<AccountId, Balance>),
+		>],
+		_slash_fraction: &[Perbill],
+		_session: SessionIndex,
+	) -> Weight {
+		Weight::zero()
+	}
+}
+
+impl pezframe_support::traits::RewardsReporter<AccountId> for NoopFallback {
+	fn reward_by_ids(_: impl IntoIterator<Item = (AccountId, u32)>) {}
+}
+
+impl pezpallet_authorship::EventHandler<AccountId, BlockNumber> for NoopFallback {
+	fn note_author(_: AccountId) {}
 }
 
 impl pezpallet_session::historical::Config for Runtime {
@@ -475,106 +510,11 @@ impl pezpallet_session::historical::Config for Runtime {
 }
 
 // =====================================================
-// STAKING CONFIGURATION
+// STAKING CONFIGURATION (async — managed by StakingAhClient)
 // =====================================================
 
 parameter_types! {
-	pub const SessionsPerEra: SessionIndex = 6;
-	pub const BondingDuration: pezsp_staking::EraIndex = 28;
-	pub const SlashDeferDuration: pezsp_staking::EraIndex = 27;
-	pub const HistoryDepth: u32 = 84;
-	pub const MaxWinners: u32 = 100;
-	pub const MaxElectingVoters: u32 = 22_500;
 	pub const MaxActiveValidators: u32 = 1000;
-	// Limits for election provider.
-	pub const ElectionBounds: pezframe_election_provider_support::bounds::ElectionBounds =
-		pezframe_election_provider_support::bounds::ElectionBounds {
-			voters: pezframe_election_provider_support::bounds::DataProviderBounds {
-				size: Some(pezframe_election_provider_support::bounds::SizeBound(20_000)),
-				count: Some(pezframe_election_provider_support::bounds::CountBound(1_000)),
-			},
-			targets: pezframe_election_provider_support::bounds::DataProviderBounds {
-				size: Some(pezframe_election_provider_support::bounds::SizeBound(1_500)),
-				count: Some(pezframe_election_provider_support::bounds::CountBound(200)),
-			},
-		};
-}
-
-pub struct OnChainSeqPhragmen;
-impl pezframe_election_provider_support::onchain::Config for OnChainSeqPhragmen {
-	type Sort = ConstBool<true>;
-	type System = Runtime;
-	type Solver = pezframe_election_provider_support::SequentialPhragmen<AccountId, Perbill>;
-	type DataProvider = Staking;
-	type WeightInfo = pezframe_election_provider_support::weights::BizinikiwiWeight<Runtime>;
-	type MaxBackersPerWinner = MaxElectingVoters;
-	type MaxWinnersPerPage = MaxWinners;
-	type Bounds = ElectionBounds;
-}
-
-/// Era payout calculation for staking rewards.
-pub struct EraPayout;
-impl pezpallet_staking::EraPayout<Balance> for EraPayout {
-	fn era_payout(
-		_total_staked: Balance,
-		_total_issuance: Balance,
-		era_duration_millis: u64,
-	) -> (Balance, Balance) {
-		const MILLISECONDS_PER_YEAR: u64 = (1000 * 3600 * 24 * 36525) / 100;
-		let relative_era_len =
-			FixedU128::from_rational(era_duration_millis.into(), MILLISECONDS_PER_YEAR.into());
-		// Fixed baseline: 200M HEZ (12 decimals) — prevents compound inflation
-		let fixed_total_issuance: i128 = 200_000_000_000_000_000_000;
-		let fixed_inflation_rate = FixedU128::from_rational(8, 100);
-		let yearly_emission = fixed_inflation_rate.saturating_mul_int(fixed_total_issuance);
-		let era_emission = relative_era_len.saturating_mul_int(yearly_emission);
-		// 15% to treasury, 85% to stakers
-		let to_treasury = FixedU128::from_rational(15, 100).saturating_mul_int(era_emission);
-		let to_stakers = era_emission.saturating_sub(to_treasury);
-		(to_stakers.saturated_into(), to_treasury.saturated_into())
-	}
-}
-
-pub struct PezkuwiStakingBenchmarkingConfig;
-impl pezpallet_staking::BenchmarkingConfig for PezkuwiStakingBenchmarkingConfig {
-	type MaxValidators = ConstU32<1000>;
-	type MaxNominators = ConstU32<1000>;
-}
-
-impl pezpallet_staking::Config for Runtime {
-	type Currency = Balances;
-	type CurrencyBalance = Balance;
-	type UnixTime = Timestamp;
-	type CurrencyToVote = pezsp_staking::currency_to_vote::U128CurrencyToVote;
-	type RewardRemainder = ();
-	type RuntimeEvent = RuntimeEvent;
-	type Slash = ();
-	type Reward = ();
-	type SessionsPerEra = SessionsPerEra;
-	type BondingDuration = BondingDuration;
-	type SlashDeferDuration = SlashDeferDuration;
-	type SessionInterface = ();
-	type EraPayout = EraPayout;
-	type NextNewSession = Session;
-	type MaxExposurePageSize = ConstU32<512>;
-	type MaxValidatorSet = MaxActiveValidators;
-	type ElectionProvider =
-		pezframe_election_provider_support::onchain::OnChainExecution<OnChainSeqPhragmen>;
-	type GenesisElectionProvider =
-		pezframe_election_provider_support::onchain::OnChainExecution<OnChainSeqPhragmen>;
-	type VoterList = VoterBagsList;
-	type TargetList = pezpallet_staking::UseValidatorsMap<Self>;
-	type MaxControllersInDeprecationBatch = ConstU32<5_900>;
-	type AdminOrigin = EnsureRoot<AccountId>;
-	type EventListeners = ();
-	type WeightInfo = pezpallet_staking::weights::BizinikiwiWeight<Runtime>;
-	type RuntimeHoldReason = RuntimeHoldReason;
-	type HistoryDepth = HistoryDepth;
-	type NominationsQuota = pezpallet_staking::FixedNominationsQuota<16>;
-	type MaxUnlockingChunks = ConstU32<32>;
-	type Filter = Nothing;
-	type OldCurrency = Balances;
-	type BenchmarkingConfig = PezkuwiStakingBenchmarkingConfig;
 }
 
 // =====================================================
@@ -703,25 +643,11 @@ impl ah_client::Config for Runtime {
 	type UnixTime = Timestamp;
 	type PointsPerBlock = ConstU32<20>;
 	type MaxOffenceBatchSize = ConstU32<50>;
-	type Fallback = Staking;
+	type Fallback = NoopFallback;
 	type MaximumValidatorsWithPoints = ConstU32<{ MaxActiveValidators::get() * 4 }>;
 	type MaxSessionReportRetries = ConstU32<64>;
 }
 
-// =====================================================
-// FAST UNSTAKE CONFIGURATION
-// =====================================================
-
-impl pezpallet_fast_unstake::Config for Runtime {
-	type RuntimeEvent = RuntimeEvent;
-	type Currency = Balances;
-	type BatchSize = ConstU32<64>;
-	type Deposit = ConstU128<{ UNITS }>;
-	type ControlOrigin = EnsureRoot<AccountId>;
-	type Staking = Staking;
-	type MaxErasToCheckPerBlock = ConstU32<1>;
-	type WeightInfo = pezpallet_fast_unstake::weights::BizinikiwiWeight<Runtime>;
-}
 
 // =====================================================
 // VALIDATOR POOL CONFIGURATION (TNPoS Shadow Mode)
@@ -780,35 +706,6 @@ impl pezpallet_validator_pool::Config for Runtime {
 	type MaxValidators = ValidatorPoolMaxValidators;
 	type MaxPoolSize = ValidatorPoolMaxPoolSize;
 	type MinStakeAmount = ValidatorPoolMinStakeAmount;
-}
-
-// =====================================================
-// VOTER BAGS LIST CONFIGURATION
-// =====================================================
-
-parameter_types! {
-	pub const VoterBagThresholds: &'static [u64] = &[
-		100 * UNITS as u64,
-		200 * UNITS as u64,
-		500 * UNITS as u64,
-		1_000 * UNITS as u64,
-		2_000 * UNITS as u64,
-		5_000 * UNITS as u64,
-		10_000 * UNITS as u64,
-		20_000 * UNITS as u64,
-		50_000 * UNITS as u64,
-		100_000 * UNITS as u64,
-	];
-}
-
-pub type VoterBagsListInstance = pezpallet_bags_list::Instance1;
-impl pezpallet_bags_list::Config<VoterBagsListInstance> for Runtime {
-	type RuntimeEvent = RuntimeEvent;
-	type WeightInfo = pezpallet_bags_list::weights::BizinikiwiWeight<Runtime>;
-	type ScoreProvider = Staking;
-	type BagThresholds = VoterBagThresholds;
-	type Score = u64;
-	type MaxAutoRebagPerBlock = ConstU32<10>;
 }
 
 // =====================================================
@@ -902,7 +799,8 @@ impl pezpallet_authority_discovery::Config for Runtime {
 }
 
 parameter_types! {
-	pub const MaxSetIdSessionEntries: u32 = BondingDuration::get() * SessionsPerEra::get();
+	// BondingDuration(2) * SessionsPerEra(6) — matches AH staking config
+	pub const MaxSetIdSessionEntries: u32 = 2 * 6;
 }
 
 impl pezpallet_grandpa::Config for Runtime {
@@ -1479,7 +1377,8 @@ impl pezpallet_parameters::Config for Runtime {
 }
 
 parameter_types! {
-	pub BeefySetIdSessionEntries: u32 = BondingDuration::get() * SessionsPerEra::get();
+	// BondingDuration(2) * SessionsPerEra(6) — matches AH staking config
+	pub BeefySetIdSessionEntries: u32 = 2 * 6;
 }
 
 impl pezpallet_beefy::Config for Runtime {
@@ -1561,7 +1460,7 @@ impl assigned_slots::Config for Runtime {
 impl validator_manager::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type PrivilegedOrigin = EnsureRoot<AccountId>;
-	type Staking = Staking;
+	type Staking = StakingAhClient;
 }
 
 parameter_types! {
@@ -1623,12 +1522,8 @@ construct_runtime! {
 		Historical: session_historical = 34,
 
 		Session: pezpallet_session = 8,
-		Staking: pezpallet_staking = 9,
 		Grandpa: pezpallet_grandpa = 10,
 		AuthorityDiscovery: pezpallet_authority_discovery = 12,
-
-		// Staking extensions.
-		FastUnstake: pezpallet_fast_unstake = 15,
 
 		// Governance stuff; uncallable initially.
 		Council: pezpallet_collective::<Instance1> = 17,
@@ -1713,9 +1608,6 @@ construct_runtime! {
 		// Root testing pezpallet.
 		RootTesting: pezpallet_root_testing = 249,
 
-		// VoterBagsList pezpallet.
-		VoterBagsList: pezpallet_bags_list::<Instance1> = 100,
-
 		// Sudo.
 		Sudo: pezpallet_sudo = 255,
 	}
@@ -1799,6 +1691,10 @@ pub mod migrations {
 		pub const TechnicalMembershipPalletName: &'static str = "TechnicalMembership";
 		pub const TipsPalletName: &'static str = "Tips";
 		pub const PhragmenElectionPalletId: LockIdentifier = *b"phrelect";
+		// Old staking ecosystem pallets (replaced by StakingAhClient + AH staking)
+		pub const StakingPalletName: &'static str = "Staking";
+		pub const FastUnstakePalletName: &'static str = "FastUnstake";
+		pub const VoterBagsListPalletName: &'static str = "VoterBagsList";
 		/// Weight for balance unreservations
 		pub BalanceUnreserveWeight: Weight = weights::pezpallet_balances_balances::WeightInfo::<Runtime>::force_unreserve();
 		pub BalanceTransferAllowDeath: Weight = weights::pezpallet_balances_balances::WeightInfo::<Runtime>::transfer_allow_death();
@@ -1874,6 +1770,19 @@ pub mod migrations {
 		teyrchains_inclusion::migration::MigrateToV1<Runtime>,
 		teyrchains_shared::migration::MigrateToV1<Runtime>,
 		teyrchains_scheduler::migration::MigrateV2ToV3<Runtime>,
+		// Remove old staking ecosystem pallets (replaced by StakingAhClient + AH staking)
+		pezframe_support::migrations::RemovePallet<
+			StakingPalletName,
+			<Runtime as pezframe_system::Config>::DbWeight,
+		>,
+		pezframe_support::migrations::RemovePallet<
+			FastUnstakePalletName,
+			<Runtime as pezframe_system::Config>::DbWeight,
+		>,
+		pezframe_support::migrations::RemovePallet<
+			VoterBagsListPalletName,
+			<Runtime as pezframe_system::Config>::DbWeight,
+		>,
 	);
 }
 
