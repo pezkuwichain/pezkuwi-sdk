@@ -146,7 +146,9 @@ impl<T: Config + pezpallet_session::historical::Config>
 	pezpallet_session::historical::SessionManager<T::ValidatorId, T::FullIdentification>
 	for Pezpallet<T>
 {
-	fn new_session(new_index: SessionIndex) -> Option<Vec<(T::ValidatorId, T::FullIdentification)>> {
+	fn new_session(
+		new_index: SessionIndex,
+	) -> Option<Vec<(T::ValidatorId, T::FullIdentification)>> {
 		<Self as pezpallet_session::SessionManager<_>>::new_session(new_index).map(|r| {
 			r.into_iter()
 				.filter_map(|v| {

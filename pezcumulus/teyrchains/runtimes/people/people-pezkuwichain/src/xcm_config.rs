@@ -134,10 +134,9 @@ impl xcm_executor::traits::ConvertOrigin<RuntimeOrigin> for RelayWelatiPlurality
 	) -> Result<RuntimeOrigin, Location> {
 		let origin = origin.into();
 		match (kind, origin.unpack()) {
-			(
-				OriginKind::Superuser,
-				(1, [Plurality { id: BodyId::Index(40 | 41 | 42), .. }]),
-			) => Ok(RuntimeOrigin::root()),
+			(OriginKind::Superuser, (1, [Plurality { id: BodyId::Index(40..=42), .. }])) => {
+				Ok(RuntimeOrigin::root())
+			},
 			_ => Err(origin),
 		}
 	}

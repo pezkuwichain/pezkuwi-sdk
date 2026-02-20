@@ -68,12 +68,12 @@ use pezkuwi_runtime_teyrchains::{
 	inclusion::{AggregateMessageOrigin, UmpQueueId},
 	initializer as teyrchains_initializer, on_demand as teyrchains_on_demand,
 	origin as teyrchains_origin, paras as teyrchains_paras,
-	paras_inherent as teyrchains_paras_inherent,
+	paras_inherent as teyrchains_paras_inherent, reward_points as teyrchains_reward_points,
 	runtime_api_impl::{
 		v13 as teyrchains_runtime_api_impl, vstaging as teyrchains_staging_runtime_api_impl,
 	},
 	scheduler as teyrchains_scheduler, session_info as teyrchains_session_info,
-	reward_points as teyrchains_reward_points, shared as teyrchains_shared,
+	shared as teyrchains_shared,
 };
 use pezkuwichain_runtime_constants::system_teyrchain::{
 	coretime::TIMESLICE_PERIOD, ASSET_HUB_ID, BROKER_ID,
@@ -174,7 +174,7 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
 	spec_name: alloc::borrow::Cow::Borrowed("pezkuwichain"),
 	impl_name: alloc::borrow::Cow::Borrowed("parity-pezkuwichain"),
 	authoring_version: 0,
-	spec_version: 1_020_008,
+	spec_version: 1_020_005,
 	impl_version: 0,
 	apis: RUNTIME_API_VERSIONS,
 	transaction_version: 26,
@@ -461,12 +461,9 @@ pub struct ExposureOfOrDefault;
 impl pezsp_runtime::traits::Convert<AccountId, Option<pezsp_staking::Exposure<AccountId, Balance>>>
 	for ExposureOfOrDefault
 {
-	fn convert(
-		validator: AccountId,
-	) -> Option<pezsp_staking::Exposure<AccountId, Balance>> {
+	fn convert(validator: AccountId) -> Option<pezsp_staking::Exposure<AccountId, Balance>> {
 		Some(
-			<pezpallet_staking::DefaultExposureOf<Runtime>>::convert(validator)
-				.unwrap_or_default(),
+			<pezpallet_staking::DefaultExposureOf<Runtime>>::convert(validator).unwrap_or_default(),
 		)
 	}
 }

@@ -69,7 +69,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	}
 
 	// Decode Vec length
-	let (count, mut offset) = decode_compact(&raw_data);
+	let (count, offset) = decode_compact(&raw_data);
 	println!("QueuedKeys entries: {}", count);
 
 	// Each entry: AccountId32 (32 bytes) + SessionKeys

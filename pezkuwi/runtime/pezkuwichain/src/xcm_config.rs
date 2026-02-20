@@ -22,9 +22,7 @@ use super::{
 	XcmPallet,
 };
 
-use crate::governance::{
-	CitizenshipAdmin, StakingAdmin, WelatiAdmin, WelatiElection,
-};
+use crate::governance::{CitizenshipAdmin, StakingAdmin, WelatiAdmin, WelatiElection};
 
 use pezframe_support::{
 	parameter_types,

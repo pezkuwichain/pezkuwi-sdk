@@ -14,8 +14,7 @@ use std::str::FromStr;
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	println!("=== SET StakingAhClient MODE → Active ===\n");
 
-	let rc_url =
-		std::env::var("RC_RPC").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string());
+	let rc_url = std::env::var("RC_RPC").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string());
 	let api = OnlineClient::<PezkuwiConfig>::from_url(&rc_url).await?;
 	println!("RC connected: spec {}", api.runtime_version().spec_version);
 
@@ -53,14 +52,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 		"set_mode",
 		vec![Value::unnamed_variant("Active", vec![])],
 	);
-	let sudo_tx =
-		pezkuwi_subxt::dynamic::tx("Sudo", "sudo", vec![set_mode.into_value()]);
+	let sudo_tx = pezkuwi_subxt::dynamic::tx("Sudo", "sudo", vec![set_mode.into_value()]);
 
 	println!("Submitting sudo(StakingAhClient.set_mode(Active))...");
-	let progress = api
-		.tx()
-		.sign_and_submit_then_watch_default(&sudo_tx, &sudo_keypair)
-		.await?;
+	let progress = api.tx().sign_and_submit_then_watch_default(&sudo_tx, &sudo_keypair).await?;
 	let events = progress.wait_for_finalized_success().await?;
 
 	for event in events.iter() {

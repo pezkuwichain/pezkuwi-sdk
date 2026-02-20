@@ -23,17 +23,12 @@ use std::str::FromStr;
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	println!("=== RELAY CHAIN RUNTIME UPGRADE ===\n");
 
-	let rc_url =
-		std::env::var("RC_RPC").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string());
+	let rc_url = std::env::var("RC_RPC").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string());
 	let wasm_path = std::env::var("WASM_FILE").expect("WASM_FILE environment variable required");
 
 	// Load WASM
 	let wasm_data = std::fs::read(&wasm_path)?;
-	println!(
-		"WASM: {} ({:.2} MB)",
-		wasm_path,
-		wasm_data.len() as f64 / 1_048_576.0
-	);
+	println!("WASM: {} ({:.2} MB)", wasm_path, wasm_data.len() as f64 / 1_048_576.0);
 	let code_hash = pezsp_crypto_hashing::blake2_256(&wasm_data);
 	println!("Code hash: 0x{}", hex::encode(code_hash));
 
@@ -68,14 +63,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 		],
 	);
 
-	let tx_progress = api
-		.tx()
-		.sign_and_submit_then_watch_default(&sudo_tx, &sudo_keypair)
-		.await?;
-	println!(
-		"  TX: 0x{}",
-		hex::encode(tx_progress.extrinsic_hash().as_ref())
-	);
+	let tx_progress = api.tx().sign_and_submit_then_watch_default(&sudo_tx, &sudo_keypair).await?;
+	println!("  TX: 0x{}", hex::encode(tx_progress.extrinsic_hash().as_ref()));
 
 	let mut progress = tx_progress;
 	let mut upgrade_ok = false;
@@ -87,9 +76,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 					Ok(events) => {
 						for ev in events.iter().flatten() {
 							println!("  {}::{}", ev.pallet_name(), ev.variant_name());
-							if ev.pallet_name() == "System"
-								&& ev.variant_name() == "CodeUpdated"
-							{
+							if ev.pallet_name() == "System" && ev.variant_name() == "CodeUpdated" {
 								upgrade_ok = true;
 							}
 						}

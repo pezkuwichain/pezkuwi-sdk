@@ -20,10 +20,8 @@ use std::str::FromStr;
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	println!("=== ASSET HUB RUNTIME UPGRADE ===\n");
 
-	let rc_url =
-		std::env::var("RC_RPC").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string());
-	let ah_url =
-		std::env::var("AH_RPC").unwrap_or_else(|_| "ws://127.0.0.1:40944".to_string());
+	let rc_url = std::env::var("RC_RPC").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string());
+	let ah_url = std::env::var("AH_RPC").unwrap_or_else(|_| "ws://127.0.0.1:40944".to_string());
 	let wasm_path = std::env::var("WASM_FILE").expect("WASM_FILE environment variable required");
 
 	let mnemonic_str =
@@ -34,11 +32,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 	// Load WASM
 	let wasm_data = std::fs::read(&wasm_path)?;
-	println!(
-		"WASM: {} ({:.2} MB)",
-		wasm_path,
-		wasm_data.len() as f64 / 1_048_576.0
-	);
+	println!("WASM: {} ({:.2} MB)", wasm_path, wasm_data.len() as f64 / 1_048_576.0);
 
 	// Blake2-256 hash of WASM
 	let code_hash = pezsp_crypto_hashing::blake2_256(&wasm_data);
@@ -50,11 +44,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 	// Connect to AH
 	let ah_api = OnlineClient::<PezkuwiConfig>::from_url(&ah_url).await?;
-	println!(
-		"AH connected: {} (spec {})\n",
-		ah_url,
-		ah_api.runtime_version().spec_version
-	);
+	println!("AH connected: {} (spec {})\n", ah_url, ah_api.runtime_version().spec_version);
 
 	// ═══════════════════════════════════════════
 	// STEP 1: Authorize upgrade via XCM from RC
@@ -77,10 +67,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 				"interior",
 				Value::unnamed_variant(
 					"X1",
-					vec![Value::unnamed_variant(
-						"Teyrchain",
-						vec![Value::u128(1000)],
-					)],
+					vec![Value::unnamed_variant("Teyrchain", vec![Value::u128(1000)])],
 				),
 			),
 		])],
@@ -113,8 +100,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 		])],
 	);
 
-	let xcm_send =
-		pezkuwi_subxt::dynamic::tx("XcmPallet", "send", vec![dest, message]);
+	let xcm_send = pezkuwi_subxt::dynamic::tx("XcmPallet", "send", vec![dest, message]);
 	let sudo_tx = pezkuwi_subxt::dynamic::tx(
 		"Sudo",
 		"sudo_unchecked_weight",
@@ -127,10 +113,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 		],
 	);
 
-	let progress = rc_api
-		.tx()
-		.sign_and_submit_then_watch_default(&sudo_tx, &sudo_keypair)
-		.await?;
+	let progress = rc_api.tx().sign_and_submit_then_watch_default(&sudo_tx, &sudo_keypair).await?;
 	let events = progress.wait_for_finalized_success().await?;
 
 	let mut sent = false;
@@ -168,12 +151,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 			.chain(pezsp_crypto_hashing::twox_128(b"AuthorizedUpgrade").iter())
 			.copied()
 			.collect::<Vec<u8>>();
-		let result = ah_check
-			.storage()
-			.at_latest()
-			.await?
-			.fetch_raw(auth_key)
-			.await?;
+		let result = ah_check.storage().at_latest().await?.fetch_raw(auth_key).await?;
 		if !result.is_empty() {
 			println!(
 				"  AuthorizedUpgrade found on AH at block {} (attempt {})!",
@@ -233,10 +211,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 				"interior",
 				Value::unnamed_variant(
 					"X1",
-					vec![Value::unnamed_variant(
-						"Teyrchain",
-						vec![Value::u128(1000)],
-					)],
+					vec![Value::unnamed_variant("Teyrchain", vec![Value::u128(1000)])],
 				),
 			),
 		])],

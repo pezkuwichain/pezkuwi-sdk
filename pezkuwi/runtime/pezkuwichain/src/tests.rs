@@ -148,11 +148,7 @@ fn governance_tracks_total_count() {
 fn governance_track_ids_are_unique() {
 	let mut seen = HashSet::new();
 	for track in <TracksInfo as TracksInfoTrait<Balance, BlockNumber>>::tracks() {
-		assert!(
-			seen.insert(track.id),
-			"Duplicate track ID: {}",
-			track.id
-		);
+		assert!(seen.insert(track.id), "Duplicate track ID: {}", track.id);
 	}
 }
 
@@ -185,24 +181,24 @@ fn governance_no_test_periods_remain() {
 fn governance_production_periods_match_spec() {
 	// Build expected values: (track_id, prepare, decision, confirm, enact)
 	let expected: Vec<(u16, &str, BlockNumber, BlockNumber, BlockNumber, BlockNumber)> = vec![
-		(0,  "root",                 2 * HOURS,   28 * DAYS,  24 * HOURS,  24 * HOURS),
-		(1,  "whitelisted_caller",  30 * MINUTES, 28 * DAYS,  10 * MINUTES, 10 * MINUTES),
-		(10, "staking_admin",        2 * HOURS,   14 * DAYS,   3 * HOURS,  10 * MINUTES),
-		(11, "treasurer",            2 * HOURS,   28 * DAYS,   3 * HOURS,  24 * HOURS),
-		(12, "lease_admin",          2 * HOURS,   14 * DAYS,   3 * HOURS,  10 * MINUTES),
-		(13, "fellowship_admin",     2 * HOURS,   14 * DAYS,   3 * HOURS,  10 * MINUTES),
-		(14, "general_admin",        2 * HOURS,   14 * DAYS,   3 * HOURS,  10 * MINUTES),
-		(15, "auction_admin",        2 * HOURS,   14 * DAYS,   3 * HOURS,  10 * MINUTES),
-		(20, "referendum_canceller",  2 * HOURS,    7 * DAYS,   3 * HOURS,  10 * MINUTES),
-		(21, "referendum_killer",    2 * HOURS,   14 * DAYS,   3 * HOURS,  10 * MINUTES),
-		(30, "small_tipper",         1 * MINUTES,  7 * DAYS,  10 * MINUTES,  1 * MINUTES),
-		(31, "big_tipper",          10 * MINUTES,  7 * DAYS,   1 * HOURS,  10 * MINUTES),
-		(32, "small_spender",        4 * HOURS,   28 * DAYS,  12 * HOURS,  24 * HOURS),
-		(33, "medium_spender",       4 * HOURS,   28 * DAYS,  24 * HOURS,  24 * HOURS),
-		(34, "big_spender",          4 * HOURS,   28 * DAYS,  48 * HOURS,  24 * HOURS),
-		(40, "welati_election",      2 * HOURS,   14 * DAYS,  12 * HOURS,  24 * HOURS),
-		(41, "welati_admin",         2 * HOURS,    7 * DAYS,   3 * HOURS,  10 * MINUTES),
-		(42, "citizenship_admin",    2 * HOURS,   14 * DAYS,   6 * HOURS,  24 * HOURS),
+		(0, "root", 2 * HOURS, 28 * DAYS, 24 * HOURS, 24 * HOURS),
+		(1, "whitelisted_caller", 30 * MINUTES, 28 * DAYS, 10 * MINUTES, 10 * MINUTES),
+		(10, "staking_admin", 2 * HOURS, 14 * DAYS, 3 * HOURS, 10 * MINUTES),
+		(11, "treasurer", 2 * HOURS, 28 * DAYS, 3 * HOURS, 24 * HOURS),
+		(12, "lease_admin", 2 * HOURS, 14 * DAYS, 3 * HOURS, 10 * MINUTES),
+		(13, "fellowship_admin", 2 * HOURS, 14 * DAYS, 3 * HOURS, 10 * MINUTES),
+		(14, "general_admin", 2 * HOURS, 14 * DAYS, 3 * HOURS, 10 * MINUTES),
+		(15, "auction_admin", 2 * HOURS, 14 * DAYS, 3 * HOURS, 10 * MINUTES),
+		(20, "referendum_canceller", 2 * HOURS, 7 * DAYS, 3 * HOURS, 10 * MINUTES),
+		(21, "referendum_killer", 2 * HOURS, 14 * DAYS, 3 * HOURS, 10 * MINUTES),
+		(30, "small_tipper", 1 * MINUTES, 7 * DAYS, 10 * MINUTES, 1 * MINUTES),
+		(31, "big_tipper", 10 * MINUTES, 7 * DAYS, 1 * HOURS, 10 * MINUTES),
+		(32, "small_spender", 4 * HOURS, 28 * DAYS, 12 * HOURS, 24 * HOURS),
+		(33, "medium_spender", 4 * HOURS, 28 * DAYS, 24 * HOURS, 24 * HOURS),
+		(34, "big_spender", 4 * HOURS, 28 * DAYS, 48 * HOURS, 24 * HOURS),
+		(40, "welati_election", 2 * HOURS, 14 * DAYS, 12 * HOURS, 24 * HOURS),
+		(41, "welati_admin", 2 * HOURS, 7 * DAYS, 3 * HOURS, 10 * MINUTES),
+		(42, "citizenship_admin", 2 * HOURS, 14 * DAYS, 6 * HOURS, 24 * HOURS),
 	];
 
 	let tracks: HashMap<u16, _> = <TracksInfo as TracksInfoTrait<Balance, BlockNumber>>::tracks()
@@ -303,7 +299,8 @@ fn governance_track_for_origin_mapping() {
 	for (origin, expected_id) in origin_to_track {
 		let pallet_origin: <RuntimeOrigin as pezframe_support::traits::OriginTrait>::PalletsOrigin =
 			origin.clone().into();
-		let result = <TracksInfo as TracksInfoTrait<Balance, BlockNumber>>::track_for(&pallet_origin);
+		let result =
+			<TracksInfo as TracksInfoTrait<Balance, BlockNumber>>::track_for(&pallet_origin);
 		assert_eq!(
 			result,
 			Ok(expected_id),

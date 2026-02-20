@@ -19,8 +19,7 @@ use std::str::FromStr;
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	println!("=== ASSIGN CORETIME ===\n");
 
-	let rc_url =
-		std::env::var("RC_RPC").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string());
+	let rc_url = std::env::var("RC_RPC").unwrap_or_else(|_| "ws://127.0.0.1:9944".to_string());
 	let api = OnlineClient::<PezkuwiConfig>::from_url(&rc_url).await?;
 	println!("Connected to RC: {}", rc_url);
 
@@ -38,18 +37,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	// Step 1: Set core count to 2
 	// Coretime.request_core_count(count: u16) - call_index 1, pallet 74
 	println!("Step 1: Setting core count to 2...");
-	let set_cores = pezkuwi_subxt::dynamic::tx(
-		"Coretime",
-		"request_core_count",
-		vec![Value::u128(2)],
-	);
-	let sudo_tx =
-		pezkuwi_subxt::dynamic::tx("Sudo", "sudo", vec![set_cores.into_value()]);
+	let set_cores =
+		pezkuwi_subxt::dynamic::tx("Coretime", "request_core_count", vec![Value::u128(2)]);
+	let sudo_tx = pezkuwi_subxt::dynamic::tx("Sudo", "sudo", vec![set_cores.into_value()]);
 
-	let progress = api
-		.tx()
-		.sign_and_submit_then_watch_default(&sudo_tx, &sudo_keypair)
-		.await?;
+	let progress = api.tx().sign_and_submit_then_watch_default(&sudo_tx, &sudo_keypair).await?;
 	let events = progress.wait_for_finalized_success().await?;
 	for event in events.iter() {
 		let event = event?;
@@ -76,19 +68,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 		"Coretime",
 		"assign_core",
 		vec![
-			Value::u128(0),        // core index
-			begin.clone(),         // begin
-			assignment_ah,         // assignment
+			Value::u128(0),                         // core index
+			begin.clone(),                          // begin
+			assignment_ah,                          // assignment
 			Value::unnamed_variant("None", vec![]), // end_hint
 		],
 	);
-	let sudo_ah =
-		pezkuwi_subxt::dynamic::tx("Sudo", "sudo", vec![assign_ah.into_value()]);
+	let sudo_ah = pezkuwi_subxt::dynamic::tx("Sudo", "sudo", vec![assign_ah.into_value()]);
 
-	let progress = api
-		.tx()
-		.sign_and_submit_then_watch_default(&sudo_ah, &sudo_keypair)
-		.await?;
+	let progress = api.tx().sign_and_submit_then_watch_default(&sudo_ah, &sudo_keypair).await?;
 	let events = progress.wait_for_finalized_success().await?;
 	for event in events.iter() {
 		let event = event?;
@@ -108,19 +96,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 		"Coretime",
 		"assign_core",
 		vec![
-			Value::u128(1),          // core index
-			begin,                   // begin
-			assignment_people,       // assignment
+			Value::u128(1),                         // core index
+			begin,                                  // begin
+			assignment_people,                      // assignment
 			Value::unnamed_variant("None", vec![]), // end_hint
 		],
 	);
-	let sudo_people =
-		pezkuwi_subxt::dynamic::tx("Sudo", "sudo", vec![assign_people.into_value()]);
+	let sudo_people = pezkuwi_subxt::dynamic::tx("Sudo", "sudo", vec![assign_people.into_value()]);
 
-	let progress = api
-		.tx()
-		.sign_and_submit_then_watch_default(&sudo_people, &sudo_keypair)
-		.await?;
+	let progress = api.tx().sign_and_submit_then_watch_default(&sudo_people, &sudo_keypair).await?;
 	let events = progress.wait_for_finalized_success().await?;
 	for event in events.iter() {
 		let event = event?;
