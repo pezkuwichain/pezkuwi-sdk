@@ -2487,7 +2487,7 @@ pezsp_api::impl_runtime_apis! {
 			use pezsp_storage::TrackedStorageKey;
 			use xcm::latest::prelude::*;
 			use xcm_config::{
-				AssetHub, LocalCheckAccount, LocationConverter, TokenLocation, XcmConfig,
+				AssetHub, CheckAccount, LocationConverter, TokenLocation, XcmConfig,
 			};
 
 			parameter_types! {
@@ -2592,7 +2592,7 @@ pezsp_api::impl_runtime_apis! {
 			impl pezpallet_xcm_benchmarks::fungible::Config for Runtime {
 				type TransactAsset = Balances;
 
-				type CheckedAccount = LocalCheckAccount;
+				type CheckedAccount = CheckAccount;
 				type TrustedTeleporter = TrustedTeleporter;
 				type TrustedReserve = TrustedReserve;
 
