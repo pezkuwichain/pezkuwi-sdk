@@ -157,16 +157,15 @@ jobs:
         id: set_runner
         shell: bash
         run: |
-          # Self-hosted runners (reduced to 3 total for lower load)
-          # VPS1: 1 runner, VPS2: 1 runner, VPS3: 1 runner
-          echo "RUNNER_DEFAULT=ubuntu-large" >> $GITHUB_OUTPUT
-          echo "RUNNER_WEIGHTS=ubuntu-large" >> $GITHUB_OUTPUT
-          echo "RUNNER_BENCHMARK=ubuntu-large" >> $GITHUB_OUTPUT
+          # Hybrid: heavy jobs → self-hosted ephemeral VPS, light jobs → GitHub-hosted
+          echo "RUNNER_DEFAULT=pezkuwi-runner" >> $GITHUB_OUTPUT
+          echo "RUNNER_WEIGHTS=pezkuwi-runner" >> $GITHUB_OUTPUT
+          echo "RUNNER_BENCHMARK=pezkuwi-runner" >> $GITHUB_OUTPUT
           echo "RUNNER_MACOS=macos-latest" >> $GITHUB_OUTPUT
-          echo "RUNNER=ubuntu-large" >> $GITHUB_OUTPUT
-          echo "RUNNER_OLDLINUX=ubuntu-large" >> $GITHUB_OUTPUT
-          echo "RUNNER_NEW=ubuntu-large" >> $GITHUB_OUTPUT
-          echo "RUNNER_OLDLINUX_NEW=ubuntu-large" >> $GITHUB_OUTPUT
+          echo "RUNNER=pezkuwi-runner" >> $GITHUB_OUTPUT
+          echo "RUNNER_OLDLINUX=pezkuwi-runner" >> $GITHUB_OUTPUT
+          echo "RUNNER_NEW=pezkuwi-runner" >> $GITHUB_OUTPUT
+          echo "RUNNER_OLDLINUX_NEW=pezkuwi-runner" >> $GITHUB_OUTPUT
 
       #
       # Set vars
