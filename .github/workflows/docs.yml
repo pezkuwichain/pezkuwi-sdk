@@ -55,7 +55,7 @@ jobs:
         id: required
         run: |
           git config --global --add safe.directory '*'
-          cargo test --doc --workspace --locked --all-features --exclude pezkuwi-zombienet-sdk-tests --exclude pezsc-basic-authorship
+          cargo test --doc --workspace --locked --all-features --exclude pezkuwi-zombienet-sdk-tests
 
   build-rustdoc:
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
