@@ -74,8 +74,6 @@ jobs:
     env:
       # Use local templates from the repo instead of cloning from external repos
       PEZKUWI_TEMPLATE_SOURCE: ${{ github.workspace }}/templates
-      # Skip WASM build due to serde_core compatibility issues
-      SKIP_WASM_BUILD: 1
       # Fix HOME directory mismatch in containers (rustup requires this)
       HOME: /root
     steps:
@@ -212,8 +210,6 @@ jobs:
     env:
       # Use local templates from the repo instead of cloning from external repos
       PEZKUWI_TEMPLATE_SOURCE: ${{ github.workspace }}/templates
-      # Skip WASM build due to serde_core compatibility issues
-      SKIP_WASM_BUILD: 1
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0

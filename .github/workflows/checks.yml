@@ -39,28 +39,11 @@ jobs:
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v4.1.7
 
-      # Clean stale caches from other workflows that ran on this VPS runner.
-      # Each VPS has limited disk; leftover caches from docs/tests can fill it.
-      - name: Clean stale caches
-        run: |
-          echo "Disk before cleanup:"
-          df -h /cache 2>/dev/null || df -h /
-          for dir in /cache/cargo-target/*/; do
-            [ "$dir" = "/cache/cargo-target/pezkuwi-sdk/" ] && continue
-            echo "Removing stale cache: $dir"
-            rm -rf "$dir"
-          done
-          echo "Disk after cleanup:"
-          df -h /cache 2>/dev/null || df -h /
-
       - name: Rust Cache
         uses: Swatinem/rust-cache@9d47c6ad4b02e050fd481d890b2ea34778fd09d6 # v2.7.8
         with:
           shared-key: clippy
           cache-on-failure: true
-
-      - name: Add wasm32v1-none target
-        run: rustup target add wasm32v1-none || true
 
       - name: script
         id: required
@@ -101,43 +84,34 @@ jobs:
           # experimental code may rely on try-runtime and vice-versa
           cargo check --locked --all --features try-runtime,experimental --quiet
 
-  # TEMPORARILY DISABLED: check-core-crypto-features
-  # Reason: serde 1.0.218+ introduces serde_core which causes duplicate panic_impl
-  # when building wasm32 with --features=serde. alloy-consensus requires serde >= 1.0.226
-  # so we cannot pin to older serde.
-  # Tracking issue: https://github.com/pezkuwichain/pezkuwi-sdk/issues/355
-  # Upstream: https://github.com/serde-rs/serde/issues (to be filed)
-  # TODO: Re-enable when serde fixes the wasm32 + no_std + serde feature combination
-  #
-  # check-core-crypto-features:
-  #   runs-on: ${{ needs.preflight.outputs.RUNNER }}
-  #   needs: [preflight]
-  #   if: ${{ needs.preflight.outputs.changes_rust }}
-  #   timeout-minutes: 30
-  #   container:
-  #     image: ${{ needs.preflight.outputs.IMAGE }}
-  #   steps:
-  #     - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v4.1.7
-  #     - name: script
-  #       id: required
-  #       run: |
-  #         cd bizinikiwi/primitives/core
-  #         ./check-features-variants.sh
-  #         cd -
-  #         cd bizinikiwi/primitives/application-crypto
-  #         ./check-features-variants.sh
-  #         cd -
-  #         cd bizinikiwi/primitives/keyring
-  #         ./check-features-variants.sh
-  #         cd -
+  check-core-crypto-features:
+    runs-on: ${{ needs.preflight.outputs.RUNNER }}
+    needs: [preflight]
+    if: ${{ needs.preflight.outputs.changes_rust }}
+    timeout-minutes: 30
+    container:
+      image: ${{ needs.preflight.outputs.IMAGE }}
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v4.1.7
+      - name: script
+        id: required
+        run: |
+          cd bizinikiwi/primitives/core
+          ./check-features-variants.sh
+          cd -
+          cd bizinikiwi/primitives/application-crypto
+          ./check-features-variants.sh
+          cd -
+          cd bizinikiwi/primitives/keyring
+          ./check-features-variants.sh
+          cd -
   # name of this job must be unique across all workflows
   # otherwise GitHub will mark all these jobs as required
   confirm-required-checks-passed:
     runs-on: ubuntu-latest
     name: All checks passed
     # If any new job gets added, be sure to add it to this array
-    # NOTE: check-core-crypto-features temporarily removed - see comment above
-    needs: [cargo-clippy, check-try-runtime]
+    needs: [cargo-clippy, check-try-runtime, check-core-crypto-features]
     if: always() && !cancelled()
     steps:
       - run: |

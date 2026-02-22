@@ -29,7 +29,6 @@ jobs:
         - /cache/cargo-target/pezkuwi-sdk-docs:/cache/target
     env:
       RUSTFLAGS: "-Cdebug-assertions=y -Dwarnings"
-      SKIP_WASM_BUILD: 1
       CARGO_INCREMENTAL: 0
       CARGO_TARGET_DIR: /cache/target
     steps:
@@ -68,7 +67,6 @@ jobs:
       volumes:
         - /cache/cargo-target/pezkuwi-sdk-docs:/cache/target
     env:
-      SKIP_WASM_BUILD: 1
       CARGO_INCREMENTAL: 0
       CARGO_TARGET_DIR: /cache/target
       RUSTDOCFLAGS: "-Dwarnings --default-theme=ayu --html-in-header ./docs/sdk/assets/header.html --extend-css ./docs/sdk/assets/theme.css --html-after-content ./docs/sdk/assets/after-content.html"

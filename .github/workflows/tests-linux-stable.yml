@@ -32,15 +32,10 @@ jobs:
       WASM_BUILD_RUSTFLAGS: "-C debug-assertions -D warnings"
       # Ensure we run the UI tests.
       RUN_UI_TESTS: 1
-      # Temporary: Skip WASM build due to serde_core + Rust 1.88 + WASM bug
-      # Tracking: https://github.com/pezkuwichain/pezkuwi-sdk/issues/358
-      SKIP_WASM_BUILD: 1
       CARGO_TARGET_DIR: /cache/target
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-      - name: Add wasm32v1-none target
-        run: rustup target add wasm32v1-none || true
       - name: script
         id: required
         run: |
@@ -62,9 +57,6 @@ jobs:
       # Enable debug assertions since we are running optimized builds for testing
       # but still want to have debug assertions.
       RUSTFLAGS: "-Cdebug-assertions=y -Dwarnings"
-      # Temporary: Skip WASM build due to serde_core + Rust 1.88 + WASM bug
-      # Tracking: https://github.com/pezkuwichain/pezkuwi-sdk/issues/358
-      SKIP_WASM_BUILD: 1
       CARGO_TARGET_DIR: /cache/target
     steps:
       - name: Checkout
@@ -94,16 +86,10 @@ jobs:
       RUST_TOOLCHAIN: stable
       RUSTFLAGS: "-Cdebug-assertions=y -Dwarnings"
       CARGO_INCREMENTAL: 0
-      # Temporary: Skip WASM build due to serde_core + Rust 1.88 + WASM bug
-      # Tracking: https://github.com/pezkuwichain/pezkuwi-sdk/issues/358
-      SKIP_WASM_BUILD: 1
       CARGO_TARGET_DIR: /cache/target
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-
-      - name: Add wasm32v1-none target
-        run: rustup target add wasm32v1-none || true
 
       - name: script
         id: required
@@ -143,15 +129,10 @@ jobs:
       # Enable debug assertions since we are running optimized builds for testing
       # but still want to have debug assertions.
       RUSTFLAGS: "-Cdebug-assertions=y -Dwarnings"
-      # Temporary: Skip WASM build due to serde_core + Rust 1.88 + WASM bug
-      # Tracking: https://github.com/pezkuwichain/pezkuwi-sdk/issues/358
-      SKIP_WASM_BUILD: 1
       CARGO_TARGET_DIR: /cache/target
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-      - name: Add wasm32v1-none target
-        run: rustup target add wasm32v1-none || true
       - name: script
         id: required
         run: |

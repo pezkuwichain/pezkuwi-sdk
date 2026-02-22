@@ -34,9 +34,6 @@ jobs:
       # but still want to have debug assertions.
       RUSTFLAGS: "-C debug-assertions"
       RUST_BACKTRACE: 1
-      # Temporary: Skip WASM build due to serde_core + Rust 1.88 + WASM bug
-      # Tracking: https://github.com/pezkuwichain/pezkuwi-sdk/issues/358
-      SKIP_WASM_BUILD: 1
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
@@ -48,37 +45,28 @@ jobs:
           cd ../application-crypto
           cargo build --locked --no-default-features --features full_crypto
 
-  # TEMPORARILY DISABLED: test-pezframe-examples-compile-to-wasm
-  # Reason: serde_core 1.0.228+ causes duplicate lang item error when building
-  # wasm32-unknown-unknown target. The error: "duplicate lang item in crate alloc: exchange_malloc"
-  # This is the same issue that disabled check-core-crypto-features in checks.yml
-  # Tracking issue: https://github.com/pezkuwichain/pezkuwi-sdk/issues/355
-  # TODO: Re-enable when serde upstream fixes the wasm32 + no_std combination
-  #
-  # test-pezframe-examples-compile-to-wasm:
-  #   timeout-minutes: 20
-  #   # into one job
-  #   needs: [preflight, test-full-crypto-feature]
-  #   runs-on: ${{ needs.preflight.outputs.RUNNER }}
-  #   if: ${{ needs.preflight.outputs.changes_rust }}
-  #   container:
-  #     image: ${{ needs.preflight.outputs.IMAGE }}
-  #   env:
-  #     # Enable debug assertions since we are running optimized builds for testing
-  #     # but still want to have debug assertions.
-  #     RUSTFLAGS: "-C debug-assertions"
-  #     RUST_BACKTRACE: 1
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-  #     - name: Add wasm32v1-none target
-  #       run: rustup target add wasm32v1-none || true
-  #     - name: script
-  #       run: |
-  #         cd bizinikiwi/pezframe/examples/offchain-worker/
-  #         RUSTFLAGS="--cfg bizinikiwi_runtime" cargo build --locked --target=wasm32-unknown-unknown --no-default-features
-  #         cd ../basic
-  #         RUSTFLAGS="--cfg bizinikiwi_runtime" cargo build --locked --target=wasm32-unknown-unknown --no-default-features
+  test-pezframe-examples-compile-to-wasm:
+    timeout-minutes: 20
+    # into one job
+    needs: [preflight, test-full-crypto-feature]
+    runs-on: ${{ needs.preflight.outputs.RUNNER }}
+    if: ${{ needs.preflight.outputs.changes_rust }}
+    container:
+      image: ${{ needs.preflight.outputs.IMAGE }}
+    env:
+      # Enable debug assertions since we are running optimized builds for testing
+      # but still want to have debug assertions.
+      RUSTFLAGS: "-C debug-assertions"
+      RUST_BACKTRACE: 1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: script
+        run: |
+          cd bizinikiwi/pezframe/examples/offchain-worker/
+          RUSTFLAGS="--cfg bizinikiwi_runtime" cargo build --locked --target=wasm32-unknown-unknown --no-default-features
+          cd ../basic
+          RUSTFLAGS="--cfg bizinikiwi_runtime" cargo build --locked --target=wasm32-unknown-unknown --no-default-features
 
   test-pezframe-ui:
     timeout-minutes: 45
@@ -90,7 +78,6 @@ jobs:
     env:
       RUSTFLAGS: "-C debug-assertions -D warnings"
       RUST_BACKTRACE: 1
-      SKIP_WASM_BUILD: 1
       RUN_UI_TESTS: 1
       CARGO_INCREMENTAL: 0
     steps:
@@ -113,44 +100,36 @@ jobs:
           cargo test --locked -q --profile testnet -p pezsp-api-test ui
           cargo test --locked -q --profile testnet --manifest-path bizinikiwi/primitives/runtime-interface/Cargo.toml ui
 
-  # TEMPORARILY DISABLED: test-deterministic-wasm
-  # Reason: This test REQUIRES WASM builds to verify deterministic compilation.
-  # serde_core 1.0.228+ causes duplicate lang item error when building WASM targets.
-  # Error: "duplicate lang item in crate alloc: exchange_malloc"
-  # SKIP_WASM_BUILD=1 makes this test meaningless as there are no WASM files to checksum.
-  # Tracking issue: https://github.com/pezkuwichain/pezkuwi-sdk/issues/358
-  # TODO: Re-enable when serde upstream fixes the wasm32 + no_std combination
-  #
-  # test-deterministic-wasm:
-  #   timeout-minutes: 40
-  #   needs: [preflight, test-full-crypto-feature]
-  #   runs-on: ${{ needs.preflight.outputs.RUNNER }}
-  #   if: ${{ needs.preflight.outputs.changes_rust }}
-  #   container:
-  #     image: ${{ needs.preflight.outputs.IMAGE }}
-  #   env:
-  #     WASM_BUILD_NO_COLOR: 1
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-  #
-  #     - name: Clean cargo cache to free disk space
-  #       run: |
-  #         cargo clean 2>/dev/null || true
-  #         rm -rf ~/.cargo/registry/cache 2>/dev/null || true
-  #         rm -rf ~/.cargo/git/db 2>/dev/null || true
-  #
-  #     - name: script
-  #       run: |
-  #         # build runtime
-  #         cargo build -q --locked --release -p zagros-runtime -p pezkuwichain-runtime
-  #         # make checksum
-  #         sha256sum target/release/wbuild/*-runtime/target/wasm32-unknown-unknown/release/*.wasm > checksum.sha256
-  #         cargo clean
-  #         # build again
-  #         cargo build -q --locked --release -p zagros-runtime -p pezkuwichain-runtime
-  #         # confirm checksum
-  #         sha256sum -c checksum.sha256
+  test-deterministic-wasm:
+    timeout-minutes: 40
+    needs: [preflight, test-full-crypto-feature]
+    runs-on: ${{ needs.preflight.outputs.RUNNER }}
+    if: ${{ needs.preflight.outputs.changes_rust }}
+    container:
+      image: ${{ needs.preflight.outputs.IMAGE }}
+    env:
+      WASM_BUILD_NO_COLOR: 1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+      - name: Clean cargo cache to free disk space
+        run: |
+          cargo clean 2>/dev/null || true
+          rm -rf ~/.cargo/registry/cache 2>/dev/null || true
+          rm -rf ~/.cargo/git/db 2>/dev/null || true
+
+      - name: script
+        run: |
+          # build runtime
+          cargo build -q --locked --release -p zagros-runtime -p pezkuwichain-runtime
+          # make checksum
+          sha256sum target/release/wbuild/*-runtime/target/wasm32-unknown-unknown/release/*.wasm > checksum.sha256
+          cargo clean
+          # build again
+          cargo build -q --locked --release -p zagros-runtime -p pezkuwichain-runtime
+          # confirm checksum
+          sha256sum -c checksum.sha256
 
   cargo-check-benches:
     needs: [preflight]
@@ -162,10 +141,6 @@ jobs:
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
-    env:
-      # Temporary: Skip WASM build due to serde_core + Rust 1.88 + WASM bug
-      # Tracking: https://github.com/pezkuwichain/pezkuwi-sdk/issues/358
-      SKIP_WASM_BUILD: 1
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
@@ -284,9 +259,6 @@ jobs:
           rm -rf ~/.cargo/registry/cache 2>/dev/null || true
           rm -rf ~/.cargo/git/db 2>/dev/null || true
 
-      # NOTE: wasm32v1-none target removed - serde_core + Rust 1.88 bug
-      # wasm-builder will fallback to wasm32-unknown-unknown automatically
-
       - name: Run tests
         id: tests
         env:
@@ -294,9 +266,6 @@ jobs:
           # Enable debug assertions since we are running optimized builds for testing
           # but still want to have debug assertions.
           RUSTFLAGS: "-Cdebug-assertions=y -Dwarnings"
-          # Temporary: Skip WASM build due to serde_core + Rust 1.88 + WASM bug
-          # Tracking: https://github.com/pezkuwichain/pezkuwi-sdk/issues/358
-          SKIP_WASM_BUILD: 1
         run: |
           cargo build --bin pezkuwi-execute-worker --bin pezkuwi-prepare-worker --profile testnet --verbose --locked
           mkdir -p ./artifacts
@@ -338,9 +307,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-
-      - name: Add wasm32v1-none target
-        run: rustup target add wasm32v1-none || true
 
       - name: script
         run: |
@@ -397,8 +363,6 @@ jobs:
     env:
       RUSTFLAGS: "-D warnings"
       CI_JOB_NAME: cargo-check-each-crate
-      # Skip WASM build to avoid serde_core duplicate lang item error
-      SKIP_WASM_BUILD: 1
       CARGO_INCREMENTAL: 0
     strategy:
       matrix:
@@ -413,9 +377,6 @@ jobs:
           shared-key: check-each-crate-${{ matrix.index }}
           cache-on-failure: true
 
-      - name: Add wasm32v1-none target
-        run: rustup target add wasm32v1-none || true
-
       - name: script
         run: |
           PYTHONUNBUFFERED=x .github/scripts/check-each-crate.py ${{ matrix.index }} ${{ strategy.job-total }}
@@ -425,8 +386,6 @@ jobs:
     needs: [preflight]
     runs-on: ${{ needs.preflight.outputs.RUNNER_MACOS }}
     if: ${{ needs.preflight.outputs.changes_rust }}
-    env:
-      SKIP_WASM_BUILD: 1
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       - name: Set rust version from env file
@@ -491,18 +450,16 @@ jobs:
     runs-on: ubuntu-latest
     name: All test misc tests passed
     # If any new job gets added, be sure to add it to this array
-    # NOTE: test-pezframe-examples-compile-to-wasm removed - disabled due to serde_core wasm32 issue
-    # NOTE: test-deterministic-wasm removed - disabled due to serde_core wasm32 issue (requires WASM builds)
     needs:
       - test-full-crypto-feature
-      # - test-pezframe-examples-compile-to-wasm  # disabled - serde_core wasm32 issue
+      - test-pezframe-examples-compile-to-wasm
       - test-pezframe-ui
+      - test-deterministic-wasm
       - cargo-check-benches
       - pez-node-bench-regression-guard
       - test-node-metrics
       - check-tracing
       - cargo-check-each-crate
-      # - test-deterministic-wasm  # disabled - serde_core wasm32 issue (requires WASM builds)
       # - cargo-hfuzz remove from required for now, as it's flaky
     if: always() && !cancelled()
     steps:
