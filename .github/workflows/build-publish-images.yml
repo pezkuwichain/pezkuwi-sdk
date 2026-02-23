@@ -43,13 +43,12 @@ jobs:
       # Enable debug assertions since we are running optimized builds for testing
       # but still want to have debug assertions.
       RUSTFLAGS: "-Cdebug-assertions=y -Dwarnings"
+      WASM_BUILD_STD: "0"
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       - name: Configure git safe.directory
         run: git config --global --add safe.directory '*'
-      - name: Install wasm32v1-none target
-        run: rustup target add wasm32v1-none
       - name: build
         id: required
         run: |
@@ -100,11 +99,10 @@ jobs:
       image: ${{ needs.preflight.outputs.IMAGE }}
     env:
       RUSTFLAGS: "-Cdebug-assertions=y -Dwarnings"
+      WASM_BUILD_STD: "0"
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-      - name: Install wasm32v1-none target
-        run: rustup target add wasm32v1-none
       - name: build
         id: required
         run: |
@@ -136,11 +134,10 @@ jobs:
       image: ${{ needs.preflight.outputs.IMAGE }}
     env:
       RUSTFLAGS: "-Cdebug-assertions=y -Dwarnings"
+      WASM_BUILD_STD: "0"
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-      - name: Install wasm32v1-none target
-        run: rustup target add wasm32v1-none
       - name: build
         id: required
         run: |
@@ -174,11 +171,11 @@ jobs:
     timeout-minutes: 120
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
+    env:
+      WASM_BUILD_STD: "0"
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-      - name: Install wasm32v1-none target
-        run: rustup target add wasm32v1-none
       - name: build
         id: required
         run: |
@@ -213,11 +210,11 @@ jobs:
     timeout-minutes: 120
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
+    env:
+      WASM_BUILD_STD: "0"
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-      - name: Install wasm32v1-none target
-        run: rustup target add wasm32v1-none
       - name: build
         id: required
         run: |
@@ -251,13 +248,13 @@ jobs:
     timeout-minutes: 120
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
+    env:
+      WASM_BUILD_STD: "0"
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       - name: Configure git safe.directory
         run: git config --global --add safe.directory '*'
-      - name: Install wasm32v1-none target
-        run: rustup target add wasm32v1-none
       - name: build
         id: required
         run: |
@@ -296,11 +293,11 @@ jobs:
     timeout-minutes: 120
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
+    env:
+      WASM_BUILD_STD: "0"
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-      - name: Install wasm32v1-none target
-        run: rustup target add wasm32v1-none
       - name: build
         id: required
         run: |
@@ -339,11 +336,11 @@ jobs:
     timeout-minutes: 120
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
+    env:
+      WASM_BUILD_STD: "0"
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-      - name: Install wasm32v1-none target
-        run: rustup target add wasm32v1-none
       - name: build
         run: |
           cargo build --locked --profile testnet -p pezkuwi-test-malus --bin malus --bin pezkuwi-prepare-worker --bin pezkuwi-execute-worker
@@ -371,11 +368,11 @@ jobs:
     timeout-minutes: 120
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
+    env:
+      WASM_BUILD_STD: "0"
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-      - name: Install wasm32v1-none target
-        run: rustup target add wasm32v1-none
       - name: build
         run: |
           cargo nextest --manifest-path pezkuwi/zombienet-sdk-tests/Cargo.toml archive --locked --features zombie-metadata,zombie-ci --archive-file pezkuwi-zombienet-tests.tar.zst
@@ -403,11 +400,11 @@ jobs:
     timeout-minutes: 120
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
+    env:
+      WASM_BUILD_STD: "0"
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-      - name: Install wasm32v1-none target
-        run: rustup target add wasm32v1-none
       - name: build
         run: |
           cargo nextest --manifest-path pezcumulus/zombienet/zombienet-sdk/Cargo.toml archive --locked --features zombie-ci --archive-file pezcumulus-zombienet-tests.tar.zst
@@ -432,11 +429,11 @@ jobs:
     timeout-minutes: 120
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
+    env:
+      WASM_BUILD_STD: "0"
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-      - name: Install wasm32v1-none target
-        run: rustup target add wasm32v1-none
       - name: build
         run: |
           cargo nextest --manifest-path templates/zombienet/Cargo.toml archive --locked --features zombienet --archive-file teyrchain-templates-zombienet-tests.tar.zst
