@@ -16,7 +16,7 @@ keywords = ["blockchain", "pezkuwi", "sdk", "zombienet"]
 async-trait = { workspace = true }
 futures = { workspace = true }
 lazy_static = { workspace = true }
-pezkuwi-subxt = { workspace = true }
+pezkuwi-subxt = { workspace = true, features = ["native"] }
 pezkuwi-subxt-signer = { workspace = true, features = ["subxt"] }
 tokio = { workspace = true }
 

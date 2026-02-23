@@ -23,7 +23,7 @@ hex = { workspace = true }
 libp2p = { workspace = true }
 libsecp256k1 = { workspace = true }
 multiaddr = { workspace = true }
-pezkuwi-subxt = { workspace = true }
+pezkuwi-subxt = { workspace = true, features = ["native"] }
 pezkuwi-subxt-signer = { workspace = true }
 pezsc-chain-spec = { workspace = true }
 pezsp-core = { workspace = true }
