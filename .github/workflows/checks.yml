@@ -93,6 +93,10 @@ jobs:
       image: ${{ needs.preflight.outputs.IMAGE }}
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v4.1.7
+
+      - name: Install wasm32v1-none target
+        run: rustup target add wasm32v1-none
+
       - name: script
         id: required
         run: |

@@ -4,7 +4,7 @@ export RUSTFLAGS="-Cdebug-assertions=y -Dwarnings"
 cargo check --release
 
 export RUSTFLAGS="$RUSTFLAGS --cfg bizinikiwi_runtime"
-T=wasm32-unknown-unknown
+T=wasm32v1-none
 cargo check --release --target=$T --no-default-features
 cargo check --release --target=$T --no-default-features  --features="full_crypto"
 cargo check --release --target=$T --no-default-features  --features="serde"

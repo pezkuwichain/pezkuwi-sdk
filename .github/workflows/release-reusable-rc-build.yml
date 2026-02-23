@@ -180,7 +180,7 @@ jobs:
          with:
            cache: false
            toolchain: ${{ env.RUST_VERSION }}
-           target: wasm32-unknown-unknown
+           target: wasm32v1-none
            components: cargo, clippy, rust-docs, rust-src, rustfmt, rustc, rust-std
 
        - name: cargo info

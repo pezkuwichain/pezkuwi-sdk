@@ -61,12 +61,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+      - name: Install wasm32v1-none target
+        run: rustup target add wasm32v1-none
+
       - name: script
         run: |
           cd bizinikiwi/pezframe/examples/offchain-worker/
-          RUSTFLAGS="--cfg bizinikiwi_runtime" cargo build --locked --target=wasm32-unknown-unknown --no-default-features
+          RUSTFLAGS="--cfg bizinikiwi_runtime" cargo build --locked --target=wasm32v1-none --no-default-features
           cd ../basic
-          RUSTFLAGS="--cfg bizinikiwi_runtime" cargo build --locked --target=wasm32-unknown-unknown --no-default-features
+          RUSTFLAGS="--cfg bizinikiwi_runtime" cargo build --locked --target=wasm32v1-none --no-default-features
 
   test-pezframe-ui:
     timeout-minutes: 45
@@ -414,7 +418,7 @@ jobs:
         run: |
           curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain $RUST_VERSION
           source $HOME/.cargo/env
-          rustup target add wasm32-unknown-unknown
+          rustup target add wasm32v1-none
           rustup component add clippy rust-docs rust-src rustfmt rustc rust-std
       - name: Install protobuf
         run: brew install protobuf
