@@ -635,16 +635,16 @@ Düzeltme 2-3 denemede işe yaramazsa → ROLLBACK
 
 ## 🖥️ VPS RUNNER INFRASTRUCTURE
 
-**Son güncelleme:** 2025-12-27
+**Son güncelleme:** 2026-02-23
 
-### Self-Hosted Runners
+### Self-Hosted Runner
 
 | VPS | IP Address | SSH | Runner Label |
 |-----|------------|-----|--------------|
-| VPS1 | 37.60.230.9 | `ssh root@37.60.230.9` | ubuntu-large |
-| VPS2 | 62.146.235.186 | `ssh root@62.146.235.186` | ubuntu-xlarge |
+| VPS-CI | 207.180.214.165 | `ssh root@207.180.214.165` | pezkuwi-runner |
 
-Her iki runner paralel çalışır. Workflow'lar kuyrukta uzun bekliyorsa her iki VPS'in de aktif olduğunu kontrol et.
+Tek runner (ephemeral, auto re-register). Servis: `github-runner.service`. Kurulum: `/home/runner/actions-runner/`.
+Workflow'lar kuyrukta uzun bekliyorsa runner'ın aktif olduğunu kontrol et: `ssh root@207.180.214.165 "systemctl status github-runner"`
 
 ---
 

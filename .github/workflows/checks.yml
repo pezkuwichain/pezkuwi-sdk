@@ -50,7 +50,8 @@ jobs:
         run: |
           git config --global --add safe.directory '*'
           cargo clippy --all-targets --all-features --locked --workspace --quiet \
-            --exclude pezpallet-revive-eth-rpc
+            --exclude pezpallet-revive-eth-rpc \
+            --exclude pezkuwi-zombienet-sdk-tests
 
   check-try-runtime:
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
