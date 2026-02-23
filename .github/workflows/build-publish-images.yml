@@ -35,7 +35,7 @@ jobs:
   build-linux-stable:
     needs: [preflight]
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
-    timeout-minutes: 60
+    timeout-minutes: 120
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
     env:
@@ -95,7 +95,7 @@ jobs:
   build-linux-stable-pezcumulus:
     needs: [preflight]
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
-    timeout-minutes: 60
+    timeout-minutes: 120
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
     env:
@@ -131,7 +131,7 @@ jobs:
   build-test-teyrchain:
     needs: [preflight]
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
-    timeout-minutes: 60
+    timeout-minutes: 120
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
     env:
@@ -171,7 +171,7 @@ jobs:
   build-test-collators:
     needs: [preflight]
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
-    timeout-minutes: 60
+    timeout-minutes: 120
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
     steps:
@@ -210,7 +210,7 @@ jobs:
   build-malus:
     needs: [preflight]
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
-    timeout-minutes: 60
+    timeout-minutes: 120
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
     steps:
@@ -248,7 +248,7 @@ jobs:
   build-linux-bizinikiwi:
     needs: [preflight]
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
-    timeout-minutes: 60
+    timeout-minutes: 120
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
     steps:
@@ -293,7 +293,7 @@ jobs:
   build-templates-node:
     needs: [preflight]
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
-    timeout-minutes: 60
+    timeout-minutes: 120
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
     steps:
@@ -336,7 +336,7 @@ jobs:
   prepare-bridges-zombienet-artifacts:
     needs: [preflight]
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
-    timeout-minutes: 60
+    timeout-minutes: 120
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
     steps:
@@ -368,7 +368,7 @@ jobs:
   prepare-pezkuwi-zombienet-artifacts:
     needs: [preflight]
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
-    timeout-minutes: 60
+    timeout-minutes: 120
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
     steps:
@@ -400,7 +400,7 @@ jobs:
   prepare-pezcumulus-zombienet-artifacts:
     needs: [preflight]
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
-    timeout-minutes: 60
+    timeout-minutes: 120
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
     steps:
@@ -429,7 +429,7 @@ jobs:
   prepare-teyrchain-templates-zombienet-artifacts:
     needs: [preflight]
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
-    timeout-minutes: 60
+    timeout-minutes: 120
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
     steps:
@@ -463,7 +463,7 @@ jobs:
   build-push-image-test-teyrchain:
     needs: [preflight, build-test-teyrchain]
     runs-on: ${{ needs.preflight.outputs.RUNNER_DEFAULT }}
-    timeout-minutes: 60
+    timeout-minutes: 120
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
@@ -489,7 +489,7 @@ jobs:
   build-push-image-pezkuwi-debug:
     needs: [preflight, build-linux-stable]
     runs-on: ${{ needs.preflight.outputs.RUNNER_DEFAULT }}
-    timeout-minutes: 60
+    timeout-minutes: 120
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
@@ -515,7 +515,7 @@ jobs:
   build-push-image-colander:
     needs: [preflight, build-test-collators]
     runs-on: ${{ needs.preflight.outputs.RUNNER_DEFAULT }}
-    timeout-minutes: 60
+    timeout-minutes: 120
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
@@ -541,7 +541,7 @@ jobs:
   build-push-image-malus:
     needs: [preflight, build-malus]
     runs-on: ${{ needs.preflight.outputs.RUNNER_DEFAULT }}
-    timeout-minutes: 60
+    timeout-minutes: 120
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
@@ -567,7 +567,7 @@ jobs:
   build-push-image-bizinikiwi-pr:
     needs: [preflight, build-linux-bizinikiwi]
     runs-on: ${{ needs.preflight.outputs.RUNNER_DEFAULT }}
-    timeout-minutes: 60
+    timeout-minutes: 120
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
@@ -601,7 +601,7 @@ jobs:
         prepare-bridges-zombienet-artifacts,
       ]
     runs-on: ${{ needs.preflight.outputs.RUNNER_DEFAULT }}
-    timeout-minutes: 60
+    timeout-minutes: 120
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
@@ -644,7 +644,7 @@ jobs:
   build-push-image-pezkuwi-teyrchain-debug:
     needs: [preflight, build-linux-stable-pezcumulus]
     runs-on: ${{ needs.preflight.outputs.RUNNER_DEFAULT }}
-    timeout-minutes: 60
+    timeout-minutes: 120
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
