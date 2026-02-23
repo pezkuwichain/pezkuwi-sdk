@@ -28,12 +28,14 @@ jobs:
       volumes:
         - /cache/cargo-target/pezkuwi-sdk-docs:/cache/target
     env:
-      SKIP_WASM_BUILD: 1
       RUSTFLAGS: "-Cdebug-assertions=y -Dwarnings"
       CARGO_INCREMENTAL: 0
       CARGO_TARGET_DIR: /cache/target
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+      - name: Install wasm32v1-none target
+        run: rustup target add wasm32v1-none
 
       # Clean stale caches from other workflows that ran on this VPS runner.
       # Each VPS has limited disk; leftover caches from tests/checks can fill it.
