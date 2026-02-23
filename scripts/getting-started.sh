@@ -149,7 +149,7 @@ if prompt_default_yes "\n🦀 Setup the Rust environment (e.g. WASM support)?"; 
     printf "🦀 Setting up Rust environment.\n"
     rustup default stable
     rustup update
-    rustup target add wasm32-unknown-unknown
+    rustup target add wasm32v1-none
     rustup component add rust-src
 fi
 
