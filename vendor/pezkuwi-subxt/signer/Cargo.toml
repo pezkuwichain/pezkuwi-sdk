@@ -32,6 +32,7 @@ std = [
 	"pezsp-crypto-hashing/std",
 	"pezsp-keyring/std",
 	"regex/std",
+	"regex/perf",
 	"schnorrkel?/std",
 	"scrypt?/std",
 	"secp256k1?/std",
@@ -97,7 +98,7 @@ keccak-hash = { workspace = true, optional = true }
 pbkdf2 = { workspace = true }
 pezkuwi-subxt-core = { workspace = true, optional = true, default-features = false }
 pezsp-crypto-hashing = { workspace = true }
-regex = { workspace = true, features = ["unicode"] }
+regex = { version = "1.10.2", default-features = false, features = ["unicode"] }
 schnorrkel = { workspace = true, optional = true, features = ["getrandom"] }
 secp256k1 = { workspace = true, optional = true, features = [
 	"alloc",

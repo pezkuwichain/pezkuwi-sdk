@@ -98,6 +98,16 @@ def main(path, version):
 	std_crates.sort(key=lambda x: x[0].name)
 	nostd_crates.sort(key=lambda x: x[0].name)
 
+	# Client-side crates that declare no_std but have std-only transitive
+	# dependencies (e.g. thiserror v1, regex). Exclude from runtime-full
+	# to prevent wasm32v1-none compilation failures.
+	RUNTIME_FULL_EXCLUDE = {
+		"pezkuwi-subxt-signer",
+		"pezkuwi-subxt-core",
+		"pezkuwi-subxt-macro",
+		"pezkuwi-subxt-metadata",
+	}
+
 	runtime_crates = [crate for crate in nostd_crates if 'frame' in crate[0].name or crate[0].name.startswith('sp-')]
 	all_crates = std_crates + nostd_crates
 	all_crates.sort(key=lambda x: x[0].name)
@@ -118,7 +128,7 @@ def main(path, version):
 		"serde": [],
 		"experimental": [],
 		"with-tracing": [],
-		"runtime-full": list([f"{d.name}" for d, _ in nostd_crates]),
+		"runtime-full": list([f"{d.name}" for d, _ in nostd_crates if d.name not in RUNTIME_FULL_EXCLUDE]),
 		"runtime": list([f"{d.name}" for d, _ in runtime_crates]),
 		"node": ["std"] + list([f"{d.name}" for d, _ in std_crates]),
 		"tuples-96": [],
