@@ -42,9 +42,10 @@ jobs:
           shared-key: quick-benchmarks
           cache-on-failure: true
 
+      - name: Install wasm32v1-none target
+        run: rustup target add wasm32v1-none
+
       - name: script
-        env:
-          WASM_BUILD_STD: "0"
         run: cargo run --locked --release -p pezstaging-node-cli --bin bizinikiwi-node --features runtime-benchmarks --quiet -- benchmark pezpallet --chain dev --pezpallet "*" --extrinsic "*" --steps 2 --repeat 1 --quiet
 
   # cf https://github.com/pezkuwichain/pezkuwi-sdk/issues/1652
