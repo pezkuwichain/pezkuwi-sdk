@@ -1,4 +1,4 @@
-# cargo-deny configuration for Pezkuwi SDK
+# cargo-deny v2 configuration for Pezkuwi SDK
 # https://embarkstudios.github.io/cargo-deny/
 
 [graph]
@@ -7,26 +7,23 @@ targets = [
 	{ triple = "x86_64-unknown-linux-musl" },
 	{ triple = "wasm32-unknown-unknown" },
 ]
-# Exclude test/bench-only crates from checks
 exclude = []
 
 # Advisory database - check for known vulnerabilities
+# In v2: all vulnerability/unsound/notice advisories automatically emit errors.
+# Use `ignore` to suppress specific advisories.
 [advisories]
-vulnerability = "deny"
-unmaintained = "warn"
 yanked = "warn"
-notice = "warn"
+unmaintained = "workspace"
 ignore = [
 	# Add specific advisory IDs to ignore here with justification:
 	# "RUSTSEC-0000-0000", # reason for ignoring
 ]
 
 # License compliance
+# In v2: all licenses are denied unless explicitly allowed.
+# Removed v1 fields: unlicensed, deny, copyleft, allow-osi-fsf-free, default
 [licenses]
-unlicensed = "deny"
-copyleft = "warn"
-allow-osi-fsf-free = "either"
-default = "deny"
 confidence-threshold = 0.8
 allow = [
 	"Apache-2.0",
@@ -60,7 +57,6 @@ ignore = true
 multiple-versions = "warn"
 wildcards = "allow"
 highlight = "simplest-path"
-# Deny specific problematic crates
 deny = []
 skip = []
 skip-tree = []
