@@ -7,7 +7,11 @@ targets = [
 	{ triple = "x86_64-unknown-linux-musl" },
 	{ triple = "wasm32-unknown-unknown" },
 ]
-exclude = []
+# Exclude no_std test runtime crates that cause krates crate to panic
+# with "unable to locate std" when resolving the dependency graph.
+exclude = [
+	"bizinikiwi-test-runtime-transaction-pool",
+]
 
 # Advisory database - check for known vulnerabilities
 # In v2: all vulnerability/unsound/notice advisories automatically emit errors.

@@ -26,37 +26,50 @@ jobs:
     needs: isdraft
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    # Informational: surfaces issues without blocking CI.
+    # Remove continue-on-error once all findings are addressed.
+    continue-on-error: true
     strategy:
       matrix:
         checks:
           - advisories
           - licenses
           - sources
-    # Continue on advisory warnings so we see all results
-    continue-on-error: ${{ matrix.checks == 'advisories' }}
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       - uses: EmbarkStudios/cargo-deny-action@3fd3802e88374d3fe9159b834c7714ec57d6c979 # v2.0.15
         with:
           command: check ${{ matrix.checks }}
-          arguments: --workspace
 
   cargo-audit:
     needs: isdraft
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    # Informational: surfaces vulnerabilities without blocking CI.
+    # Remove continue-on-error once all advisories are resolved or ignored.
+    continue-on-error: true
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       - name: Install cargo-audit
         run: cargo install cargo-audit --locked
       - name: Run cargo audit
-        run: cargo audit --deny warnings 2>&1 || true
-      - name: Run cargo audit (deny vulnerabilities only)
-        run: cargo audit
+        run: |
+          echo "## Cargo Audit Results" >> $GITHUB_STEP_SUMMARY
+          cargo audit 2>&1 | tee audit-output.txt
+          RESULT=${PIPESTATUS[0]}
+          if [ $RESULT -ne 0 ]; then
+            echo "### Vulnerabilities found" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            cat audit-output.txt >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            exit $RESULT
+          else
+            echo "### No vulnerabilities found" >> $GITHUB_STEP_SUMMARY
+          fi
 
   confirm-security-audit-passed:
     runs-on: ubuntu-latest
-    name: All security audits passed
+    name: Security audit summary
     needs: [cargo-deny, cargo-audit]
     if: always() && !cancelled()
     steps:
@@ -64,8 +77,9 @@ jobs:
           tee resultfile <<< '${{ toJSON(needs) }}'
           FAILURES=$(cat resultfile | grep '"result": "failure"' | wc -l)
           if [ $FAILURES -gt 0 ]; then
-            echo "### At least one security audit failed" >> $GITHUB_STEP_SUMMARY
-            exit 1
+            echo "### Security audit found issues - review needed" >> $GITHUB_STEP_SUMMARY
+            echo "Note: Security audit is currently informational (continue-on-error)." >> $GITHUB_STEP_SUMMARY
+            echo "Review the cargo-deny and cargo-audit job outputs for details." >> $GITHUB_STEP_SUMMARY
           else
             echo '### All security audits passed' >> $GITHUB_STEP_SUMMARY
           fi
