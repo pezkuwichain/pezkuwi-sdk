@@ -16,6 +16,8 @@ permissions: read-all
 
 env:
   COMMIT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+  # Disable Parity's forklift GCS cache wrapper - we don't have GCP credentials on our VPS runners
+  RUSTC_WRAPPER: ""
 
 jobs:
   #
@@ -35,7 +37,7 @@ jobs:
   build-linux-stable:
     needs: [preflight]
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
-    timeout-minutes: 120
+    timeout-minutes: 180
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
     env:
@@ -95,7 +97,7 @@ jobs:
   build-linux-stable-pezcumulus:
     needs: [preflight]
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
-    timeout-minutes: 120
+    timeout-minutes: 180
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
     env:
@@ -131,7 +133,7 @@ jobs:
   build-test-teyrchain:
     needs: [preflight]
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
-    timeout-minutes: 120
+    timeout-minutes: 180
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
     env:
@@ -171,7 +173,7 @@ jobs:
   build-test-collators:
     needs: [preflight]
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
-    timeout-minutes: 120
+    timeout-minutes: 180
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
     steps:
@@ -210,7 +212,7 @@ jobs:
   build-malus:
     needs: [preflight]
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
-    timeout-minutes: 120
+    timeout-minutes: 180
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
     steps:
@@ -248,7 +250,7 @@ jobs:
   build-linux-bizinikiwi:
     needs: [preflight]
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
-    timeout-minutes: 120
+    timeout-minutes: 180
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
     steps:
@@ -293,7 +295,7 @@ jobs:
   build-templates-node:
     needs: [preflight]
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
-    timeout-minutes: 120
+    timeout-minutes: 180
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
     steps:
@@ -336,7 +338,7 @@ jobs:
   prepare-bridges-zombienet-artifacts:
     needs: [preflight]
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
-    timeout-minutes: 120
+    timeout-minutes: 180
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
     steps:
@@ -349,8 +351,8 @@ jobs:
           cargo build --locked --profile testnet -p pezkuwi-test-malus --bin malus --bin pezkuwi-prepare-worker --bin pezkuwi-execute-worker
       - name: pack artifacts
         run: |
-          mkdir -p ./artifacts/bridges-pezkuwi-sdk/bridges
-          cp -r bridges/testing ./artifacts/bridges-pezkuwi-sdk/bridges/testing
+          mkdir -p ./artifacts/bridges-pezkuwi-sdk/pezbridges
+          cp -r pezbridges/testing ./artifacts/bridges-pezkuwi-sdk/pezbridges/testing
 
       - name: tar
         run: tar -cvf artifacts.tar artifacts
@@ -368,7 +370,7 @@ jobs:
   prepare-pezkuwi-zombienet-artifacts:
     needs: [preflight]
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
-    timeout-minutes: 120
+    timeout-minutes: 180
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
     steps:
@@ -400,7 +402,7 @@ jobs:
   prepare-pezcumulus-zombienet-artifacts:
     needs: [preflight]
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
-    timeout-minutes: 120
+    timeout-minutes: 180
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
     steps:
@@ -429,7 +431,7 @@ jobs:
   prepare-teyrchain-templates-zombienet-artifacts:
     needs: [preflight]
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
-    timeout-minutes: 120
+    timeout-minutes: 180
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
     steps:
@@ -463,8 +465,10 @@ jobs:
   build-push-image-test-teyrchain:
     needs: [preflight, build-test-teyrchain]
     runs-on: ${{ needs.preflight.outputs.RUNNER_DEFAULT }}
-    timeout-minutes: 120
+    timeout-minutes: 180
     steps:
+      - name: Fix workspace permissions
+        run: sudo chown -R "$(whoami)" "$GITHUB_WORKSPACE" 2>/dev/null || true
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
@@ -489,8 +493,10 @@ jobs:
   build-push-image-pezkuwi-debug:
     needs: [preflight, build-linux-stable]
     runs-on: ${{ needs.preflight.outputs.RUNNER_DEFAULT }}
-    timeout-minutes: 120
+    timeout-minutes: 180
     steps:
+      - name: Fix workspace permissions
+        run: sudo chown -R "$(whoami)" "$GITHUB_WORKSPACE" 2>/dev/null || true
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
@@ -515,8 +521,10 @@ jobs:
   build-push-image-colander:
     needs: [preflight, build-test-collators]
     runs-on: ${{ needs.preflight.outputs.RUNNER_DEFAULT }}
-    timeout-minutes: 120
+    timeout-minutes: 180
     steps:
+      - name: Fix workspace permissions
+        run: sudo chown -R "$(whoami)" "$GITHUB_WORKSPACE" 2>/dev/null || true
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
@@ -541,8 +549,10 @@ jobs:
   build-push-image-malus:
     needs: [preflight, build-malus]
     runs-on: ${{ needs.preflight.outputs.RUNNER_DEFAULT }}
-    timeout-minutes: 120
+    timeout-minutes: 180
     steps:
+      - name: Fix workspace permissions
+        run: sudo chown -R "$(whoami)" "$GITHUB_WORKSPACE" 2>/dev/null || true
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
@@ -567,8 +577,10 @@ jobs:
   build-push-image-bizinikiwi-pr:
     needs: [preflight, build-linux-bizinikiwi]
     runs-on: ${{ needs.preflight.outputs.RUNNER_DEFAULT }}
-    timeout-minutes: 120
+    timeout-minutes: 180
     steps:
+      - name: Fix workspace permissions
+        run: sudo chown -R "$(whoami)" "$GITHUB_WORKSPACE" 2>/dev/null || true
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
@@ -601,8 +613,10 @@ jobs:
         prepare-bridges-zombienet-artifacts,
       ]
     runs-on: ${{ needs.preflight.outputs.RUNNER_DEFAULT }}
-    timeout-minutes: 120
+    timeout-minutes: 180
     steps:
+      - name: Fix workspace permissions
+        run: sudo chown -R "$(whoami)" "$GITHUB_WORKSPACE" 2>/dev/null || true
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
@@ -644,8 +658,10 @@ jobs:
   build-push-image-pezkuwi-teyrchain-debug:
     needs: [preflight, build-linux-stable-pezcumulus]
     runs-on: ${{ needs.preflight.outputs.RUNNER_DEFAULT }}
-    timeout-minutes: 120
+    timeout-minutes: 180
     steps:
+      - name: Fix workspace permissions
+        run: sudo chown -R "$(whoami)" "$GITHUB_WORKSPACE" 2>/dev/null || true
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
