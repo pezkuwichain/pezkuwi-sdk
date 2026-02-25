@@ -3,9 +3,9 @@
 
 [graph]
 targets = [
-  { triple = "x86_64-unknown-linux-gnu" },
-  { triple = "x86_64-unknown-linux-musl" },
-  { triple = "wasm32-unknown-unknown" },
+	{ triple = "wasm32-unknown-unknown" },
+	{ triple = "x86_64-unknown-linux-gnu" },
+	{ triple = "x86_64-unknown-linux-musl" },
 ]
 # Exclude no_std test runtime crates that cause krates crate to panic
 # with "unable to locate std" when resolving the dependency graph.
@@ -18,8 +18,8 @@ exclude = ["bizinikiwi-test-runtime-transaction-pool"]
 yanked = "warn"
 unmaintained = "workspace"
 ignore = [
-  # Add specific advisory IDs to ignore here with justification:
-  # "RUSTSEC-0000-0000", # reason for ignoring
+	# Add specific advisory IDs to ignore here with justification:
+	# "RUSTSEC-0000-0000", # reason for ignoring
 ]
 
 # License compliance
@@ -28,29 +28,29 @@ ignore = [
 [licenses]
 confidence-threshold = 0.8
 allow = [
-  "Apache-2.0",
-  "Apache-2.0 WITH LLVM-exception",
-  "MIT",
-  "MIT-0",
-  "BSD-2-Clause",
-  "BSD-3-Clause",
-  "ISC",
-  "Unlicense",
-  "CC0-1.0",
-  "BSL-1.0",
-  "Unicode-3.0",
-  "Unicode-DFS-2016",
-  "Zlib",
-  "MPL-2.0",
-  "OpenSSL",
-  "GPL-3.0-only",
-  "GPL-3.0-or-later",
-  "GPL-3.0-only WITH Classpath-exception-2.0",
-  "GPL-3.0-or-later WITH Classpath-exception-2.0",
+	"Apache-2.0 WITH LLVM-exception",
+	"Apache-2.0",
+	"BSD-2-Clause",
+	"BSD-3-Clause",
+	"BSL-1.0",
+	"CC0-1.0",
+	"GPL-3.0-only WITH Classpath-exception-2.0",
+	"GPL-3.0-only",
+	"GPL-3.0-or-later WITH Classpath-exception-2.0",
+	"GPL-3.0-or-later",
+	"ISC",
+	"MIT",
+	"MIT-0",
+	"MPL-2.0",
+	"OpenSSL",
+	"Unicode-3.0",
+	"Unicode-DFS-2016",
+	"Unlicense",
+	"Zlib",
 ]
 exceptions = [
-  # ring uses a custom ISC-style license
-  { allow = ["OpenSSL"], name = "ring" },
+	# ring uses a custom ISC-style license
+	{ allow = ["OpenSSL"], name = "ring" },
 ]
 
 [licenses.private]
