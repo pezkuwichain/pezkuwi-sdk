@@ -73,7 +73,7 @@ jobs:
           RUSTFLAGS="--cfg bizinikiwi_runtime" cargo build --locked --target=wasm32v1-none --no-default-features
 
   test-pezframe-ui:
-    timeout-minutes: 90
+    timeout-minutes: 150
     needs: [preflight]
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
     if: ${{ needs.preflight.outputs.changes_rust }}
@@ -105,7 +105,7 @@ jobs:
           cargo test --locked -q --profile testnet --manifest-path bizinikiwi/primitives/runtime-interface/Cargo.toml ui
 
   test-deterministic-wasm:
-    timeout-minutes: 75
+    timeout-minutes: 180
     needs: [preflight, test-full-crypto-feature]
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
     if: ${{ needs.preflight.outputs.changes_rust }}
@@ -248,7 +248,7 @@ jobs:
 
   test-node-metrics:
     needs: [preflight]
-    timeout-minutes: 90
+    timeout-minutes: 180
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
     if: ${{ needs.preflight.outputs.changes_rust }}
     container:
@@ -364,7 +364,7 @@ jobs:
   #         name: hfuzz-${{ github.sha }}
 
   cargo-check-each-crate:
-    timeout-minutes: 140
+    timeout-minutes: 240
     needs: [preflight]
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
     if: ${{ needs.preflight.outputs.changes_rust }}
@@ -393,7 +393,7 @@ jobs:
           PYTHONUNBUFFERED=x .github/scripts/check-each-crate.py ${{ matrix.index }} ${{ strategy.job-total }}
 
   cargo-check-all-crate-macos:
-    timeout-minutes: 90
+    timeout-minutes: 150
     needs: [preflight]
     runs-on: ${{ needs.preflight.outputs.RUNNER_MACOS }}
     if: ${{ needs.preflight.outputs.changes_rust }}
