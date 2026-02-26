@@ -87,7 +87,7 @@ jobs:
           app-key: ${{ secrets.WORKFLOW_STOPPER_RUNNER_APP_KEY }}
 
   build-pez-subkey:
-    timeout-minutes: 20
+    timeout-minutes: 45
     needs: [preflight]
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
     container:

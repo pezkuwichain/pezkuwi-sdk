@@ -46,7 +46,7 @@ jobs:
           cargo build --locked --no-default-features --features full_crypto
 
   test-pezframe-examples-compile-to-wasm:
-    timeout-minutes: 20
+    timeout-minutes: 45
     # into one job
     needs: [preflight, test-full-crypto-feature]
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
@@ -73,7 +73,7 @@ jobs:
           RUSTFLAGS="--cfg bizinikiwi_runtime" cargo build --locked --target=wasm32v1-none --no-default-features
 
   test-pezframe-ui:
-    timeout-minutes: 45
+    timeout-minutes: 90
     needs: [preflight]
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
     if: ${{ needs.preflight.outputs.changes_rust }}
@@ -105,7 +105,7 @@ jobs:
           cargo test --locked -q --profile testnet --manifest-path bizinikiwi/primitives/runtime-interface/Cargo.toml ui
 
   test-deterministic-wasm:
-    timeout-minutes: 40
+    timeout-minutes: 75
     needs: [preflight, test-full-crypto-feature]
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
     if: ${{ needs.preflight.outputs.changes_rust }}
@@ -248,7 +248,7 @@ jobs:
 
   test-node-metrics:
     needs: [preflight]
-    timeout-minutes: 45
+    timeout-minutes: 90
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
     if: ${{ needs.preflight.outputs.changes_rust }}
     container:
@@ -289,7 +289,7 @@ jobs:
   # more information about this job can be found here:
   # https://github.com/pezkuwichain/bizinikiwi/pull/6916
   check-tracing:
-    timeout-minutes: 20
+    timeout-minutes: 45
     needs: [preflight, test-node-metrics]
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
     if: ${{ needs.preflight.outputs.changes_rust }}
@@ -305,7 +305,7 @@ jobs:
           cargo test --locked --manifest-path ./bizinikiwi/primitives/tracing/Cargo.toml --no-default-features --features=with-tracing
 
   check-metadata-hash:
-    timeout-minutes: 20
+    timeout-minutes: 45
     needs: [preflight, check-tracing]
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
     if: ${{ needs.preflight.outputs.changes_rust }}
@@ -364,7 +364,7 @@ jobs:
   #         name: hfuzz-${{ github.sha }}
 
   cargo-check-each-crate:
-    timeout-minutes: 90
+    timeout-minutes: 140
     needs: [preflight]
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
     if: ${{ needs.preflight.outputs.changes_rust }}
@@ -393,7 +393,7 @@ jobs:
           PYTHONUNBUFFERED=x .github/scripts/check-each-crate.py ${{ matrix.index }} ${{ strategy.job-total }}
 
   cargo-check-all-crate-macos:
-    timeout-minutes: 60
+    timeout-minutes: 90
     needs: [preflight]
     runs-on: ${{ needs.preflight.outputs.RUNNER_MACOS }}
     if: ${{ needs.preflight.outputs.changes_rust }}

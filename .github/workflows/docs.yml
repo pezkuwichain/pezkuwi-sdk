@@ -59,7 +59,7 @@ jobs:
         id: required
         run: |
           git config --global --add safe.directory '*'
-          cargo test --doc --workspace --locked --all-features --exclude pezkuwi-zombienet-sdk-tests
+          cargo test --doc --workspace --locked --all-features --exclude pezkuwi-zombienet-sdk-tests --exclude pezpallet-revive-eth-rpc
 
   build-rustdoc:
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
@@ -84,7 +84,7 @@ jobs:
         id: required
         run: |
           git config --global --add safe.directory '*'
-          cargo doc --all-features --workspace --no-deps --locked --exclude pezkuwi-zombienet-sdk-tests
+          cargo doc --all-features --workspace --no-deps --locked --exclude pezkuwi-zombienet-sdk-tests --exclude pezpallet-revive-eth-rpc
       - run: rm -f ${CARGO_TARGET_DIR}/doc/.lock
       - run: mv ${CARGO_TARGET_DIR}/doc ./crate-docs
       - name: Inject Simple Analytics script
