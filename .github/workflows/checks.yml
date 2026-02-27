@@ -38,6 +38,8 @@ jobs:
       WASM_BUILD_WORKSPACE_HINT: ${{ github.workspace }}
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v4.1.7
+      - name: Disable forklift cache wrapper
+        run: echo "RUSTC_WRAPPER=" >> $GITHUB_ENV
 
       - name: Rust Cache
         uses: Swatinem/rust-cache@9d47c6ad4b02e050fd481d890b2ea34778fd09d6 # v2.7.8
@@ -68,6 +70,8 @@ jobs:
       CARGO_TARGET_DIR: /cache/target
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v4.1.7
+      - name: Disable forklift cache wrapper
+        run: echo "RUSTC_WRAPPER=" >> $GITHUB_ENV
 
       - name: Rust Cache
         uses: Swatinem/rust-cache@9d47c6ad4b02e050fd481d890b2ea34778fd09d6 # v2.7.8
@@ -94,6 +98,8 @@ jobs:
       image: ${{ needs.preflight.outputs.IMAGE }}
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v4.1.7
+      - name: Disable forklift cache wrapper
+        run: echo "RUSTC_WRAPPER=" >> $GITHUB_ENV
 
       - name: Install wasm32v1-none target
         run: rustup target add wasm32v1-none
