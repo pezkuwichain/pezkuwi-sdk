@@ -34,18 +34,24 @@ crates.sort()
 # These vendor crates have workspace.dependencies that aren't in the main workspace
 SKIP_CRATES = [
 	"pezkuwi-subxt",
+	"pezkuwi-subxt-codegen",
 	"pezkuwi-subxt-core",
 	"pezkuwi-subxt-lightclient",
 	"pezkuwi-subxt-macro",
 	"pezkuwi-subxt-metadata",
 	"pezkuwi-subxt-rpcs",
 	"pezkuwi-subxt-signer",
-	"pezkuwi-zombienet-sdk",
+	"pezkuwi-subxt-utils-fetchmetadata",
+	"pezkuwi-subxt-utils-stripmetadata",
+	"pezkuwi-zombienet-cli",
 	"pezkuwi-zombienet-configuration",
 	"pezkuwi-zombienet-orchestrator",
-	"pezkuwi-zombienet-provider",
-	"pezkuwi-zombienet-support",
 	"pezkuwi-zombienet-pjs-helper",
+	"pezkuwi-zombienet-prom-metrics-parser",
+	"pezkuwi-zombienet-provider",
+	"pezkuwi-zombienet-sdk",
+	"pezkuwi-zombienet-support",
+	"pezsp-ss58-registry",
 ]
 crates = [(name, path) for name, path in crates if name not in SKIP_CRATES]
 print(f"Crates after skipping vendor workspaces: {len(crates)}", file=sys.stderr)
