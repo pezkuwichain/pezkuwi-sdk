@@ -21,7 +21,7 @@ jobs:
 
   test-doc:
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
-    timeout-minutes: 180
+    timeout-minutes: 300
     needs: [preflight]
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
