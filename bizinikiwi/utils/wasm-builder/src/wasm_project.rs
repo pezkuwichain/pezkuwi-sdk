@@ -901,6 +901,9 @@ fn build_bloaty_blob(
 		// Make sure if we're called from within a `build.rs` the host toolchain won't override a
 		// rustup toolchain we've picked.
 		.env_remove("RUSTC")
+		// Remove any RUSTC_WRAPPER (e.g. Parity's forklift GCS cache) that would fail
+		// without GCP credentials on non-Parity CI environments.
+		.env_remove("RUSTC_WRAPPER")
 		// We don't want to call ourselves recursively
 		.env(crate::SKIP_BUILD_ENV, "");
 

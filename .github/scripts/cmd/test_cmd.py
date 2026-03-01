@@ -117,10 +117,10 @@ class TestCmd(unittest.TestCase):
 
             expected_calls = [
                 # Build calls
-                call("forklift cargo build -q -p kitchensink-runtime --profile production --features=runtime-benchmarks"),
-                call("forklift cargo build -q -p zagros-runtime --profile production --features=runtime-benchmarks"),
-                call("forklift cargo build -q -p pezkuwichain-runtime --profile production --features=runtime-benchmarks"),
-                call("forklift cargo build -q -p asset-hub-zagros-runtime --profile production --features=runtime-benchmarks"),
+                call("cargo build -q -p kitchensink-runtime --profile production --features=runtime-benchmarks"),
+                call("cargo build -q -p zagros-runtime --profile production --features=runtime-benchmarks"),
+                call("cargo build -q -p pezkuwichain-runtime --profile production --features=runtime-benchmarks"),
+                call("cargo build -q -p asset-hub-zagros-runtime --profile production --features=runtime-benchmarks"),
 
                 call(get_mock_bench_output(
                     runtime='kitchensink',
@@ -170,7 +170,7 @@ class TestCmd(unittest.TestCase):
 
             expected_calls = [
                 # Build calls
-                call("forklift cargo build -q -p zagros-runtime --profile production --features=runtime-benchmarks"),
+                call("cargo build -q -p zagros-runtime --profile production --features=runtime-benchmarks"),
 
                 # Zagros runtime calls
                 call(get_mock_bench_output(
@@ -213,7 +213,7 @@ class TestCmd(unittest.TestCase):
 
             expected_calls = [
                 # Build calls
-                call("forklift cargo build -q -p zagros-runtime --profile production --features=runtime-benchmarks"),
+                call("cargo build -q -p zagros-runtime --profile production --features=runtime-benchmarks"),
 
                 # Zagros runtime calls
                 call(get_mock_bench_output(
@@ -250,8 +250,8 @@ class TestCmd(unittest.TestCase):
 
             expected_calls = [
                 # Build calls
-                call("forklift cargo build -q -p zagros-runtime --profile production --features=runtime-benchmarks"),
-                call("forklift cargo build -q -p pezkuwichain-runtime --profile production --features=runtime-benchmarks"),
+                call("cargo build -q -p zagros-runtime --profile production --features=runtime-benchmarks"),
+                call("cargo build -q -p pezkuwichain-runtime --profile production --features=runtime-benchmarks"),
                 # Zagros runtime calls
                 call(get_mock_bench_output(
                     runtime='zagros',
@@ -309,7 +309,7 @@ class TestCmd(unittest.TestCase):
 
             expected_calls = [
                 # Build calls
-                call("forklift cargo build -q -p kitchensink-runtime --profile production --features=runtime-benchmarks"),
+                call("cargo build -q -p kitchensink-runtime --profile production --features=runtime-benchmarks"),
                 # Westend runtime calls
                 call(get_mock_bench_output(
                     runtime='kitchensink',
@@ -344,7 +344,7 @@ class TestCmd(unittest.TestCase):
 
             expected_calls = [
                 # Build calls
-                call("forklift cargo build -q -p asset-hub-zagros-runtime --profile production --features=runtime-benchmarks"),
+                call("cargo build -q -p asset-hub-zagros-runtime --profile production --features=runtime-benchmarks"),
                 # Asset-hub-zagros runtime calls
                 call(get_mock_bench_output(
                     runtime='asset-hub-zagros',
@@ -379,7 +379,7 @@ class TestCmd(unittest.TestCase):
 
             expected_calls = [
                 # Build calls
-                call("forklift cargo build -q -p asset-hub-zagros-runtime --profile production --features=runtime-benchmarks"),
+                call("cargo build -q -p asset-hub-zagros-runtime --profile production --features=runtime-benchmarks"),
                 # Asset-hub-zagros runtime calls
                 call(get_mock_bench_output(
                     runtime='asset-hub-zagros',
