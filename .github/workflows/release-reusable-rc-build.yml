@@ -205,6 +205,7 @@ jobs:
          run: brew install solidity
 
        - name: Install resolc
+         # NOTE: resolc is an upstream shared tool from paritytech/revive (EVM compiler)
          run: |
             VERSION="0.3.0"
             ASSET_URL="https://github.com/paritytech/revive/releases/download/v$VERSION/resolc-universal-apple-darwin"

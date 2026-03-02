@@ -1,0 +1,41 @@
+# Mirror upstream CI image to GHCR so we control our own build infrastructure.
+# Runs manually or when .github/env changes (new CI image version).
+name: Mirror CI Image
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [".github/env"]
+
+permissions:
+  packages: write
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Read source image from env file
+        id: source
+        run: |
+          SOURCE_IMAGE=$(grep '^IMAGE=' .github/env | cut -d'"' -f2)
+          TAG=$(echo "$SOURCE_IMAGE" | cut -d: -f2)
+          echo "source=$SOURCE_IMAGE" >> "$GITHUB_OUTPUT"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "Source: $SOURCE_IMAGE"
+
+      - name: Log in to GHCR
+        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3.7.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull, tag, and push to GHCR
+        run: |
+          docker pull "${{ steps.source.outputs.source }}"
+          docker tag "${{ steps.source.outputs.source }}" "ghcr.io/pezkuwichain/ci-unified:${{ steps.source.outputs.tag }}"
+          docker push "ghcr.io/pezkuwichain/ci-unified:${{ steps.source.outputs.tag }}"
+          echo "Mirrored to ghcr.io/pezkuwichain/ci-unified:${{ steps.source.outputs.tag }}"

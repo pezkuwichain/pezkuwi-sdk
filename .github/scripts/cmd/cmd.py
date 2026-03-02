@@ -21,7 +21,7 @@ runtimeNames = list(map(lambda x: x['name'], runtimesMatrix))
 common_args = {
     '--quiet': {"action": "store_true", "help": "Won't print start/end/failed messages in PR"},
     '--clean': {"action": "store_true", "help": "Clean up the previous bot's & author's comments in PR"},
-    '--image': {"help": "Override docker image '--image docker.io/paritytech/ci-unified:latest'"},
+    '--image': {"help": "Override docker image '--image ghcr.io/pezkuwichain/ci-unified:latest'"},
 }
 
 def print_and_log(message, output_file='/tmp/cmd/command_output.log'):
@@ -414,7 +414,7 @@ def main():
 
                 print(f'-- config: {config}')
                 if runtime == 'dev':
-                    # to support sub-modules (https://github.com/paritytech/command-bot/issues/275)
+                    # to support sub-modules
                     search_manifest_path = f"cargo metadata --locked --format-version 1 --no-deps | jq -r '.packages[] | select(.name == \"{pallet.replace('_', '-')}\") | .manifest_path'"
                     print(f'-- running: {search_manifest_path}')
                     manifest_path = os.popen(search_manifest_path).read()
@@ -427,9 +427,9 @@ def main():
                     print(f'-- package_dir: {package_dir}')
                     print(f'-- manifest_path: {manifest_path}')
                     output_path = os.path.join(package_dir, "src", "weights.rs")
-                    # TODO: we can remove once all pallets in dev runtime are migrated to polkadot-sdk-frame
+                    # TODO: we can remove once all pallets in dev runtime are migrated to pezkuwi-sdk-frame
                     try:
-                        uses_polkadot_sdk_frame = "true" in os.popen(f"cargo metadata --locked --format-version 1 --no-deps | jq -r '.packages[] | select(.name == \"{pallet.replace('_', '-')}\") | .dependencies | any(.name == \"polkadot-sdk-frame\")'").read()
+                        uses_polkadot_sdk_frame = "true" in os.popen(f"cargo metadata --locked --format-version 1 --no-deps | jq -r '.packages[] | select(.name == \"{pallet.replace('_', '-')}\") | .dependencies | any(.name == \"pezkuwi-sdk-frame\")'").read()
                         print(f'uses_polkadot_sdk_frame: {uses_polkadot_sdk_frame}')
                     # Empty output from the previous os.popen command
                     except StopIteration:

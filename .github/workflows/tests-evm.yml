@@ -34,6 +34,7 @@ jobs:
       - name: Update the Installed Python
         run: apt-get update && apt-get install -y python3-pip python3
       - name: Installing the Latest Resolc
+        # NOTE: resolc is an upstream shared tool from paritytech/revive (EVM compiler)
         run: |
           VERSION="0.5.0"
           ASSET_URL="https://github.com/paritytech/revive/releases/download/v$VERSION/resolc-x86_64-unknown-linux-musl"
@@ -119,6 +120,7 @@ jobs:
           cargo build --locked --release -p pez-revive-dev-node --bin pez-revive-dev-node
 
       - name: Checkout evm-tests
+        # NOTE: evm-test-suite is an upstream shared test suite from paritytech
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           repository: paritytech/evm-test-suite

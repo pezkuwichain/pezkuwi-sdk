@@ -95,7 +95,7 @@ runs:
         else
           export RUN_IN_CI=1
           # no need to check other runner variables. for k8s they shall store the same value
-          if [[ $ZOMBIENET_SDK_DEFAULT_RUNNER == "parity-zombienet" ]]; then
+          if [[ $ZOMBIENET_SDK_DEFAULT_RUNNER == "pezkuwi-runner" ]]; then
             export ZOMBIE_K8S_CI_NAMESPACE=$(cat /data/namespace)
           fi
         fi

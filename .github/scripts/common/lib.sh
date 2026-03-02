@@ -92,11 +92,13 @@ structure_message() {
 
 # Post a message to a matrix room
 # body: '{body: "JSON string produced by structure_message"}'
-# room_id: !fsfSRjgjBWEWffws:matrix.parity.io
+# room_id: Pezkuwi project Matrix room
 # access_token: see https://matrix.org/docs/guides/client-server-api/
 # Usage: send_message $body (json formatted) $room_id $access_token
+# NOTE: Update the Matrix homeserver URL when Pezkuwi Matrix is set up
 send_message() {
-  curl -XPOST -d "$1" "https://m.parity.io/_matrix/client/r0/rooms/$2/send/m.room.message?access_token=$3"
+  echo "::warning::Matrix notification skipped - no Pezkuwi Matrix server configured yet"
+  # curl -XPOST -d "$1" "https://matrix.pezkuwi.io/_matrix/client/r0/rooms/$2/send/m.room.message?access_token=$3"
 }
 
 # Pretty-printing functions
@@ -144,7 +146,7 @@ has_runtime_changes() {
 # with only the bootnode specified and test whether that bootnode provides peers
 # The optional third argument is the index of the bootnode in the list of bootnodes, this is just used to pick an ephemeral
 # port for the node to run on. If you're only testing one, it'll just use the first ephemeral port
-# BOOTNODE: /dns/pezkuwi-connect-0.parity.io/tcp/443/wss/p2p/12D3KooWEPmjoRpDSUuiTjvyNDd8fejZ9eNWH5bE965nyBMDrB4o
+# BOOTNODE: Pezkuwi bootnode address (to be configured for mainnet)
 # CHAINSPEC_FILE: /path/to/pezkuwi.json
 check_bootnode(){
     BOOTNODE=$1
@@ -332,34 +334,10 @@ fetch_release_artifacts_from_s3() {
 }
 
 # Pass the name of the binary as input, it will
-# return the s3 base url
+# return the release download base URL (GitHub Releases)
 function get_s3_url_base() {
-    name=$1
-    case $name in
-      pezkuwi | pezkuwi-execute-worker | pezkuwi-prepare-worker )
-        printf "https://releases.parity.io/pezkuwi"
-        ;;
-
-      pezkuwi-teyrchain)
-        printf "https://releases.parity.io/pezkuwi-teyrchain"
-        ;;
-
-      pezkuwi-omni-node)
-        printf "https://releases.parity.io/pezkuwi-omni-node"
-        ;;
-
-      chain-spec-builder)
-        printf "https://releases.parity.io/chain-spec-builder"
-        ;;
-
-      frame-omni-bencher)
-        printf "https://releases.parity.io/frame-omni-bencher"
-        ;;
-      *)
-        printf "UNSUPPORTED BINARY $name"
-        exit 1
-        ;;
-    esac
+    # All binaries served from GitHub Releases
+    printf "https://github.com/pezkuwichain/pezkuwi-sdk/releases/download"
 }
 
 
