@@ -427,6 +427,18 @@ jobs:
     continue-on-error: true
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Free disk space
+        run: |
+          echo "Disk space before cleanup:"
+          df -h /
+          # Remove large pre-installed tools to free disk space
+          sudo rm -rf /Library/Developer/CommandLineTools/SDKs 2>/dev/null || true
+          sudo rm -rf /Users/runner/Library/Android 2>/dev/null || true
+          sudo rm -rf /usr/local/share/powershell 2>/dev/null || true
+          sudo rm -rf /usr/local/lib/node_modules 2>/dev/null || true
+          brew cleanup --prune=all 2>/dev/null || true
+          echo "Disk space after cleanup:"
+          df -h /
       - name: Set rust version from env file
         run: |
           RUST_VERSION=$(cat .github/env | sed -E 's/.*ci-unified:([^-]+)-([^-]+).*/\2/')

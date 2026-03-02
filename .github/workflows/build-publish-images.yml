@@ -490,7 +490,12 @@ jobs:
     timeout-minutes: 180
     steps:
       - name: Fix workspace permissions
-        run: sudo chown -R "$(whoami)" "$GITHUB_WORKSPACE" 2>/dev/null || true
+        run: |
+          sudo chown -R "$(whoami)" "$GITHUB_WORKSPACE" || {
+            echo "::warning::sudo chown failed - attempting cleanup"
+            rm -rf "${GITHUB_WORKSPACE:?}"/* 2>/dev/null || true
+            rm -rf "${GITHUB_WORKSPACE:?}"/.[!.]* 2>/dev/null || true
+          }
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
@@ -518,7 +523,12 @@ jobs:
     timeout-minutes: 180
     steps:
       - name: Fix workspace permissions
-        run: sudo chown -R "$(whoami)" "$GITHUB_WORKSPACE" 2>/dev/null || true
+        run: |
+          sudo chown -R "$(whoami)" "$GITHUB_WORKSPACE" || {
+            echo "::warning::sudo chown failed - attempting cleanup"
+            rm -rf "${GITHUB_WORKSPACE:?}"/* 2>/dev/null || true
+            rm -rf "${GITHUB_WORKSPACE:?}"/.[!.]* 2>/dev/null || true
+          }
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
@@ -546,7 +556,12 @@ jobs:
     timeout-minutes: 180
     steps:
       - name: Fix workspace permissions
-        run: sudo chown -R "$(whoami)" "$GITHUB_WORKSPACE" 2>/dev/null || true
+        run: |
+          sudo chown -R "$(whoami)" "$GITHUB_WORKSPACE" || {
+            echo "::warning::sudo chown failed - attempting cleanup"
+            rm -rf "${GITHUB_WORKSPACE:?}"/* 2>/dev/null || true
+            rm -rf "${GITHUB_WORKSPACE:?}"/.[!.]* 2>/dev/null || true
+          }
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
@@ -574,7 +589,12 @@ jobs:
     timeout-minutes: 180
     steps:
       - name: Fix workspace permissions
-        run: sudo chown -R "$(whoami)" "$GITHUB_WORKSPACE" 2>/dev/null || true
+        run: |
+          sudo chown -R "$(whoami)" "$GITHUB_WORKSPACE" || {
+            echo "::warning::sudo chown failed - attempting cleanup"
+            rm -rf "${GITHUB_WORKSPACE:?}"/* 2>/dev/null || true
+            rm -rf "${GITHUB_WORKSPACE:?}"/.[!.]* 2>/dev/null || true
+          }
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
@@ -602,7 +622,12 @@ jobs:
     timeout-minutes: 180
     steps:
       - name: Fix workspace permissions
-        run: sudo chown -R "$(whoami)" "$GITHUB_WORKSPACE" 2>/dev/null || true
+        run: |
+          sudo chown -R "$(whoami)" "$GITHUB_WORKSPACE" || {
+            echo "::warning::sudo chown failed - attempting cleanup"
+            rm -rf "${GITHUB_WORKSPACE:?}"/* 2>/dev/null || true
+            rm -rf "${GITHUB_WORKSPACE:?}"/.[!.]* 2>/dev/null || true
+          }
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
@@ -638,7 +663,12 @@ jobs:
     timeout-minutes: 180
     steps:
       - name: Fix workspace permissions
-        run: sudo chown -R "$(whoami)" "$GITHUB_WORKSPACE" 2>/dev/null || true
+        run: |
+          sudo chown -R "$(whoami)" "$GITHUB_WORKSPACE" || {
+            echo "::warning::sudo chown failed - attempting cleanup"
+            rm -rf "${GITHUB_WORKSPACE:?}"/* 2>/dev/null || true
+            rm -rf "${GITHUB_WORKSPACE:?}"/.[!.]* 2>/dev/null || true
+          }
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
@@ -683,7 +713,12 @@ jobs:
     timeout-minutes: 180
     steps:
       - name: Fix workspace permissions
-        run: sudo chown -R "$(whoami)" "$GITHUB_WORKSPACE" 2>/dev/null || true
+        run: |
+          sudo chown -R "$(whoami)" "$GITHUB_WORKSPACE" || {
+            echo "::warning::sudo chown failed - attempting cleanup"
+            rm -rf "${GITHUB_WORKSPACE:?}"/* 2>/dev/null || true
+            rm -rf "${GITHUB_WORKSPACE:?}"/.[!.]* 2>/dev/null || true
+          }
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 

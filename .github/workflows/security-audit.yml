@@ -60,7 +60,11 @@ jobs:
           if [ $RESULT -ne 0 ]; then
             echo "### Vulnerabilities found" >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY
-            cat audit-output.txt >> $GITHUB_STEP_SUMMARY
+            # Truncate output to avoid GITHUB_STEP_SUMMARY 1MB limit
+            head -500 audit-output.txt >> $GITHUB_STEP_SUMMARY
+            if [ "$(wc -l < audit-output.txt)" -gt 500 ]; then
+              echo "... (truncated, see full output in job logs)" >> $GITHUB_STEP_SUMMARY
+            fi
             echo '```' >> $GITHUB_STEP_SUMMARY
             exit $RESULT
           else
