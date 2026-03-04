@@ -1,15 +1,13 @@
 //! Benchmarking setup for pezpallet-messaging
 //!
 //! Run benchmarks with:
-//! ```
+//! ```text
 //! ./target/release/frame-omni-bencher v1 benchmark pezpallet \
 //!   --runtime target/release/wbuild/people-pezkuwichain-runtime/people_pezkuwichain_runtime.compact.compressed.wasm \
 //!   --pallets pezpallet_messaging -e all --steps 50 --repeat 20 \
 //!   --output pezcumulus/teyrchains/pezpallets/messaging/src/weights.rs \
 //!   --template bizinikiwi/.maintain/frame-weight-template.hbs
 //! ```
-
-#![cfg(feature = "runtime-benchmarks")]
 
 use super::*;
 use pezframe_benchmarking::v2::*;
@@ -68,7 +66,7 @@ mod benchmarks {
 
 		#[block]
 		{
-			Inbox::<T>::clear_prefix(era, n, None);
+			let _ = Inbox::<T>::clear_prefix(era, n, None);
 		}
 	}
 
