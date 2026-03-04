@@ -157,7 +157,7 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
 	spec_name: alloc::borrow::Cow::Borrowed("people-pezkuwichain"),
 	impl_name: alloc::borrow::Cow::Borrowed("people-pezkuwichain"),
 	authoring_version: 1,
-	spec_version: 1_020_008,
+	spec_version: 1_020_009,
 	impl_version: 0,
 	apis: RUNTIME_API_VERSIONS,
 	transaction_version: 1,
@@ -707,6 +707,7 @@ construct_runtime!(
 		IdentityKyc: pezpallet_identity_kyc = 51,
 		Referral: pezpallet_referral = 52,
 		Perwerde: pezpallet_perwerde = 53,
+		Messaging: pezpallet_messaging = 55,
 
 		// NFTs and Roles
 		Nfts: pezpallet_nfts = 60,
@@ -770,6 +771,7 @@ mod benches {
 		[pezpallet_assets, PeopleAssets]
 		// Pezkuwi - Custom People Pallets
 		[pezpallet_identity_kyc, IdentityKyc]
+		[pezpallet_messaging, Messaging]
 		[pezpallet_perwerde, Perwerde]
 		[pezpallet_referral, Referral]
 		[pezpallet_tiki, Tiki]

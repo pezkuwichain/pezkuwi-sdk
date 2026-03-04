@@ -611,6 +611,74 @@ impl pezpallet_trust::Config for Runtime {
 }
 
 // =============================================================================
+// Messaging Pezpallet Configuration (PEZkurd-P2Pmessage)
+// =============================================================================
+
+/// Messaging citizenship checker — bridges to IdentityKyc pallet
+#[cfg(not(feature = "runtime-benchmarks"))]
+pub struct MessagingCitizenshipChecker;
+#[cfg(not(feature = "runtime-benchmarks"))]
+impl pezpallet_messaging::types::CitizenshipChecker<AccountId> for MessagingCitizenshipChecker {
+	fn is_citizen(who: &AccountId) -> bool {
+		IdentityKyc::is_citizen(who)
+	}
+}
+
+#[cfg(feature = "runtime-benchmarks")]
+pub struct MessagingCitizenshipChecker;
+#[cfg(feature = "runtime-benchmarks")]
+impl pezpallet_messaging::types::CitizenshipChecker<AccountId> for MessagingCitizenshipChecker {
+	fn is_citizen(_who: &AccountId) -> bool {
+		true
+	}
+}
+
+/// Messaging trust score checker — bridges to Trust pallet
+#[cfg(not(feature = "runtime-benchmarks"))]
+pub struct MessagingTrustScoreChecker;
+#[cfg(not(feature = "runtime-benchmarks"))]
+impl pezpallet_messaging::types::TrustScoreChecker<AccountId> for MessagingTrustScoreChecker {
+	fn trust_score_of(who: &AccountId) -> u32 {
+		// Trust pallet returns u128, we cap at u32::MAX for messaging
+		let score: u128 = Trust::trust_score_of(who);
+		score.min(u32::MAX as u128) as u32
+	}
+}
+
+#[cfg(feature = "runtime-benchmarks")]
+pub struct MessagingTrustScoreChecker;
+#[cfg(feature = "runtime-benchmarks")]
+impl pezpallet_messaging::types::TrustScoreChecker<AccountId> for MessagingTrustScoreChecker {
+	fn trust_score_of(_who: &AccountId) -> u32 {
+		100 // High trust for benchmarks
+	}
+}
+
+parameter_types! {
+	/// Minimum trust score to use messaging (20 out of ~10000 scale)
+	pub const MessagingMinTrustScore: u32 = 20;
+	/// Maximum encrypted payload per message (512 bytes)
+	pub const MessagingMaxMessageSize: u32 = 512;
+	/// Maximum messages in inbox per era per recipient
+	pub const MessagingMaxInboxSize: u32 = 50;
+	/// Maximum messages a citizen can send per era
+	pub const MessagingMaxMessagesPerEra: u32 = 50;
+	/// Era length: 3600 blocks = ~6 hours at 6s/block on People Chain
+	pub const MessagingEraLength: BlockNumber = 6 * HOURS;
+}
+
+impl pezpallet_messaging::Config for Runtime {
+	type WeightInfo = pezpallet_messaging::weights::BizinikiwiWeight<Runtime>;
+	type CitizenshipChecker = MessagingCitizenshipChecker;
+	type TrustScoreChecker = MessagingTrustScoreChecker;
+	type MinTrustScore = MessagingMinTrustScore;
+	type MaxMessageSize = MessagingMaxMessageSize;
+	type MaxInboxSize = MessagingMaxInboxSize;
+	type MaxMessagesPerEra = MessagingMaxMessagesPerEra;
+	type EraLength = MessagingEraLength;
+}
+
+// =============================================================================
 // Assets Pezpallet Configuration (required by PEZ Rewards)
 // =============================================================================
 

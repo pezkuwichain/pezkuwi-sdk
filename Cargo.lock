@@ -9196,6 +9196,7 @@ dependencies = [
  "pezpallet-identity",
  "pezpallet-identity-kyc",
  "pezpallet-message-queue",
+ "pezpallet-messaging",
  "pezpallet-migrations",
  "pezpallet-multisig",
  "pezpallet-nfts",
@@ -16514,6 +16515,24 @@ dependencies = [
  "rand_distr",
  "scale-info",
  "serde",
+]
+
+[[package]]
+name = "pezpallet-messaging"
+version = "1.0.0"
+dependencies = [
+ "log",
+ "parity-scale-codec",
+ "pezframe-benchmarking",
+ "pezframe-support",
+ "pezframe-system",
+ "pezkuwi-primitives",
+ "pezpallet-balances",
+ "pezsp-core",
+ "pezsp-io",
+ "pezsp-runtime",
+ "pezsp-std",
+ "scale-info",
 ]
 
 [[package]]
