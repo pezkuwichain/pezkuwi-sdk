@@ -10,6 +10,17 @@ vendor/pezkuwi-subxt/subxt/examples/sim_*
 vendor/pezkuwi-subxt/subxt/examples/local_sim_*
 vendor/pezkuwi-subxt/subxt/examples/fix_*
 vendor/pezkuwi-subxt/subxt/examples/init_ah_staking.rs
+
+# Operational/diagnostic scripts (contain hardcoded VPS IPs)
+vendor/pezkuwi-subxt/subxt/examples/burn_xcm_check_account.rs
+vendor/pezkuwi-subxt/subxt/examples/check_tx.rs
+vendor/pezkuwi-subxt/subxt/examples/check_validator_balances.rs
+vendor/pezkuwi-subxt/subxt/examples/diagnose_balances.rs
+vendor/pezkuwi-subxt/subxt/examples/list_validators.rs
+vendor/pezkuwi-subxt/subxt/examples/people_diag.rs
+vendor/pezkuwi-subxt/subxt/examples/people_upgrade_step2.rs
+vendor/pezkuwi-subxt/subxt/examples/trace_transfers.rs
+vendor/pezkuwi-subxt/subxt/examples/watch_teleport.rs
 .idea
 .local
 .lycheecache
