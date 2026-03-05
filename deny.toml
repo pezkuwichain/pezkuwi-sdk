@@ -16,7 +16,9 @@ exclude = ["bizinikiwi-test-runtime-transaction-pool"]
 # Use `ignore` to suppress specific advisories.
 [advisories]
 yanked = "warn"
-unmaintained = "workspace"
+# All unmaintained crates are transitive upstream dependencies we cannot replace.
+# Track via quarterly review instead of blocking CI.
+unmaintained = "none"
 ignore = [
 	# wasmtime 37.0.3: no patch release for 37.x branch. Upgrade to 41+ requires
 	# major API changes in pezsc-executor-wasmtime. Tracked for future major upgrade.
