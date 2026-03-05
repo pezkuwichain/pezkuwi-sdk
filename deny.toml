@@ -18,8 +18,23 @@ exclude = ["bizinikiwi-test-runtime-transaction-pool"]
 yanked = "warn"
 unmaintained = "workspace"
 ignore = [
-	# Add specific advisory IDs to ignore here with justification:
-	# "RUSTSEC-0000-0000", # reason for ignoring
+	# wasmtime 37.0.3: no patch release for 37.x branch. Upgrade to 41+ requires
+	# major API changes in pezsc-executor-wasmtime. Tracked for future major upgrade.
+	"RUSTSEC-2026-0006", # wasmtime segfault with f64.copysign on x86-64
+	"RUSTSEC-2026-0020", # wasmtime guest-controlled resource exhaustion
+	"RUSTSEC-2026-0021", # wasmtime panic in wasi:http/types.fields
+
+	# rsa 0.9.10: no upstream fix available. Pulled transitively by sqlx-mysql
+	# (used in pezpallet-revive-eth-rpc). Not used for cryptographic signing in our chain.
+	"RUSTSEC-2023-0071", # rsa Marvin Attack timing sidechannel
+
+	# tracing-subscriber 0.2.25: pulled by ark-relations 0.5.1 (latest).
+	# Upstream arkworks hasn't updated to tracing-subscriber 0.3.x yet.
+	"RUSTSEC-2025-0055", # tracing-subscriber ANSI log poisoning
+
+	# lru 0.12.5: IterMut Stacked Borrows violation. Pulled by smoldot-light.
+	# 0.12.5 is latest version, no patch available yet.
+	"RUSTSEC-2026-0002", # lru IterMut internal pointer invalidation
 ]
 
 # License compliance

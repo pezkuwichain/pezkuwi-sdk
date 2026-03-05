@@ -26,9 +26,6 @@ jobs:
     needs: isdraft
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    # Informational: surfaces issues without blocking CI.
-    # Remove continue-on-error once all findings are addressed.
-    continue-on-error: true
     strategy:
       matrix:
         checks:
@@ -45,9 +42,6 @@ jobs:
     needs: isdraft
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    # Informational: surfaces vulnerabilities without blocking CI.
-    # Remove continue-on-error once all advisories are resolved or ignored.
-    continue-on-error: true
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Install cargo-audit
@@ -55,12 +49,20 @@ jobs:
       - name: Run cargo audit
         run: |
           echo "## Cargo Audit Results" >> $GITHUB_STEP_SUMMARY
-          cargo audit 2>&1 | tee audit-output.txt
+          # Ignored advisories: upstream transitive deps with no available fix.
+          # Review quarterly and remove ignores when patches become available.
+          cargo audit \
+            --ignore RUSTSEC-2026-0006 \
+            --ignore RUSTSEC-2026-0020 \
+            --ignore RUSTSEC-2026-0021 \
+            --ignore RUSTSEC-2023-0071 \
+            --ignore RUSTSEC-2025-0055 \
+            --ignore RUSTSEC-2026-0002 \
+            2>&1 | tee audit-output.txt
           RESULT=${PIPESTATUS[0]}
           if [ $RESULT -ne 0 ]; then
             echo "### Vulnerabilities found" >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY
-            # Truncate output to avoid GITHUB_STEP_SUMMARY 1MB limit
             head -500 audit-output.txt >> $GITHUB_STEP_SUMMARY
             if [ "$(wc -l < audit-output.txt)" -gt 500 ]; then
               echo "... (truncated, see full output in job logs)" >> $GITHUB_STEP_SUMMARY
@@ -81,9 +83,9 @@ jobs:
           tee resultfile <<< '${{ toJSON(needs) }}'
           FAILURES=$(cat resultfile | grep '"result": "failure"' | wc -l)
           if [ $FAILURES -gt 0 ]; then
-            echo "### Security audit found issues - review needed" >> $GITHUB_STEP_SUMMARY
-            echo "Note: Security audit is currently informational (continue-on-error)." >> $GITHUB_STEP_SUMMARY
+            echo "### Security audit FAILED" >> $GITHUB_STEP_SUMMARY
             echo "Review the cargo-deny and cargo-audit job outputs for details." >> $GITHUB_STEP_SUMMARY
+            exit 1
           else
             echo '### All security audits passed' >> $GITHUB_STEP_SUMMARY
           fi
