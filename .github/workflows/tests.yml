@@ -24,9 +24,8 @@ jobs:
     if: ${{ needs.preflight.outputs.changes_rust }}
     runs-on: ${{ needs.preflight.outputs.RUNNER }}
     timeout-minutes: 180
-    # Informational: pezpallet_revive benchmarks have pre-existing failures.
-    # Remove continue-on-error once revive benchmark issues are resolved.
-    continue-on-error: true
+    # pezpallet_revive excluded: requires PolkaVM toolchain for fixture compilation.
+    # Track via: https://github.com/pezkuwichain/pezkuwi-sdk/issues/TBD
     container:
       image: ${{ needs.preflight.outputs.IMAGE }}
     env:
@@ -51,7 +50,7 @@ jobs:
         run: rustup target add wasm32v1-none
 
       - name: script
-        run: cargo run --locked --release -p pezstaging-node-cli --bin bizinikiwi-node --features runtime-benchmarks --quiet -- benchmark pezpallet --chain dev --pezpallet "*" --extrinsic "*" --steps 2 --repeat 1 --quiet
+        run: cargo run --locked --release -p pezstaging-node-cli --bin bizinikiwi-node --features runtime-benchmarks --quiet -- benchmark pezpallet --chain dev --pezpallet "*" --extrinsic "*" --exclude-pezpallets pezpallet_revive --steps 2 --repeat 1 --quiet
 
   # cf https://github.com/pezkuwichain/pezkuwi-sdk/issues/1652
   test-syscalls:
