@@ -104,7 +104,7 @@ jobs:
       - name: Generate ${{ env.BENCH }}
         env:
           BENCH: availability-recovery-regression-bench
-        uses: benchmark-action/github-action-benchmark@4bdcce38c94cec68da58d012ac24b7b1155efe8b # v1.20.7
+        uses: benchmark-action/github-action-benchmark@a7bc2366eda11037936ea57d811a43b3418d3073 # v1.21.0
         with:
           tool: "customSmallerIsBetter"
           name: ${{ env.BENCH }}
@@ -117,7 +117,7 @@ jobs:
       - name: Generate ${{ env.BENCH }}
         env:
           BENCH: availability-distribution-regression-bench
-        uses: benchmark-action/github-action-benchmark@4bdcce38c94cec68da58d012ac24b7b1155efe8b # v1.20.7
+        uses: benchmark-action/github-action-benchmark@a7bc2366eda11037936ea57d811a43b3418d3073 # v1.21.0
         with:
           tool: "customSmallerIsBetter"
           name: ${{ env.BENCH }}
@@ -130,7 +130,7 @@ jobs:
       - name: Generate ${{ env.BENCH }}
         env:
           BENCH: approval-voting-regression-bench
-        uses: benchmark-action/github-action-benchmark@4bdcce38c94cec68da58d012ac24b7b1155efe8b # v1.20.7
+        uses: benchmark-action/github-action-benchmark@a7bc2366eda11037936ea57d811a43b3418d3073 # v1.21.0
         with:
           tool: "customSmallerIsBetter"
           name: ${{ env.BENCH }}
@@ -143,7 +143,7 @@ jobs:
       - name: Generate ${{ env.BENCH }}
         env:
           BENCH: statement-distribution-regression-bench
-        uses: benchmark-action/github-action-benchmark@4bdcce38c94cec68da58d012ac24b7b1155efe8b # v1.20.7
+        uses: benchmark-action/github-action-benchmark@a7bc2366eda11037936ea57d811a43b3418d3073 # v1.21.0
         with:
           tool: "customSmallerIsBetter"
           name: ${{ env.BENCH }}
@@ -156,7 +156,7 @@ jobs:
       - name: Generate ${{ env.BENCH }}
         env:
           BENCH: dispute-coordinator-regression-bench
-        uses: benchmark-action/github-action-benchmark@4bdcce38c94cec68da58d012ac24b7b1155efe8b # v1.20.7
+        uses: benchmark-action/github-action-benchmark@a7bc2366eda11037936ea57d811a43b3418d3073 # v1.21.0
         with:
           tool: "customSmallerIsBetter"
           name: ${{ env.BENCH }}
