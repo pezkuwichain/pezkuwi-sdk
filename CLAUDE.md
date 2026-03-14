@@ -466,8 +466,8 @@ Commit atılıp push edilmeli - CI/CD artık geçmeli.
 
 **Lokal test için:**
 ```bash
-export ZOMBIENET_IMAGE_PEZKUWI="docker.io/pezkuwichain/pezkuwi:latest"
-export ZOMBIENET_IMAGE_CUMULUS="docker.io/pezkuwichain/pezcumulus:latest"
+export ZOMBIENET_IMAGE_PEZKUWI="docker.io/pezkuwi/pezkuwi:latest"
+export ZOMBIENET_IMAGE_CUMULUS="docker.io/pezkuwi/pezcumulus:latest"
 cargo test --workspace --features runtime-benchmarks
 ```
 
@@ -477,8 +477,8 @@ Test yapan tüm workflow'lara (`.github/workflows/tests*.yml`) şu environment v
 
 ```yaml
 env:
-  ZOMBIENET_IMAGE_PEZKUWI: "docker.io/pezkuwichain/pezkuwi:latest"
-  ZOMBIENET_IMAGE_CUMULUS: "docker.io/pezkuwichain/pezcumulus:latest"
+  ZOMBIENET_IMAGE_PEZKUWI: "docker.io/pezkuwi/pezkuwi:latest"
+  ZOMBIENET_IMAGE_CUMULUS: "docker.io/pezkuwi/pezcumulus:latest"
 ```
 
 **Not:** Bu değişkenler compile-time'da image alanlarının doldurulması için gerekli. Gerçek image path'leri production'da güncellenebilir.

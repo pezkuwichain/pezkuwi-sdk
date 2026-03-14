@@ -240,7 +240,7 @@ jobs:
       - id: set-image
         run: |
           BODY=$(echo "$CMD" | xargs) # remove whitespace
-          IMAGE_OVERRIDE=$(echo $BODY | grep -oe 'docker.io/pezkuwichain/ci-unified:.*\s' | xargs)
+          IMAGE_OVERRIDE=$(echo $BODY | grep -oe 'docker.io/pezkuwi/ci-unified:.*\s' | xargs)
 
           cat .github/env >> $GITHUB_OUTPUT
 

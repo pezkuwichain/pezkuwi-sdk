@@ -27,8 +27,8 @@ runs:
     - name: build
       shell: bash
       env:
-        ZOMBIENET_IMAGE: "docker.io/pezkuwichain/zombienet:v1.3.105"
-        IMAGE_TAG: docker.io/pezkuwichain/${{ inputs.image-name }}
+        ZOMBIENET_IMAGE: "docker.io/pezkuwi/zombienet:v1.3.105"
+        IMAGE_TAG: docker.io/pezkuwi/${{ inputs.image-name }}
       run: |
         export DOCKER_IMAGES_VERSION=${{ github.event.pull_request.head.sha || 'main' }}
         if [[ ${{ github.event_name }} == "merge_group" ]]; then export DOCKER_IMAGES_VERSION="${GITHUB_SHA::8}"; fi

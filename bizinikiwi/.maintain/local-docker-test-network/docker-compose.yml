@@ -34,7 +34,7 @@ services:
       - "9615:9615"
     volumes:
       - ../../target/release/bizinikiwi:/usr/local/bin/bizinikiwi
-    image: pezkuwichain/bizinikiwi
+    image: pezkuwi/bizinikiwi
     networks:
       - internet
     command:
@@ -60,7 +60,7 @@ services:
       - "--prometheus-external"
 
   validator-b:
-    image: pezkuwichain/bizinikiwi
+    image: pezkuwi/bizinikiwi
     ports:
       - "9945:9944"
     volumes:
@@ -90,7 +90,7 @@ services:
       - "--prometheus-external"
 
   light-c:
-    image: pezkuwichain/bizinikiwi
+    image: pezkuwi/bizinikiwi
     ports:
       - "9946:9944"
     volumes:
