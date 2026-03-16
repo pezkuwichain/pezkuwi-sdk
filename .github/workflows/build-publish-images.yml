@@ -344,13 +344,6 @@ jobs:
           retention-days: 1
 
 
-  # Zombienet test artifact builds removed from automatic CI pipeline.
-  # Zombienet tests can be triggered manually via workflow_dispatch:
-  #   gh workflow run zombienet_pezkuwi.yml
-  #   gh workflow run zombienet_pezcumulus.yml
-  #   gh workflow run zombienet_bizinikiwi.yml
-  #   gh workflow run zombienet_teyrchain-template.yml
-
   ### Publish ########################
 
   #
@@ -518,9 +511,6 @@ jobs:
           username: ${{ secrets.PEZKUWI_DOCKERHUB_USERNAME }}
           password: ${{ secrets.PEZKUWI_DOCKERHUB_PASSWORD }}
 
-  # build-push-image-bridges-zombienet-tests: removed from automatic CI
-  # (depends on zombienet artifacts which are now manual-only)
-
   #
   #
   #
@@ -584,9 +574,3 @@ jobs:
             echo "build_success=true" >> $GITHUB_OUTPUT
           fi
 
-  # Zombienet test triggers removed from automatic CI pipeline.
-  # Use manual workflow_dispatch to run zombienet tests when needed:
-  #   gh workflow run zombienet_pezkuwi.yml --field build_run_id=<RUN_ID>
-  #   gh workflow run zombienet_pezcumulus.yml --field build_run_id=<RUN_ID>
-  #   gh workflow run zombienet_bizinikiwi.yml --field build_run_id=<RUN_ID>
-  #   gh workflow run zombienet_teyrchain-template.yml --field build_run_id=<RUN_ID>
