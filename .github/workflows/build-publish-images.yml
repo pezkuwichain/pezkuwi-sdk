@@ -344,140 +344,12 @@ jobs:
           retention-days: 1
 
 
-  ### Build zombienet test artifacts ########################
-
-  #
-  #
-  #
-  prepare-bridges-zombienet-artifacts:
-    needs: [preflight]
-    runs-on: ${{ needs.preflight.outputs.RUNNER }}
-    timeout-minutes: 180
-    container:
-      image: ${{ needs.preflight.outputs.IMAGE }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - name: Disable forklift cache wrapper
-        run: echo "RUSTC_WRAPPER=" >> $GITHUB_ENV
-      - name: Install wasm32v1-none target
-        run: rustup target add wasm32v1-none
-      - name: build
-        run: |
-          cargo build --locked --profile testnet -p pezkuwi-test-malus --bin malus --bin pezkuwi-prepare-worker --bin pezkuwi-execute-worker
-      - name: pack artifacts
-        run: |
-          mkdir -p ./artifacts/bridges-pezkuwi-sdk/pezbridges
-          cp -r pezbridges/testing ./artifacts/bridges-pezkuwi-sdk/pezbridges/testing
-
-      - name: tar
-        run: tar -cvf artifacts.tar artifacts
-
-      - name: upload artifacts
-        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
-        with:
-          name: ${{ github.job }}-${{ needs.preflight.outputs.SOURCE_REF_SLUG }}
-          path: artifacts.tar
-          retention-days: 1
-
-  #
-  #
-  #
-  prepare-pezkuwi-zombienet-artifacts:
-    needs: [preflight]
-    runs-on: ${{ needs.preflight.outputs.RUNNER }}
-    timeout-minutes: 180
-    container:
-      image: ${{ needs.preflight.outputs.IMAGE }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - name: Disable forklift cache wrapper
-        run: echo "RUSTC_WRAPPER=" >> $GITHUB_ENV
-      - name: Install wasm32v1-none target
-        run: rustup target add wasm32v1-none
-      - name: build
-        run: |
-          cargo nextest --manifest-path pezkuwi/zombienet-sdk-tests/Cargo.toml archive --locked --features zombie-metadata,zombie-ci --archive-file pezkuwi-zombienet-tests.tar.zst
-      - name: pack artifacts
-        run: |
-          mkdir -p artifacts
-          cp pezkuwi-zombienet-tests.tar.zst ./artifacts
-
-      - name: tar
-        run: tar -cvf artifacts.tar artifacts
-
-      - name: upload artifacts
-        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
-        with:
-          name: ${{ github.job }}-${{ needs.preflight.outputs.SOURCE_REF_SLUG }}
-          path: artifacts.tar
-          retention-days: 1
-
-  #
-  #
-  #
-  prepare-pezcumulus-zombienet-artifacts:
-    needs: [preflight]
-    runs-on: ${{ needs.preflight.outputs.RUNNER }}
-    timeout-minutes: 180
-    container:
-      image: ${{ needs.preflight.outputs.IMAGE }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - name: Disable forklift cache wrapper
-        run: echo "RUSTC_WRAPPER=" >> $GITHUB_ENV
-      - name: Install wasm32v1-none target
-        run: rustup target add wasm32v1-none
-      - name: build
-        run: |
-          cargo nextest --manifest-path pezcumulus/zombienet/zombienet-sdk/Cargo.toml archive --locked --features zombie-ci --archive-file pezcumulus-zombienet-tests.tar.zst
-      - name: pack artifacts
-        run: |
-          mkdir -p artifacts
-          cp pezcumulus-zombienet-tests.tar.zst ./artifacts
-
-      - name: tar
-        run: tar -cvf artifacts.tar artifacts
-
-      - name: upload artifacts
-        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
-        with:
-          name: ${{ github.job }}-${{ needs.preflight.outputs.SOURCE_REF_SLUG }}
-          path: artifacts.tar
-          retention-days: 1
-
-  prepare-teyrchain-templates-zombienet-artifacts:
-    needs: [preflight]
-    runs-on: ${{ needs.preflight.outputs.RUNNER }}
-    timeout-minutes: 180
-    container:
-      image: ${{ needs.preflight.outputs.IMAGE }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - name: Disable forklift cache wrapper
-        run: echo "RUSTC_WRAPPER=" >> $GITHUB_ENV
-      - name: Install wasm32v1-none target
-        run: rustup target add wasm32v1-none
-      - name: build
-        run: |
-          cargo nextest --manifest-path templates/zombienet/Cargo.toml archive --locked --features zombienet --archive-file teyrchain-templates-zombienet-tests.tar.zst
-      - name: pack artifacts
-        run: |
-          mkdir -p artifacts
-          cp teyrchain-templates-zombienet-tests.tar.zst ./artifacts
-
-      - name: tar
-        run: tar -cvf artifacts.tar artifacts
-
-      - name: upload artifacts
-        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
-        with:
-          name: ${{ github.job }}-${{ needs.preflight.outputs.SOURCE_REF_SLUG }}
-          path: artifacts.tar
-          retention-days: 1
+  # Zombienet test artifact builds removed from automatic CI pipeline.
+  # Zombienet tests can be triggered manually via workflow_dispatch:
+  #   gh workflow run zombienet_pezkuwi.yml
+  #   gh workflow run zombienet_pezcumulus.yml
+  #   gh workflow run zombienet_bizinikiwi.yml
+  #   gh workflow run zombienet_teyrchain-template.yml
 
   ### Publish ########################
 
@@ -646,63 +518,8 @@ jobs:
           username: ${{ secrets.PEZKUWI_DOCKERHUB_USERNAME }}
           password: ${{ secrets.PEZKUWI_DOCKERHUB_PASSWORD }}
 
-  #
-  #
-  #
-  # unlike other images, bridges+zombienet image is based on Zombienet image that pulls required binaries
-  # from other fresh images (pezkuwi and pezcumulus)
-  build-push-image-bridges-zombienet-tests:
-    needs:
-      [
-        preflight,
-        build-linux-stable,
-        build-linux-stable-pezcumulus,
-        prepare-bridges-zombienet-artifacts,
-      ]
-    runs-on: ${{ needs.preflight.outputs.RUNNER_DEFAULT }}
-    timeout-minutes: 180
-    steps:
-      - name: Fix workspace permissions
-        run: |
-          sudo chown -R "$(whoami)" "$GITHUB_WORKSPACE" || {
-            echo "::warning::sudo chown failed - attempting cleanup"
-            rm -rf "${GITHUB_WORKSPACE:?}"/* 2>/dev/null || true
-            rm -rf "${GITHUB_WORKSPACE:?}"/.[!.]* 2>/dev/null || true
-          }
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-
-      - uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8.0.0
-        with:
-          name: build-linux-stable-${{ needs.preflight.outputs.SOURCE_REF_SLUG }}
-      - name: tar
-        run: |
-          tar -xvf artifacts.tar
-          rm artifacts.tar
-
-      - uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8.0.0
-        with:
-          name: build-linux-stable-pezcumulus-${{ needs.preflight.outputs.SOURCE_REF_SLUG }}
-      - name: tar
-        run: |
-          tar -xvf artifacts.tar
-          rm artifacts.tar
-
-      - uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8.0.0
-        with:
-          name: prepare-bridges-zombienet-artifacts-${{ needs.preflight.outputs.SOURCE_REF_SLUG }}
-      - name: tar
-        run: |
-          tar -xvf artifacts.tar
-          rm artifacts.tar
-
-      - name: build and push image
-        uses: ./.github/actions/build-push-image
-        with:
-          image-name: "bridges-zombienet-tests"
-          dockerfile: "docker/dockerfiles/bridges_zombienet_tests_injected.Dockerfile"
-          username: ${{ secrets.PEZKUWI_DOCKERHUB_USERNAME }}
-          password: ${{ secrets.PEZKUWI_DOCKERHUB_PASSWORD }}
+  # build-push-image-bridges-zombienet-tests: removed from automatic CI
+  # (depends on zombienet artifacts which are now manual-only)
 
   #
   #
@@ -767,52 +584,9 @@ jobs:
             echo "build_success=true" >> $GITHUB_OUTPUT
           fi
 
-  trigger-zombienet-pezkuwi:
-    needs: [preflight, confirm-required-build-jobs-passed]
-    uses: ./.github/workflows/zombienet_pezkuwi.yml
-    with:
-      build_run_id: ${{ github.run_id }}
-      ref_slug: ${{ needs.preflight.outputs.SOURCE_REF_SLUG }}
-
-  trigger-zombienet-pezcumulus:
-    needs: [preflight, confirm-required-build-jobs-passed]
-    uses: ./.github/workflows/zombienet_pezcumulus.yml
-    with:
-      build_run_id: ${{ github.run_id }}
-      ref_slug: ${{ needs.preflight.outputs.SOURCE_REF_SLUG }}
-
-  trigger-zombienet-bizinikiwi:
-    needs: [preflight, confirm-required-build-jobs-passed]
-    uses: ./.github/workflows/zombienet_bizinikiwi.yml
-    with:
-      build_run_id: ${{ github.run_id }}
-      ref_slug: ${{ needs.preflight.outputs.SOURCE_REF_SLUG }}
-
-  trigger-zombienet-teyrchain-template:
-    needs: [preflight, confirm-required-build-jobs-passed]
-    uses: ./.github/workflows/zombienet_teyrchain-template.yml
-    with:
-      build_run_id: ${{ github.run_id }}
-      ref_slug: ${{ needs.preflight.outputs.SOURCE_REF_SLUG }}
-
-  confirm-zombienet-tests-passed:
-    runs-on: ubuntu-latest
-    name: All zombienet tests passed
-    needs:
-      - trigger-zombienet-pezkuwi
-      - trigger-zombienet-pezcumulus
-      - trigger-zombienet-bizinikiwi
-      - trigger-zombienet-teyrchain-template
-    if: always() && !cancelled()
-    steps:
-      - name: Check zombienet success
-        id: check_success
-        run: |
-          tee resultfile <<< '${{ toJSON(needs) }}'
-          FAILURES=$(grep -c '"result": "failure"' resultfile || true)
-          if [ "$FAILURES" -gt 0 ]; then
-            echo "### At least one zombienet job failed ❌" >> $GITHUB_STEP_SUMMARY
-            exit 1
-          else
-            echo '### Good job! All zombienet jobs passed 🚀' >> $GITHUB_STEP_SUMMARY
-          fi
+  # Zombienet test triggers removed from automatic CI pipeline.
+  # Use manual workflow_dispatch to run zombienet tests when needed:
+  #   gh workflow run zombienet_pezkuwi.yml --field build_run_id=<RUN_ID>
+  #   gh workflow run zombienet_pezcumulus.yml --field build_run_id=<RUN_ID>
+  #   gh workflow run zombienet_bizinikiwi.yml --field build_run_id=<RUN_ID>
+  #   gh workflow run zombienet_teyrchain-template.yml --field build_run_id=<RUN_ID>
