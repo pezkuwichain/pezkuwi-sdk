@@ -88,7 +88,7 @@ jobs:
           name: report-${{ matrix.platform }}.md
           path: report.md
       - name: Posting the report as a comment on the PR
-        uses: marocchino/sticky-pull-request-comment@773744901bac0e8cbb5a0dc842800d45e9b2b405
+        uses: marocchino/sticky-pull-request-comment@70d2764d1a7d5d9560b100cbea0077fc8f633987
         if: ${{ contains(github.event.pull_request.labels.*.name, 'T7-smart_contracts') }}
         with:
           header: diff-tests-report-${{ matrix.platform }}
