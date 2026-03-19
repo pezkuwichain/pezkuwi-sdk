@@ -39,7 +39,7 @@ RUN apt-get update && \
 
 
 # add adder-collator binary to docker image
-COPY ./artifacts/malus ./artifacts/pezkuwi-execute-worker ./artifacts/pezkuwi-prepare-worker /usr/local/bin
+COPY ./artifacts/malus ./artifacts/pezkuwi-execute-worker ./artifacts/pezkuwi-prepare-worker /usr/local/bin/
 
 USER nonroot
 
