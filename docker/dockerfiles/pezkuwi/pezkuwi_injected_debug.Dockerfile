@@ -33,7 +33,7 @@ RUN apt-get update && \
 	ln -s /data /pezkuwi/.local/share/pezkuwi
 
 # add pezkuwi binaries to docker image
-COPY ./artifacts/pezkuwi ./artifacts/pezkuwi-execute-worker ./artifacts/pezkuwi-prepare-worker /usr/local/bin
+COPY ./artifacts/pezkuwi ./artifacts/pezkuwi-execute-worker ./artifacts/pezkuwi-prepare-worker /usr/local/bin/
 
 # add runtime binaries to docker image
 COPY ./artifacts/runtimes /pezkuwi/runtimes/
