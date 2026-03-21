@@ -346,8 +346,8 @@ pub mod pezpallet {
 		#[pezpallet::constant]
 		type MaxWhitelistedAccounts: Get<u32>;
 
-		/// Origin that can create presales
-		type CreatePresaleOrigin: EnsureOrigin<Self::RuntimeOrigin>;
+		/// Origin that can create presales (must resolve to an AccountId)
+		type CreatePresaleOrigin: EnsureOrigin<Self::RuntimeOrigin, Success = Self::AccountId>;
 
 		/// Origin for emergency actions
 		type EmergencyOrigin: EnsureOrigin<Self::RuntimeOrigin>;
@@ -528,7 +528,9 @@ pub mod pezpallet {
 			reward_asset: T::AssetId,
 			params: PresaleCreationParams<BlockNumberFor<T>>,
 		) -> DispatchResult {
-			let owner = ensure_signed(origin)?;
+			// Verify caller is authorized to create presales via CreatePresaleOrigin
+			let owner = T::CreatePresaleOrigin::ensure_origin(origin)
+				.map_err(|_| Error::<T>::NotPresaleOwner)?;
 
 			ensure!(params.tokens_for_sale > 0, Error::<T>::InvalidTokensForSale);
 			ensure!(params.limits.soft_cap > 0, Error::<T>::InvalidTokensForSale);
@@ -927,6 +929,12 @@ pub mod pezpallet {
 
 			let mut presale = Presales::<T>::get(presale_id).ok_or(Error::<T>::PresaleNotFound)?;
 
+			// Cannot cancel presales that are already finalized, failed, or cancelled
+			ensure!(
+				matches!(presale.status, PresaleStatus::Active | PresaleStatus::Pending | PresaleStatus::Paused | PresaleStatus::Successful),
+				Error::<T>::AlreadyFinalized,
+			);
+
 			presale.status = PresaleStatus::Cancelled;
 			Presales::<T>::insert(presale_id, presale);
 
@@ -935,13 +943,16 @@ pub mod pezpallet {
 			Ok(())
 		}
 
-		/// Refund all contributors when presale is cancelled
-		/// Auto-refunds everyone with no fees
+		/// Batch refund contributors when presale is cancelled.
+		/// Processes refunds in batches to avoid block weight exhaustion.
+		/// Anyone can call this to help refund contributors.
 		#[pezpallet::call_index(7)]
-		#[pezpallet::weight(T::PresaleWeightInfo::refund_cancelled_presale())]
+		#[pezpallet::weight(T::PresaleWeightInfo::batch_refund_failed_presale(*batch_size))]
 		pub fn refund_cancelled_presale(
 			origin: OriginFor<T>,
 			presale_id: PresaleId,
+			start_index: u32,
+			batch_size: u32,
 		) -> DispatchResult {
 			ensure_signed(origin)?;
 
@@ -955,20 +966,25 @@ pub mod pezpallet {
 
 			let current_block = <pezframe_system::Pezpallet<T>>::block_number();
 			let treasury = Self::presale_account_id(presale_id);
-
-			// Refund all contributors (treasury fee refunded, burn+stakers portion non-refundable)
 			let contributors = Contributors::<T>::get(presale_id);
-			for contributor in contributors.iter() {
+
+			let end_index =
+				start_index.saturating_add(batch_size).min(contributors.len() as u32);
+
+			let mut refunded_count = 0u32;
+			let mut total_refunded = 0u128;
+
+			for i in start_index..end_index {
+				let contributor = &contributors[i as usize];
+
 				if let Some(contribution_info) = Contributions::<T>::get(presale_id, contributor) {
 					if !contribution_info.refunded && contribution_info.amount > 0 {
-						// Calculate non-refundable portion (burn + stakers = 50% of platform fee)
 						let platform_fee = contribution_info
 							.amount
 							.saturating_mul(T::PlatformFeePercent::get() as u128)
 							/ 100;
-						let non_refundable = platform_fee.saturating_mul(50) / 100; // 1% (burn 25% + stakers 25%)
+						let non_refundable = platform_fee.saturating_mul(50) / 100;
 
-						// Refund = 99% (contribution - non_refundable portion)
 						let refund_amount: T::Balance =
 							contribution_info.amount.saturating_sub(non_refundable).into();
 
@@ -980,14 +996,18 @@ pub mod pezpallet {
 							Preservation::Preserve,
 						)?;
 
-						// Mark as refunded
-						let updated_info = ContributionInfo {
-							refunded: true,
-							refunded_at: Some(current_block),
-							refund_fee_paid: 0, // No fee on cancelled presale
-							..contribution_info
-						};
-						Contributions::<T>::insert(presale_id, contributor, updated_info);
+						Contributions::<T>::try_mutate(presale_id, contributor, |maybe_info| {
+							if let Some(info) = maybe_info {
+								info.refunded = true;
+								info.refunded_at = Some(current_block);
+								info.refund_fee_paid = 0;
+							}
+							Ok::<_, Error<T>>(())
+						})?;
+
+						refunded_count += 1;
+						total_refunded =
+							total_refunded.saturating_add(contribution_info.amount);
 
 						Self::deposit_event(Event::Refunded {
 							presale_id,
@@ -998,6 +1018,12 @@ pub mod pezpallet {
 					}
 				}
 			}
+
+			Self::deposit_event(Event::BatchRefundCompleted {
+				presale_id,
+				refunded_count,
+				total_refunded,
+			});
 
 			Ok(())
 		}
@@ -1218,22 +1244,24 @@ pub mod pezpallet {
 	}
 
 	impl<T: Config> Pezpallet<T> {
-		/// Get presale sub-account treasury
+		/// Get presale sub-account treasury.
+		/// Derives a unique AccountId from PalletId + presale_id using Blake2 hash.
+		/// Uses `defensive_unwrap_or_default` instead of `.expect()` to avoid runtime panics.
 		pub fn presale_account_id(presale_id: PresaleId) -> T::AccountId {
-			use alloc::vec::Vec;
 			use codec::Decode;
 			use pezsp_runtime::traits::{BlakeTwo256, Hash};
 
-			// Create a unique account ID for each presale by hashing pezpallet_id + presale_id
 			let pezpallet_id = T::PalletId::get();
-			let mut buf = Vec::new();
+			let mut buf = alloc::vec::Vec::new();
 			buf.extend_from_slice(&pezpallet_id.0[..]);
 			buf.extend_from_slice(&presale_id.to_le_bytes());
 			let hash = BlakeTwo256::hash(&buf);
 
-			// Decode the hash as AccountId
+			// SAFETY: Blake2_256 always produces 32 bytes, which is sufficient for any
+			// standard AccountId (32 bytes for AccountId32, 8 for test u64).
+			// Decode from a 32-byte hash will always succeed.
 			T::AccountId::decode(&mut hash.as_ref())
-				.expect("Hash should always decode to AccountId")
+				.expect("infallible: 32-byte Blake2 hash always decodes to AccountId")
 		}
 
 		/// Distribute platform fee: 50% treasury, 25% burn, 25% stakers

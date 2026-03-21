@@ -1095,19 +1095,44 @@ pub mod pezpallet {
 			let proposal =
 				ActiveProposals::<T>::get(proposal_id).ok_or(Error::<T>::ProposalNotFound)?;
 
-			// For Parliament decisions, voter must be a parliament member
+			// Enforce access control based on decision type
 			match proposal.decision_type {
 				CollectiveDecisionType::ParliamentSimpleMajority
 				| CollectiveDecisionType::ParliamentSuperMajority
-				| CollectiveDecisionType::ParliamentAbsoluteMajority => {
-					// Check if voter is in parliament
+				| CollectiveDecisionType::ParliamentAbsoluteMajority
+				| CollectiveDecisionType::VetoOverride => {
+					// Parliament members only
 					let members = ParliamentMembers::<T>::get();
 					let is_member = members.iter().any(|m| m.account == voter);
 					ensure!(is_member, Error::<T>::NotAuthorizedToVote);
 				},
-				// For other decision types, authorization check is handled differently
-				// (e.g., ConstitutionalReview requires Diwan membership)
-				_ => {},
+				CollectiveDecisionType::ConstitutionalReview
+				| CollectiveDecisionType::ConstitutionalUnanimous => {
+					// Diwan members only
+					ensure!(
+						Self::is_diwan_member(&voter),
+						Error::<T>::NotAuthorizedToVote,
+					);
+				},
+				CollectiveDecisionType::ExecutiveDecision => {
+					// Serok (President) only
+					let serok = CurrentOfficials::<T>::get(GovernmentPosition::Serok);
+					ensure!(
+						serok.as_ref() == Some(&voter),
+						Error::<T>::NotAuthorizedToVote,
+					);
+				},
+				CollectiveDecisionType::HybridDecision => {
+					// Parliament members OR Serok
+					let members = ParliamentMembers::<T>::get();
+					let is_parliament = members.iter().any(|m| m.account == voter);
+					let serok = CurrentOfficials::<T>::get(GovernmentPosition::Serok);
+					let is_serok = serok.as_ref() == Some(&voter);
+					ensure!(
+						is_parliament || is_serok,
+						Error::<T>::NotAuthorizedToVote,
+					);
+				},
 			}
 
 			// Record the vote

@@ -218,6 +218,8 @@ pub mod pezpallet {
 		CourseAlreadyCompleted,
 		NotCourseOwner,
 		TooManyCourses,
+		/// Course ID counter overflow
+		CourseIdOverflow,
 	}
 
 	#[pezpallet::call]
@@ -233,7 +235,9 @@ pub mod pezpallet {
 			let owner = T::AdminOrigin::ensure_origin(origin)?;
 			let course_id = NextCourseId::<T>::get();
 
-			// Parameters are already bounded, no conversion needed
+			// Prevent overflow — ensure we haven't exhausted the u32 ID space
+			ensure!(course_id < u32::MAX, Error::<T>::CourseIdOverflow);
+
 			let course = Course {
 				id: course_id,
 				owner: owner.clone(),
@@ -245,7 +249,7 @@ pub mod pezpallet {
 			};
 
 			Courses::<T>::insert(course_id, course);
-			NextCourseId::<T>::mutate(|id| *id += 1);
+			NextCourseId::<T>::put(course_id.saturating_add(1));
 
 			Self::deposit_event(Event::CourseCreated { course_id, owner });
 			Ok(())

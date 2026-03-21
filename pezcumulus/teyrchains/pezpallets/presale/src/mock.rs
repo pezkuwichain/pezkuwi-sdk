@@ -181,15 +181,12 @@ pub fn mint_assets(asset_id: u32, account: u64, amount: u128) {
 pub fn presale_treasury(presale_id: u32) -> u64 {
 	use pezsp_io::hashing::blake2_256;
 
-	// Create a unique account ID for each presale by hashing pezpallet_id + presale_id
-	// This matches the logic in pezpallet_presale::Pezpallet::presale_account_id
+	// Matches the derivation in pezpallet_presale::Pezpallet::presale_account_id
 	let pezpallet_id = PresalePalletId::get();
 	let mut buf = Vec::new();
 	buf.extend_from_slice(&pezpallet_id.0[..]);
 	buf.extend_from_slice(&presale_id.to_le_bytes());
 	let hash = blake2_256(&buf);
 
-	// Convert hash to u64 (since Test uses u64 as AccountId)
-	// Take first 8 bytes and convert to u64
 	u64::from_le_bytes([hash[0], hash[1], hash[2], hash[3], hash[4], hash[5], hash[6], hash[7]])
 }
