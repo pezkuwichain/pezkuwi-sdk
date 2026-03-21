@@ -192,7 +192,7 @@ impl WeightInfo for () {
 use pezframe_support::{
 	dispatch::{GetDispatchInfo, PostDispatchInfo},
 	pezpallet_prelude::*,
-	traits::{EnsureOrigin, Get, Randomness},
+	traits::{Currency, EnsureOrigin, Get, Randomness, ReservableCurrency},
 	weights::Weight,
 };
 use pezframe_system::pezpallet_prelude::*;
@@ -201,7 +201,7 @@ use pezpallet_identity_kyc::types::KycLevel;
 use pezpallet_identity_kyc::types::KycStatus;
 use pezpallet_tiki::{Tiki, TikiScoreProvider};
 use pezpallet_trust::TrustScoreProvider;
-use pezsp_runtime::traits::Dispatchable;
+use pezsp_runtime::{traits::Dispatchable, SaturatedConversion};
 use pezsp_std::{boxed::Box, vec, vec::Vec};
 
 /// Interface for getting citizenship information from other pallets.
@@ -255,6 +255,14 @@ pub mod pezpallet {
 		#[pezpallet::constant]
 		type PresidentialEndorsements: Get<u32>;
 		type ParliamentaryEndorsements: Get<u32>;
+
+		/// Currency used for candidacy deposits
+		type NativeCurrency: ReservableCurrency<Self::AccountId>;
+
+		/// Maximum number of endorsers allowed per candidate registration.
+		/// Prevents unbounded Vec from consuming excessive weight before validation.
+		#[pezpallet::constant]
+		type MaxEndorsers: Get<u32>;
 	}
 
 	// --- CORE GOVERNANCE STORAGE ---
@@ -529,6 +537,10 @@ pub mod pezpallet {
 		InvalidElectionType,
 		CalculationOverflow,
 		RunoffElectionFailed,
+		/// Candidate cannot afford the required deposit
+		InsufficientDeposit,
+		/// Too many endorsers provided
+		TooManyEndorsers,
 	}
 
 	// --- Extrinsics ---
@@ -639,6 +651,13 @@ pub mod pezpallet {
 		) -> DispatchResult {
 			let candidate = ensure_signed(origin)?;
 
+			// H7 fix: Validate endorsers count early, before any storage reads,
+			// to prevent large Vecs from consuming excessive weight.
+			ensure!(
+				endorsers.len() as u32 <= T::MaxEndorsers::get(),
+				Error::<T>::TooManyEndorsers
+			);
+
 			let mut election =
 				ActiveElections::<T>::get(election_id).ok_or(Error::<T>::ElectionNotFound)?;
 
@@ -700,6 +719,17 @@ pub mod pezpallet {
 				!ElectionCandidates::<T>::contains_key(election_id, &candidate),
 				Error::<T>::AlreadyCandidate
 			);
+
+			// H6 fix: Actually reserve the candidacy deposit from the candidate's balance.
+			// Skip in benchmarks where accounts may not be funded.
+			#[cfg(not(feature = "runtime-benchmarks"))]
+			{
+				let deposit_amount: <<T as Config>::NativeCurrency as Currency<
+					T::AccountId,
+				>>::Balance = T::CandidacyDeposit::get().saturated_into();
+				T::NativeCurrency::reserve(&candidate, deposit_amount)
+					.map_err(|_| Error::<T>::InsufficientDeposit)?;
+			}
 
 			let candidate_info = CandidateInfo {
 				account: candidate.clone(),

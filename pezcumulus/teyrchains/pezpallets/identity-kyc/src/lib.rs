@@ -181,6 +181,13 @@ pub mod pezpallet {
 	#[pezpallet::getter(fn identity_hash_of)]
 	pub type IdentityHashes<T: Config> = StorageMap<_, Blake2_128Concat, T::AccountId, H256>;
 
+	/// Reverse mapping: identity hash -> account ID (uniqueness enforcement)
+	/// Ensures no two accounts can register with the same identity hash
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn identity_hash_owner)]
+	pub type IdentityHashToAccount<T: Config> =
+		StorageMap<_, Blake2_128Concat, H256, T::AccountId>;
+
 	/// Referrer of approved citizens (for direct responsibility tracking)
 	/// Kept permanently for penalty system even after application is removed
 	#[pezpallet::storage]
@@ -227,6 +234,8 @@ pub mod pezpallet {
 				KycStatuses::<T>::insert(account, KycLevel::Approved);
 				// Store identity hash
 				IdentityHashes::<T>::insert(account, *identity_hash);
+				// Store reverse mapping for uniqueness enforcement
+				IdentityHashToAccount::<T>::insert(*identity_hash, account);
 			}
 		}
 	}
@@ -274,6 +283,8 @@ pub mod pezpallet {
 		NotTheReferrer,
 		/// Cannot cancel application in current state (must be PendingReferral)
 		CannotCancelInCurrentState,
+		/// Identity hash already registered by another account
+		IdentityHashAlreadyUsed,
 	}
 
 	// ============= EXTRINSICS =============
@@ -309,6 +320,12 @@ pub mod pezpallet {
 			ensure!(
 				KycStatuses::<T>::get(&applicant) == KycLevel::NotStarted,
 				Error::<T>::ApplicationAlreadyExists
+			);
+
+			// Identity hash must be unique - no other account can use the same hash
+			ensure!(
+				!IdentityHashToAccount::<T>::contains_key(&identity_hash),
+				Error::<T>::IdentityHashAlreadyUsed
 			);
 
 			// Determine the actual referrer:
@@ -417,6 +434,9 @@ pub mod pezpallet {
 			// Store identity hash permanently (for proof of citizenship)
 			IdentityHashes::<T>::insert(&applicant, application.identity_hash);
 
+			// Store reverse mapping for uniqueness enforcement
+			IdentityHashToAccount::<T>::insert(application.identity_hash, &applicant);
+
 			// Store referrer permanently (for direct responsibility tracking)
 			// This is needed even after Applications is removed for penalty system
 			CitizenReferrers::<T>::insert(&applicant, application.referrer.clone());
@@ -484,8 +504,10 @@ pub mod pezpallet {
 			// Reset status
 			KycStatuses::<T>::insert(&who, KycLevel::NotStarted);
 
-			// Remove identity hash
-			IdentityHashes::<T>::remove(&who);
+			// Remove identity hash and reverse mapping
+			if let Some(hash) = IdentityHashes::<T>::take(&who) {
+				IdentityHashToAccount::<T>::remove(hash);
+			}
 
 			Self::deposit_event(Event::CitizenshipRenounced { who });
 			Ok(())

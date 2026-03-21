@@ -311,6 +311,7 @@ parameter_types! {
 	pub const MaxCourseLinkLength: u32 = 256;
 	pub const MaxStudentsPerCourse: u32 = 1000;
 	pub const MaxCoursesPerStudent: u32 = 50;
+	pub const MaxPointsPerCourse: u32 = 1000;
 }
 
 /// Admin origin for Perwerde pezpallet that supports progressive decentralization
@@ -365,6 +366,7 @@ impl pezpallet_perwerde::Config for Runtime {
 	type MaxCourseLinkLength = MaxCourseLinkLength;
 	type MaxStudentsPerCourse = MaxStudentsPerCourse;
 	type MaxCoursesPerStudent = MaxCoursesPerStudent;
+	type MaxPointsPerCourse = MaxPointsPerCourse;
 	type TrustScoreUpdater = TrustScoreNotifier;
 }
 
@@ -844,6 +846,8 @@ parameter_types! {
 	pub const WelatiPresidentialEndorsements: u32 = 1000;
 	/// Parliamentary endorsements required
 	pub const WelatiParliamentaryEndorsements: u32 = 100;
+	/// Maximum endorsers per candidate registration
+	pub const WelatiMaxEndorsers: u32 = 1000;
 }
 
 /// Randomness source for elections (using timestamp for now)
@@ -901,6 +905,8 @@ impl pezpallet_welati::Config for Runtime {
 	type CandidacyDeposit = WelatiCandidacyDeposit;
 	type PresidentialEndorsements = WelatiPresidentialEndorsements;
 	type ParliamentaryEndorsements = WelatiParliamentaryEndorsements;
+	type NativeCurrency = Balances;
+	type MaxEndorsers = WelatiMaxEndorsers;
 }
 
 // =============================================================================

@@ -209,6 +209,13 @@ pub mod pezpallet {
 	#[pezpallet::getter(fn epoch_status)]
 	pub type EpochStatus<T: Config> = StorageMap<_, Blake2_128Concat, u32, EpochState, ValueQuery>;
 
+	/// Total amount claimed from each epoch's trust score reward pool
+	/// Used to calculate correct clawback amount (total_allocated - total_claimed)
+	#[pezpallet::storage]
+	#[pezpallet::getter(fn epoch_total_claimed)]
+	pub type EpochTotalClaimed<T: Config> =
+		StorageMap<_, Blake2_128Concat, u32, BalanceOf<T>, ValueQuery>;
+
 	/// Parliamentary NFT ID to owner mapping
 	/// This will be populated by governance or runtime integration
 	#[pezpallet::storage]
@@ -574,6 +581,11 @@ pub mod pezpallet {
 			)?;
 			ClaimedRewards::<T>::insert(epoch_index, who, reward_amount);
 
+			// Track total claimed for this epoch (used by clawback calculation)
+			EpochTotalClaimed::<T>::mutate(epoch_index, |total| {
+				*total = total.saturating_add(reward_amount);
+			});
+
 			Self::deposit_event(Event::RewardClaimed {
 				user: who.clone(),
 				epoch_index,
@@ -583,7 +595,7 @@ pub mod pezpallet {
 			Ok(())
 		}
 
-		/// Close epoch and claw back unclaimed rewards
+		/// Close epoch and claw back only unclaimed rewards (not entire pot)
 		pub fn do_close_epoch(epoch_index: u32) -> DispatchResult {
 			let current_block = pezframe_system::Pezpallet::<T>::block_number();
 
@@ -595,26 +607,35 @@ pub mod pezpallet {
 
 			ensure!(current_block > reward_pool.claim_deadline, Error::<T>::ClaimPeriodExpired);
 
-			let incentive_pot = Self::incentive_pot_account_id();
-			let remaining_balance = T::Assets::balance(T::PezAssetId::get(), &incentive_pot);
+			// Calculate unclaimed amount: total allocated - total claimed
+			let total_claimed = EpochTotalClaimed::<T>::get(epoch_index);
+			let unclaimed_amount =
+				reward_pool.total_reward_pool.saturating_sub(total_claimed);
 
+			let incentive_pot = Self::incentive_pot_account_id();
 			let clawback_recipient = <T as Config>::ClawbackRecipient::get();
-			if remaining_balance > Zero::zero() {
-				T::Assets::transfer(
-					T::PezAssetId::get(),
-					&incentive_pot,
-					&clawback_recipient,
-					remaining_balance,
-					Preservation::Expendable, /* Allow source account to be deleted even if it
-					                           * has no tokens during fund transfer */
-				)?;
+
+			if unclaimed_amount > Zero::zero() {
+				// Only transfer the unclaimed portion, not the entire pot balance
+				let pot_balance = T::Assets::balance(T::PezAssetId::get(), &incentive_pot);
+				// Transfer the lesser of unclaimed_amount and actual pot balance (safety)
+				let transfer_amount = core::cmp::min(unclaimed_amount, pot_balance);
+				if transfer_amount > Zero::zero() {
+					T::Assets::transfer(
+						T::PezAssetId::get(),
+						&incentive_pot,
+						&clawback_recipient,
+						transfer_amount,
+						Preservation::Expendable,
+					)?;
+				}
 			}
 
 			EpochStatus::<T>::insert(epoch_index, EpochState::Closed);
 
 			Self::deposit_event(Event::EpochClosed {
 				epoch_index,
-				unclaimed_amount: remaining_balance,
+				unclaimed_amount,
 				clawback_recipient,
 			});
 

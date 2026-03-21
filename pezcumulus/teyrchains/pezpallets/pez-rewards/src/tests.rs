@@ -445,28 +445,36 @@ fn close_epoch_works_after_claim_period() {
 		assert_ok!(PezRewards::finalize_epoch(RuntimeOrigin::root()));
 
 		let reward_pool = PezRewards::get_epoch_reward_pool(0).unwrap();
-		let _alice_reward = reward_pool.reward_per_trust_point * 100;
-		let _bob_reward = reward_pool.reward_per_trust_point * 50;
+		let alice_reward = reward_pool.reward_per_trust_point * 100;
+		let bob_reward = reward_pool.reward_per_trust_point * 50;
 
 		assert_ok!(PezRewards::claim_reward(RuntimeOrigin::signed(bob()), 0)); // Bob claim etti
 
 		let clawback_recipient = ClawbackRecipient::get();
 		let balance_before = pez_balance(&clawback_recipient);
 
-		// FIX: Remaining balance in pot = initial - bob's claim
-		// (No NFT owner, parliamentary reward not distributed)
-		let pot_balance_before_close = pez_balance(&incentive_pot);
-		let expected_unclaimed = pot_balance_before_close;
+		// Only unclaimed rewards should be clawed back, not the entire pot.
+		// total_allocated = reward_pool.total_reward_pool (90% trust score pool)
+		// total_claimed = bob_reward
+		// unclaimed = total_allocated - bob_reward = alice_reward (+ any rounding remainder)
+		let total_claimed = bob_reward;
+		let expected_unclaimed = reward_pool.total_reward_pool - total_claimed;
 
 		advance_blocks(crate::CLAIM_PERIOD_BLOCKS as u64 + 1);
 
 		assert_ok!(PezRewards::close_epoch(RuntimeOrigin::root(), 0));
 
 		let balance_after = pez_balance(&clawback_recipient);
-		// FIX: All remaining pot (including alice's reward) should be clawed back
+		// Only alice's unclaimed reward (not entire pot) should be clawed back
 		assert_eq!(balance_after, balance_before + expected_unclaimed);
 
 		assert_eq!(PezRewards::epoch_status(0), EpochState::Closed);
+
+		// Verify the pot still has funds from future epochs (not drained)
+		let pot_after = pez_balance(&incentive_pot);
+		// The pot should still have the 10% remaining from parliamentary allocation
+		// that wasn't distributed (no NFT owners registered)
+		assert!(pot_after > 0, "Pot should not be completely drained");
 
 		System::assert_last_event(
 			Event::EpochClosed {

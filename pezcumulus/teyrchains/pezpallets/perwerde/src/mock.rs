@@ -85,6 +85,7 @@ parameter_types! {
 	pub const MaxCourseLinkLength: u32 = 200;
 	pub const MaxStudentsPerCourse: u32 = 100; // Reduced for test performance
 	pub const MaxCoursesPerStudent: u32 = 50;  // Max courses a student can enroll in
+	pub const MaxPointsPerCourse: u32 = 1000;  // Max points per course completion
 }
 
 // --- KESİN ÇÖZÜM BURADA BAŞLIYOR ---
@@ -111,6 +112,7 @@ impl pezpallet_perwerde::Config for Test {
 	type MaxCourseLinkLength = MaxCourseLinkLength;
 	type MaxStudentsPerCourse = MaxStudentsPerCourse;
 	type MaxCoursesPerStudent = MaxCoursesPerStudent;
+	type MaxPointsPerCourse = MaxPointsPerCourse;
 	type TrustScoreUpdater = ();
 }
 

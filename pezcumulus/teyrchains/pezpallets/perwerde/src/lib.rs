@@ -142,6 +142,11 @@ pub mod pezpallet {
 		#[pezpallet::constant]
 		type MaxCoursesPerStudent: Get<u32>;
 
+		/// Maximum points that can be awarded per course completion.
+		/// Prevents unbounded point inflation by course owners.
+		#[pezpallet::constant]
+		type MaxPointsPerCourse: Get<u32>;
+
 		/// Trust score updater - notifies trust pallet when perwerde score changes
 		type TrustScoreUpdater: TrustScoreUpdater<Self::AccountId>;
 	}
@@ -220,6 +225,8 @@ pub mod pezpallet {
 		TooManyCourses,
 		/// Course ID counter overflow
 		CourseIdOverflow,
+		/// Points exceed the maximum allowed per course
+		PointsExceedMax,
 	}
 
 	#[pezpallet::call]
@@ -295,6 +302,9 @@ pub mod pezpallet {
 		) -> DispatchResult {
 			let caller = ensure_signed(origin)?;
 
+			// Validate points are within the allowed maximum
+			ensure!(points <= T::MaxPointsPerCourse::get(), Error::<T>::PointsExceedMax);
+
 			// Verify caller is the course owner
 			let course = Courses::<T>::get(course_id).ok_or(Error::<T>::CourseNotFound)?;
 			ensure!(course.owner == caller, Error::<T>::NotCourseOwner);
@@ -344,7 +354,7 @@ pub mod pezpallet {
 				.filter_map(|course_id| Enrollments::<T>::get((who, *course_id)))
 				.filter(|enrollment| enrollment.completed_at.is_some())
 				.map(|enrollment| enrollment.points_earned)
-				.sum()
+				.fold(0u32, |acc, points| acc.saturating_add(points))
 		}
 	}
 }

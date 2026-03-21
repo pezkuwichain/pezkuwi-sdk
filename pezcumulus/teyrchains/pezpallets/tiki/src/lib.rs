@@ -653,44 +653,12 @@ pub mod pezpallet {
 			Ok(())
 		}
 
-		/// Makes NFT non-transferable
+		/// Makes NFT non-transferable using the system-level TransferDisabled attribute.
+		/// This sets PalletAttributes::TransferDisabled which is checked by pezpallet_nfts
+		/// during transfer operations, providing a proper soulbound guarantee.
 		fn lock_nft_transfer(collection_id: &T::CollectionId, item_id: &u32) -> DispatchResult {
-			// Mark NFT with lock attribute - use force_set_attribute in benchmarks to bypass
-			// deposits
-			#[cfg(feature = "runtime-benchmarks")]
-			let _ = pezpallet_nfts::Pezpallet::<T>::force_set_attribute(
-				T::RuntimeOrigin::from(pezframe_system::RawOrigin::Root),
-				None,
-				*collection_id,
-				Some(*item_id),
-				pezpallet_nfts::AttributeNamespace::Pezpallet,
-				b"locked"
-					.to_vec()
-					.try_into()
-					.map_err(|_| DispatchError::Other("Key too long"))?,
-				b"true"
-					.to_vec()
-					.try_into()
-					.map_err(|_| DispatchError::Other("Value too long"))?,
-			);
-
-			#[cfg(not(feature = "runtime-benchmarks"))]
-			let _ = pezpallet_nfts::Pezpallet::<T>::set_attribute(
-				T::RuntimeOrigin::from(pezframe_system::RawOrigin::Root),
-				*collection_id,
-				Some(*item_id),
-				pezpallet_nfts::AttributeNamespace::Pezpallet,
-				b"locked"
-					.to_vec()
-					.try_into()
-					.map_err(|_| DispatchError::Other("Key too long"))?,
-				b"true"
-					.to_vec()
-					.try_into()
-					.map_err(|_| DispatchError::Other("Value too long"))?,
-			);
-
-			Ok(())
+			use pezframe_support::traits::tokens::nonfungibles_v2::Transfer;
+			pezpallet_nfts::Pezpallet::<T>::disable_transfer(collection_id, item_id)
 		}
 
 		/// Updates NFT metadata based on user's roles

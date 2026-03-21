@@ -409,6 +409,7 @@ parameter_types! {
 	pub const CandidacyDeposit: u128 = 10_000;
 	pub const PresidentialEndorsements: u32 = 100;
 	pub const ParliamentaryEndorsements: u32 = 50;
+	pub const MaxEndorsers: u32 = 100;
 }
 
 impl pezpallet_welati::Config for Test {
@@ -428,6 +429,8 @@ impl pezpallet_welati::Config for Test {
 	type CandidacyDeposit = CandidacyDeposit;
 	type PresidentialEndorsements = PresidentialEndorsements;
 	type ParliamentaryEndorsements = ParliamentaryEndorsements;
+	type NativeCurrency = Balances;
+	type MaxEndorsers = MaxEndorsers;
 }
 
 // CRITICAL: CitizenInfo trait implementation - SADECE BİR KEZ TANIMLA

@@ -363,7 +363,7 @@ fn complete_course_with_zero_points() {
 }
 
 #[test]
-fn complete_course_with_max_points() {
+fn complete_course_with_max_allowed_points() {
 	new_test_ext().execute_with(|| {
 		let admin = 0;
 		let student = 1;
@@ -376,16 +376,38 @@ fn complete_course_with_max_points() {
 		));
 		assert_ok!(PerwerdePallet::enroll(RuntimeOrigin::signed(student), 0));
 
-		// Complete with maximum points
+		// Complete with maximum allowed points (MaxPointsPerCourse = 1000)
 		assert_ok!(PerwerdePallet::complete_course(
 			RuntimeOrigin::signed(admin),
 			student,
 			0,
-			u32::MAX
+			1000
 		));
 
 		let enrollment = crate::Enrollments::<Test>::get((student, 0)).unwrap();
-		assert_eq!(enrollment.points_earned, u32::MAX);
+		assert_eq!(enrollment.points_earned, 1000);
+	});
+}
+
+#[test]
+fn complete_course_fails_points_exceed_max() {
+	new_test_ext().execute_with(|| {
+		let admin = 0;
+		let student = 1;
+
+		assert_ok!(PerwerdePallet::create_course(
+			RuntimeOrigin::signed(admin),
+			create_bounded_vec(b"Course"),
+			create_bounded_vec(b"Desc"),
+			create_bounded_vec(b"http://example.com")
+		));
+		assert_ok!(PerwerdePallet::enroll(RuntimeOrigin::signed(student), 0));
+
+		// Points exceeding MaxPointsPerCourse (1000) should fail
+		assert_noop!(
+			PerwerdePallet::complete_course(RuntimeOrigin::signed(admin), student, 0, 1001),
+			crate::Error::<Test>::PointsExceedMax
+		);
 	});
 }
 
