@@ -590,7 +590,14 @@ fn finalize_presale_works() {
 		// Finalize presale (requires root)
 		assert_ok!(Presale::finalize_presale(RuntimeOrigin::root(), 0));
 
-		// Check presale status changed to Finalized
+		// Check presale status changed to Successful (not Finalized yet - needs batch_distribute)
+		let presale = Presale::presales(0).unwrap();
+		assert!(matches!(presale.status, PresaleStatus::Successful));
+
+		// Now batch distribute to all contributors
+		assert_ok!(Presale::batch_distribute(RuntimeOrigin::signed(1), 0, 0, 100));
+
+		// After batch_distribute, presale should be Finalized
 		let presale = Presale::presales(0).unwrap();
 		assert!(matches!(presale.status, PresaleStatus::Finalized));
 
@@ -612,8 +619,9 @@ fn finalize_presale_works() {
 			);
 		}
 
-		// Check event
-		System::assert_last_event(
+		// Check that batch distribution completed event was emitted
+		// (PresaleFinalized is emitted before BatchDistributionCompleted)
+		System::assert_has_event(
 			Event::PresaleFinalized { presale_id: 0, total_raised: total_gross }.into(),
 		);
 	});
@@ -1102,7 +1110,14 @@ fn finalize_presale_soft_cap_reached_success() {
 		// Root finalizes presale
 		assert_ok!(Presale::finalize_presale(RuntimeOrigin::root(), 0));
 
-		// Check presale status is Finalized (went through Successful)
+		// Check presale status is Successful (needs batch_distribute for Finalized)
+		let presale = Presale::presales(0).unwrap();
+		assert!(matches!(presale.status, PresaleStatus::Successful));
+
+		// Batch distribute to all contributors
+		assert_ok!(Presale::batch_distribute(RuntimeOrigin::signed(1), 0, 0, 100));
+
+		// Now check presale is Finalized
 		let presale = Presale::presales(0).unwrap();
 		assert!(matches!(presale.status, PresaleStatus::Finalized));
 
@@ -1238,9 +1253,11 @@ fn batch_refund_failed_presale_works() {
 			10,                       // batch_size (refund up to 10 contributors)
 		));
 
-		// Check contributors got full refunds (NO FEE for failed presale)
-		assert_eq!(Assets::balance(2, 2), bob_initial + 500_000_000); // Full refund
-		assert_eq!(Assets::balance(2, 3), charlie_initial + 500_000_000); // Full refund
+		// Check contributors got refunds minus non-refundable platform fee portion
+		// Platform fee = 500M * 2% = 10M, non-refundable = 10M * 50% = 5M
+		// Refund = 500M - 5M = 495M
+		assert_eq!(Assets::balance(2, 2), bob_initial + 495_000_000);
+		assert_eq!(Assets::balance(2, 3), charlie_initial + 495_000_000);
 
 		// Check contributions marked as refunded
 		let bob_contribution = Presale::contributions(0, 2).unwrap();

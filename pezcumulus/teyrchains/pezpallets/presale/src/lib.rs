@@ -473,6 +473,12 @@ pub mod pezpallet {
 			additional_blocks: BlockNumberFor<T>,
 			new_end_block: BlockNumberFor<T>,
 		},
+		/// Batch distribution completed [presale_id, distributed_count, total_distributed]
+		BatchDistributionCompleted {
+			presale_id: PresaleId,
+			distributed_count: u32,
+			total_distributed: u128,
+		},
 	}
 
 	#[pezpallet::error]
@@ -688,7 +694,7 @@ pub mod pezpallet {
 
 		/// Finalize presale - checks soft cap and sets status to Successful or Failed
 		#[pezpallet::call_index(2)]
-		#[pezpallet::weight(T::PresaleWeightInfo::finalize_presale(Contributors::<T>::get(presale_id).len() as u32))]
+		#[pezpallet::weight(T::PresaleWeightInfo::finalize_presale(1))]
 		pub fn finalize_presale(origin: OriginFor<T>, presale_id: PresaleId) -> DispatchResult {
 			ensure_root(origin)?;
 
@@ -714,72 +720,9 @@ pub mod pezpallet {
 					soft_cap: presale.limits.soft_cap,
 				});
 
-				// Now distribute tokens to contributors
-				let treasury = Self::presale_account_id(presale_id);
-
-				// Distribute rewards to all contributors
-				for contributor in Contributors::<T>::get(presale_id).iter() {
-					let contribution_info = match Contributions::<T>::get(presale_id, contributor) {
-						Some(info) => info,
-						None => continue,
-					};
-
-					// Skip if refunded
-					if contribution_info.refunded || contribution_info.amount == 0 {
-						continue;
-					}
-
-					// Calculate reward tokens using dynamic rate
-					let reward_amount = Self::calculate_reward_dynamic(
-						contribution_info.amount,
-						total_raised,
-						presale.tokens_for_sale,
-					)?;
-
-					let bonus =
-						Self::calculate_bonus(&presale, contribution_info.amount, reward_amount);
-					let total_reward = reward_amount.saturating_add(bonus);
-
-					// Handle vesting
-					if let Some(ref vesting) = presale.vesting {
-						let immediate = total_reward
-							.saturating_mul(vesting.immediate_release_percent as u128)
-							/ 100;
-
-						if immediate > 0 {
-							let immediate_balance: T::Balance = immediate.into();
-							T::Assets::transfer(
-								presale.reward_asset,
-								&treasury,
-								contributor,
-								immediate_balance,
-								Preservation::Expendable,
-							)?;
-						}
-
-						// Store remaining for vesting
-						VestingClaimed::<T>::insert(presale_id, contributor, immediate);
-					} else {
-						// No vesting - transfer all
-						let total_reward_balance: T::Balance = total_reward.into();
-						T::Assets::transfer(
-							presale.reward_asset,
-							&treasury,
-							contributor,
-							total_reward_balance,
-							Preservation::Expendable,
-						)?;
-					}
-
-					Self::deposit_event(Event::Distributed {
-						presale_id,
-						who: contributor.clone(),
-						amount: total_reward,
-					});
-				}
-
-				presale.status = PresaleStatus::Finalized;
-				Presales::<T>::insert(presale_id, presale);
+				// Distribution is done via batch_distribute() extrinsic to avoid
+				// unbounded iteration. Status is now Successful — call batch_distribute
+				// in batches to distribute tokens to all contributors.
 				SuccessfulPresales::<T>::mutate(|c| *c = c.saturating_add(1));
 
 				Self::deposit_event(Event::PresaleFinalized { presale_id, total_raised });
@@ -1144,6 +1087,134 @@ pub mod pezpallet {
 
 			Ok(())
 		}
+
+		/// Batch distribute tokens for SUCCESSFUL presales
+		/// Anyone can call this to help distribute tokens to contributors
+		/// Processes distribution in batches to avoid block weight limits
+		#[pezpallet::call_index(9)]
+		#[pezpallet::weight(T::PresaleWeightInfo::batch_refund_failed_presale(*batch_size))]
+		pub fn batch_distribute(
+			origin: OriginFor<T>,
+			presale_id: PresaleId,
+			start_index: u32,
+			batch_size: u32,
+		) -> DispatchResult {
+			ensure_signed(origin)?; // Anyone can trigger
+
+			let mut presale =
+				Presales::<T>::get(presale_id).ok_or(Error::<T>::PresaleNotFound)?;
+
+			// Only works on SUCCESSFUL presales (soft cap reached, not yet finalized)
+			ensure!(
+				presale.status == PresaleStatus::Successful,
+				Error::<T>::PresaleNotSuccessful,
+			);
+
+			let total_raised = TotalRaised::<T>::get(presale_id);
+			let treasury = Self::presale_account_id(presale_id);
+			let contributors = Contributors::<T>::get(presale_id);
+
+			// Calculate end index (don't exceed array length)
+			let end_index =
+				start_index.saturating_add(batch_size).min(contributors.len() as u32);
+
+			let mut distributed_count = 0u32;
+			let mut total_distributed = 0u128;
+
+			// Process batch
+			for i in start_index..end_index {
+				let contributor = &contributors[i as usize];
+
+				let contribution_info = match Contributions::<T>::get(presale_id, contributor) {
+					Some(info) => info,
+					None => continue,
+				};
+
+				// Skip if refunded or zero amount
+				if contribution_info.refunded || contribution_info.amount == 0 {
+					continue;
+				}
+
+				// Skip if already distributed (check VestingClaimed for vesting,
+				// or check a distribution flag)
+				if VestingClaimed::<T>::contains_key(presale_id, contributor) {
+					continue;
+				}
+
+				// Calculate reward tokens using dynamic rate (overflow-safe)
+				let reward_amount = Self::calculate_reward_dynamic(
+					contribution_info.amount,
+					total_raised,
+					presale.tokens_for_sale,
+				)?;
+
+				let bonus =
+					Self::calculate_bonus(&presale, contribution_info.amount, reward_amount);
+				let total_reward = reward_amount.saturating_add(bonus);
+
+				// Handle vesting
+				if let Some(ref vesting) = presale.vesting {
+					let immediate = total_reward
+						.saturating_mul(vesting.immediate_release_percent as u128)
+						/ 100;
+
+					if immediate > 0 {
+						let immediate_balance: T::Balance = immediate.into();
+						T::Assets::transfer(
+							presale.reward_asset,
+							&treasury,
+							contributor,
+							immediate_balance,
+							Preservation::Expendable,
+						)?;
+					}
+
+					// Store remaining for vesting (also marks as distributed)
+					VestingClaimed::<T>::insert(presale_id, contributor, immediate);
+				} else {
+					// No vesting - transfer all
+					let total_reward_balance: T::Balance = total_reward.into();
+					T::Assets::transfer(
+						presale.reward_asset,
+						&treasury,
+						contributor,
+						total_reward_balance,
+						Preservation::Expendable,
+					)?;
+
+					// Mark as distributed (store total_reward as claimed amount)
+					VestingClaimed::<T>::insert(presale_id, contributor, total_reward);
+				}
+
+				distributed_count += 1;
+				total_distributed = total_distributed.saturating_add(total_reward);
+
+				Self::deposit_event(Event::Distributed {
+					presale_id,
+					who: contributor.clone(),
+					amount: total_reward,
+				});
+			}
+
+			// If we've processed all contributors, mark as Finalized
+			if end_index >= contributors.len() as u32 {
+				presale.status = PresaleStatus::Finalized;
+				Presales::<T>::insert(presale_id, &presale);
+
+				Self::deposit_event(Event::PresaleFinalized {
+					presale_id,
+					total_raised,
+				});
+			}
+
+			Self::deposit_event(Event::BatchDistributionCompleted {
+				presale_id,
+				distributed_count,
+				total_distributed,
+			});
+
+			Ok(())
+		}
 	}
 
 	impl<T: Config> Pezpallet<T> {
@@ -1262,13 +1333,17 @@ pub mod pezpallet {
 		) -> Result<u128, Error<T>> {
 			ensure!(total_raised > 0, Error::<T>::ArithmeticOverflow);
 
-			// Calculate user's share: (contribution * tokens_for_sale) / total_raised
-			let user_share = user_contribution
-				.saturating_mul(tokens_for_sale)
-				.checked_div(total_raised)
-				.ok_or(Error::<T>::ArithmeticOverflow)?;
-
-			Ok(user_share)
+			// Use multiply_by_rational_with_rounding to prevent u128 overflow
+			// in (user_contribution * tokens_for_sale) intermediate multiplication.
+			// This computes: user_contribution * tokens_for_sale / total_raised
+			// using BigUint internally when values are large.
+			pezsp_runtime::helpers_128bit::multiply_by_rational_with_rounding(
+				user_contribution,
+				tokens_for_sale,
+				total_raised,
+				pezsp_runtime::Rounding::Down,
+			)
+			.ok_or(Error::<T>::ArithmeticOverflow)
 		}
 	}
 }

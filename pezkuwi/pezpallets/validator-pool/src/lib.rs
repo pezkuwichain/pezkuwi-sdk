@@ -354,20 +354,33 @@ pub mod pezpallet {
 	#[pezpallet::hooks]
 	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
 		fn on_initialize(block_number: BlockNumberFor<T>) -> Weight {
-			let mut weight = Weight::zero();
+			// Always account for the era_start + era_length reads
+			let mut weight = T::DbWeight::get().reads(2);
 
 			// Check if we need to transition to new era
 			let era_start = Self::era_start();
 			let era_length = Self::era_length();
 
 			if block_number >= era_start + era_length && era_length > Zero::zero() {
-				weight = weight.saturating_add(T::DbWeight::get().reads(2));
+				// Account for all DB operations in do_new_era + select_validators_for_era:
+				// - PoolMembers::iter() reads up to MaxPoolSize entries
+				// - SelectionHistory::get() per member
+				// - PerformanceMetrics::get() per member
+				// - CurrentEra, EraStart, CurrentValidatorSet writes
+				// - SelectionHistory::mutate per selected validator
+				let pool_size = Self::pool_size();
+				weight = weight.saturating_add(
+					T::DbWeight::get().reads(pool_size as u64 * 2) // iter + history per member
+				);
+				weight = weight.saturating_add(
+					T::DbWeight::get().writes(3 + pool_size as u64) // era state + history updates
+				);
 
 				// Trigger new era if enough time has passed
 				if Self::do_new_era().is_err() {
 					// Log error but don't panic
 				}
-				weight = weight.saturating_add(T::WeightInfo::force_new_era(Self::pool_size()));
+				weight = weight.saturating_add(T::WeightInfo::force_new_era(pool_size));
 			}
 
 			weight
@@ -730,7 +743,9 @@ pub mod pezpallet {
 			let mut random_index = 0u32;
 
 			// Collect eligible validators by category
-			for (validator, category) in PoolMembers::<T>::iter() {
+			// Bounded by MaxPoolSize to prevent unbounded iteration in on_initialize
+			let max_pool = T::MaxPoolSize::get() as usize;
+			for (validator, category) in PoolMembers::<T>::iter().take(max_pool) {
 				// Skip if selected in last 3 eras (rotation rule)
 				let history = SelectionHistory::<T>::get(&validator);
 				let current_era = Self::current_era();
