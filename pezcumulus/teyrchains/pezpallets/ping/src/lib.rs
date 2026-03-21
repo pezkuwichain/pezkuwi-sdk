@@ -20,6 +20,15 @@
 
 extern crate alloc;
 
+#[cfg(test)]
+mod mock;
+#[cfg(test)]
+mod tests;
+
+#[cfg(feature = "runtime-benchmarks")]
+mod benchmarking;
+pub mod weights;
+
 use alloc::{vec, vec::Vec};
 use pezcumulus_pezpallet_xcm::{ensure_sibling_para, Origin as CumulusOrigin};
 use pezcumulus_primitives_core::ParaId;
@@ -29,6 +38,7 @@ use pezsp_runtime::traits::Saturating;
 use xcm::latest::prelude::*;
 
 pub use pezpallet::*;
+pub use weights::WeightInfo;
 
 parameter_types! {
 	const MaxTeyrchains: u32 = 100;
@@ -59,6 +69,9 @@ pub mod pezpallet {
 		type RuntimeCall: From<Call<Self>> + Encode;
 
 		type XcmSender: SendXcm;
+
+		/// Weight information for extrinsics in this pezpallet.
+		type WeightInfo: WeightInfo;
 	}
 
 	/// The target teyrchains to ping.
@@ -145,7 +158,7 @@ pub mod pezpallet {
 	#[pezpallet::call]
 	impl<T: Config> Pezpallet<T> {
 		#[pezpallet::call_index(0)]
-		#[pezpallet::weight({0})]
+		#[pezpallet::weight(T::WeightInfo::start(payload.len() as u32))]
 		pub fn start(origin: OriginFor<T>, para: ParaId, payload: Vec<u8>) -> DispatchResult {
 			ensure_root(origin)?;
 			let payload = BoundedVec::<u8, MaxPayloadSize>::try_from(payload)
@@ -157,7 +170,7 @@ pub mod pezpallet {
 		}
 
 		#[pezpallet::call_index(1)]
-		#[pezpallet::weight({0})]
+		#[pezpallet::weight(T::WeightInfo::start_many(*count))]
 		pub fn start_many(
 			origin: OriginFor<T>,
 			para: ParaId,
@@ -177,7 +190,7 @@ pub mod pezpallet {
 		}
 
 		#[pezpallet::call_index(2)]
-		#[pezpallet::weight({0})]
+		#[pezpallet::weight(T::WeightInfo::stop())]
 		pub fn stop(origin: OriginFor<T>, para: ParaId) -> DispatchResult {
 			ensure_root(origin)?;
 			Targets::<T>::mutate(|t| {
@@ -189,7 +202,7 @@ pub mod pezpallet {
 		}
 
 		#[pezpallet::call_index(3)]
-		#[pezpallet::weight({0})]
+		#[pezpallet::weight(T::WeightInfo::stop_all())]
 		pub fn stop_all(origin: OriginFor<T>, maybe_para: Option<ParaId>) -> DispatchResult {
 			ensure_root(origin)?;
 			if let Some(para) = maybe_para {
@@ -201,7 +214,7 @@ pub mod pezpallet {
 		}
 
 		#[pezpallet::call_index(4)]
-		#[pezpallet::weight({0})]
+		#[pezpallet::weight(T::WeightInfo::ping(payload.len() as u32))]
 		pub fn ping(origin: OriginFor<T>, seq: u32, payload: Vec<u8>) -> DispatchResult {
 			// Only accept pings from other chains.
 			let para = ensure_sibling_para(<T as Config>::RuntimeOrigin::from(origin))?;
@@ -229,7 +242,7 @@ pub mod pezpallet {
 		}
 
 		#[pezpallet::call_index(5)]
-		#[pezpallet::weight({0})]
+		#[pezpallet::weight(T::WeightInfo::pong(payload.len() as u32))]
 		pub fn pong(origin: OriginFor<T>, seq: u32, payload: Vec<u8>) -> DispatchResult {
 			// Only accept pings from other chains.
 			let para = ensure_sibling_para(<T as Config>::RuntimeOrigin::from(origin))?;

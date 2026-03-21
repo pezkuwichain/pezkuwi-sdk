@@ -574,6 +574,7 @@ impl pezcumulus_ping::Config for Runtime {
 	type RuntimeOrigin = RuntimeOrigin;
 	type RuntimeCall = RuntimeCall;
 	type XcmSender = XcmRouter;
+	type WeightInfo = ();
 }
 
 parameter_types! {
