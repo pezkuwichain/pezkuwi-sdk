@@ -237,7 +237,7 @@ def add_to_workspace(path):
 def parse_args():
 	parser = argparse.ArgumentParser(description="Create a pezkuwi-sdk crate")
 	parser.add_argument("--sdk", type=str, default="pezkuwi-sdk", help="Path to the pezkuwi-sdk crate")
-	parser.add_argument("--version", type=str, help="Version of the pezkuwi-sdk crate")
+	parser.add_argument("--version", type=str, default="0.0.0", help="Version of the pezkuwi-sdk crate")
 	return parser.parse_args()
 
 if __name__ == "__main__":
