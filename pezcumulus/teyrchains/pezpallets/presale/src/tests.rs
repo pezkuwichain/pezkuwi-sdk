@@ -1253,11 +1253,12 @@ fn batch_refund_failed_presale_works() {
 			10,                       // batch_size (refund up to 10 contributors)
 		));
 
-		// Check contributors got refunds minus non-refundable platform fee portion
-		// Platform fee = 500M * 2% = 10M, non-refundable = 10M * 50% = 5M
-		// Refund = 500M - 5M = 495M
-		assert_eq!(Assets::balance(2, 2), bob_initial + 495_000_000);
-		assert_eq!(Assets::balance(2, 3), charlie_initial + 495_000_000);
+		// Check contributors got refunds of net amount in treasury
+		// Platform fee = 500M * 2% = 10M (already distributed at contribution time)
+		// Treasury received net_amount = 500M - 10M = 490M per contributor
+		// Refund = 490M (full net amount, no additional fee for failed presale)
+		assert_eq!(Assets::balance(2, 2), bob_initial + 490_000_000);
+		assert_eq!(Assets::balance(2, 3), charlie_initial + 490_000_000);
 
 		// Check contributions marked as refunded
 		let bob_contribution = Presale::contributions(0, 2).unwrap();

@@ -151,14 +151,15 @@ pub mod pezpallet {
 			)
 			.map_err(|_| Error::<T>::TransferFailed)?;
 
-			// Update total locked
+			// Mint wrapped tokens to user BEFORE updating TotalLocked
+			// If mint fails, the extrinsic reverts (including the transfer above)
+			T::Assets::mint_into(T::WrapperAssetId::get(), &who, amount)
+				.map_err(|_| Error::<T>::MintFailed)?;
+
+			// Update total locked only after both transfer and mint succeeded
 			TotalLocked::<T>::mutate(|total| {
 				*total = total.saturating_add(amount);
 			});
-
-			// Mint wrapped tokens to user
-			T::Assets::mint_into(T::WrapperAssetId::get(), &who, amount)
-				.map_err(|_| Error::<T>::MintFailed)?;
 
 			Self::deposit_event(Event::Wrapped { who, amount });
 			Ok(())
@@ -188,6 +189,10 @@ pub mod pezpallet {
 			let wrapped_balance = T::Assets::balance(T::WrapperAssetId::get(), &who);
 			ensure!(wrapped_balance >= amount, Error::<T>::InsufficientWrappedBalance);
 
+			// Verify pallet has sufficient backing before any state changes
+			let pallet_balance = T::Currency::free_balance(&Self::account_id());
+			ensure!(pallet_balance >= amount, Error::<T>::TransferFailed);
+
 			// Burn wrapped tokens from user
 			T::Assets::burn_from(
 				T::WrapperAssetId::get(),
@@ -199,12 +204,8 @@ pub mod pezpallet {
 			)
 			.map_err(|_| Error::<T>::BurnFailed)?;
 
-			// Update total locked
-			TotalLocked::<T>::mutate(|total| {
-				*total = total.saturating_sub(amount);
-			});
-
 			// Transfer native tokens back to user (unlock)
+			// If this fails, the extrinsic reverts (including the burn above)
 			T::Currency::transfer(
 				&Self::account_id(),
 				&who,
@@ -212,6 +213,11 @@ pub mod pezpallet {
 				ExistenceRequirement::AllowDeath,
 			)
 			.map_err(|_| Error::<T>::TransferFailed)?;
+
+			// Update total locked only after both burn and transfer succeeded
+			TotalLocked::<T>::mutate(|total| {
+				*total = total.saturating_sub(amount);
+			});
 
 			Self::deposit_event(Event::Unwrapped { who, amount });
 			Ok(())

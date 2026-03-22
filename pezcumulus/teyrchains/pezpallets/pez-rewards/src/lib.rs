@@ -480,7 +480,10 @@ pub mod pezpallet {
 			Self::distribute_parliamentary_rewards(current_epoch, total_reward_pool)?;
 
 			// Remaining 90% for trust score rewards
-			let trust_score_pool = total_reward_pool * 90u32.into() / 100u32.into();
+			let trust_score_pool = total_reward_pool
+				.checked_mul(&90u32.into())
+				.and_then(|v| v.checked_div(&100u32.into()))
+				.unwrap_or_else(Zero::zero);
 
 			// Calculate total trust score of all users in this epoch
 			let mut total_trust_score = 0u128;
@@ -670,9 +673,18 @@ pub mod pezpallet {
 			epoch: u32,
 			total_incentive_pool: BalanceOf<T>,
 		) -> DispatchResult {
-			let parliamentary_allocation =
-				total_incentive_pool * PARLIAMENTARY_REWARD_PERCENT.into() / 100u32.into();
-			let per_nft_reward = parliamentary_allocation / PARLIAMENTARY_NFT_COUNT.into();
+			let parliamentary_allocation = total_incentive_pool
+				.checked_mul(&PARLIAMENTARY_REWARD_PERCENT.into())
+				.and_then(|v| v.checked_div(&100u32.into()))
+				.unwrap_or_else(Zero::zero);
+			let per_nft_reward = parliamentary_allocation
+				.checked_div(&PARLIAMENTARY_NFT_COUNT.into())
+				.unwrap_or_else(Zero::zero);
+
+			// Skip the loop entirely if per_nft_reward rounds to zero
+			if per_nft_reward.is_zero() {
+				return Ok(());
+			}
 
 			let incentive_pot = Self::incentive_pot_account_id();
 

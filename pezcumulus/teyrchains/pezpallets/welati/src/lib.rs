@@ -860,7 +860,8 @@ pub mod pezpallet {
 
 					let total_citizen_count = Self::get_total_citizen_count();
 					let turnout_percentage = if total_citizen_count > 0 {
-						((election.total_votes * 100) / total_citizen_count) as u8
+						((election.total_votes as u64).saturating_mul(100) / total_citizen_count as u64)
+							as u8
 					} else {
 						0
 					};

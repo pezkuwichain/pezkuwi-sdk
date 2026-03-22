@@ -161,13 +161,47 @@ mod benchmarks {
 		Ok(())
 	}
 
-	// Temporarily skip this benchmark due to KYC complexity in benchmark environment
-	// #[benchmark]
-	// fn apply_for_citizenship() -> Result<(), BenchmarkError> {
-	// 	// KYC setup is complex in benchmark environment
-	// 	// This functionality is covered by force_mint_citizen_nft benchmark
-	// 	Ok(())
-	// }
+	#[benchmark]
+	fn apply_for_citizenship() -> Result<(), BenchmarkError> {
+		let caller: T::AccountId = whitelisted_caller();
+
+		// Fund the caller
+		let funding = Balances::<T>::minimum_balance() * 1_000_000_000u32.into();
+		Balances::<T>::make_free_balance_be(&caller, funding);
+
+		// Ensure collection exists
+		ensure_collection_exists::<T>();
+
+		// Set KYC status to Approved directly in storage
+		pezpallet_identity_kyc::KycStatuses::<T>::insert(
+			&caller,
+			pezpallet_identity_kyc::types::KycLevel::Approved,
+		);
+
+		#[extrinsic_call]
+		_(RawOrigin::Signed(caller.clone()));
+
+		// Verify citizenship was granted
+		assert!(Tiki::<T>::is_citizen(&caller));
+		Ok(())
+	}
+
+	#[benchmark]
+	fn check_transfer_permission() -> Result<(), BenchmarkError> {
+		let caller: T::AccountId = whitelisted_caller();
+		let dest: T::AccountId = account("dest", 0, 0);
+
+		// Ensure collections exist past tiki collection so we have a valid non-tiki ID
+		ensure_collection_exists::<T>();
+
+		// NextCollectionId is past tiki, so it's a non-tiki collection (call succeeds)
+		let non_tiki_id = pezpallet_nfts::NextCollectionId::<T>::get().unwrap_or_default();
+
+		#[extrinsic_call]
+		_(RawOrigin::Signed(caller.clone()), non_tiki_id, 0u32, caller.clone(), dest);
+
+		Ok(())
+	}
 
 	impl_benchmark_test_suite!(Tiki, crate::mock::new_test_ext(), crate::mock::Test);
 }

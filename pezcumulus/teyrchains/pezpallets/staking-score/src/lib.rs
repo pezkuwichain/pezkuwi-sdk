@@ -327,13 +327,13 @@ pub mod pezpallet {
 					let duration_in_blocks = current_block.saturating_sub(start_block);
 
 					let score = if duration_in_blocks >= (12 * MONTH_IN_BLOCKS).into() {
-						amount_score * 2 // x2.0 (12+ months)
+						amount_score.saturating_mul(2) // x2.0 (12+ months)
 					} else if duration_in_blocks >= (6 * MONTH_IN_BLOCKS).into() {
-						amount_score * 17 / 10 // x1.7 (6-11 months)
+						amount_score.saturating_mul(17) / 10 // x1.7 (6-11 months)
 					} else if duration_in_blocks >= (3 * MONTH_IN_BLOCKS).into() {
-						amount_score * 14 / 10 // x1.4 (3-5 months)
+						amount_score.saturating_mul(14) / 10 // x1.4 (3-5 months)
 					} else if duration_in_blocks >= MONTH_IN_BLOCKS.into() {
-						amount_score * 12 / 10 // x1.2 (1-2 months)
+						amount_score.saturating_mul(12) / 10 // x1.2 (1-2 months)
 					} else {
 						amount_score // x1.0 (< 1 month)
 					};

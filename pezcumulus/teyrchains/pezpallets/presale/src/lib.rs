@@ -979,14 +979,16 @@ pub mod pezpallet {
 
 				if let Some(contribution_info) = Contributions::<T>::get(presale_id, contributor) {
 					if !contribution_info.refunded && contribution_info.amount > 0 {
-						let platform_fee = contribution_info
+						// Calculate net amount in treasury (original - platform fee already deducted at contribution)
+						let platform_fee_at_contribution = contribution_info
 							.amount
 							.saturating_mul(T::PlatformFeePercent::get() as u128)
 							/ 100;
-						let non_refundable = platform_fee.saturating_mul(50) / 100;
+						let net_in_treasury =
+							contribution_info.amount.saturating_sub(platform_fee_at_contribution);
 
-						let refund_amount: T::Balance =
-							contribution_info.amount.saturating_sub(non_refundable).into();
+						// Refund the full net amount (cancelled presale = no additional fee)
+						let refund_amount: T::Balance = net_in_treasury.into();
 
 						T::Assets::transfer(
 							presale.payment_asset,
@@ -1000,7 +1002,7 @@ pub mod pezpallet {
 							if let Some(info) = maybe_info {
 								info.refunded = true;
 								info.refunded_at = Some(current_block);
-								info.refund_fee_paid = 0;
+								info.refund_fee_paid = platform_fee_at_contribution;
 							}
 							Ok::<_, Error<T>>(())
 						})?;
@@ -1063,16 +1065,16 @@ pub mod pezpallet {
 				if let Some(contribution_info) = Contributions::<T>::get(presale_id, contributor) {
 					// Skip if already refunded or zero amount
 					if !contribution_info.refunded && contribution_info.amount > 0 {
-						// Calculate non-refundable portion (burn + stakers = 50% of platform fee)
-						let platform_fee = contribution_info
+						// Calculate net amount in treasury (original - platform fee already deducted at contribution)
+						let platform_fee_at_contribution = contribution_info
 							.amount
 							.saturating_mul(T::PlatformFeePercent::get() as u128)
 							/ 100;
-						let non_refundable = platform_fee.saturating_mul(50) / 100; // 1% (burn 25% + stakers 25%)
+						let net_in_treasury =
+							contribution_info.amount.saturating_sub(platform_fee_at_contribution);
 
-						// Refund = 99% (contribution - non_refundable portion)
-						let refund_amount: T::Balance =
-							contribution_info.amount.saturating_sub(non_refundable).into();
+						// Refund the full net amount (failed presale = no additional fee)
+						let refund_amount: T::Balance = net_in_treasury.into();
 
 						T::Assets::transfer(
 							presale.payment_asset,

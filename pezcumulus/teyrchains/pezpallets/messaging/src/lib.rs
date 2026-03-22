@@ -194,6 +194,8 @@ pub mod pezpallet {
 		EraPurged { era: u32 },
 		/// Era rotated
 		EraRotated { old_era: u32, new_era: u32 },
+		/// Oldest message was evicted from a full inbox (FIFO)
+		InboxOverflow { recipient: T::AccountId, era: u32 },
 	}
 
 	// ============= ERRORS =============
@@ -435,6 +437,10 @@ pub mod pezpallet {
 				if inbox.len() >= T::MaxInboxSize::get() as usize {
 					// FIFO: remove oldest message to make room
 					inbox.remove(0);
+					Self::deposit_event(Event::InboxOverflow {
+						recipient: to.clone(),
+						era: current_era,
+					});
 				}
 				inbox.try_push(message).map_err(|_| Error::<T>::InboxFull)?;
 				Ok(())

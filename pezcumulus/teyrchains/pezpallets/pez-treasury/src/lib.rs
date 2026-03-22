@@ -26,7 +26,7 @@
 //!
 //! - **Halving Period**: Every 48 months (4 years)
 //! - **Period Duration**: 20,736,000 blocks (~4 years at 10 blocks/minute)
-//! - **Distribution**: 70% to Incentive Pot, 30% to Government Pot
+//! - **Distribution**: 75% to Incentive Pot, 25% to Government Pot
 //! - **Automatic Halving**: Monthly release amount halves at the start of each new period
 //!
 //! ## Security Features
@@ -360,10 +360,10 @@ pub mod pezpallet {
 		}
 
 		pub fn do_monthly_release() -> DispatchResult {
-			ensure!(TreasuryStartBlock::<T>::get().is_some(), Error::<T>::TreasuryNotInitialized);
+			let start_block = TreasuryStartBlock::<T>::get()
+				.ok_or(Error::<T>::TreasuryNotInitialized)?;
 
 			let current_block = pezframe_system::Pezpallet::<T>::block_number();
-			let start_block = TreasuryStartBlock::<T>::get().unwrap();
 			let next_month = NextReleaseMonth::<T>::get();
 
 			ensure!(
@@ -441,7 +441,7 @@ pub mod pezpallet {
 			};
 
 			MonthlyReleases::<T>::insert(next_month, release_info);
-			NextReleaseMonth::<T>::put(next_month + 1);
+			NextReleaseMonth::<T>::put(next_month.saturating_add(1));
 
 			Self::deposit_event(Event::MonthlyFundsReleased {
 				month_index: next_month,

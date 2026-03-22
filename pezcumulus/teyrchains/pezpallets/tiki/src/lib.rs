@@ -455,7 +455,7 @@ pub mod pezpallet {
 
 		/// Manually mint citizenship NFT (for testing/emergency)
 		#[pezpallet::call_index(2)]
-		#[pezpallet::weight(<T as crate::pezpallet::Config>::WeightInfo::grant_tiki())]
+		#[pezpallet::weight(<T as crate::pezpallet::Config>::WeightInfo::force_mint_citizen_nft())]
 		pub fn force_mint_citizen_nft(
 			origin: OriginFor<T>,
 			dest: <T::Lookup as StaticLookup>::Source,
@@ -469,7 +469,7 @@ pub mod pezpallet {
 
 		/// Grant role through election system (called from pezpallet-voting)
 		#[pezpallet::call_index(3)]
-		#[pezpallet::weight(<T as crate::pezpallet::Config>::WeightInfo::grant_tiki())]
+		#[pezpallet::weight(<T as crate::pezpallet::Config>::WeightInfo::grant_elected_role())]
 		pub fn grant_elected_role(
 			origin: OriginFor<T>,
 			dest: <T::Lookup as StaticLookup>::Source,
@@ -490,7 +490,7 @@ pub mod pezpallet {
 
 		/// Grant role through exam/test system
 		#[pezpallet::call_index(4)]
-		#[pezpallet::weight(<T as crate::pezpallet::Config>::WeightInfo::grant_tiki())]
+		#[pezpallet::weight(<T as crate::pezpallet::Config>::WeightInfo::grant_earned_role())]
 		pub fn grant_earned_role(
 			origin: OriginFor<T>,
 			dest: <T::Lookup as StaticLookup>::Source,
@@ -511,7 +511,7 @@ pub mod pezpallet {
 
 		/// Apply for citizenship after KYC completion
 		#[pezpallet::call_index(5)]
-		#[pezpallet::weight(<T as crate::pezpallet::Config>::WeightInfo::grant_tiki())]
+		#[pezpallet::weight(<T as crate::pezpallet::Config>::WeightInfo::apply_for_citizenship())]
 		pub fn apply_for_citizenship(origin: OriginFor<T>) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 
@@ -530,7 +530,7 @@ pub mod pezpallet {
 
 		/// Check NFT transfer for transfer blocking system
 		#[pezpallet::call_index(6)]
-		#[pezpallet::weight(<T as crate::pezpallet::Config>::WeightInfo::grant_tiki())]
+		#[pezpallet::weight(<T as crate::pezpallet::Config>::WeightInfo::check_transfer_permission())]
 		pub fn check_transfer_permission(
 			_origin: OriginFor<T>,
 			collection_id: T::CollectionId,
@@ -780,7 +780,7 @@ pub trait TikiProvider<AccountId> {
 impl<T: Config> TikiScoreProvider<T::AccountId> for Pezpallet<T> {
 	fn get_tiki_score(who: &T::AccountId) -> u32 {
 		let tikis = Self::user_tikis(who);
-		tikis.iter().map(Self::get_bonus_for_tiki).sum()
+		tikis.iter().map(Self::get_bonus_for_tiki).fold(0u32, |acc, x| acc.saturating_add(x))
 	}
 }
 

@@ -116,7 +116,7 @@ pub mod pezpallet {
 		fn on_finalize(n: BlockNumberFor<T>) {
 			for (para, payload) in Targets::<T>::get().into_iter() {
 				let seq = PingCount::<T>::mutate(|seq| {
-					*seq += 1;
+					*seq = seq.saturating_add(1);
 					*seq
 				});
 				match send_xcm::<T::XcmSender>(

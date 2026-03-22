@@ -60,6 +60,8 @@ pub trait WeightInfo {
 	fn force_mint_citizen_nft() -> Weight;
 	fn grant_earned_role() -> Weight;
 	fn grant_elected_role() -> Weight;
+	fn apply_for_citizenship() -> Weight;
+	fn check_transfer_permission() -> Weight;
 }
 
 /// Weights for `pezpallet_tiki` using the Bizinikiwi node and recommended hardware.
@@ -178,6 +180,24 @@ impl<T: pezframe_system::Config> WeightInfo for BizinikiwiWeight<T> {
 			.saturating_add(T::DbWeight::get().reads(6_u64))
 			.saturating_add(T::DbWeight::get().writes(3_u64))
 	}
+	/// Storage: `IdentityKyc::Verifications` (r:1 w:0)
+	/// Proof: `IdentityKyc::Verifications` (`max_values`: None, `max_size`: Some(128), added: 2603, mode: `MaxEncodedLen`)
+	/// Plus all storage from `force_mint_citizen_nft` (9r + 9w)
+	fn apply_for_citizenship() -> Weight {
+		// Conservative estimate: force_mint_citizen_nft + 1 KYC verification read
+		// Minimum execution time: 120_000_000 picoseconds.
+		Weight::from_parts(125_000_000, 4326)
+			.saturating_add(T::DbWeight::get().reads(10_u64))
+			.saturating_add(T::DbWeight::get().writes(9_u64))
+	}
+	/// Storage: `Tiki::CitizenNft` (r:1 w:0)
+	/// Proof: `Tiki::CitizenNft` (`max_values`: None, `max_size`: Some(52), added: 2527, mode: `MaxEncodedLen`)
+	fn check_transfer_permission() -> Weight {
+		// Lightweight read-only check
+		// Minimum execution time: 12_000_000 picoseconds.
+		Weight::from_parts(13_000_000, 2527)
+			.saturating_add(T::DbWeight::get().reads(1_u64))
+	}
 }
 
 // For backwards compatibility and tests.
@@ -294,5 +314,16 @@ impl WeightInfo for () {
 		Weight::from_parts(53_750_000, 3812)
 			.saturating_add(RocksDbWeight::get().reads(6_u64))
 			.saturating_add(RocksDbWeight::get().writes(3_u64))
+	}
+	fn apply_for_citizenship() -> Weight {
+		// Conservative estimate: force_mint_citizen_nft + 1 KYC verification read
+		Weight::from_parts(125_000_000, 4326)
+			.saturating_add(RocksDbWeight::get().reads(10_u64))
+			.saturating_add(RocksDbWeight::get().writes(9_u64))
+	}
+	fn check_transfer_permission() -> Weight {
+		// Lightweight read-only check
+		Weight::from_parts(13_000_000, 2527)
+			.saturating_add(RocksDbWeight::get().reads(1_u64))
 	}
 }

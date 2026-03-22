@@ -400,7 +400,8 @@ pub mod pezpallet {
 				.saturating_add(perwerde_u128.saturating_mul(300))
 				.saturating_add(tiki_u128.saturating_mul(300));
 
-			let final_score_u128 = staking_u128
+			// Safe: both operands are derived from u32 scores, product fits in u128
+		let final_score_u128 = staking_u128
 				.saturating_mul(weighted_sum)
 				.checked_div(base)
 				.ok_or(Error::<T>::CalculationOverflow)?;
