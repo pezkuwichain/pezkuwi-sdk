@@ -1,5 +1,6 @@
 [package]
 name = "pezkuwi-sdk"
+version = "0.0.0"
 description = "Pezkuwi SDK umbrella crate."
 license = "Apache-2.0"
 
