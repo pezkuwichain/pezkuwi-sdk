@@ -370,10 +370,10 @@ pub mod pezpallet {
 				// - SelectionHistory::mutate per selected validator
 				let pool_size = Self::pool_size();
 				weight = weight.saturating_add(
-					T::DbWeight::get().reads(pool_size as u64 * 2) // iter + history per member
+					T::DbWeight::get().reads(pool_size as u64 * 2), // iter + history per member
 				);
 				weight = weight.saturating_add(
-					T::DbWeight::get().writes(3 + pool_size as u64) // era state + history updates
+					T::DbWeight::get().writes(3 + pool_size as u64), // era state + history updates
 				);
 
 				// Trigger new era if enough time has passed

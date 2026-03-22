@@ -185,8 +185,7 @@ pub mod pezpallet {
 	/// Ensures no two accounts can register with the same identity hash
 	#[pezpallet::storage]
 	#[pezpallet::getter(fn identity_hash_owner)]
-	pub type IdentityHashToAccount<T: Config> =
-		StorageMap<_, Blake2_128Concat, H256, T::AccountId>;
+	pub type IdentityHashToAccount<T: Config> = StorageMap<_, Blake2_128Concat, H256, T::AccountId>;
 
 	/// Referrer of approved citizens (for direct responsibility tracking)
 	/// Kept permanently for penalty system even after application is removed

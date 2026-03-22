@@ -653,10 +653,7 @@ pub mod pezpallet {
 
 			// H7 fix: Validate endorsers count early, before any storage reads,
 			// to prevent large Vecs from consuming excessive weight.
-			ensure!(
-				endorsers.len() as u32 <= T::MaxEndorsers::get(),
-				Error::<T>::TooManyEndorsers
-			);
+			ensure!(endorsers.len() as u32 <= T::MaxEndorsers::get(), Error::<T>::TooManyEndorsers);
 
 			let mut election =
 				ActiveElections::<T>::get(election_id).ok_or(Error::<T>::ElectionNotFound)?;
@@ -860,8 +857,8 @@ pub mod pezpallet {
 
 					let total_citizen_count = Self::get_total_citizen_count();
 					let turnout_percentage = if total_citizen_count > 0 {
-						((election.total_votes as u64).saturating_mul(100) / total_citizen_count as u64)
-							as u8
+						((election.total_votes as u64).saturating_mul(100)
+							/ total_citizen_count as u64) as u8
 					} else {
 						0
 					};
@@ -1140,18 +1137,12 @@ pub mod pezpallet {
 				CollectiveDecisionType::ConstitutionalReview
 				| CollectiveDecisionType::ConstitutionalUnanimous => {
 					// Diwan members only
-					ensure!(
-						Self::is_diwan_member(&voter),
-						Error::<T>::NotAuthorizedToVote,
-					);
+					ensure!(Self::is_diwan_member(&voter), Error::<T>::NotAuthorizedToVote,);
 				},
 				CollectiveDecisionType::ExecutiveDecision => {
 					// Serok (President) only
 					let serok = CurrentOfficials::<T>::get(GovernmentPosition::Serok);
-					ensure!(
-						serok.as_ref() == Some(&voter),
-						Error::<T>::NotAuthorizedToVote,
-					);
+					ensure!(serok.as_ref() == Some(&voter), Error::<T>::NotAuthorizedToVote,);
 				},
 				CollectiveDecisionType::HybridDecision => {
 					// Parliament members OR Serok
@@ -1159,10 +1150,7 @@ pub mod pezpallet {
 					let is_parliament = members.iter().any(|m| m.account == voter);
 					let serok = CurrentOfficials::<T>::get(GovernmentPosition::Serok);
 					let is_serok = serok.as_ref() == Some(&voter);
-					ensure!(
-						is_parliament || is_serok,
-						Error::<T>::NotAuthorizedToVote,
-					);
+					ensure!(is_parliament || is_serok, Error::<T>::NotAuthorizedToVote,);
 				},
 			}
 

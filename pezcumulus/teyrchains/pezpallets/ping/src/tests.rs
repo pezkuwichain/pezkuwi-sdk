@@ -83,11 +83,7 @@ fn start_rejects_too_many_targets() {
 	new_test_ext().execute_with(|| {
 		// MaxTeyrchains is 100.
 		for i in 0..100u32 {
-			assert_ok!(Ping::start(
-				RuntimeOrigin::root(),
-				ParaId::from(2000 + i),
-				vec![0u8; 4],
-			));
+			assert_ok!(Ping::start(RuntimeOrigin::root(), ParaId::from(2000 + i), vec![0u8; 4],));
 		}
 
 		// 101st should fail.
@@ -144,12 +140,7 @@ fn start_many_respects_max_targets() {
 fn start_many_rejects_payload_too_large() {
 	new_test_ext().execute_with(|| {
 		assert_noop!(
-			Ping::start_many(
-				RuntimeOrigin::root(),
-				ParaId::from(2000u32),
-				1,
-				vec![0u8; 1025],
-			),
+			Ping::start_many(RuntimeOrigin::root(), ParaId::from(2000u32), 1, vec![0u8; 1025],),
 			Error::<Test>::PayloadTooLarge
 		);
 	});
@@ -256,9 +247,7 @@ fn ping_from_sibling_para_works() {
 		assert_ok!(Ping::ping(origin, 1, vec![42u8; 8]));
 
 		// Should have deposited a Pinged event.
-		System::assert_has_event(
-			Event::<Test>::Pinged(para_id, 1, vec![42u8; 8]).into(),
-		);
+		System::assert_has_event(Event::<Test>::Pinged(para_id, 1, vec![42u8; 8]).into());
 	});
 }
 
@@ -295,9 +284,7 @@ fn pong_processes_known_ping() {
 		assert!(Pings::<Test>::get(42u32).is_none());
 
 		// Should emit Ponged event with the round-trip time.
-		System::assert_has_event(
-			Event::<Test>::Ponged(para_id, 42, vec![0u8; 4], 0u64).into(),
-		);
+		System::assert_has_event(Event::<Test>::Ponged(para_id, 42, vec![0u8; 4], 0u64).into());
 	});
 }
 
@@ -310,9 +297,7 @@ fn pong_handles_unknown_pong() {
 		// No ping entry for seq 99.
 		assert_ok!(Ping::pong(origin, 99, vec![0u8; 4]));
 
-		System::assert_has_event(
-			Event::<Test>::UnknownPong(para_id, 99, vec![0u8; 4]).into(),
-		);
+		System::assert_has_event(Event::<Test>::UnknownPong(para_id, 99, vec![0u8; 4]).into());
 	});
 }
 
@@ -347,14 +332,7 @@ fn on_finalize_sends_pings_to_targets() {
 
 		// Should have emitted PingSent event (MockXcmSender always succeeds).
 		System::assert_has_event(
-			Event::<Test>::PingSent(
-				para,
-				1,
-				vec![7u8; 4],
-				[0u8; 32],
-				Assets::new(),
-			)
-			.into(),
+			Event::<Test>::PingSent(para, 1, vec![7u8; 4], [0u8; 32], Assets::new()).into(),
 		);
 	});
 }

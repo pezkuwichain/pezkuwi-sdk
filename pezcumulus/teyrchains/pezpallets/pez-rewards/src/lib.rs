@@ -612,8 +612,7 @@ pub mod pezpallet {
 
 			// Calculate unclaimed amount: total allocated - total claimed
 			let total_claimed = EpochTotalClaimed::<T>::get(epoch_index);
-			let unclaimed_amount =
-				reward_pool.total_reward_pool.saturating_sub(total_claimed);
+			let unclaimed_amount = reward_pool.total_reward_pool.saturating_sub(total_claimed);
 
 			let incentive_pot = Self::incentive_pot_account_id();
 			let clawback_recipient = <T as Config>::ClawbackRecipient::get();

@@ -931,7 +931,13 @@ pub mod pezpallet {
 
 			// Cannot cancel presales that are already finalized, failed, or cancelled
 			ensure!(
-				matches!(presale.status, PresaleStatus::Active | PresaleStatus::Pending | PresaleStatus::Paused | PresaleStatus::Successful),
+				matches!(
+					presale.status,
+					PresaleStatus::Active
+						| PresaleStatus::Pending
+						| PresaleStatus::Paused
+						| PresaleStatus::Successful
+				),
 				Error::<T>::AlreadyFinalized,
 			);
 
@@ -968,8 +974,7 @@ pub mod pezpallet {
 			let treasury = Self::presale_account_id(presale_id);
 			let contributors = Contributors::<T>::get(presale_id);
 
-			let end_index =
-				start_index.saturating_add(batch_size).min(contributors.len() as u32);
+			let end_index = start_index.saturating_add(batch_size).min(contributors.len() as u32);
 
 			let mut refunded_count = 0u32;
 			let mut total_refunded = 0u128;
@@ -1008,8 +1013,7 @@ pub mod pezpallet {
 						})?;
 
 						refunded_count += 1;
-						total_refunded =
-							total_refunded.saturating_add(contribution_info.amount);
+						total_refunded = total_refunded.saturating_add(contribution_info.amount);
 
 						Self::deposit_event(Event::Refunded {
 							presale_id,
@@ -1129,22 +1133,17 @@ pub mod pezpallet {
 		) -> DispatchResult {
 			ensure_signed(origin)?; // Anyone can trigger
 
-			let mut presale =
-				Presales::<T>::get(presale_id).ok_or(Error::<T>::PresaleNotFound)?;
+			let mut presale = Presales::<T>::get(presale_id).ok_or(Error::<T>::PresaleNotFound)?;
 
 			// Only works on SUCCESSFUL presales (soft cap reached, not yet finalized)
-			ensure!(
-				presale.status == PresaleStatus::Successful,
-				Error::<T>::PresaleNotSuccessful,
-			);
+			ensure!(presale.status == PresaleStatus::Successful, Error::<T>::PresaleNotSuccessful,);
 
 			let total_raised = TotalRaised::<T>::get(presale_id);
 			let treasury = Self::presale_account_id(presale_id);
 			let contributors = Contributors::<T>::get(presale_id);
 
 			// Calculate end index (don't exceed array length)
-			let end_index =
-				start_index.saturating_add(batch_size).min(contributors.len() as u32);
+			let end_index = start_index.saturating_add(batch_size).min(contributors.len() as u32);
 
 			let mut distributed_count = 0u32;
 			let mut total_distributed = 0u128;
@@ -1229,10 +1228,7 @@ pub mod pezpallet {
 				presale.status = PresaleStatus::Finalized;
 				Presales::<T>::insert(presale_id, &presale);
 
-				Self::deposit_event(Event::PresaleFinalized {
-					presale_id,
-					total_raised,
-				});
+				Self::deposit_event(Event::PresaleFinalized { presale_id, total_raised });
 			}
 
 			Self::deposit_event(Event::BatchDistributionCompleted {

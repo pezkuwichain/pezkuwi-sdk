@@ -99,5 +99,9 @@ mod benchmarks {
 	// The weight functions `ping(s)` and `pong(s)` in weights.rs account for the
 	// payload size variable and provide conservative estimates.
 
-	impl_benchmark_test_suite!(Pezpallet, super::super::mock::new_bench_ext(), super::super::mock::Test);
+	impl_benchmark_test_suite!(
+		Pezpallet,
+		super::super::mock::new_bench_ext(),
+		super::super::mock::Test
+	);
 }

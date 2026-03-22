@@ -24,8 +24,8 @@ pezsp-runtime = { workspace = true }
 pezcumulus-primitives-core = { workspace = true }
 
 [dev-dependencies]
-pezsp-io = { workspace = true }
 pezsp-core = { workspace = true }
+pezsp-io = { workspace = true }
 
 [features]
 default = ["std"]
@@ -34,6 +34,8 @@ std = [
 	"pezcumulus-primitives-core/std",
 	"pezframe-support/std",
 	"pezframe-system/std",
+	"pezsp-core/std",
+	"pezsp-io/std",
 	"pezsp-runtime/std",
 	"scale-info/std",
 ]
@@ -47,6 +49,7 @@ runtime-benchmarks = [
 	"pezcumulus-primitives-core/runtime-benchmarks",
 	"pezframe-support/runtime-benchmarks",
 	"pezframe-system/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 ]
 serde = []

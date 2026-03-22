@@ -780,7 +780,10 @@ pub trait TikiProvider<AccountId> {
 impl<T: Config> TikiScoreProvider<T::AccountId> for Pezpallet<T> {
 	fn get_tiki_score(who: &T::AccountId) -> u32 {
 		let tikis = Self::user_tikis(who);
-		tikis.iter().map(Self::get_bonus_for_tiki).fold(0u32, |acc, x| acc.saturating_add(x))
+		tikis
+			.iter()
+			.map(Self::get_bonus_for_tiki)
+			.fold(0u32, |acc, x| acc.saturating_add(x))
 	}
 }
 

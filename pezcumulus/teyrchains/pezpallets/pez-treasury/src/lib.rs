@@ -360,8 +360,8 @@ pub mod pezpallet {
 		}
 
 		pub fn do_monthly_release() -> DispatchResult {
-			let start_block = TreasuryStartBlock::<T>::get()
-				.ok_or(Error::<T>::TreasuryNotInitialized)?;
+			let start_block =
+				TreasuryStartBlock::<T>::get().ok_or(Error::<T>::TreasuryNotInitialized)?;
 
 			let current_block = pezframe_system::Pezpallet::<T>::block_number();
 			let next_month = NextReleaseMonth::<T>::get();

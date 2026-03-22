@@ -18,8 +18,8 @@
 
 use crate::mock::*;
 use crate::pezpallet::Pezpallet;
-use pezframe_support::traits::Get;
 use pezcumulus_primitives_core::ParaId;
+use pezframe_support::traits::Get;
 
 #[test]
 fn genesis_default_teyrchain_id_is_100() {

@@ -377,12 +377,7 @@ fn complete_course_with_max_allowed_points() {
 		assert_ok!(PerwerdePallet::enroll(RuntimeOrigin::signed(student), 0));
 
 		// Complete with maximum allowed points (MaxPointsPerCourse = 1000)
-		assert_ok!(PerwerdePallet::complete_course(
-			RuntimeOrigin::signed(admin),
-			student,
-			0,
-			1000
-		));
+		assert_ok!(PerwerdePallet::complete_course(RuntimeOrigin::signed(admin), student, 0, 1000));
 
 		let enrollment = crate::Enrollments::<Test>::get((student, 0)).unwrap();
 		assert_eq!(enrollment.points_earned, 1000);
