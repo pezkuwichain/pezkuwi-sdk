@@ -296,7 +296,7 @@ mod benchmarks {
 		let _ = Presale::<T>::cancel_presale(RawOrigin::Root.into(), presale_id);
 
 		#[extrinsic_call]
-		refund_cancelled_presale(RawOrigin::Signed(caller.clone()), presale_id);
+		refund_cancelled_presale(RawOrigin::Signed(caller.clone()), presale_id, 0, 100);
 
 		// Verify refund was processed
 		let contribution = crate::Contributions::<T>::get(presale_id, &caller).unwrap();

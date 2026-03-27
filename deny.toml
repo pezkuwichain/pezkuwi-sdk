@@ -26,17 +26,10 @@ ignore = [
 	"RUSTSEC-2026-0020", # wasmtime guest-controlled resource exhaustion
 	"RUSTSEC-2026-0021", # wasmtime panic in wasi:http/types.fields
 
-	# rsa 0.9.10: no upstream fix available. Pulled transitively by sqlx-mysql
-	# (used in pezpallet-revive-eth-rpc). Not used for cryptographic signing in our chain.
-	"RUSTSEC-2023-0071", # rsa Marvin Attack timing sidechannel
-
-	# tracing-subscriber 0.2.25: pulled by ark-relations 0.5.1 (latest).
-	# Upstream arkworks hasn't updated to tracing-subscriber 0.3.x yet.
-	"RUSTSEC-2025-0055", # tracing-subscriber ANSI log poisoning
-
-	# lru 0.12.5: IterMut Stacked Borrows violation. Pulled by smoldot-light.
-	# 0.12.5 is latest version, no patch available yet.
-	"RUSTSEC-2026-0002", # lru IterMut internal pointer invalidation
+	# rustls-webpki 0.101.7 & 0.103.9: pulled transitively by kube (0.87.2) and
+	# jsonrpsee (0.24.10). Fix requires >=0.103.10 but upstream hasn't released
+	# compatible versions of kube/jsonrpsee yet.
+	"RUSTSEC-2026-0049", # rustls-webpki certificate path building panic
 ]
 
 # License compliance
