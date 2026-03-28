@@ -30,6 +30,19 @@ ignore = [
 	# jsonrpsee (0.24.10). Fix requires >=0.103.10 but upstream hasn't released
 	# compatible versions of kube/jsonrpsee yet.
 	"RUSTSEC-2026-0049", # rustls-webpki certificate path building panic
+
+	# rsa 0.9.10: Marvin Attack timing sidechannel. Pulled transitively by
+	# sqlx-mysql (pezpallet-revive-eth-rpc). Not used for cryptographic signing.
+	"RUSTSEC-2023-0071", # rsa Marvin Attack
+
+	# tracing-subscriber 0.2.25: ANSI log poisoning. Pulled by ark-relations 0.5.1.
+	# Upstream arkworks hasn't updated to tracing-subscriber 0.3.x yet.
+	"RUSTSEC-2025-0055", # tracing-subscriber ANSI escape
+
+	# tar 0.4.44: link following + path traversal. Pulled transitively.
+	# No patch available for 0.4.x branch yet.
+	"RUSTSEC-2026-0067", # tar symlink path traversal
+	"RUSTSEC-2026-0068", # tar link following vulnerability
 ]
 
 # License compliance
