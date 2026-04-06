@@ -41,7 +41,7 @@ jobs:
         run: echo "RUSTC_WRAPPER=" >> $GITHUB_ENV
 
       - name: Rust Cache
-        uses: Swatinem/rust-cache@779680da715d629ac1d338a641029a2f4372abb5 # v2.8.2
+        uses: Swatinem/rust-cache@c19371144df3bb44fab255c43d04cbc2ab54d1c4 # v2.9.1
         with:
           shared-key: quick-benchmarks
           cache-on-failure: true
@@ -97,7 +97,7 @@ jobs:
         run: echo "RUSTC_WRAPPER=" >> $GITHUB_ENV
 
       - name: Rust Cache
-        uses: Swatinem/rust-cache@779680da715d629ac1d338a641029a2f4372abb5 # v2.8.2
+        uses: Swatinem/rust-cache@c19371144df3bb44fab255c43d04cbc2ab54d1c4 # v2.9.1
         with:
           shared-key: check-all-benches
           cache-on-failure: true
