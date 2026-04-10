@@ -304,7 +304,17 @@ This repository is the amalgamation of 3 separate repositories that used to make
 
 ## License
 
-Pezkuwi SDK is licensed under Apache 2.0. See [LICENSE](./LICENSE) for details.
+Pezkuwi SDK is a derivative work based on [Polkadot SDK](https://github.com/paritytech/polkadot-sdk)
+by [Parity Technologies (UK) Ltd.](https://www.parity.io), used under Apache-2.0 and GPL-3.0-only.
+
+Individual crates in this repository are licensed under either:
+
+- **Apache License, Version 2.0** — see [LICENSE-APACHE](./LICENSE-APACHE)
+- **GNU General Public License, Version 3.0** — see [LICENSE-GPL3](./LICENSE-GPL3)
+
+See each crate's `Cargo.toml` for the applicable license.
+
+For full attribution, significant changes, and third-party component notices, see [NOTICE](./NOTICE).
 
 ---
 
