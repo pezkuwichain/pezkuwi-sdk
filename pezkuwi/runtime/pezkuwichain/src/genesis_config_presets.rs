@@ -1042,7 +1042,7 @@ fn pezkuwichain_mainnet_simulation_genesis() -> serde_json::Value {
 		hex!("28925ed8b4c0c95402b31563251fd318414351114b1c7797ee788666d27d6305").into();
 
 	// 2 validators — real mainnet Validator_01 and Validator_02 keys
-	// Seed phrases stored in /home/mamostehp/res/MAINNET_WALLETS_*.json
+	// Seed phrases stored offline in secure wallet storage
 	let initial_authorities: Vec<(
 		AccountId,
 		AccountId,

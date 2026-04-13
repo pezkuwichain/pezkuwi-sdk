@@ -73,6 +73,16 @@ head.rs
 .claude/SESSION_LOG.md
 .claude/hooks/
 .claude/settings.json
+.claude/CRITICAL_STATE.md
+.claude/simulation-lessons.md
+.claude/benchmark_checklist.md
+.claude/mainnet_fresh/
+.claude/test-asset-hub.toml
+
+# Regenerable artifacts (do not commit)
+chain_spec.json
+publish.log
+pezkuwi.gbp
 
 # Zombienet binaries
 zombienet-linux

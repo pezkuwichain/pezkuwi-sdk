@@ -23,7 +23,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 	let url = std::env::var("RPC_URL").unwrap_or_else(|_| "ws://217.77.6.126:9944".to_string());
 	let wallets_file = std::env::var("WALLETS_FILE")
-		.unwrap_or_else(|_| "/home/mamostehp/res/MAINNET_WALLETS_20260128_235407.json".to_string());
+		.expect("WALLETS_FILE env var required (e.g. export WALLETS_FILE=/path/to/wallets.json)");
 	let bond_hez: u128 = std::env::var("BOND_EXTRA_HEZ")
 		.unwrap_or_else(|_| "499000".to_string())
 		.parse()?;
