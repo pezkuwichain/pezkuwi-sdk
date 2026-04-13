@@ -20,29 +20,26 @@ yanked = "warn"
 # Track via quarterly review instead of blocking CI.
 unmaintained = "none"
 ignore = [
-	# wasmtime 37.0.3: no patch release for 37.x branch. Upgrade to 41+ requires
-	# major API changes in pezsc-executor-wasmtime. Tracked for future major upgrade.
+	# wasmtime 37.0.3: fix requires 42.0.2 but cranelift-assembler-x64 0.129+ needs
+	# rustc 1.91.0 — our toolchain is pinned to 1.88.0. Unblock by upgrading toolchain.
+	# Note: we do NOT use Winch backend or Component Model, so sandbox-escape CVEs
+	# (Winch/aarch64) and string-transcoding CVEs (Component Model) do not apply.
+	# Remaining real risk: pooling allocator data leakage (RUSTSEC-2026-0006).
 	"RUSTSEC-2026-0006", # wasmtime segfault with f64.copysign on x86-64
-	"RUSTSEC-2026-0020", # wasmtime guest-controlled resource exhaustion
+	"RUSTSEC-2026-0020", # wasmtime WASI guest-controlled resource exhaustion
 	"RUSTSEC-2026-0021", # wasmtime panic in wasi:http/types.fields
-
-	# rustls-webpki 0.101.7 & 0.103.9: pulled transitively by kube (0.87.2) and
-	# jsonrpsee (0.24.10). Fix requires >=0.103.10 but upstream hasn't released
-	# compatible versions of kube/jsonrpsee yet.
-	"RUSTSEC-2026-0049", # rustls-webpki certificate path building panic
 
 	# rsa 0.9.10: Marvin Attack timing sidechannel. Pulled transitively by
 	# sqlx-mysql (pezpallet-revive-eth-rpc). Not used for cryptographic signing.
 	"RUSTSEC-2023-0071", # rsa Marvin Attack
 
-	# tracing-subscriber 0.2.25: ANSI log poisoning. Pulled by ark-relations 0.5.1.
-	# Upstream arkworks hasn't updated to tracing-subscriber 0.3.x yet.
-	"RUSTSEC-2025-0055", # tracing-subscriber ANSI escape
+	# tracing-subscriber 0.2.25: ANSI log injection. Pulled by ark-relations 0.5.1.
+	# Our 0.3.x is updated to 0.3.23 (fixed). 0.2.x used only by arkworks internals.
+	"RUSTSEC-2025-0055", # tracing-subscriber ANSI escape (0.2.x, arkworks transitive)
 
-	# tar 0.4.44: link following + path traversal. Pulled transitively.
-	# No patch available for 0.4.x branch yet.
-	"RUSTSEC-2026-0067", # tar symlink path traversal
-	"RUSTSEC-2026-0068", # tar link following vulnerability
+	# yamux 0.12.1: libp2p-yamux 0.47.0 (vendor/pezkuwi-zombienet-sdk) pins to 0.12.x.
+	# Fix requires 0.13.10. Upgrade path: update libp2p in zombienet vendor.
+	"RUSTSEC-2024-0428", # yamux remote panic via malformed Data frame (< 0.13.10)
 ]
 
 # License compliance
