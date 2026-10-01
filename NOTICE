@@ -23,7 +23,9 @@ The following significant modifications have been made to the original work:
 
 1. PROJECT RENAME AND REBRAND
    - Project renamed from "Polkadot SDK" to "Pezkuwi SDK"
-   - Organization renamed from "Parity Technologies" to "Kurdistan Tech Institute"
+   - Maintainer references (repository URLs, contact addresses) point to
+     Kurdistan Tech Institute; Parity Technologies (UK) Ltd. copyright
+     notices in source file headers and crate authors are retained
    - All crate prefixes updated (sp- -> pezsp-, sc- -> pezsc-, frame- -> pezframe-,
      pallet- -> pezpallet-, cumulus- -> pezcumulus-)
    - Core framework renamed from "Substrate" to "Bizinikiwi"
@@ -61,7 +63,7 @@ each with their own license terms:
     Source: https://github.com/paritytech/subxt
 
   - vendor/pezkuwi-zombienet-sdk (based on zombienet-sdk):
-    License: Apache-2.0 OR MIT
+    License: Apache-2.0 OR GPL-3.0
     Source: https://github.com/paritytech/zombienet-sdk
 
 ================================================================================

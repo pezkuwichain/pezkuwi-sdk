@@ -2,7 +2,10 @@
 # Individual crates are managed by the main pezkuwi-sdk workspace
 
 [workspace.package]
-authors = ["Kurdistan Tech Institute <admin@pezkuwichain.io>"]
+authors = [
+	"Kurdistan Tech Institute <admin@pezkuwichain.io>",
+	"Parity Technologies <admin@parity.io>",
+]
 edition = "2021"
 version = "0.43.1"
 rust-version = "1.81"
