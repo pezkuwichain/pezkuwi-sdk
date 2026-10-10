@@ -41,7 +41,7 @@ jobs:
       - name: check dependency rules
         run: |
           cd bizinikiwi/
-          ../.gitlab/ensure-deps.sh
+          ../.github/scripts/ensure-deps.sh
   check-zepter:
     runs-on: ubuntu-latest
     timeout-minutes: 20
