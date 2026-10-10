@@ -16,7 +16,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-//! Main entry point of the sc-network crate.
+//! Main entry point of the pezsc-network crate.
 //!
 //! There are two main structs in this module: [`NetworkWorker`] and [`NetworkService`].
 //! The [`NetworkWorker`] *is* the network. Network is driven by [`NetworkWorker::run`] future that
@@ -113,18 +113,18 @@ pub mod traits;
 /// Logging target for the file.
 const LOG_TARGET: &str = "sub-libp2p";
 
-/// Stub bandwidth sink that returns 0 for all metrics.
-/// Bandwidth logging was removed in libp2p 0.56.0.
-/// TODO: Implement custom bandwidth tracking if needed.
-struct NoBandwidthSink;
+struct Libp2pBandwidthSink {
+	#[allow(deprecated)]
+	sink: Arc<transport::BandwidthSinks>,
+}
 
-impl BandwidthSink for NoBandwidthSink {
+impl BandwidthSink for Libp2pBandwidthSink {
 	fn total_inbound(&self) -> u64 {
-		0
+		self.sink.total_inbound()
 	}
 
 	fn total_outbound(&self) -> u64 {
-		0
+		self.sink.total_outbound()
 	}
 }
 
@@ -199,6 +199,7 @@ where
 
 	fn bitswap_server(
 		client: Arc<dyn BlockBackend<B> + Send + Sync>,
+		_metrics_registry: Option<Registry>,
 	) -> (Pin<Box<dyn Future<Output = ()> + Send>>, Self::BitswapConfig) {
 		let (handler, protocol_config) = BitswapRequestHandler::new(client.clone());
 
@@ -260,6 +261,28 @@ where
 	/// for the network processing to advance. From it, you can extract a `NetworkService` using
 	/// `worker.service()`. The `NetworkService` can be shared through the codebase.
 	pub fn new(params: Params<B, H, Self>) -> Result<Self, Error> {
+		// Every path that starts the libp2p backend arrives here -- the six places that match on
+		// `NetworkBackendType::Libp2p` all end in this constructor -- so this is the one place
+		// where selecting it can be made audible.
+		//
+		// The default is litep2p and a test in `config.rs` holds it there, because this stack
+		// pulls `hickory-proto` 0.24.4 and `yamux` 0.12.1, both with open advisories, while
+		// litep2p resolves the patched 0.26.1 and 0.13.10. That default is what makes the
+		// advisories tolerable. But a default is not a lock: `--network-backend libp2p` still
+		// selects this stack, and until now it did so in silence -- the node came up, the fleet
+		// looked healthy, and nothing said which half of the binary was running.
+		//
+		// So the residual risk is not the vulnerability, it is a misconfiguration nobody can
+		// see. `error!` and not `warn!`: a warning scrolls past, and this needs to reach whoever
+		// reads the logs when something is wrong at three in the morning.
+		log::error!(
+			target: "sub-libp2p",
+			"Starting with the libp2p network backend. This stack carries dependencies with \
+			 open security advisories (hickory-proto 0.24.4, yamux 0.12.1) and is in \
+			 best-effort maintenance upstream. litep2p is the supported backend and reaches \
+			 neither; drop `--network-backend libp2p` unless you are deliberately testing it."
+		);
+
 		let peer_store_handle = params.network_config.peer_store_handle();
 		let FullNetworkConfiguration {
 			notification_protocols,
@@ -338,7 +361,7 @@ where
 		);
 		info!(target: LOG_TARGET, "Running libp2p network backend");
 
-		let transport = {
+		let (transport, bandwidth) = {
 			let config_mem = match network_config.transport {
 				TransportConfig::MemoryOnly => true,
 				TransportConfig::Normal { .. } => false,
@@ -467,7 +490,7 @@ where
 		)?;
 
 		// Build the swarm.
-		let mut swarm = {
+		let (mut swarm, bandwidth): (Swarm<Behaviour<B>>, _) = {
 			let user_agent =
 				format!("{} ({})", network_config.client_version, network_config.node_name);
 
@@ -547,18 +570,16 @@ where
 					.with_substream_upgrade_protocol_override(upgrade::Version::V1)
 					.with_notify_handler_buffer_size(NonZeroUsize::new(32).expect("32 != 0; qed"))
 					// NOTE: 24 is somewhat arbitrary and should be tuned in the future if
-					// necessary. See <https://github.com/pezkuwichain/pezkuwi-sdk/issues/221>
+					// necessary. See <https://github.com/paritytech/substrate/pull/6080>
 					.with_per_connection_event_buffer_size(24)
 					.with_max_negotiating_inbound_streams(2048)
 					.with_idle_connection_timeout(network_config.idle_connection_timeout);
 
 				Swarm::new(transport, behaviour, local_peer_id, config)
 			};
-			swarm
-		};
 
-		// Stub bandwidth sink (bandwidth logging removed in libp2p 0.56.0)
-		let bandwidth: Arc<dyn BandwidthSink> = Arc::new(NoBandwidthSink);
+			(swarm, Arc::new(Libp2pBandwidthSink { sink: bandwidth }))
+		};
 
 		// Initialize the metrics.
 		let metrics = match &params.metrics_registry {
@@ -771,9 +792,9 @@ where
 			connected_peers,
 			not_connected_peers,
 			// TODO: Check what info we can include here.
-			//       Issue reference: https://github.com/pezkuwichain/pezkuwi-sdk/issues/328.
+			//       Issue reference: https://github.com/paritytech/substrate/issues/14160.
 			peerset: serde_json::json!(
-				"Unimplemented. See https://github.com/pezkuwichain/pezkuwi-sdk/issues/328."
+				"Unimplemented. See https://github.com/paritytech/substrate/issues/14160."
 			),
 		}
 	}
@@ -1568,6 +1589,7 @@ where
 							let reason = match err {
 								RequestFailure::NotConnected => "not-connected",
 								RequestFailure::UnknownProtocol => "unknown-protocol",
+								RequestFailure::InvalidRequest => "invalid-request",
 								RequestFailure::Refused => "refused",
 								RequestFailure::Obsolete => "obsolete",
 								RequestFailure::Network(OutboundFailure::DialFailure) => {
@@ -1658,11 +1680,11 @@ where
 				// reopened.
 				// The code below doesn't compile because `role` is unknown. Propagating the
 				// handshake of the secondary connections is quite an invasive change and
-				// would conflict with https://github.com/pezkuwichain/pezkuwi-sdk/issues/197.
+				// would conflict with https://github.com/paritytech/substrate/issues/6403.
 				// Considering that dropping notifications is generally regarded as
 				// acceptable, this bug is at the moment intentionally left there and is
 				// intended to be fixed at the same time as
-				// https://github.com/pezkuwichain/pezkuwi-sdk/issues/197.
+				// https://github.com/paritytech/substrate/issues/6403.
 				// self.event_streams.send(Event::NotificationStreamClosed {
 				// remote,
 				// protocol,
@@ -1792,7 +1814,12 @@ where
 					if let Some(addresses) =
 						not_reported.then(|| self.boot_node_ids.get(&peer_id)).flatten()
 					{
-						if let DialError::WrongPeerId { obtained, address } = &error {
+						if let DialError::WrongPeerId { obtained, endpoint } = &error {
+							if let ConnectedPoint::Dialer {
+								address,
+								role_override: _,
+								port_use: _,
+							} = endpoint
 							{
 								let address_without_peer_id = parse_addr(address.clone().into())
 									.map_or_else(|_| address.clone(), |r| r.1.into());
@@ -1848,7 +1875,6 @@ where
 				local_addr,
 				send_back_addr,
 				error,
-				..
 			} => {
 				debug!(
 					target: LOG_TARGET,

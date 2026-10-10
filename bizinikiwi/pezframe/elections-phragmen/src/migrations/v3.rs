@@ -15,7 +15,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Migrations to version [`3.0.0`], as denoted by the changelog.
+//! Migrations to version `3.0.0`, as denoted by the changelog.
 
 use super::super::LOG_TARGET;
 use crate::{Config, Pezpallet};
@@ -24,16 +24,15 @@ use codec::{Decode, Encode, FullCodec};
 use pezframe_support::{
 	pezpallet_prelude::ValueQuery, traits::StorageVersion, weights::Weight, Twox64Concat,
 };
-use pezsp_runtime::RuntimeDebug;
 
-#[derive(Encode, Decode, Clone, Default, RuntimeDebug, PartialEq)]
+#[derive(Encode, Decode, Clone, Default, Debug, PartialEq)]
 struct SeatHolder<AccountId, Balance> {
 	who: AccountId,
 	stake: Balance,
 	deposit: Balance,
 }
 
-#[derive(Encode, Decode, Clone, Default, RuntimeDebug, PartialEq)]
+#[derive(Encode, Decode, Clone, Default, Debug, PartialEq)]
 struct Voter<AccountId, Balance> {
 	votes: Vec<AccountId>,
 	stake: Balance,

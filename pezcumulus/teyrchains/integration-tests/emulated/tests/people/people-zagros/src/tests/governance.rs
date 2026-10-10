@@ -17,11 +17,11 @@ use crate::imports::*;
 
 use codec::Encode;
 use people_zagros_runtime::people::IdentityInfo;
-use pezframe_support::pezsp_runtime::traits::Dispatchable;
-use teyrchains_common::AccountId;
-use zagros_runtime::{
-	governance::pezpallet_custom_origins::Origin::GeneralAdmin as GeneralAdminOrigin, Dmp,
+use pezframe_support::{
+	assert_err, pezsp_runtime::traits::Dispatchable, pezsp_runtime::DispatchError,
 };
+use teyrchains_common::AccountId;
+use zagros_runtime::Dmp;
 use zagros_system_emulated_network::people_zagros_emulated_chain::people_zagros_runtime;
 
 use pezpallet_identity::Data;
@@ -80,81 +80,6 @@ fn relay_commands_add_registrar() {
 			]
 		);
 	});
-}
-
-#[test]
-fn relay_commands_add_registrar_wrong_origin() {
-	let people_zagros_alice = PeopleZagros::account_id_of(ALICE);
-
-	let origins = vec![
-		(
-			OriginKind::SovereignAccount,
-			<Zagros as Chain>::RuntimeOrigin::signed(people_zagros_alice),
-		),
-		(OriginKind::Xcm, GeneralAdminOrigin.into()),
-	];
-
-	let mut signed_origin = true;
-
-	for (origin_kind, origin) in origins {
-		let registrar: AccountId = [1; 32].into();
-		Zagros::execute_with(|| {
-			type Runtime = <Zagros as Chain>::Runtime;
-			type RuntimeCall = <Zagros as Chain>::RuntimeCall;
-			type RuntimeEvent = <Zagros as Chain>::RuntimeEvent;
-			type PeopleCall = <PeopleZagros as Chain>::RuntimeCall;
-			type PeopleRuntime = <PeopleZagros as Chain>::Runtime;
-
-			Dmp::make_teyrchain_reachable(1004);
-
-			let add_registrar_call =
-				PeopleCall::Identity(pezpallet_identity::Call::<PeopleRuntime>::add_registrar {
-					account: registrar.into(),
-				});
-
-			let xcm_message = RuntimeCall::XcmPallet(pezpallet_xcm::Call::<Runtime>::send {
-				dest: bx!(VersionedLocation::from(Location::new(0, [Teyrchain(1004)]))),
-				message: bx!(VersionedXcm::from(Xcm(vec![
-					UnpaidExecution { weight_limit: Unlimited, check_origin: None },
-					Transact {
-						origin_kind,
-						call: add_registrar_call.encode().into(),
-						fallback_max_weight: None
-					}
-				]))),
-			});
-
-			assert_ok!(xcm_message.dispatch(origin));
-			assert_expected_events!(
-				Zagros,
-				vec![
-					RuntimeEvent::XcmPallet(pezpallet_xcm::Event::Sent { .. }) => {},
-				]
-			);
-		});
-
-		PeopleZagros::execute_with(|| {
-			type RuntimeEvent = <PeopleZagros as Chain>::RuntimeEvent;
-
-			if signed_origin {
-				assert_expected_events!(
-					PeopleZagros,
-					vec![
-						RuntimeEvent::MessageQueue(pezpallet_message_queue::Event::Processed { success: false, .. }) => {},
-					]
-				);
-			} else {
-				assert_expected_events!(
-					PeopleZagros,
-					vec![
-						RuntimeEvent::MessageQueue(pezpallet_message_queue::Event::Processed { success: true, .. }) => {},
-					]
-				);
-			}
-		});
-
-		signed_origin = false;
-	}
 }
 
 #[test]
@@ -236,61 +161,6 @@ fn relay_commands_kill_identity() {
 			]
 		);
 	});
-}
-
-#[test]
-fn relay_commands_kill_identity_wrong_origin() {
-	let people_zagros_alice = PeopleZagros::account_id_of(BOB);
-
-	let origins = vec![
-		(
-			OriginKind::SovereignAccount,
-			<Zagros as Chain>::RuntimeOrigin::signed(people_zagros_alice),
-		),
-		(OriginKind::Xcm, GeneralAdminOrigin.into()),
-	];
-
-	for (origin_kind, origin) in origins {
-		Zagros::execute_with(|| {
-			type Runtime = <Zagros as Chain>::Runtime;
-			type RuntimeCall = <Zagros as Chain>::RuntimeCall;
-			type PeopleCall = <PeopleZagros as Chain>::RuntimeCall;
-			type RuntimeEvent = <Zagros as Chain>::RuntimeEvent;
-			type PeopleRuntime = <PeopleZagros as Chain>::Runtime;
-
-			Dmp::make_teyrchain_reachable(1004);
-
-			let kill_identity_call = PeopleCall::Identity(pezpallet_identity::Call::<
-				PeopleRuntime,
-			>::kill_identity {
-				target: people_zagros_runtime::MultiAddress::Id(PeopleZagros::account_id_of(ALICE)),
-			});
-
-			let xcm_message = RuntimeCall::XcmPallet(pezpallet_xcm::Call::<Runtime>::send {
-				dest: bx!(VersionedLocation::from(Location::new(0, [Teyrchain(1004)]))),
-				message: bx!(VersionedXcm::from(Xcm(vec![
-					UnpaidExecution { weight_limit: Unlimited, check_origin: None },
-					Transact {
-						origin_kind,
-						call: kill_identity_call.encode().into(),
-						fallback_max_weight: None
-					}
-				]))),
-			});
-
-			assert_ok!(xcm_message.dispatch(origin));
-			assert_expected_events!(
-				Zagros,
-				vec![
-					RuntimeEvent::XcmPallet(pezpallet_xcm::Event::Sent { .. }) => {},
-				]
-			);
-		});
-
-		PeopleZagros::execute_with(|| {
-			assert_expected_events!(PeopleZagros, vec![]);
-		});
-	}
 }
 
 #[test]
@@ -447,103 +317,107 @@ fn relay_commands_add_remove_username_authority() {
 	});
 }
 
+/// A signed account on the relay cannot command this chain at all.
+///
+/// Three tests used to assert this, one per payload, and each of them also carried a case for
+/// the relay's `WelatiAdmin` origin -- which no longer exists. The payload was never what the
+/// fact depended on: the relay's `SendXcmOrigin` refuses a signed account before any message
+/// leaves, so nothing about People is reached to be tested three times.
 #[test]
-fn relay_commands_add_remove_username_authority_wrong_origin() {
-	let people_zagros_alice = PeopleZagros::account_id_of(ALICE);
+fn a_signed_account_cannot_send_this_chain_a_message() {
+	let alice = PeopleZagros::account_id_of(ALICE);
 
-	let origins = vec![
-		(
-			OriginKind::SovereignAccount,
-			<Zagros as Chain>::RuntimeOrigin::signed(people_zagros_alice.clone()),
-		),
-		(OriginKind::Xcm, GeneralAdminOrigin.into()),
-	];
+	Zagros::execute_with(|| {
+		type Runtime = <Zagros as Chain>::Runtime;
+		type RuntimeCall = <Zagros as Chain>::RuntimeCall;
+		type PeopleCall = <PeopleZagros as Chain>::RuntimeCall;
+		type PeopleRuntime = <PeopleZagros as Chain>::Runtime;
 
-	for (origin_kind, origin) in origins {
-		Zagros::execute_with(|| {
-			type Runtime = <Zagros as Chain>::Runtime;
-			type RuntimeCall = <Zagros as Chain>::RuntimeCall;
-			type RuntimeEvent = <Zagros as Chain>::RuntimeEvent;
-			type PeopleCall = <PeopleZagros as Chain>::RuntimeCall;
-			type PeopleRuntime = <PeopleZagros as Chain>::Runtime;
+		Dmp::make_teyrchain_reachable(1004);
 
-			Dmp::make_teyrchain_reachable(1004);
-
-			let add_username_authority = PeopleCall::Identity(pezpallet_identity::Call::<
-				PeopleRuntime,
-			>::add_username_authority {
-				authority: people_zagros_runtime::MultiAddress::Id(people_zagros_alice.clone()),
-				suffix: b"suffix1".into(),
-				allocation: 10,
-			});
-
-			let add_authority_xcm_msg =
-				RuntimeCall::XcmPallet(pezpallet_xcm::Call::<Runtime>::send {
-					dest: bx!(VersionedLocation::from(Location::new(0, [Teyrchain(1004)]))),
-					message: bx!(VersionedXcm::from(Xcm(vec![
-						UnpaidExecution { weight_limit: Unlimited, check_origin: None },
-						Transact {
-							origin_kind,
-							call: add_username_authority.encode().into(),
-							fallback_max_weight: None
-						}
-					]))),
-				});
-
-			assert_ok!(add_authority_xcm_msg.dispatch(origin.clone()));
-			assert_expected_events!(
-				Zagros,
-				vec![
-					RuntimeEvent::XcmPallet(pezpallet_xcm::Event::Sent { .. }) => {},
-				]
-			);
+		let call = PeopleCall::Identity(pezpallet_identity::Call::<PeopleRuntime>::add_registrar {
+			account: AccountId::from([1; 32]).into(),
 		});
 
-		// Check events system-teyrchain-side
-		PeopleZagros::execute_with(|| {
-			assert_expected_events!(PeopleZagros, vec![]);
+		let xcm_message = RuntimeCall::XcmPallet(pezpallet_xcm::Call::<Runtime>::send {
+			dest: bx!(VersionedLocation::from(Location::new(0, [Teyrchain(1004)]))),
+			message: bx!(VersionedXcm::from(Xcm(vec![
+				UnpaidExecution { weight_limit: Unlimited, check_origin: None },
+				Transact {
+					origin_kind: OriginKind::SovereignAccount,
+					call: call.encode().into(),
+					fallback_max_weight: None
+				}
+			]))),
 		});
 
-		Zagros::execute_with(|| {
-			type Runtime = <Zagros as Chain>::Runtime;
-			type RuntimeCall = <Zagros as Chain>::RuntimeCall;
-			type RuntimeEvent = <Zagros as Chain>::RuntimeEvent;
-			type PeopleCall = <PeopleZagros as Chain>::RuntimeCall;
-			type PeopleRuntime = <PeopleZagros as Chain>::Runtime;
+		assert_err!(
+			xcm_message.dispatch(<Zagros as Chain>::RuntimeOrigin::signed(alice)),
+			DispatchError::BadOrigin
+		);
+	});
+}
 
-			let remove_username_authority = PeopleCall::Identity(pezpallet_identity::Call::<
-				PeopleRuntime,
-			>::remove_username_authority {
-				authority: people_zagros_runtime::MultiAddress::Id(people_zagros_alice.clone()),
-				suffix: b"suffix1".into(),
-			});
+/// The relay cannot write the register, even as Root.
+///
+/// This is the end-to-end half of the rule. The relay's referenda weigh tokens and this
+/// chain's count heads, so a relay message must not be able to decide who is a citizen. Root
+/// is what `ParentAsSuperuser` hands it and Root is what every register call asks for, so the
+/// refusal cannot live in the origin -- FRAME's Root bypasses origin filters. It lives in
+/// `SafeCallFilter`, which runs before the origin is resolved and refuses the *call*.
+///
+/// The message leaves the relay and arrives; what fails is its execution. Asserting that is
+/// the point: a test that only checked the send would pass over a chain that accepted it.
+#[test]
+fn the_relay_cannot_write_the_register() {
+	Zagros::execute_with(|| {
+		type Runtime = <Zagros as Chain>::Runtime;
+		type RuntimeCall = <Zagros as Chain>::RuntimeCall;
+		type RuntimeEvent = <Zagros as Chain>::RuntimeEvent;
+		type PeopleCall = <PeopleZagros as Chain>::RuntimeCall;
+		type PeopleRuntime = <PeopleZagros as Chain>::Runtime;
 
-			Dmp::make_teyrchain_reachable(1004);
+		Dmp::make_teyrchain_reachable(1004);
 
-			let remove_authority_xcm_msg =
-				RuntimeCall::XcmPallet(pezpallet_xcm::Call::<Runtime>::send {
-					dest: bx!(VersionedLocation::from(Location::new(0, [Teyrchain(1004)]))),
-					message: bx!(VersionedXcm::from(Xcm(vec![
-						UnpaidExecution { weight_limit: Unlimited, check_origin: None },
-						Transact {
-							origin_kind: OriginKind::SovereignAccount,
-							call: remove_username_authority.encode().into(),
-							fallback_max_weight: None,
-						}
-					]))),
-				});
+		let revoke = PeopleCall::IdentityKyc(
+			pezpallet_identity_kyc::Call::<PeopleRuntime>::revoke_citizenship {
+				who: PeopleZagros::account_id_of(BOB),
+			},
+		);
 
-			assert_ok!(remove_authority_xcm_msg.dispatch(origin));
-			assert_expected_events!(
-				Zagros,
-				vec![
-					RuntimeEvent::XcmPallet(pezpallet_xcm::Event::Sent { .. }) => {},
-				]
-			);
+		let xcm_message = RuntimeCall::XcmPallet(pezpallet_xcm::Call::<Runtime>::send {
+			dest: bx!(VersionedLocation::from(Location::new(0, [Teyrchain(1004)]))),
+			message: bx!(VersionedXcm::from(Xcm(vec![
+				UnpaidExecution { weight_limit: Unlimited, check_origin: None },
+				Transact {
+					origin_kind: OriginKind::Superuser,
+					call: revoke.encode().into(),
+					fallback_max_weight: None
+				}
+			]))),
 		});
 
-		PeopleZagros::execute_with(|| {
-			assert_expected_events!(PeopleZagros, vec![]);
-		});
-	}
+		assert_ok!(xcm_message.dispatch(<Zagros as Chain>::RuntimeOrigin::root()));
+
+		assert_expected_events!(
+			Zagros,
+			vec![
+				RuntimeEvent::XcmPallet(pezpallet_xcm::Event::Sent { .. }) => {},
+			]
+		);
+	});
+
+	PeopleZagros::execute_with(|| {
+		type RuntimeEvent = <PeopleZagros as Chain>::RuntimeEvent;
+
+		assert_expected_events!(
+			PeopleZagros,
+			vec![
+				RuntimeEvent::MessageQueue(pezpallet_message_queue::Event::Processed {
+					success: false,
+					..
+				}) => {},
+			]
+		);
+	});
 }

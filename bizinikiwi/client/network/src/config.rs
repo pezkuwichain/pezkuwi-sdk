@@ -90,7 +90,7 @@ pub const KADEMLIA_PROVIDER_RECORD_TTL: Duration = Duration::from_secs(10 * 3600
 pub const KADEMLIA_PROVIDER_REPUBLISH_INTERVAL: Duration = Duration::from_secs(12600);
 
 /// Protocol name prefix, transmitted on the wire for legacy protocol names.
-/// I.e., `dot` in `/hez/sync/2`. Should be unique for each chain. Always UTF-8.
+/// I.e., `dot` in `/dot/sync/2`. Should be unique for each chain. Always UTF-8.
 /// Deprecated in favour of genesis hash & fork ID based protocol names.
 #[derive(Clone, PartialEq, Eq, Hash)]
 pub struct ProtocolId(smallvec::SmallVec<[u8; 6]>);
@@ -170,8 +170,12 @@ pub struct MultiaddrWithPeerId {
 impl MultiaddrWithPeerId {
 	/// Concatenates the multiaddress and peer ID into one multiaddress containing both.
 	pub fn concat(&self) -> Multiaddr {
-		let proto = multiaddr::Protocol::P2p(From::from(self.peer_id));
-		self.multiaddr.clone().with(proto)
+		let mut addr = self.multiaddr.clone();
+		// Ensure that the address not already contains the `p2p` protocol.
+		if matches!(addr.iter().last(), Some(multiaddr::Protocol::P2p(_))) {
+			addr.pop();
+		}
+		addr.with(multiaddr::Protocol::P2p(From::from(self.peer_id)))
 	}
 }
 
@@ -515,7 +519,7 @@ pub struct NonDefaultSetConfig {
 	/// `Box<dyn NotificationService>` is given to the protocol created the config and
 	/// `ProtocolHandle` is given to `Notifications` when it initializes itself. This handle allows
 	/// `Notifications ` to communicate with the protocol directly without relaying events through
-	/// `sc-network.`
+	/// `pezsc-network.`
 	protocol_handle_pair: ProtocolHandlePair,
 }
 
@@ -676,8 +680,15 @@ pub struct NetworkConfiguration {
 	/// `kademlia_replication_factor` peers to consider record successfully put.
 	pub kademlia_replication_factor: NonZeroUsize,
 
-	/// Enable serving block data over IPFS bitswap.
+	/// Enable serving indexed transaction data using IPFS Bitswap protocol.
 	pub ipfs_server: bool,
+
+	/// List of IPFS bootstrap nodes to register in IPFS DHT as a provider of indexed transaction
+	/// data.
+	///
+	/// If IPFS bootstrap nodes are not provided, this node will only handle direct Bitswap
+	/// requests from peers that already know its address.
+	pub ipfs_bootnodes: Vec<MultiaddrWithPeerId>,
 
 	/// Networking backend used for P2P communication.
 	pub network_backend: NetworkBackendType,
@@ -714,6 +725,7 @@ impl NetworkConfiguration {
 			kademlia_replication_factor: NonZeroUsize::new(DEFAULT_KADEMLIA_REPLICATION_FACTOR)
 				.expect("value is a constant; constant is non-zero; qed."),
 			ipfs_server: false,
+			ipfs_bootnodes: Vec::new(),
 			network_backend: NetworkBackendType::Litep2p,
 		}
 	}
@@ -749,6 +761,16 @@ impl NetworkConfiguration {
 	}
 }
 
+/// IPFS server configuration.
+pub struct IpfsConfig<Block: BlockT, H: ExHashT, N: NetworkBackend<Block, H>> {
+	/// Network-backend-specific Bitswap configuration.
+	pub bitswap_config: N::BitswapConfig,
+	/// Indexed transactions provider.
+	pub block_provider: Box<dyn crate::IpfsBlockProvider>,
+	/// IPFS bootstrap nodes.
+	pub bootnodes: Vec<MultiaddrWithPeerId>,
+}
+
 /// Network initialization parameters.
 pub struct Params<Block: BlockT, H: ExHashT, N: NetworkBackend<Block, H>> {
 	/// Assigned role for our node (full, light, ...).
@@ -777,7 +799,7 @@ pub struct Params<Block: BlockT, H: ExHashT, N: NetworkBackend<Block, H>> {
 	pub block_announce_config: N::NotificationProtocolConfig,
 
 	/// Bitswap configuration, if the server has been enabled.
-	pub bitswap_config: Option<N::BitswapConfig>,
+	pub ipfs_config: Option<IpfsConfig<Block, H, N>>,
 
 	/// Notification metrics.
 	pub notification_metrics: NotificationMetrics,
@@ -961,6 +983,28 @@ pub enum NetworkBackendType {
 mod tests {
 	use super::*;
 	use tempfile::TempDir;
+
+	/// The default backend has to stay litep2p, and this is a security gate rather than a
+	/// preference.
+	///
+	/// Both stacks are compiled into the node, and the libp2p one carries dependencies with open
+	/// advisories -- `hickory-proto` 0.24.4 (RUSTSEC-2026-0119) through `libp2p-dns`, and `yamux`
+	/// 0.12.1 through `libp2p-yamux`, which selects the 0.12 line for its default config. litep2p
+	/// reaches neither: it resolves `hickory-proto` 0.26.1 and `yamux` 0.13.10, both patched.
+	///
+	/// So the reason those advisories are tolerable is *this default*, and nothing else. The
+	/// exemptions recorded in `deny.toml` name this test as what holds them up. A framework sync
+	/// that flips the default would otherwise move every node onto the vulnerable stack silently,
+	/// with a green advisory gate, because the gate reasons about the graph and not about which
+	/// half of it runs.
+	#[test]
+	fn the_default_network_backend_is_litep2p() {
+		assert!(
+			matches!(NetworkBackendType::default(), NetworkBackendType::Litep2p),
+			"the libp2p stack pulls hickory-proto 0.24.4 and yamux 0.12.1, both with open \
+			 advisories; see the `webpki`/`hickory` entries in deny.toml"
+		);
+	}
 
 	fn tempdir_with_prefix(prefix: &str) -> TempDir {
 		tempfile::Builder::new().prefix(prefix).tempdir().unwrap()

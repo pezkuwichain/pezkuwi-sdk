@@ -25,29 +25,178 @@ pub mod currency {
 	/// The existential deposit.
 	pub const EXISTENTIAL_DEPOSIT: Balance = 1 * CENTS;
 
+	/// One ZGR, the testnet counterpart of a HEZ. Balances are carried in the smallest
+	/// indivisible amount and one ZGR is 10^12 of them, the same relationship a DOT has to
+	/// a planck. Chain specs pair this with `tokenDecimals: 12`; the two have to agree or
+	/// every displayed balance is wrong by a power of ten.
 	pub const UNITS: Balance = 1_000_000_000_000;
-	pub const CENTS: Balance = UNITS / 100;
+
+	/// What the initial validators are funded with at genesis, carved out of the treasury's
+	/// 40M share rather than added beside it.
+	///
+	/// It lives here because two chains have to agree on it and neither can derive it: the
+	/// relay mints it onto the validator stashes, and the Asset Hub subtracts the same number
+	/// from the treasury's share before minting the rest into the pot the spender tracks pay
+	/// from. A constant rather than `authorities.len() * stash`, so seating another validator
+	/// cannot silently change what either side mints.
+	pub const HEZ_VALIDATOR_FUNDING: Balance = 1_000 * UNITS;
+
+	/// What sudo starts with, so its first call can pay for itself.
+	///
+	/// Zagros's root is a separate key rather than the founder's, and on 2026-09-14 that key
+	/// launched with nothing: registering the teyrchains failed because the extrinsic could not
+	/// pay its fee, and the chain came up ungovernable until an account was funded by hand.
+	/// Mainnet does not have this gap -- its sudo *is* the founder account -- which is exactly
+	/// why the twins differ here: the deliberate separate-key decision is what created the need.
+	///
+	/// Carved out of the founder's allocation rather than added on top, the same way
+	/// `HEZ_VALIDATOR_FUNDING` is carved out of the treasury's, so the genesis total stays at
+	/// two hundred million to the planck.
+	///
+	/// Sized from measurement, not from a round number that looks generous: five sudo calls on
+	/// the live chain cost 0.000641 HEZ in total. A thousand is a fee budget with a very wide
+	/// margin, and small enough that the root account can never be mistaken for a treasury.
+	pub const HEZ_SUDO_FUNDING: Balance = 1_000 * UNITS;
+
+	/// What the founding office starts with, on each chain it has to act on.
+	///
+	/// The holder of `Tiki::Serok` is the only origin that can write the People chain's
+	/// register on the founding day. `TheRegisterIsNotWritableFromAbroad` drops every register
+	/// call arriving over XCM, so the relay's sudo cannot seat the founding Parliament; People
+	/// has no sudo pallet of its own; and its Root track wants a referendum, which wants a roll
+	/// that does not exist yet. `seat_founding_parliament` is signed by that key or the house
+	/// never sits -- and a key with no balance cannot sign anything.
+	///
+	/// Three chains rather than one, decided 2026-09-19. The office acts on People (the
+	/// register), on the Asset Hub (the pots the state spends from) and on the relay (the chain
+	/// itself), and a fee budget on one of the three is a gap discovered on the day. That is not
+	/// hypothetical here: Zagros launched on 2026-09-14 with an unfunded root key and came up
+	/// ungovernable, which is the same failure one chain over.
+	///
+	/// Carved out of the founder's allocation rather than added on top, exactly as
+	/// `HEZ_SUDO_FUNDING` is, so the genesis total stays at two hundred million to the planck.
+	/// The size rests on the same measurement: five sudo calls on the live chain cost 0.000641
+	/// HEZ altogether, so a thousand is a very wide fee budget and far too small to be mistaken
+	/// for a treasury.
+	pub const HEZ_FOUNDING_OFFICE_FUNDING: Balance = 1_000 * UNITS;
+
+	/// The whole carve-out, so the founder's line is reduced once and by the right amount.
+	///
+	/// Written as a product rather than three subtractions at three call sites: the relay is
+	/// where the founder's line is computed, and it has to know what the other two chains mint
+	/// without being able to see them.
+	pub const HEZ_FOUNDING_OFFICE_CARVE_OUT: Balance = 3 * HEZ_FOUNDING_OFFICE_FUNDING;
+
+	/// What the relay's accumulation account starts with: its existential deposit.
+	///
+	/// Fees, dust and coretime revenue are paid into that account by `resolve`, and `resolve`
+	/// refuses any deposit that would leave an account below the existential deposit. With the
+	/// account unfunded every such deposit smaller than the deposit itself is refused, and the
+	/// credit is dropped -- burned, with a defensive log and nothing else. Measured 2026-09-25:
+	/// the account did not exist on the relay or on People, on mainnet or on Zagros, and the
+	/// benchmark run logged the burn ninety-eight thousand times. The pallet's own setup notes
+	/// say to fund it in genesis; nothing did.
+	pub const HEZ_ACCUMULATION_RELAY: Balance = EXISTENTIAL_DEPOSIT;
+
+	/// The same for People's accumulation account. People's existential deposit is a tenth of
+	/// the relay's; the People runtime pins that the two agree, since this crate cannot see it.
+	pub const HEZ_ACCUMULATION_PEOPLE: Balance = EXISTENTIAL_DEPOSIT / 10;
+
+	/// Both, carved out of the founder's allocation as the office budgets are, so the genesis
+	/// total stays at two hundred million to the planck.
+	pub const HEZ_ACCUMULATION_CARVE_OUT: Balance =
+		HEZ_ACCUMULATION_RELAY + HEZ_ACCUMULATION_PEOPLE;
+
+	/// What each genesis validator starts with on the Asset Hub (spec K5): the validator bond,
+	/// bonded, and a thousand beside it for fees.
+	pub const HEZ_GENESIS_VALIDATOR_STAKE: Balance = 11_000 * UNITS;
+	/// Of `HEZ_GENESIS_VALIDATOR_STAKE`, the part bonded at genesis -- the validator floor.
+	pub const HEZ_GENESIS_VALIDATOR_BOND: Balance = 10_000 * UNITS;
+	/// All of it, carved out of the founder's allocation on the relay and minted on the Asset
+	/// Hub, so the genesis total stays at two hundred million to the planck.
+	pub const HEZ_GENESIS_STAKE_CARVE_OUT: Balance =
+		super::genesis::VALIDATOR_STASHES.len() as Balance * HEZ_GENESIS_VALIDATOR_STAKE;
+	pub const CENTS: Balance = UNITS / 30_000;
+	/// One unit, named for what a deposit or a spend is reckoned in.
+	///
+	/// The governance figures inherited from upstream are written `N * 3 * CENTS`, which reads as
+	/// "N dollars" only where three cents come to a dollar. Here a cent is a thirty-thousandth,
+	/// so those expressions evaluated to fractions of a unit: the largest treasury track asked
+	/// 0.04 to open a referendum against a `Treasurer` track asking a thousand — twenty-five
+	/// thousand times apart, in the same file. Name the unit and reckon in it, so the ladder
+	/// stays legible and the cent scale is not load-bearing.
+	pub const DOLLARS: Balance = UNITS;
+	/// A grand is a thousand of the base unit, which is what the name has always meant.
+	/// Upstream spells it `CENTS * 100_000` — a hundred thousand cents — which only comes to a
+	/// thousand where a cent is a hundredth. Here a cent is a thirty-thousandth, so that
+	/// spelling yielded roughly 3.33 units, and every governance figure derived from it came out
+	/// three hundred times too small: referendum submission and decision deposits of a few units
+	/// against a supply in the hundreds of millions, and a Fellowship spend cap of about 33.
+	/// Derive it from what it means rather than from the other ecosystem's cent scale, which
+	/// this crate's own comments warn against mixing.
+	pub const GRAND: Balance = UNITS * 1_000;
 	pub const MILLICENTS: Balance = CENTS / 1_000;
-	pub const GRAND: Balance = CENTS * 100_000;
 
 	pub const fn deposit(items: u32, bytes: u32) -> Balance {
-		items as Balance * 100 * CENTS + (bytes as Balance) * 5 * MILLICENTS
+		items as Balance * 2_000 * CENTS + (bytes as Balance) * 100 * MILLICENTS
 	}
 }
 
 /// Time and blocks.
+/// The genesis validators' stashes, which the relay seats and the Asset Hub bonds (spec K5).
+///
+/// One list for both chains: the relay's genesis authorities and the Asset Hub's genesis
+/// stakers must be the same accounts, and a list held twice drifts. The relay's preset test
+/// `the_relay_seats_the_stashes_the_asset_hub_bonds` holds its own authorities to this one.
+/// Generated from `res/genesis/zagros/zagros-wallets.json` (public keys only; that file never
+/// enters this repository).
+pub mod genesis {
+	/// The genesis validators' stash public keys, in seating order.
+	pub const VALIDATOR_STASHES: [[u8; 32]; 4] = [
+		// Validator_01: 5Gbb57WXHVrtVG6ozytVjAm9BCg1sNdBLLmtR1UmVcTm2UJB
+		[
+			0xc8, 0x7e, 0xb3, 0x13, 0x03, 0x6e, 0x49, 0x1d, 0x0b, 0x5c, 0x7b, 0x07, 0x77, 0xe8,
+			0x9e, 0x84, 0xb1, 0x25, 0x91, 0x91, 0xf4, 0x34, 0x97, 0x7a, 0xcc, 0x47, 0x27, 0x0c,
+			0x76, 0x75, 0x48, 0x03,
+		],
+		// Validator_02: 5ED8FZU9u2xDYqdT2gX1p9QM96ivmCPTRMmNXT3Z9jSGkmQR
+		[
+			0x5e, 0xe4, 0x8c, 0xcb, 0x62, 0x5f, 0x4b, 0xbc, 0x56, 0x7a, 0x53, 0x5f, 0xc9, 0xaf,
+			0xcd, 0xa4, 0x60, 0x9d, 0xf8, 0x61, 0xa3, 0x32, 0x0d, 0x19, 0x10, 0xd9, 0x9e, 0xc9,
+			0x0e, 0x97, 0xeb, 0x65,
+		],
+		// Validator_03: 5Dkd9PhMvuvYGSQmfBrqeH2F8FVnmaQ1MW8pM5Fe5MmhnjBU
+		[
+			0x4a, 0xae, 0x30, 0x51, 0xa6, 0xd7, 0x81, 0xb8, 0xe2, 0x5f, 0x9c, 0xac, 0xe9, 0x48,
+			0x8a, 0xac, 0xb3, 0x1a, 0xfc, 0x2a, 0x9e, 0x2a, 0x03, 0x12, 0x0f, 0x52, 0x76, 0x7b,
+			0xb0, 0xe8, 0xa9, 0x08,
+		],
+		// Validator_04: 5HYNdbYjhvZaFUvtZK2q8MqQL1F46jccH1eRL5TXnemNaJZQ
+		[
+			0xf2, 0x47, 0x51, 0xf6, 0xee, 0xb8, 0x6f, 0x26, 0x36, 0xcb, 0xf9, 0x67, 0x9f, 0xcb,
+			0x8a, 0xac, 0xc6, 0xcf, 0x5e, 0x26, 0x6c, 0x7f, 0x47, 0x25, 0x05, 0xc9, 0x17, 0x3f,
+			0xdc, 0x3b, 0x54, 0x58,
+		],
+	];
+}
+
 pub mod time {
-	use pezkuwi_primitives::{BlockNumber, Moment};
 	use pezkuwi_runtime_common::prod_or_fast;
 
+	use pezkuwi_primitives::{BlockNumber, Moment};
 	pub const MILLISECS_PER_BLOCK: Moment = 6000;
 	pub const SLOT_DURATION: Moment = MILLISECS_PER_BLOCK;
-	pub const EPOCH_DURATION_IN_SLOTS: BlockNumber = prod_or_fast!(1 * HOURS, 1 * MINUTES);
+
+	pezframe_support::parameter_types! {
+		pub EpochDurationInBlocks: BlockNumber =
+			prod_or_fast!(1 * HOURS, 1 * MINUTES, "PEZKUWICHAIN_EPOCH_DURATION");
+	}
 
 	// These time units are defined in number of blocks.
 	pub const MINUTES: BlockNumber = 60_000 / (MILLISECS_PER_BLOCK as BlockNumber);
 	pub const HOURS: BlockNumber = MINUTES * 60;
 	pub const DAYS: BlockNumber = HOURS * 24;
+	pub const WEEKS: BlockNumber = DAYS * 7;
 
 	// 1 in 4 blocks (on average, not counting collisions) will be primary babe blocks.
 	// The choice of is done in accordance to the slot duration and expected target
@@ -73,7 +222,7 @@ pub mod fee {
 	/// node's balance type.
 	///
 	/// This should typically create a mapping between the following ranges:
-	///   - [0,` MAXIMUM_BLOCK_WEIGHT`]
+	///   - [0, `pezframe_system::MaximumBlockWeight`]
 	///   - [Balance::min, Balance::max]
 	///
 	/// Yet, it can be used for any other sort of change to weight-fee. Some examples being:
@@ -83,7 +232,8 @@ pub mod fee {
 	impl WeightToFeePolynomial for WeightToFee {
 		type Balance = Balance;
 		fn polynomial() -> WeightToFeeCoefficients<Self::Balance> {
-			// in Zagros, extrinsic base weight (smallest non-zero weight) is mapped to 1/10 CENT:
+			// in Pezkuwichain, extrinsic base weight (smallest non-zero weight) is mapped to 1/10
+			// CENT:
 			let p = super::currency::CENTS;
 			let q = 10 * Balance::from(ExtrinsicBaseWeight::get().ref_time());
 			smallvec![WeightToFeeCoefficient {
@@ -109,20 +259,20 @@ pub mod system_teyrchain {
 
 	/// Network's Asset Hub teyrchain ID.
 	pub const ASSET_HUB_ID: u32 = 1000;
-	/// Collectives teyrchain ID.
+	/// Collectives teyrchain ID. Zagros keeps a collectives chain, so the ID stays here
+	/// even though mainnet has none.
 	pub const COLLECTIVES_ID: u32 = 1001;
+	/// People teyrchain ID.
+	pub const PEOPLE_ID: u32 = 1004;
 	/// BridgeHub teyrchain ID.
 	pub const BRIDGE_HUB_ID: u32 = 1002;
-	/// Encointer teyrchain ID.
-	pub const ENCOINTER_ID: u32 = 1003;
-	/// People Chain teyrchain ID.
-	pub const PEOPLE_ID: u32 = 1004;
 	/// Brokerage teyrchain ID.
+	/// 1005 was also declared as `ASSET_HUB_NEXT_ID`, reserved for a migration rehearsal that
+	/// this network never ran. Two names for one para ID is how a location ends up pointing at
+	/// the wrong chain, so the unused one is gone rather than renumbered.
 	pub const BROKER_ID: u32 = 1005;
-	/// AH-next - temporary AH clone.
-	pub const ASSET_HUB_NEXT_ID: u32 = 1100;
 
-	/// All system teyrchains of Zagros.
+	/// All system teyrchains of Pezkuwichain.
 	pub type SystemTeyrchains = IsChildSystemTeyrchain<ParaId>;
 
 	/// Coretime constants
@@ -137,8 +287,57 @@ pub mod system_teyrchain {
 	}
 }
 
-/// Zagros Treasury pezpallet instance.
-pub const TREASURY_PALLET_ID: u8 = 37;
+// `TREASURY_PALLET_ID: u8 = 18` stood here, naming the relay's Treasury pallet so a
+// `PalletInstance` location could address it. The treasury moved to the Asset Hub and index 18
+// is retired; the constant outlived the pallet and named a number nothing answers on. Nothing
+// consumed it, which is the only reason it was harmless -- a location built from it would have
+// addressed an empty slot. The Asset Hub's treasury is reached by its own `PalletId`
+// (`teyrchains_common::TREASURY_PALLET_ID`), which is a different thing with the same name.
+
+#[cfg(test)]
+mod tests {
+	use super::{
+		currency::{CENTS, MILLICENTS},
+		fee::WeightToFee,
+	};
+	use crate::weights::ExtrinsicBaseWeight;
+	use pezframe_support::weights::WeightToFee as WeightToFeeT;
+	use pezkuwi_runtime_common::MAXIMUM_BLOCK_WEIGHT;
+
+	#[test]
+	// Test that the fee for `MAXIMUM_BLOCK_WEIGHT` of weight has sane bounds.
+	fn full_block_fee_is_correct() {
+		// A full block costs what fits in it, and what fits is a property of the reference
+		// hardware rather than of the fee schedule. `WeightToFee` anchors `ExtrinsicBaseWeight`
+		// at a tenth of a CENT -- that is the economic decision, and
+		// `extrinsic_base_fee_is_correct` below is what holds it. This test only asks that the
+		// resulting block price stay in a sane range.
+		//
+		// The range was [1_000, 10_000], upstream's numbers for upstream's machine: their
+		// extrinsic base is around 100 microseconds, so twenty thousand extrinsics fit in two
+		// seconds and a full block comes to 2_000 CENTS. Ours is 223 microseconds, measured on
+		// the weakest validator class we intend to support, so 8_968 fit and a full block is
+		// 897 CENTS. A slower reference machine means fewer transactions per block, not cheaper
+		// transactions.
+		//
+		// 500 rather than 897 so the bound survives re-benchmarking: this figure moves whenever
+		// the reference hardware is re-measured, and a bound pinned to today's number would go
+		// red on a routine measurement rather than on a defect.
+		let full_block = WeightToFee::weight_to_fee(&MAXIMUM_BLOCK_WEIGHT);
+		assert!(full_block >= 500 * CENTS);
+		assert!(full_block <= 10_000 * CENTS);
+	}
+
+	#[test]
+	// This function tests that the fee for `ExtrinsicBaseWeight` of weight is correct
+	fn extrinsic_base_fee_is_correct() {
+		// `ExtrinsicBaseWeight` should cost 1/10 of a CENT
+		println!("Base: {}", ExtrinsicBaseWeight::get());
+		let x = WeightToFee::weight_to_fee(&ExtrinsicBaseWeight::get());
+		let y = CENTS / 10;
+		assert!(x.max(y) - x.min(y) < MILLICENTS);
+	}
+}
 
 /// XCM protocol related constants.
 pub mod xcm {
@@ -152,35 +351,5 @@ pub mod xcm {
 		#[deprecated = "Will be removed after August 2024; Use `xcm::latest::BodyId::Treasury` \
 			instead"]
 		pub const TREASURER_INDEX: u32 = 2;
-	}
-}
-
-#[cfg(test)]
-mod tests {
-	use super::{
-		currency::{CENTS, MILLICENTS, UNITS},
-		fee::WeightToFee,
-	};
-	use crate::weights::ExtrinsicBaseWeight;
-	use pezframe_support::weights::WeightToFee as WeightToFeeT;
-	use pezkuwi_runtime_common::MAXIMUM_BLOCK_WEIGHT;
-
-	#[test]
-	// Test that the fee for `MAXIMUM_BLOCK_WEIGHT` of weight has sane bounds.
-	fn full_block_fee_is_correct() {
-		// A full block should cost between 10 and 100 UNITS.
-		let full_block = WeightToFee::weight_to_fee(&MAXIMUM_BLOCK_WEIGHT);
-		assert!(full_block >= 10 * UNITS);
-		assert!(full_block <= 100 * UNITS);
-	}
-
-	#[test]
-	// This function tests that the fee for `ExtrinsicBaseWeight` of weight is correct
-	fn extrinsic_base_fee_is_correct() {
-		// `ExtrinsicBaseWeight` should cost 1/10 of a CENT
-		println!("Base: {}", ExtrinsicBaseWeight::get());
-		let x = WeightToFee::weight_to_fee(&ExtrinsicBaseWeight::get());
-		let y = CENTS / 10;
-		assert!(x.max(y) - x.min(y) < MILLICENTS);
 	}
 }

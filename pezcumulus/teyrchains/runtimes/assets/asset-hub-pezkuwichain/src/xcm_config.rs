@@ -40,6 +40,7 @@ use pezkuwi_teyrchain_primitives::primitives::Sibling;
 use pezkuwichain_runtime_constants::system_teyrchain::ASSET_HUB_ID;
 use pezpallet_xcm::{AuthorizedAliasers, XcmPassthrough};
 use pezsp_runtime::traits::{AccountIdConversion, TryConvertInto};
+use testnet_teyrchains_constants::pezkuwichain::locations::PeopleLocation;
 use testnet_teyrchains_constants::pezkuwichain::snowbridge::{
 	EthereumNetwork, INBOUND_QUEUE_PALLET_INDEX,
 };
@@ -92,13 +93,25 @@ parameter_types! {
 	pub UniquesPalletLocation: Location =
 		PalletInstance(<Uniques as PalletInfoAccess>::index() as u8).into();
 	pub CheckingAccount: AccountId = PezkuwiXcm::check_account();
-	/// Teleport tracking disabled — both RC and AH use None so teleports work without
-	/// a pre-seeded CheckingAccount. RC burns on send, AH mints on receive directly.
-	pub TeleportTracking: Option<(AccountId, MintLocation)> = None;
+	/// Teleports are checked in against this account, so this chain can only mint back what
+	/// previously left it.
+	///
+	/// This used to be `None`, and the comment justifying it said "both RC and AH use None" —
+	/// which was not true of the relay: it has carried
+	/// `Some((CheckAccount, MintLocation::Local))` and a seeded escrow throughout. So one side
+	/// of every teleport was accounted for and the other was not.
+	///
+	/// Turning it on requires the checking account to be seeded at genesis, which is why it
+	/// could not simply be flipped: without the seed every inbound teleport fails with
+	/// `NotWithdrawable` and the sender's balance is gone on the far side while its extrinsic
+	/// reported success. Zagros launched in exactly that state on 2026-09-11 and lost the
+	/// first teleport sent through it. The seed is now in the genesis preset of both twins,
+	/// and `VotableIssuance` keeps the escrow out of the governance denominator.
+	pub TeleportTracking: Option<(AccountId, MintLocation)> =
+		Some((CheckingAccount::get(), MintLocation::Local));
 	pub const GovernanceLocation: Location = Location::parent();
 	pub StakingPot: AccountId = CollatorSelection::account_id();
 	pub TreasuryAccount: AccountId = TREASURY_PALLET_ID.into_account_truncating();
-	pub RelayTreasuryLocation: Location = (Parent, PalletInstance(pezkuwichain_runtime_constants::TREASURY_PALLET_ID)).into();
 }
 
 /// Type for specifying how a `Location` can be converted into an `AccountId`. This is used
@@ -282,7 +295,16 @@ pub type Barrier = TrailingSetTopicAsId<
 					// and BridgeHub get free execution.
 					AllowExplicitUnpaidExecutionFrom<(
 						ParentOrParentsPlurality,
-						Equals<RelayTreasuryLocation>,
+						// The relay's treasury used to be waived here because it paid over XCM. It is retired:
+						// the treasury is on the Asset Hub now and pays from its own account, so no treasury
+						// sends messages to this chain. Should that ever change back to `PayOverXcm`, the
+						// sending body has to be waived again or every payment is charged a fee it cannot pay
+						// and is dropped without an error.
+						// The register decides and the treasury pays, so the chain holding the
+						// register has to be able to reach the one holding the money.
+						// `WaivedLocations` already charges it nothing; without this the
+						// barrier turns the message away before the fee policy is consulted.
+						Equals<PeopleLocation>,
 						Equals<bridging::SiblingBridgeHub>,
 					)>,
 					// Subscriptions for version tracking are OK.
@@ -303,7 +325,11 @@ pub type Barrier = TrailingSetTopicAsId<
 pub type WaivedLocations = (
 	Equals<RootLocation>,
 	RelayOrOtherSystemTeyrchains<AllSiblingSystemTeyrchains, Runtime>,
-	Equals<RelayTreasuryLocation>,
+	// The relay's treasury used to be waived here because it paid over XCM. It is retired:
+	// the treasury is on the Asset Hub now and pays from its own account, so no treasury
+	// sends messages to this chain. Should that ever change back to `PayOverXcm`, the
+	// sending body has to be waived again or every payment is charged a fee it cannot pay
+	// and is dropped without an error.
 );
 
 // Asset Hub trusts only particular, pre-configured bridged locations from a different consensus
@@ -321,7 +347,7 @@ pub type TrustedReserves = (
 
 /// Cases where a remote origin is accepted as trusted Teleporter for a given asset:
 ///
-/// - TYR with the parent Relay Chain and sibling system teyrchains; and
+/// - HEZ with the parent Relay Chain and sibling system teyrchains; and
 /// - Sibling teyrchains' assets from where they originate (as `ForeignCreators`).
 pub type TrustedTeleporters = (
 	ConcreteAssetFromSystem<TokenLocation>,
@@ -359,6 +385,39 @@ pub type PoolAssetsExchanger = SingleAssetExchangeAdapter<
 >;
 
 pub struct XcmConfig;
+/// Calls that XCM `Transact` may not dispatch here, whatever origin it arrives with.
+///
+/// PEZ has a fixed supply of five billion and a halving schedule; nothing mints it and nothing
+/// burns it. That is a property of the design, and until now it was only a property of nobody
+/// having tried: PEZ is asset {pez}, `Assets`' `ForceOrigin` is `EnsureRoot`, and Root arrives
+/// here from the relay through `ParentAsSuperuser`. So the relay's sudo key could reassign the
+/// asset's issuer with `force_asset_status` and mint without limit, or call `start_destroy` and
+/// take the whole supply out. Neither is a hole in sudo -- sudo is meant to be absolute during
+/// the founding period -- it is a hole in the token, and Serok's rule is explicit that no
+/// force-mint of PEZ exists even with sudo.
+///
+/// This is the door that can actually be shut. `pallet_sudo` dispatches with
+/// `dispatch_bypass_filter` and so ignores `BaseCallFilter` by construction; a call arriving
+/// over XCM does not, and every route from the relay to this chain's Root is an XCM `Transact`.
+///
+/// The filter names the asset rather than the call, so ordinary asset administration keeps
+/// working for every other asset on the hub.
+pub struct NoTouchingPez;
+impl Contains<RuntimeCall> for NoTouchingPez {
+	fn contains(call: &RuntimeCall) -> bool {
+		let pez = crate::PezAssetId::get();
+		!matches!(
+			call,
+			RuntimeCall::Assets(pezpallet_assets::Call::force_asset_status { id, .. })
+				| RuntimeCall::Assets(pezpallet_assets::Call::start_destroy { id })
+				| RuntimeCall::Assets(pezpallet_assets::Call::mint { id, .. })
+				| RuntimeCall::Assets(pezpallet_assets::Call::burn { id, .. })
+				| RuntimeCall::Assets(pezpallet_assets::Call::force_create { id, .. })
+			if id.0 == pez
+		)
+	}
+}
+
 impl xcm_executor::Config for XcmConfig {
 	type RuntimeCall = RuntimeCall;
 	type XcmSender = XcmRouter;
@@ -401,7 +460,6 @@ impl xcm_executor::Config for XcmConfig {
 	);
 	type ResponseHandler = PezkuwiXcm;
 	type AssetTrap = PezkuwiXcm;
-	type AssetClaims = PezkuwiXcm;
 	type SubscriptionService = PezkuwiXcm;
 	type PalletInstancesInfo = AllPalletsWithSystem;
 	type MaxAssetsIntoHolding = MaxAssetsIntoHolding;
@@ -415,7 +473,7 @@ impl xcm_executor::Config for XcmConfig {
 	type UniversalAliases =
 		(bridging::to_zagros::UniversalAliases, bridging::to_ethereum::UniversalAliases);
 	type CallDispatcher = RuntimeCall;
-	type SafeCallFilter = Everything;
+	type SafeCallFilter = NoTouchingPez;
 	// We allow any origin to alias into a child sub-location (equivalent to DescendOrigin).
 	type Aliasers = TrustedAliasers;
 	type TransactionalProcessor = FrameTransactionalProcessor;
@@ -518,7 +576,7 @@ pub mod bridging {
 		/// 1) an approximate cost of XCM execution (`ExportMessage` and surroundings) at Pezkuwichain bridge hub;
 		///
 		/// 2) the approximate cost of Pezkuwichain -> Zagros message delivery transaction on Zagros Bridge Hub,
-		///    converted into TYRs using 1:1 conversion rate;
+		///    converted into HEZ using 1:1 conversion rate;
 		///
 		/// 3) the approximate cost of Pezkuwichain -> Zagros message confirmation transaction on Pezkuwichain Bridge Hub.
 		pub storage XcmBridgeHubRouterBaseFee: Balance =
@@ -616,7 +674,7 @@ pub mod bridging {
 
 		parameter_types! {
 			/// User fee for ERC20 token transfer back to Ethereum.
-			/// (initially was calculated by test `OutboundQueue::calculate_fees` - ETH/TYR 1/400 and fee_per_gas 20 GWEI = 2200698000000 + *25%)
+			/// (initially was calculated by test `OutboundQueue::calculate_fees` - ETH/HEZ 1/400 and fee_per_gas 20 GWEI = 2200698000000 + *25%)
 			/// Needs to be more than fee calculated from DefaultFeeConfig FeeConfigRecord in snowbridge:teyrchain/pallets/outbound-queue/src/lib.rs
 			/// Pezkuwi uses 10 decimals, Dicle and Pezkuwichain 12 decimals.
 			pub const DefaultBridgeHubEthereumBaseFee: Balance = 3_833_568_200_000;

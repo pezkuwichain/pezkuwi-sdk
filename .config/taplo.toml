@@ -6,6 +6,7 @@ exclude = [
 	"**/testing/**",
 	"**/zombienet/**",
 	"**/zombienet_tests/**",
+	".cargo/**",
 	"target/**",
 ]
 

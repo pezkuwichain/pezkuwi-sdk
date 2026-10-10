@@ -91,12 +91,12 @@ fn send_assets_from_penpal_pezkuwichain_through_pezkuwichain_ah_to_zagros_ah(
 				vec![
 					// Amount to reserve transfer is withdrawn from Penpal's sovereign account
 					RuntimeEvent::Balances(
-						pezpallet_balances::Event::Burned { who, .. }
+						pezpallet_balances::Event::Withdraw { who, .. }
 					) => {
 						who: *who == sov_penpal_on_ahr.clone().into(),
 					},
 					// Amount deposited in AHW's sovereign account
-					RuntimeEvent::Balances(pezpallet_balances::Event::Minted { who, .. }) => {
+					RuntimeEvent::Balances(pezpallet_balances::Event::Deposit { who, .. }) => {
 						who: *who == TreasuryAccount::get(),
 					},
 					RuntimeEvent::XcmpQueue(
@@ -109,7 +109,7 @@ fn send_assets_from_penpal_pezkuwichain_through_pezkuwichain_ah_to_zagros_ah(
 }
 
 #[test]
-/// Test transfer of TYR from AssetHub Pezkuwichain to AssetHub Zagros.
+/// Test transfer of HEZ from AssetHub Pezkuwichain to AssetHub Zagros.
 fn send_roc_from_asset_hub_pezkuwichain_to_asset_hub_zagros() {
 	let amount = ASSET_HUB_PEZKUWICHAIN_ED * 1_000_000;
 	let sender = AssetHubPezkuwichainSender::get();
@@ -131,7 +131,7 @@ fn send_roc_from_asset_hub_pezkuwichain_to_asset_hub_zagros() {
 	let receiver_rocs_before =
 		foreign_balance_on_ah_zagros(bridged_roc_at_asset_hub_zagros.clone(), &receiver);
 
-	// send TYRs, use them for fees
+	// send HEZ, use them for fees
 	send_assets_over_bridge(|| {
 		let destination = asset_hub_zagros_location();
 		let assets: Assets = (roc_at_asset_hub_pezkuwichain.clone(), amount).into();
@@ -152,10 +152,10 @@ fn send_roc_from_asset_hub_pezkuwichain_to_asset_hub_zagros() {
 		assert_expected_events!(
 			AssetHubZagros,
 			vec![
-				// issue TYRs on AHW
-				RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Issued { asset_id, owner, .. }) => {
+				// issue HEZ on AHW
+				RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Deposited { asset_id, who, .. }) => {
 					asset_id: *asset_id == roc,
-					owner: owner == &receiver,
+					who: who == &receiver,
 				},
 				// message processed successfully
 				RuntimeEvent::MessageQueue(
@@ -171,11 +171,11 @@ fn send_roc_from_asset_hub_pezkuwichain_to_asset_hub_zagros() {
 	let rocs_in_reserve_on_ahr_after =
 		<AssetHubPezkuwichain as Chain>::account_data_of(sov_ahw_on_ahr.clone()).free;
 
-	// Sender's TYR balance is reduced
+	// Sender's HEZ balance is reduced
 	assert!(sender_rocs_before > sender_rocs_after);
-	// Receiver's TYR balance is increased
+	// Receiver's HEZ balance is increased
 	assert!(receiver_rocs_after > receiver_rocs_before);
-	// Reserve TYR balance is increased by sent amount
+	// Reserve HEZ balance is increased by sent amount
 	assert_eq!(rocs_in_reserve_on_ahr_after, rocs_in_reserve_on_ahr_before + amount);
 }
 
@@ -183,7 +183,7 @@ fn send_roc_from_asset_hub_pezkuwichain_to_asset_hub_zagros() {
 /// Send bridged assets "back" from AssetHub Pezkuwichain to AssetHub Zagros.
 ///
 /// This mix of assets should cover the whole range:
-/// - bridged native assets: TYR,
+/// - bridged native assets: HEZ,
 /// - bridged trust-based assets: USDT (exists only on Zagros, Pezkuwichain gets it from Zagros over
 ///   bridge),
 /// - bridged foreign asset / double-bridged asset (other bridge / Snowfork): wETH (bridged from
@@ -244,13 +244,13 @@ fn send_back_wnds_usdt_and_weth_from_asset_hub_pezkuwichain_to_asset_hub_zagros(
 			vec![
 				// ZGR is withdrawn from AHR's SA on AHW
 				RuntimeEvent::Balances(
-					pezpallet_balances::Event::Burned { who, amount }
+					pezpallet_balances::Event::Withdraw { who, amount }
 				) => {
 					who: *who == sov_ahr_on_ahw,
 					amount: *amount == amount_to_send,
 				},
 				// ZGRs deposited to beneficiary
-				RuntimeEvent::Balances(pezpallet_balances::Event::Minted { who, .. }) => {
+				RuntimeEvent::Balances(pezpallet_balances::Event::Deposit { who, .. }) => {
 					who: who == &receiver,
 				},
 				// message processed successfully
@@ -304,7 +304,7 @@ fn send_back_wnds_usdt_and_weth_from_asset_hub_pezkuwichain_to_asset_hub_zagros(
 		amount_to_send * 2,
 	);
 	AssetHubZagros::mint_foreign_asset(
-		<AssetHubZagros as Chain>::RuntimeOrigin::signed(snowbridge_sovereign()),
+		<AssetHubZagros as Chain>::RuntimeOrigin::signed(pezsnowbridge_sovereign()),
 		bridged_weth_at_ah.clone(),
 		sov_ahr_on_ahw.clone(),
 		amount_to_send * 2,
@@ -350,6 +350,13 @@ fn send_back_wnds_usdt_and_weth_from_asset_hub_pezkuwichain_to_asset_hub_zagros(
 	.into();
 	// use USDT for fees
 	let fee = usdt_id;
+
+	// Drain the XCMP `ConcatenatedOpaqueVersionedXcm` version-negotiation message that the
+	// first leg queued. Left in the queue it sits in front of this transfer, and the assets
+	// never reach the destination — the balance check below then fails for a reason that has
+	// nothing to do with the transfer.
+	BridgeHubZagros::execute_with(|| {});
+	BridgeHubPezkuwichain::execute_with(|| {});
 
 	// use the more involved transfer extrinsic
 	let custom_xcm_on_dest = Xcm::<()>(vec![DepositAsset {
@@ -412,7 +419,7 @@ fn send_rocs_from_penpal_pezkuwichain_through_asset_hub_pezkuwichain_to_asset_hu
 	let receiver_rocs_before =
 		foreign_balance_on_ah_zagros(roc_at_asset_hub_zagros.clone(), &receiver);
 
-	// Send TYRs over bridge
+	// Send HEZ over bridge
 	{
 		let destination = asset_hub_zagros_location();
 		let assets: Assets = (roc_at_pezkuwichain_teyrchains.clone(), amount).into();
@@ -440,10 +447,10 @@ fn send_rocs_from_penpal_pezkuwichain_through_asset_hub_pezkuwichain_to_asset_hu
 		assert_expected_events!(
 			AssetHubZagros,
 			vec![
-				// issue TYRs on AHW
-				RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Issued { asset_id, owner, .. }) => {
+				// issue HEZ on AHW
+				RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Deposited { asset_id, who, .. }) => {
 					asset_id: *asset_id == roc,
-					owner: owner == &receiver,
+					who: who == &receiver,
 				},
 				// message processed successfully
 				RuntimeEvent::MessageQueue(
@@ -477,7 +484,7 @@ fn send_back_wnds_from_penpal_pezkuwichain_through_asset_hub_pezkuwichain_to_ass
 	let sender = PenpalASender::get();
 	let receiver = AssetHubZagrosReceiver::get();
 
-	// set up TYRs for transfer
+	// set up HEZ for transfer
 	let (roc_at_pezkuwichain_teyrchains, _) =
 		set_up_rocs_for_penpal_pezkuwichain_through_ahr_to_ahw(&sender, amount);
 
@@ -528,7 +535,7 @@ fn send_back_wnds_from_penpal_pezkuwichain_through_asset_hub_pezkuwichain_to_ass
 	});
 	let receiver_wnds_before = <AssetHubZagros as Chain>::account_data_of(receiver.clone()).free;
 
-	// send ZGRs over the bridge, TYRs only used to pay fees on local AH, pay with ZGR on remote AH
+	// send ZGRs over the bridge, HEZ only used to pay fees on local AH, pay with ZGR on remote AH
 	{
 		let final_destination = asset_hub_zagros_location();
 		let intermediary_hop = PenpalA::sibling_location_of(AssetHubPezkuwichain::para_id());
@@ -584,8 +591,8 @@ fn send_back_wnds_from_penpal_pezkuwichain_through_asset_hub_pezkuwichain_to_ass
 		assert_expected_events!(
 			AssetHubZagros,
 			vec![
-				// issue TYRs on AHW
-				RuntimeEvent::Balances(pezpallet_balances::Event::Issued { .. }) => {},
+				// issue HEZ on AHW
+				RuntimeEvent::Balances(pezpallet_balances::Event::Deposit { .. }) => {},
 				// message processed successfully
 				RuntimeEvent::MessageQueue(
 					pezpallet_message_queue::Event::Processed { success: true, .. }

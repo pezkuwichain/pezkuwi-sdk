@@ -46,7 +46,8 @@ fn set_minimum_active_stake_lower_bond_works() {
 	// lower non-zero active stake below `MinNominatorBond` is the minimum active stake if
 	// it is selected as part of the npos voters.
 	ExtBuilder::default().has_stakers(true).nominate(true).build_and_execute(|| {
-		assert_eq!(MinNominatorBond::<Test>::get(), 1);
+		// default `ExtBuilder` sets `MinNominatorBond = ED + 1 = 2`.
+		assert_eq!(MinNominatorBond::<Test>::get(), 2);
 		assert_eq!(<Test as Config>::VoterList::count(), 4);
 
 		assert_ok!(Staking::bond(RuntimeOrigin::signed(4), 5, RewardDestination::Staked,));
@@ -941,4 +942,19 @@ fn from_most_staked_to_least_staked() {
 				vec![(41, 11000), (51, 2500), (11, 1000), (21, 1000), (31, 500), (101, 35)],
 			);
 		});
+}
+
+/// An election asked for more winners than it has electable targets can never fill its seats,
+/// and a multi-block election that cannot fill them never completes. So the count asked for is
+/// at most the number of targets there are when the snapshot is taken.
+#[test]
+fn desired_targets_never_exceed_the_electable_targets() {
+	ExtBuilder::default().build_and_execute(|| {
+		let targets = <Test as Config>::TargetList::iter().count() as u32;
+		assert!(targets > 0);
+		ValidatorCount::<Test>::put(targets + 5);
+		assert_eq!(Staking::desired_targets(), Ok(targets));
+		ValidatorCount::<Test>::put(1);
+		assert_eq!(Staking::desired_targets(), Ok(1));
+	});
 }

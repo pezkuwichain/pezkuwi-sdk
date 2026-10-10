@@ -175,9 +175,9 @@ mod bridge_hub_zagros_tests {
 	}
 
 	#[test]
-	fn change_bridge_grandpa_pallet_mode_by_governance_works() {
+	fn change_bridge_grandpa_pezpallet_mode_by_governance_works() {
 		// for Zagros finality
-		pezbridge_hub_test_utils::test_cases::change_bridge_grandpa_pallet_mode_by_governance_works::<
+		pezbridge_hub_test_utils::test_cases::change_bridge_grandpa_pezpallet_mode_by_governance_works::<
 			Runtime,
 			BridgeGrandpaZagrosInstance,
 		>(
@@ -188,9 +188,9 @@ mod bridge_hub_zagros_tests {
 	}
 
 	#[test]
-	fn change_bridge_teyrchains_pallet_mode_by_governance_works() {
+	fn change_bridge_teyrchains_pezpallet_mode_by_governance_works() {
 		// for Zagros finality
-		pezbridge_hub_test_utils::test_cases::change_bridge_teyrchains_pallet_mode_by_governance_works::<
+		pezbridge_hub_test_utils::test_cases::change_bridge_teyrchains_pezpallet_mode_by_governance_works::<
 			Runtime,
 			BridgeTeyrchainZagrosInstance,
 		>(
@@ -201,9 +201,9 @@ mod bridge_hub_zagros_tests {
 	}
 
 	#[test]
-	fn change_bridge_messages_pallet_mode_by_governance_works() {
+	fn change_bridge_messages_pezpallet_mode_by_governance_works() {
 		// for Zagros finality
-		pezbridge_hub_test_utils::test_cases::change_bridge_messages_pallet_mode_by_governance_works::<
+		pezbridge_hub_test_utils::test_cases::change_bridge_messages_pezpallet_mode_by_governance_works::<
 			Runtime,
 			WithBridgeHubZagrosMessagesInstance,
 		>(
@@ -322,6 +322,7 @@ mod bridge_hub_zagros_tests {
 			Runtime,
 			XcmConfig,
 			WithBridgeHubZagrosMessagesInstance,
+			LocationToAccountId,
 		>(
 			collator_session_keys(),
 			pezbp_bridge_hub_pezkuwichain::BRIDGE_HUB_PEZKUWICHAIN_TEYRCHAIN_ID,
@@ -571,9 +572,9 @@ mod bridge_hub_bulletin_tests {
 	}
 
 	#[test]
-	fn change_bridge_grandpa_pallet_mode_by_governance_works() {
+	fn change_bridge_grandpa_pezpallet_mode_by_governance_works() {
 		// for Bulletin finality
-		pezbridge_hub_test_utils::test_cases::change_bridge_grandpa_pallet_mode_by_governance_works::<
+		pezbridge_hub_test_utils::test_cases::change_bridge_grandpa_pezpallet_mode_by_governance_works::<
 			Runtime,
 			BridgeGrandpaPezkuwichainBulletinInstance,
 		>(
@@ -584,9 +585,9 @@ mod bridge_hub_bulletin_tests {
 	}
 
 	#[test]
-	fn change_bridge_messages_pallet_mode_by_governance_works() {
+	fn change_bridge_messages_pezpallet_mode_by_governance_works() {
 		// for Bulletin finality
-		pezbridge_hub_test_utils::test_cases::change_bridge_messages_pallet_mode_by_governance_works::<
+		pezbridge_hub_test_utils::test_cases::change_bridge_messages_pezpallet_mode_by_governance_works::<
 			Runtime,
 			WithPezkuwichainBulletinMessagesInstance,
 		>(
@@ -603,6 +604,7 @@ mod bridge_hub_bulletin_tests {
 			Runtime,
 			XcmConfig,
 			WithPezkuwichainBulletinMessagesInstance,
+			LocationToAccountId,
 		>(
 			collator_session_keys(),
 			pezbp_bridge_hub_pezkuwichain::BRIDGE_HUB_PEZKUWICHAIN_TEYRCHAIN_ID,
@@ -884,7 +886,7 @@ fn location_conversion_works() {
 		TestCase {
 			description: "Describe Zagros Location",
 			location: Location::new(2, [GlobalConsensus(ByGenesis(ZAGROS_GENESIS_HASH))]),
-			expected_account_id_str: "5Fb4pyqFuYLZ43USEAcVUBhFTfTckG9zv9kUaVnmR79YgBCe",
+			expected_account_id_str: "5FM2txzU7iJML1axk9uV8dDBDcJwQr6rcfqooKQ8gfcL9aVZ",
 		},
 		TestCase {
 			description: "Describe Zagros AccountID",
@@ -895,7 +897,7 @@ fn location_conversion_works() {
 					Junction::AccountId32 { network: None, id: AccountId::from(Alice).into() },
 				],
 			),
-			expected_account_id_str: "5EEB1syXCCSEFk26ZYjH47WMp1QjYHf3q5zcnqWWY9Tr6gUc",
+			expected_account_id_str: "5EPsMU6aQZhdJcGFAAekxGFBqdjRWtS71ZCgGLxbz2e3pRrZ",
 		},
 		TestCase {
 			description: "Describe Zagros AccountKey",
@@ -906,7 +908,7 @@ fn location_conversion_works() {
 					AccountKey20 { network: None, key: [0u8; 20] },
 				],
 			),
-			expected_account_id_str: "5FzaTcFwUMyX5Sfe7wRGuc3zw1cbpGAGZpmAsxS4tBX6x6U3",
+			expected_account_id_str: "5GgvMmhn3yvi3oquu9k1aayQKp4CiYDCH9QCXvZUjdL3dRgY",
 		},
 		TestCase {
 			description: "Describe Zagros Treasury Plurality",
@@ -917,7 +919,7 @@ fn location_conversion_works() {
 					Plurality { id: BodyId::Treasury, part: BodyPart::Voice },
 				],
 			),
-			expected_account_id_str: "5CpdRCmCYwnxS1mifwEddYHDJR8ydDfTpi1gwAQKQvfAjjzu",
+			expected_account_id_str: "5EKQcC1MVzKgYCPtkmLEtMnMwid2BepEMWcGjanbB97fpXn2",
 		},
 		TestCase {
 			description: "Describe Zagros Teyrchain Location",
@@ -925,7 +927,7 @@ fn location_conversion_works() {
 				2,
 				[GlobalConsensus(ByGenesis(ZAGROS_GENESIS_HASH)), Teyrchain(1000)],
 			),
-			expected_account_id_str: "5CkWf1L181BiSbvoofnzfSg8ZLiBK3i1U4sknzETHk8QS2mA",
+			expected_account_id_str: "5HnFoiGEFS9mRWXxkqEquyqqMrEcXN6CqqfwbJLa434iC6GQ",
 		},
 		TestCase {
 			description: "Describe Zagros Teyrchain AccountID",
@@ -937,7 +939,7 @@ fn location_conversion_works() {
 					Junction::AccountId32 { network: None, id: AccountId::from(Alice).into() },
 				],
 			),
-			expected_account_id_str: "5HBG915qTKYWzqEs4VocHLCa7ftC7JfJCpvSxk6LmXWJvhbU",
+			expected_account_id_str: "5EJDfGRDTEZBwNbTdSruH5wMv86emqdZM4tuE7ZobD6PFTEY",
 		},
 		TestCase {
 			description: "Describe Zagros Teyrchain AccountKey",
@@ -949,7 +951,7 @@ fn location_conversion_works() {
 					AccountKey20 { network: None, key: [0u8; 20] },
 				],
 			),
-			expected_account_id_str: "5EFpSvq8BUAjdjY4tuGhGXZ66P16iQnX7nxsNoHy7TM6NhMa",
+			expected_account_id_str: "5DSN99SbUA5K6V4uL5oXUsCyeApbwvvW8WxXaHtZrgFVgBzu",
 		},
 		TestCase {
 			description: "Describe Zagros Teyrchain Treasury Plurality",
@@ -961,7 +963,7 @@ fn location_conversion_works() {
 					Plurality { id: BodyId::Treasury, part: BodyPart::Voice },
 				],
 			),
-			expected_account_id_str: "5GfwA4qaz9wpQPPHmf5MSKqvsPyrfx1yYeeZB1SUkqDuRuZ1",
+			expected_account_id_str: "5Cx3yvAbLmN2YWZSYAMjBbDzNTxRcEFVPk1j6yinNekVxgvc",
 		},
 		TestCase {
 			description: "Describe Zagros USDT Location",
@@ -974,9 +976,13 @@ fn location_conversion_works() {
 					GeneralIndex(1984),
 				],
 			),
-			expected_account_id_str: "5Hd77ZjbVRrYiRXER8qo9DRDB8ZzaKtRswZoypMnMLdixzMs",
+			expected_account_id_str: "5GDnEaP68nfrgNc8s1UJW9vVBEWLLx362BrZfaG66D43DCXb",
 		},
 	];
+
+	// Every "Describe Zagros ..." account above is derived from `ZAGROS_GENESIS_HASH`, so they
+	// move together whenever Zagros's genesis is reset. Regenerate all nine in the commit that
+	// changes the hash, from the failure output -- the test prints what it computed for each.
 
 	ExtBuilder::<Runtime>::default()
 		.with_collators(collator_session_keys().collators())
@@ -984,6 +990,9 @@ fn location_conversion_works() {
 		.with_para_id(1000.into())
 		.build()
 		.execute_with(|| {
+			// Collected rather than asserted one at a time, as in the Asset Hub twin of this
+			// test: when one derived expectation is stale the rest usually are too.
+			let mut wrong = Vec::new();
 			for tc in test_cases {
 				let expected = AccountId::from_string(tc.expected_account_id_str)
 					.expect("Invalid AccountId string");
@@ -994,8 +1003,16 @@ fn location_conversion_works() {
 				>::convert_location(tc.location.into())
 				.unwrap();
 
-				assert_eq!(got, expected, "{}", tc.description);
+				if got != expected {
+					wrong.push(format!(
+						"{}: expected {}, derived {}",
+						tc.description,
+						tc.expected_account_id_str,
+						got.to_ss58check()
+					));
+				}
 			}
+			assert!(wrong.is_empty(), "location conversions disagree:\n{}", wrong.join("\n"));
 		});
 }
 

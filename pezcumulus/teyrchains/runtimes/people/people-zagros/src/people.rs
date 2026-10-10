@@ -14,20 +14,26 @@
 // limitations under the License.
 
 use super::*;
-use crate::xcm_config::LocationToAccountId;
 use codec::{Decode, Encode, MaxEncodedLen};
 use enumflags2::{bitflags, BitFlags};
+use pezframe_support::traits::EitherOfDiverse;
+use pezframe_support::traits::Equals;
 use pezframe_support::{
-	parameter_types, traits::ConstU32, CloneNoBound, EqNoBound, PartialEqNoBound,
-	RuntimeDebugNoBound,
+	parameter_types,
+	traits::{fungible::HoldConsideration, ConstU32, LinearStoragePrice, WithdrawReasons},
+	weights::Weight,
+	CloneNoBound, DebugNoBound, EqNoBound, PartialEqNoBound,
 };
+use pezframe_system::EnsureRoot;
+use pezkuwi_runtime_common::rehearsal_period;
+use pezkuwi_tnpos_primitives::scores::ScoreSnapshot;
 use pezpallet_identity::{Data, IdentityInformationProvider};
-use pezsp_runtime::{
-	traits::{AccountIdConversion, Verify},
-	RuntimeDebug,
-};
+use pezpallet_xcm::EnsureXcm;
+use pezsp_runtime::traits::{AccountIdConversion, ConvertInto, Verify};
 use scale_info::TypeInfo;
-use teyrchains_common::{impls::ToParentTreasury, DAYS};
+use testnet_teyrchains_constants::zagros::currency::UNITS;
+use testnet_teyrchains_constants::zagros::locations::AssetHubLocation;
+use testnet_teyrchains_constants::zagros::time::{DAYS, HOURS};
 
 parameter_types! {
 	//   27 | Min encoded size of `Registration`
@@ -42,6 +48,42 @@ parameter_types! {
 		teyrchains_common::TREASURY_PALLET_ID.into_account_truncating();
 }
 
+parameter_types! {
+	/// Where penalties collected here wait before crossing to the treasury.
+	///
+	/// The treasury is on the Asset Hub. A slash is rare, so a teleport each would be
+	/// affordable -- but there is no reason for penalties to take a different road from every
+	/// other kind of income, and one road means one thing to keep working.
+	pub const AccumulateForwardPalletId: PalletId = PalletId(*b"py/accfw");
+	/// One forward a day.
+	pub const ForwardPeriod: BlockNumber = 1 * DAYS;
+	/// Below this the message costs more than the money in it.
+	pub const MinForwardAmount: Balance = 10 * UNITS;
+	/// The treasury's own account on the Asset Hub, as that chain names it.
+	pub AhTreasuryStaging: InteriorLocation = {
+		let account: AccountId = PalletId(*b"py/trsry").into_account_truncating();
+		Junction::AccountId32 { network: None, id: account.into() }.into()
+	};
+}
+
+impl pezpallet_accumulate_and_forward::Config for Runtime {
+	type Currency = Balances;
+	type PalletId = AccumulateForwardPalletId;
+	type Forwarder = xcm_builder::TeleportForwarderForAccountId32<
+		crate::xcm_config::XcmConfig,
+		WelatiTreasuryChain,
+		crate::xcm_config::RelayLocation,
+		AhTreasuryStaging,
+	>;
+	type TransferPeriod = ForwardPeriod;
+	type MinTransferAmount = MinForwardAmount;
+	type BlockNumberProvider = pezframe_system::Pezpallet<Runtime>;
+	type WeightInfo = crate::weights::pezpallet_accumulate_and_forward::WeightInfo<Runtime>;
+}
+
+/// Penalties, in whichever imbalance shape the pallet that collected them speaks.
+type PenaltiesToTreasury = pezpallet_accumulate_and_forward::LegacyAdapter<Runtime, Balances>;
+
 impl pezpallet_identity::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type Currency = Balances;
@@ -52,7 +94,7 @@ impl pezpallet_identity::Config for Runtime {
 	type MaxSubAccounts = ConstU32<100>;
 	type IdentityInformation = IdentityInfo;
 	type MaxRegistrars = ConstU32<20>;
-	type Slashed = ToParentTreasury<RelayTreasuryAccount, LocationToAccountId, Runtime>;
+	type Slashed = PenaltiesToTreasury;
 	type ForceOrigin = EnsureRoot<Self::AccountId>;
 	type RegistrarOrigin = EnsureRoot<Self::AccountId>;
 	type OffchainSignature = Signature;
@@ -71,7 +113,7 @@ impl pezpallet_identity::Config for Runtime {
 /// in the `IdentityInfo` struct.
 #[bitflags]
 #[repr(u64)]
-#[derive(Clone, Copy, PartialEq, Eq, RuntimeDebug)]
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum IdentityField {
 	Display,
 	Legal,
@@ -94,13 +136,13 @@ pub enum IdentityField {
 	EqNoBound,
 	MaxEncodedLen,
 	PartialEqNoBound,
-	RuntimeDebugNoBound,
+	DebugNoBound,
 	TypeInfo,
 )]
 #[codec(mel_bound())]
 pub struct IdentityInfo {
-	/// A reasonable display name for the controller of the account. This should be whatever it is
-	/// that it is typically known as and should not be confusable with other entities, given
+	/// A reasonable display name for the controller of the account. This should be whatever the
+	/// account is typically known as and should not be confusable with other entities, given
 	/// reasonable context.
 	///
 	/// Stored as UTF-8.
@@ -231,5 +273,2517 @@ impl Default for IdentityInfo {
 			github: Data::None,
 			discord: Data::None,
 		}
+	}
+}
+
+// =============================================================================
+// PezkuwiChain Custom People Pallets Configuration
+// =============================================================================
+// NOTE: These configurations are placeholders. Full implementation requires
+// additional pezpallet API alignment. See compile errors for specific issues.
+// =============================================================================
+
+parameter_types! {
+	/// Deposit required for KYC application (spam prevention)
+	pub const KycApplicationDeposit: Balance = UNITS; // 1 PEZ
+	/// Maximum string length for identity fields
+	pub const MaxStringLength: u32 = 128;
+	/// Maximum CID (IPFS) length
+	pub const MaxCidLength: u32 = 64;
+	/// Twenty-five citizens brought in: the head of an association.
+	pub const AssociationHeadThreshold: u32 = 25;
+	/// Fifty: a community moderator.
+	pub const CommunityModeratorThreshold: u32 = 50;
+	/// Three months. After this the founder may approve an application the referrer has left
+	/// waiting -- the applicant is not punished for somebody else's silence.
+	pub const ReferralFallbackPeriod: BlockNumber = 90 * DAYS;
+}
+
+// OnKycApproved hook → Delegates to Referral pallet for referral confirmation
+// Referral pallet implements OnKycApproved trait directly and also triggers TrustScoreUpdater
+// OnCitizenshipRevoked → both the referral record and the trust register. The referral side
+// applies the penalty to whoever vouched; the trust side removes the standing, which would
+// otherwise be frozen at its last value for ever and keep counting towards reward shares.
+// CitizenNftProvider → Delegates to Tiki pallet for citizenship NFT minting/burning
+
+/// Adapter struct that bridges each pallet's local TrustScoreUpdater trait
+/// to the Trust pallet's on_score_component_changed implementation.
+/// This avoids cyclic dependencies between component pallets and pezpallet-trust.
+pub struct TrustScoreNotifier;
+
+impl pezpallet_referral::TrustScoreUpdater<AccountId> for TrustScoreNotifier {
+	fn on_score_component_changed(who: &AccountId) {
+		use pezpallet_trust::TrustScoreUpdater;
+		<Trust as TrustScoreUpdater<AccountId>>::on_score_component_changed(who);
+	}
+}
+
+impl pezpallet_tiki::TrustScoreUpdater<AccountId> for TrustScoreNotifier {
+	fn on_score_component_changed(who: &AccountId) {
+		use pezpallet_trust::TrustScoreUpdater;
+		<Trust as TrustScoreUpdater<AccountId>>::on_score_component_changed(who);
+	}
+}
+
+impl pezpallet_perwerde::TrustScoreUpdater<AccountId> for TrustScoreNotifier {
+	fn on_score_component_changed(who: &AccountId) {
+		use pezpallet_trust::TrustScoreUpdater;
+		<Trust as TrustScoreUpdater<AccountId>>::on_score_component_changed(who);
+	}
+}
+
+impl pezpallet_identity_kyc::Config for Runtime {
+	type Currency = Balances;
+	type VouchingWaitingPeriod = crate::dynamic_params::qeyd::VouchingWaitingPeriod;
+	type VouchingCapacity = Referral;
+	// The court alone. Losing citizenship takes every tiki, every office and the vote with
+	// it, and gaining one adds a voter -- so the register is the one authority Root does not
+	// share. Root arrives here from the relay, meaning from the executive for as long as sudo
+	// exists, and an executive that can write the electorate has no need to win it.
+	//
+	// Root is admitted only while the bench is short of its full number, so the founding
+	// period keeps a way to undo a forged registration -- and loses it the day the court is
+	// whole, without anyone having to remember.
+	type GovernanceOrigin = crate::RegisterAuthority;
+	type WeightInfo = weights::pezpallet_identity_kyc::WeightInfo<Runtime>;
+	type OnKycApproved = Referral;
+	// Losing citizenship concerns both: the referral record has a penalty to apply, and the
+	// trust score has to stop existing rather than being left behind at its last value.
+	// Welati is here for the dormancy count: a struck-off dormant citizen would otherwise
+	// be subtracted from the electorate twice.
+	type OnCitizenshipRevoked = (Referral, Trust, Welati);
+	// The other direction: a revocation the court reverses refunds what it charged the voucher.
+	type OnCitizenshipRestored = Referral;
+	type CitizenNftProvider = Tiki;
+	type KycApplicationDeposit = KycApplicationDeposit;
+	type MaxStringLength = MaxStringLength;
+	type MaxCidLength = MaxCidLength;
+	type DefaultReferrer = DefaultReferrer;
+	type ReferralFallbackPeriod = ReferralFallbackPeriod;
+}
+
+// =============================================================================
+// Perwerde (Education) Pezpallet Configuration
+// =============================================================================
+
+parameter_types! {
+	pub const MaxCourseNameLength: u32 = 128;
+	pub const MaxCourseDescLength: u32 = 512;
+	pub const MaxCourseLinkLength: u32 = 256;
+	pub const MaxStudentsPerCourse: u32 = 1000;
+	pub const MaxCoursesPerStudent: u32 = 50;
+	pub const MaxPointsPerCourse: u32 = 1000;
+	/// A course runs for at least three months and at most a year. Shorter would make it a
+	/// way of printing standing; longer and nobody would ever be held to closing it.
+	// Compressed only in a rehearsal build, where a course has to close inside the run.
+	pub const MinCourseDuration: BlockNumber = rehearsal_period!(90 * DAYS, DAYS);
+	pub const MaxCourseDuration: BlockNumber = rehearsal_period!(365 * DAYS, DAYS);
+	/// Five teachers ratify a course's results.
+	pub const RatificationsRequired: u32 = 5;
+	/// How many teachers the minister may seed to get the examining boards started.
+	pub const MaxHonoraryMamoste: u32 = 100;
+	/// Fifty completed courses count towards standing; study past that is free and unweighted.
+	pub const RewardedCourseLimit: u32 = 50;
+	/// No title on one course, however large.
+	pub const MinCoursesForRole: u32 = 5;
+	/// Points for each title. The trust bonuses -- Rewsenbîr 40, Mamoste 70, Axa 250 -- set
+	/// the order; these set the distance.
+	pub const RewsenbirThreshold: u32 = 5_000;
+	pub const MamosteThreshold: u32 = 15_000;
+	pub const AxaThreshold: u32 = 40_000;
+	/// Pezpallet ID used to derive a keyless sovereign "admin" account for courses created
+	/// via Root or Council (i.e. no natural signer/AccountId exists for those origins).
+	/// This is NOT an sr25519 keyring account: nobody holds (or can hold) a private key for
+	/// a `PalletId`-derived account, so it can never be used to forge `complete_course` /
+	/// `archive_course` calls the way a well-known dev seed (e.g. `//Alice`) could.
+	pub const PerwerdeAdminPotId: pezframe_support::PalletId = pezframe_support::PalletId(*b"pez/prwd");
+}
+
+/// Admin origin for Perwerde pezpallet that supports progressive decentralization
+///
+/// The order authority is handed over in:
+/// 1. Root (sudo), at the start.
+/// 2. The Council at half, once elections have run.
+/// 3. The President, by appointment.
+///
+/// Returns an `AccountId`, which `create_course` does not use: the course's teacher is named
+/// in the call, so a course opened by Root or the Council has a teacher who can sign results.
+///
+/// SECURITY: Root and Council carry no signer of their own. This origin once stood in with
+/// the dev keypair `//Alice`, whose key is public, so anyone could have graded a course as
+/// its "owner". It resolves to a `PalletId`-derived account instead, which has no private key
+/// and so can never sign anything.
+pub struct PerwerdeAdminOrigin;
+impl pezframe_support::traits::EnsureOrigin<RuntimeOrigin> for PerwerdeAdminOrigin {
+	type Success = AccountId;
+	fn try_origin(o: RuntimeOrigin) -> Result<Self::Success, RuntimeOrigin> {
+		// 1. Root origin kontrolü
+		if let Ok(_) = pezframe_system::ensure_root(o.clone()) {
+			// A keyless sovereign account for Root: nobody holds a private key to it.
+			return Ok(PerwerdeAdminPotId::get().into_account_truncating());
+		}
+
+		// 2. Council kontrolü (1/2'den fazla oy)
+		if let Ok(_) = pezpallet_collective::EnsureProportionMoreThan::<
+			AccountId,
+			CouncilCollective,
+			1,
+			2,
+		>::try_origin(o.clone())
+		{
+			// A keyless sovereign account for the body: nobody holds a private key to it.
+			return Ok(PerwerdeAdminPotId::get().into_account_truncating());
+		}
+
+		// 3. The President, in person.
+		if let Ok(serok) = pezpallet_welati::EnsureSerok::<Runtime>::try_origin(o.clone()) {
+			return Ok(serok);
+		}
+
+		Err(o)
+	}
+
+	#[cfg(feature = "runtime-benchmarks")]
+	fn try_successful_origin() -> Result<RuntimeOrigin, ()> {
+		Ok(RuntimeOrigin::root())
+	}
+}
+
+/// Citizenship, for `perwerde`'s benchmarks.
+///
+/// Appointing an honorary Mamoste grants a tiki, and the tiki pallet refuses an account with no
+/// citizen NFT. Only a runtime that actually wires the two together can arrange that, so it does
+/// it here. Measured 2026-09-22.
+#[cfg(feature = "runtime-benchmarks")]
+pub struct PerwerdeBenchmarkSetup;
+#[cfg(feature = "runtime-benchmarks")]
+impl pezpallet_perwerde::BenchmarkSetup<AccountId> for PerwerdeBenchmarkSetup {
+	fn make_citizen(who: &AccountId) {
+		if pezpallet_tiki::CitizenNft::<Runtime>::get(who).is_none() {
+			let _ = pezpallet_tiki::Pezpallet::<Runtime>::mint_citizen_nft_for_user(who);
+		}
+	}
+}
+
+impl pezpallet_perwerde::Config for Runtime {
+	type AdminOrigin = PerwerdeAdminOrigin;
+	type WeightInfo = weights::pezpallet_perwerde::WeightInfo<Runtime>;
+	type MaxCourseNameLength = MaxCourseNameLength;
+	type MaxCourseDescLength = MaxCourseDescLength;
+	type MaxCourseLinkLength = MaxCourseLinkLength;
+	type MaxStudentsPerCourse = MaxStudentsPerCourse;
+	type MaxPointsPerCourse = MaxPointsPerCourse;
+	type TrustScoreUpdater = TrustScoreNotifier;
+	// The education minister seeds the examiner corps and brings fraud to the court; the
+	// court annuls. Neither of them grades anybody.
+	type EducationMinisterOrigin = EitherOfDiverse<
+		EnsureRoot<AccountId>,
+		pezpallet_tiki::ensure::EnsureTiki<Runtime, EducationMinisterRole>,
+	>;
+	type FraudOrigin = crate::RootOrDiwan;
+	type EarnedRoles = Tiki;
+	#[cfg(feature = "runtime-benchmarks")]
+	type BenchmarkHelper = PerwerdeBenchmarkSetup;
+	type TikiSource = Tiki;
+	type MinCourseDuration = MinCourseDuration;
+	type MaxCourseDuration = MaxCourseDuration;
+	type RatificationsRequired = RatificationsRequired;
+	type MaxHonoraryMamoste = MaxHonoraryMamoste;
+	type RewardedCourseLimit = RewardedCourseLimit;
+	type MinCoursesForRole = MinCoursesForRole;
+	type RewsenbirThreshold = RewsenbirThreshold;
+	type MamosteThreshold = MamosteThreshold;
+	type AxaThreshold = AxaThreshold;
+}
+
+/// The education portfolio, for origin checks.
+pub struct EducationMinisterRole;
+impl pezpallet_tiki::ensure::GetTiki for EducationMinisterRole {
+	fn tiki() -> pezpallet_tiki::Tiki {
+		pezpallet_tiki::Tiki::WezireBelaw
+	}
+}
+
+// =============================================================================
+// Referral Pezpallet Configuration
+// =============================================================================
+
+parameter_types! {
+	/// The account the register falls back to, and the only one exempt from the vouching
+	/// limits. This chain's own founder -- `5Fhjq3KmYHgChQ7mfaRGz3hotzC1XTSsGXK8HChaid5sUrNS`.
+	///
+	/// It held the mainnet founder's January address until 2026-09-16, on both twins, and
+	/// that was not cosmetic. `DefaultReferrer` does three jobs in `identity-kyc`: it is
+	/// the referrer an application falls back to when none is named, it is the account
+	/// exempt from the waiting period and the earned vouching capacity, and it is the one
+	/// that can rescue an application whose referrer never answered. Pointed at an account
+	/// that is not a citizen here, all three stop: measured on the live Zagros People
+	/// chain, that address had no `KycStatuses` entry at all, so the register could not be
+	/// bootstrapped through the path built for it.
+	pub DefaultReferrer: AccountId = AccountId::from([
+		0xa0, 0xf3, 0x6b, 0x1e, 0xd6, 0x00, 0x6a, 0x5e,
+		0xd8, 0xe4, 0x92, 0xa1, 0xa5, 0xc5, 0x82, 0x0c,
+		0xec, 0x6c, 0xb6, 0xfe, 0xba, 0x17, 0x28, 0x2f,
+		0x0b, 0xd4, 0x1f, 0xaa, 0xcc, 0x1f, 0x8c, 0x12,
+	]);
+}
+
+impl pezpallet_referral::Config for Runtime {
+	type WeightInfo = weights::pezpallet_referral::WeightInfo<Runtime>;
+	type InitialVouchingCapacity = crate::dynamic_params::qeyd::InitialVouchingCapacity;
+	type SettledVouchesPerPlace = crate::dynamic_params::qeyd::SettledVouchesPerPlace;
+	type MaxVouchingCapacity = crate::dynamic_params::qeyd::MaxVouchingCapacity;
+	type SuspensionRevocationFloor = crate::dynamic_params::qeyd::SuspensionRevocationFloor;
+	type SuspensionRevocationPercent = crate::dynamic_params::qeyd::SuspensionRevocationPercent;
+	type DefaultReferrer = DefaultReferrer;
+	type PenaltyPerRevocation = crate::dynamic_params::qeyd::PenaltyPerRevocation;
+	type TrustScoreUpdater = TrustScoreNotifier;
+	type EarnedRoles = Tiki;
+	// How many people someone has to have brought in. Policy, not code: the chain spec sets
+	// them and governance can change them without touching the pallet.
+	type AssociationHeadThreshold = AssociationHeadThreshold;
+	type CommunityModeratorThreshold = CommunityModeratorThreshold;
+}
+
+// =============================================================================
+// NFTs Pezpallet Configuration (required by Tiki)
+// =============================================================================
+
+parameter_types! {
+	pub const NftsCollectionDeposit: Balance = 10 * UNITS;
+	pub const NftsItemDeposit: Balance = UNITS / 100;
+	pub const NftsMetadataDepositBase: Balance = deposit(1, 129);
+	pub const NftsAttributeDepositBase: Balance = deposit(1, 0);
+	pub const NftsDepositPerByte: Balance = deposit(0, 1);
+	pub NftsPalletFeatures: pezpallet_nfts::PalletFeatures = pezpallet_nfts::PalletFeatures::all_enabled();
+	pub const NftsMaxDeadlineDuration: BlockNumber = 12 * 30 * DAYS;
+	pub const NftsMaxAttributesPerCall: u32 = 10;
+}
+
+impl pezpallet_nfts::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type CollectionId = u32;
+	type ItemId = u32;
+	type Currency = Balances;
+	type ForceOrigin = EnsureRoot<AccountId>;
+	type CreateOrigin =
+		pezframe_support::traits::AsEnsureOriginWithArg<pezframe_system::EnsureSigned<AccountId>>;
+	type Locker = ();
+	type CollectionDeposit = NftsCollectionDeposit;
+	type ItemDeposit = NftsItemDeposit;
+	type MetadataDepositBase = NftsMetadataDepositBase;
+	type AttributeDepositBase = NftsAttributeDepositBase;
+	type DepositPerByte = NftsDepositPerByte;
+	type StringLimit = ConstU32<256>;
+	type KeyLimit = ConstU32<64>;
+	type ValueLimit = ConstU32<256>;
+	type ApprovalsLimit = ConstU32<20>;
+	type ItemAttributesApprovalsLimit = ConstU32<30>;
+	type MaxTips = ConstU32<10>;
+	type MaxDeadlineDuration = NftsMaxDeadlineDuration;
+	type MaxAttributesPerCall = NftsMaxAttributesPerCall;
+	type Features = NftsPalletFeatures;
+	type OffchainSignature = Signature;
+	type OffchainPublic = <Signature as pezsp_runtime::traits::Verify>::Signer;
+	#[cfg(feature = "runtime-benchmarks")]
+	type Helper = ();
+	type WeightInfo = pezpallet_nfts::weights::BizinikiwiWeight<Runtime>;
+	type BlockNumberProvider = pezframe_system::Pezpallet<Runtime>;
+}
+
+// =============================================================================
+// Tiki (Role NFT) Pezpallet Configuration
+// =============================================================================
+
+parameter_types! {
+	/// Collection ID for Tiki (Role) NFTs - Collection 0 is reserved for citizenship/roles
+	pub const TikiCollectionId: u32 = 0;
+	/// Maximum number of roles a user can hold
+	pub const MaxTikisPerUser: u32 = 20;
+}
+
+impl pezpallet_tiki::Config for Runtime {
+	// Authority hands over in stages: Root, then the technical body, which is what
+	// administers NFTs and roles.
+	type AdminOrigin = crate::RootOrSerokOrCouncil;
+	// Elected/Earned roles (Serok, SerokiMeclise, Parlementer, Axa, ...) are meant to
+	// carry evidence of a real election/exam, not just committee say-so. Until a
+	// dedicated voting/exam pezpallet exists to escalate to Root on their behalf, require
+	// full Root here — deliberately stricter than the Technical Committee threshold used
+	// for ordinary admin appointment via `AdminOrigin`.
+	type ElectedRoleOrigin = EnsureRoot<AccountId>;
+	type EarnedRoleOrigin = EnsureRoot<AccountId>;
+	// An office that came from a ballot is not removable by the bodies it exists to check.
+	// The court is; `RootOrDiwan` was defined months ago and had no user until now.
+	type ImpeachmentOrigin = crate::RootOrDiwan;
+	// Honorary citizenship is the head of government's to confer. Root stands alongside only
+	// while sudo exists; removing sudo means deleting the first arm here.
+	type HonoraryCitizenshipOrigin =
+		EitherOfDiverse<EnsureRoot<AccountId>, pezpallet_tiki::ensure::EnsureSerokWeziran<Runtime>>;
+	type WeightInfo = weights::pezpallet_tiki::WeightInfo<Runtime>;
+	type TikiCollectionId = TikiCollectionId;
+	type MaxTikisPerUser = MaxTikisPerUser;
+	type Tiki = pezpallet_tiki::Tiki;
+	type TrustScoreUpdater = TrustScoreNotifier;
+}
+
+// =============================================================================
+// Staking Score Pezpallet Configuration
+// =============================================================================
+
+parameter_types! {
+	/// Update interval for staking scores (blocks)
+	pub const StakingScoreUpdateInterval: BlockNumber = HOURS;
+}
+
+/// Noter authority checker backed by the Tiki pallet.
+/// Accounts holding the `Noter` tiki role can submit staking details.
+pub struct TikiNoterChecker;
+impl pezpallet_staking_score::NoterCheck<AccountId> for TikiNoterChecker {
+	fn is_noter(who: &AccountId) -> bool {
+		pezpallet_tiki::Pezpallet::<Runtime>::has_tiki(who, &pezpallet_tiki::Tiki::Noter)
+	}
+
+	#[cfg(feature = "runtime-benchmarks")]
+	fn make_noter(who: &AccountId) {
+		pezpallet_tiki::UserTikis::<Runtime>::mutate(who, |tikis| {
+			let _ = tikis.try_push(pezpallet_tiki::Tiki::Noter);
+		});
+	}
+}
+
+parameter_types! {
+	// Real-world analogy: a notary's bond/insurance. An account must hold the
+	// Noter tiki *and* post this bond via `register_as_noter` before its
+	// submissions are accepted. Slashable by `RootOrDiwanOrCouncil` if a
+	// disputed submission is confirmed fraudulent. The tiki role itself
+	// supports any number of independently registered accounts — this is not
+	// a single hardcoded noter, the same way a state can authorize any number
+	// of notaries.
+	pub const StakingOracleGracePeriod: BlockNumber = DAYS;
+	pub const NoterBondAmount: Balance = 50_000 * UNITS;
+	// Real-world analogy: a notarized document's recording/contestability
+	// period — a noter-signed submission only takes effect after this many
+	// blocks unchallenged. Root/XCM-Transact submissions (chain-authenticated,
+	// not a personal key) are exempt. One real hour, from this file's `HOURS`,
+	// and it does now match staking-score's own `HOUR_IN_BLOCKS` of 600.
+	//
+	// It did not until 2026-09-18. This file was importing `HOURS` from
+	// `teyrchains_common`, whose block time is 12s, so the constant was 300
+	// against the 600 the sentence claimed — the comment described the intent
+	// correctly and the code did not follow it. The import is fixed and
+	// `the_day_this_file_counts_in_matches_the_chain_it_runs_on` now holds the
+	// two together against the runtime's actual slot duration, so the sentence
+	// is checked rather than asserted.
+	pub const StakingNoterDisputeWindow: BlockNumber = HOURS;
+}
+
+impl pezpallet_staking_score::Config for Runtime {
+	type WeightInfo = weights::pezpallet_staking_score::WeightInfo<Runtime>;
+	type Balance = Balance;
+	type OnStakingUpdate = Trust;
+	type NoterChecker = TikiNoterChecker;
+	type Currency = Balances;
+	type NoterBondAmount = NoterBondAmount;
+	type DisputeWindow = StakingNoterDisputeWindow;
+	// Lightweight: any single Council member can freeze a suspicious pending
+	// submission for review — mirrors the existing VetoOrigin pattern below.
+	type DisputeOrigin = pezpallet_collective::EnsureMember<AccountId, CouncilCollective>;
+	// Deliberately stronger: slashing a noter's bond needs an actual
+	// governance decision, not one member's word.
+	type SlashOrigin = crate::RootOrDiwanOrCouncil;
+	// How much of the gap between opting in and the data landing the user is not charged
+	// for. A day covers a slow bot cycle and the dispute window it then waits out; past
+	// that, time is only credited for a stake that has actually existed.
+	type OracleGracePeriod = StakingOracleGracePeriod;
+	type SlashDestination = PenaltiesToTreasury;
+}
+
+// =============================================================================
+// Collective Pezpallet Configuration (for governance)
+// =============================================================================
+//
+// Collective bodies on this chain.
+//
+// One exists: `Council` (Instance1), the general council, whose roster is written by `welati`
+// from the elected parliament.
+//
+// An education committee, a technical committee and a treasury committee are named in places
+// that expect them and none of them has been constituted. Until they are, what stands in
+// for them is an office or a body that does exist -- the head of state through welati's
+// `EnsureSerok`, the court through `RootOrDiwan` -- and an origin whose name promises one of
+// those committees is naming something that does not exist yet. Adding a body is a runtime upgrade, not a genesis matter.
+// =============================================================================
+
+parameter_types! {
+	pub const CouncilMotionDuration: BlockNumber = 7 * DAYS;
+	pub const CouncilMaxProposals: u32 = 100;
+	pub const CouncilMaxMembers: u32 = 100;
+	pub MaxProposalWeight: Weight = pezsp_runtime::Perbill::from_percent(50) * RuntimeBlockWeights::get().max_block;
+}
+
+// Collective instances
+pub type CouncilCollective = pezpallet_collective::Instance1;
+
+/// The general council. Its members are seated by `welati` from the elected parliament.
+impl pezpallet_collective::Config<CouncilCollective> for Runtime {
+	type RuntimeOrigin = RuntimeOrigin;
+	type Proposal = RuntimeCall;
+	type RuntimeEvent = RuntimeEvent;
+	type MotionDuration = CouncilMotionDuration;
+	type MaxProposals = CouncilMaxProposals;
+	type MaxMembers = CouncilMaxMembers;
+	type DefaultVote = pezpallet_collective::PrimeDefaultVote;
+	type WeightInfo = pezpallet_collective::weights::BizinikiwiWeight<Runtime>;
+	type SetMembersOrigin = EnsureRoot<AccountId>;
+	type MaxProposalWeight = MaxProposalWeight;
+	type DisapproveOrigin = EnsureRoot<AccountId>;
+	type KillOrigin = EnsureRoot<AccountId>;
+	type Consideration = ();
+}
+
+/// The Diwan's bench, as a body that votes.
+///
+/// Membership is not set here: `pezpallet-welati` decides who sits on the court -- six the
+/// house elects, five the President appoints -- and pushes the roster in. This instance
+/// exists so that the court can *decide*, which a court has to do as a body. Before it, the
+/// four powers that answer to the Diwan accepted any single member's signature, so eleven
+/// judges were eleven separate keys over citizenship, impeachment and slashing.
+///
+/// `SetMembersOrigin` is root because the ordinary path is welati's, not a call.
+/// Parliament, as a body that can resolve.
+///
+/// The house is elected by `welati` and mirrored here, exactly as the bench is: one writer,
+/// one direction, `set_members` called with the whole roster so the collective cannot hold
+/// somebody the register has removed.
+///
+/// It exists so that "Parliament resolved" is something an origin can say. The alias that
+/// used to carry that name accepted a single member -- a name promising a body and a check
+/// giving one person -- and nothing used it, which is the only reason it was harmless.
+pub type ParliamentCollective = pezpallet_collective::Instance3;
+
+parameter_types! {
+	pub const ParliamentMotionDuration: BlockNumber = 7 * DAYS;
+	pub const ParliamentMaxProposals: u32 = 100;
+}
+
+pub struct ParliamentRoster;
+impl pezpallet_welati::HouseRoster<AccountId> for ParliamentRoster {
+	fn set_members(members: alloc::vec::Vec<AccountId>) {
+		let mut sorted = members;
+		sorted.sort();
+		sorted.dedup();
+		let prime = sorted.first().cloned();
+		let _ = pezpallet_collective::Pezpallet::<Runtime, ParliamentCollective>::set_members(
+			pezframe_system::RawOrigin::Root.into(),
+			sorted,
+			prime,
+			WelatiParliamentSize::get(),
+		);
+	}
+}
+
+impl pezpallet_collective::Config<ParliamentCollective> for Runtime {
+	type RuntimeOrigin = RuntimeOrigin;
+	type Proposal = RuntimeCall;
+	type RuntimeEvent = RuntimeEvent;
+	type MotionDuration = ParliamentMotionDuration;
+	type MaxProposals = ParliamentMaxProposals;
+	type MaxMembers = WelatiParliamentSize;
+	// A member who does not vote is not counted as agreeing.
+	type DefaultVote = pezpallet_collective::MoreThanMajorityThenPrimeDefaultVote;
+	type WeightInfo = pezpallet_collective::weights::BizinikiwiWeight<Runtime>;
+	type SetMembersOrigin = EnsureRoot<AccountId>;
+	type MaxProposalWeight = MaxProposalWeight;
+	type DisapproveOrigin = EnsureRoot<AccountId>;
+	type KillOrigin = EnsureRoot<AccountId>;
+	type Consideration = ();
+}
+
+pub type DiwanCollective = pezpallet_collective::Instance2;
+
+parameter_types! {
+	pub const DiwanMotionDuration: BlockNumber = 14 * DAYS;
+	pub const DiwanMaxProposals: u32 = 50;
+	pub const DiwanMaxMembers: u32 = 11;
+}
+
+/// Pushes welati's bench into the collective that votes it.
+///
+/// One writer, one direction. welati decides who sits; this only relays. `set_members` is
+/// called with the whole roster each time, so the collective cannot hold somebody welati has
+/// removed.
+pub struct DiwanRoster;
+impl pezpallet_welati::CourtRoster<AccountId> for DiwanRoster {
+	fn set_members(members: alloc::vec::Vec<AccountId>) {
+		let mut sorted = members;
+		sorted.sort();
+		sorted.dedup();
+		let prime = sorted.first().cloned();
+		let _ = pezpallet_collective::Pezpallet::<Runtime, DiwanCollective>::set_members(
+			pezframe_system::RawOrigin::Root.into(),
+			sorted,
+			prime,
+			DiwanMaxMembers::get(),
+		);
+	}
+}
+
+impl pezpallet_collective::Config<DiwanCollective> for Runtime {
+	type RuntimeOrigin = RuntimeOrigin;
+	type Proposal = RuntimeCall;
+	type RuntimeEvent = RuntimeEvent;
+	type MotionDuration = DiwanMotionDuration;
+	type MaxProposals = DiwanMaxProposals;
+	type MaxMembers = DiwanMaxMembers;
+	// A judge who does not vote is not counted as agreeing. On a court, silence is not
+	// assent.
+	type DefaultVote = pezpallet_collective::MoreThanMajorityThenPrimeDefaultVote;
+	type WeightInfo = pezpallet_collective::weights::BizinikiwiWeight<Runtime>;
+	type SetMembersOrigin = EnsureRoot<AccountId>;
+	type MaxProposalWeight = MaxProposalWeight;
+	type DisapproveOrigin = EnsureRoot<AccountId>;
+	type KillOrigin = EnsureRoot<AccountId>;
+	type Consideration = ();
+}
+
+// =============================================================================
+// Trust Score Pezpallet Configuration
+// =============================================================================
+
+parameter_types! {
+	/// Base multiplier for trust score calculation
+	/// A perfect record scores this. Election thresholds read as a share of it -- the
+	/// presidency asks for a quarter of everything a citizen could be.
+	pub const TrustScoreScale: u32 = 1_000;
+	/// Education 30, bringing citizens in 25, the offices and titles held 25, and the stake
+	/// 20. The stake is already a gate -- nothing without it counts at all -- so its weight
+	/// here is what having more of it is worth on top, and that is deliberately the smallest
+	/// share: money is a condition of standing, not the largest part of it. On these numbers
+	/// somebody with nothing but a maximum stake reaches two hundred, which is a seat in
+	/// Parliament and the Speaker's chair, and not the presidency.
+	pub const TrustPerwerdeWeight: u32 = 30;
+	pub const TrustReferralWeight: u32 = 25;
+	pub const TrustTikiWeight: u32 = 25;
+	pub const TrustStakingWeight: u32 = 20;
+	/// Update interval for trust scores (roughly 1 day in blocks)
+	// The sweep is what applies a stake report that landed while the payroll held the roll
+	// still; a rehearsal has to see that sweep, so it runs every couple of blocks there.
+	pub const TrustUpdateInterval: BlockNumber = rehearsal_period!(DAYS, DAYS);
+	/// Maximum batch size for trust score updates
+	pub const TrustMaxBatchSize: u32 = 100;
+}
+
+/// Staking score source for Trust pezpallet
+/// Uses the StakingScore pezpallet to get composite staking scores
+pub struct StakingScoreSource;
+impl pezpallet_trust::StakingScoreProvider<AccountId, BlockNumber> for StakingScoreSource {
+	fn max_score() -> pezpallet_staking_score::RawScore {
+		pezpallet_staking_score::MAX_STAKING_SCORE
+	}
+
+	fn get_staking_score(who: &AccountId) -> (pezpallet_staking_score::RawScore, BlockNumber) {
+		// Delegate to StakingScore pezpallet
+		<StakingScore as pezpallet_staking_score::StakingScoreProvider<AccountId, BlockNumber>>::get_staking_score(who)
+	}
+}
+
+/// Referral score source for Trust pezpallet
+/// Uses the referral pallet's tiered scoring with penalty system
+pub struct ReferralScoreSource;
+impl pezpallet_trust::ReferralScoreProvider<AccountId> for ReferralScoreSource {
+	/// The score reachable at the ceiling the register's rules currently set -- not the tier
+	/// table's own top, which needs a hundred vouches and a lifetime ceiling of fifty can never
+	/// reach. Written out here as `MAX_REFERRAL_SCORE` the declared weight of 25 was really 15,
+	/// and the highest trust anyone could hold was 900 rather than the 1000 the tables say.
+	///
+	/// It follows the ceiling rather than being written beside it, so a ninety-day referendum
+	/// moving `MaxVouchingCapacity` re-weights the source instead of quietly drifting from it.
+	/// Same pattern as `PerwerdeScoreSource` below. Note what that means: moving the ceiling
+	/// rescales every citizen's referral component, and trust feeds candidacy, pool membership
+	/// and reward share -- so the parameter is not the small dial it looks like.
+	fn max_score() -> u32 {
+		pezpallet_referral::score_for(
+			<crate::dynamic_params::qeyd::MaxVouchingCapacity as pezframe_support::traits::Get<
+				u32,
+			>>::get(),
+		)
+	}
+
+	fn get_referral_score(who: &AccountId) -> u32 {
+		<Referral as pezpallet_referral::types::ReferralScoreProvider<AccountId>>::get_referral_score(who)
+	}
+}
+
+/// Perwerde (education) score source for Trust pezpallet
+/// Sums completed course points from the Perwerde pallet
+pub struct PerwerdeScoreSource;
+impl pezpallet_trust::PerwerdeScoreProvider<AccountId> for PerwerdeScoreSource {
+	/// Read from the education pallet's own limits rather than written out here: a perfect
+	/// record is every rewarded course taken at full value, and if either of those changes
+	/// the weighting follows it instead of quietly drifting.
+	fn max_score() -> u32 {
+		RewardedCourseLimit::get().saturating_mul(MaxPointsPerCourse::get())
+	}
+
+	fn get_perwerde_score(who: &AccountId) -> u32 {
+		pezpallet_perwerde::Pezpallet::<Runtime>::get_perwerde_score(who)
+	}
+}
+
+/// Tiki score source for Trust pezpallet
+pub struct TikiScoreSource;
+impl pezpallet_trust::TikiScoreProvider<AccountId> for TikiScoreSource {
+	fn max_score() -> u32 {
+		pezpallet_tiki::MAX_TIKI_SCORE
+	}
+
+	fn get_tiki_score(who: &AccountId) -> u32 {
+		<Tiki as pezpallet_tiki::TikiScoreProvider<AccountId>>::get_tiki_score(who)
+	}
+}
+
+/// Citizenship status source for Trust pezpallet - uses real IdentityKyc, benchmarks included:
+/// the trust benchmark makes its caller a citizen through the KYC record this reads.
+pub struct CitizenshipSource;
+impl pezpallet_trust::CitizenshipStatusProvider<AccountId> for CitizenshipSource {
+	fn is_citizen(who: &AccountId) -> bool {
+		IdentityKyc::is_citizen(who)
+	}
+}
+
+impl pezpallet_trust::Config for Runtime {
+	type WeightInfo = weights::pezpallet_trust::WeightInfo<Runtime>;
+	type Score = u128;
+	type ScoreScale = TrustScoreScale;
+	// What the state considers a citizen to be made of. They add to a hundred; `try_state`
+	// insists on it.
+	type StakingWeight = TrustStakingWeight;
+	type ReferralWeight = TrustReferralWeight;
+	type PerwerdeWeight = TrustPerwerdeWeight;
+	type TikiWeight = TrustTikiWeight;
+	type UpdateInterval = TrustUpdateInterval;
+	type MaxBatchSize = TrustMaxBatchSize;
+	type StakingScoreSource = StakingScoreSource;
+	type ReferralScoreSource = ReferralScoreSource;
+	type PerwerdeScoreSource = PerwerdeScoreSource;
+	type TikiScoreSource = TikiScoreSource;
+	type CitizenshipSource = CitizenshipSource;
+}
+
+// =============================================================================
+// Messaging Pezpallet Configuration (PEZkurd-P2Pmessage)
+// =============================================================================
+
+/// Messaging citizenship checker — bridges to IdentityKyc pallet. The same under
+/// `runtime-benchmarks`: the benchmarks make real citizens (`MessagingBenchmarkHelper`).
+pub struct MessagingCitizenshipChecker;
+impl pezpallet_messaging::types::CitizenshipChecker<AccountId> for MessagingCitizenshipChecker {
+	fn is_citizen(who: &AccountId) -> bool {
+		IdentityKyc::is_citizen(who)
+	}
+}
+
+/// Messaging trust score checker — bridges to Trust pallet, benchmarks included.
+pub struct MessagingTrustScoreChecker;
+impl pezpallet_messaging::types::TrustScoreChecker<AccountId> for MessagingTrustScoreChecker {
+	fn trust_score_of(who: &AccountId) -> u32 {
+		// Trust pallet returns u128, we cap at u32::MAX for messaging
+		let score: u128 = Trust::trust_score_of(who);
+		score.min(u32::MAX as u128) as u32
+	}
+}
+
+/// Benchmarks run the real checkers above, so they need real citizens: an approved KYC record
+/// and a trust score that clears `MessagingMinTrustScore`.
+#[cfg(feature = "runtime-benchmarks")]
+pub struct MessagingBenchmarkHelper;
+#[cfg(feature = "runtime-benchmarks")]
+impl pezpallet_messaging::types::BenchmarkHelper<AccountId> for MessagingBenchmarkHelper {
+	fn make_citizen(who: &AccountId) {
+		pezpallet_identity_kyc::KycStatuses::<Runtime>::insert(
+			who,
+			pezpallet_identity_kyc::types::KycLevel::Approved,
+		);
+		pezpallet_trust::TrustScores::<Runtime>::insert(
+			who,
+			u128::from(MessagingMinTrustScore::get()).saturating_mul(10),
+		);
+	}
+}
+
+parameter_types! {
+	/// Minimum trust score to use messaging (20 out of ~10000 scale)
+	pub const MessagingMinTrustScore: u32 = 20;
+	/// Maximum encrypted payload per message (512 bytes)
+	pub const MessagingMaxMessageSize: u32 = 512;
+	/// Maximum messages in inbox per era per recipient
+	pub const MessagingMaxInboxSize: u32 = 50;
+	/// Maximum messages a citizen can send per era
+	pub const MessagingMaxMessagesPerEra: u32 = 50;
+	/// Era length: 3600 blocks = ~6 hours at 6s/block on People Chain
+	// Not `rehearsal_period!`: six hours is a quarter of a day and would floor to two blocks,
+	// too short for a rehearsal to read the inbox it just wrote to.
+	pub const MessagingEraLength: BlockNumber =
+		pezkuwi_runtime_common::prod_or_fast!(6 * HOURS, 20);
+}
+
+impl pezpallet_messaging::Config for Runtime {
+	type WeightInfo = weights::pezpallet_messaging::WeightInfo<Runtime>;
+	type CitizenshipChecker = MessagingCitizenshipChecker;
+	type TrustScoreChecker = MessagingTrustScoreChecker;
+	type MinTrustScore = MessagingMinTrustScore;
+	type MaxMessageSize = MessagingMaxMessageSize;
+	type MaxInboxSize = MessagingMaxInboxSize;
+	type MaxMessagesPerEra = MessagingMaxMessagesPerEra;
+	type EraLength = MessagingEraLength;
+	#[cfg(feature = "runtime-benchmarks")]
+	type BenchmarkHelper = MessagingBenchmarkHelper;
+}
+
+// =============================================================================
+// Assets Pezpallet Configuration (required by PEZ Rewards)
+// =============================================================================
+
+parameter_types! {
+	pub const AssetsAssetDeposit: Balance = 10 * UNITS;
+	pub const AssetsAssetAccountDeposit: Balance = deposit(1, 16);
+	pub const AssetsApprovalDeposit: Balance = deposit(1, 20);
+	pub const AssetsStringLimit: u32 = 50;
+	pub const AssetsMetadataDepositBase: Balance = deposit(1, 68);
+	pub const AssetsMetadataDepositPerByte: Balance = deposit(0, 1);
+}
+
+impl pezpallet_assets::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type Balance = Balance;
+	type AssetId = u32;
+	type AssetIdParameter = codec::Compact<u32>;
+	type Currency = Balances;
+	type CreateOrigin =
+		pezframe_support::traits::AsEnsureOriginWithArg<pezframe_system::EnsureSigned<AccountId>>;
+	type ForceOrigin = EnsureRoot<AccountId>;
+	type AssetDeposit = AssetsAssetDeposit;
+	type AssetAccountDeposit = AssetsAssetAccountDeposit;
+	type MetadataDepositBase = AssetsMetadataDepositBase;
+	type MetadataDepositPerByte = AssetsMetadataDepositPerByte;
+	type ApprovalDeposit = AssetsApprovalDeposit;
+	type StringLimit = AssetsStringLimit;
+	type Freezer = ();
+	type Extra = ();
+	type WeightInfo = weights::pezpallet_assets::WeightInfo<Runtime>;
+	type CallbackHandle = ();
+	type RemoveItemsLimit = ConstU32<1000>;
+	type ReserveData = ();
+	type Holder = ();
+	#[cfg(feature = "runtime-benchmarks")]
+	type BenchmarkHelper = ();
+}
+
+// =============================================================================
+// Scheduler Pezpallet Configuration (required by Welati & Democracy)
+// =============================================================================
+
+parameter_types! {
+	pub MaximumSchedulerWeight: Weight = pezsp_runtime::Perbill::from_percent(80) * RuntimeBlockWeights::get().max_block;
+}
+
+// =============================================================================
+// Preimage Pezpallet Configuration
+// =============================================================================
+//
+// The Scheduler and, after it, state referenda need somewhere to keep a call too large to
+// carry inline. Deposits are taken as a hold rather than a reserve so the funds stay
+// visible as the depositor's, and they are priced with this chain's `deposit()`, which is a
+// hundredth of the relay's -- People is where citizens act, not where the network's
+// validators do.
+//
+// The relay prices its own preimages through `pezpallet_parameters` dynamic params. People
+// has no such pallet, so these are ordinary constants; changing them is a runtime upgrade,
+// which is the honest cost of not carrying a parameters pallet here.
+
+parameter_types! {
+	pub const PreimageBaseDeposit: Balance = deposit(2, 64);
+	pub const PreimageByteDeposit: Balance = deposit(0, 1);
+	pub const PreimageHoldReason: RuntimeHoldReason =
+		RuntimeHoldReason::Preimage(pezpallet_preimage::HoldReason::Preimage);
+}
+
+impl pezpallet_custom_origins::Config for Runtime {}
+
+impl pezpallet_preimage::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type Currency = Balances;
+	type ManagerOrigin = EnsureRoot<AccountId>;
+	type Consideration = HoldConsideration<
+		AccountId,
+		Balances,
+		PreimageHoldReason,
+		LinearStoragePrice<PreimageBaseDeposit, PreimageByteDeposit, Balance>,
+	>;
+	type WeightInfo = pezpallet_preimage::weights::BizinikiwiWeight<Runtime>;
+}
+
+// The register's ballot box. Everything above decides *who* may put a question; this decides
+// how a question is settled, and by whom it is counted.
+//
+// `CitizenTally` counts heads, not tokens: one citizen, one voice, and `support` measured
+// against the whole roll rather than against those who happened to turn up. That is the whole
+// reason this sits here rather than on the Asset Hub -- the register is the only place that
+// knows who the citizens are.
+
+parameter_types! {
+	/// Enough to make a frivolous submission cost something, low enough that a citizen can
+	/// afford to be the one who asks.
+	pub const StateSubmissionDeposit: Balance = 10 * UNITS;
+	/// A hundredth of the register. Every jurisdiction that runs citizens' initiatives sets
+	/// this between one and five per cent; this is the low end, because the initiative only
+	/// opens a question rather than settling one.
+	pub const StateInitiativeThreshold: Perbill = Perbill::from_percent(1);
+	/// Long enough that a real initiative can be organised, short enough that a petition
+	/// cannot cross the line by patience alone.
+	pub const StateInitiativeWindow: BlockNumber = 14 * DAYS;
+	pub const StateInitiativeDeposit: u128 = 10 * UNITS;
+	/// Long enough that a declined question is not simply re-asked until it sticks.
+	pub const StateInitiativeCooldown: BlockNumber = 30 * DAYS;
+	pub const StateUndecidingTimeout: BlockNumber = 21 * DAYS;
+	pub const StateAlarmInterval: BlockNumber = 1;
+	pub const StateMaxQueued: u32 = 20;
+}
+
+/// The roll, as the tally measures itself against: the citizens still taking part.
+///
+/// Not `citizen_count()`, and the difference is the whole of WP-14. Support is ayes over this
+/// number, and the register only ever grows -- every lost key, every death and everybody who
+/// registered once and never returned would stay in the denominator for good, so the share a
+/// question needs would climb for ever while the people who could supply it did not. A large
+/// enough roll would make every referendum unpassable, which is the same end as a captured one
+/// reached by arithmetic rather than by anybody deciding it.
+///
+/// Dormancy subtracts from this and from nothing else. A dormant citizen keeps the NFT, the
+/// trust, any office and the vote; casting one puts them back in the count in the same block.
+pub struct CitizenRoll;
+impl pezsp_core::Get<u32> for CitizenRoll {
+	fn get() -> u32 {
+		pezpallet_welati::Pezpallet::<Runtime>::active_electorate()
+	}
+}
+
+impl pezpallet_referenda::Config for Runtime {
+	type WeightInfo = pezpallet_referenda::weights::BizinikiwiWeight<Runtime>;
+	type RuntimeCall = RuntimeCall;
+	type RuntimeEvent = RuntimeEvent;
+	type Scheduler = Scheduler;
+	type Currency = Balances;
+	// Anyone may ask. What they may ask for is the track's business, not this one's.
+	type SubmitOrigin = pezframe_system::EnsureSigned<AccountId>;
+	type CancelOrigin = pezframe_support::traits::EitherOf<
+		EnsureRoot<AccountId>,
+		crate::governance::ReferendumCanceller,
+	>;
+	type KillOrigin = pezframe_support::traits::EitherOf<
+		EnsureRoot<AccountId>,
+		crate::governance::ReferendumKiller,
+	>;
+	// Not `()`: dropping a negative imbalance destroys the tokens. These are HEZ, which
+	// inflates, so a burn spreads the slash across every other holder instead of funding
+	// the state. This is the same
+	// handler `pezpallet_identity` slashes into, one line 60-odd above.
+	type Slash = PenaltiesToTreasury;
+	type Votes = u32;
+	type Tally = pezpallet_welati::types::CitizenTally<CitizenRoll, MinElectorate>;
+	type SubmissionDeposit = StateSubmissionDeposit;
+	type MaxQueued = StateMaxQueued;
+	type UndecidingTimeout = StateUndecidingTimeout;
+	type AlarmInterval = StateAlarmInterval;
+	type Tracks = crate::governance::TracksInfo;
+	type Preimages = Preimage;
+	type BlockNumberProvider = System;
+}
+
+impl pezpallet_scheduler::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type RuntimeOrigin = RuntimeOrigin;
+	type PalletsOrigin = OriginCaller;
+	type RuntimeCall = RuntimeCall;
+	type MaximumWeight = MaximumSchedulerWeight;
+	type ScheduleOrigin = EnsureRoot<AccountId>;
+	type MaxScheduledPerBlock = ConstU32<50>;
+	type WeightInfo = pezpallet_scheduler::weights::BizinikiwiWeight<Runtime>;
+	type OriginPrivilegeCmp = pezframe_support::traits::EqualPrivilegeOnly;
+	type Preimages = Preimage;
+	type BlockNumberProvider = pezframe_system::Pezpallet<Runtime>;
+}
+
+// =============================================================================
+// Democracy 72 and Elections 73 used to sit here. Both are gone; their indices are not
+// reused.
+//
+// Democracy was a live root path, not a dormant shell. Its listed origins are all
+// `EnsureRoot`, but `SubmitOrigin` was `EnsureSigned` and the public queue does not pass
+// through them: any account could propose, and `pezpallet_democracy` enacts a passed
+// referendum with `RawOrigin::Root`. `Preimages = ()` did not close it either -- `bound()`
+// takes the `Bounded::Inline` branch before it ever calls `note()`, so every call whose
+// encoding fits inline was reachable. `tiki::grant_tiki` is about thirty-six bytes.
+//
+// Elections could not reach the Council it existed to fill: `ChangeMembers` and
+// `InitializeMembers` were both `()`. The bench is seated from Welati instead.
+//
+// The header on both blocks said "required by Welati". It was not true in either case:
+// `pezpallet_welati::Config` asks only for Tiki, Trust and IdentityKyc.
+// =============================================================================
+
+// =============================================================================
+// Welati (Governance) Pezpallet Configuration
+// =============================================================================
+
+parameter_types! {
+	/// Parliament size (201 members like Kurdistan Parliament)
+	pub const WelatiParliamentSize: u32 = 201;
+	/// Diwan council size
+	/// The court: eleven seats.
+	pub const WelatiDiwanSize: u32 = 11;
+	/// Rewsenbîr appointed while `perwerde` has no graduates of its own; the same order as
+	/// the honorary teachers, and spent once over the chain's life.
+	pub const WelatiMaxAppointedRewsenbir: u32 = 100;
+	/// Six of them the sitting house elects; the remaining five are the President's to
+	/// appoint, derived rather than declared so the two cannot disagree.
+	pub const WelatiDiwanElectedSeats: u32 = 6;
+	/// Election period (~4 months = ~120 days)
+	pub const WelatiElectionPeriod: BlockNumber = 120 * DAYS;
+	/// A day's notice before the house may vote on a proposal, and a week for a nomination
+	/// to be acted on. Both were bare block counts inside the pallet written against a
+	/// six-second chain; here they are a day and a week of *this* chain, and they compress
+	/// under `fast-runtime` like every other period a rehearsal has to step over.
+	pub const WelatiProposalVotingDelay: BlockNumber = rehearsal_period!(DAYS, DAYS);
+	pub const WelatiNominationPeriod: BlockNumber = rehearsal_period!(7 * DAYS, DAYS);
+	/// Candidacy period (~3 days)
+	pub const WelatiCandidacyPeriod: BlockNumber = 3 * DAYS;
+	/// Campaign period (~10 days)
+	pub const WelatiCampaignPeriod: BlockNumber = 10 * DAYS;
+	/// Number of electoral districts
+	pub const WelatiElectoralDistricts: u32 = 10;
+	/// Candidacy deposit (100 PEZ)
+	pub const WelatiCandidacyDeposit: u128 = 100 * UNITS as u128;
+	/// Endorsements a candidacy needs once the roll is mature — scaled to *this* roll.
+	///
+	/// The pallet scales these down in proportion below `MatureRoll` and `MatureRoll` is
+	/// `MinElectorate`, which this chain sets to a hundred against the mainnet's hundred
+	/// thousand. Carrying the mainnet ceilings across that thousand-fold divergence left the
+	/// relief switched off: a roll of a hundred counted as mature, took the full ceiling, and
+	/// a presidential candidacy needed a thousand endorsements from a hundred citizens — ten
+	/// times the whole electorate. Parliamentary needed every single one. Measured, not
+	/// reasoned: the twin check only holds pallet indices, so nothing caught the half-done
+	/// divergence.
+	///
+	/// Twenty and ten keep the mechanism biting at rehearsal scale — a fifth of the roll to
+	/// stand for President, a tenth for a seat — which is the standard the other Zagros
+	/// scale constants are set by. A candidacy that needs nothing is not a candidacy.
+	pub const WelatiPresidentialEndorsements: u32 = 20;
+	/// See `WelatiPresidentialEndorsements`.
+	pub const WelatiParliamentaryEndorsements: u32 = 10;
+	/// Maximum endorsers per candidate registration
+	pub const WelatiMaxEndorsers: u32 = 1000;
+
+	/// An elected mandate: four years.
+	pub const WelatiTermLength: BlockNumber = 4 * 365 * DAYS;
+
+	/// A seat on the Diwan: nine years, and the whole of it at once.
+	///
+	/// The exception, and deliberately. The Diwan judges the President and the government; a
+	/// court seated on the same cycle as the people it judges leaves with them, and a court
+	/// that leaves with the government it was meant to check was never a check.
+	///
+	/// **Staggering was considered and refused.** A staggered bench is harder for one electoral
+	/// moment to capture, and that is a real property to give up -- so the reason is worth
+	/// writing down rather than leaving as an omission somebody later reads as an oversight.
+	///
+	/// A staggered court is one whose seats are always about to fall vacant, which means its
+	/// members are always sitting in front of the body that will next fill them. What this
+	/// court is for is the opposite: eleven people the nation already follows, seated once,
+	/// irremovable, and owing nothing to whoever seated them. Removal for cause does not exist
+	/// here (§5.4) for the same reason, and a rolling appointment would reintroduce through the
+	/// calendar exactly what the missing dismissal call keeps out.
+	///
+	/// The capture worry is answered by arithmetic rather than by rotation. Taking all eleven
+	/// needs the house *and* the presidency in one moment -- six elected, five appointed,
+	/// neither able to seat a majority alone -- and both of those bodies run for four years
+	/// against this nine. The alignment that seated the court faces the electorate twice before
+	/// a single seat turns over, and by then it is not the alignment any more.
+	pub const WelatiCourtTermLength: BlockNumber = 9 * 365 * DAYS;
+
+	/// How long a court seat may stay silent before anyone may vacate it: fourteen days.
+	///
+	/// **Deliberately not the mainnet figure.** This constant is measured in the time a human
+	/// takes to notice something, so mirroring mainnet's hundred and eighty days would make the
+	/// rule untestable here -- a test network whose court cannot be shown recovering from a
+	/// dead seat has not demonstrated the mechanism, and this network exists to demonstrate the
+	/// mechanisms before a genesis freezes them. Fourteen days still bites: it is far longer
+	/// than any test run, so nothing trips it by accident.
+	/// How long a citizen may take no part in anything before they leave the denominator.
+	///
+	/// **Deliberately not the mainnet figure.** Two years here would mean the rule could never
+	/// be seen working: a test network is not run for two years, so the denominator would never
+	/// be observed shrinking and the mechanism would ship unexercised. Thirty days is still far
+	/// longer than any test run, so nothing goes dormant by accident inside one.
+	pub const WelatiDormancyPeriod: BlockNumber = 30 * DAYS;
+
+	/// How long recent airdrop spending takes to drain away: two days.
+	///
+	/// **Deliberately not the mainnet figure.** The drain is measured in the time an oversight
+	/// cycle takes, and thirty days here would mean the window could never be seen to refill --
+	/// a limit nobody can watch working is a limit nobody has tested. Two days is still far
+	/// longer than a test run, so nothing trips it by accident.
+	pub const WelatiAirdropWindow: BlockNumber = 2 * DAYS;
+
+	/// What may be paid in a window on two signatures, at this network's scale.
+	pub const WelatiAirdropWindowCeiling: u128 = 3_000_000 * UNITS;
+
+	/// Where `pezpallet_whitelist` sits in the relay's runtime.
+	///
+	/// Pinned by `the_whitelist_call_encodes_the_way_people_builds_it` on the relay side. If
+	/// the relay renumbers and this does not follow, the court's fast track lands on whatever
+	/// pallet now holds 44 -- and nothing here would notice.
+	pub const RelayWhitelistPalletIndex: u8 = 44;
+
+	/// Settled referrals needed before a citizen may ask for a geographic mark.
+	///
+	/// Twenty-five, against a lifetime vouching ceiling of fifty: half a full record. High
+	/// enough that a manufactured account cannot reach it -- every referral is another citizen
+	/// who was admitted and stayed -- and low enough that somebody who has actually brought
+	/// people into the register is not kept out of one stratum by arithmetic.
+	pub const WelatiGeographicMarkReferrals: u32 = 25;
+
+	pub const WelatiCourtInactivityPeriod: BlockNumber = 14 * DAYS;
+	/// The President's and the Speaker's silence rule. The court's period on purpose -- a head
+	/// of state out of reach for longer than a judge is not a smaller problem -- but its own
+	/// constant, so the two can be tuned apart.
+	pub const WelatiOfficeInactivityPeriod: BlockNumber = 14 * DAYS;
+
+	/// How many terms in a row one person may hold the same elected office.
+	///
+	/// Two, as in most republics. Zero here would mean no limit.
+	pub const WelatiMaxConsecutiveTerms: u32 = 2;
+
+	/// Where the PEZ treasury lives, as seen from here: a sibling teyrchain.
+	pub WelatiTreasuryChain: Location = AssetHubLocation::get();
+
+	/// `PezTreasury`'s index in the Asset Hub runtime (`pezpallet_pez_treasury = 70`).
+	///
+	/// This chain addresses the treasury's calls by index because it cannot name its types.
+	/// The emulated integration test asserts the two ends still agree; if the Asset Hub ever
+	/// renumbers, that test is what fails rather than a message landing on the wrong pallet.
+	pub const WelatiTreasuryPalletIndex: u8 = 70;
+
+	/// `pezpallet-parameters` on the Asset Hub, where HEZ's emission rate is stored.
+	pub const WelatiParametersPalletIndex: u8 = 79;
+
+	/// The airdrop pot on the Asset Hub -- `pezpallet_treasury`'s second instance, at 68.
+	///
+	/// Its own index because it is its own pallet over there, sharing only the treasury's
+	/// code. A message addressed to 65 instead would reach the ordinary treasury, which would
+	/// accept it and pay out of the wrong pot; the encoding pin in the Asset Hub's tests is
+	/// what holds the number, not this comment.
+	///
+	/// 68 rather than 66: `pezpallet_revive` holds 66 on the Zagros hub, and the twins keep
+	/// one index map, so the pot could not take it on either.
+	pub const WelatiAirdropPotPalletIndex: u8 = 68;
+
+	/// What one airdrop may move on two signatures.
+	///
+	/// A million HEZ clears an exchange listing campaign -- those run to a few tenths of a per
+	/// cent of supply -- and forty of them cannot empty a forty-million pot. Above this the
+	/// Treasurer signs too. The Asset Hub enforces the same ceiling on its spend origin; this
+	/// copy exists so the escalation is decided where the offices are, before a message is
+	/// sent that the other chain would refuse.
+	pub const WelatiAirdropCeiling: u128 = 1_000_000 * UNITS;
+
+	/// The presale pot on the Asset Hub -- `pezpallet_treasury`'s third instance, at 69.
+	///
+	/// Its own index, like the airdrop pot's: the instances share the treasury's call enum, so
+	/// the call index is identical for both and this number is the only thing that decides
+	/// which pot pays. Addressed to 68 it would empty the airdrop.
+	pub const WelatiPresalePotPalletIndex: u8 = 69;
+
+	/// One month of a presale lock, in this chain's blocks.
+	///
+	/// Thirty days rather than a calendar month, because a lock measured in blocks has no
+	/// calendar and a term the buyer can compute beats one that depends on which months it
+	/// crosses.
+	pub const WelatiPresaleLockMonth: BlockNumber = 30 * DAYS;
+
+	/// How long a large airdrop waits after its last signature.
+	///
+	/// Seven days rather than three: a three-day window that falls across a weekend is not a
+	/// window. The wait is the whole value of the third signature -- without it the Treasurer
+	/// signs and the money moves in the same block, and nobody outside the three could object
+	/// in time. Small airdrops do not wait at all.
+	pub const WelatiLargeAirdropDelay: BlockNumber = 7 * DAYS;
+
+	/// The most the Treasurer may move the emission rate in one step: one point.
+	///
+	/// The ceiling on the Asset Hub says how high the rate may ever be; this says how long it
+	/// takes to get there. Eight per cent to the ten per cent ceiling is two steps and half a
+	/// year, which is enough time for the change to be argued about before it is complete.
+	pub const WelatiMaxEmissionStep: Perbill = Perbill::from_percent(1);
+
+	/// And the least time between two of them: a quarter.
+	///
+	/// Long enough that the previous change has shown up in a payout before the next is made --
+	/// a rate moved faster than its own effect can be observed is not policy, it is guessing.
+	pub const WelatiMinEmissionInterval: BlockNumber = 90 * DAYS;
+
+	/// The state starts paying its citizens once there are a hundred of them.
+	///
+	/// A hundred, not the mainnet's hundred thousand, and the number is chosen to keep a
+	/// relationship rather than to be small: on the mainnet this gate and `MinElectorate` are
+	/// the same figure, so the roll that can carry a question is exactly the roll that opens
+	/// the treasury. `MinElectorate` was scaled to a hundred here on 2026-09-08 and this was
+	/// left behind, which broke that relationship and with it the testnet: referenda could
+	/// carry at a hundred citizens while the gate still waited for a hundred thousand, so the
+	/// activation path -- the People chain telling the Asset Hub the roll is full -- could
+	/// never fire, and the founder's share could never leave its pot. Neither is something a
+	/// testnet can be asked to demonstrate once and it is the first thing FAZ 3 asks for.
+	///
+	/// This is the recorded exception to "both twins or neither": a constant that means
+	/// something in terms of population makes the testnet untestable when it is mirrored by
+	/// value. The code is the twin; the number is not.
+	pub const WelatiPopulationThreshold: u32 = 100;
+	/// The size support is measured against while the roll is smaller than it.
+	///
+	/// small enough that a test roll can carry a question, large enough that the floor still bites. A hard constant, not a `qeyd` parameter: a floor the same electorate
+	/// could lower is not a floor. The two networks carry different numbers on purpose -- see
+	/// `CitizenTally::support` and `pezpallet_welati::Config::MinElectorate`.
+	pub const MinElectorate: u32 = 100;
+
+	/// Checked once a day. The answer only matters on the era it flips.
+	///
+	/// Compressed for a rehearsal like every other period this chain is measured against. It
+	/// was a bare `DAYS`, and that put the keystone of the whole cross-chain sequence out of
+	/// reach: the register can fill to the gate inside a test, but the check that notices only
+	/// runs every seven thousand two hundred blocks, so the report never fires and the XCM that
+	/// activates distribution on the Asset Hub is never sent. Nothing failed -- the path simply
+	/// could not be demonstrated, which is the defect a rehearsal exists to find.
+	pub const WelatiPopulationCheckPeriod: BlockNumber = rehearsal_period!(DAYS, DAYS);
+}
+
+/// Randomness source for elections (using timestamp for now)
+pub struct TimestampRandomness;
+impl pezframe_support::traits::Randomness<Hash, BlockNumber> for TimestampRandomness {
+	fn random(subject: &[u8]) -> (Hash, BlockNumber) {
+		let block_number = pezframe_system::Pezpallet::<Runtime>::block_number();
+		let timestamp = pezpallet_timestamp::Pezpallet::<Runtime>::get();
+		let mut data = subject.to_vec();
+		data.extend_from_slice(&timestamp.to_le_bytes());
+		data.extend_from_slice(&block_number.to_le_bytes());
+		// sp-core stopped re-exporting `hashing`; BlakeTwo256 is the runtime-side path and is
+		// already in scope here, so no new dependency is needed for the same digest.
+		(<BlakeTwo256 as pezsp_runtime::traits::Hash>::hash(&data), block_number)
+	}
+}
+
+/// How a backed citizens' initiative reaches the ballot.
+///
+/// The pallet that collects the signatures cannot see what a referendum is made of, and the
+/// ballot cannot see who signed. This is the only place that sees both.
+///
+/// It submits as the proposer, so the ballot's own submission deposit comes from the person
+/// who asked, exactly as it would if they had submitted directly. The initiative's deposit is
+/// a separate thing and is returned at the same moment.
+pub struct LaunchBackedInitiative;
+impl pezpallet_welati::InitiativeLaunch<AccountId, Hash> for LaunchBackedInitiative {
+	fn launch(
+		proposer: &AccountId,
+		track: u16,
+		hash: Hash,
+		len: u32,
+	) -> pezsp_runtime::DispatchResult {
+		use pezsp_runtime::traits::Dispatchable;
+
+		// The track list is the one authority on which origin a track speaks for; asking it
+		// backwards keeps the two from drifting apart.
+		let origin = <crate::governance::TracksInfo as pezpallet_referenda::TracksInfo<
+			Balance,
+			BlockNumber,
+		>>::tracks()
+		.find(|t| t.id == track)
+		.and_then(|_| Self::origin_for(track))
+		.ok_or(pezsp_runtime::DispatchError::Other("no such track"))?;
+
+		let call = RuntimeCall::Referenda(pezpallet_referenda::Call::<Runtime>::submit {
+			proposal_origin: alloc::boxed::Box::new(origin),
+			proposal: pezframe_support::traits::Bounded::Lookup { hash, len },
+			enactment_moment: pezframe_support::traits::schedule::DispatchTime::After(0),
+		});
+		call.dispatch(RuntimeOrigin::signed(proposer.clone()))
+			.map(|_| ())
+			.map_err(|e| e.error)
+	}
+}
+
+impl LaunchBackedInitiative {
+	fn origin_for(track: u16) -> Option<OriginCaller> {
+		use crate::governance::pezpallet_custom_origins::Origin as StateOrigin;
+		Some(match track {
+			0 => OriginCaller::system(pezframe_system::RawOrigin::Root),
+			40 => OriginCaller::Origins(StateOrigin::WelatiElection),
+			41 => OriginCaller::Origins(StateOrigin::WelatiAdmin),
+			42 => OriginCaller::Origins(StateOrigin::CitizenshipAdmin),
+			_ => return None,
+		})
+	}
+}
+
+/// Citizen count provider for Welati
+pub struct WelatiCitizenSource;
+impl pezpallet_welati::CitizenInfo for WelatiCitizenSource {
+	fn citizen_count() -> u32 {
+		IdentityKyc::citizen_count()
+	}
+}
+
+/// Trust score source for Welati
+pub struct WelatiTrustScoreSource;
+impl pezpallet_trust::TrustScoreProvider<AccountId> for WelatiTrustScoreSource {
+	fn trust_score_of(who: &AccountId) -> u128 {
+		Trust::trust_score_of(who)
+	}
+}
+
+/// Tiki score source for Welati
+pub struct WelatiTikiScoreSource;
+impl pezpallet_tiki::TikiScoreProvider<AccountId> for WelatiTikiScoreSource {
+	fn get_tiki_score(who: &AccountId) -> u32 {
+		<Tiki as pezpallet_tiki::TikiScoreProvider<AccountId>>::get_tiki_score(who)
+	}
+}
+
+pezpallet_welati::impl_rebind_adapters!(Runtime;
+	RebindReferral => pezpallet_referral,
+	RebindPerwerde => pezpallet_perwerde,
+	RebindTiki => pezpallet_tiki,
+	RebindTrust => pezpallet_trust,
+	RebindStakingScore => pezpallet_staking_score,
+);
+
+impl pezpallet_welati::Config for Runtime {
+	// This runtime's own measurement, like every other pallet here. It was generated and
+	// then never declared in `weights/mod.rs`, so it was not compiled, so the binding fell
+	// back to `()` -- and `()` resolved to a hand-written copy of the trait in the pallet's
+	// `lib.rs` carrying eight round numbers and no storage costs at all. Three weight
+	// sources for one pallet, and the one in use was the only one nobody measured.
+	type WeightInfo = weights::pezpallet_welati::WeightInfo<Runtime>;
+	type Randomness = TimestampRandomness;
+	type RuntimeCall = RuntimeCall;
+	type TrustScoreSource = WelatiTrustScoreSource;
+	type TikiSource = WelatiTikiScoreSource;
+	type CitizenSource = WelatiCitizenSource;
+	// The same roll the tally divides by, so a question is counted and decided against one
+	// register rather than two.
+	type Electorate = CitizenRoll;
+	type MinElectorate = MinElectorate;
+	type Polls = Referenda;
+	type Initiatives = LaunchBackedInitiative;
+	type InitiativeThreshold = StateInitiativeThreshold;
+	type InitiativeWindow = StateInitiativeWindow;
+	type InitiativeDeposit = StateInitiativeDeposit;
+	type InitiativeSlashTarget = PenaltiesToTreasury;
+	// The executive names, Parliament confirms. Root is here for the founding period only,
+	// on the same footing as everywhere else in this runtime; the Serok's own origin is
+	// deliberately absent, because one person cannot be both parties to an appointment.
+	type ConfirmationOrigin = crate::RootOrParliament;
+	type InitiativeCooldown = StateInitiativeCooldown;
+	type KycSource = IdentityKyc;
+	type ParliamentSize = WelatiParliamentSize;
+	type DiwanSize = WelatiDiwanSize;
+	type DiwanElectedSeats = WelatiDiwanElectedSeats;
+	type CourtRoster = DiwanRoster;
+	type HouseRoster = ParliamentRoster;
+	type ElectionPeriod = WelatiElectionPeriod;
+	type ProposalVotingDelay = WelatiProposalVotingDelay;
+	type NominationPeriod = WelatiNominationPeriod;
+	type MaxAppointedRewsenbir = WelatiMaxAppointedRewsenbir;
+	type CandidacyPeriod = WelatiCandidacyPeriod;
+	type CampaignPeriod = WelatiCampaignPeriod;
+	type ElectoralDistricts = WelatiElectoralDistricts;
+	type CandidacyDeposit = WelatiCandidacyDeposit;
+	type PresidentialEndorsements = WelatiPresidentialEndorsements;
+	type ParliamentaryEndorsements = WelatiParliamentaryEndorsements;
+	type NativeCurrency = Balances;
+	type MaxEndorsers = WelatiMaxEndorsers;
+	type TermLength = WelatiTermLength;
+	type CourtInactivityPeriod = WelatiCourtInactivityPeriod;
+	type OfficeInactivityPeriod = WelatiOfficeInactivityPeriod;
+	// The register authority, and nothing weaker: this is the only call that hands one
+	// account's offices to another.
+	type ReissueOrigin = crate::RootOrDiwan;
+	// Every pallet that keys anything on a citizen. A pallet added later has to be added here
+	// too or its records are quietly left behind by every reissue -- the failure is silent,
+	// which is why the list is spelled out where all of them are visible rather than derived.
+	type ReissueCarries =
+		(RebindReferral, RebindPerwerde, RebindTiki, RebindTrust, RebindStakingScore);
+	// The court, and nothing else on this chain, may ask the relay to whitelist a call. The
+	// relay refuses it from anybody else in any case; checking here as well keeps the grant
+	// readable on the side that exercises it.
+	type FastTrackOrigin = crate::RootOrDiwan;
+	type RelayWhitelistPalletIndex = RelayWhitelistPalletIndex;
+	// The same number as the tally's floor, on purpose -- see `MatureRoll`.
+	type MatureRoll = MinElectorate;
+	type GeographicMarkReferrals = WelatiGeographicMarkReferrals;
+	// The court, not the President who appoints the notaries. Attestation is administrative
+	// and stays with the administration; undoing a false one is adjudication.
+	type GeographicRevokeOrigin = crate::RootOrDiwan;
+	type DormancyPeriod = WelatiDormancyPeriod;
+	type AirdropWindow = WelatiAirdropWindow;
+	type AirdropWindowCeiling = WelatiAirdropWindowCeiling;
+	type CourtTermLength = WelatiCourtTermLength;
+	type MaxConsecutiveTerms = WelatiMaxConsecutiveTerms;
+	type XcmSender = crate::xcm_config::XcmRouter;
+	type TreasuryChainLocation = WelatiTreasuryChain;
+	type TreasuryPalletIndex = WelatiTreasuryPalletIndex;
+	type ParametersPalletIndex = WelatiParametersPalletIndex;
+	type AirdropPotPalletIndex = WelatiAirdropPotPalletIndex;
+	type AirdropCeiling = WelatiAirdropCeiling;
+	type PresalePotPalletIndex = WelatiPresalePotPalletIndex;
+	type PresaleLockMonth = WelatiPresaleLockMonth;
+	#[cfg(feature = "runtime-benchmarks")]
+	type BenchmarkHelper = WelatiBenchmarkHelper;
+	type LargeAirdropDelay = WelatiLargeAirdropDelay;
+	type MaxEmissionStep = WelatiMaxEmissionStep;
+	type MinEmissionInterval = WelatiMinEmissionInterval;
+	type PopulationThreshold = WelatiPopulationThreshold;
+	type PopulationThresholdOverride = crate::dynamic_params::qeyd::PopulationThresholdOverride;
+	type PopulationCheckPeriod = WelatiPopulationCheckPeriod;
+}
+
+// =============================================================================
+// PEZ Rewards Pezpallet Configuration
+// =============================================================================
+
+parameter_types! {
+	/// The Asset Hub holds the incentive pot; this chain only instructs payments out of it.
+	pub const PezRewardsTreasuryPalletIndex: u8 = 70;
+	/// The epoch and its claim window, from the pallet's own production constants -- one home
+	/// for the number -- wrapped so a rehearsal build can see an epoch close. Thirty days of
+	/// blocks is not something a test can wait for, and until an epoch closes nothing can be
+	/// claimed and the path that pays a claim across to the Asset Hub stays unproven.
+	pub const PezRewardsEpochLength: BlockNumber =
+		rehearsal_period!(pezpallet_pez_rewards::BLOCKS_PER_EPOCH, DAYS);
+	pub const PezRewardsClaimPeriod: BlockNumber =
+		rehearsal_period!(pezpallet_pez_rewards::CLAIM_PERIOD_BLOCKS, DAYS);
+}
+
+/// The trust roll the payroll is drawn against.
+///
+/// Reads the trust pallet directly rather than duplicating anything: the denominator is the
+/// running total that pallet already keeps and already proves, and the freeze is what keeps
+/// the rate and the shares belonging to the same roll.
+pub struct PezRewardsTrustRoll;
+impl pezpallet_pez_rewards::TrustRoll<AccountId, BlockNumber> for PezRewardsTrustRoll {
+	fn score_of(who: &AccountId) -> u128 {
+		Trust::trust_score_of(who)
+	}
+	fn total_score() -> u128 {
+		Trust::total_active_trust_score()
+	}
+	fn freeze_until(until: BlockNumber) {
+		Trust::freeze_until(until);
+	}
+}
+
+/// Who sits in Parliament, and who holds the seat.
+///
+/// Two sources on purpose. `welati::ParliamentMembers` is the roll the election wrote, and it
+/// is what makes paying Parliament a lookup over two hundred and one accounts instead of the
+/// whole population. The `Parlementer` tiki is the seat itself: a member the Diwan removed, or
+/// who lost their citizenship, is still on the roll and no longer holds it.
+pub struct PezRewardsParliamentRoll;
+impl pezpallet_pez_rewards::ParliamentRoll<AccountId, BlockNumber> for PezRewardsParliamentRoll {
+	fn seated_at(who: &AccountId) -> Option<BlockNumber> {
+		Welati::seat_taken_at(who)
+	}
+	fn holds_seat(who: &AccountId) -> bool {
+		pezpallet_tiki::Pezpallet::<Runtime>::has_tiki(who, &pezpallet_tiki::Tiki::Parlementer)
+	}
+}
+
+/// What a `claim_reward` benchmark needs before the call can be measured.
+///
+/// The entitlement is assembled from three pallets this one does not depend on, so the setup
+/// has to live where they are all in scope. Everything here is the worst case on purpose:
+///
+/// * a trust score, because `reward_per_trust_point * 0` is zero and the call refuses with
+///   `NoRewardToClaim` -- which is what the benchmark measured until 2026-09-20;
+/// * the `Parlementer` tiki, because `holds_seat` short-circuits and an unseated caller never
+///   reaches the expensive half;
+/// * a **full** roll with the caller at the end of it, because `seated_at` decodes
+///   `ParliamentMembers` and scans it linearly. A roll of one would price the scan at nothing.
+#[cfg(feature = "runtime-benchmarks")]
+pub struct PezRewardsBenchmarkSetup;
+#[cfg(feature = "runtime-benchmarks")]
+impl pezpallet_pez_rewards::BenchmarkSetup<AccountId, RuntimeOrigin> for PezRewardsBenchmarkSetup {
+	fn make_claimable(who: &AccountId) {
+		use pezframe_support::BoundedVec;
+
+		pezpallet_trust::TrustScores::<Runtime>::insert(who, 1_000u128);
+
+		let seat = |account: AccountId| pezpallet_welati::types::ParliamentMember::<Runtime> {
+			account,
+			elected_at: 0,
+			term_ends_at: BlockNumber::MAX,
+			votes_participated: 0,
+			total_votes_eligible: 0,
+			participation_rate: 0,
+			committees: BoundedVec::default(),
+		};
+
+		let size = <Runtime as pezpallet_welati::Config>::ParliamentSize::get();
+		let mut roll: Vec<_> = (0..size.saturating_sub(1))
+			.map(|i| {
+				let mut bytes = [0u8; 32];
+				bytes[..4].copy_from_slice(&i.to_le_bytes());
+				seat(AccountId::new(bytes))
+			})
+			.collect();
+		// Last, so the linear scan in `seated_at` runs the whole length.
+		roll.push(seat(who.clone()));
+		pezpallet_welati::ParliamentMembers::<Runtime>::put(
+			BoundedVec::try_from(roll).expect("the roll is built to ParliamentSize; qed"),
+		);
+
+		pezpallet_tiki::UserTikis::<Runtime>::mutate(who, |tikis| {
+			let _ = tikis.try_push(pezpallet_tiki::Tiki::Parlementer);
+		});
+
+		// The lane the payment leaves by.
+		//
+		// `claim_reward` ends in an XCM to the treasury chain, and a benchmark runs on a chain
+		// with no channels at all: the send came back `NoChannel`, the call came back
+		// `CouldNotReachTreasury`, and the benchmark measured the refund path instead of the
+		// payment. Measured 2026-09-21.
+		// Derived from the location the payment is addressed to rather than from a second
+		// constant, so the lane and the destination cannot drift apart.
+		if let Some(xcm::latest::Junction::Teyrchain(id)) =
+			WelatiTreasuryChain::get().interior().first()
+		{
+			TeyrchainSystem::open_outbound_hrmp_channel_for_benchmarks_or_tests(
+				pezcumulus_primitives_core::ParaId::from(*id),
+			);
+		}
+	}
+
+	fn funding_origin() -> RuntimeOrigin {
+		// `EnsureXcm<Equals<WelatiTreasuryChain>>` accepts one location and no other, and
+		// upstream's `try_successful_origin()` offers `Here`. Only this file knows the answer.
+		pezpallet_xcm::Origin::Xcm(WelatiTreasuryChain::get()).into()
+	}
+}
+
+impl pezpallet_pez_rewards::Config for Runtime {
+	type WeightInfo = weights::pezpallet_pez_rewards::WeightInfo<Runtime>;
+	type TrustSource = PezRewardsTrustRoll;
+	type ParliamentSource = PezRewardsParliamentRoll;
+	#[cfg(feature = "runtime-benchmarks")]
+	type BenchmarkHelper = PezRewardsBenchmarkSetup;
+	// Only the chain that holds the pot may say what the pot has been given. Root is
+	// deliberately not accepted: a key that can report funding is a key that can promise a
+	// payroll out of money that is not there, and the failure would land on the far side of
+	// a bridge with nothing here to show for it.
+	type FundingOrigin = EnsureXcm<Equals<WelatiTreasuryChain>>;
+	type XcmSender = crate::xcm_config::XcmRouter;
+	type TreasuryChainLocation = WelatiTreasuryChain;
+	type TreasuryPalletIndex = PezRewardsTreasuryPalletIndex;
+	type EpochLength = PezRewardsEpochLength;
+	type ClaimPeriod = PezRewardsClaimPeriod;
+	// Only ever used on a chain whose genesis did not start the clock.
+	type ForceOrigin = crate::RootOrSerokOrCouncilTwoThirds;
+}
+
+// =============================================================================
+// Recovery Pezpallet Configuration
+// =============================================================================
+
+parameter_types! {
+	pub const ConfigDepositBase: Balance = 5 * UNITS;
+	pub const FriendDepositFactor: Balance = 50 * CENTS;
+	pub const RecoveryDeposit: Balance = 5 * UNITS;
+	pub const RecoveryDepositPerItem: Balance = deposit(1, 0);
+	pub const RecoveryDepositPerByte: Balance = deposit(0, 1);
+
+	pub const FriendGroupsHoldReason: RuntimeHoldReason =
+		RuntimeHoldReason::Recovery(pezpallet_recovery::HoldReason::FriendGroupsStorage);
+	pub const RecoveryAttemptHoldReason: RuntimeHoldReason =
+		RuntimeHoldReason::Recovery(pezpallet_recovery::HoldReason::AttemptStorage);
+	pub const InheritorHoldReason: RuntimeHoldReason =
+		RuntimeHoldReason::Recovery(pezpallet_recovery::HoldReason::InheritorStorage);
+}
+
+// Recovery moved from fixed reserved deposits to footprint-scaled holds. Holds are typed and
+// slashable where reserves were neither, and the deposit now tracks what is actually stored, so
+// the new shape is adopted rather than pinned to the old one.
+//
+// The three deposits that existed before carry over unchanged in meaning:
+//   ConfigDepositBase + FriendDepositFactor -> FriendGroupsConsideration, which is the same
+//     base-plus-per-friend curve the old pallet computed by hand.
+//   RecoveryDeposit -> SecurityDeposit, which is what that deposit already was: the stake an
+//     initiator puts at risk when opening a recovery. It is now explicitly slashable.
+//
+// AttemptConsideration and InheritorConsideration have no predecessor. They pay for storage, so
+// they are priced like every other byte this chain stores, with the same `deposit()` helper the
+// NFT and assets pallets use here. The inheritor feature itself is new and unexercised.
+//
+// A slashed security deposit is forwarded to the treasury rather than burnt, matching how
+// this runtime already routes identity slashes. `Slash = AccumulateAndForward`, which pools
+// the amounts and teleports them to the Asset Hub's treasury -- this line said "the relay
+// treasury" until 2026-08-30, which stopped being true when the treasury moved.
+impl pezpallet_recovery::Config for Runtime {
+	type WeightInfo = ();
+	type RuntimeCall = RuntimeCall;
+	type RuntimeHoldReason = RuntimeHoldReason;
+	type BlockNumberProvider = System;
+	type Currency = Balances;
+	type FriendGroupsConsideration = HoldConsideration<
+		AccountId,
+		Balances,
+		FriendGroupsHoldReason,
+		LinearStoragePrice<ConfigDepositBase, FriendDepositFactor, Balance>,
+	>;
+	type AttemptConsideration = HoldConsideration<
+		AccountId,
+		Balances,
+		RecoveryAttemptHoldReason,
+		LinearStoragePrice<RecoveryDepositPerItem, RecoveryDepositPerByte, Balance>,
+	>;
+	type InheritorConsideration = HoldConsideration<
+		AccountId,
+		Balances,
+		InheritorHoldReason,
+		LinearStoragePrice<RecoveryDepositPerItem, RecoveryDepositPerByte, Balance>,
+	>;
+	type SecurityDeposit = RecoveryDeposit;
+	type Slash = AccumulateAndForward;
+	// Documented upstream as never safe to reduce: shrinking it makes stored bounded vectors
+	// undecodable. Held at the previous MaxFriends value.
+	type MaxFriendsPerConfig = ConstU32<9>;
+}
+
+// =============================================================================
+// Society Pezpallet Configuration
+// =============================================================================
+
+parameter_types! {
+	pub const GraceStrikes: u32 = 10;
+	pub const SocietyVotingPeriod: BlockNumber = 80 * HOURS;
+	pub const ClaimPeriod: BlockNumber = 80 * HOURS;
+	pub const PeriodSpend: Balance = 500 * UNITS;
+	pub const MaxLockDuration: BlockNumber = 36 * 30 * DAYS;
+	pub const ChallengePeriod: BlockNumber = 7 * DAYS;
+	pub const MaxPayouts: u32 = 10;
+	pub const MaxBids: u32 = 10;
+	pub const SocietyPalletId: pezframe_support::PalletId = pezframe_support::PalletId(*b"py/socie");
+}
+
+impl pezpallet_society::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type PalletId = SocietyPalletId;
+	type Currency = Balances;
+	type Randomness = TimestampRandomness;
+	type GraceStrikes = GraceStrikes;
+	type PeriodSpend = PeriodSpend;
+	type VotingPeriod = SocietyVotingPeriod;
+	type ClaimPeriod = ClaimPeriod;
+	type MaxLockDuration = MaxLockDuration;
+	type FounderSetOrigin = EnsureRoot<AccountId>;
+	type ChallengePeriod = ChallengePeriod;
+	type MaxPayouts = MaxPayouts;
+	type MaxBids = MaxBids;
+	type BlockNumberProvider = System;
+	type WeightInfo = ();
+}
+
+// =============================================================================
+// Vesting Pezpallet Configuration
+// =============================================================================
+
+parameter_types! {
+	pub const MinVestedTransfer: Balance = UNITS;
+	pub UnvestedFundsAllowedWithdrawReasons: WithdrawReasons =
+		WithdrawReasons::except(WithdrawReasons::TRANSFER | WithdrawReasons::RESERVE);
+}
+
+impl pezpallet_vesting::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type Currency = Balances;
+	type BlockNumberToBalance = ConvertInto;
+	type MinVestedTransfer = MinVestedTransfer;
+	type WeightInfo = ();
+	type UnvestedFundsAllowedWithdrawReasons = UnvestedFundsAllowedWithdrawReasons;
+	type BlockNumberProvider = System;
+	const MAX_VESTING_SCHEDULES: u32 = 28;
+}
+
+// =====================================================
+// TNPOS CONFIGURATION
+// =====================================================
+
+/// TNPoS reads the register directly, because the register lives here.
+///
+/// Every one of the nine strata is decided by a pallet on this chain -- trust, tiki, perwerde,
+/// referral and the staking oracle -- so this is a local read. That is the whole reason the
+/// committee is drawn here rather than on the relay: a relay-side TNPoS would have to import
+/// five scores across a chain boundary, and a partial import is worse than none. With all five
+/// stale at once the pallet seats nobody and the relay keeps its previous authorities; with
+/// three of five stale it would seat a committee whose stratum proportions are quietly wrong,
+/// and storage would still say they are right.
+///
+/// The timestamps are honest per source. `staking_of` carries the oracle's own observation
+/// height -- the one number here that can genuinely go stale, because it comes from off-chain.
+/// The other four are computed on this chain from state written on this chain, so they are
+/// current by construction and say so.
+pub struct RegisterScores;
+impl pezkuwi_tnpos_primitives::scores::ScoreProvider<AccountId, BlockNumber> for RegisterScores {
+	fn is_meclis_member(who: &AccountId) -> bool {
+		// The register's own answer, read locally: both pallets are on this chain, so there is
+		// no channel between them to go quiet and no snapshot to age.
+		pezpallet_welati::Pezpallet::<Runtime>::is_parliament_member(who)
+	}
+
+	fn is_diwan_member(who: &AccountId) -> bool {
+		pezpallet_welati::Pezpallet::<Runtime>::is_diwan_member(who)
+	}
+
+	fn region_of(who: &AccountId) -> Option<u8> {
+		// The register's settled answer: claimed by the citizen, attested by a notary, and
+		// cancellable by the court. The index rather than the name, because the consensus
+		// layer groups by regions and never has to say one out loud.
+		pezpallet_welati::AttestedRegion::<Runtime>::get(who).map(|r| r.index())
+	}
+
+	fn trust_of(who: &AccountId) -> ScoreSnapshot<BlockNumber> {
+		ScoreSnapshot {
+			value: <Trust as pezpallet_trust::TrustScoreProvider<AccountId>>::trust_score_of(who),
+			last_updated: System::block_number(),
+		}
+	}
+
+	fn tiki_of(who: &AccountId) -> ScoreSnapshot<BlockNumber> {
+		ScoreSnapshot {
+			value:
+				<TikiScoreSource as pezpallet_trust::TikiScoreProvider<AccountId>>::get_tiki_score(
+					who,
+				)
+				.into(),
+			last_updated: System::block_number(),
+		}
+	}
+
+	fn perwerde_of(who: &AccountId) -> ScoreSnapshot<BlockNumber> {
+		ScoreSnapshot {
+			value: <PerwerdeScoreSource as pezpallet_trust::PerwerdeScoreProvider<AccountId>>::get_perwerde_score(who)
+				.into(),
+			last_updated: System::block_number(),
+		}
+	}
+
+	fn referral_of(who: &AccountId) -> ScoreSnapshot<BlockNumber> {
+		ScoreSnapshot {
+			value: <ReferralScoreSource as pezpallet_trust::ReferralScoreProvider<AccountId>>::get_referral_score(who)
+				.into(),
+			last_updated: System::block_number(),
+		}
+	}
+
+	fn staking_of(who: &AccountId) -> ScoreSnapshot<BlockNumber> {
+		// The oracle's own height, not this block's. This is the one score that comes from
+		// outside the chain, so it is the one that can be stale -- and `value_if_fresh` is
+		// what turns a stalled oracle into an absent score rather than a confident old one.
+		let (value, observed_at) = <StakingScoreSource as pezpallet_trust::StakingScoreProvider<
+			AccountId,
+			BlockNumber,
+		>>::get_staking_score(who);
+		ScoreSnapshot { value: value.into(), last_updated: observed_at }
+	}
+}
+
+// The relay's `SessionKeys`, mirrored so a registration can be checked before it is sent.
+//
+// Must match the relay's definition field for field and in order -- it is what decodes the
+// bytes, and a mismatch would accept a payload the relay then refuses, leaving this chain
+// holding a key the relay does not have. `the_relay_key_mirror_matches` in the relay's tests
+// compares the two; this comment is not the check.
+//
+// `//` and not `///`: a doc comment here attaches to nothing -- the item that follows is a
+// macro invocation, and rustc warns `unused doc comment`. The words are the mirror invariant
+// and they stay; only their form changes.
+pezsp_runtime::impl_opaque_keys! {
+	pub struct RelaySessionKeys {
+		pub grandpa: pezsp_consensus_grandpa::AuthorityId,
+		pub babe: pezsp_consensus_babe::AuthorityId,
+		pub para_validator: pezkuwi_primitives::ValidatorId,
+		pub para_assignment: pezkuwi_primitives::AssignmentId,
+		pub authority_discovery: pezsp_authority_discovery::AuthorityId,
+		pub beefy: pezsp_consensus_beefy::ecdsa_crypto::AuthorityId,
+	}
+}
+
+/// Puts an account in a state where `eligible_for` passes, for benchmarking only.
+///
+/// The pallet cannot conjure this itself, which is why the trait exists: standing is written
+/// by five other pallets on this chain and session keys come from a keystore. What matters is
+/// that the *measured path stays the real one* -- so this writes the state those pallets read
+/// from, and `eligible_for` then reads it back exactly as it does in production. A helper that
+/// short-circuited the check would benchmark a code path nobody runs.
+#[cfg(feature = "runtime-benchmarks")]
+pub struct TnposBenchmarkHelper;
+
+/// The origin `Tnpos::note_bonded` accepts, for benchmarks: the Asset Hub, as `BondOrigin`
+/// requires.
+#[cfg(feature = "runtime-benchmarks")]
+pub struct TnposBondBenchmarkSetup;
+#[cfg(feature = "runtime-benchmarks")]
+impl pezpallet_tnpos::BondBenchmarkSetup<RuntimeOrigin> for TnposBondBenchmarkSetup {
+	fn bond_origin() -> RuntimeOrigin {
+		pezpallet_xcm::Origin::Xcm(AssetHubLocation::get()).into()
+	}
+}
+
+#[cfg(feature = "runtime-benchmarks")]
+impl pezpallet_tnpos::BenchmarkHelper<AccountId> for TnposBenchmarkHelper {
+	fn make_eligible(who: &AccountId, stratum: pezkuwi_tnpos_primitives::StratumId) {
+		use pezkuwi_tnpos_primitives::StratumId;
+
+		// Keys first: `do_join` refuses a keyless account whatever its standing, so without
+		// this every benchmark would measure the refusal path. The bytes only have to decode
+		// as `RelaySessionKeys` -- the ownership proof was checked before registration, and
+		// nothing here re-checks it.
+		let keys = [0u8; 192];
+		let bounded: pezframe_support::BoundedVec<u8, pezframe_support::traits::ConstU32<512>> =
+			keys.to_vec().try_into().expect("192 bytes fit in 512; qed");
+		pezpallet_tnpos::RelayKeys::<Runtime>::insert(who, bounded);
+
+		match stratum {
+			StratumId::Stake => {
+				// The score is derived from cached stake and its duration, so write the
+				// cache: 1000 HEZ from the relay, bonded long enough to clear the
+				// flash-stake guard.
+				pezpallet_staking_score::CachedStakingDetails::<Runtime>::insert(
+					who,
+					pezpallet_staking_score::StakingSource::RelayChain,
+					pezpallet_staking_score::StakingDetails {
+						staked_amount: 1_000 * UNITS,
+						nominations_count: 1,
+						unlocking_chunks_count: 0,
+					},
+				);
+				pezpallet_staking_score::StakingStartBlock::<Runtime>::insert(
+					who,
+					BlockNumber::from(1u32),
+				);
+			},
+			StratumId::Perwerde => {
+				pezpallet_perwerde::PerwerdeScores::<Runtime>::insert(who, 100u32);
+			},
+			StratumId::Tiki => {
+				// A community tiki, not an office. `get_tiki_score` filters offices out, so
+				// granting one of those would leave the score at zero and the benchmark
+				// measuring a rejection.
+				let tikis: pezframe_support::BoundedVec<pezpallet_tiki::Tiki, MaxTikisPerUser> =
+					alloc::vec![pezpallet_tiki::Tiki::Mela].try_into().expect("one fits; qed");
+				pezpallet_tiki::UserTikis::<Runtime>::insert(who, tikis);
+			},
+			// The remaining six reach this chain as trust standing until their own channels
+			// land; one write covers all of them.
+			// Four strata read a state rather than a score, and trust alone passes none of
+			// them: the benchmarks join Meclis, so with trust and nothing else every TNPoS
+			// benchmark measured a refusal or failed outright (weights run 37932288409).
+			StratumId::Meclis => {
+				pezpallet_trust::TrustScores::<Runtime>::insert(who, 1_000u128);
+				pezpallet_welati::ParliamentMembers::<Runtime>::mutate(|house| {
+					if !house.iter().any(|m| &m.account == who) {
+						let _ = house.try_push(pezpallet_welati::types::ParliamentMember {
+							account: who.clone(),
+							elected_at: 0,
+							term_ends_at: BlockNumber::MAX,
+							votes_participated: 0,
+							total_votes_eligible: 0,
+							participation_rate: 100,
+							committees: Default::default(),
+						});
+					}
+				});
+			},
+			StratumId::Divan => {
+				pezpallet_trust::TrustScores::<Runtime>::insert(who, 1_000u128);
+				// The court has eleven seats; past that the account stays off it, which the
+				// stratum's floor of three tolerates.
+				pezpallet_welati::DiwanMembers::<Runtime>::mutate(|court| {
+					if !court.iter().any(|m| &m.account == who) {
+						let _ = court.try_push(pezpallet_welati::types::DiwanMember {
+							account: who.clone(),
+							appointed_at: 0,
+							term_ends_at: BlockNumber::MAX,
+							appointed_by: pezpallet_welati::types::AppointmentAuthority::Parliament,
+						});
+					}
+				});
+			},
+			StratumId::Geography => {
+				pezpallet_trust::TrustScores::<Runtime>::insert(who, 1_000u128);
+				// Spread across all six regions, as the stratum's rotation needs.
+				let region = pezpallet_welati::types::Region::ALL
+					[(<AccountId as AsRef<[u8]>>::as_ref(who)[0] % 6) as usize];
+				pezpallet_welati::AttestedRegion::<Runtime>::insert(who, region);
+			},
+			StratumId::Infrastructure => {
+				pezpallet_trust::TrustScores::<Runtime>::insert(who, 1_000u128);
+				pezpallet_tnpos::SeatedSessions::<Runtime>::insert(who, u32::MAX);
+			},
+			StratumId::WelatiLottery | StratumId::Tenure => {
+				pezpallet_trust::TrustScores::<Runtime>::insert(who, 1_000u128);
+			},
+		}
+	}
+}
+
+parameter_types! {
+	/// How old a score may be before the committee treats it as absent.
+	pub const TnposMaxScoreAge: BlockNumber = 4 * HOURS;
+	pub const TnposEraLength: BlockNumber = 6 * HOURS;
+	pub const TnposMaxPoolSize: u32 = 1_000;
+}
+
+pezframe_support::parameter_types! {
+	/// How long unbroken, offence-free pool membership must run before it is standing.
+	///
+	/// **Deliberately not the mainnet figure.** A year here would mean the gate never closes
+	/// inside the life of a test network, so the strict half would ship unexercised -- and the
+	/// grace window doubles as the qualifying window, so a network that never leaves grace
+	/// never demonstrates either. Thirty days closes inside a testnet's life and is still far
+	/// longer than any single run.
+	/// Standing the open lottery asks of an ordinary citizen: forty.
+	///
+	/// Exactly what an account that stakes the smallest tier and does nothing else scores, so
+	/// *above* it means "has done something beyond the cheapest act". The same forty the
+	/// register asks of an endorser -- one number, one meaning. Identical on both twins: it is
+	/// a property of the trust arithmetic, not of the network's size.
+	pub const TnposLotteryTrustFloor: u128 = 40;
+
+	/// Sessions seated before an operating record counts, at this network's pace.
+	///
+	/// **Deliberately not the mainnet figure.** Forty-eight seatings cannot accumulate inside
+	/// the life of a test network, so the gate would never open and would ship unexercised.
+	pub const TnposInfrastructureSessions: u32 = 12;
+
+	/// Ten days of hourly sessions, so the window can be seen closing.
+	pub const TnposInfrastructureWindow: u32 = 240;
+
+	/// The same three: it follows from the committee's size, not the network's.
+	pub const TnposCoFailureGroup: u32 = 3;
+
+	/// Two here rather than three, so a pattern can be demonstrated inside a test run.
+	pub const TnposCoFailureRepeats: u32 = 2;
+
+	pub const TnposTenurePeriod: BlockNumber = 30 * DAYS;
+}
+
+impl pezpallet_tnpos::Config for Runtime {
+	type WeightInfo = crate::weights::pezpallet_tnpos::WeightInfo<Runtime>;
+	type Sortition = pezpallet_tnpos::seed::CommitRevealSortition<Runtime>;
+	// The register itself, read locally. This is the reason the pallet is on this chain.
+	type Scores = RegisterScores;
+	type TenurePeriod = TnposTenurePeriod;
+	type LotteryTrustFloor = TnposLotteryTrustFloor;
+	// The relay, and only the relay: it arrives as `Superuser` from the parent, which this
+	// chain converts to Root. Nothing else reports what a session produced.
+	type PerformanceOrigin = pezframe_system::EnsureRoot<AccountId>;
+	type InfrastructureSessions = TnposInfrastructureSessions;
+	type InfrastructureWindow = TnposInfrastructureWindow;
+	type CoFailureGroup = TnposCoFailureGroup;
+	type CoFailureRepeats = TnposCoFailureRepeats;
+	// The pallet's own register: it decides who may validate, so it holds the record of who
+	// has keys to validate with. Anything else here would be a second opinion about a fact it
+	// already keeps.
+	type HasSessionKeys = Tnpos;
+	type RelaySessionKeys = RelaySessionKeys;
+	type SendKeysToRelay = KeysToRelay;
+	type SendCommitteeToRelay = CommitteeToRelay;
+	// Strata and forced eras are constitutional, not administrative: the court writes the
+	// register's rules, and how the committee is composed is one of them.
+	type ManagerOrigin = crate::RegisterAuthority;
+	type MaxScoreAge = TnposMaxScoreAge;
+	type EraLength = TnposEraLength;
+	type MaxPoolSize = TnposMaxPoolSize;
+	// The Asset Hub reports who is bonded there; a candidacy needs a validator's bond (spec C4).
+	type BondOrigin = pezpallet_xcm::EnsureXcm<pezframe_support::traits::Equals<AssetHubLocation>>;
+	type MaxBonded = ConstU32<{ pezkuwi_tnpos_primitives::invariant::MAX_BONDED_REPORT }>;
+	#[cfg(feature = "runtime-benchmarks")]
+	type BenchmarkHelper = TnposBenchmarkHelper;
+	#[cfg(feature = "runtime-benchmarks")]
+	type BondBenchmarkHelper = TnposBondBenchmarkSetup;
+}
+
+/// How a key registration reaches the relay's session pallet.
+///
+/// This chain cannot name the relay's calls by type, so it addresses them the way `welati`
+/// addresses the treasury's: pallet index, then call index, then arguments. Both numbers are
+/// load-bearing and neither is checked by the compiler -- if the relay renumbers, the message
+/// lands on whatever now sits at 67. `the_key_calls_encode_the_way_people_builds_them` in the
+/// relay's tests is what holds the two ends together.
+///
+/// `ah_client` accepts these from the chains named in `EnsureAssetHub`, and writes them into
+/// the relay's own `pezpallet_session`. That is the only copy consensus reads; the register
+/// this chain keeps says who holds keys, not what they are worth.
+#[derive(codec::Encode, codec::Decode)]
+enum RelayRuntimePallets {
+	// `StakingAhClient` in both relay runtimes.
+	#[codec(index = 67)]
+	AhClient(AhClientCalls),
+}
+
+#[derive(codec::Encode, codec::Decode)]
+enum AhClientCalls {
+	// `fn validator_set`. The report is the relay's own type, taken from the crate that
+	// defines it rather than mirrored here: a field added upstream then stops this runtime
+	// from compiling, instead of quietly encoding a shape the relay decodes as something
+	// else. A committee is bounded at `MAX_COMMITTEE` accounts, so a report always fits in
+	// one message and never needs the paging `ValidatorSetReport::split` exists for.
+	#[codec(index = 0)]
+	ValidatorSet(pezpallet_staking_async_rc_client::ValidatorSetReport<AccountId>),
+	// `fn set_keys_from_ah`. The ownership proof was checked before this was built, so only
+	// the keys travel.
+	#[codec(index = 3)]
+	SetKeys { stash: AccountId, keys: alloc::vec::Vec<u8> },
+	// `fn purge_keys_from_ah`.
+	#[codec(index = 4)]
+	PurgeKeys { stash: AccountId },
+}
+
+/// One route for everything this chain tells the relay: an unpaid `Transact` at the parent.
+fn send_to_relay(call: RelayRuntimePallets) -> Result<(), ()> {
+	{
+		use codec::Encode;
+		use xcm::latest::prelude::*;
+
+		let message = Xcm(alloc::vec![
+			UnpaidExecution { weight_limit: Unlimited, check_origin: None },
+			Transact {
+				origin_kind: OriginKind::Native,
+				fallback_max_weight: None,
+				call: call.encode().into(),
+			},
+		]);
+
+		let (ticket, _) = <crate::xcm_config::XcmRouter as SendXcm>::validate(
+			&mut Some(Location::parent()),
+			&mut Some(message),
+		)
+		.map_err(|_| ())?;
+		<crate::xcm_config::XcmRouter as SendXcm>::deliver(ticket)
+			.map(|_| ())
+			.map_err(|_| ())
+	}
+}
+
+pub struct KeysToRelay;
+impl pezpallet_tnpos::SendKeysToRelay<AccountId> for KeysToRelay {
+	fn set_keys(stash: &AccountId, keys: alloc::vec::Vec<u8>) -> Result<(), ()> {
+		send_to_relay(RelayRuntimePallets::AhClient(AhClientCalls::SetKeys {
+			stash: stash.clone(),
+			keys,
+		}))
+	}
+
+	fn purge_keys(stash: &AccountId) -> Result<(), ()> {
+		send_to_relay(RelayRuntimePallets::AhClient(AhClientCalls::PurgeKeys {
+			stash: stash.clone(),
+		}))
+	}
+}
+
+/// How a seated committee reaches the relay.
+///
+/// This is the whole point of drawing one here: until the relay receives it, a committee is a
+/// list in this chain's storage and consensus is still run by whoever the relay already knew.
+///
+/// A send that fails is *not* retried. The relay keeps validating with the previous committee,
+/// which is safe -- those validators are still elected members of the register -- and the next
+/// era draws again. What must not happen is that the failure is invisible, so the pallet emits
+/// `CommitteeExportFailed`; a run of them means the era clock here and the validator set there
+/// have come apart, and that is an operational alarm, not a state to reconcile in code.
+pub struct CommitteeToRelay;
+impl pezpallet_tnpos::SendCommitteeToRelay<AccountId> for CommitteeToRelay {
+	fn send(era: u32, committee: alloc::vec::Vec<AccountId>) -> Result<(), ()> {
+		// `prune_up_to: None`: pruning the relay's session history is the relay's own
+		// bookkeeping, and this chain does not track its session indices. Saying nothing is
+		// the honest answer; saying a number we did not measure would discard history.
+		let to_asset_hub = committee_call_for_asset_hub(era, &committee);
+		let report = pezpallet_staking_async_rc_client::ValidatorSetReport::new_terminal(
+			committee, era, None,
+		);
+		let to_relay =
+			send_to_relay(RelayRuntimePallets::AhClient(AhClientCalls::ValidatorSet(report)));
+		// The Asset Hub keeps the last snapshot if this one is lost and goes on paying by it,
+		// so a failed send there is logged, not fatal: the relay still gets its set.
+		if send_to_asset_hub(to_asset_hub).is_err() {
+			log::warn!(
+				target: "runtime::tnpos",
+				"the committee for era {era} did not reach the Asset Hub; it pays by the last one",
+			);
+		}
+		to_relay
+	}
+}
+
+parameter_types! {
+	/// `Komite`'s index in the Asset Hub runtime (`pezpallet_komite = 71`). Held at the other
+	/// end by `the_committee_call_decodes_the_way_people_builds_it` in the Asset Hub's tests.
+	pub const KomitePalletIndex: u8 = 71;
+}
+/// `set_committee`'s call index in `pezpallet-komite`.
+const KOMITE_SET_COMMITTEE: u8 = 0;
+
+/// The committee and each member's trust, encoded as `Komite::set_committee` on the Asset Hub.
+pub(crate) fn committee_call_for_asset_hub(
+	era: u32,
+	committee: &[AccountId],
+) -> alloc::vec::Vec<u8> {
+	use codec::Encode;
+	let members: alloc::vec::Vec<(AccountId, u128)> = committee
+		.iter()
+		.map(|m| (m.clone(), pezpallet_trust::TrustScores::<Runtime>::get(m)))
+		.collect();
+	(KomitePalletIndex::get(), KOMITE_SET_COMMITTEE, era, members).encode()
+}
+
+/// An unpaid `Transact` at the Asset Hub, spoken as this chain itself.
+fn send_to_asset_hub(call: alloc::vec::Vec<u8>) -> Result<(), ()> {
+	use xcm::latest::prelude::*;
+	let message = Xcm(alloc::vec![
+		UnpaidExecution { weight_limit: Unlimited, check_origin: None },
+		// `Xcm`, so the Asset Hub sees this chain's location and `EnsureXcm<Equals<PeopleLocation>>`
+		// lets it through.
+		Transact { origin_kind: OriginKind::Xcm, fallback_max_weight: None, call: call.into() },
+	]);
+	let (ticket, _) = <crate::xcm_config::XcmRouter as SendXcm>::validate(
+		&mut Some(AssetHubLocation::get()),
+		&mut Some(message),
+	)
+	.map_err(|_| ())?;
+	<crate::xcm_config::XcmRouter as SendXcm>::deliver(ticket)
+		.map(|_| ())
+		.map_err(|_| ())
+}
+
+/// Opens the People -> Asset Hub channel so the pot spends can be benchmarked.
+///
+/// Both pots live on the Asset Hub and both payment calls address them over XCM. A benchmark
+/// runs against a bare genesis with no HRMP channel, so the router refuses the send and the
+/// call reports `CouldNotReachTreasury` -- correctly, which is why the fix belongs here rather
+/// than in the pallet.
+#[cfg(feature = "runtime-benchmarks")]
+pub struct WelatiBenchmarkHelper;
+
+#[cfg(feature = "runtime-benchmarks")]
+impl pezpallet_welati::BenchmarkHelper<AccountId> for WelatiBenchmarkHelper {
+	/// Create the register's NFT collection if genesis did not, then mint `who` a citizen NFT.
+	///
+	/// The collection exists only when genesis names a founding citizen, and a benchmark
+	/// genesis does not -- so `approve_appointment` failed with `CitizenNftNotFound` and its
+	/// recorded weight could not be regenerated.
+	fn make_citizen(who: &AccountId) {
+		use pezsp_runtime::traits::Zero;
+		let collection = <Runtime as pezpallet_tiki::Config>::TikiCollectionId::get();
+		if !pezpallet_nfts::Collection::<Runtime>::contains_key(collection) {
+			pezpallet_nfts::Pezpallet::<Runtime>::do_create_collection(
+				collection,
+				who.clone(),
+				who.clone(),
+				pezpallet_nfts::CollectionConfig {
+					settings: pezpallet_nfts::CollectionSettings(
+						pezpallet_nfts::CollectionSetting::DepositRequired.into(),
+					),
+					max_supply: None,
+					mint_settings: Default::default(),
+				},
+				Zero::zero(),
+				pezpallet_nfts::Event::ForceCreated { collection, owner: who.clone() },
+			)
+			.expect("the collection does not exist yet");
+		}
+		if pezpallet_tiki::CitizenNft::<Runtime>::get(who).is_none() {
+			pezpallet_tiki::Pezpallet::<Runtime>::mint_citizen_nft_for_user(who)
+				.expect("the collection exists and this account has none");
+		}
+	}
+
+	fn ensure_treasury_reachable() {
+		crate::TeyrchainSystem::open_outbound_hrmp_channel_for_benchmarks_or_tests(
+			testnet_teyrchains_constants::zagros::locations::AssetHubParaId::get(),
+		);
+	}
+}
+
+#[cfg(test)]
+mod tests {
+	use super::*;
+
+	/// Seating runs in `on_initialize` and charges its worst case -- the full pool -- whether
+	/// or not the pool is full, as mandatory weight nothing can refuse. Above the block it
+	/// would make the era's first block unbuildable. Measured on 2026-10-09 it is about a
+	/// twelfth of the ref time and a third of the proof size; this fails if the pool bound
+	/// or the measured weight grows past the block.
+	#[test]
+	fn the_worst_seating_fits_in_one_block() {
+		use pezpallet_tnpos::WeightInfo as _;
+		let max = <Runtime as pezframe_system::Config>::BlockWeights::get().max_block;
+		let seating = crate::weights::pezpallet_tnpos::WeightInfo::<Runtime>::seat_committee(
+			TnposMaxPoolSize::get(),
+		);
+		assert!(seating.all_lte(max), "seating {seating:?} exceeds the block {max:?}");
+		let report = crate::weights::pezpallet_tnpos::WeightInfo::<Runtime>::note_bonded(
+			pezkuwi_tnpos_primitives::invariant::MAX_BONDED_REPORT,
+		);
+		assert!(report.all_lte(max), "a full bond report {report:?} exceeds the block {max:?}");
+	}
+
+	/// The Asset Hub builds `note_bonded` by hand as (83, 11, era, accounts) -- it cannot name
+	/// this runtime's types. This pins the receiving end: if the pallet moves or the call
+	/// renumbers, this fails here instead of the report landing on whatever now sits there.
+	#[test]
+	fn the_bond_report_decodes_the_way_the_asset_hub_builds_it() {
+		use codec::{Decode, Encode};
+		let who = AccountId::from([5u8; 32]);
+		let bytes = (83u8, 11u8, 4u32, vec![who.clone()]).encode();
+		match crate::RuntimeCall::decode(&mut &bytes[..]).expect("decodes") {
+			crate::RuntimeCall::Tnpos(pezpallet_tnpos::Call::note_bonded { era, bonded }) => {
+				assert_eq!(era, 4);
+				assert_eq!(bonded.into_inner(), vec![who]);
+			},
+			other => panic!("83/11 decodes as {other:?}"),
+		}
+	}
+
+	/// The Asset Hub pays the committee by trust x work, and trust lives here, so each seating
+	/// carries each member's trust there. These are the bytes the Asset Hub's
+	/// `the_committee_call_decodes_the_way_people_builds_it` decodes as `Komite::set_committee`.
+	#[test]
+	fn the_committee_reaches_the_asset_hub_with_each_members_trust() {
+		use codec::Encode;
+		let a = AccountId::from([1u8; 32]);
+		let b = AccountId::from([2u8; 32]);
+		pezsp_io::TestExternalities::default().execute_with(|| {
+			pezpallet_trust::TrustScores::<Runtime>::insert(&a, 70u128);
+			pezpallet_trust::TrustScores::<Runtime>::insert(&b, 140u128);
+			let call = committee_call_for_asset_hub(3, &[a.clone(), b.clone()]);
+			assert_eq!(call, (71u8, 0u8, 3u32, vec![(a, 70u128), (b, 140u128)]).encode());
+		});
+	}
+
+	/// The relay addresses this chain's `pezpallet_tnpos` as pallet 83, call 10.
+	///
+	/// It cannot name the call by type -- the relay does not depend on this runtime and must
+	/// not -- so it builds the bytes by hand, and nothing in either tree compares the two. If
+	/// this pallet is renumbered, or `note_session_performance` stops being call ten, the
+	/// relay's report lands on whatever now sits at that address. The failure is the quiet
+	/// kind: the send succeeds, and the register simply stops learning who validated, so the
+	/// ninth stratum goes empty for a reason nobody is looking at.
+	/// The register's fallback referrer is this chain's own founder.
+	///
+	/// `DefaultReferrer` is not a name for a person, it is three mechanisms: the referrer an
+	/// application falls back to when none is named, the one account exempt from the waiting
+	/// period and the earned vouching capacity, and the one that can rescue an application whose
+	/// referrer never answered. All three read the same `Get`, so an address that is not a
+	/// citizen here disables all three at once -- and does it silently, because each failure
+	/// surfaces as an ordinary refusal on somebody else's extrinsic.
+	///
+	/// Both twins carried the mainnet founder's January address here until 2026-09-16. On Zagros
+	/// that was never right; on the mainnet it stopped being right the day the genesis accounts
+	/// were regenerated. Neither `check-chain-key-overlap.py` nor the genesis tests could see it:
+	/// they read the presets, and this is a `parameter_types!` in the runtime config.
+	///
+	/// So the test compares the two rather than pinning a literal. An address written twice can
+	/// drift; an address checked against the genesis that endows it cannot.
+	/// The treasury's population gate and the electorate floor are the same number.
+	///
+	/// They are equal on the mainnet by design: the roll that can carry a question is the roll
+	/// that opens the treasury. That relationship is the thing worth holding, not either figure
+	/// alone -- and it is exactly what broke here. `MinElectorate` was scaled down for the
+	/// testnet on 2026-09-08 and the gate it feeds was left at the mainnet's number, so
+	/// referenda could carry while the gate stayed shut. Nothing failed; the activation path
+	/// simply became unreachable, which is the kind of defect that surfaces only when somebody
+	/// asks the chain to demonstrate it.
+	///
+	/// Comparing the two rather than pinning either means the testnet can be rescaled again
+	/// without editing this test, and cannot be rescaled by halves.
+	#[test]
+	fn the_population_gate_matches_the_electorate_floor() {
+		assert_eq!(
+			WelatiPopulationThreshold::get(),
+			MinElectorate::get(),
+			"the roll that can carry a referendum must be the roll that opens the treasury"
+		);
+		// The override reads through the parameters pallet, so it needs storage to read from.
+		// Empty storage is the point: what is being checked is the *default*, which is what a
+		// chain carries until a referendum says otherwise.
+		pezsp_io::TestExternalities::default().execute_with(|| {
+			assert_eq!(
+				<crate::dynamic_params::qeyd::PopulationThresholdOverride as pezframe_support::traits::Get<u32>>::get(),
+				WelatiPopulationThreshold::get(),
+				"the override defaults to the gate it can only lower -- a larger default \
+				 silently reinstates a gate this chain was scaled away from"
+			);
+		});
+	}
+
+	/// A candidacy cannot need more endorsers than the chain has citizens.
+	///
+	/// The pallet scales the endorsement ceilings down in proportion below `MatureRoll`, and
+	/// `MatureRoll` is `MinElectorate`. So the two move together or the relief stops working:
+	/// scaling the roll down a thousandfold and leaving the ceilings alone made a mature roll
+	/// take the *full* mainnet requirement, and a presidential candidacy asked a hundred
+	/// citizens for a thousand endorsements. Nothing failed to compile and no test went red --
+	/// the chain simply could not hold an election, which is the sort of thing only a
+	/// rehearsal asks it to prove.
+	///
+	/// Stated against `MinElectorate` rather than against literals, so this chain can be
+	/// rescaled again and cannot be rescaled by halves. The floor is checked too: it is a
+	/// flat `max(ceiling / 20, 10)` inside the pallet and does not scale with anything, so a
+	/// small enough roll would run into it on its own.
+	/// The periods a rehearsal has to step over are compressed, and the ones it must not be
+	/// allowed to step over are left alone.
+	///
+	/// Three of these were found one at a time, each by a rehearsal stage that could not run:
+	/// the delay before a collective vote opens, the life of a nomination, and the interval at
+	/// which the population gate is checked -- the last of which is the keystone of the whole
+	/// cross-chain sequence, because nothing reaches the Asset Hub until that report fires.
+	/// Finding them one at a time is the failure this test exists to stop.
+	///
+	/// The second list matters as much. A term of office compressed to a handful of blocks
+	/// would expire *during* a rehearsal, and every office would fall vacant halfway through a
+	/// test that was measuring something else entirely -- so these are asserted to stay long.
+	/// "Compress everything" and "compress nothing" are both wrong; the line is whether a test
+	/// has to wait for it or live inside it.
+	#[test]
+	fn the_periods_a_rehearsal_steps_over_are_compressed() {
+		let day = super::DAYS;
+		let compressed = |p: BlockNumber| p < day;
+
+		for (name, period) in [
+			("ProposalVotingDelay", WelatiProposalVotingDelay::get()),
+			("NominationPeriod", WelatiNominationPeriod::get()),
+			("PopulationCheckPeriod", WelatiPopulationCheckPeriod::get()),
+			("PezRewardsEpochLength", PezRewardsEpochLength::get()),
+			("PezRewardsClaimPeriod", PezRewardsClaimPeriod::get()),
+			("MinCourseDuration", MinCourseDuration::get()),
+			("MaxCourseDuration", MaxCourseDuration::get()),
+			("TrustUpdateInterval", TrustUpdateInterval::get()),
+		] {
+			if cfg!(feature = "fast-runtime") {
+				assert!(
+					compressed(period),
+					"{name} is {period} blocks under `fast-runtime` -- a rehearsal has to wait \
+					 for it, so it must compress. Wrap it in `rehearsal_period!`"
+				);
+			} else {
+				assert!(
+					!compressed(period),
+					"{name} is {period} blocks in production, under a day -- the compression \
+					 leaked out of the rehearsal build"
+				);
+			}
+		}
+
+		// Mandates, not waits. A rehearsal lives inside these rather than waiting for them.
+		for (name, period) in [
+			("TermLength", WelatiTermLength::get()),
+			("CourtTermLength", WelatiCourtTermLength::get()),
+		] {
+			assert!(
+				period >= 365 * day,
+				"{name} is {period} blocks -- a term this short expires during a test and \
+				 empties every office it covers"
+			);
+		}
+
+		// Under a day even in production, so it cannot join the list above, whose production
+		// arm reads "under a day" as a leak. Pinned in both builds instead.
+		let era = MessagingEraLength::get();
+		if cfg!(feature = "fast-runtime") {
+			assert_eq!(era, 20, "MessagingEraLength under `fast-runtime` is {era} blocks, not 20");
+		} else {
+			assert_eq!(era, 6 * super::HOURS, "MessagingEraLength is {era} blocks, not six hours");
+		}
+	}
+
+	/// The day this file counts in is the day this chain actually has.
+	///
+	/// Two crates declare a `MILLISECS_PER_BLOCK` and they disagree. `teyrchains_common` says
+	/// 12000 -- it is upstream's default for a parachain without async backing, and these
+	/// runtimes depend on the crate for other things. `testnet_teyrchains_constants` says 6000,
+	/// and that is the one `SLOT_DURATION` comes from, which is what Aura is configured with,
+	/// which is what the running chain answers `AuraApi_slot_duration` with.
+	///
+	/// Importing `DAYS` from the first while running on the second halves every period derived
+	/// from it, and nothing complains: a four-year term becomes two, a nine-year court term
+	/// four and a half, and every governance track decides in half the time its name promises.
+	/// That is what was happening here until 2026-09-18, across eighty-one periods in three
+	/// files per twin.
+	///
+	/// So this checks the arithmetic against the slot duration rather than against another
+	/// constant -- comparing two constants is exactly how the wrong one gets confirmed.
+	#[test]
+	fn the_day_this_file_counts_in_matches_the_chain_it_runs_on() {
+		use testnet_teyrchains_constants::zagros::consensus::MILLISECS_PER_BLOCK;
+		let blocks_per_day = 24 * 60 * 60 * 1000 / MILLISECS_PER_BLOCK;
+		assert_eq!(
+			super::DAYS as u64,
+			blocks_per_day,
+			"DAYS is {} blocks but a day at {MILLISECS_PER_BLOCK}ms a block is {blocks_per_day} \
+			 -- this file is importing its day from a crate that does not govern this chain",
+			super::DAYS
+		);
+		assert_eq!(super::HOURS as u64, blocks_per_day / 24, "HOURS does not divide DAYS by 24");
+	}
+
+	/// The three terms Serok named, in years and days rather than in blocks.
+	///
+	/// A mandate of four years, a court of nine, and a hundred and twenty days from the call of
+	/// an election to its close. They were two, four and a half, and sixty until 2026-09-18,
+	/// because this file counted in a day borrowed from a crate with a different block time --
+	/// and a term of office cannot report that it is short. These are not derived numbers that
+	/// happen to be right today; they are the decision, so they are checked as the decision.
+	///
+	/// Measured in seconds against the slot duration Aura is configured with, not against
+	/// `DAYS`. Checking a period against the constant it was built from proves only that
+	/// multiplication works.
+	#[test]
+	fn the_terms_of_office_are_the_ones_the_state_decided_on() {
+		use testnet_teyrchains_constants::zagros::consensus::MILLISECS_PER_BLOCK;
+		let secs = |blocks: BlockNumber| blocks as u64 * MILLISECS_PER_BLOCK / 1000;
+		const YEAR: u64 = 365 * 24 * 60 * 60;
+		const DAY: u64 = 24 * 60 * 60;
+
+		assert_eq!(
+			secs(WelatiTermLength::get()) / YEAR,
+			4,
+			"an elected mandate is {} years; the state decided on four",
+			secs(WelatiTermLength::get()) / YEAR
+		);
+		assert_eq!(
+			secs(WelatiCourtTermLength::get()) / YEAR,
+			9,
+			"a court term is {} years; the state decided on nine",
+			secs(WelatiCourtTermLength::get()) / YEAR
+		);
+		assert_eq!(
+			secs(WelatiElectionPeriod::get()) / DAY,
+			120,
+			"an election runs {} days; the state decided on a hundred and twenty",
+			secs(WelatiElectionPeriod::get()) / DAY
+		);
+	}
+
+	#[test]
+	fn no_candidacy_can_need_more_endorsers_than_the_roll_holds() {
+		let mature = MinElectorate::get();
+		for (office, ceiling) in [
+			("President", WelatiPresidentialEndorsements::get()),
+			("a seat", WelatiParliamentaryEndorsements::get()),
+		] {
+			assert!(
+				ceiling <= mature,
+				"standing for {office} needs {ceiling} endorsements but a mature roll is only \
+				 {mature} citizens -- the ceilings were left at another chain's scale"
+			);
+			// Mirrors `get_required_endorsements`: below the mature roll the requirement
+			// falls away in proportion, but never past this floor.
+			let floor = core::cmp::max(ceiling / 20, 10);
+			assert!(
+				floor <= mature,
+				"the endorsement floor for {office} is {floor}, more than the whole roll of \
+				 {mature} -- scaling the ceiling alone does not move the floor"
+			);
+			// And it still has to cost something, or the endorsement is decoration.
+			assert!(ceiling > 0, "a candidacy for {office} that needs nothing is not a candidacy");
+		}
+	}
+
+	#[test]
+	fn the_fallback_referrer_is_the_founder_the_genesis_endows() {
+		let preset = crate::genesis_config_presets::get_preset(
+			&pezsp_genesis_builder::PresetId::from("genesis"),
+		)
+		.expect("the genesis preset exists");
+		let json: serde_json::Value = serde_json::from_slice(&preset).expect("valid json");
+
+		let founding: Vec<&str> = json["identityKyc"]["foundingCitizens"]
+			.as_array()
+			.expect("the genesis names its founding citizens")
+			.iter()
+			.map(|e| e[0].as_str().expect("an account"))
+			.collect();
+
+		use pezsp_core::crypto::Ss58Codec;
+		let fallback = DefaultReferrer::get().to_ss58check();
+		assert!(
+			founding.contains(&fallback.as_str()),
+			"DefaultReferrer {fallback} is not among the founding citizens {founding:?} -- the \
+			 fallback referrer must be a citizen of this chain, or the register cannot be \
+			 bootstrapped through the path built for it"
+		);
+	}
+
+	#[test]
+	fn the_performance_call_encodes_the_way_the_relay_builds_it() {
+		use codec::Encode;
+
+		let scored: Vec<AccountId> = vec![[1u8; 32].into(), [2u8; 32].into()];
+		let failed: Vec<AccountId> = vec![[3u8; 32].into()];
+
+		let real = crate::RuntimeCall::Tnpos(
+			pezpallet_tnpos::Call::<crate::Runtime>::note_session_performance {
+				scored: scored.clone(),
+				failed: failed.clone(),
+			},
+		)
+		.encode();
+
+		// The literals are what `tell_the_register` builds on the relay.
+		assert_eq!(
+			real,
+			(83u8, 10u8, scored, failed).encode(),
+			"the performance call's address moved"
+		);
+	}
+
+	/// The declared weight of a trust source is only true if the source is normalised by the
+	/// score that can actually be reached.
+	///
+	/// `ReferralScoreSource` declares 25 out of 1000. It used to normalise by
+	/// `MAX_REFERRAL_SCORE`, the tier table's own top, which needs a hundred vouches -- while
+	/// the register's lifetime ceiling is fifty. So the most anyone could contribute was 300
+	/// of 500, the weight was really 15, and the highest trust anyone could hold was 900 rather
+	/// than the 1000 the whitepaper and the tables both state.
+	///
+	/// Pulling the ceiling from the live parameter fixes the arithmetic and keeps it fixed: a
+	/// ninety-day referendum moving `MaxVouchingCapacity` moves this with it.
+	#[test]
+	fn the_referral_weight_is_normalised_by_the_reachable_score() {
+		pezsp_io::TestExternalities::default().execute_with(|| {
+			let ceiling = <crate::dynamic_params::qeyd::MaxVouchingCapacity as
+				pezframe_support::traits::Get<u32>>::get();
+			let reachable = pezpallet_referral::score_for(ceiling);
+
+			assert_eq!(
+				<ReferralScoreSource as pezpallet_trust::ReferralScoreProvider<AccountId>>::max_score(),
+				reachable,
+				"the source must be normalised by what the current ceiling can reach"
+			);
+			assert!(
+				reachable < pezpallet_referral::MAX_REFERRAL_SCORE,
+				"if these are equal the ceiling reaches the table's top and this test proves \
+				 nothing -- re-derive the expectation instead of deleting it"
+			);
+		});
 	}
 }

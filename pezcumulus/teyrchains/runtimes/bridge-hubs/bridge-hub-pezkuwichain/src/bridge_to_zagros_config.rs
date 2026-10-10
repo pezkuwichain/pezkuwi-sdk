@@ -40,7 +40,7 @@ use pezpallet_bridge_messages::LaneIdOf;
 use pezpallet_bridge_relayers::extension::{
 	BridgeRelayersTransactionExtension, WithMessagesExtensionConfig,
 };
-use testnet_teyrchains_constants::pezkuwichain::currency::UNITS as TYR;
+use testnet_teyrchains_constants::pezkuwichain::currency::UNITS as HEZ;
 use teyrchains_common::xcm_config::{AllSiblingSystemTeyrchains, RelayOrOtherSystemTeyrchains};
 use xcm::{
 	latest::{prelude::*, ZAGROS_GENESIS_HASH},
@@ -70,7 +70,7 @@ parameter_types! {
 		]
 	);
 
-	pub storage BridgeDeposit: Balance = 5 * TYR;
+	pub storage BridgeDeposit: Balance = 5 * HEZ;
 }
 
 /// Proof of messages, coming from Zagros.
@@ -270,12 +270,12 @@ mod tests {
 	///
 	/// We want this tip to be large enough (delivery transactions with more messages = less
 	/// operational costs and a faster bridge), so this value should be significant.
-	const FEE_BOOST_PER_MESSAGE: Balance = 2 * TYR;
+	const FEE_BOOST_PER_MESSAGE: Balance = 2 * HEZ;
 
 	// see `FEE_BOOST_PER_MESSAGE` comment
-	const FEE_BOOST_PER_RELAY_HEADER: Balance = 2 * TYR;
+	const FEE_BOOST_PER_RELAY_HEADER: Balance = 2 * HEZ;
 	// see `FEE_BOOST_PER_MESSAGE` comment
-	const FEE_BOOST_PER_TEYRCHAIN_HEADER: Balance = 2 * TYR;
+	const FEE_BOOST_PER_TEYRCHAIN_HEADER: Balance = 2 * HEZ;
 
 	#[test]
 	fn ensure_bridge_hub_pezkuwichain_message_lane_weights_are_correct() {
@@ -337,100 +337,5 @@ mod tests {
 		.into();
 
 		assert_eq!(BridgePezkuwichainToZagrosMessagesPalletInstance::get(), expected,);
-	}
-}
-
-/// Contains the migration for the AssetHubPezkuwichain<>AssetHubZagros bridge.
-pub mod migration {
-	use super::*;
-	use pezframe_support::traits::ConstBool;
-
-	parameter_types! {
-		pub AssetHubPezkuwichainToAssetHubZagrosMessagesLane: LegacyLaneId = LegacyLaneId([0, 0, 0, 2]);
-		pub AssetHubPezkuwichainLocation: Location = Location::new(1, [Teyrchain(pezbp_asset_hub_pezkuwichain::ASSET_HUB_PEZKUWICHAIN_TEYRCHAIN_ID)]);
-		pub AssetHubZagrosUniversalLocation: InteriorLocation = [GlobalConsensus(ZagrosGlobalConsensusNetwork::get()), Teyrchain(pezbp_asset_hub_zagros::ASSET_HUB_ZAGROS_TEYRCHAIN_ID)].into();
-	}
-
-	/// Ensure that the existing lanes for the AHR<>AHW bridge are correctly configured.
-	pub type StaticToDynamicLanes = pezpallet_xcm_bridge_hub::migration::OpenBridgeForLane<
-		Runtime,
-		XcmOverBridgeHubZagrosInstance,
-		AssetHubPezkuwichainToAssetHubZagrosMessagesLane,
-		// the lanes are already created for AHR<>AHW, but we need to link them to the bridge
-		// structs
-		ConstBool<false>,
-		AssetHubPezkuwichainLocation,
-		AssetHubZagrosUniversalLocation,
-	>;
-
-	mod v1_wrong {
-		use codec::{Decode, Encode};
-		use pezbp_messages::{LaneState, MessageNonce, UnrewardedRelayer};
-		use pezbp_runtime::AccountIdOf;
-		use pezpallet_bridge_messages::BridgedChainOf;
-		use pezsp_std::collections::vec_deque::VecDeque;
-
-		#[derive(Encode, Decode, Clone, PartialEq, Eq)]
-		pub(crate) struct StoredInboundLaneData<T: pezpallet_bridge_messages::Config<I>, I: 'static>(
-			pub(crate) InboundLaneData<AccountIdOf<BridgedChainOf<T, I>>>,
-		);
-		#[derive(Encode, Decode, Clone, PartialEq, Eq)]
-		pub(crate) struct InboundLaneData<RelayerId> {
-			pub state: LaneState,
-			pub(crate) relayers: VecDeque<UnrewardedRelayer<RelayerId>>,
-			pub(crate) last_confirmed_nonce: MessageNonce,
-		}
-		#[derive(Encode, Decode, Clone, PartialEq, Eq)]
-		pub(crate) struct OutboundLaneData {
-			pub state: LaneState,
-			pub(crate) oldest_unpruned_nonce: MessageNonce,
-			pub(crate) latest_received_nonce: MessageNonce,
-			pub(crate) latest_generated_nonce: MessageNonce,
-		}
-	}
-
-	mod v1 {
-		pub use pezbp_messages::{InboundLaneData, LaneState, OutboundLaneData};
-		pub use pezpallet_bridge_messages::{InboundLanes, OutboundLanes, StoredInboundLaneData};
-	}
-
-	/// Fix for v1 migration - corrects data for OutboundLaneData/InboundLaneData (it is needed only
-	/// for Pezkuwichain/Zagros).
-	pub struct FixMessagesV1Migration<T, I>(pezsp_std::marker::PhantomData<(T, I)>);
-
-	impl<T: pezpallet_bridge_messages::Config<I>, I: 'static>
-		pezframe_support::traits::OnRuntimeUpgrade for FixMessagesV1Migration<T, I>
-	{
-		fn on_runtime_upgrade() -> Weight {
-			use pezsp_core::Get;
-			let mut weight = T::DbWeight::get().reads(1);
-
-			// `InboundLanes` - add state to the old structs
-			let translate_inbound =
-				|pre: v1_wrong::StoredInboundLaneData<T, I>| -> Option<v1::StoredInboundLaneData<T, I>> {
-					weight.saturating_accrue(T::DbWeight::get().reads_writes(1, 1));
-					Some(v1::StoredInboundLaneData(v1::InboundLaneData {
-						state: v1::LaneState::Opened,
-						relayers: pre.0.relayers,
-						last_confirmed_nonce: pre.0.last_confirmed_nonce,
-					}))
-				};
-			v1::InboundLanes::<T, I>::translate_values(translate_inbound);
-
-			// `OutboundLanes` - add state to the old structs
-			let translate_outbound =
-				|pre: v1_wrong::OutboundLaneData| -> Option<v1::OutboundLaneData> {
-					weight.saturating_accrue(T::DbWeight::get().reads_writes(1, 1));
-					Some(v1::OutboundLaneData {
-						state: v1::LaneState::Opened,
-						oldest_unpruned_nonce: pre.oldest_unpruned_nonce,
-						latest_received_nonce: pre.latest_received_nonce,
-						latest_generated_nonce: pre.latest_generated_nonce,
-					})
-				};
-			v1::OutboundLanes::<T, I>::translate_values(translate_outbound);
-
-			weight
-		}
 	}
 }

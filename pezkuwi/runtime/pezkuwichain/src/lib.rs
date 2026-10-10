@@ -40,7 +40,7 @@ use alloc::{
 };
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
 use core::cmp::Ordering;
-use pezframe_support::dynamic_params::{dynamic_pallet_params, dynamic_params};
+use pezframe_support::dynamic_params::{dynamic_params, dynamic_pezpallet_params};
 use pezkuwi_primitives::{
 	async_backing::Constraints, slashing, AccountId, AccountIndex, ApprovalVotingParams, Balance,
 	BlockNumber, CandidateEvent, CandidateHash,
@@ -51,16 +51,12 @@ use pezkuwi_primitives::{
 	ValidationCodeHash, ValidatorId, ValidatorIndex, TEYRCHAIN_KEY_TYPE_ID,
 };
 use pezkuwi_runtime_common::{
-	assigned_slots, auctions, claims, crowdloan, impl_runtime_weights,
-	impls::{
-		LocatableAssetConverter, ToAuthor, VersionedLocatableAsset, VersionedLocationConverter,
-	},
-	paras_registrar, paras_sudo_wrapper, prod_or_fast, slots,
-	traits::{Leaser, OnSwap},
-	BlockHashCount, BlockLength, SlowAdjustingFeeUpdate,
+	assigned_slots, auctions, claims, crowdloan, impl_runtime_weights, impls::ToAuthor,
+	paras_registrar, paras_sudo_wrapper, prod_or_fast, slots, traits::OnSwap, BlockHashCount,
+	BlockLength, SlowAdjustingFeeUpdate,
 };
 use pezkuwi_runtime_teyrchains::{
-	assigner_coretime as teyrchains_assigner_coretime, configuration as teyrchains_configuration,
+	configuration as teyrchains_configuration,
 	configuration::ActiveConfigHrmpChannelSizeAndCapacityRatio,
 	coretime, disputes as teyrchains_disputes,
 	disputes::slashing as teyrchains_slashing,
@@ -76,9 +72,8 @@ use pezkuwi_runtime_teyrchains::{
 	shared as teyrchains_shared,
 };
 use pezkuwichain_runtime_constants::system_teyrchain::{
-	coretime::TIMESLICE_PERIOD, ASSET_HUB_ID, BROKER_ID,
+	coretime::TIMESLICE_PERIOD, ASSET_HUB_ID, BROKER_ID, PEOPLE_ID,
 };
-use pezpallet_balances::WeightInfo;
 use pezsp_authority_discovery::AuthorityId as AuthorityDiscoveryId;
 use pezsp_consensus_beefy::{
 	ecdsa_crypto::{AuthorityId as BeefyId, Signature as BeefySignature},
@@ -92,9 +87,9 @@ use pezframe_support::{
 	genesis_builder_helper::{build_state, get_preset},
 	parameter_types,
 	traits::{
-		fungible::HoldConsideration, EitherOf, EitherOfDiverse, EnsureOriginWithArg,
-		InstanceFilter, KeyOwnerProofSystem, LinearStoragePrice, PrivilegeCmp, ProcessMessage,
-		ProcessMessageError, WithdrawReasons,
+		fungible::HoldConsideration, EitherOf, EnsureOriginWithArg, InstanceFilter,
+		KeyOwnerProofSystem, LinearStoragePrice, PrivilegeCmp, ProcessMessage, ProcessMessageError,
+		WithdrawReasons,
 	},
 	weights::{ConstantMultiplier, WeightMeter},
 	PalletId,
@@ -109,11 +104,11 @@ use pezsp_core::{ConstUint, Get, OpaqueMetadata, H256};
 use pezsp_runtime::{
 	generic, impl_opaque_keys,
 	traits::{
-		AccountIdConversion, BlakeTwo256, Block as BlockT, ConstU32, ConvertInto, IdentityLookup,
-		Keccak256, OpaqueKeys, SaturatedConversion, Verify,
+		AccountIdConversion, BlakeTwo256, Block as BlockT, ConstU32, ConvertInto, Keccak256,
+		OpaqueKeys, SaturatedConversion, Verify,
 	},
 	transaction_validity::{TransactionPriority, TransactionSource, TransactionValidity},
-	ApplyExtrinsicResult, FixedU128, KeyTypeId, Perbill, Percent, Permill, RuntimeDebug,
+	ApplyExtrinsicResult, FixedU128, KeyTypeId, Perbill, Percent,
 };
 use pezsp_staking::SessionIndex;
 #[cfg(any(feature = "std", test))]
@@ -123,7 +118,6 @@ use xcm::{
 	latest::prelude::*, Version as XcmVersion, VersionedAsset, VersionedAssetId, VersionedAssets,
 	VersionedLocation, VersionedXcm,
 };
-use xcm_builder::PayOverXcm;
 
 pub use pezframe_system::Call as SystemCall;
 pub use pezpallet_balances::Call as BalancesCall;
@@ -139,9 +133,7 @@ pub mod xcm_config;
 
 // Governance and configurations.
 pub mod governance;
-use governance::{
-	pezpallet_custom_origins, AuctionAdmin, Fellows, LeaseAdmin, Treasurer, TreasurySpender,
-};
+use governance::{pezpallet_custom_origins, AuctionAdmin, LeaseAdmin};
 use xcm_config::XcmConfig;
 use xcm_runtime_pezapis::{
 	dry_run::{CallDryRunEffects, Error as XcmDryRunApiError, XcmDryRunEffects},
@@ -172,9 +164,9 @@ pub mod fast_runtime_binary {
 #[pezsp_version::runtime_version]
 pub const VERSION: RuntimeVersion = RuntimeVersion {
 	spec_name: alloc::borrow::Cow::Borrowed("pezkuwichain"),
-	impl_name: alloc::borrow::Cow::Borrowed("parity-pezkuwichain"),
+	impl_name: alloc::borrow::Cow::Borrowed("pezkuwichain"),
 	authoring_version: 0,
-	spec_version: 1_020_007,
+	spec_version: 1_020_010,
 	impl_version: 0,
 	apis: RUNTIME_API_VERSIONS,
 	transaction_version: 26,
@@ -250,7 +242,7 @@ impl PrivilegeCmp<OriginCaller> for OriginPrivilegeCmp {
 pub mod dynamic_params {
 	use super::*;
 
-	#[dynamic_pallet_params]
+	#[dynamic_pezpallet_params]
 	#[codec(index = 0)]
 	pub mod preimage {
 		use super::*;
@@ -373,7 +365,14 @@ parameter_types! {
 
 impl pezpallet_balances::Config for Runtime {
 	type Balance = Balance;
-	type DustRemoval = ();
+	/// Dust -- what is left in an account too small to keep -- goes where this chain's fee
+	/// income goes, rather than being dropped.
+	///
+	/// `()` destroys it. Small per account and not small across a population, and on a chain
+	/// that collects fees for its treasury there is no reason for the remainder to be the one
+	/// thing that vanishes. Upstream stopped dropping it too, with a pallet of its own; this
+	/// gets the same result without taking on a new pallet.
+	type DustRemoval = AccumulateAndForward;
 	type RuntimeEvent = RuntimeEvent;
 	type ExistentialDeposit = ExistentialDeposit;
 	type AccountStore = System;
@@ -395,9 +394,55 @@ parameter_types! {
 	pub const OperationalFeeMultiplier: u8 = 5;
 }
 
+parameter_types! {
+	/// Where this chain's income waits before it crosses to the treasury.
+	///
+	/// The treasury lives on the Asset Hub, with the economic franchise that votes on how it is
+	/// spent and the accounts most of its spending reaches. Income arrives here, per
+	/// transaction, so it is gathered and sent once a day rather than teleported one fee at a
+	/// time -- a message per transaction would cost more than it carried.
+	pub const AccumulateForwardPalletId: PalletId = PalletId(*b"py/accfw");
+	/// One forward a day. Rate limit, not a deadline: nothing is lost by waiting.
+	pub const ForwardPeriod: BlockNumber = 1 * DAYS;
+	/// Below this the message costs more than the money in it.
+	pub const MinForwardAmount: Balance = 10 * UNITS;
+	/// The treasury's own account on the Asset Hub, as that chain names it.
+	pub AhTreasuryStaging: InteriorLocation = {
+		let account: AccountId = PalletId(*b"py/trsry").into_account_truncating();
+		Junction::AccountId32 { network: None, id: account.into() }.into()
+	};
+	/// Four fifths of every fee. The remaining fifth stays with the block author.
+	pub const AccumulateFeePercent: Percent = Percent::from_percent(80);
+}
+
+impl pezpallet_accumulate_and_forward::Config for Runtime {
+	type Currency = Balances;
+	type PalletId = AccumulateForwardPalletId;
+	type Forwarder = xcm_builder::TeleportForwarderForAccountId32<
+		xcm_config::XcmConfig,
+		xcm_config::AssetHub,
+		xcm_config::TokenLocation,
+		AhTreasuryStaging,
+	>;
+	type TransferPeriod = ForwardPeriod;
+	type MinTransferAmount = MinForwardAmount;
+	type BlockNumberProvider = pezframe_system::Pezpallet<Runtime>;
+	type WeightInfo = weights::pezpallet_accumulate_and_forward::WeightInfo<Runtime>;
+}
+
+/// Fees: four fifths accumulated for the treasury, one fifth to whoever produced the block.
+/// Penalties collected here, in the imbalance shape the older pallets speak.
+pub type PenaltiesToTreasury = pezpallet_accumulate_and_forward::LegacyAdapter<Runtime, Balances>;
+
+pub type DealWithFeesAccumulate = pezpallet_accumulate_and_forward::DealWithFeesSplit<
+	Runtime,
+	AccumulateFeePercent,
+	ToAuthor<Runtime>,
+>;
+
 impl pezpallet_transaction_payment::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
-	type OnChargeTransaction = FungibleAdapter<Balances, ToAuthor<Runtime>>;
+	type OnChargeTransaction = FungibleAdapter<Balances, DealWithFeesAccumulate>;
 	type OperationalFeeMultiplier = OperationalFeeMultiplier;
 	type WeightToFee = WeightToFee;
 	type LengthToFee = ConstantMultiplier<Balance, TransactionByteFee>;
@@ -448,9 +493,30 @@ impl pezpallet_session::Config for Runtime {
 	type SessionManager = pezpallet_session::historical::NoteHistoricalRoot<Self, StakingAhClient>;
 	type SessionHandler = <SessionKeys as OpaqueKeys>::KeyTypeIdProviders;
 	type Keys = SessionKeys;
-	type DisablingStrategy = ();
+	// The relay carries the whole offence machinery -- BABE and GRANDPA equivocation, dispute
+	// reports -- and this is its last step: `report_offence` asks the strategy whether to disable,
+	// and `()` answers `None` every time. Left as `()`, an equivocating validator kept authoring
+	// here while its slash travelled to the Asset Hub. The byzantine default holds the set to at
+	// most `(n - 1) / 3` disabled, and re-enables a lighter offender to make room for a heavier
+	// one rather than refusing outright.
+	type DisablingStrategy = pezpallet_session::disabling::UpToLimitWithReEnablingDisablingStrategy;
 	type WeightInfo = weights::pezpallet_session::WeightInfo<Runtime>;
 	type Currency = Balances;
+	// Zero here on purpose, and not the same kind of `()` as the two this file used to carry
+	// for offences. The deposit for session keys is charged on the Asset Hub, by
+	// `pezpallet_staking_async_rc_client` at `10 * UNITS`, behind an `is_validator` check --
+	// that is where staking lives and where validators actually register. The Asset Hub then
+	// forwards the validated keys over XCM through `SessionInterface::set_keys`, which
+	// deliberately bypasses this hold; charging again here would charge twice for one
+	// registration.
+	//
+	// The public `set_keys` on this chain stays reachable, and the pezpallet is written for
+	// that: `ExternallySetKeys` exists to track which registrations came over XCM, and
+	// `do_set_keys` handles the external-to-local transition explicitly. It is the only way to
+	// rotate keys if the Asset Hub cannot reach us, which is not hypothetical here. What it
+	// costs an abuser is the existential deposit plus a fee, for seven storage entries instead
+	// of one; it confers no validator status, and it cannot squat another operator's keys,
+	// since the proof is a possession signature per key.
 	type KeyDeposit = ();
 }
 
@@ -544,6 +610,16 @@ impl Get<Location> for AssetHubLocation {
 	}
 }
 
+/// The chains allowed to tell this one who validates it.
+///
+/// Two, and they do different halves. The Asset Hub sends session reports and the staking
+/// bookkeeping that follows from them; the People chain sends the committee itself, because
+/// that is where it is drawn -- the scores every stratum rests on are written there, and a
+/// relay-side draw would have to import five of them across a chain boundary.
+///
+/// Named `EnsureAssetHub` still, because the pallet it feeds is `ah_client` and renaming the
+/// type would not rename that. What matters is the list, and the list is checked by
+/// `only_the_two_named_chains_may_seat_validators`.
 pub struct EnsureAssetHub;
 impl pezframe_support::traits::EnsureOrigin<RuntimeOrigin> for EnsureAssetHub {
 	type Success = ();
@@ -551,7 +627,11 @@ impl pezframe_support::traits::EnsureOrigin<RuntimeOrigin> for EnsureAssetHub {
 		match <RuntimeOrigin as Into<Result<teyrchains_origin::Origin, RuntimeOrigin>>>::into(
 			o.clone(),
 		) {
-			Ok(teyrchains_origin::Origin::Teyrchain(id)) if id == ASSET_HUB_ID.into() => Ok(()),
+			Ok(teyrchains_origin::Origin::Teyrchain(id))
+				if id == ASSET_HUB_ID.into() || id == PEOPLE_ID.into() =>
+			{
+				Ok(())
+			},
 			_ => Err(o),
 		}
 	}
@@ -560,6 +640,46 @@ impl pezframe_support::traits::EnsureOrigin<RuntimeOrigin> for EnsureAssetHub {
 	fn try_successful_origin() -> Result<RuntimeOrigin, ()> {
 		Ok(RuntimeOrigin::root())
 	}
+}
+
+pub struct PeopleLocation;
+impl Get<Location> for PeopleLocation {
+	fn get() -> Location {
+		Location::new(0, [Junction::Teyrchain(PEOPLE_ID)])
+	}
+}
+
+/// What the register is told about a session that has ended.
+///
+/// Not the points, and not the committee: the two lists the register cannot work out for
+/// itself. It knows who it *drew*, but the relay is what actually seated them, and the two
+/// differ for a session or two after every handover -- attributing a failure to the wrong
+/// committee is worse than not attributing it, because the record it feeds is a disqualifier.
+/// So the chain that knows says who authored and who did not.
+#[derive(codec::Encode, codec::Decode)]
+pub struct SessionPerformance {
+	/// Seated and authored something.
+	pub scored: Vec<AccountId>,
+	/// Seated and authored nothing. Its length is the whole of the signal: one name here is
+	/// an operator's own outage, eight names is eight operators sharing something.
+	pub failed: Vec<AccountId>,
+}
+
+/// The register's `pezpallet_tnpos`, addressed the way `welati` addresses the treasury: pallet
+/// index, then call index. Both numbers are load-bearing and neither is checked by the
+/// compiler; `the_performance_call_encodes_the_way_the_relay_builds_it` on the People side is
+/// what holds the two ends together.
+#[derive(codec::Encode, codec::Decode)]
+enum PeopleRuntimePallets {
+	#[codec(index = 83)]
+	Tnpos(TnposCalls),
+}
+
+#[derive(codec::Encode, codec::Decode)]
+enum TnposCalls {
+	// `fn note_session_performance`.
+	#[codec(index = 10)]
+	NoteSessionPerformance { scored: Vec<AccountId>, failed: Vec<AccountId> },
 }
 
 pub struct SessionReportToXcm;
@@ -613,6 +733,12 @@ impl ah_client::SendToAssetHub for StakingXcmToAssetHub {
 	fn relay_session_report(
 		session_report: rc_client::SessionReport<Self::AccountId>,
 	) -> Result<(), ()> {
+		// The register is told the same thing, reduced to what it cannot compute. It is told
+		// first and its failure is swallowed on purpose: the Asset Hub's copy pays the
+		// validators and must not be lost because a second message could not be delivered.
+		// A missed performance report costs one session of evidence in a ninety-day window.
+		Self::tell_the_register(&session_report);
+
 		rc_client::XCMSender::<
 			xcm_config::XcmRouter,
 			AssetHubLocation,
@@ -633,12 +759,52 @@ impl ah_client::SendToAssetHub for StakingXcmToAssetHub {
 	}
 }
 
+impl StakingXcmToAssetHub {
+	/// Send the register who authored and who did not, out of the session that just ended.
+	///
+	/// Computed here rather than there because this chain is the one that knows: the active
+	/// set is `Session::validators()`, and anybody in it who is absent from the points is a
+	/// validator that produced nothing. The register drew the committee but does not know
+	/// when it took effect, and a failure attributed to the wrong set is worse than none.
+	fn tell_the_register(report: &rc_client::SessionReport<AccountId>) {
+		use codec::Encode;
+
+		let seated = pezpallet_session::Pezpallet::<Runtime>::validators();
+		if seated.is_empty() {
+			return;
+		}
+		let (scored, failed): (Vec<AccountId>, Vec<AccountId>) = seated
+			.into_iter()
+			.partition(|who| report.validator_points.iter().any(|(a, p)| a == who && *p > 0));
+
+		let call =
+			PeopleRuntimePallets::Tnpos(TnposCalls::NoteSessionPerformance { scored, failed });
+		let message = Xcm(vec![
+			Instruction::UnpaidExecution {
+				weight_limit: WeightLimit::Unlimited,
+				check_origin: None,
+			},
+			Instruction::Transact {
+				origin_kind: OriginKind::Superuser,
+				fallback_max_weight: None,
+				call: call.encode().into(),
+			},
+		]);
+		if let Ok((ticket, _)) = <xcm_config::XcmRouter as SendXcm>::validate(
+			&mut Some(PeopleLocation::get()),
+			&mut Some(message),
+		) {
+			let _ = <xcm_config::XcmRouter as SendXcm>::deliver(ticket);
+		}
+	}
+}
+
 impl ah_client::Config for Runtime {
 	type CurrencyBalance = Balance;
 	type AssetHubOrigin =
 		pezframe_support::traits::EitherOfDiverse<EnsureRoot<AccountId>, EnsureAssetHub>;
 	type AdminOrigin = EnsureRoot<AccountId>;
-	type SessionInterface = Self;
+	type SessionInterface = Session;
 	type SendToAssetHub = StakingXcmToAssetHub;
 	type MinimumValidatorSetSize = ConstU32<1>;
 	type UnixTime = Timestamp;
@@ -650,148 +816,25 @@ impl ah_client::Config for Runtime {
 }
 
 // =====================================================
-// VALIDATOR POOL CONFIGURATION (TNPoS Shadow Mode)
-// =====================================================
-
-/// Stub Trust Score Provider - returns default trust for shadow mode
-/// Will be replaced with XCM cache from People Parachain in Phase 5
-pub struct StubTrustProvider;
-impl pezpallet_validator_pool::TrustScoreProvider<AccountId> for StubTrustProvider {
-	fn trust_score_of(_who: &AccountId) -> u128 {
-		1000 // Default trust score for shadow mode
-	}
-}
-
-/// Stub Tiki Score Provider - returns default tiki for shadow mode
-/// Will be replaced with XCM cache from People Parachain in Phase 5
-pub struct StubTikiProvider;
-impl pezpallet_validator_pool::TikiScoreProvider<AccountId> for StubTikiProvider {
-	fn get_tiki_score(_who: &AccountId) -> u32 {
-		0 // No tiki in shadow mode
-	}
-}
-
-/// Stub Referral Provider - returns default referral count for shadow mode
-/// Will be replaced with XCM cache from People Parachain in Phase 5
-pub struct StubReferralProvider;
-impl pezpallet_validator_pool::types::ReferralProvider<AccountId> for StubReferralProvider {
-	fn get_referral_count(_who: &AccountId) -> u32 {
-		0 // No referrals in shadow mode
-	}
-}
-
-/// Stub Perwerde Provider - returns default perwerde score for shadow mode
-/// Will be replaced with XCM cache from People Parachain in Phase 5
-pub struct StubPerwerdeProvider;
-impl pezpallet_validator_pool::types::PerwerdeProvider<AccountId> for StubPerwerdeProvider {
-	fn get_perwerde_score(_who: &AccountId) -> u32 {
-		0 // No perwerde in shadow mode
-	}
-}
-
-parameter_types! {
-	pub const ValidatorPoolMaxValidators: u32 = 21; // Target: 10 stake + 6 parliamentary + 5 merit
-	pub const ValidatorPoolMaxPoolSize: u32 = 1000;
-	pub const ValidatorPoolMinStakeAmount: u128 = 100 * UNITS;
-}
-
-impl pezpallet_validator_pool::Config for Runtime {
-	type WeightInfo = pezpallet_validator_pool::weights::BizinikiwiWeight<Runtime>;
-	type Randomness = pezpallet_babe::RandomnessFromOneEpochAgo<Runtime>;
-	type TrustSource = StubTrustProvider;
-	type TikiSource = StubTikiProvider;
-	type ReferralSource = StubReferralProvider;
-	type PerwerdeSource = StubPerwerdeProvider;
-	type PoolManagerOrigin = EnsureRoot<AccountId>;
-	type MaxValidators = ValidatorPoolMaxValidators;
-	type MaxPoolSize = ValidatorPoolMaxPoolSize;
-	type MinStakeAmount = ValidatorPoolMinStakeAmount;
-}
-
-// =====================================================
 // COUNCIL CONFIGURATION
 // =====================================================
 
 parameter_types! {
-	pub const CouncilMotionDuration: BlockNumber = 7 * DAYS;
-	pub const CouncilMaxProposals: u32 = 100;
-	pub const CouncilMaxMembers: u32 = 100;
-	pub MaxCollectivesProposalWeight: pezframe_support::weights::Weight = Perbill::from_percent(50) * BlockWeights::get().max_block;
-}
-
-pub type CouncilCollective = pezpallet_collective::Instance1;
-impl pezpallet_collective::Config<CouncilCollective> for Runtime {
-	type RuntimeOrigin = RuntimeOrigin;
-	type Proposal = RuntimeCall;
-	type RuntimeEvent = RuntimeEvent;
-	type MotionDuration = CouncilMotionDuration;
-	type MaxProposals = CouncilMaxProposals;
-	type MaxMembers = CouncilMaxMembers;
-	type DefaultVote = pezpallet_collective::PrimeDefaultVote;
-	type WeightInfo = pezpallet_collective::weights::BizinikiwiWeight<Runtime>;
-	type SetMembersOrigin = EnsureRoot<AccountId>;
-	type MaxProposalWeight = MaxCollectivesProposalWeight;
-	type DisapproveOrigin = EnsureRoot<AccountId>;
-	type KillOrigin = EnsureRoot<AccountId>;
-	type Consideration = ();
-}
-
-parameter_types! {
-	pub const SpendPeriod: BlockNumber = 6 * DAYS;
-	pub const Burn: Permill = Permill::from_perthousand(2);
-	pub const TreasuryPalletId: PalletId = PalletId(*b"py/trsry");
-	pub const PayoutSpendPeriod: BlockNumber = 30 * DAYS;
-	// The asset's interior location for the paying account. This is the Treasury
-	// pezpallet instance (which sits at index 18).
-	pub TreasuryInteriorLocation: InteriorLocation = PalletInstance(18).into();
-
-	pub const TipCountdown: BlockNumber = 1 * DAYS;
-	pub const TipFindersFee: Percent = Percent::from_percent(20);
-	pub const TipReportDepositBase: Balance = 100 * CENTS;
 	pub const DataDepositPerByte: Balance = 1 * CENTS;
-	pub const MaxApprovals: u32 = 100;
 	pub const MaxAuthorities: u32 = 100_000;
 	pub const MaxKeys: u32 = 10_000;
 	pub const MaxPeerInHeartbeats: u32 = 10_000;
-	pub const MaxBalance: Balance = Balance::max_value();
-}
-
-impl pezpallet_treasury::Config for Runtime {
-	type PalletId = TreasuryPalletId;
-	type Currency = Balances;
-	type RejectOrigin = EitherOfDiverse<EnsureRoot<AccountId>, Treasurer>;
-	type RuntimeEvent = RuntimeEvent;
-	type SpendPeriod = SpendPeriod;
-	type Burn = Burn;
-	type BurnDestination = ();
-	type MaxApprovals = MaxApprovals;
-	type WeightInfo = weights::pezpallet_treasury::WeightInfo<Runtime>;
-	type SpendFunds = ();
-	type SpendOrigin = TreasurySpender;
-	type AssetKind = VersionedLocatableAsset;
-	type Beneficiary = VersionedLocation;
-	type BeneficiaryLookup = IdentityLookup<Self::Beneficiary>;
-	type Paymaster = PayOverXcm<
-		TreasuryInteriorLocation,
-		crate::xcm_config::XcmRouter,
-		crate::XcmPallet,
-		ConstU32<{ 6 * HOURS }>,
-		Self::Beneficiary,
-		Self::AssetKind,
-		LocatableAssetConverter,
-		VersionedLocationConverter,
-	>;
-	type BalanceConverter = pezframe_support::traits::tokens::UnityAssetBalanceConversion;
-	type PayoutPeriod = PayoutSpendPeriod;
-	type BlockNumberProvider = System;
-	#[cfg(feature = "runtime-benchmarks")]
-	type BenchmarkHelper = pezkuwi_runtime_common::impls::benchmarks::TreasuryArguments;
 }
 
 impl pezpallet_offences::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type IdentificationTuple = pezpallet_session::historical::IdentificationTuple<Self>;
-	type OnOffenceHandler = ();
+	// The relay holds no stake -- staking lives on the Asset Hub -- so there is nothing here
+	// to slash. `StakingAhClient` is what closes both halves: it reports an ongoing offence to
+	// the session pezpallet immediately, which disables the validator on this chain, and queues
+	// the economic slash for the Asset Hub, where the money actually is. Left as `()`, both
+	// halves were dropped: an equivocation was recorded by `Offences` and went nowhere.
+	type OnOffenceHandler = StakingAhClient;
 }
 
 impl pezpallet_authority_discovery::Config for Runtime {
@@ -924,7 +967,7 @@ where
 }
 
 parameter_types! {
-	pub Prefix: &'static [u8] = b"Pay TYRs to the Pezkuwichain account:";
+	pub Prefix: &'static [u8] = b"Pay HEZ to the Pezkuwichain account:";
 }
 
 impl claims::Config for Runtime {
@@ -1000,7 +1043,7 @@ parameter_types! {
 	Encode,
 	Decode,
 	DecodeWithMemTracking,
-	RuntimeDebug,
+	Debug,
 	MaxEncodedLen,
 	TypeInfo,
 )]
@@ -1033,7 +1076,6 @@ impl InstanceFilter<RuntimeCall> for ProxyType {
 				// Specifically omitting the entire Balances pezpallet
 				RuntimeCall::Session(..) |
 				RuntimeCall::Grandpa(..) |
-				RuntimeCall::Treasury(..) |
 				RuntimeCall::ConvictionVoting(..) |
 				RuntimeCall::Referenda(..) |
 				RuntimeCall::Whitelist(..) |
@@ -1136,7 +1178,7 @@ impl teyrchains_paras::Config for Runtime {
 	type QueueFootprinter = ParaInclusion;
 	type NextSessionRotation = Babe;
 	type OnNewHead = Registrar;
-	type AssignCoretime = CoretimeAssignmentProvider;
+	type AssignCoretime = ParaScheduler;
 	type Fungible = Balances;
 	// Per day the cooldown is removed earlier, it should cost 1000.
 	type CooldownRemovalMultiplier = ConstUint<{ 1000 * UNITS / DAYS as u128 }>;
@@ -1216,11 +1258,7 @@ impl teyrchains_paras_inherent::Config for Runtime {
 	type WeightInfo = weights::pezkuwi_runtime_teyrchains_paras_inherent::WeightInfo<Runtime>;
 }
 
-impl teyrchains_scheduler::Config for Runtime {
-	// If you change this, make sure the `Assignment` type of the new provider is binary compatible,
-	// otherwise provide a migration.
-	type AssignmentProvider = CoretimeAssignmentProvider;
-}
+impl teyrchains_scheduler::Config for Runtime {}
 
 parameter_types! {
 	pub const BrokerId: u32 = BROKER_ID;
@@ -1266,8 +1304,6 @@ impl teyrchains_on_demand::Config for Runtime {
 	type MaxHistoricalRevenue = MaxHistoricalRevenue;
 	type PalletId = OnDemandPalletId;
 }
-
-impl teyrchains_assigner_coretime::Config for Runtime {}
 
 impl teyrchains_initializer::Config for Runtime {
 	type Randomness = pezpallet_babe::RandomnessFromOneEpochAgo<Runtime>;
@@ -1526,10 +1562,12 @@ construct_runtime! {
 		AuthorityDiscovery: pezpallet_authority_discovery = 12,
 
 		// Governance stuff; uncallable initially.
-		Council: pezpallet_collective::<Instance1> = 17,
-		Treasury: pezpallet_treasury = 18,
+		// RIP Council 17, Treasury 18. The treasury moved to the Asset Hub, where the
+		// franchise that votes on spending it lives; the council was its reject origin and
+		// nothing else. Indices left unused on purpose.
 		ConvictionVoting: pezpallet_conviction_voting = 20,
 		Referenda: pezpallet_referenda = 21,
+		AccumulateAndForward: pezpallet_accumulate_and_forward = 22,
 		Origins: pezpallet_custom_origins = 43,
 		Whitelist: pezpallet_whitelist = 44,
 		// Claims. Usable initially.
@@ -1570,7 +1608,8 @@ construct_runtime! {
 		MessageQueue: pezpallet_message_queue = 64,
 		OnDemandAssignmentProvider: teyrchains_on_demand = 66,
 		StakingAhClient: pezpallet_staking_async_ah_client = 67,
-		CoretimeAssignmentProvider: teyrchains_assigner_coretime = 68,
+		// RIP CoretimeAssignmentProvider 68 - its storage moved into ParaScheduler,
+		// where the code that reads it lives. Index left unused on purpose.
 
 		// Teyrchain Onboarding Pallets. Start indices at 70 to leave room.
 		Registrar: paras_registrar = 70,
@@ -1602,8 +1641,10 @@ construct_runtime! {
 		StateTrieMigration: pezpallet_state_trie_migration = 254,
 
 		// === CUSTOM PEZKUWI PALLETS ===
-		// TNPoS Validator Pool - Shadow Mode (runs parallel to NPoS)
-		ValidatorPool: pezpallet_validator_pool = 91,
+		// RIP ValidatorPool 91 - it implemented SessionManager but was never wired to
+		// anything, so its shadow-mode apparatus ran zero times. TNPoS replaces it on
+		// Zagros; it does not land here yet because the staking-score oracle it needs is
+		// still open (M7.0). Index left unused on purpose.
 
 		// Root testing pezpallet.
 		RootTesting: pezpallet_root_testing = 249,
@@ -1647,142 +1688,27 @@ pub type UncheckedSignaturePayload =
 
 /// All migrations that will run on the next runtime upgrade.
 ///
-/// This contains the combined migrations of the last 10 releases. It allows to skip runtime
-/// upgrades in case governance decides to do so. THE ORDER IS IMPORTANT.
-pub type Migrations = migrations::Unreleased;
+/// THE ORDER IS IMPORTANT: one-off migrations run before the permanent ones.
+pub type Migrations = (migrations::Unreleased, migrations::Permanent);
 
 /// The runtime migrations per release.
-#[allow(deprecated, missing_docs)]
 pub mod migrations {
 	use super::*;
 
-	use pezframe_support::traits::LockIdentifier;
-
-	pub struct GetLegacyLeaseImpl;
-	impl coretime::migration::GetLegacyLease<BlockNumber> for GetLegacyLeaseImpl {
-		fn get_teyrchain_lease_in_blocks(para: ParaId) -> Option<BlockNumber> {
-			let now = pezframe_system::Pezpallet::<Runtime>::block_number();
-			let lease = slots::Leases::<Runtime>::get(para);
-			if lease.is_empty() {
-				return None;
-			}
-			// Lease not yet started, ignore:
-			if lease.iter().any(Option::is_none) {
-				return None;
-			}
-			let (index, _) =
-				<slots::Pezpallet<Runtime> as Leaser<BlockNumber>>::lease_period_index(now)?;
-			Some(index.saturating_add(lease.len() as u32).saturating_mul(LeasePeriod::get()))
-		}
-
-		fn get_all_teyrchains_with_leases() -> Vec<ParaId> {
-			slots::Leases::<Runtime>::iter()
-				.filter(|(_, lease)| !lease.is_empty())
-				.map(|(para, _)| para)
-				.collect::<Vec<_>>()
-		}
-	}
-
-	parameter_types! {
-		pub const DemocracyPalletName: &'static str = "Democracy";
-		pub const CouncilPalletName: &'static str = "Council";
-		pub const TechnicalCommitteePalletName: &'static str = "TechnicalCommittee";
-		pub const PhragmenElectionPalletName: &'static str = "PhragmenElection";
-		pub const TechnicalMembershipPalletName: &'static str = "TechnicalMembership";
-		pub const TipsPalletName: &'static str = "Tips";
-		pub const PhragmenElectionPalletId: LockIdentifier = *b"phrelect";
-		// Old staking ecosystem pallets (replaced by StakingAhClient + AH staking)
-		pub const StakingPalletName: &'static str = "Staking";
-		pub const FastUnstakePalletName: &'static str = "FastUnstake";
-		pub const VoterBagsListPalletName: &'static str = "VoterBagsList";
-		/// Weight for balance unreservations
-		pub BalanceUnreserveWeight: Weight = weights::pezpallet_balances_balances::WeightInfo::<Runtime>::force_unreserve();
-		pub BalanceTransferAllowDeath: Weight = weights::pezpallet_balances_balances::WeightInfo::<Runtime>::transfer_allow_death();
-	}
-
-	// Special Config for Gov V1 pallets, allowing us to run migrations for them without
-	// implementing their configs on [`Runtime`].
-	// NOTE: Gov1 migration configs removed - pezpallet-democracy, pezpallet-elections-phragmen,
-	// and pezpallet-tips are no longer part of this runtime (using pezpallet-welati for governance)
-
 	/// Unreleased migrations. Add new ones here:
-	pub type Unreleased = (
-		teyrchains_configuration::migration::v7::MigrateToV7<Runtime>,
-		assigned_slots::migration::v1::MigrateToV1<Runtime>,
-		teyrchains_scheduler::migration::MigrateV1ToV2<Runtime>,
-		teyrchains_configuration::migration::v8::MigrateToV8<Runtime>,
-		teyrchains_configuration::migration::v9::MigrateToV9<Runtime>,
-		paras_registrar::migration::MigrateToV1<Runtime, ()>,
-		pezpallet_referenda::migration::v1::MigrateV0ToV1<Runtime, ()>,
-		// NOTE: Gov1 migration steps removed - pallets no longer in runtime
-		// Treasury cleanup still included as it may have existing proposals
-		pezpallet_treasury::migration::cleanup_proposals::Migration<
-			Runtime,
-			(),
-			BalanceUnreserveWeight,
-		>,
-		// Delete all Gov v1 pezpallet storage key/values (still needed to clean up any leftover
-		// storage)
-		pezframe_support::migrations::RemovePallet<
-			DemocracyPalletName,
-			<Runtime as pezframe_system::Config>::DbWeight,
-		>,
-		pezframe_support::migrations::RemovePallet<
-			CouncilPalletName,
-			<Runtime as pezframe_system::Config>::DbWeight,
-		>,
-		pezframe_support::migrations::RemovePallet<
-			TechnicalCommitteePalletName,
-			<Runtime as pezframe_system::Config>::DbWeight,
-		>,
-		pezframe_support::migrations::RemovePallet<
-			PhragmenElectionPalletName,
-			<Runtime as pezframe_system::Config>::DbWeight,
-		>,
-		pezframe_support::migrations::RemovePallet<
-			TechnicalMembershipPalletName,
-			<Runtime as pezframe_system::Config>::DbWeight,
-		>,
-		pezframe_support::migrations::RemovePallet<
-			TipsPalletName,
-			<Runtime as pezframe_system::Config>::DbWeight,
-		>,
-		pezpallet_grandpa::migrations::MigrateV4ToV5<Runtime>,
-		teyrchains_configuration::migration::v10::MigrateToV10<Runtime>,
-		teyrchains_configuration::migration::v11::MigrateToV11<Runtime>,
-		// This needs to come after the `teyrchains_configuration` above as we are reading the
-		// configuration.
-		coretime::migration::MigrateToCoretime<
-			Runtime,
-			crate::xcm_config::XcmRouter,
-			GetLegacyLeaseImpl,
-			TIMESLICE_PERIOD,
-		>,
-		teyrchains_configuration::migration::v12::MigrateToV12<Runtime>,
-		teyrchains_on_demand::migration::MigrateV0ToV1<Runtime>,
-		// migrates session storage item
-		pezpallet_session::migrations::v1::MigrateV0ToV1<
-			Runtime,
-			pezpallet_session::migrations::v1::InitOffenceSeverity<Runtime>,
-		>,
-		// permanent
+	///
+	/// Emptied with the genesis reset. Every entry it held converted state that only the chain
+	/// before the reset had -- retired pallets' storage, storage versions older than the code's,
+	/// orphaned `Balances::Holds` -- and a chain born from this runtime's genesis starts with
+	/// every pallet at its in-code storage version and none of that state. Left in, the version
+	/// migrations would be no-ops and the rest would scan storage on every upgrade for nothing.
+	pub type Unreleased = ();
+
+	/// Migrations that stay in the runtime for good and run on every upgrade.
+	pub type Permanent = (
+		// Re-encodes stored XCM data (version notifiers, queries, remote lock users) whenever
+		// the latest XCM version moves; it is idempotent and must never be dropped.
 		pezpallet_xcm::migration::MigrateToLatestXcmVersion<Runtime>,
-		teyrchains_inclusion::migration::MigrateToV1<Runtime>,
-		teyrchains_shared::migration::MigrateToV1<Runtime>,
-		teyrchains_scheduler::migration::MigrateV2ToV3<Runtime>,
-		// Remove old staking ecosystem pallets (replaced by StakingAhClient + AH staking)
-		pezframe_support::migrations::RemovePallet<
-			StakingPalletName,
-			<Runtime as pezframe_system::Config>::DbWeight,
-		>,
-		pezframe_support::migrations::RemovePallet<
-			FastUnstakePalletName,
-			<Runtime as pezframe_system::Config>::DbWeight,
-		>,
-		pezframe_support::migrations::RemovePallet<
-			VoterBagsListPalletName,
-			<Runtime as pezframe_system::Config>::DbWeight,
-		>,
 	);
 }
 
@@ -1864,12 +1790,9 @@ mod benches {
 		[pezframe_system_extensions, SystemExtensionsBench::<Runtime>]
 		[pezpallet_timestamp, Timestamp]
 		[pezpallet_transaction_payment, TransactionPayment]
-		[pezpallet_treasury, Treasury]
 		[pezpallet_utility, Utility]
 		[pezpallet_vesting, Vesting]
 		[pezpallet_whitelist, Whitelist]
-		// Pezkuwichain Custom Pallets
-		[pezpallet_validator_pool, ValidatorPool]
 		// XCM
 		[pezpallet_xcm, PalletXcmExtrinsicsBenchmark::<Runtime>]
 		[pezpallet_xcm_benchmarks::fungible, pezpallet_xcm_benchmarks::fungible::Pezpallet::<Runtime>]
@@ -2384,8 +2307,11 @@ pezsp_api::impl_runtime_apis! {
 	}
 
 	impl pezsp_session::SessionKeys<Block> for Runtime {
-		fn generate_session_keys(seed: Option<Vec<u8>>) -> Vec<u8> {
-			SessionKeys::generate(seed)
+		fn generate_session_keys(
+			owner: Vec<u8>,
+			seed: Option<Vec<u8>>,
+		) -> pezsp_session::OpaqueGeneratedSessionKeys {
+			SessionKeys::generate(&owner, seed).into()
 		}
 
 		fn decode_session_keys(
@@ -2457,6 +2383,9 @@ pezsp_api::impl_runtime_apis! {
 		) {
 			use pezframe_benchmarking::BenchmarkList;
 			use pezframe_support::traits::StorageInfoTrait;
+
+			// The pallet's benchmarks are listed above, and they need this implemented.
+			impl pezpallet_transaction_payment::BenchmarkConfig for Runtime {}
 
 			use pezframe_system_benchmarking::Pezpallet as SystemBench;
 			use pezframe_system_benchmarking::extensions::Pezpallet as SystemExtensionsBench;
@@ -2539,7 +2468,7 @@ pezsp_api::impl_runtime_apis! {
 				}
 
 				fn set_up_complex_asset_transfer(
-				) -> Option<(Assets, AssetId, Location, alloc::boxed::Box<dyn FnOnce()>)> {
+				) -> Option<(Assets, u32, Location, alloc::boxed::Box<dyn FnOnce()>)> {
 					// Relay supports only native token, either reserve transfer it to non-system teyrchains,
 					// or teleport it to system teyrchain. Use the teleport case for benchmarking as it's
 					// slightly heavier.
@@ -2572,12 +2501,14 @@ pezsp_api::impl_runtime_apis! {
 				fn valid_destination() -> Result<Location, BenchmarkError> {
 					Ok(AssetHub::get())
 				}
-				fn worst_case_holding(_depositable_count: u32) -> Assets {
-					// Pezkuwichain only knows about TYR
-					vec![Asset{
-						id: AssetId(TokenLocation::get()),
-						fun: Fungible(1_000_000 * UNITS),
-					}].into()
+				fn worst_case_holding(_depositable_count: u32) -> xcm_executor::AssetsInHolding {
+					use pezpallet_xcm_benchmarks::MockCredit;
+					let mut holding = xcm_executor::AssetsInHolding::new();
+					holding.fungible.insert(
+						AssetId(TokenLocation::get()),
+						alloc::boxed::Box::new(MockCredit(1_000_000 * UNITS)),
+					);
+					holding
 				}
 			}
 
@@ -2661,9 +2592,16 @@ pezsp_api::impl_runtime_apis! {
 				}
 			}
 
-			let mut whitelist: Vec<TrackedStorageKey> = AllPalletsWithSystem::whitelisted_storage_keys();
-			let treasury_key = pezframe_system::Account::<Runtime>::hashed_key_for(Treasury::account_id());
-			whitelist.push(treasury_key.to_vec().into());
+			// Upstream whitelists the treasury's account here, so a benchmark that touches it is
+			// not charged for a read every runtime performs anyway. This relay has no treasury --
+			// it moved to the Asset Hub -- so there is no account to name, and naming one meant
+			// neither relay could be built with `runtime-benchmarks` at all. The breakage was
+			// invisible because the only configuration that compiles the line is the one it
+			// breaks.
+			//
+			// Nothing takes its place: a whitelist entry only ever removes a cost, so an absent
+			// one makes a weight slightly pessimistic rather than wrong.
+			let whitelist: Vec<TrackedStorageKey> = AllPalletsWithSystem::whitelisted_storage_keys();
 
 			let mut batches = Vec::<BenchmarkBatch>::new();
 			let params = (&config, &whitelist);

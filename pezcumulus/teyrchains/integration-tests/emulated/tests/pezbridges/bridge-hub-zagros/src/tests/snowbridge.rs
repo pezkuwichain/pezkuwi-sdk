@@ -13,19 +13,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 use crate::{
-	imports::{
-		pez_penpal_emulated_chain::pez_penpal_runtime::xcm_config::{
-			CheckingAccount, TELEPORTABLE_ASSET_ID,
-		},
-		*,
-	},
+	imports::{pez_penpal_emulated_chain::pez_penpal_runtime::xcm_config::CheckingAccount, *},
 	tests::{
 		assert_bridge_hub_pezkuwichain_message_received, assert_bridge_hub_zagros_message_accepted,
 		asset_hub_pezkuwichain_location, asset_hub_zagros_global_location,
 		bridged_roc_at_ah_zagros, bridged_wnd_at_ah_pezkuwichain,
 		create_foreign_on_ah_pezkuwichain, create_foreign_on_ah_zagros,
 		pez_penpal_emulated_chain::pez_penpal_runtime,
-		snowbridge_common::{bridge_hub, ethereum, register_roc_on_bh, snowbridge_sovereign},
+		snowbridge_common::{bridge_hub, ethereum, pezsnowbridge_sovereign, register_roc_on_bh},
 	},
 };
 use asset_hub_zagros_runtime::xcm_config::{
@@ -41,7 +36,7 @@ use hex_literal::hex;
 use pezbridge_hub_zagros_runtime::{
 	bridge_to_ethereum_config::EthereumGatewayAddress, EthereumBeaconClient, EthereumInboundQueue,
 };
-use pezframe_support::traits::fungibles::Mutate;
+use pezframe_support::traits::{fungibles::Mutate, Get};
 use pezkuwichain_zagros_system_emulated_network::{
 	asset_hub_zagros_emulated_chain::genesis::AssetHubZagrosAssetOwner,
 	pez_penpal_emulated_chain::PARA_ID_B, zagros_emulated_chain::zagros_runtime::Dmp,
@@ -82,7 +77,7 @@ fn register_token_from_ethereum_to_asset_hub() {
 	// Fund AssetHub sovereign account so that it can pay execution fees.
 	BridgeHubZagros::fund_para_sovereign(AssetHubZagros::para_id().into(), INITIAL_FUND);
 	// Fund Snowbridge Sovereign to satisfy ED.
-	AssetHubZagros::fund_accounts(vec![(snowbridge_sovereign(), INITIAL_FUND)]);
+	AssetHubZagros::fund_accounts(vec![(pezsnowbridge_sovereign(), INITIAL_FUND)]);
 
 	let token = H160::random();
 
@@ -116,7 +111,7 @@ fn register_token_from_ethereum_to_asset_hub() {
 /// a token from Ethereum to AssetHub.
 #[test]
 fn send_weth_token_from_ethereum_to_asset_hub() {
-	let ethereum_sovereign: AccountId = snowbridge_sovereign();
+	let ethereum_sovereign: AccountId = pezsnowbridge_sovereign();
 
 	BridgeHubZagros::fund_para_sovereign(AssetHubZagros::para_id().into(), INITIAL_FUND);
 
@@ -158,7 +153,7 @@ fn send_weth_token_from_ethereum_to_asset_hub() {
 		assert_expected_events!(
 			AssetHubZagros,
 			vec![
-				RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Issued { .. }) => {},
+				RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Deposited { .. }) => {},
 			]
 		);
 	});
@@ -210,7 +205,7 @@ fn send_weth_from_ethereum_to_penpal() {
 		(Parent, Parent, ethereum_network_v5, AccountKey20 { network: None, key: WETH }).into();
 
 	// Fund ethereum sovereign on AssetHub
-	let ethereum_sovereign: AccountId = snowbridge_sovereign();
+	let ethereum_sovereign: AccountId = pezsnowbridge_sovereign();
 	AssetHubZagros::fund_accounts(vec![(ethereum_sovereign.clone(), INITIAL_FUND)]);
 
 	// Create asset on the Penpal teyrchain.
@@ -261,7 +256,7 @@ fn send_weth_from_ethereum_to_penpal() {
 		assert_expected_events!(
 			AssetHubZagros,
 			vec![
-				RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Issued { .. }) => {},
+				RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Deposited { .. }) => {},
 				RuntimeEvent::XcmpQueue(pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 			]
 		);
@@ -273,7 +268,7 @@ fn send_weth_from_ethereum_to_penpal() {
 		assert_expected_events!(
 			PenpalB,
 			vec![
-				RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Issued { .. }) => {},
+				RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Deposited { .. }) => {},
 			]
 		);
 	});
@@ -290,7 +285,7 @@ fn send_eth_asset_from_asset_hub_to_ethereum_and_back() {
 	use asset_hub_zagros_runtime::xcm_config::bridging::to_ethereum::DefaultBridgeHubEthereumBaseFee;
 	let assethub_location = BridgeHubZagros::sibling_location_of(AssetHubZagros::para_id());
 	let assethub_sovereign = BridgeHubZagros::sovereign_account_id_of(assethub_location);
-	let ethereum_sovereign: AccountId = snowbridge_sovereign();
+	let ethereum_sovereign: AccountId = pezsnowbridge_sovereign();
 
 	AssetHubZagros::force_default_xcm_version(Some(XCM_VERSION));
 	BridgeHubZagros::force_default_xcm_version(Some(XCM_VERSION));
@@ -333,9 +328,9 @@ fn send_eth_asset_from_asset_hub_to_ethereum_and_back() {
 		type RuntimeEvent = <AssetHubZagros as Chain>::RuntimeEvent;
 		type RuntimeOrigin = <AssetHubZagros as Chain>::RuntimeOrigin;
 
-		let _issued_event = RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Issued {
+		let _issued_event = RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Deposited {
 			asset_id: origin_location.clone(),
-			owner: AssetHubZagrosReceiver::get().into(),
+			who: AssetHubZagrosReceiver::get().into(),
 			amount: ETH_AMOUNT,
 		});
 		// Check that AssetHub has issued the foreign asset
@@ -347,7 +342,7 @@ fn send_eth_asset_from_asset_hub_to_ethereum_and_back() {
 		);
 		let assets =
 			vec![Asset { id: AssetId(origin_location.clone()), fun: Fungible(ETH_AMOUNT) }];
-		let multi_assets = VersionedAssets::from(Assets::from(assets));
+		let multi_assets = VersionedAssets::from(Assets::from(assets.clone()));
 
 		let destination = origin_location.clone().into();
 
@@ -366,15 +361,15 @@ fn send_eth_asset_from_asset_hub_to_ethereum_and_back() {
 			Box::new(destination),
 			Box::new(beneficiary),
 			Box::new(multi_assets),
-			Box::new(fee_asset_id.into()),
+			fee_asset_index(&Assets::from(assets.clone()), &fee_asset_id),
 			Unlimited,
 		)
 		.unwrap();
 
-		let _burned_event = RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Burned {
+		let _burned_event = RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Withdrawn {
 			asset_id: origin_location.clone(),
-			owner: AssetHubZagrosReceiver::get().into(),
-			balance: ETH_AMOUNT,
+			who: AssetHubZagrosReceiver::get().into(),
+			amount: ETH_AMOUNT,
 		});
 		// Check that AssetHub has issued the foreign asset
 		let _destination = origin_location.clone();
@@ -498,7 +493,7 @@ fn send_weth_from_ethereum_to_existent_account_on_asset_hub() {
 		assert_expected_events!(
 			AssetHubZagros,
 			vec![
-				RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Issued { .. }) => {},
+				RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Deposited { .. }) => {},
 			]
 		);
 	});
@@ -515,7 +510,7 @@ fn send_weth_from_ethereum_to_non_existent_account_on_asset_hub() {
 		assert_expected_events!(
 			AssetHubZagros,
 			vec![
-				RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Issued { .. }) => {},
+				RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Deposited { .. }) => {},
 			]
 		);
 	});
@@ -539,21 +534,79 @@ fn send_weth_from_ethereum_to_non_existent_account_on_asset_hub_with_insufficien
 	});
 }
 
+/// A bridged token is a sufficient asset, so receiving it opens the beneficiary's account on its
+/// own — the native remainder left over from the fee has no say in it.
+///
+/// This replaces a test that asserted the opposite: that a remainder below the existential
+/// deposit makes the whole message fail. That premise comes from a configuration where the
+/// bridged token is not sufficient. Here it is, which is the same property that lets an account
+/// hold a stablecoin on this chain without holding the native token, so the deposit path the old
+/// test named is never reached by this route.
+///
+/// The fee is derived here rather than written down. It has to sit in a window one existential
+/// deposit wide -- above what the Asset Hub leg costs, below that cost plus an existential
+/// deposit -- and both ends of that window move with every weight change. A literal went stale
+/// exactly that way: the leg grew past it, the message stopped executing at all, and the test
+/// read as a failure of the property it exists to prove rather than as a number needing to be
+/// measured again. So the first leg pays generously and reports what is left over, which is the
+/// cost; the second pays that cost plus half an existential deposit.
 #[test]
-fn send_weth_from_ethereum_to_non_existent_account_on_asset_hub_with_sufficient_fee_but_do_not_satisfy_ed(
-) {
-	// On AH the xcm fee is 26_789_690 and the ED is 3_300_000
-	send_weth_from_ethereum_to_asset_hub_with_fee([1; 32], 30_000_000);
+fn send_weth_from_ethereum_opens_the_account_by_the_token_not_the_remainder() {
+	// Calibration leg. A different beneficiary, so it cannot colour what the real leg observes.
+	let probe: [u8; 32] = [2; 32];
+	send_weth_from_ethereum_to_asset_hub_with_fee(probe, XCM_FEE);
+	let (asset_hub_leg_cost, existential_deposit): (u128, u128) =
+		AssetHubZagros::execute_with(|| {
+			type Runtime = <AssetHubZagros as Chain>::Runtime;
+			let remainder = <<AssetHubZagros as AssetHubZagrosPallet>::Balances as
+				pezframe_support::traits::fungible::Inspect<_>>::balance(&probe.into());
+			assert!(
+				remainder > 0,
+				"calibration leg delivered nothing: XCM_FEE no longer covers the Asset Hub leg"
+			);
+			(
+				XCM_FEE - remainder,
+				<<Runtime as pezpallet_balances::Config>::ExistentialDeposit as Get<_>>::get(),
+			)
+		});
+
+	let beneficiary: [u8; 32] = [1; 32];
+	send_weth_from_ethereum_to_asset_hub_with_fee(
+		beneficiary,
+		asset_hub_leg_cost + existential_deposit / 2,
+	);
 
 	AssetHubZagros::execute_with(|| {
 		type RuntimeEvent = <AssetHubZagros as Chain>::RuntimeEvent;
 
-		// Check that the message was not processed successfully due to insufficient ED
 		assert_expected_events!(
 			AssetHubZagros,
 			vec![
-				RuntimeEvent::MessageQueue(pezpallet_message_queue::Event::Processed { success:false, .. }) => {},
+				RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Deposited { who, .. }) => {
+					who: *who == beneficiary.into(),
+				},
+				// The remainder cannot land anywhere, so it is trapped rather than delivered, and
+				// the program reports that. This is not the same as the transfer failing: the
+				// instruction that carries the token ran first and to completion, which is what the
+				// split in `convert_send_token` is for. Measured, twice: a sub-existential-deposit
+				// native amount is refused even by an account a sufficient asset has just opened,
+				// and the bridge's own sovereign account on this chain cannot take it either.
+				//
+				// Asserting `success: true` here would mean choosing the one arrangement that
+				// produces it — sending every remainder to the bridge instead of the beneficiary —
+				// and that costs the refund of *large* unspent fees to buy a tidy flag. Trapped
+				// dust is claimable; an unrefundable fee is not.
+				RuntimeEvent::PezkuwiXcm(pezpallet_xcm::Event::AssetsTrapped { .. }) => {},
 			]
+		);
+
+		// The remainder was under the existential deposit, so it never landed as a balance. The
+		// account exists all the same.
+		assert_eq!(
+			<<AssetHubZagros as AssetHubZagrosPallet>::Balances as pezframe_support::traits::fungible::Inspect<_>>::balance(
+				&beneficiary.into()
+			),
+			0
 		);
 	});
 }
@@ -600,7 +653,7 @@ fn send_token_from_ethereum_to_asset_hub() {
 		// Check that the token was received and issued as a foreign asset on AssetHub
 		assert_expected_events!(
 			AssetHubZagros,
-			vec![RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Issued { .. }) => {},]
+			vec![RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Deposited { .. }) => {},]
 		);
 	});
 }
@@ -645,7 +698,7 @@ fn send_weth_asset_from_asset_hub_to_ethereum() {
 		// Check that AssetHub has issued the foreign asset
 		assert_expected_events!(
 			AssetHubZagros,
-			vec![RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Issued { .. }) => {},]
+			vec![RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Deposited { .. }) => {},]
 		);
 		let assets = vec![Asset {
 			id: AssetId(Location::new(
@@ -657,7 +710,7 @@ fn send_weth_asset_from_asset_hub_to_ethereum() {
 			)),
 			fun: Fungible(TOKEN_AMOUNT),
 		}];
-		let versioned_assets = VersionedAssets::from(Assets::from(assets));
+		let versioned_assets = VersionedAssets::from(Assets::from(assets.clone()));
 
 		let destination = VersionedLocation::from(Location::new(
 			2,
@@ -685,7 +738,7 @@ fn send_weth_asset_from_asset_hub_to_ethereum() {
 			Box::new(destination),
 			Box::new(beneficiary),
 			Box::new(versioned_assets),
-			Box::new(fee_asset_id.into()),
+			fee_asset_index(&Assets::from(assets.clone()), &fee_asset_id),
 			Unlimited,
 		)
 		.unwrap();
@@ -738,7 +791,7 @@ fn send_token_from_ethereum_to_penpal() {
 		(Parent, Parent, ethereum_network_v5, AccountKey20 { network: None, key: WETH }).into();
 
 	// Fund ethereum sovereign on AssetHub
-	let ethereum_sovereign: AccountId = snowbridge_sovereign();
+	let ethereum_sovereign: AccountId = pezsnowbridge_sovereign();
 	AssetHubZagros::fund_accounts(vec![(ethereum_sovereign.clone(), INITIAL_FUND)]);
 
 	// Create asset on the Penpal teyrchain.
@@ -788,7 +841,7 @@ fn send_token_from_ethereum_to_penpal() {
 		assert_expected_events!(
 			AssetHubZagros,
 			vec![
-				RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Issued { .. }) => {},
+				RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Deposited { .. }) => {},
 				RuntimeEvent::XcmpQueue(pezcumulus_pezpallet_xcmp_queue::Event::XcmpMessageSent { .. }) => {},
 			]
 		);
@@ -800,7 +853,7 @@ fn send_token_from_ethereum_to_penpal() {
 		assert_expected_events!(
 			PenpalB,
 			vec![
-				RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Issued { .. }) => {},
+				RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Deposited { .. }) => {},
 			]
 		);
 	});
@@ -819,7 +872,7 @@ fn transfer_relay_token() {
 
 	let expected_token_id = TokenIdOf::convert_location(&expected_asset_id).unwrap();
 
-	let ethereum_sovereign: AccountId = snowbridge_sovereign();
+	let ethereum_sovereign: AccountId = pezsnowbridge_sovereign();
 
 	// Register token
 	BridgeHubZagros::execute_with(|| {
@@ -854,7 +907,7 @@ fn transfer_relay_token() {
 		type RuntimeEvent = <AssetHubZagros as Chain>::RuntimeEvent;
 
 		let assets = vec![Asset { id: AssetId(Location::parent()), fun: Fungible(TOKEN_AMOUNT) }];
-		let versioned_assets = VersionedAssets::from(Assets::from(assets));
+		let versioned_assets = VersionedAssets::from(Assets::from(assets.clone()));
 
 		let destination = VersionedLocation::from(Location::new(
 			2,
@@ -931,7 +984,7 @@ fn transfer_relay_token() {
 
 		assert_expected_events!(
 			AssetHubZagros,
-			vec![RuntimeEvent::Balances(pezpallet_balances::Event::Burned{ .. }) => {},]
+			vec![RuntimeEvent::Balances(pezpallet_balances::Event::Withdraw{ .. }) => {},]
 		);
 
 		let events = AssetHubZagros::events();
@@ -940,7 +993,7 @@ fn transfer_relay_token() {
 		assert!(
 			events.iter().any(|event| matches!(
 				event,
-				RuntimeEvent::Balances(pezpallet_balances::Event::Burned { who, ..})
+				RuntimeEvent::Balances(pezpallet_balances::Event::Withdraw { who, ..})
 					if *who == ethereum_sovereign.clone(),
 			)),
 			"native token burnt from Ethereum sovereign account."
@@ -950,7 +1003,7 @@ fn transfer_relay_token() {
 		assert!(
 			events.iter().any(|event| matches!(
 				event,
-				RuntimeEvent::Balances(pezpallet_balances::Event::Minted { who, amount })
+				RuntimeEvent::Balances(pezpallet_balances::Event::Deposit { who, amount })
 					if *amount >= TOKEN_AMOUNT && *who == AssetHubZagrosReceiver::get()
 			)),
 			"Token minted to beneficiary."
@@ -968,7 +1021,7 @@ fn transfer_ah_token() {
 	let ethereum_destination =
 		Location::new(2, [GlobalConsensus(Ethereum { chain_id: SEPOLIA_ID })]);
 
-	let ethereum_sovereign: AccountId = snowbridge_sovereign();
+	let ethereum_sovereign: AccountId = pezsnowbridge_sovereign();
 	AssetHubZagros::fund_accounts(vec![(ethereum_sovereign.clone(), INITIAL_FUND)]);
 
 	let asset_id: Location =
@@ -1026,7 +1079,7 @@ fn transfer_ah_token() {
 		// Send partial of the token, will fail if send all
 		let assets =
 			vec![Asset { id: AssetId(asset_id.clone()), fun: Fungible(TOKEN_AMOUNT / 10) }];
-		let versioned_assets = VersionedAssets::from(Assets::from(assets));
+		let versioned_assets = VersionedAssets::from(Assets::from(assets.clone()));
 
 		let beneficiary = VersionedLocation::from(Location::new(
 			0,
@@ -1039,7 +1092,7 @@ fn transfer_ah_token() {
 			Box::new(VersionedLocation::from(ethereum_destination)),
 			Box::new(beneficiary),
 			Box::new(versioned_assets),
-			Box::new(fee_asset_id.into()),
+			fee_asset_index(&Assets::from(assets.clone()), &fee_asset_id),
 			Unlimited,
 		));
 
@@ -1096,7 +1149,7 @@ fn transfer_ah_token() {
 
 		assert_expected_events!(
 			AssetHubZagros,
-			vec![RuntimeEvent::Assets(pezpallet_assets::Event::Burned{..}) => {},]
+			vec![RuntimeEvent::Assets(pezpallet_assets::Event::Withdrawn{..}) => {},]
 		);
 
 		let events = AssetHubZagros::events();
@@ -1105,8 +1158,8 @@ fn transfer_ah_token() {
 		assert!(
 			events.iter().any(|event| matches!(
 				event,
-				RuntimeEvent::Assets(pezpallet_assets::Event::Burned { owner, .. })
-					if *owner == ethereum_sovereign.clone(),
+				RuntimeEvent::Assets(pezpallet_assets::Event::Withdrawn { who, .. })
+					if *who == ethereum_sovereign.clone(),
 			)),
 			"token burnt from Ethereum sovereign account."
 		);
@@ -1115,8 +1168,8 @@ fn transfer_ah_token() {
 		assert!(
 			events.iter().any(|event| matches!(
 				event,
-				RuntimeEvent::Assets(pezpallet_assets::Event::Issued { owner, .. })
-					if *owner == AssetHubZagrosReceiver::get()
+				RuntimeEvent::Assets(pezpallet_assets::Event::Deposited { who, .. })
+					if *who == AssetHubZagrosReceiver::get()
 			)),
 			"Token minted to beneficiary."
 		);
@@ -1153,10 +1206,9 @@ fn send_weth_from_ethereum_to_ahw_to_ahr_back_to_ahw_and_ethereum() {
 		true,
 		wnd_reserve,
 	);
-	create_pool_with_native_on!(
+	create_foreign_pool_with_parent_native_on!(
 		AssetHubPezkuwichain,
 		bridged_wnd_at_asset_hub_pezkuwichain.clone(),
-		true,
 		AssetHubPezkuwichainSender::get()
 	);
 
@@ -1204,7 +1256,7 @@ fn send_weth_from_ethereum_to_ahw_to_ahr_back_to_ahw_and_ethereum() {
 		assert_expected_events!(
 			AssetHubZagros,
 			vec![
-				RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Issued { .. }) => {},
+				RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Deposited { .. }) => {},
 			]
 		);
 	});
@@ -1265,9 +1317,9 @@ fn send_weth_from_ethereum_to_ahw_to_ahr_back_to_ahw_and_ethereum() {
 			AssetHubPezkuwichain,
 			vec![
 				// Token was issued to beneficiary
-				RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Issued { asset_id, owner, .. }) => {
+				RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Deposited { asset_id, who, .. }) => {
 					asset_id: *asset_id == weth_location,
-					owner: *owner == AssetHubPezkuwichainReceiver::get().into(),
+					who: *who == AssetHubPezkuwichainReceiver::get().into(),
 				},
 			]
 		);
@@ -1312,8 +1364,6 @@ fn send_weth_from_ethereum_to_ahw_to_ahr_back_to_ahw_and_ethereum() {
 		assert_expected_events!(
 			BridgeHubPezkuwichain,
 			vec![
-				// pay for bridge fees
-				RuntimeEvent::Balances(pezpallet_balances::Event::Burned { .. }) => {},
 				// message exported
 				RuntimeEvent::BridgeZagrosMessages(
 					pezpallet_bridge_messages::Event::MessageAccepted { .. }
@@ -1347,9 +1397,9 @@ fn send_weth_from_ethereum_to_ahw_to_ahr_back_to_ahw_and_ethereum() {
 			AssetHubZagros,
 			vec![
 				// Token was issued to beneficiary
-				RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Issued { asset_id, owner, .. }) => {
+				RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Deposited { asset_id, who, .. }) => {
 					asset_id: *asset_id == weth_location,
-					owner: *owner == AssetHubZagrosReceiver::get().into(),
+					who: *who == AssetHubZagrosReceiver::get().into(),
 				},
 			]
 		);
@@ -1380,7 +1430,7 @@ fn send_weth_from_ethereum_to_ahw_to_ahr_back_to_ahw_and_ethereum() {
 			fun: Fungible(TOKEN_AMOUNT),
 		}];
 
-		let versioned_assets = VersionedAssets::from(Assets::from(assets));
+		let versioned_assets = VersionedAssets::from(Assets::from(assets.clone()));
 
 		let destination = VersionedLocation::from(Location::new(
 			2,
@@ -1408,7 +1458,7 @@ fn send_weth_from_ethereum_to_ahw_to_ahr_back_to_ahw_and_ethereum() {
 			Box::new(destination),
 			Box::new(beneficiary),
 			Box::new(versioned_assets),
-			Box::new(fee_asset_id.into()),
+			fee_asset_index(&Assets::from(assets.clone()), &fee_asset_id),
 			Unlimited,
 		)
 		.unwrap();
@@ -1532,7 +1582,7 @@ fn transfer_penpal_native_asset() {
 		assert_ok!(<PenpalB as PenpalBPallet>::PezkuwiXcm::transfer_assets_using_type_and_then(
 			RuntimeOrigin::signed(PenpalBSender::get()),
 			Box::new(VersionedLocation::from(destination)),
-			Box::new(VersionedAssets::from(assets)),
+			Box::new(VersionedAssets::from(assets.clone())),
 			Box::new(TransferType::Teleport),
 			Box::new(VersionedAssetId::from(AssetId(Location::parent()))),
 			Box::new(TransferType::DestinationReserve),
@@ -1542,7 +1592,7 @@ fn transfer_penpal_native_asset() {
 
 		assert_expected_events!(
 			PenpalB,
-			vec![RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Burned{ .. }) => {},]
+			vec![RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Withdrawn{ .. }) => {},]
 		);
 	});
 
@@ -1550,7 +1600,7 @@ fn transfer_penpal_native_asset() {
 		type RuntimeEvent = <AssetHubZagros as Chain>::RuntimeEvent;
 		assert_expected_events!(
 			AssetHubZagros,
-			vec![RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Issued { .. }) => {},]
+			vec![RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Deposited { .. }) => {},]
 		);
 	});
 
@@ -1591,12 +1641,12 @@ fn transfer_penpal_native_asset() {
 
 		assert_expected_events!(
 			AssetHubZagros,
-			vec![RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Burned{..}) => {},]
+			vec![RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Withdrawn{..}) => {},]
 		);
 
 		assert_expected_events!(
 			AssetHubZagros,
-			vec![RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Issued{..}) => {},]
+			vec![RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Deposited{..}) => {},]
 		);
 	});
 
@@ -1619,14 +1669,14 @@ fn transfer_penpal_native_asset() {
 			RuntimeOrigin::signed(AssetHubZagrosSender::get()),
 			Box::new(VersionedLocation::from(destination)),
 			Box::new(VersionedLocation::from(beneficiary)),
-			Box::new(VersionedAssets::from(assets)),
-			Box::new(fee_asset_id.into()),
+			Box::new(VersionedAssets::from(assets.clone())),
+			fee_asset_index(&Assets::from(assets.clone()), &fee_asset_id),
 			Unlimited,
 		));
 
 		assert_expected_events!(
 			AssetHubZagros,
-			vec![RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Burned{..}) => {},]
+			vec![RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Withdrawn{..}) => {},]
 		);
 	});
 
@@ -1635,7 +1685,7 @@ fn transfer_penpal_native_asset() {
 
 		assert_expected_events!(
 			PenpalB,
-			vec![RuntimeEvent::Balances(pezpallet_balances::Event::Minted{..}) => {},]
+			vec![RuntimeEvent::Balances(pezpallet_balances::Event::Deposit{..}) => {},]
 		);
 	})
 }
@@ -1667,7 +1717,7 @@ fn transfer_penpal_teleport_enabled_asset() {
 		AssetHubZagros::sibling_location_of(PenpalB::para_id()),
 	);
 	AssetHubZagros::fund_accounts(vec![(penpal_sovereign.clone(), INITIAL_FUND)]);
-	AssetHubZagros::fund_accounts(vec![(snowbridge_sovereign(), INITIAL_FUND)]);
+	AssetHubZagros::fund_accounts(vec![(pezsnowbridge_sovereign(), INITIAL_FUND)]);
 
 	// Register token
 	BridgeHubZagros::execute_with(|| {
@@ -1688,7 +1738,7 @@ fn transfer_penpal_teleport_enabled_asset() {
 	PenpalB::fund_accounts(vec![(CheckingAccount::get(), INITIAL_FUND)]);
 	PenpalB::execute_with(|| {
 		assert_ok!(<PenpalB as PenpalBPallet>::Assets::mint_into(
-			TELEPORTABLE_ASSET_ID,
+			PEN2_TELEPORTABLE_ASSET_ID,
 			&PenpalBSender::get(),
 			INITIAL_FUND,
 		));
@@ -1740,7 +1790,7 @@ fn transfer_penpal_teleport_enabled_asset() {
 		assert_ok!(<PenpalB as PenpalBPallet>::PezkuwiXcm::transfer_assets_using_type_and_then(
 			RuntimeOrigin::signed(PenpalBSender::get()),
 			Box::new(VersionedLocation::from(destination)),
-			Box::new(VersionedAssets::from(assets)),
+			Box::new(VersionedAssets::from(assets.clone())),
 			Box::new(TransferType::Teleport),
 			Box::new(VersionedAssetId::from(AssetId(Location::parent()))),
 			Box::new(TransferType::DestinationReserve),
@@ -1750,12 +1800,12 @@ fn transfer_penpal_teleport_enabled_asset() {
 
 		assert_expected_events!(
 			PenpalB,
-			vec![RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Burned{ .. }) => {},]
+			vec![RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Withdrawn{ .. }) => {},]
 		);
 
 		assert_expected_events!(
 			PenpalB,
-			vec![RuntimeEvent::Assets(pezpallet_assets::Event::Burned{ .. }) => {},]
+			vec![RuntimeEvent::Assets(pezpallet_assets::Event::Withdrawn{ .. }) => {},]
 		);
 	});
 
@@ -1763,7 +1813,7 @@ fn transfer_penpal_teleport_enabled_asset() {
 		type RuntimeEvent = <AssetHubZagros as Chain>::RuntimeEvent;
 		assert_expected_events!(
 			AssetHubZagros,
-			vec![RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Issued { .. }) => {},]
+			vec![RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Deposited { .. }) => {},]
 		);
 	});
 
@@ -1805,12 +1855,12 @@ fn transfer_penpal_teleport_enabled_asset() {
 
 		assert_expected_events!(
 			AssetHubZagros,
-			vec![RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Burned{..}) => {},]
+			vec![RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Withdrawn{..}) => {},]
 		);
 
 		assert_expected_events!(
 			AssetHubZagros,
-			vec![RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Issued{..}) => {},]
+			vec![RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Deposited{..}) => {},]
 		);
 	});
 
@@ -1842,7 +1892,7 @@ fn transfer_penpal_teleport_enabled_asset() {
 			<AssetHubZagros as AssetHubZagrosPallet>::PezkuwiXcm::transfer_assets_using_type_and_then(
 				RuntimeOrigin::signed(AssetHubZagrosSender::get()),
 				Box::new(VersionedLocation::from(destination)),
-				Box::new(VersionedAssets::from(assets)),
+				Box::new(VersionedAssets::from(assets.clone())),
 				Box::new(TransferType::Teleport),
 				Box::new(VersionedAssetId::from(AssetId(Location::parent()))),
 				Box::new(TransferType::LocalReserve),
@@ -1853,7 +1903,7 @@ fn transfer_penpal_teleport_enabled_asset() {
 
 		assert_expected_events!(
 			AssetHubZagros,
-			vec![RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Burned{..}) => {},]
+			vec![RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Withdrawn{..}) => {},]
 		);
 	});
 
@@ -1862,7 +1912,7 @@ fn transfer_penpal_teleport_enabled_asset() {
 
 		assert_expected_events!(
 			PenpalB,
-			vec![RuntimeEvent::Assets(pezpallet_assets::Event::Issued{..}) => {},]
+			vec![RuntimeEvent::Assets(pezpallet_assets::Event::Deposited{..}) => {},]
 		);
 	})
 }
@@ -1984,7 +2034,7 @@ fn transfer_roc_from_ah_with_legacy_api_will_fail() {
 	let ethereum_destination =
 		Location::new(2, [GlobalConsensus(Ethereum { chain_id: SEPOLIA_ID })]);
 
-	let ethereum_sovereign: AccountId = snowbridge_sovereign();
+	let ethereum_sovereign: AccountId = pezsnowbridge_sovereign();
 	AssetHubZagros::fund_accounts(vec![(ethereum_sovereign.clone(), INITIAL_FUND)]);
 
 	let bridged_roc_at_asset_hub_zagros = bridged_roc_at_ah_zagros();
@@ -2017,7 +2067,7 @@ fn transfer_roc_from_ah_with_legacy_api_will_fail() {
 		// Send partial of the token, will fail if send all
 		let assets =
 			vec![Asset { id: AssetId(asset_id.clone()), fun: Fungible(initial_fund / 10) }];
-		let versioned_assets = VersionedAssets::from(Assets::from(assets));
+		let versioned_assets = VersionedAssets::from(Assets::from(assets.clone()));
 
 		let beneficiary = VersionedLocation::from(Location::new(
 			0,
@@ -2030,7 +2080,7 @@ fn transfer_roc_from_ah_with_legacy_api_will_fail() {
 			Box::new(VersionedLocation::from(ethereum_destination)),
 			Box::new(beneficiary),
 			Box::new(versioned_assets),
-			Box::new(fee_asset_id.into()),
+			fee_asset_index(&Assets::from(assets.clone()), &fee_asset_id),
 			Unlimited,
 		);
 
@@ -2055,7 +2105,7 @@ fn transfer_roc_from_ah_with_transfer_and_then() {
 	let ethereum_destination =
 		Location::new(2, [GlobalConsensus(Ethereum { chain_id: SEPOLIA_ID })]);
 
-	let ethereum_sovereign: AccountId = snowbridge_sovereign();
+	let ethereum_sovereign: AccountId = pezsnowbridge_sovereign();
 	AssetHubZagros::fund_accounts(vec![(ethereum_sovereign.clone(), INITIAL_FUND)]);
 
 	let bridged_roc_at_asset_hub_zagros = bridged_roc_at_ah_zagros();
@@ -2157,7 +2207,7 @@ fn transfer_roc_from_ah_with_transfer_and_then() {
 
 		assert_expected_events!(
 			AssetHubZagros,
-			vec![RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Issued{..}) => {},]
+			vec![RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Deposited{..}) => {},]
 		);
 
 		let events = AssetHubZagros::events();
@@ -2166,8 +2216,8 @@ fn transfer_roc_from_ah_with_transfer_and_then() {
 		assert!(
 			events.iter().any(|event| matches!(
 				event,
-				RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Burned { owner, .. })
-					if *owner == ethereum_sovereign.clone(),
+				RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Withdrawn { who, .. })
+					if *who == ethereum_sovereign.clone(),
 			)),
 			"token burnt from Ethereum sovereign account."
 		);
@@ -2176,8 +2226,8 @@ fn transfer_roc_from_ah_with_transfer_and_then() {
 		assert!(
 			events.iter().any(|event| matches!(
 				event,
-				RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Issued { owner, .. })
-					if *owner == AssetHubZagrosReceiver::get()
+				RuntimeEvent::ForeignAssets(pezpallet_assets::Event::Deposited { who, .. })
+					if *who == AssetHubZagrosReceiver::get()
 			)),
 			"Token minted to beneficiary."
 		);
@@ -2197,7 +2247,7 @@ fn register_pna_in_v5_while_transfer_in_v4_should_work() {
 
 	let _expected_token_id = TokenIdOf::convert_location(&expected_asset_id).unwrap();
 
-	let ethereum_sovereign: AccountId = snowbridge_sovereign();
+	let ethereum_sovereign: AccountId = pezsnowbridge_sovereign();
 
 	// Register token in V5
 	BridgeHubZagros::execute_with(|| {

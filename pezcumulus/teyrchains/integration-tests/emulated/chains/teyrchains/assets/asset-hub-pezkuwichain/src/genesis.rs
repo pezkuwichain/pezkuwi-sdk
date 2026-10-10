@@ -14,7 +14,7 @@
 // limitations under the License.
 
 // Bizinikiwi
-use pezframe_support::parameter_types;
+use pezframe_support::{parameter_types, pezsp_runtime::traits::AccountIdConversion};
 use pezsp_core::storage::Storage;
 use pezsp_keyring::Sr25519Keyring as Keyring;
 
@@ -23,8 +23,8 @@ use emulated_integration_tests_common::{
 	accounts, build_genesis_storage, collators,
 	snowbridge::{ETHER_MIN_BALANCE, WETH},
 	xcm_pez_emulator::ConvertLocation,
-	PenpalALocation, PenpalASiblingSovereignAccount, PenpalATeleportableAssetLocation,
-	PenpalBLocation, PenpalBSiblingSovereignAccount, PenpalBTeleportableAssetLocation,
+	PenpalALocation, PenpalAPen2TeleportableAssetLocation, PenpalASiblingSovereignAccount,
+	PenpalBLocation, PenpalBPen2TeleportableAssetLocation, PenpalBSiblingSovereignAccount,
 	RESERVABLE_ASSET_ID, SAFE_XCM_VERSION, USDT_ID,
 };
 use testnet_teyrchains_constants::pezkuwichain::snowbridge::EthereumNetwork;
@@ -61,6 +61,19 @@ pub fn genesis() -> Storage {
 				.iter()
 				.cloned()
 				.map(|k| (k, ED * 4096 * 4096))
+				// The XCM checking account. This chain runs
+				// `TeleportTracking = Some((CheckingAccount, MintLocation::Local))`, so an
+				// arriving teleport is paid out of here -- an unseeded account means the first
+				// one fails with `NotWithdrawable`, which is exactly how the live Zagros Asset
+				// Hub swallowed a transfer before the seed was added to its preset.
+				//
+				// Two orders of magnitude over the largest single teleport these tests make,
+				// since several of them teleport in more than once. The Zagros twin sizes it
+				// the same way and explains the arithmetic there.
+				.chain(std::iter::once((
+					asset_hub_pezkuwichain_runtime::xcm_config::CheckingAccount::get(),
+					ED * 100_000,
+				)))
 				.collect(),
 			..Default::default()
 		},
@@ -92,6 +105,17 @@ pub fn genesis() -> Storage {
 		},
 		assets: asset_hub_pezkuwichain_runtime::AssetsConfig {
 			assets: vec![
+				// PEZ, exactly as the launch preset creates it: keyless team, sufficient,
+				// minimum balance of one. The runtime reads `PezAssetId = 1`, so this entry is
+				// not an addition to the fixture -- it is the entry that was missing, and
+				// without it every call that reaches for PEZ found a keyring-owned test asset
+				// in its place. Metadata is left off: it carries no behaviour.
+				(
+					asset_hub_pezkuwichain_runtime::genesis_config_presets::PEZ_ASSET_ID,
+					asset_hub_pezkuwichain_runtime::PezAssetTeamId::get().into_account_truncating(),
+					true,
+					1,
+				),
 				(RESERVABLE_ASSET_ID, AssetHubPezkuwichainAssetOwner::get(), false, ED),
 				(USDT_ID, AssetHubPezkuwichainAssetOwner::get(), true, ED),
 			],
@@ -101,14 +125,14 @@ pub fn genesis() -> Storage {
 			assets: vec![
 				// PenpalA's teleportable asset representation
 				(
-					PenpalATeleportableAssetLocation::get(),
+					PenpalAPen2TeleportableAssetLocation::get(),
 					PenpalASiblingSovereignAccount::get(),
 					false,
 					ED,
 				),
 				// PenpalB's teleportable asset representation
 				(
-					PenpalBTeleportableAssetLocation::get(),
+					PenpalBPen2TeleportableAssetLocation::get(),
 					PenpalBSiblingSovereignAccount::get(),
 					false,
 					ED,
@@ -138,11 +162,11 @@ pub fn genesis() -> Storage {
 			],
 			reserves: vec![
 				(
-					PenpalATeleportableAssetLocation::get(),
+					PenpalAPen2TeleportableAssetLocation::get(),
 					vec![(PenpalALocation::get(), true).into()],
 				),
 				(
-					PenpalBTeleportableAssetLocation::get(),
+					PenpalBPen2TeleportableAssetLocation::get(),
 					vec![(PenpalBLocation::get(), true).into()],
 				),
 				(EthereumLocation::get(), vec![(AssetHubZagrosLocation::get(), false).into()]),

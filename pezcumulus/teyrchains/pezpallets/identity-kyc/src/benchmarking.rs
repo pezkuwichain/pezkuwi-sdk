@@ -1,3 +1,8 @@
+// This file is part of PezkuwiChain.
+
+// Copyright (C) Dijital Kurdistan Tech Institute
+// SPDX-License-Identifier: Apache-2.0
+
 //! Benchmarking setup for pezpallet-identity-kyc
 
 use super::*;
@@ -17,12 +22,35 @@ fn funded_account<T: Config>(name: &'static str, index: u32) -> T::AccountId {
 /// Helper function to setup a citizen (for referrer)
 fn setup_citizen<T: Config>(who: &T::AccountId) {
 	KycStatuses::<T>::insert(who, KycLevel::Approved);
+
+	// An approved KYC status is not a citizen, and the difference is what two of this pallet's
+	// benchmarks measured instead of their calls. Measured against the People runtimes on
+	// 2026-09-20: `approve_referral` came back `NotEligibleToVouch` because `CitizenSince` was
+	// never written, and `renounce_citizenship` came back `CitizenNftNotFound` because nothing
+	// had minted the NFT. Neither showed up in this crate's own tests -- the mock binds
+	// `CitizenNftProvider` and `VouchingCapacity` to stubs that accept anything, so the gap only
+	// exists where the real pallets are wired in, which is exactly where weights are taken.
+	//
+	// One rather than zero: zero is the genesis exemption, and the path every referral after
+	// the founding generation takes is the one that waits.
+	let since: pezframe_system::pezpallet_prelude::BlockNumberFor<T> = 1u32.into();
+	CitizenSince::<T>::insert(who, since);
+	pezframe_system::Pezpallet::<T>::set_block_number(
+		T::VouchingWaitingPeriod::get().saturating_add(2u32.into()),
+	);
+	T::CitizenNftProvider::mint_citizen_nft_confirmed(who)
+		.expect("a citizen this pallet just approved must be able to hold the NFT; qed");
 }
 
 /// Helper function to setup an applicant in PendingReferral state
 fn setup_pending_referral<T: Config>(applicant: &T::AccountId, referrer: &T::AccountId) {
 	let identity_hash = H256::repeat_byte(0x01);
-	let application = CitizenshipApplication { identity_hash, referrer: referrer.clone() };
+	let application = CitizenshipApplication {
+		identity_hash,
+		referrer: referrer.clone(),
+		inviter: None,
+		applied_at: pezframe_system::Pezpallet::<T>::block_number(),
+	};
 	Applications::<T>::insert(applicant, application);
 	KycStatuses::<T>::insert(applicant, KycLevel::PendingReferral);
 
@@ -34,7 +62,12 @@ fn setup_pending_referral<T: Config>(applicant: &T::AccountId, referrer: &T::Acc
 /// Helper function to setup an applicant in ReferrerApproved state
 fn setup_referrer_approved<T: Config>(applicant: &T::AccountId, referrer: &T::AccountId) {
 	let identity_hash = H256::repeat_byte(0x01);
-	let application = CitizenshipApplication { identity_hash, referrer: referrer.clone() };
+	let application = CitizenshipApplication {
+		identity_hash,
+		referrer: referrer.clone(),
+		inviter: None,
+		applied_at: pezframe_system::Pezpallet::<T>::block_number(),
+	};
 	Applications::<T>::insert(applicant, application);
 	KycStatuses::<T>::insert(applicant, KycLevel::ReferrerApproved);
 
@@ -60,6 +93,7 @@ mod benchmarks {
 			RawOrigin::Signed(applicant.clone()),
 			identity_hash,
 			Some(referrer.clone()),
+			None,
 		);
 
 		assert_eq!(KycStatuses::<T>::get(&applicant), KycLevel::PendingReferral);

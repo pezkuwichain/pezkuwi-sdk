@@ -1,8 +1,13 @@
+// This file is part of PezkuwiChain.
+
+// Copyright (C) Dijital Kurdistan Tech Institute
+// SPDX-License-Identifier: Apache-2.0
+
 //! Benchmarking setup for pezpallet-messaging
 //!
 //! Run benchmarks with:
 //! ```text
-//! ./target/release/frame-omni-bencher v1 benchmark pezpallet \
+//! ./target/release/pezframe-omni-bencher v1 benchmark pezpallet \
 //!   --runtime target/release/wbuild/people-pezkuwichain-runtime/people_pezkuwichain_runtime.compact.compressed.wasm \
 //!   --pallets pezpallet_messaging -e all --steps 50 --repeat 20 \
 //!   --output pezcumulus/teyrchains/pezpallets/messaging/src/weights.rs \
@@ -20,8 +25,7 @@ mod benchmarks {
 	#[benchmark]
 	fn register_encryption_key() {
 		let caller: T::AccountId = whitelisted_caller();
-		// NOTE: In real benchmarks, caller must be mocked as citizen.
-		// This requires BenchmarkHelper trait integration (future work).
+		T::BenchmarkHelper::make_citizen(&caller);
 		let key = [1u8; 32];
 
 		#[extrinsic_call]
@@ -39,6 +43,10 @@ mod benchmarks {
 		let nonce = [4u8; 24];
 		let ciphertext = alloc::vec![0xAB; l as usize];
 
+		// Both ends are checked: the sender for citizenship and trust, the recipient for
+		// citizenship.
+		T::BenchmarkHelper::make_citizen(&sender);
+		T::BenchmarkHelper::make_citizen(&recipient);
 		// Pre-setup: register encryption keys
 		EncryptionKeys::<T>::insert(&sender, [1u8; 32]);
 		EncryptionKeys::<T>::insert(&recipient, key);

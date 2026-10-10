@@ -1,0 +1,889 @@
+// This file is part of PezkuwiChain.
+
+// Copyright (C) Dijital Kurdistan Tech Institute
+// SPDX-License-Identifier: Apache-2.0
+
+//! # TNPoS
+//!
+//! Selects a validator committee by drawing a fixed number of seats from each of nine
+//! independent strata. Buying one stratum outright buys three seats of twenty-seven, which
+//! is neither enough to stall the chain nor to fork it; that bound is the design.
+//!
+//! See `docs/TNPOS_DESIGN.md` for the threat model and the security budget.
+
+#![cfg_attr(not(feature = "std"), no_std)]
+
+extern crate alloc;
+
+pub use pezpallet::*;
+pub mod pool;
+pub mod sample;
+pub mod seed;
+pub mod slash;
+pub mod weights;
+/// Re-exported at the crate root because that is where a generated weights file looks for it.
+///
+/// `benchmark pallet` writes `impl pezpallet_tnpos::WeightInfo for WeightInfo<T>`, and without
+/// this the generated file does not compile -- which is how the first real weights run for this
+/// pallet failed, after the benchmark itself had succeeded. Every other pallet here reaches the
+/// same place through `pub use pezpallet::*`; this one has no such re-export, so it says it.
+pub use weights::WeightInfo;
+
+#[cfg(feature = "runtime-benchmarks")]
+mod benchmarking;
+#[cfg(test)]
+mod mock;
+#[cfg(test)]
+mod tests;
+
+use alloc::vec::Vec;
+use pezframe_support::{pezpallet_prelude::*, traits::Get, BoundedBTreeSet};
+use pezframe_system::pezpallet_prelude::*;
+use pezkuwi_tnpos_primitives::{
+	invariant::{seat, InvariantError, Seating},
+	scores::ScoreProvider,
+	sortition::Sortition,
+	StratumConfig, StratumId,
+};
+use pezsp_runtime::Saturating;
+use slash::Offence;
+
+/// Lets a runtime make an account eligible so `join` can be benchmarked.
+///
+/// "Eligible" here means everything `do_join` checks, not only the score gate: session
+/// keys are part of that since the fix that made `join` refuse a keyless account. Both
+/// arrangements have to happen here rather than inside the benchmark itself, because
+/// benchmarks run against a real runtime -- scores arrive over XCM from another chain and
+/// session keys come from a real keystore, and neither can be conjured from inside a
+/// benchmark. The runtime supplies this so the measured path stays the real one:
+/// `eligible_for` still reads scores through `Scores`, and `do_join` still reads keys
+/// through `HasSessionKeys`, exactly as they do in production.
+#[cfg(feature = "runtime-benchmarks")]
+pub trait BenchmarkHelper<AccountId> {
+	/// Give `who` whatever standing `stratum` requires, including session keys.
+	fn make_eligible(who: &AccountId, stratum: StratumId);
+}
+
+/// An origin `BondOrigin` accepts, for benchmarks.
+///
+/// The runtime's origin is the Asset Hub over XCM, and `EnsureXcm`'s own
+/// `try_successful_origin()` offers `Here`, which `Equals<AssetHubLocation>` rightly refuses.
+/// Only the runtime knows the Asset Hub's location, so the runtime says it.
+#[cfg(feature = "runtime-benchmarks")]
+pub trait BondBenchmarkSetup<RuntimeOrigin> {
+	fn bond_origin() -> RuntimeOrigin;
+}
+
+/// Reports whether an account can actually serve: session drops keyless validators.
+///
+/// `pezpallet_session::rotate_session` silently filters out any validator with no
+/// registered session keys, logging a warning and moving on. Nothing upstream of that point
+/// knows it happened, so a stratum can be seated in storage at its full three seats and
+/// still hand session fewer authorities than that -- or, if enough seats went the same way,
+/// none at all.
+pub trait HasSessionKeys<AccountId> {
+	fn has_keys(who: &AccountId) -> bool;
+}
+
+/// The pallet answers this from its own register.
+///
+/// Bound as `type HasSessionKeys = Tnpos;` in the runtime. The trait stays rather than being
+/// replaced by a direct read because the tests need to drive it, but the register the pallet
+/// keeps is the one answer that cannot disagree with itself -- anything else bound here is a
+/// second opinion about a fact this pallet already holds.
+impl<T: Config> HasSessionKeys<T::AccountId> for Pezpallet<T> {
+	fn has_keys(who: &T::AccountId) -> bool {
+		RelayKeys::<T>::contains_key(who)
+	}
+}
+
+/// Carries a seated committee to the chain that will validate with it.
+///
+/// Deliberately without a `()` implementation, here and on [`SendKeysToRelay`]. The obvious
+/// default -- do nothing, report success -- is the shape of every silent gate this tree has
+/// had to dig out: a runtime that forgot to wire delivery would compile, emit
+/// `CommitteeExported`, and seat nobody. Making the type system ask the question costs one
+/// line per runtime and cannot be answered wrongly by omission.
+pub trait SendCommitteeToRelay<AccountId> {
+	/// `era` is the identifier the receiving chain records the set under.
+	fn send(era: u32, committee: alloc::vec::Vec<AccountId>) -> Result<(), ()>;
+}
+
+/// Carries a key registration to the chain whose session pallet will hold it.
+///
+/// Failure is reported, not swallowed. The caller reverts on `Err`, so this chain never keeps a
+/// record of keys the relay did not receive.
+pub trait SendKeysToRelay<AccountId> {
+	fn set_keys(stash: &AccountId, keys: alloc::vec::Vec<u8>) -> Result<(), ()>;
+	fn purge_keys(stash: &AccountId) -> Result<(), ()>;
+}
+
+#[pezframe_support::pezpallet]
+pub mod pezpallet {
+	use super::{weights::WeightInfo, *};
+
+	/// First version this pallet has ever had on chain. Written down so a future migration
+	/// can tell whether it has run.
+	pub const STORAGE_VERSION: StorageVersion = StorageVersion::new(1);
+
+	/// Seats each stratum carries. Defined in `invariant` beside the floor derived from it,
+	/// and re-exported here for genesis and the benchmarks.
+	pub use pezkuwi_tnpos_primitives::invariant::SEATS_PER_STRATUM;
+
+	/// Eligible members a stratum needs before it may be seated. Defined in `invariant`
+	/// alongside `FloorTooLow`, the check that enforces it, and re-exported here for
+	/// genesis and the benchmarks.
+	pub use pezkuwi_tnpos_primitives::invariant::MIN_ELIGIBLE_PER_STRATUM;
+
+	#[pezpallet::pezpallet]
+	#[pezpallet::storage_version(STORAGE_VERSION)]
+	pub struct Pezpallet<T>(_);
+
+	#[pezpallet::config]
+	pub trait Config: pezframe_system::Config<RuntimeEvent: From<Event<Self>>> {
+		type WeightInfo: crate::weights::WeightInfo;
+
+		/// Where an era's draw comes from. Phase 1 supplies a commit-reveal seed; phase 2
+		/// replaces this with ring-VRF tickets without touching the rest of the pallet.
+		type Sortition: Sortition<Self::AccountId>;
+
+		/// Cached People-chain scores. Reads go through `ScoreSnapshot::value_if_fresh`.
+		type Scores: ScoreProvider<Self::AccountId, BlockNumberFor<Self>>;
+
+		/// How long uninterrupted, offence-free pool membership must run before it is standing.
+		///
+		/// The one gate in the nine that answers to no authority at all. Not the President, not
+		/// the court, not the house, not the market -- only elapsed time without an offence,
+		/// and time is the single qualification nobody can grant, sell or manufacture. An
+		/// attacker can buy stake and forge a reputation; they cannot forge a past.
+		///
+		/// **It admits on trust for the chain's first period, and closes itself.** At genesis
+		/// nobody has a past here, so a strict gate would leave the stratum empty until the
+		/// period had run once -- and the people who would have filled it are exactly the ones
+		/// serving that period. The grace window *is* the qualifying window: those who join
+		/// during it and behave qualify on the day it ends. No governance action turns it off,
+		/// and the date it ends is knowable from genesis.
+		#[pezpallet::constant]
+		type TenurePeriod: Get<BlockNumberFor<Self>>;
+
+		/// Standing an ordinary citizen needs before the open lottery will draw them.
+		///
+		/// Forty, and it is not an arbitrary number: it is exactly what the cheapest possible
+		/// account scores. Trust weights staking at twenty of a hundred against a maximum of a
+		/// hundred, so a citizen who stakes the smallest tier and does nothing else normalises
+		/// to two hundred of a thousand and lands on forty precisely. *Above* forty therefore
+		/// means "has done something beyond the cheapest act" -- held the stake long enough for
+		/// the duration multiplier, or vouched for somebody, or earned a badge or a course.
+		///
+		/// That is the whole of the gate, and it is meant to be light. This stratum's security
+		/// is the size of the pool it draws from, not the height of its bar: three seats drawn
+		/// uniformly from thousands means an attacker needs roughly a third of every
+		/// participating citizen to expect a single seat. A hard gate here would only duplicate
+		/// one of the other eight and shut out the ordinary people this stratum exists to seat.
+		/// What the floor removes is the one profile the pool cannot dilute cheaply -- an
+		/// account minted for the draw, holding one HEZ and nothing else.
+		///
+		/// The same forty the register asks of an endorser. One number, one meaning.
+		#[pezpallet::constant]
+		type LotteryTrustFloor: Get<u128>;
+
+		/// Who may report what a session produced. The relay, and nothing else.
+		type PerformanceOrigin: EnsureOrigin<Self::RuntimeOrigin>;
+
+		/// Sessions a candidate must have been seated for before the record counts as one.
+		///
+		/// The ninth gate is the only one that asks for *work done*. Money, an identity, a
+		/// vouch and an institution's signature all buy their way past the other eight; this
+		/// one is bought with sessions actually validated, which nobody can grant.
+		#[pezpallet::constant]
+		type InfrastructureSessions: Get<u32>;
+
+		/// How far back the co-failure record is read.
+		///
+		/// A quarter, so a repeated pattern shows and a fixed one is forgiven. An operator who
+		/// moves off a bad host should not carry it for ever.
+		#[pezpallet::constant]
+		type InfrastructureWindow: Get<u32>;
+
+		/// How many must fail together before it counts as failing *together*.
+		///
+		/// Two validators down in one session is coincidence often enough to matter: across a
+		/// window of thousands of sessions an honest operator would be caught by a threshold
+		/// set that low. Four is where a committee of twenty-seven stops looking unlucky and
+		/// starts looking like shared ground.
+		#[pezpallet::constant]
+		type CoFailureGroup: Get<u32>;
+
+		/// How many such sessions inside the window disqualify.
+		///
+		/// One is too brittle whatever the group size: pick any threshold and a slightly worse
+		/// network starts disqualifying honest operators. Shared infrastructure does not
+		/// produce one event, it produces a pattern, so the rule reads the pattern.
+		#[pezpallet::constant]
+		type CoFailureRepeats: Get<u32>;
+
+		/// Whether an account has registered session keys.
+		///
+		/// A validator without keys is silently dropped when the session rotates, which
+		/// would let a stratum's real share of the committee differ from its seated one --
+		/// and, if enough seats went that way, leave the authority set empty.
+		type HasSessionKeys: crate::HasSessionKeys<Self::AccountId>;
+
+		/// The relay chain's own `SessionKeys`, mirrored so keys can be checked before they
+		/// are forwarded.
+		///
+		/// This chain cannot name the relay's type, so it declares a structurally identical
+		/// one. The mirror has to match field for field and in order -- it is what decodes
+		/// the bytes -- and `the_relay_key_mirror_matches` in the runtime tests is what holds
+		/// the two definitions together.
+		type RelaySessionKeys: pezsp_runtime::traits::OpaqueKeys + codec::Decode;
+
+		/// How a seated committee reaches the chain it will validate.
+		///
+		/// The committee is only a list in storage until somebody acts on it. Delivery is
+		/// separated from seating so the pallet stays independent of where it runs, but it is
+		/// not optional: a pallet that draws a committee nobody receives is a mechanism that
+		/// was designed and never wired, and this tree has spent a week removing those.
+		///
+		/// A failed send is logged and the era still advances. The alternative -- refusing to
+		/// seat because the message could not go out -- would hand an unreachable relay the
+		/// power to freeze this chain's own era clock.
+		type SendCommitteeToRelay: crate::SendCommitteeToRelay<Self::AccountId>;
+
+		/// How the keys reach the relay, where the session pallet that uses them lives.
+		///
+		/// Registration is a local write *and* a message: this chain keeps the register of who
+		/// holds keys, and the relay keeps the keys themselves. Both happen in one call, and
+		/// the call reverts as a whole if the message cannot be sent -- a local record of a key
+		/// the relay never received is the disagreement this design exists to make impossible.
+		type SendKeysToRelay: crate::SendKeysToRelay<Self::AccountId>;
+
+		/// May set strata and force an era.
+		type ManagerOrigin: EnsureOrigin<Self::RuntimeOrigin>;
+
+		/// How old a cached score may be before it counts as absent.
+		#[pezpallet::constant]
+		type MaxScoreAge: Get<BlockNumberFor<Self>>;
+
+		/// Blocks per era.
+		#[pezpallet::constant]
+		type EraLength: Get<BlockNumberFor<Self>>;
+
+		/// Upper bound on pool members. Bounds every iteration in this pallet.
+		#[pezpallet::constant]
+		type MaxPoolSize: Get<u32>;
+
+		/// Who may report the validators bonded on the Asset Hub: the Asset Hub over XCM.
+		type BondOrigin: EnsureOrigin<Self::RuntimeOrigin>;
+
+		/// The most accounts one bond report names (`MAX_BONDED_REPORT`).
+		#[pezpallet::constant]
+		type MaxBonded: Get<u32>;
+
+		#[cfg(feature = "runtime-benchmarks")]
+		type BondBenchmarkHelper: crate::BondBenchmarkSetup<Self::RuntimeOrigin>;
+
+		/// Makes an account eligible for a stratum during benchmarking.
+		///
+		/// Benchmarks run against a real runtime, whose scores arrive over XCM from another
+		/// chain and cannot be conjured from inside a benchmark. The runtime supplies this
+		/// so the measured path stays the real one: `eligible_for` still reads scores
+		/// through `Scores` exactly as it does in production.
+		#[cfg(feature = "runtime-benchmarks")]
+		type BenchmarkHelper: crate::BenchmarkHelper<Self::AccountId>;
+	}
+
+	/// The strata this chain draws from, and what each carries.
+	#[pezpallet::storage]
+	pub type Strata<T: Config> =
+		StorageValue<_, BoundedVec<StratumConfig, ConstU32<16>>, ValueQuery>;
+
+	/// Which stratum each pool member stands in. A member stands in exactly one: an account
+	/// in two strata would correlate them, and the security arithmetic assumes they are not.
+	#[pezpallet::storage]
+	pub type PoolMembers<T: Config> =
+		StorageMap<_, Blake2_128Concat, T::AccountId, StratumId, OptionQuery>;
+
+	/// Eligible members per stratum. Kept as a counter so seating never has to iterate.
+	#[pezpallet::storage]
+	pub type StratumSize<T: Config> = StorageMap<_, Twox64Concat, StratumId, u32, ValueQuery>;
+
+	/// Who has registered relay session keys, and the keys themselves.
+	///
+	/// The register of holders is here because this is where eligibility is decided; the keys
+	/// are here too so a re-send after a failed delivery does not need the holder to type them
+	/// again. The relay's session pallet holds the authoritative copy that consensus reads --
+	/// but it accepts writes only from this chain, so the two cannot drift.
+	#[pezpallet::storage]
+	pub type RelayKeys<T: Config> =
+		StorageMap<_, Blake2_128Concat, T::AccountId, BoundedVec<u8, ConstU32<512>>, OptionQuery>;
+
+	#[pezpallet::storage]
+	pub type CurrentEra<T: Config> = StorageValue<_, u32, ValueQuery>;
+
+	#[pezpallet::storage]
+	pub type EraStart<T: Config> = StorageValue<_, BlockNumberFor<T>, ValueQuery>;
+
+	/// The committee seated for the current era, in stratum order.
+	#[pezpallet::storage]
+	pub type CurrentCommittee<T: Config> = StorageValue<
+		_,
+		BoundedVec<T::AccountId, ConstU32<{ pezkuwi_tnpos_primitives::invariant::MAX_COMMITTEE }>>,
+		ValueQuery,
+	>;
+
+	/// Commitments for an era's seed, scoped to the era they are for.
+	///
+	/// Scoped because a commit-reveal round belongs to one era. An unscoped pot lets an
+	/// account commit again after seeing what others revealed, which is not withholding but
+	/// steering.
+	#[pezpallet::storage]
+	pub type SeedCommitments<T: Config> = StorageDoubleMap<
+		_,
+		Twox64Concat,
+		u32,
+		Blake2_128Concat,
+		T::AccountId,
+		[u8; 32],
+		OptionQuery,
+	>;
+
+	/// The mixed seed for an era's draw, and the era it belongs to.
+	///
+	/// Spent when that era is drawn. An era with no round of its own has no seed and is
+	/// refused, rather than drawing from a value the whole chain has already seen.
+	#[pezpallet::storage]
+	pub type NextSeed<T: Config> = StorageValue<_, ([u8; 32], u32), OptionQuery>;
+
+	/// Accounts barred from the pool, and the era their ban lifts.
+	#[pezpallet::storage]
+	pub type Banned<T: Config> = StorageMap<_, Blake2_128Concat, T::AccountId, u32, OptionQuery>;
+
+	/// How many sessions the relay has reported. The clock the co-failure window is read on.
+	#[pezpallet::storage]
+	pub type SessionsObserved<T: Config> = StorageValue<_, u32, ValueQuery>;
+
+	/// How many sessions each account has been seated for, ever.
+	#[pezpallet::storage]
+	pub type SeatedSessions<T: Config> =
+		StorageMap<_, Blake2_128Concat, T::AccountId, u32, ValueQuery>;
+
+	/// The sessions in which this account failed in company, most recent last.
+	///
+	/// Only the last few are kept, because only the last few can matter: the rule asks whether
+	/// `CoFailureRepeats` of them fall inside the window, so anything older than the
+	/// `CoFailureRepeats`-th most recent cannot change the answer. A bounded list rather than a
+	/// counter, because a counter cannot forget and this record has to.
+	#[pezpallet::storage]
+	pub type CoFailures<T: Config> =
+		StorageMap<_, Blake2_128Concat, T::AccountId, BoundedVec<u32, ConstU32<8>>, ValueQuery>;
+
+	/// When each member's current, unbroken spell in the pool began.
+	///
+	/// Cleared on every way out -- leaving, and being removed for an offence -- because the
+	/// stratum that reads it is defined on *uninterrupted* membership. Rejoining starts a new
+	/// spell rather than resuming the old one, which is what makes the qualification something
+	/// an offender has to earn again rather than wait out.
+	#[pezpallet::storage]
+	pub type InPoolSince<T: Config> =
+		StorageMap<_, Blake2_128Concat, T::AccountId, BlockNumberFor<T>, OptionQuery>;
+
+	/// The accounts validating on the Asset Hub, as it last reported them -- each holding at
+	/// least the validator bond there. A candidacy needs one (spec C4). `None` until the first
+	/// report, and the gate is open until then: the era clock must not wait on a message.
+	#[pezpallet::storage]
+	pub type BondedOnAssetHub<T: Config> =
+		StorageValue<_, BoundedBTreeSet<T::AccountId, T::MaxBonded>, OptionQuery>;
+
+	/// The Asset Hub era the held bond report is for, so a late report cannot replace a newer.
+	#[pezpallet::storage]
+	pub type BondReportEra<T: Config> = StorageValue<_, u32, ValueQuery>;
+
+	#[pezpallet::event]
+	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
+	pub enum Event<T: Config> {
+		/// The Asset Hub reported who is bonded there for its era `era`.
+		BondedNoted { era: u32, count: u32 },
+		/// A member joined `stratum`.
+		Joined { who: T::AccountId, stratum: StratumId },
+		/// A group failed in one session, large enough to be recorded against each of them.
+		FailedTogether { session: u32, count: u32 },
+		/// A member moved between strata without leaving the pool, so their spell continues.
+		StratumSwitched { who: T::AccountId, from: StratumId, to: StratumId },
+		/// A member left the pool.
+		Left { who: T::AccountId },
+		/// A seated committee was handed to the router for the relay.
+		///
+		/// Sent, not accepted. A successful `send` means the message left this chain; whether
+		/// the relay's `ah_client` took it depends on an origin check over there, and this
+		/// chain never hears the answer. Reading this event as "the relay is now using this
+		/// committee" is the mistake `isInBlock` teaches every time.
+		CommitteeSentToRelay { era: u32, size: u32 },
+		/// The committee was seated but could not even be sent; the relay keeps the old one.
+		CommitteeCouldNotBeSent { era: u32 },
+		/// The seated committee has fallen below the size its security budget was chosen for.
+		///
+		/// Removals inside an era shrink the committee and there is no way to refill it: the
+		/// seed is consumed and killed at each seating, so a redraw needs the next
+		/// commit-reveal round -- half an era away. Refusing the removal instead would leave
+		/// an equivocator signing, which is worse than a smaller committee.
+		///
+		/// So the chain goes on with what is left and says so. `MIN_COMMITTEE` is where the
+		/// fork and halt probabilities in the design were computed; below it they are worse
+		/// than anyone agreed to, and that has to be an alarm rather than something an
+		/// operator infers from a validator set that quietly got shorter.
+		CommitteeBelowSecurityFloor { era: u32, size: u32, floor: u32 },
+		/// Nothing was sent because the committee is empty; the relay keeps the old one.
+		///
+		/// Distinct from a failed send: this one is not a delivery problem, it is this chain
+		/// having no committee to offer, and the two need different answers.
+		EmptyCommitteeNotSent { era: u32 },
+
+		/// Relay session keys were registered here and forwarded.
+		RelayKeysSet { who: T::AccountId },
+		/// Relay session keys were withdrawn here and on the relay.
+		RelayKeysPurged { who: T::AccountId },
+		/// A committee was seated. `unseated` names the strata that stood down.
+		CommitteeSeated { era: u32, size: u32, quorum: u32, unseated: Vec<StratumId> },
+		/// No committee could be seated; the previous one stays.
+		SeatingRefused { era: u32 },
+		/// The strata configuration changed.
+		StrataSet { count: u32 },
+		/// A member was punished for `offence` and barred from the pool until `banned_until`.
+		Punished { who: T::AccountId, offence: Offence, banned_until: u32 },
+	}
+
+	#[pezpallet::error]
+	pub enum Error<T> {
+		/// The account holds no validator bond on the Asset Hub, which a candidacy needs.
+		NotBondedOnAssetHub,
+		/// A bond report for an older Asset Hub era than the one held.
+		StaleBondReport,
+		AlreadyInPool,
+		NotInPool,
+		PoolFull,
+		/// The account does not meet this stratum's gate.
+		NotEligible,
+		/// A score this decision needs is missing or too old. Deliberately not the same as
+		/// `NotEligible`: a stalled channel is an outage, not a judgement about the account.
+		ScoreUnavailable,
+		/// The strata configuration cannot be seated at all.
+		UnseatableConfiguration,
+		/// A reveal was submitted with no matching commitment.
+		NoCommitment,
+		/// The revealed preimage does not hash to the commitment on record.
+		BadReveal,
+		/// This account already committed for this round.
+		AlreadyCommitted,
+		/// The commit half of this round has closed; only reveals are accepted now.
+		CommitWindowClosed,
+		/// The reveal half of this round has not opened yet; the commit half is still running.
+		RevealWindowNotOpen,
+		/// This account is barred from the pool until its ban expires.
+		Banned,
+		/// This account has no session keys registered. Session silently drops a keyless
+		/// validator on rotation, so seating one would let a stratum's storage record
+		/// disagree with its real authority count.
+		NoSessionKeys,
+		/// The bytes do not decode as the relay's `SessionKeys`.
+		InvalidRelayKeys,
+		/// The ownership proof does not match the keys and the account offering them.
+		InvalidKeyOwnershipProof,
+		/// The keys are longer than the register will hold.
+		RelayKeysTooLong,
+		/// The relay could not be reached, so nothing was recorded.
+		CouldNotReachRelay,
+		/// There are no keys registered for this account.
+		NoRelayKeys,
+	}
+
+	#[pezpallet::genesis_config]
+	pub struct GenesisConfig<T: Config> {
+		pub strata: Vec<StratumConfig>,
+		pub members: Vec<(T::AccountId, StratumId)>,
+	}
+
+	impl<T: Config> Default for GenesisConfig<T> {
+		/// The nine strata this chain is specified with, three seats each.
+		///
+		/// Not a placeholder: nine gates of three is the shape of the committee, so a
+		/// chainspec that omits the section should get that chain rather than one which
+		/// seats nobody. An explicitly empty or otherwise unseatable configuration still
+		/// fails in `build`.
+		fn default() -> Self {
+			Self {
+				strata: StratumId::ALL
+					.iter()
+					.map(|&id| StratumConfig {
+						id,
+						seats: SEATS_PER_STRATUM,
+						// Per stratum: the court's floor is its seat count rather than fifty,
+						// because eleven judges can never be fifty. See `min_eligible_for`.
+						min_eligible: pezkuwi_tnpos_primitives::invariant::min_eligible_for(id),
+					})
+					.collect(),
+				members: Vec::new(),
+			}
+		}
+	}
+
+	#[pezpallet::genesis_build]
+	impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
+		fn build(&self) {
+			let bounded: BoundedVec<StratumConfig, ConstU32<16>> = self
+				.strata
+				.clone()
+				.try_into()
+				.expect("genesis declares at most sixteen strata; qed");
+
+			// Validate the configuration, not the population: the pool is legitimately
+			// empty at genesis and fills before the first era. Pretending every stratum is
+			// full checks exactly the config-level floors -- stratum count, total seats,
+			// no stratum carrying zero. A chain that cannot ever be seated must fail to
+			// build rather than start and discover it at the first era boundary.
+			let as_if_full = alloc::vec![u32::MAX; bounded.len()];
+			seat(&bounded, &as_if_full).expect("genesis strata must be seatable; qed");
+
+			Strata::<T>::put(&bounded);
+			for (who, stratum) in &self.members {
+				PoolMembers::<T>::insert(who, stratum);
+				StratumSize::<T>::mutate(stratum, |n| *n = n.saturating_add(1));
+			}
+			CurrentEra::<T>::put(0u32);
+		}
+	}
+
+	#[pezpallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pezpallet<T> {
+		fn on_initialize(now: BlockNumberFor<T>) -> Weight {
+			let mut weight = T::DbWeight::get().reads(1);
+			if now < EraStart::<T>::get().saturating_add(T::EraLength::get()) {
+				return weight;
+			}
+
+			// The era window moves on whether or not a committee could be drawn. The pallet
+			// this replaces left it in place on failure and so re-ran the entire selection
+			// on every block, paying full weight each time and never recovering.
+			EraStart::<T>::put(now);
+			weight = weight.saturating_add(T::DbWeight::get().writes(1));
+			weight = weight.saturating_add(T::WeightInfo::seat_committee(T::MaxPoolSize::get()));
+
+			if Self::do_seat_committee().is_err() {
+				Self::deposit_event(Event::SeatingRefused { era: CurrentEra::<T>::get() });
+				log::warn!(target: "tnpos", "no committee could be seated; previous one stands");
+			}
+			weight
+		}
+
+		#[cfg(feature = "try-runtime")]
+		fn try_state(_: BlockNumberFor<T>) -> Result<(), pezsp_runtime::TryRuntimeError> {
+			let strata = Strata::<T>::get();
+			let sizes: Vec<u32> = strata.iter().map(|c| StratumSize::<T>::get(c.id)).collect();
+			// A live chain whose strata cannot be seated is a chain running outside its
+			// security budget; that must surface as a failure, not as a quiet degradation.
+			seat(&strata, &sizes)
+				.map_err(|_| "tnpos: strata cannot satisfy the security floors")?;
+			Ok(())
+		}
+
+		fn integrity_test() {
+			// A commit half of zero blocks accepts no contribution, so no seed is ever built
+			// and no era is ever drawn -- silently, and forever. The window is half the era,
+			// so the era needs at least two blocks for both halves to exist at all.
+			assert!(
+				T::EraLength::get() >= 2u32.into(),
+				"EraLength must be at least two blocks: the commit and reveal halves each need one"
+			);
+		}
+	}
+
+	#[pezpallet::call]
+	impl<T: Config> Pezpallet<T> {
+		/// Join `stratum`. Every gate is measured against current scores.
+		#[pezpallet::call_index(0)]
+		#[pezpallet::weight(T::WeightInfo::join())]
+		pub fn join(origin: OriginFor<T>, stratum: StratumId) -> DispatchResult {
+			Self::do_join(ensure_signed(origin)?, stratum)
+		}
+
+		/// Register the relay session keys this account will validate with.
+		///
+		/// The keys are checked here and held on the relay. Checked here because this is where
+		/// eligibility is decided and an applicant deserves the reason rather than an
+		/// unexplained absence from the committee; held there because that is where consensus
+		/// reads them.
+		///
+		/// One call, two writes, and they cannot come apart: the message goes first and the
+		/// whole call reverts if it cannot be sent, so this chain never records a key the relay
+		/// did not receive. The relay accepts key writes from here and nowhere else, which is
+		/// what makes the pair a single register rather than two that agree by habit.
+		#[pezpallet::call_index(7)]
+		#[pezpallet::weight(T::WeightInfo::join())]
+		pub fn set_relay_keys(
+			origin: OriginFor<T>,
+			keys: alloc::vec::Vec<u8>,
+			proof: alloc::vec::Vec<u8>,
+		) -> DispatchResult {
+			let who = ensure_signed(origin)?;
+
+			// Decoded as the relay's own key type, so a payload that would be rejected on
+			// arrival is rejected before it is recorded.
+			let decoded = <T::RelaySessionKeys as codec::Decode>::decode(&mut &keys[..])
+				.map_err(|_| Error::<T>::InvalidRelayKeys)?;
+			ensure!(
+				pezsp_runtime::traits::OpaqueKeys::ownership_proof_is_valid(
+					&decoded,
+					&who.encode(),
+					&proof
+				),
+				Error::<T>::InvalidKeyOwnershipProof
+			);
+
+			let bounded: BoundedVec<u8, ConstU32<512>> =
+				keys.clone().try_into().map_err(|_| Error::<T>::RelayKeysTooLong)?;
+
+			T::SendKeysToRelay::set_keys(&who, keys).map_err(|_| Error::<T>::CouldNotReachRelay)?;
+			RelayKeys::<T>::insert(&who, bounded);
+
+			Self::deposit_event(Event::RelayKeysSet { who });
+			Ok(())
+		}
+
+		/// Record what a session produced: who authored, and who was seated and did not.
+		///
+		/// Sent by the relay at the end of every session. This chain draws the committee but
+		/// does not run it, so it cannot see a missed block; and it must not guess, because the
+		/// set it drew and the set the relay seated differ for a session or two after every
+		/// handover. The chain that knows reports.
+		///
+		/// The length of `failed` is the whole of the signal. One name is an operator's own
+		/// outage. Eight names in one session is eight operators who went down together, which
+		/// is what sharing a rack, a host or a provider looks like from here -- and it is the
+		/// only view of infrastructure independence a chain can have, because it is the only
+		/// consequence of it that reaches the chain at all.
+		#[pezpallet::call_index(10)]
+		#[pezpallet::weight(T::WeightInfo::join())]
+		pub fn note_session_performance(
+			origin: OriginFor<T>,
+			scored: Vec<T::AccountId>,
+			failed: Vec<T::AccountId>,
+		) -> DispatchResult {
+			T::PerformanceOrigin::ensure_origin(origin)?;
+
+			let now = SessionsObserved::<T>::mutate(|n| {
+				*n = n.saturating_add(1);
+				*n
+			});
+
+			for who in scored.iter().chain(failed.iter()) {
+				SeatedSessions::<T>::mutate(who, |n| *n = n.saturating_add(1));
+			}
+
+			// A session where more than half the committee is down says nothing about who
+			// shares ground with whom -- it is the network having a bad day, and counting it
+			// would mark every honest operator at once. The first chain-wide incident would
+			// otherwise empty this stratum.
+			let group = failed.len() as u32;
+			let seated = group.saturating_add(scored.len() as u32);
+			if group > T::CoFailureGroup::get() && group.saturating_mul(2) <= seated {
+				for who in failed.iter() {
+					CoFailures::<T>::mutate(who, |marks| {
+						if marks.is_full() {
+							marks.remove(0);
+						}
+						let _ = marks.try_push(now);
+					});
+				}
+				Self::deposit_event(Event::FailedTogether { session: now, count: group });
+			}
+			Ok(())
+		}
+
+		/// Move to another stratum without leaving the pool.
+		///
+		/// Necessary rather than convenient, and the tenure stratum is why. Standing there is
+		/// unbroken pool membership, which is cleared by `leave` -- so without this the only
+		/// way to reach that stratum would be to leave and start the clock at zero, and after
+		/// the grace window nobody could ever enter it again. Switching is not an
+		/// interruption: the member never stops being in the pool, so the spell continues.
+		///
+		/// The new stratum's gate is checked exactly as `join` checks it. Somebody who cannot
+		/// enter a stratum from outside cannot enter it from inside either.
+		#[pezpallet::call_index(9)]
+		#[pezpallet::weight(T::WeightInfo::join())]
+		pub fn switch_stratum(origin: OriginFor<T>, stratum: StratumId) -> DispatchResult {
+			let who = ensure_signed(origin)?;
+			let current = PoolMembers::<T>::get(&who).ok_or(Error::<T>::NotInPool)?;
+			ensure!(current != stratum, Error::<T>::AlreadyInPool);
+			Self::eligible_for(&who, stratum)?;
+
+			StratumSize::<T>::mutate(current, |n| *n = n.saturating_sub(1));
+			StratumSize::<T>::mutate(stratum, |n| *n = n.saturating_add(1));
+			PoolMembers::<T>::insert(&who, stratum);
+			// `InPoolSince` is deliberately untouched.
+
+			Self::deposit_event(Event::StratumSwitched { who, from: current, to: stratum });
+			Ok(())
+		}
+
+		/// Withdraw the keys, here and on the relay.
+		///
+		/// Leaves the pool as well, because a member without keys is a seat that the session
+		/// would silently drop -- the same reason `join` refuses one. Removing them from the
+		/// pool here is what keeps the stratum counts honest.
+		#[pezpallet::call_index(8)]
+		#[pezpallet::weight(T::WeightInfo::leave())]
+		pub fn purge_relay_keys(origin: OriginFor<T>) -> DispatchResult {
+			let who = ensure_signed(origin)?;
+			ensure!(RelayKeys::<T>::contains_key(&who), Error::<T>::NoRelayKeys);
+
+			T::SendKeysToRelay::purge_keys(&who).map_err(|_| Error::<T>::CouldNotReachRelay)?;
+			RelayKeys::<T>::remove(&who);
+			if PoolMembers::<T>::contains_key(&who) {
+				Self::do_leave(who.clone())?;
+			}
+
+			Self::deposit_event(Event::RelayKeysPurged { who });
+			Ok(())
+		}
+
+		/// Leave the pool.
+		#[pezpallet::call_index(1)]
+		#[pezpallet::weight(T::WeightInfo::leave())]
+		pub fn leave(origin: OriginFor<T>) -> DispatchResult {
+			Self::do_leave(ensure_signed(origin)?)
+		}
+
+		/// Seat a new committee now.
+		#[pezpallet::call_index(2)]
+		#[pezpallet::weight(T::WeightInfo::seat_committee(T::MaxPoolSize::get()))]
+		pub fn force_new_era(origin: OriginFor<T>) -> DispatchResult {
+			T::ManagerOrigin::ensure_origin(origin)?;
+			match Self::do_seat_committee() {
+				Ok(_) => Ok(()),
+				Err(e) => {
+					Self::deposit_event(Event::SeatingRefused { era: CurrentEra::<T>::get() });
+					Err(e.into())
+				},
+			}
+		}
+
+		/// Commit to a future seed contribution by hash. Reveal it in a later call with
+		/// `reveal_seed`.
+		#[pezpallet::call_index(3)]
+		#[pezpallet::weight(T::WeightInfo::commit_seed())]
+		pub fn commit_seed(origin: OriginFor<T>, hash: [u8; 32]) -> DispatchResult {
+			Self::do_commit_seed(ensure_signed(origin)?, hash)
+		}
+
+		/// Reveal a prior commitment. Its preimage is mixed into the next era's seed.
+		#[pezpallet::call_index(4)]
+		#[pezpallet::weight(T::WeightInfo::reveal_seed())]
+		pub fn reveal_seed(origin: OriginFor<T>, preimage: [u8; 32]) -> DispatchResult {
+			Self::do_reveal_seed(ensure_signed(origin)?, preimage)
+		}
+
+		/// Punish `who` for `offence`: remove them from the pool and the seated committee, and
+		/// bar them from rejoining until their ban expires.
+		#[pezpallet::call_index(5)]
+		#[pezpallet::weight(T::WeightInfo::report_offence())]
+		pub fn report_offence(
+			origin: OriginFor<T>,
+			who: T::AccountId,
+			offence: Offence,
+		) -> DispatchResult {
+			T::ManagerOrigin::ensure_origin(origin)?;
+			Self::do_report_offence(who, offence)
+		}
+
+		/// Replace the strata configuration.
+		///
+		/// Refused unless the new configuration could be seated, so the chain cannot be
+		/// governed into a shape that is outside its own security budget.
+		#[pezpallet::call_index(6)]
+		#[pezpallet::weight(T::WeightInfo::set_strata())]
+		pub fn set_strata(origin: OriginFor<T>, strata: Vec<StratumConfig>) -> DispatchResult {
+			T::ManagerOrigin::ensure_origin(origin)?;
+			let bounded: BoundedVec<StratumConfig, ConstU32<16>> =
+				strata.try_into().map_err(|_| Error::<T>::UnseatableConfiguration)?;
+			let as_if_full = alloc::vec![u32::MAX; bounded.len()];
+			seat(&bounded, &as_if_full).map_err(|_| Error::<T>::UnseatableConfiguration)?;
+
+			let count = bounded.len() as u32;
+			Strata::<T>::put(bounded);
+			Self::deposit_event(Event::StrataSet { count });
+			Ok(())
+		}
+
+		/// Record who is bonded on the Asset Hub, as it reports at the start of each of its eras.
+		///
+		/// A candidacy needs a validator's bond there (spec C4). This chain cannot read the
+		/// Asset Hub's state, so the Asset Hub says it: the accounts in its `Validators`, each of
+		/// whom bonded at least the floor to validate and cannot unbond below it while doing so.
+		#[pezpallet::call_index(11)]
+		#[pezpallet::weight(T::WeightInfo::note_bonded(bonded.len() as u32))]
+		pub fn note_bonded(
+			origin: OriginFor<T>,
+			era: u32,
+			bonded: BoundedVec<T::AccountId, T::MaxBonded>,
+		) -> DispatchResult {
+			T::BondOrigin::ensure_origin(origin)?;
+			if BondedOnAssetHub::<T>::exists() {
+				ensure!(era >= BondReportEra::<T>::get(), Error::<T>::StaleBondReport);
+			}
+			let set: BoundedBTreeSet<T::AccountId, T::MaxBonded> = bonded
+				.into_iter()
+				.collect::<alloc::collections::BTreeSet<_>>()
+				.try_into()
+				.map_err(|_| pezsp_runtime::DispatchError::Other("bounded by the same bound"))?;
+			let count = set.len() as u32;
+			BondedOnAssetHub::<T>::put(set);
+			BondReportEra::<T>::put(era);
+			Self::deposit_event(Event::BondedNoted { era, count });
+			Ok(())
+		}
+	}
+}
+
+impl<T: Config> Pezpallet<T> {
+	/// Send the committee as it currently stands to the chain that validates with it.
+	///
+	/// Called at seating and again whenever the committee changes inside an era, because the
+	/// receiving chain keeps a copy and nothing over there re-reads this storage. While this
+	/// pallet was a `SessionManager` the question did not arise -- session asked every time --
+	/// and the export replaced that with a single message per era, which silently dropped
+	/// mid-era removals: a member banned for equivocation left `CurrentCommittee` here and
+	/// kept validating there until the next era.
+	///
+	/// An empty committee is never sent. The receiving side reads a set of no validators as an
+	/// instruction to install none, which stops the chain; when there is nothing to offer, the
+	/// recoverable answer is to change nothing and say so.
+	pub(crate) fn export_committee(era: u32) {
+		let committee = CurrentCommittee::<T>::get();
+		let size = committee.len() as u32;
+		if committee.is_empty() {
+			log::warn!(target: "tnpos", "committee for era {era} is empty; not exporting");
+			Self::deposit_event(Event::EmptyCommitteeNotSent { era });
+			return;
+		}
+
+		match T::SendCommitteeToRelay::send(era, committee.to_vec()) {
+			Ok(()) => Self::deposit_event(Event::CommitteeSentToRelay { era, size }),
+			Err(()) => {
+				log::warn!(target: "tnpos", "committee for era {era} could not be delivered");
+				Self::deposit_event(Event::CommitteeCouldNotBeSent { era });
+			},
+		}
+	}
+}
+
+// There is deliberately no `SessionManager` implementation here.
+//
+// One was written while this pallet lived on the relay, where seating the committee and
+// running the session were the same act. It does not live there any more: this chain's own
+// session belongs to `CollatorSelection`, and the chain the committee validates is two hops
+// away. An `impl SessionManager for Tnpos` left behind would tell the next reader that the
+// committee seats itself somewhere, and nothing would contradict them -- a dead
+// implementation is a claim the compiler keeps agreeing with.
+//
+// The committee leaves through `SendCommitteeToRelay` and nowhere else.

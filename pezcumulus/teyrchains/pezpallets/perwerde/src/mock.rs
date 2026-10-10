@@ -1,3 +1,8 @@
+// This file is part of PezkuwiChain.
+
+// Copyright (C) Dijital Kurdistan Tech Institute
+// SPDX-License-Identifier: Apache-2.0
+
 use crate as pezpallet_perwerde;
 use pezframe_support::{
 	construct_runtime, parameter_types,
@@ -10,13 +15,13 @@ use pezsp_runtime::{
 	BuildStorage,
 };
 
-// Temel tipleri tanımlıyoruz.
+// Define the basic types.
 pub type AccountId = u64;
 pub type Balance = u128;
 pub type BlockNumber = u64;
 pub type Block = pezframe_system::mocking::MockBlock<Test>;
 
-// Test runtime'ımızı kuruyoruz.
+// Set up our test runtime.
 construct_runtime!(
 	pub enum Test
 	{
@@ -27,7 +32,7 @@ construct_runtime!(
 	}
 );
 
-// pezframe_system için implementasyon.
+// Implementation for pezframe_system.
 impl pezframe_system::Config for Test {
 	type BaseCallFilter = Everything;
 	type BlockWeights = ();
@@ -61,7 +66,7 @@ impl pezframe_system::Config for Test {
 	type PostTransactions = ();
 }
 
-// pezpallet_balances için implementasyon.
+// Implementation for pezpallet_balances.
 impl pezpallet_balances::Config for Test {
 	type Balance = Balance;
 	type DustRemoval = ();
@@ -85,38 +90,87 @@ parameter_types! {
 	pub const MaxCourseLinkLength: u32 = 200;
 	pub const MaxStudentsPerCourse: u32 = 100; // Reduced for test performance
 	pub const MaxCoursesPerStudent: u32 = 50;  // Max courses a student can enroll in
-	pub const MaxPointsPerCourse: u32 = 1000;  // Max points per course completion
+	pub const MaxPointsPerCourse: u32 = 1000;
+	/// Kept in the same proportion as the real chain, small enough for a test to run through.
+	pub const MinCourseDuration: u64 = 100;
+	pub const MaxCourseDuration: u64 = 400;
+	pub const RatificationsRequired: u32 = 5;
+	pub const MaxHonoraryMamoste: u32 = 100;
+	pub const RewardedCourseLimit: u32 = 3;
+	pub const MinCoursesForRole: u32 = 5;
+	pub const RewsenbirThreshold: u32 = 500;
+	pub const MamosteThreshold: u32 = 1_500;
+	pub const AxaThreshold: u32 = 4_000;  // Max points per course completion
 }
 
-// --- KESİN ÇÖZÜM BURADA BAŞLIYOR ---
+// --- THE DEFINITIVE SOLUTION STARTS HERE ---
 
-// AdminOrigin'i test etmek için kendi özel yetki sağlayıcımızı oluşturuyoruz.
+// We create our own custom authority provider to test AdminOrigin.
 use pezframe_system::EnsureSignedBy;
 
-// Bu struct, derleyicinin talep ettiği `SortedMembers` trait'ini manuel olarak uygular.
-// Bu, harici ve versiyona bağımlı araçlara olan ihtiyacı ortadan kaldırır.
+// This struct manually implements the `SortedMembers` trait that the compiler requires.
+// This eliminates the need for external, version-dependent tools.
 pub struct TestAdminProvider;
 impl SortedMembers<AccountId> for TestAdminProvider {
 	fn sorted_members() -> Vec<AccountId> {
-		// Test için admin olarak sadece 0 ID'li hesabı yetkili kılıyoruz.
+		// For tests, we authorize only the account with ID 0 as admin.
 		vec![0]
 	}
 }
 
+/// Every account is a teacher here. What the tests check is the board rule -- five distinct
+/// ratifiers, never the course owner -- not who is allowed to be on the board, which is tiki's.
+pub struct MockTikiProvider;
+impl pezpallet_tiki::TikiProvider<AccountId> for MockTikiProvider {
+	fn has_tiki(_who: &AccountId, _tiki: &pezpallet_tiki::Tiki) -> bool {
+		true
+	}
+	fn get_user_tikis(_who: &AccountId) -> pezsp_std::vec::Vec<pezpallet_tiki::Tiki> {
+		pezsp_std::vec::Vec::new()
+	}
+	fn is_citizen(_who: &AccountId) -> bool {
+		true
+	}
+}
+
+/// Nothing to arrange: this mock's `EarnedRoles` accepts any account, which is precisely why
+/// the runtimes disagreed with it.
+#[cfg(feature = "runtime-benchmarks")]
+pub struct MockBenchmarkSetup;
+#[cfg(feature = "runtime-benchmarks")]
+impl crate::BenchmarkSetup<AccountId> for MockBenchmarkSetup {
+	fn make_citizen(_who: &AccountId) {}
+}
+
 impl pezpallet_perwerde::Config for Test {
-	// AdminOrigin'i, kendi yazdığımız ve sadece 0'ı admin kabul eden sağlayıcıya bağlıyoruz.
+	// We bind AdminOrigin to our own provider, which accepts only 0 as admin.
 	type AdminOrigin = EnsureSignedBy<TestAdminProvider, AccountId>;
 	type WeightInfo = ();
 	type MaxCourseNameLength = MaxCourseNameLength;
 	type MaxCourseDescLength = MaxCourseDescLength;
 	type MaxCourseLinkLength = MaxCourseLinkLength;
 	type MaxStudentsPerCourse = MaxStudentsPerCourse;
-	type MaxCoursesPerStudent = MaxCoursesPerStudent;
 	type MaxPointsPerCourse = MaxPointsPerCourse;
 	type TrustScoreUpdater = ();
+	type EducationMinisterOrigin = EnsureRoot<AccountId>;
+	type FraudOrigin = EnsureRoot<AccountId>;
+	// The mock has no tiki pallet wired for granting; the awarding itself is tested there.
+	type EarnedRoles = ();
+	#[cfg(feature = "runtime-benchmarks")]
+	type BenchmarkHelper = MockBenchmarkSetup;
+	type TikiSource = MockTikiProvider;
+	type MinCourseDuration = MinCourseDuration;
+	type MaxCourseDuration = MaxCourseDuration;
+	type RatificationsRequired = RatificationsRequired;
+	type MaxHonoraryMamoste = MaxHonoraryMamoste;
+	type RewardedCourseLimit = RewardedCourseLimit;
+	type MinCoursesForRole = MinCoursesForRole;
+	type RewsenbirThreshold = RewsenbirThreshold;
+	type MamosteThreshold = MamosteThreshold;
+	type AxaThreshold = AxaThreshold;
 }
 
-// Council Paletinin Mock Kurulumu (construct_runtime'da gerekli olduğu için kalıyor)
+// Mock setup for the Council pallet (kept because it is required in construct_runtime)
 use pezpallet_collective::Instance1;
 parameter_types! {
 	pub const CouncilMotionDuration: BlockNumber = 5 * 60; // 5 minutes
@@ -142,8 +196,8 @@ impl pezpallet_collective::Config<Instance1> for Test {
 
 pub fn new_test_ext() -> pezsp_io::TestExternalities {
 	let t = pezframe_system::GenesisConfig::<Test>::default().build_storage().unwrap();
-	// `pezpallet-collective`'in genesis'ini de kurmamıza gerek kalmadı çünkü artık testimiz ona
-	// bağlı değil.
+	// We no longer need to set up the genesis of `pezpallet-collective` because our test is no
+	// longer dependent on it.
 	let mut ext = pezsp_io::TestExternalities::new(t);
 	ext.execute_with(|| System::set_block_number(1));
 	ext

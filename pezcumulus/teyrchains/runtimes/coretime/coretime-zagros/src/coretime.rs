@@ -60,7 +60,10 @@ fn burn_at_relay(stash: &AccountId, value: Balance) -> Result<(), XcmError> {
 
 	AssetTransactor::can_check_out(&dest, &asset, &dummy_xcm_context)?;
 
-	let parent_assets = Into::<Assets>::into(withdrawn)
+	// `withdraw_asset` now hands back holding assets rather than a plain `Assets`; dropping the
+	// value burns the inner imbalance, which is what the relay's own coretime module relies on.
+	let withdrawn_assets: Vec<Asset> = withdrawn.into_assets_iter().collect();
+	let parent_assets = Into::<Assets>::into(withdrawn_assets)
 		.reanchored(&dest, &Here.into())
 		.defensive_map_err(|_| XcmError::ReanchorFailed)?;
 
@@ -87,7 +90,12 @@ fn burn_at_relay(stash: &AccountId, value: Balance) -> Result<(), XcmError> {
 /// `construct_runtime` of the Relay chain.
 #[derive(Encode, Decode)]
 enum RelayRuntimePallets {
-	#[codec(index = 66)]
+	// The Zagros relay mounts `Coretime` at 74, the same index the mainnet relay uses. The 66
+	// this replaced is where `OnDemandAssignmentProvider` sits, so every call this chain makes
+	// across the coretime interface — the core count request, the revenue report, the core
+	// assignment — was addressed to the wrong pezpallet and refused. Nothing in the sales cycle
+	// could reach the relay. The mainnet copy of this file already carried the right figure.
+	#[codec(index = 74)]
 	Coretime(CoretimeProviderCalls),
 }
 

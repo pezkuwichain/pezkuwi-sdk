@@ -1,7 +1,19 @@
+// This file is part of PezkuwiChain.
+
+// Copyright (C) Dijital Kurdistan Tech Institute
+// SPDX-License-Identifier: Apache-2.0
+
 //! Custom Origin verification mechanisms based on Tiki ownership.
 //!
-//! This module provides `EnsureOrigin` implementations that verify
-//! the caller holds a specific Tiki role (Serok, Wezir, or Parlementer).
+//! `EnsureTiki` admits a signed caller who currently holds a given Tiki, read through the
+//! expiry-aware readers. A role is named by a marker type implementing `GetTiki`; runtimes
+//! declare their own markers for the offices they bind.
+//!
+//! Only single-holder offices belong behind it. For an office many people hold at once -- a
+//! member of parliament, a minister -- `EnsureTiki` admits any one of them acting alone, which
+//! is not the body deciding. Markers for `Parlementer` and `Wezir` stood here once, with
+//! aliases that invited exactly that reading, and no runtime used them; they are removed so the
+//! next binding has to be written, and reasoned about, deliberately.
 
 use crate::{Config, Pezpallet as TikiPallet};
 use pezframe_support::traits::EnsureOrigin;
@@ -21,45 +33,16 @@ pub trait GetTiki {
 
 // --- Marker Structs for Each Role ---
 
-/// Marker struct representing the `Serok` (President/Leader) role.
+/// Marker for the `SerokWeziran` (head of government) office, which one person holds at a time.
 ///
-/// Use with `EnsureTiki` to require the caller holds the Serok Tiki:
 /// ```ignore
-/// type SerokOrigin = EnsureTiki<Runtime, SerokRole>;
+/// type HeadOfGovernment = EnsureTiki<Runtime, SerokWeziranRole>;
 /// ```
-pub struct SerokRole;
+pub struct SerokWeziranRole;
 
-impl GetTiki for SerokRole {
+impl GetTiki for SerokWeziranRole {
 	fn tiki() -> crate::Tiki {
-		crate::Tiki::Serok
-	}
-}
-
-/// Marker struct representing the `Wezir` (Minister/Advisor) role.
-///
-/// Use with `EnsureTiki` to require the caller holds the Wezir Tiki:
-/// ```ignore
-/// type WezirOrigin = EnsureTiki<Runtime, WezirRole>;
-/// ```
-pub struct WezirRole;
-
-impl GetTiki for WezirRole {
-	fn tiki() -> crate::Tiki {
-		crate::Tiki::Wezir
-	}
-}
-
-/// Marker struct representing the `Parlementer` (Parliamentarian) role.
-///
-/// Use with `EnsureTiki` to require the caller holds the Parlementer Tiki:
-/// ```ignore
-/// type ParlementerOrigin = EnsureTiki<Runtime, ParlementerRole>;
-/// ```
-pub struct ParlementerRole;
-
-impl GetTiki for ParlementerRole {
-	fn tiki() -> crate::Tiki {
-		crate::Tiki::Parlementer
+		crate::Tiki::SerokWeziran
 	}
 }
 
@@ -78,15 +61,15 @@ impl GetTiki for ParlementerRole {
 /// # Example
 ///
 /// ```ignore
-/// // Require the caller to hold the Serok Tiki
-/// type SerokOrigin = EnsureTiki<Runtime, SerokRole>;
+/// // Require the caller to hold the head-of-government Tiki
+/// type HeadOfGovernment = EnsureTiki<Runtime, SerokWeziranRole>;
 ///
 /// // Use in a pezpallet's dispatchable
 /// #[pezpallet::call]
 /// impl<T: Config> Pezpallet<T> {
 ///     pub fn privileged_action(origin: OriginFor<T>) -> DispatchResult {
-///         let who = T::SerokOrigin::ensure_origin(origin)?;
-///         // ... action requiring Serok authority
+///         let who = T::HeadOfGovernment::ensure_origin(origin)?;
+///         // ... action requiring that office
 ///     }
 /// }
 /// ```
@@ -109,19 +92,19 @@ where
 		// Get the required Tiki role from the marker type
 		let required_tiki = I::tiki();
 
-		// For unique roles, check TikiHolder (fast O(1) lookup)
+		// Both paths go through the expiry-aware readers. Asking `TikiHolder` directly would
+		// let an officeholder whose term ran out keep authorising things for as long as
+		// nobody removed them -- which is the one failure the term exists to prevent, and it
+		// would fail open, in the direction of more authority rather than less.
 		if TikiPallet::<T>::is_unique_role(&required_tiki) {
-			match TikiPallet::<T>::tiki_holder(required_tiki) {
+			match TikiPallet::<T>::current_holder(&required_tiki) {
 				Some(holder) if holder == who => Ok(who),
 				_ => Err(o),
 			}
+		} else if TikiPallet::<T>::has_tiki(&who, &required_tiki) {
+			Ok(who)
 		} else {
-			// For non-unique roles (Wezir, Parlementer, etc.), check UserTikis storage
-			if TikiPallet::<T>::user_tikis(&who).contains(&required_tiki) {
-				Ok(who)
-			} else {
-				Err(o)
-			}
+			Err(o)
 		}
 	}
 
@@ -163,6 +146,4 @@ where
 }
 
 // Convenience type aliases
-pub type EnsureSerok<T> = EnsureTiki<T, SerokRole>;
-pub type EnsureWezir<T> = EnsureTiki<T, WezirRole>;
-pub type EnsureParlementer<T> = EnsureTiki<T, ParlementerRole>;
+pub type EnsureSerokWeziran<T> = EnsureTiki<T, SerokWeziranRole>;

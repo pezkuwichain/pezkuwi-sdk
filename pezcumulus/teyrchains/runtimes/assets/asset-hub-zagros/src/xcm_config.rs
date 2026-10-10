@@ -14,17 +14,15 @@
 // limitations under the License.
 
 use super::{
-	governance::TreasuryAccount, AccountId, AllPalletsWithSystem, Assets, Balance, Balances,
-	BaseDeliveryFee, CollatorSelection, DepositPerByte, DepositPerItem, FeeAssetId,
-	FellowshipAdmin, ForeignAssets, GeneralAdmin, PezkuwiXcm, PoolAssets, Runtime, RuntimeCall,
-	RuntimeEvent, RuntimeHoldReason, RuntimeOrigin, StakingAdmin, TeyrchainInfo, TeyrchainSystem,
-	ToPezkuwichainXcmRouter, TransactionByteFee, Treasurer, Uniques, WeightToFee, XcmpQueue,
+	AccountId, AllPalletsWithSystem, Assets, Balance, Balances, BaseDeliveryFee, CollatorSelection,
+	FeeAssetId, ForeignAssets, PezkuwiXcm, PoolAssets, Runtime, RuntimeCall, RuntimeEvent,
+	RuntimeHoldReason, RuntimeOrigin, TeyrchainInfo, TeyrchainSystem, ToPezkuwichainXcmRouter,
+	TransactionByteFee, Uniques, WeightToFee, XcmpQueue,
 };
-use alloc::{collections::BTreeSet, vec, vec::Vec};
 use pez_assets_common::{
 	matching::{
-		IsForeignConcreteAsset, NonTeleportableAssetFromTrustedReserve, ParentLocation,
-		TeleportableAssetWithTrustedReserve,
+		FromNetwork, IsForeignConcreteAsset, NonTeleportableAssetFromTrustedReserve,
+		ParentLocation, TeleportableAssetWithTrustedReserve,
 	},
 	TrustBackedAssetsAsLocation,
 };
@@ -40,12 +38,23 @@ use pezframe_support::{
 use pezframe_system::EnsureRoot;
 use pezkuwi_runtime_common::xcm_sender::ExponentialPrice;
 use pezkuwi_teyrchain_primitives::primitives::Sibling;
+use pezkuwichain_runtime_constants::system_teyrchain::ASSET_HUB_ID;
 use pezpallet_xcm::{AuthorizedAliasers, XcmPassthrough};
-use pezsnowbridge_outbound_queue_primitives::v2::exporter::PausableExporter;
 use pezsp_runtime::traits::{AccountIdConversion, TryConvertInto};
-use testnet_teyrchains_constants::zagros::locations::AssetHubParaId;
-use teyrchains_common::xcm_config::{
-	AllSiblingSystemTeyrchains, ConcreteAssetFromSystem, RelayOrOtherSystemTeyrchains,
+// Read from this chain's own ecosystem module. These were taken from `pezkuwichain::` — the two
+// modules carry the same figures today, so nothing was misbehaving, but the whole reason the
+// modules are separate is that either ecosystem may point at a different Ethereum, and this chain
+// would have silently followed the mainnet's choice.
+use testnet_teyrchains_constants::zagros::locations::PeopleLocation;
+use testnet_teyrchains_constants::zagros::snowbridge::{
+	EthereumNetwork, INBOUND_QUEUE_PALLET_INDEX_V1, INBOUND_QUEUE_PALLET_INDEX_V2,
+};
+use teyrchains_common::{
+	xcm_config::{
+		AllSiblingSystemTeyrchains, ConcreteAssetFromSystem, ParentRelayOrSiblingTeyrchains,
+		RelayOrOtherSystemTeyrchains,
+	},
+	TREASURY_PALLET_ID,
 };
 use xcm::latest::{prelude::*, PEZKUWICHAIN_GENESIS_HASH, ZAGROS_GENESIS_HASH};
 use xcm_builder::{
@@ -56,29 +65,33 @@ use xcm_builder::{
 	DescribeFamily, EnsureXcmOrigin, ExternalConsensusLocationsConverterFor,
 	FrameTransactionalProcessor, FungibleAdapter, FungiblesAdapter, HashedDescription, IsConcrete,
 	LocalMint, MatchInClassInstances, MatchedConvertedConcreteId, MintLocation,
-	NetworkExportTableItem, NoChecking, OriginToPluralityVoice, ParentAsSuperuser, ParentIsPreset,
-	RelayChainAsNative, SendXcmFeeToAccount, SiblingTeyrchainAsNative, SiblingTeyrchainConvertsVia,
+	NetworkExportTableItem, NoChecking, ParentAsSuperuser, ParentIsPreset, RelayChainAsNative,
+	SendXcmFeeToAccount, SiblingTeyrchainAsNative, SiblingTeyrchainConvertsVia,
 	SignedAccountId32AsNative, SignedToAccountId32, SingleAssetExchangeAdapter,
-	SovereignSignedViaLocation, StartsWith, StartsWithExplicitGlobalConsensus, TakeWeightCredit,
-	TrailingSetTopicAsId, UnpaidRemoteExporter, UsingComponents, WeightInfoBounds,
-	WithComputedOrigin, WithLatestLocationConverter, WithUniqueTopic, XcmFeeManagerFromComponents,
+	SovereignPaidRemoteExporter, SovereignSignedViaLocation, StartsWith,
+	StartsWithExplicitGlobalConsensus, TakeWeightCredit, TrailingSetTopicAsId, UsingComponents,
+	WeightInfoBounds, WithComputedOrigin, WithLatestLocationConverter, WithUniqueTopic,
+	XcmFeeManagerFromComponents,
 };
 use xcm_executor::XcmExecutor;
-use zagros_runtime_constants::{
-	system_teyrchain::COLLECTIVES_ID, xcm::body::FELLOWSHIP_ADMIN_INDEX,
-};
 
 parameter_types! {
 	pub const RootLocation: Location = Location::here();
-	pub const ZagrosLocation: Location = Location::parent();
-	pub const RelayNetwork: Option<NetworkId> = Some(NetworkId::ByGenesis(ZAGROS_GENESIS_HASH));
+	pub const TokenLocation: Location = Location::parent();
+	// The relay above this chain is Zagros. See the note in the Zagros relay's xcm_config.
+	pub const RelayNetwork: NetworkId = NetworkId::ByGenesis(ZAGROS_GENESIS_HASH);
+	pub const AssetHubParaId: crate::ParaId = crate::ParaId::new(ASSET_HUB_ID);
 	pub RelayChainOrigin: RuntimeOrigin = pezcumulus_pezpallet_xcm::Origin::Relay.into();
 	pub UniversalLocation: InteriorLocation =
-		[GlobalConsensus(RelayNetwork::get().unwrap()), Teyrchain(TeyrchainInfo::teyrchain_id().into())].into();
+		[GlobalConsensus(RelayNetwork::get()), Teyrchain(TeyrchainInfo::teyrchain_id().into())].into();
 	pub UniversalLocationNetworkId: NetworkId = UniversalLocation::get().global_consensus().unwrap();
 	pub TrustBackedAssetsPalletLocation: Location =
 		PalletInstance(TrustBackedAssetsPalletIndex::get()).into();
 	pub TrustBackedAssetsPalletIndex: u8 = <Assets as PalletInfoAccess>::index() as u8;
+	pub TrustBackedAssetsPalletLocationV3: xcm::v3::Location =
+		xcm::v3::Junction::PalletInstance(<Assets as PalletInfoAccess>::index() as u8).into();
+	pub PoolAssetsPalletLocationV3: xcm::v3::Location =
+		xcm::v3::Junction::PalletInstance(<PoolAssets as PalletInfoAccess>::index() as u8).into();
 	pub ForeignAssetsPalletLocation: Location =
 		PalletInstance(<ForeignAssets as PalletInfoAccess>::index() as u8).into();
 	pub PoolAssetsPalletLocation: Location =
@@ -86,11 +99,39 @@ parameter_types! {
 	pub UniquesPalletLocation: Location =
 		PalletInstance(<Uniques as PalletInfoAccess>::index() as u8).into();
 	pub CheckingAccount: AccountId = PezkuwiXcm::check_account();
-	pub StakingPot: AccountId = CollatorSelection::account_id();
-	pub RelayTreasuryLocation: Location = (Parent, PalletInstance(zagros_runtime_constants::TREASURY_PALLET_ID)).into();
-	/// Asset Hub has mint authority since the Asset Hub migration.
+	/// Asset Hub has mint authority since the Asset Hub migration, so teleported
+	/// funds are burned from and minted into the checking account and stay
+	/// accounted for.
+	///
+	/// The mainnet Asset Hub currently sets this to `None`, which lets teleports
+	/// work without a pre-seeded checking account at the cost of that accounting.
+	/// Mirroring the runtimes carried that choice here and took the accounting with
+	/// it. Zagros keeps it on: this is the behaviour we want on the mainnet too, and
+	/// enabling it there needs the checking account seeded first — which is exactly
+	/// the kind of step a testnet exists to rehearse.
 	pub TeleportTracking: Option<(AccountId, MintLocation)> = Some((CheckingAccount::get(), MintLocation::Local));
+	pub const GovernanceLocation: Location = Location::parent();
+	pub StakingPot: AccountId = CollatorSelection::account_id();
+	pub TreasuryAccount: AccountId = TREASURY_PALLET_ID.into_account_truncating();
+	/// The two salary pallets on the Collectives chain. Each pays from an account held here --
+	/// the Secretary in USDT, the Ambassador programme in the native token -- and so dispatches
+	/// unpaid XCM to this chain to settle each payout. Without these entries the barrier rejects
+	/// every payout before the message is read: both collectives were once fully configured,
+	/// ranks, budget and paymaster, and unable to pay anyone.
+	///
+	/// These entries are local to this runtime rather than mirrored from the mainnet Asset Hub:
+	/// that ecosystem runs no Collectives chain, so it has nothing to admit.
+	pub SecretarySalaryLocation: Location =
+		(Parent, Teyrchain(COLLECTIVES_PARA_ID), PalletInstance(SECRETARY_SALARY_PALLET_INDEX)).into();
+	pub AmbassadorSalaryLocation: Location =
+		(Parent, Teyrchain(COLLECTIVES_PARA_ID), PalletInstance(AMBASSADOR_SALARY_PALLET_INDEX)).into();
 }
+
+/// Para id of the Collectives chain in this ecosystem, and the indices of the pallets there that
+/// settle their spends on this chain.
+const COLLECTIVES_PARA_ID: u32 = 1001;
+const AMBASSADOR_SALARY_PALLET_INDEX: u8 = 74;
+const SECRETARY_SALARY_PALLET_INDEX: u8 = 91;
 
 /// Type for specifying how a `Location` can be converted into an `AccountId`. This is used
 /// when determining ownership of accounts for asset transacting and when attempting to use XCM
@@ -113,12 +154,12 @@ pub type FungibleTransactor = FungibleAdapter<
 	// Use this currency:
 	Balances,
 	// Use this currency when it is a fungible asset matching the given location or name:
-	IsConcrete<ZagrosLocation>,
+	IsConcrete<TokenLocation>,
 	// Convert an XCM Location into a local account id:
 	LocationToAccountId,
 	// Our chain's account ID type (we can't get away without mentioning it explicitly):
 	AccountId,
-	// Teleports tracking
+	// Teleports tracking — Asset Hub is the canonical minter post-migration.
 	TeleportTracking,
 >;
 
@@ -163,10 +204,10 @@ pub type ForeignAssetsConvertedConcreteId = pez_assets_common::ForeignAssetsConv
 	(
 		// Ignore `TrustBackedAssets` explicitly
 		StartsWith<TrustBackedAssetsPalletLocation>,
-		// Ignore asset which starts explicitly with our `GlobalConsensus(NetworkId)`, means:
+		// Ignore assets that start explicitly with our `GlobalConsensus(NetworkId)`, means:
 		// - foreign assets from our consensus should be: `Location {parents: 1, X*(Teyrchain(xyz),
-		//   ..)}
-		// - foreign assets outside our consensus with the same `GlobalConsensus(NetworkId)` wont
+		//   ..)}`
+		// - foreign assets outside our consensus with the same `GlobalConsensus(NetworkId)` won't
 		//   be accepted here
 		StartsWithExplicitGlobalConsensus<UniversalLocationNetworkId>,
 	),
@@ -211,6 +252,11 @@ pub type PoolFungiblesTransactor = FungiblesAdapter<
 	CheckingAccount,
 >;
 
+// Zagros carries `pezpallet-revive` (index 66); the mainnet Asset Hub does not yet.
+// Mirroring this chain onto the mainnet Asset Hub took the pallet's XCM plumbing with
+// it and left the pallet itself in place — a contract pallet whose assets could not be
+// moved by XCM. Since promoting Revive to the mainnet Asset Hub is the plan, the
+// testnet has to exercise the whole path, not just the pallet.
 parameter_types! {
 	/// Taken from the real gas and deposits of a standard ERC20 transfer call.
 	pub const ERC20TransferGasLimit: Weight = Weight::from_parts(500_000_000_000, 10 * 1024 * 1024);
@@ -282,39 +328,6 @@ impl Contains<Location> for ParentOrParentsPlurality {
 	}
 }
 
-pub struct FellowshipEntities;
-impl Contains<Location> for FellowshipEntities {
-	fn contains(location: &Location) -> bool {
-		matches!(
-			location.unpack(),
-			(1, [Teyrchain(COLLECTIVES_ID), Plurality { id: BodyId::Technical, .. }])
-				| (1, [Teyrchain(COLLECTIVES_ID), PalletInstance(64)])
-				| (1, [Teyrchain(COLLECTIVES_ID), PalletInstance(65)])
-		)
-	}
-}
-
-pub struct LocalPlurality;
-impl Contains<Location> for LocalPlurality {
-	fn contains(loc: &Location) -> bool {
-		matches!(loc.unpack(), (0, [Plurality { .. }]))
-	}
-}
-
-pub struct AmbassadorEntities;
-impl Contains<Location> for AmbassadorEntities {
-	fn contains(location: &Location) -> bool {
-		matches!(location.unpack(), (1, [Teyrchain(COLLECTIVES_ID), PalletInstance(74)]))
-	}
-}
-
-pub struct SecretaryEntities;
-impl Contains<Location> for SecretaryEntities {
-	fn contains(location: &Location) -> bool {
-		matches!(location.unpack(), (1, [Teyrchain(COLLECTIVES_ID), PalletInstance(91)]))
-	}
-}
-
 pub type Barrier = TrailingSetTopicAsId<
 	DenyThenTry<
 		DenyRecursively<DenyReserveTransferToRelayChain>,
@@ -329,17 +342,25 @@ pub type Barrier = TrailingSetTopicAsId<
 					// allow it.
 					AllowTopLevelPaidExecutionFrom<Everything>,
 					// Parent, its pluralities (i.e. governance bodies), relay treasury pezpallet
-					// and sibling teyrchains get free execution.
+					// and BridgeHub get free execution.
 					AllowExplicitUnpaidExecutionFrom<(
 						ParentOrParentsPlurality,
-						Equals<RelayTreasuryLocation>,
-						RelayOrOtherSystemTeyrchains<AllSiblingSystemTeyrchains, Runtime>,
-						FellowshipEntities,
-						AmbassadorEntities,
-						SecretaryEntities,
+						// The relay's treasury used to be waived here because it paid over XCM. It is retired:
+						// the treasury is on the Asset Hub now and pays from its own account, so no treasury
+						// sends messages to this chain. Should that ever change back to `PayOverXcm`, the
+						// sending body has to be waived again or every payment is charged a fee it cannot pay
+						// and is dropped without an error.
+						Equals<SecretarySalaryLocation>,
+						Equals<AmbassadorSalaryLocation>,
+						// The register decides and the treasury pays, so the chain holding the
+						// register has to be able to reach the one holding the money.
+						// `WaivedLocations` already charges it nothing; without this the
+						// barrier turns the message away before the fee policy is consulted.
+						Equals<PeopleLocation>,
+						Equals<bridging::SiblingBridgeHub>,
 					)>,
 					// Subscriptions for version tracking are OK.
-					AllowSubscriptionsFrom<Everything>,
+					AllowSubscriptionsFrom<ParentRelayOrSiblingTeyrchains>,
 					// HRMP notifications from the relay chain are OK.
 					AllowHrmpNotificationsFromRelayChain,
 				),
@@ -356,16 +377,29 @@ pub type Barrier = TrailingSetTopicAsId<
 pub type WaivedLocations = (
 	Equals<RootLocation>,
 	RelayOrOtherSystemTeyrchains<AllSiblingSystemTeyrchains, Runtime>,
-	Equals<RelayTreasuryLocation>,
-	FellowshipEntities,
-	AmbassadorEntities,
-	LocalPlurality,
-	SecretaryEntities,
+	// The relay's treasury used to be waived here because it paid over XCM. It is retired:
+	// the treasury is on the Asset Hub now and pays from its own account, so no treasury
+	// sends messages to this chain. Should that ever change back to `PayOverXcm`, the
+	// sending body has to be waived again or every payment is charged a fee it cannot pay
+	// and is dropped without an error.
+	// The Collectives chain's spending pallets. `RelayOrOtherSystemTeyrchains` admits the
+	// Collectives chain itself but not a pallet within it, and these payouts carry an
+	// appendix that reports the outcome home under `SetFeesMode { jit_withdraw }` — so without
+	// this the delivery fee is charged to the paying pallet's sovereign account here, which holds
+	// no native balance, and the payout fails with `FundsUnavailable`. Making each collective
+	// keep a balance on this chain just to acknowledge its own spends would be the wrong fix.
+	Equals<SecretarySalaryLocation>,
+	Equals<AmbassadorSalaryLocation>,
 );
 
-// Asset Hub accepts incoming reserve transfers only for "Foreign Assets" and only from locations
-// explicitly set by the asset's owner.
+// Asset Hub trusts only particular, pre-configured bridged locations from a different consensus
+// as reserve locations (we trust the Bridge Hub to relay the message that a reserve is being
+// held). On Pezkuwichain Asset Hub, we allow Zagros Asset Hub to act as reserve for any asset
+// native to the Zagros ecosystem. We also allow Ethereum contracts to act as reserves for the
+// foreign assets identified by the same respective contracts locations.
 pub type TrustedReserves = (
+	bridging::to_pezkuwichain::PezkuwichainOrEthereumAssetFromAssetHubPezkuwichain,
+	bridging::to_ethereum::EthereumAssetFromEthereum,
 	IsForeignConcreteAsset<
 		NonTeleportableAssetFromTrustedReserve<AssetHubParaId, crate::ForeignAssets>,
 	>,
@@ -373,11 +407,10 @@ pub type TrustedReserves = (
 
 /// Cases where a remote origin is accepted as trusted Teleporter for a given asset:
 ///
-/// - ZGR with the parent Relay Chain and sibling system teyrchains; and
-/// - Sibling teyrchains' assets according to their configured trusted reserves (teleportable when
-///   `Here` and `origin` are both trusted reserve locations).
+/// - HEZ with the parent Relay Chain and sibling system teyrchains; and
+/// - Sibling teyrchains' assets from where they originate (as `ForeignCreators`).
 pub type TrustedTeleporters = (
-	ConcreteAssetFromSystem<ZagrosLocation>,
+	ConcreteAssetFromSystem<TokenLocation>,
 	IsForeignConcreteAsset<
 		TeleportableAssetWithTrustedReserve<AssetHubParaId, crate::ForeignAssets>,
 	>,
@@ -412,6 +445,39 @@ pub type PoolAssetsExchanger = SingleAssetExchangeAdapter<
 >;
 
 pub struct XcmConfig;
+/// Calls that XCM `Transact` may not dispatch here, whatever origin it arrives with.
+///
+/// PEZ has a fixed supply of five billion and a halving schedule; nothing mints it and nothing
+/// burns it. That is a property of the design, and until now it was only a property of nobody
+/// having tried: PEZ is asset {pez}, `Assets`' `ForceOrigin` is `EnsureRoot`, and Root arrives
+/// here from the relay through `ParentAsSuperuser`. So the relay's sudo key could reassign the
+/// asset's issuer with `force_asset_status` and mint without limit, or call `start_destroy` and
+/// take the whole supply out. Neither is a hole in sudo -- sudo is meant to be absolute during
+/// the founding period -- it is a hole in the token, and Serok's rule is explicit that no
+/// force-mint of PEZ exists even with sudo.
+///
+/// This is the door that can actually be shut. `pallet_sudo` dispatches with
+/// `dispatch_bypass_filter` and so ignores `BaseCallFilter` by construction; a call arriving
+/// over XCM does not, and every route from the relay to this chain's Root is an XCM `Transact`.
+///
+/// The filter names the asset rather than the call, so ordinary asset administration keeps
+/// working for every other asset on the hub.
+pub struct NoTouchingPez;
+impl Contains<RuntimeCall> for NoTouchingPez {
+	fn contains(call: &RuntimeCall) -> bool {
+		let pez = crate::PezAssetId::get();
+		!matches!(
+			call,
+			RuntimeCall::Assets(pezpallet_assets::Call::force_asset_status { id, .. })
+				| RuntimeCall::Assets(pezpallet_assets::Call::start_destroy { id })
+				| RuntimeCall::Assets(pezpallet_assets::Call::mint { id, .. })
+				| RuntimeCall::Assets(pezpallet_assets::Call::burn { id, .. })
+				| RuntimeCall::Assets(pezpallet_assets::Call::force_create { id, .. })
+			if id.0 == pez
+		)
+	}
+}
+
 impl xcm_executor::Config for XcmConfig {
 	type RuntimeCall = RuntimeCall;
 	type XcmSender = XcmRouter;
@@ -423,20 +489,20 @@ impl xcm_executor::Config for XcmConfig {
 	type UniversalLocation = UniversalLocation;
 	type Barrier = Barrier;
 	type Weigher = WeightInfoBounds<
-		crate::weights::xcm::AssetHubZagrosXcmWeight<RuntimeCall>,
+		crate::weights::xcm::AssetHubPezkuwichainXcmWeight<RuntimeCall>,
 		RuntimeCall,
 		MaxInstructions,
 	>;
 	type Trader = (
 		UsingComponents<
 			WeightToFee,
-			ZagrosLocation,
+			TokenLocation,
 			AccountId,
 			Balances,
 			ResolveTo<StakingPot, Balances>,
 		>,
 		pezcumulus_primitives_utility::SwapFirstAssetTrader<
-			ZagrosLocation,
+			TokenLocation,
 			crate::AssetConversion,
 			WeightToFee,
 			crate::NativeAndNonPoolAssets,
@@ -454,7 +520,6 @@ impl xcm_executor::Config for XcmConfig {
 	);
 	type ResponseHandler = PezkuwiXcm;
 	type AssetTrap = PezkuwiXcm;
-	type AssetClaims = PezkuwiXcm;
 	type SubscriptionService = PezkuwiXcm;
 	type PalletInstancesInfo = AllPalletsWithSystem;
 	type MaxAssetsIntoHolding = MaxAssetsIntoHolding;
@@ -468,7 +533,8 @@ impl xcm_executor::Config for XcmConfig {
 	type UniversalAliases =
 		(bridging::to_pezkuwichain::UniversalAliases, bridging::to_ethereum::UniversalAliases);
 	type CallDispatcher = RuntimeCall;
-	type SafeCallFilter = Everything;
+	type SafeCallFilter = NoTouchingPez;
+	// We allow any origin to alias into a child sub-location (equivalent to DescendOrigin).
 	type Aliasers = TrustedAliasers;
 	type TransactionalProcessor = FrameTransactionalProcessor;
 	type HrmpNewChannelOpenRequestHandler = ();
@@ -477,48 +543,9 @@ impl xcm_executor::Config for XcmConfig {
 	type XcmRecorder = PezkuwiXcm;
 }
 
-parameter_types! {
-	// `GeneralAdmin` pluralistic body.
-	pub const GeneralAdminBodyId: BodyId = BodyId::Administration;
-	// StakingAdmin pluralistic body.
-	pub const StakingAdminBodyId: BodyId = BodyId::Defense;
-	// FellowshipAdmin pluralistic body.
-	pub const FellowshipAdminBodyId: BodyId = BodyId::Index(FELLOWSHIP_ADMIN_INDEX);
-	// `Treasurer` pluralistic body.
-	pub const TreasurerBodyId: BodyId = BodyId::Treasury;
-}
-
-/// Type to convert the `GeneralAdmin` origin to a Plurality `Location` value.
-pub type GeneralAdminToPlurality =
-	OriginToPluralityVoice<RuntimeOrigin, GeneralAdmin, GeneralAdminBodyId>;
-
-/// Local origins on this chain are allowed to dispatch XCM sends/executions.
-pub type LocalOriginToLocation =
-	(GeneralAdminToPlurality, SignedToAccountId32<RuntimeOrigin, AccountId, RelayNetwork>);
-
-/// Type to convert the `StakingAdmin` origin to a Plurality `Location` value.
-pub type StakingAdminToPlurality =
-	OriginToPluralityVoice<RuntimeOrigin, StakingAdmin, StakingAdminBodyId>;
-
-/// Type to convert the `FellowshipAdmin` origin to a Plurality `Location` value.
-pub type FellowshipAdminToPlurality =
-	OriginToPluralityVoice<RuntimeOrigin, FellowshipAdmin, FellowshipAdminBodyId>;
-
-/// Type to convert the `Treasurer` origin to a Plurality `Location` value.
-pub type TreasurerToPlurality = OriginToPluralityVoice<RuntimeOrigin, Treasurer, TreasurerBodyId>;
-
-/// Type to convert a pezpallet `Origin` type value into a `Location` value which represents an
-/// interior location of this chain for a destination chain.
-pub type LocalPalletOriginToLocation = (
-	// GeneralAdmin origin to be used in XCM as a corresponding Plurality `Location` value.
-	GeneralAdminToPlurality,
-	// StakingAdmin origin to be used in XCM as a corresponding Plurality `Location` value.
-	StakingAdminToPlurality,
-	// FellowshipAdmin origin to be used in XCM as a corresponding Plurality `Location` value.
-	FellowshipAdminToPlurality,
-	// `Treasurer` origin to be used in XCM as a corresponding Plurality `Location` value.
-	TreasurerToPlurality,
-);
+/// Converts a local signed origin into an XCM location. Forms the basis for local origins
+/// sending/executing XCMs.
+pub type LocalOriginToLocation = SignedToAccountId32<RuntimeOrigin, AccountId, RelayNetwork>;
 
 pub type PriceForParentDelivery =
 	ExponentialPrice<FeeAssetId, BaseDeliveryFee, TransactionByteFee, TeyrchainSystem>;
@@ -535,42 +562,33 @@ type LocalXcmRouter = (
 /// queues.
 pub type XcmRouter = WithUniqueTopic<(
 	LocalXcmRouter,
-	// Router which wraps and sends xcm to BridgeHub to be delivered to the Pezkuwichain
+	// Router which wraps and sends xcm to BridgeHub to be delivered to the Zagros
 	// GlobalConsensus
 	ToPezkuwichainXcmRouter,
 	// Router which wraps and sends xcm to BridgeHub to be delivered to the Ethereum
-	// GlobalConsensus with a pausable flag, if the flag is set true then the Router is paused
-	PausableExporter<
-		crate::SnowbridgeSystemFrontend,
-		(
-			UnpaidRemoteExporter<
-				(
-					bridging::to_ethereum::EthereumNetworkExportTableV2,
-					bridging::to_ethereum::EthereumNetworkExportTableV1,
-				),
-				XcmpQueue,
-				UniversalLocation,
-			>,
-		),
-	>,
+	// GlobalConsensus
+	SovereignPaidRemoteExporter<bridging::EthereumNetworkExportTable, XcmpQueue, UniversalLocation>,
 )>;
 
 parameter_types! {
-	pub Collectives: Location = Location::new(1, [Teyrchain(COLLECTIVES_ID)]);
+	pub const DepositPerItem: Balance = crate::deposit(1, 0);
+	pub const DepositPerByte: Balance = crate::deposit(0, 1);
 	pub const AuthorizeAliasHoldReason: RuntimeHoldReason = RuntimeHoldReason::PezkuwiXcm(pezpallet_xcm::HoldReason::AuthorizeAlias);
 }
 
 impl pezpallet_xcm::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
-	type SendXcmOrigin = EnsureXcmOrigin<RuntimeOrigin, LocalOriginToLocation>;
+	// We want to disallow users sending (arbitrary) XCMs from this chain.
+	type SendXcmOrigin = EnsureXcmOrigin<RuntimeOrigin, ()>;
 	type XcmRouter = XcmRouter;
+	// We support local origins dispatching XCM executions.
 	type ExecuteXcmOrigin = EnsureXcmOrigin<RuntimeOrigin, LocalOriginToLocation>;
 	type XcmExecuteFilter = Everything;
 	type XcmExecutor = XcmExecutor<XcmConfig>;
 	type XcmTeleportFilter = Everything;
 	type XcmReserveTransferFilter = Everything;
 	type Weigher = WeightInfoBounds<
-		crate::weights::xcm::AssetHubZagrosXcmWeight<RuntimeCall>,
+		crate::weights::xcm::AssetHubPezkuwichainXcmWeight<RuntimeCall>,
 		RuntimeCall,
 		MaxInstructions,
 	>;
@@ -605,41 +623,50 @@ impl pezcumulus_pezpallet_xcm::Config for Runtime {
 /// All configuration related to bridging
 pub mod bridging {
 	use super::*;
+	use alloc::collections::btree_set::BTreeSet;
 	use pez_assets_common::matching;
 
+	// common/shared parameters
 	parameter_types! {
-		/// Base price of every byte of the Zagros -> Pezkuwichain message. Can be adjusted via
+		/// Base price of every byte of the Pezkuwichain -> Zagros message. Can be adjusted via
 		/// governance `set_storage` call.
 		///
 		/// Default value is our estimation of the:
 		///
-		/// 1) an approximate cost of XCM execution (`ExportMessage` and surroundings) at Zagros bridge hub;
+		/// 1) an approximate cost of XCM execution (`ExportMessage` and surroundings) at Pezkuwichain bridge hub;
 		///
-		/// 2) the approximate cost of Zagros -> Pezkuwichain message delivery transaction on Pezkuwichain Bridge Hub,
-		///    converted into ZGRs using 1:1 conversion rate;
+		/// 2) the approximate cost of Pezkuwichain -> Zagros message delivery transaction on Zagros Bridge Hub,
+		///    converted into HEZ using 1:1 conversion rate;
 		///
-		/// 3) the approximate cost of Zagros -> Pezkuwichain message confirmation transaction on Zagros Bridge Hub.
+		/// 3) the approximate cost of Pezkuwichain -> Zagros message confirmation transaction on Pezkuwichain Bridge Hub.
 		pub storage XcmBridgeHubRouterBaseFee: Balance =
-			pezbp_bridge_hub_zagros::BridgeHubZagrosBaseXcmFeeInWnds::get()
-				.saturating_add(pezbp_bridge_hub_pezkuwichain::BridgeHubPezkuwichainBaseDeliveryFeeInRocs::get())
-				.saturating_add(pezbp_bridge_hub_zagros::BridgeHubZagrosBaseConfirmationFeeInWnds::get());
-		/// Price of every byte of the Zagros -> Pezkuwichain message. Can be adjusted via
+			pezbp_bridge_hub_pezkuwichain::BridgeHubPezkuwichainBaseXcmFeeInRocs::get()
+				.saturating_add(pezbp_bridge_hub_zagros::BridgeHubZagrosBaseDeliveryFeeInWnds::get())
+				.saturating_add(pezbp_bridge_hub_pezkuwichain::BridgeHubPezkuwichainBaseConfirmationFeeInRocs::get());
+		/// Price of every byte of the Pezkuwichain -> Zagros message. Can be adjusted via
 		/// governance `set_storage` call.
 		pub storage XcmBridgeHubRouterByteFee: Balance = TransactionByteFee::get();
 
-		pub SiblingBridgeHubParaId: u32 = pezbp_bridge_hub_zagros::BRIDGE_HUB_ZAGROS_TEYRCHAIN_ID;
+		pub SiblingBridgeHubParaId: u32 = pezbp_bridge_hub_pezkuwichain::BRIDGE_HUB_PEZKUWICHAIN_TEYRCHAIN_ID;
 		pub SiblingBridgeHub: Location = Location::new(1, [Teyrchain(SiblingBridgeHubParaId::get())]);
 		/// Router expects payment with this `AssetId`.
 		/// (`AssetId` has to be aligned with `BridgeTable`)
-		pub XcmBridgeHubRouterFeeAssetId: AssetId = ZagrosLocation::get().into();
+		pub XcmBridgeHubRouterFeeAssetId: AssetId = TokenLocation::get().into();
 
-		pub BridgeTable: Vec<NetworkExportTableItem> =
-			Vec::new().into_iter()
+		pub BridgeTable: alloc::vec::Vec<NetworkExportTableItem> =
+			alloc::vec::Vec::new().into_iter()
 			.chain(to_pezkuwichain::BridgeTable::get())
+			.collect();
+
+		pub EthereumBridgeTable: alloc::vec::Vec<NetworkExportTableItem> =
+			alloc::vec::Vec::new().into_iter()
+			.chain(to_ethereum::BridgeTable::get())
 			.collect();
 	}
 
 	pub type NetworkExportTable = xcm_builder::NetworkExportTable<BridgeTable>;
+
+	pub type EthereumNetworkExportTable = xcm_builder::NetworkExportTable<EthereumBridgeTable>;
 
 	pub mod to_pezkuwichain {
 		use super::*;
@@ -654,8 +681,10 @@ pub mod bridging {
 			);
 
 			pub const PezkuwichainNetwork: NetworkId = NetworkId::ByGenesis(PEZKUWICHAIN_GENESIS_HASH);
+			pub const EthereumNetwork: NetworkId = NetworkId::Ethereum { chain_id: 11155111 };
 			pub PezkuwichainEcosystem: Location = Location::new(2, [GlobalConsensus(PezkuwichainNetwork::get())]);
-			pub RocLocation: Location = Location::new(2, [GlobalConsensus(PezkuwichainNetwork::get())]);
+			pub EthereumEcosystem: Location = Location::new(2, [GlobalConsensus(EthereumNetwork::get())]);
+			pub PezkuwichainLocation: Location = Location::new(2, [GlobalConsensus(PezkuwichainNetwork::get())]);
 			pub AssetHubPezkuwichain: Location = Location::new(2, [
 				GlobalConsensus(PezkuwichainNetwork::get()),
 				Teyrchain(pezbp_asset_hub_pezkuwichain::ASSET_HUB_PEZKUWICHAIN_TEYRCHAIN_ID)
@@ -663,10 +692,10 @@ pub mod bridging {
 
 			/// Set up exporters configuration.
 			/// `Option<Asset>` represents static "base fee" which is used for total delivery fee calculation.
-			pub BridgeTable: Vec<NetworkExportTableItem> = vec![
+			pub BridgeTable: alloc::vec::Vec<NetworkExportTableItem> = alloc::vec![
 				NetworkExportTableItem::new(
 					PezkuwichainNetwork::get(),
-					Some(vec![
+					Some(alloc::vec![
 						AssetHubPezkuwichain::get().interior.split_global().expect("invalid configuration for AssetHubPezkuwichain").1,
 					]),
 					SiblingBridgeHub::get(),
@@ -680,7 +709,7 @@ pub mod bridging {
 
 			/// Universal aliases
 			pub UniversalAliases: BTreeSet<(Location, Junction)> = BTreeSet::from_iter(
-				vec![
+				alloc::vec![
 					(SiblingBridgeHubWithBridgeHubPezkuwichainInstance::get(), GlobalConsensus(PezkuwichainNetwork::get()))
 				]
 			);
@@ -692,37 +721,36 @@ pub mod bridging {
 			}
 		}
 
-		/// Allow any asset native to the Pezkuwichain ecosystem if it comes from Pezkuwichain Asset
-		/// Hub.
-		pub type PezkuwichainAssetFromAssetHubPezkuwichain = matching::RemoteAssetFromLocation<
-			StartsWith<PezkuwichainEcosystem>,
-			AssetHubPezkuwichain,
-		>;
+		/// Allow any asset native to the Pezkuwichain or Ethereum ecosystems if it comes from
+		/// the Pezkuwichain Asset Hub.
+		pub type PezkuwichainOrEthereumAssetFromAssetHubPezkuwichain =
+			matching::RemoteAssetFromLocation<
+				(StartsWith<PezkuwichainEcosystem>, StartsWith<EthereumEcosystem>),
+				AssetHubPezkuwichain,
+			>;
 	}
 
 	pub mod to_ethereum {
 		use super::*;
-		use pez_assets_common::matching::FromNetwork;
-		use testnet_teyrchains_constants::zagros::snowbridge::{
-			EthereumNetwork, INBOUND_QUEUE_PALLET_INDEX_V1, INBOUND_QUEUE_PALLET_INDEX_V2,
-		};
 
 		parameter_types! {
 			/// User fee for ERC20 token transfer back to Ethereum.
-			/// (initially was calculated by test `OutboundQueue::calculate_fees` - ETH/ZGR 1/400 and fee_per_gas 20 GWEI = 2200698000000 + *25%)
+			/// (initially was calculated by test `OutboundQueue::calculate_fees` - ETH/HEZ 1/400 and fee_per_gas 20 GWEI = 2200698000000 + *25%)
 			/// Needs to be more than fee calculated from DefaultFeeConfig FeeConfigRecord in snowbridge:teyrchain/pallets/outbound-queue/src/lib.rs
-			/// Pezkuwi uses 10 decimals, Dicle,Pezkuwichain,Zagros 12 decimals.
+			/// Pezkuwi uses 10 decimals, Dicle and Pezkuwichain 12 decimals.
 			pub const DefaultBridgeHubEthereumBaseFee: Balance = 3_833_568_200_000;
-			pub const DefaultBridgeHubEthereumBaseFeeV2: Balance = 100_000_000_000;
 			pub storage BridgeHubEthereumBaseFee: Balance = DefaultBridgeHubEthereumBaseFee::get();
-			pub storage BridgeHubEthereumBaseFeeV2: Balance = DefaultBridgeHubEthereumBaseFeeV2::get();
-			pub SiblingBridgeHubWithEthereumInboundQueueV1Instance: Location = Location::new(
+			pub SiblingBridgeHubWithEthereumInboundQueueInstance: Location = Location::new(
 				1,
 				[
 					Teyrchain(SiblingBridgeHubParaId::get()),
 					PalletInstance(INBOUND_QUEUE_PALLET_INDEX_V1)
 				]
 			);
+			/// The second inbound queue on the Bridge Hub. That chain runs both, but only the
+			/// first was admitted here, so every message arriving over the newer queue was
+			/// refused at `UniversalOrigin` with `InvalidLocation` — the Bridge Hub could
+			/// receive from Ethereum and this chain would not hear it.
 			pub SiblingBridgeHubWithEthereumInboundQueueV2Instance: Location = Location::new(
 				1,
 				[
@@ -733,10 +761,10 @@ pub mod bridging {
 
 			/// Set up exporters configuration.
 			/// `Option<Asset>` represents static "base fee" which is used for total delivery fee calculation.
-			pub EthereumBridgeTableV1: vec::Vec<NetworkExportTableItem> = vec![
+			pub BridgeTable: alloc::vec::Vec<NetworkExportTableItem> = alloc::vec![
 				NetworkExportTableItem::new(
-					EthereumNetwork::get(),
-					Some(vec![Junctions::Here]),
+					EthereumNetwork::get().into(),
+					Some(alloc::vec![Junctions::Here]),
 					SiblingBridgeHub::get(),
 					Some((
 						XcmBridgeHubRouterFeeAssetId::get(),
@@ -745,35 +773,14 @@ pub mod bridging {
 				),
 			];
 
-			pub EthereumBridgeTableV2: vec::Vec<NetworkExportTableItem> = vec![
-				NetworkExportTableItem::new(
-					EthereumNetwork::get(),
-					Some(vec![Junctions::Here]),
-					SiblingBridgeHub::get(),
-					Some((
-						XcmBridgeHubRouterFeeAssetId::get(),
-						BridgeHubEthereumBaseFeeV2::get(),
-					).into())
-				),
-			];
-
 			/// Universal aliases
 			pub UniversalAliases: BTreeSet<(Location, Junction)> = BTreeSet::from_iter(
-				vec![
+				alloc::vec![
+					(SiblingBridgeHubWithEthereumInboundQueueInstance::get(), GlobalConsensus(EthereumNetwork::get().into())),
 					(SiblingBridgeHubWithEthereumInboundQueueV2Instance::get(), GlobalConsensus(EthereumNetwork::get().into())),
-					(SiblingBridgeHubWithEthereumInboundQueueV1Instance::get(), GlobalConsensus(EthereumNetwork::get().into())),
 				]
 			);
 		}
-
-		pub type EthereumNetworkExportTableV1 =
-			xcm_builder::NetworkExportTable<EthereumBridgeTableV1>;
-
-		pub type EthereumNetworkExportTableV2 =
-			pezsnowbridge_outbound_queue_primitives::v2::XcmFilterExporter<
-				xcm_builder::NetworkExportTable<EthereumBridgeTableV2>,
-				pezsnowbridge_outbound_queue_primitives::v2::XcmForSnowbridgeV2,
-			>;
 
 		pub type EthereumAssetFromEthereum =
 			IsForeignConcreteAsset<FromNetwork<UniversalLocation, EthereumNetwork>>;
@@ -802,7 +809,7 @@ pub mod bridging {
 					}
 				},
 			);
-			Some(alias.expect("we expect here BridgeHubZagros to Pezkuwichain mapping at least"))
+			Some(alias.expect("we expect here BridgeHubPezkuwichain to Zagros mapping at least"))
 		}
 	}
 }
