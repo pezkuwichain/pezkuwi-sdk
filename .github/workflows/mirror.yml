@@ -1,0 +1,38 @@
+name: mirror
+
+# This repository carries the content of pezkuwi-DKS, where it is developed and
+# where its build, test and security suites run. Running them here again would
+# measure the same tree twice, so this workflow checks only what this repository
+# answers for on its own: the Parity Technologies attribution reviewed under DMCA
+# ticket #4389053.
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  attribution:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+      - name: Parity attribution is retained
+        env:
+          # The revision the change is measured against: the PR base, the previous
+          # main, or for a manual run the commit before the head.
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before || 'HEAD^' }}
+        run: |
+          if [ "$BASE" = "0000000000000000000000000000000000000000" ]; then BASE=HEAD^; fi
+          .github/scripts/check-attribution.sh "$BASE" HEAD
