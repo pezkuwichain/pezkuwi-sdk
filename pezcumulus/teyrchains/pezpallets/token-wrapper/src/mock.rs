@@ -1,3 +1,8 @@
+// This file is part of PezkuwiChain.
+
+// Copyright (C) Dijital Kurdistan Tech Institute
+// SPDX-License-Identifier: Apache-2.0
+
 use crate as pezpallet_token_wrapper;
 use pezframe_support::{
 	construct_runtime, parameter_types,

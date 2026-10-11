@@ -1,5 +1,5 @@
 use codec::{Decode, Encode, MaxEncodedLen};
-use pezframe_support::pezpallet_prelude::{BoundedVec, Get, RuntimeDebug};
+use pezframe_support::pezpallet_prelude::{BoundedVec, Get};
 use scale_info::TypeInfo;
 
 /// An encrypted message stored on-chain.
@@ -8,7 +8,7 @@ use scale_info::TypeInfo;
 /// Only the recipient can decrypt using their x25519 private key.
 ///
 /// Messages are ephemeral — automatically deleted at era boundaries.
-#[derive(Encode, Decode, Clone, Eq, PartialEq, RuntimeDebug, TypeInfo, MaxEncodedLen)]
+#[derive(Encode, Decode, Clone, Eq, PartialEq, Debug, TypeInfo, MaxEncodedLen)]
 #[scale_info(skip_type_params(MaxPayloadSize))]
 #[codec(mel_bound(
 	AccountId: MaxEncodedLen,
@@ -54,4 +54,16 @@ impl<AccountId> TrustScoreChecker<AccountId> for () {
 	fn trust_score_of(_who: &AccountId) -> u32 {
 		0
 	}
+}
+
+/// Puts an account in the state messaging requires of a sender or recipient, for benchmarks:
+/// a citizen whose trust score clears `MinTrustScore`.
+///
+/// The benchmarks run the runtime's real `CitizenshipChecker` and `TrustScoreChecker`, so the
+/// measured weight includes the reads they make. The People runtimes used to swap both for
+/// constants under `runtime-benchmarks` (`true`, `100`), which measured a cheaper call than the
+/// one the chain runs.
+#[cfg(feature = "runtime-benchmarks")]
+pub trait BenchmarkHelper<AccountId> {
+	fn make_citizen(who: &AccountId);
 }

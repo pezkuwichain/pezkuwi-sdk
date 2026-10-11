@@ -3,10 +3,11 @@ name = "people-zagros-runtime"
 version = "0.1.0"
 authors.workspace = true
 edition.workspace = true
-description = "Zagros's People teyrchain runtime"
+description = "Zagros testnet's People teyrchain runtime"
 license = "Apache-2.0"
 homepage.workspace = true
 repository.workspace = true
+publish = false
 documentation.workspace = true
 
 [lints]
@@ -15,6 +16,8 @@ workspace = true
 [dependencies]
 codec = { features = ["derive"], workspace = true }
 enumflags2 = { workspace = true }
+hex-literal = { workspace = true }
+log = { workspace = true }
 scale-info = { features = ["derive"], workspace = true }
 serde = { optional = true, features = [
 	"derive",
@@ -30,22 +33,53 @@ pezframe-system = { workspace = true }
 pezframe-system-benchmarking = { optional = true, workspace = true }
 pezframe-system-rpc-runtime-api = { workspace = true }
 pezframe-try-runtime = { optional = true, workspace = true }
+pezkuwi-primitives = { workspace = true }
+pezkuwi-tnpos-primitives = { workspace = true }
+pezpallet-accumulate-and-forward = { workspace = true }
+pezpallet-assets = { workspace = true }
 pezpallet-aura = { workspace = true }
 pezpallet-authorship = { workspace = true }
 pezpallet-balances = { workspace = true }
+pezpallet-collective = { workspace = true }
 pezpallet-identity = { workspace = true }
+pezpallet-identity-kyc = { workspace = true }
 pezpallet-message-queue = { workspace = true }
+pezpallet-messaging = { workspace = true }
 pezpallet-migrations = { workspace = true }
 pezpallet-multisig = { workspace = true }
+pezpallet-nfts = { workspace = true }
+pezpallet-parameters = { workspace = true }
+pezpallet-perwerde = { workspace = true }
+pezpallet-pez-rewards = { workspace = true }
+pezpallet-preimage = { workspace = true }
 pezpallet-proxy = { workspace = true }
+pezpallet-recovery = { workspace = true }
+pezpallet-referenda = { workspace = true }
+pezpallet-referral = { workspace = true }
+pezpallet-scheduler = { workspace = true }
 pezpallet-session = { workspace = true }
+pezpallet-skip-feeless-payment = { workspace = true }
+pezpallet-society = { workspace = true }
+pezpallet-staking-async-rc-client = { workspace = true, features = [
+	"xcm-sender",
+] }
+pezpallet-staking-score = { workspace = true }
+pezpallet-tiki = { workspace = true }
 pezpallet-timestamp = { workspace = true }
+pezpallet-tnpos = { workspace = true }
 pezpallet-transaction-payment = { workspace = true }
 pezpallet-transaction-payment-rpc-runtime-api = { workspace = true }
+pezpallet-trust = { workspace = true }
 pezpallet-utility = { workspace = true }
+pezpallet-vesting = { workspace = true }
+pezpallet-welati = { workspace = true }
 pezsp-api = { workspace = true }
+pezsp-authority-discovery = { workspace = true }
 pezsp-block-builder = { workspace = true }
 pezsp-consensus-aura = { workspace = true }
+pezsp-consensus-babe = { workspace = true }
+pezsp-consensus-beefy = { workspace = true }
+pezsp-consensus-grandpa = { workspace = true }
 pezsp-core = { workspace = true }
 pezsp-genesis-builder = { workspace = true }
 pezsp-inherents = { workspace = true }
@@ -53,21 +87,22 @@ pezsp-keyring = { workspace = true }
 pezsp-offchain = { workspace = true }
 pezsp-runtime = { workspace = true }
 pezsp-session = { workspace = true }
-pezsp-statement-store = { workspace = true }
+pezsp-staking = { workspace = true }
 pezsp-storage = { workspace = true }
 pezsp-transaction-pool = { workspace = true }
 pezsp-version = { workspace = true }
+pezsp-weights = { workspace = true }
 
 # Pezkuwi
 pezkuwi-runtime-common = { workspace = true }
 pezkuwi-teyrchain-primitives = { workspace = true }
+pezkuwichain-runtime-constants = { workspace = true }
 pezpallet-xcm = { workspace = true }
 pezpallet-xcm-benchmarks = { optional = true, workspace = true }
 xcm = { workspace = true }
 xcm-builder = { workspace = true }
 xcm-executor = { workspace = true }
 xcm-runtime-pezapis = { workspace = true }
-zagros-runtime-constants = { workspace = true }
 
 # Pezcumulus
 pezcumulus-pezpallet-aura-ext = { workspace = true }
@@ -85,18 +120,32 @@ teyrchain-info = { workspace = true }
 teyrchains-common = { workspace = true }
 
 [dev-dependencies]
+# The court-roster test builds genesis and runs against it.
+pezsp-io = { workspace = true, default-features = true }
 teyrchains-runtimes-test-utils = { workspace = true, default-features = true }
+# The runtime itself mirrors the mainnet People chain and so takes its constants
+# from `pezkuwichain-runtime-constants`. The governance test still has to name the
+# Collectives chain, which exists on Zagros but not on the mainnet, so its para id
+# comes from the Zagros constants — as a dev-dependency, where a testnet-only
+# identifier belongs.
+zagros-runtime-constants = { workspace = true, default-features = true }
 
 [build-dependencies]
 bizinikiwi-wasm-builder = { optional = true, workspace = true, default-features = true }
 
 [features]
 default = ["std"]
+# Compresses the governance track periods so a zombienet can raise the state, hold a
+# referendum on every track and tear it down inside a test run. Never enabled for a
+# deployed build -- see `rehearsal_period!` in `pezkuwi-runtime-common`.
+fast-runtime = []
+
 std = [
 	"bizinikiwi-wasm-builder",
 	"bizinikiwi-wasm-builder?/std",
 	"codec/std",
 	"enumflags2/std",
+	"log/std",
 	"pezcumulus-pezpallet-aura-ext/std",
 	"pezcumulus-pezpallet-session-benchmarking/std",
 	"pezcumulus-pezpallet-teyrchain-system/std",
@@ -113,27 +162,57 @@ std = [
 	"pezframe-system-rpc-runtime-api/std",
 	"pezframe-system/std",
 	"pezframe-try-runtime?/std",
+	"pezkuwi-primitives/std",
 	"pezkuwi-runtime-common/std",
 	"pezkuwi-teyrchain-primitives/std",
+	"pezkuwi-tnpos-primitives/std",
+	"pezkuwichain-runtime-constants/std",
+	"pezpallet-accumulate-and-forward/std",
+	"pezpallet-assets/std",
 	"pezpallet-aura/std",
 	"pezpallet-authorship/std",
 	"pezpallet-balances/std",
 	"pezpallet-collator-selection/std",
+	"pezpallet-collective/std",
+	"pezpallet-identity-kyc/std",
 	"pezpallet-identity/std",
 	"pezpallet-message-queue/std",
+	"pezpallet-messaging/std",
 	"pezpallet-migrations/std",
 	"pezpallet-multisig/std",
+	"pezpallet-nfts/std",
+	"pezpallet-parameters/std",
+	"pezpallet-perwerde/std",
+	"pezpallet-pez-rewards/std",
+	"pezpallet-preimage/std",
 	"pezpallet-proxy/std",
+	"pezpallet-recovery/std",
+	"pezpallet-referenda/std",
+	"pezpallet-referral/std",
+	"pezpallet-scheduler/std",
 	"pezpallet-session/std",
+	"pezpallet-skip-feeless-payment/std",
+	"pezpallet-society/std",
+	"pezpallet-staking-async-rc-client/std",
+	"pezpallet-staking-score/std",
+	"pezpallet-tiki/std",
 	"pezpallet-timestamp/std",
+	"pezpallet-tnpos/std",
 	"pezpallet-transaction-payment-rpc-runtime-api/std",
 	"pezpallet-transaction-payment/std",
+	"pezpallet-trust/std",
 	"pezpallet-utility/std",
+	"pezpallet-vesting/std",
+	"pezpallet-welati/std",
 	"pezpallet-xcm-benchmarks?/std",
 	"pezpallet-xcm/std",
 	"pezsp-api/std",
+	"pezsp-authority-discovery/std",
 	"pezsp-block-builder/std",
 	"pezsp-consensus-aura/std",
+	"pezsp-consensus-babe/std",
+	"pezsp-consensus-beefy/std",
+	"pezsp-consensus-grandpa/std",
 	"pezsp-core/std",
 	"pezsp-genesis-builder/std",
 	"pezsp-inherents/std",
@@ -141,10 +220,11 @@ std = [
 	"pezsp-offchain/std",
 	"pezsp-runtime/std",
 	"pezsp-session/std",
-	"pezsp-statement-store/std",
+	"pezsp-staking/std",
 	"pezsp-storage/std",
 	"pezsp-transaction-pool/std",
 	"pezsp-version/std",
+	"pezsp-weights/std",
 	"scale-info/std",
 	"serde",
 	"serde_json/std",
@@ -156,7 +236,6 @@ std = [
 	"xcm-executor/std",
 	"xcm-runtime-pezapis/std",
 	"xcm/std",
-	"zagros-runtime-constants/std",
 ]
 runtime-benchmarks = [
 	"bizinikiwi-wasm-builder?/runtime-benchmarks",
@@ -176,34 +255,64 @@ runtime-benchmarks = [
 	"pezframe-system-rpc-runtime-api/runtime-benchmarks",
 	"pezframe-system/runtime-benchmarks",
 	"pezframe-try-runtime?/runtime-benchmarks",
+	"pezkuwi-primitives/runtime-benchmarks",
 	"pezkuwi-runtime-common/runtime-benchmarks",
 	"pezkuwi-teyrchain-primitives/runtime-benchmarks",
+	"pezkuwichain-runtime-constants/runtime-benchmarks",
+	"pezpallet-accumulate-and-forward/runtime-benchmarks",
+	"pezpallet-assets/runtime-benchmarks",
 	"pezpallet-aura/runtime-benchmarks",
 	"pezpallet-authorship/runtime-benchmarks",
 	"pezpallet-balances/runtime-benchmarks",
 	"pezpallet-collator-selection/runtime-benchmarks",
+	"pezpallet-collective/runtime-benchmarks",
+	"pezpallet-identity-kyc/runtime-benchmarks",
 	"pezpallet-identity/runtime-benchmarks",
 	"pezpallet-message-queue/runtime-benchmarks",
+	"pezpallet-messaging/runtime-benchmarks",
 	"pezpallet-migrations/runtime-benchmarks",
 	"pezpallet-multisig/runtime-benchmarks",
+	"pezpallet-nfts/runtime-benchmarks",
+	"pezpallet-parameters/runtime-benchmarks",
+	"pezpallet-perwerde/runtime-benchmarks",
+	"pezpallet-pez-rewards/runtime-benchmarks",
+	"pezpallet-preimage/runtime-benchmarks",
 	"pezpallet-proxy/runtime-benchmarks",
+	"pezpallet-recovery/runtime-benchmarks",
+	"pezpallet-referenda/runtime-benchmarks",
+	"pezpallet-referral/runtime-benchmarks",
+	"pezpallet-scheduler/runtime-benchmarks",
 	"pezpallet-session/runtime-benchmarks",
+	"pezpallet-skip-feeless-payment/runtime-benchmarks",
+	"pezpallet-society/runtime-benchmarks",
+	"pezpallet-staking-async-rc-client/runtime-benchmarks",
+	"pezpallet-staking-score/runtime-benchmarks",
+	"pezpallet-tiki/runtime-benchmarks",
 	"pezpallet-timestamp/runtime-benchmarks",
+	"pezpallet-tnpos/runtime-benchmarks",
 	"pezpallet-transaction-payment-rpc-runtime-api/runtime-benchmarks",
 	"pezpallet-transaction-payment/runtime-benchmarks",
+	"pezpallet-trust/runtime-benchmarks",
 	"pezpallet-utility/runtime-benchmarks",
+	"pezpallet-vesting/runtime-benchmarks",
+	"pezpallet-welati/runtime-benchmarks",
 	"pezpallet-xcm-benchmarks/runtime-benchmarks",
 	"pezpallet-xcm/runtime-benchmarks",
 	"pezsp-api/runtime-benchmarks",
+	"pezsp-authority-discovery/runtime-benchmarks",
 	"pezsp-block-builder/runtime-benchmarks",
 	"pezsp-consensus-aura/runtime-benchmarks",
+	"pezsp-consensus-babe/runtime-benchmarks",
+	"pezsp-consensus-beefy/runtime-benchmarks",
+	"pezsp-consensus-grandpa/runtime-benchmarks",
 	"pezsp-genesis-builder/runtime-benchmarks",
 	"pezsp-inherents/runtime-benchmarks",
+	"pezsp-io/runtime-benchmarks",
 	"pezsp-keyring/runtime-benchmarks",
 	"pezsp-offchain/runtime-benchmarks",
 	"pezsp-runtime/runtime-benchmarks",
 	"pezsp-session/runtime-benchmarks",
-	"pezsp-statement-store/runtime-benchmarks",
+	"pezsp-staking/runtime-benchmarks",
 	"pezsp-transaction-pool/runtime-benchmarks",
 	"pezsp-version/runtime-benchmarks",
 	"testnet-teyrchains-constants/runtime-benchmarks",
@@ -231,34 +340,63 @@ try-runtime = [
 	"pezframe-system-benchmarking?/try-runtime",
 	"pezframe-system/try-runtime",
 	"pezframe-try-runtime/try-runtime",
+	"pezkuwi-primitives/try-runtime",
 	"pezkuwi-runtime-common/try-runtime",
 	"pezkuwi-teyrchain-primitives/try-runtime",
+	"pezkuwichain-runtime-constants/try-runtime",
+	"pezpallet-accumulate-and-forward/try-runtime",
+	"pezpallet-assets/try-runtime",
 	"pezpallet-aura/try-runtime",
 	"pezpallet-authorship/try-runtime",
 	"pezpallet-balances/try-runtime",
 	"pezpallet-collator-selection/try-runtime",
+	"pezpallet-collective/try-runtime",
+	"pezpallet-identity-kyc/try-runtime",
 	"pezpallet-identity/try-runtime",
 	"pezpallet-message-queue/try-runtime",
+	"pezpallet-messaging/try-runtime",
 	"pezpallet-migrations/try-runtime",
 	"pezpallet-multisig/try-runtime",
+	"pezpallet-nfts/try-runtime",
+	"pezpallet-parameters/try-runtime",
+	"pezpallet-perwerde/try-runtime",
+	"pezpallet-pez-rewards/try-runtime",
+	"pezpallet-preimage/try-runtime",
 	"pezpallet-proxy/try-runtime",
+	"pezpallet-recovery/try-runtime",
+	"pezpallet-referenda/try-runtime",
+	"pezpallet-referral/try-runtime",
+	"pezpallet-scheduler/try-runtime",
 	"pezpallet-session/try-runtime",
+	"pezpallet-skip-feeless-payment/try-runtime",
+	"pezpallet-society/try-runtime",
+	"pezpallet-staking-async-rc-client/try-runtime",
+	"pezpallet-staking-score/try-runtime",
+	"pezpallet-tiki/try-runtime",
 	"pezpallet-timestamp/try-runtime",
+	"pezpallet-tnpos/try-runtime",
 	"pezpallet-transaction-payment-rpc-runtime-api/try-runtime",
 	"pezpallet-transaction-payment/try-runtime",
+	"pezpallet-trust/try-runtime",
 	"pezpallet-utility/try-runtime",
+	"pezpallet-vesting/try-runtime",
+	"pezpallet-welati/try-runtime",
 	"pezpallet-xcm-benchmarks?/try-runtime",
 	"pezpallet-xcm/try-runtime",
 	"pezsp-api/try-runtime",
+	"pezsp-authority-discovery/try-runtime",
 	"pezsp-block-builder/try-runtime",
 	"pezsp-consensus-aura/try-runtime",
+	"pezsp-consensus-babe/try-runtime",
+	"pezsp-consensus-beefy/try-runtime",
+	"pezsp-consensus-grandpa/try-runtime",
 	"pezsp-genesis-builder/try-runtime",
 	"pezsp-inherents/try-runtime",
 	"pezsp-keyring/try-runtime",
 	"pezsp-offchain/try-runtime",
 	"pezsp-runtime/try-runtime",
 	"pezsp-session/try-runtime",
-	"pezsp-statement-store/try-runtime",
+	"pezsp-staking/try-runtime",
 	"pezsp-transaction-pool/try-runtime",
 	"pezsp-version/try-runtime",
 	"testnet-teyrchains-constants/try-runtime",
@@ -282,12 +420,17 @@ serde = [
 	"enumflags2/serde",
 	"pezframe-benchmarking?/serde",
 	"pezpallet-message-queue/serde",
+	"pezpallet-perwerde/serde",
+	"pezpallet-pez-rewards/serde",
+	"pezpallet-staking-score/serde",
 	"pezpallet-transaction-payment/serde",
+	"pezpallet-trust/serde",
+	"pezpallet-welati/serde",
 	"pezpallet-xcm/serde",
 	"pezsp-consensus-aura/serde",
 	"pezsp-core/serde",
 	"pezsp-runtime/serde",
-	"pezsp-statement-store/serde",
+	"pezsp-staking/serde",
 	"pezsp-storage/serde",
 	"pezsp-version/serde",
 	"scale-info/serde",

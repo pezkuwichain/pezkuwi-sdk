@@ -29,21 +29,20 @@ use pezsc_consensus_slots::BackoffAuthoringOnFinalizedHeadLagging;
 use pezsc_network_test::{Block as TestBlock, *};
 use pezsc_transaction_pool_api::RejectAllTxPool;
 use pezsp_application_crypto::key_types::BABE;
-use pezsp_consensus::{DisableProofRecording, NoNetwork as DummyOracle, Proposal};
+use pezsp_consensus::{NoNetwork as DummyOracle, Proposal, ProposeArgs};
 use pezsp_consensus_babe::{
 	inherents::{BabeCreateInherentDataProviders, InherentDataProvider},
 	make_vrf_sign_data, AllowedSlots, AuthorityId, AuthorityPair, Slot,
 };
 use pezsp_consensus_slots::SlotDuration;
 use pezsp_core::crypto::Pair;
-use pezsp_inherents::InherentData;
 use pezsp_keyring::Sr25519Keyring;
 use pezsp_keystore::{testing::MemoryKeystore, Keystore};
 use pezsp_runtime::{
 	generic::{Digest, DigestItem},
 	traits::Block as BlockT,
 };
-use std::{cell::RefCell, task::Poll, time::Duration};
+use std::{cell::RefCell, task::Poll};
 
 type Item = DigestItem;
 
@@ -105,7 +104,7 @@ impl DummyProposer {
 	fn propose_with(
 		&mut self,
 		pre_digests: Digest,
-	) -> future::Ready<Result<Proposal<TestBlock, ()>, Error>> {
+	) -> future::Ready<Result<Proposal<TestBlock>, Error>> {
 		let block_builder = BlockBuilderBuilder::new(&*self.factory.client)
 			.on_parent_block(self.parent_hash)
 			.fetch_parent_block_number(&*self.factory.client)
@@ -122,24 +121,16 @@ impl DummyProposer {
 		// mutate the block header according to the mutator.
 		(self.factory.mutator)(&mut block.header, Stage::PreSeal);
 
-		future::ready(Ok(Proposal { block, proof: (), storage_changes: Default::default() }))
+		future::ready(Ok(Proposal { block, storage_changes: Default::default() }))
 	}
 }
 
 impl Proposer<TestBlock> for DummyProposer {
 	type Error = Error;
-	type Proposal = future::Ready<Result<Proposal<TestBlock, ()>, Error>>;
-	type ProofRecording = DisableProofRecording;
-	type Proof = ();
+	type Proposal = future::Ready<Result<Proposal<TestBlock>, Error>>;
 
-	fn propose(
-		mut self,
-		_: InherentData,
-		pre_digests: Digest,
-		_: Duration,
-		_: Option<usize>,
-	) -> Self::Proposal {
-		self.propose_with(pre_digests)
+	fn propose(mut self, args: ProposeArgs<TestBlock>) -> Self::Proposal {
+		self.propose_with(args.inherent_digests)
 	}
 }
 
@@ -418,7 +409,7 @@ async fn run_one_test(mutator: impl Fn(&mut TestHeader, Stage) + Send + Sync + '
 	.await;
 }
 
-#[cfg(ignore_flaky_test)] // https://github.com/pezkuwichain/pezkuwi-sdk/issues/96
+#[cfg(ignore_flaky_test)] // https://github.com/pezkuwichain/pezkuwi-DKS/issues/96
 #[tokio::test]
 async fn authoring_blocks() {
 	run_one_test(|_, _| ()).await;
@@ -437,7 +428,7 @@ async fn rejects_missing_inherent_digest() {
 	.await;
 }
 
-#[cfg(ignore_flaky_test)] // https://github.com/pezkuwichain/pezkuwi-sdk/issues/96
+#[cfg(ignore_flaky_test)] // https://github.com/pezkuwichain/pezkuwi-DKS/issues/96
 #[tokio::test]
 #[should_panic(expected = "has a bad seal")]
 async fn rejects_missing_seals() {
@@ -523,28 +514,38 @@ fn claim_epoch_slots() {
 		Some((PreDigest::SecondaryVRF(_), _)) => 3,
 	};
 
-	// With secondary mechanism we should be able to claim all slots.
-	let claims: Vec<_> = (0..EPOCH_DURATION)
-		.into_iter()
-		.map(|slot| claim_slot_wrap(slot, epoch.clone()))
-		.collect();
-	assert_eq!(claims, [1, 2, 2, 1, 2, 2, 2, 2, 2, 1]);
-
-	// With secondary with VRF mechanism we should be able to claim all the slots.
-	epoch.config.allowed_slots = AllowedSlots::PrimaryAndSecondaryVRFSlots;
-	let claims: Vec<_> = (0..EPOCH_DURATION)
-		.into_iter()
-		.map(|slot| claim_slot_wrap(slot, epoch.clone()))
-		.collect();
-	assert_eq!(claims, [1, 3, 3, 1, 3, 3, 3, 3, 3, 1]);
-
-	// Otherwise with only vrf-based primary slots we are able to claim a subset of the slots.
+	// Which slots resolve to a Primary claim depends on the VRF authoring-score context
+	// (PezkuwiChain's sovereign b"bizinikiwi-babe-vrf"), so the exact positions are not the
+	// upstream ones. Derive the primary set from PrimarySlots-only mode (only primaries are
+	// claimable there) and assert the secondary modes are consistent with it — this verifies
+	// the real invariant without pinning context-specific slot numbers.
 	epoch.config.allowed_slots = AllowedSlots::PrimarySlots;
-	let claims: Vec<_> = (0..EPOCH_DURATION)
-		.into_iter()
-		.map(|slot| claim_slot_wrap(slot, epoch.clone()))
-		.collect();
-	assert_eq!(claims, [1, 0, 0, 1, 0, 0, 0, 0, 0, 1]);
+	let primary_only: Vec<_> =
+		(0..EPOCH_DURATION).map(|slot| claim_slot_wrap(slot, epoch.clone())).collect();
+	assert!(
+		primary_only.iter().all(|&c| c == 0 || c == 1),
+		"primary-only mode: each slot is either Primary or unclaimable"
+	);
+	assert!(primary_only.contains(&1), "expected at least one primary slot");
+	let is_primary: Vec<bool> = primary_only.iter().map(|&c| c == 1).collect();
+
+	// Secondary-plain mechanism: every slot is claimable — primaries stay Primary (1), the
+	// rest are SecondaryPlain (2).
+	epoch.config.allowed_slots = AllowedSlots::PrimaryAndSecondaryPlainSlots;
+	let plain: Vec<_> =
+		(0..EPOCH_DURATION).map(|slot| claim_slot_wrap(slot, epoch.clone())).collect();
+	for (i, &c) in plain.iter().enumerate() {
+		assert_eq!(c, if is_primary[i] { 1 } else { 2 });
+	}
+
+	// Secondary-VRF mechanism: every slot is claimable — primaries stay Primary (1), the rest
+	// are SecondaryVRF (3).
+	epoch.config.allowed_slots = AllowedSlots::PrimaryAndSecondaryVRFSlots;
+	let vrf: Vec<_> =
+		(0..EPOCH_DURATION).map(|slot| claim_slot_wrap(slot, epoch.clone())).collect();
+	for (i, &c) in vrf.iter().enumerate() {
+		assert_eq!(c, if is_primary[i] { 1 } else { 3 });
+	}
 }
 
 #[test]
@@ -567,50 +568,123 @@ fn claim_vrf_check() {
 	}
 	.into();
 
-	// We leverage the predictability of claim types given a constant randomness.
+	// PezkuwiChain's authoring-score VRF context (`AUTHORING_SCORE_VRF_CONTEXT`) is the
+	// sovereign `b"bizinikiwi-babe-vrf"`, not upstream's `b"substrate-babe-vrf"`. The score
+	// derived from that context decides Primary vs SecondaryVRF, so *which* slots resolve
+	// to each kind is specific to our context and is not upstream's hardcoded slots.
+	// Rather than pin brittle slot numbers, scan for one of each kind under the active
+	// context and assert the real invariant: the claim's VRF pre-output is deterministic,
+	// i.e. equal to a fresh keystore VRF sign over the same data (using the epoch index
+	// claim_slot signs against, which `clone_for_slot` reproduces for skipped epochs).
+	// This keeps the test correct regardless of the context value.
+	let mut saw_primary = false;
+	let mut saw_secondary_vrf = false;
+	for s in 0u64..256 {
+		let slot = Slot::from(s);
+		let Some((pre_digest, _)) = claim_slot(slot, &epoch, &keystore) else { continue };
+		let epoch_index = epoch.clone_for_slot(slot).epoch_index;
+		let data = make_vrf_sign_data(&epoch.randomness, slot, epoch_index);
+		let sign = keystore.sr25519_vrf_sign(AuthorityId::ID, &public, &data).unwrap().unwrap();
+		match &pre_digest {
+			PreDigest::Primary(d) => {
+				assert_eq!(d.vrf_signature.pre_output, sign.pre_output);
+				saw_primary = true;
+			},
+			PreDigest::SecondaryVRF(d) => {
+				assert_eq!(d.vrf_signature.pre_output, sign.pre_output);
+				saw_secondary_vrf = true;
+			},
+			PreDigest::SecondaryPlain(_) => {},
+		}
+		if saw_primary && saw_secondary_vrf {
+			break;
+		}
+	}
+	assert!(saw_primary, "expected at least one Primary claim within slots 0..256");
+	assert!(saw_secondary_vrf, "expected at least one SecondaryVRF claim within slots 0..256");
 
-	// We expect a Primary claim for slot 0
-
-	let pre_digest = match claim_slot(0.into(), &epoch, &keystore).unwrap().0 {
-		PreDigest::Primary(d) => d,
-		v => panic!("Unexpected pre-digest variant {:?}", v),
-	};
-	let data = make_vrf_sign_data(&epoch.randomness.clone(), 0.into(), epoch.epoch_index);
-	let sign = keystore.sr25519_vrf_sign(AuthorityId::ID, &public, &data).unwrap().unwrap();
-	assert_eq!(pre_digest.vrf_signature.pre_output, sign.pre_output);
-
-	// We expect a SecondaryVRF claim for slot 1
-	let pre_digest = match claim_slot(1.into(), &epoch, &keystore).unwrap().0 {
-		PreDigest::SecondaryVRF(d) => d,
-		v => panic!("Unexpected pre-digest variant {:?}", v),
-	};
-	let data = make_vrf_sign_data(&epoch.randomness.clone(), 1.into(), epoch.epoch_index);
-	let sign = keystore.sr25519_vrf_sign(AuthorityId::ID, &public, &data).unwrap().unwrap();
-	assert_eq!(pre_digest.vrf_signature.pre_output, sign.pre_output);
-
-	// Check that correct epoch index has been used if epochs are skipped (primary VRF)
+	// Epoch-index recomputation when epochs are skipped: a far-future slot must author
+	// against the recomputed epoch index (11), independent of the claim kind, and the VRF
+	// pre-output must still be deterministic against a sign using that fixed epoch index.
 	let slot = Slot::from(103);
-	let claim = match claim_slot(slot, &epoch, &keystore).unwrap().0 {
-		PreDigest::Primary(d) => d,
-		v => panic!("Unexpected claim variant {:?}", v),
-	};
+	let (pre_digest, _) = claim_slot(slot, &epoch, &keystore).expect("slot must be claimable");
 	let fixed_epoch = epoch.clone_for_slot(slot);
-	let data = make_vrf_sign_data(&epoch.randomness.clone(), slot, fixed_epoch.epoch_index);
-	let sign = keystore.sr25519_vrf_sign(AuthorityId::ID, &public, &data).unwrap().unwrap();
 	assert_eq!(fixed_epoch.epoch_index, 11);
-	assert_eq!(claim.vrf_signature.pre_output, sign.pre_output);
+	let data = make_vrf_sign_data(&epoch.randomness, slot, fixed_epoch.epoch_index);
+	let sign = keystore.sr25519_vrf_sign(AuthorityId::ID, &public, &data).unwrap().unwrap();
+	match &pre_digest {
+		PreDigest::Primary(d) => assert_eq!(d.vrf_signature.pre_output, sign.pre_output),
+		PreDigest::SecondaryVRF(d) => assert_eq!(d.vrf_signature.pre_output, sign.pre_output),
+		PreDigest::SecondaryPlain(_) => panic!("expected a VRF-based claim for slot 103"),
+	}
+}
 
-	// Check that correct epoch index has been used if epochs are skipped (secondary VRF)
-	let slot = Slot::from(100);
-	let pre_digest = match claim_slot(slot, &epoch, &keystore).unwrap().0 {
-		PreDigest::SecondaryVRF(d) => d,
-		v => panic!("Unexpected claim variant {:?}", v),
+#[test]
+fn live_babe_vrf_context_matches_chain() {
+	// Empirical proof that our node's BABE VRF authoring-score context matches the live
+	// PezkuwiChain mainnet (consensus safety, not just an internal assumption).
+	//
+	// Relay block #1679722 is a BABE *Primary* block (authority #9, slot 297073892). A
+	// block is Primary iff its authoring score — `make_bytes` over the
+	// `AUTHORING_SCORE_VRF_CONTEXT` applied to the on-chain VRF pre-output — is below the
+	// primary threshold. We recompute that score for the on-chain pre-output under both our
+	// sovereign `b"bizinikiwi-babe-vrf"` and upstream's `b"substrate-babe-vrf"`. Since the
+	// live network already accepted the block as Primary, the context the live node uses
+	// MUST yield a score below the threshold — so this asserts our context is the match.
+	// All inputs are captured from chain state at that block (no network access here).
+	use codec::Decode;
+	use pezsp_core::sr25519::{vrf::VrfPreOutput, Public};
+
+	let pubkey: [u8; 32] = [
+		0x24, 0x1f, 0xa3, 0xbe, 0x1b, 0x57, 0xd3, 0xbe, 0x4f, 0xf6, 0xfc, 0x78, 0x08, 0xfa, 0xb4,
+		0x4d, 0x8d, 0xf9, 0x38, 0x56, 0x69, 0x9b, 0xcf, 0xe9, 0xd5, 0x76, 0x8c, 0x21, 0x90, 0x03,
+		0xc7, 0x0a,
+	];
+	let pre_output_bytes: [u8; 32] = [
+		0x44, 0xd5, 0x20, 0xc4, 0x00, 0x9f, 0x59, 0x1e, 0x47, 0x9f, 0x99, 0xab, 0x47, 0xe8, 0xf4,
+		0x15, 0xd9, 0x5e, 0x4b, 0xb6, 0x4d, 0x3e, 0x79, 0x63, 0x07, 0xf9, 0x50, 0xe2, 0x53, 0x9a,
+		0xee, 0x30,
+	];
+	let randomness: pezsp_consensus_babe::Randomness = [
+		0xd7, 0x75, 0x52, 0x68, 0x65, 0x64, 0xe0, 0xa0, 0xfa, 0x24, 0x90, 0xf7, 0x52, 0x1b, 0x68,
+		0xd5, 0x1a, 0x78, 0x17, 0x74, 0xc9, 0x26, 0xd1, 0xc4, 0xc9, 0x7b, 0xf7, 0x63, 0xa8, 0x11,
+		0xa9, 0x5b,
+	];
+	let slot = Slot::from(297073892u64);
+	let epoch_index = 3147u64;
+
+	let public = Public::from_raw(pubkey);
+	let pre_output = VrfPreOutput::decode(&mut &pre_output_bytes[..]).expect("valid pre-output");
+	let data = make_vrf_sign_data(&randomness, slot, epoch_index);
+
+	let score = |ctx: &[u8]| -> u128 {
+		u128::from_le_bytes(
+			public.make_bytes::<16>(ctx, data.as_ref(), &pre_output).expect("make_bytes"),
+		)
 	};
-	let fixed_epoch = epoch.clone_for_slot(slot);
-	let data = make_vrf_sign_data(&epoch.randomness.clone(), slot, fixed_epoch.epoch_index);
-	let sign = keystore.sr25519_vrf_sign(AuthorityId::ID, &public, &data).unwrap().unwrap();
-	assert_eq!(fixed_epoch.epoch_index, 11);
-	assert_eq!(pre_digest.vrf_signature.pre_output, sign.pre_output);
+	let score_sovereign = score(b"bizinikiwi-babe-vrf");
+	let score_upstream = score(b"substrate-babe-vrf");
+
+	// Threshold for this block: c = (1, 4); authority #9 has weight 1 of 21 total.
+	let dummy: AuthorityId = Sr25519Keyring::Alice.public().into();
+	let authorities: Vec<_> = (0..21).map(|_| (dummy.clone(), 1u64)).collect();
+	let threshold = authorship::calculate_primary_threshold((1, 4), &authorities, 9);
+
+	println!("threshold             = {threshold}");
+	println!(
+		"score bizinikiwi-vrf  = {score_sovereign} (< threshold: {})",
+		score_sovereign < threshold
+	);
+	println!(
+		"score substrate-vrf   = {score_upstream} (< threshold: {})",
+		score_upstream < threshold
+	);
+
+	assert!(
+		score_sovereign < threshold,
+		"bizinikiwi-babe-vrf score is NOT below the threshold for a known-Primary live block \
+		 — our node's BABE VRF context diverges from the live network!"
+	);
 }
 
 // Propose and import a new BABE block on top of the given parent.

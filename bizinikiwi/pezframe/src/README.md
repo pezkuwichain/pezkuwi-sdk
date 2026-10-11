@@ -7,12 +7,12 @@
 
 # `pezkuwi-sdk-frame`
 
-[![StackExchange](https://img.shields.io/badge/StackExchange-Community%20&%20Support-222222?logo=stackexchange)](https://pezkuwichain.app/community/)
+[![StackExchange](https://img.shields.io/badge/StackExchange-Community%20&%20Support-222222?logo=stackexchange)](https://pezkuwichain.io/community/)
 
 </div>
 
 `pezkuwi-sdk-frame` is an umbrella crate for the
-[FRAME](https://docs.pezkuwichain.app/polkadot-protocol/glossary/#frame-framework-for-runtime-aggregation-of-modularized-entities)
+[FRAME](https://docs.pezkuwichain.io/polkadot-protocol/glossary/#frame-framework-for-runtime-aggregation-of-modularized-entities)
 framework. It simplifies building FRAME pallets and runtimes by re-exporting all the necessary components for pezpallet development.
 
 Outside the Pezkuwi SDK, `pezkuwi-sdk-frame` should be imported through the main Pezkuwi SDK [`umbrella crate`](../../../umbrella/src/lib.rs).

@@ -1,3 +1,8 @@
+// This file is part of PezkuwiChain.
+
+// Copyright (C) Dijital Kurdistan Tech Institute
+// SPDX-License-Identifier: Apache-2.0
+
 //! Benchmarking setup for pezpallet-tiki
 use super::*;
 
@@ -5,13 +10,13 @@ use super::*;
 use crate::Pezpallet as Tiki;
 use pezframe_benchmarking::v2::*;
 use pezframe_system::RawOrigin;
-// Gerekli trait'leri import ediyoruz
+// Import the required traits
 use pezframe_support::traits::{Currency, Get};
 use pezpallet_balances::Pezpallet as Balances;
 use pezsp_runtime::traits::StaticLookup;
 extern crate alloc;
 
-// Gerekli trait kısıtlamalarını ana benchmarks bloğuna ekliyoruz.
+// Add the required trait bounds to the main benchmarks block.
 #[benchmarks(
 	where
 		T::CollectionId: Copy + Default + PartialOrd,
@@ -20,13 +25,13 @@ extern crate alloc;
 mod benchmarks {
 	use super::*;
 
-	// Bu yardımcı fonksiyon, runtime'da tanımlanan Tiki koleksiyonunu oluşturur.
+	// This helper function creates the Tiki collection defined in the runtime.
 	fn ensure_collection_exists<T: Config + pezpallet_balances::Config>()
 	where
 		T::CollectionId: Default + PartialOrd,
 	{
 		let collection_id = T::TikiCollectionId::get();
-		// Koleksiyon sahibi olarak fonlanmış `whitelisted_caller`'ı kullanıyoruz.
+		// Use the funded `whitelisted_caller` as the collection owner.
 		let caller: T::AccountId = whitelisted_caller();
 
 		// Fund the caller account with sufficient balance for NFT deposits
@@ -34,18 +39,35 @@ mod benchmarks {
 		let funding = Balances::<T>::minimum_balance() * 1_000_000_000u32.into();
 		Balances::<T>::make_free_balance_be(&caller, funding);
 
-		// `while` döngüsü, 'Step' trait'ine olan ihtiyacı ortadan kaldırır.
-		while pezpallet_nfts::NextCollectionId::<T>::get().unwrap_or_default() <= collection_id {
-			let _ = pezpallet_nfts::Pezpallet::<T>::force_create(
-				RawOrigin::Root.into(),
-				T::Lookup::unlookup(caller.clone()),
-				pezpallet_nfts::CollectionConfig {
-					settings: Default::default(),
-					max_supply: None,
-					mint_settings: Default::default(),
-				},
-			);
+		// Point the counter straight at the id we need, then create that one collection.
+		//
+		// This used to be a `while` loop that called `force_create` until the counter passed
+		// `collection_id`, discarding the result each time. When the call failed the loop had
+		// no way to know: it re-ran the same failing call forever. Measured on 2026-08-19 --
+		// the weights run sat on this pallet for 3h53m at full CPU with flat memory, producing
+		// nothing, and every other pallet waited behind it.
+		//
+		// `set_next_id` exists for exactly this and is compiled under `runtime-benchmarks`, so
+		// no loop is needed. `force_create` is checked rather than discarded: a failure here
+		// means the benchmark is set up wrong, and it should say so instead of hanging.
+		// The genesis preset already creates this collection, so creating it again fails with
+		// CollectionIdInUse. That is what the old `while` loop kept hitting: it discarded the
+		// error and retried the same doomed call forever, at full CPU, producing nothing.
+		if pezpallet_nfts::Collection::<T>::contains_key(collection_id) {
+			return;
 		}
+
+		pezpallet_nfts::Pezpallet::<T>::set_next_id(collection_id);
+		pezpallet_nfts::Pezpallet::<T>::force_create(
+			RawOrigin::Root.into(),
+			T::Lookup::unlookup(caller.clone()),
+			pezpallet_nfts::CollectionConfig {
+				settings: Default::default(),
+				max_supply: None,
+				mint_settings: Default::default(),
+			},
+		)
+		.expect("root can force-create a collection that does not exist yet; qed");
 	}
 
 	// Helper to ensure user has a citizen NFT
@@ -70,10 +92,14 @@ mod benchmarks {
 
 	#[benchmark]
 	fn grant_tiki() -> Result<(), BenchmarkError> {
-		// NFT'yi alacak 'dest' hesabı olarak fonlanmış `whitelisted_caller`'ı kullanıyoruz.
+		// Use the funded `whitelisted_caller` as the 'dest' account that will receive the NFT.
 		let dest: T::AccountId = whitelisted_caller();
-		// Appointed role kullan (Serok yerine Wezir)
-		let tiki = crate::Tiki::Wezir;
+		// Use an appointed role (Wezir instead of Serok)
+		// Not `Wezir`: it is a cabinet tiki, so `is_seated_by_governance` is true for it and
+		// `grant_tiki` refuses with `SeatedByGovernance`. The benchmark measured nothing and
+		// the whole pallet's weights failed with it -- measured 2026-09-20. `Hiquqnas` is an
+		// appointed tiki this call actually grants, which is what the weight should describe.
+		let tiki = crate::Tiki::Hiquqnas;
 
 		// Ensure the dest account has a citizen NFT before granting a tiki
 		ensure_citizen_nft::<T>(dest.clone())?;
@@ -88,9 +114,11 @@ mod benchmarks {
 
 	#[benchmark]
 	fn revoke_tiki() -> Result<(), BenchmarkError> {
-		// NFT'yi alacak 'dest' hesabı olarak fonlanmış `whitelisted_caller`'ı kullanıyoruz.
+		// Use the funded `whitelisted_caller` as the 'dest' account that will receive the NFT.
 		let dest: T::AccountId = whitelisted_caller();
-		let tiki = crate::Tiki::Wezir; // Use appointed role
+		// Same reason as `grant_tiki`: a cabinet tiki cannot be granted or revoked through
+		// this call at all, so measuring one measured a refusal.
+		let tiki = crate::Tiki::Hiquqnas;
 
 		// Ensure the dest account has a citizen NFT and the tiki before revoking
 		ensure_citizen_nft::<T>(dest.clone())?;
@@ -108,19 +136,19 @@ mod benchmarks {
 	}
 
 	#[benchmark]
-	fn force_mint_citizen_nft() -> Result<(), BenchmarkError> {
+	fn grant_honorary_citizenship() -> Result<(), BenchmarkError> {
 		let dest: T::AccountId = whitelisted_caller();
 
 		// Ensure collection exists first
 		ensure_collection_exists::<T>();
 
-		// Henüz vatandaş olmamalı
+		// Should not be a citizen yet
 		assert!(Tiki::<T>::citizen_nft(&dest).is_none());
 
 		#[extrinsic_call]
 		_(RawOrigin::Root, T::Lookup::unlookup(dest.clone()));
 
-		// Vatandaş olduğundan emin ol
+		// Ensure they are now a citizen
 		assert!(Tiki::<T>::citizen_nft(&dest).is_some());
 		assert!(Tiki::<T>::is_citizen(&dest));
 
@@ -130,15 +158,15 @@ mod benchmarks {
 	#[benchmark]
 	fn grant_earned_role() -> Result<(), BenchmarkError> {
 		let dest: T::AccountId = whitelisted_caller();
-		let tiki = crate::Tiki::Axa; // Earned bir rol
+		let tiki = crate::Tiki::Axa; // An earned role
 
-		// Ön koşul: Vatandaş olmalı
+		// Precondition: must be a citizen
 		ensure_citizen_nft::<T>(dest.clone())?;
 
 		#[extrinsic_call]
 		_(RawOrigin::Root, T::Lookup::unlookup(dest.clone()), tiki);
 
-		// Rolün verildiğini doğrula
+		// Verify the role was granted
 		assert!(Tiki::<T>::has_tiki(&dest, &tiki));
 
 		Ok(())
@@ -147,15 +175,15 @@ mod benchmarks {
 	#[benchmark]
 	fn grant_elected_role() -> Result<(), BenchmarkError> {
 		let dest: T::AccountId = whitelisted_caller();
-		let tiki = crate::Tiki::Parlementer; // Elected bir rol
+		let tiki = crate::Tiki::Parlementer; // An elected role
 
-		// Ön koşul: Vatandaş olmalı
+		// Precondition: must be a citizen
 		ensure_citizen_nft::<T>(dest.clone())?;
 
 		#[extrinsic_call]
 		_(RawOrigin::Root, T::Lookup::unlookup(dest.clone()), tiki);
 
-		// Rolün verildiğini doğrula
+		// Verify the role was granted
 		assert!(Tiki::<T>::has_tiki(&dest, &tiki));
 
 		Ok(())
@@ -186,22 +214,10 @@ mod benchmarks {
 		Ok(())
 	}
 
-	#[benchmark]
-	fn check_transfer_permission() -> Result<(), BenchmarkError> {
-		let caller: T::AccountId = whitelisted_caller();
-		let dest: T::AccountId = account("dest", 0, 0);
-
-		// Ensure collections exist past tiki collection so we have a valid non-tiki ID
-		ensure_collection_exists::<T>();
-
-		// NextCollectionId is past tiki, so it's a non-tiki collection (call succeeds)
-		let non_tiki_id = pezpallet_nfts::NextCollectionId::<T>::get().unwrap_or_default();
-
-		#[extrinsic_call]
-		_(RawOrigin::Signed(caller.clone()), non_tiki_id, 0u32, caller.clone(), dest);
-
-		Ok(())
-	}
+	// `check_transfer_permission` was benchmarked here. The call is gone: an extrinsic
+	// nobody invoked, returning an error that read as the mechanism keeping citizen NFTs
+	// soulbound. The mechanism is `disable_transfer` at mint, and a test now attempts a
+	// real transfer.
 
 	impl_benchmark_test_suite!(Tiki, crate::mock::new_test_ext(), crate::mock::Test);
 }

@@ -23,13 +23,25 @@ static RUNTIMES: &[&str] = &["zagros", "pezkuwichain"];
 
 static EXTRINSICS: [(&str, &str); 2] = [("system", "remark"), ("balances", "transfer_keep_alive")];
 
+// Every combination here is expected to work. "balances"/"transfer_keep_alive" on
+// "pezkuwichain-dev" used to be skipped: `TransferKeepAliveBuilder` signs its call via
+// `identify_chain()`, and the old `is_pezkuwi()` matched any id starting with "pezkuwi", so
+// "pezkuwichain_dev" resolved to a variant the signing macro hard-rejected. Both the "pezkuwi"
+// variant and the chain it named are gone -- `identify_chain()` now names the network's role
+// (production or testnet), and each dev spec resolves to the runtime it is actually built from.
+
 /// `benchmark extrinsic` works for all dev runtimes and some extrinsics.
 #[test]
 fn benchmark_extrinsic_works() {
 	for runtime in RUNTIMES {
 		for (pezpallet, extrinsic) in EXTRINSICS {
 			let runtime = format!("{}-dev", runtime);
-			assert!(benchmark_extrinsic(&runtime, pezpallet, extrinsic).is_ok());
+			// `assert!(x.is_ok())` alone discards the `Err` payload — surface it explicitly
+			// so the signal-vs-exit-code diagnosis in `benchmark_extrinsic` is actually visible
+			// in the test failure output instead of a bare "assertion failed: ...is_ok()".
+			if let Err(e) = benchmark_extrinsic(&runtime, pezpallet, extrinsic) {
+				panic!("benchmark_extrinsic({runtime}, {pezpallet}, {extrinsic}) failed: {e}");
+			}
 		}
 	}
 }
@@ -53,7 +65,22 @@ fn benchmark_extrinsic(runtime: &str, pezpallet: &str, extrinsic: &str) -> Resul
 		.map_err(|e| format!("command failed: {:?}", e))?;
 
 	if !status.success() {
-		return Err("Command failed".into());
+		// `status.success() == false` covers both a clean non-zero exit (real Err/panic
+		// bubbling up through `main()`) and process termination by signal (e.g. SIGABRT
+		// from an aborting allocator/native library during teardown) — those need very
+		// different fixes, so surface which one this is instead of the previous opaque
+		// "Command failed".
+		#[cfg(unix)]
+		{
+			use std::os::unix::process::ExitStatusExt;
+			if let Some(signal) = status.signal() {
+				return Err(format!(
+					"Command terminated by signal {signal} (code={:?})",
+					status.code()
+				));
+			}
+		}
+		return Err(format!("Command failed with exit status {:?}", status.code()));
 	}
 
 	Ok(())

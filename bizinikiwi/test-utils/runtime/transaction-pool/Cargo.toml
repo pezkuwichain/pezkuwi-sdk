@@ -30,6 +30,7 @@ pezsp-runtime = { workspace = true, default-features = true }
 thiserror = { workspace = true }
 
 [features]
+default = ["std"]
 runtime-benchmarks = [
 	"bizinikiwi-test-runtime-client/runtime-benchmarks",
 	"pezsc-transaction-pool-api/runtime-benchmarks",

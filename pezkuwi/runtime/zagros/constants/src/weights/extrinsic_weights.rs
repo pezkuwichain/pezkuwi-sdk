@@ -1,4 +1,4 @@
-// Copyright (C) Parity Technologies (UK) Ltd. and Dijital Kurdistan Tech Institute
+// Copyright (C) Parity Technologies (UK) Ltd.
 // This file is part of Pezkuwi.
 
 // Pezkuwi is free software: you can redistribute it and/or modify
@@ -14,46 +14,50 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! THIS FILE WAS AUTO-GENERATED USING THE BIZINIKIWI BENCHMARK CLI VERSION 4.0.0-dev
-//! DATE: 2023-06-14 (Y/M/D)
-//! HOSTNAME: `runner--ss9ysm1-project-163-concurrent-0`, CPU: `Intel(R) Xeon(R) CPU @ 2.60GHz`
+//! THIS FILE WAS AUTO-GENERATED USING THE BIZINIKIWI BENCHMARK CLI VERSION 32.0.1
+//! DATE: 2026-09-27 (Y/M/D)
+//! HOSTNAME: `vmi3220280`, CPU: `AMD EPYC Processor (with IBPB)`
 //!
-//! SHORT-NAME: `extrinsic`, LONG-NAME: `ExtrinsicBase`, RUNTIME: `Development`
+//! SHORT-NAME: `extrinsic`, LONG-NAME: `ExtrinsicBase`, RUNTIME: `zagros`
 //! WARMUPS: `10`, REPEAT: `100`
-//! WEIGHT-PATH: `runtime/zagros/constants/src/weights/`
+//! WEIGHT-PATH: `./pezkuwi/runtime/zagros/constants/src/weights/`
 //! WEIGHT-METRIC: `Average`, WEIGHT-MUL: `1.0`, WEIGHT-ADD: `0`
 
 // Executed Command:
-//   ./target/production/pezkuwi
+//   /home/runner/.cargo/bin/pezframe-omni-bencher
+//   v1
 //   benchmark
 //   overhead
-//   --chain=zagros-dev
-//   --execution=wasm
-//   --wasm-execution=compiled
-//   --weight-path=runtime/zagros/constants/src/weights/
-//   --warmup=10
-//   --repeat=100
-//   --header=./file_header.txt
+//   --runtime
+//   target/production/wbuild/zagros-runtime/zagros_runtime.wasm
+//   --weight-path
+//   ./pezkuwi/runtime/zagros/constants/src/weights/
+//   --header
+//   ./pezkuwi/file_header.txt
+//   --warmup
+//   10
+//   --repeat
+//   100
 
 use pezsp_core::parameter_types;
 use pezsp_weights::{constants::WEIGHT_REF_TIME_PER_NANOS, Weight};
 
 parameter_types! {
-	/// Time to execute a NO-OP extrinsic, for example `System::remark`.
+	/// Weight of executing a NO-OP extrinsic, for example `System::remark`.
 	/// Calculated by multiplying the *Average* with `1.0` and adding `0`.
 	///
 	/// Stats nanoseconds:
-	///   Min, Max: 112_202, 116_271
-	///   Average:  113_632
-	///   Median:   113_689
-	///   Std-Dev:  576.31
+	///   Min, Max: 194_338, 306_820
+	///   Average:  224_288
+	///   Median:   219_478
+	///   Std-Dev:  18787.28
 	///
 	/// Percentiles nanoseconds:
-	///   99th: 114_688
-	///   95th: 114_367
-	///   75th: 113_969
+	///   99th: 281_131
+	///   95th: 261_213
+	///   75th: 230_764
 	pub const ExtrinsicBaseWeight: Weight =
-		Weight::from_parts(WEIGHT_REF_TIME_PER_NANOS.saturating_mul(113_632), 0);
+		Weight::from_parts(WEIGHT_REF_TIME_PER_NANOS.saturating_mul(224_288), 0);
 }
 
 #[cfg(test)]

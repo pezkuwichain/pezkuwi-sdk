@@ -24,11 +24,24 @@ use pezbp_messages::*;
 use pezbp_runtime::{
 	decl_bridge_finality_runtime_apis, decl_bridge_messages_runtime_apis, Chain, ChainId, Teyrchain,
 };
-use pezframe_support::dispatch::DispatchClass;
-use pezsp_runtime::{RuntimeDebug, StateVersion};
+use pezframe_support::{
+	dispatch::DispatchClass, parameter_types, weights::constants::WEIGHT_REF_TIME_PER_NANOS,
+};
+use pezsp_runtime::StateVersion;
+
+parameter_types! {
+	/// Weight limit of this hub's blocks, built from the base weights its runtime measured
+	/// (`src/weights/block_weights.rs`, `src/weights/extrinsic_weights.rs`). Shadows the generic
+	/// one re-exported above. When the overhead is re-measured these two numbers move with it:
+	/// `ensure_bridge_integrity` compares this with the runtime and goes red until they do.
+	pub BlockWeightsForAsyncBacking: limits::BlockWeights = block_weights_for_async_backing(
+		Weight::from_parts(WEIGHT_REF_TIME_PER_NANOS.saturating_mul(829_620), 3_144),
+		Weight::from_parts(WEIGHT_REF_TIME_PER_NANOS.saturating_mul(249_177), 474),
+	);
+}
 
 /// BridgeHubZagros teyrchain.
-#[derive(RuntimeDebug)]
+#[derive(Debug)]
 pub struct BridgeHubZagros;
 
 impl Chain for BridgeHubZagros {
@@ -89,19 +102,28 @@ pub const WITH_BRIDGE_ZAGROS_TO_PEZKUWICHAIN_MESSAGES_PALLET_INDEX: u8 = 44;
 decl_bridge_finality_runtime_apis!(bridge_hub_zagros);
 decl_bridge_messages_runtime_apis!(bridge_hub_zagros, LegacyLaneId);
 
+// These three are the fees this chain charges for bridge work, and each one is the figure the
+// test named beside it measures, plus the 33% headroom upstream also leaves. They had been
+// carrying the numbers upstream measured on its own chains, which are ~300x ours: our CENTS is
+// UNITS/30_000 where upstream's is UNITS/100, so a constant copied across that boundary
+// overcharges by the ratio between the two scales. The sibling chain's constants were already at our scale, which is how
+// the asymmetry showed.
+//
+// They are measured figures, not derived ones: re-run the tests and update these when the
+// weights are re-benchmarked, because the numbers move with the weights.
 pezframe_support::parameter_types! {
 	/// The XCM fee that is paid for executing XCM program (with `ExportMessage` instruction) at the Zagros
 	/// BridgeHub.
-	/// (initially was calculated by test `BridgeHubZagros::can_calculate_weight_for_paid_export_message_with_reserve_transfer` + `33%`)
-	pub const BridgeHubZagrosBaseXcmFeeInWnds: u128 = 22_962_450_000;
+	/// (calculated by test `BridgeHubZagros::can_calculate_weight_for_paid_export_message_with_reserve_transfer` + `33%`)
+	pub const BridgeHubZagrosBaseXcmFeeInWnds: u128 = 76_541_499;
 
 	/// Transaction fee that is paid at the Zagros BridgeHub for delivering single inbound message.
-	/// (initially was calculated by test `BridgeHubZagros::can_calculate_fee_for_standalone_message_delivery_transaction` + `33%`)
-	pub const BridgeHubZagrosBaseDeliveryFeeInWnds: u128 = 89_305_927_116;
+	/// (calculated by test `BridgeHubZagros::can_calculate_fee_for_standalone_message_delivery_transaction` + `33%`)
+	pub const BridgeHubZagrosBaseDeliveryFeeInWnds: u128 = 296_678_607;
 
 	/// Transaction fee that is paid at the Zagros BridgeHub for delivering single outbound message confirmation.
-	/// (initially was calculated by test `BridgeHubZagros::can_calculate_fee_for_standalone_message_confirmation_transaction` + `33%`)
-	pub const BridgeHubZagrosBaseConfirmationFeeInWnds: u128 = 17_034_677_116;
+	/// (calculated by test `BridgeHubZagros::can_calculate_fee_for_standalone_message_confirmation_transaction` + `33%`)
+	pub const BridgeHubZagrosBaseConfirmationFeeInWnds: u128 = 55_545_699;
 }
 
 /// Wrapper over `BridgeHubZagros`'s `RuntimeCall` that can be used without a runtime.

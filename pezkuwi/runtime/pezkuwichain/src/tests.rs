@@ -20,7 +20,7 @@ use crate::*;
 use std::collections::HashSet;
 
 use crate::xcm_config::LocationConverter;
-use pezframe_support::traits::WhitelistedStorageKeys;
+use pezframe_support::{assert_noop, assert_ok, traits::WhitelistedStorageKeys};
 use pezsp_core::{crypto::Ss58Codec, hexdisplay::HexDisplay};
 use pezsp_keyring::Sr25519Keyring::Alice;
 use xcm_runtime_pezapis::conversions::LocationToAccountHelper;
@@ -49,11 +49,31 @@ fn check_whitelist() {
 }
 
 #[test]
-fn check_treasury_pallet_id() {
-	assert_eq!(
-		<Treasury as pezframe_support::traits::PalletInfoAccess>::index() as u8,
-		pezkuwichain_runtime_constants::TREASURY_PALLET_ID
-	);
+fn retired_indices_stay_retired() {
+	// `Treasury` held 18 and `Council` 17 until the treasury moved to the Asset Hub. An index
+	// is part of the composite `RuntimeCall` and `RuntimeEvent` encodings, so giving either
+	// number to a new pallet makes old bytes decode as that pallet.
+	use pezframe_support::traits::PalletsInfoAccess;
+	let taken: Vec<usize> = <AllPalletsWithSystem as PalletsInfoAccess>::infos()
+		.iter()
+		.map(|i| i.index)
+		.collect();
+	for index in [17usize, 18] {
+		assert!(!taken.contains(&index), "index {index} is retired and was handed to a pallet");
+	}
+}
+
+#[test]
+fn retired_custom_origins_stay_retired() {
+	// A custom origin is stored inside every referendum that runs on it. 2 held
+	// `FellowshipAdmin` and 17 to 29 the Fellowship's ranks until the Fellowship was retired;
+	// 14 to 16 held the register's three before they moved to the People chain. Handing any of
+	// these numbers to a new origin would make a stored referendum decode as that origin.
+	use codec::Decode;
+	use governance::pezpallet_custom_origins::Origin;
+	for index in [2u8, 14, 15, 16].into_iter().chain(17..=29) {
+		assert!(Origin::decode(&mut &[index][..]).is_err(), "origin {index} is retired");
+	}
 }
 
 #[test]
@@ -141,7 +161,11 @@ use std::collections::HashMap;
 #[test]
 fn governance_tracks_total_count() {
 	let count = <TracksInfo as TracksInfoTrait<Balance, BlockNumber>>::tracks().count();
-	assert_eq!(count, 18, "Expected 18 tracks (15 standard + 3 welati), got {count}");
+	// Seven. The treasury moved to the Asset Hub and took its six tracks with it -- the
+	// treasurer and the five spenders -- the three register tracks moved to the People chain,
+	// `root` was removed (Root here is the register's referendum arriving over XCM, not a
+	// ballot of this chain's holders), and `fellowship_admin` went with the Fellowship.
+	assert_eq!(count, 7, "Expected 7 relay tracks, got {count}");
 }
 
 #[test]
@@ -181,24 +205,13 @@ fn governance_no_test_periods_remain() {
 fn governance_production_periods_match_spec() {
 	// Build expected values: (track_id, prepare, decision, confirm, enact)
 	let expected: Vec<(u16, &str, BlockNumber, BlockNumber, BlockNumber, BlockNumber)> = vec![
-		(0, "root", 2 * HOURS, 28 * DAYS, 24 * HOURS, 24 * HOURS),
 		(1, "whitelisted_caller", 30 * MINUTES, 28 * DAYS, 10 * MINUTES, 10 * MINUTES),
 		(10, "staking_admin", 2 * HOURS, 14 * DAYS, 3 * HOURS, 10 * MINUTES),
-		(11, "treasurer", 2 * HOURS, 28 * DAYS, 3 * HOURS, 24 * HOURS),
 		(12, "lease_admin", 2 * HOURS, 14 * DAYS, 3 * HOURS, 10 * MINUTES),
-		(13, "fellowship_admin", 2 * HOURS, 14 * DAYS, 3 * HOURS, 10 * MINUTES),
 		(14, "general_admin", 2 * HOURS, 14 * DAYS, 3 * HOURS, 10 * MINUTES),
 		(15, "auction_admin", 2 * HOURS, 14 * DAYS, 3 * HOURS, 10 * MINUTES),
 		(20, "referendum_canceller", 2 * HOURS, 7 * DAYS, 3 * HOURS, 10 * MINUTES),
 		(21, "referendum_killer", 2 * HOURS, 14 * DAYS, 3 * HOURS, 10 * MINUTES),
-		(30, "small_tipper", 1 * MINUTES, 7 * DAYS, 10 * MINUTES, 1 * MINUTES),
-		(31, "big_tipper", 10 * MINUTES, 7 * DAYS, 1 * HOURS, 10 * MINUTES),
-		(32, "small_spender", 4 * HOURS, 28 * DAYS, 12 * HOURS, 24 * HOURS),
-		(33, "medium_spender", 4 * HOURS, 28 * DAYS, 24 * HOURS, 24 * HOURS),
-		(34, "big_spender", 4 * HOURS, 28 * DAYS, 48 * HOURS, 24 * HOURS),
-		(40, "welati_election", 2 * HOURS, 14 * DAYS, 12 * HOURS, 24 * HOURS),
-		(41, "welati_admin", 2 * HOURS, 7 * DAYS, 3 * HOURS, 10 * MINUTES),
-		(42, "citizenship_admin", 2 * HOURS, 14 * DAYS, 6 * HOURS, 24 * HOURS),
 	];
 
 	let tracks: HashMap<u16, _> = <TracksInfo as TracksInfoTrait<Balance, BlockNumber>>::tracks()
@@ -234,23 +247,79 @@ fn governance_production_periods_match_spec() {
 	assert_eq!(expected.len(), tracks.len(), "Track count mismatch");
 }
 
+/// Root is not on this chain's ballot.
+///
+/// Root here reaches every chain in the network -- `System::set_code` locally, and
+/// `Paras::force_set_current_code` for each teyrchain. This chain's electorate is holdings, and
+/// the root track's support curve asked for none at all by day 28, so an upgrade of the whole
+/// network was a large enough position plus four weeks.
+///
+/// The power did not go away, it changed hands: `StateRegisterAsRoot` converts a `Superuser`
+/// message from the People chain into Root here, and that chain's tally counts citizens one
+/// each. The constitution is decided by the people and enacted by the relay.
 #[test]
-fn governance_welati_tracks_exist() {
+fn root_is_not_reachable_from_this_chains_ballot() {
+	use governance::pezpallet_custom_origins::Origin;
+
 	let tracks: HashMap<u16, _> = <TracksInfo as TracksInfoTrait<Balance, BlockNumber>>::tracks()
 		.map(|t| (t.id, t.into_owned()))
 		.collect();
 
-	// welati_election
-	let t40 = tracks.get(&40).expect("welati_election track (id=40) missing");
-	assert_eq!(t40.info.max_deciding, 1, "welati_election should allow only 1 deciding");
+	assert!(!tracks.contains_key(&0), "the root track is back on a holdings ballot");
+	for track in tracks.values() {
+		let name = String::from_utf8_lossy(&track.info.name).to_string();
+		assert_ne!(name, "root", "a track named root is a track that upgrades the network");
+	}
 
-	// welati_admin
-	let t41 = tracks.get(&41).expect("welati_admin track (id=41) missing");
-	assert_eq!(t41.info.max_deciding, 10);
+	// And no system origin maps to a track, so none can start a referendum here.
+	let root: <RuntimeOrigin as pezframe_support::traits::OriginTrait>::PalletsOrigin =
+		pezframe_system::RawOrigin::Root.into();
+	assert!(<TracksInfo as TracksInfoTrait<Balance, BlockNumber>>::track_for(&root).is_err());
 
-	// citizenship_admin
-	let t42 = tracks.get(&42).expect("citizenship_admin track (id=42) missing");
-	assert_eq!(t42.info.max_deciding, 10);
+	// The custom origins that remain are this chain's own business -- none of them is Root by
+	// another name, and each still has a track to run on.
+	for origin in [
+		Origin::StakingAdmin,
+		Origin::LeaseAdmin,
+		Origin::GeneralAdmin,
+		Origin::AuctionAdmin,
+		Origin::ReferendumCanceller,
+		Origin::ReferendumKiller,
+		Origin::WhitelistedCaller,
+	] {
+		let pallets_origin: <RuntimeOrigin as pezframe_support::traits::OriginTrait>::PalletsOrigin =
+			origin.into();
+		assert!(
+			<TracksInfo as TracksInfoTrait<Balance, BlockNumber>>::track_for(&pallets_origin)
+				.is_ok(),
+			"an origin with no track cannot be dispatched at all"
+		);
+	}
+}
+
+/// The register is not reachable from this chain's referenda.
+///
+/// Tracks 40, 41 and 42 -- `welati_election`, `welati_admin`, `citizenship_admin` -- used to
+/// sit here, and this test used to assert they existed. This chain's referenda weigh tokens
+/// and conviction, so those three let stake decide who is a person, who holds office and who
+/// stops being a citizen. They live on the People chain now, where the tally counts heads.
+#[test]
+fn the_relay_has_no_track_that_reaches_the_register() {
+	let tracks: HashMap<u16, _> = <TracksInfo as TracksInfoTrait<Balance, BlockNumber>>::tracks()
+		.map(|t| (t.id, t.into_owned()))
+		.collect();
+
+	for id in [40u16, 41, 42] {
+		assert!(!tracks.contains_key(&id), "track {id} reaches the register from a token vote");
+	}
+
+	for track in tracks.values() {
+		let name = String::from_utf8_lossy(&track.info.name).to_string();
+		assert!(
+			!name.contains("welati") && !name.contains("citizenship"),
+			"track '{name}' names a register matter on a token-weighted chain"
+		);
+	}
 }
 
 #[test]
@@ -279,28 +348,18 @@ fn governance_track_for_origin_mapping() {
 	let origin_to_track: Vec<(Origin, u16)> = vec![
 		(Origin::WhitelistedCaller, 1),
 		(Origin::StakingAdmin, 10),
-		(Origin::Treasurer, 11),
 		(Origin::LeaseAdmin, 12),
-		(Origin::FellowshipAdmin, 13),
 		(Origin::GeneralAdmin, 14),
 		(Origin::AuctionAdmin, 15),
 		(Origin::ReferendumCanceller, 20),
 		(Origin::ReferendumKiller, 21),
-		(Origin::SmallTipper, 30),
-		(Origin::BigTipper, 31),
-		(Origin::SmallSpender, 32),
-		(Origin::MediumSpender, 33),
-		(Origin::BigSpender, 34),
-		(Origin::WelatiElection, 40),
-		(Origin::WelatiAdmin, 41),
-		(Origin::CitizenshipAdmin, 42),
 	];
 
 	for (origin, expected_id) in origin_to_track {
-		let pallet_origin: <RuntimeOrigin as pezframe_support::traits::OriginTrait>::PalletsOrigin =
+		let pezpallet_origin: <RuntimeOrigin as pezframe_support::traits::OriginTrait>::PalletsOrigin =
 			origin.clone().into();
 		let result =
-			<TracksInfo as TracksInfoTrait<Balance, BlockNumber>>::track_for(&pallet_origin);
+			<TracksInfo as TracksInfoTrait<Balance, BlockNumber>>::track_for(&pezpallet_origin);
 		assert_eq!(
 			result,
 			Ok(expected_id),
@@ -308,4 +367,466 @@ fn governance_track_for_origin_mapping() {
 			origin
 		);
 	}
+}
+
+#[test]
+fn votable_issuance_excludes_the_checking_account() {
+	use governance::VotableIssuance;
+	use pezframe_support::traits::{
+		fungible::{Inspect, Mutate},
+		Get,
+	};
+
+	pezsp_io::TestExternalities::new_empty().execute_with(|| {
+		let check_account = XcmPallet::check_account();
+		let voter = Alice.to_account_id();
+
+		// Five million in circulation, five million standing behind the supply that lives on the
+		// other chains — the allocation the genesis is built around.
+		Balances::mint_into(&voter, 5_000_000 * UNITS).unwrap();
+		Balances::mint_into(&check_account, 5_000_000 * UNITS).unwrap();
+
+		assert_eq!(Balances::active_issuance(), 10_000_000 * UNITS);
+		assert_eq!(
+			VotableIssuance::get(),
+			5_000_000 * UNITS,
+			"the checking account cannot vote and must not count toward turnout"
+		);
+	});
+}
+
+#[test]
+fn fast_track_support_floor_is_measured_against_what_can_vote() {
+	use governance::VotableIssuance;
+	use pezframe_support::traits::{
+		fungible::{Inspect, Mutate},
+		Get,
+	};
+	use pezsp_runtime::Perbill;
+
+	// `SUP_WHITELISTED_CALLER` floors at five percent and never decays below it, so the fast path
+	// is only ever usable if that fraction of the turnout denominator can actually be voted. With
+	// the checking account counted, the floor is a fraction of supply that includes tokens no one
+	// holds; the larger the seed, the further out of reach the emergency route drifts — and it
+	// would only be discovered in an emergency.
+	pezsp_io::TestExternalities::new_empty().execute_with(|| {
+		let check_account = XcmPallet::check_account();
+		let voter = Alice.to_account_id();
+
+		Balances::mint_into(&voter, 5_000_000 * UNITS).unwrap();
+		Balances::mint_into(&check_account, 5_000_000 * UNITS).unwrap();
+
+		let floor = Perbill::from_percent(5);
+		let required = floor * VotableIssuance::get();
+		let circulating = Balances::active_issuance() - Balances::balance(&check_account);
+
+		assert_eq!(required, 250_000 * UNITS);
+		assert_eq!(
+			floor * Balances::active_issuance(),
+			500_000 * UNITS,
+			"counting the checking account would double what the floor demands"
+		);
+		assert!(
+			required * 2 <= circulating,
+			"the floor has to sit well inside what is actually held: {required} of {circulating}"
+		);
+	});
+}
+
+/// The People chain builds the key calls by hand, and nothing fails if the bytes drift.
+///
+/// It cannot name this runtime's types, so `KeysToRelay` writes the address itself: pallet
+/// index 67, then call index 3 or 4. If either moves, the `Transact` stops decoding -- and it
+/// stops silently, because the sending side has already taken the registration. This pins the
+/// bytes it has to produce, the same way the treasury call is pinned for `welati`.
+#[test]
+fn the_key_calls_encode_the_way_people_builds_them() {
+	use codec::Encode;
+
+	let stash: AccountId = [7u8; 32].into();
+	let keys = vec![1u8, 2, 3];
+
+	let real_set = RuntimeCall::StakingAhClient(
+		pezpallet_staking_async_ah_client::Call::<Runtime>::set_keys_from_ah {
+			stash: stash.clone(),
+			keys: keys.clone(),
+		},
+	)
+	.encode();
+	assert_eq!(real_set, (67u8, 3u8, stash.clone(), keys).encode(), "set_keys address moved");
+
+	let real_purge = RuntimeCall::StakingAhClient(pezpallet_staking_async_ah_client::Call::<
+		Runtime,
+	>::purge_keys_from_ah {
+		stash: stash.clone(),
+	})
+	.encode();
+	assert_eq!(real_purge, (67u8, 4u8, stash).encode(), "purge_keys address moved");
+}
+
+/// The court's fast track, pinned at both the pallet number and the call number.
+///
+/// The People chain cannot name this call by type: it addresses it as pallet 44, call 0, and
+/// nothing in either tree compares the two. If this pallet is renumbered, or `whitelist_call`
+/// stops being the first call in it, the court's message lands on whatever now sits at that
+/// address -- and the failure is the worst kind, because the send succeeds, the court believes
+/// it has whitelisted a fix, and the relay executes something else entirely.
+#[test]
+fn the_whitelist_call_encodes_the_way_people_builds_it() {
+	use codec::Encode;
+
+	let call_hash = pezsp_core::H256::repeat_byte(9);
+	let real =
+		RuntimeCall::Whitelist(pezpallet_whitelist::Call::<Runtime>::whitelist_call { call_hash })
+			.encode();
+
+	// The literals are what People sends: `RelayWhitelistPalletIndex` and `WHITELIST_CALL_INDEX`.
+	assert_eq!(real, (44u8, 0u8, call_hash).encode(), "the whitelist call's address moved");
+}
+
+/// Only the People chain's court may reach the whitelist over XCM, and only for the whitelist.
+///
+/// Two things are being held down here and they fail in opposite directions. If the converter
+/// stops recognising the court, the fast path goes quietly dead -- exactly the state this work
+/// was done to leave, and nothing on either chain reports it. If it starts recognising anything
+/// wider, some other body acquires the power to put calls in front of a ten-minute confirmation.
+#[test]
+fn only_the_courts_plurality_reaches_the_whitelist() {
+	use pezkuwichain_runtime_constants::system_teyrchain::{ASSET_HUB_ID, PEOPLE_ID};
+	use xcm::latest::prelude::*;
+	use xcm_executor::traits::ConvertOrigin;
+
+	let court = Location::new(
+		0,
+		[Teyrchain(PEOPLE_ID), Plurality { id: BodyId::Judicial, part: BodyPart::Voice }],
+	);
+	assert!(
+		crate::xcm_config::CourtOfPeopleAsXcmOrigin::convert_origin(court.clone(), OriginKind::Xcm)
+			.is_ok(),
+		"the court can no longer reach the relay"
+	);
+
+	// The People chain speaking as itself is the register, not the court, and it has its own
+	// converter and its own authority. Accepting it here would give a root referendum a second
+	// and narrower door it does not need.
+	assert!(
+		crate::xcm_config::CourtOfPeopleAsXcmOrigin::convert_origin(
+			Location::new(0, [Teyrchain(PEOPLE_ID)]),
+			OriginKind::Xcm
+		)
+		.is_err(),
+		"the whole register was accepted where only the court should be"
+	);
+	// Another chain's judicial body is not this state's court.
+	assert!(
+		crate::xcm_config::CourtOfPeopleAsXcmOrigin::convert_origin(
+			Location::new(
+				0,
+				[
+					Teyrchain(ASSET_HUB_ID),
+					Plurality { id: BodyId::Judicial, part: BodyPart::Voice }
+				]
+			),
+			OriginKind::Xcm
+		)
+		.is_err(),
+		"a judicial body on another chain was accepted"
+	);
+	// A different body on the right chain is a ministry, and ministries are deliberately
+	// unmatched -- see `StateRegisterAsRoot`.
+	assert!(
+		crate::xcm_config::CourtOfPeopleAsXcmOrigin::convert_origin(
+			Location::new(
+				0,
+				[Teyrchain(PEOPLE_ID), Plurality { id: BodyId::Executive, part: BodyPart::Voice }]
+			),
+			OriginKind::Xcm
+		)
+		.is_err(),
+		"a ministry was accepted as the court"
+	);
+	// Superuser is the register's kind and belongs to `StateRegisterAsRoot`. If this converter
+	// answered it too, the court would be able to ask for Root.
+	assert!(
+		crate::xcm_config::CourtOfPeopleAsXcmOrigin::convert_origin(court, OriginKind::Superuser)
+			.is_err(),
+		"the court was accepted as a superuser"
+	);
+}
+
+/// Exactly two chains may tell this one who validates it, and one of them is new.
+///
+/// The People chain draws the committee, so it has to be admitted here or every message it
+/// sends is dropped at the origin check with nothing on either side saying why -- both ends
+/// look healthy and the validator set simply stops changing. The Asset Hub stays because
+/// `ah_client` is also how session reports and the staking bookkeeping arrive.
+///
+/// Every other chain is refused, and the list is pinned rather than described: widening this
+/// origin is how a sibling chain would come to seat validators, and nothing else in the tree
+/// would notice.
+#[test]
+fn only_the_two_named_chains_may_seat_validators() {
+	use pezframe_support::traits::EnsureOrigin;
+	use pezkuwichain_runtime_constants::system_teyrchain::{
+		ASSET_HUB_ID, BRIDGE_HUB_ID, BROKER_ID, PEOPLE_ID,
+	};
+
+	let from =
+		|id: u32| -> RuntimeOrigin { teyrchains_origin::Origin::Teyrchain(id.into()).into() };
+
+	for id in [ASSET_HUB_ID, PEOPLE_ID] {
+		assert!(EnsureAssetHub::try_origin(from(id)).is_ok(), "chain {id} must be admitted");
+	}
+	for id in [BRIDGE_HUB_ID, BROKER_ID, 2000, 4242] {
+		assert!(EnsureAssetHub::try_origin(from(id)).is_err(), "chain {id} must be refused");
+	}
+	// And nothing that is not a chain at all.
+	assert!(EnsureAssetHub::try_origin(RuntimeOrigin::root()).is_err());
+}
+
+/// The committee call, pinned the same way and for the same reason.
+///
+/// This one matters more than the key calls: a key that never arrives costs one validator a
+/// session, while a committee that never arrives means the relay keeps validating with the
+/// set it already had, era after era, while People believes it has been handing over a new
+/// one. Both ends would look healthy.
+#[test]
+fn the_committee_call_encodes_the_way_people_builds_it() {
+	use codec::Encode;
+
+	let committee: Vec<AccountId> = vec![[1u8; 32].into(), [2u8; 32].into()];
+	let report = pezpallet_staking_async_rc_client::ValidatorSetReport::new_terminal(
+		committee.clone(),
+		9,
+		None,
+	);
+
+	let real = RuntimeCall::StakingAhClient(
+		pezpallet_staking_async_ah_client::Call::<Runtime>::validator_set {
+			report: report.clone(),
+		},
+	)
+	.encode();
+	assert_eq!(real, (67u8, 0u8, report).encode(), "validator_set address moved");
+
+	// The report's own shape is half the contract: People builds it from the crate that
+	// defines it, so a field added upstream stops that runtime compiling. What the compiler
+	// cannot see is the order, so pin the bytes.
+	let by_hand = (
+		67u8,
+		0u8,
+		committee,
+		9u32,
+		Option::<u32>::None, // prune_up_to: this chain does not track relay sessions
+		false,               // leftover: a committee is bounded and always fits one message
+	)
+		.encode();
+	assert_eq!(real, by_hand, "ValidatorSetReport's field order changed");
+}
+
+/// Every named preset must seat the validator-set door in `Active`.
+///
+/// `ah_client::validator_set` is the only way this relay's validator set can ever change, and
+/// it has two doors. The origin door is pinned by
+/// `only_the_two_named_chains_may_seat_validators` above. This is the other one: the call also
+/// requires `Mode == Active`, and `OperatingMode`'s derived default is `Passive`.
+///
+/// Nothing flips it for us. The one automatic transition is `on_migration_end()`, which fires
+/// during an Asset Hub migration -- and neither of our chains has one, because staking starts
+/// on the Asset Hub. That leaves `set_mode`, an `AdminOrigin` call, i.e. a manual Root step at
+/// genesis, which the plan forbids. So the mode has to arrive in the genesis patch or it never
+/// arrives at all.
+///
+/// A chain born `Passive` looks healthy from every angle: blocks are produced, People builds
+/// and sends the committee, the origin check passes, and the call dies at `Error::Blocked`
+/// with the set it started with. It would validate forever with its genesis validators, and no
+/// offence could remove them.
+///
+/// Checked against `preset_names()` rather than against a list written here, so a preset added
+/// later cannot quietly ship without the field.
+#[test]
+fn every_preset_starts_the_validator_set_door_active() {
+	use crate::genesis_config_presets::{get_preset, preset_names};
+
+	let names = preset_names();
+	assert!(!names.is_empty(), "there must be presets to check");
+
+	for id in names {
+		let name: &str = id.as_ref();
+		let raw = get_preset(&id).unwrap_or_else(|| panic!("preset `{name}` must build"));
+		let json: serde_json::Value =
+			serde_json::from_slice(&raw).expect("a preset must be valid json");
+
+		let mode = json
+			.get("stakingAhClient")
+			.and_then(|v| v.get("operatingMode"))
+			.unwrap_or_else(|| panic!("preset `{name}` never sets stakingAhClient.operatingMode"));
+
+		assert_eq!(
+			mode, "Active",
+			"preset `{name}` seats the validator-set door in {mode}, so the set could never change"
+		);
+	}
+}
+
+/// A named preset as a whole genesis, ready for `build_state`.
+///
+/// A preset is a patch over the default config, not a complete one, so it has to be merged onto
+/// `RuntimeGenesisConfig::default()` before it describes a chain.
+fn genesis_from_preset(name: &str) -> Vec<u8> {
+	use pezsp_genesis_builder::PresetId;
+
+	fn merge(base: &mut serde_json::Value, patch: serde_json::Value) {
+		match (base, patch) {
+			(serde_json::Value::Object(base), serde_json::Value::Object(patch)) => {
+				for (k, v) in patch {
+					merge(base.entry(k).or_insert(serde_json::Value::Null), v);
+				}
+			},
+			(base, patch) => *base = patch,
+		}
+	}
+
+	let raw = crate::genesis_config_presets::get_preset(&PresetId::from(name))
+		.unwrap_or_else(|| panic!("the `{name}` preset must exist"));
+	let patch: serde_json::Value = serde_json::from_slice(&raw).expect("preset must be json");
+	let mut config = serde_json::to_value(RuntimeGenesisConfig::default()).unwrap();
+	merge(&mut config, patch);
+	serde_json::to_vec(&config).unwrap()
+}
+
+/// The whole door, opened from the state a real preset builds.
+///
+/// `every_preset_starts_the_validator_set_door_active` proves the field is written; this proves
+/// the call it exists for actually gets through. They are not the same claim: the field could be
+/// present and `validator_set` still refuse, because it has *two* doors -- an origin check and a
+/// mode check -- and until now nothing exercised both together on a chain born from genesis.
+///
+/// The gap this closes was real. `only_the_two_named_chains_may_seat_validators` calls
+/// `EnsureAssetHub::try_origin` in isolation and never reaches the mode check, and the only
+/// end-to-end caller in the tree is `staking-async/ahm-test`, whose harness runs
+/// `on_migration_end()` first and so flips the mode to `Active` by a path our chains do not have
+/// -- they are born at genesis and never migrate. So the one arrangement that ships was the one
+/// arrangement nobody tested.
+#[test]
+fn the_people_chain_can_seat_validators_on_a_genesis_chain() {
+	let people = RuntimeOrigin::from(teyrchains_origin::Origin::Teyrchain(PEOPLE_ID.into()));
+	let report = pezpallet_staking_async_rc_client::ValidatorSetReport {
+		new_validator_set: vec![Alice.to_account_id()],
+		id: 1,
+		prune_up_to: None,
+		leftover: false,
+	};
+
+	pezsp_io::TestExternalities::default().execute_with(|| {
+		pezframe_support::genesis_builder_helper::build_state::<RuntimeGenesisConfig>(
+			genesis_from_preset("development"),
+		)
+		.expect("the development preset must build valid state");
+
+		// Both doors, in the arrangement that ships.
+		assert_ok!(StakingAhClient::validator_set(people.clone(), report.clone()));
+
+		// And the mode door specifically: put the pallet back to its derived default and the same
+		// call must be refused. Without this the test would still pass if `Mode` stopped being
+		// checked at all, which is the failure it exists to catch.
+		pezpallet_staking_async_ah_client::Mode::<Runtime>::put(
+			pezpallet_staking_async_ah_client::OperatingMode::Passive,
+		);
+		assert_noop!(
+			StakingAhClient::validator_set(people, report),
+			pezpallet_staking_async_ah_client::Error::<Runtime>::Blocked
+		);
+	});
+}
+
+/// The offence handler is wired, and stays wired.
+///
+/// `pezpallet_offences` records a report and hands it to `OnOffenceHandler`. That was `()` here,
+/// so BABE, GRANDPA and dispute reports arrived, were stored, and stopped: no disabling on this
+/// chain and no slash on the Asset Hub. Nothing failed loudly -- the penalty simply did not
+/// exist. `StakingAhClient` closes both halves, reporting an ongoing offence to the session
+/// pezpallet at once and queueing the economic slash for the Asset Hub, where the stake is.
+///
+/// This asserts the wiring only. The half that can be watched end to end from here is covered
+/// separately by `an_offence_disables_the_validator_on_this_chain`; what this one adds is a check
+/// that survives even if the offence never reaches the disabling branch, so the associated type
+/// cannot quietly go back to `()` again.
+#[test]
+fn offences_are_handed_to_the_asset_hub_client() {
+	use core::any::TypeId;
+
+	assert_eq!(
+		TypeId::of::<<Runtime as pezpallet_offences::Config>::OnOffenceHandler>(),
+		TypeId::of::<StakingAhClient>(),
+		"offences must reach the Asset Hub client; `()` records them and drops them"
+	);
+}
+
+/// The disabling half of the offence path, watched from end to end.
+///
+/// `offences_are_handed_to_the_asset_hub_client` asserts the type is wired. This asserts that
+/// wiring it changes what the chain does: an offence from the validator set currently in force
+/// reaches `pezpallet_session` and disables the offender here, on the relay, without waiting for
+/// the Asset Hub.
+///
+/// Three conditions gate that branch, and all three are part of what is being asserted. `Mode`
+/// must be `Active` -- it comes from genesis and is not set here. `ValidatorSetAppliedAt` must be
+/// `Some`, since `is_ongoing_offence` refuses to disable for a set this chain never applied; that
+/// is the chain's own bookkeeping, written when a set is put into force, and genesis has not been
+/// through a session yet, so the test writes it. And `DisablingStrategy` must actually return a
+/// decision -- it was `()`, which returns `None` for every offence ever reported.
+///
+/// The preset is `versi_local_testnet` rather than `development` for a reason worth keeping: the
+/// strategy will not disable more than `(n - 1) / 3` of the set, so on the one-validator
+/// `development` chain the correct answer is to disable nobody. Four validators is the smallest
+/// set where disabling is permitted at all, which makes the choice of preset part of the claim.
+///
+/// The economic half -- the slash queued for the Asset Hub -- is not visible from here: its queue
+/// is `pub(crate)` in the pezpallet and emits no event. It is covered by the pezpallet's tests.
+#[test]
+fn an_offence_disables_the_validator_on_this_chain() {
+	use pezsp_staking::offence::{OffenceDetails, OnOffenceHandler};
+
+	pezsp_io::TestExternalities::default().execute_with(|| {
+		pezframe_support::genesis_builder_helper::build_state::<RuntimeGenesisConfig>(
+			genesis_from_preset("versi_local_testnet"),
+		)
+		.expect("the preset must build valid state");
+
+		let validators = pezpallet_session::Pezpallet::<Runtime>::validators();
+		let offender = validators.first().cloned().expect("genesis must seat validators");
+		assert!(
+			pezpallet_session::Pezpallet::<Runtime>::disabled_validators().is_empty(),
+			"nobody is disabled on a chain that has just been born"
+		);
+
+		// The set the offence belongs to has to be one this chain has applied, or the handler
+		// queues the slash and skips the disabling.
+		pezpallet_staking_async_ah_client::ValidatorSetAppliedAt::<Runtime>::put(0);
+
+		// Routed through the runtime's own associated type, not through `StakingAhClient` by
+		// name: that way this covers the wiring as well as the behaviour, and setting the type
+		// back to `()` fails here too.
+		type Offender = <Runtime as pezpallet_offences::Config>::IdentificationTuple;
+		<<Runtime as pezpallet_offences::Config>::OnOffenceHandler as OnOffenceHandler<
+			AccountId,
+			Offender,
+			Weight,
+		>>::on_offence(
+			&[OffenceDetails { offender: (offender, Default::default()), reporters: vec![] }],
+			&[Perbill::from_percent(25)],
+			0,
+		);
+
+		assert_eq!(
+			pezpallet_session::Pezpallet::<Runtime>::disabled_validators(),
+			vec![0],
+			"an offence from the live set must disable the offender on this chain"
+		);
+		assert!(
+			validators.len() >= 4,
+			"the preset must seat enough validators for disabling to be allowed at all"
+		);
+	});
 }

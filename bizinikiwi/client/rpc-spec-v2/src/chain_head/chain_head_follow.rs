@@ -249,7 +249,8 @@ where
 			return None;
 		}
 
-		let block_rt = match self.client.runtime_version_at(block) {
+		let block_rt = match self.client.runtime_version_at(block, pezsp_api::CallContext::Offchain)
+		{
 			Ok(rt) => rt,
 			Err(err) => return Some(err.into()),
 		};
@@ -262,10 +263,11 @@ where
 			},
 		};
 
-		let parent_rt = match self.client.runtime_version_at(parent) {
-			Ok(rt) => rt,
-			Err(err) => return Some(err.into()),
-		};
+		let parent_rt =
+			match self.client.runtime_version_at(parent, pezsp_api::CallContext::Offchain) {
+				Ok(rt) => rt,
+				Err(err) => return Some(err.into()),
+			};
 
 		// Report the runtime version change.
 		if block_rt != parent_rt {
@@ -431,16 +433,14 @@ where
 
 		// Generate a new best block event.
 		let best_block_hash = startup_point.best_hash;
-		if best_block_hash != finalized_block_hash {
-			if !self.announced_blocks.was_announced(&best_block_hash) {
-				return Err(SubscriptionManagementError::BlockHeaderAbsent);
-			}
-			self.announced_blocks.insert(best_block_hash, true);
+		if !self.announced_blocks.was_announced(&best_block_hash) {
+			return Err(SubscriptionManagementError::BlockHeaderAbsent);
+		}
+		self.announced_blocks.insert(best_block_hash, true);
 
-			let best_block = FollowEvent::BestBlockChanged(BestBlockChanged { best_block_hash });
-			self.current_best_block = Some(best_block_hash);
-			finalized_block_descendants.push(best_block);
-		};
+		let best_block = FollowEvent::BestBlockChanged(BestBlockChanged { best_block_hash });
+		self.current_best_block = Some(best_block_hash);
+		finalized_block_descendants.push(best_block);
 
 		Ok(finalized_block_descendants)
 	}

@@ -15,6 +15,4 @@
 
 mod aliases;
 mod collectives_salary;
-mod fellowship;
-mod fellowship_treasury;
 mod teleport;

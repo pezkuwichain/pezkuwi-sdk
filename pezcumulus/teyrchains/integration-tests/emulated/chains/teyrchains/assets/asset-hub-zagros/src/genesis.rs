@@ -14,7 +14,7 @@
 // limitations under the License.
 
 // Bizinikiwi
-use pezframe_support::parameter_types;
+use pezframe_support::{parameter_types, pezsp_runtime::traits::AccountIdConversion};
 use pezsp_core::storage::Storage;
 use pezsp_keyring::Sr25519Keyring as Keyring;
 
@@ -23,8 +23,8 @@ use emulated_integration_tests_common::{
 	accounts, build_genesis_storage, collators,
 	snowbridge::{ETHER_MIN_BALANCE, WETH},
 	xcm_pez_emulator::ConvertLocation,
-	PenpalALocation, PenpalASiblingSovereignAccount, PenpalATeleportableAssetLocation,
-	PenpalBLocation, PenpalBSiblingSovereignAccount, PenpalBTeleportableAssetLocation,
+	PenpalALocation, PenpalAPen2TeleportableAssetLocation, PenpalASiblingSovereignAccount,
+	PenpalBLocation, PenpalBPen2TeleportableAssetLocation, PenpalBSiblingSovereignAccount,
 	RESERVABLE_ASSET_ID, SAFE_XCM_VERSION, USDT_ID,
 };
 use testnet_teyrchains_constants::zagros::snowbridge::EthereumNetwork;
@@ -54,12 +54,29 @@ pub fn genesis() -> Storage {
 			balances: accounts::init_balances()
 				.iter()
 				.cloned()
-				.map(|k| (k, ED * 4096))
-				// pre-fund checking account to avoid pre-funding for every test scenario
-				// teleporting funds to asset hub
+				// `AssetDeposit` is a tenth of a unit, which is roughly 30_000 existential
+				// deposits on this chain; `ED * 4096` leaves every account short of it, so
+				// `Assets::create` — the first line of most asset tests — fails with
+				// `InsufficientBalance`. The mainnet Asset Hub's emulated chain already
+				// funds accounts at this level.
+				.map(|k| (k, ED * 4096 * 4096))
+				// Pre-fund the checking account so tests teleporting funds in don't each have
+				// to. With `MintLocation::Local`, assets teleported away are minted into this
+				// account and assets arriving are burned from it, so it has to hold at least
+				// as much as any inbound teleport or the transfer fails with
+				// `NotWithdrawable`.
+				//
+				// `ED * 1000` was not enough: teleport amounts are denominated in the relay's
+				// existential deposit, which is ten times this chain's, so the largest single
+				// teleport in these tests (`ZAGROS_ED * 100`) came to 3_333_333_300 against a
+				// balance of 3_333_333_000 — three hundred plancks short, with nothing left
+				// over for the account's own existential deposit or for a second teleport.
+				//
+				// Two orders of magnitude of headroom over that largest teleport, since
+				// several tests teleport in more than once.
 				.chain(std::iter::once((
 					asset_hub_zagros_runtime::xcm_config::CheckingAccount::get(),
-					ED * 1000,
+					ED * 100_000,
 				)))
 				.collect(),
 			..Default::default()
@@ -92,6 +109,17 @@ pub fn genesis() -> Storage {
 		},
 		assets: asset_hub_zagros_runtime::AssetsConfig {
 			assets: vec![
+				// PEZ, exactly as the launch preset creates it: keyless team, sufficient,
+				// minimum balance of one. The runtime reads `PezAssetId = 1`, so this entry is
+				// not an addition to the fixture -- it is the entry that was missing, and
+				// without it every call that reaches for PEZ found a keyring-owned test asset
+				// in its place. Metadata is left off: it carries no behaviour.
+				(
+					asset_hub_zagros_runtime::genesis_config_presets::PEZ_ASSET_ID,
+					asset_hub_zagros_runtime::PezAssetTeamId::get().into_account_truncating(),
+					true,
+					1,
+				),
 				(RESERVABLE_ASSET_ID, AssetHubZagrosAssetOwner::get(), false, ED),
 				(USDT_ID, AssetHubZagrosAssetOwner::get(), true, USDT_ED),
 			],
@@ -101,14 +129,14 @@ pub fn genesis() -> Storage {
 			assets: vec![
 				// PenpalA's teleportable asset representation
 				(
-					PenpalATeleportableAssetLocation::get(),
+					PenpalAPen2TeleportableAssetLocation::get(),
 					PenpalASiblingSovereignAccount::get(),
 					false,
 					ED,
 				),
 				// PenpalB's teleportable asset representation
 				(
-					PenpalBTeleportableAssetLocation::get(),
+					PenpalBPen2TeleportableAssetLocation::get(),
 					PenpalBSiblingSovereignAccount::get(),
 					false,
 					ED,
@@ -136,11 +164,11 @@ pub fn genesis() -> Storage {
 			],
 			reserves: vec![
 				(
-					PenpalATeleportableAssetLocation::get(),
+					PenpalAPen2TeleportableAssetLocation::get(),
 					vec![(PenpalALocation::get(), true).into()],
 				),
 				(
-					PenpalBTeleportableAssetLocation::get(),
+					PenpalBPen2TeleportableAssetLocation::get(),
 					vec![(PenpalBLocation::get(), true).into()],
 				),
 				(EthereumLocation::get(), vec![(EthereumLocation::get(), false).into()]),

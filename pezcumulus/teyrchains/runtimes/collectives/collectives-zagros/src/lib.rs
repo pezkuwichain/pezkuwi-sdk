@@ -41,8 +41,6 @@ mod genesis_config_presets;
 pub mod impls;
 mod weights;
 pub mod xcm_config;
-// Fellowship configurations.
-pub mod fellowship;
 
 // Secretary Configuration
 pub mod secretary;
@@ -52,8 +50,6 @@ extern crate alloc;
 pub use ambassador::pezpallet_ambassador_origins;
 
 use alloc::{vec, vec::Vec};
-use ambassador::AmbassadorCoreInstance;
-use fellowship::{pezpallet_fellowship_origins, Fellows, FellowshipCoreInstance};
 use impls::{AllianceProposalProvider, EqualOrGreatestRootCmp};
 use pezcumulus_pezpallet_teyrchain_system::RelayNumberMonotonicallyIncreases;
 use pezsp_api::impl_runtime_apis;
@@ -71,6 +67,7 @@ use pezsp_version::RuntimeVersion;
 
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
 use pezcumulus_primitives_core::{AggregateMessageOrigin, ParaId};
+use pezframe_support::traits::tokens::imbalance::ResolveTo;
 use pezframe_support::{
 	construct_runtime, derive_impl,
 	dispatch::DispatchClass,
@@ -87,13 +84,13 @@ use pezframe_system::{
 	limits::{BlockLength, BlockWeights},
 	EnsureRoot,
 };
-use pezsp_runtime::RuntimeDebug;
+use pezpallet_collator_selection::StakingPotAccountId;
 use testnet_teyrchains_constants::zagros::{
 	account::*, consensus::*, currency::*, fee::WeightToFee, time::*,
 };
 pub use teyrchains_common as common;
 use teyrchains_common::{
-	impls::{DealWithFees, ToParentTreasury},
+	impls::{DealWithFees, ToSiblingTreasury},
 	message_queue::*,
 	AccountId, AuraId, Balance, BlockNumber, Hash, Header, Nonce, Signature,
 	AVERAGE_ON_INITIALIZE_RATIO, NORMAL_DISPATCH_RATIO,
@@ -152,7 +149,12 @@ pub type RootOrAllianceTwoThirdsMajority = EitherOfDiverse<
 parameter_types! {
 	pub const Version: RuntimeVersion = VERSION;
 	pub RuntimeBlockLength: BlockLength =
-		BlockLength::max_with_normal_ratio(5 * 1024 * 1024, NORMAL_DISPATCH_RATIO);
+		BlockLength::builder()
+		.max_length(5 * 1024 * 1024)
+		.modify_max_length_for_class(DispatchClass::Normal, |m| {
+			*m = NORMAL_DISPATCH_RATIO * *m
+		})
+		.build();
 	pub RuntimeBlockWeights: BlockWeights = BlockWeights::builder()
 		.base_block(BlockExecutionWeight::get())
 		.for_class(DispatchClass::all(), |weights| {
@@ -223,7 +225,14 @@ impl pezpallet_balances::Config for Runtime {
 	type Balance = Balance;
 	/// The ubiquitous event type.
 	type RuntimeEvent = RuntimeEvent;
-	type DustRemoval = ();
+	/// Dust -- what is left in an account too small to keep -- goes where this chain's fee
+	/// income goes, rather than being dropped.
+	///
+	/// `()` destroys it. Small per account and not small across a population, and on a chain
+	/// that collects fees for its treasury there is no reason for the remainder to be the one
+	/// thing that vanishes. Upstream stopped dropping it too, with a pallet of its own; this
+	/// gets the same result without taking on a new pallet.
+	type DustRemoval = ResolveTo<StakingPotAccountId<Runtime>, Balances>;
 	type ExistentialDeposit = ExistentialDeposit;
 	type AccountStore = System;
 	type WeightInfo = weights::pezpallet_balances::WeightInfo<Runtime>;
@@ -298,26 +307,33 @@ parameter_types! {
 	Encode,
 	Decode,
 	DecodeWithMemTracking,
-	RuntimeDebug,
+	Debug,
 	MaxEncodedLen,
 	scale_info::TypeInfo,
 )]
 pub enum ProxyType {
 	/// Fully permissioned proxy. Can execute any call on behalf of _proxied_.
+	#[codec(index = 0)]
 	Any,
 	/// Can execute any call that does not transfer funds.
+	#[codec(index = 1)]
 	NonTransfer,
 	/// Proxy with the ability to reject time-delay proxy announcements.
+	#[codec(index = 2)]
 	CancelProxy,
 	/// Collator selection proxy. Can execute calls related to collator selection mechanism.
+	#[codec(index = 3)]
 	Collator,
 	/// Alliance proxy. Allows calls related to the Alliance.
+	#[codec(index = 4)]
 	Alliance,
-	/// Fellowship proxy. Allows calls related to the Fellowship.
-	Fellowship,
+	// RIP Fellowship 5. The Fellowship is retired; the index stays empty so a proxy
+	// stored under it can never decode as another kind.
 	/// Ambassador proxy. Allows calls related to the Ambassador Program.
+	#[codec(index = 6)]
 	Ambassador,
 	/// Secretary proxy. Allows calls related to the Secretary collective
+	#[codec(index = 7)]
 	Secretary,
 }
 impl Default for ProxyType {
@@ -346,16 +362,6 @@ impl InstanceFilter<RuntimeCall> for ProxyType {
 				c,
 				RuntimeCall::AllianceMotion { .. }
 					| RuntimeCall::Alliance { .. }
-					| RuntimeCall::Utility { .. }
-					| RuntimeCall::Multisig { .. }
-			),
-			ProxyType::Fellowship => matches!(
-				c,
-				RuntimeCall::FellowshipCollective { .. }
-					| RuntimeCall::FellowshipReferenda { .. }
-					| RuntimeCall::FellowshipCore { .. }
-					| RuntimeCall::FellowshipSalary { .. }
-					| RuntimeCall::FellowshipTreasury { .. }
 					| RuntimeCall::Utility { .. }
 					| RuntimeCall::Multisig { .. }
 			),
@@ -423,6 +429,7 @@ impl pezcumulus_pezpallet_teyrchain_system::Config for Runtime {
 	type CheckAssociatedRelayNumber = RelayNumberMonotonicallyIncreases;
 	type ConsensusHook = ConsensusHook;
 	type RelayParentOffset = ConstU32<0>;
+	type SchedulingSignatureVerifier = ();
 }
 
 type ConsensusHook = pezcumulus_pezpallet_aura_ext::FixedVelocityConsensusHook<
@@ -488,7 +495,7 @@ impl pezcumulus_pezpallet_xcmp_queue::Config for Runtime {
 	// Most on-chain HRMP channels are configured to use 102400 bytes of max message size, so we
 	// need to set the page size larger than that until we reduce the channel size on-chain.
 	type MaxPageSize = ConstU32<{ 103 * 1024 }>;
-	type ControllerOrigin = EitherOfDiverse<EnsureRoot<AccountId>, Fellows>;
+	type ControllerOrigin = EnsureRoot<AccountId>;
 	type ControllerOriginConverter = XcmOriginToTransactDispatchOrigin;
 	type WeightInfo = weights::pezcumulus_pezpallet_xcmp_queue::WeightInfo<Runtime>;
 	type PriceForSiblingDelivery = PriceForSiblingTeyrchainDelivery;
@@ -592,7 +599,14 @@ pub const MAX_ALLIES: u32 = 100;
 
 parameter_types! {
 	pub const AllyDeposit: Balance = 1_000 * UNITS; // 1,000 ZGR bond to join as an Ally
+	/// The treasury's account. The bytes are the same wherever the pallet sits -- what changed
+	/// is which chain holds it: the Asset Hub, not the relay.
 	pub ZagrosTreasuryAccount: AccountId = ZAGROS_TREASURY_PALLET_ID.into_account_truncating();
+	/// Where penalties collected here are sent. `ToParentTreasury` used to send them to the
+	/// relay, which has had no treasury since it moved; the account there answers to no pallet,
+	/// so the funds would have been unspendable.
+	pub AssetHubTreasuryLocation: Location =
+		Location::new(1, [Teyrchain(zagros_runtime_constants::system_teyrchain::ASSET_HUB_ID)]);
 	// The number of blocks a member must wait between giving a retirement notice and retiring.
 	// Supposed to be greater than time required to `kick_member` with alliance motion.
 	pub const AllianceRetirementPeriod: BlockNumber = (90 * DAYS) + ALLIANCE_MOTION_DURATION;
@@ -605,7 +619,12 @@ impl pezpallet_alliance::Config for Runtime {
 	type MembershipManager = RootOrAllianceTwoThirdsMajority;
 	type AnnouncementOrigin = RootOrAllianceTwoThirdsMajority;
 	type Currency = Balances;
-	type Slashed = ToParentTreasury<ZagrosTreasuryAccount, LocationToAccountId, Runtime>;
+	type Slashed = ToSiblingTreasury<
+		ZagrosTreasuryAccount,
+		LocationToAccountId,
+		AssetHubTreasuryLocation,
+		Runtime,
+	>;
 	type InitializeMembers = AllianceMotion;
 	type MembershipChanged = AllianceMotion;
 	type RetirementPeriod = AllianceRetirementPeriod;
@@ -674,7 +693,7 @@ impl pezpallet_asset_rate::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type CreateOrigin = EitherOfDiverse<
 		EnsureRoot<AccountId>,
-		EitherOfDiverse<EnsureXcm<IsVoiceOfBody<GovernanceLocation, TreasurerBodyId>>, Fellows>,
+		EnsureXcm<IsVoiceOfBody<GovernanceLocation, TreasurerBodyId>>,
 	>;
 	type RemoveOrigin = Self::CreateOrigin;
 	type UpdateOrigin = Self::CreateOrigin;
@@ -726,18 +745,12 @@ construct_runtime!(
 		Alliance: pezpallet_alliance = 50,
 		AllianceMotion: pezpallet_collective::<Instance1> = 51,
 
-		// The Fellowship.
-		// pub type FellowshipCollectiveInstance = pezpallet_ranked_collective::Instance1;
-		FellowshipCollective: pezpallet_ranked_collective::<Instance1> = 60,
-		// pub type FellowshipReferendaInstance = pezpallet_referenda::Instance1;
-		FellowshipReferenda: pezpallet_referenda::<Instance1> = 61,
-		FellowshipOrigins: pezpallet_fellowship_origins = 62,
-		// pub type FellowshipCoreInstance = pezpallet_core_fellowship::Instance1;
-		FellowshipCore: pezpallet_core_fellowship::<Instance1> = 63,
-		// pub type FellowshipSalaryInstance = pezpallet_salary::Instance1;
-		FellowshipSalary: pezpallet_salary::<Instance1> = 64,
-		// pub type FellowshipTreasuryInstance = pezpallet_treasury::Instance1;
-		FellowshipTreasury: pezpallet_treasury::<Instance1> = 65,
+		// RIP FellowshipCollective 60, FellowshipReferenda 61, FellowshipOrigins 62,
+		// FellowshipCore 63, FellowshipSalary 64, FellowshipTreasury 65. The Fellowship ranked
+		// itself -- its members granted the ranks that decided who sat on it -- and it held the
+		// whitelist that fast-tracks a runtime upgrade: a self-selecting body at the door of
+		// constitutional change. Attesting an upgrade blob now sits with the Diwan. The indices
+		// stay empty so old calls and events can never decode as a new pallet.
 
 		// Ambassador Program.
 		AmbassadorCollective: pezpallet_ranked_collective::<Instance2> = 70,
@@ -786,23 +799,14 @@ pub type UncheckedExtrinsic =
 	generic::UncheckedExtrinsic<Address, RuntimeCall, Signature, TxExtension>;
 /// All migrations executed on runtime upgrade as a nested tuple of types implementing
 /// `OnRuntimeUpgrade`. Included migrations must be idempotent.
+///
+/// Only the permanent ones remain. The one-off entries were removed with the genesis reset: each
+/// converted state that only the chain before the reset had, and a chain born from this
+/// runtime's genesis starts with every pallet at its in-code storage version and none of that
+/// state.
 type Migrations = (
-	// unreleased
-	pezpallet_collator_selection::migration::v2::MigrationToV2<Runtime>,
-	// unreleased
-	pezcumulus_pezpallet_xcmp_queue::migration::v4::MigrationToV4<Runtime>,
-	pezcumulus_pezpallet_xcmp_queue::migration::v5::MigrateV4ToV5<Runtime>,
 	// permanent
 	pezpallet_xcm::migration::MigrateToLatestXcmVersion<Runtime>,
-	// unreleased
-	pezpallet_core_fellowship::migration::MigrateV0ToV1<Runtime, FellowshipCoreInstance>,
-	// unreleased
-	pezpallet_core_fellowship::migration::MigrateV0ToV1<Runtime, AmbassadorCoreInstance>,
-	pezcumulus_pezpallet_aura_ext::migration::MigrateV0ToV1<Runtime>,
-	pezpallet_session::migrations::v1::MigrateV0ToV1<
-		Runtime,
-		pezpallet_session::migrations::v1::InitOffenceSeverity<Runtime>,
-	>,
 );
 
 /// Executive: handles dispatch to the various modules.
@@ -834,11 +838,6 @@ mod benches {
 		[pezpallet_collective, AllianceMotion]
 		[pezpallet_preimage, Preimage]
 		[pezpallet_scheduler, Scheduler]
-		[pezpallet_referenda, FellowshipReferenda]
-		[pezpallet_ranked_collective, FellowshipCollective]
-		[pezpallet_core_fellowship, FellowshipCore]
-		[pezpallet_salary, FellowshipSalary]
-		[pezpallet_treasury, FellowshipTreasury]
 		[pezpallet_referenda, AmbassadorReferenda]
 		[pezpallet_ranked_collective, AmbassadorCollective]
 		[pezpallet_collective_content, AmbassadorContent]
@@ -870,6 +869,10 @@ impl_runtime_apis! {
 	impl pezcumulus_primitives_core::RelayParentOffsetApi<Block> for Runtime {
 		fn relay_parent_offset() -> u32 {
 			0
+		}
+
+		fn max_claim_queue_offset() -> u8 {
+			pezcumulus_pezpallet_teyrchain_system::Pezpallet::<Runtime>::max_claim_queue_offset()
 		}
 	}
 
@@ -948,8 +951,11 @@ impl_runtime_apis! {
 	}
 
 	impl pezsp_session::SessionKeys<Block> for Runtime {
-		fn generate_session_keys(seed: Option<Vec<u8>>) -> Vec<u8> {
-			SessionKeys::generate(seed)
+		fn generate_session_keys(
+			owner: Vec<u8>,
+			seed: Option<Vec<u8>>,
+		) -> pezsp_session::OpaqueGeneratedSessionKeys {
+			SessionKeys::generate(&owner, seed).into()
 		}
 
 		fn decode_session_keys(
@@ -1109,6 +1115,9 @@ impl_runtime_apis! {
 		) {
 			use pezframe_benchmarking::BenchmarkList;
 			use pezframe_support::traits::StorageInfoTrait;
+			// The pallet's benchmarks are listed above, and they need this implemented.
+			impl pezpallet_transaction_payment::BenchmarkConfig for Runtime {}
+
 			use pezframe_system_benchmarking::Pezpallet as SystemBench;
 			use pezframe_system_benchmarking::extensions::Pezpallet as SystemExtensionsBench;
 			use pezcumulus_pezpallet_session_benchmarking::Pezpallet as SessionBench;
@@ -1148,7 +1157,12 @@ impl_runtime_apis! {
 			}
 
 			use pezcumulus_pezpallet_session_benchmarking::Pezpallet as SessionBench;
-			impl pezcumulus_pezpallet_session_benchmarking::Config for Runtime {}
+			impl pezcumulus_pezpallet_session_benchmarking::Config for Runtime {
+				fn generate_session_keys_and_proof(owner: Self::AccountId) -> (Self::Keys, Vec<u8>) {
+					let keys = SessionKeys::generate(&owner.encode(), None);
+					(keys.keys, keys.proof.encode())
+				}
+			}
 			use xcm_config::WndLocation;
 			use testnet_teyrchains_constants::zagros::locations::{AssetHubParaId, AssetHubLocation};
 
@@ -1190,7 +1204,7 @@ impl_runtime_apis! {
 				}
 
 				fn set_up_complex_asset_transfer(
-				) -> Option<(Assets, AssetId, Location, alloc::boxed::Box<dyn FnOnce()>)> {
+				) -> Option<(Assets, u32, Location, alloc::boxed::Box<dyn FnOnce()>)> {
 					// Collectives only supports teleports to system teyrchain.
 					// Relay/native token can be teleported between Collectives and Relay.
 					let native_location = WndLocation::get();
@@ -1222,16 +1236,15 @@ impl_runtime_apis! {
 				fn valid_destination() -> Result<Location, BenchmarkError> {
 					Ok(AssetHubLocation::get())
 				}
-				fn worst_case_holding(_depositable_count: u32) -> Assets {
-					// just concrete assets according to relay chain.
-					let assets: Vec<Asset> = vec![
-						Asset {
-							id: AssetId(WndLocation::get()),
-							fun: Fungible(1_000_000 * UNITS),
+				fn worst_case_holding(_depositable_count: u32) -> xcm_executor::AssetsInHolding {
+							use pezpallet_xcm_benchmarks::MockCredit;
+							let mut holding = xcm_executor::AssetsInHolding::new();
+							holding.fungible.insert(
+								AssetId(WndLocation::get()),
+								alloc::boxed::Box::new(MockCredit(1_000_000 * UNITS)),
+							);
+							holding
 						}
-					];
-					assets.into()
-				}
 			}
 
 			parameter_types! {

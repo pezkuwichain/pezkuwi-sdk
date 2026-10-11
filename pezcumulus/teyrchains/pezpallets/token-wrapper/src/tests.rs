@@ -1,3 +1,8 @@
+// This file is part of PezkuwiChain.
+
+// Copyright (C) Dijital Kurdistan Tech Institute
+// SPDX-License-Identifier: Apache-2.0
+
 use super::*;
 use crate::mock::*;
 use pezframe_support::{assert_noop, assert_ok};
@@ -218,15 +223,15 @@ fn pezpallet_account_balance_consistency() {
 		let amount = 1000;
 		let pezpallet_account = TokenWrapper::account_id();
 
-		let initial_pallet_balance = Balances::free_balance(pezpallet_account);
+		let initial_pezpallet_balance = Balances::free_balance(pezpallet_account);
 
 		// Wrap - pezpallet account should receive native tokens
 		assert_ok!(TokenWrapper::wrap(RuntimeOrigin::signed(user), amount));
-		assert_eq!(Balances::free_balance(pezpallet_account), initial_pallet_balance + amount);
+		assert_eq!(Balances::free_balance(pezpallet_account), initial_pezpallet_balance + amount);
 
 		// Unwrap - pezpallet account should release native tokens
 		assert_ok!(TokenWrapper::unwrap(RuntimeOrigin::signed(user), amount));
-		assert_eq!(Balances::free_balance(pezpallet_account), initial_pallet_balance);
+		assert_eq!(Balances::free_balance(pezpallet_account), initial_pezpallet_balance);
 	});
 }
 

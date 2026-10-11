@@ -41,7 +41,7 @@ use pezframe_support::{
 	pezsp_runtime::{MultiAddress, MultiSigner},
 	weights::constants,
 };
-use pezframe_system::limits;
+pub use pezframe_system::limits;
 use pezsp_std::time::Duration;
 
 /// Average block time for Pezcumulus-based teyrchains
@@ -55,10 +55,12 @@ pub const MAX_BRIDGE_HUB_HEADER_SIZE: u32 = 4_096;
 
 parameter_types! {
 	/// Size limit of the Pezcumulus-based bridge hub blocks.
-	pub BlockLength: limits::BlockLength = limits::BlockLength::max_with_normal_ratio(
-		5 * 1024 * 1024,
-		NORMAL_DISPATCH_RATIO,
-	);
+	pub BlockLength: limits::BlockLength = limits::BlockLength::builder()
+		.max_length(5 * 1024 * 1024)
+		.modify_max_length_for_class(DispatchClass::Normal, |m| {
+			*m = NORMAL_DISPATCH_RATIO * *m
+		})
+		.build();
 
 	/// Importing a block with 0 Extrinsics.
 	pub const BlockExecutionWeight: Weight = Weight::from_parts(constants::WEIGHT_REF_TIME_PER_NANOS, 0)
@@ -87,25 +89,42 @@ parameter_types! {
 		.avg_block_initialization(AVERAGE_ON_INITIALIZE_RATIO)
 		.build_or_panic();
 
-	/// Weight limit of the Pezcumulus-based bridge hub blocks when async backing is enabled.
-	pub BlockWeightsForAsyncBacking: limits::BlockWeights = limits::BlockWeights::builder()
-		.base_block(BlockExecutionWeight::get())
+	/// Weight limit of the Pezcumulus-based bridge hub blocks when async backing is enabled,
+	/// with the generic base weights. A hub that measured its own overhead describes itself with
+	/// [`block_weights_for_async_backing`] instead.
+	pub BlockWeightsForAsyncBacking: limits::BlockWeights =
+		block_weights_for_async_backing(BlockExecutionWeight::get(), ExtrinsicBaseWeight::get());
+}
+
+/// Weight limit of a Pezcumulus-based bridge hub block when async backing is enabled.
+///
+/// The bridged side and the relayers size message delivery from this, so it has to be the hub's
+/// own: the base weights are the ones the hub's runtime charges, and the hub's
+/// `ensure_bridge_integrity` test compares the two byte for byte.
+pub fn block_weights_for_async_backing(
+	base_block: Weight,
+	base_extrinsic: Weight,
+) -> limits::BlockWeights {
+	limits::BlockWeights::builder()
+		.base_block(base_block)
 		.for_class(DispatchClass::all(), |weights| {
-			weights.base_extrinsic = ExtrinsicBaseWeight::get();
+			weights.base_extrinsic = base_extrinsic;
 		})
 		.for_class(DispatchClass::Normal, |weights| {
-			weights.max_total = Some(NORMAL_DISPATCH_RATIO * MAXIMUM_BLOCK_WEIGHT_FOR_ASYNC_BACKING);
+			weights.max_total =
+				Some(NORMAL_DISPATCH_RATIO * MAXIMUM_BLOCK_WEIGHT_FOR_ASYNC_BACKING);
 		})
 		.for_class(DispatchClass::Operational, |weights| {
 			weights.max_total = Some(MAXIMUM_BLOCK_WEIGHT_FOR_ASYNC_BACKING);
 			// Operational transactions have an extra reserved space, so that they
 			// are included even if block reached `MAXIMUM_BLOCK_WEIGHT_FOR_ASYNC_BACKING`.
 			weights.reserved = Some(
-				MAXIMUM_BLOCK_WEIGHT_FOR_ASYNC_BACKING - NORMAL_DISPATCH_RATIO * MAXIMUM_BLOCK_WEIGHT_FOR_ASYNC_BACKING,
+				MAXIMUM_BLOCK_WEIGHT_FOR_ASYNC_BACKING
+					- NORMAL_DISPATCH_RATIO * MAXIMUM_BLOCK_WEIGHT_FOR_ASYNC_BACKING,
 			);
 		})
 		.avg_block_initialization(AVERAGE_ON_INITIALIZE_RATIO)
-		.build_or_panic();
+		.build_or_panic()
 }
 
 /// Public key of the chain account that may be used to verify signatures.

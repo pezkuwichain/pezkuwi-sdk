@@ -1,0 +1,1232 @@
+// This file is part of PezkuwiChain.
+
+// Copyright (C) Dijital Kurdistan Tech Institute
+// SPDX-License-Identifier: Apache-2.0
+
+use crate::{mock::*, *};
+use pezframe_support::{assert_noop, assert_ok};
+use pezsp_io::hashing::blake2_256;
+
+#[test]
+fn genesis_installs_the_nine_strata() {
+	new_test_ext().execute_with(|| {
+		assert_eq!(Strata::<Test>::get().len(), 9);
+		assert_eq!(CurrentEra::<Test>::get(), 0);
+		assert!(CurrentCommittee::<Test>::get().is_empty());
+	});
+}
+
+#[test]
+fn genesis_refuses_a_configuration_that_cannot_be_seated() {
+	// Four strata cannot clear MIN_STRATA, so building genesis with them must fail rather
+	// than start a chain whose committee is below the security budget from block zero.
+	assert!(std::panic::catch_unwind(|| { new_test_ext_with_strata(4) }).is_err());
+}
+
+#[test]
+fn set_strata_requires_the_manager_origin() {
+	new_test_ext().execute_with(|| {
+		assert_ok!(Tnpos::set_strata(RuntimeOrigin::root(), nine_strata()));
+	});
+}
+
+#[test]
+fn joining_measures_the_score_it_does_not_take_the_callers_word() {
+	new_test_ext().execute_with(|| {
+		// ALICE has no perwerde credential in the mock; nothing she can put in the call
+		// should get her into that stratum. Keys are granted up front so this failure is
+		// the score gate, not the session-keys gate underneath it.
+		ensure_has_keys(ALICE);
+		set_perwerde(ALICE, 0);
+		assert_noop!(
+			Tnpos::join(RuntimeOrigin::signed(ALICE), StratumId::Perwerde),
+			Error::<Test>::NotEligible
+		);
+		set_perwerde(ALICE, 500);
+		assert_ok!(Tnpos::join(RuntimeOrigin::signed(ALICE), StratumId::Perwerde));
+		assert_eq!(PoolMembers::<Test>::get(ALICE), Some(StratumId::Perwerde));
+		assert_eq!(StratumSize::<Test>::get(StratumId::Perwerde), 1);
+	});
+}
+
+#[test]
+fn a_stale_score_blocks_joining_and_says_so() {
+	new_test_ext().execute_with(|| {
+		ensure_has_keys(ALICE);
+		set_perwerde_at(ALICE, 500, 1);
+		run_to_block(1 + MaxScoreAge::get() + 1);
+		// Not NotEligible: the account may well qualify. The chain simply does not know.
+		assert_noop!(
+			Tnpos::join(RuntimeOrigin::signed(ALICE), StratumId::Perwerde),
+			Error::<Test>::ScoreUnavailable
+		);
+	});
+}
+
+#[test]
+fn a_member_stands_in_exactly_one_stratum() {
+	new_test_ext().execute_with(|| {
+		ensure_has_keys(ALICE);
+		set_perwerde(ALICE, 500);
+		set_tiki(ALICE, 500);
+		assert_ok!(Tnpos::join(RuntimeOrigin::signed(ALICE), StratumId::Perwerde));
+		assert_noop!(
+			Tnpos::join(RuntimeOrigin::signed(ALICE), StratumId::Tiki),
+			Error::<Test>::AlreadyInPool
+		);
+	});
+}
+
+#[test]
+fn leaving_decrements_the_stratum_it_left() {
+	new_test_ext().execute_with(|| {
+		ensure_has_keys(ALICE);
+		set_perwerde(ALICE, 500);
+		assert_ok!(Tnpos::join(RuntimeOrigin::signed(ALICE), StratumId::Perwerde));
+		assert_ok!(Tnpos::leave(RuntimeOrigin::signed(ALICE)));
+		assert_eq!(StratumSize::<Test>::get(StratumId::Perwerde), 0);
+		assert_eq!(PoolMembers::<Test>::get(ALICE), None);
+	});
+}
+
+#[test]
+fn office_tikis_do_not_open_the_tiki_stratum() {
+	// Tiki and Meclis must stay independent gates. An office tiki is granted by the
+	// assembly, so counting it here would quietly collapse two strata into one and the
+	// security arithmetic would be measuring a chain that does not exist.
+	new_test_ext().execute_with(|| {
+		ensure_has_keys(ALICE);
+		set_office_tiki_only(ALICE);
+		assert_noop!(
+			Tnpos::join(RuntimeOrigin::signed(ALICE), StratumId::Tiki),
+			Error::<Test>::NotEligible
+		);
+	});
+}
+
+#[test]
+fn joining_without_session_keys_is_refused() {
+	// Session silently drops a keyless validator on rotation, so the join gate has to
+	// catch this itself rather than let it surface later as an unexplained absence.
+	// Nothing has keys by default, so ALICE is already in exactly the state this checks.
+	new_test_ext().execute_with(|| {
+		set_perwerde(ALICE, 500);
+		assert_noop!(
+			Tnpos::join(RuntimeOrigin::signed(ALICE), StratumId::Perwerde),
+			Error::<Test>::NoSessionKeys
+		);
+	});
+}
+
+#[test]
+fn an_account_that_loses_its_keys_after_joining_is_not_drawn() {
+	// `join` only catches a keyless account at the door; an account that deregisters
+	// afterwards stays in `PoolMembers`, so the draw has to filter it too. Five of Perwerde's
+	// sixty lose their keys, which leaves fifty-five -- still above the floor, so the stratum
+	// is seated and the five simply cannot be among its three.
+	new_test_ext().execute_with(|| {
+		fill_every_stratum(60);
+		let perwerde: Vec<AccountId> = PoolMembers::<Test>::iter()
+			.filter_map(|(w, s)| (s == StratumId::Perwerde).then_some(w))
+			.collect();
+		let dropped = &perwerde[..5];
+		for &who in dropped {
+			remove_keys(who);
+		}
+		assert_ok!(Tnpos::force_new_era(RuntimeOrigin::root()));
+		let committee = CurrentCommittee::<Test>::get();
+		for &who in dropped {
+			assert!(!committee.contains(&who), "a keyless account must not be seated");
+		}
+		assert_eq!(committee.len(), 27, "the stratum is still above its floor");
+	});
+}
+
+/// A gate that reads a state has to be read again at the draw, not only at the door.
+///
+/// This is what the disqualifying gates are for. A member whose court seat is vacated for
+/// silence, whose term ends, or whose region is cancelled stays in `PoolMembers` -- and if
+/// eligibility were checked only on the way in, they would go on being seated as the court's
+/// representative long after the court stopped recognising them. The gate would disqualify
+/// nobody who was already inside, which is everybody it exists to catch.
+///
+/// Deterministic by construction: the court's stratum carries a floor of three, so leaving
+/// exactly three live members means those three and nobody else can fill its three seats.
+#[test]
+fn a_member_who_stops_qualifying_stops_being_drawn() {
+	new_test_ext().execute_with(|| {
+		fill_every_stratum(60);
+		let bench: Vec<AccountId> = PoolMembers::<Test>::iter()
+			.filter_map(|(w, s)| (s == StratumId::Divan).then_some(w))
+			.collect();
+		let (keep, vacated) = bench.split_at(3);
+		for &who in vacated {
+			unseat_from_the_diwan(who);
+		}
+
+		assert_ok!(Tnpos::force_new_era(RuntimeOrigin::root()));
+		let committee = CurrentCommittee::<Test>::get();
+
+		for &who in keep {
+			assert!(committee.contains(&who), "a sitting judge must still be drawable");
+		}
+		for &who in vacated {
+			assert!(
+				!committee.contains(&who),
+				"a vacated seat must stop being drawn, not wait for the member to leave"
+			);
+		}
+	});
+}
+
+#[test]
+fn a_stratum_whose_live_candidates_fall_below_the_floor_stands_down() {
+	// This used to fail the whole era, and the reason was a mismatch rather than a decision:
+	// `seat` judged a stratum from `StratumSize`, which counts membership, while the draw ran
+	// against a list filtered by session keys. When the two disagreed the draw came back short
+	// and the era was refused -- so a handful of members deregistering could stop the committee
+	// rotating at all.
+	//
+	// Both now read the same list. Perwerde keeps two keyed candidates out of sixty, which is
+	// below the floor, so it stands down exactly as a stratum short of members does: the era
+	// succeeds, the committee is twenty-four, and its three seats go to nobody. Seating those
+	// two would have been the other error -- three candidates for three seats is not a lottery,
+	// which is what the floor exists to prevent.
+	new_test_ext().execute_with(|| {
+		fill_every_stratum(60);
+		let perwerde: Vec<AccountId> = PoolMembers::<Test>::iter()
+			.filter_map(|(w, s)| (s == StratumId::Perwerde).then_some(w))
+			.collect();
+		for &who in &perwerde[2..] {
+			remove_keys(who);
+		}
+		assert_ok!(Tnpos::force_new_era(RuntimeOrigin::root()));
+
+		let committee = CurrentCommittee::<Test>::get();
+		assert_eq!(
+			committee.len() as u32,
+			SEATS_PER_STRATUM * (StratumId::ALL.len() as u32 - 1),
+			"perwerde should have stood down and taken exactly its own seats with it"
+		);
+		for who in committee.iter() {
+			assert_ne!(
+				PoolMembers::<Test>::get(who),
+				Some(StratumId::Perwerde),
+				"a stratum below its floor must seat nobody"
+			);
+		}
+	});
+}
+
+#[test]
+fn the_pool_is_bounded() {
+	new_test_ext().execute_with(|| {
+		for i in 0..MaxPoolSize::get() {
+			let who = 1_000 + i as u64;
+			ensure_has_keys(who);
+			set_perwerde(who, 500);
+			assert_ok!(Tnpos::join(RuntimeOrigin::signed(who), StratumId::Perwerde));
+		}
+		set_perwerde(9_999, 500);
+		assert_noop!(
+			Tnpos::join(RuntimeOrigin::signed(9_999), StratumId::Perwerde),
+			Error::<Test>::PoolFull
+		);
+	});
+}
+
+/// The open seat asks for something, and the something is "more than the cheapest possible act".
+///
+/// Forty is not a number somebody picked. Trust weights staking at twenty of a hundred against
+/// a maximum of a hundred, so an account that stakes the smallest tier and does nothing else
+/// lands on exactly forty. Above it means the citizen has held the stake long enough to earn
+/// the duration multiplier, or vouched for somebody, or earned a badge or a course -- and any
+/// of those is beyond what an account minted for the draw will bother with.
+///
+/// The gate stays light on purpose. This stratum's security is the size of the pool, not the
+/// height of the bar; a hard gate would duplicate one of the other eight and shut out the
+/// ordinary citizens it exists to seat.
+#[test]
+fn the_open_lottery_refuses_the_account_that_did_the_minimum_and_nothing_else() {
+	new_test_ext().execute_with(|| {
+		let floor = LotteryTrustFloor::get();
+		ensure_has_keys(ALICE);
+
+		// Exactly the floor: one HEZ staked, nothing else done. This is the profile the pool
+		// cannot dilute cheaply, because it costs an attacker almost nothing per identity.
+		set_trust(ALICE, floor);
+		assert_noop!(
+			Tnpos::join(RuntimeOrigin::signed(ALICE), StratumId::WelatiLottery),
+			Error::<Test>::NotEligible
+		);
+
+		// One step past it -- any duration, any referral, any badge -- and the seat is open.
+		set_trust(ALICE, floor + 1);
+		assert_ok!(Tnpos::join(RuntimeOrigin::signed(ALICE), StratumId::WelatiLottery));
+		assert_eq!(PoolMembers::<Test>::get(ALICE), Some(StratumId::WelatiLottery));
+	});
+}
+
+mod the_operating_record {
+	use super::*;
+
+	fn report(scored: Vec<AccountId>, failed: Vec<AccountId>) {
+		assert_ok!(Tnpos::note_session_performance(RuntimeOrigin::root(), scored, failed));
+	}
+
+	/// The ninth gate is the only one that asks for work done, and nobody else may report it.
+	#[test]
+	fn only_the_relay_says_what_a_session_produced() {
+		new_test_ext().execute_with(|| {
+			assert_noop!(
+				Tnpos::note_session_performance(RuntimeOrigin::signed(ALICE), vec![ALICE], vec![]),
+				pezsp_runtime::DispatchError::BadOrigin
+			);
+			assert_eq!(SessionsObserved::<Test>::get(), 0);
+		});
+	}
+
+	#[test]
+	fn a_record_is_earned_by_validating_and_cannot_be_bought() {
+		new_test_ext().execute_with(|| {
+			set_trust(ALICE, 1_000);
+			ensure_has_keys(ALICE);
+
+			// Maximum trust, maximum everything: none of it is work done.
+			assert_noop!(
+				Tnpos::join(RuntimeOrigin::signed(ALICE), StratumId::Infrastructure),
+				Error::<Test>::NotEligible
+			);
+
+			// One short of the requirement is still short.
+			let need = InfrastructureSessions::get();
+			for _ in 0..need - 1 {
+				report(vec![ALICE], vec![]);
+			}
+			assert_noop!(
+				Tnpos::join(RuntimeOrigin::signed(ALICE), StratumId::Infrastructure),
+				Error::<Test>::NotEligible
+			);
+
+			report(vec![ALICE], vec![]);
+			assert_ok!(Tnpos::join(RuntimeOrigin::signed(ALICE), StratumId::Infrastructure));
+		});
+	}
+
+	#[test]
+	fn failing_alone_costs_nothing_and_failing_in_company_repeatedly_costs_the_seat() {
+		new_test_ext().execute_with(|| {
+			set_trust(ALICE, 1_000);
+			ensure_has_keys(ALICE);
+			credit_sessions(ALICE, InfrastructureSessions::get());
+
+			// Down on their own, over and over. That is an operator's own outage and says
+			// nothing about whose ground they share.
+			for _ in 0..10 {
+				report(vec![BOB, 3, 4, 5, 6, 7, 8, 9], vec![ALICE]);
+			}
+			assert_ok!(Tnpos::join(RuntimeOrigin::signed(ALICE), StratumId::Infrastructure));
+			assert_ok!(Tnpos::leave(RuntimeOrigin::signed(ALICE)));
+			credit_sessions(ALICE, InfrastructureSessions::get());
+
+			// Down with three others, twice. A pattern is not yet established.
+			let group = vec![ALICE, BOB, 3, 4];
+			for _ in 0..(CoFailureRepeats::get() - 1) {
+				report(vec![5, 6, 7, 8, 9, 10, 11, 12], group.clone());
+			}
+			assert_ok!(Tnpos::join(RuntimeOrigin::signed(ALICE), StratumId::Infrastructure));
+			assert_ok!(Tnpos::leave(RuntimeOrigin::signed(ALICE)));
+			credit_sessions(ALICE, InfrastructureSessions::get());
+
+			// The third time is the pattern.
+			report(vec![5, 6, 7, 8, 9, 10, 11, 12], group);
+			assert_noop!(
+				Tnpos::join(RuntimeOrigin::signed(ALICE), StratumId::Infrastructure),
+				Error::<Test>::NotEligible
+			);
+		});
+	}
+
+	#[test]
+	fn a_chain_wide_outage_marks_nobody() {
+		new_test_ext().execute_with(|| {
+			set_trust(ALICE, 1_000);
+			ensure_has_keys(ALICE);
+			credit_sessions(ALICE, InfrastructureSessions::get());
+
+			// More than half the committee down. That is the network having a bad day, and it
+			// says nothing about who shares a rack -- counting it would mark every honest
+			// operator at once and empty this stratum on the first real incident.
+			for _ in 0..10 {
+				report(vec![9, 10], vec![ALICE, BOB, 3, 4, 5, 6, 7, 8]);
+			}
+			assert!(CoFailures::<Test>::get(ALICE).is_empty());
+			assert_ok!(Tnpos::join(RuntimeOrigin::signed(ALICE), StratumId::Infrastructure));
+		});
+	}
+
+	#[test]
+	fn the_window_forgives_a_pattern_that_stopped() {
+		new_test_ext().execute_with(|| {
+			set_trust(ALICE, 1_000);
+			ensure_has_keys(ALICE);
+			credit_sessions(ALICE, InfrastructureSessions::get());
+
+			let group = vec![ALICE, BOB, 3, 4];
+			for _ in 0..CoFailureRepeats::get() {
+				report(vec![5, 6, 7, 8, 9, 10, 11, 12], group.clone());
+			}
+			assert_noop!(
+				Tnpos::join(RuntimeOrigin::signed(ALICE), StratumId::Infrastructure),
+				Error::<Test>::NotEligible
+			);
+
+			// An operator who moves off a bad host should not carry it for ever. A window of
+			// clean sessions later, the record is spent.
+			for _ in 0..InfrastructureWindow::get() + 1 {
+				report(vec![ALICE], vec![]);
+			}
+			assert_ok!(Tnpos::join(RuntimeOrigin::signed(ALICE), StratumId::Infrastructure));
+		});
+	}
+}
+
+/// Time is the one qualification nobody can grant, and the grace window closes itself.
+#[test]
+fn tenure_admits_on_trust_until_the_chain_is_old_enough_to_have_any() {
+	new_test_ext().execute_with(|| {
+		let period = TenurePeriod::get();
+		set_trust(ALICE, 1_000);
+		ensure_has_keys(ALICE);
+
+		// Younger than one period: nobody can have served one, so the stratum admits on trust
+		// and the members admitted that way are the ones serving it.
+		assert!(System::block_number() < period);
+		assert_ok!(Tnpos::join(RuntimeOrigin::signed(ALICE), StratumId::Tenure));
+		assert_eq!(InPoolSince::<Test>::get(ALICE), Some(System::block_number()));
+
+		// Past the window the gate is strict, and a newcomer with a perfect score is refused.
+		System::set_block_number(period + 1);
+		set_trust(BOB, 1_000);
+		ensure_has_keys(BOB);
+		assert_noop!(
+			Tnpos::join(RuntimeOrigin::signed(BOB), StratumId::Tenure),
+			Error::<Test>::NotEligible
+		);
+
+		// Nothing switched the window off: the chain simply got older than the period.
+	});
+}
+
+/// An offence costs the spell, not just the ban.
+#[test]
+fn an_offender_starts_their_tenure_again_rather_than_waiting_the_ban_out() {
+	new_test_ext().execute_with(|| {
+		let period = TenurePeriod::get();
+		set_trust(ALICE, 1_000);
+		ensure_has_keys(ALICE);
+		assert_ok!(Tnpos::join(RuntimeOrigin::signed(ALICE), StratumId::Tenure));
+
+		// A long, clean spell.
+		System::set_block_number(period * 3);
+		assert!(InPoolSince::<Test>::get(ALICE).is_some());
+
+		// The offence removes them from the pool and takes the spell with it. Without that the
+		// ban would expire and the offender would walk back in carrying the standing they had
+		// before it -- costing them a few eras and nothing in the stratum that measures a
+		// clean record.
+		assert_ok!(Tnpos::do_report_offence(ALICE, Offence::Equivocation));
+		assert!(InPoolSince::<Test>::get(ALICE).is_none());
+
+		// The way back in is the way everybody else takes: serve somewhere else, then switch.
+		// Straight back into tenure is refused, because the spell it measures is gone.
+		Banned::<Test>::remove(ALICE);
+		// The snapshot has to be current: `fresh` refuses a stale score, which is the point of
+		// it, and the clock has moved a long way in this test.
+		set_trust(ALICE, 1_000);
+		assert_noop!(
+			Tnpos::join(RuntimeOrigin::signed(ALICE), StratumId::Tenure),
+			Error::<Test>::NotEligible
+		);
+
+		assert_ok!(Tnpos::join(RuntimeOrigin::signed(ALICE), StratumId::WelatiLottery));
+		let restarted = System::block_number();
+		assert_eq!(InPoolSince::<Test>::get(ALICE), Some(restarted));
+
+		// Still short of a period, so switching is refused too -- the gate is the same from
+		// inside the pool as from outside it.
+		System::set_block_number(restarted + period - 1);
+		set_trust(ALICE, 1_000);
+		assert_noop!(
+			Tnpos::switch_stratum(RuntimeOrigin::signed(ALICE), StratumId::Tenure),
+			Error::<Test>::NotEligible
+		);
+
+		// A full clean spell later, the switch is allowed and it does not reset the clock:
+		// moving stratum is not leaving the pool.
+		System::set_block_number(restarted + period);
+		set_trust(ALICE, 1_000);
+		assert_ok!(Tnpos::switch_stratum(RuntimeOrigin::signed(ALICE), StratumId::Tenure));
+		assert_eq!(InPoolSince::<Test>::get(ALICE), Some(restarted));
+		assert_eq!(PoolMembers::<Test>::get(ALICE), Some(StratumId::Tenure));
+	});
+}
+
+/// Three seats, six regions, and the label has to decide something.
+///
+/// A uniform draw over the whole marked pool would let the most populous region take all three
+/// and the stratum would be "citizens a notary vouched for" -- which is not what it is named
+/// after. The seats rotate instead, so which regions are served is a guarantee rather than an
+/// average, and randomness decides only *who* inside each region.
+#[test]
+fn the_geography_seats_land_in_three_different_regions_and_move_on() {
+	new_test_ext().execute_with(|| {
+		// Six regions, plenty of members in each.
+		let mut who = 500u64;
+		for region in 0..6u8 {
+			for _ in 0..10 {
+				set_trust(who, 1_000);
+				attest_region(who, region);
+				ensure_has_keys(who);
+				assert_ok!(Tnpos::join(RuntimeOrigin::signed(who), StratumId::Geography));
+				who += 1;
+			}
+		}
+
+		let served = |era: u32| -> Vec<usize> { Tnpos::regions_for_era(era, 6) };
+
+		// Three distinct regions, every era.
+		for era in 0..12u32 {
+			let s = served(era);
+			assert_eq!(s.len(), 3, "era {era} did not serve three regions");
+			let mut sorted = s.clone();
+			sorted.sort_unstable();
+			sorted.dedup();
+			assert_eq!(sorted.len(), 3, "era {era} served the same region twice");
+		}
+
+		// And the six are covered in two eras: nobody waits while another is served twice.
+		let mut two_eras: Vec<usize> = served(0).into_iter().chain(served(1)).collect();
+		two_eras.sort_unstable();
+		two_eras.dedup();
+		assert_eq!(two_eras.len(), 6, "a full cycle did not reach every region");
+	});
+}
+
+/// Fewer regions than seats stands the stratum down; it does not cost the chain its committee.
+#[test]
+fn too_few_regions_shrinks_the_committee_rather_than_failing_the_era() {
+	new_test_ext().execute_with(|| {
+		fill_every_stratum(60);
+
+		// Collapse geography onto two regions. There are still sixty marked members, so the
+		// floor is met and only the rotation cannot be satisfied -- which is exactly the case
+		// that would otherwise fail the whole draw rather than one stratum.
+		let geography: Vec<u64> = PoolMembers::<Test>::iter()
+			.filter(|(_, s)| *s == StratumId::Geography)
+			.map(|(w, _)| w)
+			.collect();
+		for member in geography {
+			attest_region(member, (member % 2) as u8);
+		}
+
+		assert_ok!(Tnpos::force_new_era(RuntimeOrigin::root()));
+
+		let seated = CurrentCommittee::<Test>::get();
+		assert!(!seated.is_empty(), "the era produced no committee at all");
+		assert_eq!(
+			seated.len() as u32,
+			SEATS_PER_STRATUM * (StratumId::ALL.len() as u32 - 1),
+			"geography should have stood down and taken exactly its own seats with it"
+		);
+	});
+}
+
+/// The two institutional strata admit the institution, and a full trust score is not it.
+///
+/// This is the whole of the independence argument in one test. Both gates used to read trust
+/// like five others, so the stratum named for the house and the stratum named for the court
+/// admitted anybody in the country with standing -- nine strata on paper and one authority
+/// behind six of them. A citizen with a perfect score and no seat must be refused, or the name
+/// is the only thing separating these gates from the rest.
+#[test]
+fn the_house_and_the_bench_admit_their_own_members_and_nobody_else() {
+	new_test_ext().execute_with(|| {
+		ensure_has_keys(ALICE);
+		set_trust(ALICE, 1_000);
+
+		// Maximum trust, no seat: refused by both.
+		assert_noop!(
+			Tnpos::join(RuntimeOrigin::signed(ALICE), StratumId::Meclis),
+			Error::<Test>::NotEligible
+		);
+		assert_noop!(
+			Tnpos::join(RuntimeOrigin::signed(ALICE), StratumId::Divan),
+			Error::<Test>::NotEligible
+		);
+
+		// A seat in the house opens the house's stratum and not the court's.
+		seat_in_meclis(ALICE);
+		assert_noop!(
+			Tnpos::join(RuntimeOrigin::signed(ALICE), StratumId::Divan),
+			Error::<Test>::NotEligible
+		);
+		assert_ok!(Tnpos::join(RuntimeOrigin::signed(ALICE), StratumId::Meclis));
+		assert_eq!(PoolMembers::<Test>::get(ALICE), Some(StratumId::Meclis));
+
+		// And the bench opens the bench's, for somebody else.
+		ensure_has_keys(BOB);
+		set_trust(BOB, 0);
+		seat_on_the_diwan(BOB);
+		assert_ok!(Tnpos::join(RuntimeOrigin::signed(BOB), StratumId::Divan));
+		assert_eq!(PoolMembers::<Test>::get(BOB), Some(StratumId::Divan));
+	});
+}
+
+#[test]
+fn a_healthy_pool_seats_twenty_seven_across_nine_strata() {
+	new_test_ext().execute_with(|| {
+		fill_every_stratum(60);
+		assert_ok!(Tnpos::force_new_era(RuntimeOrigin::root()));
+		let c = CurrentCommittee::<Test>::get();
+		assert_eq!(c.len(), 27);
+		let mut per = std::collections::BTreeMap::new();
+		for who in c.iter() {
+			*per.entry(PoolMembers::<Test>::get(who).unwrap()).or_insert(0) += 1;
+		}
+		assert_eq!(per.len(), 9);
+		assert!(per.values().all(|&v| v == 3), "each stratum seats exactly three");
+	});
+}
+
+#[test]
+fn a_short_stratum_shrinks_the_committee_it_does_not_hand_its_seats_away() {
+	new_test_ext().execute_with(|| {
+		fill_every_stratum(60);
+		empty_stratum(StratumId::Tiki);
+		assert_ok!(Tnpos::force_new_era(RuntimeOrigin::root()));
+		let c = CurrentCommittee::<Test>::get();
+		assert_eq!(c.len(), 24, "three seats are lost, not moved");
+		assert!(!c.iter().any(|w| PoolMembers::<Test>::get(w) == Some(StratumId::Tiki)));
+	});
+}
+
+#[test]
+fn seating_is_refused_rather_than_run_below_the_budget() {
+	new_test_ext().execute_with(|| {
+		fill_every_stratum(60);
+		for s in [
+			StratumId::Tiki,
+			StratumId::Divan,
+			StratumId::Geography,
+			StratumId::Tenure,
+			StratumId::Infrastructure,
+		] {
+			empty_stratum(s);
+		}
+		let before = CurrentCommittee::<Test>::get();
+		assert_noop!(
+			Tnpos::force_new_era(RuntimeOrigin::root()),
+			Error::<Test>::UnseatableConfiguration
+		);
+		assert_eq!(CurrentCommittee::<Test>::get(), before, "the old committee stays");
+	});
+}
+
+#[test]
+fn nobody_is_seated_twice() {
+	new_test_ext().execute_with(|| {
+		fill_every_stratum(60);
+		assert_ok!(Tnpos::force_new_era(RuntimeOrigin::root()));
+		let mut c = CurrentCommittee::<Test>::get().to_vec();
+		let n = c.len();
+		c.sort();
+		c.dedup();
+		assert_eq!(c.len(), n);
+	});
+}
+
+#[test]
+fn a_new_era_draws_a_different_committee() {
+	new_test_ext().execute_with(|| {
+		fill_every_stratum(200);
+		assert_ok!(Tnpos::force_new_era(RuntimeOrigin::root()));
+		let first = CurrentCommittee::<Test>::get();
+		seed_the_era();
+		assert_ok!(Tnpos::force_new_era(RuntimeOrigin::root()));
+		assert_ne!(CurrentCommittee::<Test>::get(), first);
+	});
+}
+
+#[test]
+fn the_era_advances_on_schedule() {
+	new_test_ext().execute_with(|| {
+		fill_every_stratum(60);
+		run_to_block(EraLength::get());
+		assert_eq!(CurrentEra::<Test>::get(), 1);
+	});
+}
+
+#[test]
+fn a_refused_seating_does_not_retry_every_block() {
+	// The pallet this replaces swallowed the error and left EraStart untouched, so it
+	// re-ran the whole selection on every single block and paid full weight for it.
+	new_test_ext().execute_with(|| {
+		fill_every_stratum(60);
+		for s in [
+			StratumId::Tiki,
+			StratumId::Divan,
+			StratumId::Geography,
+			StratumId::Tenure,
+			StratumId::Infrastructure,
+		] {
+			empty_stratum(s);
+		}
+		run_to_block(EraLength::get());
+		// The window must have been written even though seating failed. Asserting only that
+		// it is unchanged between two blocks would pass while it sat at genesis zero, which
+		// is the exact bug this test exists for.
+		assert_eq!(
+			EraStart::<Test>::get(),
+			EraLength::get(),
+			"a failed seating must still move the era window"
+		);
+		run_to_block(EraLength::get() + 1);
+		assert_eq!(
+			EraStart::<Test>::get(),
+			EraLength::get(),
+			"and must not fire again on the very next block"
+		);
+	});
+}
+
+#[test]
+fn a_revealed_seed_matches_its_commitment() {
+	new_test_ext().execute_with(|| {
+		join_pool(ALICE);
+		let pre = [3u8; 32];
+		assert_ok!(Tnpos::commit_seed(RuntimeOrigin::signed(ALICE), blake2_256(&pre)));
+		advance_to_reveal_window();
+		assert_ok!(Tnpos::reveal_seed(RuntimeOrigin::signed(ALICE), pre));
+		assert!(NextSeed::<Test>::get().is_some());
+	});
+}
+
+#[test]
+fn a_reveal_that_does_not_match_is_rejected() {
+	new_test_ext().execute_with(|| {
+		join_pool(ALICE);
+		assert_ok!(Tnpos::commit_seed(RuntimeOrigin::signed(ALICE), blake2_256(&[3u8; 32])));
+		advance_to_reveal_window();
+		assert_noop!(
+			Tnpos::reveal_seed(RuntimeOrigin::signed(ALICE), [9u8; 32]),
+			Error::<Test>::BadReveal
+		);
+	});
+}
+
+#[test]
+fn one_honest_contributor_changes_the_seed() {
+	// The property the whole scheme rests on: an adversary who reveals last still cannot
+	// choose the result, because every contribution is mixed in. Both commits land inside
+	// the commit half (the window is one shared deadline, not one per account), then both
+	// reveals land after it closes.
+	new_test_ext().execute_with(|| {
+		join_pool(ALICE);
+		join_pool(BOB);
+		assert_ok!(Tnpos::commit_seed(RuntimeOrigin::signed(ALICE), blake2_256(&[1u8; 32])));
+		assert_ok!(Tnpos::commit_seed(RuntimeOrigin::signed(BOB), blake2_256(&[2u8; 32])));
+		advance_to_reveal_window();
+		assert_ok!(Tnpos::reveal_seed(RuntimeOrigin::signed(ALICE), [1u8; 32]));
+		let only_alice = NextSeed::<Test>::get().unwrap();
+		assert_ok!(Tnpos::reveal_seed(RuntimeOrigin::signed(BOB), [2u8; 32]));
+		assert_ne!(NextSeed::<Test>::get().unwrap(), only_alice);
+	});
+}
+
+#[test]
+fn seating_is_refused_when_no_seed_was_contributed() {
+	// Falling back to a predictable seed would hand an adversary the draw. Refusing keeps
+	// the previous committee, which is the safe direction.
+	new_test_ext().execute_with(|| {
+		fill_every_stratum(60);
+		clear_seed();
+		assert_noop!(
+			Tnpos::force_new_era(RuntimeOrigin::root()),
+			Error::<Test>::UnseatableConfiguration
+		);
+	});
+}
+
+#[test]
+fn only_pool_members_may_contribute() {
+	new_test_ext().execute_with(|| {
+		assert_noop!(
+			Tnpos::commit_seed(RuntimeOrigin::signed(9_999), blake2_256(&[1u8; 32])),
+			Error::<Test>::NotInPool
+		);
+	});
+}
+
+#[test]
+fn a_drawn_seed_is_spent_and_the_next_draw_needs_its_own_round() {
+	// Every preimage is public the instant it is revealed, so carrying a spent seed into
+	// another era would let anyone compute that era's committee in advance.
+	new_test_ext().execute_with(|| {
+		fill_every_stratum(60);
+		assert_ok!(Tnpos::force_new_era(RuntimeOrigin::root()));
+		assert!(NextSeed::<Test>::get().is_none(), "the seed is spent once its era is drawn");
+		assert_noop!(
+			Tnpos::force_new_era(RuntimeOrigin::root()),
+			Error::<Test>::UnseatableConfiguration
+		);
+	});
+}
+
+#[test]
+fn an_account_may_commit_only_once_per_round() {
+	// An unscoped commitment pot would let an account commit again after seeing what
+	// others revealed -- not withholding, but steering.
+	new_test_ext().execute_with(|| {
+		join_pool(ALICE);
+		assert_ok!(Tnpos::commit_seed(RuntimeOrigin::signed(ALICE), blake2_256(&[1u8; 32])));
+		assert_noop!(
+			Tnpos::commit_seed(RuntimeOrigin::signed(ALICE), blake2_256(&[2u8; 32])),
+			Error::<Test>::AlreadyCommitted
+		);
+	});
+}
+
+#[test]
+fn committing_after_the_window_closes_is_rejected() {
+	new_test_ext().execute_with(|| {
+		join_pool(ALICE);
+		advance_to_reveal_window();
+		assert_noop!(
+			Tnpos::commit_seed(RuntimeOrigin::signed(ALICE), blake2_256(&[1u8; 32])),
+			Error::<Test>::CommitWindowClosed
+		);
+	});
+}
+
+#[test]
+fn revealing_before_the_window_opens_is_rejected() {
+	// Without this deadline a member could wait for everyone else to reveal, then commit
+	// and reveal in the same block with a preimage chosen to land the seed where they want.
+	new_test_ext().execute_with(|| {
+		join_pool(ALICE);
+		let pre = [1u8; 32];
+		assert_ok!(Tnpos::commit_seed(RuntimeOrigin::signed(ALICE), blake2_256(&pre)));
+		assert_noop!(
+			Tnpos::reveal_seed(RuntimeOrigin::signed(ALICE), pre),
+			Error::<Test>::RevealWindowNotOpen
+		);
+	});
+}
+
+#[test]
+fn an_offence_bans_the_member_from_the_pool() {
+	new_test_ext().execute_with(|| {
+		ensure_has_keys(ALICE);
+		set_perwerde(ALICE, 500);
+		assert_ok!(Tnpos::join(RuntimeOrigin::signed(ALICE), StratumId::Perwerde));
+		assert_ok!(Tnpos::report_offence(RuntimeOrigin::root(), ALICE, Offence::Equivocation));
+		assert_eq!(PoolMembers::<Test>::get(ALICE), None);
+		assert_eq!(StratumSize::<Test>::get(StratumId::Perwerde), 0);
+		assert_eq!(Banned::<Test>::get(ALICE), Some(360));
+	});
+}
+
+#[test]
+fn a_banned_member_cannot_rejoin_until_the_ban_expires() {
+	new_test_ext().execute_with(|| {
+		ensure_has_keys(ALICE);
+		set_perwerde(ALICE, 500);
+		assert_ok!(Tnpos::join(RuntimeOrigin::signed(ALICE), StratumId::Perwerde));
+		assert_ok!(Tnpos::report_offence(RuntimeOrigin::root(), ALICE, Offence::Unavailable));
+		assert_noop!(
+			Tnpos::join(RuntimeOrigin::signed(ALICE), StratumId::Perwerde),
+			Error::<Test>::Banned
+		);
+		advance_eras(24);
+		assert_ok!(Tnpos::join(RuntimeOrigin::signed(ALICE), StratumId::Perwerde));
+	});
+}
+
+#[test]
+fn being_unavailable_costs_less_than_equivocating() {
+	// Going offline is a failure; signing two conflicting blocks is an attack. The ladder
+	// has to say so, or the deterrent for the thing that can fork the chain is the same as
+	// the deterrent for a bad connection.
+	new_test_ext().execute_with(|| {
+		ensure_has_keys(ALICE);
+		ensure_has_keys(BOB);
+		set_perwerde(ALICE, 500);
+		set_perwerde(BOB, 500);
+		assert_ok!(Tnpos::join(RuntimeOrigin::signed(ALICE), StratumId::Perwerde));
+		assert_ok!(Tnpos::join(RuntimeOrigin::signed(BOB), StratumId::Perwerde));
+		assert_ok!(Tnpos::report_offence(RuntimeOrigin::root(), ALICE, Offence::Unavailable));
+		assert_ok!(Tnpos::report_offence(RuntimeOrigin::root(), BOB, Offence::Equivocation));
+		assert!(Banned::<Test>::get(BOB) > Banned::<Test>::get(ALICE));
+	});
+}
+
+#[test]
+fn reporting_requires_the_manager_origin() {
+	new_test_ext().execute_with(|| {
+		assert_noop!(
+			Tnpos::report_offence(RuntimeOrigin::signed(ALICE), BOB, Offence::Unavailable),
+			pezsp_runtime::DispatchError::BadOrigin
+		);
+	});
+}
+
+#[test]
+fn an_offence_removes_the_member_from_the_seated_committee() {
+	new_test_ext().execute_with(|| {
+		fill_every_stratum(60);
+		assert_ok!(Tnpos::force_new_era(RuntimeOrigin::root()));
+		let victim = CurrentCommittee::<Test>::get()[0];
+		assert_ok!(Tnpos::report_offence(RuntimeOrigin::root(), victim, Offence::Equivocation));
+		assert!(!CurrentCommittee::<Test>::get().contains(&victim));
+	});
+}
+
+#[test]
+fn a_lesser_offence_cannot_shorten_a_longer_ban() {
+	// Reports arrive from outside and in no guaranteed order. Recomputed from whichever
+	// came last, a trivial report following an equivocation would cut the penalty from
+	// three hundred and sixty eras to twenty-four.
+	new_test_ext().execute_with(|| {
+		ensure_has_keys(ALICE);
+		set_perwerde(ALICE, 500);
+		assert_ok!(Tnpos::join(RuntimeOrigin::signed(ALICE), StratumId::Perwerde));
+		assert_ok!(Tnpos::report_offence(RuntimeOrigin::root(), ALICE, Offence::Equivocation));
+		let heavy = Banned::<Test>::get(ALICE);
+		assert_ok!(Tnpos::report_offence(RuntimeOrigin::root(), ALICE, Offence::Unavailable));
+		assert_eq!(Banned::<Test>::get(ALICE), heavy, "a ban may only ever lengthen");
+	});
+}
+
+#[test]
+fn an_offender_who_already_left_the_pool_still_leaves_the_committee() {
+	// Leaving the pool does not unseat a member from the era they are already serving.
+	// If punishment only reached pool members, an offender could call `leave` first and
+	// keep counting towards quorum for the rest of the era.
+	new_test_ext().execute_with(|| {
+		fill_every_stratum(60);
+		assert_ok!(Tnpos::force_new_era(RuntimeOrigin::root()));
+		let victim = CurrentCommittee::<Test>::get()[0];
+		assert_ok!(Tnpos::leave(RuntimeOrigin::signed(victim)));
+		assert!(CurrentCommittee::<Test>::get().contains(&victim));
+		assert_ok!(Tnpos::report_offence(RuntimeOrigin::root(), victim, Offence::Equivocation));
+		assert!(!CurrentCommittee::<Test>::get().contains(&victim));
+	});
+}
+
+#[test]
+fn what_is_sent_is_what_was_seated() {
+	new_test_ext().execute_with(|| {
+		fill_every_stratum(60);
+		assert_ok!(Tnpos::force_new_era(RuntimeOrigin::root()));
+
+		let (_, sent) = EXPORTED.with(|e| e.borrow().last().cloned().expect("nothing was sent"));
+		assert_eq!(sent, CurrentCommittee::<Test>::get().to_vec());
+		assert_eq!(sent.len(), 27);
+	});
+}
+
+/// An empty committee is never sent, and the silence is announced.
+///
+/// The receiving chain reads a set of no validators as an instruction to install none, which
+/// stops it. "Change nothing" is the recoverable answer, but it has to be distinguishable
+/// from a delivery that failed -- the two have different causes and different fixes.
+#[test]
+fn an_empty_committee_is_not_sent_at_all() {
+	new_test_ext().execute_with(|| {
+		Tnpos::export_committee(0);
+
+		assert!(EXPORTED.with(|e| e.borrow().is_empty()), "an empty set was offered to the relay");
+		assert!(System::events()
+			.iter()
+			.any(|r| matches!(r.event, RuntimeEvent::Tnpos(Event::EmptyCommitteeNotSent { .. }))));
+	});
+}
+
+/// A member removed inside an era is sent again, not left until the next one.
+///
+/// This is the behaviour that was nearly lost. While the pallet implemented `SessionManager`,
+/// session re-read `CurrentCommittee` every session, so a ban took effect within a session on
+/// its own. Exporting once per era replaced that with a copy on the other chain that nothing
+/// refreshes -- and an equivocator would have kept signing there for the rest of the era while
+/// this chain's storage said they were gone.
+#[test]
+fn a_member_banned_mid_era_is_exported_again_without_them() {
+	new_test_ext().execute_with(|| {
+		fill_every_stratum(60);
+		assert_ok!(Tnpos::force_new_era(RuntimeOrigin::root()));
+		let sends_after_seating = EXPORTED.with(|e| e.borrow().len());
+
+		let victim = CurrentCommittee::<Test>::get()[0];
+		assert_ok!(Tnpos::report_offence(RuntimeOrigin::root(), victim, Offence::Equivocation));
+
+		let exported = EXPORTED.with(|e| e.borrow().clone());
+		assert_eq!(exported.len(), sends_after_seating + 1, "the ban never left this chain");
+		let (era, sent) = exported.last().unwrap();
+		assert_eq!(*era, CurrentEra::<Test>::get());
+		assert!(!sent.contains(&victim));
+		assert_eq!(sent.len(), 26);
+	});
+}
+
+/// Punishing somebody who was not seated does not re-send the committee.
+///
+/// Every export is a cross-chain message. A pool member who is banned before ever being drawn
+/// changes nothing the validating chain knows, and sending anyway would put the cost of every
+/// offence report on a path that has nothing to carry.
+#[test]
+fn punishing_an_unseated_member_sends_nothing() {
+	new_test_ext().execute_with(|| {
+		fill_every_stratum(60);
+		assert_ok!(Tnpos::force_new_era(RuntimeOrigin::root()));
+		let seated = CurrentCommittee::<Test>::get();
+		let bystander = PoolMembers::<Test>::iter()
+			.map(|(w, _)| w)
+			.find(|w| !seated.contains(w))
+			.expect("sixty per stratum cannot all be seated");
+		let before = EXPORTED.with(|e| e.borrow().len());
+
+		assert_ok!(Tnpos::report_offence(RuntimeOrigin::root(), bystander, Offence::Unavailable));
+
+		assert_eq!(EXPORTED.with(|e| e.borrow().len()), before);
+	});
+}
+
+// ===== RELAY KEY REGISTER =====
+//
+// The pallet keeps the register of who holds relay session keys, and the relay keeps the keys
+// consensus reads. Those are two writes and they must not come apart -- a local record of a key
+// the relay never received would let a keyless account into the pool, and session drops a
+// keyless validator silently on rotation.
+
+/// Keys are recorded only if the relay accepted the message.
+#[test]
+fn a_key_the_relay_did_not_receive_is_not_recorded() {
+	new_test_ext().execute_with(|| {
+		let keys = mock_keys(ALICE);
+		let proof = mock_proof(ALICE);
+
+		SEND_FAILS.with(|f| *f.borrow_mut() = true);
+		assert_noop!(
+			Tnpos::set_relay_keys(RuntimeOrigin::signed(ALICE), keys.clone(), proof.clone()),
+			Error::<Test>::CouldNotReachRelay
+		);
+		assert!(!RelayKeys::<Test>::contains_key(ALICE), "recorded a key that never arrived");
+
+		SEND_FAILS.with(|f| *f.borrow_mut() = false);
+		assert_ok!(Tnpos::set_relay_keys(RuntimeOrigin::signed(ALICE), keys, proof));
+		assert!(RelayKeys::<Test>::contains_key(ALICE));
+	});
+}
+
+/// Bytes that are not the relay's keys are refused before they are recorded.
+#[test]
+fn keys_that_would_not_decode_on_the_relay_are_refused_here() {
+	new_test_ext().execute_with(|| {
+		assert_noop!(
+			Tnpos::set_relay_keys(RuntimeOrigin::signed(ALICE), vec![0xff], vec![]),
+			Error::<Test>::InvalidRelayKeys
+		);
+		assert!(!RelayKeys::<Test>::contains_key(ALICE));
+	});
+}
+
+/// A proof for somebody else's account does not register keys for this one.
+#[test]
+fn the_proof_has_to_belong_to_the_account_offering_it() {
+	new_test_ext().execute_with(|| {
+		assert_noop!(
+			Tnpos::set_relay_keys(RuntimeOrigin::signed(ALICE), mock_keys(ALICE), mock_proof(BOB)),
+			Error::<Test>::InvalidKeyOwnershipProof
+		);
+		assert!(!RelayKeys::<Test>::contains_key(ALICE));
+	});
+}
+
+/// Withdrawing keys takes the member out of the pool in the same call.
+///
+/// A member without keys is a seat the session would silently drop, which is the reason `join`
+/// refuses one. Leaving them in the pool would let the stratum counts claim a seat that cannot
+/// be filled -- the same arithmetic error, arrived at from the other direction.
+#[test]
+fn purging_keys_also_leaves_the_pool() {
+	new_test_ext().execute_with(|| {
+		assert_ok!(Tnpos::set_relay_keys(
+			RuntimeOrigin::signed(ALICE),
+			mock_keys(ALICE),
+			mock_proof(ALICE)
+		));
+		set_perwerde(ALICE, 500);
+		assert_ok!(Tnpos::join(RuntimeOrigin::signed(ALICE), StratumId::Perwerde));
+		assert_eq!(StratumSize::<Test>::get(StratumId::Perwerde), 1);
+
+		assert_ok!(Tnpos::purge_relay_keys(RuntimeOrigin::signed(ALICE)));
+		assert!(!RelayKeys::<Test>::contains_key(ALICE));
+		assert!(!PoolMembers::<Test>::contains_key(ALICE));
+		assert_eq!(StratumSize::<Test>::get(StratumId::Perwerde), 0, "a seat was left behind");
+	});
+}
+
+// ===== EXPORT =====
+//
+// A committee is a list in storage until the chain that validates with it receives it. These
+// hold the delivery, because a pallet that draws a committee nobody gets is a mechanism that
+// was designed and never wired.
+
+/// Seating a committee hands it to the relay, with the era it belongs to.
+#[test]
+fn a_seated_committee_is_handed_to_the_relay() {
+	new_test_ext().execute_with(|| {
+		fill_every_stratum(60);
+		assert_ok!(Tnpos::force_new_era(RuntimeOrigin::root()));
+
+		let seated = CurrentCommittee::<Test>::get().to_vec();
+		assert!(!seated.is_empty(), "nothing was seated, so the test proves nothing");
+
+		let exported = EXPORTED.with(|e| e.borrow().clone());
+		assert_eq!(exported.len(), 1, "the committee was seated but never offered to the relay");
+		let (era, sent) = &exported[0];
+		assert_eq!(*era, CurrentEra::<Test>::get());
+		assert_eq!(sent, &seated, "the relay was sent a different set than the one seated");
+	});
+}
+
+/// A delivery that fails is reported, and the era still moves.
+///
+/// The alternative -- refusing to seat because the message could not go out -- would let an
+/// unreachable relay freeze this chain's era clock. What must not happen is silence: the
+/// difference between "the relay has an old committee because delivery failed" and "because
+/// nothing was drawn" has to be visible without reading the relay.
+#[test]
+fn a_committee_that_could_not_be_delivered_says_so() {
+	new_test_ext().execute_with(|| {
+		fill_every_stratum(60);
+		SEND_FAILS.with(|f| *f.borrow_mut() = true);
+
+		let era_before = CurrentEra::<Test>::get();
+		assert_ok!(Tnpos::force_new_era(RuntimeOrigin::root()));
+
+		assert!(CurrentEra::<Test>::get() > era_before, "a failed send froze the era clock");
+		assert!(
+			EXPORTED.with(|e| !e.borrow().is_empty()),
+			"the committee was never offered, which is a different fault"
+		);
+		assert!(
+			System::events().iter().any(|r| matches!(
+				r.event,
+				RuntimeEvent::Tnpos(Event::CommitteeCouldNotBeSent { .. })
+			)),
+			"a failed delivery must be visible on chain, not only in a log line"
+		);
+	});
+}
+
+/// Shrinking past the security floor is announced, not inferred.
+///
+/// Thirteen removals take a committee of 27 down to 14, one under `MIN_COMMITTEE`. The chain
+/// keeps going -- refusing the removals would leave equivocators signing, and a redraw is
+/// impossible mid-era because the seed is consumed at seating -- but the era it is running
+/// degraded has to be visible from a block explorer. Without this the only symptom is a
+/// validator set that quietly got shorter.
+#[test]
+fn falling_under_the_security_floor_is_announced() {
+	new_test_ext().execute_with(|| {
+		fill_every_stratum(60);
+		assert_ok!(Tnpos::force_new_era(RuntimeOrigin::root()));
+		assert_eq!(CurrentCommittee::<Test>::get().len(), 27);
+
+		let floor = pezkuwi_tnpos_primitives::invariant::MIN_COMMITTEE;
+		let mut announced_at = None;
+		for _ in 0..13 {
+			let victim = CurrentCommittee::<Test>::get()[0];
+			assert_ok!(Tnpos::report_offence(RuntimeOrigin::root(), victim, Offence::Equivocation));
+			let size = CurrentCommittee::<Test>::get().len() as u32;
+			let fired = System::events().iter().any(|r| {
+				matches!(r.event, RuntimeEvent::Tnpos(Event::CommitteeBelowSecurityFloor { .. }))
+			});
+			if fired && announced_at.is_none() {
+				announced_at = Some(size);
+			}
+			// The alarm must not fire while the committee is still at or above the floor;
+			// an alarm that cries early is one operators learn to ignore.
+			assert_eq!(fired, size < floor, "alarm disagreed with the floor at size {size}");
+		}
+
+		assert_eq!(announced_at, Some(floor - 1), "the alarm fired at the wrong size");
+		assert_eq!(CurrentCommittee::<Test>::get().len() as u32, 14);
+	});
+}
+
+fn bonded(v: &[AccountId]) -> pezframe_support::BoundedVec<AccountId, MaxBonded> {
+	pezframe_support::BoundedVec::try_from(v.to_vec()).unwrap()
+}
+
+#[test]
+fn only_the_asset_hub_may_report_who_is_bonded_and_not_backwards() {
+	new_test_ext().execute_with(|| {
+		assert_noop!(
+			Tnpos::note_bonded(RuntimeOrigin::signed(ALICE), 1, bonded(&[ALICE])),
+			pezsp_runtime::DispatchError::BadOrigin
+		);
+		assert_ok!(Tnpos::note_bonded(RuntimeOrigin::root(), 5, bonded(&[ALICE])));
+		assert_noop!(
+			Tnpos::note_bonded(RuntimeOrigin::root(), 4, bonded(&[BOB])),
+			Error::<Test>::StaleBondReport
+		);
+	});
+}
+
+/// Spec C4: a candidate stands only with a validator's bond on the Asset Hub. Before the first
+/// report the gate is open -- the era clock must not wait on a message -- and once a report
+/// has arrived an account it does not name cannot join.
+#[test]
+fn an_account_not_bonded_on_the_asset_hub_cannot_join() {
+	new_test_ext().execute_with(|| {
+		ensure_has_keys(ALICE);
+		set_perwerde(ALICE, 500);
+		assert_ok!(Tnpos::note_bonded(RuntimeOrigin::root(), 1, bonded(&[BOB])));
+		assert_noop!(
+			Tnpos::join(RuntimeOrigin::signed(ALICE), StratumId::Perwerde),
+			Error::<Test>::NotBondedOnAssetHub
+		);
+		assert_ok!(Tnpos::note_bonded(RuntimeOrigin::root(), 2, bonded(&[ALICE, BOB])));
+		assert_ok!(Tnpos::join(RuntimeOrigin::signed(ALICE), StratumId::Perwerde));
+	});
+}
+
+/// The bond is read again at every draw, not trusted from the day a member joined: one whose
+/// bond lapses is not drawn.
+#[test]
+fn a_member_whose_bond_lapses_is_not_drawn() {
+	new_test_ext().execute_with(|| {
+		fill_every_stratum(60);
+		let bench: Vec<AccountId> = PoolMembers::<Test>::iter()
+			.filter_map(|(w, s)| (s == StratumId::Divan).then_some(w))
+			.collect();
+		let (keep, lapsed) = bench.split_at(3);
+		let still: Vec<AccountId> = PoolMembers::<Test>::iter()
+			.map(|(w, _)| w)
+			.filter(|w| !lapsed.contains(w))
+			.collect();
+		assert_ok!(Tnpos::note_bonded(RuntimeOrigin::root(), 1, bonded(&still)));
+
+		assert_ok!(Tnpos::force_new_era(RuntimeOrigin::root()));
+		let committee = CurrentCommittee::<Test>::get();
+		for &who in keep {
+			assert!(committee.contains(&who), "a bonded judge must still be drawable");
+		}
+		for &who in lapsed {
+			assert!(!committee.contains(&who), "a lapsed bond must stop being drawn");
+		}
+	});
+}

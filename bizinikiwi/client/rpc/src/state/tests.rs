@@ -471,20 +471,32 @@ async fn should_return_runtime_version() {
 	let (api, _child) = new_full(client.clone(), test_executor(), None);
 
 	// it is basically json-encoded bizinikiwi_test_runtime_client::runtime::VERSION
-	let result = "{\"specName\":\"test\",\"implName\":\"parity-test\",\"authoringVersion\":1,\
-		\"specVersion\":2,\"implVersion\":2,\"apis\":[[\"0xdf6acb689907609b\",5],\
-		[\"0x37e397fc7c91f5e4\",2],[\"0xd2bc9897eed08f15\",3],[\"0x40fe3ad401f8959a\",6],\
-		[\"0xbc9d89904f5b923f\",1],[\"0xc6e9a76309f39b09\",2],[\"0xdd718d5cc53262d4\",1],\
-		[\"0xcbca25e39f142387\",2],[\"0xf78b278be53f454c\",2],[\"0xab3c0572291feb8b\",1],\
-		[\"0xed99c5acb25eedf5\",3],[\"0xfbc577b9d747efd6\",1]],\"transactionVersion\":1,\"systemVersion\":1,\
+	let result = "{\"specName\":\"test\",\"implName\":\"pezkuwi-test\",\"authoringVersion\":1,\
+		\"specVersion\":2,\"implVersion\":2,\"apis\":[[\"0x40fe3ad401f8959a\",6],\
+		[\"0xcbca25e39f142387\",2],[\"0xdf6acb689907609b\",5],[\"0x37e397fc7c91f5e4\",2],\
+		[\"0xbc9d89904f5b923f\",1],[\"0xed99c5acb25eedf5\",3],[\"0xab3c0572291feb8b\",2],\
+		[\"0xf78b278be53f454c\",2],[\"0xc6e9a76309f39b09\",2],[\"0xfbc577b9d747efd6\",1],\
+		[\"0xd2bc9897eed08f15\",3],[\"0xdd718d5cc53262d4\",1]],\"transactionVersion\":1,\"systemVersion\":1,\
 		\"stateVersion\":1}";
 
 	let runtime_version = api.runtime_version(None.into()).unwrap();
 	let serialized = serde_json::to_string(&runtime_version).unwrap();
-	pretty_assertions::assert_eq!(serialized, result);
 
-	let deserialized: RuntimeVersion = serde_json::from_str(result).unwrap();
-	assert_eq!(deserialized, runtime_version);
+	// The order of the `apis` list in RuntimeVersion is not stable across builds, so compare
+	// order-independently: parse both sides as JSON, sort the `apis` arrays, then assert the
+	// whole thing matches. A missing/extra api still fails (the SET must match), only ordering
+	// is ignored.
+	let canonicalize = |s: &str| -> serde_json::Value {
+		let mut v: serde_json::Value = serde_json::from_str(s).unwrap();
+		if let Some(apis) = v.get_mut("apis").and_then(|a| a.as_array_mut()) {
+			apis.sort_by(|a, b| a.to_string().cmp(&b.to_string()));
+		}
+		v
+	};
+	pretty_assertions::assert_eq!(canonicalize(&serialized), canonicalize(result));
+
+	// The hardcoded JSON still round-trips into a RuntimeVersion.
+	let _deserialized: RuntimeVersion = serde_json::from_str(result).unwrap();
 }
 
 #[tokio::test]

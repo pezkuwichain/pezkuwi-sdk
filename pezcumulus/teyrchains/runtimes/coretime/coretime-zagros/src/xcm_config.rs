@@ -32,14 +32,10 @@ use pezkuwi_runtime_common::xcm_sender::ExponentialPrice;
 use pezkuwi_teyrchain_primitives::primitives::Sibling;
 use pezpallet_collator_selection::StakingPotAccountId;
 use pezpallet_xcm::{AuthorizedAliasers, XcmPassthrough};
-use pezsp_runtime::traits::AccountIdConversion;
 use testnet_teyrchains_constants::zagros::locations::AssetHubLocation;
-use teyrchains_common::{
-	xcm_config::{
-		AliasAccountId32FromSiblingSystemChain, AllSiblingSystemTeyrchains,
-		ConcreteAssetFromSystem, ParentRelayOrSiblingTeyrchains, RelayOrOtherSystemTeyrchains,
-	},
-	TREASURY_PALLET_ID,
+use teyrchains_common::xcm_config::{
+	AliasAccountId32FromSiblingSystemChain, AllSiblingSystemTeyrchains, ConcreteAssetFromSystem,
+	ParentRelayOrSiblingTeyrchains, RelayOrOtherSystemTeyrchains,
 };
 use xcm::latest::{prelude::*, ZAGROS_GENESIS_HASH};
 use xcm_builder::{
@@ -55,7 +51,6 @@ use xcm_builder::{
 	WeightInfoBounds, WithComputedOrigin, WithUniqueTopic, XcmFeeManagerFromComponents,
 };
 use xcm_executor::XcmExecutor;
-use zagros_runtime_constants::system_teyrchain::COLLECTIVES_ID;
 
 // Re-export
 pub use testnet_teyrchains_constants::zagros::locations::GovernanceLocation;
@@ -71,7 +66,6 @@ parameter_types! {
 		PalletInstance(<Broker as PalletInfoAccess>::index() as u8).into();
 	pub const MaxInstructions: u32 = 100;
 	pub const MaxAssetsIntoHolding: u32 = 64;
-	pub FellowshipLocation: Location = Location::new(1, Teyrchain(COLLECTIVES_ID));
 }
 
 /// Type for specifying how a `Location` can be converted into an `AccountId`. This is used
@@ -153,16 +147,6 @@ impl Contains<Location> for ParentOrParentsPlurality {
 	}
 }
 
-pub struct FellowsPlurality;
-impl Contains<Location> for FellowsPlurality {
-	fn contains(location: &Location) -> bool {
-		matches!(
-			location.unpack(),
-			(1, [Teyrchain(COLLECTIVES_ID), Plurality { id: BodyId::Technical, .. }])
-		)
-	}
-}
-
 pub type Barrier = TrailingSetTopicAsId<
 	DenyThenTry<
 		DenyRecursively<DenyReserveTransferToRelayChain>,
@@ -176,11 +160,9 @@ pub type Barrier = TrailingSetTopicAsId<
 					// If the message is one that immediately attempts to pay for execution, then
 					// allow it.
 					AllowTopLevelPaidExecutionFrom<Everything>,
-					// Parent, its pluralities (i.e. governance bodies), and the Fellows plurality
-					// get free execution.
+					// Parent and its pluralities (i.e. governance bodies) get free execution.
 					AllowExplicitUnpaidExecutionFrom<(
 						ParentOrParentsPlurality,
-						FellowsPlurality,
 						Equals<GovernanceLocation>,
 					)>,
 					// Subscriptions for version tracking are OK.
@@ -196,8 +178,14 @@ pub type Barrier = TrailingSetTopicAsId<
 >;
 
 parameter_types! {
-	pub TreasuryAccount: AccountId = TREASURY_PALLET_ID.into_account_truncating();
-	pub RelayTreasuryLocation: Location = (Parent, PalletInstance(zagros_runtime_constants::TREASURY_PALLET_ID)).into();
+	/// Delivery fees for messages this chain forwards.
+	///
+	/// They used to go to an address derived from the treasury's pallet id, which is right on a
+	/// chain that has a treasury and meaningless on one that does not: the money arrived at an
+	/// address with no pallet behind it and stayed there. This chain has no treasury, so the
+	/// fee goes where its other operating income goes -- the collators who did the delivering.
+	pub StakingPot: AccountId =
+		<StakingPotAccountId<Runtime> as pezframe_support::traits::TypedGet>::get();
 }
 
 /// Locations that will not be charged fees in the executor, neither for execution nor delivery.
@@ -205,7 +193,11 @@ parameter_types! {
 pub type WaivedLocations = (
 	Equals<RootLocation>,
 	RelayOrOtherSystemTeyrchains<AllSiblingSystemTeyrchains, Runtime>,
-	Equals<RelayTreasuryLocation>,
+	// The relay's treasury used to be waived here because it paid over XCM. It is retired:
+	// the treasury is on the Asset Hub now and pays from its own account, so no treasury
+	// sends messages to this chain. Should that ever change back to `PayOverXcm`, the
+	// sending body has to be waived again or every payment is charged a fee it cannot pay
+	// and is dropped without an error.
 );
 
 /// Cases where a remote origin is accepted as trusted Teleporter for a given asset:
@@ -232,7 +224,7 @@ impl xcm_executor::Config for XcmConfig {
 	type XcmEventEmitter = PezkuwiXcm;
 	type AssetTransactor = AssetTransactors;
 	type OriginConverter = XcmOriginToTransactDispatchOrigin;
-	// Coretime chain does not recognize a reserve location for any asset. Users must teleport TYR
+	// Coretime chain does not recognize a reserve location for any asset. Users must teleport ZGR
 	// where allowed (e.g. with the Relay Chain).
 	type IsReserve = ();
 	type IsTeleporter = TrustedTeleporters;
@@ -252,7 +244,6 @@ impl xcm_executor::Config for XcmConfig {
 	>;
 	type ResponseHandler = PezkuwiXcm;
 	type AssetTrap = PezkuwiXcm;
-	type AssetClaims = PezkuwiXcm;
 	type SubscriptionService = PezkuwiXcm;
 	type PalletInstancesInfo = AllPalletsWithSystem;
 	type MaxAssetsIntoHolding = MaxAssetsIntoHolding;
@@ -260,7 +251,7 @@ impl xcm_executor::Config for XcmConfig {
 	type AssetExchanger = ();
 	type FeeManager = XcmFeeManagerFromComponents<
 		WaivedLocations,
-		SendXcmFeeToAccount<Self::AssetTransactor, TreasuryAccount>,
+		SendXcmFeeToAccount<Self::AssetTransactor, StakingPot>,
 	>;
 	type MessageExporter = ();
 	type UniversalAliases = Nothing;

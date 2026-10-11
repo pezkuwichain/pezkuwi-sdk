@@ -7,39 +7,122 @@ targets = [
 	{ triple = "x86_64-unknown-linux-gnu" },
 	{ triple = "x86_64-unknown-linux-musl" },
 ]
-# Exclude no_std test runtime crates that cause krates crate to panic
-# with "unable to locate std" when resolving the dependency graph.
-exclude = ["bizinikiwi-test-runtime-transaction-pool"]
+# all-features prevents krates 0.20+ from panicking with "unable to locate std"
+# on workspace crates that have a std feature but don't enable it by default.
+all-features = true
 
 # Advisory database - check for known vulnerabilities
 # In v2: all vulnerability/unsound/notice advisories automatically emit errors.
 # Use `ignore` to suppress specific advisories.
 [advisories]
 yanked = "warn"
-# All unmaintained crates are transitive upstream dependencies we cannot replace.
-# Track via quarterly review instead of blocking CI.
-unmaintained = "none"
+# Checked, not switched off. "none" suppressed the whole class, which meant it also covered
+# any unmaintained crate we might add ourselves, and the reason recorded for it -- that these
+# are transitive upstream dependencies we cannot replace -- was measurably wrong: every one
+# of the seven listed below is declared in our own workspace manifest. "workspace" keeps the
+# check on the surface we can actually act on. The transitive-only ones stay out of scope
+# because we cannot act on them, and a gate that reports what you cannot fix teaches you to
+# skim it. An eighth unmaintained crate now fails the run instead of arriving unannounced.
+unmaintained = "workspace"
 ignore = [
-	# wasmtime 37.0.3: fix requires 42.0.2 but cranelift-assembler-x64 0.129+ needs
-	# rustc 1.91.0 — our toolchain is pinned to 1.88.0. Unblock by upgrading toolchain.
-	# Note: we do NOT use Winch backend or Component Model, so sandbox-escape CVEs
-	# (Winch/aarch64) and string-transcoding CVEs (Component Model) do not apply.
-	# Remaining real risk: pooling allocator data leakage (RUSTSEC-2026-0006).
-	"RUSTSEC-2026-0006", # wasmtime segfault with f64.copysign on x86-64
-	"RUSTSEC-2026-0020", # wasmtime WASI guest-controlled resource exhaustion
-	"RUSTSEC-2026-0021", # wasmtime panic in wasi:http/types.fields
+	# ── wasmtime ──────────────────────────────────────────────────────────────
+	# Nothing is exempted here. The block that used to sit here listed fourteen wasmtime
+	# advisories and justified them with "wasmtime is pinned at 37.x"; the lock says 36.0.13
+	# and cargo-deny reported every one of them as "no crate matched advisory criteria",
+	# on our graph and on main's. Fifteen dead entries also meant fifteen warnings on every
+	# run, which is how a live one would have gone unread. Re-add an entry only with the
+	# advisory that actually fires and the reason it is tolerable.
 
-	# rsa 0.9.10: Marvin Attack timing sidechannel. Pulled transitively by
-	# sqlx-mysql (pezpallet-revive-eth-rpc). Not used for cryptographic signing.
-	"RUSTSEC-2023-0071", # rsa Marvin Attack
+	# ── unmaintained ──────────────────────────────────────────────────────────
+	# None of these is a known vulnerability. The advisory says only that no further
+	# patches will come, so each needs a reason it is tolerable to carry.
+	#
+	# Macro crates: they run at compile time and no part of them reaches a binary or a blob.
+	"RUSTSEC-2024-0436", # paste
+	"RUSTSEC-2026-0173", # proc-macro-error2
+	#
+	# Host and build-time tooling, never inside a runtime blob — the same class as git2 below.
+	"RUSTSEC-2022-0061", # parity-wasm: wasm-builder, sp-version embed, contracts fixtures
+	"RUSTSEC-2025-0012", # backoff
+	"RUSTSEC-2025-0052", # async-std
+	"RUSTSEC-2025-0141", # bincode
+	#
+	# libsecp256k1 — this line records the item, it does not settle it. The crate is the
+	# host-side body of the secp256k1 ECDSA recovery host function, so every node has to
+	# agree on what it returns: replacing it is a consensus change, not a version bump.
+	# Upstream carries the same crate, so follow upstream rather than diverging alone. If it
+	# is ever to be replaced, the genesis reset is the only window where that costs nothing;
+	# after genesis, changing signature recovery breaks consensus.
+	"RUSTSEC-2025-0161", # libsecp256k1
 
-	# tracing-subscriber 0.2.25: ANSI log injection. Pulled by ark-relations 0.5.1.
-	# Our 0.3.x is updated to 0.3.23 (fixed). 0.2.x used only by arkworks internals.
-	"RUSTSEC-2025-0055", # tracing-subscriber ANSI escape (0.2.x, arkworks transitive)
+	# ── memmap2 ───────────────────────────────────────────────────────────────
+	# Nothing exempted. The note here said "no fixed release for the pinned versions"; 0.9.11
+	# fixes 0186 and the workspace pins it now. It was tolerable while it stood -- memmap2 is
+	# host-side and there is no mmap in WASM -- but tolerable stops being a reason the day a
+	# patched release exists.
 
-	# yamux 0.12.1: libp2p-yamux 0.47.0 (vendor/pezkuwi-zombienet-sdk) pins to 0.12.x.
-	# Fix requires 0.13.10. Upgrade path: update libp2p in zombienet vendor.
-	"RUSTSEC-2024-0428", # yamux remote panic via malformed Data frame (< 0.13.10)
+	# ── webpki ────────────────────────────────────────────────────────────────
+	# All three land on `rustls-webpki` 0.101.7, and nothing a node ships reaches it. The one
+	# path is `kube-client` -> `kube` -> `pezkuwi-zombienet-provider`, the Kubernetes client the
+	# zombienet test harness uses to spawn networks; the versions our own TLS resolves are
+	# `rustls-webpki` 0.103.13, which is the patched release for all three.
+	#
+	# The reason recorded here before was "we do not use CRLs or rely on certificate name
+	# constraints", which was an assertion nobody had checked and is not what makes these safe.
+	# What makes them safe is reachability, and that is measurable:
+	#   cargo tree -i rustls-webpki@0.101.7
+	# This exemption is void the moment that command reports a path that is not test tooling.
+	"RUSTSEC-2026-0098", # webpki: URI name constraints incorrectly accepted
+	"RUSTSEC-2026-0099", # webpki: wildcard name constraints incorrectly accepted
+	"RUSTSEC-2026-0104", # webpki: reachable panic in CRL parsing (onlySomeReasons BIT STRING)
+
+	# ── git2 / libgit2 ────────────────────────────────────────────────────────
+	# Nothing exempted. The note said "track for upstream git2 bump" -- we are a fork and did
+	# not have to wait: 0183 and 0184 are fixed in 0.21.0, which the workspace pins. One crate
+	# uses it, `revive/rpc`'s build script, and only to read the branch and commit id.
+
+	# ── hickory DNS ───────────────────────────────────────────────────────────
+	# 0119 lands on `hickory-proto` 0.24.4, which arrives only through `libp2p-dns` ->
+	# `libp2p`. The node compiles both P2P stacks but runs one, and the default is litep2p,
+	# which resolves `hickory-proto` 0.26.1 -- the release that fixes this. So the whole of
+	# the exemption rests on that default, and on nothing else: a node started with
+	# `--network-backend libp2p` is running the affected code.
+	#
+	# That default is not left to be remembered. `pezsc_network::config::tests::
+	# the_default_network_backend_is_litep2p` fails if it ever flips, which is the case that
+	# would otherwise move every node onto the vulnerable stack while this file stayed green
+	# -- the gate reasons about the dependency graph, not about which half of it runs.
+	#
+	# Measure before trusting this entry:
+	#   cargo tree -i hickory-proto@0.24.4     # must show only the libp2p path
+	# 0118 was here too and never matched our graph; cargo-deny reported it as
+	# `advisory-not-detected` on every run, so it is gone. A dead entry is a warning that
+	# teaches you to skim the live ones.
+	"RUSTSEC-2026-0119", # hickory: O(n^2) name-compression CPU exhaustion
+
+	# ── when these two entries close ──────────────────────────────────────────
+	# Measured 2026-09-09, and written here because an exemption without an end is the worst
+	# kind: upstream `stable2606`, the release this fork syncs to, pins `libp2p = "0.54.1"` --
+	# the same version we carry. So upgrading libp2p would not be following upstream, it would
+	# be leaving it, alone, in the crate that carries the node's networking, to repair a stack
+	# the nodes do not run. Deleting it instead means deleting the crate's original
+	# implementation (litep2p lives in its own subtree; libp2p is the body of the crate) and
+	# re-resolving that deletion on every framework sync, forever.
+	#
+	# So neither was done, and the trigger is upstream's: **when polkadot-sdk moves libp2p, we
+	# take it with the sync**, not as a separate job. Until then the tolerance rests on the
+	# default backend, and the default is held by a test.
+	#
+	# What did change: a node started with `--network-backend libp2p` now says so at `error!`
+	# level from `NetworkWorker::new`, the one constructor every path to that backend passes
+	# through. The residual risk was never the advisory -- it was a misconfiguration nobody
+	# could see.
+	#
+	# OSV holds another on the same path, outside RustSec and so recorded only in
+	# `.github/scripts/osv-baseline.json`: GHSA-5j98-2g5x-46v6 on `hickory-resolver` 0.24.4
+	# (lookups hide whether DNSSEC validated; fixed only in 0.26.2). It rests on the same
+	# default and closes with the same libp2p move. litep2p's resolver was bumped past it
+	# (0.26.3) on 2026-10-07, the day the advisory reached the gate.
 ]
 
 # License compliance
@@ -92,4 +175,7 @@ skip-tree = []
 unknown-registry = "warn"
 unknown-git = "warn"
 allow-registry = ["https://github.com/rust-lang/crates.io-index"]
-allow-git = []
+allow-git = [
+	# Our serde fork with wasm32v1-none target fix (pending upstream merge)
+	"https://github.com/pezkuwichain/serde.git",
+]

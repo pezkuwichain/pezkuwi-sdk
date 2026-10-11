@@ -28,7 +28,7 @@ use pezbp_runtime::{
 pub use pezbp_xcm_bridge_hub_router::XcmBridgeHubRouterCall;
 use pezframe_support::{
 	dispatch::DispatchClass,
-	pezsp_runtime::{MultiAddress, MultiSigner, RuntimeDebug, StateVersion},
+	pezsp_runtime::{MultiAddress, MultiSigner, StateVersion},
 };
 use scale_info::TypeInfo;
 use testnet_teyrchains_constants::zagros::currency::UNITS;
@@ -46,7 +46,11 @@ use xcm::latest::prelude::*;
 #[derive(Encode, Decode, Debug, PartialEq, Eq, Clone, TypeInfo)]
 pub enum Call {
 	/// `ToPezkuwichainXcmRouter` bridge pezpallet.
-	#[codec(index = 34)]
+	///
+	/// Must match the router's index in the Asset Hub Zagros runtime. It moved to 45 when
+	/// the runtime was aligned with the mainnet Asset Hub's pallet layout; 34 is now
+	/// `MessageQueue`, so the old value silently addressed the wrong pallet on-chain.
+	#[codec(index = 45)]
 	ToPezkuwichainXcmRouter(XcmBridgeHubRouterCall),
 }
 
@@ -84,7 +88,7 @@ pub fn build_congestion_message<RuntimeCall>(
 pub const ASSET_HUB_ZAGROS_TEYRCHAIN_ID: u32 = 1000;
 
 /// AssetHubZagros teyrchain.
-#[derive(RuntimeDebug)]
+#[derive(Debug)]
 pub struct AssetHubZagros;
 
 impl Chain for AssetHubZagros {

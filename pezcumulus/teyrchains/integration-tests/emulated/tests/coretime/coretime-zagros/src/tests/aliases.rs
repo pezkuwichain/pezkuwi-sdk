@@ -27,12 +27,30 @@ const DENIED: bool = false;
 const TELEPORT_FEES: bool = true;
 const RESERVE_TRANSFER_FEES: bool = false;
 
+/// Fee budget for one cross-chain alias attempt. The macro splits it in half: one half pays for
+/// local execution and delivery on the sending chain, the other is carried to the remote leg.
+///
+/// Sized for the most expensive sender in the lists below, Penpal, which weighs messages with
+/// `FixedWeightBounds` instead of benchmarked weights and so bills a five-instruction message
+/// for 320kb of proof size — nineteen times what a system teyrchain measures for the same
+/// message. Under-fund it and the transfer fails with `NotHoldingFees` before the alias these
+/// tests exist to check is ever attempted, so the tests go red for a reason that is not aliasing.
+///
+/// Measured on this tree, not carried over: the suite fails at `ZAGROS_ED * 27` and passes at
+/// `* 28`. It is set well above that floor because the floor moves with any weight change, and a
+/// budget sitting one ED above it turns every such change into an unrelated red test.
+///
+/// The multiplier is large because `ZAGROS_ED` is one cent and our cent is `UNITS / 30_000`,
+/// three hundred times smaller than the scale upstream's `ED * N` fee sizings were tuned at.
+/// The absolute budget here is ordinary; only the number of EDs it takes to say it is unusual.
+const ALIAS_FEES: u128 = ZAGROS_ED * 40;
+
 #[test]
 fn account_on_sibling_syschain_aliases_into_same_local_account() {
 	// origin and target are the same account on different chains
 	let origin: AccountId = [1; 32].into();
 	let target = origin.clone();
-	let fees = ZAGROS_ED * 10;
+	let fees = ALIAS_FEES;
 
 	PenpalB::mint_foreign_asset(
 		<PenpalB as Chain>::RuntimeOrigin::signed(PenpalAssetOwner::get()),
@@ -66,7 +84,7 @@ fn account_on_sibling_syschain_cannot_alias_into_different_local_account() {
 	// origin and target are different accounts on different chains
 	let origin: AccountId = [1; 32].into();
 	let target: AccountId = [2; 32].into();
-	let fees = ZAGROS_ED * 10;
+	let fees = ALIAS_FEES;
 
 	PenpalB::mint_foreign_asset(
 		<PenpalB as Chain>::RuntimeOrigin::signed(PenpalAssetOwner::get()),
@@ -193,7 +211,7 @@ fn authorized_cross_chain_aliases() {
 	let origin: AccountId = [100; 32].into();
 	let bad_origin: AccountId = [150; 32].into();
 	let target: AccountId = [200; 32].into();
-	let fees = ZAGROS_ED * 10;
+	let fees = ALIAS_FEES;
 
 	let pal_admin = <PenpalB as Chain>::RuntimeOrigin::signed(PenpalAssetOwner::get());
 	PenpalB::mint_foreign_asset(pal_admin.clone(), Location::parent(), origin.clone(), fees * 10);

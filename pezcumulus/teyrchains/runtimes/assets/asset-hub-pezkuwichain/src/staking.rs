@@ -28,8 +28,15 @@ use pezsp_runtime::{
 use xcm::latest::prelude::*;
 
 parameter_types! {
-	/// Number of election pages that we operate upon. 32 * 6s block = 192s = 3.2min snapshots
-	pub Pages: u32 = 32;
+	/// Number of election pages that we operate upon. 32 * 6s block = 192s = 3.2min snapshots.
+	///
+	/// A fast runtime's session is 20 blocks and its era two of them, and the whole election --
+	/// snapshot, signed and unsigned phases, export -- has to fit in that for an era to start
+	/// with exposures; at 32 pages it took about 150 blocks, so on every rehearsal network each
+	/// era started on the payout cap without one and nobody could be paid (measured on run
+	/// 37798342519: era 3 reached, no validator set ever exported). Four pages and short phases
+	/// bring it to about 22 blocks. Production is unchanged.
+	pub Pages: u32 = prod_or_fast!(32, 4);
 
 	/// Compatible with Pezkuwi, we allow up to 22_500 nominators to be considered for election
 	pub MaxElectingVoters: u32 = 22_500;
@@ -46,15 +53,25 @@ parameter_types! {
 	// 10 mins for each pages
 	pub storage SignedPhase: u32 = prod_or_fast!(
 		10 * MINUTES,
-		4 * MINUTES
+		4
 	);
 	pub storage UnsignedPhase: u32 = prod_or_fast!(
 		10 * MINUTES,
-		(1 * MINUTES)
+		5
 	);
 
 	/// validate up to 4 signed solution. Each solution.
 	pub storage SignedValidationPhase: u32 = prod_or_fast!(Pages::get() * 4, Pages::get());
+
+	/// Abandon an election that has produced nothing usable for this long, and start over.
+	///
+	/// A full election takes snapshot (`Pages` + 1) + signed + signed-validation + unsigned +
+	/// export, roughly 400 blocks here. With `AreWeDone = RevertToSignedIfNotQueuedOf` a failing
+	/// election loops back to the signed phase instead of ever returning to `Phase::Off`, which is
+	/// what let round 673 stay frozen for four days in July 2026 — staking's own stall detection
+	/// waits for an *idle* election, so it could never count. Two hours leaves room for about three
+	/// honest attempts before the round is given up on.
+	pub storage StalledRoundTimeout: BlockNumber = prod_or_fast!(2 * HOURS, 10 * MINUTES);
 
 	/// In each page, we may observe up to all of the validators.
 	pub MaxWinnersPerPage: u32 = MaxValidatorSet::get();
@@ -82,7 +99,7 @@ pezframe_election_provider_support::generate_solution_type!(
 );
 
 ord_parameter_types! {
-	// https://westend.subscan.io/account/5GBoBNFP9TA7nAk82i6SUZJimerbdhxaRgyC2PVcdYQMdb8e
+	// Reference account, carried over with the upstream constant: 5GBoBNFP9TA7nAk82i6SUZJimerbdhxaRgyC2PVcdYQMdb8e
 	pub const ZagrosStakingMiner: AccountId = AccountId::from(hex_literal::hex!("b65991822483a6c3bd24b1dcf6afd3e270525da1f9c8c22a4373d1e1079e236a"));
 }
 
@@ -111,6 +128,8 @@ impl pezframe_election_provider_support::onchain::Config for OnChainConfig {
 }
 
 impl multi_block::Config for Runtime {
+	type StalledRoundTimeout = StalledRoundTimeout;
+	type Signed = MultiBlockElectionSigned;
 	type Pages = Pages;
 	type UnsignedPhase = UnsignedPhase;
 	type SignedPhase = SignedPhase;
@@ -171,7 +190,12 @@ parameter_types! {
 	pub MinerTxPriority: TransactionPriority = TransactionPriority::max_value() / 2;
 	/// Try and run the OCW miner 4 times during the unsigned phase.
 	pub OffchainRepeat: BlockNumber = UnsignedPhase::get() / 4;
-	pub storage MinerPages: u32 = 32;
+	/// Pages the offchain miner puts in its one unsigned transaction. The `submit_unsigned`
+	/// benchmark mines exactly this many pages. At 32 it measured 12 MB of proof against the
+	/// 10 MiB `MAX_POV_SIZE` -- the unsigned phase could never land a solution; at 2 it is
+	/// 417 KB.
+	/// Upstream's Asset Hub uses 2; the signed phase covers the pages the miner leaves out.
+	pub storage MinerPages: u32 = 2;
 }
 
 impl multi_block::unsigned::Config for Runtime {
@@ -229,8 +253,201 @@ impl pezpallet_bags_list::Config<VoterBagsListInstance> for Runtime {
 	type WeightInfo = weights::pezpallet_bags_list::WeightInfo<Runtime>;
 }
 
+/// The most this chain will emit in a year, whatever the parameter says.
+///
+/// The rate is policy and lives in storage; this is not. A ceiling the same body could raise
+/// is not a ceiling, so it is compiled in and only a runtime upgrade moves it -- which is the
+/// distinction the whole arrangement rests on: the constitution is code, policy is storage.
+pub const MAX_INFLATION_RATE: Perbill = Perbill::from_percent(10);
+
+/// The base the emission is measured against: 200M HEZ at twelve decimals.
+///
+/// Not a parameter. How much HEZ there is meant to be is the token's identity rather than a
+/// policy about it, and measuring emission against a movable base would make the rate mean
+/// nothing.
+pub const HEZ_ISSUANCE_BASE: u128 = 200_000_000_000_000_000_000;
+
+/// The election's targets: the committee People seated, among those who validate here.
+///
+/// The Asset Hub runs its own election only to build the exposures -- who backs whom, and with
+/// how much -- that payout and slashing read. Who sits is People's to decide, so the targets are
+/// the validators in People's latest snapshot. The filter steps aside when there is nothing to
+/// filter by -- no snapshot yet (genesis, or People silent since launch), or a snapshot none of
+/// whose members validates here -- because an election with no target stops the era clock, and
+/// work by anyone outside the committee is paid to the treasury, not to them.
+///
+/// `count` is the whole validator set: staking reads it as an upper bound when it sizes the
+/// target snapshot, and `try_state` holds it equal to `Validators`' count.
+pub struct CommitteeTargets;
+type AllValidators = UseValidatorsMap<Runtime>;
+
+impl CommitteeTargets {
+	/// The members to filter by, read once: `None` when there is nothing to filter by -- no
+	/// snapshot, or one naming no validator here.
+	fn seated() -> Option<alloc::collections::BTreeSet<AccountId>> {
+		let snapshot = pezpallet_komite::Committee::<Runtime>::get()?;
+		let seated: alloc::collections::BTreeSet<AccountId> =
+			snapshot.members.into_iter().map(|(m, _)| m).collect();
+		seated
+			.iter()
+			.any(|m| pezpallet_staking_async::Validators::<Runtime>::contains_key(m))
+			.then_some(seated)
+	}
+}
+
+impl pezframe_election_provider_support::SortedListProvider<AccountId> for CommitteeTargets {
+	type Error =
+		<AllValidators as pezframe_election_provider_support::SortedListProvider<AccountId>>::Error;
+	type Score =
+		<AllValidators as pezframe_election_provider_support::SortedListProvider<AccountId>>::Score;
+
+	fn iter() -> alloc::boxed::Box<dyn Iterator<Item = AccountId>> {
+		match Self::seated() {
+			None => AllValidators::iter(),
+			Some(seated) => {
+				alloc::boxed::Box::new(AllValidators::iter().filter(move |v| seated.contains(v)))
+			},
+		}
+	}
+	fn iter_from(
+		start: &AccountId,
+	) -> Result<alloc::boxed::Box<dyn Iterator<Item = AccountId>>, Self::Error> {
+		let all = AllValidators::iter_from(start)?;
+		Ok(match Self::seated() {
+			None => all,
+			Some(seated) => alloc::boxed::Box::new(all.filter(move |v| seated.contains(v))),
+		})
+	}
+	fn lock() {
+		AllValidators::lock()
+	}
+	fn unlock() {
+		AllValidators::unlock()
+	}
+	fn count() -> u32 {
+		AllValidators::count()
+	}
+	fn contains(id: &AccountId) -> bool {
+		AllValidators::contains(id) && Self::seated().map_or(true, |seated| seated.contains(id))
+	}
+	fn on_insert(id: AccountId, score: Self::Score) -> Result<(), Self::Error> {
+		AllValidators::on_insert(id, score)
+	}
+	fn on_update(id: &AccountId, score: Self::Score) -> Result<(), Self::Error> {
+		AllValidators::on_update(id, score)
+	}
+	fn get_score(id: &AccountId) -> Result<Self::Score, Self::Error> {
+		AllValidators::get_score(id)
+	}
+	fn on_remove(id: &AccountId) -> Result<(), Self::Error> {
+		AllValidators::on_remove(id)
+	}
+	fn unsafe_regenerate(
+		all: impl IntoIterator<Item = AccountId>,
+		score_of: alloc::boxed::Box<dyn Fn(&AccountId) -> Option<Self::Score>>,
+	) -> u32 {
+		AllValidators::unsafe_regenerate(all, score_of)
+	}
+	fn unsafe_clear() {
+		AllValidators::unsafe_clear()
+	}
+	#[cfg(feature = "try-runtime")]
+	fn try_state() -> Result<(), pezsp_runtime::TryRuntimeError> {
+		AllValidators::try_state()
+	}
+	#[cfg(feature = "runtime-benchmarks")]
+	fn score_update_worst_case(who: &AccountId, is_increase: bool) -> Self::Score {
+		AllValidators::score_update_worst_case(who, is_increase)
+	}
+}
+
+/// Ask the election for every seat the committee has. How many it can actually elect -- the
+/// seated members validating here when the snapshot is taken -- is staking's `desired_targets`
+/// to say, so a member who stops validating cannot make the election fail and one who starts
+/// late can still be elected. A committee none of whom validates here leaves the count as it
+/// was, as `CommitteeTargets` leaves the targets.
+pub struct SetValidatorCountToSeatedValidators;
+impl pezpallet_komite::OnCommittee<AccountId> for SetValidatorCountToSeatedValidators {
+	fn on_committee(members: &[(AccountId, u128)]) {
+		let any_here = members
+			.iter()
+			.any(|(m, _)| pezpallet_staking_async::Validators::<Runtime>::contains_key(m));
+		if any_here {
+			pezpallet_staking_async::ValidatorCount::<Runtime>::put(members.len() as u32);
+		}
+	}
+}
+
+/// Each validator's share, split by the protocol: half to the validator, half to the nominators
+/// backing it, by bond. Commission is not consulted: with pay set by trust x work, a validator
+/// gains nothing by turning nominators away, and nominators choose by quality (Serok,
+/// 2026-10-04). The odd planck goes to the nominators' half, and whatever of that half is not
+/// paid -- a validator with no nominators -- is minted to the treasury.
+pub struct FixedHalfSplit;
+impl pezsp_staking::StakerRewardCalculator<Balance> for FixedHalfSplit {
+	fn calculate_validator_incentive_weight(self_stake: Balance) -> Balance {
+		<pezpallet_staking_async::reward::DefaultStakerRewardCalculator<Runtime> as
+			pezsp_staking::StakerRewardCalculator<Balance>>::calculate_validator_incentive_weight(
+			self_stake,
+		)
+	}
+	fn calculate_staker_reward(
+		total: Balance,
+		_commission: Perbill,
+		_own: Balance,
+		_exposure: Balance,
+	) -> pezsp_staking::StakerRewardResult<Balance> {
+		let validator_payout = total / 2;
+		pezsp_staking::StakerRewardResult {
+			validator_payout,
+			nominator_payout: total - validator_payout,
+		}
+	}
+}
+
+/// `Tnpos`'s index in the People runtime and `note_bonded`'s call index in it, held at the other
+/// end by `the_bond_report_decodes_the_way_the_asset_hub_builds_it` in People's tests.
+const TNPOS_PALLET_INDEX: u8 = 83;
+const TNPOS_NOTE_BONDED: u8 = 11;
+
+/// Every validator here, sorted, as `Tnpos::note_bonded` on People.
+///
+/// `validate` needs `MinValidatorBond` bonded and a validator cannot unbond below it, so these
+/// are the accounts holding a validator's bond. Bounded at `MAX_BONDED_REPORT`, above People's
+/// pool bound, so every account the pool can hold can be named.
+pub fn bond_report_for_people(era: u32) -> Vec<u8> {
+	use codec::Encode;
+	let mut bonded: Vec<AccountId> = pezpallet_staking_async::Validators::<Runtime>::iter_keys()
+		.take(pezkuwi_tnpos_primitives::invariant::MAX_BONDED_REPORT as usize)
+		.collect();
+	bonded.sort();
+	(TNPOS_PALLET_INDEX, TNPOS_NOTE_BONDED, era, bonded).encode()
+}
+
+/// An unpaid `Transact` at People, spoken as this chain itself.
+fn send_to_people(call: Vec<u8>) -> Result<(), ()> {
+	let message = Xcm(alloc::vec![
+		UnpaidExecution { weight_limit: Unlimited, check_origin: None },
+		// `Xcm`, so People sees this chain's location and `EnsureXcm<Equals<AssetHubLocation>>`
+		// lets it through.
+		Transact { origin_kind: OriginKind::Xcm, fallback_max_weight: None, call: call.into() },
+	]);
+	let (ticket, _) = <xcm_config::XcmRouter as SendXcm>::validate(
+		&mut Some(PeopleLocation::get()),
+		&mut Some(message),
+	)
+	.map_err(|_| ())?;
+	<xcm_config::XcmRouter as SendXcm>::deliver(ticket).map(|_| ()).map_err(|_| ())
+}
+
 pub struct EraPayout;
 impl pezpallet_staking_async::EraPayout<Balance> for EraPayout {
+	/// Neither argument is read, and the names say so.
+	///
+	/// Upstream's payout is a function of the staking ratio: emit more when little is staked,
+	/// less when much is. This one is a flat share of a fixed base, so how much is staked and
+	/// how much exists change nothing. The comment on `pezpallet_staking_async::Config` below
+	/// used to describe the upstream behaviour as if it were this one.
 	fn era_payout(
 		_total_staked: Balance,
 		_total_issuance: Balance,
@@ -241,15 +458,12 @@ impl pezpallet_staking_async::EraPayout<Balance> for EraPayout {
 		let relative_era_len =
 			FixedU128::from_rational(era_duration_millis.into(), MILLISECONDS_PER_YEAR.into());
 
-		// Fixed total TI that we use as baseline for the issuance.
-		// 200M HEZ (12 decimals) = 200_000_000 * 10^12
-		let fixed_total_issuance: i128 = 200_000_000_000_000_000_000;
-		let fixed_inflation_rate = FixedU128::from_rational(8, 100);
-		let yearly_emission = fixed_inflation_rate.saturating_mul_int(fixed_total_issuance);
+		use pezframe_support::traits::Get;
+		let rate = crate::dynamic_params::hez::InflationRate::get().min(MAX_INFLATION_RATE);
+		let yearly_emission = rate.mul_floor(HEZ_ISSUANCE_BASE);
 
 		let era_emission = relative_era_len.saturating_mul_int(yearly_emission);
-		// 15% to treasury, as per Pezkuwi ref 1139.
-		let to_treasury = FixedU128::from_rational(15, 100).saturating_mul_int(era_emission);
+		let to_treasury = crate::dynamic_params::hez::TreasuryShare::get().mul_floor(era_emission);
 		let to_stakers = era_emission.saturating_sub(to_treasury);
 
 		(to_stakers.saturated_into(), to_treasury.saturated_into())
@@ -257,14 +471,20 @@ impl pezpallet_staking_async::EraPayout<Balance> for EraPayout {
 }
 
 parameter_types! {
-	// Six sessions in an era (6 hours).
+	// Six sessions per era; the era itself lasts five hours (see `era_length`).
 	pub const SessionsPerEra: SessionIndex = prod_or_fast!(6, 2);
 	/// Duration of a relay session in our blocks. Needs to be hardcoded per-runtime.
 	pub const RelaySessionDuration: BlockNumber = 1 * HOURS;
-	// 2 eras for unbonding (12 hours).
-	pub const BondingDuration: pezsp_staking::EraIndex = 2;
-	// 1 era in which slashes can be cancelled (6 hours).
-	pub const SlashDeferDuration: pezsp_staking::EraIndex = 1;
+	// 4 eras for unbonding (20 hours): long enough that an offence can reach this chain and be
+	// slashed before the stake it is charged to has left.
+	pub const BondingDuration: pezsp_staking::EraIndex = 4;
+	// Slashes wait 2 eras (10 hours), and staking accepts offences from as far back as this
+	// leaves room for -- the active era and the one before. A relay offence can reach this chain
+	// a session or two after it happened, so with 1 every offence in an era's last sessions
+	// arrived "too old" and was never slashed: a validator could time misbehaviour to the end of
+	// an era and keep its stake (Serok, 2026-10-08). The wait is also the window in which a
+	// mistaken slash can be cancelled.
+	pub const SlashDeferDuration: pezsp_staking::EraIndex = 2;
 	pub const MaxControllersInDeprecationBatch: u32 = 751;
 	// alias for 16, which is the max nominations per nominator in the runtime.
 	pub const MaxNominations: u32 = <NposCompactSolution16 as pezframe_election_provider_support::NposSolution>::LIMIT as u32;
@@ -272,13 +492,44 @@ parameter_types! {
 	pub MaxPruningItems: u32 = 100;
 }
 
+parameter_types! {
+	/// Era reward pots, used only when minting is disabled. Kept distinct from `PotId`.
+	pub const StakingPotsPalletId: PalletId = PalletId(*b"py/stkpt");
+	/// Eras a nominator must wait to fast-unbond. Matches upstream.
+	pub const NominatorFastUnbondDuration: pezsp_staking::EraIndex = 2;
+}
+
 impl pezpallet_staking_async::Config for Runtime {
+	// Upstream added a non-minting reward mode where staking pays out of a pre-funded pot
+	// instead of creating tokens. This runtime keeps the legacy minting mode: inflation here
+	// is a flat share of a fixed 200M base (see EraPayout above), not a function of the
+	// staking ratio -- the sentence that used to stand here described upstream, not this,
+	// which is exactly the case the pallet documents legacy mode as being kept for. The switch
+	// to non-minting is one-way - once eras carry funded pots, going back would orphan them and
+	// double-mint - so it is not a default to drift into. Revisit with the genesis spec.
+	type DisableMinting = ConstBool<false>;
+	// Only read in non-minting mode, but the pot addresses must still be well-defined and
+	// distinct from the existing PotStake account, so they get their own id rather than
+	// borrowing one.
+	type RewardPots = pezpallet_staking_async::Seed<StakingPotsPalletId>;
+	// Non-minting mode hands expired unclaimed rewards here; in minting mode they are never
+	// created, so there is nothing to route.
+	type UnclaimedRewardHandler = ();
+	type StakerRewardCalculator = FixedHalfSplit;
+	type NominatorFastUnbondDuration = NominatorFastUnbondDuration;
 	type Filter = ();
 	type OldCurrency = Balances;
 	type Currency = Balances;
 	type CurrencyBalance = Balance;
 	type RuntimeHoldReason = RuntimeHoldReason;
-	type CurrencyToVote = pezsp_staking::currency_to_vote::SaturatingCurrencyToVote;
+	// U128, not Saturating: HEZ has 12 decimals and total issuance (~204M HEZ = ~2.04e20 planck)
+	// far exceeds u64::MAX (~1.8446e19). SaturatingCurrencyToVote casts balance->u64 saturating, so
+	// any stash bonding more than ~18.45M HEZ collapses to u64::MAX. Two large nominators (~41M and
+	// ~40M HEZ) both saturated to u64::MAX, becoming tied voters; the resulting tied edge weights hit
+	// the `reduce_4` "duplicate/corrupt input" panic in the offchain election miner, so no solution
+	// was ever produced and no era exposures were written. U128CurrencyToVote scales by
+	// (total_issuance / u64::MAX) instead, keeping every stake distinct and inside u64 range.
+	type CurrencyToVote = pezsp_staking::currency_to_vote::U128CurrencyToVote;
 	type RewardRemainder = ResolveTo<xcm_config::TreasuryAccount, Balances>;
 	type Slash = ResolveTo<xcm_config::TreasuryAccount, Balances>;
 	type Reward = ();
@@ -290,7 +541,7 @@ impl pezpallet_staking_async::Config for Runtime {
 	type MaxExposurePageSize = MaxExposurePageSize;
 	type ElectionProvider = MultiBlockElection;
 	type VoterList = VoterList;
-	type TargetList = UseValidatorsMap<Self>;
+	type TargetList = CommitteeTargets;
 	type MaxValidatorSet = MaxValidatorSet;
 	type NominationsQuota =
 		pezpallet_staking_async::FixedNominationsQuota<{ MaxNominations::get() }>;
@@ -298,28 +549,178 @@ impl pezpallet_staking_async::Config for Runtime {
 	type HistoryDepth = pezframe_support::traits::ConstU32<84>;
 	type MaxControllersInDeprecationBatch = MaxControllersInDeprecationBatch;
 	type EventListeners = (NominationPools, DelegatedStaking);
-	type MaxInvulnerables = pezframe_support::traits::ConstU32<20>;
 	type PlanningEraOffset =
 		pezpallet_staking_async::PlanningEraOffsetOf<Runtime, RelaySessionDuration, ConstU32<5>>;
-	type RcClientInterface = StakingRcClient;
+	type RcClientInterface = ElectionStaysHome;
 	type MaxEraDuration = MaxEraDuration;
 	type MaxPruningItems = MaxPruningItems;
 	type WeightInfo = weights::pezpallet_staking_async::WeightInfo<Runtime>;
 }
 
+// Must mirror the relay chain's `SessionKeys` exactly - same fields, same order - because the
+// validator set is decoded on this side using this definition. Verified against
+// pezkuwi/runtime/{zagros,pezkuwichain}/src/lib.rs, which declare these six in this order.
+pezsp_runtime::impl_opaque_keys! {
+	pub struct RelayChainSessionKeys {
+		pub grandpa: pezsp_consensus_grandpa::AuthorityId,
+		pub babe: pezsp_consensus_babe::AuthorityId,
+		pub para_validator: pezkuwi_primitives::ValidatorId,
+		pub para_assignment: pezkuwi_primitives::AssignmentId,
+		pub authority_discovery: pezsp_authority_discovery::AuthorityId,
+		pub beefy: pezsp_consensus_beefy::ecdsa_crypto::AuthorityId,
+	}
+}
+
 impl pezpallet_staking_async_rc_client::Config for Runtime {
+	// Export the validator set at the end of session 4 within an era, as upstream does.
+	type ValidatorSetExportSession = ConstU32<4>;
+	type RelayChainSessionKeys = RelayChainSessionKeys;
+	type Currency = Balances;
+	// Held while a validator's session keys are registered here. Six keys plus SCALE overhead;
+	// upstream charges 10 UNITS for the same payload and this chain's UNITS is the same size.
+	type KeyDeposit = ConstU128<{ 10 * UNITS }>;
+	type WeightInfo = ();
 	type RelayChainOrigin = EnsureRoot<AccountId>;
-	type AHStakingInterface = Staking;
+	type AHStakingInterface = RelayReportsAreWork;
 	type SendToRelayChain = StakingXcmToRelayChain;
 	type MaxValidatorSetRetries = ConstU32<64>;
 }
 
-/// Forwards session events to both CollatorSelection (collator management) and
-/// Staking pallet (era management) via local SessionReport generation.
+/// What a relay session report is to this chain: a record of the work its validators did.
 ///
-/// This is needed because `pallet_staking_async` expects `SessionReport` messages from
-/// the relay chain's `ah_client` pallet, which is not yet active. This wrapper generates
-/// local session reports from AH's own session rotation events.
+/// The relay sends a report every session, with the era points of the validators that
+/// validated. `staking-async` would also end a session with it and, with an activation
+/// timestamp, start an era. This chain's era clock is its own (`StakingSessionManager`): the
+/// validator set comes from People, so the relay's activation never names an era of ours, and
+/// the relay's session numbers are not ours. Two writers to one clock is how an era is skipped
+/// or never starts. So the report is taken for its points and nothing else.
+pub struct RelayReportsAreWork;
+/// How many relay sessions `RelaySessionEras` remembers: more than `BondingDuration` eras of
+/// `SessionsPerEra` sessions, the oldest offence staking would still act on.
+pub const RELAY_SESSION_HISTORY: u32 = 32;
+type RelaySessionBook =
+	BoundedVec<(SessionIndex, pezsp_staking::EraIndex), ConstU32<RELAY_SESSION_HISTORY>>;
+
+/// Each relay session the relay has reported, with the era of this chain it ended in.
+///
+/// The relay names an offence by its own session index, and staking finds an offence's era by
+/// comparing that index with the sessions its eras started at -- this chain's sessions, which
+/// the relay's do not count (relay 200 against 13 here, measured 2026-10-04). Every relay index
+/// is larger, so every offence landed in the active era and was charged against exposures that
+/// were not the offender's at the time. This book is what translates one into the other.
+#[pezframe_support::storage_alias]
+pub type RelaySessionEras = StorageValue<
+	RelayReportsAreWork,
+	RelaySessionBook,
+	pezframe_support::storage::types::ValueQuery,
+>;
+
+impl RelayReportsAreWork {
+	/// The session of this chain at which the era `relay_session` ended in started, which is
+	/// what staking maps back to that era. `None` if that is older than the book or than the
+	/// eras staking keeps: the offence can no longer be placed, and placing it in the wrong era
+	/// is worse than not at all.
+	///
+	/// A relay session not yet in the book is still running, so it is in the active era. (So
+	/// is every session while the book is empty, the hours right after it was introduced.)
+	fn session_here_of_relay_session(relay_session: SessionIndex) -> Option<SessionIndex> {
+		let book = RelaySessionEras::get();
+		// A session before the first one recorded ended in an era the book cannot name.
+		if book.first().is_some_and(|(first, _)| relay_session < *first) {
+			return None;
+		}
+		let era = match book.iter().find(|(ended, _)| *ended >= relay_session) {
+			Some((_, era)) => *era,
+			None => {
+				return Some(
+					<Staking as rc_client::AHStakingInterface>::active_era_start_session_index(),
+				)
+			},
+		};
+		pezpallet_staking_async::BondedEras::<Runtime>::get()
+			.iter()
+			.find(|(e, _)| *e == era)
+			.map(|(_, started)| *started)
+	}
+}
+
+impl rc_client::AHStakingInterface for RelayReportsAreWork {
+	type AccountId = AccountId;
+	type MaxValidatorSet = <Staking as rc_client::AHStakingInterface>::MaxValidatorSet;
+
+	fn on_relay_session_report(report: rc_client::SessionReport<AccountId>) -> Weight {
+		let weight = Self::weigh_on_relay_session_report(&report);
+		// Work weighed by trust, in thousandths of the committee's highest. An account People
+		// did not seat keeps full weight: it has no exposure, so its share goes to the treasury
+		// at era end rather than being spread over the committee.
+		//
+		// The trust is the committee's the active era was elected under, so a member People
+		// removes mid-era keeps its own weight to the era's end. Points keep the relay's
+		// magnitude -- weighed, never multiplied up -- so an era's total stays as far from
+		// `u32::MAX` as the relay's own.
+		let snapshot = Komite::weighing_snapshot();
+		let weighed = report.validator_points.into_iter().map(|(who, points)| {
+			let permille = snapshot.as_ref().and_then(|s| s.trust_permille(&who)).unwrap_or(1000);
+			(who, (points as u64 * permille as u64 / 1000) as u32)
+		});
+		Staking::note_era_points(weighed);
+		RelaySessionEras::mutate(|book| {
+			let era = pezpallet_staking_async::ActiveEra::<Runtime>::get().map_or(0, |e| e.index);
+			if book.is_full() {
+				book.remove(0);
+			}
+			let _ = book.try_push((report.end_index, era));
+		});
+		weight
+	}
+	fn weigh_on_relay_session_report(report: &rc_client::SessionReport<AccountId>) -> Weight {
+		use codec::MaxEncodedLen;
+		// Plus the committee snapshots the points are weighed by (the active era's, or the
+		// latest), and the session book.
+		<Staking as rc_client::AHStakingInterface>::weigh_on_relay_session_report(report)
+			.saturating_add(
+				<Runtime as pezframe_system::Config>::DbWeight::get().reads_writes(3, 1),
+			)
+			.saturating_add(Weight::from_parts(
+				0,
+				2 * pezpallet_komite::Snapshot::<Runtime>::max_encoded_len() as u64
+					+ <RelaySessionBook as MaxEncodedLen>::max_encoded_len() as u64,
+			))
+	}
+	fn on_new_offences(
+		slash_session: SessionIndex,
+		offences: Vec<rc_client::Offence<AccountId>>,
+	) -> Weight {
+		let Some(session) = Self::session_here_of_relay_session(slash_session) else {
+			log::warn!(
+				target: "runtime::staking",
+				"{} offence(s) in relay session {slash_session}, before any era this chain still \
+				 keeps; not charged",
+				offences.len(),
+			);
+			return <Runtime as pezframe_system::Config>::DbWeight::get().reads(2);
+		};
+		<Staking as rc_client::AHStakingInterface>::on_new_offences(session, offences)
+			.saturating_add(<Runtime as pezframe_system::Config>::DbWeight::get().reads(2))
+	}
+	fn weigh_on_new_offences(offence_count: u32) -> Weight {
+		<Staking as rc_client::AHStakingInterface>::weigh_on_new_offences(offence_count)
+			.saturating_add(<Runtime as pezframe_system::Config>::DbWeight::get().reads(2))
+	}
+	fn active_era_start_session_index() -> SessionIndex {
+		<Staking as rc_client::AHStakingInterface>::active_era_start_session_index()
+	}
+	fn is_validator(who: &AccountId) -> bool {
+		<Staking as rc_client::AHStakingInterface>::is_validator(who)
+	}
+}
+
+/// Forwards session events to CollatorSelection and turns the staking era clock.
+///
+/// This chain's sessions are the only clock of its eras: the relay's reports arrive too (measured
+/// live: `LastSessionReportEndingIndex` 200 against this chain's session 13 on 2026-10-04), but
+/// they only record work (`RelayReportsAreWork`). An era is `SessionsPerEra - PlanningEraOffset + 1`
+/// of these sessions (see `era_length`).
 pub struct StakingSessionManager;
 
 impl pezpallet_session::SessionManager<AccountId> for StakingSessionManager {
@@ -337,33 +738,76 @@ impl pezpallet_session::SessionManager<AccountId> for StakingSessionManager {
 			.map(|e| e.index)
 			.unwrap_or(0);
 
-		// Provide activation_timestamp when a planned era exists (CurrentEra > ActiveEra)
-		let activation_timestamp = if current_era > active_era_idx {
+		// Start a planned era once its election is delivered, so its exposures are whole when
+		// it starts -- or, if the election has not finished, once the active era has run for
+		// the payout cap, so an election that never finishes cannot stop the clock.
+		let activation_timestamp = if current_era > active_era_idx
+			&& (Self::election_delivered() || Self::era_reached_payout_cap(end_index))
+		{
 			let now_ms = pezpallet_timestamp::Now::<Runtime>::get();
 			Some((now_ms, current_era))
 		} else {
 			None
 		};
 
-		// Equal reward points for all validators
-		let validator_points: Vec<(AccountId, u32)> =
-			pezpallet_staking_async::Validators::<Runtime>::iter_keys()
-				.map(|v| (v, 20u32))
-				.collect();
-
-		let report = rc_client::SessionReport::new_terminal(
-			end_index,
-			validator_points,
-			activation_timestamp,
-		);
+		// Points come from the relay's reports (`RelayReportsAreWork`); this report only turns
+		// the clock. It used to give every validator here an equal 20, which counted nothing.
+		let report =
+			rc_client::SessionReport::new_terminal(end_index, Vec::new(), activation_timestamp);
 
 		let _ = <Staking as rc_client::AHStakingInterface>::on_relay_session_report(report);
+
+		// Freeze the committee an era is elected under when its election is planned, and make
+		// that copy the active one when the era starts: the trust its work is weighed by. In
+		// one session end staking activates before it plans, so the hooks run in that order.
+		let active_now =
+			pezpallet_staking_async::ActiveEra::<Runtime>::get().map_or(0, |e| e.index);
+		if active_now > active_era_idx {
+			Komite::note_era_activated();
+			// A candidacy on People needs a validator's bond here (spec C4); tell People who
+			// holds one. A lost report keeps People on the last one, so it is logged, not fatal.
+			if send_to_people(bond_report_for_people(active_now)).is_err() {
+				log::warn!(
+					target: "runtime::staking",
+					"the bond report for era {active_now} did not reach People",
+				);
+			}
+		}
+		if pezpallet_staking_async::CurrentEra::<Runtime>::get().unwrap_or(0) > current_era {
+			Komite::note_era_planned();
+		}
 	}
 
 	fn start_session(start_index: u32) {
 		<CollatorSelection as pezpallet_session::SessionManager<AccountId>>::start_session(
 			start_index,
 		);
+	}
+}
+
+impl StakingSessionManager {
+	/// The planned era's election has finished and every page of it has been fetched.
+	///
+	/// The election provider is `Off` only before an election starts and after it is exported,
+	/// and one is started the moment an era is planned; `NextElectionPage` is `None` once the
+	/// last page is in. Together, with an era planned, they mean its exposures are all stored.
+	fn election_delivered() -> bool {
+		use pezframe_election_provider_support::ElectionProvider;
+		<<Runtime as pezpallet_staking_async::Config>::ElectionProvider as ElectionProvider>::status()
+			.is_err() && pezpallet_staking_async::NextElectionPage::<Runtime>::get().is_none()
+	}
+
+	/// The active era, if a new one started at the session after `end_index`, would have run
+	/// `SessionsPerEra` sessions. In production that is `MaxEraDuration`, six one-hour sessions,
+	/// the longest an era is paid for. In a fast runtime sessions are twenty blocks, shorter
+	/// than an election, so this is the path every era takes there and the wait for delivery
+	/// is exercised only by the unit test.
+	fn era_reached_payout_cap(end_index: u32) -> bool {
+		let started = pezpallet_staking_async::BondedEras::<Runtime>::get()
+			.last()
+			.map(|(_, session)| *session)
+			.unwrap_or(0);
+		(end_index + 1).saturating_sub(started) >= SessionsPerEra::get()
 	}
 }
 
@@ -377,9 +821,33 @@ pub enum RelayChainRuntimePallets {
 
 #[derive(Encode, Decode)]
 pub enum AhClientCalls {
-	// index of `fn validator_set` in `staking-async-ah-client`. It has only one call.
+	// index of `fn validator_set` in `staking-async-ah-client`.
 	#[codec(index = 0)]
 	ValidatorSet(rc_client::ValidatorSetReport<AccountId>),
+	// index of `fn set_keys_from_ah` in `staking-async-ah-client`.
+	// The proof of possession is checked here, so only the keys travel to the relay.
+	#[codec(index = 3)]
+	SetKeys { stash: AccountId, keys: Vec<u8> },
+	// index of `fn purge_keys_from_ah` in `staking-async-ah-client`.
+	#[codec(index = 4)]
+	PurgeKeys { stash: AccountId },
+}
+
+pub struct KeysMessageToXcm;
+impl pezsp_runtime::traits::Convert<rc_client::KeysMessage<AccountId>, Xcm<()>>
+	for KeysMessageToXcm
+{
+	fn convert(msg: rc_client::KeysMessage<AccountId>) -> Xcm<()> {
+		let encoded_call = match msg {
+			rc_client::KeysMessage::SetKeys { stash, keys } => {
+				RelayChainRuntimePallets::AhClient(AhClientCalls::SetKeys { stash, keys }).encode()
+			},
+			rc_client::KeysMessage::PurgeKeys { stash } => {
+				RelayChainRuntimePallets::AhClient(AhClientCalls::PurgeKeys { stash }).encode()
+			},
+		};
+		rc_client::build_transact_xcm(encoded_call)
+	}
 }
 
 pub struct ValidatorSetToXcm;
@@ -405,12 +873,46 @@ impl pezsp_runtime::traits::Convert<rc_client::ValidatorSetReport<AccountId>, Xc
 
 parameter_types! {
 	pub RelayLocation: Location = Location::parent();
+	/// Relay-side cost of set/purge keys. Held above the benchmarked figure on purpose:
+	/// undercharging strands the message, overpaying only costs the sender a little.
+	pub RemoteKeysExecutionWeight: Weight = Weight::from_parts(200_000_000, 20_000);
+}
+
+/// Asset Hub elects, and its result stops here.
+///
+/// `staking-async` calls this when its election finishes, and until 2026-08-29 it went
+/// straight to `rc_client`, which put the set in `OutgoingValidatorSet` and shipped it to the
+/// relay every era. That is no longer who decides: the committee is drawn on the People chain
+/// by TNPoS, from nine strata whose scores are written there.
+///
+/// The election still runs, and it still matters: it builds, for the committee People seated
+/// (`CommitteeTargets`), the exposures that slashing and the payout machinery read. It seats
+/// no one -- every stratum, the stake stratum too, is drawn by lot on People. What it no
+/// longer does is leave the chain.
+///
+/// This is dropped rather than the export being disabled, and the difference is the point:
+/// `rc_client`'s exporter is still live and still the one path to the relay. If both this and
+/// the People chain wrote `OutgoingValidatorSet`, the later write would win and the validator
+/// set would be whichever message happened to land second.
+pub struct ElectionStaysHome;
+impl rc_client::RcClientInterface for ElectionStaysHome {
+	type AccountId = AccountId;
+
+	fn validator_set(new_validator_set: Vec<Self::AccountId>, id: u32, _prune_up_to: Option<u32>) {
+		log::debug!(
+			target: "runtime::staking",
+			"election for era {id} produced {} stashes; kept local, the committee comes from People",
+			new_validator_set.len(),
+		);
+	}
 }
 
 pub struct StakingXcmToRelayChain;
 
 impl rc_client::SendToRelayChain for StakingXcmToRelayChain {
 	type AccountId = AccountId;
+	type Balance = Balance;
+
 	fn validator_set(report: rc_client::ValidatorSetReport<Self::AccountId>) -> Result<(), ()> {
 		rc_client::XCMSender::<
 			xcm_config::XcmRouter,
@@ -418,6 +920,61 @@ impl rc_client::SendToRelayChain for StakingXcmToRelayChain {
 			rc_client::ValidatorSetReport<Self::AccountId>,
 			ValidatorSetToXcm,
 		>::send(report)
+	}
+
+	fn set_keys(
+		stash: Self::AccountId,
+		keys: Vec<u8>,
+		max_delivery_and_remote_execution_fee: Option<Self::Balance>,
+	) -> Result<Self::Balance, rc_client::SendKeysError<Self::Balance>> {
+		let execution_cost = <WeightToFee as pezframe_support::weights::WeightToFee>::weight_to_fee(
+			&RemoteKeysExecutionWeight::get(),
+		);
+
+		rc_client::XCMSender::<
+			xcm_config::XcmRouter,
+			RelayLocation,
+			rc_client::KeysMessage<Self::AccountId>,
+			KeysMessageToXcm,
+		>::send_with_fees::<
+			xcm_executor::XcmExecutor<xcm_config::XcmConfig>,
+			RuntimeCall,
+			AccountId,
+			rc_client::AccountId32ToLocation,
+			Self::Balance,
+		>(
+			rc_client::KeysMessage::set_keys(stash.clone(), keys),
+			stash,
+			max_delivery_and_remote_execution_fee,
+			execution_cost,
+		)
+	}
+
+	fn purge_keys(
+		stash: Self::AccountId,
+		max_delivery_and_remote_execution_fee: Option<Self::Balance>,
+	) -> Result<Self::Balance, rc_client::SendKeysError<Self::Balance>> {
+		let execution_cost = <WeightToFee as pezframe_support::weights::WeightToFee>::weight_to_fee(
+			&RemoteKeysExecutionWeight::get(),
+		);
+
+		rc_client::XCMSender::<
+			xcm_config::XcmRouter,
+			RelayLocation,
+			rc_client::KeysMessage<Self::AccountId>,
+			KeysMessageToXcm,
+		>::send_with_fees::<
+			xcm_executor::XcmExecutor<xcm_config::XcmConfig>,
+			RuntimeCall,
+			AccountId,
+			rc_client::AccountId32ToLocation,
+			Self::Balance,
+		>(
+			rc_client::KeysMessage::purge_keys(stash.clone()),
+			stash,
+			max_delivery_and_remote_execution_fee,
+			execution_cost,
+		)
 	}
 }
 
@@ -548,5 +1105,59 @@ where
 {
 	fn create_bare(call: RuntimeCall) -> UncheckedExtrinsic {
 		UncheckedExtrinsic::new_bare(call)
+	}
+}
+
+#[cfg(test)]
+mod era_length {
+	use super::*;
+	use pezframe_support::traits::Get;
+
+	/// An era never outlasts the payout it is minted for.
+	///
+	/// `EraPayout` mints for the era's elapsed time, capped at `MaxEraDuration`. An era is not
+	/// `SessionsPerEra` sessions: the next era is planned once `SessionsPerEra - PlanningEraOffset`
+	/// sessions have passed and activated at the following session end, so it lasts
+	/// `SessionsPerEra - PlanningEraOffset + 1` sessions (five hours in production, one session in a
+	/// fast runtime). If that ever exceeds the cap, every era is paid for the cap and the rest is
+	/// never minted -- with six-hour sessions it was a thirty-hour era paid for six, a fifth of the
+	/// set inflation.
+	#[test]
+	fn an_era_never_outlasts_the_payout_cap() {
+		// The planning offset reads the election's phase lengths, which are storage parameters.
+		pezsp_io::TestExternalities::default().execute_with(|| {
+			let per_era = SessionsPerEra::get();
+			let offset = <<Runtime as pezpallet_staking_async::Config>::PlanningEraOffset as Get<
+				SessionIndex,
+			>>::get()
+			.min(per_era);
+			let era_sessions = (per_era - offset + 1) as u64;
+			// This chain's own block time: `Period` counts its blocks, not the relay's.
+			let era_ms = era_sessions * crate::Period::get() as u64 * crate::MILLISECS_PER_BLOCK;
+			assert!(
+				era_ms <= MaxEraDuration::get(),
+				"an era is {era_sessions} sessions, {era_ms} ms, past the payout cap of {} ms",
+				MaxEraDuration::get()
+			);
+		});
+	}
+}
+
+#[cfg(test)]
+mod half_split {
+	use super::*;
+	use pezsp_staking::StakerRewardCalculator;
+	// The calculator staking is configured with, so the test measures the wiring too.
+	type Split = <Runtime as pezpallet_staking_async::Config>::StakerRewardCalculator;
+
+	/// Half to the validator, half to its nominators, whatever the commission or the stakes;
+	/// the odd planck goes to the nominators' half, whose unpaid part reaches the treasury.
+	#[test]
+	fn the_validator_takes_half_and_its_nominators_the_rest_whatever_the_commission() {
+		let r = Split::calculate_staker_reward(1001, Perbill::from_percent(100), 50, 1000);
+		assert_eq!(r.validator_payout, 500);
+		assert_eq!(r.nominator_payout, 501);
+		let r = Split::calculate_staker_reward(1000, Perbill::zero(), 1000, 1000);
+		assert_eq!((r.validator_payout, r.nominator_payout), (500, 500));
 	}
 }

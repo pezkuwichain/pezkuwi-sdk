@@ -163,11 +163,21 @@ fn governance_authorize_upgrade_works() {
 		>(GovernanceOrigin::Location(Location::new(1, Teyrchain(12334)))),
 		Either::Right(InstructionError { index: 0, error: XcmError::Barrier })
 	);
-	// ok - AssetHub
-	assert_ok!(teyrchains_runtimes_test_utils::test_cases::can_governance_authorize_upgrade::<
-		Runtime,
-		RuntimeOrigin,
-	>(GovernanceOrigin::Location(Location::new(1, Teyrchain(ASSET_HUB_ID)))));
+	// no - Asset Hub. Upstream expects this to pass because their governance moved there; ours
+	// did not. `GovernanceLocation` on this network is the relay, and its own declaration says
+	// so: administering a coretime broker or a bridge is not an economic question, and the
+	// Asset Hub holds the economy rather than the constitution.
+	//
+	// The assertion never held here. It arrived with the fork asserting upstream's arrangement
+	// and nothing ran it -- the per-push gate type-checked the runtimes without running their
+	// integration tests. It surfaced the first time that job reached this file.
+	assert_err!(
+		teyrchains_runtimes_test_utils::test_cases::can_governance_authorize_upgrade::<
+			Runtime,
+			RuntimeOrigin,
+		>(GovernanceOrigin::Location(Location::new(1, Teyrchain(ASSET_HUB_ID)))),
+		Either::Right(InstructionError { index: 0, error: XcmError::Barrier })
+	);
 	// no - Collectives
 	assert_err!(
 		teyrchains_runtimes_test_utils::test_cases::can_governance_authorize_upgrade::<
@@ -176,7 +186,9 @@ fn governance_authorize_upgrade_works() {
 		>(GovernanceOrigin::Location(Location::new(1, Teyrchain(COLLECTIVES_ID)))),
 		Either::Right(InstructionError { index: 0, error: XcmError::Barrier })
 	);
-	// no - Collectives Voice of Fellows plurality
+	// no - Collectives Voice of Fellows plurality. The barrier used to admit it and the origin
+	// check refused it; with the Fellowship retired the barrier no longer names it, so it is
+	// turned away at the first instruction instead.
 	assert_err!(
 		teyrchains_runtimes_test_utils::test_cases::can_governance_authorize_upgrade::<
 			Runtime,
@@ -185,7 +197,7 @@ fn governance_authorize_upgrade_works() {
 			Location::new(1, Teyrchain(COLLECTIVES_ID)),
 			Plurality { id: BodyId::Technical, part: BodyPart::Voice }.into()
 		)),
-		Either::Right(InstructionError { index: 2, error: XcmError::BadOrigin })
+		Either::Right(InstructionError { index: 0, error: XcmError::Barrier })
 	);
 
 	// ok - relaychain

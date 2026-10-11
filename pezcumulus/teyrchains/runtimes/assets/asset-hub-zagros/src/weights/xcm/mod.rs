@@ -1,4 +1,5 @@
 // Copyright (C) Parity Technologies (UK) Ltd. and Dijital Kurdistan Tech Institute
+// This file is part of Pezcumulus.
 // SPDX-License-Identifier: Apache-2.0
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +14,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-mod pezpallet_xcm_benchmarks_fungible;
+pub mod pezpallet_xcm_benchmarks_fungible;
 mod pezpallet_xcm_benchmarks_generic;
 
 use crate::{
@@ -90,8 +91,8 @@ impl WeighAssets for Assets {
 	}
 }
 
-pub struct AssetHubZagrosXcmWeight<Call>(core::marker::PhantomData<Call>);
-impl<Call> XcmWeightInfo<Call> for AssetHubZagrosXcmWeight<Call> {
+pub struct AssetHubPezkuwichainXcmWeight<Call>(core::marker::PhantomData<Call>);
+impl<Call> XcmWeightInfo<Call> for AssetHubPezkuwichainXcmWeight<Call> {
 	fn withdraw_asset(assets: &Assets) -> Weight {
 		assets.weigh_assets(XcmFungibleWeight::<Runtime>::withdraw_asset())
 	}
@@ -147,13 +148,16 @@ impl<Call> XcmWeightInfo<Call> for AssetHubZagrosXcmWeight<Call> {
 	fn report_error(_query_response_info: &QueryResponseInfo) -> Weight {
 		XcmGeneric::<Runtime>::report_error()
 	}
-
 	fn deposit_asset(assets: &AssetFilter, _dest: &Location) -> Weight {
 		assets.weigh_assets(XcmFungibleWeight::<Runtime>::deposit_asset())
 	}
 	fn deposit_reserve_asset(assets: &AssetFilter, _dest: &Location, _xcm: &Xcm<()>) -> Weight {
 		assets.weigh_assets(XcmFungibleWeight::<Runtime>::deposit_reserve_asset())
 	}
+	/// The mainnet Asset Hub does not support `ExchangeAsset` and weighs it as
+	/// `Weight::MAX`, which makes the weigher reject any message containing the
+	/// instruction before it is executed. Zagros does support it, and mirroring the
+	/// runtimes took this weight — and with it the capability — away.
 	fn exchange_asset(give: &AssetFilter, receive: &Assets, _maximal: &bool) -> Weight {
 		let base_weight = XcmGeneric::<Runtime>::exchange_asset();
 		let give_weight = give.weigh_assets(base_weight);

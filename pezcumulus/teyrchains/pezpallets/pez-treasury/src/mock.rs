@@ -1,10 +1,15 @@
+// This file is part of PezkuwiChain.
+
+// Copyright (C) Dijital Kurdistan Tech Institute
+// SPDX-License-Identifier: Apache-2.0
+
 // pezkuwi/pallets/pez-treasury/src/mock.rs
-// VERSION 3: AccountId tipi H256 yapıldı (u64 yerine)
+// VERSION 3: AccountId type changed to H256 (instead of u64)
 
 use crate::{self as pezpallet_pez_treasury, weights};
 use pezframe_support::{
 	assert_ok, construct_runtime, parameter_types,
-	traits::{ConstU128, ConstU32, OnFinalize, OnInitialize},
+	traits::{fungibles::Mutate, ConstU128, ConstU32, OnFinalize, OnInitialize},
 	PalletId,
 };
 use pezsp_core::H256;
@@ -39,7 +44,7 @@ impl pezframe_system::Config for Test {
 	type Nonce = u64;
 	type Hash = H256;
 	type Hashing = BlakeTwo256;
-	type AccountId = H256; // V3: u64 -> H256 değişti
+	type AccountId = H256; // V3: changed u64 -> H256
 	type Lookup = IdentityLookup<Self::AccountId>;
 	type Block = Block;
 	type RuntimeEvent = RuntimeEvent;
@@ -118,15 +123,16 @@ impl pezpallet_assets::Config for Test {
 	type BenchmarkHelper = ();
 }
 
-// CRITICAL: Bu üç PalletId FARKLI olmak ZORUNDA
+// CRITICAL: These three PalletIds MUST be DIFFERENT
 parameter_types! {
 	pub const PezTreasuryPalletId: PalletId = PalletId(*b"py/pztrs");
 	pub const PezIncentivePotId: PalletId = PalletId(*b"py/pzinc");
 	pub const PezGovernmentPotId: PalletId = PalletId(*b"py/pzgov");
+	pub const PezFounderPotId: PalletId = PalletId(*b"py/pzfnd");
 	pub const PezAssetId: u32 = 1;
 }
 
-// V3: Test accounts - H256 formatında
+// V3: Test accounts - in H256 format
 use pezsp_runtime::traits::AccountIdConversion;
 
 pub fn alice() -> H256 {
@@ -141,6 +147,9 @@ pub fn charlie() -> H256 {
 	H256::from_low_u64_be(3)
 }
 
+// Two ordinary funded accounts. The pallet no longer knows about a presale or a founder --
+// their allocations are genesis balances now -- but the tests still use them to check that
+// releases move money between the pots and touch nothing else.
 pub fn presale() -> H256 {
 	H256::from_low_u64_be(10)
 }
@@ -150,8 +159,67 @@ pub fn founder() -> H256 {
 }
 
 parameter_types! {
-	pub PresaleAccount: H256 = presale();
-	pub FounderAccount: H256 = founder();
+	pub RewardsChain: xcm::latest::Location =
+		xcm::latest::Location::new(1, [xcm::latest::Junction::Teyrchain(1004)]);
+	pub const RewardsPalletIndex: u8 = 91;
+}
+
+/// Records what the pallet tried to send instead of sending it.
+///
+/// A test that only checked storage could not tell "decided not to send" from "sent and it
+/// vanished". Keeping the messages makes the difference visible.
+pub struct RecordingXcmSender;
+
+thread_local! {
+	pub static SENT_XCM: core::cell::RefCell<Vec<(xcm::latest::Location, xcm::latest::Xcm<()>)>> =
+		const { core::cell::RefCell::new(Vec::new()) };
+	pub static SENDING_FAILS: core::cell::RefCell<bool> = const { core::cell::RefCell::new(false) };
+}
+
+impl xcm::latest::SendXcm for RecordingXcmSender {
+	type Ticket = (xcm::latest::Location, xcm::latest::Xcm<()>);
+
+	fn validate(
+		dest: &mut Option<xcm::latest::Location>,
+		msg: &mut Option<xcm::latest::Xcm<()>>,
+	) -> xcm::latest::SendResult<Self::Ticket> {
+		if SENDING_FAILS.with(|f| *f.borrow()) {
+			return Err(xcm::latest::SendError::Transport("mock"));
+		}
+		let pair = (dest.take().unwrap(), msg.take().unwrap());
+		Ok((pair, xcm::latest::Assets::new()))
+	}
+
+	fn deliver(ticket: Self::Ticket) -> Result<xcm::latest::XcmHash, xcm::latest::SendError> {
+		SENT_XCM.with(|q| q.borrow_mut().push(ticket));
+		Ok([0u8; 32])
+	}
+}
+
+/// Everything the pallet has tried to send so far.
+pub fn sent_xcm() -> Vec<(xcm::latest::Location, xcm::latest::Xcm<()>)> {
+	SENT_XCM.with(|q| q.borrow().clone())
+}
+
+/// Forget what was sent, so a test can assert about one stretch of blocks.
+pub fn clear_sent_xcm() {
+	SENT_XCM.with(|q| q.borrow_mut().clear());
+}
+
+/// Make every send fail, so a test can prove the release survives a lost report.
+pub fn fail_sending(on: bool) {
+	SENDING_FAILS.with(|f| *f.borrow_mut() = on);
+}
+
+/// Matches this mock's `EnsureRoot` bindings. The runtimes answer differently, which is the
+/// whole reason the origin is theirs to say.
+#[cfg(feature = "runtime-benchmarks")]
+pub struct MockBenchmarkSetup;
+#[cfg(feature = "runtime-benchmarks")]
+impl crate::BenchmarkSetup<RuntimeOrigin> for MockBenchmarkSetup {
+	fn people_chain_origin() -> RuntimeOrigin {
+		RuntimeOrigin::root()
+	}
 }
 
 impl pezpallet_pez_treasury::Config for Test {
@@ -161,9 +229,19 @@ impl pezpallet_pez_treasury::Config for Test {
 	type TreasuryPalletId = PezTreasuryPalletId;
 	type IncentivePotId = PezIncentivePotId;
 	type GovernmentPotId = PezGovernmentPotId;
-	type PresaleAccount = PresaleAccount;
-	type FounderAccount = FounderAccount;
-	type ForceOrigin = pezframe_system::EnsureRoot<Self::AccountId>;
+	type FounderPotId = PezFounderPotId;
+	// On the real chains this is the People chain's XCM origin. Root stands in here only
+	// because the mock has no sibling chain to speak for the citizen register.
+	type ActivationOrigin = pezframe_system::EnsureRoot<Self::AccountId>;
+	// Likewise the People chain on the real runtimes; root stands in here.
+	type GovernmentSpendOrigin = pezframe_system::EnsureRoot<Self::AccountId>;
+	// The rewards chain on the real runtimes; root stands in here for the same reason.
+	type IncentiveSpendOrigin = pezframe_system::EnsureRoot<Self::AccountId>;
+	#[cfg(feature = "runtime-benchmarks")]
+	type BenchmarkHelper = MockBenchmarkSetup;
+	type XcmSender = RecordingXcmSender;
+	type RewardsChainLocation = RewardsChain;
+	type RewardsPalletIndex = RewardsPalletIndex;
 }
 
 // Build genesis storage according to the mock runtime.
@@ -207,7 +285,64 @@ pub fn run_to_block(n: u64) {
 		}
 		System::set_block_number(System::block_number() + 1);
 		AllPalletsWithSystem::on_initialize(System::block_number());
+		check_invariants();
 	}
+}
+
+/// Assert the pallet's `try_state` invariant.
+///
+/// Called after every block the tests run, so the invariant is checked against real histories
+/// -- backlogs, halvings, failed releases -- rather than in a test of its own that would only
+/// ever see the states someone thought to write down. Without the feature this compiles away,
+/// which is why the suite is run both ways.
+pub fn check_invariants() {
+	#[cfg(feature = "try-runtime")]
+	{
+		use pezframe_support::traits::TryState;
+		AllPalletsWithSystem::try_state(
+			System::block_number(),
+			pezframe_support::traits::TryStateSelect::All,
+		)
+		.expect("try_state failed");
+	}
+}
+
+/// Advance the block number without running any hooks.
+///
+/// `run_to_block` executes every block in between, which is right when the point is what the
+/// hooks do, and unusable when the point is what happens forty-eight months from now -- that
+/// is twenty million blocks. Tests that need to be somewhere far away jump, then run the few
+/// blocks they actually care about.
+pub fn jump_to_block(n: u64) {
+	assert!(n >= System::block_number(), "cannot jump backwards");
+	System::set_block_number(n);
+}
+
+/// Run `count` blocks, hooks and all.
+pub fn run_blocks(count: u64) {
+	run_to_block(System::block_number() + count);
+}
+
+/// Put the genesis treasury allocation where genesis would put it.
+///
+/// The pallet has no way to mint, which is the point of it; on a real chain the chain spec
+/// credits this account before the first block. The tests have to stand in for that.
+pub fn fund_treasury() {
+	assert_ok!(Assets::mint_into(
+		PezAssetId::get(),
+		&treasury_account(),
+		pezpallet_pez_treasury::TREASURY_ALLOCATION,
+	));
+}
+
+/// PEZ held by one account.
+pub fn pez_balance(account: H256) -> u128 {
+	Assets::balance(PezAssetId::get(), account)
+}
+
+/// Total PEZ in existence. Nothing the pallet does may ever change this.
+pub fn pez_total_supply() -> u128 {
+	Assets::total_supply(PezAssetId::get())
 }
 
 // V3: Helper to assert balance - H256 account ile
@@ -222,7 +357,7 @@ pub fn assert_pez_balance(account: H256, expected: u128) {
 	);
 }
 
-// V3: Helper fonksiyonlar - H256 dönüyor
+// V3: Helper functions - return H256
 #[allow(dead_code)]
 pub fn treasury_account() -> H256 {
 	PezTreasuryPalletId::get().into_account_truncating()
@@ -236,6 +371,12 @@ pub fn incentive_pot_account() -> H256 {
 #[allow(dead_code)]
 pub fn government_pot_account() -> H256 {
 	PezGovernmentPotId::get().into_account_truncating()
+}
+
+/// The pot the founder's PEZ waits in until the population gate fires.
+#[allow(dead_code)]
+pub fn founder_pot() -> H256 {
+	PezFounderPotId::get().into_account_truncating()
 }
 
 // V3: Debug helper

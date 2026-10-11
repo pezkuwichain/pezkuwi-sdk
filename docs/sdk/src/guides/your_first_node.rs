@@ -16,7 +16,7 @@
 //!
 //! ### Installs
 //!
-//! The `pezkuwi-omni-node` can either be downloaded from the latest [Release](https://github.com/pezkuwichain/pezkuwi-sdk/releases/) of `pezkuwi-sdk`,
+//! The `pezkuwi-omni-node` can either be downloaded from the latest [Release](https://github.com/pezkuwichain/pezkuwi-DKS/releases/) of `pezkuwi-sdk`,
 //! or installed using `cargo`:
 //!
 //! ```text
@@ -107,6 +107,7 @@ mod tests {
 	use pezsp_genesis_builder::PresetId;
 	use rand::Rng;
 	use std::{
+		collections::VecDeque,
 		io::{BufRead, BufReader},
 		path::PathBuf,
 		process::{ChildStderr, Command, Stdio},
@@ -114,7 +115,9 @@ mod tests {
 	};
 
 	const PARA_RUNTIME: &'static str = "teyrchain-template-runtime";
-	const CHAIN_SPEC_BUILDER: &'static str = "chain-spec-builder";
+	// The binary carries the package name here, unlike upstream: `CARGO_BIN_EXE_`, the
+	// reference-doc test and the umbrella feature all spell it this way.
+	const CHAIN_SPEC_BUILDER: &'static str = "pezstaging-chain-spec-builder";
 	const OMNI_NODE: &'static str = "pezkuwi-omni-node";
 
 	fn cargo() -> Command {
@@ -202,21 +205,43 @@ mod tests {
 		}
 	}
 
-	async fn imported_block_found(stderr: ChildStderr, block: u64, timeout: u64) -> bool {
+	/// Waits for the node to report importing `block`, and on failure says why.
+	///
+	/// The previous version returned a bare `bool` and dropped every line it read, so a node
+	/// that refused to start, panicked, or produced no blocks all looked the same from the
+	/// assertion: `false`. The reason was in the stream and was thrown away. It keeps the tail
+	/// now and hands it back, because the failure this guards against is exactly the one whose
+	/// cause only the node can state.
+	async fn imported_block_found(
+		stderr: ChildStderr,
+		block: u64,
+		timeout: u64,
+	) -> Result<(), String> {
+		const TAIL: usize = 40;
 		tokio::time::timeout(Duration::from_secs(timeout), async {
 			let want = format!("Imported #{}", block);
 			let reader = BufReader::new(stderr);
-			let mut found_block = false;
+			let mut tail: VecDeque<String> = VecDeque::with_capacity(TAIL);
 			for line in reader.lines() {
-				if line.unwrap().contains(&want) {
-					found_block = true;
-					break;
+				let line = line.map_err(|e| format!("reading node stderr failed: {e}"))?;
+				if line.contains(&want) {
+					return Ok(());
 				}
+				if tail.len() == TAIL {
+					tail.pop_front();
+				}
+				tail.push_back(line);
 			}
-			found_block
+			Err(format!(
+				"node stderr ended without reporting `{want}`; last {} lines:\n{}",
+				tail.len(),
+				Vec::from(tail).join("\n")
+			))
 		})
 		.await
-		.unwrap()
+		.unwrap_or_else(|_| {
+			Err(format!("node did not report `Imported #{block}` within {timeout}s"))
+		})
 	}
 
 	async fn test_runtime_preset(
@@ -263,7 +288,10 @@ mod tests {
 		let stderr = child.stderr.take().unwrap();
 		let expected_blocks = (10_000 / block_time).saturating_div(2);
 		assert!(expected_blocks > 0, "test configuration is bad, should give it more time");
-		assert_eq!(imported_block_found(stderr, expected_blocks, 100).await, true);
+		if let Err(why) = imported_block_found(stderr, expected_blocks, 100).await {
+			child.kill().unwrap();
+			panic!("{why}");
+		}
 		std::fs::remove_file(chain_spec_file).unwrap();
 		child.kill().unwrap();
 	}
@@ -281,7 +309,10 @@ mod tests {
 			.unwrap();
 
 		let stderr = child.stderr.take().unwrap();
-		assert_eq!(imported_block_found(stderr, 7, 100).await, true);
+		if let Err(why) = imported_block_found(stderr, 7, 100).await {
+			child.kill().unwrap();
+			panic!("{why}");
+		}
 		child.kill().unwrap();
 	}
 

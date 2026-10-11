@@ -27,7 +27,6 @@ use emulated_integration_tests_common::{
 	impl_assets_helpers_for_system_teyrchain, impl_assets_helpers_for_teyrchain,
 	impl_bridge_helpers_for_chain, impl_foreign_assets_helpers_for_teyrchain,
 	impl_xcm_helpers_for_teyrchain, impls::Teyrchain, xcm_pez_emulator::decl_test_teyrchains,
-	AuraDigestProvider,
 };
 use pezkuwichain_emulated_chain::Pezkuwichain;
 
@@ -44,8 +43,18 @@ decl_test_teyrchains! {
 			LocationToAccountId: asset_hub_pezkuwichain_runtime::xcm_config::LocationToAccountId,
 			TeyrchainInfo: asset_hub_pezkuwichain_runtime::TeyrchainInfo,
 			MessageOrigin: pezcumulus_primitives_core::AggregateMessageOrigin,
-			DigestProvider: AuraDigestProvider,
 			AdditionalInherentCode: (),
+			// This chain runs `TeleportTracking = Some((CheckingAccount, MintLocation::Local))`,
+			// so a teleport out parks the amount in the check account rather than burning it,
+			// and local total issuance stays the authoritative figure.
+			//
+			// The flag is not a preference: it selects which invariant
+			// `test_teyrchain_is_trusted_teleporter!` asserts, and if it disagrees with the
+			// runtime the test paints a correctly behaving chain red. It was absent while the
+			// tracking was `None`, and turning the tracking on without it is exactly what
+			// failed four emulated teleport tests -- the runtime stopped burning and the
+			// assertion still demanded a burn.
+			native_total_supply_tracker: true,
 		},
 		pallets = {
 			PezkuwiXcm: asset_hub_pezkuwichain_runtime::PezkuwiXcm,
@@ -71,7 +80,7 @@ impl_foreign_assets_helpers_for_teyrchain!(
 impl_xcm_helpers_for_teyrchain!(AssetHubPezkuwichain);
 impl_bridge_helpers_for_chain!(
 	AssetHubPezkuwichain,
-	ParaPezpallet,
+	ParaPallet,
 	PezkuwiXcm,
 	pezbp_bridge_hub_pezkuwichain::RuntimeCall::XcmOverBridgeHubZagros
 );

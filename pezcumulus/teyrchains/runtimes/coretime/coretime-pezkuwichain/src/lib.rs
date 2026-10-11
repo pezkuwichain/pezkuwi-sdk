@@ -40,6 +40,7 @@ use alloc::{vec, vec::Vec};
 use codec::{Decode, DecodeWithMemTracking, Encode, MaxEncodedLen};
 use pezcumulus_pezpallet_teyrchain_system::RelayNumberMonotonicallyIncreases;
 use pezcumulus_primitives_core::{AggregateMessageOrigin, ParaId};
+use pezframe_support::traits::tokens::imbalance::ResolveTo;
 use pezframe_support::{
 	construct_runtime, derive_impl,
 	dispatch::DispatchClass,
@@ -56,6 +57,7 @@ use pezframe_system::{
 	EnsureRoot,
 };
 use pezkuwi_runtime_common::{BlockHashCount, SlowAdjustingFeeUpdate};
+use pezpallet_collator_selection::StakingPotAccountId;
 use pezpallet_xcm::{EnsureXcm, IsVoiceOfBody};
 use pezsp_api::impl_runtime_apis;
 use pezsp_core::{crypto::KeyTypeId, OpaqueMetadata};
@@ -63,9 +65,9 @@ use pezsp_core::{crypto::KeyTypeId, OpaqueMetadata};
 pub use pezsp_runtime::BuildStorage;
 use pezsp_runtime::{
 	generic, impl_opaque_keys,
-	traits::{BlakeTwo256, Block as BlockT, BlockNumberProvider},
+	traits::{BlakeTwo256, Block as BlockT},
 	transaction_validity::{TransactionSource, TransactionValidity},
-	ApplyExtrinsicResult, DispatchError, MultiAddress, Perbill, RuntimeDebug,
+	ApplyExtrinsicResult, DispatchError, MultiAddress, Perbill,
 };
 #[cfg(feature = "std")]
 use pezsp_version::NativeVersion;
@@ -82,8 +84,7 @@ use teyrchains_common::{
 use weights::{BlockExecutionWeight, ExtrinsicBaseWeight, RocksDbWeight};
 use xcm::{prelude::*, Version as XcmVersion};
 use xcm_config::{
-	FellowshipLocation, GovernanceLocation, RocRelayLocation, XcmConfig,
-	XcmOriginToTransactDispatchOrigin,
+	GovernanceLocation, RocRelayLocation, XcmConfig, XcmOriginToTransactDispatchOrigin,
 };
 use xcm_runtime_pezapis::{
 	dry_run::{CallDryRunEffects, Error as XcmDryRunApiError, XcmDryRunEffects},
@@ -124,21 +125,14 @@ pub type UncheckedExtrinsic =
 	generic::UncheckedExtrinsic<Address, RuntimeCall, Signature, TxExtension>;
 
 /// Migrations to apply on runtime upgrade.
+///
+/// Only the permanent ones remain. The one-off entries were removed with the genesis reset: each
+/// converted state that only the chain before the reset had, and a chain born from this
+/// runtime's genesis starts with every pallet at its in-code storage version and none of that
+/// state.
 pub type Migrations = (
-	pezpallet_collator_selection::migration::v2::MigrationToV2<Runtime>,
-	pezcumulus_pezpallet_xcmp_queue::migration::v4::MigrationToV4<Runtime>,
-	pezcumulus_pezpallet_xcmp_queue::migration::v5::MigrateV4ToV5<Runtime>,
-	pezpallet_broker::migration::MigrateV0ToV1<Runtime>,
-	pezpallet_broker::migration::MigrateV1ToV2<Runtime>,
-	pezpallet_broker::migration::MigrateV2ToV3<Runtime>,
-	pezpallet_broker::migration::MigrateV3ToV4<Runtime, BrokerMigrationV4BlockConversion>,
-	pezpallet_session::migrations::v1::MigrateV0ToV1<
-		Runtime,
-		pezpallet_session::migrations::v1::InitOffenceSeverity<Runtime>,
-	>,
 	// permanent
 	pezpallet_xcm::migration::MigrateToLatestXcmVersion<Runtime>,
-	pezcumulus_pezpallet_aura_ext::migration::MigrateV0ToV1<Runtime>,
 );
 
 /// Executive: handles dispatch to the various modules.
@@ -177,7 +171,12 @@ pub fn native_version() -> NativeVersion {
 parameter_types! {
 	pub const Version: RuntimeVersion = VERSION;
 	pub RuntimeBlockLength: BlockLength =
-		BlockLength::max_with_normal_ratio(5 * 1024 * 1024, NORMAL_DISPATCH_RATIO);
+		BlockLength::builder()
+		.max_length(5 * 1024 * 1024)
+		.modify_max_length_for_class(DispatchClass::Normal, |m| {
+			*m = NORMAL_DISPATCH_RATIO * *m
+		})
+		.build();
 	pub RuntimeBlockWeights: BlockWeights = BlockWeights::builder()
 		.base_block(BlockExecutionWeight::get())
 		.for_class(DispatchClass::all(), |weights| {
@@ -256,7 +255,14 @@ parameter_types! {
 
 impl pezpallet_balances::Config for Runtime {
 	type Balance = Balance;
-	type DustRemoval = ();
+	/// Dust -- what is left in an account too small to keep -- goes where this chain's fee
+	/// income goes, rather than being dropped.
+	///
+	/// `()` destroys it. Small per account and not small across a population, and on a chain
+	/// that collects fees for its treasury there is no reason for the remainder to be the one
+	/// thing that vanishes. Upstream stopped dropping it too, with a pallet of its own; this
+	/// gets the same result without taking on a new pallet.
+	type DustRemoval = ResolveTo<StakingPotAccountId<Runtime>, Balances>;
 	type RuntimeEvent = RuntimeEvent;
 	type ExistentialDeposit = ExistentialDeposit;
 	type AccountStore = System;
@@ -306,6 +312,7 @@ impl pezcumulus_pezpallet_teyrchain_system::Config for Runtime {
 	type CheckAssociatedRelayNumber = RelayNumberMonotonicallyIncreases;
 	type ConsensusHook = ConsensusHook;
 	type RelayParentOffset = ConstU32<0>;
+	type SchedulingSignatureVerifier = ();
 }
 
 type ConsensusHook = pezcumulus_pezpallet_aura_ext::FixedVelocityConsensusHook<
@@ -347,17 +354,6 @@ impl teyrchain_info::Config for Runtime {}
 impl pezcumulus_pezpallet_aura_ext::Config for Runtime {}
 
 parameter_types! {
-	/// Fellows pluralistic body.
-	pub const FellowsBodyId: BodyId = BodyId::Technical;
-}
-
-/// Privileged origin that represents Root or Fellows pluralistic body.
-pub type RootOrFellows = EitherOfDiverse<
-	EnsureRoot<AccountId>,
-	EnsureXcm<IsVoiceOfBody<FellowshipLocation, FellowsBodyId>>,
->;
-
-parameter_types! {
 	/// The asset ID for the asset that we use to pay for message delivery fees.
 	pub FeeAssetId: AssetId = AssetId(RocRelayLocation::get());
 	/// The base fee for the message delivery fees.
@@ -381,7 +377,7 @@ impl pezcumulus_pezpallet_xcmp_queue::Config for Runtime {
 	// Most on-chain HRMP channels are configured to use 102400 bytes of max message size, so we
 	// need to set the page size larger than that until we reduce the channel size on-chain.
 	type MaxPageSize = ConstU32<{ 103 * 1024 }>;
-	type ControllerOrigin = RootOrFellows;
+	type ControllerOrigin = EnsureRoot<AccountId>;
 	type ControllerOriginConverter = XcmOriginToTransactDispatchOrigin;
 	type WeightInfo = weights::pezcumulus_pezpallet_xcmp_queue::WeightInfo<Runtime>;
 	type PriceForSiblingDelivery = PriceForSiblingTeyrchainDelivery;
@@ -479,7 +475,7 @@ impl pezpallet_multisig::Config for Runtime {
 	Encode,
 	Decode,
 	DecodeWithMemTracking,
-	RuntimeDebug,
+	Debug,
 	MaxEncodedLen,
 	scale_info::TypeInfo,
 )]
@@ -615,25 +611,6 @@ impl pezpallet_sudo::Config for Runtime {
 	type WeightInfo = pezpallet_sudo::weights::BizinikiwiWeight<Runtime>;
 }
 
-pub struct BrokerMigrationV4BlockConversion;
-
-impl pezpallet_broker::migration::v4::BlockToRelayHeightConversion<Runtime>
-	for BrokerMigrationV4BlockConversion
-{
-	fn convert_block_number_to_relay_height(input_block_number: u32) -> u32 {
-		let relay_height = pezpallet_broker::RCBlockNumberProviderOf::<
-			<Runtime as pezpallet_broker::Config>::Coretime,
-		>::current_block_number();
-		let teyrchain_block_number = pezframe_system::Pezpallet::<Runtime>::block_number();
-		let offset = relay_height - teyrchain_block_number * 2;
-		offset + input_block_number * 2
-	}
-
-	fn convert_block_length_to_relay_length(input_block_length: u32) -> u32 {
-		input_block_length * 2
-	}
-}
-
 // Create the runtime by composing the FRAME pallets that were previously configured.
 construct_runtime!(
 	pub enum Runtime
@@ -713,6 +690,10 @@ impl_runtime_apis! {
 		fn relay_parent_offset() -> u32 {
 			0
 		}
+
+		fn max_claim_queue_offset() -> u8 {
+			pezcumulus_pezpallet_teyrchain_system::Pezpallet::<Runtime>::max_claim_queue_offset()
+		}
 	}
 
 	impl pezcumulus_primitives_aura::AuraUnincludedSegmentApi<Block> for Runtime {
@@ -790,8 +771,11 @@ impl_runtime_apis! {
 	}
 
 	impl pezsp_session::SessionKeys<Block> for Runtime {
-		fn generate_session_keys(seed: Option<Vec<u8>>) -> Vec<u8> {
-			SessionKeys::generate(seed)
+		fn generate_session_keys(
+			owner: Vec<u8>,
+			seed: Option<Vec<u8>>,
+		) -> pezsp_session::OpaqueGeneratedSessionKeys {
+			SessionKeys::generate(&owner, seed).into()
 		}
 
 		fn decode_session_keys(
@@ -970,7 +954,12 @@ impl_runtime_apis! {
 			}
 
 			use pezcumulus_pezpallet_session_benchmarking::Pezpallet as SessionBench;
-			impl pezcumulus_pezpallet_session_benchmarking::Config for Runtime {}
+			impl pezcumulus_pezpallet_session_benchmarking::Config for Runtime {
+				fn generate_session_keys_and_proof(owner: Self::AccountId) -> (Self::Keys, Vec<u8>) {
+					let keys = SessionKeys::generate(&owner.encode(), None);
+					(keys.keys, keys.proof.encode())
+				}
+			}
 
 			use xcm::latest::prelude::*;
 			use xcm_config::RocRelayLocation;
@@ -1028,7 +1017,7 @@ impl_runtime_apis! {
 					))
 				}
 
-				fn set_up_complex_asset_transfer() -> Option<(Assets, AssetId, Location, alloc::boxed::Box<dyn FnOnce()>)> {
+				fn set_up_complex_asset_transfer() -> Option<(Assets, u32, Location, alloc::boxed::Box<dyn FnOnce()>)> {
 					let native_location = Parent.into();
 					let dest = AssetHubLocation::get();
 
@@ -1059,16 +1048,15 @@ impl_runtime_apis! {
 				fn valid_destination() -> Result<Location, BenchmarkError> {
 					Ok(AssetHubLocation::get())
 				}
-				fn worst_case_holding(_depositable_count: u32) -> Assets {
-					// just concrete assets according to relay chain.
-					let assets: Vec<Asset> = vec![
-						Asset {
-							id: AssetId(RocRelayLocation::get()),
-							fun: Fungible(1_000_000 * UNITS),
+				fn worst_case_holding(_depositable_count: u32) -> xcm_executor::AssetsInHolding {
+							use pezpallet_xcm_benchmarks::MockCredit;
+							let mut holding = xcm_executor::AssetsInHolding::new();
+							holding.fungible.insert(
+								AssetId(RocRelayLocation::get()),
+								alloc::boxed::Box::new(MockCredit(1_000_000 * UNITS)),
+							);
+							holding
 						}
-					];
-					assets.into()
-				}
 			}
 
 			parameter_types! {

@@ -24,16 +24,10 @@ use pezsp_runtime::str_array as s;
 const fn percent(x: i32) -> pezsp_arithmetic::FixedI64 {
 	pezsp_arithmetic::FixedI64::from_rational(x as u128, 100)
 }
+use pezkuwi_runtime_common::rehearsal_period;
 use pezpallet_referenda::Curve;
-const APP_ROOT: Curve = Curve::make_reciprocal(4, 28, percent(80), percent(50), percent(100));
-const SUP_ROOT: Curve = Curve::make_linear(28, 28, percent(0), percent(50));
 const APP_STAKING_ADMIN: Curve = Curve::make_linear(17, 28, percent(50), percent(100));
 const SUP_STAKING_ADMIN: Curve =
-	Curve::make_reciprocal(12, 28, percent(1), percent(0), percent(50));
-const APP_TREASURER: Curve = Curve::make_reciprocal(4, 28, percent(80), percent(50), percent(100));
-const SUP_TREASURER: Curve = Curve::make_linear(28, 28, percent(0), percent(50));
-const APP_FELLOWSHIP_ADMIN: Curve = Curve::make_linear(17, 28, percent(50), percent(100));
-const SUP_FELLOWSHIP_ADMIN: Curve =
 	Curve::make_reciprocal(12, 28, percent(1), percent(0), percent(50));
 const APP_GENERAL_ADMIN: Curve =
 	Curve::make_reciprocal(4, 28, percent(80), percent(50), percent(100));
@@ -51,48 +45,39 @@ const SUP_REFERENDUM_CANCELLER: Curve =
 const APP_REFERENDUM_KILLER: Curve = Curve::make_linear(17, 28, percent(50), percent(100));
 const SUP_REFERENDUM_KILLER: Curve =
 	Curve::make_reciprocal(12, 28, percent(1), percent(0), percent(50));
-const APP_SMALL_TIPPER: Curve = Curve::make_linear(10, 28, percent(50), percent(100));
-const SUP_SMALL_TIPPER: Curve = Curve::make_reciprocal(1, 28, percent(4), percent(0), percent(50));
-const APP_BIG_TIPPER: Curve = Curve::make_linear(10, 28, percent(50), percent(100));
-const SUP_BIG_TIPPER: Curve = Curve::make_reciprocal(8, 28, percent(1), percent(0), percent(50));
-const APP_SMALL_SPENDER: Curve = Curve::make_linear(17, 28, percent(50), percent(100));
-const SUP_SMALL_SPENDER: Curve =
-	Curve::make_reciprocal(12, 28, percent(1), percent(0), percent(50));
-const APP_MEDIUM_SPENDER: Curve = Curve::make_linear(23, 28, percent(50), percent(100));
-const SUP_MEDIUM_SPENDER: Curve =
-	Curve::make_reciprocal(16, 28, percent(1), percent(0), percent(50));
-const APP_BIG_SPENDER: Curve = Curve::make_linear(28, 28, percent(50), percent(100));
-const SUP_BIG_SPENDER: Curve = Curve::make_reciprocal(20, 28, percent(1), percent(0), percent(50));
 const APP_WHITELISTED_CALLER: Curve =
 	Curve::make_reciprocal(16, 28 * 24, percent(96), percent(50), percent(100));
 const SUP_WHITELISTED_CALLER: Curve =
 	Curve::make_reciprocal(1, 28, percent(20), percent(5), percent(50));
 
-const TRACKS_DATA: [pezpallet_referenda::Track<u16, Balance, BlockNumber>; 15] = [
-	pezpallet_referenda::Track {
-		id: 0,
-		info: pezpallet_referenda::TrackInfo {
-			name: s("root"),
-			max_deciding: 1,
-			decision_deposit: 100 * GRAND,
-			prepare_period: 8 * MINUTES,
-			decision_period: 20 * MINUTES,
-			confirm_period: 12 * MINUTES,
-			min_enactment_period: 5 * MINUTES,
-			min_approval: APP_ROOT,
-			min_support: SUP_ROOT,
-		},
-	},
+// A `root` track used to head this list, and it is gone.
+//
+// Root on this chain reaches every chain: `System::set_code` here, and
+// `Paras::force_set_current_code` for each teyrchain. This chain's electorate is HEZ weighted by
+// conviction, and its root curve asked for no support at all by day 28 -- so an upgrade of the
+// whole network was, on paper, a large enough holding plus four weeks.
+//
+// Removing the track does not remove the power; it moves who holds it. Root here is still
+// reachable, by `StateRegisterAsRoot`: a referendum on the People chain, where the tally counts
+// citizens one each, arrives as `Superuser` and converts to Root. The constitution is decided by
+// the people and enacted by the relay, which is the arrangement the whole design rests on.
+//
+// The `whitelisted_caller` track below keeps its purpose and gains a second key. `Whitelist`'s
+// `WhitelistOrigin` is Root, and Root now means the register's referendum -- so the people
+// approve a call hash and this chain's own fast track enacts it. Neither half alone suffices.
+//
+// Sudo remains for the founding period and is the one hand outside this arrangement.
+const TRACKS_DATA: [pezpallet_referenda::Track<u16, Balance, BlockNumber>; 7] = [
 	pezpallet_referenda::Track {
 		id: 1,
 		info: pezpallet_referenda::TrackInfo {
 			name: s("whitelisted_caller"),
 			max_deciding: 100,
 			decision_deposit: 10 * GRAND,
-			prepare_period: 6 * MINUTES,
-			decision_period: 20 * MINUTES,
-			confirm_period: 4 * MINUTES,
-			min_enactment_period: 3 * MINUTES,
+			prepare_period: rehearsal_period!(30 * MINUTES, DAYS),
+			decision_period: rehearsal_period!(28 * DAYS, DAYS),
+			confirm_period: rehearsal_period!(10 * MINUTES, DAYS),
+			min_enactment_period: rehearsal_period!(10 * MINUTES, DAYS),
 			min_approval: APP_WHITELISTED_CALLER,
 			min_support: SUP_WHITELISTED_CALLER,
 		},
@@ -103,26 +88,12 @@ const TRACKS_DATA: [pezpallet_referenda::Track<u16, Balance, BlockNumber>; 15] =
 			name: s("staking_admin"),
 			max_deciding: 10,
 			decision_deposit: 5 * GRAND,
-			prepare_period: 8 * MINUTES,
-			decision_period: 20 * MINUTES,
-			confirm_period: 8 * MINUTES,
-			min_enactment_period: 3 * MINUTES,
+			prepare_period: rehearsal_period!(2 * HOURS, DAYS),
+			decision_period: rehearsal_period!(14 * DAYS, DAYS),
+			confirm_period: rehearsal_period!(3 * HOURS, DAYS),
+			min_enactment_period: rehearsal_period!(10 * MINUTES, DAYS),
 			min_approval: APP_STAKING_ADMIN,
 			min_support: SUP_STAKING_ADMIN,
-		},
-	},
-	pezpallet_referenda::Track {
-		id: 11,
-		info: pezpallet_referenda::TrackInfo {
-			name: s("treasurer"),
-			max_deciding: 10,
-			decision_deposit: 1 * GRAND,
-			prepare_period: 8 * MINUTES,
-			decision_period: 20 * MINUTES,
-			confirm_period: 8 * MINUTES,
-			min_enactment_period: 5 * MINUTES,
-			min_approval: APP_TREASURER,
-			min_support: SUP_TREASURER,
 		},
 	},
 	pezpallet_referenda::Track {
@@ -131,26 +102,12 @@ const TRACKS_DATA: [pezpallet_referenda::Track<u16, Balance, BlockNumber>; 15] =
 			name: s("lease_admin"),
 			max_deciding: 10,
 			decision_deposit: 5 * GRAND,
-			prepare_period: 8 * MINUTES,
-			decision_period: 20 * MINUTES,
-			confirm_period: 8 * MINUTES,
-			min_enactment_period: 3 * MINUTES,
+			prepare_period: rehearsal_period!(2 * HOURS, DAYS),
+			decision_period: rehearsal_period!(14 * DAYS, DAYS),
+			confirm_period: rehearsal_period!(3 * HOURS, DAYS),
+			min_enactment_period: rehearsal_period!(10 * MINUTES, DAYS),
 			min_approval: APP_LEASE_ADMIN,
 			min_support: SUP_LEASE_ADMIN,
-		},
-	},
-	pezpallet_referenda::Track {
-		id: 13,
-		info: pezpallet_referenda::TrackInfo {
-			name: s("fellowship_admin"),
-			max_deciding: 10,
-			decision_deposit: 5 * GRAND,
-			prepare_period: 8 * MINUTES,
-			decision_period: 20 * MINUTES,
-			confirm_period: 8 * MINUTES,
-			min_enactment_period: 3 * MINUTES,
-			min_approval: APP_FELLOWSHIP_ADMIN,
-			min_support: SUP_FELLOWSHIP_ADMIN,
 		},
 	},
 	pezpallet_referenda::Track {
@@ -159,10 +116,10 @@ const TRACKS_DATA: [pezpallet_referenda::Track<u16, Balance, BlockNumber>; 15] =
 			name: s("general_admin"),
 			max_deciding: 10,
 			decision_deposit: 5 * GRAND,
-			prepare_period: 8 * MINUTES,
-			decision_period: 20 * MINUTES,
-			confirm_period: 8 * MINUTES,
-			min_enactment_period: 3 * MINUTES,
+			prepare_period: rehearsal_period!(2 * HOURS, DAYS),
+			decision_period: rehearsal_period!(14 * DAYS, DAYS),
+			confirm_period: rehearsal_period!(3 * HOURS, DAYS),
+			min_enactment_period: rehearsal_period!(10 * MINUTES, DAYS),
 			min_approval: APP_GENERAL_ADMIN,
 			min_support: SUP_GENERAL_ADMIN,
 		},
@@ -173,10 +130,10 @@ const TRACKS_DATA: [pezpallet_referenda::Track<u16, Balance, BlockNumber>; 15] =
 			name: s("auction_admin"),
 			max_deciding: 10,
 			decision_deposit: 5 * GRAND,
-			prepare_period: 8 * MINUTES,
-			decision_period: 20 * MINUTES,
-			confirm_period: 8 * MINUTES,
-			min_enactment_period: 3 * MINUTES,
+			prepare_period: rehearsal_period!(2 * HOURS, DAYS),
+			decision_period: rehearsal_period!(14 * DAYS, DAYS),
+			confirm_period: rehearsal_period!(3 * HOURS, DAYS),
+			min_enactment_period: rehearsal_period!(10 * MINUTES, DAYS),
 			min_approval: APP_AUCTION_ADMIN,
 			min_support: SUP_AUCTION_ADMIN,
 		},
@@ -187,10 +144,10 @@ const TRACKS_DATA: [pezpallet_referenda::Track<u16, Balance, BlockNumber>; 15] =
 			name: s("referendum_canceller"),
 			max_deciding: 1_000,
 			decision_deposit: 10 * GRAND,
-			prepare_period: 8 * MINUTES,
-			decision_period: 14 * MINUTES,
-			confirm_period: 8 * MINUTES,
-			min_enactment_period: 3 * MINUTES,
+			prepare_period: rehearsal_period!(2 * HOURS, DAYS),
+			decision_period: rehearsal_period!(7 * DAYS, DAYS),
+			confirm_period: rehearsal_period!(3 * HOURS, DAYS),
+			min_enactment_period: rehearsal_period!(10 * MINUTES, DAYS),
 			min_approval: APP_REFERENDUM_CANCELLER,
 			min_support: SUP_REFERENDUM_CANCELLER,
 		},
@@ -201,82 +158,12 @@ const TRACKS_DATA: [pezpallet_referenda::Track<u16, Balance, BlockNumber>; 15] =
 			name: s("referendum_killer"),
 			max_deciding: 1_000,
 			decision_deposit: 50 * GRAND,
-			prepare_period: 8 * MINUTES,
-			decision_period: 20 * MINUTES,
-			confirm_period: 8 * MINUTES,
-			min_enactment_period: 3 * MINUTES,
+			prepare_period: rehearsal_period!(2 * HOURS, DAYS),
+			decision_period: rehearsal_period!(14 * DAYS, DAYS),
+			confirm_period: rehearsal_period!(3 * HOURS, DAYS),
+			min_enactment_period: rehearsal_period!(10 * MINUTES, DAYS),
 			min_approval: APP_REFERENDUM_KILLER,
 			min_support: SUP_REFERENDUM_KILLER,
-		},
-	},
-	pezpallet_referenda::Track {
-		id: 30,
-		info: pezpallet_referenda::TrackInfo {
-			name: s("small_tipper"),
-			max_deciding: 200,
-			decision_deposit: 1 * 3 * CENTS,
-			prepare_period: 1 * MINUTES,
-			decision_period: 14 * MINUTES,
-			confirm_period: 4 * MINUTES,
-			min_enactment_period: 1 * MINUTES,
-			min_approval: APP_SMALL_TIPPER,
-			min_support: SUP_SMALL_TIPPER,
-		},
-	},
-	pezpallet_referenda::Track {
-		id: 31,
-		info: pezpallet_referenda::TrackInfo {
-			name: s("big_tipper"),
-			max_deciding: 100,
-			decision_deposit: 10 * 3 * CENTS,
-			prepare_period: 4 * MINUTES,
-			decision_period: 14 * MINUTES,
-			confirm_period: 12 * MINUTES,
-			min_enactment_period: 3 * MINUTES,
-			min_approval: APP_BIG_TIPPER,
-			min_support: SUP_BIG_TIPPER,
-		},
-	},
-	pezpallet_referenda::Track {
-		id: 32,
-		info: pezpallet_referenda::TrackInfo {
-			name: s("small_spender"),
-			max_deciding: 50,
-			decision_deposit: 100 * 3 * CENTS,
-			prepare_period: 10 * MINUTES,
-			decision_period: 20 * MINUTES,
-			confirm_period: 10 * MINUTES,
-			min_enactment_period: 5 * MINUTES,
-			min_approval: APP_SMALL_SPENDER,
-			min_support: SUP_SMALL_SPENDER,
-		},
-	},
-	pezpallet_referenda::Track {
-		id: 33,
-		info: pezpallet_referenda::TrackInfo {
-			name: s("medium_spender"),
-			max_deciding: 50,
-			decision_deposit: 200 * 3 * CENTS,
-			prepare_period: 10 * MINUTES,
-			decision_period: 20 * MINUTES,
-			confirm_period: 12 * MINUTES,
-			min_enactment_period: 5 * MINUTES,
-			min_approval: APP_MEDIUM_SPENDER,
-			min_support: SUP_MEDIUM_SPENDER,
-		},
-	},
-	pezpallet_referenda::Track {
-		id: 34,
-		info: pezpallet_referenda::TrackInfo {
-			name: s("big_spender"),
-			max_deciding: 50,
-			decision_deposit: 400 * 3 * CENTS,
-			prepare_period: 10 * MINUTES,
-			decision_period: 20 * MINUTES,
-			confirm_period: 14 * MINUTES,
-			min_enactment_period: 5 * MINUTES,
-			min_approval: APP_BIG_SPENDER,
-			min_support: SUP_BIG_SPENDER,
 		},
 	},
 ];
@@ -292,30 +179,22 @@ impl pezpallet_referenda::TracksInfo<Balance, BlockNumber> for TracksInfo {
 		TRACKS_DATA.iter().map(Cow::Borrowed)
 	}
 	fn track_for(id: &Self::RuntimeOrigin) -> Result<Self::Id, ()> {
-		if let Ok(system_origin) = pezframe_system::RawOrigin::try_from(id.clone()) {
-			match system_origin {
-				pezframe_system::RawOrigin::Root => Ok(0),
-				_ => Err(()),
-			}
+		if pezframe_system::RawOrigin::try_from(id.clone()).is_ok() {
+			// No system origin has a track here any more, Root included. Root arrives from the
+			// People chain's referendum, not from a ballot of this chain's holders.
+			Err(())
 		} else if let Ok(custom_origin) = origins::Origin::try_from(id.clone()) {
 			match custom_origin {
 				origins::Origin::WhitelistedCaller => Ok(1),
 				// General admin
 				origins::Origin::StakingAdmin => Ok(10),
-				origins::Origin::Treasurer => Ok(11),
 				origins::Origin::LeaseAdmin => Ok(12),
-				origins::Origin::FellowshipAdmin => Ok(13),
 				origins::Origin::GeneralAdmin => Ok(14),
 				origins::Origin::AuctionAdmin => Ok(15),
 				// Referendum admins
 				origins::Origin::ReferendumCanceller => Ok(20),
 				origins::Origin::ReferendumKiller => Ok(21),
 				// Limited treasury spenders
-				origins::Origin::SmallTipper => Ok(30),
-				origins::Origin::BigTipper => Ok(31),
-				origins::Origin::SmallSpender => Ok(32),
-				origins::Origin::MediumSpender => Ok(33),
-				origins::Origin::BigSpender => Ok(34),
 				_ => Err(()),
 			}
 		} else {

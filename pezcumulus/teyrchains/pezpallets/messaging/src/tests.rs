@@ -1,3 +1,8 @@
+// This file is part of PezkuwiChain.
+
+// Copyright (C) Dijital Kurdistan Tech Institute
+// SPDX-License-Identifier: Apache-2.0
+
 use crate::{mock::*, Error, Event, *};
 use pezframe_support::{assert_noop, assert_ok};
 

@@ -19,16 +19,14 @@
 use super::*;
 use pezframe_support::{
 	parameter_types,
-	traits::{ConstU16, EitherOf},
+	traits::{ConstU16, EitherOf, EitherOfDiverse, Get},
 };
 use pezframe_system::EnsureRootWithSuccess;
 
 mod origins;
 pub use origins::{
-	pezpallet_custom_origins, AuctionAdmin, CitizenshipAdmin, Fellows, FellowshipAdmin,
-	FellowshipExperts, FellowshipInitiates, FellowshipMasters, GeneralAdmin, LeaseAdmin,
-	ReferendumCanceller, ReferendumKiller, Spender, StakingAdmin, Treasurer, WelatiAdmin,
-	WelatiElection, WhitelistedCaller,
+	pezpallet_custom_origins, AuctionAdmin, GeneralAdmin, LeaseAdmin, ReferendumCanceller,
+	ReferendumKiller, StakingAdmin, WhitelistedCaller,
 };
 mod tracks;
 pub use tracks::TracksInfo;
@@ -37,14 +35,33 @@ parameter_types! {
 	pub const VoteLockingPeriod: BlockNumber = 7 * DAYS;
 }
 
+/// Turnout is measured against what can actually vote here.
+///
+/// The XCM checking account holds the supply that lives on the other chains: an arriving teleport
+/// is checked in against it, so its balance is the counterpart of what left. It cannot vote, yet
+/// `ActiveIssuanceOf` counts it, and every support threshold is a fraction of that figure. The
+/// fast track's support floor never decays below five percent, so a checking account seeded to
+/// cover real cross-chain flow would have put that path permanently out of reach — the emergency
+/// route failing arithmetically, and only discovered in an emergency.
+///
+/// `MaxTurnout`'s own documentation asks for exactly this: reduce it to account for funds which
+/// are unable to vote. Excluding the checking account also frees the genesis allocation, which
+/// otherwise had to keep the seed below the circulating supply to leave the floor reachable.
+pub struct VotableIssuance;
+impl Get<Balance> for VotableIssuance {
+	fn get() -> Balance {
+		use pezframe_support::traits::fungible::Inspect;
+		Balances::active_issuance().saturating_sub(Balances::balance(&XcmPallet::check_account()))
+	}
+}
+
 impl pezpallet_conviction_voting::Config for Runtime {
 	type WeightInfo = weights::pezpallet_conviction_voting::WeightInfo<Self>;
 	type RuntimeEvent = RuntimeEvent;
 	type Currency = Balances;
 	type VoteLockingPeriod = VoteLockingPeriod;
 	type MaxVotes = ConstU32<512>;
-	type MaxTurnout =
-		pezframe_support::traits::tokens::currency::ActiveIssuanceOf<Balances, Self::AccountId>;
+	type MaxTurnout = VotableIssuance;
 	type Polls = Referenda;
 	type BlockNumberProvider = System;
 	type VotingHooks = ();
@@ -52,23 +69,48 @@ impl pezpallet_conviction_voting::Config for Runtime {
 
 parameter_types! {
 	pub const AlarmInterval: BlockNumber = 1;
-	pub const SubmissionDeposit: Balance = 1 * 3 * CENTS;
+	/// What it costs to put a referendum on the table. Was `1 * 3 * CENTS`, a ten-thousandth of
+	/// a unit, so submitting was free and nothing stood between the queue and a flood.
+	pub const SubmissionDeposit: Balance = 1 * DOLLARS;
 	pub const UndecidingTimeout: BlockNumber = 14 * DAYS;
 }
 
 parameter_types! {
 	pub const MaxBalance: Balance = Balance::max_value();
 }
-pub type TreasurySpender = EitherOf<EnsureRootWithSuccess<AccountId, MaxBalance>, Spender>;
 
 impl origins::pezpallet_custom_origins::Config for Runtime {}
+
+/// The People chain's court, as this chain's fast-track key.
+///
+/// A second gate behind `CourtOfPeopleAsXcmOrigin`, which already refuses every location but
+/// this one. Two checks for one grant is deliberate: the converter decides what may become an
+/// XCM origin at all, this decides what that origin may then do, and a later change to either
+/// cannot widen this authority on its own.
+pub type CourtOfPeople =
+	pezpallet_xcm::EnsureXcm<pezframe_support::traits::Equals<xcm_config::PeopleCourtLocation>>;
 
 impl pezpallet_whitelist::Config for Runtime {
 	type WeightInfo = weights::pezpallet_whitelist::WeightInfo<Self>;
 	type RuntimeCall = RuntimeCall;
 	type RuntimeEvent = RuntimeEvent;
+	// Two keys, and until now only the second one existed.
+	//
+	// The whitelist is the fast path: `whitelisted_caller` confirms in ten minutes, so a call
+	// that is already on the list can be enacted in hours. What was missing was the first key.
+	// Root alone could whitelist, and with the root track gone Root here means the People
+	// chain's twenty-eight-day referendum -- so the fast half was reachable only after the slow
+	// half had already run. That is fine for a change somebody planned and useless for the case
+	// the whitelist exists to serve: a defect nobody knew about yesterday, whose call hash
+	// cannot have been listed in advance.
+	//
+	// `Fellows` stood here once and was never an alternative -- there is no Fellowship on this
+	// chain and no track produces the origin. The court is the body that does exist, is elected,
+	// and is already trusted with the register and with impeachment. It is bounded to the
+	// whitelist: it cannot spend, cannot touch the register from here, and cannot dispatch the
+	// whitelisted call itself, which still has to go through the track and be confirmed.
 	type WhitelistOrigin =
-		EitherOf<EnsureRootWithSuccess<Self::AccountId, ConstU16<65535>>, Fellows>;
+		EitherOfDiverse<EnsureRootWithSuccess<Self::AccountId, ConstU16<65535>>, CourtOfPeople>;
 	type DispatchWhitelistedOrigin = EitherOf<EnsureRoot<Self::AccountId>, WhitelistedCaller>;
 	type Preimages = Preimage;
 }
@@ -82,7 +124,10 @@ impl pezpallet_referenda::Config for Runtime {
 	type SubmitOrigin = pezframe_system::EnsureSigned<AccountId>;
 	type CancelOrigin = EitherOf<EnsureRoot<AccountId>, ReferendumCanceller>;
 	type KillOrigin = EitherOf<EnsureRoot<AccountId>, ReferendumKiller>;
-	type Slash = Treasury;
+	// Referendum deposits that are killed rather than refunded. They go where every other
+	// penalty on this chain goes: accumulated here and forwarded to the Asset Hub's
+	// treasury. Not `()`, which would destroy them.
+	type Slash = crate::PenaltiesToTreasury;
 	type Votes = pezpallet_conviction_voting::VotesOf<Runtime>;
 	type Tally = pezpallet_conviction_voting::TallyOf<Runtime>;
 	type SubmissionDeposit = SubmissionDeposit;

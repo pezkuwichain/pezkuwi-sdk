@@ -1,3 +1,8 @@
+// This file is part of PezkuwiChain.
+
+// Copyright (C) Dijital Kurdistan Tech Institute
+// SPDX-License-Identifier: Apache-2.0
+
 //! Storage migrations for pezpallet-tiki
 
 use super::*;

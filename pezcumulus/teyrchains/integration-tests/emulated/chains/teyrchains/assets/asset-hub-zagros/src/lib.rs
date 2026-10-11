@@ -27,7 +27,6 @@ use emulated_integration_tests_common::{
 	impl_assets_helpers_for_system_teyrchain, impl_assets_helpers_for_teyrchain,
 	impl_bridge_helpers_for_chain, impl_foreign_assets_helpers_for_teyrchain,
 	impl_xcm_helpers_for_teyrchain, impls::Teyrchain, xcm_pez_emulator::decl_test_teyrchains,
-	AuraDigestProvider,
 };
 use zagros_emulated_chain::Zagros;
 
@@ -44,8 +43,15 @@ decl_test_teyrchains! {
 			LocationToAccountId: asset_hub_zagros_runtime::xcm_config::LocationToAccountId,
 			TeyrchainInfo: asset_hub_zagros_runtime::TeyrchainInfo,
 			MessageOrigin: pezcumulus_primitives_core::AggregateMessageOrigin,
-			DigestProvider: AuraDigestProvider,
 			AdditionalInherentCode: (),
+			// This chain runs `TeleportTracking = Some((CheckingAccount, MintLocation::Local))`, so a
+			// teleport out parks the amount in the check account rather than burning it, and local
+			// total issuance stays the authoritative figure.
+			//
+			// Mainnet's Asset Hub used to have that tracking off and to burn, so this comment
+			// used to say only Zagros carried the flag. Both carry it now: the tracking was
+			// turned on there once its check account was seeded at genesis.
+			native_total_supply_tracker: true,
 		},
 		pallets = {
 			PezkuwiXcm: asset_hub_zagros_runtime::PezkuwiXcm,
@@ -54,7 +60,6 @@ decl_test_teyrchains! {
 			ForeignAssets: asset_hub_zagros_runtime::ForeignAssets,
 			PoolAssets: asset_hub_zagros_runtime::PoolAssets,
 			AssetConversion: asset_hub_zagros_runtime::AssetConversion,
-			SnowbridgeSystemFrontend: asset_hub_zagros_runtime::SnowbridgeSystemFrontend,
 			Revive: asset_hub_zagros_runtime::Revive,
 		}
 	},
@@ -73,7 +78,7 @@ impl_foreign_assets_helpers_for_teyrchain!(
 impl_xcm_helpers_for_teyrchain!(AssetHubZagros);
 impl_bridge_helpers_for_chain!(
 	AssetHubZagros,
-	ParaPezpallet,
+	ParaPallet,
 	PezkuwiXcm,
 	pezbp_bridge_hub_zagros::RuntimeCall::XcmOverBridgeHubPezkuwichain
 );

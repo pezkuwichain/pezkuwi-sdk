@@ -163,11 +163,21 @@ fn governance_authorize_upgrade_works() {
 		>(GovernanceOrigin::Location(Location::new(1, Teyrchain(12334)))),
 		Either::Right(InstructionError { index: 0, error: XcmError::Barrier })
 	);
-	// ok - AssetHub
-	assert_ok!(teyrchains_runtimes_test_utils::test_cases::can_governance_authorize_upgrade::<
-		Runtime,
-		RuntimeOrigin,
-	>(GovernanceOrigin::Location(Location::new(1, Teyrchain(ASSET_HUB_ID)))));
+	// no - Asset Hub. Upstream expects this to pass because their governance moved there;
+	// ours did not. `GovernanceLocation` on this network is the relay, and the barrier grants
+	// free execution to the parent and its bodies. Asset Hub holds the economy, not the
+	// constitution.
+	//
+	// This assertion has never held in this repository -- it arrived with the fork asserting
+	// upstream's arrangement, and nothing ran it: the per-push gate type-checks the runtimes
+	// and does not run their integration tests. That is fixed alongside this.
+	assert_err!(
+		teyrchains_runtimes_test_utils::test_cases::can_governance_authorize_upgrade::<
+			Runtime,
+			RuntimeOrigin,
+		>(GovernanceOrigin::Location(Location::new(1, Teyrchain(ASSET_HUB_ID)))),
+		Either::Right(InstructionError { index: 0, error: XcmError::Barrier })
+	);
 	// no - Collectives
 	assert_err!(
 		teyrchains_runtimes_test_utils::test_cases::can_governance_authorize_upgrade::<
@@ -199,4 +209,28 @@ fn governance_authorize_upgrade_works() {
 		Runtime,
 		RuntimeOrigin,
 	>(GovernanceOrigin::Location(GovernanceLocation::get())));
+}
+
+#[test]
+fn retired_indices_stay_retired() {
+	// The Fellowship held 60 to 65 until it was retired. A pallet index is part of the composite
+	// `RuntimeCall` and `RuntimeEvent` encodings, so giving one of these numbers to a new pallet
+	// makes old bytes decode as that pallet.
+	use pezframe_support::traits::PalletsInfoAccess;
+	let taken: Vec<usize> =
+		<collectives_zagros_runtime::AllPalletsWithSystem as PalletsInfoAccess>::infos()
+			.iter()
+			.map(|i| i.index)
+			.collect();
+	for index in 60usize..=65 {
+		assert!(!taken.contains(&index), "index {index} is retired and was handed to a pallet");
+	}
+
+	// The same holds for the Fellowship proxy kind, which is stored with every proxy: byte 5
+	// must not decode as another kind.
+	use codec::Decode;
+	use collectives_zagros_runtime::ProxyType;
+	assert!(ProxyType::decode(&mut &[5u8][..]).is_err(), "proxy kind 5 is retired");
+	assert_eq!(ProxyType::decode(&mut &[6u8][..]), Ok(ProxyType::Ambassador));
+	assert_eq!(ProxyType::decode(&mut &[7u8][..]), Ok(ProxyType::Secretary));
 }

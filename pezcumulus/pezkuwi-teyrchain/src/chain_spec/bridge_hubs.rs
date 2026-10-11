@@ -21,12 +21,9 @@ use std::str::FromStr;
 /// Collects all supported BridgeHub configurations
 #[derive(Debug, PartialEq)]
 pub enum BridgeHubRuntimeType {
-	Dicle,
-	DicleLocal,
-
-	Pezkuwi,
-	PezkuwiLocal,
-
+	// Both live ids stay: `LegacyRuntime::from_id` parses a running node's chain id into this
+	// type, so a hub started from its own spec file needs its id here. Zagros runs its bridge
+	// hub since 2026-10-04 and embeds the live spec; Pezkuwichain takes one after Zagros has.
 	Pezkuwichain,
 	PezkuwichainLocal,
 	// used by benchmarks
@@ -43,10 +40,6 @@ impl FromStr for BridgeHubRuntimeType {
 
 	fn from_str(value: &str) -> Result<Self, Self::Err> {
 		match value {
-			pezkuwi::BRIDGE_HUB_PEZKUWI => Ok(BridgeHubRuntimeType::Pezkuwi),
-			pezkuwi::BRIDGE_HUB_PEZKUWI_LOCAL => Ok(BridgeHubRuntimeType::PezkuwiLocal),
-			dicle::BRIDGE_HUB_DICLE => Ok(BridgeHubRuntimeType::Dicle),
-			dicle::BRIDGE_HUB_DICLE_LOCAL => Ok(BridgeHubRuntimeType::DicleLocal),
 			zagros::BRIDGE_HUB_ZAGROS => Ok(BridgeHubRuntimeType::Zagros),
 			zagros::BRIDGE_HUB_ZAGROS_LOCAL => Ok(BridgeHubRuntimeType::ZagrosLocal),
 			zagros::BRIDGE_HUB_ZAGROS_DEVELOPMENT => Ok(BridgeHubRuntimeType::ZagrosDevelopment),
@@ -67,15 +60,12 @@ impl BridgeHubRuntimeType {
 
 	pub fn load_config(&self) -> Result<Box<dyn ChainSpec>, String> {
 		match self {
-			BridgeHubRuntimeType::Pezkuwi => Ok(Box::new(GenericChainSpec::from_json_bytes(
-				&include_bytes!("../../chain-specs/bridge-hub-pezkuwi.json")[..],
-			)?)),
-			BridgeHubRuntimeType::Dicle => Ok(Box::new(GenericChainSpec::from_json_bytes(
-				&include_bytes!("../../chain-specs/bridge-hub-dicle.json")[..],
-			)?)),
 			BridgeHubRuntimeType::Zagros => Ok(Box::new(GenericChainSpec::from_json_bytes(
 				&include_bytes!("../../chain-specs/bridge-hub-zagros.json")[..],
 			)?)),
+			BridgeHubRuntimeType::Pezkuwichain => {
+				Err(std::format!("{self:?}: not launched: Pezkuwichain takes this chain after Zagros has run it, so no spec of it is embedded yet; pass the launched chain's spec as a file"))
+			},
 			BridgeHubRuntimeType::ZagrosLocal => Ok(Box::new(zagros::local_config(
 				zagros::BRIDGE_HUB_ZAGROS_LOCAL,
 				"Zagros BridgeHub Local",
@@ -88,9 +78,6 @@ impl BridgeHubRuntimeType {
 				"zagros-dev",
 				ChainType::Development,
 			))),
-			BridgeHubRuntimeType::Pezkuwichain => Ok(Box::new(GenericChainSpec::from_json_bytes(
-				&include_bytes!("../../chain-specs/bridge-hub-pezkuwichain.json")[..],
-			)?)),
 			BridgeHubRuntimeType::PezkuwichainLocal => Ok(Box::new(pezkuwichain::local_config(
 				pezkuwichain::BRIDGE_HUB_PEZKUWICHAIN_LOCAL,
 				"Pezkuwichain BridgeHub Local",
@@ -107,7 +94,6 @@ impl BridgeHubRuntimeType {
 					ChainType::Development,
 				)))
 			},
-			other => Err(std::format!("No default config present for {:?}", other)),
 		}
 	}
 }
@@ -144,7 +130,7 @@ pub mod pezkuwichain {
 		// Pezkuwichain defaults
 		let mut properties = pezsc_chain_spec::Properties::new();
 		properties.insert("ss58Format".into(), 42.into());
-		properties.insert("tokenSymbol".into(), "TYR".into());
+		properties.insert("tokenSymbol".into(), "HEZ".into());
 		properties.insert("tokenDecimals".into(), 12.into());
 		modify_props(&mut properties);
 
@@ -166,12 +152,6 @@ pub mod pezkuwichain {
 	}
 }
 
-/// Sub-module for Dicle setup
-pub mod dicle {
-	pub(crate) const BRIDGE_HUB_DICLE: &str = "bridge-hub-dicle";
-	pub(crate) const BRIDGE_HUB_DICLE_LOCAL: &str = "bridge-hub-dicle-local";
-}
-
 /// Sub-module for Zagros setup.
 pub mod zagros {
 	use super::ChainType;
@@ -188,7 +168,7 @@ pub mod zagros {
 		chain_type: ChainType,
 	) -> GenericChainSpec {
 		let mut properties = pezsc_chain_spec::Properties::new();
-		properties.insert("tokenSymbol".into(), "ZGR".into());
+		properties.insert("tokenSymbol".into(), "HEZ".into());
 		properties.insert("tokenDecimals".into(), 12.into());
 
 		GenericChainSpec::builder(
@@ -207,10 +187,4 @@ pub mod zagros {
 		.with_properties(properties)
 		.build()
 	}
-}
-
-/// Sub-module for Pezkuwi setup
-pub mod pezkuwi {
-	pub(crate) const BRIDGE_HUB_PEZKUWI: &str = "bridge-hub-pezkuwi";
-	pub(crate) const BRIDGE_HUB_PEZKUWI_LOCAL: &str = "bridge-hub-pezkuwi-local";
 }

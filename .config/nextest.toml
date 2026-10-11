@@ -75,7 +75,24 @@ fail-fast = true
 # which will cause slow tests to be terminated after the specified number of
 # periods have passed.
 # Example: slow-timeout = { period = "60s", terminate-after = 2 }
-slow-timeout = { period = "60s" }
+# A slow test is worth a line in the log; a hung test is worth killing.
+#
+# Without `terminate-after` nextest prints SLOW forever and waits, so a hung test costs the
+# whole job timeout -- twelve hours of a runner -- and reports nothing at all, which is worse
+# than a red because a red at least says something. Re-measured on the 2026-09-06 green run
+# (34014730362, 16,947 results across all four test jobs): p99 is 35s, 110 exceed 60s, 56
+# exceed 300s, 20 exceed 1200s, and four exceed 1800s -- all four `pezkuwi-sdk-docs`, which
+# has its own budget below.
+#
+# Thirty periods of sixty seconds kills a hang in half an hour. What that number cannot do is
+# tell a hang apart from a test that honestly takes that long, so anything running close to it
+# on a *green* run is one contended runner away from being killed and reported as a failure
+# with nothing to read. Two families were in that position and now have budgets of their own:
+# `export_import_revert` at 1696s was using 94% of this, and the nine `pezkuwi-node-core-pvf`
+# integration tests 78-90%. Raising the global instead would have bought them room by giving
+# every genuine hang another half hour, which is the wrong trade for 16,000 tests whose p99 is
+# 35 seconds.
+slow-timeout = { period = "60s", terminate-after = 30 }
 
 # Treat a test as leaky if after the process is shut down, standard output and standard error
 # aren't closed within this duration.
@@ -123,3 +140,166 @@ serial-integration = { max-threads = 1 }
 [[profile.default.overrides]]
 filter = 'test(/(^ui$|_ui|ui_)/)'
 test-group = 'serial-integration'
+
+# The snowbridge ethereum-client tests load large beacon-chain fixtures and run BLS over a
+# 512-key sync committee. They pass in isolation but aborted under full-suite concurrency on
+# the capped self-hosted runners (memory pressure). Reserve all threads so each runs alone,
+# without concurrent contention.
+# Each rehearsal stage raises a whole network -- a relay, two validators and two collators --
+# from the same `zagros-local` spec, which means the same Alice and Bob authority keys every
+# time. Run two of them at once and the two relays find each other and vote twice with one
+# identity: BABE and GRANDPA equivocation, then "Essential task `grandpa-voter` failed" and the
+# node shuts down. Measured 2026-09-19: all six stages failed this way on the first run, and
+# none of the failures named the cause, because from inside a test the symptom is a chain that
+# stops finalising.
+#
+# Concurrency is not an optimisation to recover here. Six networks is thirty nodes on one box,
+# and the run would thrash even if the keys were distinct.
+# The register stage gets longer, because its work is not a wait -- it is ninety-five citizens
+# walking three extrinsics each.
+#
+# Measured twice rather than guessed twice. On 2026-09-19 it was terminated at the twenty-minute
+# cap in two consecutive runs; the log shows it reaching "generation of 50 applicants" nine
+# minutes in, so the cap was cutting a healthy test in half rather than catching a stuck one.
+# Forty minutes leaves roughly the same margin over the measured rate that twenty leaves over the
+# other stages.
+#
+# It sits ABOVE the general `state_rehearsal` override on purpose. nextest resolves overrides
+# in file order and the first match wins, so this block placed after the general one was read,
+# accepted, and silently ignored -- the stage was terminated at twenty minutes in a third
+# consecutive run while the config said forty. A rule in the wrong position is not a weaker
+# rule, it is no rule.
+#
+# Deliberately not a blanket raise. A timeout is a statement about what normal looks like, and
+# the other five stages wait on chains rather than on a loop -- if one of them runs long, that is
+# a fault and twenty minutes should still say so.
+# Raised again on 2026-09-21, and again against a measurement rather than a feeling. This stage
+# is no longer only the register: the offices, the budget, the payroll and now the citizen
+# initiative all run on the network it raises, because each of them needs a register that is
+# full and a chain that is actually producing. Run 21 took forty-nine minutes before the
+# initiative stage joined it, which left five minutes of margin under a sixty-minute cap --
+# not enough to tell a slow run from a stuck one.
+#
+# Raised to two hours on 2026-10-03, when the custom-pallet stages joined the same network.
+# Run 37058746004 measured it: the register full at 29 minutes, the offices through the
+# initiative done at 58, Rewsenbîr, Perwerde's opening and Referral at 74 -- each logging
+# progress, none stuck -- and the cap ended it one minute into Messaging, with Messaging,
+# TokenWrapper, WP-19 and Perwerde's closing still to run at roughly five minutes each.
+[[profile.default.overrides]]
+filter = 'test(/the_register_fills/)'
+threads-required = 'num-cpus'
+slow-timeout = { period = "60s", terminate-after = 120 }
+retries = 0
+
+# The governance-track stage is sized by the tracks, not by a guess.
+#
+# It walks every track the chain declares -- five on People -- and each one waits up to
+# `TRACK_SETTLE_SECS` (420s) for its referendum to reach `Deciding`. The worst case is therefore
+# about thirty-five minutes of waiting plus the setup, against a general cap of twenty: two slow
+# tracks were enough to end the stage before it had reported on the rest. Measured 2026-09-20.
+#
+# Not made concurrent, and the reason is a real constraint rather than caution: the same three
+# voters answer every track's referendum, so submitting them together would race their nonces.
+# The votes inside a single proposal *are* concurrent, because there each voter is distinct.
+#
+# Above the general override on purpose -- nextest takes the first match.
+[[profile.default.overrides]]
+filter = 'test(/state_rehearsal_tracks/)'
+threads-required = 'num-cpus'
+slow-timeout = { period = "60s", terminate-after = 45 }
+retries = 0
+
+# Ten nodes at once -- five validators and a collator for each of the five Zagros
+# teyrchains -- so it takes the whole runner, like the rehearsal stages. Thirty relay blocks of
+# throughput after a network that size comes up is minutes, not the twenty a stage gets.
+[[profile.default.overrides]]
+filter = 'test(/zagros_runs_every_system_chain/)'
+threads-required = 'num-cpus'
+slow-timeout = { period = "60s", terminate-after = 20 }
+retries = 0
+
+# The Asset Hub's era clock: several eras of a fast runtime, and a stopped clock never reaches
+# era 1. Above the general rehearsal override because nextest takes the first match.
+[[profile.default.overrides]]
+filter = 'test(/ah_era_advances_and_issuance_grows/)'
+threads-required = 'num-cpus'
+slow-timeout = { period = "60s", terminate-after = 40 }
+retries = 0
+
+[[profile.default.overrides]]
+filter = 'test(/state_rehearsal/)'
+threads-required = 'num-cpus'
+# Twenty minutes, and no retries, and both numbers are the correction of a much worse first
+# guess. Two hours an attempt against the global `retries = 5` is six attempts of two hours per
+# stage -- seventy-two hours for six stages, and the run measured on 2026-09-19 was five and a
+# half hours in with not one stage finished.
+#
+# Retrying is worse than useless for these. A stage that fails does so because a chain did not
+# do something, which the next attempt will reproduce exactly; meanwhile the terminated
+# attempt's nodes are not always reaped, and a leftover relay carrying the same Alice and Bob
+# keys equivocates against the next attempt's relay. The retry does not just waste two hours,
+# it poisons what follows.
+#
+# Twenty minutes is the honest ceiling: a stage raises a network in two or three and then walks
+# its extrinsics. One that has not finished in twenty is not slow, it is waiting for something
+# that will not arrive, and the sooner it says so the sooner the log can be read.
+slow-timeout = { period = "60s", terminate-after = 20 }
+retries = 0
+
+[[profile.default.overrides]]
+filter = 'package(pezsnowbridge-pezpallet-ethereum-client)'
+threads-required = 'num-cpus'
+
+# benchmark_extrinsic_works spins up a full dev node (BABE + block-import workers) for every
+# runtime/extrinsic pair to smoke-test the `benchmark extrinsic` command. Under full-suite
+# concurrency on the capped self-hosted runners its node's essential consensus tasks get
+# starved and the service shuts down ("Essential task failed"). Give it the whole runner so
+# the node has the resources to run — it is a heavy end-to-end node test, not a unit test.
+[[profile.default.overrides]]
+filter = 'test(benchmark_extrinsic_works)'
+threads-required = 'num-cpus'
+slow-timeout = { period = "120s", terminate-after = 10 }
+
+# The longest tests in the suite are here, and almost none of it is testing: `your_first_node`
+# shells out to `cargo build --release` for a runtime and a node before it can run them. Until
+# that build moves out of the test, the budget has to cover it.
+#
+# The budget alone was not enough. This is the heaviest thing the suite does -- two release
+# builds -- and it was the only heavy job still sharing a runner with everything else, so on a
+# six-core box it went from 4270s to over the 6000s ceiling and had to be retried. Giving it
+# the runner is the same remedy the three overrides above got, and for the same reason.
+[[profile.default.overrides]]
+filter = 'package(pezkuwi-sdk-docs)'
+threads-required = 'num-cpus'
+slow-timeout = { period = "300s", terminate-after = 20 }
+
+# Sixty end-to-end sub-tests against a node and an RPC server this test starts itself. It used
+# to carry its own 300s deadline; on a runner also building a release binary it blew that on
+# five attempts and passed the sixth in 224s, which tripped the retry-exhaustion gate and
+# failed the job. The budget was not the defect — sharing the machine was. Give it the runner,
+# and let the harness bound the hang: 120s x 10 is twenty minutes, ample for a 224s test that
+# is not competing for cores.
+[[profile.default.overrides]]
+filter = 'test(run_all_eth_rpc_tests)'
+threads-required = 'num-cpus'
+slow-timeout = { period = "120s", terminate-after = 10 }
+
+# Every test in this package drives a real node binary end to end -- spawning it, building
+# and importing blocks, exporting and reverting a chain. They are slow for what they do, not
+# because they are stuck, and on the 2026-09-06 green run seven of them were over 900s, led
+# by `export_import_revert` at 1696s: 94% of the global budget, which exists to kill hangs
+# and would have killed this instead the first time the runner was busy.
+#
+# The budget is given to the package rather than to the three binaries that happened to be
+# measured near the line, so a slower sibling does not have to be discovered by being killed.
+# An hour is still plainly a hang for any of them.
+[[profile.default.overrides]]
+filter = 'package(pezstaging-node-cli)'
+slow-timeout = { period = "120s", terminate-after = 30 }
+
+# The PVF integration tests each prepare and execute real PVF artifacts in spawned worker
+# processes, and there are nine of them between 1397s and 1626s -- 78-90% of the global
+# budget. Same reasoning as above.
+[[profile.default.overrides]]
+filter = 'binary_id(pezkuwi-node-core-pvf::it)'
+slow-timeout = { period = "120s", terminate-after = 30 }

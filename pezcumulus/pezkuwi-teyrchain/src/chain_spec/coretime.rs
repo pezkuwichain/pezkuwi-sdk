@@ -21,13 +21,9 @@ use std::{borrow::Cow, str::FromStr};
 /// Collects all supported Coretime configurations.
 #[derive(Debug, PartialEq, Clone, Copy)]
 pub enum CoretimeRuntimeType {
-	Dicle,
-	DicleLocal,
-
-	Pezkuwi,
-	PezkuwiLocal,
-
-	// Live
+	// Live. Both ids stay: `LegacyRuntime::from_id` parses a running node's chain id into this
+	// type. Zagros runs its coretime chain since 2026-10-04 and embeds the live spec;
+	// Pezkuwichain takes one after Zagros has.
 	Pezkuwichain,
 	// Local
 	PezkuwichainLocal,
@@ -47,10 +43,6 @@ impl FromStr for CoretimeRuntimeType {
 
 	fn from_str(value: &str) -> Result<Self, Self::Err> {
 		match value {
-			dicle::CORETIME_DICLE => Ok(CoretimeRuntimeType::Dicle),
-			dicle::CORETIME_DICLE_LOCAL => Ok(CoretimeRuntimeType::DicleLocal),
-			pezkuwi::CORETIME_PEZKUWI => Ok(CoretimeRuntimeType::Pezkuwi),
-			pezkuwi::CORETIME_PEZKUWI_LOCAL => Ok(CoretimeRuntimeType::PezkuwiLocal),
 			pezkuwichain::CORETIME_PEZKUWICHAIN => Ok(CoretimeRuntimeType::Pezkuwichain),
 			pezkuwichain::CORETIME_PEZKUWICHAIN_LOCAL => Ok(CoretimeRuntimeType::PezkuwichainLocal),
 			pezkuwichain::CORETIME_PEZKUWICHAIN_DEVELOPMENT => {
@@ -67,10 +59,6 @@ impl FromStr for CoretimeRuntimeType {
 impl From<CoretimeRuntimeType> for &str {
 	fn from(runtime_type: CoretimeRuntimeType) -> Self {
 		match runtime_type {
-			CoretimeRuntimeType::Dicle => dicle::CORETIME_DICLE,
-			CoretimeRuntimeType::DicleLocal => dicle::CORETIME_DICLE_LOCAL,
-			CoretimeRuntimeType::Pezkuwi => pezkuwi::CORETIME_PEZKUWI,
-			CoretimeRuntimeType::PezkuwiLocal => pezkuwi::CORETIME_PEZKUWI_LOCAL,
 			CoretimeRuntimeType::Pezkuwichain => pezkuwichain::CORETIME_PEZKUWICHAIN,
 			CoretimeRuntimeType::PezkuwichainLocal => pezkuwichain::CORETIME_PEZKUWICHAIN_LOCAL,
 			CoretimeRuntimeType::PezkuwichainDevelopment => {
@@ -86,14 +74,10 @@ impl From<CoretimeRuntimeType> for &str {
 impl From<CoretimeRuntimeType> for ChainType {
 	fn from(runtime_type: CoretimeRuntimeType) -> Self {
 		match runtime_type {
-			CoretimeRuntimeType::Dicle
-			| CoretimeRuntimeType::Pezkuwi
-			| CoretimeRuntimeType::Pezkuwichain
-			| CoretimeRuntimeType::Zagros => ChainType::Live,
-			CoretimeRuntimeType::DicleLocal
-			| CoretimeRuntimeType::PezkuwiLocal
-			| CoretimeRuntimeType::PezkuwichainLocal
-			| CoretimeRuntimeType::ZagrosLocal => ChainType::Local,
+			CoretimeRuntimeType::Pezkuwichain | CoretimeRuntimeType::Zagros => ChainType::Live,
+			CoretimeRuntimeType::PezkuwichainLocal | CoretimeRuntimeType::ZagrosLocal => {
+				ChainType::Local
+			},
 			CoretimeRuntimeType::PezkuwichainDevelopment
 			| CoretimeRuntimeType::ZagrosDevelopment => ChainType::Development,
 		}
@@ -105,34 +89,24 @@ impl CoretimeRuntimeType {
 
 	pub fn load_config(&self) -> Result<Box<dyn ChainSpec>, String> {
 		match self {
-			CoretimeRuntimeType::Dicle => Ok(Box::new(GenericChainSpec::from_json_bytes(
-				&include_bytes!("../../chain-specs/coretime-dicle.json")[..],
+			CoretimeRuntimeType::Zagros => Ok(Box::new(GenericChainSpec::from_json_bytes(
+				&include_bytes!("../../chain-specs/coretime-zagros.json")[..],
 			)?)),
-			CoretimeRuntimeType::Pezkuwi => Ok(Box::new(GenericChainSpec::from_json_bytes(
-				&include_bytes!("../../chain-specs/coretime-pezkuwi.json")[..],
-			)?)),
-			CoretimeRuntimeType::Pezkuwichain => Ok(Box::new(GenericChainSpec::from_json_bytes(
-				&include_bytes!("../../chain-specs/coretime-pezkuwichain.json")[..],
-			)?)),
+			CoretimeRuntimeType::Pezkuwichain => {
+				Err(std::format!("{self:?}: not launched: Pezkuwichain takes this chain after Zagros has run it, so no spec of it is embedded yet; pass the launched chain's spec as a file"))
+			},
 			CoretimeRuntimeType::PezkuwichainLocal => {
 				Ok(Box::new(pezkuwichain::local_config(*self, "pezkuwichain-local")))
 			},
 			CoretimeRuntimeType::PezkuwichainDevelopment => {
 				Ok(Box::new(pezkuwichain::local_config(*self, "pezkuwichain-dev")))
 			},
-			CoretimeRuntimeType::Zagros => Ok(Box::new(GenericChainSpec::from_json_bytes(
-				&include_bytes!("../../../teyrchains/chain-specs/coretime-zagros.json")[..],
-			)?)),
 			CoretimeRuntimeType::ZagrosLocal => {
 				Ok(Box::new(zagros::local_config(*self, "zagros-local")))
 			},
 			CoretimeRuntimeType::ZagrosDevelopment => {
 				Ok(Box::new(zagros::local_config(*self, "zagros-dev")))
 			},
-			other => Err(std::format!(
-				"No default config present for {:?}, you should provide a chain-spec as json file!",
-				other
-			)),
 		}
 	}
 }
@@ -162,7 +136,7 @@ pub mod pezkuwichain {
 		// Pezkuwichain defaults
 		let mut properties = pezsc_chain_spec::Properties::new();
 		properties.insert("ss58Format".into(), 42.into());
-		properties.insert("tokenSymbol".into(), "TYR".into());
+		properties.insert("tokenSymbol".into(), "HEZ".into());
 		properties.insert("tokenDecimals".into(), 12.into());
 
 		let chain_type = runtime_type.into();
@@ -207,7 +181,7 @@ pub mod zagros {
 		// zagros defaults
 		let mut properties = pezsc_chain_spec::Properties::new();
 		properties.insert("ss58Format".into(), 42.into());
-		properties.insert("tokenSymbol".into(), "ZGR".into());
+		properties.insert("tokenSymbol".into(), "HEZ".into());
 		properties.insert("tokenDecimals".into(), 12.into());
 
 		let chain_type = runtime_type.into();
@@ -229,14 +203,4 @@ pub mod zagros {
 		.with_properties(properties)
 		.build()
 	}
-}
-
-pub mod dicle {
-	pub(crate) const CORETIME_DICLE: &str = "coretime-dicle";
-	pub(crate) const CORETIME_DICLE_LOCAL: &str = "coretime-dicle-local";
-}
-
-pub mod pezkuwi {
-	pub(crate) const CORETIME_PEZKUWI: &str = "coretime-pezkuwi";
-	pub(crate) const CORETIME_PEZKUWI_LOCAL: &str = "coretime-pezkuwi-local";
 }

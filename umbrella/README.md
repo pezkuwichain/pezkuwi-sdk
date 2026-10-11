@@ -6,12 +6,12 @@
 <!-- markdownlint-disable-next-line MD044 -->
 # `pezkuwi-sdk`
 
-[![StackExchange](https://img.shields.io/badge/StackExchange-Community%20&%20Support-222222?logo=stackexchange)](https://pezkuwichain.app/community/)
+[![StackExchange](https://img.shields.io/badge/StackExchange-Community%20&%20Support-222222?logo=stackexchange)](https://pezkuwichain.io/community/)
 
 </div>
 
 `pezkuwi-sdk` is an umbrella crate for the [PezkuwiChain
-SDK](https://github.com/pezkuwichain/pezkuwi-sdk), in the sense that it is an "umbrella" that
+SDK](https://github.com/pezkuwichain/pezkuwi-DKS), in the sense that it is an "umbrella" that
 encompasses other components. More specifically, it re-exports all the crates that are needed by
 builders.
 
@@ -24,7 +24,7 @@ updates.
 You may have seen another umbrella crate named `pezkuwi-sdk-frame`, also known as the FRAME umbrella crate.
 For clarification, while
 `pezkuwi-sdk` aims to ease dependency management, `pezkuwi-sdk-frame` intends to simplify
-[FRAME](https://docs.pezkuwichain.app/polkadot-protocol/glossary/#frame-framework-for-runtime-aggregation-of-modularized-entities)
+[FRAME](https://docs.pezkuwichain.io/polkadot-protocol/glossary/#frame-framework-for-runtime-aggregation-of-modularized-entities)
 pezpallet implementation, as demonstrated in the example below.
 
 ## 💻 Usage
@@ -174,7 +174,7 @@ For more detailed documentation and examples on `pezkuwi-sdk-frame`, see [`pezku
 
 To learn more about building with the Pezkuwi SDK, you may start with these
 [guides](https://docs.pezkuwichain.io/sdk/master/polkadot_sdk_docs/guides/index.html) and
-our [official docs](https://docs.pezkuwichain.app/).
+our [official docs](https://docs.pezkuwichain.io/).
 
 ## 🚀 Versioning
 

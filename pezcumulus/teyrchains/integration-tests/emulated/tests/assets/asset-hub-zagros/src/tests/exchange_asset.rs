@@ -21,7 +21,7 @@ use crate::{
 	},
 };
 use asset_hub_zagros_runtime::{
-	xcm_config::ZagrosLocation, Balances, ForeignAssets, PezkuwiXcm, RuntimeOrigin,
+	xcm_config::TokenLocation, Balances, ForeignAssets, PezkuwiXcm, RuntimeOrigin,
 };
 use emulated_integration_tests_common::{accounts::ALICE, xcm_pez_emulator::TestExt};
 use pezframe_support::{
@@ -55,10 +55,14 @@ fn exchange_asset_insufficient_liquidity() {
 
 #[test]
 fn exchange_asset_insufficient_balance() {
+	// Has to exceed what the sender actually holds, which is the emulated genesis balance
+	// (`ED * 4096 * 4096`, roughly 55_924 units, raised so accounts can afford `AssetDeposit`)
+	// plus the 1_000 units this test mints. `5_000` used to be more than the sender had; it no
+	// longer is, and the withdraw it was meant to fail on now succeeds.
 	let log_capture = capture_test_logs!({
 		test_exchange_asset(
 			true,
-			5_000 * UNITS,
+			1_000_000 * UNITS,
 			1_665 * UNITS,
 			Some(InstructionError { index: 0, error: XcmError::FailedToTransactAsset("") }),
 		);
@@ -83,7 +87,7 @@ fn test_exchange_asset(
 	expected_error: Option<InstructionError>,
 ) {
 	let alice: AccountId = Zagros::account_id_of(ALICE);
-	let native_asset_location = ZagrosLocation::get();
+	let native_asset_location = TokenLocation::get();
 	let native_asset_id = AssetId(native_asset_location.clone());
 	let origin = RuntimeOrigin::signed(alice.clone());
 	let asset_location = Location::new(1, [Teyrchain(2001)]);
@@ -269,7 +273,7 @@ fn exchange_asset_from_penpal_via_asset_hub_back_to_penpal() {
 		.unwrap();
 
 		// verify expected events;
-		PenpalA::assert_xcm_pallet_attempted_complete(None);
+		PenpalA::assert_xcm_pezpallet_attempted_complete(None);
 
 		let msg_sent_id = find_xcm_sent_message_id::<PenpalA>().expect("Missing Sent Event");
 		topic_id_tracker.insert("PenpalA_sent", msg_sent_id.into());

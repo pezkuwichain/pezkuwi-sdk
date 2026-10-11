@@ -1,126 +1,29 @@
-!pezkuwi.service
-.cargo-remote.toml
-.direnv/
-.DS_Store
-.env*
-chainspecs/
+# Rust / Cargo
+/target
+**/target
+*.rs.bk
+Cargo.lock.bak
 
-# Simulation scripts and data (local mainnet sim)
-vendor/pezkuwi-subxt/subxt/examples/sim_*
-vendor/pezkuwi-subxt/subxt/examples/local_sim_*
-vendor/pezkuwi-subxt/subxt/examples/fix_*
-vendor/pezkuwi-subxt/subxt/examples/init_ah_staking.rs
+# WASM build artifacts
+**/wbuild
 
-# Operational/diagnostic scripts (contain hardcoded VPS IPs)
-vendor/pezkuwi-subxt/subxt/examples/burn_xcm_check_account.rs
-vendor/pezkuwi-subxt/subxt/examples/check_tx.rs
-vendor/pezkuwi-subxt/subxt/examples/check_validator_balances.rs
-vendor/pezkuwi-subxt/subxt/examples/diagnose_balances.rs
-vendor/pezkuwi-subxt/subxt/examples/list_validators.rs
-vendor/pezkuwi-subxt/subxt/examples/people_diag.rs
-vendor/pezkuwi-subxt/subxt/examples/people_upgrade_step2.rs
-vendor/pezkuwi-subxt/subxt/examples/trace_transfers.rs
-vendor/pezkuwi-subxt/subxt/examples/watch_teleport.rs
-.idea
-.local
-.lycheecache
-.vscode
-.zed
-.wasm-binaries
-*.adoc
-*.bin
-# Exception: sassafras benchmark data (required for CI)
-!bizinikiwi/pezframe/sassafras/src/data/*.bin
-*.iml
-*.orig
-*.rej
+# Editor / OS
+.vscode/
+.idea/
 *.swp
-*.wasm
-**/._*
-**/.criterion/
-**/*.rs.bk
-**/hfuzz_target/
-**/hfuzz_workspace/
-**/node_modules
-**/target/
-**/wip/*.stderr
-**/__pycache__/
-/.cargo/config
-/.envrc
-artifacts
-!vendor/pezkuwi-subxt/artifacts/
-bin/node-template/Cargo.lock
-nohup.out
-pezkuwi_argument_parsing
-!docs/sdk/src/pezkuwi_sdk/pezkuwi.rs
-pwasm-alloc/Cargo.lock
-pwasm-libc/Cargo.lock
-release-artifacts
-release.json
-rls*.log
-runtime/wasm/target/
-pezkuwi.code-workspace
-target/
-*.scale
-rustc-ice-*
+.DS_Store
 
-# AI coordination files (private)
-.ai-coordination/
-head.rs
+# Local env / secrets — never commit
+.env
+*.key
+*.pem
+secrets/
 
-# Claude Code local files
-.claude/PROJECT_STATE.md
-.claude/SESSION_LOG.md
-.claude/hooks/
-.claude/settings.json
-.claude/CRITICAL_STATE.md
-.claude/simulation-lessons.md
-.claude/benchmark_checklist.md
-.claude/mainnet_fresh/
-.claude/test-asset-hub.toml
+# Logs & local chain data
+*.log
+/chains
+/data
 
-# Regenerable artifacts (do not commit)
-chain_spec.json
-publish.log
-pezkuwi.gbp
-
-# Zombienet binaries
-zombienet-linux
-zombienet-macos
-
-# Vendored lock files
-vendor/*/Cargo.lock
-
-# Generated chain specs
-chain-specs/
-
-# Sensitive wallet data - NEVER commit
-/res/
-tools/usdt-bridge/secrets/
-*.seed
-*wallet*.json
-founder_validators.json
-founder_governance.json
-mainnet/
-relay-mainnet.json
-relay-mainnet-raw.json
-asset-hub-plain.json
-asset-hub-raw.json
-people-chain.json
-people-chain-raw.json
-
-# Mainnet operation scripts (may contain sensitive data)
-vendor/pezkuwi-subxt/subxt/examples/check_staking.rs
-vendor/pezkuwi-subxt/subxt/examples/comprehensive_test.rs
-vendor/pezkuwi-subxt/subxt/examples/create_nft_collection.rs
-vendor/pezkuwi-subxt/subxt/examples/debug_transfer.rs
-vendor/pezkuwi-subxt/subxt/examples/register_teyrchain.rs
-vendor/pezkuwi-subxt/subxt/examples/transfer_mainnet.rs
-
-# Local tools (not part of SDK)
-tools/asset-creator/
-tools/build-mainnet-chainspec.sh
-tools/runtime-upgrade/
-tools/wasm-crypto/
-tools/usdt-bridge/bridge_db.json
-.claude/domains-repositories
+# Running the cmd.py tests locally leaves these behind.
+__pycache__/
+*.pyc

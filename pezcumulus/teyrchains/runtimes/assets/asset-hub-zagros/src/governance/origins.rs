@@ -1,28 +1,27 @@
+// This file is part of PezkuwiChain.
+
 // Copyright (C) Parity Technologies (UK) Ltd. and Dijital Kurdistan Tech Institute
-// This file is part of Pezcumulus.
 // SPDX-License-Identifier: Apache-2.0
 
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// 	http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-//! Custom origins for governance interventions.
+//! Origins the economic franchise dispatches with.
+//!
+//! These are the economy's matters and only the economy's: what the treasury spends and how
+//! much of it, and the hygiene of this chain's own ballot. Everything the state decides --
+//! who holds office, who is a citizen, how an election runs -- belongs to the other franchise,
+//! on the chain that holds the register, and is deliberately absent here.
+//!
+//! That absence is the safety property, not an omission. The two franchises count different
+//! electorates: this one counts holdings, and the other counts citizens, one each. If an
+//! origin appeared in both, a holding could reach a state power and the register would be for
+//! sale. `state_and_economic_origins_do_not_overlap` holds the two lists apart.
 
 pub use pezpallet_custom_origins::*;
 
-// From https://github.com/polkadot-fellows/runtimes/blob/7bbf00566d86d51fcd5582779e7e9c37a814405e/relay/polkadot/src/governance/origins.rs#L21-L154
 #[pezframe_support::pezpallet]
 pub mod pezpallet_custom_origins {
-	use crate::{Balance, CENTS, GRAND};
+	use crate::Balance;
 	use pezframe_support::pezpallet_prelude::*;
+	use testnet_teyrchains_constants::zagros::currency::UNITS;
 
 	#[pezpallet::config]
 	pub trait Config: pezframe_system::Config {}
@@ -31,61 +30,55 @@ pub mod pezpallet_custom_origins {
 	pub struct Pezpallet<T>(_);
 
 	#[derive(
-		PartialEq,
-		Eq,
-		Clone,
-		MaxEncodedLen,
-		Encode,
-		Decode,
-		DecodeWithMemTracking,
-		TypeInfo,
-		RuntimeDebug,
+		PartialEq, Eq, Clone, MaxEncodedLen, Encode, Decode, DecodeWithMemTracking, TypeInfo, Debug,
 	)]
 	#[pezpallet::origin]
 	pub enum Origin {
-		/// Origin able to cancel slashes and manage minimum commission.
-		StakingAdmin,
-		/// Origin for spending up to $10,000,000 HEZ from the treasury as well as generally
-		/// administering it.
+		/// The treasury as a whole: rates, budgets, and what the other spenders may reach.
+		#[codec(index = 0)]
 		Treasurer,
-		/// Origin for managing the composition of the fellowship.
-		FellowshipAdmin,
-		/// Origin for managing the registrar and permissioned HRMP channel operations.
-		GeneralAdmin,
-		/// Origin for starting auctions.
-		AuctionAdmin,
-		/// Origin able to force slot leases.
-		LeaseAdmin,
-		/// Origin able to cancel referenda.
-		ReferendumCanceller,
-		/// Origin able to kill referenda.
-		ReferendumKiller,
-		/// Origin able to spend around $250 from the treasury at once.
+		/// Small tips, decided quickly because the amount cannot do much harm.
+		#[codec(index = 1)]
 		SmallTipper,
-		/// Origin able to spend around $1,000 from the treasury at once.
+		/// Larger tips.
+		#[codec(index = 2)]
 		BigTipper,
-		/// Origin able to spend around $10,000 from the treasury at once.
+		/// Ordinary spending.
+		#[codec(index = 3)]
 		SmallSpender,
-		/// Origin able to spend around $100,000 from the treasury at once.
+		#[codec(index = 4)]
 		MediumSpender,
-		/// Origin able to spend up to $1,000,000 HEZ from the treasury at once.
+		/// The largest single amounts this chain will move without Root.
+		#[codec(index = 5)]
 		BigSpender,
-		/// Origin able to dispatch a whitelisted call.
-		WhitelistedCaller,
+		/// Cancel a referendum on this chain, refunding its deposit.
+		#[codec(index = 6)]
+		ReferendumCanceller,
+		/// Kill a referendum on this chain and slash its deposit.
+		#[codec(index = 7)]
+		ReferendumKiller,
+		// Index 8 held `EconomicAdmin`, which turned HEZ's emission rate. It is retired rather
+		// than reused: the rate went to the Treasurer, an office on the People chain, for the
+		// reason central banks exist -- holders voting on their own dilution under-emit, and
+		// emission is what pays for the chain's security. See the `AdminOrigin` note in
+		// `lib.rs`.
 	}
 
 	macro_rules! decl_unit_ensures {
 		( $name:ident: $success_type:ty = $success:expr ) => {
 			pub struct $name;
-			impl<O: Into<Result<Origin, O>> + From<Origin>>
-				EnsureOrigin<O> for $name
+			impl<O: OriginTrait + From<Origin>> EnsureOrigin<O> for $name
+			where
+				for<'a> &'a O::PalletsOrigin: TryInto<&'a Origin>,
 			{
 				type Success = $success_type;
 				fn try_origin(o: O) -> Result<Self::Success, O> {
-					o.into().and_then(|o| match o {
-						Origin::$name => Ok($success),
-						r => Err(O::from(r)),
-					})
+					match o.caller().try_into() {
+						Ok(Origin::$name) => return Ok($success),
+						_ => (),
+					}
+
+					Err(o)
 				}
 				#[cfg(feature = "runtime-benchmarks")]
 				fn try_successful_origin() -> Result<O, ()> {
@@ -104,17 +97,8 @@ pub mod pezpallet_custom_origins {
 		};
 		() => {}
 	}
-	decl_unit_ensures!(
-		StakingAdmin,
-		Treasurer,
-		FellowshipAdmin,
-		GeneralAdmin,
-		AuctionAdmin,
-		LeaseAdmin,
-		ReferendumCanceller,
-		ReferendumKiller,
-		WhitelistedCaller,
-	);
+
+	decl_unit_ensures!(Treasurer, ReferendumCanceller, ReferendumKiller,);
 
 	macro_rules! decl_ensure {
 		(
@@ -123,22 +107,25 @@ pub mod pezpallet_custom_origins {
 			}
 		) => {
 			$vis struct $name;
-			impl<O: Into<Result<Origin, O>> + From<Origin>>
-				EnsureOrigin<O> for $name
+			impl<O: OriginTrait + From<Origin>> EnsureOrigin<O> for $name
+			where
+				for<'a> &'a O::PalletsOrigin: TryInto<&'a Origin>,
 			{
 				type Success = $success_type;
 				fn try_origin(o: O) -> Result<Self::Success, O> {
-					o.into().and_then(|o| match o {
+					match o.caller().try_into() {
 						$(
-							Origin::$item => Ok($success),
+							Ok(Origin::$item) => return Ok($success),
 						)*
-						r => Err(O::from(r)),
-					})
+						_ => (),
+					}
+
+					Err(o)
 				}
 				#[cfg(feature = "runtime-benchmarks")]
 				fn try_successful_origin() -> Result<O, ()> {
-					// By convention the more privileged origins go later, so for greatest chance
-					// of success, we want the last one.
+					// By convention the more privileged origins go later, so the last one
+					// should be the most powerful.
 					let _result: Result<O, ()> = Err(());
 					$(
 						let _result: Result<O, ()> = Ok(O::from(Origin::$item));
@@ -151,12 +138,11 @@ pub mod pezpallet_custom_origins {
 
 	decl_ensure! {
 		pub type Spender: EnsureOrigin<Success = Balance> {
-			SmallTipper = 250 * 3 * CENTS,
-			BigTipper = 1 * GRAND,
-			SmallSpender = 10 * GRAND,
-			MediumSpender = 100 * GRAND,
-			BigSpender = 1_000 * GRAND,
-			Treasurer = 10_000 * GRAND,
+			SmallTipper = 250 * UNITS,
+			BigTipper = 1_000 * UNITS,
+			SmallSpender = 10_000 * UNITS,
+			MediumSpender = 100_000 * UNITS,
+			BigSpender = 1_000_000 * UNITS,
 		}
 	}
 }

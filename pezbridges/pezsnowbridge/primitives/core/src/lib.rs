@@ -28,7 +28,7 @@ use hex_literal::hex;
 use pezframe_support::{traits::Contains, BoundedVec};
 use pezsp_core::{ConstU32, H256};
 use pezsp_io::hashing::keccak_256;
-use pezsp_runtime::{traits::AccountIdConversion, RuntimeDebug};
+use pezsp_runtime::traits::AccountIdConversion;
 use pezsp_std::prelude::*;
 use scale_info::TypeInfo;
 use xcm::latest::{Asset, Junction::Teyrchain, Location, Result as XcmResult, XcmContext};
@@ -65,7 +65,7 @@ pub fn eth(x: u128) -> U256 {
 	U256::from(1_000_000_000_000_000_000u128).saturating_mul(x.into())
 }
 
-pub const TYR: u128 = 1_000_000_000_000;
+pub const HEZ: u128 = 1_000_000_000_000;
 
 /// Identifier for a message channel
 #[derive(
@@ -77,7 +77,7 @@ pub const TYR: u128 = 1_000_000_000_000;
 	PartialEq,
 	Eq,
 	Default,
-	RuntimeDebug,
+	Debug,
 	MaxEncodedLen,
 	TypeInfo,
 )]
@@ -138,7 +138,7 @@ impl AsRef<[u8]> for ChannelId {
 	}
 }
 
-#[derive(Clone, Encode, Decode, RuntimeDebug, MaxEncodedLen, TypeInfo)]
+#[derive(Clone, Encode, Decode, Debug, MaxEncodedLen, TypeInfo)]
 pub struct Channel {
 	/// ID of the agent contract deployed on Ethereum
 	pub agent_id: AgentId,
@@ -164,7 +164,7 @@ pub const SECONDARY_GOVERNANCE_CHANNEL: ChannelId =
 	ChannelId::new(hex!("0000000000000000000000000000000000000000000000000000000000000002"));
 
 /// Metadata to include in the instantiated ERC20 token contract
-#[derive(Clone, Encode, Decode, DecodeWithMemTracking, PartialEq, RuntimeDebug, TypeInfo)]
+#[derive(Clone, Encode, Decode, DecodeWithMemTracking, PartialEq, Debug, TypeInfo)]
 pub struct AssetMetadata {
 	pub name: BoundedVec<u8, ConstU32<METADATA_FIELD_MAX_LEN>>,
 	pub symbol: BoundedVec<u8, ConstU32<METADATA_FIELD_MAX_LEN>>,

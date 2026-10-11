@@ -1,4 +1,4 @@
-//! Asset Hub Runtime Upgrade (Mainnet)
+//! Asset Hub Runtime Upgrade (mainnet or Zagros)
 //!
 //! Two-step process:
 //! 1. RC → XCM → AH: System.authorize_upgrade(blake2_256(wasm))
@@ -15,39 +15,78 @@ use pezkuwi_subxt::dynamic::Value;
 use pezkuwi_subxt::{OnlineClient, PezkuwiConfig};
 use pezkuwi_subxt_signer::bip39::Mnemonic;
 use pezkuwi_subxt_signer::sr25519::Keypair;
+use pezkuwi_subxt_signer::SecretUri;
 use std::str::FromStr;
 
-const AH_PARA_ID: u128 = 1000;
+// Para id of the Asset Hub being upgraded; both mainnet and Zagros use 1000.
+fn ah_para_id() -> u128 {
+	std::env::var("AH_PARA_ID").ok().and_then(|v| v.parse().ok()).unwrap_or(1000)
+}
 
+/// Read the chain sudo mnemonic from a file under `res/`, never from an env var or
+/// argument, so the seed never lands in the process list or in shell history.
+///
+/// `SUDO_KEY_FILE` selects the chain, and the two chains keep their keys in different
+/// shapes:
+///
+/// - mainnet: `res/sudo.json`, JSON with a `mnemonic` field, used bare.
+/// - Zagros: `res/genesis/zagros/zagros-wallets.json`, JSON with a `_master_phrase` from
+///   which every key in the set derives. The root key is not the bare phrase, it is
+///   `//zagros//sudo` — so `SUDO_PATH` has to be given with it.
+///
+/// `res/zagros.md` used to be the Zagros source and is **not** any more: it records the
+/// key from the 2026-07-07 rotation, and Zagros was relaunched from a new genesis on
+/// 2026-09-14 with a different one. Pointing here at a stale file produces a keypair the
+/// chain rejects rather than acting on the wrong chain, which is the safe failure -- but
+/// it is still a wasted deploy attempt, and this comment is what prevents it.
+///
+/// Mainnet and Zagros deliberately do not share a sudo key.
 fn load_sudo_keypair() -> Keypair {
-	// 1. Try SUDO_MNEMONIC env var
-	if let Ok(mnemonic_str) = std::env::var("SUDO_MNEMONIC") {
-		if !mnemonic_str.is_empty() {
-			if let Ok(mnemonic) = Mnemonic::from_str(&mnemonic_str) {
-				if let Ok(kp) = Keypair::from_phrase(&mnemonic, None) {
-					println!("  [sudo] Loaded from SUDO_MNEMONIC env var");
-					return kp;
-				}
-			}
-		}
-	}
+	let path =
+		std::env::var("SUDO_KEY_FILE").unwrap_or_else(|_| "/home/myhez/res/sudo.json".to_string());
+	let content =
+		std::fs::read_to_string(&path).unwrap_or_else(|e| panic!("cannot read {}: {}", path, e));
 
-	// 2. Fallback to seeds file
-	let seeds_path = "/home/mamostehp/res/test_seeds.json";
-	if let Ok(content) = std::fs::read_to_string(seeds_path) {
-		if let Ok(json) = serde_json::from_str::<serde_json::Value>(&content) {
-			if let Some(mnemonic_str) = json["sudo_mnemonic"].as_str() {
-				if let Ok(mnemonic) = Mnemonic::from_str(mnemonic_str) {
-					if let Ok(kp) = Keypair::from_phrase(&mnemonic, None) {
-						println!("  [sudo] Loaded from {}", seeds_path);
-						return kp;
-					}
-				}
-			}
-		}
-	}
+	let mnemonic_str = if path.ends_with(".json") {
+		let json: serde_json::Value =
+			serde_json::from_str(&content).expect("sudo key file is not valid JSON");
+		// `mnemonic` is mainnet's shape; `_master_phrase` is the generated wallet set's, where
+		// the root key is a derivation rather than the phrase itself.
+		json["mnemonic"]
+			.as_str()
+			.or_else(|| json["_master_phrase"].as_str())
+			.unwrap_or_else(|| {
+				panic!("{} has neither a `mnemonic` nor a `_master_phrase` field", path)
+			})
+			.to_string()
+	} else {
+		// Markdown: the line reads ``- **Mnemonic:** `word word ...` ``
+		content
+			.lines()
+			.find(|l| l.contains("Mnemonic:"))
+			.and_then(|l| l.split('`').nth(1))
+			.unwrap_or_else(|| panic!("{} has no `**Mnemonic:** \\`...\\`` line", path))
+			.trim()
+			.to_string()
+	};
 
-	panic!("SUDO_MNEMONIC required! Set env var or create /home/mamostehp/res/test_seeds.json");
+	// The bare phrase is a different account from any derivation of it. Signing with the
+	// phrase where the chain expects `//zagros//sudo` produces a stranger with no balance,
+	// and the chain reports it as an inability to pay fees -- which reads like the target
+	// is wrong when the signer is.
+	let path_suffix = std::env::var("SUDO_PATH").unwrap_or_default();
+	let signer = if path_suffix.is_empty() {
+		let mnemonic =
+			Mnemonic::from_str(&mnemonic_str).expect("invalid mnemonic in sudo key file");
+		Keypair::from_phrase(&mnemonic, None).expect("cannot derive keypair from mnemonic")
+	} else {
+		let uri = SecretUri::from_str(&format!("{mnemonic_str}{path_suffix}"))
+			.expect("phrase + SUDO_PATH is not a valid secret uri");
+		Keypair::from_uri(&uri).expect("cannot derive keypair from phrase and path")
+	};
+	println!("  [sudo] Loaded from {} (path {:?})", path, path_suffix);
+	println!("  [sudo] {}", signer.public_key().to_account_id());
+	signer
 }
 
 #[tokio::main]
@@ -85,11 +124,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	// ═══════════════════════════════════════════
 	println!("=== STEP 1: Authorize upgrade (RC → XCM → AH) ===");
 
-	// Encode System::authorize_upgrade_without_checks(code_hash)
-	// System pallet index = 0, call_index = 10 (verified from source)
+	// `authorize_upgrade`, not `authorize_upgrade_without_checks`. The two differ by one flag,
+	// and the flag turns on the check that the blob's `spec_name` belongs to this chain and its
+	// `spec_version` is higher than the running one. This network is twins -- Zagros and
+	// Pezkuwichain build near-identical artefacts from one tree -- so authorising the wrong
+	// twin's blob is a plausible slip on a tired evening, not a theoretical one. Skipping the
+	// check is upstream's escape hatch for a chain that has to be recovered; using it as the
+	// default in every upgrade tool removes the guard for the ordinary case too.
+	// Encode System::authorize_upgrade(code_hash)
+	// System pallet index = 0, call_index = 9 (verified from source)
 	let mut encoded_call = Vec::with_capacity(34);
 	encoded_call.push(0x00); // System pallet
-	encoded_call.push(0x0a); // authorize_upgrade_without_checks = call_index(10)
+	encoded_call.push(0x09); // authorize_upgrade = call_index(9)
 	encoded_call.extend_from_slice(&code_hash);
 	println!("  Encoded call: {} bytes", encoded_call.len());
 
@@ -101,7 +147,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 				"interior",
 				Value::unnamed_variant(
 					"X1",
-					vec![Value::unnamed_variant("Teyrchain", vec![Value::u128(AH_PARA_ID)])],
+					vec![Value::unnamed_variant("Teyrchain", vec![Value::u128(ah_para_id())])],
 				),
 			),
 		])],
@@ -205,112 +251,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	}
 
 	// ═══════════════════════════════════════════
-	// STEP 1.5: Fund sudo account on AH via XCM (if needed)
-	// ═══════════════════════════════════════════
-	println!("\n=== STEP 1.5: Fund sudo account on AH ===");
-	let sudo_account_id = sudo_keypair.public_key().to_account_id();
-	let account_bytes: [u8; 32] = *sudo_account_id.as_ref();
-
-	// Check existing balance first
-	let balance_key = {
-		let mut key = Vec::new();
-		key.extend_from_slice(&pezsp_crypto_hashing::twox_128(b"System"));
-		key.extend_from_slice(&pezsp_crypto_hashing::twox_128(b"Account"));
-		let hash = pezsp_crypto_hashing::blake2_128(&account_bytes);
-		key.extend_from_slice(&hash);
-		key.extend_from_slice(&account_bytes);
-		key
-	};
-	let ah_storage = ah_api.storage().at_latest().await?;
-	let has_balance = match ah_storage.fetch_raw(balance_key).await {
-		Ok(data) => !data.is_empty(),
-		Err(_) => false,
-	};
-
-	if has_balance {
-		println!("  Sudo account already has funds on AH — skipping funding");
-	} else {
-		println!("  Sudo account has no funds — funding via XCM...");
-
-		// Encode Balances::force_set_balance(who, new_free)
-		// Balances pallet = 10, call_index = 8 (verified from source)
-		let mut fund_call: Vec<u8> = Vec::new();
-		fund_call.push(10u8); // Balances pallet
-		fund_call.push(8u8); // force_set_balance
-		fund_call.push(0u8); // MultiAddress::Id variant
-		fund_call.extend_from_slice(&account_bytes);
-		// 10,000 HEZ = 10_000 * 10^12 (12 decimals, NOT 18)
-		let amount: u128 = 10_000_000_000_000_000u128; // 10,000 HEZ
-		let amount_bytes = amount.to_le_bytes();
-		let significant = amount_bytes.iter().rposition(|&b| b != 0).map(|i| i + 1).unwrap_or(1);
-		let byte_len = significant.max(4);
-		fund_call.push(((byte_len as u8 - 4) << 2) | 0b11);
-		fund_call.extend_from_slice(&amount_bytes[..byte_len]);
-
-		let fund_dest = Value::unnamed_variant(
-			"V3",
-			vec![Value::named_composite([
-				("parents", Value::u128(0)),
-				(
-					"interior",
-					Value::unnamed_variant(
-						"X1",
-						vec![Value::unnamed_variant("Teyrchain", vec![Value::u128(AH_PARA_ID)])],
-					),
-				),
-			])],
-		);
-
-		let fund_msg = Value::unnamed_variant(
-			"V3",
-			vec![Value::unnamed_composite(vec![
-				Value::named_variant(
-					"UnpaidExecution",
-					[
-						("weight_limit", Value::unnamed_variant("Unlimited", vec![])),
-						("check_origin", Value::unnamed_variant("None", vec![])),
-					],
-				),
-				Value::named_variant(
-					"Transact",
-					[
-						("origin_kind", Value::unnamed_variant("Superuser", vec![])),
-						(
-							"require_weight_at_most",
-							Value::named_composite([
-								("ref_time", Value::u128(5_000_000_000u128)),
-								("proof_size", Value::u128(500_000u128)),
-							]),
-						),
-						("call", Value::from_bytes(&fund_call)),
-					],
-				),
-			])],
-		);
-
-		let fund_xcm = pezkuwi_subxt::dynamic::tx("XcmPallet", "send", vec![fund_dest, fund_msg]);
-		let fund_sudo = pezkuwi_subxt::dynamic::tx("Sudo", "sudo", vec![fund_xcm.into_value()]);
-
-		let progress = rc_api
-			.tx()
-			.sign_and_submit_then_watch_default(&fund_sudo, &sudo_keypair)
-			.await?;
-		let events = progress.wait_for_finalized_success().await?;
-		let fund_sent = events
-			.iter()
-			.flatten()
-			.any(|e| e.pallet_name() == "XcmPallet" && e.variant_name() == "Sent");
-		if fund_sent {
-			println!("  [OK] Force set balance XCM sent");
-		} else {
-			println!("  [WARN] No XcmPallet::Sent event for funding");
-		}
-
-		println!("  Waiting 18s for DMP processing...");
-		tokio::time::sleep(std::time::Duration::from_secs(18)).await;
-	}
-
-	// ═══════════════════════════════════════════
 	// STEP 2: Enact upgrade on AH directly
 	// ═══════════════════════════════════════════
 	println!("\n=== STEP 2: Apply authorized upgrade on AH ===");
@@ -322,10 +262,39 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 		vec![Value::from_bytes(&wasm_data)],
 	);
 
-	let progress = ah_api
-		.tx()
-		.sign_and_submit_then_watch_default(&enact_call, &sudo_keypair)
-		.await?;
+	// Signed when the submitter already holds HEZ here, unsigned otherwise; never funded by minting.
+	//
+	// Unsigned needs no balance: `pezframe_system` validates it against the hash authorised in step
+	// 1 and nothing else. But an unsigned call has the same hash every time, so once a pool has
+	// seen it in a block the relay did not include, the pool keeps it banned and every retry is
+	// refused as "temporarily banned". A signed call carries a nonce and a fresh hash. Fund the
+	// account with a real teleport first (relay -> the Asset Hub) when a retry is needed. This step used to
+	// mint 10,000 HEZ with a relay Superuser `force_set_balance` instead, which breaks the supply
+	// both chains are audited against.
+	let submitter = sudo_keypair.public_key().to_account_id();
+	let submitter_bytes: [u8; 32] = *submitter.as_ref();
+	let account_key = {
+		let mut key = Vec::new();
+		key.extend_from_slice(&pezsp_crypto_hashing::twox_128(b"System"));
+		key.extend_from_slice(&pezsp_crypto_hashing::twox_128(b"Account"));
+		key.extend_from_slice(&pezsp_crypto_hashing::blake2_128(&submitter_bytes));
+		key.extend_from_slice(&submitter_bytes);
+		key
+	};
+	let funded = match ah_api.storage().at_latest().await?.fetch_raw(account_key).await {
+		Ok(data) => !data.is_empty(),
+		Err(_) => false,
+	};
+	let progress = if funded {
+		println!("  Submitter holds HEZ here -- signing");
+		ah_api
+			.tx()
+			.sign_and_submit_then_watch_default(&enact_call, &sudo_keypair)
+			.await?
+	} else {
+		println!("  Submitter holds nothing here -- unsigned");
+		ah_api.tx().create_unsigned(&enact_call)?.submit_and_watch().await?
+	};
 	let events = progress.wait_for_finalized_success().await?;
 
 	let mut code_updated = false;

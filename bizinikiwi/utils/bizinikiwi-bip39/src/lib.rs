@@ -81,7 +81,7 @@ mod test {
 
 	// phrase, entropy, seed, expanded secret_key
 	//
-	// ALL SEEDS GENERATED USING "Bizinikiwi" PASSWORD!
+	// ALL SEEDS GENERATED USING "Substrate" PASSWORD!
 	static VECTORS: &[[&str; 3]] = &[
         [
             "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
@@ -214,8 +214,8 @@ mod test {
 			let expected_seed: Vec<u8> = vector[2].from_hex().unwrap();
 
 			let mnemonic = Mnemonic::parse_in(Language::English, phrase).unwrap();
-			let seed = seed_from_entropy(&mnemonic.to_entropy(), "Bizinikiwi").unwrap();
-			let secret = mini_secret_from_entropy(&mnemonic.to_entropy(), "Bizinikiwi")
+			let seed = seed_from_entropy(&mnemonic.to_entropy(), "Substrate").unwrap();
+			let secret = mini_secret_from_entropy(&mnemonic.to_entropy(), "Substrate")
 				.unwrap()
 				.to_bytes();
 

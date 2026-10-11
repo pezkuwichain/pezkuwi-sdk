@@ -19,8 +19,8 @@
 #![cfg(feature = "full-node")]
 
 use crate::{
-	fake_runtime_api::RuntimeApi, grandpa_support, relay_chain_selection, Error, FullBackend,
-	FullClient, IdentifyVariant, GRANDPA_JUSTIFICATION_PERIOD,
+	fake_runtime_api::RuntimeApi, relay_chain_selection, Error, FullBackend, FullClient,
+	GRANDPA_JUSTIFICATION_PERIOD,
 };
 use pezkuwi_primitives::Block;
 use pezsc_consensus_grandpa::FinalityProofProvider as GrandpaFinalityProofProvider;
@@ -122,11 +122,14 @@ pub(crate) fn new_partial_basics(
 		.with_runtime_cache_size(config.executor.runtime_cache_size)
 		.build();
 
+	// Blocks carrying GRANDPA justifications must survive pruning, or warp sync has nothing to
+	// verify against on a pruned node.
 	let (client, backend, keystore_container, task_manager) =
 		pezsc_service::new_full_parts::<Block, RuntimeApi, _>(
 			&config,
 			telemetry.as_ref().map(|(_, telemetry)| telemetry.handle()),
 			executor,
+			vec![Arc::new(pezsc_consensus_grandpa::GrandpaPruningFilter)],
 		)?;
 	let client = Arc::new(client);
 
@@ -146,7 +149,7 @@ pub(crate) fn new_partial_basics(
 
 pub(crate) fn new_partial<ChainSelection>(
 	config: &mut Configuration,
-	Basics { task_manager, backend, client, keystore_container, telemetry }: Basics,
+	Basics { mut task_manager, backend, client, keystore_container, telemetry }: Basics,
 	select_chain: ChainSelection,
 ) -> Result<PezkuwiPartialComponents<ChainSelection>, Error>
 where
@@ -163,8 +166,8 @@ where
 		.build(),
 	);
 
-	let grandpa_hard_forks =
-		if config.chain_spec.is_dicle() { grandpa_support::dicle_hard_forks() } else { Vec::new() };
+	// See the note in `builder/mod.rs`: hard forks are another network's incident history.
+	let grandpa_hard_forks = Vec::new();
 
 	let (grandpa_block_import, grandpa_link) =
 		pezsc_consensus_grandpa::block_import_with_authority_set_hard_forks(
@@ -214,6 +217,24 @@ where
 			registry: config.prometheus_registry(),
 			telemetry: telemetry.as_ref().map(|x| x.handle()),
 		})?;
+
+	// `import_queue`'s babe-worker essential task lives only as long as some clone of
+	// `babe_worker_handle` (its channel sender) is alive. For `new_full` an RPC-bound clone
+	// keeps it alive naturally, but chain_ops-only callers (e.g. `new_chain_ops`, used by CLI
+	// utility/benchmark commands) discard `PartialComponents::other` — which held the only
+	// other surviving clone — dropping the last sender almost immediately. That closes the
+	// worker's channel, the essential task completes, and it gets logged as "failed" (any
+	// completion is logged as failure by `spawn_essential`), even though nothing is actually
+	// broken. Anchor a clone to `task_manager` itself so it survives for as long as the caller
+	// keeps `task_manager` alive, regardless of which components they keep.
+	//
+	// `transaction_pool`'s own essential tasks (`txpool-background`, `transaction-pool-task-0`/
+	// `-1`) have the identical problem: `new_chain_ops` doesn't even include `transaction_pool`
+	// in its return tuple, so it's dropped as soon as `new_partial` returns unless something
+	// else anchors it. Chain_ops-only callers don't need a live pool (they talk to `client`
+	// directly), but a dead pool still trips the same "essential task failed" false alarm.
+	// Anchor it here too, for the same reason and by the same mechanism.
+	task_manager.keep_alive((babe_worker_handle.clone(), transaction_pool.clone()));
 
 	let justification_stream = grandpa_link.justification_stream();
 	let shared_authority_set = grandpa_link.shared_authority_set().clone();

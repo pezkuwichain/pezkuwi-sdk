@@ -14,56 +14,66 @@
 // You should have received a copy of the GNU General Public License
 // along with Pezkuwi.  If not, see <http://www.gnu.org/licenses/>.
 
-//! XCM configurations for Zagros.
+//! XCM configuration for Pezkuwichain.
 
 use super::{
-	teyrchains_origin, AccountId, AllPalletsWithSystem, Balances, Dmp, FellowshipAdmin,
-	GeneralAdmin, ParaId, Runtime, RuntimeCall, RuntimeEvent, RuntimeOrigin, StakingAdmin,
-	TransactionByteFee, Treasury, WeightToFee, XcmPallet,
+	teyrchains_origin, AccountId, AllPalletsWithSystem, Balances, Dmp, ParaId, Runtime,
+	RuntimeCall, RuntimeEvent, RuntimeOrigin, TransactionByteFee, WeightToFee, XcmPallet,
 };
-use crate::governance::pezpallet_custom_origins::Treasurer;
+
+use crate::governance::StakingAdmin;
+
 use pezframe_support::{
 	parameter_types,
 	traits::{Contains, Disabled, Equals, Everything, Nothing},
+	weights::Weight,
 };
 use pezframe_system::EnsureRoot;
-use pezkuwi_runtime_common::{
-	xcm_sender::{ChildTeyrchainRouter, ExponentialPrice},
-	ToAuthor,
-};
+use pezkuwi_runtime_common::xcm_sender::{ChildTeyrchainRouter, ExponentialPrice};
 use pezpallet_xcm::XcmPassthrough;
 use pezsp_core::ConstU32;
 use xcm::latest::{prelude::*, ZAGROS_GENESIS_HASH};
 use xcm_builder::{
-	AccountId32Aliases, AliasChildLocation, AllowExplicitUnpaidExecutionFrom,
-	AllowKnownQueryResponses, AllowSubscriptionsFrom, AllowTopLevelPaidExecutionFrom,
-	ChildTeyrchainAsNative, ChildTeyrchainConvertsVia, DescribeAllTerminal, DescribeFamily,
+	AccountId32Aliases, AllowExplicitUnpaidExecutionFrom, AllowKnownQueryResponses,
+	AllowSubscriptionsFrom, AllowTopLevelPaidExecutionFrom, ChildTeyrchainAsNative,
+	ChildTeyrchainConvertsVia, DescribeAllTerminal, DescribeFamily, FixedWeightBounds,
 	FrameTransactionalProcessor, FungibleAdapter, HashedDescription, IsChildSystemTeyrchain,
-	IsConcrete, LocationAsSuperuser, MintLocation, OriginToPluralityVoice, SendXcmFeeToAccount,
+	IsConcrete, MintLocation, OriginToPluralityVoice, SendXcmFeeToAccount,
 	SignedAccountId32AsNative, SignedToAccountId32, SovereignSignedViaLocation, TakeWeightCredit,
 	TrailingSetTopicAsId, UsingComponents, WeightInfoBounds, WithComputedOrigin, WithUniqueTopic,
 	XcmFeeManagerFromComponents,
 };
 use xcm_executor::XcmExecutor;
-use zagros_runtime_constants::{
-	currency::CENTS, system_teyrchain::*, xcm::body::FELLOWSHIP_ADMIN_INDEX,
-};
+use zagros_runtime_constants::{currency::CENTS, system_teyrchain::*};
 
 parameter_types! {
-	pub const TokenLocation: Location = Here.into_location();
-	pub const RootLocation: Location = Location::here();
-	pub const ThisNetwork: NetworkId = ByGenesis(ZAGROS_GENESIS_HASH);
-	pub UniversalLocation: InteriorLocation = [GlobalConsensus(ThisNetwork::get())].into();
+	pub TokenLocation: Location = Here.into_location();
+	pub RootLocation: Location = Location::here();
+	// This chain is Zagros, not the mainnet it mirrors. Mirroring the runtimes copied
+	// the mainnet's XCM identity along with its structure, which made three of the five
+	// Zagros chains announce themselves as the Pezkuwichain network — the same
+	// impersonation the chain-spec reset exists to end, one layer lower.
+	pub const ThisNetwork: NetworkId = NetworkId::ByGenesis(ZAGROS_GENESIS_HASH);
+	pub UniversalLocation: InteriorLocation = ThisNetwork::get().into();
 	pub CheckAccount: AccountId = XcmPallet::check_account();
-	/// Zagros does not have mint authority anymore after the Asset Hub migration.
-	pub TeleportTracking: Option<(AccountId, MintLocation)> = None;
-	pub TreasuryAccount: AccountId = Treasury::account_id();
-	/// The asset ID for the asset that we use to pay for message delivery fees.
-	pub FeeAssetId: AssetId = AssetId(TokenLocation::get());
-	/// The base fee for the message delivery fees.
-	pub const BaseDeliveryFee: u128 = CENTS.saturating_mul(3);
-	// Fellows pluralistic body.
-	pub const FellowsBodyId: BodyId = BodyId::Technical;
+	/// Track what teleports away and what comes back.
+	///
+	/// The comment this replaces said the relay has no mint authority since the Asset Hub
+	/// migration, but `None` does not remove mint authority — it removes the accounting. The
+	/// chain still accepts a teleport from any trusted teyrchain and mints on receipt; it simply
+	/// keeps no record that the supply ever left. Measured on the mainnet, which carries the same
+	/// setting: the checking account has never existed and no teyrchain sovereign account exists
+	/// either, so nothing has ever backed a teleport in this direction.
+	///
+	/// With `MintLocation::Local` the chain can only mint back what previously left, because an
+	/// arriving teleport is checked in against this account. That is the property worth having,
+	/// and it is what the relay-side teleport test describes. It requires the account to be
+	/// seeded, which is a genesis matter rather than a runtime one.
+	pub TeleportTracking: Option<(AccountId, MintLocation)> = Some((CheckAccount::get(), MintLocation::Local));
+	/// Delivery fees this chain earns. The treasury is on the Asset Hub now, so they join
+	/// the accumulation account with the rest of the income and cross with it.
+	pub TreasuryAccount: AccountId =
+		pezpallet_accumulate_and_forward::Pezpallet::<Runtime>::accumulation_account();
 }
 
 pub type LocationConverter = (
@@ -75,6 +85,10 @@ pub type LocationConverter = (
 	HashedDescription<AccountId, DescribeFamily<DescribeAllTerminal>>,
 );
 
+/// Our asset transactor. This is what allows us to interest with the runtime facilities from the
+/// point of view of XCM-only concepts like `Location` and `Asset`.
+///
+/// Ours is only aware of the Balances pezpallet, which is mapped to `RocLocation`.
 pub type LocalAssetTransactor = FungibleAdapter<
 	// Use this currency:
 	Balances,
@@ -87,21 +101,97 @@ pub type LocalAssetTransactor = FungibleAdapter<
 	TeleportTracking,
 >;
 
+/// The means that we convert the XCM message origin location into a local dispatch origin.
+/// The state register's own Root, as this chain's Root.
+///
+/// Sudo is meant to retire, and when it does the relay's privileged surface has to answer to
+/// something. All of it is `EnsureRoot` -- `Configuration`, `set_code`, HRMP, the initializer
+/// -- and no converter here turned any child chain into Root, so retiring sudo would have
+/// left the constitution unreachable rather than democratic.
+///
+/// It answers to the register as a whole, not to an office within it. A referendum on the
+/// People chain's root track speaks as that chain itself (`EnsureXcmOrigin` falls back to
+/// `Here` for Root, so the message arrives bare); the three ministerial bodies speak as
+/// pluralities and are deliberately not matched here. Changing the chain's own code is the
+/// whole register's business, not a ministry's.
+pub struct StateRegisterAsRoot;
+impl xcm_executor::traits::ConvertOrigin<RuntimeOrigin> for StateRegisterAsRoot {
+	fn convert_origin(
+		origin: impl Into<Location>,
+		kind: OriginKind,
+	) -> Result<RuntimeOrigin, Location> {
+		let origin = origin.into();
+		match (kind, origin.unpack()) {
+			(OriginKind::Superuser, (0, [Teyrchain(id)])) if u32::from(*id) == PEOPLE_ID => {
+				Ok(RuntimeOrigin::root())
+			},
+			_ => Err(origin),
+		}
+	}
+}
+
+/// The People chain's court, speaking for itself rather than for the register.
+///
+/// One body, one authority, and both are named here rather than filtered later. The court may
+/// put a call on the relay's whitelist so that a defect can be patched in hours instead of the
+/// twenty-eight days a root referendum takes; it may do nothing else.
+///
+/// It is separate from `StateRegisterAsRoot` on purpose and the two must not be collapsed. That
+/// one answers *"the whole register decided"* and grants everything; this one answers *"the
+/// court decided"* and grants one call. Matching a plurality there instead would have handed a
+/// ministry the constitution.
+///
+/// It sits above `XcmPassthrough` deliberately. The passthrough would convert this message too,
+/// but it converts every other location as well, and an authority that only exists because a
+/// catch-all did not refuse it is an authority nobody granted. Named first, the grant is
+/// readable here rather than inferred from what the filter downstream happens to allow.
+///
+/// The two-thirds threshold is not checked here and cannot be: a message carries a body, not a
+/// vote count. It is enforced where the vote happens, by the origin on the People chain that
+/// emits this, and the trust placed here is in that chain rather than in the message.
+pub struct CourtOfPeopleAsXcmOrigin;
+impl xcm_executor::traits::ConvertOrigin<RuntimeOrigin> for CourtOfPeopleAsXcmOrigin {
+	fn convert_origin(
+		origin: impl Into<Location>,
+		kind: OriginKind,
+	) -> Result<RuntimeOrigin, Location> {
+		let origin = origin.into();
+		match (kind, origin.unpack()) {
+			(
+				OriginKind::Xcm,
+				(0, [Teyrchain(id), Plurality { id: BodyId::Judicial, part: BodyPart::Voice }]),
+			) if u32::from(*id) == PEOPLE_ID => Ok(pezpallet_xcm::Origin::Xcm(origin).into()),
+			_ => Err(origin),
+		}
+	}
+}
+
 type LocalOriginConverter = (
-	// Asset Hub can gain root on the relay chain.
-	LocationAsSuperuser<Equals<AssetHub>, RuntimeOrigin>,
-	// If the origin kind is `Sovereign`, then return a `Signed` origin with the account determined
-	// by the `LocationConverter` converter.
+	// A `Signed` origin of the sovereign account that the original location controls.
 	SovereignSignedViaLocation<LocationConverter, RuntimeOrigin>,
-	// If the origin kind is `Native` and the XCM origin is a child teyrchain, then we can express
-	// it with the special `teyrchains_origin::Origin` origin variant.
+	// A child teyrchain, natively expressed, has the `Teyrchain` origin.
 	ChildTeyrchainAsNative<teyrchains_origin::Origin, RuntimeOrigin>,
-	// If the origin kind is `Native` and the XCM origin is the `AccountId32` location, then it can
-	// be expressed using the `Signed` origin variant.
+	// The AccountId32 location type can be expressed natively as a `Signed` origin.
 	SignedAccountId32AsNative<ThisNetwork, RuntimeOrigin>,
-	// Xcm origins can be represented natively under the Xcm pezpallet's Xcm origin.
+	// A referendum of the whole register, as this chain's Root.
+	StateRegisterAsRoot,
+	// The court of the People chain, for the whitelist and nothing else. Above the passthrough
+	// so the grant is named rather than inherited from a catch-all.
+	CourtOfPeopleAsXcmOrigin,
+	// Xcm origins can be represented natively under the Xcm pezpallet's Xcm origin. Without this
+	// there is no converter for `OriginKind::Xcm` at all, so a `Transact` sent that way is
+	// rejected with `BadOrigin` no matter who sent it, before its origin can be judged.
 	XcmPassthrough<RuntimeOrigin>,
 );
+
+parameter_types! {
+	/// The amount of weight an XCM operation takes. This is a safe overestimate.
+	pub const BaseXcmWeight: Weight = Weight::from_parts(1_000_000_000, 64 * 1024);
+	/// The asset ID for the asset that we use to pay for message delivery fees.
+	pub FeeAssetId: AssetId = AssetId(TokenLocation::get());
+	/// The base fee for the message delivery fees.
+	pub const BaseDeliveryFee: u128 = CENTS.saturating_mul(3);
+}
 
 pub type PriceForChildTeyrchainDelivery =
 	ExponentialPrice<FeeAssetId, BaseDeliveryFee, TransactionByteFee, Dmp>;
@@ -114,49 +204,39 @@ pub type XcmRouter = WithUniqueTopic<
 >;
 
 parameter_types! {
+	pub Tyr: AssetFilter = Wild(AllOf { fun: WildFungible, id: AssetId(TokenLocation::get()) });
 	pub AssetHub: Location = Teyrchain(ASSET_HUB_ID).into_location();
-	pub AssetHubNext: Location = Teyrchain(ASSET_HUB_NEXT_ID).into_location();
 	pub Collectives: Location = Teyrchain(COLLECTIVES_ID).into_location();
 	pub BridgeHub: Location = Teyrchain(BRIDGE_HUB_ID).into_location();
-	pub Encointer: Location = Teyrchain(ENCOINTER_ID).into_location();
 	pub People: Location = Teyrchain(PEOPLE_ID).into_location();
 	pub Broker: Location = Teyrchain(BROKER_ID).into_location();
-	pub Zgr: AssetFilter = Wild(AllOf { fun: WildFungible, id: AssetId(TokenLocation::get()) });
-	pub WndForAssetHub: (AssetFilter, Location) = (Zgr::get(), AssetHub::get());
-	pub WndForAssetHubNext: (AssetFilter, Location) = (Zgr::get(), AssetHubNext::get());
-	pub WndForCollectives: (AssetFilter, Location) = (Zgr::get(), Collectives::get());
-	pub WndForBridgeHub: (AssetFilter, Location) = (Zgr::get(), BridgeHub::get());
-	pub WndForEncointer: (AssetFilter, Location) = (Zgr::get(), Encointer::get());
-	pub WndForPeople: (AssetFilter, Location) = (Zgr::get(), People::get());
-	pub WndForBroker: (AssetFilter, Location) = (Zgr::get(), Broker::get());
-	pub MaxInstructions: u32 = 100;
-	pub MaxAssetsIntoHolding: u32 = 64;
+	pub TyrForAssetHub: (AssetFilter, Location) = (Tyr::get(), AssetHub::get());
+	pub TyrForCollectives: (AssetFilter, Location) = (Tyr::get(), Collectives::get());
+	pub TyrForBridgeHub: (AssetFilter, Location) = (Tyr::get(), BridgeHub::get());
+	pub TyrForPeople: (AssetFilter, Location) = (Tyr::get(), People::get());
+	pub TyrForBroker: (AssetFilter, Location) = (Tyr::get(), Broker::get());
+	pub const MaxInstructions: u32 = 100;
+	pub const MaxAssetsIntoHolding: u32 = 64;
 }
-
+/// The system teyrchains this relay will teleport its native token to and from.
+///
+/// One entry per chain that actually exists in this ecosystem. The list the mirror brought over
+/// named chains from another network — `Tick` (100), `Trick` (110), `Track` (120) and
+/// `Encointer` (1003) have no runtime here, and `Contracts` resolved to 1002, which is the
+/// Bridge Hub, so it trusted the same chain twice. Collectives, which does exist and whose own
+/// teleport tests exercise this, had been dropped.
 pub type TrustedTeleporters = (
-	xcm_builder::Case<WndForAssetHub>,
-	xcm_builder::Case<WndForAssetHubNext>,
-	xcm_builder::Case<WndForCollectives>,
-	xcm_builder::Case<WndForBridgeHub>,
-	xcm_builder::Case<WndForEncointer>,
-	xcm_builder::Case<WndForPeople>,
-	xcm_builder::Case<WndForBroker>,
+	xcm_builder::Case<TyrForAssetHub>,
+	xcm_builder::Case<TyrForCollectives>,
+	xcm_builder::Case<TyrForBridgeHub>,
+	xcm_builder::Case<TyrForPeople>,
+	xcm_builder::Case<TyrForBroker>,
 );
 
 pub struct OnlyTeyrchains;
 impl Contains<Location> for OnlyTeyrchains {
-	fn contains(location: &Location) -> bool {
-		matches!(location.unpack(), (0, [Teyrchain(_)]))
-	}
-}
-
-pub struct Fellows;
-impl Contains<Location> for Fellows {
-	fn contains(location: &Location) -> bool {
-		matches!(
-			location.unpack(),
-			(0, [Teyrchain(COLLECTIVES_ID), Plurality { id: BodyId::Technical, .. }])
-		)
+	fn contains(loc: &Location) -> bool {
+		matches!(loc.unpack(), (0, [Teyrchain(_)]))
 	}
 }
 
@@ -177,10 +257,10 @@ pub type Barrier = TrailingSetTopicAsId<(
 		(
 			// If the message is one that immediately attempts to pay for execution, then allow it.
 			AllowTopLevelPaidExecutionFrom<Everything>,
+			// Messages from system teyrchains need not pay for execution.
+			AllowExplicitUnpaidExecutionFrom<IsChildSystemTeyrchain<ParaId>>,
 			// Subscriptions for version tracking are OK.
 			AllowSubscriptionsFrom<OnlyTeyrchains>,
-			// Messages from system teyrchains or the Fellows plurality need not pay for execution.
-			AllowExplicitUnpaidExecutionFrom<(IsChildSystemTeyrchain<ParaId>, Fellows)>,
 		),
 		UniversalLocation,
 		ConstU32<8>,
@@ -190,11 +270,6 @@ pub type Barrier = TrailingSetTopicAsId<(
 /// Locations that will not be charged fees in the executor, neither for execution nor delivery.
 /// We only waive fees for system functions, which these locations represent.
 pub type WaivedLocations = (SystemTeyrchains, Equals<RootLocation>, LocalPlurality);
-
-/// We let locations alias into child locations of their own.
-/// This is a very simple aliasing rule, mimicking the behaviour of
-/// the `DescendOrigin` instruction.
-pub type Aliasers = AliasChildLocation;
 
 pub struct XcmConfig;
 impl xcm_executor::Config for XcmConfig {
@@ -208,17 +283,21 @@ impl xcm_executor::Config for XcmConfig {
 	type UniversalLocation = UniversalLocation;
 	type Barrier = Barrier;
 	type Weigher = WeightInfoBounds<
-		crate::weights::xcm::ZagrosXcmWeight<RuntimeCall>,
+		crate::weights::xcm::PezkuwichainXcmWeight<RuntimeCall>,
 		RuntimeCall,
 		MaxInstructions,
 	>;
-	type Trader =
-		UsingComponents<WeightToFee, TokenLocation, AccountId, Balances, ToAuthor<Runtime>>;
+	type Trader = UsingComponents<
+		WeightToFee,
+		TokenLocation,
+		AccountId,
+		Balances,
+		crate::DealWithFeesAccumulate,
+	>;
 	type ResponseHandler = XcmPallet;
 	type AssetTrap = XcmPallet;
 	type AssetLocker = ();
 	type AssetExchanger = ();
-	type AssetClaims = XcmPallet;
 	type SubscriptionService = XcmPallet;
 	type PalletInstancesInfo = AllPalletsWithSystem;
 	type MaxAssetsIntoHolding = MaxAssetsIntoHolding;
@@ -230,7 +309,7 @@ impl xcm_executor::Config for XcmConfig {
 	type UniversalAliases = Nothing;
 	type CallDispatcher = RuntimeCall;
 	type SafeCallFilter = Everything;
-	type Aliasers = Aliasers;
+	type Aliasers = Nothing;
 	type TransactionalProcessor = FrameTransactionalProcessor;
 	type HrmpNewChannelOpenRequestHandler = ();
 	type HrmpChannelAcceptedHandler = ();
@@ -239,26 +318,23 @@ impl xcm_executor::Config for XcmConfig {
 }
 
 parameter_types! {
-	// `GeneralAdmin` pluralistic body.
-	pub const GeneralAdminBodyId: BodyId = BodyId::Administration;
-	// StakingAdmin pluralistic body.
+	/// Collective pluralistic body.
+	pub const CollectiveBodyId: BodyId = BodyId::Unit;
+	/// StakingAdmin pluralistic body.
 	pub const StakingAdminBodyId: BodyId = BodyId::Defense;
-	// FellowshipAdmin pluralistic body.
-	pub const FellowshipAdminBodyId: BodyId = BodyId::Index(FELLOWSHIP_ADMIN_INDEX);
-	// `Treasurer` pluralistic body.
-	pub const TreasurerBodyId: BodyId = BodyId::Treasury;
-	// DDay pluralistic body.
-	pub const DDayBodyId: BodyId = BodyId::Moniker([b'd', b'd', b'a', b'y']);
+	/// Where the People chain's court speaks from, as this chain sees it.
+	pub PeopleCourtLocation: Location = Location::new(
+		0,
+		[Teyrchain(PEOPLE_ID.into()), Plurality {
+			id: BodyId::Judicial,
+			part: BodyPart::Voice,
+		}],
+	);
 }
 
-/// Type to convert the `GeneralAdmin` origin to a Plurality `Location` value.
-pub type GeneralAdminToPlurality =
-	OriginToPluralityVoice<RuntimeOrigin, GeneralAdmin, GeneralAdminBodyId>;
-
-/// Converts a local signed origin into an XCM location. Forms the basis for local origins
-/// sending/executing XCMs.
+/// Type to convert an `Origin` type value into a `Location` value which represents an interior
+/// location of this chain.
 pub type LocalOriginToLocation = (
-	GeneralAdminToPlurality,
 	// And a usual Signed origin to be used in XCM as a corresponding AccountId32
 	SignedToAccountId32<RuntimeOrigin, AccountId, ThisNetwork>,
 );
@@ -267,46 +343,33 @@ pub type LocalOriginToLocation = (
 pub type StakingAdminToPlurality =
 	OriginToPluralityVoice<RuntimeOrigin, StakingAdmin, StakingAdminBodyId>;
 
-/// Type to convert the `FellowshipAdmin` origin to a Plurality `Location` value.
-pub type FellowshipAdminToPlurality =
-	OriginToPluralityVoice<RuntimeOrigin, FellowshipAdmin, FellowshipAdminBodyId>;
-
-/// Type to convert the `Treasurer` origin to a Plurality `Location` value.
-pub type TreasurerToPlurality = OriginToPluralityVoice<RuntimeOrigin, Treasurer, TreasurerBodyId>;
-
 /// Type to convert a pezpallet `Origin` type value into a `Location` value which represents an
 /// interior location of this chain for a destination chain.
 pub type LocalPalletOriginToLocation = (
-	// GeneralAdmin origin to be used in XCM as a corresponding Plurality `Location` value.
-	GeneralAdminToPlurality,
 	// StakingAdmin origin to be used in XCM as a corresponding Plurality `Location` value.
 	StakingAdminToPlurality,
-	// FellowshipAdmin origin to be used in XCM as a corresponding Plurality `Location` value.
-	FellowshipAdminToPlurality,
-	// `Treasurer` origin to be used in XCM as a corresponding Plurality `Location` value.
-	TreasurerToPlurality,
 );
 
 impl pezpallet_xcm::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
-	// Note that this configuration of `SendXcmOrigin` is different from the one present in
-	// production.
-	type SendXcmOrigin = xcm_builder::EnsureXcmOrigin<
-		RuntimeOrigin,
-		(LocalPalletOriginToLocation, LocalOriginToLocation),
-	>;
+	// Production relay: only a governance-controlled pallet origin (StakingAdmin) may
+	// originate raw `pezpallet_xcm::send` messages. Ordinary signed
+	// accounts are intentionally excluded here (unlike the zagros/testnet config) so that no
+	// funded relay account can craft arbitrary XCM programs toward any current or future
+	// teyrchain. Local execution for signed accounts is still permitted via `ExecuteXcmOrigin`
+	// below, which is scoped to the caller's own derived-sovereign origin and does not grant
+	// send-to-any-destination capability.
+	type SendXcmOrigin = xcm_builder::EnsureXcmOrigin<RuntimeOrigin, LocalPalletOriginToLocation>;
 	type XcmRouter = XcmRouter;
 	// Anyone can execute XCM messages locally.
 	type ExecuteXcmOrigin = xcm_builder::EnsureXcmOrigin<RuntimeOrigin, LocalOriginToLocation>;
 	type XcmExecuteFilter = Everything;
 	type XcmExecutor = XcmExecutor<XcmConfig>;
 	type XcmTeleportFilter = Everything;
+	// Anyone is able to use reserve transfers regardless of who they are and what they want to
+	// transfer.
 	type XcmReserveTransferFilter = Everything;
-	type Weigher = WeightInfoBounds<
-		crate::weights::xcm::ZagrosXcmWeight<RuntimeCall>,
-		RuntimeCall,
-		MaxInstructions,
-	>;
+	type Weigher = FixedWeightBounds<BaseXcmWeight, RuntimeCall, MaxInstructions>;
 	type UniversalLocation = UniversalLocation;
 	type RuntimeOrigin = RuntimeOrigin;
 	type RuntimeCall = RuntimeCall;
@@ -321,6 +384,6 @@ impl pezpallet_xcm::Config for Runtime {
 	type RemoteLockConsumerIdentifier = ();
 	type WeightInfo = crate::weights::pezpallet_xcm::WeightInfo<Runtime>;
 	type AdminOrigin = EnsureRoot<AccountId>;
-	// Aliasing is disabled: xcm_executor::Config::Aliasers only allows `AliasChildLocation`.
+	// Aliasing is disabled: xcm_executor::Config::Aliasers is set to `Nothing`.
 	type AuthorizedAliasConsideration = Disabled;
 }

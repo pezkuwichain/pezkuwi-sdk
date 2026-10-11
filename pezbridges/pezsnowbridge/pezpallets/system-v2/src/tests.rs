@@ -37,8 +37,11 @@ fn agent_id_from_location() {
 			],
 		);
 		let agent_id = EthereumSystemV2::location_to_message_origin(origin.clone()).unwrap();
+		// Derived from `ZAGROS_GENESIS_HASH`, last re-read after Zagros's relaunch on 2026-09-25.
+		// The value below moves with it whenever Zagros's genesis is reset: it is a function of
+		// the network id, not a constant of this pallet.
 		let expected_agent_id =
-			hex_literal::hex!("fa2d646322a1c6db25dd004f44f14f3d39a9556bed9655f372942a84a5b3d93b")
+			hex_literal::hex!("0d0a324f94a77c47d8561aea36f29183e47c4e1993d81806b50d1fad4241ce02")
 				.into();
 		assert_eq!(agent_id, expected_agent_id);
 	});
@@ -106,7 +109,7 @@ pub struct RegisterTokenTestCase {
 #[test]
 fn register_all_tokens_succeeds() {
 	let test_cases = vec![
-		// HEZ
+		// DOT
 		RegisterTokenTestCase { native: Location::parent() },
 		// GLMR (Some Pezkuwi teyrchain currency)
 		RegisterTokenTestCase { native: Location::new(1, [Teyrchain(2004)]) },
@@ -114,7 +117,7 @@ fn register_all_tokens_succeeds() {
 		RegisterTokenTestCase {
 			native: Location::new(1, [Teyrchain(1000), PalletInstance(50), GeneralIndex(1984)]),
 		},
-		// DCL
+		// KSM
 		RegisterTokenTestCase { native: Location::new(2, [GlobalConsensus(Dicle)]) },
 		// KAR (Some Dicle teyrchain currency)
 		RegisterTokenTestCase {

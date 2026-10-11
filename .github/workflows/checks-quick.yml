@@ -41,7 +41,7 @@ jobs:
       - name: check dependency rules
         run: |
           cd bizinikiwi/
-          ../.gitlab/ensure-deps.sh
+          ../.github/scripts/ensure-deps.sh
   check-zepter:
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -142,7 +142,7 @@ jobs:
           git config --global --add safe.directory '*'
 
           # Ensure jq is installed
-          if ! command -v jq &> /dev/null; then
+          if ! command -v jq > /dev/null 2>&1; then
             echo "Installing jq..."
             apt-get update && apt-get install -y jq
           fi

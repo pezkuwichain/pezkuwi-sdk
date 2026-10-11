@@ -22,67 +22,16 @@ pub mod message_queue;
 pub mod pay;
 pub mod xcm_config;
 pub use constants::*;
-pub use opaque::*;
-pub use types::*;
-
-/// Common types of teyrchains.
-mod types {
-	use pezsp_runtime::traits::{IdentifyAccount, Verify};
-
-	/// An index to a block.
-	pub type BlockNumber = u32;
-
-	/// Alias to 512-bit hash when used in the context of a transaction signature on the chain.
-	pub type Signature = pezsp_runtime::MultiSignature;
-
-	/// Some way of identifying an account on the chain. We intentionally make it equivalent
-	/// to the public key of our transaction signing scheme.
-	pub type AccountId = <<Signature as Verify>::Signer as IdentifyAccount>::AccountId;
-
-	/// The type for looking up accounts. We don't expect more than 4 billion of them, but you
-	/// never know...
-	pub type AccountIndex = u32;
-
-	/// Balance of an account.
-	pub type Balance = u128;
-
-	/// Index of a transaction in the chain.
-	pub type Nonce = u32;
-
-	/// A hash of some data used by the chain.
-	pub type Hash = pezsp_core::H256;
-
-	/// Digest item type.
-	pub type DigestItem = pezsp_runtime::generic::DigestItem;
-
-	// Aura consensus authority.
-	pub type AuraId = pezsp_consensus_aura::sr25519::AuthorityId;
-
-	// Aura consensus authority used by Asset Hub Pezkuwi.
-	//
-	// Because of registering the authorities with an ed25519 key before switching from Shell
-	// to Asset Hub Pezkuwi, we were required to deploy a hotfix that changed Asset Hub Pezkuwi's
-	// Aura keys to ed22519. In the future that may change again.
-	pub type AssetHubPezkuwiAuraId = pezsp_consensus_aura::ed25519::AuthorityId;
-
-	// Id used for identifying assets.
-	pub type AssetIdForTrustBackedAssets = u32;
-
-	// Id used for identifying non-fungible collections.
-	pub type CollectionId = u32;
-
-	// Id used for identifying non-fungible items.
-	pub type ItemId = u32;
-}
+pub use teyrchains_common_types::{opaque::*, *};
 
 /// Common constants of teyrchains.
 mod constants {
-	use super::types::BlockNumber;
 	use pezframe_support::{
 		weights::{constants::WEIGHT_REF_TIME_PER_SECOND, Weight},
 		PalletId,
 	};
 	use pezsp_runtime::Perbill;
+	use teyrchains_common_types::BlockNumber;
 
 	/// This determines the average expected block time that we are targeting. Blocks will be
 	/// produced at a minimum duration defined by `SLOT_DURATION`. `SLOT_DURATION` is picked up by
@@ -90,10 +39,28 @@ mod constants {
 	/// slot_duration()`.
 	///
 	/// Change this to adjust the block time.
+	///
+	/// **This is upstream's default and it does not govern any chain in this tree.** Every
+	/// Pezkuwi teyrchain takes its `SLOT_DURATION` from `testnet_teyrchains_constants::<chain>
+	/// ::consensus`, where it is 6000 -- confirmed by asking a running chain for
+	/// `AuraApi_slot_duration`. The constant is left here because the crate is upstream's and
+	/// the rest of it is used.
+	///
+	/// The `MINUTES`/`HOURS`/`DAYS` below are derived from it and are therefore **half** a
+	/// Pezkuwi teyrchain's real day. Do not import them into a runtime. Doing so is not a
+	/// compile error and not a test failure; it silently halves every period built from them,
+	/// which is what happened to eighty-one periods across the People and Asset Hub runtimes
+	/// until 2026-09-18 -- a four-year term of office that ran two years, and every governance
+	/// track deciding in half the time its name promised.
+	///
+	/// The runtimes now import time from their own chain's constants, and each holds a test
+	/// comparing its `DAYS` against its own slot duration rather than against another
+	/// constant, because comparing two constants is how the wrong one gets confirmed.
 	pub const MILLISECS_PER_BLOCK: u64 = 12000;
 	pub const SLOT_DURATION: u64 = MILLISECS_PER_BLOCK;
 
-	// Time is measured by number of blocks.
+	// Time is measured by number of blocks. See the warning on `MILLISECS_PER_BLOCK`: these are
+	// upstream's twelve-second day, not this tree's six-second one.
 	pub const MINUTES: BlockNumber = 60_000 / (MILLISECS_PER_BLOCK as BlockNumber);
 	pub const HOURS: BlockNumber = MINUTES * 60;
 	pub const DAYS: BlockNumber = HOURS * 24;
@@ -119,21 +86,4 @@ mod constants {
 
 	/// Treasury pezpallet id of the local chain, used to convert into AccountId
 	pub const TREASURY_PALLET_ID: PalletId = PalletId(*b"py/trsry");
-}
-
-/// Opaque types. These are used by the CLI to instantiate machinery that don't need to know
-/// the specifics of the runtime. They can then be made to be agnostic over specific formats
-/// of data like extrinsics, allowing for them to continue syncing the network through upgrades
-/// to even the core data structures.
-pub mod opaque {
-	use super::*;
-	use pezsp_runtime::{generic, traits::BlakeTwo256};
-
-	pub use pezsp_runtime::OpaqueExtrinsic as UncheckedExtrinsic;
-	/// Opaque block header type.
-	pub type Header = generic::Header<BlockNumber, BlakeTwo256>;
-	/// Opaque block type.
-	pub type Block = generic::Block<Header, UncheckedExtrinsic>;
-	/// Opaque block identifier type.
-	pub type BlockId = generic::BlockId<Block>;
 }
