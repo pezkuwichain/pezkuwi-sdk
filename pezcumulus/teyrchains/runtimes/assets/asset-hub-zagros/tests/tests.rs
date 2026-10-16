@@ -2160,13 +2160,13 @@ fn expensive_erc20_runs_out_of_gas() {
 /// executes.
 ///
 /// It is not a policy. This runtime sets `TeleportTracking = Some(..)`, which is a chain
-/// saying it means to account for teleports; its twin, asset-hub-pezkuwichain, carries a real
-/// measurement here (21_550_000). One of the two ran the benchmark and one did not.
+/// saying it means to account for teleports. The cause was the benchmark's `CheckedAccount`,
+/// declared `None` while the executor insisted on one; with the two aligned the benchmark
+/// measures again.
 ///
-/// The fix is not a number typed into the weights file -- a fabricated weight is worse than a
-/// red test. Re-run `pezpallet_xcm_benchmarks::fungible` against this runtime and import the
-/// result. Until then this stays red, which is the correct state for a chain that cannot
-/// receive value.
+/// The fix is never a number typed into the weights file -- a fabricated weight is worse than
+/// a red test. Re-run `pezpallet_xcm_benchmarks::fungible` against this runtime and import the
+/// result.
 #[test]
 fn this_chain_can_be_teleported_to() {
 	use asset_hub_zagros_runtime::weights::xcm::pezpallet_xcm_benchmarks_fungible::WeightInfo as XcmFungibleWeight;
@@ -2306,11 +2306,8 @@ fn the_emission_call_encodes_the_way_welati_builds_it() {
 #[test]
 fn pez_cannot_be_minted_or_destroyed_over_xcm() {
 	use asset_hub_zagros_runtime::{xcm_config::NoTouchingPez, PezAssetId, RuntimeCall};
-	use pezframe_support::traits::{Contains, Get};
+	use pezframe_support::traits::Contains;
 
-	let who = || -> pezsp_runtime::MultiAddress<pezsp_runtime::AccountId32, ()> {
-		pezsp_runtime::MultiAddress::Id(pezsp_runtime::AccountId32::new([0u8; 32]))
-	};
 	let who = || -> pezsp_runtime::MultiAddress<pezsp_runtime::AccountId32, ()> {
 		pezsp_runtime::MultiAddress::Id(pezsp_runtime::AccountId32::new([0u8; 32]))
 	};
@@ -2368,7 +2365,6 @@ mod hez_parameters {
 		dynamic_params::hez, staking::MAX_INFLATION_RATE, Runtime, RuntimeOrigin,
 	};
 	use pezframe_support::{assert_noop, assert_ok, traits::Get};
-	use pezpallet_staking_async::EraPayout as _;
 	use pezsp_runtime::{traits::BadOrigin, BuildStorage, Perbill};
 
 	fn new_test_ext() -> pezsp_io::TestExternalities {
@@ -2865,5 +2861,49 @@ fn the_bond_report_names_every_validator_here() {
 		let call = asset_hub_zagros_runtime::staking::bond_report_for_people(3);
 		// Sorted, so the same validators always make the same message.
 		assert_eq!(call, (83u8, 11u8, 3u32, vec![b, a]).encode());
+	});
+}
+
+/// EIP-155 chain id. The fork carried an upstream test network's id, so a transaction signed for
+/// that network was valid here and wallets listed this chain under its name. Ids from the upstream
+/// 4204204xx family are refused outright, and the value is pinned to our own.
+#[test]
+fn evm_chain_id_is_our_own() {
+	let id = <<Runtime as pezpallet_revive::Config>::ChainId as pezframe_support::traits::Get<
+		u64,
+	>>::get();
+	assert!(!(420_420_400..420_420_500).contains(&id), "upstream EVM chain id {id}");
+	assert_eq!(id, 1921);
+}
+
+/// An approved bounty is funded in the treasury's next spend period, and only through the
+/// treasury's `SpendFunds` hook: bounties has no other way to move the value into the bounty's
+/// account. Both Asset Hubs had `SpendFunds = ()`, so a bounty could be approved and would sit in
+/// `Approved` for ever; the bounties benchmarks found it, failing with `UnexpectedStatus`.
+#[test]
+fn an_approved_bounty_is_funded_in_the_next_spend_period() {
+	use asset_hub_zagros_runtime::{Bounties, SpendPeriod, System, Treasury};
+	use pezframe_support::traits::Hooks;
+	use pezpallet_bounties::BountyStatus;
+
+	ExtBuilder::<Runtime>::default().build().execute_with(|| {
+		let proposer: AccountId = [9u8; 32].into();
+		let value = 10 * UNITS;
+		assert_ok!(Balances::mint_into(&proposer, 100 * UNITS));
+		assert_ok!(Balances::mint_into(&Treasury::account_id(), 1_000 * UNITS));
+
+		assert_ok!(Bounties::propose_bounty(RuntimeOrigin::signed(proposer), value, b"x".to_vec()));
+		assert_ok!(Bounties::approve_bounty(RuntimeOrigin::root(), 0));
+
+		// The first call records the spend period it falls in; the second lands one period later.
+		System::set_block_number(1);
+		Treasury::on_initialize(1);
+		let next = SpendPeriod::get() + 1;
+		System::set_block_number(next);
+		Treasury::on_initialize(next);
+
+		let bounty = pezpallet_bounties::Bounties::<Runtime>::get(0).expect("the bounty exists");
+		assert_eq!(bounty.get_status(), BountyStatus::Funded, "an approved bounty was not funded");
+		assert_eq!(Balances::free_balance(Bounties::bounty_account_id(0)), value);
 	});
 }

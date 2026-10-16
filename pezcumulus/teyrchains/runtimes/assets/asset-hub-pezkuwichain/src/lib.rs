@@ -31,7 +31,7 @@ pub mod genesis_config_presets;
 pub mod governance;
 // Public so the integration tests can hold the emission rule to its ceiling.
 pub mod staking;
-mod weights;
+pub mod weights;
 pub mod xcm_config;
 
 // Re-export staking configurations
@@ -58,7 +58,7 @@ use pezsp_runtime::{
 	generic, impl_opaque_keys,
 	traits::{AccountIdConversion, BlakeTwo256, Block as BlockT, Verify},
 	transaction_validity::{TransactionSource, TransactionValidity},
-	ApplyExtrinsicResult, Permill, Perquintill,
+	ApplyExtrinsicResult, FixedU128, Permill, Perquintill,
 };
 use testnet_teyrchains_constants::pezkuwichain::{
 	locations::PeopleLocation, snowbridge::EthereumNetwork,
@@ -91,12 +91,13 @@ use pezframe_system::{
 	EnsureRoot, EnsureSigned, EnsureSignedBy,
 };
 use pezpallet_asset_conversion_tx_payment::SwapAssetAdapter;
+use pezpallet_assets_precompiles::{InlineIdConfig, ERC20};
 use pezpallet_collator_selection::StakingPotAccountId;
 use pezpallet_nfts::PalletFeatures;
+use pezpallet_revive::evm::runtime::EthExtra;
+use pezpallet_xcm_precompiles::XcmPrecompile;
 use pezsp_runtime::Perbill;
-use testnet_teyrchains_constants::pezkuwichain::{
-	consensus::*, currency::*, fee::WeightToFee, time::*,
-};
+use testnet_teyrchains_constants::pezkuwichain::{consensus::*, currency::*, time::*};
 use teyrchains_common::{
 	impls::DealWithFees,
 	message_queue::{NarrowOriginToSibling, ParaIdToSibling},
@@ -121,7 +122,7 @@ use pezpallet_xcm::{EnsureXcm, IsVoiceOfBody};
 #[cfg(feature = "runtime-benchmarks")]
 use xcm::latest::prelude::{
 	Asset, Assets as XcmAssets, Fungible, Here, InteriorLocation, Junction, Junction::*, Location,
-	NetworkId, NonFungible, ParentThen, Response, WeightLimit, XCM_VERSION,
+	NetworkId, ParentThen, Response, WeightLimit, XCM_VERSION,
 };
 use xcm::{
 	latest::prelude::{AssetId, BodyId},
@@ -209,6 +210,13 @@ impl pezframe_system::Config for Runtime {
 	type SS58Prefix = SS58Prefix;
 	type OnSetCode = pezcumulus_pezpallet_teyrchain_system::TeyrchainSetCode<Self>;
 	type MaxConsumers = pezframe_support::traits::ConstU32<16>;
+	// `pezpallet_revive::Config::AutoMap` is on for this chain. Turning it on disables the
+	// `map_account` dispatchable -- it returns `Ok(())` and maps nothing -- and moves the
+	// mapping to these two hooks. They were left at their default of `()` when `AutoMap` was
+	// adopted, so nothing was ever mapped and every signed contract call was refused with
+	// `AccountUnmapped`, including for users who dutifully called `map_account` first.
+	type OnNewAccount = pezpallet_revive::AutoMapper<Runtime>;
+	type OnKilledAccount = pezpallet_revive::AutoMapper<Runtime>;
 	type SingleBlockMigrations = Migrations;
 	// The pallet sits in this runtime at index 6, but leaving this at the default `()`
 	// leaves it unreachable: `frame_system` never hands it a block, so a multi-block
@@ -268,6 +276,19 @@ parameter_types! {
 	/// Relay Chain `TransactionByteFee` / 10
 	pub const TransactionByteFee: Balance = MILLICENTS;
 }
+
+/// `pezpallet_revive` requires this specific `WeightToFee` implementation: the contract
+/// pallet assumes a fixed relationship between weight and fee, and enforces it at compile
+/// time. Keeping it here is what allows Ethereum transactions to be priced consistently with
+/// native ones.
+pub type WeightToFee = pezpallet_revive::evm::fees::BlockRatioFee<
+	// p
+	CENTS,
+	// q
+	{ 100 * ExtrinsicBaseWeight::get().ref_time() as u128 },
+	Runtime,
+	Balance,
+>;
 
 impl pezpallet_transaction_payment::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
@@ -1200,7 +1221,7 @@ use pezframe_support::traits::fungible::ItemOf;
 use pezpallet_nis::WithMaximumOf;
 
 impl pezpallet_nis::Config for Runtime {
-	type WeightInfo = pezpallet_nis::weights::BizinikiwiWeight<Runtime>;
+	type WeightInfo = weights::pezpallet_nis::WeightInfo<Runtime>;
 	type RuntimeEvent = RuntimeEvent;
 	type Currency = Balances;
 	type CurrencyBalance = Balance;
@@ -1267,8 +1288,10 @@ impl pezpallet_treasury::Config for Runtime {
 	// nothing. These are the pallet's own reference figures, measured on
 	// somebody else's hardware -- the same caveat every weight file here carries
 	// -- and a wrong non-zero number is not in the same class as no number.
-	type WeightInfo = pezpallet_treasury::weights::BizinikiwiWeight<Runtime>;
-	type SpendFunds = ();
+	type WeightInfo = weights::pezpallet_treasury_treasury::WeightInfo<Runtime>;
+	// Approved bounties are funded in the treasury's spend period, through this hook. With `()`
+	// a bounty could be approved and would never leave `Approved`.
+	type SpendFunds = Bounties;
 	// Root, or a spender the economic franchise elected to trust with an amount.
 	//
 	// Root alone meant there was no governance path to this treasury at all: the five
@@ -1282,8 +1305,7 @@ impl pezpallet_treasury::Config for Runtime {
 	type AssetKind = ();
 	type Beneficiary = AccountId;
 	type BeneficiaryLookup = pezsp_runtime::traits::IdentityLookup<Self::Beneficiary>;
-	type Paymaster =
-		pezframe_support::traits::tokens::pay::PayFromAccount<Balances, TreasuryAccount>;
+	type Paymaster = pez_assets_common::treasury::PayFromPot<Balances, TreasuryAccount>;
 	type BalanceConverter = pezframe_support::traits::tokens::UnityAssetBalanceConversion;
 	type PayoutPeriod = PayoutSpendPeriod;
 	type BlockNumberProvider = pezframe_system::Pezpallet<Runtime>;
@@ -1355,21 +1377,20 @@ impl pezpallet_treasury::Config<AirdropPotInstance> for Runtime {
 	type Burn = Burn;
 	type BurnDestination = ();
 	type MaxApprovals = MaxApprovals;
-	type WeightInfo = pezpallet_treasury::weights::BizinikiwiWeight<Runtime>;
+	type WeightInfo = weights::pezpallet_treasury_airdrop_pot::WeightInfo<Runtime>;
 	type SpendFunds = ();
 	// People, and only People -- with a ceiling. `EnsureWithSuccess` is what turns "this
 	// origin may spend" into "this origin may spend up to this much", and the amount it
 	// returns is what the pallet checks the spend against.
 	type SpendOrigin = pezframe_system::EnsureWithSuccess<
-		EnsureXcm<Equals<PeopleLocation>>,
+		pez_assets_common::treasury::EnsureXcmFrom<PeopleLocation>,
 		AccountId,
 		AirdropSpendCeiling,
 	>;
 	type AssetKind = ();
 	type Beneficiary = AccountId;
 	type BeneficiaryLookup = pezsp_runtime::traits::IdentityLookup<Self::Beneficiary>;
-	type Paymaster =
-		pezframe_support::traits::tokens::pay::PayFromAccount<Balances, AirdropPotAccount>;
+	type Paymaster = pez_assets_common::treasury::PayFromPot<Balances, AirdropPotAccount>;
 	type BalanceConverter = pezframe_support::traits::tokens::UnityAssetBalanceConversion;
 	type PayoutPeriod = PayoutSpendPeriod;
 	type BlockNumberProvider = pezframe_system::Pezpallet<Runtime>;
@@ -1395,18 +1416,17 @@ impl pezpallet_treasury::Config<PresalePotInstance> for Runtime {
 	type Burn = Burn;
 	type BurnDestination = ();
 	type MaxApprovals = MaxApprovals;
-	type WeightInfo = pezpallet_treasury::weights::BizinikiwiWeight<Runtime>;
+	type WeightInfo = weights::pezpallet_treasury_presale_pot::WeightInfo<Runtime>;
 	type SpendFunds = ();
 	type SpendOrigin = pezframe_system::EnsureWithSuccess<
-		EnsureXcm<Equals<PeopleLocation>>,
+		pez_assets_common::treasury::EnsureXcmFrom<PeopleLocation>,
 		AccountId,
 		PresaleSpendCeiling,
 	>;
 	type AssetKind = ();
 	type Beneficiary = AccountId;
 	type BeneficiaryLookup = pezsp_runtime::traits::IdentityLookup<Self::Beneficiary>;
-	type Paymaster =
-		pezframe_support::traits::tokens::pay::PayFromAccount<Balances, PresalePotAccount>;
+	type Paymaster = pez_assets_common::treasury::PayFromPot<Balances, PresalePotAccount>;
 	type BalanceConverter = pezframe_support::traits::tokens::UnityAssetBalanceConversion;
 	type PayoutPeriod = PresalePayoutPeriod;
 	type BlockNumberProvider = pezframe_system::Pezpallet<Runtime>;
@@ -1422,7 +1442,7 @@ impl pezpallet_asset_rate::Config for Runtime {
 	// nothing. These are the pallet's own reference figures, measured on
 	// somebody else's hardware -- the same caveat every weight file here carries
 	// -- and a wrong non-zero number is not in the same class as no number.
-	type WeightInfo = pezpallet_asset_rate::weights::BizinikiwiWeight<Runtime>;
+	type WeightInfo = weights::pezpallet_asset_rate::WeightInfo<Runtime>;
 	type RuntimeEvent = RuntimeEvent;
 	type CreateOrigin = EnsureRoot<AccountId>;
 	type RemoveOrigin = EnsureRoot<AccountId>;
@@ -1452,6 +1472,13 @@ parameter_types! {
 		alloc::vec![xcm_config::TokenLocation::get()];
 }
 
+// ERC20 precompiles now offer EIP-2612 permits, which need their own pallet for the nonce
+// and domain separator. Without it the precompile set does not satisfy its bounds.
+impl pezpallet_assets_precompiles::PermitConfig for Runtime {
+	type ChainId = <Runtime as pezpallet_revive::Config>::ChainId;
+	type WeightInfo = weights::pezpallet_assets_precompiles_permit::WeightInfo<Runtime>;
+}
+
 impl pezpallet_bounties::Config for Runtime {
 	// On cancellation the bounty account is emptied into the treasury. Binding this to the
 	// unit type would compile and silently strand whatever the account holds, so it is
@@ -1475,7 +1502,7 @@ impl pezpallet_bounties::Config for Runtime {
 	// nothing. These are the pallet's own reference figures, measured on
 	// somebody else's hardware -- the same caveat every weight file here carries
 	// -- and a wrong non-zero number is not in the same class as no number.
-	type WeightInfo = pezpallet_bounties::weights::BizinikiwiWeight<Runtime>;
+	type WeightInfo = weights::pezpallet_bounties::WeightInfo<Runtime>;
 	type ChildBountyManager = ChildBounties;
 	type OnSlash = Treasury;
 }
@@ -1496,7 +1523,7 @@ impl pezpallet_child_bounties::Config for Runtime {
 	// nothing. These are the pallet's own reference figures, measured on
 	// somebody else's hardware -- the same caveat every weight file here carries
 	// -- and a wrong non-zero number is not in the same class as no number.
-	type WeightInfo = pezpallet_child_bounties::weights::BizinikiwiWeight<Runtime>;
+	type WeightInfo = weights::pezpallet_child_bounties::WeightInfo<Runtime>;
 }
 
 // =============================================================================
@@ -1608,6 +1635,14 @@ impl pezpallet_token_wrapper::Config for Runtime {
 }
 
 parameter_types! {
+	/// Deposits for the contract pallet's storage, and the share of a code hash's deposit that
+	/// is locked up while the code is in use.
+	pub const DepositPerItem: Balance = deposit(1, 0);
+	pub const DepositPerChildTrieItem: Balance = deposit(1, 0) / 100;
+	pub const DepositPerByte: Balance = deposit(0, 1);
+	pub const CodeHashLockupDepositPercent: Perbill = Perbill::from_percent(30);
+	/// An Ethereum transaction may not claim more than this share of a block.
+	pub const MaxEthExtrinsicWeight: FixedU128 = FixedU128::from_rational(9, 10);
 	/// Multi-block migrations may use up to 80% of the block for their own work.
 	pub MbmServiceWeight: Weight = Perbill::from_percent(80) * RuntimeBlockWeights::get().max_block;
 }
@@ -1628,6 +1663,78 @@ impl pezpallet_migrations::Config for Runtime {
 	type FailedMigrationHandler = pezframe_support::migrations::FreezeChainOnFailedMigration;
 	type MaxServiceWeight = MbmServiceWeight;
 	type WeightInfo = weights::pezpallet_migrations::WeightInfo<Runtime>;
+}
+
+/// The Ethereum-transaction extension used by `pezpallet_revive`. The derives are required
+/// because it appears as a type parameter of the runtime's `UncheckedExtrinsic`.
+#[derive(Clone, PartialEq, Eq, Debug, scale_info::TypeInfo)]
+pub struct EthExtraImpl;
+
+impl EthExtra for EthExtraImpl {
+	type Config = Runtime;
+	type ExtensionV0 = TxExtension;
+	// No transaction extension version beyond 0 is accepted.
+	type ExtensionOtherVersions = pezsp_runtime::traits::InvalidVersion;
+
+	fn get_eth_extension(nonce: u32, tip: Balance) -> Self::ExtensionV0 {
+		(
+			pezframe_system::AuthorizeCall::<Runtime>::new(),
+			pezframe_system::CheckNonZeroSender::<Runtime>::new(),
+			pezframe_system::CheckSpecVersion::<Runtime>::new(),
+			pezframe_system::CheckTxVersion::<Runtime>::new(),
+			pezframe_system::CheckGenesis::<Runtime>::new(),
+			pezframe_system::CheckMortality::from(generic::Era::Immortal),
+			pezframe_system::CheckNonce::<Runtime>::from(nonce),
+			pezframe_system::CheckWeight::<Runtime>::new(),
+			pezpallet_asset_conversion_tx_payment::ChargeAssetTxPayment::<Runtime>::from(tip, None),
+			pezframe_metadata_hash_extension::CheckMetadataHash::<Runtime>::new(false),
+			pezpallet_revive::evm::tx_extension::SetOrigin::<Runtime>::new_from_eth_transaction(),
+		)
+			.into()
+	}
+}
+
+impl pezpallet_revive::Config for Runtime {
+	type AutoMap = ConstBool<true>;
+	type GasScale = ConstU32<1000>;
+	// Upstream sends burned value to its DAP pallet. This chain has no DAP; the value
+	// goes to the treasury, which is where this runtime already routes slashes and
+	// fee remainders. The pallet documents treasury as an intended target.
+	type OnBurn = ResolveTo<xcm_config::TreasuryAccount, Balances>;
+	// The unit binding charges storage deposits in the native currency, which is what
+	// this chain uses; upstream's PGasDeposit belongs to its PGas allowance scheme.
+	type Deposit = ();
+	type Time = Timestamp;
+	type Balance = Balance;
+	type Currency = Balances;
+	type RuntimeEvent = RuntimeEvent;
+	type RuntimeCall = RuntimeCall;
+	type RuntimeOrigin = RuntimeOrigin;
+	type DepositPerItem = DepositPerItem;
+	type DepositPerChildTrieItem = DepositPerChildTrieItem;
+	type DepositPerByte = DepositPerByte;
+	type WeightInfo = weights::pezpallet_revive::WeightInfo<Self>;
+	type Precompiles = (
+		ERC20<Self, InlineIdConfig<0x120>, TrustBackedAssetsInstance>,
+		ERC20<Self, InlineIdConfig<0x320>, PoolAssetsInstance>,
+		XcmPrecompile<Self>,
+	);
+	type AddressMapper = pezpallet_revive::AccountId32Mapper<Self>;
+	type RuntimeMemory = ConstU32<{ 128 * 1024 * 1024 }>;
+	type PVFMemory = ConstU32<{ 512 * 1024 * 1024 }>;
+	type AllowEVMBytecode = ConstBool<true>;
+	type UploadOrigin = EnsureSigned<Self::AccountId>;
+	type InstantiateOrigin = EnsureSigned<Self::AccountId>;
+	type RuntimeHoldReason = RuntimeHoldReason;
+	type CodeHashLockupDepositPercent = CodeHashLockupDepositPercent;
+	// EIP-155 chain id. The fork carried an upstream test network's id; Pezkuwichain Asset Hub has
+	// its own, and Zagros Asset Hub 1921. Pinned by `evm_chain_id_is_our_own`.
+	type ChainId = ConstU64<1920>;
+	type NativeToEthRatio = ConstU32<1_000_000>; // 10^(18 - 12) Eth is 10^18, Native is 10^12.
+	type FindAuthor = <Runtime as pezpallet_authorship::Config>::FindAuthor;
+	type FeeInfo = pezpallet_revive::evm::fees::Info<Address, Signature, EthExtraImpl>;
+	type MaxEthExtrinsicWeight = MaxEthExtrinsicWeight;
+	type DebugEnabled = ConstBool<false>;
 }
 
 // Create the runtime by composing the FRAME pallets that were previously configured.
@@ -1666,7 +1773,7 @@ impl pezpallet_scheduler::Config for Runtime {
 	type MaximumWeight = MaximumSchedulerWeight;
 	type ScheduleOrigin = EnsureRoot<AccountId>;
 	type MaxScheduledPerBlock = EconomicMaxScheduledPerBlock;
-	type WeightInfo = pezpallet_scheduler::weights::BizinikiwiWeight<Runtime>;
+	type WeightInfo = weights::pezpallet_scheduler::WeightInfo<Runtime>;
 	type OriginPrivilegeCmp = pezframe_support::traits::EqualPrivilegeOnly;
 	type Preimages = Preimage;
 	type BlockNumberProvider = pezframe_system::Pezpallet<Runtime>;
@@ -1686,7 +1793,7 @@ impl pezpallet_preimage::Config for Runtime {
 			Balance,
 		>,
 	>;
-	type WeightInfo = pezpallet_preimage::weights::BizinikiwiWeight<Runtime>;
+	type WeightInfo = weights::pezpallet_preimage::WeightInfo<Runtime>;
 }
 
 impl pezpallet_custom_origins::Config for Runtime {}
@@ -1709,7 +1816,7 @@ impl pezframe_support::traits::Get<Balance> for VotableIssuance {
 }
 
 impl pezpallet_conviction_voting::Config for Runtime {
-	type WeightInfo = pezpallet_conviction_voting::weights::BizinikiwiWeight<Runtime>;
+	type WeightInfo = weights::pezpallet_conviction_voting::WeightInfo<Runtime>;
 	type RuntimeEvent = RuntimeEvent;
 	type Currency = Balances;
 	type VoteLockingPeriod = VoteLockingPeriod;
@@ -1801,10 +1908,12 @@ construct_runtime!(
 		Nis: pezpallet_nis = 61,
 		AssetRate: pezpallet_asset_rate = 62,
 		Bounties: pezpallet_bounties = 63,
+		AssetsPrecompilesPermit: pezpallet_assets_precompiles::permit::pezpallet = 67,
 		ChildBounties: pezpallet_child_bounties = 64,
 		Treasury: pezpallet_treasury = 65,
 		AirdropPot: pezpallet_treasury::<Instance2> = 68,
 		PresalePot: pezpallet_treasury::<Instance3> = 69,
+		Revive: pezpallet_revive = 66,
 
 		// PezkuwiChain Custom Pallets
 		PezTreasury: pezpallet_pez_treasury = 70,
@@ -1861,11 +1970,13 @@ pub type TxExtension = pezcumulus_pezpallet_weight_reclaim::StorageWeightReclaim
 		pezframe_system::CheckWeight<Runtime>,
 		pezpallet_asset_conversion_tx_payment::ChargeAssetTxPayment<Runtime>,
 		pezframe_metadata_hash_extension::CheckMetadataHash<Runtime>,
+		// Required by `pezpallet_revive`: carries the Ethereum sender through to the call.
+		pezpallet_revive::evm::tx_extension::SetOrigin<Runtime>,
 	),
 >;
 /// Unchecked extrinsic type as expected by this runtime.
 pub type UncheckedExtrinsic =
-	generic::UncheckedExtrinsic<Address, RuntimeCall, Signature, TxExtension>;
+	pezpallet_revive::evm::runtime::UncheckedExtrinsic<Address, Signature, EthExtraImpl>;
 
 /// Migrations to apply on runtime upgrade.
 ///
@@ -1983,6 +2094,20 @@ mod benches {
 		[pezcumulus_pezpallet_xcmp_queue, XcmpQueue]
 		[pezpallet_xcm_bridge_hub_router, ToZagros]
 		[pezpallet_asset_conversion_ops, AssetConversionMigration]
+		[pezpallet_assets_precompiles::permit, AssetsPrecompilesPermit]
+		[pezpallet_revive, Revive]
+		// Treasury, bounties and OpenGov run on this chain; without these entries their weights
+		// stay the pallets' own defaults, measured on a different machine.
+		[pezpallet_treasury, Treasury]
+		[pezpallet_treasury, AirdropPot]
+		[pezpallet_treasury, PresalePot]
+		[pezpallet_asset_rate, AssetRate]
+		[pezpallet_bounties, Bounties]
+		[pezpallet_child_bounties, ChildBounties]
+		[pezpallet_nis, Nis]
+		[pezpallet_scheduler, Scheduler]
+		[pezpallet_preimage, Preimage]
+		[pezpallet_conviction_voting, ConvictionVoting]
 		// XCM
 		[pezpallet_xcm, PalletXcmExtrinsicsBenchmark::<Runtime>]
 		// NOTE: Make sure you point to the individual modules below.
@@ -2006,7 +2131,17 @@ mod benches {
 	);
 }
 
-impl_runtime_apis! {
+// The transaction-payment benchmarks need this. It lives here rather than inside the
+// `Benchmark` runtime API, because an impl inside a function body is a non-local definition.
+#[cfg(feature = "runtime-benchmarks")]
+impl pezpallet_transaction_payment::BenchmarkConfig for Runtime {}
+
+pezpallet_revive::impl_runtime_apis_plus_revive_traits!(
+	Runtime,
+	Revive,
+	Executive,
+	EthExtraImpl,
+
 	impl pezsp_consensus_aura::AuraApi<Block, AuraId> for Runtime {
 		fn slot_duration() -> pezsp_consensus_aura::SlotDuration {
 			pezsp_consensus_aura::SlotDuration::from_millis(SLOT_DURATION)
@@ -2372,8 +2507,6 @@ impl_runtime_apis! {
 		) {
 			use pezframe_benchmarking::BenchmarkList;
 			use pezframe_support::traits::StorageInfoTrait;
-			// The pallet's benchmarks are listed above, and they need this implemented.
-			impl pezpallet_transaction_payment::BenchmarkConfig for Runtime {}
 
 			use pezframe_system_benchmarking::Pezpallet as SystemBench;
 			use pezframe_system_benchmarking::extensions::Pezpallet as SystemExtensionsBench;
@@ -2712,7 +2845,15 @@ impl_runtime_apis! {
 					PeopleLocation::get(),
 					Asset { fun: Fungible(UNITS), id: AssetId(TokenLocation::get()) },
 				));
-				pub const CheckedAccount: Option<(AccountId, xcm_builder::MintLocation)> = None;
+				// Must match this runtime's `TeleportTracking`, which is
+				// `Some((CheckingAccount, MintLocation::Local))`. It was `None` here, left from
+				// when the tracking was off. On Zagros the same mismatch meant
+				// `receive_teleported_asset` could never complete a run and the generator
+				// wrote `u64::MAX` for it -- a weight no block can hold, which barred every
+				// teleport into that chain. The figure in this runtime's weights file predates
+				// the tracking; the next benchmark run would have replaced it with `u64::MAX`.
+				pub CheckedAccount: Option<(AccountId, xcm_builder::MintLocation)> =
+					Some((xcm_config::CheckingAccount::get(), xcm_builder::MintLocation::Local));
 				// AssetHubPezkuwichain trusts AssetHubZagros as reserve for WNDs
 				pub TrustedReserve: Option<(Location, Asset)> = Some(
 					(
@@ -2940,7 +3081,7 @@ impl_runtime_apis! {
 			PezkuwiXcm::is_authorized_alias(origin, target)
 		}
 	}
-}
+);
 
 /// HEZ's economic knobs, held in storage rather than in the binary.
 ///

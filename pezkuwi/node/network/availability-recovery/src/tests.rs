@@ -149,7 +149,7 @@ fn request_receiver(
 ) -> IncomingRequestReceiver<AvailableDataFetchingRequest> {
 	let receiver = IncomingRequest::get_config_receiver::<
 		Block,
-		pezsc_network::NetworkWorker<Block, Hash>,
+		pezsc_network::Litep2pNetworkBackend,
 	>(req_protocol_names);
 	// Don't close the sending end of the request protocol. Otherwise, the subsystem will terminate.
 	std::mem::forget(receiver.1.inbound_queue);
@@ -548,7 +548,10 @@ impl TestState {
 									}
 								};
 
-								req.pending_response.send(
+								// Recovery cancels the requests it no longer needs as soon as it has
+								// enough chunks to reconstruct, dropping the receiver. Answering a
+								// request that has already been cancelled is not a failure.
+								let _ = req.pending_response.send(
 									available_data.map(|r|
 										(
 											match protocol {
@@ -570,7 +573,7 @@ impl TestState {
 											req_protocol_names.get_name(protocol)
 										)
 									)
-								).unwrap();
+								);
 							}
 						)
 					}
