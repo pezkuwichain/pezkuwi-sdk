@@ -24,7 +24,6 @@ doc = false
 
 [dependencies]
 async-trait = { workspace = true }
-bincode = { workspace = true }
 bitvec = { workspace = true, default-features = true }
 clap = { features = ["derive"], workspace = true }
 color-eyre = { workspace = true }
@@ -79,8 +78,8 @@ pezsp-keyring = { workspace = true, default-features = true }
 prometheus = { workspace = true }
 prometheus-endpoint = { workspace = true, default-features = true }
 serde = { workspace = true, default-features = true }
+serde-saphyr = { workspace = true }
 serde_json = { workspace = true }
-serde_yaml = { workspace = true }
 tokio = { features = [
 	"parking_lot",
 	"rt-multi-thread",

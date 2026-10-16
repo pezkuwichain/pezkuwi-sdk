@@ -156,7 +156,7 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
 	spec_name: alloc::borrow::Cow::Borrowed("people-zagros"),
 	impl_name: alloc::borrow::Cow::Borrowed("people-zagros"),
 	authoring_version: 1,
-	spec_version: 1_020_014,
+	spec_version: 1_020_016,
 	impl_version: 0,
 	apis: RUNTIME_API_VERSIONS,
 	transaction_version: 1,
@@ -866,6 +866,13 @@ mod benches {
 	);
 }
 
+// The transaction-payment benchmarks need this. Upstream's people runtime does not list that
+// pallet at all, so there was nothing to copy; the runtimes that do list it implement this empty
+// trait too. It lives here rather than inside the `Benchmark` runtime API, because an impl inside
+// a function body is a non-local definition.
+#[cfg(feature = "runtime-benchmarks")]
+impl pezpallet_transaction_payment::BenchmarkConfig for Runtime {}
+
 impl_runtime_apis! {
 	impl pezsp_consensus_aura::AuraApi<Block, AuraId> for Runtime {
 		fn slot_duration() -> pezsp_consensus_aura::SlotDuration {
@@ -1103,11 +1110,6 @@ impl_runtime_apis! {
 			use pezframe_benchmarking::BenchmarkList;
 			use pezframe_support::traits::StorageInfoTrait;
 			use pezframe_system_benchmarking::Pezpallet as SystemBench;
-			// The pallet's benchmarks are listed above, and they need this to be implemented.
-			// Upstream's people runtime does not list the pallet at all, so there was nothing to
-			// copy: the runtimes that do list it implement this empty trait alongside.
-			impl pezpallet_transaction_payment::BenchmarkConfig for Runtime {}
-
 			use pezcumulus_pezpallet_session_benchmarking::Pezpallet as SessionBench;
 			use pezpallet_xcm::benchmarking::Pezpallet as PalletXcmExtrinsicsBenchmark;
 
@@ -1307,7 +1309,13 @@ impl_runtime_apis! {
 				}
 
 				fn alias_origin() -> Result<(Location, Location), BenchmarkError> {
-					Err(BenchmarkError::Skip)
+					// `TrustedAliasers` lets any origin alias into its own child, so a sibling
+					// aliasing into an account under itself is admitted without setup. Skipping
+					// here left `AliasOrigin` with no measured weight on this chain.
+					Ok((
+						Location::new(1, [Teyrchain(1001)]),
+						Location::new(1, [Teyrchain(1001), AccountId32 { id: [111u8; 32], network: None }]),
+					))
 				}
 			}
 
