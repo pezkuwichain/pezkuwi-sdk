@@ -67,6 +67,11 @@ mod mock;
 #[cfg(test)]
 mod tests;
 
+/// Live proofs, for tests here and in the runtimes, and for the benchmark.
+#[cfg(any(feature = "std", feature = "runtime-benchmarks"))]
+pub mod hub_fixture;
+pub mod hub_proof;
+pub mod migrations;
 pub mod weights;
 
 // Re-exported so the generated runtime weights can name it.
@@ -80,13 +85,15 @@ pub use weights::WeightInfo;
 #[pezframe_support::pezpallet]
 pub mod pezpallet {
 	use super::weights::WeightInfo;
+	use codec::Encode;
 	use core::ops::Div;
 	use pezframe_support::{
 		pezpallet_prelude::*,
-		traits::{Currency, OnUnbalanced, ReservableCurrency},
+		traits::{BalanceStatus, Currency, OnUnbalanced, ReservableCurrency},
 	};
 	use pezframe_system::pezpallet_prelude::*;
-	use pezsp_runtime::traits::{Saturating, Zero};
+	use pezsp_runtime::traits::{One, Saturating, Zero};
+	use pezsp_std::vec::Vec;
 
 	// --- Constants ---
 	//
@@ -104,6 +111,27 @@ pub mod pezpallet {
 	// updating to match — they are not derived automatically.
 	pub const MONTH_IN_BLOCKS: u32 = 30 * 24 * 60 * 10;
 	pub const HOUR_IN_BLOCKS: u32 = 60 * 10;
+
+	/// The most proof a stake needs: a relay path to the hub's head and a hub path to a bond,
+	/// a pool and its account. Measured at about 6 KiB on Zagros; a large state deepens the
+	/// tries, not by an order of magnitude.
+	pub const MAX_PROOF_KIB: u32 = 64;
+	pub const PRUNE_RELAY_ROOTS_PER_BLOCK: u32 = 4;
+
+	/// The size of a stake proof, in whole KiB, which is what its weight is measured by.
+	pub fn proof_kib(relay_proof: &[Vec<u8>], hub_proof: &[Vec<u8>]) -> u32 {
+		let bytes: usize = relay_proof.iter().chain(hub_proof).map(|n| n.len()).sum();
+		bytes.div_ceil(1024).try_into().unwrap_or(u32::MAX)
+	}
+
+	/// The months at which a stake's duration multiplier steps up.
+	pub const TIER_MONTHS: [u32; 4] = [1, 3, 6, 12];
+
+	/// The most accounts told in one block that their stake has reached a longer tier, and
+	/// the most blocks looked through to find them. Each is a read, a removal and one write
+	/// on the listener's side: 250 is a few per cent of a block.
+	pub const MAX_TIER_CROSSINGS_PER_BLOCK: u32 = 250;
+	pub const MAX_CROSSING_BLOCKS_SCANNED: u32 = 16;
 	pub const UNITS: u128 = 1_000_000_000_000;
 
 	/// The ceiling the score is clamped to: the largest amount tier (50) at the longest
@@ -138,7 +166,7 @@ pub mod pezpallet {
 	/// Declared so that the first migration has a baseline to compare against. Without it the
 	/// in-code and on-chain versions are both an implicit zero, and a migration cannot tell a
 	/// chain that has never been migrated from one that has been migrated to zero.
-	const STORAGE_VERSION: StorageVersion = StorageVersion::new(1);
+	const STORAGE_VERSION: StorageVersion = StorageVersion::new(2);
 
 	#[pezpallet::pezpallet]
 	#[pezpallet::storage_version(STORAGE_VERSION)]
@@ -149,6 +177,20 @@ pub mod pezpallet {
 	where
 		BlockNumberFor<T>: From<u32>,
 	{
+		fn on_initialize(now: BlockNumberFor<T>) -> Weight {
+			// `on_finalize` below: the relay parent and the cursor read, the root and the cursor
+			// written, and up to `PRUNE_RELAY_ROOTS_PER_BLOCK` old roots removed.
+			Self::announce_tier_crossings(now).saturating_add(
+				T::DbWeight::get().reads_writes(2, 2 + u64::from(PRUNE_RELAY_ROOTS_PER_BLOCK)),
+			)
+		}
+
+		/// Keep this block's relay parent root. The validation data is set by an inherent
+		/// after `on_initialize`, so it is read here.
+		fn on_finalize(_now: BlockNumberFor<T>) {
+			Self::keep_relay_root();
+		}
+
 		/// What the pallet has recorded about noters and stake has to hold together.
 		///
 		/// This is the one input to the trust score that the People chain cannot see for
@@ -169,7 +211,7 @@ pub mod pezpallet {
 
 			for (who, source, pending) in PendingStakingDetails::<T>::iter() {
 				ensure!(
-					NoterBonds::<T>::contains_key(&pending.submitted_by),
+					NoterBonds::<T>::contains_key(Self::noter_answering_for(&pending.submitted_by)),
 					"a pending submission is from somebody who is not a bonded noter"
 				);
 				ensure!(
@@ -177,6 +219,22 @@ pub mod pezpallet {
 					"a noter submitted staking data about themselves"
 				);
 				let _ = source;
+			}
+
+			// The hub speaks for a stake that is there. A mark with nothing behind it would keep
+			// a clock current on data that does not exist.
+			for who in ReportedByChain::<T>::iter_keys() {
+				ensure!(
+					CachedStakingDetails::<T>::contains_key(&who, StakingSource::AssetHub),
+					"the hub is marked as reporting a stake that is not recorded"
+				);
+			}
+
+			// A crossing behind the cursor would never be announced.
+			if let Some(next) = NextCrossingBlock::<T>::get() {
+				for (at, _, ()) in TierCrossings::<T>::iter() {
+					ensure!(at >= next, "a tier crossing was left behind by the cursor");
+				}
 			}
 
 			// A confirmation vouches for a stake. One with no stake behind it would keep an
@@ -189,6 +247,19 @@ pub mod pezpallet {
 			}
 
 			Ok(())
+		}
+	}
+
+	/// Where this block's relay parent is read from.
+	pub trait RelayParentProvider {
+		/// The relay block this block is built on and its storage root, once the block's
+		/// validation data is in; `None` before.
+		fn relay_parent() -> Option<(u32, pezsp_core::H256)>;
+	}
+
+	impl RelayParentProvider for () {
+		fn relay_parent() -> Option<(u32, pezsp_core::H256)> {
+			None
 		}
 	}
 
@@ -310,6 +381,24 @@ pub mod pezpallet {
 		/// account never reaches it. It is reached only when confirmations stop.
 		#[pezpallet::constant]
 		type MaxDataAge: Get<BlockNumberFor<Self>>;
+
+		/// The relay block this block is built on, and that block's storage root.
+		///
+		/// A stake proof hangs from a relay root, so the chain has to know the roots it may
+		/// hang from. They are kept for `RelayRootsKept` relay blocks; see `RelayRoots`.
+		type RelayParent: RelayParentProvider;
+
+		/// How many relay blocks back a stake proof may be anchored.
+		#[pezpallet::constant]
+		type RelayRootsKept: Get<u32>;
+
+		/// The Asset Hub's teyrchain id: whose head in the relay a proof reads.
+		#[pezpallet::constant]
+		type AssetHubParaId: Get<u32>;
+
+		/// The hub's nomination-pools pallet id, from which a pool's bonded account derives.
+		#[pezpallet::constant]
+		type HubPoolsPalletId: Get<pezframe_support::PalletId>;
 	}
 
 	/// Balance type of `T::Currency` (the noter bond currency) — distinct from
@@ -352,6 +441,15 @@ pub mod pezpallet {
 	#[pezpallet::storage]
 	pub type NoterLastSubmission<T: Config> =
 		StorageMap<_, Blake2_128Concat, T::AccountId, BlockNumberFor<T>, OptionQuery>;
+
+	/// The account a noter's standing moved to when its key was reissued.
+	///
+	/// A pending submission names the key that made it, and a dispute against it is charged
+	/// to whoever answers for that key now -- otherwise the successor holds the bond while
+	/// the retired key, which nobody can sign for, takes the dispute.
+	#[pezpallet::storage]
+	pub type NoterSucceededBy<T: Config> =
+		StorageMap<_, Blake2_128Concat, T::AccountId, T::AccountId, OptionQuery>;
 
 	/// A noter-submitted staking update awaiting its dispute window. Does not
 	/// affect `get_staking_score` until finalized into `CachedStakingDetails` —
@@ -402,6 +500,33 @@ pub mod pezpallet {
 		OptionQuery,
 	>;
 
+	/// Who reaches a longer duration tier at a block, by that block.
+	///
+	/// A tier is reached by time passing and by nothing else, so nothing announces it: the
+	/// multiplier is worked out when it is read, and a score derived from it -- trust -- keeps
+	/// the old value until something makes it look again. The dates are known the moment the
+	/// clock starts, so they are written down then and announced when they come.
+	#[pezpallet::storage]
+	pub type TierCrossings<T: Config> = StorageDoubleMap<
+		_,
+		Twox64Concat,
+		BlockNumberFor<T>,
+		Blake2_128Concat,
+		T::AccountId,
+		(),
+		OptionQuery,
+	>;
+
+	/// The block `who`'s duration is counted from, as of the last time their crossings were
+	/// written down. A confirmation that changes nothing writes nothing.
+	#[pezpallet::storage]
+	pub type CrossingsScheduledFrom<T: Config> =
+		StorageMap<_, Blake2_128Concat, T::AccountId, BlockNumberFor<T>, OptionQuery>;
+
+	/// The first block whose tier crossings are still to be announced.
+	#[pezpallet::storage]
+	pub type NextCrossingBlock<T: Config> = StorageValue<_, BlockNumberFor<T>, OptionQuery>;
+
 	/// Accounts that have asked for their staking time to be counted.
 	///
 	/// Separate from the block the clock starts at. Opting in says "count my duration"; the
@@ -411,6 +536,34 @@ pub mod pezpallet {
 	#[pezpallet::storage]
 	#[pezpallet::getter(fn tracking_opted_in)]
 	pub type TrackingOptIn<T: Config> =
+		StorageMap<_, Blake2_128Concat, T::AccountId, (), OptionQuery>;
+
+	/// The relay storage roots a stake proof may hang from, by relay block.
+	///
+	/// This chain only ever sees its current relay parent's root, and a proof is built against
+	/// some recent relay block, not necessarily the one this block lands on. So each block's
+	/// relay parent is kept for `RelayRootsKept` relay blocks.
+	#[pezpallet::storage]
+	pub type RelayRoots<T: Config> =
+		StorageMap<_, Twox64Concat, u32, pezsp_core::H256, OptionQuery>;
+
+	/// The oldest relay block still in `RelayRoots`, so pruning walks forward from it.
+	#[pezpallet::storage]
+	pub type OldestRelayRoot<T: Config> = StorageValue<_, u32, OptionQuery>;
+
+	/// The relay block `who`'s stake was last proven at. A proof has to be newer: an older
+	/// one is a true statement about the past, and showing it again would undo a later one.
+	#[pezpallet::storage]
+	pub type ProvenAt<T: Config> = StorageMap<_, Blake2_128Concat, T::AccountId, u32, OptionQuery>;
+
+	/// Accounts whose stake has been proven from the hub's own state.
+	///
+	/// A change on the hub can be proven here by anyone, free of charge, so for these accounts
+	/// no proof means no change: their duration clock is current without anybody re-confirming
+	/// unchanged stake. A noter's three-day confirmations were what kept every other clock
+	/// running, and at forty million they do not fit in the chain.
+	#[pezpallet::storage]
+	pub type ReportedByChain<T: Config> =
 		StorageMap<_, Blake2_128Concat, T::AccountId, (), OptionQuery>;
 
 	/// How many times a pending update for this account and source has been frozen.
@@ -441,6 +594,30 @@ pub mod pezpallet {
 	#[pezpallet::getter(fn disputes_against)]
 	pub type DisputesAgainstNoter<T: Config> =
 		StorageMap<_, Blake2_128Concat, T::AccountId, u32, ValueQuery>;
+
+	/// Disputes against each noter that governance has not yet ruled on.
+	///
+	/// The bond is what a disputed submission is answered from, so it stays reserved until
+	/// they are ruled on: slashed, or dismissed. It used to be withdrawable an hour after the
+	/// submission -- before any review could have happened (L-7, 2026-10-21).
+	#[pezpallet::storage]
+	pub type UnresolvedDisputes<T: Config> =
+		StorageMap<_, Blake2_128Concat, T::AccountId, u32, ValueQuery>;
+
+	/// A stake that went to zero, kept for `OracleGracePeriod` in case it was not real.
+	///
+	/// (opt-in start, first seen, total before the lapse, lapsed at). A zero used to erase the
+	/// holding duration at once and for good, so one false zero that nobody disputed within
+	/// the hour cost a citizen years of multiplier, and a correction a few minutes later could
+	/// not give it back (L-7, 2026-10-21).
+	#[pezpallet::storage]
+	pub type LapsedStake<T: Config> = StorageMap<
+		_,
+		Blake2_128Concat,
+		T::AccountId,
+		(Option<BlockNumberFor<T>>, Option<BlockNumberFor<T>>, T::Balance, BlockNumberFor<T>),
+		OptionQuery,
+	>;
 
 	#[pezpallet::event]
 	#[pezpallet::generate_deposit(pub(super) fn deposit_event)]
@@ -476,6 +653,8 @@ pub mod pezpallet {
 		/// A noter's bond was slashed by governance after a confirmed fraudulent
 		/// submission.
 		NoterSlashed { who: T::AccountId, amount: BalanceOf<T> },
+		/// Governance ruled a noter's open disputes unfounded; the bond is free again.
+		NoterDisputesDismissed { who: T::AccountId, dismissed: u32 },
 	}
 
 	#[pezpallet::error]
@@ -499,6 +678,23 @@ pub mod pezpallet {
 		NoPendingSubmission,
 		/// The pending submission's dispute window has not yet elapsed.
 		NotYetMatured,
+		/// A dispute against this noter is awaiting governance's ruling; the bond stays.
+		DisputeUnresolved,
+		/// Different data is already pending for this account and source; it matures or is
+		/// disputed first.
+		SubmissionAwaitingWindow,
+		/// No disputes against this noter are awaiting a ruling.
+		NoUnresolvedDisputes,
+		/// The relay block is not one this chain keeps a root for: too old, or not yet seen.
+		UnknownRelayBlock,
+		/// A stake proof as new or newer has already been accepted for this account.
+		ProofNotNewer,
+		/// The proof does not hash to the root, or does not cover what it has to.
+		InvalidProof,
+		/// More proof than a stake needs.
+		ProofTooLarge,
+		/// Stake is counted only for an account that asked for it.
+		NotTracking,
 	}
 
 	#[pezpallet::call]
@@ -528,6 +724,7 @@ pub mod pezpallet {
 			// the user duration they actually held the stake for. See
 			// `duration_counts_from_optin_not_from_data_arrival`.
 			StakingStartBlock::<T>::insert(&who, current_block);
+			Self::schedule_tier_crossings(&who);
 
 			// Notify trust pallet. Score may be 0 if CachedStakingDetails is empty.
 			T::OnStakingUpdate::on_staking_data_changed(&who);
@@ -579,11 +776,23 @@ pub mod pezpallet {
 			// progress past whatever Root last committed (often zero).
 			Self::maybe_finalize(&who, source);
 
-			let current_block = pezframe_system::Pezpallet::<T>::block_number();
-			NoterLastSubmission::<T>::insert(&caller, current_block);
-
 			let details =
 				StakingDetails { staked_amount, nominations_count, unlocking_chunks_count };
+
+			// A submission still in its window is not replaced. Each replacement used to
+			// restart the window, so a noter resubmitting every fifty-nine minutes -- even the
+			// right numbers -- kept an account's data from ever taking effect, and anyone else's
+			// submission was overwritten on the way (L-7, 2026-10-21). The same data again is
+			// the bot confirming what it already sent: accepted, and the window left running.
+			if let Some(pending) = PendingStakingDetails::<T>::get(&who, source) {
+				if pending.details == details {
+					return Ok(());
+				}
+				return Err(Error::<T>::SubmissionAwaitingWindow.into());
+			}
+
+			let current_block = pezframe_system::Pezpallet::<T>::block_number();
+			NoterLastSubmission::<T>::insert(&caller, current_block);
 			PendingStakingDetails::<T>::insert(
 				&who,
 				source,
@@ -631,6 +840,7 @@ pub mod pezpallet {
 		pub fn unregister_as_noter(origin: OriginFor<T>) -> DispatchResult {
 			let who = ensure_signed(origin)?;
 			let bond = NoterBonds::<T>::get(&who).ok_or(Error::<T>::NotRegisteredNoter)?;
+			ensure!(UnresolvedDisputes::<T>::get(&who) == 0, Error::<T>::DisputeUnresolved);
 
 			if let Some(last_submission) = NoterLastSubmission::<T>::get(&who) {
 				let current_block = pezframe_system::Pezpallet::<T>::block_number();
@@ -683,7 +893,9 @@ pub mod pezpallet {
 
 			PendingStakingDetails::<T>::remove(&who, source);
 			DisputeCount::<T>::insert(&who, source, already.saturating_add(1));
-			DisputesAgainstNoter::<T>::mutate(&pending.submitted_by, |n| *n = n.saturating_add(1));
+			let noter = Self::noter_answering_for(&pending.submitted_by);
+			DisputesAgainstNoter::<T>::mutate(&noter, |n| *n = n.saturating_add(1));
+			UnresolvedDisputes::<T>::mutate(&noter, |n| *n = n.saturating_add(1));
 
 			Self::deposit_event(Event::StakingDetailsDisputed { who, source, disputed_by });
 			Ok(())
@@ -733,6 +945,7 @@ pub mod pezpallet {
 
 			let bond = NoterBonds::<T>::take(&noter).ok_or(Error::<T>::NotRegisteredNoter)?;
 			NoterLastSubmission::<T>::remove(&noter);
+			UnresolvedDisputes::<T>::remove(&noter);
 
 			T::Currency::unreserve(&noter, bond);
 			let (slashed, _) = T::Currency::slash(&noter, bond);
@@ -740,6 +953,98 @@ pub mod pezpallet {
 
 			Self::deposit_event(Event::NoterSlashed { who: noter, amount: bond });
 			Ok(())
+		}
+
+		/// Rule a noter's open disputes unfounded, freeing the bond they held in place.
+		///
+		/// The other ruling is `slash_noter`. Same origin: whoever may find a submission
+		/// fraudulent may find that it was not. Charged as `slash_noter`, which does strictly
+		/// more storage work.
+		#[pezpallet::call_index(7)]
+		#[pezpallet::weight(T::WeightInfo::slash_noter())]
+		pub fn dismiss_disputes(origin: OriginFor<T>, noter: T::AccountId) -> DispatchResult {
+			T::SlashOrigin::ensure_origin(origin)?;
+			let dismissed = UnresolvedDisputes::<T>::take(&noter);
+			ensure!(dismissed != 0, Error::<T>::NoUnresolvedDisputes);
+			Self::deposit_event(Event::NoterDisputesDismissed { who: noter, dismissed });
+			Ok(())
+		}
+
+		/// Prove `who`'s stake from the Asset Hub's own state.
+		///
+		/// `relay_proof` reaches the hub's head under the root of `relay_block`, which this
+		/// chain kept; `hub_proof` reaches `who`'s bond, nominations and pool membership under
+		/// that head's state root. Nobody is believed and nobody is authorised: anyone may
+		/// submit, and a proof either hashes to the root or is refused. The register is not
+		/// written from abroad -- it reads what is there.
+		///
+		/// Free when it changes what is recorded, charged when it does not. A change is worth
+		/// telling, so anybody can afford to tell it -- including a fall in somebody else's
+		/// stake, which its owner would not hurry to report; repeating what is already known is
+		/// what a fee is for.
+		#[pezpallet::call_index(8)]
+		#[pezpallet::weight(T::WeightInfo::prove_stake(proof_kib(relay_proof, hub_proof)))]
+		pub fn prove_stake(
+			origin: OriginFor<T>,
+			who: T::AccountId,
+			relay_block: u32,
+			relay_proof: Vec<Vec<u8>>,
+			hub_proof: Vec<Vec<u8>>,
+		) -> DispatchResultWithPostInfo {
+			ensure_signed(origin)?;
+			ensure!(
+				proof_kib(&relay_proof, &hub_proof) <= MAX_PROOF_KIB,
+				Error::<T>::ProofTooLarge
+			);
+			ensure!(TrackingOptIn::<T>::contains_key(&who), Error::<T>::NotTracking);
+			let relay_root =
+				RelayRoots::<T>::get(relay_block).ok_or(Error::<T>::UnknownRelayBlock)?;
+			ensure!(
+				ProvenAt::<T>::get(&who).map_or(true, |at| relay_block > at),
+				Error::<T>::ProofNotNewer
+			);
+
+			let account: [u8; 32] =
+				who.encode().try_into().map_err(|_| Error::<T>::InvalidProof)?;
+			let hub_root = crate::hub_proof::hub_state_root(
+				relay_root,
+				&relay_proof,
+				T::AssetHubParaId::get(),
+			)
+			.map_err(|_| Error::<T>::InvalidProof)?;
+			let stake = crate::hub_proof::hub_stake(
+				hub_root,
+				&hub_proof,
+				&account,
+				T::HubPoolsPalletId::get(),
+			)
+			.map_err(|_| Error::<T>::InvalidProof)?;
+
+			ProvenAt::<T>::insert(&who, relay_block);
+			let staked: T::Balance = stake.staked.into();
+			let proven = StakingDetails {
+				staked_amount: staked,
+				nominations_count: stake.nominations,
+				unlocking_chunks_count: stake.unlocking_chunks,
+			};
+			let changed = CachedStakingDetails::<T>::get(&who, StakingSource::AssetHub)
+				.map_or(!staked.is_zero(), |recorded| recorded != proven);
+			if !staked.is_zero() {
+				ReportedByChain::<T>::insert(&who, ());
+			}
+			if !changed {
+				return Ok(Pays::Yes.into());
+			}
+			// What the hub's state says supersedes what a noter said it would.
+			PendingStakingDetails::<T>::remove(&who, StakingSource::AssetHub);
+			Self::apply_staking_update(
+				&who,
+				StakingSource::AssetHub,
+				staked,
+				stake.nominations,
+				stake.unlocking_chunks,
+			);
+			Ok(Pays::No.into())
 		}
 	}
 
@@ -796,6 +1101,14 @@ pub mod pezpallet {
 	pub trait OnStakingDataUpdate<AccountId> {
 		fn on_staking_data_changed(who: &AccountId);
 
+		/// `who`'s stake has reached a longer duration tier. Nothing about it changed; the
+		/// time did. Announced from `on_initialize`, up to `MAX_TIER_CROSSINGS_PER_BLOCK` a
+		/// block, and charged as one write: a listener should note it and do the work in its
+		/// own budget, not here.
+		fn on_staking_tier_reached(who: &AccountId) {
+			Self::on_staking_data_changed(who);
+		}
+
 		/// Put `who` where the callback does its full work, for benchmarking only. Without it
 		/// a listener that bails out early for most accounts -- the trust pallet skips anyone
 		/// who is not a citizen -- is measured on its cheap path, and every call that notifies
@@ -830,20 +1143,58 @@ pub mod pezpallet {
 			from: &T::AccountId,
 			to: &T::AccountId,
 		) -> pezframe_support::pezpallet_prelude::DispatchResult {
+			// The record and the money it describes move together. Moving only the record
+			// left the reserve on the lost key: unregistering then released the successor's
+			// other deposits, and a slash took its free balance (L-7, 2026-10-22).
+			let mut was_noter = false;
 			if let Some(bond) = NoterBonds::<T>::take(from) {
-				NoterBonds::<T>::insert(to, bond);
+				was_noter = true;
+				match T::Currency::repatriate_reserved(from, to, bond, BalanceStatus::Reserved) {
+					Ok(left_behind) => {
+						let moved = bond.saturating_sub(left_behind);
+						if !moved.is_zero() {
+							NoterBonds::<T>::insert(to, moved);
+						}
+					},
+					// The successor cannot take it; the bond stays where its money is, and
+					// governance can still slash it there.
+					Err(_) => NoterBonds::<T>::insert(from, bond),
+				}
 			}
 			if let Some(at) = NoterLastSubmission::<T>::take(from) {
+				was_noter = true;
 				NoterLastSubmission::<T>::insert(to, at);
+			}
+			if was_noter {
+				NoterSucceededBy::<T>::insert(from, to);
 			}
 			let disputes = DisputesAgainstNoter::<T>::take(from);
 			if disputes != 0 {
 				DisputesAgainstNoter::<T>::insert(to, disputes);
 			}
+			let open = UnresolvedDisputes::<T>::take(from);
+			if open != 0 {
+				UnresolvedDisputes::<T>::insert(to, open);
+			}
 			if TrackingOptIn::<T>::take(from).is_some() {
 				TrackingOptIn::<T>::insert(to, ());
 			}
 			Ok(())
+		}
+
+		/// The account that answers today for submissions `who` made as a noter.
+		///
+		/// Bounded: a noter can lose a key twice, and a chain long enough to matter is not
+		/// one, so the walk stops after a fixed number of steps.
+		pub fn noter_answering_for(who: &T::AccountId) -> T::AccountId {
+			let mut current = who.clone();
+			for _ in 0..8 {
+				match NoterSucceededBy::<T>::get(&current) {
+					Some(next) => current = next,
+					None => break,
+				}
+			}
+			current
 		}
 
 		/// Calculate total cached stake across all sources for a given account.
@@ -873,11 +1224,23 @@ pub mod pezpallet {
 			if staked_amount.is_zero() {
 				CachedStakingDetails::<T>::remove(who, source);
 				LastConfirmed::<T>::remove(who, source);
+				// Nothing left on the hub for it to speak for, whoever said so.
+				if source == StakingSource::AssetHub {
+					ReportedByChain::<T>::remove(who);
+				}
 
 				let remaining = Self::total_cached_stake(who);
-				if remaining.is_zero() {
-					StakingStartBlock::<T>::remove(who);
-					StakeFirstSeen::<T>::remove(who);
+				if remaining.is_zero() && !previous_total.is_zero() {
+					// Not erased yet: kept for the grace period, in case the zero was not real.
+					LapsedStake::<T>::insert(
+						who,
+						(
+							StakingStartBlock::<T>::take(who),
+							StakeFirstSeen::<T>::take(who),
+							previous_total,
+							pezframe_system::Pezpallet::<T>::block_number(),
+						),
+					);
 				}
 			} else {
 				let details =
@@ -890,14 +1253,28 @@ pub mod pezpallet {
 				);
 
 				let new_total = Self::total_cached_stake(who);
+				// What the comparison below measures against: the stake before a lapse that
+				// turned out to be brief, or the stake just before this update.
+				let mut compared_with = previous_total;
 				if previous_total.is_zero() {
-					StakeFirstSeen::<T>::insert(
-						who,
-						pezframe_system::Pezpallet::<T>::block_number(),
-					);
+					let now = pezframe_system::Pezpallet::<T>::block_number();
+					match LapsedStake::<T>::take(who) {
+						// Back within the grace period: the lapse is treated as never having
+						// happened, so the duration carries on from where it was.
+						Some((start, first_seen, before, lapsed_at))
+							if now <= lapsed_at.saturating_add(T::OracleGracePeriod::get()) =>
+						{
+							if let Some(start) = start {
+								StakingStartBlock::<T>::insert(who, start);
+							}
+							StakeFirstSeen::<T>::insert(who, first_seen.unwrap_or(now));
+							compared_with = before;
+						},
+						_ => StakeFirstSeen::<T>::insert(who, now),
+					}
 				}
-				if !previous_total.is_zero()
-					&& new_total > previous_total
+				if !compared_with.is_zero()
+					&& new_total > compared_with
 					&& StakingStartBlock::<T>::contains_key(who)
 				{
 					let current_block = pezframe_system::Pezpallet::<T>::block_number();
@@ -905,12 +1282,86 @@ pub mod pezpallet {
 				}
 			}
 
+			Self::schedule_tier_crossings(who);
 			T::OnStakingUpdate::on_staking_data_changed(who);
 			Self::deposit_event(Event::StakingDetailsReceived {
 				who: who.clone(),
 				source,
 				staked_amount,
 			});
+		}
+
+		/// The block `who`'s duration is counted from: the later of the opt-in and the stake
+		/// first being seen less the grace period -- the two limits `get_staking_score` takes
+		/// the smaller of. None while either is missing, when there is no duration at all.
+		pub fn duration_origin(who: &T::AccountId) -> Option<BlockNumberFor<T>> {
+			let start = StakingStartBlock::<T>::get(who)?;
+			let first_seen = StakeFirstSeen::<T>::get(who)?;
+			Some(start.max(first_seen.saturating_sub(T::OracleGracePeriod::get())))
+		}
+
+		/// Write down the blocks at which `who` reaches each longer tier, if the block their
+		/// duration counts from has moved since the last time.
+		///
+		/// A date written for a clock that was later reset stays where it is: announcing it
+		/// costs a recomputation that finds nothing changed, which is cheaper than finding and
+		/// removing it.
+		pub(crate) fn schedule_tier_crossings(who: &T::AccountId) {
+			let Some(origin) = Self::duration_origin(who) else { return };
+			if CrossingsScheduledFrom::<T>::get(who) == Some(origin) {
+				return;
+			}
+			CrossingsScheduledFrom::<T>::insert(who, origin);
+			let now = pezframe_system::Pezpallet::<T>::block_number();
+			for months in TIER_MONTHS {
+				let at = origin.saturating_add((months * MONTH_IN_BLOCKS).into());
+				if at > now {
+					TierCrossings::<T>::insert(at, who, ());
+				}
+			}
+		}
+
+		/// Keep the relay parent's root, and drop one that has aged past `RelayRootsKept`.
+		pub(crate) fn keep_relay_root() {
+			let Some((number, root)) = T::RelayParent::relay_parent() else { return };
+			RelayRoots::<T>::insert(number, root);
+			let horizon = number.saturating_sub(T::RelayRootsKept::get());
+			// A few a block: the relay parent usually advances by one, and by more only when
+			// this chain missed a relay block, so pruning keeps up.
+			let mut oldest = OldestRelayRoot::<T>::get().unwrap_or(number);
+			for _ in 0..PRUNE_RELAY_ROOTS_PER_BLOCK {
+				if oldest >= horizon {
+					break;
+				}
+				RelayRoots::<T>::remove(oldest);
+				oldest = oldest.saturating_add(1);
+			}
+			OldestRelayRoot::<T>::put(oldest);
+		}
+
+		/// Announce the tier crossings that have come due, oldest first, within a block's
+		/// budget. What does not fit waits for the next block; the cursor does not move past
+		/// a block until all of it is announced.
+		pub(crate) fn announce_tier_crossings(now: BlockNumberFor<T>) -> Weight {
+			let db = T::DbWeight::get();
+			let mut cursor = NextCrossingBlock::<T>::get().unwrap_or(now);
+			let mut announced = 0u32;
+			let mut scanned = 0u32;
+			while cursor <= now && scanned < MAX_CROSSING_BLOCKS_SCANNED {
+				scanned += 1;
+				let room = MAX_TIER_CROSSINGS_PER_BLOCK.saturating_sub(announced) as usize;
+				for (who, ()) in TierCrossings::<T>::drain_prefix(cursor).take(room) {
+					T::OnStakingUpdate::on_staking_tier_reached(&who);
+					announced += 1;
+				}
+				if announced >= MAX_TIER_CROSSINGS_PER_BLOCK {
+					break;
+				}
+				cursor = cursor.saturating_add(One::one());
+			}
+			NextCrossingBlock::<T>::put(cursor);
+			db.reads_writes(1u64.saturating_add(scanned.into()), 1)
+				.saturating_add(db.reads_writes(1, 2).saturating_mul(announced.into()))
 		}
 
 		/// The block the duration multiplier may count up to for `who`.
@@ -921,12 +1372,39 @@ pub mod pezpallet {
 		/// confirmations were kept has none, and is reckoned confirmed when it was first seen.
 		pub fn confirmed_clock(who: &T::AccountId) -> BlockNumberFor<T> {
 			let now = pezframe_system::Pezpallet::<T>::block_number();
-			let newest = LastConfirmed::<T>::iter_prefix_values(who)
-				.max()
-				.or_else(|| StakeFirstSeen::<T>::get(who));
-			match newest {
+			match Self::newest_confirmation(who) {
 				Some(at) => now.min(at.saturating_add(T::MaxDataAge::get())),
 				None => now,
+			}
+		}
+
+		/// The newest confirmation of any of `who`'s sources; stake recorded before
+		/// confirmations were kept is reckoned confirmed when it was first seen, and stake the
+		/// Asset Hub reports itself is confirmed now.
+		pub fn newest_confirmation(who: &T::AccountId) -> Option<BlockNumberFor<T>> {
+			// The hub reports every change, so what it last said is still what is there.
+			if ReportedByChain::<T>::contains_key(who) {
+				return Some(pezframe_system::Pezpallet::<T>::block_number());
+			}
+			LastConfirmed::<T>::iter_prefix_values(who)
+				.max()
+				.or_else(|| StakeFirstSeen::<T>::get(who))
+		}
+
+		/// The height the oracle's word on `who` is current as of, for a reader that applies its
+		/// own freshness bound.
+		///
+		/// Now, while the newest confirmation is within `MaxDataAge` -- this pallet's one rule
+		/// for when unchanged stake is still believed. Otherwise that confirmation, so the
+		/// reader's bound sees how old the word really is. Zero when nothing was ever
+		/// confirmed. Not `get_staking_score`'s second value: that is how long the stake has
+		/// been held, a duration and not a height.
+		pub fn observed_at(who: &T::AccountId) -> BlockNumberFor<T> {
+			let now = pezframe_system::Pezpallet::<T>::block_number();
+			match Self::newest_confirmation(who) {
+				Some(at) if now <= at.saturating_add(T::MaxDataAge::get()) => now,
+				Some(at) => at,
+				None => Zero::zero(),
 			}
 		}
 

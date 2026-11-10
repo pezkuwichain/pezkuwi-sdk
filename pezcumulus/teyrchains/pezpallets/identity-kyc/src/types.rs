@@ -182,6 +182,12 @@ pub trait OnKycApproved<AccountId> {
 	///   fact from the guarantor and frequently a different person: you can be brought here by
 	///   one person and ask another to stand for you.
 	fn on_kyc_approved(who: &AccountId, referrer: &AccountId, inviter: Option<&AccountId>);
+
+	/// Make `referrer` the voucher whose bookkeeping costs the most, for benchmarking. An
+	/// approval, a revocation and a restoration each recompute the voucher's standing, and
+	/// that recomputation is only paid in full for a citizen with a stake.
+	#[cfg(feature = "runtime-benchmarks")]
+	fn prepare_worst_case(_referrer: &AccountId) {}
 }
 
 /// No-op implementation for when no hook is needed
@@ -213,13 +219,28 @@ pub trait OnCitizenshipRevoked<AccountId> {
 /// Revoking a citizenship charges whoever vouched for them, which is right: a guarantee costs
 /// the guarantor. But a revocation can be wrong, and the court that corrects it has to correct
 /// the charge as well -- otherwise the voucher is punished for a fraud that was never a fraud,
-/// and now permanently, because vouching capacity is computed from that same record.
+/// and now permanently, because suspension from vouching is judged from that same record.
 pub trait OnCitizenshipRestored<AccountId> {
 	fn on_citizenship_restored(who: &AccountId);
 }
 
 impl<AccountId> OnCitizenshipRestored<AccountId> for () {
 	fn on_citizenship_restored(_who: &AccountId) {}
+}
+
+/// Told every time an account becomes a citizen, whichever of the three ways it happens: an
+/// application approved, a revocation the court undoes, or honorary citizenship.
+///
+/// Not `OnKycApproved`, which is about the voucher and fires for one of the three. This is
+/// about the new citizen's own record. What they earned before they were a citizen -- a
+/// course, a stake -- is not counted until they are one, and nothing else will tell the
+/// pallets that count it that the day has come.
+pub trait OnCitizenshipGranted<AccountId> {
+	fn on_citizenship_granted(who: &AccountId);
+}
+
+impl<AccountId> OnCitizenshipGranted<AccountId> for () {
+	fn on_citizenship_granted(_who: &AccountId) {}
 }
 
 /// No-op implementation for when no hook is needed
@@ -300,17 +321,19 @@ mod stored_enum_encoding {
 	}
 }
 
-/// How many more citizens an account may vouch into the register.
+/// Whether an account's vouching is suspended.
 ///
-/// Asked of the pallet that counts vouching, so the register need not know how the number is
-/// arrived at -- only that there is one. `None` means unlimited, which is what the founder is:
-/// the root of the tree cannot be rate-limited by a record of vouching it predates.
-pub trait VouchingCapacity<AccountId> {
-	fn remaining(who: &AccountId) -> Option<u32>;
+/// Asked of the pallet that keeps the vouching record, so the register need not know how the
+/// judgement is reached. There is no quota: a citizen may vouch for as many people as they
+/// actually know, and the register grows as fast as the nation does. What a mass of vouches
+/// could buy is bounded elsewhere -- the referral score has a ceiling -- and the one stop here
+/// is a record of vouching for people the court later revoked.
+pub trait VouchingStanding<AccountId> {
+	fn is_suspended(who: &AccountId) -> bool;
 }
 
-impl<AccountId> VouchingCapacity<AccountId> for () {
-	fn remaining(_who: &AccountId) -> Option<u32> {
-		None
+impl<AccountId> VouchingStanding<AccountId> for () {
+	fn is_suspended(_who: &AccountId) -> bool {
+		false
 	}
 }

@@ -163,6 +163,75 @@ fn register_candidate_fails_already_candidate() {
 	});
 }
 
+/// A ballot names each candidate once.
+///
+/// The tally adds the voter's weight once per name on the ballot, and the ballot was never
+/// deduplicated: ten copies of one name were ten votes for that candidate, from one citizen
+/// (L-7, 2026-10-21).
+#[test]
+fn a_ballot_naming_one_candidate_twice_is_refused() {
+	ExtBuilder::default().build().execute_with(|| {
+		assert_ok!(Welati::initiate_election(
+			RuntimeOrigin::root(),
+			ElectionType::Parliamentary,
+			None,
+			None,
+		));
+		let endorsers = endorsed_by(0, 1, (3..=52).collect());
+		assert_ok!(Welati::register_candidate(RuntimeOrigin::signed(1), 0, None, endorsers));
+		run_to_block(crate::mock::CandidacyPeriod::get() + crate::mock::CampaignPeriod::get() + 1);
+
+		assert_noop!(
+			Welati::cast_vote(RuntimeOrigin::signed(2), 0, vec![1; 10], None),
+			Error::<Test>::CandidateNamedTwice
+		);
+		assert_noop!(
+			Welati::cast_vote(RuntimeOrigin::signed(2), 0, vec![1; 11], None),
+			Error::<Test>::BallotTooLong
+		);
+
+		assert_ok!(Welati::cast_vote(RuntimeOrigin::signed(2), 0, vec![1], None));
+		assert_eq!(
+			crate::ElectionCandidates::<Test>::get(0, 1).unwrap().vote_count,
+			Welati::election_votes(0, 2).unwrap().vote_weight,
+			"one ballot counts once"
+		);
+	});
+}
+
+/// An endorsement counts once, and never the candidate's own.
+///
+/// The threshold was checked against the list as given and each name only for having endorsed
+/// this candidate, so one endorsement repeated met it, and a candidate could endorse
+/// themselves (L-7, 2026-10-21).
+#[test]
+fn an_endorsement_counts_once_and_never_the_candidates_own() {
+	ExtBuilder::default().build().execute_with(|| {
+		assert_ok!(Welati::initiate_election(
+			RuntimeOrigin::root(),
+			ElectionType::Parliamentary,
+			None,
+			None,
+		));
+		let needed = Welati::get_required_endorsements(&ElectionType::Parliamentary) as usize;
+		assert_ok!(Welati::endorse_candidate(RuntimeOrigin::signed(3), 0, 1));
+		assert_noop!(
+			Welati::register_candidate(RuntimeOrigin::signed(1), 0, None, vec![3; needed]),
+			Error::<Test>::EndorserNamedTwice
+		);
+		assert_noop!(
+			Welati::endorse_candidate(RuntimeOrigin::signed(1), 0, 1),
+			Error::<Test>::CannotEndorseSelf
+		);
+		let mut with_self: Vec<u64> = (3..(3 + needed as u64 - 1)).collect();
+		with_self.push(1);
+		assert_noop!(
+			Welati::register_candidate(RuntimeOrigin::signed(1), 0, None, with_self),
+			Error::<Test>::CannotEndorseSelf
+		);
+	});
+}
+
 #[test]
 fn cast_vote_works() {
 	ExtBuilder::default().build().execute_with(|| {
@@ -972,25 +1041,18 @@ fn parliament_is_elected_at_the_midpoint_of_a_presidency() {
 	// The stagger, and the one shortened term that creates it. Without this the two clocks
 	// start together and stay together, and a single vote hands one side both the government
 	// and the legislature for four years.
+	// The founding house has no term, so the first house this applies to is the first one
+	// elected: it is the one that starts Parliament's calendar.
 	ExtBuilder::default().build().execute_with(|| {
-		seat_president(1);
-		crate::TermEnds::<Test>::remove(ElectionType::Presidential);
-
 		let now = System::block_number();
 		let term = crate::mock::TermLength::get();
 
-		assert_ok!(Welati::seat_founding_parliament(RuntimeOrigin::signed(1), vec![2, 3]));
-		let parliament_ends = crate::TermEnds::<Test>::get(ElectionType::Parliamentary).unwrap();
-		assert_eq!(parliament_ends, now + term / 2, "the first house sits half a term");
+		let parliament_ends = Welati::begin_term(&ElectionType::Parliamentary);
+		assert_eq!(parliament_ends, now + term / 2, "the first elected house sits half a term");
 
 		// Every house after it serves a full term, so the offset persists.
-		crate::ParliamentMembers::<Test>::kill();
-		crate::PendingSeatGrants::<Test>::kill();
-		crate::PendingSeatRevokes::<Test>::kill();
-		crate::PendingSeatTerm::<Test>::kill();
-		assert_ok!(Welati::seat_founding_parliament(RuntimeOrigin::signed(1), vec![4, 5]));
 		assert_eq!(
-			crate::TermEnds::<Test>::get(ElectionType::Parliamentary).unwrap(),
+			Welati::begin_term(&ElectionType::Parliamentary),
 			parliament_ends + term,
 			"and the ones after it serve whole terms from that anchor"
 		);
@@ -1240,7 +1302,7 @@ fn register_candidate_presidential_with_max_endorsements() {
 		assert_ok!(Welati::register_candidate(RuntimeOrigin::signed(1), 0, None, endorsers,));
 
 		let candidate_info = Welati::election_candidates(0, 1).unwrap();
-		assert_eq!(candidate_info.endorsers.len(), 100);
+		assert_eq!(candidate_info.endorsement_count, 100);
 	});
 }
 
@@ -2821,6 +2883,192 @@ mod electoral_clock {
 		id
 	}
 
+	// ===== THE FOUNDING PERIOD =====
+	//
+	// The founding President (seated by genesis) and the founding house (seated by that
+	// President) are interim, and the register ends them: the day it reaches
+	// `FoundingPeriodThreshold` citizens, the elections that replace them open on their own.
+	// No date ends it, nothing the founding government can set brings it forward, and it
+	// does not come back.
+	mod founding_period {
+		use super::*;
+		use crate::{
+			mock::{
+				set_citizen_count, MockFoundingPeriodThreshold, MockPopulationThresholdOverride,
+			},
+			FirstElectionOwed, FoundingPeriodEnded, PopulationGateReported,
+		};
+
+		/// The state as genesis and the founding President leave it: a President with no
+		/// term, and a house seated without one.
+		fn found_the_state() {
+			seat_president(1);
+			TermEnds::<Test>::remove(ElectionType::Presidential);
+			assert_ok!(Welati::seat_founding_parliament(RuntimeOrigin::signed(1), vec![2, 3]));
+			run_to_block(System::block_number() + 2);
+		}
+
+		fn open(election_type: ElectionType) -> Option<u32> {
+			OpenElection::<Test>::get(election_type)
+		}
+
+		/// Run the presidential election that is open to a seated winner.
+		fn win_the_open_presidential(winner: u64) {
+			let id = open(ElectionType::Presidential).expect("no presidential election is open");
+			let endorsers =
+				gather_endorsements(id, winner, crate::mock::PresidentialEndorsements::get());
+			assert_ok!(Welati::register_candidate(
+				RuntimeOrigin::signed(winner),
+				id,
+				None,
+				endorsers
+			));
+			let election = Welati::active_elections(id).unwrap();
+			run_to_block(election.voting_start + 1);
+			for voter in 1..=60u64 {
+				assert_ok!(Welati::cast_vote(RuntimeOrigin::signed(voter), id, vec![winner], None));
+			}
+			run_to_block(election.end_block + 1);
+			assert_ok!(Welati::finalize_election(RuntimeOrigin::signed(99), id));
+		}
+
+		#[test]
+		fn below_the_threshold_the_founding_government_stays_however_long_it_takes() {
+			ExtBuilder::default().build().execute_with(|| {
+				MockFoundingPeriodThreshold::set(200); // the register holds 110
+				found_the_state();
+
+				run_to_block(System::block_number() + 3 * crate::mock::TermLength::get());
+
+				assert!(!FoundingPeriodEnded::<Test>::get());
+				assert_eq!(open(ElectionType::Presidential), None, "no presidential election");
+				assert_eq!(open(ElectionType::Parliamentary), None, "no parliamentary election");
+				assert_eq!(holder_of(Tiki::Serok), Some(1), "the founding President still sits");
+				assert!(Welati::is_parliament_member(&2), "and so does the founding house");
+			});
+		}
+
+		#[test]
+		fn reaching_the_threshold_opens_both_first_elections() {
+			ExtBuilder::default().build().execute_with(|| {
+				MockFoundingPeriodThreshold::set(200);
+				found_the_state();
+				run_to_block(30);
+				assert_eq!(open(ElectionType::Presidential), None);
+
+				MockFoundingPeriodThreshold::set(110); // the register reaches it
+				run_to_block(40);
+
+				assert!(FoundingPeriodEnded::<Test>::get());
+				assert!(open(ElectionType::Presidential).is_some(), "the President is replaced");
+				assert!(open(ElectionType::Parliamentary).is_some(), "and so is the house");
+				System::assert_has_event(RuntimeEvent::Welati(WelatiEvent::FoundingPeriodEnded {
+					citizen_count: 110,
+				}));
+			});
+		}
+
+		#[test]
+		fn the_payment_override_does_not_end_the_founding_period() {
+			// The override lowers the payment gate, and only that. If it reached this one, a
+			// founding government could lower the bar for its own replacement and choose
+			// the electorate that replaces it.
+			ExtBuilder::default().build().execute_with(|| {
+				MockFoundingPeriodThreshold::set(200);
+				MockPopulationThresholdOverride::set(50);
+				found_the_state();
+
+				run_to_block(100);
+
+				assert!(PopulationGateReported::<Test>::get(), "the payment gate did open");
+				assert!(!FoundingPeriodEnded::<Test>::get(), "the founding period did not end");
+				assert_eq!(open(ElectionType::Presidential), None);
+			});
+		}
+
+		#[test]
+		fn a_first_election_without_a_winner_is_opened_again() {
+			// Nobody stood, so nobody won, and the founding President is still sitting. If the
+			// first election were opened once and then forgotten, that would be the end of
+			// elections: the founding offices have no term for the clock to act on.
+			ExtBuilder::default().build().execute_with(|| {
+				MockFoundingPeriodThreshold::set(110);
+				found_the_state();
+				run_to_block(10);
+				let first = open(ElectionType::Presidential).expect("opened at the threshold");
+
+				let election = Welati::active_elections(first).unwrap();
+				run_to_block(election.end_block + 1);
+				assert_ok!(Welati::finalize_election(RuntimeOrigin::signed(99), first));
+				assert_eq!(open(ElectionType::Presidential), None, "it ended without a winner");
+				assert!(FirstElectionOwed::<Test>::contains_key(ElectionType::Presidential));
+
+				run_to_block(System::block_number() + crate::mock::PopulationCheckPeriod::get());
+				let second = open(ElectionType::Presidential).expect("the debt was not forgotten");
+				assert_ne!(second, first, "a new election, not the old one");
+			});
+		}
+
+		#[test]
+		fn a_seated_winner_settles_the_debt() {
+			ExtBuilder::default().build().execute_with(|| {
+				MockFoundingPeriodThreshold::set(110);
+				found_the_state();
+				run_to_block(10);
+
+				win_the_open_presidential(4);
+
+				assert_eq!(holder_of(Tiki::Serok), Some(4), "the elected President took office");
+				assert!(!FirstElectionOwed::<Test>::contains_key(ElectionType::Presidential));
+				assert!(
+					TermEnds::<Test>::get(ElectionType::Presidential).is_some(),
+					"from here on the office runs on its term like any elected one"
+				);
+
+				run_to_block(System::block_number() + crate::mock::PopulationCheckPeriod::get());
+				assert_eq!(open(ElectionType::Presidential), None, "nothing more is owed");
+			});
+		}
+
+		/// The founding President is the one officeholder allowed no mandate, and only until a
+		/// successor is elected. After that the exception is gone.
+		#[cfg(feature = "try-runtime")]
+		#[test]
+		#[should_panic(expected = "an elected office is held under no mandate")]
+		fn after_the_founding_period_every_president_has_a_mandate() {
+			ExtBuilder::default().build().execute_with(|| {
+				MockFoundingPeriodThreshold::set(110);
+				found_the_state();
+				run_to_block(10);
+				win_the_open_presidential(4);
+
+				TermEnds::<Test>::remove(ElectionType::Presidential);
+				crate::mock::check_invariants();
+			});
+		}
+
+		#[test]
+		fn the_founding_period_does_not_come_back() {
+			ExtBuilder::default().build().execute_with(|| {
+				MockFoundingPeriodThreshold::set(110);
+				found_the_state();
+				run_to_block(10);
+				assert!(FoundingPeriodEnded::<Test>::get());
+
+				set_citizen_count(10);
+				run_to_block(100);
+				assert!(FoundingPeriodEnded::<Test>::get(), "a smaller register does not undo it");
+
+				// And with it goes the one power the founding period had: appointing a house.
+				crate::ParliamentMembers::<Test>::kill();
+				assert_noop!(
+					Welati::seat_founding_parliament(RuntimeOrigin::signed(1), vec![5, 6]),
+					Error::<Test>::FoundingPeriodOver
+				);
+			});
+		}
+	}
+
 	#[test]
 	fn winning_starts_a_mandate_that_runs_out() {
 		ExtBuilder::default().build().execute_with(|| {
@@ -3032,6 +3280,45 @@ mod electoral_clock {
 		});
 	}
 
+	/// A failed count is final: counting it again neither seats anyone nor refunds twice.
+	///
+	/// It used to be countable again. The second count found `FailedAttempts` at one, skipped
+	/// the quorum the first had just failed, and seated whoever led -- a President on one vote
+	/// out of a million -- and released the candidates' deposits again out of whatever else they
+	/// had reserved (L-7, 2026-10-21).
+	#[test]
+	fn a_failed_election_cannot_be_counted_twice() {
+		ExtBuilder::default().build().execute_with(|| {
+			crate::mock::set_citizen_count(1_000_000);
+			let id = Welati::next_election_id();
+			assert_ok!(Welati::initiate_election(
+				RuntimeOrigin::root(),
+				ElectionType::Presidential,
+				None,
+				None,
+			));
+			let endorsers =
+				gather_endorsements(id, 2, crate::mock::PresidentialEndorsements::get());
+			assert_ok!(Welati::register_candidate(RuntimeOrigin::signed(2), id, None, endorsers));
+			let election = Welati::active_elections(id).unwrap();
+			run_to_block(election.voting_start + 1);
+			assert_ok!(Welati::cast_vote(RuntimeOrigin::signed(1), id, vec![2], None));
+			run_to_block(election.end_block + 1);
+			assert_ok!(Welati::finalize_election(RuntimeOrigin::signed(99), id));
+
+			// Something else of candidate 2's held in reserve, which a second refund would free.
+			use pezframe_support::traits::ReservableCurrency;
+			assert_ok!(crate::mock::Balances::reserve(&2, 7));
+
+			assert_noop!(
+				Welati::finalize_election(RuntimeOrigin::signed(99), id),
+				Error::<Test>::ElectionAlreadyFinalized
+			);
+			assert_ne!(holder_of(Tiki::Serok), Some(2), "a failed count seated a President");
+			assert_eq!(crate::mock::Balances::reserved_balance(2), 7, "a deposit came back twice");
+		});
+	}
+
 	#[test]
 	fn the_re_run_does_not_ask_again_for_a_quorum_the_country_missed() {
 		// Applying the same threshold unchanged produces the same failure for ever, and an
@@ -3124,6 +3411,20 @@ mod invariant {
 	}
 
 	#[test]
+	fn a_founding_house_with_a_term_is_caught() {
+		// The first elected house would take this term as its predecessor's and be given the
+		// wrong calendar; meanwhile it opens a Speaker's election the founding house cannot hold.
+		ExtBuilder::default().build().execute_with(|| {
+			seated_president();
+			crate::FoundingPeriodEnded::<Test>::put(true);
+			crate::FirstElectionOwed::<Test>::insert(ElectionType::Parliamentary, ());
+			assert_ok!(check());
+			TermEnds::<Test>::insert(ElectionType::Parliamentary, 10_714_544);
+			assert_rejected("the founding house carried a term");
+		});
+	}
+
+	#[test]
 	fn an_office_voting_on_an_election_that_does_not_exist_is_caught() {
 		// A stale entry here stops the scheduler from ever opening another election for that
 		// office -- it would quietly stop being contested, with nothing to say why.
@@ -3171,9 +3472,12 @@ mod invariant {
 	#[test]
 	fn an_elected_office_held_under_no_mandate_is_caught() {
 		// An officeholder no clock will ever remove: nothing schedules an election, because
-		// there is no term running down to schedule it against.
+		// there is no term running down to schedule it against. Past the founding period, and
+		// with no first election owed -- before that, the founding President is the one holder
+		// allowed no mandate (see `founding_period`).
 		ExtBuilder::default().build().execute_with(|| {
 			seated_president();
+			crate::FoundingPeriodEnded::<Test>::put(true);
 			TermEnds::<Test>::remove(ElectionType::Presidential);
 			assert_rejected("somebody held an elected office with no mandate recorded");
 		});
@@ -3221,10 +3525,10 @@ fn listed_members() -> Vec<u64> {
 const CYCLE: u64 = 60;
 
 #[test]
-fn the_founding_parliament_is_seated_and_starts_the_clock() {
+fn the_founding_parliament_is_seated_without_a_clock() {
 	// The house that passes the first budget cannot itself have been elected -- there is
-	// nobody to elect it yet. What matters is that seating it starts the institutional clock,
-	// because that clock is the only thing that opens the first real election.
+	// nobody to elect it yet. It is seated without a term: what replaces it is the register
+	// reaching the founding threshold, not a calendar (see `mod founding_period`).
 	ExtBuilder::default().build().execute_with(|| {
 		seat_president(1);
 		let founding: Vec<u64> = (2..=6).collect();
@@ -3233,8 +3537,8 @@ fn the_founding_parliament_is_seated_and_starts_the_clock() {
 
 		assert_eq!(listed_members(), founding);
 		assert!(
-			crate::TermEnds::<Test>::contains_key(ElectionType::Parliamentary),
-			"seating the founding house has to start the clock, or the first election never opens"
+			!crate::TermEnds::<Test>::contains_key(ElectionType::Parliamentary),
+			"a term on the founding house would open its election by the calendar"
 		);
 
 		// The seats arrive over the following blocks, not in the call.
@@ -3244,30 +3548,23 @@ fn the_founding_parliament_is_seated_and_starts_the_clock() {
 }
 
 #[test]
-fn the_founding_parliament_is_temporary_by_construction() {
-	// It is not temporary because anyone promised to replace it: the seats carry the same
-	// term an elected house would, so they run out on their own.
+fn a_founding_seat_does_not_run_out() {
+	// A seat with an expiry would empty the founding house on a date, and an empty house
+	// opens an election -- the calendar coming back in by the side door.
 	ExtBuilder::default().build().execute_with(|| {
 		seat_president(1);
 		assert_ok!(Welati::seat_founding_parliament(RuntimeOrigin::signed(1), vec![2, 3]));
 		run_to_block(System::block_number() + 2);
 
-		let term_end = crate::TermEnds::<Test>::get(ElectionType::Parliamentary).unwrap();
 		assert_eq!(
 			pezpallet_tiki::TikiExpiry::<Test>::get(2, pezpallet_tiki::Tiki::Parlementer),
-			Some(term_end + CYCLE),
-			"a seat outlives its term by one election cycle, so the house is never empty \
-			 while the next one is being counted"
+			None,
+			"a founding seat carries no expiry"
 		);
-
-		assert!(pezpallet_tiki::Pezpallet::<Test>::has_tiki(
-			&2,
-			&pezpallet_tiki::Tiki::Parlementer
-		));
-		run_to_block(term_end + CYCLE + 1);
+		run_to_block(System::block_number() + 3 * crate::mock::TermLength::get());
 		assert!(
-			!pezpallet_tiki::Pezpallet::<Test>::has_tiki(&2, &pezpallet_tiki::Tiki::Parlementer),
-			"the seat has to stop counting when its term is over, without anyone removing it"
+			pezpallet_tiki::Pezpallet::<Test>::has_tiki(&2, &pezpallet_tiki::Tiki::Parlementer),
+			"three full terms later the founding member still sits"
 		);
 	});
 }
@@ -3338,8 +3635,8 @@ fn a_member_who_keeps_their_seat_never_loses_it() {
 		// A new house: 3 stays, 2 and 4 go, 5 arrives.
 		let incoming = vec![3u64, 5];
 		let outgoing: Vec<u64> = vec![2, 3, 4];
-		let term_end = crate::TermEnds::<Test>::get(ElectionType::Parliamentary).unwrap() + 500;
-		assert_ok!(Welati::queue_seat_handover(&outgoing, &incoming, term_end));
+		let term_end = System::block_number() + crate::mock::TermLength::get();
+		assert_ok!(Welati::queue_seat_handover(&outgoing, &incoming, Some(term_end)));
 
 		assert_eq!(
 			Welati::pending_seat_revokes().to_vec(),
@@ -3379,23 +3676,24 @@ fn a_winner_who_is_no_longer_a_citizen_does_not_stall_the_queue() {
 }
 
 #[test]
-fn the_clock_and_not_the_roll_opens_the_next_election() {
-	// The ordinary path: a house is replaced when its term runs out. There is an emptiness
-	// arm beside it now -- see `an_emptied_house_does_not_wait_for_its_term` -- and this pins
-	// that the clock still opens the election on its own, and that seating the founding house
-	// is what starts that clock at all.
+fn an_elected_house_is_replaced_by_the_clock() {
+	// The ordinary path once the founding period is over: a house is replaced when its term
+	// runs out. There is an emptiness arm beside it -- see
+	// `an_emptied_house_does_not_wait_for_its_term`. An elected house is stood in for by its
+	// term, which is what the election's arm writes.
 	ExtBuilder::default().build().execute_with(|| {
 		seat_president(1);
 		assert_ok!(Welati::seat_founding_parliament(RuntimeOrigin::signed(1), vec![2, 3]));
 		run_to_block(System::block_number() + 2);
+		let term_end = System::block_number() + crate::mock::TermLength::get();
+		crate::TermEnds::<Test>::insert(ElectionType::Parliamentary, term_end);
 		assert!(Welati::scheduled_election(ElectionType::Parliamentary).is_none());
 
-		let term_end = crate::TermEnds::<Test>::get(ElectionType::Parliamentary).unwrap();
 		// The election opens one cycle before the term ends, so the count is finished in time.
 		run_to_block(term_end - CYCLE);
 		assert!(
 			Welati::scheduled_election(ElectionType::Parliamentary).is_some(),
-			"the founding house has to hand over to an elected one on schedule"
+			"an elected house has to hand over to the next one on schedule"
 		);
 	});
 }
@@ -3428,6 +3726,11 @@ fn an_emptied_house_does_not_wait_for_its_term() {
 		seat_president(1);
 		assert_ok!(Welati::seat_founding_parliament(RuntimeOrigin::signed(1), vec![2, 3]));
 		run_to_block(System::block_number() + 2);
+		// An elected house, as far as the scheduler can tell: one with a term.
+		crate::TermEnds::<Test>::insert(
+			ElectionType::Parliamentary,
+			System::block_number() + crate::mock::TermLength::get(),
+		);
 		assert!(
 			Welati::scheduled_election(ElectionType::Parliamentary).is_none(),
 			"a sitting house schedules nothing"
@@ -3445,6 +3748,34 @@ fn an_emptied_house_does_not_wait_for_its_term() {
 			Welati::scheduled_election(ElectionType::Parliamentary).is_some(),
 			"an empty house must open an election without waiting for the calendar"
 		);
+	});
+}
+
+/// A seat the court takes away takes the vote in the house with it.
+///
+/// The house read its own roll and nothing told it when the court revoked a seat: the member
+/// kept proposing, voting, and their place in the Parliament collective (L-7, 2026-10-21).
+#[test]
+fn a_member_whose_seat_the_court_took_no_longer_votes() {
+	ExtBuilder::default().build().execute_with(|| {
+		add_parliament_member(5);
+		assert!(Welati::is_parliament_member(&5));
+
+		assert_ok!(pezpallet_tiki::Pezpallet::<Test>::revoke_tiki(
+			RuntimeOrigin::root(),
+			5,
+			Tiki::Parlementer
+		));
+
+		assert!(!Welati::is_parliament_member(&5), "the seat is gone but the vote remained");
+		assert!(
+			!Welati::parliament_members().iter().any(|m| m.account == 5),
+			"the roll still names a member the court removed"
+		);
+		assert!(!Welati::is_authorized_to_vote(
+			&CollectiveDecisionType::ParliamentSimpleMajority,
+			&5
+		));
 	});
 }
 
@@ -4692,7 +5023,68 @@ mod initiative {
 			assert_eq!(launched(), vec![(PROPOSER, 0u16, hash(), 42u32)]);
 			assert_eq!(Balances::reserved_balance(PROPOSER), 0, "it did what it was taken for");
 			assert!(Initiatives::<Test>::get(id).is_none());
+
+			// The backers stay until somebody clears them, in bounded and paid-for steps.
+			// Clearing them inside the launch was every backer at a fixed weight.
+			assert!(InitiativeBacking::<Test>::contains_key(id, PROPOSER));
+			assert_ok!(Welati::clear_initiative_backing(RuntimeOrigin::signed(SIGNER), id, 10));
 			assert!(!InitiativeBacking::<Test>::contains_key(id, PROPOSER));
+		});
+	}
+
+	/// An open initiative's backing is not cleared: it is what stops a second signature.
+	#[test]
+	fn an_open_initiatives_backing_cannot_be_cleared() {
+		ExtBuilder::default().build().execute_with(|| {
+			let id = open();
+			assert_noop!(
+				Welati::clear_initiative_backing(RuntimeOrigin::signed(SIGNER), id, 10),
+				Error::<Test>::InitiativeStillOpen
+			);
+		});
+	}
+
+	/// Clearing is bounded per call and charged for what it is asked to clear.
+	///
+	/// It used to take any limit at a fixed weight, so one fee could ask for a deletion larger
+	/// than a block can prove (L-7, 2026-10-21).
+	#[test]
+	fn clearing_is_bounded_and_charged_for_what_it_clears() {
+		use pezframe_support::dispatch::GetDispatchInfo;
+		let mut ext = ExtBuilder::default().build();
+		ext.execute_with(|| {
+			let small = crate::Call::<Test>::clear_referendum_answers { poll: 9, limit: 1 }
+				.get_dispatch_info()
+				.call_weight;
+			let huge = crate::Call::<Test>::clear_referendum_answers { poll: 9, limit: u32::MAX }
+				.get_dispatch_info()
+				.call_weight;
+			assert!(huge.all_gt(small), "asking to clear more did not cost more");
+			assert_eq!(huge, Welati::clearing_weight(crate::MAX_CLEARED_PER_CALL));
+
+			// A finished question with more answers than one call may clear.
+			let mut polls = crate::mock::MockPolls::get();
+			polls.insert(9, crate::mock::MockPollState::Completed(1, true));
+			crate::mock::MockPolls::set(polls);
+			for who in 0..(crate::MAX_CLEARED_PER_CALL as u64 + 5) {
+				crate::ReferendumVotes::<Test>::insert(9, 10_000 + who, true);
+			}
+		});
+		// Into the backend: `clear_prefix` counts its limit against stored keys, and removes
+		// keys that exist only in the overlay without counting them -- a chain's answers were
+		// written in earlier blocks, so this is the case that matters.
+		ext.commit_all().expect("the answers commit");
+		ext.execute_with(|| {
+			assert_ok!(Welati::clear_referendum_answers(
+				RuntimeOrigin::signed(SIGNER),
+				9,
+				u32::MAX
+			));
+			assert_eq!(
+				crate::ReferendumVotes::<Test>::iter_prefix(9).count(),
+				5,
+				"one call cleared past its bound"
+			);
 		});
 	}
 
@@ -5578,6 +5970,60 @@ mod a_silent_office {
 		);
 	}
 
+	/// A Speaker the house has just elected is not silent.
+	///
+	/// Seating by election wrote no check-in, so the silence was measured from the start of the
+	/// term -- and the Speaker's term is the house's, half a term old by the time the first
+	/// elected house chose a Speaker. Anyone could vacate the chair the moment it was filled,
+	/// and every by-election's winner after it (L-7, 2026-10-21).
+	#[test]
+	fn a_freshly_elected_speaker_is_not_silent() {
+		ExtBuilder::default().build().execute_with(|| {
+			// The first elected house: half a term, starting now.
+			crate::TermEnds::<Test>::insert(
+				ElectionType::Parliamentary,
+				System::block_number() + crate::mock::TermLength::get() / 2,
+			);
+			let speaker = 7u64;
+			// The house that chooses its Speaker.
+			for member in 7..=10u64 {
+				crate::mock::add_parliament_member(member);
+			}
+
+			let id = Welati::next_election_id();
+			assert_ok!(Welati::initiate_election(
+				RuntimeOrigin::root(),
+				ElectionType::SpeakerElection,
+				None,
+				None,
+			));
+			assert_ok!(Welati::register_candidate(
+				RuntimeOrigin::signed(speaker),
+				id,
+				None,
+				vec![]
+			));
+			let election = Welati::active_elections(id).unwrap();
+			crate::mock::run_to_block(election.voting_start + 1);
+			for voter in 8..=10u64 {
+				assert_ok!(Welati::cast_vote(
+					RuntimeOrigin::signed(voter),
+					id,
+					vec![speaker],
+					None
+				));
+			}
+			crate::mock::run_to_block(election.end_block + 1);
+			assert_ok!(Welati::finalize_election(RuntimeOrigin::signed(99), id));
+			assert_eq!(holder_of(Tiki::SerokiMeclise), Some(speaker));
+
+			assert_noop!(
+				Welati::vacate_silent_office(RuntimeOrigin::signed(99), Tiki::SerokiMeclise),
+				Error::<Test>::OfficeHolderIsStillReachable
+			);
+		});
+	}
+
 	#[test]
 	fn a_founding_president_is_not_emptied_for_silence() {
 		ExtBuilder::default().build().execute_with(|| {
@@ -5702,6 +6148,684 @@ mod a_silent_office {
 				Welati::vacate_silent_office(RuntimeOrigin::signed(99), Tiki::Serok),
 				Error::<Test>::OfficeHolderIsStillReachable
 			);
+		});
+	}
+}
+
+// ===== A FREE CALL IS ONE THAT WILL BE COUNTED =====
+//
+// The register's votes are free so that the franchise costs nothing. A fee exemption that
+// asks less than the call does is something else: a call the body is certain to refuse goes
+// through for nothing, as often as its sender likes, and fills the block it lands in. The
+// exemption used to ask only whether the vote existed and had not been cast -- not whether
+// the caller could cast it (L-7 Y4, 2026-10-21).
+
+mod free_only_when_counted {
+	use super::*;
+	use crate::{mock::set_trust_score, Call, Initiatives};
+	use pezframe_support::{dispatch::CheckIfFeeless, traits::Currency};
+
+	fn free(who: u64, call: Call<Test>) -> bool {
+		call.is_feeless(&RuntimeOrigin::signed(who))
+	}
+
+	fn open_initiative() -> u32 {
+		let _ = crate::mock::Balances::deposit_creating(&11, 1_000);
+		assert_ok!(Welati::open_initiative(
+			RuntimeOrigin::signed(11),
+			0,
+			pezsp_core::H256::repeat_byte(9),
+			42
+		));
+		0
+	}
+
+	#[test]
+	fn backing_an_initiative() {
+		ExtBuilder::default().build().execute_with(|| {
+			let id = open_initiative();
+			assert!(free(12, Call::back_initiative { id }));
+
+			set_trust_score(0);
+			assert!(!free(12, Call::back_initiative { id }), "trust of zero cannot sign");
+			set_trust_score(1000);
+
+			assert!(!free(11, Call::back_initiative { id }), "the proposer already signed");
+
+			run_to_block(Initiatives::<Test>::get(id).unwrap().closes + 1);
+			assert!(!free(12, Call::back_initiative { id }), "the window has closed");
+		});
+	}
+
+	#[test]
+	fn answering_a_referendum() {
+		ExtBuilder::default().build().execute_with(|| {
+			assert!(free(7, Call::answer_referendum { poll: 1, aye: true }));
+
+			set_trust_score(0);
+			assert!(!free(7, Call::answer_referendum { poll: 1, aye: true }));
+			set_trust_score(1000);
+
+			assert_ok!(Welati::answer_referendum(RuntimeOrigin::signed(7), 1, true));
+			assert!(!free(7, Call::answer_referendum { poll: 1, aye: false }), "a change is paid");
+		});
+	}
+
+	#[test]
+	fn endorsing_a_candidate() {
+		ExtBuilder::default().build().execute_with(|| {
+			assert_ok!(Welati::initiate_election(
+				RuntimeOrigin::root(),
+				ElectionType::Parliamentary,
+				None,
+				None,
+			));
+			assert!(free(3, Call::endorse_candidate { election_id: 0, candidate: 1 }));
+			assert!(
+				!free(1, Call::endorse_candidate { election_id: 0, candidate: 1 }),
+				"nobody endorses themselves"
+			);
+
+			run_to_block(crate::mock::CandidacyPeriod::get() + 2);
+			assert!(
+				!free(3, Call::endorse_candidate { election_id: 0, candidate: 1 }),
+				"the candidacy period is over"
+			);
+		});
+	}
+
+	#[test]
+	fn casting_a_ballot() {
+		ExtBuilder::default().build().execute_with(|| {
+			assert_ok!(Welati::initiate_election(
+				RuntimeOrigin::root(),
+				ElectionType::Parliamentary,
+				None,
+				None,
+			));
+			let endorsers = endorsed_by(0, 1, (3..=52).collect());
+			assert_ok!(Welati::register_candidate(RuntimeOrigin::signed(1), 0, None, endorsers));
+			let ballot = |candidates: Vec<u64>| Call::cast_vote {
+				election_id: 0,
+				candidates,
+				district_id: None,
+			};
+
+			assert!(!free(2, ballot(vec![1])), "voting has not opened");
+
+			run_to_block(
+				crate::mock::CandidacyPeriod::get() + crate::mock::CampaignPeriod::get() + 1,
+			);
+			assert!(free(2, ballot(vec![1])));
+			assert!(!free(2, ballot(vec![99])), "nobody of that name is standing");
+			assert!(!free(2, ballot(vec![1, 1])), "a name counts once");
+			assert!(!free(2, ballot((1..=11).collect())), "a ballot holds ten names");
+		});
+	}
+
+	#[test]
+	fn voting_on_a_proposal() {
+		ExtBuilder::default().build().execute_with(|| {
+			add_parliament_member(1);
+			add_parliament_member(2);
+			assert_ok!(Welati::submit_proposal(
+				RuntimeOrigin::signed(1),
+				b"t".to_vec().try_into().unwrap(),
+				b"d".to_vec().try_into().unwrap(),
+				CollectiveDecisionType::ParliamentSimpleMajority,
+				ProposalPriority::Normal,
+				None,
+			));
+			let aye = || Call::vote_on_proposal {
+				proposal_id: 0,
+				vote: VoteChoice::Aye,
+				rationale: None,
+			};
+
+			let proposal = Welati::active_proposals(0).unwrap();
+			if proposal.voting_starts_at > System::block_number() {
+				assert!(!free(2, aye()), "debate has not opened");
+			}
+			run_to_block(proposal.voting_starts_at + 1);
+			assert!(free(2, aye()));
+
+			assert_ok!(Welati::vote_on_proposal(
+				RuntimeOrigin::signed(2),
+				0,
+				VoteChoice::Aye,
+				None
+			));
+			assert!(!free(2, aye()), "a second vote is refused, so it is not free");
+
+			run_to_block(proposal.expires_at + 1);
+			assert!(!free(1, aye()), "the window has closed");
+		});
+	}
+}
+
+// ===== THE HOUSE'S OWN ELECTIONS =====
+//
+// The Speaker is "the presiding officer of the elected house, chosen by that house"
+// (whitepaper §5.3), and six of the court's eleven seats are the house's to fill (§5.4). Two
+// things were wrong. Every citizen could vote for the Speaker. And both elections measured
+// turnout against the whole register, which a house of 201 can never reach: the first round
+// always failed, and the re-run asks for no quorum at all (L-7, 2026-10-21).
+
+mod the_houses_own_elections {
+	use super::*;
+	use crate::FailedAttempts;
+
+	#[test]
+	fn the_speaker_is_chosen_by_the_house() {
+		ExtBuilder::default().build().execute_with(|| {
+			let speaker = 7u64;
+			add_parliament_member(speaker);
+			add_parliament_member(8);
+			let id = Welati::next_election_id();
+			assert_ok!(Welati::initiate_election(
+				RuntimeOrigin::root(),
+				ElectionType::SpeakerElection,
+				None,
+				None,
+			));
+			assert_ok!(Welati::register_candidate(
+				RuntimeOrigin::signed(speaker),
+				id,
+				None,
+				vec![]
+			));
+			run_to_block(Welati::active_elections(id).unwrap().voting_start + 1);
+
+			make_citizen(50);
+			assert_noop!(
+				Welati::cast_vote(RuntimeOrigin::signed(50), id, vec![speaker], None),
+				Error::<Test>::NotAParliamentMember
+			);
+			assert_ok!(Welati::cast_vote(RuntimeOrigin::signed(8), id, vec![speaker], None));
+		});
+	}
+
+	#[test]
+	fn a_house_that_turns_out_elects_at_the_first_attempt() {
+		ExtBuilder::default().build().execute_with(|| {
+			let speaker = 7u64;
+			for member in 7..=10u64 {
+				add_parliament_member(member);
+			}
+			let id = Welati::next_election_id();
+			assert_ok!(Welati::initiate_election(
+				RuntimeOrigin::root(),
+				ElectionType::SpeakerElection,
+				None,
+				None,
+			));
+			assert_ok!(Welati::register_candidate(
+				RuntimeOrigin::signed(speaker),
+				id,
+				None,
+				vec![]
+			));
+			let election = Welati::active_elections(id).unwrap();
+			run_to_block(election.voting_start + 1);
+			// The whole house, four of four -- and four of the register's hundred and ten.
+			for member in 7..=10u64 {
+				assert_ok!(Welati::cast_vote(
+					RuntimeOrigin::signed(member),
+					id,
+					vec![speaker],
+					None
+				));
+			}
+			run_to_block(election.end_block + 1);
+			assert_ok!(Welati::finalize_election(RuntimeOrigin::signed(99), id));
+
+			assert_eq!(Welati::active_elections(id).unwrap().status, ElectionStatus::Completed);
+			assert_eq!(FailedAttempts::<Test>::get(ElectionType::SpeakerElection), 0);
+		});
+	}
+
+	#[test]
+	fn a_house_that_stays_home_does_not_elect() {
+		ExtBuilder::default().build().execute_with(|| {
+			let speaker = 7u64;
+			for member in 7..=16u64 {
+				add_parliament_member(member);
+			}
+			let id = Welati::next_election_id();
+			assert_ok!(Welati::initiate_election(
+				RuntimeOrigin::root(),
+				ElectionType::SpeakerElection,
+				None,
+				None,
+			));
+			assert_ok!(Welati::register_candidate(
+				RuntimeOrigin::signed(speaker),
+				id,
+				None,
+				vec![]
+			));
+			let election = Welati::active_elections(id).unwrap();
+			run_to_block(election.voting_start + 1);
+			// Two of ten, under the thirty per cent the election asks for.
+			for member in 7..=8u64 {
+				assert_ok!(Welati::cast_vote(
+					RuntimeOrigin::signed(member),
+					id,
+					vec![speaker],
+					None
+				));
+			}
+			run_to_block(election.end_block + 1);
+			assert_ok!(Welati::finalize_election(RuntimeOrigin::signed(99), id));
+
+			assert_eq!(
+				Welati::active_elections(id).unwrap().status,
+				ElectionStatus::FailedForTurnout
+			);
+		});
+	}
+}
+
+/// A first round that goes to a runoff returns its deposits.
+///
+/// A completed or failed election returns every candidacy deposit; one that went to a runoff
+/// was marked completed and returned none, so every first-round candidate's deposit stayed
+/// reserved for good (L-7, 2026-10-21).
+#[test]
+fn a_first_round_that_goes_to_a_runoff_returns_its_deposits() {
+	use crate::mock::{Balances, CandidacyDeposit};
+
+	ExtBuilder::default().build().execute_with(|| {
+		assert_ok!(Welati::initiate_election(
+			RuntimeOrigin::root(),
+			ElectionType::Presidential,
+			None,
+			None,
+		));
+		for (candidate, endorsers) in [(1u64, 200..=299u64), (2, 300..=399), (3, 400..=499)] {
+			let endorsers = endorsed_by(0, candidate, endorsers.collect());
+			assert_ok!(Welati::register_candidate(
+				RuntimeOrigin::signed(candidate),
+				0,
+				None,
+				endorsers
+			));
+			// A benchmark build takes no deposit; see `register_candidate`.
+			if cfg!(not(feature = "runtime-benchmarks")) {
+				assert_eq!(Balances::reserved_balance(candidate), CandidacyDeposit::get());
+			}
+		}
+
+		let election = Welati::active_elections(0).unwrap();
+		run_to_block(election.voting_start + 1);
+		// 25, 20 and 15 of sixty: nobody has half, so the first two go to a runoff.
+		for (voter, candidate) in (1000..1060u64).map(|v| {
+			(
+				v,
+				if v < 1025 {
+					1
+				} else if v < 1045 {
+					2
+				} else {
+					3
+				},
+			)
+		}) {
+			assert_ok!(Welati::cast_vote(RuntimeOrigin::signed(voter), 0, vec![candidate], None));
+		}
+		run_to_block(election.end_block + 1);
+		assert_ok!(Welati::finalize_election(RuntimeOrigin::signed(99), 0));
+		assert!(Welati::active_elections(1).is_some(), "the runoff is open");
+
+		for candidate in 1..=3u64 {
+			assert_eq!(Balances::reserved_balance(candidate), 0, "candidate {candidate}");
+		}
+	});
+}
+
+// ===== THE SPEAKER'S ELECTION =====
+//
+// The Speaker holds no term of their own: the chair is the house's, filled by the house, and
+// vacated when the house is replaced (whitepaper §5.3). Seating a new house cleared the
+// Speaker's term "so the scheduler opens a Speaker election" -- but the scheduler reads no
+// term as an office never elected and opens nothing, so an elected house never got a Speaker.
+// And a Speaker who did have a term had the house's, so the scheduler would have re-elected
+// the chair in the outgoing house's last weeks (L-7, 2026-10-21).
+
+mod the_speakers_election {
+	use super::*;
+	use crate::{OpenElection, TermEnds};
+	use pezframe_support::traits::Hooks;
+
+	#[test]
+	fn an_elected_house_without_a_speaker_opens_the_election() {
+		ExtBuilder::default().build().execute_with(|| {
+			let now = System::block_number();
+			TermEnds::<Test>::insert(ElectionType::Parliamentary, now + 100_000);
+			for member in 7..=10u64 {
+				add_parliament_member(member);
+			}
+			run_to_block(now + 1);
+			assert!(OpenElection::<Test>::contains_key(ElectionType::SpeakerElection));
+		});
+	}
+
+	#[test]
+	fn the_founding_house_does_not_open_it() {
+		ExtBuilder::default().build().execute_with(|| {
+			// No term for the house: it was seated by the founding President, not elected.
+			for member in 7..=10u64 {
+				add_parliament_member(member);
+			}
+			run_to_block(System::block_number() + 1);
+			assert!(!OpenElection::<Test>::contains_key(ElectionType::SpeakerElection));
+		});
+	}
+
+	#[test]
+	fn a_founding_house_that_still_carries_a_term_does_not_open_it() {
+		ExtBuilder::default().build().execute_with(|| {
+			// Zagros on 2026-10-24: the founding period over, the house's first election
+			// owed, and the founding house still carrying the term it was seated with before
+			// the founding term was abolished.
+			crate::FoundingPeriodEnded::<Test>::put(true);
+			crate::FirstElectionOwed::<Test>::insert(ElectionType::Parliamentary, ());
+			TermEnds::<Test>::insert(ElectionType::Parliamentary, System::block_number() + 100_000);
+			for member in 7..=10u64 {
+				add_parliament_member(member);
+			}
+			// One hook call rather than `run_to_block`: `try_state` refuses this state, and the
+			// question here is what the scheduler does when it meets it anyway.
+			let next = System::block_number() + 1;
+			System::set_block_number(next);
+			Welati::on_initialize(next);
+			assert!(!OpenElection::<Test>::contains_key(ElectionType::SpeakerElection));
+		});
+	}
+
+	#[test]
+	fn a_seated_speaker_is_not_re_elected_on_the_houses_clock() {
+		ExtBuilder::default().build().execute_with(|| {
+			let ends = System::block_number() + 2_000;
+			TermEnds::<Test>::insert(ElectionType::Parliamentary, ends);
+			TermEnds::<Test>::insert(ElectionType::SpeakerElection, ends);
+			for member in 7..=10u64 {
+				add_parliament_member(member);
+			}
+			assert_ok!(Welati::seat_unique_tiki(&7, Tiki::SerokiMeclise));
+			// Keep the chair from falling silent while the house runs down.
+			crate::OfficeLastActive::<Test>::insert(Tiki::SerokiMeclise, (7u64, ends));
+
+			run_to_block(ends - 1);
+			assert!(
+				!OpenElection::<Test>::contains_key(ElectionType::SpeakerElection),
+				"the chair is filled and the house still sits"
+			);
+		});
+	}
+}
+
+// ===== AN ELECTION'S RECORDS ARE DISCARDED ONCE IT IS OVER =====
+//
+// Every ballot, endorsement and candidacy stayed in state for good: one entry per voter per
+// election, forty million a presidency at the scale this chain is built for, and nothing ever
+// removed them. A finished election's records are now cleared by anyone, in bounded steps,
+// as referendum answers and initiative backing already were (L-7, 2026-10-21).
+
+mod election_records {
+	use super::*;
+	use crate::{ActiveElections, ElectionCandidates, Endorsements, MAX_CLEARED_PER_CALL};
+
+	fn candidacy(account: u64) -> CandidateInfo<Test> {
+		CandidateInfo {
+			account,
+			district_id: None,
+			registered_at: 1,
+			endorsement_count: 0,
+			vote_count: 0,
+			deposit_paid: 0,
+			campaign_data: Default::default(),
+		}
+	}
+
+	#[test]
+	fn a_running_election_keeps_its_records() {
+		ExtBuilder::default().build().execute_with(|| {
+			assert_ok!(Welati::initiate_election(
+				RuntimeOrigin::root(),
+				ElectionType::Parliamentary,
+				None,
+				None,
+			));
+			assert_noop!(
+				Welati::clear_election_records(RuntimeOrigin::signed(99), 0, 10),
+				Error::<Test>::ElectionNotFinished
+			);
+		});
+	}
+
+	#[test]
+	fn a_finished_elections_records_go_in_bounded_steps() {
+		let mut ext = ExtBuilder::default().build();
+		ext.execute_with(|| {
+			assert_ok!(Welati::initiate_election(
+				RuntimeOrigin::root(),
+				ElectionType::Parliamentary,
+				None,
+				None,
+			));
+			ActiveElections::<Test>::mutate(0, |e| {
+				e.as_mut().unwrap().status = ElectionStatus::Completed
+			});
+			for who in 0..(MAX_CLEARED_PER_CALL as u64 + 5) {
+				Endorsements::<Test>::insert(0, 10_000 + who, 1u64);
+			}
+			ElectionCandidates::<Test>::insert(0, 1u64, candidacy(1));
+			ElectionCandidates::<Test>::insert(0, 2u64, candidacy(2));
+		});
+		// Into the backend, where a chain's records are: see
+		// `clearing_is_bounded_and_charged_for_what_it_clears`.
+		ext.commit_all().expect("the records commit");
+		ext.execute_with(|| {
+			assert_ok!(Welati::clear_election_records(RuntimeOrigin::signed(99), 0, u32::MAX));
+			let left = Endorsements::<Test>::iter_prefix(0).count()
+				+ ElectionCandidates::<Test>::iter_prefix(0).count();
+			assert_eq!(left, 7, "one call cleared past its bound");
+		});
+		// The next call comes in a later block, after this one's removals are stored.
+		ext.commit_all().expect("the first clearing commits");
+		ext.execute_with(|| {
+			assert_ok!(Welati::clear_election_records(RuntimeOrigin::signed(99), 0, u32::MAX));
+			assert_eq!(Endorsements::<Test>::iter_prefix(0).count(), 0);
+			assert_eq!(ElectionCandidates::<Test>::iter_prefix(0).count(), 0);
+		});
+	}
+}
+
+// ===== ONE PERSON, ONE VOTE, ACROSS A REISSUE =====
+//
+// A court-ordered reissue moves a citizenship to a new key. Every "already voted" check read
+// the voting key only, so the new key could vote again in a ballot, a proposal, an
+// endorsement round, an initiative or a referendum its predecessor had already answered
+// (L-7, 2026-10-22).
+
+mod one_person_one_vote {
+	use super::*;
+	use crate::mock::{set_trust_score, TestPolls};
+	use pezframe_support::traits::{Currency, Polling};
+
+	const SUCCESSOR_OFFSET: u64 = 1_000;
+
+	/// Reissue `who`'s citizenship to `who + SUCCESSOR_OFFSET`, as the register and this
+	/// pallet do it on a real runtime.
+	fn reissue(who: u64) -> u64 {
+		let to = who + SUCCESSOR_OFFSET;
+		pezpallet_identity_kyc::KycStatuses::<Test>::insert(
+			who,
+			pezpallet_identity_kyc::types::KycLevel::Approved,
+		);
+		assert_ok!(pezpallet_identity_kyc::Pezpallet::<Test>::rebind_account(&who, &to));
+		assert_ok!(Welati::rebind_account(&who, &to));
+		to
+	}
+
+	fn election_open_for_ballots() {
+		assert_ok!(Welati::initiate_election(
+			RuntimeOrigin::root(),
+			ElectionType::Parliamentary,
+			None,
+			None,
+		));
+		let endorsers = endorsed_by(0, 1, (3..=52).collect());
+		assert_ok!(Welati::register_candidate(RuntimeOrigin::signed(1), 0, None, endorsers));
+		run_to_block(crate::mock::CandidacyPeriod::get() + crate::mock::CampaignPeriod::get() + 1);
+	}
+
+	#[test]
+	fn a_ballot() {
+		ExtBuilder::default().build().execute_with(|| {
+			election_open_for_ballots();
+			assert_ok!(Welati::cast_vote(RuntimeOrigin::signed(60), 0, vec![1], None));
+			let successor = reissue(60);
+			assert_noop!(
+				Welati::cast_vote(RuntimeOrigin::signed(successor), 0, vec![1], None),
+				Error::<Test>::AlreadyVoted
+			);
+		});
+	}
+
+	#[test]
+	fn an_endorsement() {
+		ExtBuilder::default().build().execute_with(|| {
+			assert_ok!(Welati::initiate_election(
+				RuntimeOrigin::root(),
+				ElectionType::Parliamentary,
+				None,
+				None,
+			));
+			assert_ok!(Welati::endorse_candidate(RuntimeOrigin::signed(3), 0, 1));
+			let successor = reissue(3);
+			assert_noop!(
+				Welati::endorse_candidate(RuntimeOrigin::signed(successor), 0, 1),
+				Error::<Test>::AlreadyEndorsed
+			);
+		});
+	}
+
+	#[test]
+	fn a_proposal() {
+		ExtBuilder::default().build().execute_with(|| {
+			add_parliament_member(1);
+			add_parliament_member(2);
+			assert_ok!(Welati::submit_proposal(
+				RuntimeOrigin::signed(1),
+				b"t".to_vec().try_into().unwrap(),
+				b"d".to_vec().try_into().unwrap(),
+				CollectiveDecisionType::ParliamentSimpleMajority,
+				ProposalPriority::Normal,
+				None,
+			));
+			run_to_block(Welati::active_proposals(0).unwrap().voting_starts_at + 1);
+			assert_ok!(Welati::vote_on_proposal(
+				RuntimeOrigin::signed(2),
+				0,
+				VoteChoice::Aye,
+				None
+			));
+			let successor = reissue(2);
+			assert_noop!(
+				Welati::vote_on_proposal(
+					RuntimeOrigin::signed(successor),
+					0,
+					VoteChoice::Aye,
+					None
+				),
+				Error::<Test>::ProposalAlreadyVoted
+			);
+		});
+	}
+
+	#[test]
+	fn an_initiative() {
+		ExtBuilder::default().build().execute_with(|| {
+			let _ = crate::mock::Balances::deposit_creating(&11, 1_000);
+			assert_ok!(Welati::open_initiative(
+				RuntimeOrigin::signed(11),
+				0,
+				pezsp_core::H256::repeat_byte(9),
+				42
+			));
+			set_trust_score(1000);
+			assert_ok!(Welati::back_initiative(RuntimeOrigin::signed(12), 0));
+			let successor = reissue(12);
+			assert_noop!(
+				Welati::back_initiative(RuntimeOrigin::signed(successor), 0),
+				Error::<Test>::AlreadyBacked
+			);
+		});
+	}
+
+	#[test]
+	fn a_referendum_answer_is_changed_not_repeated() {
+		// A referendum answer may be changed while the question is open. The successor
+		// changes the person's answer; it does not add a second one.
+		ExtBuilder::default().build().execute_with(|| {
+			assert_ok!(Welati::answer_referendum(RuntimeOrigin::signed(7), 1, true));
+			let successor = reissue(7);
+			assert_noop!(
+				Welati::answer_referendum(RuntimeOrigin::signed(successor), 1, true),
+				Error::<Test>::AlreadyAnsweredThatWay
+			);
+			assert_ok!(Welati::answer_referendum(RuntimeOrigin::signed(successor), 1, false));
+			let (tally, _) = TestPolls::as_ongoing(1).unwrap();
+			assert_eq!((tally.ayes, tally.nays), (0, 1), "one person, one answer");
+		});
+	}
+}
+
+mod hook_charges {
+	use super::*;
+	use crate::weights::WeightInfo;
+	use pezframe_support::traits::Hooks;
+
+	/// Opening an election from the clock does what `initiate_election` does, so the block
+	/// pays at least that. It paid two writes.
+	#[test]
+	fn an_election_the_clock_opens_is_charged_as_one() {
+		ExtBuilder::default().build().execute_with(|| {
+			seat_president(1);
+			assert_ok!(Welati::seat_founding_parliament(RuntimeOrigin::signed(1), vec![2, 3]));
+			run_to_block(System::block_number() + 2);
+			let term_end = System::block_number() + crate::mock::TermLength::get();
+			crate::TermEnds::<Test>::insert(ElectionType::Parliamentary, term_end);
+
+			let at = term_end - CYCLE;
+			System::set_block_number(at);
+			let charged = Welati::on_initialize(at);
+
+			assert!(Welati::scheduled_election(ElectionType::Parliamentary).is_some());
+			assert!(charged.all_gte(<() as WeightInfo>::initiate_election()));
+		});
+	}
+
+	/// Each seat handed over is a tiki granted, so a block that hands over ten pays for ten
+	/// grants. It paid four writes a seat.
+	#[test]
+	fn a_seat_handed_over_is_charged_as_a_grant() {
+		ExtBuilder::default().build().execute_with(|| {
+			let seats: Vec<u64> = (100..110).collect();
+			for who in &seats {
+				make_citizen(*who);
+			}
+			crate::PendingSeatGrants::<Test>::put(
+				BoundedVec::try_from(seats.clone()).expect("ten fit the house"),
+			);
+
+			let charged = Welati::on_initialize(System::block_number());
+
+			assert!(crate::PendingSeatGrants::<Test>::get().is_empty());
+			let grant = <() as pezpallet_tiki::weights::WeightInfo>::grant_elected_role();
+			assert!(charged.all_gte(grant.saturating_mul(seats.len() as u64)));
 		});
 	}
 }

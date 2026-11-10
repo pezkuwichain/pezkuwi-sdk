@@ -73,6 +73,7 @@ pub trait WeightInfo {
 	fn appoint_honorary_mamoste() -> Weight;
 	fn report_course_fraud() -> Weight;
 	fn annul_course(c: u32) -> Weight;
+	fn enroll_in_place_of() -> Weight;
 }
 
 /// Weights for `pezpallet_perwerde` using the Bizinikiwi node and recommended hardware.
@@ -142,6 +143,24 @@ impl<T: pezframe_system::Config> WeightInfo for BizinikiwiWeight<T> {
 				T::DbWeight::get().reads_writes(4_u64, 4_u64).saturating_mul(c.into()),
 			)
 	}
+	/// Storage: `Tiki::CitizenNft` (r:2 w:0)
+	/// Proof: `Tiki::CitizenNft` (`max_values`: None, `max_size`: Some(52), added: 2527, mode: `MaxEncodedLen`)
+	/// Storage: `Perwerde::Courses` (r:1 w:0)
+	/// Proof: `Perwerde::Courses` (`max_values`: None, `max_size`: Some(972), added: 3447, mode: `MaxEncodedLen`)
+	/// Storage: `Perwerde::Enrollments` (r:2 w:2)
+	/// Proof: `Perwerde::Enrollments` (`max_values`: None, `max_size`: Some(114), added: 2589, mode: `MaxEncodedLen`)
+	/// Storage: `Perwerde::CourseEnrollmentCount` (r:1 w:0)
+	/// Proof: `Perwerde::CourseEnrollmentCount` (`max_values`: None, `max_size`: Some(24), added: 2499, mode: `MaxEncodedLen`)
+	fn enroll_in_place_of() -> Weight {
+		// Proof Size summary in bytes:
+		//  Measured:  `2316`
+		//  Estimated: `6168`
+		// Minimum execution time: 128_184_000 picoseconds.
+		Weight::from_parts(164_385_000, 0)
+			.saturating_add(Weight::from_parts(0, 6168))
+			.saturating_add(T::DbWeight::get().reads(6))
+			.saturating_add(T::DbWeight::get().writes(2))
+	}
 }
 
 impl WeightInfo for () {
@@ -195,5 +214,23 @@ impl WeightInfo for () {
 			.saturating_add(
 				RocksDbWeight::get().reads_writes(4_u64, 4_u64).saturating_mul(c.into()),
 			)
+	}
+	/// Storage: `Tiki::CitizenNft` (r:2 w:0)
+	/// Proof: `Tiki::CitizenNft` (`max_values`: None, `max_size`: Some(52), added: 2527, mode: `MaxEncodedLen`)
+	/// Storage: `Perwerde::Courses` (r:1 w:0)
+	/// Proof: `Perwerde::Courses` (`max_values`: None, `max_size`: Some(972), added: 3447, mode: `MaxEncodedLen`)
+	/// Storage: `Perwerde::Enrollments` (r:2 w:2)
+	/// Proof: `Perwerde::Enrollments` (`max_values`: None, `max_size`: Some(114), added: 2589, mode: `MaxEncodedLen`)
+	/// Storage: `Perwerde::CourseEnrollmentCount` (r:1 w:0)
+	/// Proof: `Perwerde::CourseEnrollmentCount` (`max_values`: None, `max_size`: Some(24), added: 2499, mode: `MaxEncodedLen`)
+	fn enroll_in_place_of() -> Weight {
+		// Proof Size summary in bytes:
+		//  Measured:  `2316`
+		//  Estimated: `6168`
+		// Minimum execution time: 128_184_000 picoseconds.
+		Weight::from_parts(164_385_000, 0)
+			.saturating_add(Weight::from_parts(0, 6168))
+			.saturating_add(RocksDbWeight::get().reads(6))
+			.saturating_add(RocksDbWeight::get().writes(2))
 	}
 }

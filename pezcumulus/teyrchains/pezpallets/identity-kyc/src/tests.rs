@@ -309,8 +309,10 @@ fn cancel_application_works() {
 		// Cancel
 		assert_ok!(IdentityKycPallet::cancel_application(RuntimeOrigin::signed(APPLICANT)));
 
-		// Status should be reset to NotStarted
+		// Status should be reset to NotStarted -- and the record gone, not left behind as one
+		// more entry for the trust sweep to walk.
 		assert_eq!(IdentityKycPallet::kyc_status_of(APPLICANT), KycLevel::NotStarted);
+		assert!(!crate::KycStatuses::<Test>::contains_key(APPLICANT));
 
 		// Application should be removed
 		assert!(IdentityKycPallet::applications(APPLICANT).is_none());
@@ -786,6 +788,40 @@ mod honorary {
 		});
 	}
 
+	/// The head of government cannot undo the court with an honour.
+	#[test]
+	fn a_revoked_citizenship_is_not_overwritten_by_an_honour() {
+		new_test_ext().execute_with(|| {
+			assert_ok!(IdentityKycPallet::revoke_citizenship(RuntimeOrigin::root(), CITIZEN_1));
+			let count = IdentityKycPallet::approved_citizen_count();
+
+			assert_noop!(
+				IdentityKycPallet::register_honorary_citizen(&CITIZEN_1),
+				Error::<Test>::CitizenshipRevokedByTheCourt
+			);
+			assert_eq!(IdentityKycPallet::kyc_status_of(CITIZEN_1), KycLevel::Revoked);
+			assert_eq!(IdentityKycPallet::approved_citizen_count(), count);
+		});
+	}
+
+	/// An application in progress is finished or cancelled, not overwritten with its deposit
+	/// still reserved.
+	#[test]
+	fn an_application_in_progress_is_not_overwritten_by_an_honour() {
+		new_test_ext().execute_with(|| {
+			assert_ok!(IdentityKycPallet::apply_for_citizenship(
+				RuntimeOrigin::signed(APPLICANT),
+				H256::from_low_u64_be(4242),
+				Some(CITIZEN_1),
+				None,
+			));
+			assert_noop!(
+				IdentityKycPallet::register_honorary_citizen(&APPLICANT),
+				Error::<Test>::ApplicationInProgress
+			);
+		});
+	}
+
 	#[test]
 	fn nobody_is_named_a_citizen_twice() {
 		new_test_ext().execute_with(|| {
@@ -921,4 +957,71 @@ fn a_new_citizen_waits_before_vouching_and_the_founders_do_not() {
 		System::set_block_number(System::block_number() + VouchingWaitingPeriod::get());
 		assert_ok!(IdentityKycPallet::approve_referral(RuntimeOrigin::signed(APPLICANT), newcomer));
 	});
+}
+
+// ============================================================================
+// EVERY WAY IN IS ANNOUNCED
+// ============================================================================
+//
+// What somebody earned before they were a citizen is not counted until they are one, and
+// the pallets that count it learn the day has come from this announcement and from nothing
+// else. Approval used to tell only the voucher's side; a restored or an honorary citizen was
+// not announced at all, and their standing waited for the next full sweep of the register.
+
+mod announced {
+	use super::*;
+	use crate::mock::take_citizenships_granted;
+
+	#[test]
+	fn an_approved_application_announces_the_new_citizen() {
+		new_test_ext().execute_with(|| {
+			assert_ok!(IdentityKycPallet::apply_for_citizenship(
+				RuntimeOrigin::signed(APPLICANT),
+				H256::from_low_u64_be(12345),
+				Some(CITIZEN_1),
+				None,
+			));
+			assert_ok!(IdentityKycPallet::approve_referral(
+				RuntimeOrigin::signed(CITIZEN_1),
+				APPLICANT
+			));
+			take_citizenships_granted();
+
+			assert_ok!(IdentityKycPallet::confirm_citizenship(RuntimeOrigin::signed(APPLICANT)));
+			assert_eq!(take_citizenships_granted(), vec![APPLICANT]);
+		});
+	}
+
+	#[test]
+	fn a_restored_citizenship_is_announced() {
+		new_test_ext().execute_with(|| {
+			assert_ok!(IdentityKycPallet::revoke_citizenship(RuntimeOrigin::root(), CITIZEN_1));
+			take_citizenships_granted();
+
+			assert_ok!(IdentityKycPallet::restore_citizenship(RuntimeOrigin::root(), CITIZEN_1));
+			assert_eq!(take_citizenships_granted(), vec![CITIZEN_1]);
+		});
+	}
+
+	#[test]
+	fn an_honorary_citizenship_is_announced() {
+		new_test_ext().execute_with(|| {
+			take_citizenships_granted();
+			assert_ok!(IdentityKycPallet::register_honorary_citizen(&42));
+			assert_eq!(take_citizenships_granted(), vec![42]);
+		});
+	}
+
+	#[test]
+	fn a_refused_way_in_announces_nobody() {
+		new_test_ext().execute_with(|| {
+			take_citizenships_granted();
+			assert!(IdentityKycPallet::register_honorary_citizen(&CITIZEN_1).is_err());
+			assert_noop!(
+				IdentityKycPallet::restore_citizenship(RuntimeOrigin::root(), CITIZEN_1),
+				Error::<Test>::NotRevoked
+			);
+			assert!(take_citizenships_granted().is_empty());
+		});
+	}
 }

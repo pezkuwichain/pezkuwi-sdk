@@ -132,6 +132,13 @@ pub type UncheckedExtrinsic =
 /// runtime's genesis starts with every pallet at its in-code storage version and none of that
 /// state.
 pub type Migrations = (
+	// A founding house seated before the founding term was abolished keeps no term
+	// (Zagros; on a chain founded since, its genesis writes version 2 and this is a no-op).
+	pezpallet_welati::migrations::v2::DropTheFoundingHousesTerm<Runtime>,
+	// Tier crossings for the clocks already running (Zagros; a no-op on a chain founded since).
+	pezpallet_staking_score::migrations::v2::ScheduleTierCrossings<Runtime>,
+	// The `.kurd` register's genesis set (Zagros; a no-op on a chain founded since).
+	pezpallet_navnisan::migrations::v1::SeedNavnisan<Runtime, people::NavnisanSeed>,
 	// permanent
 	pezpallet_xcm::migration::MigrateToLatestXcmVersion<Runtime>,
 );
@@ -156,7 +163,7 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
 	spec_name: alloc::borrow::Cow::Borrowed("people-zagros"),
 	impl_name: alloc::borrow::Cow::Borrowed("people-zagros"),
 	authoring_version: 1,
-	spec_version: 1_020_016,
+	spec_version: 1_020_025,
 	impl_version: 0,
 	apis: RUNTIME_API_VERSIONS,
 	transaction_version: 1,
@@ -618,7 +625,10 @@ impl InstanceFilter<RuntimeCall> for ProxyType {
 				RuntimeCall::Referenda(pezpallet_referenda::Call::submit { .. }) |
 				RuntimeCall::Referenda(
 					pezpallet_referenda::Call::place_decision_deposit { .. }
-				)
+				) |
+				// Names are bought, sold and pointed at accounts and sites: a delegate that
+				// may not move funds may not move a name, or redirect where payments to it go.
+				RuntimeCall::Navnisan { .. }
 			),
 			ProxyType::CancelProxy => matches!(
 				c,
@@ -767,6 +777,7 @@ construct_runtime!(
 		IdentityKyc: pezpallet_identity_kyc = 51,
 		Referral: pezpallet_referral = 52,
 		Perwerde: pezpallet_perwerde = 53,
+		Navnisan: pezpallet_navnisan = 54,
 		Messaging: pezpallet_messaging = 55,
 
 		// NFTs and Roles
@@ -847,6 +858,7 @@ mod benches {
 		[pezpallet_perwerde, Perwerde]
 		[pezpallet_referral, Referral]
 		[pezpallet_tiki, Tiki]
+		[pezpallet_navnisan, Navnisan]
 		[pezpallet_staking_score, StakingScore]
 		[pezpallet_accumulate_and_forward, AccumulateAndForward]
 		[pezpallet_tnpos, Tnpos]
@@ -1368,6 +1380,24 @@ impl_runtime_apis! {
 			1
 		}
 	}
+
+	impl pezpallet_navnisan::runtime_api::NavnisanApi<Block, AccountId, pezpallet_tiki::Tiki, Balance> for Runtime {
+		fn resolve(name: Vec<u8>) -> Option<pezpallet_navnisan::runtime_api::Resolution<AccountId, pezpallet_tiki::Tiki>> {
+			Navnisan::api_resolve(&name)
+		}
+		fn text(name: Vec<u8>, key: Vec<u8>) -> Option<Vec<u8>> {
+			Navnisan::api_text(&name, &key)
+		}
+		fn reverse(who: AccountId) -> Option<Vec<u8>> {
+			Navnisan::api_reverse(&who)
+		}
+		fn price(label: Vec<u8>, years: u32) -> Option<Balance> {
+			Navnisan::api_price(&label, years)
+		}
+		fn availability(label: Vec<u8>) -> pezpallet_navnisan::runtime_api::Availability {
+			Navnisan::api_availability(&label)
+		}
+	}
 }
 
 /// The register's own rules, in storage rather than in the binary.
@@ -1388,9 +1418,9 @@ pub mod dynamic_params {
 	pub mod qeyd {
 		/// How long a new citizen waits before vouching for anyone.
 		///
-		/// Bounds how *fast* a chain of vouching can deepen; capacity below bounds how *wide*
-		/// one person's mistake can be. The two are often confused, and confusing them costs
-		/// the register its growth.
+		/// Bounds how *fast* a chain of vouching can deepen. There is no bound on how *wide*
+		/// one citizen may vouch: the referral score's ceiling caps what width is worth, and
+		/// a record of revoked vouches suspends it.
 		#[codec(index = 0)]
 		/// Compressed in a rehearsal build, for the same reason the track periods are: a
 		/// register that takes a day per generation cannot be grown to the population gate
@@ -1399,17 +1429,14 @@ pub mod dynamic_params {
 		pub static VouchingWaitingPeriod: BlockNumber =
 			pezkuwi_runtime_common::rehearsal_period!(1 * DAYS, DAYS);
 
-		/// How many a new citizen may vouch for at first.
-		#[codec(index = 1)]
-		pub static InitialVouchingCapacity: u32 = 5;
+		// Indices 1 and 2 held the vouching quota, removed 2026-10-21; not reused.
 
-		/// How many settled vouches earn one more place.
-		#[codec(index = 2)]
-		pub static SettledVouchesPerPlace: u32 = 3;
-
-		/// The ceiling on one citizen's vouching width.
+		/// The number of good referrals at which the referral score is full.
+		///
+		/// Not a limit on vouching -- there is none -- but the point past which more vouches
+		/// add nothing to standing.
 		#[codec(index = 3)]
-		pub static MaxVouchingCapacity: u32 = 50;
+		pub static ReferralScoreCeiling: u32 = 50;
 
 		/// Revocations before a voucher's record is judged at all.
 		///
@@ -1449,9 +1476,9 @@ pub mod dynamic_params {
 #[cfg(feature = "runtime-benchmarks")]
 impl Default for RuntimeParameters {
 	fn default() -> Self {
-		RuntimeParameters::Qeyd(dynamic_params::qeyd::Parameters::InitialVouchingCapacity(
-			dynamic_params::qeyd::InitialVouchingCapacity,
-			Some(5),
+		RuntimeParameters::Qeyd(dynamic_params::qeyd::Parameters::ReferralScoreCeiling(
+			dynamic_params::qeyd::ReferralScoreCeiling,
+			Some(50),
 		))
 	}
 }

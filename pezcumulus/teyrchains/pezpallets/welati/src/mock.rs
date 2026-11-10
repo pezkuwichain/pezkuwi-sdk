@@ -298,8 +298,9 @@ parameter_types! {
 
 impl pezpallet_identity_kyc::Config for Test {
 	type OnCitizenshipRestored = ();
+	type OnCitizenshipGranted = ();
 	type VouchingWaitingPeriod = VouchingWaitingPeriod;
-	type VouchingCapacity = ();
+	type VouchingStanding = ();
 	type Currency = Balances;
 	type GovernanceOrigin = pezframe_system::EnsureRoot<AccountId>;
 	type WeightInfo = ();
@@ -333,6 +334,14 @@ impl pezpallet_staking_score::Config for Test {
 	type SlashDestination = SlashesTo<StakingScoreSlashDestination>;
 	type OracleGracePeriod = OracleGracePeriod;
 	type MaxDataAge = StakingMaxDataAge;
+	type RelayParent = ();
+	type RelayRootsKept = pezframe_support::traits::ConstU32<600>;
+	type AssetHubParaId = pezframe_support::traits::ConstU32<1000>;
+	type HubPoolsPalletId = HubPoolsPalletId;
+}
+
+pezframe_support::parameter_types! {
+	pub const HubPoolsPalletId: pezframe_support::PalletId = pezframe_support::PalletId(*b"py/nopls");
 }
 
 // Referral Configuration
@@ -342,17 +351,11 @@ parameter_types! {
 }
 
 parameter_types! {
-	pub const InitialVouchingCapacity: u32 = 5;
-	pub const SettledVouchesPerPlace: u32 = 3;
-	pub const MaxVouchingCapacity: u32 = 50;
 	pub const SuspensionRevocationFloor: u32 = 3;
 	pub const SuspensionRevocationPercent: u32 = 20;
 }
 
 impl pezpallet_referral::Config for Test {
-	type InitialVouchingCapacity = InitialVouchingCapacity;
-	type SettledVouchesPerPlace = SettledVouchesPerPlace;
-	type MaxVouchingCapacity = MaxVouchingCapacity;
 	type SuspensionRevocationFloor = SuspensionRevocationFloor;
 	type SuspensionRevocationPercent = SuspensionRevocationPercent;
 	type WeightInfo = ();
@@ -371,6 +374,7 @@ parameter_types! {
 }
 
 impl pezpallet_tiki::Config for Test {
+	type OnRoleRevoked = Welati;
 	type AdminOrigin = pezframe_system::EnsureRoot<AccountId>;
 	type ElectedRoleOrigin = pezframe_system::EnsureRoot<AccountId>;
 	type EarnedRoleOrigin = pezframe_system::EnsureRoot<AccountId>;
@@ -510,6 +514,8 @@ impl pezpallet_trust::Config for Test {
 	type PerwerdeScoreSource = MockPerwerdeScoreProvider;
 	type TikiScoreSource = MockTikiScoreProvider;
 	type CitizenshipSource = MockCitizenshipStatusProvider;
+	#[cfg(feature = "runtime-benchmarks")]
+	type BenchmarkHelper = ();
 }
 
 // Welati Configuration - DEFINE ONLY ONCE
@@ -636,6 +642,10 @@ parameter_types! {
 	/// Defaults to the mock threshold, so the gate reads as it did before the override
 	/// existed; the cases that exercise lowering set it themselves.
 	pub static MockPopulationThresholdOverride: u32 = 100;
+	/// Out of reach unless a test lowers it. The mock register reports a hundred and ten
+	/// citizens so that turnout arithmetic has a population to work against, and the tests
+	/// written before the founding period existed assume no election opens on its own.
+	pub static MockFoundingPeriodThreshold: u32 = u32::MAX;
 	pub static MockPolls: BTreeMap<u32, MockPollState> =
 		vec![(1u32, MockPollState::Ongoing(<CitizenTally<MockElectorate, MockMinElectorate> as pezframe_support::traits::VoteTally<u32, u16>>::new(0), 0u16))].into_iter().collect();
 }
@@ -844,6 +854,7 @@ impl pezpallet_welati::Config for Test {
 	type PopulationThreshold = PopulationThreshold;
 	type PopulationThresholdOverride = MockPopulationThresholdOverride;
 	type PopulationCheckPeriod = PopulationCheckPeriod;
+	type FoundingPeriodThreshold = MockFoundingPeriodThreshold;
 }
 
 // CRITICAL: CitizenInfo trait implementation - DEFINE ONLY ONCE
@@ -914,6 +925,15 @@ pub fn add_parliament_member(account: AccountId) {
 	let mut members = ParliamentMembers::<Test>::get();
 	if members.try_push(member).is_ok() {
 		ParliamentMembers::<Test>::put(members);
+	}
+	// A seat is the roll and the tiki together, as the chain grants it; the house now reads
+	// both, so a helper that wrote only the roll would seat nobody.
+	make_citizen(account);
+	if !pezpallet_tiki::Pezpallet::<Test>::has_tiki(&account, &pezpallet_tiki::Tiki::Parlementer) {
+		assert_ok!(pezpallet_tiki::Pezpallet::<Test>::internal_grant_role(
+			&account,
+			pezpallet_tiki::Tiki::Parlementer
+		));
 	}
 }
 

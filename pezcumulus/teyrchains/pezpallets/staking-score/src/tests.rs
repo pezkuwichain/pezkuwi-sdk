@@ -1796,6 +1796,30 @@ mod freshness {
 		});
 	}
 
+	/// What a reader with its own freshness bound is told: current while confirmations keep
+	/// coming, the real age once they stop -- and never the holding duration.
+	#[test]
+	fn the_observation_height_is_current_while_confirmed() {
+		ExtBuilder.build_and_execute(|| {
+			assert_eq!(StakingScore::observed_at(&USER_STASH), 0, "nothing was ever confirmed");
+			tracked_from(10, 500 * UNITS);
+
+			// Months held and still confirmed: current, whatever the duration.
+			let mut at = 10u64;
+			while at < 10 + 4 * MONTH_IN_BLOCKS as u64 {
+				at += AGE / 2;
+				System::set_block_number(at);
+				confirm(500 * UNITS);
+			}
+			System::set_block_number(at + 1);
+			assert_eq!(StakingScore::observed_at(&USER_STASH), at + 1);
+
+			// Confirmations stop: past the allowance it reports the last one.
+			System::set_block_number(at + AGE + 1);
+			assert_eq!(StakingScore::observed_at(&USER_STASH), at);
+		});
+	}
+
 	#[test]
 	fn the_newest_source_is_what_counts() {
 		// Two sources, one gone quiet: the account is as fresh as its freshest confirmation.
@@ -1913,6 +1937,507 @@ mod invariant {
 			));
 			NoterBonds::<Test>::remove(NOTER);
 			assert_rejected("a pending submission was left by somebody with no bond");
+		});
+	}
+}
+
+// =============================================================================
+// L-7: A NOTER'S BOND, A FALSE ZERO, AND A WINDOW THAT CAN BE KEPT OPEN
+// =============================================================================
+
+mod noter_accountability {
+	use super::*;
+	use crate::{LapsedStake, StakeFirstSeen, StakingStartBlock, UnresolvedDisputes};
+
+	fn submit(noter: AccountId, amount: Balance) -> pezsp_runtime::DispatchResult {
+		StakingScore::receive_staking_details(
+			RuntimeOrigin::signed(noter),
+			USER_STASH,
+			StakingSource::RelayChain,
+			amount,
+			0,
+			0,
+		)
+	}
+
+	fn dispute() {
+		assert_ok!(StakingScore::dispute_staking_details(
+			RuntimeOrigin::signed(DISPUTE_MEMBER),
+			USER_STASH,
+			StakingSource::RelayChain,
+		));
+	}
+
+	/// The bond answers for a disputed submission until governance rules on it.
+	#[test]
+	fn a_disputed_noter_keeps_the_bond_in_place_until_the_ruling() {
+		ExtBuilder.build_and_execute(|| {
+			ensure_registered(NOTER);
+			assert_ok!(submit(NOTER, 200 * UNITS));
+			dispute();
+
+			// Long past the dispute window, and still no ruling.
+			System::set_block_number(System::block_number() + 10 * DISPUTE_WINDOW);
+			assert_noop!(
+				StakingScore::unregister_as_noter(RuntimeOrigin::signed(NOTER)),
+				Error::<Test>::DisputeUnresolved
+			);
+
+			// Ruled unfounded: the bond is free again.
+			assert_ok!(StakingScore::dismiss_disputes(RuntimeOrigin::signed(SLASH_MEMBER), NOTER));
+			assert_eq!(UnresolvedDisputes::<Test>::get(NOTER), 0);
+			assert_ok!(StakingScore::unregister_as_noter(RuntimeOrigin::signed(NOTER)));
+		});
+	}
+
+	#[test]
+	fn only_governance_dismisses_and_only_what_is_open() {
+		ExtBuilder.build_and_execute(|| {
+			ensure_registered(NOTER);
+			assert_noop!(
+				StakingScore::dismiss_disputes(RuntimeOrigin::signed(SLASH_MEMBER), NOTER),
+				Error::<Test>::NoUnresolvedDisputes
+			);
+			assert_ok!(submit(NOTER, 200 * UNITS));
+			dispute();
+			assert!(StakingScore::dismiss_disputes(RuntimeOrigin::signed(NOTER), NOTER).is_err());
+			// A slash is the other ruling, and it settles them too.
+			assert_ok!(StakingScore::slash_noter(RuntimeOrigin::signed(SLASH_MEMBER), NOTER));
+			assert_eq!(UnresolvedDisputes::<Test>::get(NOTER), 0);
+		});
+	}
+
+	/// Resending the same numbers does not restart the window, and other numbers wait.
+	#[test]
+	fn a_pending_submission_cannot_be_kept_from_maturing() {
+		ExtBuilder.build_and_execute(|| {
+			ensure_registered(NOTER);
+			ensure_registered(NOTER_2);
+			let start = System::block_number();
+			assert_ok!(submit(NOTER, 200 * UNITS));
+
+			// Every few blocks, the same data again: accepted, window untouched.
+			for step in 1..DISPUTE_WINDOW {
+				System::set_block_number(start + step);
+				assert_ok!(submit(NOTER, 200 * UNITS));
+			}
+			let pending =
+				PendingStakingDetails::<Test>::get(USER_STASH, StakingSource::RelayChain).unwrap();
+			assert_eq!(pending.submitted_at, start, "a resubmission restarted the window");
+
+			// Different data, from anyone, waits for this one.
+			assert_noop!(submit(NOTER_2, 300 * UNITS), Error::<Test>::SubmissionAwaitingWindow);
+
+			// And it matures on time.
+			System::set_block_number(start + DISPUTE_WINDOW);
+			assert_ok!(StakingScore::finalize_staking_details(
+				RuntimeOrigin::signed(USER_STASH),
+				USER_STASH,
+				StakingSource::RelayChain,
+			));
+			assert_eq!(StakingScore::total_cached_stake(&USER_STASH), 200 * UNITS);
+		});
+	}
+
+	fn held_for_months() -> (u64, u64) {
+		submit_and_finalize(NOTER, USER_STASH, StakingSource::RelayChain, 500 * UNITS, 0, 0);
+		assert_ok!(StakingScore::start_score_tracking(RuntimeOrigin::signed(USER_STASH)));
+		let start = StakingStartBlock::<Test>::get(USER_STASH).unwrap();
+		let first = StakeFirstSeen::<Test>::get(USER_STASH).unwrap();
+		System::set_block_number(System::block_number() + 4 * MONTH_IN_BLOCKS as u64);
+		submit_and_finalize(NOTER, USER_STASH, StakingSource::RelayChain, 500 * UNITS, 0, 0);
+		(start, first)
+	}
+
+	/// A false zero corrected within the grace period costs nothing.
+	#[test]
+	fn a_brief_zero_does_not_erase_the_holding_duration() {
+		ExtBuilder.build_and_execute(|| {
+			let (start, first) = held_for_months();
+			let before = StakingScore::get_staking_score(&USER_STASH);
+
+			submit_and_finalize(NOTER, USER_STASH, StakingSource::RelayChain, 0, 0, 0);
+			assert_eq!(StakingScore::get_staking_score(&USER_STASH).0, 0);
+			assert!(LapsedStake::<Test>::get(USER_STASH).is_some());
+
+			submit_and_finalize(NOTER, USER_STASH, StakingSource::RelayChain, 500 * UNITS, 0, 0);
+			assert_eq!(StakingStartBlock::<Test>::get(USER_STASH), Some(start));
+			assert_eq!(StakeFirstSeen::<Test>::get(USER_STASH), Some(first));
+			assert_eq!(StakingScore::get_staking_score(&USER_STASH).0, before.0);
+		});
+	}
+
+	/// A real end of the stake still ends the duration.
+	#[test]
+	fn a_zero_past_the_grace_period_ends_it() {
+		ExtBuilder.build_and_execute(|| {
+			held_for_months();
+			submit_and_finalize(NOTER, USER_STASH, StakingSource::RelayChain, 0, 0, 0);
+			System::set_block_number(System::block_number() + OracleGracePeriod::get() + 1);
+
+			submit_and_finalize(NOTER, USER_STASH, StakingSource::RelayChain, 500 * UNITS, 0, 0);
+			assert_eq!(StakingStartBlock::<Test>::get(USER_STASH), None, "the opt-in survived");
+			assert_eq!(StakeFirstSeen::<Test>::get(USER_STASH), Some(System::block_number()));
+		});
+	}
+
+	/// Coming back bigger after a brief lapse is a flash stake like any other.
+	#[test]
+	fn a_lapse_does_not_launder_a_flash_stake() {
+		ExtBuilder.build_and_execute(|| {
+			held_for_months();
+			submit_and_finalize(NOTER, USER_STASH, StakingSource::RelayChain, 0, 0, 0);
+			submit_and_finalize(NOTER, USER_STASH, StakingSource::RelayChain, 50_000 * UNITS, 0, 0);
+			assert_eq!(
+				StakingStartBlock::<Test>::get(USER_STASH),
+				Some(System::block_number()),
+				"a larger stake after a lapse kept the old clock"
+			);
+		});
+	}
+}
+
+// ============================================================================
+// A noter's key reissued
+// ============================================================================
+
+mod a_reissued_noter {
+	use super::*;
+	use pezframe_support::traits::ReservableCurrency;
+
+	const SUCCESSOR: AccountId = 30;
+	const ITS_OWN_RESERVE: Balance = 7;
+
+	#[test]
+	fn the_bond_moves_with_the_money_behind_it() {
+		// The record of the bond moved to the successor and the reserve it describes stayed on
+		// the lost key. Unregistering then unreserved the successor's own deposits, and a slash
+		// took the successor's free balance while the bond sat out of reach.
+		ExtBuilder.build_and_execute(|| {
+			System::set_block_number(1);
+			assert_ok!(Balances::reserve(&SUCCESSOR, ITS_OWN_RESERVE));
+			ensure_registered(NOTER);
+			let bond = NoterBondAmount::get();
+
+			assert_ok!(StakingScore::rebind_account(&NOTER, &SUCCESSOR));
+
+			assert_eq!(Balances::reserved_balance(NOTER), 0, "the bond stayed on the lost key");
+			assert_eq!(Balances::reserved_balance(SUCCESSOR), bond + ITS_OWN_RESERVE);
+			assert_eq!(NoterBonds::<Test>::get(SUCCESSOR), Some(bond));
+
+			assert_ok!(StakingScore::unregister_as_noter(RuntimeOrigin::signed(SUCCESSOR)));
+			assert_eq!(
+				Balances::reserved_balance(SUCCESSOR),
+				ITS_OWN_RESERVE,
+				"unregistering released a deposit that was not the bond"
+			);
+		});
+	}
+
+	#[test]
+	fn a_submission_made_before_the_reissue_is_still_answered_for() {
+		// A dispute is charged to whoever made the submission. Charged to the retired key, it
+		// left the successor -- who holds the bond -- free to unregister and walk away.
+		ExtBuilder.build_and_execute(|| {
+			System::set_block_number(1);
+			ensure_registered(NOTER);
+			assert_ok!(StakingScore::receive_staking_details(
+				RuntimeOrigin::signed(NOTER),
+				USER_STASH,
+				StakingSource::RelayChain,
+				100 * UNITS,
+				0,
+				0
+			));
+			assert_ok!(StakingScore::rebind_account(&NOTER, &SUCCESSOR));
+
+			assert_ok!(StakingScore::dispute_staking_details(
+				RuntimeOrigin::signed(DISPUTE_MEMBER),
+				USER_STASH,
+				StakingSource::RelayChain
+			));
+			System::set_block_number(1 + DISPUTE_WINDOW);
+			assert_noop!(
+				StakingScore::unregister_as_noter(RuntimeOrigin::signed(SUCCESSOR)),
+				Error::<Test>::DisputeUnresolved
+			);
+		});
+	}
+}
+
+mod a_noters_submission {
+	use crate::weights::WeightInfo;
+
+	/// A noter's submission applies a matured one before recording itself, so it is charged
+	/// at least what applying one costs. It was charged the Root path, which only applies.
+	#[test]
+	fn is_charged_for_the_submission_it_applies() {
+		let submit = <() as WeightInfo>::receive_staking_details();
+		let apply = <() as WeightInfo>::finalize_staking_details();
+		// Its own work adds reads and writes, not proof, so the time is what has to be larger.
+		assert!(submit.all_gte(apply) && submit.ref_time() > apply.ref_time());
+	}
+}
+
+// ============================================================================
+// A TIER IS REACHED BY TIME, AND IS ANNOUNCED
+// ============================================================================
+//
+// The multiplier is worked out when it is read, so reaching three months changes nothing that
+// anyone is told about; a score derived from it -- trust -- kept the old value until a noter
+// next confirmed the stake or the full sweep came round. The dates are known when the clock
+// starts, so they are written down then and announced when they come.
+
+mod tiers {
+	use super::*;
+	use crate::{CrossingsScheduledFrom, NextCrossingBlock, TierCrossings, TIER_MONTHS};
+	use pezframe_support::traits::Hooks;
+
+	const M: u64 = MONTH_IN_BLOCKS as u64;
+
+	fn stake(who: AccountId, hez: u128) {
+		assert_ok!(StakingScore::receive_staking_details(
+			RuntimeOrigin::root(),
+			who,
+			StakingSource::RelayChain,
+			hez * UNITS,
+			1,
+			0,
+		));
+	}
+
+	fn run_to(n: u64) {
+		System::set_block_number(n);
+		<StakingScore as Hooks<u64>>::on_initialize(n);
+	}
+
+	#[test]
+	fn each_tier_is_announced_on_the_block_it_is_reached() {
+		ExtBuilder::default().build_and_execute(|| {
+			run_to(1);
+			assert_ok!(StakingScore::start_score_tracking(RuntimeOrigin::signed(USER_STASH)));
+			stake(USER_STASH, 500);
+			take_tiers_reached();
+
+			let origin = StakingScore::duration_origin(&USER_STASH).unwrap();
+			for months in TIER_MONTHS {
+				let at = origin + u64::from(months) * M;
+				run_to(at - 1);
+				assert!(take_tiers_reached().is_empty(), "not before {months} months");
+				// The cursor walks a bounded number of blocks each time; jumping the clock
+				// ahead is the test's doing, so let it catch up first.
+				NextCrossingBlock::<Test>::put(at);
+				run_to(at);
+				assert_eq!(take_tiers_reached(), vec![USER_STASH], "at {months} months");
+			}
+			assert_eq!(TierCrossings::<Test>::iter().count(), 0);
+		});
+	}
+
+	#[test]
+	fn a_confirmation_that_changes_nothing_writes_nothing() {
+		ExtBuilder::default().build_and_execute(|| {
+			run_to(1);
+			assert_ok!(StakingScore::start_score_tracking(RuntimeOrigin::signed(USER_STASH)));
+			stake(USER_STASH, 500);
+			assert_eq!(TierCrossings::<Test>::iter().count(), TIER_MONTHS.len());
+			// Take one away: a confirmation that rewrote the dates would put it back.
+			let (at, _, ()) = TierCrossings::<Test>::iter().next().unwrap();
+			TierCrossings::<Test>::remove(at, USER_STASH);
+
+			run_to(100);
+			stake(USER_STASH, 500);
+			assert_eq!(
+				TierCrossings::<Test>::iter().count(),
+				TIER_MONTHS.len() - 1,
+				"the same clock, so nothing was written"
+			);
+		});
+	}
+
+	#[test]
+	fn a_clock_that_restarts_is_rescheduled_from_its_new_start() {
+		ExtBuilder::default().build_and_execute(|| {
+			run_to(1);
+			assert_ok!(StakingScore::start_score_tracking(RuntimeOrigin::signed(USER_STASH)));
+			stake(USER_STASH, 500);
+			let first = CrossingsScheduledFrom::<Test>::get(USER_STASH).unwrap();
+
+			// More stake restarts the clock.
+			run_to(2 * M);
+			stake(USER_STASH, 900);
+			let second = CrossingsScheduledFrom::<Test>::get(USER_STASH).unwrap();
+			assert!(second > first);
+			for months in TIER_MONTHS {
+				assert!(TierCrossings::<Test>::contains_key(
+					second + u64::from(months) * M,
+					USER_STASH
+				));
+			}
+		});
+	}
+
+	#[test]
+	fn no_stake_no_dates() {
+		ExtBuilder::default().build_and_execute(|| {
+			run_to(1);
+			assert_ok!(StakingScore::start_score_tracking(RuntimeOrigin::signed(USER_STASH)));
+			assert_eq!(TierCrossings::<Test>::iter().count(), 0, "nothing to count yet");
+		});
+	}
+
+	#[test]
+	fn more_than_a_block_can_announce_waits_for_the_next() {
+		ExtBuilder::default().build_and_execute(|| {
+			run_to(1);
+			let at = 50u64;
+			for who in 0..(crate::MAX_TIER_CROSSINGS_PER_BLOCK as u64 + 10) {
+				TierCrossings::<Test>::insert(at, 10_000 + who, ());
+			}
+			NextCrossingBlock::<Test>::put(at);
+			run_to(at);
+			assert_eq!(take_tiers_reached().len(), crate::MAX_TIER_CROSSINGS_PER_BLOCK as usize);
+			run_to(at + 1);
+			assert_eq!(take_tiers_reached().len(), 10, "the rest the block after");
+			assert_eq!(TierCrossings::<Test>::iter().count(), 0);
+		});
+	}
+
+	#[test]
+	fn the_upgrade_writes_dates_for_clocks_already_running() {
+		use pezframe_support::traits::{OnRuntimeUpgrade, StorageVersion};
+		ExtBuilder::default().build_and_execute(|| {
+			run_to(1);
+			assert_ok!(StakingScore::start_score_tracking(RuntimeOrigin::signed(USER_STASH)));
+			stake(USER_STASH, 500);
+			// As a clock started before version 2 left it.
+			let _ = TierCrossings::<Test>::clear(u32::MAX, None);
+			CrossingsScheduledFrom::<Test>::remove(USER_STASH);
+			StorageVersion::new(1).put::<StakingScore>();
+
+			run_to(10);
+			crate::migrations::v2::ScheduleTierCrossings::<Test>::on_runtime_upgrade();
+
+			let origin = StakingScore::duration_origin(&USER_STASH).unwrap();
+			for months in TIER_MONTHS {
+				assert!(TierCrossings::<Test>::contains_key(
+					origin + u64::from(months) * M,
+					USER_STASH
+				));
+			}
+			assert_eq!(NextCrossingBlock::<Test>::get(), Some(10));
+			assert_eq!(StorageVersion::get::<StakingScore>(), StorageVersion::new(2));
+		});
+	}
+}
+
+// ============================================================================
+// A STAKE IS PROVEN FROM THE HUB'S OWN STATE
+// ============================================================================
+//
+// The stake is on the Asset Hub. Rather than believe a noter about it, or let the hub's own
+// governance write it here, anyone may prove it: a relay proof to the hub's head, a hub proof
+// to the bond. The happy path needs 32-byte accounts and runs in the People runtime's tests
+// against proofs the live chains produced; these are the checks that come before the proof.
+
+mod proven {
+	use super::*;
+	use crate::{OldestRelayRoot, RelayRoots};
+	use pezframe_support::traits::Hooks;
+
+	fn finalize(n: u64) {
+		System::set_block_number(n);
+		<StakingScore as Hooks<u64>>::on_finalize(n);
+	}
+
+	fn prove(relay_block: u32) -> pezframe_support::dispatch::DispatchResultWithPostInfo {
+		StakingScore::prove_stake(
+			RuntimeOrigin::signed(30),
+			USER_STASH,
+			relay_block,
+			vec![],
+			vec![],
+		)
+	}
+
+	#[test]
+	fn each_blocks_relay_root_is_kept_and_the_old_ones_pruned() {
+		ExtBuilder::default().build_and_execute(|| {
+			for (n, relay) in (1u64..=30).zip(100u32..) {
+				set_relay_parent(relay, [relay as u8; 32]);
+				finalize(n);
+			}
+			// Kept for ten relay blocks back from 129, pruned below.
+			assert!(RelayRoots::<Test>::get(129).is_some());
+			assert!(RelayRoots::<Test>::get(119).is_some());
+			assert!(RelayRoots::<Test>::get(118).is_none());
+			assert!(RelayRoots::<Test>::get(100).is_none());
+			assert_eq!(OldestRelayRoot::<Test>::get(), Some(119));
+		});
+	}
+
+	#[test]
+	fn a_relay_parent_that_jumps_does_not_leave_roots_behind() {
+		ExtBuilder::default().build_and_execute(|| {
+			set_relay_parent(100, [1; 32]);
+			finalize(1);
+			// The chain missed relay blocks; pruning catches up a few a block.
+			for (n, relay) in (2u64..=8).zip([103u32, 106, 109, 112, 115, 118, 121]) {
+				set_relay_parent(relay, [relay as u8; 32]);
+				finalize(n);
+			}
+			assert_eq!(RelayRoots::<Test>::iter().filter(|(k, _)| *k < 111).count(), 0);
+		});
+	}
+
+	#[test]
+	fn a_proof_for_an_account_that_has_not_opted_in_is_refused() {
+		ExtBuilder::default().build_and_execute(|| {
+			set_relay_parent(100, [1; 32]);
+			finalize(1);
+			assert_noop!(prove(100), Error::<Test>::NotTracking);
+		});
+	}
+
+	#[test]
+	fn a_proof_from_a_relay_block_not_kept_is_refused() {
+		ExtBuilder::default().build_and_execute(|| {
+			set_relay_parent(100, [1; 32]);
+			finalize(1);
+			assert_ok!(StakingScore::start_score_tracking(RuntimeOrigin::signed(USER_STASH)));
+			assert_noop!(prove(99), Error::<Test>::UnknownRelayBlock);
+		});
+	}
+
+	#[test]
+	fn a_proof_no_newer_than_the_last_is_refused() {
+		ExtBuilder::default().build_and_execute(|| {
+			set_relay_parent(100, [1; 32]);
+			finalize(1);
+			assert_ok!(StakingScore::start_score_tracking(RuntimeOrigin::signed(USER_STASH)));
+			crate::ProvenAt::<Test>::insert(USER_STASH, 100);
+			assert_noop!(prove(100), Error::<Test>::ProofNotNewer);
+		});
+	}
+
+	#[test]
+	fn a_proof_that_does_not_verify_is_refused() {
+		ExtBuilder::default().build_and_execute(|| {
+			set_relay_parent(100, [1; 32]);
+			finalize(1);
+			assert_ok!(StakingScore::start_score_tracking(RuntimeOrigin::signed(USER_STASH)));
+			assert_noop!(prove(100), Error::<Test>::InvalidProof);
+		});
+	}
+
+	#[test]
+	fn more_proof_than_a_stake_needs_is_refused() {
+		ExtBuilder::default().build_and_execute(|| {
+			let big = vec![vec![0u8; 1024]; (crate::MAX_PROOF_KIB + 1) as usize];
+			assert_noop!(
+				StakingScore::prove_stake(RuntimeOrigin::signed(30), USER_STASH, 1, big, vec![]),
+				Error::<Test>::ProofTooLarge
+			);
 		});
 	}
 }

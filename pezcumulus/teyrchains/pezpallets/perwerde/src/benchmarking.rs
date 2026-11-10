@@ -49,6 +49,8 @@ fn fill_class<T: Config>(course_id: u32, owner: &T::AccountId, count: u32) -> Ve
 	let mut students = Vec::new();
 	for i in 0..count {
 		let student: T::AccountId = account("student", i, 0);
+		// Closing and annulling the course recompute each student's standing.
+		T::TrustScoreUpdater::prepare_worst_case(&student);
 		assert_ok!(Perwerde::<T>::enroll(RawOrigin::Signed(student.clone()).into(), course_id));
 		assert_ok!(Perwerde::<T>::record_result(
 			RawOrigin::Signed(owner.clone()).into(),
@@ -120,6 +122,27 @@ mod benchmarks {
 		_(RawOrigin::Signed(student.clone()), course_id);
 
 		assert!(Enrollments::<T>::contains_key(course_id, &student));
+	}
+
+	#[benchmark]
+	fn enroll_in_place_of() {
+		let owner: T::AccountId = account("owner", 0, 0);
+		let course_id = open_course::<T>(&owner);
+		let max = T::MaxStudentsPerCourse::get();
+		for i in 0..max {
+			let who: T::AccountId = account("stranger", i, 0);
+			T::BenchmarkHelper::make_stranger(&who);
+			assert_ok!(Perwerde::<T>::enroll(RawOrigin::Signed(who).into(), course_id));
+		}
+		let holder: T::AccountId = account("stranger", 0, 0);
+		let student: T::AccountId = whitelisted_caller();
+		T::BenchmarkHelper::make_citizen(&student);
+
+		#[extrinsic_call]
+		_(RawOrigin::Signed(student.clone()), course_id, holder.clone());
+
+		assert!(Enrollments::<T>::contains_key(course_id, &student));
+		assert!(!Enrollments::<T>::contains_key(course_id, &holder));
 	}
 
 	#[benchmark]

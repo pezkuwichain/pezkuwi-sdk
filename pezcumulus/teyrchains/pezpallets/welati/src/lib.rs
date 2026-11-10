@@ -185,7 +185,7 @@ use pezpallet_identity_kyc::types::KycLevel;
 use pezpallet_identity_kyc::types::KycStatus;
 use pezpallet_tiki::{Tiki, TikiScoreProvider};
 use pezpallet_trust::TrustScoreProvider;
-use pezsp_runtime::traits::{Dispatchable, Saturating};
+use pezsp_runtime::traits::{Bounded, Dispatchable, Saturating};
 // Not feature-gated, for the same reason as `Currency` above: `return_candidacy_deposits`
 // calls `saturated_into` in every configuration.
 use pezsp_runtime::SaturatedConversion;
@@ -196,6 +196,10 @@ use xcm::latest::prelude::*;
 ///
 /// Kept next to the pallet-index constant it is used with, because the pair is the whole
 /// address of a call on another chain and neither half means anything alone.
+/// The most per-citizen entries one clearing call removes. Enough that a finished question can
+/// be cleared in a few hundred calls, small enough that one of them fits a block with room left.
+pub const MAX_CLEARED_PER_CALL: u32 = 1_000;
+
 const ACTIVATE_DISTRIBUTION_CALL_INDEX: u8 = 0;
 
 /// `pezpallet-pez-treasury::spend_from_government_pot`, by call index.
@@ -229,6 +233,12 @@ pub trait BenchmarkHelper<AccountId> {
 	/// configuration for the router to check the message against -- the same refusal, for
 	/// the same reason, as the treasury's.
 	fn ensure_relay_reachable();
+
+	/// Give `who` a trust score, which voting, backing and opening an initiative require.
+	///
+	/// The score is another pallet's, and a benchmark genesis has nobody with one, so the
+	/// runtime writes it. Nothing to do where the trust source already answers for anyone.
+	fn give_trust(_who: &AccountId) {}
 }
 
 #[cfg(feature = "runtime-benchmarks")]
@@ -365,11 +375,24 @@ impl<T: Config> pezpallet_identity_kyc::types::OnCitizenshipRevoked<T::AccountId
 		// Parliament and judging in the Diwan until the term ran out. The empty seat is then
 		// what the vacancy rules are for: an emptied house opens an election, an elected court
 		// seat short opens one for that half, an appointed one is the President's to fill.
-		ParliamentMembers::<T>::mutate(|house| house.retain(|member| &member.account != who));
-		DiwanMembers::<T>::mutate(|bench| bench.retain(|member| &member.account != who));
-		// A seat still waiting to be handed over would be granted to somebody who can no
-		// longer hold a role; the grant would be refused and leave the handover stuck.
-		PendingSeatGrants::<T>::mutate(|grants| grants.retain(|grant| grant != who));
+		Pezpallet::<T>::leave_the_house(who);
+		Pezpallet::<T>::leave_the_bench(who);
+	}
+}
+
+/// A seat the court or the register takes away leaves the roll and the collective with it.
+///
+/// The house reads its own roll to decide who may propose and vote, and the Parliament
+/// collective holds its own copy of the members. Neither followed the tiki: a member whose seat
+/// the court revoked went on voting in the house and in the collective's motions, and kept the
+/// validator stratum that reads the roll (L-7, 2026-10-21).
+impl<T: Config> pezpallet_tiki::OnRoleRevoked<T::AccountId> for Pezpallet<T> {
+	fn on_role_revoked(who: &T::AccountId, tiki: Tiki) {
+		match tiki {
+			Tiki::Parlementer => Self::leave_the_house(who),
+			Tiki::EndameDiwane => Self::leave_the_bench(who),
+			_ => {},
+		}
 	}
 }
 
@@ -848,6 +871,16 @@ pub mod pezpallet {
 		/// one call the whole population makes.
 		#[pezpallet::constant]
 		type PopulationCheckPeriod: Get<BlockNumberFor<Self>>;
+
+		/// How many citizens the register must hold before the founding government is
+		/// replaced by election.
+		///
+		/// Its own constant rather than `PopulationThreshold`, though both runtimes bind the
+		/// two to the same number: the payment gate has `PopulationThresholdOverride` beside
+		/// it, and this one deliberately has nothing. There is no lower figure the founding
+		/// government could set, and no date that ends the founding period instead.
+		#[pezpallet::constant]
+		type FoundingPeriodThreshold: Get<u32>;
 	}
 
 	// --- CORE GOVERNANCE STORAGE ---
@@ -878,7 +911,8 @@ pub mod pezpallet {
 	/// When the seats being handed out run out.
 	///
 	/// Held here rather than in each queue entry because every seat in one handover ends on
-	/// the same day -- the house has one term, not two hundred and one.
+	/// the same day -- the house has one term, not two hundred and one. Absent while the
+	/// founding house is seated: its seats have no term.
 	#[pezpallet::storage]
 	pub type PendingSeatTerm<T: Config> = StorageValue<_, BlockNumberFor<T>, OptionQuery>;
 
@@ -1207,6 +1241,28 @@ pub mod pezpallet {
 	#[pezpallet::getter(fn population_gate_reported)]
 	pub type PopulationGateReported<T: Config> = StorageValue<_, bool, ValueQuery>;
 
+	/// Whether the founding period is over.
+	///
+	/// The founding government -- the President genesis seats and the house that President
+	/// seats -- is interim, and one thing ends it: the register reaching
+	/// `FoundingPeriodThreshold` citizens. Not a date. A state of a few thousand electing two hundred and one
+	/// representatives would be a vote in name only, and a deadline would force exactly that
+	/// if the register grew slowly; so the founding government sits for as long as it takes,
+	/// and the day the threshold is crossed the first elections open on their own. Latched:
+	/// a register that later dips below the threshold does not bring the founding period back.
+	#[pezpallet::storage]
+	pub type FoundingPeriodEnded<T: Config> = StorageValue<_, bool, ValueQuery>;
+
+	/// The first elections the end of the founding period owes, until each produces a winner.
+	///
+	/// An election can end without one -- nobody stood, or the count failed -- and the
+	/// founding office it was meant to replace is then still sitting. Owed until a winner is
+	/// seated, so the next check opens it again rather than leaving the interim government in
+	/// place for good.
+	#[pezpallet::storage]
+	pub type FirstElectionOwed<T: Config> =
+		StorageMap<_, Blake2_128Concat, ElectionType, (), OptionQuery>;
+
 	/// Initiatives open for backing, and those that closed but were not yet settled.
 	#[pezpallet::storage]
 	pub type Initiatives<T: Config> = StorageMap<
@@ -1363,7 +1419,7 @@ pub mod pezpallet {
 		ParliamentUpdated { new_members: Vec<T::AccountId>, term_start: BlockNumberFor<T> },
 
 		/// The founding parliament was seated by the President before the first election.
-		FoundingParliamentSeated { members: Vec<T::AccountId>, term_ends_at: BlockNumberFor<T> },
+		FoundingParliamentSeated { members: Vec<T::AccountId> },
 
 		/// Every seat in a handover has changed hands.
 		SeatHandoverCompleted,
@@ -1492,6 +1548,16 @@ pub mod pezpallet {
 			vetoed_by: T::AccountId,
 			reason: BoundedVec<u8, ConstU32<1000>>,
 		},
+
+		/// The register reached the population threshold: the founding period is over, and
+		/// the elections that replace the founding President and house are opening.
+		FoundingPeriodEnded { citizen_count: u32 },
+
+		/// Backing of a finished initiative was discarded.
+		InitiativeBackingCleared { id: u32, removed: u32 },
+
+		/// Ballots, endorsements and candidacies of a finished election were discarded.
+		ElectionRecordsCleared { election_id: u32, removed: u32 },
 	}
 
 	#[pezpallet::error]
@@ -1683,6 +1749,18 @@ pub mod pezpallet {
 		AppointedRewsenbirLimitReached,
 		/// The approver nominated this appointee; an appointment has two parties.
 		CannotApproveOwnNomination,
+		/// The founding period is over; a house now comes only from an election.
+		FoundingPeriodOver,
+		/// A ballot names more candidates than it may.
+		BallotTooLong,
+		/// A ballot names the same candidate more than once.
+		CandidateNamedTwice,
+		/// An endorsement list names the same endorser more than once.
+		EndorserNamedTwice,
+		/// A candidate cannot endorse their own candidacy.
+		CannotEndorseSelf,
+		/// An election's records can be discarded only once it has finished.
+		ElectionNotFinished,
 	}
 
 	#[pezpallet::hooks]
@@ -1697,7 +1775,25 @@ pub mod pezpallet {
 			let mut weight = Self::process_seat_handover();
 			weight = weight.saturating_add(Self::schedule_due_elections(n));
 			weight = weight.saturating_add(Self::check_population_gate(n));
+			weight = weight.saturating_add(Self::end_founding_period(n));
 			weight
+		}
+
+		/// A candidacy the configuration requires must be one the configuration admits.
+		///
+		/// `get_required_endorsements` asks for up to `PresidentialEndorsements` and
+		/// `ParliamentaryEndorsements`, and `register_candidate` refuses a list longer than
+		/// `MaxEndorsers`. If either requirement exceeds that bound, nobody can register for
+		/// that office once the roll is mature -- and the founding period ends into elections
+		/// that can never have a candidate. A hidden third bound (a list of a hundred kept in
+		/// each candidate's record) did exactly that to the mainnet presidency, which asks for
+		/// a thousand; the rehearsals asked for twenty and never saw it (L-7, 2026-10-21).
+		fn integrity_test() {
+			assert!(
+				T::PresidentialEndorsements::get() <= T::MaxEndorsers::get()
+					&& T::ParliamentaryEndorsements::get() <= T::MaxEndorsers::get(),
+				"an office requires more endorsements than a candidacy may carry"
+			);
 		}
 
 		/// What the constitution says must always be true of the government.
@@ -1731,13 +1827,24 @@ pub mod pezpallet {
 			// scheduler is meant to see it. What must not happen is the reverse: somebody
 			// seated in an elected office with no mandate recorded at all, which is an
 			// officeholder no clock will ever remove.
+			//
+			// With one exception, and only one: the founding President. Genesis seats them
+			// with no term, because what replaces them is the register reaching the founding
+			// threshold rather than a date, and `end_founding_period` -- not a clock -- is
+			// what removes them. That lasts until an election has seated a successor. This
+			// check used to allow no exception at all, which every founded chain contradicted
+			// from its first block.
+			let founding_president = !FoundingPeriodEnded::<T>::get()
+				|| FirstElectionOwed::<T>::contains_key(ElectionType::Presidential);
 			for (election_type, tiki) in [
 				(ElectionType::Presidential, Tiki::Serok),
 				(ElectionType::SpeakerElection, Tiki::SerokiMeclise),
 			] {
 				if pezpallet_tiki::Pezpallet::<T>::current_holder(&tiki).is_some() {
+					let founding =
+						election_type == ElectionType::Presidential && founding_president;
 					ensure!(
-						TermEnds::<T>::contains_key(election_type),
+						founding || TermEnds::<T>::contains_key(election_type),
 						"an elected office is held under no mandate"
 					);
 				}
@@ -1797,12 +1904,32 @@ pub mod pezpallet {
 				}
 			}
 
-			// A queued handover has to have a term to hand out, and a finished one must not
-			// leave the term behind: a stale term would be given to the next house.
+			// A finished handover must not leave its term behind: a stale term would be given
+			// to the next house. The other direction is not an invariant any more -- the
+			// founding house is seated with no term at all -- and an elected house cannot be
+			// queued without one, because the election's arm is the only caller that passes
+			// a term and it always does.
 			let handover_running = !PendingSeatGrants::<T>::get().is_empty() || !leaving.is_empty();
 			ensure!(
-				handover_running == PendingSeatTerm::<T>::exists(),
-				"the seat handover queue and the term it hands out disagree"
+				handover_running || !PendingSeatTerm::<T>::exists(),
+				"a finished seat handover left its term behind"
+			);
+
+			// The founding period's bookkeeping: a first election is owed only once the
+			// period is over.
+			ensure!(
+				FoundingPeriodEnded::<T>::get()
+					|| FirstElectionOwed::<T>::iter_keys().next().is_none(),
+				"a first election is owed while the founding period is still running"
+			);
+
+			// The founding house sits under no term. A term recorded for it opens a Speaker's
+			// election the founding house cannot hold, and the first elected house would
+			// inherit it as the end of a previous mandate and be given the wrong calendar.
+			ensure!(
+				!Self::the_founding_house_sits()
+					|| !TermEnds::<T>::contains_key(ElectionType::Parliamentary),
+				"the founding house carries a term"
 			);
 
 			// Nobody is serving more consecutive terms than the office allows. The limit is
@@ -1842,20 +1969,36 @@ pub mod pezpallet {
 					continue;
 				}
 
-				let due = match TermEnds::<T>::get(election_type) {
-					// A term is running: open the election early enough that the count is
-					// finished by the time the mandate ends. An office that has fallen empty
-					// mid-term does not wait for the clock -- the state cannot go without a
-					// President because the calendar says the term has three years left.
-					Some(ends_at) => {
-						n.saturating_add(lead_time) >= ends_at
-							|| Self::office_is_vacant(&election_type)
-					},
-					// No term recorded means the office has never been filled by a vote. The
-					// founding government is seated by genesis without one -- genesis does not
-					// write `TermEnds` -- so this also covers a founding office: its first
-					// election is opened by hand, not by this scheduler.
-					None => false,
+				let due = if election_type == ElectionType::SpeakerElection {
+					// The Speaker has no term of their own: the chair belongs to the house, so
+					// it is due whenever an elected house sits without one -- not on a clock.
+					// Reading the Speaker's recorded term here meant no term once a new house
+					// had cleared it, so an elected house never got a Speaker; and the house's
+					// term while one sat, so the chair would have been re-elected in the
+					// outgoing house's last weeks (L-7, 2026-10-21). The founding house has no
+					// term, so this opens nothing for it -- and it is asked directly as well,
+					// because a house seated before the founding term was abolished still
+					// carried one, and on Zagros that opened a Speaker's election nobody in
+					// the founding house could stand in or vote in (2026-10-24).
+					TermEnds::<T>::contains_key(ElectionType::Parliamentary)
+						&& !Self::the_founding_house_sits()
+						&& Self::office_is_vacant(&election_type)
+				} else {
+					match TermEnds::<T>::get(election_type) {
+						// A term is running: open the election early enough that the count is
+						// finished by the time the mandate ends. An office that has fallen empty
+						// mid-term does not wait for the clock -- the state cannot go without a
+						// President because the calendar says the term has three years left.
+						Some(ends_at) => {
+							n.saturating_add(lead_time) >= ends_at
+								|| Self::office_is_vacant(&election_type)
+						},
+						// No term recorded means the office has never been filled by a vote. The
+						// founding government is seated by genesis without one -- genesis does not
+						// write `TermEnds` -- so this also covers a founding office: its first
+						// election is opened by hand, not by this scheduler.
+						None => false,
+					}
 				};
 
 				if due
@@ -1872,7 +2015,22 @@ pub mod pezpallet {
 				}
 			}
 
-			T::DbWeight::get().reads_writes(8, (opened as u64).saturating_mul(2))
+			// An election opened here is `initiate_election`, so it is charged as one; two
+			// writes was a guess at its storage (L-7, 2026-10-22).
+			T::DbWeight::get().reads(8).saturating_add(
+				<T as Config>::WeightInfo::initiate_election().saturating_mul(u64::from(opened)),
+			)
+		}
+
+		/// Whether the house sitting now is the founding one.
+		///
+		/// The founding house is replaced by the first parliamentary election, and that
+		/// election stays owed until it seats somebody, so while it is owed the house in the
+		/// chamber is the one the founding President seated. Before the founding period ends
+		/// nothing is owed yet and this says no; a founding house seated by today's code has
+		/// no term then, so there is nothing for the answer to mislead.
+		pub(crate) fn the_founding_house_sits() -> bool {
+			FirstElectionOwed::<T>::contains_key(ElectionType::Parliamentary)
 		}
 
 		/// Whether a single-holder office that should be filled is empty.
@@ -1976,7 +2134,65 @@ pub mod pezpallet {
 				},
 			}
 
-			T::DbWeight::get().reads_writes(3, 1)
+			// The report is a message to the treasury chain. `pay_airdrop` sends one there and
+			// measured it, with reads of its own besides -- an overcharge, once in the chain's
+			// life, rather than a message nothing paid for.
+			T::DbWeight::get()
+				.reads_writes(3, 1)
+				.saturating_add(<T as Config>::WeightInfo::pay_airdrop())
+		}
+
+		/// End the founding period once the register is large enough, and open what it owes.
+		///
+		/// Checked on the population gate's period, against `FoundingPeriodThreshold`, which
+		/// has no override: the payment gate's lets the register bring the first payment
+		/// forward, and a founding government able to lower the bar for its own replacement
+		/// could choose the electorate that replaces it.
+		///
+		/// The founding offices have no term (`seat_founding_parliament`, and genesis seats
+		/// the President without one), so the ordinary scheduler never opens their elections
+		/// -- this is the only thing that does. Each first election stays owed until it
+		/// seats somebody.
+		fn end_founding_period(n: BlockNumberFor<T>) -> Weight {
+			let period = T::PopulationCheckPeriod::get();
+			if period.is_zero() || !(n % period).is_zero() {
+				return Weight::zero();
+			}
+			let mut weight = T::DbWeight::get().reads(1);
+
+			if !FoundingPeriodEnded::<T>::get() {
+				let citizen_count = T::CitizenSource::citizen_count();
+				weight = weight.saturating_add(T::DbWeight::get().reads(1));
+				if citizen_count < T::FoundingPeriodThreshold::get() {
+					return weight;
+				}
+				FoundingPeriodEnded::<T>::put(true);
+				FirstElectionOwed::<T>::insert(ElectionType::Presidential, ());
+				FirstElectionOwed::<T>::insert(ElectionType::Parliamentary, ());
+				weight = weight.saturating_add(T::DbWeight::get().writes(3));
+				Self::deposit_event(Event::FoundingPeriodEnded { citizen_count });
+			}
+
+			for election_type in [ElectionType::Presidential, ElectionType::Parliamentary] {
+				weight = weight.saturating_add(T::DbWeight::get().reads(2));
+				if !FirstElectionOwed::<T>::contains_key(election_type)
+					|| OpenElection::<T>::contains_key(election_type)
+				{
+					continue;
+				}
+				weight = weight.saturating_add(<T as Config>::WeightInfo::initiate_election());
+				if Self::initiate_election(
+					pezframe_system::RawOrigin::Root.into(),
+					election_type,
+					None,
+					None,
+				)
+				.is_ok()
+				{
+					Self::deposit_event(Event::ElectionScheduled { election_type });
+				}
+			}
+			weight
 		}
 	}
 
@@ -1994,7 +2210,7 @@ pub mod pezpallet {
 		/// closed without them. Waiting for the deadline even after the votes are in would
 		/// hold the state up for no reason.
 		#[pezpallet::call_index(22)]
-		#[pezpallet::weight(<T as pezpallet::Config>::WeightInfo::vote_on_proposal())]
+		#[pezpallet::weight(<T as pezpallet::Config>::WeightInfo::finalize_proposal())]
 		pub fn finalize_proposal(origin: OriginFor<T>, proposal_id: u32) -> DispatchResult {
 			ensure_signed(origin)?;
 
@@ -2091,7 +2307,7 @@ pub mod pezpallet {
 		/// caller holds the finance portfolio (the tiki), the allowance covers it (Parliament's
 		/// vote), and the pot has the money (the treasury chain's own check, on arrival).
 		#[pezpallet::call_index(41)]
-		#[pezpallet::weight(<T as pezpallet::Config>::WeightInfo::vote_on_proposal())]
+		#[pezpallet::weight(<T as pezpallet::Config>::WeightInfo::spend_budget())]
 		pub fn spend_budget(
 			origin: OriginFor<T>,
 			beneficiary: T::AccountId,
@@ -2782,7 +2998,7 @@ pub mod pezpallet {
 		/// The proposal is named by a preimage that is already stored, so what is being asked
 		/// is readable before anyone signs it.
 		#[pezpallet::call_index(52)]
-		#[pezpallet::weight(<T as pezpallet::Config>::WeightInfo::submit_proposal())]
+		#[pezpallet::weight(<T as pezpallet::Config>::WeightInfo::open_initiative())]
 		pub fn open_initiative(
 			origin: OriginFor<T>,
 			track: u16,
@@ -2838,33 +3054,21 @@ pub mod pezpallet {
 		/// right, and letting one account sign twice would make the threshold measure balance
 		/// rather than people.
 		#[pezpallet::call_index(53)]
-		#[pezpallet::weight(<T as pezpallet::Config>::WeightInfo::vote_on_proposal())]
-		#[pezpallet::feeless_if(|_origin: &OriginFor<T>, id: &u32| -> bool {
-			Initiatives::<T>::contains_key(id)
+		#[pezpallet::weight(<T as pezpallet::Config>::WeightInfo::back_initiative())]
+		#[pezpallet::feeless_if(|origin: &OriginFor<T>, id: &u32| -> bool {
+			let Ok(who) = pezframe_system::ensure_signed(origin.clone()) else { return false };
+			Pezpallet::<T>::may_back_initiative(&who, *id).is_ok()
 		})]
 		pub fn back_initiative(
 			origin: OriginFor<T>,
 			#[pezpallet::compact] id: u32,
 		) -> DispatchResult {
 			let who = ensure_signed(origin)?;
-
-			#[cfg(not(any(test, feature = "runtime-benchmarks")))]
-			ensure!(
-				<pezpallet_identity_kyc::Pezpallet<T> as KycStatus<T::AccountId>>::get_kyc_status(
-					&who
-				) == KycLevel::Approved,
-				Error::<T>::NotACitizen
-			);
-			ensure!(T::TrustScoreSource::trust_score_of(&who) > 0, Error::<T>::NoTrustToVote);
-			ensure!(!InitiativeBacking::<T>::contains_key(id, &who), Error::<T>::AlreadyBacked);
+			Self::may_back_initiative(&who, id)?;
 
 			let backing =
 				Initiatives::<T>::try_mutate(id, |maybe| -> Result<u32, DispatchError> {
 					let init = maybe.as_mut().ok_or(Error::<T>::NoSuchInitiative)?;
-					ensure!(
-						pezframe_system::Pezpallet::<T>::block_number() <= init.closes,
-						Error::<T>::InitiativeClosed
-					);
 					init.backing = init.backing.saturating_add(1);
 					Ok(init.backing)
 				})?;
@@ -2881,7 +3085,7 @@ pub mod pezpallet {
 		/// collect it would let an initiative that the register already backed die because one
 		/// person went quiet.
 		#[pezpallet::call_index(54)]
-		#[pezpallet::weight(<T as pezpallet::Config>::WeightInfo::submit_proposal())]
+		#[pezpallet::weight(<T as pezpallet::Config>::WeightInfo::launch_initiative())]
 		pub fn launch_initiative(
 			origin: OriginFor<T>,
 			#[pezpallet::compact] id: u32,
@@ -2895,8 +3099,11 @@ pub mod pezpallet {
 
 			// It did what it was taken for.
 			T::NativeCurrency::unreserve(&init.proposer, init.deposit.saturated_into());
+			// The backers are left for `clear_initiative_backing`. Clearing them here was every
+			// backer in one call at a fixed weight -- four hundred thousand at the mature
+			// threshold, a block nobody could validate (L-7, 2026-10-21). With the initiative
+			// gone they are inert: backing checks the initiative first.
 			Initiatives::<T>::remove(id);
-			let _ = InitiativeBacking::<T>::clear_prefix(id, u32::MAX, None);
 
 			Self::deposit_event(Event::InitiativeLaunched { id, backing: init.backing });
 			Ok(())
@@ -2907,7 +3114,7 @@ pub mod pezpallet {
 		/// The deposit is forfeit to the treasury -- not destroyed. Destroying HEZ would pay
 		/// the forfeit out to every other holder instead of to the state.
 		#[pezpallet::call_index(55)]
-		#[pezpallet::weight(<T as pezpallet::Config>::WeightInfo::vote_on_proposal())]
+		#[pezpallet::weight(<T as pezpallet::Config>::WeightInfo::close_lapsed_initiative())]
 		pub fn close_lapsed_initiative(
 			origin: OriginFor<T>,
 			#[pezpallet::compact] id: u32,
@@ -2934,10 +3141,29 @@ pub mod pezpallet {
 					.saturating_add(T::InitiativeCooldown::get()),
 			);
 
+			// The backers are left for `clear_initiative_backing`, as in `launch_initiative`.
 			Initiatives::<T>::remove(id);
-			let _ = InitiativeBacking::<T>::clear_prefix(id, u32::MAX, None);
 
 			Self::deposit_event(Event::InitiativeLapsed { id, backing: init.backing });
+			Ok(())
+		}
+
+		/// Discard the backing of an initiative that has been launched or has lapsed.
+		///
+		/// Permissionless and bounded, like `clear_referendum_answers`: at most
+		/// `MAX_CLEARED_PER_CALL` entries, charged for what is asked.
+		#[pezpallet::call_index(74)]
+		#[pezpallet::weight(Pezpallet::<T>::clearing_weight((*limit).min(MAX_CLEARED_PER_CALL)))]
+		pub fn clear_initiative_backing(
+			origin: OriginFor<T>,
+			#[pezpallet::compact] id: u32,
+			limit: u32,
+		) -> DispatchResult {
+			ensure_signed(origin)?;
+			ensure!(!Initiatives::<T>::contains_key(id), Error::<T>::InitiativeStillOpen);
+			let removed =
+				InitiativeBacking::<T>::clear_prefix(id, limit.min(MAX_CLEARED_PER_CALL), None);
+			Self::deposit_event(Event::InitiativeBackingCleared { id, removed: removed.unique });
 			Ok(())
 		}
 
@@ -2955,7 +3181,7 @@ pub mod pezpallet {
 		/// Answering the other way while the question is open replaces the earlier answer. That
 		/// is not a second vote -- the tally moves by one either way, never by two.
 		#[pezpallet::call_index(50)]
-		#[pezpallet::weight(<T as pezpallet::Config>::WeightInfo::vote_on_proposal())]
+		#[pezpallet::weight(<T as pezpallet::Config>::WeightInfo::answer_referendum())]
 		/// Free the first time, and paid after that.
 		///
 		/// Voting is the act this whole register exists to carry, and charging for it makes the
@@ -2964,13 +3190,16 @@ pub mod pezpallet {
 		/// cannot cast, and "zero stake is zero trust" already means they are the citizens
 		/// least likely to have any.
 		///
-		/// The predicate is narrow on purpose. Free requires that the vote is real *and* that
-		/// this account has not already cast one: a repeat is paid for, so a free call cannot
-		/// be repeated, and a call naming something that does not exist was never a vote.
+		/// The predicate is narrow on purpose. Free requires that the vote is real, that this
+		/// account may cast it, *and* that it has not already cast one: a repeat is paid for,
+		/// so a free call cannot be repeated, and a call the body will refuse was never a
+		/// vote. It used to skip the middle condition, so anyone could send a refused answer
+		/// for nothing, as often as they liked (L-7 Y4, 2026-10-21).
 		#[pezpallet::feeless_if(|origin: &OriginFor<T>, poll: &u32, _aye: &bool| -> bool {
 			let Ok(who) = pezframe_system::ensure_signed(origin.clone()) else { return false };
-			T::Polls::as_ongoing(*poll).is_some()
-				&& !ReferendumVotes::<T>::contains_key(poll, &who)
+			Pezpallet::<T>::ensure_may_vote_in_the_register(&who).is_ok()
+				&& T::Polls::as_ongoing(*poll).is_some()
+				&& Pezpallet::<T>::referendum_answer_of(*poll, &who).is_none()
 		})]
 		pub fn answer_referendum(
 			origin: OriginFor<T>,
@@ -2978,29 +3207,26 @@ pub mod pezpallet {
 			aye: bool,
 		) -> DispatchResult {
 			let who = ensure_signed(origin)?;
-
-			#[cfg(not(any(test, feature = "runtime-benchmarks")))]
-			ensure!(
-				<pezpallet_identity_kyc::Pezpallet<T> as KycStatus<T::AccountId>>::get_kyc_status(
-					&who
-				) == KycLevel::Approved,
-				Error::<T>::NotACitizen
-			);
-			ensure!(T::TrustScoreSource::trust_score_of(&who) > 0, Error::<T>::NoTrustToVote);
+			Self::ensure_may_vote_in_the_register(&who)?;
 
 			T::Polls::try_access_poll(poll, |status| {
 				let (tally, _class) =
 					status.ensure_ongoing().ok_or(Error::<T>::ReferendumNotOngoing)?;
 
-				match ReferendumVotes::<T>::get(poll, &who) {
-					Some(previous) if previous == aye => {
+				// The person's answer, under whichever of their keys gave it.
+				let previous = Self::referendum_answer_of(poll, &who);
+				match previous {
+					Some((_, earlier)) if earlier == aye => {
 						return Err(Error::<T>::AlreadyAnsweredThatWay.into())
 					},
 					// Take the earlier answer back out before putting the new one in, or the
 					// citizen would be counted on both sides at once.
-					Some(true) => tally.ayes = tally.ayes.saturating_sub(1),
-					Some(false) => tally.nays = tally.nays.saturating_sub(1),
+					Some((_, true)) => tally.ayes = tally.ayes.saturating_sub(1),
+					Some((_, false)) => tally.nays = tally.nays.saturating_sub(1),
 					None => {},
+				}
+				if let Some((by, _)) = previous {
+					ReferendumVotes::<T>::remove(poll, &by);
 				}
 
 				if aye {
@@ -3024,9 +3250,12 @@ pub mod pezpallet {
 		/// ever grows, one entry per citizen per question, forever.
 		///
 		/// `limit` bounds the work so a long-running question can be cleared across several
-		/// calls rather than in one block nobody else fits into.
+		/// calls rather than in one block nobody else fits into -- at most
+		/// `MAX_CLEARED_PER_CALL`, and the caller pays for what they ask to clear. It used to be
+		/// charged a fixed weight whatever the limit, so `limit = u32::MAX` on a large poll was
+		/// a block over the proof limit for one fee (L-7, 2026-10-21).
 		#[pezpallet::call_index(51)]
-		#[pezpallet::weight(<T as pezpallet::Config>::WeightInfo::vote_on_proposal())]
+		#[pezpallet::weight(Pezpallet::<T>::clearing_weight((*limit).min(MAX_CLEARED_PER_CALL)))]
 		pub fn clear_referendum_answers(
 			origin: OriginFor<T>,
 			#[pezpallet::compact] poll: u32,
@@ -3035,8 +3264,57 @@ pub mod pezpallet {
 			ensure_signed(origin)?;
 			ensure!(T::Polls::as_ongoing(poll).is_none(), Error::<T>::ReferendumStillOngoing);
 
-			let removed = ReferendumVotes::<T>::clear_prefix(poll, limit, None);
+			let removed =
+				ReferendumVotes::<T>::clear_prefix(poll, limit.min(MAX_CLEARED_PER_CALL), None);
 			Self::deposit_event(Event::ReferendumVotesCleared { poll, removed: removed.unique });
+			Ok(())
+		}
+
+		/// Discard the ballots, endorsements and candidacies of a finished election.
+		///
+		/// Permissionless and bounded, like `clear_referendum_answers`: at most
+		/// `MAX_CLEARED_PER_CALL` entries across the three, charged for what is asked. Nothing
+		/// reads them once the count is in -- the winners are in `ElectionResults`, and every
+		/// deposit was returned at the count. Without this they stayed for good, one entry per
+		/// voter per election (L-7, 2026-10-21).
+		#[pezpallet::call_index(75)]
+		#[pezpallet::weight(Pezpallet::<T>::clearing_weight((*limit).min(MAX_CLEARED_PER_CALL)))]
+		pub fn clear_election_records(
+			origin: OriginFor<T>,
+			#[pezpallet::compact] election_id: u32,
+			limit: u32,
+		) -> DispatchResult {
+			ensure_signed(origin)?;
+			let election =
+				ActiveElections::<T>::get(election_id).ok_or(Error::<T>::ElectionNotFound)?;
+			ensure!(
+				matches!(
+					election.status,
+					ElectionStatus::Completed
+						| ElectionStatus::FailedForTurnout
+						| ElectionStatus::Cancelled
+				),
+				Error::<T>::ElectionNotFinished
+			);
+
+			let mut budget = limit.min(MAX_CLEARED_PER_CALL);
+			let mut removed = 0u32;
+			if budget > 0 {
+				let r = ElectionVotes::<T>::clear_prefix(election_id, budget, None);
+				budget = budget.saturating_sub(r.loops);
+				removed = removed.saturating_add(r.unique);
+			}
+			if budget > 0 {
+				let r = Endorsements::<T>::clear_prefix(election_id, budget, None);
+				budget = budget.saturating_sub(r.loops);
+				removed = removed.saturating_add(r.unique);
+			}
+			if budget > 0 {
+				let r = ElectionCandidates::<T>::clear_prefix(election_id, budget, None);
+				removed = removed.saturating_add(r.unique);
+			}
+
+			Self::deposit_event(Event::ElectionRecordsCleared { election_id, removed });
 			Ok(())
 		}
 
@@ -3049,16 +3327,15 @@ pub mod pezpallet {
 		/// Only during the candidacy period, so that support is given before campaigning
 		/// rather than gathered from people who have already seen the field.
 		#[pezpallet::call_index(4)]
-		#[pezpallet::weight(<T as pezpallet::Config>::WeightInfo::register_candidate())]
+		#[pezpallet::weight(<T as pezpallet::Config>::WeightInfo::endorse_candidate())]
 		/// Free the first time, and paid after that -- see `answer_referendum`.
 		///
 		/// An endorsement is how a citizen with no money takes part in *choosing who stands*,
 		/// which is the half of an election that happens before anybody votes. Charging for it
 		/// puts the earlier and more consequential half behind the same wall.
-		#[pezpallet::feeless_if(|origin: &OriginFor<T>, election_id: &u32, _candidate: &T::AccountId| -> bool {
+		#[pezpallet::feeless_if(|origin: &OriginFor<T>, election_id: &u32, candidate: &T::AccountId| -> bool {
 			let Ok(who) = pezframe_system::ensure_signed(origin.clone()) else { return false };
-			ActiveElections::<T>::contains_key(election_id)
-				&& !Endorsements::<T>::contains_key(election_id, &who)
+			Pezpallet::<T>::may_endorse(&who, *election_id, candidate).is_ok()
 		})]
 		pub fn endorse_candidate(
 			origin: OriginFor<T>,
@@ -3066,26 +3343,7 @@ pub mod pezpallet {
 			candidate: T::AccountId,
 		) -> DispatchResult {
 			let endorser = ensure_signed(origin)?;
-
-			let election =
-				ActiveElections::<T>::get(election_id).ok_or(Error::<T>::ElectionNotFound)?;
-			let now = pezframe_system::Pezpallet::<T>::block_number();
-			ensure!(now <= election.candidacy_deadline, Error::<T>::CandidacyPeriodExpired);
-
-			#[cfg(not(any(test, feature = "runtime-benchmarks")))]
-			{
-				ensure!(
-					<pezpallet_identity_kyc::Pezpallet<T> as KycStatus<T::AccountId>>::get_kyc_status(
-						&endorser
-					) == KycLevel::Approved,
-					Error::<T>::NotACitizen
-				);
-			}
-
-			ensure!(
-				!Endorsements::<T>::contains_key(election_id, &endorser),
-				Error::<T>::AlreadyEndorsed
-			);
+			Self::may_endorse(&endorser, election_id, &candidate)?;
 
 			Self::note_governance_activity(&endorser);
 			Endorsements::<T>::insert(election_id, &endorser, &candidate);
@@ -3146,10 +3404,18 @@ pub mod pezpallet {
 		/// budget has to be there before there is anyone to elect it. So the President seats
 		/// it, once, and only while no house sits.
 		///
-		/// It is temporary by construction rather than by promise. The seats carry the
-		/// institutional term, exactly as elected ones do, and seating the house starts the
-		/// clock that makes the scheduler open the first real election. When that election is
-		/// counted these members are replaced wholesale, through the same queue.
+		/// It is interim, and what ends it is the register rather than a calendar. The seats
+		/// carry no term, and seating the house starts no clock: the first parliamentary
+		/// election opens the day the register reaches `FoundingPeriodThreshold` citizens (see
+		/// `end_founding_period`), and until then this house sits. When that election is
+		/// counted these members are replaced wholesale, through the same queue. It used to
+		/// carry half an institutional term instead, which would have put the first vote two
+		/// years in whatever the roll's size -- a house of two hundred and one chosen by a few
+		/// thousand voters.
+		///
+		/// Only during the founding period. Once it is over, a house comes from an election
+		/// and from nothing else, even an empty one -- `schedule_due_elections` opens the vote
+		/// for that.
 		///
 		/// No minimum size is imposed. `get_voting_threshold` counts against `ParliamentSize`
 		/// -- the constant, not the number of people sitting -- so a founding house of twenty
@@ -3175,11 +3441,15 @@ pub mod pezpallet {
 			members: Vec<T::AccountId>,
 		) -> DispatchResult {
 			Self::ensure_root_or_serok(origin)?;
+			ensure!(!FoundingPeriodEnded::<T>::get(), Error::<T>::FoundingPeriodOver);
 			ensure!(ParliamentMembers::<T>::get().is_empty(), Error::<T>::ParliamentAlreadySeated);
 			ensure!(!members.is_empty(), Error::<T>::ParliamentFull);
 
 			let current_block = pezframe_system::Pezpallet::<T>::block_number();
-			let term_end = Self::begin_term(&ElectionType::Parliamentary);
+			// No term: the founding house sits until the elected one replaces it. The field
+			// is informational -- nothing reads a member's term to decide anything -- and the
+			// largest block number says "not by the clock" in the only way the type allows.
+			let term_end = BlockNumberFor::<T>::max_value();
 
 			let seated: BoundedVec<_, T::ParliamentSize> = members
 				.iter()
@@ -3198,12 +3468,9 @@ pub mod pezpallet {
 
 			ParliamentMembers::<T>::put(seated);
 			T::HouseRoster::set_members(members.clone());
-			Self::queue_seat_handover(&[], &members, term_end)?;
+			Self::queue_seat_handover(&[], &members, None)?;
 
-			Self::deposit_event(Event::FoundingParliamentSeated {
-				members,
-				term_ends_at: term_end,
-			});
+			Self::deposit_event(Event::FoundingParliamentSeated { members });
 			Ok(())
 		}
 
@@ -3352,7 +3619,7 @@ pub mod pezpallet {
 						account: candidate.clone(),
 						district_id: None,
 						registered_at: current_block,
-						endorsers: Default::default(),
+						endorsement_count: 0,
 						vote_count: 0,
 						deposit_paid: 0,
 						campaign_data: Default::default(),
@@ -3471,6 +3738,17 @@ pub mod pezpallet {
 				);
 			}
 
+			// Each endorser once, and never the candidate. The count was taken of the list as
+			// given, and each name was checked only for having endorsed this candidate -- so one
+			// endorsement written a thousand times met the threshold, and a candidate could be
+			// their own endorser. A faction of a few hundred could take every candidate slot of
+			// an election that is meant to need tens of thousands of endorsers (L-7, 2026-10-21).
+			let mut distinct = endorsers.clone();
+			distinct.sort();
+			distinct.dedup();
+			ensure!(distinct.len() == endorsers.len(), Error::<T>::EndorserNamedTwice);
+			ensure!(!endorsers.contains(&candidate), Error::<T>::CannotEndorseSelf);
+
 			let required_endorsements = Self::get_required_endorsements(&election.election_type);
 			ensure!(
 				endorsers.len() as u32 >= required_endorsements,
@@ -3516,9 +3794,7 @@ pub mod pezpallet {
 				account: candidate.clone(),
 				district_id,
 				registered_at: current_block,
-				endorsers: endorsers
-					.try_into()
-					.map_err(|_| Error::<T>::InsufficientEndorsements)?,
+				endorsement_count: endorsers.len() as u32,
 				vote_count: 0,
 				deposit_paid: T::CandidacyDeposit::get(),
 				campaign_data: Default::default(),
@@ -3551,13 +3827,14 @@ pub mod pezpallet {
 		/// cannot cast, and "zero stake is zero trust" already means they are the citizens
 		/// least likely to have any.
 		///
-		/// The predicate is narrow on purpose. Free requires that the vote is real *and* that
-		/// this account has not already cast one: a repeat is paid for, so a free call cannot
-		/// be repeated, and a call naming something that does not exist was never a vote.
-		#[pezpallet::feeless_if(|origin: &OriginFor<T>, election_id: &u32, _candidates: &Vec<T::AccountId>, _district_id: &Option<u32>| -> bool {
+		/// The predicate is narrow on purpose: it asks everything the body asks, through the
+		/// same `ballot_for`. A repeat is refused, so it is not free, and a ballot the body
+		/// will refuse was never a vote. It used to ask only that the election existed and
+		/// that this account had not voted, so a ballot certain to be refused went through
+		/// for nothing, as often as its sender liked (L-7 Y4, 2026-10-21).
+		#[pezpallet::feeless_if(|origin: &OriginFor<T>, election_id: &u32, candidates: &Vec<T::AccountId>, _district_id: &Option<u32>| -> bool {
 			let Ok(who) = pezframe_system::ensure_signed(origin.clone()) else { return false };
-			ActiveElections::<T>::contains_key(election_id)
-				&& !ElectionVotes::<T>::contains_key(election_id, &who)
+			Pezpallet::<T>::ballot_for(&who, *election_id, candidates.clone()).is_ok()
 		})]
 		pub fn cast_vote(
 			origin: OriginFor<T>,
@@ -3566,57 +3843,14 @@ pub mod pezpallet {
 			district_id: Option<u32>,
 		) -> DispatchResult {
 			let voter = ensure_signed(origin)?;
-
-			let mut election =
-				ActiveElections::<T>::get(election_id).ok_or(Error::<T>::ElectionNotFound)?;
-
+			let (candidates, mut election) = Self::ballot_for(&voter, election_id, candidates)?;
 			let current_block = pezframe_system::Pezpallet::<T>::block_number();
-			ensure!(
-				current_block >= election.voting_start && current_block <= election.end_block,
-				Error::<T>::VotingPeriodNotStarted
-			);
-
-			// BYPASS KYC CHECK FOR TESTS AND BENCHMARKS
-			#[cfg(not(any(test, feature = "runtime-benchmarks")))]
-			{
-				ensure!(
-					<pezpallet_identity_kyc::Pezpallet<T> as KycStatus<T::AccountId>>::get_kyc_status(
-						&voter
-					) == KycLevel::Approved,
-					Error::<T>::NotACitizen
-				);
-			}
-
-			// The court is the one election with a restricted electorate. Six of its eleven
-			// seats belong to the house, so the house votes for them -- not the whole
-			// citizenry. The other five are the President's, and are not voted for at all.
-			if election.election_type == ElectionType::ConstitutionalCourt {
-				ensure!(
-					pezpallet_tiki::Pezpallet::<T>::has_tiki(&voter, &Tiki::Parlementer),
-					Error::<T>::NotAParliamentMember
-				);
-			}
-
-			ensure!(
-				!ElectionVotes::<T>::contains_key(election_id, &voter),
-				Error::<T>::AlreadyVoted
-			);
-
-			for candidate in &candidates {
-				ensure!(
-					ElectionCandidates::<T>::contains_key(election_id, candidate),
-					Error::<T>::ElectionNotFound
-				);
-			}
 
 			let vote_weight = Self::calculate_vote_weight(&voter, &election.election_type);
 
 			let vote_info = ElectionVoteInfo {
 				voter: voter.clone(),
-				candidates: candidates
-					.clone()
-					.try_into()
-					.map_err(|_| Error::<T>::CalculationOverflow)?,
+				candidates: candidates.clone(),
 				vote_block: current_block,
 				vote_weight,
 				vote_type: VoteType::Citizen,
@@ -3638,7 +3872,12 @@ pub mod pezpallet {
 			election.total_votes = election.total_votes.saturating_add(vote_weight);
 			ActiveElections::<T>::insert(election_id, election);
 
-			Self::deposit_event(Event::VoteCast { election_id, voter, candidates, district_id });
+			Self::deposit_event(Event::VoteCast {
+				election_id,
+				voter,
+				candidates: candidates.into_inner(),
+				district_id,
+			});
 
 			Ok(())
 		}
@@ -3672,8 +3911,18 @@ pub mod pezpallet {
 			let current_block = pezframe_system::Pezpallet::<T>::block_number();
 			ensure!(current_block > election.end_block, Error::<T>::ElectionNotActive);
 
+			// Counted once, whatever the count said. A turnout failure is an ending too, and it
+			// used to be countable again: the second count found `FailedAttempts` already at one,
+			// skipped the quorum the first had just failed, and seated whoever led -- a President
+			// on one vote -- while refunding every deposit a second time out of whatever else
+			// the candidates had reserved (L-7, 2026-10-21).
 			ensure!(
-				election.status != ElectionStatus::Completed,
+				!matches!(
+					election.status,
+					ElectionStatus::Completed
+						| ElectionStatus::FailedForTurnout
+						| ElectionStatus::Cancelled
+				),
 				Error::<T>::ElectionAlreadyFinalized
 			);
 
@@ -3706,10 +3955,10 @@ pub mod pezpallet {
 				ElectionOutcome::Winners(winners) => {
 					Self::assign_election_winners(&election.election_type, &winners)?;
 
-					let total_citizen_count = Self::get_total_citizen_count();
-					let turnout_percentage = if total_citizen_count > 0 {
-						((election.total_votes as u64).saturating_mul(100)
-							/ total_citizen_count as u64) as u8
+					let electorate = Self::electorate_of(&election.election_type);
+					let turnout_percentage = if electorate > 0 {
+						((election.total_votes as u64).saturating_mul(100) / electorate as u64)
+							.min(100) as u8
 					} else {
 						0
 					};
@@ -3745,6 +3994,10 @@ pub mod pezpallet {
 					)?;
 
 					election.status = ElectionStatus::Completed;
+					// The first round is over like any other, so its deposits come back. This
+					// arm used to return none, and every first-round candidate's deposit stayed
+					// reserved for good (L-7, 2026-10-21).
+					Self::return_candidacy_deposits(election_id, &election);
 					ActiveElections::<T>::insert(election_id, election);
 				},
 			}
@@ -3975,7 +4228,7 @@ pub mod pezpallet {
 		/// ever been rejected outright, and the check works anyway, because a President does
 		/// not send a name that will be refused.
 		#[pezpallet::call_index(12)]
-		#[pezpallet::weight(<T as pezpallet::Config>::WeightInfo::approve_appointment())]
+		#[pezpallet::weight(<T as pezpallet::Config>::WeightInfo::confirm_appointment())]
 		pub fn confirm_appointment(origin: OriginFor<T>, process_id: u32) -> DispatchResult {
 			T::ConfirmationOrigin::ensure_origin(origin)?;
 
@@ -4094,10 +4347,11 @@ pub mod pezpallet {
             // accounts unauthorized for this specific proposal's decision type
             // (e.g. Ministers, who are never authorized to vote) could spam this
             // call for free and always fail authorization.
+            // It asks everything the body asks, through the same `may_vote_on_proposal`: a
+            // member's second vote, or one outside the window, used to be free as well
+            // (L-7 Y4, 2026-10-21).
             match ensure_signed(origin.clone()) {
-                Ok(who) => ActiveProposals::<T>::get(proposal_id)
-                    .map(|proposal| Pezpallet::<T>::is_authorized_to_vote(&proposal.decision_type, &who))
-                    .unwrap_or(false),
+                Ok(who) => Pezpallet::<T>::may_vote_on_proposal(&who, *proposal_id).is_ok(),
                 Err(_) => false,
             }
         })]
@@ -4108,34 +4362,7 @@ pub mod pezpallet {
 			rationale: Option<BoundedVec<u8, ConstU32<500>>>,
 		) -> DispatchResult {
 			let voter = ensure_signed(origin)?;
-			ensure!(ActiveProposals::<T>::contains_key(proposal_id), Error::<T>::ProposalNotFound);
-
-			// Check if voter has already voted on this proposal
-			ensure!(
-				!CollectiveVotes::<T>::contains_key(proposal_id, &voter),
-				Error::<T>::ProposalAlreadyVoted
-			);
-
-			// Check if voter is authorized (must be a parliament member)
-			let proposal =
-				ActiveProposals::<T>::get(proposal_id).ok_or(Error::<T>::ProposalNotFound)?;
-
-			// Enforce access control based on decision type (shared with feeless_if
-			// via is_authorized_to_vote so the two checks cannot drift apart)
-			ensure!(
-				Self::is_authorized_to_vote(&proposal.decision_type, &voter),
-				Error::<T>::NotAuthorizedToVote
-			);
-
-			// The window was written onto the proposal and never read, so a member could vote
-			// before debate opened or long after it closed -- and since a proposal passes the
-			// moment its ayes reach the threshold, a late vote could carry something the
-			// house had already let lapse.
-			let now = pezframe_system::Pezpallet::<T>::block_number();
-			ensure!(
-				now >= proposal.voting_starts_at && now <= proposal.expires_at,
-				Error::<T>::OutsideVotingWindow
-			);
+			Self::may_vote_on_proposal(&voter, proposal_id)?;
 
 			// Record the vote
 			let vote_info = CollectiveVote {
@@ -4319,9 +4546,30 @@ pub mod pezpallet {
 			1
 		}
 
-		/// Total citizen count
-		fn get_total_citizen_count() -> u32 {
-			T::CitizenSource::citizen_count()
+		/// Whether only the house votes in this election.
+		///
+		/// The Speaker is the presiding officer of the house, chosen by that house; six of the
+		/// court's eleven seats belong to the house, so the house casts them, and the other
+		/// five are the President's and not voted for at all. Every citizen used to be able to
+		/// vote for the Speaker (L-7, 2026-10-21).
+		pub fn elected_by_the_house(election_type: &ElectionType) -> bool {
+			matches!(
+				election_type,
+				ElectionType::SpeakerElection | ElectionType::ConstitutionalCourt
+			)
+		}
+
+		/// How many may vote in this election, which is what its turnout is measured against.
+		///
+		/// The house for its own elections, the register for the rest. Both house elections
+		/// used to be measured against the register, which a house of 201 can never reach: the
+		/// first round always failed, and the re-run asks for no quorum at all.
+		fn electorate_of(election_type: &ElectionType) -> u32 {
+			if Self::elected_by_the_house(election_type) {
+				ParliamentMembers::<T>::get().len() as u32
+			} else {
+				T::CitizenSource::citizen_count()
+			}
 		}
 
 		/// Calculates election winners or determines if runoff is needed
@@ -4332,10 +4580,11 @@ pub mod pezpallet {
 			// Enforce the minimum turnout quorum recorded on the election at initiation
 			// time. Without this check, elections could be finalized (and officeholders
 			// seated) with arbitrarily low citizen participation.
-			let total_citizen_count = Self::get_total_citizen_count();
-			if total_citizen_count > 0 && FailedAttempts::<T>::get(election.election_type) == 0 {
+			let electorate = Self::electorate_of(&election.election_type);
+			if electorate > 0 && FailedAttempts::<T>::get(election.election_type) == 0 {
 				let turnout_percentage = ((election.total_votes as u64).saturating_mul(100)
-					/ total_citizen_count as u64) as u8;
+					/ electorate as u64)
+					.min(100) as u8;
 				ensure!(turnout_percentage >= election.minimum_turnout, Error::<T>::QuorumNotMet);
 			}
 
@@ -4426,6 +4675,7 @@ pub mod pezpallet {
 						let ends_at = Self::begin_term(election_type);
 						Self::seat_elected_tiki(winner, Tiki::Serok, ends_at)?;
 						Self::record_consecutive_term(election_type, winner);
+						FirstElectionOwed::<T>::remove(election_type);
 					}
 				},
 				ElectionType::Parliamentary => {
@@ -4438,8 +4688,8 @@ pub mod pezpallet {
 						let term_end = Self::begin_term(election_type);
 
 						// The Speaker's mandate came from the house that has just been
-						// replaced, so it ends with it. Clearing the term here is what makes
-						// the scheduler open a Speaker election for the new house.
+						// replaced, so it ends with it. The empty chair under an elected house
+						// is what makes the scheduler open a Speaker election for the new one.
 						let _ = Self::vacate_unique_tiki(Tiki::SerokiMeclise);
 						TermEnds::<T>::remove(ElectionType::SpeakerElection);
 
@@ -4466,7 +4716,8 @@ pub mod pezpallet {
 							parliament_members.map_err(|_| Error::<T>::ParliamentFull)?,
 						);
 						T::HouseRoster::set_members(winners.to_vec());
-						Self::queue_seat_handover(&outgoing, winners, term_end)?;
+						Self::queue_seat_handover(&outgoing, winners, Some(term_end))?;
+						FirstElectionOwed::<T>::remove(election_type);
 
 						Self::deposit_event(Event::ParliamentUpdated {
 							new_members: winners.to_vec(),
@@ -4554,9 +4805,7 @@ pub mod pezpallet {
 						== Some(proposer.clone()))
 				},
 				_ => {
-					let is_parliamentarian = ParliamentMembers::<T>::get()
-						.iter()
-						.any(|member| member.account == *proposer);
+					let is_parliamentarian = Self::is_parliament_member(proposer);
 					let is_president = pezpallet_tiki::Pezpallet::<T>::current_holder(&Tiki::Serok)
 						== Some(proposer.clone());
 
@@ -4582,6 +4831,179 @@ pub mod pezpallet {
 					Self::is_parliament_member(voter) || Self::is_serok(voter)
 				},
 			}
+		}
+
+		/// Whether `who` may take part in the register's own votes: an approved citizen whose
+		/// trust is above zero. Trust of zero is technical death, and the dead do not vote.
+		pub fn ensure_may_vote_in_the_register(who: &T::AccountId) -> DispatchResult {
+			#[cfg(not(any(test, feature = "runtime-benchmarks")))]
+			ensure!(
+				<pezpallet_identity_kyc::Pezpallet<T> as KycStatus<T::AccountId>>::get_kyc_status(
+					who
+				) == KycLevel::Approved,
+				Error::<T>::NotACitizen
+			);
+			ensure!(T::TrustScoreSource::trust_score_of(who) > 0, Error::<T>::NoTrustToVote);
+			Ok(())
+		}
+
+		/// Whether `check` holds for `who` or for any key a reissue retired in its favour.
+		///
+		/// What a person did under an earlier key is recorded under that key, so asking only
+		/// the current one let a reissue vote a second time (L-7, 2026-10-22).
+		pub fn the_person_has(who: &T::AccountId, check: impl Fn(&T::AccountId) -> bool) -> bool {
+			check(who)
+				|| pezpallet_identity_kyc::Pezpallet::<T>::earlier_accounts(who).iter().any(check)
+		}
+
+		/// The person's answer to `poll` and the key it was given under, if any.
+		pub fn referendum_answer_of(poll: u32, who: &T::AccountId) -> Option<(T::AccountId, bool)> {
+			core::iter::once(who.clone())
+				.chain(pezpallet_identity_kyc::Pezpallet::<T>::earlier_accounts(who))
+				.find_map(|a| ReferendumVotes::<T>::get(poll, &a).map(|aye| (a, aye)))
+		}
+
+		/// Everything `back_initiative` checks before it writes.
+		///
+		/// The call's fee exemption asks the same thing, so a free signature is one that will
+		/// be counted. Every `may_*` and `ballot_for` below exists for the same reason: an
+		/// exemption that asks less than the body lets a call the body refuses through for
+		/// nothing, as often as its sender likes (L-7 Y4, 2026-10-21).
+		pub fn may_back_initiative(who: &T::AccountId, id: u32) -> DispatchResult {
+			Self::ensure_may_vote_in_the_register(who)?;
+			ensure!(
+				!Self::the_person_has(who, |a| InitiativeBacking::<T>::contains_key(id, a)),
+				Error::<T>::AlreadyBacked
+			);
+			let init = Initiatives::<T>::get(id).ok_or(Error::<T>::NoSuchInitiative)?;
+			ensure!(
+				pezframe_system::Pezpallet::<T>::block_number() <= init.closes,
+				Error::<T>::InitiativeClosed
+			);
+			Ok(())
+		}
+
+		/// Everything `endorse_candidate` checks before it writes.
+		pub fn may_endorse(
+			endorser: &T::AccountId,
+			election_id: u32,
+			candidate: &T::AccountId,
+		) -> DispatchResult {
+			ensure!(endorser != candidate, Error::<T>::CannotEndorseSelf);
+
+			let election =
+				ActiveElections::<T>::get(election_id).ok_or(Error::<T>::ElectionNotFound)?;
+			let now = pezframe_system::Pezpallet::<T>::block_number();
+			ensure!(now <= election.candidacy_deadline, Error::<T>::CandidacyPeriodExpired);
+
+			#[cfg(not(any(test, feature = "runtime-benchmarks")))]
+			ensure!(
+				<pezpallet_identity_kyc::Pezpallet<T> as KycStatus<T::AccountId>>::get_kyc_status(
+					endorser
+				) == KycLevel::Approved,
+				Error::<T>::NotACitizen
+			);
+
+			ensure!(
+				!Self::the_person_has(endorser, |a| Endorsements::<T>::contains_key(
+					election_id,
+					a
+				)),
+				Error::<T>::AlreadyEndorsed
+			);
+			Ok(())
+		}
+
+		/// Everything `cast_vote` checks before it writes, returning the ballot as it will be
+		/// counted and the election it is cast in.
+		pub fn ballot_for(
+			voter: &T::AccountId,
+			election_id: u32,
+			candidates: Vec<T::AccountId>,
+		) -> Result<(BoundedVec<T::AccountId, ConstU32<10>>, ElectionInfo<T>), DispatchError> {
+			// Bounded before anything walks it, and every name on it once. The list used to be
+			// walked before the bound of ten was applied -- a hundred thousand names cost one
+			// fixed fee -- and a name written ten times was counted ten times, so one ballot was
+			// worth ten for any candidate (L-7, 2026-10-21).
+			let candidates: BoundedVec<T::AccountId, ConstU32<10>> =
+				candidates.try_into().map_err(|_| Error::<T>::BallotTooLong)?;
+			let mut distinct = candidates.clone().into_inner();
+			distinct.sort();
+			distinct.dedup();
+			ensure!(distinct.len() == candidates.len(), Error::<T>::CandidateNamedTwice);
+
+			let election =
+				ActiveElections::<T>::get(election_id).ok_or(Error::<T>::ElectionNotFound)?;
+
+			let current_block = pezframe_system::Pezpallet::<T>::block_number();
+			ensure!(
+				current_block >= election.voting_start && current_block <= election.end_block,
+				Error::<T>::VotingPeriodNotStarted
+			);
+
+			// BYPASS KYC CHECK FOR TESTS AND BENCHMARKS
+			#[cfg(not(any(test, feature = "runtime-benchmarks")))]
+			{
+				ensure!(
+					<pezpallet_identity_kyc::Pezpallet<T> as KycStatus<T::AccountId>>::get_kyc_status(
+						voter
+					) == KycLevel::Approved,
+					Error::<T>::NotACitizen
+				);
+			}
+
+			// The house's own elections are the house's -- see `elected_by_the_house`.
+			if Self::elected_by_the_house(&election.election_type) {
+				ensure!(Self::is_parliament_member(voter), Error::<T>::NotAParliamentMember);
+			}
+
+			ensure!(
+				!Self::the_person_has(voter, |a| ElectionVotes::<T>::contains_key(election_id, a)),
+				Error::<T>::AlreadyVoted
+			);
+
+			for candidate in &candidates {
+				ensure!(
+					ElectionCandidates::<T>::contains_key(election_id, candidate),
+					Error::<T>::ElectionNotFound
+				);
+			}
+
+			Ok((candidates, election))
+		}
+
+		/// Everything `vote_on_proposal` checks before it writes.
+		pub fn may_vote_on_proposal(voter: &T::AccountId, proposal_id: u32) -> DispatchResult {
+			ensure!(ActiveProposals::<T>::contains_key(proposal_id), Error::<T>::ProposalNotFound);
+
+			// Check if voter has already voted on this proposal
+			ensure!(
+				!Self::the_person_has(voter, |a| CollectiveVotes::<T>::contains_key(
+					proposal_id,
+					a
+				)),
+				Error::<T>::ProposalAlreadyVoted
+			);
+
+			// Authorised for this proposal's decision type.
+			let proposal =
+				ActiveProposals::<T>::get(proposal_id).ok_or(Error::<T>::ProposalNotFound)?;
+			ensure!(
+				Self::is_authorized_to_vote(&proposal.decision_type, voter),
+				Error::<T>::NotAuthorizedToVote
+			);
+
+			// The window was written onto the proposal and never read, so a member could vote
+			// before debate opened or long after it closed -- and since a proposal passes the
+			// moment its ayes reach the threshold, a late vote could carry something the
+			// house had already let lapse.
+			let now = pezframe_system::Pezpallet::<T>::block_number();
+			ensure!(
+				now >= proposal.voting_starts_at && now <= proposal.expires_at,
+				Error::<T>::OutsideVotingWindow
+			);
+
+			Ok(())
 		}
 
 		/// Accept Root or the sitting President, and nobody else.
@@ -4689,7 +5111,7 @@ pub mod pezpallet {
 		/// one back by however late the count was, and the whole calendar would drift a
 		/// little further every cycle until elections landed wherever the last delay left
 		/// them. Anchoring to the previous term keeps the cycle fixed.
-		fn begin_term(election_type: &ElectionType) -> BlockNumberFor<T> {
+		pub(crate) fn begin_term(election_type: &ElectionType) -> BlockNumberFor<T> {
 			let now = pezframe_system::Pezpallet::<T>::block_number();
 			let length = Self::term_length_of(election_type);
 			let previous = TermEnds::<T>::get(election_type);
@@ -4877,6 +5299,50 @@ pub mod pezpallet {
 		///
 		/// Called after every change to the bench and nowhere else, so the two can only
 		/// disagree for the length of one call. `try_state` holds them to it.
+		/// What clearing `n` per-citizen entries costs: a read and a write each, and the proof of
+		/// the key and value it removes (a double-map key of 4+8 and 16+32 bytes, a one-byte
+		/// value, the trie nodes above it -- a hundred and fifty bytes, rounded up).
+		pub(crate) fn clearing_weight(n: u32) -> Weight {
+			<T as pezpallet::Config>::WeightInfo::vote_on_proposal()
+				.saturating_add(T::DbWeight::get().reads_writes(u64::from(n), u64::from(n)))
+				.saturating_add(Weight::from_parts(0, 150u64.saturating_mul(u64::from(n))))
+		}
+
+		/// Take `who` off the house's roll, out of any pending grant, and out of the collective.
+		///
+		/// The collective is told only when the roll changed: a seat handover revokes the
+		/// outgoing members after the new roll is already in place, and republishing a house of
+		/// two hundred and one for each of them would cost the collective's rewrite each time.
+		pub(crate) fn leave_the_house(who: &T::AccountId) {
+			let mut changed = false;
+			ParliamentMembers::<T>::mutate(|house| {
+				let before = house.len();
+				house.retain(|member| &member.account != who);
+				changed = house.len() != before;
+			});
+			// A seat still waiting to be handed over would be granted to somebody who can no
+			// longer hold a role; the grant would be refused and leave the handover stuck.
+			PendingSeatGrants::<T>::mutate(|grants| grants.retain(|grant| grant != who));
+			if changed {
+				T::HouseRoster::set_members(
+					ParliamentMembers::<T>::get().iter().map(|m| m.account.clone()).collect(),
+				);
+			}
+		}
+
+		/// Take `who` off the bench, and out of the court's collective if they were on it.
+		pub(crate) fn leave_the_bench(who: &T::AccountId) {
+			let mut changed = false;
+			DiwanMembers::<T>::mutate(|bench| {
+				let before = bench.len();
+				bench.retain(|member| &member.account != who);
+				changed = bench.len() != before;
+			});
+			if changed {
+				Self::publish_the_bench();
+			}
+		}
+
 		fn publish_the_bench() {
 			T::CourtRoster::set_members(
 				DiwanMembers::<T>::get().iter().map(|member| member.account.clone()).collect(),
@@ -4910,10 +5376,11 @@ pub mod pezpallet {
 		///
 		/// Only the difference: a member returned to their seat keeps their tiki untouched,
 		/// so the trust score behind it never dips and the NFT is not rewritten for nothing.
+		/// `term_ends_at` is `None` for the founding house, whose seats have no term.
 		pub(crate) fn queue_seat_handover(
 			outgoing: &[T::AccountId],
 			incoming: &[T::AccountId],
-			term_ends_at: BlockNumberFor<T>,
+			term_ends_at: Option<BlockNumberFor<T>>,
 		) -> Result<(), Error<T>> {
 			ensure!(
 				PendingSeatRevokes::<T>::get().is_empty()
@@ -4934,16 +5401,19 @@ pub mod pezpallet {
 			// Everyone who kept their seat keeps it under the new term, and that is a
 			// bounded rewrite of the expiry alone -- no grant, no metadata, no queue.
 			for member in incoming.iter().filter(|who| outgoing.contains(who)) {
-				pezpallet_tiki::TikiExpiry::<T>::insert(
-					member,
-					Tiki::Parlementer,
-					Self::seat_expiry(term_ends_at),
-				);
+				match term_ends_at {
+					Some(end) => pezpallet_tiki::TikiExpiry::<T>::insert(
+						member,
+						Tiki::Parlementer,
+						Self::seat_expiry(end),
+					),
+					None => pezpallet_tiki::TikiExpiry::<T>::remove(member, Tiki::Parlementer),
+				}
 			}
 
 			PendingSeatRevokes::<T>::put(revokes);
 			PendingSeatGrants::<T>::put(grants);
-			PendingSeatTerm::<T>::put(term_ends_at);
+			PendingSeatTerm::<T>::set(term_ends_at);
 			Ok(())
 		}
 
@@ -4980,23 +5450,24 @@ pub mod pezpallet {
 			}
 
 			let term = PendingSeatTerm::<T>::get();
-			let mut done = 0u32;
+			let mut revoked = 0u32;
+			let mut granted = 0u32;
 
-			while done < SEATS_PER_BLOCK && !revokes.is_empty() {
+			while revoked < SEATS_PER_BLOCK && !revokes.is_empty() {
 				let who = revokes.remove(0);
 				// A seat already gone -- the holder lost their citizenship, or the Diwan
 				// removed them -- is not an error, it is the outcome we wanted.
 				let _ =
 					pezpallet_tiki::Pezpallet::<T>::internal_revoke_role(&who, Tiki::Parlementer);
-				done = done.saturating_add(1);
+				revoked = revoked.saturating_add(1);
 			}
 
-			while done < SEATS_PER_BLOCK && !grants.is_empty() {
+			while revoked.saturating_add(granted) < SEATS_PER_BLOCK && !grants.is_empty() {
 				let who = grants.remove(0);
 				if Self::seat_parliamentarian(&who, term).is_err() {
 					Self::deposit_event(Event::SeatCouldNotBeTaken { who });
 				}
-				done = done.saturating_add(1);
+				granted = granted.saturating_add(1);
 			}
 
 			let finished = revokes.is_empty() && grants.is_empty();
@@ -5007,7 +5478,21 @@ pub mod pezpallet {
 				Self::deposit_event(Event::SeatHandoverCompleted);
 			}
 
-			T::DbWeight::get().reads_writes(3, 3 + (done as u64).saturating_mul(4))
+			// Each seat is a tiki taken or given, which is what the tiki pallet measured for
+			// those calls -- the role, its expiry, and the trust score it moves. Four writes a
+			// seat was the storage alone (L-7, 2026-10-22).
+			use pezpallet_tiki::weights::WeightInfo as _;
+			T::DbWeight::get()
+				.reads_writes(3, 3)
+				.saturating_add(
+					<T as pezpallet_tiki::Config>::WeightInfo::revoke_tiki()
+						.saturating_mul(u64::from(revoked)),
+				)
+				.saturating_add(
+					<T as pezpallet_tiki::Config>::WeightInfo::grant_elected_role()
+						.saturating_add(T::DbWeight::get().writes(2))
+						.saturating_mul(u64::from(granted)),
+				)
 		}
 
 		/// Give one seat, with its term.
@@ -5073,6 +5558,15 @@ pub mod pezpallet {
 				tiki,
 				pezpallet_tiki::RoleAssignmentType::Elected,
 			);
+			// A winner gets a full period from the day they are seated, as an appointee does in
+			// `seat_unique_tiki`. Without the record the silence was measured from the start of
+			// the term -- and the Speaker's term is the house's, which began before any Speaker
+			// was elected, so a Speaker was 'silent' the moment they took the chair and anyone
+			// could vacate it, and every by-election's winner after them (L-7, 2026-10-21).
+			if Self::silence_vacatable_office(&tiki).is_some() {
+				let now = pezframe_system::Pezpallet::<T>::block_number();
+				OfficeLastActive::<T>::insert(tiki, (who.clone(), now));
+			}
 			Ok(())
 		}
 
@@ -5659,8 +6153,11 @@ impl<T: Config> Pezpallet<T> {
 		Ok(())
 	}
 
+	/// On the roll and still holding the seat. The roll alone used to answer, and a seat whose
+	/// term had run out, or that a path other than the court's took away, left its holder voting.
 	pub fn is_parliament_member(who: &T::AccountId) -> bool {
 		ParliamentMembers::<T>::get().iter().any(|member| &member.account == who)
+			&& pezpallet_tiki::Pezpallet::<T>::has_tiki(who, &Tiki::Parlementer)
 	}
 
 	/// Check if account is a Diwan member
