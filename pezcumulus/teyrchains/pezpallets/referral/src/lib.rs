@@ -160,6 +160,12 @@ pub fn score_for(good_referrals: u32) -> u32 {
 /// Defined locally to avoid cyclic dependency with pezpallet-trust.
 pub trait TrustScoreUpdater<AccountId> {
 	fn on_score_component_changed(who: &AccountId);
+
+	/// Make `who` the account whose notification costs the most, for benchmarking: a citizen
+	/// with a stake, whose score has to be worked out and written. For anybody else the trust
+	/// pallet returns at its first check, and a benchmark notifying them measures that.
+	#[cfg(feature = "runtime-benchmarks")]
+	fn prepare_worst_case(_who: &AccountId) {}
 }
 
 /// Noop implementation for mock environments and pallets that don't need trust updates.
@@ -274,25 +280,6 @@ pub mod pezpallet {
 		/// Default: 3 (each bad referral costs 3x a good referral)
 		#[pezpallet::constant]
 		type PenaltyPerRevocation: Get<u32>;
-
-		/// How many people a citizen may vouch for before having vouched for anyone.
-		///
-		/// Small on purpose. This is the width of the tree at its newest edge, and a forger
-		/// buys accounts far more cheaply than they buy a record.
-		#[pezpallet::constant]
-		type InitialVouchingCapacity: Get<u32>;
-
-		/// How many settled referrals buy one more place.
-		///
-		/// Capacity is earned rather than granted: bring one person in and stand behind them,
-		/// and after this many you may bring another. A revoked referral is subtracted, so the
-		/// account that vouches carelessly loses the room to do it again.
-		#[pezpallet::constant]
-		type SettledVouchesPerPlace: Get<u32>;
-
-		/// The most anyone may ever have brought in.
-		#[pezpallet::constant]
-		type MaxVouchingCapacity: Get<u32>;
 
 		/// How many revoked referrals before a record is judged at all.
 		///
@@ -529,6 +516,11 @@ pub mod pezpallet {
 	// --- Trait Implementations ---
 
 	impl<T: Config> OnKycApproved<T::AccountId> for Pezpallet<T> {
+		#[cfg(feature = "runtime-benchmarks")]
+		fn prepare_worst_case(referrer: &T::AccountId) {
+			T::TrustScoreUpdater::prepare_worst_case(referrer);
+		}
+
 		fn on_kyc_approved(
 			who: &T::AccountId,
 			referrer: &T::AccountId,
@@ -853,42 +845,24 @@ impl<T: Config> Pezpallet<T> {
 		Ok(())
 	}
 
-	/// How many people this account may still vouch into the register.
+	/// Whether this account's vouching is suspended.
 	///
-	/// `initial + settled / per_place`, capped, minus those already brought in. Settled means
-	/// referrals that became citizens and stayed citizens: a revoked one is subtracted, so an
-	/// account that vouched for a forgery pays for it in the room it has left rather than only
-	/// in its standing.
-	pub fn vouching_capacity(who: &T::AccountId) -> u32 {
+	/// There is no quota on vouching: a citizen may vouch for everyone they know, and the
+	/// referral score caps what any number of vouches is worth. What stops an account is a
+	/// record bad enough -- a manufactured cluster shows as a subtree with an anomalous share of
+	/// revocations. A revocation only happens once somebody has noticed, so this is a lagging
+	/// signal, and the right response to a lagging signal is to stop the bleeding rather than to
+	/// punish. It lifts on its own the moment the court restores what it revoked.
+	pub fn vouching_suspended(who: &T::AccountId) -> bool {
 		let stats = ReferrerStatsStorage::<T>::get(who);
-
-		// A record bad enough stops the account vouching entirely. The tree is public and a
-		// manufactured cluster shows as a subtree with an anomalous share of revocations --
-		// but a revocation only happens once somebody has noticed, so this is a lagging
-		// signal and the right response to a lagging signal is to stop the bleeding rather
-		// than to punish. It lifts on its own the moment the court restores what it revoked.
-		if stats.revoked_referrals >= T::SuspensionRevocationFloor::get()
+		stats.revoked_referrals >= T::SuspensionRevocationFloor::get()
 			&& stats.revoked_referrals.saturating_mul(100)
 				>= stats.total_referrals.saturating_mul(T::SuspensionRevocationPercent::get())
-		{
-			return 0;
-		}
-
-		let settled = stats.total_referrals.saturating_sub(stats.revoked_referrals);
-		let earned = settled.checked_div(T::SettledVouchesPerPlace::get().max(1)).unwrap_or(0);
-		T::InitialVouchingCapacity::get()
-			.saturating_add(earned)
-			.min(T::MaxVouchingCapacity::get())
-	}
-
-	/// What is left of that capacity.
-	pub fn vouching_remaining(who: &T::AccountId) -> u32 {
-		Self::vouching_capacity(who).saturating_sub(InvitationCount::<T>::get(who))
 	}
 }
 
-impl<T: Config> pezpallet_identity_kyc::types::VouchingCapacity<T::AccountId> for Pezpallet<T> {
-	fn remaining(who: &T::AccountId) -> Option<u32> {
-		Some(Self::vouching_remaining(who))
+impl<T: Config> pezpallet_identity_kyc::types::VouchingStanding<T::AccountId> for Pezpallet<T> {
+	fn is_suspended(who: &T::AccountId) -> bool {
+		Self::vouching_suspended(who)
 	}
 }

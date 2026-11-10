@@ -110,8 +110,9 @@ parameter_types! {
 
 impl pezpallet_identity_kyc::Config for Test {
 	type OnCitizenshipRestored = ();
+	type OnCitizenshipGranted = TrustPallet;
 	type VouchingWaitingPeriod = VouchingWaitingPeriod;
-	type VouchingCapacity = ();
+	type VouchingStanding = ();
 	type Currency = Balances;
 	type GovernanceOrigin = pezframe_system::EnsureRoot<u64>;
 	type WeightInfo = ();
@@ -237,6 +238,8 @@ impl pezpallet_trust::Config for Test {
 	type PerwerdeScoreSource = MockPerwerdeScoreProvider;
 	type TikiScoreSource = MockTikiScoreProvider;
 	type CitizenshipSource = MockCitizenshipStatusProvider;
+	#[cfg(feature = "runtime-benchmarks")]
+	type BenchmarkHelper = ();
 }
 
 pub fn new_test_ext() -> pezsp_io::TestExternalities {

@@ -136,6 +136,9 @@ thread_local! {
 	/// `ExtBuilder`, so a test that does not set it cannot inherit it from one that did.
 	pub static SEND_FAILS: RefCell<bool> = const { RefCell::new(false) };
 
+	/// How many key registrations reached the relay -- each one an unpaid upward message.
+	pub static KEYS_SENT: RefCell<u32> = const { RefCell::new(0) };
+
 	/// Every committee handed to the sender, in order. Recorded even when the send fails, so
 	/// a test can tell "was not delivered" from "was never offered" -- two very different
 	/// faults that look identical from the relay's side.
@@ -159,6 +162,7 @@ impl pezpallet_tnpos::SendKeysToRelay<AccountId> for MockSender {
 		if SEND_FAILS.with(|f| *f.borrow()) {
 			Err(())
 		} else {
+			KEYS_SENT.with(|n| *n.borrow_mut() += 1);
 			Ok(())
 		}
 	}
@@ -315,6 +319,18 @@ impl pezpallet_tnpos::BenchmarkHelper<AccountId> for BenchHelper {
 		// the runtime's own `BenchmarkHelper` guarantees.
 		ensure_has_keys(*who);
 	}
+
+	/// A key id of its own, so the keys differ from the ones `make_eligible` registered.
+	fn relay_keys(who: &AccountId) -> (Vec<u8>, Vec<u8>) {
+		use codec::Encode;
+		let id = who.saturating_add(1_000_000);
+		(
+			MockRelayKeys { dummy: pezsp_runtime::testing::UintAuthorityId(id) }.encode(),
+			pezsp_runtime::testing::TestSignature(id, who.encode()).encode(),
+		)
+	}
+
+	fn ensure_relay_reachable() {}
 }
 
 /// The nine strata at their specified sizes, at the design's floor. `FloorTooLow` refuses
